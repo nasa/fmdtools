@@ -6,7 +6,7 @@
 
 **fmdtools** (Fault Model Design tools) is a toolkit for modelling system resilience in the early design phase. With it, one can simulate the effects of faults in a system to build resilience into the system design at a high level.  To achieve this, fmdtools provides a Python-based *design environment* where one can represent the system in a model, simulate the resilience of the model to faults, and analyze the resulting model responses to iteratively improve the resilience of the design.
 
-Note: This version (**2.0-alpha3**) is currently in development, and thus not all interfaces may be fully stable and not all examples or documentation may be up-to-date. [Click here to view the status of our test results.](https://htmlpreview.github.io/?https://github.com/nasa/fmdtools/blob/main/pytest_report.html). For stable versions, download packages releases without the -alpha or -beta tags.
+Note: This version (**2.0-alpha4**) is currently in development, and thus not all interfaces may be fully stable and not all examples or documentation may be up-to-date. [Click here to view the status of our test results.](https://htmlpreview.github.io/?https://github.com/nasa/fmdtools/blob/main/pytest_report.html). For stable versions, download packages releases without the -alpha or -beta tags.
 
 [Click here to view the the full documentation website.](https://nasa.github.io/fmdtools)
 
@@ -21,7 +21,7 @@ The latest public version of fmdtools can be downloaded from the [fmdtools githu
 For development and use of this version (e.g., for tutorials and models), we recommended then installing this package using `pip`:
 
 ```
-   pip install -e /path/to/fmdtools 
+   pip install -e "/path/to/fmdtools" 
 ```
 
 A version of the fmdtools toolkit can also be installed directly from the [PyPI package repository](https://pypi.org/project/fmdtools/) using ``pip install fmdtools``.
@@ -29,34 +29,55 @@ A version of the fmdtools toolkit can also be installed directly from the [PyPI 
 
 ### Prerequisites
 
-fmdtools requires Python 3 and depends directly on these packages (see requirements.txt):
+fmdtools requires Python 3 (anaconda recommended) and depends directly on these packages (see requirements.txt):
 
 ```
-   scipy
-   tqdm
-   networkx
-   numpy
-   matplotlib
-   pandas
-   ordered-set
-   dill 
-   recordclass >=0.14.4
-   pytest
+scipy
+tqdm
+networkx
+numpy
+matplotlib
+pandas
+ordered-set
+dill 
+recordclass >=0.14.4
+pytest
+pygraphviz
 ```
 
-These packages are optional but recommended to enable specific fmdtools use-cases and to work with examples in the repository:
+These external (non-python) packages are recommended to enable specific fmdtools use-cases and to test/develop fmdtools as well as work with examples in the repository:
 
 ```
-   jupyter notebook			#(for repository notebooks)
-   graphviz					#(to plot using graphviz options)
-   pyvis					#(for interactive html views of model graphs)
-   ffmpeg 					#(for animations)
-   shapely					#(for multirotor model)
-   deap						#(for optimization of rover faults)
-   pycallgraph2				#(for model profiling)
+# (for repository notebooks)
+jupyter notebook
+# (to plot using graphviz options)
+graphviz
+# (for interactive html views of model graphs)
+pyvis
+# (for animations)
+ffmpeg
 ```
 
-These must be installed (e.g. using ``pip install packagename`` or ``conda install packagename``) them before running any of the codes in the repository. 
+These must be installed within the system environment (e.g. using ``conda install packagename``) them to enable the specific features/uses in the repository. 
+
+Additionally, the following python packages are not included but are necessary for development/testing of the code:
+```
+# (for multirotor model)
+shapely
+# (for optimization of rover faults)
+deap						
+# (for model profiling)
+pycallgraph2
+# (for notebook tests)
+nbmake                
+# (for test report generation)
+pytest-html
+# (for parallism tutorial profiling)
+multiprocess          
+# (for parallism tutorial profiling)
+pathos          
+```
+They can be installed using ``pip install packagename``.
 
 
 ## Contributions

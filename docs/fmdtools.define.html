@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>fmdtools.define package &mdash; fmdtools 2.0-alpha3 documentation</title>
+  <title>fmdtools.define package &mdash; fmdtools 2.0-alpha4 documentation</title>
       <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
     <link rel="shortcut icon" href="../_static/fmdtools_ico.ico"/>
@@ -12,11 +12,11 @@
     <script src="../_static/js/html5shiv.min.js"></script>
   <![endif]-->
   
-        <script src="../_static/jquery.js"></script>
-        <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
         <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
         <script src="../_static/doctools.js"></script>
-        <script src="../_static/sphinx_highlight.js"></script>
         <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
     <script src="../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
@@ -69,7 +69,7 @@
 <li class="toctree-l2"><a class="reference internal" href="Development%20Guide.html#intro-to-fmdtools">Intro to fmdtools</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="Intro_to_fmdtools.html">Intro to resilience modelling, simulation, and visualization in Python with fmdtools.</a><ul>
 <li class="toctree-l4"><a class="reference internal" href="Intro_to_fmdtools.html#author-daniel-hulse">Author: Daniel Hulse</a></li>
-<li class="toctree-l4"><a class="reference internal" href="Intro_to_fmdtools.html#version-2-0-alpha">Version: 2.0-alpha</a></li>
+<li class="toctree-l4"><a class="reference internal" href="Intro_to_fmdtools.html#version-2-0-alpha4">Version: 2.0-alpha4</a></li>
 </ul>
 </li>
 <li class="toctree-l3"><a class="reference internal" href="Intro_to_fmdtools.html#overview">Overview</a></li>
@@ -114,6 +114,7 @@
 </li>
 <li class="toctree-l3"><a class="reference internal" href="Development%20Guide.html#roles">Roles</a></li>
 <li class="toctree-l3"><a class="reference internal" href="Development%20Guide.html#documentation">Documentation</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Development%20Guide.html#style-formatting">Style/Formatting</a></li>
 <li class="toctree-l3"><a class="reference internal" href="Development%20Guide.html#testing">Testing</a></li>
 <li class="toctree-l3"><a class="reference internal" href="Development%20Guide.html#contributors">Contributors</a><ul>
 <li class="toctree-l4"><a class="reference internal" href="../CONTRIBUTORS.html">CONTRIBUTORS</a></li>
@@ -213,8 +214,13 @@
 <li class="toctree-l4"><a class="reference internal" href="../examples/tank/Tank_Analysis.html#Testing-different-reaction-times">Testing different reaction times</a></li>
 </ul>
 </li>
-<li class="toctree-l3"><a class="reference internal" href="../examples/tank/Tank_Optimization.html">Cooling Tank Model</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="../examples/tank/Tank_Optimization.html#Simulation">Simulation</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../examples/tank/Tank_Optimization.html">Cooling Tank Model Optimization</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../examples/tank/Tank_Optimization.html#Simulation">Simulation</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../examples/tank/Tank_Optimization.html#Verifying-the-nominal-state:">Verifying the nominal state:</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../examples/tank/Tank_Optimization.html#What-happens-under-component-faults?">What happens under component faults?</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../examples/tank/Tank_Optimization.html#Full-set-of-modes">Full set of modes</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../examples/tank/Tank_Optimization.html#Defining-Optimization-Problem">Defining Optimization Problem</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../examples/tank/Tank_Optimization.html#Optimization">Optimization</a></li>
 </ul>
 </li>
 </ul>
@@ -287,239 +293,29 @@
 <li class="toctree-l1"><a class="reference internal" href="Glossary.html">Glossary</a></li>
 <li class="toctree-l1 current"><a class="reference internal" href="fmdtools.html">Module Reference</a><ul class="current">
 <li class="toctree-l2 current"><a class="current reference internal" href="#">fmdtools.define package</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="#fmdtools-define-block">fmdtools.define.block</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="#fmdtools.define.block.ASG"><code class="docutils literal notranslate"><span class="pre">ASG</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="#fmdtools.define.block.Action"><code class="docutils literal notranslate"><span class="pre">Action</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="#fmdtools.define.block.Block"><code class="docutils literal notranslate"><span class="pre">Block</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="#fmdtools.define.block.CompArch"><code class="docutils literal notranslate"><span class="pre">CompArch</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="#fmdtools.define.block.Component"><code class="docutils literal notranslate"><span class="pre">Component</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="#fmdtools.define.block.FxnBlock"><code class="docutils literal notranslate"><span class="pre">FxnBlock</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="#fmdtools.define.block.GenericFxn"><code class="docutils literal notranslate"><span class="pre">GenericFxn</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="#fmdtools.define.block.Simulable"><code class="docutils literal notranslate"><span class="pre">Simulable</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="#fmdtools.define.block.assoc_flows"><code class="docutils literal notranslate"><span class="pre">assoc_flows()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="#fmdtools.define.block.inject_faults_internal"><code class="docutils literal notranslate"><span class="pre">inject_faults_internal()</span></code></a></li>
-</ul>
-</li>
-<li class="toctree-l3"><a class="reference internal" href="#module-fmdtools.define.common">fmdtools.define.common</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="#fmdtools.define.common.check_pickleability"><code class="docutils literal notranslate"><span class="pre">check_pickleability()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="#fmdtools.define.common.eq_units"><code class="docutils literal notranslate"><span class="pre">eq_units()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="#fmdtools.define.common.get_dataobj_track"><code class="docutils literal notranslate"><span class="pre">get_dataobj_track()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="#fmdtools.define.common.get_obj_track"><code class="docutils literal notranslate"><span class="pre">get_obj_track()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="#fmdtools.define.common.get_true_field"><code class="docutils literal notranslate"><span class="pre">get_true_field()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="#fmdtools.define.common.get_true_fields"><code class="docutils literal notranslate"><span class="pre">get_true_fields()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="#fmdtools.define.common.get_var"><code class="docutils literal notranslate"><span class="pre">get_var()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="#fmdtools.define.common.init_obj_attr"><code class="docutils literal notranslate"><span class="pre">init_obj_attr()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="#fmdtools.define.common.is_iter"><code class="docutils literal notranslate"><span class="pre">is_iter()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="#fmdtools.define.common.set_var"><code class="docutils literal notranslate"><span class="pre">set_var()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="#fmdtools.define.common.t_key"><code class="docutils literal notranslate"><span class="pre">t_key()</span></code></a></li>
-</ul>
-</li>
-<li class="toctree-l3"><a class="reference internal" href="#module-fmdtools.define.flow">fmdtools.define.flow</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="#fmdtools.define.flow.CommsFlow"><code class="docutils literal notranslate"><span class="pre">CommsFlow</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="#fmdtools.define.flow.Flow"><code class="docutils literal notranslate"><span class="pre">Flow</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="#fmdtools.define.flow.MultiFlow"><code class="docutils literal notranslate"><span class="pre">MultiFlow</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="#fmdtools.define.flow.init_flow"><code class="docutils literal notranslate"><span class="pre">init_flow()</span></code></a></li>
-</ul>
-</li>
-<li class="toctree-l3"><a class="reference internal" href="#module-fmdtools.define.mode">fmdtools.define.mode</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="#fmdtools.define.mode.Fault"><code class="docutils literal notranslate"><span class="pre">Fault</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="#fmdtools.define.mode.Mode"><code class="docutils literal notranslate"><span class="pre">Mode</span></code></a></li>
-</ul>
-</li>
-<li class="toctree-l3"><a class="reference internal" href="#fmdtools-define-model">fmdtools.define.model</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="#fmdtools.define.model.Model"><code class="docutils literal notranslate"><span class="pre">Model</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="#fmdtools.define.model.check_model_pickleability"><code class="docutils literal notranslate"><span class="pre">check_model_pickleability()</span></code></a></li>
-</ul>
-</li>
-<li class="toctree-l3"><a class="reference internal" href="#module-fmdtools.define.parameter">fmdtools.define.parameter</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="#fmdtools.define.parameter.Parameter"><code class="docutils literal notranslate"><span class="pre">Parameter</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="#fmdtools.define.parameter.SimParam"><code class="docutils literal notranslate"><span class="pre">SimParam</span></code></a></li>
-</ul>
-</li>
-<li class="toctree-l3"><a class="reference internal" href="#module-fmdtools.define.rand">fmdtools.define.rand</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="#fmdtools.define.rand.Rand"><code class="docutils literal notranslate"><span class="pre">Rand</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="#fmdtools.define.rand.get_pdf_for_dist"><code class="docutils literal notranslate"><span class="pre">get_pdf_for_dist()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="#fmdtools.define.rand.get_pdf_for_rand"><code class="docutils literal notranslate"><span class="pre">get_pdf_for_rand()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="#fmdtools.define.rand.get_scipy_pdf_helper"><code class="docutils literal notranslate"><span class="pre">get_scipy_pdf_helper()</span></code></a></li>
-</ul>
-</li>
-<li class="toctree-l3"><a class="reference internal" href="#module-fmdtools.define.state">fmdtools.define.state</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="#fmdtools.define.state.State"><code class="docutils literal notranslate"><span class="pre">State</span></code></a></li>
-</ul>
-</li>
-<li class="toctree-l3"><a class="reference internal" href="#module-fmdtools.define.time">fmdtools.define.time</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="#fmdtools.define.time.Time"><code class="docutils literal notranslate"><span class="pre">Time</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="#fmdtools.define.time.Timer"><code class="docutils literal notranslate"><span class="pre">Timer</span></code></a></li>
-</ul>
-</li>
+<li class="toctree-l3"><a class="reference internal" href="#fmdtools-define-block">fmdtools.define.block</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#module-fmdtools.define.common">fmdtools.define.common</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#module-fmdtools.define.flow">fmdtools.define.flow</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#module-fmdtools.define.mode">fmdtools.define.mode</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#fmdtools-define-model">fmdtools.define.model</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#module-fmdtools.define.parameter">fmdtools.define.parameter</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#module-fmdtools.define.rand">fmdtools.define.rand</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#module-fmdtools.define.state">fmdtools.define.state</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#module-fmdtools.define.time">fmdtools.define.time</a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="fmdtools.sim.html">fmdtools.sim</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="fmdtools.sim.html#fmdtools-sim-propagate">fmdtools.sim.propagate</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="fmdtools.sim.html#fmdtools.sim.propagate.approach"><code class="docutils literal notranslate"><span class="pre">approach()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="fmdtools.sim.html#fmdtools.sim.propagate.check_end_condition"><code class="docutils literal notranslate"><span class="pre">check_end_condition()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="fmdtools.sim.html#fmdtools.sim.propagate.check_hist_memory"><code class="docutils literal notranslate"><span class="pre">check_hist_memory()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="fmdtools.sim.html#fmdtools.sim.propagate.check_mdl_memory"><code class="docutils literal notranslate"><span class="pre">check_mdl_memory()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="fmdtools.sim.html#fmdtools.sim.propagate.check_overwrite"><code class="docutils literal notranslate"><span class="pre">check_overwrite()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="fmdtools.sim.html#fmdtools.sim.propagate.close_pool"><code class="docutils literal notranslate"><span class="pre">close_pool()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="fmdtools.sim.html#fmdtools.sim.propagate.copy_staged"><code class="docutils literal notranslate"><span class="pre">copy_staged()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="fmdtools.sim.html#fmdtools.sim.propagate.exec_nom_helper"><code class="docutils literal notranslate"><span class="pre">exec_nom_helper()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="fmdtools.sim.html#fmdtools.sim.propagate.exec_nom_par"><code class="docutils literal notranslate"><span class="pre">exec_nom_par()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="fmdtools.sim.html#fmdtools.sim.propagate.exec_scen"><code class="docutils literal notranslate"><span class="pre">exec_scen()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="fmdtools.sim.html#fmdtools.sim.propagate.exec_scen_par"><code class="docutils literal notranslate"><span class="pre">exec_scen_par()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="fmdtools.sim.html#fmdtools.sim.propagate.get_endclass_vars"><code class="docutils literal notranslate"><span class="pre">get_endclass_vars()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="fmdtools.sim.html#fmdtools.sim.propagate.get_result"><code class="docutils literal notranslate"><span class="pre">get_result()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="fmdtools.sim.html#fmdtools.sim.propagate.init_histrange"><code class="docutils literal notranslate"><span class="pre">init_histrange()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="fmdtools.sim.html#fmdtools.sim.propagate.list_init_faults"><code class="docutils literal notranslate"><span class="pre">list_init_faults()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="fmdtools.sim.html#fmdtools.sim.propagate.mult_kwargs"><code class="docutils literal notranslate"><span class="pre">mult_kwargs</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="fmdtools.sim.html#fmdtools.sim.propagate.nested_approach"><code class="docutils literal notranslate"><span class="pre">nested_approach()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="fmdtools.sim.html#fmdtools.sim.propagate.nom_helper"><code class="docutils literal notranslate"><span class="pre">nom_helper()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="fmdtools.sim.html#fmdtools.sim.propagate.nominal"><code class="docutils literal notranslate"><span class="pre">nominal()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="fmdtools.sim.html#fmdtools.sim.propagate.nominal_approach"><code class="docutils literal notranslate"><span class="pre">nominal_approach()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="fmdtools.sim.html#fmdtools.sim.propagate.one_fault"><code class="docutils literal notranslate"><span class="pre">one_fault()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="fmdtools.sim.html#fmdtools.sim.propagate.pack_run_kwargs"><code class="docutils literal notranslate"><span class="pre">pack_run_kwargs()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="fmdtools.sim.html#fmdtools.sim.propagate.pack_sim_kwargs"><code class="docutils literal notranslate"><span class="pre">pack_sim_kwargs()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="fmdtools.sim.html#fmdtools.sim.propagate.phases_from_hist"><code class="docutils literal notranslate"><span class="pre">phases_from_hist()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="fmdtools.sim.html#fmdtools.sim.propagate.prop_one_scen"><code class="docutils literal notranslate"><span class="pre">prop_one_scen()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="fmdtools.sim.html#fmdtools.sim.propagate.run_kwargs"><code class="docutils literal notranslate"><span class="pre">run_kwargs</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="fmdtools.sim.html#fmdtools.sim.propagate.save_helper"><code class="docutils literal notranslate"><span class="pre">save_helper()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="fmdtools.sim.html#fmdtools.sim.propagate.scenlist_helper"><code class="docutils literal notranslate"><span class="pre">scenlist_helper()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="fmdtools.sim.html#fmdtools.sim.propagate.sequence"><code class="docutils literal notranslate"><span class="pre">sequence()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="fmdtools.sim.html#fmdtools.sim.propagate.sim_kwargs"><code class="docutils literal notranslate"><span class="pre">sim_kwargs</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="fmdtools.sim.html#fmdtools.sim.propagate.single_faults"><code class="docutils literal notranslate"><span class="pre">single_faults()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="fmdtools.sim.html#fmdtools.sim.propagate.unpack_mult_kwargs"><code class="docutils literal notranslate"><span class="pre">unpack_mult_kwargs()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="fmdtools.sim.html#fmdtools.sim.propagate.unpack_res_list"><code class="docutils literal notranslate"><span class="pre">unpack_res_list()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="fmdtools.sim.html#fmdtools.sim.propagate.unpack_sim_kwargs"><code class="docutils literal notranslate"><span class="pre">unpack_sim_kwargs()</span></code></a></li>
-</ul>
-</li>
-<li class="toctree-l3"><a class="reference internal" href="fmdtools.sim.html#module-fmdtools.sim.scenario">fmdtools.sim.scenario</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="fmdtools.sim.html#fmdtools.sim.scenario.Injection"><code class="docutils literal notranslate"><span class="pre">Injection</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="fmdtools.sim.html#fmdtools.sim.scenario.JointFaultScenario"><code class="docutils literal notranslate"><span class="pre">JointFaultScenario</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="fmdtools.sim.html#fmdtools.sim.scenario.NominalScenario"><code class="docutils literal notranslate"><span class="pre">NominalScenario</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="fmdtools.sim.html#fmdtools.sim.scenario.ParamScenario"><code class="docutils literal notranslate"><span class="pre">ParamScenario</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="fmdtools.sim.html#fmdtools.sim.scenario.Scenario"><code class="docutils literal notranslate"><span class="pre">Scenario</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="fmdtools.sim.html#fmdtools.sim.scenario.Sequence"><code class="docutils literal notranslate"><span class="pre">Sequence</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="fmdtools.sim.html#fmdtools.sim.scenario.SingleFaultScenario"><code class="docutils literal notranslate"><span class="pre">SingleFaultScenario</span></code></a></li>
-</ul>
-</li>
-<li class="toctree-l3"><a class="reference internal" href="fmdtools.sim.html#module-fmdtools.sim.approach">fmdtools.sim.approach</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="fmdtools.sim.html#fmdtools.sim.approach.NominalApproach"><code class="docutils literal notranslate"><span class="pre">NominalApproach</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="fmdtools.sim.html#fmdtools.sim.approach.SampleApproach"><code class="docutils literal notranslate"><span class="pre">SampleApproach</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="fmdtools.sim.html#fmdtools.sim.approach.find_overlap_n"><code class="docutils literal notranslate"><span class="pre">find_overlap_n()</span></code></a></li>
-</ul>
-</li>
-<li class="toctree-l3"><a class="reference internal" href="fmdtools.sim.html#module-fmdtools.sim.search">fmdtools.sim.search</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="fmdtools.sim.html#fmdtools.sim.search.DynamicInterface"><code class="docutils literal notranslate"><span class="pre">DynamicInterface</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="fmdtools.sim.html#fmdtools.sim.search.ProblemInterface"><code class="docutils literal notranslate"><span class="pre">ProblemInterface</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="fmdtools.sim.html#fmdtools.sim.search.eval_con"><code class="docutils literal notranslate"><span class="pre">eval_con()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="fmdtools.sim.html#fmdtools.sim.search.get_pos_negative"><code class="docutils literal notranslate"><span class="pre">get_pos_negative()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="fmdtools.sim.html#fmdtools.sim.search.get_pos_str"><code class="docutils literal notranslate"><span class="pre">get_pos_str()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="fmdtools.sim.html#fmdtools.sim.search.get_text_time"><code class="docutils literal notranslate"><span class="pre">get_text_time()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="fmdtools.sim.html#fmdtools.sim.search.greater_to_factor"><code class="docutils literal notranslate"><span class="pre">greater_to_factor()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="fmdtools.sim.html#fmdtools.sim.search.n_to_factor"><code class="docutils literal notranslate"><span class="pre">n_to_factor()</span></code></a></li>
-</ul>
-</li>
+<li class="toctree-l3"><a class="reference internal" href="fmdtools.sim.html#fmdtools-sim-propagate">fmdtools.sim.propagate</a></li>
+<li class="toctree-l3"><a class="reference internal" href="fmdtools.sim.html#module-fmdtools.sim.scenario">fmdtools.sim.scenario</a></li>
+<li class="toctree-l3"><a class="reference internal" href="fmdtools.sim.html#module-fmdtools.sim.approach">fmdtools.sim.approach</a></li>
+<li class="toctree-l3"><a class="reference internal" href="fmdtools.sim.html#module-fmdtools.sim.search">fmdtools.sim.search</a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="fmdtools.analyze.html">fmdtools.analyze package</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="fmdtools.analyze.html#module-fmdtools.analyze.result">fmdtools.analyze.result</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="fmdtools.analyze.html#fmdtools.analyze.result.History"><code class="docutils literal notranslate"><span class="pre">History</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="fmdtools.analyze.html#fmdtools.analyze.result.Result"><code class="docutils literal notranslate"><span class="pre">Result</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="fmdtools.analyze.html#fmdtools.analyze.result.auto_filetype"><code class="docutils literal notranslate"><span class="pre">auto_filetype()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="fmdtools.analyze.html#fmdtools.analyze.result.bootstrap_confidence_interval"><code class="docutils literal notranslate"><span class="pre">bootstrap_confidence_interval()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="fmdtools.analyze.html#fmdtools.analyze.result.check_include_error"><code class="docutils literal notranslate"><span class="pre">check_include_error()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="fmdtools.analyze.html#fmdtools.analyze.result.check_include_errors"><code class="docutils literal notranslate"><span class="pre">check_include_errors()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="fmdtools.analyze.html#fmdtools.analyze.result.clean_resultdict_keys"><code class="docutils literal notranslate"><span class="pre">clean_resultdict_keys()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="fmdtools.analyze.html#fmdtools.analyze.result.create_indiv_filename"><code class="docutils literal notranslate"><span class="pre">create_indiv_filename()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="fmdtools.analyze.html#fmdtools.analyze.result.diff"><code class="docutils literal notranslate"><span class="pre">diff()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="fmdtools.analyze.html#fmdtools.analyze.result.file_check"><code class="docutils literal notranslate"><span class="pre">file_check()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="fmdtools.analyze.html#fmdtools.analyze.result.fromdict"><code class="docutils literal notranslate"><span class="pre">fromdict()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="fmdtools.analyze.html#fmdtools.analyze.result.get_dict_attr"><code class="docutils literal notranslate"><span class="pre">get_dict_attr()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="fmdtools.analyze.html#fmdtools.analyze.result.get_sub_include"><code class="docutils literal notranslate"><span class="pre">get_sub_include()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="fmdtools.analyze.html#fmdtools.analyze.result.init_dicthist"><code class="docutils literal notranslate"><span class="pre">init_dicthist()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="fmdtools.analyze.html#fmdtools.analyze.result.init_hist_iter"><code class="docutils literal notranslate"><span class="pre">init_hist_iter()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="fmdtools.analyze.html#fmdtools.analyze.result.init_indicator_hist"><code class="docutils literal notranslate"><span class="pre">init_indicator_hist()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="fmdtools.analyze.html#fmdtools.analyze.result.is_bool"><code class="docutils literal notranslate"><span class="pre">is_bool()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="fmdtools.analyze.html#fmdtools.analyze.result.is_known_immutable"><code class="docutils literal notranslate"><span class="pre">is_known_immutable()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="fmdtools.analyze.html#fmdtools.analyze.result.is_known_mutable"><code class="docutils literal notranslate"><span class="pre">is_known_mutable()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="fmdtools.analyze.html#fmdtools.analyze.result.is_numeric"><code class="docutils literal notranslate"><span class="pre">is_numeric()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="fmdtools.analyze.html#fmdtools.analyze.result.join_key"><code class="docutils literal notranslate"><span class="pre">join_key()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="fmdtools.analyze.html#fmdtools.analyze.result.load"><code class="docutils literal notranslate"><span class="pre">load()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="fmdtools.analyze.html#fmdtools.analyze.result.load_folder"><code class="docutils literal notranslate"><span class="pre">load_folder()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="fmdtools.analyze.html#fmdtools.analyze.result.nan_to_x"><code class="docutils literal notranslate"><span class="pre">nan_to_x()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="fmdtools.analyze.html#fmdtools.analyze.result.to_include_keys"><code class="docutils literal notranslate"><span class="pre">to_include_keys()</span></code></a></li>
-</ul>
-</li>
-<li class="toctree-l3"><a class="reference internal" href="fmdtools.analyze.html#module-fmdtools.analyze.plot">fmdtools.analyze.plot</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="fmdtools.analyze.html#fmdtools.analyze.plot.dyn_order"><code class="docutils literal notranslate"><span class="pre">dyn_order()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="fmdtools.analyze.html#fmdtools.analyze.plot.hist"><code class="docutils literal notranslate"><span class="pre">hist()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="fmdtools.analyze.html#fmdtools.analyze.plot.make_consolidated_legend"><code class="docutils literal notranslate"><span class="pre">make_consolidated_legend()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="fmdtools.analyze.html#fmdtools.analyze.plot.metric_dist"><code class="docutils literal notranslate"><span class="pre">metric_dist()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="fmdtools.analyze.html#fmdtools.analyze.plot.metric_dist_from"><code class="docutils literal notranslate"><span class="pre">metric_dist_from()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="fmdtools.analyze.html#fmdtools.analyze.plot.metricovertime"><code class="docutils literal notranslate"><span class="pre">metricovertime()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="fmdtools.analyze.html#fmdtools.analyze.plot.multibar_helper"><code class="docutils literal notranslate"><span class="pre">multibar_helper()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="fmdtools.analyze.html#fmdtools.analyze.plot.multiplot_legend_title"><code class="docutils literal notranslate"><span class="pre">multiplot_legend_title()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="fmdtools.analyze.html#fmdtools.analyze.plot.nested_factor_comparison"><code class="docutils literal notranslate"><span class="pre">nested_factor_comparison()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="fmdtools.analyze.html#fmdtools.analyze.plot.nominal_factor_comparison"><code class="docutils literal notranslate"><span class="pre">nominal_factor_comparison()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="fmdtools.analyze.html#fmdtools.analyze.plot.nominal_vals_1d"><code class="docutils literal notranslate"><span class="pre">nominal_vals_1d()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="fmdtools.analyze.html#fmdtools.analyze.plot.nominal_vals_2d"><code class="docutils literal notranslate"><span class="pre">nominal_vals_2d()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="fmdtools.analyze.html#fmdtools.analyze.plot.nominal_vals_3d"><code class="docutils literal notranslate"><span class="pre">nominal_vals_3d()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="fmdtools.analyze.html#fmdtools.analyze.plot.phases"><code class="docutils literal notranslate"><span class="pre">phases()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="fmdtools.analyze.html#fmdtools.analyze.plot.plot_err_lines"><code class="docutils literal notranslate"><span class="pre">plot_err_lines()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="fmdtools.analyze.html#fmdtools.analyze.plot.plot_line_and_err"><code class="docutils literal notranslate"><span class="pre">plot_line_and_err()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="fmdtools.analyze.html#fmdtools.analyze.plot.samplemetric"><code class="docutils literal notranslate"><span class="pre">samplemetric()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="fmdtools.analyze.html#fmdtools.analyze.plot.samplemetrics"><code class="docutils literal notranslate"><span class="pre">samplemetrics()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="fmdtools.analyze.html#fmdtools.analyze.plot.suite_for_plots"><code class="docutils literal notranslate"><span class="pre">suite_for_plots()</span></code></a></li>
-</ul>
-</li>
-<li class="toctree-l3"><a class="reference internal" href="fmdtools.analyze.html#module-fmdtools.analyze.graph">fmdtools.analyze.graph</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="fmdtools.analyze.html#fmdtools.analyze.graph.ASGActGraph"><code class="docutils literal notranslate"><span class="pre">ASGActGraph</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="fmdtools.analyze.html#fmdtools.analyze.graph.ASGFlowGraph"><code class="docutils literal notranslate"><span class="pre">ASGFlowGraph</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="fmdtools.analyze.html#fmdtools.analyze.graph.ASGGraph"><code class="docutils literal notranslate"><span class="pre">ASGGraph</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="fmdtools.analyze.html#fmdtools.analyze.graph.CommsFlowGraph"><code class="docutils literal notranslate"><span class="pre">CommsFlowGraph</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="fmdtools.analyze.html#fmdtools.analyze.graph.EdgeLabelStyle"><code class="docutils literal notranslate"><span class="pre">EdgeLabelStyle</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="fmdtools.analyze.html#fmdtools.analyze.graph.EdgeStyle"><code class="docutils literal notranslate"><span class="pre">EdgeStyle</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="fmdtools.analyze.html#fmdtools.analyze.graph.Graph"><code class="docutils literal notranslate"><span class="pre">Graph</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="fmdtools.analyze.html#fmdtools.analyze.graph.GraphInteractor"><code class="docutils literal notranslate"><span class="pre">GraphInteractor</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="fmdtools.analyze.html#fmdtools.analyze.graph.LabelStyle"><code class="docutils literal notranslate"><span class="pre">LabelStyle</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="fmdtools.analyze.html#fmdtools.analyze.graph.Labels"><code class="docutils literal notranslate"><span class="pre">Labels</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="fmdtools.analyze.html#fmdtools.analyze.graph.ModelCompGraph"><code class="docutils literal notranslate"><span class="pre">ModelCompGraph</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="fmdtools.analyze.html#fmdtools.analyze.graph.ModelFlowGraph"><code class="docutils literal notranslate"><span class="pre">ModelFlowGraph</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="fmdtools.analyze.html#fmdtools.analyze.graph.ModelFxnGraph"><code class="docutils literal notranslate"><span class="pre">ModelFxnGraph</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="fmdtools.analyze.html#fmdtools.analyze.graph.ModelGraph"><code class="docutils literal notranslate"><span class="pre">ModelGraph</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="fmdtools.analyze.html#fmdtools.analyze.graph.ModelTypeGraph"><code class="docutils literal notranslate"><span class="pre">ModelTypeGraph</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="fmdtools.analyze.html#fmdtools.analyze.graph.MultiFlowGraph"><code class="docutils literal notranslate"><span class="pre">MultiFlowGraph</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="fmdtools.analyze.html#fmdtools.analyze.graph.NodeStyle"><code class="docutils literal notranslate"><span class="pre">NodeStyle</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="fmdtools.analyze.html#fmdtools.analyze.graph.add_g_nested"><code class="docutils literal notranslate"><span class="pre">add_g_nested()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="fmdtools.analyze.html#fmdtools.analyze.graph.data_average"><code class="docutils literal notranslate"><span class="pre">data_average()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="fmdtools.analyze.html#fmdtools.analyze.graph.data_error"><code class="docutils literal notranslate"><span class="pre">data_error()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="fmdtools.analyze.html#fmdtools.analyze.graph.get_label_groups"><code class="docutils literal notranslate"><span class="pre">get_label_groups()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="fmdtools.analyze.html#fmdtools.analyze.graph.get_style_kwargs"><code class="docutils literal notranslate"><span class="pre">get_style_kwargs()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="fmdtools.analyze.html#fmdtools.analyze.graph.graph_factory"><code class="docutils literal notranslate"><span class="pre">graph_factory()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="fmdtools.analyze.html#fmdtools.analyze.graph.gv_import_check"><code class="docutils literal notranslate"><span class="pre">gv_import_check()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="fmdtools.analyze.html#fmdtools.analyze.graph.node_is_tagged"><code class="docutils literal notranslate"><span class="pre">node_is_tagged()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="fmdtools.analyze.html#fmdtools.analyze.graph.random"><code class="docutils literal notranslate"><span class="pre">random()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="fmdtools.analyze.html#fmdtools.analyze.graph.sff_one_trial"><code class="docutils literal notranslate"><span class="pre">sff_one_trial()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="fmdtools.analyze.html#fmdtools.analyze.graph.to_legend_label"><code class="docutils literal notranslate"><span class="pre">to_legend_label()</span></code></a></li>
-</ul>
-</li>
-<li class="toctree-l3"><a class="reference internal" href="fmdtools.analyze.html#module-fmdtools.analyze.tabulate">fmdtools.analyze.tabulate</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="fmdtools.analyze.html#fmdtools.analyze.tabulate.dicttab"><code class="docutils literal notranslate"><span class="pre">dicttab()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="fmdtools.analyze.html#fmdtools.analyze.tabulate.fmea"><code class="docutils literal notranslate"><span class="pre">fmea()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="fmdtools.analyze.html#fmdtools.analyze.tabulate.label_faults"><code class="docutils literal notranslate"><span class="pre">label_faults()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="fmdtools.analyze.html#fmdtools.analyze.tabulate.maptab"><code class="docutils literal notranslate"><span class="pre">maptab()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="fmdtools.analyze.html#fmdtools.analyze.tabulate.metricovertime"><code class="docutils literal notranslate"><span class="pre">metricovertime()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="fmdtools.analyze.html#fmdtools.analyze.tabulate.nested_factor_comparison"><code class="docutils literal notranslate"><span class="pre">nested_factor_comparison()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="fmdtools.analyze.html#fmdtools.analyze.tabulate.nested_stats"><code class="docutils literal notranslate"><span class="pre">nested_stats()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="fmdtools.analyze.html#fmdtools.analyze.tabulate.nominal_factor_comparison"><code class="docutils literal notranslate"><span class="pre">nominal_factor_comparison()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="fmdtools.analyze.html#fmdtools.analyze.tabulate.nominal_stats"><code class="docutils literal notranslate"><span class="pre">nominal_stats()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="fmdtools.analyze.html#fmdtools.analyze.tabulate.phasefmea"><code class="docutils literal notranslate"><span class="pre">phasefmea()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="fmdtools.analyze.html#fmdtools.analyze.tabulate.result_summary"><code class="docutils literal notranslate"><span class="pre">result_summary()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="fmdtools.analyze.html#fmdtools.analyze.tabulate.result_summary_fmea"><code class="docutils literal notranslate"><span class="pre">result_summary_fmea()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="fmdtools.analyze.html#fmdtools.analyze.tabulate.samptime"><code class="docutils literal notranslate"><span class="pre">samptime()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="fmdtools.analyze.html#fmdtools.analyze.tabulate.summfmea"><code class="docutils literal notranslate"><span class="pre">summfmea()</span></code></a></li>
-</ul>
-</li>
+<li class="toctree-l3"><a class="reference internal" href="fmdtools.analyze.html#module-fmdtools.analyze.result">fmdtools.analyze.result</a></li>
+<li class="toctree-l3"><a class="reference internal" href="fmdtools.analyze.html#module-fmdtools.analyze.plot">fmdtools.analyze.plot</a></li>
+<li class="toctree-l3"><a class="reference internal" href="fmdtools.analyze.html#module-fmdtools.analyze.graph">fmdtools.analyze.graph</a></li>
+<li class="toctree-l3"><a class="reference internal" href="fmdtools.analyze.html#module-fmdtools.analyze.tabulate">fmdtools.analyze.tabulate</a></li>
 </ul>
 </li>
 </ul>
@@ -554,10 +350,10 @@
   <section id="fmdtools-define-package">
 <h1>fmdtools.define package<a class="headerlink" href="#fmdtools-define-package" title="Permalink to this heading"></a></h1>
 <p>The define package provides the building blocks to develop a simulation. Simulations are defined in the sub-classes of the <code class="xref py py-class docutils literal notranslate"><span class="pre">Simulable</span></code> class (in the <code class="xref py py-mod docutils literal notranslate"><span class="pre">block</span></code> and <code class="xref py py-mod docutils literal notranslate"><span class="pre">model</span></code> subpackages), as shown below:</p>
-<figure class="align-default" id="id50">
+<figure class="align-default" id="id48">
 <a class="reference internal image-reference" href="docs/figures/block_inheritance"><img alt="Structure simulable fmdtools classes" src="docs/figures/block_inheritance" style="width: 800px;" /></a>
 <figcaption>
-<p><span class="caption-text">Structure of simulable fmdtools subclasses used for developing simulations.</span><a class="headerlink" href="#id50" title="Permalink to this image"></a></p>
+<p><span class="caption-text">Structure of simulable fmdtools subclasses used for developing simulations.</span><a class="headerlink" href="#id48" title="Permalink to this image"></a></p>
 </figcaption>
 </figure>
 <p>Aside from their internal methods defining behavior, events/indicators, and results, Simulations are additionally composed of internal <a class="reference internal" href="Glossary.html#term-Role"><span class="xref std std-term">role</span></a> s, or sub-attributes of the class which are defined in their own class.</p>
@@ -574,10 +370,10 @@
 <p>Common methods and data structures are kept in <code class="xref py py-mod docutils literal notranslate"><span class="pre">common</span></code>.</p>
 <section id="fmdtools-define-block">
 <h2>fmdtools.define.block<a class="headerlink" href="#fmdtools-define-block" title="Permalink to this heading"></a></h2>
-<figure class="align-default" id="id51">
+<figure class="align-default" id="id49">
 <a class="reference internal image-reference" href="../_images/fxnblock_structure.png"><img alt="Structure of a FxnBlock" src="../_images/fxnblock_structure.png" style="width: 800px;" /></a>
 <figcaption>
-<p><span class="caption-text">Code template for <code class="xref py py-class docutils literal notranslate"><span class="pre">FxnBlock</span></code> used to define high-level system functions and their behavior.</span><a class="headerlink" href="#id51" title="Permalink to this image"></a></p>
+<p><span class="caption-text">Code template for <code class="xref py py-class docutils literal notranslate"><span class="pre">FxnBlock</span></code> used to define high-level system functions and their behavior.</span><a class="headerlink" href="#id49" title="Permalink to this image"></a></p>
 </figcaption>
 </figure>
 <span class="target" id="module-fmdtools.define.block"></span><p>Description: A module to define Functions, Components, Actions, and other classes with behaviors.</p>
@@ -1013,7 +809,7 @@ check if the block has changed</p>
 <p>Container for holding component architectures</p>
 <dl class="py attribute">
 <dt class="sig sig-object py" id="fmdtools.define.block.CompArch.archtype">
-<span class="sig-name descname"><span class="pre">archtype</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#fmdtools.define.block.CompArch.archtype" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">archtype</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'default'</span></em><a class="headerlink" href="#fmdtools.define.block.CompArch.archtype" title="Permalink to this definition"></a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
@@ -1494,24 +1290,30 @@ connection to the rest of the model)</p></li>
 <section id="module-fmdtools.define.common">
 <span id="fmdtools-define-common"></span><h2>fmdtools.define.common<a class="headerlink" href="#module-fmdtools.define.common" title="Permalink to this heading"></a></h2>
 <p>Description: A module for methods used commonly in model definition constructs.</p>
-<dl class="simple">
-<dt>Functions contained in this module:</dt><dd><p>-<a class="reference internal" href="#fmdtools.define.common.get_var" title="fmdtools.define.common.get_var"><code class="xref py py-func docutils literal notranslate"><span class="pre">get_var()</span></code></a>:Gets the variable value of the object
--<a class="reference internal" href="#fmdtools.define.common.set_var" title="fmdtools.define.common.set_var"><code class="xref py py-func docutils literal notranslate"><span class="pre">set_var()</span></code></a>:Sets variable of the object to a given value
--<a class="reference internal" href="#fmdtools.define.common.get_true_fields" title="fmdtools.define.common.get_true_fields"><code class="xref py py-func docutils literal notranslate"><span class="pre">get_true_fields()</span></code></a>:Resolves the args to pass to a dataobject given certain defaults
--<a class="reference internal" href="#fmdtools.define.common.get_true_field" title="fmdtools.define.common.get_true_field"><code class="xref py py-func docutils literal notranslate"><span class="pre">get_true_field()</span></code></a>:Gets the value that will be set to fieldname given <a href="#id7"><span class="problematic" id="id8">*</span></a>args and <a href="#id9"><span class="problematic" id="id10">**</span></a>kwargs
--<a class="reference internal" href="#fmdtools.define.common.is_iter" title="fmdtools.define.common.is_iter"><code class="xref py py-func docutils literal notranslate"><span class="pre">is_iter()</span></code></a>: Checks whether a data type should be interpreted as an iterable or not.
--<a class="reference internal" href="#fmdtools.define.common.check_pickleability" title="fmdtools.define.common.check_pickleability"><code class="xref py py-func docutils literal notranslate"><span class="pre">check_pickleability()</span></code></a>:Checks to see which attributes of an object will pickle (and thus parallelize)”
--<a class="reference internal" href="#fmdtools.define.common.init_obj_attr" title="fmdtools.define.common.init_obj_attr"><code class="xref py py-func docutils literal notranslate"><span class="pre">init_obj_attr()</span></code></a>:Initializes attributes to a given object
--<a class="reference internal" href="#fmdtools.define.common.get_dataobj_track" title="fmdtools.define.common.get_dataobj_track"><code class="xref py py-func docutils literal notranslate"><span class="pre">get_dataobj_track()</span></code></a>:Gets tracking params for a given dataobject (State, Mode, Rand, etc)
--<a class="reference internal" href="#fmdtools.define.common.get_obj_track" title="fmdtools.define.common.get_obj_track"><code class="xref py py-func docutils literal notranslate"><span class="pre">get_obj_track()</span></code></a>:Gets tracking params for a given object (block, model, etc)
--<a class="reference internal" href="#fmdtools.define.common.t_key" title="fmdtools.define.common.t_key"><code class="xref py py-func docutils literal notranslate"><span class="pre">t_key()</span></code></a>:Used to generate keys for a given (float) time that is queryable as an attribute of an object/dict
--<a class="reference internal" href="#fmdtools.define.common.eq_units" title="fmdtools.define.common.eq_units"><code class="xref py py-func docutils literal notranslate"><span class="pre">eq_units()</span></code></a>:Provides conversion factor for from rateunit (str) to timeunit (str)</p>
-</dd>
-</dl>
+<p>Functions contained in this module:</p>
+<ul class="simple">
+<li><p><a class="reference internal" href="#fmdtools.define.common.get_var" title="fmdtools.define.common.get_var"><code class="xref py py-func docutils literal notranslate"><span class="pre">get_var()</span></code></a>:Gets the variable value of the object</p></li>
+<li><p><a class="reference internal" href="#fmdtools.define.common.set_var" title="fmdtools.define.common.set_var"><code class="xref py py-func docutils literal notranslate"><span class="pre">set_var()</span></code></a>:Sets variable of the object to a given value</p></li>
+<li><p><a class="reference internal" href="#fmdtools.define.common.get_true_fields" title="fmdtools.define.common.get_true_fields"><code class="xref py py-func docutils literal notranslate"><span class="pre">get_true_fields()</span></code></a>:Resolves the args to pass to a dataobject given certain</p></li>
+</ul>
+<p>defaults
+- <a class="reference internal" href="#fmdtools.define.common.get_true_field" title="fmdtools.define.common.get_true_field"><code class="xref py py-func docutils literal notranslate"><span class="pre">get_true_field()</span></code></a>:Gets the value that will be set to fieldname given <a href="#id7"><span class="problematic" id="id8">*</span></a>args and
+<a href="#id9"><span class="problematic" id="id10">**</span></a>kwargs
+- <a class="reference internal" href="#fmdtools.define.common.is_iter" title="fmdtools.define.common.is_iter"><code class="xref py py-func docutils literal notranslate"><span class="pre">is_iter()</span></code></a>: Checks whether a data type should be interpreted as an iterable or
+not.
+- <a class="reference internal" href="#fmdtools.define.common.check_pickleability" title="fmdtools.define.common.check_pickleability"><code class="xref py py-func docutils literal notranslate"><span class="pre">check_pickleability()</span></code></a>:Checks to see which attributes of an object will pickle
+(and thus parallelize)”
+- <a class="reference internal" href="#fmdtools.define.common.init_obj_attr" title="fmdtools.define.common.init_obj_attr"><code class="xref py py-func docutils literal notranslate"><span class="pre">init_obj_attr()</span></code></a>:Initializes attributes to a given object
+- <a class="reference internal" href="#fmdtools.define.common.get_dataobj_track" title="fmdtools.define.common.get_dataobj_track"><code class="xref py py-func docutils literal notranslate"><span class="pre">get_dataobj_track()</span></code></a>:Gets tracking params for a given dataobject
+(State, Mode, Rand, etc)
+- <a class="reference internal" href="#fmdtools.define.common.get_obj_track" title="fmdtools.define.common.get_obj_track"><code class="xref py py-func docutils literal notranslate"><span class="pre">get_obj_track()</span></code></a>:Gets tracking params for a given object (block, model, etc)
+- <a class="reference internal" href="#fmdtools.define.common.t_key" title="fmdtools.define.common.t_key"><code class="xref py py-func docutils literal notranslate"><span class="pre">t_key()</span></code></a>:Used to generate keys for a given (float) time that is queryable as
+an attribute of an object/dict
+- <a class="reference internal" href="#fmdtools.define.common.eq_units" title="fmdtools.define.common.eq_units"><code class="xref py py-func docutils literal notranslate"><span class="pre">eq_units()</span></code></a>:Provides conversion factor for from rateunit (str) to timeunit (str)</p>
 <dl class="py function">
 <dt class="sig sig-object py" id="fmdtools.define.common.check_pickleability">
 <span class="sig-prename descclassname"><span class="pre">fmdtools.define.common.</span></span><span class="sig-name descname"><span class="pre">check_pickleability</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">obj</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verbose</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">try_pick</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pause</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.2</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.define.common.check_pickleability" title="Permalink to this definition"></a></dt>
-<dd><p>Checks to see which attributes of an object will pickle (and thus parallelize)</p>
+<dd><p>Checks to see which attributes of an object will pickle (and parallelize)</p>
 </dd></dl>
 
 <dl class="py function">
@@ -1540,6 +1342,23 @@ Options for units are: ‘sec’, ‘min’, ‘hr’, ‘day’, ‘wk’, ‘m
 </dd>
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>tuple</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="fmdtools.define.common.get_obj_indicators">
+<span class="sig-prename descclassname"><span class="pre">fmdtools.define.common.</span></span><span class="sig-name descname"><span class="pre">get_obj_indicators</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">obj</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.define.common.get_obj_indicators" title="Permalink to this definition"></a></dt>
+<dd><p>Gets the names of the indicators</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>obj</strong> (<a class="reference internal" href="#fmdtools.define.block.Simulable" title="fmdtools.define.block.Simulable"><em>Simulable</em></a><em> or </em><a class="reference internal" href="#fmdtools.define.flow.Flow" title="fmdtools.define.flow.Flow"><em>Flow</em></a>) – Object with indicators</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>indicators</strong> – dict of indicator names and their associated method handles.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>dict</p>
 </dd>
 </dl>
 </dd></dl>
@@ -1577,7 +1396,8 @@ Options for units are: ‘sec’, ‘min’, ‘hr’, ‘day’, ‘wk’, ‘m
 <dt class="sig sig-object py" id="fmdtools.define.common.get_true_fields">
 <span class="sig-prename descclassname"><span class="pre">fmdtools.define.common.</span></span><span class="sig-name descname"><span class="pre">get_true_fields</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dataobject</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">force_kwargs</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.define.common.get_true_fields" title="Permalink to this definition"></a></dt>
 <dd><p>Resolves the args to pass to a dataobject given certain defaults, <a href="#id15"><span class="problematic" id="id16">*</span></a>args and <a href="#id17"><span class="problematic" id="id18">**</span></a>kwargs</p>
-<p>NOTE: must be used for pickling, since pickle passes arguments as <a href="#id19"><span class="problematic" id="id20">*</span></a>args and not <a href="#id21"><span class="problematic" id="id22">**</span></a>kwargs.</p>
+<p>NOTE: must be used for pickling, since pickle passes arguments as <a href="#id19"><span class="problematic" id="id20">*</span></a>args and not
+<a href="#id21"><span class="problematic" id="id22">**</span></a>kwargs.</p>
 </dd></dl>
 
 <dl class="py function">
@@ -1623,13 +1443,33 @@ as a single value or tuple/array</p>
 </dd></dl>
 
 <dl class="py function">
+<dt class="sig sig-object py" id="fmdtools.define.common.return_true_indicators">
+<span class="sig-prename descclassname"><span class="pre">fmdtools.define.common.</span></span><span class="sig-name descname"><span class="pre">return_true_indicators</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">obj</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">time</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.define.common.return_true_indicators" title="Permalink to this definition"></a></dt>
+<dd><p>Gets list of indicators</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>obj</strong> (<em>flow/fxn/etc</em>) – Object with an indicator</p></li>
+<li><p><strong>time</strong> (<em>float</em>) – Time to execute the indicator method at.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>List of inticators that return true at time</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>list</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
 <dt class="sig sig-object py" id="fmdtools.define.common.set_var">
 <span class="sig-prename descclassname"><span class="pre">fmdtools.define.common.</span></span><span class="sig-name descname"><span class="pre">set_var</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">obj</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">var</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">val</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.define.common.set_var" title="Permalink to this definition"></a></dt>
 <dd><p>Sets variable of the object to a given value</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>var</strong> (<em>list/tuple</em><em> of </em><em>strings</em>) – list of nested attributes</p></li>
+<li><p><strong>var</strong> (<em>list/tuple of strings</em>) – list of nested attributes</p></li>
 <li><p><strong>val</strong> (<em>attr</em>) – attribute to set the value to</p></li>
 </ul>
 </dd>
@@ -1711,7 +1551,7 @@ internal view, out view, in dict, and received set.</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="fmdtools.define.flow.CommsFlow.get_port">
 <span class="sig-name descname"><span class="pre">get_port</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">fxnname</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">portname</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">box</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'internal'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.define.flow.CommsFlow.get_port" title="Permalink to this definition"></a></dt>
-<dd><p>Gets a port with name portname (if it exists), otherwise the default port is riven.
+<dd><p>Gets a port with name portname (if it exists), otherwise the default port is given.
 The argument is ‘internal’ or ‘out’ for the internal state or outbox, respectively</p>
 </dd></dl>
 
@@ -2095,12 +1935,13 @@ or  pass an already-constructured flow class.</p>
 <p>Description: Module for helping define Modes (faulty and otherwise).</p>
 <p>Has classes:
 - <a class="reference internal" href="#fmdtools.define.mode.Fault" title="fmdtools.define.mode.Fault"><code class="xref py py-class docutils literal notranslate"><span class="pre">Fault</span></code></a>: Class for defining fault parameters
-- <a href="#id23"><span class="problematic" id="id24">:Mode:`Mode`</span></a>: Class for defining the mode property (and associated probability model) held in Blocks.</p>
+- <a class="reference internal" href="#fmdtools.define.mode.Mode" title="fmdtools.define.mode.Mode"><code class="xref py py-class docutils literal notranslate"><span class="pre">Mode</span></code></a>: Class for defining the mode property (and associated probability model)
+held in Blocks.</p>
 <dl class="py class">
 <dt class="sig sig-object py" id="fmdtools.define.mode.Fault">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">fmdtools.define.mode.</span></span><span class="sig-name descname"><span class="pre">Fault</span></span><a class="headerlink" href="#fmdtools.define.mode.Fault" title="Permalink to this definition"></a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">dataobject</span></code></p>
-<p>Stores Default Attributes for for modes to use in Mode.faultmodes</p>
+<p>Stores Default Attributes for for modes to use in Mode.faultmodes.</p>
 <dl class="py attribute">
 <dt class="sig sig-object py" id="fmdtools.define.mode.Fault.dist">
 <span class="sig-name descname"><span class="pre">dist</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">float</span></em><a class="headerlink" href="#fmdtools.define.mode.Fault.dist" title="Permalink to this definition"></a></dt>
@@ -2132,8 +1973,10 @@ or  pass an already-constructured flow class.</p>
 <dt class="sig sig-object py" id="fmdtools.define.mode.Mode">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">fmdtools.define.mode.</span></span><span class="sig-name descname"><span class="pre">Mode</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">s_kwargs</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">{}</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.define.mode.Mode" title="Permalink to this definition"></a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">dataobject</span></code></p>
-<p>Description: Class for defining the mode property (and associated probability model) held in Blocks.</p>
-<p>Mode is meant to be inherited in order to define the specific faults related to a given Block.</p>
+<p>Description: Class for defining the mode property (and associated probability model)
+held in Blocks.</p>
+<p>Mode is meant to be inherited in order to define the specific faults related to a
+given Block.</p>
 <p>e.g.,
 class ExampleMode(Mode):</p>
 <blockquote>
@@ -2183,14 +2026,17 @@ the phases/modes to key by are defined in “key_phases_by”
 </dd>
 </dl>
 </dd>
-<dt>probtype<span class="classifier">str, optional</span></dt><dd><p>Type of probability in the probability model, a per-time ‘rate’ or per-run ‘prob’.
-The default is ‘rate’</p>
+<dt>probtype<span class="classifier">str, optional</span></dt><dd><p>Type of probability in the probability model, a per-time ‘rate’ or
+per-run ‘prob’.The default is ‘rate’</p>
 </dd>
 <dt>units<span class="classifier">str, optional</span></dt><dd><p>Type of units (‘sec’/’min’/’hr’/’day’) used for the rates. Default is ‘hr’</p>
 </dd>
-<dt>exclusive<span class="classifier">True/False</span></dt><dd><p>Whether fault modes are exclusive of each other or not. Default is False (i.e. more than one can be present).</p>
+<dt>exclusive<span class="classifier">True/False</span></dt><dd><p>Whether fault modes are exclusive of each other or not.
+Default is False (i.e. more than one can be present).</p>
 </dd>
-<dt>key_phases_by<span class="classifier">‘self’/’none’/’global’/’fxnname’</span></dt><dd><p>Phases to key the faultmodes by (using local, global, or an external function’s modes’). Default is ‘global’</p>
+<dt>key_phases_by<span class="classifier">‘self’/’none’/’global’/’fxnname’</span></dt><dd><p>Phases to key the faultmodes by
+(using local, global, or an external function’s modes’).
+Default is ‘global’</p>
 </dd>
 <dt>longnames<span class="classifier">dict</span></dt><dd><p>Longer names for the faults (if desired). {faultname: longname}</p>
 </dd>
@@ -2201,8 +2047,6 @@ The default is ‘rate’</p>
 <dt>he_args<span class="classifier">tuple</span></dt><dd><p>Arguments for add_he_rate defining a human error probability model.</p>
 </dd>
 </dl>
-<section id="these-properties-can-then-be-used-in-simulation">
-<h3>These properties can then be used in simulation<a class="headerlink" href="#these-properties-can-then-be-used-in-simulation" title="Permalink to this heading"></a></h3>
 <dl class="simple">
 <dt>faults<span class="classifier">set</span></dt><dd><p>Set of faults present (or not) at any given time</p>
 </dd>
@@ -2211,17 +2055,15 @@ The default is ‘rate’</p>
 <dt>mode_state_dict: dict</dt><dd><p>Maps modes to states. Assigned by assoc_faultstates</p>
 </dd>
 </dl>
-</section>
-<section id="while-these-properties-are-used-for-determining-scenario-information">
-<h3>While these properties are used for determining scenario information<a class="headerlink" href="#while-these-properties-are-used-for-determining-scenario-information" title="Permalink to this heading"></a></h3>
 <dl class="simple">
-<dt>faultmodes<span class="classifier">dict</span></dt><dd><p>Dictionary of <a class="reference internal" href="#fmdtools.define.mode.Fault" title="fmdtools.define.mode.Fault"><code class="xref py py-class docutils literal notranslate"><span class="pre">Fault</span></code></a> defining possible fault modes and their properties</p>
+<dt>faultmodes<span class="classifier">dict</span></dt><dd><p>Dictionary of <a class="reference internal" href="#fmdtools.define.mode.Fault" title="fmdtools.define.mode.Fault"><code class="xref py py-class docutils literal notranslate"><span class="pre">Fault</span></code></a> defining possible fault modes and
+their properties</p>
 </dd>
 </dl>
 <dl class="py method">
 <dt class="sig sig-object py" id="fmdtools.define.mode.Mode.add_fault">
 <span class="sig-name descname"><span class="pre">add_fault</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">faults</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.define.mode.Mode.add_fault" title="Permalink to this definition"></a></dt>
-<dd><p>Adds fault (a str) to the block</p>
+<dd><p>Add fault (a str) to the block.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>*fault</strong> (<em>str</em><em>(</em><em>s</em><em>)</em>) – name(s) of the fault to add to the black</p>
@@ -2232,13 +2074,18 @@ The default is ‘rate’</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="fmdtools.define.mode.Mode.add_he_rate">
 <span class="sig-name descname"><span class="pre">add_he_rate</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">gtp</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">EPCs</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">{'na':</span> <span class="pre">[1,</span> <span class="pre">0]}</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.define.mode.Mode.add_he_rate" title="Permalink to this definition"></a></dt>
-<dd><p>Calculates self.failrate based on a human error probability model.</p>
+<dd><p>Calculate self.failrate based on a human error probability model.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>gtp</strong> (<em>float</em>) – Generic Task Probability. (from HEART)</p></li>
-<li><p><strong>EPCs</strong> (<em>Dict</em><em> or </em><em>list</em>) – Error producing conditions (and respective factors) for a given task (from HEART). Used in format:
-Dict {‘name’:[EPC factor, Effect proportion]} or list [[EPC factor, Effect proportion],[[EPC factor, Effect proportion]]]</p></li>
+<li><p><strong>EPCs</strong> (<em>Dict</em><em> or </em><em>list</em>) – <p>Error producing conditions (and respective factors) for a given task
+(from HEART). Used in format:</p>
+<ul>
+<li><p>Dict {‘name’:[EPC factor, Effect proportion]} or</p></li>
+<li><p>list [[EPC factor, Effect proportion],[[EPC factor, Effect proportion]]]</p></li>
+</ul>
+</p></li>
 </ul>
 </dd>
 </dl>
@@ -2247,25 +2094,30 @@ Dict {‘name’:[EPC factor, Effect proportion]} or list [[EPC factor, Effect p
 <dl class="py method">
 <dt class="sig sig-object py" id="fmdtools.define.mode.Mode.any_faults">
 <span class="sig-name descname"><span class="pre">any_faults</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.define.mode.Mode.any_faults" title="Permalink to this definition"></a></dt>
-<dd><p>check if the block has any fault modes</p>
+<dd><p>Check if the block has any fault modes.</p>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="fmdtools.define.mode.Mode.assoc_faultstates">
 <span class="sig-name descname"><span class="pre">assoc_faultstates</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">franges</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">{}</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mode_app</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'none'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">manual_modes</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">{}</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">probtype</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'prob'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">units</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'hr'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">key_phases_by</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'global'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">seed</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">42</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.define.mode.Mode.assoc_faultstates" title="Permalink to this definition"></a></dt>
-<dd><p>Associates modes with given faultstates.</p>
+<dd><p>Associate modes with given faultstates.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>franges</strong> (<em>dict</em><em>, </em><em>optional</em>) – Dictionary of form {‘state’:{val1, val2…}) of ranges for each health state (if used to generate modes). The default is {}.</p></li>
+<li><p><strong>franges</strong> (<em>dict</em><em>, </em><em>optional</em>) – <dl class="simple">
+<dt>Dictionary of form {‘state’:{val1, val2…}) of ranges for each health state</dt><dd><p>(if used to generate modes). The default is {}.</p>
+</dd>
+</dl>
+</p></li>
 <li><p><strong>mode_app</strong> (<em>str</em>) – type of modes to elaborate from the given health states.</p></li>
-<li><p><strong>manual_modes</strong> (<em>dict</em><em>, </em><em>optional</em>) – <dl class="simple">
+<li><p><strong>manual_modes</strong> (<em>dict</em><em>, </em><em>optional</em>) – <dl>
 <dt>Dictionary/Set of faultmodes with structure, which has the form:</dt><dd><ul>
-<li><dl class="simple">
-<dt>dict {‘fault1’: [atts], ‘fault2’: atts}, where atts may be of form:</dt><dd><ul>
+<li><dl>
+<dt>dict {‘fault1’: [atts], ‘fault2’: atts}, where atts may be of form:</dt><dd><ul class="simple">
 <li><p>states: {state1: val1, state2, val2}</p></li>
-<li><p>[states, faultattributes], where faultattributes is the same as in assoc_modes</p></li>
+<li><p>[states, faultattributes], where faultattributes is the same as in</p></li>
 </ul>
+<p>assoc_modes</p>
 </dd>
 </dl>
 </li>
@@ -2273,8 +2125,8 @@ Dict {‘name’:[EPC factor, Effect proportion]} or list [[EPC factor, Effect p
 </dd>
 </dl>
 </p></li>
-<li><p><strong>probtype</strong> (<em>str</em><em>, </em><em>optional</em>) – Type of probability in the probability model, a per-time ‘rate’ or per-run ‘prob’.
-The default is ‘rate’</p></li>
+<li><p><strong>probtype</strong> (<em>str</em><em>, </em><em>optional</em>) – Type of probability in the probability model, a per-time ‘rate’ or
+per-run ‘prob’. The default is ‘rate’</p></li>
 <li><p><strong>units</strong> (<em>str</em><em>, </em><em>optional</em>) – Type of units (‘sec’/’min’/’hr’/’day’) used for the rates. Default is ‘hr’</p></li>
 <li><p><strong>**kwargs</strong> (<em>kwargs</em>) – Entries for the Faults (e.g., oppvect, etc)</p></li>
 </ul>
@@ -2299,7 +2151,7 @@ The default is ‘rate’</p></li>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="fmdtools.define.mode.Mode.failrate">
-<span class="sig-name descname"><span class="pre">failrate</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">float</span></em><a class="headerlink" href="#fmdtools.define.mode.Mode.failrate" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">failrate</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">1.0</span></em><a class="headerlink" href="#fmdtools.define.mode.Mode.failrate" title="Permalink to this definition"></a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
@@ -2330,7 +2182,7 @@ The default is ‘rate’</p></li>
 <dl class="py method">
 <dt class="sig sig-object py" id="fmdtools.define.mode.Mode.has_fault">
 <span class="sig-name descname"><span class="pre">has_fault</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">faults</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.define.mode.Mode.has_fault" title="Permalink to this definition"></a></dt>
-<dd><p>Check if the block has fault (a str)</p>
+<dd><p>Check if the block has fault (a str).</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>*faults</strong> (<em>strs</em>) – names of the fault to check.</p>
@@ -2346,7 +2198,7 @@ The default is ‘rate’</p></li>
 <dl class="py method">
 <dt class="sig sig-object py" id="fmdtools.define.mode.Mode.in_mode">
 <span class="sig-name descname"><span class="pre">in_mode</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">modes</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.define.mode.Mode.in_mode" title="Permalink to this definition"></a></dt>
-<dd><p>Checks if the system is in a given operational mode</p>
+<dd><p>Check if the system is in a given operational mode.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>*modes</strong> (<em>strs</em>) – names of the mode to check</p>
@@ -2357,7 +2209,7 @@ The default is ‘rate’</p></li>
 <dl class="py method">
 <dt class="sig sig-object py" id="fmdtools.define.mode.Mode.init_faultmodes">
 <span class="sig-name descname"><span class="pre">init_faultmodes</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.define.mode.Mode.init_faultmodes" title="Permalink to this definition"></a></dt>
-<dd><p>Initializes the self.faultmodes dictionary from the parameters of the Mode</p>
+<dd><p>Initialize the self.faultmodes dictionary from the parameters of the Mode.</p>
 </dd></dl>
 
 <dl class="py attribute">
@@ -2377,7 +2229,7 @@ The default is ‘rate’</p></li>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="fmdtools.define.mode.Mode.mode">
-<span class="sig-name descname"><span class="pre">mode</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#fmdtools.define.mode.Mode.mode" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">mode</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'nominal'</span></em><a class="headerlink" href="#fmdtools.define.mode.Mode.mode" title="Permalink to this definition"></a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
@@ -2388,7 +2240,7 @@ The default is ‘rate’</p></li>
 <dl class="py method">
 <dt class="sig sig-object py" id="fmdtools.define.mode.Mode.no_fault">
 <span class="sig-name descname"><span class="pre">no_fault</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">fault</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.define.mode.Mode.no_fault" title="Permalink to this definition"></a></dt>
-<dd><p>Check if the block does not have fault (a str)</p>
+<dd><p>Check if the block does not have fault (a str).</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>fault</strong> (<em>str</em>) – name of the fault to check.</p>
@@ -2409,7 +2261,7 @@ The default is ‘rate’</p></li>
 <dl class="py method">
 <dt class="sig sig-object py" id="fmdtools.define.mode.Mode.remove_any_faults">
 <span class="sig-name descname"><span class="pre">remove_any_faults</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">opermode</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">warnmessage</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.define.mode.Mode.remove_any_faults" title="Permalink to this definition"></a></dt>
-<dd><p>Resets fault mode to nominal and returns to the given operational mode</p>
+<dd><p>Reset fault mode to nominal and returns to the given operational mode.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
@@ -2423,7 +2275,7 @@ The default is ‘rate’</p></li>
 <dl class="py method">
 <dt class="sig sig-object py" id="fmdtools.define.mode.Mode.remove_fault">
 <span class="sig-name descname"><span class="pre">remove_fault</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">fault_to_remove</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">opermode</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">warnmessage</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.define.mode.Mode.remove_fault" title="Permalink to this definition"></a></dt>
-<dd><p>Removes fault in the set of faults and returns to given operational mode</p>
+<dd><p>Remove fault in the set of faults and returns to given operational mode.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
@@ -2438,7 +2290,7 @@ The default is ‘rate’</p></li>
 <dl class="py method">
 <dt class="sig sig-object py" id="fmdtools.define.mode.Mode.replace_fault">
 <span class="sig-name descname"><span class="pre">replace_fault</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">fault_to_replace</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fault_to_add</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.define.mode.Mode.replace_fault" title="Permalink to this definition"></a></dt>
-<dd><p>Replaces fault_to_replace with fault_to_add in the set of faults</p>
+<dd><p>Replace fault_to_replace with fault_to_add in the set of faults.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
@@ -2457,7 +2309,7 @@ The default is ‘rate’</p></li>
 <dl class="py method">
 <dt class="sig sig-object py" id="fmdtools.define.mode.Mode.set_mode">
 <span class="sig-name descname"><span class="pre">set_mode</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mode</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.define.mode.Mode.set_mode" title="Permalink to this definition"></a></dt>
-<dd><p>Sets a mode in the block</p>
+<dd><p>Set a mode in the block.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>mode</strong> (<em>str</em>) – name of the mode to enter.</p>
@@ -2468,7 +2320,7 @@ The default is ‘rate’</p></li>
 <dl class="py method">
 <dt class="sig sig-object py" id="fmdtools.define.mode.Mode.to_fault">
 <span class="sig-name descname"><span class="pre">to_fault</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">fault</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.define.mode.Mode.to_fault" title="Permalink to this definition"></a></dt>
-<dd><p>Moves from the current fault mode to a new fault mode</p>
+<dd><p>Move from the current fault mode to a new fault mode.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>fault</strong> (<em>str</em>) – name of the fault mode to switch to</p>
@@ -2489,10 +2341,10 @@ The default is ‘rate’</p></li>
 <dl class="py method">
 <dt class="sig sig-object py" id="fmdtools.define.mode.Mode.update_modestates">
 <span class="sig-name descname"><span class="pre">update_modestates</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.define.mode.Mode.update_modestates" title="Permalink to this definition"></a></dt>
-<dd><p>Updates states of the model associated with a specific fault mode (see assoc_modes).</p>
+<dd><p>Update states of the model associated with a specific fault mode.</p>
+<p>(see assoc_modes)</p>
 </dd></dl>
 
-</section>
 </dd></dl>
 
 </section>
@@ -2741,8 +2593,8 @@ in assoc_faultmodes/ Default is 0.</p></li>
 </dd></dl>
 
 <dl class="py attribute">
-<dt class="sig sig-object py" id="id25">
-<span class="sig-name descname"><span class="pre">fxns</span></span><a class="headerlink" href="#id25" title="Permalink to this definition"></a></dt>
+<dt class="sig sig-object py" id="id23">
+<span class="sig-name descname"><span class="pre">fxns</span></span><a class="headerlink" href="#id23" title="Permalink to this definition"></a></dt>
 <dd></dd></dl>
 
 <dl class="py method">
@@ -2794,8 +2646,8 @@ a str ‘fxnname.comp1.att2’</p>
 </dd></dl>
 
 <dl class="py attribute">
-<dt class="sig sig-object py" id="id26">
-<span class="sig-name descname"><span class="pre">graph</span></span><a class="headerlink" href="#id26" title="Permalink to this definition"></a></dt>
+<dt class="sig sig-object py" id="id24">
+<span class="sig-name descname"><span class="pre">graph</span></span><a class="headerlink" href="#id24" title="Permalink to this definition"></a></dt>
 <dd></dd></dl>
 
 <dl class="py method">
@@ -2877,7 +2729,7 @@ Can set as ‘track_pdf’ to calculate/track the probability densities of rando
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>varlist</strong> (<em>list</em><em> of </em><em>lists/tuples</em>) – <dl class="simple">
+<li><p><strong>varlist</strong> (<em>list of lists/tuples</em>) – <dl class="simple">
 <dt>List of variables to set, with possible structures:</dt><dd><p>[[‘fxnname’, ‘att1’], [‘fxnname2’, ‘comp1’, ‘att2’], [‘flowname’, ‘att3’]]
 [‘fxnname.att1’, ‘fxnname.comp1.att2’, ‘flowname.att3’]</p>
 </dd>
@@ -2885,7 +2737,7 @@ Can set as ‘track_pdf’ to calculate/track the probability densities of rando
 </p></li>
 <li><p><strong>varvalues</strong> (<em>list</em>) – List of values corresponding to varlist</p></li>
 <li><p><strong>kwargs</strong> (<em>kwargs</em>) – attribute-value pairs. If provided, must be passed using ** syntax:
-mdl.set_vars(<a href="#id27"><span class="problematic" id="id28">**</span></a>{‘fxnname.varname’:value})</p></li>
+mdl.set_vars(<a href="#id25"><span class="problematic" id="id26">**</span></a>{‘fxnname.varname’:value})</p></li>
 </ul>
 </dd>
 </dl>
@@ -2923,7 +2775,8 @@ mdl.set_vars(<a href="#id27"><span class="problematic" id="id28">**</span></a>{�
 </section>
 <section id="module-fmdtools.define.parameter">
 <span id="fmdtools-define-parameter"></span><h2>fmdtools.define.parameter<a class="headerlink" href="#module-fmdtools.define.parameter" title="Permalink to this heading"></a></h2>
-<p>Description: A module for defining Parameters, which are (generic) containers for system attributes that do not change</p>
+<p>Description: A module for defining Parameters, which are (generic) containers for
+system attributes that do not change.</p>
 <ul class="simple">
 <li><p><a class="reference internal" href="#fmdtools.define.parameter.Parameter" title="fmdtools.define.parameter.Parameter"><code class="xref py py-class docutils literal notranslate"><span class="pre">Parameter</span></code></a>: Superclass for Parameters</p></li>
 <li><p><a class="reference internal" href="#fmdtools.define.parameter.SimParam" title="fmdtools.define.parameter.SimParam"><code class="xref py py-class docutils literal notranslate"><span class="pre">SimParam</span></code></a>: Class defining Simulation Parameters</p></li>
@@ -2984,7 +2837,7 @@ self.k_lim or set constraints self.k_set</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="fmdtools.define.parameter.Parameter.check_pickle">
 <span class="sig-name descname"><span class="pre">check_pickle</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.define.parameter.Parameter.check_pickle" title="Permalink to this definition"></a></dt>
-<dd><p>Checks to make sure pickled object will get <a href="#id29"><span class="problematic" id="id30">*</span></a>args and <a href="#id31"><span class="problematic" id="id32">**</span></a>kwargs</p>
+<dd><p>Checks to make sure pickled object will get <a href="#id27"><span class="problematic" id="id28">*</span></a>args and <a href="#id29"><span class="problematic" id="id30">**</span></a>kwargs</p>
 </dd></dl>
 
 <dl class="py method">
@@ -3024,7 +2877,8 @@ self.k_lim or set constraints self.k_set</p>
 <dt>Has fields:</dt><dd><dl class="simple">
 <dt>phases<span class="classifier">tuple</span></dt><dd><p>phases ((‘name’, start, end)…) that the simulation progresses through</p>
 </dd>
-<dt>times<span class="classifier">tuple</span></dt><dd><p>tuple of times to sample (if desired) (starttime, sampletime1, sampletime2,… endtime)</p>
+<dt>times<span class="classifier">tuple</span></dt><dd><p>tuple of times to sample (if desired)
+(starttime, sampletime1, sampletime2,… endtime)</p>
 </dd>
 <dt>dt<span class="classifier">float</span></dt><dd><p>timestep used in the simulation. default is 1.0</p>
 </dd>
@@ -3033,7 +2887,8 @@ self.k_lim or set constraints self.k_set</p>
 <dt>end_condition<span class="classifier">str</span></dt><dd><p>Name of indicator method to use to end the simulation. If not provided (‘’),
 the simulation ends at the final time. Default is ‘’</p>
 </dd>
-<dt>use_local<span class="classifier">bool</span></dt><dd><p>Whether to use locally-defined timesteps in functions (if any). Default is True.</p>
+<dt>use_local<span class="classifier">bool</span></dt><dd><p>Whether to use locally-defined timesteps in functions (if any).
+Default is True.</p>
 </dd>
 </dl>
 </dd>
@@ -3083,25 +2938,22 @@ the simulation ends at the final time. Default is ‘’</p>
 </section>
 <section id="module-fmdtools.define.rand">
 <span id="fmdtools-define-rand"></span><h2>fmdtools.define.rand<a class="headerlink" href="#module-fmdtools.define.rand" title="Permalink to this heading"></a></h2>
-<p>Description: A module for defining randon properties for use in blocks. Has Classes and Functions:</p>
+<p>Description: A module for defining randon properties for use in blocks.</p>
+<p>Has Classes and Functions:</p>
 <ul class="simple">
-<li><p><a class="reference internal" href="#fmdtools.define.rand.Rand" title="fmdtools.define.rand.Rand"><code class="xref py py-class docutils literal notranslate"><span class="pre">Rand</span></code></a>:               Superclass for Block random properties.</p></li>
-<li><dl class="simple">
-<dt><a class="reference internal" href="#fmdtools.define.rand.get_pdf_for_rand" title="fmdtools.define.rand.get_pdf_for_rand"><code class="xref py py-func docutils literal notranslate"><span class="pre">get_pdf_for_rand()</span></code></a>:     Gets the corresponding probability mass/density for random sample x</dt><dd><p>from ‘randname’ function in numpy.</p>
-</dd>
-</dl>
-</li>
-<li><dl class="simple">
-<dt><a class="reference internal" href="#fmdtools.define.rand.get_scipy_pdf_helper" title="fmdtools.define.rand.get_scipy_pdf_helper"><code class="xref py py-func docutils literal notranslate"><span class="pre">get_scipy_pdf_helper()</span></code></a>: Gets probability mass/density for the outcome x from the distribution “randname”.</dt><dd><p>Used as a helper function in determining stochastic model state probability</p>
-</dd>
-</dl>
-</li>
-<li><dl class="simple">
-<dt><a class="reference internal" href="#fmdtools.define.rand.get_pdf_for_dist" title="fmdtools.define.rand.get_pdf_for_dist"><code class="xref py py-func docutils literal notranslate"><span class="pre">get_pdf_for_dist()</span></code></a>:     Gets the corresponding probability mass/density (from scipy) for outcome x</dt><dd><p>for probability distributions with name ‘randname’ in numpy.</p>
-</dd>
-</dl>
-</li>
+<li><p><a class="reference internal" href="#fmdtools.define.rand.Rand" title="fmdtools.define.rand.Rand"><code class="xref py py-class docutils literal notranslate"><span class="pre">Rand</span></code></a>: Superclass for Block random properties.</p></li>
+<li><p><a class="reference internal" href="#fmdtools.define.rand.get_pdf_for_rand" title="fmdtools.define.rand.get_pdf_for_rand"><code class="xref py py-func docutils literal notranslate"><span class="pre">get_pdf_for_rand()</span></code></a>: Gets the corresponding probability mass/density for</p></li>
 </ul>
+<p>random sample x from ‘randname’ function in numpy.</p>
+<ul class="simple">
+<li><p><a class="reference internal" href="#fmdtools.define.rand.get_scipy_pdf_helper" title="fmdtools.define.rand.get_scipy_pdf_helper"><code class="xref py py-func docutils literal notranslate"><span class="pre">get_scipy_pdf_helper()</span></code></a>: Gets probability mass/density for the outcome x from the</p></li>
+</ul>
+<p>distribution “randname”. Used as a helper function in determining stochastic model state
+probability</p>
+<ul class="simple">
+<li><p><a class="reference internal" href="#fmdtools.define.rand.get_pdf_for_dist" title="fmdtools.define.rand.get_pdf_for_dist"><code class="xref py py-func docutils literal notranslate"><span class="pre">get_pdf_for_dist()</span></code></a>: Gets the corresponding probability mass/density (from scipy)</p></li>
+</ul>
+<p>for outcome x for probability distributions with name ‘randname’ in numpy.</p>
 <dl class="py class">
 <dt class="sig sig-object py" id="fmdtools.define.rand.Rand">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">fmdtools.define.rand.</span></span><span class="sig-name descname"><span class="pre">Rand</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">seed</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">42</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">run_stochastic</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">probs</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[]</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">s_kwargs</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">{}</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.define.rand.Rand" title="Permalink to this definition"></a></dt>
@@ -3182,7 +3034,7 @@ run_stochastic:     bool=True</p>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>timerange</strong> (<em>iterable</em><em>, </em><em>optional</em>) – Time-range to initialize the history over. The default is None.</p></li>
 <li><p><strong>track</strong> (<em>list/str/dict</em><em>, </em><em>optional</em>) – <dl class="simple">
-<dt>argument specifying attributes for :func:<a href="#id33"><span class="problematic" id="id34">`</span></a>get_sub_include’. The default is None.</dt><dd><p>DESCRIPTION. The default is None.</p>
+<dt>argument specifying attributes for :func:<a href="#id31"><span class="problematic" id="id32">`</span></a>get_sub_include’.</dt><dd><p>The default is None.</p>
 </dd>
 </dl>
 </p></li>
@@ -3223,8 +3075,8 @@ run_stochastic:     bool=True</p>
 <dd></dd></dl>
 
 <dl class="py attribute">
-<dt class="sig sig-object py" id="id35">
-<span class="sig-name descname"><span class="pre">probs</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">list</span></em><a class="headerlink" href="#id35" title="Permalink to this definition"></a></dt>
+<dt class="sig sig-object py" id="id33">
+<span class="sig-name descname"><span class="pre">probs</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">list</span></em><a class="headerlink" href="#id33" title="Permalink to this definition"></a></dt>
 <dd></dd></dl>
 
 <dl class="py method">
@@ -3244,8 +3096,8 @@ run_stochastic:     bool=True</p>
 <dd></dd></dl>
 
 <dl class="py attribute">
-<dt class="sig sig-object py" id="id36">
-<span class="sig-name descname"><span class="pre">rng</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">default_rng</span></em><a class="headerlink" href="#id36" title="Permalink to this definition"></a></dt>
+<dt class="sig sig-object py" id="id34">
+<span class="sig-name descname"><span class="pre">rng</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">default_rng</span></em><a class="headerlink" href="#id34" title="Permalink to this definition"></a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
@@ -3254,14 +3106,15 @@ run_stochastic:     bool=True</p>
 <dd></dd></dl>
 
 <dl class="py attribute">
-<dt class="sig sig-object py" id="id37">
-<span class="sig-name descname"><span class="pre">seed</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><a class="headerlink" href="#id37" title="Permalink to this definition"></a></dt>
+<dt class="sig sig-object py" id="id35">
+<span class="sig-name descname"><span class="pre">seed</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><a class="headerlink" href="#id35" title="Permalink to this definition"></a></dt>
 <dd></dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="fmdtools.define.rand.Rand.set_rand">
 <span class="sig-name descname"><span class="pre">set_rand</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">statename</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">methodname</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.define.rand.Rand.set_rand" title="Permalink to this definition"></a></dt>
-<dd><p>Update the given random state with a given method and arguments (if in run_stochastic mode)</p>
+<dd><p>Update the given random state with a given method and arguments
+(if in run_stochastic mode)</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
@@ -3340,15 +3193,17 @@ for random sample x from ‘randname’ function in numpy.</p>
 <dl class="py function">
 <dt class="sig sig-object py" id="fmdtools.define.rand.get_scipy_pdf_helper">
 <span class="sig-prename descclassname"><span class="pre">fmdtools.define.rand.</span></span><span class="sig-name descname"><span class="pre">get_scipy_pdf_helper</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">randname</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pmf</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.define.rand.get_scipy_pdf_helper" title="Permalink to this definition"></a></dt>
-<dd><p>Gets probability mass/density for the outcome x from the distribution “randname” with arguments “args”.
-Used as a helper function in determining stochastic model state probability</p>
+<dd><p>Gets probability mass/density for the outcome x from the distribution “randname”
+with arguments “args”.</p>
+<p>Used as a helper function in determining stochastic model state probability</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>x</strong> (<em>int/float/array</em>) – samples to get probability mass/density of</p></li>
 <li><p><strong>randname</strong> (<em>str</em>) – Name of scipy.stats probability distribution</p></li>
 <li><p><strong>args</strong> (<em>tuple</em>) – Arguments to send to scipy.stats.randname.pdf</p></li>
-<li><p><strong>pmf</strong> (<em>Bool</em><em>, </em><em>optional</em>) – Whether the distribution uses a probability mass function instead of a pdf. The default is False.</p></li>
+<li><p><strong>pmf</strong> (<em>Bool</em><em>, </em><em>optional</em>) – Whether the distribution uses a probability mass function instead of a pdf.
+The default is False.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
@@ -3363,7 +3218,8 @@ Used as a helper function in determining stochastic model state probability</p>
 </section>
 <section id="module-fmdtools.define.state">
 <span id="fmdtools-define-state"></span><h2>fmdtools.define.state<a class="headerlink" href="#module-fmdtools.define.state" title="Permalink to this heading"></a></h2>
-<p>Description: A module for defining States, which are (generic) containers for system attributes that change over time.</p>
+<p>Description: A module for defining States, which are (generic) containers for system
+attributes that change over time.</p>
 <ul class="simple">
 <li><p><a class="reference internal" href="#fmdtools.define.state.State" title="fmdtools.define.state.State"><code class="xref py py-class docutils literal notranslate"><span class="pre">State</span></code></a>: Superclass for Model States.</p></li>
 </ul>
@@ -3374,14 +3230,15 @@ Used as a helper function in determining stochastic model state probability</p>
 <p>Class for working with model states, which are variables in the model which
 change over time. This class inherits from dataobject for low memory footprint
 and has a number of methods for making attribute assignment/copying easier.</p>
-<p>State is meant to be extended in the model definition object to add the corresponding
-field related to a simulation, e.g.,</p>
+<p>State is meant to be extended in the model definition object to add the
+corresponding field related to a simulation, e.g.,</p>
 <dl class="simple">
 <dt>class Point(State):</dt><dd><p>x : float=1.0
 y : float=1.0</p>
 </dd>
 </dl>
-<p>Creates a class point with fields x and y which are tagged as floats with default values of 1.0.</p>
+<p>Creates a class point with fields x and y which are tagged as floats with default
+values of 1.0.</p>
 <p>Instancing State gives normal read/write access, e.g., one can do:</p>
 <p>p = Point()
 p.x
@@ -3403,12 +3260,13 @@ e.g.,   a = self.add(‘x’,’y’,’z’) is the same as</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="fmdtools.define.state.State.assign">
 <span class="sig-name descname"><span class="pre">assign</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">obj</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">states</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">as_copy</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">statedict</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.define.state.State.assign" title="Permalink to this definition"></a></dt>
-<dd><p>Sets the same-named values of the current flow/function object to those of a given flow.
-Further arguments specify which values.
-e.g. self.EE1.assign(EE2, ‘v’, ‘a’) is the same as saying</p>
-<blockquote>
-<div><p>self.EE1.a = self.EE2.a; self.EE1.v = self.EE2.v</p>
-</div></blockquote>
+<dd><p>Sets the same-named values of the current flow/function object to those of a
+given flow.</p>
+<p>Further arguments specify which values.</p>
+<dl class="simple">
+<dt>e.g. self.EE1.assign(EE2, ‘v’, ‘a’) is the same as saying</dt><dd><p>self.EE1.a = self.EE2.a; self.EE1.v = self.EE2.v</p>
+</dd>
+</dl>
 <p>Can also be used to assign list values to a variable
 e.g. self.Pos.assign([1,2,3],’x’,’y’,’z’)
 Can also provide dict in case value names don’t match
@@ -3420,26 +3278,21 @@ as_copy: bool, set to True for dicts/sets to be copied rather than referenced</p
 <dt class="sig sig-object py" id="fmdtools.define.state.State.create_hist">
 <span class="sig-name descname"><span class="pre">create_hist</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">timerange</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">track</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">default_str_size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'&lt;U20'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.define.state.State.create_hist" title="Permalink to this definition"></a></dt>
 <dd><p>Creates a History corresponding to State</p>
-<section id="parameter">
-<h3>Parameter<a class="headerlink" href="#parameter" title="Permalink to this heading"></a></h3>
 <dl class="simple">
 <dt>timerange<span class="classifier">iterable, optional</span></dt><dd><p>Time-range to initialize the history over. The default is None.</p>
 </dd>
-<dt>track<span class="classifier">list/str/dict, optional</span></dt><dd><dl class="simple">
-<dt>argument specifying attributes for :func:<a href="#id38"><span class="problematic" id="id39">`</span></a>get_sub_include’. The default is None.</dt><dd><p>DESCRIPTION. The default is None.</p>
-</dd>
-</dl>
+<dt>track<span class="classifier">list/str/dict, optional</span></dt><dd><p>argument specifying attributes for :func:<a href="#id36"><span class="problematic" id="id37">`</span></a>get_sub_include’.
+The default is None.</p>
 </dd>
 </dl>
 <dl class="field-list simple">
-<dt class="field-odd">returns<span class="colon">:</span></dt>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>hist</strong> – History of fields specified in track.</p>
 </dd>
-<dt class="field-even">rtype<span class="colon">:</span></dt>
-<dd class="field-even"><p>History</p>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><a class="reference internal" href="fmdtools.analyze.html#fmdtools.analyze.result.History" title="fmdtools.analyze.result.History">History</a></p>
 </dd>
 </dl>
-</section>
 </dd></dl>
 
 <dl class="py attribute">
@@ -3471,8 +3324,8 @@ e.g.,   a = self.div(‘x’,’y’,’z’) is the same as</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="fmdtools.define.state.State.get">
 <span class="sig-name descname"><span class="pre">get</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">attnames</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.define.state.State.get" title="Permalink to this definition"></a></dt>
-<dd><p>Returns the given attribute names (strings). Mainly useful for reducing length
-of lines/adding clarity to assignment statements.
+<dd><p>Returns the given attribute names (strings). Mainly useful for reducing
+length of lines/adding clarity to assignment statements.
 e.g., x,y = self.Pos.get(‘x’,’y’) is the same as</p>
 <blockquote>
 <div><p>x,y = self.Pos.x, self.Pos.y, or
@@ -3485,9 +3338,9 @@ z = np.array([self.Pos.x, self.Pos.y])</p>
 <dt class="sig sig-object py" id="fmdtools.define.state.State.gett">
 <span class="sig-name descname"><span class="pre">gett</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">attnames</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.define.state.State.gett" title="Permalink to this definition"></a></dt>
 <dd><p>Alternative to self.get that returns the given constructs as a tuple instead
-of as an array. Useful when a numpy array would translate the underlying data types
-poorly (e.g., np.array([1,’b’] would make 1 a string–using a tuple instead preserves
-the data type)</p>
+of as an array. Useful when a numpy array would translate the underlying data
+types poorly (e.g., np.array([1,’b’] would make 1 a string–using a tuple
+instead preserves the data type)</p>
 </dd></dl>
 
 <dl class="py method">
@@ -3500,8 +3353,8 @@ e.g., self.Pos.inc(x=1,y=1) is the same as</p>
 <div><p>self.Pos.x+=1; self.Pos.y+=1, or
 self.Pos.x = self.Pos.x + 1; self.Pos.y = self.Pos.y +1</p>
 </div></blockquote>
-<p>Can additionally be provided with a second value denoting a limit on the increments
-e.g. self.Pos.inc(x=(1,10)) will increment x by 1 until it reaches 10</p>
+<p>Can additionally be provided with a second value denoting a limit on the
+increments e.g. self.Pos.inc(x=(1,10)) will increment x by 1 until it reaches 10</p>
 </dd></dl>
 
 <dl class="py method">
@@ -3561,11 +3414,14 @@ e.g.,   self.same([1,2],’a’,’b’) is the same as</p>
 <span class="sig-name descname"><span class="pre">set_atts</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.define.state.State.set_atts" title="Permalink to this definition"></a></dt>
 <dd><p>Sets the given arguments to a given value. Mainly useful for
 reducing length/adding clarity to assignment statements in __init__ methods
-(self.put is reccomended otherwise so that the iteration is on function/flow <em>states</em>)
-e.g., self.set_attr(maxpower=1, maxvoltage=1) is the same as saying</p>
+(self.put is reccomended otherwise so that the iteration is on function/flow</p>
 <blockquote>
-<div><p>self.maxpower=1; self.maxvoltage=1</p>
+<div><p><em>states</em>)</p>
 </div></blockquote>
+<dl class="simple">
+<dt>e.g., self.set_attr(maxpower=1, maxvoltage=1) is the same as saying</dt><dd><p>self.maxpower=1; self.maxvoltage=1</p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="py method">
@@ -3591,7 +3447,8 @@ e.g.,   a = self.div(‘x’,’y’,’z’) is the same as</p>
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>*messages</strong> (<em>str</em>) – Strings to make up the message (will be joined by spaces)</p></li>
-<li><p><strong>stacklevel</strong> (<em>int</em>) – Where the warning points to. The default is 2 (points to the place in the model)</p></li>
+<li><p><strong>stacklevel</strong> (<em>int</em>) – Where the warning points to.
+The default is 2 (points to the place in the model)</p></li>
 </ul>
 </dd>
 </dl>
@@ -3663,7 +3520,8 @@ e.g.,   a = self.div(‘x’,’y’,’z’) is the same as</p>
 <dl class="py attribute">
 <dt class="sig sig-object py" id="fmdtools.define.time.Time.run_times">
 <span class="sig-name descname"><span class="pre">run_times</span></span><a class="headerlink" href="#fmdtools.define.time.Time.run_times" title="Permalink to this definition"></a></dt>
-<dd><p>number of times to run the behavior if running at a different timestep than global</p>
+<dd><p>number of times to run the behavior if running at a different timestep than
+global</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>int</p>
@@ -3718,11 +3576,8 @@ e.g.,   a = self.div(‘x’,’y’,’z’) is the same as</p>
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>timerange</strong> (<em>iterable</em><em>, </em><em>optional</em>) – Time-range to initialize the history over. The default is None.</p></li>
-<li><p><strong>track</strong> (<em>list/str/dict</em><em>, </em><em>optional</em>) – <dl class="simple">
-<dt>argument specifying attributes for :func:<a href="#id40"><span class="problematic" id="id41">`</span></a>get_sub_include’. The default is None.</dt><dd><p>DESCRIPTION. The default is None.</p>
-</dd>
-</dl>
-</p></li>
+<li><p><strong>track</strong> (<em>list/str/dict</em><em>, </em><em>optional</em>) – argument specifying attributes for :func:<a href="#id38"><span class="problematic" id="id39">`</span></a>get_sub_include’.
+The default is None.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
@@ -3740,8 +3595,13 @@ e.g.,   a = self.div(‘x’,’y’,’z’) is the same as</p>
 <dd></dd></dl>
 
 <dl class="py attribute">
-<dt class="sig sig-object py" id="id42">
-<span class="sig-name descname"><span class="pre">dt</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">float</span></em><a class="headerlink" href="#id42" title="Permalink to this definition"></a></dt>
+<dt class="sig sig-object py" id="id40">
+<span class="sig-name descname"><span class="pre">dt</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">float</span></em><a class="headerlink" href="#id40" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="fmdtools.define.time.Time.local_dt">
+<span class="sig-name descname"><span class="pre">local_dt</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">1.0</span></em><a class="headerlink" href="#fmdtools.define.time.Time.local_dt" title="Permalink to this definition"></a></dt>
 <dd></dd></dl>
 
 <dl class="py method">
@@ -3756,8 +3616,8 @@ e.g.,   a = self.div(‘x’,’y’,’z’) is the same as</p>
 <dd></dd></dl>
 
 <dl class="py attribute">
-<dt class="sig sig-object py" id="id43">
-<span class="sig-name descname"><span class="pre">run_times</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><a class="headerlink" href="#id43" title="Permalink to this definition"></a></dt>
+<dt class="sig sig-object py" id="id41">
+<span class="sig-name descname"><span class="pre">run_times</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><a class="headerlink" href="#id41" title="Permalink to this definition"></a></dt>
 <dd></dd></dl>
 
 <dl class="py method">
@@ -3768,33 +3628,33 @@ e.g.,   a = self.div(‘x’,’y’,’z’) is the same as</p>
 </dd></dl>
 
 <dl class="py attribute">
+<dt class="sig sig-object py" id="id42">
+<span class="sig-name descname"><span class="pre">t_ind</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><a class="headerlink" href="#id42" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="id43">
+<span class="sig-name descname"><span class="pre">t_loc</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">float</span></em><a class="headerlink" href="#id43" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
 <dt class="sig sig-object py" id="id44">
-<span class="sig-name descname"><span class="pre">t_ind</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><a class="headerlink" href="#id44" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">time</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">float</span></em><a class="headerlink" href="#id44" title="Permalink to this definition"></a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="id45">
-<span class="sig-name descname"><span class="pre">t_loc</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">float</span></em><a class="headerlink" href="#id45" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">timernames</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">()</span></em><a class="headerlink" href="#id45" title="Permalink to this definition"></a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="id46">
-<span class="sig-name descname"><span class="pre">time</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">float</span></em><a class="headerlink" href="#id46" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">timers</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">dict</span></em><a class="headerlink" href="#id46" title="Permalink to this definition"></a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="id47">
-<span class="sig-name descname"><span class="pre">timernames</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">()</span></em><a class="headerlink" href="#id47" title="Permalink to this definition"></a></dt>
-<dd></dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="id48">
-<span class="sig-name descname"><span class="pre">timers</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">dict</span></em><a class="headerlink" href="#id48" title="Permalink to this definition"></a></dt>
-<dd></dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="id49">
-<span class="sig-name descname"><span class="pre">use_local</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">bool</span></em><a class="headerlink" href="#id49" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">use_local</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">bool</span></em><a class="headerlink" href="#id47" title="Permalink to this definition"></a></dt>
 <dd></dd></dl>
 
 </dd></dl>
@@ -3899,7 +3759,7 @@ e.g.,   a = self.div(‘x’,’y’,’z’) is the same as</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="fmdtools.define.time.Timer.set_timer">
-<span class="sig-name descname"><span class="pre">set_timer</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">time</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tstep</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">-1.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">overwrite</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'always'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.define.time.Timer.set_timer" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">set_timer</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">time</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tstep</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">-</span> <span class="pre">1.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">overwrite</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'always'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.define.time.Timer.set_timer" title="Permalink to this definition"></a></dt>
 <dd><p>Sets timer to a given time</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>

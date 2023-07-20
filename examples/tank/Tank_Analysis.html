@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Hold-up Tank Model &mdash; fmdtools 2.0-alpha3 documentation</title>
+  <title>Hold-up Tank Model &mdash; fmdtools 2.0-alpha4 documentation</title>
       <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
       <link rel="stylesheet" href="../../_static/nbsphinx-code-cells.css" type="text/css" />
@@ -13,18 +13,18 @@
     <script src="../../_static/js/html5shiv.min.js"></script>
   <![endif]-->
   
-        <script src="../../_static/jquery.js"></script>
-        <script src="../../_static/_sphinx_javascript_frameworks_compat.js"></script>
         <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+        <script src="../../_static/jquery.js"></script>
+        <script src="../../_static/underscore.js"></script>
+        <script src="../../_static/_sphinx_javascript_frameworks_compat.js"></script>
         <script src="../../_static/doctools.js"></script>
-        <script src="../../_static/sphinx_highlight.js"></script>
         <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
         <script>window.MathJax = {"tex": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true}, "options": {"ignoreHtmlClass": "tex2jax_ignore|mathjax_ignore|document", "processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
         <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
     <script src="../../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
-    <link rel="next" title="Cooling Tank Model" href="Tank_Optimization.html" />
+    <link rel="next" title="Cooling Tank Model Optimization" href="Tank_Optimization.html" />
     <link rel="prev" title="Integrated Resilience Optimization Architectures" href="../multirotor/Multirotor_Optimization.html" /> 
 </head>
 
@@ -72,7 +72,7 @@
 <li class="toctree-l2"><a class="reference internal" href="../../docs/Development%20Guide.html#intro-to-fmdtools">Intro to fmdtools</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="../../docs/Intro_to_fmdtools.html">Intro to resilience modelling, simulation, and visualization in Python with fmdtools.</a><ul>
 <li class="toctree-l4"><a class="reference internal" href="../../docs/Intro_to_fmdtools.html#author-daniel-hulse">Author: Daniel Hulse</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/Intro_to_fmdtools.html#version-2-0-alpha">Version: 2.0-alpha</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../docs/Intro_to_fmdtools.html#version-2-0-alpha4">Version: 2.0-alpha4</a></li>
 </ul>
 </li>
 <li class="toctree-l3"><a class="reference internal" href="../../docs/Intro_to_fmdtools.html#overview">Overview</a></li>
@@ -117,6 +117,7 @@
 </li>
 <li class="toctree-l3"><a class="reference internal" href="../../docs/Development%20Guide.html#roles">Roles</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../docs/Development%20Guide.html#documentation">Documentation</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../docs/Development%20Guide.html#style-formatting">Style/Formatting</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../docs/Development%20Guide.html#testing">Testing</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../docs/Development%20Guide.html#contributors">Contributors</a><ul>
 <li class="toctree-l4"><a class="reference internal" href="../../CONTRIBUTORS.html">CONTRIBUTORS</a></li>
@@ -216,8 +217,13 @@
 <li class="toctree-l4"><a class="reference internal" href="#Testing-different-reaction-times">Testing different reaction times</a></li>
 </ul>
 </li>
-<li class="toctree-l3"><a class="reference internal" href="Tank_Optimization.html">Cooling Tank Model</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="Tank_Optimization.html#Simulation">Simulation</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Tank_Optimization.html">Cooling Tank Model Optimization</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Tank_Optimization.html#Simulation">Simulation</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="Tank_Optimization.html#Verifying-the-nominal-state:">Verifying the nominal state:</a></li>
+<li class="toctree-l4"><a class="reference internal" href="Tank_Optimization.html#What-happens-under-component-faults?">What happens under component faults?</a></li>
+<li class="toctree-l4"><a class="reference internal" href="Tank_Optimization.html#Full-set-of-modes">Full set of modes</a></li>
+<li class="toctree-l4"><a class="reference internal" href="Tank_Optimization.html#Defining-Optimization-Problem">Defining Optimization Problem</a></li>
+<li class="toctree-l4"><a class="reference internal" href="Tank_Optimization.html#Optimization">Optimization</a></li>
 </ul>
 </li>
 </ul>
@@ -290,239 +296,29 @@
 <li class="toctree-l1"><a class="reference internal" href="../../docs/Glossary.html">Glossary</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../docs/fmdtools.html">Module Reference</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="../../docs/fmdtools.define.html">fmdtools.define package</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="../../docs/fmdtools.define.html#fmdtools-define-block">fmdtools.define.block</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.define.html#fmdtools.define.block.ASG"><code class="docutils literal notranslate"><span class="pre">ASG</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.define.html#fmdtools.define.block.Action"><code class="docutils literal notranslate"><span class="pre">Action</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.define.html#fmdtools.define.block.Block"><code class="docutils literal notranslate"><span class="pre">Block</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.define.html#fmdtools.define.block.CompArch"><code class="docutils literal notranslate"><span class="pre">CompArch</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.define.html#fmdtools.define.block.Component"><code class="docutils literal notranslate"><span class="pre">Component</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.define.html#fmdtools.define.block.FxnBlock"><code class="docutils literal notranslate"><span class="pre">FxnBlock</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.define.html#fmdtools.define.block.GenericFxn"><code class="docutils literal notranslate"><span class="pre">GenericFxn</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.define.html#fmdtools.define.block.Simulable"><code class="docutils literal notranslate"><span class="pre">Simulable</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.define.html#fmdtools.define.block.assoc_flows"><code class="docutils literal notranslate"><span class="pre">assoc_flows()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.define.html#fmdtools.define.block.inject_faults_internal"><code class="docutils literal notranslate"><span class="pre">inject_faults_internal()</span></code></a></li>
-</ul>
-</li>
-<li class="toctree-l3"><a class="reference internal" href="../../docs/fmdtools.define.html#module-fmdtools.define.common">fmdtools.define.common</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.define.html#fmdtools.define.common.check_pickleability"><code class="docutils literal notranslate"><span class="pre">check_pickleability()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.define.html#fmdtools.define.common.eq_units"><code class="docutils literal notranslate"><span class="pre">eq_units()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.define.html#fmdtools.define.common.get_dataobj_track"><code class="docutils literal notranslate"><span class="pre">get_dataobj_track()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.define.html#fmdtools.define.common.get_obj_track"><code class="docutils literal notranslate"><span class="pre">get_obj_track()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.define.html#fmdtools.define.common.get_true_field"><code class="docutils literal notranslate"><span class="pre">get_true_field()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.define.html#fmdtools.define.common.get_true_fields"><code class="docutils literal notranslate"><span class="pre">get_true_fields()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.define.html#fmdtools.define.common.get_var"><code class="docutils literal notranslate"><span class="pre">get_var()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.define.html#fmdtools.define.common.init_obj_attr"><code class="docutils literal notranslate"><span class="pre">init_obj_attr()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.define.html#fmdtools.define.common.is_iter"><code class="docutils literal notranslate"><span class="pre">is_iter()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.define.html#fmdtools.define.common.set_var"><code class="docutils literal notranslate"><span class="pre">set_var()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.define.html#fmdtools.define.common.t_key"><code class="docutils literal notranslate"><span class="pre">t_key()</span></code></a></li>
-</ul>
-</li>
-<li class="toctree-l3"><a class="reference internal" href="../../docs/fmdtools.define.html#module-fmdtools.define.flow">fmdtools.define.flow</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.define.html#fmdtools.define.flow.CommsFlow"><code class="docutils literal notranslate"><span class="pre">CommsFlow</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.define.html#fmdtools.define.flow.Flow"><code class="docutils literal notranslate"><span class="pre">Flow</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.define.html#fmdtools.define.flow.MultiFlow"><code class="docutils literal notranslate"><span class="pre">MultiFlow</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.define.html#fmdtools.define.flow.init_flow"><code class="docutils literal notranslate"><span class="pre">init_flow()</span></code></a></li>
-</ul>
-</li>
-<li class="toctree-l3"><a class="reference internal" href="../../docs/fmdtools.define.html#module-fmdtools.define.mode">fmdtools.define.mode</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.define.html#fmdtools.define.mode.Fault"><code class="docutils literal notranslate"><span class="pre">Fault</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.define.html#fmdtools.define.mode.Mode"><code class="docutils literal notranslate"><span class="pre">Mode</span></code></a></li>
-</ul>
-</li>
-<li class="toctree-l3"><a class="reference internal" href="../../docs/fmdtools.define.html#fmdtools-define-model">fmdtools.define.model</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.define.html#fmdtools.define.model.Model"><code class="docutils literal notranslate"><span class="pre">Model</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.define.html#fmdtools.define.model.check_model_pickleability"><code class="docutils literal notranslate"><span class="pre">check_model_pickleability()</span></code></a></li>
-</ul>
-</li>
-<li class="toctree-l3"><a class="reference internal" href="../../docs/fmdtools.define.html#module-fmdtools.define.parameter">fmdtools.define.parameter</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.define.html#fmdtools.define.parameter.Parameter"><code class="docutils literal notranslate"><span class="pre">Parameter</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.define.html#fmdtools.define.parameter.SimParam"><code class="docutils literal notranslate"><span class="pre">SimParam</span></code></a></li>
-</ul>
-</li>
-<li class="toctree-l3"><a class="reference internal" href="../../docs/fmdtools.define.html#module-fmdtools.define.rand">fmdtools.define.rand</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.define.html#fmdtools.define.rand.Rand"><code class="docutils literal notranslate"><span class="pre">Rand</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.define.html#fmdtools.define.rand.get_pdf_for_dist"><code class="docutils literal notranslate"><span class="pre">get_pdf_for_dist()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.define.html#fmdtools.define.rand.get_pdf_for_rand"><code class="docutils literal notranslate"><span class="pre">get_pdf_for_rand()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.define.html#fmdtools.define.rand.get_scipy_pdf_helper"><code class="docutils literal notranslate"><span class="pre">get_scipy_pdf_helper()</span></code></a></li>
-</ul>
-</li>
-<li class="toctree-l3"><a class="reference internal" href="../../docs/fmdtools.define.html#module-fmdtools.define.state">fmdtools.define.state</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.define.html#fmdtools.define.state.State"><code class="docutils literal notranslate"><span class="pre">State</span></code></a></li>
-</ul>
-</li>
-<li class="toctree-l3"><a class="reference internal" href="../../docs/fmdtools.define.html#module-fmdtools.define.time">fmdtools.define.time</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.define.html#fmdtools.define.time.Time"><code class="docutils literal notranslate"><span class="pre">Time</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.define.html#fmdtools.define.time.Timer"><code class="docutils literal notranslate"><span class="pre">Timer</span></code></a></li>
-</ul>
-</li>
+<li class="toctree-l3"><a class="reference internal" href="../../docs/fmdtools.define.html#fmdtools-define-block">fmdtools.define.block</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../docs/fmdtools.define.html#module-fmdtools.define.common">fmdtools.define.common</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../docs/fmdtools.define.html#module-fmdtools.define.flow">fmdtools.define.flow</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../docs/fmdtools.define.html#module-fmdtools.define.mode">fmdtools.define.mode</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../docs/fmdtools.define.html#fmdtools-define-model">fmdtools.define.model</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../docs/fmdtools.define.html#module-fmdtools.define.parameter">fmdtools.define.parameter</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../docs/fmdtools.define.html#module-fmdtools.define.rand">fmdtools.define.rand</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../docs/fmdtools.define.html#module-fmdtools.define.state">fmdtools.define.state</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../docs/fmdtools.define.html#module-fmdtools.define.time">fmdtools.define.time</a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="../../docs/fmdtools.sim.html">fmdtools.sim</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="../../docs/fmdtools.sim.html#fmdtools-sim-propagate">fmdtools.sim.propagate</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.sim.html#fmdtools.sim.propagate.approach"><code class="docutils literal notranslate"><span class="pre">approach()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.sim.html#fmdtools.sim.propagate.check_end_condition"><code class="docutils literal notranslate"><span class="pre">check_end_condition()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.sim.html#fmdtools.sim.propagate.check_hist_memory"><code class="docutils literal notranslate"><span class="pre">check_hist_memory()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.sim.html#fmdtools.sim.propagate.check_mdl_memory"><code class="docutils literal notranslate"><span class="pre">check_mdl_memory()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.sim.html#fmdtools.sim.propagate.check_overwrite"><code class="docutils literal notranslate"><span class="pre">check_overwrite()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.sim.html#fmdtools.sim.propagate.close_pool"><code class="docutils literal notranslate"><span class="pre">close_pool()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.sim.html#fmdtools.sim.propagate.copy_staged"><code class="docutils literal notranslate"><span class="pre">copy_staged()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.sim.html#fmdtools.sim.propagate.exec_nom_helper"><code class="docutils literal notranslate"><span class="pre">exec_nom_helper()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.sim.html#fmdtools.sim.propagate.exec_nom_par"><code class="docutils literal notranslate"><span class="pre">exec_nom_par()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.sim.html#fmdtools.sim.propagate.exec_scen"><code class="docutils literal notranslate"><span class="pre">exec_scen()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.sim.html#fmdtools.sim.propagate.exec_scen_par"><code class="docutils literal notranslate"><span class="pre">exec_scen_par()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.sim.html#fmdtools.sim.propagate.get_endclass_vars"><code class="docutils literal notranslate"><span class="pre">get_endclass_vars()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.sim.html#fmdtools.sim.propagate.get_result"><code class="docutils literal notranslate"><span class="pre">get_result()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.sim.html#fmdtools.sim.propagate.init_histrange"><code class="docutils literal notranslate"><span class="pre">init_histrange()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.sim.html#fmdtools.sim.propagate.list_init_faults"><code class="docutils literal notranslate"><span class="pre">list_init_faults()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.sim.html#fmdtools.sim.propagate.mult_kwargs"><code class="docutils literal notranslate"><span class="pre">mult_kwargs</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.sim.html#fmdtools.sim.propagate.nested_approach"><code class="docutils literal notranslate"><span class="pre">nested_approach()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.sim.html#fmdtools.sim.propagate.nom_helper"><code class="docutils literal notranslate"><span class="pre">nom_helper()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.sim.html#fmdtools.sim.propagate.nominal"><code class="docutils literal notranslate"><span class="pre">nominal()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.sim.html#fmdtools.sim.propagate.nominal_approach"><code class="docutils literal notranslate"><span class="pre">nominal_approach()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.sim.html#fmdtools.sim.propagate.one_fault"><code class="docutils literal notranslate"><span class="pre">one_fault()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.sim.html#fmdtools.sim.propagate.pack_run_kwargs"><code class="docutils literal notranslate"><span class="pre">pack_run_kwargs()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.sim.html#fmdtools.sim.propagate.pack_sim_kwargs"><code class="docutils literal notranslate"><span class="pre">pack_sim_kwargs()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.sim.html#fmdtools.sim.propagate.phases_from_hist"><code class="docutils literal notranslate"><span class="pre">phases_from_hist()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.sim.html#fmdtools.sim.propagate.prop_one_scen"><code class="docutils literal notranslate"><span class="pre">prop_one_scen()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.sim.html#fmdtools.sim.propagate.run_kwargs"><code class="docutils literal notranslate"><span class="pre">run_kwargs</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.sim.html#fmdtools.sim.propagate.save_helper"><code class="docutils literal notranslate"><span class="pre">save_helper()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.sim.html#fmdtools.sim.propagate.scenlist_helper"><code class="docutils literal notranslate"><span class="pre">scenlist_helper()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.sim.html#fmdtools.sim.propagate.sequence"><code class="docutils literal notranslate"><span class="pre">sequence()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.sim.html#fmdtools.sim.propagate.sim_kwargs"><code class="docutils literal notranslate"><span class="pre">sim_kwargs</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.sim.html#fmdtools.sim.propagate.single_faults"><code class="docutils literal notranslate"><span class="pre">single_faults()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.sim.html#fmdtools.sim.propagate.unpack_mult_kwargs"><code class="docutils literal notranslate"><span class="pre">unpack_mult_kwargs()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.sim.html#fmdtools.sim.propagate.unpack_res_list"><code class="docutils literal notranslate"><span class="pre">unpack_res_list()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.sim.html#fmdtools.sim.propagate.unpack_sim_kwargs"><code class="docutils literal notranslate"><span class="pre">unpack_sim_kwargs()</span></code></a></li>
-</ul>
-</li>
-<li class="toctree-l3"><a class="reference internal" href="../../docs/fmdtools.sim.html#module-fmdtools.sim.scenario">fmdtools.sim.scenario</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.sim.html#fmdtools.sim.scenario.Injection"><code class="docutils literal notranslate"><span class="pre">Injection</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.sim.html#fmdtools.sim.scenario.JointFaultScenario"><code class="docutils literal notranslate"><span class="pre">JointFaultScenario</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.sim.html#fmdtools.sim.scenario.NominalScenario"><code class="docutils literal notranslate"><span class="pre">NominalScenario</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.sim.html#fmdtools.sim.scenario.ParamScenario"><code class="docutils literal notranslate"><span class="pre">ParamScenario</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.sim.html#fmdtools.sim.scenario.Scenario"><code class="docutils literal notranslate"><span class="pre">Scenario</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.sim.html#fmdtools.sim.scenario.Sequence"><code class="docutils literal notranslate"><span class="pre">Sequence</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.sim.html#fmdtools.sim.scenario.SingleFaultScenario"><code class="docutils literal notranslate"><span class="pre">SingleFaultScenario</span></code></a></li>
-</ul>
-</li>
-<li class="toctree-l3"><a class="reference internal" href="../../docs/fmdtools.sim.html#module-fmdtools.sim.approach">fmdtools.sim.approach</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.sim.html#fmdtools.sim.approach.NominalApproach"><code class="docutils literal notranslate"><span class="pre">NominalApproach</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.sim.html#fmdtools.sim.approach.SampleApproach"><code class="docutils literal notranslate"><span class="pre">SampleApproach</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.sim.html#fmdtools.sim.approach.find_overlap_n"><code class="docutils literal notranslate"><span class="pre">find_overlap_n()</span></code></a></li>
-</ul>
-</li>
-<li class="toctree-l3"><a class="reference internal" href="../../docs/fmdtools.sim.html#module-fmdtools.sim.search">fmdtools.sim.search</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.sim.html#fmdtools.sim.search.DynamicInterface"><code class="docutils literal notranslate"><span class="pre">DynamicInterface</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.sim.html#fmdtools.sim.search.ProblemInterface"><code class="docutils literal notranslate"><span class="pre">ProblemInterface</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.sim.html#fmdtools.sim.search.eval_con"><code class="docutils literal notranslate"><span class="pre">eval_con()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.sim.html#fmdtools.sim.search.get_pos_negative"><code class="docutils literal notranslate"><span class="pre">get_pos_negative()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.sim.html#fmdtools.sim.search.get_pos_str"><code class="docutils literal notranslate"><span class="pre">get_pos_str()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.sim.html#fmdtools.sim.search.get_text_time"><code class="docutils literal notranslate"><span class="pre">get_text_time()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.sim.html#fmdtools.sim.search.greater_to_factor"><code class="docutils literal notranslate"><span class="pre">greater_to_factor()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.sim.html#fmdtools.sim.search.n_to_factor"><code class="docutils literal notranslate"><span class="pre">n_to_factor()</span></code></a></li>
-</ul>
-</li>
+<li class="toctree-l3"><a class="reference internal" href="../../docs/fmdtools.sim.html#fmdtools-sim-propagate">fmdtools.sim.propagate</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../docs/fmdtools.sim.html#module-fmdtools.sim.scenario">fmdtools.sim.scenario</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../docs/fmdtools.sim.html#module-fmdtools.sim.approach">fmdtools.sim.approach</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../docs/fmdtools.sim.html#module-fmdtools.sim.search">fmdtools.sim.search</a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="../../docs/fmdtools.analyze.html">fmdtools.analyze package</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="../../docs/fmdtools.analyze.html#module-fmdtools.analyze.result">fmdtools.analyze.result</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.analyze.html#fmdtools.analyze.result.History"><code class="docutils literal notranslate"><span class="pre">History</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.analyze.html#fmdtools.analyze.result.Result"><code class="docutils literal notranslate"><span class="pre">Result</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.analyze.html#fmdtools.analyze.result.auto_filetype"><code class="docutils literal notranslate"><span class="pre">auto_filetype()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.analyze.html#fmdtools.analyze.result.bootstrap_confidence_interval"><code class="docutils literal notranslate"><span class="pre">bootstrap_confidence_interval()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.analyze.html#fmdtools.analyze.result.check_include_error"><code class="docutils literal notranslate"><span class="pre">check_include_error()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.analyze.html#fmdtools.analyze.result.check_include_errors"><code class="docutils literal notranslate"><span class="pre">check_include_errors()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.analyze.html#fmdtools.analyze.result.clean_resultdict_keys"><code class="docutils literal notranslate"><span class="pre">clean_resultdict_keys()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.analyze.html#fmdtools.analyze.result.create_indiv_filename"><code class="docutils literal notranslate"><span class="pre">create_indiv_filename()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.analyze.html#fmdtools.analyze.result.diff"><code class="docutils literal notranslate"><span class="pre">diff()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.analyze.html#fmdtools.analyze.result.file_check"><code class="docutils literal notranslate"><span class="pre">file_check()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.analyze.html#fmdtools.analyze.result.fromdict"><code class="docutils literal notranslate"><span class="pre">fromdict()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.analyze.html#fmdtools.analyze.result.get_dict_attr"><code class="docutils literal notranslate"><span class="pre">get_dict_attr()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.analyze.html#fmdtools.analyze.result.get_sub_include"><code class="docutils literal notranslate"><span class="pre">get_sub_include()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.analyze.html#fmdtools.analyze.result.init_dicthist"><code class="docutils literal notranslate"><span class="pre">init_dicthist()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.analyze.html#fmdtools.analyze.result.init_hist_iter"><code class="docutils literal notranslate"><span class="pre">init_hist_iter()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.analyze.html#fmdtools.analyze.result.init_indicator_hist"><code class="docutils literal notranslate"><span class="pre">init_indicator_hist()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.analyze.html#fmdtools.analyze.result.is_bool"><code class="docutils literal notranslate"><span class="pre">is_bool()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.analyze.html#fmdtools.analyze.result.is_known_immutable"><code class="docutils literal notranslate"><span class="pre">is_known_immutable()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.analyze.html#fmdtools.analyze.result.is_known_mutable"><code class="docutils literal notranslate"><span class="pre">is_known_mutable()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.analyze.html#fmdtools.analyze.result.is_numeric"><code class="docutils literal notranslate"><span class="pre">is_numeric()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.analyze.html#fmdtools.analyze.result.join_key"><code class="docutils literal notranslate"><span class="pre">join_key()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.analyze.html#fmdtools.analyze.result.load"><code class="docutils literal notranslate"><span class="pre">load()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.analyze.html#fmdtools.analyze.result.load_folder"><code class="docutils literal notranslate"><span class="pre">load_folder()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.analyze.html#fmdtools.analyze.result.nan_to_x"><code class="docutils literal notranslate"><span class="pre">nan_to_x()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.analyze.html#fmdtools.analyze.result.to_include_keys"><code class="docutils literal notranslate"><span class="pre">to_include_keys()</span></code></a></li>
-</ul>
-</li>
-<li class="toctree-l3"><a class="reference internal" href="../../docs/fmdtools.analyze.html#module-fmdtools.analyze.plot">fmdtools.analyze.plot</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.analyze.html#fmdtools.analyze.plot.dyn_order"><code class="docutils literal notranslate"><span class="pre">dyn_order()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.analyze.html#fmdtools.analyze.plot.hist"><code class="docutils literal notranslate"><span class="pre">hist()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.analyze.html#fmdtools.analyze.plot.make_consolidated_legend"><code class="docutils literal notranslate"><span class="pre">make_consolidated_legend()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.analyze.html#fmdtools.analyze.plot.metric_dist"><code class="docutils literal notranslate"><span class="pre">metric_dist()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.analyze.html#fmdtools.analyze.plot.metric_dist_from"><code class="docutils literal notranslate"><span class="pre">metric_dist_from()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.analyze.html#fmdtools.analyze.plot.metricovertime"><code class="docutils literal notranslate"><span class="pre">metricovertime()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.analyze.html#fmdtools.analyze.plot.multibar_helper"><code class="docutils literal notranslate"><span class="pre">multibar_helper()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.analyze.html#fmdtools.analyze.plot.multiplot_legend_title"><code class="docutils literal notranslate"><span class="pre">multiplot_legend_title()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.analyze.html#fmdtools.analyze.plot.nested_factor_comparison"><code class="docutils literal notranslate"><span class="pre">nested_factor_comparison()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.analyze.html#fmdtools.analyze.plot.nominal_factor_comparison"><code class="docutils literal notranslate"><span class="pre">nominal_factor_comparison()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.analyze.html#fmdtools.analyze.plot.nominal_vals_1d"><code class="docutils literal notranslate"><span class="pre">nominal_vals_1d()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.analyze.html#fmdtools.analyze.plot.nominal_vals_2d"><code class="docutils literal notranslate"><span class="pre">nominal_vals_2d()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.analyze.html#fmdtools.analyze.plot.nominal_vals_3d"><code class="docutils literal notranslate"><span class="pre">nominal_vals_3d()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.analyze.html#fmdtools.analyze.plot.phases"><code class="docutils literal notranslate"><span class="pre">phases()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.analyze.html#fmdtools.analyze.plot.plot_err_lines"><code class="docutils literal notranslate"><span class="pre">plot_err_lines()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.analyze.html#fmdtools.analyze.plot.plot_line_and_err"><code class="docutils literal notranslate"><span class="pre">plot_line_and_err()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.analyze.html#fmdtools.analyze.plot.samplemetric"><code class="docutils literal notranslate"><span class="pre">samplemetric()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.analyze.html#fmdtools.analyze.plot.samplemetrics"><code class="docutils literal notranslate"><span class="pre">samplemetrics()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.analyze.html#fmdtools.analyze.plot.suite_for_plots"><code class="docutils literal notranslate"><span class="pre">suite_for_plots()</span></code></a></li>
-</ul>
-</li>
-<li class="toctree-l3"><a class="reference internal" href="../../docs/fmdtools.analyze.html#module-fmdtools.analyze.graph">fmdtools.analyze.graph</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.analyze.html#fmdtools.analyze.graph.ASGActGraph"><code class="docutils literal notranslate"><span class="pre">ASGActGraph</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.analyze.html#fmdtools.analyze.graph.ASGFlowGraph"><code class="docutils literal notranslate"><span class="pre">ASGFlowGraph</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.analyze.html#fmdtools.analyze.graph.ASGGraph"><code class="docutils literal notranslate"><span class="pre">ASGGraph</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.analyze.html#fmdtools.analyze.graph.CommsFlowGraph"><code class="docutils literal notranslate"><span class="pre">CommsFlowGraph</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.analyze.html#fmdtools.analyze.graph.EdgeLabelStyle"><code class="docutils literal notranslate"><span class="pre">EdgeLabelStyle</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.analyze.html#fmdtools.analyze.graph.EdgeStyle"><code class="docutils literal notranslate"><span class="pre">EdgeStyle</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.analyze.html#fmdtools.analyze.graph.Graph"><code class="docutils literal notranslate"><span class="pre">Graph</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.analyze.html#fmdtools.analyze.graph.GraphInteractor"><code class="docutils literal notranslate"><span class="pre">GraphInteractor</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.analyze.html#fmdtools.analyze.graph.LabelStyle"><code class="docutils literal notranslate"><span class="pre">LabelStyle</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.analyze.html#fmdtools.analyze.graph.Labels"><code class="docutils literal notranslate"><span class="pre">Labels</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.analyze.html#fmdtools.analyze.graph.ModelCompGraph"><code class="docutils literal notranslate"><span class="pre">ModelCompGraph</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.analyze.html#fmdtools.analyze.graph.ModelFlowGraph"><code class="docutils literal notranslate"><span class="pre">ModelFlowGraph</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.analyze.html#fmdtools.analyze.graph.ModelFxnGraph"><code class="docutils literal notranslate"><span class="pre">ModelFxnGraph</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.analyze.html#fmdtools.analyze.graph.ModelGraph"><code class="docutils literal notranslate"><span class="pre">ModelGraph</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.analyze.html#fmdtools.analyze.graph.ModelTypeGraph"><code class="docutils literal notranslate"><span class="pre">ModelTypeGraph</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.analyze.html#fmdtools.analyze.graph.MultiFlowGraph"><code class="docutils literal notranslate"><span class="pre">MultiFlowGraph</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.analyze.html#fmdtools.analyze.graph.NodeStyle"><code class="docutils literal notranslate"><span class="pre">NodeStyle</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.analyze.html#fmdtools.analyze.graph.add_g_nested"><code class="docutils literal notranslate"><span class="pre">add_g_nested()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.analyze.html#fmdtools.analyze.graph.data_average"><code class="docutils literal notranslate"><span class="pre">data_average()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.analyze.html#fmdtools.analyze.graph.data_error"><code class="docutils literal notranslate"><span class="pre">data_error()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.analyze.html#fmdtools.analyze.graph.get_label_groups"><code class="docutils literal notranslate"><span class="pre">get_label_groups()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.analyze.html#fmdtools.analyze.graph.get_style_kwargs"><code class="docutils literal notranslate"><span class="pre">get_style_kwargs()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.analyze.html#fmdtools.analyze.graph.graph_factory"><code class="docutils literal notranslate"><span class="pre">graph_factory()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.analyze.html#fmdtools.analyze.graph.gv_import_check"><code class="docutils literal notranslate"><span class="pre">gv_import_check()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.analyze.html#fmdtools.analyze.graph.node_is_tagged"><code class="docutils literal notranslate"><span class="pre">node_is_tagged()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.analyze.html#fmdtools.analyze.graph.random"><code class="docutils literal notranslate"><span class="pre">random()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.analyze.html#fmdtools.analyze.graph.sff_one_trial"><code class="docutils literal notranslate"><span class="pre">sff_one_trial()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.analyze.html#fmdtools.analyze.graph.to_legend_label"><code class="docutils literal notranslate"><span class="pre">to_legend_label()</span></code></a></li>
-</ul>
-</li>
-<li class="toctree-l3"><a class="reference internal" href="../../docs/fmdtools.analyze.html#module-fmdtools.analyze.tabulate">fmdtools.analyze.tabulate</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.analyze.html#fmdtools.analyze.tabulate.dicttab"><code class="docutils literal notranslate"><span class="pre">dicttab()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.analyze.html#fmdtools.analyze.tabulate.fmea"><code class="docutils literal notranslate"><span class="pre">fmea()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.analyze.html#fmdtools.analyze.tabulate.label_faults"><code class="docutils literal notranslate"><span class="pre">label_faults()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.analyze.html#fmdtools.analyze.tabulate.maptab"><code class="docutils literal notranslate"><span class="pre">maptab()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.analyze.html#fmdtools.analyze.tabulate.metricovertime"><code class="docutils literal notranslate"><span class="pre">metricovertime()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.analyze.html#fmdtools.analyze.tabulate.nested_factor_comparison"><code class="docutils literal notranslate"><span class="pre">nested_factor_comparison()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.analyze.html#fmdtools.analyze.tabulate.nested_stats"><code class="docutils literal notranslate"><span class="pre">nested_stats()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.analyze.html#fmdtools.analyze.tabulate.nominal_factor_comparison"><code class="docutils literal notranslate"><span class="pre">nominal_factor_comparison()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.analyze.html#fmdtools.analyze.tabulate.nominal_stats"><code class="docutils literal notranslate"><span class="pre">nominal_stats()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.analyze.html#fmdtools.analyze.tabulate.phasefmea"><code class="docutils literal notranslate"><span class="pre">phasefmea()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.analyze.html#fmdtools.analyze.tabulate.result_summary"><code class="docutils literal notranslate"><span class="pre">result_summary()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.analyze.html#fmdtools.analyze.tabulate.result_summary_fmea"><code class="docutils literal notranslate"><span class="pre">result_summary_fmea()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.analyze.html#fmdtools.analyze.tabulate.samptime"><code class="docutils literal notranslate"><span class="pre">samptime()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.analyze.html#fmdtools.analyze.tabulate.summfmea"><code class="docutils literal notranslate"><span class="pre">summfmea()</span></code></a></li>
-</ul>
-</li>
+<li class="toctree-l3"><a class="reference internal" href="../../docs/fmdtools.analyze.html#module-fmdtools.analyze.result">fmdtools.analyze.result</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../docs/fmdtools.analyze.html#module-fmdtools.analyze.plot">fmdtools.analyze.plot</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../docs/fmdtools.analyze.html#module-fmdtools.analyze.graph">fmdtools.analyze.graph</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../docs/fmdtools.analyze.html#module-fmdtools.analyze.tabulate">fmdtools.analyze.tabulate</a></li>
 </ul>
 </li>
 </ul>
@@ -603,7 +399,7 @@
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-graph: &lt;fmdtools.analyze.graph.ModelGraph object at 0x00000171793E1D50&gt;
+graph: &lt;fmdtools.analyze.graph.ModelGraph object at 0x00000251AD105300&gt;
 </pre></div></div>
 </div>
 <p>With these results, we can now plot the graph of results resgraph using:</p>
@@ -2631,7 +2427,7 @@ array([10., 10., 10., 10., 10., 10., 10., 10., 10., 10., 10., 10., 10.,
 </div>
 <div class="output_area stderr docutils container">
 <div class="highlight"><pre>
-SCENARIOS COMPLETE: 100%|██████████| 92/92 [00:00&lt;00:00, 111.24it/s]
+SCENARIOS COMPLETE: 100%|██████████| 92/92 [00:00&lt;00:00, 105.54it/s]
 </pre></div></div>
 </div>
 <div class="nbinput docutils container">
@@ -2675,14 +2471,6 @@ SCENARIOS COMPLETE: 100%|██████████| 92/92 [00:00&lt;00:00, 
   </thead>
   <tbody>
     <tr>
-      <th>nominal</th>
-      <td>[]</td>
-      <td>[]</td>
-      <td>1.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-    </tr>
-    <tr>
       <th>faulty</th>
       <td>[]</td>
       <td>[]</td>
@@ -2691,50 +2479,26 @@ SCENARIOS COMPLETE: 100%|██████████| 92/92 [00:00&lt;00:00, 
       <td>NaN</td>
     </tr>
     <tr>
-      <th>store_water_leak_ export_water_stuck_t0p0</th>
+      <th>nominal</th>
+      <td>[]</td>
+      <td>[]</td>
+      <td>1.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+    </tr>
+    <tr>
+      <th>guide_water_in_clogged_ human_grasp_cannot_t0p0</th>
       <td>NaN</td>
       <td>NaN</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
+      <td>0.000001</td>
+      <td>1000000.0</td>
+      <td>105353.394172</td>
     </tr>
     <tr>
       <th>export_water_stuck_ human_grasp_cannot_t0p0</th>
       <td>NaN</td>
       <td>NaN</td>
       <td>0.000001</td>
-      <td>0.0</td>
-      <td>0.0</td>
-    </tr>
-    <tr>
-      <th>store_water_leak_ guide_water_out_clogged_t0p0</th>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-    </tr>
-    <tr>
-      <th>...</th>
-      <td>...</td>
-      <td>...</td>
-      <td>...</td>
-      <td>...</td>
-      <td>...</td>
-    </tr>
-    <tr>
-      <th>human_turn_wrong_valve_t0p0</th>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>0.5</td>
-      <td>0.0</td>
-      <td>0.0</td>
-    </tr>
-    <tr>
-      <th>human_reach_unable_t0p0</th>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>0.5</td>
       <td>0.0</td>
       <td>0.0</td>
     </tr>
@@ -2747,7 +2511,23 @@ SCENARIOS COMPLETE: 100%|██████████| 92/92 [00:00&lt;00:00, 
       <td>0.0</td>
     </tr>
     <tr>
-      <th>guide_water_in_clogged_ human_reach_unable_t0p0</th>
+      <th>...</th>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+    </tr>
+    <tr>
+      <th>import_water_stuck_ guide_water_in_leak_t0p0</th>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>0.0</td>
+      <td>1000000.0</td>
+      <td>0.277778</td>
+    </tr>
+    <tr>
+      <th>store_water_leak_ human_turn_wrong_valve_t0p0</th>
       <td>NaN</td>
       <td>NaN</td>
       <td>0.000001</td>
@@ -2755,12 +2535,28 @@ SCENARIOS COMPLETE: 100%|██████████| 92/92 [00:00&lt;00:00, 
       <td>65578.190231</td>
     </tr>
     <tr>
-      <th>guide_water_out_leak_ human_turn_wrong_valve_t0p0</th>
+      <th>store_water_leak_ human_turn_cannot_t0p0</th>
       <td>NaN</td>
       <td>NaN</td>
       <td>0.000001</td>
       <td>1000000.0</td>
-      <td>65578.190231</td>
+      <td>105353.394172</td>
+    </tr>
+    <tr>
+      <th>import_water_stuck_ human_detect_false_low_t0p0</th>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>0.000001</td>
+      <td>0.0</td>
+      <td>0.0</td>
+    </tr>
+    <tr>
+      <th>import_water_stuck_ human_grasp_cannot_t0p0</th>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>0.000001</td>
+      <td>0.0</td>
+      <td>0.0</td>
     </tr>
   </tbody>
 </table>
@@ -2809,14 +2605,6 @@ SCENARIOS COMPLETE: 100%|██████████| 92/92 [00:00&lt;00:00, 
   </thead>
   <tbody>
     <tr>
-      <th>human_detect_false_low_t0p0</th>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>0.5</td>
-      <td>1000000.0</td>
-      <td>50000000000.0</td>
-    </tr>
-    <tr>
       <th>human_detect_false_high_t0p0</th>
       <td>NaN</td>
       <td>NaN</td>
@@ -2825,12 +2613,12 @@ SCENARIOS COMPLETE: 100%|██████████| 92/92 [00:00&lt;00:00, 
       <td>50000000000.0</td>
     </tr>
     <tr>
-      <th>guide_water_in_clogged_t0p0</th>
+      <th>human_detect_false_low_t0p0</th>
       <td>NaN</td>
       <td>NaN</td>
-      <td>0.000002</td>
+      <td>0.5</td>
       <td>1000000.0</td>
-      <td>166666.666667</td>
+      <td>50000000000.0</td>
     </tr>
     <tr>
       <th>guide_water_out_leak_t0p0</th>
@@ -2841,7 +2629,15 @@ SCENARIOS COMPLETE: 100%|██████████| 92/92 [00:00&lt;00:00, 
       <td>166666.666667</td>
     </tr>
     <tr>
-      <th>store_water_leak_ human_turn_cannot_t0p0</th>
+      <th>guide_water_in_clogged_t0p0</th>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>0.000002</td>
+      <td>1000000.0</td>
+      <td>166666.666667</td>
+    </tr>
+    <tr>
+      <th>guide_water_in_clogged_ human_grasp_cannot_t0p0</th>
       <td>NaN</td>
       <td>NaN</td>
       <td>0.000001</td>
@@ -2849,7 +2645,7 @@ SCENARIOS COMPLETE: 100%|██████████| 92/92 [00:00&lt;00:00, 
       <td>105353.394172</td>
     </tr>
     <tr>
-      <th>guide_water_in_leak_ human_detect_not_detected_t0p0</th>
+      <th>guide_water_out_leak_ human_detect_not_detected_t0p0</th>
       <td>NaN</td>
       <td>NaN</td>
       <td>0.000001</td>
@@ -2865,7 +2661,47 @@ SCENARIOS COMPLETE: 100%|██████████| 92/92 [00:00&lt;00:00, 
       <td>105353.394172</td>
     </tr>
     <tr>
+      <th>guide_water_in_clogged_ human_turn_cannot_t0p0</th>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>0.000001</td>
+      <td>1000000.0</td>
+      <td>105353.394172</td>
+    </tr>
+    <tr>
+      <th>store_water_leak_ human_grasp_cannot_t0p0</th>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>0.000001</td>
+      <td>1000000.0</td>
+      <td>105353.394172</td>
+    </tr>
+    <tr>
+      <th>guide_water_in_leak_ human_turn_cannot_t0p0</th>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>0.000001</td>
+      <td>1000000.0</td>
+      <td>105353.394172</td>
+    </tr>
+    <tr>
       <th>guide_water_out_leak_ human_turn_cannot_t0p0</th>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>0.000001</td>
+      <td>1000000.0</td>
+      <td>105353.394172</td>
+    </tr>
+    <tr>
+      <th>guide_water_in_leak_ human_detect_not_detected_t0p0</th>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>0.000001</td>
+      <td>1000000.0</td>
+      <td>105353.394172</td>
+    </tr>
+    <tr>
+      <th>guide_water_out_leak_ human_grasp_cannot_t0p0</th>
       <td>NaN</td>
       <td>NaN</td>
       <td>0.000001</td>
@@ -2889,47 +2725,7 @@ SCENARIOS COMPLETE: 100%|██████████| 92/92 [00:00&lt;00:00, 
       <td>105353.394172</td>
     </tr>
     <tr>
-      <th>guide_water_out_leak_ human_grasp_cannot_t0p0</th>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>0.000001</td>
-      <td>1000000.0</td>
-      <td>105353.394172</td>
-    </tr>
-    <tr>
-      <th>guide_water_in_clogged_ human_grasp_cannot_t0p0</th>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>0.000001</td>
-      <td>1000000.0</td>
-      <td>105353.394172</td>
-    </tr>
-    <tr>
-      <th>store_water_leak_ human_detect_not_detected_t0p0</th>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>0.000001</td>
-      <td>1000000.0</td>
-      <td>105353.394172</td>
-    </tr>
-    <tr>
-      <th>guide_water_in_clogged_ human_turn_cannot_t0p0</th>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>0.000001</td>
-      <td>1000000.0</td>
-      <td>105353.394172</td>
-    </tr>
-    <tr>
-      <th>guide_water_in_leak_ human_turn_cannot_t0p0</th>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>0.000001</td>
-      <td>1000000.0</td>
-      <td>105353.394172</td>
-    </tr>
-    <tr>
-      <th>guide_water_in_leak_ human_grasp_cannot_t0p0</th>
+      <th>store_water_leak_ human_turn_cannot_t0p0</th>
       <td>NaN</td>
       <td>NaN</td>
       <td>0.000001</td>
@@ -2945,7 +2741,7 @@ SCENARIOS COMPLETE: 100%|██████████| 92/92 [00:00&lt;00:00, 
       <td>105353.394172</td>
     </tr>
     <tr>
-      <th>guide_water_out_leak_ human_detect_not_detected_t0p0</th>
+      <th>store_water_leak_ human_detect_not_detected_t0p0</th>
       <td>NaN</td>
       <td>NaN</td>
       <td>0.000001</td>
@@ -2953,95 +2749,15 @@ SCENARIOS COMPLETE: 100%|██████████| 92/92 [00:00&lt;00:00, 
       <td>105353.394172</td>
     </tr>
     <tr>
-      <th>store_water_leak_ human_grasp_cannot_t0p0</th>
+      <th>guide_water_in_leak_ human_grasp_cannot_t0p0</th>
       <td>NaN</td>
       <td>NaN</td>
       <td>0.000001</td>
       <td>1000000.0</td>
       <td>105353.394172</td>
-    </tr>
-    <tr>
-      <th>export_water_stuck_ human_detect_false_high_t0p0</th>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>0.000001</td>
-      <td>1000000.0</td>
-      <td>65578.190231</td>
-    </tr>
-    <tr>
-      <th>guide_water_out_leak_ human_detect_false_high_t0p0</th>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>0.000001</td>
-      <td>1000000.0</td>
-      <td>65578.190231</td>
-    </tr>
-    <tr>
-      <th>guide_water_out_leak_ human_reach_unable_t0p0</th>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>0.000001</td>
-      <td>1000000.0</td>
-      <td>65578.190231</td>
-    </tr>
-    <tr>
-      <th>store_water_leak_ human_turn_wrong_valve_t0p0</th>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>0.000001</td>
-      <td>1000000.0</td>
-      <td>65578.190231</td>
-    </tr>
-    <tr>
-      <th>guide_water_in_clogged_ human_detect_false_high_t0p0</th>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>0.000001</td>
-      <td>1000000.0</td>
-      <td>65578.190231</td>
-    </tr>
-    <tr>
-      <th>guide_water_in_leak_ human_turn_wrong_valve_t0p0</th>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>0.000001</td>
-      <td>1000000.0</td>
-      <td>65578.190231</td>
     </tr>
     <tr>
       <th>store_water_leak_ human_detect_false_high_t0p0</th>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>0.000001</td>
-      <td>1000000.0</td>
-      <td>65578.190231</td>
-    </tr>
-    <tr>
-      <th>guide_water_in_clogged_ human_detect_false_low_t0p0</th>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>0.000001</td>
-      <td>1000000.0</td>
-      <td>65578.190231</td>
-    </tr>
-    <tr>
-      <th>guide_water_in_clogged_ human_reach_unable_t0p0</th>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>0.000001</td>
-      <td>1000000.0</td>
-      <td>65578.190231</td>
-    </tr>
-    <tr>
-      <th>guide_water_in_clogged_ human_turn_wrong_valve_t0p0</th>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>0.000001</td>
-      <td>1000000.0</td>
-      <td>65578.190231</td>
-    </tr>
-    <tr>
-      <th>guide_water_out_leak_ human_turn_wrong_valve_t0p0</th>
       <td>NaN</td>
       <td>NaN</td>
       <td>0.000001</td>
@@ -3057,15 +2773,7 @@ SCENARIOS COMPLETE: 100%|██████████| 92/92 [00:00&lt;00:00, 
       <td>65578.190231</td>
     </tr>
     <tr>
-      <th>guide_water_in_leak_ human_detect_false_high_t0p0</th>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>0.000001</td>
-      <td>1000000.0</td>
-      <td>65578.190231</td>
-    </tr>
-    <tr>
-      <th>guide_water_out_clogged_ human_reach_unable_t0p0</th>
+      <th>guide_water_in_clogged_ human_reach_unable_t0p0</th>
       <td>NaN</td>
       <td>NaN</td>
       <td>0.000001</td>
@@ -3081,15 +2789,7 @@ SCENARIOS COMPLETE: 100%|██████████| 92/92 [00:00&lt;00:00, 
       <td>65578.190231</td>
     </tr>
     <tr>
-      <th>guide_water_out_clogged_ human_detect_false_low_t0p0</th>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>0.000001</td>
-      <td>1000000.0</td>
-      <td>65578.190231</td>
-    </tr>
-    <tr>
-      <th>export_water_stuck_ human_detect_false_low_t0p0</th>
+      <th>guide_water_out_leak_ human_detect_false_high_t0p0</th>
       <td>NaN</td>
       <td>NaN</td>
       <td>0.000001</td>
@@ -3105,12 +2805,124 @@ SCENARIOS COMPLETE: 100%|██████████| 92/92 [00:00&lt;00:00, 
       <td>65578.190231</td>
     </tr>
     <tr>
+      <th>guide_water_in_leak_ human_detect_false_high_t0p0</th>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>0.000001</td>
+      <td>1000000.0</td>
+      <td>65578.190231</td>
+    </tr>
+    <tr>
+      <th>export_water_stuck_ human_detect_false_high_t0p0</th>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>0.000001</td>
+      <td>1000000.0</td>
+      <td>65578.190231</td>
+    </tr>
+    <tr>
+      <th>guide_water_out_clogged_ human_reach_unable_t0p0</th>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>0.000001</td>
+      <td>1000000.0</td>
+      <td>65578.190231</td>
+    </tr>
+    <tr>
+      <th>guide_water_out_leak_ human_reach_unable_t0p0</th>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>0.000001</td>
+      <td>1000000.0</td>
+      <td>65578.190231</td>
+    </tr>
+    <tr>
+      <th>guide_water_out_leak_ human_turn_wrong_valve_t0p0</th>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>0.000001</td>
+      <td>1000000.0</td>
+      <td>65578.190231</td>
+    </tr>
+    <tr>
+      <th>guide_water_in_leak_ human_turn_wrong_valve_t0p0</th>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>0.000001</td>
+      <td>1000000.0</td>
+      <td>65578.190231</td>
+    </tr>
+    <tr>
+      <th>guide_water_out_clogged_ human_detect_false_low_t0p0</th>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>0.000001</td>
+      <td>1000000.0</td>
+      <td>65578.190231</td>
+    </tr>
+    <tr>
+      <th>guide_water_in_clogged_ human_detect_false_high_t0p0</th>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>0.000001</td>
+      <td>1000000.0</td>
+      <td>65578.190231</td>
+    </tr>
+    <tr>
       <th>store_water_leak_ human_reach_unable_t0p0</th>
       <td>NaN</td>
       <td>NaN</td>
       <td>0.000001</td>
       <td>1000000.0</td>
       <td>65578.190231</td>
+    </tr>
+    <tr>
+      <th>export_water_stuck_ human_detect_false_low_t0p0</th>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>0.000001</td>
+      <td>1000000.0</td>
+      <td>65578.190231</td>
+    </tr>
+    <tr>
+      <th>guide_water_in_clogged_ human_turn_wrong_valve_t0p0</th>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>0.000001</td>
+      <td>1000000.0</td>
+      <td>65578.190231</td>
+    </tr>
+    <tr>
+      <th>store_water_leak_ human_turn_wrong_valve_t0p0</th>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>0.000001</td>
+      <td>1000000.0</td>
+      <td>65578.190231</td>
+    </tr>
+    <tr>
+      <th>guide_water_in_clogged_ human_detect_false_low_t0p0</th>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>0.000001</td>
+      <td>1000000.0</td>
+      <td>65578.190231</td>
+    </tr>
+    <tr>
+      <th>store_water_leak_ human_look_not_visible_t0p0</th>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>0.0</td>
+      <td>1000000.0</td>
+      <td>25586.361139</td>
+    </tr>
+    <tr>
+      <th>guide_water_in_leak_ human_look_not_visible_t0p0</th>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>0.0</td>
+      <td>1000000.0</td>
+      <td>25586.361139</td>
     </tr>
     <tr>
       <th>guide_water_out_clogged_ human_look_not_visible_t0p0</th>
@@ -3129,14 +2941,6 @@ SCENARIOS COMPLETE: 100%|██████████| 92/92 [00:00&lt;00:00, 
       <td>25586.361139</td>
     </tr>
     <tr>
-      <th>guide_water_in_leak_ human_look_not_visible_t0p0</th>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>0.0</td>
-      <td>1000000.0</td>
-      <td>25586.361139</td>
-    </tr>
-    <tr>
       <th>guide_water_out_leak_ human_look_not_visible_t0p0</th>
       <td>NaN</td>
       <td>NaN</td>
@@ -3145,23 +2949,7 @@ SCENARIOS COMPLETE: 100%|██████████| 92/92 [00:00&lt;00:00, 
       <td>25586.361139</td>
     </tr>
     <tr>
-      <th>store_water_leak_ human_look_not_visible_t0p0</th>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>0.0</td>
-      <td>1000000.0</td>
-      <td>25586.361139</td>
-    </tr>
-    <tr>
-      <th>guide_water_in_clogged_ export_water_stuck_t0p0</th>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>0.0</td>
-      <td>1000000.0</td>
-      <td>0.277778</td>
-    </tr>
-    <tr>
-      <th>import_water_stuck_ store_water_leak_t0p0</th>
+      <th>guide_water_out_leak_ export_water_stuck_t0p0</th>
       <td>NaN</td>
       <td>NaN</td>
       <td>0.0</td>
@@ -3177,15 +2965,7 @@ SCENARIOS COMPLETE: 100%|██████████| 92/92 [00:00&lt;00:00, 
       <td>0.277778</td>
     </tr>
     <tr>
-      <th>import_water_stuck_ guide_water_in_leak_t0p0</th>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>0.0</td>
-      <td>1000000.0</td>
-      <td>0.277778</td>
-    </tr>
-    <tr>
-      <th>guide_water_in_clogged_ store_water_leak_t0p0</th>
+      <th>import_water_stuck_ guide_water_in_clogged_t0p0</th>
       <td>NaN</td>
       <td>NaN</td>
       <td>0.0</td>
@@ -3209,6 +2989,22 @@ SCENARIOS COMPLETE: 100%|██████████| 92/92 [00:00&lt;00:00, 
       <td>0.277778</td>
     </tr>
     <tr>
+      <th>guide_water_in_clogged_ export_water_stuck_t0p0</th>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>0.0</td>
+      <td>1000000.0</td>
+      <td>0.277778</td>
+    </tr>
+    <tr>
+      <th>guide_water_in_clogged_ store_water_leak_t0p0</th>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>0.0</td>
+      <td>1000000.0</td>
+      <td>0.277778</td>
+    </tr>
+    <tr>
       <th>import_water_stuck_ guide_water_out_leak_t0p0</th>
       <td>NaN</td>
       <td>NaN</td>
@@ -3217,7 +3013,7 @@ SCENARIOS COMPLETE: 100%|██████████| 92/92 [00:00&lt;00:00, 
       <td>0.277778</td>
     </tr>
     <tr>
-      <th>import_water_stuck_ guide_water_in_clogged_t0p0</th>
+      <th>import_water_stuck_ guide_water_in_leak_t0p0</th>
       <td>NaN</td>
       <td>NaN</td>
       <td>0.0</td>
@@ -3225,7 +3021,7 @@ SCENARIOS COMPLETE: 100%|██████████| 92/92 [00:00&lt;00:00, 
       <td>0.277778</td>
     </tr>
     <tr>
-      <th>guide_water_out_leak_ export_water_stuck_t0p0</th>
+      <th>import_water_stuck_ store_water_leak_t0p0</th>
       <td>NaN</td>
       <td>NaN</td>
       <td>0.0</td>
@@ -3269,12 +3065,12 @@ dict_keys([&#39;import_water_stuck_t0p0.fxns.import_water.s.amt_open&#39;, &#39;
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">fmdtools.analyze.result</span> <span class="kn">import</span> <span class="n">History</span>
 <span class="n">scenhists</span> <span class="o">=</span> <span class="n">History</span><span class="p">({</span><span class="s1">&#39;nominal&#39;</span><span class="p">:</span><span class="n">mdlhists</span><span class="o">.</span><span class="n">nominal</span><span class="p">,</span>
             <span class="s1">&#39;faulty&#39;</span><span class="p">:</span><span class="n">mdlhists</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;guide_water_in_leak_ human_detect_not_detected_t0p0&#39;</span><span class="p">)})</span>
-<span class="n">scenhists</span><span class="o">.</span><span class="n">flatten</span><span class="p">()</span>
+<span class="c1">#scenhists.flatten()</span>
 <span class="n">fig</span><span class="p">,</span> <span class="n">axs</span> <span class="o">=</span> <span class="n">an</span><span class="o">.</span><span class="n">plot</span><span class="o">.</span><span class="n">hist</span><span class="p">(</span><span class="n">scenhists</span><span class="p">,</span><span class="s1">&#39;flows.valve1_sig.s.action&#39;</span><span class="p">,</span>
                        <span class="s1">&#39;flows.tank_sig.s.indicator&#39;</span><span class="p">,</span>
                        <span class="s1">&#39;fxns.store_water.s.level&#39;</span><span class="p">,</span>
                        <span class="s1">&#39;fxns.store_water.s.net_flow&#39;</span><span class="p">)</span>
-</pre></div>
+<br/></pre></div>
 </div>
 </div>
 <div class="nboutput nblast docutils container">
@@ -3290,8 +3086,12 @@ dict_keys([&#39;import_water_stuck_t0p0.fxns.import_water.s.amt_open&#39;, &#39;
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[23]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">scenhists</span> <span class="o">=</span><span class="p">{</span><span class="s1">&#39;nominal&#39;</span><span class="p">:</span><span class="n">mdlhists</span><span class="p">[</span><span class="s1">&#39;nominal&#39;</span><span class="p">],</span> <span class="s1">&#39;faulty&#39;</span><span class="p">:</span><span class="n">mdlhists</span><span class="p">[</span><span class="s1">&#39;Guide_Water_Out: Leak, Human: FalseDetection_low, t=0&#39;</span><span class="p">]}</span>
-<span class="n">fig</span><span class="p">,</span> <span class="n">axs</span> <span class="o">=</span> <span class="n">an</span><span class="o">.</span><span class="n">plot</span><span class="o">.</span><span class="n">mdlhists</span><span class="p">(</span><span class="n">scenhists</span><span class="p">)</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">scenhists</span> <span class="o">=</span><span class="n">History</span><span class="p">({</span><span class="s1">&#39;nominal&#39;</span><span class="p">:</span><span class="n">mdlhists</span><span class="o">.</span><span class="n">nominal</span><span class="p">,</span> <span class="s1">&#39;faulty&#39;</span><span class="p">:</span><span class="n">mdlhists</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;guide_water_out_leak_ human_detect_false_low_t0p0&#39;</span><span class="p">)})</span>
+<span class="n">scenhists</span><span class="o">.</span><span class="n">flatten</span><span class="p">()</span>
+<span class="n">fig</span><span class="p">,</span> <span class="n">axs</span> <span class="o">=</span> <span class="n">an</span><span class="o">.</span><span class="n">plot</span><span class="o">.</span><span class="n">hist</span><span class="p">(</span><span class="n">scenhists</span><span class="p">,</span><span class="s1">&#39;flows.valve1_sig.s.action&#39;</span><span class="p">,</span>
+                       <span class="s1">&#39;flows.tank_sig.s.indicator&#39;</span><span class="p">,</span>
+                       <span class="s1">&#39;fxns.store_water.s.level&#39;</span><span class="p">,</span>
+                       <span class="s1">&#39;fxns.store_water.s.net_flow&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -3299,20 +3099,8 @@ dict_keys([&#39;import_water_stuck_t0p0.fxns.import_water.s.amt_open&#39;, &#39;
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area docutils container">
-<div class="highlight"><pre>
-<span class="ansi-red-intense-fg ansi-bold">---------------------------------------------------------------------------</span>
-<span class="ansi-red-intense-fg ansi-bold">KeyError</span>                                  Traceback (most recent call last)
-Cell <span class="ansi-green-intense-fg ansi-bold">In[23], line 1</span>
-<span class="ansi-green-intense-fg ansi-bold">----&gt; 1</span> scenhists <span style="color: rgb(98,98,98)">=</span>{<span style="color: rgb(175,0,0)">&#39;</span><span style="color: rgb(175,0,0)">nominal</span><span style="color: rgb(175,0,0)">&#39;</span>:<span class="ansi-yellow-bg">mdlhists</span><span class="ansi-yellow-bg">[</span><span class="ansi-yellow-bg" style="color: rgb(175,0,0)">&#39;</span><span class="ansi-yellow-bg" style="color: rgb(175,0,0)">nominal</span><span class="ansi-yellow-bg" style="color: rgb(175,0,0)">&#39;</span><span class="ansi-yellow-bg">]</span>, <span style="color: rgb(175,0,0)">&#39;</span><span style="color: rgb(175,0,0)">faulty</span><span style="color: rgb(175,0,0)">&#39;</span>:mdlhists[<span style="color: rgb(175,0,0)">&#39;</span><span style="color: rgb(175,0,0)">Guide_Water_Out: Leak, Human: FalseDetection_low, t=0</span><span style="color: rgb(175,0,0)">&#39;</span>]}
-<span class="ansi-green-fg">      2</span> fig, axs <span style="color: rgb(98,98,98)">=</span> an<span style="color: rgb(98,98,98)">.</span>plot<span style="color: rgb(98,98,98)">.</span>mdlhists(scenhists)
-
-File <span class="ansi-green-intense-fg ansi-bold">~\AppData\Local\anaconda3\lib\collections\__init__.py:1106</span>, in <span class="ansi-cyan-fg">UserDict.__getitem__</span><span class="ansi-blue-intense-fg ansi-bold">(self, key)</span>
-<span class="ansi-green-fg">   1104</span> <span class="ansi-bold" style="color: rgb(0,135,0)">if</span> <span style="color: rgb(0,135,0)">hasattr</span>(<span style="color: rgb(0,135,0)">self</span><span style="color: rgb(98,98,98)">.</span><span style="color: rgb(0,0,135)">__class__</span>, <span style="color: rgb(175,0,0)">&#34;</span><span style="color: rgb(175,0,0)">__missing__</span><span style="color: rgb(175,0,0)">&#34;</span>):
-<span class="ansi-green-fg">   1105</span>     <span class="ansi-bold" style="color: rgb(0,135,0)">return</span> <span style="color: rgb(0,135,0)">self</span><span style="color: rgb(98,98,98)">.</span><span style="color: rgb(0,0,135)">__class__</span><span style="color: rgb(98,98,98)">.</span><span style="color: rgb(0,0,255)">__missing__</span>(<span style="color: rgb(0,135,0)">self</span>, key)
-<span class="ansi-green-intense-fg ansi-bold">-&gt; 1106</span> <span class="ansi-bold" style="color: rgb(0,135,0)">raise</span> <span class="ansi-bold" style="color: rgb(215,95,95)">KeyError</span>(key)
-
-<span class="ansi-red-intense-fg ansi-bold">KeyError</span>: &#39;nominal&#39;
-</pre></div></div>
+<img alt="../../_images/examples_tank_Tank_Analysis_42_0.png" src="../../_images/examples_tank_Tank_Analysis_42_0.png" />
+</div>
 </div>
 <p>In this case, there is a leak, but it is not caugh, resulting in a failure again.</p>
 </section>
@@ -3320,23 +3108,58 @@ File <span class="ansi-green-intense-fg ansi-bold">~\AppData\Local\anaconda3\lib
 <h2>Testing different reaction times<a class="headerlink" href="#Testing-different-reaction-times" title="Permalink to this heading"></a></h2>
 <p>The model set up in <code class="docutils literal notranslate"><span class="pre">tank_model</span></code> is parameterized by the reaction time of the operator. As a result, we can assess how long or short reaction times affect the given scenarios.</p>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[24]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">mdl_long_reaction_time</span> <span class="o">=</span> <span class="n">Tank</span><span class="p">(</span><span class="n">Parameter</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;reacttime&#39;</span><span class="p">:</span><span class="mi">10</span><span class="p">,</span> <span class="s2">&quot;store_tstep&quot;</span><span class="p">:</span><span class="mf">1.0</span><span class="p">})</span> <span class="c1">#also needs reconfiguring</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">mdl_long_reaction_time</span> <span class="o">=</span> <span class="n">Tank</span><span class="p">(</span><span class="n">p</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;reacttime&#39;</span><span class="p">:</span><span class="mi">10</span><span class="p">,</span> <span class="s2">&quot;store_tstep&quot;</span><span class="p">:</span><span class="mf">1.0</span><span class="p">})</span> <span class="c1">#also needs reconfiguring</span>
 </pre></div>
 </div>
 </div>
 <p>In this case, we will show the affect of reaction time on the operator’s ability to catch a leak.</p>
-<div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[25]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">resgraph</span><span class="p">,</span> <span class="n">mdlhist</span> <span class="o">=</span> <span class="n">propagate</span><span class="o">.</span><span class="n">one_fault</span><span class="p">(</span><span class="n">mdl_long_reaction_time</span><span class="p">,</span><span class="s1">&#39;Store_Water&#39;</span><span class="p">,</span><span class="s1">&#39;Leak&#39;</span><span class="p">,</span> <span class="n">time</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">desired_result</span><span class="o">=</span><span class="s1">&#39;fxnflowgraph&#39;</span><span class="p">)</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">result</span><span class="p">,</span> <span class="n">mdlhist</span> <span class="o">=</span> <span class="n">propagate</span><span class="o">.</span><span class="n">one_fault</span><span class="p">(</span><span class="n">mdl_long_reaction_time</span><span class="p">,</span><span class="s1">&#39;store_water&#39;</span><span class="p">,</span><span class="s1">&#39;leak&#39;</span><span class="p">,</span> <span class="n">time</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">desired_result</span><span class="o">=</span><span class="s1">&#39;graph&#39;</span><span class="p">)</span>
 
-<span class="n">fig</span><span class="p">,</span> <span class="n">axs</span> <span class="o">=</span> <span class="n">an</span><span class="o">.</span><span class="n">plot</span><span class="o">.</span><span class="n">mdlhists</span><span class="p">(</span><span class="n">mdlhist</span><span class="p">,</span> <span class="n">title</span> <span class="o">=</span> <span class="s2">&quot;Response of Tank to Leak&quot;</span><span class="p">,</span> <span class="n">time_slice</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">fxnflowvals</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;Store_Water&#39;</span><span class="p">:[</span><span class="s1">&#39;level&#39;</span><span class="p">,</span> <span class="s1">&#39;net_flow&#39;</span><span class="p">],</span> <span class="s1">&#39;Tank_Sig&#39;</span><span class="p">:[</span><span class="s1">&#39;indicator&#39;</span><span class="p">],</span> <span class="s1">&#39;Valve1_Sig&#39;</span><span class="p">:[</span><span class="s1">&#39;action&#39;</span><span class="p">]},</span> <span class="n">legend_loc</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
-<span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">an</span><span class="o">.</span><span class="n">graph</span><span class="o">.</span><span class="n">show</span><span class="p">(</span><span class="n">resgraph</span><span class="p">,</span><span class="n">faultscen</span><span class="o">=</span><span class="s1">&#39;Leak&#39;</span><span class="p">,</span> <span class="n">time</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
+<span class="n">fig</span><span class="p">,</span> <span class="n">axs</span> <span class="o">=</span> <span class="n">an</span><span class="o">.</span><span class="n">plot</span><span class="o">.</span><span class="n">hist</span><span class="p">(</span><span class="n">mdlhist</span><span class="p">,</span><span class="s1">&#39;flows.valve1_sig.s.action&#39;</span><span class="p">,</span>
+                       <span class="s1">&#39;flows.tank_sig.s.indicator&#39;</span><span class="p">,</span>
+                       <span class="s1">&#39;fxns.store_water.s.level&#39;</span><span class="p">,</span>
+                       <span class="s1">&#39;fxns.store_water.s.net_flow&#39;</span><span class="p">)</span>
+
+<span class="n">result</span><span class="o">.</span><span class="n">graph</span><span class="o">.</span><span class="n">draw</span><span class="p">()</span>
 <br/></pre></div>
+</div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area stderr docutils container">
+<div class="highlight"><pre>
+No artists with labels found to put in legend.  Note that artists whose label start with an underscore are ignored when legend() is called with no argument.
+</pre></div></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[25]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+(&lt;Figure size 1200x1000 with 1 Axes&gt;, &lt;Axes: &gt;)
+</pre></div></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../../_images/examples_tank_Tank_Analysis_47_2.png" src="../../_images/examples_tank_Tank_Analysis_47_2.png" />
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../../_images/examples_tank_Tank_Analysis_47_3.png" src="../../_images/examples_tank_Tank_Analysis_47_3.png" />
 </div>
 </div>
 <p>As shown, the operator does not respond in time, resulting in the tank draining all the way, a failure state. We can further use the <code class="docutils literal notranslate"><span class="pre">propagate.approach</span></code> function to compare the number of scenarios caught in this system compared with the other.</p>
@@ -3356,7 +3179,7 @@ File <span class="ansi-green-intense-fg ansi-bold">~\AppData\Local\anaconda3\lib
           </div>
           <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
         <a href="../multirotor/Multirotor_Optimization.html" class="btn btn-neutral float-left" title="Integrated Resilience Optimization Architectures" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
-        <a href="Tank_Optimization.html" class="btn btn-neutral float-right" title="Cooling Tank Model" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="Tank_Optimization.html" class="btn btn-neutral float-right" title="Cooling Tank Model Optimization" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 
   <hr/>
