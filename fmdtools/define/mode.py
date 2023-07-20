@@ -119,6 +119,9 @@ class Mode(dataobject, readonly=False):
 
     def __init__(self, *args, s_kwargs={}, **kwargs):
         if self.he_args:
+            if 'failrate' not in self.__fields__:
+                raise Exception("failrate must be added to " + self.__class__.__name__ +
+                                " Mode definition to calculate failrate from he_args")
             kwargs['failrate'] = self.add_he_rate(*self.he_args)
         args = get_true_fields(self, *args, **kwargs)
         super().__init__(*args)
