@@ -6,6 +6,7 @@ Description: A module for defining time-based properties for use in blocks. Has 
 - :class:`Time`: Class containing all time-related Block constructs (e.g., timers).
 """
 from decimal import Decimal
+from typing import ClassVar
 from recordclass import dataobject
 from fmdtools.analyze.result import History, get_sub_include
 from .common import get_dataobj_track, get_obj_track
@@ -150,12 +151,13 @@ class Time(dataobject):
         Names of timers to instantiate.
     """
     time: float = 0.0
-    dt: float = 1.0
     t_ind: int = 0
     t_loc: float = 0.0
-    run_times: int = 1
     timers: dict = {}
     use_local: bool = True
+    dt: float = 1.0
+    run_times: int = 1
+    local_dt = 1.0
     timernames = ()
     default_track = ('timers')
 
@@ -184,7 +186,7 @@ class Time(dataobject):
         """Sets the timestep of the function given the option use_local
         (which selects whether it uses local_timestep or global_timestep)"""
         global_tstep = Decimal(str(self.dt))
-        local_tstep = Decimal(str(self.__defaults__[self.__fields__.index('dt')]))
+        local_tstep = Decimal(self.local_dt)
         if self.use_local:
             dt = local_tstep
             if dt < global_tstep:
