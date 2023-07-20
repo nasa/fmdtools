@@ -145,7 +145,7 @@ class Mode(dataobject, readonly=False):
                    ")")
         return reprstr
 
-    def add_he_rate(self,gtp,EPCs={'na':[1,0]}):
+    def add_he_rate(self, gtp, EPCs={'na': [1, 0]}):
         """
         Calculate self.failrate based on a human error probability model.
 
@@ -183,7 +183,7 @@ class Mode(dataobject, readonly=False):
                           'units': self.units,
                           'oppvect': oppvect}
         for mode in self.faultparams:
-            if type(self.faultparams) == tuple:   
+            if type(self.faultparams) == tuple:
                 kwargs = {**default_kwargs}
             elif type(self.faultparams[mode]) == float:
                 # dict of modes: dist is the distribution ((individual rate/probability)
@@ -311,7 +311,7 @@ class Mode(dataobject, readonly=False):
     def set_mode(self, mode):
         """
         Set a mode in the block.
- 
+
         Parameters
         ----------
         mode : str
@@ -325,9 +325,9 @@ class Mode(dataobject, readonly=False):
             elif mode in self.faultmodes:
                 self.to_fault(mode)
             else:
-                self.mode = mode
+                self._assign_mode(mode)
         else:
-            self.mode = mode
+            self._assign_mode(mode)
 
     def in_mode(self, *modes):
         """
@@ -377,8 +377,8 @@ class Mode(dataobject, readonly=False):
         """
         self.faults.clear()
         self.faults.add(fault)
-        if self.exclusive and 'mode' in self.__fields__: 
-            self.mode = fault
+        if self.exclusive:
+            self._assign_mode(fault)
 
     def add_fault(self, *faults):
         """
@@ -399,7 +399,7 @@ class Mode(dataobject, readonly=False):
                                 + "--no faults but mode is still in faultmode "
                                 + self.mode)
             elif faults:
-                self.mode = faults[0]
+                self._assign_mode(faults[0])
 
     def replace_fault(self, fault_to_replace, fault_to_add):
         """
@@ -415,7 +415,7 @@ class Mode(dataobject, readonly=False):
         self.faults.add(fault_to_add)
         self.faults.remove(fault_to_replace)
         if self.exclusive:
-            self.mode = fault_to_add
+            self._assign_mode(fault_to_add)
 
     def remove_fault(self, fault_to_remove, opermode=False, warnmessage=False):
         """
@@ -432,8 +432,8 @@ class Mode(dataobject, readonly=False):
         """
         self.faults.discard(fault_to_remove)
         if opermode:
-            self.mode = opermode
-        if self.exclusive and not(opermode):
+            self._assign_mode(opermode)
+        if self.exclusive and not (opermode):
             raise Exception("Unclear which operational mode to enter w- fault removed")
         if warnmessage:
             self.warn(warnmessage, "Fault mode `" +
@@ -451,11 +451,9 @@ class Mode(dataobject, readonly=False):
             Warning to give when performing operation. Default is False (no warning)
         """
         self.faults.clear()
-        if opermode:
-            self.mode = opermode
-        else:
-            self.mode = self.__defaults__[self.__fields__.index('mode')]
-        if self.exclusive and not(self.mode):
+        self._assign_mode(opermode)
+
+        if self.exclusive and not (self.mode):
             raise Exception("In " + str(self.__class__) + ": Unclear which operational"
                             + " mode to enter with fault removed--no default or"
                             + " opermode specified")
@@ -488,3 +486,9 @@ class Mode(dataobject, readonly=False):
         str_size = '<U'+str(modelength)
         h.init_att('mode', self.mode, timerange, track, str_size=str_size)
         return h
+
+    def _assign_mode(self, mode):
+        if 'mode' in self.__fields__:
+            if mode is None or mode is False:
+                mode = self.__defaults__[self.__fields__.index('mode')]
+            self.mode = mode
