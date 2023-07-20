@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Pump Example Notebook &mdash; fmdtools 2.0-alpha3 documentation</title>
+  <title>Pump Example Notebook &mdash; fmdtools 2.0-alpha4 documentation</title>
       <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
       <link rel="stylesheet" href="../../_static/nbsphinx-code-cells.css" type="text/css" />
@@ -13,11 +13,11 @@
     <script src="../../_static/js/html5shiv.min.js"></script>
   <![endif]-->
   
-        <script src="../../_static/jquery.js"></script>
-        <script src="../../_static/_sphinx_javascript_frameworks_compat.js"></script>
         <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+        <script src="../../_static/jquery.js"></script>
+        <script src="../../_static/underscore.js"></script>
+        <script src="../../_static/_sphinx_javascript_frameworks_compat.js"></script>
         <script src="../../_static/doctools.js"></script>
-        <script src="../../_static/sphinx_highlight.js"></script>
         <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
         <script>window.MathJax = {"tex": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true}, "options": {"ignoreHtmlClass": "tex2jax_ignore|mathjax_ignore|document", "processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
         <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
@@ -72,7 +72,7 @@
 <li class="toctree-l2"><a class="reference internal" href="../../docs/Development%20Guide.html#intro-to-fmdtools">Intro to fmdtools</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="../../docs/Intro_to_fmdtools.html">Intro to resilience modelling, simulation, and visualization in Python with fmdtools.</a><ul>
 <li class="toctree-l4"><a class="reference internal" href="../../docs/Intro_to_fmdtools.html#author-daniel-hulse">Author: Daniel Hulse</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/Intro_to_fmdtools.html#version-2-0-alpha">Version: 2.0-alpha</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../docs/Intro_to_fmdtools.html#version-2-0-alpha4">Version: 2.0-alpha4</a></li>
 </ul>
 </li>
 <li class="toctree-l3"><a class="reference internal" href="../../docs/Intro_to_fmdtools.html#overview">Overview</a></li>
@@ -117,6 +117,7 @@
 </li>
 <li class="toctree-l3"><a class="reference internal" href="../../docs/Development%20Guide.html#roles">Roles</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../docs/Development%20Guide.html#documentation">Documentation</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../docs/Development%20Guide.html#style-formatting">Style/Formatting</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../docs/Development%20Guide.html#testing">Testing</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../docs/Development%20Guide.html#contributors">Contributors</a><ul>
 <li class="toctree-l4"><a class="reference internal" href="../../CONTRIBUTORS.html">CONTRIBUTORS</a></li>
@@ -216,8 +217,13 @@
 <li class="toctree-l4"><a class="reference internal" href="../tank/Tank_Analysis.html#Testing-different-reaction-times">Testing different reaction times</a></li>
 </ul>
 </li>
-<li class="toctree-l3"><a class="reference internal" href="../tank/Tank_Optimization.html">Cooling Tank Model</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="../tank/Tank_Optimization.html#Simulation">Simulation</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../tank/Tank_Optimization.html">Cooling Tank Model Optimization</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../tank/Tank_Optimization.html#Simulation">Simulation</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../tank/Tank_Optimization.html#Verifying-the-nominal-state:">Verifying the nominal state:</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../tank/Tank_Optimization.html#What-happens-under-component-faults?">What happens under component faults?</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../tank/Tank_Optimization.html#Full-set-of-modes">Full set of modes</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../tank/Tank_Optimization.html#Defining-Optimization-Problem">Defining Optimization Problem</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../tank/Tank_Optimization.html#Optimization">Optimization</a></li>
 </ul>
 </li>
 </ul>
@@ -290,239 +296,29 @@
 <li class="toctree-l1"><a class="reference internal" href="../../docs/Glossary.html">Glossary</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../docs/fmdtools.html">Module Reference</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="../../docs/fmdtools.define.html">fmdtools.define package</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="../../docs/fmdtools.define.html#fmdtools-define-block">fmdtools.define.block</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.define.html#fmdtools.define.block.ASG"><code class="docutils literal notranslate"><span class="pre">ASG</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.define.html#fmdtools.define.block.Action"><code class="docutils literal notranslate"><span class="pre">Action</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.define.html#fmdtools.define.block.Block"><code class="docutils literal notranslate"><span class="pre">Block</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.define.html#fmdtools.define.block.CompArch"><code class="docutils literal notranslate"><span class="pre">CompArch</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.define.html#fmdtools.define.block.Component"><code class="docutils literal notranslate"><span class="pre">Component</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.define.html#fmdtools.define.block.FxnBlock"><code class="docutils literal notranslate"><span class="pre">FxnBlock</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.define.html#fmdtools.define.block.GenericFxn"><code class="docutils literal notranslate"><span class="pre">GenericFxn</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.define.html#fmdtools.define.block.Simulable"><code class="docutils literal notranslate"><span class="pre">Simulable</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.define.html#fmdtools.define.block.assoc_flows"><code class="docutils literal notranslate"><span class="pre">assoc_flows()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.define.html#fmdtools.define.block.inject_faults_internal"><code class="docutils literal notranslate"><span class="pre">inject_faults_internal()</span></code></a></li>
-</ul>
-</li>
-<li class="toctree-l3"><a class="reference internal" href="../../docs/fmdtools.define.html#module-fmdtools.define.common">fmdtools.define.common</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.define.html#fmdtools.define.common.check_pickleability"><code class="docutils literal notranslate"><span class="pre">check_pickleability()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.define.html#fmdtools.define.common.eq_units"><code class="docutils literal notranslate"><span class="pre">eq_units()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.define.html#fmdtools.define.common.get_dataobj_track"><code class="docutils literal notranslate"><span class="pre">get_dataobj_track()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.define.html#fmdtools.define.common.get_obj_track"><code class="docutils literal notranslate"><span class="pre">get_obj_track()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.define.html#fmdtools.define.common.get_true_field"><code class="docutils literal notranslate"><span class="pre">get_true_field()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.define.html#fmdtools.define.common.get_true_fields"><code class="docutils literal notranslate"><span class="pre">get_true_fields()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.define.html#fmdtools.define.common.get_var"><code class="docutils literal notranslate"><span class="pre">get_var()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.define.html#fmdtools.define.common.init_obj_attr"><code class="docutils literal notranslate"><span class="pre">init_obj_attr()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.define.html#fmdtools.define.common.is_iter"><code class="docutils literal notranslate"><span class="pre">is_iter()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.define.html#fmdtools.define.common.set_var"><code class="docutils literal notranslate"><span class="pre">set_var()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.define.html#fmdtools.define.common.t_key"><code class="docutils literal notranslate"><span class="pre">t_key()</span></code></a></li>
-</ul>
-</li>
-<li class="toctree-l3"><a class="reference internal" href="../../docs/fmdtools.define.html#module-fmdtools.define.flow">fmdtools.define.flow</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.define.html#fmdtools.define.flow.CommsFlow"><code class="docutils literal notranslate"><span class="pre">CommsFlow</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.define.html#fmdtools.define.flow.Flow"><code class="docutils literal notranslate"><span class="pre">Flow</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.define.html#fmdtools.define.flow.MultiFlow"><code class="docutils literal notranslate"><span class="pre">MultiFlow</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.define.html#fmdtools.define.flow.init_flow"><code class="docutils literal notranslate"><span class="pre">init_flow()</span></code></a></li>
-</ul>
-</li>
-<li class="toctree-l3"><a class="reference internal" href="../../docs/fmdtools.define.html#module-fmdtools.define.mode">fmdtools.define.mode</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.define.html#fmdtools.define.mode.Fault"><code class="docutils literal notranslate"><span class="pre">Fault</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.define.html#fmdtools.define.mode.Mode"><code class="docutils literal notranslate"><span class="pre">Mode</span></code></a></li>
-</ul>
-</li>
-<li class="toctree-l3"><a class="reference internal" href="../../docs/fmdtools.define.html#fmdtools-define-model">fmdtools.define.model</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.define.html#fmdtools.define.model.Model"><code class="docutils literal notranslate"><span class="pre">Model</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.define.html#fmdtools.define.model.check_model_pickleability"><code class="docutils literal notranslate"><span class="pre">check_model_pickleability()</span></code></a></li>
-</ul>
-</li>
-<li class="toctree-l3"><a class="reference internal" href="../../docs/fmdtools.define.html#module-fmdtools.define.parameter">fmdtools.define.parameter</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.define.html#fmdtools.define.parameter.Parameter"><code class="docutils literal notranslate"><span class="pre">Parameter</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.define.html#fmdtools.define.parameter.SimParam"><code class="docutils literal notranslate"><span class="pre">SimParam</span></code></a></li>
-</ul>
-</li>
-<li class="toctree-l3"><a class="reference internal" href="../../docs/fmdtools.define.html#module-fmdtools.define.rand">fmdtools.define.rand</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.define.html#fmdtools.define.rand.Rand"><code class="docutils literal notranslate"><span class="pre">Rand</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.define.html#fmdtools.define.rand.get_pdf_for_dist"><code class="docutils literal notranslate"><span class="pre">get_pdf_for_dist()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.define.html#fmdtools.define.rand.get_pdf_for_rand"><code class="docutils literal notranslate"><span class="pre">get_pdf_for_rand()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.define.html#fmdtools.define.rand.get_scipy_pdf_helper"><code class="docutils literal notranslate"><span class="pre">get_scipy_pdf_helper()</span></code></a></li>
-</ul>
-</li>
-<li class="toctree-l3"><a class="reference internal" href="../../docs/fmdtools.define.html#module-fmdtools.define.state">fmdtools.define.state</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.define.html#fmdtools.define.state.State"><code class="docutils literal notranslate"><span class="pre">State</span></code></a></li>
-</ul>
-</li>
-<li class="toctree-l3"><a class="reference internal" href="../../docs/fmdtools.define.html#module-fmdtools.define.time">fmdtools.define.time</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.define.html#fmdtools.define.time.Time"><code class="docutils literal notranslate"><span class="pre">Time</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.define.html#fmdtools.define.time.Timer"><code class="docutils literal notranslate"><span class="pre">Timer</span></code></a></li>
-</ul>
-</li>
+<li class="toctree-l3"><a class="reference internal" href="../../docs/fmdtools.define.html#fmdtools-define-block">fmdtools.define.block</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../docs/fmdtools.define.html#module-fmdtools.define.common">fmdtools.define.common</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../docs/fmdtools.define.html#module-fmdtools.define.flow">fmdtools.define.flow</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../docs/fmdtools.define.html#module-fmdtools.define.mode">fmdtools.define.mode</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../docs/fmdtools.define.html#fmdtools-define-model">fmdtools.define.model</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../docs/fmdtools.define.html#module-fmdtools.define.parameter">fmdtools.define.parameter</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../docs/fmdtools.define.html#module-fmdtools.define.rand">fmdtools.define.rand</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../docs/fmdtools.define.html#module-fmdtools.define.state">fmdtools.define.state</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../docs/fmdtools.define.html#module-fmdtools.define.time">fmdtools.define.time</a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="../../docs/fmdtools.sim.html">fmdtools.sim</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="../../docs/fmdtools.sim.html#fmdtools-sim-propagate">fmdtools.sim.propagate</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.sim.html#fmdtools.sim.propagate.approach"><code class="docutils literal notranslate"><span class="pre">approach()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.sim.html#fmdtools.sim.propagate.check_end_condition"><code class="docutils literal notranslate"><span class="pre">check_end_condition()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.sim.html#fmdtools.sim.propagate.check_hist_memory"><code class="docutils literal notranslate"><span class="pre">check_hist_memory()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.sim.html#fmdtools.sim.propagate.check_mdl_memory"><code class="docutils literal notranslate"><span class="pre">check_mdl_memory()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.sim.html#fmdtools.sim.propagate.check_overwrite"><code class="docutils literal notranslate"><span class="pre">check_overwrite()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.sim.html#fmdtools.sim.propagate.close_pool"><code class="docutils literal notranslate"><span class="pre">close_pool()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.sim.html#fmdtools.sim.propagate.copy_staged"><code class="docutils literal notranslate"><span class="pre">copy_staged()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.sim.html#fmdtools.sim.propagate.exec_nom_helper"><code class="docutils literal notranslate"><span class="pre">exec_nom_helper()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.sim.html#fmdtools.sim.propagate.exec_nom_par"><code class="docutils literal notranslate"><span class="pre">exec_nom_par()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.sim.html#fmdtools.sim.propagate.exec_scen"><code class="docutils literal notranslate"><span class="pre">exec_scen()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.sim.html#fmdtools.sim.propagate.exec_scen_par"><code class="docutils literal notranslate"><span class="pre">exec_scen_par()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.sim.html#fmdtools.sim.propagate.get_endclass_vars"><code class="docutils literal notranslate"><span class="pre">get_endclass_vars()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.sim.html#fmdtools.sim.propagate.get_result"><code class="docutils literal notranslate"><span class="pre">get_result()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.sim.html#fmdtools.sim.propagate.init_histrange"><code class="docutils literal notranslate"><span class="pre">init_histrange()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.sim.html#fmdtools.sim.propagate.list_init_faults"><code class="docutils literal notranslate"><span class="pre">list_init_faults()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.sim.html#fmdtools.sim.propagate.mult_kwargs"><code class="docutils literal notranslate"><span class="pre">mult_kwargs</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.sim.html#fmdtools.sim.propagate.nested_approach"><code class="docutils literal notranslate"><span class="pre">nested_approach()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.sim.html#fmdtools.sim.propagate.nom_helper"><code class="docutils literal notranslate"><span class="pre">nom_helper()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.sim.html#fmdtools.sim.propagate.nominal"><code class="docutils literal notranslate"><span class="pre">nominal()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.sim.html#fmdtools.sim.propagate.nominal_approach"><code class="docutils literal notranslate"><span class="pre">nominal_approach()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.sim.html#fmdtools.sim.propagate.one_fault"><code class="docutils literal notranslate"><span class="pre">one_fault()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.sim.html#fmdtools.sim.propagate.pack_run_kwargs"><code class="docutils literal notranslate"><span class="pre">pack_run_kwargs()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.sim.html#fmdtools.sim.propagate.pack_sim_kwargs"><code class="docutils literal notranslate"><span class="pre">pack_sim_kwargs()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.sim.html#fmdtools.sim.propagate.phases_from_hist"><code class="docutils literal notranslate"><span class="pre">phases_from_hist()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.sim.html#fmdtools.sim.propagate.prop_one_scen"><code class="docutils literal notranslate"><span class="pre">prop_one_scen()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.sim.html#fmdtools.sim.propagate.run_kwargs"><code class="docutils literal notranslate"><span class="pre">run_kwargs</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.sim.html#fmdtools.sim.propagate.save_helper"><code class="docutils literal notranslate"><span class="pre">save_helper()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.sim.html#fmdtools.sim.propagate.scenlist_helper"><code class="docutils literal notranslate"><span class="pre">scenlist_helper()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.sim.html#fmdtools.sim.propagate.sequence"><code class="docutils literal notranslate"><span class="pre">sequence()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.sim.html#fmdtools.sim.propagate.sim_kwargs"><code class="docutils literal notranslate"><span class="pre">sim_kwargs</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.sim.html#fmdtools.sim.propagate.single_faults"><code class="docutils literal notranslate"><span class="pre">single_faults()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.sim.html#fmdtools.sim.propagate.unpack_mult_kwargs"><code class="docutils literal notranslate"><span class="pre">unpack_mult_kwargs()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.sim.html#fmdtools.sim.propagate.unpack_res_list"><code class="docutils literal notranslate"><span class="pre">unpack_res_list()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.sim.html#fmdtools.sim.propagate.unpack_sim_kwargs"><code class="docutils literal notranslate"><span class="pre">unpack_sim_kwargs()</span></code></a></li>
-</ul>
-</li>
-<li class="toctree-l3"><a class="reference internal" href="../../docs/fmdtools.sim.html#module-fmdtools.sim.scenario">fmdtools.sim.scenario</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.sim.html#fmdtools.sim.scenario.Injection"><code class="docutils literal notranslate"><span class="pre">Injection</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.sim.html#fmdtools.sim.scenario.JointFaultScenario"><code class="docutils literal notranslate"><span class="pre">JointFaultScenario</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.sim.html#fmdtools.sim.scenario.NominalScenario"><code class="docutils literal notranslate"><span class="pre">NominalScenario</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.sim.html#fmdtools.sim.scenario.ParamScenario"><code class="docutils literal notranslate"><span class="pre">ParamScenario</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.sim.html#fmdtools.sim.scenario.Scenario"><code class="docutils literal notranslate"><span class="pre">Scenario</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.sim.html#fmdtools.sim.scenario.Sequence"><code class="docutils literal notranslate"><span class="pre">Sequence</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.sim.html#fmdtools.sim.scenario.SingleFaultScenario"><code class="docutils literal notranslate"><span class="pre">SingleFaultScenario</span></code></a></li>
-</ul>
-</li>
-<li class="toctree-l3"><a class="reference internal" href="../../docs/fmdtools.sim.html#module-fmdtools.sim.approach">fmdtools.sim.approach</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.sim.html#fmdtools.sim.approach.NominalApproach"><code class="docutils literal notranslate"><span class="pre">NominalApproach</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.sim.html#fmdtools.sim.approach.SampleApproach"><code class="docutils literal notranslate"><span class="pre">SampleApproach</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.sim.html#fmdtools.sim.approach.find_overlap_n"><code class="docutils literal notranslate"><span class="pre">find_overlap_n()</span></code></a></li>
-</ul>
-</li>
-<li class="toctree-l3"><a class="reference internal" href="../../docs/fmdtools.sim.html#module-fmdtools.sim.search">fmdtools.sim.search</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.sim.html#fmdtools.sim.search.DynamicInterface"><code class="docutils literal notranslate"><span class="pre">DynamicInterface</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.sim.html#fmdtools.sim.search.ProblemInterface"><code class="docutils literal notranslate"><span class="pre">ProblemInterface</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.sim.html#fmdtools.sim.search.eval_con"><code class="docutils literal notranslate"><span class="pre">eval_con()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.sim.html#fmdtools.sim.search.get_pos_negative"><code class="docutils literal notranslate"><span class="pre">get_pos_negative()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.sim.html#fmdtools.sim.search.get_pos_str"><code class="docutils literal notranslate"><span class="pre">get_pos_str()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.sim.html#fmdtools.sim.search.get_text_time"><code class="docutils literal notranslate"><span class="pre">get_text_time()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.sim.html#fmdtools.sim.search.greater_to_factor"><code class="docutils literal notranslate"><span class="pre">greater_to_factor()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.sim.html#fmdtools.sim.search.n_to_factor"><code class="docutils literal notranslate"><span class="pre">n_to_factor()</span></code></a></li>
-</ul>
-</li>
+<li class="toctree-l3"><a class="reference internal" href="../../docs/fmdtools.sim.html#fmdtools-sim-propagate">fmdtools.sim.propagate</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../docs/fmdtools.sim.html#module-fmdtools.sim.scenario">fmdtools.sim.scenario</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../docs/fmdtools.sim.html#module-fmdtools.sim.approach">fmdtools.sim.approach</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../docs/fmdtools.sim.html#module-fmdtools.sim.search">fmdtools.sim.search</a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="../../docs/fmdtools.analyze.html">fmdtools.analyze package</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="../../docs/fmdtools.analyze.html#module-fmdtools.analyze.result">fmdtools.analyze.result</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.analyze.html#fmdtools.analyze.result.History"><code class="docutils literal notranslate"><span class="pre">History</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.analyze.html#fmdtools.analyze.result.Result"><code class="docutils literal notranslate"><span class="pre">Result</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.analyze.html#fmdtools.analyze.result.auto_filetype"><code class="docutils literal notranslate"><span class="pre">auto_filetype()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.analyze.html#fmdtools.analyze.result.bootstrap_confidence_interval"><code class="docutils literal notranslate"><span class="pre">bootstrap_confidence_interval()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.analyze.html#fmdtools.analyze.result.check_include_error"><code class="docutils literal notranslate"><span class="pre">check_include_error()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.analyze.html#fmdtools.analyze.result.check_include_errors"><code class="docutils literal notranslate"><span class="pre">check_include_errors()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.analyze.html#fmdtools.analyze.result.clean_resultdict_keys"><code class="docutils literal notranslate"><span class="pre">clean_resultdict_keys()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.analyze.html#fmdtools.analyze.result.create_indiv_filename"><code class="docutils literal notranslate"><span class="pre">create_indiv_filename()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.analyze.html#fmdtools.analyze.result.diff"><code class="docutils literal notranslate"><span class="pre">diff()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.analyze.html#fmdtools.analyze.result.file_check"><code class="docutils literal notranslate"><span class="pre">file_check()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.analyze.html#fmdtools.analyze.result.fromdict"><code class="docutils literal notranslate"><span class="pre">fromdict()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.analyze.html#fmdtools.analyze.result.get_dict_attr"><code class="docutils literal notranslate"><span class="pre">get_dict_attr()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.analyze.html#fmdtools.analyze.result.get_sub_include"><code class="docutils literal notranslate"><span class="pre">get_sub_include()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.analyze.html#fmdtools.analyze.result.init_dicthist"><code class="docutils literal notranslate"><span class="pre">init_dicthist()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.analyze.html#fmdtools.analyze.result.init_hist_iter"><code class="docutils literal notranslate"><span class="pre">init_hist_iter()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.analyze.html#fmdtools.analyze.result.init_indicator_hist"><code class="docutils literal notranslate"><span class="pre">init_indicator_hist()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.analyze.html#fmdtools.analyze.result.is_bool"><code class="docutils literal notranslate"><span class="pre">is_bool()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.analyze.html#fmdtools.analyze.result.is_known_immutable"><code class="docutils literal notranslate"><span class="pre">is_known_immutable()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.analyze.html#fmdtools.analyze.result.is_known_mutable"><code class="docutils literal notranslate"><span class="pre">is_known_mutable()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.analyze.html#fmdtools.analyze.result.is_numeric"><code class="docutils literal notranslate"><span class="pre">is_numeric()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.analyze.html#fmdtools.analyze.result.join_key"><code class="docutils literal notranslate"><span class="pre">join_key()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.analyze.html#fmdtools.analyze.result.load"><code class="docutils literal notranslate"><span class="pre">load()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.analyze.html#fmdtools.analyze.result.load_folder"><code class="docutils literal notranslate"><span class="pre">load_folder()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.analyze.html#fmdtools.analyze.result.nan_to_x"><code class="docutils literal notranslate"><span class="pre">nan_to_x()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.analyze.html#fmdtools.analyze.result.to_include_keys"><code class="docutils literal notranslate"><span class="pre">to_include_keys()</span></code></a></li>
-</ul>
-</li>
-<li class="toctree-l3"><a class="reference internal" href="../../docs/fmdtools.analyze.html#module-fmdtools.analyze.plot">fmdtools.analyze.plot</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.analyze.html#fmdtools.analyze.plot.dyn_order"><code class="docutils literal notranslate"><span class="pre">dyn_order()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.analyze.html#fmdtools.analyze.plot.hist"><code class="docutils literal notranslate"><span class="pre">hist()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.analyze.html#fmdtools.analyze.plot.make_consolidated_legend"><code class="docutils literal notranslate"><span class="pre">make_consolidated_legend()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.analyze.html#fmdtools.analyze.plot.metric_dist"><code class="docutils literal notranslate"><span class="pre">metric_dist()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.analyze.html#fmdtools.analyze.plot.metric_dist_from"><code class="docutils literal notranslate"><span class="pre">metric_dist_from()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.analyze.html#fmdtools.analyze.plot.metricovertime"><code class="docutils literal notranslate"><span class="pre">metricovertime()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.analyze.html#fmdtools.analyze.plot.multibar_helper"><code class="docutils literal notranslate"><span class="pre">multibar_helper()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.analyze.html#fmdtools.analyze.plot.multiplot_legend_title"><code class="docutils literal notranslate"><span class="pre">multiplot_legend_title()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.analyze.html#fmdtools.analyze.plot.nested_factor_comparison"><code class="docutils literal notranslate"><span class="pre">nested_factor_comparison()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.analyze.html#fmdtools.analyze.plot.nominal_factor_comparison"><code class="docutils literal notranslate"><span class="pre">nominal_factor_comparison()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.analyze.html#fmdtools.analyze.plot.nominal_vals_1d"><code class="docutils literal notranslate"><span class="pre">nominal_vals_1d()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.analyze.html#fmdtools.analyze.plot.nominal_vals_2d"><code class="docutils literal notranslate"><span class="pre">nominal_vals_2d()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.analyze.html#fmdtools.analyze.plot.nominal_vals_3d"><code class="docutils literal notranslate"><span class="pre">nominal_vals_3d()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.analyze.html#fmdtools.analyze.plot.phases"><code class="docutils literal notranslate"><span class="pre">phases()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.analyze.html#fmdtools.analyze.plot.plot_err_lines"><code class="docutils literal notranslate"><span class="pre">plot_err_lines()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.analyze.html#fmdtools.analyze.plot.plot_line_and_err"><code class="docutils literal notranslate"><span class="pre">plot_line_and_err()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.analyze.html#fmdtools.analyze.plot.samplemetric"><code class="docutils literal notranslate"><span class="pre">samplemetric()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.analyze.html#fmdtools.analyze.plot.samplemetrics"><code class="docutils literal notranslate"><span class="pre">samplemetrics()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.analyze.html#fmdtools.analyze.plot.suite_for_plots"><code class="docutils literal notranslate"><span class="pre">suite_for_plots()</span></code></a></li>
-</ul>
-</li>
-<li class="toctree-l3"><a class="reference internal" href="../../docs/fmdtools.analyze.html#module-fmdtools.analyze.graph">fmdtools.analyze.graph</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.analyze.html#fmdtools.analyze.graph.ASGActGraph"><code class="docutils literal notranslate"><span class="pre">ASGActGraph</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.analyze.html#fmdtools.analyze.graph.ASGFlowGraph"><code class="docutils literal notranslate"><span class="pre">ASGFlowGraph</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.analyze.html#fmdtools.analyze.graph.ASGGraph"><code class="docutils literal notranslate"><span class="pre">ASGGraph</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.analyze.html#fmdtools.analyze.graph.CommsFlowGraph"><code class="docutils literal notranslate"><span class="pre">CommsFlowGraph</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.analyze.html#fmdtools.analyze.graph.EdgeLabelStyle"><code class="docutils literal notranslate"><span class="pre">EdgeLabelStyle</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.analyze.html#fmdtools.analyze.graph.EdgeStyle"><code class="docutils literal notranslate"><span class="pre">EdgeStyle</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.analyze.html#fmdtools.analyze.graph.Graph"><code class="docutils literal notranslate"><span class="pre">Graph</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.analyze.html#fmdtools.analyze.graph.GraphInteractor"><code class="docutils literal notranslate"><span class="pre">GraphInteractor</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.analyze.html#fmdtools.analyze.graph.LabelStyle"><code class="docutils literal notranslate"><span class="pre">LabelStyle</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.analyze.html#fmdtools.analyze.graph.Labels"><code class="docutils literal notranslate"><span class="pre">Labels</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.analyze.html#fmdtools.analyze.graph.ModelCompGraph"><code class="docutils literal notranslate"><span class="pre">ModelCompGraph</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.analyze.html#fmdtools.analyze.graph.ModelFlowGraph"><code class="docutils literal notranslate"><span class="pre">ModelFlowGraph</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.analyze.html#fmdtools.analyze.graph.ModelFxnGraph"><code class="docutils literal notranslate"><span class="pre">ModelFxnGraph</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.analyze.html#fmdtools.analyze.graph.ModelGraph"><code class="docutils literal notranslate"><span class="pre">ModelGraph</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.analyze.html#fmdtools.analyze.graph.ModelTypeGraph"><code class="docutils literal notranslate"><span class="pre">ModelTypeGraph</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.analyze.html#fmdtools.analyze.graph.MultiFlowGraph"><code class="docutils literal notranslate"><span class="pre">MultiFlowGraph</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.analyze.html#fmdtools.analyze.graph.NodeStyle"><code class="docutils literal notranslate"><span class="pre">NodeStyle</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.analyze.html#fmdtools.analyze.graph.add_g_nested"><code class="docutils literal notranslate"><span class="pre">add_g_nested()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.analyze.html#fmdtools.analyze.graph.data_average"><code class="docutils literal notranslate"><span class="pre">data_average()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.analyze.html#fmdtools.analyze.graph.data_error"><code class="docutils literal notranslate"><span class="pre">data_error()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.analyze.html#fmdtools.analyze.graph.get_label_groups"><code class="docutils literal notranslate"><span class="pre">get_label_groups()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.analyze.html#fmdtools.analyze.graph.get_style_kwargs"><code class="docutils literal notranslate"><span class="pre">get_style_kwargs()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.analyze.html#fmdtools.analyze.graph.graph_factory"><code class="docutils literal notranslate"><span class="pre">graph_factory()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.analyze.html#fmdtools.analyze.graph.gv_import_check"><code class="docutils literal notranslate"><span class="pre">gv_import_check()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.analyze.html#fmdtools.analyze.graph.node_is_tagged"><code class="docutils literal notranslate"><span class="pre">node_is_tagged()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.analyze.html#fmdtools.analyze.graph.random"><code class="docutils literal notranslate"><span class="pre">random()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.analyze.html#fmdtools.analyze.graph.sff_one_trial"><code class="docutils literal notranslate"><span class="pre">sff_one_trial()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.analyze.html#fmdtools.analyze.graph.to_legend_label"><code class="docutils literal notranslate"><span class="pre">to_legend_label()</span></code></a></li>
-</ul>
-</li>
-<li class="toctree-l3"><a class="reference internal" href="../../docs/fmdtools.analyze.html#module-fmdtools.analyze.tabulate">fmdtools.analyze.tabulate</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.analyze.html#fmdtools.analyze.tabulate.dicttab"><code class="docutils literal notranslate"><span class="pre">dicttab()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.analyze.html#fmdtools.analyze.tabulate.fmea"><code class="docutils literal notranslate"><span class="pre">fmea()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.analyze.html#fmdtools.analyze.tabulate.label_faults"><code class="docutils literal notranslate"><span class="pre">label_faults()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.analyze.html#fmdtools.analyze.tabulate.maptab"><code class="docutils literal notranslate"><span class="pre">maptab()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.analyze.html#fmdtools.analyze.tabulate.metricovertime"><code class="docutils literal notranslate"><span class="pre">metricovertime()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.analyze.html#fmdtools.analyze.tabulate.nested_factor_comparison"><code class="docutils literal notranslate"><span class="pre">nested_factor_comparison()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.analyze.html#fmdtools.analyze.tabulate.nested_stats"><code class="docutils literal notranslate"><span class="pre">nested_stats()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.analyze.html#fmdtools.analyze.tabulate.nominal_factor_comparison"><code class="docutils literal notranslate"><span class="pre">nominal_factor_comparison()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.analyze.html#fmdtools.analyze.tabulate.nominal_stats"><code class="docutils literal notranslate"><span class="pre">nominal_stats()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.analyze.html#fmdtools.analyze.tabulate.phasefmea"><code class="docutils literal notranslate"><span class="pre">phasefmea()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.analyze.html#fmdtools.analyze.tabulate.result_summary"><code class="docutils literal notranslate"><span class="pre">result_summary()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.analyze.html#fmdtools.analyze.tabulate.result_summary_fmea"><code class="docutils literal notranslate"><span class="pre">result_summary_fmea()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.analyze.html#fmdtools.analyze.tabulate.samptime"><code class="docutils literal notranslate"><span class="pre">samptime()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.analyze.html#fmdtools.analyze.tabulate.summfmea"><code class="docutils literal notranslate"><span class="pre">summfmea()</span></code></a></li>
-</ul>
-</li>
+<li class="toctree-l3"><a class="reference internal" href="../../docs/fmdtools.analyze.html#module-fmdtools.analyze.result">fmdtools.analyze.result</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../docs/fmdtools.analyze.html#module-fmdtools.analyze.plot">fmdtools.analyze.plot</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../docs/fmdtools.analyze.html#module-fmdtools.analyze.graph">fmdtools.analyze.graph</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../docs/fmdtools.analyze.html#module-fmdtools.analyze.tabulate">fmdtools.analyze.tabulate</a></li>
 </ul>
 </li>
 </ul>
@@ -596,7 +392,7 @@
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-Pump model at 0x1ea5216ebc0
+Pump model at 0x1a7f0fe6bc0
 FUNCTIONS:
 import_ee ImportEE
 - ImportEEState(effstate=1.0)
@@ -663,7 +459,7 @@ wat_2 Water flow: WaterStates(flowrate=1.0, pressure=1.0, area=1.0, level=1.0)
 </div>
 <div class="output_area stderr docutils container">
 <div class="highlight"><pre>
-c:\users\dhulse\documents\github\fmdtools\fmdtools\analyze\graph.py:643: UserWarning:
+c:\users\dhulse\documents\github\fmdtools\fmdtools\analyze\graph.py:724: UserWarning:
 
 The arrowstyle keyword argument is not applicable when drawing edges
 with LineCollection.
@@ -672,7 +468,7 @@ To make this warning go away, either specify `arrows=True` to
 force FancyArrowPatches or use the default value for arrowstyle.
 Note that using FancyArrowPatches may be slow for large graphs.
 
-  nx.draw_networkx_edges(self.g, self.pos, edges, **self.edge_styles[label].kwargs(), label=legend_label, ax=ax)
+  nx.draw_networkx_edges(self.g, self.pos, edges,
 </pre></div></div>
 </div>
 <div class="nboutput nblast docutils container">
@@ -713,7 +509,7 @@ Note that using FancyArrowPatches may be slow for large graphs.
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-graph: &lt;fmdtools.analyze.graph.ModelGraph object at 0x000001EA54431E70&gt;
+graph: &lt;fmdtools.analyze.graph.ModelGraph object at 0x000001A7A0025F90&gt;
 </pre></div></div>
 </div>
 <div class="nbinput docutils container">
@@ -730,7 +526,7 @@ graph: &lt;fmdtools.analyze.graph.ModelGraph object at 0x000001EA54431E70&gt;
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-&lt;fmdtools.analyze.graph.ModelGraph at 0x1ea54431e70&gt;
+&lt;fmdtools.analyze.graph.ModelGraph at 0x1a7a0025f90&gt;
 </pre></div></div>
 </div>
 <p>With these results, we can now plot the graph of results resgraph using:</p>
@@ -1672,12 +1468,12 @@ time:                          array(56)
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-endclass.rate:                      55.0
+endclass.rate:                   0.00055
 endclass.cost:        29000.000000000007
-endclass.expected cost: 159500000000.00003
+endclass.expected cost: 1595000.0000000005
 endfaults: {&#39;import_ee&#39;: [&#39;no_v&#39;], &#39;move_water&#39;: [&#39;short&#39;]}
 faultprops: {&#39;import_ee&#39;: {&#39;no_v&#39;: Fault(dist=0.8, oppvect=[0, 1, 0], rcost=10000, probtype=&#39;rate&#39;, units=&#39;hr&#39;)}, &#39;move_water&#39;: {&#39;short&#39;: Fault(dist=1.0, oppvect=[1.5, 1.0, 1.0], rcost=10000, probtype=&#39;rate&#39;, units=&#39;hr&#39;)}}
-graph: &lt;fmdtools.analyze.graph.ModelGraph object at 0x000001EA55C31A20&gt;
+graph: &lt;fmdtools.analyze.graph.ModelGraph object at 0x000001A7F4A5EB90&gt;
 </pre></div></div>
 </div>
 <p>However, the graph view now has information about degradations between the faulty and nominal runs, along with fault information:</p>
@@ -1714,6 +1510,7 @@ graph: &lt;fmdtools.analyze.graph.ModelGraph object at 0x000001EA55C31A20&gt;
  &#39;label&#39;: &#39;FxnBlock&#39;,
  &#39;states&#39;: {&#39;eff&#39;: 0.0},
  &#39;faults&#39;: [&#39;short&#39;],
+ &#39;indicators&#39;: [],
  &#39;degraded&#39;: True,
  &#39;faulty&#39;: True}
 </pre></div></div>
@@ -1957,42 +1754,42 @@ input[type=range].anim-slider {
 </style>
 
 <div class="animation">
-  <img id="_anim_imgfd56f3e1aaeb49c89b56ca39442f8fdf">
+  <img id="_anim_imgcae80679846443e0b29256b515c15a63">
   <div class="anim-controls">
-    <input id="_anim_sliderfd56f3e1aaeb49c89b56ca39442f8fdf" type="range" class="anim-slider"
+    <input id="_anim_slidercae80679846443e0b29256b515c15a63" type="range" class="anim-slider"
            name="points" min="0" max="1" step="1" value="0"
-           oninput="animfd56f3e1aaeb49c89b56ca39442f8fdf.set_frame(parseInt(this.value));">
+           oninput="animcae80679846443e0b29256b515c15a63.set_frame(parseInt(this.value));">
     <div class="anim-buttons">
-      <button title="Decrease speed" aria-label="Decrease speed" onclick="animfd56f3e1aaeb49c89b56ca39442f8fdf.slower()">
+      <button title="Decrease speed" aria-label="Decrease speed" onclick="animcae80679846443e0b29256b515c15a63.slower()">
           <i class="fa fa-minus"></i></button>
-      <button title="First frame" aria-label="First frame" onclick="animfd56f3e1aaeb49c89b56ca39442f8fdf.first_frame()">
+      <button title="First frame" aria-label="First frame" onclick="animcae80679846443e0b29256b515c15a63.first_frame()">
         <i class="fa fa-fast-backward"></i></button>
-      <button title="Previous frame" aria-label="Previous frame" onclick="animfd56f3e1aaeb49c89b56ca39442f8fdf.previous_frame()">
+      <button title="Previous frame" aria-label="Previous frame" onclick="animcae80679846443e0b29256b515c15a63.previous_frame()">
           <i class="fa fa-step-backward"></i></button>
-      <button title="Play backwards" aria-label="Play backwards" onclick="animfd56f3e1aaeb49c89b56ca39442f8fdf.reverse_animation()">
+      <button title="Play backwards" aria-label="Play backwards" onclick="animcae80679846443e0b29256b515c15a63.reverse_animation()">
           <i class="fa fa-play fa-flip-horizontal"></i></button>
-      <button title="Pause" aria-label="Pause" onclick="animfd56f3e1aaeb49c89b56ca39442f8fdf.pause_animation()">
+      <button title="Pause" aria-label="Pause" onclick="animcae80679846443e0b29256b515c15a63.pause_animation()">
           <i class="fa fa-pause"></i></button>
-      <button title="Play" aria-label="Play" onclick="animfd56f3e1aaeb49c89b56ca39442f8fdf.play_animation()">
+      <button title="Play" aria-label="Play" onclick="animcae80679846443e0b29256b515c15a63.play_animation()">
           <i class="fa fa-play"></i></button>
-      <button title="Next frame" aria-label="Next frame" onclick="animfd56f3e1aaeb49c89b56ca39442f8fdf.next_frame()">
+      <button title="Next frame" aria-label="Next frame" onclick="animcae80679846443e0b29256b515c15a63.next_frame()">
           <i class="fa fa-step-forward"></i></button>
-      <button title="Last frame" aria-label="Last frame" onclick="animfd56f3e1aaeb49c89b56ca39442f8fdf.last_frame()">
+      <button title="Last frame" aria-label="Last frame" onclick="animcae80679846443e0b29256b515c15a63.last_frame()">
           <i class="fa fa-fast-forward"></i></button>
-      <button title="Increase speed" aria-label="Increase speed" onclick="animfd56f3e1aaeb49c89b56ca39442f8fdf.faster()">
+      <button title="Increase speed" aria-label="Increase speed" onclick="animcae80679846443e0b29256b515c15a63.faster()">
           <i class="fa fa-plus"></i></button>
     </div>
-    <form title="Repetition mode" aria-label="Repetition mode" action="#n" name="_anim_loop_selectfd56f3e1aaeb49c89b56ca39442f8fdf"
+    <form title="Repetition mode" aria-label="Repetition mode" action="#n" name="_anim_loop_selectcae80679846443e0b29256b515c15a63"
           class="anim-state">
-      <input type="radio" name="state" value="once" id="_anim_radio1_fd56f3e1aaeb49c89b56ca39442f8fdf"
+      <input type="radio" name="state" value="once" id="_anim_radio1_cae80679846443e0b29256b515c15a63"
              >
-      <label for="_anim_radio1_fd56f3e1aaeb49c89b56ca39442f8fdf">Once</label>
-      <input type="radio" name="state" value="loop" id="_anim_radio2_fd56f3e1aaeb49c89b56ca39442f8fdf"
+      <label for="_anim_radio1_cae80679846443e0b29256b515c15a63">Once</label>
+      <input type="radio" name="state" value="loop" id="_anim_radio2_cae80679846443e0b29256b515c15a63"
              checked>
-      <label for="_anim_radio2_fd56f3e1aaeb49c89b56ca39442f8fdf">Loop</label>
-      <input type="radio" name="state" value="reflect" id="_anim_radio3_fd56f3e1aaeb49c89b56ca39442f8fdf"
+      <label for="_anim_radio2_cae80679846443e0b29256b515c15a63">Loop</label>
+      <input type="radio" name="state" value="reflect" id="_anim_radio3_cae80679846443e0b29256b515c15a63"
              >
-      <label for="_anim_radio3_fd56f3e1aaeb49c89b56ca39442f8fdf">Reflect</label>
+      <label for="_anim_radio3_cae80679846443e0b29256b515c15a63">Reflect</label>
     </form>
   </div>
 </div>
@@ -2002,13 +1799,13 @@ input[type=range].anim-slider {
   /* Instantiate the Animation class. */
   /* The IDs given should match those used in the template above. */
   (function() {
-    var img_id = "_anim_imgfd56f3e1aaeb49c89b56ca39442f8fdf";
-    var slider_id = "_anim_sliderfd56f3e1aaeb49c89b56ca39442f8fdf";
-    var loop_select_id = "_anim_loop_selectfd56f3e1aaeb49c89b56ca39442f8fdf";
+    var img_id = "_anim_imgcae80679846443e0b29256b515c15a63";
+    var slider_id = "_anim_slidercae80679846443e0b29256b515c15a63";
+    var loop_select_id = "_anim_loop_selectcae80679846443e0b29256b515c15a63";
     var frames = new Array(56);
 
   frames[0] = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAlgAAAGQCAYAAAByNR6YAAAAOXRFWHRTb2Z0d2FyZQBNYXRwbG90\
-bGliIHZlcnNpb24zLjcuMSwgaHR0cHM6Ly9tYXRwbG90bGliLm9yZy/bCgiHAAAACXBIWXMAAA9h\
+bGliIHZlcnNpb24zLjcuMiwgaHR0cHM6Ly9tYXRwbG90bGliLm9yZy8pXeV/AAAACXBIWXMAAA9h\
 AAAPYQGoP6dpAACirUlEQVR4nOzdeVzN2f8H8Ndtu+0blRYtaEOlUJYSQ4MozEhZK0sTxtZkxiCS\
 kTAyRmOnmkyo7DQmRsgyWbJEpEiUUkilTer8/vDr8+2qKG6LvJ+Px32493zO55z353a73n0+53MO\
 jzHGQAghhBBChEakuQMghBBCCGltKMEihBBCCBEySrAIIYQQQoSMEixCCCGEECGjBIsQQgghRMgo\
@@ -2743,7 +2540,7 @@ kcwYsIiIiIhkxoBFREREJDMGLCIiIiKZMWARERERyYwBi4iIiEhmDFhEREREMvs/GSYAQLMiQckA\
 AAAASUVORK5CYII=\
 "
   frames[1] = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAlgAAAGQCAYAAAByNR6YAAAAOXRFWHRTb2Z0d2FyZQBNYXRwbG90\
-bGliIHZlcnNpb24zLjcuMSwgaHR0cHM6Ly9tYXRwbG90bGliLm9yZy/bCgiHAAAACXBIWXMAAA9h\
+bGliIHZlcnNpb24zLjcuMiwgaHR0cHM6Ly9tYXRwbG90bGliLm9yZy8pXeV/AAAACXBIWXMAAA9h\
 AAAPYQGoP6dpAACh3UlEQVR4nOzdeVyN6f8/8NdpO+0blYoWtKEilC0xNIjCjJStxdKEsTWZMYiE\
 hJFBY41q8gmVncbE2LJMliwRKZIppZBKu7p+f/h1fztaFKdF3s/H4zycc93XfV3v+3Q63t33dV8X\
 jzHGQAghhBBChEakuQMghBBCCGltKMEihBBCCBEySrAIIYQQQoSMEixCCCGEECGjBIsQQgghRMgo\
@@ -3474,7 +3271,7 @@ gEVEREQkMwYsIiIiIpkxYBERERHJjAGLiIiISGYMWEREREQyY8AiIiIikhkDFhEREZHMGLCIiIiI\
 ZMaARURERCSz/wNOl6W2ETn8WwAAAABJRU5ErkJggg==\
 "
   frames[2] = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAlgAAAGQCAYAAAByNR6YAAAAOXRFWHRTb2Z0d2FyZQBNYXRwbG90\
-bGliIHZlcnNpb24zLjcuMSwgaHR0cHM6Ly9tYXRwbG90bGliLm9yZy/bCgiHAAAACXBIWXMAAA9h\
+bGliIHZlcnNpb24zLjcuMiwgaHR0cHM6Ly9tYXRwbG90bGliLm9yZy8pXeV/AAAACXBIWXMAAA9h\
 AAAPYQGoP6dpAACidUlEQVR4nOzdeVyN6f8/8NdpO+0blQoV2lARlaUsQ4MozEhZpsXShLE1mTGI\
 hISRMRprVJNPqOw0JkbIMlmyRKSoTCmFVNqkrt8fft3fjhbFaZH38/E4D+dc93Vf1/s+nY53933d\
 18VjjDEQQgghhBChEWnpAAghhBBC2hpKsAghhBBChIwSLEIIIYQQIaMEixBCCCFEyCjBIoQQQggR\
@@ -4208,7 +4005,7 @@ RDJjwCIiIiKSGQMWERERkcwYsIiIiIhkxoBFREREJDMGLCIiIiKZMWARERERyez/ALif7cNmHWJU\
 AAAAAElFTkSuQmCC\
 "
   frames[3] = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAlgAAAGQCAYAAAByNR6YAAAAOXRFWHRTb2Z0d2FyZQBNYXRwbG90\
-bGliIHZlcnNpb24zLjcuMSwgaHR0cHM6Ly9tYXRwbG90bGliLm9yZy/bCgiHAAAACXBIWXMAAA9h\
+bGliIHZlcnNpb24zLjcuMiwgaHR0cHM6Ly9tYXRwbG90bGliLm9yZy8pXeV/AAAACXBIWXMAAA9h\
 AAAPYQGoP6dpAACijElEQVR4nOzdeVyN6f8/8NdpO+2rSosWtKEiKkuJwVgLM1KWUVmaMLYmMwaR\
 kPCRMRo71WRCZacxMUKWyZIlIkVlSimk0q6u3x9+3d+OiuK0yPv5eJyHc677uq/rfZ9Ox7v7vu7r\
 4jHGGAghhBBCiNCItHQAhBBCCCFtDSVYhBBCCCFCRgkWIYQQQoiQUYJFCCGEECJklGARQgghhAgZ\
@@ -4942,7 +4739,7 @@ REQyY8AiIiIikhkDFhEREZHMGLCIiIiIZMaARURERCQzBiwiIiIimTFgEREREcmMAYuIiIhIZgxY\
 RERERDJjwCIiIiKS2f8B6XAGKXt53LMAAAAASUVORK5CYII=\
 "
   frames[4] = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAlgAAAGQCAYAAAByNR6YAAAAOXRFWHRTb2Z0d2FyZQBNYXRwbG90\
-bGliIHZlcnNpb24zLjcuMSwgaHR0cHM6Ly9tYXRwbG90bGliLm9yZy/bCgiHAAAACXBIWXMAAA9h\
+bGliIHZlcnNpb24zLjcuMiwgaHR0cHM6Ly9tYXRwbG90bGliLm9yZy8pXeV/AAAACXBIWXMAAA9h\
 AAAPYQGoP6dpAACiSUlEQVR4nOzdeVyN6f8/8NdpO+0blYoWtFIRyhZmaBCFGSnLtFiaMLYmw6Ak\
 JIyM0VijmnxCZacxMUKWyU5EisqUUkilXV2/P/y6vx0VxWmR9/PxOA/nXPd1X9f7Pp2Od/d93dfF\
 Y4wxEEIIIYQQoRFp6QAIIYQQQtoaSrAIIYQQQoSMEixCCCGEECGjBIsQQgghRMgowSKEEEIIETJK\
@@ -5675,7 +5472,7 @@ GQMWERERkcwYsIiIiIhkxoBFREREJDMGLCIiIiKZMWARERERyYwBi4iIiEhmDFhEREREMmPAIiIi\
 IpLZ/wFPytpqUtxwVAAAAABJRU5ErkJggg==\
 "
   frames[5] = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAlgAAAGQCAYAAAByNR6YAAAAOXRFWHRTb2Z0d2FyZQBNYXRwbG90\
-bGliIHZlcnNpb24zLjcuMSwgaHR0cHM6Ly9tYXRwbG90bGliLm9yZy/bCgiHAAAACXBIWXMAAA9h\
+bGliIHZlcnNpb24zLjcuMiwgaHR0cHM6Ly9tYXRwbG90bGliLm9yZy8pXeV/AAAACXBIWXMAAA9h\
 AAAPYQGoP6dpAACicklEQVR4nOzdeVyN6f8/8NdpO+2rSkUL2lARlaUwQ4MozEhZpsXSWMbWZAaJ\
 hISRMRprVJNPqOw0JkbIMtmJSJFMKYVU2tX1+8Ov+9tRUZwWeT8fj/NwznVf93W979PpeHff131d\
 PMYYAyGEEEIIERqRlg6AEEIIIaStoQSLEEIIIUTIKMEihBBCCBEySrAIIYQQQoSMEixCCCGEECGj\
@@ -6409,7 +6206,7 @@ BiwiIiIimTFgEREREcmMAYuIiIhIZgxYRERERDJjwCIiIiKSGQMWERERkcz+D2g77oBfEIzMAAAA\
 AElFTkSuQmCC\
 "
   frames[6] = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAlgAAAGQCAYAAAByNR6YAAAAOXRFWHRTb2Z0d2FyZQBNYXRwbG90\
-bGliIHZlcnNpb24zLjcuMSwgaHR0cHM6Ly9tYXRwbG90bGliLm9yZy/bCgiHAAAACXBIWXMAAA9h\
+bGliIHZlcnNpb24zLjcuMiwgaHR0cHM6Ly9tYXRwbG90bGliLm9yZy8pXeV/AAAACXBIWXMAAA9h\
 AAAPYQGoP6dpAACi5UlEQVR4nOzdeVyN6f8/8NdpO+2rSgsV2lAplKXsDaIwI2WZFksTxtYwYySy\
 JXxk0Fijmkyo7DQmRsgyWbJEpEimlEIqbVLX7w+/7m9HRXFa5P18PM7DOdd93df1vk+n4919X/d1\
 8RhjDIQQQgghRGhEmjsAQgghhJDWhhIsQgghhBAhowSLEEIIIUTIKMEihBBCCBEySrAIIYQQQoSM\
@@ -7145,7 +6942,7 @@ xoBFREREJDMGLCIiIiKZMWARERERyYwBi4iIiEhmDFhEREREMmPAIiIiIpLZ/wGiShY0NP5rsgAA\
 AABJRU5ErkJggg==\
 "
   frames[7] = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAlgAAAGQCAYAAAByNR6YAAAAOXRFWHRTb2Z0d2FyZQBNYXRwbG90\
-bGliIHZlcnNpb24zLjcuMSwgaHR0cHM6Ly9tYXRwbG90bGliLm9yZy/bCgiHAAAACXBIWXMAAA9h\
+bGliIHZlcnNpb24zLjcuMiwgaHR0cHM6Ly9tYXRwbG90bGliLm9yZy8pXeV/AAAACXBIWXMAAA9h\
 AAAPYQGoP6dpAACiIUlEQVR4nOzdeVyN6f8/8NdpO+0blYoWtKEiKltiaBCFGSnLtFiaMLYmMwaR\
 kPCRMRprqSYTKjuNiRGyTHYiUiRTSiGVdnX9/vDr/nZUFKdF3s/H4zycc93XfV3v+3Q63t33dV8X\
 jzHGQAghhBBChEakpQMghBBCCGlrKMEihBBCCBEySrAIIYQQQoSMEixCCCGEECGjBIsQQgghRMgo\
@@ -7877,7 +7674,7 @@ iIhkxoBFREREJDMGLCIiIiKZMWARERERyYwBi4iIiEhmDFhEREREMmPAIiIiIpIZAxYRERGRzBiw\
 iIiIiGTGgEVEREQkMwYsIiIiIpn9H3DgzuLCOC5aAAAAAElFTkSuQmCC\
 "
   frames[8] = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAlgAAAGQCAYAAAByNR6YAAAAOXRFWHRTb2Z0d2FyZQBNYXRwbG90\
-bGliIHZlcnNpb24zLjcuMSwgaHR0cHM6Ly9tYXRwbG90bGliLm9yZy/bCgiHAAAACXBIWXMAAA9h\
+bGliIHZlcnNpb24zLjcuMiwgaHR0cHM6Ly9tYXRwbG90bGliLm9yZy8pXeV/AAAACXBIWXMAAA9h\
 AAAPYQGoP6dpAACi2UlEQVR4nOzdeVyN6f8/8NdpO+2rSkUL2lARlaXE0FjLMlKWabE0YWwNMwYR\
 RsLIGI21VJNPqOw0JkbIMlmyRKRIppRCKm1art8fft3fjoritMj7+Xich3Ou+7qv632fTse7+77u\
 6+IxxhgIIYQQQojQiLR0AIQQQgghbQ0lWIQQQgghQkYJFiGEEEKIkFGCRQghhBAiZJRgEUIIIYQI\
@@ -8612,7 +8409,7 @@ MmPAIiIiIpIZAxYRERGRzBiwiIiIiGTGgEVEREQkMwYsIiIiIpkxYBERERHJjAGLiIiISGYMWERE\
 REQyY8AiIiIikhkDFhEREZHMGLCIiIiIZMaARURERCSz/wPDjRFGm6vvbgAAAABJRU5ErkJggg==\
 "
   frames[9] = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAlgAAAGQCAYAAAByNR6YAAAAOXRFWHRTb2Z0d2FyZQBNYXRwbG90\
-bGliIHZlcnNpb24zLjcuMSwgaHR0cHM6Ly9tYXRwbG90bGliLm9yZy/bCgiHAAAACXBIWXMAAA9h\
+bGliIHZlcnNpb24zLjcuMiwgaHR0cHM6Ly9tYXRwbG90bGliLm9yZy8pXeV/AAAACXBIWXMAAA9h\
 AAAPYQGoP6dpAACizElEQVR4nOzdeVyN6f8/8NdpO+0blYoWtKFSVJayDA2iMCNla7E0YWxNhkEk\
 JIyM0VijmnyylJ3GxAhZJkuWiBTJlFJIpU3q+v3h1/3tqChOi7yfj8d5OOe6r/u63vfpdLy77+u+\
 Lh5jjIEQQgghhAiNSHMHQAghhBDS2lCCRQghhBAiZJRgEUIIIYQIGSVYhBBCCCFCRgkWIYQQQoiQ\
@@ -9347,7 +9144,7 @@ iEhmDFhEREREMmPAIiIiIpIZAxYRERGRzBiwiIiIiGTGgEVEREQkMwYsIiIiIpkxYBERERHJjAGL\
 iIiISGYMWEREREQyY8AiIiIiktn/AZmw9Uld3lLWAAAAAElFTkSuQmCC\
 "
   frames[10] = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAlgAAAGQCAYAAAByNR6YAAAAOXRFWHRTb2Z0d2FyZQBNYXRwbG90\
-bGliIHZlcnNpb24zLjcuMSwgaHR0cHM6Ly9tYXRwbG90bGliLm9yZy/bCgiHAAAACXBIWXMAAA9h\
+bGliIHZlcnNpb24zLjcuMiwgaHR0cHM6Ly9tYXRwbG90bGliLm9yZy8pXeV/AAAACXBIWXMAAA9h\
 AAAPYQGoP6dpAACn1UlEQVR4nOzdeVyN2R8H8M9t31dJe6GSJUrKUtYxiBpmRNbK0tiXZBiJZAsj\
 Yxk71Y8JlZ3GxCiyjC1LZCkqSimk0q7O74+mR1eL4tZNfd+v13259zznOec8t+v27ZzznMNjjDEQ\
 QgghhBCBERF2AwghhBBCGhsKsAghhBBCBIwCLEIIIYQQAaMAixBCCCFEwCjAIoQQQggRMAqwCCGE\
@@ -10105,7 +9902,7 @@ dqYES0RERMTOlGCJiIiI2JkSLBERERE7U4IlIiIiYmdKsERERETsTAmWiIiIiJ0pwRIRERGxs/8P\
 sTNGRCNqK+sAAAAASUVORK5CYII=\
 "
   frames[11] = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAlgAAAGQCAYAAAByNR6YAAAAOXRFWHRTb2Z0d2FyZQBNYXRwbG90\
-bGliIHZlcnNpb24zLjcuMSwgaHR0cHM6Ly9tYXRwbG90bGliLm9yZy/bCgiHAAAACXBIWXMAAA9h\
+bGliIHZlcnNpb24zLjcuMiwgaHR0cHM6Ly9tYXRwbG90bGliLm9yZy8pXeV/AAAACXBIWXMAAA9h\
 AAAPYQGoP6dpAACm50lEQVR4nOzdeVyN2R8H8M9t31dJizYqWaKkLGWdxlrDjMhaWRr7kgwjkWxh\
 ZCxjp/oxobLTmBhFlsmSJbIUFUVEqbSr8/uj6dHVorh1U9/363Vf7j3Pec75Prfr9u15znMOjzHG\
 QAghhBBCBEZE2AEQQgghhDQ2lGARQgghhAgYJViEEEIIIQJGCRYhhBBCiIBRgkUIIYQQImCUYBFC\
@@ -10859,7 +10656,7 @@ wRIRERGxMyVYIiIiInamBEtERETEzpRgiYiIiNiZEiwRERERO1OCJSIiImJn/w8j0+6d+7sVzQAA\
 AABJRU5ErkJggg==\
 "
   frames[12] = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAlgAAAGQCAYAAAByNR6YAAAAOXRFWHRTb2Z0d2FyZQBNYXRwbG90\
-bGliIHZlcnNpb24zLjcuMSwgaHR0cHM6Ly9tYXRwbG90bGliLm9yZy/bCgiHAAAACXBIWXMAAA9h\
+bGliIHZlcnNpb24zLjcuMiwgaHR0cHM6Ly9tYXRwbG90bGliLm9yZy8pXeV/AAAACXBIWXMAAA9h\
 AAAPYQGoP6dpAACnrElEQVR4nOzdeVyN2R8H8M9t31dJixZUskRJWco6DaIGI7JWlsa+JMNIJFsY\
 WcdO9WNCZacxMYoskyVLZCkqigiptKvz+6Pp0dWiuHVT3/frdV/uPc95zvk+t+v27XnOcw6PMcZA\
 CCGEEEIERkTYARBCCCGENDSUYBFCCCGECBglWIQQQgghAkYJFiGEEEKIgFGCRQghhBAiYJRgEUII\
@@ -11616,7 +11413,7 @@ InamBEtERETEzpRgiYiIiNiZEiwRERERO1OCJSIiImJnSrBERERE7EwJloiIiIidKcESERERsTMl\
 WCIiIiJ2pgRLRERExM7+PyEsO9wuiKVdAAAAAElFTkSuQmCC\
 "
   frames[13] = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAlgAAAGQCAYAAAByNR6YAAAAOXRFWHRTb2Z0d2FyZQBNYXRwbG90\
-bGliIHZlcnNpb24zLjcuMSwgaHR0cHM6Ly9tYXRwbG90bGliLm9yZy/bCgiHAAAACXBIWXMAAA9h\
+bGliIHZlcnNpb24zLjcuMiwgaHR0cHM6Ly9tYXRwbG90bGliLm9yZy8pXeV/AAAACXBIWXMAAA9h\
 AAAPYQGoP6dpAACnx0lEQVR4nOzdeVyN2R8H8M9t31dJizYqWaKkLGUdg6hhRmStLE12kmEkki2M\
 jGWsUf2YUNlpTIwiy2TJElmKiiJCKu3q/P5oenRVFLdu6vt+ve7Lvec5zznf53bdvj3Pec7hMcYY\
 CCGEEEKIwIgIOwBCCCGEkMaGEixCCCGEEAGjBIsQQgghRMAowSKEEEIIETBKsAghhBBCBIwSLEII\
@@ -12374,7 +12171,7 @@ iIidKcESERERsTMlWCIiIiJ2pgRLRERExM6UYImIiIjYmRIsERERETv7/4/sWgmD4M4aAAAAAElF\
 TkSuQmCC\
 "
   frames[14] = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAlgAAAGQCAYAAAByNR6YAAAAOXRFWHRTb2Z0d2FyZQBNYXRwbG90\
-bGliIHZlcnNpb24zLjcuMSwgaHR0cHM6Ly9tYXRwbG90bGliLm9yZy/bCgiHAAAACXBIWXMAAA9h\
+bGliIHZlcnNpb24zLjcuMiwgaHR0cHM6Ly9tYXRwbG90bGliLm9yZy8pXeV/AAAACXBIWXMAAA9h\
 AAAPYQGoP6dpAACnW0lEQVR4nOzdeVyN2R8H8M9t31dJixZUskRJWco6jbWGGZG1sjTZSYaRSLYw\
 MpaxU/2YUNlpTIwiy2TJElmKiiKiVNrV+f3R9OhqUdy6qe/79bov957nPOec53bdvp1znnN4jDEG\
 QgghhBAiMCLCbgAhhBBCSGNDARYhhBBCiIBRgEUIIYQQImAUYBFCCCGECBgFWIQQQgghAkYBFiGE\
@@ -13130,7 +12927,7 @@ ERERETtTgiUiIiJiZ0qwREREROxMCZaIiIiInSnBEhEREbEzJVgiIiIidqYES0RERMTOlGCJiIiI\
 AAAAAElFTkSuQmCC\
 "
   frames[15] = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAlgAAAGQCAYAAAByNR6YAAAAOXRFWHRTb2Z0d2FyZQBNYXRwbG90\
-bGliIHZlcnNpb24zLjcuMSwgaHR0cHM6Ly9tYXRwbG90bGliLm9yZy/bCgiHAAAACXBIWXMAAA9h\
+bGliIHZlcnNpb24zLjcuMiwgaHR0cHM6Ly9tYXRwbG90bGliLm9yZy8pXeV/AAAACXBIWXMAAA9h\
 AAAPYQGoP6dpAACnf0lEQVR4nOzdeVyN2R8H8M9t31dJixZUskRJWco6jbWGGZGtxdLYl2QYiWQL\
 I2MZO9UvEyo7jYlRZBlblsgWFaWIUmlX5/dH06OrRXHrpr7v1+u+3Hue85xzntt1+3bOec7hMcYY\
 CCGEEEKIwIgIuwGEEEIIIY0NBViEEEIIIQJGARYhhBBCiIBRgEUIIYQQImAUYBFCCCGECBgFWIQQ\
@@ -13886,7 +13683,7 @@ wRIRERGxMSVYIiIiIjamBEtERETExpRgiYiIiNiYEiwRERERG1OCJSIiImJjSrBEREREbEwJloiI\
 iIiNKcESERERsTElWCIiIiI2pgRLRERExMb+Pyn1NzgnP+xrAAAAAElFTkSuQmCC\
 "
   frames[16] = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAlgAAAGQCAYAAAByNR6YAAAAOXRFWHRTb2Z0d2FyZQBNYXRwbG90\
-bGliIHZlcnNpb24zLjcuMSwgaHR0cHM6Ly9tYXRwbG90bGliLm9yZy/bCgiHAAAACXBIWXMAAA9h\
+bGliIHZlcnNpb24zLjcuMiwgaHR0cHM6Ly9tYXRwbG90bGliLm9yZy8pXeV/AAAACXBIWXMAAA9h\
 AAAPYQGoP6dpAACn8UlEQVR4nOzdeVyN2R8H8M9t31dJixZUskRJWco6jbWGGSVrZWmykwwjkWxh\
 ZCxjp/oxobLTmBhFlsmSJbIUFUWEVNrV+f3R9OhqUdy6qe/79bov957nPOec53bdvp1znnN4jDEG\
 QgghhBAiMCLCbgAhhBBCSGNDARYhhBBCiIBRgEUIIYQQImAUYBFCCCGECBgFWIQQQgghAkYBFiGE\
@@ -14644,7 +14441,7 @@ YImIiIjYmRIsERERETtTgiUiIiJiZ0qwREREROxMCZaIiIiInSnBEhEREbEzJVgiIiIidqYES0RE\
 RMTOlGCJiIiI2JkSLBERERE7U4IlIiIiYmf/H7DPREzFroQ8AAAAAElFTkSuQmCC\
 "
   frames[17] = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAlgAAAGQCAYAAAByNR6YAAAAOXRFWHRTb2Z0d2FyZQBNYXRwbG90\
-bGliIHZlcnNpb24zLjcuMSwgaHR0cHM6Ly9tYXRwbG90bGliLm9yZy/bCgiHAAAACXBIWXMAAA9h\
+bGliIHZlcnNpb24zLjcuMiwgaHR0cHM6Ly9tYXRwbG90bGliLm9yZy8pXeV/AAAACXBIWXMAAA9h\
 AAAPYQGoP6dpAACnTElEQVR4nOzdeVyN2R8H8M9t31dJixZUskRJWSrbGGsNRmStLI19SYaRSLYw\
 MpaxU/0QKjuNiVFkmSxZIktRUUSUSrs6vz+aHl0tils39X2/Xvfl3vOc55zz3K7bt3POcw6PMcZA\
 CCGEEEIERkTYDSCEEEIIaWgowCKEEEIIETAKsAghhBBCBIwCLEIIIYQQAaMAixBCCCFEwCjAIoQQ\
@@ -15399,7 +15196,7 @@ RERExM6UYImIiIjYmRIsERERETtTgiUiIiJiZ0qwREREROxMCZaIiIiInSnBEhEREbEzJVgiIiIi\
 dqYES0RERMTOlGCJiIiI2JkSLBERERE7U4IlIiIiYmf/D+bwEWbk5e8LAAAAAElFTkSuQmCC\
 "
   frames[18] = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAlgAAAGQCAYAAAByNR6YAAAAOXRFWHRTb2Z0d2FyZQBNYXRwbG90\
-bGliIHZlcnNpb24zLjcuMSwgaHR0cHM6Ly9tYXRwbG90bGliLm9yZy/bCgiHAAAACXBIWXMAAA9h\
+bGliIHZlcnNpb24zLjcuMiwgaHR0cHM6Ly9tYXRwbG90bGliLm9yZy8pXeV/AAAACXBIWXMAAA9h\
 AAAPYQGoP6dpAACoCklEQVR4nOzdeVyN2R8H8M9t31dJixa0WaKkLGUZY6w1zIgso7I09iVZRiLZ\
 wshYxhrVjwmVncbEKLJlyRJZiooiolTa1fn90fToalHcuqnv+/W6L/ee5zznnOd23b6dc55zeIwx\
 BkIIIYQQIjAiwm4AIYQQQkhjQwEWIYQQQoiAUYBFCCGEECJgFGARQgghhAgYBViEEEIIIQJGARYh\
@@ -16158,7 +15955,7 @@ iIiIiJ0pwRIRERGxMyVYIiIiInamBEtERETEzpRgiYiIiNiZEiwRERERO1OCJSIiImJn/x9YYlvb\
 TOSjjQAAAABJRU5ErkJggg==\
 "
   frames[19] = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAlgAAAGQCAYAAAByNR6YAAAAOXRFWHRTb2Z0d2FyZQBNYXRwbG90\
-bGliIHZlcnNpb24zLjcuMSwgaHR0cHM6Ly9tYXRwbG90bGliLm9yZy/bCgiHAAAACXBIWXMAAA9h\
+bGliIHZlcnNpb24zLjcuMiwgaHR0cHM6Ly9tYXRwbG90bGliLm9yZy8pXeV/AAAACXBIWXMAAA9h\
 AAAPYQGoP6dpAACn60lEQVR4nOzdeVyN2R8H8M9t31dJixZUClFSlrKOsdYwo2QZlaXJTjKMRLKF\
 kXXsVD8mVHYaE6PIMlmyRJaiooiQSrs6vz+aHl0tils39X2/Xvfl3vOc55zz3K7bt3POcw6PMcZA\
 CCGEEEIERkTYDSCEEEIIaWwowCKEEEIIETAKsAghhBBCBIwCLEIIIYQQAaMAixBCCCFEwCjAIoQQ\
@@ -16916,7 +16713,7 @@ U4IlIiIiYmdKsERERETsTAmWiIiIiJ0pwRIRERGxMyVYIiIiInamBEtERETEzpRgiYiIiNiZEiwR\
 ERERO1OCJSIiImJnSrBERERE7Oz/A6WSSO84K6vIAAAAAElFTkSuQmCC\
 "
   frames[20] = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAlgAAAGQCAYAAAByNR6YAAAAOXRFWHRTb2Z0d2FyZQBNYXRwbG90\
-bGliIHZlcnNpb24zLjcuMSwgaHR0cHM6Ly9tYXRwbG90bGliLm9yZy/bCgiHAAAACXBIWXMAAA9h\
+bGliIHZlcnNpb24zLjcuMiwgaHR0cHM6Ly9tYXRwbG90bGliLm9yZy8pXeV/AAAACXBIWXMAAA9h\
 AAAPYQGoP6dpAACoYUlEQVR4nOzdeVyN2R8H8M9t31dJe6GSJUrKUhjGIGqYEVmmxdLYl2QYiWQL\
 I2MZO9WPCZWdxsQoskyWLJGlqCilEKVdnd8fTY+uFsWtm/q+X6/7cu95znPOeW7X7ds55zmHxxhj\
 IIQQQgghAiMi7AYQQgghhDQ1FGARQgghhAgYBViEEEIIIQJGARYhhBBCiIBRgEUIIYQQImAUYBFC\
@@ -17676,7 +17473,7 @@ ERERsTMlWCIiIiJ2pgRLRERExM6UYImIiIjYmRIsERERETtTgiUiIiJiZ0qwREREROxMCZaIiIiI\
 nSnBEhEREbEzJVgiIiIidqYES0RERMTO/j+qEX2m19ap0AAAAABJRU5ErkJggg==\
 "
   frames[21] = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAlgAAAGQCAYAAAByNR6YAAAAOXRFWHRTb2Z0d2FyZQBNYXRwbG90\
-bGliIHZlcnNpb24zLjcuMSwgaHR0cHM6Ly9tYXRwbG90bGliLm9yZy/bCgiHAAAACXBIWXMAAA9h\
+bGliIHZlcnNpb24zLjcuMiwgaHR0cHM6Ly9tYXRwbG90bGliLm9yZy8pXeV/AAAACXBIWXMAAA9h\
 AAAPYQGoP6dpAACnhklEQVR4nOzdeVyN2R8H8M9t31dJe6GSJUrKUtYx1hpmRLYWS5OdZBiJZAsj\
 Yxk71Y8JlZ3GxCiyTJYskaWoKCKk0q7O74+mR1eL4tZNfd+v13259zznOef73K7bt+c5zzk8xhgD\
 IYQQQggRGBFhB0AIIYQQ0thQgkUIIYQQImCUYBFCCCGECBglWIQQQgghAkYJFiGEEEKIgFGCRQgh\
@@ -18432,7 +18229,7 @@ RERERGxMCZaIiIiIjSnBEhEREbExJVgiIiIiNqYES0RERMTGlGCJiIiI2JgSLBEREREbU4IlIiIi\
 YmNKsERERERsTAmWiIiIiI0pwRIRERGxMSVYIiIiIjb2/wHh8CW5upy9KAAAAABJRU5ErkJggg==\
 "
   frames[22] = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAlgAAAGQCAYAAAByNR6YAAAAOXRFWHRTb2Z0d2FyZQBNYXRwbG90\
-bGliIHZlcnNpb24zLjcuMSwgaHR0cHM6Ly9tYXRwbG90bGliLm9yZy/bCgiHAAAACXBIWXMAAA9h\
+bGliIHZlcnNpb24zLjcuMiwgaHR0cHM6Ly9tYXRwbG90bGliLm9yZy8pXeV/AAAACXBIWXMAAA9h\
 AAAPYQGoP6dpAACoNUlEQVR4nOzdeVyN2R8H8M9t31dJe6GSJUrKUtZpEDXMiCzTYmmykwwjkWxh\
 ZB071Y8JlZ3GxCiyTJYskaWoKCJEaVfn90fTo6tFcXNT3/frdV/uPc95zvk+t+v27XnOcw6PMcZA\
 CCGEEEIERkTYARBCCCGENDaUYBFCCCGECBglWIQQQgghAkYJFiGEEEKIgFGCRQghhBAiYJRgEUII\
@@ -19192,7 +18989,7 @@ WCIiIiJ2pgRLRERExM6UYImIiIjYmRIsERERETtTgiUiIiJiZ/8fHEN9NM7TOm8AAAAASUVORK5C\
 YII=\
 "
   frames[23] = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAlgAAAGQCAYAAAByNR6YAAAAOXRFWHRTb2Z0d2FyZQBNYXRwbG90\
-bGliIHZlcnNpb24zLjcuMSwgaHR0cHM6Ly9tYXRwbG90bGliLm9yZy/bCgiHAAAACXBIWXMAAA9h\
+bGliIHZlcnNpb24zLjcuMiwgaHR0cHM6Ly9tYXRwbG90bGliLm9yZy8pXeV/AAAACXBIWXMAAA9h\
 AAAPYQGoP6dpAACoUElEQVR4nOzdeVyN2R8H8M9t31dJixZUskRJWSqMaRA1zIgs02Jp7EsyjESy\
 hZGxjJ3qx4TKTmNiiCyTJUtkKSqKiFJpV+f3R9Ojq0Vx66a+79frvtx7nvOcc57bdft2znnO4THG\
 GAghhBBCiMCICLsBhBBCCCFNDQVYhBBCCCECRgEWIYQQQoiAUYBFCCGEECJgFGARQgghhAgYBViE\
@@ -19952,7 +19749,7 @@ iIidKcESERERsTMlWCIiIiJ2pgRLRERExM6UYImIiIjYmRIsERERETtTgiUiIiJiZ0qwREREROxM\
 CZaIiIiInf1/V0CgFEQgcRYAAAAASUVORK5CYII=\
 "
   frames[24] = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAlgAAAGQCAYAAAByNR6YAAAAOXRFWHRTb2Z0d2FyZQBNYXRwbG90\
-bGliIHZlcnNpb24zLjcuMSwgaHR0cHM6Ly9tYXRwbG90bGliLm9yZy/bCgiHAAAACXBIWXMAAA9h\
+bGliIHZlcnNpb24zLjcuMiwgaHR0cHM6Ly9tYXRwbG90bGliLm9yZy8pXeV/AAAACXBIWXMAAA9h\
 AAAPYQGoP6dpAACoCklEQVR4nOzdeVyN2R8H8M9t31dJe6GSJUrKUmGMsdYwI7JMi6XJTjKMRLKF\
 kbGMnerHhMpOY2IUWSZLlshSVBQRRWlX5/dH06OrRXHrpr7v1+u+3Hue85xzntt1+3bOec7hMcYY\
 CCGEEEKIwIgIuwGEEEIIIU0NBViEEEIIIQJGARYhhBBCiIBRgEUIIYQQImAUYBFCCCGECBgFWIQQ\
@@ -20711,7 +20508,7 @@ ERERETtTgiUiIiJiZ0qwREREROxMCZaIiIiInSnBEhEREbEzJVgiIiIidqYES0RERMTO/j+yImA7\
 WBdwzgAAAABJRU5ErkJggg==\
 "
   frames[25] = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAlgAAAGQCAYAAAByNR6YAAAAOXRFWHRTb2Z0d2FyZQBNYXRwbG90\
-bGliIHZlcnNpb24zLjcuMSwgaHR0cHM6Ly9tYXRwbG90bGliLm9yZy/bCgiHAAAACXBIWXMAAA9h\
+bGliIHZlcnNpb24zLjcuMiwgaHR0cHM6Ly9tYXRwbG90bGliLm9yZy8pXeV/AAAACXBIWXMAAA9h\
 AAAPYQGoP6dpAACoDUlEQVR4nOzdeVyN2R8H8M9t31dJe6GSJUrKUjFMY61hRmSZFktjX5JhJJIt\
 jIxl7FS/TKjsNCZGkWWyZIksRUUpQpR2dX5/ND26WhQ3N/V9v1735d7znOec89yu27dzznMOjzHG\
 QAghhBBCBEZE2A0ghBBCCGlqKMAihBBCCBEwCrAIIYQQQgSMAixCCCGEEAGjAIsQQgghRMAowCKE\
@@ -21470,7 +21267,7 @@ Z0qwREREROxMCZaIiIiInSnBEhEREbEzJVgiIiIidqYES0RERMTOlGCJiIiI2JkSLBERERE7+/8o\
 XYABGHuD7gAAAABJRU5ErkJggg==\
 "
   frames[26] = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAlgAAAGQCAYAAAByNR6YAAAAOXRFWHRTb2Z0d2FyZQBNYXRwbG90\
-bGliIHZlcnNpb24zLjcuMSwgaHR0cHM6Ly9tYXRwbG90bGliLm9yZy/bCgiHAAAACXBIWXMAAA9h\
+bGliIHZlcnNpb24zLjcuMiwgaHR0cHM6Ly9tYXRwbG90bGliLm9yZy8pXeV/AAAACXBIWXMAAA9h\
 AAAPYQGoP6dpAACofUlEQVR4nOzdeVyN2R8H8M9t31dJixZUskRpsVTMmMZaw4ySrcXS2JdkGIlk\
 CyNjGTvVjwmVncbEKLJMliyRpagoIqTSrs7vj6ZHV4vi5qa+79frvtx7nvOcc57bdft2znnO4THG\
 GAghhBBCiMCICLsBhBBCCCFNDQVYhBBCCCECRgEWIYQQQoiAUYBFCCGEECJgFGARQgghhAgYBViE\
@@ -22231,7 +22028,7 @@ iYiIiNiZEiwRERERO1OCJSIiImJnSrBERERE7EwJloiIiIidKcESERERsTMlWCIiIiJ29v8BouqG\
 S69UbxwAAAAASUVORK5CYII=\
 "
   frames[27] = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAlgAAAGQCAYAAAByNR6YAAAAOXRFWHRTb2Z0d2FyZQBNYXRwbG90\
-bGliIHZlcnNpb24zLjcuMSwgaHR0cHM6Ly9tYXRwbG90bGliLm9yZy/bCgiHAAAACXBIWXMAAA9h\
+bGliIHZlcnNpb24zLjcuMiwgaHR0cHM6Ly9tYXRwbG90bGliLm9yZy8pXeV/AAAACXBIWXMAAA9h\
 AAAPYQGoP6dpAACn5ElEQVR4nOzdeVyN2R8H8M9t31dJe6GSJUrKUtnGWGuYEVmmxdLYl2QYiWQL\
 I2MZO9UPobLTmBhFlsmSJbIUFUVEUdrV+f3R9OhqUdy6qe/79bov957nPOec53bdvp1znnN4jDEG\
 QgghhBAiMCLCbgAhhBBCSGNDARYhhBBCiIBRgEUIIYQQImAUYBFCCCGECBgFWIQQQgghAkYBFiGE\
@@ -22989,7 +22786,7 @@ MyVYIiIiInamBEtERETEzpRgiYiIiNiZEiwRERERO1OCJSIiImJnSrBERERE7EwJloiIiIidKcES\
 ERERsTMlWCIiIiJ29v8BMs1WCcXYeksAAAAASUVORK5CYII=\
 "
   frames[28] = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAlgAAAGQCAYAAAByNR6YAAAAOXRFWHRTb2Z0d2FyZQBNYXRwbG90\
-bGliIHZlcnNpb24zLjcuMSwgaHR0cHM6Ly9tYXRwbG90bGliLm9yZy/bCgiHAAAACXBIWXMAAA9h\
+bGliIHZlcnNpb24zLjcuMiwgaHR0cHM6Ly9tYXRwbG90bGliLm9yZy8pXeV/AAAACXBIWXMAAA9h\
 AAAPYQGoP6dpAACokklEQVR4nOzdeVyN2R8H8M9t31dJixZUskRJWSqMMdYaZkSWabE09iUZRiLZ\
 wshYxk71Y0JlpzExiiyTJUtkKSpKEaXSrs7vj6ZHV4vi1k1936/Xfbn3POc55zy36/btnPOcw2OM\
 MRBCCCGEEIEREXYDCCGEEEKaGgqwCCGEEEIEjAIsQgghhBABowCLEEIIIUTAKMAihBBCCBEwCrAI\
@@ -23750,7 +23547,7 @@ RETEzpRgiYiIiNiZEiwRERERO1OCJSIiImJnSrBERERE7EwJloiIiIidKcESERERsTMlWCIiIiJ2\
 pgRLRERExM6UYImIiIjY2f8HfpCegWHH4QsAAAAASUVORK5CYII=\
 "
   frames[29] = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAlgAAAGQCAYAAAByNR6YAAAAOXRFWHRTb2Z0d2FyZQBNYXRwbG90\
-bGliIHZlcnNpb24zLjcuMSwgaHR0cHM6Ly9tYXRwbG90bGliLm9yZy/bCgiHAAAACXBIWXMAAA9h\
+bGliIHZlcnNpb24zLjcuMiwgaHR0cHM6Ly9tYXRwbG90bGliLm9yZy8pXeV/AAAACXBIWXMAAA9h\
 AAAPYQGoP6dpAACoi0lEQVR4nOzdd1RUx9vA8e/Su4AiYgNUQCwYG9hQE2PsRBNRLBGwRWOJNTF2\
 jS36U2M0xg68JliwxhKDxoYlGnvvihF7BQUbzPsH4coKKioI6vM5Z4+7c+fOzF3W5WFm7oxOKaUQ\
 QgghhBCZxiC7GyCEEEII8a6RAEsIIYQQIpNJgCWEEEIIkckkwBJCCCGEyGQSYAkhhBBCZDIJsIQQ\
@@ -24511,7 +24308,7 @@ IiIidqYES0RERMTOlGCJiIiI2JkSLBERERE7U4IlIiIiYmdKsERERETsTAmWiIiIiJ0pwRIRERGx\
 MyVYIiIiInb2/wEqS39WjdciIAAAAABJRU5ErkJggg==\
 "
   frames[30] = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAlgAAAGQCAYAAAByNR6YAAAAOXRFWHRTb2Z0d2FyZQBNYXRwbG90\
-bGliIHZlcnNpb24zLjcuMSwgaHR0cHM6Ly9tYXRwbG90bGliLm9yZy/bCgiHAAAACXBIWXMAAA9h\
+bGliIHZlcnNpb24zLjcuMiwgaHR0cHM6Ly9tYXRwbG90bGliLm9yZy8pXeV/AAAACXBIWXMAAA9h\
 AAAPYQGoP6dpAACofklEQVR4nOzdeVyN2R8H8M9t31dJe6GSJUrKUtYxiBpmRJZRWRr7kgwjkWxh\
 ZCxjp/oxobLTmBhF9iVLZCkqSimk0q7O74+mR1eL4tZNfd+v13259zznOec8t+v27ZzznMNjjDEQ\
 QgghhBCBERF2AwghhBBCGhsKsAghhBBCBIwCLEIIIYQQAaMAixBCCCFEwCjAIoQQQggRMAqwCCGE\
@@ -25272,7 +25069,7 @@ JVgiIiIidqYES0RERMTOlGCJiIiI2JkSLBERERE7U4IlIiIiYmdKsERERETsTAmWiIiIiJ39f1dL\
 mjsvC1ftAAAAAElFTkSuQmCC\
 "
   frames[31] = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAlgAAAGQCAYAAAByNR6YAAAAOXRFWHRTb2Z0d2FyZQBNYXRwbG90\
-bGliIHZlcnNpb24zLjcuMSwgaHR0cHM6Ly9tYXRwbG90bGliLm9yZy/bCgiHAAAACXBIWXMAAA9h\
+bGliIHZlcnNpb24zLjcuMiwgaHR0cHM6Ly9tYXRwbG90bGliLm9yZy8pXeV/AAAACXBIWXMAAA9h\
 AAAPYQGoP6dpAACnrElEQVR4nOzdeVyN2R8H8M9t31dJixZUskRJWco6DaIGI7JWlsa+JMNIJFsY\
 GcvYqX5MqOw0JkaRfckSWYqKUoRU2tX5/dH06GpR3Lqp7/v1ui/3nuc853yf23X79jznOYfHGGMg\
 hBBCCCECIyLsAAghhBBCGhpKsAghhBBCBIwSLEIIIYQQAaMEixBCCCFEwCjBIoQQQggRMEqwCCGE\
@@ -26029,7 +25826,7 @@ iJ0pwRIRERGxMyVYIiIiInamBEtERETEzpRgiYiIiNiZEiwRERERO1OCJSIiImJnSrBERERE7EwJ\
 loiIiIidKcESERERsbP/D/41PeXfnwhnAAAAAElFTkSuQmCC\
 "
   frames[32] = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAlgAAAGQCAYAAAByNR6YAAAAOXRFWHRTb2Z0d2FyZQBNYXRwbG90\
-bGliIHZlcnNpb24zLjcuMSwgaHR0cHM6Ly9tYXRwbG90bGliLm9yZy/bCgiHAAAACXBIWXMAAA9h\
+bGliIHZlcnNpb24zLjcuMiwgaHR0cHM6Ly9tYXRwbG90bGliLm9yZy8pXeV/AAAACXBIWXMAAA9h\
 AAAPYQGoP6dpAACoXUlEQVR4nOzdd3yN1x/A8c/N3pIQkRhJEBEjdmIFraqttELQkljV2kqrNq1R\
 ihpVO8mPxkisGtVQK0qpHbNmEHuHxErO7480j1wJEhIJvu/X677ce57znPN9bq6bb57nPOfolFIK\
 IYQQQgiRaQyyOwAhhBBCiLeNJFhCCCGEEJlMEiwhhBBCiEwmCZYQQgghRCaTBEsIIYQQIpNJgiWE\
@@ -26789,7 +26586,7 @@ U4IlIiIiYmdKsERERETsTAmWiIiIiJ0pwRIRERGxMyVYIiIiInamBEtERETEzpRgiYiIiNiZEiwR\
 ERERO1OCJSIiImJnSrBERERE7Oz/A754iDfAb+QLAAAAAElFTkSuQmCC\
 "
   frames[33] = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAlgAAAGQCAYAAAByNR6YAAAAOXRFWHRTb2Z0d2FyZQBNYXRwbG90\
-bGliIHZlcnNpb24zLjcuMSwgaHR0cHM6Ly9tYXRwbG90bGliLm9yZy/bCgiHAAAACXBIWXMAAA9h\
+bGliIHZlcnNpb24zLjcuMiwgaHR0cHM6Ly9tYXRwbG90bGliLm9yZy8pXeV/AAAACXBIWXMAAA9h\
 AAAPYQGoP6dpAACobElEQVR4nOzdeVyN2R8H8M9t31dJizYqWaKkLGUZ0yBqmBFZRmVpspMMI5Fs\
 YWQdO9WPyVJ2GhOjyJYlS2QpKooIbdrV+f3R9OiqKG7d1Pf9et2Xe89znnPOc7tu3845zzk8xhgD\
 IYQQQggRGBFhN4AQQgghpLGhAIsQQgghRMAowCKEEEIIETAKsAghhBBCBIwCLEIIIYQQAaMAixBC\
@@ -27549,7 +27346,7 @@ SrBERERE7EwJloiIiIidKcESERERsTMlWCIiIiJ2pgRLRERExM6UYImIiIjYmRIsERERETtTgiUi\
 IiJiZ0qwREREROxMCZaIiIiInSnBEhEREbEzJVgiIiIidvb/AaQNrTRYcDg2AAAAAElFTkSuQmCC\
 "
   frames[34] = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAlgAAAGQCAYAAAByNR6YAAAAOXRFWHRTb2Z0d2FyZQBNYXRwbG90\
-bGliIHZlcnNpb24zLjcuMSwgaHR0cHM6Ly9tYXRwbG90bGliLm9yZy/bCgiHAAAACXBIWXMAAA9h\
+bGliIHZlcnNpb24zLjcuMiwgaHR0cHM6Ly9tYXRwbG90bGliLm9yZy8pXeV/AAAACXBIWXMAAA9h\
 AAAPYQGoP6dpAACoF0lEQVR4nOzdeVyN2R8H8M9t31dJixZUskRJWcoypkHUMCOyjMrSZCcZRiLZ\
 wk/GMnaqYUJlpzExiiyTJUtkKSqKiFJpV+f3R9Ojq0Vx66a+79frvtx7nvOcc57bdft2znnO4THG\
 GAghhBBCiMCICLsBhBBCCCFNDQVYhBBCCCECRgEWIYQQQoiAUYBFCCGEECJgFGARQgghhAgYBViE\
@@ -28308,7 +28105,7 @@ iIidKcESERERsTMlWCIiIiJ2pgRLRERExM6UYImIiIjYmRIsERERETtTgiUiIiJiZ0qwREREROxM\
 CZaIiIiInf1/ebdqi8/1YAkAAAAASUVORK5CYII=\
 "
   frames[35] = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAlgAAAGQCAYAAAByNR6YAAAAOXRFWHRTb2Z0d2FyZQBNYXRwbG90\
-bGliIHZlcnNpb24zLjcuMSwgaHR0cHM6Ly9tYXRwbG90bGliLm9yZy/bCgiHAAAACXBIWXMAAA9h\
+bGliIHZlcnNpb24zLjcuMiwgaHR0cHM6Ly9tYXRwbG90bGliLm9yZy8pXeV/AAAACXBIWXMAAA9h\
 AAAPYQGoP6dpAACoP0lEQVR4nOzdeVyN2R8H8M9t31dJe6GSJUrKUpYxjbWGGZFlWiyNfUmGkUi2\
 MDKWsVP9mFDZaUyMIsvYskSWoqIUUSrt6vz+aHp0tShu3dT3/Xrdl3vPc55zznO7bt/OOc85PMYY\
 AyGEEEIIERgRYTeAEEIIIaSpoQCLEEIIIUTAKMAihBBCCBEwCrAIIYQQQgSMAixCCCGEEAGjAIsQ\
@@ -29068,7 +28865,7 @@ O1OCJSIiImJnSrBERERE7EwJloiIiIidKcESERERsTMlWCIiIiJ2pgRLRERExM7+P9BOeVUZN9B9\
 AAAAAElFTkSuQmCC\
 "
   frames[36] = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAlgAAAGQCAYAAAByNR6YAAAAOXRFWHRTb2Z0d2FyZQBNYXRwbG90\
-bGliIHZlcnNpb24zLjcuMSwgaHR0cHM6Ly9tYXRwbG90bGliLm9yZy/bCgiHAAAACXBIWXMAAA9h\
+bGliIHZlcnNpb24zLjcuMiwgaHR0cHM6Ly9tYXRwbG90bGliLm9yZy8pXeV/AAAACXBIWXMAAA9h\
 AAAPYQGoP6dpAAConUlEQVR4nOzdeVyN2R8H8M9t31dJixZUskRpsZRlTGOtYUbJWlma7CTDSCRb\
 +MlYxk41TJay05gYRfYlS2QpKkoRUmlX5/dH06OrRXHrpr7v1+u+3Hue85xzntt1+3bOec7hMcYY\
 CCGEEEKIwIgIuwGEEEIIIY0NBViEEEIIIQJGARYhhBBCiIBRgEUIIYQQImAUYBFCCCGECBgFWIQQ\
@@ -29829,7 +29626,7 @@ KcESERERsTMlWCIiIiJ2pgRLRERExM6UYImIiIjYmRIsERERETtTgiUiIiJiZ0qwREREROxMCZaI\
 iIiInSnBEhEREbEzJVgiIiIidqYES0RERMTO/j94qZJXm7/2VQAAAABJRU5ErkJggg==\
 "
   frames[37] = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAlgAAAGQCAYAAAByNR6YAAAAOXRFWHRTb2Z0d2FyZQBNYXRwbG90\
-bGliIHZlcnNpb24zLjcuMSwgaHR0cHM6Ly9tYXRwbG90bGliLm9yZy/bCgiHAAAACXBIWXMAAA9h\
+bGliIHZlcnNpb24zLjcuMiwgaHR0cHM6Ly9tYXRwbG90bGliLm9yZy8pXeV/AAAACXBIWXMAAA9h\
 AAAPYQGoP6dpAACn+ElEQVR4nOzdeVyN2R8H8M9t31dJe6GSJUrKUtZprDXMiCyjsjTZSYaRSLYw\
 MpaxU/0QKjuNiVFkGVuWyFJUFBGl0q7O74+mR1eL4tZNfd+v13259zznOec8t+v27ZzznMNjjDEQ\
 QgghhBCBERF2AwghhBBCGhsKsAghhBBCBIwCLEIIIYQQAaMAixBCCCFEwCjAIoQQQggRMAqwCCGE\
@@ -30587,7 +30384,7 @@ JSIiImJnSrBERERE7EwJloiIiIidKcESERERsTMlWCIiIiJ2pgRLRERExM6UYImIiIjYmRIsERER\
 ETtTgiUiIiJiZ0qwREREROxMCZaIiIiInSnBEhEREbGz/w/0GlyT68VIWQAAAABJRU5ErkJggg==\
 "
   frames[38] = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAlgAAAGQCAYAAAByNR6YAAAAOXRFWHRTb2Z0d2FyZQBNYXRwbG90\
-bGliIHZlcnNpb24zLjcuMSwgaHR0cHM6Ly9tYXRwbG90bGliLm9yZy/bCgiHAAAACXBIWXMAAA9h\
+bGliIHZlcnNpb24zLjcuMiwgaHR0cHM6Ly9tYXRwbG90bGliLm9yZy8pXeV/AAAACXBIWXMAAA9h\
 AAAPYQGoP6dpAACos0lEQVR4nOzdd1yV1R/A8c9lbwFFBAegAuLAXGAqapm5TcuBWgquzJWalrk1\
 V/oTM83cQBoOcOXI0Fw40syFe2Pi3ii44Pz+IB65ggoKgvp9v1735b3nOc8557lcL1/OOc85OqWU\
 QgghhBBCZBmDnG6AEEIIIcSbRgIsIYQQQogsJgGWEEIIIUQWkwBLCCGEECKLSYAlhBBCCJHFJMAS\
@@ -31349,7 +31146,7 @@ EbEzJVgiIiIidqYES0RERMTOlGCJiIiI2JkSLBERERE7U4IlIiIiYmdKsERERETs7P8Dlku22Eka\
 86EAAAAASUVORK5CYII=\
 "
   frames[39] = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAlgAAAGQCAYAAAByNR6YAAAAOXRFWHRTb2Z0d2FyZQBNYXRwbG90\
-bGliIHZlcnNpb24zLjcuMSwgaHR0cHM6Ly9tYXRwbG90bGliLm9yZy/bCgiHAAAACXBIWXMAAA9h\
+bGliIHZlcnNpb24zLjcuMiwgaHR0cHM6Ly9tYXRwbG90bGliLm9yZy8pXeV/AAAACXBIWXMAAA9h\
 AAAPYQGoP6dpAACooklEQVR4nOzdd1RURxvA4d/Su4AiggVQAbFgbGBDTYyxG01EURMFWzQaY02M\
 XRNLNGosMXbg02DBGksMGhuWaOzYO0bsFRRsMN8fhCsrqKggqO9zzh53586dmbusy8vM3BmdUkoh\
 hBBCCCEyjUF2N0AIIYQQ4m0jAZYQQgghRCaTAEsIIYQQIpNJgCWEEEIIkckkwBJCCCGEyGQSYAkh\
@@ -32110,7 +31907,7 @@ IiIiInamBEtERETEzpRgiYiIiNiZEiwRERERO1OCJSIiImJnSrBERERE7EwJloiIiIidKcESERER\
 sTMlWCIiIiJ2pgRLRERExM6UYImIiIjYmRIsERERETv7/1jfnKFBmS2bAAAAAElFTkSuQmCC\
 "
   frames[40] = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAlgAAAGQCAYAAAByNR6YAAAAOXRFWHRTb2Z0d2FyZQBNYXRwbG90\
-bGliIHZlcnNpb24zLjcuMSwgaHR0cHM6Ly9tYXRwbG90bGliLm9yZy/bCgiHAAAACXBIWXMAAA9h\
+bGliIHZlcnNpb24zLjcuMiwgaHR0cHM6Ly9tYXRwbG90bGliLm9yZy8pXeV/AAAACXBIWXMAAA9h\
 AAAPYQGoP6dpAACoUUlEQVR4nOzdeVyN2R8H8M9t31dJixZUClFSlrKMMdYaZqQso7I02UmGkUi2\
 MDKWsVP9mFDZaUyMIstkyRJZiopSClHa1fn90fToalHcuqnv+/W6L/ee5zznnOd23b6dc55zeIwx\
 BkIIIYQQIjAiwm4AIYQQQkhTQwEWIYQQQoiAUYBFCCGEECJgFGARQgghhAgYBViEEEIIIQJGARYh\
@@ -32870,7 +32667,7 @@ ERGxMyVYIiIiInamBEtERETEzpRgiYiIiNiZEiwRERERO1OCJSIiImJnSrBERERE7EwJloiIiIid\
 KcESERERsbP/D3Z8hhMnC+MfAAAAAElFTkSuQmCC\
 "
   frames[41] = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAlgAAAGQCAYAAAByNR6YAAAAOXRFWHRTb2Z0d2FyZQBNYXRwbG90\
-bGliIHZlcnNpb24zLjcuMSwgaHR0cHM6Ly9tYXRwbG90bGliLm9yZy/bCgiHAAAACXBIWXMAAA9h\
+bGliIHZlcnNpb24zLjcuMiwgaHR0cHM6Ly9tYXRwbG90bGliLm9yZy8pXeV/AAAACXBIWXMAAA9h\
 AAAPYQGoP6dpAACnZUlEQVR4nOzdeTyV2R8H8M+172uSnQppUSRaaJ2mlamZRCtaTPsiTU1S0qaa\
 NC3TXvjVqNBeplETpWW0aFFaKBQRRRFCnN8fxpObJepyxff9et1X957nPOd8n+t2fT3Pec7hMcYY\
 CCGEEEKIwIgIOwBCCCGEkMaGEixCCCGEEAGjBIsQQgghRMAowSKEEEIIETBKsAghhBBCBIwSLEII\
@@ -33626,7 +33423,7 @@ IiJiZ0qwREREROxMCZaIiIiInSnBEhEREbEzJVgiIiIidqYES0RERMTOlGCJiIiI2JkSLBERERE7\
 +/+hmyPUQHU5yQAAAABJRU5ErkJggg==\
 "
   frames[42] = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAlgAAAGQCAYAAAByNR6YAAAAOXRFWHRTb2Z0d2FyZQBNYXRwbG90\
-bGliIHZlcnNpb24zLjcuMSwgaHR0cHM6Ly9tYXRwbG90bGliLm9yZy/bCgiHAAAACXBIWXMAAA9h\
+bGliIHZlcnNpb24zLjcuMiwgaHR0cHM6Ly9tYXRwbG90bGliLm9yZy8pXeV/AAAACXBIWXMAAA9h\
 AAAPYQGoP6dpAACoEElEQVR4nOzdeVyN2R8H8M9t31dJe6FSiJKylGWMsdZgpCzTYmnsS7KMRLKF\
 kbGMNaofEyo7jYkhskyWLJGlqChSiNKuzu+PpkdXRXHrpr7v1+u+3Hue85zzfW7X7dvznOccHmOM\
 gRBCCCGECIyIsAMghBBCCGlsKMEihBBCCBEwSrAIIYQQQgSMEixCCCGEEAGjBIsQQgghRMAowSKE\
@@ -34385,7 +34182,7 @@ IiJ2pgRLRERExM6UYImIiIjYmRIsERERETtTgiUiIiJiZ0qwREREROxMCZaIiIiInSnBEhEREbGz\
 /w9ZoGNr1+F1xQAAAABJRU5ErkJggg==\
 "
   frames[43] = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAlgAAAGQCAYAAAByNR6YAAAAOXRFWHRTb2Z0d2FyZQBNYXRwbG90\
-bGliIHZlcnNpb24zLjcuMSwgaHR0cHM6Ly9tYXRwbG90bGliLm9yZy/bCgiHAAAACXBIWXMAAA9h\
+bGliIHZlcnNpb24zLjcuMiwgaHR0cHM6Ly9tYXRwbG90bGliLm9yZy8pXeV/AAAACXBIWXMAAA9h\
 AAAPYQGoP6dpAACoLUlEQVR4nOzdeVyN2R8H8M9t31dJe6FSiJKylGWMsdYwI2UZlaXJTjKMRLKF\
 kbGMnerHhMpOY2KILGPLElmKiiJFqbSr8/uj6dHVorh1U9/363Vf7j3Pec45z+26fTvnPOfwGGMM\
 hBBCCCFEYESE3QBCCCGEkKaGAixCCCGEEAGjAIsQQgghRMAowCKEEEIIETAKsAghhBBCBIwCLEII\
@@ -35144,7 +34941,7 @@ iIiIiJ0pwRIRERGxMyVYIiIiInamBEtERETEzpRgiYiIiNiZEiwRERERO1OCJSIiImJnSrBERERE\
 REREROxMCZaIiIiInSnBEhEREbEzJVgiIiIidvb/ASOCd2MOF/TaAAAAAElFTkSuQmCC\
 "
   frames[44] = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAlgAAAGQCAYAAAByNR6YAAAAOXRFWHRTb2Z0d2FyZQBNYXRwbG90\
-bGliIHZlcnNpb24zLjcuMSwgaHR0cHM6Ly9tYXRwbG90bGliLm9yZy/bCgiHAAAACXBIWXMAAA9h\
+bGliIHZlcnNpb24zLjcuMiwgaHR0cHM6Ly9tYXRwbG90bGliLm9yZy8pXeV/AAAACXBIWXMAAA9h\
 AAAPYQGoP6dpAACnsklEQVR4nOzdeVyN2R8H8M9t31dJe6FSiJKylHUMooYZKWtlabKTDCORbGHU\
 WMZO9WNCZacxMUSWsWWJLEVFkUKUdnV+fzQ9uloUt27yfb9e9+Xe85znnPPcrtu3c85zDo8xxkAI\
 IYQQQgRGRNgNIIQQQghpaijAIoQQQggRMAqwCCGEEEIEjAIsQgghhBABowCLEEIIIUTAKMAihBBC\
@@ -35901,7 +35698,7 @@ pgRLRERExM6UYImIiIjYmRIsERERETtTgiUiIiJiZ0qwREREROxMCZaIiIiInSnBEhEREbEzJVgi\
 IiIidqYES0RERMTOlGCJiIiI2Nn/B/0gUBUEit9LAAAAAElFTkSuQmCC\
 "
   frames[45] = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAlgAAAGQCAYAAAByNR6YAAAAOXRFWHRTb2Z0d2FyZQBNYXRwbG90\
-bGliIHZlcnNpb24zLjcuMSwgaHR0cHM6Ly9tYXRwbG90bGliLm9yZy/bCgiHAAAACXBIWXMAAA9h\
+bGliIHZlcnNpb24zLjcuMiwgaHR0cHM6Ly9tYXRwbG90bGliLm9yZy8pXeV/AAAACXBIWXMAAA9h\
 AAAPYQGoP6dpAACn70lEQVR4nOzdeVyN2R8H8M9t31dJe6FSiJKyVBhjEDXMiCyjsjT2JRlGItnC\
 yFjGTvVjQmWnMTGKLGPLElmKiiJFUdrV+f3R9OhqUdy6qe/79bov957nPOec53bdvp1znnN4jDEG\
 QgghhBAiMCLCbgAhhBBCSFNDARYhhBBCiIBRgEUIIYQQImAUYBFCCCGECBgFWIQQQgghAkYBFiGE\
@@ -36659,7 +36456,7 @@ RERE7EwJloiIiIidKcESERERsTMlWCIiIiJ2pgRLRERExM6UYImIiIjYmRIsERERETtTgiUiIiJi\
 Z0qwREREROxMCZaIiIiInSnBEhEREbGz/w8DQFJNpcgF9gAAAABJRU5ErkJggg==\
 "
   frames[46] = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAlgAAAGQCAYAAAByNR6YAAAAOXRFWHRTb2Z0d2FyZQBNYXRwbG90\
-bGliIHZlcnNpb24zLjcuMSwgaHR0cHM6Ly9tYXRwbG90bGliLm9yZy/bCgiHAAAACXBIWXMAAA9h\
+bGliIHZlcnNpb24zLjcuMiwgaHR0cHM6Ly9tYXRwbG90bGliLm9yZy8pXeV/AAAACXBIWXMAAA9h\
 AAAPYQGoP6dpAACoU0lEQVR4nOzdd1RUx9vA8e/Su4AiggVQEbFgBxtqYowVo4kFSxRrTCyxJsbe\
 NRo1RmPswKvBArZYYtDYMBqNHWusGLFXULDBvH/w48oKKigI6vM5Z4+7c+fOzF3W5WFm7oxOKaUQ\
 QgghhBCZxiC7GyCEEEII8a6RAEsIIYQQIpNJgCWEEEIIkckkwBJCCCGEyGQSYAkhhBBCZDIJsIQQ\
@@ -37419,7 +37216,7 @@ JSIiImJnSrBERERE7EwJloiIiIidKcESERERsTMlWCIiIiJ2pgRLRERExM6UYImIiIjYmRIsERER\
 ETtTgiUiIiJiZ/8fTGlvR6XJgjcAAAAASUVORK5CYII=\
 "
   frames[47] = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAlgAAAGQCAYAAAByNR6YAAAAOXRFWHRTb2Z0d2FyZQBNYXRwbG90\
-bGliIHZlcnNpb24zLjcuMSwgaHR0cHM6Ly9tYXRwbG90bGliLm9yZy/bCgiHAAAACXBIWXMAAA9h\
+bGliIHZlcnNpb24zLjcuMiwgaHR0cHM6Ly9tYXRwbG90bGliLm9yZy8pXeV/AAAACXBIWXMAAA9h\
 AAAPYQGoP6dpAACnxElEQVR4nOzdeVyN2R8H8M9t31dJe6FSiJKyVLYx1hpmpCyjsjTZSYaRSLYw\
 MpaxU/0QKjuNiVFkGVuWyFJUFClEaVfn90fTo6tFcesm3/frdV/uPc95zjnP7bp9O+c85/AYYwyE\
 EEIIIURgRITdAEIIIYSQpoYCLEIIIYQQAaMAixBCCCFEwCjAIoQQQggRMAqwCCGEEEIEjAIsQggh\
@@ -38177,7 +37974,7 @@ lGCJiIiI2JkSLBERERE7U4IlIiIiYmdKsERERETsTAmWiIiIiJ39f/hYN/BFNWMrAAAAAElFTkSu\
 QmCC\
 "
   frames[48] = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAlgAAAGQCAYAAAByNR6YAAAAOXRFWHRTb2Z0d2FyZQBNYXRwbG90\
-bGliIHZlcnNpb24zLjcuMSwgaHR0cHM6Ly9tYXRwbG90bGliLm9yZy/bCgiHAAAACXBIWXMAAA9h\
+bGliIHZlcnNpb24zLjcuMiwgaHR0cHM6Ly9tYXRwbG90bGliLm9yZy8pXeV/AAAACXBIWXMAAA9h\
 AAAPYQGoP6dpAACobUlEQVR4nOzdeVyN2R8H8M9t31dJe6FSiJKyVBhjEDXMiCyjsjTZSYaRSLYw\
 MpaxU/2YLGWnMTGKLGPLElmKilIKqbSr8/uj6dFVUdy6qe/79bov957nPOec53bdvp1znnN4jDEG\
 QgghhBAiMCLCbgAhhBBCSFNDARYhhBBCiIBRgEUIIYQQImAUYBFCCCGECBgFWIQQQgghAkYBFiGE\
@@ -38938,7 +38735,7 @@ iIiIiJ0pwRIRERGxMyVYIiIiInamBEtERETEzpRgiYiIiNjZ/wfG/YFXSn2UugAAAABJRU5ErkJg\
 gg==\
 "
   frames[49] = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAlgAAAGQCAYAAAByNR6YAAAAOXRFWHRTb2Z0d2FyZQBNYXRwbG90\
-bGliIHZlcnNpb24zLjcuMSwgaHR0cHM6Ly9tYXRwbG90bGliLm9yZy/bCgiHAAAACXBIWXMAAA9h\
+bGliIHZlcnNpb24zLjcuMiwgaHR0cHM6Ly9tYXRwbG90bGliLm9yZy8pXeV/AAAACXBIWXMAAA9h\
 AAAPYQGoP6dpAACoXElEQVR4nOzdeVyN2R8H8M9t31dJixa0IkrKUpYxxlrDjBbLqCxNdpJhJJIt\
 jIxl7FQ/JlR2GhOjyDK2LJGlqChSiNKuzu+PpkdXi+LWTX3fr9d9ufc85znn+9yu27fnOc85PMYY\
 AyGEEEIIERgRYQdACCGEENLUUIJFCCGEECJglGARQgghhAgYJViEEEIIIQJGCRYhhBBCiIBRgkUI\
@@ -39698,7 +39495,7 @@ CZaIiIiInSnBEhEREbEzJVgiIiIidqYES0RERMTOlGCJiIiI2JkSLBERERE7U4IlIiIiYmdKsERE\
 RETsTAmWiIiIiJ0pwRIRERGxs/8PN890WPar1hIAAAAASUVORK5CYII=\
 "
   frames[50] = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAlgAAAGQCAYAAAByNR6YAAAAOXRFWHRTb2Z0d2FyZQBNYXRwbG90\
-bGliIHZlcnNpb24zLjcuMSwgaHR0cHM6Ly9tYXRwbG90bGliLm9yZy/bCgiHAAAACXBIWXMAAA9h\
+bGliIHZlcnNpb24zLjcuMiwgaHR0cHM6Ly9tYXRwbG90bGliLm9yZy8pXeV/AAAACXBIWXMAAA9h\
 AAAPYQGoP6dpAACozklEQVR4nOzdeVyN2R8H8M9tu+2rSgsV2ixRVJaSGWOshRmRZVSWxr4kM0gk\
 WxgZo7FGNZksZacxMUSWsS+RpagopdCmTer8/ujXM10tils39X2/Xvfl3vOc55zvc7tu357nPOfw\
 GGMMhBBCCCFEaMREHQAhhBBCSFNDCRYhhBBCiJBRgkUIIYQQImSUYBFCCCGECBklWIQQQgghQkYJ\
@@ -40460,7 +40257,7 @@ BEtERETEzpRgiYiIiNiZEiwRERERO1OCJSIiImJnSrBERERE7EwJloiIiIidKcESERERsTMlWCIi\
 IiJ2pgRLRERExM6UYImIiIjY2f8HURpya4BAicsAAAAASUVORK5CYII=\
 "
   frames[51] = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAlgAAAGQCAYAAAByNR6YAAAAOXRFWHRTb2Z0d2FyZQBNYXRwbG90\
-bGliIHZlcnNpb24zLjcuMSwgaHR0cHM6Ly9tYXRwbG90bGliLm9yZy/bCgiHAAAACXBIWXMAAA9h\
+bGliIHZlcnNpb24zLjcuMiwgaHR0cHM6Ly9tYXRwbG90bGliLm9yZy8pXeV/AAAACXBIWXMAAA9h\
 AAAPYQGoP6dpAACn/UlEQVR4nOzdeVyN2R8H8M9t31eVFiq0WaKoLIUZYxCFGZG1sjT2JTFGItnC\
 yKCxRjWZLGWnMTFElrEvkaWoKKXQpl2d3x/9eqarRXHrpr7v1+u+3Hue85zzfW7X7dvznOccHmOM\
 gRBCCCGECIyIsAMghBBCCGlqKMEihBBCCBEwSrAIIYQQQgSMEixCCCGEEAGjBIsQQgghRMAowSKE\
@@ -41219,7 +41016,7 @@ CZaIiIiIjSnBEhEREbExJVgiIiIiNqYES0RERMTGlGCJiIiI2Nj/B8ssHebHopAjAAAAAElFTkSu\
 QmCC\
 "
   frames[52] = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAlgAAAGQCAYAAAByNR6YAAAAOXRFWHRTb2Z0d2FyZQBNYXRwbG90\
-bGliIHZlcnNpb24zLjcuMSwgaHR0cHM6Ly9tYXRwbG90bGliLm9yZy/bCgiHAAAACXBIWXMAAA9h\
+bGliIHZlcnNpb24zLjcuMiwgaHR0cHM6Ly9tYXRwbG90bGliLm9yZy8pXeV/AAAACXBIWXMAAA9h\
 AAAPYQGoP6dpAACon0lEQVR4nOzdeVyN2R8H8M9t31eVFiq0WaJQlpIZY6xlGZFlWiyNfWlijESy\
 hZExGmtUkwmVncbEEFnGvkSWoqKUQpt2dX5/9OuZrhbFrZv6vl+v+3Lvec5zzve5Xbdvz3Oec3iM\
 MQZCCCGEECIwIsIOgBBCCCGkuaEEixBCCCFEwCjBIoQQQggRMEqwCCGEEEIEjBIsQgghhBABowSL\
@@ -41980,7 +41777,7 @@ InamBEtERETEzpRgiYiIiNiZEiwRERERO1OCJSIiImJnSrBERERE7EwJloiIiIidKcESERERsTMl\
 WCIiIiJ2pgRLRERExM6UYImIiIjYmRIsERERETv7/y60X4Prg+4cAAAAAElFTkSuQmCC\
 "
   frames[53] = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAlgAAAGQCAYAAAByNR6YAAAAOXRFWHRTb2Z0d2FyZQBNYXRwbG90\
-bGliIHZlcnNpb24zLjcuMSwgaHR0cHM6Ly9tYXRwbG90bGliLm9yZy/bCgiHAAAACXBIWXMAAA9h\
+bGliIHZlcnNpb24zLjcuMiwgaHR0cHM6Ly9tYXRwbG90bGliLm9yZy8pXeV/AAAACXBIWXMAAA9h\
 AAAPYQGoP6dpAACouUlEQVR4nOzdeVyN2R8H8M9t31eVFi1os0RJWQozxlgLMyLLqCyNfWkyg0Sy\
 hZFBY41qMlnKTmNiiCxjyxJZiopSCm3a1fn90a9nuloUt27q+3697su95znPOd/ndt2+Pc95zuEx\
 xhgIIYQQQojAiAg7AEIIIYSQ5oYSLEIIIYQQAaMEixBCCCFEwCjBIoQQQggRMEqwCCGEEEIEjBIs\
@@ -42742,7 +42539,7 @@ nSnBEhEREbEzJVgiIiIidqYES0RERMTOlGCJiIiI2JkSLBERERE7U4IlIiIiYmdKsERERETs7P8D\
 IwCGLw9tGNEAAAAASUVORK5CYII=\
 "
   frames[54] = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAlgAAAGQCAYAAAByNR6YAAAAOXRFWHRTb2Z0d2FyZQBNYXRwbG90\
-bGliIHZlcnNpb24zLjcuMSwgaHR0cHM6Ly9tYXRwbG90bGliLm9yZy/bCgiHAAAACXBIWXMAAA9h\
+bGliIHZlcnNpb24zLjcuMiwgaHR0cHM6Ly9tYXRwbG90bGliLm9yZy8pXeV/AAAACXBIWXMAAA9h\
 AAAPYQGoP6dpAACoXklEQVR4nOzdeVyN2R8H8M9t31eVFiq0WaKoLGUZYxCFGZFlVJYmO4kxEskW\
 RgaNNarJZCk7jYkhsox9iSxFRSmFVNrV+f3Rr2e6WhS3bur7fr3uy73nOc853+d23b49z3nO4THG\
 GAghhBBCiMCICDsAQgghhJCmhhIsQgghhBABowSLEEIIIUTAKMEihBBCCBEwSrAIIYQQQgSMEixC\
@@ -43502,7 +43299,7 @@ ERERETtTgiUiIiJiZ0qwREREROxMCZaIiIiInSnBEhEREbEzJVgiIiIidqYES0RERMTOlGCJiIiI\
 iYiIiNiZEiwRERERO1OCJSIiImJn/x/XZ2UHrm+fsQAAAABJRU5ErkJggg==\
 "
   frames[55] = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAlgAAAGQCAYAAAByNR6YAAAAOXRFWHRTb2Z0d2FyZQBNYXRwbG90\
-bGliIHZlcnNpb24zLjcuMSwgaHR0cHM6Ly9tYXRwbG90bGliLm9yZy/bCgiHAAAACXBIWXMAAA9h\
+bGliIHZlcnNpb24zLjcuMiwgaHR0cHM6Ly9tYXRwbG90bGliLm9yZy8pXeV/AAAACXBIWXMAAA9h\
 AAAPYQGoP6dpAACogklEQVR4nOzdeVyN2R8H8M9t31eVNhXaLFFUlsKMMYjCjMgyKktjX5IZJJIt\
 jIzRWKOaTJay05gYIsvYl8hSVJRSaNOuzu+Pfj3T1aK4dVPf9+t1X+49z3nO+T636/btec5zDo8x\
 xkAIIYQQQgRGRNgBEEIIIYQ0N5RgEUIIIYQIGCVYhBBCCCECRgkWIYQQQoiAUYJFCCGEECJglGAR\
@@ -44267,7 +44064,7 @@ iIjYmRIsERERETtTgiUiIiJiZ0qwREREROxMCZaIiIiInSnBEhEREbEzJVgiIiIidqYES0RERMTO\
     /* set a timeout to make sure all the above elements are created before
        the object is initialized. */
     setTimeout(function() {
-        animfd56f3e1aaeb49c89b56ca39442f8fdf = new Animation(frames, img_id, slider_id, 200.0,
+        animcae80679846443e0b29256b515c15a63 = new Animation(frames, img_id, slider_id, 200.0,
                                  loop_select_id);
     }, 0);
   })()
@@ -45964,7 +45761,7 @@ in a nice tabular form).</p>
 </div>
 <div class="output_area stderr docutils container">
 <div class="highlight"><pre>
-SCENARIOS COMPLETE: 100%|██████████| 21/21 [00:00&lt;00:00, 121.90it/s]
+SCENARIOS COMPLETE: 100%|██████████| 21/21 [00:00&lt;00:00, 116.41it/s]
 </pre></div></div>
 </div>
 <p>We can visualize the metrics for each scenario using <code class="docutils literal notranslate"><span class="pre">Result.create_simple_fmea</span></code></p>
@@ -46006,136 +45803,136 @@ SCENARIOS COMPLETE: 100%|██████████| 21/21 [00:00&lt;00:00, 
   </thead>
   <tbody>
     <tr>
-      <th>import_ee_inf_v_t0</th>
-      <td>11.0</td>
-      <td>25125.0</td>
-      <td>2.763750e+10</td>
-    </tr>
-    <tr>
-      <th>move_water_mech_break_t20</th>
-      <td>33.0</td>
-      <td>11750.0</td>
-      <td>3.877500e+10</td>
-    </tr>
-    <tr>
-      <th>import_water_no_wat_t55</th>
-      <td>55.0</td>
-      <td>1000.0</td>
-      <td>5.500000e+09</td>
-    </tr>
-    <tr>
-      <th>move_water_short_t0</th>
-      <td>55.0</td>
-      <td>30125.0</td>
-      <td>1.656875e+11</td>
-    </tr>
-    <tr>
-      <th>export_water_block_t0</th>
-      <td>55.0</td>
-      <td>20102.5</td>
-      <td>1.105638e+11</td>
-    </tr>
-    <tr>
-      <th>import_ee_no_v_t55</th>
-      <td>44.0</td>
-      <td>10000.0</td>
-      <td>4.400000e+10</td>
-    </tr>
-    <tr>
-      <th>import_ee_inf_v_t20</th>
-      <td>11.0</td>
-      <td>21750.0</td>
-      <td>2.392500e+10</td>
-    </tr>
-    <tr>
-      <th>move_water_mech_break_t55</th>
-      <td>33.0</td>
-      <td>5000.0</td>
-      <td>1.650000e+10</td>
-    </tr>
-    <tr>
-      <th>import_water_no_wat_t0</th>
-      <td>55.0</td>
-      <td>11125.0</td>
-      <td>6.118750e+10</td>
-    </tr>
-    <tr>
-      <th>export_water_block_t20</th>
-      <td>55.0</td>
-      <td>16727.5</td>
-      <td>9.200125e+10</td>
-    </tr>
-    <tr>
-      <th>import_water_no_wat_t20</th>
-      <td>55.0</td>
-      <td>7750.0</td>
-      <td>4.262500e+10</td>
-    </tr>
-    <tr>
-      <th>nominal</th>
-      <td>1.0</td>
-      <td>0.0</td>
-      <td>0.000000e+00</td>
-    </tr>
-    <tr>
-      <th>import_signal_no_sig_t20</th>
-      <td>55.0</td>
-      <td>8650.0</td>
-      <td>4.757500e+10</td>
-    </tr>
-    <tr>
-      <th>import_ee_no_v_t20</th>
-      <td>44.0</td>
-      <td>16750.0</td>
-      <td>7.370000e+10</td>
-    </tr>
-    <tr>
-      <th>move_water_short_t55</th>
-      <td>55.0</td>
-      <td>10000.0</td>
-      <td>5.500000e+10</td>
-    </tr>
-    <tr>
-      <th>import_signal_no_sig_t55</th>
-      <td>55.0</td>
-      <td>10000.0</td>
-      <td>5.500000e+10</td>
-    </tr>
-    <tr>
       <th>import_ee_no_v_t0</th>
-      <td>44.0</td>
+      <td>0.000440</td>
       <td>20125.0</td>
-      <td>8.855000e+10</td>
-    </tr>
-    <tr>
-      <th>import_signal_no_sig_t0</th>
-      <td>55.0</td>
-      <td>7525.0</td>
-      <td>4.138750e+10</td>
-    </tr>
-    <tr>
-      <th>move_water_mech_break_t0</th>
-      <td>33.0</td>
-      <td>15125.0</td>
-      <td>4.991250e+10</td>
+      <td>885500.0</td>
     </tr>
     <tr>
       <th>import_ee_inf_v_t55</th>
-      <td>11.0</td>
+      <td>0.000110</td>
       <td>5000.0</td>
-      <td>5.500000e+09</td>
+      <td>55000.0</td>
     </tr>
     <tr>
-      <th>move_water_short_t20</th>
-      <td>55.0</td>
-      <td>26750.0</td>
-      <td>1.471250e+11</td>
+      <th>import_ee_inf_v_t0</th>
+      <td>0.000110</td>
+      <td>25125.0</td>
+      <td>276375.0</td>
+    </tr>
+    <tr>
+      <th>import_water_no_wat_t20</th>
+      <td>0.000550</td>
+      <td>7750.0</td>
+      <td>426250.0</td>
+    </tr>
+    <tr>
+      <th>import_signal_no_sig_t0</th>
+      <td>0.000055</td>
+      <td>7525.0</td>
+      <td>41387.5</td>
+    </tr>
+    <tr>
+      <th>move_water_short_t55</th>
+      <td>0.000550</td>
+      <td>10000.0</td>
+      <td>550000.0</td>
+    </tr>
+    <tr>
+      <th>nominal</th>
+      <td>1.000000</td>
+      <td>0.0</td>
+      <td>0.0</td>
     </tr>
     <tr>
       <th>export_water_block_t55</th>
-      <td>55.0</td>
+      <td>0.000550</td>
       <td>5000.0</td>
-      <td>2.750000e+10</td>
+      <td>275000.0</td>
+    </tr>
+    <tr>
+      <th>import_water_no_wat_t55</th>
+      <td>0.000550</td>
+      <td>1000.0</td>
+      <td>55000.0</td>
+    </tr>
+    <tr>
+      <th>move_water_short_t20</th>
+      <td>0.000550</td>
+      <td>26750.0</td>
+      <td>1471250.0</td>
+    </tr>
+    <tr>
+      <th>import_ee_inf_v_t20</th>
+      <td>0.000110</td>
+      <td>21750.0</td>
+      <td>239250.0</td>
+    </tr>
+    <tr>
+      <th>import_signal_no_sig_t55</th>
+      <td>0.000055</td>
+      <td>10000.0</td>
+      <td>55000.0</td>
+    </tr>
+    <tr>
+      <th>move_water_mech_break_t0</th>
+      <td>0.000330</td>
+      <td>15125.0</td>
+      <td>499125.0</td>
+    </tr>
+    <tr>
+      <th>move_water_short_t0</th>
+      <td>0.000550</td>
+      <td>30125.0</td>
+      <td>1656875.0</td>
+    </tr>
+    <tr>
+      <th>export_water_block_t20</th>
+      <td>0.000550</td>
+      <td>16727.5</td>
+      <td>920012.5</td>
+    </tr>
+    <tr>
+      <th>move_water_mech_break_t20</th>
+      <td>0.000330</td>
+      <td>11750.0</td>
+      <td>387750.0</td>
+    </tr>
+    <tr>
+      <th>import_water_no_wat_t0</th>
+      <td>0.000550</td>
+      <td>11125.0</td>
+      <td>611875.0</td>
+    </tr>
+    <tr>
+      <th>import_ee_no_v_t20</th>
+      <td>0.000440</td>
+      <td>16750.0</td>
+      <td>737000.0</td>
+    </tr>
+    <tr>
+      <th>import_ee_no_v_t55</th>
+      <td>0.000440</td>
+      <td>10000.0</td>
+      <td>440000.0</td>
+    </tr>
+    <tr>
+      <th>import_signal_no_sig_t20</th>
+      <td>0.000055</td>
+      <td>8650.0</td>
+      <td>47575.0</td>
+    </tr>
+    <tr>
+      <th>export_water_block_t0</th>
+      <td>0.000550</td>
+      <td>20102.5</td>
+      <td>1105637.5</td>
+    </tr>
+    <tr>
+      <th>move_water_mech_break_t55</th>
+      <td>0.000330</td>
+      <td>5000.0</td>
+      <td>165000.0</td>
     </tr>
   </tbody>
 </table>
@@ -46183,84 +45980,84 @@ SCENARIOS COMPLETE: 100%|██████████| 21/21 [00:00&lt;00:00, 
   </thead>
   <tbody>
     <tr>
+      <th>import_ee_no_v_t0</th>
+      <td>['import_ee', 'ee_1', 'wat_1', 'wat_2']</td>
+      <td>['import_ee']</td>
+      <td>0.00044</td>
+      <td>20125.0</td>
+      <td>885500.0</td>
+    </tr>
+    <tr>
+      <th>import_ee_inf_v_t55</th>
+      <td>['import_ee', 'ee_1']</td>
+      <td>['import_ee']</td>
+      <td>0.00011</td>
+      <td>5000.0</td>
+      <td>55000.0</td>
+    </tr>
+    <tr>
       <th>import_ee_inf_v_t0</th>
       <td>['import_ee', 'ee_1', 'wat_1', 'wat_2']</td>
       <td>['import_ee']</td>
-      <td>11.0</td>
+      <td>0.00011</td>
       <td>25125.0</td>
-      <td>27637500000.000008</td>
+      <td>276375.0</td>
     </tr>
     <tr>
-      <th>move_water_mech_break_t20</th>
-      <td>['move_water', 'ee_1', 'wat_1', 'wat_2']</td>
+      <th>import_water_no_wat_t20</th>
+      <td>['import_water', 'ee_1', 'wat_1', 'wat_2']</td>
+      <td>['import_water']</td>
+      <td>0.00055</td>
+      <td>7750.0</td>
+      <td>426250.0</td>
+    </tr>
+    <tr>
+      <th>import_signal_no_sig_t0</th>
+      <td>['import_signal', 'ee_1', 'sig_1', 'wat_1', 'w...</td>
+      <td>['import_signal']</td>
+      <td>0.000055</td>
+      <td>7525.0</td>
+      <td>41387.5</td>
+    </tr>
+    <tr>
+      <th>move_water_short_t55</th>
       <td>['move_water']</td>
-      <td>33.0</td>
-      <td>11750.0</td>
-      <td>38775000000.0</td>
+      <td>['move_water']</td>
+      <td>0.00055</td>
+      <td>10000.0</td>
+      <td>550000.0</td>
+    </tr>
+    <tr>
+      <th>nominal</th>
+      <td>[]</td>
+      <td>[]</td>
+      <td>1.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+    </tr>
+    <tr>
+      <th>export_water_block_t55</th>
+      <td>['export_water', 'wat_2']</td>
+      <td>['export_water']</td>
+      <td>0.00055</td>
+      <td>5000.0</td>
+      <td>275000.0</td>
     </tr>
     <tr>
       <th>import_water_no_wat_t55</th>
       <td>['import_water', 'wat_1']</td>
       <td>['import_water']</td>
-      <td>55.0</td>
+      <td>0.00055</td>
       <td>1000.0</td>
-      <td>5500000000.0</td>
+      <td>55000.0</td>
     </tr>
     <tr>
-      <th>move_water_short_t0</th>
+      <th>move_water_short_t20</th>
       <td>['import_ee', 'move_water', 'ee_1', 'wat_1', '...</td>
       <td>['import_ee', 'move_water']</td>
-      <td>55.0</td>
-      <td>30125.0</td>
-      <td>165687500000.000031</td>
-    </tr>
-    <tr>
-      <th>export_water_block_t0</th>
-      <td>['move_water', 'export_water', 'ee_1', 'wat_1'...</td>
-      <td>['move_water', 'export_water']</td>
-      <td>55.0</td>
-      <td>20102.5</td>
-      <td>110563750000.000046</td>
-    </tr>
-    <tr>
-      <th>import_ee_no_v_t55</th>
-      <td>['import_ee', 'ee_1']</td>
-      <td>['import_ee']</td>
-      <td>44.0</td>
-      <td>10000.0</td>
-      <td>44000000000.0</td>
-    </tr>
-    <tr>
-      <th>import_ee_inf_v_t20</th>
-      <td>['import_ee', 'ee_1', 'wat_1', 'wat_2']</td>
-      <td>['import_ee']</td>
-      <td>11.0</td>
-      <td>21750.0</td>
-      <td>23925000000.0</td>
-    </tr>
-    <tr>
-      <th>move_water_mech_break_t55</th>
-      <td>['move_water']</td>
-      <td>['move_water']</td>
-      <td>33.0</td>
-      <td>5000.0</td>
-      <td>16500000000.0</td>
-    </tr>
-    <tr>
-      <th>import_water_no_wat_t0</th>
-      <td>['import_water', 'ee_1', 'wat_1', 'wat_2']</td>
-      <td>['import_water']</td>
-      <td>55.0</td>
-      <td>11125.0</td>
-      <td>61187500000.000038</td>
-    </tr>
-    <tr>
-      <th>export_water_block_t20</th>
-      <td>['move_water', 'export_water', 'ee_1', 'wat_1'...</td>
-      <td>['move_water', 'export_water']</td>
-      <td>55.0</td>
-      <td>16727.5</td>
-      <td>92001250000.0</td>
+      <td>0.00055</td>
+      <td>26750.0</td>
+      <td>1471250.0</td>
     </tr>
   </tbody>
 </table>
@@ -46293,7 +46090,7 @@ SCENARIOS COMPLETE: 100%|██████████| 21/21 [00:00&lt;00:00, 
 </div>
 <div class="output_area stderr docutils container">
 <div class="highlight"><pre>
-SCENARIOS COMPLETE: 100%|██████████| 17/17 [00:00&lt;00:00, 127.41it/s]
+SCENARIOS COMPLETE: 100%|██████████| 17/17 [00:00&lt;00:00, 85.70it/s]
 </pre></div></div>
 </div>
 <div class="nboutput nblast docutils container">
@@ -46326,34 +46123,34 @@ SCENARIOS COMPLETE: 100%|██████████| 17/17 [00:00&lt;00:00, 
   </thead>
   <tbody>
     <tr>
-      <th>export_water_block_t2p0</th>
-      <td>2.142857</td>
-      <td>20102.5</td>
-      <td>4.307679e+09</td>
-    </tr>
-    <tr>
-      <th>export_water_block_t27p0</th>
-      <td>12.857143</td>
-      <td>15152.5</td>
-      <td>1.948179e+10</td>
-    </tr>
-    <tr>
-      <th>move_water_short_t52p0</th>
-      <td>1.714286</td>
-      <td>10000.0</td>
-      <td>1.714286e+09</td>
-    </tr>
-    <tr>
       <th>export_water_block_t52p0</th>
-      <td>1.714286</td>
+      <td>0.000017</td>
       <td>5000.0</td>
-      <td>8.571429e+08</td>
+      <td>8571.428571</td>
     </tr>
     <tr>
-      <th>move_water_mech_break_t27p0</th>
-      <td>23.142857</td>
-      <td>10175.0</td>
-      <td>2.354786e+10</td>
+      <th>import_ee_no_v_t27p0</th>
+      <td>0.000360</td>
+      <td>15175.0</td>
+      <td>546300.000000</td>
+    </tr>
+    <tr>
+      <th>import_signal_no_sig_t27p0</th>
+      <td>0.000013</td>
+      <td>8650.0</td>
+      <td>11121.428571</td>
+    </tr>
+    <tr>
+      <th>move_water_mech_break_t52p0</th>
+      <td>0.000003</td>
+      <td>5000.0</td>
+      <td>1285.714286</td>
+    </tr>
+    <tr>
+      <th>import_water_no_wat_t27p0</th>
+      <td>0.000150</td>
+      <td>6175.0</td>
+      <td>92625.000000</td>
     </tr>
   </tbody>
 </table>
@@ -46402,118 +46199,118 @@ SCENARIOS COMPLETE: 100%|██████████| 17/17 [00:00&lt;00:00, 
     <tr>
       <th>(import_ee, inf_v)</th>
       <th>(global, on)</th>
-      <td>9.000000</td>
-      <td>1.815750e+10</td>
+      <td>0.000090</td>
+      <td>181575.000000</td>
       <td>20175.000000</td>
     </tr>
     <tr>
       <th>(import_ee, no_v)</th>
       <th>(global, on)</th>
-      <td>36.000000</td>
-      <td>5.463000e+10</td>
+      <td>0.000360</td>
+      <td>546300.000000</td>
       <td>15175.000000</td>
     </tr>
     <tr>
       <th rowspan="2" valign="top">(move_water, short)</th>
       <th>(global, start)</th>
-      <td>2.142857</td>
-      <td>6.455357e+09</td>
+      <td>0.000021</td>
+      <td>64553.571429</td>
       <td>10041.666667</td>
     </tr>
     <tr>
       <th>(global, on)</th>
-      <td>12.857143</td>
-      <td>3.236786e+10</td>
+      <td>0.000129</td>
+      <td>323678.571429</td>
       <td>8391.666667</td>
     </tr>
     <tr>
       <th>(import_signal, no_sig)</th>
       <th>(global, start)</th>
-      <td>2.142857</td>
-      <td>4.312500e+09</td>
+      <td>0.000002</td>
+      <td>4312.500000</td>
       <td>6708.333333</td>
     </tr>
     <tr>
       <th rowspan="2" valign="top">(export_water, block)</th>
       <th>(global, start)</th>
-      <td>2.142857</td>
-      <td>4.307679e+09</td>
+      <td>0.000021</td>
+      <td>43076.785714</td>
       <td>6700.833333</td>
     </tr>
     <tr>
       <th>(global, on)</th>
-      <td>12.857143</td>
-      <td>1.948179e+10</td>
+      <td>0.000129</td>
+      <td>194817.857143</td>
       <td>5050.833333</td>
     </tr>
     <tr>
       <th>(move_water, mech_break)</th>
       <th>(global, start)</th>
-      <td>0.214286</td>
-      <td>3.241071e+08</td>
+      <td>0.000002</td>
+      <td>3241.071429</td>
       <td>5041.666667</td>
     </tr>
     <tr>
       <th>(import_water, no_wat)</th>
       <th>(global, start)</th>
-      <td>1.666667</td>
-      <td>1.854167e+09</td>
+      <td>0.000017</td>
+      <td>18541.666667</td>
       <td>3708.333333</td>
     </tr>
     <tr>
       <th>(move_water, mech_break)</th>
       <th>(global, on)</th>
-      <td>23.142857</td>
-      <td>2.354786e+10</td>
+      <td>0.000231</td>
+      <td>235478.571429</td>
       <td>3391.666667</td>
     </tr>
     <tr>
       <th>(import_signal, no_sig)</th>
       <th>(global, end)</th>
-      <td>1.714286</td>
-      <td>1.714286e+09</td>
+      <td>0.000002</td>
+      <td>1714.285714</td>
       <td>3333.333333</td>
     </tr>
     <tr>
       <th>(move_water, short)</th>
       <th>(global, end)</th>
-      <td>1.714286</td>
-      <td>1.714286e+09</td>
+      <td>0.000017</td>
+      <td>17142.857143</td>
       <td>3333.333333</td>
     </tr>
     <tr>
       <th>(import_signal, no_sig)</th>
       <th>(global, on)</th>
-      <td>12.857143</td>
-      <td>1.112143e+10</td>
+      <td>0.000013</td>
+      <td>11121.428571</td>
       <td>2883.333333</td>
     </tr>
     <tr>
       <th>(import_water, no_wat)</th>
       <th>(global, on)</th>
-      <td>15.000000</td>
-      <td>9.262500e+09</td>
+      <td>0.000150</td>
+      <td>92625.000000</td>
       <td>2058.333333</td>
     </tr>
     <tr>
       <th>(move_water, mech_break)</th>
       <th>(global, end)</th>
-      <td>0.257143</td>
-      <td>1.285714e+08</td>
+      <td>0.000003</td>
+      <td>1285.714286</td>
       <td>1666.666667</td>
     </tr>
     <tr>
       <th>(export_water, block)</th>
       <th>(global, end)</th>
-      <td>1.714286</td>
-      <td>8.571429e+08</td>
+      <td>0.000017</td>
+      <td>8571.428571</td>
       <td>1666.666667</td>
     </tr>
     <tr>
       <th>(import_water, no_wat)</th>
       <th>(global, end)</th>
-      <td>2.000000</td>
-      <td>2.000000e+08</td>
+      <td>0.000020</td>
+      <td>2000.000000</td>
       <td>333.333333</td>
     </tr>
   </tbody>
@@ -46562,49 +46359,49 @@ SCENARIOS COMPLETE: 100%|██████████| 17/17 [00:00&lt;00:00, 
     <tr>
       <th>move_water</th>
       <th>short</th>
-      <td>16.714286</td>
-      <td>4.053750e+10</td>
+      <td>0.000167</td>
+      <td>405375.000000</td>
       <td>21766.666667</td>
     </tr>
     <tr>
       <th rowspan="2" valign="top">import_ee</th>
       <th>inf_v</th>
-      <td>9.000000</td>
-      <td>1.815750e+10</td>
+      <td>0.000090</td>
+      <td>181575.000000</td>
       <td>20175.000000</td>
     </tr>
     <tr>
       <th>no_v</th>
-      <td>36.000000</td>
-      <td>5.463000e+10</td>
+      <td>0.000360</td>
+      <td>546300.000000</td>
       <td>15175.000000</td>
     </tr>
     <tr>
       <th>export_water</th>
       <th>block</th>
-      <td>16.714286</td>
-      <td>2.464661e+10</td>
+      <td>0.000167</td>
+      <td>246466.071429</td>
       <td>13418.333333</td>
     </tr>
     <tr>
       <th>import_signal</th>
       <th>no_sig</th>
-      <td>16.714286</td>
-      <td>1.714821e+10</td>
+      <td>0.000017</td>
+      <td>17148.214286</td>
       <td>12925.000000</td>
     </tr>
     <tr>
       <th>move_water</th>
       <th>mech_break</th>
-      <td>23.614286</td>
-      <td>2.400054e+10</td>
+      <td>0.000236</td>
+      <td>240005.357143</td>
       <td>10100.000000</td>
     </tr>
     <tr>
       <th>import_water</th>
       <th>no_wat</th>
-      <td>18.666667</td>
-      <td>1.131667e+10</td>
+      <td>0.000187</td>
+      <td>113166.666667</td>
       <td>6100.000000</td>
     </tr>
   </tbody>
