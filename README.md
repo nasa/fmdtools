@@ -32,39 +32,50 @@ A version of the fmdtools toolkit can also be installed directly from the [PyPI 
 fmdtools requires Python 3 (anaconda recommended) and depends directly on these packages (see requirements.txt):
 
 ```
-   scipy
-   tqdm
-   networkx
-   numpy
-   matplotlib
-   pandas
-   ordered-set
-   dill 
-   recordclass >=0.14.4
-   pytest
-   pygraphviz
+scipy
+tqdm
+networkx
+numpy
+matplotlib
+pandas
+ordered-set
+dill 
+recordclass >=0.14.4
+pytest
+pygraphviz
 ```
 
 These external (non-python) packages are recommended to enable specific fmdtools use-cases and to test/develop fmdtools as well as work with examples in the repository:
 
 ```
-   jupyter notebook			# (for repository notebooks)
-   graphviz					# (to plot using graphviz options)
-   pyvis					   # (for interactive html views of model graphs)
-   ffmpeg 					# (for animations)
+# (for repository notebooks)
+jupyter notebook
+# (to plot using graphviz options)
+graphviz
+# (for interactive html views of model graphs)
+pyvis
+# (for animations)
+ffmpeg
 ```
 
 These must be installed within the system environment (e.g. using ``conda install packagename``) them to enable the specific features/uses in the repository. 
 
 Additionally, the following python packages are not included but are necessary for development/testing of the code:
 ```
-   shapely					# (for multirotor model)
-   deap						# (for optimization of rover faults)
-   pycallgraph2				# (for model profiling)
-   nbmake                # (for notebook tests)
-   pytest-html           # (for test report generation)
-   multiprocess          # (for parallism tutorial profiling)
-   pathos          # (for parallism tutorial profiling)
+# (for multirotor model)
+shapely
+# (for optimization of rover faults)
+deap						
+# (for model profiling)
+pycallgraph2
+# (for notebook tests)
+nbmake                
+# (for test report generation)
+pytest-html
+# (for parallism tutorial profiling)
+multiprocess          
+# (for parallelism tutorial profiling)
+pathos          
 ```
 They can be installed using ``pip install packagename``.
 
