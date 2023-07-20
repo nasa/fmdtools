@@ -2170,10 +2170,11 @@ class ASGGraph(Graph):
         - Actions as (square) Nodes
     """
 
-    def __init__(self, asg, get_states=True):
+    def __init__(self, asg, time=0.0, get_states=True):
         self.g = nx.compose(asg.flow_graph, asg.action_graph)
         self.set_nx_labels(asg)
         if get_states:
+            self.time = time
             self.set_nx_states(asg)
 
     def set_nx_labels(self, asg):
@@ -2217,13 +2218,17 @@ class ASGGraph(Graph):
             self.g.nodes[g]['active'] = g in asg.active_actions
         states = {}
         faults = {}
+        indicators = {}
         for aname, action in asg.actions.items():
             states[aname] = asdict(action.s)
             faults[aname] = [*action.m.faults]
+            indicators[aname] = return_true_indicators(action, self.time)
         for fname, flow in asg.flows.items():
             states[fname] = asdict(flow.s)
+            indicators[fname] = return_true_indicators(flow, self.time)
         nx.set_node_attributes(self.g, states, 'states')
         nx.set_node_attributes(self.g, faults, 'faults')
+        nx.set_node_attributes(self.g, indicators, 'indicators')
 
     def set_edge_labels(self, title='label', title2='', subtext='name',
                         **edge_label_styles):
