@@ -253,10 +253,10 @@ function filterTable(elem) { // eslint-disable-line no-unused-vars
 }
 </script>
     <h1>pytest_report.html</h1>
-    <p>Report generated on 20-Jul-2023 at 13:06:17 by <a href="https://pypi.python.org/pypi/pytest-html">pytest-html</a> v3.2.0</p>
+    <p>Report generated on 20-Jul-2023 at 14:33:05 by <a href="https://pypi.python.org/pypi/pytest-html">pytest-html</a> v3.2.0</p>
     <h2>Summary</h2>
-    <p>118 tests ran in 1336.21 seconds. </p>
-    <p class="filter" hidden="true">(Un)check the boxes to filter the results.</p><input checked="true" class="filter" data-test-result="passed" hidden="true" name="filter_checkbox" onChange="filterTable(this)" type="checkbox"/><span class="passed">97 passed</span>, <input checked="true" class="filter" data-test-result="skipped" disabled="true" hidden="true" name="filter_checkbox" onChange="filterTable(this)" type="checkbox"/><span class="skipped">0 skipped</span>, <input checked="true" class="filter" data-test-result="failed" hidden="true" name="filter_checkbox" onChange="filterTable(this)" type="checkbox"/><span class="failed">21 failed</span>, <input checked="true" class="filter" data-test-result="error" disabled="true" hidden="true" name="filter_checkbox" onChange="filterTable(this)" type="checkbox"/><span class="error">0 errors</span>, <input checked="true" class="filter" data-test-result="xfailed" disabled="true" hidden="true" name="filter_checkbox" onChange="filterTable(this)" type="checkbox"/><span class="xfailed">0 expected failures</span>, <input checked="true" class="filter" data-test-result="xpassed" disabled="true" hidden="true" name="filter_checkbox" onChange="filterTable(this)" type="checkbox"/><span class="xpassed">0 unexpected passes</span>
+    <p>118 tests ran in 786.14 seconds. </p>
+    <p class="filter" hidden="true">(Un)check the boxes to filter the results.</p><input checked="true" class="filter" data-test-result="passed" hidden="true" name="filter_checkbox" onChange="filterTable(this)" type="checkbox"/><span class="passed">99 passed</span>, <input checked="true" class="filter" data-test-result="skipped" disabled="true" hidden="true" name="filter_checkbox" onChange="filterTable(this)" type="checkbox"/><span class="skipped">0 skipped</span>, <input checked="true" class="filter" data-test-result="failed" hidden="true" name="filter_checkbox" onChange="filterTable(this)" type="checkbox"/><span class="failed">19 failed</span>, <input checked="true" class="filter" data-test-result="error" disabled="true" hidden="true" name="filter_checkbox" onChange="filterTable(this)" type="checkbox"/><span class="error">0 errors</span>, <input checked="true" class="filter" data-test-result="xfailed" disabled="true" hidden="true" name="filter_checkbox" onChange="filterTable(this)" type="checkbox"/><span class="xfailed">0 expected failures</span>, <input checked="true" class="filter" data-test-result="xpassed" disabled="true" hidden="true" name="filter_checkbox" onChange="filterTable(this)" type="checkbox"/><span class="xpassed">0 unexpected passes</span>
     <h2>Results</h2>
     <table id="results-table">
       <thead id="results-table-head">
@@ -288,27 +288,8 @@ function filterTable(elem) { // eslint-disable-line no-unused-vars
       <tbody class="failed results-table-row">
         <tr>
           <td class="col-result">Failed</td>
-          <td class="col-name">examples/multirotor/Demonstration.ipynb::</td>
-          <td class="col-duration">7.38</td>
-          <td class="col-links"></td></tr>
-        <tr>
-          <td class="extra" colspan="4">
-            <div class="log">---------------------------------------------------------------------------<br/>fig = fg.sff_model(endtime=15,pi=.3,pr=.1,start_node=&#x27;affect_dof&#x27;,error_bar_option=&#x27;on&#x27;)<br/>fig.savefig(&#x27;sff_model.pdf&#x27;, format=&quot;pdf&quot;, bbox_inches = &#x27;tight&#x27;, pad_inches = 0)<br/>[1;31m---------------------------------------------------------------------------[0m<br/>[1;31mValueError[0m                                Traceback (most recent call last)<br/>Cell [1;32mIn[18], line 1[0m<br/>[1;32m----&gt; 1[0m fig [38;5;241m=[39m [43mfg[49m[38;5;241;43m.[39;49m[43msff_model[49m[43m([49m[43mendtime[49m[38;5;241;43m=[39;49m[38;5;241;43m15[39;49m[43m,[49m[43mpi[49m[38;5;241;43m=[39;49m[38;5;241;43m.3[39;49m[43m,[49m[43mpr[49m[38;5;241;43m=[39;49m[38;5;241;43m.1[39;49m[43m,[49m[43mstart_node[49m[38;5;241;43m=[39;49m[38;5;124;43m&#x27;[39;49m[38;5;124;43maffect_dof[39;49m[38;5;124;43m&#x27;[39;49m[43m,[49m[43merror_bar_option[49m[38;5;241;43m=[39;49m[38;5;124;43m&#x27;[39;49m[38;5;124;43mon[39;49m[38;5;124;43m&#x27;[39;49m[43m)[49m<br/>[0;32m      2[0m fig[38;5;241m.[39msavefig([38;5;124m&#x27;[39m[38;5;124msff_model.pdf[39m[38;5;124m&#x27;[39m, [38;5;28mformat[39m[38;5;241m=[39m[38;5;124m&quot;[39m[38;5;124mpdf[39m[38;5;124m&quot;[39m, bbox_inches [38;5;241m=[39m [38;5;124m&#x27;[39m[38;5;124mtight[39m[38;5;124m&#x27;[39m, pad_inches [38;5;241m=[39m [38;5;241m0[39m)<br/><br/>File [1;32mc:\users\dhulse\documents\github\fmdtools\fmdtools\analyze\graph.py:1219[0m, in [0;36mGraph.sff_model[1;34m(self, endtime, pi, pr, num_trials, start_node, error_bar_option)[0m<br/>[0;32m   1217[0m num_fail_asymmetric_error [38;5;241m=[39m [num_fail_lower_error, num_fail_upper_error]<br/>[0;32m   1218[0m num_fix_asymmetric_error [38;5;241m=[39m [num_fix_lower_error, num_fix_upper_error]<br/>[1;32m-&gt; 1219[0m [43mplt[49m[38;5;241;43m.[39;49m[43merrorbar[49m[43m([49m[43mtime_list[49m[43m,[49m[43m [49m[43mnum_susc_average[49m[43m,[49m<br/>[0;32m   1220[0m [43m             [49m[43myerr[49m[38;5;241;43m=[39;49m[43mnum_susc_asymmetric_error[49m[43m,[49m[43m [49m[43mfmt[49m[38;5;241;43m=[39;49m[38;5;124;43m&#x27;[39;49m[38;5;124;43m-o[39;49m[38;5;124;43m&#x27;[39;49m[43m,[49m[43m [49m[43mlabel[49m[38;5;241;43m=[39;49m[38;5;124;43m&#x27;[39;49m[38;5;124;43mSusceptible[39;49m[38;5;124;43m&#x27;[39;49m[43m)[49m<br/>[0;32m   1221[0m plt[38;5;241m.[39merrorbar(time_list, num_fail_average,<br/>[0;32m   1222[0m              yerr[38;5;241m=[39mnum_fail_asymmetric_error, fmt[38;5;241m=[39m[38;5;124m&#x27;[39m[38;5;124m-o[39m[38;5;124m&#x27;[39m, label[38;5;241m=[39m[38;5;124m&#x27;[39m[38;5;124mFailed[39m[38;5;124m&#x27;[39m)<br/>[0;32m   1223[0m plt[38;5;241m.[39merrorbar(time_list, num_fix_average,<br/>[0;32m   1224[0m              yerr[38;5;241m=[39mnum_fix_asymmetric_error, fmt[38;5;241m=[39m[38;5;124m&#x27;[39m[38;5;124m-o[39m[38;5;124m&#x27;[39m, label[38;5;241m=[39m[38;5;124m&#x27;[39m[38;5;124mFixed[39m[38;5;124m&#x27;[39m)<br/><br/>File [1;32m~\AppData\Roaming\Python\Python310\site-packages\matplotlib\pyplot.py:2564[0m, in [0;36merrorbar[1;34m(x, y, yerr, xerr, fmt, ecolor, elinewidth, capsize, barsabove, lolims, uplims, xlolims, xuplims, errorevery, capthick, data, **kwargs)[0m<br/>[0;32m   2558[0m [38;5;129m@_copy_docstring_and_deprecators[39m(Axes[38;5;241m.[39merrorbar)<br/>[0;32m   2559[0m [38;5;28;01mdef[39;00m [38;5;21merrorbar[39m(<br/>[0;32m   2560[0m         x, y, yerr[38;5;241m=[39m[38;5;28;01mNone[39;00m, xerr[38;5;241m=[39m[38;5;28;01mNone[39;00m, fmt[38;5;241m=[39m[38;5;124m&#x27;[39m[38;5;124m&#x27;[39m, ecolor[38;5;241m=[39m[38;5;28;01mNone[39;00m,<br/>[0;32m   2561[0m         elinewidth[38;5;241m=[39m[38;5;28;01mNone[39;00m, capsize[38;5;241m=[39m[38;5;28;01mNone[39;00m, barsabove[38;5;241m=[39m[38;5;28;01mFalse[39;00m, lolims[38;5;241m=[39m[38;5;28;01mFalse[39;00m,<br/>[0;32m   2562[0m         uplims[38;5;241m=[39m[38;5;28;01mFalse[39;00m, xlolims[38;5;241m=[39m[38;5;28;01mFalse[39;00m, xuplims[38;5;241m=[39m[38;5;28;01mFalse[39;00m, errorevery[38;5;241m=[39m[38;5;241m1[39m,<br/>[0;32m   2563[0m         capthick[38;5;241m=[39m[38;5;28;01mNone[39;00m, [38;5;241m*[39m, data[38;5;241m=[39m[38;5;28;01mNone[39;00m, [38;5;241m*[39m[38;5;241m*[39mkwargs):<br/>[1;32m-&gt; 2564[0m     [38;5;28;01mreturn[39;00m gca()[38;5;241m.[39merrorbar(<br/>[0;32m   2565[0m         x, y, yerr[38;5;241m=[39myerr, xerr[38;5;241m=[39mxerr, fmt[38;5;241m=[39mfmt, ecolor[38;5;241m=[39mecolor,<br/>[0;32m   2566[0m         elinewidth[38;5;241m=[39melinewidth, capsize[38;5;241m=[39mcapsize, barsabove[38;5;241m=[39mbarsabove,<br/>[0;32m   2567[0m         lolims[38;5;241m=[39mlolims, uplims[38;5;241m=[39muplims, xlolims[38;5;241m=[39mxlolims,<br/>[0;32m   2568[0m         xuplims[38;5;241m=[39mxuplims, errorevery[38;5;241m=[39merrorevery, capthick[38;5;241m=[39mcapthick,<br/>[0;32m   2569[0m         [38;5;241m*[39m[38;5;241m*[39m({[38;5;124m&quot;[39m[38;5;124mdata[39m[38;5;124m&quot;[39m: data} [38;5;28;01mif[39;00m data [38;5;129;01mis[39;00m [38;5;129;01mnot[39;00m [38;5;28;01mNone[39;00m [38;5;28;01melse[39;00m {}), [38;5;241m*[39m[38;5;241m*[39mkwargs)<br/><br/>File [1;32m~\AppData\Roaming\Python\Python310\site-packages\matplotlib\__init__.py:1461[0m, in [0;36m_preprocess_data.&lt;locals&gt;.inner[1;34m(ax, data, *args, **kwargs)[0m<br/>[0;32m   1458[0m [38;5;129m@functools[39m[38;5;241m.[39mwraps(func)<br/>[0;32m   1459[0m [38;5;28;01mdef[39;00m [38;5;21minner[39m(ax, [38;5;241m*[39margs, data[38;5;241m=[39m[38;5;28;01mNone[39;00m, [38;5;241m*[39m[38;5;241m*[39mkwargs):<br/>[0;32m   1460[0m     [38;5;28;01mif[39;00m data [38;5;129;01mis[39;00m [38;5;28;01mNone[39;00m:<br/>[1;32m-&gt; 1461[0m         [38;5;28;01mreturn[39;00m func(ax, [38;5;241m*[39m[38;5;28mmap[39m(sanitize_sequence, args), [38;5;241m*[39m[38;5;241m*[39mkwargs)<br/>[0;32m   1463[0m     bound [38;5;241m=[39m new_sig[38;5;241m.[39mbind(ax, [38;5;241m*[39margs, [38;5;241m*[39m[38;5;241m*[39mkwargs)<br/>[0;32m   1464[0m     auto_label [38;5;241m=[39m (bound[38;5;241m.[39marguments[38;5;241m.[39mget(label_namer)<br/>[0;32m   1465[0m                   [38;5;129;01mor[39;00m bound[38;5;241m.[39mkwargs[38;5;241m.[39mget(label_namer))<br/><br/>File [1;32m~\AppData\Roaming\Python\Python310\site-packages\matplotlib\axes\_axes.py:3636[0m, in [0;36mAxes.errorbar[1;34m(self, x, y, yerr, xerr, fmt, ecolor, elinewidth, capsize, barsabove, lolims, uplims, xlolims, xuplims, errorevery, capthick, **kwargs)[0m<br/>[0;32m   3633[0m res [38;5;241m=[39m np[38;5;241m.[39mzeros(err[38;5;241m.[39mshape, dtype[38;5;241m=[39m[38;5;28mbool[39m)  [38;5;66;03m# Default in case of nan[39;00m<br/>[0;32m   3634[0m [38;5;28;01mif[39;00m np[38;5;241m.[39many(np[38;5;241m.[39mless(err, [38;5;241m-[39merr, out[38;5;241m=[39mres, where[38;5;241m=[39m(err [38;5;241m==[39m err))):<br/>[0;32m   3635[0m     [38;5;66;03m# like err&lt;0, but also works for timedelta and nan.[39;00m<br/>[1;32m-&gt; 3636[0m     [38;5;28;01mraise[39;00m [38;5;167;01mValueError[39;00m(<br/>[0;32m   3637[0m         [38;5;124mf[39m[38;5;124m&quot;[39m[38;5;124m&#x27;[39m[38;5;132;01m{[39;00mdep_axis[38;5;132;01m}[39;00m[38;5;124merr[39m[38;5;124m&#x27;[39m[38;5;124m must not contain negative values[39m[38;5;124m&quot;[39m)<br/>[0;32m   3638[0m [38;5;66;03m# This is like[39;00m<br/>[0;32m   3639[0m [38;5;66;03m#     elow, ehigh = np.broadcast_to(...)[39;00m<br/>[0;32m   3640[0m [38;5;66;03m#     return dep - elow * ~lolims, dep + ehigh * ~uplims[39;00m<br/>[0;32m   3641[0m [38;5;66;03m# except that broadcast_to would strip units.[39;00m<br/>[0;32m   3642[0m low, high [38;5;241m=[39m dep [38;5;241m+[39m np[38;5;241m.[39mrow_stack([[38;5;241m-[39m([38;5;241m1[39m [38;5;241m-[39m lolims), [38;5;241m1[39m [38;5;241m-[39m uplims]) [38;5;241m*[39m err<br/><br/>[1;31mValueError[0m: &#x27;yerr&#x27; must not contain negative values<br/></div></td></tr></tbody>
-      <tbody class="failed results-table-row">
-        <tr>
-          <td class="col-result">Failed</td>
-          <td class="col-name">examples/multirotor/Multirotor_Optimization.ipynb::</td>
-          <td class="col-duration">312.62</td>
-          <td class="col-links"></td></tr>
-        <tr>
-          <td class="extra" colspan="4">
-            <div class="log">A cell timed out while it was being executed, after 300 seconds.<br/>The message was: Cell execution timed out.<br/>Here is a preview of the cell contents:<br/>-------------------<br/>opt_hist = brute_search()<br/>-------------------<br/> ------------------------------Captured stderr call------------------------------ <br/>[SpyderKernelApp] ERROR | Timeout waiting for execute reply (300s).
-<br/></div></td></tr></tbody>
-      <tbody class="failed results-table-row">
-        <tr>
-          <td class="col-result">Failed</td>
           <td class="col-name">examples/multirotor/test_multirotor.py::DroneTests::test_interface_values</td>
-          <td class="col-duration">1.53</td>
+          <td class="col-duration">1.68</td>
           <td class="col-links"></td></tr>
         <tr>
           <td class="extra" colspan="4">
@@ -317,7 +298,7 @@ function filterTable(elem) { // eslint-disable-line no-unused-vars
         <tr>
           <td class="col-result">Failed</td>
           <td class="col-name">examples/pump/AST_Sampling.ipynb::</td>
-          <td class="col-duration">0.01</td>
+          <td class="col-duration">0.03</td>
           <td class="col-links"></td></tr>
         <tr>
           <td class="extra" colspan="4">
@@ -340,7 +321,7 @@ jupyter_client.kernelspec.NoSuchKernel: No such kernel named julia-1.7
         <tr>
           <td class="col-result">Failed</td>
           <td class="col-name">examples/pump/Optimization.ipynb::</td>
-          <td class="col-duration">5.99</td>
+          <td class="col-duration">6.00</td>
           <td class="col-links"></td></tr>
         <tr>
           <td class="extra" colspan="4">
@@ -349,16 +330,16 @@ jupyter_client.kernelspec.NoSuchKernel: No such kernel named julia-1.7
         <tr>
           <td class="col-result">Failed</td>
           <td class="col-name">examples/pump/Parallelism_Tutorial.ipynb::</td>
-          <td class="col-duration">5.28</td>
+          <td class="col-duration">8.20</td>
           <td class="col-links"></td></tr>
         <tr>
           <td class="extra" colspan="4">
-            <div class="log">---------------------------------------------------------------------------<br/>import multiprocessing as mp<br/>import multiprocess as ms<br/>from pathos.pools import ParallelPool, ProcessPool, SerialPool, ThreadPool<br/>[1;31m---------------------------------------------------------------------------[0m<br/>[1;31mModuleNotFoundError[0m                       Traceback (most recent call last)<br/>Cell [1;32mIn[9], line 2[0m<br/>[0;32m      1[0m [38;5;28;01mimport[39;00m [38;5;21;01mmultiprocessing[39;00m [38;5;28;01mas[39;00m [38;5;21;01mmp[39;00m<br/>[1;32m----&gt; 2[0m [38;5;28;01mimport[39;00m [38;5;21;01mmultiprocess[39;00m [38;5;28;01mas[39;00m [38;5;21;01mms[39;00m<br/>[0;32m      3[0m [38;5;28;01mfrom[39;00m [38;5;21;01mpathos[39;00m[38;5;21;01m.[39;00m[38;5;21;01mpools[39;00m [38;5;28;01mimport[39;00m ParallelPool, ProcessPool, SerialPool, ThreadPool<br/><br/>[1;31mModuleNotFoundError[0m: No module named &#x27;multiprocess&#x27;<br/></div></td></tr></tbody>
+            <div class="log">---------------------------------------------------------------------------<br/>endclasses_par, mdlhists = propagate.single_faults(mdl, pool=pool)<br/>#tab_par = an.tabulate.simplefmea(endclasses_par)<br/>endclasses, mdlhists = propagate.single_faults(mdl)<br/>#tab = an.tabulate.simplefmea(endclasses)<br/>#tab - tab_par<br/>[1;31m---------------------------------------------------------------------------[0m<br/>[1;31mValueError[0m                                Traceback (most recent call last)<br/>Cell [1;32mIn[12], line 1[0m<br/>[1;32m----&gt; 1[0m endclasses_par, mdlhists [38;5;241m=[39m [43mpropagate[49m[38;5;241;43m.[39;49m[43msingle_faults[49m[43m([49m[43mmdl[49m[43m,[49m[43m [49m[43mpool[49m[38;5;241;43m=[39;49m[43mpool[49m[43m)[49m<br/>[0;32m      2[0m [38;5;66;03m#tab_par = an.tabulate.simplefmea(endclasses_par)[39;00m<br/>[0;32m      3[0m endclasses, mdlhists [38;5;241m=[39m propagate[38;5;241m.[39msingle_faults(mdl)<br/><br/>File [1;32mc:\users\dhulse\documents\github\fmdtools\fmdtools\sim\propagate.py:498[0m, in [0;36msingle_faults[1;34m(mdl, **kwargs)[0m<br/>[0;32m    495[0m nomresult, nomhist, nomscen, c_mdl, t_end_nom [38;5;241m=[39m nom_helper(mdl, mdl[38;5;241m.[39msp[38;5;241m.[39mtimes, [38;5;241m*[39m[38;5;241m*[39m{[38;5;241m*[39m[38;5;241m*[39mkwargs, [38;5;124m&#x27;[39m[38;5;124muse_end_condition[39m[38;5;124m&#x27;[39m:[38;5;28;01mFalse[39;00m})<br/>[0;32m    497[0m scenlist [38;5;241m=[39m list_init_faults(mdl)<br/>[1;32m--&gt; 498[0m results, mdlhists [38;5;241m=[39m scenlist_helper(mdl, scenlist, c_mdl, [38;5;241m*[39m[38;5;241m*[39mkwargs, nomhist[38;5;241m=[39mnomhist, nomresult[38;5;241m=[39mnomresult)<br/>[0;32m    499[0m nomhist[38;5;241m.[39mcut(t_end_nom)<br/>[0;32m    500[0m mdlhists[[38;5;124m&#x27;[39m[38;5;124mnominal[39m[38;5;124m&#x27;[39m] [38;5;241m=[39m nomhist<br/><br/>File [1;32mc:\users\dhulse\documents\github\fmdtools\fmdtools\sim\propagate.py:522[0m, in [0;36mscenlist_helper[1;34m(mdl, scenlist, c_mdl, **kwargs)[0m<br/>[0;32m    520[0m     [38;5;28;01melse[39;00m:       <br/>[0;32m    521[0m         inputs [38;5;241m=[39m [(c_mdl[[38;5;241m0[39m], scen,  kwargs, [38;5;28mstr[39m(i)) [38;5;28;01mfor[39;00m i, scen [38;5;129;01min[39;00m [38;5;28menumerate[39m(scenlist)]<br/>[1;32m--&gt; 522[0m     res_list [38;5;241m=[39m [38;5;28mlist[39m(tqdm[38;5;241m.[39mtqdm([43mpool[49m[38;5;241;43m.[39;49m[43mmap[49m[43m([49m[43mexec_scen_par[49m[43m,[49m[43m [49m[43minputs[49m[43m)[49m, <br/>[0;32m    523[0m                               total[38;5;241m=[39m[38;5;28mlen[39m(inputs), disable[38;5;241m=[39m[38;5;129;01mnot[39;00m(showprogress), <br/>[0;32m    524[0m                               desc[38;5;241m=[39m[38;5;124m&quot;[39m[38;5;124mSCENARIOS COMPLETE[39m[38;5;124m&quot;[39m))<br/>[0;32m    525[0m     results, mdlhists [38;5;241m=[39m unpack_res_list(scenlist, res_list)<br/>[0;32m    526[0m [38;5;28;01melse[39;00m:<br/><br/>File [1;32m~\AppData\Local\anaconda3\lib\multiprocessing\pool.py:367[0m, in [0;36mPool.map[1;34m(self, func, iterable, chunksize)[0m<br/>[0;32m    362[0m [38;5;28;01mdef[39;00m [38;5;21mmap[39m([38;5;28mself[39m, func, iterable, chunksize[38;5;241m=[39m[38;5;28;01mNone[39;00m):<br/>[0;32m    363[0m [38;5;250m    [39m[38;5;124;03m&#x27;&#x27;&#x27;[39;00m<br/>[0;32m    364[0m [38;5;124;03m    Apply `func` to each element in `iterable`, collecting the results[39;00m<br/>[0;32m    365[0m [38;5;124;03m    in a list that is returned.[39;00m<br/>[0;32m    366[0m [38;5;124;03m    &#x27;&#x27;&#x27;[39;00m<br/>[1;32m--&gt; 367[0m     [38;5;28;01mreturn[39;00m [38;5;28;43mself[39;49m[38;5;241;43m.[39;49m[43m_map_async[49m[43m([49m[43mfunc[49m[43m,[49m[43m [49m[43miterable[49m[43m,[49m[43m [49m[43mmapstar[49m[43m,[49m[43m [49m[43mchunksize[49m[43m)[49m[38;5;241m.[39mget()<br/><br/>File [1;32m~\AppData\Local\anaconda3\lib\multiprocessing\pool.py:476[0m, in [0;36mPool._map_async[1;34m(self, func, iterable, mapper, chunksize, callback, error_callback)[0m<br/>[0;32m    471[0m [38;5;28;01mdef[39;00m [38;5;21m_map_async[39m([38;5;28mself[39m, func, iterable, mapper, chunksize[38;5;241m=[39m[38;5;28;01mNone[39;00m, callback[38;5;241m=[39m[38;5;28;01mNone[39;00m,<br/>[0;32m    472[0m         error_callback[38;5;241m=[39m[38;5;28;01mNone[39;00m):<br/>[0;32m    473[0m [38;5;250m    [39m[38;5;124;03m&#x27;&#x27;&#x27;[39;00m<br/>[0;32m    474[0m [38;5;124;03m    Helper function to implement map, starmap and their async counterparts.[39;00m<br/>[0;32m    475[0m [38;5;124;03m    &#x27;&#x27;&#x27;[39;00m<br/>[1;32m--&gt; 476[0m     [38;5;28;43mself[39;49m[38;5;241;43m.[39;49m[43m_check_running[49m[43m([49m[43m)[49m<br/>[0;32m    477[0m     [38;5;28;01mif[39;00m [38;5;129;01mnot[39;00m [38;5;28mhasattr[39m(iterable, [38;5;124m&#x27;[39m[38;5;124m__len__[39m[38;5;124m&#x27;[39m):<br/>[0;32m    478[0m         iterable [38;5;241m=[39m [38;5;28mlist[39m(iterable)<br/><br/>File [1;32m~\AppData\Local\anaconda3\lib\multiprocessing\pool.py:353[0m, in [0;36mPool._check_running[1;34m(self)[0m<br/>[0;32m    351[0m [38;5;28;01mdef[39;00m [38;5;21m_check_running[39m([38;5;28mself[39m):<br/>[0;32m    352[0m     [38;5;28;01mif[39;00m [38;5;28mself[39m[38;5;241m.[39m_state [38;5;241m!=[39m RUN:<br/>[1;32m--&gt; 353[0m         [38;5;28;01mraise[39;00m [38;5;167;01mValueError[39;00m([38;5;124m&quot;[39m[38;5;124mPool not running[39m[38;5;124m&quot;[39m)<br/><br/>[1;31mValueError[0m: Pool not running<br/></div></td></tr></tbody>
       <tbody class="failed results-table-row">
         <tr>
           <td class="col-result">Failed</td>
           <td class="col-name">examples/pump/Tutorial_unfilled.ipynb::</td>
-          <td class="col-duration">2.41</td>
+          <td class="col-duration">2.52</td>
           <td class="col-links"></td></tr>
         <tr>
           <td class="extra" colspan="4">
@@ -367,7 +348,7 @@ jupyter_client.kernelspec.NoSuchKernel: No such kernel named julia-1.7
         <tr>
           <td class="col-result">Failed</td>
           <td class="col-name">examples/pump/test_pump.py::PumpTests::test_approach_cost_calc</td>
-          <td class="col-duration">3.38</td>
+          <td class="col-duration">3.78</td>
           <td class="col-links"></td></tr>
         <tr>
           <td class="extra" colspan="4">
@@ -376,7 +357,7 @@ jupyter_client.kernelspec.NoSuchKernel: No such kernel named julia-1.7
         <tr>
           <td class="col-result">Failed</td>
           <td class="col-name">examples/pump/test_pump.py::PumpTests::test_approach_pruning</td>
-          <td class="col-duration">1.76</td>
+          <td class="col-duration">1.89</td>
           <td class="col-links"></td></tr>
         <tr>
           <td class="extra" colspan="4">
@@ -385,16 +366,17 @@ jupyter_client.kernelspec.NoSuchKernel: No such kernel named julia-1.7
         <tr>
           <td class="col-result">Failed</td>
           <td class="col-name">examples/rover/Approach_Use-Cases.ipynb::</td>
-          <td class="col-duration">3.19</td>
+          <td class="col-duration">3.55</td>
           <td class="col-links"></td></tr>
         <tr>
           <td class="extra" colspan="4">
-            <div class="log">---------------------------------------------------------------------------<br/>help(FxnBlock.assoc_modes)<br/>[1;31m---------------------------------------------------------------------------[0m<br/>[1;31mAttributeError[0m                            Traceback (most recent call last)<br/>Cell [1;32mIn[2], line 1[0m<br/>[1;32m----&gt; 1[0m help([43mFxnBlock[49m[38;5;241;43m.[39;49m[43massoc_modes[49m)<br/><br/>[1;31mAttributeError[0m: type object &#x27;FxnBlock&#x27; has no attribute &#x27;assoc_modes&#x27;<br/></div></td></tr></tbody>
+            <div class="log">---------------------------------------------------------------------------<br/>help(FxnBlock.assoc_modes)<br/>[1;31m---------------------------------------------------------------------------[0m<br/>[1;31mAttributeError[0m                            Traceback (most recent call last)<br/>Cell [1;32mIn[2], line 1[0m<br/>[1;32m----&gt; 1[0m help([43mFxnBlock[49m[38;5;241;43m.[39;49m[43massoc_modes[49m)<br/><br/>[1;31mAttributeError[0m: type object &#x27;FxnBlock&#x27; has no attribute &#x27;assoc_modes&#x27;<br/> ------------------------------Captured stderr call------------------------------ <br/>Assertion failed: pfd.revents &amp; POLLIN (C:\ci\zeromq_1616055400030\work\src\signaler.cpp:265)
+<br/></div></td></tr></tbody>
       <tbody class="failed results-table-row">
         <tr>
           <td class="col-result">Failed</td>
           <td class="col-name">examples/rover/Nominal_Approach_Use-Cases.ipynb::</td>
-          <td class="col-duration">3.31</td>
+          <td class="col-duration">3.54</td>
           <td class="col-links"></td></tr>
         <tr>
           <td class="extra" colspan="4">
@@ -403,7 +385,7 @@ jupyter_client.kernelspec.NoSuchKernel: No such kernel named julia-1.7
         <tr>
           <td class="col-result">Failed</td>
           <td class="col-name">examples/rover/Rover_Setup_Notebook.ipynb::</td>
-          <td class="col-duration">2.93</td>
+          <td class="col-duration">3.00</td>
           <td class="col-links"></td></tr>
         <tr>
           <td class="extra" colspan="4">
@@ -421,7 +403,7 @@ jupyter_client.kernelspec.NoSuchKernel: No such kernel named julia-1.7
         <tr>
           <td class="col-result">Failed</td>
           <td class="col-name">examples/rover/HFAC_Analyses/HFAC_Analyses.ipynb::</td>
-          <td class="col-duration">2.91</td>
+          <td class="col-duration">3.02</td>
           <td class="col-links"></td></tr>
         <tr>
           <td class="extra" colspan="4">
@@ -430,7 +412,7 @@ jupyter_client.kernelspec.NoSuchKernel: No such kernel named julia-1.7
         <tr>
           <td class="col-result">Failed</td>
           <td class="col-name">examples/rover/HFAC_Analyses/IDETC_Human_Paper_Analysis.ipynb::</td>
-          <td class="col-duration">1.93</td>
+          <td class="col-duration">1.96</td>
           <td class="col-links"></td></tr>
         <tr>
           <td class="extra" colspan="4">
@@ -439,7 +421,7 @@ jupyter_client.kernelspec.NoSuchKernel: No such kernel named julia-1.7
         <tr>
           <td class="col-result">Failed</td>
           <td class="col-name">examples/rover/degradation_modelling/Degradation_Modelling_Notebook.ipynb::</td>
-          <td class="col-duration">2.94</td>
+          <td class="col-duration">3.03</td>
           <td class="col-links"></td></tr>
         <tr>
           <td class="extra" colspan="4">
@@ -448,7 +430,7 @@ jupyter_client.kernelspec.NoSuchKernel: No such kernel named julia-1.7
         <tr>
           <td class="col-result">Failed</td>
           <td class="col-name">examples/rover/fault_sampling/Rover_Mode_Notebook.ipynb::</td>
-          <td class="col-duration">2.95</td>
+          <td class="col-duration">3.00</td>
           <td class="col-links"></td></tr>
         <tr>
           <td class="extra" colspan="4">
@@ -457,7 +439,7 @@ jupyter_client.kernelspec.NoSuchKernel: No such kernel named julia-1.7
         <tr>
           <td class="col-result">Failed</td>
           <td class="col-name">examples/rover/optimization/Rover_Response_Optimization.ipynb::</td>
-          <td class="col-duration">2.96</td>
+          <td class="col-duration">2.98</td>
           <td class="col-links"></td></tr>
         <tr>
           <td class="extra" colspan="4">
@@ -466,7 +448,7 @@ jupyter_client.kernelspec.NoSuchKernel: No such kernel named julia-1.7
         <tr>
           <td class="col-result">Failed</td>
           <td class="col-name">examples/rover/optimization/Search_Comparison.ipynb::</td>
-          <td class="col-duration">3.08</td>
+          <td class="col-duration">3.30</td>
           <td class="col-links"></td></tr>
         <tr>
           <td class="extra" colspan="4">
@@ -475,7 +457,7 @@ jupyter_client.kernelspec.NoSuchKernel: No such kernel named julia-1.7
         <tr>
           <td class="col-result">Passed</td>
           <td class="col-name">examples/asg_demo/Action_Sequence_Graph.ipynb::</td>
-          <td class="col-duration">6.23</td>
+          <td class="col-duration">6.54</td>
           <td class="col-links"></td></tr>
         <tr>
           <td class="extra" colspan="4">
@@ -484,7 +466,7 @@ jupyter_client.kernelspec.NoSuchKernel: No such kernel named julia-1.7
         <tr>
           <td class="col-result">Passed</td>
           <td class="col-name">examples/eps/EPS_Example_Notebook.ipynb::</td>
-          <td class="col-duration">4.14</td>
+          <td class="col-duration">4.33</td>
           <td class="col-links"></td></tr>
         <tr>
           <td class="extra" colspan="4">
@@ -520,7 +502,7 @@ jupyter_client.kernelspec.NoSuchKernel: No such kernel named julia-1.7
         <tr>
           <td class="col-result">Passed</td>
           <td class="col-name">examples/eps/test_eps.py::epsTests::test_save_load_multfault</td>
-          <td class="col-duration">0.04</td>
+          <td class="col-duration">0.03</td>
           <td class="col-links"></td></tr>
         <tr>
           <td class="extra" colspan="4">
@@ -538,7 +520,7 @@ jupyter_client.kernelspec.NoSuchKernel: No such kernel named julia-1.7
         <tr>
           <td class="col-result">Passed</td>
           <td class="col-name">examples/eps/test_eps.py::epsTests::test_save_load_onefault</td>
-          <td class="col-duration">0.03</td>
+          <td class="col-duration">0.04</td>
           <td class="col-links"></td></tr>
         <tr>
           <td class="extra" colspan="4">
@@ -547,7 +529,7 @@ jupyter_client.kernelspec.NoSuchKernel: No such kernel named julia-1.7
         <tr>
           <td class="col-result">Passed</td>
           <td class="col-name">examples/eps/test_eps.py::epsTests::test_save_load_singlefaults</td>
-          <td class="col-duration">0.91</td>
+          <td class="col-duration">0.94</td>
           <td class="col-links"></td></tr>
         <tr>
           <td class="extra" colspan="4">
@@ -564,8 +546,26 @@ jupyter_client.kernelspec.NoSuchKernel: No such kernel named julia-1.7
       <tbody class="passed results-table-row">
         <tr>
           <td class="col-result">Passed</td>
+          <td class="col-name">examples/multirotor/Demonstration.ipynb::</td>
+          <td class="col-duration">283.89</td>
+          <td class="col-links"></td></tr>
+        <tr>
+          <td class="extra" colspan="4">
+            <div class="empty log">No log output captured.</div></td></tr></tbody>
+      <tbody class="passed results-table-row">
+        <tr>
+          <td class="col-result">Passed</td>
+          <td class="col-name">examples/multirotor/Multirotor_Optimization.ipynb::</td>
+          <td class="col-duration">16.12</td>
+          <td class="col-links"></td></tr>
+        <tr>
+          <td class="extra" colspan="4">
+            <div class="empty log">No log output captured.</div></td></tr></tbody>
+      <tbody class="passed results-table-row">
+        <tr>
+          <td class="col-result">Passed</td>
           <td class="col-name">examples/multirotor/test_multirotor.py::DroneTests::test_sim_types</td>
-          <td class="col-duration">3.97</td>
+          <td class="col-duration">4.14</td>
           <td class="col-links"></td></tr>
         <tr>
           <td class="extra" colspan="4">
@@ -574,7 +574,7 @@ jupyter_client.kernelspec.NoSuchKernel: No such kernel named julia-1.7
         <tr>
           <td class="col-result">Passed</td>
           <td class="col-name">examples/pump/Pump_Example_Notebook.ipynb::</td>
-          <td class="col-duration">12.42</td>
+          <td class="col-duration">12.87</td>
           <td class="col-links"></td></tr>
         <tr>
           <td class="extra" colspan="4">
@@ -583,7 +583,7 @@ jupyter_client.kernelspec.NoSuchKernel: No such kernel named julia-1.7
         <tr>
           <td class="col-result">Passed</td>
           <td class="col-name">examples/pump/Stochastic_Modelling.ipynb::</td>
-          <td class="col-duration">34.73</td>
+          <td class="col-duration">36.42</td>
           <td class="col-links"></td></tr>
         <tr>
           <td class="extra" colspan="4">
@@ -592,7 +592,7 @@ jupyter_client.kernelspec.NoSuchKernel: No such kernel named julia-1.7
         <tr>
           <td class="col-result">Passed</td>
           <td class="col-name">examples/pump/Tutorial_complete.ipynb::</td>
-          <td class="col-duration">4.83</td>
+          <td class="col-duration">5.00</td>
           <td class="col-links"></td></tr>
         <tr>
           <td class="extra" colspan="4">
@@ -610,7 +610,7 @@ jupyter_client.kernelspec.NoSuchKernel: No such kernel named julia-1.7
         <tr>
           <td class="col-result">Passed</td>
           <td class="col-name">examples/pump/test_pump.py::PumpTests::test_approach_parallelism</td>
-          <td class="col-duration">7.20</td>
+          <td class="col-duration">7.80</td>
           <td class="col-links"></td></tr>
         <tr>
           <td class="extra" colspan="4">
@@ -637,7 +637,7 @@ jupyter_client.kernelspec.NoSuchKernel: No such kernel named julia-1.7
         <tr>
           <td class="col-result">Passed</td>
           <td class="col-name">examples/pump/test_pump.py::PumpTests::test_fmea_options</td>
-          <td class="col-duration">0.36</td>
+          <td class="col-duration">0.38</td>
           <td class="col-links"></td></tr>
         <tr>
           <td class="extra" colspan="4">
@@ -655,7 +655,7 @@ jupyter_client.kernelspec.NoSuchKernel: No such kernel named julia-1.7
         <tr>
           <td class="col-result">Passed</td>
           <td class="col-name">examples/pump/test_pump.py::PumpTests::test_model_copy_same</td>
-          <td class="col-duration">0.37</td>
+          <td class="col-duration">0.38</td>
           <td class="col-links"></td></tr>
         <tr>
           <td class="extra" colspan="4">
@@ -664,7 +664,7 @@ jupyter_client.kernelspec.NoSuchKernel: No such kernel named julia-1.7
         <tr>
           <td class="col-result">Passed</td>
           <td class="col-name">examples/pump/test_pump.py::PumpTests::test_model_reset</td>
-          <td class="col-duration">0.41</td>
+          <td class="col-duration">0.42</td>
           <td class="col-links"></td></tr>
         <tr>
           <td class="extra" colspan="4">
@@ -709,7 +709,7 @@ jupyter_client.kernelspec.NoSuchKernel: No such kernel named julia-1.7
         <tr>
           <td class="col-result">Passed</td>
           <td class="col-name">examples/pump/test_pump.py::PumpTests::test_save_load_approach</td>
-          <td class="col-duration">0.46</td>
+          <td class="col-duration">0.49</td>
           <td class="col-links"></td></tr>
         <tr>
           <td class="extra" colspan="4">
@@ -718,7 +718,7 @@ jupyter_client.kernelspec.NoSuchKernel: No such kernel named julia-1.7
         <tr>
           <td class="col-result">Passed</td>
           <td class="col-name">examples/pump/test_pump.py::PumpTests::test_save_load_approach_indiv</td>
-          <td class="col-duration">0.60</td>
+          <td class="col-duration">0.65</td>
           <td class="col-links"></td></tr>
         <tr>
           <td class="extra" colspan="4">
@@ -736,7 +736,7 @@ jupyter_client.kernelspec.NoSuchKernel: No such kernel named julia-1.7
         <tr>
           <td class="col-result">Passed</td>
           <td class="col-name">examples/pump/test_pump.py::PumpTests::test_save_load_nestedapproach</td>
-          <td class="col-duration">4.76</td>
+          <td class="col-duration">5.25</td>
           <td class="col-links"></td></tr>
         <tr>
           <td class="extra" colspan="4">
@@ -745,7 +745,7 @@ jupyter_client.kernelspec.NoSuchKernel: No such kernel named julia-1.7
         <tr>
           <td class="col-result">Passed</td>
           <td class="col-name">examples/pump/test_pump.py::PumpTests::test_save_load_nestedapproach_indiv</td>
-          <td class="col-duration">4.82</td>
+          <td class="col-duration">5.27</td>
           <td class="col-links"></td></tr>
         <tr>
           <td class="extra" colspan="4">
@@ -754,7 +754,7 @@ jupyter_client.kernelspec.NoSuchKernel: No such kernel named julia-1.7
         <tr>
           <td class="col-result">Passed</td>
           <td class="col-name">examples/pump/test_pump.py::PumpTests::test_save_load_nominal</td>
-          <td class="col-duration">0.04</td>
+          <td class="col-duration">0.05</td>
           <td class="col-links"></td></tr>
         <tr>
           <td class="extra" colspan="4">
@@ -763,7 +763,7 @@ jupyter_client.kernelspec.NoSuchKernel: No such kernel named julia-1.7
         <tr>
           <td class="col-result">Passed</td>
           <td class="col-name">examples/pump/test_pump.py::PumpTests::test_save_load_nominalapproach</td>
-          <td class="col-duration">0.27</td>
+          <td class="col-duration">0.31</td>
           <td class="col-links"></td></tr>
         <tr>
           <td class="extra" colspan="4">
@@ -772,7 +772,7 @@ jupyter_client.kernelspec.NoSuchKernel: No such kernel named julia-1.7
         <tr>
           <td class="col-result">Passed</td>
           <td class="col-name">examples/pump/test_pump.py::PumpTests::test_save_load_nominalapproach_indiv</td>
-          <td class="col-duration">0.32</td>
+          <td class="col-duration">0.38</td>
           <td class="col-links"></td></tr>
         <tr>
           <td class="extra" colspan="4">
@@ -781,7 +781,7 @@ jupyter_client.kernelspec.NoSuchKernel: No such kernel named julia-1.7
         <tr>
           <td class="col-result">Passed</td>
           <td class="col-name">examples/pump/test_pump.py::PumpTests::test_save_load_onefault</td>
-          <td class="col-duration">0.07</td>
+          <td class="col-duration">0.06</td>
           <td class="col-links"></td></tr>
         <tr>
           <td class="extra" colspan="4">
@@ -790,7 +790,7 @@ jupyter_client.kernelspec.NoSuchKernel: No such kernel named julia-1.7
         <tr>
           <td class="col-result">Passed</td>
           <td class="col-name">examples/pump/test_pump.py::PumpTests::test_save_load_singlefaults</td>
-          <td class="col-duration">0.56</td>
+          <td class="col-duration">0.61</td>
           <td class="col-links"></td></tr>
         <tr>
           <td class="extra" colspan="4">
@@ -799,7 +799,7 @@ jupyter_client.kernelspec.NoSuchKernel: No such kernel named julia-1.7
         <tr>
           <td class="col-result">Passed</td>
           <td class="col-name">examples/pump/test_pump.py::PumpTests::test_save_load_singlefaults_indiv</td>
-          <td class="col-duration">0.72</td>
+          <td class="col-duration">0.79</td>
           <td class="col-links"></td></tr>
         <tr>
           <td class="extra" colspan="4">
@@ -907,7 +907,7 @@ jupyter_client.kernelspec.NoSuchKernel: No such kernel named julia-1.7
         <tr>
           <td class="col-result">Passed</td>
           <td class="col-name">examples/pump/test_pump_example.py::Integration_Tests::test_blockage_results</td>
-          <td class="col-duration">0.03</td>
+          <td class="col-duration">0.04</td>
           <td class="col-links"></td></tr>
         <tr>
           <td class="extra" colspan="4">
@@ -925,7 +925,7 @@ jupyter_client.kernelspec.NoSuchKernel: No such kernel named julia-1.7
         <tr>
           <td class="col-result">Passed</td>
           <td class="col-name">examples/pump/test_pump_example.py::Integration_Tests::test_nominal_results</td>
-          <td class="col-duration">0.01</td>
+          <td class="col-duration">0.02</td>
           <td class="col-links"></td></tr>
         <tr>
           <td class="extra" colspan="4">
@@ -934,7 +934,7 @@ jupyter_client.kernelspec.NoSuchKernel: No such kernel named julia-1.7
         <tr>
           <td class="col-result">Passed</td>
           <td class="col-name">examples/pump/test_pump_stochastic.py::StochasticPumpTests::test_model_copy_different</td>
-          <td class="col-duration">0.24</td>
+          <td class="col-duration">0.26</td>
           <td class="col-links"></td></tr>
         <tr>
           <td class="extra" colspan="4">
@@ -943,7 +943,7 @@ jupyter_client.kernelspec.NoSuchKernel: No such kernel named julia-1.7
         <tr>
           <td class="col-result">Passed</td>
           <td class="col-name">examples/pump/test_pump_stochastic.py::StochasticPumpTests::test_model_copy_same</td>
-          <td class="col-duration">0.32</td>
+          <td class="col-duration">0.35</td>
           <td class="col-links"></td></tr>
         <tr>
           <td class="extra" colspan="4">
@@ -952,7 +952,7 @@ jupyter_client.kernelspec.NoSuchKernel: No such kernel named julia-1.7
         <tr>
           <td class="col-result">Passed</td>
           <td class="col-name">examples/pump/test_pump_stochastic.py::StochasticPumpTests::test_model_reset</td>
-          <td class="col-duration">0.42</td>
+          <td class="col-duration">0.44</td>
           <td class="col-links"></td></tr>
         <tr>
           <td class="extra" colspan="4">
@@ -961,7 +961,7 @@ jupyter_client.kernelspec.NoSuchKernel: No such kernel named julia-1.7
         <tr>
           <td class="col-result">Passed</td>
           <td class="col-name">examples/pump/test_pump_stochastic.py::StochasticPumpTests::test_run_approach</td>
-          <td class="col-duration">11.28</td>
+          <td class="col-duration">12.61</td>
           <td class="col-links"></td></tr>
         <tr>
           <td class="extra" colspan="4">
@@ -970,7 +970,7 @@ jupyter_client.kernelspec.NoSuchKernel: No such kernel named julia-1.7
         <tr>
           <td class="col-result">Passed</td>
           <td class="col-name">examples/pump/test_pump_stochastic.py::StochasticPumpTests::test_run_safety</td>
-          <td class="col-duration">2.14</td>
+          <td class="col-duration">2.27</td>
           <td class="col-links"></td></tr>
         <tr>
           <td class="extra" colspan="4">
@@ -979,7 +979,7 @@ jupyter_client.kernelspec.NoSuchKernel: No such kernel named julia-1.7
         <tr>
           <td class="col-result">Passed</td>
           <td class="col-name">examples/pump/test_pump_stochastic.py::StochasticPumpTests::test_save_load_nestedapproach</td>
-          <td class="col-duration">8.76</td>
+          <td class="col-duration">9.79</td>
           <td class="col-links"></td></tr>
         <tr>
           <td class="extra" colspan="4">
@@ -988,16 +988,19 @@ jupyter_client.kernelspec.NoSuchKernel: No such kernel named julia-1.7
         <tr>
           <td class="col-result">Passed</td>
           <td class="col-name">examples/pump/test_pump_stochastic.py::StochasticPumpTests::test_save_load_nestedapproach_indiv</td>
-          <td class="col-duration">9.68</td>
+          <td class="col-duration">9.96</td>
           <td class="col-links"></td></tr>
         <tr>
           <td class="extra" colspan="4">
-            <div class="empty log">No log output captured.</div></td></tr></tbody>
+            <div class="log"> ------------------------------Captured stdout call------------------------------ <br/>Faults found during the nominal run {&#x27;import_ee&#x27;: [&#x27;no_v&#x27;]}
+Faults found during the nominal run {&#x27;import_ee&#x27;: [&#x27;no_v&#x27;]}
+Faults found during the nominal run {&#x27;import_ee&#x27;: [&#x27;no_v&#x27;]}
+<br/></div></td></tr></tbody>
       <tbody class="passed results-table-row">
         <tr>
           <td class="col-result">Passed</td>
           <td class="col-name">examples/pump/test_pump_stochastic.py::StochasticPumpTests::test_save_load_nominalapproach</td>
-          <td class="col-duration">3.83</td>
+          <td class="col-duration">3.98</td>
           <td class="col-links"></td></tr>
         <tr>
           <td class="extra" colspan="4">
@@ -1006,7 +1009,7 @@ jupyter_client.kernelspec.NoSuchKernel: No such kernel named julia-1.7
         <tr>
           <td class="col-result">Passed</td>
           <td class="col-name">examples/pump/test_pump_stochastic.py::StochasticPumpTests::test_save_load_nominalapproach_indiv</td>
-          <td class="col-duration">3.92</td>
+          <td class="col-duration">3.99</td>
           <td class="col-links"></td></tr>
         <tr>
           <td class="extra" colspan="4">
@@ -1015,7 +1018,7 @@ jupyter_client.kernelspec.NoSuchKernel: No such kernel named julia-1.7
         <tr>
           <td class="col-result">Passed</td>
           <td class="col-name">examples/pump/test_pump_stochastic.py::StochasticPumpTests::test_set_seeds</td>
-          <td class="col-duration">0.01</td>
+          <td class="col-duration">0.03</td>
           <td class="col-links"></td></tr>
         <tr>
           <td class="extra" colspan="4">
@@ -1033,7 +1036,7 @@ jupyter_client.kernelspec.NoSuchKernel: No such kernel named julia-1.7
         <tr>
           <td class="col-result">Passed</td>
           <td class="col-name">examples/rover/Model_Structure_Visualization_Tutorial.ipynb::</td>
-          <td class="col-duration">14.75</td>
+          <td class="col-duration">15.38</td>
           <td class="col-links"></td></tr>
         <tr>
           <td class="extra" colspan="4">
@@ -1042,7 +1045,7 @@ jupyter_client.kernelspec.NoSuchKernel: No such kernel named julia-1.7
         <tr>
           <td class="col-result">Passed</td>
           <td class="col-name">examples/tank/Tank_Analysis.ipynb::</td>
-          <td class="col-duration">7.06</td>
+          <td class="col-duration">7.41</td>
           <td class="col-links"></td></tr>
         <tr>
           <td class="extra" colspan="4">
@@ -1051,7 +1054,7 @@ jupyter_client.kernelspec.NoSuchKernel: No such kernel named julia-1.7
         <tr>
           <td class="col-result">Passed</td>
           <td class="col-name">examples/tank/Tank_Optimization.ipynb::</td>
-          <td class="col-duration">789.47</td>
+          <td class="col-duration">246.58</td>
           <td class="col-links"></td></tr>
         <tr>
           <td class="extra" colspan="4">
@@ -1060,7 +1063,7 @@ jupyter_client.kernelspec.NoSuchKernel: No such kernel named julia-1.7
         <tr>
           <td class="col-result">Passed</td>
           <td class="col-name">examples/tank/test_tank.py::TankTests::test_approach</td>
-          <td class="col-duration">0.39</td>
+          <td class="col-duration">0.36</td>
           <td class="col-links"></td></tr>
         <tr>
           <td class="extra" colspan="4">
@@ -1069,7 +1072,7 @@ jupyter_client.kernelspec.NoSuchKernel: No such kernel named julia-1.7
         <tr>
           <td class="col-result">Passed</td>
           <td class="col-name">examples/tank/test_tank.py::TankTests::test_approach_parallelism_0</td>
-          <td class="col-duration">3.09</td>
+          <td class="col-duration">3.10</td>
           <td class="col-links"></td></tr>
         <tr>
           <td class="extra" colspan="4">
@@ -1078,7 +1081,7 @@ jupyter_client.kernelspec.NoSuchKernel: No such kernel named julia-1.7
         <tr>
           <td class="col-result">Passed</td>
           <td class="col-name">examples/tank/test_tank.py::TankTests::test_approach_parallelism_1</td>
-          <td class="col-duration">3.35</td>
+          <td class="col-duration">3.45</td>
           <td class="col-links"></td></tr>
         <tr>
           <td class="extra" colspan="4">
@@ -1087,7 +1090,7 @@ jupyter_client.kernelspec.NoSuchKernel: No such kernel named julia-1.7
         <tr>
           <td class="col-result">Passed</td>
           <td class="col-name">examples/tank/test_tank.py::TankTests::test_approach_parallelism_notrack</td>
-          <td class="col-duration">3.37</td>
+          <td class="col-duration">3.07</td>
           <td class="col-links"></td></tr>
         <tr>
           <td class="extra" colspan="4">
@@ -1123,7 +1126,7 @@ jupyter_client.kernelspec.NoSuchKernel: No such kernel named julia-1.7
         <tr>
           <td class="col-result">Passed</td>
           <td class="col-name">examples/tank/test_tank.py::TankTests::test_local_tstep</td>
-          <td class="col-duration">0.05</td>
+          <td class="col-duration">0.04</td>
           <td class="col-links"></td></tr>
         <tr>
           <td class="extra" colspan="4">
@@ -1132,7 +1135,7 @@ jupyter_client.kernelspec.NoSuchKernel: No such kernel named julia-1.7
         <tr>
           <td class="col-result">Passed</td>
           <td class="col-name">examples/tank/test_tank.py::TankTests::test_model_copy_different</td>
-          <td class="col-duration">0.20</td>
+          <td class="col-duration">0.18</td>
           <td class="col-links"></td></tr>
         <tr>
           <td class="extra" colspan="4">
@@ -1141,7 +1144,7 @@ jupyter_client.kernelspec.NoSuchKernel: No such kernel named julia-1.7
         <tr>
           <td class="col-result">Passed</td>
           <td class="col-name">examples/tank/test_tank.py::TankTests::test_model_copy_same</td>
-          <td class="col-duration">0.28</td>
+          <td class="col-duration">0.26</td>
           <td class="col-links"></td></tr>
         <tr>
           <td class="extra" colspan="4">
@@ -1150,7 +1153,7 @@ jupyter_client.kernelspec.NoSuchKernel: No such kernel named julia-1.7
         <tr>
           <td class="col-result">Passed</td>
           <td class="col-name">examples/tank/test_tank.py::TankTests::test_model_reset</td>
-          <td class="col-duration">0.28</td>
+          <td class="col-duration">0.26</td>
           <td class="col-links"></td></tr>
         <tr>
           <td class="extra" colspan="4">
@@ -1159,7 +1162,7 @@ jupyter_client.kernelspec.NoSuchKernel: No such kernel named julia-1.7
         <tr>
           <td class="col-result">Passed</td>
           <td class="col-name">examples/tank/test_tank.py::TankTests::test_save_load_approach</td>
-          <td class="col-duration">0.40</td>
+          <td class="col-duration">0.33</td>
           <td class="col-links"></td></tr>
         <tr>
           <td class="extra" colspan="4">
@@ -1168,7 +1171,7 @@ jupyter_client.kernelspec.NoSuchKernel: No such kernel named julia-1.7
         <tr>
           <td class="col-result">Passed</td>
           <td class="col-name">examples/tank/test_tank.py::TankTests::test_save_load_approach_indiv</td>
-          <td class="col-duration">0.45</td>
+          <td class="col-duration">0.46</td>
           <td class="col-links"></td></tr>
         <tr>
           <td class="extra" colspan="4">
@@ -1177,7 +1180,7 @@ jupyter_client.kernelspec.NoSuchKernel: No such kernel named julia-1.7
         <tr>
           <td class="col-result">Passed</td>
           <td class="col-name">examples/tank/test_tank.py::TankTests::test_save_load_multfault</td>
-          <td class="col-duration">0.05</td>
+          <td class="col-duration">0.04</td>
           <td class="col-links"></td></tr>
         <tr>
           <td class="extra" colspan="4">
@@ -1186,7 +1189,7 @@ jupyter_client.kernelspec.NoSuchKernel: No such kernel named julia-1.7
         <tr>
           <td class="col-result">Passed</td>
           <td class="col-name">examples/tank/test_tank.py::TankTests::test_save_load_nestedapproach</td>
-          <td class="col-duration">3.57</td>
+          <td class="col-duration">3.37</td>
           <td class="col-links"></td></tr>
         <tr>
           <td class="extra" colspan="4">
@@ -1204,7 +1207,7 @@ jupyter_client.kernelspec.NoSuchKernel: No such kernel named julia-1.7
         <tr>
           <td class="col-result">Passed</td>
           <td class="col-name">examples/tank/test_tank.py::TankTests::test_save_load_nominal</td>
-          <td class="col-duration">0.04</td>
+          <td class="col-duration">0.05</td>
           <td class="col-links"></td></tr>
         <tr>
           <td class="extra" colspan="4">
@@ -1213,7 +1216,7 @@ jupyter_client.kernelspec.NoSuchKernel: No such kernel named julia-1.7
         <tr>
           <td class="col-result">Passed</td>
           <td class="col-name">examples/tank/test_tank.py::TankTests::test_save_load_nominalapproach</td>
-          <td class="col-duration">0.18</td>
+          <td class="col-duration">0.19</td>
           <td class="col-links"></td></tr>
         <tr>
           <td class="extra" colspan="4">
@@ -1222,7 +1225,7 @@ jupyter_client.kernelspec.NoSuchKernel: No such kernel named julia-1.7
         <tr>
           <td class="col-result">Passed</td>
           <td class="col-name">examples/tank/test_tank.py::TankTests::test_save_load_nominalapproach_indiv</td>
-          <td class="col-duration">0.24</td>
+          <td class="col-duration">0.26</td>
           <td class="col-links"></td></tr>
         <tr>
           <td class="extra" colspan="4">
@@ -1240,7 +1243,7 @@ jupyter_client.kernelspec.NoSuchKernel: No such kernel named julia-1.7
         <tr>
           <td class="col-result">Passed</td>
           <td class="col-name">examples/tank/test_tank.py::TankTests::test_save_load_singlefaults</td>
-          <td class="col-duration">1.34</td>
+          <td class="col-duration">1.29</td>
           <td class="col-links"></td></tr>
         <tr>
           <td class="extra" colspan="4">
@@ -1249,7 +1252,7 @@ jupyter_client.kernelspec.NoSuchKernel: No such kernel named julia-1.7
         <tr>
           <td class="col-result">Passed</td>
           <td class="col-name">examples/tank/test_tank.py::TankTests::test_save_load_singlefaults_indiv</td>
-          <td class="col-duration">1.87</td>
+          <td class="col-duration">1.92</td>
           <td class="col-links"></td></tr>
         <tr>
           <td class="extra" colspan="4">
@@ -1267,7 +1270,7 @@ jupyter_client.kernelspec.NoSuchKernel: No such kernel named julia-1.7
         <tr>
           <td class="col-result">Passed</td>
           <td class="col-name">examples/tank/test_tank_opt.py::TankOptTests::test_same_rcost</td>
-          <td class="col-duration">3.61</td>
+          <td class="col-duration">3.62</td>
           <td class="col-links"></td></tr>
         <tr>
           <td class="extra" colspan="4">
@@ -1276,15 +1279,6 @@ jupyter_client.kernelspec.NoSuchKernel: No such kernel named julia-1.7
         <tr>
           <td class="col-result">Passed</td>
           <td class="col-name">tests/test_graph.py::ModelGraphTests::test_fault_plot</td>
-          <td class="col-duration">0.10</td>
-          <td class="col-links"></td></tr>
-        <tr>
-          <td class="extra" colspan="4">
-            <div class="empty log">No log output captured.</div></td></tr></tbody>
-      <tbody class="passed results-table-row">
-        <tr>
-          <td class="col-result">Passed</td>
-          <td class="col-name">tests/test_graph.py::ModelGraphTests::test_flowgraph_plot</td>
           <td class="col-duration">0.08</td>
           <td class="col-links"></td></tr>
         <tr>
@@ -1293,8 +1287,17 @@ jupyter_client.kernelspec.NoSuchKernel: No such kernel named julia-1.7
       <tbody class="passed results-table-row">
         <tr>
           <td class="col-result">Passed</td>
+          <td class="col-name">tests/test_graph.py::ModelGraphTests::test_flowgraph_plot</td>
+          <td class="col-duration">0.07</td>
+          <td class="col-links"></td></tr>
+        <tr>
+          <td class="extra" colspan="4">
+            <div class="empty log">No log output captured.</div></td></tr></tbody>
+      <tbody class="passed results-table-row">
+        <tr>
+          <td class="col-result">Passed</td>
           <td class="col-name">tests/test_graph.py::ModelGraphTests::test_fxngraph_plot</td>
-          <td class="col-duration">0.19</td>
+          <td class="col-duration">0.24</td>
           <td class="col-links"></td></tr>
         <tr>
           <td class="extra" colspan="4">
@@ -1321,7 +1324,7 @@ jupyter_client.kernelspec.NoSuchKernel: No such kernel named julia-1.7
         <tr>
           <td class="col-result">Passed</td>
           <td class="col-name">tests/test_graph.py::ModelGraphTests::test_typegraph_plot</td>
-          <td class="col-duration">0.04</td>
+          <td class="col-duration">0.03</td>
           <td class="col-links"></td></tr>
         <tr>
           <td class="extra" colspan="4">

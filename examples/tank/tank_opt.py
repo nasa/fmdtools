@@ -85,11 +85,10 @@ def bilevel_opt(pool=False, xdes=[21,.5], maxiter=1000):
     args = {'seed':seedpop(), 'll_opt':1e6, 'll_optx':[], 'fhist':[],'thist':[],'starttime':time.time(), 'xdhist':[xdes]}
     result = minimize(lower_level, xdes,
                       method='Nelder-Mead',
-                      maxiter=maxiter
                       bounds =((10, 100),(0,1)),
                       callback=callbackF1,
                       args = args,
-                      options={'disp':True, 'adaptive':True, 'fatol':10, 'xtol':0.00001})
+                      options={'disp': True, 'adaptive': True, 'fatol': 10, 'xtol': 0.00001, 'maxiter':maxiter})
     fullfhist = args['fhist']; fullxdhist = args['xdhist']
     bestfhist=  [fullfhist[0]]+[min(fullfhist[:i]) for i,f in enumerate(fullfhist) if i!=0]
     bestxdhist = [fullxdhist[0]]+[fullxdhist[np.argmin(fullfhist[:i])] for i,f in enumerate(fullfhist) if i!=0]
