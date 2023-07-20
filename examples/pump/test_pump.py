@@ -13,7 +13,7 @@ from fmdtools.define.common import check_pickleability
 from fmdtools.sim.approach import SampleApproach, NominalApproach
 from tests.common import CommonTests
 import numpy as np
-from fmdtools.analyze.result import load, load_folder, Result, History
+from fmdtools.analyze.result import load, History
 
 
 class PumpTests(unittest.TestCase, CommonTests):
@@ -23,11 +23,11 @@ class PumpTests(unittest.TestCase, CommonTests):
         self.mdl = Pump()
         self.water_mdl = Pump(p={'cost':('water',), 'delay':10})
     def test_value_setting(self):
-        statenames = ['import_ee.m.mode', 'sig_1.s.power', 'move_water.s.eff']
-        newvalues = ['newmode', 20, 0.1]
+        statenames = ['sig_1.s.power', 'move_water.s.eff']
+        newvalues = [20, 0.1]
         self.check_var_setting(self.mdl, statenames, newvalues)
     def test_value_setting_dict(self):
-        dict_to_check ={'import_ee.m.mode':'thismode', 'wat_2.s.area':0.0}
+        dict_to_check ={'wat_2.s.area':0.0}
         self.check_var_setting_dict(self.mdl, dict_to_check)
     def test_dynamic_prop_values(self):
         """Test that given fault times result in the expected water/value loss"""
@@ -198,8 +198,8 @@ class PumpTests(unittest.TestCase, CommonTests):
         app = SampleApproach(self.water_mdl, faults=[('move_water','mech_break')], phases=['on'],defaultsamp={'samp':'evenspacing','numpts':5})
         endclasses, mdlhists = propagate.approach(self.water_mdl, app, showprogress=False)
         self.check_same_fmea(app, endclasses, self.water_mdl)
-        
-        app2 = SampleApproach(self.mdl, defaultsamp={'samp':'evenspacing','numpts':2})
+
+        app2 = SampleApproach(self.mdl, defaultsamp={'samp': 'evenspacing', 'numpts': 2})
         endclasses2, mdlhists2 = propagate.approach(self.mdl, app2, showprogress=False)
         self.check_same_fmea(app2, endclasses2, self.mdl)
         

@@ -15,6 +15,7 @@ Description: A module to define Functions, Components, Actions, and other classe
 - :func:`assoc_flows`:  Associates flows with the given object (Block, ASG, etc.) 
 - :func:`inject_faults_internal`: Injects faults in the CompArch/ASG object obj.
 """
+from typing import ClassVar
 from decimal import Decimal
 import sys
 import itertools
@@ -678,7 +679,7 @@ class Component(Block):
 
 class CompArch(dataobject, mapping=True):
     """Container for holding component architectures"""
-    archtype: str = 'default'
+    archtype: ClassVar[str] = 'default'
     components: dict = dict()
     faultmodes: dict = dict()
     default_track = ('i', 'components')

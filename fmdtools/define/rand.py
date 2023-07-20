@@ -11,19 +11,20 @@ Description: A module for defining randon properties for use in blocks. Has Clas
 - :func:`get_pdf_for_dist`:     Gets the corresponding probability mass/density (from scipy) for outcome x 
                                 for probability distributions with name 'randname' in numpy.
 """
-
+from typing import ClassVar
 from scipy import stats 
 from recordclass import dataobject, asdict, astuple
 import numpy as np
 from .common import get_true_fields, get_true_field, get_dataobj_track
 import copy
 
-from fmdtools.analyze.result import History, get_sub_include, init_hist_iter
+from fmdtools.analyze.result import History, init_hist_iter
+
 
 class Rand(dataobject, mapping=True):
     """
-    Class for defining and interacting with random states of the model. 
-    
+    Class for defining and interacting with random states of the model.
+
     Attributes
     ----------
     rng : np.random.default_rng
@@ -32,24 +33,25 @@ class Rand(dataobject, mapping=True):
         probability of the given states
     seed : int
         state for the random number generator
-    
+
     Rand is meant to be extended in model definition with random states, e.g.:
-        
+
     class RandState(State):
         noise: float=1.0
     class ExampleRand(Rand):
         s= RandState()
         run_stochastic:     bool=True
-        
+
     Which enables the use of set_rand, update_stochastic_states, etc for updating
     these states with methods called from the rng.
     """
-    rng:            np.random.default_rng
-    probs:          list = list()
-    probdens:       float = 1.0
-    seed:           int =   42
-    run_stochastic: bool=False
+    rng: np.random.default_rng
+    probs: list = list()
+    probdens: float = 1.0
+    seed: int = 42
+    run_stochastic: bool = False
     default_track = ('s', 'probdens')
+
     def __init__(self, *args, seed=42, run_stochastic=False, probs = list(), s_kwargs={}):
         args = get_true_fields(self, *args, seed=seed, run_stochastic=run_stochastic, probs=probs)
         super().__init__(*args)

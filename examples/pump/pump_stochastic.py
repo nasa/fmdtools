@@ -26,7 +26,7 @@ class ImportEERandState(State):
     grid_noise: float=1.0
 class ImportEERand(Rand):
     s= ImportEERandState()
-    run_stochastic:     bool=True
+
 class ImportEE(DetImportEE):
     __slots__=()
     _init_r = ImportEERand
@@ -47,7 +47,7 @@ class ImportSigRandState(State):
     sig_noise : float = 1.0
 class ImportSigRand(Rand):
     s=ImportSigRandState()
-    run_stochastic:     bool=True
+
 class ImportSig(DetImportSig):
     __slots__=()
     _init_r=ImportSigRand
@@ -75,7 +75,7 @@ class MoveWatRandState(State):
     eff_update = ('normal', (1.0, 0.2))
 class MoveWatRand(Rand):
     s=MoveWatRandState()
-    run_stochastic: bool=True
+
 class MoveWat(DetMoveWat):
     __slots__=()
     _init_s = MoveWatStates
