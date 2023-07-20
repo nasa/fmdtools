@@ -1,17 +1,18 @@
 # -*- coding: utf-8 -*-
 """
 Description: A module for defining time-based properties for use in blocks. Has Classes:
-    
+
 - :class:`Timer`: Class defining timers
 - :class:`Time`: Class containing all time-related Block constructs (e.g., timers).
 """
 from decimal import Decimal
 from recordclass import dataobject
-from fmdtools.analyze.result import History, init_hist_iter, get_sub_include
-from .common import  get_dataobj_track, get_obj_track
+from fmdtools.analyze.result import History, get_sub_include
+from .common import get_dataobj_track, get_obj_track
+
 
 class Timer():
-    """class for model timers used in functions (e.g. for conditional faults) 
+    """class for model timers used in functions (e.g. for conditional faults)
     Attributes
     ----------
     name : str
@@ -24,6 +25,7 @@ class Timer():
         the internal state of the timer
     """
     default_track = ('time', 'mode')
+
     def __init__(self, name):
         """
         Initializes the Tymer
@@ -37,29 +39,34 @@ class Timer():
         self.time = 0.0
         self.tstep = -1.0
         self.mode = 'standby'
+
     def __repr__(self):
         return 'Timer ' + self.name + ': mode= ' + self.mode + ', time= ' + str(self.time)
+
     def t(self):
         """ Returns the time elapsed """
         return self.time
+
     def inc(self, tstep=[]):
         """ Increments the time elapsed by tstep"""
-        if self.time>=0.0:
-            if tstep: 
+        if self.time >= 0.0:
+            if tstep:
                 self.time += tstep
-            else: 
+            else:
                 self.time += self.tstep
             self.mode = 'ticking'
-        if self.time <= 0: 
-            self.time = 0.0 
+        if self.time <= 0:
+            self.time = 0.0
             self.mode = 'complete'
+
     def reset(self):
         """ Resets the time to zero"""
         self.time = 0.0
         self.mode = 'standby'
-    def set_timer(self,time, tstep=-1.0, overwrite='always'):
+
+    def set_timer(self, time, tstep=-1.0, overwrite='always'):
         """ Sets timer to a given time
-        
+
         Parameters
         ----------
         time : float
@@ -74,36 +81,42 @@ class Timer():
             'never' doesn't overwrite an existing timer unless it has reached 0.0
             'increment' increments the previous time by the new time
         """
-        if overwrite == 'always': 
+        if overwrite == 'always':
             self.time = time
         elif overwrite == 'if_more' and self.time < time:
             self.time = time
-        elif overwrite == 'if_less' and self.time > time: 
+        elif overwrite == 'if_less' and self.time > time:
             self.time = time
-        elif overwrite == 'never' and self.time == 0.0: 
+        elif overwrite == 'never' and self.time == 0.0:
             self.time = time
-        elif overwrite == 'increment': 
+        elif overwrite == 'increment':
             self.time += time
         self.tstep = tstep
         self.mode = 'set'
+
     def in_standby(self):
         """Whether the timer is in standby (time has not been set)"""
         return self.mode == 'standby'
+
     def is_ticking(self):
         """Whether the timer is ticking (time is incrementing)"""
         return self.mode == 'ticking'
+
     def is_complete(self):
         """Whether the timer is complete (after time is done incrementing)"""
         return self.mode == 'complete'
+
     def is_set(self):
         """Whether the timer is set (before time increments)"""
         return self.mode == 'set'
+
     def copy(self):
         cop = self.__class__(self.name)
         cop.time = self.time
         cop.mode = self.mode
         cop.dt = self.dt
         return cop
+
     def create_hist(self, timerange, track):
         h = History()
         track = get_obj_track(self, track, all_possible=('time', 'mode'))
@@ -111,10 +124,11 @@ class Timer():
         h.init_att('mode', self.mode, timerange=timerange, track=track, str_size='<U8')
         return h
 
+
 class Time(dataobject):
     """
-    Class for defining all time-based aspects of a Block (e.g., time, timestep, timers). 
-    
+    Class for defining all time-based aspects of a Block (e.g., time, timestep, timers).
+
     Attributes
     ----------
     time : float
@@ -126,7 +140,8 @@ class Time(dataobject):
     t_loc : float
         local time (e.g., for actions with durations)
     run_times : int
-        number of times to run the behavior if running at a different timestep than global
+        number of times to run the behavior if running at a different timestep than
+        global
     timers : dict
         dictionary of instantiated timers
     use_local : bool
@@ -137,12 +152,13 @@ class Time(dataobject):
     time: float = 0.0
     dt: float = 1.0
     t_ind: int = 0
-    t_loc: float=0.0
+    t_loc: float = 0.0
     run_times: int = 1
     timers: dict = {}
     use_local: bool = True
     timernames = ()
     default_track = ('timers')
+
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         if not self.timers:
@@ -150,33 +166,45 @@ class Time(dataobject):
         for timername in self.timernames:
             self.timers[timername] = Timer(timername)
         self.set_timestep()
+
     def __getattr__(self, item):
         if item in self.timers:
             return self.timers[item]
         else:
             return super().__getattribute__(item)
+
     def return_mutables(self):
-        return (*(t.time for t in self.timers.values()), self.time, self.t_ind, self.t_loc, self.run_times)
+        return (*(t.time for t in self.timers.values()),
+                self.time,
+                self.t_ind,
+                self.t_loc,
+                self.run_times)
+
     def set_timestep(self):
-        """Sets the timestep of the function given the option use_local 
+        """Sets the timestep of the function given the option use_local
         (which selects whether it uses local_timestep or global_timestep)"""
         global_tstep = Decimal(str(self.dt))
         local_tstep = Decimal(str(self.__defaults__[self.__fields__.index('dt')]))
         if self.use_local:
-            dt=local_tstep
+            dt = local_tstep
             if dt < global_tstep:
-                if global_tstep%dt:
-                    raise Exception("Local timestep: "+str(dt)+" doesn't line up with global timestep: "+str(global_tstep))
+                if global_tstep % dt:
+                    raise Exception("Local timestep: " + str(dt) +
+                                    " doesn't line up with global timestep: " +
+                                    str(global_tstep))
             else:
-                if dt%global_tstep:
-                    raise Exception("Local timestep: "+str(dt)+" doesn't line up with global timestep: "+str(global_tstep))
+                if dt % global_tstep:
+                    raise Exception(
+                        "Local timestep: " + str(dt) +
+                        " doesn't line up with global timestep: " + str(global_tstep))
             self.run_times = int(global_tstep/dt)
-        else:   
-            dt=global_tstep
-            self.run_times=1
+        else:
+            dt = global_tstep
+            self.run_times = 1
         self.dt = float(dt)
         for timer in self.timers.values():
-            timer.dt=-self.dt
+            timer.dt = -self.dt
+
     def reset(self):
         """Resets time to the initial state"""
         self.time = 0.0
@@ -184,6 +212,7 @@ class Time(dataobject):
         self.t_loc = 0.0
         for timer in self.timers.values():
             timer.reset()
+
     def copy(self, *args, **t_args):
         """ Copies the timer"""
         cop = self.__class__(*args, **t_args)
@@ -195,6 +224,7 @@ class Time(dataobject):
         cop.t_loc = self.t_loc
         cop.dt = self.dt
         return cop
+
     def create_hist(self, timerange, track):
         """
         Creates a History corresponding to Time
@@ -204,8 +234,8 @@ class Time(dataobject):
         timerange : iterable, optional
             Time-range to initialize the history over. The default is None.
         track : list/str/dict, optional
-            argument specifying attributes for :func:`get_sub_include'. The default is None.
-                DESCRIPTION. The default is None.
+            argument specifying attributes for :func:`get_sub_include'.
+            The default is None.
 
         Returns
         -------
