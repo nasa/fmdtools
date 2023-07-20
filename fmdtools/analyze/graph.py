@@ -1213,9 +1213,9 @@ class Graph(object):
                                                                     num_fail_average)
             num_fix_lower_error, num_fix_upper_error = data_error(num_fix_all_trials,
                                                                   num_fix_average)
-            num_susc_asymmetric_error = [num_susc_lower_error, num_susc_upper_error]
-            num_fail_asymmetric_error = [num_fail_lower_error, num_fail_upper_error]
-            num_fix_asymmetric_error = [num_fix_lower_error, num_fix_upper_error]
+            num_susc_asymmetric_error = np.abs([num_susc_lower_error, num_susc_upper_error])
+            num_fail_asymmetric_error = np.abs([num_fail_lower_error, num_fail_upper_error])
+            num_fix_asymmetric_error = np.abs([num_fix_lower_error, num_fix_upper_error])
             plt.errorbar(time_list, num_susc_average,
                          yerr=num_susc_asymmetric_error, fmt='-o', label='Susceptible')
             plt.errorbar(time_list, num_fail_average,

@@ -78,18 +78,25 @@ def lower_level(xdes, args):
     print('time: '+str(t)+' fval: '+str(f)+' xdes: '+str(xdes))
     return do_cost + rcost
 ##Bilevel optimization method
-def bilevel_opt(pool=False, xdes=[21,.5]):
+def bilevel_opt(pool=False, xdes=[21,.5], maxiter=1000):
     prob.clear()
-    if pool: prob.update_sim_options("res_sim", pool=pool)
+    if pool:
+        prob.update_sim_options("res_sim", pool=pool)
     args = {'seed':seedpop(), 'll_opt':1e6, 'll_optx':[], 'fhist':[],'thist':[],'starttime':time.time(), 'xdhist':[xdes]}
-    result = minimize(lower_level, xdes, method='Nelder-Mead', bounds =((10, 100),(0,1)), callback=callbackF1, args = args, options={'disp':True, 'adaptive':True, 'fatol':10, 'xtol':0.00001})
+    result = minimize(lower_level, xdes,
+                      method='Nelder-Mead',
+                      maxiter=maxiter
+                      bounds =((10, 100),(0,1)),
+                      callback=callbackF1,
+                      args = args,
+                      options={'disp':True, 'adaptive':True, 'fatol':10, 'xtol':0.00001})
     fullfhist = args['fhist']; fullxdhist = args['xdhist']
     bestfhist=  [fullfhist[0]]+[min(fullfhist[:i]) for i,f in enumerate(fullfhist) if i!=0]
     bestxdhist = [fullxdhist[0]]+[fullxdhist[np.argmin(fullfhist[:i])] for i,f in enumerate(fullfhist) if i!=0]
     return result, args, bestfhist, bestxdhist
 
 ##Alternating optimization method
-def alternating_opt(option='with_cr', pool=False, xdes=[21,.5]):
+def alternating_opt(option='with_cr', pool=False, xdes=[21,.5], max_alts = 10):
     prob.clear()
     xdes = np.array(xdes)
     args = {'seed':seedpop(), 'll_opt':1e6, 'll_optx':[]}
@@ -102,7 +109,7 @@ def alternating_opt(option='with_cr', pool=False, xdes=[21,.5]):
     fhist = [prob.tot_cost(xdes, [*bestsol[0], *bestsol[1]])]
     thist = [0]
     xdhist = [xdes]
-    for n in range(10):
+    for n in range(max_alts):
         if option=='with_cr':   result = minimize(prob.tot_cost, [np.round(xdes[0],1), np.round(xdes[1],1)], method='Nelder-Mead', bounds =((10, 100),(0,1)), callback=callbackF1, args = ([*bestsol[0],*bestsol[1]]), options={'disp':True})
         else:                   result = minimize(prob.cd, [np.round(xdes[0],1), np.round(xdes[1],1)], method='Nelder-Mead', bounds =((10, 100),(0,1)), callback=callbackF1, options={'disp':True})
         xdes = result['x']
