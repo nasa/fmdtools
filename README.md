@@ -33,47 +33,67 @@ fmdtools requires Python 3 (anaconda recommended) and depends directly on these 
 
 ```
 scipy
+# license: (BSD-new) https://www.scipy.org/scipylib/license.html
 tqdm
+# license: (mixed) https://github.com/tqdm/tqdm/blob/master/LICENCE
 networkx
+# license: (BSD-new) https://raw.githubusercontent.com/networkx/networkx/master/LICENSE.txt
 numpy
+# license: (BSD) https://numpy.org/doc/stable/license.html
 matplotlib
+# license: (mixed) https://matplotlib.org/stable/users/license.html
 pandas
+# license: (BSD 3-clause) https://pandas.pydata.org/pandas-docs/stable/getting_started/overview.html#license
 ordered-set
+# license: (MIT) https://github.com/rspeer/ordered-set/blob/master/MIT-LICENSE
 dill 
+# license: (MIT) https://github.com/uqfoundation/dill/blob/master/LICENSE
 recordclass >=0.14.4
+# license: (MIT) https://bitbucket.org/intellimath/recordclass/src/master/LICENSE.txt
 pytest
+# license: (MIT) https://docs.pytest.org/en/7.3.x/license.html
 graphviz
+# license: (MIT) https://github.com/xflr6/graphviz/blob/master/LICENSE.txt
 ```
 
 These external (non-python) packages are recommended to enable specific fmdtools use-cases and to test/develop fmdtools as well as work with examples in the repository:
 
 ```
-# (for repository notebooks)
 jupyter notebook
-# (to plot using graphviz options)
+# used for: repository notebooks
+# license: (BSD-3) https://jupyter.org/governance/projectlicense.html
 graphviz
-# (for interactive html views of model graphs)
+# used for: plotting graphs using graphviz
+# license: (CPL 1.0) https://graphviz.org/license/ 
 pyvis
-# (for animations)
+# used for: interactive html views of model graphs
+# license: (BSD-3)
 ffmpeg
+# used for: animations in demo notebook(s)
+# license: (LGPL version) https://www.ffmpeg.org/legal.html
 ```
 
 These must be installed within the system environment (e.g. using ``conda install packagename``) them to enable the specific features/uses in the repository. 
 
 Additionally, the following python packages are not included but are necessary for development/testing of the code:
 ```
-# (for multirotor model)
 shapely
-# (for optimization of rover faults)
-deap						
-# (for notebook tests)
-nbmake                
-# (for test report generation)
-pytest-html
-# (for parallism tutorial profiling)
-multiprocess          
-# (for parallelism tutorial profiling)
+# used for: multirotor model
+# license: (BSD 3-clause) https://github.com/shapely/shapely/blob/main/LICENSE.txt
+deap
+# used for: optimization of rover faults
+# license: (LGPL-3.0) https://github.com/DEAP/deap/blob/master/LICENSE.txt
+nbmake
+# used for: for notebook tests
+# license: (Apache 2.0) https://github.com/treebeardtech/nbmake/blob/main/LICENSE
+pytest-html  
+# used for: development test report generation
+multiprocess
+# used for: parallism tutorial profiling
+# license: (BSD-3 Clause) https://github.com/uqfoundation/multiprocess/blob/master/LICENSE      
 pathos          
+# used for: parallelism tutorial profiling
+# license: (BSD-3 Clause) https://github.com/uqfoundation/pathos/blob/master/LICENSE 
 ```
 They can be installed using ``pip install packagename``.
 
