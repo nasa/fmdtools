@@ -42,7 +42,7 @@ ordered-set
 dill 
 recordclass >=0.14.4
 pytest
-pygraphviz
+graphviz
 ```
 
 These external (non-python) packages are recommended to enable specific fmdtools use-cases and to test/develop fmdtools as well as work with examples in the repository:
