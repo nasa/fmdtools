@@ -28,7 +28,7 @@ The pump example model is located in `examples/pump/ex_pump.py`, which is then u
   
   - Different options for history tracking and staged execution which can reduce computational costs when desired.
   
-  - Profiling models with ``cProfile`` and ``pycallgraph2`` to discover what parts are most computationally-expensive.
+  - Profiling models with ``cProfile`` to discover what parts are most computationally-expensive.
 
 - `Optimization <../examples/pump/Optimization.ipynb>`_, shows some of the basics of working with the :class:`fmdtools.sim.search.ProblemInterface` class for optimization. 
 

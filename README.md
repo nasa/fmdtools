@@ -66,8 +66,6 @@ Additionally, the following python packages are not included but are necessary f
 shapely
 # (for optimization of rover faults)
 deap						
-# (for model profiling)
-pycallgraph2
 # (for notebook tests)
 nbmake                
 # (for test report generation)
