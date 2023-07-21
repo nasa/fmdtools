@@ -9,4 +9,4 @@ ordered-set
 dill
 recordclass >= 0.14.4
 pytest
-pygraphviz
+graphviz
