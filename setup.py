@@ -13,7 +13,7 @@ required = ["scipy",
             "dill",
             "recordclass",
             "pytest",
-            "pygraphviz"]
+            "graphviz"]
 
 setuptools.setup(
     name="fmdtools",
