@@ -183,6 +183,8 @@ class MultiFlow(Flow):
             view = self
         elif name == "global": 
             view = self.glob
+        elif name == "out":
+            view = getattr(self.glob, self.name + "_out")
         elif name in getattr(self, 'locals',[]): 
             view = getattr(self, name)
         else:
