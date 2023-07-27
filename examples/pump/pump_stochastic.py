@@ -189,8 +189,21 @@ if __name__ == "__main__":
     comp_mdlhists = mdlhists.get_scens('export_water_block_t27p0')
     comp_groups = {'delay_1': app_comp.ranges['delay_1']['scenarios'],
                    'delay_10': app_comp.ranges['delay_10']['scenarios']}
-    fig = an.plot.hist(comp_mdlhists, 'fxns.move_water.s.eff', 'fxns.move_water.s.total_flow', 'flows.wat_2.s.flowrate', 'flows.wat_2.s.pressure',
-                       comp_groups=comp_groups, aggregation='percentile', time_slice=27)
+    fig = an.plot.hist(comp_mdlhists,
+                       'fxns.move_water.s.eff',
+                       'fxns.move_water.s.total_flow',
+                       'flows.wat_2.s.flowrate',
+                       'flows.wat_2.s.pressure',
+                       comp_groups=comp_groups,
+                       aggregation='percentile',
+                       time_slice=27)
+
+    fig = an.plot.hist(comp_mdlhists,
+                       'fxns.move_water.s.eff',
+                       'fxns.move_water.s.total_flow',
+                       'flows.wat_2.s.flowrate',
+                       'flows.wat_2.s.pressure',
+                       aggregation='percentile', time_slice=27)
 
     app = NominalApproach()
     app.add_param_replicates(paramfunc, 'no_delay', 100, (0))
