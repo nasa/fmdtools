@@ -2,31 +2,44 @@
 Description: Plots quantities of interest over time using matplotlib.
 
 Uses the following methods:
-    - :func:`hist`:         plots function and flow histories over time (with different plots for each function/flow)
-    - :func:`plot_line_and_err`: Plots a line with a given range of uncertainty around it.         
-    - :func:`plot_err_lines`:    Plots error lines on the given plot      
-    - :func:`multiplot_legend_title`: Helper function for multiplot legends and titles          
-    - :func:`make_consolidated_legend`: Creates a single legend for a given multiplot where multiple groups are being compared         
-    - :func:`metric_dist`:     Plots the histogram of given metric(s) separated by comparison groups over a set of scenarios
-    - :func:`metric_dist_from`:Plot the distribution of model history function/flow value over at defined time(s) over a number of scenarios.
-    - :func:`nominal_vals_1d`: plots the end-state classification of a system over a (1-D) range of nominal runs
-    - :func:`nominal_vals_2d`: plots the end-state classification of a system over a (2-D) range of nominal runs
-    - :func:`nominal_vals_3d`: plots the end-state classification of a system over a (3-D) range of nominal runs
-    - :func:`dyn_order`:    Plots the run order for the model during the dynamic propagation step used by dynamic_behavior() methods    
-    - :func:`phases`:          plots the phases of operation that the model progresses through.
-    - :func:`samplemetric`:      plots a metric for a single fault sampled by a SampleApproach over time with rates
-    - :func:`samplemetrics`:     plots a metric for a set of faults sampled by a SampleApproach over time with rates on separate plots
-    - :func:`metricovertime`:    plots the total metric/explected metric of a set of faults sampled by a SampleApproach over time
-    - :func:`nominal_factor_comparison`:    gives a bar plot of nominal simulation statistics over given factors
-    - :func:`nested_factor_comparison`: gives a bar plot of fault simulation statistics over given factors
-    - :func:`multibar_helper`: Shared plotting helper for nested_factor_comparison and nominal_factor_comparison
-    - :func:`suite_for_plots`:   enables plots to be checked and turned on/off when testing using unittest
-     
-
+- :func:`hist`: plots function and flow histories over time
+(with different plots for each function/flow)
+- :func:`plot_line_and_err`: Plots a line with a given range of uncertainty around it.
+- :func:`plot_err_lines`: Plots error lines on the given plot.
+- :func:`multiplot_legend_title`: Helper function for multiplot legends and titles.
+- :func:`make_consolidated_legend`: Creates a single legend for a given multiplot where
+multiple groups are being compared.
+- :func:`metric_dist`:     Plots the histogram of given metric(s) separated by
+comparison groups over a set of scenarios.
+- :func:`metric_dist_from`:Plot the distribution of model history function/flow value
+over at defined time(s) over a number of scenarios.
+- :func:`nominal_vals_1d`: plots the end-state classification of a system over a
+(1-D) range of nominal runs
+- :func:`nominal_vals_2d`: plots the end-state classification of a system over a
+(2-D) range of nominal runs
+- :func:`nominal_vals_3d`: plots the end-state classification of a system over a
+(3-D) range of nominal runs
+- :func:`dyn_order`: Plots the run order for the model during the dynamic propagation
+step used by dynamic_behavior() methods.
+- :func:`phases`: plots the phases of operation that the model progresses through.
+- :func:`samplemetric`: plots a metric for a single fault sampled by a SampleApproach
+over time with rates
+- :func:`samplemetrics`: plots a metric for a set of faults sampled by a SampleApproach
+over time with rates on separate plots
+- :func:`metricovertime`: plots the total metric/explected metric of a set of faults
+sampled by a SampleApproach over time
+- :func:`nominal_factor_comparison`: gives a bar plot of nominal simulation
+statistics over given factors
+- :func:`nested_factor_comparison`: gives a bar plot of fault simulation statistics
+over given factors
+- :func:`multibar_helper`: Shared plotting helper for nested_factor_comparison and
+nominal_factor_comparison
+- :func:`suite_for_plots`: enables plots to be checked and turned on/off when testing
+using unittest
 """
-#File Name: analyze/plot.py
-#Author: Daniel Hulse
-#Created: November 2019 (Refactored April 2020, Feb 2022)
+# File Name: analyze/plot.py
+# Author: Daniel Hulse
+# Created: November 2019 (Refactored April 2020, Feb 2022)
 
 import numpy as np
 import matplotlib.pyplot as plt
@@ -39,14 +52,16 @@ from matplotlib.ticker import AutoMinorLocator
 plt.rcParams['pdf.fonttype'] = 42
 
 
-def hist(simhists, *plot_values, cols=2, aggregation='individual', comp_groups={'nominal':'nominal', 'faulty':'faulty'}, 
-         legend_loc=-1, xlabel='time', ylabels={}, max_ind='max', boundtype='fill', 
-         fillalpha=0.3, boundcolor='gray',boundlinestyle='--', ci=0.95, titles={},
-         title='', indiv_kwargs={}, time_slice=[],time_slice_label=None, figsize='default',
+def hist(simhists, *plot_values, cols=2, aggregation='individual',
+         comp_groups={'nominal': 'nominal', 'faulty': 'faulty'},
+         legend_loc=-1, xlabel='time', ylabels={}, max_ind='max', boundtype='fill',
+         fillalpha=0.3, boundcolor='gray', boundlinestyle='--', ci=0.95, titles={},
+         title='', indiv_kwargs={}, time_slice=[], time_slice_label=None,
+         figsize='default',
          v_padding=None, h_padding=None, title_padding=0.0,
          phases={}, modephases={}, label_phases=True, legend_title=None,  **kwargs):
     """
-    Plot the behavior over time of the given function/flow values 
+    Plot the behavior over time of the given function/flow values
     over a set of scenarios, with ability to aggregate behaviors as needed.
 
     Parameters
@@ -54,41 +69,48 @@ def hist(simhists, *plot_values, cols=2, aggregation='individual', comp_groups={
     simhists : History
         Simulation history
     plot_values : strs, optional
-        names of values to pull from the history (e.g., 'fxns.move_water.s.flowrate'). 
+        names of values to pull from the history (e.g., 'fxns.move_water.s.flowrate').
         Can also be specified as a dict (e.g. {'fxns':'move_water'}) to get all keys
         from a given fxn/flow/mode/etc.
     cols : int, optional
         columns to use in the figure. The default is 2.
     aggregation : str, optional
         Way of aggregating the plot values. The default is 'individual'
-        Note that only the `individual` option can be used for histories of non-numeric quantities
-        (e.g., modes, which are recorded as strings)
-        - 'individual' plots each run individually. 
-        - 'mean_std' plots the mean values over the sim with standard deviation error bars
-        - 'mean_ci'  plots the mean values over the sim with mean confidence interval error bars
-            - optional argument ci (float 0.0-1.0) specifies the confidence interval (Default:0.95)
+        Note that only the `individual` option can be used for histories of non-numeric
+        quantities (e.g., modes, which are recorded as strings):
+        - 'individual' plots each run individually.
+        - 'mean_std' plots the mean values over the sim with standard deviation error
+        bars
+        - 'mean_ci'  plots the mean values over the sim with mean confidence interval
+        error bars:
+            - optional argument ci (float 0.0-1.0) specifies the confidence interval
+            (Default:0.95)
         - 'mean_bound' plots the mean values over the sim with variable bound error bars
-        - 'percentile' plots the percentile distribution of the sim over time (does not reject outliers)
-            - optional argument 'perc_range' (int 0-100) specifies the percentile range of the inner bars (Default: 50) 
+        - 'percentile' plots the percentile distribution of the sim over time
+        (does not reject outliers):
+            - optional argument 'perc_range' (int 0-100) specifies the percentile range
+            of the inner bars (Default: 50)
     comp_groups : dict, optional
         Dictionary for comparison groups (if more than one) with structure:
             {'group1':('scen1', 'scen2'), 'group2':('scen3', 'scen4')} Default is {}
             If a legend is shown, group names are used as labels.
     legend_loc : int, optional
-        Specifies the plot to place the legend on, if runs are bine compared. Default is -1 (the last plot)
-        To remove the legend, give a value of False
+        Specifies the plot to place the legend on, if runs are bine compared. Default is
+        -1 (the last plot). To remove the legend, give a value of False
     xlabel : str, optional
         Label for the x-axes. Default is 'time'
     ylabels : dict, optional
         Label for the y-axes with structure {(fxnflowname, value):'label'}
     max_ind : int, optional
-        index (usually correlates to time) cutoff for the simulation. Default is 'max' which uses the first simulation termination time.
+        index (usually correlates to time) cutoff for the simulation. Default is 'max',
+        which uses the first simulation termination time.
     boundtype : 'fill' or 'line', optional
         -'fill' plots the error bounds as a filled area
             - optional fillalpha (float) changes the alpha of this area.
         -'line' plots the error bounds as lines
             - optional boundcolor (str) changes the color of the bounds (default 'gray')
-            - optional boundlinestyle (str) changes the style of the bound lines (default '--')
+            - optional boundlinestyle (str) changes the style of the bound lines
+            (default '--')
     fillalpha : float
         alpha value for fill in aggregated plots. Default is 0.3.
     boundcolor : str, optional
@@ -96,23 +118,26 @@ def hist(simhists, *plot_values, cols=2, aggregation='individual', comp_groups={
     boundlinestyle : str, optional
         linestyle to use for bounds in aggregated plots. Default is '--'
     ci : float, optional
-        Bootstrap confidence interval (0-1) to use in 'mean_ci' bound argument. Default is 0.95.
+        Bootstrap confidence interval (0-1) to use in 'mean_ci' bound argument.
+        Default is 0.95.
     title : str, optional
         overall title for the plot. Default is ''
     indiv_kwargs : dict, optional
-        dict of kwargs with structure {comp1:kwargs1, comp2:kwargs2}, where 
+        dict of kwargs with structure {comp1:kwargs1, comp2:kwargs2}, where
         where kwargs is an individual dict of keyword arguments for the
-        comparison group comp (or scenario, if not aggregated) which overrides 
+        comparison group comp (or scenario, if not aggregated) which overrides
         the global kwargs (or default behavior). If no comparison groups are given,
         use 'default' for a single history or 'nominal'/'faulty' for a fault history
-        e.g. kwargs = {'nominal':{color:'green'}} would make the nominal color green   
+        e.g. kwargs = {'nominal':{color:'green'}} would make the nominal color green
         Default is {}.
     time_slice : int/list, optional
-        overlays a bar or bars at the given index when the fault was injected (if any). Default is []
+        overlays a bar or bars at the given index when the fault was injected (if any).
+        Default is []
     time_slice_label : str, optional
         label to use for the time slice bars in the legend. Default is None
     figsize : tuple (float,float)
-        x-y size for the figure. The default is 'default', which dymanically gives 3 for each column and 2 for each row
+        x-y size for the figure. The default is 'default', which dymanically gives 3 for
+        each column and 2 for each row
     v_padding : float
         vertical padding between subplots as a fraction of axis height
     h_padding : float
@@ -121,53 +146,54 @@ def hist(simhists, *plot_values, cols=2, aggregation='individual', comp_groups={
         padding for title as a fraction of figure height
     phases : dict, optional
         Provide to overlay phases on the individual function histories, where phases
-        is from an.process.mdlhist and of structure {'fxnname':'phase':[start, end]}. 
+        is from an.process.mdlhist and of structure {'fxnname':'phase':[start, end]}.
         Default is {}.
     modephases : dict, optional
-        dictionary that maps the phases to operational modes, if it is desired to track the progression
-        through modes
+        dictionary that maps the phases to operational modes, if it is desired to track
+        the progression through modes
     legend_title : str, optional
         title for the legend. Default is None
     **kwargs : kwargs
-        keyword arguments to mpl.plot e.g. linestyle, color, etc. See 'aggregation' for specification.
-        phases={}, modephases={}, label_phases=True,  **kwargs):
+        keyword arguments to mpl.plot e.g. linestyle, color, etc. See 'aggregation' for
+        specification.
     """
-    #Process data - clip and flatten
+    # Process data - clip and flatten
     if "time" in simhists:
         simhists = History(nominal=simhists).flatten()
     else:
         simhists = simhists.flatten()
-    if len(plot_values)==1 and type(plot_values[0])==dict:
+    if len(plot_values) == 1 and type(plot_values[0]) == dict:
         plot_values = to_include_keys(plot_values[0])
-    
+
     grouphists = simhists.get_comp_groups(*plot_values, **comp_groups)
     # Set up plots and iteration
-    if 'nominal' in grouphists.keys() and len(grouphists)>1: 
-        indiv_kwargs['nominal'] = indiv_kwargs.get('nominal', {'color':'blue', 'ls':'--'})
-    else: 
-        indiv_kwargs.pop('nominal','')
-    
-    if 'faulty' in grouphists.keys(): 
-        indiv_kwargs['faulty'] = indiv_kwargs.get('faulty', {'color':'red'})  
-    else: 
-        indiv_kwargs.pop('faulty','')
+    if 'nominal' in grouphists.keys() and len(grouphists) > 1:
+        indiv_kwargs['nominal'] = indiv_kwargs.get(
+            'nominal', {'color': 'blue', 'ls': '--'})
+    else:
+        indiv_kwargs.pop('nominal', '')
+
+    if 'faulty' in grouphists.keys():
+        indiv_kwargs['faulty'] = indiv_kwargs.get('faulty', {'color': 'red'})
+    else:
+        indiv_kwargs.pop('faulty', '')
 
     num_plots = len(plot_values)
-    if num_plots==1: 
-        cols=1
+    if num_plots == 1:
+        cols = 1
     rows = int(np.ceil(num_plots/cols))
-    if figsize=='default': 
-        figsize=(cols*3, 2*rows)
-    fig, axs = plt.subplots(rows,cols, sharex=True, figsize=figsize) 
-    
-    if type(axs)==np.ndarray: 
+    if figsize == 'default':
+        figsize = (cols*3, 2*rows)
+    fig, axs = plt.subplots(rows, cols, sharex=True, figsize=figsize)
+
+    if type(axs) == np.ndarray:
         axs = axs.flatten()
-    else: 
-        axs=[axs]
-    
-    subplot_titles = {plot_value:plot_value for plot_value in plot_values}
+    else:
+        axs = [axs]
+
+    subplot_titles = {plot_value: plot_value for plot_value in plot_values}
     subplot_titles.update(titles)
-    
+
     for i, plot_value in enumerate(plot_values):
         ax = axs[i]
         ax.set_title(subplot_titles[plot_value])
