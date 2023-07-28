@@ -66,7 +66,7 @@ def get_paramdist_from(mdlhists, t):
     return {'friction':friction, 'drift':drift}
 
 def sample_params(mdlhists, t=1, scen=1):
-    mdlhist = [*mdlhists.values()][scen]
+    mdlhist = getattr(mdlhists, 'test_' + str(scen))
     return get_params_from(mdlhist, t)
 
 def gen_sample_params(mdlhists, t=1, scen=1):
@@ -77,20 +77,20 @@ if __name__=="__main__":
     #nominal
     deg_mdl = RoverDegradation()
     endresults,  mdlhist = prop.nominal(deg_mdl)
-    an.plot.mdlhists(mdlhist)
+    an.plot.hist(mdlhist, 'fxns.drive.s.wear')
     #stochastic
     deg_mdl = RoverDegradation()
     endresults,  mdlhist = prop.nominal(deg_mdl, run_stochastic=True)
-    an.plot.mdlhists(mdlhist)
+    an.plot.hist(mdlhist, 'fxns.drive.s.wear')
     
     #stochastic over replicates
     nomapp = NominalApproach()
     nomapp.add_seed_replicates('test', 100)
     endclasses, mdlhists = prop.nominal_approach(deg_mdl, nomapp, run_stochastic=True, desired_result='endclass')
-    an.plot.mdlhists(mdlhists, fxnflowvals={'fxns':{'drive':{'s':['wear', 'corrosion', 'friction', 'drift']}}}, aggregation='mean_std')
+    an.plot.hist(mdlhists, {'fxns':{'drive':{'s':['wear', 'corrosion', 'friction', 'drift']}}}, aggregation='mean_std')
     
     #individual slice
-    an.plot.metric_dist_from(mdlhists, [1,10,20], fxnflowvals={'fxns':{'drive':{'s':['wear', 'corrosion', 'friction', 'drift']}}})
+    #an.plot.metric_dist_from(mdlhists, [1,10,20], {'fxns':{'drive':{'s':['wear', 'corrosion', 'friction', 'drift']}}})
     
     
     #question -- how do we sample this:
