@@ -45,7 +45,8 @@ import numpy as np
 import matplotlib.pyplot as plt
 import matplotlib.colors as mcolors
 from fmdtools.analyze.tabulate import metricovertime as metric_table
-from fmdtools.analyze.result import bootstrap_confidence_interval, History, to_include_keys
+from fmdtools.analyze.result import bootstrap_confidence_interval, to_include_keys
+from fmdtools.analyze.result import History, Result
 from matplotlib.collections import PolyCollection
 from matplotlib.ticker import AutoMinorLocator
 
@@ -447,14 +448,14 @@ def metric_dist(result, *plot_values, cols=2, comp_groups={},
         else:
             ax.set_xlabel(' '.join(xlabel))
         ax.grid(axis='y')
-        fulldata = [ec[plot_value] for endc in groupmetrics.values()
-                    for ec in endc.values()]
+        fulldata = [[*endc.get_values(plot_value).values()]
+                    for endc in groupmetrics.values()]
         bins = np.histogram(fulldata, metric_bins.get(plot_value, num_bins))[1]
         if not i % cols:
             ax.set_ylabel(ylabel)
         for group, endclasses in groupmetrics.items():
             local_kwargs = {**kwargs, **indiv_kwargs.get(group, {})}
-            x = [ec[plot_value] for ec in endclasses.values()]
+            x = [*endclasses.get_values(plot_value).values()]
             ax.hist(x, bins, label=group, **local_kwargs)
 
     multiplot_legend_title(groupmetrics, axs, ax, legend_loc, title,
@@ -491,18 +492,18 @@ def metric_dist_from(mdlhists, times, *plot_values, **kwargs):
     if type(times) in [int, float]:
         times = [times]
     if len(times) == 1 and kwargs.get('comp_groups', False):
-        time_classes = {scen:
-                        {metric: val[times[0]] for metric, val in flat_hist.items()}
-                        for scen, flat_hist in flat_mdlhists.items()}
+        time_classes = Result({scen: Result(flat_hist.get_slice(times[0]))
+                               for scen, flat_hist in flat_mdlhists.items()})
         comp_groups = kwargs.pop('comp_groups')
     elif kwargs.get('comp_groups', False):
         raise Exception("Cannot compare times and comp_groups at the same time")
     else:
-        time_classes = {str(t)+'_'+scen:
-                        {metric: val[t] for metric, val in flat_hist.items()}
-                        for scen, flat_hist in flat_mdlhists.items() for t in times}
-        comp_groups = {t: {str(t)+'_'+scen for scen in flat_mdlhists} for t in times}
-    fig, axs = metric_dist(time_classes, *plot_values,
+        time_classes = Result({str(t)+'_'+scen: Result(flat_hist.get_slice(t))
+                               for scen, flat_hist in flat_mdlhists.items()
+                               for t in times})
+        comp_groups = {str(t): {str(t)+'_'+scen for scen in flat_mdlhists}
+                       for t in times}
+    fig, axs = metric_dist(time_classes.flatten(), *plot_values,
                            comp_groups=comp_groups, **kwargs)
     return fig, axs
 
