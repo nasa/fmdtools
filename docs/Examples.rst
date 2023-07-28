@@ -171,5 +171,5 @@ The Rover model showcases more advanced methodologies that can be used in fmdtoo
 Multiflow Demo
 +++++++++++++++++++++++++++++++++++++++++++++
 
-The multiflows example is limited to the model in the file `multiflows_demo.py`, which shows basic usage of the :class:`fmdtools.define.flow.MultiFlow` and :class:`fmdtools.define.flow.CommsFlow` flow structures.
+The multiflows example is limited to the model in the file `multiflows_demo.py`, which shows basic usage of the :class:`fmdtools.define.flow.MultiFlow` and :class:`fmdtools.define.flow.CommsFlow` flow structures. `Multiflow and Commsflow Demonstration.ipynb` is a tutorialized version of that file discussing the step by step creation and use of `fmdtools.analyze.graph.ModelTypeGraph` to view model types.
 
