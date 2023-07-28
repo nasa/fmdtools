@@ -99,7 +99,7 @@ They can be installed using ``pip install packagename``.
 
 ## Examples
 
-For tutorials, see the [examples folder](https://github.com/nasa/fmdtools/tree/main/examples) and [examples page of the documentation](https://nasa.github.io/fmdtools/docs/Examples.html). Additionally, see the ``README`` in that folder for the details on each file/example. These folders include the following: 
+For tutorials, see the [examples folder](https://github.com/nasa/fmdtools/tree/main/examples) and [examples page of the documentation](https://nasa.github.io/fmdtools/docs/Examples.html). These folders include the following: 
 
 - [**asg_demo**](https://github.com/nasa/fmdtools/tree/main/examples/asg_demo): A tutorial covering the use of the Action Sequence Graph in the FxnBlock class, which is useful for representing a Function's Progress through a sequence of actions \(e.g., modes of operation, etc\).
 
