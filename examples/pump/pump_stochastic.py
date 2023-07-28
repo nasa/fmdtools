@@ -205,6 +205,7 @@ if __name__ == "__main__":
                        'flows.wat_2.s.pressure',
                        aggregation='percentile', time_slice=27)
 
+
     app = NominalApproach()
     app.add_param_replicates(paramfunc, 'no_delay', 100, (0))
     app.add_param_replicates(paramfunc, 'delay_10', 100, (10))
