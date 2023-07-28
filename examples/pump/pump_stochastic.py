@@ -209,6 +209,12 @@ if __name__ == "__main__":
     app = NominalApproach()
     app.add_param_replicates(paramfunc, 'no_delay', 100, (0))
     app.add_param_replicates(paramfunc, 'delay_10', 100, (10))
+    
+    fig = an.plot.metric_dist_from(comp_mdlhists, [5,10,15],
+                       'fxns.move_water.s.eff',
+                       'fxns.move_water.s.total_flow',
+                       'flows.wat_2.s.flowrate',
+                       'flows.wat_2.s.pressure')
 
     # endresults, resgraph, mdlhist=propagate.nominal(mdl)
     # an.plot.mdlhistvals(mdlhist, fxnflowvals={'MoveWater':'eff', 'Wat_1':'flowrate', 'Wat_2':['flowrate', 'pressure']})
