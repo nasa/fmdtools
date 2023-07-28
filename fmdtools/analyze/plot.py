@@ -53,11 +53,10 @@ plt.rcParams['pdf.fonttype'] = 42
 
 
 def hist(simhists, *plot_values, cols=2, aggregation='individual',
-         comp_groups={'nominal': 'nominal', 'faulty': 'faulty'},
          legend_loc=-1, xlabel='time', ylabels={}, max_ind='max', boundtype='fill',
          fillalpha=0.3, boundcolor='gray', boundlinestyle='--', ci=0.95, titles={},
          title='', indiv_kwargs={}, time_slice=[], time_slice_label=None,
-         figsize='default',
+         figsize='default', comp_groups={},
          v_padding=None, h_padding=None, title_padding=0.0,
          phases={}, modephases={}, label_phases=True, legend_title=None,  **kwargs):
     """
@@ -68,7 +67,7 @@ def hist(simhists, *plot_values, cols=2, aggregation='individual',
     ----------
     simhists : History
         Simulation history
-    plot_values : strs, optional
+    plot_values : strs
         names of values to pull from the history (e.g., 'fxns.move_water.s.flowrate').
         Can also be specified as a dict (e.g. {'fxns':'move_water'}) to get all keys
         from a given fxn/flow/mode/etc.
@@ -91,9 +90,11 @@ def hist(simhists, *plot_values, cols=2, aggregation='individual',
             - optional argument 'perc_range' (int 0-100) specifies the percentile range
             of the inner bars (Default: 50)
     comp_groups : dict, optional
-        Dictionary for comparison groups (if more than one) with structure:
-            {'group1':('scen1', 'scen2'), 'group2':('scen3', 'scen4')} Default is {}
-            If a legend is shown, group names are used as labels.
+        Dictionary for comparison groups (if more than one) with structure
+        {'group1':('scen1', 'scen2'), 'group2':('scen3', 'scen4')}.
+        Default is {}, which compares nominal and faulty.
+        If {'default': 'default'} is passed, all scenarios will be put in one group.
+        If a legend is shown, group names are used as labels.
     legend_loc : int, optional
         Specifies the plot to place the legend on, if runs are bine compared. Default is
         -1 (the last plot). To remove the legend, give a value of False
@@ -164,8 +165,11 @@ def hist(simhists, *plot_values, cols=2, aggregation='individual',
         simhists = simhists.flatten()
     if len(plot_values) == 1 and type(plot_values[0]) == dict:
         plot_values = to_include_keys(plot_values[0])
+    if not plot_values:
+        raise Exception("Empty plot_values--make sure to pass quantities to plot!")
 
     grouphists = simhists.get_comp_groups(*plot_values, **comp_groups)
+
     # Set up plots and iteration
     if 'nominal' in grouphists.keys() and len(grouphists) > 1:
         indiv_kwargs['nominal'] = indiv_kwargs.get(
@@ -376,14 +380,16 @@ def metric_dist(result, *plot_values, cols=2, comp_groups={},
     ----------
     endclasses : Result
         Dictionary of metrics with structure {'scen':{'metric':value}}
-    plot_values : list, optional
-        list of metrics in the dictionary to plot
+    plot_values : strs
+        metrics in the dictionary to plot
     cols : int, optional
         columns to use in the figure. The default is 2.
     comp_groups : dict, optional
-        Dictionary for comparison groups (if more than one) with structure:
-            {'group1':('scen1', 'scen2'), 'group2':('scen3', 'scen4')} Default is {}
-            If a legend is shown, group names are used as labels.
+        Dictionary for comparison groups (if more than one) with structure
+        {'group1':('scen1', 'scen2'), 'group2':('scen3', 'scen4')}.
+        Default is {}, which compares nominal and faulty.
+        If {'default': 'default'} is passed, all scenarios will be put in one group.
+        If a legend is shown, group names are used as labels.
     bins : int
         Number of bins to use (for all plots). Default is None
     metric_bins : dict,
@@ -473,9 +479,11 @@ def metric_dist_from(mdlhists, times, *plot_values, **kwargs):
         {fxnflow:[vals], fxnflow:'val'/all, fxnflow:{'comp':[vals]}}.
         The default is 'all', which returns all.
     comp_groups : dict, optional
-        Dictionary for comparison groups (if not comparing times) with structure:
-            {'group1':('scen1', 'scen2'), 'group2':('scen3', 'scen4')} Default is {}
-            If a legend is shown, group names are used as labels.
+        Dictionary for comparison groups (if more than one) with structure
+        {'group1':('scen1', 'scen2'), 'group2':('scen3', 'scen4')}.
+        Default is {}, which compares nominal and faulty.
+        If {'default': 'default'} is passed, all scenarios will be put in one group.
+        If a legend is shown, group names are used as labels.
     **kwargs : kwargs
         keyword arguments to plot.metric_dist
     """

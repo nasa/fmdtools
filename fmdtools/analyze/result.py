@@ -444,7 +444,7 @@ class Result(UserDict):
             Single-level history with structure {group:{scenname.valuename}}
         """
         if not groups:
-            groups = {'default': 'default'}
+            groups = self.get_default_comp_groups()
         if 'time' not in values:
             values = values + ('time', )
         group_hist = self.__class__()
@@ -460,7 +460,33 @@ class Result(UserDict):
             for k in k_vs:
                 group_hist[group][k] = self[k]
         # Sort into comparison groups
+        if not group_hist:
+            raise Exception("Invalid comp_groups: " + str(groups) +
+                            ", resulting grouped result is empty")
         return group_hist
+
+    def get_default_comp_groups(self):
+        """
+        Gets a dict of nominal and faulty scenario keys from the Result
+
+        Returns
+        -------
+        comp_groups : dict
+            Dict with structure {'nominal': [list of nominal scenarios],
+                                 'faulty': [list of faulty scenarios]}.
+            If no nominal or faulty, returns an empty dict {}.
+        """
+        nest = self.nest(1)
+        nest2 = self.nest(2)
+        if 'nominal' in nest.keys():
+            comp_groups = {'nominal': 'nominal',
+                           'faulty': [f for f in nest.keys() if f != 'nominal']}
+        elif any(['nominal' in k for k in nest2.keys()]):
+            comp_groups = {'nominal': [f for f in nest2.keys() if 'nominal' not in f],
+                           'faulty': [f for f in nest2.keys() if 'nominal' not in f]}
+        else:
+            comp_groups = {'default': 'default'}
+        return comp_groups
 
     def flatten(self, newhist=False, prevname="", to_include='all'):
         """
