@@ -119,7 +119,7 @@ Action Sequence Graph
 Rover
 +++++++++++++++++++++++++++++++++++++++++++++
 
-The Rover model showcases more advanced methodologies that can be used in fmdtools, and has essentially been the developers' demo case study for advancing the state-of-the-art in resilience simulation These demonstrations include:
+The Rover model showcases more advanced methodologies that can be used in fmdtools, and has essentially been the developers' demo case study for advancing the state-of-the-art in resilience simulation. These demonstrations include:
 
 - `Rover Setup Notebook <../examples/rover/Rover_Setup_Notebook.ipynb>`_ , which introduces the model and basic usages.
 
