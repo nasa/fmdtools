@@ -9,7 +9,7 @@ import pytest
 if __name__=="__main__":
     # requires pytest, nbmake, pytest-html
     #retcode = pytest.main(["--html=pytest_report.html", "--nbmake"])
-    
+
     fast_notebooks = ["examples/asg_demo/Action_Sequence_Graph.ipynb",
                       "examples/eps/EPS_Example_Notebook.ipynb", 
                       "examples/pump/Pump_Example_Notebook.ipynb",
@@ -20,10 +20,10 @@ if __name__=="__main__":
                       "examples/rover/Rover_Setup_Notebook.ipynb",
                       "examples/tank/Tank_Analysis.ipynb"
                       ]
-    
+
     # for testing notebooks during development:
-    #retcode = pytest.main(["--nbmake", *fast_notebooks])
-    
+    # retcode = pytest.main(["--nbmake", *fast_notebooks])
+
     slow_notebooks = ["examples/multirotor/Demonstration.ipynb",
                       "examples/multirotor/Multirotor_Optimization.ipynb",
                       "examples/pump/AST_Sampling.ipynb",
@@ -37,13 +37,12 @@ if __name__=="__main__":
                       "examples/rover/optimization/Rover Response Optimization.ipynb",
                       "examples/rover/optimization/Search Comparison.ipynb",
                       "examples/tank/Tank Optimization.ipynb"]
-    
+
     # for testing longer-running notebooks
-    #retcode = pytest.main(["--nbmake", *slow_notebooks])
-    
+    # retcode = pytest.main(["--nbmake", *slow_notebooks])
+
     # for testing all unittests
     # retcode = pytest.main()
-    
-    
+
     # for creating comprehensive test report:
     retcode = pytest.main(["--html=pytest_report.html", "--nbmake", "--overwrite", "--continue-on-collection-errors"])
