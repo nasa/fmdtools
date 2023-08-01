@@ -5,7 +5,7 @@ Author: Daniel Hulse
 Created: October 2019
 Description: A simple model for explaining stochastic behavior modelling
 
-This model is an exension of ex_pump.py that includes stochastic behaviors
+This model is an extension of ex_pump.py that includes stochastic behaviors
 """
 from examples.pump.ex_pump  import MoveWat as DetMoveWat
 from fmdtools.define.rand import Rand
