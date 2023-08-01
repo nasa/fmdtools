@@ -97,6 +97,23 @@ pathos
 ```
 They can be installed using ``pip install packagename``.
 
+## Examples
+
+For tutorials, see the [examples folder](https://github.com/nasa/fmdtools/tree/main/examples) and [examples page of the documentation](https://nasa.github.io/fmdtools/docs/Examples.html). These folders include the following: 
+
+- [**asg_demo**](https://github.com/nasa/fmdtools/tree/main/examples/asg_demo): A tutorial covering the use of the Action Sequence Graph in the FxnBlock class, which is useful for representing a Function's Progress through a sequence of actions \(e.g., modes of operation, etc\).
+
+- [**eps**](https://github.com/nasa/fmdtools/tree/main/examples/eps): A model of a simple electric power system in eps.py, which shows how undirected propagation can be used in a simple static (i.e., one time-step) moelling use-case.
+
+- [**multiflow_demo**](https://github.com/nasa/fmdtools/tree/main/examples/multiflow_demo): A demonstration on the use of MultiFlow and CommsFlow for the coordination of multiple devices.
+
+- [**multirotor**](https://github.com/nasa/fmdtools/tree/main/examples/multirotor): Includes several models of drones modelled at differing levels of detail. Includes a demonstration of how models can be matured as more details are added and how the system can be co-optimized.
+
+- [**pump**](https://github.com/nasa/fmdtools/tree/main/examples/pump): A simple pump model to demonstrate various capabilities of fmdtools. This includes a tutorial notebook, demostration of plot capabilities, optimization and stochastic modeling.
+
+- [**rover**](https://github.com/nasa/fmdtools/tree/main/examples/rover): Showcases more advanced methodologies that can be used in fmdtools, and has essentially been the developers’ demo case study for advancing the state-of-the-art in resilience simulation. 
+
+- [**tank**](https://github.com/nasa/fmdtools/tree/main/examples/tank): A fairly simple model of a tank, inlet valve, and outlet valve. It includes a demonstration of the model and optimization of said model.
 
 ## Contributions
 fmdtools is developed primarily by researchers at NASA Ames Research Center. External contributions are welcome under a Contributor License Agreement:
