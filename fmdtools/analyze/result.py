@@ -421,7 +421,7 @@ class Result(UserDict):
         """Gets a dictlike with all scenarios corresponding to the strings in *scens"""
         h = self.__class__()
         k_s = [k for k in self.keys()
-               for s in scens if k.startswith(s) or '.'+s+'.' in k]
+               for s in scens if k.startswith(s+".") or '.'+s+'.' in k]
         for k in k_s:
             h[k] = self[k]
         return h
@@ -884,7 +884,7 @@ def is_bool(val):
 def is_numeric(val):
     """Checks if a given value is numeric"""
     try:
-        return val.dtype in ['float', 'bool', 'int']
+        return np.issubdtype(np.array(val).dtype, np.number)
     except:
         return type(val) in [float, bool, int]
 

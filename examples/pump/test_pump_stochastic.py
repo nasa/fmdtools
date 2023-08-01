@@ -5,7 +5,7 @@ Created on Tue Dec 21 08:52:58 2021
 @author: dhulse
 """
 import unittest
-from examples.pump.pump_stochastic import Pump
+from examples.pump.pump_stochastic import Pump, paramfunc
 from fmdtools.sim import propagate
 from fmdtools.sim.approach import NominalApproach
 from tests.common import CommonTests
@@ -99,6 +99,41 @@ class StochasticPumpTests(unittest.TestCase, CommonTests):
         self.check_save_load_nestapproach_indiv(self.mdl, "stochpump_mdlhists", "stochpump_endclasses", "csv", app=app, run_stochastic=True, pool=mp.Pool(4))
         self.check_save_load_nestapproach_indiv(self.mdl, "stochpump_mdlhists", "stochpump_endclasses", "json", app=app, run_stochastic=True, pool=mp.Pool(4))
 
+def check_nominal_vals():
+    """tests nominal_vals_1d"""
+    from fmdtools import analyze as an
+    mdl = Pump()
+    app = NominalApproach()
+    app.add_seed_replicates('test_seeds', 100)
+    endres, mdlhists = propagate.nominal_approach(mdl, app, run_stochastic=True)
+    endres['test_seeds_1.endclass.cost'] = 10.0
+    #an.plot.nominal_vals_1d(app, endres, 'r.seed', metric="nonsense")
+    title = "should show at least one red line over range of seeds"
+    an.plot.nominal_vals_1d(app, endres, 'r.seed', metric='cost', faultalpha=1.0,
+                            title=title)
+    title = "should show single line over nonexistent range"
+    an.plot.nominal_vals_1d(app, endres, 'nonsense', title=title)
+
+def check_nominal_2d():
+    """tests nominal_vals_1d"""
+    from fmdtools import analyze as an
+    mdl = Pump()
+    app = NominalApproach()
+    app.add_param_replicates(paramfunc, 'delay_1', 10, (1))
+    app.add_param_replicates(paramfunc, 'delay_10', 10, (10))
+    app.add_param_replicates(paramfunc, 'delay_10', 20, (15))
+    
+    endres, mdlhists = propagate.nominal_approach(mdl, app, run_stochastic=True)
+    endres['delay_10_20.endclass.cost'] = 10.0
+    title = "should show at least one red x over range of seeds, probs, and delay=1, 10"
+    an.plot.nominal_vals_2d(app, endres, 'r.seed', 'p.delay',
+                            metric="cost", title=title)
+    
+    an.plot.nominal_vals_3d(app, endres, 'r.seed', 'p.delay', 'prob',
+                            metric="cost", title=title)
+
+    
+
 if __name__ == '__main__':
     #suite = unittest.TestSuite()
     #suite.addTest(StochasticPumpTests("test_run_safety"))
@@ -108,4 +143,8 @@ if __name__ == '__main__':
     #suite.addTest(StochasticPumpTests("test_save_load_nominalapproach_indiv"))
     #runner = unittest.TextTestRunner()
     #runner.run(suite)
-    unittest.main()
+    #unittest.main()
+    
+    check_nominal_2d()
+    
+    #check_nominal_vals()

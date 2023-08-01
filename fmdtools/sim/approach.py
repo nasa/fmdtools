@@ -310,7 +310,12 @@ class NominalApproach():
         newapp.ranges = copy.deepcopy(self.ranges)
         newapp.num_scenarios = self.num_scenarios
         return newapp
-        
+    def get_param_scens(self, *params, only_params=False, default="NA"):
+        data = [(scenname, scen.get_params(*params, default=default))
+                for scenname, scen in self.scenarios.items()
+                if not only_params or (default in scen.get_params(params, default=default))]
+        return data
+
 
 class SampleApproach():
     """
