@@ -15,15 +15,17 @@ Functions::
 """
 from recordclass import dataobject, asdict
 from collections import UserDict
-
+from typing import ClassVar
 
 
 class Injection(dataobject, readonly=True, mapping=True):
-    faults:         dict={}
-    disturbances:   dict={}
+    faults: dict={}
+    disturbances: dict={}
     def get(self, entry, fallback):
-        if not hasattr(self, entry): return fallback
-        else:                        return self[entry] 
+        if not hasattr(self, entry): 
+            return fallback
+        else:
+            return self[entry] 
     
     def update(self, inj):
         if hasattr(inj,'faults'):
@@ -44,48 +46,56 @@ class Sequence(UserDict):
                 self[i]=new_sequence[i]
             else:
                 self[i].update(new_sequence[i])
-    
 
-class Scenario(dataobject, readonly=True, mapping=True):
-    sequence:   dict = dict()
-    rate:       float = 1.0
-    name:       str = "nominal"
-    times:      tuple = ()
-    time:       float = 0.0
+class BaseScenario(dataobject, readonly=True, mapping=True):
+    sequence: dict = dict()
+    times: tuple = ()
+    rate: ClassVar[float] = 1.0
+    name: ClassVar[str] = "nominal"
+    time: ClassVar[float] = 0.0
     def copy_with(self, **kwargs):
         existing_kwargs = asdict(self)
         return self.__class__(**{**existing_kwargs, **kwargs})
     def get(self, entry, fallback):
-        if not hasattr(self, entry): return fallback
-        else:                        return self[entry] 
+        if not hasattr(self, entry): 
+            return fallback
+        else: 
+            return self[entry]     
 
-class SingleFaultScenario(Scenario):
-    function:   str=''
-    fault:      str=''
-    time:       float = 0.0
-    name:       str = 'faulty'
+class Scenario(BaseScenario):
+    rate: float = 1.0
+    name: str = "nominal"
+    time: float = 0.0
 
-class JointFaultScenario(Scenario):
-    joint_faults:   int=1
-    functions:      tuple=()
-    modes:          tuple=()
-    name:           str = 'faulty'
-    time:           float = 0.0
+class SingleFaultScenario(BaseScenario):
+    function: str=''
+    fault: str=''
+    rate: float = 1.0
+    name: str = 'faulty'
+    time: float = 0.0
 
-class NominalScenario(Scenario, readonly=True):
-    p:          dict={}
-    r:          dict={}
-    sp:         dict={}
-    inputparams:    dict = {}
-    rangeid:    str=''
-    prob:       float=1.0
+class JointFaultScenario(BaseScenario):
+    joint_faults: int=1
+    functions: tuple=()
+    modes: tuple=()
+    rate: float = 1.0
+    name: str = 'faulty'
+    time: float = 0.0
+
+class NominalScenario(BaseScenario, readonly=True):
+    p: dict={}
+    r: dict={}
+    sp: dict={}
+    inputparams: dict = {}
+    rangeid: str=''
+    prob: float=1.0
+    name: str = 'nominal'
     
     
 class ParamScenario(NominalScenario):
-    paramfunc:      callable 
-    fixedargs:      tuple = ()
-    fixedkwargs:    dict = {}
-    prob:       float=1.0
+    paramfunc: callable 
+    fixedargs: tuple = ()
+    fixedkwargs: dict = {}
     
     
 

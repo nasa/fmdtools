@@ -115,7 +115,7 @@ class Drone(DynDrone):
         #add flows to the model
         self.add_flow('force_st',   Force)
         self.add_flow('force_lin',  Force)
-        self.add_flow('force_gr' ,  Force)
+        self.add_flow('force_gr',   Force)
         self.add_flow('force_lg',   Force)
         self.add_flow('ee_1',       EE)
         self.add_flow('ee_mot',     EE)

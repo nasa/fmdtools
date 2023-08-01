@@ -3,11 +3,21 @@ import setuptools
 with open("README.md", "r") as fh:
     long_description = fh.read()
 
-required = ["scipy","tqdm","networkx","numpy","matplotlib","pandas","ordered-set","dill","recordclass", "pytest"]
+required = ["scipy",
+            "tqdm",
+            "networkx",
+            "numpy",
+            "matplotlib",
+            "pandas",
+            "ordered-set",
+            "dill",
+            "recordclass",
+            "pytest",
+            "graphviz"]
 
 setuptools.setup(
     name="fmdtools",
-    version="2.0-alpha3",
+    version="2.0-alpha4",
     author="Daniel Hulse",
     author_email="daniel.e.hulse@nasa.gov",
     description="System resilience modelling, simulation, and assessment in Python",

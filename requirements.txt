@@ -6,8 +6,7 @@ numpy
 matplotlib
 pandas
 ordered-set
-dill 
-deap
-shapely
-recordclass
+dill
+recordclass >= 0.14.4
 pytest
+graphviz
