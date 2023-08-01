@@ -549,7 +549,7 @@ def nominal_vals_1d(nomapp, endclasses, x_param,
         Nominal sample approach simulated in the model.
     endclasses : dict
         End-classifications for the set of simulations in the model.
-    p_param : str
+    x_param : str
         Parameter range desired to visualize in the operational envelope. Can be any
         property that changes over the nomapp
         (e.g., `r.seed`, `inputparam.x_in`, `p.x`...)
