@@ -338,7 +338,7 @@ def exec_nom_helper(mdl, scen, name, **kwargs):
     return result, mdlhist
 
 
-def one_fault(mdl, *fxnfault, time=1, **kwargs):
+def one_fault(mdl, *fxnfault, time=0, **kwargs):
     """
     Runs one fault in the model at a specified time.
 
