@@ -182,7 +182,8 @@ When releasing fmdtools, the following checklist should be followed:
       - 
     * - 10
       - Update/check external CI resources as needed (if not automatically). e.g., CodeFactor.
-
+      -
+      -
 
 Upload to PyPI
 ********************************
@@ -266,6 +267,16 @@ See: `CONTRIBUTORS.md <../CONTRIBUTORS.md>`_
 
 Model Development Best Practices
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+Pay attention to and document the fmdtools version
+--------------------------------
+
+As a research-oriented tool, much of the fmdtools interfaces can be considered to be "in development." While we have wanted to keep the repository stable, there have been many changes to syntax over the years to provide enhanced functionality and usages.
+
+As such, it can be helpful to document what fmdtools version you are running in a README.md for your project, so you can always have a working model and replicate results, even if something has changed on the toolkit-level. 
+
+This also helps us (as developers) address bugs which affect specific versions of fmdtools, as well as identify bugs which were introduced in updates.
+
 
 Plan your model to avoid technical debt
 --------------------------------
