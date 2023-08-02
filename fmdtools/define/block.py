@@ -708,8 +708,8 @@ class CompArch(dataobject, mapping=True):
             else:
                 kwargs_comp = kwargs
             self.components[arg] = CompClass(arg, **kwargs_comp)
-            self.faultmodes.update({self.components[arg].name+'_'+modename:arg 
-                               for modename in self.components[arg].m.faultmodes})
+            self.faultmodes.update({self.components[arg].name + '_' + modename: arg
+                                    for modename in self.components[arg].m.faultmodes})
 
     def copy_with_arg(self, **kwargs):
         cop = self.__class__(**kwargs)
