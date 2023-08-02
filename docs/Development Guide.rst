@@ -135,14 +135,54 @@ The major exceptions to this process are:
 - external contributions, which are managed via pull request off of ``main`` (or some external dev branch)
 - minor documentation changes
 
-The release process is as follows:
+When releasing fmdtools, the following checklist should be followed:
 
-- Update all version numbers in the appropriate files (conf, LICENSE, README, etc)
-- Generate the documentation using `make`
-- Tag the version in git with the appropriate version (e.g., ``git tag -a v2.X.X -m "version 2.x.x"``)
-- Sync ``main`` branches between the internal and github remotes and push new documentation to ``gh-pages``
-- `Create a release in GitHub <https://github.com/nasa/fmdtools/releases/new>`_ that incorporates (1) a narrative summary of features and changes in the release and (2) the auto-generated release notes corresponding to the issues in bitbucket.
-- If the release is a "stable" release, generate the PyPI package using wheel and twine and upload it to PyPI
+.. list-table:: Title
+   :widths: 10 50 10 30
+   :header-rows: 1
+    * - Step
+      - Description
+      - Complete?
+      - Comment
+    * - 1
+      - Sync all appropriate (internal and external) main/dev branches into the release branch
+      - 
+      - 
+    * - 2
+      - Run the test script run_all_tests.py and verify test results are appropriate for release
+      - 
+      - 
+    * - 3
+      - Update all version numbers in the appropriate files (conf, LICENSE, README, etc)
+      - 
+      - 
+    * - 4
+      - Update all version numbers, including README.md, setup,py, LICENSE, Intro_to_fmdtools.md. (this can be done by searching all files)
+      -
+      -
+    * - 5
+      - Generate the documentation using `make`  (see Documentation section)
+      - 
+      - 
+    * - 6
+      - Tag the branch in git with the appropriate version (e.g., ``git tag -a v2.X.X -m "version 2.x.x"``)
+      - 
+      - 
+    * - 7
+      - Sync ``main`` branches between the internal and github remotes and push new generated documentation to ``gh-pages``
+      - 
+      - 
+    * - 8 
+      - `Create a release in GitHub <https://github.com/nasa/fmdtools/releases/new>`_ that incorporates (1) a narrative summary of features and changes in the release and (2) the auto-generated release notes corresponding to the issues in bitbucket.
+      - 
+      - 
+    * - 9 
+      - If the release is a "stable" release, generate the PyPI package using wheel and twine and upload it to PyPI
+      - 
+      - 
+    * - 10
+      - Update/check external CI resources as needed (if not automatically). e.g., CodeFactor.
+
 
 Upload to PyPI
 ********************************
