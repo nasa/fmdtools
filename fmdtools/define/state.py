@@ -22,23 +22,24 @@ class State(dataobject, mapping=True):
     State is meant to be extended in the model definition object to add the
     corresponding field related to a simulation, e.g.,
 
-    class Point(State):
-        x : float=1.0
-        y : float=1.0
+    >>> class ExamplePoint(State):
+    ...     x : float=1.0
+    ...     y : float=1.0
 
     Creates a class point with fields x and y which are tagged as floats with default
     values of 1.0.
 
     Instancing State gives normal read/write access, e.g., one can do:
 
-    p = Point()
-    p.x
-    > 1.0
+    >>> p = ExamplePoint()
+    >>> p.x
+    1.0
 
-    or
-    p = Point(x=10.0)
-    p.x
-    > 10.0
+    or:
+
+    >>> p = ExamplePoint(x=10.0)
+    >>> p.x
+    10.0
     """
     default_track = 'all'
 
@@ -46,19 +47,28 @@ class State(dataobject, mapping=True):
         """Sets the given arguments to a given value. Mainly useful for
         reducing length/adding clarity to assignment statements in __init__ methods
         (self.put is reccomended otherwise so that the iteration is on function/flow
-         *states*)
+        *states*) e.g.,
 
-        e.g., self.set_attr(maxpower=1, maxvoltage=1) is the same as saying
-              self.maxpower=1; self.maxvoltage=1
+        >>> p = ExamplePoint()
+        >>> p.set_atts(x=2.0, y=2.0)
+        >>> p.x
+        2.0
+        >>> p.y
+        2.0
         """
         for name, value in kwargs.items():
             setattr(self, name, value)
 
     def put(self, as_copy=True, **kwargs):
         """Sets the given arguments to a given value. Mainly useful for
-        reducing length/adding clarity to assignment statements.
-        e.g., self.EE.put(v=1, a=1) is the same as saying
-              self.EE.v=1; self.EE.a=1
+        reducing length/adding clarity to assignment statements. e.g.,
+
+        >>> p = ExamplePoint()
+        >>> p.put(x=2.0, y=2.0)
+        >>> p.x
+        2.0
+        >>> p.y
+        2.0
 
         as_copy: bool, set to True for dicts/sets to be copied rather than referenced
         """
@@ -73,15 +83,34 @@ class State(dataobject, mapping=True):
         """ Sets the same-named values of the current flow/function object to those of a
         given flow.
 
-        Further arguments specify which values.
+        Further arguments specify which values.e.g.,
 
-        e.g. self.EE1.assign(EE2, 'v', 'a') is the same as saying
-            self.EE1.a = self.EE2.a; self.EE1.v = self.EE2.v
-        Can also be used to assign list values to a variable
-        e.g. self.Pos.assign([1,2,3],'x','y','z')
-        Can also provide dict in case value names don't match
-        e.g. self.Pos_out.assign(self.Pos_in, x='dx',y='dy')
-        as_copy: bool, set to True for dicts/sets to be copied rather than referenced
+        >>> p1 = ExamplePoint(x=0.0, y=0.0)
+        >>> p2 = ExamplePoint(x=10.0, y=20.0)
+        >>> p1.assign(p2, 'x', 'y')
+        >>> p1.x
+        10.0
+        >>> p1.y
+        20.0
+
+        Can also be used to assign list values to a variable, e.g.:
+
+        >>> p1.assign([3.0,4.0], 'x', 'y')
+        >>> p1.x
+        3.0
+        >>> p1.y
+        4.0
+
+        Can also provide kwargs in case value names don't match, e.g.:
+
+        >>> p1.assign(p2, x='y', y='x')
+        >>> p1.x
+        20.0
+        >>> p1.y
+        10.0
+
+        as_copy: bool,
+            set to True for dicts/sets to be copied rather than referenced
         """
         if type(obj) in [list, tuple] or isinstance(obj, np.ndarray):
             for i, state in enumerate(states):
@@ -108,12 +137,13 @@ class State(dataobject, mapping=True):
                 setattr(self, set_state, val)
 
     def get(self, *attnames, **kwargs):
-        """Returns the given attribute names (strings). Mainly useful for reducing
-        length of lines/adding clarity to assignment statements.
-        e.g., x,y = self.Pos.get('x','y') is the same as
-              x,y = self.Pos.x, self.Pos.y, or
-              z = self.Pos.get('x','y') is the same as
-              z = np.array([self.Pos.x, self.Pos.y])
+        """Returns the given attribute names (strings) as a numpy array. Mainly useful
+        for reducing length of lines/adding clarity to assignment statements. e.g.,:
+
+        >>> p = ExamplePoint(x=1.0, y=2.0)
+        >>> p_arr = p.get("x", "y")
+        >>> p_arr
+        array([1., 2.])
         """
         if len(attnames) == 1:
             states = getattr(self, attnames[0])
@@ -146,13 +176,24 @@ class State(dataobject, mapping=True):
 
     def inc(self, **kwargs):
         """Increments the given arguments by a given value. Mainly useful for
-        reducing length/adding clarity to increment statements.
-        e.g., self.Pos.inc(x=1,y=1) is the same as
-             self.Pos.x+=1; self.Pos.y+=1, or
-             self.Pos.x = self.Pos.x + 1; self.Pos.y = self.Pos.y +1
+        reducing length/adding clarity to increment statements, e.g.:
+
+        >>> p = ExamplePoint(x=1.0, y=1.0)
+        >>> p.inc(x=1, y=2)
+        >>> p.x
+        2.0
+        >>> p.y
+        3.0
 
         Can additionally be provided with a second value denoting a limit on the
-        increments e.g. self.Pos.inc(x=(1,10)) will increment x by 1 until it reaches 10
+        increments e.g.:
+        >>> p = ExamplePoint(x=1.0, y=1.0)
+        >>> p.inc(x=(3, 5.0))
+        >>> p.x
+        4.0
+        >>> p.inc(x=(3, 5.0))
+        >>> p.x
+        5.0
         """
         for name, value in kwargs.items():
             if name not in self.__fields__:
@@ -170,8 +211,12 @@ class State(dataobject, mapping=True):
 
     def roundto(self, **kwargs):
         """
-        Rounds the given arguments to a given resolution.
-        e.g., self.Pos.roundto(x=0.1) will round Pos.x to the nearest 0.1.
+        Rounds the given arguments to a given resolution. e.g.:
+
+        >>> p = ExamplePoint(x=1.75850)
+        >>> p.roundto(x=0.1)
+        >>> p.x
+        1.8
         """
         for name, value in kwargs.items():
             current = getattr(self, name)
@@ -179,10 +224,14 @@ class State(dataobject, mapping=True):
 
     def limit(self, **kwargs):
         """Enforces limits on the value of a given property. Mainly useful for
-        reducing length/adding clarity to increment statements.
-        e.g., self.EE.limit(a=(0,100), v=(0,12)) is the same as
-            self.EE.a = min(100, max(0,self.EE.a));
-            self.EE.v = min(12, max(0,self.EE.v))
+        reducing length/adding clarity to increment statements. e.g.,:
+
+        >>> p = ExamplePoint(x=200.0, y=-200.0)
+        >>> p.limit(x=(0.0,100.0), y=(0.0, 100.0))
+        >>> p.x
+        100.0
+        >>>
+        0.0
         """
         for name, value in kwargs.items():
             if name not in self.__fields__:
@@ -194,9 +243,11 @@ class State(dataobject, mapping=True):
                                 ": "+str(getattr(self, name))) from e
 
     def mul(self, *states):
-        """Returns the multiplication of given attributes of the model construct.
-        e.g.,   a = self.mul('x','y','z') is the same as
-                a = self.x*self.y*self.z
+        """Returns the multiplication of given attributes of the State. e.g.:
+
+        >>> p = ExamplePoint(x=2.0, y=3.0)
+        >>> p.mul("x","y")
+        6.0
         """
         a = self.get(states[0])
         for state in states[1:]:
@@ -204,9 +255,11 @@ class State(dataobject, mapping=True):
         return a
 
     def div(self, *states):
-        """Returns the division of given attributes of the model construct
-        e.g.,   a = self.div('x','y','z') is the same as
-                a = (self.x/self.y)/self.z
+        """Returns the division of given attributes of the State, e.g.:
+
+        >>> p = ExamplePoint(x=1.0, y=2.0)
+        >>> p.div('x','y')
+        0.5
         """
         a = self.get(states[0])
         for state in states[1:]:
@@ -214,9 +267,11 @@ class State(dataobject, mapping=True):
         return a
 
     def add(self, *states):
-        """Returns the addition of given attributes of the model construct
-        e.g.,   a = self.add('x','y','z') is the same as
-                a = self.x+self.y+self.z
+        """Returns the addition of given attributes of the State, e.g.:
+
+        >>> p = ExamplePoint(x=1.0, y=2.0)
+        >>> p.add('x','y')
+        3.0
         """
         a = self.get(states[0])
         for state in states[1:]:
@@ -224,9 +279,11 @@ class State(dataobject, mapping=True):
         return a
 
     def sub(self, *states):
-        """Returns the subtraction of given attributes of the model construct
-        e.g.,   a = self.div('x','y','z') is the same as
-                a = (self.x-self.y)-self.z
+        """Returns the subtraction of given attributes of the State, e.g.:
+
+        >>> p = ExamplePoint(x=1.0, y=2.0)
+        >>> p.sub('x','y')
+        -1.0
         """
         a = self.get(states[0])
         for state in states[1:]:
@@ -235,23 +292,17 @@ class State(dataobject, mapping=True):
 
     def same(self, values, *states):
         """Tests whether a given iterable values has the same value as each
-        give state in the model construct.
-        e.g.,   self.same([1,2],'a','b') is the same as
-                all([1,2]==[self.a, self.b])"""
+        give state in the State, e.g.:
+
+        >>> p = ExamplePoint(x=1.0, y=2.0)
+        >>> p.same([1.0, 2.0], "x", "y")
+        True
+        >>> p.same([0.0, 2.0], "x", "y")
+        False
+        """
         test = values == self.get(*states)
         if is_iter(test):
             return all(test)
-        else:
-            return test
-
-    def different(self, values, *states):
-        """Tests whether a given iterable values has any different value the
-        given states in the model construct.
-        e.g.,   self.same([1,2],'a','b') is the same as
-                any([1,2]!=[self.a, self.b])"""
-        test = values != self.get(*states)
-        if is_iter(test):
-            return any(test)
         else:
             return test
 
@@ -299,3 +350,9 @@ class State(dataobject, mapping=True):
                     str_size = "<U"+str(max(strlen))
             hist.init_att(att, val, timerange, track, dtype=dtype, str_size=str_size)
         return hist
+
+
+class ExamplePoint(State):
+    """Example State class used for docstring tests"""
+    x: float = 1.0
+    y: float = 1.0
