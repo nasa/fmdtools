@@ -73,7 +73,6 @@ Intro to fmdtools
 
 Contributions
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
---------------------------------
 
 Development of fmdtools is coordinated by the `fmdtools team <https://github.com/nasa/fmdtools/blob/main/CONTRIBUTORS.md>`_ at NASA Ames Research Center. As an open-source tool developed under the NASA Open Source Agreement, outside contributions are welcomed. To be able to submit contributions (e.g., pull requests) external contributors should first submit a contributors license agreement (`Individual CLA <https://github.com/nasa/fmdtools/blob/main/fmdtools_Individual_CLA.pdf>`_ , `Corporate CLA <https://github.com/nasa/fmdtools/blob/main/fmdtools_Corporate_CLA.pdf>`_).
 
@@ -135,55 +134,20 @@ The major exceptions to this process are:
 - external contributions, which are managed via pull request off of ``main`` (or some external dev branch)
 - minor documentation changes
 
-When releasing fmdtools, the following checklist should be followed:
+Release Checklist
+********************************
 
-.. list-table:: Title
-   :widths: 10 50 10 30
+When releasing fmdtools, follow the steps in the :download:`Release Checklist <release_checklist.csv>`, see below:
+
+.. tabularcolumns:: |p{1cm}|p{3cm}|p{1cm}|p{3cm}|
+
+.. csv-table:: Release Checklist
+   :file: release_checklist.csv
    :header-rows: 1
-    * - Step
-      - Description
-      - Complete?
-      - Comment
-    * - 1
-      - Sync all appropriate (internal and external) main/dev branches into the release branch
-      - 
-      - 
-    * - 2
-      - Run the test script run_all_tests.py and verify test results are appropriate for release
-      - 
-      - 
-    * - 3
-      - Update all version numbers in the appropriate files (conf, LICENSE, README, etc)
-      - 
-      - 
-    * - 4
-      - Update all version numbers, including README.md, setup,py, LICENSE, Intro_to_fmdtools.md. (this can be done by searching all files)
-      -
-      -
-    * - 5
-      - Generate the documentation using `make`  (see Documentation section)
-      - 
-      - 
-    * - 6
-      - Tag the branch in git with the appropriate version (e.g., ``git tag -a v2.X.X -m "version 2.x.x"``)
-      - 
-      - 
-    * - 7
-      - Sync ``main`` branches between the internal and github remotes and push new generated documentation to ``gh-pages``
-      - 
-      - 
-    * - 8 
-      - `Create a release in GitHub <https://github.com/nasa/fmdtools/releases/new>`_ that incorporates (1) a narrative summary of features and changes in the release and (2) the auto-generated release notes corresponding to the issues in bitbucket.
-      - 
-      - 
-    * - 9 
-      - If the release is a "stable" release, generate the PyPI package using wheel and twine and upload it to PyPI
-      - 
-      - 
-    * - 10
-      - Update/check external CI resources as needed (if not automatically). e.g., CodeFactor.
-      -
-      -
+   :widths: 1 3 1 3
+
+.. tabularcolumns:: |p{1cm}|p{3cm}|p{1cm}|p{3cm}|
+
 
 Upload to PyPI
 ********************************

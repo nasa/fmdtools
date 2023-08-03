@@ -55,7 +55,6 @@ In addition to `ex_pump.py <../examples/pump/ex_pump.py>`_, more use-cases are d
    ../examples/pump/Optimization.ipynb
    ../examples/pump/Stochastic_Modelling.ipynb
    ../examples/pump/AST_Sampling.ipynb
-   ../examples/pump/IDETC_Results/IDETC_Figures.ipynb
    ../examples/pump/ex_pump.py
 
 Multirotor
@@ -75,13 +74,13 @@ The multirotor example model has several models of drones modelled at differing 
 
 - The support files include various implementations of the drone model.
 
-  - The `static drone model <../examples/multirotor/drone_mdl_static.py>`_ is the baseline model of the drone for static modeling that is used in the other models.
+  - `drone_mdl_static.py` is the baseline model of the drone for static modeling that is used in the other models.
 
-  - The `dynamic drone model <../examples/multirotor/drone_mdl_dynamic.py>`_ expands on the static model to allow for dynamic simulation. It generates behavior-over-time graphs and dynamic/phase-based FMEAs. 
+  - `drone_mdl_dynamic.py` expands on the static model to allow for dynamic simulation. It generates behavior-over-time graphs and dynamic/phase-based FMEAs. 
 
-  - The `hierarchical drone model <../examples/multirotor/drone_mdl_hierarchical.py>`_ is used to compare system architectures. First by seeing how faults effect the behaviors in each architecture, then by seing how it affects the overall system resilience.
+  - `drone_mdl_hierarchical.py` is used to compare system architectures. First by seeing how faults effect the behaviors in each architecture, then by seing how it affects the overall system resilience.
 
-  - The `optimization drone model <../examples/multirotor/drone_mdl_opt.py>`_ is a modified version of the hierarchical done that encompasses autonomous path planning, rotors, electrical system, and control of the drone. It is parameterized with the following parameters: The rotor and battery architecture can be changed, the flight height can be changed to support different heights, which in turn changes the drone's flight plan, and there is now a `ManageHealth` function which reconfigures the flight depending on detected faults.
+  - `drone_mdl_opt.py` is a modified version of the hierarchical done that encompasses autonomous path planning, rotors, electrical system, and control of the drone. It is parameterized with the following parameters: The rotor and battery architecture can be changed, the flight height can be changed to support different heights, which in turn changes the drone's flight plan, and there is now a `ManageHealth` function which reconfigures the flight depending on detected faults.
 
 
 .. toctree::
@@ -89,10 +88,6 @@ The multirotor example model has several models of drones modelled at differing 
    
    ../examples/multirotor/Demonstration.ipynb
    ../examples/multirotor/Multirotor_Optimization.ipynb
-   ../examples/multirotor/drone_mdl_static.py
-   ../examples/multirotor/drone_mdl_dynamic.py
-   ../examples/multirotor/drone_mdl_hierarchical.py
-   ../examples/multirotor/drone_mdl_opt.py
 
 Tank
 +++++++++++++++++++++++++++++++++++++++++++++
@@ -106,20 +101,18 @@ The tank example is a fairly simple model of a tank, inlet valve, and outlet val
 The support files include various implementations of the tank model.
 
 
-- The baseline `Tank Model <../examples/tank/tank_model.py>`_, a dynamical implementation of a human-operated tank system to show how fmdtools can be used to model human errors
+- The baseline Tank Model (`tank_model.py`), a dynamical implementation of a human-operated tank system to show how fmdtools can be used to model human errors
 
-- A demonstration `Optimization Tank Model <../examples/tank/tank_opt.py>`_, resilience optimization architectures using :class:`fmdtools.sim.search.ProblemInterface` 
+- A demonstration Optimization Tank Model (`tank_opt.py`), resilience optimization architectures using :class:`fmdtools.sim.search.ProblemInterface` 
  
-- The main `Tank optimization model <../examples/tank/tank_optimization.py>`_ similar to `tank_model` and `tank_opt` and is a dynamical implementation of a tank system with contingency management. 
+- The main `Tank optimization model (`tank_optimization.py`)similar to `tank_model` and `tank_opt` and is a dynamical implementation of a tank system with contingency management. 
 
 .. toctree::
    :hidden:
    
    ../examples/tank/Tank_Analysis.ipynb
    ../examples/tank/Tank_Optimization.ipynb
-   ../examples/tank/tank_model.py
-   ../examples/tank/tank_opt.py
-   ../examples/tank/tank_optimization.py
+
 
 EPS
 +++++++++++++++++++++++++++++++++++++++++++++
@@ -128,13 +121,12 @@ The EPS model is a model of a simple electric power system in `eps.py`, which sh
 
 - `EPS Example Notebook <../examples/eps/EPS_Example_Notebook.ipynb>`_ demonstrates this model and some basic fmdtools methods. It shows how fmdtools can be used for purely static propagation models where dynamic states are not a concern. This is a relication of a previous simple electric power system implemented `IBFM <https://github.com/DesignEngrLab/IBFM>`.
 
--  `The supporting EPS Model <../examples/eps/eps.py>`_  builds the eps model for the notebook. The main purpose of this system is to supply power to optical, mechanical, and heat loads. Failure behavior of the system is represented at a high level using solely the functions of the system. 
+-  `The supporting EPS Model `eps.py` builds the eps model for the notebook. The main purpose of this system is to supply power to optical, mechanical, and heat loads. Failure behavior of the system is represented at a high level using solely the functions of the system. 
 
 .. toctree::
    :hidden:
    
    ../examples/eps/EPS_Example_Notebook.ipynb
-   <../examples/eps/eps.py>
 
 Action Sequence Graph
 +++++++++++++++++++++++++++++++++++++++++++++
@@ -184,9 +176,9 @@ The Rover model showcases more advanced methodologies that can be used in fmdtoo
 - `Rover Response Optimization <../examples/rover/optimization/Rover_Response_Optimization.ipynb>`_ further demonstrates the optimization of parameters over a set of fault scenarios using :class:`ProblemInterface`.
   
 - The support files include various implementations of the drone model.
-  - The `main rover model <../examples/rover/rover_model.py>`_ defines the functions and flows used in the analysis.
-  - The `degraded rover model <../examples/rover/rover_degradation.py>`_ extends the model to include degradated states.
-  - The `human-rover model <../examples/rover/rover_model_human.py>_` extends the model to include human faults and response.
+  - `rover_model.py` defines the functions and flows used in the analysis.
+  - `rover_degradation.py` extends the model to include degradated states.
+  - `rover_model_human.py` extends the model to include human faults and response.
 
 
 .. toctree::
@@ -202,16 +194,12 @@ The Rover model showcases more advanced methodologies that can be used in fmdtoo
    ../examples/rover/fault_sampling/Rover_Mode_Notebook.ipynb
    ../examples/rover/optimization/Search_Comparison.ipynb
    ../examples/rover/optimization/Rover_Response_Optimization.ipynb
-   ../examples/rover/rover_model.py
-   ../examples/rover/rover_degradation.py
-   ../examples/rover/rover_model_human.py
 
 Multiflow Demo
 +++++++++++++++++++++++++++++++++++++++++++++
 
-The multiflows example is limited to the model in the file `multiflow_demo.py <..examples/multiflow_demo/multiflow_demo.py>`_, which shows basic usage of the :class:`fmdtools.define.flow.MultiFlow` and :class:`fmdtools.define.flow.CommsFlow` flow structures. `Multiflow and Commsflow Demonstration <..examples/multiflow_demo/MultiFlow_and_Commsflow_Demonstation.ipynb>`_ is a tutorialized version of that file discussing the step by step creation and use of `fmdtools.analyze.graph.ModelTypeGraph` to view model types.
+The multiflows example is limited to the model in the file `multiflow_demo.py`, which shows basic usage of the :class:`fmdtools.define.flow.MultiFlow` and :class:`fmdtools.define.flow.CommsFlow` flow structures. `Multiflow and Commsflow Demonstration <..examples/multiflow_demo/MultiFlow_and_Commsflow_Demonstation.ipynb>`_ is a tutorialized version of that file discussing the step by step creation and use of `fmdtools.analyze.graph.ModelTypeGraph` to view model types.
 
 .. toctree::
   :hidden:
-  ..examples/multiflow_demo/multiflow_demo.py
   ..examples/multiflow_demo/MultiFlow_and_Commsflow_Demonstation.ipynb

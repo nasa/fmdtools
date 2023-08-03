@@ -3,46 +3,49 @@
 Description: functions to propagate faults through a user-defined fault model.
 
 Main Methods:
+
 - :func:`nominal()`: Runs the model over time in the nominal scenario.
 - :func:`one_fault()`:  Runs one fault in the model at a specified time.
-- :func:`sequence()': Runs arbitrary scenario of fault modes at specified times
+- :func:`sequence()`: Runs arbitrary scenario of fault modes at specified times.
 - :func:`single_faults()`: Creates and propagates a list of failure scenarios in a model
- over given model times
+  over given model times.
 - :func:`approach`: Injects and propagates faults in the model defined by a given
-sample approach.
+  sample approach.
 - :func:`nominal_approach`: Simulates a model over a range of parameters defined by a
-nominal approach.
+  nominal approach.
 - :func:`nested_approach`: Injects and propagates faults in the model defined by a
-given sample approach over a range of parameters defined by a nominal approach.
+  given sample approach over a range of parameters defined by a nominal approach.
 
 Shared Method Parameters:
+
 - :data:`sim_kwargs`: Simulation keyword arguments.
 - :data:`run_kwargs`: Run keyword arguments.
 - :data:`mult_kwargs`: Multi-scenario keyword arguments
 
 Private Methods:
+
 - :func:`list_init_faults()`: Creates a list of single-fault scenarios for the graph,
-given the modes set up in the fault model
+  given the modes set up in the fault model
 - :func:`prop_one_scen()`: Runs a fault scenario in the model over time
 - :func:`save_helper()`: Helper function for inline results saving.
--:func:`unpack _res_list`: Helper function for unpacking results
--:func:`exec_nom_par`: Helper function for executing nominal scenarios in parallel
--:func:`exec_nom_helper`: Helper function for executing nominal scenarios
--:func:`nom_helper`: Helper function for initial run of nominal scenario
--:func:`scenlist_helper`: Helper function for `approach`
--:func:`exec_scen_par`:  Helper function for executing the scenario in parallel
--:func:`exec_scen`: Executes a scenario and generates results and classifications given
-a model and nominal model history
--:func:`check_hist_memory`: Checks if the memory will be exhausted given the size of the
-mdlhist and number of scenarios
--:func:`check_mdl_memory`: Raises exception if model size is too large.
--:func:`check_overwrite`: Checks if file can be overwritten
--:func:`phases_from_hist`: Helper function for `nested_approach`
--:func:`check_end_condition`: Helper function for `prop_one_scen` to end simulation
-earlier.
--:func:`get_result`: Helper function for `prop_one_scen` to get result at specific
-timestep.
--:func:`get_endclass_vars`: Helper function for `get_result`
+- :func:`unpack _res_list`: Helper function for unpacking results
+- :func:`exec_nom_par`: Helper function for executing nominal scenarios in parallel
+- :func:`exec_nom_helper`: Helper function for executing nominal scenarios
+- :func:`nom_helper`: Helper function for initial run of nominal scenario
+- :func:`scenlist_helper`: Helper function for `approach`
+- :func:`exec_scen_par`:  Helper function for executing the scenario in parallel
+- :func:`exec_scen`: Executes a scenario and generates results and classifications given
+  a model and nominal model history
+- :func:`check_hist_memory`: Checks if the memory will be exhausted given the size of
+  the mdlhist and number of scenarios
+- :func:`check_mdl_memory`: Raises exception if model size is too large.
+- :func:`check_overwrite`: Checks if file can be overwritten
+- :func:`phases_from_hist`: Helper function for `nested_approach`
+- :func:`check_end_condition`: Helper function for `prop_one_scen` to end simulation
+  earlier.
+- :func:`get_result`: Helper function for `prop_one_scen` to get result at specific
+  timestep.
+- :func:`get_endclass_vars`: Helper function for `get_result`
 """
 # File name: propagate.py
 # Author: Daniel Hulse
@@ -723,8 +726,9 @@ def exec_scen(mdl, scen, save_args={}, indiv_id='', **kwargs):
         ID str to insert into the file name (if saving individually)
     **kwargs : kwargs
         Additional keyword arguments, may include:
+
             - :data:`sim_kwargs` : kwargs
-                Simulation options for :func:`prop_one_scen
+                Simulation options for :func:`prop_one_scen`
     """
     result, mdlhist, _, t_end,  = prop_one_scen(mdl, scen, **kwargs)
     save_helper(save_args, result, mdlhist, indiv_id=indiv_id, result_id=str(scen.name))
