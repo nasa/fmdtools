@@ -123,7 +123,8 @@ class EdgeStyle(dataobject):
         return EdgeStyle(**style_kwargs)
 
     def kwargs(self):
-        return asdict(self)
+        return {k: v for k, v in asdict(self).items()
+                if not (not self.arrows and k in ('arrowstyle', 'arrowsize'))}
 
     def as_gv_kwargs(self):
         """

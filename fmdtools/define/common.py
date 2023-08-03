@@ -7,19 +7,19 @@ Functions contained in this module:
 - :func:`get_var`:Gets the variable value of the object
 - :func:`set_var`:Sets variable of the object to a given value
 - :func:`get_true_fields`:Resolves the args to pass to a dataobject given certain
-defaults
+  defaults
 - :func:`get_true_field`:Gets the value that will be set to fieldname given *args and
-**kwargs
+  **kwargs
 - :func:`is_iter`: Checks whether a data type should be interpreted as an iterable or
 not.
 - :func:`check_pickleability`:Checks to see which attributes of an object will pickle
-(and thus parallelize)"
+  (and thus parallelize)"
 - :func:`init_obj_attr`:Initializes attributes to a given object
 - :func:`get_dataobj_track`:Gets tracking params for a given dataobject
-(State, Mode, Rand, etc)
+  (State, Mode, Rand, etc)
 - :func:`get_obj_track`:Gets tracking params for a given object (block, model, etc)
 - :func:`t_key`:Used to generate keys for a given (float) time that is queryable as
-an attribute of an object/dict
+  an attribute of an object/dict
 - :func:`eq_units`:Provides conversion factor for from rateunit (str) to timeunit (str)
 
 """

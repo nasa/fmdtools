@@ -11,6 +11,7 @@ import fmdtools.analyze as an
 from fmdtools.sim.approach import SampleApproach
 from fmdtools.define.common import check_pickleability
 import numpy as np
+import math
 from tests.common import CommonTests
 
 
@@ -45,21 +46,10 @@ class epsTests(unittest.TestCase, CommonTests):
         endclasses, reshists = propagate.single_faults(mdl, showprogress=False)
         actual_num_faults = np.sum([len(f.m.faultmodes) for f in mdl.fxns.values()])
         self.assertEqual(len(endclasses.nest(1)), actual_num_faults + 1)
-        hist_len_is_1 = all(
-            [
-                all(
-                    [
-                        all([len(j) == 1 for j in i.values()])
-                        for i in f.flows.values()
-                    ]
-                )
-                for f in reshists.values()
-            ]
-        )
+        hist_len_is_1 = all([len(v) == 1 for v in reshists.values()])
         self.assertTrue(hist_len_is_1)  # all histories have length 1
-        all_have_costs = all(
-            [e["cost"] for name, e in endclasses.items() if name != "nominal"]
-        )
+        all_have_costs = all(v > 0 for k, v in endclasses.get_values('.cost').items()
+                             if 'nominal' not in k)
         self.assertTrue(all_have_costs)  # all endresults have positive costs
         repcosts = np.sum(
             [
@@ -67,15 +57,13 @@ class epsTests(unittest.TestCase, CommonTests):
                 for f in mdl.fxns.values()
             ]
         )
-        total_simcosts = np.sum(
-            [e["cost"] for name, e in endclasses.items() if name != "nominal"]
-        )
-        self.assertGreater(
-            total_simcosts, repcosts
-        )  # fault costs higher than if it was just repairs
+        # fault costs higher than if it was just repairs
+        total_simcosts = sum([v for v in endclasses.get_values('.cost').values()])
+        self.assertGreater(total_simcosts, repcosts)
 
     def test_fault_app(self):
-        """Tests that the expected number of scenarios are generated for a given approach"""
+        """Tests that the expected number of scenarios are generated for a given
+        approach"""
         actual_num_faults = int(
             np.sum([len(f.m.faultmodes) for f in self.mdl.fxns.values()])
         )
@@ -90,7 +78,7 @@ class epsTests(unittest.TestCase, CommonTests):
                 },
             )
             self.assertEqual(
-                len(approach.scenlist), np.math.comb(actual_num_faults, num_joint)
+                len(approach.scenlist), math.comb(actual_num_faults, num_joint)
             )  # tests the length
             endclasses, reshists = propagate.approach(
                 self.mdl, approach, showprogress=False
