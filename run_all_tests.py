@@ -13,10 +13,16 @@ import pytest
 
 if __name__=="__main__":
     # requires pytest, nbmake, pytest-html
-    retcode = pytest.main(["--html=./reports/junit/report.html",
-                           "--self-contained-html",
-                           "--junitxml=./reports/junit/junit.xml",
-                           "--continue-on-collection-errors"])
+    
+    # for testing modules with doctests
+    doctest_modules = ["fmdtools/define/state.py", "fmdtools/define/parameter.py"]
+    redcode = pytest.main(["--doctest-modules", *doctest_modules])
+    
+    # retcode = pytest.main(["--html=./reports/junit/report.html",
+    #                        "--self-contained-html",
+    #                        "--junitxml=./reports/junit/junit.xml",
+    #                        "--doctest-modules",
+    #                        "--continue-on-collection-errors"])
 
     fast_notebooks = ["examples/asg_demo/Action_Sequence_Graph.ipynb",
                       "examples/eps/EPS_Example_Notebook.ipynb", 
@@ -58,6 +64,7 @@ if __name__=="__main__":
 #                            "--junitxml=./reports/junit/junit.xml",
 #                            "--nbmake",
 #                            "--overwrite",
+#                            "--doctest-modules",
 #                            "--continue-on-collection-errors"])
 # =============================================================================
     

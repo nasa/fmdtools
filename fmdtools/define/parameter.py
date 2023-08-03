@@ -20,20 +20,25 @@ class Parameter(dataobject, readonly=True):
     The Parameter class defines model/function/flow values which are immutable,
     that is, the same from model instantiation through a simulation. Parameters
     inherit from recordclass, giving them a low memory footprint, and use type
-    hints and ranges to ensure parameter values are valid.
+    hints and ranges to ensure parameter values are valid. e.g.,:
 
-    e.g.,
-    class Param(Parameter, readonly=True):
-        x:          float = 30.0
-        y:          float = 30.0
-        x_lim = (0.0,100.0)
-        y_set = (0.0,30.0,100.0)
+    >>> class Param(Parameter, readonly=True):
+    ...     x: float = 30.0
+    ...     y:          float = 30.0
+    ...     x_lim = (0.0,100.0)
+    ...     y_set = (0.0,30.0,100.0)
+
     defines a parameter with float x and y fields with default values of 30 and
     x_lim minimum/maximum values for x and y_set possible values for y. Note that
     readonly=True should be set to ensure fields are not changed.
 
     This parameter can then be instantiated using:
-        p = Param(x=1.0, y=0.0)
+
+    >>> p = Param(x=1.0, y=0.0)
+    >>> p.x
+    1.0
+    >>> p.y
+    0.0
     """
 
     def __init__(self, *args, strict_immutability=True, check_type=True,
