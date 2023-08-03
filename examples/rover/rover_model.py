@@ -143,8 +143,8 @@ class FaultyStates(State):
 
 class Fault(Flow):
     _init_s = FaultyStates
-    #_init_p = DegParam
-    #def __init__(self,name, **kwargs):
+    # _init_p = DegParam
+    # def __init__(self,name, **kwargs):
     #    super().__init__(self,name, **kwargs)
     #    self.s.inc(friction = self.p.friction,
     #               drift = self.p.drift)
@@ -933,7 +933,7 @@ def plot_trajectories(
         ax = fig.axes[0]
     else:
         fig = ax.get_figure()
-    
+
     for mode, hist in range_hist.items():
         if mode[6:11] == "hmode":
             ax.plot(
