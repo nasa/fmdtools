@@ -73,7 +73,6 @@ Intro to fmdtools
 
 Contributions
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
---------------------------------
 
 Development of fmdtools is coordinated by the `fmdtools team <https://github.com/nasa/fmdtools/blob/main/CONTRIBUTORS.md>`_ at NASA Ames Research Center. As an open-source tool developed under the NASA Open Source Agreement, outside contributions are welcomed. To be able to submit contributions (e.g., pull requests) external contributors should first submit a contributors license agreement (`Individual CLA <https://github.com/nasa/fmdtools/blob/main/fmdtools_Individual_CLA.pdf>`_ , `Corporate CLA <https://github.com/nasa/fmdtools/blob/main/fmdtools_Corporate_CLA.pdf>`_).
 
@@ -135,14 +134,20 @@ The major exceptions to this process are:
 - external contributions, which are managed via pull request off of ``main`` (or some external dev branch)
 - minor documentation changes
 
-The release process is as follows:
+Release Checklist
+********************************
 
-- Update all version numbers in the appropriate files (conf, LICENSE, README, etc)
-- Generate the documentation using `make`
-- Tag the version in git with the appropriate version (e.g., ``git tag -a v2.X.X -m "version 2.x.x"``)
-- Sync ``main`` branches between the internal and github remotes and push new documentation to ``gh-pages``
-- `Create a release in GitHub <https://github.com/nasa/fmdtools/releases/new>`_ that incorporates (1) a narrative summary of features and changes in the release and (2) the auto-generated release notes corresponding to the issues in bitbucket.
-- If the release is a "stable" release, generate the PyPI package using wheel and twine and upload it to PyPI
+When releasing fmdtools, follow the steps in the :download:`Release Checklist <release_checklist.csv>`, see below:
+
+.. tabularcolumns:: |p{1cm}|p{3cm}|p{1cm}|p{3cm}|
+
+.. csv-table:: Release Checklist
+   :file: release_checklist.csv
+   :header-rows: 1
+   :widths: 1 3 1 3
+
+.. tabularcolumns:: |p{1cm}|p{3cm}|p{1cm}|p{3cm}|
+
 
 Upload to PyPI
 ********************************
@@ -226,6 +231,16 @@ See: `CONTRIBUTORS.md <../CONTRIBUTORS.md>`_
 
 Model Development Best Practices
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+Pay attention to and document the fmdtools version
+--------------------------------
+
+As a research-oriented tool, much of the fmdtools interfaces can be considered to be "in development." While we have wanted to keep the repository stable, there have been many changes to syntax over the years to provide enhanced functionality and usages.
+
+As such, it can be helpful to document what fmdtools version you are running in a README.md for your project, so you can always have a working model and replicate results, even if something has changed on the toolkit-level. 
+
+This also helps us (as developers) address bugs which affect specific versions of fmdtools, as well as identify bugs which were introduced in updates.
+
 
 Plan your model to avoid technical debt
 --------------------------------

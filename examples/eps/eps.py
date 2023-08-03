@@ -371,7 +371,7 @@ class EPS(Model):
     __slots__ = ()
     default_track = {"flows": ["he", "me", "oe"]}
 
-    def __init__(self, sp=SimParam(times=(0, 1)), **kwargs):
+    def __init__(self, sp=SimParam(times=(0, 0)), **kwargs):
         """
         The Model superclass uses a static model representation by default if
         there are no parameters for times, phases, etc.
@@ -476,4 +476,4 @@ if __name__ == "__main__":
     mg.set_heatmap(degtimemap)
     mg.draw()
 
-    propagate.single_faults(mdl)
+    #propagate.single_faults(mdl)

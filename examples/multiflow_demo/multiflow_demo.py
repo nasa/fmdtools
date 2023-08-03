@@ -80,4 +80,6 @@ if __name__=='__main__':
     mdl.flows["communications"].mover_1.send("mover_2")
     from fmdtools.sim import propagate
     
-    endclass, mdlhist = propagate.nominal(mdl)
+    endres, mdlhist = propagate.nominal(mdl, desired_result='graph.flows.communications')
+    
+    endres.graph.flows.communications.draw()
