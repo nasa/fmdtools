@@ -106,7 +106,9 @@ class StochasticPumpTests(unittest.TestCase, CommonTests):
         mdl = Pump()
         app = NominalApproach()
         app.add_seed_replicates('test_seeds', 10)
-        endres, mdlhists = propagate.nominal_approach(mdl, app, run_stochastic=True)
+        endres, mdlhists = propagate.nominal_approach(mdl, app,
+                                                      run_stochastic=True,
+                                                      showprogress=False)
         endres['test_seeds_1.endclass.cost'] = 10.0
         # an.plot.nominal_vals_1d(app, endres, 'r.seed', metric="nonsense")
         title = "should show at least one red line over range of seeds"
@@ -125,7 +127,9 @@ class StochasticPumpTests(unittest.TestCase, CommonTests):
         app.add_param_replicates(paramfunc, 'delay_10', 10, (10))
         app.add_param_replicates(paramfunc, 'delay_10', 20, (15))
 
-        endres, mdlhists = propagate.nominal_approach(mdl, app, run_stochastic=True)
+        endres, mdlhists = propagate.nominal_approach(mdl, app,
+                                                      run_stochastic=True,
+                                                      showprogress=False)
         endres['delay_10_20.endclass.cost'] = 10.0
         title = ("should show at least one red x over range of seeds," +
                  " probs, and delay={1, 10}")

@@ -1,0 +1,23 @@
+Step,Description,Complete?,Comment
+1,"Sync appropriate branches into release branch",,
+1a, "Internal branches (e.g., main, dev),,
+1b, "External branches (e.g., main),,
+2,"Run script run_all_tests.py and verify test results are appropriate",,
+2a, "Run full tests"
+2b, "Regenerate badge"
+3,"Update version numbers in appropriate files",,
+3a, "Check files conf.py, LICENSE.py, REAMDE.py",,
+3b, "Run a repository-wide search for the version number",,
+4,"Generate the documentation using ""./make html"" ",,
+5,"Tag the branch in git with the appropriate version.",,
+5a,"e.g., git tag -a v2.X.X -m ""version 2.x.x"" "
+6,"Sync to remotes",,
+6a, "Push release branch to github and internal remotes",,
+6b, "Overwrite documentation on gh-pages and push to GitHub",,
+7,"Create a release in GitHub",,
+7a, "incorporate a narrative summary of features and changes",,
+7b, "incorporate the auto-generated bitbucket release notes.",,
+9,"Update/check external CI resources as needed",,
+9a, "CodeFactor"
+10,"If release is ""stable"", Upload to PyPI (see below",,
+
