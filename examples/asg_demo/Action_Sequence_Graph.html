@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Action Sequence Graph Tutorial &mdash; fmdtools 2.0-alpha documentation</title>
+  <title>Action Sequence Graph Tutorial &mdash; fmdtools 2.0-alpha5 documentation</title>
       <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
     <link rel="shortcut icon" href="../../_static/fmdtools_ico.ico"/>
@@ -48,6 +48,7 @@
 <li class="toctree-l3"><a class="reference internal" href="../../README.html#prerequisites">Prerequisites</a></li>
 </ul>
 </li>
+<li class="toctree-l2"><a class="reference internal" href="../../README.html#examples">Examples</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../README.html#contributions">Contributions</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="../../README.html#contributors">Contributors</a></li>
 </ul>
@@ -66,7 +67,7 @@
 <li class="toctree-l2"><a class="reference internal" href="../../docs/Development%20Guide.html#intro-to-fmdtools">Intro to fmdtools</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="../../docs/Intro_to_fmdtools.html">Intro to resilience modelling, simulation, and visualization in Python with fmdtools.</a><ul>
 <li class="toctree-l4"><a class="reference internal" href="../../docs/Intro_to_fmdtools.html#author-daniel-hulse">Author: Daniel Hulse</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/Intro_to_fmdtools.html#version-2-0-alpha">Version: 2.0-alpha</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../docs/Intro_to_fmdtools.html#version-2-0-alpha5">Version: 2.0-alpha5</a></li>
 </ul>
 </li>
 <li class="toctree-l3"><a class="reference internal" href="../../docs/Intro_to_fmdtools.html#overview">Overview</a></li>
@@ -83,6 +84,8 @@
 <li class="toctree-l3"><a class="reference internal" href="../../docs/Intro_to_fmdtools.html#analysis-workflow-structure">Analysis Workflow/Structure</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../docs/Intro_to_fmdtools.html#defining-a-model">Defining a Model</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../docs/Intro_to_fmdtools.html#id1">Defining a Model</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../docs/Intro_to_fmdtools.html#function-code-template">Function Code Template</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../docs/Intro_to_fmdtools.html#model-code-template">Model Code Template</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../docs/Intro_to_fmdtools.html#demo-model-activity-examples-pump-ex-pump-py">Demo Model Activity: examples/pump/ex_pump.py</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../docs/Intro_to_fmdtools.html#more-resources-for-model-definition">More Resources for Model Definition</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../docs/Intro_to_fmdtools.html#notebook-activity">Notebook Activity:</a></li>
@@ -104,11 +107,13 @@
 </ul>
 </li>
 <li class="toctree-l3"><a class="reference internal" href="../../docs/Development%20Guide.html#development-process">Development Process</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../docs/Development%20Guide.html#release-checklist">Release Checklist</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../docs/Development%20Guide.html#upload-to-pypi">Upload to PyPI</a></li>
 </ul>
 </li>
 <li class="toctree-l3"><a class="reference internal" href="../../docs/Development%20Guide.html#roles">Roles</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../docs/Development%20Guide.html#documentation">Documentation</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../docs/Development%20Guide.html#style-formatting">Style/Formatting</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../docs/Development%20Guide.html#testing">Testing</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../docs/Development%20Guide.html#contributors">Contributors</a><ul>
 <li class="toctree-l4"><a class="reference internal" href="../../CONTRIBUTORS.html">CONTRIBUTORS</a></li>
@@ -117,6 +122,7 @@
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="../../docs/Development%20Guide.html#model-development-best-practices">Model Development Best Practices</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../docs/Development%20Guide.html#pay-attention-to-and-document-the-fmdtools-version">Pay attention to and document the fmdtools version</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../docs/Development%20Guide.html#plan-your-model-to-avoid-technical-debt">Plan your model to avoid technical debt</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../docs/Development%20Guide.html#don-t-copy-inherit-and-functionalize">Don’t copy, inherit and functionalize</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../docs/Development%20Guide.html#document-your-code-sometimes-before-your-write-it">Document your code, sometimes <em>before</em> your write it</a></li>
@@ -131,8 +137,8 @@
 </li>
 </ul>
 </li>
-<li class="toctree-l1 current"><a class="reference internal" href="../../docs/Examples.html">Examples</a><ul class="current">
-<li class="toctree-l2"><a class="reference internal" href="../../docs/Examples.html#pump">Pump</a><ul>
+<li class="toctree-l1 current"><a class="reference internal" href="../Examples.html">Examples</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../Examples.html#pump">Pump</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="../pump/Tutorial_complete.html">fmdtools Tutorial</a><ul>
 <li class="toctree-l4"><a class="reference internal" href="../pump/Tutorial_complete.html#1.)-Loading-the-environment-and-model">1.) Loading the environment and model</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../pump/Tutorial_complete.html#2.),-3.),-and-4.)-Simulate-and-visualize-the-results!">2.), 3.), and 4.) Simulate and visualize the results!</a></li>
@@ -177,15 +183,9 @@
 <li class="toctree-l4"><a class="reference internal" href="../pump/AST_Sampling.html#Simulator">Simulator</a></li>
 </ul>
 </li>
-<li class="toctree-l3"><a class="reference internal" href="../pump/IDETC_Results/IDETC_Figures.html">Probability Modelling in fmdtools</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="../pump/IDETC_Results/IDETC_Figures.html#Theory-and-Goals">Theory and Goals</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../pump/IDETC_Results/IDETC_Figures.html#Model-Description">Model Description</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../pump/IDETC_Results/IDETC_Figures.html#Experiments">Experiments</a></li>
 </ul>
 </li>
-</ul>
-</li>
-<li class="toctree-l2"><a class="reference internal" href="../../docs/Examples.html#multirotor">Multirotor</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../Examples.html#multirotor">Multirotor</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="../multirotor/Demonstration.html">fmdtools Paper Demonstration</a><ul>
 <li class="toctree-l4"><a class="reference internal" href="../multirotor/Demonstration.html#Initial-Model">Initial Model</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../multirotor/Demonstration.html#Setting-Node-Positions">Setting Node Positions</a></li>
@@ -204,26 +204,32 @@
 </li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="../../docs/Examples.html#tank">Tank</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../Examples.html#tank">Tank</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="../tank/Tank_Analysis.html">Hold-up Tank Model</a><ul>
 <li class="toctree-l4"><a class="reference internal" href="../tank/Tank_Analysis.html#Verifying-the-nominal-state:">Verifying the nominal state:</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../tank/Tank_Analysis.html#History">History</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../tank/Tank_Analysis.html#What-happens-under-component-faults?">What happens under component faults?</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../tank/Tank_Analysis.html#What-about-human-induced-faults?">What about human-induced faults?</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../tank/Tank_Analysis.html#Evaluating-Joint-Component-Human-fault-modes">Evaluating Joint Component-Human fault modes</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../tank/Tank_Analysis.html#Testing-different-reaction-times">Testing different reaction times</a></li>
 </ul>
 </li>
-<li class="toctree-l3"><a class="reference internal" href="../tank/Tank_Optimization.html">Cooling Tank Model</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="../tank/Tank_Optimization.html#Simulation">Simulation</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../tank/Tank_Optimization.html">Cooling Tank Model Optimization</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../tank/Tank_Optimization.html#Simulation">Simulation</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../tank/Tank_Optimization.html#Verifying-the-nominal-state:">Verifying the nominal state:</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../tank/Tank_Optimization.html#What-happens-under-component-faults?">What happens under component faults?</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../tank/Tank_Optimization.html#Full-set-of-modes">Full set of modes</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../tank/Tank_Optimization.html#Defining-Optimization-Problem">Defining Optimization Problem</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../tank/Tank_Optimization.html#Optimization">Optimization</a></li>
 </ul>
 </li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="../../docs/Examples.html#eps">EPS</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../Examples.html#eps">EPS</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="../eps/EPS_Example_Notebook.html">EPS Example Notebook</a></li>
 </ul>
 </li>
-<li class="toctree-l2 current"><a class="reference internal" href="../../docs/Examples.html#action-sequence-graph">Action Sequence Graph</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="../Examples.html#action-sequence-graph">Action Sequence Graph</a><ul class="current">
 <li class="toctree-l3 current"><a class="current reference internal" href="#">Action Sequence Graph Tutorial</a><ul>
 <li class="toctree-l4"><a class="reference internal" href="#Function-level-Simulation">Function-level Simulation</a></li>
 <li class="toctree-l4"><a class="reference internal" href="#Model-Simulation">Model Simulation</a></li>
@@ -232,7 +238,7 @@
 </li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="../../docs/Examples.html#rover">Rover</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../Examples.html#rover">Rover</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="../rover/Rover_Setup_Notebook.html">Rover Model Explanation and Preliminaries</a><ul>
 <li class="toctree-l4"><a class="reference internal" href="../rover/Rover_Setup_Notebook.html#Model-Setup">Model Setup</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../rover/Rover_Setup_Notebook.html#Model-simulation">Model simulation</a></li>
@@ -281,17 +287,20 @@
 </li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="../../docs/Examples.html#multiflow-demo">Multiflow Demo</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../Examples.html#multiflow-demo">Multiflow Demo</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../multiflow_demo/Multiflow_and_Commsflow_Demonstration.html">Demonstration on Using MultiFlow and CommsFlow</a></li>
+</ul>
+</li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../../docs/Glossary.html">Glossary</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../docs/fmdtools.html">Module Reference</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="../../docs/fmdtools.define.html">fmdtools.define package</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="../../docs/fmdtools.define.html#module-fmdtools.define.block">fmdtools.define.block</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../docs/fmdtools.define.html#fmdtools-define-block">fmdtools.define.block</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../docs/fmdtools.define.html#module-fmdtools.define.common">fmdtools.define.common</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../docs/fmdtools.define.html#module-fmdtools.define.flow">fmdtools.define.flow</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../docs/fmdtools.define.html#module-fmdtools.define.mode">fmdtools.define.mode</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../../docs/fmdtools.define.html#module-fmdtools.define.model">fmdtools.define.model</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../docs/fmdtools.define.html#fmdtools-define-model">fmdtools.define.model</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../docs/fmdtools.define.html#module-fmdtools.define.parameter">fmdtools.define.parameter</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../docs/fmdtools.define.html#module-fmdtools.define.rand">fmdtools.define.rand</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../docs/fmdtools.define.html#module-fmdtools.define.state">fmdtools.define.state</a></li>
@@ -330,7 +339,7 @@
           <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
       <li><a href="../../index.html" class="icon icon-home"></a> &raquo;</li>
-          <li><a href="../../docs/Examples.html">Examples</a> &raquo;</li>
+          <li><a href="../Examples.html">Examples</a> &raquo;</li>
       <li>Action Sequence Graph Tutorial</li>
       <li class="wy-breadcrumbs-aside">
             <a href="../../_sources/examples/asg_demo/Action_Sequence_Graph.ipynb.txt" rel="nofollow"> View page source</a>
@@ -687,14 +696,16 @@ div.rendered_html tbody tr:hover {
         <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">m</span><span class="o">.</span><span class="n">in_mode</span><span class="p">(</span><span class="s1">&#39;failed&#39;</span><span class="p">):</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">hazard</span><span class="o">.</span><span class="n">s</span><span class="o">.</span><span class="n">mitigated</span><span class="o">=</span><span class="kc">False</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">m</span><span class="o">.</span><span class="n">remove_fault</span><span class="p">(</span><span class="s1">&#39;failed&#39;</span><span class="p">,</span> <span class="s1">&#39;nom&#39;</span><span class="p">)</span>
-        <span class="k">else</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">hazard</span><span class="o">.</span><span class="n">s</span><span class="o">.</span><span class="n">mitigated</span><span class="o">=</span><span class="kc">False</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">hazard</span><span class="o">.</span><span class="n">s</span><span class="o">.</span><span class="n">mitigated</span><span class="o">=</span><span class="kc">False</span>
     <span class="k">def</span> <span class="nf">acted</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">m</span><span class="o">.</span><span class="n">in_mode</span><span class="p">(</span><span class="s1">&#39;failed&#39;</span><span class="p">)</span>
 <span class="k">class</span> <span class="nc">Done</span><span class="p">(</span><span class="n">Action</span><span class="p">):</span>
     <span class="vm">__slots__</span><span class="o">=</span><span class="p">(</span><span class="s1">&#39;hazard&#39;</span><span class="p">)</span>
     <span class="n">_init_hazard</span> <span class="o">=</span> <span class="n">Hazard</span>
     <span class="k">def</span> <span class="nf">behavior</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">time</span><span class="p">):</span>
-        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">hazard</span><span class="o">.</span><span class="n">s</span><span class="o">.</span><span class="n">present</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">hazard</span><span class="o">.</span><span class="n">s</span><span class="o">.</span><span class="n">mitigated</span><span class="o">=</span><span class="kc">False</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">hazard</span><span class="o">.</span><span class="n">s</span><span class="o">.</span><span class="n">present</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">hazard</span><span class="o">.</span><span class="n">s</span><span class="o">.</span><span class="n">mitigated</span><span class="o">=</span><span class="kc">False</span>
     <span class="k">def</span> <span class="nf">ready</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">hazard</span><span class="o">.</span><span class="n">s</span><span class="o">.</span><span class="n">present</span>
 </pre></div>
@@ -708,19 +719,18 @@ div.rendered_html tbody tr:hover {
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">Human</span><span class="p">(</span><span class="n">ASG</span><span class="p">):</span>
     <span class="n">initial_action</span><span class="o">=</span><span class="s2">&quot;perceive&quot;</span>
-    <span class="n">_init_hazard</span> <span class="o">=</span> <span class="n">Hazard</span>    <span class="c1"># flows from external fxn/model should be defined as a part of the class definition</span>
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">add_flow</span><span class="p">(</span><span class="s2">&quot;outcome&quot;</span><span class="p">,</span>    <span class="n">fclass</span><span class="o">=</span><span class="n">Outcome</span><span class="p">)</span> <span class="c1">#flows can be added in the ASG for custom flow architectures.</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_flow</span><span class="p">(</span><span class="s2">&quot;hazard&quot;</span><span class="p">,</span> <span class="n">Hazard</span><span class="p">)</span> <span class="c1"># flows from external fxn/model can be defined here,</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_flow</span><span class="p">(</span><span class="s2">&quot;outcome&quot;</span><span class="p">,</span> <span class="n">fclass</span><span class="o">=</span><span class="n">Outcome</span><span class="p">)</span> <span class="c1"># along with flows internal to the ASG class</span>
 
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_act</span><span class="p">(</span><span class="s2">&quot;perceive&quot;</span><span class="p">,</span> <span class="n">Perceive</span><span class="p">,</span> <span class="s2">&quot;outcome&quot;</span><span class="p">,</span> <span class="s2">&quot;hazard&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_act</span><span class="p">(</span><span class="s2">&quot;act&quot;</span><span class="p">,</span> <span class="n">Act</span><span class="p">,</span> <span class="s2">&quot;outcome&quot;</span><span class="p">,</span> <span class="s2">&quot;hazard&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_act</span><span class="p">(</span><span class="s2">&quot;done&quot;</span><span class="p">,</span> <span class="n">Done</span><span class="p">,</span> <span class="s2">&quot;hazard&quot;</span><span class="p">)</span>
 
-        <span class="bp">self</span><span class="o">.</span><span class="n">add_act</span><span class="p">(</span><span class="s2">&quot;perceive&quot;</span><span class="p">,</span>    <span class="n">Perceive</span><span class="p">,</span>   <span class="s2">&quot;outcome&quot;</span><span class="p">,</span> <span class="s2">&quot;hazard&quot;</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">add_act</span><span class="p">(</span><span class="s2">&quot;act&quot;</span><span class="p">,</span>         <span class="n">Act</span><span class="p">,</span>        <span class="s2">&quot;outcome&quot;</span><span class="p">,</span> <span class="s2">&quot;hazard&quot;</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">add_act</span><span class="p">(</span><span class="s2">&quot;done&quot;</span><span class="p">,</span>        <span class="n">Done</span><span class="p">,</span>       <span class="s2">&quot;hazard&quot;</span><span class="p">)</span>
-
-        <span class="bp">self</span><span class="o">.</span><span class="n">add_cond</span><span class="p">(</span><span class="s2">&quot;perceive&quot;</span><span class="p">,</span>   <span class="s2">&quot;act&quot;</span><span class="p">,</span>      <span class="s2">&quot;percieved&quot;</span><span class="p">,</span>    <span class="bp">self</span><span class="o">.</span><span class="n">actions</span><span class="p">[</span><span class="s1">&#39;perceive&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">percieved</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">add_cond</span><span class="p">(</span><span class="s2">&quot;act&quot;</span><span class="p">,</span>        <span class="s2">&quot;done&quot;</span><span class="p">,</span>     <span class="s2">&quot;acted&quot;</span><span class="p">,</span>        <span class="bp">self</span><span class="o">.</span><span class="n">actions</span><span class="p">[</span><span class="s1">&#39;act&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">acted</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">add_cond</span><span class="p">(</span><span class="s2">&quot;done&quot;</span><span class="p">,</span>       <span class="s2">&quot;perceive&quot;</span><span class="p">,</span> <span class="s2">&quot;ready&quot;</span><span class="p">,</span>        <span class="bp">self</span><span class="o">.</span><span class="n">actions</span><span class="p">[</span><span class="s1">&#39;done&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">ready</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_cond</span><span class="p">(</span><span class="s2">&quot;perceive&quot;</span><span class="p">,</span> <span class="s2">&quot;act&quot;</span><span class="p">,</span> <span class="s2">&quot;percieved&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">actions</span><span class="p">[</span><span class="s1">&#39;perceive&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">percieved</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_cond</span><span class="p">(</span><span class="s2">&quot;act&quot;</span><span class="p">,</span> <span class="s2">&quot;done&quot;</span><span class="p">,</span> <span class="s2">&quot;acted&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">actions</span><span class="p">[</span><span class="s1">&#39;act&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">acted</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_cond</span><span class="p">(</span><span class="s2">&quot;done&quot;</span><span class="p">,</span><span class="s2">&quot;perceive&quot;</span><span class="p">,</span> <span class="s2">&quot;ready&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">actions</span><span class="p">[</span><span class="s1">&#39;done&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">ready</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">build</span><span class="p">()</span>
 </pre></div>
 </div>
@@ -790,7 +800,7 @@ add_act(self, name, actclass, *flownames, duration=0.0, **params)
     *flownames : flow
         Flows (optional) which connect the actions
     duration:
-        Not documented
+        Duration of the action. Default is 0.0
     **params : any
         parameters to instantiate the Action with.
 
@@ -868,25 +878,7 @@ build(self)
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-Human(actions={&#39;perceive&#39;: perceive Perceive
-- State()
-- ActionMode(mode=nominal, faults=set())
-, &#39;act&#39;: act Act
-- State()
-- ActionMode(mode=nominal, faults=set())
-, &#39;done&#39;: done Done
-- State()
-- Mode(mode=nominal, faults=set())
-}, action_graph=&lt;networkx.classes.digraph.DiGraph object at 0x00000151FB40BC10&gt;, flow_graph=&lt;networkx.classes.digraph.DiGraph object at 0x00000151FB40B5B0&gt;, conditions={&#39;percieved&#39;: &lt;bound method Perceive.percieved of perceive Perceive
-- State()
-- ActionMode(mode=nominal, faults=set())
-&gt;, &#39;acted&#39;: &lt;bound method Act.acted of act Act
-- State()
-- ActionMode(mode=nominal, faults=set())
-&gt;, &#39;ready&#39;: &lt;bound method Done.ready of done Done
-- State()
-- Mode(mode=nominal, faults=set())
-&gt;}, faultmodes={&#39;perceive_failed&#39;: &#39;perceive&#39;, &#39;perceive_unable&#39;: &#39;perceive&#39;, &#39;act_failed&#39;: &#39;act&#39;, &#39;act_unable&#39;: &#39;act&#39;}, flows={&#39;hazard&#39;: hazard Hazard flow: HazardState(present=False, percieved=False, mitigated=False), &#39;outcome&#39;: outcome Outcome flow: OutcomeStates(num_perceptions=0, num_actions=0)}, active_actions={&#39;perceive&#39;}, pos={})
+&lt;__main__.Human at 0x28451c7b8b0&gt;
 </pre></div></div>
 </div>
 <p><code class="docutils literal notranslate"><span class="pre">ASGGraph</span></code> can also be used to visualize the flow of actions (e.g., which are active, flows vs conditions, etc.).</p>
@@ -937,7 +929,12 @@ Human(actions={&#39;perceive&#39;: perceive Perceive
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-{&#39;bipartite&#39;: 0, &#39;label&#39;: &#39;Action&#39;, &#39;active&#39;: True, &#39;states&#39;: {}, &#39;faults&#39;: []}
+{&#39;bipartite&#39;: 0,
+ &#39;label&#39;: &#39;Action&#39;,
+ &#39;active&#39;: True,
+ &#39;states&#39;: {},
+ &#39;faults&#39;: [],
+ &#39;indicators&#39;: []}
 </pre></div></div>
 </div>
 <section id="Function-level-Simulation">
@@ -948,8 +945,8 @@ Human(actions={&#39;perceive&#39;: perceive Perceive
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">DetectHazard</span><span class="p">(</span><span class="n">FxnBlock</span><span class="p">):</span>
-    <span class="n">_init_a</span> <span class="o">=</span>           <span class="n">Human</span>
-    <span class="n">_init_hazard</span><span class="o">=</span>       <span class="n">Hazard</span>
+    <span class="n">_init_a</span> <span class="o">=</span> <span class="n">Human</span>
+    <span class="n">_init_hazard</span><span class="o">=</span> <span class="n">Hazard</span>
 </pre></div>
 </div>
 </div>
@@ -1117,7 +1114,7 @@ outcome Outcome flow: OutcomeStates(num_perceptions=1, num_actions=1)
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-hazard Hazard flow: HazardState(present=False, percieved=False, mitigated=True)
+hazard Hazard flow: HazardState(present=False, percieved=False, mitigated=False)
 </pre></div></div>
 </div>
 <div class="nbinput docutils container">
@@ -1134,7 +1131,7 @@ hazard Hazard flow: HazardState(present=False, percieved=False, mitigated=True)
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-hazard Hazard flow: HazardState(present=False, percieved=False, mitigated=True)
+hazard Hazard flow: HazardState(present=False, percieved=False, mitigated=False)
 </pre></div></div>
 </div>
 <div class="nbinput nblast docutils container">
@@ -1142,7 +1139,7 @@ hazard Hazard flow: HazardState(present=False, percieved=False, mitigated=True)
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">assert</span> <span class="n">ex_fxn</span><span class="o">.</span><span class="n">a</span><span class="o">.</span><span class="n">flows</span><span class="p">[</span><span class="s1">&#39;hazard&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">s</span><span class="o">.</span><span class="n">present</span><span class="o">==</span><span class="kc">False</span>
-<span class="k">assert</span> <span class="n">ex_fxn</span><span class="o">.</span><span class="n">a</span><span class="o">.</span><span class="n">flows</span><span class="p">[</span><span class="s1">&#39;hazard&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">s</span><span class="o">.</span><span class="n">mitigated</span><span class="o">==</span><span class="kc">True</span>
+<span class="k">assert</span> <span class="n">ex_fxn</span><span class="o">.</span><span class="n">a</span><span class="o">.</span><span class="n">flows</span><span class="p">[</span><span class="s1">&#39;hazard&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">s</span><span class="o">.</span><span class="n">mitigated</span><span class="o">==</span><span class="kc">False</span>
 <span class="k">assert</span> <span class="nb">id</span><span class="p">(</span><span class="n">ex_fxn</span><span class="o">.</span><span class="n">hazard</span><span class="p">)</span> <span class="o">==</span> <span class="nb">id</span><span class="p">(</span><span class="n">ex_fxn</span><span class="o">.</span><span class="n">a</span><span class="o">.</span><span class="n">flows</span><span class="p">[</span><span class="s1">&#39;hazard&#39;</span><span class="p">])</span>
 </pre></div>
 </div>
@@ -1405,21 +1402,21 @@ time:                          array(61)
       <td>{perceive}</td>
       <td>False</td>
       <td>False</td>
-      <td>True</td>
+      <td>False</td>
     </tr>
     <tr>
       <th>58</th>
       <td>{perceive}</td>
       <td>False</td>
       <td>False</td>
-      <td>True</td>
+      <td>False</td>
     </tr>
     <tr>
       <th>59</th>
       <td>{perceive}</td>
       <td>False</td>
       <td>False</td>
-      <td>True</td>
+      <td>False</td>
     </tr>
     <tr>
       <th>60</th>
@@ -1613,9 +1610,9 @@ m.mode:                        array(61)
       <th>4</th>
       <td>1</td>
       <td>0</td>
+      <td>1</td>
       <td>0</td>
-      <td>0</td>
-      <td>3</td>
+      <td>2</td>
       <td>4.0</td>
     </tr>
     <tr>
@@ -1631,45 +1628,45 @@ m.mode:                        array(61)
       <th>56</th>
       <td>1</td>
       <td>0</td>
+      <td>1</td>
       <td>0</td>
-      <td>0</td>
-      <td>3</td>
+      <td>2</td>
       <td>56.0</td>
     </tr>
     <tr>
       <th>57</th>
       <td>1</td>
       <td>0</td>
+      <td>1</td>
       <td>0</td>
-      <td>0</td>
-      <td>3</td>
+      <td>2</td>
       <td>57.0</td>
     </tr>
     <tr>
       <th>58</th>
       <td>1</td>
       <td>0</td>
+      <td>1</td>
       <td>0</td>
-      <td>0</td>
-      <td>3</td>
+      <td>2</td>
       <td>58.0</td>
     </tr>
     <tr>
       <th>59</th>
       <td>1</td>
       <td>0</td>
+      <td>1</td>
       <td>0</td>
-      <td>0</td>
-      <td>3</td>
+      <td>2</td>
       <td>59.0</td>
     </tr>
     <tr>
       <th>60</th>
       <td>1</td>
       <td>0</td>
+      <td>1</td>
       <td>0</td>
-      <td>0</td>
-      <td>3</td>
+      <td>2</td>
       <td>60.0</td>
     </tr>
   </tbody>
@@ -1741,8 +1738,8 @@ m.mode:                        array(61)
     </tr>
     <tr>
       <th>4</th>
-      <td>False</td>
-      <td>0</td>
+      <td>True</td>
+      <td>1</td>
       <td>4.0</td>
     </tr>
     <tr>
@@ -1753,32 +1750,32 @@ m.mode:                        array(61)
     </tr>
     <tr>
       <th>56</th>
-      <td>False</td>
-      <td>0</td>
+      <td>True</td>
+      <td>1</td>
       <td>56.0</td>
     </tr>
     <tr>
       <th>57</th>
-      <td>False</td>
-      <td>0</td>
+      <td>True</td>
+      <td>1</td>
       <td>57.0</td>
     </tr>
     <tr>
       <th>58</th>
-      <td>False</td>
-      <td>0</td>
+      <td>True</td>
+      <td>1</td>
       <td>58.0</td>
     </tr>
     <tr>
       <th>59</th>
-      <td>False</td>
-      <td>0</td>
+      <td>True</td>
+      <td>1</td>
       <td>59.0</td>
     </tr>
     <tr>
       <th>60</th>
-      <td>False</td>
-      <td>0</td>
+      <td>True</td>
+      <td>1</td>
       <td>60.0</td>
     </tr>
   </tbody>

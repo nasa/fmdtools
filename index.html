@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>fmdtools Version 2.0-alpha &mdash; fmdtools 2.0-alpha documentation</title>
+  <title>fmdtools Version 2.0-alpha5 &mdash; fmdtools 2.0-alpha5 documentation</title>
       <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
     <link rel="shortcut icon" href="_static/fmdtools_ico.ico"/>
@@ -45,6 +45,7 @@
 <li class="toctree-l3"><a class="reference internal" href="README.html#prerequisites">Prerequisites</a></li>
 </ul>
 </li>
+<li class="toctree-l2"><a class="reference internal" href="README.html#examples">Examples</a></li>
 <li class="toctree-l2"><a class="reference internal" href="README.html#contributions">Contributions</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="README.html#contributors">Contributors</a></li>
 </ul>
@@ -63,7 +64,7 @@
 <li class="toctree-l2"><a class="reference internal" href="docs/Development%20Guide.html#intro-to-fmdtools">Intro to fmdtools</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="docs/Intro_to_fmdtools.html">Intro to resilience modelling, simulation, and visualization in Python with fmdtools.</a><ul>
 <li class="toctree-l4"><a class="reference internal" href="docs/Intro_to_fmdtools.html#author-daniel-hulse">Author: Daniel Hulse</a></li>
-<li class="toctree-l4"><a class="reference internal" href="docs/Intro_to_fmdtools.html#version-2-0-alpha">Version: 2.0-alpha</a></li>
+<li class="toctree-l4"><a class="reference internal" href="docs/Intro_to_fmdtools.html#version-2-0-alpha5">Version: 2.0-alpha5</a></li>
 </ul>
 </li>
 <li class="toctree-l3"><a class="reference internal" href="docs/Intro_to_fmdtools.html#overview">Overview</a></li>
@@ -80,6 +81,8 @@
 <li class="toctree-l3"><a class="reference internal" href="docs/Intro_to_fmdtools.html#analysis-workflow-structure">Analysis Workflow/Structure</a></li>
 <li class="toctree-l3"><a class="reference internal" href="docs/Intro_to_fmdtools.html#defining-a-model">Defining a Model</a></li>
 <li class="toctree-l3"><a class="reference internal" href="docs/Intro_to_fmdtools.html#id1">Defining a Model</a></li>
+<li class="toctree-l3"><a class="reference internal" href="docs/Intro_to_fmdtools.html#function-code-template">Function Code Template</a></li>
+<li class="toctree-l3"><a class="reference internal" href="docs/Intro_to_fmdtools.html#model-code-template">Model Code Template</a></li>
 <li class="toctree-l3"><a class="reference internal" href="docs/Intro_to_fmdtools.html#demo-model-activity-examples-pump-ex-pump-py">Demo Model Activity: examples/pump/ex_pump.py</a></li>
 <li class="toctree-l3"><a class="reference internal" href="docs/Intro_to_fmdtools.html#more-resources-for-model-definition">More Resources for Model Definition</a></li>
 <li class="toctree-l3"><a class="reference internal" href="docs/Intro_to_fmdtools.html#notebook-activity">Notebook Activity:</a></li>
@@ -101,11 +104,13 @@
 </ul>
 </li>
 <li class="toctree-l3"><a class="reference internal" href="docs/Development%20Guide.html#development-process">Development Process</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="docs/Development%20Guide.html#release-checklist">Release Checklist</a></li>
 <li class="toctree-l4"><a class="reference internal" href="docs/Development%20Guide.html#upload-to-pypi">Upload to PyPI</a></li>
 </ul>
 </li>
 <li class="toctree-l3"><a class="reference internal" href="docs/Development%20Guide.html#roles">Roles</a></li>
 <li class="toctree-l3"><a class="reference internal" href="docs/Development%20Guide.html#documentation">Documentation</a></li>
+<li class="toctree-l3"><a class="reference internal" href="docs/Development%20Guide.html#style-formatting">Style/Formatting</a></li>
 <li class="toctree-l3"><a class="reference internal" href="docs/Development%20Guide.html#testing">Testing</a></li>
 <li class="toctree-l3"><a class="reference internal" href="docs/Development%20Guide.html#contributors">Contributors</a><ul>
 <li class="toctree-l4"><a class="reference internal" href="CONTRIBUTORS.html">CONTRIBUTORS</a></li>
@@ -114,6 +119,7 @@
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="docs/Development%20Guide.html#model-development-best-practices">Model Development Best Practices</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="docs/Development%20Guide.html#pay-attention-to-and-document-the-fmdtools-version">Pay attention to and document the fmdtools version</a></li>
 <li class="toctree-l3"><a class="reference internal" href="docs/Development%20Guide.html#plan-your-model-to-avoid-technical-debt">Plan your model to avoid technical debt</a></li>
 <li class="toctree-l3"><a class="reference internal" href="docs/Development%20Guide.html#don-t-copy-inherit-and-functionalize">Don’t copy, inherit and functionalize</a></li>
 <li class="toctree-l3"><a class="reference internal" href="docs/Development%20Guide.html#document-your-code-sometimes-before-your-write-it">Document your code, sometimes <em>before</em> your write it</a></li>
@@ -128,8 +134,8 @@
 </li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="docs/Examples.html">Examples</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="docs/Examples.html#pump">Pump</a><ul>
+<li class="toctree-l1"><a class="reference internal" href="examples/Examples.html">Examples</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="examples/Examples.html#pump">Pump</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="examples/pump/Tutorial_complete.html">fmdtools Tutorial</a><ul>
 <li class="toctree-l4"><a class="reference internal" href="examples/pump/Tutorial_complete.html#1.)-Loading-the-environment-and-model">1.) Loading the environment and model</a></li>
 <li class="toctree-l4"><a class="reference internal" href="examples/pump/Tutorial_complete.html#2.),-3.),-and-4.)-Simulate-and-visualize-the-results!">2.), 3.), and 4.) Simulate and visualize the results!</a></li>
@@ -174,15 +180,9 @@
 <li class="toctree-l4"><a class="reference internal" href="examples/pump/AST_Sampling.html#Simulator">Simulator</a></li>
 </ul>
 </li>
-<li class="toctree-l3"><a class="reference internal" href="examples/pump/IDETC_Results/IDETC_Figures.html">Probability Modelling in fmdtools</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="examples/pump/IDETC_Results/IDETC_Figures.html#Theory-and-Goals">Theory and Goals</a></li>
-<li class="toctree-l4"><a class="reference internal" href="examples/pump/IDETC_Results/IDETC_Figures.html#Model-Description">Model Description</a></li>
-<li class="toctree-l4"><a class="reference internal" href="examples/pump/IDETC_Results/IDETC_Figures.html#Experiments">Experiments</a></li>
 </ul>
 </li>
-</ul>
-</li>
-<li class="toctree-l2"><a class="reference internal" href="docs/Examples.html#multirotor">Multirotor</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="examples/Examples.html#multirotor">Multirotor</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="examples/multirotor/Demonstration.html">fmdtools Paper Demonstration</a><ul>
 <li class="toctree-l4"><a class="reference internal" href="examples/multirotor/Demonstration.html#Initial-Model">Initial Model</a></li>
 <li class="toctree-l4"><a class="reference internal" href="examples/multirotor/Demonstration.html#Setting-Node-Positions">Setting Node Positions</a></li>
@@ -201,26 +201,32 @@
 </li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="docs/Examples.html#tank">Tank</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="examples/Examples.html#tank">Tank</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="examples/tank/Tank_Analysis.html">Hold-up Tank Model</a><ul>
 <li class="toctree-l4"><a class="reference internal" href="examples/tank/Tank_Analysis.html#Verifying-the-nominal-state:">Verifying the nominal state:</a></li>
+<li class="toctree-l4"><a class="reference internal" href="examples/tank/Tank_Analysis.html#History">History</a></li>
 <li class="toctree-l4"><a class="reference internal" href="examples/tank/Tank_Analysis.html#What-happens-under-component-faults?">What happens under component faults?</a></li>
 <li class="toctree-l4"><a class="reference internal" href="examples/tank/Tank_Analysis.html#What-about-human-induced-faults?">What about human-induced faults?</a></li>
 <li class="toctree-l4"><a class="reference internal" href="examples/tank/Tank_Analysis.html#Evaluating-Joint-Component-Human-fault-modes">Evaluating Joint Component-Human fault modes</a></li>
 <li class="toctree-l4"><a class="reference internal" href="examples/tank/Tank_Analysis.html#Testing-different-reaction-times">Testing different reaction times</a></li>
 </ul>
 </li>
-<li class="toctree-l3"><a class="reference internal" href="examples/tank/Tank_Optimization.html">Cooling Tank Model</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="examples/tank/Tank_Optimization.html#Simulation">Simulation</a></li>
+<li class="toctree-l3"><a class="reference internal" href="examples/tank/Tank_Optimization.html">Cooling Tank Model Optimization</a></li>
+<li class="toctree-l3"><a class="reference internal" href="examples/tank/Tank_Optimization.html#Simulation">Simulation</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="examples/tank/Tank_Optimization.html#Verifying-the-nominal-state:">Verifying the nominal state:</a></li>
+<li class="toctree-l4"><a class="reference internal" href="examples/tank/Tank_Optimization.html#What-happens-under-component-faults?">What happens under component faults?</a></li>
+<li class="toctree-l4"><a class="reference internal" href="examples/tank/Tank_Optimization.html#Full-set-of-modes">Full set of modes</a></li>
+<li class="toctree-l4"><a class="reference internal" href="examples/tank/Tank_Optimization.html#Defining-Optimization-Problem">Defining Optimization Problem</a></li>
+<li class="toctree-l4"><a class="reference internal" href="examples/tank/Tank_Optimization.html#Optimization">Optimization</a></li>
 </ul>
 </li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="docs/Examples.html#eps">EPS</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="examples/Examples.html#eps">EPS</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="examples/eps/EPS_Example_Notebook.html">EPS Example Notebook</a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="docs/Examples.html#action-sequence-graph">Action Sequence Graph</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="examples/Examples.html#action-sequence-graph">Action Sequence Graph</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="examples/asg_demo/Action_Sequence_Graph.html">Action Sequence Graph Tutorial</a><ul>
 <li class="toctree-l4"><a class="reference internal" href="examples/asg_demo/Action_Sequence_Graph.html#Function-level-Simulation">Function-level Simulation</a></li>
 <li class="toctree-l4"><a class="reference internal" href="examples/asg_demo/Action_Sequence_Graph.html#Model-Simulation">Model Simulation</a></li>
@@ -229,7 +235,7 @@
 </li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="docs/Examples.html#rover">Rover</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="examples/Examples.html#rover">Rover</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="examples/rover/Rover_Setup_Notebook.html">Rover Model Explanation and Preliminaries</a><ul>
 <li class="toctree-l4"><a class="reference internal" href="examples/rover/Rover_Setup_Notebook.html#Model-Setup">Model Setup</a></li>
 <li class="toctree-l4"><a class="reference internal" href="examples/rover/Rover_Setup_Notebook.html#Model-simulation">Model simulation</a></li>
@@ -278,17 +284,20 @@
 </li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="docs/Examples.html#multiflow-demo">Multiflow Demo</a></li>
+<li class="toctree-l2"><a class="reference internal" href="examples/Examples.html#multiflow-demo">Multiflow Demo</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="examples/multiflow_demo/Multiflow_and_Commsflow_Demonstration.html">Demonstration on Using MultiFlow and CommsFlow</a></li>
+</ul>
+</li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="docs/Glossary.html">Glossary</a></li>
 <li class="toctree-l1"><a class="reference internal" href="docs/fmdtools.html">Module Reference</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="docs/fmdtools.define.html">fmdtools.define package</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="docs/fmdtools.define.html#module-fmdtools.define.block">fmdtools.define.block</a></li>
+<li class="toctree-l3"><a class="reference internal" href="docs/fmdtools.define.html#fmdtools-define-block">fmdtools.define.block</a></li>
 <li class="toctree-l3"><a class="reference internal" href="docs/fmdtools.define.html#module-fmdtools.define.common">fmdtools.define.common</a></li>
 <li class="toctree-l3"><a class="reference internal" href="docs/fmdtools.define.html#module-fmdtools.define.flow">fmdtools.define.flow</a></li>
 <li class="toctree-l3"><a class="reference internal" href="docs/fmdtools.define.html#module-fmdtools.define.mode">fmdtools.define.mode</a></li>
-<li class="toctree-l3"><a class="reference internal" href="docs/fmdtools.define.html#module-fmdtools.define.model">fmdtools.define.model</a></li>
+<li class="toctree-l3"><a class="reference internal" href="docs/fmdtools.define.html#fmdtools-define-model">fmdtools.define.model</a></li>
 <li class="toctree-l3"><a class="reference internal" href="docs/fmdtools.define.html#module-fmdtools.define.parameter">fmdtools.define.parameter</a></li>
 <li class="toctree-l3"><a class="reference internal" href="docs/fmdtools.define.html#module-fmdtools.define.rand">fmdtools.define.rand</a></li>
 <li class="toctree-l3"><a class="reference internal" href="docs/fmdtools.define.html#module-fmdtools.define.state">fmdtools.define.state</a></li>
@@ -327,7 +336,7 @@
           <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
       <li><a href="#" class="icon icon-home"></a> &raquo;</li>
-      <li>fmdtools Version 2.0-alpha</li>
+      <li>fmdtools Version 2.0-alpha5</li>
       <li class="wy-breadcrumbs-aside">
             <a href="_sources/index.rst.txt" rel="nofollow"> View page source</a>
       </li>
@@ -362,14 +371,18 @@
 }
 </style>
 <section id="fmdtools-version-release">
-<h1>fmdtools Version 2.0-alpha<a class="headerlink" href="#fmdtools-version-release" title="Permalink to this headline"></a></h1>
+<h1>fmdtools Version 2.0-alpha5<a class="headerlink" href="#fmdtools-version-release" title="Permalink to this headline"></a></h1>
 <a class="reference internal image-reference" href="_images/logo_detailed.jpg"><img alt="fmdtools logo (detailed)" src="_images/logo_detailed.jpg" style="width: 800px;" /></a>
 <section class="tex2jax_ignore mathjax_ignore" id="overview">
 <h2>Overview<a class="headerlink" href="#overview" title="Permalink to this headline"></a></h2>
 <p><img alt="PyPI" src="https://img.shields.io/pypi/v/fmdtools" />
-<img alt="GitHub release (latest by date)" src="https://img.shields.io/github/v/release/nasa/fmdtools?label=GitHub%20Release" /></p>
+<img alt="GitHub release (latest by date)" src="https://img.shields.io/github/v/release/nasa/fmdtools?label=GitHub%20Release" />
+<a class="reference external" href="https://www.codefactor.io/repository/github/nasa/fmdtools"><img alt="CodeFactor" src="https://www.codefactor.io/repository/github/nasa/fmdtools/badge" /></a>
+<span class="xref myst"><img alt="Tests Status" src="_images/tests-badge.svg" /></span>
+<a class="reference external" href="https://github.com/nasa/fmdtools/blob/main/NASA_Open_Source_Agreement_fmdtools.pdf"><img alt="GitHub License" src="https://img.shields.io/badge/License-NOSA-green" /></a></p>
 <p><strong>fmdtools</strong> (Fault Model Design tools) is a toolkit for modelling system resilience in the early design phase. With it, one can simulate the effects of faults in a system to build resilience into the system design at a high level.  To achieve this, fmdtools provides a Python-based <em>design environment</em> where one can represent the system in a model, simulate the resilience of the model to faults, and analyze the resulting model responses to iteratively improve the resilience of the design.</p>
-<p>Note: This version (<strong>2.0-alpha2</strong>) is currently in development, and thus not all interfaces may be fully stable and not all examples or documentation may be up-to-date. <a class="reference external" href="https://htmlpreview.github.io/?https://github.com/nasa/fmdtools/blob/main/pytest_report.html">Click here to view the status of our test results.</a>. For stable versions, download packages releases without the -alpha or -beta tags.</p>
+<p>Note: This version (<strong>2.0-alpha5</strong>) is currently in development, and thus not all interfaces may be fully stable and not all examples or documentation may be up-to-date. For stable versions, download packages releases without the -alpha or -beta tags.</p>
+<p><a class="reference external" href="https://nasa.github.io/fmdtools">Click here to view the the full documentation website.</a></p>
 <section id="getting-started">
 <h3>Getting Started<a class="headerlink" href="#getting-started" title="Permalink to this headline"></a></h3>
 <p>The latest public version of fmdtools can be downloaded from the <a class="reference external" href="https://github.com/nasa/fmdtools/">fmdtools github repository</a> e.g., using:</p>
@@ -377,38 +390,92 @@
 </pre></div>
 </div>
 <p>For development and use of this version (e.g., for tutorials and models), we recommended then installing this package using <code class="docutils literal notranslate"><span class="pre">pip</span></code>:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>   <span class="n">pip</span> <span class="n">install</span> <span class="o">-</span><span class="n">e</span> <span class="o">/</span><span class="n">path</span><span class="o">/</span><span class="n">to</span><span class="o">/</span><span class="n">fmdtools</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>   <span class="n">pip</span> <span class="n">install</span> <span class="o">-</span><span class="n">e</span> <span class="s2">&quot;/path/to/fmdtools&quot;</span>
 </pre></div>
 </div>
 <p>A version of the fmdtools toolkit can also be installed directly from the <a class="reference external" href="https://pypi.org/project/fmdtools/">PyPI package repository</a> using <code class="docutils literal notranslate"><span class="pre">pip</span> <span class="pre">install</span> <span class="pre">fmdtools</span></code>.</p>
 <section id="prerequisites">
 <h4>Prerequisites<a class="headerlink" href="#prerequisites" title="Permalink to this headline"></a></h4>
-<p>fmdtools requires Python 3 and depends directly on these packages (see requirements.txt):</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>   <span class="n">scipy</span>
-   <span class="n">tqdm</span>
-   <span class="n">networkx</span>
-   <span class="n">numpy</span>
-   <span class="n">matplotlib</span>
-   <span class="n">pandas</span>
-   <span class="n">ordered</span><span class="o">-</span><span class="nb">set</span>
-   <span class="n">dill</span>
-   <span class="n">recordclass</span> <span class="o">&gt;=</span><span class="mf">0.14.4</span>
-   <span class="n">pytest</span>
+<p>fmdtools requires Python 3 (anaconda recommended) and depends directly on these packages (see requirements.txt):</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">scipy</span>
+<span class="c1"># license: (BSD-new) https://www.scipy.org/scipylib/license.html</span>
+<span class="n">tqdm</span>
+<span class="c1"># license: (mixed) https://github.com/tqdm/tqdm/blob/master/LICENCE</span>
+<span class="n">networkx</span>
+<span class="c1"># license: (BSD-new) https://raw.githubusercontent.com/networkx/networkx/master/LICENSE.txt</span>
+<span class="n">numpy</span>
+<span class="c1"># license: (BSD) https://numpy.org/doc/stable/license.html</span>
+<span class="n">matplotlib</span>
+<span class="c1"># license: (mixed) https://matplotlib.org/stable/users/license.html</span>
+<span class="n">pandas</span>
+<span class="c1"># license: (BSD 3-clause) https://pandas.pydata.org/pandas-docs/stable/getting_started/overview.html#license</span>
+<span class="n">ordered</span><span class="o">-</span><span class="nb">set</span>
+<span class="c1"># license: (MIT) https://github.com/rspeer/ordered-set/blob/master/MIT-LICENSE</span>
+<span class="n">dill</span>
+<span class="c1"># license: (MIT) https://github.com/uqfoundation/dill/blob/master/LICENSE</span>
+<span class="n">recordclass</span> <span class="o">&gt;=</span><span class="mf">0.14.4</span>
+<span class="c1"># license: (MIT) https://bitbucket.org/intellimath/recordclass/src/master/LICENSE.txt</span>
+<span class="n">pytest</span>
+<span class="c1"># license: (MIT) https://docs.pytest.org/en/7.3.x/license.html</span>
+<span class="n">graphviz</span>
+<span class="c1"># license: (MIT) https://github.com/xflr6/graphviz/blob/master/LICENSE.txt</span>
 </pre></div>
 </div>
-<p>These packages are optional but recommended to enable specific fmdtools use-cases and to work with examples in the repository:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>   <span class="n">jupyter</span> <span class="n">notebook</span>                     <span class="c1">#(for repository notebooks)</span>
-   <span class="n">graphviz</span>                                     <span class="c1">#(to plot using graphviz options)</span>
-   <span class="n">pyvis</span>                                        <span class="c1">#(for interactive html views of model graphs)</span>
-   <span class="n">quadpy</span>                                       <span class="c1">#(for quadrature sampling)</span>
-   <span class="n">ffmpeg</span>                                       <span class="c1">#(for animations)</span>
-   <span class="n">shapely</span>                                      <span class="c1">#(for multirotor model)</span>
-   <span class="n">deap</span>                                         <span class="c1">#(for optimization of rover faults)</span>
-   <span class="n">pycallgraph2</span>                         <span class="c1">#(for model profiling)</span>
+<p>These external (non-python) packages are recommended to enable specific fmdtools use-cases and to test/develop fmdtools as well as work with examples in the repository:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">jupyter</span> <span class="n">notebook</span>
+<span class="c1"># used for: repository notebooks</span>
+<span class="c1"># license: (BSD-3) https://jupyter.org/governance/projectlicense.html</span>
+<span class="n">graphviz</span>
+<span class="c1"># used for: plotting graphs using graphviz</span>
+<span class="c1"># license: (CPL 1.0) https://graphviz.org/license/</span>
+<span class="n">pyvis</span>
+<span class="c1"># used for: interactive html views of model graphs</span>
+<span class="c1"># license: (BSD-3)</span>
+<span class="n">ffmpeg</span>
+<span class="c1"># used for: animations in demo notebook(s)</span>
+<span class="c1"># license: (LGPL version) https://www.ffmpeg.org/legal.html</span>
 </pre></div>
 </div>
-<p>These must be installed (e.g. using <code class="docutils literal notranslate"><span class="pre">pip</span> <span class="pre">install</span> <span class="pre">packagename</span></code> or <code class="docutils literal notranslate"><span class="pre">conda</span> <span class="pre">install</span> <span class="pre">packagename</span></code>) them before running any of the codes in the repository.</p>
+<p>These must be installed within the system environment (e.g. using <code class="docutils literal notranslate"><span class="pre">conda</span> <span class="pre">install</span> <span class="pre">packagename</span></code>) them to enable the specific features/uses in the repository.</p>
+<p>Additionally, the following python packages are not included but are necessary for development/testing of the code:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">shapely</span>
+<span class="c1"># used for: multirotor model</span>
+<span class="c1"># license: (BSD 3-clause) https://github.com/shapely/shapely/blob/main/LICENSE.txt</span>
+<span class="n">deap</span>
+<span class="c1"># used for: optimization of rover faults</span>
+<span class="c1"># license: (LGPL-3.0) https://github.com/DEAP/deap/blob/master/LICENSE.txt</span>
+<span class="n">nbmake</span>
+<span class="c1"># used for: for notebook tests</span>
+<span class="c1"># license: (Apache 2.0) https://github.com/treebeardtech/nbmake/blob/main/LICENSE</span>
+<span class="n">pytest</span><span class="o">-</span><span class="n">html</span>
+<span class="c1"># used for: development test report generation</span>
+<span class="c1"># license: (MPL-3) https://github.com/pytest-dev/pytest-html/blob/master/LICENSE</span>
+<span class="n">genbadge</span>
+<span class="c1"># used for: generating test badges for the README</span>
+<span class="c1"># license: (BSD 3-Clause) https://github.com/smarie/python-genbadge/blob/main/LICENSE</span>
+<span class="n">multiprocess</span>
+<span class="c1"># used for: parallism tutorial profiling</span>
+<span class="c1"># license: (BSD-3 Clause) https://github.com/uqfoundation/multiprocess/blob/master/LICENSE</span>
+<span class="n">pathos</span>
+<span class="c1"># used for: parallelism tutorial profiling</span>
+<span class="c1"># license: (BSD-3 Clause) https://github.com/uqfoundation/pathos/blob/master/LICENSE</span>
+</pre></div>
+</div>
+<p>They can be installed using <code class="docutils literal notranslate"><span class="pre">pip</span> <span class="pre">install</span> <span class="pre">packagename</span></code>.</p>
 </section>
+</section>
+<section id="examples">
+<h3>Examples<a class="headerlink" href="#examples" title="Permalink to this headline"></a></h3>
+<p>For tutorials, see the <a class="reference external" href="https://github.com/nasa/fmdtools/tree/main/examples">examples folder</a> and <a class="reference external" href="https://nasa.github.io/fmdtools/docs/Examples.html">examples page of the documentation</a>. These folders include the following:</p>
+<ul class="simple">
+<li><p><a class="reference external" href="https://github.com/nasa/fmdtools/tree/main/examples/asg_demo"><strong>asg_demo</strong></a>: A tutorial covering the use of the Action Sequence Graph in the FxnBlock class, which is useful for representing a Function’s Progress through a sequence of actions (e.g., modes of operation, etc).</p></li>
+<li><p><a class="reference external" href="https://github.com/nasa/fmdtools/tree/main/examples/eps"><strong>eps</strong></a>: A model of a simple electric power system in eps.py, which shows how undirected propagation can be used in a simple static (i.e., one time-step) moelling use-case.</p></li>
+<li><p><a class="reference external" href="https://github.com/nasa/fmdtools/tree/main/examples/multiflow_demo"><strong>multiflow_demo</strong></a>: A demonstration on the use of MultiFlow and CommsFlow for the coordination of multiple devices.</p></li>
+<li><p><a class="reference external" href="https://github.com/nasa/fmdtools/tree/main/examples/multirotor"><strong>multirotor</strong></a>: Includes several models of drones modelled at differing levels of detail. Includes a demonstration of how models can be matured as more details are added and how the system can be co-optimized.</p></li>
+<li><p><a class="reference external" href="https://github.com/nasa/fmdtools/tree/main/examples/pump"><strong>pump</strong></a>: A simple pump model to demonstrate various capabilities of fmdtools. This includes a tutorial notebook, demostration of plot capabilities, optimization and stochastic modeling.</p></li>
+<li><p><a class="reference external" href="https://github.com/nasa/fmdtools/tree/main/examples/rover"><strong>rover</strong></a>: Showcases more advanced methodologies that can be used in fmdtools, and has essentially been the developers’ demo case study for advancing the state-of-the-art in resilience simulation.</p></li>
+<li><p><a class="reference external" href="https://github.com/nasa/fmdtools/tree/main/examples/tank"><strong>tank</strong></a>: A fairly simple model of a tank, inlet valve, and outlet valve. It includes a demonstration of the model and optimization of said model.</p></li>
+</ul>
 </section>
 <section id="contributions">
 <h3>Contributions<a class="headerlink" href="#contributions" title="Permalink to this headline"></a></h3>
@@ -445,6 +512,7 @@
 <li class="toctree-l3"><a class="reference internal" href="README.html#prerequisites">Prerequisites</a></li>
 </ul>
 </li>
+<li class="toctree-l2"><a class="reference internal" href="README.html#examples">Examples</a></li>
 <li class="toctree-l2"><a class="reference internal" href="README.html#contributions">Contributions</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="README.html#contributors">Contributors</a></li>
 </ul>
@@ -467,16 +535,19 @@
 </ul>
 </li>
 <li class="toctree-l3"><a class="reference internal" href="docs/Development%20Guide.html#development-process">Development Process</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="docs/Development%20Guide.html#release-checklist">Release Checklist</a></li>
 <li class="toctree-l4"><a class="reference internal" href="docs/Development%20Guide.html#upload-to-pypi">Upload to PyPI</a></li>
 </ul>
 </li>
 <li class="toctree-l3"><a class="reference internal" href="docs/Development%20Guide.html#roles">Roles</a></li>
 <li class="toctree-l3"><a class="reference internal" href="docs/Development%20Guide.html#documentation">Documentation</a></li>
+<li class="toctree-l3"><a class="reference internal" href="docs/Development%20Guide.html#style-formatting">Style/Formatting</a></li>
 <li class="toctree-l3"><a class="reference internal" href="docs/Development%20Guide.html#testing">Testing</a></li>
 <li class="toctree-l3"><a class="reference internal" href="docs/Development%20Guide.html#contributors">Contributors</a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="docs/Development%20Guide.html#model-development-best-practices">Model Development Best Practices</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="docs/Development%20Guide.html#pay-attention-to-and-document-the-fmdtools-version">Pay attention to and document the fmdtools version</a></li>
 <li class="toctree-l3"><a class="reference internal" href="docs/Development%20Guide.html#plan-your-model-to-avoid-technical-debt">Plan your model to avoid technical debt</a></li>
 <li class="toctree-l3"><a class="reference internal" href="docs/Development%20Guide.html#don-t-copy-inherit-and-functionalize">Don’t copy, inherit and functionalize</a></li>
 <li class="toctree-l3"><a class="reference internal" href="docs/Development%20Guide.html#document-your-code-sometimes-before-your-write-it">Document your code, sometimes <em>before</em> your write it</a></li>
@@ -491,24 +562,24 @@
 </li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="docs/Examples.html">Examples</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="docs/Examples.html#pump">Pump</a></li>
-<li class="toctree-l2"><a class="reference internal" href="docs/Examples.html#multirotor">Multirotor</a></li>
-<li class="toctree-l2"><a class="reference internal" href="docs/Examples.html#tank">Tank</a></li>
-<li class="toctree-l2"><a class="reference internal" href="docs/Examples.html#eps">EPS</a></li>
-<li class="toctree-l2"><a class="reference internal" href="docs/Examples.html#action-sequence-graph">Action Sequence Graph</a></li>
-<li class="toctree-l2"><a class="reference internal" href="docs/Examples.html#rover">Rover</a></li>
-<li class="toctree-l2"><a class="reference internal" href="docs/Examples.html#multiflow-demo">Multiflow Demo</a></li>
+<li class="toctree-l1"><a class="reference internal" href="examples/Examples.html">Examples</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="examples/Examples.html#pump">Pump</a></li>
+<li class="toctree-l2"><a class="reference internal" href="examples/Examples.html#multirotor">Multirotor</a></li>
+<li class="toctree-l2"><a class="reference internal" href="examples/Examples.html#tank">Tank</a></li>
+<li class="toctree-l2"><a class="reference internal" href="examples/Examples.html#eps">EPS</a></li>
+<li class="toctree-l2"><a class="reference internal" href="examples/Examples.html#action-sequence-graph">Action Sequence Graph</a></li>
+<li class="toctree-l2"><a class="reference internal" href="examples/Examples.html#rover">Rover</a></li>
+<li class="toctree-l2"><a class="reference internal" href="examples/Examples.html#multiflow-demo">Multiflow Demo</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="docs/Glossary.html">Glossary</a></li>
 <li class="toctree-l1"><a class="reference internal" href="docs/fmdtools.html">Module Reference</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="docs/fmdtools.define.html">fmdtools.define package</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="docs/fmdtools.define.html#module-fmdtools.define.block">fmdtools.define.block</a></li>
+<li class="toctree-l3"><a class="reference internal" href="docs/fmdtools.define.html#fmdtools-define-block">fmdtools.define.block</a></li>
 <li class="toctree-l3"><a class="reference internal" href="docs/fmdtools.define.html#module-fmdtools.define.common">fmdtools.define.common</a></li>
 <li class="toctree-l3"><a class="reference internal" href="docs/fmdtools.define.html#module-fmdtools.define.flow">fmdtools.define.flow</a></li>
 <li class="toctree-l3"><a class="reference internal" href="docs/fmdtools.define.html#module-fmdtools.define.mode">fmdtools.define.mode</a></li>
-<li class="toctree-l3"><a class="reference internal" href="docs/fmdtools.define.html#module-fmdtools.define.model">fmdtools.define.model</a></li>
+<li class="toctree-l3"><a class="reference internal" href="docs/fmdtools.define.html#fmdtools-define-model">fmdtools.define.model</a></li>
 <li class="toctree-l3"><a class="reference internal" href="docs/fmdtools.define.html#module-fmdtools.define.parameter">fmdtools.define.parameter</a></li>
 <li class="toctree-l3"><a class="reference internal" href="docs/fmdtools.define.html#module-fmdtools.define.rand">fmdtools.define.rand</a></li>
 <li class="toctree-l3"><a class="reference internal" href="docs/fmdtools.define.html#module-fmdtools.define.state">fmdtools.define.state</a></li>

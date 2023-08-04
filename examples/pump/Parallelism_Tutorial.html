@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Using Parallel Computing in fmdtools &mdash; fmdtools 2.0-alpha documentation</title>
+  <title>Using Parallel Computing in fmdtools &mdash; fmdtools 2.0-alpha5 documentation</title>
       <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
     <link rel="shortcut icon" href="../../_static/fmdtools_ico.ico"/>
@@ -48,6 +48,7 @@
 <li class="toctree-l3"><a class="reference internal" href="../../README.html#prerequisites">Prerequisites</a></li>
 </ul>
 </li>
+<li class="toctree-l2"><a class="reference internal" href="../../README.html#examples">Examples</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../README.html#contributions">Contributions</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="../../README.html#contributors">Contributors</a></li>
 </ul>
@@ -66,7 +67,7 @@
 <li class="toctree-l2"><a class="reference internal" href="../../docs/Development%20Guide.html#intro-to-fmdtools">Intro to fmdtools</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="../../docs/Intro_to_fmdtools.html">Intro to resilience modelling, simulation, and visualization in Python with fmdtools.</a><ul>
 <li class="toctree-l4"><a class="reference internal" href="../../docs/Intro_to_fmdtools.html#author-daniel-hulse">Author: Daniel Hulse</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/Intro_to_fmdtools.html#version-2-0-alpha">Version: 2.0-alpha</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../docs/Intro_to_fmdtools.html#version-2-0-alpha5">Version: 2.0-alpha5</a></li>
 </ul>
 </li>
 <li class="toctree-l3"><a class="reference internal" href="../../docs/Intro_to_fmdtools.html#overview">Overview</a></li>
@@ -83,6 +84,8 @@
 <li class="toctree-l3"><a class="reference internal" href="../../docs/Intro_to_fmdtools.html#analysis-workflow-structure">Analysis Workflow/Structure</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../docs/Intro_to_fmdtools.html#defining-a-model">Defining a Model</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../docs/Intro_to_fmdtools.html#id1">Defining a Model</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../docs/Intro_to_fmdtools.html#function-code-template">Function Code Template</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../docs/Intro_to_fmdtools.html#model-code-template">Model Code Template</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../docs/Intro_to_fmdtools.html#demo-model-activity-examples-pump-ex-pump-py">Demo Model Activity: examples/pump/ex_pump.py</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../docs/Intro_to_fmdtools.html#more-resources-for-model-definition">More Resources for Model Definition</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../docs/Intro_to_fmdtools.html#notebook-activity">Notebook Activity:</a></li>
@@ -104,11 +107,13 @@
 </ul>
 </li>
 <li class="toctree-l3"><a class="reference internal" href="../../docs/Development%20Guide.html#development-process">Development Process</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../docs/Development%20Guide.html#release-checklist">Release Checklist</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../docs/Development%20Guide.html#upload-to-pypi">Upload to PyPI</a></li>
 </ul>
 </li>
 <li class="toctree-l3"><a class="reference internal" href="../../docs/Development%20Guide.html#roles">Roles</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../docs/Development%20Guide.html#documentation">Documentation</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../docs/Development%20Guide.html#style-formatting">Style/Formatting</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../docs/Development%20Guide.html#testing">Testing</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../docs/Development%20Guide.html#contributors">Contributors</a><ul>
 <li class="toctree-l4"><a class="reference internal" href="../../CONTRIBUTORS.html">CONTRIBUTORS</a></li>
@@ -117,6 +122,7 @@
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="../../docs/Development%20Guide.html#model-development-best-practices">Model Development Best Practices</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../docs/Development%20Guide.html#pay-attention-to-and-document-the-fmdtools-version">Pay attention to and document the fmdtools version</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../docs/Development%20Guide.html#plan-your-model-to-avoid-technical-debt">Plan your model to avoid technical debt</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../docs/Development%20Guide.html#don-t-copy-inherit-and-functionalize">Don’t copy, inherit and functionalize</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../docs/Development%20Guide.html#document-your-code-sometimes-before-your-write-it">Document your code, sometimes <em>before</em> your write it</a></li>
@@ -131,8 +137,8 @@
 </li>
 </ul>
 </li>
-<li class="toctree-l1 current"><a class="reference internal" href="../../docs/Examples.html">Examples</a><ul class="current">
-<li class="toctree-l2 current"><a class="reference internal" href="../../docs/Examples.html#pump">Pump</a><ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="../Examples.html">Examples</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="../Examples.html#pump">Pump</a><ul class="current">
 <li class="toctree-l3"><a class="reference internal" href="Tutorial_complete.html">fmdtools Tutorial</a><ul>
 <li class="toctree-l4"><a class="reference internal" href="Tutorial_complete.html#1.)-Loading-the-environment-and-model">1.) Loading the environment and model</a></li>
 <li class="toctree-l4"><a class="reference internal" href="Tutorial_complete.html#2.),-3.),-and-4.)-Simulate-and-visualize-the-results!">2.), 3.), and 4.) Simulate and visualize the results!</a></li>
@@ -177,15 +183,9 @@
 <li class="toctree-l4"><a class="reference internal" href="AST_Sampling.html#Simulator">Simulator</a></li>
 </ul>
 </li>
-<li class="toctree-l3"><a class="reference internal" href="IDETC_Results/IDETC_Figures.html">Probability Modelling in fmdtools</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="IDETC_Results/IDETC_Figures.html#Theory-and-Goals">Theory and Goals</a></li>
-<li class="toctree-l4"><a class="reference internal" href="IDETC_Results/IDETC_Figures.html#Model-Description">Model Description</a></li>
-<li class="toctree-l4"><a class="reference internal" href="IDETC_Results/IDETC_Figures.html#Experiments">Experiments</a></li>
 </ul>
 </li>
-</ul>
-</li>
-<li class="toctree-l2"><a class="reference internal" href="../../docs/Examples.html#multirotor">Multirotor</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../Examples.html#multirotor">Multirotor</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="../multirotor/Demonstration.html">fmdtools Paper Demonstration</a><ul>
 <li class="toctree-l4"><a class="reference internal" href="../multirotor/Demonstration.html#Initial-Model">Initial Model</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../multirotor/Demonstration.html#Setting-Node-Positions">Setting Node Positions</a></li>
@@ -204,26 +204,32 @@
 </li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="../../docs/Examples.html#tank">Tank</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../Examples.html#tank">Tank</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="../tank/Tank_Analysis.html">Hold-up Tank Model</a><ul>
 <li class="toctree-l4"><a class="reference internal" href="../tank/Tank_Analysis.html#Verifying-the-nominal-state:">Verifying the nominal state:</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../tank/Tank_Analysis.html#History">History</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../tank/Tank_Analysis.html#What-happens-under-component-faults?">What happens under component faults?</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../tank/Tank_Analysis.html#What-about-human-induced-faults?">What about human-induced faults?</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../tank/Tank_Analysis.html#Evaluating-Joint-Component-Human-fault-modes">Evaluating Joint Component-Human fault modes</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../tank/Tank_Analysis.html#Testing-different-reaction-times">Testing different reaction times</a></li>
 </ul>
 </li>
-<li class="toctree-l3"><a class="reference internal" href="../tank/Tank_Optimization.html">Cooling Tank Model</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="../tank/Tank_Optimization.html#Simulation">Simulation</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../tank/Tank_Optimization.html">Cooling Tank Model Optimization</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../tank/Tank_Optimization.html#Simulation">Simulation</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../tank/Tank_Optimization.html#Verifying-the-nominal-state:">Verifying the nominal state:</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../tank/Tank_Optimization.html#What-happens-under-component-faults?">What happens under component faults?</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../tank/Tank_Optimization.html#Full-set-of-modes">Full set of modes</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../tank/Tank_Optimization.html#Defining-Optimization-Problem">Defining Optimization Problem</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../tank/Tank_Optimization.html#Optimization">Optimization</a></li>
 </ul>
 </li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="../../docs/Examples.html#eps">EPS</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../Examples.html#eps">EPS</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="../eps/EPS_Example_Notebook.html">EPS Example Notebook</a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="../../docs/Examples.html#action-sequence-graph">Action Sequence Graph</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../Examples.html#action-sequence-graph">Action Sequence Graph</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="../asg_demo/Action_Sequence_Graph.html">Action Sequence Graph Tutorial</a><ul>
 <li class="toctree-l4"><a class="reference internal" href="../asg_demo/Action_Sequence_Graph.html#Function-level-Simulation">Function-level Simulation</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../asg_demo/Action_Sequence_Graph.html#Model-Simulation">Model Simulation</a></li>
@@ -232,7 +238,7 @@
 </li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="../../docs/Examples.html#rover">Rover</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../Examples.html#rover">Rover</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="../rover/Rover_Setup_Notebook.html">Rover Model Explanation and Preliminaries</a><ul>
 <li class="toctree-l4"><a class="reference internal" href="../rover/Rover_Setup_Notebook.html#Model-Setup">Model Setup</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../rover/Rover_Setup_Notebook.html#Model-simulation">Model simulation</a></li>
@@ -281,17 +287,20 @@
 </li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="../../docs/Examples.html#multiflow-demo">Multiflow Demo</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../Examples.html#multiflow-demo">Multiflow Demo</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../multiflow_demo/Multiflow_and_Commsflow_Demonstration.html">Demonstration on Using MultiFlow and CommsFlow</a></li>
+</ul>
+</li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../../docs/Glossary.html">Glossary</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../docs/fmdtools.html">Module Reference</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="../../docs/fmdtools.define.html">fmdtools.define package</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="../../docs/fmdtools.define.html#module-fmdtools.define.block">fmdtools.define.block</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../docs/fmdtools.define.html#fmdtools-define-block">fmdtools.define.block</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../docs/fmdtools.define.html#module-fmdtools.define.common">fmdtools.define.common</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../docs/fmdtools.define.html#module-fmdtools.define.flow">fmdtools.define.flow</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../docs/fmdtools.define.html#module-fmdtools.define.mode">fmdtools.define.mode</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../../docs/fmdtools.define.html#module-fmdtools.define.model">fmdtools.define.model</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../docs/fmdtools.define.html#fmdtools-define-model">fmdtools.define.model</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../docs/fmdtools.define.html#module-fmdtools.define.parameter">fmdtools.define.parameter</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../docs/fmdtools.define.html#module-fmdtools.define.rand">fmdtools.define.rand</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../docs/fmdtools.define.html#module-fmdtools.define.state">fmdtools.define.state</a></li>
@@ -330,7 +339,7 @@
           <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
       <li><a href="../../index.html" class="icon icon-home"></a> &raquo;</li>
-          <li><a href="../../docs/Examples.html">Examples</a> &raquo;</li>
+          <li><a href="../Examples.html">Examples</a> &raquo;</li>
       <li>Using Parallel Computing in fmdtools</li>
       <li class="wy-breadcrumbs-aside">
             <a href="../../_sources/examples/pump/Parallelism_Tutorial.ipynb.txt" rel="nofollow"> View page source</a>
@@ -782,7 +791,7 @@ set of faults over a set of model parameters)</p>
 </div>
 <div class="output_area stderr docutils container">
 <div class="highlight"><pre>
-SCENARIOS COMPLETE: 100%|██████████| 17/17 [00:02&lt;00:00,  8.02it/s]
+SCENARIOS COMPLETE: 100%|██████████| 17/17 [00:00&lt;?, ?it/s]
 </pre></div></div>
 </div>
 <div class="nbinput docutils container">
@@ -800,10 +809,7 @@ SCENARIOS COMPLETE: 100%|██████████| 17/17 [00:02&lt;00:00, 
 </div>
 <div class="output_area stderr docutils container">
 <div class="highlight"><pre>
-C:\Users\dhulse\Anaconda3\lib\multiprocessing\pool.py:265: ResourceWarning: unclosed running multiprocessing pool &lt;multiprocessing.pool.Pool state=RUN pool_size=4&gt;
-  _warn(f&#34;unclosed running multiprocessing pool {self!r}&#34;,
-ResourceWarning: Enable tracemalloc to get the object allocation traceback
-SCENARIOS COMPLETE: 100%|██████████| 21/21 [00:02&lt;00:00,  9.51it/s]
+SCENARIOS COMPLETE: 100%|██████████| 21/21 [00:00&lt;?, ?it/s]
 </pre></div></div>
 </div>
 <p>It can also be helpful to verify that the results of parallel simulation and normal serial execution are the same:</p>
@@ -822,13 +828,56 @@ SCENARIOS COMPLETE: 100%|██████████| 21/21 [00:02&lt;00:00, 
 <div class="nboutput nblast docutils container">
 <div class="prompt empty docutils container">
 </div>
-<div class="output_area stderr docutils container">
+<div class="output_area docutils container">
 <div class="highlight"><pre>
-SCENARIOS COMPLETE: 100%|██████████| 21/21 [00:00&lt;00:00, 290.02it/s]
-SCENARIOS COMPLETE: 100%|██████████| 21/21 [00:00&lt;00:00, 111.46it/s]
+<span class="ansi-red-intense-fg ansi-bold">---------------------------------------------------------------------------</span>
+<span class="ansi-red-intense-fg ansi-bold">ValueError</span>                                Traceback (most recent call last)
+<span class="ansi-green-intense-fg ansi-bold">~\AppData\Local\Temp\1/ipykernel_8432/1153561868.py</span> in <span class="ansi-cyan-fg">&lt;module&gt;</span>
+<span class="ansi-green-intense-fg ansi-bold">----&gt; 1</span><span class="ansi-yellow-intense-fg ansi-bold"> </span>endclasses_par<span class="ansi-yellow-intense-fg ansi-bold">,</span> mdlhists <span class="ansi-yellow-intense-fg ansi-bold">=</span> propagate<span class="ansi-yellow-intense-fg ansi-bold">.</span>single_faults<span class="ansi-yellow-intense-fg ansi-bold">(</span>mdl<span class="ansi-yellow-intense-fg ansi-bold">,</span> pool<span class="ansi-yellow-intense-fg ansi-bold">=</span>pool<span class="ansi-yellow-intense-fg ansi-bold">)</span>
+<span class="ansi-green-fg">      2</span> <span class="ansi-red-intense-fg ansi-bold">#tab_par = an.tabulate.simplefmea(endclasses_par)</span>
+<span class="ansi-green-fg">      3</span> endclasses<span class="ansi-yellow-intense-fg ansi-bold">,</span> mdlhists <span class="ansi-yellow-intense-fg ansi-bold">=</span> propagate<span class="ansi-yellow-intense-fg ansi-bold">.</span>single_faults<span class="ansi-yellow-intense-fg ansi-bold">(</span>mdl<span class="ansi-yellow-intense-fg ansi-bold">)</span>
+<span class="ansi-green-fg">      4</span> <span class="ansi-red-intense-fg ansi-bold">#tab = an.tabulate.simplefmea(endclasses)</span>
+<span class="ansi-green-fg">      5</span> <span class="ansi-red-intense-fg ansi-bold">#tab - tab_par</span>
+
+<span class="ansi-green-intense-fg ansi-bold">c:\users\dhulse\documents\github\fmdtools\fmdtools\sim\propagate.py</span> in <span class="ansi-cyan-fg">single_faults</span><span class="ansi-blue-intense-fg ansi-bold">(mdl, **kwargs)</span>
+<span class="ansi-green-fg">    664</span>
+<span class="ansi-green-fg">    665</span>     scenlist <span class="ansi-yellow-intense-fg ansi-bold">=</span> list_init_faults<span class="ansi-yellow-intense-fg ansi-bold">(</span>mdl<span class="ansi-yellow-intense-fg ansi-bold">)</span>
+<span class="ansi-green-intense-fg ansi-bold">--&gt; 666</span><span class="ansi-yellow-intense-fg ansi-bold">     results, mdlhists = scenlist_helper(mdl,
+</span><span class="ansi-green-fg">    667</span>                                         scenlist<span class="ansi-yellow-intense-fg ansi-bold">,</span>
+<span class="ansi-green-fg">    668</span>                                         c_mdl<span class="ansi-yellow-intense-fg ansi-bold">,</span>
+
+<span class="ansi-green-intense-fg ansi-bold">c:\users\dhulse\documents\github\fmdtools\fmdtools\sim\propagate.py</span> in <span class="ansi-cyan-fg">scenlist_helper</span><span class="ansi-blue-intense-fg ansi-bold">(mdl, scenlist, c_mdl, **kwargs)</span>
+<span class="ansi-green-fg">    700</span>             inputs = [(c_mdl[0], scen,  kwargs, str(i))
+<span class="ansi-green-fg">    701</span>                       for i, scen in enumerate(scenlist)]
+<span class="ansi-green-intense-fg ansi-bold">--&gt; 702</span><span class="ansi-yellow-intense-fg ansi-bold">         res_list = list(tqdm.tqdm(pool.map(exec_scen_par, inputs),
+</span><span class="ansi-green-fg">    703</span>                                   total<span class="ansi-yellow-intense-fg ansi-bold">=</span>len<span class="ansi-yellow-intense-fg ansi-bold">(</span>inputs<span class="ansi-yellow-intense-fg ansi-bold">)</span><span class="ansi-yellow-intense-fg ansi-bold">,</span>
+<span class="ansi-green-fg">    704</span>                                   disable<span class="ansi-yellow-intense-fg ansi-bold">=</span><span class="ansi-green-intense-fg ansi-bold">not</span> <span class="ansi-yellow-intense-fg ansi-bold">(</span>showprogress<span class="ansi-yellow-intense-fg ansi-bold">)</span><span class="ansi-yellow-intense-fg ansi-bold">,</span>
+
+<span class="ansi-green-intense-fg ansi-bold">~\Anaconda3\lib\multiprocessing\pool.py</span> in <span class="ansi-cyan-fg">map</span><span class="ansi-blue-intense-fg ansi-bold">(self, func, iterable, chunksize)</span>
+<span class="ansi-green-fg">    362</span>         <span class="ansi-green-intense-fg ansi-bold">in</span> a list that <span class="ansi-green-intense-fg ansi-bold">is</span> returned<span class="ansi-yellow-intense-fg ansi-bold">.</span>
+<span class="ansi-green-fg">    363</span>         &#39;&#39;&#39;
+<span class="ansi-green-intense-fg ansi-bold">--&gt; 364</span><span class="ansi-yellow-intense-fg ansi-bold">         </span><span class="ansi-green-intense-fg ansi-bold">return</span> self<span class="ansi-yellow-intense-fg ansi-bold">.</span>_map_async<span class="ansi-yellow-intense-fg ansi-bold">(</span>func<span class="ansi-yellow-intense-fg ansi-bold">,</span> iterable<span class="ansi-yellow-intense-fg ansi-bold">,</span> mapstar<span class="ansi-yellow-intense-fg ansi-bold">,</span> chunksize<span class="ansi-yellow-intense-fg ansi-bold">)</span><span class="ansi-yellow-intense-fg ansi-bold">.</span>get<span class="ansi-yellow-intense-fg ansi-bold">(</span><span class="ansi-yellow-intense-fg ansi-bold">)</span>
+<span class="ansi-green-fg">    365</span>
+<span class="ansi-green-fg">    366</span>     <span class="ansi-green-intense-fg ansi-bold">def</span> starmap<span class="ansi-yellow-intense-fg ansi-bold">(</span>self<span class="ansi-yellow-intense-fg ansi-bold">,</span> func<span class="ansi-yellow-intense-fg ansi-bold">,</span> iterable<span class="ansi-yellow-intense-fg ansi-bold">,</span> chunksize<span class="ansi-yellow-intense-fg ansi-bold">=</span><span class="ansi-green-intense-fg ansi-bold">None</span><span class="ansi-yellow-intense-fg ansi-bold">)</span><span class="ansi-yellow-intense-fg ansi-bold">:</span>
+
+<span class="ansi-green-intense-fg ansi-bold">~\Anaconda3\lib\multiprocessing\pool.py</span> in <span class="ansi-cyan-fg">_map_async</span><span class="ansi-blue-intense-fg ansi-bold">(self, func, iterable, mapper, chunksize, callback, error_callback)</span>
+<span class="ansi-green-fg">    471</span>         Helper function to implement map<span class="ansi-yellow-intense-fg ansi-bold">,</span> starmap <span class="ansi-green-intense-fg ansi-bold">and</span> their <span class="ansi-green-intense-fg ansi-bold">async</span> counterparts<span class="ansi-yellow-intense-fg ansi-bold">.</span>
+<span class="ansi-green-fg">    472</span>         &#39;&#39;&#39;
+<span class="ansi-green-intense-fg ansi-bold">--&gt; 473</span><span class="ansi-yellow-intense-fg ansi-bold">         </span>self<span class="ansi-yellow-intense-fg ansi-bold">.</span>_check_running<span class="ansi-yellow-intense-fg ansi-bold">(</span><span class="ansi-yellow-intense-fg ansi-bold">)</span>
+<span class="ansi-green-fg">    474</span>         <span class="ansi-green-intense-fg ansi-bold">if</span> <span class="ansi-green-intense-fg ansi-bold">not</span> hasattr<span class="ansi-yellow-intense-fg ansi-bold">(</span>iterable<span class="ansi-yellow-intense-fg ansi-bold">,</span> <span class="ansi-blue-intense-fg ansi-bold">&#39;__len__&#39;</span><span class="ansi-yellow-intense-fg ansi-bold">)</span><span class="ansi-yellow-intense-fg ansi-bold">:</span>
+<span class="ansi-green-fg">    475</span>             iterable <span class="ansi-yellow-intense-fg ansi-bold">=</span> list<span class="ansi-yellow-intense-fg ansi-bold">(</span>iterable<span class="ansi-yellow-intense-fg ansi-bold">)</span>
+
+<span class="ansi-green-intense-fg ansi-bold">~\Anaconda3\lib\multiprocessing\pool.py</span> in <span class="ansi-cyan-fg">_check_running</span><span class="ansi-blue-intense-fg ansi-bold">(self)</span>
+<span class="ansi-green-fg">    348</span>     <span class="ansi-green-intense-fg ansi-bold">def</span> _check_running<span class="ansi-yellow-intense-fg ansi-bold">(</span>self<span class="ansi-yellow-intense-fg ansi-bold">)</span><span class="ansi-yellow-intense-fg ansi-bold">:</span>
+<span class="ansi-green-fg">    349</span>         <span class="ansi-green-intense-fg ansi-bold">if</span> self<span class="ansi-yellow-intense-fg ansi-bold">.</span>_state <span class="ansi-yellow-intense-fg ansi-bold">!=</span> RUN<span class="ansi-yellow-intense-fg ansi-bold">:</span>
+<span class="ansi-green-intense-fg ansi-bold">--&gt; 350</span><span class="ansi-yellow-intense-fg ansi-bold">             </span><span class="ansi-green-intense-fg ansi-bold">raise</span> ValueError<span class="ansi-yellow-intense-fg ansi-bold">(</span><span class="ansi-blue-intense-fg ansi-bold">&#34;Pool not running&#34;</span><span class="ansi-yellow-intense-fg ansi-bold">)</span>
+<span class="ansi-green-fg">    351</span>
+<span class="ansi-green-fg">    352</span>     <span class="ansi-green-intense-fg ansi-bold">def</span> apply<span class="ansi-yellow-intense-fg ansi-bold">(</span>self<span class="ansi-yellow-intense-fg ansi-bold">,</span> func<span class="ansi-yellow-intense-fg ansi-bold">,</span> args<span class="ansi-yellow-intense-fg ansi-bold">=</span><span class="ansi-yellow-intense-fg ansi-bold">(</span><span class="ansi-yellow-intense-fg ansi-bold">)</span><span class="ansi-yellow-intense-fg ansi-bold">,</span> kwds<span class="ansi-yellow-intense-fg ansi-bold">=</span><span class="ansi-yellow-intense-fg ansi-bold">{</span><span class="ansi-yellow-intense-fg ansi-bold">}</span><span class="ansi-yellow-intense-fg ansi-bold">)</span><span class="ansi-yellow-intense-fg ansi-bold">:</span>
+
+<span class="ansi-red-intense-fg ansi-bold">ValueError</span>: Pool not running
 </pre></div></div>
 </div>
-<div class="nbinput docutils container">
+<div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[13]:
 </pre></div>
 </div>
@@ -840,15 +889,6 @@ SCENARIOS COMPLETE: 100%|██████████| 21/21 [00:00&lt;00:00, 
 </pre></div>
 </div>
 </div>
-<div class="nboutput nblast docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area stderr docutils container">
-<div class="highlight"><pre>
-SCENARIOS COMPLETE: 100%|██████████| 17/17 [00:00&lt;00:00, 332.97it/s]
-SCENARIOS COMPLETE: 100%|██████████| 17/17 [00:00&lt;00:00, 110.72it/s]
-</pre></div></div>
-</div>
 <p>While fmdtools built-in methods are the easiest way to leverage parallelism, it can also be used with custom arguments/methods to meet the needs of simulation. However, (on Windows) these methods need to be defined in an external module with an “if <strong>name</strong>==‘<strong>main</strong>’:” statement, otherwise execution will hang from spawning new processes. This has to do with how multiprocessing works in windows.</p>
 <p>To show how parellism can be leveraged manually for a desired use-case, below the model is run over the blockage fault mode at time t=1 with a different model parameter (delayed failure behavior), as defined in the <code class="docutils literal notranslate"><span class="pre">parallelism_methods.py</span></code> module in this folder.</p>
 <div class="nbinput nblast docutils container">
@@ -859,7 +899,7 @@ SCENARIOS COMPLETE: 100%|██████████| 17/17 [00:00&lt;00:00, 
 </pre></div>
 </div>
 </div>
-<div class="nbinput docutils container">
+<div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[15]:
 </pre></div>
 </div>
@@ -867,44 +907,6 @@ SCENARIOS COMPLETE: 100%|██████████| 17/17 [00:00&lt;00:00, 
 <span class="n">results</span>
 </pre></div>
 </div>
-</div>
-<div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[15]:
-</pre></div>
-</div>
-<div class="output_area docutils container">
-<div class="highlight"><pre>
-[endclass.rate:                   0.00055
- endclass.cost:        20125.000000000007
- endclass.expected cost: 1106875.0000000005,
- endclass.rate:                   0.00055
- endclass.cost:        20102.500000000007
- endclass.expected cost: 1105637.5000000005,
- endclass.rate:                   0.00055
- endclass.cost:        20080.000000000007
- endclass.expected cost: 1104400.0000000005,
- endclass.rate:                   0.00055
- endclass.cost:        20057.500000000007
- endclass.expected cost: 1103162.5000000005,
- endclass.rate:                   0.00055
- endclass.cost:        20035.000000000007
- endclass.expected cost: 1101925.0000000005,
- endclass.rate:                   0.00055
- endclass.cost:        15023.750000000005
- endclass.expected cost: 826306.2500000003,
- endclass.rate:                   0.00055
- endclass.cost:        15023.750000000005
- endclass.expected cost: 826306.2500000003,
- endclass.rate:                   0.00055
- endclass.cost:        15023.750000000005
- endclass.expected cost: 826306.2500000003,
- endclass.rate:                   0.00055
- endclass.cost:        15023.750000000005
- endclass.expected cost: 826306.2500000003,
- endclass.rate:                   0.00055
- endclass.cost:        15023.750000000005
- endclass.expected cost: 826306.2500000003]
-</pre></div></div>
 </div>
 <p>In this method, the model is run many times over a given fault with different delay parameters. It should be noted that this approach is not especially efficient, since the nominal scenario is simulated at each call of <code class="docutils literal notranslate"><span class="pre">propagate.one_fault()</span></code>. It is thus preferred to use the appropriate fault/parameter sampling approaches and propagate methods, since these methods only run the nominal simulation once for fault scenarios and can also use staged execution (copying the model at fault time for
 fault scenarios) to reduce ~1/2 of the cost of each fault simulation.</p>
@@ -922,7 +924,7 @@ fault scenarios) to reduce ~1/2 of the cost of each fault simulation.</p>
 </pre></div>
 </div>
 </div>
-<div class="nbinput docutils container">
+<div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[17]:
 </pre></div>
 </div>
@@ -930,49 +932,6 @@ fault scenarios) to reduce ~1/2 of the cost of each fault simulation.</p>
 <span class="n">pools</span> <span class="o">=</span> <span class="n">instantiate_pools</span><span class="p">(</span><span class="n">cores</span><span class="p">)</span>
 </pre></div>
 </div>
-</div>
-<div class="nboutput nblast docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area stderr docutils container">
-<div class="highlight"><pre>
-C:\Users\dhulse\Anaconda3\lib\subprocess.py:1052: ResourceWarning: subprocess 18992 is still running
-  _warn(&#34;subprocess %s is still running&#34; % self.pid,
-ResourceWarning: Enable tracemalloc to get the object allocation traceback
-C:\Users\dhulse\Anaconda3\lib\site-packages\ppft\_pp.py:162: ResourceWarning: unclosed file &lt;_io.BufferedReader name=8&gt;
-  self.start()
-ResourceWarning: Enable tracemalloc to get the object allocation traceback
-C:\Users\dhulse\Anaconda3\lib\subprocess.py:1052: ResourceWarning: subprocess 19116 is still running
-  _warn(&#34;subprocess %s is still running&#34; % self.pid,
-ResourceWarning: Enable tracemalloc to get the object allocation traceback
-C:\Users\dhulse\Anaconda3\lib\site-packages\ppft\_pp.py:162: ResourceWarning: unclosed file &lt;_io.BufferedReader name=10&gt;
-  self.start()
-ResourceWarning: Enable tracemalloc to get the object allocation traceback
-C:\Users\dhulse\Anaconda3\lib\subprocess.py:1052: ResourceWarning: subprocess 12524 is still running
-  _warn(&#34;subprocess %s is still running&#34; % self.pid,
-ResourceWarning: Enable tracemalloc to get the object allocation traceback
-C:\Users\dhulse\Anaconda3\lib\site-packages\ppft\_pp.py:162: ResourceWarning: unclosed file &lt;_io.BufferedReader name=12&gt;
-  self.start()
-ResourceWarning: Enable tracemalloc to get the object allocation traceback
-C:\Users\dhulse\Anaconda3\lib\subprocess.py:1052: ResourceWarning: subprocess 19244 is still running
-  _warn(&#34;subprocess %s is still running&#34; % self.pid,
-ResourceWarning: Enable tracemalloc to get the object allocation traceback
-C:\Users\dhulse\Anaconda3\lib\site-packages\ppft\_pp.py:162: ResourceWarning: unclosed file &lt;_io.BufferedReader name=14&gt;
-  self.start()
-ResourceWarning: Enable tracemalloc to get the object allocation traceback
-C:\Users\dhulse\Anaconda3\lib\subprocess.py:1052: ResourceWarning: subprocess 15216 is still running
-  _warn(&#34;subprocess %s is still running&#34; % self.pid,
-ResourceWarning: Enable tracemalloc to get the object allocation traceback
-C:\Users\dhulse\Anaconda3\lib\site-packages\ppft\_pp.py:162: ResourceWarning: unclosed file &lt;_io.BufferedReader name=16&gt;
-  self.start()
-ResourceWarning: Enable tracemalloc to get the object allocation traceback
-C:\Users\dhulse\Anaconda3\lib\subprocess.py:1052: ResourceWarning: subprocess 17588 is still running
-  _warn(&#34;subprocess %s is still running&#34; % self.pid,
-ResourceWarning: Enable tracemalloc to get the object allocation traceback
-C:\Users\dhulse\Anaconda3\lib\site-packages\ppft\_pp.py:162: ResourceWarning: unclosed file &lt;_io.BufferedReader name=18&gt;
-  self.start()
-ResourceWarning: Enable tracemalloc to get the object allocation traceback
-</pre></div></div>
 </div>
 <p>Below is the baseline comparison, where the the following parameters characterize the sampling approach: - single faults: only the single-fault scenarios are considered - 3 points per phase: an evenly-spaced quadrature is sampled at each phase of operation (start, on, end) for the model - staged: the model is copied at each point in time where faults is injected during the model time to save computation - track: the entire model history is returned for each simulation</p>
 <p>This is typical for a small model like this where the per-model expense is low.</p>
@@ -987,7 +946,7 @@ ResourceWarning: Enable tracemalloc to get the object allocation traceback
 </pre></div>
 </div>
 </div>
-<div class="nbinput docutils container">
+<div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[19]:
 </pre></div>
 </div>
@@ -998,13 +957,6 @@ ResourceWarning: Enable tracemalloc to get the object allocation traceback
 <span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s2">&quot;Computational Time (s)&quot;</span><span class="p">)</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">grid</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="s1">&#39;y&#39;</span><span class="p">)</span>
 </pre></div>
-</div>
-</div>
-<div class="nboutput nblast docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area docutils container">
-<img alt="../../_images/examples_pump_Parallelism_Tutorial_30_0.png" src="../../_images/examples_pump_Parallelism_Tutorial_30_0.png" />
 </div>
 </div>
 <p>As shown, in this situation, both the multiprocessing and threadpool pools give computational performance increases.</p>
@@ -1021,7 +973,7 @@ ResourceWarning: Enable tracemalloc to get the object allocation traceback
 </pre></div>
 </div>
 </div>
-<div class="nbinput docutils container">
+<div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[21]:
 </pre></div>
 </div>
@@ -1035,22 +987,6 @@ ResourceWarning: Enable tracemalloc to get the object allocation traceback
 <span class="n">plt</span><span class="o">.</span><span class="n">grid</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="s1">&#39;y&#39;</span><span class="p">)</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
 </pre></div>
-</div>
-</div>
-<div class="nboutput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[21]:
-</pre></div>
-</div>
-<div class="output_area docutils container">
-<div class="highlight"><pre>
-&lt;matplotlib.legend.Legend at 0x1835e6d5a60&gt;
-</pre></div></div>
-</div>
-<div class="nboutput nblast docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area docutils container">
-<img alt="../../_images/examples_pump_Parallelism_Tutorial_34_1.png" src="../../_images/examples_pump_Parallelism_Tutorial_34_1.png" />
 </div>
 </div>
 <p>As shown, in this situation, the overall simulation expense decreases, even in the serial execution case.</p>
@@ -1070,7 +1006,7 @@ ResourceWarning: Enable tracemalloc to get the object allocation traceback
 </pre></div>
 </div>
 </div>
-<div class="nbinput docutils container">
+<div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[23]:
 </pre></div>
 </div>
@@ -1084,22 +1020,6 @@ ResourceWarning: Enable tracemalloc to get the object allocation traceback
 <span class="n">plt</span><span class="o">.</span><span class="n">grid</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="s1">&#39;y&#39;</span><span class="p">)</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
 </pre></div>
-</div>
-</div>
-<div class="nboutput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[23]:
-</pre></div>
-</div>
-<div class="output_area docutils container">
-<div class="highlight"><pre>
-&lt;matplotlib.legend.Legend at 0x1835e9b1520&gt;
-</pre></div></div>
-</div>
-<div class="nboutput nblast docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area docutils container">
-<img alt="../../_images/examples_pump_Parallelism_Tutorial_38_1.png" src="../../_images/examples_pump_Parallelism_Tutorial_38_1.png" />
 </div>
 </div>
 <p>As shown, increasing the number of joint-fault scenarios increases computational costs significantly–as would be expected.</p>
@@ -1118,7 +1038,7 @@ ResourceWarning: Enable tracemalloc to get the object allocation traceback
 </pre></div>
 </div>
 </div>
-<div class="nbinput docutils container">
+<div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[25]:
 </pre></div>
 </div>
@@ -1132,22 +1052,6 @@ ResourceWarning: Enable tracemalloc to get the object allocation traceback
 <span class="n">plt</span><span class="o">.</span><span class="n">grid</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="s1">&#39;y&#39;</span><span class="p">)</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
 </pre></div>
-</div>
-</div>
-<div class="nboutput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[25]:
-</pre></div>
-</div>
-<div class="output_area docutils container">
-<div class="highlight"><pre>
-&lt;matplotlib.legend.Legend at 0x1835e98a490&gt;
-</pre></div></div>
-</div>
-<div class="nboutput nblast docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area docutils container">
-<img alt="../../_images/examples_pump_Parallelism_Tutorial_42_1.png" src="../../_images/examples_pump_Parallelism_Tutorial_42_1.png" />
 </div>
 </div>
 <p>As shown, the simulation time does increase significantly–about tenfold. In terms of comparative performance, the same general trends hold, except some pools take more of a performance decrease than others. Ostensibly because they require more computational overhead to copy larger data structures back to the main process.</p>
@@ -1165,7 +1069,7 @@ ResourceWarning: Enable tracemalloc to get the object allocation traceback
 </pre></div>
 </div>
 </div>
-<div class="nbinput docutils container">
+<div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[27]:
 </pre></div>
 </div>
@@ -1179,22 +1083,6 @@ ResourceWarning: Enable tracemalloc to get the object allocation traceback
 <span class="n">plt</span><span class="o">.</span><span class="n">grid</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="s1">&#39;y&#39;</span><span class="p">)</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
 </pre></div>
-</div>
-</div>
-<div class="nboutput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[27]:
-</pre></div>
-</div>
-<div class="output_area docutils container">
-<div class="highlight"><pre>
-&lt;matplotlib.legend.Legend at 0x1835e9e8670&gt;
-</pre></div></div>
-</div>
-<div class="nboutput nblast docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area docutils container">
-<img alt="../../_images/examples_pump_Parallelism_Tutorial_46_1.png" src="../../_images/examples_pump_Parallelism_Tutorial_46_1.png" />
 </div>
 </div>
 <p>As shown, removing the tracking makes the long simulations take less time than the short simulation!</p>
@@ -1213,7 +1101,7 @@ ResourceWarning: Enable tracemalloc to get the object allocation traceback
 </pre></div>
 </div>
 </div>
-<div class="nbinput docutils container">
+<div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[29]:
 </pre></div>
 </div>
@@ -1227,22 +1115,6 @@ ResourceWarning: Enable tracemalloc to get the object allocation traceback
 <span class="n">plt</span><span class="o">.</span><span class="n">grid</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="s1">&#39;y&#39;</span><span class="p">)</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
 </pre></div>
-</div>
-</div>
-<div class="nboutput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[29]:
-</pre></div>
-</div>
-<div class="output_area docutils container">
-<div class="highlight"><pre>
-&lt;matplotlib.legend.Legend at 0x1835e674c70&gt;
-</pre></div></div>
-</div>
-<div class="nboutput nblast docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area docutils container">
-<img alt="../../_images/examples_pump_Parallelism_Tutorial_50_1.png" src="../../_images/examples_pump_Parallelism_Tutorial_50_1.png" />
 </div>
 </div>
 <p>As shown, only tracking a few variables results in similar computational time no tracking.</p>
@@ -1262,7 +1134,7 @@ ResourceWarning: Enable tracemalloc to get the object allocation traceback
 </pre></div>
 </div>
 </div>
-<div class="nbinput docutils container">
+<div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[31]:
 </pre></div>
 </div>
@@ -1276,22 +1148,6 @@ ResourceWarning: Enable tracemalloc to get the object allocation traceback
 <span class="n">plt</span><span class="o">.</span><span class="n">grid</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="s1">&#39;y&#39;</span><span class="p">)</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
 </pre></div>
-</div>
-</div>
-<div class="nboutput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[31]:
-</pre></div>
-</div>
-<div class="output_area docutils container">
-<div class="highlight"><pre>
-&lt;matplotlib.legend.Legend at 0x1835de6ed00&gt;
-</pre></div></div>
-</div>
-<div class="nboutput nblast docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area docutils container">
-<img alt="../../_images/examples_pump_Parallelism_Tutorial_54_1.png" src="../../_images/examples_pump_Parallelism_Tutorial_54_1.png" />
 </div>
 </div>
 <p>As shown, while lowering time resolution could theoretically lower computational time, it does not significantly change much in this example.</p>
@@ -1316,320 +1172,12 @@ effect, it does not because the overhead is less to do with filling the underlyi
 </pre></div>
 </div>
 </div>
-<div class="nbinput docutils container">
+<div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[33]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">cProfile</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="s1">&#39;propagate.nominal(mdl)&#39;</span><span class="p">)</span>
 </pre></div>
-</div>
-</div>
-<div class="nboutput nblast docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area docutils container">
-<div class="highlight"><pre>
-         187882 function calls (184790 primitive calls) in 0.125 seconds
-
-   Ordered by: standard name
-
-   ncalls  tottime  percall  cumtime  percall filename:lineno(function)
-        1    0.000    0.000    0.000    0.000 &lt;__array_function__ internals&gt;:2(amin)
-       28    0.000    0.000    0.000    0.000 &lt;__array_function__ internals&gt;:2(concatenate)
-       28    0.000    0.000    0.001    0.000 &lt;__array_function__ internals&gt;:2(sort)
-        1    0.000    0.000    0.124    0.124 &lt;string&gt;:1(&lt;module&gt;)
-       18    0.000    0.000    0.000    0.000 __init__.py:1043(__init__)
-       14    0.000    0.000    0.000    0.000 __init__.py:1050(__len__)
-        5    0.000    0.000    0.000    0.000 __init__.py:1053(__getitem__)
-       35    0.000    0.000    0.000    0.000 __init__.py:1060(__setitem__)
-        1    0.000    0.000    0.000    0.000 __init__.py:1066(__iter__)
-      508    0.000    0.000    0.000    0.000 __init__.py:1070(__contains__)
-       28    0.000    0.000    0.000    0.000 _asarray.py:110(asanyarray)
-     1006    0.002    0.000    0.006    0.000 _collections_abc.py:706(__ior__)
-        2    0.000    0.000    0.000    0.000 _collections_abc.py:933(update)
-       56    0.000    0.000    0.000    0.000 _ufunc_config.py:132(geterr)
-       56    0.001    0.000    0.001    0.000 _ufunc_config.py:32(seterr)
-       28    0.000    0.000    0.001    0.000 _ufunc_config.py:433(__enter__)
-       28    0.000    0.000    0.000    0.000 _ufunc_config.py:438(__exit__)
-       45    0.000    0.000    0.000    0.000 abc.py:117(__instancecheck__)
-       12    0.000    0.000    0.007    0.001 block.py:100(__init__)
-       10    0.000    0.000    0.009    0.001 block.py:1057(__init__)
-       10    0.000    0.000    0.000    0.000 block.py:1109(return_faultmodes)
-       10    0.000    0.000    0.000    0.000 block.py:1120(&lt;listcomp&gt;)
-       30    0.000    0.000    0.002    0.000 block.py:1128(update_seed)
-     5042    0.006    0.000    0.034    0.000 block.py:1182(return_mutables)
-     2526    0.010    0.000    0.029    0.000 block.py:1191(__call__)
-        5    0.000    0.000    0.000    0.000 block.py:1255(reset)
-        1    0.000    0.000    0.000    0.000 block.py:129(add_flow_hist)
-       32    0.000    0.000    0.002    0.000 block.py:150(update_seed)
-        2    0.000    0.000    0.001    0.001 block.py:181(new_params)
-       10    0.000    0.000    0.008    0.001 block.py:287(__init__)
-       10    0.001    0.000    0.002    0.000 block.py:32(assoc_flows)
-       10    0.000    0.000    0.000    0.000 block.py:344(is_static)
-       10    0.000    0.000    0.000    0.000 block.py:350(is_dynamic)
-        5    0.000    0.000    0.000    0.000 block.py:430(reset)
-       10    0.000    0.000    0.000    0.000 block.py:48(&lt;dictcomp&gt;)
-     5042    0.011    0.000    0.027    0.000 block.py:512(return_mutables)
-       30    0.000    0.000    0.009    0.000 common.py:115(init_obj_attr)
-5010/2004    0.005    0.000    0.008    0.000 common.py:12(get_var)
-        2    0.000    0.000    0.000    0.000 common.py:139(get_dataobj_track)
-        5    0.000    0.000    0.000    0.000 common.py:164(get_obj_track)
-       27    0.000    0.000    0.000    0.000 common.py:57(get_true_fields)
-       28    0.000    0.000    0.000    0.000 contextlib.py:63(_recreate_cm)
-       28    0.000    0.000    0.002    0.000 contextlib.py:76(inner)
-     1010    0.000    0.000    0.000    0.000 copy.py:107(_copy_immutable)
-     31/3    0.000    0.000    0.000    0.000 copy.py:128(deepcopy)
-       19    0.000    0.000    0.000    0.000 copy.py:182(_deepcopy_atomic)
-        2    0.000    0.000    0.000    0.000 copy.py:200(_deepcopy_list)
-      8/2    0.000    0.000    0.000    0.000 copy.py:226(_deepcopy_dict)
-       12    0.000    0.000    0.000    0.000 copy.py:242(_keep_alive)
-        2    0.000    0.000    0.000    0.000 copy.py:258(_reconstruct)
-        4    0.000    0.000    0.000    0.000 copy.py:263(&lt;genexpr&gt;)
-     6052    0.004    0.000    0.006    0.000 copy.py:66(copy)
-      130    0.000    0.000    0.000    0.000 enum.py:358(__call__)
-      130    0.000    0.000    0.000    0.000 enum.py:670(__new__)
-      505    0.000    0.000    0.000    0.000 ex_pump.py:139(condfaults)
-      504    0.001    0.000    0.002    0.000 ex_pump.py:148(behavior)
-      504    0.000    0.000    0.001    0.000 ex_pump.py:174(behavior)
-      504    0.000    0.000    0.001    0.000 ex_pump.py:196(behavior)
-      504    0.001    0.000    0.001    0.000 ex_pump.py:215(behavior)
-      506    0.000    0.000    0.001    0.000 ex_pump.py:270(condfaults)
-      506    0.000    0.000    0.000    0.000 ex_pump.py:286(indicate_over_pressure)
-      505    0.002    0.000    0.008    0.000 ex_pump.py:293(behavior)
-        2    0.000    0.000    0.013    0.007 ex_pump.py:331(__init__)
-      501    0.000    0.000    0.000    0.000 ex_pump.py:358(indicate_finished)
-      501    0.000    0.000    0.000    0.000 ex_pump.py:370(indicate_on)
-        1    0.000    0.000    0.000    0.000 ex_pump.py:372(find_classification)
-        8    0.000    0.000    0.001    0.000 flow.py:27(__init__)
-        8    0.000    0.000    0.001    0.000 flow.py:402(init_flow)
-       12    0.000    0.000    0.000    0.000 flow.py:51(reset)
-     4044    0.001    0.000    0.002    0.000 flow.py:54(return_mutables)
-        4    0.000    0.000    0.000    0.000 flow.py:78(create_hist)
-        1    0.000    0.000    0.000    0.000 fromnumeric.py:2737(_amin_dispatcher)
-        1    0.000    0.000    0.000    0.000 fromnumeric.py:2742(amin)
-        1    0.000    0.000    0.000    0.000 fromnumeric.py:70(_wrapreduction)
-        1    0.000    0.000    0.000    0.000 fromnumeric.py:71(&lt;dictcomp&gt;)
-       28    0.000    0.000    0.000    0.000 fromnumeric.py:840(_sort_dispatcher)
-       28    0.000    0.000    0.000    0.000 fromnumeric.py:844(sort)
-       20    0.000    0.000    0.000    0.000 graph.py:1214(neighbors)
-        2    0.000    0.000    0.000    0.000 graph.py:1380(degree)
-        2    0.000    0.000    0.000    0.000 graph.py:289(__init__)
-        4    0.000    0.000    0.000    0.000 graph.py:526(add_nodes_from)
-        2    0.000    0.000    0.000    0.000 graph.py:895(add_edges_from)
-       72    0.000    0.000    0.000    0.000 inspect.py:159(isfunction)
-       36    0.000    0.000    0.001    0.000 inspect.py:1838(_signature_bound_method)
-       36    0.001    0.000    0.002    0.000 inspect.py:2150(_signature_from_function)
-    72/36    0.001    0.000    0.004    0.000 inspect.py:2244(_signature_from_callable)
-      130    0.000    0.000    0.001    0.000 inspect.py:2496(__init__)
-      224    0.000    0.000    0.000    0.000 inspect.py:2546(name)
-      354    0.000    0.000    0.000    0.000 inspect.py:2558(kind)
-       94    0.000    0.000    0.000    0.000 inspect.py:2580(__str__)
-       72    0.000    0.000    0.001    0.000 inspect.py:2779(__init__)
-      166    0.000    0.000    0.000    0.000 inspect.py:2828(&lt;genexpr&gt;)
-       36    0.000    0.000    0.004    0.000 inspect.py:2857(from_callable)
-       72    0.000    0.000    0.000    0.000 inspect.py:2863(parameters)
-       36    0.000    0.000    0.000    0.000 inspect.py:2867(return_annotation)
-       36    0.000    0.000    0.000    0.000 inspect.py:2871(replace)
-       36    0.000    0.000    0.001    0.000 inspect.py:3063(__str__)
-       36    0.000    0.000    0.004    0.000 inspect.py:3109(signature)
-       36    0.000    0.000    0.000    0.000 inspect.py:494(unwrap)
-       36    0.000    0.000    0.000    0.000 inspect.py:514(_is_wrapper)
-       76    0.000    0.000    0.000    0.000 inspect.py:73(isclass)
-        2    0.000    0.000    0.000    0.000 isolate.py:40(isolates)
-        2    0.000    0.000    0.000    0.000 isolate.py:82(&lt;genexpr&gt;)
-       10    0.000    0.000    0.000    0.000 mode.py:110(__init__)
-     5042    0.003    0.000    0.008    0.000 mode.py:142(return_mutables)
-       10    0.000    0.000    0.000    0.000 mode.py:144(init_faultmodes)
-       14    0.000    0.000    0.000    0.000 mode.py:165(&lt;dictcomp&gt;)
-     3530    0.003    0.000    0.005    0.000 mode.py:260(has_fault)
-        5    0.000    0.000    0.000    0.000 mode.py:337(remove_any_faults)
-        8    0.000    0.000    0.001    0.000 model.py:109(add_flow)
-       10    0.000    0.000    0.009    0.001 model.py:128(add_fxn)
-       10    0.000    0.000    0.000    0.000 model.py:161(get_flows)
-       10    0.000    0.000    0.000    0.000 model.py:163(&lt;dictcomp&gt;)
-        2    0.000    0.000    0.002    0.001 model.py:184(build)
-        2    0.000    0.000    0.000    0.000 model.py:196(&lt;listcomp&gt;)
-        2    0.000    0.000    0.000    0.000 model.py:198(&lt;listcomp&gt;)
-        2    0.000    0.000    0.000    0.000 model.py:201(&lt;listcomp&gt;)
-        2    0.000    0.000    0.000    0.000 model.py:202(construct_graph)
-        2    0.000    0.000    0.000    0.000 model.py:211(&lt;listcomp&gt;)
-        1    0.000    0.000    0.000    0.000 model.py:213(calc_repaircost)
-        1    0.000    0.000    0.000    0.000 model.py:235(&lt;listcomp&gt;)
-        2    0.000    0.000    0.000    0.000 model.py:238(return_faultmodes)
-        2    0.000    0.000    0.015    0.007 model.py:271(new_with_params)
-        1    0.000    0.000    0.000    0.000 model.py:318(reset)
-      501    0.000    0.000    0.001    0.000 model.py:331(set_vars)
-        1    0.000    0.000    0.000    0.000 model.py:392(create_hist)
-      501    0.002    0.000    0.088    0.000 model.py:408(propagate)
-      501    0.011    0.000    0.082    0.000 model.py:439(prop_static)
-       12    0.000    0.000    0.000    0.000 model.py:477(&lt;listcomp&gt;)
-        2    0.000    0.000    0.001    0.001 model.py:52(__init__)
-        2    0.000    0.000    0.002    0.001 model.py:72(update_seed)
-       28    0.000    0.000    0.000    0.000 multiarray.py:143(concatenate)
-      501    0.000    0.000    0.005    0.000 ordered_set.py:122(copy)
-       40    0.000    0.000    0.000    0.000 ordered_set.py:157(__contains__)
-     2525    0.002    0.000    0.003    0.000 ordered_set.py:169(add)
-       10    0.000    0.000    0.000    0.000 ordered_set.py:190(update)
-     2004    0.001    0.000    0.001    0.000 ordered_set.py:287(__iter__)
-      501    0.001    0.000    0.003    0.000 ordered_set.py:336(union)
-     1008    0.001    0.000    0.007    0.000 ordered_set.py:65(__init__)
-     2505    0.001    0.000    0.001    0.000 ordered_set.py:71(__len__)
-       36    0.000    0.000    0.000    0.000 parameter.py:102(check_type)
-        4    0.000    0.000    0.001    0.000 parameter.py:117(copy_with_vals)
-       36    0.000    0.000    0.005    0.000 parameter.py:120(check_pickle)
-       14    0.000    0.000    0.003    0.000 parameter.py:156(__init__)
-       14    0.000    0.000    0.001    0.000 parameter.py:161(find_any_phase_overlap)
-       14    0.000    0.000    0.000    0.000 parameter.py:162(&lt;dictcomp&gt;)
-       14    0.000    0.000    0.000    0.000 parameter.py:164(&lt;listcomp&gt;)
-       14    0.000    0.000    0.000    0.000 parameter.py:165(&lt;listcomp&gt;)
-       36    0.000    0.000    0.005    0.000 parameter.py:35(__init__)
-       34    0.000    0.000    0.000    0.000 parameter.py:59(check_lim)
-       36    0.000    0.000    0.000    0.000 parameter.py:84(check_immutable)
-        1    0.000    0.000    0.124    0.124 propagate.py:142(nominal)
-        1    0.000    0.000    0.000    0.000 propagate.py:168(save_helper)
-        1    0.000    0.000    0.124    0.124 propagate.py:349(nom_helper)
-        1    0.000    0.000    0.000    0.000 propagate.py:547(check_overwrite)
-        1    0.000    0.000    0.001    0.001 propagate.py:659(init_histrange)
-      501    0.000    0.000    0.000    0.000 propagate.py:707(check_end_condition)
-        1    0.002    0.002    0.109    0.109 propagate.py:715(prop_one_scen)
-        1    0.000    0.000    0.000    0.000 propagate.py:794(get_result)
-        1    0.000    0.000    0.000    0.000 propagate.py:818(&lt;listcomp&gt;)
-        1    0.000    0.000    0.000    0.000 propagate.py:83(unpack_sim_kwargs)
-        7    0.000    0.000    0.000    0.000 propagate.py:85(&lt;genexpr&gt;)
-       10    0.001    0.000    0.002    0.000 rand.py:103(update_seed)
-       17    0.000    0.000    0.002    0.000 rand.py:46(__init__)
-     5042    0.001    0.000    0.001    0.000 rand.py:59(return_mutables)
-     2500    0.001    0.000    0.001    0.000 rand.py:90(update_stochastic_states)
-        1    0.000    0.000    0.000    0.000 rand.py:98(reset)
-        2    0.000    0.000    0.000    0.000 reportviews.py:355(__init__)
-        2    0.000    0.000    0.000    0.000 reportviews.py:362(__call__)
-       20    0.000    0.000    0.000    0.000 reportviews.py:465(__iter__)
-        7    0.000    0.000    0.000    0.000 result.py:114(check_include_errors)
-        7    0.000    0.000    0.000    0.000 result.py:122(check_include_error)
-        4    0.000    0.000    0.000    0.000 result.py:206(keys)
-      515    0.000    0.000    0.000    0.000 result.py:209(items)
-       10    0.000    0.000    0.000    0.000 result.py:218(__getattr__)
-       18    0.000    0.000    0.000    0.000 result.py:228(__setattr__)
-        6    0.000    0.000    0.000    0.000 result.py:259(all_with)
-      7/1    0.000    0.000    0.000    0.000 result.py:345(flatten)
-       10    0.000    0.000    0.000    0.000 result.py:688(is_numeric)
-     2505    0.001    0.000    0.001    0.000 result.py:707(is_known_mutable)
-       22    0.000    0.000    0.000    0.000 result.py:725(get_sub_include)
-        3    0.000    0.000    0.000    0.000 result.py:743(init_indicator_hist)
-        1    0.000    0.000    0.000    0.000 result.py:765(&lt;listcomp&gt;)
-        5    0.000    0.000    0.000    0.000 result.py:843(init_att)
-      501    0.007    0.000    0.018    0.000 result.py:887(log)
-        1    0.000    0.000    0.000    0.000 result.py:942(cut)
-       10    0.000    0.000    0.000    0.000 result.py:95(get_dict_attr)
-        1    0.000    0.000    0.000    0.000 scenario.py:35(__init__)
-        1    0.000    0.000    0.000    0.000 scenario.py:37(&lt;dictcomp&gt;)
-        2    0.000    0.000    0.000    0.000 state.py:217(create_hist)
-      505    0.002    0.000    0.004    0.000 state.py:62(assign)
-      505    0.000    0.000    0.000    0.000 state.py:81(&lt;dictcomp&gt;)
-       10    0.000    0.000    0.000    0.000 time.py:137(__init__)
-     5042    0.003    0.000    0.004    0.000 time.py:146(return_mutables)
-     6052    0.001    0.000    0.001    0.000 time.py:147(&lt;genexpr&gt;)
-       10    0.000    0.000    0.000    0.000 time.py:148(set_timestep)
-        5    0.000    0.000    0.000    0.000 time.py:168(reset)
-        2    0.000    0.000    0.000    0.000 time.py:27(__init__)
-        1    0.000    0.000    0.000    0.000 time.py:52(reset)
-       45    0.000    0.000    0.000    0.000 {built-in method _abc._abc_instancecheck}
-     3539    0.001    0.000    0.001    0.000 {built-in method builtins.any}
-       80    0.000    0.000    0.000    0.000 {built-in method builtins.callable}
-       11    0.001    0.000    0.001    0.000 {built-in method builtins.dir}
-       20    0.000    0.000    0.001    0.000 {built-in method builtins.eval}
-        1    0.000    0.000    0.125    0.125 {built-in method builtins.exec}
-    10589    0.002    0.000    0.002    0.000 {built-in method builtins.getattr}
-    27870    0.004    0.000    0.004    0.000 {built-in method builtins.hasattr}
-       93    0.000    0.000    0.000    0.000 {built-in method builtins.id}
-     4121    0.001    0.000    0.001    0.000 {built-in method builtins.isinstance}
-       78    0.000    0.000    0.000    0.000 {built-in method builtins.issubclass}
-     2025    0.000    0.000    0.000    0.000 {built-in method builtins.iter}
-11308/11298    0.001    0.000    0.001    0.000 {built-in method builtins.len}
-       10    0.000    0.000    0.000    0.000 {built-in method builtins.max}
-     1010    0.000    0.000    0.000    0.000 {built-in method builtins.min}
-       22    0.000    0.000    0.000    0.000 {built-in method builtins.repr}
-     1190    0.000    0.000    0.000    0.000 {built-in method builtins.setattr}
-        2    0.000    0.000    0.000    0.000 {built-in method builtins.sum}
-      501    0.000    0.000    0.000    0.000 {built-in method from_iterable}
-       12    0.000    0.000    0.000    0.000 {built-in method fromkeys}
-        1    0.000    0.000    0.000    0.000 {built-in method numpy.arange}
-       28    0.000    0.000    0.000    0.000 {built-in method numpy.array}
-       57    0.000    0.000    0.001    0.000 {built-in method numpy.core._multiarray_umath.implement_array_function}
-        5    0.000    0.000    0.000    0.000 {built-in method numpy.empty}
-      112    0.000    0.000    0.000    0.000 {built-in method numpy.geterrobj}
-       56    0.000    0.000    0.000    0.000 {built-in method numpy.seterrobj}
-        8    0.000    0.000    0.000    0.000 {built-in method recordclass._dataobject.asdict}
-     9086    0.002    0.000    0.002    0.000 {built-in method recordclass._dataobject.astuple}
-       36    0.000    0.000    0.000    0.000 {built-in method sys.getrecursionlimit}
-       28    0.001    0.000    0.001    0.000 {function SeedSequence.generate_state at 0x0000018358666AF0}
-        2    0.000    0.000    0.000    0.000 {method &#39;__reduce_ex__&#39; of &#39;object&#39; objects}
-     2777    0.000    0.000    0.000    0.000 {method &#39;append&#39; of &#39;list&#39; objects}
-        1    0.000    0.000    0.000    0.000 {method &#39;clear&#39; of &#39;list&#39; objects}
-      510    0.000    0.000    0.000    0.000 {method &#39;clear&#39; of &#39;set&#39; objects}
-      505    0.000    0.000    0.000    0.000 {method &#39;copy&#39; of &#39;list&#39; objects}
-       28    0.000    0.000    0.000    0.000 {method &#39;copy&#39; of &#39;numpy.ndarray&#39; objects}
-     5557    0.001    0.000    0.001    0.000 {method &#39;copy&#39; of &#39;set&#39; objects}
-        1    0.000    0.000    0.000    0.000 {method &#39;disable&#39; of &#39;_lsprof.Profiler&#39; objects}
-        4    0.000    0.000    0.000    0.000 {method &#39;endswith&#39; of &#39;str&#39; objects}
-       58    0.000    0.000    0.000    0.000 {method &#39;format&#39; of &#39;str&#39; objects}
-     6442    0.001    0.000    0.001    0.000 {method &#39;get&#39; of &#39;dict&#39; objects}
-     1002    0.000    0.000    0.000    0.000 {method &#39;index&#39; of &#39;list&#39; objects}
-       15    0.000    0.000    0.000    0.000 {method &#39;index&#39; of &#39;tuple&#39; objects}
-     3530    0.001    0.000    0.001    0.000 {method &#39;intersection&#39; of &#39;set&#39; objects}
-      130    0.000    0.000    0.000    0.000 {method &#39;isidentifier&#39; of &#39;str&#39; objects}
-     1088    0.000    0.000    0.000    0.000 {method &#39;items&#39; of &#39;dict&#39; objects}
-     1038    0.000    0.000    0.000    0.000 {method &#39;join&#39; of &#39;str&#39; objects}
-      505    0.000    0.000    0.000    0.000 {method &#39;keys&#39; of &#39;dict&#39; objects}
-        2    0.000    0.000    0.000    0.000 {method &#39;lower&#39; of &#39;str&#39; objects}
-       17    0.000    0.000    0.000    0.000 {method &#39;pop&#39; of &#39;dict&#39; objects}
-        1    0.000    0.000    0.000    0.000 {method &#39;reduce&#39; of &#39;numpy.ufunc&#39; objects}
-       28    0.000    0.000    0.000    0.000 {method &#39;sort&#39; of &#39;numpy.ndarray&#39; objects}
-     3016    0.001    0.000    0.001    0.000 {method &#39;split&#39; of &#39;str&#39; objects}
-     2944    0.001    0.000    0.001    0.000 {method &#39;startswith&#39; of &#39;str&#39; objects}
-       52    0.000    0.000    0.000    0.000 {method &#39;update&#39; of &#39;dict&#39; objects}
-       12    0.000    0.000    0.000    0.000 {method &#39;update&#39; of &#39;set&#39; objects}
-     5078    0.001    0.000    0.001    0.000 {method &#39;values&#39; of &#39;dict&#39; objects}
-       72    0.000    0.000    0.000    0.000 {method &#39;values&#39; of &#39;mappingproxy&#39; objects}
-       18    0.001    0.000    0.002    0.000 {numpy.random._generator.default_rng}
-
-
-</pre></div></div>
-</div>
-<p>This is difficult to vizualize, although there are methods to store and sort through this output if needed. The <code class="docutils literal notranslate"><span class="pre">pycallgraph</span></code> package (requires a graphviz installation) can give a more immediate and insightful picture of where the code bottlenecks are.</p>
-<div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[34]:
-</pre></div>
-</div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">pycallgraph2</span> <span class="kn">import</span> <span class="n">PyCallGraph</span>
-<span class="kn">from</span> <span class="nn">pycallgraph2.output</span> <span class="kn">import</span> <span class="n">GraphvizOutput</span>
-<span class="kn">from</span> <span class="nn">IPython.display</span> <span class="kn">import</span> <span class="n">Image</span>
-</pre></div>
-</div>
-</div>
-<div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[35]:
-</pre></div>
-</div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">with</span> <span class="n">PyCallGraph</span><span class="p">(</span><span class="n">output</span><span class="o">=</span><span class="n">GraphvizOutput</span><span class="p">()):</span>
-    <span class="n">propagate</span><span class="o">.</span><span class="n">nominal</span><span class="p">(</span><span class="n">mdl</span><span class="p">)</span>
-</pre></div>
-</div>
-</div>
-<div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[36]:
-</pre></div>
-</div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">Image</span><span class="p">(</span><span class="n">filename</span><span class="o">=</span><span class="s1">&#39;pycallgraph.png&#39;</span><span class="p">)</span>
-</pre></div>
-</div>
-</div>
-<div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[36]:
-</pre></div>
-</div>
-<div class="output_area docutils container">
-<img alt="../../_images/examples_pump_Parallelism_Tutorial_63_0.png" src="../../_images/examples_pump_Parallelism_Tutorial_63_0.png" />
 </div>
 </div>
 <p>As shown, running this model is not particularly computationally expensive. As a result, the majority of the computational expense is not actually because of the simulation itself, but because of the way the model is simulated: - the majority is spent simulating the model - a certain amount is spent re-initalizing the model at first so that the model object can be re-used without worrying about it being modified by any previous executions - another amount is spent recording the model history,

@@ -9,6 +9,9 @@ Glossary
 	Flow
 		A data structure which connects functions--traditionally energy, material, or signal. Defined using the :class:`fmdtools.define.flow.Flow` class.
 	
+	Role
+		A defined attribute of an fmdtools class which refers to a user-defined (or default) subclass of a corresponding fmdtools data structure. For example, Blocks have the role `Block.s` (for state) which may be filled by a subclass of :class:`fmdtools.define.state.State`.
+
 	Internal Flow
 		A flow object that is internal to a :class:`fmdtools.define.block.FxnBlock` which is not present in the overall model definition.
 	
