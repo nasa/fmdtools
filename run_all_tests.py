@@ -15,8 +15,8 @@ if __name__=="__main__":
     # requires pytest, nbmake, pytest-html
     
     # for testing modules with doctests
-    doctest_modules = ["fmdtools/define/state.py", "fmdtools/define/parameter.py"]
-    redcode = pytest.main(["--doctest-modules", *doctest_modules])
+    #doctest_modules = ["fmdtools/define/state.py", "fmdtools/define/parameter.py"]
+    #retcode = pytest.main(["--doctest-modules", *doctest_modules])
     
     # retcode = pytest.main(["--html=./reports/junit/report.html",
     #                        "--self-contained-html",
@@ -59,14 +59,13 @@ if __name__=="__main__":
     # retcode = pytest.main()
 
     # for creating comprehensive test report:
-# =============================================================================
-#     retcode = pytest.main(["--html=./reports/junit/report.html",
-#                            "--junitxml=./reports/junit/junit.xml",
-#                            "--nbmake",
-#                            "--overwrite",
-#                            "--doctest-modules",
-#                            "--continue-on-collection-errors"])
-# =============================================================================
+
+    retcode = pytest.main(["--html=./reports/junit/report.html",
+                           "--junitxml=./reports/junit/junit.xml",
+                           "--nbmake",
+                           "--overwrite",
+                           "--doctest-modules",
+                           "--continue-on-collection-errors"])
     
     # after creating test report, update the badge using this in powershell:
     # !Powershell.exe -Command "genbadge tests"
