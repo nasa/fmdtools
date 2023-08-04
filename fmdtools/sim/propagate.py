@@ -74,42 +74,53 @@ Simulation keyword arguments.
 
 Parameters
 ----------
-    desired_result: dict/str/list
-        Desired quantities to return in the first argument.
-        Options are:
-            - 'endclass': a dict returned by find_classification (default)
-            - 'endfaults': a dict of returned fault modes and their propagation
-            {'endfaults':faultdict, 'faultprops':faultpropdict}
-            - 'graph'/'flowgraph'/etc: a networkx graph of the model with
-            fault modes superimposed
-            - 'fxnname.varname': variable values to get
-            - a list of the above arguments (for multiple at the end)
-            - a dict of lists (for multiple over time),
-            e.g. {time:[varnames,... 'endclass']}
-    track : str, optional
-        Which model states to track over time (overwrites mdl.default_track).
-        Default is 'default'
-        Options:
-            - 'default'
-            - 'all'
-            - 'none'
-            - or a dict of form {'functions':{'fxn1':'att1'}, 'flows':{'flow1':'att1'}}
-        The default is 'all'.
-    track_times : str/tuple
-        Defines what times to include in the history.
-        Options are:
-            - 'all'--all simulated times
-            - ('interval', n)--includes every nth time in the history
-            - ('times', [t1, ... tn])--only includes times defined in the
-            vector [t1 ... tn]
-    run_stochastic : bool
-        Whether to run stochastic behaviors or use default values. Default is False.
-        Can set as 'track_pdf' to calculate/track the probability densities of random
-        states over time.
-    staged : bool, optional
-        Whether to inject the faults in a copy of the nominal model at the fault time
-        (True) or instantiate a new model for the fault (False). Setting to True
-        roughly halves execution time. The default is False.
+desired_result : dict/str/list
+    Desired quantities to return in the first argument.
+    Options are:
+
+    - 'endclass': a dict returned by find_classification (default)
+    - 'endfaults': a dict of returned fault modes and their propagation, e.g. ::
+
+        {'endfaults':faultdict, 'faultprops':faultpropdict}
+
+    - 'graph'/'flowgraph'/etc: a networkx graph of the model with fault modes
+      superimposed
+    - 'fxnname.varname': variable values to get
+    - a list of the above arguments (for multiple at the end)
+    - a dict of lists (for multiple over time), e.g. ::
+
+        {time:[varnames,... 'endclass']}
+
+track : str, optional
+    Which model states to track over time (overwrites mdl.default_track).
+    Default is 'default'
+    Options:
+
+    - 'default'
+    - 'all'
+    - 'none'
+    - or a dict of form ::
+
+        {'functions':{'fxn1':'att1'}, 'flows':{'flow1':'att1'}}
+
+    The default is 'all'.
+track_times : str/tuple
+    Defines what times to include in the history.
+    Options are:
+
+    - 'all'--all simulated times
+    - ('interval', n)--includes every nth time in the history
+    - ('times', [t1, ... tn])--only includes times defined in the
+      vector [t1 ... tn]
+
+run_stochastic : bool
+    Whether to run stochastic behaviors or use default values. Default is False.
+    Can set as 'track_pdf' to calculate/track the probability densities of random
+    states over time.
+staged : bool, optional
+    Whether to inject the faults in a copy of the nominal model at the fault time
+    (True) or instantiate a new model for the fault (False). Setting to True
+    roughly halves execution time. The default is False.
 """
 
 
@@ -131,27 +142,35 @@ Run keyword arguments.
 
 Parameters
 ----------
-    protect : bool
-        Whether or not to protect the model object via copying.
-        Options:
-            - True (default): re-instances the model so that multiple simulations can
-            be run successively without causing problems
-            - False : Thus, the model object that is returned can be modified and
-            analyzed if needed
-    save_args : dict (optional)
-        Dictionary specifying if/how to save results. Default is {}, which doesn't
-        save anything.
-        Has structure:
-            - {'mdlhists':mdlhistargs, 'endclass':endclassargs, 'indiv':indiv},
-            - where mdlhistargs and endclassargs are dictionaries of arguments to
-            - (i.e., {'filename':'filename.pkl', 'filetype':'pickle', 'overwrite':True})
-            - and indiv is an (optional) bool specifying whether to save results
-            individually (in a folder) or as a monolythic file
-    mdl_kwargs: dict (optional)
-        Parameter dictionary to be instantiated in the model prior to simulation.
-        Has structure:
-            - {"p":Parameter, "sp":SimParam, "track":track}
-        Parameter dictionaries do not need to be complete (if incomplete).
+protect : bool
+    Whether or not to protect the model object via copying.
+    Options:
+        - True (default): re-instances the model so that multiple simulations can
+          be run successively without causing problems
+        - False : Thus, the model object that is returned can be modified and
+          analyzed if needed
+
+save_args : dict (optional)
+    Dictionary specifying if/how to save results. Default is {}, which doesn't
+    save anything.
+    Has structure ::
+
+        {'mdlhists':mdlhistargs, 'endclass':endclassargs, 'indiv':indiv}
+
+    where mdlhistargs and endclassargs are dictionaries of save arguments, e.g.::
+
+    {'filename':'filename.pkl', 'filetype':'pickle', 'overwrite':True}
+
+    and indiv is an (optional) bool specifying whether to save results individually
+    (in a folder) or as a monolythic file.
+
+mdl_kwargs: dict (optional)
+    Parameter dictionary to be instantiated in the model prior to simulation.
+    Has structure ::
+
+        {"p":Parameter, "sp":SimParam, "track":track}
+
+    Parameter dictionaries do not need to be complete (if incomplete).
 """
 
 
@@ -194,22 +213,26 @@ def nominal(mdl, **kwargs):
 
     Parameters
     ----------
-    mdl : Model
+    mdl : Simulable
         Model of the system
     **kwargs : kwargs
         Additional keyword arguments, may include:
-            - :data:`sim_kwargs` : kwargs
-                Simulation options for :func:`prop_one_scen
-            - :data:`run_kwargs` : kwargs
-                Run options for :func:`nom_helper` and others
+
+        - :data:`sim_kwargs` : kwargs
+              Simulation options for :func:`prop_one_scen`
+        - :data:`run_kwargs` : kwargs
+              Run options for :func:`nom_helper` and others
+
     Returns
     -------
-    result:
-        dict of result corresponding to desired_result:
-        {'endclass': endclasses,
-         'endfaults': endfaults,
-         'varname': var,
-         t: {'endclass': endclasses...} ...}
+    result: Result
+        dict of result corresponding to desired_result, e.g. ::
+
+            Result({'endclass': endclasses,
+                    'endfaults': endfaults,
+                    'varname': var,
+                    t: {'endclass': endclasses...} ...})
+
     nomhist : History
         A History dict with a history of modelstates
     """
@@ -227,10 +250,12 @@ def save_helper(save_args, endclass, mdlhist, indiv_id='', result_id=''):
     Parameters
     ----------
     save_args : dict
-        Dict with structure:
+        Dict with structure ::
+
             {'mdlhists': mdlhistargs,
              'endclass': endclassargs,
-             'indiv': individual_saving},
+             'indiv': individual_saving}
+
         where mdlhistargs and endclassargs are dictionaries of arguments to Result.save
         (i.e., {'filename':'filename.pkl', 'filetype':'pickle', 'overwrite':True})
         and individual_saving is a bool (True/False)
@@ -272,7 +297,7 @@ def nominal_approach(mdl, nomapp, **kwargs):
 
     Parameters
     ----------
-    mdl : Model
+    mdl : Simulable
         Model to simulate
     nomapp : NominalApproach
         Nominal Approach defining the nominal scenarios to run the system over.
@@ -280,12 +305,14 @@ def nominal_approach(mdl, nomapp, **kwargs):
         Whether to return endclasses from mdl.find_classification. Default is True.
     **kwargs : kwargs
         Additional keyword arguments, may include:
-            - :data:`sim_kwargs` : kwargs
-                Simulation options for :func:`prop_one_scen
-            - :data:`run_kwargs` : kwargs
-                Run options for :func:`nom_helper` and others
-            - :data:`mult_kwargs` : kwargs
-                Multi-scenario options for :func:`approach` and others
+
+        - :data:`sim_kwargs` : kwargs
+              Simulation options for :func:`prop_one_scen`
+        - :data:`run_kwargs` : kwargs
+              Run options for :func:`nom_helper` and others
+        - :data:`mult_kwargs` : kwargs
+              Multi-scenario options
+
     Returns
     -------
     nomresults: Result
@@ -347,27 +374,30 @@ def one_fault(mdl, *fxnfault, time=0, **kwargs):
 
     Parameters
     ----------
-    mdl : Model
+    mdl : Simulable
         The model to inject the fault in.
-    *fxnfault:
-        - fxnname, faultmode when a Model is provided, or
-        - faultmode when a Block/FxnBlock is provided
+    *fxnfault : str
+        Has options:
+        - 'fxnname', 'faultmode' when a Model is provided, or
+        - 'faultmode' when a Block/FxnBlock is provided
     time : float, optional
         Time to inject fault. Must be in the range of model times
         (i.e. in range(0, end, mdl.sp.dt)). The default is 0.
     **kwargs : kwargs
         Additional keyword arguments, may include:
-            - :data:`sim_kwargs` : kwargs
-                Simulation options for :func:`prop_one_scen
-            - :data:`run_kwargs` : kwargs
-                Run options for :func:`nom_helper` and others
+
+        - :data:`sim_kwargs` : kwargs
+              Simulation options for :func:`prop_one_scen`
+        - :data:`run_kwargs` : kwargs
+              Run options for :func:`nom_helper` and others
+
     Returns
     -------
     result: Result
-        Result dict of result corresponding to desired_result
-        {'endclass': endclasses,
-         'endfaults': endfaults,
-         'varname': var, t: {'endclass':endclasses...} ...}
+        Result dict of result corresponding to desired_result, with structure,::
+
+        Result({'nominal': nomresult, 'faulty': faultyresult})
+
     mdlhists : History
         A dictionary of the states of the model of each fault scenario over time with
         structure: {'nominal': nomhist, 'faulty': faulthist}
@@ -395,7 +425,7 @@ def sequence(mdl, seq={}, faultseq={}, disturbances={}, scen={}, rate=np.NaN, **
 
     Parameters
     ----------
-    mdl : Model
+    mdl : Simulable
         The model to inject the fault in.
     seq : dict
         Scenario dict defining the scenario
@@ -403,23 +433,29 @@ def sequence(mdl, seq={}, faultseq={}, disturbances={}, scen={}, rate=np.NaN, **
     faultseq : dict
         Dict of times and modes defining the fault scenario {time:{fxns: [modes]},}
     disturbances : dict
-        Dict of times and modes defining the disturbances in the scenario
+        Dict of times and modes defining the disturbances in the scenario::
+
         {time:{fxns: [modes]},}
+
     scen : Scenario, optional
         Scenario dictionary, if already constructed (for external calls)
     rate : float, optional
         Input rate for the sequence (must be calculated elsewhere)
     **kwargs : kwargs
         Additional keyword arguments, may include:
-            - :data:`sim_kwargs` : kwargs
-                Simulation options for :func:`prop_one_scen
-            - :data:`run_kwargs` : kwargs
-                Run options for :func:`nom_helper` and others
+
+        - :data:`sim_kwargs` : kwargs
+              Simulation options for :func:`prop_one_scen`
+        - :data:`run_kwargs` : kwargs
+              Run options for :func:`nom_helper` and others
+
     Returns
     -------
     result: Result
-        Result dict of result corresponding to desired_result with structure
-        {'nominal': nomresult, 'faulty': faultresult}
+        Result dict of result corresponding to desired_result, with structure,::
+
+        Result({'nominal': nomresult, 'faulty': faultyresult})
+
     mdlhists : dict
         A dictionary of the states of the model of each fault scenario over time with
         structure: {'nominal': nomhist, 'faulty': faulthist}
@@ -463,12 +499,12 @@ def nom_helper(mdl, ctimes, protect=True, save_args={}, mdl_kwargs={}, scen={},
 
     Parameters
     ----------
-    mdl : Model (object or class)
+    mdl : Simulable (object or class)
         Model of the system
     time : float/list
         Times to copy the nominal model from
     **kwargs : kwargs
-        :data:`sim_kwargs` simulation options for :func:`prop_one_scen
+        :data:`sim_kwargs` simulation options for :func:`prop_one_scen`
 
     Returns
     -------
@@ -525,23 +561,34 @@ def approach(mdl, app,  **kwargs):
     """
     Injects and propagates faults in the model defined by a given sample approach
 
+    NOTE: When calling in a script/module using parallel=True, execute using the
+    protection statement ::
+
+        if __name__ == 'main':
+            results, mdlhists = approach(mdl, app)
+
+    Otherwise, the method will keep spawning parallel processes.
+    See multiprocessing documentation.
+
     Parameters
     ----------
-    mdl : model
+    mdl : Simulable
         The model to inject faults in.
     app : sampleapproach
         SampleApproach used to define the list of faults and sample time for the model.
     **kwargs : kwargs
         Additional keyword arguments, may include:
-            - :data:`sim_kwargs` : kwargs
-                Simulation options for :func:`prop_one_scen
-            - :data:`run_kwargs` : kwargs
-                Run options for :func:`nom_helper` and others
-            - :data:`mult_kwargs` : kwargs
-                Multi-scenario options for :func:`approach` and others
+
+        - :data:`sim_kwargs` : kwargs
+              Simulation options for :func:`prop_one_scen`
+        - :data:`run_kwargs` : kwargs
+              Run options for :func:`nom_helper` and others
+        - :data:`mult_kwargs` : kwargs
+              Multi-scenario options
+
     Returns
     -------
-    endresults : Result
+    results : Result
         A Result dictionary with results desired from each scenario corresponding to
         desired_result over the set of scenarios.
     mdlhists : History
@@ -578,25 +625,29 @@ def single_faults(mdl, **kwargs):
     """
     Creates and propagates a list of failure scenarios in a model.
 
-    NOTE: When calling in a script using parallel=True, keep the script in the if
-    statement:
-        "if __name__ == 'main':
-            endclasses, mdlhists = single_faults(mdl)"
-        Otherwise, the method will keep spawning parallel processes.
-        See multiprocessing documentation.
+    NOTE: When calling in a script/module using parallel=True, execute using the
+    protection statement ::
+
+        if __name__ == 'main':
+            results, mdlhists = single_faults(mdl)
+
+    Otherwise, the method will keep spawning parallel processes.
+    See multiprocessing documentation.
 
     Parameters
     ----------
-    mdl : model
+    mdl : Simulable
         The model to inject faults in
     **kwargs : kwargs
         Additional keyword arguments, may include:
-            - :data:`sim_kwargs` : kwargs
-                Simulation options for :func:`prop_one_scen
-            - :data:`run_kwargs` : kwargs
-                Run options for :func:`nom_helper` and others
-            - :data:`mult_kwargs` : kwargs
-                Multi-scenario options for :func:`approach` and others
+
+        - :data:`sim_kwargs` : kwargs
+              Simulation options for :func:`prop_one_scen`
+        - :data:`run_kwargs` : kwargs
+              Run options for :func:`nom_helper` and others
+        - :data:`mult_kwargs` : kwargs
+              Multi-scenario options
+
     Returns
     -------
     results: Result
@@ -712,23 +763,20 @@ def exec_scen(mdl, scen, save_args={}, indiv_id='', **kwargs):
     Executes a scenario and generates results and classifications given a model and
     nominal model history.
 
-     Parameters
+    Parameters
     ----------
-    mdl : model
+    mdl : Simulable
         The model to inject faults in.
     scen : scenario
         scenario used to define time and faults where the fault is to be injected
-    nomhist:
+    nomhist : History
         history of results in the nominal model run
     save_args : dict
         Save dictionary to use in save_helper defining when/how to save the dictionary
     indiv_id : str
         ID str to insert into the file name (if saving individually)
     **kwargs : kwargs
-        Additional keyword arguments, may include:
-
-            - :data:`sim_kwargs` : kwargs
-                Simulation options for :func:`prop_one_scen`
+        :data:`sim_kwargs` for :func:`prop_one_scen`.
     """
     result, mdlhist, _, t_end,  = prop_one_scen(mdl, scen, **kwargs)
     save_helper(save_args, result, mdlhist, indiv_id=indiv_id, result_id=str(scen.name))
@@ -781,9 +829,18 @@ def nested_approach(mdl, nomapp, get_phases=False, **kwargs):
     Simulates a set of fault modes within a set of nominal scenarios defined by a
     nominal approach.
 
+    NOTE: When calling in a script/module using parallel=True, execute using the
+    protection statement ::
+
+        if __name__ == "main":
+            results, mdlhists = nested_approach(mdl, nomapp)
+
+    Otherwise, the method will keep spawning parallel processes.
+    See multiprocessing documentation.
+
     Parameters
     ----------
-    mdl : Model
+    mdl : Simulable
         Model Object to use in the simulation.
     nomapp : NominalApproach
         NominalApproach defining the nominal situations the model will be run over
@@ -797,15 +854,16 @@ def nested_approach(mdl, nomapp, get_phases=False, **kwargs):
         will be passed.
     **kwargs : kwargs
         Additional keyword arguments, may include:
-            - :data:`sim_kwargs` : kwargs
-                Simulation options for :func:`prop_one_scen
-            - :data:`run_kwargs` : kwargs
-                Run options for :func:`nom_helper` and others
-            - :data:`mult_kwargs` : kwargs
-                Multi-scenario options for :func:`approach` and others
-            - **app_args : mdl_kwargs
-                Keyword arguments for the SampleApproach.
-                See sim.approach.SampleApproach documentation.
+
+        - :data:`sim_kwargs` : kwargs
+              Simulation options for :func:`prop_one_scen`.
+        - :data:`run_kwargs` : kwargs
+              Run options for :func:`nom_helper` and others.
+        - :data:`mult_kwargs` : kwargs
+              Multi-scenario options
+        - app_args : mdl_kwargs
+              Keyword arguments for the SampleApproach.
+              See sim.approach.SampleApproach documentation.
 
     Returns
     -------
@@ -890,7 +948,7 @@ def list_init_faults(mdl):
 
     Parameters
     ----------
-    mdl : Model/FxnBlock
+    mdl : Simulable/FxnBlock
         Simulable with list of times in mdl.sp.times
 
     Returns
@@ -924,7 +982,7 @@ def init_histrange(mdl, start_time, staged, track, track_times):
 
     Parameters
     ----------
-    mdl : Model
+    mdl : Simulable
         Model (with times)
     start_time : float
         Time to start the history over
@@ -1012,7 +1070,7 @@ def prop_one_scen(mdl, scen, ctimes=[], nomhist={}, nomresult={}, cut_hist=True,
 
     Parameters
     ----------
-    mdl : model
+    mdl : Simulable
         The model to inject faults in.
     scen : Scenario
         The Scenario to run.
