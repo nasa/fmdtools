@@ -115,6 +115,8 @@ class Parameter(dataobject, readonly=True):
             attr_type = type(attr)
             if isinstance(attr, (list, set, dict)):
                 raise Exception("Parameter "+f+" type "+str(attr_type)+" is mutable")
+            elif isinstance(attr, np.ndarray):
+                attr.flags.writeable = False
             elif not isinstance(attr, (int, float, tuple, str, Parameter, np.number)):
                 warnings.warn("Parameter "+f+" type "+str(attr_type)+" may be mutable")
 
