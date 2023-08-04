@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Index &mdash; fmdtools 2.0-alpha documentation</title>
+  <title>Index &mdash; fmdtools 2.0-alpha5 documentation</title>
       <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
     <link rel="shortcut icon" href="_static/fmdtools_ico.ico"/>
@@ -43,6 +43,7 @@
 <li class="toctree-l3"><a class="reference internal" href="README.html#prerequisites">Prerequisites</a></li>
 </ul>
 </li>
+<li class="toctree-l2"><a class="reference internal" href="README.html#examples">Examples</a></li>
 <li class="toctree-l2"><a class="reference internal" href="README.html#contributions">Contributions</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="README.html#contributors">Contributors</a></li>
 </ul>
@@ -61,7 +62,7 @@
 <li class="toctree-l2"><a class="reference internal" href="docs/Development%20Guide.html#intro-to-fmdtools">Intro to fmdtools</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="docs/Intro_to_fmdtools.html">Intro to resilience modelling, simulation, and visualization in Python with fmdtools.</a><ul>
 <li class="toctree-l4"><a class="reference internal" href="docs/Intro_to_fmdtools.html#author-daniel-hulse">Author: Daniel Hulse</a></li>
-<li class="toctree-l4"><a class="reference internal" href="docs/Intro_to_fmdtools.html#version-2-0-alpha">Version: 2.0-alpha</a></li>
+<li class="toctree-l4"><a class="reference internal" href="docs/Intro_to_fmdtools.html#version-2-0-alpha5">Version: 2.0-alpha5</a></li>
 </ul>
 </li>
 <li class="toctree-l3"><a class="reference internal" href="docs/Intro_to_fmdtools.html#overview">Overview</a></li>
@@ -78,6 +79,8 @@
 <li class="toctree-l3"><a class="reference internal" href="docs/Intro_to_fmdtools.html#analysis-workflow-structure">Analysis Workflow/Structure</a></li>
 <li class="toctree-l3"><a class="reference internal" href="docs/Intro_to_fmdtools.html#defining-a-model">Defining a Model</a></li>
 <li class="toctree-l3"><a class="reference internal" href="docs/Intro_to_fmdtools.html#id1">Defining a Model</a></li>
+<li class="toctree-l3"><a class="reference internal" href="docs/Intro_to_fmdtools.html#function-code-template">Function Code Template</a></li>
+<li class="toctree-l3"><a class="reference internal" href="docs/Intro_to_fmdtools.html#model-code-template">Model Code Template</a></li>
 <li class="toctree-l3"><a class="reference internal" href="docs/Intro_to_fmdtools.html#demo-model-activity-examples-pump-ex-pump-py">Demo Model Activity: examples/pump/ex_pump.py</a></li>
 <li class="toctree-l3"><a class="reference internal" href="docs/Intro_to_fmdtools.html#more-resources-for-model-definition">More Resources for Model Definition</a></li>
 <li class="toctree-l3"><a class="reference internal" href="docs/Intro_to_fmdtools.html#notebook-activity">Notebook Activity:</a></li>
@@ -99,11 +102,13 @@
 </ul>
 </li>
 <li class="toctree-l3"><a class="reference internal" href="docs/Development%20Guide.html#development-process">Development Process</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="docs/Development%20Guide.html#release-checklist">Release Checklist</a></li>
 <li class="toctree-l4"><a class="reference internal" href="docs/Development%20Guide.html#upload-to-pypi">Upload to PyPI</a></li>
 </ul>
 </li>
 <li class="toctree-l3"><a class="reference internal" href="docs/Development%20Guide.html#roles">Roles</a></li>
 <li class="toctree-l3"><a class="reference internal" href="docs/Development%20Guide.html#documentation">Documentation</a></li>
+<li class="toctree-l3"><a class="reference internal" href="docs/Development%20Guide.html#style-formatting">Style/Formatting</a></li>
 <li class="toctree-l3"><a class="reference internal" href="docs/Development%20Guide.html#testing">Testing</a></li>
 <li class="toctree-l3"><a class="reference internal" href="docs/Development%20Guide.html#contributors">Contributors</a><ul>
 <li class="toctree-l4"><a class="reference internal" href="CONTRIBUTORS.html">CONTRIBUTORS</a></li>
@@ -112,6 +117,7 @@
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="docs/Development%20Guide.html#model-development-best-practices">Model Development Best Practices</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="docs/Development%20Guide.html#pay-attention-to-and-document-the-fmdtools-version">Pay attention to and document the fmdtools version</a></li>
 <li class="toctree-l3"><a class="reference internal" href="docs/Development%20Guide.html#plan-your-model-to-avoid-technical-debt">Plan your model to avoid technical debt</a></li>
 <li class="toctree-l3"><a class="reference internal" href="docs/Development%20Guide.html#don-t-copy-inherit-and-functionalize">Don’t copy, inherit and functionalize</a></li>
 <li class="toctree-l3"><a class="reference internal" href="docs/Development%20Guide.html#document-your-code-sometimes-before-your-write-it">Document your code, sometimes <em>before</em> your write it</a></li>
@@ -126,8 +132,8 @@
 </li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="docs/Examples.html">Examples</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="docs/Examples.html#pump">Pump</a><ul>
+<li class="toctree-l1"><a class="reference internal" href="examples/Examples.html">Examples</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="examples/Examples.html#pump">Pump</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="examples/pump/Tutorial_complete.html">fmdtools Tutorial</a><ul>
 <li class="toctree-l4"><a class="reference internal" href="examples/pump/Tutorial_complete.html#1.)-Loading-the-environment-and-model">1.) Loading the environment and model</a></li>
 <li class="toctree-l4"><a class="reference internal" href="examples/pump/Tutorial_complete.html#2.),-3.),-and-4.)-Simulate-and-visualize-the-results!">2.), 3.), and 4.) Simulate and visualize the results!</a></li>
@@ -172,15 +178,9 @@
 <li class="toctree-l4"><a class="reference internal" href="examples/pump/AST_Sampling.html#Simulator">Simulator</a></li>
 </ul>
 </li>
-<li class="toctree-l3"><a class="reference internal" href="examples/pump/IDETC_Results/IDETC_Figures.html">Probability Modelling in fmdtools</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="examples/pump/IDETC_Results/IDETC_Figures.html#Theory-and-Goals">Theory and Goals</a></li>
-<li class="toctree-l4"><a class="reference internal" href="examples/pump/IDETC_Results/IDETC_Figures.html#Model-Description">Model Description</a></li>
-<li class="toctree-l4"><a class="reference internal" href="examples/pump/IDETC_Results/IDETC_Figures.html#Experiments">Experiments</a></li>
 </ul>
 </li>
-</ul>
-</li>
-<li class="toctree-l2"><a class="reference internal" href="docs/Examples.html#multirotor">Multirotor</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="examples/Examples.html#multirotor">Multirotor</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="examples/multirotor/Demonstration.html">fmdtools Paper Demonstration</a><ul>
 <li class="toctree-l4"><a class="reference internal" href="examples/multirotor/Demonstration.html#Initial-Model">Initial Model</a></li>
 <li class="toctree-l4"><a class="reference internal" href="examples/multirotor/Demonstration.html#Setting-Node-Positions">Setting Node Positions</a></li>
@@ -199,26 +199,32 @@
 </li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="docs/Examples.html#tank">Tank</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="examples/Examples.html#tank">Tank</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="examples/tank/Tank_Analysis.html">Hold-up Tank Model</a><ul>
 <li class="toctree-l4"><a class="reference internal" href="examples/tank/Tank_Analysis.html#Verifying-the-nominal-state:">Verifying the nominal state:</a></li>
+<li class="toctree-l4"><a class="reference internal" href="examples/tank/Tank_Analysis.html#History">History</a></li>
 <li class="toctree-l4"><a class="reference internal" href="examples/tank/Tank_Analysis.html#What-happens-under-component-faults?">What happens under component faults?</a></li>
 <li class="toctree-l4"><a class="reference internal" href="examples/tank/Tank_Analysis.html#What-about-human-induced-faults?">What about human-induced faults?</a></li>
 <li class="toctree-l4"><a class="reference internal" href="examples/tank/Tank_Analysis.html#Evaluating-Joint-Component-Human-fault-modes">Evaluating Joint Component-Human fault modes</a></li>
 <li class="toctree-l4"><a class="reference internal" href="examples/tank/Tank_Analysis.html#Testing-different-reaction-times">Testing different reaction times</a></li>
 </ul>
 </li>
-<li class="toctree-l3"><a class="reference internal" href="examples/tank/Tank_Optimization.html">Cooling Tank Model</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="examples/tank/Tank_Optimization.html#Simulation">Simulation</a></li>
+<li class="toctree-l3"><a class="reference internal" href="examples/tank/Tank_Optimization.html">Cooling Tank Model Optimization</a></li>
+<li class="toctree-l3"><a class="reference internal" href="examples/tank/Tank_Optimization.html#Simulation">Simulation</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="examples/tank/Tank_Optimization.html#Verifying-the-nominal-state:">Verifying the nominal state:</a></li>
+<li class="toctree-l4"><a class="reference internal" href="examples/tank/Tank_Optimization.html#What-happens-under-component-faults?">What happens under component faults?</a></li>
+<li class="toctree-l4"><a class="reference internal" href="examples/tank/Tank_Optimization.html#Full-set-of-modes">Full set of modes</a></li>
+<li class="toctree-l4"><a class="reference internal" href="examples/tank/Tank_Optimization.html#Defining-Optimization-Problem">Defining Optimization Problem</a></li>
+<li class="toctree-l4"><a class="reference internal" href="examples/tank/Tank_Optimization.html#Optimization">Optimization</a></li>
 </ul>
 </li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="docs/Examples.html#eps">EPS</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="examples/Examples.html#eps">EPS</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="examples/eps/EPS_Example_Notebook.html">EPS Example Notebook</a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="docs/Examples.html#action-sequence-graph">Action Sequence Graph</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="examples/Examples.html#action-sequence-graph">Action Sequence Graph</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="examples/asg_demo/Action_Sequence_Graph.html">Action Sequence Graph Tutorial</a><ul>
 <li class="toctree-l4"><a class="reference internal" href="examples/asg_demo/Action_Sequence_Graph.html#Function-level-Simulation">Function-level Simulation</a></li>
 <li class="toctree-l4"><a class="reference internal" href="examples/asg_demo/Action_Sequence_Graph.html#Model-Simulation">Model Simulation</a></li>
@@ -227,7 +233,7 @@
 </li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="docs/Examples.html#rover">Rover</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="examples/Examples.html#rover">Rover</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="examples/rover/Rover_Setup_Notebook.html">Rover Model Explanation and Preliminaries</a><ul>
 <li class="toctree-l4"><a class="reference internal" href="examples/rover/Rover_Setup_Notebook.html#Model-Setup">Model Setup</a></li>
 <li class="toctree-l4"><a class="reference internal" href="examples/rover/Rover_Setup_Notebook.html#Model-simulation">Model simulation</a></li>
@@ -276,17 +282,20 @@
 </li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="docs/Examples.html#multiflow-demo">Multiflow Demo</a></li>
+<li class="toctree-l2"><a class="reference internal" href="examples/Examples.html#multiflow-demo">Multiflow Demo</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="examples/multiflow_demo/Multiflow_and_Commsflow_Demonstration.html">Demonstration on Using MultiFlow and CommsFlow</a></li>
+</ul>
+</li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="docs/Glossary.html">Glossary</a></li>
 <li class="toctree-l1"><a class="reference internal" href="docs/fmdtools.html">Module Reference</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="docs/fmdtools.define.html">fmdtools.define package</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="docs/fmdtools.define.html#module-fmdtools.define.block">fmdtools.define.block</a></li>
+<li class="toctree-l3"><a class="reference internal" href="docs/fmdtools.define.html#fmdtools-define-block">fmdtools.define.block</a></li>
 <li class="toctree-l3"><a class="reference internal" href="docs/fmdtools.define.html#module-fmdtools.define.common">fmdtools.define.common</a></li>
 <li class="toctree-l3"><a class="reference internal" href="docs/fmdtools.define.html#module-fmdtools.define.flow">fmdtools.define.flow</a></li>
 <li class="toctree-l3"><a class="reference internal" href="docs/fmdtools.define.html#module-fmdtools.define.mode">fmdtools.define.mode</a></li>
-<li class="toctree-l3"><a class="reference internal" href="docs/fmdtools.define.html#module-fmdtools.define.model">fmdtools.define.model</a></li>
+<li class="toctree-l3"><a class="reference internal" href="docs/fmdtools.define.html#fmdtools-define-model">fmdtools.define.model</a></li>
 <li class="toctree-l3"><a class="reference internal" href="docs/fmdtools.define.html#module-fmdtools.define.parameter">fmdtools.define.parameter</a></li>
 <li class="toctree-l3"><a class="reference internal" href="docs/fmdtools.define.html#module-fmdtools.define.rand">fmdtools.define.rand</a></li>
 <li class="toctree-l3"><a class="reference internal" href="docs/fmdtools.define.html#module-fmdtools.define.state">fmdtools.define.state</a></li>
@@ -361,6 +370,7 @@
  | <a href="#V"><strong>V</strong></a>
  | <a href="#W"><strong>W</strong></a>
  | <a href="#X"><strong>X</strong></a>
+ | <a href="#Y"><strong>Y</strong></a>
  
 </div>
 <h2 id="A">A</h2>
@@ -379,12 +389,6 @@
 </li>
       </ul></li>
       <li><a href="docs/Glossary.html#term-Action-Sequence-Graph"><strong>Action Sequence Graph</strong></a>
-</li>
-      <li><a href="docs/fmdtools.define.html#fmdtools.define.block.ASG.action_graph">action_graph (fmdtools.define.block.ASG attribute)</a>
-</li>
-      <li><a href="docs/fmdtools.define.html#fmdtools.define.block.ASG.actions">actions (fmdtools.define.block.ASG attribute)</a>
-</li>
-      <li><a href="docs/fmdtools.define.html#fmdtools.define.block.ASG.active_actions">active_actions (fmdtools.define.block.ASG attribute)</a>
 </li>
       <li><a href="docs/fmdtools.define.html#fmdtools.define.state.State.add">add() (fmdtools.define.state.State method)</a>
 </li>
@@ -430,12 +434,12 @@
 </li>
       <li><a href="docs/fmdtools.sim.html#fmdtools.sim.search.ProblemInterface.add_simulation">add_simulation() (fmdtools.sim.search.ProblemInterface method)</a>
 </li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="docs/fmdtools.sim.html#fmdtools.sim.search.ProblemInterface.add_variables">add_variables() (fmdtools.sim.search.ProblemInterface method)</a>
 </li>
       <li><a href="docs/Glossary.html#term-Agent"><strong>Agent</strong></a>
 </li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="docs/fmdtools.analyze.html#fmdtools.analyze.result.Result.all">all() (fmdtools.analyze.result.Result method)</a>
 </li>
       <li><a href="docs/fmdtools.analyze.html#fmdtools.analyze.result.Result.all_with">all_with() (fmdtools.analyze.result.Result method)</a>
@@ -596,6 +600,8 @@
         <li><a href="docs/fmdtools.analyze.html#fmdtools.analyze.graph.LabelStyle.clip_on">(fmdtools.analyze.graph.LabelStyle attribute)</a>
 </li>
       </ul></li>
+      <li><a href="docs/fmdtools.sim.html#fmdtools.sim.propagate.close_pool">close_pool() (in module fmdtools.sim.propagate)</a>
+</li>
       <li><a href="docs/fmdtools.analyze.html#fmdtools.analyze.graph.NodeStyle.cmap">cmap (fmdtools.analyze.graph.NodeStyle attribute)</a>
 </li>
       <li><a href="docs/fmdtools.define.html#fmdtools.define.flow.CommsFlow">CommsFlow (class in fmdtools.define.flow)</a>
@@ -620,8 +626,6 @@
 </li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="docs/fmdtools.define.html#fmdtools.define.block.ASG.conditions">conditions (fmdtools.define.block.ASG attribute)</a>
-</li>
       <li><a href="docs/fmdtools.sim.html#fmdtools.sim.search.ProblemInterface.constraints">constraints (fmdtools.sim.search.ProblemInterface attribute)</a>
 </li>
       <li><a href="docs/fmdtools.define.html#fmdtools.define.model.Model.construct_graph">construct_graph() (fmdtools.define.model.Model method)</a>
@@ -629,6 +633,8 @@
       <li><a href="docs/fmdtools.analyze.html#fmdtools.analyze.result.History.copy">copy() (fmdtools.analyze.result.History method)</a>
 
       <ul>
+        <li><a href="docs/fmdtools.define.html#fmdtools.define.block.Action.copy">(fmdtools.define.block.Action method)</a>
+</li>
         <li><a href="docs/fmdtools.define.html#fmdtools.define.block.ASG.copy">(fmdtools.define.block.ASG method)</a>
 </li>
         <li><a href="docs/fmdtools.define.html#fmdtools.define.block.Block.copy">(fmdtools.define.block.Block method)</a>
@@ -650,7 +656,9 @@
         <li><a href="docs/fmdtools.sim.html#fmdtools.sim.approach.NominalApproach.copy">(fmdtools.sim.approach.NominalApproach method)</a>
 </li>
       </ul></li>
-      <li><a href="docs/fmdtools.sim.html#fmdtools.sim.scenario.Scenario.copy_with">copy_with() (fmdtools.sim.scenario.Scenario method)</a>
+      <li><a href="docs/fmdtools.sim.html#fmdtools.sim.propagate.copy_staged">copy_staged() (in module fmdtools.sim.propagate)</a>
+</li>
+      <li><a href="docs/fmdtools.sim.html#fmdtools.sim.scenario.BaseScenario.copy_with">copy_with() (fmdtools.sim.scenario.BaseScenario method)</a>
 </li>
       <li><a href="docs/fmdtools.define.html#fmdtools.define.block.CompArch.copy_with_arg">copy_with_arg() (fmdtools.define.block.CompArch method)</a>
 </li>
@@ -742,12 +750,10 @@
 </li>
       <li><a href="docs/fmdtools.analyze.html#fmdtools.analyze.result.diff">diff() (in module fmdtools.analyze.result)</a>
 </li>
-      <li><a href="docs/fmdtools.define.html#fmdtools.define.state.State.different">different() (fmdtools.define.state.State method)</a>
+      <li><a href="docs/fmdtools.define.html#fmdtools.define.mode.Fault.dist">dist (fmdtools.define.mode.Fault attribute)</a>
 </li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="docs/fmdtools.define.html#fmdtools.define.mode.Fault.dist">dist (fmdtools.define.mode.Fault attribute)</a>
-</li>
       <li><a href="docs/Glossary.html#term-Disturbances"><strong>Disturbances</strong></a>
 </li>
       <li><a href="docs/fmdtools.sim.html#fmdtools.sim.scenario.Injection.disturbances">disturbances (fmdtools.sim.scenario.Injection attribute)</a>
@@ -779,9 +785,11 @@
       <li><a href="docs/fmdtools.define.html#fmdtools.define.parameter.SimParam.dt">dt (fmdtools.define.parameter.SimParam attribute)</a>
 
       <ul>
-        <li><a href="docs/fmdtools.define.html#fmdtools.define.time.Time.dt">(fmdtools.define.time.Time attribute)</a>, <a href="docs/fmdtools.define.html#id38">[1]</a>
+        <li><a href="docs/fmdtools.define.html#fmdtools.define.time.Time.dt">(fmdtools.define.time.Time attribute)</a>, <a href="docs/fmdtools.define.html#id40">[1]</a>
 </li>
       </ul></li>
+      <li><a href="docs/fmdtools.define.html#fmdtools.define.block.Action.duration">duration (fmdtools.define.block.Action attribute)</a>
+</li>
       <li><a href="docs/fmdtools.analyze.html#fmdtools.analyze.plot.dyn_order">dyn_order() (in module fmdtools.analyze.plot)</a>
 </li>
       <li><a href="docs/Glossary.html#term-Dynamic-Propagation"><strong>Dynamic Propagation</strong></a>
@@ -814,13 +822,15 @@
 </li>
       <li><a href="docs/Glossary.html#term-Environment"><strong>Environment</strong></a>
 </li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="docs/fmdtools.analyze.html#fmdtools.analyze.graph.GraphInteractor.epsilon">epsilon (fmdtools.analyze.graph.GraphInteractor attribute)</a>
 </li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="docs/fmdtools.define.html#fmdtools.define.common.eq_units">eq_units() (in module fmdtools.define.common)</a>
 </li>
       <li><a href="docs/fmdtools.sim.html#fmdtools.sim.search.eval_con">eval_con() (in module fmdtools.sim.search)</a>
+</li>
+      <li><a href="docs/fmdtools.define.html#fmdtools.define.state.ExamplePoint">ExamplePoint (class in fmdtools.define.state)</a>
 </li>
       <li><a href="docs/fmdtools.define.html#fmdtools.define.mode.Mode.exclusive">exclusive (fmdtools.define.mode.Mode attribute)</a>
 </li>
@@ -850,11 +860,9 @@
 </li>
       <li><a href="docs/Glossary.html#term-Fault-Mode"><strong>Fault Mode</strong></a>
 </li>
-      <li><a href="docs/fmdtools.define.html#fmdtools.define.block.ASG.faultmodes">faultmodes (fmdtools.define.block.ASG attribute)</a>
+      <li><a href="docs/fmdtools.define.html#fmdtools.define.block.CompArch.faultmodes">faultmodes (fmdtools.define.block.CompArch attribute)</a>
 
       <ul>
-        <li><a href="docs/fmdtools.define.html#fmdtools.define.block.CompArch.faultmodes">(fmdtools.define.block.CompArch attribute)</a>
-</li>
         <li><a href="docs/fmdtools.define.html#fmdtools.define.mode.Mode.faultmodes">(fmdtools.define.mode.Mode attribute)</a>
 </li>
       </ul></li>
@@ -890,13 +898,9 @@
         <li><a href="docs/fmdtools.define.html#fmdtools.define.flow.Flow">(class in fmdtools.define.flow)</a>
 </li>
       </ul></li>
-      <li><a href="docs/fmdtools.define.html#fmdtools.define.block.ASG.flow_graph">flow_graph (fmdtools.define.block.ASG attribute)</a>
-</li>
-      <li><a href="docs/fmdtools.define.html#fmdtools.define.block.ASG.flows">flows (fmdtools.define.block.ASG attribute)</a>
+      <li><a href="docs/fmdtools.define.html#fmdtools.define.block.Simulable.flows">flows (fmdtools.define.block.Simulable attribute)</a>
 
       <ul>
-        <li><a href="docs/fmdtools.define.html#fmdtools.define.block.Simulable.flows">(fmdtools.define.block.Simulable attribute)</a>
-</li>
         <li><a href="docs/fmdtools.define.html#fmdtools.define.model.Model.flows">(fmdtools.define.model.Model attribute)</a>
 </li>
       </ul></li>
@@ -955,8 +959,6 @@
         <li><a href="docs/fmdtools.define.html#module-fmdtools.define.flow">module</a>
 </li>
       </ul></li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li>
     fmdtools.define.mode
 
@@ -964,6 +966,8 @@
         <li><a href="docs/fmdtools.define.html#module-fmdtools.define.mode">module</a>
 </li>
       </ul></li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li>
     fmdtools.define.model
 
@@ -1079,7 +1083,7 @@
 </li>
       <li><a href="docs/fmdtools.sim.html#fmdtools.sim.approach.SampleApproach.fxnrates">fxnrates (fmdtools.sim.approach.SampleApproach attribute)</a>
 </li>
-      <li><a href="docs/fmdtools.define.html#fmdtools.define.model.Model.fxns">fxns (fmdtools.define.model.Model attribute)</a>, <a href="docs/fmdtools.define.html#id21">[1]</a>
+      <li><a href="docs/fmdtools.define.html#fmdtools.define.model.Model.fxns">fxns (fmdtools.define.model.Model attribute)</a>, <a href="docs/fmdtools.define.html#id23">[1]</a>
 </li>
       <li><a href="docs/fmdtools.define.html#fmdtools.define.model.Model.fxns_of_class">fxns_of_class() (fmdtools.define.model.Model method)</a>
 </li>
@@ -1096,11 +1100,13 @@
       <ul>
         <li><a href="docs/fmdtools.define.html#fmdtools.define.state.State.get">(fmdtools.define.state.State method)</a>
 </li>
+        <li><a href="docs/fmdtools.sim.html#fmdtools.sim.scenario.BaseScenario.get">(fmdtools.sim.scenario.BaseScenario method)</a>
+</li>
         <li><a href="docs/fmdtools.sim.html#fmdtools.sim.scenario.Injection.get">(fmdtools.sim.scenario.Injection method)</a>
 </li>
-        <li><a href="docs/fmdtools.sim.html#fmdtools.sim.scenario.Scenario.get">(fmdtools.sim.scenario.Scenario method)</a>
-</li>
       </ul></li>
+      <li><a href="docs/fmdtools.define.html#fmdtools.define.block.Simulable.get_args">get_args() (fmdtools.define.block.Simulable method)</a>
+</li>
       <li><a href="docs/fmdtools.analyze.html#fmdtools.analyze.graph.GraphInteractor.get_closest_point">get_closest_point() (fmdtools.analyze.graph.GraphInteractor method)</a>
 </li>
       <li><a href="docs/fmdtools.analyze.html#fmdtools.analyze.result.Result.get_comp_groups">get_comp_groups() (fmdtools.analyze.result.Result method)</a>
@@ -1111,9 +1117,19 @@
 </li>
       <li><a href="docs/fmdtools.define.html#fmdtools.define.common.get_dataobj_track">get_dataobj_track() (in module fmdtools.define.common)</a>
 </li>
+      <li><a href="docs/fmdtools.analyze.html#fmdtools.analyze.result.Result.get_default_comp_groups">get_default_comp_groups() (fmdtools.analyze.result.Result method)</a>
+</li>
       <li><a href="docs/fmdtools.analyze.html#fmdtools.analyze.result.History.get_degraded_hist">get_degraded_hist() (fmdtools.analyze.result.History method)</a>
 </li>
       <li><a href="docs/fmdtools.analyze.html#fmdtools.analyze.result.get_dict_attr">get_dict_attr() (in module fmdtools.analyze.result)</a>
+</li>
+      <li><a href="docs/fmdtools.analyze.html#fmdtools.analyze.result.History.get_different">get_different() (fmdtools.analyze.result.History method)</a>
+
+      <ul>
+        <li><a href="docs/fmdtools.analyze.html#fmdtools.analyze.result.Result.get_different">(fmdtools.analyze.result.Result method)</a>
+</li>
+      </ul></li>
+      <li><a href="docs/fmdtools.analyze.html#fmdtools.analyze.plot.get_dim_data">get_dim_data() (in module fmdtools.analyze.plot)</a>
 </li>
       <li><a href="docs/fmdtools.sim.html#fmdtools.sim.propagate.get_endclass_vars">get_endclass_vars() (in module fmdtools.sim.propagate)</a>
 </li>
@@ -1163,14 +1179,26 @@
 </li>
       <li><a href="docs/fmdtools.analyze.html#fmdtools.analyze.graph.ModelGraph.get_multi_edges">get_multi_edges() (fmdtools.analyze.graph.ModelGraph method)</a>
 </li>
+      <li><a href="docs/fmdtools.analyze.html#fmdtools.analyze.graph.get_node_info">get_node_info() (in module fmdtools.analyze.graph)</a>
+</li>
+      <li><a href="docs/fmdtools.analyze.html#fmdtools.analyze.plot.get_nominal_classes">get_nominal_classes() (in module fmdtools.analyze.plot)</a>
+</li>
+      <li><a href="docs/fmdtools.define.html#fmdtools.define.common.get_obj_indicators">get_obj_indicators() (in module fmdtools.define.common)</a>
+</li>
       <li><a href="docs/fmdtools.define.html#fmdtools.define.common.get_obj_track">get_obj_track() (in module fmdtools.define.common)</a>
 </li>
+      <li><a href="docs/fmdtools.sim.html#fmdtools.sim.scenario.NominalScenario.get_param">get_param() (fmdtools.sim.scenario.NominalScenario method)</a>
+</li>
       <li><a href="docs/fmdtools.sim.html#fmdtools.sim.approach.NominalApproach.get_param_scens">get_param_scens() (fmdtools.sim.approach.NominalApproach method)</a>
+</li>
+      <li><a href="docs/fmdtools.sim.html#fmdtools.sim.scenario.NominalScenario.get_params">get_params() (fmdtools.sim.scenario.NominalScenario method)</a>
 </li>
       <li><a href="docs/fmdtools.define.html#fmdtools.define.rand.get_pdf_for_dist">get_pdf_for_dist() (in module fmdtools.define.rand)</a>
 </li>
       <li><a href="docs/fmdtools.define.html#fmdtools.define.rand.get_pdf_for_rand">get_pdf_for_rand() (in module fmdtools.define.rand)</a>
 </li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="docs/fmdtools.define.html#fmdtools.define.flow.CommsFlow.get_port">get_port() (fmdtools.define.flow.CommsFlow method)</a>
 </li>
       <li><a href="docs/fmdtools.sim.html#fmdtools.sim.search.get_pos_negative">get_pos_negative() (in module fmdtools.sim.search)</a>
@@ -1187,8 +1215,6 @@
         <li><a href="docs/fmdtools.define.html#fmdtools.define.rand.Rand.get_rand_states">(fmdtools.define.rand.Rand method)</a>
 </li>
       </ul></li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="docs/fmdtools.sim.html#fmdtools.sim.propagate.get_result">get_result() (in module fmdtools.sim.propagate)</a>
 </li>
       <li><a href="docs/fmdtools.define.html#fmdtools.define.block.Simulable.get_scen_rate">get_scen_rate() (fmdtools.define.block.Simulable method)</a>
@@ -1269,7 +1295,7 @@
         <li><a href="docs/fmdtools.analyze.html#fmdtools.analyze.graph.Graph">(class in fmdtools.analyze.graph)</a>
 </li>
       </ul></li>
-      <li><a href="docs/fmdtools.define.html#fmdtools.define.model.Model.graph">graph (fmdtools.define.model.Model attribute)</a>, <a href="docs/fmdtools.define.html#id0">[1]</a>, <a href="docs/fmdtools.define.html#id22">[2]</a>
+      <li><a href="docs/fmdtools.define.html#fmdtools.define.model.Model.graph">graph (fmdtools.define.model.Model attribute)</a>, <a href="docs/fmdtools.define.html#id0">[1]</a>, <a href="docs/fmdtools.define.html#id24">[2]</a>
 </li>
       <li><a href="docs/fmdtools.analyze.html#fmdtools.analyze.graph.graph_factory">graph_factory() (in module fmdtools.analyze.graph)</a>
 </li>
@@ -1359,6 +1385,8 @@
 </li>
       <li><a href="docs/fmdtools.define.html#fmdtools.define.block.inject_faults_internal">inject_faults_internal() (in module fmdtools.define.block)</a>
 </li>
+      <li><a href="docs/fmdtools.sim.html#fmdtools.sim.scenario.Injection">Injection (class in fmdtools.sim.scenario)</a>
+</li>
       <li><a href="docs/fmdtools.sim.html#fmdtools.sim.scenario.NominalScenario.inputparams">inputparams (fmdtools.sim.scenario.NominalScenario attribute)</a>
 
       <ul>
@@ -1368,6 +1396,8 @@
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="docs/Glossary.html#term-Internal-Flow"><strong>Internal Flow</strong></a>
+</li>
+      <li><a href="docs/fmdtools.analyze.html#fmdtools.analyze.result.is_bool">is_bool() (in module fmdtools.analyze.result)</a>
 </li>
       <li><a href="docs/fmdtools.define.html#fmdtools.define.time.Timer.is_complete">is_complete() (fmdtools.define.time.Timer method)</a>
 </li>
@@ -1449,6 +1479,8 @@
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="docs/fmdtools.analyze.html#fmdtools.analyze.tabulate.label_faults">label_faults() (in module fmdtools.analyze.tabulate)</a>
 </li>
+      <li><a href="docs/fmdtools.analyze.html#fmdtools.analyze.graph.label_for_entry">label_for_entry() (in module fmdtools.analyze.graph)</a>
+</li>
       <li><a href="docs/fmdtools.analyze.html#fmdtools.analyze.graph.Labels">Labels (class in fmdtools.analyze.graph)</a>
 </li>
       <li><a href="docs/fmdtools.analyze.html#fmdtools.analyze.graph.LabelStyle">LabelStyle (class in fmdtools.analyze.graph)</a>
@@ -1481,6 +1513,8 @@
         <li><a href="docs/fmdtools.analyze.html#fmdtools.analyze.result.load_folder">(in module fmdtools.analyze.result)</a>
 </li>
       </ul></li>
+      <li><a href="docs/fmdtools.define.html#fmdtools.define.time.Time.local_dt">local_dt (fmdtools.define.time.Time attribute)</a>
+</li>
       <li><a href="docs/fmdtools.analyze.html#fmdtools.analyze.result.History.log">log() (fmdtools.analyze.result.History method)</a>
 </li>
       <li><a href="docs/fmdtools.define.html#fmdtools.define.mode.Mode.longnames">longnames (fmdtools.define.mode.Mode attribute)</a>
@@ -1491,11 +1525,9 @@
 <h2 id="M">M</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="docs/fmdtools.define.html#fmdtools.define.block.Action.m">m (fmdtools.define.block.Action attribute)</a>
+      <li><a href="docs/fmdtools.define.html#fmdtools.define.block.Block.m">m (fmdtools.define.block.Block attribute)</a>
 
       <ul>
-        <li><a href="docs/fmdtools.define.html#fmdtools.define.block.Block.m">(fmdtools.define.block.Block attribute)</a>
-</li>
         <li><a href="docs/fmdtools.define.html#fmdtools.define.block.Component.m">(fmdtools.define.block.Component attribute)</a>
 </li>
       </ul></li>
@@ -1553,10 +1585,10 @@
 </li>
       <li><a href="docs/fmdtools.analyze.html#fmdtools.analyze.graph.ModelTypeGraph">ModelTypeGraph (class in fmdtools.analyze.graph)</a>
 </li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="docs/fmdtools.sim.html#fmdtools.sim.approach.SampleApproach.modephases">modephases (fmdtools.sim.approach.SampleApproach attribute)</a>
 </li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="docs/fmdtools.sim.html#fmdtools.sim.scenario.JointFaultScenario.modes">modes (fmdtools.sim.scenario.JointFaultScenario attribute)</a>
 </li>
       <li>
@@ -1628,6 +1660,8 @@
         <li><a href="docs/fmdtools.define.html#fmdtools.define.flow.Flow.name">(fmdtools.define.flow.Flow attribute)</a>
 </li>
         <li><a href="docs/fmdtools.define.html#fmdtools.define.flow.MultiFlow.name">(fmdtools.define.flow.MultiFlow attribute)</a>
+</li>
+        <li><a href="docs/fmdtools.sim.html#fmdtools.sim.scenario.BaseScenario.name">(fmdtools.sim.scenario.BaseScenario attribute)</a>
 </li>
         <li><a href="docs/fmdtools.sim.html#fmdtools.sim.scenario.JointFaultScenario.name">(fmdtools.sim.scenario.JointFaultScenario attribute)</a>
 </li>
@@ -1794,10 +1828,10 @@
 </li>
       <li><a href="docs/fmdtools.analyze.html#fmdtools.analyze.graph.Graph.plot_bridging_nodes">plot_bridging_nodes() (fmdtools.analyze.graph.Graph method)</a>
 </li>
-      <li><a href="docs/fmdtools.analyze.html#fmdtools.analyze.graph.Graph.plot_degree_dist">plot_degree_dist() (fmdtools.analyze.graph.Graph method)</a>
-</li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="docs/fmdtools.analyze.html#fmdtools.analyze.graph.Graph.plot_degree_dist">plot_degree_dist() (fmdtools.analyze.graph.Graph method)</a>
+</li>
       <li><a href="docs/fmdtools.analyze.html#fmdtools.analyze.plot.plot_err_lines">plot_err_lines() (in module fmdtools.analyze.plot)</a>
 </li>
       <li><a href="docs/fmdtools.analyze.html#fmdtools.analyze.graph.Graph.plot_high_degree_nodes">plot_high_degree_nodes() (fmdtools.analyze.graph.Graph method)</a>
@@ -1805,8 +1839,6 @@
       <li><a href="docs/fmdtools.analyze.html#fmdtools.analyze.plot.plot_line_and_err">plot_line_and_err() (in module fmdtools.analyze.plot)</a>
 </li>
       <li><a href="docs/fmdtools.sim.html#fmdtools.sim.search.ProblemInterface.plot_obj_const">plot_obj_const() (fmdtools.sim.search.ProblemInterface method)</a>
-</li>
-      <li><a href="docs/fmdtools.define.html#fmdtools.define.block.ASG.pos">pos (fmdtools.define.block.ASG attribute)</a>
 </li>
       <li><a href="docs/fmdtools.analyze.html#fmdtools.analyze.graph.GraphInteractor.print_pos">print_pos() (fmdtools.analyze.graph.GraphInteractor method)</a>
 </li>
@@ -1820,7 +1852,7 @@
 </li>
       <li><a href="docs/fmdtools.sim.html#fmdtools.sim.search.ProblemInterface">ProblemInterface (class in fmdtools.sim.search)</a>
 </li>
-      <li><a href="docs/fmdtools.define.html#fmdtools.define.rand.Rand.probs">probs (fmdtools.define.rand.Rand attribute)</a>, <a href="docs/fmdtools.define.html#id31">[1]</a>
+      <li><a href="docs/fmdtools.define.html#fmdtools.define.rand.Rand.probs">probs (fmdtools.define.rand.Rand attribute)</a>, <a href="docs/fmdtools.define.html#id33">[1]</a>
 </li>
       <li><a href="docs/fmdtools.define.html#fmdtools.define.mode.Fault.probtype">probtype (fmdtools.define.mode.Fault attribute)</a>
 
@@ -1876,12 +1908,10 @@
 </li>
       <li><a href="docs/Glossary.html#term-Rate"><strong>Rate</strong></a>
 </li>
-      <li><a href="docs/fmdtools.sim.html#fmdtools.sim.scenario.JointFaultScenario.rate">rate (fmdtools.sim.scenario.JointFaultScenario attribute)</a>
+      <li><a href="docs/fmdtools.sim.html#fmdtools.sim.scenario.BaseScenario.rate">rate (fmdtools.sim.scenario.BaseScenario attribute)</a>
 
       <ul>
-        <li><a href="docs/fmdtools.sim.html#fmdtools.sim.scenario.NominalScenario.rate">(fmdtools.sim.scenario.NominalScenario attribute)</a>
-</li>
-        <li><a href="docs/fmdtools.sim.html#fmdtools.sim.scenario.ParamScenario.rate">(fmdtools.sim.scenario.ParamScenario attribute)</a>
+        <li><a href="docs/fmdtools.sim.html#fmdtools.sim.scenario.JointFaultScenario.rate">(fmdtools.sim.scenario.JointFaultScenario attribute)</a>
 </li>
         <li><a href="docs/fmdtools.sim.html#fmdtools.sim.scenario.Scenario.rate">(fmdtools.sim.scenario.Scenario attribute)</a>
 </li>
@@ -1906,9 +1936,11 @@
 </li>
       <li><a href="docs/fmdtools.define.html#fmdtools.define.mode.Mode.replace_fault">replace_fault() (fmdtools.define.mode.Mode method)</a>
 </li>
-      <li><a href="docs/fmdtools.define.html#fmdtools.define.block.Block.reset">reset() (fmdtools.define.block.Block method)</a>
+      <li><a href="docs/fmdtools.define.html#fmdtools.define.block.ASG.reset">reset() (fmdtools.define.block.ASG method)</a>
 
       <ul>
+        <li><a href="docs/fmdtools.define.html#fmdtools.define.block.Block.reset">(fmdtools.define.block.Block method)</a>
+</li>
         <li><a href="docs/fmdtools.define.html#fmdtools.define.block.CompArch.reset">(fmdtools.define.block.CompArch method)</a>
 </li>
         <li><a href="docs/fmdtools.define.html#fmdtools.define.block.FxnBlock.reset">(fmdtools.define.block.FxnBlock method)</a>
@@ -1980,7 +2012,11 @@
         <li><a href="docs/fmdtools.define.html#fmdtools.define.flow.MultiFlow.return_states">(fmdtools.define.flow.MultiFlow method)</a>
 </li>
       </ul></li>
-      <li><a href="docs/fmdtools.define.html#fmdtools.define.rand.Rand.rng">rng (fmdtools.define.rand.Rand attribute)</a>, <a href="docs/fmdtools.define.html#id32">[1]</a>
+      <li><a href="docs/fmdtools.define.html#fmdtools.define.common.return_true_indicators">return_true_indicators() (in module fmdtools.define.common)</a>
+</li>
+      <li><a href="docs/fmdtools.define.html#fmdtools.define.rand.Rand.rng">rng (fmdtools.define.rand.Rand attribute)</a>, <a href="docs/fmdtools.define.html#id34">[1]</a>
+</li>
+      <li><a href="docs/Glossary.html#term-Role"><strong>Role</strong></a>
 </li>
       <li><a href="docs/fmdtools.analyze.html#fmdtools.analyze.graph.EdgeLabelStyle.rotate">rotate (fmdtools.analyze.graph.EdgeLabelStyle attribute)</a>
 </li>
@@ -1990,7 +2026,7 @@
 </li>
       <li><a href="docs/fmdtools.define.html#fmdtools.define.rand.Rand.run_stochastic">run_stochastic (fmdtools.define.rand.Rand attribute)</a>
 </li>
-      <li><a href="docs/fmdtools.define.html#fmdtools.define.time.Time.run_times">run_times (fmdtools.define.time.Time attribute)</a>, <a href="docs/fmdtools.define.html#id39">[1]</a>
+      <li><a href="docs/fmdtools.define.html#fmdtools.define.time.Time.run_times">run_times (fmdtools.define.time.Time attribute)</a>, <a href="docs/fmdtools.define.html#id41">[1]</a>
 </li>
   </ul></td>
 </tr></table>
@@ -1998,11 +2034,9 @@
 <h2 id="S">S</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="docs/fmdtools.define.html#fmdtools.define.block.Action.s">s (fmdtools.define.block.Action attribute)</a>
+      <li><a href="docs/fmdtools.define.html#fmdtools.define.block.Block.s">s (fmdtools.define.block.Block attribute)</a>
 
       <ul>
-        <li><a href="docs/fmdtools.define.html#fmdtools.define.block.Block.s">(fmdtools.define.block.Block attribute)</a>
-</li>
         <li><a href="docs/fmdtools.define.html#fmdtools.define.block.Component.s">(fmdtools.define.block.Component attribute)</a>
 </li>
         <li><a href="docs/fmdtools.define.html#fmdtools.define.flow.CommsFlow.s">(fmdtools.define.flow.CommsFlow attribute)</a>
@@ -2044,7 +2078,7 @@
 </li>
       <li><a href="docs/fmdtools.sim.html#fmdtools.sim.propagate.scenlist_helper">scenlist_helper() (in module fmdtools.sim.propagate)</a>
 </li>
-      <li><a href="docs/fmdtools.define.html#fmdtools.define.rand.Rand.seed">seed (fmdtools.define.rand.Rand attribute)</a>, <a href="docs/fmdtools.define.html#id33">[1]</a>
+      <li><a href="docs/fmdtools.define.html#fmdtools.define.rand.Rand.seed">seed (fmdtools.define.rand.Rand attribute)</a>, <a href="docs/fmdtools.define.html#id35">[1]</a>
 </li>
       <li><a href="docs/fmdtools.sim.html#fmdtools.sim.approach.SampleApproach.select_points">select_points() (fmdtools.sim.approach.SampleApproach method)</a>
 </li>
@@ -2052,9 +2086,11 @@
 </li>
       <li><a href="docs/fmdtools.sim.html#fmdtools.sim.scenario.Sequence">Sequence (class in fmdtools.sim.scenario)</a>
 </li>
-      <li><a href="docs/fmdtools.sim.html#fmdtools.sim.scenario.JointFaultScenario.sequence">sequence (fmdtools.sim.scenario.JointFaultScenario attribute)</a>
+      <li><a href="docs/fmdtools.sim.html#fmdtools.sim.scenario.BaseScenario.sequence">sequence (fmdtools.sim.scenario.BaseScenario attribute)</a>
 
       <ul>
+        <li><a href="docs/fmdtools.sim.html#fmdtools.sim.scenario.JointFaultScenario.sequence">(fmdtools.sim.scenario.JointFaultScenario attribute)</a>
+</li>
         <li><a href="docs/fmdtools.sim.html#fmdtools.sim.scenario.NominalScenario.sequence">(fmdtools.sim.scenario.NominalScenario attribute)</a>
 </li>
         <li><a href="docs/fmdtools.sim.html#fmdtools.sim.scenario.ParamScenario.sequence">(fmdtools.sim.scenario.ParamScenario attribute)</a>
@@ -2234,11 +2270,9 @@
 <h2 id="T">T</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="docs/fmdtools.define.html#fmdtools.define.block.Action.t">t (fmdtools.define.block.Action attribute)</a>
+      <li><a href="docs/fmdtools.define.html#fmdtools.define.block.Block.t">t (fmdtools.define.block.Block attribute)</a>
 
       <ul>
-        <li><a href="docs/fmdtools.define.html#fmdtools.define.block.Block.t">(fmdtools.define.block.Block attribute)</a>
-</li>
         <li><a href="docs/fmdtools.define.html#fmdtools.define.block.Component.t">(fmdtools.define.block.Component attribute)</a>
 </li>
         <li><a href="docs/fmdtools.sim.html#fmdtools.sim.search.DynamicInterface.t">(fmdtools.sim.search.DynamicInterface attribute)</a>
@@ -2246,7 +2280,7 @@
       </ul></li>
       <li><a href="docs/fmdtools.define.html#fmdtools.define.time.Timer.t">t() (fmdtools.define.time.Timer method)</a>
 </li>
-      <li><a href="docs/fmdtools.define.html#fmdtools.define.time.Time.t_ind">t_ind (fmdtools.define.time.Time attribute)</a>, <a href="docs/fmdtools.define.html#id40">[1]</a>
+      <li><a href="docs/fmdtools.define.html#fmdtools.define.time.Time.t_ind">t_ind (fmdtools.define.time.Time attribute)</a>, <a href="docs/fmdtools.define.html#id42">[1]</a>
 
       <ul>
         <li><a href="docs/fmdtools.sim.html#fmdtools.sim.search.DynamicInterface.t_ind">(fmdtools.sim.search.DynamicInterface attribute)</a>
@@ -2254,22 +2288,20 @@
       </ul></li>
       <li><a href="docs/fmdtools.define.html#fmdtools.define.common.t_key">t_key() (in module fmdtools.define.common)</a>
 </li>
-      <li><a href="docs/fmdtools.define.html#fmdtools.define.time.Time.t_loc">t_loc (fmdtools.define.time.Time attribute)</a>, <a href="docs/fmdtools.define.html#id41">[1]</a>
+      <li><a href="docs/fmdtools.define.html#fmdtools.define.time.Time.t_loc">t_loc (fmdtools.define.time.Time attribute)</a>, <a href="docs/fmdtools.define.html#id43">[1]</a>
 </li>
       <li><a href="docs/fmdtools.sim.html#fmdtools.sim.search.DynamicInterface.t_max">t_max (fmdtools.sim.search.DynamicInterface attribute)</a>
 </li>
       <li><a href="docs/fmdtools.define.html#fmdtools.define.time.Time">Time (class in fmdtools.define.time)</a>
 </li>
-      <li><a href="docs/fmdtools.define.html#fmdtools.define.time.Time.time">time (fmdtools.define.time.Time attribute)</a>, <a href="docs/fmdtools.define.html#id42">[1]</a>
+      <li><a href="docs/fmdtools.define.html#fmdtools.define.time.Time.time">time (fmdtools.define.time.Time attribute)</a>, <a href="docs/fmdtools.define.html#id44">[1]</a>
 
       <ul>
         <li><a href="docs/fmdtools.define.html#fmdtools.define.time.Timer.time">(fmdtools.define.time.Timer attribute)</a>
 </li>
+        <li><a href="docs/fmdtools.sim.html#fmdtools.sim.scenario.BaseScenario.time">(fmdtools.sim.scenario.BaseScenario attribute)</a>
+</li>
         <li><a href="docs/fmdtools.sim.html#fmdtools.sim.scenario.JointFaultScenario.time">(fmdtools.sim.scenario.JointFaultScenario attribute)</a>
-</li>
-        <li><a href="docs/fmdtools.sim.html#fmdtools.sim.scenario.NominalScenario.time">(fmdtools.sim.scenario.NominalScenario attribute)</a>
-</li>
-        <li><a href="docs/fmdtools.sim.html#fmdtools.sim.scenario.ParamScenario.time">(fmdtools.sim.scenario.ParamScenario attribute)</a>
 </li>
         <li><a href="docs/fmdtools.sim.html#fmdtools.sim.scenario.Scenario.time">(fmdtools.sim.scenario.Scenario attribute)</a>
 </li>
@@ -2280,15 +2312,17 @@
 </li>
       <li><a href="docs/fmdtools.define.html#fmdtools.define.time.Timer">Timer (class in fmdtools.define.time)</a>
 </li>
+      <li><a href="docs/fmdtools.define.html#fmdtools.define.time.Time.timernames">timernames (fmdtools.define.time.Time attribute)</a>, <a href="docs/fmdtools.define.html#id45">[1]</a>
+</li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="docs/fmdtools.define.html#fmdtools.define.time.Time.timernames">timernames (fmdtools.define.time.Time attribute)</a>, <a href="docs/fmdtools.define.html#id43">[1]</a>
-</li>
-      <li><a href="docs/fmdtools.define.html#fmdtools.define.time.Time.timers">timers (fmdtools.define.time.Time attribute)</a>, <a href="docs/fmdtools.define.html#id44">[1]</a>
+      <li><a href="docs/fmdtools.define.html#fmdtools.define.time.Time.timers">timers (fmdtools.define.time.Time attribute)</a>, <a href="docs/fmdtools.define.html#id46">[1]</a>
 </li>
       <li><a href="docs/fmdtools.define.html#fmdtools.define.parameter.SimParam.times">times (fmdtools.define.parameter.SimParam attribute)</a>
 
       <ul>
+        <li><a href="docs/fmdtools.sim.html#fmdtools.sim.scenario.BaseScenario.times">(fmdtools.sim.scenario.BaseScenario attribute)</a>
+</li>
         <li><a href="docs/fmdtools.sim.html#fmdtools.sim.scenario.JointFaultScenario.times">(fmdtools.sim.scenario.JointFaultScenario attribute)</a>
 </li>
         <li><a href="docs/fmdtools.sim.html#fmdtools.sim.scenario.NominalScenario.times">(fmdtools.sim.scenario.NominalScenario attribute)</a>
@@ -2366,6 +2400,8 @@
         <li><a href="docs/fmdtools.sim.html#fmdtools.sim.search.DynamicInterface.update">(fmdtools.sim.search.DynamicInterface method)</a>
 </li>
       </ul></li>
+      <li><a href="docs/fmdtools.define.html#fmdtools.define.block.FxnBlock.update_contained_modes">update_contained_modes() (fmdtools.define.block.FxnBlock method)</a>
+</li>
       <li><a href="docs/fmdtools.sim.html#fmdtools.sim.search.ProblemInterface.update_current_iter">update_current_iter() (fmdtools.sim.search.ProblemInterface method)</a>
 </li>
   </ul></td>
@@ -2401,7 +2437,7 @@
       <li><a href="docs/fmdtools.define.html#fmdtools.define.parameter.SimParam.use_local">use_local (fmdtools.define.parameter.SimParam attribute)</a>
 
       <ul>
-        <li><a href="docs/fmdtools.define.html#fmdtools.define.time.Time.use_local">(fmdtools.define.time.Time attribute)</a>, <a href="docs/fmdtools.define.html#id45">[1]</a>
+        <li><a href="docs/fmdtools.define.html#fmdtools.define.time.Time.use_local">(fmdtools.define.time.Time attribute)</a>, <a href="docs/fmdtools.define.html#id47">[1]</a>
 </li>
       </ul></li>
   </ul></td>
@@ -2444,7 +2480,19 @@
 <h2 id="X">X</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="docs/fmdtools.define.html#fmdtools.define.state.ExamplePoint.x">x (fmdtools.define.state.ExamplePoint attribute)</a>
+</li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="docs/fmdtools.sim.html#fmdtools.sim.search.ProblemInterface.x_to_obj_const">x_to_obj_const() (fmdtools.sim.search.ProblemInterface method)</a>
+</li>
+  </ul></td>
+</tr></table>
+
+<h2 id="Y">Y</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="docs/fmdtools.define.html#fmdtools.define.state.ExamplePoint.y">y (fmdtools.define.state.ExamplePoint attribute)</a>
 </li>
   </ul></td>
 </tr></table>

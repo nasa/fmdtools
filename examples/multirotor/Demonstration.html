@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>fmdtools Paper Demonstration &mdash; fmdtools 2.0-alpha documentation</title>
+  <title>fmdtools Paper Demonstration &mdash; fmdtools 2.0-alpha5 documentation</title>
       <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
     <link rel="shortcut icon" href="../../_static/fmdtools_ico.ico"/>
@@ -23,7 +23,7 @@
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
     <link rel="next" title="Integrated Resilience Optimization Architectures" href="Multirotor_Optimization.html" />
-    <link rel="prev" title="Probability Modelling in fmdtools" href="../pump/IDETC_Results/IDETC_Figures.html" /> 
+    <link rel="prev" title="fmdtools-AdaStress integration" href="../pump/AST_Sampling.html" /> 
 </head>
 
 <body class="wy-body-for-nav"> 
@@ -48,6 +48,7 @@
 <li class="toctree-l3"><a class="reference internal" href="../../README.html#prerequisites">Prerequisites</a></li>
 </ul>
 </li>
+<li class="toctree-l2"><a class="reference internal" href="../../README.html#examples">Examples</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../README.html#contributions">Contributions</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="../../README.html#contributors">Contributors</a></li>
 </ul>
@@ -66,7 +67,7 @@
 <li class="toctree-l2"><a class="reference internal" href="../../docs/Development%20Guide.html#intro-to-fmdtools">Intro to fmdtools</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="../../docs/Intro_to_fmdtools.html">Intro to resilience modelling, simulation, and visualization in Python with fmdtools.</a><ul>
 <li class="toctree-l4"><a class="reference internal" href="../../docs/Intro_to_fmdtools.html#author-daniel-hulse">Author: Daniel Hulse</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/Intro_to_fmdtools.html#version-2-0-alpha">Version: 2.0-alpha</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../docs/Intro_to_fmdtools.html#version-2-0-alpha5">Version: 2.0-alpha5</a></li>
 </ul>
 </li>
 <li class="toctree-l3"><a class="reference internal" href="../../docs/Intro_to_fmdtools.html#overview">Overview</a></li>
@@ -83,6 +84,8 @@
 <li class="toctree-l3"><a class="reference internal" href="../../docs/Intro_to_fmdtools.html#analysis-workflow-structure">Analysis Workflow/Structure</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../docs/Intro_to_fmdtools.html#defining-a-model">Defining a Model</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../docs/Intro_to_fmdtools.html#id1">Defining a Model</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../docs/Intro_to_fmdtools.html#function-code-template">Function Code Template</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../docs/Intro_to_fmdtools.html#model-code-template">Model Code Template</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../docs/Intro_to_fmdtools.html#demo-model-activity-examples-pump-ex-pump-py">Demo Model Activity: examples/pump/ex_pump.py</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../docs/Intro_to_fmdtools.html#more-resources-for-model-definition">More Resources for Model Definition</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../docs/Intro_to_fmdtools.html#notebook-activity">Notebook Activity:</a></li>
@@ -104,11 +107,13 @@
 </ul>
 </li>
 <li class="toctree-l3"><a class="reference internal" href="../../docs/Development%20Guide.html#development-process">Development Process</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../docs/Development%20Guide.html#release-checklist">Release Checklist</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../docs/Development%20Guide.html#upload-to-pypi">Upload to PyPI</a></li>
 </ul>
 </li>
 <li class="toctree-l3"><a class="reference internal" href="../../docs/Development%20Guide.html#roles">Roles</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../docs/Development%20Guide.html#documentation">Documentation</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../docs/Development%20Guide.html#style-formatting">Style/Formatting</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../docs/Development%20Guide.html#testing">Testing</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../docs/Development%20Guide.html#contributors">Contributors</a><ul>
 <li class="toctree-l4"><a class="reference internal" href="../../CONTRIBUTORS.html">CONTRIBUTORS</a></li>
@@ -117,6 +122,7 @@
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="../../docs/Development%20Guide.html#model-development-best-practices">Model Development Best Practices</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../docs/Development%20Guide.html#pay-attention-to-and-document-the-fmdtools-version">Pay attention to and document the fmdtools version</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../docs/Development%20Guide.html#plan-your-model-to-avoid-technical-debt">Plan your model to avoid technical debt</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../docs/Development%20Guide.html#don-t-copy-inherit-and-functionalize">Don’t copy, inherit and functionalize</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../docs/Development%20Guide.html#document-your-code-sometimes-before-your-write-it">Document your code, sometimes <em>before</em> your write it</a></li>
@@ -131,8 +137,8 @@
 </li>
 </ul>
 </li>
-<li class="toctree-l1 current"><a class="reference internal" href="../../docs/Examples.html">Examples</a><ul class="current">
-<li class="toctree-l2"><a class="reference internal" href="../../docs/Examples.html#pump">Pump</a><ul>
+<li class="toctree-l1 current"><a class="reference internal" href="../Examples.html">Examples</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../Examples.html#pump">Pump</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="../pump/Tutorial_complete.html">fmdtools Tutorial</a><ul>
 <li class="toctree-l4"><a class="reference internal" href="../pump/Tutorial_complete.html#1.)-Loading-the-environment-and-model">1.) Loading the environment and model</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../pump/Tutorial_complete.html#2.),-3.),-and-4.)-Simulate-and-visualize-the-results!">2.), 3.), and 4.) Simulate and visualize the results!</a></li>
@@ -177,15 +183,9 @@
 <li class="toctree-l4"><a class="reference internal" href="../pump/AST_Sampling.html#Simulator">Simulator</a></li>
 </ul>
 </li>
-<li class="toctree-l3"><a class="reference internal" href="../pump/IDETC_Results/IDETC_Figures.html">Probability Modelling in fmdtools</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="../pump/IDETC_Results/IDETC_Figures.html#Theory-and-Goals">Theory and Goals</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../pump/IDETC_Results/IDETC_Figures.html#Model-Description">Model Description</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../pump/IDETC_Results/IDETC_Figures.html#Experiments">Experiments</a></li>
 </ul>
 </li>
-</ul>
-</li>
-<li class="toctree-l2 current"><a class="reference internal" href="../../docs/Examples.html#multirotor">Multirotor</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="../Examples.html#multirotor">Multirotor</a><ul class="current">
 <li class="toctree-l3 current"><a class="current reference internal" href="#">fmdtools Paper Demonstration</a><ul>
 <li class="toctree-l4"><a class="reference internal" href="#Initial-Model">Initial Model</a></li>
 <li class="toctree-l4"><a class="reference internal" href="#Setting-Node-Positions">Setting Node Positions</a></li>
@@ -204,26 +204,32 @@
 </li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="../../docs/Examples.html#tank">Tank</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../Examples.html#tank">Tank</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="../tank/Tank_Analysis.html">Hold-up Tank Model</a><ul>
 <li class="toctree-l4"><a class="reference internal" href="../tank/Tank_Analysis.html#Verifying-the-nominal-state:">Verifying the nominal state:</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../tank/Tank_Analysis.html#History">History</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../tank/Tank_Analysis.html#What-happens-under-component-faults?">What happens under component faults?</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../tank/Tank_Analysis.html#What-about-human-induced-faults?">What about human-induced faults?</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../tank/Tank_Analysis.html#Evaluating-Joint-Component-Human-fault-modes">Evaluating Joint Component-Human fault modes</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../tank/Tank_Analysis.html#Testing-different-reaction-times">Testing different reaction times</a></li>
 </ul>
 </li>
-<li class="toctree-l3"><a class="reference internal" href="../tank/Tank_Optimization.html">Cooling Tank Model</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="../tank/Tank_Optimization.html#Simulation">Simulation</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../tank/Tank_Optimization.html">Cooling Tank Model Optimization</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../tank/Tank_Optimization.html#Simulation">Simulation</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../tank/Tank_Optimization.html#Verifying-the-nominal-state:">Verifying the nominal state:</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../tank/Tank_Optimization.html#What-happens-under-component-faults?">What happens under component faults?</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../tank/Tank_Optimization.html#Full-set-of-modes">Full set of modes</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../tank/Tank_Optimization.html#Defining-Optimization-Problem">Defining Optimization Problem</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../tank/Tank_Optimization.html#Optimization">Optimization</a></li>
 </ul>
 </li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="../../docs/Examples.html#eps">EPS</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../Examples.html#eps">EPS</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="../eps/EPS_Example_Notebook.html">EPS Example Notebook</a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="../../docs/Examples.html#action-sequence-graph">Action Sequence Graph</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../Examples.html#action-sequence-graph">Action Sequence Graph</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="../asg_demo/Action_Sequence_Graph.html">Action Sequence Graph Tutorial</a><ul>
 <li class="toctree-l4"><a class="reference internal" href="../asg_demo/Action_Sequence_Graph.html#Function-level-Simulation">Function-level Simulation</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../asg_demo/Action_Sequence_Graph.html#Model-Simulation">Model Simulation</a></li>
@@ -232,7 +238,7 @@
 </li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="../../docs/Examples.html#rover">Rover</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../Examples.html#rover">Rover</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="../rover/Rover_Setup_Notebook.html">Rover Model Explanation and Preliminaries</a><ul>
 <li class="toctree-l4"><a class="reference internal" href="../rover/Rover_Setup_Notebook.html#Model-Setup">Model Setup</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../rover/Rover_Setup_Notebook.html#Model-simulation">Model simulation</a></li>
@@ -281,17 +287,20 @@
 </li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="../../docs/Examples.html#multiflow-demo">Multiflow Demo</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../Examples.html#multiflow-demo">Multiflow Demo</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../multiflow_demo/Multiflow_and_Commsflow_Demonstration.html">Demonstration on Using MultiFlow and CommsFlow</a></li>
+</ul>
+</li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../../docs/Glossary.html">Glossary</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../docs/fmdtools.html">Module Reference</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="../../docs/fmdtools.define.html">fmdtools.define package</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="../../docs/fmdtools.define.html#module-fmdtools.define.block">fmdtools.define.block</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../docs/fmdtools.define.html#fmdtools-define-block">fmdtools.define.block</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../docs/fmdtools.define.html#module-fmdtools.define.common">fmdtools.define.common</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../docs/fmdtools.define.html#module-fmdtools.define.flow">fmdtools.define.flow</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../docs/fmdtools.define.html#module-fmdtools.define.mode">fmdtools.define.mode</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../../docs/fmdtools.define.html#module-fmdtools.define.model">fmdtools.define.model</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../docs/fmdtools.define.html#fmdtools-define-model">fmdtools.define.model</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../docs/fmdtools.define.html#module-fmdtools.define.parameter">fmdtools.define.parameter</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../docs/fmdtools.define.html#module-fmdtools.define.rand">fmdtools.define.rand</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../docs/fmdtools.define.html#module-fmdtools.define.state">fmdtools.define.state</a></li>
@@ -330,7 +339,7 @@
           <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
       <li><a href="../../index.html" class="icon icon-home"></a> &raquo;</li>
-          <li><a href="../../docs/Examples.html">Examples</a> &raquo;</li>
+          <li><a href="../Examples.html">Examples</a> &raquo;</li>
       <li>fmdtools Paper Demonstration</li>
       <li class="wy-breadcrumbs-aside">
             <a href="../../_sources/examples/multirotor/Demonstration.ipynb.txt" rel="nofollow"> View page source</a>
@@ -623,12 +632,11 @@ div.rendered_html tbody tr:hover {
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 <span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+<span class="kn">from</span> <span class="nn">IPython.display</span> <span class="kn">import</span> <span class="n">HTML</span>
 
 <span class="kn">import</span> <span class="nn">fmdtools.sim</span> <span class="k">as</span> <span class="nn">fs</span>
 <span class="kn">import</span> <span class="nn">fmdtools.analyze</span> <span class="k">as</span> <span class="nn">an</span>
 <span class="kn">from</span> <span class="nn">fmdtools.analyze.graph</span> <span class="kn">import</span> <span class="n">ModelGraph</span><span class="p">,</span> <span class="n">ModelFxnGraph</span>
-<span class="kn">import</span> <span class="nn">quadpy</span>
-<span class="kn">from</span> <span class="nn">IPython.display</span> <span class="kn">import</span> <span class="n">HTML</span>
 <span class="kn">from</span> <span class="nn">fmdtools.sim.approach</span> <span class="kn">import</span> <span class="n">SampleApproach</span>
 <span class="kn">from</span> <span class="nn">fmdtools.define.model</span> <span class="kn">import</span> <span class="n">Model</span>
 </pre></div>
@@ -681,23 +689,23 @@ div.rendered_html tbody tr:hover {
 </div>
 <div class="output_area stderr docutils container">
 <div class="highlight"><pre>
-c:\users\dhulse\documents\github\fmdtools\fmdtools\define\block.py:61: UserWarning: these flows sent from model [&#39;ee_1&#39;, &#39;force_st&#39;] not added to class &lt;class &#39;fmdtools.define.block.FxnBlock&#39;&gt;
+c:\users\dhulse\documents\github\fmdtools\fmdtools\define\block.py:68: UserWarning: these flows sent from model [&#39;ee_1&#39;, &#39;force_st&#39;] not added to class &lt;class &#39;fmdtools.define.block.FxnBlock&#39;&gt;
   warnings.warn(&#34;these flows sent from model &#34;+str([*flows.keys()])+&#34; not added to class &#34;+str(obj.__class__))
-c:\users\dhulse\documents\github\fmdtools\fmdtools\define\block.py:61: UserWarning: these flows sent from model [&#39;ee_1&#39;, &#39;ee_mot&#39;, &#39;ee_ctl&#39;, &#39;force_st&#39;] not added to class &lt;class &#39;fmdtools.define.block.FxnBlock&#39;&gt;
+c:\users\dhulse\documents\github\fmdtools\fmdtools\define\block.py:68: UserWarning: these flows sent from model [&#39;ee_1&#39;, &#39;ee_mot&#39;, &#39;ee_ctl&#39;, &#39;force_st&#39;] not added to class &lt;class &#39;fmdtools.define.block.FxnBlock&#39;&gt;
   warnings.warn(&#34;these flows sent from model &#34;+str([*flows.keys()])+&#34; not added to class &#34;+str(obj.__class__))
-c:\users\dhulse\documents\github\fmdtools\fmdtools\define\block.py:61: UserWarning: these flows sent from model [&#39;ee_mot&#39;, &#39;ctl&#39;, &#39;dofs&#39;, &#39;force_lin&#39;] not added to class &lt;class &#39;fmdtools.define.block.FxnBlock&#39;&gt;
+c:\users\dhulse\documents\github\fmdtools\fmdtools\define\block.py:68: UserWarning: these flows sent from model [&#39;ee_mot&#39;, &#39;ctl&#39;, &#39;dofs&#39;, &#39;force_lin&#39;] not added to class &lt;class &#39;fmdtools.define.block.FxnBlock&#39;&gt;
   warnings.warn(&#34;these flows sent from model &#34;+str([*flows.keys()])+&#34; not added to class &#34;+str(obj.__class__))
-c:\users\dhulse\documents\github\fmdtools\fmdtools\define\block.py:61: UserWarning: these flows sent from model [&#39;ee_ctl&#39;, &#39;dir&#39;, &#39;ctl&#39;, &#39;dofs&#39;, &#39;force_st&#39;] not added to class &lt;class &#39;fmdtools.define.block.FxnBlock&#39;&gt;
+c:\users\dhulse\documents\github\fmdtools\fmdtools\define\block.py:68: UserWarning: these flows sent from model [&#39;ee_ctl&#39;, &#39;dir&#39;, &#39;ctl&#39;, &#39;dofs&#39;, &#39;force_st&#39;] not added to class &lt;class &#39;fmdtools.define.block.FxnBlock&#39;&gt;
   warnings.warn(&#34;these flows sent from model &#34;+str([*flows.keys()])+&#34; not added to class &#34;+str(obj.__class__))
-c:\users\dhulse\documents\github\fmdtools\fmdtools\define\block.py:61: UserWarning: these flows sent from model [&#39;ee_ctl&#39;, &#39;env&#39;, &#39;dir&#39;, &#39;force_st&#39;] not added to class &lt;class &#39;fmdtools.define.block.FxnBlock&#39;&gt;
+c:\users\dhulse\documents\github\fmdtools\fmdtools\define\block.py:68: UserWarning: these flows sent from model [&#39;ee_ctl&#39;, &#39;env&#39;, &#39;dir&#39;, &#39;force_st&#39;] not added to class &lt;class &#39;fmdtools.define.block.FxnBlock&#39;&gt;
   warnings.warn(&#34;these flows sent from model &#34;+str([*flows.keys()])+&#34; not added to class &#34;+str(obj.__class__))
-c:\users\dhulse\documents\github\fmdtools\fmdtools\define\block.py:61: UserWarning: these flows sent from model [&#39;env&#39;, &#39;dofs&#39;, &#39;dir&#39;, &#39;force_gr&#39;] not added to class &lt;class &#39;fmdtools.define.block.FxnBlock&#39;&gt;
+c:\users\dhulse\documents\github\fmdtools\fmdtools\define\block.py:68: UserWarning: these flows sent from model [&#39;env&#39;, &#39;dofs&#39;, &#39;dir&#39;, &#39;force_gr&#39;] not added to class &lt;class &#39;fmdtools.define.block.FxnBlock&#39;&gt;
   warnings.warn(&#34;these flows sent from model &#34;+str([*flows.keys()])+&#34; not added to class &#34;+str(obj.__class__))
-c:\users\dhulse\documents\github\fmdtools\fmdtools\define\block.py:61: UserWarning: these flows sent from model [&#39;force_gr&#39;, &#39;force_lg&#39;] not added to class &lt;class &#39;fmdtools.define.block.FxnBlock&#39;&gt;
+c:\users\dhulse\documents\github\fmdtools\fmdtools\define\block.py:68: UserWarning: these flows sent from model [&#39;force_gr&#39;, &#39;force_lg&#39;] not added to class &lt;class &#39;fmdtools.define.block.FxnBlock&#39;&gt;
   warnings.warn(&#34;these flows sent from model &#34;+str([*flows.keys()])+&#34; not added to class &#34;+str(obj.__class__))
-c:\users\dhulse\documents\github\fmdtools\fmdtools\define\block.py:61: UserWarning: these flows sent from model [&#39;force_lg&#39;, &#39;force_lin&#39;, &#39;force_st&#39;] not added to class &lt;class &#39;fmdtools.define.block.FxnBlock&#39;&gt;
+c:\users\dhulse\documents\github\fmdtools\fmdtools\define\block.py:68: UserWarning: these flows sent from model [&#39;force_lg&#39;, &#39;force_lin&#39;, &#39;force_st&#39;] not added to class &lt;class &#39;fmdtools.define.block.FxnBlock&#39;&gt;
   warnings.warn(&#34;these flows sent from model &#34;+str([*flows.keys()])+&#34; not added to class &#34;+str(obj.__class__))
-c:\users\dhulse\documents\github\fmdtools\fmdtools\define\block.py:61: UserWarning: these flows sent from model [&#39;env&#39;] not added to class &lt;class &#39;fmdtools.define.block.FxnBlock&#39;&gt;
+c:\users\dhulse\documents\github\fmdtools\fmdtools\define\block.py:68: UserWarning: these flows sent from model [&#39;env&#39;] not added to class &lt;class &#39;fmdtools.define.block.FxnBlock&#39;&gt;
   warnings.warn(&#34;these flows sent from model &#34;+str([*flows.keys()])+&#34; not added to class &#34;+str(obj.__class__))
 </pre></div></div>
 </div>
@@ -929,7 +937,7 @@ High Degree Nodes: [(&#39;ctl_dof&#39;, 6), (&#39;plan_path&#39;, 6), (&#39;hold
 <div class="highlight"><pre>
 ASPL, functions and flows: 2.77
 Modularity, functions and flows: 0.35
-Robustness Coefficient, functions and flows: 80.72
+Robustness Coefficient, functions and flows: 82.22
 </pre></div></div>
 </div>
 <div class="nbinput docutils container">
@@ -1033,7 +1041,7 @@ High Degree Nodes: [(&#39;ctl_dof&#39;, 5), (&#39;force_st&#39;, 5)]
 </div>
 <div class="output_area stderr docutils container">
 <div class="highlight"><pre>
-SCENARIOS COMPLETE: 100%|██████████| 50/50 [00:00&lt;00:00, 166.60it/s]
+SCENARIOS COMPLETE: 100%|██████████| 50/50 [00:00&lt;00:00, 143.58it/s]
 </pre></div></div>
 </div>
 <div class="nbinput docutils container">
@@ -1077,14 +1085,6 @@ SCENARIOS COMPLETE: 100%|██████████| 50/50 [00:00&lt;00:00, 
   </thead>
   <tbody>
     <tr>
-      <th>store_ee_nocharge_t0</th>
-      <td>['store_ee', 'dist_ee', 'ctl_dof', 'plan_path'...</td>
-      <td>['store_ee', 'dist_ee', 'ctl_dof', 'plan_path'...</td>
-      <td>0.00001</td>
-      <td>183300.0</td>
-      <td>183300.0</td>
-    </tr>
-    <tr>
       <th>store_ee_nocharge_t1</th>
       <td>['store_ee', 'dist_ee', 'ctl_dof', 'plan_path'...</td>
       <td>['store_ee', 'dist_ee', 'ctl_dof', 'plan_path'...</td>
@@ -1093,7 +1093,15 @@ SCENARIOS COMPLETE: 100%|██████████| 50/50 [00:00&lt;00:00, 
       <td>183300.0</td>
     </tr>
     <tr>
-      <th>plan_path_degloc_t0</th>
+      <th>store_ee_nocharge_t0</th>
+      <td>['store_ee', 'dist_ee', 'ctl_dof', 'plan_path'...</td>
+      <td>['store_ee', 'dist_ee', 'ctl_dof', 'plan_path'...</td>
+      <td>0.00001</td>
+      <td>183300.0</td>
+      <td>183300.0</td>
+    </tr>
+    <tr>
+      <th>plan_path_degloc_t1</th>
       <td>['dist_ee', 'ctl_dof', 'plan_path', 'trajector...</td>
       <td>['dist_ee', 'ctl_dof', 'plan_path', 'trajector...</td>
       <td>0.000008</td>
@@ -1101,7 +1109,7 @@ SCENARIOS COMPLETE: 100%|██████████| 50/50 [00:00&lt;00:00, 
       <td>154400.0</td>
     </tr>
     <tr>
-      <th>plan_path_degloc_t1</th>
+      <th>plan_path_degloc_t0</th>
       <td>['dist_ee', 'ctl_dof', 'plan_path', 'trajector...</td>
       <td>['dist_ee', 'ctl_dof', 'plan_path', 'trajector...</td>
       <td>0.000008</td>
@@ -1125,7 +1133,7 @@ SCENARIOS COMPLETE: 100%|██████████| 50/50 [00:00&lt;00:00, 
       <td>55800.0</td>
     </tr>
     <tr>
-      <th>affect_dof_ctlbreak_t1</th>
+      <th>affect_dof_ctlbreak_t0</th>
       <td>['dist_ee', 'affect_dof', 'ctl_dof', 'plan_pat...</td>
       <td>['dist_ee', 'affect_dof', 'ctl_dof', 'plan_pat...</td>
       <td>0.000002</td>
@@ -1133,7 +1141,7 @@ SCENARIOS COMPLETE: 100%|██████████| 50/50 [00:00&lt;00:00, 
       <td>36800.0</td>
     </tr>
     <tr>
-      <th>affect_dof_ctlbreak_t0</th>
+      <th>affect_dof_ctlbreak_t1</th>
       <td>['dist_ee', 'affect_dof', 'ctl_dof', 'plan_pat...</td>
       <td>['dist_ee', 'affect_dof', 'ctl_dof', 'plan_pat...</td>
       <td>0.000002</td>
@@ -1157,7 +1165,7 @@ SCENARIOS COMPLETE: 100%|██████████| 50/50 [00:00&lt;00:00, 
       <td>36700.0</td>
     </tr>
     <tr>
-      <th>ctl_dof_noctl_t1</th>
+      <th>ctl_dof_noctl_t0</th>
       <td>['dist_ee', 'ctl_dof', 'plan_path', 'trajector...</td>
       <td>['dist_ee', 'ctl_dof', 'plan_path', 'trajector...</td>
       <td>0.000002</td>
@@ -1181,20 +1189,12 @@ SCENARIOS COMPLETE: 100%|██████████| 50/50 [00:00&lt;00:00, 
       <td>36600.0</td>
     </tr>
     <tr>
-      <th>ctl_dof_noctl_t0</th>
+      <th>ctl_dof_noctl_t1</th>
       <td>['dist_ee', 'ctl_dof', 'plan_path', 'trajector...</td>
       <td>['dist_ee', 'ctl_dof', 'plan_path', 'trajector...</td>
       <td>0.000002</td>
       <td>183000.0</td>
       <td>36600.0</td>
-    </tr>
-    <tr>
-      <th>affect_dof_mechbreak_t1</th>
-      <td>['dist_ee', 'affect_dof', 'ctl_dof', 'plan_pat...</td>
-      <td>['dist_ee', 'affect_dof', 'ctl_dof', 'plan_pat...</td>
-      <td>0.000001</td>
-      <td>183500.0</td>
-      <td>18350.0</td>
     </tr>
     <tr>
       <th>affect_dof_mechbreak_t0</th>
@@ -1205,20 +1205,12 @@ SCENARIOS COMPLETE: 100%|██████████| 50/50 [00:00&lt;00:00, 
       <td>18350.0</td>
     </tr>
     <tr>
-      <th>affect_dof_openc_t0</th>
+      <th>affect_dof_mechbreak_t1</th>
       <td>['dist_ee', 'affect_dof', 'ctl_dof', 'plan_pat...</td>
       <td>['dist_ee', 'affect_dof', 'ctl_dof', 'plan_pat...</td>
       <td>0.000001</td>
-      <td>183200.0</td>
-      <td>18320.0</td>
-    </tr>
-    <tr>
-      <th>affect_dof_short_t0</th>
-      <td>['dist_ee', 'affect_dof', 'ctl_dof', 'plan_pat...</td>
-      <td>['dist_ee', 'affect_dof', 'ctl_dof', 'plan_pat...</td>
-      <td>0.000001</td>
-      <td>183200.0</td>
-      <td>18320.0</td>
+      <td>183500.0</td>
+      <td>18350.0</td>
     </tr>
     <tr>
       <th>affect_dof_short_t1</th>
@@ -1237,20 +1229,28 @@ SCENARIOS COMPLETE: 100%|██████████| 50/50 [00:00&lt;00:00, 
       <td>18320.0</td>
     </tr>
     <tr>
+      <th>affect_dof_openc_t0</th>
+      <td>['dist_ee', 'affect_dof', 'ctl_dof', 'plan_pat...</td>
+      <td>['dist_ee', 'affect_dof', 'ctl_dof', 'plan_pat...</td>
+      <td>0.000001</td>
+      <td>183200.0</td>
+      <td>18320.0</td>
+    </tr>
+    <tr>
+      <th>affect_dof_short_t0</th>
+      <td>['dist_ee', 'affect_dof', 'ctl_dof', 'plan_pat...</td>
+      <td>['dist_ee', 'affect_dof', 'ctl_dof', 'plan_pat...</td>
+      <td>0.000001</td>
+      <td>183200.0</td>
+      <td>18320.0</td>
+    </tr>
+    <tr>
       <th>hold_payload_deform_t0</th>
       <td>['dist_ee', 'ctl_dof', 'plan_path', 'trajector...</td>
       <td>['dist_ee', 'ctl_dof', 'plan_path', 'trajector...</td>
       <td>0.000001</td>
       <td>193000.0</td>
       <td>15440.0</td>
-    </tr>
-    <tr>
-      <th>plan_path_noloc_t0</th>
-      <td>['plan_path', 'trajectory', 'ctl', 'dofs', 'en...</td>
-      <td>['plan_path', 'trajectory']</td>
-      <td>0.000002</td>
-      <td>60000.0</td>
-      <td>12000.0</td>
     </tr>
     <tr>
       <th>plan_path_noloc_t1</th>
@@ -1261,12 +1261,12 @@ SCENARIOS COMPLETE: 100%|██████████| 50/50 [00:00&lt;00:00, 
       <td>12000.0</td>
     </tr>
     <tr>
-      <th>ctl_dof_degctl_t0</th>
-      <td>['ctl_dof', 'force_gr', 'force_lg', 'ctl', 'do...</td>
-      <td>['ctl_dof']</td>
-      <td>0.000008</td>
-      <td>10000.0</td>
-      <td>8000.0</td>
+      <th>plan_path_noloc_t0</th>
+      <td>['plan_path', 'trajectory', 'ctl', 'dofs', 'en...</td>
+      <td>['plan_path', 'trajectory']</td>
+      <td>0.000002</td>
+      <td>60000.0</td>
+      <td>12000.0</td>
     </tr>
     <tr>
       <th>ctl_dof_degctl_t1</th>
@@ -1277,12 +1277,12 @@ SCENARIOS COMPLETE: 100%|██████████| 50/50 [00:00&lt;00:00, 
       <td>8000.0</td>
     </tr>
     <tr>
-      <th>affect_dof_propbreak_t1</th>
-      <td>['dist_ee', 'affect_dof', 'ctl_dof', 'plan_pat...</td>
-      <td>['dist_ee', 'affect_dof', 'ctl_dof', 'plan_pat...</td>
-      <td>0.0</td>
-      <td>183200.0</td>
-      <td>5496.0</td>
+      <th>ctl_dof_degctl_t0</th>
+      <td>['ctl_dof', 'force_gr', 'force_lg', 'ctl', 'do...</td>
+      <td>['ctl_dof']</td>
+      <td>0.000008</td>
+      <td>10000.0</td>
+      <td>8000.0</td>
     </tr>
     <tr>
       <th>affect_dof_propbreak_t0</th>
@@ -1293,12 +1293,12 @@ SCENARIOS COMPLETE: 100%|██████████| 50/50 [00:00&lt;00:00, 
       <td>5496.0</td>
     </tr>
     <tr>
-      <th>affect_dof_propstuck_t1</th>
+      <th>affect_dof_propbreak_t1</th>
       <td>['dist_ee', 'affect_dof', 'ctl_dof', 'plan_pat...</td>
       <td>['dist_ee', 'affect_dof', 'ctl_dof', 'plan_pat...</td>
       <td>0.0</td>
       <td>183200.0</td>
-      <td>3664.0</td>
+      <td>5496.0</td>
     </tr>
     <tr>
       <th>affect_dof_propstuck_t0</th>
@@ -1309,7 +1309,15 @@ SCENARIOS COMPLETE: 100%|██████████| 50/50 [00:00&lt;00:00, 
       <td>3664.0</td>
     </tr>
     <tr>
-      <th>hold_payload_break_t0</th>
+      <th>affect_dof_propstuck_t1</th>
+      <td>['dist_ee', 'affect_dof', 'ctl_dof', 'plan_pat...</td>
+      <td>['dist_ee', 'affect_dof', 'ctl_dof', 'plan_pat...</td>
+      <td>0.0</td>
+      <td>183200.0</td>
+      <td>3664.0</td>
+    </tr>
+    <tr>
+      <th>hold_payload_break_t1</th>
       <td>['dist_ee', 'ctl_dof', 'plan_path', 'trajector...</td>
       <td>['dist_ee', 'ctl_dof', 'plan_path', 'trajector...</td>
       <td>0.0</td>
@@ -1317,7 +1325,7 @@ SCENARIOS COMPLETE: 100%|██████████| 50/50 [00:00&lt;00:00, 
       <td>3660.0</td>
     </tr>
     <tr>
-      <th>hold_payload_break_t1</th>
+      <th>hold_payload_break_t0</th>
       <td>['dist_ee', 'ctl_dof', 'plan_path', 'trajector...</td>
       <td>['dist_ee', 'ctl_dof', 'plan_path', 'trajector...</td>
       <td>0.0</td>
@@ -1341,7 +1349,7 @@ SCENARIOS COMPLETE: 100%|██████████| 50/50 [00:00&lt;00:00, 
       <td>2000.0</td>
     </tr>
     <tr>
-      <th>engage_land_deform_t1</th>
+      <th>engage_land_deform_t0</th>
       <td>['engage_land']</td>
       <td>['engage_land']</td>
       <td>0.000008</td>
@@ -1349,7 +1357,7 @@ SCENARIOS COMPLETE: 100%|██████████| 50/50 [00:00&lt;00:00, 
       <td>800.0</td>
     </tr>
     <tr>
-      <th>engage_land_deform_t0</th>
+      <th>engage_land_deform_t1</th>
       <td>['engage_land']</td>
       <td>['engage_land']</td>
       <td>0.000008</td>
@@ -1365,7 +1373,7 @@ SCENARIOS COMPLETE: 100%|██████████| 50/50 [00:00&lt;00:00, 
       <td>800.0</td>
     </tr>
     <tr>
-      <th>dist_ee_degr_t1</th>
+      <th>dist_ee_degr_t0</th>
       <td>['dist_ee', 'force_gr', 'force_lg', 'ee_mot', ...</td>
       <td>['dist_ee']</td>
       <td>0.000005</td>
@@ -1373,7 +1381,7 @@ SCENARIOS COMPLETE: 100%|██████████| 50/50 [00:00&lt;00:00, 
       <td>500.0</td>
     </tr>
     <tr>
-      <th>dist_ee_degr_t0</th>
+      <th>dist_ee_degr_t1</th>
       <td>['dist_ee', 'force_gr', 'force_lg', 'ee_mot', ...</td>
       <td>['dist_ee']</td>
       <td>0.000005</td>
@@ -1413,7 +1421,7 @@ SCENARIOS COMPLETE: 100%|██████████| 50/50 [00:00&lt;00:00, 
       <td>100.0</td>
     </tr>
     <tr>
-      <th>affect_dof_mechfriction_t0</th>
+      <th>affect_dof_mechfriction_t1</th>
       <td>['affect_dof', 'ee_1', 'ee_mot']</td>
       <td>['affect_dof']</td>
       <td>0.000001</td>
@@ -1421,7 +1429,7 @@ SCENARIOS COMPLETE: 100%|██████████| 50/50 [00:00&lt;00:00, 
       <td>25.0</td>
     </tr>
     <tr>
-      <th>affect_dof_mechfriction_t1</th>
+      <th>affect_dof_mechfriction_t0</th>
       <td>['affect_dof', 'ee_1', 'ee_mot']</td>
       <td>['affect_dof']</td>
       <td>0.000001</td>
@@ -1445,19 +1453,11 @@ SCENARIOS COMPLETE: 100%|██████████| 50/50 [00:00&lt;00:00, 
       <td>2.0</td>
     </tr>
     <tr>
-      <th>trajectory_lost_t1</th>
-      <td>['trajectory']</td>
-      <td>['trajectory']</td>
+      <th>nominal</th>
+      <td>[]</td>
+      <td>[]</td>
+      <td>1.0</td>
       <td>0.0</td>
-      <td>50000.0</td>
-      <td>0.0</td>
-    </tr>
-    <tr>
-      <th>trajectory_lost_t0</th>
-      <td>['trajectory']</td>
-      <td>['trajectory']</td>
-      <td>0.0</td>
-      <td>50000.0</td>
       <td>0.0</td>
     </tr>
     <tr>
@@ -1469,11 +1469,11 @@ SCENARIOS COMPLETE: 100%|██████████| 50/50 [00:00&lt;00:00, 
       <td>0.0</td>
     </tr>
     <tr>
-      <th>nominal</th>
-      <td>[]</td>
-      <td>[]</td>
-      <td>1.0</td>
+      <th>trajectory_lost_t0</th>
+      <td>['trajectory']</td>
+      <td>['trajectory']</td>
       <td>0.0</td>
+      <td>50000.0</td>
       <td>0.0</td>
     </tr>
     <tr>
@@ -1482,6 +1482,14 @@ SCENARIOS COMPLETE: 100%|██████████| 50/50 [00:00&lt;00:00, 
       <td>['trajectory']</td>
       <td>0.0</td>
       <td>100000.0</td>
+      <td>0.0</td>
+    </tr>
+    <tr>
+      <th>trajectory_lost_t1</th>
+      <td>['trajectory']</td>
+      <td>['trajectory']</td>
+      <td>0.0</td>
+      <td>50000.0</td>
       <td>0.0</td>
     </tr>
   </tbody>
@@ -1505,57 +1513,57 @@ SCENARIOS COMPLETE: 100%|██████████| 50/50 [00:00&lt;00:00, 
 \toprule
 {} &amp;                                           degraded &amp;                                             faulty &amp;      rate &amp;      cost &amp; expected cost \\
 \midrule
-store\_ee\_nocharge\_t0       &amp;  [&#39;store\_ee&#39;, &#39;dist\_ee&#39;, &#39;ctl\_dof&#39;, &#39;plan\_path&#39;... &amp;  [&#39;store\_ee&#39;, &#39;dist\_ee&#39;, &#39;ctl\_dof&#39;, &#39;plan\_path&#39;... &amp;   0.00001 &amp;  183300.0 &amp;      183300.0 \\
 store\_ee\_nocharge\_t1       &amp;  [&#39;store\_ee&#39;, &#39;dist\_ee&#39;, &#39;ctl\_dof&#39;, &#39;plan\_path&#39;... &amp;  [&#39;store\_ee&#39;, &#39;dist\_ee&#39;, &#39;ctl\_dof&#39;, &#39;plan\_path&#39;... &amp;   0.00001 &amp;  183300.0 &amp;      183300.0 \\
-plan\_path\_degloc\_t0        &amp;  [&#39;dist\_ee&#39;, &#39;ctl\_dof&#39;, &#39;plan\_path&#39;, &#39;trajector... &amp;  [&#39;dist\_ee&#39;, &#39;ctl\_dof&#39;, &#39;plan\_path&#39;, &#39;trajector... &amp;  0.000008 &amp;  193000.0 &amp;      154400.0 \\
+store\_ee\_nocharge\_t0       &amp;  [&#39;store\_ee&#39;, &#39;dist\_ee&#39;, &#39;ctl\_dof&#39;, &#39;plan\_path&#39;... &amp;  [&#39;store\_ee&#39;, &#39;dist\_ee&#39;, &#39;ctl\_dof&#39;, &#39;plan\_path&#39;... &amp;   0.00001 &amp;  183300.0 &amp;      183300.0 \\
 plan\_path\_degloc\_t1        &amp;  [&#39;dist\_ee&#39;, &#39;ctl\_dof&#39;, &#39;plan\_path&#39;, &#39;trajector... &amp;  [&#39;dist\_ee&#39;, &#39;ctl\_dof&#39;, &#39;plan\_path&#39;, &#39;trajector... &amp;  0.000008 &amp;  193000.0 &amp;      154400.0 \\
+plan\_path\_degloc\_t0        &amp;  [&#39;dist\_ee&#39;, &#39;ctl\_dof&#39;, &#39;plan\_path&#39;, &#39;trajector... &amp;  [&#39;dist\_ee&#39;, &#39;ctl\_dof&#39;, &#39;plan\_path&#39;, &#39;trajector... &amp;  0.000008 &amp;  193000.0 &amp;      154400.0 \\
 dist\_ee\_short\_t0           &amp;  [&#39;dist\_ee&#39;, &#39;ctl\_dof&#39;, &#39;plan\_path&#39;, &#39;trajector... &amp;  [&#39;dist\_ee&#39;, &#39;ctl\_dof&#39;, &#39;plan\_path&#39;, &#39;trajector... &amp;  0.000003 &amp;  186000.0 &amp;       55800.0 \\
 dist\_ee\_short\_t1           &amp;  [&#39;dist\_ee&#39;, &#39;ctl\_dof&#39;, &#39;plan\_path&#39;, &#39;trajector... &amp;  [&#39;dist\_ee&#39;, &#39;ctl\_dof&#39;, &#39;plan\_path&#39;, &#39;trajector... &amp;  0.000003 &amp;  186000.0 &amp;       55800.0 \\
-affect\_dof\_ctlbreak\_t1     &amp;  [&#39;dist\_ee&#39;, &#39;affect\_dof&#39;, &#39;ctl\_dof&#39;, &#39;plan\_pat... &amp;  [&#39;dist\_ee&#39;, &#39;affect\_dof&#39;, &#39;ctl\_dof&#39;, &#39;plan\_pat... &amp;  0.000002 &amp;  184000.0 &amp;       36800.0 \\
 affect\_dof\_ctlbreak\_t0     &amp;  [&#39;dist\_ee&#39;, &#39;affect\_dof&#39;, &#39;ctl\_dof&#39;, &#39;plan\_pat... &amp;  [&#39;dist\_ee&#39;, &#39;affect\_dof&#39;, &#39;ctl\_dof&#39;, &#39;plan\_pat... &amp;  0.000002 &amp;  184000.0 &amp;       36800.0 \\
+affect\_dof\_ctlbreak\_t1     &amp;  [&#39;dist\_ee&#39;, &#39;affect\_dof&#39;, &#39;ctl\_dof&#39;, &#39;plan\_pat... &amp;  [&#39;dist\_ee&#39;, &#39;affect\_dof&#39;, &#39;ctl\_dof&#39;, &#39;plan\_pat... &amp;  0.000002 &amp;  184000.0 &amp;       36800.0 \\
 affect\_dof\_ctlup\_t1        &amp;  [&#39;dist\_ee&#39;, &#39;affect\_dof&#39;, &#39;ctl\_dof&#39;, &#39;plan\_pat... &amp;  [&#39;dist\_ee&#39;, &#39;affect\_dof&#39;, &#39;ctl\_dof&#39;, &#39;plan\_pat... &amp;  0.000002 &amp;  183500.0 &amp;       36700.0 \\
 affect\_dof\_ctlup\_t0        &amp;  [&#39;dist\_ee&#39;, &#39;affect\_dof&#39;, &#39;ctl\_dof&#39;, &#39;plan\_pat... &amp;  [&#39;dist\_ee&#39;, &#39;affect\_dof&#39;, &#39;ctl\_dof&#39;, &#39;plan\_pat... &amp;  0.000002 &amp;  183500.0 &amp;       36700.0 \\
-ctl\_dof\_noctl\_t1           &amp;  [&#39;dist\_ee&#39;, &#39;ctl\_dof&#39;, &#39;plan\_path&#39;, &#39;trajector... &amp;  [&#39;dist\_ee&#39;, &#39;ctl\_dof&#39;, &#39;plan\_path&#39;, &#39;trajector... &amp;  0.000002 &amp;  183000.0 &amp;       36600.0 \\
+ctl\_dof\_noctl\_t0           &amp;  [&#39;dist\_ee&#39;, &#39;ctl\_dof&#39;, &#39;plan\_path&#39;, &#39;trajector... &amp;  [&#39;dist\_ee&#39;, &#39;ctl\_dof&#39;, &#39;plan\_path&#39;, &#39;trajector... &amp;  0.000002 &amp;  183000.0 &amp;       36600.0 \\
 dist\_ee\_break\_t0           &amp;  [&#39;dist\_ee&#39;, &#39;ctl\_dof&#39;, &#39;plan\_path&#39;, &#39;trajector... &amp;  [&#39;dist\_ee&#39;, &#39;ctl\_dof&#39;, &#39;plan\_path&#39;, &#39;trajector... &amp;  0.000002 &amp;  183000.0 &amp;       36600.0 \\
 dist\_ee\_break\_t1           &amp;  [&#39;dist\_ee&#39;, &#39;ctl\_dof&#39;, &#39;plan\_path&#39;, &#39;trajector... &amp;  [&#39;dist\_ee&#39;, &#39;ctl\_dof&#39;, &#39;plan\_path&#39;, &#39;trajector... &amp;  0.000002 &amp;  183000.0 &amp;       36600.0 \\
-ctl\_dof\_noctl\_t0           &amp;  [&#39;dist\_ee&#39;, &#39;ctl\_dof&#39;, &#39;plan\_path&#39;, &#39;trajector... &amp;  [&#39;dist\_ee&#39;, &#39;ctl\_dof&#39;, &#39;plan\_path&#39;, &#39;trajector... &amp;  0.000002 &amp;  183000.0 &amp;       36600.0 \\
-affect\_dof\_mechbreak\_t1    &amp;  [&#39;dist\_ee&#39;, &#39;affect\_dof&#39;, &#39;ctl\_dof&#39;, &#39;plan\_pat... &amp;  [&#39;dist\_ee&#39;, &#39;affect\_dof&#39;, &#39;ctl\_dof&#39;, &#39;plan\_pat... &amp;  0.000001 &amp;  183500.0 &amp;       18350.0 \\
+ctl\_dof\_noctl\_t1           &amp;  [&#39;dist\_ee&#39;, &#39;ctl\_dof&#39;, &#39;plan\_path&#39;, &#39;trajector... &amp;  [&#39;dist\_ee&#39;, &#39;ctl\_dof&#39;, &#39;plan\_path&#39;, &#39;trajector... &amp;  0.000002 &amp;  183000.0 &amp;       36600.0 \\
 affect\_dof\_mechbreak\_t0    &amp;  [&#39;dist\_ee&#39;, &#39;affect\_dof&#39;, &#39;ctl\_dof&#39;, &#39;plan\_pat... &amp;  [&#39;dist\_ee&#39;, &#39;affect\_dof&#39;, &#39;ctl\_dof&#39;, &#39;plan\_pat... &amp;  0.000001 &amp;  183500.0 &amp;       18350.0 \\
-affect\_dof\_openc\_t0        &amp;  [&#39;dist\_ee&#39;, &#39;affect\_dof&#39;, &#39;ctl\_dof&#39;, &#39;plan\_pat... &amp;  [&#39;dist\_ee&#39;, &#39;affect\_dof&#39;, &#39;ctl\_dof&#39;, &#39;plan\_pat... &amp;  0.000001 &amp;  183200.0 &amp;       18320.0 \\
-affect\_dof\_short\_t0        &amp;  [&#39;dist\_ee&#39;, &#39;affect\_dof&#39;, &#39;ctl\_dof&#39;, &#39;plan\_pat... &amp;  [&#39;dist\_ee&#39;, &#39;affect\_dof&#39;, &#39;ctl\_dof&#39;, &#39;plan\_pat... &amp;  0.000001 &amp;  183200.0 &amp;       18320.0 \\
+affect\_dof\_mechbreak\_t1    &amp;  [&#39;dist\_ee&#39;, &#39;affect\_dof&#39;, &#39;ctl\_dof&#39;, &#39;plan\_pat... &amp;  [&#39;dist\_ee&#39;, &#39;affect\_dof&#39;, &#39;ctl\_dof&#39;, &#39;plan\_pat... &amp;  0.000001 &amp;  183500.0 &amp;       18350.0 \\
 affect\_dof\_short\_t1        &amp;  [&#39;dist\_ee&#39;, &#39;affect\_dof&#39;, &#39;ctl\_dof&#39;, &#39;plan\_pat... &amp;  [&#39;dist\_ee&#39;, &#39;affect\_dof&#39;, &#39;ctl\_dof&#39;, &#39;plan\_pat... &amp;  0.000001 &amp;  183200.0 &amp;       18320.0 \\
 affect\_dof\_openc\_t1        &amp;  [&#39;dist\_ee&#39;, &#39;affect\_dof&#39;, &#39;ctl\_dof&#39;, &#39;plan\_pat... &amp;  [&#39;dist\_ee&#39;, &#39;affect\_dof&#39;, &#39;ctl\_dof&#39;, &#39;plan\_pat... &amp;  0.000001 &amp;  183200.0 &amp;       18320.0 \\
+affect\_dof\_openc\_t0        &amp;  [&#39;dist\_ee&#39;, &#39;affect\_dof&#39;, &#39;ctl\_dof&#39;, &#39;plan\_pat... &amp;  [&#39;dist\_ee&#39;, &#39;affect\_dof&#39;, &#39;ctl\_dof&#39;, &#39;plan\_pat... &amp;  0.000001 &amp;  183200.0 &amp;       18320.0 \\
+affect\_dof\_short\_t0        &amp;  [&#39;dist\_ee&#39;, &#39;affect\_dof&#39;, &#39;ctl\_dof&#39;, &#39;plan\_pat... &amp;  [&#39;dist\_ee&#39;, &#39;affect\_dof&#39;, &#39;ctl\_dof&#39;, &#39;plan\_pat... &amp;  0.000001 &amp;  183200.0 &amp;       18320.0 \\
 hold\_payload\_deform\_t0     &amp;  [&#39;dist\_ee&#39;, &#39;ctl\_dof&#39;, &#39;plan\_path&#39;, &#39;trajector... &amp;  [&#39;dist\_ee&#39;, &#39;ctl\_dof&#39;, &#39;plan\_path&#39;, &#39;trajector... &amp;  0.000001 &amp;  193000.0 &amp;       15440.0 \\
-plan\_path\_noloc\_t0         &amp;  [&#39;plan\_path&#39;, &#39;trajectory&#39;, &#39;ctl&#39;, &#39;dofs&#39;, &#39;en... &amp;                        [&#39;plan\_path&#39;, &#39;trajectory&#39;] &amp;  0.000002 &amp;   60000.0 &amp;       12000.0 \\
 plan\_path\_noloc\_t1         &amp;  [&#39;plan\_path&#39;, &#39;trajectory&#39;, &#39;ctl&#39;, &#39;dofs&#39;, &#39;en... &amp;                        [&#39;plan\_path&#39;, &#39;trajectory&#39;] &amp;  0.000002 &amp;   60000.0 &amp;       12000.0 \\
-ctl\_dof\_degctl\_t0          &amp;  [&#39;ctl\_dof&#39;, &#39;force\_gr&#39;, &#39;force\_lg&#39;, &#39;ctl&#39;, &#39;do... &amp;                                        [&#39;ctl\_dof&#39;] &amp;  0.000008 &amp;   10000.0 &amp;        8000.0 \\
+plan\_path\_noloc\_t0         &amp;  [&#39;plan\_path&#39;, &#39;trajectory&#39;, &#39;ctl&#39;, &#39;dofs&#39;, &#39;en... &amp;                        [&#39;plan\_path&#39;, &#39;trajectory&#39;] &amp;  0.000002 &amp;   60000.0 &amp;       12000.0 \\
 ctl\_dof\_degctl\_t1          &amp;  [&#39;ctl\_dof&#39;, &#39;force\_gr&#39;, &#39;force\_lg&#39;, &#39;ctl&#39;, &#39;do... &amp;                                        [&#39;ctl\_dof&#39;] &amp;  0.000008 &amp;   10000.0 &amp;        8000.0 \\
-affect\_dof\_propbreak\_t1    &amp;  [&#39;dist\_ee&#39;, &#39;affect\_dof&#39;, &#39;ctl\_dof&#39;, &#39;plan\_pat... &amp;  [&#39;dist\_ee&#39;, &#39;affect\_dof&#39;, &#39;ctl\_dof&#39;, &#39;plan\_pat... &amp;       0.0 &amp;  183200.0 &amp;        5496.0 \\
+ctl\_dof\_degctl\_t0          &amp;  [&#39;ctl\_dof&#39;, &#39;force\_gr&#39;, &#39;force\_lg&#39;, &#39;ctl&#39;, &#39;do... &amp;                                        [&#39;ctl\_dof&#39;] &amp;  0.000008 &amp;   10000.0 &amp;        8000.0 \\
 affect\_dof\_propbreak\_t0    &amp;  [&#39;dist\_ee&#39;, &#39;affect\_dof&#39;, &#39;ctl\_dof&#39;, &#39;plan\_pat... &amp;  [&#39;dist\_ee&#39;, &#39;affect\_dof&#39;, &#39;ctl\_dof&#39;, &#39;plan\_pat... &amp;       0.0 &amp;  183200.0 &amp;        5496.0 \\
-affect\_dof\_propstuck\_t1    &amp;  [&#39;dist\_ee&#39;, &#39;affect\_dof&#39;, &#39;ctl\_dof&#39;, &#39;plan\_pat... &amp;  [&#39;dist\_ee&#39;, &#39;affect\_dof&#39;, &#39;ctl\_dof&#39;, &#39;plan\_pat... &amp;       0.0 &amp;  183200.0 &amp;        3664.0 \\
+affect\_dof\_propbreak\_t1    &amp;  [&#39;dist\_ee&#39;, &#39;affect\_dof&#39;, &#39;ctl\_dof&#39;, &#39;plan\_pat... &amp;  [&#39;dist\_ee&#39;, &#39;affect\_dof&#39;, &#39;ctl\_dof&#39;, &#39;plan\_pat... &amp;       0.0 &amp;  183200.0 &amp;        5496.0 \\
 affect\_dof\_propstuck\_t0    &amp;  [&#39;dist\_ee&#39;, &#39;affect\_dof&#39;, &#39;ctl\_dof&#39;, &#39;plan\_pat... &amp;  [&#39;dist\_ee&#39;, &#39;affect\_dof&#39;, &#39;ctl\_dof&#39;, &#39;plan\_pat... &amp;       0.0 &amp;  183200.0 &amp;        3664.0 \\
-hold\_payload\_break\_t0      &amp;  [&#39;dist\_ee&#39;, &#39;ctl\_dof&#39;, &#39;plan\_path&#39;, &#39;trajector... &amp;  [&#39;dist\_ee&#39;, &#39;ctl\_dof&#39;, &#39;plan\_path&#39;, &#39;trajector... &amp;       0.0 &amp;  183000.0 &amp;        3660.0 \\
+affect\_dof\_propstuck\_t1    &amp;  [&#39;dist\_ee&#39;, &#39;affect\_dof&#39;, &#39;ctl\_dof&#39;, &#39;plan\_pat... &amp;  [&#39;dist\_ee&#39;, &#39;affect\_dof&#39;, &#39;ctl\_dof&#39;, &#39;plan\_pat... &amp;       0.0 &amp;  183200.0 &amp;        3664.0 \\
 hold\_payload\_break\_t1      &amp;  [&#39;dist\_ee&#39;, &#39;ctl\_dof&#39;, &#39;plan\_path&#39;, &#39;trajector... &amp;  [&#39;dist\_ee&#39;, &#39;ctl\_dof&#39;, &#39;plan\_path&#39;, &#39;trajector... &amp;       0.0 &amp;  183000.0 &amp;        3660.0 \\
+hold\_payload\_break\_t0      &amp;  [&#39;dist\_ee&#39;, &#39;ctl\_dof&#39;, &#39;plan\_path&#39;, &#39;trajector... &amp;  [&#39;dist\_ee&#39;, &#39;ctl\_dof&#39;, &#39;plan\_path&#39;, &#39;trajector... &amp;       0.0 &amp;  183000.0 &amp;        3660.0 \\
 view\_env\_poorview\_t0       &amp;                                [&#39;view\_env&#39;, &#39;env&#39;] &amp;                                       [&#39;view\_env&#39;] &amp;  0.000002 &amp;   10000.0 &amp;        2000.0 \\
 view\_env\_poorview\_t1       &amp;                                [&#39;view\_env&#39;, &#39;env&#39;] &amp;                                       [&#39;view\_env&#39;] &amp;  0.000002 &amp;   10000.0 &amp;        2000.0 \\
-engage\_land\_deform\_t1      &amp;                                    [&#39;engage\_land&#39;] &amp;                                    [&#39;engage\_land&#39;] &amp;  0.000008 &amp;    1000.0 &amp;         800.0 \\
 engage\_land\_deform\_t0      &amp;                                    [&#39;engage\_land&#39;] &amp;                                    [&#39;engage\_land&#39;] &amp;  0.000008 &amp;    1000.0 &amp;         800.0 \\
+engage\_land\_deform\_t1      &amp;                                    [&#39;engage\_land&#39;] &amp;                                    [&#39;engage\_land&#39;] &amp;  0.000008 &amp;    1000.0 &amp;         800.0 \\
 hold\_payload\_deform\_t1     &amp;          [&#39;hold\_payload&#39;, &#39;force\_st&#39;, &#39;force\_lin&#39;] &amp;                                   [&#39;hold\_payload&#39;] &amp;  0.000001 &amp;   10000.0 &amp;         800.0 \\
-dist\_ee\_degr\_t1            &amp;  [&#39;dist\_ee&#39;, &#39;force\_gr&#39;, &#39;force\_lg&#39;, &#39;ee\_mot&#39;, ... &amp;                                        [&#39;dist\_ee&#39;] &amp;  0.000005 &amp;    1000.0 &amp;         500.0 \\
 dist\_ee\_degr\_t0            &amp;  [&#39;dist\_ee&#39;, &#39;force\_gr&#39;, &#39;force\_lg&#39;, &#39;ee\_mot&#39;, ... &amp;                                        [&#39;dist\_ee&#39;] &amp;  0.000005 &amp;    1000.0 &amp;         500.0 \\
+dist\_ee\_degr\_t1            &amp;  [&#39;dist\_ee&#39;, &#39;force\_gr&#39;, &#39;force\_lg&#39;, &#39;ee\_mot&#39;, ... &amp;                                        [&#39;dist\_ee&#39;] &amp;  0.000005 &amp;    1000.0 &amp;         500.0 \\
 engage\_land\_break\_t0       &amp;                                    [&#39;engage\_land&#39;] &amp;                                    [&#39;engage\_land&#39;] &amp;  0.000002 &amp;    1000.0 &amp;         200.0 \\
 engage\_land\_break\_t1       &amp;                                    [&#39;engage\_land&#39;] &amp;                                    [&#39;engage\_land&#39;] &amp;  0.000002 &amp;    1000.0 &amp;         200.0 \\
 affect\_dof\_ctldn\_t0        &amp;  [&#39;affect\_dof&#39;, &#39;force\_gr&#39;, &#39;force\_lg&#39;, &#39;ctl&#39;, ... &amp;                                     [&#39;affect\_dof&#39;] &amp;  0.000002 &amp;     500.0 &amp;         100.0 \\
 affect\_dof\_ctldn\_t1        &amp;  [&#39;affect\_dof&#39;, &#39;force\_gr&#39;, &#39;force\_lg&#39;, &#39;ctl&#39;, ... &amp;                                     [&#39;affect\_dof&#39;] &amp;  0.000002 &amp;     500.0 &amp;         100.0 \\
-affect\_dof\_mechfriction\_t0 &amp;                   [&#39;affect\_dof&#39;, &#39;ee\_1&#39;, &#39;ee\_mot&#39;] &amp;                                     [&#39;affect\_dof&#39;] &amp;  0.000001 &amp;     500.0 &amp;          25.0 \\
 affect\_dof\_mechfriction\_t1 &amp;                   [&#39;affect\_dof&#39;, &#39;ee\_1&#39;, &#39;ee\_mot&#39;] &amp;                                     [&#39;affect\_dof&#39;] &amp;  0.000001 &amp;     500.0 &amp;          25.0 \\
+affect\_dof\_mechfriction\_t0 &amp;                   [&#39;affect\_dof&#39;, &#39;ee\_1&#39;, &#39;ee\_mot&#39;] &amp;                                     [&#39;affect\_dof&#39;] &amp;  0.000001 &amp;     500.0 &amp;          25.0 \\
 affect\_dof\_propwarp\_t1     &amp;     [&#39;affect\_dof&#39;, &#39;force\_gr&#39;, &#39;force\_lg&#39;, &#39;dofs&#39;] &amp;                                     [&#39;affect\_dof&#39;] &amp;       0.0 &amp;     200.0 &amp;           2.0 \\
 affect\_dof\_propwarp\_t0     &amp;     [&#39;affect\_dof&#39;, &#39;force\_gr&#39;, &#39;force\_lg&#39;, &#39;dofs&#39;] &amp;                                     [&#39;affect\_dof&#39;] &amp;       0.0 &amp;     200.0 &amp;           2.0 \\
-trajectory\_lost\_t1         &amp;                                     [&#39;trajectory&#39;] &amp;                                     [&#39;trajectory&#39;] &amp;       0.0 &amp;   50000.0 &amp;           0.0 \\
-trajectory\_lost\_t0         &amp;                                     [&#39;trajectory&#39;] &amp;                                     [&#39;trajectory&#39;] &amp;       0.0 &amp;   50000.0 &amp;           0.0 \\
-trajectory\_crash\_t0        &amp;                                     [&#39;trajectory&#39;] &amp;                                     [&#39;trajectory&#39;] &amp;       0.0 &amp;  100000.0 &amp;           0.0 \\
 nominal                    &amp;                                                 [] &amp;                                                 [] &amp;       1.0 &amp;       0.0 &amp;           0.0 \\
+trajectory\_crash\_t0        &amp;                                     [&#39;trajectory&#39;] &amp;                                     [&#39;trajectory&#39;] &amp;       0.0 &amp;  100000.0 &amp;           0.0 \\
+trajectory\_lost\_t0         &amp;                                     [&#39;trajectory&#39;] &amp;                                     [&#39;trajectory&#39;] &amp;       0.0 &amp;   50000.0 &amp;           0.0 \\
 trajectory\_crash\_t1        &amp;                                     [&#39;trajectory&#39;] &amp;                                     [&#39;trajectory&#39;] &amp;       0.0 &amp;  100000.0 &amp;           0.0 \\
+trajectory\_lost\_t1         &amp;                                     [&#39;trajectory&#39;] &amp;                                     [&#39;trajectory&#39;] &amp;       0.0 &amp;   50000.0 &amp;           0.0 \\
 \bottomrule
 \end{tabular}
 
@@ -1679,7 +1687,7 @@ trajectory\_crash\_t1        &amp;                                     [&#39;tra
 </div>
 <div class="output_area stderr docutils container">
 <div class="highlight"><pre>
-SCENARIOS COMPLETE: 100%|██████████| 16/16 [00:11&lt;00:00,  1.38it/s]
+SCENARIOS COMPLETE: 100%|██████████| 16/16 [00:11&lt;00:00,  1.39it/s]
 </pre></div></div>
 </div>
 <div class="nbinput docutils container">
@@ -1896,7 +1904,7 @@ nominal.endclass.expected cost:      0.0
 </div>
 <div class="output_area stderr docutils container">
 <div class="highlight"><pre>
-SCENARIOS COMPLETE: 100%|██████████| 120/120 [01:35&lt;00:00,  1.25it/s]
+SCENARIOS COMPLETE: 100%|██████████| 120/120 [01:41&lt;00:00,  1.19it/s]
 </pre></div></div>
 </div>
 <div class="nbinput docutils container">
@@ -1938,6 +1946,12 @@ SCENARIOS COMPLETE: 100%|██████████| 120/120 [01:35&lt;00:00
   </thead>
   <tbody>
     <tr>
+      <th>affect_dof_rf_ctlbreak_t49p0</th>
+      <td>1.666667e-07</td>
+      <td>186800.0</td>
+      <td>3113.333333</td>
+    </tr>
+    <tr>
       <th>affect_dof_lf_ctlbreak_t49p0</th>
       <td>1.666667e-07</td>
       <td>186800.0</td>
@@ -1956,12 +1970,6 @@ SCENARIOS COMPLETE: 100%|██████████| 120/120 [01:35&lt;00:00
       <td>3113.333333</td>
     </tr>
     <tr>
-      <th>affect_dof_rf_ctlbreak_t49p0</th>
-      <td>1.666667e-07</td>
-      <td>186800.0</td>
-      <td>3113.333333</td>
-    </tr>
-    <tr>
       <th>affect_dof_lf_ctlup_t49p0</th>
       <td>1.666667e-07</td>
       <td>186300.0</td>
@@ -1974,7 +1982,7 @@ SCENARIOS COMPLETE: 100%|██████████| 120/120 [01:35&lt;00:00
       <td>...</td>
     </tr>
     <tr>
-      <th>affect_dof_rf_propwarp_t97p0</th>
+      <th>affect_dof_lr_propwarp_t97p0</th>
       <td>5.555556e-10</td>
       <td>200.0</td>
       <td>0.011111</td>
@@ -1986,13 +1994,13 @@ SCENARIOS COMPLETE: 100%|██████████| 120/120 [01:35&lt;00:00
       <td>0.011111</td>
     </tr>
     <tr>
-      <th>affect_dof_lr_propwarp_t2p0</th>
+      <th>affect_dof_rr_propwarp_t2p0</th>
       <td>4.629630e-10</td>
       <td>200.0</td>
       <td>0.009259</td>
     </tr>
     <tr>
-      <th>affect_dof_rr_propwarp_t2p0</th>
+      <th>affect_dof_lr_propwarp_t2p0</th>
       <td>4.629630e-10</td>
       <td>200.0</td>
       <td>0.009259</td>
@@ -2024,7 +2032,7 @@ SCENARIOS COMPLETE: 100%|██████████| 120/120 [01:35&lt;00:00
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-47341.7111111111
+47341.71111111108
 </pre></div></div>
 </div>
 <p>The overall rate of crashes:</p>
@@ -2044,7 +2052,7 @@ SCENARIOS COMPLETE: 100%|██████████| 120/120 [01:35&lt;00:00
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-2.675000000000001e-06
+2.6750000000000006e-06
 </pre></div></div>
 </div>
 <p>The number of crashes:</p>
@@ -2112,7 +2120,7 @@ SCENARIOS COMPLETE: 100%|██████████| 120/120 [01:35&lt;00:00
 </div>
 <div class="output_area stderr docutils container">
 <div class="highlight"><pre>
-SCENARIOS COMPLETE: 100%|██████████| 240/240 [03:38&lt;00:00,  1.10it/s]
+SCENARIOS COMPLETE: 100%|██████████| 240/240 [03:30&lt;00:00,  1.14it/s]
 </pre></div></div>
 </div>
 <div class="nbinput docutils container">
@@ -2154,18 +2162,6 @@ SCENARIOS COMPLETE: 100%|██████████| 240/240 [03:38&lt;00:00
   </thead>
   <tbody>
     <tr>
-      <th>affect_dof_rf2_ctlbreak_t49p0</th>
-      <td>1.666667e-07</td>
-      <td>139600.0</td>
-      <td>2326.666667</td>
-    </tr>
-    <tr>
-      <th>affect_dof_lf_ctlbreak_t49p0</th>
-      <td>1.666667e-07</td>
-      <td>139600.0</td>
-      <td>2326.666667</td>
-    </tr>
-    <tr>
       <th>affect_dof_lf2_ctlbreak_t49p0</th>
       <td>1.666667e-07</td>
       <td>139600.0</td>
@@ -2178,7 +2174,19 @@ SCENARIOS COMPLETE: 100%|██████████| 240/240 [03:38&lt;00:00
       <td>2326.666667</td>
     </tr>
     <tr>
-      <th>affect_dof_rf_ctldn_t49p0</th>
+      <th>affect_dof_rf2_ctlbreak_t49p0</th>
+      <td>1.666667e-07</td>
+      <td>139600.0</td>
+      <td>2326.666667</td>
+    </tr>
+    <tr>
+      <th>affect_dof_lf_ctlbreak_t49p0</th>
+      <td>1.666667e-07</td>
+      <td>139600.0</td>
+      <td>2326.666667</td>
+    </tr>
+    <tr>
+      <th>affect_dof_lf2_ctldn_t49p0</th>
       <td>1.666667e-07</td>
       <td>139100.0</td>
       <td>2318.333333</td>
@@ -2202,13 +2210,13 @@ SCENARIOS COMPLETE: 100%|██████████| 240/240 [03:38&lt;00:00
       <td>0.009259</td>
     </tr>
     <tr>
-      <th>affect_dof_rr_propwarp_t2p0</th>
+      <th>affect_dof_lr2_propwarp_t2p0</th>
       <td>4.629630e-10</td>
       <td>200.0</td>
       <td>0.009259</td>
     </tr>
     <tr>
-      <th>affect_dof_lr2_propwarp_t2p0</th>
+      <th>affect_dof_rr_propwarp_t2p0</th>
       <td>4.629630e-10</td>
       <td>200.0</td>
       <td>0.009259</td>
@@ -2240,7 +2248,7 @@ SCENARIOS COMPLETE: 100%|██████████| 240/240 [03:38&lt;00:00
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-49174.644444444464
+49174.64444444445
 </pre></div></div>
 </div>
 <p>The overall rate of crashes:</p>
@@ -2260,7 +2268,7 @@ SCENARIOS COMPLETE: 100%|██████████| 240/240 [03:38&lt;00:00
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-3.0259259259259256e-06
+3.025925925925927e-06
 </pre></div></div>
 </div>
 <p>Number of crashes:</p>
@@ -2317,7 +2325,7 @@ SCENARIOS COMPLETE: 100%|██████████| 240/240 [03:38&lt;00:00
            </div>
           </div>
           <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
-        <a href="../pump/IDETC_Results/IDETC_Figures.html" class="btn btn-neutral float-left" title="Probability Modelling in fmdtools" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="../pump/AST_Sampling.html" class="btn btn-neutral float-left" title="fmdtools-AdaStress integration" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
         <a href="Multirotor_Optimization.html" class="btn btn-neutral float-right" title="Integrated Resilience Optimization Architectures" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 

@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Defining and Visualizing fmdtools Model Structures &mdash; fmdtools 2.0-alpha documentation</title>
+  <title>Defining and Visualizing fmdtools Model Structures &mdash; fmdtools 2.0-alpha5 documentation</title>
       <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
     <link rel="shortcut icon" href="../../_static/fmdtools_ico.ico"/>
@@ -46,6 +46,7 @@
 <li class="toctree-l3"><a class="reference internal" href="../../README.html#prerequisites">Prerequisites</a></li>
 </ul>
 </li>
+<li class="toctree-l2"><a class="reference internal" href="../../README.html#examples">Examples</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../README.html#contributions">Contributions</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="../../README.html#contributors">Contributors</a></li>
 </ul>
@@ -64,7 +65,7 @@
 <li class="toctree-l2"><a class="reference internal" href="../../docs/Development%20Guide.html#intro-to-fmdtools">Intro to fmdtools</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="../../docs/Intro_to_fmdtools.html">Intro to resilience modelling, simulation, and visualization in Python with fmdtools.</a><ul>
 <li class="toctree-l4"><a class="reference internal" href="../../docs/Intro_to_fmdtools.html#author-daniel-hulse">Author: Daniel Hulse</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/Intro_to_fmdtools.html#version-2-0-alpha">Version: 2.0-alpha</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../docs/Intro_to_fmdtools.html#version-2-0-alpha5">Version: 2.0-alpha5</a></li>
 </ul>
 </li>
 <li class="toctree-l3"><a class="reference internal" href="../../docs/Intro_to_fmdtools.html#overview">Overview</a></li>
@@ -81,6 +82,8 @@
 <li class="toctree-l3"><a class="reference internal" href="../../docs/Intro_to_fmdtools.html#analysis-workflow-structure">Analysis Workflow/Structure</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../docs/Intro_to_fmdtools.html#defining-a-model">Defining a Model</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../docs/Intro_to_fmdtools.html#id1">Defining a Model</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../docs/Intro_to_fmdtools.html#function-code-template">Function Code Template</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../docs/Intro_to_fmdtools.html#model-code-template">Model Code Template</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../docs/Intro_to_fmdtools.html#demo-model-activity-examples-pump-ex-pump-py">Demo Model Activity: examples/pump/ex_pump.py</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../docs/Intro_to_fmdtools.html#more-resources-for-model-definition">More Resources for Model Definition</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../docs/Intro_to_fmdtools.html#notebook-activity">Notebook Activity:</a></li>
@@ -102,11 +105,13 @@
 </ul>
 </li>
 <li class="toctree-l3"><a class="reference internal" href="../../docs/Development%20Guide.html#development-process">Development Process</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../docs/Development%20Guide.html#release-checklist">Release Checklist</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../docs/Development%20Guide.html#upload-to-pypi">Upload to PyPI</a></li>
 </ul>
 </li>
 <li class="toctree-l3"><a class="reference internal" href="../../docs/Development%20Guide.html#roles">Roles</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../docs/Development%20Guide.html#documentation">Documentation</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../docs/Development%20Guide.html#style-formatting">Style/Formatting</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../docs/Development%20Guide.html#testing">Testing</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../docs/Development%20Guide.html#contributors">Contributors</a><ul>
 <li class="toctree-l4"><a class="reference internal" href="../../CONTRIBUTORS.html">CONTRIBUTORS</a></li>
@@ -115,6 +120,7 @@
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="../../docs/Development%20Guide.html#model-development-best-practices">Model Development Best Practices</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../docs/Development%20Guide.html#pay-attention-to-and-document-the-fmdtools-version">Pay attention to and document the fmdtools version</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../docs/Development%20Guide.html#plan-your-model-to-avoid-technical-debt">Plan your model to avoid technical debt</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../docs/Development%20Guide.html#don-t-copy-inherit-and-functionalize">Don’t copy, inherit and functionalize</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../docs/Development%20Guide.html#document-your-code-sometimes-before-your-write-it">Document your code, sometimes <em>before</em> your write it</a></li>
@@ -129,8 +135,8 @@
 </li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="../../docs/Examples.html">Examples</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="../../docs/Examples.html#pump">Pump</a><ul>
+<li class="toctree-l1"><a class="reference internal" href="../Examples.html">Examples</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../Examples.html#pump">Pump</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="../pump/Tutorial_complete.html">fmdtools Tutorial</a><ul>
 <li class="toctree-l4"><a class="reference internal" href="../pump/Tutorial_complete.html#1.)-Loading-the-environment-and-model">1.) Loading the environment and model</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../pump/Tutorial_complete.html#2.),-3.),-and-4.)-Simulate-and-visualize-the-results!">2.), 3.), and 4.) Simulate and visualize the results!</a></li>
@@ -175,15 +181,9 @@
 <li class="toctree-l4"><a class="reference internal" href="../pump/AST_Sampling.html#Simulator">Simulator</a></li>
 </ul>
 </li>
-<li class="toctree-l3"><a class="reference internal" href="../pump/IDETC_Results/IDETC_Figures.html">Probability Modelling in fmdtools</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="../pump/IDETC_Results/IDETC_Figures.html#Theory-and-Goals">Theory and Goals</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../pump/IDETC_Results/IDETC_Figures.html#Model-Description">Model Description</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../pump/IDETC_Results/IDETC_Figures.html#Experiments">Experiments</a></li>
 </ul>
 </li>
-</ul>
-</li>
-<li class="toctree-l2"><a class="reference internal" href="../../docs/Examples.html#multirotor">Multirotor</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../Examples.html#multirotor">Multirotor</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="../multirotor/Demonstration.html">fmdtools Paper Demonstration</a><ul>
 <li class="toctree-l4"><a class="reference internal" href="../multirotor/Demonstration.html#Initial-Model">Initial Model</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../multirotor/Demonstration.html#Setting-Node-Positions">Setting Node Positions</a></li>
@@ -202,26 +202,32 @@
 </li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="../../docs/Examples.html#tank">Tank</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../Examples.html#tank">Tank</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="../tank/Tank_Analysis.html">Hold-up Tank Model</a><ul>
 <li class="toctree-l4"><a class="reference internal" href="../tank/Tank_Analysis.html#Verifying-the-nominal-state:">Verifying the nominal state:</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../tank/Tank_Analysis.html#History">History</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../tank/Tank_Analysis.html#What-happens-under-component-faults?">What happens under component faults?</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../tank/Tank_Analysis.html#What-about-human-induced-faults?">What about human-induced faults?</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../tank/Tank_Analysis.html#Evaluating-Joint-Component-Human-fault-modes">Evaluating Joint Component-Human fault modes</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../tank/Tank_Analysis.html#Testing-different-reaction-times">Testing different reaction times</a></li>
 </ul>
 </li>
-<li class="toctree-l3"><a class="reference internal" href="../tank/Tank_Optimization.html">Cooling Tank Model</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="../tank/Tank_Optimization.html#Simulation">Simulation</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../tank/Tank_Optimization.html">Cooling Tank Model Optimization</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../tank/Tank_Optimization.html#Simulation">Simulation</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../tank/Tank_Optimization.html#Verifying-the-nominal-state:">Verifying the nominal state:</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../tank/Tank_Optimization.html#What-happens-under-component-faults?">What happens under component faults?</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../tank/Tank_Optimization.html#Full-set-of-modes">Full set of modes</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../tank/Tank_Optimization.html#Defining-Optimization-Problem">Defining Optimization Problem</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../tank/Tank_Optimization.html#Optimization">Optimization</a></li>
 </ul>
 </li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="../../docs/Examples.html#eps">EPS</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../Examples.html#eps">EPS</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="../eps/EPS_Example_Notebook.html">EPS Example Notebook</a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="../../docs/Examples.html#action-sequence-graph">Action Sequence Graph</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../Examples.html#action-sequence-graph">Action Sequence Graph</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="../asg_demo/Action_Sequence_Graph.html">Action Sequence Graph Tutorial</a><ul>
 <li class="toctree-l4"><a class="reference internal" href="../asg_demo/Action_Sequence_Graph.html#Function-level-Simulation">Function-level Simulation</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../asg_demo/Action_Sequence_Graph.html#Model-Simulation">Model Simulation</a></li>
@@ -230,7 +236,7 @@
 </li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="../../docs/Examples.html#rover">Rover</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../Examples.html#rover">Rover</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="Rover_Setup_Notebook.html">Rover Model Explanation and Preliminaries</a><ul>
 <li class="toctree-l4"><a class="reference internal" href="Rover_Setup_Notebook.html#Model-Setup">Model Setup</a></li>
 <li class="toctree-l4"><a class="reference internal" href="Rover_Setup_Notebook.html#Model-simulation">Model simulation</a></li>
@@ -279,17 +285,20 @@
 </li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="../../docs/Examples.html#multiflow-demo">Multiflow Demo</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../Examples.html#multiflow-demo">Multiflow Demo</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../multiflow_demo/Multiflow_and_Commsflow_Demonstration.html">Demonstration on Using MultiFlow and CommsFlow</a></li>
+</ul>
+</li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../../docs/Glossary.html">Glossary</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../docs/fmdtools.html">Module Reference</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="../../docs/fmdtools.define.html">fmdtools.define package</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="../../docs/fmdtools.define.html#module-fmdtools.define.block">fmdtools.define.block</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../docs/fmdtools.define.html#fmdtools-define-block">fmdtools.define.block</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../docs/fmdtools.define.html#module-fmdtools.define.common">fmdtools.define.common</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../docs/fmdtools.define.html#module-fmdtools.define.flow">fmdtools.define.flow</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../docs/fmdtools.define.html#module-fmdtools.define.mode">fmdtools.define.mode</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../../docs/fmdtools.define.html#module-fmdtools.define.model">fmdtools.define.model</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../docs/fmdtools.define.html#fmdtools-define-model">fmdtools.define.model</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../docs/fmdtools.define.html#module-fmdtools.define.parameter">fmdtools.define.parameter</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../docs/fmdtools.define.html#module-fmdtools.define.rand">fmdtools.define.rand</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../docs/fmdtools.define.html#module-fmdtools.define.state">fmdtools.define.state</a></li>
@@ -645,12 +654,12 @@ div.rendered_html tbody tr:hover {
 Help on class ModelGraph in module fmdtools.analyze.graph:
 
 class ModelGraph(Graph)
- |  ModelGraph(mdl, withstates=True, **kwargs)
+ |  ModelGraph(mdl, get_states=True, time=0.0, **kwargs)
  |
  |  Creates a Graph of Model functions and flow for display, where both functions
  |  and flows are nodes.
  |
- |  If withstates option is used on instantiation, a `states` dict is associated
+ |  If get_states option is used on instantiation, a `states` dict is associated
  |  with the edges/nodes which can then be used to visualize function/flow attributes.
  |
  |  Method resolution order:
@@ -660,15 +669,18 @@ class ModelGraph(Graph)
  |
  |  Methods defined here:
  |
- |  __init__(self, mdl, withstates=True, **kwargs)
+ |  __init__(self, mdl, get_states=True, time=0.0, **kwargs)
  |      Generates the ModelGraph corresponding to a given Model
  |
  |      Parameters
  |      ----------
  |      mdl : define.Model
  |          fmdtools model to represent graphically
- |      withstates : bool, optional
- |          Whether to copy states to the node/edge &#39;states&#39; property. The default is True.
+ |      get_states : bool, optional
+ |          Whether to copy states to the node/edge &#39;states&#39; property.
+ |          The default is True.
+ |      time: float
+ |          Time model is run at (to execute indicators at). Default is 0.0
  |      **kwargs : kwargs
  |          (placeholder for kwargs)
  |
@@ -684,7 +696,7 @@ class ModelGraph(Graph)
  |      filetype : str, optional
  |          Type of file to safe. The default is &#39;png&#39;.
  |      **kwargs : kwargs
- |          kwargs to
+ |          kwargs to draw
  |
  |      Returns
  |      -------
@@ -699,12 +711,14 @@ class ModelGraph(Graph)
  |      mdl: Model
  |          Model to represent.
  |      subedges : list
- |          nodes from the full graph which will become edges in the subgraph (e.g. individual flows)
+ |          nodes from the full graph which will become edges in the subgraph
+ |          (e.g. individual flows)
  |
  |      Returns
  |      -------
  |      flows : dict
- |              Dictionary of edges with keys representing each sub-attribute of the edge (e.g., flows)
+ |              Dictionary of edges with keys representing each sub-attribute of the
+ |              edge (e.g., flows)
  |
  |  nx_from_obj(self, mdl)
  |      Generates the networkx.graph object corresponding to the model.
@@ -716,7 +730,8 @@ class ModelGraph(Graph)
  |      Returns
  |      -------
  |      g : networkx.Graph
- |          networkx.Graph representation of model functions and flows (along with their attributes)
+ |          networkx.Graph representation of model functions and flows
+ |          (along with their attributes)
  |
  |  set_exec_order(self, mdl, static={}, dynamic={}, next_edges={}, label_order=True, label_tstep=True)
  |      Enables the plotting of ModelGraph execution order.
@@ -726,21 +741,26 @@ class ModelGraph(Graph)
  |      mdl : Model
  |          Model to plot the execution order of.
  |      static : dict/False, optional
- |          kwargs to overwrite the default style for functions/flows in the static execution step.
+ |          kwargs to overwrite the default style for functions/flows in the static
+ |          execution step.
  |          If False, static functions are not differentiated. The default is {}.
  |      dynamic : dict/False, optional
- |          kwargs to overwrite the default style for functions/flows in the dynamic execution step.
+ |          kwargs to overwrite the default style for functions/flows in the dynamic
+ |          execution step.
  |          If False, dynamic functions are not differentiated. The default is {}.
  |      next_edges : dict
  |          kwargs to overwrite the default style for edges indicating the flow order.
  |          If False, these edges are not added. the default is {}.
  |      label_order : bool, optional
- |          Whether to label execution order (with a number on each node). The default is True.
+ |          Whether to label execution order (with a number on each node).
+ |          The default is True.
  |      label_tstep : bool, optional
- |          Whether to label each timestep (with a number in the subtitle). The default is True.
+ |          Whether to label each timestep (with a number in the subtitle).
+ |          The default is True.
  |
  |  set_flow_nodestates(self, mdl)
- |      Attaches node state attributes to Graph corresponding to the states of the model that belong to flows.
+ |      Attaches node state attributes to Graph corresponding to the states of the
+ |      model that belong to flows.
  |
  |      Parameters
  |      ----------
@@ -751,11 +771,14 @@ class ModelGraph(Graph)
  |      -------
  |
  |  set_fxn_nodestates(self, mdl)
- |      Attaches state attributes to Graph corresponding to the states of the model that belong to functions
+ |      Attaches state attributes to Graph corresponding to the states of the model
+ |      that belong to functions
  |      Parameters
  |      ----------
  |      mdl: Model
  |          Model to represent.
+ |      time: float
+ |          Time to execute indicators at. Default is 0.0
  |
  |      Returns
  |      -------
@@ -774,7 +797,8 @@ class ModelGraph(Graph)
  |  Methods inherited from Graph:
  |
  |  add_node_groups(self, **node_groups)
- |      Creates arbitrary groups of nodes which may be then be displayed with different styles
+ |      Creates arbitrary groups of nodes which may be then be displayed with different
+ |      styles
  |
  |      Parameters
  |      ----------
@@ -782,10 +806,12 @@ class ModelGraph(Graph)
  |
  |      e.g.
  |      graph.add_node_groups(group1=(&#39;node1&#39;, &#39;node2&#39;), group2=(&#39;node3&#39;))
- |      graph.set_node_styles(group={&#39;group1&#39;:{&#39;color&#39;:&#39;green&#39;}, &#39;group2&#39;:{&#39;color&#39;:&#39;red&#39;}})
+ |      graph.set_node_styles(group={&#39;group1&#39;:{&#39;color&#39;:&#39;green&#39;},
+ |                                   &#39;group2&#39;:{&#39;color&#39;:&#39;red&#39;}})
  |      graph.draw()
  |
- |      would show two different groups of nodes, one with green nodes, and the other with red nodes
+ |      would show two different groups of nodes, one with green nodes, and the other
+ |      with red nodes
  |
  |  animate_from(self, history, times=&#39;all&#39;, figsize=(6, 4), **kwargs)
  |      Successively animates a plot using Graph.draw_from
@@ -826,7 +852,8 @@ class ModelGraph(Graph)
  |      Parameters
  |      ----------
  |      trials : int
- |          number of times to run robustness coefficient algorithm (result is averaged over all trials)
+ |          number of times to run robustness coefficient algorithm
+ |          (result is averaged over all trials)
  |      seed : int
  |          optional seed to instantiate test with
  |
@@ -835,7 +862,8 @@ class ModelGraph(Graph)
  |      RC : robustness coefficient
  |
  |  draw(self, figsize=(12, 10), title=&#39;&#39;, fig=False, ax=False, withlegend=True, legend_bbox=(1, 0.5), legend_loc=&#39;center left&#39;, legend_labelspacing=2, legend_borderpad=1, **kwargs)
- |      Draws a networkx graph g with given styles corresponding to the node/edge properties.
+ |      Draws a networkx graph g with given styles corresponding to the node/edge
+ |      properties.
  |
  |      Parameters
  |      ----------
@@ -850,7 +878,8 @@ class ModelGraph(Graph)
  |      withlegend : bool, optional
  |          Whether to include a legend. The default is True.
  |      legend_bbox : tuple, optional
- |          bbox to anchor the legend to. The default is (1,0.5) (places legend on the right)
+ |          bbox to anchor the legend to. The default is (1,0.5) (places legend on the
+ |                                                                right)
  |      legend_loc : str, optional
  |          loc argument for plt.legend. the default is &#34;center left&#34;
  |      legend_labelspacing : float, optional
@@ -859,7 +888,8 @@ class ModelGraph(Graph)
  |          borderpad argument for plt.legend. the default is 1
  |      **kwargs : kwargs
  |          Arguments for various supporting functions:
- |              (set_pos, set_edge_styles, set_edge_labels, set_node_styles, set_node_labels, etc)
+ |          (set_pos, set_edge_styles, set_edge_labels, set_node_styles,
+ |           set_node_labels, etc)
  |
  |      Returns
  |      -------
@@ -915,7 +945,8 @@ class ModelGraph(Graph)
  |      bridgingNodes : list of bridging nodes
  |
  |  find_high_degree_nodes(self, p=90)
- |      Determines highest degree nodes, up to percentile p, in graph representation of model mdl.
+ |      Determines highest degree nodes, up to percentile p, in graph representation of
+ |      model mdl.
  |
  |      Parameters
  |      ----------
@@ -928,7 +959,8 @@ class ModelGraph(Graph)
  |
  |  move_nodes(self, **kwargs)
  |      Sets the position of nodes for plots in analyze.graph using a graphical tool.
- |      Note: make sure matplotlib is set to plot in an external window (e.g using &#39;%matplotlib qt)
+ |      Note: make sure matplotlib is set to plot in an external window
+ |      (e.g using &#39;%matplotlib qt)
  |
  |      Parameters
  |      ----------
@@ -1014,11 +1046,11 @@ class ModelGraph(Graph)
  |      Parameters
  |      ----------
  |      **edge_styles : dict, optional
- |          Dictionary of tags, labels, and styles for the edges that overwrite the default.
- |          Has structure {tag:{label:kwargs}}, where kwargs are the keyword arguments to
- |          nx.draw_networkx_edges. The default is {&#34;label&#34;:{}}.
+ |          Dictionary of tags, labels, and styles for the edges that overwrite the
+ |          default. Has structure {tag:{label:kwargs}}, where kwargs are the keyword
+ |          arguments to nx.draw_networkx_edges. The default is {&#34;label&#34;:{}}.
  |
- |  set_heatmap(self, heatmap, cmap=&lt;matplotlib.colors.LinearSegmentedColormap object at 0x000002A829AB4520&gt;, default_color_val=0.0)
+ |  set_heatmap(self, heatmap, cmap=&lt;matplotlib.colors.LinearSegmentedColormap object at 0x0000020C90A0B8E0&gt;, default_color_val=0.0)
  |      Enables the association and plotting of a heatmap on a graph.
  |
  |      e.g. graph.set_heatmap({&#39;node_1&#39;:1.0, &#39;node_2&#39;: 0.0, &#39;node_3&#39;:0.5})
@@ -1054,9 +1086,9 @@ class ModelGraph(Graph)
  |      Parameters
  |      ----------
  |      **node_styles : dict, optional
- |          Dictionary of tags, labels, and style kwargs for the nodes that overwrite the default.
- |          Has structure {tag:{label:kwargs}}, where kwargs are the keyword arguments to
- |          nx.draw_networkx_nodes. The default is {&#34;label&#34;:{}}.
+ |          Dictionary of tags, labels, and style kwargs for the nodes that overwrite
+ |          the default. Has structure {tag:{label:kwargs}}, where kwargs are the
+ |          keyword arguments to nx.draw_networkx_nodes. The default is {&#34;label&#34;:{}}.
  |
  |  set_pos(self, auto=True, **pos)
  |      Sets graph positions to given positions, (automatically or manually)
@@ -1126,7 +1158,8 @@ class ModelGraph(Graph)
 Help on function draw in module fmdtools.analyze.graph:
 
 draw(self, figsize=(12, 10), title=&#39;&#39;, fig=False, ax=False, withlegend=True, legend_bbox=(1, 0.5), legend_loc=&#39;center left&#39;, legend_labelspacing=2, legend_borderpad=1, **kwargs)
-    Draws a networkx graph g with given styles corresponding to the node/edge properties.
+    Draws a networkx graph g with given styles corresponding to the node/edge
+    properties.
 
     Parameters
     ----------
@@ -1141,7 +1174,8 @@ draw(self, figsize=(12, 10), title=&#39;&#39;, fig=False, ax=False, withlegend=T
     withlegend : bool, optional
         Whether to include a legend. The default is True.
     legend_bbox : tuple, optional
-        bbox to anchor the legend to. The default is (1,0.5) (places legend on the right)
+        bbox to anchor the legend to. The default is (1,0.5) (places legend on the
+                                                              right)
     legend_loc : str, optional
         loc argument for plt.legend. the default is &#34;center left&#34;
     legend_labelspacing : float, optional
@@ -1150,7 +1184,8 @@ draw(self, figsize=(12, 10), title=&#39;&#39;, fig=False, ax=False, withlegend=T
         borderpad argument for plt.legend. the default is 1
     **kwargs : kwargs
         Arguments for various supporting functions:
-            (set_pos, set_edge_styles, set_edge_labels, set_node_styles, set_node_labels, etc)
+        (set_pos, set_edge_styles, set_edge_labels, set_node_styles,
+         set_node_labels, etc)
 
     Returns
     -------
@@ -1225,18 +1260,22 @@ set_exec_order(self, mdl, static={}, dynamic={}, next_edges={}, label_order=True
     mdl : Model
         Model to plot the execution order of.
     static : dict/False, optional
-        kwargs to overwrite the default style for functions/flows in the static execution step.
+        kwargs to overwrite the default style for functions/flows in the static
+        execution step.
         If False, static functions are not differentiated. The default is {}.
     dynamic : dict/False, optional
-        kwargs to overwrite the default style for functions/flows in the dynamic execution step.
+        kwargs to overwrite the default style for functions/flows in the dynamic
+        execution step.
         If False, dynamic functions are not differentiated. The default is {}.
     next_edges : dict
         kwargs to overwrite the default style for edges indicating the flow order.
         If False, these edges are not added. the default is {}.
     label_order : bool, optional
-        Whether to label execution order (with a number on each node). The default is True.
+        Whether to label execution order (with a number on each node).
+        The default is True.
     label_tstep : bool, optional
-        Whether to label each timestep (with a number in the subtitle). The default is True.
+        Whether to label each timestep (with a number in the subtitle).
+        The default is True.
 
 </pre></div></div>
 </div>
@@ -1325,7 +1364,7 @@ set_exec_order(self, mdl, static={}, dynamic={}, next_edges={}, label_order=True
 <span class="k">class</span> <span class="nc">StoreEnergyState</span><span class="p">(</span><span class="n">State</span><span class="p">):</span>
     <span class="n">charge</span><span class="p">:</span> <span class="nb">float</span><span class="o">=</span><span class="mf">100.0</span>
 <span class="k">class</span> <span class="nc">StoreEnergyTime</span><span class="p">(</span><span class="n">Time</span><span class="p">):</span>
-    <span class="n">dt</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.5</span>
+    <span class="n">local_dt</span> <span class="o">=</span> <span class="mf">0.5</span>
 <span class="k">class</span> <span class="nc">StoreEnergyMode</span><span class="p">(</span><span class="n">Mode</span><span class="p">):</span>
     <span class="n">faultparams</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;no_charge&quot;</span><span class="p">:(</span><span class="mf">1e-5</span><span class="p">,</span> <span class="p">{</span><span class="s1">&#39;standby&#39;</span><span class="p">:</span><span class="mf">1.0</span><span class="p">},</span> <span class="mi">100</span><span class="p">),</span>
                    <span class="s2">&quot;short&quot;</span><span class="p">:(</span><span class="mf">1e-5</span><span class="p">,</span> <span class="p">{</span><span class="s1">&#39;supply&#39;</span><span class="p">:</span><span class="mf">1.0</span><span class="p">},</span> <span class="mi">100</span><span class="p">)}</span>
@@ -1386,18 +1425,18 @@ set_exec_order(self, mdl, static={}, dynamic={}, next_edges={}, label_order=True
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
 
-        <span class="bp">self</span><span class="o">.</span><span class="n">add_flow</span><span class="p">(</span><span class="s1">&#39;ground&#39;</span><span class="p">,</span>  <span class="n">Ground</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">add_flow</span><span class="p">(</span><span class="s1">&#39;force&#39;</span><span class="p">,</span>   <span class="n">Force</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">add_flow</span><span class="p">(</span><span class="s1">&#39;ee&#39;</span><span class="p">,</span>      <span class="n">EE</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">add_flow</span><span class="p">(</span><span class="s1">&#39;video&#39;</span><span class="p">,</span>   <span class="n">Video</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_flow</span><span class="p">(</span><span class="s1">&#39;ground&#39;</span><span class="p">,</span> <span class="n">Ground</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_flow</span><span class="p">(</span><span class="s1">&#39;force&#39;</span><span class="p">,</span> <span class="n">Force</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_flow</span><span class="p">(</span><span class="s1">&#39;ee&#39;</span><span class="p">,</span> <span class="n">EE</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_flow</span><span class="p">(</span><span class="s1">&#39;video&#39;</span><span class="p">,</span> <span class="n">Video</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">add_flow</span><span class="p">(</span><span class="s1">&#39;control&#39;</span><span class="p">,</span> <span class="n">Control</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">add_flow</span><span class="p">(</span><span class="s1">&#39;comms&#39;</span><span class="p">,</span>   <span class="n">Flow</span><span class="p">)</span> <span class="c1">#{&#39;x&#39;:0,&#39;y&#39;:0}</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_flow</span><span class="p">(</span><span class="s1">&#39;comms&#39;</span><span class="p">,</span> <span class="n">Flow</span><span class="p">)</span> <span class="c1">#{&#39;x&#39;:0,&#39;y&#39;:0}</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">add_fxn</span><span class="p">(</span><span class="s2">&quot;control_rover&quot;</span><span class="p">,</span> <span class="n">ControlRover</span><span class="p">,</span> <span class="s2">&quot;video&quot;</span><span class="p">,</span><span class="s2">&quot;comms&quot;</span><span class="p">,</span> <span class="s2">&quot;ee&quot;</span><span class="p">,</span> <span class="s2">&quot;control&quot;</span><span class="p">,</span><span class="s2">&quot;force&quot;</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">add_fxn</span><span class="p">(</span><span class="s2">&quot;store_energy&quot;</span><span class="p">,</span>  <span class="n">StoreEnergy</span><span class="p">,</span>  <span class="s2">&quot;ee&quot;</span><span class="p">,</span> <span class="s2">&quot;force&quot;</span><span class="p">,</span> <span class="s2">&quot;control&quot;</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">add_fxn</span><span class="p">(</span><span class="s2">&quot;move_rover&quot;</span><span class="p">,</span>    <span class="n">MoveRover</span><span class="p">,</span> <span class="s2">&quot;ground&quot;</span><span class="p">,</span><span class="s2">&quot;force&quot;</span><span class="p">,</span><span class="s2">&quot;ee&quot;</span><span class="p">,</span> <span class="s2">&quot;control&quot;</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">add_fxn</span><span class="p">(</span><span class="s2">&quot;view_ground&quot;</span><span class="p">,</span>   <span class="n">FxnBlock</span><span class="p">,</span> <span class="s2">&quot;ground&quot;</span><span class="p">,</span> <span class="s2">&quot;ee&quot;</span><span class="p">,</span> <span class="s2">&quot;video&quot;</span><span class="p">,</span><span class="s2">&quot;force&quot;</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">add_fxn</span><span class="p">(</span><span class="s2">&quot;communicate&quot;</span><span class="p">,</span>   <span class="n">FxnBlock</span><span class="p">,</span> <span class="s2">&quot;comms&quot;</span><span class="p">,</span> <span class="s2">&quot;ee&quot;</span><span class="p">,</span><span class="s2">&quot;force&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_fxn</span><span class="p">(</span><span class="s2">&quot;store_energy&quot;</span><span class="p">,</span> <span class="n">StoreEnergy</span><span class="p">,</span>  <span class="s2">&quot;ee&quot;</span><span class="p">,</span> <span class="s2">&quot;force&quot;</span><span class="p">,</span> <span class="s2">&quot;control&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_fxn</span><span class="p">(</span><span class="s2">&quot;move_rover&quot;</span><span class="p">,</span> <span class="n">MoveRover</span><span class="p">,</span> <span class="s2">&quot;ground&quot;</span><span class="p">,</span><span class="s2">&quot;force&quot;</span><span class="p">,</span><span class="s2">&quot;ee&quot;</span><span class="p">,</span> <span class="s2">&quot;control&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_fxn</span><span class="p">(</span><span class="s2">&quot;view_ground&quot;</span><span class="p">,</span> <span class="n">FxnBlock</span><span class="p">,</span> <span class="s2">&quot;ground&quot;</span><span class="p">,</span> <span class="s2">&quot;ee&quot;</span><span class="p">,</span> <span class="s2">&quot;video&quot;</span><span class="p">,</span><span class="s2">&quot;force&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_fxn</span><span class="p">(</span><span class="s2">&quot;communicate&quot;</span><span class="p">,</span> <span class="n">FxnBlock</span><span class="p">,</span> <span class="s2">&quot;comms&quot;</span><span class="p">,</span> <span class="s2">&quot;ee&quot;</span><span class="p">,</span><span class="s2">&quot;force&quot;</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">build</span><span class="p">()</span>
 <span class="n">rover_pos</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;control_rover&#39;</span><span class="p">:</span> <span class="p">[</span><span class="o">-</span><span class="mf">0.017014983401385075</span><span class="p">,</span> <span class="mf">0.8197778602536954</span><span class="p">],</span>
  <span class="s1">&#39;move_rover&#39;</span><span class="p">:</span> <span class="p">[</span><span class="mf">0.1943738434915952</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.5118219332727401</span><span class="p">],</span>
@@ -1430,7 +1469,7 @@ set_exec_order(self, mdl, static={}, dynamic={}, next_edges={}, label_order=True
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">mdl</span> <span class="o">=</span> <span class="n">Rover</span><span class="p">()</span>
 <span class="n">mtg</span> <span class="o">=</span> <span class="n">ModelTypeGraph</span><span class="p">(</span><span class="n">mdl</span><span class="p">)</span>
-<span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span><span class="n">mtg</span><span class="o">.</span><span class="n">draw</span><span class="p">()</span>
+<span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">mtg</span><span class="o">.</span><span class="n">draw</span><span class="p">()</span>
 </pre></div>
 </div>
 </div>
@@ -1439,15 +1478,15 @@ set_exec_order(self, mdl, static={}, dynamic={}, next_edges={}, label_order=True
 </div>
 <div class="output_area stderr docutils container">
 <div class="highlight"><pre>
-c:\users\dhulse\documents\github\fmdtools\fmdtools\define\block.py:61: UserWarning: these flows sent from model [&#39;video&#39;, &#39;comms&#39;, &#39;ee&#39;, &#39;force&#39;] not added to class &lt;class &#39;__main__.ControlRover&#39;&gt;
+c:\users\dhulse\documents\github\fmdtools\fmdtools\define\block.py:68: UserWarning: these flows sent from model [&#39;video&#39;, &#39;comms&#39;, &#39;ee&#39;, &#39;force&#39;] not added to class &lt;class &#39;__main__.ControlRover&#39;&gt;
   warnings.warn(&#34;these flows sent from model &#34;+str([*flows.keys()])+&#34; not added to class &#34;+str(obj.__class__))
-c:\users\dhulse\documents\github\fmdtools\fmdtools\define\block.py:61: UserWarning: these flows sent from model [&#39;force&#39;] not added to class &lt;class &#39;__main__.StoreEnergy&#39;&gt;
+c:\users\dhulse\documents\github\fmdtools\fmdtools\define\block.py:68: UserWarning: these flows sent from model [&#39;force&#39;] not added to class &lt;class &#39;__main__.StoreEnergy&#39;&gt;
   warnings.warn(&#34;these flows sent from model &#34;+str([*flows.keys()])+&#34; not added to class &#34;+str(obj.__class__))
-c:\users\dhulse\documents\github\fmdtools\fmdtools\define\block.py:61: UserWarning: these flows sent from model [&#39;force&#39;] not added to class &lt;class &#39;__main__.MoveRover&#39;&gt;
+c:\users\dhulse\documents\github\fmdtools\fmdtools\define\block.py:68: UserWarning: these flows sent from model [&#39;force&#39;] not added to class &lt;class &#39;__main__.MoveRover&#39;&gt;
   warnings.warn(&#34;these flows sent from model &#34;+str([*flows.keys()])+&#34; not added to class &#34;+str(obj.__class__))
-c:\users\dhulse\documents\github\fmdtools\fmdtools\define\block.py:61: UserWarning: these flows sent from model [&#39;ground&#39;, &#39;ee&#39;, &#39;video&#39;, &#39;force&#39;] not added to class &lt;class &#39;fmdtools.define.block.FxnBlock&#39;&gt;
+c:\users\dhulse\documents\github\fmdtools\fmdtools\define\block.py:68: UserWarning: these flows sent from model [&#39;ground&#39;, &#39;ee&#39;, &#39;video&#39;, &#39;force&#39;] not added to class &lt;class &#39;fmdtools.define.block.FxnBlock&#39;&gt;
   warnings.warn(&#34;these flows sent from model &#34;+str([*flows.keys()])+&#34; not added to class &#34;+str(obj.__class__))
-c:\users\dhulse\documents\github\fmdtools\fmdtools\define\block.py:61: UserWarning: these flows sent from model [&#39;comms&#39;, &#39;ee&#39;, &#39;force&#39;] not added to class &lt;class &#39;fmdtools.define.block.FxnBlock&#39;&gt;
+c:\users\dhulse\documents\github\fmdtools\fmdtools\define\block.py:68: UserWarning: these flows sent from model [&#39;comms&#39;, &#39;ee&#39;, &#39;force&#39;] not added to class &lt;class &#39;fmdtools.define.block.FxnBlock&#39;&gt;
   warnings.warn(&#34;these flows sent from model &#34;+str([*flows.keys()])+&#34; not added to class &#34;+str(obj.__class__))
 </pre></div></div>
 </div>
@@ -1464,7 +1503,7 @@ c:\users\dhulse\documents\github\fmdtools\fmdtools\define\block.py:61: UserWarni
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[12]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">dot</span> <span class="o">=</span><span class="n">mtg</span><span class="o">.</span><span class="n">draw_graphviz</span><span class="p">()</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">dot</span> <span class="o">=</span> <span class="n">mtg</span><span class="o">.</span><span class="n">draw_graphviz</span><span class="p">()</span>
 </pre></div>
 </div>
 </div>
@@ -1633,18 +1672,22 @@ set_exec_order(self, mdl, static={}, dynamic={}, next_edges={}, label_order=True
     mdl : Model
         Model to plot the execution order of.
     static : dict/False, optional
-        kwargs to overwrite the default style for functions/flows in the static execution step.
+        kwargs to overwrite the default style for functions/flows in the static
+        execution step.
         If False, static functions are not differentiated. The default is {}.
     dynamic : dict/False, optional
-        kwargs to overwrite the default style for functions/flows in the dynamic execution step.
+        kwargs to overwrite the default style for functions/flows in the dynamic
+        execution step.
         If False, dynamic functions are not differentiated. The default is {}.
     next_edges : dict
         kwargs to overwrite the default style for edges indicating the flow order.
         If False, these edges are not added. the default is {}.
     label_order : bool, optional
-        Whether to label execution order (with a number on each node). The default is True.
+        Whether to label execution order (with a number on each node).
+        The default is True.
     label_tstep : bool, optional
-        Whether to label each timestep (with a number in the subtitle). The default is True.
+        Whether to label each timestep (with a number in the subtitle).
+        The default is True.
 
 </pre></div></div>
 </div>
@@ -1719,7 +1762,7 @@ set_exec_order(self, mdl, static={}, dynamic={}, next_edges={}, label_order=True
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-&lt;fmdtools.analyze.graph.ModelGraph at 0x2a82ce88b80&gt;
+&lt;fmdtools.analyze.graph.ModelGraph at 0x20c93f3b760&gt;
 </pre></div></div>
 </div>
 <div class="nbinput docutils container">
@@ -2117,42 +2160,42 @@ input[type=range].anim-slider {
 </style>
 
 <div class="animation">
-  <img id="_anim_img8111b5778bd44611a6b931bac0fdbf6f">
+  <img id="_anim_img2fbd62789b2349c3a455335bf6149e66">
   <div class="anim-controls">
-    <input id="_anim_slider8111b5778bd44611a6b931bac0fdbf6f" type="range" class="anim-slider"
+    <input id="_anim_slider2fbd62789b2349c3a455335bf6149e66" type="range" class="anim-slider"
            name="points" min="0" max="1" step="1" value="0"
-           oninput="anim8111b5778bd44611a6b931bac0fdbf6f.set_frame(parseInt(this.value));"></input>
+           oninput="anim2fbd62789b2349c3a455335bf6149e66.set_frame(parseInt(this.value));"></input>
     <div class="anim-buttons">
-      <button title="Decrease speed" aria-label="Decrease speed" onclick="anim8111b5778bd44611a6b931bac0fdbf6f.slower()">
+      <button title="Decrease speed" aria-label="Decrease speed" onclick="anim2fbd62789b2349c3a455335bf6149e66.slower()">
           <i class="fa fa-minus"></i></button>
-      <button title="First frame" aria-label="First frame" onclick="anim8111b5778bd44611a6b931bac0fdbf6f.first_frame()">
+      <button title="First frame" aria-label="First frame" onclick="anim2fbd62789b2349c3a455335bf6149e66.first_frame()">
         <i class="fa fa-fast-backward"></i></button>
-      <button title="Previous frame" aria-label="Previous frame" onclick="anim8111b5778bd44611a6b931bac0fdbf6f.previous_frame()">
+      <button title="Previous frame" aria-label="Previous frame" onclick="anim2fbd62789b2349c3a455335bf6149e66.previous_frame()">
           <i class="fa fa-step-backward"></i></button>
-      <button title="Play backwards" aria-label="Play backwards" onclick="anim8111b5778bd44611a6b931bac0fdbf6f.reverse_animation()">
+      <button title="Play backwards" aria-label="Play backwards" onclick="anim2fbd62789b2349c3a455335bf6149e66.reverse_animation()">
           <i class="fa fa-play fa-flip-horizontal"></i></button>
-      <button title="Pause" aria-label="Pause" onclick="anim8111b5778bd44611a6b931bac0fdbf6f.pause_animation()">
+      <button title="Pause" aria-label="Pause" onclick="anim2fbd62789b2349c3a455335bf6149e66.pause_animation()">
           <i class="fa fa-pause"></i></button>
-      <button title="Play" aria-label="Play" onclick="anim8111b5778bd44611a6b931bac0fdbf6f.play_animation()">
+      <button title="Play" aria-label="Play" onclick="anim2fbd62789b2349c3a455335bf6149e66.play_animation()">
           <i class="fa fa-play"></i></button>
-      <button title="Next frame" aria-label="Next frame" onclick="anim8111b5778bd44611a6b931bac0fdbf6f.next_frame()">
+      <button title="Next frame" aria-label="Next frame" onclick="anim2fbd62789b2349c3a455335bf6149e66.next_frame()">
           <i class="fa fa-step-forward"></i></button>
-      <button title="Last frame" aria-label="Last frame" onclick="anim8111b5778bd44611a6b931bac0fdbf6f.last_frame()">
+      <button title="Last frame" aria-label="Last frame" onclick="anim2fbd62789b2349c3a455335bf6149e66.last_frame()">
           <i class="fa fa-fast-forward"></i></button>
-      <button title="Increase speed" aria-label="Increase speed" onclick="anim8111b5778bd44611a6b931bac0fdbf6f.faster()">
+      <button title="Increase speed" aria-label="Increase speed" onclick="anim2fbd62789b2349c3a455335bf6149e66.faster()">
           <i class="fa fa-plus"></i></button>
     </div>
-    <form title="Repetition mode" aria-label="Repetition mode" action="#n" name="_anim_loop_select8111b5778bd44611a6b931bac0fdbf6f"
+    <form title="Repetition mode" aria-label="Repetition mode" action="#n" name="_anim_loop_select2fbd62789b2349c3a455335bf6149e66"
           class="anim-state">
-      <input type="radio" name="state" value="once" id="_anim_radio1_8111b5778bd44611a6b931bac0fdbf6f"
+      <input type="radio" name="state" value="once" id="_anim_radio1_2fbd62789b2349c3a455335bf6149e66"
              >
-      <label for="_anim_radio1_8111b5778bd44611a6b931bac0fdbf6f">Once</label>
-      <input type="radio" name="state" value="loop" id="_anim_radio2_8111b5778bd44611a6b931bac0fdbf6f"
+      <label for="_anim_radio1_2fbd62789b2349c3a455335bf6149e66">Once</label>
+      <input type="radio" name="state" value="loop" id="_anim_radio2_2fbd62789b2349c3a455335bf6149e66"
              checked>
-      <label for="_anim_radio2_8111b5778bd44611a6b931bac0fdbf6f">Loop</label>
-      <input type="radio" name="state" value="reflect" id="_anim_radio3_8111b5778bd44611a6b931bac0fdbf6f"
+      <label for="_anim_radio2_2fbd62789b2349c3a455335bf6149e66">Loop</label>
+      <input type="radio" name="state" value="reflect" id="_anim_radio3_2fbd62789b2349c3a455335bf6149e66"
              >
-      <label for="_anim_radio3_8111b5778bd44611a6b931bac0fdbf6f">Reflect</label>
+      <label for="_anim_radio3_2fbd62789b2349c3a455335bf6149e66">Reflect</label>
     </form>
   </div>
 </div>
@@ -2162,9 +2205,9 @@ input[type=range].anim-slider {
   /* Instantiate the Animation class. */
   /* The IDs given should match those used in the template above. */
   (function() {
-    var img_id = "_anim_img8111b5778bd44611a6b931bac0fdbf6f";
-    var slider_id = "_anim_slider8111b5778bd44611a6b931bac0fdbf6f";
-    var loop_select_id = "_anim_loop_select8111b5778bd44611a6b931bac0fdbf6f";
+    var img_id = "_anim_img2fbd62789b2349c3a455335bf6149e66";
+    var slider_id = "_anim_slider2fbd62789b2349c3a455335bf6149e66";
+    var loop_select_id = "_anim_loop_select2fbd62789b2349c3a455335bf6149e66";
     var frames = new Array(61);
 
   frames[0] = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAbAAAAEgCAYAAADVKCZpAAAAOXRFWHRTb2Z0d2FyZQBNYXRwbG90\
@@ -3636,7 +3679,7 @@ QmCC\
     /* set a timeout to make sure all the above elements are created before
        the object is initialized. */
     setTimeout(function() {
-        anim8111b5778bd44611a6b931bac0fdbf6f = new Animation(frames, img_id, slider_id, 200.0,
+        anim2fbd62789b2349c3a455335bf6149e66 = new Animation(frames, img_id, slider_id, 200.0,
                                  loop_select_id);
     }, 0);
   })()

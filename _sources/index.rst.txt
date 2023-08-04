@@ -17,7 +17,7 @@ TABLE OF CONTENTS
  
  README
  docs/Development Guide
- docs/Examples
+ examples/Examples
  docs/Glossary
  docs/fmdtools
  

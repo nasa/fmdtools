@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Stochastic Modelling in fmdtools &mdash; fmdtools 2.0-alpha documentation</title>
+  <title>Stochastic Modelling in fmdtools &mdash; fmdtools 2.0-alpha5 documentation</title>
       <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
     <link rel="shortcut icon" href="../../_static/fmdtools_ico.ico"/>
@@ -48,6 +48,7 @@
 <li class="toctree-l3"><a class="reference internal" href="../../README.html#prerequisites">Prerequisites</a></li>
 </ul>
 </li>
+<li class="toctree-l2"><a class="reference internal" href="../../README.html#examples">Examples</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../README.html#contributions">Contributions</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="../../README.html#contributors">Contributors</a></li>
 </ul>
@@ -66,7 +67,7 @@
 <li class="toctree-l2"><a class="reference internal" href="../../docs/Development%20Guide.html#intro-to-fmdtools">Intro to fmdtools</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="../../docs/Intro_to_fmdtools.html">Intro to resilience modelling, simulation, and visualization in Python with fmdtools.</a><ul>
 <li class="toctree-l4"><a class="reference internal" href="../../docs/Intro_to_fmdtools.html#author-daniel-hulse">Author: Daniel Hulse</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/Intro_to_fmdtools.html#version-2-0-alpha">Version: 2.0-alpha</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../docs/Intro_to_fmdtools.html#version-2-0-alpha5">Version: 2.0-alpha5</a></li>
 </ul>
 </li>
 <li class="toctree-l3"><a class="reference internal" href="../../docs/Intro_to_fmdtools.html#overview">Overview</a></li>
@@ -83,6 +84,8 @@
 <li class="toctree-l3"><a class="reference internal" href="../../docs/Intro_to_fmdtools.html#analysis-workflow-structure">Analysis Workflow/Structure</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../docs/Intro_to_fmdtools.html#defining-a-model">Defining a Model</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../docs/Intro_to_fmdtools.html#id1">Defining a Model</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../docs/Intro_to_fmdtools.html#function-code-template">Function Code Template</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../docs/Intro_to_fmdtools.html#model-code-template">Model Code Template</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../docs/Intro_to_fmdtools.html#demo-model-activity-examples-pump-ex-pump-py">Demo Model Activity: examples/pump/ex_pump.py</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../docs/Intro_to_fmdtools.html#more-resources-for-model-definition">More Resources for Model Definition</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../docs/Intro_to_fmdtools.html#notebook-activity">Notebook Activity:</a></li>
@@ -104,11 +107,13 @@
 </ul>
 </li>
 <li class="toctree-l3"><a class="reference internal" href="../../docs/Development%20Guide.html#development-process">Development Process</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../docs/Development%20Guide.html#release-checklist">Release Checklist</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../docs/Development%20Guide.html#upload-to-pypi">Upload to PyPI</a></li>
 </ul>
 </li>
 <li class="toctree-l3"><a class="reference internal" href="../../docs/Development%20Guide.html#roles">Roles</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../docs/Development%20Guide.html#documentation">Documentation</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../docs/Development%20Guide.html#style-formatting">Style/Formatting</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../docs/Development%20Guide.html#testing">Testing</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../docs/Development%20Guide.html#contributors">Contributors</a><ul>
 <li class="toctree-l4"><a class="reference internal" href="../../CONTRIBUTORS.html">CONTRIBUTORS</a></li>
@@ -117,6 +122,7 @@
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="../../docs/Development%20Guide.html#model-development-best-practices">Model Development Best Practices</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../docs/Development%20Guide.html#pay-attention-to-and-document-the-fmdtools-version">Pay attention to and document the fmdtools version</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../docs/Development%20Guide.html#plan-your-model-to-avoid-technical-debt">Plan your model to avoid technical debt</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../docs/Development%20Guide.html#don-t-copy-inherit-and-functionalize">Don’t copy, inherit and functionalize</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../docs/Development%20Guide.html#document-your-code-sometimes-before-your-write-it">Document your code, sometimes <em>before</em> your write it</a></li>
@@ -131,8 +137,8 @@
 </li>
 </ul>
 </li>
-<li class="toctree-l1 current"><a class="reference internal" href="../../docs/Examples.html">Examples</a><ul class="current">
-<li class="toctree-l2 current"><a class="reference internal" href="../../docs/Examples.html#pump">Pump</a><ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="../Examples.html">Examples</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="../Examples.html#pump">Pump</a><ul class="current">
 <li class="toctree-l3"><a class="reference internal" href="Tutorial_complete.html">fmdtools Tutorial</a><ul>
 <li class="toctree-l4"><a class="reference internal" href="Tutorial_complete.html#1.)-Loading-the-environment-and-model">1.) Loading the environment and model</a></li>
 <li class="toctree-l4"><a class="reference internal" href="Tutorial_complete.html#2.),-3.),-and-4.)-Simulate-and-visualize-the-results!">2.), 3.), and 4.) Simulate and visualize the results!</a></li>
@@ -177,15 +183,9 @@
 <li class="toctree-l4"><a class="reference internal" href="AST_Sampling.html#Simulator">Simulator</a></li>
 </ul>
 </li>
-<li class="toctree-l3"><a class="reference internal" href="IDETC_Results/IDETC_Figures.html">Probability Modelling in fmdtools</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="IDETC_Results/IDETC_Figures.html#Theory-and-Goals">Theory and Goals</a></li>
-<li class="toctree-l4"><a class="reference internal" href="IDETC_Results/IDETC_Figures.html#Model-Description">Model Description</a></li>
-<li class="toctree-l4"><a class="reference internal" href="IDETC_Results/IDETC_Figures.html#Experiments">Experiments</a></li>
 </ul>
 </li>
-</ul>
-</li>
-<li class="toctree-l2"><a class="reference internal" href="../../docs/Examples.html#multirotor">Multirotor</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../Examples.html#multirotor">Multirotor</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="../multirotor/Demonstration.html">fmdtools Paper Demonstration</a><ul>
 <li class="toctree-l4"><a class="reference internal" href="../multirotor/Demonstration.html#Initial-Model">Initial Model</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../multirotor/Demonstration.html#Setting-Node-Positions">Setting Node Positions</a></li>
@@ -204,26 +204,32 @@
 </li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="../../docs/Examples.html#tank">Tank</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../Examples.html#tank">Tank</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="../tank/Tank_Analysis.html">Hold-up Tank Model</a><ul>
 <li class="toctree-l4"><a class="reference internal" href="../tank/Tank_Analysis.html#Verifying-the-nominal-state:">Verifying the nominal state:</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../tank/Tank_Analysis.html#History">History</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../tank/Tank_Analysis.html#What-happens-under-component-faults?">What happens under component faults?</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../tank/Tank_Analysis.html#What-about-human-induced-faults?">What about human-induced faults?</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../tank/Tank_Analysis.html#Evaluating-Joint-Component-Human-fault-modes">Evaluating Joint Component-Human fault modes</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../tank/Tank_Analysis.html#Testing-different-reaction-times">Testing different reaction times</a></li>
 </ul>
 </li>
-<li class="toctree-l3"><a class="reference internal" href="../tank/Tank_Optimization.html">Cooling Tank Model</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="../tank/Tank_Optimization.html#Simulation">Simulation</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../tank/Tank_Optimization.html">Cooling Tank Model Optimization</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../tank/Tank_Optimization.html#Simulation">Simulation</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../tank/Tank_Optimization.html#Verifying-the-nominal-state:">Verifying the nominal state:</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../tank/Tank_Optimization.html#What-happens-under-component-faults?">What happens under component faults?</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../tank/Tank_Optimization.html#Full-set-of-modes">Full set of modes</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../tank/Tank_Optimization.html#Defining-Optimization-Problem">Defining Optimization Problem</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../tank/Tank_Optimization.html#Optimization">Optimization</a></li>
 </ul>
 </li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="../../docs/Examples.html#eps">EPS</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../Examples.html#eps">EPS</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="../eps/EPS_Example_Notebook.html">EPS Example Notebook</a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="../../docs/Examples.html#action-sequence-graph">Action Sequence Graph</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../Examples.html#action-sequence-graph">Action Sequence Graph</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="../asg_demo/Action_Sequence_Graph.html">Action Sequence Graph Tutorial</a><ul>
 <li class="toctree-l4"><a class="reference internal" href="../asg_demo/Action_Sequence_Graph.html#Function-level-Simulation">Function-level Simulation</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../asg_demo/Action_Sequence_Graph.html#Model-Simulation">Model Simulation</a></li>
@@ -232,7 +238,7 @@
 </li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="../../docs/Examples.html#rover">Rover</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../Examples.html#rover">Rover</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="../rover/Rover_Setup_Notebook.html">Rover Model Explanation and Preliminaries</a><ul>
 <li class="toctree-l4"><a class="reference internal" href="../rover/Rover_Setup_Notebook.html#Model-Setup">Model Setup</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../rover/Rover_Setup_Notebook.html#Model-simulation">Model simulation</a></li>
@@ -281,17 +287,20 @@
 </li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="../../docs/Examples.html#multiflow-demo">Multiflow Demo</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../Examples.html#multiflow-demo">Multiflow Demo</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../multiflow_demo/Multiflow_and_Commsflow_Demonstration.html">Demonstration on Using MultiFlow and CommsFlow</a></li>
+</ul>
+</li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../../docs/Glossary.html">Glossary</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../docs/fmdtools.html">Module Reference</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="../../docs/fmdtools.define.html">fmdtools.define package</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="../../docs/fmdtools.define.html#module-fmdtools.define.block">fmdtools.define.block</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../docs/fmdtools.define.html#fmdtools-define-block">fmdtools.define.block</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../docs/fmdtools.define.html#module-fmdtools.define.common">fmdtools.define.common</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../docs/fmdtools.define.html#module-fmdtools.define.flow">fmdtools.define.flow</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../docs/fmdtools.define.html#module-fmdtools.define.mode">fmdtools.define.mode</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../../docs/fmdtools.define.html#module-fmdtools.define.model">fmdtools.define.model</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../docs/fmdtools.define.html#fmdtools-define-model">fmdtools.define.model</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../docs/fmdtools.define.html#module-fmdtools.define.parameter">fmdtools.define.parameter</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../docs/fmdtools.define.html#module-fmdtools.define.rand">fmdtools.define.rand</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../docs/fmdtools.define.html#module-fmdtools.define.state">fmdtools.define.state</a></li>
@@ -330,7 +339,7 @@
           <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
       <li><a href="../../index.html" class="icon icon-home"></a> &raquo;</li>
-          <li><a href="../../docs/Examples.html">Examples</a> &raquo;</li>
+          <li><a href="../Examples.html">Examples</a> &raquo;</li>
       <li>Stochastic Modelling in fmdtools</li>
       <li class="wy-breadcrumbs-aside">
             <a href="../../_sources/examples/pump/Stochastic_Modelling.ipynb.txt" rel="nofollow"> View page source</a>
@@ -678,7 +687,7 @@ states</em> to function blocks and incorporating them in function behavior - How
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-Rand(rng=Generator(PCG64) at 0x12FE24262E0, probs=[], probdens=1.0, seed=42, run_stochastic=False)
+Rand(rng=Generator(PCG64) at 0x2438C219E40, probs=[], probdens=1.0, seed=42, run_stochastic=False)
 </pre></div></div>
 </div>
 <p>Below, <code class="docutils literal notranslate"><span class="pre">assoc_rand_states</span></code> is used in the ImportEE function to add two random states: - <code class="docutils literal notranslate"><span class="pre">effstate</span></code>, the quality of the input voltage (i.e. large fluctuations from a step change in power) - <code class="docutils literal notranslate"><span class="pre">grid_noise</span></code>, which is meant to be fluctuations in voltage from the power source (i.e., more ordinary noise)</p>
@@ -699,7 +708,8 @@ Rand(rng=Generator(PCG64) at 0x12FE24262E0, probs=[], probdens=1.0, seed=42, run
 Help on function set_rand in module fmdtools.define.rand:
 
 set_rand(self, statename, methodname, *args)
-    Update the given random state with a given method and arguments (if in run_stochastic mode)
+    Update the given random state with a given method and arguments
+    (if in run_stochastic mode)
 
     Parameters
     ----------
@@ -742,12 +752,11 @@ set_rand(self, statename, methodname, *args)
 <div class="output_area docutils container">
 <div class="highlight"><pre>
 class ImportEERand(Rand):
-    s= ImportEERandState()
-    run_stochastic:     bool=True
+    s = ImportEERandState()
 
 class ImportEERandState(State):
-    effstate:   float=1.0
-    grid_noise: float=1.0
+    effstate: float = 1.0
+    grid_noise: float = 1.0
 
 </pre></div></div>
 </div>
@@ -765,14 +774,17 @@ class ImportEERandState(State):
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-    def behavior(self,time):
-        if self.m.has_fault(&#39;no_v&#39;):      self.r.s.effstate=0.0 #an open circuit means no voltage is exported
-        elif self.m.has_fault(&#39;inf_v&#39;):   self.r.s.effstate=100.0 #a voltage spike means voltage is much higher
+    def behavior(self, time):
+        if self.m.has_fault(&#39;no_v&#39;):
+            self.r.s.effstate = 0.0  # an open circuit means no voltage is exported
+        elif self.m.has_fault(&#39;inf_v&#39;):
+            self.r.s.effstate = 100.0  # a voltage spike means voltage is much higher
         else:
-            if time&gt;self.t.time: self.r.set_rand(&#39;effstate&#39;,&#39;triangular&#39;,0.9,1,1.1)
-        if time&gt;self.t.time:
-            self.r.set_rand(&#39;grid_noise&#39;,&#39;normal&#39;,1, 0.05*(2+np.sin(np.pi/2*time)))
-        self.ee_out.s.voltage= self.r.s.grid_noise*self.r.s.effstate * 500
+            if time &gt; self.t.time:
+                self.r.set_rand(&#39;effstate&#39;, &#39;triangular&#39;, 0.9, 1, 1.1)
+        if time &gt; self.t.time:
+            self.r.set_rand(&#39;grid_noise&#39;, &#39;normal&#39;, 1, 0.05*(2+np.sin(np.pi/2*time)))
+        self.ee_out.s.voltage = self.r.s.grid_noise*self.r.s.effstate * 500
 
 </pre></div></div>
 </div>
@@ -808,7 +820,7 @@ class ImportEERandState(State):
 <div class="output_area docutils container">
 <div class="highlight"><pre>
 class MoveWatRandState(State):
-    eff:        float=1.0
+    eff: float = 1.0
     eff_update = (&#39;normal&#39;, (1.0, 0.2))
 
 </pre></div></div>
@@ -829,9 +841,10 @@ class MoveWatRandState(State):
 <div class="output_area docutils container">
 <div class="highlight"><pre>
     def behavior(self, time):
-        self.s.eff=self.r.s.eff
+        self.s.eff = self.r.s.eff
         super().behavior(time)
-        if time&gt;self.t.time: self.s.inc(total_flow=self.wat_out.s.flowrate)
+        if time &gt; self.t.time:
+            self.s.inc(total_flow=self.wat_out.s.flowrate)
 
 </pre></div></div>
 </div>
@@ -855,7 +868,7 @@ class MoveWatRandState(State):
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-MoveWatRand(rng=Generator(PCG64) at 0x12FE2A9C4A0, probs=[], probdens=1.0, seed=23, run_stochastic=False)
+MoveWatRand(rng=Generator(PCG64) at 0x2438C8C83C0, probs=[], probdens=1.0, seed=23, run_stochastic=False)
 </pre></div></div>
 </div>
 <div class="nbinput docutils container">
@@ -873,7 +886,7 @@ MoveWatRand(rng=Generator(PCG64) at 0x12FE2A9C4A0, probs=[], probdens=1.0, seed=
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-MoveWatRand(rng=Generator(PCG64) at 0x12FE24644A0, probs=[], probdens=1.0, seed=10, run_stochastic=False)
+MoveWatRand(rng=Generator(PCG64) at 0x2438C8B9120, probs=[], probdens=1.0, seed=10, run_stochastic=False)
 </pre></div></div>
 </div>
 </section>
@@ -1070,7 +1083,7 @@ add_seed_replicates(self, rangeid, seeds)
 </div>
 <div class="output_area stderr docutils container">
 <div class="highlight"><pre>
-SCENARIOS COMPLETE: 100%|██████████| 100/100 [00:02&lt;00:00, 37.93it/s]
+SCENARIOS COMPLETE: 100%|██████████| 100/100 [00:02&lt;00:00, 38.49it/s]
 </pre></div></div>
 </div>
 <p>To evaluate this behavior over time, we can then use <code class="docutils literal notranslate"><span class="pre">an.plot.hist</span></code>, to plot the <em>distribution</em> of behaviors over time. <code class="docutils literal notranslate"><span class="pre">an.plot.hist</span></code> has a number of different options for visualization of distributions. For example, below we plot model states as individual lines:</p>
@@ -1184,7 +1197,23 @@ SCENARIOS COMPLETE: 100%|██████████| 100/100 [00:02&lt;00:00
 </div>
 <div class="output_area stderr docutils container">
 <div class="highlight"><pre>
-NESTED SCENARIOS COMPLETE:   2%|▎         | 5/200 [00:00&lt;00:25,  7.58it/s]
+NESTED SCENARIOS COMPLETE:   6%|▋         | 13/200 [00:01&lt;00:25,  7.37it/s]
+</pre></div></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+Faults found during the nominal run {&#39;import_ee&#39;: [&#39;no_v&#39;]}
+</pre></div></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area stderr docutils container">
+<div class="highlight"><pre>
+NESTED SCENARIOS COMPLETE:  12%|█▏        | 24/200 [00:03&lt;00:23,  7.60it/s]
 </pre></div></div>
 </div>
 <div class="nboutput docutils container">
@@ -1200,7 +1229,7 @@ Faults found during the nominal run {&#39;move_water&#39;: [&#39;mech_break&#39;
 </div>
 <div class="output_area stderr docutils container">
 <div class="highlight"><pre>
-NESTED SCENARIOS COMPLETE:  13%|█▎        | 26/200 [00:03&lt;00:23,  7.52it/s]
+NESTED SCENARIOS COMPLETE:  22%|██▏       | 44/200 [00:05&lt;00:20,  7.53it/s]
 </pre></div></div>
 </div>
 <div class="nboutput docutils container">
@@ -1208,7 +1237,7 @@ NESTED SCENARIOS COMPLETE:  13%|█▎        | 26/200 [00:03&lt;00:23,  7.52it/
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-Faults found during the nominal run {&#39;move_water&#39;: [&#39;mech_break&#39;]}
+Faults found during the nominal run {&#39;import_ee&#39;: [&#39;no_v&#39;]}
 </pre></div></div>
 </div>
 <div class="nboutput docutils container">
@@ -1216,7 +1245,7 @@ Faults found during the nominal run {&#39;move_water&#39;: [&#39;mech_break&#39;
 </div>
 <div class="output_area stderr docutils container">
 <div class="highlight"><pre>
-NESTED SCENARIOS COMPLETE:  80%|████████  | 161/200 [00:21&lt;00:04,  8.35it/s]
+NESTED SCENARIOS COMPLETE:  84%|████████▍ | 169/200 [00:22&lt;00:04,  7.61it/s]
 </pre></div></div>
 </div>
 <div class="nboutput docutils container">
@@ -1232,7 +1261,7 @@ Faults found during the nominal run {&#39;import_ee&#39;: [&#39;no_v&#39;]}
 </div>
 <div class="output_area stderr docutils container">
 <div class="highlight"><pre>
-NESTED SCENARIOS COMPLETE: 100%|██████████| 200/200 [00:26&lt;00:00,  7.63it/s]
+NESTED SCENARIOS COMPLETE: 100%|██████████| 200/200 [00:26&lt;00:00,  7.50it/s]
 </pre></div></div>
 </div>
 <p>Next, we get just the scenarios of interest:</p>
@@ -1357,27 +1386,27 @@ until the fault time, when pressure increases dramatically. This is also observe
     </tr>
     <tr>
       <th>ave_cost</th>
-      <td>41223.068546</td>
-      <td>41223.068546</td>
-      <td>41223.068546</td>
-      <td>41223.068546</td>
-      <td>41223.068546</td>
-      <td>41223.068546</td>
-      <td>41223.068546</td>
-      <td>41223.068546</td>
-      <td>41223.068546</td>
-      <td>41223.068546</td>
+      <td>41112.137132</td>
+      <td>41112.137132</td>
+      <td>41112.137132</td>
+      <td>41112.137132</td>
+      <td>41112.137132</td>
+      <td>41112.137132</td>
+      <td>41112.137132</td>
+      <td>41112.137132</td>
+      <td>41112.137132</td>
+      <td>41112.137132</td>
       <td>...</td>
-      <td>39019.214837</td>
-      <td>39019.214837</td>
-      <td>39019.214837</td>
-      <td>39019.214837</td>
-      <td>39019.214837</td>
-      <td>39019.214837</td>
-      <td>39019.214837</td>
-      <td>39019.214837</td>
-      <td>39019.214837</td>
-      <td>39019.214837</td>
+      <td>39571.459556</td>
+      <td>39571.459556</td>
+      <td>39571.459556</td>
+      <td>39571.459556</td>
+      <td>39571.459556</td>
+      <td>39571.459556</td>
+      <td>39571.459556</td>
+      <td>39571.459556</td>
+      <td>39571.459556</td>
+      <td>39571.459556</td>
     </tr>
   </tbody>
 </table>
@@ -1388,22 +1417,51 @@ until the fault time, when pressure increases dramatically. This is also observe
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[36]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">an</span><span class="o">.</span><span class="n">tabulate</span><span class="o">.</span><span class="n">resilience_factor_comparison</span><span class="p">(</span><span class="n">app_comp</span><span class="p">,</span> <span class="n">endclasses</span><span class="p">,</span> <span class="p">[</span><span class="s1">&#39;delay&#39;</span><span class="p">],</span> <span class="s1">&#39;cost&#39;</span><span class="p">,</span>  <span class="n">difference</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">percent</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">an</span><span class="o">.</span><span class="n">tabulate</span><span class="o">.</span><span class="n">nested_factor_comparison</span><span class="p">(</span><span class="n">app_comp</span><span class="p">,</span> <span class="n">endclasses</span><span class="p">,</span> <span class="p">[</span><span class="s1">&#39;delay&#39;</span><span class="p">],</span> <span class="s1">&#39;cost&#39;</span><span class="p">,</span>  <span class="n">difference</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">percent</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
 <div class="nboutput nblast docutils container">
-<div class="prompt empty docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[36]:
+</pre></div>
 </div>
-<div class="output_area docutils container">
-<div class="highlight"><pre>
-<span class="ansi-red-intense-fg ansi-bold">---------------------------------------------------------------------------</span>
-<span class="ansi-red-intense-fg ansi-bold">AttributeError</span>                            Traceback (most recent call last)
-<span class="ansi-green-intense-fg ansi-bold">~\AppData\Local\Temp\1/ipykernel_3724/82623819.py</span> in <span class="ansi-cyan-fg">&lt;module&gt;</span>
-<span class="ansi-green-intense-fg ansi-bold">----&gt; 1</span><span class="ansi-yellow-intense-fg ansi-bold"> </span>an<span class="ansi-yellow-intense-fg ansi-bold">.</span>tabulate<span class="ansi-yellow-intense-fg ansi-bold">.</span>resilience_factor_comparison<span class="ansi-yellow-intense-fg ansi-bold">(</span>app_comp<span class="ansi-yellow-intense-fg ansi-bold">,</span> endclasses<span class="ansi-yellow-intense-fg ansi-bold">,</span> <span class="ansi-yellow-intense-fg ansi-bold">[</span><span class="ansi-blue-intense-fg ansi-bold">&#39;delay&#39;</span><span class="ansi-yellow-intense-fg ansi-bold">]</span><span class="ansi-yellow-intense-fg ansi-bold">,</span> <span class="ansi-blue-intense-fg ansi-bold">&#39;cost&#39;</span><span class="ansi-yellow-intense-fg ansi-bold">,</span>  difference<span class="ansi-yellow-intense-fg ansi-bold">=</span><span class="ansi-green-intense-fg ansi-bold">False</span><span class="ansi-yellow-intense-fg ansi-bold">,</span> percent<span class="ansi-yellow-intense-fg ansi-bold">=</span><span class="ansi-green-intense-fg ansi-bold">False</span><span class="ansi-yellow-intense-fg ansi-bold">)</span>
+<div class="output_area rendered_html docutils container">
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
 
-<span class="ansi-red-intense-fg ansi-bold">AttributeError</span>: module &#39;fmdtools.analyze.tabulate&#39; has no attribute &#39;resilience_factor_comparison&#39;
-</pre></div></div>
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th>(delay,)</th>
+      <th>nominal</th>
+      <th>export_water</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>delay_1</th>
+      <td>250.0</td>
+      <td>16445.385773</td>
+    </tr>
+    <tr>
+      <th>delay_10</th>
+      <td>100.0</td>
+      <td>14854.617694</td>
+    </tr>
+  </tbody>
+</table>
+</div></div>
 </div>
 </section>
 </section>

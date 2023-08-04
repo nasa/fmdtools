@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>fmdtools-AdaStress integration &mdash; fmdtools 2.0-alpha documentation</title>
+  <title>fmdtools-AdaStress integration &mdash; fmdtools 2.0-alpha5 documentation</title>
       <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
     <link rel="shortcut icon" href="../../_static/fmdtools_ico.ico"/>
@@ -22,7 +22,7 @@
     <script src="../../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
-    <link rel="next" title="Probability Modelling in fmdtools" href="IDETC_Results/IDETC_Figures.html" />
+    <link rel="next" title="fmdtools Paper Demonstration" href="../multirotor/Demonstration.html" />
     <link rel="prev" title="Stochastic Modelling in fmdtools" href="Stochastic_Modelling.html" /> 
 </head>
 
@@ -48,6 +48,7 @@
 <li class="toctree-l3"><a class="reference internal" href="../../README.html#prerequisites">Prerequisites</a></li>
 </ul>
 </li>
+<li class="toctree-l2"><a class="reference internal" href="../../README.html#examples">Examples</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../README.html#contributions">Contributions</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="../../README.html#contributors">Contributors</a></li>
 </ul>
@@ -66,7 +67,7 @@
 <li class="toctree-l2"><a class="reference internal" href="../../docs/Development%20Guide.html#intro-to-fmdtools">Intro to fmdtools</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="../../docs/Intro_to_fmdtools.html">Intro to resilience modelling, simulation, and visualization in Python with fmdtools.</a><ul>
 <li class="toctree-l4"><a class="reference internal" href="../../docs/Intro_to_fmdtools.html#author-daniel-hulse">Author: Daniel Hulse</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/Intro_to_fmdtools.html#version-2-0-alpha">Version: 2.0-alpha</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../docs/Intro_to_fmdtools.html#version-2-0-alpha5">Version: 2.0-alpha5</a></li>
 </ul>
 </li>
 <li class="toctree-l3"><a class="reference internal" href="../../docs/Intro_to_fmdtools.html#overview">Overview</a></li>
@@ -83,6 +84,8 @@
 <li class="toctree-l3"><a class="reference internal" href="../../docs/Intro_to_fmdtools.html#analysis-workflow-structure">Analysis Workflow/Structure</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../docs/Intro_to_fmdtools.html#defining-a-model">Defining a Model</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../docs/Intro_to_fmdtools.html#id1">Defining a Model</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../docs/Intro_to_fmdtools.html#function-code-template">Function Code Template</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../docs/Intro_to_fmdtools.html#model-code-template">Model Code Template</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../docs/Intro_to_fmdtools.html#demo-model-activity-examples-pump-ex-pump-py">Demo Model Activity: examples/pump/ex_pump.py</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../docs/Intro_to_fmdtools.html#more-resources-for-model-definition">More Resources for Model Definition</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../docs/Intro_to_fmdtools.html#notebook-activity">Notebook Activity:</a></li>
@@ -104,11 +107,13 @@
 </ul>
 </li>
 <li class="toctree-l3"><a class="reference internal" href="../../docs/Development%20Guide.html#development-process">Development Process</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../docs/Development%20Guide.html#release-checklist">Release Checklist</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../docs/Development%20Guide.html#upload-to-pypi">Upload to PyPI</a></li>
 </ul>
 </li>
 <li class="toctree-l3"><a class="reference internal" href="../../docs/Development%20Guide.html#roles">Roles</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../docs/Development%20Guide.html#documentation">Documentation</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../docs/Development%20Guide.html#style-formatting">Style/Formatting</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../docs/Development%20Guide.html#testing">Testing</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../docs/Development%20Guide.html#contributors">Contributors</a><ul>
 <li class="toctree-l4"><a class="reference internal" href="../../CONTRIBUTORS.html">CONTRIBUTORS</a></li>
@@ -117,6 +122,7 @@
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="../../docs/Development%20Guide.html#model-development-best-practices">Model Development Best Practices</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../docs/Development%20Guide.html#pay-attention-to-and-document-the-fmdtools-version">Pay attention to and document the fmdtools version</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../docs/Development%20Guide.html#plan-your-model-to-avoid-technical-debt">Plan your model to avoid technical debt</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../docs/Development%20Guide.html#don-t-copy-inherit-and-functionalize">Don’t copy, inherit and functionalize</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../docs/Development%20Guide.html#document-your-code-sometimes-before-your-write-it">Document your code, sometimes <em>before</em> your write it</a></li>
@@ -131,8 +137,8 @@
 </li>
 </ul>
 </li>
-<li class="toctree-l1 current"><a class="reference internal" href="../../docs/Examples.html">Examples</a><ul class="current">
-<li class="toctree-l2 current"><a class="reference internal" href="../../docs/Examples.html#pump">Pump</a><ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="../Examples.html">Examples</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="../Examples.html#pump">Pump</a><ul class="current">
 <li class="toctree-l3"><a class="reference internal" href="Tutorial_complete.html">fmdtools Tutorial</a><ul>
 <li class="toctree-l4"><a class="reference internal" href="Tutorial_complete.html#1.)-Loading-the-environment-and-model">1.) Loading the environment and model</a></li>
 <li class="toctree-l4"><a class="reference internal" href="Tutorial_complete.html#2.),-3.),-and-4.)-Simulate-and-visualize-the-results!">2.), 3.), and 4.) Simulate and visualize the results!</a></li>
@@ -177,15 +183,9 @@
 <li class="toctree-l4"><a class="reference internal" href="#Simulator">Simulator</a></li>
 </ul>
 </li>
-<li class="toctree-l3"><a class="reference internal" href="IDETC_Results/IDETC_Figures.html">Probability Modelling in fmdtools</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="IDETC_Results/IDETC_Figures.html#Theory-and-Goals">Theory and Goals</a></li>
-<li class="toctree-l4"><a class="reference internal" href="IDETC_Results/IDETC_Figures.html#Model-Description">Model Description</a></li>
-<li class="toctree-l4"><a class="reference internal" href="IDETC_Results/IDETC_Figures.html#Experiments">Experiments</a></li>
 </ul>
 </li>
-</ul>
-</li>
-<li class="toctree-l2"><a class="reference internal" href="../../docs/Examples.html#multirotor">Multirotor</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../Examples.html#multirotor">Multirotor</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="../multirotor/Demonstration.html">fmdtools Paper Demonstration</a><ul>
 <li class="toctree-l4"><a class="reference internal" href="../multirotor/Demonstration.html#Initial-Model">Initial Model</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../multirotor/Demonstration.html#Setting-Node-Positions">Setting Node Positions</a></li>
@@ -204,26 +204,32 @@
 </li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="../../docs/Examples.html#tank">Tank</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../Examples.html#tank">Tank</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="../tank/Tank_Analysis.html">Hold-up Tank Model</a><ul>
 <li class="toctree-l4"><a class="reference internal" href="../tank/Tank_Analysis.html#Verifying-the-nominal-state:">Verifying the nominal state:</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../tank/Tank_Analysis.html#History">History</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../tank/Tank_Analysis.html#What-happens-under-component-faults?">What happens under component faults?</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../tank/Tank_Analysis.html#What-about-human-induced-faults?">What about human-induced faults?</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../tank/Tank_Analysis.html#Evaluating-Joint-Component-Human-fault-modes">Evaluating Joint Component-Human fault modes</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../tank/Tank_Analysis.html#Testing-different-reaction-times">Testing different reaction times</a></li>
 </ul>
 </li>
-<li class="toctree-l3"><a class="reference internal" href="../tank/Tank_Optimization.html">Cooling Tank Model</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="../tank/Tank_Optimization.html#Simulation">Simulation</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../tank/Tank_Optimization.html">Cooling Tank Model Optimization</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../tank/Tank_Optimization.html#Simulation">Simulation</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../tank/Tank_Optimization.html#Verifying-the-nominal-state:">Verifying the nominal state:</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../tank/Tank_Optimization.html#What-happens-under-component-faults?">What happens under component faults?</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../tank/Tank_Optimization.html#Full-set-of-modes">Full set of modes</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../tank/Tank_Optimization.html#Defining-Optimization-Problem">Defining Optimization Problem</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../tank/Tank_Optimization.html#Optimization">Optimization</a></li>
 </ul>
 </li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="../../docs/Examples.html#eps">EPS</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../Examples.html#eps">EPS</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="../eps/EPS_Example_Notebook.html">EPS Example Notebook</a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="../../docs/Examples.html#action-sequence-graph">Action Sequence Graph</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../Examples.html#action-sequence-graph">Action Sequence Graph</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="../asg_demo/Action_Sequence_Graph.html">Action Sequence Graph Tutorial</a><ul>
 <li class="toctree-l4"><a class="reference internal" href="../asg_demo/Action_Sequence_Graph.html#Function-level-Simulation">Function-level Simulation</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../asg_demo/Action_Sequence_Graph.html#Model-Simulation">Model Simulation</a></li>
@@ -232,7 +238,7 @@
 </li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="../../docs/Examples.html#rover">Rover</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../Examples.html#rover">Rover</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="../rover/Rover_Setup_Notebook.html">Rover Model Explanation and Preliminaries</a><ul>
 <li class="toctree-l4"><a class="reference internal" href="../rover/Rover_Setup_Notebook.html#Model-Setup">Model Setup</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../rover/Rover_Setup_Notebook.html#Model-simulation">Model simulation</a></li>
@@ -281,17 +287,20 @@
 </li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="../../docs/Examples.html#multiflow-demo">Multiflow Demo</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../Examples.html#multiflow-demo">Multiflow Demo</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../multiflow_demo/Multiflow_and_Commsflow_Demonstration.html">Demonstration on Using MultiFlow and CommsFlow</a></li>
+</ul>
+</li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../../docs/Glossary.html">Glossary</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../docs/fmdtools.html">Module Reference</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="../../docs/fmdtools.define.html">fmdtools.define package</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="../../docs/fmdtools.define.html#module-fmdtools.define.block">fmdtools.define.block</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../docs/fmdtools.define.html#fmdtools-define-block">fmdtools.define.block</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../docs/fmdtools.define.html#module-fmdtools.define.common">fmdtools.define.common</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../docs/fmdtools.define.html#module-fmdtools.define.flow">fmdtools.define.flow</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../docs/fmdtools.define.html#module-fmdtools.define.mode">fmdtools.define.mode</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../../docs/fmdtools.define.html#module-fmdtools.define.model">fmdtools.define.model</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../docs/fmdtools.define.html#fmdtools-define-model">fmdtools.define.model</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../docs/fmdtools.define.html#module-fmdtools.define.parameter">fmdtools.define.parameter</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../docs/fmdtools.define.html#module-fmdtools.define.rand">fmdtools.define.rand</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../docs/fmdtools.define.html#module-fmdtools.define.state">fmdtools.define.state</a></li>
@@ -330,7 +339,7 @@
           <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
       <li><a href="../../index.html" class="icon icon-home"></a> &raquo;</li>
-          <li><a href="../../docs/Examples.html">Examples</a> &raquo;</li>
+          <li><a href="../Examples.html">Examples</a> &raquo;</li>
       <li>fmdtools-AdaStress integration</li>
       <li class="wy-breadcrumbs-aside">
             <a href="../../_sources/examples/pump/AST_Sampling.ipynb.txt" rel="nofollow"> View page source</a>
@@ -614,7 +623,7 @@ div.rendered_html tbody tr:hover {
 <section id="fmdtools-AdaStress-integration">
 <h1>fmdtools-AdaStress integration<a class="headerlink" href="#fmdtools-AdaStress-integration" title="Permalink to this headline"></a></h1>
 <p><strong>NOTE: This notebook may not run correctly, see ticket RAD-224</strong></p>
-<p>This goal of this notebook is to illustrate running Adaptive Stress Testing on fmdtools model using the AdaStress package.</p>
+<p>This goal of this notebook is to illustrate running <a class="reference external" href="https://www.nasa.gov/content/tech/rse/research/adastress">Adaptive Stress Testing</a> on fmdtools model using the AdaStress package.</p>
 <p>For this setup to work, first install: - AdaStress (and related packages) in Julia - fmdtools (and related packages) in Python - PyCall in Julia - PyJulia in Python</p>
 <div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[1]:
@@ -653,7 +662,7 @@ div.rendered_html tbody tr:hover {
 </div>
 </div>
 <p>Next, we get the module–in this case we will be using the stochastic pump model in <code class="docutils literal notranslate"><span class="pre">/example_pump/pump_stochastic</span></code></p>
-<div class="nbinput docutils container">
+<div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[4]:
 </pre></div>
 </div>
@@ -662,39 +671,8 @@ div.rendered_html tbody tr:hover {
 </pre></div>
 </div>
 </div>
-<div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[4]:
-</pre></div>
-</div>
-<div class="output_area docutils container">
-<div class="highlight"><pre>
-PyObject Pump model at 0x6e5a4b80
-FUNCTIONS:
-import_ee ImportEE
-- ImportEEState(effstate=1.0)
-- ImportEEMode(mode=nominal, faults=set())
-import_water ImportWater
-- State()
-- ImportWaterMode(mode=nominal, faults=set())
-import_signal ImportSig
-- State()
-- ImportSigMode(mode=nominal, faults=set())
-move_water MoveWat
-- MoveWatStates(total_flow=0.0, eff=1.0)
-- MoveWatMode(mode=nominal, faults=set())
-export_water ExportWater
-- State()
-- ExportWaterMode(mode=nominal, faults=set())
-FLOWS:
-ee_1 Electricity flow: EEStates(current=1.0, voltage=1.0)
-sig_1 Signal flow: SignalStates(power=1.0)
-Wat_1 Water flow: WaterStates(flowrate=1.0, pressure=1.0, area=1.0, level=1.0)
-Wat_1 Water flow: WaterStates(flowrate=1.0, pressure=1.0, area=1.0, level=1.0)
-
-</pre></div></div>
-</div>
 <p>To get the propagation/analysis methods, we can further import the fmdtools packages…</p>
-<div class="nbinput docutils container">
+<div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[5]:
 </pre></div>
 </div>
@@ -702,15 +680,6 @@ Wat_1 Water flow: WaterStates(flowrate=1.0, pressure=1.0, area=1.0, level=1.0)
 <span class="n">an</span> <span class="o">=</span> <span class="n">pyimport</span><span class="p">(</span><span class="s">&quot;analyze&quot;</span><span class="p">)</span>
 </pre></div>
 </div>
-</div>
-<div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[5]:
-</pre></div>
-</div>
-<div class="output_area docutils container">
-<div class="highlight"><pre>
-PyObject &lt;module &#39;analyze&#39; from &#39;C:\\Users\\dhulse\\Documents\\GitHub\\fmdtools\\fmdtools\\analyze\\__init__.py&#39;&gt;
-</pre></div></div>
 </div>
 <p>Example simulation</p>
 <div class="nbinput nblast docutils container">
@@ -722,7 +691,7 @@ PyObject &lt;module &#39;analyze&#39; from &#39;C:\\Users\\dhulse\\Documents\\Gi
 </div>
 </div>
 <p>NOTE: in order for <code class="docutils literal notranslate"><span class="pre">an.plot.mdlhists</span></code> to work correctly, make sure to use the <code class="docutils literal notranslate"><span class="pre">Using</span> <span class="pre">PyCall</span></code> command at the beginning.</p>
-<div class="nbinput docutils container">
+<div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[7]:
 </pre></div>
 </div>
@@ -733,26 +702,10 @@ PyObject &lt;module &#39;analyze&#39; from &#39;C:\\Users\\dhulse\\Documents\\Gi
 </pre></div>
 </div>
 </div>
-<div class="nboutput docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area docutils container">
-<img alt="../../_images/examples_pump_AST_Sampling_12_0.png" src="../../_images/examples_pump_AST_Sampling_12_0.png" />
-</div>
-</div>
-<div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[7]:
-</pre></div>
-</div>
-<div class="output_area docutils container">
-<div class="highlight"><pre>
-(Figure(PyObject &lt;Figure size 600x400 with 4 Axes&gt;), PyObject[PyObject &lt;AxesSubplot:title={&#39;center&#39;:&#39;fxns.move_water.s.eff&#39;}&gt;, PyObject &lt;AxesSubplot:title={&#39;center&#39;:&#39;fxns.move_water.s.total_flow&#39;}&gt;, PyObject &lt;AxesSubplot:title={&#39;center&#39;:&#39;flows.wat_2.s.flowrate&#39;}, xlabel=&#39;time&#39;&gt;, PyObject &lt;AxesSubplot:title={&#39;center&#39;:&#39;flows.wat_2.s.pressure&#39;}, xlabel=&#39;time&#39;&gt;])
-</pre></div></div>
-</div>
 <section id="AdaStress-Setup">
 <h3>AdaStress Setup<a class="headerlink" href="#AdaStress-Setup" title="Permalink to this headline"></a></h3>
 <p>Interfacing AdaStress with fmdtools models is enabled by the <code class="docutils literal notranslate"><span class="pre">DynamicProblem</span></code> class in <code class="docutils literal notranslate"><span class="pre">sim.search</span></code> (though this can also be done manually). See below.</p>
-<div class="nbinput docutils container">
+<div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[8]:
 </pre></div>
 </div>
@@ -761,16 +714,7 @@ PyObject &lt;module &#39;analyze&#39; from &#39;C:\\Users\\dhulse\\Documents\\Gi
 </pre></div>
 </div>
 </div>
-<div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[8]:
-</pre></div>
-</div>
-<div class="output_area docutils container">
-<div class="highlight"><pre>
-PyObject &lt;class &#39;sim.search.DynamicInterface&#39;&gt;
-</pre></div></div>
-</div>
-<div class="nbinput docutils container">
+<div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[9]:
 </pre></div>
 </div>
@@ -778,17 +722,8 @@ PyObject &lt;class &#39;sim.search.DynamicInterface&#39;&gt;
 </pre></div>
 </div>
 </div>
-<div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[9]:
-</pre></div>
-</div>
-<div class="output_area docutils container">
-<div class="highlight"><pre>
-PyObject &lt;sim.search.DynamicInterface object at 0x000000006EA3CD60&gt;
-</pre></div></div>
-</div>
 <p>Defining the simulation is quite simple with the DynamicProblem class. Note the possible options from this class</p>
-<div class="nbinput docutils container">
+<div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[10]:
 </pre></div>
 </div>
@@ -796,35 +731,7 @@ PyObject &lt;sim.search.DynamicInterface object at 0x000000006EA3CD60&gt;
 </pre></div>
 </div>
 </div>
-<div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[10]:
-</pre></div>
-</div>
-<div class="output_area docutils container">
-<div class="highlight"><pre>
-
-        Initializing the problem
-
-        Parameters
-        ----------
-        mdl : Model
-            Model defining the simulation.
-        mdl_kwargs : dict, optional
-            Parameters to run the model at. The default is {}.
-        t_max : float, optional
-            Maximum simulation time. The default is False.
-        track : str/dict, optional
-            Properties of the model to track over time. The default is &#34;all&#34;.
-        run_stochastic : bool/str, optional
-            Whether to run stochastic behaviors (True/False) and/or return pdf &#34;track_pdf&#34;. The default is &#34;track_pdf&#34;.
-        desired_result : list, optional
-            List of desired results to return at each update. The default is [].
-        use_end_condition : bool, optional
-            Whether to use model end-condition. The default is None.
-
-</pre></div></div>
-</div>
-<div class="nbinput docutils container">
+<div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[11]:
 </pre></div>
 </div>
@@ -834,16 +741,7 @@ PyObject &lt;sim.search.DynamicInterface object at 0x000000006EA3CD60&gt;
 </pre></div>
 </div>
 </div>
-<div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[11]:
-</pre></div>
-</div>
-<div class="output_area docutils container">
-<div class="highlight"><pre>
-PumpSim
-</pre></div></div>
-</div>
-<div class="nbinput docutils container">
+<div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[12]:
 </pre></div>
 </div>
@@ -853,17 +751,8 @@ PumpSim
 </pre></div>
 </div>
 </div>
-<div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[12]:
-</pre></div>
-</div>
-<div class="output_area docutils container">
-<div class="highlight"><pre>
-initialize! (generic function with 1 method)
-</pre></div></div>
-</div>
 <p>Updating is further enabled by DynamicProblem.update</p>
-<div class="nbinput docutils container">
+<div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[13]:
 </pre></div>
 </div>
@@ -871,32 +760,7 @@ initialize! (generic function with 1 method)
 </pre></div>
 </div>
 </div>
-<div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[13]:
-</pre></div>
-</div>
-<div class="output_area docutils container">
-<div class="highlight"><pre>
-
-        Updates the model states at the simulation time and iterates time
-
-        Parameters
-        ----------
-        seed : seed, optional
-            Seed for the simulation. The default is {}.
-        faults : dict, optional
-            faults to inject in the model, with structure {fxn:[faults]}. The default is {}.
-        disturbances : dict, optional
-            Variables to change in the model, with structure {fxn.var:value}. The default is {}.
-
-        Returns
-        -------
-        returns : dict
-            dictionary of returns with values corresponding to desired_result
-
-</pre></div></div>
-</div>
-<div class="nbinput docutils container">
+<div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[14]:
 </pre></div>
 </div>
@@ -908,17 +772,8 @@ initialize! (generic function with 1 method)
 </pre></div>
 </div>
 </div>
-<div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[14]:
-</pre></div>
-</div>
-<div class="output_area docutils container">
-<div class="highlight"><pre>
-update! (generic function with 1 method)
-</pre></div></div>
-</div>
 <p>Model end-states can be interfaced with using <code class="docutils literal notranslate"><span class="pre">DynamicProblem.check_sim_end</span></code>, which additionally accomodates external conditions.</p>
-<div class="nbinput docutils container">
+<div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[15]:
 </pre></div>
 </div>
@@ -930,16 +785,7 @@ update! (generic function with 1 method)
 </pre></div>
 </div>
 </div>
-<div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[15]:
-</pre></div>
-</div>
-<div class="output_area docutils container">
-<div class="highlight"><pre>
-isterminal! (generic function with 1 method)
-</pre></div></div>
-</div>
-<div class="nbinput docutils container">
+<div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[16]:
 </pre></div>
 </div>
@@ -949,15 +795,6 @@ isterminal! (generic function with 1 method)
 <span class="k">end</span>
 </pre></div>
 </div>
-</div>
-<div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[16]:
-</pre></div>
-</div>
-<div class="output_area docutils container">
-<div class="highlight"><pre>
-isevent! (generic function with 1 method)
-</pre></div></div>
 </div>
 <p>Finally, the below shows the full setup:</p>
 <div class="nbinput nblast docutils container">
@@ -979,7 +816,7 @@ isevent! (generic function with 1 method)
 <section id="Running-AdaStress-Methods">
 <h2>Running AdaStress Methods<a class="headerlink" href="#Running-AdaStress-Methods" title="Permalink to this headline"></a></h2>
 <p>Monte Carlo Search</p>
-<div class="nbinput docutils container">
+<div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[18]:
 </pre></div>
 </div>
@@ -987,16 +824,7 @@ isevent! (generic function with 1 method)
 </pre></div>
 </div>
 </div>
-<div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[18]:
-</pre></div>
-</div>
-<div class="output_area docutils container">
-<div class="highlight"><pre>
-AdaStress.Solvers.MonteCarloSearch.MCS(1000, 10)
-</pre></div></div>
-</div>
-<div class="nbinput docutils container">
+<div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[19]:
 </pre></div>
 </div>
@@ -1004,15 +832,6 @@ AdaStress.Solvers.MonteCarloSearch.MCS(1000, 10)
 <span class="n">mdp</span><span class="o">.</span><span class="n">reward</span><span class="o">.</span><span class="n">event_bonus</span> <span class="o">=</span> <span class="mf">200.0</span>
 </pre></div>
 </div>
-</div>
-<div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[19]:
-</pre></div>
-</div>
-<div class="output_area docutils container">
-<div class="highlight"><pre>
-200.0
-</pre></div></div>
 </div>
 <div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[20]:
@@ -1022,7 +841,7 @@ AdaStress.Solvers.MonteCarloSearch.MCS(1000, 10)
 </pre></div>
 </div>
 </div>
-<div class="nbinput docutils container">
+<div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[21]:
 </pre></div>
 </div>
@@ -1030,62 +849,6 @@ AdaStress.Solvers.MonteCarloSearch.MCS(1000, 10)
 <span class="n">sol</span> <span class="o">=</span> <span class="n">mcs</span><span class="p">(()</span> <span class="o">-&gt;</span> <span class="n">mdp</span><span class="p">)</span>
 </pre></div>
 </div>
-</div>
-<div class="nboutput nblast docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area docutils container">
-<div class="highlight"><pre>
-PyError ($(Expr(:escape, :(ccall(#= C:\Users\dhulse\.julia\packages\PyCall\7a7w0\src\pyfncall.jl:43 =# @pysym(:PyObject_Call), PyPtr, (PyPtr, PyPtr, PyPtr), o, pyargsptr, kw))))) &lt;class &#39;AttributeError&#39;&gt;
-AttributeError(&#34;module &#39;fmdtools.sim.propagate&#39; has no attribute &#39;cut_mdlhist&#39;&#34;)
-  File &#34;C:\Users\dhulse\Documents\GitHub\fmdtools\fmdtools\sim\search.py&#34;, line 939, in check_sim_end
-    prop.cut_mdlhist(self.log, self.t_ind)
-
-
-Stacktrace:
-  [1] pyerr_check
-    @ C:\Users\dhulse\.julia\packages\PyCall\7a7w0\src\exception.jl:62 [inlined]
-  [2] pyerr_check
-    @ C:\Users\dhulse\.julia\packages\PyCall\7a7w0\src\exception.jl:66 [inlined]
-  [3] _handle_error(msg::String)
-    @ PyCall C:\Users\dhulse\.julia\packages\PyCall\7a7w0\src\exception.jl:83
-  [4] macro expansion
-    @ C:\Users\dhulse\.julia\packages\PyCall\7a7w0\src\exception.jl:97 [inlined]
-  [5] #107
-    @ C:\Users\dhulse\.julia\packages\PyCall\7a7w0\src\pyfncall.jl:43 [inlined]
-  [6] disable_sigint
-    @ .\c.jl:458 [inlined]
-  [7] __pycall!
-    @ C:\Users\dhulse\.julia\packages\PyCall\7a7w0\src\pyfncall.jl:42 [inlined]
-  [8] _pycall!(ret::PyObject, o::PyObject, args::Tuple{}, nargs::Int64, kw::PyObject)
-    @ PyCall C:\Users\dhulse\.julia\packages\PyCall\7a7w0\src\pyfncall.jl:29
-  [9] _pycall!
-    @ C:\Users\dhulse\.julia\packages\PyCall\7a7w0\src\pyfncall.jl:11 [inlined]
- [10] (::PyObject)(; kwargs::Base.Pairs{Symbol, Bool, Tuple{Symbol}, NamedTuple{(:external_condition,), Tuple{Bool}}})
-    @ PyCall C:\Users\dhulse\.julia\packages\PyCall\7a7w0\src\pyfncall.jl:86
- [11] isterminal!(sim::PumpSim)
-    @ Main .\In[15]:3
- [12] isterminal
-    @ .\In[17]:3 [inlined]
- [13] terminated(mdp::AdaStress.Interface.ASTMDP{AdaStress.Interface.UnobservableState, AdaStress.Interface.SeedAction})
-    @ AdaStress.Interface C:\Users\dhulse\.julia\packages\AdaStress\RFXZv\src\interface\RL.jl:99
- [14] terminated(mdp::AdaStress.Interface.ASTMDP{AdaStress.Interface.UnobservableState, AdaStress.Interface.SeedAction})
-    @ AdaStress.Interface C:\Users\dhulse\.julia\packages\AdaStress\RFXZv\src\interface\RL.jl:111
- [15] macro expansion
-    @ C:\Users\dhulse\.julia\packages\AdaStress\RFXZv\src\solvers\local\MonteCarloSearch\MonteCarloSearch.jl:78 [inlined]
- [16] macro expansion
-    @ C:\Users\dhulse\.julia\packages\ProgressMeter\sN2xr\src\ProgressMeter.jl:938 [inlined]
- [17] solve(mcs::AdaStress.Solvers.MonteCarloSearch.MCS, env_fn::var&#34;#2#3&#34;)
-    @ AdaStress.Solvers.MonteCarloSearch C:\Users\dhulse\.julia\packages\AdaStress\RFXZv\src\solvers\local\MonteCarloSearch\MonteCarloSearch.jl:72
- [18] (::AdaStress.Solvers.MonteCarloSearch.MCS)(env_fn::Function)
-    @ AdaStress.Solvers C:\Users\dhulse\.julia\packages\AdaStress\RFXZv\src\solvers\types.jl:74
- [19] top-level scope
-    @ In[21]:2
- [20] eval
-    @ .\boot.jl:373 [inlined]
- [21] include_string(mapexpr::typeof(REPL.softscope), mod::Module, code::String, filename::String)
-    @ Base .\loading.jl:1196
-</pre></div></div>
 </div>
 <div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[45]:
@@ -1472,7 +1235,7 @@ Stacktrace:
           </div>
           <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
         <a href="Stochastic_Modelling.html" class="btn btn-neutral float-left" title="Stochastic Modelling in fmdtools" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
-        <a href="IDETC_Results/IDETC_Figures.html" class="btn btn-neutral float-right" title="Probability Modelling in fmdtools" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="../multirotor/Demonstration.html" class="btn btn-neutral float-right" title="fmdtools Paper Demonstration" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 
   <hr/>

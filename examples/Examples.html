@@ -1,0 +1,546 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Examples &mdash; fmdtools 2.0-alpha5 documentation</title>
+      <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+    <link rel="shortcut icon" href="../_static/fmdtools_ico.ico"/>
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/doctools.js"></script>
+        <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="fmdtools Tutorial" href="pump/Tutorial_complete.html" />
+    <link rel="prev" title="CONTRIBUTORS" href="../CONTRIBUTORS.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="../index.html">
+            <img src="../_static/logo_glow.png" class="logo" alt="Logo"/>
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../README.html">Overview</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../README.html#getting-started">Getting Started</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../README.html#prerequisites">Prerequisites</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../README.html#examples">Examples</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../README.html#contributions">Contributions</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../README.html#contributors">Contributors</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../README.html#license-notices">License/Notices</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../README.html#disclaimers">Disclaimers</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../docs/Development%20Guide.html">Development Guide</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../docs/Development%20Guide.html#why-fmdtools">Why fmdtools?</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../docs/Development%20Guide.html#key-features">Key Features</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../docs/Development%20Guide.html#intro-to-fmdtools">Intro to fmdtools</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../docs/Intro_to_fmdtools.html">Intro to resilience modelling, simulation, and visualization in Python with fmdtools.</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../docs/Intro_to_fmdtools.html#author-daniel-hulse">Author: Daniel Hulse</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../docs/Intro_to_fmdtools.html#version-2-0-alpha5">Version: 2.0-alpha5</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../docs/Intro_to_fmdtools.html#overview">Overview</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../docs/Intro_to_fmdtools.html#prerequisites">Prerequisites</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../docs/Intro_to_fmdtools.html#motivation-modelling-system-resilience">Motivation: Modelling System Resilience</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../docs/Intro_to_fmdtools.html#why-is-resilience-important">Why is Resilience Important?</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../docs/Intro_to_fmdtools.html#enabling-proactive-design-process">Enabling proactive design process</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../docs/Intro_to_fmdtools.html#why-fmdtools-possible-competitors">Why fmdtools? Possible Competitors:</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../docs/Intro_to_fmdtools.html#why-fmdtools-pros">Why fmdtools? Pros:</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../docs/Intro_to_fmdtools.html#why-not-fmdtools-cons">Why <strong>not</strong> fmdtools? Cons:</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../docs/Intro_to_fmdtools.html#what-is-fmdtools-a-python-package-for-design-simulation-and-analysis-of-resilience">What is fmdtools? A Python package for <strong>design</strong>, <strong>simulation</strong>, and <strong>analysis</strong> of resilience.</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../docs/Intro_to_fmdtools.html#what-is-fmdtools-repo-structure">What is fmdtools? Repo Structure</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../docs/Intro_to_fmdtools.html#activity-download-and-install-fmdtools">Activity: Download and Install fmdtools</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../docs/Intro_to_fmdtools.html#analysis-workflow-structure">Analysis Workflow/Structure</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../docs/Intro_to_fmdtools.html#defining-a-model">Defining a Model</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../docs/Intro_to_fmdtools.html#id1">Defining a Model</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../docs/Intro_to_fmdtools.html#function-code-template">Function Code Template</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../docs/Intro_to_fmdtools.html#model-code-template">Model Code Template</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../docs/Intro_to_fmdtools.html#demo-model-activity-examples-pump-ex-pump-py">Demo Model Activity: examples/pump/ex_pump.py</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../docs/Intro_to_fmdtools.html#more-resources-for-model-definition">More Resources for Model Definition</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../docs/Intro_to_fmdtools.html#notebook-activity">Notebook Activity:</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../docs/Intro_to_fmdtools.html#simulation-concepts-static-undirected-propagation">Simulation Concepts: Static/Undirected Propagation</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../docs/Intro_to_fmdtools.html#simulation-concepts-propagation-over-time">Simulation Concepts: Propagation over Time</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../docs/Intro_to_fmdtools.html#simulation-concepts-types-of-simulations">Simulation Concepts: Types of Simulations</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../docs/Intro_to_fmdtools.html#simulation-concepts-sampling-approaches">Simulation Concepts: Sampling Approaches</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../docs/Intro_to_fmdtools.html#simulation-concepts-things-to-consider">Simulation Concepts: Things to Consider</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../docs/Intro_to_fmdtools.html#activity-simulate-the-model">Activity: Simulate the Model</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../docs/Intro_to_fmdtools.html#analysis-modules">Analysis Modules</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../docs/Intro_to_fmdtools.html#analysis-activity">Analysis Activity</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../docs/Intro_to_fmdtools.html#conclusions-summary">Conclusions/Summary</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../docs/Intro_to_fmdtools.html#further-reading-links">Further Reading/Links</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../docs/Development%20Guide.html#contributions">Contributions</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../docs/Development%20Guide.html#repo-structure">Repo Structure</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../docs/Development%20Guide.html#remote-structure">Remote Structure</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../docs/Development%20Guide.html#development-process">Development Process</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../docs/Development%20Guide.html#release-checklist">Release Checklist</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../docs/Development%20Guide.html#upload-to-pypi">Upload to PyPI</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../docs/Development%20Guide.html#roles">Roles</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../docs/Development%20Guide.html#documentation">Documentation</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../docs/Development%20Guide.html#style-formatting">Style/Formatting</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../docs/Development%20Guide.html#testing">Testing</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../docs/Development%20Guide.html#contributors">Contributors</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../CONTRIBUTORS.html">CONTRIBUTORS</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../docs/Development%20Guide.html#model-development-best-practices">Model Development Best Practices</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../docs/Development%20Guide.html#pay-attention-to-and-document-the-fmdtools-version">Pay attention to and document the fmdtools version</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../docs/Development%20Guide.html#plan-your-model-to-avoid-technical-debt">Plan your model to avoid technical debt</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../docs/Development%20Guide.html#don-t-copy-inherit-and-functionalize">Don’t copy, inherit and functionalize</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../docs/Development%20Guide.html#document-your-code-sometimes-before-your-write-it">Document your code, sometimes <em>before</em> your write it</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../docs/Development%20Guide.html#don-t-get-ahead-of-yourself-try-to-get-a-running-simulation-first">Don’t get ahead of yourself–try to get a running simulation first</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../docs/Development%20Guide.html#preserve-your-prototype-setup-by-formalizing-it-as-a-test">Preserve your prototype setup by formalizing it as a test</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../docs/Development%20Guide.html#edit-your-code">Edit your code</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../docs/Development%20Guide.html#structuring-a-model">Structuring a model</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../docs/Development%20Guide.html#use-model-constructs-to-simplify-your-code">Use model constructs to simplify your code</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../docs/Development%20Guide.html#style-advice">Style advice</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../docs/Development%20Guide.html#see-also">See also</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Examples</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#pump">Pump</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="pump/Tutorial_complete.html">fmdtools Tutorial</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="pump/Tutorial_complete.html#1.)-Loading-the-environment-and-model">1.) Loading the environment and model</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pump/Tutorial_complete.html#2.),-3.),-and-4.)-Simulate-and-visualize-the-results!">2.), 3.), and 4.) Simulate and visualize the results!</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pump/Tutorial_complete.html#5.)-Saving-Work">5.) Saving Work</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="pump/Pump_Example_Notebook.html">Pump Example Notebook</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="pump/Pump_Example_Notebook.html#Initial-Model-Checks">Initial Model Checks</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pump/Pump_Example_Notebook.html#History">History</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pump/Pump_Example_Notebook.html#Propagating-and-Viewing-Results-for-Individual-Faults">Propagating and Viewing Results for Individual Faults</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pump/Pump_Example_Notebook.html#Visualization-of-resilience-metrics">Visualization of resilience metrics</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pump/Pump_Example_Notebook.html#Running-a-List-of-Faults">Running a List of Faults</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pump/Pump_Example_Notebook.html#Running-a-Fault-Sampling-Approach">Running a Fault Sampling Approach</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="pump/Parallelism_Tutorial.html">Using Parallel Computing in fmdtools</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="pump/Parallelism_Tutorial.html#Model-Checks">Model Checks</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pump/Parallelism_Tutorial.html#Using-Parallelism-in-Simulation">Using Parallelism in Simulation</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pump/Parallelism_Tutorial.html#Performance-Comparison">Performance Comparison</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pump/Parallelism_Tutorial.html#Comparison:-Lower-Tracking-Time-Resolution">Comparison: Lower Tracking Time Resolution</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pump/Parallelism_Tutorial.html#Comparison-Conclusions:">Comparison Conclusions:</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pump/Parallelism_Tutorial.html#Further-Computational-Cost-Reduction-via-Profiling">Further Computational Cost Reduction via Profiling</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="pump/Optimization.html">Optimization using the ProblemInterface class</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="pump/Optimization.html#ProblemInterface-Setup">ProblemInterface Setup</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pump/Optimization.html#Problem-interfaces">Problem interfaces</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pump/Optimization.html#Optimization:">Optimization:</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pump/Optimization.html#Multi-scenario-Optimization">Multi-scenario Optimization</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="pump/Stochastic_Modelling.html">Stochastic Modelling in fmdtools</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="pump/Stochastic_Modelling.html#Model-Setup">Model Setup</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pump/Stochastic_Modelling.html#Simulation-and-Analysis">Simulation and Analysis</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="pump/AST_Sampling.html">fmdtools-AdaStress integration</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="pump/AST_Sampling.html#Python-setup:">Python setup:</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pump/AST_Sampling.html#Running-AdaStress-Methods">Running AdaStress Methods</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pump/AST_Sampling.html#MCTS">MCTS</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pump/AST_Sampling.html#Pump">Pump</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pump/AST_Sampling.html#Simulator">Simulator</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#multirotor">Multirotor</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="multirotor/Demonstration.html">fmdtools Paper Demonstration</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="multirotor/Demonstration.html#Initial-Model">Initial Model</a></li>
+<li class="toctree-l4"><a class="reference internal" href="multirotor/Demonstration.html#Setting-Node-Positions">Setting Node Positions</a></li>
+<li class="toctree-l4"><a class="reference internal" href="multirotor/Demonstration.html#Network-Model">Network Model</a></li>
+<li class="toctree-l4"><a class="reference internal" href="multirotor/Demonstration.html#Static-Model">Static Model</a></li>
+<li class="toctree-l4"><a class="reference internal" href="multirotor/Demonstration.html#Dynamic-Model">Dynamic Model</a></li>
+<li class="toctree-l4"><a class="reference internal" href="multirotor/Demonstration.html#Hierarchical-Model">Hierarchical Model</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="multirotor/Multirotor_Optimization.html">Integrated Resilience Optimization Architectures</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="multirotor/Multirotor_Optimization.html#Design-Model">Design Model</a></li>
+<li class="toctree-l4"><a class="reference internal" href="multirotor/Multirotor_Optimization.html#Operational-Model">Operational Model</a></li>
+<li class="toctree-l4"><a class="reference internal" href="multirotor/Multirotor_Optimization.html#Resilience-Model">Resilience Model</a></li>
+<li class="toctree-l4"><a class="reference internal" href="multirotor/Multirotor_Optimization.html#Combined-Simulation/Optimization">Combined Simulation/Optimization</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#tank">Tank</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="tank/Tank_Analysis.html">Hold-up Tank Model</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="tank/Tank_Analysis.html#Verifying-the-nominal-state:">Verifying the nominal state:</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tank/Tank_Analysis.html#History">History</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tank/Tank_Analysis.html#What-happens-under-component-faults?">What happens under component faults?</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tank/Tank_Analysis.html#What-about-human-induced-faults?">What about human-induced faults?</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tank/Tank_Analysis.html#Evaluating-Joint-Component-Human-fault-modes">Evaluating Joint Component-Human fault modes</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tank/Tank_Analysis.html#Testing-different-reaction-times">Testing different reaction times</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="tank/Tank_Optimization.html">Cooling Tank Model Optimization</a></li>
+<li class="toctree-l3"><a class="reference internal" href="tank/Tank_Optimization.html#Simulation">Simulation</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="tank/Tank_Optimization.html#Verifying-the-nominal-state:">Verifying the nominal state:</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tank/Tank_Optimization.html#What-happens-under-component-faults?">What happens under component faults?</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tank/Tank_Optimization.html#Full-set-of-modes">Full set of modes</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tank/Tank_Optimization.html#Defining-Optimization-Problem">Defining Optimization Problem</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tank/Tank_Optimization.html#Optimization">Optimization</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#eps">EPS</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="eps/EPS_Example_Notebook.html">EPS Example Notebook</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#action-sequence-graph">Action Sequence Graph</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="asg_demo/Action_Sequence_Graph.html">Action Sequence Graph Tutorial</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="asg_demo/Action_Sequence_Graph.html#Function-level-Simulation">Function-level Simulation</a></li>
+<li class="toctree-l4"><a class="reference internal" href="asg_demo/Action_Sequence_Graph.html#Model-Simulation">Model Simulation</a></li>
+<li class="toctree-l4"><a class="reference internal" href="asg_demo/Action_Sequence_Graph.html#Fault-Simulation">Fault Simulation</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#rover">Rover</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="rover/Rover_Setup_Notebook.html">Rover Model Explanation and Preliminaries</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="rover/Rover_Setup_Notebook.html#Model-Setup">Model Setup</a></li>
+<li class="toctree-l4"><a class="reference internal" href="rover/Rover_Setup_Notebook.html#Model-simulation">Model simulation</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="rover/Approach_Use-Cases.html">Defining Fault Sampling Approaches in fmdtools</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="rover/Approach_Use-Cases.html#Basics">Basics</a></li>
+<li class="toctree-l4"><a class="reference internal" href="rover/Approach_Use-Cases.html#Model-Setup">Model Setup</a></li>
+<li class="toctree-l4"><a class="reference internal" href="rover/Approach_Use-Cases.html#Setting-up-an-approach">Setting up an approach</a></li>
+<li class="toctree-l4"><a class="reference internal" href="rover/Approach_Use-Cases.html#Propagating-Faults">Propagating Faults</a></li>
+<li class="toctree-l4"><a class="reference internal" href="rover/Approach_Use-Cases.html#Pruning">Pruning</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="rover/Nominal_Approach_Use-Cases.html">Defining Nominal Approaches in fmdtools</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="rover/Nominal_Approach_Use-Cases.html#Quantifying-probabilities">Quantifying probabilities</a></li>
+<li class="toctree-l4"><a class="reference internal" href="rover/Nominal_Approach_Use-Cases.html#Random-input-generation">Random input generation</a></li>
+<li class="toctree-l4"><a class="reference internal" href="rover/Nominal_Approach_Use-Cases.html#Nested-Scenario-Sampling">Nested Scenario Sampling</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="rover/HFAC_Analyses/HFAC_Analyses.html">More Human Failure Analyses</a></li>
+<li class="toctree-l3"><a class="reference internal" href="rover/HFAC_Analyses/IDETC_Human_Paper_Analysis.html">Human Failure Representation</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="rover/HFAC_Analyses/IDETC_Human_Paper_Analysis.html#Testing-behavioral-simulation">Testing behavioral simulation</a></li>
+<li class="toctree-l4"><a class="reference internal" href="rover/HFAC_Analyses/IDETC_Human_Paper_Analysis.html#Testing-Faults">Testing Faults</a></li>
+<li class="toctree-l4"><a class="reference internal" href="rover/HFAC_Analyses/IDETC_Human_Paper_Analysis.html#Examining-Performance-Shaping-Factors">Examining Performance Shaping Factors</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="rover/degradation_modelling/Degradation_Modelling_Notebook.html">Degradation Modelling</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="rover/degradation_modelling/Degradation_Modelling_Notebook.html#Drive-Degradation">Drive Degradation</a></li>
+<li class="toctree-l4"><a class="reference internal" href="rover/degradation_modelling/Degradation_Modelling_Notebook.html#Human-Degradation">Human Degradation</a></li>
+<li class="toctree-l4"><a class="reference internal" href="rover/degradation_modelling/Degradation_Modelling_Notebook.html#Combined-Degradation">Combined Degradation</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="rover/fault_sampling/Rover_Mode_Notebook.html">Synthetic Mode Generation</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="rover/fault_sampling/Rover_Mode_Notebook.html#Cluster-Analysis">Cluster Analysis</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="rover/optimization/Search_Comparison.html">Faulty State-Space Search Method Comparison</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="rover/optimization/Search_Comparison.html#Performance-Comparison">Performance Comparison</a></li>
+<li class="toctree-l4"><a class="reference internal" href="rover/optimization/Search_Comparison.html#Comparing-Solutions-over-weights---Fault-Space-Formulation">Comparing Solutions over weights - Fault-Space Formulation</a></li>
+<li class="toctree-l4"><a class="reference internal" href="rover/optimization/Search_Comparison.html#Comparing-Solutions-over-weights---Result-Space-Formulation">Comparing Solutions over weights - Result-Space Formulation</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="rover/optimization/Rover_Response_Optimization.html">Rover Response Optimization</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="rover/optimization/Rover_Response_Optimization.html#Optimization">Optimization</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#multiflow-demo">Multiflow Demo</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="multiflow_demo/Multiflow_and_Commsflow_Demonstration.html">Demonstration on Using MultiFlow and CommsFlow</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../docs/Glossary.html">Glossary</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../docs/fmdtools.html">Module Reference</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../docs/fmdtools.define.html">fmdtools.define package</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../docs/fmdtools.define.html#fmdtools-define-block">fmdtools.define.block</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../docs/fmdtools.define.html#module-fmdtools.define.common">fmdtools.define.common</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../docs/fmdtools.define.html#module-fmdtools.define.flow">fmdtools.define.flow</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../docs/fmdtools.define.html#module-fmdtools.define.mode">fmdtools.define.mode</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../docs/fmdtools.define.html#fmdtools-define-model">fmdtools.define.model</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../docs/fmdtools.define.html#module-fmdtools.define.parameter">fmdtools.define.parameter</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../docs/fmdtools.define.html#module-fmdtools.define.rand">fmdtools.define.rand</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../docs/fmdtools.define.html#module-fmdtools.define.state">fmdtools.define.state</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../docs/fmdtools.define.html#module-fmdtools.define.time">fmdtools.define.time</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../docs/fmdtools.sim.html">fmdtools.sim</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../docs/fmdtools.sim.html#fmdtools-sim-propagate">fmdtools.sim.propagate</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../docs/fmdtools.sim.html#module-fmdtools.sim.scenario">fmdtools.sim.scenario</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../docs/fmdtools.sim.html#module-fmdtools.sim.approach">fmdtools.sim.approach</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../docs/fmdtools.sim.html#module-fmdtools.sim.search">fmdtools.sim.search</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../docs/fmdtools.analyze.html">fmdtools.analyze package</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../docs/fmdtools.analyze.html#module-fmdtools.analyze.result">fmdtools.analyze.result</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../docs/fmdtools.analyze.html#module-fmdtools.analyze.plot">fmdtools.analyze.plot</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../docs/fmdtools.analyze.html#module-fmdtools.analyze.graph">fmdtools.analyze.graph</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../docs/fmdtools.analyze.html#module-fmdtools.analyze.tabulate">fmdtools.analyze.tabulate</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">fmdtools</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
+      <li>Examples</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/examples/Examples.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  
+<style>
+/* CSS overrides for sphinx_rtd_theme */
+
+/* 24px margin */
+.nbinput.nblast.container,
+.nboutput.nblast.container {
+    margin-bottom: 19px;  /* padding has already 5px */
+}
+
+/* ... except between code cells! */
+.nblast.container + .nbinput.container {
+    margin-top: -19px;
+}
+
+.admonition > p:before {
+    margin-right: 4px;  /* make room for the exclamation icon */
+}
+
+/* Fix math alignment, see https://github.com/rtfd/sphinx_rtd_theme/pull/686 */
+.math {
+    text-align: unset;
+}
+</style>
+<section id="examples">
+<h1>Examples<a class="headerlink" href="#examples" title="Permalink to this headline"></a></h1>
+<p>This repository provides several examples models in the <cite>/examples</cite> directory, with some corresponding documentation in the form of notebooks (which may be accessed here).</p>
+<section id="pump">
+<h2>Pump<a class="headerlink" href="#pump" title="Permalink to this headline"></a></h2>
+<p>The pump example model is located in <cite>examples/pump/ex_pump.py</cite>, which is then used in the following notebooks:</p>
+<ul class="simple">
+<li><p><strong>Tutorial</strong> which was designed to provide a basic interactive tutorial for learning basic fmdtools functions (along with the <a class="reference external" href="docs/Intro_to_fmdtools.md">Intro to fmdtools</a> workshop). This tutorial has two components:</p>
+<ul>
+<li><p><a class="reference internal" href="pump/Tutorial_unfilled.html"><span class="doc">Tutorial_unfilled.ipynb</span></a>, which is to be used by students, and has the basic structure without the code filled in</p></li>
+<li><p><a class="reference internal" href="pump/Tutorial_complete.html"><span class="doc">Tutorial_complete.ipynb</span></a>, which is to be used by the instructor, and has the basic code filled in to follow along with</p></li>
+</ul>
+</li>
+<li><p><a class="reference internal" href="pump/Pump_Example_Notebook.html"><span class="doc">Pump Example Notebook</span></a> is helpful for understanding the breadth of fmdtools plotting, tabulation, and visualization capabilities. It covers:</p>
+<ul>
+<li><p>A variety of graphing use-cases in <a class="reference internal" href="../docs/fmdtools.analyze.html#module-fmdtools.analyze.graph" title="fmdtools.analyze.graph"><code class="xref py py-mod docutils literal notranslate"><span class="pre">fmdtools.analyze.graph</span></code></a> functions which enable viewing different graph types, simulation results at individual times, and overall model statistics/results.</p></li>
+<li><p><a class="reference internal" href="../docs/fmdtools.analyze.html#module-fmdtools.analyze.tabulate" title="fmdtools.analyze.tabulate"><code class="xref py py-mod docutils literal notranslate"><span class="pre">fmdtools.analyze.tabulate</span></code></a> functions for viewing simulation results over time and summarizing run information</p></li>
+<li><p>Saving/Loading <cite>fmdtools.analyze.result.Result</cite> data structures.</p></li>
+</ul>
+</li>
+<li><p><a class="reference internal" href="pump/Parallelism_Tutorial.html"><span class="doc">Using Parallel Computing in fmdtools</span></a> covers how to reduce computational costs for computationally-expensive simulation use-cases (e.g., sampling large numbers of fault scenarios or running complex models with large numbers of timesteps). It covers:</p>
+<ul>
+<li><p>Using process pools as arguments to <a class="reference internal" href="../docs/fmdtools.sim.html#module-fmdtools.sim.propagate" title="fmdtools.sim.propagate"><code class="xref py py-mod docutils literal notranslate"><span class="pre">fmdtools.sim.propagate</span></code></a> methods to speed up simulation. A comparison of process pools from different external python packages are provided.</p></li>
+<li><p>Different options for history tracking and staged execution which can reduce computational costs when desired.</p></li>
+<li><p>Profiling models with <code class="docutils literal notranslate"><span class="pre">cProfile</span></code> to discover what parts are most computationally-expensive.</p></li>
+</ul>
+</li>
+<li><p><a class="reference internal" href="pump/Optimization.html"><span class="doc">Optimization</span></a>, shows some of the basics of working with the <a class="reference internal" href="../docs/fmdtools.sim.html#fmdtools.sim.search.ProblemInterface" title="fmdtools.sim.search.ProblemInterface"><code class="xref py py-class docutils literal notranslate"><span class="pre">fmdtools.sim.search.ProblemInterface</span></code></a> class for optimization.</p></li>
+</ul>
+<p>In addition to <cite>ex_pump.py</cite>, more use-cases are demonstrated in the derivative models <cite>pump_indiv.py</cite> (which shows how individual <a class="reference internal" href="../docs/fmdtools.define.html#fmdtools.define.block.FxnBlock" title="fmdtools.define.block.FxnBlock"><code class="xref py py-class docutils literal notranslate"><span class="pre">fmdtools.define.block.FxnBlock</span></code></a> objects can be simulated individually outside of a model) and <cite>pump_stochastic.py</cite>, which is demonstrates stochastic modelling in fmdtools and is shown in the notebook:</p>
+<ul class="simple">
+<li><p><a class="reference internal" href="pump/Stochastic_Modelling.html"><span class="doc">Stochastic Modelling in fmdtools</span></a> , which covers defining and simulating stochastic models–models with random internal behaviors. This includees:</p>
+<ul>
+<li><p>Setting up random states in functions using <code class="xref py py-meth docutils literal notranslate"><span class="pre">fmdtools.define.Block.assoc_rand_state()</span></code>, <code class="xref py py-meth docutils literal notranslate"><span class="pre">fmdtools.define.Block.set_rand()</span></code>, and <code class="xref py py-meth docutils literal notranslate"><span class="pre">fmdtools.define.Block.to_default()</span></code>.</p></li>
+<li><p>Simulating stochastic models using the <cite>run_stochastic</cite> parameter in <a class="reference internal" href="../docs/fmdtools.sim.html#module-fmdtools.sim.propagate" title="fmdtools.sim.propagate"><code class="xref py py-mod docutils literal notranslate"><span class="pre">fmdtools.sim.propagate</span></code></a> functions, as well as setting up a <code class="xref py py-class docutils literal notranslate"><span class="pre">fmdtools.define.NominalApproach</span></code> with multiple seeds to run a set of random simulations.</p></li>
+<li><p>Using <code class="xref py py-func docutils literal notranslate"><span class="pre">fmdtools.analyze.plot.mdlhists()</span></code> to visualize the results of multiple stochastic simulations over time, and analyze quantities of interest using <a class="reference internal" href="../docs/fmdtools.analyze.html#fmdtools.analyze.tabulate.nested_stats" title="fmdtools.analyze.tabulate.nested_stats"><code class="xref py py-func docutils literal notranslate"><span class="pre">fmdtools.analyze.tabulate.nested_stats()</span></code></a>, <a class="reference internal" href="../docs/fmdtools.analyze.html#fmdtools.analyze.tabulate.nested_factor_comparison" title="fmdtools.analyze.tabulate.nested_factor_comparison"><code class="xref py py-func docutils literal notranslate"><span class="pre">fmdtools.analyze.tabulate.nested_factor_comparison()</span></code></a></p></li>
+</ul>
+</li>
+<li><p><a class="reference internal" href="pump/AST_Sampling.html"><span class="doc">AST Sampling</span></a>, shows how fmdtools models called from the <cite>AdaSress Julia&lt;https://www.nasa.gov/content/tech/rse/research/adastress&gt;</cite> package to leverage the adaptive stress testing methodology using the <a class="reference internal" href="../docs/fmdtools.sim.html#fmdtools.sim.search.DynamicInterface" title="fmdtools.sim.search.DynamicInterface"><code class="xref py py-class docutils literal notranslate"><span class="pre">fmdtools.sim.search.DynamicInterface</span></code></a> class.</p></li>
+</ul>
+<div class="toctree-wrapper compound">
+</div>
+</section>
+<section id="multirotor">
+<h2>Multirotor<a class="headerlink" href="#multirotor" title="Permalink to this headline"></a></h2>
+<p>The multirotor example model has several models of drones modelled at differing levels of detail which are then used in the following example notebooks;</p>
+<ul class="simple">
+<li><p><a class="reference internal" href="multirotor/Demonstration.html"><span class="doc">fmdtools Paper Demonstration</span></a>  is helpful for understanding how a model can be matured as more details are added, covering:</p>
+<ul>
+<li><p>The <a class="reference internal" href="../docs/fmdtools.analyze.html#module-fmdtools.analyze.graph" title="fmdtools.analyze.graph"><code class="xref py py-mod docutils literal notranslate"><span class="pre">fmdtools.analyze.graph</span></code></a> module.</p></li>
+<li><p>Basic simulation of dynamic and static models using methods in <a class="reference internal" href="../docs/fmdtools.sim.html#module-fmdtools.sim.propagate" title="fmdtools.sim.propagate"><code class="xref py py-mod docutils literal notranslate"><span class="pre">fmdtools.sim.propagate</span></code></a> and usage of class <code class="xref py py-class docutils literal notranslate"><span class="pre">fmdtools.define.SampleApproach</span></code> for fault sampling</p></li>
+<li><p>Analysis using Basic analysis/results processing capabilities</p></li>
+</ul>
+</li>
+<li><p><a class="reference internal" href="multirotor/Multirotor_Optimization.html"><span class="doc">Multirotor Optimization</span></a> shows how the design, operations, and contingency management of a system can be co-optimized with the <a class="reference internal" href="../docs/fmdtools.sim.html#fmdtools.sim.search.ProblemInterface" title="fmdtools.sim.search.ProblemInterface"><code class="xref py py-class docutils literal notranslate"><span class="pre">fmdtools.sim.search.ProblemInterface</span></code></a> class.</p></li>
+<li><p>The support files include various implementations of the drone model.</p>
+<ul>
+<li><p><cite>drone_mdl_static.py</cite> is the baseline model of the drone for static modeling that is used in the other models.</p></li>
+<li><p><cite>drone_mdl_dynamic.py</cite> expands on the static model to allow for dynamic simulation. It generates behavior-over-time graphs and dynamic/phase-based FMEAs.</p></li>
+<li><p><cite>drone_mdl_hierarchical.py</cite> is used to compare system architectures. First by seeing how faults effect the behaviors in each architecture, then by seing how it affects the overall system resilience.</p></li>
+<li><p><cite>drone_mdl_opt.py</cite> is a modified version of the hierarchical done that encompasses autonomous path planning, rotors, electrical system, and control of the drone. It is parameterized with the following parameters: The rotor and battery architecture can be changed, the flight height can be changed to support different heights, which in turn changes the drone’s flight plan, and there is now a <cite>ManageHealth</cite> function which reconfigures the flight depending on detected faults.</p></li>
+</ul>
+</li>
+</ul>
+<div class="toctree-wrapper compound">
+</div>
+</section>
+<section id="tank">
+<h2>Tank<a class="headerlink" href="#tank" title="Permalink to this headline"></a></h2>
+<p>The tank example is a fairly simple model of a tank, inlet valve, and outlet valve. This example is shown in the notebook</p>
+<ul class="simple">
+<li><p><a class="reference internal" href="tank/Tank_Analysis.html"><span class="doc">Hold-up Tank Model</span></a> uses the <code class="xref py py-class docutils literal notranslate"><span class="pre">fmdtools.define.SampleApproach</span></code> class to model human interactions with the modelled system (in <cite>tank_model.py</cite>).</p></li>
+<li><p><a class="reference internal" href="tank/Tank_Optimization.html"><span class="doc">Tank Optimization</span></a> shows how design and contingency management of a system (in <cite>tank_optimization_model.py</cite>) can be co-optimized with the <a class="reference internal" href="../docs/fmdtools.sim.html#fmdtools.sim.search.ProblemInterface" title="fmdtools.sim.search.ProblemInterface"><code class="xref py py-class docutils literal notranslate"><span class="pre">fmdtools.sim.search.ProblemInterface</span></code></a> class, as well as external solvers.</p></li>
+</ul>
+<p>The support files include various implementations of the tank model.</p>
+<ul class="simple">
+<li><p>The baseline Tank Model (<cite>tank_model.py</cite>), a dynamical implementation of a human-operated tank system to show how fmdtools can be used to model human errors</p></li>
+<li><p>A demonstration Optimization Tank Model (<cite>tank_opt.py</cite>), resilience optimization architectures using <a class="reference internal" href="../docs/fmdtools.sim.html#fmdtools.sim.search.ProblemInterface" title="fmdtools.sim.search.ProblemInterface"><code class="xref py py-class docutils literal notranslate"><span class="pre">fmdtools.sim.search.ProblemInterface</span></code></a></p></li>
+<li><p>The main <cite>Tank optimization model (`tank_optimization.py</cite>)similar to <cite>tank_model</cite> and <cite>tank_opt</cite> and is a dynamical implementation of a tank system with contingency management.</p></li>
+</ul>
+<div class="toctree-wrapper compound">
+</div>
+</section>
+<section id="eps">
+<h2>EPS<a class="headerlink" href="#eps" title="Permalink to this headline"></a></h2>
+<p>The EPS model is a model of a simple electric power system in <cite>eps.py</cite>, which shows how undirected propagation can be used in a simple static (i.e., one time-step) moelling use-case.</p>
+<ul class="simple">
+<li><p><a class="reference internal" href="eps/EPS_Example_Notebook.html"><span class="doc">EPS Example Notebook</span></a> demonstrates this model and some basic fmdtools methods. It shows how fmdtools can be used for purely static propagation models where dynamic states are not a concern. This is a relication of a previous simple electric power system implemented <cite>IBFM &lt;https://github.com/DesignEngrLab/IBFM&gt;</cite>.</p></li>
+<li><p><cite>The supporting EPS Model `eps.py</cite> builds the eps model for the notebook. The main purpose of this system is to supply power to optical, mechanical, and heat loads. Failure behavior of the system is represented at a high level using solely the functions of the system.</p></li>
+</ul>
+<div class="toctree-wrapper compound">
+</div>
+</section>
+<section id="action-sequence-graph">
+<h2>Action Sequence Graph<a class="headerlink" href="#action-sequence-graph" title="Permalink to this headline"></a></h2>
+<p><a class="reference external" href="../examples/eps/Action_Sequence_Graph.ipynb">Action Sequence Graph</a> shows a very basic example of using the <a class="reference internal" href="../docs/fmdtools.define.html#fmdtools.define.block.ASG" title="fmdtools.define.block.ASG"><code class="xref py py-class docutils literal notranslate"><span class="pre">fmdtools.define.block.ASG</span></code></a> structure to define sequences of actions or modes, which is helpful for modelling human and autonomous behaviors.</p>
+<div class="toctree-wrapper compound">
+</div>
+</section>
+<section id="rover">
+<h2>Rover<a class="headerlink" href="#rover" title="Permalink to this headline"></a></h2>
+<p>The Rover model showcases more advanced methodologies that can be used in fmdtools, and has essentially been the developers’ demo case study for advancing the state-of-the-art in resilience simulation. These demonstrations include:</p>
+<ul class="simple">
+<li><p><a class="reference internal" href="rover/Rover_Setup_Notebook.html"><span class="doc">Rover Setup Notebook</span></a> , which introduces the model and basic usages.</p></li>
+<li><p><a class="reference internal" href="rover/Model_Structure_Visualization_Tutorial.html"><span class="doc">Defining and Visualizing fmdtools Model Structures</span></a> is helpful for understanding how a given model simulates over time. It covers the class  <a class="reference internal" href="../docs/fmdtools.analyze.html#fmdtools.analyze.graph.Graph" title="fmdtools.analyze.graph.Graph"><code class="xref py py-class docutils literal notranslate"><span class="pre">fmdtools.analyze.graph.Graph</span></code></a> and containing methods.</p></li>
+<li><p><a class="reference internal" href="rover/Nominal_Approach_Use-Cases.html"><span class="doc">Defining Nominal Approaches in fmdtools</span></a> , which covers simulating the model at different parameters in nominal/faulty scenarios. This includes:</p>
+<ul>
+<li><p>Setting up a nominal parameter sampling approach using <code class="xref py py-class docutils literal notranslate"><span class="pre">fmdtools.define.NominalApproach</span></code> and simulating it with <a class="reference internal" href="../docs/fmdtools.sim.html#fmdtools.sim.propagate.nominal_approach" title="fmdtools.sim.propagate.nominal_approach"><code class="xref py py-func docutils literal notranslate"><span class="pre">fmdtools.sim.propagate.nominal_approach()</span></code></a> and <a class="reference internal" href="../docs/fmdtools.sim.html#fmdtools.sim.propagate.nested_approach" title="fmdtools.sim.propagate.nested_approach"><code class="xref py py-func docutils literal notranslate"><span class="pre">fmdtools.sim.propagate.nested_approach()</span></code></a> methods for nominal and faulty simulations.</p></li>
+<li><p>Using analysis functions like <code class="xref py py-func docutils literal notranslate"><span class="pre">fmdtools.analyze.tabulate.nominal_vals_1d()</span></code> and <a class="reference internal" href="../docs/fmdtools.analyze.html#fmdtools.analyze.plot.nominal_factor_comparison" title="fmdtools.analyze.plot.nominal_factor_comparison"><code class="xref py py-func docutils literal notranslate"><span class="pre">fmdtools.analyze.plot.nominal_factor_comparison()</span></code></a> to visualize quantities of interest for the simulation over a range of nominal parameters.</p></li>
+<li><p>Using analysis functions like <a class="reference internal" href="../docs/fmdtools.analyze.html#fmdtools.analyze.tabulate.nested_factor_comparison" title="fmdtools.analyze.tabulate.nested_factor_comparison"><code class="xref py py-func docutils literal notranslate"><span class="pre">fmdtools.analyze.tabulate.nested_factor_comparison()</span></code></a> and <a class="reference internal" href="../docs/fmdtools.analyze.html#fmdtools.analyze.plot.nested_factor_comparison" title="fmdtools.analyze.plot.nested_factor_comparison"><code class="xref py py-func docutils literal notranslate"><span class="pre">fmdtools.analyze.plot.nested_factor_comparison()</span></code></a> to visualize resilience metrics of the model to a set of fault modes over a range of nominal parameters.</p></li>
+</ul>
+</li>
+<li><p><a class="reference internal" href="rover/Approach_Use-Cases.html"><span class="doc">Defining Fault Sampling Approaches in fmdtools</span></a> covers how to set up a fault sampling approach and use it to simulate a large number of hazardous scenarios in a model. This includes:</p>
+<ul>
+<li><p>Adding fault and operational modes to Model functions using the method <code class="xref py py-meth docutils literal notranslate"><span class="pre">fmdtools.define.Block.assoc_modes()</span></code> and explanation of the <cite>key_phases_by</cite> and <cite>exclusive</cite> options.</p></li>
+<li><p>Using <a class="reference internal" href="../docs/fmdtools.analyze.html#fmdtools.analyze.result.History.get_modephases" title="fmdtools.analyze.result.History.get_modephases"><code class="xref py py-func docutils literal notranslate"><span class="pre">fmdtools.analyze.result.History.get_modephases()</span></code></a> to setting a <code class="xref py py-class docutils literal notranslate"><span class="pre">fmdtools.define.SampleApproach</span></code> up which samples individual faults based on the phases of the model and/or function defined by their operational modes.</p></li>
+<li><p>Using <a class="reference internal" href="../docs/fmdtools.analyze.html#fmdtools.analyze.plot.phases" title="fmdtools.analyze.plot.phases"><code class="xref py py-func docutils literal notranslate"><span class="pre">fmdtools.analyze.plot.phases()</span></code></a> to visualize the phases and modes of a model over time and <code class="xref py py-func docutils literal notranslate"><span class="pre">fmdtools.analyze.plot.samplecosts()</span></code> to visualize the consequences of each fault scenario in the approach within each phase.</p></li>
+<li><p>Using the <cite>defaultsamp</cite> option and <code class="xref py py-meth docutils literal notranslate"><span class="pre">fmdtools.define.SampleApproach.prune_scenarios()</span></code> in <code class="xref py py-class docutils literal notranslate"><span class="pre">fmdtools.define.SampleApproach</span></code> to control how many time-steps in each phase are sampled (and when).</p></li>
+</ul>
+</li>
+<li><p><a class="reference external" href="../examples/rover/HFAC_Analyses.ipynb">HFAC Analyses</a> and <a class="reference external" href="../examples/rover/IDETC_Human_Paper_Analysis.ipynb">IDETC_Human_Paper_Analysis</a> showcase fmdtools human factors modelling capabilities (action sequence graphs, performance shaping factors, etc.) in</p></li>
+<li><p><a class="reference internal" href="rover/degradation_modelling/Degradation_Modelling_Notebook.html"><span class="doc">Degradation Modelling Notebook</span></a> shows how degradation models can be used to sample resilience model parameters.</p></li>
+<li><p><a class="reference internal" href="rover/fault_sampling/Rover_Mode_Notebook.html"><span class="doc">Rover Mode Notebook</span></a> shows how fault scenarios can be exhaustively generated to augment hazard identification.</p></li>
+<li><p><a class="reference internal" href="rover/optimization/Search_Comparison.html"><span class="doc">Search_Comparison</span></a> shows an (in-development) method for searching the faulty state-space to find a unique set of hazardous scenarios.</p></li>
+<li><p><a class="reference internal" href="rover/optimization/Rover_Response_Optimization.html"><span class="doc">Rover Response Optimization</span></a> further demonstrates the optimization of parameters over a set of fault scenarios using <code class="xref py py-class docutils literal notranslate"><span class="pre">ProblemInterface</span></code>.</p></li>
+<li><p>The support files include various implementations of the drone model.
+- <cite>rover_model.py</cite> defines the functions and flows used in the analysis.
+- <cite>rover_degradation.py</cite> extends the model to include degradated states.
+- <cite>rover_model_human.py</cite> extends the model to include human faults and response.</p></li>
+</ul>
+<div class="toctree-wrapper compound">
+</div>
+</section>
+<section id="multiflow-demo">
+<h2>Multiflow Demo<a class="headerlink" href="#multiflow-demo" title="Permalink to this headline"></a></h2>
+<p>The multiflows example is limited to the model in the file <cite>multiflow_demo.py</cite>, which shows basic usage of the <a class="reference internal" href="../docs/fmdtools.define.html#fmdtools.define.flow.MultiFlow" title="fmdtools.define.flow.MultiFlow"><code class="xref py py-class docutils literal notranslate"><span class="pre">fmdtools.define.flow.MultiFlow</span></code></a> and <a class="reference internal" href="../docs/fmdtools.define.html#fmdtools.define.flow.CommsFlow" title="fmdtools.define.flow.CommsFlow"><code class="xref py py-class docutils literal notranslate"><span class="pre">fmdtools.define.flow.CommsFlow</span></code></a> flow structures. <a class="reference external" href="..examples/multiflow_demo/MultiFlow_and_Commsflow_Demonstation.ipynb">Multiflow and Commsflow Demonstration</a> is a tutorialized version of that file discussing the step by step creation and use of <cite>fmdtools.analyze.graph.ModelTypeGraph</cite> to view model types.</p>
+<div class="toctree-wrapper compound">
+</div>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="../CONTRIBUTORS.html" class="btn btn-neutral float-left" title="CONTRIBUTORS" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="pump/Tutorial_complete.html" class="btn btn-neutral float-right" title="fmdtools Tutorial" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright .</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
