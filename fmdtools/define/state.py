@@ -322,9 +322,9 @@ class State(dataobject, mapping=True):
 
     def create_hist(self, timerange=None, track=None, default_str_size='<U20'):
         """
-        Creates a History corresponding to State
+        Creates a History corresponding to the State.
 
-        Parameter
+        Parameters
         ----------
         timerange : iterable, optional
             Time-range to initialize the history over. The default is None.

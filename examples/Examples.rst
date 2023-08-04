@@ -55,7 +55,6 @@ In addition to `ex_pump.py`, more use-cases are demonstrated in the derivative m
    ../examples/pump/Optimization.ipynb
    ../examples/pump/Stochastic_Modelling.ipynb
    ../examples/pump/AST_Sampling.ipynb
-   ../examples/pump/ex_pump.py
 
 Multirotor
 +++++++++++++++++++++++++++++++++++++++++++++
