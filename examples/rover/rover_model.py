@@ -53,7 +53,6 @@ class GroundState(State):
     ubx: float = 0.0
     uby: float = 1.5
     vel: float = 0.0
-    line: float = 0.0
     angle: float = 0.0
     ang: float = 0.0
 
@@ -633,16 +632,16 @@ class Environment(FxnBlock):
         self.ground.s.uby = self.ground.s.liney + 1.5 * np.cos(
             self.ground.s.angle * np.pi / 180
         )
-        self.s.in_bound = int(
-            in_bounds(
-                self.ground.s.x,
-                self.ground.s.y,
-                self.ground.s.lbx,
-                self.ground.s.lby,
-                self.ground.s.ubx,
-                self.ground.s.uby,
-            )
-        )
+        # self.s.in_bound = int(
+        #     in_bounds(
+        #         self.ground.s.x,
+        #         self.ground.s.y,
+        #         self.ground.s.lbx,
+        #         self.ground.s.lby,
+        #         self.ground.s.ubx,
+        #         self.ground.s.uby,
+        #     )
+        #)
 
 
 def sin_func(x, y, amp, period):
@@ -898,7 +897,7 @@ def plot_course(hist, label=True, ax=False):
 
     x_ground = hist.flows.ground.s.lbx
     y_ground = hist.flows.ground.s.lby
-    ax.plot(x_ground, y_ground, label=bound_lab, color="grey")
+    ax.plot(x_ground, y_ground, color="grey")
     x_ground = hist.flows.ground.s.ubx
     y_ground = hist.flows.ground.s.uby
     ax.plot(x_ground, y_ground, label=bound_lab, color="grey")
