@@ -40,9 +40,10 @@ class DriveRand(Rand):
 class DriveDegradation(FxnBlock):
     _init_s = DriveDegradationStates
     _init_r = DriveRand
+    default_sp = dict(times=(0, 100))
 
-    def __init__(self, name, flows, params={}, **kwargs):
-        super().__init__(name, flows, **kwargs)
+    def __init__(self, name, **kwargs):
+        super().__init__(name, **kwargs)
         # self.assoc_rand_state('corrode_rate', 0.01, auto_update = ['pareto', (50,)])
         # self.assoc_rand_state('wear_rate', 0.02, auto_update = ['pareto', (25,)])
         # self.assoc_rand_state('yaw_load', 0.01, auto_update = ['uniform', (-0.1, 0.1)])
@@ -90,7 +91,7 @@ class PSFDegradationShort(FxnBlock):
 
     def dynamic_behavior(self, time):
         if self.p.stoch_fatigue:
-            self.s.fatigue = int(self.r.fatigue_param)
+            self.s.fatigue = int(self.r.s.fatigue_param)
         else:
             self.s.fatigue = int(self.p.fatigue_param)
         if self.s.stress < 100:
@@ -134,18 +135,10 @@ class PSFDegradationLong(FxnBlock):
         )
 
 
-class RoverDegradation(Model):
-    default_sp = dict(times=(0, 100))
-
-    def __init__(self, r={"seed": 102}, **kwargs):
-        super().__init__(**kwargs)
-        self.add_fxn("drive", DriveDegradation)
-        self.build(require_connections=False)
-
 
 def get_params_from(mdlhist, t=1):
-    friction = mdlhist.fxns.drive.s.friction[t]
-    drift = mdlhist.fxns.drive.s.drift[t]
+    friction = mdlhist.s.friction[t]
+    drift = mdlhist.s.drift[t]
     return {"friction": friction, "drift": drift}
 
 
@@ -272,13 +265,13 @@ def gen_long_deg_param_list(mdlhists, mdlhists_hum, t_total, total_scen):
 
 if __name__ == "__main__":
     # nominal
-    deg_mdl = RoverDegradation()
+    deg_mdl = DriveDegradation('DriveDeg')
     endresults, mdlhist = prop.nominal(deg_mdl)
-    an.plot.hist(mdlhist, "fxns.drive.s.wear")
+    an.plot.hist(mdlhist, "s.wear")
     # stochastic
-    deg_mdl = RoverDegradation()
+    deg_mdl = DriveDegradation('DriveDeg')
     endresults, mdlhist = prop.nominal(deg_mdl, run_stochastic=True)
-    an.plot.hist(mdlhist, "fxns.drive.s.wear")
+    an.plot.hist(mdlhist, "s.friction")
 
     # stochastic over replicates
     nomapp = NominalApproach()
@@ -289,12 +282,12 @@ if __name__ == "__main__":
     )
     an.plot.hist(
         mdlhists,
-        {"fxns": {"drive": {"s": ["wear", "corrosion", "friction", "drift"]}}},
+        {"s": ["wear", "corrosion", "friction", "drift"]},
         aggregation="mean_std",
     )
 
     # individual slice
-    # an.plot.metric_dist_from(mdlhists, [1,10,20], {'fxns':{'drive':{'s':['wear', 'corrosion', 'friction', 'drift']}}})
+    #an.plot.metric_dist_from(mdlhists, [1,10,20], {'s':['wear', 'corrosion', 'friction', 'drift']})
 
     # question -- how do we sample this:
     #   - all replicates?
@@ -324,11 +317,11 @@ if __name__ == "__main__":
         "group_2": [*behave_endclasses][100:],
     }
 
-    # an.plot.metric_dist(behave_endclasses, metrics=['line_dist', 'end_dist', 'x', 'y'], comp_groups=comp_groups, alpha=0.5, bins=10, metric_bins={'x':20})
+    #an.plot.metric_dist(behave_endclasses, metrics=['line_dist', 'end_dist', 'x', 'y'], comp_groups=comp_groups, alpha=0.5, bins=10, metric_bins={'x':20})
 
-    # an.plot.metric_dist_from(behave_mdlhists, times= [0, 10, 20], fxnflowvals = {'flows':{'ground':{'s':['x', 'y', 'linex', 'ang']}}}, alpha=0.5, bins=10)
+    #an.plot.metric_dist_from(behave_mdlhists, times= [0, 10, 20], fxnflowvals = {'flows':{'ground':{'s':['x', 'y', 'linex', 'ang']}}}, alpha=0.5, bins=10)
 
-    # an.plot.metric_dist_from(behave_mdlhists, times= 30, fxnflowvals = {'flows':{'ground':{'s':['x', 'y', 'linex', 'ang']}}}, comp_groups=comp_groups, alpha=0.5, bins=10)
+    #an.plot.metric_dist_from(behave_mdlhists, times= 30, fxnflowvals = {'flows':{'ground':{'s':['x', 'y', 'linex', 'ang']}}}, comp_groups=comp_groups, alpha=0.5, bins=10)
 
     # human PSF degradation code starts here
 
