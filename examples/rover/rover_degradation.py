@@ -287,7 +287,7 @@ if __name__ == "__main__":
     )
 
     # individual slice
-    #an.plot.metric_dist_from(mdlhists, [1,10,20], {'s':['wear', 'corrosion', 'friction', 'drift']})
+    an.plot.metric_dist_from(mdlhists, [1,10,20], {'s':['wear', 'corrosion', 'friction', 'drift']})
 
     # question -- how do we sample this:
     #   - all replicates?
