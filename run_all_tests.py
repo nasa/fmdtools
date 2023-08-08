@@ -5,10 +5,24 @@ Created on Tue May 16 15:12:39 2023
 @author: dhulse
 """
 import pytest
+# import sys
+
+# NOTE: If report won't generate with error:
+# "UnicodeEncodeError: 'charmap' codec can't encode characters in position..."
+# make sure all tests pass show_progress=False to propagate
 
 if __name__=="__main__":
     # requires pytest, nbmake, pytest-html
-    #retcode = pytest.main(["--html=pytest_report.html", "--nbmake"])
+    
+    # for testing modules with doctests
+    #doctest_modules = ["fmdtools/define/state.py", "fmdtools/define/parameter.py"]
+    #retcode = pytest.main(["--doctest-modules", *doctest_modules])
+    
+    # retcode = pytest.main(["--html=./reports/junit/report.html",
+    #                        "--self-contained-html",
+    #                        "--junitxml=./reports/junit/junit.xml",
+    #                        "--doctest-modules",
+    #                        "--continue-on-collection-errors"])
 
     fast_notebooks = ["examples/asg_demo/Action_Sequence_Graph.ipynb",
                       "examples/eps/EPS_Example_Notebook.ipynb", 
@@ -45,4 +59,13 @@ if __name__=="__main__":
     # retcode = pytest.main()
 
     # for creating comprehensive test report:
-    retcode = pytest.main(["--html=pytest_report.html", "--nbmake", "--overwrite", "--continue-on-collection-errors"])
+
+    retcode = pytest.main(["--html=./reports/junit/report.html",
+                           "--junitxml=./reports/junit/junit.xml",
+                           "--nbmake",
+                           "--overwrite",
+                           "--doctest-modules",
+                           "--continue-on-collection-errors"])
+    
+    # after creating test report, update the badge using this in powershell:
+    # !Powershell.exe -Command "genbadge tests"

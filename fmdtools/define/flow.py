@@ -133,7 +133,7 @@ class MultiFlow(Flow):
         for l in self.locals:
             rep_str=rep_str+"\n   "+self.get_view(l).__repr__()
         return rep_str
-    def create_local(self, name, attrs = "all", p={}, s={}):
+    def create_local(self, name, attrs = "all", p='global', s='global'):
         """
         Creates a local view of the Flow
 
@@ -148,6 +148,11 @@ class MultiFlow(Flow):
                 dict: dict of attributes to use in the local flow and their initial values
         p : dict
             Parameters to instantiate the local version with (if params used in the flow)
+            Default is 'global', which uses the same parameter as the multiflow
+        s : dict
+            Initial values for the states. Default is 'global', which uses the
+            same initial states as the multiflow
+            
 
         Returns
         -------
@@ -160,6 +165,11 @@ class MultiFlow(Flow):
         #elif type(attrs)==str:  attrs = [attrs]
         #if type(attrs)==list:   atts = {k:v for k,v in default_states if k in attrs}
         #elif type(attrs)==dict: atts = {k:v for k,v in attrs.items() if k in default_states}
+        if p=='global':
+            p = self.p
+        if s=='global':
+            s = asdict(self.s)
+        
         if hasattr(self, name): 
             newflow = getattr(self, name).copy(glob=self, p=p, s=s)
         else: 

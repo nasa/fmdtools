@@ -3,39 +3,39 @@ Description: Plots quantities of interest over time using matplotlib.
 
 Uses the following methods:
 - :func:`hist`: plots function and flow histories over time
-(with different plots for each function/flow)
+  (with different plots for each function/flow)
 - :func:`plot_line_and_err`: Plots a line with a given range of uncertainty around it.
 - :func:`plot_err_lines`: Plots error lines on the given plot.
 - :func:`multiplot_legend_title`: Helper function for multiplot legends and titles.
 - :func:`make_consolidated_legend`: Creates a single legend for a given multiplot where
-multiple groups are being compared.
+  multiple groups are being compared.
 - :func:`metric_dist`:     Plots the histogram of given metric(s) separated by
-comparison groups over a set of scenarios.
+  comparison groups over a set of scenarios.
 - :func:`metric_dist_from`:Plot the distribution of model history function/flow value
-over at defined time(s) over a number of scenarios.
+  over at defined time(s) over a number of scenarios.
 - :func:`nominal_vals_1d`: plots the end-state classification of a system over a
-(1-D) range of nominal runs
+  (1-D) range of nominal runs
 - :func:`nominal_vals_2d`: plots the end-state classification of a system over a
-(2-D) range of nominal runs
+  (2-D) range of nominal runs
 - :func:`nominal_vals_3d`: plots the end-state classification of a system over a
-(3-D) range of nominal runs
+  (3-D) range of nominal runs
 - :func:`dyn_order`: Plots the run order for the model during the dynamic propagation
-step used by dynamic_behavior() methods.
+  step used by dynamic_behavior() methods.
 - :func:`phases`: plots the phases of operation that the model progresses through.
 - :func:`samplemetric`: plots a metric for a single fault sampled by a SampleApproach
-over time with rates
+  over time with rates
 - :func:`samplemetrics`: plots a metric for a set of faults sampled by a SampleApproach
-over time with rates on separate plots
+  over time with rates on separate plots
 - :func:`metricovertime`: plots the total metric/explected metric of a set of faults
-sampled by a SampleApproach over time
+  sampled by a SampleApproach over time
 - :func:`nominal_factor_comparison`: gives a bar plot of nominal simulation
-statistics over given factors
+  statistics over given factors
 - :func:`nested_factor_comparison`: gives a bar plot of fault simulation statistics
-over given factors
+  over given factors
 - :func:`multibar_helper`: Shared plotting helper for nested_factor_comparison and
-nominal_factor_comparison
+  nominal_factor_comparison
 - :func:`suite_for_plots`: enables plots to be checked and turned on/off when testing
-using unittest
+  using unittest
 """
 # File Name: analyze/plot.py
 # Author: Daniel Hulse
@@ -45,7 +45,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 import matplotlib.colors as mcolors
 from fmdtools.analyze.tabulate import metricovertime as metric_table
-from fmdtools.analyze.result import bootstrap_confidence_interval, to_include_keys
+from fmdtools.analyze.result import bootstrap_confidence_interval, to_include_keys, is_numeric
 from fmdtools.analyze.result import History, Result
 from matplotlib.collections import PolyCollection
 from matplotlib.ticker import AutoMinorLocator
@@ -517,70 +517,119 @@ def metric_dist_from(mdlhists, times, *plot_values, **kwargs):
                            comp_groups=comp_groups, **kwargs)
     return fig, axs
 
-def nominal_vals_1d(nomapp, nomapp_endclasses, param1, title="Nominal Operational Envelope", nomlabel = 'nominal', metric='classification', figsize=(6,4), xlabel=''):
+def get_nominal_classes(nomapp, endclasses, params, metric, only_params, default_param,
+                        nom_func):
+    """helper function for nominal_values_xd functions that gets the parameters and
+    metrics to plot"""
+    data = nomapp.get_param_scens(*params,
+                                  only_params=only_params,
+                                  default=default_param)
+    if not data:
+        raise Exception("No matching scenarios--are parameters " +
+                        params+" in the nomapp Scenarios?")
+
+    names = [d[0] for d in data]
+    classifications = [val for val in
+                       endclasses.get_scens(*names).get_values("."+metric).values()]
+    if not classifications:
+        raise Exception("No scenarios--is metric " + metric + " in endclasses?")
+    all_classes = set(classifications)
+    nom_classes = [c for c in all_classes if nom_func(c)]
+    non_nom_classes = [c for c in all_classes if not nom_func(c)]
+    discrete_classes = nom_classes + non_nom_classes
+    return data, classifications, discrete_classes
+
+
+def get_dim_data(data, classifications, cl, ind):
+    return [d[1][ind] for i, d in enumerate(data) if classifications[i] == cl]
+
+
+def nominal_vals_1d(nomapp, endclasses, x_param,
+                    only_params=False, default_param=0,
+                    title="Nominal Operational Envelope", nom_func=lambda x: x == 0.0,
+                    metric='cost', figsize=(6, 4), xlabel='',
+                    nom_alpha=0.5, nom_color="blue",
+                    fault_alpha=0.5, fault_color="red"):
     """
-    Visualizes the nominal operational envelope along one given parameter
+    Visualizes the nominal operational envelope along one given parameter.
 
     Parameters
     ----------
     nomapp : NominalApproach
         Nominal sample approach simulated in the model.
-    nomapp_endclasses : dict
+    endclasses : dict
         End-classifications for the set of simulations in the model.
-    param1 : str
-        Parameter range desired to visualize in the operational envelope
+    x_param : str
+        Parameter range desired to visualize in the operational envelope. Can be any
+        property that changes over the nomapp
+        (e.g., `r.seed`, `inputparam.x_in`, `p.x`...)
+    only_params : bool
+        Whether to only include scenarios with a defined x_param. Default is False.
+    default_param : any
+        Default parameter value (if parameter not defined)
     title : str, optional
         Plot title. The default is "Nominal Operational Envelope".
-    nomlabel : str, optional
-        Flag for nominal end-states. The default is 'nominal'.
-    xlabel: str, optional
-        label for x-axis (defaults to parameter name for param1)
+    nom_func : method, optional
+        Function to classify metric values as "nominal".
+        Default is lambda x: x == 0.0
+    metric : str
+        Value to get from endclasses for the scenario(s). The default is 'cost'.
+    figsize : bool
+        figsize argument to plt.figure
+    xlabel : str, optional
+        label for x-axis (defaults to parameter name for x_param)
+    nom_alpha : float, optional
+        alpha value for nominal values. Default is 0.5.
+    nom_color : str, optional
+        color for nominal values
+    fault_alpha : float, optional
+        alpha value for off-nominal values. Default is 0.5.
+    fault_color : str, optional
+        color for off-nominal values
 
     Returns
     -------
     fig : matplotlib figure
         Figure for the plot.
-
     """
-
     fig = plt.figure(figsize=figsize)
 
-    data = [(x, scen.inputparams[param1])
-            for x, scen in nomapp.scenarios.items()
-            if (scen.inputparams.get(param1, False) != False)]
-    names = [d[0] for d in data]
-    classifications = [str(nomapp_endclasses[name][metric]) for name in names]
-    all_classes = set(classifications)
-    nom_classes = [c for c in all_classes if nomlabel in c]
-    non_nom_classes = [c for c in all_classes if nomlabel not in c]
-    discrete_classes = nom_classes + non_nom_classes
+    nom_c = get_nominal_classes(nomapp, endclasses, (x_param,), metric, only_params,
+                                default_param, nom_func)
+    data, classifications, discrete_classes = nom_c
 
-    min_x = np.min([d[1] for i, d in enumerate(data)])
-    max_x = np.max([d[1] for i, d in enumerate(data)])
-    plt.hlines(1, min_x-1, max_x+1)
+    data_values = [d[1][0] for i, d in enumerate(data)]
+    if is_numeric(data_values):
+        min_x = np.min(data_values)
+        max_x = np.max(data_values)
+        plt.hlines(1, min_x-1, max_x+1)
+        plt.xlim(min_x-1, max_x+1)
 
     for cl in discrete_classes:
-        xdata = [d[1] for i, d in enumerate(data) if classifications[i] == cl]
-        if str(nomlabel) in cl:
-            plt.eventplot(xdata, label=cl, color='blue', alpha=0.5)
+        xdata = get_dim_data(data, classifications, cl, 0)
+        if nom_func(cl):
+            plt.eventplot(xdata, label=cl, color=nom_color, alpha=nom_alpha)
         else:
-            plt.eventplot(xdata, label=cl, color='red', alpha=0.5)
+            plt.eventplot(xdata, label=cl, color=fault_color, alpha=fault_alpha)
     plt.legend()
-    plt.xlim(min_x-1, max_x+1)
+
     axis = plt.gca()
     axis.yaxis.set_ticklabels([])
     if not xlabel:
-        xlabel = param1
+        xlabel = x_param
     plt.xlabel(xlabel)
     plt.title(title)
     plt.grid(which='both', axis='x')
     return fig
 
 
-def nominal_vals_2d(nomapp, nomapp_endclasses, param1, param2,
-                    title="Nominal Operational Envelope", nomlabel='nominal',
-                    metric='classification', legendloc='best',
-                    figsize=(6, 4), xlabel='', ylabel=''):
+def nominal_vals_2d(nomapp, endclasses, x_param, y_param,
+                    only_params=False, default_param=0,
+                    title="Nominal Operational Envelope", nom_func=lambda x: x == 0.0,
+                    metric='cost', figsize=(6, 4), xlabel='', ylabel='',
+                    nom_alpha=0.5, nom_color="blue", nom_marker="o",
+                    fault_alpha=0.5, fault_color="red", fault_marker="X",
+                    legend_loc="best"):
     """
     Visualizes the nominal operational envelope along two given parameters
 
@@ -588,20 +637,47 @@ def nominal_vals_2d(nomapp, nomapp_endclasses, param1, param2,
     ----------
     nomapp : NominalApproach
         Nominal sample approach simulated in the model.
-    nomapp_endclasses : dict
+    endclasses : dict
         End-classifications for the set of simulations in the model.
-    param1 : str
-        First parameter (x) desired to visualize in the operational envelope
-    param2 : str
-        Second arameter (y) desired to visualize in the operational envelope
+    x_param : str
+        Parameter range desired to visualize on the x-axis. Can be any
+        property that changes over the nomapp
+        (e.g., `r.seed`, `inputparam.x_in`, `p.x`...)
+    y_param : str
+        Parameter range desired to visualize on the y-axis. Can be any
+        property that changes over the nomapp
+        (e.g., `r.seed`, `inputparam.x_in`, `p.x`...)
+    only_params : bool
+        Whether to only include scenarios with a defined x_param. Default is False.
+    default_param : any
+        Default parameter value (if parameter not defined)
     title : str, optional
         Plot title. The default is "Nominal Operational Envelope".
-    nomlabel : str, optional
-        Flag for nominal end-states. The default is 'nominal'.
-    xlabel: str, optional
-        label for x-axis (defaults to parameter name for param1)
-    ylabel: str, optional
-        label for y-axis (defaults to parameter name for param2)
+    nom_func : method, optional
+        Function to classify metric values as "nominal".
+        Default is lambda x: x == 0.0
+    metric : str
+        Value to get from endclasses for the scenario(s). The default is 'cost'.
+    figsize : bool
+        figsize argument to plt.figure
+    xlabel : str, optional
+        label for x-axis (defaults to parameter name for x_param)
+    ylabel : str, optional
+        label for y-axis (defaults to parameter name for x_param)
+    nom_alpha : float, optional
+        alpha value for nominal values. Default is 0.5.
+    nom_color : str, optional
+        color for nominal values
+    nom_marker : str, optional
+        marker for nominal values. Default is 'o'.
+    fault_alpha : float, optional
+        alpha value for off-nominal values. Default is 0.5.
+    fault_color : str, optional
+        color for off-nominal values
+    fault_marker : str, optional
+        marker for nominal values. Default is 'X'.
+    legend_loc : str, optional
+        location for the legend (see matplotlib docs). Default is 'best'.
 
     Returns
     -------
@@ -609,30 +685,24 @@ def nominal_vals_2d(nomapp, nomapp_endclasses, param1, param2,
         Figure for the plot.
     """
     fig = plt.figure(figsize=figsize)
-
-    data = [(x, scen.inputparams[param1], scen.inputparams[param2])
-            for x, scen in nomapp.scenarios.items()
-            if (scen.inputparams.get(param1, False) != False
-                and scen.inputparams.get(param2, False) != False)]
-    names = [d[0] for d in data]
-    classifications = [str(nomapp_endclasses[name][metric]) for name in names]
-    all_classes = set(classifications)
-    nom_classes = [c for c in all_classes if nomlabel in c]
-    non_nom_classes = [c for c in all_classes if nomlabel not in c]
-    discrete_classes = nom_classes + non_nom_classes
+    nom_c = get_nominal_classes(nomapp, endclasses, (x_param, y_param), metric,
+                                only_params, default_param, nom_func)
+    data, classifications, discrete_classes = nom_c
 
     for cl in discrete_classes:
-        xdata = [d[1] for i, d in enumerate(data) if classifications[i] == cl]
-        ydata = [d[2] for i, d in enumerate(data) if classifications[i] == cl]
-        if str(nomlabel) in cl:
-            plt.scatter(xdata, ydata, label=cl, marker="o")
+        xdata = get_dim_data(data, classifications, cl, 0)
+        ydata = get_dim_data(data, classifications, cl, 1)
+        if nom_func(cl):
+            plt.scatter(xdata, ydata, label=cl,
+                        marker=nom_marker, alpha=nom_alpha, color=nom_color)
         else:
-            plt.scatter(xdata, ydata, label=cl, marker="X")
-    plt.legend(loc=legendloc)
+            plt.scatter(xdata, ydata, label=cl,
+                        marker=fault_marker, color=fault_color)
+    plt.legend(loc=legend_loc)
     if not xlabel:
-        xlabel = param1
+        xlabel = x_param
     if not ylabel:
-        ylabel = param2
+        ylabel = y_param
     plt.xlabel(xlabel)
     plt.ylabel(ylabel)
     plt.title(title)
@@ -640,35 +710,63 @@ def nominal_vals_2d(nomapp, nomapp_endclasses, param1, param2,
     return fig
 
 
-def nominal_vals_3d(nomapp, nomapp_endclasses, param1, param2, param3,
-                    title="Nominal Operational Envelope", nomlabel='nominal',
-                    metric='classification',
-                    figsize=(6, 4), xlabel='', ylabel='', zlabel=''):
+def nominal_vals_3d(nomapp, endclasses, x_param, y_param, z_param,
+                    only_params=False, default_param=0,
+                    title="Nominal Operational Envelope", nom_func=lambda x: x == 0.0,
+                    metric='cost', figsize=(6, 4), xlabel='', ylabel='', zlabel='',
+                    nom_alpha=0.5, nom_color="blue", nom_marker="o",
+                    fault_alpha=0.5, fault_color="red", fault_marker="X",
+                    legend_loc="best", markersize=50):
     """
-    Visualizes the nominal operational envelope along three given parameters
+    Visualizes the nominal operational envelope along two given parameters
 
     Parameters
     ----------
     nomapp : NominalApproach
         Nominal sample approach simulated in the model.
-    nomapp_endclasses : dict
+    endclasses : dict
         End-classifications for the set of simulations in the model.
-    param1 : str
-        First parameter (x) desired to visualize in the operational envelope
-    param2 : str
-        Second parameter (y) desired to visualize in the operational envelope
-    param3 : str
-        Third parameter (y) desired to visualize in the operational envelope
+    x_param : str
+        Parameter range desired to visualize on the x-axis. Can be any
+        property that changes over the nomapp
+        (e.g., `r.seed`, `inputparam.x_in`, `p.x`...)
+    y_param : str
+        Parameter range desired to visualize on the y-axis. Can be any
+        property that changes over the nomapp
+        (e.g., `r.seed`, `inputparam.x_in`, `p.x`...)
+    z_param : str
+        Parameter range desired to visualize on the y-axis. Can be any
+        property that changes over the nomapp
+        (e.g., `r.seed`, `inputparam.x_in`, `p.x`...)
+    only_params : bool
+        Whether to only include scenarios with a defined x_param. Default is False.
+    default_param : any
+        Default parameter value (if parameter not defined)
     title : str, optional
         Plot title. The default is "Nominal Operational Envelope".
-    nomlabel : str, optional
-        Flag for nominal end-states. The default is 'nominal'.
-    xlabel: str, optional
-        label for x-axis (defaults to parameter name for param1)
-    ylabel: str, optional
-        label for y-axis (defaults to parameter name for param2)
-    zlabel: str, optional
-        label for z-axis (defaults to parameter name for param3)
+    nom_func : method, optional
+        Function to classify metric values as "nominal".
+        Default is lambda x: x == 0.0
+    metric : str
+        Value to get from endclasses for the scenario(s). The default is 'cost'.
+    figsize : bool
+        figsize argument to plt.figure
+    xlabel, ylabel, zlabel : str, optional
+        label for x/y/z-axis (defaults to parameter name for x_param/2/3)
+    nom_alpha : float, optional
+        alpha value for nominal values. Default is 0.5.
+    nom_color : str, optional
+        color for nominal values
+    nom_marker : str, optional
+        marker for nominal values. Default is 'o'.
+    fault_alpha : float, optional
+        alpha value for off-nominal values. Default is 0.5.
+    fault_color : str, optional
+        color for off-nominal values
+    fault_marker : str, optional
+        marker for nominal values. Default is 'X'.
+    legend_loc : str, optional
+        location for the legend (see matplotlib docs). Default is 'best'.
 
     Returns
     -------
@@ -678,32 +776,27 @@ def nominal_vals_3d(nomapp, nomapp_endclasses, param1, param2, param3,
     fig = plt.figure(figsize=figsize)
     ax = fig.add_subplot(projection='3d')
 
-    data = [(x, scen.inputparams[param1], scen.inputparams[param2], scen.inputparams[param3])
-            for x, scen in nomapp.scenarios.items()
-            if (scen.inputparams.get(param1, False) != False
-                and scen.inputparams.get(param2, False) != False
-                and scen.inputparams.get(param3, False) != False)]
-    names = [d[0] for d in data]
-    classifications = [str(nomapp_endclasses[name][metric]) for name in names]
-    all_classes = set(classifications)
-    nom_classes = [c for c in all_classes if nomlabel in c]
-    non_nom_classes = [c for c in all_classes if nomlabel not in c]
-    discrete_classes = nom_classes + non_nom_classes
+    nom_c = get_nominal_classes(nomapp, endclasses, (x_param, y_param, z_param), metric,
+                                only_params, default_param, nom_func)
+    data, classifications, discrete_classes = nom_c
     for cl in discrete_classes:
-        xdata = [d[1] for i, d in enumerate(data) if classifications[i] == cl]
-        ydata = [d[2] for i, d in enumerate(data) if classifications[i] == cl]
-        zdata = [d[3] for i, d in enumerate(data) if classifications[i] == cl]
-        if str(nomlabel) in cl:
-            ax.scatter(xdata, ydata, zdata, label=cl, marker="o")
+        xdata = get_dim_data(data, classifications, cl, 0)
+        ydata = get_dim_data(data, classifications, cl, 1)
+        zdata = get_dim_data(data, classifications, cl, 2)
+        s = np.ones(len(xdata))*markersize
+        if nom_func(cl):
+            ax.scatter(xdata, ydata, zdata, label=cl, s=s,
+                       marker=nom_marker, alpha=nom_alpha, color=nom_color)
         else:
-            ax.scatter(xdata, ydata, zdata, label=cl, marker="X")
+            ax.scatter(xdata, ydata, zdata, label=cl, s=s,
+                       marker=fault_marker, color=fault_color)
     ax.legend()
     if not xlabel:
-        xlabel = param1
+        xlabel = x_param
     if not ylabel:
-        ylabel = param2
+        ylabel = y_param
     if not zlabel:
-        xlabel = param3
+        zlabel = z_param
     ax.set_xlabel(xlabel)
     ax.set_ylabel(ylabel)
     ax.set_zlabel(zlabel)
@@ -1017,6 +1110,7 @@ def samplemetrics(app, endclasses, joint=False, title="", metric='cost'):
             st = 'std'
         samplemetric(app, endclasses, fxnmode, samptype=st, title="", metric=metric)
 
+
 def metricovertime(endclasses, app, metric='cost', metrictype='expected cost'):
     """
     Plots the total cost or total expected cost of faults over time.
@@ -1024,13 +1118,15 @@ def metricovertime(endclasses, app, metric='cost', metrictype='expected cost'):
     Parameters
     ----------
     endclasses : dict
-        dict with rate,cost, and expected cost for each injected scenario (e.g. from run_approach())
+        dict with rate,cost, and expected cost for each injected scenario
+        (e.g. from run_approach())
     app : sampleapproach
         sample approach used to generate the list of scenarios
     metric : str
         metric to plot ovre time. Default is 'cost'
     metrictype : str, optional
-        type of cost to plot (e.g,'cost', 'expected cost' or 'rate'). The default is 'expected cost'.
+        type of cost to plot (e.g,'cost', 'expected cost' or 'rate').
+        The default is 'expected cost'.
     Returns
     -------
     figure: matplotlib figure
@@ -1082,8 +1178,12 @@ def nominal_factor_comparison(comparison_table, metric, ylabel='proportion',
                        for col in comparison_table.columns if col[1] == ''])
         labels = [str(i[0]) for i in comparison_table.columns if i[1] == '']
         if error_bars:
-            UB = np.array([comparison_table.at[metric,col] for col in comparison_table.columns if col[1]=='UB'])
-            LB = np.array([comparison_table.at[metric,col] for col in comparison_table.columns if col[1]=='LB'])
+            UB = np.array([comparison_table.at[metric, col]
+                           for col in comparison_table.columns
+                           if col[1] == 'UB'])
+            LB = np.array([comparison_table.at[metric, col]
+                           for col in comparison_table.columns
+                           if col[1] == 'LB'])
             yerr = [bar-LB, UB-bar]
             if maxy == 'max':
                 maxy = comparison_table.loc[metric].max()
@@ -1173,7 +1273,7 @@ def nested_factor_comparison(comparison_table, faults='all', rows=1, stat='propo
         if stack == False:
             maxy = comparison_table.max().max()
         else:
-            maxy = comparison_table.iloc[:, 1:].max().max()+comparison_table['nominal'].max()
+            maxy = comparison_table.iloc[:, 1:].max().max() + comparison_table['nominal'].max()
     for fault in faults:
         n += 1
         ax = figure.add_subplot(rows, columns, n, label=str(n))

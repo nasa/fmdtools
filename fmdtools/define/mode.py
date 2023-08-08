@@ -3,9 +3,10 @@
 Description: Module for helping define Modes (faulty and otherwise).
 
 Has classes:
+
 - :class:`Fault`: Class for defining fault parameters
 - :class:`Mode`: Class for defining the mode property (and associated probability model)
-held in Blocks.
+  held in Blocks.
 """
 from recordclass import dataobject
 from typing import ClassVar
