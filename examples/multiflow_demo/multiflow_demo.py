@@ -38,12 +38,12 @@ class Mover(FxnBlock):
         #recieve messages
         self.internal_info.receive()
         #communicate
-        if self.p.x_up==0.0:  
-            self.internal_info.s.y=self.loc.s.y
-            self.internal_info.send("all", "local", "y")
-        elif self.p.y_up==0.0:   
+        if self.p.x_up!=0.0:  
             self.internal_info.s.x=self.loc.s.x
             self.internal_info.send("all", "local", "x")
+        elif self.p.y_up!=0.0:   
+            self.internal_info.s.y=self.loc.s.y
+            self.internal_info.send("all", "local", "y")   
     def find_classification(self, scen, fxnhist):
         return {"last_x": self.loc.s.x, "min_x": fxnhist.faulty.location.get(self.name).x}
         
@@ -80,4 +80,6 @@ if __name__=='__main__':
     mdl.flows["communications"].mover_1.send("mover_2")
     from fmdtools.sim import propagate
     
-    endclass, mdlhist = propagate.nominal(mdl)
+    endres, mdlhist = propagate.nominal(mdl, desired_result='graph.flows.communications')
+    
+    endres.graph.flows.communications.draw()

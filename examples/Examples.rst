@@ -43,7 +43,7 @@ In addition to `ex_pump.py`, more use-cases are demonstrated in the derivative m
   
   - Using :func:`fmdtools.analyze.plot.mdlhists()` to visualize the results of multiple stochastic simulations over time, and analyze quantities of interest using :func:`fmdtools.analyze.tabulate.nested_stats()`, :func:`fmdtools.analyze.tabulate.nested_factor_comparison()`
 
-- `AST Sampling <../examples/pump/AST_Sampling.ipynb>`_, shows how fmdtools models called from the AdaSress Julia package to leverage the adaptive stress testing methodology using the :class:`fmdtools.sim.search.DynamicInterface` class.
+- `AST Sampling <../examples/pump/AST_Sampling.ipynb>`_, shows how fmdtools models called from the `AdaSress Julia<https://www.nasa.gov/content/tech/rse/research/adastress>` package to leverage the adaptive stress testing methodology using the :class:`fmdtools.sim.search.DynamicInterface` class.
 
 
 .. toctree::
@@ -55,7 +55,6 @@ In addition to `ex_pump.py`, more use-cases are demonstrated in the derivative m
    ../examples/pump/Optimization.ipynb
    ../examples/pump/Stochastic_Modelling.ipynb
    ../examples/pump/AST_Sampling.ipynb
-   ../examples/pump/IDETC_Results/IDETC_Figures.ipynb
 
 Multirotor
 +++++++++++++++++++++++++++++++++++++++++++++
@@ -72,6 +71,17 @@ The multirotor example model has several models of drones modelled at differing 
  
 - `Multirotor Optimization <../examples/multirotor/Multirotor_Optimization.ipynb>`_ shows how the design, operations, and contingency management of a system can be co-optimized with the :class:`fmdtools.sim.search.ProblemInterface` class. 
 
+- The support files include various implementations of the drone model.
+
+  - `drone_mdl_static.py` is the baseline model of the drone for static modeling that is used in the other models.
+
+  - `drone_mdl_dynamic.py` expands on the static model to allow for dynamic simulation. It generates behavior-over-time graphs and dynamic/phase-based FMEAs. 
+
+  - `drone_mdl_hierarchical.py` is used to compare system architectures. First by seeing how faults effect the behaviors in each architecture, then by seing how it affects the overall system resilience.
+
+  - `drone_mdl_opt.py` is a modified version of the hierarchical done that encompasses autonomous path planning, rotors, electrical system, and control of the drone. It is parameterized with the following parameters: The rotor and battery architecture can be changed, the flight height can be changed to support different heights, which in turn changes the drone's flight plan, and there is now a `ManageHealth` function which reconfigures the flight depending on detected faults.
+
+
 .. toctree::
    :hidden:
    
@@ -87,6 +97,14 @@ The tank example is a fairly simple model of a tank, inlet valve, and outlet val
 
 - `Tank Optimization <../examples/tank/Tank_Optimization.ipynb>`_ shows how design and contingency management of a system (in `tank_optimization_model.py`) can be co-optimized with the :class:`fmdtools.sim.search.ProblemInterface` class, as well as external solvers.
 
+The support files include various implementations of the tank model.
+
+
+- The baseline Tank Model (`tank_model.py`), a dynamical implementation of a human-operated tank system to show how fmdtools can be used to model human errors
+
+- A demonstration Optimization Tank Model (`tank_opt.py`), resilience optimization architectures using :class:`fmdtools.sim.search.ProblemInterface` 
+ 
+- The main `Tank optimization model (`tank_optimization.py`)similar to `tank_model` and `tank_opt` and is a dynamical implementation of a tank system with contingency management. 
 
 .. toctree::
    :hidden:
@@ -94,12 +112,15 @@ The tank example is a fairly simple model of a tank, inlet valve, and outlet val
    ../examples/tank/Tank_Analysis.ipynb
    ../examples/tank/Tank_Optimization.ipynb
 
+
 EPS
 +++++++++++++++++++++++++++++++++++++++++++++
 
 The EPS model is a model of a simple electric power system in `eps.py`, which shows how undirected propagation can be used in a simple static (i.e., one time-step) moelling use-case. 
 
-- `EPS Example Notebook <../examples/eps/EPS_Example_Notebook.ipynb>`_ demonstrates this model and some basic fmdtools methods.
+- `EPS Example Notebook <../examples/eps/EPS_Example_Notebook.ipynb>`_ demonstrates this model and some basic fmdtools methods. It shows how fmdtools can be used for purely static propagation models where dynamic states are not a concern. This is a relication of a previous simple electric power system implemented `IBFM <https://github.com/DesignEngrLab/IBFM>`.
+
+-  `The supporting EPS Model `eps.py` builds the eps model for the notebook. The main purpose of this system is to supply power to optical, mechanical, and heat loads. Failure behavior of the system is represented at a high level using solely the functions of the system. 
 
 .. toctree::
    :hidden:
@@ -119,7 +140,7 @@ Action Sequence Graph
 Rover
 +++++++++++++++++++++++++++++++++++++++++++++
 
-The Rover model showcases more advanced methodologies that can be used in fmdtools, and has essentially been the developers' demo case study for advancing the state-of-the-art in resilience simulation These demonstrations include:
+The Rover model showcases more advanced methodologies that can be used in fmdtools, and has essentially been the developers' demo case study for advancing the state-of-the-art in resilience simulation. These demonstrations include:
 
 - `Rover Setup Notebook <../examples/rover/Rover_Setup_Notebook.ipynb>`_ , which introduces the model and basic usages.
 
@@ -153,6 +174,11 @@ The Rover model showcases more advanced methodologies that can be used in fmdtoo
   
 - `Rover Response Optimization <../examples/rover/optimization/Rover_Response_Optimization.ipynb>`_ further demonstrates the optimization of parameters over a set of fault scenarios using :class:`ProblemInterface`.
   
+- The support files include various implementations of the drone model.
+  - `rover_model.py` defines the functions and flows used in the analysis.
+  - `rover_degradation.py` extends the model to include degradated states.
+  - `rover_model_human.py` extends the model to include human faults and response.
+
 
 .. toctree::
    :hidden:
@@ -171,5 +197,9 @@ The Rover model showcases more advanced methodologies that can be used in fmdtoo
 Multiflow Demo
 +++++++++++++++++++++++++++++++++++++++++++++
 
-The multiflows example is limited to the model in the file `multiflows_demo.py`, which shows basic usage of the :class:`fmdtools.define.flow.MultiFlow` and :class:`fmdtools.define.flow.CommsFlow` flow structures.
+The multiflows example is limited to the model in the file `multiflow_demo.py`, which shows basic usage of the :class:`fmdtools.define.flow.MultiFlow` and :class:`fmdtools.define.flow.CommsFlow` flow structures. `Multiflow and Commsflow Demonstration <..examples/multiflow_demo/MultiFlow_and_Commsflow_Demonstation.ipynb>`_ is a tutorialized version of that file discussing the step by step creation and use of `fmdtools.analyze.graph.ModelTypeGraph` to view model types.
 
+.. toctree::
+  :hidden:
+
+  ../examples/multiflow_demo/Multiflow_and_Commsflow_Demonstration.ipynb

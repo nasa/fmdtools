@@ -5,7 +5,7 @@ Author: Daniel Hulse
 Created: October 2019
 Description: A simple model for explaining stochastic behavior modelling
 
-This model is an exension of ex_pump.py that includes stochastic behaviors
+This model is an extension of ex_pump.py that includes stochastic behaviors
 """
 from examples.pump.ex_pump  import MoveWat as DetMoveWat
 from fmdtools.define.rand import Rand
@@ -215,6 +215,11 @@ if __name__ == "__main__":
                        'fxns.move_water.s.total_flow',
                        'flows.wat_2.s.flowrate',
                        'flows.wat_2.s.pressure')
+    
+    nomhist, nomres, = propagate.nominal_approach(mdl, app)
+    an.plot.nominal_vals_1d,(app, nomres, )
+    
+
 
     # endresults, resgraph, mdlhist=propagate.nominal(mdl)
     # an.plot.mdlhistvals(mdlhist, fxnflowvals={'MoveWater':'eff', 'Wat_1':'flowrate', 'Wat_2':['flowrate', 'pressure']})
@@ -267,6 +272,7 @@ if __name__ == "__main__":
     """
     # app = NominalApproach()
     # app.add_seed_replicates('test_seeds', 100)
+    # an.plot.nominal_vals_1d(app, endclasses, 'test_seeds')
     # endclasses, mdlhists=propagate.nominal_approach(mdl,app, run_stochastic=True)
     # an.plot.mdlhists(mdlhists, {'MoveWater':['eff', 'total_flow'], 'Wat_2':['flowrate', 'pressure']},\
     #                               ylabels={('Wat_2', 'flowrate'):'liters/s'}, color='blue', alpha=0.1, legend_loc=False)
@@ -287,7 +293,9 @@ if __name__ == "__main__":
     #                               ylabels={('Wat_2', 'flowrate'):'liters/s'}, cols=2, color='blue', alpha=0.1, legend_loc=False)
     # an.plot.mdlhists(mdlhists, {'MoveWater':['eff', 'total_flow'], 'Wat_2':['flowrate', 'pressure'], 'ImportEE':['effstate', 'grid_noise'], 'EE_1':['voltage', 'current'], 'Sig_1':['power']}, aggregation='percentile',\
     #                               ylabels={('Wat_2', 'flowrate'):'liters/s'}, cols=2, color='blue', alpha=0.1, legend_loc=False)
-    #an.plot.nominal_vals_1d(app, endclasses, 'test_seeds')
+    #
+    endclasses, mdlhists=propagate.nominal_approach(mdl,app, run_stochastic=True)
+    an.plot.nominal_vals_1d(app, endclasses, 'test_seeds')
     
     
     

@@ -4,9 +4,9 @@ Description: A module defining how simulation results (histories) structured and
 processed. Has classes:
 
 - :class:`Result`:  Class for defining result dictionaries
-(nested dictionaries of metric(s))
+  (nested dictionaries of metric(s))
 - :class:`History`: Class for defining simulation histories
-(nested dictionaries of arrays or lists)
+  (nested dictionaries of arrays or lists)
 
 And functions:
 
@@ -17,36 +17,36 @@ Private Methods:
 
 - :func:`file_check`: Check if files exists and whether to overwrite the file
 - :func:`auto_filetype`: Helper function that automatically determines the filetype
-(pickle, csv, or json) of a given filename
+  (pickle, csv, or json) of a given filename
 - :func:`create_indiv_filename`: Helper function that creates an individualized name for
 a file given the general filename and an individual id
 - :func:`clean_resultdict_keys`: Helper function for recreating results dictionary keys
-(tuples) from a dictionary loaded from a file (where keys are strings)
+  (tuples) from a dictionary loaded from a file (where keys are strings)
 (used in csv/json results)
 - :func:`get_dict_attr`: Gets attributes *attr from a given nested dict dict_in of class
-des_class
+  des_class
 - :func:`fromdict`: Creates new history/result from given dictionary
 - :func:`check_include_errors`: Helper function for Result Class, Cycles through
-`check_include_error`.
+  `check_include_error`.
 - :func:`check_include_error`: Helper function to raise exceptions for errors.
 - :func:`bootstrap_confidence_interval`: Convenience wrapper for scipy.bootstrap
 - :func:`diff`: Helper function for finding inconsistent states between val1, val2, with
-the difftype option
+  the difftype option
 - :func:`nan_to_x`: Helper function for Result Class, returns nan as zero if present,
-otherwise returns the number
+  otherwise returns the number
 - :func:`is_numeric`: Helper function for Result Class, checks if a given value is
-numeric
+  numeric
 - :func:`join_key`: Helper function for Result Class
 - :func:`is_known_immutable`: Helper function for History Class
 - :func:`is_known_mutable`: Helper function for History Class
 - :func:`to_include_keys`: Determine what dict keys to include from Result given nested
-to_include dictionary
+  to_include dictionary
 - :func:`get_sub_include`: Determines what attributes of att to include based on the
-provided dict/str/list/set to_include
+  provided dict/str/list/set to_include
 - :func:`init_indicator_hist`: Creates a history for an object with indicator methods
 (e.g., obj.indicate_XX)
 - :func:`init_hist_iter`: Initializes the history for a given attribute att with value
-val. Enables the recursive definition of a history as a nested structure.
+  val. Enables the recursive definition of a history as a nested structure.
 - :func:`init_dicthist`: Initializes histories for dictionary attributes (if any)
 """
 
@@ -421,7 +421,7 @@ class Result(UserDict):
         """Gets a dictlike with all scenarios corresponding to the strings in *scens"""
         h = self.__class__()
         k_s = [k for k in self.keys()
-               for s in scens if k.startswith(s) or '.'+s+'.' in k]
+               for s in scens if k.startswith(s+".") or '.'+s+'.' in k]
         for k in k_s:
             h[k] = self[k]
         return h
@@ -884,7 +884,7 @@ def is_bool(val):
 def is_numeric(val):
     """Checks if a given value is numeric"""
     try:
-        return val.dtype in ['float', 'bool', 'int']
+        return np.issubdtype(np.array(val).dtype, np.number)
     except:
         return type(val) in [float, bool, int]
 

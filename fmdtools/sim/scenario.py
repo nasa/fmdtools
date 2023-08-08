@@ -90,8 +90,26 @@ class NominalScenario(BaseScenario, readonly=True):
     rangeid: str=''
     prob: float=1.0
     name: str = 'nominal'
-    
-    
+
+    def get_param(self, param, default="NA"):
+        if param.startswith("p."):
+            pval = self.p.get(param[2:], default)
+        elif param.startswith("r."):
+            pval = self.r.get(param[2:], default)
+        elif param.startswith("sp."):
+            pval = self.sp.get(param[3:], default)
+        elif param.startswith("inputparams."):
+            pval = self.inputparams.get(param[12:], default)
+        elif param == 'prob':
+            pval = self.prob
+        else:
+            pval = default
+        return pval
+
+    def get_params(self, *params, default="NA"):
+        return [self.get_param(param, default=default) for param in params]
+
+
 class ParamScenario(NominalScenario):
     paramfunc: callable 
     fixedargs: tuple = ()

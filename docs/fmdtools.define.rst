@@ -3,7 +3,7 @@ fmdtools.define package
 
 The define package provides the building blocks to develop a simulation. Simulations are defined in the sub-classes of the :class:`Simulable` class (in the :mod:`block` and :mod:`model` subpackages), as shown below:
 
-.. figure:: figures/block_inheritance
+.. figure:: figures/block_inheritance.svg
    :width: 800
    :alt: Structure simulable fmdtools classes
    
@@ -70,7 +70,7 @@ fmdtools.define.model
    :width: 800
    :alt: Structure of a Model
    
-	Code template for :class:`Model` used to define the high-level function-flow structure of a system model.
+   Code template for :class:`Model` used to define the high-level function-flow structure of a system model.
 
 .. automodule:: fmdtools.define.model
    :members:
