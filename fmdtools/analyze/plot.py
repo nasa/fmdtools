@@ -386,8 +386,8 @@ def metric_dist(result, *plot_values, cols=2, comp_groups={},
 
     Parameters
     ----------
-    endclasses : Result
-        Dictionary of metrics with structure {'scen':{'metric':value}}
+    result : Result
+        Result dictionary of metrics over set of scenarios
     plot_values : strs
         names of values to pull from the result (e.g., 'fxns.move_water.s.flowrate').
         Can also be specified as a dict (e.g. {'fxns':'move_water'}) to get all keys
@@ -458,8 +458,8 @@ def metric_dist(result, *plot_values, cols=2, comp_groups={},
         else:
             ax.set_xlabel(' '.join(xlabel))
         ax.grid(axis='y')
-        fulldata = [[*endc.get_values(plot_value).values()]
-                    for endc in groupmetrics.values()]
+        fulldata = [i for endc in groupmetrics.values()
+                    for i in [*endc.get_values(plot_value).values()]]
         bins = np.histogram(fulldata, metric_bins.get(plot_value, num_bins))[1]
         if not i % cols:
             ax.set_ylabel(ylabel)

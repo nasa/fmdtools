@@ -310,18 +310,26 @@ if __name__ == "__main__":
     behave_endclasses, behave_mdlhists = prop.nominal_approach(mdl, behave_nomapp)
     f = plt.figure()
     f = plot_trajectories(behave_mdlhists)
-    an.plot.nominal_vals_2d(behave_nomapp, behave_endclasses, "t", "scen")
+    an.plot.nominal_vals_2d(behave_nomapp, behave_endclasses, "t", "scen",
+                            nom_func=lambda x: x == 'nominal',
+                            metric='classification')
 
     comp_groups = {
-        "group_1": [*behave_endclasses][:100],
-        "group_2": [*behave_endclasses][100:],
+        "group_1": [*behave_endclasses.nest().keys()][:100],
+        "group_2": [*behave_endclasses.nest().keys()][100:],
     }
 
-    #an.plot.metric_dist(behave_endclasses, metrics=['line_dist', 'end_dist', 'x', 'y'], comp_groups=comp_groups, alpha=0.5, bins=10, metric_bins={'x':20})
+    an.plot.metric_dist(behave_endclasses, 'line_dist', 'end_dist', 'x', 'y',
+                        comp_groups=comp_groups, alpha=0.5, bins=10,
+                        metric_bins={'x':20})
 
-    #an.plot.metric_dist_from(behave_mdlhists, times= [0, 10, 20], fxnflowvals = {'flows':{'ground':{'s':['x', 'y', 'linex', 'ang']}}}, alpha=0.5, bins=10)
+    an.plot.metric_dist_from(behave_mdlhists, [0, 10, 20],
+                             {'flows': {'ground': {'s': ['x', 'y', 'linex', 'ang']}}},
+                             alpha=0.5, bins=10)
 
-    #an.plot.metric_dist_from(behave_mdlhists, times= 30, fxnflowvals = {'flows':{'ground':{'s':['x', 'y', 'linex', 'ang']}}}, comp_groups=comp_groups, alpha=0.5, bins=10)
+    an.plot.metric_dist_from(behave_mdlhists, 30,
+                             {'flows': {'ground': {'s':['x', 'y', 'linex', 'ang']}}},
+                             comp_groups=comp_groups, alpha=0.5, bins=10)
 
     # human PSF degradation code starts here
 
