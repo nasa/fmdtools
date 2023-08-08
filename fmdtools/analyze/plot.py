@@ -164,10 +164,8 @@ def hist(simhists, *plot_values, cols=2, aggregation='individual',
         simhists = History(nominal=simhists).flatten()
     else:
         simhists = simhists.flatten()
-    if len(plot_values) == 1 and type(plot_values[0]) == dict:
-        plot_values = to_include_keys(plot_values[0])
-    if not plot_values:
-        raise Exception("Empty plot_values--make sure to pass quantities to plot!")
+
+    plot_values = unpack_plot_values(plot_values)
 
     grouphists = simhists.get_comp_groups(*plot_values, **comp_groups)
 
@@ -310,6 +308,15 @@ def plot_line_and_err(ax, times, line, lows, highs, boundtype,
         raise Exception("Invalid bound type: "+boundtype)
 
 
+def unpack_plot_values(plot_values):
+    """Helper function for enabling both dict and str plot_values."""
+    if len(plot_values) == 1 and type(plot_values[0]) == dict:
+        plot_values = to_include_keys(plot_values[0])
+    if not plot_values:
+        raise Exception("Empty plot_values--make sure to pass quantities to plot!")
+    return plot_values
+
+
 def plot_err_lines(ax, times, lows, highs, **kwargs):
     """
     Plots error lines on the given plot
@@ -382,7 +389,9 @@ def metric_dist(result, *plot_values, cols=2, comp_groups={},
     endclasses : Result
         Dictionary of metrics with structure {'scen':{'metric':value}}
     plot_values : strs
-        metrics in the dictionary to plot
+        names of values to pull from the result (e.g., 'fxns.move_water.s.flowrate').
+        Can also be specified as a dict (e.g. {'fxns':'move_water'}) to get all keys
+        from a given fxn/flow/mode/etc.
     cols : int, optional
         columns to use in the figure. The default is 2.
     comp_groups : dict, optional
@@ -426,6 +435,7 @@ def metric_dist(result, *plot_values, cols=2, comp_groups={},
         keyword arguments to mpl.hist e.g. bins, etc
     """
     # Sort into comparison groups
+    plot_values = unpack_plot_values(plot_values)
     groupmetrics = result.get_comp_groups(*plot_values, **comp_groups)
 
     num_plots = len(plot_values)
