@@ -19,10 +19,10 @@ Private Methods:
 - :func:`auto_filetype`: Helper function that automatically determines the filetype
   (pickle, csv, or json) of a given filename
 - :func:`create_indiv_filename`: Helper function that creates an individualized name for
-a file given the general filename and an individual id
+  a file given the general filename and an individual id
 - :func:`clean_resultdict_keys`: Helper function for recreating results dictionary keys
   (tuples) from a dictionary loaded from a file (where keys are strings)
-(used in csv/json results)
+  (used in csv/json results)
 - :func:`get_dict_attr`: Gets attributes *attr from a given nested dict dict_in of class
   des_class
 - :func:`fromdict`: Creates new history/result from given dictionary
@@ -44,7 +44,7 @@ a file given the general filename and an individual id
 - :func:`get_sub_include`: Determines what attributes of att to include based on the
   provided dict/str/list/set to_include
 - :func:`init_indicator_hist`: Creates a history for an object with indicator methods
-(e.g., obj.indicate_XX)
+  (e.g., obj.indicate_XX)
 - :func:`init_hist_iter`: Initializes the history for a given attribute att with value
   val. Enables the recursive definition of a history as a nested structure.
 - :func:`init_dicthist`: Initializes histories for dictionary attributes (if any)
@@ -1262,10 +1262,11 @@ class History(Result):
         operator : function
             Method of combining multiple degraded values. The default is np.prod
         difftype : 'bool'/'diff'/float
-            Way to calculate the difference
-                - for 'bool' it is calculated as an equality nom == faulty
-                - for 'diff' it is calculated as a difference nom - faulty
-                - if a float is provided, it is calculated as nom - fault > diff
+            Way to calculate the difference:
+
+                - for 'bool', it is calculated as an equality nom == faulty
+                - for 'diff', it is calculated as a difference nom - faulty
+                - if a float, is provided, it is calculated as nom - fault > diff
         threshold : 0.000001
             Threshold for degradation
         withtime : bool

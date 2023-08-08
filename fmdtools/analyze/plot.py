@@ -2,6 +2,7 @@
 Description: Plots quantities of interest over time using matplotlib.
 
 Uses the following methods:
+
 - :func:`hist`: plots function and flow histories over time
   (with different plots for each function/flow)
 - :func:`plot_line_and_err`: Plots a line with a given range of uncertainty around it.
@@ -9,7 +10,7 @@ Uses the following methods:
 - :func:`multiplot_legend_title`: Helper function for multiplot legends and titles.
 - :func:`make_consolidated_legend`: Creates a single legend for a given multiplot where
   multiple groups are being compared.
-- :func:`metric_dist`:     Plots the histogram of given metric(s) separated by
+- :func:`metric_dist`: Plots the histogram of given metric(s) separated by
   comparison groups over a set of scenarios.
 - :func:`metric_dist_from`:Plot the distribution of model history function/flow value
   over at defined time(s) over a number of scenarios.
@@ -68,31 +69,33 @@ def hist(simhists, *plot_values, cols=2, aggregation='individual',
     ----------
     simhists : History
         Simulation history
-    plot_values : strs
+    *plot_values : strs
         names of values to pull from the history (e.g., 'fxns.move_water.s.flowrate').
-        Can also be specified as a dict (e.g. {'fxns':'move_water'}) to get all keys
+        Can also be specified as a dict (e.g. {'fxns': 'move_water'}) to get all keys
         from a given fxn/flow/mode/etc.
     cols : int, optional
         columns to use in the figure. The default is 2.
     aggregation : str, optional
-        Way of aggregating the plot values. The default is 'individual'
+        Way of aggregating the plot values. The default is 'individual'.
+
         Note that only the `individual` option can be used for histories of non-numeric
         quantities (e.g., modes, which are recorded as strings):
+
         - 'individual' plots each run individually.
         - 'mean_std' plots the mean values over the sim with standard deviation error
-        bars
-        - 'mean_ci'  plots the mean values over the sim with mean confidence interval
-        error bars:
-            - optional argument ci (float 0.0-1.0) specifies the confidence interval
-            (Default:0.95)
-        - 'mean_bound' plots the mean values over the sim with variable bound error bars
+          bars.
+        - 'mean_ci' plots the mean values over the sim with mean confidence interval
+          error bars given by optional argument `ci`.
+        - 'mean_bound' plots the mean values over the sim with variable bound error 
+          bars.
         - 'percentile' plots the percentile distribution of the sim over time
-        (does not reject outliers):
-            - optional argument 'perc_range' (int 0-100) specifies the percentile range
-            of the inner bars (Default: 50)
+          (does not reject outliers). Modified by 'perc_range' argument.
     comp_groups : dict, optional
-        Dictionary for comparison groups (if more than one) with structure
-        {'group1':('scen1', 'scen2'), 'group2':('scen3', 'scen4')}.
+        Dictionary for comparison groups (if more than one) with structure given by:
+        ::
+            {'group1': ('scen1', 'scen2'),
+             'group2':('scen3', 'scen4')}.
+
         Default is {}, which compares nominal and faulty.
         If {'default': 'default'} is passed, all scenarios will be put in one group.
         If a legend is shown, group names are used as labels.
@@ -102,17 +105,20 @@ def hist(simhists, *plot_values, cols=2, aggregation='individual',
     xlabel : str, optional
         Label for the x-axes. Default is 'time'
     ylabels : dict, optional
-        Label for the y-axes with structure {(fxnflowname, value):'label'}
+        Label for the y-axes.
+        Has structure::
+            {(fxnflowname, value): 'label'}
+
     max_ind : int, optional
         index (usually correlates to time) cutoff for the simulation. Default is 'max',
         which uses the first simulation termination time.
-    boundtype : 'fill' or 'line', optional
-        -'fill' plots the error bounds as a filled area
-            - optional fillalpha (float) changes the alpha of this area.
-        -'line' plots the error bounds as lines
-            - optional boundcolor (str) changes the color of the bounds (default 'gray')
-            - optional boundlinestyle (str) changes the style of the bound lines
-            (default '--')
+    boundtype : str, optional
+        Way to represent the bound ('fill' or 'line'):
+
+        - 'fill' plots the error bounds as a filled area with alpha define by optional 
+         'fillalpha' argument.
+        - 'line' plots the error bounds as lines modified by the optional 'boundcolor'
+          and 'boundlinestyle' arguments.
     fillalpha : float
         alpha value for fill in aggregated plots. Default is 0.3.
     boundcolor : str, optional
@@ -122,33 +128,42 @@ def hist(simhists, *plot_values, cols=2, aggregation='individual',
     ci : float, optional
         Bootstrap confidence interval (0-1) to use in 'mean_ci' bound argument.
         Default is 0.95.
+    perc_range : int, optional
+        Percentile range of inner bars when using the 'percentile' option. Default is 50
     title : str, optional
         overall title for the plot. Default is ''
     indiv_kwargs : dict, optional
-        dict of kwargs with structure {comp1:kwargs1, comp2:kwargs2}, where
-        where kwargs is an individual dict of keyword arguments for the
+        Dict of kwargs to use to differentiate each comparison group.
+        Has structure::
+            {comp1: kwargs1, comp2: kwargs2}
+
+        where kwargs is an individual dict of plt.plot arguments for the
         comparison group comp (or scenario, if not aggregated) which overrides
         the global kwargs (or default behavior). If no comparison groups are given,
         use 'default' for a single history or 'nominal'/'faulty' for a fault history
-        e.g. kwargs = {'nominal':{color:'green'}} would make the nominal color green
-        Default is {}.
+        e.g.::
+            kwargs = {'nominal': {color: 'green'}} 
+
+        would make the nominal color green. Default is {}.
     time_slice : int/list, optional
         overlays a bar or bars at the given index when the fault was injected (if any).
         Default is []
     time_slice_label : str, optional
-        label to use for the time slice bars in the legend. Default is None
+        label to use for the time slice bars in the legend. Default is None.
     figsize : tuple (float,float)
         x-y size for the figure. The default is 'default', which dymanically gives 3 for
-        each column and 2 for each row
+        each column and 2 for each row.
     v_padding : float
-        vertical padding between subplots as a fraction of axis height
+        vertical padding between subplots as a fraction of axis height.
     h_padding : float
-        horizontal padding between subplots as a fraction of axis width
+        horizontal padding between subplots as a fraction of axis width.
     title_padding : float
-        padding for title as a fraction of figure height
+        padding for title as a fraction of figure height.
     phases : dict, optional
         Provide to overlay phases on the individual function histories, where phases
-        is from an.process.mdlhist and of structure {'fxnname':'phase':[start, end]}.
+        is from an.process.mdlhist and of structure::
+            {'fxnname': {'phase':[start, end]}}.
+
         Default is {}.
     modephases : dict, optional
         dictionary that maps the phases to operational modes, if it is desired to track
@@ -156,8 +171,7 @@ def hist(simhists, *plot_values, cols=2, aggregation='individual',
     legend_title : str, optional
         title for the legend. Default is None
     **kwargs : kwargs
-        keyword arguments to mpl.plot e.g. linestyle, color, etc. See 'aggregation' for
-        specification.
+        Global/default keyword arguments to mpl.plot e.g., linestyle, color, etc.
     """
     # Process data - clip and flatten
     if "time" in simhists:
@@ -379,35 +393,48 @@ def metric_dist(result, *plot_values, cols=2, comp_groups={},
 
     Parameters
     ----------
-    endclasses : Result
-        Dictionary of metrics with structure {'scen':{'metric':value}}
-    plot_values : strs
-        metrics in the dictionary to plot
+    result : Result
+        Result dict to plot metrics from/of.
+    *plot_values : strs
+        names of values to pull from the result (e.g., 'fxns.move_water.s.flowrate').
+        Can also be specified as a dict (e.g. {'fxns':'move_water'}) to get all keys
+        from a given fxn/flow/mode/etc.
     cols : int, optional
         columns to use in the figure. The default is 2.
     comp_groups : dict, optional
-        Dictionary for comparison groups (if more than one) with structure
-        {'group1':('scen1', 'scen2'), 'group2':('scen3', 'scen4')}.
+        Dictionary for comparison groups (if more than one).
+        Has structure::
+            {'group1': ('scen1', 'scen2'), 'group2': ('scen3', 'scen4')}.
+
         Default is {}, which compares nominal and faulty.
         If {'default': 'default'} is passed, all scenarios will be put in one group.
         If a legend is shown, group names are used as labels.
     bins : int
         Number of bins to use (for all plots). Default is None
     metric_bins : dict,
-        Dictionary of number of bins to use for each metric with structure
-        {'metric':num}. Default is {}
+        Dictionary of number of bins to use for each metric.
+        Has structure::
+            {'metric':num}.
+        
+        Default is {}
     legend_loc : int, optional
         Specifies the plot to place the legend on, if runs are being compared.
         Default is -1 (the last plot)
         To remove the legend, give a value of False
     xlabels : dict, optional
-        Label for the x-axes with structure {'metric':'label'}
+        Label for the x-axes.
+        Has structure::
+            {'metric':'label'}
+
     ylabel : str, optional
         Label for the y-axes. Default is 'time'
     title : str, optional
         overall title for the plot. Default is ''
     indiv_kwargs : dict, optional
-        dict of kwargs with structure {comp1:kwargs1, comp2:kwargs2}, where
+        dict of kwargs to differentiate the comparison groups.
+        Has structure::
+            {comp1: kwargs1, comp2: kwargs2}
+
         where kwargs is an individual dict of keyword arguments for the
         comparison group comp (or scenario, if not aggregated) which overrides
         the global kwargs (or default behavior).
@@ -415,15 +442,15 @@ def metric_dist(result, *plot_values, cols=2, comp_groups={},
         x-y size for the figure. The default is 'default', which dymanically gives 3 for
         each column and 2 for each row
     v_padding : float
-        vertical padding between subplots as a fraction of axis height
+        vertical padding between subplots as a fraction of axis height.
     h_padding : float
-        horizontal padding between subplots as a fraction of axis width
+        horizontal padding between subplots as a fraction of axis width.
     title_padding : float
-        padding for title as a fraction of figure height
+        padding for title as a fraction of figure height.
     legend_title : str, optional
-        title for the legend. Default is None
+        title for the legend. Default is None.
     **kwargs : kwargs
-        keyword arguments to mpl.hist e.g. bins, etc
+        keyword arguments to mpl.hist e.g. bins, etc.
     """
     # Sort into comparison groups
     groupmetrics = result.get_comp_groups(*plot_values, **comp_groups)
@@ -470,21 +497,15 @@ def metric_dist_from(mdlhists, times, *plot_values, **kwargs):
 
     Parameters
     ----------
-    mdlhists : dict
-        Aggregate model history with structure {'scen':mdlhist} (or single mdlhist)
+    mdlhists : History
+        Aggregate model histories over a set of scenarios.
     times : list/int
         List of times (or single time) to key the model history from.
         If more than one time is provided, it takes the place of comp_groups.
-    fxnflowsvals : dict, optional
-        dict of flow values to plot with structure
-        {fxnflow:[vals], fxnflow:'val'/all, fxnflow:{'comp':[vals]}}.
-        The default is 'all', which returns all.
-    comp_groups : dict, optional
-        Dictionary for comparison groups (if more than one) with structure
-        {'group1':('scen1', 'scen2'), 'group2':('scen3', 'scen4')}.
-        Default is {}, which compares nominal and faulty.
-        If {'default': 'default'} is passed, all scenarios will be put in one group.
-        If a legend is shown, group names are used as labels.
+    *plot_values : strs
+        names of values to pull from the history (e.g., 'fxns.move_water.s.flowrate').
+        Can also be specified as a dict (e.g. {'fxns':'move_water'}) to get all keys
+        from a given fxn/flow/mode/etc.
     **kwargs : kwargs
         keyword arguments to plot.metric_dist
     """
@@ -547,8 +568,8 @@ def nominal_vals_1d(nomapp, endclasses, x_param,
     ----------
     nomapp : NominalApproach
         Nominal sample approach simulated in the model.
-    endclasses : dict
-        End-classifications for the set of simulations in the model.
+    endclasses : Result
+        Result dict for the set of simulations produced by running the model over nomapp
     x_param : str
         Parameter range desired to visualize in the operational envelope. Can be any
         property that changes over the nomapp
@@ -627,8 +648,8 @@ def nominal_vals_2d(nomapp, endclasses, x_param, y_param,
     ----------
     nomapp : NominalApproach
         Nominal sample approach simulated in the model.
-    endclasses : dict
-        End-classifications for the set of simulations in the model.
+    endclasses : Result
+        Result dict for the set of simulations produced by running the model over nomapp
     x_param : str
         Parameter range desired to visualize on the x-axis. Can be any
         property that changes over the nomapp
@@ -714,8 +735,8 @@ def nominal_vals_3d(nomapp, endclasses, x_param, y_param, z_param,
     ----------
     nomapp : NominalApproach
         Nominal sample approach simulated in the model.
-    endclasses : dict
-        End-classifications for the set of simulations in the model.
+    endclasses : Result
+        Result dict for the set of simulations produced by running the model over nomapp
     x_param : str
         Parameter range desired to visualize on the x-axis. Can be any
         property that changes over the nomapp
@@ -874,7 +895,9 @@ def phases(mdlphases, modephases=[], mdl=[], dt=1.0, singleplot=True,
     ----------
     mdlphases : History
         phases that the functions of the model progresses through
-        (e.g. from an.process.mdlhist) of structure {'fxnname':'phase':[start, end]}
+        (e.g. from an.process.mdlhist) of structure::
+            {'fxnname': {'phase':[start, end]}}
+
     modephases : dict, optional
         dictionary that maps the phases to operational modes, if it is desired to track
         the progression through modes
@@ -982,7 +1005,9 @@ def samplemetric(app, endclasses, fxnmode,
     metric : str
         Metric to plot. The default is 'cost'
     samptype : str, optional
-        The type of sample approach used:
+        The type of sample approach used.
+        Options include:
+
             - 'std' for a single point for each interval
             - 'quadrature' for a set of points with weights defined by a quadrature
             - 'pruned piecewise-linear' for a set of points with weights defined by a
@@ -1080,8 +1105,8 @@ def samplemetrics(app, endclasses, joint=False, title="", metric='cost'):
     ----------
     app : sampleapproach
         The sample approach used to run the list of faults
-    endclasses : dict
-        A dict of results for each of the scenarios.
+    endclasses : Result
+        Results over the scenarios defined in app.
     joint : bool, optional
         Whether to include joint fault scenarios. The default is False.
     title : str
@@ -1107,15 +1132,15 @@ def metricovertime(endclasses, app, metric='cost', metrictype='expected cost'):
 
     Parameters
     ----------
-    endclasses : dict
-        dict with rate,cost, and expected cost for each injected scenario
+    endclasses : Result
+        Result with metrics for each injected scenario over the approach app
         (e.g. from run_approach())
     app : sampleapproach
         sample approach used to generate the list of scenarios
     metric : str
-        metric to plot ovre time. Default is 'cost'
+        metric to plot over time. Default is 'cost'
     metrictype : str, optional
-        type of cost to plot (e.g,'cost', 'expected cost' or 'rate').
+        type of metric to plot (e.g, 'cost', 'expected cost' or 'rate').
         The default is 'expected cost'.
     Returns
     -------
@@ -1151,10 +1176,11 @@ def nominal_factor_comparison(comparison_table, metric, ylabel='proportion',
         Plot title. The default is ''.
     maxy : float
         Cutoff for the y-axis (to use if the default is bad). The default is 'max'
-    xlabel : TYPE, optional
-        DESCRIPTION. The default is True.
-    error_bars : TYPE, optional
-        DESCRIPTION. The default is False.
+    xlabel : bool/str
+        The x-label descriptor for the design factors. Defaults to the column values.
+    error_bars : bool
+        Whether to include error bars for the factor. Requires comparison_table to have
+        lower and upper bound information
 
     Returns
     -------
