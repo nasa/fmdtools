@@ -287,7 +287,8 @@ if __name__ == "__main__":
     )
 
     # individual slice
-    an.plot.metric_dist_from(mdlhists, [1,10,20], {'s':['wear', 'corrosion', 'friction', 'drift']})
+    an.plot.metric_dist_from(mdlhists, [1, 10, 20],
+                             {'s': ['wear', 'corrosion', 'friction', 'drift']})
 
     # question -- how do we sample this:
     #   - all replicates?
@@ -310,7 +311,7 @@ if __name__ == "__main__":
     behave_endclasses, behave_mdlhists = prop.nominal_approach(mdl, behave_nomapp)
     f = plt.figure()
     f = plot_trajectories(behave_mdlhists)
-    an.plot.nominal_vals_2d(behave_nomapp, behave_endclasses, "t", "scen",
+    an.plot.nominal_vals_2d(behave_nomapp, behave_endclasses, "inputparams.t", "inputparams.scen",
                             nom_func=lambda x: x == 'nominal',
                             metric='classification')
 
