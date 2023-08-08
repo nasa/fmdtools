@@ -526,7 +526,7 @@ def get_nominal_classes(nomapp, endclasses, params, metric, only_params, default
                                   default=default_param)
     if not data:
         raise Exception("No matching scenarios--are parameters " +
-                        params+" in the nomapp Scenarios?")
+                        params + " in the nomapp Scenarios?")
 
     names = [d[0] for d in data]
     classifications = [val for val in

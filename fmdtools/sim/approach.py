@@ -195,6 +195,7 @@ class NominalApproach():
                                                         p=p, 
                                                         r={'seed':int(seeds[i])}, 
                                                         paramfunc=paramfunc,
+                                                        inputparams=inputparams,
                                                         fixedargs=args,
                                                         fixedkwargs=fixedkwargs,
                                                         prob = 1/(len(fullspace)*replicates))
@@ -294,14 +295,14 @@ class NominalApproach():
             inputparams = {name: (ins() if callable(ins) else ins[0](*ins[1:])) for name, ins in randvars.items()}
             p = paramfunc(*fixedargs, **inputparams)
             scenname = rangeid+'_'+str(self.num_scenarios)
-            self.scenarios[scenname] = ParamScenario(name=scenname, 
-                                                    rangeid=rangeid, 
-                                                    p=p, 
-                                                    r={'seed':int(mdlseeds[i])}, 
-                                                    paramfunc=paramfunc,
-                                                    fixedargs=fixedargs,
-                                                    inputparams=inputparams,
-                                                    prob = prob_weight/replicates)
+            self.scenarios[scenname] = ParamScenario(name=scenname,
+                                                     rangeid=rangeid,
+                                                     p=p,
+                                                     r={'seed': int(mdlseeds[i])},
+                                                     paramfunc=paramfunc,
+                                                     fixedargs=fixedargs,
+                                                     inputparams=inputparams,
+                                                     prob=prob_weight/replicates)
             self.ranges[rangeid]['scenarios'].append(scenname)
     def copy(self):
         """Copies the given sampleapproach. Used in nested scenario sampling."""
