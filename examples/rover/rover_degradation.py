@@ -17,6 +17,8 @@ import matplotlib.pyplot as plt
 from rover_model import Rover, plot_trajectories, DegParam
 
 
+
+    
 class DriveDegradationStates(State):
     wear: float = 0.0
     corrosion: float = 0.0
@@ -160,7 +162,7 @@ def sample_params(mdlhists, histname, t=1, scen=1):
 
 def gen_sample_params(mdlhists, histname, t=1, scen=1):
     degparams = sample_params(mdlhists, histname, t=t, scen=scen)
-    return {"linetype": "turn", "degradation": DegParam(**degparams)}
+    return {"linetype": "turn", 'drive_modes': {"mode_args": "degradation"}, "degradation": DegParam(**degparams)}
 
 
 def gen_long_degPSF_param(experience_param, scen=1):
@@ -184,14 +186,13 @@ def get_longhuman_params_from(mdlhist, t):
 def gen_human_params_combined(
     mdlhists_stress,
     app_stress,
-    stress_id="nomapp",
     t_exp=1,
     t_stress=1,
     scen=1,
     linetype="sine",
 ):
-    scen_groups = app_stress.get_param_scens(stress_id, "t", "scen")
-    scen = scen_groups[t_exp, scen]
+    scen_groups = app_stress.get_param_scens("inputparams.t", "inputparams.scen")
+    scen = [scenario[0] for scenario in scen_groups if scenario[1] == [t_exp, scen]]
     if len(scen) > 1:
         raise Exception("multiple scenarios for the given time and scen")
     scen = [*scen][0]
@@ -320,7 +321,8 @@ if __name__ == "__main__":
         "group_2": [*behave_endclasses.nest().keys()][100:],
     }
 
-    an.plot.metric_dist(behave_endclasses, 'line_dist', 'end_dist', 'x', 'y',
+
+    an.plot.metric_dist(behave_endclasses, 'line_dist', 'end_dist',
                         comp_groups=comp_groups, alpha=0.5, bins=10,
                         metric_bins={'x':20})
 
@@ -331,6 +333,7 @@ if __name__ == "__main__":
     an.plot.metric_dist_from(behave_mdlhists, 30,
                              {'flows': {'ground': {'s':['x', 'y', 'linex', 'ang']}}},
                              comp_groups=comp_groups, alpha=0.5, bins=10)
+
 
     # human PSF degradation code starts here
 
@@ -379,7 +382,6 @@ if __name__ == "__main__":
         "behave_nomapp_hum",
         mdlhists_hum_short_long,
         nomapp_short_long,
-        histname_short,
         t_stress=(1, 11, 2),
         t_exp=(1, 15, 4),
         scen=(1, 25, 1),
