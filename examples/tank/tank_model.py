@@ -410,12 +410,12 @@ if __name__ == '__main__':
 
     endclass, mdlhist = propagate.one_fault(mdl, 'human', 'look_not_visible', time=2)
 
-    ## nominal run
+    # nominal run
     endresults, mdlhist = propagate.nominal(mdl, desired_result=['endclass', 'graph'])
     an.plot.hist(mdlhist, "fxns.store_water.s.level")
     endresults.graph.draw()
 
-    ## faulty run
+    # faulty run
     endres, mdlhist = propagate.one_fault(
         mdl, 'store_water', 'leak', time=2, desired_result='graph')
     an.plot.hist(mdlhist,  "fxns.store_water.s.level",
