@@ -15,7 +15,7 @@ import numpy as np
 from .common import get_true_fields, get_true_field
 
 
-class Parameter(dataobject, readonly=True):
+class Parameter(dataobject, readonly=True, mapping=True, iterable=True):
     """
     The Parameter class defines model/function/flow values which are immutable,
     that is, the same from model instantiation through a simulation. Parameters
@@ -70,6 +70,9 @@ class Parameter(dataobject, readonly=True):
             self.check_type()
         if check_pickle:
             self.check_pickle()
+
+    def keys(self):
+        return self.__fields__
 
     def check_lim(self, k, v):
         """
