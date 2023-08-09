@@ -104,7 +104,8 @@ class TankTests(unittest.TestCase, CommonTests):
         mdlhist_global = mdlhist_global.flatten()
 
         mdl_loc_low = Tank(p={'reacttime': 2, 'store_tstep': 0.1})
-        _, mdlhist_loc_low = propagate.one_fault(mdl_loc_low, 'store_water', 'leak', time=2)
+        _, mdlhist_loc_low = propagate.one_fault(mdl_loc_low,
+                                                 'store_water', 'leak', time=2)
         mdlhist_loc_low = mdlhist_loc_low.flatten()
 
         self.compare_results(mdlhist_global, mdlhist_loc_low)
@@ -125,57 +126,97 @@ class TankTests(unittest.TestCase, CommonTests):
         self.assertEqual(mdl.fxns['human'].a.actions['look'].m.failrate, ratecalc)
 
     def test_save_load_nominal(self):
-        for extension in [".pkl",".csv",".json"]:
-            self.check_save_load_onerun(self.mdl, "tank_mdlhist"+extension, "tank_endclass"+extension, 'nominal')
+        for extension in [".pkl", ".csv", ".json"]:
+            self.check_save_load_onerun(self.mdl,
+                                        "tank_mdlhist"+extension,
+                                        "tank_endclass"+extension,
+                                        'nominal')
+
     def test_save_load_onefault(self):
-        for extension in [".pkl",".csv",".json"]:
-            self.check_save_load_onerun(self.mdl, "tank_mdlhist"+extension, "tank_endclass"+extension, 'one_fault', faultscen = ('import_water', 'stuck', 5))
+        for extension in [".pkl", ".csv", ".json"]:
+            self.check_save_load_onerun(self.mdl,
+                                        "tank_mdlhist"+extension,
+                                        "tank_endclass"+extension,
+                                        'one_fault',
+                                        faultscen=('import_water', 'stuck', 5))
+
     def test_save_load_multfault(self):
-        for extension in [".pkl",".csv",".json"]:
-            faultscen = {5: {"import_water": ['stuck']},10: {"store_water": ["leak"]}}
-            self.check_save_load_onerun(self.mdl, "tank_mdlhist"+extension, "tank_endclass"+extension, 'sequence', faultscen=faultscen )
+        for extension in [".pkl", ".csv", ".json"]:
+            faultscen = {5: {"import_water": ['stuck']}, 10: {"store_water": ["leak"]}}
+            self.check_save_load_onerun(self.mdl,
+                                        "tank_mdlhist"+extension,
+                                        "tank_endclass"+extension,
+                                        'sequence',
+                                        faultscen=faultscen)
+
     def test_save_load_singlefaults(self):
-        self.check_save_load_singlefaults(self.mdl, "tank_mdlhists.pkl", "tank_endclasses.pkl")
-        self.check_save_load_singlefaults(self.mdl, "tank_mdlhists.csv", "tank_endclasses.csv")
-        self.check_save_load_singlefaults(self.mdl, "tank_mdlhists.json", "tank_endclasses.json")
+        self.check_save_load_singlefaults(self.mdl,
+                                          "tank_mdlhists.pkl",
+                                          "tank_endclasses.pkl")
+        self.check_save_load_singlefaults(self.mdl,
+                                          "tank_mdlhists.csv",
+                                          "tank_endclasses.csv")
+        self.check_save_load_singlefaults(self.mdl,
+                                          "tank_mdlhists.json",
+                                          "tank_endclasses.json")
+
     def test_save_load_singlefaults_indiv(self):
-        self.check_save_load_singlefaults_indiv(self.mdl, "tank_mdlhists", "tank_endclasses", "pkl")
-        self.check_save_load_singlefaults_indiv(self.mdl, "tank_mdlhists", "tank_endclasses", "csv")
-        self.check_save_load_singlefaults_indiv(self.mdl, "tank_mdlhists", "tank_endclasses", "json")
+        indiv_names = ("tank_mdlhists", "tank_endclasses")
+        self.check_save_load_singlefaults_indiv(self.mdl, *indiv_names, "pkl")
+        self.check_save_load_singlefaults_indiv(self.mdl, *indiv_names, "csv")
+        self.check_save_load_singlefaults_indiv(self.mdl, *indiv_names, "json")
+
     def test_save_load_nominalapproach(self):
         app = NominalApproach()
         app.add_seed_replicates("replicates", 10)
-        self.check_save_load_nomapproach(self.mdl, "tank_mdlhists.pkl", "tank_endclasses.pkl", app=app)
-        self.check_save_load_nomapproach(self.mdl, "tank_mdlhists.csv", "tank_endclasses.csv", app=app)
-        self.check_save_load_nomapproach(self.mdl, "tank_mdlhists.json", "tank_endclasses.json", app=app)
+        self.check_save_load_nomapproach(
+            self.mdl, "tank_mdlhists.pkl", "tank_endclasses.pkl", app=app)
+        self.check_save_load_nomapproach(
+            self.mdl, "tank_mdlhists.csv", "tank_endclasses.csv", app=app)
+        self.check_save_load_nomapproach(
+            self.mdl, "tank_mdlhists.json", "tank_endclasses.json", app=app)
+
     def test_save_load_nominalapproach_indiv(self):
         app = NominalApproach()
         app.add_seed_replicates("replicates", 10)
-        self.check_save_load_nomapproach_indiv(self.mdl, "tank_mdlhists", "tank_endclasses", "pkl", app=app)
-        self.check_save_load_nomapproach_indiv(self.mdl, "tank_mdlhists", "tank_endclasses", "csv", app=app)
-        self.check_save_load_nomapproach_indiv(self.mdl, "tank_mdlhists", "tank_endclasses", "json", app=app)
+        indiv_names = ("tank_mdlhists", "tank_endclasses")
+        self.check_save_load_nomapproach_indiv(self.mdl, *indiv_names, "pkl", app=app)
+        self.check_save_load_nomapproach_indiv(self.mdl, *indiv_names, "csv", app=app)
+        self.check_save_load_nomapproach_indiv(self.mdl, *indiv_names, "json", app=app)
+
     def test_save_load_nestedapproach(self):
         app = NominalApproach()
         app.add_seed_replicates("replicates", 10)
-        self.check_save_load_nestapproach(self.mdl, "tank_mdlhists.pkl", "tank_endclasses.pkl", app=app)
-        self.check_save_load_nestapproach(self.mdl, "tank_mdlhists.csv", "tank_endclasses.csv", app=app)
-        self.check_save_load_nestapproach(self.mdl, "tank_mdlhists.json", "tank_endclasses.json", app=app)
+        self.check_save_load_nestapproach(
+            self.mdl, "tank_mdlhists.pkl", "tank_endclasses.pkl", app=app)
+        self.check_save_load_nestapproach(
+            self.mdl, "tank_mdlhists.csv", "tank_endclasses.csv", app=app)
+        self.check_save_load_nestapproach(
+            self.mdl, "tank_mdlhists.json", "tank_endclasses.json", app=app)
+
     def test_save_load_nestedapproach_indiv(self):
         app = NominalApproach()
         app.add_seed_replicates("replicates", 10)
-        self.check_save_load_nestapproach_indiv(self.mdl, "tank_mdlhists", "tank_endclasses", "pkl", app=app)
-        self.check_save_load_nestapproach_indiv(self.mdl, "tank_mdlhists", "tank_endclasses", "csv", app=app)
-        self.check_save_load_nestapproach_indiv(self.mdl, "tank_mdlhists", "tank_endclasses", "json", app=app)
+        indiv_names = ("tank_mdlhists", "tank_endclasses")
+        self.check_save_load_nestapproach_indiv(self.mdl, *indiv_names, "pkl", app=app)
+        self.check_save_load_nestapproach_indiv(self.mdl, *indiv_names, "csv", app=app)
+        self.check_save_load_nestapproach_indiv(self.mdl, *indiv_names, "json", app=app)
+
     def test_save_load_approach(self):
         app = SampleApproach(self.mdl)
-        self.check_save_load_approach(self.mdl, "tank_mdlhists.pkl", "tank_endclasses.pkl", app=app)
-        self.check_save_load_approach(self.mdl, "tank_mdlhists.csv", "tank_endclasses.csv", app=app)
-        self.check_save_load_approach(self.mdl, "tank_mdlhists.json", "tank_endclasses.json", app=app)
+        self.check_save_load_approach(
+            self.mdl, "tank_mdlhists.pkl", "tank_endclasses.pkl", app=app)
+        self.check_save_load_approach(
+            self.mdl, "tank_mdlhists.csv", "tank_endclasses.csv", app=app)
+        self.check_save_load_approach(
+            self.mdl, "tank_mdlhists.json", "tank_endclasses.json", app=app)
+
     def test_save_load_approach_indiv(self):
         app = SampleApproach(self.mdl)
-        self.check_save_load_approach_indiv(self.mdl, "tank_mdlhists", "tank_endclasses", "pkl", app=app)
-        self.check_save_load_approach_indiv(self.mdl, "tank_mdlhists", "tank_endclasses", "csv", app=app)
-        self.check_save_load_approach_indiv(self.mdl, "tank_mdlhists", "tank_endclasses", "json", app=app)
+        indiv_names = ("tank_mdlhists", "tank_endclasses")
+        self.check_save_load_approach_indiv(self.mdl, *indiv_names, "pkl", app=app)
+        self.check_save_load_approach_indiv(self.mdl, *indiv_names, "csv", app=app)
+        self.check_save_load_approach_indiv(self.mdl, *indiv_names, "json", app=app)
 
 
 def check_parallel():
