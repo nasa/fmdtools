@@ -35,13 +35,51 @@ import matplotlib.pyplot as plt
 import multiprocessing as mp
 
 
-## MODEL FLOWS
 class DegParam(Parameter, readonly=True):
     """Parameters for rover degradation"""
-
+    
     friction: float = 0.0
     drift: float = 0.0
 
+# MODEL PARAMETERS
+class RoverParam(Parameter, readonly=True):
+    """Parameters for rover"""
+    linetype: str = "sine"  # line type (sine or turn)
+    period: float = 1.0  # period of the curve (for sine linetype)
+    end: tuple = (10.0, 10.0)  # end of the curve (requires instantiation)
+    initangle: float = 0.0  # initial rover angle
+    linetype_set = ("sine", "turn")
+    amp: float = 1.0  # amplitude of sine wave (input for sine linetype)
+    wavelength: float = 50.0  # wavelength of sine wave (input for sine linetype)
+    radius: float = 20.0  # radius of turn (input for turn linetype)
+    start: float = 20.0  # start of turn (input for turn linetype)
+    ub_f: float = 10.0
+    lb_f: float = -1.0
+    ub_t: float = 10.0
+    lb_t: float = -1.0
+    ub_d: float = 2.0
+    lb_d: float = -2.0
+    cor_d: float = 1.0
+    cor_t: float = 1.0
+    cor_f: float = 1.0
+    degradation: DegParam = DegParam()
+    drive_modes: dict = {"mode_args": "set"}
+
+    def __init__(self, *args, **kwargs):
+        linetype = self.get_true_field("linetype", *args, **kwargs)
+        if linetype == "sine":
+            wavelength = self.get_true_field("wavelength", *args, **kwargs)
+            amp = self.get_true_field("amp", *args, **kwargs)
+            kwargs["period"] = 2 * np.pi / wavelength
+            kwargs["initangle"] = sin_angle_func(0.0, amp, kwargs["period"])
+            kwargs["end"] = (wavelength, 0.0)
+        elif linetype == "turn":
+            radius = self.get_true_field("radius", *args, **kwargs)
+            start = self.get_true_field("start", *args, **kwargs)
+            kwargs["end"] = (radius + start, radius + start)
+        super().__init__(*args, strict_immutability=False, **kwargs)
+        
+## MODEL FLOWS
 
 class GroundState(State):
     x: float = 0.0
@@ -138,55 +176,16 @@ class FaultyStates(State):
     transfer: float = 1.0
     friction: float = 1.0
     drift: float = 0.0
+   
+
 
 
 class Fault(Flow):
     _init_s = FaultyStates
-    # _init_p = DegParam
-    # def __init__(self,name, **kwargs):
-    #    super().__init__(self,name, **kwargs)
+
+          
     #    self.s.inc(friction = self.p.friction,
     #               drift = self.p.drift)
-
-
-# MODEL PARAMETERS
-class RoverParam(Parameter, readonly=True):
-    """Parameters for rover"""
-
-    period: float = 1.0  # period of the curve (for sine linetype)
-    end: tuple = (10.0, 10.0)  # end of the curve (requires instantiation)
-    initangle: float = 0.0  # initial rover angle
-    linetype: str = "sine"  # line type (sine or turn)
-    linetype_set = ("sine", "turn")
-    amp: float = 1.0  # amplitude of sine wave (input for sine linetype)
-    wavelength: float = 50.0  # wavelength of sine wave (input for sine linetype)
-    radius: float = 20.0  # radius of turn (input for turn linetype)
-    start: float = 20.0  # start of turn (input for turn linetype)
-    ub_f: float = 10.0
-    lb_f: float = -1.0
-    ub_t: float = 10.0
-    lb_t: float = -1.0
-    ub_d: float = 2.0
-    lb_d: float = -2.0
-    cor_d: float = 1.0
-    cor_t: float = 1.0
-    cor_f: float = 1.0
-    degradation: DegParam = DegParam()
-    drive_modes: dict = {"mode_args": "set"}
-
-    def __init__(self, *args, **kwargs):
-        linetype = self.get_true_field("linetype", *args, **kwargs)
-        if linetype == "sine":
-            wavelength = self.get_true_field("wavelength", *args, **kwargs)
-            amp = self.get_true_field("amp", *args, **kwargs)
-            kwargs["period"] = 2 * np.pi / wavelength
-            kwargs["initangle"] = sin_angle_func(0.0, amp, kwargs["period"])
-            kwargs["end"] = (wavelength, 0.0)
-        elif linetype == "turn":
-            radius = self.get_true_field("radius", *args, **kwargs)
-            start = self.get_true_field("start", *args, **kwargs)
-            kwargs["end"] = (radius + start, radius + start)
-        super().__init__(*args, strict_immutability=False, **kwargs)
 
 
 # MODEL FUNCTIONS
@@ -291,19 +290,21 @@ def translate_angle(angle):
 
 class DriveMode(Mode):
     """ """
-
     s: FaultyStates = FaultyStates()
     mode_args: tuple = tuple()
+    deg_params: dict = dict
     faultparams = dict()
     key_phases_by = "avionics"
 
-    def __init__(self, *args, mode_args=tuple(), **kwargs):
+    def __init__(self, *args, mode_args=tuple(), deg_params=dict(), **kwargs):
         super().__init__(*args, **kwargs)
         if "mode_args" in mode_args:
             self.mode_args = mode_args["mode_args"]
         else:
             self.mode_args = mode_args
         if self.mode_args == "degradation":
+            self.s.friction = deg_params.friction
+            self.s.drift = deg_params.drift
             self.assoc_faultstates(
                 {
                     "friction": {
@@ -388,7 +389,6 @@ class DriveMode(Mode):
 
 class Drive(FxnBlock):
     __slots__ = ("ground", "motor_control", "ee_in", "faultystates")
-    _init_p = DegParam
     _init_m = DriveMode
     _init_faultystates = Fault
     _init_ground = Ground
@@ -602,9 +602,6 @@ class Environment(FxnBlock):
     _init_p = RoverParam
     _init_ground = Ground
 
-    def __init__(self, name, flows, p={}, **kwargs):
-        super().__init__(name, flows, **kwargs)
-
     def dynamic_behavior(self, t):
         if self.p.linetype == "sine":
             self.ground.s.angle = sin_angle_func(
@@ -632,16 +629,16 @@ class Environment(FxnBlock):
         self.ground.s.uby = self.ground.s.liney + 1.5 * np.cos(
             self.ground.s.angle * np.pi / 180
         )
-        # self.s.in_bound = int(
-        #     in_bounds(
-        #         self.ground.s.x,
-        #         self.ground.s.y,
-        #         self.ground.s.lbx,
-        #         self.ground.s.lby,
-        #         self.ground.s.ubx,
-        #         self.ground.s.uby,
-        #     )
-        #)
+        self.s.in_bound = int(
+            in_bounds(
+                self.ground.s.x,
+                self.ground.s.y,
+                self.ground.s.lbx,
+                self.ground.s.lby,
+                self.ground.s.ubx,
+                self.ground.s.uby,
+            )
+        )
 
 
 def sin_func(x, y, amp, period):
@@ -761,8 +758,7 @@ class Rover(Model):
             "ee_15",
             "motor_control",
             "faultystates",
-            m={"mode_args": self.p.drive_modes},
-            p=self.p.degradation,
+            m={"mode_args": self.p.drive_modes, 'deg_params': self.p.degradation},
         )
         self.add_fxn("environment", Environment, "ground", p=self.p)
 
