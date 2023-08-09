@@ -945,7 +945,8 @@ def plot_trajectories(
                 marker="o",
                 label="Range",
             )
-    mdlhists = mdlhists.nest(1)
+    if type(mdlhists) == dict is False:
+        mdlhists = mdlhists.nest(1)
     for mode, hist in mdlhists.items():
         if mode == "nominal":
             plot_course(hist, ax=ax)
