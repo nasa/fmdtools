@@ -115,7 +115,15 @@ class ParamScenario(NominalScenario):
     fixedargs: tuple = ()
     fixedkwargs: dict = {}
     
-    
+    def get_param(self, param, default="NA"):
+        if param.startswith("fixedargs."):
+            pval = self.p.get(param[10:], default)
+        elif param.startswith("fixedkwargs."):
+            pval = self.p.get(param[12:], default)
+        else:
+            pval = super().get_param(param, default=default)
+        return pval
+
 
 
 

@@ -15,7 +15,7 @@ import numpy as np
 from .common import get_true_fields, get_true_field
 
 
-class Parameter(dataobject, readonly=True):
+class Parameter(dataobject, readonly=True, mapping=True, iterable=True):
     """
     The Parameter class defines model/function/flow values which are immutable,
     that is, the same from model instantiation through a simulation. Parameters
@@ -71,6 +71,9 @@ class Parameter(dataobject, readonly=True):
         if check_pickle:
             self.check_pickle()
 
+    def keys(self):
+        return self.__fields__
+
     def check_lim(self, k, v):
         """
         Checks to ensure the value v for field k is within the defined limits
@@ -115,6 +118,8 @@ class Parameter(dataobject, readonly=True):
             attr_type = type(attr)
             if isinstance(attr, (list, set, dict)):
                 raise Exception("Parameter "+f+" type "+str(attr_type)+" is mutable")
+            elif isinstance(attr, np.ndarray):
+                attr.flags.writeable = False
             elif not isinstance(attr, (int, float, tuple, str, Parameter, np.number)):
                 warnings.warn("Parameter "+f+" type "+str(attr_type)+" may be mutable")
 
