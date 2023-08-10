@@ -19,9 +19,12 @@ Flows:
     - EE
     - Camera
 """
-from fmdtools.define.block import FxnBlock, Action
-from fmdtools.define.model import Model, ModelParam
-from fmdtools.define.common import Parameter
+from fmdtools.define.parameter import Parameter, SimParam
+from fmdtools.define.state import State
+from fmdtools.define.mode import Mode
+from fmdtools.define.block import FxnBlock
+from fmdtools.define.model import Model
+from fmdtools.define.flow import Flow
 from fmdtools.sim.approach import SampleApproach, NominalApproach
 
 
@@ -89,23 +92,6 @@ class Drive(FxnBlock):
             self.Ground.inc(x = np.cos(np.pi/180 *self.Ground.ang) * self.Ground.vel, \
                             y = np.sin(np.pi/180 *self.Ground.ang) * self.Ground.vel)
 
-class PSFDegradationShort(FxnBlock):
-    def __init__(self,name,flows, params):
-        self.p=params
-        super().__init__(name, flows, states={'fatigue':2.0, 'stress': self.p.stress_param})
-        if self.p.stoch_fatigue: self.assoc_rand_state('fatigue_param', 2.0, auto_update = ['gamma', (2,1.9)])
-    def dynamic_behavior(self, time):
-        if self.p.stoch_fatigue: self.fatigue=int(self.fatigue_param)
-        self.stress = int(self.p.stress_param+(1+(1/self.p.experience))**self.time)
-        self.limit(fatigue=(0,10),stress = (0,100))
-
-class PSFDegradationLong(FxnBlock):
-    def __init__(self,name,flows, params):
-        super().__init__(name, flows, states={'experience':1.0})
-        self.p=params
-    def dynamic_behavior(self, time):
-        training_frequency = 3
-        self.experience= 10/(1+((10/self.p.experience_param)*np.exp(-1*(1/training_frequency)*self.time)))
 
 class GenerateVideo(FxnBlock):
     def __init__(self, name, flows):
@@ -286,7 +272,7 @@ class Project(Action):
         self.assoc_modes({'failed_turn_right', 'failed_turn_left', 'failed_poweron', 'failed_poweroff', 'failed_noturn', 'failed_nopower', 'failed_noaction'},
                          ['nominal'], initmode='nominal', exclusive=False, name='proj_')
 
-    def project_calc(self, time):
+    def project_calc(self, ):
 
         if in_area(self.p.end[0], self.p.end[1], 1, self.Video.x, self.Video.y):
             self.ProjectOut.powerswitch = 0
@@ -320,7 +306,7 @@ class Project(Action):
             self.ProjectOut.powerswitch = self.Stimulus.powerswitch
         SignalFailure = False
         if self.Signal.S1 == 'alternate' and self.Signal.S2 == 'alternate':
-            self.project_calc(t)
+            self.project_calc()
             self.LocalPSF.workload = 5
             SignalFailure = True
         if not self.any_faults():
@@ -690,25 +676,7 @@ class Rover(Model):
 
         return {'rate':0,'cost':0, 'prob':scen.prob, 'expected cost':0,'at_finish':at_finish, 'line_dist':line_dist, 'num_modes':num_modes, 'end_dist':end_dist, 'faults':modes, 'classification':classification, 'x':self.flows['Ground'].x ,'y':self.flows['Ground'].y}
 
-class LongParams(Parameter, readonly=True):
-    experience_param:   np.float64=np.float64(1.0)
-    
-class HumanDegradationLong(Model):
-    def __init__(self, params=LongParams(), modelparams=ModelParam(times=(0,100), seed=101), valparams={}):
-        super().__init__(params, modelparams, valparams)
-        self.add_fxn('Control', [], fclass = PSFDegradationLong, fparams=params)
-        self.build_model(require_connections=False)
 
-class ShortParams(Parameter, readonly=True):
-    experience :    np.float64=np.float64(1.0)
-    stress_param :  np.float64=np.float64(0.0)
-    stoch_fatigue : bool=False
-
-class HumanDegradationShort(Model):
-    def __init__(self, params=ShortParams(), modelparams=ModelParam(times=(0,10), seed=101), valparams={}):
-        super().__init__(params, modelparams, valparams)
-        self.add_fxn('Control', [], PSFDegradationShort, fparams=params)
-        self.build_model(require_connections=False)
 
 
 def plot_map(mdl, mdlhist):
@@ -749,68 +717,7 @@ def plot_map(mdl, mdlhist):
     plt.ylabel("y-error (meters)")
     plt.title("Rover Centerline Error")
 
-from rover_model import get_params_from, sample_params
 
-def get_human_params_from(mdlhist, t=1):
-    fatigue = mdlhist['functions']['Control']['fatigue'][t]
-    stress = mdlhist['functions']['Control']['stress'][t]
-    return {'fatigue' :fatigue, 'stress': stress}
-def get_longhuman_params_from(mdlhist, t):
-    experience = mdlhist['functions']['Control']['experience'][t]
-    return experience
-def sample_human_params(mdlhists, t=1, scen=1):
-    mdlhist = [*mdlhists.values()][scen]
-    return get_human_params_from(mdlhist, t)
-def gen_sample_params_human(mdlhists, t=1, scen=1, linetype='sine'):
-    degparams = sample_human_params(mdlhists, t=t, scen=scen)
-    return dict(linetype=linetype, **degparams)
-
-def gen_sample_params_comp(mdlhists, t=1, scen=1, linetype='sine'):
-    degparams = sample_params(mdlhists, t=t, scen=scen)
-    return dict(linetype=linetype, **degparams)
-
-def gen_human_params_combined(mdlhists_stress, app_stress, stress_id='nomapp', t_exp=1, t_stress=1, scen=1, linetype='sine'):
-    scen_groups = app_stress.get_param_scens(stress_id, 't', 'scen')
-    scen = scen_groups[t_exp, scen]
-    if len(scen)>1: raise Exception("multiple scenarios for the given time and scen")
-    scen = [*scen][0]
-    mdlhist = mdlhists_stress[scen]
-    human_params = get_human_params_from(mdlhist, t_stress)
-    return dict(linetype=linetype, **human_params)
-
-def gen_sample_params_combined(mdlhists_comp, mdlhists_stress, app_stress, stress_id='nomapp', t_comp=1, t_exp=1, t_stress=1, scen=1, linetype='sine'):
-    scen_groups = app_stress.get_param_scens(stress_id, 't', 'scen')
-    stress_scen = scen_groups[t_exp, scen]
-    if len(stress_scen)>1: raise Exception("multiple scenarios for the given time and scen")
-    stress_scen = [*stress_scen][0]
-    mdlhist_stress = mdlhists_stress[stress_scen]
-    degparams = get_human_params_from(mdlhist_stress, t_stress)
-    degparams.update(sample_params(mdlhists_comp, t=t_comp, scen=scen))
-    return dict(linetype=linetype, **degparams)
-def gen_sample_params(mdlhists, long_deg_params, t=1, scen=1, linetype='sine'):
-    degparams={}
-    degparams.update(sample_human_params(mdlhists, t=t, scen=scen))
-    degparams.update({'friction': long_deg_params[scen][0], 'drift': long_deg_params[scen][1], 'experience': long_deg_params[scen][2]})
-    return dict(linetype=linetype, **degparams)
-def gen_long_degPSF_param(experience_param, scen=1):
-    params = {'experience_param': experience_param[scen-1]}
-    return params
-def gen_short_degPSF_param(mdlhists, stress_param, t=1, scen=1):
-    mdlhist = [*mdlhists.values()][scen]
-    params = {'experience': get_longhuman_params_from(mdlhist, t)}
-    params.update({'stress_param': stress_param[scen]})
-    return params
-
-def gen_long_deg_param_list (mdlhists, mdlhists_hum, t_total, total_scen):
-    params = []
-    for s in range(total_scen):
-        for t in range (t_total):
-            mdlhist = [*mdlhists.values()][s]
-            temp= get_params_from(mdlhist, t+1)
-            mdlhist_hum = [*mdlhists_hum.values()][s]
-            temp = temp + (get_longhuman_params_from(mdlhist_hum, t+1), )
-            params.append(temp)
-    return params
 
 if __name__ == "__main__":
     import matplotlib.pyplot as pyplot
@@ -822,30 +729,13 @@ if __name__ == "__main__":
     an.plot.mdlhists({'nominal':mdlhist}, fxnflowvals=['Power'])
     an.plot.mdlhists({'nominal':mdlhist}, fxnflowvals={'Ground'})
     
-    deg_mdl_hum_short = HumanDegradationShort()
-    deg_mdl_hum_long = HumanDegradationLong()
-    endresults, mdlhist_hum_long = prop.nominal(deg_mdl_hum_long)
-    fig,ax = an.plot.mdlhists(mdlhist_hum_long)
+
     
-    nomapp_hum_long = NominalApproach()
-    experience_param = np.random.default_rng(seed=101).gamma(1,1.9,101)
-    experience_param = list(experience_param)
-    nomapp_hum_long.add_param_ranges(gen_long_degPSF_param, 'nomapp_hum_long', experience_param, scen = (0,25,1))
-    
-    endclasses, mdlhists_hum_long = prop.nominal_approach(deg_mdl_hum_long, nomapp_hum_long, run_stochastic=True)
+   
     
     
-    stress_param = np.random.default_rng(seed=101).gamma(2,1.9,101)
-    stress_param = list(stress_param)
-    nomapp_short_long = NominalApproach()
-    nomapp_short_long.add_param_ranges(gen_short_degPSF_param, 'nomapp', mdlhists_hum_long, stress_param, scen = (0,25,1), t= (1,15,4))
-    nomapp_short_long.update_factor_seeds('nomapp', 'scen')
     
-    endclasses, mdlhists_hum_short_long = prop.nominal_approach(deg_mdl_hum_short, nomapp_short_long, run_stochastic=True)    
-    
-    behave_nomapp_hum = NominalApproach()
-    behave_nomapp_hum.add_param_ranges(gen_human_params_combined, 'behave_nomapp_hum', mdlhists_hum_short_long, nomapp_short_long, 'nomapp', t_stress=(1,11, 2), t_exp=(1,15,4), scen = (1,25, 1), linetype='sine')
-    
+   
     mdl=Rover()
     behave_endclasses_hum, behave_mdlhists_hum = prop.nominal_approach(mdl, behave_nomapp_hum, run_stochastic=True)   
     
