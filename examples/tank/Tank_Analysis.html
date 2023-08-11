@@ -669,7 +669,7 @@ div.rendered_html tbody tr:hover {
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-graph: &lt;fmdtools.analyze.graph.ModelGraph object at 0x00000241A05A6DC0&gt;
+graph: &lt;fmdtools.analyze.graph.ModelGraph object at 0x0000017D425A31F0&gt;
 </pre></div></div>
 </div>
 <p>With these results, we can now plot the graph of results resgraph using:</p>
@@ -2697,7 +2697,7 @@ array([10., 10., 10., 10., 10., 10., 10., 10., 10., 10., 10., 10., 10.,
 </div>
 <div class="output_area stderr docutils container">
 <div class="highlight"><pre>
-SCENARIOS COMPLETE: 100%|██████████| 92/92 [00:01&lt;00:00, 63.46it/s]
+SCENARIOS COMPLETE: 100%|██████████| 92/92 [00:01&lt;00:00, 68.25it/s]
 </pre></div></div>
 </div>
 <div class="nbinput docutils container">
@@ -2757,28 +2757,28 @@ SCENARIOS COMPLETE: 100%|██████████| 92/92 [00:01&lt;00:00, 
       <td>NaN</td>
     </tr>
     <tr>
-      <th>import_water_stuck_ human_grasp_cannot_t0p0</th>
+      <th>human_detect_not_detected_t0p0</th>
       <td>NaN</td>
       <td>NaN</td>
-      <td>0.000001</td>
+      <td>1.0</td>
       <td>0.0</td>
       <td>0.0</td>
     </tr>
     <tr>
-      <th>guide_water_in_leak_ human_look_not_visible_t0p0</th>
+      <th>human_turn_wrong_valve_t0p0</th>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>0.5</td>
+      <td>0.0</td>
+      <td>0.0</td>
+    </tr>
+    <tr>
+      <th>import_water_stuck_ store_water_leak_t0p0</th>
       <td>NaN</td>
       <td>NaN</td>
       <td>0.0</td>
       <td>1000000.0</td>
-      <td>25586.361139</td>
-    </tr>
-    <tr>
-      <th>export_water_stuck_ human_detect_not_detected_t0p0</th>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>0.000001</td>
-      <td>0.0</td>
-      <td>0.0</td>
+      <td>0.277778</td>
     </tr>
     <tr>
       <th>...</th>
@@ -2789,26 +2789,18 @@ SCENARIOS COMPLETE: 100%|██████████| 92/92 [00:01&lt;00:00, 
       <td>...</td>
     </tr>
     <tr>
-      <th>store_water_leak_ human_turn_wrong_valve_t0p0</th>
+      <th>store_water_leak_ human_grasp_cannot_t0p0</th>
       <td>NaN</td>
       <td>NaN</td>
       <td>0.000001</td>
       <td>1000000.0</td>
-      <td>65578.190231</td>
+      <td>105353.394172</td>
     </tr>
     <tr>
-      <th>human_detect_false_high_t0p0</th>
+      <th>guide_water_in_leak_t0p0</th>
       <td>NaN</td>
       <td>NaN</td>
-      <td>0.5</td>
-      <td>1000000.0</td>
-      <td>50000000000.0</td>
-    </tr>
-    <tr>
-      <th>guide_water_in_leak_ human_detect_false_low_t0p0</th>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>0.000001</td>
+      <td>0.000002</td>
       <td>0.0</td>
       <td>0.0</td>
     </tr>
@@ -2821,7 +2813,15 @@ SCENARIOS COMPLETE: 100%|██████████| 92/92 [00:01&lt;00:00, 
       <td>0.0</td>
     </tr>
     <tr>
-      <th>export_water_stuck_ human_turn_wrong_valve_t0p0</th>
+      <th>guide_water_in_clogged_ guide_water_out_clogged_t0p0</th>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+    </tr>
+    <tr>
+      <th>export_water_stuck_ human_turn_cannot_t0p0</th>
       <td>NaN</td>
       <td>NaN</td>
       <td>0.000001</td>
@@ -2875,14 +2875,6 @@ SCENARIOS COMPLETE: 100%|██████████| 92/92 [00:01&lt;00:00, 
   </thead>
   <tbody>
     <tr>
-      <th>human_detect_false_high_t0p0</th>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>0.5</td>
-      <td>1000000.0</td>
-      <td>50000000000.0</td>
-    </tr>
-    <tr>
       <th>human_detect_false_low_t0p0</th>
       <td>NaN</td>
       <td>NaN</td>
@@ -2891,12 +2883,12 @@ SCENARIOS COMPLETE: 100%|██████████| 92/92 [00:01&lt;00:00, 
       <td>50000000000.0</td>
     </tr>
     <tr>
-      <th>guide_water_in_clogged_t0p0</th>
+      <th>human_detect_false_high_t0p0</th>
       <td>NaN</td>
       <td>NaN</td>
-      <td>0.000002</td>
+      <td>0.5</td>
       <td>1000000.0</td>
-      <td>166666.666667</td>
+      <td>50000000000.0</td>
     </tr>
     <tr>
       <th>guide_water_out_leak_t0p0</th>
@@ -2907,55 +2899,15 @@ SCENARIOS COMPLETE: 100%|██████████| 92/92 [00:01&lt;00:00, 
       <td>166666.666667</td>
     </tr>
     <tr>
-      <th>store_water_leak_ human_detect_not_detected_t0p0</th>
+      <th>guide_water_in_clogged_t0p0</th>
       <td>NaN</td>
       <td>NaN</td>
-      <td>0.000001</td>
+      <td>0.000002</td>
       <td>1000000.0</td>
-      <td>105353.394172</td>
-    </tr>
-    <tr>
-      <th>guide_water_out_leak_ human_grasp_cannot_t0p0</th>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>0.000001</td>
-      <td>1000000.0</td>
-      <td>105353.394172</td>
-    </tr>
-    <tr>
-      <th>store_water_leak_ human_grasp_cannot_t0p0</th>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>0.000001</td>
-      <td>1000000.0</td>
-      <td>105353.394172</td>
+      <td>166666.666667</td>
     </tr>
     <tr>
       <th>guide_water_out_clogged_ human_detect_not_detected_t0p0</th>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>0.000001</td>
-      <td>1000000.0</td>
-      <td>105353.394172</td>
-    </tr>
-    <tr>
-      <th>guide_water_out_clogged_ human_grasp_cannot_t0p0</th>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>0.000001</td>
-      <td>1000000.0</td>
-      <td>105353.394172</td>
-    </tr>
-    <tr>
-      <th>guide_water_out_leak_ human_detect_not_detected_t0p0</th>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>0.000001</td>
-      <td>1000000.0</td>
-      <td>105353.394172</td>
-    </tr>
-    <tr>
-      <th>guide_water_in_leak_ human_detect_not_detected_t0p0</th>
       <td>NaN</td>
       <td>NaN</td>
       <td>0.000001</td>
@@ -2971,6 +2923,14 @@ SCENARIOS COMPLETE: 100%|██████████| 92/92 [00:01&lt;00:00, 
       <td>105353.394172</td>
     </tr>
     <tr>
+      <th>guide_water_out_leak_ human_grasp_cannot_t0p0</th>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>0.000001</td>
+      <td>1000000.0</td>
+      <td>105353.394172</td>
+    </tr>
+    <tr>
       <th>guide_water_in_leak_ human_grasp_cannot_t0p0</th>
       <td>NaN</td>
       <td>NaN</td>
@@ -2979,7 +2939,7 @@ SCENARIOS COMPLETE: 100%|██████████| 92/92 [00:01&lt;00:00, 
       <td>105353.394172</td>
     </tr>
     <tr>
-      <th>guide_water_in_clogged_ human_turn_cannot_t0p0</th>
+      <th>store_water_leak_ human_detect_not_detected_t0p0</th>
       <td>NaN</td>
       <td>NaN</td>
       <td>0.000001</td>
@@ -2995,23 +2955,7 @@ SCENARIOS COMPLETE: 100%|██████████| 92/92 [00:01&lt;00:00, 
       <td>105353.394172</td>
     </tr>
     <tr>
-      <th>guide_water_in_clogged_ human_grasp_cannot_t0p0</th>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>0.000001</td>
-      <td>1000000.0</td>
-      <td>105353.394172</td>
-    </tr>
-    <tr>
-      <th>guide_water_out_clogged_ human_turn_cannot_t0p0</th>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>0.000001</td>
-      <td>1000000.0</td>
-      <td>105353.394172</td>
-    </tr>
-    <tr>
-      <th>store_water_leak_ human_turn_cannot_t0p0</th>
+      <th>guide_water_in_leak_ human_detect_not_detected_t0p0</th>
       <td>NaN</td>
       <td>NaN</td>
       <td>0.000001</td>
@@ -3027,71 +2971,63 @@ SCENARIOS COMPLETE: 100%|██████████| 92/92 [00:01&lt;00:00, 
       <td>105353.394172</td>
     </tr>
     <tr>
-      <th>store_water_leak_ human_detect_false_high_t0p0</th>
+      <th>guide_water_out_leak_ human_detect_not_detected_t0p0</th>
       <td>NaN</td>
       <td>NaN</td>
       <td>0.000001</td>
       <td>1000000.0</td>
-      <td>65578.190231</td>
+      <td>105353.394172</td>
     </tr>
     <tr>
-      <th>guide_water_in_clogged_ human_turn_wrong_valve_t0p0</th>
+      <th>guide_water_out_clogged_ human_turn_cannot_t0p0</th>
       <td>NaN</td>
       <td>NaN</td>
       <td>0.000001</td>
       <td>1000000.0</td>
-      <td>65578.190231</td>
+      <td>105353.394172</td>
     </tr>
     <tr>
-      <th>guide_water_in_clogged_ human_reach_unable_t0p0</th>
+      <th>guide_water_in_clogged_ human_turn_cannot_t0p0</th>
       <td>NaN</td>
       <td>NaN</td>
       <td>0.000001</td>
       <td>1000000.0</td>
-      <td>65578.190231</td>
+      <td>105353.394172</td>
     </tr>
     <tr>
-      <th>guide_water_out_clogged_ human_turn_wrong_valve_t0p0</th>
+      <th>guide_water_out_clogged_ human_grasp_cannot_t0p0</th>
       <td>NaN</td>
       <td>NaN</td>
       <td>0.000001</td>
       <td>1000000.0</td>
-      <td>65578.190231</td>
+      <td>105353.394172</td>
     </tr>
     <tr>
-      <th>guide_water_out_leak_ human_detect_false_low_t0p0</th>
+      <th>store_water_leak_ human_grasp_cannot_t0p0</th>
       <td>NaN</td>
       <td>NaN</td>
       <td>0.000001</td>
       <td>1000000.0</td>
-      <td>65578.190231</td>
+      <td>105353.394172</td>
     </tr>
     <tr>
-      <th>store_water_leak_ human_turn_wrong_valve_t0p0</th>
+      <th>store_water_leak_ human_turn_cannot_t0p0</th>
       <td>NaN</td>
       <td>NaN</td>
       <td>0.000001</td>
       <td>1000000.0</td>
-      <td>65578.190231</td>
+      <td>105353.394172</td>
     </tr>
     <tr>
-      <th>guide_water_out_clogged_ human_detect_false_low_t0p0</th>
+      <th>guide_water_in_clogged_ human_grasp_cannot_t0p0</th>
       <td>NaN</td>
       <td>NaN</td>
       <td>0.000001</td>
       <td>1000000.0</td>
-      <td>65578.190231</td>
+      <td>105353.394172</td>
     </tr>
     <tr>
-      <th>guide_water_in_clogged_ human_detect_false_low_t0p0</th>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>0.000001</td>
-      <td>1000000.0</td>
-      <td>65578.190231</td>
-    </tr>
-    <tr>
-      <th>guide_water_in_clogged_ human_detect_false_high_t0p0</th>
+      <th>export_water_stuck_ human_detect_false_high_t0p0</th>
       <td>NaN</td>
       <td>NaN</td>
       <td>0.000001</td>
@@ -3107,7 +3043,7 @@ SCENARIOS COMPLETE: 100%|██████████| 92/92 [00:01&lt;00:00, 
       <td>65578.190231</td>
     </tr>
     <tr>
-      <th>guide_water_out_clogged_ human_reach_unable_t0p0</th>
+      <th>guide_water_in_clogged_ human_turn_wrong_valve_t0p0</th>
       <td>NaN</td>
       <td>NaN</td>
       <td>0.000001</td>
@@ -3115,23 +3051,7 @@ SCENARIOS COMPLETE: 100%|██████████| 92/92 [00:01&lt;00:00, 
       <td>65578.190231</td>
     </tr>
     <tr>
-      <th>guide_water_in_leak_ human_detect_false_high_t0p0</th>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>0.000001</td>
-      <td>1000000.0</td>
-      <td>65578.190231</td>
-    </tr>
-    <tr>
-      <th>guide_water_in_leak_ human_turn_wrong_valve_t0p0</th>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>0.000001</td>
-      <td>1000000.0</td>
-      <td>65578.190231</td>
-    </tr>
-    <tr>
-      <th>store_water_leak_ human_reach_unable_t0p0</th>
+      <th>store_water_leak_ human_detect_false_high_t0p0</th>
       <td>NaN</td>
       <td>NaN</td>
       <td>0.000001</td>
@@ -3147,7 +3067,7 @@ SCENARIOS COMPLETE: 100%|██████████| 92/92 [00:01&lt;00:00, 
       <td>65578.190231</td>
     </tr>
     <tr>
-      <th>guide_water_out_leak_ human_turn_wrong_valve_t0p0</th>
+      <th>guide_water_in_leak_ human_detect_false_high_t0p0</th>
       <td>NaN</td>
       <td>NaN</td>
       <td>0.000001</td>
@@ -3163,7 +3083,63 @@ SCENARIOS COMPLETE: 100%|██████████| 92/92 [00:01&lt;00:00, 
       <td>65578.190231</td>
     </tr>
     <tr>
-      <th>export_water_stuck_ human_detect_false_high_t0p0</th>
+      <th>guide_water_out_leak_ human_detect_false_low_t0p0</th>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>0.000001</td>
+      <td>1000000.0</td>
+      <td>65578.190231</td>
+    </tr>
+    <tr>
+      <th>guide_water_in_clogged_ human_reach_unable_t0p0</th>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>0.000001</td>
+      <td>1000000.0</td>
+      <td>65578.190231</td>
+    </tr>
+    <tr>
+      <th>store_water_leak_ human_turn_wrong_valve_t0p0</th>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>0.000001</td>
+      <td>1000000.0</td>
+      <td>65578.190231</td>
+    </tr>
+    <tr>
+      <th>guide_water_in_leak_ human_turn_wrong_valve_t0p0</th>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>0.000001</td>
+      <td>1000000.0</td>
+      <td>65578.190231</td>
+    </tr>
+    <tr>
+      <th>guide_water_out_clogged_ human_detect_false_low_t0p0</th>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>0.000001</td>
+      <td>1000000.0</td>
+      <td>65578.190231</td>
+    </tr>
+    <tr>
+      <th>store_water_leak_ human_reach_unable_t0p0</th>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>0.000001</td>
+      <td>1000000.0</td>
+      <td>65578.190231</td>
+    </tr>
+    <tr>
+      <th>guide_water_out_leak_ human_turn_wrong_valve_t0p0</th>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>0.000001</td>
+      <td>1000000.0</td>
+      <td>65578.190231</td>
+    </tr>
+    <tr>
+      <th>guide_water_in_clogged_ human_detect_false_high_t0p0</th>
       <td>NaN</td>
       <td>NaN</td>
       <td>0.000001</td>
@@ -3179,7 +3155,31 @@ SCENARIOS COMPLETE: 100%|██████████| 92/92 [00:01&lt;00:00, 
       <td>65578.190231</td>
     </tr>
     <tr>
-      <th>guide_water_out_clogged_ human_look_not_visible_t0p0</th>
+      <th>guide_water_out_clogged_ human_turn_wrong_valve_t0p0</th>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>0.000001</td>
+      <td>1000000.0</td>
+      <td>65578.190231</td>
+    </tr>
+    <tr>
+      <th>guide_water_out_clogged_ human_reach_unable_t0p0</th>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>0.000001</td>
+      <td>1000000.0</td>
+      <td>65578.190231</td>
+    </tr>
+    <tr>
+      <th>guide_water_in_clogged_ human_detect_false_low_t0p0</th>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>0.000001</td>
+      <td>1000000.0</td>
+      <td>65578.190231</td>
+    </tr>
+    <tr>
+      <th>store_water_leak_ human_look_not_visible_t0p0</th>
       <td>NaN</td>
       <td>NaN</td>
       <td>0.0</td>
@@ -3188,14 +3188,6 @@ SCENARIOS COMPLETE: 100%|██████████| 92/92 [00:01&lt;00:00, 
     </tr>
     <tr>
       <th>guide_water_in_clogged_ human_look_not_visible_t0p0</th>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>0.0</td>
-      <td>1000000.0</td>
-      <td>25586.361139</td>
-    </tr>
-    <tr>
-      <th>store_water_leak_ human_look_not_visible_t0p0</th>
       <td>NaN</td>
       <td>NaN</td>
       <td>0.0</td>
@@ -3219,7 +3211,15 @@ SCENARIOS COMPLETE: 100%|██████████| 92/92 [00:01&lt;00:00, 
       <td>25586.361139</td>
     </tr>
     <tr>
-      <th>guide_water_in_leak_ store_water_leak_t0p0</th>
+      <th>guide_water_out_clogged_ human_look_not_visible_t0p0</th>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>0.0</td>
+      <td>1000000.0</td>
+      <td>25586.361139</td>
+    </tr>
+    <tr>
+      <th>guide_water_out_leak_ export_water_stuck_t0p0</th>
       <td>NaN</td>
       <td>NaN</td>
       <td>0.0</td>
@@ -3227,7 +3227,7 @@ SCENARIOS COMPLETE: 100%|██████████| 92/92 [00:01&lt;00:00, 
       <td>0.277778</td>
     </tr>
     <tr>
-      <th>guide_water_in_clogged_ store_water_leak_t0p0</th>
+      <th>guide_water_in_clogged_ export_water_stuck_t0p0</th>
       <td>NaN</td>
       <td>NaN</td>
       <td>0.0</td>
@@ -3243,7 +3243,15 @@ SCENARIOS COMPLETE: 100%|██████████| 92/92 [00:01&lt;00:00, 
       <td>0.277778</td>
     </tr>
     <tr>
-      <th>import_water_stuck_ guide_water_out_leak_t0p0</th>
+      <th>guide_water_in_clogged_ guide_water_out_leak_t0p0</th>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>0.0</td>
+      <td>1000000.0</td>
+      <td>0.277778</td>
+    </tr>
+    <tr>
+      <th>guide_water_in_leak_ store_water_leak_t0p0</th>
       <td>NaN</td>
       <td>NaN</td>
       <td>0.0</td>
@@ -3259,14 +3267,6 @@ SCENARIOS COMPLETE: 100%|██████████| 92/92 [00:01&lt;00:00, 
       <td>0.277778</td>
     </tr>
     <tr>
-      <th>import_water_stuck_ store_water_leak_t0p0</th>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>0.0</td>
-      <td>1000000.0</td>
-      <td>0.277778</td>
-    </tr>
-    <tr>
       <th>import_water_stuck_ guide_water_in_leak_t0p0</th>
       <td>NaN</td>
       <td>NaN</td>
@@ -3275,7 +3275,7 @@ SCENARIOS COMPLETE: 100%|██████████| 92/92 [00:01&lt;00:00, 
       <td>0.277778</td>
     </tr>
     <tr>
-      <th>guide_water_in_clogged_ guide_water_out_leak_t0p0</th>
+      <th>import_water_stuck_ guide_water_out_leak_t0p0</th>
       <td>NaN</td>
       <td>NaN</td>
       <td>0.0</td>
@@ -3283,7 +3283,7 @@ SCENARIOS COMPLETE: 100%|██████████| 92/92 [00:01&lt;00:00, 
       <td>0.277778</td>
     </tr>
     <tr>
-      <th>guide_water_out_leak_ export_water_stuck_t0p0</th>
+      <th>guide_water_in_clogged_ store_water_leak_t0p0</th>
       <td>NaN</td>
       <td>NaN</td>
       <td>0.0</td>
@@ -3291,7 +3291,7 @@ SCENARIOS COMPLETE: 100%|██████████| 92/92 [00:01&lt;00:00, 
       <td>0.277778</td>
     </tr>
     <tr>
-      <th>guide_water_in_clogged_ export_water_stuck_t0p0</th>
+      <th>import_water_stuck_ store_water_leak_t0p0</th>
       <td>NaN</td>
       <td>NaN</td>
       <td>0.0</td>
@@ -3407,7 +3407,7 @@ dict_keys([&#39;import_water_stuck_t0p0.fxns.import_water.s.amt_open&#39;, &#39;
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-(&lt;Figure size 864x720 with 1 Axes&gt;, &lt;AxesSubplot:&gt;)
+(&lt;Figure size 864x720 with 1 Axes&gt;, &lt;Axes: &gt;)
 </pre></div></div>
 </div>
 <div class="nboutput docutils container">

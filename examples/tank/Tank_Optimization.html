@@ -794,7 +794,7 @@ time:                          array(21)
 </div>
 <div class="output_area stderr docutils container">
 <div class="highlight"><pre>
-SCENARIOS COMPLETE: 100%|██████████| 5/5 [00:00&lt;00:00, 168.39it/s]
+SCENARIOS COMPLETE: 100%|██████████| 5/5 [00:00&lt;00:00, 114.06it/s]
 </pre></div></div>
 </div>
 <div class="nboutput nblast docutils container">
@@ -829,14 +829,6 @@ SCENARIOS COMPLETE: 100%|██████████| 5/5 [00:00&lt;00:00, 16
   </thead>
   <tbody>
     <tr>
-      <th>import_coolant_stuck_t0p0</th>
-      <td>[]</td>
-      <td>[]</td>
-      <td>0.000002</td>
-      <td>0.0</td>
-      <td>0.0</td>
-    </tr>
-    <tr>
       <th>export_coolant_stuck_t0p0</th>
       <td>[]</td>
       <td>[]</td>
@@ -865,6 +857,14 @@ SCENARIOS COMPLETE: 100%|██████████| 5/5 [00:00&lt;00:00, 16
       <td>[]</td>
       <td>[]</td>
       <td>1.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+    </tr>
+    <tr>
+      <th>import_coolant_stuck_t0p0</th>
+      <td>[]</td>
+      <td>[]</td>
+      <td>0.000002</td>
       <td>0.0</td>
       <td>0.0</td>
     </tr>
@@ -989,60 +989,60 @@ Problem res_problem                                                     current 
  Variables
  -vars capacity at t=0: None                                                      nan
  -vars turnup at t=0: None                                                        nan
- -&lt;function make_tankparam at 0x000001B23CD02EE0&gt; (-1, -1, -1, &#39;l&#39;) at t=0: None                 nan
- -&lt;function make_tankparam at 0x000001B23CD02EE0&gt; (-1, -1, 0, &#39;l&#39;) at t=0: None                 nan
- -&lt;function make_tankparam at 0x000001B23CD02EE0&gt; (-1, -1, 1, &#39;l&#39;) at t=0: None                 nan
- -&lt;function make_tankparam at 0x000001B23CD02EE0&gt; (-1, 0, -1, &#39;l&#39;) at t=0: None                 nan
- -&lt;function make_tankparam at 0x000001B23CD02EE0&gt; (-1, 0, 0, &#39;l&#39;) at t=0: None                 nan
- -&lt;function make_tankparam at 0x000001B23CD02EE0&gt; (-1, 0, 1, &#39;l&#39;) at t=0: None                 nan
- -&lt;function make_tankparam at 0x000001B23CD02EE0&gt; (-1, 1, -1, &#39;l&#39;) at t=0: None                 nan
- -&lt;function make_tankparam at 0x000001B23CD02EE0&gt; (-1, 1, 0, &#39;l&#39;) at t=0: None                 nan
- -&lt;function make_tankparam at 0x000001B23CD02EE0&gt; (-1, 1, 1, &#39;l&#39;) at t=0: None                 nan
- -&lt;function make_tankparam at 0x000001B23CD02EE0&gt; (0, -1, -1, &#39;l&#39;) at t=0: None                 nan
- -&lt;function make_tankparam at 0x000001B23CD02EE0&gt; (0, -1, 0, &#39;l&#39;) at t=0: None                 nan
- -&lt;function make_tankparam at 0x000001B23CD02EE0&gt; (0, -1, 1, &#39;l&#39;) at t=0: None                 nan
- -&lt;function make_tankparam at 0x000001B23CD02EE0&gt; (0, 0, -1, &#39;l&#39;) at t=0: None                 nan
- -&lt;function make_tankparam at 0x000001B23CD02EE0&gt; (0, 0, 0, &#39;l&#39;) at t=0: None                 nan
- -&lt;function make_tankparam at 0x000001B23CD02EE0&gt; (0, 0, 1, &#39;l&#39;) at t=0: None                 nan
- -&lt;function make_tankparam at 0x000001B23CD02EE0&gt; (0, 1, -1, &#39;l&#39;) at t=0: None                 nan
- -&lt;function make_tankparam at 0x000001B23CD02EE0&gt; (0, 1, 0, &#39;l&#39;) at t=0: None                 nan
- -&lt;function make_tankparam at 0x000001B23CD02EE0&gt; (0, 1, 1, &#39;l&#39;) at t=0: None                 nan
- -&lt;function make_tankparam at 0x000001B23CD02EE0&gt; (1, -1, -1, &#39;l&#39;) at t=0: None                 nan
- -&lt;function make_tankparam at 0x000001B23CD02EE0&gt; (1, -1, 0, &#39;l&#39;) at t=0: None                 nan
- -&lt;function make_tankparam at 0x000001B23CD02EE0&gt; (1, -1, 1, &#39;l&#39;) at t=0: None                 nan
- -&lt;function make_tankparam at 0x000001B23CD02EE0&gt; (1, 0, -1, &#39;l&#39;) at t=0: None                 nan
- -&lt;function make_tankparam at 0x000001B23CD02EE0&gt; (1, 0, 0, &#39;l&#39;) at t=0: None                 nan
- -&lt;function make_tankparam at 0x000001B23CD02EE0&gt; (1, 0, 1, &#39;l&#39;) at t=0: None                 nan
- -&lt;function make_tankparam at 0x000001B23CD02EE0&gt; (1, 1, -1, &#39;l&#39;) at t=0: None                 nan
- -&lt;function make_tankparam at 0x000001B23CD02EE0&gt; (1, 1, 0, &#39;l&#39;) at t=0: None                 nan
- -&lt;function make_tankparam at 0x000001B23CD02EE0&gt; (1, 1, 1, &#39;l&#39;) at t=0: None                 nan
- -&lt;function make_tankparam at 0x000001B23CD02EE0&gt; (-1, -1, -1, &#39;u&#39;) at t=0: None                 nan
- -&lt;function make_tankparam at 0x000001B23CD02EE0&gt; (-1, -1, 0, &#39;u&#39;) at t=0: None                 nan
- -&lt;function make_tankparam at 0x000001B23CD02EE0&gt; (-1, -1, 1, &#39;u&#39;) at t=0: None                 nan
- -&lt;function make_tankparam at 0x000001B23CD02EE0&gt; (-1, 0, -1, &#39;u&#39;) at t=0: None                 nan
- -&lt;function make_tankparam at 0x000001B23CD02EE0&gt; (-1, 0, 0, &#39;u&#39;) at t=0: None                 nan
- -&lt;function make_tankparam at 0x000001B23CD02EE0&gt; (-1, 0, 1, &#39;u&#39;) at t=0: None                 nan
- -&lt;function make_tankparam at 0x000001B23CD02EE0&gt; (-1, 1, -1, &#39;u&#39;) at t=0: None                 nan
- -&lt;function make_tankparam at 0x000001B23CD02EE0&gt; (-1, 1, 0, &#39;u&#39;) at t=0: None                 nan
- -&lt;function make_tankparam at 0x000001B23CD02EE0&gt; (-1, 1, 1, &#39;u&#39;) at t=0: None                 nan
- -&lt;function make_tankparam at 0x000001B23CD02EE0&gt; (0, -1, -1, &#39;u&#39;) at t=0: None                 nan
- -&lt;function make_tankparam at 0x000001B23CD02EE0&gt; (0, -1, 0, &#39;u&#39;) at t=0: None                 nan
- -&lt;function make_tankparam at 0x000001B23CD02EE0&gt; (0, -1, 1, &#39;u&#39;) at t=0: None                 nan
- -&lt;function make_tankparam at 0x000001B23CD02EE0&gt; (0, 0, -1, &#39;u&#39;) at t=0: None                 nan
- -&lt;function make_tankparam at 0x000001B23CD02EE0&gt; (0, 0, 0, &#39;u&#39;) at t=0: None                 nan
- -&lt;function make_tankparam at 0x000001B23CD02EE0&gt; (0, 0, 1, &#39;u&#39;) at t=0: None                 nan
- -&lt;function make_tankparam at 0x000001B23CD02EE0&gt; (0, 1, -1, &#39;u&#39;) at t=0: None                 nan
- -&lt;function make_tankparam at 0x000001B23CD02EE0&gt; (0, 1, 0, &#39;u&#39;) at t=0: None                 nan
- -&lt;function make_tankparam at 0x000001B23CD02EE0&gt; (0, 1, 1, &#39;u&#39;) at t=0: None                 nan
- -&lt;function make_tankparam at 0x000001B23CD02EE0&gt; (1, -1, -1, &#39;u&#39;) at t=0: None                 nan
- -&lt;function make_tankparam at 0x000001B23CD02EE0&gt; (1, -1, 0, &#39;u&#39;) at t=0: None                 nan
- -&lt;function make_tankparam at 0x000001B23CD02EE0&gt; (1, -1, 1, &#39;u&#39;) at t=0: None                 nan
- -&lt;function make_tankparam at 0x000001B23CD02EE0&gt; (1, 0, -1, &#39;u&#39;) at t=0: None                 nan
- -&lt;function make_tankparam at 0x000001B23CD02EE0&gt; (1, 0, 0, &#39;u&#39;) at t=0: None                 nan
- -&lt;function make_tankparam at 0x000001B23CD02EE0&gt; (1, 0, 1, &#39;u&#39;) at t=0: None                 nan
- -&lt;function make_tankparam at 0x000001B23CD02EE0&gt; (1, 1, -1, &#39;u&#39;) at t=0: None                 nan
- -&lt;function make_tankparam at 0x000001B23CD02EE0&gt; (1, 1, 0, &#39;u&#39;) at t=0: None                 nan
- -&lt;function make_tankparam at 0x000001B23CD02EE0&gt; (1, 1, 1, &#39;u&#39;) at t=0: None                 nan
+ -&lt;function make_tankparam at 0x00000257C077FD30&gt; (-1, -1, -1, &#39;l&#39;) at t=0: None                 nan
+ -&lt;function make_tankparam at 0x00000257C077FD30&gt; (-1, -1, 0, &#39;l&#39;) at t=0: None                 nan
+ -&lt;function make_tankparam at 0x00000257C077FD30&gt; (-1, -1, 1, &#39;l&#39;) at t=0: None                 nan
+ -&lt;function make_tankparam at 0x00000257C077FD30&gt; (-1, 0, -1, &#39;l&#39;) at t=0: None                 nan
+ -&lt;function make_tankparam at 0x00000257C077FD30&gt; (-1, 0, 0, &#39;l&#39;) at t=0: None                 nan
+ -&lt;function make_tankparam at 0x00000257C077FD30&gt; (-1, 0, 1, &#39;l&#39;) at t=0: None                 nan
+ -&lt;function make_tankparam at 0x00000257C077FD30&gt; (-1, 1, -1, &#39;l&#39;) at t=0: None                 nan
+ -&lt;function make_tankparam at 0x00000257C077FD30&gt; (-1, 1, 0, &#39;l&#39;) at t=0: None                 nan
+ -&lt;function make_tankparam at 0x00000257C077FD30&gt; (-1, 1, 1, &#39;l&#39;) at t=0: None                 nan
+ -&lt;function make_tankparam at 0x00000257C077FD30&gt; (0, -1, -1, &#39;l&#39;) at t=0: None                 nan
+ -&lt;function make_tankparam at 0x00000257C077FD30&gt; (0, -1, 0, &#39;l&#39;) at t=0: None                 nan
+ -&lt;function make_tankparam at 0x00000257C077FD30&gt; (0, -1, 1, &#39;l&#39;) at t=0: None                 nan
+ -&lt;function make_tankparam at 0x00000257C077FD30&gt; (0, 0, -1, &#39;l&#39;) at t=0: None                 nan
+ -&lt;function make_tankparam at 0x00000257C077FD30&gt; (0, 0, 0, &#39;l&#39;) at t=0: None                 nan
+ -&lt;function make_tankparam at 0x00000257C077FD30&gt; (0, 0, 1, &#39;l&#39;) at t=0: None                 nan
+ -&lt;function make_tankparam at 0x00000257C077FD30&gt; (0, 1, -1, &#39;l&#39;) at t=0: None                 nan
+ -&lt;function make_tankparam at 0x00000257C077FD30&gt; (0, 1, 0, &#39;l&#39;) at t=0: None                 nan
+ -&lt;function make_tankparam at 0x00000257C077FD30&gt; (0, 1, 1, &#39;l&#39;) at t=0: None                 nan
+ -&lt;function make_tankparam at 0x00000257C077FD30&gt; (1, -1, -1, &#39;l&#39;) at t=0: None                 nan
+ -&lt;function make_tankparam at 0x00000257C077FD30&gt; (1, -1, 0, &#39;l&#39;) at t=0: None                 nan
+ -&lt;function make_tankparam at 0x00000257C077FD30&gt; (1, -1, 1, &#39;l&#39;) at t=0: None                 nan
+ -&lt;function make_tankparam at 0x00000257C077FD30&gt; (1, 0, -1, &#39;l&#39;) at t=0: None                 nan
+ -&lt;function make_tankparam at 0x00000257C077FD30&gt; (1, 0, 0, &#39;l&#39;) at t=0: None                 nan
+ -&lt;function make_tankparam at 0x00000257C077FD30&gt; (1, 0, 1, &#39;l&#39;) at t=0: None                 nan
+ -&lt;function make_tankparam at 0x00000257C077FD30&gt; (1, 1, -1, &#39;l&#39;) at t=0: None                 nan
+ -&lt;function make_tankparam at 0x00000257C077FD30&gt; (1, 1, 0, &#39;l&#39;) at t=0: None                 nan
+ -&lt;function make_tankparam at 0x00000257C077FD30&gt; (1, 1, 1, &#39;l&#39;) at t=0: None                 nan
+ -&lt;function make_tankparam at 0x00000257C077FD30&gt; (-1, -1, -1, &#39;u&#39;) at t=0: None                 nan
+ -&lt;function make_tankparam at 0x00000257C077FD30&gt; (-1, -1, 0, &#39;u&#39;) at t=0: None                 nan
+ -&lt;function make_tankparam at 0x00000257C077FD30&gt; (-1, -1, 1, &#39;u&#39;) at t=0: None                 nan
+ -&lt;function make_tankparam at 0x00000257C077FD30&gt; (-1, 0, -1, &#39;u&#39;) at t=0: None                 nan
+ -&lt;function make_tankparam at 0x00000257C077FD30&gt; (-1, 0, 0, &#39;u&#39;) at t=0: None                 nan
+ -&lt;function make_tankparam at 0x00000257C077FD30&gt; (-1, 0, 1, &#39;u&#39;) at t=0: None                 nan
+ -&lt;function make_tankparam at 0x00000257C077FD30&gt; (-1, 1, -1, &#39;u&#39;) at t=0: None                 nan
+ -&lt;function make_tankparam at 0x00000257C077FD30&gt; (-1, 1, 0, &#39;u&#39;) at t=0: None                 nan
+ -&lt;function make_tankparam at 0x00000257C077FD30&gt; (-1, 1, 1, &#39;u&#39;) at t=0: None                 nan
+ -&lt;function make_tankparam at 0x00000257C077FD30&gt; (0, -1, -1, &#39;u&#39;) at t=0: None                 nan
+ -&lt;function make_tankparam at 0x00000257C077FD30&gt; (0, -1, 0, &#39;u&#39;) at t=0: None                 nan
+ -&lt;function make_tankparam at 0x00000257C077FD30&gt; (0, -1, 1, &#39;u&#39;) at t=0: None                 nan
+ -&lt;function make_tankparam at 0x00000257C077FD30&gt; (0, 0, -1, &#39;u&#39;) at t=0: None                 nan
+ -&lt;function make_tankparam at 0x00000257C077FD30&gt; (0, 0, 0, &#39;u&#39;) at t=0: None                 nan
+ -&lt;function make_tankparam at 0x00000257C077FD30&gt; (0, 0, 1, &#39;u&#39;) at t=0: None                 nan
+ -&lt;function make_tankparam at 0x00000257C077FD30&gt; (0, 1, -1, &#39;u&#39;) at t=0: None                 nan
+ -&lt;function make_tankparam at 0x00000257C077FD30&gt; (0, 1, 0, &#39;u&#39;) at t=0: None                 nan
+ -&lt;function make_tankparam at 0x00000257C077FD30&gt; (0, 1, 1, &#39;u&#39;) at t=0: None                 nan
+ -&lt;function make_tankparam at 0x00000257C077FD30&gt; (1, -1, -1, &#39;u&#39;) at t=0: None                 nan
+ -&lt;function make_tankparam at 0x00000257C077FD30&gt; (1, -1, 0, &#39;u&#39;) at t=0: None                 nan
+ -&lt;function make_tankparam at 0x00000257C077FD30&gt; (1, -1, 1, &#39;u&#39;) at t=0: None                 nan
+ -&lt;function make_tankparam at 0x00000257C077FD30&gt; (1, 0, -1, &#39;u&#39;) at t=0: None                 nan
+ -&lt;function make_tankparam at 0x00000257C077FD30&gt; (1, 0, 0, &#39;u&#39;) at t=0: None                 nan
+ -&lt;function make_tankparam at 0x00000257C077FD30&gt; (1, 0, 1, &#39;u&#39;) at t=0: None                 nan
+ -&lt;function make_tankparam at 0x00000257C077FD30&gt; (1, 1, -1, &#39;u&#39;) at t=0: None                 nan
+ -&lt;function make_tankparam at 0x00000257C077FD30&gt; (1, 1, 0, &#39;u&#39;) at t=0: None                 nan
+ -&lt;function make_tankparam at 0x00000257C077FD30&gt; (1, 1, 1, &#39;u&#39;) at t=0: None                 nan
  Objectives
  -cd: +(des_cost   at t=)                                                         nan
  -cost: +sum(res_sim endclass expected cost at t=end)                             nan
@@ -1185,6 +1185,7 @@ Problem res_problem                                                     current 
 [10.          0.45390625]
 [10.          0.36132812]
 [10.          0.15722656]
+[10.  0.]
 [10.  0.]
 [10.  0.]
 [10.  0.]
@@ -1337,6 +1338,7 @@ Optimization terminated successfully.
 [10.  0.]
 [10.  0.]
 [10.  0.]
+[10.  0.]
 Optimization terminated successfully.
          Current function value: 0.000000
          Iterations: 13
@@ -1452,18 +1454,35 @@ Optimization terminated successfully.
 </pre></div>
 </div>
 </div>
-<div class="nboutput nblast docutils container">
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area stderr docutils container">
+<div class="highlight"><pre>
+C:\Users\dhulse\Documents\GitHub\fmdtools\examples\tank\tank_opt.py:86: OptimizeWarning: Unknown solver options: xtol
+  result = minimize(lower_level, xdes,
+</pre></div></div>
+</div>
+<div class="nboutput docutils container">
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-time: 14.489802360534668 fval: 667833.3333333333 xdes: [21.   0.5]
-time: 28.470828533172607 fval: 693085.8333333333 xdes: [22.05  0.5 ]
-time: 42.75062704086304 fval: 668089.5833333333 xdes: [21.     0.525]
-time: 57.17077398300171 fval: 645042.0833333333 xdes: [19.95   0.525]
-time: 72.50075340270996 fval: 624332.3958333333 xdes: [18.9     0.5375]
+time: 14.446196556091309 fval: 667833.3333333333 xdes: [21.   0.5]
+time: 28.805665731430054 fval: 693085.8333333333 xdes: [22.05  0.5 ]
+time: 43.28752517700195 fval: 668089.5833333333 xdes: [21.     0.525]
+time: 57.82218909263611 fval: 645042.0833333333 xdes: [19.95   0.525]
+time: 72.29638528823853 fval: 624332.3958333333 xdes: [18.9     0.5375]
 [18.9     0.5375]
-Warning: Maximum number of iterations has been exceeded.
+</pre></div></div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area stderr docutils container">
+<div class="highlight"><pre>
+C:\Users\dhulse\Documents\GitHub\fmdtools\examples\tank\tank_opt.py:86: RuntimeWarning: Maximum number of iterations has been exceeded.
+  result = minimize(lower_level, xdes,
 </pre></div></div>
 </div>
 <div class="nbinput docutils container">
@@ -1497,7 +1516,7 @@ Warning: Maximum number of iterations has been exceeded.
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-&lt;matplotlib.legend.Legend at 0x1b23d096d30&gt;
+&lt;matplotlib.legend.Legend at 0x257c0785520&gt;
 </pre></div></div>
 </div>
 <div class="nboutput nblast docutils container">
@@ -1571,35 +1590,35 @@ Warning: Maximum number of iterations has been exceeded.
       <td>18.9</td>
       <td>0.5375</td>
       <td>624332.395833</td>
-      <td>72.500753</td>
+      <td>72.296385</td>
     </tr>
     <tr>
       <th>Alt. (no $C_R$)</th>
       <td>10.0</td>
       <td>0.0000</td>
       <td>533333.333333</td>
-      <td>144.138794</td>
+      <td>143.521800</td>
     </tr>
     <tr>
       <th>Alt. (with $C_R$)</th>
       <td>10.0</td>
       <td>0.0000</td>
       <td>533333.333333</td>
-      <td>146.301460</td>
+      <td>147.489022</td>
     </tr>
     <tr>
       <th>Seq. (with $C_R$)</th>
       <td>10.0</td>
       <td>0.0000</td>
       <td>533333.333333</td>
-      <td>146.301460</td>
+      <td>147.489022</td>
     </tr>
     <tr>
       <th>Seq. (no $C_R$)</th>
       <td>10.0</td>
       <td>0.0000</td>
       <td>533333.333333</td>
-      <td>144.138794</td>
+      <td>143.521800</td>
     </tr>
   </tbody>
 </table>
