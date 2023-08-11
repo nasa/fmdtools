@@ -246,13 +246,15 @@ class NominalApproach():
             and params is a dictionary of parameters (e.g., {'mu':1,'std':1}) to use '
             as the key/parameter inputs to the pdf
         """
+        scenprobs = dict()
         for scenname in self.ranges[rangeid]['scenarios']:
             inputparams = self.scenarios[scenname].inputparams
             inputprobs = [inpdf[0](inputparams[name], **inpdf[1]) for name, inpdf in inputpdfs.items()]
-            self.scenarios[scenname].prob = np.prod(inputprobs)
-        totprobs = sum([self.scenarios[scenname].prob for scenname in self.ranges[rangeid]['scenarios']])
+            scenprobs[scenname] = np.prod(inputprobs)
+        totprobs = sum([*scenprobs.values()])
         for scenname in self.ranges[rangeid]['scenarios']:
-            self.scenarios[scenname].prob = self.scenarios[scenname].prob*prob_weight/totprobs
+            prob = scenprobs[scenname]*prob_weight/totprobs
+            self.scenarios[scenname] = self.scenarios[scenname].copy_with(prob=prob)
     def add_rand_params(self, paramfunc, rangeid, *fixedargs, prob_weight=1.0, replicates=1000, seeds='shared', **randvars):
         """
         Adds a set of random scenarios to the approach.

@@ -50,6 +50,7 @@ class Sequence(UserDict):
 class BaseScenario(dataobject, readonly=True, mapping=True):
     sequence: dict = dict()
     times: tuple = ()
+    prob: ClassVar[float] = 1.0
     rate: ClassVar[float] = 1.0
     name: ClassVar[str] = "nominal"
     time: ClassVar[float] = 0.0
@@ -86,9 +87,9 @@ class NominalScenario(BaseScenario, readonly=True):
     p: dict={}
     r: dict={}
     sp: dict={}
+    prob: float=1.0
     inputparams: dict = {}
     rangeid: str=''
-    prob: float=1.0
     name: str = 'nominal'
 
     def get_param(self, param, default="NA"):

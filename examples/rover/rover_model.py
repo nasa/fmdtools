@@ -833,9 +833,9 @@ class Rover(Model):
         )
 
         return {
-            "rate": 0,
+            "rate": scen.rate,
             "cost": 0,
-            "prob": scen.rate,
+            "prob": scen.prob,
             "expected cost": 0,
             "in_bound": in_bound,
             "at_finish": at_finish,
