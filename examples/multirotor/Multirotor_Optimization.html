@@ -843,7 +843,7 @@ Mechanical Design, 144(11), 111704. - This reference provides a better review of
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-Faults found during the nominal run {&#39;store_ee&#39;: [&#39;s1p1_lowcharge&#39;, &#39;s1p2_lowcharge&#39;, &#39;lowcharge&#39;]}
+Faults found during the nominal run {&#39;store_ee&#39;: [&#39;s1p2_lowcharge&#39;, &#39;s1p1_lowcharge&#39;, &#39;lowcharge&#39;]}
 </pre></div></div>
 </div>
 <div class="nboutput nblast docutils container">
@@ -964,7 +964,7 @@ Faults found during the nominal run {&#39;store_ee&#39;: [&#39;s1p1_lowcharge&#3
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-Faults found during the nominal run {&#39;store_ee&#39;: [&#39;s1p1_lowcharge&#39;, &#39;s1p2_lowcharge&#39;, &#39;lowcharge&#39;]}
+Faults found during the nominal run {&#39;store_ee&#39;: [&#39;s1p2_lowcharge&#39;, &#39;s1p1_lowcharge&#39;, &#39;lowcharge&#39;]}
 </pre></div></div>
 </div>
 <div class="nboutput nblast docutils container">
@@ -1167,9 +1167,9 @@ Faults found during the nominal run {&#39;store_ee&#39;: [&#39;s1p1_lowcharge&#3
 Simulation Times:
 design_model: 0.0 s
 set_const: 0.0 s
-operational_model: 0.10401248931884766 s
-resilience_model: 1.2747435569763184 s
-total: 1.378756046295166
+operational_model: 0.11441397666931152 s
+resilience_model: 1.240833044052124 s
+total: 1.3552470207214355
 </pre></div></div>
 </div>
 <p>We can further speed this up by updating the simulation options to track specific parts of the model history (instead of all) as well as provide a multiprocessing pool.</p>
@@ -1197,10 +1197,10 @@ total: 1.378756046295166
 <div class="highlight"><pre>
 Simulation Times:
 design_model: 0.0 s
-set_const: 0.0009975433349609375 s
-operational_model: 0.1614067554473877 s
-resilience_model: 3.2975502014160156 s
-total: 3.4599545001983643
+set_const: 0.0 s
+operational_model: 0.11483287811279297 s
+resilience_model: 2.6572015285491943 s
+total: 2.7720344066619873
 </pre></div></div>
 </div>
 <p>Note that cost savings from parallelism often come after a single simulation (since initialization of the pool takes time), but are still not major in this case. This is because the parameters in the approach both require re-instantiation of the model (which is a significant amount of the computational cost).</p>
@@ -1220,9 +1220,9 @@ total: 3.4599545001983643
 Simulation Times:
 design_model: 0.0 s
 set_const: 0.0 s
-operational_model: 0.10431933403015137 s
-resilience_model: 0.6532607078552246 s
-total: 0.757580041885376
+operational_model: 0.11583161354064941 s
+resilience_model: 0.668588399887085 s
+total: 0.7844200134277344
 </pre></div></div>
 </div>
 <p>Below we show a very simple optimization of these variables using brute force search. Much more sophisticated architectures/methods can be used on this problem, this code is mainly to demonstrate how these disciplines can be used together as a single objective/problem.</p>
@@ -1283,8 +1283,8 @@ Faults found during the nominal run {&#39;store_ee&#39;: [&#39;s1p1_lowcharge&#3
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-Faults found during the nominal run {&#39;store_ee&#39;: [&#39;s1p1_lowcharge&#39;, &#39;s1p2_lowcharge&#39;, &#39;lowcharge&#39;]}
-Faults found during the nominal run {&#39;store_ee&#39;: [&#39;s1p1_lowcharge&#39;, &#39;s1p2_lowcharge&#39;, &#39;lowcharge&#39;]}
+Faults found during the nominal run {&#39;store_ee&#39;: [&#39;s1p2_lowcharge&#39;, &#39;s1p1_lowcharge&#39;, &#39;lowcharge&#39;]}
+Faults found during the nominal run {&#39;store_ee&#39;: [&#39;s1p2_lowcharge&#39;, &#39;s1p1_lowcharge&#39;, &#39;lowcharge&#39;]}
 </pre></div></div>
 </div>
 <div class="nboutput nblast docutils container">
@@ -1319,7 +1319,7 @@ Faults found during the nominal run {&#39;store_ee&#39;: [&#39;s1p1_lowcharge&#3
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-[&lt;matplotlib.lines.Line2D at 0x1f4d12f11c0&gt;]
+[&lt;matplotlib.lines.Line2D at 0x16ea7779430&gt;]
 </pre></div></div>
 </div>
 <div class="nboutput nblast docutils container">
@@ -1343,7 +1343,7 @@ Faults found during the nominal run {&#39;store_ee&#39;: [&#39;s1p1_lowcharge&#3
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-[&lt;matplotlib.lines.Line2D at 0x1f4d12dbe50&gt;]
+[&lt;matplotlib.lines.Line2D at 0x16ea77a92b0&gt;]
 </pre></div></div>
 </div>
 <div class="nboutput nblast docutils container">
@@ -1367,7 +1367,7 @@ Faults found during the nominal run {&#39;store_ee&#39;: [&#39;s1p1_lowcharge&#3
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-[&lt;matplotlib.lines.Line2D at 0x1f4d1719250&gt;]
+[&lt;matplotlib.lines.Line2D at 0x16ea8b14700&gt;]
 </pre></div></div>
 </div>
 <div class="nboutput nblast docutils container">

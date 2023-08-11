@@ -1829,7 +1829,7 @@ as well as a single global view (which may represent the actual value)</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="fmdtools.define.flow.MultiFlow.create_local">
-<span class="sig-name descname"><span class="pre">create_local</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">attrs</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'all'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">p</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">{}</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">s</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">{}</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.define.flow.MultiFlow.create_local" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">create_local</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">attrs</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'all'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">p</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'global'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">s</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'global'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.define.flow.MultiFlow.create_local" title="Permalink to this definition"></a></dt>
 <dd><p>Creates a local view of the Flow</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -1842,7 +1842,10 @@ dict: dict of attributes to use in the local flow and their initial values</p>
 </dd>
 </dl>
 </p></li>
-<li><p><strong>p</strong> (<em>dict</em>) – Parameters to instantiate the local version with (if params used in the flow)</p></li>
+<li><p><strong>p</strong> (<em>dict</em>) – Parameters to instantiate the local version with (if params used in the flow)
+Default is ‘global’, which uses the same parameter as the multiflow</p></li>
+<li><p><strong>s</strong> (<em>dict</em>) – Initial values for the states. Default is ‘global’, which uses the
+same initial states as the multiflow</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>
@@ -2904,6 +2907,11 @@ self.k_lim or set constraints self.k_set</p>
 <span class="sig-name descname"><span class="pre">get_true_fields</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.define.parameter.Parameter.get_true_fields" title="Permalink to this definition"></a></dt>
 <dd></dd></dl>
 
+<dl class="py method">
+<dt class="sig sig-object py" id="fmdtools.define.parameter.Parameter.keys">
+<span class="sig-name descname"><span class="pre">keys</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.define.parameter.Parameter.keys" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
 </dd></dl>
 
 <dl class="py class">
@@ -3445,7 +3453,7 @@ reducing length/adding clarity to increment statements. e.g.,:</p>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">p</span><span class="o">.</span><span class="n">limit</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="p">(</span><span class="mf">0.0</span><span class="p">,</span><span class="mf">100.0</span><span class="p">),</span> <span class="n">y</span><span class="o">=</span><span class="p">(</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">100.0</span><span class="p">))</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">p</span><span class="o">.</span><span class="n">x</span>
 <span class="go">100.0</span>
-<span class="go">&gt;&gt;&gt;</span>
+<span class="gp">&gt;&gt;&gt;</span>
 <span class="go">0.0</span>
 </pre></div>
 </div>

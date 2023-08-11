@@ -709,7 +709,7 @@ div.rendered_html tbody tr:hover {
 </div>
 <div class="output_area stderr docutils container">
 <div class="highlight"><pre>
-SCENARIOS COMPLETE: 100%|██████████| 70/70 [00:00&lt;00:00, 82.34it/s]
+SCENARIOS COMPLETE: 100%|██████████| 70/70 [00:00&lt;00:00, 79.62it/s]
 </pre></div></div>
 </div>
 <p>Using <code class="docutils literal notranslate"><span class="pre">make_summarytable</span></code>, one can see the degradation effects of this fault on the flows:</p>
@@ -770,195 +770,11 @@ array([0.5])
   </thead>
   <tbody>
     <tr>
-      <th>supply_ee_minor_overload_t0</th>
-      <td>['me', 'oe', 'he']</td>
-      <td>[]</td>
-      <td>0.0</td>
-      <td>5150.0</td>
-      <td>0.0</td>
-    </tr>
-    <tr>
-      <th>store_ee_low_storage_t0</th>
-      <td>[]</td>
-      <td>[]</td>
-      <td>0.0</td>
-      <td>2000.0</td>
-      <td>0.0</td>
-    </tr>
-    <tr>
-      <th>import_signal_no_signal_t0</th>
-      <td>['me', 'oe', 'he']</td>
-      <td>[]</td>
-      <td>0.0</td>
-      <td>2000.0</td>
-      <td>0.0</td>
-    </tr>
-    <tr>
-      <th>store_ee_no_storage_t0</th>
-      <td>['me', 'oe', 'he']</td>
-      <td>[]</td>
-      <td>0.0</td>
-      <td>3250.0</td>
-      <td>0.0</td>
-    </tr>
-    <tr>
-      <th>export_waste_ho_ineffective_sink_t0</th>
-      <td>[]</td>
-      <td>[]</td>
-      <td>0.0</td>
-      <td>1000.0</td>
-      <td>0.0</td>
-    </tr>
-    <tr>
-      <th>ee_to_oe_burnt_out_t0</th>
-      <td>['oe']</td>
-      <td>[]</td>
-      <td>0.0</td>
-      <td>550.0</td>
-      <td>0.0</td>
-    </tr>
-    <tr>
-      <th>ee_to_oe_optical_resist_t0</th>
-      <td>['oe']</td>
-      <td>[]</td>
-      <td>0.0</td>
-      <td>520.0</td>
-      <td>0.0</td>
-    </tr>
-    <tr>
-      <th>export_waste_hm_hot_sink_t0</th>
-      <td>[]</td>
-      <td>[]</td>
-      <td>0.0</td>
-      <td>500.0</td>
-      <td>0.0</td>
-    </tr>
-    <tr>
-      <th>ee_to_he_high_heat_t0</th>
-      <td>['he']</td>
-      <td>[]</td>
-      <td>0.0</td>
-      <td>2500.0</td>
-      <td>0.0</td>
-    </tr>
-    <tr>
-      <th>export_waste_hm_ineffective_sink_t0</th>
-      <td>[]</td>
-      <td>[]</td>
-      <td>0.0</td>
-      <td>1000.0</td>
-      <td>0.0</td>
-    </tr>
-    <tr>
-      <th>supply_ee_major_overload_t0</th>
-      <td>[]</td>
-      <td>[]</td>
-      <td>0.0</td>
-      <td>2400.0</td>
-      <td>0.0</td>
-    </tr>
-    <tr>
-      <th>supply_ee_open_circuit_t0</th>
-      <td>['me', 'oe', 'he']</td>
-      <td>[]</td>
-      <td>0.0</td>
-      <td>1450.0</td>
-      <td>0.0</td>
-    </tr>
-    <tr>
-      <th>ee_to_he_open_circuit_t0</th>
-      <td>['he']</td>
-      <td>[]</td>
-      <td>0.0</td>
-      <td>550.0</td>
-      <td>0.0</td>
-    </tr>
-    <tr>
-      <th>import_ee_low_v_t0</th>
-      <td>['me', 'oe', 'he']</td>
-      <td>[]</td>
-      <td>0.0</td>
-      <td>700.0</td>
-      <td>0.0</td>
-    </tr>
-    <tr>
-      <th>supply_ee_short_t0</th>
-      <td>['me', 'oe', 'he']</td>
-      <td>[]</td>
-      <td>0.0</td>
-      <td>5150.0</td>
-      <td>0.0</td>
-    </tr>
-    <tr>
-      <th>ee_to_me_short_t0</th>
-      <td>['me', 'oe', 'he']</td>
-      <td>[]</td>
-      <td>0.0</td>
-      <td>4950.0</td>
-      <td>0.0</td>
-    </tr>
-    <tr>
-      <th>export_he_hot_sink_t0</th>
-      <td>['he']</td>
-      <td>[]</td>
-      <td>0.0</td>
-      <td>600.0</td>
-      <td>0.0</td>
-    </tr>
-    <tr>
-      <th>distribute_ee_open_circuit_t0</th>
-      <td>['me', 'oe', 'he']</td>
-      <td>[]</td>
-      <td>0.0</td>
-      <td>2750.0</td>
-      <td>0.0</td>
-    </tr>
-    <tr>
-      <th>import_ee_no_v_t0</th>
-      <td>['me', 'oe', 'he']</td>
-      <td>[]</td>
-      <td>0.0</td>
-      <td>1550.0</td>
-      <td>0.0</td>
-    </tr>
-    <tr>
       <th>ee_to_me_high_torque_t0</th>
       <td>['me']</td>
       <td>[]</td>
       <td>0.0</td>
       <td>450.0</td>
-      <td>0.0</td>
-    </tr>
-    <tr>
-      <th>import_ee_high_v_t0</th>
-      <td>[]</td>
-      <td>[]</td>
-      <td>0.0</td>
-      <td>2100.0</td>
-      <td>0.0</td>
-    </tr>
-    <tr>
-      <th>nominal</th>
-      <td>[]</td>
-      <td>[]</td>
-      <td>1.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-    </tr>
-    <tr>
-      <th>ee_to_he_low_heat_t0</th>
-      <td>['he']</td>
-      <td>[]</td>
-      <td>0.0</td>
-      <td>550.0</td>
-      <td>0.0</td>
-    </tr>
-    <tr>
-      <th>export_waste_h1_hot_sink_t0</th>
-      <td>[]</td>
-      <td>[]</td>
-      <td>0.0</td>
-      <td>500.0</td>
       <td>0.0</td>
     </tr>
     <tr>
@@ -970,6 +786,46 @@ array([0.5])
       <td>0.0</td>
     </tr>
     <tr>
+      <th>import_ee_high_v_t0</th>
+      <td>['me', 'oe', 'he']</td>
+      <td>[]</td>
+      <td>0.0</td>
+      <td>3350.0</td>
+      <td>0.0</td>
+    </tr>
+    <tr>
+      <th>export_waste_hm_ineffective_sink_t0</th>
+      <td>[]</td>
+      <td>[]</td>
+      <td>0.0</td>
+      <td>1000.0</td>
+      <td>0.0</td>
+    </tr>
+    <tr>
+      <th>store_ee_low_storage_t0</th>
+      <td>[]</td>
+      <td>[]</td>
+      <td>0.0</td>
+      <td>2000.0</td>
+      <td>0.0</td>
+    </tr>
+    <tr>
+      <th>supply_ee_major_overload_t0</th>
+      <td>['me', 'oe', 'he']</td>
+      <td>[]</td>
+      <td>0.0</td>
+      <td>3650.0</td>
+      <td>0.0</td>
+    </tr>
+    <tr>
+      <th>export_waste_ho_ineffective_sink_t0</th>
+      <td>[]</td>
+      <td>[]</td>
+      <td>0.0</td>
+      <td>1000.0</td>
+      <td>0.0</td>
+    </tr>
+    <tr>
       <th>supply_ee_adverse_resist_t0</th>
       <td>['me', 'oe', 'he']</td>
       <td>[]</td>
@@ -978,15 +834,63 @@ array([0.5])
       <td>0.0</td>
     </tr>
     <tr>
-      <th>ee_to_me_open_circuit_t0</th>
-      <td>['me']</td>
+      <th>nominal</th>
       <td>[]</td>
+      <td>[]</td>
+      <td>1.0</td>
       <td>0.0</td>
-      <td>650.0</td>
       <td>0.0</td>
     </tr>
     <tr>
-      <th>distribute_ee_adverse_resist_t0</th>
+      <th>ee_to_he_toohigh_heat_t0</th>
+      <td>['me', 'oe', 'he']</td>
+      <td>[]</td>
+      <td>0.0</td>
+      <td>5100.0</td>
+      <td>0.0</td>
+    </tr>
+    <tr>
+      <th>supply_ee_short_t0</th>
+      <td>['me', 'oe', 'he']</td>
+      <td>[]</td>
+      <td>0.0</td>
+      <td>5150.0</td>
+      <td>0.0</td>
+    </tr>
+    <tr>
+      <th>supply_ee_minor_overload_t0</th>
+      <td>['me', 'oe', 'he']</td>
+      <td>[]</td>
+      <td>0.0</td>
+      <td>5150.0</td>
+      <td>0.0</td>
+    </tr>
+    <tr>
+      <th>ee_to_me_toohigh_torque_t0</th>
+      <td>['me', 'oe', 'he']</td>
+      <td>[]</td>
+      <td>0.0</td>
+      <td>5050.0</td>
+      <td>0.0</td>
+    </tr>
+    <tr>
+      <th>export_waste_ho_hot_sink_t0</th>
+      <td>[]</td>
+      <td>[]</td>
+      <td>0.0</td>
+      <td>500.0</td>
+      <td>0.0</td>
+    </tr>
+    <tr>
+      <th>export_waste_hm_hot_sink_t0</th>
+      <td>[]</td>
+      <td>[]</td>
+      <td>0.0</td>
+      <td>500.0</td>
+      <td>0.0</td>
+    </tr>
+    <tr>
+      <th>distribute_ee_open_circuit_t0</th>
       <td>['me', 'oe', 'he']</td>
       <td>[]</td>
       <td>0.0</td>
@@ -1002,43 +906,27 @@ array([0.5])
       <td>0.0</td>
     </tr>
     <tr>
-      <th>export_waste_ho_hot_sink_t0</th>
-      <td>[]</td>
+      <th>ee_to_oe_optical_resist_t0</th>
+      <td>['oe']</td>
       <td>[]</td>
       <td>0.0</td>
-      <td>500.0</td>
+      <td>520.0</td>
       <td>0.0</td>
     </tr>
     <tr>
-      <th>export_waste_h1_ineffective_sink_t0</th>
-      <td>[]</td>
-      <td>[]</td>
-      <td>0.0</td>
-      <td>1000.0</td>
-      <td>0.0</td>
-    </tr>
-    <tr>
-      <th>import_signal_partial_signal_t0</th>
-      <td>['me', 'oe', 'he']</td>
-      <td>[]</td>
-      <td>0.0</td>
-      <td>2000.0</td>
-      <td>0.0</td>
-    </tr>
-    <tr>
-      <th>export_he_ineffective_sink_t0</th>
+      <th>ee_to_he_high_heat_t0</th>
       <td>['he']</td>
       <td>[]</td>
       <td>0.0</td>
-      <td>1500.0</td>
+      <td>2500.0</td>
       <td>0.0</td>
     </tr>
     <tr>
-      <th>ee_to_me_toohigh_torque_t0</th>
+      <th>ee_to_me_short_t0</th>
       <td>['me', 'oe', 'he']</td>
       <td>[]</td>
       <td>0.0</td>
-      <td>5050.0</td>
+      <td>4950.0</td>
       <td>0.0</td>
     </tr>
     <tr>
@@ -1050,11 +938,123 @@ array([0.5])
       <td>0.0</td>
     </tr>
     <tr>
-      <th>ee_to_he_toohigh_heat_t0</th>
+      <th>export_waste_h1_hot_sink_t0</th>
+      <td>[]</td>
+      <td>[]</td>
+      <td>0.0</td>
+      <td>500.0</td>
+      <td>0.0</td>
+    </tr>
+    <tr>
+      <th>import_ee_no_v_t0</th>
       <td>['me', 'oe', 'he']</td>
       <td>[]</td>
       <td>0.0</td>
-      <td>5100.0</td>
+      <td>1550.0</td>
+      <td>0.0</td>
+    </tr>
+    <tr>
+      <th>export_he_hot_sink_t0</th>
+      <td>['he']</td>
+      <td>[]</td>
+      <td>0.0</td>
+      <td>600.0</td>
+      <td>0.0</td>
+    </tr>
+    <tr>
+      <th>import_ee_low_v_t0</th>
+      <td>['me', 'oe', 'he']</td>
+      <td>[]</td>
+      <td>0.0</td>
+      <td>700.0</td>
+      <td>0.0</td>
+    </tr>
+    <tr>
+      <th>import_signal_partial_signal_t0</th>
+      <td>['me', 'oe', 'he']</td>
+      <td>[]</td>
+      <td>0.0</td>
+      <td>2000.0</td>
+      <td>0.0</td>
+    </tr>
+    <tr>
+      <th>export_waste_h1_ineffective_sink_t0</th>
+      <td>[]</td>
+      <td>[]</td>
+      <td>0.0</td>
+      <td>1000.0</td>
+      <td>0.0</td>
+    </tr>
+    <tr>
+      <th>ee_to_he_open_circuit_t0</th>
+      <td>['he']</td>
+      <td>[]</td>
+      <td>0.0</td>
+      <td>550.0</td>
+      <td>0.0</td>
+    </tr>
+    <tr>
+      <th>ee_to_oe_burnt_out_t0</th>
+      <td>['oe']</td>
+      <td>[]</td>
+      <td>0.0</td>
+      <td>550.0</td>
+      <td>0.0</td>
+    </tr>
+    <tr>
+      <th>export_he_ineffective_sink_t0</th>
+      <td>['he']</td>
+      <td>[]</td>
+      <td>0.0</td>
+      <td>1500.0</td>
+      <td>0.0</td>
+    </tr>
+    <tr>
+      <th>supply_ee_open_circuit_t0</th>
+      <td>['me', 'oe', 'he']</td>
+      <td>[]</td>
+      <td>0.0</td>
+      <td>1450.0</td>
+      <td>0.0</td>
+    </tr>
+    <tr>
+      <th>distribute_ee_adverse_resist_t0</th>
+      <td>['me', 'oe', 'he']</td>
+      <td>[]</td>
+      <td>0.0</td>
+      <td>2750.0</td>
+      <td>0.0</td>
+    </tr>
+    <tr>
+      <th>ee_to_he_low_heat_t0</th>
+      <td>['he']</td>
+      <td>[]</td>
+      <td>0.0</td>
+      <td>550.0</td>
+      <td>0.0</td>
+    </tr>
+    <tr>
+      <th>ee_to_me_open_circuit_t0</th>
+      <td>['me']</td>
+      <td>[]</td>
+      <td>0.0</td>
+      <td>650.0</td>
+      <td>0.0</td>
+    </tr>
+    <tr>
+      <th>store_ee_no_storage_t0</th>
+      <td>['me', 'oe', 'he']</td>
+      <td>[]</td>
+      <td>0.0</td>
+      <td>3250.0</td>
+      <td>0.0</td>
+    </tr>
+    <tr>
+      <th>import_signal_no_signal_t0</th>
+      <td>['me', 'oe', 'he']</td>
+      <td>[]</td>
+      <td>0.0</td>
+      <td>2000.0</td>
       <td>0.0</td>
     </tr>
   </tbody>

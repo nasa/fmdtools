@@ -731,7 +731,7 @@ c:\users\dhulse\documents\github\fmdtools\fmdtools\define\block.py:68: UserWarni
 </div>
 </div>
 <p>To set node positions, we can use <code class="docutils literal notranslate"><span class="pre">Graph.move_nodes</span></code>, which lets one drag the nodes to their desired locations. Node that while these node positions become attributes of the object (for future display) it is good practice to save node locations when one is done in the script so you don’t have to move them every time.</p>
-<div class="nbinput nblast docutils container">
+<div class="nbinput docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[4]:
 </pre></div>
 </div>
@@ -739,6 +739,109 @@ c:\users\dhulse\documents\github\fmdtools\fmdtools\define\block.py:68: UserWarni
 <span class="n">gi</span> <span class="o">=</span> <span class="n">mg</span><span class="o">.</span><span class="n">move_nodes</span><span class="p">()</span>
 </pre></div>
 </div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+<span class="ansi-red-intense-fg ansi-bold">---------------------------------------------------------------------------</span>
+<span class="ansi-red-intense-fg ansi-bold">ImportError</span>                               Traceback (most recent call last)
+<span class="ansi-green-intense-fg ansi-bold">~\AppData\Local\Temp\1/ipykernel_4044/1451165344.py</span> in <span class="ansi-cyan-fg">&lt;module&gt;</span>
+<span class="ansi-green-intense-fg ansi-bold">----&gt; 1</span><span class="ansi-yellow-intense-fg ansi-bold"> </span>get_ipython<span class="ansi-yellow-intense-fg ansi-bold">(</span><span class="ansi-yellow-intense-fg ansi-bold">)</span><span class="ansi-yellow-intense-fg ansi-bold">.</span>run_line_magic<span class="ansi-yellow-intense-fg ansi-bold">(</span><span class="ansi-blue-intense-fg ansi-bold">&#39;matplotlib&#39;</span><span class="ansi-yellow-intense-fg ansi-bold">,</span> <span class="ansi-blue-intense-fg ansi-bold">&#39;qt5&#39;</span><span class="ansi-yellow-intense-fg ansi-bold">)</span>
+<span class="ansi-green-fg">      2</span> gi <span class="ansi-yellow-intense-fg ansi-bold">=</span> mg<span class="ansi-yellow-intense-fg ansi-bold">.</span>move_nodes<span class="ansi-yellow-intense-fg ansi-bold">(</span><span class="ansi-yellow-intense-fg ansi-bold">)</span>
+
+<span class="ansi-green-intense-fg ansi-bold">~\Anaconda3\lib\site-packages\IPython\core\interactiveshell.py</span> in <span class="ansi-cyan-fg">run_line_magic</span><span class="ansi-blue-intense-fg ansi-bold">(self, magic_name, line, _stack_depth)</span>
+<span class="ansi-green-fg">   2349</span>                 kwargs<span class="ansi-yellow-intense-fg ansi-bold">[</span><span class="ansi-blue-intense-fg ansi-bold">&#39;local_ns&#39;</span><span class="ansi-yellow-intense-fg ansi-bold">]</span> <span class="ansi-yellow-intense-fg ansi-bold">=</span> self<span class="ansi-yellow-intense-fg ansi-bold">.</span>get_local_scope<span class="ansi-yellow-intense-fg ansi-bold">(</span>stack_depth<span class="ansi-yellow-intense-fg ansi-bold">)</span>
+<span class="ansi-green-fg">   2350</span>             <span class="ansi-green-intense-fg ansi-bold">with</span> self<span class="ansi-yellow-intense-fg ansi-bold">.</span>builtin_trap<span class="ansi-yellow-intense-fg ansi-bold">:</span>
+<span class="ansi-green-intense-fg ansi-bold">-&gt; 2351</span><span class="ansi-yellow-intense-fg ansi-bold">                 </span>result <span class="ansi-yellow-intense-fg ansi-bold">=</span> fn<span class="ansi-yellow-intense-fg ansi-bold">(</span><span class="ansi-yellow-intense-fg ansi-bold">*</span>args<span class="ansi-yellow-intense-fg ansi-bold">,</span> <span class="ansi-yellow-intense-fg ansi-bold">**</span>kwargs<span class="ansi-yellow-intense-fg ansi-bold">)</span>
+<span class="ansi-green-fg">   2352</span>             <span class="ansi-green-intense-fg ansi-bold">return</span> result
+<span class="ansi-green-fg">   2353</span>
+
+<span class="ansi-green-intense-fg ansi-bold">~\Anaconda3\lib\site-packages\decorator.py</span> in <span class="ansi-cyan-fg">fun</span><span class="ansi-blue-intense-fg ansi-bold">(*args, **kw)</span>
+<span class="ansi-green-fg">    230</span>             <span class="ansi-green-intense-fg ansi-bold">if</span> <span class="ansi-green-intense-fg ansi-bold">not</span> kwsyntax<span class="ansi-yellow-intense-fg ansi-bold">:</span>
+<span class="ansi-green-fg">    231</span>                 args<span class="ansi-yellow-intense-fg ansi-bold">,</span> kw <span class="ansi-yellow-intense-fg ansi-bold">=</span> fix<span class="ansi-yellow-intense-fg ansi-bold">(</span>args<span class="ansi-yellow-intense-fg ansi-bold">,</span> kw<span class="ansi-yellow-intense-fg ansi-bold">,</span> sig<span class="ansi-yellow-intense-fg ansi-bold">)</span>
+<span class="ansi-green-intense-fg ansi-bold">--&gt; 232</span><span class="ansi-yellow-intense-fg ansi-bold">             </span><span class="ansi-green-intense-fg ansi-bold">return</span> caller<span class="ansi-yellow-intense-fg ansi-bold">(</span>func<span class="ansi-yellow-intense-fg ansi-bold">,</span> <span class="ansi-yellow-intense-fg ansi-bold">*</span><span class="ansi-yellow-intense-fg ansi-bold">(</span>extras <span class="ansi-yellow-intense-fg ansi-bold">+</span> args<span class="ansi-yellow-intense-fg ansi-bold">)</span><span class="ansi-yellow-intense-fg ansi-bold">,</span> <span class="ansi-yellow-intense-fg ansi-bold">**</span>kw<span class="ansi-yellow-intense-fg ansi-bold">)</span>
+<span class="ansi-green-fg">    233</span>     fun<span class="ansi-yellow-intense-fg ansi-bold">.</span>__name__ <span class="ansi-yellow-intense-fg ansi-bold">=</span> func<span class="ansi-yellow-intense-fg ansi-bold">.</span>__name__
+<span class="ansi-green-fg">    234</span>     fun<span class="ansi-yellow-intense-fg ansi-bold">.</span>__doc__ <span class="ansi-yellow-intense-fg ansi-bold">=</span> func<span class="ansi-yellow-intense-fg ansi-bold">.</span>__doc__
+
+<span class="ansi-green-intense-fg ansi-bold">~\Anaconda3\lib\site-packages\IPython\core\magic.py</span> in <span class="ansi-cyan-fg">&lt;lambda&gt;</span><span class="ansi-blue-intense-fg ansi-bold">(f, *a, **k)</span>
+<span class="ansi-green-fg">    185</span>     <span class="ansi-red-intense-fg ansi-bold"># but it&#39;s overkill for just that one bit of state.</span>
+<span class="ansi-green-fg">    186</span>     <span class="ansi-green-intense-fg ansi-bold">def</span> magic_deco<span class="ansi-yellow-intense-fg ansi-bold">(</span>arg<span class="ansi-yellow-intense-fg ansi-bold">)</span><span class="ansi-yellow-intense-fg ansi-bold">:</span>
+<span class="ansi-green-intense-fg ansi-bold">--&gt; 187</span><span class="ansi-yellow-intense-fg ansi-bold">         </span>call <span class="ansi-yellow-intense-fg ansi-bold">=</span> <span class="ansi-green-intense-fg ansi-bold">lambda</span> f<span class="ansi-yellow-intense-fg ansi-bold">,</span> <span class="ansi-yellow-intense-fg ansi-bold">*</span>a<span class="ansi-yellow-intense-fg ansi-bold">,</span> <span class="ansi-yellow-intense-fg ansi-bold">**</span>k<span class="ansi-yellow-intense-fg ansi-bold">:</span> f<span class="ansi-yellow-intense-fg ansi-bold">(</span><span class="ansi-yellow-intense-fg ansi-bold">*</span>a<span class="ansi-yellow-intense-fg ansi-bold">,</span> <span class="ansi-yellow-intense-fg ansi-bold">**</span>k<span class="ansi-yellow-intense-fg ansi-bold">)</span>
+<span class="ansi-green-fg">    188</span>
+<span class="ansi-green-fg">    189</span>         <span class="ansi-green-intense-fg ansi-bold">if</span> callable<span class="ansi-yellow-intense-fg ansi-bold">(</span>arg<span class="ansi-yellow-intense-fg ansi-bold">)</span><span class="ansi-yellow-intense-fg ansi-bold">:</span>
+
+<span class="ansi-green-intense-fg ansi-bold">~\Anaconda3\lib\site-packages\IPython\core\magics\pylab.py</span> in <span class="ansi-cyan-fg">matplotlib</span><span class="ansi-blue-intense-fg ansi-bold">(self, line)</span>
+<span class="ansi-green-fg">     97</span>             print<span class="ansi-yellow-intense-fg ansi-bold">(</span><span class="ansi-blue-intense-fg ansi-bold">&#34;Available matplotlib backends: %s&#34;</span> <span class="ansi-yellow-intense-fg ansi-bold">%</span> backends_list<span class="ansi-yellow-intense-fg ansi-bold">)</span>
+<span class="ansi-green-fg">     98</span>         <span class="ansi-green-intense-fg ansi-bold">else</span><span class="ansi-yellow-intense-fg ansi-bold">:</span>
+<span class="ansi-green-intense-fg ansi-bold">---&gt; 99</span><span class="ansi-yellow-intense-fg ansi-bold">             </span>gui<span class="ansi-yellow-intense-fg ansi-bold">,</span> backend <span class="ansi-yellow-intense-fg ansi-bold">=</span> self<span class="ansi-yellow-intense-fg ansi-bold">.</span>shell<span class="ansi-yellow-intense-fg ansi-bold">.</span>enable_matplotlib<span class="ansi-yellow-intense-fg ansi-bold">(</span>args<span class="ansi-yellow-intense-fg ansi-bold">.</span>gui<span class="ansi-yellow-intense-fg ansi-bold">.</span>lower<span class="ansi-yellow-intense-fg ansi-bold">(</span><span class="ansi-yellow-intense-fg ansi-bold">)</span> <span class="ansi-green-intense-fg ansi-bold">if</span> isinstance<span class="ansi-yellow-intense-fg ansi-bold">(</span>args<span class="ansi-yellow-intense-fg ansi-bold">.</span>gui<span class="ansi-yellow-intense-fg ansi-bold">,</span> str<span class="ansi-yellow-intense-fg ansi-bold">)</span> <span class="ansi-green-intense-fg ansi-bold">else</span> args<span class="ansi-yellow-intense-fg ansi-bold">.</span>gui<span class="ansi-yellow-intense-fg ansi-bold">)</span>
+<span class="ansi-green-fg">    100</span>             self<span class="ansi-yellow-intense-fg ansi-bold">.</span>_show_matplotlib_backend<span class="ansi-yellow-intense-fg ansi-bold">(</span>args<span class="ansi-yellow-intense-fg ansi-bold">.</span>gui<span class="ansi-yellow-intense-fg ansi-bold">,</span> backend<span class="ansi-yellow-intense-fg ansi-bold">)</span>
+<span class="ansi-green-fg">    101</span>
+
+<span class="ansi-green-intense-fg ansi-bold">~\Anaconda3\lib\site-packages\IPython\core\interactiveshell.py</span> in <span class="ansi-cyan-fg">enable_matplotlib</span><span class="ansi-blue-intense-fg ansi-bold">(self, gui)</span>
+<span class="ansi-green-fg">   3531</span>                 gui<span class="ansi-yellow-intense-fg ansi-bold">,</span> backend <span class="ansi-yellow-intense-fg ansi-bold">=</span> pt<span class="ansi-yellow-intense-fg ansi-bold">.</span>find_gui_and_backend<span class="ansi-yellow-intense-fg ansi-bold">(</span>self<span class="ansi-yellow-intense-fg ansi-bold">.</span>pylab_gui_select<span class="ansi-yellow-intense-fg ansi-bold">)</span>
+<span class="ansi-green-fg">   3532</span>
+<span class="ansi-green-intense-fg ansi-bold">-&gt; 3533</span><span class="ansi-yellow-intense-fg ansi-bold">         </span>pt<span class="ansi-yellow-intense-fg ansi-bold">.</span>activate_matplotlib<span class="ansi-yellow-intense-fg ansi-bold">(</span>backend<span class="ansi-yellow-intense-fg ansi-bold">)</span>
+<span class="ansi-green-fg">   3534</span>         configure_inline_support<span class="ansi-yellow-intense-fg ansi-bold">(</span>self<span class="ansi-yellow-intense-fg ansi-bold">,</span> backend<span class="ansi-yellow-intense-fg ansi-bold">)</span>
+<span class="ansi-green-fg">   3535</span>
+
+<span class="ansi-green-intense-fg ansi-bold">~\Anaconda3\lib\site-packages\IPython\core\pylabtools.py</span> in <span class="ansi-cyan-fg">activate_matplotlib</span><span class="ansi-blue-intense-fg ansi-bold">(backend)</span>
+<span class="ansi-green-fg">    357</span>     <span class="ansi-green-intense-fg ansi-bold">from</span> matplotlib <span class="ansi-green-intense-fg ansi-bold">import</span> pyplot <span class="ansi-green-intense-fg ansi-bold">as</span> plt
+<span class="ansi-green-fg">    358</span>
+<span class="ansi-green-intense-fg ansi-bold">--&gt; 359</span><span class="ansi-yellow-intense-fg ansi-bold">     </span>plt<span class="ansi-yellow-intense-fg ansi-bold">.</span>switch_backend<span class="ansi-yellow-intense-fg ansi-bold">(</span>backend<span class="ansi-yellow-intense-fg ansi-bold">)</span>
+<span class="ansi-green-fg">    360</span>
+<span class="ansi-green-fg">    361</span>     plt<span class="ansi-yellow-intense-fg ansi-bold">.</span>show<span class="ansi-yellow-intense-fg ansi-bold">.</span>_needmain <span class="ansi-yellow-intense-fg ansi-bold">=</span> <span class="ansi-green-intense-fg ansi-bold">False</span>
+
+<span class="ansi-green-intense-fg ansi-bold">~\Anaconda3\lib\site-packages\matplotlib\pyplot.py</span> in <span class="ansi-cyan-fg">switch_backend</span><span class="ansi-blue-intense-fg ansi-bold">(newbackend)</span>
+<span class="ansi-green-fg">    269</span>     old_backend <span class="ansi-yellow-intense-fg ansi-bold">=</span> dict<span class="ansi-yellow-intense-fg ansi-bold">.</span>__getitem__<span class="ansi-yellow-intense-fg ansi-bold">(</span>rcParams<span class="ansi-yellow-intense-fg ansi-bold">,</span> <span class="ansi-blue-intense-fg ansi-bold">&#39;backend&#39;</span><span class="ansi-yellow-intense-fg ansi-bold">)</span>
+<span class="ansi-green-fg">    270</span>
+<span class="ansi-green-intense-fg ansi-bold">--&gt; 271</span><span class="ansi-yellow-intense-fg ansi-bold">     backend_mod = importlib.import_module(
+</span><span class="ansi-green-fg">    272</span>         cbook._backend_module_name(newbackend))
+<span class="ansi-green-fg">    273</span>
+
+<span class="ansi-green-intense-fg ansi-bold">~\Anaconda3\lib\importlib\__init__.py</span> in <span class="ansi-cyan-fg">import_module</span><span class="ansi-blue-intense-fg ansi-bold">(name, package)</span>
+<span class="ansi-green-fg">    125</span>                 <span class="ansi-green-intense-fg ansi-bold">break</span>
+<span class="ansi-green-fg">    126</span>             level <span class="ansi-yellow-intense-fg ansi-bold">+=</span> <span class="ansi-cyan-intense-fg ansi-bold">1</span>
+<span class="ansi-green-intense-fg ansi-bold">--&gt; 127</span><span class="ansi-yellow-intense-fg ansi-bold">     </span><span class="ansi-green-intense-fg ansi-bold">return</span> _bootstrap<span class="ansi-yellow-intense-fg ansi-bold">.</span>_gcd_import<span class="ansi-yellow-intense-fg ansi-bold">(</span>name<span class="ansi-yellow-intense-fg ansi-bold">[</span>level<span class="ansi-yellow-intense-fg ansi-bold">:</span><span class="ansi-yellow-intense-fg ansi-bold">]</span><span class="ansi-yellow-intense-fg ansi-bold">,</span> package<span class="ansi-yellow-intense-fg ansi-bold">,</span> level<span class="ansi-yellow-intense-fg ansi-bold">)</span>
+<span class="ansi-green-fg">    128</span>
+<span class="ansi-green-fg">    129</span>
+
+<span class="ansi-green-intense-fg ansi-bold">~\Anaconda3\lib\importlib\_bootstrap.py</span> in <span class="ansi-cyan-fg">_gcd_import</span><span class="ansi-blue-intense-fg ansi-bold">(name, package, level)</span>
+
+<span class="ansi-green-intense-fg ansi-bold">~\Anaconda3\lib\importlib\_bootstrap.py</span> in <span class="ansi-cyan-fg">_find_and_load</span><span class="ansi-blue-intense-fg ansi-bold">(name, import_)</span>
+
+<span class="ansi-green-intense-fg ansi-bold">~\Anaconda3\lib\importlib\_bootstrap.py</span> in <span class="ansi-cyan-fg">_find_and_load_unlocked</span><span class="ansi-blue-intense-fg ansi-bold">(name, import_)</span>
+
+<span class="ansi-green-intense-fg ansi-bold">~\Anaconda3\lib\importlib\_bootstrap.py</span> in <span class="ansi-cyan-fg">_load_unlocked</span><span class="ansi-blue-intense-fg ansi-bold">(spec)</span>
+
+<span class="ansi-green-intense-fg ansi-bold">~\Anaconda3\lib\importlib\_bootstrap_external.py</span> in <span class="ansi-cyan-fg">exec_module</span><span class="ansi-blue-intense-fg ansi-bold">(self, module)</span>
+
+<span class="ansi-green-intense-fg ansi-bold">~\Anaconda3\lib\importlib\_bootstrap.py</span> in <span class="ansi-cyan-fg">_call_with_frames_removed</span><span class="ansi-blue-intense-fg ansi-bold">(f, *args, **kwds)</span>
+
+<span class="ansi-green-intense-fg ansi-bold">~\Anaconda3\lib\site-packages\matplotlib\backends\backend_qt5agg.py</span> in <span class="ansi-cyan-fg">&lt;module&gt;</span>
+<span class="ansi-green-fg">      5</span>
+<span class="ansi-green-fg">      6</span> backends<span class="ansi-yellow-intense-fg ansi-bold">.</span>_QT_FORCE_QT5_BINDING <span class="ansi-yellow-intense-fg ansi-bold">=</span> <span class="ansi-green-intense-fg ansi-bold">True</span>
+<span class="ansi-green-intense-fg ansi-bold">----&gt; 7</span><span class="ansi-yellow-intense-fg ansi-bold"> from .backend_qtagg import (    # noqa: F401, E402 # pylint: disable=W0611
+</span><span class="ansi-green-fg">      8</span>     _BackendQTAgg<span class="ansi-yellow-intense-fg ansi-bold">,</span> FigureCanvasQTAgg<span class="ansi-yellow-intense-fg ansi-bold">,</span> FigureManagerQT<span class="ansi-yellow-intense-fg ansi-bold">,</span> NavigationToolbar2QT<span class="ansi-yellow-intense-fg ansi-bold">,</span>
+<span class="ansi-green-fg">      9</span>     FigureCanvasAgg, FigureCanvasQT)
+
+<span class="ansi-green-intense-fg ansi-bold">~\Anaconda3\lib\site-packages\matplotlib\backends\backend_qtagg.py</span> in <span class="ansi-cyan-fg">&lt;module&gt;</span>
+<span class="ansi-green-fg">      7</span> <span class="ansi-green-intense-fg ansi-bold">from</span> matplotlib<span class="ansi-yellow-intense-fg ansi-bold">.</span>transforms <span class="ansi-green-intense-fg ansi-bold">import</span> Bbox
+<span class="ansi-green-fg">      8</span>
+<span class="ansi-green-intense-fg ansi-bold">----&gt; 9</span><span class="ansi-yellow-intense-fg ansi-bold"> </span><span class="ansi-green-intense-fg ansi-bold">from</span> <span class="ansi-yellow-intense-fg ansi-bold">.</span>qt_compat <span class="ansi-green-intense-fg ansi-bold">import</span> QT_API<span class="ansi-yellow-intense-fg ansi-bold">,</span> _enum
+<span class="ansi-green-fg">     10</span> <span class="ansi-green-intense-fg ansi-bold">from</span> <span class="ansi-yellow-intense-fg ansi-bold">.</span>backend_agg <span class="ansi-green-intense-fg ansi-bold">import</span> FigureCanvasAgg
+<span class="ansi-green-fg">     11</span> <span class="ansi-green-intense-fg ansi-bold">from</span> <span class="ansi-yellow-intense-fg ansi-bold">.</span>backend_qt <span class="ansi-green-intense-fg ansi-bold">import</span> QtCore<span class="ansi-yellow-intense-fg ansi-bold">,</span> QtGui<span class="ansi-yellow-intense-fg ansi-bold">,</span> _BackendQT<span class="ansi-yellow-intense-fg ansi-bold">,</span> FigureCanvasQT
+
+<span class="ansi-green-intense-fg ansi-bold">~\Anaconda3\lib\site-packages\matplotlib\backends\qt_compat.py</span> in <span class="ansi-cyan-fg">&lt;module&gt;</span>
+<span class="ansi-green-fg">    142</span>
+<span class="ansi-green-fg">    143</span> <span class="ansi-green-intense-fg ansi-bold">if</span> _version_info <span class="ansi-yellow-intense-fg ansi-bold">&lt;</span> <span class="ansi-yellow-intense-fg ansi-bold">(</span><span class="ansi-cyan-intense-fg ansi-bold">5</span><span class="ansi-yellow-intense-fg ansi-bold">,</span> <span class="ansi-cyan-intense-fg ansi-bold">10</span><span class="ansi-yellow-intense-fg ansi-bold">)</span><span class="ansi-yellow-intense-fg ansi-bold">:</span>
+<span class="ansi-green-intense-fg ansi-bold">--&gt; 144</span><span class="ansi-yellow-intense-fg ansi-bold">     raise ImportError(
+</span><span class="ansi-green-fg">    145</span>         <span class="ansi-blue-intense-fg ansi-bold">f&#34;The Qt version imported is &#34;</span>
+<span class="ansi-green-fg">    146</span>         <span class="ansi-blue-intense-fg ansi-bold">f&#34;{QtCore.QLibraryInfo.version().toString()} but Matplotlib requires &#34;</span>
+
+<span class="ansi-red-intense-fg ansi-bold">ImportError</span>: The Qt version imported is 5.9.7 but Matplotlib requires Qt&gt;=5.10
+</pre></div></div>
 </div>
 <div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[5]:
@@ -775,7 +878,7 @@ c:\users\dhulse\documents\github\fmdtools\fmdtools\define\block.py:68: UserWarni
 </pre></div>
 </div>
 </div>
-<div class="nbinput docutils container">
+<div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[7]:
 </pre></div>
 </div>
@@ -783,15 +886,8 @@ c:\users\dhulse\documents\github\fmdtools\fmdtools\define\block.py:68: UserWarni
 </pre></div>
 </div>
 </div>
-<div class="nboutput nblast docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area docutils container">
-<img alt="../../_images/examples_multirotor_Demonstration_11_0.png" src="../../_images/examples_multirotor_Demonstration_11_0.png" />
-</div>
-</div>
 <p>Note that a variety of views of the model graph can be used for analysis/visualization. Below we use the ModelFxnGraph</p>
-<div class="nbinput docutils container">
+<div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[8]:
 </pre></div>
 </div>
@@ -810,19 +906,12 @@ c:\users\dhulse\documents\github\fmdtools\fmdtools\define\block.py:68: UserWarni
 </pre></div>
 </div>
 </div>
-<div class="nboutput nblast docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area docutils container">
-<img alt="../../_images/examples_multirotor_Demonstration_13_0.png" src="../../_images/examples_multirotor_Demonstration_13_0.png" />
-</div>
-</div>
 </section>
 <section id="Network-Model">
 <h2>Network Model<a class="headerlink" href="#Network-Model" title="Permalink to this headline"></a></h2>
 <p>A network model can be used to compute network metrics and visualize network vulnerabilities.</p>
 <p>We can calculate network metrics using calc_aspl, calc_modularity, and calc_robustness_coefficient in the <code class="docutils literal notranslate"><span class="pre">networks</span></code> module.</p>
-<div class="nbinput docutils container">
+<div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[9]:
 </pre></div>
 </div>
@@ -836,18 +925,8 @@ c:\users\dhulse\documents\github\fmdtools\fmdtools\define\block.py:68: UserWarni
 </pre></div>
 </div>
 </div>
-<div class="nboutput nblast docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area docutils container">
-<div class="highlight"><pre>
-ASPL: 1.44
-Modularity: 0.12
-Robustness Coefficient: 95.38
-</pre></div></div>
-</div>
 <p>Next, we visualize network vulnerabilities using find_bridging_nodes and find_high_degree_nodes.</p>
-<div class="nbinput docutils container">
+<div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[10]:
 </pre></div>
 </div>
@@ -856,14 +935,7 @@ Robustness Coefficient: 95.38
 </pre></div>
 </div>
 </div>
-<div class="nboutput nblast docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area docutils container">
-<img alt="../../_images/examples_multirotor_Demonstration_18_0.png" src="../../_images/examples_multirotor_Demonstration_18_0.png" />
-</div>
-</div>
-<div class="nbinput docutils container">
+<div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[11]:
 </pre></div>
 </div>
@@ -872,15 +944,8 @@ Robustness Coefficient: 95.38
 </pre></div>
 </div>
 </div>
-<div class="nboutput nblast docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area docutils container">
-<img alt="../../_images/examples_multirotor_Demonstration_19_0.png" src="../../_images/examples_multirotor_Demonstration_19_0.png" />
-</div>
-</div>
 <p>High degree nodes (along with their degrees) and bridging nodes are also obtainable as lists.</p>
-<div class="nbinput docutils container">
+<div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[12]:
 </pre></div>
 </div>
@@ -889,17 +954,8 @@ Robustness Coefficient: 95.38
 </pre></div>
 </div>
 </div>
-<div class="nboutput nblast docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area docutils container">
-<div class="highlight"><pre>
-Bridging Nodes: [&#39;affect_dof&#39;, &#39;ctl_dof&#39;, &#39;dist_ee&#39;, &#39;engage_land&#39;, &#39;hold_payload&#39;, &#39;plan_path&#39;, &#39;store_ee&#39;, &#39;trajectory&#39;]
-High Degree Nodes: [(&#39;ctl_dof&#39;, 6), (&#39;plan_path&#39;, 6), (&#39;hold_payload&#39;, 6)]
-</pre></div></div>
-</div>
 <p>Finally, we can plot the degree distribution of the network using degree_dist.</p>
-<div class="nbinput docutils container">
+<div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[13]:
 </pre></div>
 </div>
@@ -908,15 +964,8 @@ High Degree Nodes: [(&#39;ctl_dof&#39;, 6), (&#39;plan_path&#39;, 6), (&#39;hold
 </pre></div>
 </div>
 </div>
-<div class="nboutput nblast docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area docutils container">
-<img alt="../../_images/examples_multirotor_Demonstration_23_0.png" src="../../_images/examples_multirotor_Demonstration_23_0.png" />
-</div>
-</div>
 <p>The above analysis includes only function nodes. It is also possible to treat the entire model graph (containing both functions and flows) as a unipartite-like graph and perform similar analysis on both function and flow nodes.</p>
-<div class="nbinput docutils container">
+<div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[14]:
 </pre></div>
 </div>
@@ -930,17 +979,7 @@ High Degree Nodes: [(&#39;ctl_dof&#39;, 6), (&#39;plan_path&#39;, 6), (&#39;hold
 </pre></div>
 </div>
 </div>
-<div class="nboutput nblast docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area docutils container">
-<div class="highlight"><pre>
-ASPL, functions and flows: 2.77
-Modularity, functions and flows: 0.35
-Robustness Coefficient, functions and flows: 82.22
-</pre></div></div>
-</div>
-<div class="nbinput docutils container">
+<div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[15]:
 </pre></div>
 </div>
@@ -949,21 +988,7 @@ Robustness Coefficient, functions and flows: 82.22
 </pre></div>
 </div>
 </div>
-<div class="nboutput docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area docutils container">
-<img alt="../../_images/examples_multirotor_Demonstration_26_0.png" src="../../_images/examples_multirotor_Demonstration_26_0.png" />
-</div>
-</div>
-<div class="nboutput nblast docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area docutils container">
-<img alt="../../_images/examples_multirotor_Demonstration_26_1.png" src="../../_images/examples_multirotor_Demonstration_26_1.png" />
-</div>
-</div>
-<div class="nbinput docutils container">
+<div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[16]:
 </pre></div>
 </div>
@@ -972,16 +997,7 @@ Robustness Coefficient, functions and flows: 82.22
 </pre></div>
 </div>
 </div>
-<div class="nboutput nblast docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area docutils container">
-<div class="highlight"><pre>
-Bridging Nodes: [&#39;affect_dof&#39;, &#39;ctl&#39;, &#39;ctl_dof&#39;, &#39;dir&#39;, &#39;dist_ee&#39;, &#39;dofs&#39;, &#39;ee_ctl&#39;, &#39;ee_mot&#39;, &#39;env&#39;, &#39;force_gr&#39;, &#39;force_lin&#39;, &#39;force_st&#39;, &#39;hold_payload&#39;, &#39;plan_path&#39;, &#39;store_ee&#39;, &#39;trajectory&#39;]
-High Degree Nodes: [(&#39;ctl_dof&#39;, 5), (&#39;force_st&#39;, 5)]
-</pre></div></div>
-</div>
-<div class="nbinput docutils container">
+<div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[17]:
 </pre></div>
 </div>
@@ -989,28 +1005,14 @@ High Degree Nodes: [(&#39;ctl_dof&#39;, 5), (&#39;force_st&#39;, 5)]
 </pre></div>
 </div>
 </div>
-<div class="nboutput nblast docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area docutils container">
-<img alt="../../_images/examples_multirotor_Demonstration_28_0.png" src="../../_images/examples_multirotor_Demonstration_28_0.png" />
-</div>
-</div>
 <p>The SFF model can be simulated with options for simulation time, infection (failure) rate, and recovery (fix) rate. The start node can be selected or chosen randomly. Plotting includes an option for error bars. This models the system’s response to a failure using an analogy of an epidemic spreading through a network.</p>
-<div class="nbinput docutils container">
+<div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[18]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">fig</span> <span class="o">=</span> <span class="n">fg</span><span class="o">.</span><span class="n">sff_model</span><span class="p">(</span><span class="n">endtime</span><span class="o">=</span><span class="mi">15</span><span class="p">,</span><span class="n">pi</span><span class="o">=</span><span class="mf">.3</span><span class="p">,</span><span class="n">pr</span><span class="o">=</span><span class="mf">.1</span><span class="p">,</span><span class="n">start_node</span><span class="o">=</span><span class="s1">&#39;affect_dof&#39;</span><span class="p">,</span><span class="n">error_bar_option</span><span class="o">=</span><span class="s1">&#39;on&#39;</span><span class="p">)</span>
 <span class="n">fig</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="s1">&#39;sff_model.pdf&#39;</span><span class="p">,</span> <span class="nb">format</span><span class="o">=</span><span class="s2">&quot;pdf&quot;</span><span class="p">,</span> <span class="n">bbox_inches</span> <span class="o">=</span> <span class="s1">&#39;tight&#39;</span><span class="p">,</span> <span class="n">pad_inches</span> <span class="o">=</span> <span class="mi">0</span><span class="p">)</span>
 </pre></div>
-</div>
-</div>
-<div class="nboutput nblast docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area docutils container">
-<img alt="../../_images/examples_multirotor_Demonstration_30_0.png" src="../../_images/examples_multirotor_Demonstration_30_0.png" />
 </div>
 </div>
 </section>
@@ -1027,7 +1029,7 @@ High Degree Nodes: [(&#39;ctl_dof&#39;, 5), (&#39;force_st&#39;, 5)]
 </div>
 </div>
 <p>In design, it often helps to quantify the relative impact of fault scenarios. Here we produce a scenario-based FMEA to show which scenarios are most important in the model:</p>
-<div class="nbinput docutils container">
+<div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[20]:
 </pre></div>
 </div>
@@ -1036,15 +1038,7 @@ High Degree Nodes: [(&#39;ctl_dof&#39;, 5), (&#39;force_st&#39;, 5)]
 </pre></div>
 </div>
 </div>
-<div class="nboutput nblast docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area stderr docutils container">
-<div class="highlight"><pre>
-SCENARIOS COMPLETE: 100%|██████████| 50/50 [00:00&lt;00:00, 143.58it/s]
-</pre></div></div>
-</div>
-<div class="nbinput docutils container">
+<div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[21]:
 </pre></div>
 </div>
@@ -1053,450 +1047,7 @@ SCENARIOS COMPLETE: 100%|██████████| 50/50 [00:00&lt;00:00, 
 </pre></div>
 </div>
 </div>
-<div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[21]:
-</pre></div>
-</div>
-<div class="output_area rendered_html docutils container">
-<div>
-<style scoped>
-    .dataframe tbody tr th:only-of-type {
-        vertical-align: middle;
-    }
-
-    .dataframe tbody tr th {
-        vertical-align: top;
-    }
-
-    .dataframe thead th {
-        text-align: right;
-    }
-</style>
-<table border="1" class="dataframe">
-  <thead>
-    <tr style="text-align: right;">
-      <th></th>
-      <th>degraded</th>
-      <th>faulty</th>
-      <th>rate</th>
-      <th>cost</th>
-      <th>expected cost</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <th>store_ee_nocharge_t1</th>
-      <td>['store_ee', 'dist_ee', 'ctl_dof', 'plan_path'...</td>
-      <td>['store_ee', 'dist_ee', 'ctl_dof', 'plan_path'...</td>
-      <td>0.00001</td>
-      <td>183300.0</td>
-      <td>183300.0</td>
-    </tr>
-    <tr>
-      <th>store_ee_nocharge_t0</th>
-      <td>['store_ee', 'dist_ee', 'ctl_dof', 'plan_path'...</td>
-      <td>['store_ee', 'dist_ee', 'ctl_dof', 'plan_path'...</td>
-      <td>0.00001</td>
-      <td>183300.0</td>
-      <td>183300.0</td>
-    </tr>
-    <tr>
-      <th>plan_path_degloc_t1</th>
-      <td>['dist_ee', 'ctl_dof', 'plan_path', 'trajector...</td>
-      <td>['dist_ee', 'ctl_dof', 'plan_path', 'trajector...</td>
-      <td>0.000008</td>
-      <td>193000.0</td>
-      <td>154400.0</td>
-    </tr>
-    <tr>
-      <th>plan_path_degloc_t0</th>
-      <td>['dist_ee', 'ctl_dof', 'plan_path', 'trajector...</td>
-      <td>['dist_ee', 'ctl_dof', 'plan_path', 'trajector...</td>
-      <td>0.000008</td>
-      <td>193000.0</td>
-      <td>154400.0</td>
-    </tr>
-    <tr>
-      <th>dist_ee_short_t0</th>
-      <td>['dist_ee', 'ctl_dof', 'plan_path', 'trajector...</td>
-      <td>['dist_ee', 'ctl_dof', 'plan_path', 'trajector...</td>
-      <td>0.000003</td>
-      <td>186000.0</td>
-      <td>55800.0</td>
-    </tr>
-    <tr>
-      <th>dist_ee_short_t1</th>
-      <td>['dist_ee', 'ctl_dof', 'plan_path', 'trajector...</td>
-      <td>['dist_ee', 'ctl_dof', 'plan_path', 'trajector...</td>
-      <td>0.000003</td>
-      <td>186000.0</td>
-      <td>55800.0</td>
-    </tr>
-    <tr>
-      <th>affect_dof_ctlbreak_t0</th>
-      <td>['dist_ee', 'affect_dof', 'ctl_dof', 'plan_pat...</td>
-      <td>['dist_ee', 'affect_dof', 'ctl_dof', 'plan_pat...</td>
-      <td>0.000002</td>
-      <td>184000.0</td>
-      <td>36800.0</td>
-    </tr>
-    <tr>
-      <th>affect_dof_ctlbreak_t1</th>
-      <td>['dist_ee', 'affect_dof', 'ctl_dof', 'plan_pat...</td>
-      <td>['dist_ee', 'affect_dof', 'ctl_dof', 'plan_pat...</td>
-      <td>0.000002</td>
-      <td>184000.0</td>
-      <td>36800.0</td>
-    </tr>
-    <tr>
-      <th>affect_dof_ctlup_t1</th>
-      <td>['dist_ee', 'affect_dof', 'ctl_dof', 'plan_pat...</td>
-      <td>['dist_ee', 'affect_dof', 'ctl_dof', 'plan_pat...</td>
-      <td>0.000002</td>
-      <td>183500.0</td>
-      <td>36700.0</td>
-    </tr>
-    <tr>
-      <th>affect_dof_ctlup_t0</th>
-      <td>['dist_ee', 'affect_dof', 'ctl_dof', 'plan_pat...</td>
-      <td>['dist_ee', 'affect_dof', 'ctl_dof', 'plan_pat...</td>
-      <td>0.000002</td>
-      <td>183500.0</td>
-      <td>36700.0</td>
-    </tr>
-    <tr>
-      <th>ctl_dof_noctl_t0</th>
-      <td>['dist_ee', 'ctl_dof', 'plan_path', 'trajector...</td>
-      <td>['dist_ee', 'ctl_dof', 'plan_path', 'trajector...</td>
-      <td>0.000002</td>
-      <td>183000.0</td>
-      <td>36600.0</td>
-    </tr>
-    <tr>
-      <th>dist_ee_break_t0</th>
-      <td>['dist_ee', 'ctl_dof', 'plan_path', 'trajector...</td>
-      <td>['dist_ee', 'ctl_dof', 'plan_path', 'trajector...</td>
-      <td>0.000002</td>
-      <td>183000.0</td>
-      <td>36600.0</td>
-    </tr>
-    <tr>
-      <th>dist_ee_break_t1</th>
-      <td>['dist_ee', 'ctl_dof', 'plan_path', 'trajector...</td>
-      <td>['dist_ee', 'ctl_dof', 'plan_path', 'trajector...</td>
-      <td>0.000002</td>
-      <td>183000.0</td>
-      <td>36600.0</td>
-    </tr>
-    <tr>
-      <th>ctl_dof_noctl_t1</th>
-      <td>['dist_ee', 'ctl_dof', 'plan_path', 'trajector...</td>
-      <td>['dist_ee', 'ctl_dof', 'plan_path', 'trajector...</td>
-      <td>0.000002</td>
-      <td>183000.0</td>
-      <td>36600.0</td>
-    </tr>
-    <tr>
-      <th>affect_dof_mechbreak_t0</th>
-      <td>['dist_ee', 'affect_dof', 'ctl_dof', 'plan_pat...</td>
-      <td>['dist_ee', 'affect_dof', 'ctl_dof', 'plan_pat...</td>
-      <td>0.000001</td>
-      <td>183500.0</td>
-      <td>18350.0</td>
-    </tr>
-    <tr>
-      <th>affect_dof_mechbreak_t1</th>
-      <td>['dist_ee', 'affect_dof', 'ctl_dof', 'plan_pat...</td>
-      <td>['dist_ee', 'affect_dof', 'ctl_dof', 'plan_pat...</td>
-      <td>0.000001</td>
-      <td>183500.0</td>
-      <td>18350.0</td>
-    </tr>
-    <tr>
-      <th>affect_dof_short_t1</th>
-      <td>['dist_ee', 'affect_dof', 'ctl_dof', 'plan_pat...</td>
-      <td>['dist_ee', 'affect_dof', 'ctl_dof', 'plan_pat...</td>
-      <td>0.000001</td>
-      <td>183200.0</td>
-      <td>18320.0</td>
-    </tr>
-    <tr>
-      <th>affect_dof_openc_t1</th>
-      <td>['dist_ee', 'affect_dof', 'ctl_dof', 'plan_pat...</td>
-      <td>['dist_ee', 'affect_dof', 'ctl_dof', 'plan_pat...</td>
-      <td>0.000001</td>
-      <td>183200.0</td>
-      <td>18320.0</td>
-    </tr>
-    <tr>
-      <th>affect_dof_openc_t0</th>
-      <td>['dist_ee', 'affect_dof', 'ctl_dof', 'plan_pat...</td>
-      <td>['dist_ee', 'affect_dof', 'ctl_dof', 'plan_pat...</td>
-      <td>0.000001</td>
-      <td>183200.0</td>
-      <td>18320.0</td>
-    </tr>
-    <tr>
-      <th>affect_dof_short_t0</th>
-      <td>['dist_ee', 'affect_dof', 'ctl_dof', 'plan_pat...</td>
-      <td>['dist_ee', 'affect_dof', 'ctl_dof', 'plan_pat...</td>
-      <td>0.000001</td>
-      <td>183200.0</td>
-      <td>18320.0</td>
-    </tr>
-    <tr>
-      <th>hold_payload_deform_t0</th>
-      <td>['dist_ee', 'ctl_dof', 'plan_path', 'trajector...</td>
-      <td>['dist_ee', 'ctl_dof', 'plan_path', 'trajector...</td>
-      <td>0.000001</td>
-      <td>193000.0</td>
-      <td>15440.0</td>
-    </tr>
-    <tr>
-      <th>plan_path_noloc_t1</th>
-      <td>['plan_path', 'trajectory', 'ctl', 'dofs', 'en...</td>
-      <td>['plan_path', 'trajectory']</td>
-      <td>0.000002</td>
-      <td>60000.0</td>
-      <td>12000.0</td>
-    </tr>
-    <tr>
-      <th>plan_path_noloc_t0</th>
-      <td>['plan_path', 'trajectory', 'ctl', 'dofs', 'en...</td>
-      <td>['plan_path', 'trajectory']</td>
-      <td>0.000002</td>
-      <td>60000.0</td>
-      <td>12000.0</td>
-    </tr>
-    <tr>
-      <th>ctl_dof_degctl_t1</th>
-      <td>['ctl_dof', 'force_gr', 'force_lg', 'ctl', 'do...</td>
-      <td>['ctl_dof']</td>
-      <td>0.000008</td>
-      <td>10000.0</td>
-      <td>8000.0</td>
-    </tr>
-    <tr>
-      <th>ctl_dof_degctl_t0</th>
-      <td>['ctl_dof', 'force_gr', 'force_lg', 'ctl', 'do...</td>
-      <td>['ctl_dof']</td>
-      <td>0.000008</td>
-      <td>10000.0</td>
-      <td>8000.0</td>
-    </tr>
-    <tr>
-      <th>affect_dof_propbreak_t0</th>
-      <td>['dist_ee', 'affect_dof', 'ctl_dof', 'plan_pat...</td>
-      <td>['dist_ee', 'affect_dof', 'ctl_dof', 'plan_pat...</td>
-      <td>0.0</td>
-      <td>183200.0</td>
-      <td>5496.0</td>
-    </tr>
-    <tr>
-      <th>affect_dof_propbreak_t1</th>
-      <td>['dist_ee', 'affect_dof', 'ctl_dof', 'plan_pat...</td>
-      <td>['dist_ee', 'affect_dof', 'ctl_dof', 'plan_pat...</td>
-      <td>0.0</td>
-      <td>183200.0</td>
-      <td>5496.0</td>
-    </tr>
-    <tr>
-      <th>affect_dof_propstuck_t0</th>
-      <td>['dist_ee', 'affect_dof', 'ctl_dof', 'plan_pat...</td>
-      <td>['dist_ee', 'affect_dof', 'ctl_dof', 'plan_pat...</td>
-      <td>0.0</td>
-      <td>183200.0</td>
-      <td>3664.0</td>
-    </tr>
-    <tr>
-      <th>affect_dof_propstuck_t1</th>
-      <td>['dist_ee', 'affect_dof', 'ctl_dof', 'plan_pat...</td>
-      <td>['dist_ee', 'affect_dof', 'ctl_dof', 'plan_pat...</td>
-      <td>0.0</td>
-      <td>183200.0</td>
-      <td>3664.0</td>
-    </tr>
-    <tr>
-      <th>hold_payload_break_t1</th>
-      <td>['dist_ee', 'ctl_dof', 'plan_path', 'trajector...</td>
-      <td>['dist_ee', 'ctl_dof', 'plan_path', 'trajector...</td>
-      <td>0.0</td>
-      <td>183000.0</td>
-      <td>3660.0</td>
-    </tr>
-    <tr>
-      <th>hold_payload_break_t0</th>
-      <td>['dist_ee', 'ctl_dof', 'plan_path', 'trajector...</td>
-      <td>['dist_ee', 'ctl_dof', 'plan_path', 'trajector...</td>
-      <td>0.0</td>
-      <td>183000.0</td>
-      <td>3660.0</td>
-    </tr>
-    <tr>
-      <th>view_env_poorview_t0</th>
-      <td>['view_env', 'env']</td>
-      <td>['view_env']</td>
-      <td>0.000002</td>
-      <td>10000.0</td>
-      <td>2000.0</td>
-    </tr>
-    <tr>
-      <th>view_env_poorview_t1</th>
-      <td>['view_env', 'env']</td>
-      <td>['view_env']</td>
-      <td>0.000002</td>
-      <td>10000.0</td>
-      <td>2000.0</td>
-    </tr>
-    <tr>
-      <th>engage_land_deform_t0</th>
-      <td>['engage_land']</td>
-      <td>['engage_land']</td>
-      <td>0.000008</td>
-      <td>1000.0</td>
-      <td>800.0</td>
-    </tr>
-    <tr>
-      <th>engage_land_deform_t1</th>
-      <td>['engage_land']</td>
-      <td>['engage_land']</td>
-      <td>0.000008</td>
-      <td>1000.0</td>
-      <td>800.0</td>
-    </tr>
-    <tr>
-      <th>hold_payload_deform_t1</th>
-      <td>['hold_payload', 'force_st', 'force_lin']</td>
-      <td>['hold_payload']</td>
-      <td>0.000001</td>
-      <td>10000.0</td>
-      <td>800.0</td>
-    </tr>
-    <tr>
-      <th>dist_ee_degr_t0</th>
-      <td>['dist_ee', 'force_gr', 'force_lg', 'ee_mot', ...</td>
-      <td>['dist_ee']</td>
-      <td>0.000005</td>
-      <td>1000.0</td>
-      <td>500.0</td>
-    </tr>
-    <tr>
-      <th>dist_ee_degr_t1</th>
-      <td>['dist_ee', 'force_gr', 'force_lg', 'ee_mot', ...</td>
-      <td>['dist_ee']</td>
-      <td>0.000005</td>
-      <td>1000.0</td>
-      <td>500.0</td>
-    </tr>
-    <tr>
-      <th>engage_land_break_t0</th>
-      <td>['engage_land']</td>
-      <td>['engage_land']</td>
-      <td>0.000002</td>
-      <td>1000.0</td>
-      <td>200.0</td>
-    </tr>
-    <tr>
-      <th>engage_land_break_t1</th>
-      <td>['engage_land']</td>
-      <td>['engage_land']</td>
-      <td>0.000002</td>
-      <td>1000.0</td>
-      <td>200.0</td>
-    </tr>
-    <tr>
-      <th>affect_dof_ctldn_t0</th>
-      <td>['affect_dof', 'force_gr', 'force_lg', 'ctl', ...</td>
-      <td>['affect_dof']</td>
-      <td>0.000002</td>
-      <td>500.0</td>
-      <td>100.0</td>
-    </tr>
-    <tr>
-      <th>affect_dof_ctldn_t1</th>
-      <td>['affect_dof', 'force_gr', 'force_lg', 'ctl', ...</td>
-      <td>['affect_dof']</td>
-      <td>0.000002</td>
-      <td>500.0</td>
-      <td>100.0</td>
-    </tr>
-    <tr>
-      <th>affect_dof_mechfriction_t1</th>
-      <td>['affect_dof', 'ee_1', 'ee_mot']</td>
-      <td>['affect_dof']</td>
-      <td>0.000001</td>
-      <td>500.0</td>
-      <td>25.0</td>
-    </tr>
-    <tr>
-      <th>affect_dof_mechfriction_t0</th>
-      <td>['affect_dof', 'ee_1', 'ee_mot']</td>
-      <td>['affect_dof']</td>
-      <td>0.000001</td>
-      <td>500.0</td>
-      <td>25.0</td>
-    </tr>
-    <tr>
-      <th>affect_dof_propwarp_t1</th>
-      <td>['affect_dof', 'force_gr', 'force_lg', 'dofs']</td>
-      <td>['affect_dof']</td>
-      <td>0.0</td>
-      <td>200.0</td>
-      <td>2.0</td>
-    </tr>
-    <tr>
-      <th>affect_dof_propwarp_t0</th>
-      <td>['affect_dof', 'force_gr', 'force_lg', 'dofs']</td>
-      <td>['affect_dof']</td>
-      <td>0.0</td>
-      <td>200.0</td>
-      <td>2.0</td>
-    </tr>
-    <tr>
-      <th>nominal</th>
-      <td>[]</td>
-      <td>[]</td>
-      <td>1.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-    </tr>
-    <tr>
-      <th>trajectory_crash_t0</th>
-      <td>['trajectory']</td>
-      <td>['trajectory']</td>
-      <td>0.0</td>
-      <td>100000.0</td>
-      <td>0.0</td>
-    </tr>
-    <tr>
-      <th>trajectory_lost_t0</th>
-      <td>['trajectory']</td>
-      <td>['trajectory']</td>
-      <td>0.0</td>
-      <td>50000.0</td>
-      <td>0.0</td>
-    </tr>
-    <tr>
-      <th>trajectory_crash_t1</th>
-      <td>['trajectory']</td>
-      <td>['trajectory']</td>
-      <td>0.0</td>
-      <td>100000.0</td>
-      <td>0.0</td>
-    </tr>
-    <tr>
-      <th>trajectory_lost_t1</th>
-      <td>['trajectory']</td>
-      <td>['trajectory']</td>
-      <td>0.0</td>
-      <td>50000.0</td>
-      <td>0.0</td>
-    </tr>
-  </tbody>
-</table>
-</div></div>
-</div>
-<div class="nbinput docutils container">
+<div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[22]:
 </pre></div>
 </div>
@@ -1504,73 +1055,8 @@ SCENARIOS COMPLETE: 100%|██████████| 50/50 [00:00&lt;00:00, 
 </pre></div>
 </div>
 </div>
-<div class="nboutput nblast docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area docutils container">
-<div class="highlight"><pre>
-\begin{tabular}{llllll}
-\toprule
-{} &amp;                                           degraded &amp;                                             faulty &amp;      rate &amp;      cost &amp; expected cost \\
-\midrule
-store\_ee\_nocharge\_t1       &amp;  [&#39;store\_ee&#39;, &#39;dist\_ee&#39;, &#39;ctl\_dof&#39;, &#39;plan\_path&#39;... &amp;  [&#39;store\_ee&#39;, &#39;dist\_ee&#39;, &#39;ctl\_dof&#39;, &#39;plan\_path&#39;... &amp;   0.00001 &amp;  183300.0 &amp;      183300.0 \\
-store\_ee\_nocharge\_t0       &amp;  [&#39;store\_ee&#39;, &#39;dist\_ee&#39;, &#39;ctl\_dof&#39;, &#39;plan\_path&#39;... &amp;  [&#39;store\_ee&#39;, &#39;dist\_ee&#39;, &#39;ctl\_dof&#39;, &#39;plan\_path&#39;... &amp;   0.00001 &amp;  183300.0 &amp;      183300.0 \\
-plan\_path\_degloc\_t1        &amp;  [&#39;dist\_ee&#39;, &#39;ctl\_dof&#39;, &#39;plan\_path&#39;, &#39;trajector... &amp;  [&#39;dist\_ee&#39;, &#39;ctl\_dof&#39;, &#39;plan\_path&#39;, &#39;trajector... &amp;  0.000008 &amp;  193000.0 &amp;      154400.0 \\
-plan\_path\_degloc\_t0        &amp;  [&#39;dist\_ee&#39;, &#39;ctl\_dof&#39;, &#39;plan\_path&#39;, &#39;trajector... &amp;  [&#39;dist\_ee&#39;, &#39;ctl\_dof&#39;, &#39;plan\_path&#39;, &#39;trajector... &amp;  0.000008 &amp;  193000.0 &amp;      154400.0 \\
-dist\_ee\_short\_t0           &amp;  [&#39;dist\_ee&#39;, &#39;ctl\_dof&#39;, &#39;plan\_path&#39;, &#39;trajector... &amp;  [&#39;dist\_ee&#39;, &#39;ctl\_dof&#39;, &#39;plan\_path&#39;, &#39;trajector... &amp;  0.000003 &amp;  186000.0 &amp;       55800.0 \\
-dist\_ee\_short\_t1           &amp;  [&#39;dist\_ee&#39;, &#39;ctl\_dof&#39;, &#39;plan\_path&#39;, &#39;trajector... &amp;  [&#39;dist\_ee&#39;, &#39;ctl\_dof&#39;, &#39;plan\_path&#39;, &#39;trajector... &amp;  0.000003 &amp;  186000.0 &amp;       55800.0 \\
-affect\_dof\_ctlbreak\_t0     &amp;  [&#39;dist\_ee&#39;, &#39;affect\_dof&#39;, &#39;ctl\_dof&#39;, &#39;plan\_pat... &amp;  [&#39;dist\_ee&#39;, &#39;affect\_dof&#39;, &#39;ctl\_dof&#39;, &#39;plan\_pat... &amp;  0.000002 &amp;  184000.0 &amp;       36800.0 \\
-affect\_dof\_ctlbreak\_t1     &amp;  [&#39;dist\_ee&#39;, &#39;affect\_dof&#39;, &#39;ctl\_dof&#39;, &#39;plan\_pat... &amp;  [&#39;dist\_ee&#39;, &#39;affect\_dof&#39;, &#39;ctl\_dof&#39;, &#39;plan\_pat... &amp;  0.000002 &amp;  184000.0 &amp;       36800.0 \\
-affect\_dof\_ctlup\_t1        &amp;  [&#39;dist\_ee&#39;, &#39;affect\_dof&#39;, &#39;ctl\_dof&#39;, &#39;plan\_pat... &amp;  [&#39;dist\_ee&#39;, &#39;affect\_dof&#39;, &#39;ctl\_dof&#39;, &#39;plan\_pat... &amp;  0.000002 &amp;  183500.0 &amp;       36700.0 \\
-affect\_dof\_ctlup\_t0        &amp;  [&#39;dist\_ee&#39;, &#39;affect\_dof&#39;, &#39;ctl\_dof&#39;, &#39;plan\_pat... &amp;  [&#39;dist\_ee&#39;, &#39;affect\_dof&#39;, &#39;ctl\_dof&#39;, &#39;plan\_pat... &amp;  0.000002 &amp;  183500.0 &amp;       36700.0 \\
-ctl\_dof\_noctl\_t0           &amp;  [&#39;dist\_ee&#39;, &#39;ctl\_dof&#39;, &#39;plan\_path&#39;, &#39;trajector... &amp;  [&#39;dist\_ee&#39;, &#39;ctl\_dof&#39;, &#39;plan\_path&#39;, &#39;trajector... &amp;  0.000002 &amp;  183000.0 &amp;       36600.0 \\
-dist\_ee\_break\_t0           &amp;  [&#39;dist\_ee&#39;, &#39;ctl\_dof&#39;, &#39;plan\_path&#39;, &#39;trajector... &amp;  [&#39;dist\_ee&#39;, &#39;ctl\_dof&#39;, &#39;plan\_path&#39;, &#39;trajector... &amp;  0.000002 &amp;  183000.0 &amp;       36600.0 \\
-dist\_ee\_break\_t1           &amp;  [&#39;dist\_ee&#39;, &#39;ctl\_dof&#39;, &#39;plan\_path&#39;, &#39;trajector... &amp;  [&#39;dist\_ee&#39;, &#39;ctl\_dof&#39;, &#39;plan\_path&#39;, &#39;trajector... &amp;  0.000002 &amp;  183000.0 &amp;       36600.0 \\
-ctl\_dof\_noctl\_t1           &amp;  [&#39;dist\_ee&#39;, &#39;ctl\_dof&#39;, &#39;plan\_path&#39;, &#39;trajector... &amp;  [&#39;dist\_ee&#39;, &#39;ctl\_dof&#39;, &#39;plan\_path&#39;, &#39;trajector... &amp;  0.000002 &amp;  183000.0 &amp;       36600.0 \\
-affect\_dof\_mechbreak\_t0    &amp;  [&#39;dist\_ee&#39;, &#39;affect\_dof&#39;, &#39;ctl\_dof&#39;, &#39;plan\_pat... &amp;  [&#39;dist\_ee&#39;, &#39;affect\_dof&#39;, &#39;ctl\_dof&#39;, &#39;plan\_pat... &amp;  0.000001 &amp;  183500.0 &amp;       18350.0 \\
-affect\_dof\_mechbreak\_t1    &amp;  [&#39;dist\_ee&#39;, &#39;affect\_dof&#39;, &#39;ctl\_dof&#39;, &#39;plan\_pat... &amp;  [&#39;dist\_ee&#39;, &#39;affect\_dof&#39;, &#39;ctl\_dof&#39;, &#39;plan\_pat... &amp;  0.000001 &amp;  183500.0 &amp;       18350.0 \\
-affect\_dof\_short\_t1        &amp;  [&#39;dist\_ee&#39;, &#39;affect\_dof&#39;, &#39;ctl\_dof&#39;, &#39;plan\_pat... &amp;  [&#39;dist\_ee&#39;, &#39;affect\_dof&#39;, &#39;ctl\_dof&#39;, &#39;plan\_pat... &amp;  0.000001 &amp;  183200.0 &amp;       18320.0 \\
-affect\_dof\_openc\_t1        &amp;  [&#39;dist\_ee&#39;, &#39;affect\_dof&#39;, &#39;ctl\_dof&#39;, &#39;plan\_pat... &amp;  [&#39;dist\_ee&#39;, &#39;affect\_dof&#39;, &#39;ctl\_dof&#39;, &#39;plan\_pat... &amp;  0.000001 &amp;  183200.0 &amp;       18320.0 \\
-affect\_dof\_openc\_t0        &amp;  [&#39;dist\_ee&#39;, &#39;affect\_dof&#39;, &#39;ctl\_dof&#39;, &#39;plan\_pat... &amp;  [&#39;dist\_ee&#39;, &#39;affect\_dof&#39;, &#39;ctl\_dof&#39;, &#39;plan\_pat... &amp;  0.000001 &amp;  183200.0 &amp;       18320.0 \\
-affect\_dof\_short\_t0        &amp;  [&#39;dist\_ee&#39;, &#39;affect\_dof&#39;, &#39;ctl\_dof&#39;, &#39;plan\_pat... &amp;  [&#39;dist\_ee&#39;, &#39;affect\_dof&#39;, &#39;ctl\_dof&#39;, &#39;plan\_pat... &amp;  0.000001 &amp;  183200.0 &amp;       18320.0 \\
-hold\_payload\_deform\_t0     &amp;  [&#39;dist\_ee&#39;, &#39;ctl\_dof&#39;, &#39;plan\_path&#39;, &#39;trajector... &amp;  [&#39;dist\_ee&#39;, &#39;ctl\_dof&#39;, &#39;plan\_path&#39;, &#39;trajector... &amp;  0.000001 &amp;  193000.0 &amp;       15440.0 \\
-plan\_path\_noloc\_t1         &amp;  [&#39;plan\_path&#39;, &#39;trajectory&#39;, &#39;ctl&#39;, &#39;dofs&#39;, &#39;en... &amp;                        [&#39;plan\_path&#39;, &#39;trajectory&#39;] &amp;  0.000002 &amp;   60000.0 &amp;       12000.0 \\
-plan\_path\_noloc\_t0         &amp;  [&#39;plan\_path&#39;, &#39;trajectory&#39;, &#39;ctl&#39;, &#39;dofs&#39;, &#39;en... &amp;                        [&#39;plan\_path&#39;, &#39;trajectory&#39;] &amp;  0.000002 &amp;   60000.0 &amp;       12000.0 \\
-ctl\_dof\_degctl\_t1          &amp;  [&#39;ctl\_dof&#39;, &#39;force\_gr&#39;, &#39;force\_lg&#39;, &#39;ctl&#39;, &#39;do... &amp;                                        [&#39;ctl\_dof&#39;] &amp;  0.000008 &amp;   10000.0 &amp;        8000.0 \\
-ctl\_dof\_degctl\_t0          &amp;  [&#39;ctl\_dof&#39;, &#39;force\_gr&#39;, &#39;force\_lg&#39;, &#39;ctl&#39;, &#39;do... &amp;                                        [&#39;ctl\_dof&#39;] &amp;  0.000008 &amp;   10000.0 &amp;        8000.0 \\
-affect\_dof\_propbreak\_t0    &amp;  [&#39;dist\_ee&#39;, &#39;affect\_dof&#39;, &#39;ctl\_dof&#39;, &#39;plan\_pat... &amp;  [&#39;dist\_ee&#39;, &#39;affect\_dof&#39;, &#39;ctl\_dof&#39;, &#39;plan\_pat... &amp;       0.0 &amp;  183200.0 &amp;        5496.0 \\
-affect\_dof\_propbreak\_t1    &amp;  [&#39;dist\_ee&#39;, &#39;affect\_dof&#39;, &#39;ctl\_dof&#39;, &#39;plan\_pat... &amp;  [&#39;dist\_ee&#39;, &#39;affect\_dof&#39;, &#39;ctl\_dof&#39;, &#39;plan\_pat... &amp;       0.0 &amp;  183200.0 &amp;        5496.0 \\
-affect\_dof\_propstuck\_t0    &amp;  [&#39;dist\_ee&#39;, &#39;affect\_dof&#39;, &#39;ctl\_dof&#39;, &#39;plan\_pat... &amp;  [&#39;dist\_ee&#39;, &#39;affect\_dof&#39;, &#39;ctl\_dof&#39;, &#39;plan\_pat... &amp;       0.0 &amp;  183200.0 &amp;        3664.0 \\
-affect\_dof\_propstuck\_t1    &amp;  [&#39;dist\_ee&#39;, &#39;affect\_dof&#39;, &#39;ctl\_dof&#39;, &#39;plan\_pat... &amp;  [&#39;dist\_ee&#39;, &#39;affect\_dof&#39;, &#39;ctl\_dof&#39;, &#39;plan\_pat... &amp;       0.0 &amp;  183200.0 &amp;        3664.0 \\
-hold\_payload\_break\_t1      &amp;  [&#39;dist\_ee&#39;, &#39;ctl\_dof&#39;, &#39;plan\_path&#39;, &#39;trajector... &amp;  [&#39;dist\_ee&#39;, &#39;ctl\_dof&#39;, &#39;plan\_path&#39;, &#39;trajector... &amp;       0.0 &amp;  183000.0 &amp;        3660.0 \\
-hold\_payload\_break\_t0      &amp;  [&#39;dist\_ee&#39;, &#39;ctl\_dof&#39;, &#39;plan\_path&#39;, &#39;trajector... &amp;  [&#39;dist\_ee&#39;, &#39;ctl\_dof&#39;, &#39;plan\_path&#39;, &#39;trajector... &amp;       0.0 &amp;  183000.0 &amp;        3660.0 \\
-view\_env\_poorview\_t0       &amp;                                [&#39;view\_env&#39;, &#39;env&#39;] &amp;                                       [&#39;view\_env&#39;] &amp;  0.000002 &amp;   10000.0 &amp;        2000.0 \\
-view\_env\_poorview\_t1       &amp;                                [&#39;view\_env&#39;, &#39;env&#39;] &amp;                                       [&#39;view\_env&#39;] &amp;  0.000002 &amp;   10000.0 &amp;        2000.0 \\
-engage\_land\_deform\_t0      &amp;                                    [&#39;engage\_land&#39;] &amp;                                    [&#39;engage\_land&#39;] &amp;  0.000008 &amp;    1000.0 &amp;         800.0 \\
-engage\_land\_deform\_t1      &amp;                                    [&#39;engage\_land&#39;] &amp;                                    [&#39;engage\_land&#39;] &amp;  0.000008 &amp;    1000.0 &amp;         800.0 \\
-hold\_payload\_deform\_t1     &amp;          [&#39;hold\_payload&#39;, &#39;force\_st&#39;, &#39;force\_lin&#39;] &amp;                                   [&#39;hold\_payload&#39;] &amp;  0.000001 &amp;   10000.0 &amp;         800.0 \\
-dist\_ee\_degr\_t0            &amp;  [&#39;dist\_ee&#39;, &#39;force\_gr&#39;, &#39;force\_lg&#39;, &#39;ee\_mot&#39;, ... &amp;                                        [&#39;dist\_ee&#39;] &amp;  0.000005 &amp;    1000.0 &amp;         500.0 \\
-dist\_ee\_degr\_t1            &amp;  [&#39;dist\_ee&#39;, &#39;force\_gr&#39;, &#39;force\_lg&#39;, &#39;ee\_mot&#39;, ... &amp;                                        [&#39;dist\_ee&#39;] &amp;  0.000005 &amp;    1000.0 &amp;         500.0 \\
-engage\_land\_break\_t0       &amp;                                    [&#39;engage\_land&#39;] &amp;                                    [&#39;engage\_land&#39;] &amp;  0.000002 &amp;    1000.0 &amp;         200.0 \\
-engage\_land\_break\_t1       &amp;                                    [&#39;engage\_land&#39;] &amp;                                    [&#39;engage\_land&#39;] &amp;  0.000002 &amp;    1000.0 &amp;         200.0 \\
-affect\_dof\_ctldn\_t0        &amp;  [&#39;affect\_dof&#39;, &#39;force\_gr&#39;, &#39;force\_lg&#39;, &#39;ctl&#39;, ... &amp;                                     [&#39;affect\_dof&#39;] &amp;  0.000002 &amp;     500.0 &amp;         100.0 \\
-affect\_dof\_ctldn\_t1        &amp;  [&#39;affect\_dof&#39;, &#39;force\_gr&#39;, &#39;force\_lg&#39;, &#39;ctl&#39;, ... &amp;                                     [&#39;affect\_dof&#39;] &amp;  0.000002 &amp;     500.0 &amp;         100.0 \\
-affect\_dof\_mechfriction\_t1 &amp;                   [&#39;affect\_dof&#39;, &#39;ee\_1&#39;, &#39;ee\_mot&#39;] &amp;                                     [&#39;affect\_dof&#39;] &amp;  0.000001 &amp;     500.0 &amp;          25.0 \\
-affect\_dof\_mechfriction\_t0 &amp;                   [&#39;affect\_dof&#39;, &#39;ee\_1&#39;, &#39;ee\_mot&#39;] &amp;                                     [&#39;affect\_dof&#39;] &amp;  0.000001 &amp;     500.0 &amp;          25.0 \\
-affect\_dof\_propwarp\_t1     &amp;     [&#39;affect\_dof&#39;, &#39;force\_gr&#39;, &#39;force\_lg&#39;, &#39;dofs&#39;] &amp;                                     [&#39;affect\_dof&#39;] &amp;       0.0 &amp;     200.0 &amp;           2.0 \\
-affect\_dof\_propwarp\_t0     &amp;     [&#39;affect\_dof&#39;, &#39;force\_gr&#39;, &#39;force\_lg&#39;, &#39;dofs&#39;] &amp;                                     [&#39;affect\_dof&#39;] &amp;       0.0 &amp;     200.0 &amp;           2.0 \\
-nominal                    &amp;                                                 [] &amp;                                                 [] &amp;       1.0 &amp;       0.0 &amp;           0.0 \\
-trajectory\_crash\_t0        &amp;                                     [&#39;trajectory&#39;] &amp;                                     [&#39;trajectory&#39;] &amp;       0.0 &amp;  100000.0 &amp;           0.0 \\
-trajectory\_lost\_t0         &amp;                                     [&#39;trajectory&#39;] &amp;                                     [&#39;trajectory&#39;] &amp;       0.0 &amp;   50000.0 &amp;           0.0 \\
-trajectory\_crash\_t1        &amp;                                     [&#39;trajectory&#39;] &amp;                                     [&#39;trajectory&#39;] &amp;       0.0 &amp;  100000.0 &amp;           0.0 \\
-trajectory\_lost\_t1         &amp;                                     [&#39;trajectory&#39;] &amp;                                     [&#39;trajectory&#39;] &amp;       0.0 &amp;   50000.0 &amp;           0.0 \\
-\bottomrule
-\end{tabular}
-
-</pre></div></div>
-</div>
 <p>We can in turn visualize these faults on the graph representation of the system. Here we will focus on the break of one of the rotors in the AffectDOF function, the effects of which are shown below:</p>
-<div class="nbinput docutils container">
+<div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[23]:
 </pre></div>
 </div>
@@ -1581,13 +1067,6 @@ trajectory\_lost\_t1         &amp;                                     [&#39;tra
 <span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">result</span><span class="o">.</span><span class="n">graph</span><span class="o">.</span><span class="n">draw</span><span class="p">(</span><span class="n">title</span> <span class="o">=</span> <span class="s1">&#39;AffectDOF: Mechbreak at final sim time&#39;</span><span class="p">)</span>
 <span class="c1">#fig.savefig(&#39;static_propagation.pdf&#39;, format=&quot;pdf&quot;, bbox_inches = &#39;tight&#39;, pad_inches = 0)</span>
 </pre></div>
-</div>
-</div>
-<div class="nboutput nblast docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area docutils container">
-<img alt="../../_images/examples_multirotor_Demonstration_38_0.png" src="../../_images/examples_multirotor_Demonstration_38_0.png" />
 </div>
 </div>
 </section>
@@ -1615,7 +1094,7 @@ trajectory\_lost\_t1         &amp;                                     [&#39;tra
 </pre></div>
 </div>
 </div>
-<div class="nbinput docutils container">
+<div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[26]:
 </pre></div>
 </div>
@@ -1633,13 +1112,6 @@ trajectory\_lost\_t1         &amp;                                     [&#39;tra
 </pre></div>
 </div>
 </div>
-<div class="nboutput nblast docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area docutils container">
-<img alt="../../_images/examples_multirotor_Demonstration_43_0.png" src="../../_images/examples_multirotor_Demonstration_43_0.png" />
-</div>
-</div>
 <p>As shown below, in the case of the break in the AffectDOF function, the system crashes:</p>
 <div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[27]:
@@ -1650,7 +1122,7 @@ trajectory\_lost\_t1         &amp;                                     [&#39;tra
 </pre></div>
 </div>
 </div>
-<div class="nbinput docutils container">
+<div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[28]:
 </pre></div>
 </div>
@@ -1663,15 +1135,8 @@ trajectory\_lost\_t1         &amp;                                     [&#39;tra
 </pre></div>
 </div>
 </div>
-<div class="nboutput nblast docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area docutils container">
-<img alt="../../_images/examples_multirotor_Demonstration_46_0.png" src="../../_images/examples_multirotor_Demonstration_46_0.png" />
-</div>
-</div>
 <p>Finally, we can see how the cost function of this scenario changes over time. As shown, when the fault is injected early, it has a lower cost because it crashes at the landing pad and not in a dangerous area. When it is injected at the end, the cost is minimal because the drone has already landed.</p>
-<div class="nbinput docutils container">
+<div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[29]:
 </pre></div>
 </div>
@@ -1682,15 +1147,7 @@ trajectory\_lost\_t1         &amp;                                     [&#39;tra
 </pre></div>
 </div>
 </div>
-<div class="nboutput nblast docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area stderr docutils container">
-<div class="highlight"><pre>
-SCENARIOS COMPLETE: 100%|██████████| 16/16 [00:11&lt;00:00,  1.39it/s]
-</pre></div></div>
-</div>
-<div class="nbinput docutils container">
+<div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[30]:
 </pre></div>
 </div>
@@ -1698,16 +1155,7 @@ SCENARIOS COMPLETE: 100%|██████████| 16/16 [00:11&lt;00:00, 
 </pre></div>
 </div>
 </div>
-<div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[30]:
-</pre></div>
-</div>
-<div class="output_area docutils container">
-<div class="highlight"><pre>
-dict_keys([&#39;affect_dof_mechbreak_t0p0.fxns.store_ee.s.soc&#39;, &#39;affect_dof_mechbreak_t0p0.fxns.store_ee.m.faults.nocharge&#39;, &#39;affect_dof_mechbreak_t0p0.fxns.store_ee.m.mode&#39;, &#39;affect_dof_mechbreak_t0p0.fxns.dist_ee.s.ee_tr&#39;, &#39;affect_dof_mechbreak_t0p0.fxns.dist_ee.s.ee_te&#39;, &#39;affect_dof_mechbreak_t0p0.fxns.dist_ee.m.faults.short&#39;, &#39;affect_dof_mechbreak_t0p0.fxns.dist_ee.m.faults.degr&#39;, &#39;affect_dof_mechbreak_t0p0.fxns.dist_ee.m.faults.break&#39;, &#39;affect_dof_mechbreak_t0p0.fxns.dist_ee.m.mode&#39;, &#39;affect_dof_mechbreak_t0p0.fxns.affect_dof.s.e_to&#39;, &#39;affect_dof_mechbreak_t0p0.fxns.affect_dof.s.e_ti&#39;, &#39;affect_dof_mechbreak_t0p0.fxns.affect_dof.s.ct&#39;, &#39;affect_dof_mechbreak_t0p0.fxns.affect_dof.s.mt&#39;, &#39;affect_dof_mechbreak_t0p0.fxns.affect_dof.s.pt&#39;, &#39;affect_dof_mechbreak_t0p0.fxns.affect_dof.m.faults.short&#39;, &#39;affect_dof_mechbreak_t0p0.fxns.affect_dof.m.faults.openc&#39;, &#39;affect_dof_mechbreak_t0p0.fxns.affect_dof.m.faults.ctlup&#39;, &#39;affect_dof_mechbreak_t0p0.fxns.affect_dof.m.faults.ctldn&#39;, &#39;affect_dof_mechbreak_t0p0.fxns.affect_dof.m.faults.ctlbreak&#39;, &#39;affect_dof_mechbreak_t0p0.fxns.affect_dof.m.faults.mechbreak&#39;, &#39;affect_dof_mechbreak_t0p0.fxns.affect_dof.m.faults.mechfriction&#39;, &#39;affect_dof_mechbreak_t0p0.fxns.affect_dof.m.faults.propwarp&#39;, &#39;affect_dof_mechbreak_t0p0.fxns.affect_dof.m.faults.propstuck&#39;, &#39;affect_dof_mechbreak_t0p0.fxns.affect_dof.m.faults.propbreak&#39;, &#39;affect_dof_mechbreak_t0p0.fxns.affect_dof.m.mode&#39;, &#39;affect_dof_mechbreak_t0p0.fxns.ctl_dof.s.cs&#39;, &#39;affect_dof_mechbreak_t0p0.fxns.ctl_dof.s.vel&#39;, &#39;affect_dof_mechbreak_t0p0.fxns.ctl_dof.m.faults.noctl&#39;, &#39;affect_dof_mechbreak_t0p0.fxns.ctl_dof.m.faults.degctl&#39;, &#39;affect_dof_mechbreak_t0p0.fxns.ctl_dof.m.mode&#39;, &#39;affect_dof_mechbreak_t0p0.fxns.plan_path.s.dx&#39;, &#39;affect_dof_mechbreak_t0p0.fxns.plan_path.s.dy&#39;, &#39;affect_dof_mechbreak_t0p0.fxns.plan_path.s.dz&#39;, &#39;affect_dof_mechbreak_t0p0.fxns.plan_path.s.pt&#39;, &#39;affect_dof_mechbreak_t0p0.fxns.plan_path.s.goal&#39;, &#39;affect_dof_mechbreak_t0p0.fxns.plan_path.m.faults.noloc&#39;, &#39;affect_dof_mechbreak_t0p0.fxns.plan_path.m.faults.degloc&#39;, &#39;affect_dof_mechbreak_t0p0.fxns.plan_path.m.mode&#39;, &#39;affect_dof_mechbreak_t0p0.fxns.plan_path.t.pause.time&#39;, &#39;affect_dof_mechbreak_t0p0.fxns.plan_path.t.pause.mode&#39;, &#39;affect_dof_mechbreak_t0p0.fxns.trajectory.m.mode&#39;, &#39;affect_dof_mechbreak_t0p0.fxns.engage_land.m.faults.break&#39;, &#39;affect_dof_mechbreak_t0p0.fxns.engage_land.m.faults.deform&#39;, &#39;affect_dof_mechbreak_t0p0.fxns.engage_land.m.mode&#39;, &#39;affect_dof_mechbreak_t0p0.fxns.hold_payload.m.faults.break&#39;, &#39;affect_dof_mechbreak_t0p0.fxns.hold_payload.m.faults.deform&#39;, &#39;affect_dof_mechbreak_t0p0.fxns.hold_payload.m.mode&#39;, &#39;affect_dof_mechbreak_t0p0.fxns.view_env.m.mode&#39;, &#39;affect_dof_mechbreak_t0p0.flows.force_st.s.support&#39;, &#39;affect_dof_mechbreak_t0p0.flows.force_lin.s.support&#39;, &#39;affect_dof_mechbreak_t0p0.flows.force_gr.s.support&#39;, &#39;affect_dof_mechbreak_t0p0.flows.force_lg.s.support&#39;, &#39;affect_dof_mechbreak_t0p0.flows.ee_1.s.rate&#39;, &#39;affect_dof_mechbreak_t0p0.flows.ee_1.s.effort&#39;, &#39;affect_dof_mechbreak_t0p0.flows.ee_mot.s.rate&#39;, &#39;affect_dof_mechbreak_t0p0.flows.ee_mot.s.effort&#39;, &#39;affect_dof_mechbreak_t0p0.flows.ee_ctl.s.rate&#39;, &#39;affect_dof_mechbreak_t0p0.flows.ee_ctl.s.effort&#39;, &#39;affect_dof_mechbreak_t0p0.flows.ctl.s.forward&#39;, &#39;affect_dof_mechbreak_t0p0.flows.ctl.s.upward&#39;, &#39;affect_dof_mechbreak_t0p0.flows.dofs.s.vertvel&#39;, &#39;affect_dof_mechbreak_t0p0.flows.dofs.s.planvel&#39;, &#39;affect_dof_mechbreak_t0p0.flows.dofs.s.planpwr&#39;, &#39;affect_dof_mechbreak_t0p0.flows.dofs.s.uppwr&#39;, &#39;affect_dof_mechbreak_t0p0.flows.env.s.x&#39;, &#39;affect_dof_mechbreak_t0p0.flows.env.s.y&#39;, &#39;affect_dof_mechbreak_t0p0.flows.env.s.z&#39;, &#39;affect_dof_mechbreak_t0p0.flows.dir.s.x&#39;, &#39;affect_dof_mechbreak_t0p0.flows.dir.s.y&#39;, &#39;affect_dof_mechbreak_t0p0.flows.dir.s.z&#39;, &#39;affect_dof_mechbreak_t0p0.flows.dir.s.power&#39;, &#39;affect_dof_mechbreak_t0p0.time&#39;, &#39;affect_dof_mechbreak_t1p0.fxns.store_ee.s.soc&#39;, &#39;affect_dof_mechbreak_t1p0.fxns.store_ee.m.faults.nocharge&#39;, &#39;affect_dof_mechbreak_t1p0.fxns.store_ee.m.mode&#39;, &#39;affect_dof_mechbreak_t1p0.fxns.dist_ee.s.ee_tr&#39;, &#39;affect_dof_mechbreak_t1p0.fxns.dist_ee.s.ee_te&#39;, &#39;affect_dof_mechbreak_t1p0.fxns.dist_ee.m.faults.short&#39;, &#39;affect_dof_mechbreak_t1p0.fxns.dist_ee.m.faults.degr&#39;, &#39;affect_dof_mechbreak_t1p0.fxns.dist_ee.m.faults.break&#39;, &#39;affect_dof_mechbreak_t1p0.fxns.dist_ee.m.mode&#39;, &#39;affect_dof_mechbreak_t1p0.fxns.affect_dof.s.e_to&#39;, &#39;affect_dof_mechbreak_t1p0.fxns.affect_dof.s.e_ti&#39;, &#39;affect_dof_mechbreak_t1p0.fxns.affect_dof.s.ct&#39;, &#39;affect_dof_mechbreak_t1p0.fxns.affect_dof.s.mt&#39;, &#39;affect_dof_mechbreak_t1p0.fxns.affect_dof.s.pt&#39;, &#39;affect_dof_mechbreak_t1p0.fxns.affect_dof.m.faults.short&#39;, &#39;affect_dof_mechbreak_t1p0.fxns.affect_dof.m.faults.openc&#39;, &#39;affect_dof_mechbreak_t1p0.fxns.affect_dof.m.faults.ctlup&#39;, &#39;affect_dof_mechbreak_t1p0.fxns.affect_dof.m.faults.ctldn&#39;, &#39;affect_dof_mechbreak_t1p0.fxns.affect_dof.m.faults.ctlbreak&#39;, &#39;affect_dof_mechbreak_t1p0.fxns.affect_dof.m.faults.mechbreak&#39;, &#39;affect_dof_mechbreak_t1p0.fxns.affect_dof.m.faults.mechfriction&#39;, &#39;affect_dof_mechbreak_t1p0.fxns.affect_dof.m.faults.propwarp&#39;, &#39;affect_dof_mechbreak_t1p0.fxns.affect_dof.m.faults.propstuck&#39;, &#39;affect_dof_mechbreak_t1p0.fxns.affect_dof.m.faults.propbreak&#39;, &#39;affect_dof_mechbreak_t1p0.fxns.affect_dof.m.mode&#39;, &#39;affect_dof_mechbreak_t1p0.fxns.ctl_dof.s.cs&#39;, &#39;affect_dof_mechbreak_t1p0.fxns.ctl_dof.s.vel&#39;, &#39;affect_dof_mechbreak_t1p0.fxns.ctl_dof.m.faults.noctl&#39;, &#39;affect_dof_mechbreak_t1p0.fxns.ctl_dof.m.faults.degctl&#39;, &#39;affect_dof_mechbreak_t1p0.fxns.ctl_dof.m.mode&#39;, &#39;affect_dof_mechbreak_t1p0.fxns.plan_path.s.dx&#39;, &#39;affect_dof_mechbreak_t1p0.fxns.plan_path.s.dy&#39;, &#39;affect_dof_mechbreak_t1p0.fxns.plan_path.s.dz&#39;, &#39;affect_dof_mechbreak_t1p0.fxns.plan_path.s.pt&#39;, &#39;affect_dof_mechbreak_t1p0.fxns.plan_path.s.goal&#39;, &#39;affect_dof_mechbreak_t1p0.fxns.plan_path.m.faults.noloc&#39;, &#39;affect_dof_mechbreak_t1p0.fxns.plan_path.m.faults.degloc&#39;, &#39;affect_dof_mechbreak_t1p0.fxns.plan_path.m.mode&#39;, &#39;affect_dof_mechbreak_t1p0.fxns.plan_path.t.pause.time&#39;, &#39;affect_dof_mechbreak_t1p0.fxns.plan_path.t.pause.mode&#39;, &#39;affect_dof_mechbreak_t1p0.fxns.trajectory.m.mode&#39;, &#39;affect_dof_mechbreak_t1p0.fxns.engage_land.m.faults.break&#39;, &#39;affect_dof_mechbreak_t1p0.fxns.engage_land.m.faults.deform&#39;, &#39;affect_dof_mechbreak_t1p0.fxns.engage_land.m.mode&#39;, &#39;affect_dof_mechbreak_t1p0.fxns.hold_payload.m.faults.break&#39;, &#39;affect_dof_mechbreak_t1p0.fxns.hold_payload.m.faults.deform&#39;, &#39;affect_dof_mechbreak_t1p0.fxns.hold_payload.m.mode&#39;, &#39;affect_dof_mechbreak_t1p0.fxns.view_env.m.mode&#39;, &#39;affect_dof_mechbreak_t1p0.flows.force_st.s.support&#39;, &#39;affect_dof_mechbreak_t1p0.flows.force_lin.s.support&#39;, &#39;affect_dof_mechbreak_t1p0.flows.force_gr.s.support&#39;, &#39;affect_dof_mechbreak_t1p0.flows.force_lg.s.support&#39;, &#39;affect_dof_mechbreak_t1p0.flows.ee_1.s.rate&#39;, &#39;affect_dof_mechbreak_t1p0.flows.ee_1.s.effort&#39;, &#39;affect_dof_mechbreak_t1p0.flows.ee_mot.s.rate&#39;, &#39;affect_dof_mechbreak_t1p0.flows.ee_mot.s.effort&#39;, &#39;affect_dof_mechbreak_t1p0.flows.ee_ctl.s.rate&#39;, &#39;affect_dof_mechbreak_t1p0.flows.ee_ctl.s.effort&#39;, &#39;affect_dof_mechbreak_t1p0.flows.ctl.s.forward&#39;, &#39;affect_dof_mechbreak_t1p0.flows.ctl.s.upward&#39;, &#39;affect_dof_mechbreak_t1p0.flows.dofs.s.vertvel&#39;, &#39;affect_dof_mechbreak_t1p0.flows.dofs.s.planvel&#39;, &#39;affect_dof_mechbreak_t1p0.flows.dofs.s.planpwr&#39;, &#39;affect_dof_mechbreak_t1p0.flows.dofs.s.uppwr&#39;, &#39;affect_dof_mechbreak_t1p0.flows.env.s.x&#39;, &#39;affect_dof_mechbreak_t1p0.flows.env.s.y&#39;, &#39;affect_dof_mechbreak_t1p0.flows.env.s.z&#39;, &#39;affect_dof_mechbreak_t1p0.flows.dir.s.x&#39;, &#39;affect_dof_mechbreak_t1p0.flows.dir.s.y&#39;, &#39;affect_dof_mechbreak_t1p0.flows.dir.s.z&#39;, &#39;affect_dof_mechbreak_t1p0.flows.dir.s.power&#39;, &#39;affect_dof_mechbreak_t1p0.time&#39;, &#39;affect_dof_mechbreak_t2p0.fxns.store_ee.s.soc&#39;, &#39;affect_dof_mechbreak_t2p0.fxns.store_ee.m.faults.nocharge&#39;, &#39;affect_dof_mechbreak_t2p0.fxns.store_ee.m.mode&#39;, &#39;affect_dof_mechbreak_t2p0.fxns.dist_ee.s.ee_tr&#39;, &#39;affect_dof_mechbreak_t2p0.fxns.dist_ee.s.ee_te&#39;, &#39;affect_dof_mechbreak_t2p0.fxns.dist_ee.m.faults.short&#39;, &#39;affect_dof_mechbreak_t2p0.fxns.dist_ee.m.faults.degr&#39;, &#39;affect_dof_mechbreak_t2p0.fxns.dist_ee.m.faults.break&#39;, &#39;affect_dof_mechbreak_t2p0.fxns.dist_ee.m.mode&#39;, &#39;affect_dof_mechbreak_t2p0.fxns.affect_dof.s.e_to&#39;, &#39;affect_dof_mechbreak_t2p0.fxns.affect_dof.s.e_ti&#39;, &#39;affect_dof_mechbreak_t2p0.fxns.affect_dof.s.ct&#39;, &#39;affect_dof_mechbreak_t2p0.fxns.affect_dof.s.mt&#39;, &#39;affect_dof_mechbreak_t2p0.fxns.affect_dof.s.pt&#39;, &#39;affect_dof_mechbreak_t2p0.fxns.affect_dof.m.faults.short&#39;, &#39;affect_dof_mechbreak_t2p0.fxns.affect_dof.m.faults.openc&#39;, &#39;affect_dof_mechbreak_t2p0.fxns.affect_dof.m.faults.ctlup&#39;, &#39;affect_dof_mechbreak_t2p0.fxns.affect_dof.m.faults.ctldn&#39;, &#39;affect_dof_mechbreak_t2p0.fxns.affect_dof.m.faults.ctlbreak&#39;, &#39;affect_dof_mechbreak_t2p0.fxns.affect_dof.m.faults.mechbreak&#39;, &#39;affect_dof_mechbreak_t2p0.fxns.affect_dof.m.faults.mechfriction&#39;, &#39;affect_dof_mechbreak_t2p0.fxns.affect_dof.m.faults.propwarp&#39;, &#39;affect_dof_mechbreak_t2p0.fxns.affect_dof.m.faults.propstuck&#39;, &#39;affect_dof_mechbreak_t2p0.fxns.affect_dof.m.faults.propbreak&#39;, &#39;affect_dof_mechbreak_t2p0.fxns.affect_dof.m.mode&#39;, &#39;affect_dof_mechbreak_t2p0.fxns.ctl_dof.s.cs&#39;, &#39;affect_dof_mechbreak_t2p0.fxns.ctl_dof.s.vel&#39;, &#39;affect_dof_mechbreak_t2p0.fxns.ctl_dof.m.faults.noctl&#39;, &#39;affect_dof_mechbreak_t2p0.fxns.ctl_dof.m.faults.degctl&#39;, &#39;affect_dof_mechbreak_t2p0.fxns.ctl_dof.m.mode&#39;, &#39;affect_dof_mechbreak_t2p0.fxns.plan_path.s.dx&#39;, &#39;affect_dof_mechbreak_t2p0.fxns.plan_path.s.dy&#39;, &#39;affect_dof_mechbreak_t2p0.fxns.plan_path.s.dz&#39;, &#39;affect_dof_mechbreak_t2p0.fxns.plan_path.s.pt&#39;, &#39;affect_dof_mechbreak_t2p0.fxns.plan_path.s.goal&#39;, &#39;affect_dof_mechbreak_t2p0.fxns.plan_path.m.faults.noloc&#39;, &#39;affect_dof_mechbreak_t2p0.fxns.plan_path.m.faults.degloc&#39;, &#39;affect_dof_mechbreak_t2p0.fxns.plan_path.m.mode&#39;, &#39;affect_dof_mechbreak_t2p0.fxns.plan_path.t.pause.time&#39;, &#39;affect_dof_mechbreak_t2p0.fxns.plan_path.t.pause.mode&#39;, &#39;affect_dof_mechbreak_t2p0.fxns.trajectory.m.mode&#39;, &#39;affect_dof_mechbreak_t2p0.fxns.engage_land.m.faults.break&#39;, &#39;affect_dof_mechbreak_t2p0.fxns.engage_land.m.faults.deform&#39;, &#39;affect_dof_mechbreak_t2p0.fxns.engage_land.m.mode&#39;, &#39;affect_dof_mechbreak_t2p0.fxns.hold_payload.m.faults.break&#39;, &#39;affect_dof_mechbreak_t2p0.fxns.hold_payload.m.faults.deform&#39;, &#39;affect_dof_mechbreak_t2p0.fxns.hold_payload.m.mode&#39;, &#39;affect_dof_mechbreak_t2p0.fxns.view_env.m.mode&#39;, &#39;affect_dof_mechbreak_t2p0.flows.force_st.s.support&#39;, &#39;affect_dof_mechbreak_t2p0.flows.force_lin.s.support&#39;, &#39;affect_dof_mechbreak_t2p0.flows.force_gr.s.support&#39;, &#39;affect_dof_mechbreak_t2p0.flows.force_lg.s.support&#39;, &#39;affect_dof_mechbreak_t2p0.flows.ee_1.s.rate&#39;, &#39;affect_dof_mechbreak_t2p0.flows.ee_1.s.effort&#39;, &#39;affect_dof_mechbreak_t2p0.flows.ee_mot.s.rate&#39;, &#39;affect_dof_mechbreak_t2p0.flows.ee_mot.s.effort&#39;, &#39;affect_dof_mechbreak_t2p0.flows.ee_ctl.s.rate&#39;, &#39;affect_dof_mechbreak_t2p0.flows.ee_ctl.s.effort&#39;, &#39;affect_dof_mechbreak_t2p0.flows.ctl.s.forward&#39;, &#39;affect_dof_mechbreak_t2p0.flows.ctl.s.upward&#39;, &#39;affect_dof_mechbreak_t2p0.flows.dofs.s.vertvel&#39;, &#39;affect_dof_mechbreak_t2p0.flows.dofs.s.planvel&#39;, &#39;affect_dof_mechbreak_t2p0.flows.dofs.s.planpwr&#39;, &#39;affect_dof_mechbreak_t2p0.flows.dofs.s.uppwr&#39;, &#39;affect_dof_mechbreak_t2p0.flows.env.s.x&#39;, &#39;affect_dof_mechbreak_t2p0.flows.env.s.y&#39;, &#39;affect_dof_mechbreak_t2p0.flows.env.s.z&#39;, &#39;affect_dof_mechbreak_t2p0.flows.dir.s.x&#39;, &#39;affect_dof_mechbreak_t2p0.flows.dir.s.y&#39;, &#39;affect_dof_mechbreak_t2p0.flows.dir.s.z&#39;, &#39;affect_dof_mechbreak_t2p0.flows.dir.s.power&#39;, &#39;affect_dof_mechbreak_t2p0.time&#39;, &#39;affect_dof_mechbreak_t3p0.fxns.store_ee.s.soc&#39;, &#39;affect_dof_mechbreak_t3p0.fxns.store_ee.m.faults.nocharge&#39;, &#39;affect_dof_mechbreak_t3p0.fxns.store_ee.m.mode&#39;, &#39;affect_dof_mechbreak_t3p0.fxns.dist_ee.s.ee_tr&#39;, &#39;affect_dof_mechbreak_t3p0.fxns.dist_ee.s.ee_te&#39;, &#39;affect_dof_mechbreak_t3p0.fxns.dist_ee.m.faults.short&#39;, &#39;affect_dof_mechbreak_t3p0.fxns.dist_ee.m.faults.degr&#39;, &#39;affect_dof_mechbreak_t3p0.fxns.dist_ee.m.faults.break&#39;, &#39;affect_dof_mechbreak_t3p0.fxns.dist_ee.m.mode&#39;, &#39;affect_dof_mechbreak_t3p0.fxns.affect_dof.s.e_to&#39;, &#39;affect_dof_mechbreak_t3p0.fxns.affect_dof.s.e_ti&#39;, &#39;affect_dof_mechbreak_t3p0.fxns.affect_dof.s.ct&#39;, &#39;affect_dof_mechbreak_t3p0.fxns.affect_dof.s.mt&#39;, &#39;affect_dof_mechbreak_t3p0.fxns.affect_dof.s.pt&#39;, &#39;affect_dof_mechbreak_t3p0.fxns.affect_dof.m.faults.short&#39;, &#39;affect_dof_mechbreak_t3p0.fxns.affect_dof.m.faults.openc&#39;, &#39;affect_dof_mechbreak_t3p0.fxns.affect_dof.m.faults.ctlup&#39;, &#39;affect_dof_mechbreak_t3p0.fxns.affect_dof.m.faults.ctldn&#39;, &#39;affect_dof_mechbreak_t3p0.fxns.affect_dof.m.faults.ctlbreak&#39;, &#39;affect_dof_mechbreak_t3p0.fxns.affect_dof.m.faults.mechbreak&#39;, &#39;affect_dof_mechbreak_t3p0.fxns.affect_dof.m.faults.mechfriction&#39;, &#39;affect_dof_mechbreak_t3p0.fxns.affect_dof.m.faults.propwarp&#39;, &#39;affect_dof_mechbreak_t3p0.fxns.affect_dof.m.faults.propstuck&#39;, &#39;affect_dof_mechbreak_t3p0.fxns.affect_dof.m.faults.propbreak&#39;, &#39;affect_dof_mechbreak_t3p0.fxns.affect_dof.m.mode&#39;, &#39;affect_dof_mechbreak_t3p0.fxns.ctl_dof.s.cs&#39;, &#39;affect_dof_mechbreak_t3p0.fxns.ctl_dof.s.vel&#39;, &#39;affect_dof_mechbreak_t3p0.fxns.ctl_dof.m.faults.noctl&#39;, &#39;affect_dof_mechbreak_t3p0.fxns.ctl_dof.m.faults.degctl&#39;, &#39;affect_dof_mechbreak_t3p0.fxns.ctl_dof.m.mode&#39;, &#39;affect_dof_mechbreak_t3p0.fxns.plan_path.s.dx&#39;, &#39;affect_dof_mechbreak_t3p0.fxns.plan_path.s.dy&#39;, &#39;affect_dof_mechbreak_t3p0.fxns.plan_path.s.dz&#39;, &#39;affect_dof_mechbreak_t3p0.fxns.plan_path.s.pt&#39;, &#39;affect_dof_mechbreak_t3p0.fxns.plan_path.s.goal&#39;, &#39;affect_dof_mechbreak_t3p0.fxns.plan_path.m.faults.noloc&#39;, &#39;affect_dof_mechbreak_t3p0.fxns.plan_path.m.faults.degloc&#39;, &#39;affect_dof_mechbreak_t3p0.fxns.plan_path.m.mode&#39;, &#39;affect_dof_mechbreak_t3p0.fxns.plan_path.t.pause.time&#39;, &#39;affect_dof_mechbreak_t3p0.fxns.plan_path.t.pause.mode&#39;, &#39;affect_dof_mechbreak_t3p0.fxns.trajectory.m.mode&#39;, &#39;affect_dof_mechbreak_t3p0.fxns.engage_land.m.faults.break&#39;, &#39;affect_dof_mechbreak_t3p0.fxns.engage_land.m.faults.deform&#39;, &#39;affect_dof_mechbreak_t3p0.fxns.engage_land.m.mode&#39;, &#39;affect_dof_mechbreak_t3p0.fxns.hold_payload.m.faults.break&#39;, &#39;affect_dof_mechbreak_t3p0.fxns.hold_payload.m.faults.deform&#39;, &#39;affect_dof_mechbreak_t3p0.fxns.hold_payload.m.mode&#39;, &#39;affect_dof_mechbreak_t3p0.fxns.view_env.m.mode&#39;, &#39;affect_dof_mechbreak_t3p0.flows.force_st.s.support&#39;, &#39;affect_dof_mechbreak_t3p0.flows.force_lin.s.support&#39;, &#39;affect_dof_mechbreak_t3p0.flows.force_gr.s.support&#39;, &#39;affect_dof_mechbreak_t3p0.flows.force_lg.s.support&#39;, &#39;affect_dof_mechbreak_t3p0.flows.ee_1.s.rate&#39;, &#39;affect_dof_mechbreak_t3p0.flows.ee_1.s.effort&#39;, &#39;affect_dof_mechbreak_t3p0.flows.ee_mot.s.rate&#39;, &#39;affect_dof_mechbreak_t3p0.flows.ee_mot.s.effort&#39;, &#39;affect_dof_mechbreak_t3p0.flows.ee_ctl.s.rate&#39;, &#39;affect_dof_mechbreak_t3p0.flows.ee_ctl.s.effort&#39;, &#39;affect_dof_mechbreak_t3p0.flows.ctl.s.forward&#39;, &#39;affect_dof_mechbreak_t3p0.flows.ctl.s.upward&#39;, &#39;affect_dof_mechbreak_t3p0.flows.dofs.s.vertvel&#39;, &#39;affect_dof_mechbreak_t3p0.flows.dofs.s.planvel&#39;, &#39;affect_dof_mechbreak_t3p0.flows.dofs.s.planpwr&#39;, &#39;affect_dof_mechbreak_t3p0.flows.dofs.s.uppwr&#39;, &#39;affect_dof_mechbreak_t3p0.flows.env.s.x&#39;, &#39;affect_dof_mechbreak_t3p0.flows.env.s.y&#39;, &#39;affect_dof_mechbreak_t3p0.flows.env.s.z&#39;, &#39;affect_dof_mechbreak_t3p0.flows.dir.s.x&#39;, &#39;affect_dof_mechbreak_t3p0.flows.dir.s.y&#39;, &#39;affect_dof_mechbreak_t3p0.flows.dir.s.z&#39;, &#39;affect_dof_mechbreak_t3p0.flows.dir.s.power&#39;, &#39;affect_dof_mechbreak_t3p0.time&#39;, &#39;affect_dof_mechbreak_t4p0.fxns.store_ee.s.soc&#39;, &#39;affect_dof_mechbreak_t4p0.fxns.store_ee.m.faults.nocharge&#39;, &#39;affect_dof_mechbreak_t4p0.fxns.store_ee.m.mode&#39;, &#39;affect_dof_mechbreak_t4p0.fxns.dist_ee.s.ee_tr&#39;, &#39;affect_dof_mechbreak_t4p0.fxns.dist_ee.s.ee_te&#39;, &#39;affect_dof_mechbreak_t4p0.fxns.dist_ee.m.faults.short&#39;, &#39;affect_dof_mechbreak_t4p0.fxns.dist_ee.m.faults.degr&#39;, &#39;affect_dof_mechbreak_t4p0.fxns.dist_ee.m.faults.break&#39;, &#39;affect_dof_mechbreak_t4p0.fxns.dist_ee.m.mode&#39;, &#39;affect_dof_mechbreak_t4p0.fxns.affect_dof.s.e_to&#39;, &#39;affect_dof_mechbreak_t4p0.fxns.affect_dof.s.e_ti&#39;, &#39;affect_dof_mechbreak_t4p0.fxns.affect_dof.s.ct&#39;, &#39;affect_dof_mechbreak_t4p0.fxns.affect_dof.s.mt&#39;, &#39;affect_dof_mechbreak_t4p0.fxns.affect_dof.s.pt&#39;, &#39;affect_dof_mechbreak_t4p0.fxns.affect_dof.m.faults.short&#39;, &#39;affect_dof_mechbreak_t4p0.fxns.affect_dof.m.faults.openc&#39;, &#39;affect_dof_mechbreak_t4p0.fxns.affect_dof.m.faults.ctlup&#39;, &#39;affect_dof_mechbreak_t4p0.fxns.affect_dof.m.faults.ctldn&#39;, &#39;affect_dof_mechbreak_t4p0.fxns.affect_dof.m.faults.ctlbreak&#39;, &#39;affect_dof_mechbreak_t4p0.fxns.affect_dof.m.faults.mechbreak&#39;, &#39;affect_dof_mechbreak_t4p0.fxns.affect_dof.m.faults.mechfriction&#39;, &#39;affect_dof_mechbreak_t4p0.fxns.affect_dof.m.faults.propwarp&#39;, &#39;affect_dof_mechbreak_t4p0.fxns.affect_dof.m.faults.propstuck&#39;, &#39;affect_dof_mechbreak_t4p0.fxns.affect_dof.m.faults.propbreak&#39;, &#39;affect_dof_mechbreak_t4p0.fxns.affect_dof.m.mode&#39;, &#39;affect_dof_mechbreak_t4p0.fxns.ctl_dof.s.cs&#39;, &#39;affect_dof_mechbreak_t4p0.fxns.ctl_dof.s.vel&#39;, &#39;affect_dof_mechbreak_t4p0.fxns.ctl_dof.m.faults.noctl&#39;, &#39;affect_dof_mechbreak_t4p0.fxns.ctl_dof.m.faults.degctl&#39;, &#39;affect_dof_mechbreak_t4p0.fxns.ctl_dof.m.mode&#39;, &#39;affect_dof_mechbreak_t4p0.fxns.plan_path.s.dx&#39;, &#39;affect_dof_mechbreak_t4p0.fxns.plan_path.s.dy&#39;, &#39;affect_dof_mechbreak_t4p0.fxns.plan_path.s.dz&#39;, &#39;affect_dof_mechbreak_t4p0.fxns.plan_path.s.pt&#39;, &#39;affect_dof_mechbreak_t4p0.fxns.plan_path.s.goal&#39;, &#39;affect_dof_mechbreak_t4p0.fxns.plan_path.m.faults.noloc&#39;, &#39;affect_dof_mechbreak_t4p0.fxns.plan_path.m.faults.degloc&#39;, &#39;affect_dof_mechbreak_t4p0.fxns.plan_path.m.mode&#39;, &#39;affect_dof_mechbreak_t4p0.fxns.plan_path.t.pause.time&#39;, &#39;affect_dof_mechbreak_t4p0.fxns.plan_path.t.pause.mode&#39;, &#39;affect_dof_mechbreak_t4p0.fxns.trajectory.m.mode&#39;, &#39;affect_dof_mechbreak_t4p0.fxns.engage_land.m.faults.break&#39;, &#39;affect_dof_mechbreak_t4p0.fxns.engage_land.m.faults.deform&#39;, &#39;affect_dof_mechbreak_t4p0.fxns.engage_land.m.mode&#39;, &#39;affect_dof_mechbreak_t4p0.fxns.hold_payload.m.faults.break&#39;, &#39;affect_dof_mechbreak_t4p0.fxns.hold_payload.m.faults.deform&#39;, &#39;affect_dof_mechbreak_t4p0.fxns.hold_payload.m.mode&#39;, &#39;affect_dof_mechbreak_t4p0.fxns.view_env.m.mode&#39;, &#39;affect_dof_mechbreak_t4p0.flows.force_st.s.support&#39;, &#39;affect_dof_mechbreak_t4p0.flows.force_lin.s.support&#39;, &#39;affect_dof_mechbreak_t4p0.flows.force_gr.s.support&#39;, &#39;affect_dof_mechbreak_t4p0.flows.force_lg.s.support&#39;, &#39;affect_dof_mechbreak_t4p0.flows.ee_1.s.rate&#39;, &#39;affect_dof_mechbreak_t4p0.flows.ee_1.s.effort&#39;, &#39;affect_dof_mechbreak_t4p0.flows.ee_mot.s.rate&#39;, &#39;affect_dof_mechbreak_t4p0.flows.ee_mot.s.effort&#39;, &#39;affect_dof_mechbreak_t4p0.flows.ee_ctl.s.rate&#39;, &#39;affect_dof_mechbreak_t4p0.flows.ee_ctl.s.effort&#39;, &#39;affect_dof_mechbreak_t4p0.flows.ctl.s.forward&#39;, &#39;affect_dof_mechbreak_t4p0.flows.ctl.s.upward&#39;, &#39;affect_dof_mechbreak_t4p0.flows.dofs.s.vertvel&#39;, &#39;affect_dof_mechbreak_t4p0.flows.dofs.s.planvel&#39;, &#39;affect_dof_mechbreak_t4p0.flows.dofs.s.planpwr&#39;, &#39;affect_dof_mechbreak_t4p0.flows.dofs.s.uppwr&#39;, &#39;affect_dof_mechbreak_t4p0.flows.env.s.x&#39;, &#39;affect_dof_mechbreak_t4p0.flows.env.s.y&#39;, &#39;affect_dof_mechbreak_t4p0.flows.env.s.z&#39;, &#39;affect_dof_mechbreak_t4p0.flows.dir.s.x&#39;, &#39;affect_dof_mechbreak_t4p0.flows.dir.s.y&#39;, &#39;affect_dof_mechbreak_t4p0.flows.dir.s.z&#39;, &#39;affect_dof_mechbreak_t4p0.flows.dir.s.power&#39;, &#39;affect_dof_mechbreak_t4p0.time&#39;, &#39;affect_dof_mechbreak_t20p0.fxns.store_ee.s.soc&#39;, &#39;affect_dof_mechbreak_t20p0.fxns.store_ee.m.faults.nocharge&#39;, &#39;affect_dof_mechbreak_t20p0.fxns.store_ee.m.mode&#39;, &#39;affect_dof_mechbreak_t20p0.fxns.dist_ee.s.ee_tr&#39;, &#39;affect_dof_mechbreak_t20p0.fxns.dist_ee.s.ee_te&#39;, &#39;affect_dof_mechbreak_t20p0.fxns.dist_ee.m.faults.short&#39;, &#39;affect_dof_mechbreak_t20p0.fxns.dist_ee.m.faults.degr&#39;, &#39;affect_dof_mechbreak_t20p0.fxns.dist_ee.m.faults.break&#39;, &#39;affect_dof_mechbreak_t20p0.fxns.dist_ee.m.mode&#39;, &#39;affect_dof_mechbreak_t20p0.fxns.affect_dof.s.e_to&#39;, &#39;affect_dof_mechbreak_t20p0.fxns.affect_dof.s.e_ti&#39;, &#39;affect_dof_mechbreak_t20p0.fxns.affect_dof.s.ct&#39;, &#39;affect_dof_mechbreak_t20p0.fxns.affect_dof.s.mt&#39;, &#39;affect_dof_mechbreak_t20p0.fxns.affect_dof.s.pt&#39;, &#39;affect_dof_mechbreak_t20p0.fxns.affect_dof.m.faults.short&#39;, &#39;affect_dof_mechbreak_t20p0.fxns.affect_dof.m.faults.openc&#39;, &#39;affect_dof_mechbreak_t20p0.fxns.affect_dof.m.faults.ctlup&#39;, &#39;affect_dof_mechbreak_t20p0.fxns.affect_dof.m.faults.ctldn&#39;, &#39;affect_dof_mechbreak_t20p0.fxns.affect_dof.m.faults.ctlbreak&#39;, &#39;affect_dof_mechbreak_t20p0.fxns.affect_dof.m.faults.mechbreak&#39;, &#39;affect_dof_mechbreak_t20p0.fxns.affect_dof.m.faults.mechfriction&#39;, &#39;affect_dof_mechbreak_t20p0.fxns.affect_dof.m.faults.propwarp&#39;, &#39;affect_dof_mechbreak_t20p0.fxns.affect_dof.m.faults.propstuck&#39;, &#39;affect_dof_mechbreak_t20p0.fxns.affect_dof.m.faults.propbreak&#39;, &#39;affect_dof_mechbreak_t20p0.fxns.affect_dof.m.mode&#39;, &#39;affect_dof_mechbreak_t20p0.fxns.ctl_dof.s.cs&#39;, &#39;affect_dof_mechbreak_t20p0.fxns.ctl_dof.s.vel&#39;, &#39;affect_dof_mechbreak_t20p0.fxns.ctl_dof.m.faults.noctl&#39;, &#39;affect_dof_mechbreak_t20p0.fxns.ctl_dof.m.faults.degctl&#39;, &#39;affect_dof_mechbreak_t20p0.fxns.ctl_dof.m.mode&#39;, &#39;affect_dof_mechbreak_t20p0.fxns.plan_path.s.dx&#39;, &#39;affect_dof_mechbreak_t20p0.fxns.plan_path.s.dy&#39;, &#39;affect_dof_mechbreak_t20p0.fxns.plan_path.s.dz&#39;, &#39;affect_dof_mechbreak_t20p0.fxns.plan_path.s.pt&#39;, &#39;affect_dof_mechbreak_t20p0.fxns.plan_path.s.goal&#39;, &#39;affect_dof_mechbreak_t20p0.fxns.plan_path.m.faults.noloc&#39;, &#39;affect_dof_mechbreak_t20p0.fxns.plan_path.m.faults.degloc&#39;, &#39;affect_dof_mechbreak_t20p0.fxns.plan_path.m.mode&#39;, &#39;affect_dof_mechbreak_t20p0.fxns.plan_path.t.pause.time&#39;, &#39;affect_dof_mechbreak_t20p0.fxns.plan_path.t.pause.mode&#39;, &#39;affect_dof_mechbreak_t20p0.fxns.trajectory.m.mode&#39;, &#39;affect_dof_mechbreak_t20p0.fxns.engage_land.m.faults.break&#39;, &#39;affect_dof_mechbreak_t20p0.fxns.engage_land.m.faults.deform&#39;, &#39;affect_dof_mechbreak_t20p0.fxns.engage_land.m.mode&#39;, &#39;affect_dof_mechbreak_t20p0.fxns.hold_payload.m.faults.break&#39;, &#39;affect_dof_mechbreak_t20p0.fxns.hold_payload.m.faults.deform&#39;, &#39;affect_dof_mechbreak_t20p0.fxns.hold_payload.m.mode&#39;, &#39;affect_dof_mechbreak_t20p0.fxns.view_env.m.mode&#39;, &#39;affect_dof_mechbreak_t20p0.flows.force_st.s.support&#39;, &#39;affect_dof_mechbreak_t20p0.flows.force_lin.s.support&#39;, &#39;affect_dof_mechbreak_t20p0.flows.force_gr.s.support&#39;, &#39;affect_dof_mechbreak_t20p0.flows.force_lg.s.support&#39;, &#39;affect_dof_mechbreak_t20p0.flows.ee_1.s.rate&#39;, &#39;affect_dof_mechbreak_t20p0.flows.ee_1.s.effort&#39;, &#39;affect_dof_mechbreak_t20p0.flows.ee_mot.s.rate&#39;, &#39;affect_dof_mechbreak_t20p0.flows.ee_mot.s.effort&#39;, &#39;affect_dof_mechbreak_t20p0.flows.ee_ctl.s.rate&#39;, &#39;affect_dof_mechbreak_t20p0.flows.ee_ctl.s.effort&#39;, &#39;affect_dof_mechbreak_t20p0.flows.ctl.s.forward&#39;, &#39;affect_dof_mechbreak_t20p0.flows.ctl.s.upward&#39;, &#39;affect_dof_mechbreak_t20p0.flows.dofs.s.vertvel&#39;, &#39;affect_dof_mechbreak_t20p0.flows.dofs.s.planvel&#39;, &#39;affect_dof_mechbreak_t20p0.flows.dofs.s.planpwr&#39;, &#39;affect_dof_mechbreak_t20p0.flows.dofs.s.uppwr&#39;, &#39;affect_dof_mechbreak_t20p0.flows.env.s.x&#39;, &#39;affect_dof_mechbreak_t20p0.flows.env.s.y&#39;, &#39;affect_dof_mechbreak_t20p0.flows.env.s.z&#39;, &#39;affect_dof_mechbreak_t20p0.flows.dir.s.x&#39;, &#39;affect_dof_mechbreak_t20p0.flows.dir.s.y&#39;, &#39;affect_dof_mechbreak_t20p0.flows.dir.s.z&#39;, &#39;affect_dof_mechbreak_t20p0.flows.dir.s.power&#39;, &#39;affect_dof_mechbreak_t20p0.time&#39;, &#39;affect_dof_mechbreak_t35p0.fxns.store_ee.s.soc&#39;, &#39;affect_dof_mechbreak_t35p0.fxns.store_ee.m.faults.nocharge&#39;, &#39;affect_dof_mechbreak_t35p0.fxns.store_ee.m.mode&#39;, &#39;affect_dof_mechbreak_t35p0.fxns.dist_ee.s.ee_tr&#39;, &#39;affect_dof_mechbreak_t35p0.fxns.dist_ee.s.ee_te&#39;, &#39;affect_dof_mechbreak_t35p0.fxns.dist_ee.m.faults.short&#39;, &#39;affect_dof_mechbreak_t35p0.fxns.dist_ee.m.faults.degr&#39;, &#39;affect_dof_mechbreak_t35p0.fxns.dist_ee.m.faults.break&#39;, &#39;affect_dof_mechbreak_t35p0.fxns.dist_ee.m.mode&#39;, &#39;affect_dof_mechbreak_t35p0.fxns.affect_dof.s.e_to&#39;, &#39;affect_dof_mechbreak_t35p0.fxns.affect_dof.s.e_ti&#39;, &#39;affect_dof_mechbreak_t35p0.fxns.affect_dof.s.ct&#39;, &#39;affect_dof_mechbreak_t35p0.fxns.affect_dof.s.mt&#39;, &#39;affect_dof_mechbreak_t35p0.fxns.affect_dof.s.pt&#39;, &#39;affect_dof_mechbreak_t35p0.fxns.affect_dof.m.faults.short&#39;, &#39;affect_dof_mechbreak_t35p0.fxns.affect_dof.m.faults.openc&#39;, &#39;affect_dof_mechbreak_t35p0.fxns.affect_dof.m.faults.ctlup&#39;, &#39;affect_dof_mechbreak_t35p0.fxns.affect_dof.m.faults.ctldn&#39;, &#39;affect_dof_mechbreak_t35p0.fxns.affect_dof.m.faults.ctlbreak&#39;, &#39;affect_dof_mechbreak_t35p0.fxns.affect_dof.m.faults.mechbreak&#39;, &#39;affect_dof_mechbreak_t35p0.fxns.affect_dof.m.faults.mechfriction&#39;, &#39;affect_dof_mechbreak_t35p0.fxns.affect_dof.m.faults.propwarp&#39;, &#39;affect_dof_mechbreak_t35p0.fxns.affect_dof.m.faults.propstuck&#39;, &#39;affect_dof_mechbreak_t35p0.fxns.affect_dof.m.faults.propbreak&#39;, &#39;affect_dof_mechbreak_t35p0.fxns.affect_dof.m.mode&#39;, &#39;affect_dof_mechbreak_t35p0.fxns.ctl_dof.s.cs&#39;, &#39;affect_dof_mechbreak_t35p0.fxns.ctl_dof.s.vel&#39;, &#39;affect_dof_mechbreak_t35p0.fxns.ctl_dof.m.faults.noctl&#39;, &#39;affect_dof_mechbreak_t35p0.fxns.ctl_dof.m.faults.degctl&#39;, &#39;affect_dof_mechbreak_t35p0.fxns.ctl_dof.m.mode&#39;, &#39;affect_dof_mechbreak_t35p0.fxns.plan_path.s.dx&#39;, &#39;affect_dof_mechbreak_t35p0.fxns.plan_path.s.dy&#39;, &#39;affect_dof_mechbreak_t35p0.fxns.plan_path.s.dz&#39;, &#39;affect_dof_mechbreak_t35p0.fxns.plan_path.s.pt&#39;, &#39;affect_dof_mechbreak_t35p0.fxns.plan_path.s.goal&#39;, &#39;affect_dof_mechbreak_t35p0.fxns.plan_path.m.faults.noloc&#39;, &#39;affect_dof_mechbreak_t35p0.fxns.plan_path.m.faults.degloc&#39;, &#39;affect_dof_mechbreak_t35p0.fxns.plan_path.m.mode&#39;, &#39;affect_dof_mechbreak_t35p0.fxns.plan_path.t.pause.time&#39;, &#39;affect_dof_mechbreak_t35p0.fxns.plan_path.t.pause.mode&#39;, &#39;affect_dof_mechbreak_t35p0.fxns.trajectory.m.mode&#39;, &#39;affect_dof_mechbreak_t35p0.fxns.engage_land.m.faults.break&#39;, &#39;affect_dof_mechbreak_t35p0.fxns.engage_land.m.faults.deform&#39;, &#39;affect_dof_mechbreak_t35p0.fxns.engage_land.m.mode&#39;, &#39;affect_dof_mechbreak_t35p0.fxns.hold_payload.m.faults.break&#39;, &#39;affect_dof_mechbreak_t35p0.fxns.hold_payload.m.faults.deform&#39;, &#39;affect_dof_mechbreak_t35p0.fxns.hold_payload.m.mode&#39;, &#39;affect_dof_mechbreak_t35p0.fxns.view_env.m.mode&#39;, &#39;affect_dof_mechbreak_t35p0.flows.force_st.s.support&#39;, &#39;affect_dof_mechbreak_t35p0.flows.force_lin.s.support&#39;, &#39;affect_dof_mechbreak_t35p0.flows.force_gr.s.support&#39;, &#39;affect_dof_mechbreak_t35p0.flows.force_lg.s.support&#39;, &#39;affect_dof_mechbreak_t35p0.flows.ee_1.s.rate&#39;, &#39;affect_dof_mechbreak_t35p0.flows.ee_1.s.effort&#39;, &#39;affect_dof_mechbreak_t35p0.flows.ee_mot.s.rate&#39;, &#39;affect_dof_mechbreak_t35p0.flows.ee_mot.s.effort&#39;, &#39;affect_dof_mechbreak_t35p0.flows.ee_ctl.s.rate&#39;, &#39;affect_dof_mechbreak_t35p0.flows.ee_ctl.s.effort&#39;, &#39;affect_dof_mechbreak_t35p0.flows.ctl.s.forward&#39;, &#39;affect_dof_mechbreak_t35p0.flows.ctl.s.upward&#39;, &#39;affect_dof_mechbreak_t35p0.flows.dofs.s.vertvel&#39;, &#39;affect_dof_mechbreak_t35p0.flows.dofs.s.planvel&#39;, &#39;affect_dof_mechbreak_t35p0.flows.dofs.s.planpwr&#39;, &#39;affect_dof_mechbreak_t35p0.flows.dofs.s.uppwr&#39;, &#39;affect_dof_mechbreak_t35p0.flows.env.s.x&#39;, &#39;affect_dof_mechbreak_t35p0.flows.env.s.y&#39;, &#39;affect_dof_mechbreak_t35p0.flows.env.s.z&#39;, &#39;affect_dof_mechbreak_t35p0.flows.dir.s.x&#39;, &#39;affect_dof_mechbreak_t35p0.flows.dir.s.y&#39;, &#39;affect_dof_mechbreak_t35p0.flows.dir.s.z&#39;, &#39;affect_dof_mechbreak_t35p0.flows.dir.s.power&#39;, &#39;affect_dof_mechbreak_t35p0.time&#39;, &#39;affect_dof_mechbreak_t49p0.fxns.store_ee.s.soc&#39;, &#39;affect_dof_mechbreak_t49p0.fxns.store_ee.m.faults.nocharge&#39;, &#39;affect_dof_mechbreak_t49p0.fxns.store_ee.m.mode&#39;, &#39;affect_dof_mechbreak_t49p0.fxns.dist_ee.s.ee_tr&#39;, &#39;affect_dof_mechbreak_t49p0.fxns.dist_ee.s.ee_te&#39;, &#39;affect_dof_mechbreak_t49p0.fxns.dist_ee.m.faults.short&#39;, &#39;affect_dof_mechbreak_t49p0.fxns.dist_ee.m.faults.degr&#39;, &#39;affect_dof_mechbreak_t49p0.fxns.dist_ee.m.faults.break&#39;, &#39;affect_dof_mechbreak_t49p0.fxns.dist_ee.m.mode&#39;, &#39;affect_dof_mechbreak_t49p0.fxns.affect_dof.s.e_to&#39;, &#39;affect_dof_mechbreak_t49p0.fxns.affect_dof.s.e_ti&#39;, &#39;affect_dof_mechbreak_t49p0.fxns.affect_dof.s.ct&#39;, &#39;affect_dof_mechbreak_t49p0.fxns.affect_dof.s.mt&#39;, &#39;affect_dof_mechbreak_t49p0.fxns.affect_dof.s.pt&#39;, &#39;affect_dof_mechbreak_t49p0.fxns.affect_dof.m.faults.short&#39;, &#39;affect_dof_mechbreak_t49p0.fxns.affect_dof.m.faults.openc&#39;, &#39;affect_dof_mechbreak_t49p0.fxns.affect_dof.m.faults.ctlup&#39;, &#39;affect_dof_mechbreak_t49p0.fxns.affect_dof.m.faults.ctldn&#39;, &#39;affect_dof_mechbreak_t49p0.fxns.affect_dof.m.faults.ctlbreak&#39;, &#39;affect_dof_mechbreak_t49p0.fxns.affect_dof.m.faults.mechbreak&#39;, &#39;affect_dof_mechbreak_t49p0.fxns.affect_dof.m.faults.mechfriction&#39;, &#39;affect_dof_mechbreak_t49p0.fxns.affect_dof.m.faults.propwarp&#39;, &#39;affect_dof_mechbreak_t49p0.fxns.affect_dof.m.faults.propstuck&#39;, &#39;affect_dof_mechbreak_t49p0.fxns.affect_dof.m.faults.propbreak&#39;, &#39;affect_dof_mechbreak_t49p0.fxns.affect_dof.m.mode&#39;, &#39;affect_dof_mechbreak_t49p0.fxns.ctl_dof.s.cs&#39;, &#39;affect_dof_mechbreak_t49p0.fxns.ctl_dof.s.vel&#39;, &#39;affect_dof_mechbreak_t49p0.fxns.ctl_dof.m.faults.noctl&#39;, &#39;affect_dof_mechbreak_t49p0.fxns.ctl_dof.m.faults.degctl&#39;, &#39;affect_dof_mechbreak_t49p0.fxns.ctl_dof.m.mode&#39;, &#39;affect_dof_mechbreak_t49p0.fxns.plan_path.s.dx&#39;, &#39;affect_dof_mechbreak_t49p0.fxns.plan_path.s.dy&#39;, &#39;affect_dof_mechbreak_t49p0.fxns.plan_path.s.dz&#39;, &#39;affect_dof_mechbreak_t49p0.fxns.plan_path.s.pt&#39;, &#39;affect_dof_mechbreak_t49p0.fxns.plan_path.s.goal&#39;, &#39;affect_dof_mechbreak_t49p0.fxns.plan_path.m.faults.noloc&#39;, &#39;affect_dof_mechbreak_t49p0.fxns.plan_path.m.faults.degloc&#39;, &#39;affect_dof_mechbreak_t49p0.fxns.plan_path.m.mode&#39;, &#39;affect_dof_mechbreak_t49p0.fxns.plan_path.t.pause.time&#39;, &#39;affect_dof_mechbreak_t49p0.fxns.plan_path.t.pause.mode&#39;, &#39;affect_dof_mechbreak_t49p0.fxns.trajectory.m.mode&#39;, &#39;affect_dof_mechbreak_t49p0.fxns.engage_land.m.faults.break&#39;, &#39;affect_dof_mechbreak_t49p0.fxns.engage_land.m.faults.deform&#39;, &#39;affect_dof_mechbreak_t49p0.fxns.engage_land.m.mode&#39;, &#39;affect_dof_mechbreak_t49p0.fxns.hold_payload.m.faults.break&#39;, &#39;affect_dof_mechbreak_t49p0.fxns.hold_payload.m.faults.deform&#39;, &#39;affect_dof_mechbreak_t49p0.fxns.hold_payload.m.mode&#39;, &#39;affect_dof_mechbreak_t49p0.fxns.view_env.m.mode&#39;, &#39;affect_dof_mechbreak_t49p0.flows.force_st.s.support&#39;, &#39;affect_dof_mechbreak_t49p0.flows.force_lin.s.support&#39;, &#39;affect_dof_mechbreak_t49p0.flows.force_gr.s.support&#39;, &#39;affect_dof_mechbreak_t49p0.flows.force_lg.s.support&#39;, &#39;affect_dof_mechbreak_t49p0.flows.ee_1.s.rate&#39;, &#39;affect_dof_mechbreak_t49p0.flows.ee_1.s.effort&#39;, &#39;affect_dof_mechbreak_t49p0.flows.ee_mot.s.rate&#39;, &#39;affect_dof_mechbreak_t49p0.flows.ee_mot.s.effort&#39;, &#39;affect_dof_mechbreak_t49p0.flows.ee_ctl.s.rate&#39;, &#39;affect_dof_mechbreak_t49p0.flows.ee_ctl.s.effort&#39;, &#39;affect_dof_mechbreak_t49p0.flows.ctl.s.forward&#39;, &#39;affect_dof_mechbreak_t49p0.flows.ctl.s.upward&#39;, &#39;affect_dof_mechbreak_t49p0.flows.dofs.s.vertvel&#39;, &#39;affect_dof_mechbreak_t49p0.flows.dofs.s.planvel&#39;, &#39;affect_dof_mechbreak_t49p0.flows.dofs.s.planpwr&#39;, &#39;affect_dof_mechbreak_t49p0.flows.dofs.s.uppwr&#39;, &#39;affect_dof_mechbreak_t49p0.flows.env.s.x&#39;, &#39;affect_dof_mechbreak_t49p0.flows.env.s.y&#39;, &#39;affect_dof_mechbreak_t49p0.flows.env.s.z&#39;, &#39;affect_dof_mechbreak_t49p0.flows.dir.s.x&#39;, &#39;affect_dof_mechbreak_t49p0.flows.dir.s.y&#39;, &#39;affect_dof_mechbreak_t49p0.flows.dir.s.z&#39;, &#39;affect_dof_mechbreak_t49p0.flows.dir.s.power&#39;, &#39;affect_dof_mechbreak_t49p0.time&#39;, &#39;affect_dof_mechbreak_t64p0.fxns.store_ee.s.soc&#39;, &#39;affect_dof_mechbreak_t64p0.fxns.store_ee.m.faults.nocharge&#39;, &#39;affect_dof_mechbreak_t64p0.fxns.store_ee.m.mode&#39;, &#39;affect_dof_mechbreak_t64p0.fxns.dist_ee.s.ee_tr&#39;, &#39;affect_dof_mechbreak_t64p0.fxns.dist_ee.s.ee_te&#39;, &#39;affect_dof_mechbreak_t64p0.fxns.dist_ee.m.faults.short&#39;, &#39;affect_dof_mechbreak_t64p0.fxns.dist_ee.m.faults.degr&#39;, &#39;affect_dof_mechbreak_t64p0.fxns.dist_ee.m.faults.break&#39;, &#39;affect_dof_mechbreak_t64p0.fxns.dist_ee.m.mode&#39;, &#39;affect_dof_mechbreak_t64p0.fxns.affect_dof.s.e_to&#39;, &#39;affect_dof_mechbreak_t64p0.fxns.affect_dof.s.e_ti&#39;, &#39;affect_dof_mechbreak_t64p0.fxns.affect_dof.s.ct&#39;, &#39;affect_dof_mechbreak_t64p0.fxns.affect_dof.s.mt&#39;, &#39;affect_dof_mechbreak_t64p0.fxns.affect_dof.s.pt&#39;, &#39;affect_dof_mechbreak_t64p0.fxns.affect_dof.m.faults.short&#39;, &#39;affect_dof_mechbreak_t64p0.fxns.affect_dof.m.faults.openc&#39;, &#39;affect_dof_mechbreak_t64p0.fxns.affect_dof.m.faults.ctlup&#39;, &#39;affect_dof_mechbreak_t64p0.fxns.affect_dof.m.faults.ctldn&#39;, &#39;affect_dof_mechbreak_t64p0.fxns.affect_dof.m.faults.ctlbreak&#39;, &#39;affect_dof_mechbreak_t64p0.fxns.affect_dof.m.faults.mechbreak&#39;, &#39;affect_dof_mechbreak_t64p0.fxns.affect_dof.m.faults.mechfriction&#39;, &#39;affect_dof_mechbreak_t64p0.fxns.affect_dof.m.faults.propwarp&#39;, &#39;affect_dof_mechbreak_t64p0.fxns.affect_dof.m.faults.propstuck&#39;, &#39;affect_dof_mechbreak_t64p0.fxns.affect_dof.m.faults.propbreak&#39;, &#39;affect_dof_mechbreak_t64p0.fxns.affect_dof.m.mode&#39;, &#39;affect_dof_mechbreak_t64p0.fxns.ctl_dof.s.cs&#39;, &#39;affect_dof_mechbreak_t64p0.fxns.ctl_dof.s.vel&#39;, &#39;affect_dof_mechbreak_t64p0.fxns.ctl_dof.m.faults.noctl&#39;, &#39;affect_dof_mechbreak_t64p0.fxns.ctl_dof.m.faults.degctl&#39;, &#39;affect_dof_mechbreak_t64p0.fxns.ctl_dof.m.mode&#39;, &#39;affect_dof_mechbreak_t64p0.fxns.plan_path.s.dx&#39;, &#39;affect_dof_mechbreak_t64p0.fxns.plan_path.s.dy&#39;, &#39;affect_dof_mechbreak_t64p0.fxns.plan_path.s.dz&#39;, &#39;affect_dof_mechbreak_t64p0.fxns.plan_path.s.pt&#39;, &#39;affect_dof_mechbreak_t64p0.fxns.plan_path.s.goal&#39;, &#39;affect_dof_mechbreak_t64p0.fxns.plan_path.m.faults.noloc&#39;, &#39;affect_dof_mechbreak_t64p0.fxns.plan_path.m.faults.degloc&#39;, &#39;affect_dof_mechbreak_t64p0.fxns.plan_path.m.mode&#39;, &#39;affect_dof_mechbreak_t64p0.fxns.plan_path.t.pause.time&#39;, &#39;affect_dof_mechbreak_t64p0.fxns.plan_path.t.pause.mode&#39;, &#39;affect_dof_mechbreak_t64p0.fxns.trajectory.m.mode&#39;, &#39;affect_dof_mechbreak_t64p0.fxns.engage_land.m.faults.break&#39;, &#39;affect_dof_mechbreak_t64p0.fxns.engage_land.m.faults.deform&#39;, &#39;affect_dof_mechbreak_t64p0.fxns.engage_land.m.mode&#39;, &#39;affect_dof_mechbreak_t64p0.fxns.hold_payload.m.faults.break&#39;, &#39;affect_dof_mechbreak_t64p0.fxns.hold_payload.m.faults.deform&#39;, &#39;affect_dof_mechbreak_t64p0.fxns.hold_payload.m.mode&#39;, &#39;affect_dof_mechbreak_t64p0.fxns.view_env.m.mode&#39;, &#39;affect_dof_mechbreak_t64p0.flows.force_st.s.support&#39;, &#39;affect_dof_mechbreak_t64p0.flows.force_lin.s.support&#39;, &#39;affect_dof_mechbreak_t64p0.flows.force_gr.s.support&#39;, &#39;affect_dof_mechbreak_t64p0.flows.force_lg.s.support&#39;, &#39;affect_dof_mechbreak_t64p0.flows.ee_1.s.rate&#39;, &#39;affect_dof_mechbreak_t64p0.flows.ee_1.s.effort&#39;, &#39;affect_dof_mechbreak_t64p0.flows.ee_mot.s.rate&#39;, &#39;affect_dof_mechbreak_t64p0.flows.ee_mot.s.effort&#39;, &#39;affect_dof_mechbreak_t64p0.flows.ee_ctl.s.rate&#39;, &#39;affect_dof_mechbreak_t64p0.flows.ee_ctl.s.effort&#39;, &#39;affect_dof_mechbreak_t64p0.flows.ctl.s.forward&#39;, &#39;affect_dof_mechbreak_t64p0.flows.ctl.s.upward&#39;, &#39;affect_dof_mechbreak_t64p0.flows.dofs.s.vertvel&#39;, &#39;affect_dof_mechbreak_t64p0.flows.dofs.s.planvel&#39;, &#39;affect_dof_mechbreak_t64p0.flows.dofs.s.planpwr&#39;, &#39;affect_dof_mechbreak_t64p0.flows.dofs.s.uppwr&#39;, &#39;affect_dof_mechbreak_t64p0.flows.env.s.x&#39;, &#39;affect_dof_mechbreak_t64p0.flows.env.s.y&#39;, &#39;affect_dof_mechbreak_t64p0.flows.env.s.z&#39;, &#39;affect_dof_mechbreak_t64p0.flows.dir.s.x&#39;, &#39;affect_dof_mechbreak_t64p0.flows.dir.s.y&#39;, &#39;affect_dof_mechbreak_t64p0.flows.dir.s.z&#39;, &#39;affect_dof_mechbreak_t64p0.flows.dir.s.power&#39;, &#39;affect_dof_mechbreak_t64p0.time&#39;, &#39;affect_dof_mechbreak_t79p0.fxns.store_ee.s.soc&#39;, &#39;affect_dof_mechbreak_t79p0.fxns.store_ee.m.faults.nocharge&#39;, &#39;affect_dof_mechbreak_t79p0.fxns.store_ee.m.mode&#39;, &#39;affect_dof_mechbreak_t79p0.fxns.dist_ee.s.ee_tr&#39;, &#39;affect_dof_mechbreak_t79p0.fxns.dist_ee.s.ee_te&#39;, &#39;affect_dof_mechbreak_t79p0.fxns.dist_ee.m.faults.short&#39;, &#39;affect_dof_mechbreak_t79p0.fxns.dist_ee.m.faults.degr&#39;, &#39;affect_dof_mechbreak_t79p0.fxns.dist_ee.m.faults.break&#39;, &#39;affect_dof_mechbreak_t79p0.fxns.dist_ee.m.mode&#39;, &#39;affect_dof_mechbreak_t79p0.fxns.affect_dof.s.e_to&#39;, &#39;affect_dof_mechbreak_t79p0.fxns.affect_dof.s.e_ti&#39;, &#39;affect_dof_mechbreak_t79p0.fxns.affect_dof.s.ct&#39;, &#39;affect_dof_mechbreak_t79p0.fxns.affect_dof.s.mt&#39;, &#39;affect_dof_mechbreak_t79p0.fxns.affect_dof.s.pt&#39;, &#39;affect_dof_mechbreak_t79p0.fxns.affect_dof.m.faults.short&#39;, &#39;affect_dof_mechbreak_t79p0.fxns.affect_dof.m.faults.openc&#39;, &#39;affect_dof_mechbreak_t79p0.fxns.affect_dof.m.faults.ctlup&#39;, &#39;affect_dof_mechbreak_t79p0.fxns.affect_dof.m.faults.ctldn&#39;, &#39;affect_dof_mechbreak_t79p0.fxns.affect_dof.m.faults.ctlbreak&#39;, &#39;affect_dof_mechbreak_t79p0.fxns.affect_dof.m.faults.mechbreak&#39;, &#39;affect_dof_mechbreak_t79p0.fxns.affect_dof.m.faults.mechfriction&#39;, &#39;affect_dof_mechbreak_t79p0.fxns.affect_dof.m.faults.propwarp&#39;, &#39;affect_dof_mechbreak_t79p0.fxns.affect_dof.m.faults.propstuck&#39;, &#39;affect_dof_mechbreak_t79p0.fxns.affect_dof.m.faults.propbreak&#39;, &#39;affect_dof_mechbreak_t79p0.fxns.affect_dof.m.mode&#39;, &#39;affect_dof_mechbreak_t79p0.fxns.ctl_dof.s.cs&#39;, &#39;affect_dof_mechbreak_t79p0.fxns.ctl_dof.s.vel&#39;, &#39;affect_dof_mechbreak_t79p0.fxns.ctl_dof.m.faults.noctl&#39;, &#39;affect_dof_mechbreak_t79p0.fxns.ctl_dof.m.faults.degctl&#39;, &#39;affect_dof_mechbreak_t79p0.fxns.ctl_dof.m.mode&#39;, &#39;affect_dof_mechbreak_t79p0.fxns.plan_path.s.dx&#39;, &#39;affect_dof_mechbreak_t79p0.fxns.plan_path.s.dy&#39;, &#39;affect_dof_mechbreak_t79p0.fxns.plan_path.s.dz&#39;, &#39;affect_dof_mechbreak_t79p0.fxns.plan_path.s.pt&#39;, &#39;affect_dof_mechbreak_t79p0.fxns.plan_path.s.goal&#39;, &#39;affect_dof_mechbreak_t79p0.fxns.plan_path.m.faults.noloc&#39;, &#39;affect_dof_mechbreak_t79p0.fxns.plan_path.m.faults.degloc&#39;, &#39;affect_dof_mechbreak_t79p0.fxns.plan_path.m.mode&#39;, &#39;affect_dof_mechbreak_t79p0.fxns.plan_path.t.pause.time&#39;, &#39;affect_dof_mechbreak_t79p0.fxns.plan_path.t.pause.mode&#39;, &#39;affect_dof_mechbreak_t79p0.fxns.trajectory.m.mode&#39;, &#39;affect_dof_mechbreak_t79p0.fxns.engage_land.m.faults.break&#39;, &#39;affect_dof_mechbreak_t79p0.fxns.engage_land.m.faults.deform&#39;, &#39;affect_dof_mechbreak_t79p0.fxns.engage_land.m.mode&#39;, &#39;affect_dof_mechbreak_t79p0.fxns.hold_payload.m.faults.break&#39;, &#39;affect_dof_mechbreak_t79p0.fxns.hold_payload.m.faults.deform&#39;, &#39;affect_dof_mechbreak_t79p0.fxns.hold_payload.m.mode&#39;, &#39;affect_dof_mechbreak_t79p0.fxns.view_env.m.mode&#39;, &#39;affect_dof_mechbreak_t79p0.flows.force_st.s.support&#39;, &#39;affect_dof_mechbreak_t79p0.flows.force_lin.s.support&#39;, &#39;affect_dof_mechbreak_t79p0.flows.force_gr.s.support&#39;, &#39;affect_dof_mechbreak_t79p0.flows.force_lg.s.support&#39;, &#39;affect_dof_mechbreak_t79p0.flows.ee_1.s.rate&#39;, &#39;affect_dof_mechbreak_t79p0.flows.ee_1.s.effort&#39;, &#39;affect_dof_mechbreak_t79p0.flows.ee_mot.s.rate&#39;, &#39;affect_dof_mechbreak_t79p0.flows.ee_mot.s.effort&#39;, &#39;affect_dof_mechbreak_t79p0.flows.ee_ctl.s.rate&#39;, &#39;affect_dof_mechbreak_t79p0.flows.ee_ctl.s.effort&#39;, &#39;affect_dof_mechbreak_t79p0.flows.ctl.s.forward&#39;, &#39;affect_dof_mechbreak_t79p0.flows.ctl.s.upward&#39;, &#39;affect_dof_mechbreak_t79p0.flows.dofs.s.vertvel&#39;, &#39;affect_dof_mechbreak_t79p0.flows.dofs.s.planvel&#39;, &#39;affect_dof_mechbreak_t79p0.flows.dofs.s.planpwr&#39;, &#39;affect_dof_mechbreak_t79p0.flows.dofs.s.uppwr&#39;, &#39;affect_dof_mechbreak_t79p0.flows.env.s.x&#39;, &#39;affect_dof_mechbreak_t79p0.flows.env.s.y&#39;, &#39;affect_dof_mechbreak_t79p0.flows.env.s.z&#39;, &#39;affect_dof_mechbreak_t79p0.flows.dir.s.x&#39;, &#39;affect_dof_mechbreak_t79p0.flows.dir.s.y&#39;, &#39;affect_dof_mechbreak_t79p0.flows.dir.s.z&#39;, &#39;affect_dof_mechbreak_t79p0.flows.dir.s.power&#39;, &#39;affect_dof_mechbreak_t79p0.time&#39;, &#39;affect_dof_mechbreak_t95p0.fxns.store_ee.s.soc&#39;, &#39;affect_dof_mechbreak_t95p0.fxns.store_ee.m.faults.nocharge&#39;, &#39;affect_dof_mechbreak_t95p0.fxns.store_ee.m.mode&#39;, &#39;affect_dof_mechbreak_t95p0.fxns.dist_ee.s.ee_tr&#39;, &#39;affect_dof_mechbreak_t95p0.fxns.dist_ee.s.ee_te&#39;, &#39;affect_dof_mechbreak_t95p0.fxns.dist_ee.m.faults.short&#39;, &#39;affect_dof_mechbreak_t95p0.fxns.dist_ee.m.faults.degr&#39;, &#39;affect_dof_mechbreak_t95p0.fxns.dist_ee.m.faults.break&#39;, &#39;affect_dof_mechbreak_t95p0.fxns.dist_ee.m.mode&#39;, &#39;affect_dof_mechbreak_t95p0.fxns.affect_dof.s.e_to&#39;, &#39;affect_dof_mechbreak_t95p0.fxns.affect_dof.s.e_ti&#39;, &#39;affect_dof_mechbreak_t95p0.fxns.affect_dof.s.ct&#39;, &#39;affect_dof_mechbreak_t95p0.fxns.affect_dof.s.mt&#39;, &#39;affect_dof_mechbreak_t95p0.fxns.affect_dof.s.pt&#39;, &#39;affect_dof_mechbreak_t95p0.fxns.affect_dof.m.faults.short&#39;, &#39;affect_dof_mechbreak_t95p0.fxns.affect_dof.m.faults.openc&#39;, &#39;affect_dof_mechbreak_t95p0.fxns.affect_dof.m.faults.ctlup&#39;, &#39;affect_dof_mechbreak_t95p0.fxns.affect_dof.m.faults.ctldn&#39;, &#39;affect_dof_mechbreak_t95p0.fxns.affect_dof.m.faults.ctlbreak&#39;, &#39;affect_dof_mechbreak_t95p0.fxns.affect_dof.m.faults.mechbreak&#39;, &#39;affect_dof_mechbreak_t95p0.fxns.affect_dof.m.faults.mechfriction&#39;, &#39;affect_dof_mechbreak_t95p0.fxns.affect_dof.m.faults.propwarp&#39;, &#39;affect_dof_mechbreak_t95p0.fxns.affect_dof.m.faults.propstuck&#39;, &#39;affect_dof_mechbreak_t95p0.fxns.affect_dof.m.faults.propbreak&#39;, &#39;affect_dof_mechbreak_t95p0.fxns.affect_dof.m.mode&#39;, &#39;affect_dof_mechbreak_t95p0.fxns.ctl_dof.s.cs&#39;, &#39;affect_dof_mechbreak_t95p0.fxns.ctl_dof.s.vel&#39;, &#39;affect_dof_mechbreak_t95p0.fxns.ctl_dof.m.faults.noctl&#39;, &#39;affect_dof_mechbreak_t95p0.fxns.ctl_dof.m.faults.degctl&#39;, &#39;affect_dof_mechbreak_t95p0.fxns.ctl_dof.m.mode&#39;, &#39;affect_dof_mechbreak_t95p0.fxns.plan_path.s.dx&#39;, &#39;affect_dof_mechbreak_t95p0.fxns.plan_path.s.dy&#39;, &#39;affect_dof_mechbreak_t95p0.fxns.plan_path.s.dz&#39;, &#39;affect_dof_mechbreak_t95p0.fxns.plan_path.s.pt&#39;, &#39;affect_dof_mechbreak_t95p0.fxns.plan_path.s.goal&#39;, &#39;affect_dof_mechbreak_t95p0.fxns.plan_path.m.faults.noloc&#39;, &#39;affect_dof_mechbreak_t95p0.fxns.plan_path.m.faults.degloc&#39;, &#39;affect_dof_mechbreak_t95p0.fxns.plan_path.m.mode&#39;, &#39;affect_dof_mechbreak_t95p0.fxns.plan_path.t.pause.time&#39;, &#39;affect_dof_mechbreak_t95p0.fxns.plan_path.t.pause.mode&#39;, &#39;affect_dof_mechbreak_t95p0.fxns.trajectory.m.mode&#39;, &#39;affect_dof_mechbreak_t95p0.fxns.engage_land.m.faults.break&#39;, &#39;affect_dof_mechbreak_t95p0.fxns.engage_land.m.faults.deform&#39;, &#39;affect_dof_mechbreak_t95p0.fxns.engage_land.m.mode&#39;, &#39;affect_dof_mechbreak_t95p0.fxns.hold_payload.m.faults.break&#39;, &#39;affect_dof_mechbreak_t95p0.fxns.hold_payload.m.faults.deform&#39;, &#39;affect_dof_mechbreak_t95p0.fxns.hold_payload.m.mode&#39;, &#39;affect_dof_mechbreak_t95p0.fxns.view_env.m.mode&#39;, &#39;affect_dof_mechbreak_t95p0.flows.force_st.s.support&#39;, &#39;affect_dof_mechbreak_t95p0.flows.force_lin.s.support&#39;, &#39;affect_dof_mechbreak_t95p0.flows.force_gr.s.support&#39;, &#39;affect_dof_mechbreak_t95p0.flows.force_lg.s.support&#39;, &#39;affect_dof_mechbreak_t95p0.flows.ee_1.s.rate&#39;, &#39;affect_dof_mechbreak_t95p0.flows.ee_1.s.effort&#39;, &#39;affect_dof_mechbreak_t95p0.flows.ee_mot.s.rate&#39;, &#39;affect_dof_mechbreak_t95p0.flows.ee_mot.s.effort&#39;, &#39;affect_dof_mechbreak_t95p0.flows.ee_ctl.s.rate&#39;, &#39;affect_dof_mechbreak_t95p0.flows.ee_ctl.s.effort&#39;, &#39;affect_dof_mechbreak_t95p0.flows.ctl.s.forward&#39;, &#39;affect_dof_mechbreak_t95p0.flows.ctl.s.upward&#39;, &#39;affect_dof_mechbreak_t95p0.flows.dofs.s.vertvel&#39;, &#39;affect_dof_mechbreak_t95p0.flows.dofs.s.planvel&#39;, &#39;affect_dof_mechbreak_t95p0.flows.dofs.s.planpwr&#39;, &#39;affect_dof_mechbreak_t95p0.flows.dofs.s.uppwr&#39;, &#39;affect_dof_mechbreak_t95p0.flows.env.s.x&#39;, &#39;affect_dof_mechbreak_t95p0.flows.env.s.y&#39;, &#39;affect_dof_mechbreak_t95p0.flows.env.s.z&#39;, &#39;affect_dof_mechbreak_t95p0.flows.dir.s.x&#39;, &#39;affect_dof_mechbreak_t95p0.flows.dir.s.y&#39;, &#39;affect_dof_mechbreak_t95p0.flows.dir.s.z&#39;, &#39;affect_dof_mechbreak_t95p0.flows.dir.s.power&#39;, &#39;affect_dof_mechbreak_t95p0.time&#39;, &#39;affect_dof_mechbreak_t96p0.fxns.store_ee.s.soc&#39;, &#39;affect_dof_mechbreak_t96p0.fxns.store_ee.m.faults.nocharge&#39;, &#39;affect_dof_mechbreak_t96p0.fxns.store_ee.m.mode&#39;, &#39;affect_dof_mechbreak_t96p0.fxns.dist_ee.s.ee_tr&#39;, &#39;affect_dof_mechbreak_t96p0.fxns.dist_ee.s.ee_te&#39;, &#39;affect_dof_mechbreak_t96p0.fxns.dist_ee.m.faults.short&#39;, &#39;affect_dof_mechbreak_t96p0.fxns.dist_ee.m.faults.degr&#39;, &#39;affect_dof_mechbreak_t96p0.fxns.dist_ee.m.faults.break&#39;, &#39;affect_dof_mechbreak_t96p0.fxns.dist_ee.m.mode&#39;, &#39;affect_dof_mechbreak_t96p0.fxns.affect_dof.s.e_to&#39;, &#39;affect_dof_mechbreak_t96p0.fxns.affect_dof.s.e_ti&#39;, &#39;affect_dof_mechbreak_t96p0.fxns.affect_dof.s.ct&#39;, &#39;affect_dof_mechbreak_t96p0.fxns.affect_dof.s.mt&#39;, &#39;affect_dof_mechbreak_t96p0.fxns.affect_dof.s.pt&#39;, &#39;affect_dof_mechbreak_t96p0.fxns.affect_dof.m.faults.short&#39;, &#39;affect_dof_mechbreak_t96p0.fxns.affect_dof.m.faults.openc&#39;, &#39;affect_dof_mechbreak_t96p0.fxns.affect_dof.m.faults.ctlup&#39;, &#39;affect_dof_mechbreak_t96p0.fxns.affect_dof.m.faults.ctldn&#39;, &#39;affect_dof_mechbreak_t96p0.fxns.affect_dof.m.faults.ctlbreak&#39;, &#39;affect_dof_mechbreak_t96p0.fxns.affect_dof.m.faults.mechbreak&#39;, &#39;affect_dof_mechbreak_t96p0.fxns.affect_dof.m.faults.mechfriction&#39;, &#39;affect_dof_mechbreak_t96p0.fxns.affect_dof.m.faults.propwarp&#39;, &#39;affect_dof_mechbreak_t96p0.fxns.affect_dof.m.faults.propstuck&#39;, &#39;affect_dof_mechbreak_t96p0.fxns.affect_dof.m.faults.propbreak&#39;, &#39;affect_dof_mechbreak_t96p0.fxns.affect_dof.m.mode&#39;, &#39;affect_dof_mechbreak_t96p0.fxns.ctl_dof.s.cs&#39;, &#39;affect_dof_mechbreak_t96p0.fxns.ctl_dof.s.vel&#39;, &#39;affect_dof_mechbreak_t96p0.fxns.ctl_dof.m.faults.noctl&#39;, &#39;affect_dof_mechbreak_t96p0.fxns.ctl_dof.m.faults.degctl&#39;, &#39;affect_dof_mechbreak_t96p0.fxns.ctl_dof.m.mode&#39;, &#39;affect_dof_mechbreak_t96p0.fxns.plan_path.s.dx&#39;, &#39;affect_dof_mechbreak_t96p0.fxns.plan_path.s.dy&#39;, &#39;affect_dof_mechbreak_t96p0.fxns.plan_path.s.dz&#39;, &#39;affect_dof_mechbreak_t96p0.fxns.plan_path.s.pt&#39;, &#39;affect_dof_mechbreak_t96p0.fxns.plan_path.s.goal&#39;, &#39;affect_dof_mechbreak_t96p0.fxns.plan_path.m.faults.noloc&#39;, &#39;affect_dof_mechbreak_t96p0.fxns.plan_path.m.faults.degloc&#39;, &#39;affect_dof_mechbreak_t96p0.fxns.plan_path.m.mode&#39;, &#39;affect_dof_mechbreak_t96p0.fxns.plan_path.t.pause.time&#39;, &#39;affect_dof_mechbreak_t96p0.fxns.plan_path.t.pause.mode&#39;, &#39;affect_dof_mechbreak_t96p0.fxns.trajectory.m.mode&#39;, &#39;affect_dof_mechbreak_t96p0.fxns.engage_land.m.faults.break&#39;, &#39;affect_dof_mechbreak_t96p0.fxns.engage_land.m.faults.deform&#39;, &#39;affect_dof_mechbreak_t96p0.fxns.engage_land.m.mode&#39;, &#39;affect_dof_mechbreak_t96p0.fxns.hold_payload.m.faults.break&#39;, &#39;affect_dof_mechbreak_t96p0.fxns.hold_payload.m.faults.deform&#39;, &#39;affect_dof_mechbreak_t96p0.fxns.hold_payload.m.mode&#39;, &#39;affect_dof_mechbreak_t96p0.fxns.view_env.m.mode&#39;, &#39;affect_dof_mechbreak_t96p0.flows.force_st.s.support&#39;, &#39;affect_dof_mechbreak_t96p0.flows.force_lin.s.support&#39;, &#39;affect_dof_mechbreak_t96p0.flows.force_gr.s.support&#39;, &#39;affect_dof_mechbreak_t96p0.flows.force_lg.s.support&#39;, &#39;affect_dof_mechbreak_t96p0.flows.ee_1.s.rate&#39;, &#39;affect_dof_mechbreak_t96p0.flows.ee_1.s.effort&#39;, &#39;affect_dof_mechbreak_t96p0.flows.ee_mot.s.rate&#39;, &#39;affect_dof_mechbreak_t96p0.flows.ee_mot.s.effort&#39;, &#39;affect_dof_mechbreak_t96p0.flows.ee_ctl.s.rate&#39;, &#39;affect_dof_mechbreak_t96p0.flows.ee_ctl.s.effort&#39;, &#39;affect_dof_mechbreak_t96p0.flows.ctl.s.forward&#39;, &#39;affect_dof_mechbreak_t96p0.flows.ctl.s.upward&#39;, &#39;affect_dof_mechbreak_t96p0.flows.dofs.s.vertvel&#39;, &#39;affect_dof_mechbreak_t96p0.flows.dofs.s.planvel&#39;, &#39;affect_dof_mechbreak_t96p0.flows.dofs.s.planpwr&#39;, &#39;affect_dof_mechbreak_t96p0.flows.dofs.s.uppwr&#39;, &#39;affect_dof_mechbreak_t96p0.flows.env.s.x&#39;, &#39;affect_dof_mechbreak_t96p0.flows.env.s.y&#39;, &#39;affect_dof_mechbreak_t96p0.flows.env.s.z&#39;, &#39;affect_dof_mechbreak_t96p0.flows.dir.s.x&#39;, &#39;affect_dof_mechbreak_t96p0.flows.dir.s.y&#39;, &#39;affect_dof_mechbreak_t96p0.flows.dir.s.z&#39;, &#39;affect_dof_mechbreak_t96p0.flows.dir.s.power&#39;, &#39;affect_dof_mechbreak_t96p0.time&#39;, &#39;affect_dof_mechbreak_t97p0.fxns.store_ee.s.soc&#39;, &#39;affect_dof_mechbreak_t97p0.fxns.store_ee.m.faults.nocharge&#39;, &#39;affect_dof_mechbreak_t97p0.fxns.store_ee.m.mode&#39;, &#39;affect_dof_mechbreak_t97p0.fxns.dist_ee.s.ee_tr&#39;, &#39;affect_dof_mechbreak_t97p0.fxns.dist_ee.s.ee_te&#39;, &#39;affect_dof_mechbreak_t97p0.fxns.dist_ee.m.faults.short&#39;, &#39;affect_dof_mechbreak_t97p0.fxns.dist_ee.m.faults.degr&#39;, &#39;affect_dof_mechbreak_t97p0.fxns.dist_ee.m.faults.break&#39;, &#39;affect_dof_mechbreak_t97p0.fxns.dist_ee.m.mode&#39;, &#39;affect_dof_mechbreak_t97p0.fxns.affect_dof.s.e_to&#39;, &#39;affect_dof_mechbreak_t97p0.fxns.affect_dof.s.e_ti&#39;, &#39;affect_dof_mechbreak_t97p0.fxns.affect_dof.s.ct&#39;, &#39;affect_dof_mechbreak_t97p0.fxns.affect_dof.s.mt&#39;, &#39;affect_dof_mechbreak_t97p0.fxns.affect_dof.s.pt&#39;, &#39;affect_dof_mechbreak_t97p0.fxns.affect_dof.m.faults.short&#39;, &#39;affect_dof_mechbreak_t97p0.fxns.affect_dof.m.faults.openc&#39;, &#39;affect_dof_mechbreak_t97p0.fxns.affect_dof.m.faults.ctlup&#39;, &#39;affect_dof_mechbreak_t97p0.fxns.affect_dof.m.faults.ctldn&#39;, &#39;affect_dof_mechbreak_t97p0.fxns.affect_dof.m.faults.ctlbreak&#39;, &#39;affect_dof_mechbreak_t97p0.fxns.affect_dof.m.faults.mechbreak&#39;, &#39;affect_dof_mechbreak_t97p0.fxns.affect_dof.m.faults.mechfriction&#39;, &#39;affect_dof_mechbreak_t97p0.fxns.affect_dof.m.faults.propwarp&#39;, &#39;affect_dof_mechbreak_t97p0.fxns.affect_dof.m.faults.propstuck&#39;, &#39;affect_dof_mechbreak_t97p0.fxns.affect_dof.m.faults.propbreak&#39;, &#39;affect_dof_mechbreak_t97p0.fxns.affect_dof.m.mode&#39;, &#39;affect_dof_mechbreak_t97p0.fxns.ctl_dof.s.cs&#39;, &#39;affect_dof_mechbreak_t97p0.fxns.ctl_dof.s.vel&#39;, &#39;affect_dof_mechbreak_t97p0.fxns.ctl_dof.m.faults.noctl&#39;, &#39;affect_dof_mechbreak_t97p0.fxns.ctl_dof.m.faults.degctl&#39;, &#39;affect_dof_mechbreak_t97p0.fxns.ctl_dof.m.mode&#39;, &#39;affect_dof_mechbreak_t97p0.fxns.plan_path.s.dx&#39;, &#39;affect_dof_mechbreak_t97p0.fxns.plan_path.s.dy&#39;, &#39;affect_dof_mechbreak_t97p0.fxns.plan_path.s.dz&#39;, &#39;affect_dof_mechbreak_t97p0.fxns.plan_path.s.pt&#39;, &#39;affect_dof_mechbreak_t97p0.fxns.plan_path.s.goal&#39;, &#39;affect_dof_mechbreak_t97p0.fxns.plan_path.m.faults.noloc&#39;, &#39;affect_dof_mechbreak_t97p0.fxns.plan_path.m.faults.degloc&#39;, &#39;affect_dof_mechbreak_t97p0.fxns.plan_path.m.mode&#39;, &#39;affect_dof_mechbreak_t97p0.fxns.plan_path.t.pause.time&#39;, &#39;affect_dof_mechbreak_t97p0.fxns.plan_path.t.pause.mode&#39;, &#39;affect_dof_mechbreak_t97p0.fxns.trajectory.m.mode&#39;, &#39;affect_dof_mechbreak_t97p0.fxns.engage_land.m.faults.break&#39;, &#39;affect_dof_mechbreak_t97p0.fxns.engage_land.m.faults.deform&#39;, &#39;affect_dof_mechbreak_t97p0.fxns.engage_land.m.mode&#39;, &#39;affect_dof_mechbreak_t97p0.fxns.hold_payload.m.faults.break&#39;, &#39;affect_dof_mechbreak_t97p0.fxns.hold_payload.m.faults.deform&#39;, &#39;affect_dof_mechbreak_t97p0.fxns.hold_payload.m.mode&#39;, &#39;affect_dof_mechbreak_t97p0.fxns.view_env.m.mode&#39;, &#39;affect_dof_mechbreak_t97p0.flows.force_st.s.support&#39;, &#39;affect_dof_mechbreak_t97p0.flows.force_lin.s.support&#39;, &#39;affect_dof_mechbreak_t97p0.flows.force_gr.s.support&#39;, &#39;affect_dof_mechbreak_t97p0.flows.force_lg.s.support&#39;, &#39;affect_dof_mechbreak_t97p0.flows.ee_1.s.rate&#39;, &#39;affect_dof_mechbreak_t97p0.flows.ee_1.s.effort&#39;, &#39;affect_dof_mechbreak_t97p0.flows.ee_mot.s.rate&#39;, &#39;affect_dof_mechbreak_t97p0.flows.ee_mot.s.effort&#39;, &#39;affect_dof_mechbreak_t97p0.flows.ee_ctl.s.rate&#39;, &#39;affect_dof_mechbreak_t97p0.flows.ee_ctl.s.effort&#39;, &#39;affect_dof_mechbreak_t97p0.flows.ctl.s.forward&#39;, &#39;affect_dof_mechbreak_t97p0.flows.ctl.s.upward&#39;, &#39;affect_dof_mechbreak_t97p0.flows.dofs.s.vertvel&#39;, &#39;affect_dof_mechbreak_t97p0.flows.dofs.s.planvel&#39;, &#39;affect_dof_mechbreak_t97p0.flows.dofs.s.planpwr&#39;, &#39;affect_dof_mechbreak_t97p0.flows.dofs.s.uppwr&#39;, &#39;affect_dof_mechbreak_t97p0.flows.env.s.x&#39;, &#39;affect_dof_mechbreak_t97p0.flows.env.s.y&#39;, &#39;affect_dof_mechbreak_t97p0.flows.env.s.z&#39;, &#39;affect_dof_mechbreak_t97p0.flows.dir.s.x&#39;, &#39;affect_dof_mechbreak_t97p0.flows.dir.s.y&#39;, &#39;affect_dof_mechbreak_t97p0.flows.dir.s.z&#39;, &#39;affect_dof_mechbreak_t97p0.flows.dir.s.power&#39;, &#39;affect_dof_mechbreak_t97p0.time&#39;, &#39;affect_dof_mechbreak_t98p0.fxns.store_ee.s.soc&#39;, &#39;affect_dof_mechbreak_t98p0.fxns.store_ee.m.faults.nocharge&#39;, &#39;affect_dof_mechbreak_t98p0.fxns.store_ee.m.mode&#39;, &#39;affect_dof_mechbreak_t98p0.fxns.dist_ee.s.ee_tr&#39;, &#39;affect_dof_mechbreak_t98p0.fxns.dist_ee.s.ee_te&#39;, &#39;affect_dof_mechbreak_t98p0.fxns.dist_ee.m.faults.short&#39;, &#39;affect_dof_mechbreak_t98p0.fxns.dist_ee.m.faults.degr&#39;, &#39;affect_dof_mechbreak_t98p0.fxns.dist_ee.m.faults.break&#39;, &#39;affect_dof_mechbreak_t98p0.fxns.dist_ee.m.mode&#39;, &#39;affect_dof_mechbreak_t98p0.fxns.affect_dof.s.e_to&#39;, &#39;affect_dof_mechbreak_t98p0.fxns.affect_dof.s.e_ti&#39;, &#39;affect_dof_mechbreak_t98p0.fxns.affect_dof.s.ct&#39;, &#39;affect_dof_mechbreak_t98p0.fxns.affect_dof.s.mt&#39;, &#39;affect_dof_mechbreak_t98p0.fxns.affect_dof.s.pt&#39;, &#39;affect_dof_mechbreak_t98p0.fxns.affect_dof.m.faults.short&#39;, &#39;affect_dof_mechbreak_t98p0.fxns.affect_dof.m.faults.openc&#39;, &#39;affect_dof_mechbreak_t98p0.fxns.affect_dof.m.faults.ctlup&#39;, &#39;affect_dof_mechbreak_t98p0.fxns.affect_dof.m.faults.ctldn&#39;, &#39;affect_dof_mechbreak_t98p0.fxns.affect_dof.m.faults.ctlbreak&#39;, &#39;affect_dof_mechbreak_t98p0.fxns.affect_dof.m.faults.mechbreak&#39;, &#39;affect_dof_mechbreak_t98p0.fxns.affect_dof.m.faults.mechfriction&#39;, &#39;affect_dof_mechbreak_t98p0.fxns.affect_dof.m.faults.propwarp&#39;, &#39;affect_dof_mechbreak_t98p0.fxns.affect_dof.m.faults.propstuck&#39;, &#39;affect_dof_mechbreak_t98p0.fxns.affect_dof.m.faults.propbreak&#39;, &#39;affect_dof_mechbreak_t98p0.fxns.affect_dof.m.mode&#39;, &#39;affect_dof_mechbreak_t98p0.fxns.ctl_dof.s.cs&#39;, &#39;affect_dof_mechbreak_t98p0.fxns.ctl_dof.s.vel&#39;, &#39;affect_dof_mechbreak_t98p0.fxns.ctl_dof.m.faults.noctl&#39;, &#39;affect_dof_mechbreak_t98p0.fxns.ctl_dof.m.faults.degctl&#39;, &#39;affect_dof_mechbreak_t98p0.fxns.ctl_dof.m.mode&#39;, &#39;affect_dof_mechbreak_t98p0.fxns.plan_path.s.dx&#39;, &#39;affect_dof_mechbreak_t98p0.fxns.plan_path.s.dy&#39;, &#39;affect_dof_mechbreak_t98p0.fxns.plan_path.s.dz&#39;, &#39;affect_dof_mechbreak_t98p0.fxns.plan_path.s.pt&#39;, &#39;affect_dof_mechbreak_t98p0.fxns.plan_path.s.goal&#39;, &#39;affect_dof_mechbreak_t98p0.fxns.plan_path.m.faults.noloc&#39;, &#39;affect_dof_mechbreak_t98p0.fxns.plan_path.m.faults.degloc&#39;, &#39;affect_dof_mechbreak_t98p0.fxns.plan_path.m.mode&#39;, &#39;affect_dof_mechbreak_t98p0.fxns.plan_path.t.pause.time&#39;, &#39;affect_dof_mechbreak_t98p0.fxns.plan_path.t.pause.mode&#39;, &#39;affect_dof_mechbreak_t98p0.fxns.trajectory.m.mode&#39;, &#39;affect_dof_mechbreak_t98p0.fxns.engage_land.m.faults.break&#39;, &#39;affect_dof_mechbreak_t98p0.fxns.engage_land.m.faults.deform&#39;, &#39;affect_dof_mechbreak_t98p0.fxns.engage_land.m.mode&#39;, &#39;affect_dof_mechbreak_t98p0.fxns.hold_payload.m.faults.break&#39;, &#39;affect_dof_mechbreak_t98p0.fxns.hold_payload.m.faults.deform&#39;, &#39;affect_dof_mechbreak_t98p0.fxns.hold_payload.m.mode&#39;, &#39;affect_dof_mechbreak_t98p0.fxns.view_env.m.mode&#39;, &#39;affect_dof_mechbreak_t98p0.flows.force_st.s.support&#39;, &#39;affect_dof_mechbreak_t98p0.flows.force_lin.s.support&#39;, &#39;affect_dof_mechbreak_t98p0.flows.force_gr.s.support&#39;, &#39;affect_dof_mechbreak_t98p0.flows.force_lg.s.support&#39;, &#39;affect_dof_mechbreak_t98p0.flows.ee_1.s.rate&#39;, &#39;affect_dof_mechbreak_t98p0.flows.ee_1.s.effort&#39;, &#39;affect_dof_mechbreak_t98p0.flows.ee_mot.s.rate&#39;, &#39;affect_dof_mechbreak_t98p0.flows.ee_mot.s.effort&#39;, &#39;affect_dof_mechbreak_t98p0.flows.ee_ctl.s.rate&#39;, &#39;affect_dof_mechbreak_t98p0.flows.ee_ctl.s.effort&#39;, &#39;affect_dof_mechbreak_t98p0.flows.ctl.s.forward&#39;, &#39;affect_dof_mechbreak_t98p0.flows.ctl.s.upward&#39;, &#39;affect_dof_mechbreak_t98p0.flows.dofs.s.vertvel&#39;, &#39;affect_dof_mechbreak_t98p0.flows.dofs.s.planvel&#39;, &#39;affect_dof_mechbreak_t98p0.flows.dofs.s.planpwr&#39;, &#39;affect_dof_mechbreak_t98p0.flows.dofs.s.uppwr&#39;, &#39;affect_dof_mechbreak_t98p0.flows.env.s.x&#39;, &#39;affect_dof_mechbreak_t98p0.flows.env.s.y&#39;, &#39;affect_dof_mechbreak_t98p0.flows.env.s.z&#39;, &#39;affect_dof_mechbreak_t98p0.flows.dir.s.x&#39;, &#39;affect_dof_mechbreak_t98p0.flows.dir.s.y&#39;, &#39;affect_dof_mechbreak_t98p0.flows.dir.s.z&#39;, &#39;affect_dof_mechbreak_t98p0.flows.dir.s.power&#39;, &#39;affect_dof_mechbreak_t98p0.time&#39;, &#39;affect_dof_mechbreak_t99p0.fxns.store_ee.s.soc&#39;, &#39;affect_dof_mechbreak_t99p0.fxns.store_ee.m.faults.nocharge&#39;, &#39;affect_dof_mechbreak_t99p0.fxns.store_ee.m.mode&#39;, &#39;affect_dof_mechbreak_t99p0.fxns.dist_ee.s.ee_tr&#39;, &#39;affect_dof_mechbreak_t99p0.fxns.dist_ee.s.ee_te&#39;, &#39;affect_dof_mechbreak_t99p0.fxns.dist_ee.m.faults.short&#39;, &#39;affect_dof_mechbreak_t99p0.fxns.dist_ee.m.faults.degr&#39;, &#39;affect_dof_mechbreak_t99p0.fxns.dist_ee.m.faults.break&#39;, &#39;affect_dof_mechbreak_t99p0.fxns.dist_ee.m.mode&#39;, &#39;affect_dof_mechbreak_t99p0.fxns.affect_dof.s.e_to&#39;, &#39;affect_dof_mechbreak_t99p0.fxns.affect_dof.s.e_ti&#39;, &#39;affect_dof_mechbreak_t99p0.fxns.affect_dof.s.ct&#39;, &#39;affect_dof_mechbreak_t99p0.fxns.affect_dof.s.mt&#39;, &#39;affect_dof_mechbreak_t99p0.fxns.affect_dof.s.pt&#39;, &#39;affect_dof_mechbreak_t99p0.fxns.affect_dof.m.faults.short&#39;, &#39;affect_dof_mechbreak_t99p0.fxns.affect_dof.m.faults.openc&#39;, &#39;affect_dof_mechbreak_t99p0.fxns.affect_dof.m.faults.ctlup&#39;, &#39;affect_dof_mechbreak_t99p0.fxns.affect_dof.m.faults.ctldn&#39;, &#39;affect_dof_mechbreak_t99p0.fxns.affect_dof.m.faults.ctlbreak&#39;, &#39;affect_dof_mechbreak_t99p0.fxns.affect_dof.m.faults.mechbreak&#39;, &#39;affect_dof_mechbreak_t99p0.fxns.affect_dof.m.faults.mechfriction&#39;, &#39;affect_dof_mechbreak_t99p0.fxns.affect_dof.m.faults.propwarp&#39;, &#39;affect_dof_mechbreak_t99p0.fxns.affect_dof.m.faults.propstuck&#39;, &#39;affect_dof_mechbreak_t99p0.fxns.affect_dof.m.faults.propbreak&#39;, &#39;affect_dof_mechbreak_t99p0.fxns.affect_dof.m.mode&#39;, &#39;affect_dof_mechbreak_t99p0.fxns.ctl_dof.s.cs&#39;, &#39;affect_dof_mechbreak_t99p0.fxns.ctl_dof.s.vel&#39;, &#39;affect_dof_mechbreak_t99p0.fxns.ctl_dof.m.faults.noctl&#39;, &#39;affect_dof_mechbreak_t99p0.fxns.ctl_dof.m.faults.degctl&#39;, &#39;affect_dof_mechbreak_t99p0.fxns.ctl_dof.m.mode&#39;, &#39;affect_dof_mechbreak_t99p0.fxns.plan_path.s.dx&#39;, &#39;affect_dof_mechbreak_t99p0.fxns.plan_path.s.dy&#39;, &#39;affect_dof_mechbreak_t99p0.fxns.plan_path.s.dz&#39;, &#39;affect_dof_mechbreak_t99p0.fxns.plan_path.s.pt&#39;, &#39;affect_dof_mechbreak_t99p0.fxns.plan_path.s.goal&#39;, &#39;affect_dof_mechbreak_t99p0.fxns.plan_path.m.faults.noloc&#39;, &#39;affect_dof_mechbreak_t99p0.fxns.plan_path.m.faults.degloc&#39;, &#39;affect_dof_mechbreak_t99p0.fxns.plan_path.m.mode&#39;, &#39;affect_dof_mechbreak_t99p0.fxns.plan_path.t.pause.time&#39;, &#39;affect_dof_mechbreak_t99p0.fxns.plan_path.t.pause.mode&#39;, &#39;affect_dof_mechbreak_t99p0.fxns.trajectory.m.mode&#39;, &#39;affect_dof_mechbreak_t99p0.fxns.engage_land.m.faults.break&#39;, &#39;affect_dof_mechbreak_t99p0.fxns.engage_land.m.faults.deform&#39;, &#39;affect_dof_mechbreak_t99p0.fxns.engage_land.m.mode&#39;, &#39;affect_dof_mechbreak_t99p0.fxns.hold_payload.m.faults.break&#39;, &#39;affect_dof_mechbreak_t99p0.fxns.hold_payload.m.faults.deform&#39;, &#39;affect_dof_mechbreak_t99p0.fxns.hold_payload.m.mode&#39;, &#39;affect_dof_mechbreak_t99p0.fxns.view_env.m.mode&#39;, &#39;affect_dof_mechbreak_t99p0.flows.force_st.s.support&#39;, &#39;affect_dof_mechbreak_t99p0.flows.force_lin.s.support&#39;, &#39;affect_dof_mechbreak_t99p0.flows.force_gr.s.support&#39;, &#39;affect_dof_mechbreak_t99p0.flows.force_lg.s.support&#39;, &#39;affect_dof_mechbreak_t99p0.flows.ee_1.s.rate&#39;, &#39;affect_dof_mechbreak_t99p0.flows.ee_1.s.effort&#39;, &#39;affect_dof_mechbreak_t99p0.flows.ee_mot.s.rate&#39;, &#39;affect_dof_mechbreak_t99p0.flows.ee_mot.s.effort&#39;, &#39;affect_dof_mechbreak_t99p0.flows.ee_ctl.s.rate&#39;, &#39;affect_dof_mechbreak_t99p0.flows.ee_ctl.s.effort&#39;, &#39;affect_dof_mechbreak_t99p0.flows.ctl.s.forward&#39;, &#39;affect_dof_mechbreak_t99p0.flows.ctl.s.upward&#39;, &#39;affect_dof_mechbreak_t99p0.flows.dofs.s.vertvel&#39;, &#39;affect_dof_mechbreak_t99p0.flows.dofs.s.planvel&#39;, &#39;affect_dof_mechbreak_t99p0.flows.dofs.s.planpwr&#39;, &#39;affect_dof_mechbreak_t99p0.flows.dofs.s.uppwr&#39;, &#39;affect_dof_mechbreak_t99p0.flows.env.s.x&#39;, &#39;affect_dof_mechbreak_t99p0.flows.env.s.y&#39;, &#39;affect_dof_mechbreak_t99p0.flows.env.s.z&#39;, &#39;affect_dof_mechbreak_t99p0.flows.dir.s.x&#39;, &#39;affect_dof_mechbreak_t99p0.flows.dir.s.y&#39;, &#39;affect_dof_mechbreak_t99p0.flows.dir.s.z&#39;, &#39;affect_dof_mechbreak_t99p0.flows.dir.s.power&#39;, &#39;affect_dof_mechbreak_t99p0.time&#39;, &#39;affect_dof_mechbreak_t100p0.fxns.store_ee.s.soc&#39;, &#39;affect_dof_mechbreak_t100p0.fxns.store_ee.m.faults.nocharge&#39;, &#39;affect_dof_mechbreak_t100p0.fxns.store_ee.m.mode&#39;, &#39;affect_dof_mechbreak_t100p0.fxns.dist_ee.s.ee_tr&#39;, &#39;affect_dof_mechbreak_t100p0.fxns.dist_ee.s.ee_te&#39;, &#39;affect_dof_mechbreak_t100p0.fxns.dist_ee.m.faults.short&#39;, &#39;affect_dof_mechbreak_t100p0.fxns.dist_ee.m.faults.degr&#39;, &#39;affect_dof_mechbreak_t100p0.fxns.dist_ee.m.faults.break&#39;, &#39;affect_dof_mechbreak_t100p0.fxns.dist_ee.m.mode&#39;, &#39;affect_dof_mechbreak_t100p0.fxns.affect_dof.s.e_to&#39;, &#39;affect_dof_mechbreak_t100p0.fxns.affect_dof.s.e_ti&#39;, &#39;affect_dof_mechbreak_t100p0.fxns.affect_dof.s.ct&#39;, &#39;affect_dof_mechbreak_t100p0.fxns.affect_dof.s.mt&#39;, &#39;affect_dof_mechbreak_t100p0.fxns.affect_dof.s.pt&#39;, &#39;affect_dof_mechbreak_t100p0.fxns.affect_dof.m.faults.short&#39;, &#39;affect_dof_mechbreak_t100p0.fxns.affect_dof.m.faults.openc&#39;, &#39;affect_dof_mechbreak_t100p0.fxns.affect_dof.m.faults.ctlup&#39;, &#39;affect_dof_mechbreak_t100p0.fxns.affect_dof.m.faults.ctldn&#39;, &#39;affect_dof_mechbreak_t100p0.fxns.affect_dof.m.faults.ctlbreak&#39;, &#39;affect_dof_mechbreak_t100p0.fxns.affect_dof.m.faults.mechbreak&#39;, &#39;affect_dof_mechbreak_t100p0.fxns.affect_dof.m.faults.mechfriction&#39;, &#39;affect_dof_mechbreak_t100p0.fxns.affect_dof.m.faults.propwarp&#39;, &#39;affect_dof_mechbreak_t100p0.fxns.affect_dof.m.faults.propstuck&#39;, &#39;affect_dof_mechbreak_t100p0.fxns.affect_dof.m.faults.propbreak&#39;, &#39;affect_dof_mechbreak_t100p0.fxns.affect_dof.m.mode&#39;, &#39;affect_dof_mechbreak_t100p0.fxns.ctl_dof.s.cs&#39;, &#39;affect_dof_mechbreak_t100p0.fxns.ctl_dof.s.vel&#39;, &#39;affect_dof_mechbreak_t100p0.fxns.ctl_dof.m.faults.noctl&#39;, &#39;affect_dof_mechbreak_t100p0.fxns.ctl_dof.m.faults.degctl&#39;, &#39;affect_dof_mechbreak_t100p0.fxns.ctl_dof.m.mode&#39;, &#39;affect_dof_mechbreak_t100p0.fxns.plan_path.s.dx&#39;, &#39;affect_dof_mechbreak_t100p0.fxns.plan_path.s.dy&#39;, &#39;affect_dof_mechbreak_t100p0.fxns.plan_path.s.dz&#39;, &#39;affect_dof_mechbreak_t100p0.fxns.plan_path.s.pt&#39;, &#39;affect_dof_mechbreak_t100p0.fxns.plan_path.s.goal&#39;, &#39;affect_dof_mechbreak_t100p0.fxns.plan_path.m.faults.noloc&#39;, &#39;affect_dof_mechbreak_t100p0.fxns.plan_path.m.faults.degloc&#39;, &#39;affect_dof_mechbreak_t100p0.fxns.plan_path.m.mode&#39;, &#39;affect_dof_mechbreak_t100p0.fxns.plan_path.t.pause.time&#39;, &#39;affect_dof_mechbreak_t100p0.fxns.plan_path.t.pause.mode&#39;, &#39;affect_dof_mechbreak_t100p0.fxns.trajectory.m.mode&#39;, &#39;affect_dof_mechbreak_t100p0.fxns.engage_land.m.faults.break&#39;, &#39;affect_dof_mechbreak_t100p0.fxns.engage_land.m.faults.deform&#39;, &#39;affect_dof_mechbreak_t100p0.fxns.engage_land.m.mode&#39;, &#39;affect_dof_mechbreak_t100p0.fxns.hold_payload.m.faults.break&#39;, &#39;affect_dof_mechbreak_t100p0.fxns.hold_payload.m.faults.deform&#39;, &#39;affect_dof_mechbreak_t100p0.fxns.hold_payload.m.mode&#39;, &#39;affect_dof_mechbreak_t100p0.fxns.view_env.m.mode&#39;, &#39;affect_dof_mechbreak_t100p0.flows.force_st.s.support&#39;, &#39;affect_dof_mechbreak_t100p0.flows.force_lin.s.support&#39;, &#39;affect_dof_mechbreak_t100p0.flows.force_gr.s.support&#39;, &#39;affect_dof_mechbreak_t100p0.flows.force_lg.s.support&#39;, &#39;affect_dof_mechbreak_t100p0.flows.ee_1.s.rate&#39;, &#39;affect_dof_mechbreak_t100p0.flows.ee_1.s.effort&#39;, &#39;affect_dof_mechbreak_t100p0.flows.ee_mot.s.rate&#39;, &#39;affect_dof_mechbreak_t100p0.flows.ee_mot.s.effort&#39;, &#39;affect_dof_mechbreak_t100p0.flows.ee_ctl.s.rate&#39;, &#39;affect_dof_mechbreak_t100p0.flows.ee_ctl.s.effort&#39;, &#39;affect_dof_mechbreak_t100p0.flows.ctl.s.forward&#39;, &#39;affect_dof_mechbreak_t100p0.flows.ctl.s.upward&#39;, &#39;affect_dof_mechbreak_t100p0.flows.dofs.s.vertvel&#39;, &#39;affect_dof_mechbreak_t100p0.flows.dofs.s.planvel&#39;, &#39;affect_dof_mechbreak_t100p0.flows.dofs.s.planpwr&#39;, &#39;affect_dof_mechbreak_t100p0.flows.dofs.s.uppwr&#39;, &#39;affect_dof_mechbreak_t100p0.flows.env.s.x&#39;, &#39;affect_dof_mechbreak_t100p0.flows.env.s.y&#39;, &#39;affect_dof_mechbreak_t100p0.flows.env.s.z&#39;, &#39;affect_dof_mechbreak_t100p0.flows.dir.s.x&#39;, &#39;affect_dof_mechbreak_t100p0.flows.dir.s.y&#39;, &#39;affect_dof_mechbreak_t100p0.flows.dir.s.z&#39;, &#39;affect_dof_mechbreak_t100p0.flows.dir.s.power&#39;, &#39;affect_dof_mechbreak_t100p0.time&#39;, &#39;nominal.fxns.store_ee.s.soc&#39;, &#39;nominal.fxns.store_ee.m.faults.nocharge&#39;, &#39;nominal.fxns.store_ee.m.mode&#39;, &#39;nominal.fxns.dist_ee.s.ee_tr&#39;, &#39;nominal.fxns.dist_ee.s.ee_te&#39;, &#39;nominal.fxns.dist_ee.m.faults.short&#39;, &#39;nominal.fxns.dist_ee.m.faults.degr&#39;, &#39;nominal.fxns.dist_ee.m.faults.break&#39;, &#39;nominal.fxns.dist_ee.m.mode&#39;, &#39;nominal.fxns.affect_dof.s.e_to&#39;, &#39;nominal.fxns.affect_dof.s.e_ti&#39;, &#39;nominal.fxns.affect_dof.s.ct&#39;, &#39;nominal.fxns.affect_dof.s.mt&#39;, &#39;nominal.fxns.affect_dof.s.pt&#39;, &#39;nominal.fxns.affect_dof.m.faults.short&#39;, &#39;nominal.fxns.affect_dof.m.faults.openc&#39;, &#39;nominal.fxns.affect_dof.m.faults.ctlup&#39;, &#39;nominal.fxns.affect_dof.m.faults.ctldn&#39;, &#39;nominal.fxns.affect_dof.m.faults.ctlbreak&#39;, &#39;nominal.fxns.affect_dof.m.faults.mechbreak&#39;, &#39;nominal.fxns.affect_dof.m.faults.mechfriction&#39;, &#39;nominal.fxns.affect_dof.m.faults.propwarp&#39;, &#39;nominal.fxns.affect_dof.m.faults.propstuck&#39;, &#39;nominal.fxns.affect_dof.m.faults.propbreak&#39;, &#39;nominal.fxns.affect_dof.m.mode&#39;, &#39;nominal.fxns.ctl_dof.s.cs&#39;, &#39;nominal.fxns.ctl_dof.s.vel&#39;, &#39;nominal.fxns.ctl_dof.m.faults.noctl&#39;, &#39;nominal.fxns.ctl_dof.m.faults.degctl&#39;, &#39;nominal.fxns.ctl_dof.m.mode&#39;, &#39;nominal.fxns.plan_path.s.dx&#39;, &#39;nominal.fxns.plan_path.s.dy&#39;, &#39;nominal.fxns.plan_path.s.dz&#39;, &#39;nominal.fxns.plan_path.s.pt&#39;, &#39;nominal.fxns.plan_path.s.goal&#39;, &#39;nominal.fxns.plan_path.m.faults.noloc&#39;, &#39;nominal.fxns.plan_path.m.faults.degloc&#39;, &#39;nominal.fxns.plan_path.m.mode&#39;, &#39;nominal.fxns.plan_path.t.pause.time&#39;, &#39;nominal.fxns.plan_path.t.pause.mode&#39;, &#39;nominal.fxns.trajectory.m.mode&#39;, &#39;nominal.fxns.engage_land.m.faults.break&#39;, &#39;nominal.fxns.engage_land.m.faults.deform&#39;, &#39;nominal.fxns.engage_land.m.mode&#39;, &#39;nominal.fxns.hold_payload.m.faults.break&#39;, &#39;nominal.fxns.hold_payload.m.faults.deform&#39;, &#39;nominal.fxns.hold_payload.m.mode&#39;, &#39;nominal.fxns.view_env.m.mode&#39;, &#39;nominal.flows.force_st.s.support&#39;, &#39;nominal.flows.force_lin.s.support&#39;, &#39;nominal.flows.force_gr.s.support&#39;, &#39;nominal.flows.force_lg.s.support&#39;, &#39;nominal.flows.ee_1.s.rate&#39;, &#39;nominal.flows.ee_1.s.effort&#39;, &#39;nominal.flows.ee_mot.s.rate&#39;, &#39;nominal.flows.ee_mot.s.effort&#39;, &#39;nominal.flows.ee_ctl.s.rate&#39;, &#39;nominal.flows.ee_ctl.s.effort&#39;, &#39;nominal.flows.ctl.s.forward&#39;, &#39;nominal.flows.ctl.s.upward&#39;, &#39;nominal.flows.dofs.s.vertvel&#39;, &#39;nominal.flows.dofs.s.planvel&#39;, &#39;nominal.flows.dofs.s.planpwr&#39;, &#39;nominal.flows.dofs.s.uppwr&#39;, &#39;nominal.flows.env.s.x&#39;, &#39;nominal.flows.env.s.y&#39;, &#39;nominal.flows.env.s.z&#39;, &#39;nominal.flows.dir.s.x&#39;, &#39;nominal.flows.dir.s.y&#39;, &#39;nominal.flows.dir.s.z&#39;, &#39;nominal.flows.dir.s.power&#39;, &#39;nominal.time&#39;])
-</pre></div></div>
-</div>
-<div class="nbinput docutils container">
+<div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[31]:
 </pre></div>
 </div>
@@ -1715,16 +1163,7 @@ dict_keys([&#39;affect_dof_mechbreak_t0p0.fxns.store_ee.s.soc&#39;, &#39;affect_
 </pre></div>
 </div>
 </div>
-<div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[31]:
-</pre></div>
-</div>
-<div class="output_area docutils container">
-<div class="highlight"><pre>
-39.82614350378407
-</pre></div></div>
-</div>
-<div class="nbinput docutils container">
+<div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[32]:
 </pre></div>
 </div>
@@ -1734,79 +1173,13 @@ dict_keys([&#39;affect_dof_mechbreak_t0p0.fxns.store_ee.s.soc&#39;, &#39;affect_
 </pre></div>
 </div>
 </div>
-<div class="nboutput nblast docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area docutils container">
-<img alt="../../_images/examples_multirotor_Demonstration_51_0.png" src="../../_images/examples_multirotor_Demonstration_51_0.png" />
-</div>
-</div>
-<div class="nbinput docutils container">
+<div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[33]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">quad_comp_endclasses</span>
 </pre></div>
 </div>
-</div>
-<div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[33]:
-</pre></div>
-</div>
-<div class="output_area docutils container">
-<div class="highlight"><pre>
-affect_dof_mechbreak9.25925925925926e-10
-affect_dof_mechbreak                 500
-affect_dof_mechbreak  0.0462962962962963
-affect_dof_mechbreak9.25925925925926e-10
-affect_dof_mechbreak              133500
-affect_dof_mechbreak  12.361111111111112
-affect_dof_mechbreak9.25925925925926e-10
-affect_dof_mechbreak              133500
-affect_dof_mechbreak  12.361111111111112
-affect_dof_mechbreak9.25925925925926e-10
-affect_dof_mechbreak              133500
-affect_dof_mechbreak  12.361111111111112
-affect_dof_mechbreak9.25925925925926e-10
-affect_dof_mechbreak              133500
-affect_dof_mechbreak  12.361111111111112
-affect_dof_mechbreak1.6666666666666667e-08
-affect_dof_mechbreak              183500
-affect_dof_mechbreak  305.83333333333337
-affect_dof_mechbreak1.6666666666666667e-08
-affect_dof_mechbreak              183500
-affect_dof_mechbreak  305.83333333333337
-affect_dof_mechbreak1.6666666666666667e-08
-affect_dof_mechbreak              183500
-affect_dof_mechbreak  305.83333333333337
-affect_dof_mechbreak1.6666666666666667e-08
-affect_dof_mechbreak              183500
-affect_dof_mechbreak  305.83333333333337
-affect_dof_mechbreak1.6666666666666667e-08
-affect_dof_mechbreak              133500
-affect_dof_mechbreak               222.5
-affect_dof_mechbreak9.259259259259261e-10
-affect_dof_mechbreak                 500
-affect_dof_mechbreak 0.04629629629629631
-affect_dof_mechbreak9.259259259259261e-10
-affect_dof_mechbreak                 500
-affect_dof_mechbreak 0.04629629629629631
-affect_dof_mechbreak9.259259259259261e-10
-affect_dof_mechbreak                 500
-affect_dof_mechbreak 0.04629629629629631
-affect_dof_mechbreak9.259259259259261e-10
-affect_dof_mechbreak                 500
-affect_dof_mechbreak 0.04629629629629631
-affect_dof_mechbreak9.259259259259261e-10
-affect_dof_mechbreak                 500
-affect_dof_mechbreak 0.04629629629629631
-affect_dof_mechbreak9.259259259259261e-10
-affect_dof_mechbreak                 500
-affect_dof_mechbreak 0.04629629629629631
-nominal.endclass.rate:               1.0
-nominal.endclass.cost:                 0
-nominal.endclass.expected cost:      0.0
-</pre></div></div>
 </div>
 </section>
 <section id="Hierarchical-Model">
@@ -1831,20 +1204,13 @@ nominal.endclass.expected cost:      0.0
 </pre></div>
 </div>
 </div>
-<div class="nbinput docutils container">
+<div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[36]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">fig</span><span class="p">,</span> <span class="n">axs</span> <span class="o">=</span> <span class="n">an</span><span class="o">.</span><span class="n">plot</span><span class="o">.</span><span class="n">hist</span><span class="p">(</span><span class="n">mdlhist</span><span class="p">,</span> <span class="s1">&#39;flows.env.s.x&#39;</span><span class="p">,</span> <span class="s1">&#39;env.s.y&#39;</span><span class="p">,</span> <span class="s1">&#39;env.s.z&#39;</span><span class="p">,</span> <span class="s1">&#39;store_ee.s.soc&#39;</span><span class="p">,</span>
                         <span class="n">title</span><span class="o">=</span><span class="s1">&#39;Response of Drone to AffectDOF mechbreak&#39;</span><span class="p">,</span> <span class="n">time_slice</span><span class="o">=</span><span class="mi">50</span><span class="p">,</span> <span class="n">legend_loc</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
 </pre></div>
-</div>
-</div>
-<div class="nboutput nblast docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area docutils container">
-<img alt="../../_images/examples_multirotor_Demonstration_57_0.png" src="../../_images/examples_multirotor_Demonstration_57_0.png" />
 </div>
 </div>
 <p>Then we can see how the octorotor architecture performs in the same case:</p>
@@ -1857,7 +1223,7 @@ nominal.endclass.expected cost:      0.0
 </pre></div>
 </div>
 </div>
-<div class="nbinput docutils container">
+<div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[38]:
 </pre></div>
 </div>
@@ -1868,13 +1234,6 @@ nominal.endclass.expected cost:      0.0
 
 <span class="n">fig</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="s2">&quot;red_fault_behavior.pdf&quot;</span><span class="p">,</span> <span class="nb">format</span><span class="o">=</span><span class="s2">&quot;pdf&quot;</span><span class="p">,</span> <span class="n">bbox_inches</span> <span class="o">=</span> <span class="s1">&#39;tight&#39;</span><span class="p">,</span> <span class="n">pad_inches</span> <span class="o">=</span> <span class="mi">0</span><span class="p">)</span>
 </pre></div>
-</div>
-</div>
-<div class="nboutput nblast docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area docutils container">
-<img alt="../../_images/examples_multirotor_Demonstration_60_0.png" src="../../_images/examples_multirotor_Demonstration_60_0.png" />
 </div>
 </div>
 <p>As shown, the octorotor architecture enables the quadrotor to recover from the fault and land.</p>
@@ -1890,7 +1249,7 @@ nominal.endclass.expected cost:      0.0
 </pre></div>
 </div>
 </div>
-<div class="nbinput docutils container">
+<div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[40]:
 </pre></div>
 </div>
@@ -1899,15 +1258,7 @@ nominal.endclass.expected cost:      0.0
 </pre></div>
 </div>
 </div>
-<div class="nboutput nblast docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area stderr docutils container">
-<div class="highlight"><pre>
-SCENARIOS COMPLETE: 100%|██████████| 120/120 [01:41&lt;00:00,  1.19it/s]
-</pre></div></div>
-</div>
-<div class="nbinput docutils container">
+<div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[41]:
 </pre></div>
 </div>
@@ -1916,108 +1267,8 @@ SCENARIOS COMPLETE: 100%|██████████| 120/120 [01:41&lt;00:00
 </pre></div>
 </div>
 </div>
-<div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[41]:
-</pre></div>
-</div>
-<div class="output_area rendered_html docutils container">
-<div>
-<style scoped>
-    .dataframe tbody tr th:only-of-type {
-        vertical-align: middle;
-    }
-
-    .dataframe tbody tr th {
-        vertical-align: top;
-    }
-
-    .dataframe thead th {
-        text-align: right;
-    }
-</style>
-<table border="1" class="dataframe">
-  <thead>
-    <tr style="text-align: right;">
-      <th></th>
-      <th>rate</th>
-      <th>cost</th>
-      <th>expected cost</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <th>affect_dof_rf_ctlbreak_t49p0</th>
-      <td>1.666667e-07</td>
-      <td>186800.0</td>
-      <td>3113.333333</td>
-    </tr>
-    <tr>
-      <th>affect_dof_lf_ctlbreak_t49p0</th>
-      <td>1.666667e-07</td>
-      <td>186800.0</td>
-      <td>3113.333333</td>
-    </tr>
-    <tr>
-      <th>affect_dof_lr_ctlbreak_t49p0</th>
-      <td>1.666667e-07</td>
-      <td>186800.0</td>
-      <td>3113.333333</td>
-    </tr>
-    <tr>
-      <th>affect_dof_rr_ctlbreak_t49p0</th>
-      <td>1.666667e-07</td>
-      <td>186800.0</td>
-      <td>3113.333333</td>
-    </tr>
-    <tr>
-      <th>affect_dof_lf_ctlup_t49p0</th>
-      <td>1.666667e-07</td>
-      <td>186300.0</td>
-      <td>3105.000000</td>
-    </tr>
-    <tr>
-      <th>...</th>
-      <td>...</td>
-      <td>...</td>
-      <td>...</td>
-    </tr>
-    <tr>
-      <th>affect_dof_lr_propwarp_t97p0</th>
-      <td>5.555556e-10</td>
-      <td>200.0</td>
-      <td>0.011111</td>
-    </tr>
-    <tr>
-      <th>affect_dof_lf_propwarp_t97p0</th>
-      <td>5.555556e-10</td>
-      <td>200.0</td>
-      <td>0.011111</td>
-    </tr>
-    <tr>
-      <th>affect_dof_rr_propwarp_t2p0</th>
-      <td>4.629630e-10</td>
-      <td>200.0</td>
-      <td>0.009259</td>
-    </tr>
-    <tr>
-      <th>affect_dof_lr_propwarp_t2p0</th>
-      <td>4.629630e-10</td>
-      <td>200.0</td>
-      <td>0.009259</td>
-    </tr>
-    <tr>
-      <th>nominal</th>
-      <td>1.000000e+00</td>
-      <td>0.0</td>
-      <td>0.000000</td>
-    </tr>
-  </tbody>
-</table>
-<p>121 rows × 3 columns</p>
-</div></div>
-</div>
 <p>Based on this model, we can calculate some metrics that quantify how resilient the system was to the set of faults, such as the cost of resilience:</p>
-<div class="nbinput docutils container">
+<div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[42]:
 </pre></div>
 </div>
@@ -2026,17 +1277,8 @@ SCENARIOS COMPLETE: 100%|██████████| 120/120 [01:41&lt;00:00
 </pre></div>
 </div>
 </div>
-<div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[42]:
-</pre></div>
-</div>
-<div class="output_area docutils container">
-<div class="highlight"><pre>
-47341.71111111108
-</pre></div></div>
-</div>
 <p>The overall rate of crashes:</p>
-<div class="nbinput docutils container">
+<div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[43]:
 </pre></div>
 </div>
@@ -2046,17 +1288,8 @@ SCENARIOS COMPLETE: 100%|██████████| 120/120 [01:41&lt;00:00
 </pre></div>
 </div>
 </div>
-<div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[43]:
-</pre></div>
-</div>
-<div class="output_area docutils container">
-<div class="highlight"><pre>
-2.6750000000000006e-06
-</pre></div></div>
-</div>
 <p>The number of crashes:</p>
-<div class="nbinput docutils container">
+<div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[44]:
 </pre></div>
 </div>
@@ -2065,17 +1298,8 @@ SCENARIOS COMPLETE: 100%|██████████| 120/120 [01:41&lt;00:00
 </pre></div>
 </div>
 </div>
-<div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[44]:
-</pre></div>
-</div>
-<div class="output_area docutils container">
-<div class="highlight"><pre>
-62
-</pre></div></div>
-</div>
 <p>The percentage of crashes:</p>
-<div class="nbinput docutils container">
+<div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[45]:
 </pre></div>
 </div>
@@ -2083,15 +1307,6 @@ SCENARIOS COMPLETE: 100%|██████████| 120/120 [01:41&lt;00:00
 <span class="n">quad_perc_crashes</span>
 </pre></div>
 </div>
-</div>
-<div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[45]:
-</pre></div>
-</div>
-<div class="output_area docutils container">
-<div class="highlight"><pre>
-0.512396694214876
-</pre></div></div>
 </div>
 <section id="Octocopter-Resilience">
 <h3>Octocopter Resilience<a class="headerlink" href="#Octocopter-Resilience" title="Permalink to this headline"></a></h3>
@@ -2106,7 +1321,7 @@ SCENARIOS COMPLETE: 100%|██████████| 120/120 [01:41&lt;00:00
 </pre></div>
 </div>
 </div>
-<div class="nbinput docutils container">
+<div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[47]:
 </pre></div>
 </div>
@@ -2115,15 +1330,7 @@ SCENARIOS COMPLETE: 100%|██████████| 120/120 [01:41&lt;00:00
 </pre></div>
 </div>
 </div>
-<div class="nboutput nblast docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area stderr docutils container">
-<div class="highlight"><pre>
-SCENARIOS COMPLETE: 100%|██████████| 240/240 [03:30&lt;00:00,  1.14it/s]
-</pre></div></div>
-</div>
-<div class="nbinput docutils container">
+<div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[48]:
 </pre></div>
 </div>
@@ -2132,108 +1339,8 @@ SCENARIOS COMPLETE: 100%|██████████| 240/240 [03:30&lt;00:00
 </pre></div>
 </div>
 </div>
-<div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[48]:
-</pre></div>
-</div>
-<div class="output_area rendered_html docutils container">
-<div>
-<style scoped>
-    .dataframe tbody tr th:only-of-type {
-        vertical-align: middle;
-    }
-
-    .dataframe tbody tr th {
-        vertical-align: top;
-    }
-
-    .dataframe thead th {
-        text-align: right;
-    }
-</style>
-<table border="1" class="dataframe">
-  <thead>
-    <tr style="text-align: right;">
-      <th></th>
-      <th>rate</th>
-      <th>cost</th>
-      <th>expected cost</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <th>affect_dof_lf2_ctlbreak_t49p0</th>
-      <td>1.666667e-07</td>
-      <td>139600.0</td>
-      <td>2326.666667</td>
-    </tr>
-    <tr>
-      <th>affect_dof_rf_ctlbreak_t49p0</th>
-      <td>1.666667e-07</td>
-      <td>139600.0</td>
-      <td>2326.666667</td>
-    </tr>
-    <tr>
-      <th>affect_dof_rf2_ctlbreak_t49p0</th>
-      <td>1.666667e-07</td>
-      <td>139600.0</td>
-      <td>2326.666667</td>
-    </tr>
-    <tr>
-      <th>affect_dof_lf_ctlbreak_t49p0</th>
-      <td>1.666667e-07</td>
-      <td>139600.0</td>
-      <td>2326.666667</td>
-    </tr>
-    <tr>
-      <th>affect_dof_lf2_ctldn_t49p0</th>
-      <td>1.666667e-07</td>
-      <td>139100.0</td>
-      <td>2318.333333</td>
-    </tr>
-    <tr>
-      <th>...</th>
-      <td>...</td>
-      <td>...</td>
-      <td>...</td>
-    </tr>
-    <tr>
-      <th>affect_dof_lr_propwarp_t2p0</th>
-      <td>4.629630e-10</td>
-      <td>200.0</td>
-      <td>0.009259</td>
-    </tr>
-    <tr>
-      <th>affect_dof_rr2_propwarp_t2p0</th>
-      <td>4.629630e-10</td>
-      <td>200.0</td>
-      <td>0.009259</td>
-    </tr>
-    <tr>
-      <th>affect_dof_lr2_propwarp_t2p0</th>
-      <td>4.629630e-10</td>
-      <td>200.0</td>
-      <td>0.009259</td>
-    </tr>
-    <tr>
-      <th>affect_dof_rr_propwarp_t2p0</th>
-      <td>4.629630e-10</td>
-      <td>200.0</td>
-      <td>0.009259</td>
-    </tr>
-    <tr>
-      <th>nominal</th>
-      <td>1.000000e+00</td>
-      <td>0.0</td>
-      <td>0.000000</td>
-    </tr>
-  </tbody>
-</table>
-<p>241 rows × 3 columns</p>
-</div></div>
-</div>
 <p>Based on this model, we can calculate some metrics that quantify how resilient the system was to the set of faults, such as the cost of resilience:</p>
-<div class="nbinput docutils container">
+<div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[49]:
 </pre></div>
 </div>
@@ -2242,17 +1349,8 @@ SCENARIOS COMPLETE: 100%|██████████| 240/240 [03:30&lt;00:00
 </pre></div>
 </div>
 </div>
-<div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[49]:
-</pre></div>
-</div>
-<div class="output_area docutils container">
-<div class="highlight"><pre>
-49174.64444444445
-</pre></div></div>
-</div>
 <p>The overall rate of crashes:</p>
-<div class="nbinput docutils container">
+<div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[50]:
 </pre></div>
 </div>
@@ -2262,17 +1360,8 @@ SCENARIOS COMPLETE: 100%|██████████| 240/240 [03:30&lt;00:00
 </pre></div>
 </div>
 </div>
-<div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[50]:
-</pre></div>
-</div>
-<div class="output_area docutils container">
-<div class="highlight"><pre>
-3.025925925925927e-06
-</pre></div></div>
-</div>
 <p>Number of crashes:</p>
-<div class="nbinput docutils container">
+<div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[51]:
 </pre></div>
 </div>
@@ -2281,17 +1370,8 @@ SCENARIOS COMPLETE: 100%|██████████| 240/240 [03:30&lt;00:00
 </pre></div>
 </div>
 </div>
-<div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[51]:
-</pre></div>
-</div>
-<div class="output_area docutils container">
-<div class="highlight"><pre>
-72
-</pre></div></div>
-</div>
 <p>Percent of crashes:</p>
-<div class="nbinput docutils container">
+<div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[52]:
 </pre></div>
 </div>
@@ -2299,15 +1379,6 @@ SCENARIOS COMPLETE: 100%|██████████| 240/240 [03:30&lt;00:00
 <span class="n">oct_perc_crashes</span>
 </pre></div>
 </div>
-</div>
-<div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[52]:
-</pre></div>
-</div>
-<div class="output_area docutils container">
-<div class="highlight"><pre>
-0.2987551867219917
-</pre></div></div>
 </div>
 <div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:

@@ -5,6 +5,7 @@ fmdtools.analyze package
    :width: 800
 
 The analyze package is organized into the modules:
+
 - :mod:`fmdtools.analyze.result`, which defines the :class:`fmdtools.analyze.result.Result` and :class:`fmdtools.analyze.result.History` classes for tracking, saving, and processing simulation outputs. 
 - :mod:`fmdtools.analyze.plot`, which provides functions for plotting `History` and `Result` metrics (and is essentially a convenience interface for `matplotlib`)
 - :mod:`fmdtools.analyze.graph`, which provides classes for creating and visualizing Graphs of simulation structures (and is a sort of convenience iterface for `networkx`/`graphviz` and other graphing libraries).

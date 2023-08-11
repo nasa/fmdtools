@@ -964,10 +964,10 @@ Problem new_problem                                                     current 
 <div class="output_area docutils container">
 <div class="highlight"><pre>
 (&lt;Figure size 432x288 with 4 Axes&gt;,
- array([&lt;AxesSubplot:title={&#39;center&#39;:&#39;move_water.s.total_flow&#39;}&gt;,
-        &lt;AxesSubplot:title={&#39;center&#39;:&#39;wat_1.s.pressure&#39;}&gt;,
-        &lt;AxesSubplot:title={&#39;center&#39;:&#39;move_water.s.eff&#39;}, xlabel=&#39;time&#39;&gt;,
-        &lt;AxesSubplot:&gt;], dtype=object))
+ array([&lt;Axes: title={&#39;center&#39;: &#39;move_water.s.total_flow&#39;}&gt;,
+        &lt;Axes: title={&#39;center&#39;: &#39;wat_1.s.pressure&#39;}&gt;,
+        &lt;Axes: title={&#39;center&#39;: &#39;move_water.s.eff&#39;}, xlabel=&#39;time&#39;&gt;,
+        &lt;Axes: &gt;], dtype=object))
 </pre></div></div>
 </div>
 <div class="nboutput nblast docutils container">
@@ -1059,15 +1059,15 @@ Problem new_problem                                                     current 
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-     fun: 2.6999999999999997
-     jac: array([0.])
- message: &#39;Optimization terminated successfully&#39;
-    nfev: 2
-     nit: 1
-    njev: 1
-  status: 0
+ message: Optimization terminated successfully
  success: True
-       x: array([1.])
+  status: 0
+     fun: 2.6999999999999997
+       x: [ 1.000e+00]
+     nit: 1
+     jac: [ 0.000e+00]
+    nfev: 2
+    njev: 1
 </pre></div></div>
 </div>
 <p>As shown, the variables are optimized to a value of x=0.0, the minimum possible value of MoveWater.eff which was put in the problem. We can further verify the optimized result by looking at the problem:</p>
@@ -1113,10 +1113,10 @@ Problem new_problem                                                     current 
 <div class="output_area docutils container">
 <div class="highlight"><pre>
 (&lt;Figure size 432x288 with 4 Axes&gt;,
- array([&lt;AxesSubplot:title={&#39;center&#39;:&#39;move_water.s.total_flow&#39;}&gt;,
-        &lt;AxesSubplot:title={&#39;center&#39;:&#39;wat_1.s.pressure&#39;}&gt;,
-        &lt;AxesSubplot:title={&#39;center&#39;:&#39;move_water.s.eff&#39;}, xlabel=&#39;time&#39;&gt;,
-        &lt;AxesSubplot:&gt;], dtype=object))
+ array([&lt;Axes: title={&#39;center&#39;: &#39;move_water.s.total_flow&#39;}&gt;,
+        &lt;Axes: title={&#39;center&#39;: &#39;wat_1.s.pressure&#39;}&gt;,
+        &lt;Axes: title={&#39;center&#39;: &#39;move_water.s.eff&#39;}, xlabel=&#39;time&#39;&gt;,
+        &lt;Axes: &gt;], dtype=object))
 </pre></div></div>
 </div>
 <div class="nboutput nblast docutils container">
@@ -1221,15 +1221,15 @@ Problem new_problem                                                     current 
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-     fun: -0.0
-     jac: array([0.])
- message: &#39;Optimization terminated successfully&#39;
-    nfev: 2
-     nit: 1
-    njev: 1
-  status: 0
+ message: Optimization terminated successfully
  success: True
-       x: array([1.])
+  status: 0
+     fun: -0.0
+       x: [ 1.000e+00]
+     nit: 1
+     jac: [ 0.000e+00]
+    nfev: 2
+    njev: 1
 </pre></div></div>
 </div>
 <div class="nbinput docutils container">
@@ -1274,10 +1274,10 @@ Problem new_problem                                                     current 
 <div class="output_area docutils container">
 <div class="highlight"><pre>
 (&lt;Figure size 432x288 with 4 Axes&gt;,
- array([&lt;AxesSubplot:title={&#39;center&#39;:&#39;move_water.s.total_flow&#39;}&gt;,
-        &lt;AxesSubplot:title={&#39;center&#39;:&#39;wat_1.s.pressure&#39;}&gt;,
-        &lt;AxesSubplot:title={&#39;center&#39;:&#39;move_water.s.eff&#39;}, xlabel=&#39;time&#39;&gt;,
-        &lt;AxesSubplot:&gt;], dtype=object))
+ array([&lt;Axes: title={&#39;center&#39;: &#39;move_water.s.total_flow&#39;}&gt;,
+        &lt;Axes: title={&#39;center&#39;: &#39;wat_1.s.pressure&#39;}&gt;,
+        &lt;Axes: title={&#39;center&#39;: &#39;move_water.s.eff&#39;}, xlabel=&#39;time&#39;&gt;,
+        &lt;Axes: &gt;], dtype=object))
 </pre></div></div>
 </div>
 <div class="nboutput nblast docutils container">
@@ -1395,57 +1395,57 @@ Problem multi_problem                                                   current 
 <div class="highlight"><pre>
 <span class="ansi-red-intense-fg ansi-bold">---------------------------------------------------------------------------</span>
 <span class="ansi-red-intense-fg ansi-bold">Exception</span>                                 Traceback (most recent call last)
-<span class="ansi-green-intense-fg ansi-bold">~\AppData\Local\Temp\1/ipykernel_11700/2162782049.py</span> in <span class="ansi-cyan-fg">&lt;module&gt;</span>
+<span class="ansi-green-intense-fg ansi-bold">~\AppData\Local\Temp\1/ipykernel_11280/2162782049.py</span> in <span class="ansi-cyan-fg">&lt;module&gt;</span>
 <span class="ansi-green-intense-fg ansi-bold">----&gt; 1</span><span class="ansi-yellow-intense-fg ansi-bold"> </span>res <span class="ansi-yellow-intense-fg ansi-bold">=</span> minimize<span class="ansi-yellow-intense-fg ansi-bold">(</span>multi_problem<span class="ansi-yellow-intense-fg ansi-bold">.</span>cost<span class="ansi-yellow-intense-fg ansi-bold">,</span> <span class="ansi-yellow-intense-fg ansi-bold">[</span><span class="ansi-cyan-intense-fg ansi-bold">5</span><span class="ansi-yellow-intense-fg ansi-bold">]</span><span class="ansi-yellow-intense-fg ansi-bold">,</span> method<span class="ansi-yellow-intense-fg ansi-bold">=</span><span class="ansi-blue-intense-fg ansi-bold">&#34;SLSQP&#34;</span><span class="ansi-yellow-intense-fg ansi-bold">,</span> bounds<span class="ansi-yellow-intense-fg ansi-bold">=</span><span class="ansi-yellow-intense-fg ansi-bold">[</span><span class="ansi-yellow-intense-fg ansi-bold">[</span><span class="ansi-cyan-intense-fg ansi-bold">0</span><span class="ansi-yellow-intense-fg ansi-bold">,</span><span class="ansi-cyan-intense-fg ansi-bold">40</span><span class="ansi-yellow-intense-fg ansi-bold">]</span><span class="ansi-yellow-intense-fg ansi-bold">]</span><span class="ansi-yellow-intense-fg ansi-bold">)</span>
 
 <span class="ansi-green-intense-fg ansi-bold">~\Anaconda3\lib\site-packages\scipy\optimize\_minimize.py</span> in <span class="ansi-cyan-fg">minimize</span><span class="ansi-blue-intense-fg ansi-bold">(fun, x0, args, method, jac, hess, hessp, bounds, constraints, tol, callback, options)</span>
-<span class="ansi-green-fg">    629</span>         <span class="ansi-green-intense-fg ansi-bold">return</span> _minimize_cobyla<span class="ansi-yellow-intense-fg ansi-bold">(</span>fun<span class="ansi-yellow-intense-fg ansi-bold">,</span> x0<span class="ansi-yellow-intense-fg ansi-bold">,</span> args<span class="ansi-yellow-intense-fg ansi-bold">,</span> constraints<span class="ansi-yellow-intense-fg ansi-bold">,</span> <span class="ansi-yellow-intense-fg ansi-bold">**</span>options<span class="ansi-yellow-intense-fg ansi-bold">)</span>
-<span class="ansi-green-fg">    630</span>     <span class="ansi-green-intense-fg ansi-bold">elif</span> meth <span class="ansi-yellow-intense-fg ansi-bold">==</span> <span class="ansi-blue-intense-fg ansi-bold">&#39;slsqp&#39;</span><span class="ansi-yellow-intense-fg ansi-bold">:</span>
-<span class="ansi-green-intense-fg ansi-bold">--&gt; 631</span><span class="ansi-yellow-intense-fg ansi-bold">         return _minimize_slsqp(fun, x0, args, jac, bounds,
-</span><span class="ansi-green-fg">    632</span>                                constraints, callback=callback, **options)
-<span class="ansi-green-fg">    633</span>     <span class="ansi-green-intense-fg ansi-bold">elif</span> meth <span class="ansi-yellow-intense-fg ansi-bold">==</span> <span class="ansi-blue-intense-fg ansi-bold">&#39;trust-constr&#39;</span><span class="ansi-yellow-intense-fg ansi-bold">:</span>
+<span class="ansi-green-fg">    703</span>                                 **options)
+<span class="ansi-green-fg">    704</span>     <span class="ansi-green-intense-fg ansi-bold">elif</span> meth <span class="ansi-yellow-intense-fg ansi-bold">==</span> <span class="ansi-blue-intense-fg ansi-bold">&#39;slsqp&#39;</span><span class="ansi-yellow-intense-fg ansi-bold">:</span>
+<span class="ansi-green-intense-fg ansi-bold">--&gt; 705</span><span class="ansi-yellow-intense-fg ansi-bold">         res = _minimize_slsqp(fun, x0, args, jac, bounds,
+</span><span class="ansi-green-fg">    706</span>                               constraints, callback=callback, **options)
+<span class="ansi-green-fg">    707</span>     <span class="ansi-green-intense-fg ansi-bold">elif</span> meth <span class="ansi-yellow-intense-fg ansi-bold">==</span> <span class="ansi-blue-intense-fg ansi-bold">&#39;trust-constr&#39;</span><span class="ansi-yellow-intense-fg ansi-bold">:</span>
 
-<span class="ansi-green-intense-fg ansi-bold">~\Anaconda3\lib\site-packages\scipy\optimize\slsqp.py</span> in <span class="ansi-cyan-fg">_minimize_slsqp</span><span class="ansi-blue-intense-fg ansi-bold">(func, x0, args, jac, bounds, constraints, maxiter, ftol, iprint, disp, eps, callback, finite_diff_rel_step, **unknown_options)</span>
-<span class="ansi-green-fg">    373</span>
-<span class="ansi-green-fg">    374</span>     <span class="ansi-red-intense-fg ansi-bold"># ScalarFunction provides function and gradient evaluation</span>
-<span class="ansi-green-intense-fg ansi-bold">--&gt; 375</span><span class="ansi-yellow-intense-fg ansi-bold">     sf = _prepare_scalar_function(func, x, jac=jac, args=args, epsilon=eps,
-</span><span class="ansi-green-fg">    376</span>                                   finite_diff_rel_step<span class="ansi-yellow-intense-fg ansi-bold">=</span>finite_diff_rel_step<span class="ansi-yellow-intense-fg ansi-bold">,</span>
-<span class="ansi-green-fg">    377</span>                                   bounds=new_bounds)
+<span class="ansi-green-intense-fg ansi-bold">~\Anaconda3\lib\site-packages\scipy\optimize\_slsqp_py.py</span> in <span class="ansi-cyan-fg">_minimize_slsqp</span><span class="ansi-blue-intense-fg ansi-bold">(func, x0, args, jac, bounds, constraints, maxiter, ftol, iprint, disp, eps, callback, finite_diff_rel_step, **unknown_options)</span>
+<span class="ansi-green-fg">    372</span>
+<span class="ansi-green-fg">    373</span>     <span class="ansi-red-intense-fg ansi-bold"># ScalarFunction provides function and gradient evaluation</span>
+<span class="ansi-green-intense-fg ansi-bold">--&gt; 374</span><span class="ansi-yellow-intense-fg ansi-bold">     sf = _prepare_scalar_function(func, x, jac=jac, args=args, epsilon=eps,
+</span><span class="ansi-green-fg">    375</span>                                   finite_diff_rel_step<span class="ansi-yellow-intense-fg ansi-bold">=</span>finite_diff_rel_step<span class="ansi-yellow-intense-fg ansi-bold">,</span>
+<span class="ansi-green-fg">    376</span>                                   bounds=new_bounds)
 
-<span class="ansi-green-intense-fg ansi-bold">~\Anaconda3\lib\site-packages\scipy\optimize\optimize.py</span> in <span class="ansi-cyan-fg">_prepare_scalar_function</span><span class="ansi-blue-intense-fg ansi-bold">(fun, x0, jac, args, bounds, epsilon, finite_diff_rel_step, hess)</span>
-<span class="ansi-green-fg">    259</span>     <span class="ansi-red-intense-fg ansi-bold"># ScalarFunction caches. Reuse of fun(x) during grad</span>
-<span class="ansi-green-fg">    260</span>     <span class="ansi-red-intense-fg ansi-bold"># calculation reduces overall function evaluations.</span>
-<span class="ansi-green-intense-fg ansi-bold">--&gt; 261</span><span class="ansi-yellow-intense-fg ansi-bold">     sf = ScalarFunction(fun, x0, args, grad, hess,
-</span><span class="ansi-green-fg">    262</span>                         finite_diff_rel_step, bounds, epsilon=epsilon)
-<span class="ansi-green-fg">    263</span>
+<span class="ansi-green-intense-fg ansi-bold">~\Anaconda3\lib\site-packages\scipy\optimize\_optimize.py</span> in <span class="ansi-cyan-fg">_prepare_scalar_function</span><span class="ansi-blue-intense-fg ansi-bold">(fun, x0, jac, args, bounds, epsilon, finite_diff_rel_step, hess)</span>
+<span class="ansi-green-fg">    330</span>     <span class="ansi-red-intense-fg ansi-bold"># ScalarFunction caches. Reuse of fun(x) during grad</span>
+<span class="ansi-green-fg">    331</span>     <span class="ansi-red-intense-fg ansi-bold"># calculation reduces overall function evaluations.</span>
+<span class="ansi-green-intense-fg ansi-bold">--&gt; 332</span><span class="ansi-yellow-intense-fg ansi-bold">     sf = ScalarFunction(fun, x0, args, grad, hess,
+</span><span class="ansi-green-fg">    333</span>                         finite_diff_rel_step, bounds, epsilon=epsilon)
+<span class="ansi-green-fg">    334</span>
 
 <span class="ansi-green-intense-fg ansi-bold">~\Anaconda3\lib\site-packages\scipy\optimize\_differentiable_functions.py</span> in <span class="ansi-cyan-fg">__init__</span><span class="ansi-blue-intense-fg ansi-bold">(self, fun, x0, args, grad, hess, finite_diff_rel_step, finite_diff_bounds, epsilon)</span>
-<span class="ansi-green-fg">    138</span>
-<span class="ansi-green-fg">    139</span>         self<span class="ansi-yellow-intense-fg ansi-bold">.</span>_update_fun_impl <span class="ansi-yellow-intense-fg ansi-bold">=</span> update_fun
-<span class="ansi-green-intense-fg ansi-bold">--&gt; 140</span><span class="ansi-yellow-intense-fg ansi-bold">         </span>self<span class="ansi-yellow-intense-fg ansi-bold">.</span>_update_fun<span class="ansi-yellow-intense-fg ansi-bold">(</span><span class="ansi-yellow-intense-fg ansi-bold">)</span>
-<span class="ansi-green-fg">    141</span>
-<span class="ansi-green-fg">    142</span>         <span class="ansi-red-intense-fg ansi-bold"># Gradient evaluation</span>
+<span class="ansi-green-fg">    156</span>
+<span class="ansi-green-fg">    157</span>         self<span class="ansi-yellow-intense-fg ansi-bold">.</span>_update_fun_impl <span class="ansi-yellow-intense-fg ansi-bold">=</span> update_fun
+<span class="ansi-green-intense-fg ansi-bold">--&gt; 158</span><span class="ansi-yellow-intense-fg ansi-bold">         </span>self<span class="ansi-yellow-intense-fg ansi-bold">.</span>_update_fun<span class="ansi-yellow-intense-fg ansi-bold">(</span><span class="ansi-yellow-intense-fg ansi-bold">)</span>
+<span class="ansi-green-fg">    159</span>
+<span class="ansi-green-fg">    160</span>         <span class="ansi-red-intense-fg ansi-bold"># Gradient evaluation</span>
 
 <span class="ansi-green-intense-fg ansi-bold">~\Anaconda3\lib\site-packages\scipy\optimize\_differentiable_functions.py</span> in <span class="ansi-cyan-fg">_update_fun</span><span class="ansi-blue-intense-fg ansi-bold">(self)</span>
-<span class="ansi-green-fg">    231</span>     <span class="ansi-green-intense-fg ansi-bold">def</span> _update_fun<span class="ansi-yellow-intense-fg ansi-bold">(</span>self<span class="ansi-yellow-intense-fg ansi-bold">)</span><span class="ansi-yellow-intense-fg ansi-bold">:</span>
-<span class="ansi-green-fg">    232</span>         <span class="ansi-green-intense-fg ansi-bold">if</span> <span class="ansi-green-intense-fg ansi-bold">not</span> self<span class="ansi-yellow-intense-fg ansi-bold">.</span>f_updated<span class="ansi-yellow-intense-fg ansi-bold">:</span>
-<span class="ansi-green-intense-fg ansi-bold">--&gt; 233</span><span class="ansi-yellow-intense-fg ansi-bold">             </span>self<span class="ansi-yellow-intense-fg ansi-bold">.</span>_update_fun_impl<span class="ansi-yellow-intense-fg ansi-bold">(</span><span class="ansi-yellow-intense-fg ansi-bold">)</span>
-<span class="ansi-green-fg">    234</span>             self<span class="ansi-yellow-intense-fg ansi-bold">.</span>f_updated <span class="ansi-yellow-intense-fg ansi-bold">=</span> <span class="ansi-green-intense-fg ansi-bold">True</span>
-<span class="ansi-green-fg">    235</span>
+<span class="ansi-green-fg">    249</span>     <span class="ansi-green-intense-fg ansi-bold">def</span> _update_fun<span class="ansi-yellow-intense-fg ansi-bold">(</span>self<span class="ansi-yellow-intense-fg ansi-bold">)</span><span class="ansi-yellow-intense-fg ansi-bold">:</span>
+<span class="ansi-green-fg">    250</span>         <span class="ansi-green-intense-fg ansi-bold">if</span> <span class="ansi-green-intense-fg ansi-bold">not</span> self<span class="ansi-yellow-intense-fg ansi-bold">.</span>f_updated<span class="ansi-yellow-intense-fg ansi-bold">:</span>
+<span class="ansi-green-intense-fg ansi-bold">--&gt; 251</span><span class="ansi-yellow-intense-fg ansi-bold">             </span>self<span class="ansi-yellow-intense-fg ansi-bold">.</span>_update_fun_impl<span class="ansi-yellow-intense-fg ansi-bold">(</span><span class="ansi-yellow-intense-fg ansi-bold">)</span>
+<span class="ansi-green-fg">    252</span>             self<span class="ansi-yellow-intense-fg ansi-bold">.</span>f_updated <span class="ansi-yellow-intense-fg ansi-bold">=</span> <span class="ansi-green-intense-fg ansi-bold">True</span>
+<span class="ansi-green-fg">    253</span>
 
 <span class="ansi-green-intense-fg ansi-bold">~\Anaconda3\lib\site-packages\scipy\optimize\_differentiable_functions.py</span> in <span class="ansi-cyan-fg">update_fun</span><span class="ansi-blue-intense-fg ansi-bold">()</span>
-<span class="ansi-green-fg">    135</span>
-<span class="ansi-green-fg">    136</span>         <span class="ansi-green-intense-fg ansi-bold">def</span> update_fun<span class="ansi-yellow-intense-fg ansi-bold">(</span><span class="ansi-yellow-intense-fg ansi-bold">)</span><span class="ansi-yellow-intense-fg ansi-bold">:</span>
-<span class="ansi-green-intense-fg ansi-bold">--&gt; 137</span><span class="ansi-yellow-intense-fg ansi-bold">             </span>self<span class="ansi-yellow-intense-fg ansi-bold">.</span>f <span class="ansi-yellow-intense-fg ansi-bold">=</span> fun_wrapped<span class="ansi-yellow-intense-fg ansi-bold">(</span>self<span class="ansi-yellow-intense-fg ansi-bold">.</span>x<span class="ansi-yellow-intense-fg ansi-bold">)</span>
-<span class="ansi-green-fg">    138</span>
-<span class="ansi-green-fg">    139</span>         self<span class="ansi-yellow-intense-fg ansi-bold">.</span>_update_fun_impl <span class="ansi-yellow-intense-fg ansi-bold">=</span> update_fun
+<span class="ansi-green-fg">    153</span>
+<span class="ansi-green-fg">    154</span>         <span class="ansi-green-intense-fg ansi-bold">def</span> update_fun<span class="ansi-yellow-intense-fg ansi-bold">(</span><span class="ansi-yellow-intense-fg ansi-bold">)</span><span class="ansi-yellow-intense-fg ansi-bold">:</span>
+<span class="ansi-green-intense-fg ansi-bold">--&gt; 155</span><span class="ansi-yellow-intense-fg ansi-bold">             </span>self<span class="ansi-yellow-intense-fg ansi-bold">.</span>f <span class="ansi-yellow-intense-fg ansi-bold">=</span> fun_wrapped<span class="ansi-yellow-intense-fg ansi-bold">(</span>self<span class="ansi-yellow-intense-fg ansi-bold">.</span>x<span class="ansi-yellow-intense-fg ansi-bold">)</span>
+<span class="ansi-green-fg">    156</span>
+<span class="ansi-green-fg">    157</span>         self<span class="ansi-yellow-intense-fg ansi-bold">.</span>_update_fun_impl <span class="ansi-yellow-intense-fg ansi-bold">=</span> update_fun
 
 <span class="ansi-green-intense-fg ansi-bold">~\Anaconda3\lib\site-packages\scipy\optimize\_differentiable_functions.py</span> in <span class="ansi-cyan-fg">fun_wrapped</span><span class="ansi-blue-intense-fg ansi-bold">(x)</span>
-<span class="ansi-green-fg">    132</span>             <span class="ansi-red-intense-fg ansi-bold"># Overwriting results in undefined behaviour because</span>
-<span class="ansi-green-fg">    133</span>             <span class="ansi-red-intense-fg ansi-bold"># fun(self.x) will change self.x, with the two no longer linked.</span>
-<span class="ansi-green-intense-fg ansi-bold">--&gt; 134</span><span class="ansi-yellow-intense-fg ansi-bold">             </span><span class="ansi-green-intense-fg ansi-bold">return</span> fun<span class="ansi-yellow-intense-fg ansi-bold">(</span>np<span class="ansi-yellow-intense-fg ansi-bold">.</span>copy<span class="ansi-yellow-intense-fg ansi-bold">(</span>x<span class="ansi-yellow-intense-fg ansi-bold">)</span><span class="ansi-yellow-intense-fg ansi-bold">,</span> <span class="ansi-yellow-intense-fg ansi-bold">*</span>args<span class="ansi-yellow-intense-fg ansi-bold">)</span>
-<span class="ansi-green-fg">    135</span>
-<span class="ansi-green-fg">    136</span>         <span class="ansi-green-intense-fg ansi-bold">def</span> update_fun<span class="ansi-yellow-intense-fg ansi-bold">(</span><span class="ansi-yellow-intense-fg ansi-bold">)</span><span class="ansi-yellow-intense-fg ansi-bold">:</span>
+<span class="ansi-green-fg">    135</span>             <span class="ansi-red-intense-fg ansi-bold"># Overwriting results in undefined behaviour because</span>
+<span class="ansi-green-fg">    136</span>             <span class="ansi-red-intense-fg ansi-bold"># fun(self.x) will change self.x, with the two no longer linked.</span>
+<span class="ansi-green-intense-fg ansi-bold">--&gt; 137</span><span class="ansi-yellow-intense-fg ansi-bold">             </span>fx <span class="ansi-yellow-intense-fg ansi-bold">=</span> fun<span class="ansi-yellow-intense-fg ansi-bold">(</span>np<span class="ansi-yellow-intense-fg ansi-bold">.</span>copy<span class="ansi-yellow-intense-fg ansi-bold">(</span>x<span class="ansi-yellow-intense-fg ansi-bold">)</span><span class="ansi-yellow-intense-fg ansi-bold">,</span> <span class="ansi-yellow-intense-fg ansi-bold">*</span>args<span class="ansi-yellow-intense-fg ansi-bold">)</span>
+<span class="ansi-green-fg">    138</span>             <span class="ansi-red-intense-fg ansi-bold"># Make sure the function returns a true scalar</span>
+<span class="ansi-green-fg">    139</span>             <span class="ansi-green-intense-fg ansi-bold">if</span> <span class="ansi-green-intense-fg ansi-bold">not</span> np<span class="ansi-yellow-intense-fg ansi-bold">.</span>isscalar<span class="ansi-yellow-intense-fg ansi-bold">(</span>fx<span class="ansi-yellow-intense-fg ansi-bold">)</span><span class="ansi-yellow-intense-fg ansi-bold">:</span>
 
 <span class="ansi-green-intense-fg ansi-bold">c:\users\dhulse\documents\github\fmdtools\fmdtools\sim\search.py</span> in <span class="ansi-cyan-fg">newobj</span><span class="ansi-blue-intense-fg ansi-bold">(x)</span>
 <span class="ansi-green-fg">    252</span>     <span class="ansi-green-intense-fg ansi-bold">def</span> _assoc_obj_con<span class="ansi-yellow-intense-fg ansi-bold">(</span>self<span class="ansi-yellow-intense-fg ansi-bold">,</span> simname<span class="ansi-yellow-intense-fg ansi-bold">,</span> objname<span class="ansi-yellow-intense-fg ansi-bold">,</span> obj_const<span class="ansi-yellow-intense-fg ansi-bold">,</span> arg<span class="ansi-yellow-intense-fg ansi-bold">)</span><span class="ansi-yellow-intense-fg ansi-bold">:</span>
@@ -1497,11 +1497,11 @@ Problem multi_problem                                                   current 
 <span class="ansi-green-fg">    214</span>         <span class="ansi-green-intense-fg ansi-bold">if</span> <span class="ansi-green-intense-fg ansi-bold">not</span> r<span class="ansi-yellow-intense-fg ansi-bold">:</span>
 
 <span class="ansi-green-intense-fg ansi-bold">c:\users\dhulse\documents\github\fmdtools\fmdtools\define\parameter.py</span> in <span class="ansi-cyan-fg">copy_with_vals</span><span class="ansi-blue-intense-fg ansi-bold">(self, **kwargs)</span>
-<span class="ansi-green-fg">    140</span>     <span class="ansi-green-intense-fg ansi-bold">def</span> copy_with_vals<span class="ansi-yellow-intense-fg ansi-bold">(</span>self<span class="ansi-yellow-intense-fg ansi-bold">,</span> <span class="ansi-yellow-intense-fg ansi-bold">**</span>kwargs<span class="ansi-yellow-intense-fg ansi-bold">)</span><span class="ansi-yellow-intense-fg ansi-bold">:</span>
-<span class="ansi-green-fg">    141</span>         <span class="ansi-blue-intense-fg ansi-bold">&#34;&#34;&#34;Creates a copy of itself with modified values given by kwargs&#34;&#34;&#34;</span>
-<span class="ansi-green-intense-fg ansi-bold">--&gt; 142</span><span class="ansi-yellow-intense-fg ansi-bold">         </span><span class="ansi-green-intense-fg ansi-bold">return</span> self<span class="ansi-yellow-intense-fg ansi-bold">.</span>__class__<span class="ansi-yellow-intense-fg ansi-bold">(</span><span class="ansi-yellow-intense-fg ansi-bold">**</span><span class="ansi-yellow-intense-fg ansi-bold">{</span><span class="ansi-yellow-intense-fg ansi-bold">**</span>asdict<span class="ansi-yellow-intense-fg ansi-bold">(</span>self<span class="ansi-yellow-intense-fg ansi-bold">)</span><span class="ansi-yellow-intense-fg ansi-bold">,</span> <span class="ansi-yellow-intense-fg ansi-bold">**</span>kwargs<span class="ansi-yellow-intense-fg ansi-bold">}</span><span class="ansi-yellow-intense-fg ansi-bold">)</span>
-<span class="ansi-green-fg">    143</span>
-<span class="ansi-green-fg">    144</span>     <span class="ansi-green-intense-fg ansi-bold">def</span> check_pickle<span class="ansi-yellow-intense-fg ansi-bold">(</span>self<span class="ansi-yellow-intense-fg ansi-bold">)</span><span class="ansi-yellow-intense-fg ansi-bold">:</span>
+<span class="ansi-green-fg">    145</span>     <span class="ansi-green-intense-fg ansi-bold">def</span> copy_with_vals<span class="ansi-yellow-intense-fg ansi-bold">(</span>self<span class="ansi-yellow-intense-fg ansi-bold">,</span> <span class="ansi-yellow-intense-fg ansi-bold">**</span>kwargs<span class="ansi-yellow-intense-fg ansi-bold">)</span><span class="ansi-yellow-intense-fg ansi-bold">:</span>
+<span class="ansi-green-fg">    146</span>         <span class="ansi-blue-intense-fg ansi-bold">&#34;&#34;&#34;Creates a copy of itself with modified values given by kwargs&#34;&#34;&#34;</span>
+<span class="ansi-green-intense-fg ansi-bold">--&gt; 147</span><span class="ansi-yellow-intense-fg ansi-bold">         </span><span class="ansi-green-intense-fg ansi-bold">return</span> self<span class="ansi-yellow-intense-fg ansi-bold">.</span>__class__<span class="ansi-yellow-intense-fg ansi-bold">(</span><span class="ansi-yellow-intense-fg ansi-bold">**</span><span class="ansi-yellow-intense-fg ansi-bold">{</span><span class="ansi-yellow-intense-fg ansi-bold">**</span>asdict<span class="ansi-yellow-intense-fg ansi-bold">(</span>self<span class="ansi-yellow-intense-fg ansi-bold">)</span><span class="ansi-yellow-intense-fg ansi-bold">,</span> <span class="ansi-yellow-intense-fg ansi-bold">**</span>kwargs<span class="ansi-yellow-intense-fg ansi-bold">}</span><span class="ansi-yellow-intense-fg ansi-bold">)</span>
+<span class="ansi-green-fg">    148</span>
+<span class="ansi-green-fg">    149</span>     <span class="ansi-green-intense-fg ansi-bold">def</span> check_pickle<span class="ansi-yellow-intense-fg ansi-bold">(</span>self<span class="ansi-yellow-intense-fg ansi-bold">)</span><span class="ansi-yellow-intense-fg ansi-bold">:</span>
 
 <span class="ansi-green-intense-fg ansi-bold">c:\users\dhulse\documents\github\fmdtools\fmdtools\define\parameter.py</span> in <span class="ansi-cyan-fg">__init__</span><span class="ansi-blue-intense-fg ansi-bold">(self, strict_immutability, check_type, check_pickle, *args, **kwargs)</span>
 <span class="ansi-green-fg">     68</span>             self<span class="ansi-yellow-intense-fg ansi-bold">.</span>check_immutable<span class="ansi-yellow-intense-fg ansi-bold">(</span><span class="ansi-yellow-intense-fg ansi-bold">)</span>
@@ -1511,11 +1511,11 @@ Problem multi_problem                                                   current 
 <span class="ansi-green-fg">     72</span>             self<span class="ansi-yellow-intense-fg ansi-bold">.</span>check_pickle<span class="ansi-yellow-intense-fg ansi-bold">(</span><span class="ansi-yellow-intense-fg ansi-bold">)</span>
 
 <span class="ansi-green-intense-fg ansi-bold">c:\users\dhulse\documents\github\fmdtools\fmdtools\define\parameter.py</span> in <span class="ansi-cyan-fg">check_type</span><span class="ansi-blue-intense-fg ansi-bold">(self)</span>
-<span class="ansi-green-fg">    134</span>                     str(true_type).split(&#34;&#39;&#34;)[1] not in str(attr_type)):
-<span class="ansi-green-fg">    135</span>                 <span class="ansi-red-intense-fg ansi-bold"># weaker, but enables use of np.str, np.float, etc</span>
-<span class="ansi-green-intense-fg ansi-bold">--&gt; 136</span><span class="ansi-yellow-intense-fg ansi-bold">                 raise Exception(typed_field+&#34; in &#34;+str(self.__class__) +
-</span><span class="ansi-green-fg">    137</span>                                 <span class="ansi-blue-intense-fg ansi-bold">&#34; assigned incorrect type: &#34;</span> <span class="ansi-yellow-intense-fg ansi-bold">+</span> str<span class="ansi-yellow-intense-fg ansi-bold">(</span>attr_type<span class="ansi-yellow-intense-fg ansi-bold">)</span> <span class="ansi-yellow-intense-fg ansi-bold">+</span>
-<span class="ansi-green-fg">    138</span>                                 &#34; (should be &#34;+str(true_type)+&#34;)&#34;)
+<span class="ansi-green-fg">    139</span>                     str(true_type).split(&#34;&#39;&#34;)[1] not in str(attr_type)):
+<span class="ansi-green-fg">    140</span>                 <span class="ansi-red-intense-fg ansi-bold"># weaker, but enables use of np.str, np.float, etc</span>
+<span class="ansi-green-intense-fg ansi-bold">--&gt; 141</span><span class="ansi-yellow-intense-fg ansi-bold">                 raise Exception(typed_field+&#34; in &#34;+str(self.__class__) +
+</span><span class="ansi-green-fg">    142</span>                                 <span class="ansi-blue-intense-fg ansi-bold">&#34; assigned incorrect type: &#34;</span> <span class="ansi-yellow-intense-fg ansi-bold">+</span> str<span class="ansi-yellow-intense-fg ansi-bold">(</span>attr_type<span class="ansi-yellow-intense-fg ansi-bold">)</span> <span class="ansi-yellow-intense-fg ansi-bold">+</span>
+<span class="ansi-green-fg">    143</span>                                 &#34; (should be &#34;+str(true_type)+&#34;)&#34;)
 
 <span class="ansi-red-intense-fg ansi-bold">Exception</span>: delay in &lt;class &#39;examples.pump.ex_pump.PumpParam&#39;&gt; assigned incorrect type: &lt;class &#39;numpy.float64&#39;&gt; (should be &lt;class &#39;int&#39;&gt;)
 </pre></div></div>
