@@ -741,12 +741,16 @@ class Result(UserDict):
             Dictionary of probabilities of different simulation classifications
 
         """
-        classifications = set([props[class_key] for k, props in self.items()])
-        probabilities = dict.fromkeys(classifications)
-        for classif in classifications:
-            probabilities[classif] = sum([props[prob_key]
-                                          for k, props in self.items()
-                                          if classif == props[class_key]])
+        classifications = self.get_values("." + class_key)
+        class_len = len("." + class_key)
+        probs = self.get_values("." + prob_key)
+        probabilities = dict()
+        for key, classif in classifications.items():
+            prob = probs[key[:-class_len] + "." + prob_key]
+            if classif in probabilities:
+                probabilities[classif] += prob
+            else:
+                probabilities[classif] = prob
         return probabilities
 
     def expected(self, metric, prob_key='rate'):
