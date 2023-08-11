@@ -165,14 +165,14 @@ class MultiFlow(Flow):
         #elif type(attrs)==str:  attrs = [attrs]
         #if type(attrs)==list:   atts = {k:v for k,v in default_states if k in attrs}
         #elif type(attrs)==dict: atts = {k:v for k,v in attrs.items() if k in default_states}
-        if p=='global':
-            p = self.p
-        if s=='global':
-            s = asdict(self.s)
-        
-        if hasattr(self, name): 
-            newflow = getattr(self, name).copy(glob=self, p=p, s=s)
+        if hasattr(self, name):
+            oldflow = getattr(self, name)
+            newflow = oldflow.copy(glob=self)
         else: 
+            if p=='global':
+                p = self.p
+            if s=='global':
+                s = asdict(self.s)
             newflow = self.__class__(name, glob=self, p=p, s=s)
         setattr(self, name, newflow)
         self.locals.append(name)

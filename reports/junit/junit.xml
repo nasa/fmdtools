@@ -1,12 +1,122 @@
-<?xml version="1.0" encoding="utf-8"?><testsuites><testsuite name="pytest" errors="7" failures="17" skipped="0" tests="142" time="1360.736" timestamp="2023-08-04T09:20:15.879540" hostname="siskiyou"><testcase classname="" name="examples.pump.jointfaults_ex" time="0.000"><error message="collection failure">examples\pump\jointfaults_ex.py:12: in &lt;module&gt;
+<?xml version="1.0" encoding="utf-8"?><testsuites><testsuite name="pytest" errors="7" failures="19" skipped="0" tests="95" time="790.078" timestamp="2023-08-10T19:39:38.623950" hostname="siskiyou"><testcase classname="" name="examples.pump.jointfaults_ex" time="0.000"><error message="collection failure">..\..\..\Anaconda3\lib\site-packages\_pytest\runner.py:341: in from_call
+    result: Optional[TResult] = func()
+..\..\..\Anaconda3\lib\site-packages\_pytest\runner.py:372: in &lt;lambda&gt;
+    call = CallInfo.from_call(lambda: list(collector.collect()), "collect")
+..\..\..\Anaconda3\lib\site-packages\_pytest\doctest.py:547: in collect
+    module = import_path(
+..\..\..\Anaconda3\lib\site-packages\_pytest\pathlib.py:565: in import_path
+    importlib.import_module(module_name)
+..\..\..\Anaconda3\lib\importlib\__init__.py:127: in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+&lt;frozen importlib._bootstrap&gt;:1030: in _gcd_import
+    ???
+&lt;frozen importlib._bootstrap&gt;:1007: in _find_and_load
+    ???
+&lt;frozen importlib._bootstrap&gt;:986: in _find_and_load_unlocked
+    ???
+&lt;frozen importlib._bootstrap&gt;:680: in _load_unlocked
+    ???
+&lt;frozen importlib._bootstrap_external&gt;:850: in exec_module
+    ???
+&lt;frozen importlib._bootstrap&gt;:228: in _call_with_frames_removed
+    ???
+examples\pump\jointfaults_ex.py:12: in &lt;module&gt;
     from ex_pump import Pump  # required to import entire module
-E   ModuleNotFoundError: No module named 'ex_pump'</error></testcase><testcase classname="" name="examples.pump.parallelism_methods" time="0.000"><error message="collection failure">examples\pump\parallelism_methods.py:8: in &lt;module&gt;
+E   ModuleNotFoundError: No module named 'ex_pump'</error></testcase><testcase classname="" name="examples.pump.parallelism_methods" time="0.000"><error message="collection failure">..\..\..\Anaconda3\lib\site-packages\_pytest\runner.py:341: in from_call
+    result: Optional[TResult] = func()
+..\..\..\Anaconda3\lib\site-packages\_pytest\runner.py:372: in &lt;lambda&gt;
+    call = CallInfo.from_call(lambda: list(collector.collect()), "collect")
+..\..\..\Anaconda3\lib\site-packages\_pytest\doctest.py:547: in collect
+    module = import_path(
+..\..\..\Anaconda3\lib\site-packages\_pytest\pathlib.py:565: in import_path
+    importlib.import_module(module_name)
+..\..\..\Anaconda3\lib\importlib\__init__.py:127: in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+&lt;frozen importlib._bootstrap&gt;:1030: in _gcd_import
+    ???
+&lt;frozen importlib._bootstrap&gt;:1007: in _find_and_load
+    ???
+&lt;frozen importlib._bootstrap&gt;:986: in _find_and_load_unlocked
+    ???
+&lt;frozen importlib._bootstrap&gt;:680: in _load_unlocked
+    ???
+&lt;frozen importlib._bootstrap_external&gt;:850: in exec_module
+    ???
+&lt;frozen importlib._bootstrap&gt;:228: in _call_with_frames_removed
+    ???
+examples\pump\parallelism_methods.py:8: in &lt;module&gt;
     from ex_pump import *
-E   ModuleNotFoundError: No module named 'ex_pump'</error></testcase><testcase classname="" name="examples.rover.rover_degradation" time="0.000"><error message="collection failure">examples\rover\rover_degradation.py:17: in &lt;module&gt;
+E   ModuleNotFoundError: No module named 'ex_pump'</error></testcase><testcase classname="" name="examples.rover.rover_degradation" time="0.000"><error message="collection failure">..\..\..\Anaconda3\lib\site-packages\_pytest\runner.py:341: in from_call
+    result: Optional[TResult] = func()
+..\..\..\Anaconda3\lib\site-packages\_pytest\runner.py:372: in &lt;lambda&gt;
+    call = CallInfo.from_call(lambda: list(collector.collect()), "collect")
+..\..\..\Anaconda3\lib\site-packages\_pytest\doctest.py:547: in collect
+    module = import_path(
+..\..\..\Anaconda3\lib\site-packages\_pytest\pathlib.py:565: in import_path
+    importlib.import_module(module_name)
+..\..\..\Anaconda3\lib\importlib\__init__.py:127: in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+&lt;frozen importlib._bootstrap&gt;:1030: in _gcd_import
+    ???
+&lt;frozen importlib._bootstrap&gt;:1007: in _find_and_load
+    ???
+&lt;frozen importlib._bootstrap&gt;:986: in _find_and_load_unlocked
+    ???
+&lt;frozen importlib._bootstrap&gt;:680: in _load_unlocked
+    ???
+&lt;frozen importlib._bootstrap_external&gt;:850: in exec_module
+    ???
+&lt;frozen importlib._bootstrap&gt;:228: in _call_with_frames_removed
+    ???
+examples\rover\rover_degradation.py:17: in &lt;module&gt;
     from rover_model import Rover, plot_trajectories, DegParam
-E   ModuleNotFoundError: No module named 'rover_model'</error></testcase><testcase classname="" name="examples.rover.rover_model_human" time="0.000"><error message="collection failure">examples\rover\rover_model_human.py:23: in &lt;module&gt;
-    from fmdtools.define.model import Model, ModelParam
-E   ImportError: cannot import name 'ModelParam' from 'fmdtools.define.model' (C:\Users\dhulse\Documents\GitHub\fmdtools\fmdtools\define\model.py)</error></testcase><testcase classname="" name="examples.rover.optimization.animation" time="0.000"><error message="collection failure">examples\rover\optimization\animation.py:24: in &lt;module&gt;
+E   ModuleNotFoundError: No module named 'rover_model'</error></testcase><testcase classname="" name="examples.rover.rover_model_human" time="0.000"><error message="collection failure">..\..\..\Anaconda3\lib\site-packages\_pytest\runner.py:341: in from_call
+    result: Optional[TResult] = func()
+..\..\..\Anaconda3\lib\site-packages\_pytest\runner.py:372: in &lt;lambda&gt;
+    call = CallInfo.from_call(lambda: list(collector.collect()), "collect")
+..\..\..\Anaconda3\lib\site-packages\_pytest\doctest.py:547: in collect
+    module = import_path(
+..\..\..\Anaconda3\lib\site-packages\_pytest\pathlib.py:565: in import_path
+    importlib.import_module(module_name)
+..\..\..\Anaconda3\lib\importlib\__init__.py:127: in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+&lt;frozen importlib._bootstrap&gt;:1030: in _gcd_import
+    ???
+&lt;frozen importlib._bootstrap&gt;:1007: in _find_and_load
+    ???
+&lt;frozen importlib._bootstrap&gt;:986: in _find_and_load_unlocked
+    ???
+&lt;frozen importlib._bootstrap&gt;:680: in _load_unlocked
+    ???
+&lt;frozen importlib._bootstrap_external&gt;:850: in exec_module
+    ???
+&lt;frozen importlib._bootstrap&gt;:228: in _call_with_frames_removed
+    ???
+examples\rover\rover_model_human.py:37: in &lt;module&gt;
+    from rover_model import translate_angle, turn_func, sin_func, sin_angle_func, in_area, dist, find_line_dist, gen_param_space
+E   ModuleNotFoundError: No module named 'rover_model'</error></testcase><testcase classname="" name="examples.rover.optimization.animation" time="0.000"><error message="collection failure">..\..\..\Anaconda3\lib\site-packages\_pytest\runner.py:341: in from_call
+    result: Optional[TResult] = func()
+..\..\..\Anaconda3\lib\site-packages\_pytest\runner.py:372: in &lt;lambda&gt;
+    call = CallInfo.from_call(lambda: list(collector.collect()), "collect")
+..\..\..\Anaconda3\lib\site-packages\_pytest\doctest.py:547: in collect
+    module = import_path(
+..\..\..\Anaconda3\lib\site-packages\_pytest\pathlib.py:565: in import_path
+    importlib.import_module(module_name)
+..\..\..\Anaconda3\lib\importlib\__init__.py:127: in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+&lt;frozen importlib._bootstrap&gt;:1030: in _gcd_import
+    ???
+&lt;frozen importlib._bootstrap&gt;:1007: in _find_and_load
+    ???
+&lt;frozen importlib._bootstrap&gt;:986: in _find_and_load_unlocked
+    ???
+&lt;frozen importlib._bootstrap&gt;:680: in _load_unlocked
+    ???
+&lt;frozen importlib._bootstrap_external&gt;:850: in exec_module
+    ???
+&lt;frozen importlib._bootstrap&gt;:228: in _call_with_frames_removed
+    ???
+examples\rover\optimization\animation.py:24: in &lt;module&gt;
     dfccea = pd.read_csv('ccea_species.csv')
 ..\..\..\Anaconda3\lib\site-packages\pandas\util\_decorators.py:311: in wrapper
     return func(*args, **kwargs)
@@ -24,7 +134,29 @@ E   ImportError: cannot import name 'ModelParam' from 'fmdtools.define.model' (C
     self.handles = get_handle(
 ..\..\..\Anaconda3\lib\site-packages\pandas\io\common.py:702: in get_handle
     handle = open(
-E   FileNotFoundError: [Errno 2] No such file or directory: 'ccea_species.csv'</error></testcase><testcase classname="" name="examples.rover.optimization.ea_analysis" time="0.000"><error message="collection failure">examples\rover\optimization\ea_analysis.py:11: in &lt;module&gt;
+E   FileNotFoundError: [Errno 2] No such file or directory: 'ccea_species.csv'</error></testcase><testcase classname="" name="examples.rover.optimization.ea_analysis" time="0.000"><error message="collection failure">..\..\..\Anaconda3\lib\site-packages\_pytest\runner.py:341: in from_call
+    result: Optional[TResult] = func()
+..\..\..\Anaconda3\lib\site-packages\_pytest\runner.py:372: in &lt;lambda&gt;
+    call = CallInfo.from_call(lambda: list(collector.collect()), "collect")
+..\..\..\Anaconda3\lib\site-packages\_pytest\doctest.py:547: in collect
+    module = import_path(
+..\..\..\Anaconda3\lib\site-packages\_pytest\pathlib.py:565: in import_path
+    importlib.import_module(module_name)
+..\..\..\Anaconda3\lib\importlib\__init__.py:127: in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+&lt;frozen importlib._bootstrap&gt;:1030: in _gcd_import
+    ???
+&lt;frozen importlib._bootstrap&gt;:1007: in _find_and_load
+    ???
+&lt;frozen importlib._bootstrap&gt;:986: in _find_and_load_unlocked
+    ???
+&lt;frozen importlib._bootstrap&gt;:680: in _load_unlocked
+    ???
+&lt;frozen importlib._bootstrap_external&gt;:850: in exec_module
+    ???
+&lt;frozen importlib._bootstrap&gt;:228: in _call_with_frames_removed
+    ???
+examples\rover\optimization\ea_analysis.py:11: in &lt;module&gt;
     dfea = pd.read_csv('rslt_ea.csv')
 ..\..\..\Anaconda3\lib\site-packages\pandas\util\_decorators.py:311: in wrapper
     return func(*args, **kwargs)
@@ -42,9 +174,166 @@ E   FileNotFoundError: [Errno 2] No such file or directory: 'ccea_species.csv'</
     self.handles = get_handle(
 ..\..\..\Anaconda3\lib\site-packages\pandas\io\common.py:702: in get_handle
     handle = open(
-E   FileNotFoundError: [Errno 2] No such file or directory: 'rslt_ea.csv'</error></testcase><testcase classname="" name="examples.tank.tank_script" time="0.000"><error message="collection failure">examples\tank\tank_script.py:13: in &lt;module&gt;
+E   FileNotFoundError: [Errno 2] No such file or directory: 'rslt_ea.csv'</error></testcase><testcase classname="" name="examples.tank.tank_script" time="0.000"><error message="collection failure">..\..\..\Anaconda3\lib\site-packages\_pytest\runner.py:341: in from_call
+    result: Optional[TResult] = func()
+..\..\..\Anaconda3\lib\site-packages\_pytest\runner.py:372: in &lt;lambda&gt;
+    call = CallInfo.from_call(lambda: list(collector.collect()), "collect")
+..\..\..\Anaconda3\lib\site-packages\_pytest\doctest.py:547: in collect
+    module = import_path(
+..\..\..\Anaconda3\lib\site-packages\_pytest\pathlib.py:565: in import_path
+    importlib.import_module(module_name)
+..\..\..\Anaconda3\lib\importlib\__init__.py:127: in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+&lt;frozen importlib._bootstrap&gt;:1030: in _gcd_import
+    ???
+&lt;frozen importlib._bootstrap&gt;:1007: in _find_and_load
+    ???
+&lt;frozen importlib._bootstrap&gt;:986: in _find_and_load_unlocked
+    ???
+&lt;frozen importlib._bootstrap&gt;:680: in _load_unlocked
+    ???
+&lt;frozen importlib._bootstrap_external&gt;:850: in exec_module
+    ???
+&lt;frozen importlib._bootstrap&gt;:228: in _call_with_frames_removed
+    ???
+examples\tank\tank_script.py:13: in &lt;module&gt;
     from tank_model import Tank
-E   ModuleNotFoundError: No module named 'tank_model'</error></testcase><testcase classname="examples.asg_demo.Action_Sequence_Graph.ipynb" name="" time="7.782" /><testcase classname="examples.eps.EPS_Example_Notebook.ipynb" name="" time="5.685" /><testcase classname="examples.eps.test_eps.epsTests" name="test_all_faults" time="0.425" /><testcase classname="examples.eps.test_eps.epsTests" name="test_backward_fault_prop_1" time="0.017" /><testcase classname="examples.eps.test_eps.epsTests" name="test_backward_fault_prop_2" time="0.020" /><testcase classname="examples.eps.test_eps.epsTests" name="test_fault_app" time="47.782" /><testcase classname="examples.eps.test_eps.epsTests" name="test_pickleability" time="0.007" /><testcase classname="examples.eps.test_eps.epsTests" name="test_save_load_multfault" time="0.069" /><testcase classname="examples.eps.test_eps.epsTests" name="test_save_load_nominal" time="0.060" /><testcase classname="examples.eps.test_eps.epsTests" name="test_save_load_onefault" time="0.066" /><testcase classname="examples.eps.test_eps.epsTests" name="test_save_load_singlefaults" time="1.612" /><testcase classname="examples.multiflow_demo.Multiflow_and_Commsflow_Demonstration.ipynb" name="" time="5.089" /><testcase classname="examples.multiflow_demo.test_multiflow.define_Tests" name="test_multiflows" time="0.038" /><testcase classname="examples.multirotor.Demonstration.ipynb" name="" time="351.359" /><testcase classname="examples.multirotor.Multirotor_Optimization.ipynb" name="" time="23.270" /><testcase classname="examples.multirotor.test_multirotor.DroneTests" name="test_interface_values" time="2.965"><failure message="AssertionError: 1.0460427910138081 != 0.7096666666666668 within 1 places (0.33637612434714137 difference)">self = &lt;examples.multirotor.test_multirotor.DroneTests testMethod=test_interface_values&gt;
+E   ModuleNotFoundError: No module named 'tank_model'</error></testcase><testcase classname="examples.asg_demo.Action_Sequence_Graph.ipynb" name="" time="12.235" /><testcase classname="examples.eps.EPS_Example_Notebook.ipynb" name="" time="9.959" /><testcase classname="examples.eps.test_eps.epsTests" name="test_all_faults" time="1.313" /><testcase classname="examples.eps.test_eps.epsTests" name="test_backward_fault_prop_1" time="0.043" /><testcase classname="examples.eps.test_eps.epsTests" name="test_backward_fault_prop_2" time="0.040" /><testcase classname="examples.eps.test_eps.epsTests" name="test_fault_app" time="57.341" /><testcase classname="examples.eps.test_eps.epsTests" name="test_pickleability" time="0.007" /><testcase classname="examples.eps.test_eps.epsTests" name="test_save_load_multfault" time="0.097" /><testcase classname="examples.eps.test_eps.epsTests" name="test_save_load_nominal" time="0.061" /><testcase classname="examples.eps.test_eps.epsTests" name="test_save_load_onefault" time="0.071" /><testcase classname="examples.eps.test_eps.epsTests" name="test_save_load_singlefaults" time="1.722" /><testcase classname="examples.multiflow_demo.Multiflow_and_Commsflow_Demonstration.ipynb" name="" time="5.607" /><testcase classname="examples.multiflow_demo.test_multiflow.define_Tests" name="test_multiflows" time="0.021"><failure message="AssertionError: 0.0 != 25">self = &lt;examples.multiflow_demo.test_multiflow.define_Tests testMethod=test_multiflows&gt;
+
+    def test_multiflows(self):
+        mdl = TestModel()
+        endresults, mdlhist = propagate.nominal(mdl)
+        # check that location copied such that the global version aren't modified but the local ones are
+        np.testing.assert_array_equal(mdlhist.flows.location.s.x, np.zeros(11))
+        np.testing.assert_array_equal(mdlhist.flows.location.s.y, np.zeros(11))
+        np.testing.assert_array_equal(mdlhist.flows.location.mover_1.s.x, [i for i in range(11)])
+        np.testing.assert_array_equal(mdlhist.flows.location.mover_1.s.y, np.zeros(11))
+        np.testing.assert_array_equal(mdlhist.flows.location.mover_2.s.x, np.zeros(11))
+        np.testing.assert_array_equal(mdlhist.flows.location.mover_2.s.y, [i for i in range(11)])
+        # check that communications combined such that both Movers have iterating x-y values
+        np.testing.assert_array_equal(mdlhist.flows.communications.mover_1.s.x, [i for i in range(11)])
+        np.testing.assert_array_equal(mdlhist.flows.communications.mover_1.s.y, [i for i in range(11)])
+        np.testing.assert_array_equal(mdlhist.flows.communications.mover_2.s.x, [i for i in range(11)])
+        np.testing.assert_array_equal(mdlhist.flows.communications.mover_2.s.y, [i for i in range(11)])
+        # check that coordinator parses communiations from each Mover
+        np.testing.assert_array_equal(mdlhist.flows.communications.coordinator.mover_1.s.x, [i for i in range(11)])
+        np.testing.assert_array_equal(mdlhist.flows.communications.coordinator.mover_2.s.y, [i for i in range(11)])
+    
+        #tests that copying works
+        mdl.flows["communications"].mover_1.s.x=25
+        mdl.flows["communications"].mover_1.send(["mover_2", "coordinator"])
+        self.assertEqual(mdl.flows["communications"].fxns["coordinator"]["in"], {"mover_1":()})
+    
+    
+        mdl.flows["communications"].coordinator.receive()
+        self.assertEqual(mdl.flows["communications"].fxns["mover_1"]["out"].s.x, 25)
+        self.assertEqual(mdl.flows["communications"].fxns["coordinator"]["internal"].mover_1.s.x, 25)
+        self.assertEqual(mdl.flows["communications"].fxns["mover_2"]["in"], {"mover_1":()})
+    
+        # copies should keep in/out dicts in place
+        mdl2 = mdl.copy()
+&gt;       self.assertEqual(mdl2.flows["communications"].fxns["mover_1"]["out"].s.x, 25)
+E       AssertionError: 0.0 != 25
+
+examples\multiflow_demo\test_multiflow.py:45: AssertionError</failure></testcase><testcase classname="examples.multirotor.Demonstration.ipynb" name="" time="5.122"><failure message="#x1B[1;31mImportError#x1B[0m: The Qt version imported is 5.9.7 but Matplotlib requires Qt&gt;=5.10">---------------------------------------------------------------------------
+%matplotlib qt5
+gi = mg.move_nodes()
+#x1B[1;31m---------------------------------------------------------------------------#x1B[0m
+#x1B[1;31mImportError#x1B[0m                               Traceback (most recent call last)
+#x1B[1;32m~\AppData\Local\Temp\1/ipykernel_10072/1451165344.py#x1B[0m in #x1B[0;36m&lt;module&gt;#x1B[1;34m#x1B[0m
+#x1B[1;32m----&gt; 1#x1B[1;33m #x1B[0mget_ipython#x1B[0m#x1B[1;33m(#x1B[0m#x1B[1;33m)#x1B[0m#x1B[1;33m.#x1B[0m#x1B[0mrun_line_magic#x1B[0m#x1B[1;33m(#x1B[0m#x1B[1;34m'matplotlib'#x1B[0m#x1B[1;33m,#x1B[0m #x1B[1;34m'qt5'#x1B[0m#x1B[1;33m)#x1B[0m#x1B[1;33m#x1B[0m#x1B[1;33m#x1B[0m#x1B[0m
+#x1B[0m#x1B[0;32m      2#x1B[0m #x1B[0mgi#x1B[0m #x1B[1;33m=#x1B[0m #x1B[0mmg#x1B[0m#x1B[1;33m.#x1B[0m#x1B[0mmove_nodes#x1B[0m#x1B[1;33m(#x1B[0m#x1B[1;33m)#x1B[0m#x1B[1;33m#x1B[0m#x1B[1;33m#x1B[0m#x1B[0m
+
+#x1B[1;32m~\Anaconda3\lib\site-packages\IPython\core\interactiveshell.py#x1B[0m in #x1B[0;36mrun_line_magic#x1B[1;34m(self, magic_name, line, _stack_depth)#x1B[0m
+#x1B[0;32m   2349#x1B[0m                 #x1B[0mkwargs#x1B[0m#x1B[1;33m[#x1B[0m#x1B[1;34m'local_ns'#x1B[0m#x1B[1;33m]#x1B[0m #x1B[1;33m=#x1B[0m #x1B[0mself#x1B[0m#x1B[1;33m.#x1B[0m#x1B[0mget_local_scope#x1B[0m#x1B[1;33m(#x1B[0m#x1B[0mstack_depth#x1B[0m#x1B[1;33m)#x1B[0m#x1B[1;33m#x1B[0m#x1B[1;33m#x1B[0m#x1B[0m
+#x1B[0;32m   2350#x1B[0m             #x1B[1;32mwith#x1B[0m #x1B[0mself#x1B[0m#x1B[1;33m.#x1B[0m#x1B[0mbuiltin_trap#x1B[0m#x1B[1;33m:#x1B[0m#x1B[1;33m#x1B[0m#x1B[1;33m#x1B[0m#x1B[0m
+#x1B[1;32m-&gt; 2351#x1B[1;33m                 #x1B[0mresult#x1B[0m #x1B[1;33m=#x1B[0m #x1B[0mfn#x1B[0m#x1B[1;33m(#x1B[0m#x1B[1;33m*#x1B[0m#x1B[0margs#x1B[0m#x1B[1;33m,#x1B[0m #x1B[1;33m**#x1B[0m#x1B[0mkwargs#x1B[0m#x1B[1;33m)#x1B[0m#x1B[1;33m#x1B[0m#x1B[1;33m#x1B[0m#x1B[0m
+#x1B[0m#x1B[0;32m   2352#x1B[0m             #x1B[1;32mreturn#x1B[0m #x1B[0mresult#x1B[0m#x1B[1;33m#x1B[0m#x1B[1;33m#x1B[0m#x1B[0m
+#x1B[0;32m   2353#x1B[0m #x1B[1;33m#x1B[0m#x1B[0m
+
+#x1B[1;32m~\Anaconda3\lib\site-packages\decorator.py#x1B[0m in #x1B[0;36mfun#x1B[1;34m(*args, **kw)#x1B[0m
+#x1B[0;32m    230#x1B[0m             #x1B[1;32mif#x1B[0m #x1B[1;32mnot#x1B[0m #x1B[0mkwsyntax#x1B[0m#x1B[1;33m:#x1B[0m#x1B[1;33m#x1B[0m#x1B[1;33m#x1B[0m#x1B[0m
+#x1B[0;32m    231#x1B[0m                 #x1B[0margs#x1B[0m#x1B[1;33m,#x1B[0m #x1B[0mkw#x1B[0m #x1B[1;33m=#x1B[0m #x1B[0mfix#x1B[0m#x1B[1;33m(#x1B[0m#x1B[0margs#x1B[0m#x1B[1;33m,#x1B[0m #x1B[0mkw#x1B[0m#x1B[1;33m,#x1B[0m #x1B[0msig#x1B[0m#x1B[1;33m)#x1B[0m#x1B[1;33m#x1B[0m#x1B[1;33m#x1B[0m#x1B[0m
+#x1B[1;32m--&gt; 232#x1B[1;33m             #x1B[1;32mreturn#x1B[0m #x1B[0mcaller#x1B[0m#x1B[1;33m(#x1B[0m#x1B[0mfunc#x1B[0m#x1B[1;33m,#x1B[0m #x1B[1;33m*#x1B[0m#x1B[1;33m(#x1B[0m#x1B[0mextras#x1B[0m #x1B[1;33m+#x1B[0m #x1B[0margs#x1B[0m#x1B[1;33m)#x1B[0m#x1B[1;33m,#x1B[0m #x1B[1;33m**#x1B[0m#x1B[0mkw#x1B[0m#x1B[1;33m)#x1B[0m#x1B[1;33m#x1B[0m#x1B[1;33m#x1B[0m#x1B[0m
+#x1B[0m#x1B[0;32m    233#x1B[0m     #x1B[0mfun#x1B[0m#x1B[1;33m.#x1B[0m#x1B[0m__name__#x1B[0m #x1B[1;33m=#x1B[0m #x1B[0mfunc#x1B[0m#x1B[1;33m.#x1B[0m#x1B[0m__name__#x1B[0m#x1B[1;33m#x1B[0m#x1B[1;33m#x1B[0m#x1B[0m
+#x1B[0;32m    234#x1B[0m     #x1B[0mfun#x1B[0m#x1B[1;33m.#x1B[0m#x1B[0m__doc__#x1B[0m #x1B[1;33m=#x1B[0m #x1B[0mfunc#x1B[0m#x1B[1;33m.#x1B[0m#x1B[0m__doc__#x1B[0m#x1B[1;33m#x1B[0m#x1B[1;33m#x1B[0m#x1B[0m
+
+#x1B[1;32m~\Anaconda3\lib\site-packages\IPython\core\magic.py#x1B[0m in #x1B[0;36m&lt;lambda&gt;#x1B[1;34m(f, *a, **k)#x1B[0m
+#x1B[0;32m    185#x1B[0m     #x1B[1;31m# but it's overkill for just that one bit of state.#x1B[0m#x1B[1;33m#x1B[0m#x1B[1;33m#x1B[0m#x1B[0m
+#x1B[0;32m    186#x1B[0m     #x1B[1;32mdef#x1B[0m #x1B[0mmagic_deco#x1B[0m#x1B[1;33m(#x1B[0m#x1B[0marg#x1B[0m#x1B[1;33m)#x1B[0m#x1B[1;33m:#x1B[0m#x1B[1;33m#x1B[0m#x1B[1;33m#x1B[0m#x1B[0m
+#x1B[1;32m--&gt; 187#x1B[1;33m         #x1B[0mcall#x1B[0m #x1B[1;33m=#x1B[0m #x1B[1;32mlambda#x1B[0m #x1B[0mf#x1B[0m#x1B[1;33m,#x1B[0m #x1B[1;33m*#x1B[0m#x1B[0ma#x1B[0m#x1B[1;33m,#x1B[0m #x1B[1;33m**#x1B[0m#x1B[0mk#x1B[0m#x1B[1;33m:#x1B[0m #x1B[0mf#x1B[0m#x1B[1;33m(#x1B[0m#x1B[1;33m*#x1B[0m#x1B[0ma#x1B[0m#x1B[1;33m,#x1B[0m #x1B[1;33m**#x1B[0m#x1B[0mk#x1B[0m#x1B[1;33m)#x1B[0m#x1B[1;33m#x1B[0m#x1B[1;33m#x1B[0m#x1B[0m
+#x1B[0m#x1B[0;32m    188#x1B[0m #x1B[1;33m#x1B[0m#x1B[0m
+#x1B[0;32m    189#x1B[0m         #x1B[1;32mif#x1B[0m #x1B[0mcallable#x1B[0m#x1B[1;33m(#x1B[0m#x1B[0marg#x1B[0m#x1B[1;33m)#x1B[0m#x1B[1;33m:#x1B[0m#x1B[1;33m#x1B[0m#x1B[1;33m#x1B[0m#x1B[0m
+
+#x1B[1;32m~\Anaconda3\lib\site-packages\IPython\core\magics\pylab.py#x1B[0m in #x1B[0;36mmatplotlib#x1B[1;34m(self, line)#x1B[0m
+#x1B[0;32m     97#x1B[0m             #x1B[0mprint#x1B[0m#x1B[1;33m(#x1B[0m#x1B[1;34m"Available matplotlib backends: %s"#x1B[0m #x1B[1;33m%#x1B[0m #x1B[0mbackends_list#x1B[0m#x1B[1;33m)#x1B[0m#x1B[1;33m#x1B[0m#x1B[1;33m#x1B[0m#x1B[0m
+#x1B[0;32m     98#x1B[0m         #x1B[1;32melse#x1B[0m#x1B[1;33m:#x1B[0m#x1B[1;33m#x1B[0m#x1B[1;33m#x1B[0m#x1B[0m
+#x1B[1;32m---&gt; 99#x1B[1;33m             #x1B[0mgui#x1B[0m#x1B[1;33m,#x1B[0m #x1B[0mbackend#x1B[0m #x1B[1;33m=#x1B[0m #x1B[0mself#x1B[0m#x1B[1;33m.#x1B[0m#x1B[0mshell#x1B[0m#x1B[1;33m.#x1B[0m#x1B[0menable_matplotlib#x1B[0m#x1B[1;33m(#x1B[0m#x1B[0margs#x1B[0m#x1B[1;33m.#x1B[0m#x1B[0mgui#x1B[0m#x1B[1;33m.#x1B[0m#x1B[0mlower#x1B[0m#x1B[1;33m(#x1B[0m#x1B[1;33m)#x1B[0m #x1B[1;32mif#x1B[0m #x1B[0misinstance#x1B[0m#x1B[1;33m(#x1B[0m#x1B[0margs#x1B[0m#x1B[1;33m.#x1B[0m#x1B[0mgui#x1B[0m#x1B[1;33m,#x1B[0m #x1B[0mstr#x1B[0m#x1B[1;33m)#x1B[0m #x1B[1;32melse#x1B[0m #x1B[0margs#x1B[0m#x1B[1;33m.#x1B[0m#x1B[0mgui#x1B[0m#x1B[1;33m)#x1B[0m#x1B[1;33m#x1B[0m#x1B[1;33m#x1B[0m#x1B[0m
+#x1B[0m#x1B[0;32m    100#x1B[0m             #x1B[0mself#x1B[0m#x1B[1;33m.#x1B[0m#x1B[0m_show_matplotlib_backend#x1B[0m#x1B[1;33m(#x1B[0m#x1B[0margs#x1B[0m#x1B[1;33m.#x1B[0m#x1B[0mgui#x1B[0m#x1B[1;33m,#x1B[0m #x1B[0mbackend#x1B[0m#x1B[1;33m)#x1B[0m#x1B[1;33m#x1B[0m#x1B[1;33m#x1B[0m#x1B[0m
+#x1B[0;32m    101#x1B[0m #x1B[1;33m#x1B[0m#x1B[0m
+
+#x1B[1;32m~\Anaconda3\lib\site-packages\IPython\core\interactiveshell.py#x1B[0m in #x1B[0;36menable_matplotlib#x1B[1;34m(self, gui)#x1B[0m
+#x1B[0;32m   3531#x1B[0m                 #x1B[0mgui#x1B[0m#x1B[1;33m,#x1B[0m #x1B[0mbackend#x1B[0m #x1B[1;33m=#x1B[0m #x1B[0mpt#x1B[0m#x1B[1;33m.#x1B[0m#x1B[0mfind_gui_and_backend#x1B[0m#x1B[1;33m(#x1B[0m#x1B[0mself#x1B[0m#x1B[1;33m.#x1B[0m#x1B[0mpylab_gui_select#x1B[0m#x1B[1;33m)#x1B[0m#x1B[1;33m#x1B[0m#x1B[1;33m#x1B[0m#x1B[0m
+#x1B[0;32m   3532#x1B[0m #x1B[1;33m#x1B[0m#x1B[0m
+#x1B[1;32m-&gt; 3533#x1B[1;33m         #x1B[0mpt#x1B[0m#x1B[1;33m.#x1B[0m#x1B[0mactivate_matplotlib#x1B[0m#x1B[1;33m(#x1B[0m#x1B[0mbackend#x1B[0m#x1B[1;33m)#x1B[0m#x1B[1;33m#x1B[0m#x1B[1;33m#x1B[0m#x1B[0m
+#x1B[0m#x1B[0;32m   3534#x1B[0m         #x1B[0mconfigure_inline_support#x1B[0m#x1B[1;33m(#x1B[0m#x1B[0mself#x1B[0m#x1B[1;33m,#x1B[0m #x1B[0mbackend#x1B[0m#x1B[1;33m)#x1B[0m#x1B[1;33m#x1B[0m#x1B[1;33m#x1B[0m#x1B[0m
+#x1B[0;32m   3535#x1B[0m #x1B[1;33m#x1B[0m#x1B[0m
+
+#x1B[1;32m~\Anaconda3\lib\site-packages\IPython\core\pylabtools.py#x1B[0m in #x1B[0;36mactivate_matplotlib#x1B[1;34m(backend)#x1B[0m
+#x1B[0;32m    357#x1B[0m     #x1B[1;32mfrom#x1B[0m #x1B[0mmatplotlib#x1B[0m #x1B[1;32mimport#x1B[0m #x1B[0mpyplot#x1B[0m #x1B[1;32mas#x1B[0m #x1B[0mplt#x1B[0m#x1B[1;33m#x1B[0m#x1B[1;33m#x1B[0m#x1B[0m
+#x1B[0;32m    358#x1B[0m #x1B[1;33m#x1B[0m#x1B[0m
+#x1B[1;32m--&gt; 359#x1B[1;33m     #x1B[0mplt#x1B[0m#x1B[1;33m.#x1B[0m#x1B[0mswitch_backend#x1B[0m#x1B[1;33m(#x1B[0m#x1B[0mbackend#x1B[0m#x1B[1;33m)#x1B[0m#x1B[1;33m#x1B[0m#x1B[1;33m#x1B[0m#x1B[0m
+#x1B[0m#x1B[0;32m    360#x1B[0m #x1B[1;33m#x1B[0m#x1B[0m
+#x1B[0;32m    361#x1B[0m     #x1B[0mplt#x1B[0m#x1B[1;33m.#x1B[0m#x1B[0mshow#x1B[0m#x1B[1;33m.#x1B[0m#x1B[0m_needmain#x1B[0m #x1B[1;33m=#x1B[0m #x1B[1;32mFalse#x1B[0m#x1B[1;33m#x1B[0m#x1B[1;33m#x1B[0m#x1B[0m
+
+#x1B[1;32m~\Anaconda3\lib\site-packages\matplotlib\pyplot.py#x1B[0m in #x1B[0;36mswitch_backend#x1B[1;34m(newbackend)#x1B[0m
+#x1B[0;32m    269#x1B[0m     #x1B[0mold_backend#x1B[0m #x1B[1;33m=#x1B[0m #x1B[0mdict#x1B[0m#x1B[1;33m.#x1B[0m#x1B[0m__getitem__#x1B[0m#x1B[1;33m(#x1B[0m#x1B[0mrcParams#x1B[0m#x1B[1;33m,#x1B[0m #x1B[1;34m'backend'#x1B[0m#x1B[1;33m)#x1B[0m#x1B[1;33m#x1B[0m#x1B[1;33m#x1B[0m#x1B[0m
+#x1B[0;32m    270#x1B[0m #x1B[1;33m#x1B[0m#x1B[0m
+#x1B[1;32m--&gt; 271#x1B[1;33m     backend_mod = importlib.import_module(
+#x1B[0m#x1B[0;32m    272#x1B[0m         cbook._backend_module_name(newbackend))
+#x1B[0;32m    273#x1B[0m #x1B[1;33m#x1B[0m#x1B[0m
+
+#x1B[1;32m~\Anaconda3\lib\importlib\__init__.py#x1B[0m in #x1B[0;36mimport_module#x1B[1;34m(name, package)#x1B[0m
+#x1B[0;32m    125#x1B[0m                 #x1B[1;32mbreak#x1B[0m#x1B[1;33m#x1B[0m#x1B[1;33m#x1B[0m#x1B[0m
+#x1B[0;32m    126#x1B[0m             #x1B[0mlevel#x1B[0m #x1B[1;33m+=#x1B[0m #x1B[1;36m1#x1B[0m#x1B[1;33m#x1B[0m#x1B[1;33m#x1B[0m#x1B[0m
+#x1B[1;32m--&gt; 127#x1B[1;33m     #x1B[1;32mreturn#x1B[0m #x1B[0m_bootstrap#x1B[0m#x1B[1;33m.#x1B[0m#x1B[0m_gcd_import#x1B[0m#x1B[1;33m(#x1B[0m#x1B[0mname#x1B[0m#x1B[1;33m[#x1B[0m#x1B[0mlevel#x1B[0m#x1B[1;33m:#x1B[0m#x1B[1;33m]#x1B[0m#x1B[1;33m,#x1B[0m #x1B[0mpackage#x1B[0m#x1B[1;33m,#x1B[0m #x1B[0mlevel#x1B[0m#x1B[1;33m)#x1B[0m#x1B[1;33m#x1B[0m#x1B[1;33m#x1B[0m#x1B[0m
+#x1B[0m#x1B[0;32m    128#x1B[0m #x1B[1;33m#x1B[0m#x1B[0m
+#x1B[0;32m    129#x1B[0m #x1B[1;33m#x1B[0m#x1B[0m
+
+#x1B[1;32m~\Anaconda3\lib\importlib\_bootstrap.py#x1B[0m in #x1B[0;36m_gcd_import#x1B[1;34m(name, package, level)#x1B[0m
+
+#x1B[1;32m~\Anaconda3\lib\importlib\_bootstrap.py#x1B[0m in #x1B[0;36m_find_and_load#x1B[1;34m(name, import_)#x1B[0m
+
+#x1B[1;32m~\Anaconda3\lib\importlib\_bootstrap.py#x1B[0m in #x1B[0;36m_find_and_load_unlocked#x1B[1;34m(name, import_)#x1B[0m
+
+#x1B[1;32m~\Anaconda3\lib\importlib\_bootstrap.py#x1B[0m in #x1B[0;36m_load_unlocked#x1B[1;34m(spec)#x1B[0m
+
+#x1B[1;32m~\Anaconda3\lib\importlib\_bootstrap_external.py#x1B[0m in #x1B[0;36mexec_module#x1B[1;34m(self, module)#x1B[0m
+
+#x1B[1;32m~\Anaconda3\lib\importlib\_bootstrap.py#x1B[0m in #x1B[0;36m_call_with_frames_removed#x1B[1;34m(f, *args, **kwds)#x1B[0m
+
+#x1B[1;32m~\Anaconda3\lib\site-packages\matplotlib\backends\backend_qt5agg.py#x1B[0m in #x1B[0;36m&lt;module&gt;#x1B[1;34m#x1B[0m
+#x1B[0;32m      5#x1B[0m #x1B[1;33m#x1B[0m#x1B[0m
+#x1B[0;32m      6#x1B[0m #x1B[0mbackends#x1B[0m#x1B[1;33m.#x1B[0m#x1B[0m_QT_FORCE_QT5_BINDING#x1B[0m #x1B[1;33m=#x1B[0m #x1B[1;32mTrue#x1B[0m#x1B[1;33m#x1B[0m#x1B[1;33m#x1B[0m#x1B[0m
+#x1B[1;32m----&gt; 7#x1B[1;33m from .backend_qtagg import (    # noqa: F401, E402 # pylint: disable=W0611
+#x1B[0m#x1B[0;32m      8#x1B[0m     #x1B[0m_BackendQTAgg#x1B[0m#x1B[1;33m,#x1B[0m #x1B[0mFigureCanvasQTAgg#x1B[0m#x1B[1;33m,#x1B[0m #x1B[0mFigureManagerQT#x1B[0m#x1B[1;33m,#x1B[0m #x1B[0mNavigationToolbar2QT#x1B[0m#x1B[1;33m,#x1B[0m#x1B[1;33m#x1B[0m#x1B[1;33m#x1B[0m#x1B[0m
+#x1B[0;32m      9#x1B[0m     FigureCanvasAgg, FigureCanvasQT)
+
+#x1B[1;32m~\Anaconda3\lib\site-packages\matplotlib\backends\backend_qtagg.py#x1B[0m in #x1B[0;36m&lt;module&gt;#x1B[1;34m#x1B[0m
+#x1B[0;32m      7#x1B[0m #x1B[1;32mfrom#x1B[0m #x1B[0mmatplotlib#x1B[0m#x1B[1;33m.#x1B[0m#x1B[0mtransforms#x1B[0m #x1B[1;32mimport#x1B[0m #x1B[0mBbox#x1B[0m#x1B[1;33m#x1B[0m#x1B[1;33m#x1B[0m#x1B[0m
+#x1B[0;32m      8#x1B[0m #x1B[1;33m#x1B[0m#x1B[0m
+#x1B[1;32m----&gt; 9#x1B[1;33m #x1B[1;32mfrom#x1B[0m #x1B[1;33m.#x1B[0m#x1B[0mqt_compat#x1B[0m #x1B[1;32mimport#x1B[0m #x1B[0mQT_API#x1B[0m#x1B[1;33m,#x1B[0m #x1B[0m_enum#x1B[0m#x1B[1;33m#x1B[0m#x1B[1;33m#x1B[0m#x1B[0m
+#x1B[0m#x1B[0;32m     10#x1B[0m #x1B[1;32mfrom#x1B[0m #x1B[1;33m.#x1B[0m#x1B[0mbackend_agg#x1B[0m #x1B[1;32mimport#x1B[0m #x1B[0mFigureCanvasAgg#x1B[0m#x1B[1;33m#x1B[0m#x1B[1;33m#x1B[0m#x1B[0m
+#x1B[0;32m     11#x1B[0m #x1B[1;32mfrom#x1B[0m #x1B[1;33m.#x1B[0m#x1B[0mbackend_qt#x1B[0m #x1B[1;32mimport#x1B[0m #x1B[0mQtCore#x1B[0m#x1B[1;33m,#x1B[0m #x1B[0mQtGui#x1B[0m#x1B[1;33m,#x1B[0m #x1B[0m_BackendQT#x1B[0m#x1B[1;33m,#x1B[0m #x1B[0mFigureCanvasQT#x1B[0m#x1B[1;33m#x1B[0m#x1B[1;33m#x1B[0m#x1B[0m
+
+#x1B[1;32m~\Anaconda3\lib\site-packages\matplotlib\backends\qt_compat.py#x1B[0m in #x1B[0;36m&lt;module&gt;#x1B[1;34m#x1B[0m
+#x1B[0;32m    142#x1B[0m #x1B[1;33m#x1B[0m#x1B[0m
+#x1B[0;32m    143#x1B[0m #x1B[1;32mif#x1B[0m #x1B[0m_version_info#x1B[0m #x1B[1;33m&lt;#x1B[0m #x1B[1;33m(#x1B[0m#x1B[1;36m5#x1B[0m#x1B[1;33m,#x1B[0m #x1B[1;36m10#x1B[0m#x1B[1;33m)#x1B[0m#x1B[1;33m:#x1B[0m#x1B[1;33m#x1B[0m#x1B[1;33m#x1B[0m#x1B[0m
+#x1B[1;32m--&gt; 144#x1B[1;33m     raise ImportError(
+#x1B[0m#x1B[0;32m    145#x1B[0m         #x1B[1;34mf"The Qt version imported is "#x1B[0m#x1B[1;33m#x1B[0m#x1B[1;33m#x1B[0m#x1B[0m
+#x1B[0;32m    146#x1B[0m         #x1B[1;34mf"{QtCore.QLibraryInfo.version().toString()} but Matplotlib requires "#x1B[0m#x1B[1;33m#x1B[0m#x1B[1;33m#x1B[0m#x1B[0m
+
+#x1B[1;31mImportError#x1B[0m: The Qt version imported is 5.9.7 but Matplotlib requires Qt&gt;=5.10</failure></testcase><testcase classname="examples.multirotor.Multirotor_Optimization.ipynb" name="" time="23.641" /><testcase classname="examples.multirotor.test_multirotor.DroneTests" name="test_interface_values" time="3.352"><failure message="AssertionError: 1.0460427910138081 != 0.7096666666666668 within 1 places (0.33637612434714137 difference)">self = &lt;examples.multirotor.test_multirotor.DroneTests testMethod=test_interface_values&gt;
 
     def test_interface_values(self):
     
@@ -59,61 +348,61 @@ E   ModuleNotFoundError: No module named 'tank_model'</error></testcase><testcas
 &gt;           self.assertAlmostEqual(rcost_manual/10000, rcost_int/10000, 1)
 E           AssertionError: 1.0460427910138081 != 0.7096666666666668 within 1 places (0.33637612434714137 difference)
 
-examples\multirotor\test_multirotor.py:22: AssertionError</failure></testcase><testcase classname="examples.multirotor.test_multirotor.DroneTests" name="test_sim_types" time="8.972" /><testcase classname="examples.pump.AST_Sampling.ipynb" name="" time="0.060"><failure message="Error - No such kernel: 'julia-1.8'">Error - No such kernel: 'julia-1.8'</failure></testcase><testcase classname="examples.pump.Optimization.ipynb" name="" time="5.727"><failure message="#x1B[1;31mException#x1B[0m: delay in &lt;class 'examples.pump.ex_pump.PumpParam'&gt; assigned incorrect type: &lt;class 'numpy.float64'&gt; (should be &lt;class 'int'&gt;)">---------------------------------------------------------------------------
+examples\multirotor\test_multirotor.py:22: AssertionError</failure></testcase><testcase classname="examples.multirotor.test_multirotor.DroneTests" name="test_sim_types" time="9.375" /><testcase classname="examples.pump.AST_Sampling.ipynb" name="" time="0.080"><failure message="Error - No such kernel: 'julia-1.8'">Error - No such kernel: 'julia-1.8'</failure></testcase><testcase classname="examples.pump.Optimization.ipynb" name="" time="6.738"><failure message="#x1B[1;31mException#x1B[0m: delay in &lt;class 'examples.pump.ex_pump.PumpParam'&gt; assigned incorrect type: &lt;class 'numpy.float64'&gt; (should be &lt;class 'int'&gt;)">---------------------------------------------------------------------------
 res = minimize(multi_problem.cost, [5], method="SLSQP", bounds=[[0,40]])
 #x1B[1;31m---------------------------------------------------------------------------#x1B[0m
 #x1B[1;31mException#x1B[0m                                 Traceback (most recent call last)
-#x1B[1;32m~\AppData\Local\Temp\1/ipykernel_11700/2162782049.py#x1B[0m in #x1B[0;36m&lt;module&gt;#x1B[1;34m#x1B[0m
+#x1B[1;32m~\AppData\Local\Temp\1/ipykernel_12772/2162782049.py#x1B[0m in #x1B[0;36m&lt;module&gt;#x1B[1;34m#x1B[0m
 #x1B[1;32m----&gt; 1#x1B[1;33m #x1B[0mres#x1B[0m #x1B[1;33m=#x1B[0m #x1B[0mminimize#x1B[0m#x1B[1;33m(#x1B[0m#x1B[0mmulti_problem#x1B[0m#x1B[1;33m.#x1B[0m#x1B[0mcost#x1B[0m#x1B[1;33m,#x1B[0m #x1B[1;33m[#x1B[0m#x1B[1;36m5#x1B[0m#x1B[1;33m]#x1B[0m#x1B[1;33m,#x1B[0m #x1B[0mmethod#x1B[0m#x1B[1;33m=#x1B[0m#x1B[1;34m"SLSQP"#x1B[0m#x1B[1;33m,#x1B[0m #x1B[0mbounds#x1B[0m#x1B[1;33m=#x1B[0m#x1B[1;33m[#x1B[0m#x1B[1;33m[#x1B[0m#x1B[1;36m0#x1B[0m#x1B[1;33m,#x1B[0m#x1B[1;36m40#x1B[0m#x1B[1;33m]#x1B[0m#x1B[1;33m]#x1B[0m#x1B[1;33m)#x1B[0m#x1B[1;33m#x1B[0m#x1B[1;33m#x1B[0m#x1B[0m
 #x1B[0m
 #x1B[1;32m~\Anaconda3\lib\site-packages\scipy\optimize\_minimize.py#x1B[0m in #x1B[0;36mminimize#x1B[1;34m(fun, x0, args, method, jac, hess, hessp, bounds, constraints, tol, callback, options)#x1B[0m
-#x1B[0;32m    629#x1B[0m         #x1B[1;32mreturn#x1B[0m #x1B[0m_minimize_cobyla#x1B[0m#x1B[1;33m(#x1B[0m#x1B[0mfun#x1B[0m#x1B[1;33m,#x1B[0m #x1B[0mx0#x1B[0m#x1B[1;33m,#x1B[0m #x1B[0margs#x1B[0m#x1B[1;33m,#x1B[0m #x1B[0mconstraints#x1B[0m#x1B[1;33m,#x1B[0m #x1B[1;33m**#x1B[0m#x1B[0moptions#x1B[0m#x1B[1;33m)#x1B[0m#x1B[1;33m#x1B[0m#x1B[1;33m#x1B[0m#x1B[0m
-#x1B[0;32m    630#x1B[0m     #x1B[1;32melif#x1B[0m #x1B[0mmeth#x1B[0m #x1B[1;33m==#x1B[0m #x1B[1;34m'slsqp'#x1B[0m#x1B[1;33m:#x1B[0m#x1B[1;33m#x1B[0m#x1B[1;33m#x1B[0m#x1B[0m
-#x1B[1;32m--&gt; 631#x1B[1;33m         return _minimize_slsqp(fun, x0, args, jac, bounds,
-#x1B[0m#x1B[0;32m    632#x1B[0m                                constraints, callback=callback, **options)
-#x1B[0;32m    633#x1B[0m     #x1B[1;32melif#x1B[0m #x1B[0mmeth#x1B[0m #x1B[1;33m==#x1B[0m #x1B[1;34m'trust-constr'#x1B[0m#x1B[1;33m:#x1B[0m#x1B[1;33m#x1B[0m#x1B[1;33m#x1B[0m#x1B[0m
+#x1B[0;32m    703#x1B[0m                                 **options)
+#x1B[0;32m    704#x1B[0m     #x1B[1;32melif#x1B[0m #x1B[0mmeth#x1B[0m #x1B[1;33m==#x1B[0m #x1B[1;34m'slsqp'#x1B[0m#x1B[1;33m:#x1B[0m#x1B[1;33m#x1B[0m#x1B[1;33m#x1B[0m#x1B[0m
+#x1B[1;32m--&gt; 705#x1B[1;33m         res = _minimize_slsqp(fun, x0, args, jac, bounds,
+#x1B[0m#x1B[0;32m    706#x1B[0m                               constraints, callback=callback, **options)
+#x1B[0;32m    707#x1B[0m     #x1B[1;32melif#x1B[0m #x1B[0mmeth#x1B[0m #x1B[1;33m==#x1B[0m #x1B[1;34m'trust-constr'#x1B[0m#x1B[1;33m:#x1B[0m#x1B[1;33m#x1B[0m#x1B[1;33m#x1B[0m#x1B[0m
 
-#x1B[1;32m~\Anaconda3\lib\site-packages\scipy\optimize\slsqp.py#x1B[0m in #x1B[0;36m_minimize_slsqp#x1B[1;34m(func, x0, args, jac, bounds, constraints, maxiter, ftol, iprint, disp, eps, callback, finite_diff_rel_step, **unknown_options)#x1B[0m
-#x1B[0;32m    373#x1B[0m #x1B[1;33m#x1B[0m#x1B[0m
-#x1B[0;32m    374#x1B[0m     #x1B[1;31m# ScalarFunction provides function and gradient evaluation#x1B[0m#x1B[1;33m#x1B[0m#x1B[1;33m#x1B[0m#x1B[0m
-#x1B[1;32m--&gt; 375#x1B[1;33m     sf = _prepare_scalar_function(func, x, jac=jac, args=args, epsilon=eps,
-#x1B[0m#x1B[0;32m    376#x1B[0m                                   #x1B[0mfinite_diff_rel_step#x1B[0m#x1B[1;33m=#x1B[0m#x1B[0mfinite_diff_rel_step#x1B[0m#x1B[1;33m,#x1B[0m#x1B[1;33m#x1B[0m#x1B[1;33m#x1B[0m#x1B[0m
-#x1B[0;32m    377#x1B[0m                                   bounds=new_bounds)
+#x1B[1;32m~\Anaconda3\lib\site-packages\scipy\optimize\_slsqp_py.py#x1B[0m in #x1B[0;36m_minimize_slsqp#x1B[1;34m(func, x0, args, jac, bounds, constraints, maxiter, ftol, iprint, disp, eps, callback, finite_diff_rel_step, **unknown_options)#x1B[0m
+#x1B[0;32m    372#x1B[0m #x1B[1;33m#x1B[0m#x1B[0m
+#x1B[0;32m    373#x1B[0m     #x1B[1;31m# ScalarFunction provides function and gradient evaluation#x1B[0m#x1B[1;33m#x1B[0m#x1B[1;33m#x1B[0m#x1B[0m
+#x1B[1;32m--&gt; 374#x1B[1;33m     sf = _prepare_scalar_function(func, x, jac=jac, args=args, epsilon=eps,
+#x1B[0m#x1B[0;32m    375#x1B[0m                                   #x1B[0mfinite_diff_rel_step#x1B[0m#x1B[1;33m=#x1B[0m#x1B[0mfinite_diff_rel_step#x1B[0m#x1B[1;33m,#x1B[0m#x1B[1;33m#x1B[0m#x1B[1;33m#x1B[0m#x1B[0m
+#x1B[0;32m    376#x1B[0m                                   bounds=new_bounds)
 
-#x1B[1;32m~\Anaconda3\lib\site-packages\scipy\optimize\optimize.py#x1B[0m in #x1B[0;36m_prepare_scalar_function#x1B[1;34m(fun, x0, jac, args, bounds, epsilon, finite_diff_rel_step, hess)#x1B[0m
-#x1B[0;32m    259#x1B[0m     #x1B[1;31m# ScalarFunction caches. Reuse of fun(x) during grad#x1B[0m#x1B[1;33m#x1B[0m#x1B[1;33m#x1B[0m#x1B[0m
-#x1B[0;32m    260#x1B[0m     #x1B[1;31m# calculation reduces overall function evaluations.#x1B[0m#x1B[1;33m#x1B[0m#x1B[1;33m#x1B[0m#x1B[0m
-#x1B[1;32m--&gt; 261#x1B[1;33m     sf = ScalarFunction(fun, x0, args, grad, hess,
-#x1B[0m#x1B[0;32m    262#x1B[0m                         finite_diff_rel_step, bounds, epsilon=epsilon)
-#x1B[0;32m    263#x1B[0m #x1B[1;33m#x1B[0m#x1B[0m
+#x1B[1;32m~\Anaconda3\lib\site-packages\scipy\optimize\_optimize.py#x1B[0m in #x1B[0;36m_prepare_scalar_function#x1B[1;34m(fun, x0, jac, args, bounds, epsilon, finite_diff_rel_step, hess)#x1B[0m
+#x1B[0;32m    330#x1B[0m     #x1B[1;31m# ScalarFunction caches. Reuse of fun(x) during grad#x1B[0m#x1B[1;33m#x1B[0m#x1B[1;33m#x1B[0m#x1B[0m
+#x1B[0;32m    331#x1B[0m     #x1B[1;31m# calculation reduces overall function evaluations.#x1B[0m#x1B[1;33m#x1B[0m#x1B[1;33m#x1B[0m#x1B[0m
+#x1B[1;32m--&gt; 332#x1B[1;33m     sf = ScalarFunction(fun, x0, args, grad, hess,
+#x1B[0m#x1B[0;32m    333#x1B[0m                         finite_diff_rel_step, bounds, epsilon=epsilon)
+#x1B[0;32m    334#x1B[0m #x1B[1;33m#x1B[0m#x1B[0m
 
 #x1B[1;32m~\Anaconda3\lib\site-packages\scipy\optimize\_differentiable_functions.py#x1B[0m in #x1B[0;36m__init__#x1B[1;34m(self, fun, x0, args, grad, hess, finite_diff_rel_step, finite_diff_bounds, epsilon)#x1B[0m
-#x1B[0;32m    138#x1B[0m #x1B[1;33m#x1B[0m#x1B[0m
-#x1B[0;32m    139#x1B[0m         #x1B[0mself#x1B[0m#x1B[1;33m.#x1B[0m#x1B[0m_update_fun_impl#x1B[0m #x1B[1;33m=#x1B[0m #x1B[0mupdate_fun#x1B[0m#x1B[1;33m#x1B[0m#x1B[1;33m#x1B[0m#x1B[0m
-#x1B[1;32m--&gt; 140#x1B[1;33m         #x1B[0mself#x1B[0m#x1B[1;33m.#x1B[0m#x1B[0m_update_fun#x1B[0m#x1B[1;33m(#x1B[0m#x1B[1;33m)#x1B[0m#x1B[1;33m#x1B[0m#x1B[1;33m#x1B[0m#x1B[0m
-#x1B[0m#x1B[0;32m    141#x1B[0m #x1B[1;33m#x1B[0m#x1B[0m
-#x1B[0;32m    142#x1B[0m         #x1B[1;31m# Gradient evaluation#x1B[0m#x1B[1;33m#x1B[0m#x1B[1;33m#x1B[0m#x1B[0m
+#x1B[0;32m    156#x1B[0m #x1B[1;33m#x1B[0m#x1B[0m
+#x1B[0;32m    157#x1B[0m         #x1B[0mself#x1B[0m#x1B[1;33m.#x1B[0m#x1B[0m_update_fun_impl#x1B[0m #x1B[1;33m=#x1B[0m #x1B[0mupdate_fun#x1B[0m#x1B[1;33m#x1B[0m#x1B[1;33m#x1B[0m#x1B[0m
+#x1B[1;32m--&gt; 158#x1B[1;33m         #x1B[0mself#x1B[0m#x1B[1;33m.#x1B[0m#x1B[0m_update_fun#x1B[0m#x1B[1;33m(#x1B[0m#x1B[1;33m)#x1B[0m#x1B[1;33m#x1B[0m#x1B[1;33m#x1B[0m#x1B[0m
+#x1B[0m#x1B[0;32m    159#x1B[0m #x1B[1;33m#x1B[0m#x1B[0m
+#x1B[0;32m    160#x1B[0m         #x1B[1;31m# Gradient evaluation#x1B[0m#x1B[1;33m#x1B[0m#x1B[1;33m#x1B[0m#x1B[0m
 
 #x1B[1;32m~\Anaconda3\lib\site-packages\scipy\optimize\_differentiable_functions.py#x1B[0m in #x1B[0;36m_update_fun#x1B[1;34m(self)#x1B[0m
-#x1B[0;32m    231#x1B[0m     #x1B[1;32mdef#x1B[0m #x1B[0m_update_fun#x1B[0m#x1B[1;33m(#x1B[0m#x1B[0mself#x1B[0m#x1B[1;33m)#x1B[0m#x1B[1;33m:#x1B[0m#x1B[1;33m#x1B[0m#x1B[1;33m#x1B[0m#x1B[0m
-#x1B[0;32m    232#x1B[0m         #x1B[1;32mif#x1B[0m #x1B[1;32mnot#x1B[0m #x1B[0mself#x1B[0m#x1B[1;33m.#x1B[0m#x1B[0mf_updated#x1B[0m#x1B[1;33m:#x1B[0m#x1B[1;33m#x1B[0m#x1B[1;33m#x1B[0m#x1B[0m
-#x1B[1;32m--&gt; 233#x1B[1;33m             #x1B[0mself#x1B[0m#x1B[1;33m.#x1B[0m#x1B[0m_update_fun_impl#x1B[0m#x1B[1;33m(#x1B[0m#x1B[1;33m)#x1B[0m#x1B[1;33m#x1B[0m#x1B[1;33m#x1B[0m#x1B[0m
-#x1B[0m#x1B[0;32m    234#x1B[0m             #x1B[0mself#x1B[0m#x1B[1;33m.#x1B[0m#x1B[0mf_updated#x1B[0m #x1B[1;33m=#x1B[0m #x1B[1;32mTrue#x1B[0m#x1B[1;33m#x1B[0m#x1B[1;33m#x1B[0m#x1B[0m
-#x1B[0;32m    235#x1B[0m #x1B[1;33m#x1B[0m#x1B[0m
+#x1B[0;32m    249#x1B[0m     #x1B[1;32mdef#x1B[0m #x1B[0m_update_fun#x1B[0m#x1B[1;33m(#x1B[0m#x1B[0mself#x1B[0m#x1B[1;33m)#x1B[0m#x1B[1;33m:#x1B[0m#x1B[1;33m#x1B[0m#x1B[1;33m#x1B[0m#x1B[0m
+#x1B[0;32m    250#x1B[0m         #x1B[1;32mif#x1B[0m #x1B[1;32mnot#x1B[0m #x1B[0mself#x1B[0m#x1B[1;33m.#x1B[0m#x1B[0mf_updated#x1B[0m#x1B[1;33m:#x1B[0m#x1B[1;33m#x1B[0m#x1B[1;33m#x1B[0m#x1B[0m
+#x1B[1;32m--&gt; 251#x1B[1;33m             #x1B[0mself#x1B[0m#x1B[1;33m.#x1B[0m#x1B[0m_update_fun_impl#x1B[0m#x1B[1;33m(#x1B[0m#x1B[1;33m)#x1B[0m#x1B[1;33m#x1B[0m#x1B[1;33m#x1B[0m#x1B[0m
+#x1B[0m#x1B[0;32m    252#x1B[0m             #x1B[0mself#x1B[0m#x1B[1;33m.#x1B[0m#x1B[0mf_updated#x1B[0m #x1B[1;33m=#x1B[0m #x1B[1;32mTrue#x1B[0m#x1B[1;33m#x1B[0m#x1B[1;33m#x1B[0m#x1B[0m
+#x1B[0;32m    253#x1B[0m #x1B[1;33m#x1B[0m#x1B[0m
 
 #x1B[1;32m~\Anaconda3\lib\site-packages\scipy\optimize\_differentiable_functions.py#x1B[0m in #x1B[0;36mupdate_fun#x1B[1;34m()#x1B[0m
-#x1B[0;32m    135#x1B[0m #x1B[1;33m#x1B[0m#x1B[0m
-#x1B[0;32m    136#x1B[0m         #x1B[1;32mdef#x1B[0m #x1B[0mupdate_fun#x1B[0m#x1B[1;33m(#x1B[0m#x1B[1;33m)#x1B[0m#x1B[1;33m:#x1B[0m#x1B[1;33m#x1B[0m#x1B[1;33m#x1B[0m#x1B[0m
-#x1B[1;32m--&gt; 137#x1B[1;33m             #x1B[0mself#x1B[0m#x1B[1;33m.#x1B[0m#x1B[0mf#x1B[0m #x1B[1;33m=#x1B[0m #x1B[0mfun_wrapped#x1B[0m#x1B[1;33m(#x1B[0m#x1B[0mself#x1B[0m#x1B[1;33m.#x1B[0m#x1B[0mx#x1B[0m#x1B[1;33m)#x1B[0m#x1B[1;33m#x1B[0m#x1B[1;33m#x1B[0m#x1B[0m
-#x1B[0m#x1B[0;32m    138#x1B[0m #x1B[1;33m#x1B[0m#x1B[0m
-#x1B[0;32m    139#x1B[0m         #x1B[0mself#x1B[0m#x1B[1;33m.#x1B[0m#x1B[0m_update_fun_impl#x1B[0m #x1B[1;33m=#x1B[0m #x1B[0mupdate_fun#x1B[0m#x1B[1;33m#x1B[0m#x1B[1;33m#x1B[0m#x1B[0m
+#x1B[0;32m    153#x1B[0m #x1B[1;33m#x1B[0m#x1B[0m
+#x1B[0;32m    154#x1B[0m         #x1B[1;32mdef#x1B[0m #x1B[0mupdate_fun#x1B[0m#x1B[1;33m(#x1B[0m#x1B[1;33m)#x1B[0m#x1B[1;33m:#x1B[0m#x1B[1;33m#x1B[0m#x1B[1;33m#x1B[0m#x1B[0m
+#x1B[1;32m--&gt; 155#x1B[1;33m             #x1B[0mself#x1B[0m#x1B[1;33m.#x1B[0m#x1B[0mf#x1B[0m #x1B[1;33m=#x1B[0m #x1B[0mfun_wrapped#x1B[0m#x1B[1;33m(#x1B[0m#x1B[0mself#x1B[0m#x1B[1;33m.#x1B[0m#x1B[0mx#x1B[0m#x1B[1;33m)#x1B[0m#x1B[1;33m#x1B[0m#x1B[1;33m#x1B[0m#x1B[0m
+#x1B[0m#x1B[0;32m    156#x1B[0m #x1B[1;33m#x1B[0m#x1B[0m
+#x1B[0;32m    157#x1B[0m         #x1B[0mself#x1B[0m#x1B[1;33m.#x1B[0m#x1B[0m_update_fun_impl#x1B[0m #x1B[1;33m=#x1B[0m #x1B[0mupdate_fun#x1B[0m#x1B[1;33m#x1B[0m#x1B[1;33m#x1B[0m#x1B[0m
 
 #x1B[1;32m~\Anaconda3\lib\site-packages\scipy\optimize\_differentiable_functions.py#x1B[0m in #x1B[0;36mfun_wrapped#x1B[1;34m(x)#x1B[0m
-#x1B[0;32m    132#x1B[0m             #x1B[1;31m# Overwriting results in undefined behaviour because#x1B[0m#x1B[1;33m#x1B[0m#x1B[1;33m#x1B[0m#x1B[0m
-#x1B[0;32m    133#x1B[0m             #x1B[1;31m# fun(self.x) will change self.x, with the two no longer linked.#x1B[0m#x1B[1;33m#x1B[0m#x1B[1;33m#x1B[0m#x1B[0m
-#x1B[1;32m--&gt; 134#x1B[1;33m             #x1B[1;32mreturn#x1B[0m #x1B[0mfun#x1B[0m#x1B[1;33m(#x1B[0m#x1B[0mnp#x1B[0m#x1B[1;33m.#x1B[0m#x1B[0mcopy#x1B[0m#x1B[1;33m(#x1B[0m#x1B[0mx#x1B[0m#x1B[1;33m)#x1B[0m#x1B[1;33m,#x1B[0m #x1B[1;33m*#x1B[0m#x1B[0margs#x1B[0m#x1B[1;33m)#x1B[0m#x1B[1;33m#x1B[0m#x1B[1;33m#x1B[0m#x1B[0m
-#x1B[0m#x1B[0;32m    135#x1B[0m #x1B[1;33m#x1B[0m#x1B[0m
-#x1B[0;32m    136#x1B[0m         #x1B[1;32mdef#x1B[0m #x1B[0mupdate_fun#x1B[0m#x1B[1;33m(#x1B[0m#x1B[1;33m)#x1B[0m#x1B[1;33m:#x1B[0m#x1B[1;33m#x1B[0m#x1B[1;33m#x1B[0m#x1B[0m
+#x1B[0;32m    135#x1B[0m             #x1B[1;31m# Overwriting results in undefined behaviour because#x1B[0m#x1B[1;33m#x1B[0m#x1B[1;33m#x1B[0m#x1B[0m
+#x1B[0;32m    136#x1B[0m             #x1B[1;31m# fun(self.x) will change self.x, with the two no longer linked.#x1B[0m#x1B[1;33m#x1B[0m#x1B[1;33m#x1B[0m#x1B[0m
+#x1B[1;32m--&gt; 137#x1B[1;33m             #x1B[0mfx#x1B[0m #x1B[1;33m=#x1B[0m #x1B[0mfun#x1B[0m#x1B[1;33m(#x1B[0m#x1B[0mnp#x1B[0m#x1B[1;33m.#x1B[0m#x1B[0mcopy#x1B[0m#x1B[1;33m(#x1B[0m#x1B[0mx#x1B[0m#x1B[1;33m)#x1B[0m#x1B[1;33m,#x1B[0m #x1B[1;33m*#x1B[0m#x1B[0margs#x1B[0m#x1B[1;33m)#x1B[0m#x1B[1;33m#x1B[0m#x1B[1;33m#x1B[0m#x1B[0m
+#x1B[0m#x1B[0;32m    138#x1B[0m             #x1B[1;31m# Make sure the function returns a true scalar#x1B[0m#x1B[1;33m#x1B[0m#x1B[1;33m#x1B[0m#x1B[0m
+#x1B[0;32m    139#x1B[0m             #x1B[1;32mif#x1B[0m #x1B[1;32mnot#x1B[0m #x1B[0mnp#x1B[0m#x1B[1;33m.#x1B[0m#x1B[0misscalar#x1B[0m#x1B[1;33m(#x1B[0m#x1B[0mfx#x1B[0m#x1B[1;33m)#x1B[0m#x1B[1;33m:#x1B[0m#x1B[1;33m#x1B[0m#x1B[1;33m#x1B[0m#x1B[0m
 
 #x1B[1;32mc:\users\dhulse\documents\github\fmdtools\fmdtools\sim\search.py#x1B[0m in #x1B[0;36mnewobj#x1B[1;34m(x)#x1B[0m
 #x1B[0;32m    252#x1B[0m     #x1B[1;32mdef#x1B[0m #x1B[0m_assoc_obj_con#x1B[0m#x1B[1;33m(#x1B[0m#x1B[0mself#x1B[0m#x1B[1;33m,#x1B[0m #x1B[0msimname#x1B[0m#x1B[1;33m,#x1B[0m #x1B[0mobjname#x1B[0m#x1B[1;33m,#x1B[0m #x1B[0mobj_const#x1B[0m#x1B[1;33m,#x1B[0m #x1B[0marg#x1B[0m#x1B[1;33m)#x1B[0m#x1B[1;33m:#x1B[0m#x1B[1;33m#x1B[0m#x1B[1;33m#x1B[0m#x1B[0m
@@ -165,11 +454,11 @@ res = minimize(multi_problem.cost, [5], method="SLSQP", bounds=[[0,40]])
 #x1B[0;32m    214#x1B[0m         #x1B[1;32mif#x1B[0m #x1B[1;32mnot#x1B[0m #x1B[0mr#x1B[0m#x1B[1;33m:#x1B[0m#x1B[1;33m#x1B[0m#x1B[1;33m#x1B[0m#x1B[0m
 
 #x1B[1;32mc:\users\dhulse\documents\github\fmdtools\fmdtools\define\parameter.py#x1B[0m in #x1B[0;36mcopy_with_vals#x1B[1;34m(self, **kwargs)#x1B[0m
-#x1B[0;32m    140#x1B[0m     #x1B[1;32mdef#x1B[0m #x1B[0mcopy_with_vals#x1B[0m#x1B[1;33m(#x1B[0m#x1B[0mself#x1B[0m#x1B[1;33m,#x1B[0m #x1B[1;33m**#x1B[0m#x1B[0mkwargs#x1B[0m#x1B[1;33m)#x1B[0m#x1B[1;33m:#x1B[0m#x1B[1;33m#x1B[0m#x1B[1;33m#x1B[0m#x1B[0m
-#x1B[0;32m    141#x1B[0m         #x1B[1;34m"""Creates a copy of itself with modified values given by kwargs"""#x1B[0m#x1B[1;33m#x1B[0m#x1B[1;33m#x1B[0m#x1B[0m
-#x1B[1;32m--&gt; 142#x1B[1;33m         #x1B[1;32mreturn#x1B[0m #x1B[0mself#x1B[0m#x1B[1;33m.#x1B[0m#x1B[0m__class__#x1B[0m#x1B[1;33m(#x1B[0m#x1B[1;33m**#x1B[0m#x1B[1;33m{#x1B[0m#x1B[1;33m**#x1B[0m#x1B[0masdict#x1B[0m#x1B[1;33m(#x1B[0m#x1B[0mself#x1B[0m#x1B[1;33m)#x1B[0m#x1B[1;33m,#x1B[0m #x1B[1;33m**#x1B[0m#x1B[0mkwargs#x1B[0m#x1B[1;33m}#x1B[0m#x1B[1;33m)#x1B[0m#x1B[1;33m#x1B[0m#x1B[1;33m#x1B[0m#x1B[0m
-#x1B[0m#x1B[0;32m    143#x1B[0m #x1B[1;33m#x1B[0m#x1B[0m
-#x1B[0;32m    144#x1B[0m     #x1B[1;32mdef#x1B[0m #x1B[0mcheck_pickle#x1B[0m#x1B[1;33m(#x1B[0m#x1B[0mself#x1B[0m#x1B[1;33m)#x1B[0m#x1B[1;33m:#x1B[0m#x1B[1;33m#x1B[0m#x1B[1;33m#x1B[0m#x1B[0m
+#x1B[0;32m    145#x1B[0m     #x1B[1;32mdef#x1B[0m #x1B[0mcopy_with_vals#x1B[0m#x1B[1;33m(#x1B[0m#x1B[0mself#x1B[0m#x1B[1;33m,#x1B[0m #x1B[1;33m**#x1B[0m#x1B[0mkwargs#x1B[0m#x1B[1;33m)#x1B[0m#x1B[1;33m:#x1B[0m#x1B[1;33m#x1B[0m#x1B[1;33m#x1B[0m#x1B[0m
+#x1B[0;32m    146#x1B[0m         #x1B[1;34m"""Creates a copy of itself with modified values given by kwargs"""#x1B[0m#x1B[1;33m#x1B[0m#x1B[1;33m#x1B[0m#x1B[0m
+#x1B[1;32m--&gt; 147#x1B[1;33m         #x1B[1;32mreturn#x1B[0m #x1B[0mself#x1B[0m#x1B[1;33m.#x1B[0m#x1B[0m__class__#x1B[0m#x1B[1;33m(#x1B[0m#x1B[1;33m**#x1B[0m#x1B[1;33m{#x1B[0m#x1B[1;33m**#x1B[0m#x1B[0masdict#x1B[0m#x1B[1;33m(#x1B[0m#x1B[0mself#x1B[0m#x1B[1;33m)#x1B[0m#x1B[1;33m,#x1B[0m #x1B[1;33m**#x1B[0m#x1B[0mkwargs#x1B[0m#x1B[1;33m}#x1B[0m#x1B[1;33m)#x1B[0m#x1B[1;33m#x1B[0m#x1B[1;33m#x1B[0m#x1B[0m
+#x1B[0m#x1B[0;32m    148#x1B[0m #x1B[1;33m#x1B[0m#x1B[0m
+#x1B[0;32m    149#x1B[0m     #x1B[1;32mdef#x1B[0m #x1B[0mcheck_pickle#x1B[0m#x1B[1;33m(#x1B[0m#x1B[0mself#x1B[0m#x1B[1;33m)#x1B[0m#x1B[1;33m:#x1B[0m#x1B[1;33m#x1B[0m#x1B[1;33m#x1B[0m#x1B[0m
 
 #x1B[1;32mc:\users\dhulse\documents\github\fmdtools\fmdtools\define\parameter.py#x1B[0m in #x1B[0;36m__init__#x1B[1;34m(self, strict_immutability, check_type, check_pickle, *args, **kwargs)#x1B[0m
 #x1B[0;32m     68#x1B[0m             #x1B[0mself#x1B[0m#x1B[1;33m.#x1B[0m#x1B[0mcheck_immutable#x1B[0m#x1B[1;33m(#x1B[0m#x1B[1;33m)#x1B[0m#x1B[1;33m#x1B[0m#x1B[1;33m#x1B[0m#x1B[0m
@@ -179,13 +468,13 @@ res = minimize(multi_problem.cost, [5], method="SLSQP", bounds=[[0,40]])
 #x1B[0;32m     72#x1B[0m             #x1B[0mself#x1B[0m#x1B[1;33m.#x1B[0m#x1B[0mcheck_pickle#x1B[0m#x1B[1;33m(#x1B[0m#x1B[1;33m)#x1B[0m#x1B[1;33m#x1B[0m#x1B[1;33m#x1B[0m#x1B[0m
 
 #x1B[1;32mc:\users\dhulse\documents\github\fmdtools\fmdtools\define\parameter.py#x1B[0m in #x1B[0;36mcheck_type#x1B[1;34m(self)#x1B[0m
-#x1B[0;32m    134#x1B[0m                     str(true_type).split("'")[1] not in str(attr_type)):
-#x1B[0;32m    135#x1B[0m                 #x1B[1;31m# weaker, but enables use of np.str, np.float, etc#x1B[0m#x1B[1;33m#x1B[0m#x1B[1;33m#x1B[0m#x1B[0m
-#x1B[1;32m--&gt; 136#x1B[1;33m                 raise Exception(typed_field+" in "+str(self.__class__) +
-#x1B[0m#x1B[0;32m    137#x1B[0m                                 #x1B[1;34m" assigned incorrect type: "#x1B[0m #x1B[1;33m+#x1B[0m #x1B[0mstr#x1B[0m#x1B[1;33m(#x1B[0m#x1B[0mattr_type#x1B[0m#x1B[1;33m)#x1B[0m #x1B[1;33m+#x1B[0m#x1B[1;33m#x1B[0m#x1B[1;33m#x1B[0m#x1B[0m
-#x1B[0;32m    138#x1B[0m                                 " (should be "+str(true_type)+")")
+#x1B[0;32m    139#x1B[0m                     str(true_type).split("'")[1] not in str(attr_type)):
+#x1B[0;32m    140#x1B[0m                 #x1B[1;31m# weaker, but enables use of np.str, np.float, etc#x1B[0m#x1B[1;33m#x1B[0m#x1B[1;33m#x1B[0m#x1B[0m
+#x1B[1;32m--&gt; 141#x1B[1;33m                 raise Exception(typed_field+" in "+str(self.__class__) +
+#x1B[0m#x1B[0;32m    142#x1B[0m                                 #x1B[1;34m" assigned incorrect type: "#x1B[0m #x1B[1;33m+#x1B[0m #x1B[0mstr#x1B[0m#x1B[1;33m(#x1B[0m#x1B[0mattr_type#x1B[0m#x1B[1;33m)#x1B[0m #x1B[1;33m+#x1B[0m#x1B[1;33m#x1B[0m#x1B[1;33m#x1B[0m#x1B[0m
+#x1B[0;32m    143#x1B[0m                                 " (should be "+str(true_type)+")")
 
-#x1B[1;31mException#x1B[0m: delay in &lt;class 'examples.pump.ex_pump.PumpParam'&gt; assigned incorrect type: &lt;class 'numpy.float64'&gt; (should be &lt;class 'int'&gt;)</failure></testcase><testcase classname="examples.pump.Parallelism_Tutorial.ipynb" name="" time="11.556"><failure message="#x1B[1;31mValueError#x1B[0m: Pool not running">---------------------------------------------------------------------------
+#x1B[1;31mException#x1B[0m: delay in &lt;class 'examples.pump.ex_pump.PumpParam'&gt; assigned incorrect type: &lt;class 'numpy.float64'&gt; (should be &lt;class 'int'&gt;)</failure></testcase><testcase classname="examples.pump.Parallelism_Tutorial.ipynb" name="" time="13.220"><failure message="#x1B[1;31mValueError#x1B[0m: Pool not running">---------------------------------------------------------------------------
 endclasses_par, mdlhists = propagate.single_faults(mdl, pool=pool)
 #tab_par = an.tabulate.simplefmea(endclasses_par)
 endclasses, mdlhists = propagate.single_faults(mdl)
@@ -193,7 +482,7 @@ endclasses, mdlhists = propagate.single_faults(mdl)
 #tab - tab_par
 #x1B[1;31m---------------------------------------------------------------------------#x1B[0m
 #x1B[1;31mValueError#x1B[0m                                Traceback (most recent call last)
-#x1B[1;32m~\AppData\Local\Temp\1/ipykernel_8432/1153561868.py#x1B[0m in #x1B[0;36m&lt;module&gt;#x1B[1;34m#x1B[0m
+#x1B[1;32m~\AppData\Local\Temp\1/ipykernel_9456/1153561868.py#x1B[0m in #x1B[0;36m&lt;module&gt;#x1B[1;34m#x1B[0m
 #x1B[1;32m----&gt; 1#x1B[1;33m #x1B[0mendclasses_par#x1B[0m#x1B[1;33m,#x1B[0m #x1B[0mmdlhists#x1B[0m #x1B[1;33m=#x1B[0m #x1B[0mpropagate#x1B[0m#x1B[1;33m.#x1B[0m#x1B[0msingle_faults#x1B[0m#x1B[1;33m(#x1B[0m#x1B[0mmdl#x1B[0m#x1B[1;33m,#x1B[0m #x1B[0mpool#x1B[0m#x1B[1;33m=#x1B[0m#x1B[0mpool#x1B[0m#x1B[1;33m)#x1B[0m#x1B[1;33m#x1B[0m#x1B[1;33m#x1B[0m#x1B[0m
 #x1B[0m#x1B[0;32m      2#x1B[0m #x1B[1;31m#tab_par = an.tabulate.simplefmea(endclasses_par)#x1B[0m#x1B[1;33m#x1B[0m#x1B[1;33m#x1B[0m#x1B[0m
 #x1B[0;32m      3#x1B[0m #x1B[0mendclasses#x1B[0m#x1B[1;33m,#x1B[0m #x1B[0mmdlhists#x1B[0m #x1B[1;33m=#x1B[0m #x1B[0mpropagate#x1B[0m#x1B[1;33m.#x1B[0m#x1B[0msingle_faults#x1B[0m#x1B[1;33m(#x1B[0m#x1B[0mmdl#x1B[0m#x1B[1;33m)#x1B[0m#x1B[1;33m#x1B[0m#x1B[1;33m#x1B[0m#x1B[0m
@@ -235,12 +524,12 @@ endclasses, mdlhists = propagate.single_faults(mdl)
 #x1B[0m#x1B[0;32m    351#x1B[0m #x1B[1;33m#x1B[0m#x1B[0m
 #x1B[0;32m    352#x1B[0m     #x1B[1;32mdef#x1B[0m #x1B[0mapply#x1B[0m#x1B[1;33m(#x1B[0m#x1B[0mself#x1B[0m#x1B[1;33m,#x1B[0m #x1B[0mfunc#x1B[0m#x1B[1;33m,#x1B[0m #x1B[0margs#x1B[0m#x1B[1;33m=#x1B[0m#x1B[1;33m(#x1B[0m#x1B[1;33m)#x1B[0m#x1B[1;33m,#x1B[0m #x1B[0mkwds#x1B[0m#x1B[1;33m=#x1B[0m#x1B[1;33m{#x1B[0m#x1B[1;33m}#x1B[0m#x1B[1;33m)#x1B[0m#x1B[1;33m:#x1B[0m#x1B[1;33m#x1B[0m#x1B[1;33m#x1B[0m#x1B[0m
 
-#x1B[1;31mValueError#x1B[0m: Pool not running</failure></testcase><testcase classname="examples.pump.Pump_Example_Notebook.ipynb" name="" time="16.931" /><testcase classname="examples.pump.Stochastic_Modelling.ipynb" name="" time="48.974" /><testcase classname="examples.pump.Tutorial_complete.ipynb" name="" time="7.172" /><testcase classname="examples.pump.Tutorial_unfilled.ipynb" name="" time="5.097"><failure message="">---------------------------------------------------------------------------
+#x1B[1;31mValueError#x1B[0m: Pool not running</failure></testcase><testcase classname="examples.pump.Pump_Example_Notebook.ipynb" name="" time="21.976" /><testcase classname="examples.pump.Stochastic_Modelling.ipynb" name="" time="59.283" /><testcase classname="examples.pump.Tutorial_complete.ipynb" name="" time="10.285" /><testcase classname="examples.pump.Tutorial_unfilled.ipynb" name="" time="8.122"><failure message="">---------------------------------------------------------------------------
                                                  desired_result=['endclass', 'graph'], track="all")
-#x1B[1;36m  File #x1B[1;32m"C:\Users\dhulse\AppData\Local\Temp\1/ipykernel_10076/2080439979.py"#x1B[1;36m, line #x1B[1;32m1#x1B[0m
+#x1B[1;36m  File #x1B[1;32m"C:\Users\dhulse\AppData\Local\Temp\1/ipykernel_17944/2080439979.py"#x1B[1;36m, line #x1B[1;32m1#x1B[0m
 #x1B[1;33m    desired_result=['endclass', 'graph'], track="all")#x1B[0m
 #x1B[1;37m                    ^#x1B[0m
-#x1B[1;31mSyntaxError#x1B[0m#x1B[1;31m:#x1B[0m cannot assign to literal</failure></testcase><testcase classname="examples.pump.test_pump.PumpTests" name="test_app_prop_values" time="0.077" /><testcase classname="examples.pump.test_pump.PumpTests" name="test_approach_cost_calc" time="5.082"><failure message="AssertionError: 1799299.0952380954 != 1799153.8095238095 within 7 places (145.28571428591385 difference)">self = &lt;examples.pump.test_pump.PumpTests testMethod=test_approach_cost_calc&gt;
+#x1B[1;31mSyntaxError#x1B[0m#x1B[1;31m:#x1B[0m cannot assign to literal</failure></testcase><testcase classname="examples.pump.test_pump.PumpTests" name="test_app_prop_values" time="0.088" /><testcase classname="examples.pump.test_pump.PumpTests" name="test_approach_cost_calc" time="6.181"><failure message="AssertionError: 1799299.0952380956 != 1799153.8095238095 within 7 places (145.28571428614669 difference)">self = &lt;examples.pump.test_pump.PumpTests testMethod=test_approach_cost_calc&gt;
 
     def test_approach_cost_calc(self):
         """Test that the (linear) resilience loss function is perfectly approximated
@@ -252,9 +541,9 @@ endclasses, mdlhists = propagate.single_faults(mdl)
         app_multipt = SampleApproach(mdl, defaultsamp={'samp':'evenspacing', 'numpts':3})
         multipt_util=exp_cost_quant(app_multipt,mdl)
 &gt;       self.assertAlmostEqual(full_util, multipt_util)
-E       AssertionError: 1799299.0952380954 != 1799153.8095238095 within 7 places (145.28571428591385 difference)
+E       AssertionError: 1799299.0952380956 != 1799153.8095238095 within 7 places (145.28571428614669 difference)
 
-examples\pump\test_pump.py:79: AssertionError</failure></testcase><testcase classname="examples.pump.test_pump.PumpTests" name="test_approach_parallelism" time="14.138" /><testcase classname="examples.pump.test_pump.PumpTests" name="test_approach_pruning" time="2.699"><failure message="AssertionError: Lists differ: [5.0, 6.0, 27.0] != [27.0]&#10;&#10;First differing element 0:&#10;5.0&#10;27.0&#10;&#10;First list contains 2 additional elements.&#10;First extra element 1:&#10;6.0&#10;&#10;- [5.0, 6.0, 27.0]&#10;+ [27.0]">self = &lt;examples.pump.test_pump.PumpTests testMethod=test_approach_pruning&gt;
+examples\pump\test_pump.py:79: AssertionError</failure></testcase><testcase classname="examples.pump.test_pump.PumpTests" name="test_approach_parallelism" time="16.776" /><testcase classname="examples.pump.test_pump.PumpTests" name="test_approach_pruning" time="3.157"><failure message="AssertionError: Lists differ: [5.0, 6.0, 27.0] != [27.0]&#10;&#10;First differing element 0:&#10;5.0&#10;27.0&#10;&#10;First list contains 2 additional elements.&#10;First extra element 1:&#10;6.0&#10;&#10;- [5.0, 6.0, 27.0]&#10;+ [27.0]">self = &lt;examples.pump.test_pump.PumpTests testMethod=test_approach_pruning&gt;
 
     def test_approach_pruning(self):
         """Tests that sample approach pruning places points in the center of their
@@ -279,17 +568,9 @@ E
 E       - [5.0, 6.0, 27.0]
 E       + [27.0]
 
-examples\pump\test_pump.py:103: AssertionError</failure></testcase><testcase classname="examples.pump.test_pump.PumpTests" name="test_dynamic_prop_values" time="0.075" /><testcase classname="examples.pump.test_pump.PumpTests" name="test_dynamic_prop_values_2" time="0.161" /><testcase classname="examples.pump.test_pump.PumpTests" name="test_fmea_options" time="0.576" /><testcase classname="examples.pump.test_pump.PumpTests" name="test_model_copy_different" time="0.347" /><testcase classname="examples.pump.test_pump.PumpTests" name="test_model_copy_same" time="0.557" /><testcase classname="examples.pump.test_pump.PumpTests" name="test_model_reset" time="0.622" /><testcase classname="examples.pump.test_pump.PumpTests" name="test_one_run_csv" time="0.033" /><testcase classname="examples.pump.test_pump.PumpTests" name="test_one_run_json" time="0.032" /><testcase classname="examples.pump.test_pump.PumpTests" name="test_one_run_pickle" time="0.033" /><testcase classname="examples.pump.test_pump.PumpTests" name="test_pickleability" time="0.009" /><testcase classname="examples.pump.test_pump.PumpTests" name="test_save_load_approach" time="0.741" /><testcase classname="examples.pump.test_pump.PumpTests" name="test_save_load_approach_indiv" time="0.964" /><testcase classname="examples.pump.test_pump.PumpTests" name="test_save_load_multfault" time="0.091" /><testcase classname="examples.pump.test_pump.PumpTests" name="test_save_load_nestedapproach" time="7.466" /><testcase classname="examples.pump.test_pump.PumpTests" name="test_save_load_nestedapproach_indiv" time="7.802" /><testcase classname="examples.pump.test_pump.PumpTests" name="test_save_load_nominal" time="0.060" /><testcase classname="examples.pump.test_pump.PumpTests" name="test_save_load_nominalapproach" time="0.427" /><testcase classname="examples.pump.test_pump.PumpTests" name="test_save_load_nominalapproach_indiv" time="0.539" /><testcase classname="examples.pump.test_pump.PumpTests" name="test_save_load_onefault" time="0.090" /><testcase classname="examples.pump.test_pump.PumpTests" name="test_save_load_singlefaults" time="0.897" /><testcase classname="examples.pump.test_pump.PumpTests" name="test_save_load_singlefaults_indiv" time="1.210" /><testcase classname="examples.pump.test_pump.PumpTests" name="test_value_setting" time="0.007" /><testcase classname="examples.pump.test_pump.PumpTests" name="test_value_setting_dict" time="0.007" /><testcase classname="examples.pump.test_pump_example.ImportEE_Tests" name="test_behave_inf_v" time="0.001" /><testcase classname="examples.pump.test_pump_example.ImportEE_Tests" name="test_behave_no_v" time="0.001" /><testcase classname="examples.pump.test_pump_example.ImportEE_Tests" name="test_behave_nom" time="0.001" /><testcase classname="examples.pump.test_pump_example.ImportEE_Tests" name="test_condfaults_hi" time="0.001" /><testcase classname="examples.pump.test_pump_example.ImportEE_Tests" name="test_condfaults_nom" time="0.001" /><testcase classname="examples.pump.test_pump_example.ImportEE_Tests" name="test_initialization" time="0.001" /><testcase classname="examples.pump.test_pump_example.MoveWat_Tests" name="test_condfaults_dynamic" time="0.002" /><testcase classname="examples.pump.test_pump_example.MoveWat_Tests" name="test_initialization" time="0.001" /><testcase classname="examples.pump.test_pump_example.MoveWat_Tests" name="test_nom" time="0.001" /><testcase classname="examples.pump.test_pump_example.Integration_Tests" name="test_blockage_results" time="0.057" /><testcase classname="examples.pump.test_pump_example.Integration_Tests" name="test_blockage_static" time="0.004" /><testcase classname="examples.pump.test_pump_example.Integration_Tests" name="test_nominal_results" time="0.029" /><testcase classname="examples.pump.test_pump_stochastic.StochasticPumpTests" name="test_model_copy_different" time="0.397" /><testcase classname="examples.pump.test_pump_stochastic.StochasticPumpTests" name="test_model_copy_same" time="0.528" /><testcase classname="examples.pump.test_pump_stochastic.StochasticPumpTests" name="test_model_reset" time="0.674" /><testcase classname="examples.pump.test_pump_stochastic.StochasticPumpTests" name="test_plot_nominal_vals" time="0.390" /><testcase classname="examples.pump.test_pump_stochastic.StochasticPumpTests" name="test_plot_nominal_vals_xd" time="1.097" /><testcase classname="examples.pump.test_pump_stochastic.StochasticPumpTests" name="test_run_approach" time="18.103" /><testcase classname="examples.pump.test_pump_stochastic.StochasticPumpTests" name="test_run_safety" time="3.493" /><testcase classname="examples.pump.test_pump_stochastic.StochasticPumpTests" name="test_save_load_nestedapproach" time="16.498" /><testcase classname="examples.pump.test_pump_stochastic.StochasticPumpTests" name="test_save_load_nestedapproach_indiv" time="17.210" /><testcase classname="examples.pump.test_pump_stochastic.StochasticPumpTests" name="test_save_load_nominalapproach" time="7.326" /><testcase classname="examples.pump.test_pump_stochastic.StochasticPumpTests" name="test_save_load_nominalapproach_indiv" time="7.352" /><testcase classname="examples.pump.test_pump_stochastic.StochasticPumpTests" name="test_set_seeds" time="0.029" /><testcase classname="examples.pump.test_pump_stochastic.StochasticPumpTests" name="test_stochastic_pdf" time="0.019" /><testcase classname="examples.rover.Approach_Use-Cases.ipynb" name="" time="3.777"><failure message="#x1B[1;31mAttributeError#x1B[0m: type object 'FxnBlock' has no attribute 'assoc_modes'">---------------------------------------------------------------------------
-help(FxnBlock.assoc_modes)
-#x1B[1;31m---------------------------------------------------------------------------#x1B[0m
-#x1B[1;31mAttributeError#x1B[0m                            Traceback (most recent call last)
-#x1B[1;32m~\AppData\Local\Temp\1/ipykernel_3224/414845463.py#x1B[0m in #x1B[0;36m&lt;module&gt;#x1B[1;34m#x1B[0m
-#x1B[1;32m----&gt; 1#x1B[1;33m #x1B[0mhelp#x1B[0m#x1B[1;33m(#x1B[0m#x1B[0mFxnBlock#x1B[0m#x1B[1;33m.#x1B[0m#x1B[0massoc_modes#x1B[0m#x1B[1;33m)#x1B[0m#x1B[1;33m#x1B[0m#x1B[1;33m#x1B[0m#x1B[0m
-#x1B[0m
-#x1B[1;31mAttributeError#x1B[0m: type object 'FxnBlock' has no attribute 'assoc_modes'</failure></testcase><testcase classname="examples.rover.Model_Structure_Visualization_Tutorial.ipynb" name="" time="23.378" /><testcase classname="examples.rover.Nominal_Approach_Use-Cases.ipynb" name="" time="3.981"><failure message="#x1B[1;31mException#x1B[0m: Invalid args/kwargs: () , {'times': [0, 60], 'tstep': 1, 'phases': {'start': [1, 30], 'end': [31, 60]}} in &lt;class 'fmdtools.define.parameter.Parameter'&gt;">---------------------------------------------------------------------------
-mdl = Rover(params=gen_params('turn'))
-results, mdlhist = prop.nominal(mdl)
-plot_map(mdl, mdlhist)
+examples\pump\test_pump.py:103: AssertionError</failure></testcase><testcase classname="examples.pump.test_pump.PumpTests" name="test_dynamic_prop_values" time="0.088" /><testcase classname="examples.pump.test_pump.PumpTests" name="test_dynamic_prop_values_2" time="0.190" /><testcase classname="examples.pump.test_pump.PumpTests" name="test_fmea_options" time="0.678" /><testcase classname="examples.pump.test_pump.PumpTests" name="test_model_copy_different" time="0.417" /><testcase classname="examples.pump.test_pump.PumpTests" name="test_model_copy_same" time="0.655" /><testcase classname="examples.pump.test_pump.PumpTests" name="test_model_reset" time="0.729" /><testcase classname="examples.pump.test_pump.PumpTests" name="test_one_run_csv" time="0.038" /><testcase classname="examples.pump.test_pump.PumpTests" name="test_one_run_json" time="0.039" /><testcase classname="examples.pump.test_pump.PumpTests" name="test_one_run_pickle" time="0.038" /><testcase classname="examples.pump.test_pump.PumpTests" name="test_pickleability" time="0.010" /><testcase classname="examples.pump.test_pump.PumpTests" name="test_save_load_approach" time="0.832" /><testcase classname="examples.pump.test_pump.PumpTests" name="test_save_load_approach_indiv" time="1.078" /><testcase classname="examples.pump.test_pump.PumpTests" name="test_save_load_multfault" time="0.108" /><testcase classname="examples.pump.test_pump.PumpTests" name="test_save_load_nestedapproach" time="8.934" /><testcase classname="examples.pump.test_pump.PumpTests" name="test_save_load_nestedapproach_indiv" time="8.960" /><testcase classname="examples.pump.test_pump.PumpTests" name="test_save_load_nominal" time="0.069" /><testcase classname="examples.pump.test_pump.PumpTests" name="test_save_load_nominalapproach" time="0.451" /><testcase classname="examples.pump.test_pump.PumpTests" name="test_save_load_nominalapproach_indiv" time="0.562" /><testcase classname="examples.pump.test_pump.PumpTests" name="test_save_load_onefault" time="0.099" /><testcase classname="examples.pump.test_pump.PumpTests" name="test_save_load_singlefaults" time="0.953" /><testcase classname="examples.pump.test_pump.PumpTests" name="test_save_load_singlefaults_indiv" time="1.206" /><testcase classname="examples.pump.test_pump.PumpTests" name="test_value_setting" time="0.008" /><testcase classname="examples.pump.test_pump.PumpTests" name="test_value_setting_dict" time="0.008" /><testcase classname="examples.pump.test_pump_example.ImportEE_Tests" name="test_behave_inf_v" time="0.002" /><testcase classname="examples.pump.test_pump_example.ImportEE_Tests" name="test_behave_no_v" time="0.001" /><testcase classname="examples.pump.test_pump_example.ImportEE_Tests" name="test_behave_nom" time="0.002" /><testcase classname="examples.pump.test_pump_example.ImportEE_Tests" name="test_condfaults_hi" time="0.002" /><testcase classname="examples.pump.test_pump_example.ImportEE_Tests" name="test_condfaults_nom" time="0.002" /><testcase classname="examples.pump.test_pump_example.ImportEE_Tests" name="test_initialization" time="0.002" /><testcase classname="examples.pump.test_pump_example.MoveWat_Tests" name="test_condfaults_dynamic" time="0.002" /><testcase classname="examples.pump.test_pump_example.MoveWat_Tests" name="test_initialization" time="0.002" /><testcase classname="examples.pump.test_pump_example.MoveWat_Tests" name="test_nom" time="0.002" /><testcase classname="examples.pump.test_pump_example.Integration_Tests" name="test_blockage_results" time="0.060" /><testcase classname="examples.pump.test_pump_example.Integration_Tests" name="test_blockage_static" time="0.005" /><testcase classname="examples.pump.test_pump_example.Integration_Tests" name="test_nominal_results" time="0.031" /><testcase classname="examples.pump.test_pump_stochastic.StochasticPumpTests" name="test_model_copy_different" time="0.422" /><testcase classname="examples.pump.test_pump_stochastic.StochasticPumpTests" name="test_model_copy_same" time="0.566" /><testcase classname="examples.pump.test_pump_stochastic.StochasticPumpTests" name="test_model_reset" time="0.760" /><testcase classname="examples.pump.test_pump_stochastic.StochasticPumpTests" name="test_plot_nominal_vals" time="0.422" /><testcase classname="examples.pump.test_pump_stochastic.StochasticPumpTests" name="test_plot_nominal_vals_xd" time="1.202" /><testcase classname="examples.pump.test_pump_stochastic.StochasticPumpTests" name="test_run_approach" time="19.650" /><testcase classname="examples.pump.test_pump_stochastic.StochasticPumpTests" name="test_run_safety" time="3.815" /><testcase classname="examples.pump.test_pump_stochastic.StochasticPumpTests" name="test_save_load_nestedapproach" time="17.036" /><testcase classname="examples.pump.test_pump_stochastic.StochasticPumpTests" name="test_save_load_nestedapproach_indiv" time="16.969" /><testcase classname="examples.pump.test_pump_stochastic.StochasticPumpTests" name="test_save_load_nominalapproach" time="7.185" /><testcase classname="examples.pump.test_pump_stochastic.StochasticPumpTests" name="test_save_load_nominalapproach_indiv" time="7.222" /><testcase classname="examples.pump.test_pump_stochastic.StochasticPumpTests" name="test_set_seeds" time="0.030" /><testcase classname="examples.pump.test_pump_stochastic.StochasticPumpTests" name="test_stochastic_pdf" time="0.018" /><testcase classname="examples.rover.Approach_Use-Cases.ipynb" name="" time="5.115"><failure message="#x1B[1;31mException#x1B[0m: Invalid args/kwargs: () , {'times': [0, 60], 'tstep': 1, 'phases': {'firsthalf': [0, 30], 'secondhalf': [31, 60]}} in &lt;class 'fmdtools.define.parameter.Parameter'&gt;">---------------------------------------------------------------------------
+mdl = Rover()
+app = SampleApproach(mdl)
 #x1B[1;31m---------------------------------------------------------------------------#x1B[0m
 #x1B[1;31mTypeError#x1B[0m                                 Traceback (most recent call last)
 #x1B[1;32mc:\users\dhulse\documents\github\fmdtools\fmdtools\define\parameter.py#x1B[0m in #x1B[0;36m__init__#x1B[1;34m(self, strict_immutability, check_type, check_pickle, *args, **kwargs)#x1B[0m
@@ -302,17 +583,16 @@ plot_map(mdl, mdlhist)
 During handling of the above exception, another exception occurred:
 
 #x1B[1;31mException#x1B[0m                                 Traceback (most recent call last)
-#x1B[1;32m~\AppData\Local\Temp\1/ipykernel_7672/3250322124.py#x1B[0m in #x1B[0;36m&lt;module&gt;#x1B[1;34m#x1B[0m
-#x1B[1;32m----&gt; 1#x1B[1;33m #x1B[0mmdl#x1B[0m #x1B[1;33m=#x1B[0m #x1B[0mRover#x1B[0m#x1B[1;33m(#x1B[0m#x1B[0mparams#x1B[0m#x1B[1;33m=#x1B[0m#x1B[0mgen_params#x1B[0m#x1B[1;33m(#x1B[0m#x1B[1;34m'turn'#x1B[0m#x1B[1;33m)#x1B[0m#x1B[1;33m)#x1B[0m#x1B[1;33m#x1B[0m#x1B[1;33m#x1B[0m#x1B[0m
-#x1B[0m#x1B[0;32m      2#x1B[0m #x1B[0mresults#x1B[0m#x1B[1;33m,#x1B[0m #x1B[0mmdlhist#x1B[0m #x1B[1;33m=#x1B[0m #x1B[0mprop#x1B[0m#x1B[1;33m.#x1B[0m#x1B[0mnominal#x1B[0m#x1B[1;33m(#x1B[0m#x1B[0mmdl#x1B[0m#x1B[1;33m)#x1B[0m#x1B[1;33m#x1B[0m#x1B[1;33m#x1B[0m#x1B[0m
-#x1B[0;32m      3#x1B[0m #x1B[0mplot_map#x1B[0m#x1B[1;33m(#x1B[0m#x1B[0mmdl#x1B[0m#x1B[1;33m,#x1B[0m #x1B[0mmdlhist#x1B[0m#x1B[1;33m)#x1B[0m#x1B[1;33m#x1B[0m#x1B[1;33m#x1B[0m#x1B[0m
+#x1B[1;32m~\AppData\Local\Temp\1/ipykernel_11812/3690765673.py#x1B[0m in #x1B[0;36m&lt;module&gt;#x1B[1;34m#x1B[0m
+#x1B[1;32m----&gt; 1#x1B[1;33m #x1B[0mmdl#x1B[0m #x1B[1;33m=#x1B[0m #x1B[0mRover#x1B[0m#x1B[1;33m(#x1B[0m#x1B[1;33m)#x1B[0m#x1B[1;33m#x1B[0m#x1B[1;33m#x1B[0m#x1B[0m
+#x1B[0m#x1B[0;32m      2#x1B[0m #x1B[0mapp#x1B[0m #x1B[1;33m=#x1B[0m #x1B[0mSampleApproach#x1B[0m#x1B[1;33m(#x1B[0m#x1B[0mmdl#x1B[0m#x1B[1;33m)#x1B[0m#x1B[1;33m#x1B[0m#x1B[1;33m#x1B[0m#x1B[0m
 
-#x1B[1;32m~\AppData\Local\Temp\1/ipykernel_7672/2935710477.py#x1B[0m in #x1B[0;36m__init__#x1B[1;34m(self, params, modelparams, valparams)#x1B[0m
-#x1B[0;32m    152#x1B[0m                  #x1B[0mmodelparams#x1B[0m#x1B[1;33m=#x1B[0m#x1B[1;33m{#x1B[0m#x1B[1;34m'times'#x1B[0m#x1B[1;33m:#x1B[0m#x1B[1;33m[#x1B[0m#x1B[1;36m0#x1B[0m#x1B[1;33m,#x1B[0m#x1B[1;36m60#x1B[0m#x1B[1;33m]#x1B[0m#x1B[1;33m,#x1B[0m #x1B[1;34m'tstep'#x1B[0m#x1B[1;33m:#x1B[0m#x1B[1;36m1#x1B[0m#x1B[1;33m,#x1B[0m #x1B[1;34m'phases'#x1B[0m#x1B[1;33m:#x1B[0m#x1B[1;33m{#x1B[0m#x1B[1;34m'start'#x1B[0m#x1B[1;33m:#x1B[0m#x1B[1;33m[#x1B[0m#x1B[1;36m1#x1B[0m#x1B[1;33m,#x1B[0m#x1B[1;36m30#x1B[0m#x1B[1;33m]#x1B[0m#x1B[1;33m,#x1B[0m #x1B[1;34m'end'#x1B[0m#x1B[1;33m:#x1B[0m#x1B[1;33m[#x1B[0m#x1B[1;36m31#x1B[0m#x1B[1;33m,#x1B[0m #x1B[1;36m60#x1B[0m#x1B[1;33m]#x1B[0m#x1B[1;33m}#x1B[0m#x1B[1;33m}#x1B[0m#x1B[1;33m,#x1B[0m#x1B[0;31m\#x1B[0m#x1B[1;33m#x1B[0m#x1B[1;33m#x1B[0m#x1B[0m
-#x1B[0;32m    153#x1B[0m                      valparams={}):
-#x1B[1;32m--&gt; 154#x1B[1;33m         #x1B[0msuper#x1B[0m#x1B[1;33m(#x1B[0m#x1B[1;33m)#x1B[0m#x1B[1;33m.#x1B[0m#x1B[0m__init__#x1B[0m#x1B[1;33m(#x1B[0m#x1B[0mparams#x1B[0m#x1B[1;33m,#x1B[0m #x1B[0mmodelparams#x1B[0m#x1B[1;33m,#x1B[0m #x1B[0mvalparams#x1B[0m#x1B[1;33m)#x1B[0m#x1B[1;33m#x1B[0m#x1B[1;33m#x1B[0m#x1B[0m
-#x1B[0m#x1B[0;32m    155#x1B[0m #x1B[1;33m#x1B[0m#x1B[0m
-#x1B[0;32m    156#x1B[0m         #x1B[0mself#x1B[0m#x1B[1;33m.#x1B[0m#x1B[0madd_flow#x1B[0m#x1B[1;33m(#x1B[0m#x1B[1;34m'Ground'#x1B[0m#x1B[1;33m,#x1B[0m #x1B[1;33m{#x1B[0m#x1B[1;34m'x'#x1B[0m#x1B[1;33m:#x1B[0m#x1B[1;36m0.0#x1B[0m#x1B[1;33m,#x1B[0m#x1B[1;34m'y'#x1B[0m#x1B[1;33m:#x1B[0m#x1B[1;36m0.0#x1B[0m#x1B[1;33m,#x1B[0m#x1B[1;34m'liney'#x1B[0m#x1B[1;33m:#x1B[0m#x1B[1;36m0.0#x1B[0m#x1B[1;33m,#x1B[0m#x1B[1;34m'linex'#x1B[0m#x1B[1;33m:#x1B[0m#x1B[1;36m0.0#x1B[0m#x1B[1;33m,#x1B[0m #x1B[1;34m'vel'#x1B[0m#x1B[1;33m:#x1B[0m#x1B[1;36m0.0#x1B[0m#x1B[1;33m,#x1B[0m #x1B[1;34m'line'#x1B[0m#x1B[1;33m:#x1B[0m#x1B[1;36m0.0#x1B[0m#x1B[1;33m,#x1B[0m #x1B[1;34m'angle'#x1B[0m#x1B[1;33m:#x1B[0m#x1B[0mparams#x1B[0m#x1B[1;33m[#x1B[0m#x1B[1;34m'initangle'#x1B[0m#x1B[1;33m]#x1B[0m#x1B[1;33m,#x1B[0m #x1B[1;34m'ang'#x1B[0m#x1B[1;33m:#x1B[0m#x1B[1;36m0.0#x1B[0m#x1B[1;33m}#x1B[0m#x1B[1;33m)#x1B[0m#x1B[1;33m#x1B[0m#x1B[1;33m#x1B[0m#x1B[0m
+#x1B[1;32m~\AppData\Local\Temp\1/ipykernel_11812/3942537109.py#x1B[0m in #x1B[0;36m__init__#x1B[1;34m(self, params, modelparams, valparams)#x1B[0m
+#x1B[0;32m      4#x1B[0m                  #x1B[0mmodelparams#x1B[0m#x1B[1;33m=#x1B[0m#x1B[1;33m{#x1B[0m#x1B[1;34m'times'#x1B[0m#x1B[1;33m:#x1B[0m#x1B[1;33m[#x1B[0m#x1B[1;36m0#x1B[0m#x1B[1;33m,#x1B[0m#x1B[1;36m60#x1B[0m#x1B[1;33m]#x1B[0m#x1B[1;33m,#x1B[0m #x1B[1;34m'tstep'#x1B[0m#x1B[1;33m:#x1B[0m#x1B[1;36m1#x1B[0m#x1B[1;33m,#x1B[0m #x1B[1;34m'phases'#x1B[0m#x1B[1;33m:#x1B[0m #x1B[1;33m{#x1B[0m#x1B[1;34m'firsthalf'#x1B[0m#x1B[1;33m:#x1B[0m#x1B[1;33m[#x1B[0m#x1B[1;36m0#x1B[0m#x1B[1;33m,#x1B[0m#x1B[1;36m30#x1B[0m#x1B[1;33m]#x1B[0m#x1B[1;33m,#x1B[0m #x1B[1;34m'secondhalf'#x1B[0m#x1B[1;33m:#x1B[0m#x1B[1;33m[#x1B[0m#x1B[1;36m31#x1B[0m#x1B[1;33m,#x1B[0m#x1B[1;36m60#x1B[0m#x1B[1;33m]#x1B[0m#x1B[1;33m}#x1B[0m#x1B[1;33m}#x1B[0m#x1B[1;33m,#x1B[0m#x1B[0;31m\#x1B[0m#x1B[1;33m#x1B[0m#x1B[1;33m#x1B[0m#x1B[0m
+#x1B[0;32m      5#x1B[0m                  valparams={}):
+#x1B[1;32m----&gt; 6#x1B[1;33m         #x1B[0msuper#x1B[0m#x1B[1;33m(#x1B[0m#x1B[1;33m)#x1B[0m#x1B[1;33m.#x1B[0m#x1B[0m__init__#x1B[0m#x1B[1;33m(#x1B[0m#x1B[0mparams#x1B[0m#x1B[1;33m,#x1B[0m #x1B[0mmodelparams#x1B[0m#x1B[1;33m,#x1B[0m #x1B[0mvalparams#x1B[0m#x1B[1;33m)#x1B[0m#x1B[1;33m#x1B[0m#x1B[1;33m#x1B[0m#x1B[0m
+#x1B[0m#x1B[0;32m      7#x1B[0m #x1B[1;33m#x1B[0m#x1B[0m
+#x1B[0;32m      8#x1B[0m         #x1B[0mself#x1B[0m#x1B[1;33m.#x1B[0m#x1B[0madd_flow#x1B[0m#x1B[1;33m(#x1B[0m#x1B[1;34m'Ground'#x1B[0m#x1B[1;33m,#x1B[0m #x1B[1;33m{#x1B[0m#x1B[1;34m'x'#x1B[0m#x1B[1;33m:#x1B[0m#x1B[1;36m0.0#x1B[0m#x1B[1;33m,#x1B[0m#x1B[1;34m'y'#x1B[0m#x1B[1;33m:#x1B[0m#x1B[1;36m0.0#x1B[0m#x1B[1;33m,#x1B[0m #x1B[1;34m'dir'#x1B[0m#x1B[1;33m:#x1B[0m#x1B[1;36m0.0#x1B[0m#x1B[1;33m,#x1B[0m #x1B[1;34m'vel'#x1B[0m#x1B[1;33m:#x1B[0m#x1B[1;36m0.0#x1B[0m#x1B[1;33m}#x1B[0m#x1B[1;33m)#x1B[0m#x1B[1;33m#x1B[0m#x1B[1;33m#x1B[0m#x1B[0m
 
 #x1B[1;32mc:\users\dhulse\documents\github\fmdtools\fmdtools\define\model.py#x1B[0m in #x1B[0;36m__init__#x1B[1;34m(self, name, p, sp, r, track)#x1B[0m
 #x1B[0;32m     51#x1B[0m     """
@@ -342,14 +622,35 @@ During handling of the above exception, another exception occurred:
 #x1B[0m#x1B[0;32m     66#x1B[0m                             str(kwargs)+" in "+str(self.__class__))
 #x1B[0;32m     67#x1B[0m         #x1B[1;32mif#x1B[0m #x1B[0mstrict_immutability#x1B[0m#x1B[1;33m:#x1B[0m#x1B[1;33m#x1B[0m#x1B[1;33m#x1B[0m#x1B[0m
 
-#x1B[1;31mException#x1B[0m: Invalid args/kwargs: () , {'times': [0, 60], 'tstep': 1, 'phases': {'start': [1, 30], 'end': [31, 60]}} in &lt;class 'fmdtools.define.parameter.Parameter'&gt;</failure></testcase><testcase classname="examples.rover.Rover_Setup_Notebook.ipynb" name="" time="3.905"><failure message="#x1B[1;31mImportError#x1B[0m: cannot import name 'gen_params' from 'rover_model' (C:\Users\dhulse\Documents\GitHub\fmdtools\examples\rover\rover_model.py)">---------------------------------------------------------------------------
-from rover_model import Rover, gen_params, plot_map, plot_trajectories
+#x1B[1;31mException#x1B[0m: Invalid args/kwargs: () , {'times': [0, 60], 'tstep': 1, 'phases': {'firsthalf': [0, 30], 'secondhalf': [31, 60]}} in &lt;class 'fmdtools.define.parameter.Parameter'&gt;</failure></testcase><testcase classname="examples.rover.Model_Structure_Visualization_Tutorial.ipynb" name="" time="26.355" /><testcase classname="examples.rover.Nominal_Approach_Use-Cases.ipynb" name="" time="22.225"><failure message="#x1B[1;31mAttributeError#x1B[0m: 'float' object has no attribute 'get'">---------------------------------------------------------------------------
+nomtab = an.tabulate.nominal_factor_comparison(nomapp, endclasses, ['inputparams.radius', 'inputparams.start'], rangeid='turn', percent=False)
 #x1B[1;31m---------------------------------------------------------------------------#x1B[0m
-#x1B[1;31mImportError#x1B[0m                               Traceback (most recent call last)
-#x1B[1;32m~\AppData\Local\Temp\1/ipykernel_12352/947193376.py#x1B[0m in #x1B[0;36m&lt;module&gt;#x1B[1;34m#x1B[0m
-#x1B[1;32m----&gt; 1#x1B[1;33m #x1B[1;32mfrom#x1B[0m #x1B[0mrover_model#x1B[0m #x1B[1;32mimport#x1B[0m #x1B[0mRover#x1B[0m#x1B[1;33m,#x1B[0m #x1B[0mgen_params#x1B[0m#x1B[1;33m,#x1B[0m #x1B[0mplot_map#x1B[0m#x1B[1;33m,#x1B[0m #x1B[0mplot_trajectories#x1B[0m#x1B[1;33m#x1B[0m#x1B[1;33m#x1B[0m#x1B[0m
+#x1B[1;31mAttributeError#x1B[0m                            Traceback (most recent call last)
+#x1B[1;32m~\AppData\Local\Temp\1/ipykernel_11296/1879769913.py#x1B[0m in #x1B[0;36m&lt;module&gt;#x1B[1;34m#x1B[0m
+#x1B[1;32m----&gt; 1#x1B[1;33m #x1B[0mnomtab#x1B[0m #x1B[1;33m=#x1B[0m #x1B[0man#x1B[0m#x1B[1;33m.#x1B[0m#x1B[0mtabulate#x1B[0m#x1B[1;33m.#x1B[0m#x1B[0mnominal_factor_comparison#x1B[0m#x1B[1;33m(#x1B[0m#x1B[0mnomapp#x1B[0m#x1B[1;33m,#x1B[0m #x1B[0mendclasses#x1B[0m#x1B[1;33m,#x1B[0m #x1B[1;33m[#x1B[0m#x1B[1;34m'inputparams.radius'#x1B[0m#x1B[1;33m,#x1B[0m #x1B[1;34m'inputparams.start'#x1B[0m#x1B[1;33m]#x1B[0m#x1B[1;33m,#x1B[0m #x1B[0mrangeid#x1B[0m#x1B[1;33m=#x1B[0m#x1B[1;34m'turn'#x1B[0m#x1B[1;33m,#x1B[0m #x1B[0mpercent#x1B[0m#x1B[1;33m=#x1B[0m#x1B[1;32mFalse#x1B[0m#x1B[1;33m)#x1B[0m#x1B[1;33m#x1B[0m#x1B[1;33m#x1B[0m#x1B[0m
 #x1B[0m
-#x1B[1;31mImportError#x1B[0m: cannot import name 'gen_params' from 'rover_model' (C:\Users\dhulse\Documents\GitHub\fmdtools\examples\rover\rover_model.py)</failure></testcase><testcase classname="examples.rover.test_rover.RoverTests" name="test_obj_values" time="0.138"><failure message="AssertionError: 0.11329848698471573 != 0.5763384838180136">self = &lt;examples.rover.test_rover.RoverTests testMethod=test_obj_values&gt;
+#x1B[1;32mc:\users\dhulse\documents\github\fmdtools\fmdtools\analyze\tabulate.py#x1B[0m in #x1B[0;36mnominal_factor_comparison#x1B[1;34m(nomapp, endclasses, params, metrics, rangeid, nan_as, percent, give_ci, **kwargs)#x1B[0m
+#x1B[0;32m    212#x1B[0m     #x1B[1;32melse#x1B[0m#x1B[1;33m:#x1B[0m#x1B[1;33m#x1B[0m#x1B[1;33m#x1B[0m#x1B[0m
+#x1B[0;32m    213#x1B[0m         #x1B[0mfactors#x1B[0m #x1B[1;33m=#x1B[0m #x1B[0mnomapp#x1B[0m#x1B[1;33m.#x1B[0m#x1B[0mget_param_scens#x1B[0m#x1B[1;33m(#x1B[0m#x1B[0mrangeid#x1B[0m#x1B[1;33m,#x1B[0m #x1B[1;33m*#x1B[0m#x1B[0mparams#x1B[0m#x1B[1;33m)#x1B[0m#x1B[1;33m#x1B[0m#x1B[1;33m#x1B[0m#x1B[0m
+#x1B[1;32m--&gt; 214#x1B[1;33m     #x1B[1;32mif#x1B[0m #x1B[1;33m[#x1B[0m#x1B[1;33m*#x1B[0m#x1B[0mendclasses#x1B[0m#x1B[1;33m.#x1B[0m#x1B[0mvalues#x1B[0m#x1B[1;33m(#x1B[0m#x1B[1;33m)#x1B[0m#x1B[1;33m]#x1B[0m#x1B[1;33m[#x1B[0m#x1B[1;36m0#x1B[0m#x1B[1;33m]#x1B[0m#x1B[1;33m.#x1B[0m#x1B[0mget#x1B[0m#x1B[1;33m(#x1B[0m#x1B[1;34m'nominal'#x1B[0m#x1B[1;33m,#x1B[0m #x1B[1;32mFalse#x1B[0m#x1B[1;33m)#x1B[0m#x1B[1;33m:#x1B[0m#x1B[1;33m#x1B[0m#x1B[1;33m#x1B[0m#x1B[0m
+#x1B[0m#x1B[0;32m    215#x1B[0m         #x1B[0mendclasses#x1B[0m #x1B[1;33m=#x1B[0m #x1B[1;33m{#x1B[0m#x1B[0mscen#x1B[0m#x1B[1;33m:#x1B[0m#x1B[0mec#x1B[0m#x1B[1;33m[#x1B[0m#x1B[1;34m'nominal'#x1B[0m#x1B[1;33m]#x1B[0m #x1B[1;32mfor#x1B[0m #x1B[0mscen#x1B[0m#x1B[1;33m,#x1B[0m #x1B[0mec#x1B[0m #x1B[1;32min#x1B[0m #x1B[0mendclasses#x1B[0m#x1B[1;33m.#x1B[0m#x1B[0mitems#x1B[0m#x1B[1;33m(#x1B[0m#x1B[1;33m)#x1B[0m#x1B[1;33m}#x1B[0m#x1B[1;33m#x1B[0m#x1B[1;33m#x1B[0m#x1B[0m
+#x1B[0;32m    216#x1B[0m     #x1B[1;32mif#x1B[0m #x1B[0mmetrics#x1B[0m #x1B[1;33m==#x1B[0m #x1B[1;34m'all'#x1B[0m#x1B[1;33m:#x1B[0m#x1B[1;33m#x1B[0m#x1B[1;33m#x1B[0m#x1B[0m
+
+#x1B[1;31mAttributeError#x1B[0m: 'float' object has no attribute 'get'</failure></testcase><testcase classname="examples.rover.Rover_Setup_Notebook.ipynb" name="" time="13.022"><failure message="#x1B[1;31mAttributeError#x1B[0m: 'numpy.ndarray' object has no attribute 'flows'">---------------------------------------------------------------------------
+fig = plot_trajectories(mdlhists.get_scens(*app.ranges['sine']['scenarios']))
+#x1B[1;31m---------------------------------------------------------------------------#x1B[0m
+#x1B[1;31mAttributeError#x1B[0m                            Traceback (most recent call last)
+#x1B[1;32m~\AppData\Local\Temp\1/ipykernel_14272/3898236212.py#x1B[0m in #x1B[0;36m&lt;module&gt;#x1B[1;34m#x1B[0m
+#x1B[1;32m----&gt; 1#x1B[1;33m #x1B[0mfig#x1B[0m #x1B[1;33m=#x1B[0m #x1B[0mplot_trajectories#x1B[0m#x1B[1;33m(#x1B[0m#x1B[0mmdlhists#x1B[0m#x1B[1;33m.#x1B[0m#x1B[0mget_scens#x1B[0m#x1B[1;33m(#x1B[0m#x1B[1;33m*#x1B[0m#x1B[0mapp#x1B[0m#x1B[1;33m.#x1B[0m#x1B[0mranges#x1B[0m#x1B[1;33m[#x1B[0m#x1B[1;34m'sine'#x1B[0m#x1B[1;33m]#x1B[0m#x1B[1;33m[#x1B[0m#x1B[1;34m'scenarios'#x1B[0m#x1B[1;33m]#x1B[0m#x1B[1;33m)#x1B[0m#x1B[1;33m)#x1B[0m#x1B[1;33m#x1B[0m#x1B[1;33m#x1B[0m#x1B[0m
+#x1B[0m
+#x1B[1;32m~\Documents\GitHub\fmdtools\examples\rover\rover_model.py#x1B[0m in #x1B[0;36mplot_trajectories#x1B[1;34m(mdlhists, nomhist, app, faultlabel, faultalpha, range_hist, rangealpha, setalpha, show_labels, title, textoffset, mode_trunc, mode_trunc_end, xlim, ylim, figsize, ax, legend)#x1B[0m
+#x1B[0;32m    969#x1B[0m         #x1B[1;32melse#x1B[0m#x1B[1;33m:#x1B[0m#x1B[1;33m#x1B[0m#x1B[1;33m#x1B[0m#x1B[0m
+#x1B[0;32m    970#x1B[0m             ax.plot(
+#x1B[1;32m--&gt; 971#x1B[1;33m                 #x1B[0mhist#x1B[0m#x1B[1;33m.#x1B[0m#x1B[0mflows#x1B[0m#x1B[1;33m.#x1B[0m#x1B[0mground#x1B[0m#x1B[1;33m.#x1B[0m#x1B[0ms#x1B[0m#x1B[1;33m.#x1B[0m#x1B[0mx#x1B[0m#x1B[1;33m,#x1B[0m#x1B[1;33m#x1B[0m#x1B[1;33m#x1B[0m#x1B[0m
+#x1B[0m#x1B[0;32m    972#x1B[0m                 #x1B[0mhist#x1B[0m#x1B[1;33m.#x1B[0m#x1B[0mflows#x1B[0m#x1B[1;33m.#x1B[0m#x1B[0mground#x1B[0m#x1B[1;33m.#x1B[0m#x1B[0ms#x1B[0m#x1B[1;33m.#x1B[0m#x1B[0my#x1B[0m#x1B[1;33m,#x1B[0m#x1B[1;33m#x1B[0m#x1B[1;33m#x1B[0m#x1B[0m
+#x1B[0;32m    973#x1B[0m                 #x1B[0mcolor#x1B[0m#x1B[1;33m=#x1B[0m#x1B[1;34m"red"#x1B[0m#x1B[1;33m,#x1B[0m#x1B[1;33m#x1B[0m#x1B[1;33m#x1B[0m#x1B[0m
+
+#x1B[1;31mAttributeError#x1B[0m: 'numpy.ndarray' object has no attribute 'flows'</failure></testcase><testcase classname="examples.rover.test_rover.RoverTests" name="test_obj_values" time="0.127"><failure message="AssertionError: 0.15635424450519864 != 0.7729340149323878">self = &lt;examples.rover.test_rover.RoverTests testMethod=test_obj_values&gt;
 
     def test_obj_values(self):
     
@@ -359,18 +660,18 @@ from rover_model import Rover, gen_params, plot_map, plot_trajectories
             dist,enddist, endpt = line_dist(testvalue)
     
 &gt;           self.assertEqual(dist, dist_int)
-E           AssertionError: 0.11329848698471573 != 0.5763384838180136
+E           AssertionError: 0.15635424450519864 != 0.7729340149323878
 
-examples\rover\test_rover.py:20: AssertionError</failure></testcase><testcase classname="examples.rover.HFAC_Analyses.HFAC_Analyses.ipynb" name="" time="4.038"><failure message="#x1B[1;31mModuleNotFoundError#x1B[0m: No module named 'rover_model_human'">---------------------------------------------------------------------------
+examples\rover\test_rover.py:20: AssertionError</failure></testcase><testcase classname="examples.rover.HFAC_Analyses.HFAC_Analyses.ipynb" name="" time="4.079"><failure message="#x1B[1;31mModuleNotFoundError#x1B[0m: No module named 'rover_model_human'">---------------------------------------------------------------------------
 from rover_model_human import *
 from rover_model import plot_trajectories, plot_map
 #x1B[1;31m---------------------------------------------------------------------------#x1B[0m
 #x1B[1;31mModuleNotFoundError#x1B[0m                       Traceback (most recent call last)
-#x1B[1;32m~\AppData\Local\Temp\1/ipykernel_10568/4227275924.py#x1B[0m in #x1B[0;36m&lt;module&gt;#x1B[1;34m#x1B[0m
+#x1B[1;32m~\AppData\Local\Temp\1/ipykernel_3088/4227275924.py#x1B[0m in #x1B[0;36m&lt;module&gt;#x1B[1;34m#x1B[0m
 #x1B[1;32m----&gt; 1#x1B[1;33m #x1B[1;32mfrom#x1B[0m #x1B[0mrover_model_human#x1B[0m #x1B[1;32mimport#x1B[0m #x1B[1;33m*#x1B[0m#x1B[1;33m#x1B[0m#x1B[1;33m#x1B[0m#x1B[0m
 #x1B[0m#x1B[0;32m      2#x1B[0m #x1B[1;32mfrom#x1B[0m #x1B[0mrover_model#x1B[0m #x1B[1;32mimport#x1B[0m #x1B[0mplot_trajectories#x1B[0m#x1B[1;33m,#x1B[0m #x1B[0mplot_map#x1B[0m#x1B[1;33m#x1B[0m#x1B[1;33m#x1B[0m#x1B[0m
 
-#x1B[1;31mModuleNotFoundError#x1B[0m: No module named 'rover_model_human'</failure></testcase><testcase classname="examples.rover.HFAC_Analyses.IDETC_Human_Paper_Analysis.ipynb" name="" time="4.104"><failure message="#x1B[1;31mModuleNotFoundError#x1B[0m: No module named 'rover_model_human'">---------------------------------------------------------------------------
+#x1B[1;31mModuleNotFoundError#x1B[0m: No module named 'rover_model_human'</failure></testcase><testcase classname="examples.rover.HFAC_Analyses.IDETC_Human_Paper_Analysis.ipynb" name="" time="3.105"><failure message="#x1B[1;31mModuleNotFoundError#x1B[0m: No module named 'rover_model_human'">---------------------------------------------------------------------------
 from rover_model_human import Rover, gen_params
 from rover_model import plot_map, plot_trajectories
 import fmdtools.analyze as an
@@ -381,43 +682,43 @@ import numpy as np
 import matplotlib.pyplot as plt
 #x1B[1;31m---------------------------------------------------------------------------#x1B[0m
 #x1B[1;31mModuleNotFoundError#x1B[0m                       Traceback (most recent call last)
-#x1B[1;32m~\AppData\Local\Temp\1/ipykernel_12284/1671020471.py#x1B[0m in #x1B[0;36m&lt;module&gt;#x1B[1;34m#x1B[0m
+#x1B[1;32m~\AppData\Local\Temp\1/ipykernel_9212/1671020471.py#x1B[0m in #x1B[0;36m&lt;module&gt;#x1B[1;34m#x1B[0m
 #x1B[1;32m----&gt; 1#x1B[1;33m #x1B[1;32mfrom#x1B[0m #x1B[0mrover_model_human#x1B[0m #x1B[1;32mimport#x1B[0m #x1B[0mRover#x1B[0m#x1B[1;33m,#x1B[0m #x1B[0mgen_params#x1B[0m#x1B[1;33m#x1B[0m#x1B[1;33m#x1B[0m#x1B[0m
 #x1B[0m#x1B[0;32m      2#x1B[0m #x1B[1;32mfrom#x1B[0m #x1B[0mrover_model#x1B[0m #x1B[1;32mimport#x1B[0m #x1B[0mplot_map#x1B[0m#x1B[1;33m,#x1B[0m #x1B[0mplot_trajectories#x1B[0m#x1B[1;33m#x1B[0m#x1B[1;33m#x1B[0m#x1B[0m
 #x1B[0;32m      3#x1B[0m #x1B[1;32mimport#x1B[0m #x1B[0mfmdtools#x1B[0m#x1B[1;33m.#x1B[0m#x1B[0manalyze#x1B[0m #x1B[1;32mas#x1B[0m #x1B[0man#x1B[0m#x1B[1;33m#x1B[0m#x1B[1;33m#x1B[0m#x1B[0m
 #x1B[0;32m      4#x1B[0m #x1B[1;32mimport#x1B[0m #x1B[0mfmdtools#x1B[0m#x1B[1;33m.#x1B[0m#x1B[0msim#x1B[0m#x1B[1;33m.#x1B[0m#x1B[0mpropagate#x1B[0m #x1B[1;32mas#x1B[0m #x1B[0mprop#x1B[0m#x1B[1;33m#x1B[0m#x1B[1;33m#x1B[0m#x1B[0m
 #x1B[0;32m      5#x1B[0m #x1B[1;32mfrom#x1B[0m #x1B[0mfmdtools#x1B[0m#x1B[1;33m.#x1B[0m#x1B[0msim#x1B[0m#x1B[1;33m.#x1B[0m#x1B[0mapproach#x1B[0m #x1B[1;32mimport#x1B[0m #x1B[0mSampleApproach#x1B[0m#x1B[1;33m,#x1B[0m #x1B[0mNominalApproach#x1B[0m#x1B[1;33m#x1B[0m#x1B[1;33m#x1B[0m#x1B[0m
 
-#x1B[1;31mModuleNotFoundError#x1B[0m: No module named 'rover_model_human'</failure></testcase><testcase classname="examples.rover.degradation_modelling.Degradation_Modelling_Notebook.ipynb" name="" time="3.770"><failure message="#x1B[1;31mModuleNotFoundError#x1B[0m: No module named 'rover_model_human'">---------------------------------------------------------------------------
+#x1B[1;31mModuleNotFoundError#x1B[0m: No module named 'rover_model_human'</failure></testcase><testcase classname="examples.rover.degradation_modelling.Degradation_Modelling_Notebook.ipynb" name="" time="5.081"><failure message="#x1B[1;31mModuleNotFoundError#x1B[0m: No module named 'rover_model_human'">---------------------------------------------------------------------------
 from rover_model_human import *
 from rover_model import plot_trajectories, plot_map
 #x1B[1;31m---------------------------------------------------------------------------#x1B[0m
 #x1B[1;31mModuleNotFoundError#x1B[0m                       Traceback (most recent call last)
-#x1B[1;32m~\AppData\Local\Temp\1/ipykernel_9936/4227275924.py#x1B[0m in #x1B[0;36m&lt;module&gt;#x1B[1;34m#x1B[0m
+#x1B[1;32m~\AppData\Local\Temp\1/ipykernel_13780/4227275924.py#x1B[0m in #x1B[0;36m&lt;module&gt;#x1B[1;34m#x1B[0m
 #x1B[1;32m----&gt; 1#x1B[1;33m #x1B[1;32mfrom#x1B[0m #x1B[0mrover_model_human#x1B[0m #x1B[1;32mimport#x1B[0m #x1B[1;33m*#x1B[0m#x1B[1;33m#x1B[0m#x1B[1;33m#x1B[0m#x1B[0m
 #x1B[0m#x1B[0;32m      2#x1B[0m #x1B[1;32mfrom#x1B[0m #x1B[0mrover_model#x1B[0m #x1B[1;32mimport#x1B[0m #x1B[0mplot_trajectories#x1B[0m#x1B[1;33m,#x1B[0m #x1B[0mplot_map#x1B[0m#x1B[1;33m#x1B[0m#x1B[1;33m#x1B[0m#x1B[0m
 
-#x1B[1;31mModuleNotFoundError#x1B[0m: No module named 'rover_model_human'</failure></testcase><testcase classname="examples.rover.fault_sampling.Rover_Mode_Notebook.ipynb" name="" time="3.802"><failure message="#x1B[1;31mModuleNotFoundError#x1B[0m: No module named 'rover_model'">---------------------------------------------------------------------------
+#x1B[1;31mModuleNotFoundError#x1B[0m: No module named 'rover_model_human'</failure></testcase><testcase classname="examples.rover.fault_sampling.Rover_Mode_Notebook.ipynb" name="" time="4.013"><failure message="#x1B[1;31mModuleNotFoundError#x1B[0m: No module named 'rover_model'">---------------------------------------------------------------------------
 from rover_model import Rover, gen_params, plot_map, plot_trajectories, compare_trajectories, plot_course
 #x1B[1;31m---------------------------------------------------------------------------#x1B[0m
 #x1B[1;31mModuleNotFoundError#x1B[0m                       Traceback (most recent call last)
-#x1B[1;32m~\AppData\Local\Temp\1/ipykernel_14188/2381073313.py#x1B[0m in #x1B[0;36m&lt;module&gt;#x1B[1;34m#x1B[0m
+#x1B[1;32m~\AppData\Local\Temp\1/ipykernel_10004/2381073313.py#x1B[0m in #x1B[0;36m&lt;module&gt;#x1B[1;34m#x1B[0m
 #x1B[1;32m----&gt; 1#x1B[1;33m #x1B[1;32mfrom#x1B[0m #x1B[0mrover_model#x1B[0m #x1B[1;32mimport#x1B[0m #x1B[0mRover#x1B[0m#x1B[1;33m,#x1B[0m #x1B[0mgen_params#x1B[0m#x1B[1;33m,#x1B[0m #x1B[0mplot_map#x1B[0m#x1B[1;33m,#x1B[0m #x1B[0mplot_trajectories#x1B[0m#x1B[1;33m,#x1B[0m #x1B[0mcompare_trajectories#x1B[0m#x1B[1;33m,#x1B[0m #x1B[0mplot_course#x1B[0m#x1B[1;33m#x1B[0m#x1B[1;33m#x1B[0m#x1B[0m
 #x1B[0m
-#x1B[1;31mModuleNotFoundError#x1B[0m: No module named 'rover_model'</failure></testcase><testcase classname="examples.rover.optimization.Rover_Response_Optimization.ipynb" name="" time="3.773"><failure message="#x1B[1;31mModuleNotFoundError#x1B[0m: No module named 'rover_model'">---------------------------------------------------------------------------
+#x1B[1;31mModuleNotFoundError#x1B[0m: No module named 'rover_model'</failure></testcase><testcase classname="examples.rover.optimization.Rover_Response_Optimization.ipynb" name="" time="4.115"><failure message="#x1B[1;31mModuleNotFoundError#x1B[0m: No module named 'rover_model'">---------------------------------------------------------------------------
 from rover_model import Rover, gen_params, plot_map, plot_trajectories
 #x1B[1;31m---------------------------------------------------------------------------#x1B[0m
 #x1B[1;31mModuleNotFoundError#x1B[0m                       Traceback (most recent call last)
-#x1B[1;32m~\AppData\Local\Temp\1/ipykernel_16688/947193376.py#x1B[0m in #x1B[0;36m&lt;module&gt;#x1B[1;34m#x1B[0m
+#x1B[1;32m~\AppData\Local\Temp\1/ipykernel_8792/947193376.py#x1B[0m in #x1B[0;36m&lt;module&gt;#x1B[1;34m#x1B[0m
 #x1B[1;32m----&gt; 1#x1B[1;33m #x1B[1;32mfrom#x1B[0m #x1B[0mrover_model#x1B[0m #x1B[1;32mimport#x1B[0m #x1B[0mRover#x1B[0m#x1B[1;33m,#x1B[0m #x1B[0mgen_params#x1B[0m#x1B[1;33m,#x1B[0m #x1B[0mplot_map#x1B[0m#x1B[1;33m,#x1B[0m #x1B[0mplot_trajectories#x1B[0m#x1B[1;33m#x1B[0m#x1B[1;33m#x1B[0m#x1B[0m
 #x1B[0m
-#x1B[1;31mModuleNotFoundError#x1B[0m: No module named 'rover_model'</failure></testcase><testcase classname="examples.rover.optimization.Search_Comparison.ipynb" name="" time="208.236"><failure message="#x1B[1;31mTypeError#x1B[0m: __init__() got an unexpected keyword argument 'params'">---------------------------------------------------------------------------
+#x1B[1;31mModuleNotFoundError#x1B[0m: No module named 'rover_model'</failure></testcase><testcase classname="examples.rover.optimization.Search_Comparison.ipynb" name="" time="218.196"><failure message="#x1B[1;31mTypeError#x1B[0m: __init__() got an unexpected keyword argument 'params'">---------------------------------------------------------------------------
 result_mc, sol_mc= montecarlo(ngen=50, weight=0.5, filename='results/rslt_random.csv')
 result_ea, sol_ea= ea(ngen=50, weight=0.5, filename='results/rslt_ea.csv')
 result_ccea, sol_ccea, pop= ccea(ngen=50, weight=0.5, filename="results/rslt_ccea.csv")
 #x1B[1;31m---------------------------------------------------------------------------#x1B[0m
 #x1B[1;31mTypeError#x1B[0m                                 Traceback (most recent call last)
-#x1B[1;32m~\AppData\Local\Temp\1/ipykernel_5312/2259828233.py#x1B[0m in #x1B[0;36m&lt;module&gt;#x1B[1;34m#x1B[0m
+#x1B[1;32m~\AppData\Local\Temp\1/ipykernel_3336/2259828233.py#x1B[0m in #x1B[0;36m&lt;module&gt;#x1B[1;34m#x1B[0m
 #x1B[1;32m----&gt; 1#x1B[1;33m #x1B[0mresult_mc#x1B[0m#x1B[1;33m,#x1B[0m #x1B[0msol_mc#x1B[0m#x1B[1;33m=#x1B[0m #x1B[0mmontecarlo#x1B[0m#x1B[1;33m(#x1B[0m#x1B[0mngen#x1B[0m#x1B[1;33m=#x1B[0m#x1B[1;36m50#x1B[0m#x1B[1;33m,#x1B[0m #x1B[0mweight#x1B[0m#x1B[1;33m=#x1B[0m#x1B[1;36m0.5#x1B[0m#x1B[1;33m,#x1B[0m #x1B[0mfilename#x1B[0m#x1B[1;33m=#x1B[0m#x1B[1;34m'results/rslt_random.csv'#x1B[0m#x1B[1;33m)#x1B[0m#x1B[1;33m#x1B[0m#x1B[1;33m#x1B[0m#x1B[0m
 #x1B[0m#x1B[0;32m      2#x1B[0m #x1B[0mresult_ea#x1B[0m#x1B[1;33m,#x1B[0m #x1B[0msol_ea#x1B[0m#x1B[1;33m=#x1B[0m #x1B[0mea#x1B[0m#x1B[1;33m(#x1B[0m#x1B[0mngen#x1B[0m#x1B[1;33m=#x1B[0m#x1B[1;36m50#x1B[0m#x1B[1;33m,#x1B[0m #x1B[0mweight#x1B[0m#x1B[1;33m=#x1B[0m#x1B[1;36m0.5#x1B[0m#x1B[1;33m,#x1B[0m #x1B[0mfilename#x1B[0m#x1B[1;33m=#x1B[0m#x1B[1;34m'results/rslt_ea.csv'#x1B[0m#x1B[1;33m)#x1B[0m#x1B[1;33m#x1B[0m#x1B[1;33m#x1B[0m#x1B[0m
 #x1B[0;32m      3#x1B[0m #x1B[0mresult_ccea#x1B[0m#x1B[1;33m,#x1B[0m #x1B[0msol_ccea#x1B[0m#x1B[1;33m,#x1B[0m #x1B[0mpop#x1B[0m#x1B[1;33m=#x1B[0m #x1B[0mccea#x1B[0m#x1B[1;33m(#x1B[0m#x1B[0mngen#x1B[0m#x1B[1;33m=#x1B[0m#x1B[1;36m50#x1B[0m#x1B[1;33m,#x1B[0m #x1B[0mweight#x1B[0m#x1B[1;33m=#x1B[0m#x1B[1;36m0.5#x1B[0m#x1B[1;33m,#x1B[0m #x1B[0mfilename#x1B[0m#x1B[1;33m=#x1B[0m#x1B[1;34m"results/rslt_ccea.csv"#x1B[0m#x1B[1;33m)#x1B[0m#x1B[1;33m#x1B[0m#x1B[1;33m#x1B[0m#x1B[0m
@@ -437,10 +738,10 @@ result_ccea, sol_ccea, pop= ccea(ngen=50, weight=0.5, filename="results/rslt_cce
 #x1B[0;32m    551#x1B[0m     #x1B[0mphases#x1B[0m#x1B[1;33m,#x1B[0m #x1B[0mmodephases#x1B[0m #x1B[1;33m=#x1B[0m #x1B[0mmdlhists#x1B[0m#x1B[1;33m.#x1B[0m#x1B[0mget_modephases#x1B[0m#x1B[1;33m(#x1B[0m#x1B[1;33m)#x1B[0m#x1B[1;33m#x1B[0m#x1B[1;33m#x1B[0m#x1B[0m
 
 #x1B[1;32mc:\users\dhulse\documents\github\fmdtools\examples\rover\rover_model.py#x1B[0m in #x1B[0;36m__init__#x1B[1;34m(self, **kwargs)#x1B[0m
-#x1B[0;32m    454#x1B[0m     #x1B[0mdefault_sp#x1B[0m #x1B[1;33m=#x1B[0m #x1B[0mdict#x1B[0m#x1B[1;33m(#x1B[0m#x1B[0mtimes#x1B[0m#x1B[1;33m=#x1B[0m#x1B[1;33m(#x1B[0m#x1B[1;36m0#x1B[0m#x1B[1;33m,#x1B[0m #x1B[1;36m100#x1B[0m#x1B[1;33m)#x1B[0m#x1B[1;33m,#x1B[0m #x1B[0mphases#x1B[0m#x1B[1;33m=#x1B[0m#x1B[1;33m(#x1B[0m#x1B[1;33m(#x1B[0m#x1B[1;34m'start'#x1B[0m#x1B[1;33m,#x1B[0m#x1B[1;36m0#x1B[0m#x1B[1;33m,#x1B[0m #x1B[1;36m30#x1B[0m#x1B[1;33m)#x1B[0m#x1B[1;33m,#x1B[0m #x1B[1;33m(#x1B[0m#x1B[1;34m'end'#x1B[0m#x1B[1;33m,#x1B[0m #x1B[1;36m31#x1B[0m#x1B[1;33m,#x1B[0m #x1B[1;36m60#x1B[0m#x1B[1;33m)#x1B[0m#x1B[1;33m)#x1B[0m#x1B[1;33m,#x1B[0m #x1B[0mend_condition#x1B[0m#x1B[1;33m=#x1B[0m#x1B[1;34m'indicate_finished'#x1B[0m#x1B[1;33m)#x1B[0m#x1B[1;33m#x1B[0m#x1B[1;33m#x1B[0m#x1B[0m
-#x1B[0;32m    455#x1B[0m     #x1B[1;32mdef#x1B[0m #x1B[0m__init__#x1B[0m#x1B[1;33m(#x1B[0m#x1B[0mself#x1B[0m#x1B[1;33m,#x1B[0m #x1B[1;33m**#x1B[0m#x1B[0mkwargs#x1B[0m#x1B[1;33m)#x1B[0m#x1B[1;33m:#x1B[0m#x1B[1;33m#x1B[0m#x1B[1;33m#x1B[0m#x1B[0m
-#x1B[1;32m--&gt; 456#x1B[1;33m         #x1B[0msuper#x1B[0m#x1B[1;33m(#x1B[0m#x1B[1;33m)#x1B[0m#x1B[1;33m.#x1B[0m#x1B[0m__init__#x1B[0m#x1B[1;33m(#x1B[0m#x1B[1;33m**#x1B[0m#x1B[0mkwargs#x1B[0m#x1B[1;33m)#x1B[0m#x1B[1;33m#x1B[0m#x1B[1;33m#x1B[0m#x1B[0m
-#x1B[0m#x1B[0;32m    457#x1B[0m #x1B[1;33m#x1B[0m#x1B[0m
-#x1B[0;32m    458#x1B[0m         #x1B[0mself#x1B[0m#x1B[1;33m.#x1B[0m#x1B[0madd_flow#x1B[0m#x1B[1;33m(#x1B[0m#x1B[1;34m'ground'#x1B[0m#x1B[1;33m,#x1B[0m             #x1B[0mGround#x1B[0m#x1B[1;33m,#x1B[0m #x1B[0ms#x1B[0m#x1B[1;33m=#x1B[0m#x1B[1;33m{#x1B[0m#x1B[1;34m'angle'#x1B[0m#x1B[1;33m:#x1B[0m#x1B[0mself#x1B[0m#x1B[1;33m.#x1B[0m#x1B[0mp#x1B[0m#x1B[1;33m.#x1B[0m#x1B[0minitangle#x1B[0m#x1B[1;33m}#x1B[0m#x1B[1;33m)#x1B[0m#x1B[1;33m#x1B[0m#x1B[1;33m#x1B[0m#x1B[0m
+#x1B[0;32m    714#x1B[0m #x1B[1;33m#x1B[0m#x1B[0m
+#x1B[0;32m    715#x1B[0m     #x1B[1;32mdef#x1B[0m #x1B[0m__init__#x1B[0m#x1B[1;33m(#x1B[0m#x1B[0mself#x1B[0m#x1B[1;33m,#x1B[0m #x1B[1;33m**#x1B[0m#x1B[0mkwargs#x1B[0m#x1B[1;33m)#x1B[0m#x1B[1;33m:#x1B[0m#x1B[1;33m#x1B[0m#x1B[1;33m#x1B[0m#x1B[0m
+#x1B[1;32m--&gt; 716#x1B[1;33m         #x1B[0msuper#x1B[0m#x1B[1;33m(#x1B[0m#x1B[1;33m)#x1B[0m#x1B[1;33m.#x1B[0m#x1B[0m__init__#x1B[0m#x1B[1;33m(#x1B[0m#x1B[1;33m**#x1B[0m#x1B[0mkwargs#x1B[0m#x1B[1;33m)#x1B[0m#x1B[1;33m#x1B[0m#x1B[1;33m#x1B[0m#x1B[0m
+#x1B[0m#x1B[0;32m    717#x1B[0m #x1B[1;33m#x1B[0m#x1B[0m
+#x1B[0;32m    718#x1B[0m         #x1B[0mself#x1B[0m#x1B[1;33m.#x1B[0m#x1B[0madd_flow#x1B[0m#x1B[1;33m(#x1B[0m#x1B[1;34m"ground"#x1B[0m#x1B[1;33m,#x1B[0m #x1B[0mGround#x1B[0m#x1B[1;33m,#x1B[0m #x1B[0ms#x1B[0m#x1B[1;33m=#x1B[0m#x1B[1;33m{#x1B[0m#x1B[1;34m"angle"#x1B[0m#x1B[1;33m:#x1B[0m #x1B[0mself#x1B[0m#x1B[1;33m.#x1B[0m#x1B[0mp#x1B[0m#x1B[1;33m.#x1B[0m#x1B[0minitangle#x1B[0m#x1B[1;33m}#x1B[0m#x1B[1;33m)#x1B[0m#x1B[1;33m#x1B[0m#x1B[1;33m#x1B[0m#x1B[0m
 
-#x1B[1;31mTypeError#x1B[0m: __init__() got an unexpected keyword argument 'params'</failure></testcase><testcase classname="examples.tank.Tank_Analysis.ipynb" name="" time="10.219" /><testcase classname="examples.tank.Tank_Optimization.ipynb" name="" time="368.940" /><testcase classname="examples.tank.test_tank.TankTests" name="test_approach" time="0.577" /><testcase classname="examples.tank.test_tank.TankTests" name="test_approach_parallelism_0" time="6.198" /><testcase classname="examples.tank.test_tank.TankTests" name="test_approach_parallelism_1" time="6.473" /><testcase classname="examples.tank.test_tank.TankTests" name="test_approach_parallelism_notrack" time="5.846" /><testcase classname="examples.tank.test_tank.TankTests" name="test_comp_mode_inj" time="0.040" /><testcase classname="examples.tank.test_tank.TankTests" name="test_different_components" time="0.020" /><testcase classname="examples.tank.test_tank.TankTests" name="test_epc_math" time="0.009" /><testcase classname="examples.tank.test_tank.TankTests" name="test_local_tstep" time="0.071" /><testcase classname="examples.tank.test_tank.TankTests" name="test_model_copy_different" time="0.296" /><testcase classname="examples.tank.test_tank.TankTests" name="test_model_copy_same" time="0.429" /><testcase classname="examples.tank.test_tank.TankTests" name="test_model_reset" time="0.424" /><testcase classname="examples.tank.test_tank.TankTests" name="test_save_load_approach" time="0.529" /><testcase classname="examples.tank.test_tank.TankTests" name="test_save_load_approach_indiv" time="0.794" /><testcase classname="examples.tank.test_tank.TankTests" name="test_save_load_multfault" time="0.070" /><testcase classname="examples.tank.test_tank.TankTests" name="test_save_load_nestedapproach" time="5.362" /><testcase classname="examples.tank.test_tank.TankTests" name="test_save_load_nestedapproach_indiv" time="5.512" /><testcase classname="examples.tank.test_tank.TankTests" name="test_save_load_nominal" time="0.052" /><testcase classname="examples.tank.test_tank.TankTests" name="test_save_load_nominalapproach" time="0.268" /><testcase classname="examples.tank.test_tank.TankTests" name="test_save_load_nominalapproach_indiv" time="0.430" /><testcase classname="examples.tank.test_tank.TankTests" name="test_save_load_onefault" time="0.068" /><testcase classname="examples.tank.test_tank.TankTests" name="test_save_load_singlefaults" time="2.091" /><testcase classname="examples.tank.test_tank.TankTests" name="test_save_load_singlefaults_indiv" time="3.209" /><testcase classname="examples.tank.test_tank.TankTests" name="test_tank_copy_args" time="0.028" /><testcase classname="examples.tank.test_tank_opt.TankOptTests" name="test_same_rcost" time="6.648" /><testcase classname="fmdtools.define.parameter" name="fmdtools.define.parameter.Parameter" time="0.007" /><testcase classname="fmdtools.define.state" name="fmdtools.define.state.State" time="0.005" /><testcase classname="fmdtools.define.state" name="fmdtools.define.state.State.add" time="0.005" /><testcase classname="fmdtools.define.state" name="fmdtools.define.state.State.assign" time="0.005" /><testcase classname="fmdtools.define.state" name="fmdtools.define.state.State.div" time="0.006" /><testcase classname="fmdtools.define.state" name="fmdtools.define.state.State.get" time="0.005" /><testcase classname="fmdtools.define.state" name="fmdtools.define.state.State.inc" time="0.005" /><testcase classname="fmdtools.define.state" name="fmdtools.define.state.State.limit" time="0.005" /><testcase classname="fmdtools.define.state" name="fmdtools.define.state.State.mul" time="0.005" /><testcase classname="fmdtools.define.state" name="fmdtools.define.state.State.put" time="0.005" /><testcase classname="fmdtools.define.state" name="fmdtools.define.state.State.roundto" time="0.005" /><testcase classname="fmdtools.define.state" name="fmdtools.define.state.State.same" time="0.006" /><testcase classname="fmdtools.define.state" name="fmdtools.define.state.State.set_atts" time="0.005" /><testcase classname="fmdtools.define.state" name="fmdtools.define.state.State.sub" time="0.005" /><testcase classname="tests.test_graph.ModelGraphTests" name="test_fault_plot" time="0.252" /><testcase classname="tests.test_graph.ModelGraphTests" name="test_flowgraph_plot" time="0.143" /><testcase classname="tests.test_graph.ModelGraphTests" name="test_fxngraph_plot" time="0.122" /><testcase classname="tests.test_graph.ModelGraphTests" name="test_modelgraph_plot" time="0.196" /><testcase classname="tests.test_graph.ModelGraphTests" name="test_result_from_plot" time="0.099" /><testcase classname="tests.test_graph.ModelGraphTests" name="test_typegraph_plot" time="0.057" /><testcase classname="tests.test_mode.ModeTests" name="test_mode_generation" time="0.001" /><testcase classname="tests.test_packages.define_Tests" name="test_pdf_translation_options" time="0.044" /></testsuite></testsuites>
+#x1B[1;31mTypeError#x1B[0m: __init__() got an unexpected keyword argument 'params'</failure></testcase><testcase classname="examples.tank.Tank_Analysis.ipynb" name="" time="11.590" /><testcase time="0.000" /></testsuite></testsuites>
