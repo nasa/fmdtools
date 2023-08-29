@@ -86,6 +86,13 @@ class StoreEE(FxnBlock):
     _init_ee_out = EE
     _init_fs = Force
     flownames = {"ee_1": "ee_out", "force_st": "fs"}
+    """
+    Class for the battery architecture with:
+    - StoreEEState: State
+        specifies battery state of charge percentage
+    - StoreEEMode: Mode
+        specifies modes for battery (e.g., lowcharge)
+    """
 
     def behavior(self, time):
         if self.m.has_fault("nocharge"):
@@ -96,12 +103,30 @@ class StoreEE(FxnBlock):
 
 class DistEEMode(Mode):
     failrate = 1e-5
-    faultparams = {"short": (0.3, 3000), "degr": (0.5, 1000), "break": (0.2, 2000)}
+    faultparams = {"short": (0.3, 3000),
+                   "degr": (0.5, 1000),
+                   "break": (0.2, 2000)}
+    """
+    Power Distribution Fault modes. Includes:
+        - short: Fault
+            EE effort goes to zero, while rate increases to 10 (or some high value)
+        - degr: Fault
+            Less ability to transfer EE effort
+        - break: Fault
+            Open circuit caused by mechanical breakage, inability to tranfer EE
+    """
 
 
 class DistEEState(State):
     ee_tr: float = 1.0
     ee_te: float = 1.0
+    """
+    State of power distribution. Has values:
+        - ee_tr: float
+            Ability to transfer EE rate (current, with a nominal value of 1.0)
+    -   - ee_te: float
+            Ability to transfer EE effort (voltage, with a nominal value of 1.0)
+    """
 
 
 class DistEE(FxnBlock):
@@ -113,6 +138,10 @@ class DistEE(FxnBlock):
     _init_ee_ctl = EE
     _init_st = Force
     flownames = {"ee_1": "ee_in", "force_st": "st"}
+    """
+    Power distribution for the drone. Takes in power from the battery and distributes
+    it to the motors and control systems/avionics.
+    """
 
     def condfaults(self, time):
         if self.st.s.support < 0.5 or max(self.ee_mot.s.rate, self.ee_ctl.s.rate) > 2:
@@ -140,15 +169,27 @@ class DistEE(FxnBlock):
 
 class EngageLandMode(Mode):
     failrate = 1e-5
-    faultparams = {"break": (0.2, 1000), "deform": (0.8, 1000)}
-
+    faultparams = {"break": (0.2, 1000),
+                   "deform": (0.8, 1000)}
+    """
+    Multirotor landing gear fault modes. Includes:
+        - break: Fault
+            provides no support to the body and lines
+        - deform: Fault
+            support is less than desired
+    """
 
 class EngageLand(FxnBlock):
     __slots__ = ("force_in", "force_out")
     _init_m = EngageLandMode
     _init_force_in = Force
     _init_force_out = Force
-    flownames = {"force_gr": "force_in", "force_lg": "force_out"}
+    flownames = {"force_gr": "force_in",
+                 "force_lg": "force_out"}
+    """
+    Drone landing gear. Transfers force from the ground to the drone structure
+    (HoldPayload)
+    """
 
     def condfaults(self, time):
         if abs(self.force_in.s.support) >= 2.0:
@@ -162,7 +203,15 @@ class EngageLand(FxnBlock):
 
 class HoldPayloadMode(Mode):
     failrate = 1e-6
-    faultparams = {"break": (0.2, 10000), "deform": (0.8, 10000)}
+    faultparams = {"break": (0.2, 10000),
+                   "deform": (0.8, 10000)}
+    """
+    Multirotor structure fault modes. Includes:
+        - break: Fault
+            provides no support to the body and lines
+        - deform: Fault
+            support is less than desired
+    """
 
 
 class HoldPayload(FxnBlock):
@@ -171,6 +220,9 @@ class HoldPayload(FxnBlock):
     _init_force_lg = Force
     _init_force_lin = Force
     _init_force_st = Force
+    """
+    Multirotor Structure. Transfers Landing gear force to the rotors and of the drone.
+    """
 
     def condfaults(self, time):
         if abs(self.force_lg.s.support) > 0.8:
@@ -195,6 +247,19 @@ class AffectDOFState(State):
     ct: float = 1.0
     mt: float = 1.0
     pt: float = 1.0
+    """
+    Behavior-affecting states for drone rotors/propellers. Has values:
+        Eto: float
+            Electricity transfer (out)
+        Eti: float
+            Electricity pull (in)
+        Ct: float
+            Control transferrence
+        Mt: float
+            Mechanical support
+        Pt: float
+            Physical tranferrence (ability of rotor to spin)
+    """
 
 
 class AffectDOFMode(Mode):
@@ -221,7 +286,13 @@ class AffectDOF(FxnBlock):  # ee_mot,ctl,dofs,force_lin HSig_dofs, RSig_dofs
     _init_ctl_in = Control
     _init_dofs = DOFs
     _init_force = Force
-    flownames = {"ee_mot": "ee_in", "ctl": "ctl_in", "force_lin": "force"}
+    flownames = {"ee_mot": "ee_in",
+                 "ctl": "ctl_in",
+                 "force_lin": "force"}
+    """
+    Drone rotor architecture which moves the drone through the air based on signals
+    using electrical power.
+    """
 
     def behavior(self, time):
         self.s.put(e_ti=1.0, e_to=1.0)
@@ -396,6 +467,9 @@ class ViewEnvironment(FxnBlock):
 
 class Drone(Model):
     __slots__ = ()
+    """
+    Static multirotor drone model (executes in a single timestep).
+    """
 
     def __init__(self, sp=SimParam(times=(0, 1)), **kwargs):
         super().__init__(sp=sp, **kwargs)
