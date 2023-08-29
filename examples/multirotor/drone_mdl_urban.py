@@ -5,7 +5,7 @@ Variant of drone model for modelling computer vision in urban settings.
 from examples.multirotor.drone_mdl_static import EE, Force, Control
 from examples.multirotor.drone_mdl_static import DistEE
 from drone_mdl_opt import DesTraj, DOFs, HSig, RSig
-from drone_mdl_opt import ManageHealth, StoreEE, AffectDOF, CtlDOF, HoldPayload
+from drone_mdl_opt import ManageHealth, StoreEE, AffectDOF, CtlDOF
 from drone_mdl_opt import PlanPath as PlanPathOpt
 from drone_mdl_opt import DroneParam as DroneParamOpt
 from drone_mdl_opt import HoldPayload as HoldPayloadOpt
@@ -272,7 +272,7 @@ class ComputerVision(Component):
         elif self.m.has_fault("lack_of_detection"):
             occ = False
         else:
-            occ = environment.get_below(dofs.x, dofs.y)['occupied']
+            occ = environment.get_below(dofs.s.x, dofs.s.y)['occupied']
         self.m.remove_fault("undesired_detection")
         return occ
 
@@ -340,13 +340,24 @@ class PlanPath(PlanPathOpt):
         self.update_dist()
         self.update_traj()
 
-    def dynamic_behavior(self):
+    def dynamic_behavior(self, time):
         self.increment_point()
+
+
+class HoldPayload(HoldPayloadOpt):
+    _init_environment = Environment
+    
+    def at_ground(self):
+        ground_height = self.environment.ground_height(self.dofs.s.x,
+                                                       self.dofs.s.y,
+                                                       self.dofs.s.z)
+        return ground_height <= 0.0
 
 
 class DroneParam(DroneParamOpt):
     plan_param: PlanPathParam = PlanPathParam()
     env_param: EnvironmentParameter = EnvironmentParameter()
+
 
 class Drone(Model):
     _init_p = DroneParam
@@ -379,16 +390,16 @@ class Drone(Model):
 
         store_ee_p = {'archtype': self.p.bat, 'weight': (
             self.p.batweight+self.p.archweight)/2.2, 'drag': self.p.archdrag}
-        self.add_fxn('store_ee',    StoreEE, 'ee_1',
-                     'force_st', 'hsig_bat', c=store_ee_p)
-        self.add_fxn('dist_ee',     DistEE,   'ee_1', 'ee_mot', 'ee_ctl', 'force_st')
-        self.add_fxn('affect_dof',  AffectDOF, 'ee_mot', 'ctl', 'dofs', 'des_traj',
-                     'force_lin', 'hsig_dofs',  c={'archtype': self.p.linearch})
-        self.add_fxn('ctl_dof',     CtlDOF,   'ee_ctl',
-                     'des_traj', 'ctl', 'dofs', 'force_st')
-        self.add_fxn('plan_path',   PlanPath, 'ee_ctl', 'dofs',
-                     'des_traj', 'force_st', 'rsig_traj', p=self.p.plan_param)
-        self.add_fxn('hold_payload', HoldPayload, 'dofs', 'force_lin', 'force_st')
+        self.add_fxn('store_ee', StoreEE, 'ee_1', 'force_st', 'hsig_bat', c=store_ee_p)
+        self.add_fxn('dist_ee', DistEE, 'ee_1', 'ee_mot', 'ee_ctl', 'force_st')
+        self.add_fxn('affect_dof', AffectDOF, 'ee_mot', 'ctl', 'dofs', 'des_traj',
+                     'force_lin', 'hsig_dofs', 'environment',
+                     c={'archtype': self.p.linearch})
+        self.add_fxn('ctl_dof', CtlDOF, 'ee_ctl', 'des_traj', 'ctl', 'dofs', 'force_st')
+        self.add_fxn('plan_path',   PlanPath, 'ee_ctl', 'dofs', 'des_traj', 'force_st',
+                     'rsig_traj', 'environment', p=self.p.plan_param)
+        self.add_fxn('hold_payload', HoldPayload, 'dofs', 'force_lin', 'force_st', 
+                     'environment')
 
         self.build()
 
@@ -400,13 +411,116 @@ class Drone(Model):
             return time > 1 and self.fxns['plan_path'].m.mode == 'taxi'
 
 
+def plot_traj(mdlhist, mdl, title='Trajectory', legend=False):
+    """
+    Plots given 3d Drone trajectories over the gridword.
+
+    Parameters
+    ----------
+    mdlhist : dict
+        Dict of model histories.
+    mdl : Drone
+        Drone model object.
+    title : str
+        Title for the plot. The default is 'Trajectory'.
+    legend : bool, optional
+        Whether to include a legend. The default is False.
+
+    Returns
+    -------
+    fig : matplotlib figure
+    ax : matplotlib axis
+    """
+    if "nominal" not in mdlhist:
+        mdlhist = {'nominal': mdlhist}
+    else:
+        mdlhist = mdlhist.nest(1)
+
+    fig, ax = mdl.flows['environment'].show_3d()
+    ax.set_zlim3d(0, mdl.p.plan_param.height)
+
+    for faultlabel in mdlhist:
+        dofs = mdlhist[faultlabel].flows.dofs.s
+        t = mdlhist[faultlabel]['time']
+        ax.plot(dofs.x, dofs.y, dofs.z, label="Faulty")
+        if faultlabel == 'nominal':
+            xnom, ynom, znom, tnom = dofs.x, dofs.y, dofs.z, t
+
+    for xx, yy, zz, tt in zip(xnom, ynom, znom, tnom):
+        if tt % 20 == 0:
+            ax.text(xx, yy, zz, 't=' + str(tt), fontsize=8)
+
+    for goal, loc in mdl.fxns['plan_path'].goals.items():
+        ax.text(loc[0], loc[1], loc[2], str(goal), fontweight='bold', fontsize=12)
+        ax.plot([loc[0]], [loc[1]], [loc[2]],
+                marker='o', markersize=10, color='red', alpha=0.5)
+
+    ax.set_title(title)
+    if legend:
+        consolidate_legend(ax)
+    return fig, ax
+
+
+def plot_xy(mdlhists,  mdl, title='', legend=False):
+    """
+    Plots given 2d Drone trajectories over the gridword.
+
+    Parameters
+    ----------
+    mdlhists : dict
+        Dict of model histories.
+    mdl : Drone
+        Drone model object.
+    title : str
+        Title for the plot. The default is 'Trajectory'.
+    legend : bool, optional
+        Whether to include a legend. The default is False.
+
+    Returns
+    -------
+    fig : matplotlib figure
+    ax : matplotlib axis
+    """
+    if 'time' in mdlhists:
+        mdlhists = {'nominal': mdlhists}
+    else:
+        mdlhists = mdlhists.nest(1)
+    fig, ax = mdl.flows['environment'].show_grid()
+    for scenname, hist in mdlhists.items():
+        ax.plot(hist.flows.dofs.s.x, hist.flows.dofs.s.y, label=scenname, marker="*")
+    plt.title(title)
+    if legend:
+        consolidate_legend(ax)
+    return fig, ax
+
+
+def consolidate_legend(ax):
+    ax.legend()
+    handles, labels = ax.get_legend_handles_labels()
+    by_label = dict(zip(labels, handles))
+    ax.get_legend().remove()
+    ax.legend(by_label.values(), by_label.keys(), bbox_to_anchor=(1.05, 1), loc='upper left')
 
 if __name__ == "__main__":
+    from fmdtools.sim import propagate
+    from fmdtools import analyze as an
     p = PlanPath("test", {})
     
     e = Environment("env")
     e.show_grid()
     e.show_3d()
+    
+    mdl = Drone()
+    ec, mdlhist = propagate.nominal(mdl)
+    
+    phases, modephases = mdlhist.get_modephases()
+    an.plot.phases(phases, modephases)
+    
+    an.plot.hist(mdlhist, "flows.dofs.s.planvel","flows.dofs.s.vertvel", "fxns.store_ee.s.soc")
+    plot_xy(mdlhist, mdl, legend=True)
+    plot_traj(mdlhist, mdl, legend=True)
+    
+    #move_quad = make_move_quad(mdlhist, phases['PlanPath']['move'])
 
 
 
