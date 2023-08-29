@@ -13,6 +13,7 @@ from fmdtools.define.parameter import Parameter
 from fmdtools.define.state import State
 from fmdtools.define.block import FxnBlock, Component, CompArch
 from fmdtools.sim.approach import SampleApproach
+from fmdtools.define.model import Model
 
 from examples.multirotor.drone_mdl_static import m2to1, EngageLand, HoldPayload, DistEE
 from examples.multirotor.drone_mdl_static import Force, EE, Control, DOFs, Env, Dir
@@ -161,7 +162,7 @@ class Drone(DynDrone):
     _init_p = DroneParam
 
     def __init__(self, **kwargs):
-        super().__init__(**kwargs)
+        Model.__init__(self, **kwargs)
         # add flows to the model
         self.add_flow('force_st',   Force)
         self.add_flow('force_lin',  Force)
