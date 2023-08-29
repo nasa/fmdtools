@@ -449,10 +449,12 @@ class AffectDOF(FxnBlock):  # ee_mot,ctl,dofs,force_lin hsig_dofs, RSig_dofs
             self.hsig_dofs.s.hstate = 'faulty'
         else:
             self.hsig_dofs.s.hstate = 'nominal'
+
     def calc_vel(self):
         # calculate velocities from power
         self.dofs.s.put(vertvel=300*(self.dofs.s.uppwr-1.0),
                         planvel=600*self.dofs.s.planpwr)  # 600 m/m = 23 mph
+        self.dofs.s.roundto(vertvel=0.001, planvel=0.001)
 
     def inc_takeoff(self):
         # can only take off at ground
@@ -474,6 +476,7 @@ class AffectDOF(FxnBlock):  # ee_mot,ctl,dofs,force_lin hsig_dofs, RSig_dofs
         self.dofs.s.inc(x=norm_vel*self.des_traj.s.x,
                         y=norm_vel*self.des_traj.s.y,
                         z=self.dofs.s.vertvel*self.t.dt)
+        self.dofs.s.roundto(x=0.01, y=0.01, z=0.01)
 
     def dynamic_behavior(self, time):
         self.calc_vel()
@@ -617,7 +620,7 @@ class PlanPath(FxnBlock):
     _init_dofs = DOFs
     _init_ee_ctl = EE
     _init_des_traj = DesTraj
-    """ 
+    """
     Path planning function of the drone. Follows a sequence defined in flightplan.
     """
 
@@ -633,7 +636,7 @@ class PlanPath(FxnBlock):
             self.m.add_fault('noloc')
 
     def behavior(self, t):
-        self.s.ground_height = self.s.z
+        self.s.ground_height = self.dofs.s.z
         self.update_mode(t)
         self.increment_point()
         self.update_dist()
@@ -683,16 +686,19 @@ class PlanPath(FxnBlock):
                                self.s.get('x', 'y', 'z'))
         dx, dy, dz = vectdist(self.s.get('x', 'y', 'z'), self.dofs.s.get('x', 'y', 'z'))
         self.s.put(dx=dx, dy=dy, dz=dz)
+        self.s.roundto(dx=0.01, dy=0.01, dz=0.01, dist=0.01, x=0.01, y=0.01, z=0.01,
+                       ground_height=0.01)
 
     def mission_over(self):
-        return self.s.pt >= max(self.goals) or self.m.in_mode('to_nearest', 'to_home', 'land', 'emland')
+        return (self.s.pt >= max(self.goals) or
+                self.m.in_mode('to_nearest', 'to_home', 'land', 'emland'))
 
     def increment_point(self):
         # if close to the given point, go to the next point
-        if (self.in_mode('move', 'move_em')
-                and self.dist < 10
-                and self.pt < max(self.goals)):
-            self.pt += 1
+        if (self.m.in_mode('move', 'move_em')
+                and self.s.dist < 10
+                and self.s.pt < max(self.goals)):
+            self.s.pt += 1
 
 class Drone(Model):
     __slots__ = ('start_area', 'safe_area', 'target_area')
@@ -741,7 +747,7 @@ class Drone(Model):
 
         self.build()
 
-    def find_classification(self, scen, mdlhist):
+    def calc_viewed(self, scen, mdlhist):
         # landing costs
         viewed = env_viewed(mdlhist.faulty.flows.dofs.s.x,
                             mdlhist.faulty.flows.dofs.s.y,
@@ -749,10 +755,10 @@ class Drone(Model):
                             self.target_area)
         viewed_value = sum(
             [0.5+2*view for k, view in viewed.items() if view != 'unviewed'])
+        return viewed, viewed_value
 
-        # to fix: need to find fault time more efficiently (maybe in the toolkit?)
-        faulttime = self.h.get_fault_time(metric='total')
-
+    def calc_land_metrics(self, scen, viewed, faulttime):
+        metrics = {}
         dofs = self.flows['dofs']
         if inrange(self.start_area, dofs.s.x, dofs.s.y):
             landloc = 'nominal'  # nominal landing
@@ -768,41 +774,46 @@ class Drone(Model):
                 loc = 'urban'
             else:
                 loc = self.p.loc
-            body_strikes = density_categories[loc]['body strike']['horiz']
-            head_strikes = density_categories[loc]['head strike']['horiz']
-            property_restrictions = 1
+            metrics['body_strikes'] = density_categories[loc]['body strike']['horiz']
+            metrics['head_strikes'] = density_categories[loc]['head strike']['horiz']
+            metrics['property_restrictions'] = 1
         else:
-            body_strikes = 0.0
-            head_strikes = 0.0
-            property_restrictions = 0
+            metrics['body_strikes'] = 0.0
+            metrics['head_strikes'] = 0.0
+            metrics['property_restrictions'] = 0
+        metrics['safecost'] = calc_safe_cost(metrics, self.p.loc, faulttime)
 
-        safecost = safety_categories['hazardous']['cost'] * \
-            (head_strikes + body_strikes) + unsafecost[self.p.loc] * faulttime
-        landcost = property_restrictions*propertycost[self.p.loc]
+        metrics['landcost'] = metrics['property_restrictions'] * \
+            propertycost[self.p.loc]
+        metrics['p_safety'] = calc_p_safety(metrics, faulttime)
+        metrics['severities'] = {'hazardous': scen.rate * metrics['p_safety'],
+                                 'minor': scen.rate * (1 - metrics['p_safety'])}
+        return metrics
+
+    def find_classification(self, scen, mdlhist):
+        viewed, viewed_value = self.calc_viewed(scen, mdlhist)
+        # to fix: need to find fault time more efficiently (maybe in the toolkit?)
+        faulttime = self.h.get_fault_time(metric='total')
+
+        land_metrics = self.calc_land_metrics(scen, mdlhist, faulttime)
 
         # repair costs
         repcost = self.calc_repaircost(max_cost=1500)
-        rate = scen.rate
-        p_safety = 1-np.exp(-(body_strikes+head_strikes) * 60 /
-                            (faulttime+0.001))  # convert to pfh
-        classifications = {'hazardous': rate*p_safety, 'minor': rate*(1-p_safety)}
 
-        totcost = repcost+landcost+safecost-viewed_value
+        totcost = (land_metrics['landcost']
+                   + land_metrics['safecost']
+                   + repcost
+                   - viewed_value)
 
-        expcost = totcost*rate*1e5
-
-        return {'rate': rate, 'cost': totcost, 'expected cost': expcost,
-                'repcost': repcost,
-                'landcost': landcost,
-                'safecost': safecost,
-                'viewed value': viewed_value,
-                'viewed': viewed,
-                'landloc': landloc,
-                'body strikes': body_strikes,
-                'head strikes': head_strikes,
-                'property restrictions': property_restrictions,
-                'severities': classifications,
-                'unsafe flight time': faulttime}
+        metrics = {'rate': scen.rate,
+                   'cost': totcost,
+                   'expected cost': totcost * scen.rate * 1e5,
+                   'repcost': repcost,
+                   'viewed value': viewed_value,
+                   'viewed': viewed,
+                   'unsafe flight time': faulttime,
+                   **land_metrics}
+        return metrics
 
 
 pos = {'manage_health': [0.23793980988102348, 1.0551602632416588],
@@ -833,6 +844,19 @@ bippos = {'manage_health': [-0.23403572483176666, 0.8119063670455383],
           'des_traj': [0.9276094920710914, 0.6064107724557304]}
 
 # BASE FUNCTIONS
+
+
+def calc_p_safety(metrics, faulttime):
+    p_saf = 1-np.exp(-(metrics['body_strikes'] + metrics['head_strikes']) * 60 /
+                     (faulttime+0.001))  # convert to pfh
+    return p_saf
+
+
+def calc_safe_cost(metrics, loc, faulttime):
+    safecost = safety_categories['hazardous']['cost'] * \
+            (metrics['head_strikes'] + metrics['body_strikes']) + \
+            unsafecost[loc] * faulttime
+    return safecost
 
 
 def find_landtime(mdlhist):

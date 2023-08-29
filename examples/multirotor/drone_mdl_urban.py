@@ -392,6 +392,14 @@ class Drone(Model):
 
         self.build()
 
+        def indicate_landed(self, time):
+            """
+            Custom indicator for ending the simulation. Returns true if the
+            drone has entered the "landed" state.
+            """
+            return time > 1 and self.fxns['plan_path'].m.mode == 'taxi'
+
+
 
 if __name__ == "__main__":
     p = PlanPath("test", {})

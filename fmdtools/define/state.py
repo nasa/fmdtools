@@ -220,7 +220,8 @@ class State(dataobject, mapping=True):
         """
         for name, value in kwargs.items():
             current = getattr(self, name)
-            setattr(self, name, round(current/value)*value)
+            # np round used to avoid final rounding errors
+            setattr(self, name, np.round(round(current/value)*value, 7))
 
     def limit(self, **kwargs):
         """Enforces limits on the value of a given property. Mainly useful for
