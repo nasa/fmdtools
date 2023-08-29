@@ -23,6 +23,13 @@ from examples.multirotor.drone_mdl_dynamic import Drone as DynDrone
 class OverallAffectDOFState(State):
     lrstab:     float = 0.0
     frstab:     float = 0.0
+    """
+    Overall states for the dynamics. Has entries:
+        - lrstab: float
+            Left/Right stability (nominal value = 0.0)
+        - frstab: float
+            Front/Rear stability (nominal value = 0.0)
+    """
 
 
 class AffectDOFArch(CompArch):
@@ -30,6 +37,12 @@ class AffectDOFArch(CompArch):
     forward:    dict = dict()
     lr_dict:    dict = dict()
     fr_dict:    dict = dict()
+    """
+    Line Architecture defined by parameter 'archtype'. Has options:
+        - 'quad': quadrotor architecture
+        - 'hex': hexarotor architecture
+        - 'oct': octorotor architecture
+    """
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)

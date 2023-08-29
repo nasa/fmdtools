@@ -123,6 +123,13 @@ class BatState(State):
     soc:  float = 100.0
     ee_e: float = 1.0
     e_t:  float = 1.0
+    """
+    Battery States. Includes:
+        soc: float
+            State of charge, with values (0-100)
+        e_t: float
+            Power transference with nominal value 1.0
+    """
 
 
 class BatMode(Mode):
@@ -133,6 +140,19 @@ class BatMode(Mode):
                    'nocharge': (0.6, [0.6, 0.2, 0.2], 100),
                    'lowcharge': (0, [0.6, 0.2, 0.2], 100)}
     key_phases_by = 'plan_path'
+    """
+    Battery Modes. Includes:
+        - short: Fault
+            inability to transfer power
+        - degr: Fault
+            less power tranferrence
+        - break: Fault
+            inability to transfer power
+        - nocharge: Fault
+            zero state of charge (need a way to trigger these modes)
+        - lowcharge: Fault
+            state of charge of 20
+    """
 
 
 class BatParam(Parameter):
@@ -158,10 +178,11 @@ class Battery(Component):
     _init_p = BatParam
 
     def behavior(self, fs, ee_outr, time):
-        if fs < 1.0:
+        # If current is too high, battery breaks.
+        if fs < 1.0 or ee_outr > self.p.maxa:
             self.m.add_fault('break')
-        if ee_outr > self.p.maxa:
-            self.m.add_fault('break')
+
+        # Determine transference state based on faults
         if self.m.has_fault('short'):
             self.s.e_t = 0.0
         elif self.m.has_fault('break'):
@@ -171,10 +192,13 @@ class Battery(Component):
         else:
             self.s.e_t = self.p.avail_eff
 
+        # Increment power use/soc (once per timestep)
         if time > self.t.time:
             self.s.inc(soc=-100*ee_outr*self.p.parallel *
                        self.p.series*(time-self.t.time)/self.p.amt)
             self.t.time = time
+
+        # Calculate charge modes/values
         if self.s.soc < 20:
             self.m.add_fault('lowcharge')
         if self.s.soc < 1:
@@ -195,6 +219,17 @@ class BatArch(CompArch):
     parallel:   int = 1
     voltage:    float = 12.0
     drag:       float = 0.0
+    """
+    Battery architecture. Defined by archtype parameter with options:
+        - 'monolythic':
+            Single Battery
+        - 'series-split':
+            Two batteries put in series
+        - 'parallel-split':
+            two batteries put in parallel
+        - 'split-both':
+            four batteries arranged in a series-parallel configuration
+    """
 
     def __init__(self, *args, **kwargs):
         archtype = self.get_true_field('archtype', *args, **kwargs)
@@ -238,6 +273,9 @@ class StoreEE(FxnBlock):
     _init_hsig_bat = HSig
     _init_ee_1 = EE
     _init_force_st = Force
+    """
+    Class defining energy storage function with battery architecture.
+    """
 
     def condfaults(self, time):
         if self.s.soc < 20:
@@ -281,10 +319,22 @@ class HoldPayloadMode(Mode):
     faultparams = {'break': (0.2, [0.33, 0.33, 0.33], 1000),
                    'deform': (0.8, [0.33, 0.33, 0.33], 1000)}
     key_phases_by = 'plan_path'
+    """
+    Landing Gear Modes. Has faults:
+        - break: Fault
+            provides no support to the body and lines
+        - deform: Fault
+            support is less than desired
+    """
 
 
 class HoldPayloadState(State):
     force_gr:   float = 1.0
+    """
+    Landing Gear States. Has values:
+        - force_gr: float
+            Force from the ground
+    """
 
 
 class HoldPayload(FxnBlock):
@@ -301,9 +351,9 @@ class HoldPayload(FxnBlock):
                                   self.dofs.s.planvel)/(60*7.5))
         else:
             self.s.force_gr = 0.0
-        if abs(self.s.force_gr/2) > 0.8:
+        if abs(self.s.force_gr/2) > 1.0:
             self.m.add_fault('break')
-        elif abs(self.s.force_gr/2) > 1.0:
+        elif abs(self.s.force_gr/2) > 0.8:
             self.m.add_fault('deform')
 
         # need to transfer FG to FA & FS???
@@ -318,10 +368,13 @@ class HoldPayload(FxnBlock):
 
 class ManageHealthMode(Mode):
     failrate = 1e-6
-    faultparams = {'falsemasking': (0.1, [0.5, 0.5, 0.5], 1000),
-                   'falseemland': (0.05, [0.0, 1.0, 0.0], 1000),
-                   'lostfunction': (0.05, [0.5, 0.5, 0.5], 1000)}
+    faultparams = {'lostfunction': (0.05, [0.5, 0.5, 0.5], 1000)}
     key_phases_by = "plan_path"
+    """
+    Has modes:
+        - lostfunction: Fault
+            Inability to sense health and thus reconfigure the system
+    """
 
 
 class ManageHealth(FxnBlock):
@@ -396,31 +449,57 @@ class AffectDOF(FxnBlock):  # ee_mot,ctl,dofs,force_lin hsig_dofs, RSig_dofs
             self.hsig_dofs.s.hstate = 'faulty'
         else:
             self.hsig_dofs.s.hstate = 'nominal'
-
-    def dynamic_behavior(self, time):
+    def calc_vel(self):
         # calculate velocities from power
         self.dofs.s.put(vertvel=300*(self.dofs.s.uppwr-1.0),
                         planvel=600*self.dofs.s.planpwr)  # 600 m/m = 23 mph
+
+    def inc_takeoff(self):
         # can only take off at ground
         if self.dofs.s.z <= 0.0:
             self.dofs.s.put(planvel=0.0, vertvel=max(0, self.dofs.s.vertvel))
+
+    def inc_falling(self, min_fall_dist=300.0):
         # if falling, it can't reach the destination if it hits the ground first
         plan_dist = np.sqrt(self.des_traj.s.x**2 + self.des_traj.s.y**2+0.0001)
         if self.dofs.s.vertvel < -self.dofs.s.z and -self.dofs.s.vertvel > self.dofs.s.planvel:
             plan_dist = plan_dist*self.dofs.s.z/(-self.dofs.s.vertvel+0.001)
-        self.dofs.s.limit(vertvel=(-self.dofs.s.z, 300.0), planvel=(0.0, plan_dist))
+        self.dofs.s.limit(vertvel=(-min_fall_dist/self.t.dt, 300.0),
+                          planvel=(0.0, plan_dist/self.t.dt))
+
+    def inc_pos(self):
         # increment x,y,z
-        norm_vel = self.dofs.s.planvel / \
-            np.sqrt(self.des_traj.s.x**2 + self.des_traj.s.y**2+0.0001)
-        self.dofs.s.inc(x=norm_vel*self.des_traj.s.x, y=norm_vel *
-                        self.des_traj.s.y, z=self.dofs.s.vertvel)
+        vec_factor = np.sqrt(self.des_traj.s.x**2 + self.des_traj.s.y**2+0.0001)
+        norm_vel = self.dofs.s.planvel * self.t.dt / vec_factor
+        self.dofs.s.inc(x=norm_vel*self.des_traj.s.x,
+                        y=norm_vel*self.des_traj.s.y,
+                        z=self.dofs.s.vertvel*self.t.dt)
+
+    def dynamic_behavior(self, time):
+        self.calc_vel()
+        self.inc_takeoff()
+        self.inc_falling(min_fall_dist=self.dofs.s.z)
+        self.inc_pos()
+
+
 
 
 class CtlDOFState(State):
-    cs:              float = 1.0
-    vel:             float = 0.0
-    upthrottle:      float = 0.0
+    cs: float = 1.0
+    vel: float = 0.0
+    upthrottle: float = 0.0
     throttle: float = 0.0
+    """
+    Controller States. Has entries:
+        cs: float
+            Control signal transferrence (nominally 1.0)
+        upthrottle: float
+            Internal throttle signal (up) (0 is off, 1 is hover, 2 is max climb 5 m/s)
+        throttle: float
+            Internal throttle signal (forward)
+        vel: float
+            Percieved vertical velocity at the last timestep
+    """
 
 
 class CtlDOFMode(Mode):
@@ -430,6 +509,13 @@ class CtlDOFMode(Mode):
     exclusive = True
     key_phases_by = 'plan_path'
     mode:   str = 'nominal'
+    """
+    Controller modes:
+        noctl: Fault
+            No control transference (throttles set to zero)
+        degctl: Fault
+            Poor control transference (throttles set to 0.5)
+    """
 
 
 class CtlDOF(FxnBlock):
@@ -454,11 +540,12 @@ class CtlDOF(FxnBlock):
         else:
             self.s.cs = 1.0
 
-        # throttle settings: 0 is off (-50 m/s), 1 is hover, 2 is max climb (5 m/s)
+        # set throttle
         self.s.upthrottle = 1+self.des_traj.s.z/(50*5)
         self.s.throttle = np.sqrt(self.des_traj.s.x**2+self.des_traj.s.y**2)/(60*10)
         self.s.limit(throttle=(0, 1), upthrottle=(0, 2))
 
+        # send control signals
         self.ctl.s.forward = self.ee_ctl.s.effort*self.s.cs*self.s.throttle*self.des_traj.s.power
         self.ctl.s.upward = self.ee_ctl.s.effort*self.s.cs*self.s.upthrottle*self.des_traj.s.power
 
@@ -474,6 +561,25 @@ class PlanPathMode(Mode):
     mode: str = 'taxi'
     exclusive = True
     key_phases_by = 'self'
+    """
+    Path planning fault modes:
+    - noloc: Fault
+        no location data
+    - degloc: Fault
+        degraded location data
+    - taxi:
+        off at landing area
+    - to_nearest:
+        go to the nearest possible landing area
+    - to_home:
+        flight to the takeoff location
+    - emland:
+        emergency landing
+    - land:
+        descent/landing
+    - move:
+        nominal drone navigation
+    """
 
 
 class PlanPathState(State):
@@ -485,6 +591,20 @@ class PlanPathState(State):
     x: float = 0.0
     y: float = 0.0
     z: float = 0.0
+    ground_height: float = 0.0
+    """
+    Path planning states:
+    - dx, dy, dz: float
+        desired trajectory (from current)
+    - dist: float
+        distance to goal point
+    - pt: int
+        current goal point (number)
+    x, y, z: float
+        Current location
+    ground_height: float
+        Height above the ground (if terrain)
+    """
 
 
 class PlanPath(FxnBlock):
@@ -497,9 +617,15 @@ class PlanPath(FxnBlock):
     _init_dofs = DOFs
     _init_ee_ctl = EE
     _init_des_traj = DesTraj
+    """ 
+    Path planning function of the drone. Follows a sequence defined in flightplan.
+    """
 
     def __init__(self, name, flows, **kwargs):
         super().__init__(name, flows, **kwargs)
+        self.init_goals()
+
+    def init_goals(self):
         self.goals = {i: list(vals) for i, vals in enumerate(self.p.flightplan)}
 
     def condfaults(self, time):
@@ -507,6 +633,13 @@ class PlanPath(FxnBlock):
             self.m.add_fault('noloc')
 
     def behavior(self, t):
+        self.s.ground_height = self.s.z
+        self.update_mode(t)
+        self.increment_point()
+        self.update_dist()
+        self.update_traj()
+
+    def update_mode(self, t):
         if not self.m.any_faults():
             # if in reconfigure mode, copy that mode, otherwise complete mission
             if self.rsig_traj.s.mode != 'continue':
@@ -519,22 +652,24 @@ class PlanPath(FxnBlock):
                     self.m.set_mode('taxi')
                 elif self.s.dist < 10:
                     self.m.set_mode('land')
-        # if close to the given point, go to the next point
-        if self.m.in_mode('move') and self.s.dist < 10:
-            self.s.pt += 1
+
+    def update_dist(self):
         # set the new goal based on the mode
         if self.m.in_mode('emland', 'land'):
-            self.calc_dist_to_goal([self.dofs.s.x, self.dofs.s.y, -self.dofs.s.z/2])
+            z_down = self.dofs.s.z - self.s.ground_height/2
+            self.calc_dist_to_goal([self.dofs.s.x, self.dofs.s.y, z_down])
         elif self.m.in_mode('to_home', 'taxi'):
             self.calc_dist_to_goal(self.goals[0])
         elif self.m.in_mode('to_nearest'):
             self.calc_dist_to_goal([*self.p.safe[:2], 0.0])
-        elif self.m.in_mode('move'):
+        elif self.m.in_mode('move', 'move_em'):
             self.calc_dist_to_goal(self.goals[self.s.pt])
         elif self.m.in_mode('noloc'):
             self.calc_dist_to_goal(self.dofs.s.get('x', 'y', 'z'))
         elif self.m.in_mode('degloc'):
             self.calc_dist_to_goal([self.dofs.s.x, self.dofs.s.y, self.dofs.s.z-1])
+
+    def update_traj(self):
         # send commands (des_traj) if power
         if self.ee_ctl.s.effort < 0.5 or self.m.in_mode('taxi'):
             self.des_traj.s.assign([0.0, 0.0, 0.0, 0.0], 'x', 'y', 'z', 'power')
@@ -552,6 +687,12 @@ class PlanPath(FxnBlock):
     def mission_over(self):
         return self.s.pt >= max(self.goals) or self.m.in_mode('to_nearest', 'to_home', 'land', 'emland')
 
+    def increment_point(self):
+        # if close to the given point, go to the next point
+        if (self.in_mode('move', 'move_em')
+                and self.dist < 10
+                and self.pt < max(self.goals)):
+            self.pt += 1
 
 class Drone(Model):
     __slots__ = ('start_area', 'safe_area', 'target_area')
@@ -564,10 +705,9 @@ class Drone(Model):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
 
-        self.start_area = square(self.p.start[0:2], self.p.start[2], self.p.start[3])
-        self.safe_area = square(self.p.safe[0:2], self.p.safe[2], self.p.safe[3])
-        self.target_area = square(
-            self.p.target[0:2], self.p.target[2], self.p.target[3])
+        self.start_area = rect(self.p.start[0:2], self.p.start[2], self.p.start[3])
+        self.safe_area = rect(self.p.safe[0:2], self.p.safe[2], self.p.safe[3])
+        self.target_area = rect(self.p.target[0:2], self.p.target[2], self.p.target[3])
 
         #add flows to the model
         self.add_flow('force_st',   Force)
@@ -701,7 +841,25 @@ def find_landtime(mdlhist):
 # creates list of corner coordinates for a square, given a center, xwidth, and ywidth
 
 
-def square(center, xw, yw):
+def rect(center, xw, yw):
+    """
+    creates list of corner coordinates for a rect, given a center, xwidth, and ywidth
+
+    Parameters
+    ----------
+    center : list
+        Center of rectangle [x, y].
+    xw : float
+        x-width
+        DESCRIPTION.
+    yw : float
+        y-width
+
+    Returns
+    -------
+    square : list
+        Outer points of the square [ll, lr, ur, ul].
+    """
     square = [[center[0]-xw/2, center[1]-yw/2],
               [center[0]+xw/2, center[1]-yw/2],
               [center[0]+xw/2, center[1]+yw/2],
@@ -709,7 +867,7 @@ def square(center, xw, yw):
     return square
 
 
-def rect(x1, y1, x2, y2, width, height):
+def rect_viewed(x1, y1, x2, y2, width, height):
     vec = [x1-x2, y1-y2]
     vec = vec/(np.sum([v**2 for v in vec])+0.00001)
     normvec = np.array([vec[1], -vec[0]])
@@ -723,7 +881,7 @@ def env_viewed(xhist, yhist, zhist, square):
         square[1][0])+10, 10) for y in range(int(square[0][1]), int(square[2][1])+10, 10)}
     for i, x in enumerate(xhist[1:len(xhist)]):
         w, h, d = viewable_area(zhist[i+1])
-        viewed_area = rect(xhist[i], yhist[i], xhist[i+1], yhist[i+1], w+5, h+5)
+        viewed_area = rect_viewed(xhist[i], yhist[i], xhist[i+1], yhist[i+1], w+5, h+5)
         if abs(xhist[i]-xhist[i+1]) + abs(yhist[i]-yhist[i+1]) > 0.1 and w > 0.01:
             polygon = Polygon(viewed_area)
             #plt.plot(*polygon.exterior.xy) (displays area to debug code)
@@ -955,7 +1113,7 @@ def_mdl = Drone()
 
 
 def plan_flight(z):
-    sq = square(def_mdl.p.target[0:2], def_mdl.p.target[2], def_mdl.p.target[3])
+    sq = rect(def_mdl.p.target[0:2], def_mdl.p.target[2], def_mdl.p.target[3])
     landing = [*def_mdl.p.start[0:2], 0]
 
     flightplan = {0: landing, 1: landing[0:2]+[z]}

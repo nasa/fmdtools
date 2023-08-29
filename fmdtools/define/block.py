@@ -701,7 +701,7 @@ class CompArch(dataobject, mapping=True):
             self.components = dict()
         if not self.faultmodes:
             self.faultmodes = dict()
-        
+
         for arg in args:
             if arg in kwargs:
                 kwargs_comp = kwargs[arg]
