@@ -345,8 +345,11 @@ class HoldPayload(FxnBlock):
     _init_force_st = Force
     _init_force_lin = Force
 
+    def at_ground(self):
+        return self.dofs.s.z <= 0.0
+
     def dynamic_behavior(self, time):
-        if self.dofs.s.z <= 0.0:
+        if self.at_ground():
             self.s.force_gr = min(-0.5, (self.dofs.s.vertvel -
                                   self.dofs.s.planvel)/(60*7.5))
         else:
