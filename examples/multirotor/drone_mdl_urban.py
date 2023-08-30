@@ -18,6 +18,7 @@ from fmdtools.define.flow import Flow
 from fmdtools.define.state import State
 from fmdtools.define.parameter import Parameter
 from fmdtools.define.model import Model
+from fmdtools.analyze.result import History
 
 
 import numpy as np
@@ -281,10 +282,10 @@ class ComputerVision(Component):
             pt = environment.open[round(len(environment.open)/3)]
             return np.array([*pt, environment.get_below(*pt)["height"]])
         elif self.m.has_fault("lack_of_detection"):
-            return environment.get_closest(dofs.x, dofs.y,
+            return environment.get_closest(dofs.s.x, dofs.s.y,
                                            where="pts", include_pt=include_pt)
         else:
-            return environment.get_closest(dofs.x, dofs.y, where="open",
+            return environment.get_closest(dofs.s.x, dofs.s.y, where="open",
                                            include_pt=include_pt)
 
 
@@ -313,9 +314,9 @@ class PlanPath(PlanPathOpt):
                       3: end}
 
     def reconfigure_plan(self, new_landing):
-        self.make_goals([self.dofs.x, self.dofs.y, self.dofs.z], new_landing)
-        self.set_mode("move_em")
-        self.pt = 0
+        self.make_goals([self.dofs.s.x, self.dofs.s.y, self.dofs.s.z], new_landing)
+        self.m.set_mode("move_em")
+        self.s.pt = 0
 
     def reconfigure_path(self):
         vis = self.c.components['vision']
@@ -330,6 +331,10 @@ class PlanPath(PlanPathOpt):
             self.reconfigure_plan(self.find_nearest())
         elif self.m.in_mode('to_home'):
             self.reconfigure_plan([*self.environment.start, 0.0])
+
+    def find_nearest(self):
+        return self.environment.get_closest(self.dofs.s.x, self.dofs.s.y,
+                                            where="allow", include_pt=False)
 
     def behavior(self, t):
         self.s.ground_height = self.environment.ground_height(self.dofs.s.x,
@@ -431,8 +436,8 @@ def plot_traj(mdlhist, mdl, title='Trajectory', legend=False):
     fig : matplotlib figure
     ax : matplotlib axis
     """
-    if "nominal" not in mdlhist:
-        mdlhist = {'nominal': mdlhist}
+    if "time" in mdlhist:
+        mdlhist = History({'nominal': mdlhist})
     else:
         mdlhist = mdlhist.nest(1)
 
@@ -440,7 +445,7 @@ def plot_traj(mdlhist, mdl, title='Trajectory', legend=False):
     ax.set_zlim3d(0, mdl.p.plan_param.height)
 
     for faultlabel in mdlhist:
-        dofs = mdlhist[faultlabel].flows.dofs.s
+        dofs = mdlhist.get(faultlabel).flows.dofs.s
         t = mdlhist[faultlabel]['time']
         ax.plot(dofs.x, dofs.y, dofs.z, label="Faulty")
         if faultlabel == 'nominal':
@@ -482,7 +487,7 @@ def plot_xy(mdlhists,  mdl, title='', legend=False):
     ax : matplotlib axis
     """
     if 'time' in mdlhists:
-        mdlhists = {'nominal': mdlhists}
+        mdlhists = History({'nominal': mdlhists})
     else:
         mdlhists = mdlhists.nest(1)
     fig, ax = mdl.flows['environment'].show_grid()
