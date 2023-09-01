@@ -759,15 +759,24 @@ class Drone(Model):
         viewed_value = sum(
             [0.5+2*view for k, view in viewed.items() if view != 'unviewed'])
         return viewed, viewed_value
+    
+    def at_start(self, dofs):
+        return inrange(self.start_area, dofs.s.x, dofs.s.y)
+    
+    def at_safe(self, dofs):
+        return inrange(self.safe_area, dofs.s.x, dofs.s.y)
+    
+    def at_dangerous(self, dofs):
+        return inrange(self.target_area, dofs.s.x, dofs.s.y)
 
     def calc_land_metrics(self, scen, viewed, faulttime):
         metrics = {}
         dofs = self.flows['dofs']
-        if inrange(self.start_area, dofs.s.x, dofs.s.y):
+        if self.at_start(dofs):
             landloc = 'nominal'  # nominal landing
-        elif inrange(self.safe_area, dofs.s.x, dofs.s.y):
+        elif self.at_safe(dofs):
             landloc = 'designated'  # emergency safe
-        elif inrange(self.target_area, dofs.s.x, dofs.s.y):
+        elif self.at_dangerous(dofs):
             landloc = 'over target'  # emergency dangerous
         else:
             landloc = 'outside target'  # emergency unsanctioned

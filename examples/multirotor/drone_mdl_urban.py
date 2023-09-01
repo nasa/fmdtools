@@ -10,6 +10,7 @@ from drone_mdl_opt import PlanPath as PlanPathOpt
 from drone_mdl_opt import DroneParam as DroneParamOpt
 from drone_mdl_opt import HoldPayload as HoldPayloadOpt
 from drone_mdl_opt import AffectDOF as AffectDOFOpt
+from drone_mdl_opt import Drone as DroneOpt
 from drone_mdl_opt import rect, inrange
 
 from fmdtools.define.block import CompArch, Component
@@ -364,7 +365,7 @@ class DroneParam(DroneParamOpt):
     env_param: EnvironmentParameter = EnvironmentParameter()
 
 
-class Drone(Model):
+class Drone(DroneOpt):
     _init_p = DroneParam
     default_sp = dict(phases=(('ascend', 0, 0),
                               ('forward', 1, 11),
@@ -374,7 +375,7 @@ class Drone(Model):
                       dt=0.1)
 
     def __init__(self, name='drone', **kwargs):
-        super().__init__(name=name, **kwargs)
+        Model.__init__(self, name=name, **kwargs)
 
         self.add_flow('force_st', Force)
         self.add_flow('force_lin', Force)
@@ -408,12 +409,41 @@ class Drone(Model):
 
         self.build()
 
-        def indicate_landed(self, time):
-            """
-            Custom indicator for ending the simulation. Returns true if the
-            drone has entered the "landed" state.
-            """
-            return time > 1 and self.fxns['plan_path'].m.mode == 'taxi'
+    def indicate_landed(self, time):
+        """
+        Custom indicator for ending the simulation. Returns true if the
+        drone has entered the "landed" state.
+        """
+        return time > 1 and self.fxns['plan_path'].m.mode == 'taxi'
+
+    def at_start(self, dofs):
+        return self.flows['environment'].in_area(dofs.s.x, dofs.s.y, where="start")
+    
+    def at_safe(self, dofs):
+        return self.flows['environment'].in_area(dofs.s.x, dofs.s.y, where="allow")
+    
+    def at_dangerous(self, dofs):
+        return self.flows['environment'].in_area(dofs.s.x, dofs.s.y, where="occ")
+
+    def find_classification(self, scen, mdlhist):
+        faulttime = self.h.get_fault_time(metric='total')
+
+        land_metrics = self.calc_land_metrics(scen, mdlhist, faulttime)
+
+        # repair costs
+        repcost = self.calc_repaircost(max_cost=1500)
+
+        totcost = (land_metrics['landcost']
+                   + land_metrics['safecost']
+                   + repcost)
+
+        metrics = {'rate': scen.rate,
+                   'cost': totcost,
+                   'expected cost': totcost * scen.rate * 1e5,
+                   'repcost': repcost,
+                   'unsafe flight time': faulttime,
+                   **land_metrics}
+        return metrics
 
 
 def plot_traj(mdlhist, mdl, title='Trajectory', legend=False):
