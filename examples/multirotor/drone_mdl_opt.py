@@ -648,7 +648,7 @@ class PlanPath(FxnBlock):
     def update_mode(self, t):
         if not self.m.any_faults():
             # if in reconfigure mode, copy that mode, otherwise complete mission
-            if self.rsig_traj.s.mode != 'continue':
+            if self.rsig_traj.s.mode != 'continue' and not self.m.in_mode("move_em", "emland"):
                 self.m.set_mode(self.rsig_traj.s.mode)
             elif self.m.in_mode('taxi') and t < 5 and t > 1:
                 self.m.set_mode("move")
@@ -819,11 +819,11 @@ class Drone(Model):
 
         metrics = {'rate': scen.rate,
                    'cost': totcost,
-                   'expected cost': totcost * scen.rate * 1e5,
+                   'expected_cost': totcost * scen.rate * 1e5,
                    'repcost': repcost,
                    'viewed value': viewed_value,
                    'viewed': viewed,
-                   'unsafe flight time': faulttime,
+                   'unsafe_flight_time': faulttime,
                    **land_metrics}
         return metrics
 
