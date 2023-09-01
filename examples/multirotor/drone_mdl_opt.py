@@ -134,11 +134,11 @@ class BatState(State):
 
 class BatMode(Mode):
     failrate = 1e-4
-    faultparams = {'short': (0.2, [0.3, 0.3, 0.3], 100),
-                   'degr': (0.2, [0.3, 0.3, 0.3], 100),
-                   'break': (0.2, [0.2, 0.2, 0.2], 100),
-                   'nocharge': (0.6, [0.6, 0.2, 0.2], 100),
-                   'lowcharge': (0, [0.6, 0.2, 0.2], 100)}
+    faultparams = {'short': (0.2, {"taxi": 0.3, "move": 0.3, "land": 0.3}, 100),
+                   'degr': (0.2, {"taxi": 0.3, "move": 0.3, "land": 0.3}, 100),
+                   'break': (0.2, {"taxi": 0.3, "move": 0.3, "land": 0.3}, 100),
+                   'nocharge': (0.6, {"taxi": 0.7, "move": 0.2, "land": 0.1}, 100),
+                   'lowcharge': (0.4, {"taxi": 0.5, "move": 0.2, "land": 0.3}, 100)}
     key_phases_by = 'plan_path'
     """
     Battery Modes. Includes:
@@ -260,8 +260,8 @@ class BatArch(CompArch):
 
 class StoreEEMode(Mode):
     failrate = 1e-4
-    faultparams = {'nocharge':  (0.2, [0.6, 0.2, 0.2], 0),
-                   'lowcharge': (0.7, [0.6, 0.2, 0.2], 0)}
+    faultparams = {'nocharge':  (0.2, {"taxi": 0.6, "move": 0.2, "land": 0.2}, 0),
+                   'lowcharge': (0.7, {"taxi": 0.6, "move": 0.2, "land": 0.2}, 0)}
     key_phases_by = "plan_path"
 
 
@@ -316,8 +316,8 @@ class StoreEE(FxnBlock):
 
 class HoldPayloadMode(Mode):
     failrate = 1e-6
-    faultparams = {'break': (0.2, [0.33, 0.33, 0.33], 1000),
-                   'deform': (0.8, [0.33, 0.33, 0.33], 1000)}
+    faultparams = {'break': (0.2, {"taxi": 0.3, "move": 0.3, "land": 0.3}, 1000),
+                   'deform': (0.8, {"taxi": 0.3, "move": 0.3, "land": 0.3}, 1000)}
     key_phases_by = 'plan_path'
     """
     Landing Gear Modes. Has faults:
@@ -371,7 +371,7 @@ class HoldPayload(FxnBlock):
 
 class ManageHealthMode(Mode):
     failrate = 1e-6
-    faultparams = {'lostfunction': (0.05, [0.5, 0.5, 0.5], 1000)}
+    faultparams = {'lostfunction': (0.05, {"taxi": 0.3, "move": 0.3, "land": 0.3}, 1000)}
     key_phases_by = "plan_path"
     """
     Has modes:
@@ -510,8 +510,8 @@ class CtlDOFState(State):
 
 class CtlDOFMode(Mode):
     failrate = 1e-5
-    faultparams = {'noctl':   (0.2, [0.6, 0.3, 0.1], 1000),
-                   'degctl':  (0.8, [0.6, 0.3, 0.1], 1000)}
+    faultparams = {'noctl':   (0.2, {"taxi": 0.6, "move": 0.3, "land": 0.1}, 1000),
+                   'degctl':  (0.8, {"taxi": 0.6, "move": 0.3, "land": 0.1}, 1000)}
     exclusive = True
     key_phases_by = 'plan_path'
     mode:   str = 'nominal'
@@ -561,8 +561,8 @@ class CtlDOF(FxnBlock):
 
 class PlanPathMode(Mode):
     failrate = 1e-5
-    faultparams = {'noloc': (0.2, [0.6, 0.3, 0.1], 1000),
-                   'degloc': (0.8, [0.6, 0.3, 0.1], 1000)}
+    faultparams = {'noloc': (0.2, {"taxi": 0.6, "move": 0.3, "land": 0.1}, 1000),
+                   'degloc': (0.8, {"taxi": 0.6, "move": 0.3, "land": 0.1}, 1000)}
     opermodes = ('taxi', 'to_nearest', 'to_home', 'emland', 'land', 'move')
     mode: str = 'taxi'
     exclusive = True
