@@ -606,8 +606,10 @@ class SampleApproach():
         if key_phases == 'self':
             key_phases = fxnname
         if modephases and type(mode_oppvect) == list and key_phases != 'global':
-            if len(mode_oppvect) <= 1:
+            if len(mode_oppvect) < 1:
                 mode_oppvect = {}
+            elif len(mode_oppvect) == 1:
+                mode_oppvect = {phase: 1 for phase in modephases[key_phases]}
             else:
                 raise Exception("Poorly specified oppvect for fxn: " + fxnname +
                                 " mode: " + mode +

@@ -314,19 +314,18 @@ class PlanPath(PlanPathOpt):
                       2: [end[0], end[1], self.p.height],
                       3: end}
 
-    def reconfigure_plan(self, new_landing):
+    def reconfigure_plan(self, new_landing, newmode="move_em"):
         self.make_goals([self.dofs.s.x, self.dofs.s.y, self.dofs.s.z], new_landing)
         self.m.set_mode("move_em")
         self.s.pt = 0
 
     def reconfigure_path(self):
         vis = self.c.components['vision']
+        land_occupied = vis.check_if_occupied(self.environment, self.dofs)
         # reconfigure path based on mode
-        if (self.m.in_mode('emland')
-                and vis.check_if_occupied(self.environment, self.dofs)):
-                self.reconfigure_plan(vis.find_nearest_open(self.environment, self.dofs))
-        elif (self.m.in_mode('land')
-                and vis.check_if_occupied(self.environment, self.dofs)):
+        if (self.m.in_mode('emland') and land_occupied):
+            self.reconfigure_plan(vis.find_nearest_open(self.environment, self.dofs))
+        elif (self.m.in_mode('land') and land_occupied):
             self.reconfigure_plan(self.find_nearest())
         elif self.m.in_mode('to_nearest'):
             self.reconfigure_plan(self.find_nearest())
@@ -441,7 +440,7 @@ class Drone(DroneOpt):
                    'cost': totcost,
                    'expected cost': totcost * scen.rate * 1e5,
                    'repcost': repcost,
-                   'unsafe flight time': faulttime,
+                   'unsafe_flight_time': faulttime,
                    **land_metrics}
         return metrics
 
@@ -557,7 +556,7 @@ def make_move_quad(mdlhist, move_phase, weights = [0.003, 0.5, 0.46]):
     ws = []
     for i, times in enumerate([unsafe_times, safe_times, land_times]):
         if times:
-            time = np.percentile(times, 50, interpolation='nearest')
+            time = np.percentile(times, 50, method='nearest')
             node = 2*(time-move_phase[0])/(move_phase[1]-move_phase[0])-1.0
             nodes.append(node)
             ws.append(2*weights[i])
@@ -583,17 +582,22 @@ if __name__ == "__main__":
     plot_xy(mdlhist, mdl, legend=True)
     plot_traj(mdlhist, mdl, legend=True)
     
+    
+    
     move_quad=make_move_quad(mdlhist, phases['plan_path']['move'])
+    
+    ec, mdlhist = propagate.one_fault(mdl, 'store_ee', 'nocharge', 4.5)
     app = SampleApproach(mdl, phases=phases, modephases=modephases,
                          sampparams = {('PlanPath','move'): move_quad})
     app
     endresults, hists = propagate.approach(mdl, app, staged=False)
     statsfmea = an.tabulate.fmea(endresults, app, group_by='fxnfault',
                                  weight_metrics=['rate'],
-                                 avg_metrics=['unsafe flight time', 'cost', 'repcost',
-                                              'landcost', 'body strikes',
-                                              'head strikes', 'property restrictions'],
+                                 avg_metrics=['unsafe_flight_time', 'cost', 'repcost',
+                                              'landcost', 'body_strikes',
+                                              'head_strikes', 'property_restrictions'],
                                  sort_by='cost')
+    plot_traj(hists, mdl, title="", legend=True)
 
     #move_quad = make_move_quad(mdlhist, phases['PlanPath']['move'])
 
