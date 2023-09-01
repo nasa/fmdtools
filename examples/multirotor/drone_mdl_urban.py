@@ -536,9 +536,37 @@ def consolidate_legend(ax):
     ax.get_legend().remove()
     ax.legend(by_label.values(), by_label.keys(), bbox_to_anchor=(1.05, 1), loc='upper left')
 
+def make_move_quad(mdlhist, move_phase, weights = [0.003, 0.5, 0.46]):
+    """
+    Creates a quadrature for SampleApproach over a provided phase that has the drone
+    over an unsafe area, over a safe area, and over the landing area.
+    """
+    unsafe_times = [t for i, t in enumerate(mdlhist['time'])
+                    if not mdlhist.flows.environment.s.safe[i]
+                    and mdlhist.fxns.plan_path.m.mode[i] == 'move']
+    safe_times = [t for i, t in enumerate(mdlhist['time'])
+                  if mdlhist.flows.environment.s.safe[i]
+                  and not mdlhist.flows.environment.s.allowed[i]
+                  and mdlhist.fxns.plan_path.m.mode[i] == 'move']
+    land_times = [t for i, t in enumerate(mdlhist['time'])
+                  if mdlhist.flows.environment.s.safe[i]
+                  and mdlhist.flows.environment.s.allowed[i]
+                  and mdlhist.fxns.plan_path.m.mode[i] == 'move']
+
+    nodes = []
+    ws = []
+    for i, times in enumerate([unsafe_times, safe_times, land_times]):
+        if times:
+            time = np.percentile(times, 50, interpolation='nearest')
+            node = 2*(time-move_phase[0])/(move_phase[1]-move_phase[0])-1.0
+            nodes.append(node)
+            ws.append(2*weights[i])
+    return {'samp': 'quadrature', 'quad': {'nodes': nodes, 'weights': weights}}
+
 if __name__ == "__main__":
     from fmdtools.sim import propagate
     from fmdtools import analyze as an
+    from fmdtools.sim.approach import SampleApproach
     p = PlanPath("test", {})
     
     e = Environment("env")
@@ -555,6 +583,18 @@ if __name__ == "__main__":
     plot_xy(mdlhist, mdl, legend=True)
     plot_traj(mdlhist, mdl, legend=True)
     
+    move_quad=make_move_quad(mdlhist, phases['plan_path']['move'])
+    app = SampleApproach(mdl, phases=phases, modephases=modephases,
+                         sampparams = {('PlanPath','move'): move_quad})
+    app
+    endresults, hists = propagate.approach(mdl, app, staged=False)
+    statsfmea = an.tabulate.fmea(endresults, app, group_by='fxnfault',
+                                 weight_metrics=['rate'],
+                                 avg_metrics=['unsafe flight time', 'cost', 'repcost',
+                                              'landcost', 'body strikes',
+                                              'head strikes', 'property restrictions'],
+                                 sort_by='cost')
+
     #move_quad = make_move_quad(mdlhist, phases['PlanPath']['move'])
 
 

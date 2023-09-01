@@ -577,102 +577,147 @@ class SampleApproach():
         return float(times[1]-times[0])+tstep
     def init_rates(self,mdl, jointfaults={'faults':'None'}, modephases={}, join_modephases=False):
         """ Initializes rates, rates_timeless"""
-        self.rates=dict.fromkeys(self._fxnmodes)
-        self.rates_timeless=dict.fromkeys(self._fxnmodes)
-        self.mode_phase_map=dict.fromkeys(self._fxnmodes)
-        
+        self.rates = dict.fromkeys(self._fxnmodes)
+        self.rates_timeless = dict.fromkeys(self._fxnmodes)
+        self.mode_phase_map = dict.fromkeys(self._fxnmodes)
+
         for (fxnname, mode) in self._fxnmodes:
-            self.rates[fxnname, mode]=dict(); self.rates_timeless[fxnname, mode]=dict(); self.mode_phase_map[fxnname, mode] = dict()
-            overallrate = self.fxnrates[fxnname]
-            dist = self._fxnmodes[fxnname, mode]['dist']
-            if self.comprates[fxnname] and mode in self.fxns[fxnname].c.faultmodes:
-                compname = self.fxns[fxnname].c.faultmodes[mode]
-                overallrate=self.comprates[fxnname][compname]
-                        
-            key_phases = self.fxns[fxnname].m.key_phases_by
-            if key_phases == 'self': key_phases = fxnname
-            if modephases and type(self._fxnmodes[fxnname, mode]['oppvect'])==list:
-                raise Exception("Poorly specified oppvect for fxn: "+fxnname+" mode: "+mode+"--provide a dict to use with modephases")
-            
-            if modephases and join_modephases and (key_phases not in ['global', 'none']):
-                oppvect = {**{phase:0 for phase in modephases[fxnname]}, **self._fxnmodes[fxnname, mode]['oppvect']}
-                fxnphases = {m:[self.phases[fxnname][ph] for ph in m_phs] for m, m_phs in modephases[fxnname].items()}
+            try:
+                self.init_rate(mdl, fxnname, mode,
+                               modephases=modephases, join_modephases=join_modephases)
+            except Exception as e:
+                raise Exception("Error in fxnname, mode: " +
+                                fxnname + "," + mode) from e
+        if getattr(self, 'jointmodes', False):
+            self.init_jointmode_rates(jointfaults)
+
+    def init_rate(self, mdl, fxnname, mode, modephases={}, join_modephases=False):
+        self.rates[fxnname, mode] = dict()
+        self.rates_timeless[fxnname, mode] = dict()
+        self.mode_phase_map[fxnname, mode] = dict()
+        overallrate = self.fxnrates[fxnname]
+        dist = self._fxnmodes[fxnname, mode]['dist']
+        mode_oppvect = self._fxnmodes[fxnname, mode]['oppvect']
+        if self.comprates[fxnname] and mode in self.fxns[fxnname].c.faultmodes:
+            compname = self.fxns[fxnname].c.faultmodes[mode]
+            overallrate = self.comprates[fxnname][compname]
+
+        key_phases = self.fxns[fxnname].m.key_phases_by
+        if key_phases == 'self':
+            key_phases = fxnname
+        if modephases and type(mode_oppvect) == list and key_phases != 'global':
+            if len(mode_oppvect) <= 1:
+                mode_oppvect = {}
             else:
-                if key_phases=='global': fxnphases = self.globalphases
-                elif key_phases=='none': fxnphases = {'operating':[mdl.sp.times[0], mdl.sp.times[-1]]} 
-                else:                    fxnphases = self.phases.get(key_phases, self.globalphases)
-                fxnphases = dict(sorted(fxnphases.items(), key = lambda item: item[1][0]))  
-                if modephases and (key_phases not in ['global', 'none']):
-                    modevect = self._fxnmodes[fxnname, mode]['oppvect']
-                    oppvect = {phase:0 for phase in fxnphases}
-                    oppvect.update({phase:modevect.get(mode, 0)/len(phases)  for mode,phases in modephases[key_phases].items() for phase in phases})
+                raise Exception("Poorly specified oppvect for fxn: " + fxnname +
+                                " mode: " + mode +
+                                "--provide a dict to use with modephases")
+
+        if modephases and join_modephases and (key_phases not in ['global', 'none']):
+            oppvect = {**{phase: 0 for phase in modephases[fxnname]},
+                       **mode_oppvect}
+            fxnphases = {m: [self.phases[fxnname][ph] for ph in m_phs]
+                         for m, m_phs in modephases[fxnname].items()}
+        else:
+            if key_phases == 'global':
+                fxnphases = self.globalphases
+            elif key_phases == 'none':
+                fxnphases = {'operating': [mdl.sp.times[0], mdl.sp.times[-1]]}
+            else:
+                fxnphases = self.phases.get(key_phases, self.globalphases)
+            fxnphases = dict(sorted(fxnphases.items(),
+                                    key=lambda item: item[1][0]))
+            if modephases and (key_phases not in ['global', 'none']):
+                modevect = mode_oppvect
+                oppvect = {phase: 0 for phase in fxnphases}
+                oppvect.update({phase: modevect.get(mode, 0)/len(phases)
+                                for mode, phases in modephases[key_phases].items()
+                                for phase in phases})
+            else:
+                oppvect = {phase: 0 for phase in fxnphases}
+                if type(mode_oppvect) == dict:
+                    oppvect.update(mode_oppvect)
                 else:
-                    oppvect = {phase:0 for phase in fxnphases}
-                    if type(self._fxnmodes[fxnname, mode]['oppvect'])==dict: 
-                        oppvect.update(self._fxnmodes[fxnname, mode]['oppvect'])
+                    opplist = mode_oppvect
+                    if len(opplist) > 1:
+                        oppvect.update({phase: opplist[i]
+                                        for (i, phase) in enumerate(fxnphases)})
                     else:
-                        opplist = self._fxnmodes[fxnname, mode]['oppvect']
-                        if len(opplist)>1:  oppvect.update({phase:opplist[i] for (i, phase) in enumerate(fxnphases)})
-                        else:               oppvect.update({phase:opplist[0] for (i, phase) in enumerate(fxnphases)})
-            for phase, times in fxnphases.items():
-                opp = oppvect[phase]/(sum(oppvect.values())+1e-100)
-                
-                if self._fxnmodes[fxnname, mode]['probtype']=='prob':   dt = self.tstep; unitfactor = 1
-                elif type(times[0])==list:
-                    dt = sum([self.calc_intervaltime(ts, self.tstep) for ts in times])
-                    unitfactor = self.unit_factors[self.units]/self.unit_factors[self._fxnmodes[fxnname, mode]['units']]
-                elif self._fxnmodes[fxnname, mode]['probtype']=='rate' and len(times)>1:      
-                    dt = self.calc_intervaltime(times, self.tstep)
-                    unitfactor = self.unit_factors[self.units]/self.unit_factors[self._fxnmodes[fxnname, mode]['units']]
-                    times=[times]
-                elif self._fxnmodes[fxnname, mode]['probtype']=='rate':  
-                    dt = self.tstep
-                    unitfactor = self.unit_factors[self.units]/self.unit_factors[self._fxnmodes[fxnname, mode]['units']]
-                self.rates[fxnname, mode][key_phases, phase] = overallrate*opp*dist*dt*unitfactor #TODO: update with units
-                self.rates_timeless[fxnname, mode][key_phases, phase] = overallrate*opp*dist
-                self.mode_phase_map[fxnname, mode][key_phases, phase] = times
-                
-        if getattr(self, 'jointmodes',False):
-            for (j_ind, jointmode) in enumerate(self.jointmodes):
-                self.rates.update({jointmode:dict()})
-                self.rates_timeless.update({jointmode:dict()})
-                self.mode_phase_map.update({jointmode:dict()})
-                jointphase_list = [self.mode_phase_map[mode] for mode in jointmode]
-                jointphase_dict = {k:v for mode in jointmode for k,v in self.mode_phase_map[mode].items()}
-                phasecombos = [i for i in itertools.product(*jointphase_list)]
-                if 'limit jointphases' in jointfaults and jointfaults['limit jointphases']<len(phasecombos): 
-                    rng = np.random.default_rng()
-                    pc_inds = [i for i in range(len(phasecombos))]
-                    pc_choices = rng.choice(pc_inds, jointfaults['limit jointphases'], replace=False)
-                    phasecombos = [phasecombos[i] for i in pc_choices]
-                for phase_combo in phasecombos:
-                    intervals = [jointphase_dict[phase] for phase in phase_combo]
-                    overlap, intervals_times = find_overlap_n(intervals)
-                    if overlap: 
-                        phaseid = tuple(set(phase_combo))
-                        if len(phaseid) == 1: 
-                            phaseid = phaseid[0]
-                            rates=[self.rates[fmode][phaseid] for fmode in jointmode]
-                        else:
-                            rates = [self.rates[fmode][phase_combo[i]]* len(overlap)/intervals_times[i] for i,fmode in enumerate(jointmode)]
-                        if not jointfaults.get('pcond', False): # if no input, assume independence
-                            prob = np.prod(1-np.exp(-np.array(rates)))
-                            self.rates[jointmode][phaseid] = -np.log(1.0-prob)
-                        elif type(jointfaults['pcond']) in [float, int]:
-                            self.rates[jointmode][phaseid] = jointfaults['pcond']*max(rates)
-                        elif type(jointfaults['pcond'])==list:
-                            self.rates[jointmode][phaseid] = jointfaults['pcond'][j_ind]*max(rates)
-                        else: raise Exception("Invalid pcond argument in jointfaults: "+str(jointfaults['pcond']))
-                        if len(overlap)>1:  
-                            self.rates_timeless[jointmode][phaseid] = self.rates[jointmode][phaseid]/(len(overlap)*self.tstep)
-                        else:
-                            self.rates_timeless[jointmode][phaseid] = self.rates[jointmode][phaseid]
-                        self.mode_phase_map[jointmode][phaseid] = overlap 
-            if not jointfaults.get('inclusive', True): 
-                for (fxnname, mode) in self._fxnmodes: 
-                    self.rates.pop((fxnname,mode))
-                    self.rates_timeless.pop((fxnname,mode))
-                    self.mode_phase_map.pop((fxnname,mode))
+                        oppvect.update({phase: opplist[0]
+                                        for (i, phase) in enumerate(fxnphases)})
+        for phase, times in fxnphases.items():
+            opp = oppvect[phase]/(sum(oppvect.values())+1e-100)
+            
+            if self._fxnmodes[fxnname, mode]['probtype'] == 'prob':
+                dt = self.tstep
+                unitfactor = 1
+            elif type(times[0]) == list:
+                dt = sum([self.calc_intervaltime(ts, self.tstep) for ts in times])
+                unitfactor = self.unit_factors[self.units]/self.unit_factors[self._fxnmodes[fxnname, mode]['units']]
+            elif self._fxnmodes[fxnname, mode]['probtype']=='rate' and len(times)>1:      
+                dt = self.calc_intervaltime(times, self.tstep)
+                unitfactor = self.unit_factors[self.units]/self.unit_factors[self._fxnmodes[fxnname, mode]['units']]
+                times=[times]
+            elif self._fxnmodes[fxnname, mode]['probtype']=='rate':  
+                dt = self.tstep
+                unitfactor = self.unit_factors[self.units]/self.unit_factors[self._fxnmodes[fxnname, mode]['units']]
+            self.rates[fxnname, mode][key_phases, phase] = overallrate*opp*dist*dt*unitfactor #TODO: update with units
+            self.rates_timeless[fxnname, mode][key_phases, phase] = overallrate*opp*dist
+            self.mode_phase_map[fxnname, mode][key_phases, phase] = times
+
+    def init_jointmode_rates(self, jointfaults):
+        for (j_ind, jointmode) in enumerate(self.jointmodes):
+            self.init_jointmode_rate(jointfaults, j_ind, jointmode)
+
+        if not jointfaults.get('inclusive', True):
+            for (fxnname, mode) in self._fxnmodes:
+                self.rates.pop((fxnname, mode))
+                self.rates_timeless.pop((fxnname, mode))
+                self.mode_phase_map.pop((fxnname, mode))
+
+    def init_jointmode_rate(self,jointfaults, j_ind, jointmode):
+        self.rates.update({jointmode: dict()})
+        self.rates_timeless.update({jointmode: dict()})
+        self.mode_phase_map.update({jointmode: dict()})
+        jointphase_list = [self.mode_phase_map[mode] for mode in jointmode]
+        jointphase_dict = {k: v for mode in jointmode
+                           for k, v in self.mode_phase_map[mode].items()}
+        phasecombos = [i for i in itertools.product(*jointphase_list)]
+        if 'limit jointphases' in jointfaults and jointfaults['limit jointphases']<len(phasecombos): 
+            rng = np.random.default_rng()
+            pc_inds = [i for i in range(len(phasecombos))]
+            pc_choices = rng.choice(pc_inds,
+                                    jointfaults['limit jointphases'], replace=False)
+            phasecombos = [phasecombos[i] for i in pc_choices]
+        for phase_combo in phasecombos:
+            intervals = [jointphase_dict[phase] for phase in phase_combo]
+            overlap, intervals_times = find_overlap_n(intervals)
+            if overlap:
+                phaseid = tuple(set(phase_combo))
+                if len(phaseid) == 1:
+                    phaseid = phaseid[0]
+                    rates = [self.rates[fmode][phaseid] for fmode in jointmode]
+                else:
+                    rates = [self.rates[fmode][phase_combo[i]] *
+                             len(overlap)/intervals_times[i]
+                             for i, fmode in enumerate(jointmode)]
+                # if no input, assume independence
+                if not jointfaults.get('pcond', False):
+                    prob = np.prod(1-np.exp(-np.array(rates)))
+                    self.rates[jointmode][phaseid] = -np.log(1.0-prob)
+                elif type(jointfaults['pcond']) in [float, int]:
+                    self.rates[jointmode][phaseid] = jointfaults['pcond']*max(rates)
+                elif type(jointfaults['pcond']) == list:
+                    self.rates[jointmode][phaseid] = jointfaults['pcond'][j_ind]*max(rates)
+                else:
+                    raise Exception("Invalid pcond argument in jointfaults: " +
+                                    str(jointfaults['pcond']))
+                if len(overlap) > 1:
+                    self.rates_timeless[jointmode][phaseid] = self.rates[jointmode][phaseid]/(len(overlap)*self.tstep)
+                else:
+                    self.rates_timeless[jointmode][phaseid] = self.rates[jointmode][phaseid]
+                self.mode_phase_map[jointmode][phaseid] = overlap
+
     def create_sampletimes(self,mdl, params={}, default={'samp':'evenspacing','numpts':1}):
         """ Initializes weights and sampletimes """
         self.sampletimes={}
