@@ -58,7 +58,6 @@ class EnvironmentParameter(Parameter):
     y_size: int = 1000
     seed: int = 100
 
-
 class Environment(Flow):
     _init_s = EnvironmentState
     _init_p = EnvironmentParameter
@@ -84,10 +83,12 @@ class Environment(Flow):
         self.grid = np.array([[(i, j) for i in range(0, self.p.x_size, self.p.blocksize)]
                               for j in range(0, self.p.y_size, self.p.blocksize)])
         self.pts = self.grid.reshape(int(self.grid.size/2), 2)
+        
         self.map = {tuple(pt):{'safe': True,
                                'allowed': False,
                                'height': rng.integers(0, self.p.maxheight),
                                'occupied': False} for pt in self.pts}
+        
         self.start = self.pts[0]
         self.end = self.pts[-1]
         rand_pts = rng.choice(self.pts[1:-1],
