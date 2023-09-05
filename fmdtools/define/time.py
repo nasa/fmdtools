@@ -6,7 +6,6 @@ Description: A module for defining time-based properties for use in blocks. Has 
 - :class:`Time`: Class containing all time-related Block constructs (e.g., timers).
 """
 from decimal import Decimal
-from typing import ClassVar
 from recordclass import dataobject
 from fmdtools.analyze.result import History, get_sub_include
 from .common import get_dataobj_track, get_obj_track

@@ -44,8 +44,8 @@ class Rand(dataobject, mapping=True):
     class RandState(State):
         noise: float=1.0
     class ExampleRand(Rand):
-        s= RandState()
-        run_stochastic:     bool=True
+        s = RandState()
+        run_stochastic: bool = True
 
     Which enables the use of set_rand, update_stochastic_states, etc for updating
     these states with methods called from the rng.
