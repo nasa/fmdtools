@@ -593,13 +593,23 @@ class Grid(object):
         return fig, ax
 
 def as_voxels(array, res=10):
+    from matplotlib import colormaps
+    cmap = colormaps['viridis']
+    
     dims = array.shape
     X, Y, Z = np.indices((dims[0], dims[1], res))
+    z_shape = Z.swapaxes(0, 2).swapaxes(1, 2)
+    shape = z_shape < array
+    shape = shape.swapaxes(0, 1).swapaxes(1, 2)
     
-    shape = np.swapaxes(X < array, 0, 2)
-    shape = np.swapaxes(shape, 0, 1)
+    norm= plt.Normalize(z_shape.min(), z_shape.max())
+    colors = cmap(norm(z_shape)).swapaxes(0, 1).swapaxes(1, 2) # .swapaxes(0, 1).swapaxes(1, 2)
+    #colors[shape] = cmap(Z)
+    #colors = np.array([z_shape for i in range(res)])
+    #shape = np.swapaxes(X < array, 0, 2)
+    #shape = np.swapaxes(shape, 0, 1)
     ax = plt.figure().add_subplot(projection='3d')
-    ax.voxels(shape, edgecolor='k') #, facecolors=colors, edgecolor='k')
+    ax.voxels(shape, edgecolor='k', facecolors = colors) #, facecolors=colors, edgecolor='k')
     ax.set_xlabel("x")
     ax.set_ylabel("y")
     ax.set_zlabel("z")
