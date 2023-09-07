@@ -6,7 +6,7 @@ Created on Fri Sep  1 15:03:39 2023
 """
 
 
-from fmdtools.define.environment import Grid
+from fmdtools.define.environment import Grid, GridParam
 
 # Grid - collection of points
 
