@@ -95,7 +95,7 @@ class Flow(object):
         if hasattr(self, 'h'): 
             return self.h
         else:
-            track = get_obj_track(self, track, all_possible =Flow.default_track)
+            track = get_obj_track(self, track, all_possible = Flow.default_track)
             if track:
                 h=History()
                 sh = self.s.create_hist(timerange, get_sub_include('s', track))

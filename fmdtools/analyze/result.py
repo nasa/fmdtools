@@ -1054,6 +1054,8 @@ class History(Result):
                 self[att] = np.empty([len(timerange)], dtype=str_size)
             elif type(val) == dict:
                 self[att] = init_dicthist(val, timerange, sub_track)
+            elif type(val) == np.ndarray or dtype == np.ndarray:
+                self[att] = np.array([val for i in timerange])
             elif dtype:
                 self[att] = np.empty([len(timerange)], dtype=dtype)
             else:
