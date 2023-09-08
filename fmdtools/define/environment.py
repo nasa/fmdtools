@@ -6,10 +6,15 @@ import numpy as np
 from typing import ClassVar
 from fmdtools.define.parameter import Parameter
 from fmdtools.define.rand import Rand
-from fmdtools.define.common import is_iter
+from fmdtools.define.common import is_iter, get_obj_track
+from fmdtools.analyze.result import History
+
 from matplotlib import pyplot as plt
 from mpl_toolkits.axes_grid1 import make_axes_locatable
 from matplotlib.patches import Patch, Rectangle
+from matplotlib import colormaps, cm
+from mpl_toolkits.mplot3d import Axes3D, art3d
+from matplotlib.colors import to_rgba
 
 
 class GridParam(Parameter):
@@ -132,6 +137,8 @@ class Grid(object):
         self.init_grids(*args, **kwargs)
         self.init_properties(*args, **kwargs)
         self.build()
+        if not hasattr(self, 'default_track'):
+            self.default_track = self.states
 
     def init_properties(self, *args, **kwargs):
         """Method used to initialize arrays with non-default values."""
@@ -439,6 +446,27 @@ class Grid(object):
         set_pts = self.r.rng.choice(pts, number, replace=replace)
         self.set_pts(set_pts, prop, value)
 
+    def set_prop_dist(self, prop, dist, *args, **kwargs):
+        """
+        Randomizes a property according to a given distribution.
+
+        Parameters
+        ----------
+        prop : str
+            Property to set
+        dist : str
+            Name of distribution to call from the rng.
+            (see documentation for numpy.random)
+        *args : tuple, optional
+            Arguments to the distribution method (e.g., (min, max)). The default is ().
+        **kwargs : kwargs, optional
+            Keyword arguments to the distribution method. The default is {}.
+        """
+        p = getattr(self, prop)
+        meth = getattr(self.r.rng, dist)
+        new_p = meth(*args, size=p.shape, **kwargs)
+        setattr(self, prop, new_p)
+        
     def return_mutables(self):
         """Used in propagation to check if grid properties have changed."""
         return tuple([*(getattr(self, state) for state in self.states)])
@@ -461,8 +489,7 @@ class Grid(object):
             setattr(cop, state, np.copy(getattr(self, state)))
         return cop
 
-    def show_property(self, prop, xlab="x", ylab="y", proplab="prop", dim="2d",
-                      **kwargs):
+    def show_property(self, prop, xlab="x", ylab="y", proplab="prop", **kwargs):
         """
         Plots a given property 'prop' as a colormesh on an x-y grid.
         See matplotlib.pyplot.pcolormesh.
@@ -491,11 +518,7 @@ class Grid(object):
         default_kwargs = dict(edgecolors='black', cmap="Greens")
         kwargs = {**kwargs, **default_kwargs}
 
-        if dim == "2d":
-            fig, ax = plt.subplots(1)
-        else:
-            fig = plt.figure()
-            ax = fig.add_subplot(111, projection='3d')
+        fig, ax = plt.subplots(1)
 
         p = getattr(self, prop)
         # im = ax.matshow(p, **kwargs)
@@ -503,23 +526,125 @@ class Grid(object):
         x = np.linspace(0., self.p.blocksize*(self.p.x_size-1), self.p.x_size)
         y = np.linspace(0., self.p.blocksize*(self.p.y_size-1), self.p.y_size)
         X, Y = np.meshgrid(x, y)
-        if dim == "2d":
-            im = ax.pcolormesh(X, Y, p.swapaxes(0, 1), **kwargs)
-        else:
-            im = ax.plot_surface(X, Y, p.swapaxes(0, 1), **kwargs)
+
+        im = ax.pcolormesh(X, Y, p.swapaxes(0, 1), **kwargs)
+
         plt.xlabel(xlab)
         plt.ylabel(ylab)
 
-        if dim == "2d":
-            divider = make_axes_locatable(ax)
-            cax = divider.append_axes("right", size="5%", pad=0.05)
-            cbar = plt.colorbar(im, cax=cax)
-            if proplab == "prop":
-                proplab = prop
-            cbar.set_label(proplab, rotation=270)
+        divider = make_axes_locatable(ax)
+        cax = divider.append_axes("right", size="5%", pad=0.05)
+        cbar = plt.colorbar(im, cax=cax)
+        if proplab == "prop":
+            proplab = prop
+        cbar.set_label(proplab, rotation=270)
         return fig, ax
 
-    def show_collection(self, prop, fig=None, ax=None, label=True, dim="2d", **kwargs):
+    def show_property3d(self, prop, z="prop", z_res=10, collections = {},
+                        xlab="x", ylab="y", zlab="prop",
+                        proplab="prop", cmap="Greens", **kwargs):
+        """
+        Plots a given properties 'prop' and 'z' as a voxels on an x-y-z grid.
+        See mpl_toolkits.mplot3d.axes3d.Axes3D.voxels.
+
+        Parameters
+        ----------
+        prop : str
+            Name of the property to represent a color.
+        z : str, optional
+            Name of the property to plot as z. The default is "prop", which uses the same
+            property as prop.
+        z_res : int, optional
+            Resolution to plot z at. The default is 10.
+        xlab : str, optional
+            Label for x-axis. The default is "x".
+        ylab : str, optional
+            Label for y-axis. The default is "y".
+        zlab : str, optional
+            Label for the z-axis. The default is "prop", which uses the name of the
+            property.
+        proplab : str, optional
+            Label for the property. The default is "prop", which uses the name of the
+            property provided.
+        cmap : str, optional
+            Name of the matplotlib colormap to use for colors. The default is "Greens".
+        **kwargs : kwargs
+            Kwargs to pass to Axes3D.voxels
+
+        Returns
+        -------
+        fig : mpl.figure
+            Plotted figure object
+        ax : mpl.axis
+            Ploted axis object.
+        """
+        default_kwargs = dict(edgecolor='k')
+        kwargs = {**kwargs, **default_kwargs}
+
+        fig = plt.figure()
+        ax = fig.add_subplot(111, projection='3d')
+
+        c_array = getattr(self, prop)
+        if z == "prop":
+            z_array = c_array
+        else:
+            z_array = getattr(self, z)
+
+        dims = z_array.shape
+        X, Y, Z = np.indices((dims[0]+1, dims[1]+1, z_res+1))
+        z_shape = Z[:-1, :-1, :-1].swapaxes(0, 2).swapaxes(1, 2)
+
+        max_z = z_array.max()
+        min_z = z_array.min()
+        norm_z_array = z_res * (z_array - min_z)/(max_z - min_z + 0.00000001)
+        round_z_array = np.digitize(norm_z_array, [i for i in range(z_res)])
+        shape = z_shape < round_z_array
+        shape = shape.swapaxes(0, 1).swapaxes(1, 2)
+        X_scale = X * self.p.blocksize - self.p.blocksize/2
+        Y_scale = Y * self.p.blocksize - self.p.blocksize/2
+        Z_scale = Z * (max_z - min_z) / z_res + min_z
+
+        color_shape = np.array([c_array for i in range(z_res)])
+        norm = plt.Normalize(color_shape.min(), color_shape.max())
+        cmap = colormaps[cmap]
+        colors = cmap(norm(color_shape)).swapaxes(0, 1).swapaxes(1, 2)
+
+        for i, (prop, coll_kwargs) in enumerate(collections.items()):
+            coll_colors = cm.rainbow(np.linspace(0, 1, len(collections)))
+            coll = self.get_collection(prop)
+            if 'color' not in coll_kwargs:
+                coll_color = colormaps['rainbow'](coll_colors[i])
+            else:
+                coll_color = to_rgba(coll_kwargs['color'])
+            
+            if "text_z_offset" not in coll_kwargs:
+                coll_kwargs['text_z_offset'] = (max_z - min_z) / z_res
+            for pt in coll:
+                index = self.to_index(*pt)
+                inds = np.where(shape[index])
+                if any(inds[0]):
+                    z_index = inds[0][-1]
+                else:
+                    z_index = 0
+                colors[index[0], index[1], z_index] = coll_color
+                
+
+        ax.voxels(X_scale, Y_scale, Z_scale, shape, facecolors=colors, **kwargs)
+        ax.set_xlabel(xlab)
+        ax.set_ylabel(ylab)
+        ax.set_zlabel(zlab)
+        return fig, ax
+
+    def get_collection(self, prop):
+        if prop in self.collections or prop == 'pts':
+            return getattr(self, prop)
+        elif prop in self.points:
+            return np.array([getattr(self, prop)])
+        else:
+            raise Exception("Not a point or collection")
+
+    def show_collection(self, prop, fig=None, ax=None, label=True, z="",
+                        legend_args=False, text_z_offset=0.0, **kwargs):
         """
         Shows a collection on the grid as square patches.
 
@@ -535,6 +660,11 @@ class Grid(object):
             Label for the collection. The default is True, which shows the collection
             name. If False, no label is provided. If a string, the string is used as
             the label.
+        z: str
+            Argument to plot as third dimension on 3d plot. Default is "", which
+            returns a 2d plot.
+        legend_args : dict/False
+            Specifies arguments to legend. Default is False, which shows no legend.
         **kwargs : kwargs
             Kwargs to matplotlib.patches.Rectangle
 
@@ -549,24 +679,42 @@ class Grid(object):
         offset = self.p.blocksize/2
         if not ax:
             fig, ax = plt.subplots(1)
+            if not z:
+                fig, ax = plt.subplots(1)
+            else:
+                fig = plt.figure()
+                ax = fig.add_subplot(111, projection='3d')
+                ax.set_zlim(getattr(self, z).min(), getattr(self, z).max())
             ax.set_xlim(-offset, self.p.x_size*self.p.blocksize+offset)
             ax.set_ylim(-offset, self.p.y_size*self.p.blocksize+offset)
-        coll = getattr(self, prop)
-        for pt in coll:
+
+        coll = self.get_collection(prop)
+        for i, pt in enumerate(coll):
             corner = pt - np.array([offset, offset])
             rect = Rectangle(corner, self.p.blocksize, self.p.blocksize,
                              label=prop, **kwargs)
             ax.add_patch(rect)
+            if z:
+                art3d.patch_2d_to_3d(rect, z=self.get(pt[0], pt[1], z))
             if label:
                 if type(label) != str:
                     lab = rect.get_label()
                 else:
                     lab = label
-                ax.text(pt[0], pt[1], lab,
-                        horizontalalignment="center", verticalalignment="center")
+                if z:
+                    ax.text(pt[0], pt[1], self.get(pt[0], pt[1], z)+text_z_offset,
+                            lab,
+                            horizontalalignment="center", verticalalignment="center")
+                else:
+                    ax.text(pt[0], pt[1], lab,
+                            horizontalalignment="center", verticalalignment="center")
+        if not legend_args == False:
+            if legend_args == True:
+                legend_args = {}
+            consolidate_legend(ax, **legend_args)
         return fig, ax
 
-    def show(self, prop, collections={}, dim="2d", **kwargs):
+    def show(self, prop, collections={}, legend_args=False, **kwargs):
         """
         Plots a property and set of collections on the grid.
 
@@ -587,35 +735,94 @@ class Grid(object):
         ax : mpl.axis
             Ploted axis object.
         """
-        fig, ax = self.show_property(prop, dim=dim, **kwargs)
+        fig, ax = self.show_property(prop, **kwargs)
         for coll in collections:
-            self.show_collection(coll, fig=fig, ax=ax, dim=dim, **collections[coll])
+            self.show_collection(coll, fig=fig, ax=ax, **collections[coll])
         return fig, ax
 
-def as_voxels(array, res=10):
-    from matplotlib import colormaps
-    cmap = colormaps['viridis']
+    def show3d(self, prop, z="prop", collections={}, legend_args=False, **kwargs):
+        """
+        Plots a property and set of collections in a discretized (voxelized) version
+        of the grid.
+
+        Parameters
+        ----------
+        prop : str
+            Property to plot.
+        z : str, optional
+            Property to use as the height. The default is "prop".
+        collections : dict, optional
+            Collections to plot and their respective kwargs for show_collection.
+            The default is {}.
+        legend_args : dict/False
+            Specifies arguments to legend. Default is False, which shows no legend.
+        **kwargs : kwargs
+            kwargs to show_property3d.
+
+        Returns
+        -------
+        fig : mpl.figure
+            Plotted figure object
+        ax : mpl.axis
+            Ploted axis object.
+        """
+        if z == "prop":
+            z = prop
+        fig, ax = self.show_property3d(prop, z=z, collections=collections, **kwargs)
+        for coll in collections:
+            self.show_collection(coll, fig=fig, ax=ax, legend_args = legend_args,
+                                 **collections[coll], z=z)
+        return fig, ax
+
+    def create_hist(self, timerange, track):
+        """
+        Creates a history of states for the grid
+
+        Parameters
+        ----------
+        timerange : iterable, optional
+            Time-range to initialize the history over. The default is None.
+        track : list/str/dict, optional
+            argument specifying attributes for :func:`get_sub_include'.
+            The default is None.
+
+        Returns
+        -------
+        hist : History
+            History of fields specified in track.
+
+        e.g.,
+        >>> ex = ExampleGrid()
+        >>> h = ex.create_hist([0, 1, 2], "all")
+        >>> h.keys()
+        dict_keys(['h'])
+        >>> h.h[0]
+        array([[0., 0., 0., 0., 0., 0., 0., 0., 0., 0.],
+               [0., 0., 0., 0., 0., 0., 0., 0., 0., 0.],
+               [0., 0., 0., 0., 0., 0., 0., 0., 0., 0.],
+               [0., 0., 0., 0., 0., 0., 0., 0., 0., 0.],
+               [0., 0., 0., 0., 0., 0., 0., 0., 0., 0.],
+               [0., 0., 0., 0., 0., 0., 0., 0., 0., 0.],
+               [0., 0., 0., 0., 0., 0., 0., 0., 0., 0.],
+               [0., 0., 0., 0., 0., 0., 0., 0., 0., 0.],
+               [0., 0., 0., 0., 0., 0., 0., 0., 0., 0.],
+               [0., 0., 0., 0., 0., 0., 0., 0., 0., 0.]])
+        """
+        track = get_obj_track(self, track, all_possible = self.states)
+        h = History()
+        for att in track:
+            val = getattr(self, att)
+            h.init_att(att, val, timerange, track, dtype=np.ndarray)
+        return h
+        
     
-    dims = array.shape
-    X, Y, Z = np.indices((dims[0], dims[1], res))
-    z_shape = Z.swapaxes(0, 2).swapaxes(1, 2)
-    shape = z_shape < array
-    shape = shape.swapaxes(0, 1).swapaxes(1, 2)
-    
-    norm= plt.Normalize(z_shape.min(), z_shape.max())
-    colors = cmap(norm(z_shape)).swapaxes(0, 1).swapaxes(1, 2) # .swapaxes(0, 1).swapaxes(1, 2)
-    #colors[shape] = cmap(Z)
-    #colors = np.array([z_shape for i in range(res)])
-    #shape = np.swapaxes(X < array, 0, 2)
-    #shape = np.swapaxes(shape, 0, 1)
-    ax = plt.figure().add_subplot(projection='3d')
-    ax.voxels(shape, edgecolor='k', facecolors = colors) #, facecolors=colors, edgecolor='k')
-    ax.set_xlabel("x")
-    ax.set_ylabel("y")
-    ax.set_zlabel("z")
-    #ax.set_zlim(0, 100)
-    
-    
+def consolidate_legend(ax, **kwargs):
+    kwargs = {**dict(bbox_to_anchor=(1.05, 1), loc='upper left'), **kwargs}
+    ax.legend()
+    handles, labels = ax.get_legend_handles_labels()
+    by_label = dict(zip(labels, handles))
+    ax.get_legend().remove()
+    ax.legend(by_label.values(), by_label.keys(), **kwargs)
     
 
 class ExampleGrid(Grid):
@@ -635,8 +842,14 @@ if __name__ == "__main__":
     ex.show_property("v", cmap="Greys")
     ex.show_collection("high_v")
     ex.show("h", collections={"high_v":{"alpha":0.5, "color":"red"}})
-    as_voxels(ex.v)
-    
-    ex.show_property("v", cmap="Greys", dim="3d")
+    ex.show_property3d("h", z="v", collections={"high_v":{"alpha":0.5, "color":"red"}})
+    #as_voxels(ex.v)
+    ex.show_property("v", cmap="Greys")
+    ex.show_property3d("v")
+    ex.show_property3d("h", z="v")
+    ex.show_collection("high_v")
+    ex.show_collection("high_v", z="v")
+    ex.show3d("h", z="v", collections={"pts":{"color":"blue"},
+                                       "high_v":{"alpha":0.5, "color":"red"}}, legend_args=True)
     import doctest
     doctest.testmod(verbose=True)
