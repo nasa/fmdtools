@@ -19,8 +19,10 @@ from fmdtools.define.flow import Flow
 from fmdtools.define.state import State
 from fmdtools.define.parameter import Parameter
 from fmdtools.define.model import Model
-from fmdtools.analyze.result import History
+from fmdtools.define.environment import Grid, GridParam, Environment
 
+from fmdtools.analyze.result import History
+from fmdtools.analyze import show
 
 import numpy as np
 import matplotlib.pyplot as plt
@@ -30,10 +32,6 @@ from recordclass import asdict
 
 
 class EnvironmentState(State):
-    safe: bool = True
-    allowed: bool = True
-    landed: bool = True
-    occupied: bool = False
     """
     States relating the drone with its environmnet:
         -safe: bool
@@ -45,202 +43,105 @@ class EnvironmentState(State):
         -occupied: bool
             whether the space is occupied
     """
+    safe: bool = True
+    allowed: bool = True
+    landed: bool = True
+    occupied: bool = False
 
 
-class EnvironmentParameter(Parameter):
-    blocksize: int = 100
+class DroneEnvironmentGridParam(GridParam):
+    """
+    Defines the grid parameters, including resolution as well as number of allowed,
+    unsafe, and occupied spaces, max height of the buildings, and road width.
+    """
+    x_size: int = 10
+    y_size: int = 10
+    blocksize: float = 100.0
+    num_allowed: int = 10
+    num_unsafe: int = 10
+    num_occupied: int = 10
+    max_height: float = 100.0
     roadwidth: int = 15
-    maxheight: int = 100
-    num_allowed: int = 4
-    num_unsafe: int = 3
-    num_occupied: int = 20
-    x_size: int = 1000
-    y_size: int = 1000
-    seed: int = 100
 
-class Environment(Flow):
+
+class StreetGrid(Grid):
+    """
+    Defines the urban environment (buildings, streets, etc) the drone flies through.
+
+    Note the aspects of the Grid:
+        - safe: feature
+            places where the drone is safe to land
+        - allowed: feature
+            places the drone is allowed to land
+        - occupied: feature
+            places where people are (landing would be dangerous)
+        - height: feature
+            height of the buildings to fly over
+        - start: point
+            where the drone starts
+        - end: point
+            where the drone ends
+        - all_occupied: collection
+            all points that are occupied
+        - all_safe: collection
+            all points that are safe to land at
+    """
+    _init_p = DroneEnvironmentGridParam
+
+    _feature_safe = (bool, True)
+    _feature_allowed = (bool, False)
+    _feature_occupied = (bool, False)
+    _feature_height = (float, 0.0)
+
+    _point_start = (0, 0)
+    _point_end = (900, 900)
+    _collect_all_occupied = ("occupied", True)
+    _collect_all_safe = ("safe", True)
+
+    def init_properties(self, *args, **kwargs):
+        """Randomly allocates the allowed/occupied points, as well as the building 
+        heights."""
+        rand_pts = self.r.rng.choice(self.pts[1:-1],
+                                     self.p.num_allowed + self.p.num_unsafe,
+                                     replace=False)
+        for i, pt in enumerate(rand_pts):
+            if i < self.p.num_allowed:
+                self.set(*pt, 'allowed', True)
+            else:
+                self.set(*pt, 'safe', False)
+        self.set_rand_pts('occupied', True, 10, pts=self.pts[1:-1])
+        self.set_prop_dist("height", "uniform", low=0.0, high=self.p.max_height)
+
+
+
+class DroneEnvironment(Environment):
+    _init_g = StreetGrid
     _init_s = EnvironmentState
-    _init_p = EnvironmentParameter
-    """
-    The environment the drone flies through. 
-
-    And attributes:
-        - grid:     grid of points corresponding to the map size and parameters in env_params
-        - pts:      list of grid points
-        - map:      dict mapping each grid point to safe, allowed, and height attributes
-        - start:    start point
-        - end:      end point
-    As well as custom methods for interacting/visualizing the underlying map.
-    """
-
-    def __init__(self, name, s={}, p={}):
-        super().__init__(name, s=s, p=p)
-        self.build_map()
-
-    def build_map(self):
-        """ Builds the map based on class parameters defined in env_params"""
-        rng = np.random.default_rng(self.p.seed)
-        self.grid = np.array([[(i, j) for i in range(0, self.p.x_size, self.p.blocksize)]
-                              for j in range(0, self.p.y_size, self.p.blocksize)])
-        self.pts = self.grid.reshape(int(self.grid.size/2), 2)
-        
-        self.map = {tuple(pt):{'safe': True,
-                               'allowed': False,
-                               'height': rng.integers(0, self.p.maxheight),
-                               'occupied': False} for pt in self.pts}
-        
-        self.start = self.pts[0]
-        self.end = self.pts[-1]
-        rand_pts = rng.choice(self.pts[1:-1],
-                              self.p.num_allowed + self.p.num_unsafe,
-                              replace=False)
-        self.allow = np.array([*rand_pts[:self.p.num_allowed], self.start, self.end])
-        self.unsafe = rand_pts[self.p.num_allowed:]
-        self.occ = rng.choice(self.pts[1:-1], self.p.num_occupied, replace=False)
-        self.open = np.array([pt for pt in self.pts
-                              if not any([all(pt == pto) for pto in self.occ])])
-
-        for pt in self.allow:
-            self.set_pt(pt, allowed=True)
-        for pt in self.unsafe:
-            self.set_pt(pt, safe=False)
-        for pt in self.occ:
-            self.set_pt(pt, occupied=True)
-        self.set_pts([self.start, self.end], height=0.0)
-
-    def to_gridpoint(self, *args):
-        """Finds the grid point closest to the given x/y values"""
-        return tuple(round(arg/self.p.blocksize)*self.p.blocksize for arg in args)
-
-    def set_pts(self, pts, **kwargs):
-        """Sets a given list of points to have the safe/allowed/height attributes given
-        in kwargs"""
-        for pt in pts:
-            self.set_pt(pt, **kwargs)
-
-    def set_pt(self, pt, **kwargs):
-        """Sets a given point to have the safe/allowed/height attributes given in
-        kwargs"""
-        pt_round = self.to_gridpoint(*pt)
-        self.map[pt_round].update(kwargs)
-
-    def ground_height(self, x, y, z):
+    
+    def ground_height(self, dofs):
         """Gets the distance of the height z above the ground at point x,y"""
-        env_height = self.get_below(x, y)['height']
-        return z-env_height
+        env_height = self.g.get(dofs.s.x, dofs.s.y, 'height', dofs.s.z)
+        return dofs.s.z-env_height
 
-    def set_states(self, x, y, z):
+    def set_states(self, dofs):
         """Set the landing states safe_land and allowed_land since the drone has
         landed"""
-        props = self.get_below(x, y)
-        self.s.safe = props['safe']
-        self.s.allowed = props['allowed']
-        self.s.occupied = props['occupied']
-        if self.ground_height(x, y, z) <= 0.1:
-            self.s.landed = True
-        else:
-            self.s.landed = False
-
-    def in_area(self, x, y, where="pts"):
-        """Check if the drone is in a given area (pts, allowed, start, end, etc)"""
-        pts = getattr(self, where)
-        pt = self.to_gridpoint(x, y)
-        if pt in pts:
-            return True
-
-    def get_closest(self, x, y, where="pts", include_pt=True):
-        """Get the closest point in a given area (pts, allowed, start, end, etc)"""
-        pts = getattr(self, where)
-        pt = self.to_gridpoint(x, y)
-        if pt in pts and include_pt:
-            xy = pt
-        else:
-            if not include_pt:
-                pts = np.array([p for p in pts if all(p != pt)])
-            dists = np.sqrt(np.sum((np.array([x, y])-pts)**2, 1))
-            closest_ind = np.argmin(dists)
-            xy = pts[closest_ind]
-        z = self.get_below(*xy)['height']
-        return np.array([xy[0], xy[1], z])
-
-    def get_below(self, x, y):
-        """Gets all map properties of the gridpoint below"""
-        pt = self.to_gridpoint(x, y)
-        block = rect(pt,
-                     self.p.blocksize-self.p.roadwidth,
-                     self.p.blocksize-self.p.roadwidth)
-        if inrange(block, x, y):
-            properties = self.map.get(pt, {"safe": False,
-                                           "allowed": False,
-                                           "height": 0.0,
-                                           "occupied": True})
-        else:
-            properties = {"safe": False,
-                          "allowed": False,
-                          "height": 0.0,
-                          "occupied": True}
-        return properties
-
-    def show_grid(self):
-        """Shows the environment gridworld. Returns matplotlib figure and axis."""
-        fig, ax = plt.subplots()
-        for pt in self.pts:
-            rect = self._create_rect(pt)
-            if rect.get_label() != 'disallowed':
-                plt.text(pt[0], pt[1], rect.get_label(),
-                         horizontalalignment="center", verticalalignment="center")
-            ax.add_patch(rect)
-        ax.set_xlim(-self.p.blocksize, self.p.x_size)
-        ax.set_ylim(-self.p.blocksize, self.p.y_size)
-        # ax.legend()
-        return fig, ax
-
-    def _create_rect(self, pt):
-        if all(pt == self.start):
-            color = "green"
-            label = "start"
-        elif all(pt == self.end):
-            color = "green"
-            label = "end"
-        elif self.map[tuple(pt)]['allowed']:
-            color = "blue"
-            label = "allowed"
-        elif not self.map[tuple(pt)]['safe']:
-            color = "red"
-            label = "unsafe"
-        else:
-            color = "gray"
-            label = "disallowed"
-        if self.map[tuple(pt)]['occupied']:
-            hatch = "//"
-        else:
-            hatch = ""
-        lw = int(5*self.map[tuple(pt)]['height']/self.p.maxheight)
-        rect = Rectangle(pt-[self.p.blocksize/2, self.p.blocksize/2],
-                         self.p.blocksize-self.p.roadwidth,
-                         self.p.blocksize-self.p.roadwidth,
-                         facecolor=color, linewidth=lw, edgecolor="black",
-                         label=label, hatch=hatch, alpha=0.5)
-        return rect
-
-    def show_3d(self):
-        """Shows a 3d version of the environment. Returns matplotlib figure and axis."""
-        fig = plt.figure()
-        ax = fig.add_subplot(111, projection='3d')
-        for pt in self.pts:
-            rect = self._create_rect(pt)
-            ax.add_patch(rect)
-            art3d.patch_2d_to_3d(rect, z=self.map[tuple(pt)]['height'])
-        ax.set_xlim3d(0, self.p.x_size)
-        ax.set_ylim3d(0, self.p.y_size)
-        ax.set_zlim3d(0, self.p.maxheight)
-        return fig, ax
+        if self.g.in_range(dofs.s.x, dofs.s.y):
+            props = self.g.get_properties(dofs.s.x, dofs.s.y)
+            self.s.safe = props['safe']
+            self.s.allowed = props['allowed']
+            self.s.occupied = props['occupied']
+    
+            if self.ground_height(dofs) <= 0.1:
+                self.s.landed = True
+            else:
+                self.s.landed = False
 
 class AffectDOF(AffectDOFOpt):
-    _init_environment = Environment
+    _init_environment = DroneEnvironment
 
     def inc_takeoff(self):
-        self.environment.set_states(self.dofs.s.x, self.dofs.s.y, self.dofs.s.z)
+        self.environment.set_states(self.dofs)
         # can only take off at ground
         if self.environment.s.landed:
             self.dofs.s.put(planvel=0.0, vertvel=max(0, self.dofs.s.vertvel))
@@ -248,12 +149,10 @@ class AffectDOF(AffectDOFOpt):
     def dynamic_behavior(self, time):
         self.calc_vel()
         self.inc_takeoff()
-        g_h = self.environment.ground_height(self.dofs.s.x,
-                                             self.dofs.s.y,
-                                             self.dofs.s.z)
+        g_h = self.environment.ground_height(self.dofs)
         self.inc_falling(min_fall_dist=g_h)
         self.inc_pos()
-        self.environment.set_states(self.dofs.s.x, self.dofs.s.y, self.dofs.s.z)
+        self.environment.set_states(self.dofs)
 
 class ComputerVisionMode(Mode):
     faultparams = {'undesired_detection': (0.5, {'move': 1.0}, 0),
@@ -275,20 +174,20 @@ class ComputerVision(Component):
         elif self.m.has_fault("lack_of_detection"):
             occ = False
         else:
-            occ = environment.get_below(dofs.s.x, dofs.s.y)['occupied']
+            occ = environment.g.get(dofs.s.x, dofs.s.y, 'occupied', True)
         self.m.remove_fault("undesired_detection")
         return occ
 
     def find_nearest_open(self, environment, dofs, include_pt=False):
         if self.m.has_fault("undesired_detection"):
             pt = environment.open[round(len(environment.open)/3)]
-            return np.array([*pt, environment.get_below(*pt)["height"]])
+            return np.array([*pt, environment.g.get(*pt, "height", 0.0)])
         elif self.m.has_fault("lack_of_detection"):
-            return environment.get_closest(dofs.s.x, dofs.s.y,
-                                           where="pts", include_pt=include_pt)
+            return environment.g.find_closest(dofs.s.x, dofs.s.y, 'pts',
+                                              include_pt=include_pt)
         else:
-            return environment.get_closest(dofs.s.x, dofs.s.y, where="open",
-                                           include_pt=include_pt)
+            return environment.g.find_closest(dofs.s.x, dofs.s.y, "open",
+                                              include_pt=include_pt)
 
 
 class VisionArch(CompArch):
@@ -302,12 +201,12 @@ class PlanPathParam(Parameter):
 
 
 class PlanPath(PlanPathOpt):
-    _init_environment = Environment
+    _init_environment = DroneEnvironment
     _init_c = VisionArch
     _init_p = PlanPathParam
 
     def init_goals(self):
-        self.make_goals([*self.environment.start, 0], [*self.environment.end, 0])
+        self.make_goals([*self.environment.g.start, 0], [*self.environment.g.end, 0])
 
     def make_goals(self, start, end):
         self.goals = {0: start,
@@ -331,16 +230,14 @@ class PlanPath(PlanPathOpt):
         elif self.m.in_mode('to_nearest'):
             self.reconfigure_plan(self.find_nearest())
         elif self.m.in_mode('to_home'):
-            self.reconfigure_plan([*self.environment.start, 0.0])
+            self.reconfigure_plan([*self.environment.g.start, 0.0])
 
     def find_nearest(self):
         return self.environment.get_closest(self.dofs.s.x, self.dofs.s.y,
                                             where="allow", include_pt=False)
 
     def behavior(self, t):
-        self.s.ground_height = self.environment.ground_height(self.dofs.s.x,
-                                                              self.dofs.s.y,
-                                                              self.dofs.s.z)
+        self.s.ground_height = self.environment.ground_height(self.dofs)
         self.update_mode(t)
         self.reconfigure_path()
         self.update_dist()
@@ -351,18 +248,16 @@ class PlanPath(PlanPathOpt):
 
 
 class HoldPayload(HoldPayloadOpt):
-    _init_environment = Environment
-    
+    _init_environment = DroneEnvironment
+
     def at_ground(self):
-        ground_height = self.environment.ground_height(self.dofs.s.x,
-                                                       self.dofs.s.y,
-                                                       self.dofs.s.z)
+        ground_height = self.environment.ground_height(self.dofs)
         return ground_height <= 0.0
 
 
 class DroneParam(DroneParamOpt):
     plan_param: PlanPathParam = PlanPathParam()
-    env_param: EnvironmentParameter = EnvironmentParameter()
+    env_param: DroneEnvironmentGridParam = DroneEnvironmentGridParam()
 
 
 class Drone(DroneOpt):
@@ -388,7 +283,7 @@ class Drone(DroneOpt):
         self.add_flow('ctl', Control)
         self.add_flow('dofs', DOFs)
         self.add_flow('des_traj', DesTraj)
-        self.add_flow('environment', Environment, p=self.p.env_param)
+        self.add_flow('environment', DroneEnvironment, g=dict(p=self.p.env_param))
 
         # add functions to the model
         flows = ['ee_ctl', 'force_st', 'hsig_dofs', 'hsig_bat', 'rsig_traj']
@@ -417,13 +312,13 @@ class Drone(DroneOpt):
         return time > 1 and self.fxns['plan_path'].m.mode == 'taxi'
 
     def at_start(self, dofs):
-        return self.flows['environment'].in_area(dofs.s.x, dofs.s.y, where="start")
+        return self.flows['environment'].g.in_area(dofs.s.x, dofs.s.y, "start")
     
     def at_safe(self, dofs):
-        return self.flows['environment'].in_area(dofs.s.x, dofs.s.y, where="allow")
+        return self.flows['environment'].g.in_area(dofs.s.x, dofs.s.y, "all_safe")
     
     def at_dangerous(self, dofs):
-        return self.flows['environment'].in_area(dofs.s.x, dofs.s.y, where="occ")
+        return self.flows['environment'].in_area(dofs.s.x, dofs.s.y, "all_occupied")
 
     def find_classification(self, scen, mdlhist):
         faulttime = self.h.get_fault_time(metric='total')
@@ -471,7 +366,15 @@ def plot_traj(mdlhist, mdl, title='Trajectory', legend=False):
     else:
         mdlhist = mdlhist.nest(1)
 
-    fig, ax = mdl.flows['environment'].show_3d()
+    collections = {"all_safe": {"color": "blue", "label": False},
+                   "all_occupied": {"color": "red", "label": False},
+                   "start": {"color": "yellow", "label": True, "text_z_offset": 30},
+                   "end": {"color": "yellow", "label": True, "text_z_offset": 30}}
+
+    fig, ax = show.grid3d(mdl.flows['environment'].g, "allowed", z="height",
+                          collections=collections,
+                          legend_args=dict(bbox_to_anchor=(0.9, 1)))
+
     ax.set_zlim3d(0, mdl.p.plan_param.height)
 
     for faultlabel in mdlhist:
@@ -520,7 +423,7 @@ def plot_xy(mdlhists,  mdl, title='', legend=False):
         mdlhists = History({'nominal': mdlhists})
     else:
         mdlhists = mdlhists.nest(1)
-    fig, ax = mdl.flows['environment'].show_grid()
+    fig, ax = show.grid(mdl.flows['environment'].g, "height")
     for scenname, hist in mdlhists.items():
         ax.plot(hist.flows.dofs.s.x, hist.flows.dofs.s.y, label=scenname, marker="*")
     plt.title(title)
@@ -567,11 +470,12 @@ if __name__ == "__main__":
     from fmdtools.sim import propagate
     from fmdtools import analyze as an
     from fmdtools.sim.approach import SampleApproach
+
     p = PlanPath("test", {})
     
-    e = Environment("env")
-    e.show_grid()
-    e.show_3d()
+    e = DroneEnvironment("env")
+    show.grid(e.g, "height")
+    show.grid3d(e.g, "height")
     
     mdl = Drone()
     ec, mdlhist = propagate.nominal(mdl)
