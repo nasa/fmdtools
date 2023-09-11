@@ -7,6 +7,7 @@ Created on Fri Sep  1 15:03:39 2023
 
 
 from fmdtools.define.environment import Grid, GridParam
+from fmdtools.analyze import show
 
 # Grid - collection of points
 
@@ -60,13 +61,15 @@ class SpecialGrid(Grid):
 b = Grid()
 c = SpecialGrid()
 c.find_all("safe")
-c.show("safe")
-c.show("height")
-c.show3d("allowed", z="height", legend_args=dict(bbox_to_anchor=(0.9, 1)),
-         collections={"all_safe": {"color": "blue", "label": False},
-                      "all_occupied": {"color": "red", "label": False},
-                      "start": {"color": "yellow", "label": True, "text_z_offset": 30},
-                      "end": {"color": "yellow", "label": True, "text_z_offset": 30}})
-c.show_collection("end")
+
+show.grid(c, "safe")
+show.grid(c, "height")
+
+show.grid3d(c, "allowed", z="height", legend_args=dict(bbox_to_anchor=(0.9, 1)),
+            collections={"all_safe": {"color": "blue", "label": False},
+                         "all_occupied": {"color": "red", "label": False},
+                         "start": {"color": "yellow", "label": True, "text_z_offset": 30},
+                         "end": {"color": "yellow", "label": True, "text_z_offset": 30}})
+show.grid_collection(c, "end")
 
 h = c.create_hist([0,1,2,3], "all")
