@@ -3,12 +3,13 @@
 Classes for creating environments.
 """
 import numpy as np
+import copy
 from typing import ClassVar
 from fmdtools.define.parameter import Parameter
 from fmdtools.define.rand import Rand
-from fmdtools.define.common import is_iter, get_obj_track
+from fmdtools.define.common import is_iter, get_obj_track, init_obj_attr
 from fmdtools.analyze.result import History
-
+from fmdtools.define.flow import CommsFlow
 
 
 
@@ -93,9 +94,20 @@ class Grid(object):
     (0.0, 0.0)
     """
     __slots__ = ("p", "r", "grid", "pts", "points", "collections", "features", "states",
-                 "properties", "_args", "_kwargs", "default_track")
+                 "properties", "_args", "_kwargs", "default_track", )
     _init_p = GridParam
     _init_r = Rand
+
+    def __init__(self, *args, **kwargs):
+        """Initializes class with properties in init_properties"""
+        self._args = args
+        self._kwargs = kwargs
+        self.init_grids(*args, **kwargs)
+        self.init_properties(*args, **kwargs)
+        self.build()
+        if not hasattr(self, 'default_track'):
+            self.default_track = self.states
+
 
     def init_grids(self, *args, **kwargs):
         """Prepares class with defined features."""
@@ -124,16 +136,6 @@ class Grid(object):
             proparray = np.full((self.p.x_size, self.p.y_size),
                                 prop[1], dtype=prop[0])
             setattr(self, propname, proparray)
-
-    def __init__(self, *args, **kwargs):
-        """Initializes class with properties in init_properties"""
-        self._args = args
-        self._kwargs = kwargs
-        self.init_grids(*args, **kwargs)
-        self.init_properties(*args, **kwargs)
-        self.build()
-        if not hasattr(self, 'default_track'):
-            self.default_track = self.states
 
     def init_properties(self, *args, **kwargs):
         """Method used to initialize arrays with non-default values."""
@@ -260,7 +262,7 @@ class Grid(object):
             properties[prop] = self.get(x, y, prop)
         return properties
 
-    def get(self, x, y, prop):
+    def get(self, x, y, prop, outside = "error"):
         """
         Gets the value of the property at the given scalar x/y values
 
@@ -272,6 +274,8 @@ class Grid(object):
             Scalar y location
         prop : str
             Name of the property to get.
+        outside : value
+            Value to provide if not in range. Default i 'error', which throws an error
 
         Returns
         -------
@@ -287,6 +291,11 @@ class Grid(object):
         >>> ex.get(50.0, 50.0, "v")
         1.0
         """
+        if not self.in_range(x, y):
+            if outside == "error":
+                raise Exception("Outside bounds of grid: "+str(x, y))
+            else:
+                return outside
         proparray = getattr(self, prop)
         x_i, y_i = self.to_index(x, y)
         return proparray[x_i, y_i]
@@ -410,6 +419,53 @@ class Grid(object):
             xy = pts[closest_ind]
             return xy
 
+    def in_range(self, x, y):
+        """
+        Checks to 
+
+        Parameters
+        ----------
+        x : number
+            x-position to check from.
+        y : number
+            y-position to check from.
+
+        Returns
+        -------
+        in: bool
+            Whether the point is in the range of the grid
+        """
+        return (0.0 <= x <= self.p.blocksize * self.p.x_size and
+                0.0 <= y <= self.p.blocksize * self.p.y_size)
+
+    def in_area(self, x, y, coll):
+        """
+        Checks to see if the point x, y is in a given collection or at a point.
+
+        Parameters
+        ----------
+        x : number
+            x-position to check from.
+        y : number
+            y-position to check from.
+       coll: str
+            Property or collection of the grid to check.
+
+        Returns
+        -------
+        in: bool
+            Whether the point is in the collection
+        """
+        pts = getattr(self, coll)
+        if coll in self.points:
+            pt = getattr(self, coll)
+            return np.all(pt == pts)
+        elif coll in self.collections:
+            pt = self.to_gridpoint(x, y)
+            return pt in pts
+        else:
+            raise Exception("coll "+coll+" not a point or collection")
+
     def set_rand_pts(self, prop, value, number, pts=None, replace=False):
         """
         Sets a given number of points for a property to random value.
@@ -526,12 +582,32 @@ class Grid(object):
         return h
 
     def get_collection(self, prop):
+        """
+        Gets the points for a given collection.
+
+        Parameters
+        ----------
+        prop : str
+            Name of the collection.
+
+        Returns
+        -------
+        coll: np.ndarray
+            Array of points in the collection
+        """
         if prop in self.collections or prop == 'pts':
             return getattr(self, prop)
         elif prop in self.points:
             return np.array([getattr(self, prop)])
         else:
             raise Exception("Not a point or collection")
+
+    def return_states(self):
+        """Returns the mutable states of a grid."""
+        states = dict.fromkeys(self.states)
+        for state in states:
+            states[state] = copy.copy(getattr(self, state))
+        return states
 
 
 class ExampleGrid(Grid):
@@ -546,19 +622,70 @@ class ExampleGrid(Grid):
     def init_properties(self, *args, **kwargs):
         self.set_pts([[0.0, 0.0], [10.0, 0.0]], "v", 10.0)
 
+
+class Environment(CommsFlow):
+    """
+    Class for representing environments (in development).
+    
+    Environments are CommsFlows in order to readily enable perception as well as
+    sending and recieving of information. In addition to having normal flow properties,
+    they also contain the roles:
+
+    Roles
+    ---------------
+    g: Grid
+        Representation of gridworld properties
+    r: Rand
+        Representaiton of random variables/rng
+    f: Form
+        (in development): Representaion of shapes/forms
+    """
+    slots = ["g", "_args_g", "r", "_args_r"]
+    _init_g = Grid
+    _init_r = Rand
+    default_track = ('s', 'i', 'g')
+
+    def __init__(self, name, glob=[], p={}, s={}, g={}, r={}):
+        super().__init__(name, glob=glob, p=p, s=s)
+        init_obj_attr(self, r=r, g=g)
+        self.update_seed()
+
+    def return_mutables(self):
+        return (*super().return_mutables(),
+                self.r.return_mutables(),
+                self.g.return_mutables())
+
+    def copy(self, glob=[], p={}, s={}):
+        cop = super().copy(glob=glob, p=p, s=s)
+        cop.r.assign(self.r)
+        cop.g = self.g.copy()
+        return cop
+
+    def status(self):
+        stat = super().status()
+        stat["g"] = self.g.return_states()
+        return stat
+
+    def reset(self):
+        super().reset()
+        self.r.reset()
+        self.g = self._init_g(**self._args_g)
+
+    def update_seed(self, seed=[]):
+        if not seed:
+            seed = self.r.seed
+        self.g.r.update_seed(seed)
+
+    def return_probdens(self):
+        return self.r.return_probdens() * self.g.r.return_probdens()
+
+class ExampleEnvironment(Environment):
+    _init_g = ExampleGrid
+
+
 if __name__ == "__main__":
-    ex = ExampleGrid()
-    ex.show_property("v", cmap="Greys")
-    ex.show_collection("high_v")
-    ex.show("h", collections={"high_v":{"alpha":0.5, "color":"red"}})
-    ex.show_property3d("h", z="v", collections={"high_v":{"alpha":0.5, "color":"red"}})
-    #as_voxels(ex.v)
-    ex.show_property("v", cmap="Greys")
-    ex.show_property3d("v")
-    ex.show_property3d("h", z="v")
-    ex.show_collection("high_v")
-    ex.show_collection("high_v", z="v")
-    ex.show3d("h", z="v", collections={"pts":{"color":"blue"},
-                                       "high_v":{"alpha":0.5, "color":"red"}}, legend_args=True)
+
     import doctest
     doctest.testmod(verbose=True)
+    e = ExampleEnvironment("env")
+    d = e.copy()
