@@ -1,24 +1,31 @@
 # -*- coding: utf-8 -*-
 """
-Module for showing the physical 2d/3d properties of the model (mainly focused on 
+Module for showing the physical 2d/3d properties of the model (mainly focused on
 grids, environments, trajectories, etc).
 
 Uses the following primary methods:
 
 - :func: `grid`: Plots a Grid collections/properties on an x-y grid.
 - :func: `grid3d`: Plots a Grid collection.property on an x-y grid.
+
+And secondary methods:
+
 - :func:`grid_property`: Plots a given Grid property on an x-y grid.
 - :func:`grid_property3d`: Plots a given Grid property in 3d space.
 - :func: `grid_collection`: Plots a given Grid collections on an x-y grid.
 
+And helper functions:
+
+- :func:`consolidate_legend`: For plotting legends of grids.
 """
 from matplotlib import pyplot as plt
 from mpl_toolkits.axes_grid1 import make_axes_locatable
-from matplotlib.patches import Patch, Rectangle
+from matplotlib.patches import Rectangle
 from matplotlib import colormaps, cm
-from mpl_toolkits.mplot3d import Axes3D, art3d
+from mpl_toolkits.mplot3d import art3d
 from matplotlib.colors import to_rgba
 import numpy as np
+
 
 def grid_property(grd, prop, xlab="x", ylab="y", proplab="prop", **kwargs):
     """
@@ -72,6 +79,7 @@ def grid_property(grd, prop, xlab="x", ylab="y", proplab="prop", **kwargs):
         proplab = prop
     cbar.set_label(proplab, rotation=270)
     return fig, ax
+
 
 def grid_property3d(grd, prop, z="prop", z_res=10, collections = {},
                     xlab="x", ylab="y", zlab="prop",
@@ -151,7 +159,7 @@ def grid_property3d(grd, prop, z="prop", z_res=10, collections = {},
             coll_color = colormaps['rainbow'](coll_colors[i])
         else:
             coll_color = to_rgba(coll_kwargs['color'])
-        
+
         if "text_z_offset" not in coll_kwargs:
             coll_kwargs['text_z_offset'] = (max_z - min_z) / z_res
         for pt in coll:
@@ -162,13 +170,13 @@ def grid_property3d(grd, prop, z="prop", z_res=10, collections = {},
             else:
                 z_index = 0
             colors[index[0], index[1], z_index] = coll_color
-            
 
     ax.voxels(X_scale, Y_scale, Z_scale, shape, facecolors=colors, **kwargs)
     ax.set_xlabel(xlab)
     ax.set_ylabel(ylab)
     ax.set_zlabel(zlab)
     return fig, ax
+
 
 def grid_collection(grd, prop, fig=None, ax=None, label=True, z="",
                     legend_args=False, text_z_offset=0.0, **kwargs):
@@ -243,6 +251,7 @@ def grid_collection(grd, prop, fig=None, ax=None, label=True, z="",
         consolidate_legend(ax, **legend_args)
     return fig, ax
 
+
 def grid(grd, prop, collections={}, legend_args=False, **kwargs):
     """
     Plots a property and set of collections on the grid.
@@ -270,6 +279,7 @@ def grid(grd, prop, collections={}, legend_args=False, **kwargs):
     for coll in collections:
         grid_collection(grd, coll, fig=fig, ax=ax, **collections[coll])
     return fig, ax
+
 
 def grid3d(grd, prop, z="prop", collections={}, legend_args=False, **kwargs):
     """
@@ -303,9 +313,10 @@ def grid3d(grd, prop, z="prop", collections={}, legend_args=False, **kwargs):
         z = prop
     fig, ax = grid_property3d(grd, prop, z=z, collections=collections, **kwargs)
     for coll in collections:
-        grid_collection(grd, coll, fig=fig, ax=ax, legend_args = legend_args,
-                             **collections[coll], z=z)
+        grid_collection(grd, coll, fig=fig, ax=ax, legend_args=legend_args,
+                        **collections[coll], z=z)
     return fig, ax
+
 
 def consolidate_legend(ax, **kwargs):
     """
@@ -325,20 +336,24 @@ def consolidate_legend(ax, **kwargs):
     ax.get_legend().remove()
     ax.legend(by_label.values(), by_label.keys(), **kwargs)
 
+
 if __name__ == "__main__":
     from fmdtools.define.environment import ExampleGrid
 
     ex = ExampleGrid()
     grid_property(ex, "v", cmap="Greys")
     grid_collection(ex, "high_v")
-    grid(ex, "h", collections={"high_v":{"alpha": 0.5, "color": "red"}})
-    grid_property3d(ex, "h", z="v", collections={"high_v": {"alpha": 0.5, "color": "red"}})
-    #as_voxels(ex.v)
+    grid(ex, "h", collections={"high_v": {"alpha": 0.5, "color": "red"}})
+    grid_property3d(ex, "h", z="v",
+                    collections={"high_v": {"alpha": 0.5, "color": "red"}})
+
     grid_property(ex, "v", cmap="Greys")
     grid_property3d(ex, "v")
     grid_property3d(ex, "h", z="v")
     grid_collection(ex, "high_v")
     grid_collection(ex, "high_v", z="v")
-    grid3d(ex, "h", z="v", collections={"pts":{"color":"blue"},
-                                       "high_v":{"alpha":0.5, "color":"red"}}, legend_args=True)
+    grid3d(ex, "h", z="v",
+           collections={"pts": {"color": "blue"},
+                        "high_v": {"alpha": 0.5, "color": "red"}},
+           legend_args=True)
 
