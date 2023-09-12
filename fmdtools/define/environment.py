@@ -405,8 +405,11 @@ class Grid(object):
         """
         if prop in self.properties:
             pts = self.find_all(prop, value, comparator)
-        elif prop in self.collections:
+        elif prop in self.collections or prop == 'pts':
             pts = getattr(self, prop)
+        else:
+            raise Exception(prop+" not in .properties or .collections")
+            
         p_rounded = self.to_gridpoint(x, y)
 
         if p_rounded.tolist() in pts.tolist():

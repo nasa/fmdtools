@@ -565,7 +565,7 @@ class PlanPathMode(Mode):
                    'degloc': (0.8, {"taxi": 0.6, "move": 0.3, "land": 0.1}, 1000)}
     opermodes = ('taxi', 'to_nearest', 'to_home', 'emland', 'land', 'move')
     mode: str = 'taxi'
-    exclusive = True
+    exclusive = False
     key_phases_by = 'self'
     """
     Path planning fault modes:
