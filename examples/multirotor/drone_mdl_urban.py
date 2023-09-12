@@ -111,6 +111,8 @@ class StreetGrid(Grid):
                 self.set(*pt, 'safe', False)
         self.set_rand_pts('occupied', True, 10, pts=self.pts[1:-1])
         self.set_prop_dist("height", "uniform", low=0.0, high=self.p.max_height)
+        self.set(0, 0, "height", 0.0)
+        self.set(900, 900, "height", 0.0)
 
 
 
@@ -186,7 +188,7 @@ class ComputerVision(Component):
             return environment.g.find_closest(dofs.s.x, dofs.s.y, 'pts',
                                               include_pt=include_pt)
         else:
-            return environment.g.find_closest(dofs.s.x, dofs.s.y, "open",
+            return environment.g.find_closest(dofs.s.x, dofs.s.y, "all_safe",
                                               include_pt=include_pt)
 
 
@@ -233,8 +235,8 @@ class PlanPath(PlanPathOpt):
             self.reconfigure_plan([*self.environment.g.start, 0.0])
 
     def find_nearest(self):
-        return self.environment.get_closest(self.dofs.s.x, self.dofs.s.y,
-                                            where="allow", include_pt=False)
+        return self.environment.g.find_closest(self.dofs.s.x, self.dofs.s.y,
+                                               "all_safe", include_pt=False)
 
     def behavior(self, t):
         self.s.ground_height = self.environment.ground_height(self.dofs)
@@ -470,6 +472,7 @@ if __name__ == "__main__":
     from fmdtools.sim import propagate
     from fmdtools import analyze as an
     from fmdtools.sim.approach import SampleApproach
+    
 
     p = PlanPath("test", {})
     
@@ -478,6 +481,8 @@ if __name__ == "__main__":
     show.grid3d(e.g, "height")
     
     mdl = Drone()
+    # ec, mdlhist_fault = propagate.one_fault(mdl, "plan_path", "vision_lack_of_detection", time=4.5)
+
     ec, mdlhist = propagate.nominal(mdl)
     
     phases, modephases = mdlhist.get_modephases()
