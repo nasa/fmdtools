@@ -510,9 +510,12 @@ class Model(Simulable):
                 #Check to see what flows now have new values and add connected functions (done for each because of communications potential)
                 for flowname in self.fxns[fxnname].flows:
                     if flowname in flows_to_check:
-                        if self._flowstates[flowname]!=self.flows[flowname].return_mutables():
-                            nextfxns.update(set([n for n in self.graph.neighbors(flowname) if n in self.staticfxns]))
-                            flows_to_check.remove(flowname)
+                        try:
+                            if self._flowstates[flowname]!=self.flows[flowname].return_mutables():
+                                nextfxns.update(set([n for n in self.graph.neighbors(flowname) if n in self.staticfxns]))
+                                flows_to_check.remove(flowname)
+                        except ValueError as e:
+                            raise Exception("Invalid mutables in flow: "+flowname) from e
             # check remaining flows that have not been checked already
             for flowname in flows_to_check:
                 if self._flowstates[flowname]!=self.flows[flowname].return_mutables():

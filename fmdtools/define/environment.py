@@ -535,10 +535,17 @@ class Grid(object):
         -------
         in: bool
             Whether the point is in the collection
+
+        e.g.,
+        >>> ex = ExampleGrid()
+        >>> ex.in_area(0.4, 0.2, 'start')
+        True
+        >>> ex.in_area(10, 10, 'start')
+        False
         """
         pts = getattr(self, coll)
         if coll in self.points:
-            pt = getattr(self, coll)
+            pt = self.to_gridpoint(x, y)
             return np.all(pt == pts)
         elif coll in self.collections:
             pt = self.to_gridpoint(x, y)
@@ -600,7 +607,7 @@ class Grid(object):
         
     def return_mutables(self):
         """Used in propagation to check if grid properties have changed."""
-        return tuple([*(getattr(self, state) for state in self.states)])
+        return tuple([*(tuple(map(tuple, getattr(self, state))) for state in self.states)])
 
     def copy(self):
         """Copies the grid.
@@ -727,6 +734,8 @@ class Environment(CommsFlow):
 
     def __init__(self, name, glob=[], p={}, s={}, g={}, r={}):
         super().__init__(name, glob=glob, p=p, s=s)
+        if 'p' not in g:
+            g = {**g, 'p': self.p}
         init_obj_attr(self, r=r, g=g)
         self.update_seed()
 
