@@ -53,13 +53,22 @@ class DroneEnvironmentGridParam(GridParam):
     blocksize: float = 10.0
     loc: str = 'rural'
 
+
 class SightGrid(Grid):
+    _init_p = DroneEnvironmentGridParam
     _state_viewed = (bool, False)
     _feature_target = (bool, False)
     _point_start = (0, 0)
     _point_safe = (0, 50)
     def init_properties(self, *args, **kwargs):
         self.set_range("target", True, 0, 150, 10, 160)
+
+
+class DroneEnvironment(Environment):
+    _init_g = SightGrid
+    _init_p = DroneEnvironmentGridParam
+
+
 
 class DronePhysicalParameters(Parameter, readonly=True):
     bat:        str = 'monolithic'
@@ -576,6 +585,21 @@ class CtlDOF(FxnBlock):
         self.s.vel = self.dofs.s.vertvel
 
 
+class ViewEnvironment(FxnBlock):
+    """Camera for the drone. Determins which aspects of the environment are viewed."""
+    _init_dofs = DOFs
+    _init_environment = DroneEnvironment
+
+    def behavior(self, time):
+        width = self.dofs.s.z
+        height = self.dofs.s.z
+        self.environment.g.set_range("viewed", True,
+                                     self.dofs.s.x - width/2,
+                                     self.dofs.s.x + width/2,
+                                     self.dofs.s.y - height/2,
+                                     self.dofs.s.y + height/2)
+
+
 class PlanPathMode(Mode):
     failrate = 1e-5
     faultparams = {'noloc': (0.2, {"taxi": 0.6, "move": 0.3, "land": 0.1}, 1000),
@@ -645,7 +669,7 @@ class PlanPath(FxnBlock):
     """
 
     def __init__(self, name, flows, **kwargs):
-        super().__init__(name, flows, **kwargs)
+        FxnBlock.__init__(self, name, flows, **kwargs)
         self.init_goals()
 
     def init_goals(self):
@@ -723,68 +747,57 @@ class PlanPath(FxnBlock):
 class Drone(Model):
     __slots__ = ('start_area', 'safe_area', 'target_area')
     _init_p = DroneParam
-    default_sp = dict(phases=(('ascend', 0, 0),
-                              ('forward', 1, 11),
-                              ('taxi', 12, 20)),
+    default_sp = dict(phases=(('taxi', 0, 0),
+                              ('move', 1, 11),
+                              ('land', 12, 20)),
                       times=(0, 30), units='min')
 
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
 
-        self.start_area = rect(self.p.start[0:2], self.p.start[2], self.p.start[3])
-        self.safe_area = rect(self.p.safe[0:2], self.p.safe[2], self.p.safe[3])
-        self.target_area = rect(self.p.target[0:2], self.p.target[2], self.p.target[3])
-
-        #add flows to the model
-        self.add_flow('force_st',   Force)
-        self.add_flow('force_lin',  Force)
-        self.add_flow('hsig_dofs',  HSig)
-        self.add_flow('hsig_bat',   HSig)
-        self.add_flow('rsig_traj',  RSig)
-        self.add_flow('ee_1',       EE)
-        self.add_flow('ee_mot',     EE)
-        self.add_flow('ee_ctl',     EE)
-        self.add_flow('ctl',        Control)
-        self.add_flow('dofs',       DOFs)
-        self.add_flow('des_traj',   DesTraj)
+        # add flows to the model
+        self.add_flow('force_st', Force)
+        self.add_flow('force_lin', Force)
+        self.add_flow('hsig_dofs', HSig)
+        self.add_flow('hsig_bat', HSig)
+        self.add_flow('rsig_traj', RSig)
+        self.add_flow('ee_1', EE)
+        self.add_flow('ee_mot', EE)
+        self.add_flow('ee_ctl', EE)
+        self.add_flow('ctl', Control)
+        self.add_flow('dofs', DOFs)
+        self.add_flow('des_traj', DesTraj)
+        self.add_flow('environment', DroneEnvironment, p=self.p.env_param)
 
         # add functions to the model
         flows = ['ee_ctl', 'force_st', 'hsig_dofs', 'hsig_bat', 'rsig_traj']
         self.add_fxn('manage_health', ManageHealth, *flows, p=asdict(self.p.respolicy))
 
-        store_ee_p = {'archtype': self.p.bat, 'weight': (
-            self.p.batweight+self.p.archweight)/2.2, 'drag': self.p.archdrag}
-        self.add_fxn('store_ee',    StoreEE, 'ee_1',
-                     'force_st', 'hsig_bat', c=store_ee_p)
-        self.add_fxn('dist_ee',     DistEE,   'ee_1', 'ee_mot', 'ee_ctl', 'force_st')
-        self.add_fxn('affect_dof',  AffectDOF, 'ee_mot', 'ctl', 'dofs', 'des_traj',
-                     'force_lin', 'hsig_dofs',  c={'archtype': self.p.linearch})
-        self.add_fxn('ctl_dof',     CtlDOF,   'ee_ctl',
-                     'des_traj', 'ctl', 'dofs', 'force_st')
-        self.add_fxn('plan_path',   PlanPath, 'ee_ctl', 'dofs',
-                     'des_traj', 'force_st', 'rsig_traj', p=asdict(self.p))
+        store_ee_p = {'archtype': self.p.phys_param.bat,
+                      'weight': self.p.phys_param.batweight+self.p.phys_param.archweight,
+                      'drag': self.p.phys_param.archdrag}
+        self.add_fxn('store_ee', StoreEE, 'ee_1', 'force_st', 'hsig_bat', c=store_ee_p)
+        self.add_fxn('dist_ee', DistEE, 'ee_1', 'ee_mot', 'ee_ctl', 'force_st')
+        self.add_fxn('affect_dof', AffectDOF, 'ee_mot', 'ctl', 'dofs', 'des_traj',
+                     'force_lin', 'hsig_dofs',
+                     c={'archtype': self.p.phys_param.linearch})
+        self.add_fxn('ctl_dof', CtlDOF, 'ee_ctl', 'des_traj', 'ctl', 'dofs', 'force_st')
+        self.add_fxn('plan_path', PlanPath, 'ee_ctl', 'dofs', 'des_traj', 'force_st',
+                     'rsig_traj', p=asdict(self.p))
         self.add_fxn('hold_payload', HoldPayload, 'dofs', 'force_lin', 'force_st')
+        self.add_fxn('view_environment', ViewEnvironment, 'dofs', 'environment')
 
         self.build()
 
-    def calc_viewed(self, scen, mdlhist):
-        # landing costs
-        viewed = env_viewed(mdlhist.faulty.flows.dofs.s.x,
-                            mdlhist.faulty.flows.dofs.s.y,
-                            mdlhist.faulty.flows.dofs.s.z,
-                            self.target_area)
-        viewed_value = sum(
-            [0.5+2*view for k, view in viewed.items() if view != 'unviewed'])
-        return viewed, viewed_value
 
     def at_start(self, dofs):
-        return inrange(self.start_area, dofs.s.x, dofs.s.y)
+        return self.flows['environment'].g.in_area(dofs.s.x, dofs.s.y, 'start')
 
     def at_safe(self, dofs):
-        return inrange(self.safe_area, dofs.s.x, dofs.s.y)
+        return self.flows['environment'].g.in_area(dofs.s.x, dofs.s.y, 'safe')
 
     def at_dangerous(self, dofs):
-        return inrange(self.target_area, dofs.s.x, dofs.s.y)
+        return self.flows['environment'].g.get(dofs.s.x, dofs.s.y, 'target')
 
     def calc_land_metrics(self, scen, viewed, faulttime):
         metrics = {}
@@ -799,10 +812,10 @@ class Drone(Model):
             landloc = 'outside target'  # emergency unsanctioned
         # need a way to differentiate horizontal and vertical crashes/landings
         if landloc in ['over target', 'outside target']:
-            if landloc == "outside target" and self.p.loc == 'congested':
+            if landloc == "outside target" and self.p.env_param.loc == 'congested':
                 loc = 'urban'
             else:
-                loc = self.p.loc
+                loc = self.p.env_param.loc
             metrics['body_strikes'] = density_categories[loc]['body strike']['horiz']
             metrics['head_strikes'] = density_categories[loc]['head strike']['horiz']
             metrics['property_restrictions'] = 1
@@ -810,17 +823,17 @@ class Drone(Model):
             metrics['body_strikes'] = 0.0
             metrics['head_strikes'] = 0.0
             metrics['property_restrictions'] = 0
-        metrics['safecost'] = calc_safe_cost(metrics, self.p.loc, faulttime)
+        metrics['safecost'] = calc_safe_cost(metrics, self.p.env_param.loc, faulttime)
 
         metrics['landcost'] = metrics['property_restrictions'] * \
-            propertycost[self.p.loc]
+            propertycost[self.p.env_param.loc]
         metrics['p_safety'] = calc_p_safety(metrics, faulttime)
         metrics['severities'] = {'hazardous': scen.rate * metrics['p_safety'],
                                  'minor': scen.rate * (1 - metrics['p_safety'])}
         return metrics
 
     def find_classification(self, scen, mdlhist):
-        viewed, viewed_value = self.calc_viewed(scen, mdlhist)
+        viewed = 0.5 + np.sum(self.flows['environment'].g.viewed*self.flows['environment'].g.target)
         # to fix: need to find fault time more efficiently (maybe in the toolkit?)
         faulttime = self.h.get_fault_time(metric='total')
 
@@ -832,14 +845,13 @@ class Drone(Model):
         totcost = (land_metrics['landcost']
                    + land_metrics['safecost']
                    + repcost
-                   - viewed_value)
+                   - viewed)
 
         metrics = {'rate': scen.rate,
                    'cost': totcost,
                    'expected_cost': totcost * scen.rate * 1e5,
                    'repcost': repcost,
-                   'viewed value': viewed_value,
-                   'viewed': viewed,
+                   'viewed value': viewed,
                    'unsafe_flight_time': faulttime,
                    **land_metrics}
         return metrics
@@ -887,13 +899,7 @@ def calc_safe_cost(metrics, loc, faulttime):
             unsafecost[loc] * faulttime
     return safecost
 
-
-def find_landtime(mdlhist):
-    return min([i for i, a in enumerate(mdlhist['functions']['plan_path']['mode'])
-                if a == 'taxi']+[15])
 # creates list of corner coordinates for a square, given a center, xwidth, and ywidth
-
-
 def rect(center, xw, yw):
     """
     creates list of corner coordinates for a rect, given a center, xwidth, and ywidth
@@ -918,40 +924,6 @@ def rect(center, xw, yw):
               [center[0]+xw/2, center[1]+yw/2],
               [center[0]-xw/2, center[1]+yw/2]]
     return square
-
-
-def rect_viewed(x1, y1, x2, y2, width, height):
-    vec = [x1-x2, y1-y2]
-    vec = vec/(np.sum([v**2 for v in vec])+0.00001)
-    normvec = np.array([vec[1], -vec[0]])
-    rec = [[x1, y1]+normvec*width/2+vec*height/2, [x1, y1]-normvec*width/2+vec*height /
-           2, [x2, y2]-normvec*width/2-vec*height/2, [x2, y2]+normvec*width/2-vec*height/2]
-    return rec
-
-
-def env_viewed(xhist, yhist, zhist, square):
-    viewed = {(x, y): 'unviewed' for x in range(int(square[0][0]), int(
-        square[1][0])+10, 10) for y in range(int(square[0][1]), int(square[2][1])+10, 10)}
-    for i, x in enumerate(xhist[1:len(xhist)]):
-        w, h, d = viewable_area(zhist[i+1])
-        viewed_area = rect_viewed(xhist[i], yhist[i], xhist[i+1], yhist[i+1], w+5, h+5)
-        if abs(xhist[i]-xhist[i+1]) + abs(yhist[i]-yhist[i+1]) > 0.1 and w > 0.01:
-            polygon = Polygon(viewed_area)
-            #plt.plot(*polygon.exterior.xy) (displays area to debug code)
-            #plt.plot([xhist[i],xhist[i+1]],[yhist[i],yhist[i+1]])
-            if not polygon.is_valid:
-                print('invalid points')
-            for spot in viewed:
-                if polygon.contains(Point(spot)):
-                    viewed[spot] = d
-    return viewed
-
-
-def viewable_area(z):
-    width = z
-    height = z  # * 0.75 # 4/3 camera with ~45 mm lens st dist = width
-    detail = 1/(width*height+0.00001)
-    return width, height, detail
 
 # PLOTTING
 
@@ -1166,12 +1138,12 @@ def_mdl = Drone()
 
 
 def plan_flight(z):
-    sq = rect(def_mdl.p.target[0:2], def_mdl.p.target[2], def_mdl.p.target[3])
-    landing = [*def_mdl.p.start[0:2], 0]
+    sq = rect(target[0:2], target[2], target[3])
+    landing = start
 
     flightplan = {0: landing, 1: landing[0:2]+[z]}
 
-    width, height, detail = viewable_area(z)
+    width, height = z, z
     # x,y, z
     startpt = [sq[0][0]+width/2, sq[0][1]+height/2, z]
     endpt = [sq[1][0]-width/2, sq[1][1]+height/2, z]
@@ -1241,7 +1213,7 @@ def spec_respol(bat, line):
     return {'respolicy': ResPolicy(bat=respols[int(bat)], line=respols[int(line)])}
 
 
-app = SampleApproach(def_mdl,  phases={'forward'},
+app = SampleApproach(def_mdl,  phases={'move'},
                      faults=('single-component', 'store_ee'))
 opt_prob.add_simulation("rcost", "multi", app.scenlist, include_nominal=False,
                         upstream_sims={'ocost': {'phases': {
@@ -1327,6 +1299,7 @@ def x_to_rcost(xdes, xoper, xres, loc='rural', fullcosts=False, faultmodes='all'
 if __name__ == "__main__":
     import fmdtools.sim.propagate as prop
     import matplotlib.pyplot as plt
+    from fmdtools.analyze import show
 
     mdl = Drone()
     ec, mdlhist = prop.nominal(mdl)
@@ -1334,7 +1307,7 @@ if __name__ == "__main__":
     an.plot.phases(phases, modephases)
 
     mdl = Drone()
-    app = SampleApproach(mdl,  phases={'forward'})
+    app = SampleApproach(mdl,  phases={'move'})
     endclasses, mdlhists = prop.approach(mdl, app, staged=True)
     plot_faulttraj(History(nominal=mdlhists.nominal,
                            faulty=mdlhists.store_ee_lowcharge_t6p0),

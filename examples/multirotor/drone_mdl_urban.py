@@ -7,11 +7,10 @@ from examples.multirotor.drone_mdl_static import DistEE
 from drone_mdl_opt import DesTraj, DOFs, HSig, RSig
 from drone_mdl_opt import ManageHealth, StoreEE, AffectDOF, CtlDOF
 from drone_mdl_opt import PlanPath as PlanPathOpt
-from drone_mdl_opt import DroneParam as DroneParamOpt
+from drone_mdl_opt import DronePhysicalParameters, ResPolicy
 from drone_mdl_opt import HoldPayload as HoldPayloadOpt
 from drone_mdl_opt import AffectDOF as AffectDOFOpt
 from drone_mdl_opt import Drone as DroneOpt
-from drone_mdl_opt import rect, inrange
 
 from fmdtools.define.block import CompArch, Component
 from fmdtools.define.mode import Mode
@@ -49,7 +48,7 @@ class EnvironmentState(State):
     occupied: bool = False
 
 
-class DroneEnvironmentGridParam(GridParam):
+class UrbanGridParam(GridParam):
     """
     Defines the grid parameters, including resolution as well as number of allowed,
     unsafe, and occupied spaces, max height of the buildings, and road width.
@@ -62,6 +61,7 @@ class DroneEnvironmentGridParam(GridParam):
     num_occupied: int = 10
     max_height: float = 100.0
     roadwidth: int = 15
+    loc: str = 'urban'
 
 
 class StreetGrid(Grid):
@@ -86,7 +86,7 @@ class StreetGrid(Grid):
         - all_safe: collection
             all points that are safe to land at
     """
-    _init_p = DroneEnvironmentGridParam
+    _init_p = UrbanGridParam
 
     _feature_safe = (bool, True)
     _feature_allowed = (bool, False)
@@ -115,11 +115,11 @@ class StreetGrid(Grid):
         self.set(900, 900, "height", 0.0)
 
 
-
-class DroneEnvironment(Environment):
+class UrbanDroneEnvironment(Environment):
+    _init_p = UrbanGridParam
     _init_g = StreetGrid
     _init_s = EnvironmentState
-    
+
     def ground_height(self, dofs):
         """Gets the distance of the height z above the ground at point x,y"""
         env_height = self.g.get(dofs.s.x, dofs.s.y, 'height', dofs.s.z)
@@ -140,7 +140,7 @@ class DroneEnvironment(Environment):
                 self.s.landed = False
 
 class AffectDOF(AffectDOFOpt):
-    _init_environment = DroneEnvironment
+    _init_environment = UrbanDroneEnvironment
 
     def inc_takeoff(self):
         self.environment.set_states(self.dofs)
@@ -203,7 +203,7 @@ class PlanPathParam(Parameter):
 
 
 class PlanPath(PlanPathOpt):
-    _init_environment = DroneEnvironment
+    _init_environment = UrbanDroneEnvironment
     _init_c = VisionArch
     _init_p = PlanPathParam
 
@@ -250,17 +250,18 @@ class PlanPath(PlanPathOpt):
 
 
 class HoldPayload(HoldPayloadOpt):
-    _init_environment = DroneEnvironment
+    _init_environment = UrbanDroneEnvironment
 
     def at_ground(self):
         ground_height = self.environment.ground_height(self.dofs)
         return ground_height <= 0.0
 
 
-class DroneParam(DroneParamOpt):
+class DroneParam(Parameter):
     plan_param: PlanPathParam = PlanPathParam()
-    env_param: DroneEnvironmentGridParam = DroneEnvironmentGridParam()
+    env_param: UrbanGridParam = UrbanGridParam()
     phys_param: DronePhysicalParameters = DronePhysicalParameters()
+    respolicy: ResPolicy = ResPolicy()
 
 
 class Drone(DroneOpt):
@@ -286,19 +287,20 @@ class Drone(DroneOpt):
         self.add_flow('ctl', Control)
         self.add_flow('dofs', DOFs)
         self.add_flow('des_traj', DesTraj)
-        self.add_flow('environment', DroneEnvironment, g=dict(p=self.p.env_param))
+        self.add_flow('environment', UrbanDroneEnvironment, g=dict(p=self.p.env_param))
 
         # add functions to the model
         flows = ['ee_ctl', 'force_st', 'hsig_dofs', 'hsig_bat', 'rsig_traj']
         self.add_fxn('manage_health', ManageHealth, *flows, p=asdict(self.p.respolicy))
 
-        store_ee_p = {'archtype': self.p.bat, 'weight': (
-            self.p.batweight+self.p.archweight)/2.2, 'drag': self.p.archdrag}
+        store_ee_p = {'archtype': self.p.phys_param.bat,
+                      'weight': self.p.phys_param.batweight+self.p.phys_param.archweight,
+                      'drag': self.p.phys_param.archdrag}
         self.add_fxn('store_ee', StoreEE, 'ee_1', 'force_st', 'hsig_bat', c=store_ee_p)
         self.add_fxn('dist_ee', DistEE, 'ee_1', 'ee_mot', 'ee_ctl', 'force_st')
         self.add_fxn('affect_dof', AffectDOF, 'ee_mot', 'ctl', 'dofs', 'des_traj',
                      'force_lin', 'hsig_dofs', 'environment',
-                     c={'archtype': self.p.linearch})
+                     c={'archtype': self.p.phys_param.linearch})
         self.add_fxn('ctl_dof', CtlDOF, 'ee_ctl', 'des_traj', 'ctl', 'dofs', 'force_st')
         self.add_fxn('plan_path',   PlanPath, 'ee_ctl', 'dofs', 'des_traj', 'force_st',
                      'rsig_traj', 'environment', p=self.p.plan_param)
@@ -474,10 +476,13 @@ if __name__ == "__main__":
     from fmdtools import analyze as an
     from fmdtools.sim.approach import SampleApproach
     
-
-    p = PlanPath("test", {})
+    #UrbanDroneEnvironment("a")
     
-    e = DroneEnvironment("env")
+    #PlanPath._init_environment("a")
+
+    #p = PlanPath("test", {})
+    
+    e = UrbanDroneEnvironment("env")
     show.grid(e.g, "height")
     show.grid3d(e.g, "height")
     
