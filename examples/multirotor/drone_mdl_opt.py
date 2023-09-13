@@ -16,6 +16,7 @@ from fmdtools.define.mode import Mode
 from fmdtools.define.block import FxnBlock, Component, CompArch
 from fmdtools.define.flow import Flow
 from fmdtools.define.model import Model
+from fmdtools.define.environment import Grid, GridParam, Environment
 from fmdtools.sim.approach import SampleApproach
 from fmdtools.sim import propagate
 from fmdtools.sim.search import ProblemInterface
@@ -42,12 +43,43 @@ class ResPolicy(Parameter, readonly=True):
     line_set = ('to_nearest', 'to_home', 'emland', 'land', 'move', 'continue')
 
 
-class DroneParam(Parameter, readonly=True):
-    """Parameters for the Drone optimization model"""
+class DroneEnvironmentGridParam(GridParam):
+    """
+    Defines the grid parameters, including resolution as well as number of allowed,
+    unsafe, and occupied spaces, max height of the buildings, and road width.
+    """
+    x_size: int = 16
+    y_size: int = 16
+    blocksize: float = 10.0
+    loc: str = 'rural'
+
+class SightGrid(Grid):
+    _state_viewed = (bool, False)
+    _feature_target = (bool, False)
+    _point_start = (0, 0)
+    _point_safe = (0, 50)
+    def init_properties(self, *args, **kwargs):
+        self.set_range("target", True, 0, 150, 10, 160)
+
+class DronePhysicalParameters(Parameter, readonly=True):
     bat:        str = 'monolithic'
     bat_set = ('monolithic', 'series-split', 'parallel-split', 'split-both')
     linearch:   str = 'quad'
     linearch_set = ('quad', 'hex', 'oct')
+    batweight:  float = 0.4
+    archweight: float = 1.2
+    archdrag:   float = 0.95
+    def __init__(self, *args, **kwargs):
+        args = self.get_true_fields(*args, **kwargs)
+        args[2] = {'monolithic': 0.4, 'series-split': 0.5,
+                   'parallel-split': 0.5, 'split-both': 0.6}[args[0]]
+        args[3] = {'quad': 1.2, 'hex': 1.6, 'oct': 2.0}[args[1]]
+        args[4] = {'quad': 0.95, 'hex': 0.85, 'oct': 0.75}[args[1]]
+        super().__init__(*args)
+
+
+class DroneParam(Parameter, readonly=True):
+    """Parameters for the Drone optimization model"""
     respolicy:  ResPolicy = ResPolicy()
     flightplan: tuple = ((0, 0, 0),  # flies through a few points and back to the start
                          (0, 0, 100),
@@ -56,26 +88,11 @@ class DroneParam(Parameter, readonly=True):
                          (150, 150, 100),
                          (0, 0, 100),
                          (0, 0, 0))
-    start:      tuple = (0.0, 0.0, 10.0, 10.0)
-    target:     tuple = (0.0, 150.0, 160.0, 160.0)
-    safe:       tuple = (0.0, 50.0, 10.0, 10.0)
-    batweight:  float = 0.4
-    archweight: float = 1.2
-    archdrag:   float = 0.95
-    loc:       str = 'rural'
-
-    def __init__(self, *args, **kwargs):
-        args = self.get_true_fields(*args, **kwargs)
-        args[7] = {'monolithic': 0.4, 'series-split': 0.5,
-                   'parallel-split': 0.5, 'split-both': 0.6}[args[0]]
-        args[8] = {'quad': 1.2, 'hex': 1.6, 'oct': 2.0}[args[1]]
-        args[9] = {'quad': 0.95, 'hex': 0.85, 'oct': 0.75}[args[1]]
-        super().__init__(*args)
+    env_param: DroneEnvironmentGridParam = DroneEnvironmentGridParam()
+    phys_param: DronePhysicalParameters = DronePhysicalParameters()
 
 
 # DEFINE FLOWS
-
-
 class DOFstate(State):
     vertvel:    float = 1.0
     planvel:    float = 1.0
@@ -759,13 +776,13 @@ class Drone(Model):
         viewed_value = sum(
             [0.5+2*view for k, view in viewed.items() if view != 'unviewed'])
         return viewed, viewed_value
-    
+
     def at_start(self, dofs):
         return inrange(self.start_area, dofs.s.x, dofs.s.y)
-    
+
     def at_safe(self, dofs):
         return inrange(self.safe_area, dofs.s.x, dofs.s.y)
-    
+
     def at_dangerous(self, dofs):
         return inrange(self.target_area, dofs.s.x, dofs.s.y)
 

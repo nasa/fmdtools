@@ -260,6 +260,7 @@ class HoldPayload(HoldPayloadOpt):
 class DroneParam(DroneParamOpt):
     plan_param: PlanPathParam = PlanPathParam()
     env_param: DroneEnvironmentGridParam = DroneEnvironmentGridParam()
+    phys_param: DronePhysicalParameters = DronePhysicalParameters()
 
 
 class Drone(DroneOpt):
@@ -320,7 +321,7 @@ class Drone(DroneOpt):
         return self.flows['environment'].g.in_area(dofs.s.x, dofs.s.y, "all_safe")
     
     def at_dangerous(self, dofs):
-        return self.flows['environment'].in_area(dofs.s.x, dofs.s.y, "all_occupied")
+        return self.flows['environment'].g.in_area(dofs.s.x, dofs.s.y, "all_occupied")
 
     def find_classification(self, scen, mdlhist):
         faulttime = self.h.get_fault_time(metric='total')
@@ -510,6 +511,3 @@ if __name__ == "__main__":
     plot_traj(hists, mdl, title="", legend=True)
 
     #move_quad = make_move_quad(mdlhist, phases['PlanPath']['move'])
-
-
-
