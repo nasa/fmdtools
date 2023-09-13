@@ -325,6 +325,83 @@ class Grid(object):
         x_i, y_i = self.to_index(x, y)
         proparray[x_i, y_i] = value
 
+    def set_range(self, prop, value, xmin=0, xmax='max', ymin=0, ymax='max',
+                  inclusive=True):
+        """
+        Sets ranges of the grid property to a given value.
+
+        Parameters
+        ----------
+        prop : str
+            Name of the range
+        value : value
+            Value to set
+        xmin : number, optional
+            minimum x-value. The default is 0.
+        xmax : number, optional
+            maximum x-value. The default is 'max'.
+        ymin : number, optional
+            minimum y-value. The default is 0.
+        ymax : number, optional
+            maximum y-value. The default is 'max'.
+        inclusive : bool, optional
+            whether to include the end of the range. The default is False.
+        
+        e.g.,
+        >>> ex = ExampleGrid()
+        >>> ex.set_range("h", 100.0, 20, 40, 20, 40)
+        >>> ex.h
+        array([[  0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.],
+               [  0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.],
+               [  0.,   0., 100., 100., 100.,   0.,   0.,   0.,   0.,   0.],
+               [  0.,   0., 100., 100., 100.,   0.,   0.,   0.,   0.,   0.],
+               [  0.,   0., 100., 100., 100.,   0.,   0.,   0.,   0.,   0.],
+               [  0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.],
+               [  0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.],
+               [  0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.],
+               [  0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.],
+               [  0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.]])
+        >>> ex.set_range("h", 0.0)
+        >>> ex.h
+        array([[0., 0., 0., 0., 0., 0., 0., 0., 0., 0.],
+               [0., 0., 0., 0., 0., 0., 0., 0., 0., 0.],
+               [0., 0., 0., 0., 0., 0., 0., 0., 0., 0.],
+               [0., 0., 0., 0., 0., 0., 0., 0., 0., 0.],
+               [0., 0., 0., 0., 0., 0., 0., 0., 0., 0.],
+               [0., 0., 0., 0., 0., 0., 0., 0., 0., 0.],
+               [0., 0., 0., 0., 0., 0., 0., 0., 0., 0.],
+               [0., 0., 0., 0., 0., 0., 0., 0., 0., 0.],
+               [0., 0., 0., 0., 0., 0., 0., 0., 0., 0.],
+               [0., 0., 0., 0., 0., 0., 0., 0., 0., 0.]])
+        >>> ex.set_range("h", 20.0, 20, 40, 20, 40, inclusive=False)
+        >>> ex.h
+        array([[ 0.,  0.,  0.,  0.,  0.,  0.,  0.,  0.,  0.,  0.],
+               [ 0.,  0.,  0.,  0.,  0.,  0.,  0.,  0.,  0.,  0.],
+               [ 0.,  0., 20., 20.,  0.,  0.,  0.,  0.,  0.,  0.],
+               [ 0.,  0., 20., 20.,  0.,  0.,  0.,  0.,  0.,  0.],
+               [ 0.,  0.,  0.,  0.,  0.,  0.,  0.,  0.,  0.,  0.],
+               [ 0.,  0.,  0.,  0.,  0.,  0.,  0.,  0.,  0.,  0.],
+               [ 0.,  0.,  0.,  0.,  0.,  0.,  0.,  0.,  0.,  0.],
+               [ 0.,  0.,  0.,  0.,  0.,  0.,  0.,  0.,  0.,  0.],
+               [ 0.,  0.,  0.,  0.,  0.,  0.,  0.,  0.,  0.,  0.],
+               [ 0.,  0.,  0.,  0.,  0.,  0.,  0.,  0.,  0.,  0.]])
+        """
+        x_min_ind, y_min_ind = self.to_index(xmin, ymin)
+        if xmax == 'max':
+            x_max_ind = -1
+        else: 
+            x_max_ind, _ = self.to_index(xmax, 0.0)
+            if inclusive and x_max_ind < self.p.x_size:
+                x_max_ind += 1
+        if ymax == 'max':
+            y_max_ind = -1
+        else: 
+            _, y_max_ind = self.to_index(0.0, ymax)
+            if inclusive and y_max_ind < self.p.y_size:
+                y_max_ind += 1
+        proparray = getattr(self, prop)
+        proparray[x_min_ind:x_max_ind, y_min_ind:y_max_ind] = value
+
     def set_pts(self, pts, prop, value):
         """
         Sets the property to a given value over a list of provided points.
@@ -687,8 +764,8 @@ class ExampleEnvironment(Environment):
 
 
 if __name__ == "__main__":
-
     import doctest
     doctest.testmod(verbose=True)
+    ex = ExampleGrid()
     e = ExampleEnvironment("env")
     d = e.copy()
