@@ -172,28 +172,18 @@ def hist(simhists, *plot_values, cols=2, aggregation='individual',
         title for the legend. Default is None
     **kwargs : kwargs
         Global/default keyword arguments to mpl.plot e.g., linestyle, color, etc.
+
+    Returns
+    -------
+    fig : figure
+        Matplotlib figure object
+    ax : axis
+        Corresponding matplotlib axis
     """
-    # Process data - clip and flatten
-    if "time" in simhists:
-        simhists = History(nominal=simhists).flatten()
-    else:
-        simhists = simhists.flatten()
-
-    plot_values = unpack_plot_values(plot_values)
-
-    grouphists = simhists.get_comp_groups(*plot_values, **comp_groups)
-
-    # Set up plots and iteration
-    if 'nominal' in grouphists.keys() and len(grouphists) > 1:
-        indiv_kwargs['nominal'] = indiv_kwargs.get(
-            'nominal', {'color': 'blue', 'ls': '--'})
-    else:
-        indiv_kwargs.pop('nominal', '')
-
-    if 'faulty' in grouphists.keys():
-        indiv_kwargs['faulty'] = indiv_kwargs.get('faulty', {'color': 'red'})
-    else:
-        indiv_kwargs.pop('faulty', '')
+    simhists, plot_values, grouphists, indiv_kwargs = prep_hists(simhists,
+                                                                 plot_values,
+                                                                 comp_groups,
+                                                                 indiv_kwargs)
 
     num_plots = len(plot_values)
     if num_plots == 1:
@@ -281,6 +271,32 @@ def hist(simhists, *plot_values, cols=2, aggregation='individual',
     multiplot_legend_title(grouphists, axs, ax, legend_loc, title,
                            v_padding, h_padding, title_padding, legend_title)
     return fig, axs
+
+def prep_hists(simhists, plot_values, comp_groups, indiv_kwargs):
+    # Process data - clip and flatten
+    if "time" in simhists:
+        simhists = History(nominal=simhists).flatten()
+    else:
+        simhists = simhists.flatten()
+
+    plot_values = unpack_plot_values(plot_values)
+
+    grouphists = simhists.get_comp_groups(*plot_values, **comp_groups)
+    
+    # Set up plots and iteration
+    if 'nominal' in grouphists.keys() and len(grouphists) > 1:
+        indiv_kwargs['nominal'] = indiv_kwargs.get(
+            'nominal', {'color': 'blue', 'ls': '--'})
+    else:
+        indiv_kwargs.pop('nominal', '')
+
+    if 'faulty' in grouphists.keys():
+        indiv_kwargs['faulty'] = indiv_kwargs.get('faulty', {'color': 'red'})
+    else:
+        indiv_kwargs.pop('faulty', '')
+
+    
+    return simhists, plot_values, grouphists, indiv_kwargs
 
 
 def plot_line_and_err(ax, times, line, lows, highs, boundtype,
