@@ -900,143 +900,14 @@ def calc_safe_cost(metrics, loc, faulttime):
 
 
 # PLOTTING
-
-
-def plot_nomtraj(mdlhist, params, title='Trajectory'):
-    xnom = mdlhist.flows.dofs.s.x
-    ynom = mdlhist.flows.dofs.s.y
-    znom = mdlhist.flows.dofs.s.z
-
-    time = mdlhist.time
-
-    fig2 = plt.figure()
-
-    ax2 = fig2.add_subplot(111, projection='3d')
-    ax2.set_xlim3d(-50, 200)
-    ax2.set_ylim3d(-50, 200)
-    ax2.set_zlim3d(0, 100)
-    ax2.plot(xnom, ynom, znom)
-
-    for xx, yy, zz, tt in zip(xnom, ynom, znom, time):
-        if tt % 20 == 0:
-            ax2.text(xx, yy, zz, 't='+str(tt), fontsize=8)
-
+def plot_goals(ax, params):
     for goal, loc in enumerate(params.flightplan):
-        ax2.text(loc[0], loc[1], loc[2], str(goal), fontweight='bold', fontsize=12)
-        ax2.plot([loc[0]], [loc[1]], [loc[2]], marker='o',
+        ax.text(loc[0], loc[1], loc[2], str(goal), fontweight='bold', fontsize=12)
+        ax.plot([loc[0]], [loc[1]], [loc[2]], marker='o',
                  markersize=10, color='red', alpha=0.5)
 
-    ax2.set_title(title)
-    plt.show()
-
-
-def plot_faulttraj(mdlhist, params, title='Fault response to RFpropbreak fault at t=20'):
-    xnom = mdlhist.nominal.flows.dofs.s.x
-    ynom = mdlhist.nominal.flows.dofs.s.y
-    znom = mdlhist.nominal.flows.dofs.s.z
-    #
-    x = mdlhist.faulty.flows.dofs.s.x
-    y = mdlhist.faulty.flows.dofs.s.y
-    z = mdlhist.faulty.flows.dofs.s.z
-
-    time = mdlhist.nominal.time
-
-    fig2 = plt.figure()
-
-    ax2 = fig2.add_subplot(111, projection='3d')
-    ax2.set_xlim3d(-50, 200)
-    ax2.set_ylim3d(-50, 200)
-    ax2.set_zlim3d(0, 100)
-    ax2.plot(xnom, ynom, znom)
-    ax2.plot(x, y, z)
-
-    for xx, yy, zz, tt in zip(xnom, ynom, znom, time):
-        if tt % 20 == 0:
-            ax2.text(xx, yy, zz, 't='+str(tt), fontsize=8)
-
-    for goal, loc in enumerate(params.flightplan):
-        ax2.text(loc[0], loc[1], loc[2], str(goal), fontweight='bold', fontsize=12)
-        ax2.plot([loc[0]], [loc[1]], [loc[2]], marker='o',
-                 markersize=10, color='red', alpha=0.5)
-
-    ax2.set_title(title)
-    ax2.legend(['Nominal Flightpath', 'Faulty Flightpath'], loc=4)
-    return fig2, ax2
-
-
-def plot_xy(mdlhist, endresults, mdl, title='', legend=False):
-    plt.figure()
-    plot_one_xy(mdlhist, endresults)
-
-    plt.fill([x[0] for x in mdl.start_area], [x[1]
-             for x in mdl.start_area], color='blue', label='Starting Area')
-    plt.fill([x[0] for x in mdl.target_area], [x[1]
-             for x in mdl.target_area], alpha=0.2, color='red', label='Target Area')
-    plt.fill([x[0] for x in mdl.safe_area], [x[1]
-             for x in mdl.safe_area], color='yellow', label='Emergency Landing Area')
-
-    plt.title(title)
-    if legend:
-        plt.legend(bbox_to_anchor=(1.05, 1), loc='upper left')
-
-    return plt.gcf(), plt.gca()
-
-
-def plot_one_xy(mdlhist, endresults):
-    xnom = mdlhist.flows.dofs.x
-    ynom = mdlhist.flows.dofs.y
-
-    plt.plot(xnom, ynom)
-
-    xviewed = [x for (x, y), view in endresults['classification']
-               ['viewed'].items() if view != 'unviewed']
-    yviewed = [y for (x, y), view in endresults['classification']
-               ['viewed'].items() if view != 'unviewed']
-    xunviewed = [x for (x, y), view in endresults['classification']
-                 ['viewed'].items() if view == 'unviewed']
-    yunviewed = [y for (x, y), view in endresults['classification']
-                 ['viewed'].items() if view == 'unviewed']
-
-    plt.scatter(xviewed, yviewed, color='red', label='Viewed')
-    plt.scatter(xunviewed, yunviewed, color='grey', label='Unviewed')
-    return plt.gca(), plt.gcf()
-
-
-def plot_xys(mdlhists, endresultss, mdl, cols=2, title='', legend=False):
-    num_plots = len(mdlhists)
-    fig, axs = plt.subplots(nrows=int(np.ceil((num_plots)/cols)),
-                            ncols=cols, figsize=(cols*6, 5*num_plots/cols))
-    n = 1
-
-    for paramlab, mdlhist in mdlhists.items():
-        plt.subplot(int(np.ceil((num_plots)/cols)), cols, n, label=paramlab)
-        a, _ = plot_one_xy(mdlhist, endresultss[paramlab])
-        b = plt.fill([x[0] for x in mdl.start_area], [x[1]
-                     for x in mdl.start_area], color='blue', label='Starting Area')
-        c = plt.fill([x[0] for x in mdl.target_area], [x[1]
-                     for x in mdl.target_area], alpha=0.2, color='red', label='Target Area')
-        d = plt.fill([x[0] for x in mdl.safe_area], [x[1]
-                     for x in mdl.safe_area], color='yellow', label='Emergency Landing Area')
-        plt.title(paramlab)
-        n += 1
-    plt.suptitle(title)
-    if legend:
-        plt.subplot(np.ceil((num_plots+1)/cols), cols, n, label='legend')
-        plt.axis('off')
-        legend_elements = [Line2D([0], [0], color='b', lw=1, label='Flightpath'),
-                           Line2D([0], [0], marker='o', color='r', label='Viewed',
-                                  markerfacecolor='r', markersize=8),
-                           Line2D([0], [0], marker='o', color='grey', label='Unviewed',
-                                  markerfacecolor='grey', markersize=8),
-                           Patch(facecolor='red', edgecolor='red', alpha=0.2,
-                                 label='Target Area'),
-                           Patch(facecolor='blue', edgecolor='blue',
-                                 label='Landing Area'),
-                           Patch(facecolor='yellow', edgecolor='yellow', label='Emergency Landing Area')]
-        plt.legend(handles=legend_elements, loc='center')
-    plt.subplots_adjust(top=1-0.05-0.05/(num_plots/cols))
-
-    return fig
+def plot_env_with_traj(hist, env):
+    show.grid()
 
 
 # likelihood class schedule (pfh)
@@ -1104,9 +975,6 @@ hazards = {'VH-1': 'loss of control',
            'VH-7': 'collision'}
 
 
-
-
-
 if __name__ == "__main__":
     import fmdtools.sim.propagate as prop
     import matplotlib.pyplot as plt
@@ -1120,7 +988,14 @@ if __name__ == "__main__":
     mdl = Drone()
     app = SampleApproach(mdl,  phases={'move'})
     endclasses, mdlhists = prop.approach(mdl, app, staged=True)
-    plot_faulttraj(History(nominal=mdlhists.nominal,
-                           faulty=mdlhists.store_ee_lowcharge_t6p0),
-                   mdl.p, title='Fault response to RFpropbreak fault at t=20')
+    h = History(nominal=mdlhists.nominal,
+                faulty=mdlhists.store_ee_lowcharge_t6p0)
+    
+    fig, ax = show.trajectories(mdlhists, "dofs.s.x", "dofs.s.y")
+    fig, ax = show.trajectories(mdlhists, "dofs.s.x", "dofs.s.y", "dofs.s.z")
+    fig, ax = show.trajectories(h, "dofs.s.x", "dofs.s.y", "dofs.s.z")
+    fig, ax = show.trajectories(h, "dofs.s.x", "dofs.s.y", "dofs.s.z", time_groups=['nominal'], time_ticks=1.0)
 
+    fig, ax = show.grid(mdl.flows['environment'].g, "target",
+                        collections={"start": {"color": "yellow"},
+                                     "safe":{"color": "yellow"}})

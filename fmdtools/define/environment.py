@@ -604,7 +604,7 @@ class Grid(object):
         meth = getattr(self.r.rng, dist)
         new_p = meth(*args, size=p.shape, **kwargs)
         setattr(self, prop, new_p)
-        
+
     def return_mutables(self):
         """Used in propagation to check if grid properties have changed."""
         return tuple([*(tuple(map(tuple, getattr(self, state))) for state in self.states)])
