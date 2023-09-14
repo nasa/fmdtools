@@ -530,6 +530,3 @@ if __name__ == "__main__":
            collections={"pts": {"color": "blue"},
                         "high_v": {"alpha": 0.5, "color": "red"}},
            legend_args=True)
-    
-
-
