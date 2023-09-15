@@ -900,15 +900,28 @@ def calc_safe_cost(metrics, loc, faulttime):
 
 
 # PLOTTING
-def plot_goals(ax, params):
-    for goal, loc in enumerate(params.flightplan):
+def plot_goals(ax, flightplan):
+    for goal, loc in enumerate(flightplan):
         ax.text(loc[0], loc[1], loc[2], str(goal), fontweight='bold', fontsize=12)
         ax.plot([loc[0]], [loc[1]], [loc[2]], marker='o',
                  markersize=10, color='red', alpha=0.5)
 
-def plot_env_with_traj(hist, env):
-    show.grid()
+def plot_env_with_traj3d(hist, mdl):
+    fig, ax = show.grid3d(mdl.flows['environment'].g, "target", z="",
+                        collections={"start": {"color": "yellow"},
+                                     "safe":{"color": "yellow"}})
+    fig, ax = show.trajectories(hist, "dofs.s.x", "dofs.s.y", "dofs.s.z",
+                                time_groups=['nominal'], time_ticks=1.0,
+                                fig=fig, ax=ax)
+    plot_goals(ax, mdl.p.flightplan)
+    return fig, ax
 
+def plot_env_with_traj(mdlhists, mdl):
+    fig, ax = show.grid(mdl.flows['environment'].g, "target",
+                        collections={"start": {"color": "yellow"},
+                                     "safe":{"color": "yellow"}})
+    fig, ax = show.trajectories(mdlhists, "dofs.s.x", "dofs.s.y", fig=fig, ax=ax)
+    return fig, ax
 
 # likelihood class schedule (pfh)
 p_allowable = {'small airplane': {'no requirement': 'na',
@@ -981,6 +994,9 @@ if __name__ == "__main__":
     from fmdtools.analyze import show
 
     mdl = Drone()
+    
+
+    
     ec, mdlhist = prop.nominal(mdl)
     phases, modephases = mdlhist.get_modephases()
     an.plot.phases(phases, modephases)
@@ -994,8 +1010,8 @@ if __name__ == "__main__":
     fig, ax = show.trajectories(mdlhists, "dofs.s.x", "dofs.s.y")
     fig, ax = show.trajectories(mdlhists, "dofs.s.x", "dofs.s.y", "dofs.s.z")
     fig, ax = show.trajectories(h, "dofs.s.x", "dofs.s.y", "dofs.s.z")
-    fig, ax = show.trajectories(h, "dofs.s.x", "dofs.s.y", "dofs.s.z", time_groups=['nominal'], time_ticks=1.0)
-
-    fig, ax = show.grid(mdl.flows['environment'].g, "target",
-                        collections={"start": {"color": "yellow"},
-                                     "safe":{"color": "yellow"}})
+    
+    
+    fig, ax = plot_env_with_traj3d(h, mdl)
+    fig, ax = plot_env_with_traj(mdlhists, mdl)
+    
