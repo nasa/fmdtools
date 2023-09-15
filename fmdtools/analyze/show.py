@@ -85,7 +85,8 @@ def grid_property(grd, prop, xlab="x", ylab="y", proplab="prop", **kwargs):
 
 def grid_property3d(grd, prop, z="prop", z_res=10, collections = {},
                     xlab="x", ylab="y", zlab="prop",
-                    proplab="prop", cmap="Greens", **kwargs):
+                    proplab="prop", cmap="Greens", 
+                    fig=None, ax=None, figsize=(4, 5), **kwargs):
     """
     Plots a given properties 'prop' and 'z' as a voxels on an x-y-z grid.
     See mpl_toolkits.mplot3d.axes3d.Axes3D.voxels.
@@ -113,6 +114,10 @@ def grid_property3d(grd, prop, z="prop", z_res=10, collections = {},
         property provided.
     cmap : str, optional
         Name of the matplotlib colormap to use for colors. The default is "Greens".
+    fig : matplotlib.figure, optional
+        Existing Figure. The default is None.
+    ax : matplotlib.axis, optional
+        Existing axis. The default is None.
     **kwargs : kwargs
         Kwargs to pass to Axes3D.voxels
 
@@ -126,12 +131,13 @@ def grid_property3d(grd, prop, z="prop", z_res=10, collections = {},
     default_kwargs = dict(edgecolor='k')
     kwargs = {**kwargs, **default_kwargs}
 
-    fig = plt.figure()
-    ax = fig.add_subplot(111, projection='3d')
+    fig, ax = init_figure(fig=fig, ax=ax, z=True, figsize=figsize)
 
     c_array = getattr(grd, prop)
     if z == "prop":
         z_array = c_array
+    elif not z:
+        z_array = c_array * 0
     else:
         z_array = getattr(grd, z)
 
@@ -139,9 +145,9 @@ def grid_property3d(grd, prop, z="prop", z_res=10, collections = {},
     X, Y, Z = np.indices((dims[0]+1, dims[1]+1, z_res+1))
     z_shape = Z[:-1, :-1, :-1].swapaxes(0, 2).swapaxes(1, 2)
 
-    max_z = z_array.max()
-    min_z = z_array.min()
-    norm_z_array = z_res * (z_array - min_z)/(max_z - min_z + 0.00000001)
+    max_z = 1 * z_array.max()
+    min_z = 1 * z_array.min()
+    norm_z_array = z_res * (1*z_array - min_z)/(max_z - min_z + 0.00000001)
     round_z_array = np.digitize(norm_z_array, [i for i in range(z_res)])
     shape = z_shape < round_z_array
     shape = shape.swapaxes(0, 1).swapaxes(1, 2)
@@ -180,8 +186,20 @@ def grid_property3d(grd, prop, z="prop", z_res=10, collections = {},
     return fig, ax
 
 
+def init_figure(fig=None, ax=None, z=False, figsize=()):
+    """Initializes a 2d or 3d figure at a given size, unless there is a
+    pre-existing figure or axis."""
+    if not fig:
+        if z:
+            fig = plt.figure(figsize=figsize)
+            ax = fig.add_subplot(111, projection='3d')
+        else:
+            fig, ax = plt.subplots(1, figsize=figsize)
+    return fig, ax
+        
+
 def grid_collection(grd, prop, fig=None, ax=None, label=True, z="",
-                    legend_args=False, text_z_offset=0.0, **kwargs):
+                    legend_args=False, text_z_offset=0.0, figsize=(4,4), **kwargs):
     """
     Shows a collection on the grid as square patches.
 
@@ -201,9 +219,14 @@ def grid_collection(grd, prop, fig=None, ax=None, label=True, z="",
         the label.
     z: str
         Argument to plot as third dimension on 3d plot. Default is "", which
-        returns a 2d plot.
+        returns a 2d plot. If a number is provided, the plot will be 3d with
+        the height at that constant z-value.
     legend_args : dict/False
         Specifies arguments to legend. Default is False, which shows no legend.
+    text_z_offset : 
+        Offset for text. Default is 0.0
+    figsize : tuple
+        Size for the figure. Default is (4,4)
     **kwargs : kwargs
         Kwargs to matplotlib.patches.Rectangle
 
@@ -217,12 +240,10 @@ def grid_collection(grd, prop, fig=None, ax=None, label=True, z="",
     """
     offset = grd.p.blocksize/2
     if not ax:
-        fig, ax = plt.subplots(1)
-        if not z:
-            fig, ax = plt.subplots(1)
-        else:
-            fig = plt.figure()
-            ax = fig.add_subplot(111, projection='3d')
+        fig, ax = init_figure(fig=fig, ax=ax, z=z, figsize=figsize)
+    else:
+        fig, ax = init_figure(fig=fig, ax=ax, z=z, figsize=figsize)
+        if type(z) == str and z:
             ax.set_zlim(getattr(grd, z).min(), getattr(grd, z).max())
         ax.set_xlim(-offset, grd.p.x_size*grd.p.blocksize+offset)
         ax.set_ylim(-offset, grd.p.y_size*grd.p.blocksize+offset)
@@ -233,16 +254,21 @@ def grid_collection(grd, prop, fig=None, ax=None, label=True, z="",
         rect = Rectangle(corner, grd.p.blocksize, grd.p.blocksize,
                          label=prop, **kwargs)
         ax.add_patch(rect)
-        if z:
-            art3d.patch_2d_to_3d(rect, z=grd.get(pt[0], pt[1], z))
+        if type(z) == str and z:
+            z_h = grd.get(pt[0], pt[1], z)
+            art3d.patch_2d_to_3d(rect, z=z_h)
+        elif type(z) in [float, int]:
+            z_h = z
+            art3d.patch_2d_to_3d(rect, z=z_h)
+        else:
+            z_h = None
         if label:
             if type(label) != str:
                 lab = rect.get_label()
             else:
                 lab = label
-            if z:
-                ax.text(pt[0], pt[1], grd.get(pt[0], pt[1], z)+text_z_offset,
-                        lab,
+            if not z_h == None:
+                ax.text(pt[0], pt[1], z_h+text_z_offset, lab,
                         horizontalalignment="center", verticalalignment="center")
             else:
                 ax.text(pt[0], pt[1], lab,
@@ -313,6 +339,8 @@ def grid3d(grd, prop, z="prop", collections={}, legend_args=False, **kwargs):
     """
     if z == "prop":
         z = prop
+    elif z == '':
+        z = 0.0
     fig, ax = grid_property3d(grd, prop, z=z, collections=collections, **kwargs)
     for coll in collections:
         grid_collection(grd, coll, fig=fig, ax=ax, legend_args=legend_args,
@@ -323,7 +351,8 @@ def grid3d(grd, prop, z="prop", collections={}, legend_args=False, **kwargs):
 def trajectories(simhists, *plot_values,
                  comp_groups={}, indiv_kwargs={}, figsize=(4, 4),
                  time_groups=[], time_ticks=5.0, time_fontsize=8,
-                 xlim=(), ylim=(), zlim=(), legend=True, title='', **kwargs):
+                 xlim=(), ylim=(), zlim=(), legend=True, title='',
+                 fig=None, ax=None, **kwargs):
     """
     Shows trajectories from the environment in 2d or 3d space.
 
@@ -373,6 +402,12 @@ def trajectories(simhists, *plot_values,
         Limits on the z-axis. The default is ().
     legend : bool, optional
         Whether to show a legend. The default is True.
+    title : str, optional
+        Title to add. Default is '' (no title).
+    fig : matplotlib.figure, optional
+        Existing Figure. The default is None.
+    ax : matplotlib.axis, optional
+        Existing axis. The default is None.
     **kwargs : TYPE
         DESCRIPTION.
 
@@ -388,11 +423,10 @@ def trajectories(simhists, *plot_values,
                                                                  comp_groups,
                                                                  indiv_kwargs)
     if len(plot_values) == 2:
-        fig, ax = plt.subplots(figsize=figsize)
+        fig, ax = init_figure(fig=fig, ax=ax, z=False, figsize=figsize)
         plot_meth = traj
     elif len(plot_values) == 3:
-        fig = plt.figure()
-        ax = fig.add_subplot(111, projection='3d')
+        fig, ax = init_figure(fig=fig, ax=ax, z=True, figsize=figsize)
         plot_meth = traj3
     else:
         raise Exception("Number of plot values must be 2 or 3, not "+len(plot_values))
@@ -415,7 +449,7 @@ def trajectories(simhists, *plot_values,
         by_label = dict(zip(labels, handles))
         ax.legend(by_label.values(), by_label.keys())
     if title:
-        ax.title(title)
+        ax.set_title(title)
     return fig, ax
 
 

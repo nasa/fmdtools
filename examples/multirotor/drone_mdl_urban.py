@@ -4,13 +4,13 @@ Variant of drone model for modelling computer vision in urban settings.
 """
 from examples.multirotor.drone_mdl_static import EE, Force, Control
 from examples.multirotor.drone_mdl_static import DistEE
-from drone_mdl_opt import DesTraj, DOFs, HSig, RSig
-from drone_mdl_opt import ManageHealth, StoreEE, AffectDOF, CtlDOF
-from drone_mdl_opt import PlanPath as PlanPathOpt
-from drone_mdl_opt import DronePhysicalParameters, ResPolicy
-from drone_mdl_opt import HoldPayload as HoldPayloadOpt
-from drone_mdl_opt import AffectDOF as AffectDOFOpt
-from drone_mdl_opt import Drone as DroneOpt
+from drone_mdl_rural import DesTraj, DOFs, HSig, RSig
+from drone_mdl_rural import ManageHealth, StoreEE, AffectDOF, CtlDOF
+from drone_mdl_rural import PlanPath as PlanPathOpt
+from drone_mdl_rural import DronePhysicalParameters, ResPolicy
+from drone_mdl_rural import HoldPayload as HoldPayloadOpt
+from drone_mdl_rural import AffectDOF as AffectDOFOpt
+from drone_mdl_rural import Drone as DroneOpt
 
 from fmdtools.define.block import CompArch, Component
 from fmdtools.define.mode import Mode
@@ -345,8 +345,35 @@ class Drone(DroneOpt):
                    **land_metrics}
         return metrics
 
+def plot_env_with_traj(mdlhists, mdl, legend=True, title="trajectory"):
+    """
+    Plots given 2d Drone trajectories over the gridword.
 
-def plot_traj(mdlhist, mdl, title='Trajectory', legend=False):
+    Parameters
+    ----------
+    mdlhist : dict
+        Dict of model histories.
+    mdl : Drone
+        Drone model object.
+    title : str
+        Title for the plot. The default is 'Trajectory'.
+    legend : bool, optional
+        Whether to include a legend. The default is False.
+
+    Returns
+    -------
+    fig : matplotlib figure
+    ax : matplotlib axis
+    """
+    fig, ax = show.grid(mdl.flows['environment'].g, "height",
+                        collections={"all_occupied": {"color": "red"},
+                                     "start": {"color": "blue"},
+                                     "end": {"color": "blue"}})
+    fig, ax = show.trajectories(mdlhists, "dofs.s.x", "dofs.s.y",
+                                fig=fig, ax=ax, legend=legend, title=title)
+    return fig, ax
+
+def plot_env_with_traj3d(mdlhists, mdl, legend=True, title="trajectory"):
     """
     Plots given 3d Drone trajectories over the gridword.
 
@@ -366,83 +393,22 @@ def plot_traj(mdlhist, mdl, title='Trajectory', legend=False):
     fig : matplotlib figure
     ax : matplotlib axis
     """
-    if "time" in mdlhist:
-        mdlhist = History({'nominal': mdlhist})
-    else:
-        mdlhist = mdlhist.nest(1)
-
     collections = {"all_safe": {"color": "blue", "label": False},
                    "all_occupied": {"color": "red", "label": False},
                    "start": {"color": "yellow", "label": True, "text_z_offset": 30},
                    "end": {"color": "yellow", "label": True, "text_z_offset": 30}}
-
-    fig, ax = show.grid3d(mdl.flows['environment'].g, "allowed", z="height",
-                          collections=collections,
-                          legend_args=dict(bbox_to_anchor=(0.9, 1)))
-
+    
+    fig, ax = show.grid3d(mdl.flows['environment'].g, "height",
+                        collections=collections)
+    fig, ax = show.trajectories(mdlhists, "dofs.s.x", "dofs.s.y", "dofs.s.z",
+                                fig=fig, ax=ax, legend=legend, title=title)
     ax.set_zlim3d(0, mdl.p.plan_param.height)
-
-    for faultlabel in mdlhist:
-        dofs = mdlhist.get(faultlabel).flows.dofs.s
-        t = mdlhist[faultlabel]['time']
-        ax.plot(dofs.x, dofs.y, dofs.z, label="Faulty")
-        if faultlabel == 'nominal':
-            xnom, ynom, znom, tnom = dofs.x, dofs.y, dofs.z, t
-
-    for xx, yy, zz, tt in zip(xnom, ynom, znom, tnom):
-        if tt % 20 == 0:
-            ax.text(xx, yy, zz, 't=' + str(tt), fontsize=8)
-
     for goal, loc in mdl.fxns['plan_path'].goals.items():
         ax.text(loc[0], loc[1], loc[2], str(goal), fontweight='bold', fontsize=12)
         ax.plot([loc[0]], [loc[1]], [loc[2]],
                 marker='o', markersize=10, color='red', alpha=0.5)
-
-    ax.set_title(title)
-    if legend:
-        consolidate_legend(ax)
     return fig, ax
 
-
-def plot_xy(mdlhists,  mdl, title='', legend=False):
-    """
-    Plots given 2d Drone trajectories over the gridword.
-
-    Parameters
-    ----------
-    mdlhists : dict
-        Dict of model histories.
-    mdl : Drone
-        Drone model object.
-    title : str
-        Title for the plot. The default is 'Trajectory'.
-    legend : bool, optional
-        Whether to include a legend. The default is False.
-
-    Returns
-    -------
-    fig : matplotlib figure
-    ax : matplotlib axis
-    """
-    if 'time' in mdlhists:
-        mdlhists = History({'nominal': mdlhists})
-    else:
-        mdlhists = mdlhists.nest(1)
-    fig, ax = show.grid(mdl.flows['environment'].g, "height")
-    for scenname, hist in mdlhists.items():
-        ax.plot(hist.flows.dofs.s.x, hist.flows.dofs.s.y, label=scenname, marker="*")
-    plt.title(title)
-    if legend:
-        consolidate_legend(ax)
-    return fig, ax
-
-
-def consolidate_legend(ax):
-    ax.legend()
-    handles, labels = ax.get_legend_handles_labels()
-    by_label = dict(zip(labels, handles))
-    ax.get_legend().remove()
-    ax.legend(by_label.values(), by_label.keys(), bbox_to_anchor=(1.05, 1), loc='upper left')
 
 def make_move_quad(mdlhist, move_phase, weights = [0.003, 0.5, 0.46]):
     """
@@ -495,13 +461,14 @@ if __name__ == "__main__":
     an.plot.phases(phases, modephases)
     
     an.plot.hist(mdlhist, "flows.dofs.s.planvel","flows.dofs.s.vertvel", "fxns.store_ee.s.soc")
-    plot_xy(mdlhist, mdl, legend=True)
-    plot_traj(mdlhist, mdl, legend=True)
+    plot_env_with_traj(mdlhist, mdl)
+    plot_env_with_traj3d(mdlhist, mdl)
     
     
     
     move_quad=make_move_quad(mdlhist, phases['plan_path']['move'])
     
+    """
     ec, mdlhist = propagate.one_fault(mdl, 'store_ee', 'nocharge', 4.5)
     app = SampleApproach(mdl, phases=phases, modephases=modephases,
                          sampparams = {('PlanPath','move'): move_quad})
@@ -514,5 +481,5 @@ if __name__ == "__main__":
                                               'head_strikes', 'property_restrictions'],
                                  sort_by='cost')
     plot_traj(hists, mdl, title="", legend=True)
-
+    """
     #move_quad = make_move_quad(mdlhist, phases['PlanPath']['move'])
