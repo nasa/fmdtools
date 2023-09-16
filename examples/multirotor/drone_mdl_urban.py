@@ -218,7 +218,7 @@ class PlanPath(PlanPathOpt):
 
     def reconfigure_plan(self, new_landing, newmode="move_em"):
         self.make_goals([self.dofs.s.x, self.dofs.s.y, self.dofs.s.z], new_landing)
-        self.m.set_mode("move_em")
+        self.m.set_mode(newmode)
         self.s.pt = 0
 
     def reconfigure_path(self):
@@ -260,7 +260,7 @@ class HoldPayload(HoldPayloadOpt):
 class DroneParam(Parameter):
     plan_param: PlanPathParam = PlanPathParam()
     env_param: UrbanGridParam = UrbanGridParam()
-    phys_param: DronePhysicalParameters = DronePhysicalParameters()
+    phys_param: DronePhysicalParameters = DronePhysicalParameters(bat="parallel-split")
     respolicy: ResPolicy = ResPolicy()
 
 
@@ -393,12 +393,11 @@ def plot_env_with_traj3d(mdlhists, mdl, legend=True, title="trajectory"):
     fig : matplotlib figure
     ax : matplotlib axis
     """
-    collections = {"all_safe": {"color": "blue", "label": False},
-                   "all_occupied": {"color": "red", "label": False},
+    collections = {"all_occupied": {"color": "red", "label": False},
                    "start": {"color": "yellow", "label": True, "text_z_offset": 30},
                    "end": {"color": "yellow", "label": True, "text_z_offset": 30}}
     
-    fig, ax = show.grid3d(mdl.flows['environment'].g, "height",
+    fig, ax = show.grid3d(mdl.flows['environment'].g, "height", voxels=False,
                         collections=collections)
     fig, ax = show.trajectories(mdlhists, "dofs.s.x", "dofs.s.y", "dofs.s.z",
                                 fig=fig, ax=ax, legend=legend, title=title)
@@ -452,10 +451,12 @@ if __name__ == "__main__":
     show.grid(e.g, "height")
     show.grid3d(e.g, "height")
     
+    show.grid_collection(e.g, 'all_safe', z='height')
+    
     mdl = Drone()
     # ec, mdlhist_fault = propagate.one_fault(mdl, "plan_path", "vision_lack_of_detection", time=4.5)
 
-    ec, mdlhist = propagate.nominal(mdl)
+    ec, mdlhist = propagate.nominal(mdl, dt=1.0)
     
     phases, modephases = mdlhist.get_modephases()
     an.plot.phases(phases, modephases)

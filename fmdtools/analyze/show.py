@@ -26,7 +26,7 @@ from matplotlib import colormaps, cm
 from mpl_toolkits.mplot3d import art3d
 from matplotlib.colors import to_rgba
 import numpy as np
-from .plot import prep_hists
+from fmdtools.analyze.plot import prep_hists
 
 
 def grid_property(grd, prop, xlab="x", ylab="y", proplab="prop", **kwargs):
@@ -240,13 +240,13 @@ def grid_collection(grd, prop, fig=None, ax=None, label=True, z="",
     """
     offset = grd.p.blocksize/2
     if not ax:
-        fig, ax = init_figure(fig=fig, ax=ax, z=z, figsize=figsize)
-    else:
-        fig, ax = init_figure(fig=fig, ax=ax, z=z, figsize=figsize)
+        fig, ax = init_figure(z=z, figsize=figsize)
         if type(z) == str and z:
             ax.set_zlim(getattr(grd, z).min(), getattr(grd, z).max())
         ax.set_xlim(-offset, grd.p.x_size*grd.p.blocksize+offset)
         ax.set_ylim(-offset, grd.p.y_size*grd.p.blocksize+offset)
+    else:
+        fig, ax = init_figure(fig=fig, ax=ax, z=z, figsize=figsize)
 
     coll = grd.get_collection(prop)
     for i, pt in enumerate(coll):
@@ -309,7 +309,8 @@ def grid(grd, prop, collections={}, legend_args=False, **kwargs):
     return fig, ax
 
 
-def grid3d(grd, prop, z="prop", collections={}, legend_args=False, **kwargs):
+def grid3d(grd, prop, z="prop", collections={}, legend_args=False, voxels=True,
+           **kwargs):
     """
     Plots a property and set of collections in a discretized (voxelized) version
     of the grid.
@@ -341,7 +342,10 @@ def grid3d(grd, prop, z="prop", collections={}, legend_args=False, **kwargs):
         z = prop
     elif z == '':
         z = 0.0
-    fig, ax = grid_property3d(grd, prop, z=z, collections=collections, **kwargs)
+    if voxels:
+        fig, ax = grid_property3d(grd, prop, z=z, collections=collections, **kwargs)
+    else:
+        fig, ax = grid_collection(grd, "pts", z=z, legend_args=legend_args, label=False, **kwargs)
     for coll in collections:
         grid_collection(grd, coll, fig=fig, ax=ax, legend_args=legend_args,
                         **collections[coll], z=z)
