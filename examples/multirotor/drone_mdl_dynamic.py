@@ -22,7 +22,7 @@ from shapely.geometry.polygon import Polygon
 
 from examples.multirotor.drone_mdl_static import DistEE, EngageLand, HoldPayload, AffectDOF
 from examples.multirotor.drone_mdl_static import StoreEE as StaticstoreEE
-from examples.multirotor.drone_mdl_static import Force, EE, Control, DOFs, Env, Dir
+from examples.multirotor.drone_mdl_static import Force, EE, Control, DOFs, DesTraj
 
 
 class StoreEE(StaticstoreEE):
@@ -39,18 +39,29 @@ class StoreEE(StaticstoreEE):
         if time > self.t.time:
             self.s.inc(soc=-self.ee_out.s.mul('rate', 'effort')*(time-self.t.time)/2)
 
-
 class CtlDOFState(State):
-    cs:     float = 1.0
-    vel:    float = 0.0
-
+    cs: float = 1.0
+    vel: float = 0.0
+    upthrottle: float = 0.0
+    throttle: float = 0.0
+    """
+    Controller States. Has entries:
+        cs: float
+            Control signal transferrence (nominally 1.0)
+        upthrottle: float
+            Internal throttle signal (up) (0 is off, 1 is hover, 2 is max climb 5 m/s)
+        throttle: float
+            Internal throttle signal (forward)
+        vel: float
+            Percieved vertical velocity at the last timestep
+    """
 
 class CtlDOF(FxnBlock):
-    __slots__ = ('ee_in', 'dir', 'ctl', 'dofs', 'fs')
+    __slots__ = ('ee_in', 'des_traj', 'ctl', 'dofs', 'fs')
     _init_s = CtlDOFState
     _init_m = CtlDOFMode
     _init_ee_in = EE
-    _init_dir = Dir
+    _init_des_traj = DesTraj
     _init_ctl = Control
     _init_dofs = DOFs
     _init_fs = Force
@@ -65,30 +76,31 @@ class CtlDOF(FxnBlock):
             self.s.cs = 0.0
         elif self.m.has_fault('degctl'):
             self.s.cs = 0.5
-
-        upthrottle = 1.0
-        if self.dir.s.z > 1:
-            upthrottle = 2.0
-        elif 0 < self.dir.s.z <= 1:
-            upthrottle = self.dir.s.z + 1.0
-        elif self.dir.s.z == 0:
+        self.s.vel = self.dofs.s.vertvel
+        self.s.upthrottle = 1.0
+        if self.des_traj.s.z > 1:
+            self.s.upthrottle = 2.0
+        elif 0 < self.des_traj.s.z <= 1:
+            self.s.upthrottle = self.des_traj.s.z + 1.0 
+        elif self.des_traj.s.z == 0:
             damp = np.sign(self.s.vel)
             damp2 = damp*min(1.0, np.power(self.s.vel, 2))
-            upthrottle = 1.0-0.2*damp2
-        elif -1 < self.dir.s.z <= 0.0:
+            self.s.upthrottle = 1.0-0.2*damp2
+        elif -1 < self.des_traj.s.z <= 0.0:
             damp = min(1.0, np.power(self.s.vel+0.5, 2))
-            upthrottle = 0.75+0.25*damp
-        elif self.dir.s.z <= -1.0:
+            self.s.upthrottle = 0.5+0.5*damp
+        elif self.des_traj.s.z <= -1.0:
             damp = min(0.75, np.power(self.s.vel+5.0, 2))
-            upthrottle = 0.75+0.15*damp
+            self.s.upthrottle = 0.75+0.15*damp
 
-        if self.dir.s.same([0.0, 0.0], 'x', 'y'):
-            forwardthrottle = 0.0
+        if self.des_traj.s.same([0.0, 0.0], 'x', 'y'):
+            self.s.throttle = 0.0
         else:
-            forwardthrottle = 1.0
+            self.s.throttle = 1.0
 
-        power = self.ee_in.s.effort*self.s.cs*self.dir.s.power
-        self.ctl.s.put(forward=power*forwardthrottle, upward=power*upthrottle)
+        power = self.ee_in.s.effort*self.s.cs*self.des_traj.s.power
+        self.ctl.s.put(forward=power*self.s.throttle,
+                       upward=power*self.s.upthrottle)
 
 
 class PlanPathMode(Mode):
@@ -122,14 +134,14 @@ class PlanPathTime(Time):
 
 
 class PlanPath(FxnBlock):
-    __slots__ = ('ee_in', 'env', 'dir', 'fs')
+    __slots__ = ('ee_in', 'dofs', 'des_traj', 'fs')
     _init_t = PlanPathTime
     _init_m = PlanPathMode
     _init_s = PlanPathStates
     _init_p = PlanPathParams
     _init_ee_in = EE
-    _init_env = Env
-    _init_dir = Dir
+    _init_dofs = DOFs
+    _init_des_traj = DesTraj
     _init_fs = Force
     flownames = {'ee_ctl': 'ee_in', 'force_st': 'fs'}
 
@@ -139,13 +151,13 @@ class PlanPath(FxnBlock):
 
     def behavior(self, t):
         self.s.goal = self.p.goals[self.s.pt]
-        loc = self.env.s.get('x', 'y', 'z')
+        loc = self.dofs.s.get('x', 'y', 'z')
         dist = finddist(loc, self.s.goal)
         self.s.assign(vectdist(self.s.goal, loc), 'dz', 'dy', 'dz')
 
         if self.m.mode == 'taxi' and t > 5:
             self.m.mode = 'taxi'
-        elif self.env.s.z < 1 and self.s.pt == 5:
+        elif self.dofs.s.z < 1 and self.s.pt == 5:
             self.m.mode = 'taxi'
         elif dist < 5 and self.s.pt == 5:
             self.m.mode = 'land'
@@ -163,35 +175,34 @@ class PlanPath(FxnBlock):
                     self.s.goal = self.p.goals[self.s.pt]
                     self.t.pause.reset()
         # nominal behaviors
-        self.dir.s.power = 1.0
+        self.des_traj.s.power = 1.0
         if self.m.mode == 'taxi':
-            self.dir.s.power = 0.0
+            self.des_traj.s.power = 0.0
         elif self.m.mode == 'hover':
-            self.dir.s.assign([0, 0, 0], "x", "y", "z")
+            self.des_traj.s.assign([0, 0, 0], "x", "y", "z")
         elif self.m.mode == 'move':
-            self.dir.s.assign(vectdir(self.s.goal, loc), "x", "y", "z")
+            self.des_traj.s.assign(vectdist(self.s.goal, loc), "x", "y", "z")
         elif self.m.mode == 'descend':
-            self.dir.s.assign([0, 0, -0.5], "x", "y", "z")
+            self.des_traj.s.assign([0, 0, -0.5], "x", "y", "z")
         elif self.m.mode == 'land':
-            self.dir.s.assign([0, 0, -0.1], "x", "y", "z")
+            self.des_traj.s.assign([0, 0, -0.1], "x", "y", "z")
         # faulty behaviors
         if self.m.has_fault('noloc'):
-            self.dir.s.assign([0, 0, 0], "x", "y", "z")
+            self.des_traj.s.assign([0, 0, 0], "x", "y", "z")
         elif self.m.has_fault('degloc'):
-            self.dir.s.assign([0, 0, -1], "x", "y", "z")
+            self.des_traj.s.assign([0, 0, -1], "x", "y", "z")
         if self.ee_in.s.effort < 0.5:
-            self.dir.s.assign([0, 0, 0, 0], "x", "y", "z", "power")
+            self.des_traj.s.assign([0, 0, 0, 0], "x", "y", "z", "power")
 
 
 class Trajectory(FxnBlock):
-    __slots__ = ('env', 'dofs', 'dir', 'force_gr')
-    _init_env = Env
+    __slots__ = ('dofs', 'des_traj', 'force_gr')
     _init_dofs = DOFs
-    _init_dir = Dir
+    _init_des_traj = DesTraj
     _init_force_gr = Force
 
     def dynamic_behavior(self, time):
-        if self.env.s.z <= 0.0:
+        if self.dofs.s.z <= 0.0:
             self.force_gr.s.support = min(-0.5,
                                           (self.dofs.s.vertvel - self.dofs.s.planvel)
                                           / 7.5)
@@ -204,18 +215,18 @@ class Trajectory(FxnBlock):
         damp = (-0.02*sign*np.power(self.dofs.s.vertvel, 2)-0.1*self.dofs.s.vertvel)
         self.dofs.s.vertvel = self.dofs.s.vertvel+(acc+damp)
         self.dofs.s.planvel = 10.0*self.dofs.s.planpwr
-        if self.env.s.z <= 0.0:
+        if self.dofs.s.z <= 0.0:
             self.dofs.s.vertvel = max(0, self.dofs.s.vertvel)
             self.dofs.s.planvel = 0.0
 
-        self.env.s.inc(x=self.dofs.s.planvel*self.dir.s.x,
-                       y=self.dofs.s.planvel*self.dir.s.y,
-                       z=self.dofs.s.vertvel)
-        self.env.s.limit(z=(0.0, np.inf))
+        self.dofs.s.inc(x=self.dofs.s.planvel*self.des_traj.s.x,
+                        y=self.dofs.s.planvel*self.des_traj.s.y,
+                        z=self.dofs.s.vertvel*self.des_traj.s.z)
+        self.dofs.s.limit(z=(0.0, np.inf))
 
 
 class ViewEnvironment(FxnBlock):
-    _init_env = Env
+    _init_dofs = DOFs
 
     def __init__(self, name, flows, params={}, **kwargs):
         super().__init__(name, **kwargs)
@@ -225,7 +236,7 @@ class ViewEnvironment(FxnBlock):
                             for y in range(int(sq[0][1]), int(sq[2][1])+10, 10)}
 
     def dynamic_behavior(self, time):
-        area = square((self.env.s.x, self.env.s.y), 10, 10)
+        area = square((self.dofs.s.x, self.dofs.s.y), 10, 10)
         # TODO: This is *the* major bottleneck in the model.
         # Ideally we should try to speed it up
         for spot in self.viewingarea:
@@ -253,27 +264,26 @@ class Drone(Model):
         self.add_flow('ee_ctl', EE)
         self.add_flow('ctl', Control)
         self.add_flow('dofs', DOFs)
-        self.add_flow('env', Env, s={'z': 0.0} )
-        self.add_flow('dir', Dir)
+        self.add_flow('des_traj', DesTraj)
         # add functions to the model
         self.add_fxn('store_ee', StoreEE, 'ee_1', 'force_st')
         self.add_fxn('dist_ee', DistEE, 'ee_1', 'ee_mot', 'ee_ctl', 'force_st')
         self.add_fxn('affect_dof', AffectDOF, 'ee_mot', 'ctl', 'dofs', 'force_lin')
-        self.add_fxn('ctl_dof', CtlDOF, 'ee_ctl', 'dir', 'ctl', 'dofs', 'force_st')
-        self.add_fxn('plan_path', PlanPath, 'ee_ctl', 'env', 'dir', 'force_st')
-        self.add_fxn('trajectory', Trajectory, 'env', 'dofs', 'dir', 'force_gr')
+        self.add_fxn('ctl_dof', CtlDOF, 'ee_ctl', 'des_traj', 'ctl', 'dofs', 'force_st')
+        self.add_fxn('plan_path', PlanPath, 'ee_ctl', 'des_traj', 'force_st')
+        self.add_fxn('trajectory', Trajectory, 'dofs', 'des_traj', 'force_gr')
         self.add_fxn('engage_land', EngageLand, 'force_gr', 'force_lg')
         self.add_fxn('hold_payload', HoldPayload, 'force_lg', 'force_lin', 'force_st')
-        self.add_fxn('view_env', ViewEnvironment, 'env')
+        self.add_fxn('view_env', ViewEnvironment, 'dofs')
 
         self.build()
 
     def find_classification(self, scen, mdlhists):
-        if -5 > mdlhists.faulty.flows.env.s.x[-1] or 5 < mdlhists.faulty.flows.env.s.x[-1]:
+        if -5 > mdlhists.faulty.flows.dofs.s.x[-1] or 5 < mdlhists.faulty.flows.dofs.s.x[-1]:
             lostcost = 50000
-        elif -5 > mdlhists.faulty.flows.env.s.y[-1] or 5 < mdlhists.faulty.flows.env.s.y[-1]:
+        elif -5 > mdlhists.faulty.flows.dofs.s.y[-1] or 5 < mdlhists.faulty.flows.dofs.s.y[-1]:
             lostcost = 50000
-        elif mdlhists.faulty.flows.env.s.z[-1] > 5:
+        elif mdlhists.faulty.flows.dofs.s.z[-1] > 5:
             lostcost = 50000
         else:
             lostcost = 0
@@ -323,10 +333,11 @@ def vectdist(p1, p2):
 
 
 def vectdir(p1, p2):
-    return vectdist(p1, p2)/finddist(p1, p2)
+    return vectdist(p1, p2)/(finddist(p1, p2)+0.00001)
 
 
 if __name__ == "__main__":
+    from fmdtools import analyze as an
     mdl = Drone()
     app = SampleApproach(mdl)
 
@@ -337,6 +348,7 @@ if __name__ == "__main__":
     quad_comp_endclasses, quad_comp_mdlhists = fs.propagate.approach(mdl_quad_comp,
                                                                      quad_comp_app,
                                                                      staged=True)
+    an.plot.hist(quad_comp_mdlhists.nominal, 'flows.dofs.s.x', 'dofs.s.y', 'dofs.s.z', 'store_ee.s.soc')
 
     import fmdtools.analyze as an
     an.plot.samplemetric(quad_comp_app,
