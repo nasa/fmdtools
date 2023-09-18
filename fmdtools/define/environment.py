@@ -12,12 +12,78 @@ from fmdtools.analyze.result import History
 from fmdtools.define.flow import CommsFlow
 
 
+def init_obj_dict(obj, spec, name_end="s", set_attr=False):
+    """
+    Creates a dict for the attribute 'spec' by finding all attributes from the obj's
+    parameter with the name 'spec' in them and adding them to the dict.
+    Adds the dict to the object.
+
+    Parameters
+    ----------
+    obj : object
+        Object with _spec_ attributes
+    spec : str
+        Name of the attributes to initialize
+    set_attr : bool
+        Whether to also add the individual attributes attr to the obj
+    sub_obj : str
+        Sub-object to form the object from (e.g., 'p' if defined in a parameter).
+        Default is '', which gets from obj.
+    """
+    spec_len = len(spec) + 1
+    specs = {p[spec_len:]: obj.p[p] for p in obj.p.__fields__ if spec in p}
+    specname = spec + name_end
+    setattr(obj, specname, specs)
+    if set_attr:
+        for s_name in specs:
+            setattr(obj, s_name, specs[s_name])
+
 
 class GridParam(Parameter):
     x_size: ClassVar[int] = 10
     y_size: ClassVar[int] = 10
     blocksize: ClassVar[float] = 10.0
     gapwidth: ClassVar[float] = 0.0
+    """
+    Defines the underlying arrays that make up the Grid object. Modifiers may be added
+    to add additional properties (e.g., features, states, collections, points) to
+    the grid. Additionally has class fields which may be overwritten.
+
+    Class Variables
+    ---------------
+    x_size : int
+        Number of rows in the x-dimension
+    y_size : int
+        Number of rows in the y-dimension
+    blocksize : float
+        Grid resolution
+    gapwidth : float
+        Width between grid cells (if any). Blocksize is inclusive of this width.
+
+    Other Modifiers
+    ---------------
+    feature_featurename : tuple
+        Tuple (datatype, defaultvalue) defining immutable grid features to instantiate
+        as arrays.
+    state_statename : tuple
+        Tuple (datatype, defaultvalue) defining mutable grid features to instantiate
+        as arrays.
+    collect_collectionname : tuple
+        Tuple (propertyname, value, comparator) defining a collection of points to
+        instantiate as a list, where the tuple is arguments to Grid.find_all
+    point_pointname: tuple
+        Tuple (x, y) referring to a point in the grid with a given name.
+
+    e.g., defining the following classes will define a grid with a, v features, an
+    h state, a point "start", and a "high_v" collection:
+    >>>class ExampleGridParam(GridParam):
+    ...    feature_a: tuple = (bool, False)
+    ...    feature_v: tuple = (float, 1.0)
+    ...    state_h: tuple = (float, 0.0)
+    ...    point_start: tuple = (0.0, 0.0)
+    ...    collect_high_v: tuple = ("v", 5.0, np.greater)
+    >>> ex = ExampleGridParam()
+    """
 
 
 class Grid(object):
@@ -27,37 +93,20 @@ class Grid(object):
 
     Class Variables/Modifiers
     ---------------
-    init_p: Parameter
+    init_p: GridParam
         Parameter controlling default grid matrix (see GridParam), along with other
         properties of interest. Sets the .p role.
     init_r: Rand
         Random number generator. sets the .r role.
-    _feature_featurename : tuple
-        Tuple (datatype, defaultvalue) defining immutable grid features to instantiate
-        as arrays.
-    _state_statename : tuple
-        Tuple (datatype, defaultvalue) defining mutable grid features to instantiate
-        as arrays.
-    _collect_collectionname : tuple
-        Tuple (propertyname, value, comparator) defining a collection of points to
-        instantiate as a list, where the tuple is arguments to Grid.find_all
-    _point_pointname: tuple
-        Tuple (x, y) referring to a point in the grid with a given name.
     init_properties: method
         Method that initializes the (non-default) properties of the Grid.
 
-    e.g., defining the following class:
-
     >>> class ExampleGrid(Grid):
-    ...    _feature_a = (bool, False)
-    ...    _feature_v = (float, 1.0)
-    ...    _state_h = (float, 0.0)
-    ...    _point_start = (0.0, 0.0)
-    ...    _collect_high_v = ("v", 5.0, np.greater)
+    ...    _init_p = ExampleGridParam
     ...    def init_properties(self, *args, **kwargs):
     ...        self.set_pts([[0.0, 0.0], [10.0, 0.0]], "v", 10.0)
 
-    Instantiating this class a class with:
+    Instantiating this class a class with (see ExampleGridParam):
         - immutable arrays a and v,
         - mutable array h,
         - point start at (0.0), and
@@ -117,20 +166,11 @@ class Grid(object):
                              for i in range(0, self.p.x_size)]) * self.p.blocksize
         self.pts = self.grid.reshape(int(self.grid.size/2), 2)
 
-        self.points = {p[7:]: getattr(self, p) for p in dir(self) if "_point_" in p}
-        for pt_name, pt in self.points.items():
-            setattr(self, pt_name, pt)
-
-        self.collections = {p[9:]: getattr(self, p)
-                            for p in dir(self) if "_collect_" in p}
-
-        self.features = [p[9:] for p in dir(self) if "_feature_" in p]
-        self.properties = {p[9:]: getattr(self, p)
-                           for p in dir(self) if "_feature_" in p}
-
-        self.states = [p[7:] for p in dir(self) if "_state_" in p]
-        self.properties.update({p[7:]: getattr(self, p)
-                               for p in dir(self) if "_state_" in p})
+        init_obj_dict(self, "point", set_attr=True)
+        init_obj_dict(self, "collect", "ions")
+        init_obj_dict(self, "feature")
+        init_obj_dict(self, "state")
+        self.properties = {**self.features, **self.states}
         for propname, prop in self.properties.items():
             prop_type, prop_default = prop
             proparray = np.full((self.p.x_size, self.p.y_size),
@@ -696,15 +736,17 @@ class Grid(object):
             states[state] = copy.copy(getattr(self, state))
         return states
 
+class ExampleGridParam(GridParam):
+    feature_a: tuple = (bool, False)
+    feature_v: tuple = (float, 1.0)
+    state_h: tuple = (float, 0.0)
+    point_start: tuple = (0.0, 0.0)
+    collect_high_v: tuple = ("v", 5.0, np.greater)
 
 class ExampleGrid(Grid):
     """Example of Grid class for use in documentation and testing. Must match
     docstrings for Grid."""
-    _feature_a = (bool, False)
-    _feature_v = (float, 1.0)
-    _state_h = (float, 0.0)
-    _point_start = (0.0, 0.0)
-    _collect_high_v = ("v", 5.0, np.greater)
+    _init_p = ExampleGridParam
 
     def init_properties(self, *args, **kwargs):
         self.set_pts([[0.0, 0.0], [10.0, 0.0]], "v", 10.0)
@@ -773,8 +815,9 @@ class ExampleEnvironment(Environment):
 
 
 if __name__ == "__main__":
-    import doctest
-    doctest.testmod(verbose=True)
     ex = ExampleGrid()
     e = ExampleEnvironment("env")
     d = e.copy()
+    import doctest
+    doctest.testmod(verbose=True)
+
