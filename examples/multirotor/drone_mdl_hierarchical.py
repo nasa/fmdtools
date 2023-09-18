@@ -16,7 +16,7 @@ from fmdtools.sim.approach import SampleApproach
 from fmdtools.define.model import Model
 
 from examples.multirotor.drone_mdl_static import m2to1, EngageLand, HoldPayload, DistEE
-from examples.multirotor.drone_mdl_static import Force, EE, Control, DOFs, Env, Dir
+from examples.multirotor.drone_mdl_static import Force, EE, Control, DOFs, DesTraj
 from examples.multirotor.drone_mdl_dynamic import StoreEE, CtlDOF, PlanPath, Trajectory, ViewEnvironment
 from examples.multirotor.drone_mdl_static import AffectDOFMode, AffectDOFState
 from examples.multirotor.drone_mdl_dynamic import Drone as DynDrone
@@ -173,20 +173,19 @@ class Drone(DynDrone):
         self.add_flow('ee_ctl',     EE)
         self.add_flow('ctl',        Control)
         self.add_flow('dofs',       DOFs)
-        self.add_flow('env',        Env, s={'z': 0.0})
-        self.add_flow('dir',        Dir)
+        self.add_flow('des_traj',        DesTraj)
         # add functions to the model
         self.add_fxn('store_ee',    StoreEE,    'ee_1', 'force_st')
         self.add_fxn('dist_ee',     DistEE,     'ee_1', 'ee_mot', 'ee_ctl', 'force_st')
         self.add_fxn('affect_dof',  AffectDOF,  'ee_mot', 'ctl',
                      'dofs', 'force_lin', c={'archtype': self.p.arch})
         self.add_fxn('ctl_dof',     CtlDOF,     'ee_ctl',
-                     'dir', 'ctl', 'dofs', 'force_st')
-        self.add_fxn('plan_path',   PlanPath,   'ee_ctl', 'env', 'dir', 'force_st')
-        self.add_fxn('trajectory',  Trajectory, 'env', 'dofs', 'dir', 'force_gr')
+                     'des_traj', 'ctl', 'dofs', 'force_st')
+        self.add_fxn('plan_path',   PlanPath,   'ee_ctl', 'des_traj', 'force_st')
+        self.add_fxn('trajectory',  Trajectory, 'dofs', 'des_traj', 'force_gr')
         self.add_fxn('engage_land', EngageLand, 'force_gr', 'force_lg')
         self.add_fxn('hold_payload', HoldPayload, 'force_lg', 'force_lin', 'force_st')
-        self.add_fxn('view_env',    ViewEnvironment, 'env')
+        self.add_fxn('view_env',    ViewEnvironment, 'dofs')
 
         self.build()
 
@@ -209,8 +208,7 @@ fxnflowgraph_pos = {'store_ee': [-1.067135163123663, 0.32466987344741055],
                     'ee_ctl': [-0.48751243650229525, 0.4852032717825657],
                     'ctl': [-0.06913038312848868, 0.2445174568603189],
                     'dofs': [0.2606664304933561, 0.3243482171363975],
-                    'env': [0.06157634305459603, 0.7099922980251693],
-                    'dir': [-0.13617863906968142, 0.6037252153639261]}
+                    'des_traj': [-0.13617863906968142, 0.6037252153639261]}
 
 graph_pos = {'store_ee': [-1.0787279392101061, -0.06903523859088145],
              'dist_ee': [-0.361531174332526, -0.0935883732235363],
@@ -238,4 +236,4 @@ if __name__ == "__main__":
                                                  staged=True,
                                                  pool=mp.Pool(4))
     an.plot.hist(mdlhists.get('nominal', 'affect_dof_rr2_propstuck_t49p0').flatten(),
-                 'flows.env.s.x', 'env.s.y', 'env.s.z', 'store_ee.s.soc')
+                 'flows.dofs.s.x', 'dofs.s.y', 'dofs.s.z', 'store_ee.s.soc')
