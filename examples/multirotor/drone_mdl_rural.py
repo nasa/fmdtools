@@ -26,8 +26,8 @@ import fmdtools.analyze as an
 from matplotlib.patches import Patch
 from matplotlib.lines import Line2D
 
-from examples.multirotor.drone_mdl_dynamic import finddist, vectdist, inrange
-from examples.multirotor.drone_mdl_static import EE, Force, Control
+from examples.multirotor.drone_mdl_dynamic import finddist, vectdist, vectdir, inrange
+from examples.multirotor.drone_mdl_static import EE, Force, Control, DesTraj, DOFs
 from examples.multirotor.drone_mdl_static import DistEE
 from examples.multirotor.drone_mdl_static import StoreEEState
 from recordclass import asdict
@@ -101,37 +101,12 @@ class DroneParam(Parameter, readonly=True):
 
 
 # DEFINE FLOWS
-class DOFstate(State):
-    vertvel:    float = 1.0
-    planvel:    float = 1.0
-    planpwr:    float = 1.0
-    uppwr:      float = 1.0
-    x:          float = 0.0
-    y:          float = 0.0
-    z:          float = 0.0
-
-
-class DOFs(Flow):
-    _init_s = DOFstate
-
-
 class HSigState(State):
     hstate: str = 'nominal'
 
 
 class HSig(Flow):
     _init_s = HSigState
-
-
-class DesTrajState(State):
-    x:      float = 0.0
-    y:      float = 0.0
-    z:      float = 0.0
-    power:  float = 1.0
-
-
-class DesTraj(Flow):
-    _init_s = DesTrajState
 
 
 class RSigState(State):
@@ -309,7 +284,7 @@ class StoreEE(FxnBlock):
             self.m.replace_fault('lowcharge', 'nocharge')
         if self.m.has_fault('lowcharge'):
             for batname, bat in self.c.components.items():
-                bat.s.soc = 19
+                bat.s.limit(soc = (0, 19))
         elif self.m.has_fault('nocharge'):
             for batname, bat in self.c.components.items():
                 bat.s.soc = 0
@@ -514,25 +489,6 @@ class AffectDOF(FxnBlock):  # ee_mot,ctl,dofs,force_lin hsig_dofs, RSig_dofs
 
 
 
-
-class CtlDOFState(State):
-    cs: float = 1.0
-    vel: float = 0.0
-    upthrottle: float = 0.0
-    throttle: float = 0.0
-    """
-    Controller States. Has entries:
-        cs: float
-            Control signal transferrence (nominally 1.0)
-        upthrottle: float
-            Internal throttle signal (up) (0 is off, 1 is hover, 2 is max climb 5 m/s)
-        throttle: float
-            Internal throttle signal (forward)
-        vel: float
-            Percieved vertical velocity at the last timestep
-    """
-
-
 class CtlDOFMode(Mode):
     failrate = 1e-5
     faultparams = {'noctl':   (0.2, {"taxi": 0.6, "move": 0.3, "land": 0.1}, 1000),
@@ -547,41 +503,46 @@ class CtlDOFMode(Mode):
         degctl: Fault
             Poor control transference (throttles set to 0.5)
     """
+from drone_mdl_dynamic import CtlDOF as CtlDOFDyn
 
-
-class CtlDOF(FxnBlock):
-    __slots__ = ('ctl', 'ee_ctl', 'des_traj', 'force_st', 'dofs')
-    _init_s = CtlDOFState
+class CtlDOF(CtlDOFDyn):
     _init_m = CtlDOFMode
-    _init_ctl = Control
-    _init_ee_ctl = EE
-    _init_des_traj = DesTraj
-    _init_force_st = Force
-    _init_dofs = DOFs
 
-    def condfaults(self, time):
-        if self.force_st.s.support < 0.5:
-            self.m.add_fault('noctl')
-
-    def behavior(self, time):
-        if self.m.has_fault('noctl'):
-            self.s.cs = 0.0
-        elif self.m.has_fault('degctl'):
-            self.s.cs = 0.5
-        else:
-            self.s.cs = 1.0
-
-        # set throttle
-        self.s.upthrottle = 1+self.des_traj.s.z/(50*5)
-        self.s.throttle = np.sqrt(self.des_traj.s.x**2+self.des_traj.s.y**2)/(60*10)
-        self.s.limit(throttle=(0, 1), upthrottle=(0, 2))
-
-        # send control signals
-        self.ctl.s.forward = self.ee_ctl.s.effort*self.s.cs*self.s.throttle*self.des_traj.s.power
-        self.ctl.s.upward = self.ee_ctl.s.effort*self.s.cs*self.s.upthrottle*self.des_traj.s.power
-
-    def dynamic_behavior(self, time):
-        self.s.vel = self.dofs.s.vertvel
+# =============================================================================
+# class CtlDOF(FxnBlock):
+#     __slots__ = ('ctl', 'ee_ctl', 'des_traj', 'force_st', 'dofs')
+#     _init_s = CtlDOFState
+#     _init_m = CtlDOFMode
+#     _init_ctl = Control
+#     _init_ee_ctl = EE
+#     _init_des_traj = DesTraj
+#     _init_force_st = Force
+#     _init_dofs = DOFs
+# 
+#     def condfaults(self, time):
+#         if self.force_st.s.support < 0.5:
+#             self.m.add_fault('noctl')
+# 
+#     def behavior(self, time):
+#         if self.m.has_fault('noctl'):
+#             self.s.cs = 0.0
+#         elif self.m.has_fault('degctl'):
+#             self.s.cs = 0.5
+#         else:
+#             self.s.cs = 1.0
+# 
+#         # set throttle
+#         self.s.upthrottle = 1+self.des_traj.s.z/(50*5)
+#         self.s.throttle = np.sqrt(self.des_traj.s.x**2+self.des_traj.s.y**2)/(60*10)
+#         self.s.limit(throttle=(0, 1), upthrottle=(0, 2))
+# 
+#         # send control signals
+#         self.ctl.s.forward = self.ee_ctl.s.effort*self.s.cs*self.s.throttle*self.des_traj.s.power
+#         self.ctl.s.upward = self.ee_ctl.s.effort*self.s.cs*self.s.upthrottle*self.des_traj.s.power
+# 
+#     def dynamic_behavior(self, time):
+#         self.s.vel = self.dofs.s.vertvel
+# =============================================================================
 
 
 class ViewEnvironment(FxnBlock):
@@ -727,7 +688,8 @@ class PlanPath(FxnBlock):
         self.s.assign(goal, 'x', 'y', 'z')
         self.s.dist = finddist(self.dofs.s.get('x', 'y', 'z'),
                                self.s.get('x', 'y', 'z'))
-        dx, dy, dz = vectdist(self.s.get('x', 'y', 'z'), self.dofs.s.get('x', 'y', 'z'))
+        dx, dy, dz = vectdir(self.s.get('x', 'y', 'z'),
+                             self.dofs.s.get('x', 'y', 'z'))
         self.s.put(dx=dx, dy=dy, dz=dz)
         self.s.roundto(dx=0.01, dy=0.01, dz=0.01, dist=0.01, x=0.01, y=0.01, z=0.01,
                        ground_height=0.01)
@@ -900,15 +862,28 @@ def calc_safe_cost(metrics, loc, faulttime):
 
 
 # PLOTTING
-def plot_goals(ax, params):
-    for goal, loc in enumerate(params.flightplan):
+def plot_goals(ax, flightplan):
+    for goal, loc in enumerate(flightplan):
         ax.text(loc[0], loc[1], loc[2], str(goal), fontweight='bold', fontsize=12)
         ax.plot([loc[0]], [loc[1]], [loc[2]], marker='o',
                  markersize=10, color='red', alpha=0.5)
 
-def plot_env_with_traj(hist, env):
-    show.grid()
+def plot_env_with_traj3d(hist, mdl):
+    fig, ax = show.grid3d(mdl.flows['environment'].g, "target", z="",
+                        collections={"start": {"color": "yellow"},
+                                     "safe":{"color": "yellow"}})
+    fig, ax = show.trajectories(hist, "dofs.s.x", "dofs.s.y", "dofs.s.z",
+                                time_groups=['nominal'], time_ticks=1.0,
+                                fig=fig, ax=ax)
+    plot_goals(ax, mdl.p.flightplan)
+    return fig, ax
 
+def plot_env_with_traj(mdlhists, mdl):
+    fig, ax = show.grid(mdl.flows['environment'].g, "target",
+                        collections={"start": {"color": "yellow"},
+                                     "safe":{"color": "yellow"}})
+    fig, ax = show.trajectories(mdlhists, "dofs.s.x", "dofs.s.y", fig=fig, ax=ax)
+    return fig, ax
 
 # likelihood class schedule (pfh)
 p_allowable = {'small airplane': {'no requirement': 'na',
@@ -981,6 +956,9 @@ if __name__ == "__main__":
     from fmdtools.analyze import show
 
     mdl = Drone()
+    
+
+    
     ec, mdlhist = prop.nominal(mdl)
     phases, modephases = mdlhist.get_modephases()
     an.plot.phases(phases, modephases)
@@ -994,8 +972,8 @@ if __name__ == "__main__":
     fig, ax = show.trajectories(mdlhists, "dofs.s.x", "dofs.s.y")
     fig, ax = show.trajectories(mdlhists, "dofs.s.x", "dofs.s.y", "dofs.s.z")
     fig, ax = show.trajectories(h, "dofs.s.x", "dofs.s.y", "dofs.s.z")
-    fig, ax = show.trajectories(h, "dofs.s.x", "dofs.s.y", "dofs.s.z", time_groups=['nominal'], time_ticks=1.0)
-
-    fig, ax = show.grid(mdl.flows['environment'].g, "target",
-                        collections={"start": {"color": "yellow"},
-                                     "safe":{"color": "yellow"}})
+    
+    
+    fig, ax = plot_env_with_traj3d(h, mdl)
+    fig, ax = plot_env_with_traj(mdlhists, mdl)
+    

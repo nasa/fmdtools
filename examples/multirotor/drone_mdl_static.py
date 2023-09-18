@@ -40,31 +40,24 @@ class DOFstate(State):
     planvel: float = 1.0
     planpwr: float = 1.0
     uppwr: float = 1.0
+    x: float = 0.0
+    y: float = 0.0
+    z: float = 0.0
 
 
 class DOFs(Flow):
     _init_s = DOFstate
 
 
-class EnvState(State):
-    x: float = 0.0
-    y: float = 0.0
-    z: float = 50.0
-
-
-class Env(Flow):
-    _init_s = EnvState
-
-
-class DirState(State):
+class DesTrajState(State):
     x: float = 1.0
     y: float = 0.0
     z: float = 0.0
     power: float = 1.0
 
 
-class Dir(Flow):
-    _init_s = DirState
+class DesTraj(Flow):
+    _init_s = DesTrajState
 
 
 ## MODEL FUNCTIONS
@@ -333,11 +326,11 @@ class CtlDOFMode(Mode):
 
 
 class CtlDOF(FxnBlock):
-    __slots__ = ("ee_in", "dir", "ctl", "dofs", "fs")
+    __slots__ = ("ee_in", "des_traj", "ctl", "dofs", "fs")
     _init_s = CtlDOFstate
     _init_m = CtlDOFMode
     _init_ee_in = EE
-    _init_dir = Dir
+    _init_des_traj = DesTraj
     _init_ctl = Control
     _init_dofs = DOFs
     _init_fs = Force
@@ -356,19 +349,19 @@ class CtlDOF(FxnBlock):
             self.s.cs = 1.0
 
         upthrottle = 1.0
-        if self.dir.s.z > 1:
+        if self.des_traj.s.z > 1:
             upthrottle = 2
-        elif -1 < self.dir.s.z < 1:
-            upthrottle = 1 + self.dir.s.z
-        elif self.dir.s.z <= -1.0:
+        elif -1 < self.des_traj.s.z < 1:
+            upthrottle = 1 + self.des_traj.s.z
+        elif self.des_traj.s.z <= -1.0:
             upthrottle = 0
 
-        if self.dir.s.same([0.0, 0.0], "x", "y"):
+        if self.des_traj.s.same([0.0, 0.0], "x", "y"):
             forwardthrottle = 0.0
         else:
             forwardthrottle = 1.0
 
-        power = self.ee_in.s.effort * self.s.cs * self.dir.s.power
+        power = self.ee_in.s.effort * self.s.cs * self.des_traj.s.power
         self.ctl.s.put(forward=power * forwardthrottle, upward=power * upthrottle)
 
 
@@ -378,11 +371,11 @@ class PlanPathMode(Mode):
 
 
 class PlanPath(FxnBlock):
-    __slots__ = ("ee_in", "env", "dir", "fs")
+    __slots__ = ("ee_in", "dofs", "des_traj", "fs")
     _init_m = PlanPathMode
     _init_ee_in = EE
-    _init_env = Env
-    _init_dir = Dir
+    _init_dofs = DOFs
+    _init_des_traj = DesTraj
     _init_fs = Force
     flownames = {"ee_ctl": "ee_in", "force_st": "fs"}
 
@@ -391,14 +384,14 @@ class PlanPath(FxnBlock):
             self.m.add_fault("noloc")
 
     def behavior(self, t):
-        self.dir.s.assign([1.0, 0.0, 0.0], "x", "y", "z")
+        self.des_traj.s.assign([1.0, 0.0, 0.0], "x", "y", "z")
         # faulty behaviors
         if self.m.has_fault("noloc"):
-            self.dir.s.assign([0, 0, 0], "x", "y", "z")
+            self.des_traj.s.assign([0, 0, 0], "x", "y", "z")
         elif self.m.has_fault("degloc"):
-            self.dir.s.assign([0, 0, -1], "x", "y", "z")
+            self.des_traj.s.assign([0, 0, -1], "x", "y", "z")
         if self.ee_in.s.effort < 0.5:
-            self.dir.s.assign([0.0, 0.0, 0.0, 0.0], "x", "y", "z", "power")
+            self.des_traj.s.assign([0.0, 0.0, 0.0, 0.0], "x", "y", "z", "power")
 
 
 class TrajectoryMode(Mode):
@@ -406,11 +399,10 @@ class TrajectoryMode(Mode):
 
 
 class Trajectory(FxnBlock):
-    __slots__ = ("env", "dofs", "dir", "force_gr")
+    __slots__ = ("dofs", "des_traj", "force_gr")
     _init_m = TrajectoryMode
-    _init_env = Env
     _init_dofs = DOFs
-    _init_dir = Dir
+    _init_des_traj = DesTraj
     _init_force_gr = Force
 
     def behavior(self, time):
@@ -419,12 +411,12 @@ class Trajectory(FxnBlock):
         self.dofs.s.planvel = self.dofs.s.planpwr
         if self.dofs.s.vertvel > 1.5 or self.dofs.s.vertvel < -1:
             self.m.add_fault("crash")
-            self.env.s.z = 0.0
+            self.dofs.s.z = 0.0
         if self.dofs.s.planvel > 1.5 or self.dofs.s.planvel < 0.5:
             self.m.add_fault("lost")
-            self.env.s.x = 0.0
+            self.dofs.s.x = 0.0
         else:
-            self.env.s.x = 1.0
+            self.dofs.s.x = 1.0
 
 
 def m2to1(x):
@@ -462,7 +454,7 @@ class ViewModes(Mode):
 
 class ViewEnvironment(FxnBlock):
     _init_m = ViewModes
-    _init_env = Env
+    _init_dofs = DOFs
 
 
 class Drone(Model):
@@ -483,18 +475,17 @@ class Drone(Model):
         self.add_flow("ee_ctl", EE)
         self.add_flow("ctl", Control)
         self.add_flow("dofs", DOFs)
-        self.add_flow("env", Env)
-        self.add_flow("dir", Dir)
+        self.add_flow("des_traj", DesTraj)
         # add functions to the model
         self.add_fxn("store_ee", StoreEE, "ee_1", "force_st")
         self.add_fxn("dist_ee", DistEE, "ee_1", "ee_mot", "ee_ctl", "force_st")
         self.add_fxn("affect_dof", AffectDOF, "ee_mot", "ctl", "dofs", "force_lin")
-        self.add_fxn("ctl_dof", CtlDOF, "ee_ctl", "dir", "ctl", "dofs", "force_st")
-        self.add_fxn("plan_path", PlanPath, "ee_ctl", "env", "dir", "force_st")
-        self.add_fxn("trajectory", Trajectory, "env", "dofs", "dir", "force_gr")
+        self.add_fxn("ctl_dof", CtlDOF, "ee_ctl", "des_traj", "ctl", "dofs", "force_st")
+        self.add_fxn("plan_path", PlanPath, "ee_ctl", "des_traj", "force_st")
+        self.add_fxn("trajectory", Trajectory, "dofs", "des_traj", "force_gr")
         self.add_fxn("engage_land", EngageLand, "force_gr", "force_lg")
         self.add_fxn("hold_payload", HoldPayload, "force_lg", "force_lin", "force_st")
-        self.add_fxn("view_env", ViewEnvironment, "env")
+        self.add_fxn("view_env", ViewEnvironment, "dofs")
 
         self.build()
 
