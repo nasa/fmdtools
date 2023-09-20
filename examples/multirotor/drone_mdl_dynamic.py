@@ -189,9 +189,10 @@ class AffectDOF(AffectDOFStatic):
         if self.dofs.s.z <= 0.0:
             self.dofs.s.put(planvel=0.0,
                             vertvel=max(0, self.dofs.s.vertvel))
-        self.limit_falling_vel(min_fall_dist=self.dofs.s.z)
+        self.limit_falling_vel()
 
-    def limit_falling_vel(self, min_fall_dist=300.0):
+    def limit_falling_vel(self):
+        min_fall_dist = self.get_fall_dist()
         # if falling, it can't reach the destination if it hits the ground first
         plan_dist = self.des_traj.s.dist2d()
         no_runway = (self.dofs.s.vertvel/self.t.dt < -min_fall_dist
@@ -201,6 +202,9 @@ class AffectDOF(AffectDOFStatic):
         self.dofs.s.limit(vertvel=(-min_fall_dist/self.t.dt, 300.0),
                           planvel=(0.0, plan_dist/self.t.dt),
                           z=(0, np.inf))
+
+    def get_fall_dist(self):
+        return self.dofs.s.z
 
     def inc_pos(self):
         # increment x,y,z
