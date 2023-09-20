@@ -1,8 +1,10 @@
 # -*- coding: utf-8 -*-
 """
-Created on Mon Sep 18 11:06:06 2023
-
-@author: dhulse
+Now:
+    Static Geoms, with properties tied to parameters and states representing
+    allocations.
+Future:
+    Dynamic Geoms, with properties tied to states
 """
 from shapely import LineString, Point, Polygon, GeometryCollection
 import numpy as np

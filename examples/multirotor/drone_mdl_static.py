@@ -8,7 +8,7 @@ from fmdtools.define.model import Model
 from fmdtools.define.flow import Flow
 
 
-## MODEL FLOWS
+# MODEL FLOWS
 class EEState(State):
     rate: float = 1.0
     effort: float = 1.0
@@ -45,23 +45,33 @@ class DOFstate(State):
     z: float = 0.0
 
 
+class DOFParam(Parameter):
+    max_vel: float = 300.0  # 5 m/s (300 m/min)
+
+
 class DOFs(Flow):
     _init_s = DOFstate
+    _init_p = DOFParam
 
 
 class DesTrajState(State):
-    x: float = 1.0
-    y: float = 0.0
-    z: float = 0.0
+    dx: float = 1.0
+    dy: float = 0.0
+    dz: float = 0.0
     power: float = 1.0
+    def unit_vect2d(self):
+        return np.array([self.dx, self.dy])/self.dist2d()
+
+    def dist2d(self):
+        return np.sqrt(self.dx**2 + self.dy**2)  + 0.00001
+
 
 
 class DesTraj(Flow):
     _init_s = DesTrajState
 
 
-## MODEL FUNCTIONS
-
+# MODEL FUNCTIONS
 
 class StoreEEMode(Mode):
     failrate = 1e-5
@@ -151,47 +161,8 @@ class DistEE(FxnBlock):
             self.s.put(ee_te=0.5)
         self.ee_mot.s.effort = self.s.ee_te * self.ee_in.s.effort
         self.ee_ctl.s.effort = self.s.ee_te * self.ee_in.s.effort
-        self.ee_in.s.rate = m2to1(
-            [
-                self.ee_in.s.effort,
-                self.s.ee_tr,
-                0.9 * self.ee_mot.s.rate + 0.1 * self.ee_ctl.s.rate,
-            ]
-        )
-
-
-class EngageLandMode(Mode):
-    failrate = 1e-5
-    faultparams = {"break": (0.2, 1000),
-                   "deform": (0.8, 1000)}
-    """
-    Multirotor landing gear fault modes. Includes:
-        - break: Fault
-            provides no support to the body and lines
-        - deform: Fault
-            support is less than desired
-    """
-
-class EngageLand(FxnBlock):
-    __slots__ = ("force_in", "force_out")
-    _init_m = EngageLandMode
-    _init_force_in = Force
-    _init_force_out = Force
-    flownames = {"force_gr": "force_in",
-                 "force_lg": "force_out"}
-    """
-    Drone landing gear. Transfers force from the ground to the drone structure
-    (HoldPayload)
-    """
-
-    def condfaults(self, time):
-        if abs(self.force_in.s.support) >= 2.0:
-            self.m.add_fault("break")
-        elif abs(self.force_in.s.support) > 1.5:
-            self.m.add_fault("deform")
-
-    def behavior(self, time):
-        self.force_out.s.support = self.force_in.s.support / 2
+        self.ee_in.s.rate = m2to1([self.ee_in.s.effort, self.s.ee_tr,
+                                   0.9 * self.ee_mot.s.rate + 0.1 * self.ee_ctl.s.rate])
 
 
 class HoldPayloadMode(Mode):
@@ -207,31 +178,45 @@ class HoldPayloadMode(Mode):
     """
 
 
+class HoldPayloadState(State):
+    force_gr:   float = 1.0
+    """
+    Landing Gear States. Has values:
+        - force_gr: float
+            Force from the ground
+    """
+
+
 class HoldPayload(FxnBlock):
-    __slots__ = ("force_lg", "force_lin", "force_st")
+    __slots__ = ('dofs', 'force_st', 'force_lin')
     _init_m = HoldPayloadMode
-    _init_force_lg = Force
-    _init_force_lin = Force
+    _init_s = HoldPayloadState
+    _init_dofs = DOFs
     _init_force_st = Force
-    """
-    Multirotor Structure. Transfers Landing gear force to the rotors and of the drone.
-    """
+    _init_force_lin = Force
 
-    def condfaults(self, time):
-        if abs(self.force_lg.s.support) > 0.8:
-            self.m.add_fault("break")
-        elif abs(self.force_lg.s.support) > 1.0:
-            self.m.add_fault("deform")
+    def at_ground(self):
+        return self.dofs.s.z <= 0.0
 
-    def behavior(self, time):
+    def dynamic_behavior(self, time):
+        if self.at_ground():
+            self.s.force_gr = min(-0.5, (self.dofs.s.vertvel -
+                                  self.dofs.s.planvel)/self.dofs.p.max_vel)
+        else:
+            self.s.force_gr = 0.0
+        if abs(self.s.force_gr/2) > 1.0:
+            self.m.add_fault('break')
+        elif abs(self.s.force_gr/2) > 0.8:
+            self.m.add_fault('deform')
+
         # need to transfer FG to FA & FS???
-        if self.m.has_fault("break"):
+        if self.m.has_fault('break'):
             self.force_st.s.support = 0.0
-        elif self.m.has_fault("deform"):
+        elif self.m.has_fault('deform'):
             self.force_st.s.support = 0.5
         else:
             self.force_st.s.support = 1.0
-        self.force_lin.s.assign(self.force_st.s, "support")
+        self.force_lin.s.assign(self.force_st.s, 'support')
 
 
 class AffectDOFState(State):
@@ -271,23 +256,9 @@ class AffectDOFMode(Mode):
     }
 
 
-class AffectDOF(FxnBlock):  # ee_mot,ctl,dofs,force_lin HSig_dofs, RSig_dofs
-    __slots__ = ("ee_in", "ctl_in", "dofs", "force")
-    _init_s = AffectDOFState
-    _init_m = AffectDOFMode
-    _init_ee_in = EE
-    _init_ctl_in = Control
-    _init_dofs = DOFs
-    _init_force = Force
-    flownames = {"ee_mot": "ee_in",
-                 "ctl": "ctl_in",
-                 "force_lin": "force"}
-    """
-    Drone rotor architecture which moves the drone through the air based on signals
-    using electrical power.
-    """
-
-    def behavior(self, time):
+class BaseLine(object):
+    def calc_faults(self):
+        """Modifies AffectDOF states based on faults"""
         self.s.put(e_ti=1.0, e_to=1.0)
         if self.m.has_fault("short"):
             self.s.put(e_ti=10, e_to=0.0)
@@ -309,15 +280,61 @@ class AffectDOF(FxnBlock):  # ee_mot,ctl,dofs,force_lin HSig_dofs, RSig_dofs
             self.s.pt = 0.0
         elif self.m.has_fault("propwarp"):
             self.s.pt = 0.5
+    
 
+class AffectDOF(FxnBlock, BaseLine):  # ee_mot,ctl,dofs,force_lin HSig_dofs, RSig_dofs
+    __slots__ = ("ee_in", "ctl_in", "dofs", "force")
+    _init_s = AffectDOFState
+    _init_m = AffectDOFMode
+    _init_ee_in = EE
+    _init_ctl_in = Control
+    _init_dofs = DOFs
+    _init_force = Force
+    flownames = {"ee_mot": "ee_in",
+                 "ctl": "ctl_in",
+                 "force_lin": "force"}
+    """
+    Drone rotor architecture which moves the drone through the air based on signals
+    using electrical power.
+    """
+
+    def behavior(self, time):
+        self.calc_faults()
+        self.calc_pwr()
+        self.calc_vel()
+        self.inc_pos()
+
+    def calc_pwr(self):
+        """Calculates immediate power/support from AffectDOF function"""
         self.ee_in.s.rate = self.s.e_ti
         pwr = self.s.mul("e_to", "e_ti", "ct", "mt", "pt")
         self.dofs.s.uppwr = self.ctl_in.s.upward * pwr
         self.dofs.s.planpwr = self.ctl_in.s.forward * pwr
 
+    def calc_vel(self):
+        """Calculates velocity given power/support"""
+        self.dofs.s.vertvel = max(min(-2 + 2 * self.dofs.s.uppwr, 2), -2)
+        self.dofs.s.planvel = self.dofs.s.planpwr
+
+    def inc_pos(self):
+        """Increments Drone Position"""
+        if self.dofs.s.vertvel > 1.5 or self.dofs.s.vertvel < -1:
+            self.m.add_fault("mechbreak")
+            self.dofs.s.z = 0.0
+        else:
+            self.dofs.s.z = 1.0
+
 
 class CtlDOFstate(State):
     cs: float = 1.0
+    power: float = 1.0
+    """
+    Controller States. Has entries:
+        cs: float
+            Control signal transferrence (nominally 1.0)
+        power: float
+            Power sent transference (nominally 1.0)
+    """
 
 
 class CtlDOFMode(Mode):
@@ -341,6 +358,11 @@ class CtlDOF(FxnBlock):
             self.m.add_fault("noctl")
 
     def behavior(self, time):
+        self.calc_cs()
+        up, forward = self.calc_throttle()
+        self.update_ctl(up, forward)
+
+    def calc_cs(self):
         if self.m.has_fault("noctl"):
             self.s.cs = 0.0
         elif self.m.has_fault("degctl"):
@@ -348,21 +370,20 @@ class CtlDOF(FxnBlock):
         else:
             self.s.cs = 1.0
 
-        upthrottle = 1.0
-        if self.des_traj.s.z > 1:
-            upthrottle = 2
-        elif -1 < self.des_traj.s.z < 1:
-            upthrottle = 1 + self.des_traj.s.z
-        elif self.des_traj.s.z <= -1.0:
-            upthrottle = 0
+    def calc_throttle(self):
+        up = 1.0 + self.des_traj.s.dz / self.dofs.p.max_vel
 
-        if self.des_traj.s.same([0.0, 0.0], "x", "y"):
-            forwardthrottle = 0.0
+        if self.des_traj.s.same([0.0, 0.0], 'dx', 'dy'):
+            forward = 0.0
         else:
-            forwardthrottle = 1.0
+            forward = 1.0
+        return up, forward
 
-        power = self.ee_in.s.effort * self.s.cs * self.des_traj.s.power
-        self.ctl.s.put(forward=power * forwardthrottle, upward=power * upthrottle)
+    def update_ctl(self, up, forward):
+        self.s.power = self.ee_in.s.effort * self.s.cs * self.des_traj.s.power
+        self.ctl.s.put(forward=self.s.power*forward,
+                       upward=self.s.power*up)
+        self.ctl.s.limit(forward=(0.0, 2.0), upward=(0.0, 2.0))
 
 
 class PlanPathMode(Mode):
@@ -382,41 +403,18 @@ class PlanPath(FxnBlock):
     def condfaults(self, time):
         if self.fs.s.support < 0.5:
             self.m.add_fault("noloc")
+        if self.dofs.s.planvel > 1.5 or self.dofs.s.planvel < 0.5:
+            self.m.add_fault("noloc")
 
     def behavior(self, t):
-        self.des_traj.s.assign([1.0, 0.0, 0.0], "x", "y", "z")
+        self.des_traj.s.assign([1.0, 0.0, 0.0], "dx", "dy", "dz")
         # faulty behaviors
         if self.m.has_fault("noloc"):
-            self.des_traj.s.assign([0, 0, 0], "x", "y", "z")
+            self.des_traj.s.assign([0, 0, 0], "dx", "dy", "dz")
         elif self.m.has_fault("degloc"):
-            self.des_traj.s.assign([0, 0, -1], "x", "y", "z")
+            self.des_traj.s.assign([0, 0, -1], "dx", "dy", "dz")
         if self.ee_in.s.effort < 0.5:
-            self.des_traj.s.assign([0.0, 0.0, 0.0, 0.0], "x", "y", "z", "power")
-
-
-class TrajectoryMode(Mode):
-    faultparams = {"crash": (0, 100000), "lost": (0.0, 50000)}
-
-
-class Trajectory(FxnBlock):
-    __slots__ = ("dofs", "des_traj", "force_gr")
-    _init_m = TrajectoryMode
-    _init_dofs = DOFs
-    _init_des_traj = DesTraj
-    _init_force_gr = Force
-
-    def behavior(self, time):
-        self.dofs.s.vertvel = max(min(-2 + 2 * self.dofs.s.uppwr, 2), -2)
-        self.force_gr.s.support = self.dofs.s.vertvel
-        self.dofs.s.planvel = self.dofs.s.planpwr
-        if self.dofs.s.vertvel > 1.5 or self.dofs.s.vertvel < -1:
-            self.m.add_fault("crash")
-            self.dofs.s.z = 0.0
-        if self.dofs.s.planvel > 1.5 or self.dofs.s.planvel < 0.5:
-            self.m.add_fault("lost")
-            self.dofs.s.x = 0.0
-        else:
-            self.dofs.s.x = 1.0
+            self.des_traj.s.assign([0.0, 0.0, 0.0, 0.0], "dx", "dy", "dz", "power")
 
 
 def m2to1(x):
@@ -463,13 +461,11 @@ class Drone(Model):
     Static multirotor drone model (executes in a single timestep).
     """
 
-    def __init__(self, sp=SimParam(times=(0, 1)), **kwargs):
+    def __init__(self, sp=SimParam(times=(0,)), **kwargs):
         super().__init__(sp=sp, **kwargs)
         # add flows to the model
         self.add_flow("force_st", Force)
         self.add_flow("force_lin", Force)
-        self.add_flow("force_gr", Force)
-        self.add_flow("force_lg", Force)
         self.add_flow("ee_1", EE)
         self.add_flow("ee_mot", EE)
         self.add_flow("ee_ctl", EE)
@@ -482,9 +478,7 @@ class Drone(Model):
         self.add_fxn("affect_dof", AffectDOF, "ee_mot", "ctl", "dofs", "force_lin")
         self.add_fxn("ctl_dof", CtlDOF, "ee_ctl", "des_traj", "ctl", "dofs", "force_st")
         self.add_fxn("plan_path", PlanPath, "ee_ctl", "des_traj", "force_st")
-        self.add_fxn("trajectory", Trajectory, "dofs", "des_traj", "force_gr")
-        self.add_fxn("engage_land", EngageLand, "force_gr", "force_lg")
-        self.add_fxn("hold_payload", HoldPayload, "force_lg", "force_lin", "force_st")
+        self.add_fxn("hold_payload", HoldPayload, "dofs", "force_lin", "force_st")
         self.add_fxn("view_env", ViewEnvironment, "dofs")
 
         self.build()
