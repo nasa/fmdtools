@@ -23,9 +23,11 @@ from matplotlib.patches import Patch
 from matplotlib.lines import Line2D
 
 from drone_mdl_hierarchical import AffectDOF as AffectDOFHierarchical
-from drone_mdl_dynamic import CtlDOF as CtlDOFDyn
+from drone_mdl_static import CtlDOF as CtlDOFStat
 from examples.multirotor.drone_mdl_dynamic import DroneEnvironmentGridParam, DroneEnvironment, ViewEnvironment
 from examples.multirotor.drone_mdl_dynamic import finddist, vectdist
+from drone_mdl_dynamic import PlanPathState as PlanPathStateDyn
+from drone_mdl_dynamic import PlanPath as PlanPathDyn
 from examples.multirotor.drone_mdl_static import EE, Force, Control, DesTraj, DOFs
 from examples.multirotor.drone_mdl_static import DistEE, HoldPayload
 from examples.multirotor.drone_mdl_static import StoreEEState
@@ -134,7 +136,7 @@ class BatParam(Parameter):
     maxa: float = 0.0
     amt: float = 0.0
     weight: float = 0.1
-    drag: float = 0.0
+    drag: float = 0.95
     series: int = 1
     parallel: int = 1
     voltage: float = 12.0
@@ -143,7 +145,7 @@ class BatParam(Parameter):
         super().__init__(*args, **kwargs)
         self.avail_eff = 1/self.parallel
         self.maxa = 2/self.series
-        self.amt = 60*4.200/(self.weight*170/(self.drag*self.voltage))
+        self.amt = 4200/60 * (self.drag/self.weight)
 
 
 class Battery(Component):
@@ -185,14 +187,14 @@ class Battery(Component):
 
 
 class BatArch(CompArch):
-    archtype:   str = 'monolithic'
-    batparams:  dict = {}  # weight, cap, voltage, drag_factor
-    weight:     float = 0.0
-    drag:       float = 0.0
-    series:     int = 1
-    parallel:   int = 1
-    voltage:    float = 12.0
-    drag:       float = 0.0
+    archtype: str = 'monolithic'
+    batparams: dict = {}  # weight, cap, voltage, drag_factor
+    weight: float = 0.0
+    drag: float = 0.0
+    series: int = 1
+    parallel: int = 1
+    voltage: float = 12.0
+    drag: float = 0.0
     """
     Battery architecture. Defined by archtype parameter with options:
         - 'monolythic':
@@ -348,6 +350,7 @@ class AffectMode(Mode):
 class AffectDOF(AffectDOFHierarchical):  # ee_mot,ctl,dofs,force_lin hsig_dofs, RSig_dofs
     __slots__ = ('hsig_dofs',)
     _init_m = AffectMode
+    _init_hsig_dofs = HSig
 
     def reconfig_faults(self):
         AffectDOFHierarchical.reconfig_faults(self)
@@ -373,7 +376,7 @@ class CtlDOFMode(Mode):
     """
 
 
-class CtlDOF(CtlDOFDyn):
+class CtlDOF(CtlDOFStat):
     _init_m = CtlDOFMode
 
 
@@ -405,8 +408,6 @@ class PlanPathMode(Mode):
         nominal drone navigation
     """
 
-from drone_mdl_dynamic import PlanPathState as PlanPathStateDyn
-from drone_mdl_dynamic import PlanPath as PlanPathDyn
 
 class PlanPathState(PlanPathStateDyn):
     ground_height: float = 0.0
@@ -443,14 +444,18 @@ class PlanPath(PlanPathDyn):
     def behavior(self, t):
         self.calc_dist_to_goal()
         self.increment_point()
-        self.s.ground_height = self.dofs.s.z
+        self.calc_ground_height()
 
         self.update_mode(t)
         self.update_goal()
         if self.ee_ctl.s.effort < 0.5 or self.m.in_mode('taxi'):
             self.des_traj.s.assign([0.0, 0.0, 0.0, 0.0], 'dx', 'dy', 'dz', 'power')
         else:
+            self.des_traj.s.power = 1.0
             self.assign_vectdist_to_goal()
+
+    def calc_ground_height(self):
+        self.s.ground_height = self.dofs.s.z
 
     def update_mode(self, t):
         if not self.m.any_faults():
@@ -464,7 +469,10 @@ class PlanPath(PlanPathDyn):
                 if self.dofs.s.z < 1:
                     self.m.set_mode('taxi')
                 elif self.s.dist < 10:
-                    self.m.set_mode('land')
+                    if self.em_engaged():
+                        self.m.set_mode('emland')
+                    else:
+                        self.m.set_mode('land')
 
     def update_goal(self):
         # set the new goal based on the mode
@@ -482,6 +490,9 @@ class PlanPath(PlanPathDyn):
         elif self.m.in_mode('degloc'):
             self.s.goal = self.dofs.s.get('x', 'y', 'z')
             self.s.goal[2] -= 1
+
+    def em_engaged(self):
+        return 'em' in self.m.mode
 
     def update_traj(self):
         # send commands (des_traj) if power
@@ -766,9 +777,18 @@ if __name__ == "__main__":
     h = History(nominal=mdlhists.nominal,
                 faulty=mdlhists.store_ee_lowcharge_t6p0)
     
-    fig, ax = show.trajectories(mdlhists, "dofs.s.x", "dofs.s.y")
-    fig, ax = show.trajectories(mdlhists, "dofs.s.x", "dofs.s.y", "dofs.s.z")
-    fig, ax = show.trajectories(h, "dofs.s.x", "dofs.s.y", "dofs.s.z")
+    fault_kwargs = {'alpha': 0.2, 'color': 'red'}
+
+    an.plot.hist(mdlhists, 'flows.dofs.s.x', 'dofs.s.y', 'dofs.s.z', 'store_ee.s.soc',
+                 indiv_kwargs={'faulty': fault_kwargs})
+    fig, ax = an.show.trajectories(mdlhists,
+                                   "dofs.s.x", "dofs.s.y", "dofs.s.z",
+                                   time_groups=['nominal'],
+                                   indiv_kwargs={'faulty': fault_kwargs})
+    
+    fig, ax = show.trajectories(mdlhists, "dofs.s.x", "dofs.s.y",
+                                time_groups=['nominal'],
+                                indiv_kwargs={'faulty': fault_kwargs})
     
     
     fig, ax = plot_env_with_traj3d(h, mdl)

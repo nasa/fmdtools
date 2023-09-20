@@ -6,11 +6,11 @@ from examples.multirotor.drone_mdl_static import EE, Force, Control
 from examples.multirotor.drone_mdl_static import DistEE
 from drone_mdl_rural import DesTraj, DOFs, HSig, RSig
 from drone_mdl_rural import ManageHealth, StoreEE, AffectDOF, CtlDOF
-from drone_mdl_rural import PlanPath as PlanPathOpt
+from drone_mdl_rural import PlanPath as PlanPathRural
 from drone_mdl_rural import DronePhysicalParameters, ResPolicy
-from drone_mdl_rural import HoldPayload as HoldPayloadOpt
-from drone_mdl_rural import AffectDOF as AffectDOFOpt
-from drone_mdl_rural import Drone as DroneOpt
+from drone_mdl_rural import HoldPayload as HoldPayloadRural
+from drone_mdl_rural import AffectDOF as AffectDOFRural
+from drone_mdl_rural import Drone as DroneRural
 
 from fmdtools.define.block import CompArch, Component
 from fmdtools.define.mode import Mode
@@ -62,6 +62,14 @@ class UrbanGridParam(GridParam):
     max_height: float = 100.0
     roadwidth: int = 15
     loc: str = 'urban'
+    feature_safe: tuple = (bool, True)
+    feature_allowed: tuple = (bool, False)
+    feature_occupied: tuple = (bool, False)
+    feature_height: tuple = (float, 0.0)
+    point_start: tuple = (0, 0)
+    point_end: tuple = (900, 900)
+    collect_all_occupied: tuple = ("occupied", True)
+    collect_all_safe: tuple = ("safe", True)
 
 
 class StreetGrid(Grid):
@@ -87,16 +95,6 @@ class StreetGrid(Grid):
             all points that are safe to land at
     """
     _init_p = UrbanGridParam
-
-    _feature_safe = (bool, True)
-    _feature_allowed = (bool, False)
-    _feature_occupied = (bool, False)
-    _feature_height = (float, 0.0)
-
-    _point_start = (0, 0)
-    _point_end = (900, 900)
-    _collect_all_occupied = ("occupied", True)
-    _collect_all_safe = ("safe", True)
 
     def init_properties(self, *args, **kwargs):
         """Randomly allocates the allowed/occupied points, as well as the building 
@@ -139,22 +137,12 @@ class UrbanDroneEnvironment(Environment):
             else:
                 self.s.landed = False
 
-class AffectDOF(AffectDOFOpt):
+class AffectDOF(AffectDOFRural):
     _init_environment = UrbanDroneEnvironment
 
-    def inc_takeoff(self):
-        self.environment.set_states(self.dofs)
-        # can only take off at ground
-        if self.environment.s.landed:
-            self.dofs.s.put(planvel=0.0, vertvel=max(0, self.dofs.s.vertvel))
+    def get_fall_dist(self):
+        return self.environment.ground_height(self.dofs)
 
-    def dynamic_behavior(self, time):
-        self.calc_vel()
-        self.inc_takeoff()
-        g_h = self.environment.ground_height(self.dofs)
-        self.inc_falling(min_fall_dist=g_h)
-        self.inc_pos()
-        self.environment.set_states(self.dofs)
 
 class ComputerVisionMode(Mode):
     faultparams = {'undesired_detection': (0.5, {'move': 1.0}, 0),
@@ -202,7 +190,7 @@ class PlanPathParam(Parameter):
     height: float = 200.0
 
 
-class PlanPath(PlanPathOpt):
+class PlanPath(PlanPathRural):
     _init_environment = UrbanDroneEnvironment
     _init_c = VisionArch
     _init_p = PlanPathParam
@@ -211,17 +199,18 @@ class PlanPath(PlanPathOpt):
         self.make_goals([*self.environment.g.start, 0], [*self.environment.g.end, 0])
 
     def make_goals(self, start, end):
-        self.goals = {0: start,
-                      1: [start[0], start[1], self.p.height],
-                      2: [end[0], end[1], self.p.height],
-                      3: end}
+        self.s.goals = {0: start,
+                        1: (start[0], start[1], self.p.height),
+                        2: (end[0], end[1], self.p.height),
+                        3: end}
 
     def reconfigure_plan(self, new_landing, newmode="move_em"):
-        self.make_goals([self.dofs.s.x, self.dofs.s.y, self.dofs.s.z], new_landing)
+        self.make_goals(self.dofs.s.get('x', 'y', 'z'), new_landing)
         self.m.set_mode(newmode)
-        self.s.pt = 0
+        self.s.pt = 1
+        self.s.goal = self.s.goals[self.s.pt]
 
-    def reconfigure_path(self):
+    def update_goal(self):
         vis = self.c.components['vision']
         land_occupied = vis.check_if_occupied(self.environment, self.dofs)
         # reconfigure path based on mode
@@ -233,23 +222,27 @@ class PlanPath(PlanPathOpt):
             self.reconfigure_plan(self.find_nearest())
         elif self.m.in_mode('to_home'):
             self.reconfigure_plan([*self.environment.g.start, 0.0])
+        elif self.m.in_mode('emland', 'land'):
+            z_down = self.dofs.s.z - self.s.ground_height/2
+            self.s.goal = (self.dofs.s.x, self.dofs.s.y, z_down)
+        elif self.m.in_mode('move', 'move_em'):
+            self.s.goal = self.s.goals[self.s.pt]
+        elif self.m.in_mode('noloc'):
+            self.s.goal = self.dofs.s.get('x', 'y', 'z')
+        elif self.m.in_mode('degloc'):
+            self.s.goal = self.dofs.s.get('x', 'y', 'z')
+            self.s.goal[2] -= 1
 
     def find_nearest(self):
         return self.environment.g.find_closest(self.dofs.s.x, self.dofs.s.y,
                                                "all_safe", include_pt=False)
-
-    def behavior(self, t):
+    
+    def calc_ground_height(self):
         self.s.ground_height = self.environment.ground_height(self.dofs)
-        self.update_mode(t)
-        self.reconfigure_path()
-        self.update_dist()
-        self.update_traj()
-
-    def dynamic_behavior(self, time):
-        self.increment_point()
 
 
-class HoldPayload(HoldPayloadOpt):
+
+class HoldPayload(HoldPayloadRural):
     _init_environment = UrbanDroneEnvironment
 
     def at_ground(self):
@@ -258,13 +251,14 @@ class HoldPayload(HoldPayloadOpt):
 
 
 class DroneParam(Parameter):
+    respolicy: ResPolicy = ResPolicy()
     plan_param: PlanPathParam = PlanPathParam()
     env_param: UrbanGridParam = UrbanGridParam()
-    phys_param: DronePhysicalParameters = DronePhysicalParameters(bat="parallel-split")
-    respolicy: ResPolicy = ResPolicy()
+    phys_param: DronePhysicalParameters = DronePhysicalParameters()
 
 
-class Drone(DroneOpt):
+
+class Drone(DroneRural):
     _init_p = DroneParam
     default_sp = dict(phases=(('ascend', 0, 0),
                               ('forward', 1, 11),
@@ -402,7 +396,7 @@ def plot_env_with_traj3d(mdlhists, mdl, legend=True, title="trajectory"):
     fig, ax = show.trajectories(mdlhists, "dofs.s.x", "dofs.s.y", "dofs.s.z",
                                 fig=fig, ax=ax, legend=legend, title=title)
     ax.set_zlim3d(0, mdl.p.plan_param.height)
-    for goal, loc in mdl.fxns['plan_path'].goals.items():
+    for goal, loc in mdl.fxns['plan_path'].s.goals.items():
         ax.text(loc[0], loc[1], loc[2], str(goal), fontweight='bold', fontsize=12)
         ax.plot([loc[0]], [loc[1]], [loc[2]],
                 marker='o', markersize=10, color='red', alpha=0.5)
@@ -453,7 +447,7 @@ if __name__ == "__main__":
     
     show.grid_collection(e.g, 'all_safe', z='height')
     
-    mdl = Drone()
+    mdl = Drone(p={'respolicy': ResPolicy(bat="to_nearest", line="to_nearest")})
     # ec, mdlhist_fault = propagate.one_fault(mdl, "plan_path", "vision_lack_of_detection", time=4.5)
 
     ec, mdlhist = propagate.nominal(mdl, dt=1.0)
@@ -466,21 +460,22 @@ if __name__ == "__main__":
     plot_env_with_traj3d(mdlhist, mdl)
     
     
-    
     move_quad=make_move_quad(mdlhist, phases['plan_path']['move'])
     
-    """
-    ec, mdlhist = propagate.one_fault(mdl, 'store_ee', 'nocharge', 4.5)
+
+    ec, mdlhist = propagate.one_fault(mdl, 'store_ee', 'lowcharge', 4.0)
     app = SampleApproach(mdl, phases=phases, modephases=modephases,
                          sampparams = {('PlanPath','move'): move_quad})
     app
-    endresults, hists = propagate.approach(mdl, app, staged=False)
+    endresults, hists = propagate.approach(mdl, app, staged=False,
+                                           mdl_kwargs = {'sp':{'dt':1.0}})
     statsfmea = an.tabulate.fmea(endresults, app, group_by='fxnfault',
                                  weight_metrics=['rate'],
                                  avg_metrics=['unsafe_flight_time', 'cost', 'repcost',
                                               'landcost', 'body_strikes',
                                               'head_strikes', 'property_restrictions'],
                                  sort_by='cost')
-    plot_traj(hists, mdl, title="", legend=True)
-    """
+    plot_env_with_traj3d(hists, mdl)
+    plot_env_with_traj(hists, mdl)
+
     #move_quad = make_move_quad(mdlhist, phases['PlanPath']['move'])
