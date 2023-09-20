@@ -56,6 +56,8 @@ pytest
 # license: (MIT) https://docs.pytest.org/en/7.3.x/license.html
 graphviz
 # license: (MIT) https://github.com/xflr6/graphviz/blob/master/LICENSE.txt
+shapely
+# license: (BSD 3-clause) https://github.com/shapely/shapely/blob/main/LICENSE.txt
 ```
 
 These external (non-python) packages are recommended to enable specific fmdtools use-cases and to test/develop fmdtools as well as work with examples in the repository:
@@ -79,9 +81,6 @@ These must be installed within the system environment (e.g. using ``conda instal
 
 Additionally, the following python packages are not included but are necessary for development/testing of the code:
 ```
-shapely
-# used for: multirotor model
-# license: (BSD 3-clause) https://github.com/shapely/shapely/blob/main/LICENSE.txt
 deap
 # used for: optimization of rover faults
 # license: (LGPL-3.0) https://github.com/DEAP/deap/blob/master/LICENSE.txt
