@@ -20,7 +20,8 @@ import fmdtools.sim as fs
 from shapely.geometry import Point
 from shapely.geometry.polygon import Polygon
 
-from examples.multirotor.drone_mdl_static import DistEE, HoldPayload
+from examples.multirotor.drone_mdl_static import DistEE
+from examples.multirotor.drone_mdl_static import HoldPayload as HoldPayloadStatic
 from examples.multirotor.drone_mdl_static import StoreEE as StaticstoreEE
 from examples.multirotor.drone_mdl_static import AffectDOF as AffectDOFStatic
 from examples.multirotor.drone_mdl_static import CtlDOF
@@ -70,6 +71,14 @@ class StoreEE(StaticstoreEE):
             self.s.inc(soc=-self.ee_out.s.mul('rate', 'effort')*(time-self.t.time)/2)
 
 
+class HoldPayload(HoldPayloadStatic):
+    def calc_force_gr(self):
+        if self.at_ground():
+            force_vel = - (abs(self.dofs.s.vertvel)
+                           + abs(self.dofs.s.planvel)) / 60
+            self.s.force_gr = min(-0.5, force_vel)
+        else:
+            self.s.force_gr = 0.0
 
 class PlanPathMode(Mode):
     failrate = 1e-5
@@ -135,7 +144,7 @@ class PlanPath(FxnBlock):
             self.m.mode = 'taxi'
         elif self.s.dist < 5 and self.s.pt == 5:
             self.m.mode = 'land'
-        elif self.s.pt == 6 and self.m.in_mode('move', 'hover'):
+        elif self.s.pt == 5 and self.m.in_mode('move', 'hover'):
             self.m.mode = 'descend'
         elif self.s.dist > 5 and not (self.m.mode == 'descend'):
             self.m.mode = 'move'
@@ -157,9 +166,9 @@ class PlanPath(FxnBlock):
         elif self.m.mode == 'move':
             self.assign_vectdist_to_goal()
         elif self.m.mode == 'descend':
-            self.des_traj.s.assign([0, 0, -0.5], "dx", "dy", "dz")
+            self.des_traj.s.assign([0, 0, -3*self.dofs.s.z/4], "dx", "dy", "dz")
         elif self.m.mode == 'land':
-            self.des_traj.s.assign([0, 0, -0.1], "dx", "dy", "dz")
+            self.des_traj.s.assign([0, 0, -2], "dx", "dy", "dz")
         # faulty behaviors
         if self.m.has_fault('noloc'):
             self.des_traj.s.assign([0, 0, 0], "dx", "dy", "dz")
@@ -218,6 +227,7 @@ class AffectDOF(AffectDOFStatic):
 
 class ViewEnvironment(FxnBlock):
     """Camera for the drone. Determines which aspects of the environment are viewed."""
+
     _init_dofs = DOFs
     _init_environment = DroneEnvironment
 
@@ -234,8 +244,9 @@ class ViewEnvironment(FxnBlock):
 class Drone(Model):
     __slots__ = ()
     default_sp = dict(phases=(('ascend', 0, 1),
-                              ('forward', 2, 16),
-                              ('taxi', 17, 20)),
+                              ('forward', 2, 14),
+                              ('descend', 15, 18),
+                              ('taxi', 19, 20)),
                       times=(0, 20),
                       units='sec')
 
@@ -273,7 +284,7 @@ class Drone(Model):
         else:
             lostcost = 0
 
-        if any(abs(mdlhists.faulty.fxns.hold_payload.s.force_gr) > 2.0):
+        if any(mdlhists.faulty.fxns.hold_payload.m.faults['break']):
             crashcost = 100000
         else:
             crashcost = 0

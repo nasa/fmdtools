@@ -9,33 +9,85 @@ from fmdtools.define.flow import Flow
 
 
 # MODEL FLOWS
+
 class EEState(State):
+    """
+    State of electrical energy.
+
+    Fields
+    -------
+    rate : float
+        Dimensionless current. 1.0 is nominal.
+    effort : float
+        Dimensionless voltage. 1.0 is nominal while 0.0 is off.
+    """
+
     rate: float = 1.0
     effort: float = 1.0
 
 
 class EE(Flow):
+    """Electrical Energy Flow."""
+
     _init_s = EEState
 
 
 class ForceState(State):
+    """State of force. Holds support field."""
+
     support: float = 1.0
 
 
 class Force(Flow):
+    """Force flow."""
+
     _init_s = ForceState
 
 
 class ControlState(State):
+    """
+    State of control power/throttle controlling velocity.
+
+    Fields
+    -------
+    forward : float
+        Throttle forward. 1.0 is normal speed. 0.0 is stopped.
+    upward : float
+        Throttle upward. 1.0 maintains hover. 2.0 climbs and 0.0 is no throttle.
+    """
+
     forward: float = 1.0
     upward: float = 1.0
 
 
 class Control(Flow):
+    """Control Flow."""
+
     _init_s = ControlState
 
 
 class DOFstate(State):
+    """
+    State defining the (simplified) degrees of freedom of the drone.
+
+    Fields
+    -------
+    vertvel : float
+        Vertical velocity (m/min)
+    planvel : float
+        Planar velocity (m/min)
+    planpwr : float
+        Planar power. 1.0 is normal speed and 0.0 is stopped.
+    uppwr : float
+        Upward power. 1.0 maintains hover. 2.0 climbs and 0.0 is no power.
+    x : float
+        x-position
+    y : float
+        y-position
+    z : float
+        z-position
+    """
+
     vertvel: float = 1.0
     planvel: float = 1.0
     planpwr: float = 1.0
@@ -46,56 +98,106 @@ class DOFstate(State):
 
 
 class DOFParam(Parameter):
-    max_vel: float = 300.0  # 5 m/s (300 m/min)
+    """Parameter defining max velocity (5m/s or 300 m/min)."""
+
+    max_vel: float = 300.0
 
 
 class DOFs(Flow):
+    """Flow defining the Drone degrees of freedom."""
+
     _init_s = DOFstate
     _init_p = DOFParam
 
 
 class DesTrajState(State):
+    """
+    State defining the drone's desired trajectory.
+
+    Fields
+    -------
+    dx : float
+        x-distance to goal
+    dy : float
+        y-distance to goal
+    dz : float
+        z-distance to goal
+    power : float
+        whether to follow trajectory (0.0 no, 1.0 yes).
+    """
+
     dx: float = 1.0
     dy: float = 0.0
     dz: float = 0.0
     power: float = 1.0
+
     def unit_vect2d(self):
-        return np.array([self.dx, self.dy])/self.dist2d()
+        """
+        Produce a unit vector corresponding to the planar (x and y) trajectory.
+
+        Returns
+        -------
+        uvect : np.array
+            Unit vector of the direction
+
+        e.g.::
+        >>> d = DesTrajState()
+        >>> d.unit_vect2d()
+        array([1., 0.])
+        """
+        return np.round(np.array([self.dx, self.dy])/self.dist2d())
 
     def dist2d(self):
-        return np.sqrt(self.dx**2 + self.dy**2)  + 0.00001
+        """
+        Get the planar (x and y) distance to the goal.
 
+        Returns
+        -------
+        dist : float
+            2d distance to goal.
+
+        e.g.::
+        >>> d = DesTrajState()
+        >>> d.dist2d()
+        1.0
+        """
+        dist = np.sqrt(self.dx**2 + self.dy**2)
+        if dist == 0.0:
+            return 0.00000001
+        else:
+            return dist
 
 
 class DesTraj(Flow):
+    """Desired trajectory flow."""
+
     _init_s = DesTrajState
 
 
 # MODEL FUNCTIONS
 
 class StoreEEMode(Mode):
+    """Specifies fault modes for battery (e.g., lowcharge)."""
+
     failrate = 1e-5
     faultparams = {"nocharge": (1, 300)}
 
 
 class StoreEEState(State):
+    """Battery state of charge percentage."""
+
     soc: float = 100.0
 
 
 class StoreEE(FxnBlock):
+    """Class for the battery architecture/energy storage."""
+
     __slots__ = ("ee_out", "fs")
     _init_s = StoreEEState
     _init_m = StoreEEMode
     _init_ee_out = EE
     _init_fs = Force
     flownames = {"ee_1": "ee_out", "force_st": "fs"}
-    """
-    Class for the battery architecture with:
-    - StoreEEState: State
-        specifies battery state of charge percentage
-    - StoreEEMode: Mode
-        specifies modes for battery (e.g., lowcharge)
-    """
 
     def behavior(self, time):
         if self.m.has_fault("nocharge"):
@@ -105,34 +207,49 @@ class StoreEE(FxnBlock):
 
 
 class DistEEMode(Mode):
+    """
+    Power Distribution Fault modes.
+
+    Modes
+    -------
+    short: Fault
+        EE effort goes to zero, while rate increases to 10 (or some high value)
+    degr: Fault
+        Less ability to transfer EE effort
+    break: Fault
+        Open circuit caused by mechanical breakage, inability to tranfer EE
+    """
+
     failrate = 1e-5
     faultparams = {"short": (0.3, 3000),
                    "degr": (0.5, 1000),
                    "break": (0.2, 2000)}
-    """
-    Power Distribution Fault modes. Includes:
-        - short: Fault
-            EE effort goes to zero, while rate increases to 10 (or some high value)
-        - degr: Fault
-            Less ability to transfer EE effort
-        - break: Fault
-            Open circuit caused by mechanical breakage, inability to tranfer EE
-    """
 
 
 class DistEEState(State):
+    """
+    State of power distribution.
+
+    Fields
+    -------
+    ee_tr: float
+        Ability to transfer EE rate (current, with a nominal value of 1.0)
+    ee_te: float
+        Ability to transfer EE effort (voltage, with a nominal value of 1.0)
+    """
+
     ee_tr: float = 1.0
     ee_te: float = 1.0
-    """
-    State of power distribution. Has values:
-        - ee_tr: float
-            Ability to transfer EE rate (current, with a nominal value of 1.0)
-    -   - ee_te: float
-            Ability to transfer EE effort (voltage, with a nominal value of 1.0)
-    """
 
 
 class DistEE(FxnBlock):
+    """
+    Power distribution for the drone.
+
+    Takes in power from the battery and distributes it to the motors and control
+    systems/avionics.
+    """
+
     __slots__ = ("ee_in", "ee_mot", "ee_ctl", "st")
     _init_s = DistEEState
     _init_m = DistEEMode
@@ -141,10 +258,6 @@ class DistEE(FxnBlock):
     _init_ee_ctl = EE
     _init_st = Force
     flownames = {"ee_1": "ee_in", "force_st": "st"}
-    """
-    Power distribution for the drone. Takes in power from the battery and distributes
-    it to the motors and control systems/avionics.
-    """
 
     def condfaults(self, time):
         if self.st.s.support < 0.5 or max(self.ee_mot.s.rate, self.ee_ctl.s.rate) > 2:
@@ -166,28 +279,38 @@ class DistEE(FxnBlock):
 
 
 class HoldPayloadMode(Mode):
+    """
+    Multirotor structure fault modes.
+
+    Modes
+    -------
+    break: Fault
+        provides no support to the body and lines
+    deform: Fault
+        support is less than desired
+    """
+
     failrate = 1e-6
     faultparams = {"break": (0.2, 10000),
                    "deform": (0.8, 10000)}
-    """
-    Multirotor structure fault modes. Includes:
-        - break: Fault
-            provides no support to the body and lines
-        - deform: Fault
-            support is less than desired
-    """
 
 
 class HoldPayloadState(State):
+    """
+    Landing Gear States.
+
+    Fields
+    -------
+    force_gr: float
+        Force from the ground
+    """
+
     force_gr:   float = 1.0
-    """
-    Landing Gear States. Has values:
-        - force_gr: float
-            Force from the ground
-    """
 
 
 class HoldPayload(FxnBlock):
+    """Drone landing gear."""
+
     __slots__ = ('dofs', 'force_st', 'force_lin')
     _init_m = HoldPayloadMode
     _init_s = HoldPayloadState
@@ -198,15 +321,18 @@ class HoldPayload(FxnBlock):
     def at_ground(self):
         return self.dofs.s.z <= 0.0
 
-    def dynamic_behavior(self, time):
+    def calc_force_gr(self):
         if self.at_ground():
-            self.s.force_gr = min(-0.5, (self.dofs.s.vertvel +
-                                  self.dofs.s.planvel)/self.dofs.p.max_vel)
+            self.s.force_gr = -1.0
         else:
             self.s.force_gr = 0.0
-        if abs(self.s.force_gr/2) > 1.0:
+
+    def behavior(self, time):
+        self.calc_force_gr()
+
+        if self.s.force_gr < -0.8:
             self.m.add_fault('break')
-        elif abs(self.s.force_gr/2) > 0.8:
+        elif self.s.force_gr < -0.6:
             self.m.add_fault('deform')
 
         # need to transfer FG to FA & FS???
@@ -220,24 +346,28 @@ class HoldPayload(FxnBlock):
 
 
 class AffectDOFState(State):
+    """
+    Behavior-affecting states for drone rotors/propellers.
+
+    Fields
+    -------
+    Eto: float
+        Electricity transfer (out)
+    Eti: float
+        Electricity pull (in)
+    Ct: float
+        Control transferrence
+    Mt: float
+        Mechanical support
+    Pt: float
+        Physical tranferrence (ability of rotor to spin)
+    """
+
     e_to: float = 1.0
     e_ti: float = 1.0
     ct: float = 1.0
     mt: float = 1.0
     pt: float = 1.0
-    """
-    Behavior-affecting states for drone rotors/propellers. Has values:
-        Eto: float
-            Electricity transfer (out)
-        Eti: float
-            Electricity pull (in)
-        Ct: float
-            Control transferrence
-        Mt: float
-            Mechanical support
-        Pt: float
-            Physical tranferrence (ability of rotor to spin)
-    """
 
 
 class AffectDOFMode(Mode):
@@ -257,8 +387,10 @@ class AffectDOFMode(Mode):
 
 
 class BaseLine(object):
+    """Base class for Lines that includes fault logic affecting states."""
+
     def calc_faults(self):
-        """Modifies AffectDOF states based on faults"""
+        """Modify AffectDOF states based on faults."""
         self.s.put(e_ti=1.0, e_to=1.0)
         if self.m.has_fault("short"):
             self.s.put(e_ti=10, e_to=0.0)
@@ -280,9 +412,11 @@ class BaseLine(object):
             self.s.pt = 0.0
         elif self.m.has_fault("propwarp"):
             self.s.pt = 0.5
-    
 
-class AffectDOF(FxnBlock, BaseLine):  # ee_mot,ctl,dofs,force_lin HSig_dofs, RSig_dofs
+
+class AffectDOF(FxnBlock, BaseLine):
+    """Drone rotors that the drone through the air."""
+
     __slots__ = ("ee_in", "ctl_in", "dofs", "force")
     _init_s = AffectDOFState
     _init_m = AffectDOFMode
@@ -293,10 +427,6 @@ class AffectDOF(FxnBlock, BaseLine):  # ee_mot,ctl,dofs,force_lin HSig_dofs, RSi
     flownames = {"ee_mot": "ee_in",
                  "ctl": "ctl_in",
                  "force_lin": "force"}
-    """
-    Drone rotor architecture which moves the drone through the air based on signals
-    using electrical power.
-    """
 
     def behavior(self, time):
         self.calc_faults()
@@ -305,19 +435,19 @@ class AffectDOF(FxnBlock, BaseLine):  # ee_mot,ctl,dofs,force_lin HSig_dofs, RSi
         self.inc_pos()
 
     def calc_pwr(self):
-        """Calculates immediate power/support from AffectDOF function"""
+        """Calculate immediate power/support from AffectDOF function."""
         self.ee_in.s.rate = self.s.e_ti
         pwr = self.s.mul("e_to", "e_ti", "ct", "mt", "pt")
         self.dofs.s.uppwr = self.ctl_in.s.upward * pwr
         self.dofs.s.planpwr = self.ctl_in.s.forward * pwr
 
     def calc_vel(self):
-        """Calculates velocity given power/support"""
+        """Calculate velocity given power/support."""
         self.dofs.s.vertvel = max(min(-2 + 2 * self.dofs.s.uppwr, 2), -2)
         self.dofs.s.planvel = self.dofs.s.planpwr
 
     def inc_pos(self):
-        """Increments Drone Position"""
+        """Increment Drone Position."""
         if self.dofs.s.vertvel > 1.5 or self.dofs.s.vertvel < -1:
             self.m.add_fault("mechbreak")
             self.dofs.s.z = 0.0
@@ -326,23 +456,32 @@ class AffectDOF(FxnBlock, BaseLine):  # ee_mot,ctl,dofs,force_lin HSig_dofs, RSi
 
 
 class CtlDOFstate(State):
+    """
+    Controller States.
+
+    Fields
+    -------
+    cs: float
+        Control signal transferrence (nominally 1.0)
+    power: float
+        Power sent transference (nominally 1.0)
+    """
+
     cs: float = 1.0
     power: float = 1.0
-    """
-    Controller States. Has entries:
-        cs: float
-            Control signal transferrence (nominally 1.0)
-        power: float
-            Power sent transference (nominally 1.0)
-    """
 
 
 class CtlDOFMode(Mode):
+    """Controller Modes, noctl (lack of control) and degctl (degraded control)."""
+
     failrate = 1e-5
-    faultparams = {"noctl": (0.2, 10000), "degctl": (0.8, 10000)}
+    faultparams = {"noctl": (0.2, 10000),
+                   "degctl": (0.8, 10000)}
 
 
 class CtlDOF(FxnBlock):
+    """Drone rotor control."""
+
     __slots__ = ("ee_in", "des_traj", "ctl", "dofs", "fs")
     _init_s = CtlDOFstate
     _init_m = CtlDOFMode
@@ -363,6 +502,7 @@ class CtlDOF(FxnBlock):
         self.update_ctl(up, forward)
 
     def calc_cs(self):
+        """Calculate signal transferrence based on faults."""
         if self.m.has_fault("noctl"):
             self.s.cs = 0.0
         elif self.m.has_fault("degctl"):
@@ -371,6 +511,7 @@ class CtlDOF(FxnBlock):
             self.s.cs = 1.0
 
     def calc_throttle(self):
+        """Calculate upward and forward throttle (desired/ideal)."""
         up = 1.0 + self.des_traj.s.dz / self.dofs.p.max_vel
 
         if self.des_traj.s.same([0.0, 0.0], 'dx', 'dy'):
@@ -380,6 +521,7 @@ class CtlDOF(FxnBlock):
         return up, forward
 
     def update_ctl(self, up, forward):
+        """Update control throttle flow."""
         self.s.power = self.ee_in.s.effort * self.s.cs * self.des_traj.s.power
         self.ctl.s.put(forward=self.s.power*forward,
                        upward=self.s.power*up)
@@ -387,11 +529,15 @@ class CtlDOF(FxnBlock):
 
 
 class PlanPathMode(Mode):
+    """Path planning modes (no location and degraded location)."""
+
     failrate = 1e-5
     faultparams = {"noloc": (0.2, 10000), "degloc": (0.8, 10000)}
 
 
 class PlanPath(FxnBlock):
+    """Drone path planning function."""
+
     __slots__ = ("ee_in", "dofs", "des_traj", "fs")
     _init_m = PlanPathMode
     _init_ee_in = EE
@@ -419,7 +565,9 @@ class PlanPath(FxnBlock):
 
 def m2to1(x):
     """
-    Multiplies a list of numbers which may take on the values infinity or zero. In deciding if num is inf or zero, the earlier values take precedence
+    Multiply a list of numbers which may take on the values infinity or zero.
+
+    In deciding if num is inf or zero, the earlier values take precedence
 
     Parameters
     ----------
@@ -446,20 +594,23 @@ def m2to1(x):
 
 
 class ViewModes(Mode):
+    """Drone camera modes (no view of environment)."""
+
     failrate = 1e-5
     faultparams = {"poorview": (0.2, 10000)}
 
 
 class ViewEnvironment(FxnBlock):
+    """Drone camera placeholder."""
+
     _init_m = ViewModes
     _init_dofs = DOFs
 
 
 class Drone(Model):
+    """Static multirotor drone model (executes in a single timestep)."""
+
     __slots__ = ()
-    """
-    Static multirotor drone model (executes in a single timestep).
-    """
 
     def __init__(self, sp=SimParam(times=(0,)), **kwargs):
         super().__init__(sp=sp, **kwargs)
@@ -495,6 +646,8 @@ class Drone(Model):
 
 if __name__ == "__main__":
     from fmdtools.sim import propagate
+    import doctest
+    doctest.testmod(verbose=True)
 
     static_mdl = Drone()
     endclasses, mdlhists = propagate.single_faults(static_mdl)

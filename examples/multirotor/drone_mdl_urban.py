@@ -32,16 +32,20 @@ from recordclass import asdict
 
 class EnvironmentState(State):
     """
-    States relating the drone with its environmnet:
-        -safe: bool
-            whether the drone is above a safe grid point (where no people are)
-        -allowed: bool
-            whether the drone is above an allowed grid location
-        -landed: bool
-            whether the drone has landed
-        -occupied: bool
-            whether the space is occupied
+    States relating the drone with its environment.
+
+    Fields
+    -------
+    safe: bool
+        whether the drone is above a safe grid point (where no people are)
+    allowed: bool
+        whether the drone is above an allowed grid location
+    landed: bool
+        whether the drone has landed
+    occupied: bool
+        whether the space is occupied
     """
+
     safe: bool = True
     allowed: bool = True
     landed: bool = True
@@ -50,9 +54,12 @@ class EnvironmentState(State):
 
 class UrbanGridParam(GridParam):
     """
-    Defines the grid parameters, including resolution as well as number of allowed,
-    unsafe, and occupied spaces, max height of the buildings, and road width.
+    Defines the grid parameters.
+
+    Includes resolution as well as number of allowed, unsafe, and occupied spaces,
+    max height of the buildings, and road width.
     """
+
     x_size: int = 10
     y_size: int = 10
     blocksize: float = 100.0
@@ -94,11 +101,11 @@ class StreetGrid(Grid):
         - all_safe: collection
             all points that are safe to land at
     """
+
     _init_p = UrbanGridParam
 
     def init_properties(self, *args, **kwargs):
-        """Randomly allocates the allowed/occupied points, as well as the building 
-        heights."""
+        """Randomly allocates the allowed/occupied points, and the building heights."""
         rand_pts = self.r.rng.choice(self.pts[1:-1],
                                      self.p.num_allowed + self.p.num_unsafe,
                                      replace=False)
@@ -119,13 +126,12 @@ class UrbanDroneEnvironment(Environment):
     _init_s = EnvironmentState
 
     def ground_height(self, dofs):
-        """Gets the distance of the height z above the ground at point x,y"""
+        """Get the distance of the height z above the ground at point x,y."""
         env_height = self.g.get(dofs.s.x, dofs.s.y, 'height', dofs.s.z)
         return dofs.s.z-env_height
 
     def set_states(self, dofs):
-        """Set the landing states safe_land and allowed_land since the drone has
-        landed"""
+        """Set the landing states safe_land and allowed_land for landing."""
         if self.g.in_range(dofs.s.x, dofs.s.y):
             props = self.g.get_properties(dofs.s.x, dofs.s.y)
             self.s.safe = props['safe']
@@ -149,18 +155,25 @@ class AffectDOF(AffectDOFRural):
 
 
 class ComputerVisionMode(Mode):
+    """
+    Computer vision modes.
+
+    -------
+    undesired_detection : Fault
+        detects an occupied space (even if it isn't')
+    lack_of_detection : Fault
+        doesn't detect occupied spaces
+    """
+
     faultparams = {'undesired_detection': (0.5, {'move': 1.0}, 0),
                    'lack_of_detection': (0.5, {'move': 1.0}, 0)}
 
 
 class ComputerVision(Component):
+    """Component for percieving if a landing location is occupied."""
+
     _init_m = ComputerVisionMode
-    """
-    Component for percieving if a landing location is occupied.
-    Has modes:
-        -undesired_detection: detects an occupied space (even if it isn't')
-        -lack_of_detection: doesn't detect occupied spaces
-    """
+
 
     def check_if_occupied(self, environment, dofs):
         if self.m.has_fault("undesired_detection"):
@@ -240,7 +253,7 @@ class PlanPath(PlanPathRural):
     def find_nearest(self):
         return self.environment.g.find_closest(self.dofs.s.x, self.dofs.s.y,
                                                "all_allowed", include_pt=False)
-    
+
     def calc_ground_height(self):
         self.s.ground_height = self.environment.ground_height(self.dofs)
 
@@ -308,10 +321,8 @@ class Drone(DroneRural):
         self.build()
 
     def indicate_landed(self, time):
-        """
-        Custom indicator for ending the simulation. Returns true if the
-        drone has entered the "landed" state.
-        """
+        """Returns true if the drone has entered the "landed" state."""
+
         return time > 1 and self.fxns['plan_path'].m.mode == 'taxi'
 
     def at_start(self, dofs):
@@ -437,6 +448,7 @@ def make_move_quad(mdlhist, move_phase, weights = [0.003, 0.5, 0.46]):
             nodes.append(node)
             ws.append(2*weights[i])
     return {'samp': 'quadrature', 'quad': {'nodes': nodes, 'weights': weights}}
+
 
 if __name__ == "__main__":
     from fmdtools.sim import propagate
