@@ -31,7 +31,8 @@ from fmdtools.analyze.plot import prep_hists
 
 def grid_property(grd, prop, xlab="x", ylab="y", proplab="prop", **kwargs):
     """
-    Plots a given property 'prop' as a colormesh on an x-y grid.
+    Plot a given property 'prop' as a colormesh on an x-y grid.
+
     See matplotlib.pyplot.pcolormesh.
 
     Parameters
@@ -83,12 +84,13 @@ def grid_property(grd, prop, xlab="x", ylab="y", proplab="prop", **kwargs):
     return fig, ax
 
 
-def grid_property3d(grd, prop, z="prop", z_res=10, collections = {},
+def grid_property3d(grd, prop, z="prop", z_res=10, collections={},
                     xlab="x", ylab="y", zlab="prop",
-                    proplab="prop", cmap="Greens", 
+                    proplab="prop", cmap="Greens",
                     fig=None, ax=None, figsize=(4, 5), **kwargs):
     """
-    Plots a given properties 'prop' and 'z' as a voxels on an x-y-z grid.
+    Plot a given properties 'prop' and 'z' as a voxels on an x-y-z grid.
+
     See mpl_toolkits.mplot3d.axes3d.Axes3D.voxels.
 
     Parameters
@@ -187,8 +189,11 @@ def grid_property3d(grd, prop, z="prop", z_res=10, collections = {},
 
 
 def init_figure(fig=None, ax=None, z=False, figsize=()):
-    """Initializes a 2d or 3d figure at a given size, unless there is a
-    pre-existing figure or axis."""
+    """
+    Initialize a 2d or 3d figure at a given size.
+
+    If there is a pre-existing figure or axis, uses that instead.
+    """
     if not fig:
         if z:
             fig = plt.figure(figsize=figsize)
@@ -196,12 +201,12 @@ def init_figure(fig=None, ax=None, z=False, figsize=()):
         else:
             fig, ax = plt.subplots(1, figsize=figsize)
     return fig, ax
-        
+
 
 def grid_collection(grd, prop, fig=None, ax=None, label=True, z="",
-                    legend_args=False, text_z_offset=0.0, figsize=(4,4), **kwargs):
+                    legend_args=False, text_z_offset=0.0, figsize=(4, 4), **kwargs):
     """
-    Shows a collection on the grid as square patches.
+    Show a collection on the grid as square patches.
 
     Parameters
     ----------
@@ -223,7 +228,7 @@ def grid_collection(grd, prop, fig=None, ax=None, label=True, z="",
         the height at that constant z-value.
     legend_args : dict/False
         Specifies arguments to legend. Default is False, which shows no legend.
-    text_z_offset : 
+    text_z_offset : float
         Offset for text. Default is 0.0
     figsize : tuple
         Size for the figure. Default is (4,4)
@@ -282,7 +287,7 @@ def grid_collection(grd, prop, fig=None, ax=None, label=True, z="",
 
 def grid(grd, prop, collections={}, legend_args=False, **kwargs):
     """
-    Plots a property and set of collections on the grid.
+    Plot a property and set of collections on the grid.
 
     Parameters
     ----------
@@ -312,8 +317,7 @@ def grid(grd, prop, collections={}, legend_args=False, **kwargs):
 def grid3d(grd, prop, z="prop", collections={}, legend_args=False, voxels=True,
            **kwargs):
     """
-    Plots a property and set of collections in a discretized (voxelized) version
-    of the grid.
+    Plot a property and set of collections in a discretized version of the grid.
 
     Parameters
     ----------
@@ -328,6 +332,8 @@ def grid3d(grd, prop, z="prop", collections={}, legend_args=False, voxels=True,
         The default is {}.
     legend_args : dict/False
         Specifies arguments to legend. Default is False, which shows no legend.
+    voxels : bool
+        Whether or not to plot the grid as voxels. Default is True.
     **kwargs : kwargs
         kwargs to show_property3d.
 
@@ -345,7 +351,8 @@ def grid3d(grd, prop, z="prop", collections={}, legend_args=False, voxels=True,
     if voxels:
         fig, ax = grid_property3d(grd, prop, z=z, collections=collections, **kwargs)
     else:
-        fig, ax = grid_collection(grd, "pts", z=z, legend_args=legend_args, label=False, **kwargs)
+        fig, ax = grid_collection(grd, "pts", z=z,
+                                  legend_args=legend_args, label=False, **kwargs)
     for coll in collections:
         grid_collection(grd, coll, fig=fig, ax=ax, legend_args=legend_args,
                         **collections[coll], z=z)
@@ -358,7 +365,7 @@ def trajectories(simhists, *plot_values,
                  xlim=(), ylim=(), zlim=(), legend=True, title='',
                  fig=None, ax=None, **kwargs):
     """
-    Shows trajectories from the environment in 2d or 3d space.
+    Show trajectories from the environment in 2d or 3d space.
 
     Parameters
     ----------
@@ -385,7 +392,7 @@ def trajectories(simhists, *plot_values,
         the global kwargs (or default behavior). If no comparison groups are given,
         use 'default' for a single history or 'nominal'/'faulty' for a fault history
         e.g.::
-            kwargs = {'nominal': {color: 'green'}} 
+            kwargs = {'nominal': {color: 'green'}}
 
         would make the nominal color green. Default is {}.
     figsize : tuple (float,float)
@@ -460,7 +467,7 @@ def trajectories(simhists, *plot_values,
 def traj(ax, hists, xlab, ylab,
          mark_time=False, time_ticks=1.0, time_fontsize=8, **kwargs):
     """
-    Plots a single set of trajectories on an existing matplotlib axis.
+    Plot a single set of trajectories on an existing matplotlib axis.
 
     Parameters
     ----------
@@ -493,7 +500,9 @@ def traj(ax, hists, xlab, ylab,
 def traj3(ax, hists, xlab, ylab, zlab,
           mark_time=False, time_ticks=1.0, time_fontsize=8, **kwargs):
     """
-    Plots a single set of trajectories on an existing matplotlib axis. See show.traj.
+    Plot a single set of trajectories on an existing matplotlib axis.
+
+    See show.traj.
     """
     xs = [*hists.get_values(xlab).values()]
     ys = [*hists.get_values(ylab).values()]
@@ -508,7 +517,7 @@ def traj3(ax, hists, xlab, ylab, zlab,
 
 def mark_times(ax, tick, time, *plot_values, fontsize=8):
     """
-    Marks times on an axis at a particular tick interval.
+    Mark times on an axis at a particular tick interval.
 
     Parameters
     ----------
@@ -532,7 +541,7 @@ def mark_times(ax, tick, time, *plot_values, fontsize=8):
 
 def consolidate_legend(ax, **kwargs):
     """
-    Creates a consolidated legend with all grid properties
+    Create a consolidated legend with all grid properties.
 
     Parameters
     ----------

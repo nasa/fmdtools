@@ -186,7 +186,7 @@ class Drone(DynDrone):
                      'dofs', 'force_lin', c={'archtype': self.p.arch})
         self.add_fxn('ctl_dof', CtlDOF, 'ee_ctl', 'des_traj', 'ctl', 'dofs', 'force_st')
         self.add_fxn('plan_path', PlanPath, 'ee_ctl', 'des_traj', 'force_st', 'dofs')
-        self.add_fxn('hold_payload', HoldPayload, 'force_lin', 'force_st')
+        self.add_fxn('hold_payload', HoldPayload, 'force_lin', 'force_st', 'dofs')
         self.add_fxn('view_env', ViewEnvironment, 'dofs', 'environment')
 
         self.build()

@@ -252,7 +252,9 @@ class Simulable(object):
         """
         fxn = self.get_fxns()[fxnname]
         fm = fxn.m
-        rate_time = eq_units(fm.faultmodes[faultmode]['units'], self.sp.units)*(self.sp.times[-1]-self.sp.times[0])  # this rate is on a per-simulation basis
+        # this rate is on a per-simulation basis
+        tot_time = self.sp.times[-1] - self.sp.times[0] + self.sp.dt
+        rate_time = eq_units(fm.faultmodes[faultmode]['units'], self.sp.units)*tot_time
         if not fm.faultmodes.get(faultmode, False): 
             raise Exception("faultmode "+faultmode+" not in "+str(fm.__class__))
         else:

@@ -481,7 +481,7 @@ class Grid(object):
             for pt in pts:
                 self.set(*pt, prop, value)
 
-    def find_closest(self, x, y, prop, include_pt=True, value=None, comparator=None):
+    def find_closest(self, x, y, prop, include_pt=True, value=True, comparator=np.equal):
         """
         Finds the closest point in the grid satisfying a given property.
 
@@ -496,11 +496,11 @@ class Grid(object):
         include_pt : bool, optional
             Whether to include the containing grid point. The default is True.
         value : bool/int/str, optional
-            Value to compare against. The default is None, which solely finds the
-            closest in the array.
-        comparator : TYPE, optional
+            Value to compare against. The default is None, which returns the points
+            that have the value True.
+        comparator : method, optional
             Comparator function to use (e.g., np.equal, np.greater...).
-            The default is None.
+            The default is np.equal.
 
         Returns
         -------
@@ -820,4 +820,3 @@ if __name__ == "__main__":
     d = e.copy()
     import doctest
     doctest.testmod(verbose=True)
-

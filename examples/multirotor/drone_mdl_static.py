@@ -200,7 +200,7 @@ class HoldPayload(FxnBlock):
 
     def dynamic_behavior(self, time):
         if self.at_ground():
-            self.s.force_gr = min(-0.5, (self.dofs.s.vertvel -
+            self.s.force_gr = min(-0.5, (self.dofs.s.vertvel +
                                   self.dofs.s.planvel)/self.dofs.p.max_vel)
         else:
             self.s.force_gr = 0.0
@@ -477,7 +477,7 @@ class Drone(Model):
         self.add_fxn("dist_ee", DistEE, "ee_1", "ee_mot", "ee_ctl", "force_st")
         self.add_fxn("affect_dof", AffectDOF, "ee_mot", "ctl", "dofs", "force_lin")
         self.add_fxn("ctl_dof", CtlDOF, "ee_ctl", "des_traj", "ctl", "dofs", "force_st")
-        self.add_fxn("plan_path", PlanPath, "ee_ctl", "des_traj", "force_st")
+        self.add_fxn("plan_path", PlanPath, "ee_ctl", "des_traj", "force_st", "dofs")
         self.add_fxn("hold_payload", HoldPayload, "dofs", "force_lin", "force_st")
         self.add_fxn("view_env", ViewEnvironment, "dofs")
 
