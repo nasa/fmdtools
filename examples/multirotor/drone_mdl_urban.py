@@ -2,8 +2,8 @@
 """
 Variant of drone model for modelling computer vision in urban settings.
 """
-from examples.multirotor.drone_mdl_static import EE, Force, Control
-from examples.multirotor.drone_mdl_static import DistEE
+from drone_mdl_static import EE, Force, Control
+from drone_mdl_static import DistEE
 from drone_mdl_rural import DesTraj, DOFs, HSig, RSig
 from drone_mdl_rural import ManageHealth, StoreEE, AffectDOF, CtlDOF
 from drone_mdl_rural import PlanPath as PlanPathRural
@@ -70,7 +70,7 @@ class UrbanGridParam(GridParam):
     point_end: tuple = (900, 900)
     collect_all_occupied: tuple = ("occupied", True)
     collect_all_safe: tuple = ("safe", True)
-
+    collect_all_allowed: tuple = ("allowed", True)
 
 class StreetGrid(Grid):
     """
@@ -143,6 +143,10 @@ class AffectDOF(AffectDOFRural):
     def get_fall_dist(self):
         return self.environment.ground_height(self.dofs)
 
+    def inc_pos(self):
+        AffectDOFRural.inc_pos(self)
+        self.environment.set_states(self.dofs)
+
 
 class ComputerVisionMode(Mode):
     faultparams = {'undesired_detection': (0.5, {'move': 1.0}, 0),
@@ -176,7 +180,7 @@ class ComputerVision(Component):
             return environment.g.find_closest(dofs.s.x, dofs.s.y, 'pts',
                                               include_pt=include_pt)
         else:
-            return environment.g.find_closest(dofs.s.x, dofs.s.y, "all_safe",
+            return environment.g.find_closest(dofs.s.x, dofs.s.y, "all_allowed",
                                               include_pt=include_pt)
 
 
@@ -235,7 +239,7 @@ class PlanPath(PlanPathRural):
 
     def find_nearest(self):
         return self.environment.g.find_closest(self.dofs.s.x, self.dofs.s.y,
-                                               "all_safe", include_pt=False)
+                                               "all_allowed", include_pt=False)
     
     def calc_ground_height(self):
         self.s.ground_height = self.environment.ground_height(self.dofs)
@@ -339,9 +343,10 @@ class Drone(DroneRural):
                    **land_metrics}
         return metrics
 
+
 def plot_env_with_traj(mdlhists, mdl, legend=True, title="trajectory"):
     """
-    Plots given 2d Drone trajectories over the gridword.
+    Plot given 2d Drone trajectories over the gridword.
 
     Parameters
     ----------
@@ -361,15 +366,17 @@ def plot_env_with_traj(mdlhists, mdl, legend=True, title="trajectory"):
     """
     fig, ax = show.grid(mdl.flows['environment'].g, "height",
                         collections={"all_occupied": {"color": "red"},
+                                     "all_allowed": {"color": "blue"},
                                      "start": {"color": "blue"},
                                      "end": {"color": "blue"}})
     fig, ax = show.trajectories(mdlhists, "dofs.s.x", "dofs.s.y",
                                 fig=fig, ax=ax, legend=legend, title=title)
     return fig, ax
 
+
 def plot_env_with_traj3d(mdlhists, mdl, legend=True, title="trajectory"):
     """
-    Plots given 3d Drone trajectories over the gridword.
+    Plot given 3d Drone trajectories over the gridword.
 
     Parameters
     ----------
@@ -388,6 +395,7 @@ def plot_env_with_traj3d(mdlhists, mdl, legend=True, title="trajectory"):
     ax : matplotlib axis
     """
     collections = {"all_occupied": {"color": "red", "label": False},
+                   "all_allowed": {"color": "yellow", "label": False},
                    "start": {"color": "yellow", "label": True, "text_z_offset": 30},
                    "end": {"color": "yellow", "label": True, "text_z_offset": 30}}
     
