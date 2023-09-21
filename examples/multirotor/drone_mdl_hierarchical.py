@@ -15,40 +15,47 @@ from fmdtools.define.block import FxnBlock, Component, CompArch
 from fmdtools.sim.approach import SampleApproach
 from fmdtools.define.model import Model
 
-from examples.multirotor.drone_mdl_static import m2to1, HoldPayload, DistEE, BaseLine
+from examples.multirotor.drone_mdl_static import m2to1, DistEE, BaseLine
 from examples.multirotor.drone_mdl_static import Force, EE, Control, DOFs, DesTraj
-from examples.multirotor.drone_mdl_dynamic import StoreEE, CtlDOF, PlanPath, ViewEnvironment, DroneEnvironment
+from examples.multirotor.drone_mdl_dynamic import StoreEE, CtlDOF, PlanPath, ViewEnvironment, DroneEnvironment, HoldPayload
 from examples.multirotor.drone_mdl_static import AffectDOFMode, AffectDOFState
 from examples.multirotor.drone_mdl_dynamic import Drone as DynDrone
 from drone_mdl_dynamic import AffectDOF as AffectDOFDynamic
 
+
 class OverallAffectDOFState(State):
+    """
+    Overall states for the multirotor AffectDOF architecture.
+
+    Fields
+    -------
+    lrstab: float
+        Left/Right stability (nominal value = 0.0)
+    frstab: float
+        Front/Rear stability (nominal value = 0.0)
+    """
+
     lrstab: float = 0.0
     frstab: float = 0.0
     amp_factor: float = 1.0
-    
-    """
-    Overall states for the dynamics. Has entries:
-        - lrstab: float
-            Left/Right stability (nominal value = 0.0)
-        - frstab: float
-            Front/Rear stability (nominal value = 0.0)
-    """
 
 
 class AffectDOFArch(CompArch):
+    """
+    Line Architecture defined by parameter 'archtype'.
+
+    Has options:
+    - 'quad': quadrotor architecture
+    - 'hex': hexarotor architecture
+    - 'oct': octorotor architecture
+    """
+
     archtype: str = 'quad'
     forward: dict = dict()
     upward: dict = dict()
     lr_dict: dict = dict()
     fr_dict: dict = dict()
     opposite: dict = dict()
-    """
-    Line Architecture defined by parameter 'archtype'. Has options:
-        - 'quad': quadrotor architecture
-        - 'hex': hexarotor architecture
-        - 'oct': octorotor architecture
-    """
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -102,7 +109,10 @@ class AffectDOF(AffectDOFDynamic):
                     self.c.upward[opp] = 0.0
         tot_comps = len(self.c.components)
         empty_comps = len([c for c in self.c.forward if self.c.forward[c] == 0.0])
-        self.s.amp_factor = tot_comps / (tot_comps - empty_comps)
+        try:
+            self.s.amp_factor = tot_comps / (tot_comps - empty_comps)
+        except ZeroDivisionError:
+            self.s.amp_factor = 1.0
 
     def calc_pwr(self):
         air, ee_in = {}, {}
@@ -219,4 +229,4 @@ if __name__ == "__main__":
                                    "dofs.s.x", "dofs.s.y", "dofs.s.z",
                                    time_groups=['nominal'],
                                    indiv_kwargs={'faulty': fault_kwargs})
-    mdlhists.affect_dof_rr2_propstuck_t9p0.flows.dofs.s.z
+    mdlhists.affect_dof_rr2_propstuck_t8p0.flows.dofs.s.z

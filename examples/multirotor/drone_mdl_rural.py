@@ -25,12 +25,11 @@ from matplotlib.lines import Line2D
 from drone_mdl_hierarchical import AffectDOF as AffectDOFHierarchical
 from drone_mdl_static import CtlDOF as CtlDOFStat
 from examples.multirotor.drone_mdl_dynamic import DroneEnvironmentGridParam, DroneEnvironment, ViewEnvironment
-from examples.multirotor.drone_mdl_dynamic import finddist, vectdist
 from drone_mdl_dynamic import PlanPathState as PlanPathStateDyn
 from drone_mdl_dynamic import PlanPath as PlanPathDyn
+from drone_mdl_dynamic import HoldPayload as HoldPayloadDyn
 from examples.multirotor.drone_mdl_static import EE, Force, Control, DesTraj, DOFs
-from examples.multirotor.drone_mdl_static import DistEE, HoldPayload
-from examples.multirotor.drone_mdl_static import StoreEEState
+from examples.multirotor.drone_mdl_static import DistEE, StoreEEState
 from recordclass import asdict
 
 # DEFINE PARAMETERS
@@ -63,7 +62,8 @@ class DronePhysicalParameters(Parameter, readonly=True):
 
 
 class DroneParam(Parameter, readonly=True):
-    """Parameters for the Drone optimization model"""
+    """Parameters for the Drone optimization model."""
+
     respolicy:  ResPolicy = ResPolicy()
     flightplan: tuple = ((0, 0, 0),  # flies through a few points and back to the start
                          (0, 0, 100),
@@ -96,19 +96,40 @@ class RSig(Flow):
 
 
 class BatState(State):
+    """
+    Battery States.
+
+    Fields
+    -------
+    soc: float
+        State of charge, with values (0-100)
+    e_t: float
+        Power transference with nominal value 1.0
+    """
+
     soc:  float = 100.0
     ee_e: float = 1.0
     e_t:  float = 1.0
-    """
-    Battery States. Includes:
-        soc: float
-            State of charge, with values (0-100)
-        e_t: float
-            Power transference with nominal value 1.0
-    """
 
 
 class BatMode(Mode):
+    """
+    Battery Modes.
+
+    Modes
+    -------
+    short: Fault
+        inability to transfer power
+    degr: Fault
+        less power tranferrence
+    break: Fault
+        inability to transfer power
+    nocharge: Fault
+        zero state of charge (need a way to trigger these modes)
+    lowcharge: Fault
+        state of charge of 20
+    """
+
     failrate = 1e-4
     faultparams = {'short': (0.2, {"taxi": 0.3, "move": 0.3, "land": 0.3}, 100),
                    'degr': (0.2, {"taxi": 0.3, "move": 0.3, "land": 0.3}, 100),
@@ -116,19 +137,7 @@ class BatMode(Mode):
                    'nocharge': (0.6, {"taxi": 0.7, "move": 0.2, "land": 0.1}, 100),
                    'lowcharge': (0.4, {"taxi": 0.5, "move": 0.2, "land": 0.3}, 100)}
     key_phases_by = 'plan_path'
-    """
-    Battery Modes. Includes:
-        - short: Fault
-            inability to transfer power
-        - degr: Fault
-            less power tranferrence
-        - break: Fault
-            inability to transfer power
-        - nocharge: Fault
-            zero state of charge (need a way to trigger these modes)
-        - lowcharge: Fault
-            state of charge of 20
-    """
+
 
 
 class BatParam(Parameter):
@@ -187,16 +196,10 @@ class Battery(Component):
 
 
 class BatArch(CompArch):
-    archtype: str = 'monolithic'
-    batparams: dict = {}  # weight, cap, voltage, drag_factor
-    weight: float = 0.0
-    drag: float = 0.0
-    series: int = 1
-    parallel: int = 1
-    voltage: float = 12.0
-    drag: float = 0.0
     """
-    Battery architecture. Defined by archtype parameter with options:
+    Battery architecture.
+
+    Defined by archtype parameter with options:
         - 'monolythic':
             Single Battery
         - 'series-split':
@@ -206,6 +209,15 @@ class BatArch(CompArch):
         - 'split-both':
             four batteries arranged in a series-parallel configuration
     """
+
+    archtype: str = 'monolithic'
+    batparams: dict = {}  # weight, cap, voltage, drag_factor
+    weight: float = 0.0
+    drag: float = 0.0
+    series: int = 1
+    parallel: int = 1
+    voltage: float = 12.0
+    drag: float = 0.0
 
     def __init__(self, *args, **kwargs):
         archtype = self.get_true_field('archtype', *args, **kwargs)
@@ -242,6 +254,8 @@ class StoreEEMode(Mode):
 
 
 class StoreEE(FxnBlock):
+    """Class defining energy storage function with battery architecture."""
+
     __slots__ = ('hsig_bat', 'ee_1', 'force_st')
     _init_s = StoreEEState
     _init_m = StoreEEMode
@@ -249,9 +263,6 @@ class StoreEE(FxnBlock):
     _init_hsig_bat = HSig
     _init_ee_1 = EE
     _init_force_st = Force
-    """
-    Class defining energy storage function with battery architecture.
-    """
 
     def condfaults(self, time):
         if self.s.soc < 20:
@@ -291,31 +302,40 @@ class StoreEE(FxnBlock):
 
 
 class HoldPayloadMode(Mode):
+    """
+    Landing Gear Modes.
+
+    Modes
+    -------
+    break: Fault
+        provides no support to the body and lines
+    deform: Fault
+        support is less than desired
+    """
+
     failrate = 1e-6
     faultparams = {'break': (0.2, {"taxi": 0.3, "move": 0.3, "land": 0.3}, 1000),
                    'deform': (0.8, {"taxi": 0.3, "move": 0.3, "land": 0.3}, 1000)}
     key_phases_by = 'plan_path'
-    """
-    Landing Gear Modes. Has faults:
-        - break: Fault
-            provides no support to the body and lines
-        - deform: Fault
-            support is less than desired
-    """
 
 
-
+class HoldPayload(HoldPayloadDyn):
+    _init_m = HoldPayloadMode
 
 
 class ManageHealthMode(Mode):
+    """
+    Health management fault modes.
+
+    Modes
+    -------
+    lostfunction: Fault
+        Inability to sense health and thus reconfigure the system
+    """
+
     failrate = 1e-6
     faultparams = {'lostfunction': (0.05, {"taxi": 0.3, "move": 0.3, "land": 0.3}, 1000)}
     key_phases_by = "plan_path"
-    """
-    Has modes:
-        - lostfunction: Fault
-            Inability to sense health and thus reconfigure the system
-    """
 
 
 class ManageHealth(FxnBlock):
@@ -361,19 +381,22 @@ class AffectDOF(AffectDOFHierarchical):  # ee_mot,ctl,dofs,force_lin hsig_dofs, 
 
 
 class CtlDOFMode(Mode):
+    """
+    Controller modes.
+
+    Modes
+    -------
+    noctl: Fault
+        No control transference (throttles set to zero)
+    degctl: Fault
+        Poor control transference (throttles set to 0.5)
+    """
     failrate = 1e-5
     faultparams = {'noctl':   (0.2, {"taxi": 0.6, "move": 0.3, "land": 0.1}, 1000),
                    'degctl':  (0.8, {"taxi": 0.6, "move": 0.3, "land": 0.1}, 1000)}
     exclusive = True
     key_phases_by = 'plan_path'
     mode:   str = 'nominal'
-    """
-    Controller modes:
-        noctl: Fault
-            No control transference (throttles set to zero)
-        degctl: Fault
-            Poor control transference (throttles set to 0.5)
-    """
 
 
 class CtlDOF(CtlDOFStat):
@@ -381,15 +404,11 @@ class CtlDOF(CtlDOFStat):
 
 
 class PlanPathMode(Mode):
-    failrate = 1e-5
-    faultparams = {'noloc': (0.2, {"taxi": 0.6, "move": 0.3, "land": 0.1}, 1000),
-                   'degloc': (0.8, {"taxi": 0.6, "move": 0.3, "land": 0.1}, 1000)}
-    opermodes = ('taxi', 'to_nearest', 'to_home', 'emland', 'land', 'move')
-    mode: str = 'taxi'
-    exclusive = False
-    key_phases_by = 'self'
     """
-    Path planning fault modes:
+    Path planning fault modes.
+
+    Modes
+    -------
     - noloc: Fault
         no location data
     - degloc: Fault
@@ -408,12 +427,21 @@ class PlanPathMode(Mode):
         nominal drone navigation
     """
 
+    failrate = 1e-5
+    faultparams = {'noloc': (0.2, {"taxi": 0.6, "move": 0.3, "land": 0.1}, 1000),
+                   'degloc': (0.8, {"taxi": 0.6, "move": 0.3, "land": 0.1}, 1000)}
+    opermodes = ('taxi', 'to_nearest', 'to_home', 'emland', 'land', 'move')
+    mode: str = 'taxi'
+    exclusive = False
+    key_phases_by = 'self'
+
 
 class PlanPathState(PlanPathStateDyn):
-    ground_height: float = 0.0
-    goals: dict = {}
     """
-    Path planning states:
+    Path planning states (extends dynamic model states).
+
+    Fields
+    -------
     - dist: float
         distance to goal point
     - pt: int
@@ -422,17 +450,19 @@ class PlanPathState(PlanPathStateDyn):
         Height above the ground (if terrain)
     """
 
+    ground_height: float = 0.0
+    goals: dict = {}
+
 
 class PlanPath(PlanPathDyn):
+    """Path planning function of the drone. Follows a sequence defined in flightplan."""
+
     __slots__ = ('rsig_traj', )
     _init_s = PlanPathState
     _init_m = PlanPathMode
     _init_p = DroneParam
     _init_rsig_traj = RSig
-    default_track = {'s': ['ground_height', 'pt', 'goal'], 'm':'all'}
-    """
-    Path planning function of the drone. Follows a sequence defined in flightplan.
-    """
+    default_track = {'s': ['ground_height', 'pt', 'goal'], 'm': 'all'}
 
     def __init__(self, name, flows, **kwargs):
         FxnBlock.__init__(self, name, flows, **kwargs)
@@ -475,7 +505,7 @@ class PlanPath(PlanPathDyn):
                         self.m.set_mode('land')
 
     def update_goal(self):
-        # set the new goal based on the mode
+        """Set the new goal based on the mode."""
         if self.m.in_mode('emland', 'land'):
             z_down = self.dofs.s.z - self.s.ground_height/2
             self.s.goal = (self.dofs.s.x, self.dofs.s.y, z_down)
@@ -495,7 +525,7 @@ class PlanPath(PlanPathDyn):
         return 'em' in self.m.mode
 
     def update_traj(self):
-        # send commands (des_traj) if power
+        """Send commands (des_traj) if power."""
         if self.ee_ctl.s.effort < 0.5 or self.m.in_mode('taxi'):
             self.des_traj.s.assign([0.0, 0.0, 0.0, 0.0], 'x', 'y', 'z', 'power')
         else:
@@ -624,34 +654,6 @@ class Drone(Model):
                    'unsafe_flight_time': faulttime,
                    **land_metrics}
         return metrics
-
-
-pos = {'manage_health': [0.23793980988102348, 1.0551602632416588],
-       'store_ee': [-0.9665780995752296, -0.4931538151692423],
-       'dist_ee': [-0.1858834234148632, -0.20479989209711924],
-       'affect_dof': [1.0334916329507422, 0.6317263653616103],
-       'ctl_dof': [0.1835014208949617, 0.32084893189175423],
-       'plan_path': [-0.7427736219526058, 0.8569475547950892],
-       'hold_payload': [0.74072970715511, -0.7305391093272489]}
-
-bippos = {'manage_health': [-0.23403572483176666, 0.8119063670455383],
-          'store_ee': [-0.7099736148158298, 0.2981652748232978],
-          'dist_ee': [-0.28748133634190726, 0.32563569654296287],
-          'affect_dof': [0.9073412427515959, 0.0466423266443633],
-          'ctl_dof': [0.498663257339388, 0.44284186573420836],
-          'plan_path': [0.5353654708147643, 0.7413936186204868],
-          'hold_payload': [0.329334798653681, -0.17443414674339652],
-          'force_st': [-0.2364754675127569, -0.18801548176633154],
-          'force_lin': [0.7206415618571647, -0.17552020772024013],
-          'hsig_dofs': [0.3209028709788254, 0.04984245810974697],
-          'hsig_bat': [-0.6358884586093769, 0.7311076416371343],
-          'rsig_traj': [0.18430501738656657, 0.856472541655958],
-          'ee_1': [-0.48288657418004555, 0.3017533207866233],
-          'ee_mot': [-0.0330582435936827, 0.2878069006385988],
-          'ee_ctl': [0.13195069534343862, 0.4818116953414546],
-          'ctl': [0.5682663453757308, 0.23385244312813386],
-          'dofs': [0.8194232270836169, 0.3883256382522293],
-          'des_traj': [0.9276094920710914, 0.6064107724557304]}
 
 # BASE FUNCTIONS
 
