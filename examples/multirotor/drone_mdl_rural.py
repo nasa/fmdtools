@@ -391,10 +391,10 @@ class CtlDOFMode(Mode):
     degctl: Fault
         Poor control transference (throttles set to 0.5)
     """
+
     failrate = 1e-5
     faultparams = {'noctl':   (0.2, {"taxi": 0.6, "move": 0.3, "land": 0.1}, 1000),
                    'degctl':  (0.8, {"taxi": 0.6, "move": 0.3, "land": 0.1}, 1000)}
-    exclusive = True
     key_phases_by = 'plan_path'
     mode:   str = 'nominal'
 
