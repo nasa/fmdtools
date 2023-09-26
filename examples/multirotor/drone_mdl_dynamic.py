@@ -17,9 +17,6 @@ from fmdtools.define.environment import Grid, GridParam, Environment
 
 import fmdtools.sim as fs
 
-from shapely.geometry import Point
-from shapely.geometry.polygon import Polygon
-
 from examples.multirotor.drone_mdl_static import DistEE
 from examples.multirotor.drone_mdl_static import HoldPayload as HoldPayloadStatic
 from examples.multirotor.drone_mdl_static import StoreEE as StaticstoreEE
@@ -30,9 +27,27 @@ from examples.multirotor.drone_mdl_static import Force, EE, Control, DOFs, DesTr
 
 class DroneEnvironmentGridParam(GridParam):
     """
-    Defines the grid parameters, including resolution as well as number of allowed,
-    unsafe, and occupied spaces, max height of the buildings, and road width.
+    Define the grid parameters.
+
+    By default the grid is a 16x16 grid of 10.0 m blocks. Defines the following
+
+    Features/Collections
+    -------
+    viewed : State
+        Whether the point as been viewed.
+    target : State
+        Whether the point is in the target area.
+    start : Point
+        Starting location
+    start : Point
+        Safe landing location (for emergencies)
+
+    Other Fields
+    -------
+    loc : str
+        Type of environment risk profile (urban or rural).
     """
+
     x_size: int = 16
     y_size: int = 16
     blocksize: float = 10.0
@@ -44,25 +59,37 @@ class DroneEnvironmentGridParam(GridParam):
 
 
 class SightGrid(Grid):
+    """
+    Define the Drone Grid environment.
+
+    Used to calculate environmental risk and number of points viewed.
+    """
+
     _init_p = DroneEnvironmentGridParam
 
     def init_properties(self, *args, **kwargs):
+        """Set target true between 0 and 150 in the x and 10 and 160 in the y."""
         self.set_range("target", True, 0, 150, 10, 160)
 
 
 class DroneEnvironment(Environment):
+    """Drone environment flow (contains grid)."""
+
     _init_g = SightGrid
     _init_p = DroneEnvironmentGridParam
 
 
-
 class StoreEE(StaticstoreEE):
+    """Dynamic StoreEE function (adds energy usage)."""
+
     def condfaults(self, time):
+        """When soc is 0, add 'nocharge' fault."""
         if self.s.soc < 1:
             self.s.soc = 0
             self.m.add_fault('nocharge')
 
     def behavior(self, time):
+        """Energy storage/use behavior."""
         if self.m.has_fault('nocharge'):
             self.ee_out.s.effort = 0.0
         else:
@@ -72,7 +99,14 @@ class StoreEE(StaticstoreEE):
 
 
 class HoldPayload(HoldPayloadStatic):
+    """Holds payload (adapted with dynamic behaviors)."""
+
     def calc_force_gr(self):
+        """Calculate ground force (dynamic adaptation).
+
+        Makes it so that high velocity landings break the landing gear but low-velocity
+        landings do not.
+        """
         if self.at_ground():
             force_vel = - (abs(self.dofs.s.vertvel)
                            + abs(self.dofs.s.planvel)) / 60
@@ -80,7 +114,29 @@ class HoldPayload(HoldPayloadStatic):
         else:
             self.s.force_gr = 0.0
 
+
 class PlanPathMode(Mode):
+    """
+    Possible modes for drone path planning.
+
+    Modes
+    -------
+    degloc : Fault
+        Degraded location
+    noloc : Fault
+        Lost Location.
+    taxi : Mode
+        Drone on the ground.
+    hover : Mode
+        Drone hovers at a given point.
+    move : Mode
+        Drone moves from point to point.
+    descend : Mode
+        Drone descends to the ground.
+    land : Mode
+        Drone lands.
+    """
+
     failrate = 1e-5
     faultparams = {'noloc': (0.2, 10000),
                    'degloc': (0.8, 10000)}
@@ -89,12 +145,27 @@ class PlanPathMode(Mode):
 
 
 class PlanPathState(State):
+    """
+    Path planning states (extends dynamic model states).
+
+    Fields
+    -------
+    pt : int
+        current goal point (number) in sequence.
+    goal : tuple
+        current location of goal point.
+    dist: float
+        distance to goal point.
+    """
+
     pt: int = 0
     goal: tuple = (0.0, 0.0, 50.0)
     dist: float = 0.0
 
 
 class PlanPathParams(Parameter):
+    """Defines flightplan."""
+
     goals = ((0.0,      0.0,    50.0),
              (100.0,    0.0,    50.0),
              (100.0,    100.0,  50.0),
@@ -104,10 +175,14 @@ class PlanPathParams(Parameter):
 
 
 class PlanPathTime(Time):
+    """Define pause timer for hovering at each point in the flightplan."""
+
     timernames = ('pause',)
 
 
 class PlanPath(FxnBlock):
+    """Path planning for the drone."""
+
     __slots__ = ('ee_ctl', 'dofs', 'des_traj', 'fs', 'dofs')
     _init_t = PlanPathTime
     _init_m = PlanPathMode
@@ -120,20 +195,48 @@ class PlanPath(FxnBlock):
     flownames = {'force_st': 'fs'}
 
     def condfaults(self, time):
+        """Enter "noloc" fault if loses support."""
         if self.fs.s.support < 0.5:
             self.m.add_fault('noloc')
 
     def calc_dist_to_goal(self):
+        """
+        Calculate drone distance to goal.
+
+        e.g.::
+        >>> p = PlanPath()
+        >>> p.s.dist
+        0.0
+        >>> p.calc_dist_to_goal()
+        >>> p.s.dist
+        50.0
+        """
         loc = self.dofs.s.get('x', 'y', 'z')
         self.s.dist = finddist(loc, self.s.goal)
 
     def assign_vectdist_to_goal(self):
+        """
+        Assign the desired trajectory based on the goal.
+
+        e.g.::
+        >>> p = PlanPath()
+        >>> p.des_traj.s
+        DesTrajState(dx=1.0, dy=0.0, dz=0.0, power=1.0)
+        >>> p.assign_vectdist_to_goal()
+        >>> p.des_traj.s
+        DesTrajState(dx=0.0, dy=0.0, dz=50.0, power=1.0)
+        """
         loc = self.dofs.s.get('x', 'y', 'z')
         vd = vectdist(self.s.goal, loc)
         self.des_traj.s.assign(vd, "dx", "dy", "dz")
-        
 
     def behavior(self, t):
+        """
+        Path planning behavior.
+
+        Involves steps (1) calculating distance to goal (2) determining mode/next goal
+        based on progress in flight plan and (3) asigning new trajectory.
+        """
         self.s.goal = self.p.goals[self.s.pt]
         self.calc_dist_to_goal()
 
@@ -179,17 +282,22 @@ class PlanPath(FxnBlock):
 
 
 class AffectDOF(AffectDOFStatic):
+    """Dynamic extension of drone locomotion."""
+
     _init_des_traj = DesTraj
 
     def behavior(self, time):
+        """Behavior in-time (fault effects on states and instantaneous power/force)."""
         self.calc_faults()
         self.calc_pwr()
 
     def dynamic_behavior(self, time):
+        """Behavior at-time (calculating velociy and incrementing position)."""
         self.calc_vel()
         self.inc_pos()
 
     def calc_vel(self):
+        """Calculate vertical/planar velocity based on power."""
         # calculate velocities from power
         self.dofs.s.put(vertvel=self.dofs.p.max_vel*(self.dofs.s.uppwr-1.0),
                         planvel=self.dofs.p.max_vel*self.dofs.s.planpwr)
@@ -201,6 +309,7 @@ class AffectDOF(AffectDOFStatic):
         self.limit_falling_vel()
 
     def limit_falling_vel(self):
+        """Limit falling distances based on xy-velocity and fall height."""
         min_fall_dist = self.get_fall_dist()
         # if falling, it can't reach the destination if it hits the ground first
         plan_dist = self.des_traj.s.dist2d()
@@ -213,9 +322,27 @@ class AffectDOF(AffectDOFStatic):
                           z=(0, np.inf))
 
     def get_fall_dist(self):
+        """Get the max distance possible to fall at the given point (dofs.s.z)."""
         return self.dofs.s.z
 
     def inc_pos(self):
+        """
+        Increments the drone position based on trajectory and calculated velocities.
+
+        e.g.,::
+        >>> a = AffectDOF()
+        >>> a.des_traj.s.put(dx=1.0, dy=0.0, dz=0.0, power=1.0)
+        >>> a.dofs.s.put(x=0.0, y=0.0, z=100.0, planvel=1.0, vertvel=0.0)
+        >>> a.inc_pos()
+        >>> a.dofs.s
+        DOFstate(vertvel=0.0, planvel=1.0, planpwr=1.0, uppwr=1.0, x=1.0, y=0.0, z=100.0)
+
+        or, for climbing::
+        >>> a.dofs.s.put(vertvel=1.0, planvel=0.0)
+        >>> a.inc_pos()
+        >>> a.dofs.s
+        DOFstate(vertvel=1.0, planvel=0.0, planpwr=1.0, uppwr=1.0, x=1.0, y=0.0, z=101.0)
+        """
         # increment x,y,z
         vec_factor = self.des_traj.s.dist2d()
         norm_vel = self.dofs.s.planvel * self.t.dt / vec_factor
@@ -232,6 +359,7 @@ class ViewEnvironment(FxnBlock):
     _init_environment = DroneEnvironment
 
     def behavior(self, time):
+        """Set points in grid as viewed if in range of view."""
         width = self.dofs.s.z
         height = self.dofs.s.z
         self.environment.g.set_range("viewed", True,
@@ -242,6 +370,8 @@ class ViewEnvironment(FxnBlock):
 
 
 class Drone(Model):
+    """Dynamic drone model."""
+
     __slots__ = ()
     default_sp = dict(phases=(('ascend', 0, 1),
                               ('forward', 2, 14),
@@ -275,6 +405,16 @@ class Drone(Model):
         self.build()
 
     def find_classification(self, scen, mdlhists):
+        """
+        Calculate cost model based on scenario results.
+
+        Cost model is based on repairs, getting lost, and crashing.
+
+        Returns
+        -------
+        endclass : dict
+            Rate, cost, and expected cost for scenario.
+        """
         if -5 > mdlhists.faulty.flows.dofs.s.x[-1] or 5 < mdlhists.faulty.flows.dofs.s.x[-1]:
             lostcost = 50000
         elif -5 > mdlhists.faulty.flows.dofs.s.y[-1] or 5 < mdlhists.faulty.flows.dofs.s.y[-1]:
@@ -301,15 +441,19 @@ class Drone(Model):
 
 
 def finddist(p1, p2):
+    """Find the 3d distance between two points."""
     return np.sqrt((p1[0]-p2[0])**2+(p1[1]-p2[1])**2+(p1[2]-p2[2])**2)
 
 
 def vectdist(p1, p2):
+    """Find the 3d vector distance between two points."""
     return [p1[0]-p2[0], p1[1]-p2[1], p1[2]-p2[2]]
 
 
-
 if __name__ == "__main__":
+    import doctest
+    doctest.testmod(verbose=True)
+    
     from fmdtools import analyze as an
     mdl = Drone()
     ec, mdlhist = fs.propagate.nominal(mdl)

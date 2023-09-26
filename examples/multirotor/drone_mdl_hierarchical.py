@@ -11,14 +11,15 @@ import fmdtools.analyze as an
 
 from fmdtools.define.parameter import Parameter
 from fmdtools.define.state import State
-from fmdtools.define.block import FxnBlock, Component, CompArch
+from fmdtools.define.block import Component, CompArch
 from fmdtools.sim.approach import SampleApproach
 from fmdtools.define.model import Model
 
 from examples.multirotor.drone_mdl_static import m2to1, DistEE, BaseLine
 from examples.multirotor.drone_mdl_static import Force, EE, Control, DOFs, DesTraj
-from examples.multirotor.drone_mdl_dynamic import StoreEE, CtlDOF, PlanPath, ViewEnvironment, DroneEnvironment, HoldPayload
 from examples.multirotor.drone_mdl_static import AffectDOFMode, AffectDOFState
+from examples.multirotor.drone_mdl_dynamic import StoreEE, CtlDOF, PlanPath, HoldPayload
+from examples.multirotor.drone_mdl_dynamic import ViewEnvironment, DroneEnvironment
 from examples.multirotor.drone_mdl_dynamic import Drone as DynDrone
 from drone_mdl_dynamic import AffectDOF as AffectDOFDynamic
 
@@ -33,6 +34,8 @@ class OverallAffectDOFState(State):
         Left/Right stability (nominal value = 0.0)
     frstab: float
         Front/Rear stability (nominal value = 0.0)
+    amp_factor: float
+        Amplification factor (for fault recovery)
     """
 
     lrstab: float = 0.0
@@ -44,10 +47,24 @@ class AffectDOFArch(CompArch):
     """
     Line Architecture defined by parameter 'archtype'.
 
-    Has options:
+    Archtype has options:
     - 'quad': quadrotor architecture
     - 'hex': hexarotor architecture
     - 'oct': octorotor architecture
+    Which in turn change the following fields...
+
+    Fields
+    -------
+    forward : dict
+        Correction factors for moving forward (based on which rotors are in front).
+    upward: dict
+        Correction factors for moving upward (1.0 unless in a recovery mode).
+    lr_dict: dict
+        Left/right dictionary. Has structure {"l": {<left components>}, ...}
+    fr_dict: dict
+        Front/rear dictionary. Has structure {'f':{<front components>}, ...}
+    opposite:
+        Component on the opposite side of a given component. Used for reconfiguration.
     """
 
     archtype: str = 'quad'
@@ -86,10 +103,13 @@ class AffectDOFArch(CompArch):
 
 
 class AffectDOF(AffectDOFDynamic):
+    """Rotor locomotion (multi-component extension)."""
+
     _init_s = OverallAffectDOFState
     _init_c = AffectDOFArch
 
     def behavior(self, time):
+        """Rotor dynamic behavior with architecture-base recovery."""
         if self.c.opposite:
             self.reconfig_faults()
         self.calc_pwr()
@@ -115,6 +135,21 @@ class AffectDOF(AffectDOFDynamic):
             self.s.amp_factor = 1.0
 
     def calc_pwr(self):
+        """
+        Calculates overall power and stability based on individual rotor output.
+
+        e.g., ::
+        >>> a = AffectDOF()
+        >>> a.dofs.s.put(z=100.0)
+        >>> a.ctl_in.s.put(forward=0.0, upward=1.0)
+        >>> a.calc_pwr()
+        >>> a.dofs.s
+        DOFstate(vertvel=1.0, planvel=1.0, planpwr=-0.0, uppwr=1.0, x=0.0, y=0.0, z=100.0)
+        >>> a.ctl_in.s.put(forward=1.0, upward=1.0)
+        >>> a.calc_pwr()
+        >>> a.dofs.s
+        DOFstate(vertvel=1.0, planvel=1.0, planpwr=1.0, uppwr=1.0, x=0.0, y=0.0, z=100.0)
+        """
         air, ee_in = {}, {}
         # injects faults into lines
         for linname, lin in self.c.components.items():
@@ -147,10 +182,13 @@ class AffectDOF(AffectDOFDynamic):
 
 
 class Line(Component, BaseLine):
+    """Individual version of a line (extends BaseLine in static model)."""
+
     _init_s = AffectDOFState
     _init_m = AffectDOFMode
 
     def behavior(self, ee_in, ctlin, u_fact, f_fact, force):
+        """Calculate air, ee out based on inputs and modes."""
         if force <= 0.0:
             self.m.add_fault('mechbreak', 'propbreak')
         elif force <= 0.5:
@@ -170,11 +208,15 @@ class Line(Component, BaseLine):
 
 
 class DroneParam(Parameter, readonly=True):
+    """Parameter defining drone architecture (quad, oct, or hex)."""
+
     arch: str = 'quad'
     arch_set = ('quad', 'oct', 'hex')
 
 
 class Drone(DynDrone):
+    """Hierarchical version of the drone model."""
+
     _init_p = DroneParam
 
     def __init__(self, **kwargs):
@@ -203,6 +245,8 @@ class Drone(DynDrone):
 
 
 if __name__ == "__main__":
+    import doctest
+    doctest.testmod(verbose=True)
     import multiprocessing as mp
 
     hierarchical_model = Drone(p=DroneParam(arch='quad'))

@@ -5,7 +5,6 @@ Author: Daniel Hulse
 Created: June 2019, revised Nov 2022
 Description: A fault model of a multi-rotor drone.
 """
-import matplotlib.pyplot as plt
 import numpy as np
 from fmdtools.define.parameter import Parameter
 from fmdtools.define.state import State
@@ -14,44 +13,71 @@ from fmdtools.define.block import FxnBlock, Component, CompArch
 from fmdtools.define.flow import Flow
 from fmdtools.define.model import Model
 from fmdtools.sim.approach import SampleApproach
-from fmdtools.sim import propagate
 from fmdtools.analyze.result import History
 
-import fmdtools.analyze as an
-
-from matplotlib.patches import Patch
-from matplotlib.lines import Line2D
-
-from drone_mdl_hierarchical import AffectDOF as AffectDOFHierarchical
+from examples.multirotor.drone_mdl_static import EE, Force, Control, DesTraj, DOFs
+from examples.multirotor.drone_mdl_static import DistEE, StoreEEState
 from drone_mdl_static import CtlDOF as CtlDOFStat
-from examples.multirotor.drone_mdl_dynamic import DroneEnvironmentGridParam, DroneEnvironment, ViewEnvironment
+
+from examples.multirotor.drone_mdl_dynamic import DroneEnvironmentGridParam
+from examples.multirotor.drone_mdl_dynamic import DroneEnvironment, ViewEnvironment
 from drone_mdl_dynamic import PlanPathState as PlanPathStateDyn
 from drone_mdl_dynamic import PlanPath as PlanPathDyn
 from drone_mdl_dynamic import HoldPayload as HoldPayloadDyn
-from examples.multirotor.drone_mdl_static import EE, Force, Control, DesTraj, DOFs
-from examples.multirotor.drone_mdl_static import DistEE, StoreEEState
+
+from drone_mdl_hierarchical import AffectDOF as AffectDOFHierarchical
+
 from recordclass import asdict
 
 # DEFINE PARAMETERS
 
 
 class ResPolicy(Parameter, readonly=True):
-    bat:   str = 'to_home'
+    """
+    Define the resilience policy/contingency management of the drone.
+
+    Fields
+    -------
+    bat : str
+        Where to go if a battery fault is detected.
+    line : str
+        Where to go if a lien fault is detected.
+    """
+
+    bat: str = 'to_home'
     bat_set = ('to_nearest', 'to_home', 'emland', 'land', 'move', 'continue')
-    line:   str = 'emland'
+    line: str = 'emland'
     line_set = ('to_nearest', 'to_home', 'emland', 'land', 'move', 'continue')
 
 
-
-
 class DronePhysicalParameters(Parameter, readonly=True):
-    bat:        str = 'monolithic'
+    """
+    Define the physical characteristics of the drone based on architectures.
+
+    Fields (input)
+    -------
+    bat : str
+        Battery cell architecture.
+    linearch : str
+        Line/rotor architecture.
+
+    Fields (calculated)
+    -------
+    batweight : float
+        Total battery weight
+    archweight : float
+        Total line architecture weight
+    archdrag : float
+        Total line architecture drag
+    """
+
+    bat: str = 'monolithic'
     bat_set = ('monolithic', 'series-split', 'parallel-split', 'split-both')
-    linearch:   str = 'quad'
+    linearch: str = 'quad'
     linearch_set = ('quad', 'hex', 'oct')
-    batweight:  float = 0.4
+    batweight: float = 0.4
     archweight: float = 1.2
-    archdrag:   float = 0.95
+    archdrag: float = 0.95
     def __init__(self, *args, **kwargs):
         args = self.get_true_fields(*args, **kwargs)
         args[2] = {'monolithic': 0.4, 'series-split': 0.5,
@@ -62,7 +88,17 @@ class DronePhysicalParameters(Parameter, readonly=True):
 
 
 class DroneParam(Parameter, readonly=True):
-    """Parameters for the Drone optimization model."""
+    """
+    Overall parameters for the rural Drone model.
+
+    Fields
+    -------
+    respolicy: ResPolicy
+    flighplan: tuple
+        sequence of locations for the drone to fly through
+    env_param: DroneEnvironmentGridParam
+    phys_param: DronePhysicalParameters
+    """
 
     respolicy:  ResPolicy = ResPolicy()
     flightplan: tuple = ((0, 0, 0),  # flies through a few points and back to the start
@@ -78,18 +114,26 @@ class DroneParam(Parameter, readonly=True):
 
 # DEFINE FLOWS
 class HSigState(State):
+    """State defining health signals (hstate: nominal/faulty)."""
+
     hstate: str = 'nominal'
 
 
 class HSig(Flow):
+    """Health signal flow."""
+
     _init_s = HSigState
 
 
 class RSigState(State):
-    mode:   str = 'continue'
+    """State defining Recovery signal (mode: continue, to_home, etc)."""
+
+    mode: str = 'continue'
 
 
 class RSig(Flow):
+    """Recovery signal flow."""
+
     _init_s = RSigState
 
 # DEFINE FUNCTIONS
@@ -139,8 +183,33 @@ class BatMode(Mode):
     key_phases_by = 'plan_path'
 
 
-
 class BatParam(Parameter):
+    """
+    Individual battery properties.
+
+    Fields (input)
+    -------
+    weight: float
+        Drone weight.
+    drag: float
+        Drone drag.
+    series: int
+        Number of packs in series.
+    parallel : int
+        Number of packs in parallel.
+    voltage : float
+        Pack voltage.
+
+    Fields (calculated)
+    -------
+    avail_eff : float
+        Available effort (voltage).
+    maxa : float
+        Maximum current.
+    amt : float
+        Energy stored (in flight time).
+    """
+
     avail_eff: float = 0.0
     maxa: float = 0.0
     amt: float = 0.0
@@ -158,11 +227,14 @@ class BatParam(Parameter):
 
 
 class Battery(Component):
+    """Battery component used to hold energy in distributed architecture."""
+
     _init_s = BatState
     _init_m = BatMode
     _init_p = BatParam
 
     def behavior(self, fs, ee_outr, time):
+        """Battery behavior returning electrical transference, soc, and fault state."""
         # If current is too high, battery breaks.
         if fs < 1.0 or ee_outr > self.p.maxa:
             self.m.add_fault('break')
@@ -247,6 +319,8 @@ class BatArch(CompArch):
 
 
 class StoreEEMode(Mode):
+    """Overall StoreEE mode."""
+
     failrate = 1e-4
     faultparams = {'nocharge':  (0.2, {"taxi": 0.6, "move": 0.2, "land": 0.2}, 0),
                    'lowcharge': (0.7, {"taxi": 0.6, "move": 0.2, "land": 0.2}, 0)}
@@ -265,18 +339,20 @@ class StoreEE(FxnBlock):
     _init_force_st = Force
 
     def condfaults(self, time):
+        """Calculate overall conditional faults for StoreEE architecture."""
         if self.s.soc < 20:
             self.m.add_fault('lowcharge')
         if self.s.soc < 1:
             self.m.replace_fault('lowcharge', 'nocharge')
         if self.m.has_fault('lowcharge'):
             for batname, bat in self.c.components.items():
-                bat.s.limit(soc = (0, 19))
+                bat.s.limit(soc=(0, 19))
         elif self.m.has_fault('nocharge'):
             for batname, bat in self.c.components.items():
                 bat.s.soc = 0
 
     def behavior(self, time):
+        """Calculate overall behavior for StoreEE architecture."""
         ee, soc = {}, {}
         rate_res = 0
         for batname, bat in self.c.components.items():
@@ -320,6 +396,8 @@ class HoldPayloadMode(Mode):
 
 
 class HoldPayload(HoldPayloadDyn):
+    """Adaptation of HoldPayload with new mode information."""
+
     _init_m = HoldPayloadMode
 
 
@@ -334,11 +412,14 @@ class ManageHealthMode(Mode):
     """
 
     failrate = 1e-6
-    faultparams = {'lostfunction': (0.05, {"taxi": 0.3, "move": 0.3, "land": 0.3}, 1000)}
+    faultparams = {'lostfunction':
+                   (0.05, {"taxi": 0.3, "move": 0.3, "land": 0.3}, 1000)}
     key_phases_by = "plan_path"
 
 
 class ManageHealth(FxnBlock):
+    """Health management function for rotor and battery."""
+
     __slots__ = ('force_st', 'ee_ctl', 'hsig_dofs', 'hsig_bat', 'rsig_traj')
     _init_m = ManageHealthMode
     _init_p = ResPolicy
@@ -349,10 +430,12 @@ class ManageHealth(FxnBlock):
     _init_rsig_traj = RSig
 
     def condfaults(self, time):
+        """If no support (e.g., in a crash), unit breaks."""
         if self.force_st.s.support < 0.5 or self.ee_ctl.s.effort > 2.0:
             self.m.add_fault('lostfunction')
 
     def behavior(self, time):
+        """Assign recovery trajectory from ResPolicy for a fault mode, if found."""
         if self.m.has_fault('lostfunction'):
             self.rsig_traj.s.mode = 'continue'
         elif self.hsig_dofs.s.hstate == 'faulty':
@@ -364,15 +447,20 @@ class ManageHealth(FxnBlock):
 
 
 class AffectMode(Mode):
+    """Overall Effect DOF mode - combines all line modes."""
+
     key_phases_by = 'plan_path'
 
 
-class AffectDOF(AffectDOFHierarchical):  # ee_mot,ctl,dofs,force_lin hsig_dofs, RSig_dofs
+class AffectDOF(AffectDOFHierarchical):
+    """Adaptation of hierarchical AffecDOF function which returns fault signals."""
+
     __slots__ = ('hsig_dofs',)
     _init_m = AffectMode
     _init_hsig_dofs = HSig
 
     def reconfig_faults(self):
+        """Send a faulty health state when in a fault mode."""
         AffectDOFHierarchical.reconfig_faults(self)
         if self.m.any_faults():
             self.hsig_dofs.s.hstate = 'faulty'
@@ -400,6 +488,8 @@ class CtlDOFMode(Mode):
 
 
 class CtlDOF(CtlDOFStat):
+    """Adaptation of CtlDOFMode with more mode information."""
+
     _init_m = CtlDOFMode
 
 
@@ -409,21 +499,21 @@ class PlanPathMode(Mode):
 
     Modes
     -------
-    - noloc: Fault
+    noloc: Fault
         no location data
-    - degloc: Fault
+    degloc: Fault
         degraded location data
-    - taxi:
+    taxi: Mode
         off at landing area
-    - to_nearest:
+    to_nearest: Mode
         go to the nearest possible landing area
-    - to_home:
+    to_home: Mode
         flight to the takeoff location
-    - emland:
+    emland: Mode
         emergency landing
-    - land:
+    land: Mode
         descent/landing
-    - move:
+    move: Mode
         nominal drone navigation
     """
 
@@ -438,16 +528,14 @@ class PlanPathMode(Mode):
 
 class PlanPathState(PlanPathStateDyn):
     """
-    Path planning states (extends dynamic model states).
+    Path planning states (extends dynamic model states for dynamic flightplan/height).
 
-    Fields
+    Additional Fields
     -------
-    - dist: float
-        distance to goal point
-    - pt: int
-        current goal point (number)
-    ground_height: float
+    ground_height : float
         Height above the ground (if terrain)
+    goals : dict
+        Sequence of goals defining the flightplan.
     """
 
     ground_height: float = 0.0
@@ -469,9 +557,16 @@ class PlanPath(PlanPathDyn):
         self.init_goals()
 
     def init_goals(self):
+        """Initialize path planning goals based on initial flightplan."""
         self.s.goals = {i: list(vals) for i, vals in enumerate(self.p.flightplan)}
 
     def behavior(self, t):
+        """
+        Path planning behavior for the drone.
+
+        The drone will (1) calculate distance to goal, (2) increment goal point,
+        (3) update its internal mode and goal, and (3) assign a desired trajectory.
+        """
         self.calc_dist_to_goal()
         self.increment_point()
         self.calc_ground_height()
@@ -485,9 +580,11 @@ class PlanPath(PlanPathDyn):
             self.assign_vectdist_to_goal()
 
     def calc_ground_height(self):
+        """Assigns the ground height state."""
         self.s.ground_height = self.dofs.s.z
 
     def update_mode(self, t):
+        """Update mode based on current mode and state."""
         if not self.m.any_faults():
             # if in reconfigure mode, copy that mode, otherwise complete mission
             if self.rsig_traj.s.mode != 'continue' and not self.m.in_mode("move_em", "emland"):
@@ -522,6 +619,7 @@ class PlanPath(PlanPathDyn):
             self.s.goal[2] -= 1
 
     def em_engaged(self):
+        """Return True if in an emergency mode already."""
         return 'em' in self.m.mode
 
     def update_traj(self):
@@ -533,17 +631,22 @@ class PlanPath(PlanPathDyn):
             self.des_traj.s.assign(self.s, x='dx', y='dy', z='dz')
 
     def mission_over(self):
+        """Return true if the mission is over (complete or in emergency mode)."""
         return (self.s.pt >= max(self.s.goals) or
                 self.m.in_mode('to_nearest', 'to_home', 'land', 'emland'))
 
     def increment_point(self):
+        """Increment to the next poin in the flight plan if close to goal point."""
         # if close to the given point, go to the next point
         if (self.m.in_mode('move', 'move_em')
                 and self.s.dist < 10
                 and self.s.pt < max(self.s.goals)):
             self.s.pt += 1
 
+
 class Drone(Model):
+    """Rural surveillance Drone model."""
+
     __slots__ = ('start_area', 'safe_area', 'target_area')
     _init_p = DroneParam
     default_sp = dict(phases=(('taxi', 0, 0),
@@ -588,17 +691,42 @@ class Drone(Model):
 
         self.build()
 
-
     def at_start(self, dofs):
+        """Check if drone is at start location."""
         return self.flows['environment'].g.in_area(dofs.s.x, dofs.s.y, 'start')
 
     def at_safe(self, dofs):
+        """Check if drone is at a safe location."""
         return self.flows['environment'].g.in_area(dofs.s.x, dofs.s.y, 'safe')
 
     def at_dangerous(self, dofs):
+        """Check if drone is at a dangerous location."""
         return self.flows['environment'].g.get(dofs.s.x, dofs.s.y, 'target')
 
-    def calc_land_metrics(self, scen, viewed, faulttime):
+    def calc_land_metrics(self, scen, faulttime):
+        """
+        Calculate landing metrics for the drone based on the scenario.
+
+        Parameters
+        ----------
+        scen : Scenario
+            Fault Scenario
+        viewed : TYPE
+            DESCRIPTION.
+        faulttime : TYPE
+            DESCRIPTION.
+
+        Returns
+        -------
+        metrics : dict
+            Metrics, including:
+                - body_strikes
+                - head_strikes
+                - property_restrictions
+                - safe_cost: safety cost
+                - p_safety: probability of a safety-affecting event
+                - severities: hazardous and minor event probabilities
+        """
         metrics = {}
         dofs = self.flows['dofs']
         if self.at_start(dofs):
@@ -632,11 +760,12 @@ class Drone(Model):
         return metrics
 
     def find_classification(self, scen, mdlhist):
+        """Classify a given scenario based on land_metrics and expected cost model."""
         viewed = 0.5 + np.sum(self.flows['environment'].g.viewed*self.flows['environment'].g.target)
         # to fix: need to find fault time more efficiently (maybe in the toolkit?)
         faulttime = self.h.get_fault_time(metric='total')
 
-        land_metrics = self.calc_land_metrics(scen, mdlhist, faulttime)
+        land_metrics = self.calc_land_metrics(scen, faulttime)
 
         # repair costs
         repcost = self.calc_repaircost(max_cost=1500)
@@ -659,12 +788,14 @@ class Drone(Model):
 
 
 def calc_p_safety(metrics, faulttime):
+    """Calculate probability of a safety event."""
     p_saf = 1-np.exp(-(metrics['body_strikes'] + metrics['head_strikes']) * 60 /
                      (faulttime+0.001))  # convert to pfh
     return p_saf
 
 
 def calc_safe_cost(metrics, loc, faulttime):
+    """Calculate cost of a safety event."""
     safecost = safety_categories['hazardous']['cost'] * \
             (metrics['head_strikes'] + metrics['body_strikes']) + \
             unsafecost[loc] * faulttime
@@ -676,22 +807,24 @@ def plot_goals(ax, flightplan):
     for goal, loc in enumerate(flightplan):
         ax.text(loc[0], loc[1], loc[2], str(goal), fontweight='bold', fontsize=12)
         ax.plot([loc[0]], [loc[1]], [loc[2]], marker='o',
-                 markersize=10, color='red', alpha=0.5)
+                markersize=10, color='red', alpha=0.5)
+
 
 def plot_env_with_traj3d(hist, mdl):
     fig, ax = show.grid3d(mdl.flows['environment'].g, "target", z="",
-                        collections={"start": {"color": "yellow"},
-                                     "safe":{"color": "yellow"}})
+                          collections={"start": {"color": "yellow"},
+                                       "safe": {"color": "yellow"}})
     fig, ax = show.trajectories(hist, "dofs.s.x", "dofs.s.y", "dofs.s.z",
                                 time_groups=['nominal'], time_ticks=1.0,
                                 fig=fig, ax=ax)
     plot_goals(ax, mdl.p.flightplan)
     return fig, ax
 
+
 def plot_env_with_traj(mdlhists, mdl):
     fig, ax = show.grid(mdl.flows['environment'].g, "target",
                         collections={"start": {"color": "yellow"},
-                                     "safe":{"color": "yellow"}})
+                                     "safe": {"color": "yellow"}})
     fig, ax = show.trajectories(mdlhists, "dofs.s.x", "dofs.s.y", fig=fig, ax=ax)
     return fig, ax
 
@@ -762,16 +895,13 @@ hazards = {'VH-1': 'loss of control',
 
 if __name__ == "__main__":
     import fmdtools.sim.propagate as prop
-    import matplotlib.pyplot as plt
-    from fmdtools.analyze import show
+    from fmdtools.analyze import show, plot
 
     mdl = Drone()
-    
 
-    
     ec, mdlhist = prop.nominal(mdl)
     phases, modephases = mdlhist.get_modephases()
-    an.plot.phases(phases, modephases)
+    plot.phases(phases, modephases)
 
     mdl = Drone()
     app = SampleApproach(mdl,  phases={'move'})
@@ -781,9 +911,9 @@ if __name__ == "__main__":
     
     fault_kwargs = {'alpha': 0.2, 'color': 'red'}
 
-    an.plot.hist(mdlhists, 'flows.dofs.s.x', 'dofs.s.y', 'dofs.s.z', 'store_ee.s.soc',
+    plot.hist(mdlhists, 'flows.dofs.s.x', 'dofs.s.y', 'dofs.s.z', 'store_ee.s.soc',
                  indiv_kwargs={'faulty': fault_kwargs})
-    fig, ax = an.show.trajectories(mdlhists,
+    fig, ax = show.trajectories(mdlhists,
                                    "dofs.s.x", "dofs.s.y", "dofs.s.z",
                                    time_groups=['nominal'],
                                    indiv_kwargs={'faulty': fault_kwargs})
