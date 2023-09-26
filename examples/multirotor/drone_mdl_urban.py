@@ -5,7 +5,7 @@ Variant of drone model for modelling computer vision in urban settings.
 from drone_mdl_static import EE, Force, Control
 from drone_mdl_static import DistEE
 from drone_mdl_rural import DesTraj, DOFs, HSig, RSig
-from drone_mdl_rural import ManageHealth, StoreEE, AffectDOF, CtlDOF
+from drone_mdl_rural import ManageHealth, StoreEE, CtlDOF
 from drone_mdl_rural import PlanPath as PlanPathRural
 from drone_mdl_rural import DronePhysicalParameters, ResPolicy
 from drone_mdl_rural import HoldPayload as HoldPayloadRural
@@ -14,19 +14,14 @@ from drone_mdl_rural import Drone as DroneRural
 
 from fmdtools.define.block import CompArch, Component
 from fmdtools.define.mode import Mode
-from fmdtools.define.flow import Flow
 from fmdtools.define.state import State
 from fmdtools.define.parameter import Parameter
 from fmdtools.define.model import Model
 from fmdtools.define.environment import Grid, GridParam, Environment
 
-from fmdtools.analyze.result import History
 from fmdtools.analyze import show
 
 import numpy as np
-import matplotlib.pyplot as plt
-from matplotlib.patches import Patch, Rectangle
-from mpl_toolkits.mplot3d import Axes3D, art3d
 from recordclass import asdict
 
 
@@ -54,10 +49,26 @@ class EnvironmentState(State):
 
 class UrbanGridParam(GridParam):
     """
-    Defines the grid parameters.
+    Define the grid parameters (by default a 10-10 grid of 100m blocks).
 
-    Includes resolution as well as number of allowed, unsafe, and occupied spaces,
-    max height of the buildings, and road width.
+    Features/Collections
+    -------
+    .   safe: feature
+        places where the drone is safe to land
+    allowed: feature
+        places the drone is allowed to land
+    occupied: feature
+        places where people are (landing would be dangerous)
+    height: feature
+        height of the buildings to fly over
+    start: point
+        where the drone starts
+    end: point
+        where the drone ends
+    all_occupied: collection
+        all points that are occupied
+    all_safe: collection
+        all points that are safe to land at
     """
 
     x_size: int = 10
@@ -79,33 +90,14 @@ class UrbanGridParam(GridParam):
     collect_all_safe: tuple = ("safe", True)
     collect_all_allowed: tuple = ("allowed", True)
 
-class StreetGrid(Grid):
-    """
-    Defines the urban environment (buildings, streets, etc) the drone flies through.
 
-    Note the aspects of the Grid:
-        - safe: feature
-            places where the drone is safe to land
-        - allowed: feature
-            places the drone is allowed to land
-        - occupied: feature
-            places where people are (landing would be dangerous)
-        - height: feature
-            height of the buildings to fly over
-        - start: point
-            where the drone starts
-        - end: point
-            where the drone ends
-        - all_occupied: collection
-            all points that are occupied
-        - all_safe: collection
-            all points that are safe to land at
-    """
+class StreetGrid(Grid):
+    """Define the urban environment (buildings, streets, etc)."""
 
     _init_p = UrbanGridParam
 
     def init_properties(self, *args, **kwargs):
-        """Randomly allocates the allowed/occupied points, and the building heights."""
+        """Randomly allocate the allowed/occupied points, and the building heights."""
         rand_pts = self.r.rng.choice(self.pts[1:-1],
                                      self.p.num_allowed + self.p.num_unsafe,
                                      replace=False)
@@ -121,6 +113,8 @@ class StreetGrid(Grid):
 
 
 class UrbanDroneEnvironment(Environment):
+    """ Drone environment for an urban area with buildings."""
+
     _init_p = UrbanGridParam
     _init_g = StreetGrid
     _init_s = EnvironmentState
@@ -137,19 +131,24 @@ class UrbanDroneEnvironment(Environment):
             self.s.safe = props['safe']
             self.s.allowed = props['allowed']
             self.s.occupied = props['occupied']
-    
+
             if self.ground_height(dofs) <= 0.1:
                 self.s.landed = True
             else:
                 self.s.landed = False
 
+
 class AffectDOF(AffectDOFRural):
+    """Adaptation of AffectDOF for urban environment."""
+
     _init_environment = UrbanDroneEnvironment
 
     def get_fall_dist(self):
+        """Get fall distance based on height above buildings."""
         return self.environment.ground_height(self.dofs)
 
     def inc_pos(self):
+        """Set environment states based on position while incrementing it."""
         AffectDOFRural.inc_pos(self)
         self.environment.set_states(self.dofs)
 
@@ -174,8 +173,8 @@ class ComputerVision(Component):
 
     _init_m = ComputerVisionMode
 
-
     def check_if_occupied(self, environment, dofs):
+        """Check if the grid area below is occupied (before landing)."""
         if self.m.has_fault("undesired_detection"):
             occ = True
         elif self.m.has_fault("lack_of_detection"):
@@ -186,6 +185,7 @@ class ComputerVision(Component):
         return occ
 
     def find_nearest_open(self, environment, dofs, include_pt=False):
+        """Find the nearest open place to land in the grid."""
         if self.m.has_fault("undesired_detection"):
             pt = environment.open[round(len(environment.open)/3)]
             return np.array([*pt, environment.g.get(*pt, "height", 0.0)])
@@ -198,36 +198,46 @@ class ComputerVision(Component):
 
 
 class VisionArch(CompArch):
+    """Computer vision architecture (one camera)."""
+
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.make_components(ComputerVision, 'vision')
 
 
 class PlanPathParam(Parameter):
+    """Path planning parameter (height)."""
+
     height: float = 200.0
 
 
 class PlanPath(PlanPathRural):
+    """Path planning adaptation for urban environment."""
+
     _init_environment = UrbanDroneEnvironment
     _init_c = VisionArch
     _init_p = PlanPathParam
 
     def init_goals(self):
+        """Initialize goals from start to end point."""
         self.make_goals([*self.environment.g.start, 0], [*self.environment.g.end, 0])
 
     def make_goals(self, start, end):
+        """Make goals from given start location to given end location."""
         self.s.goals = {0: start,
                         1: (start[0], start[1], self.p.height),
                         2: (end[0], end[1], self.p.height),
                         3: end}
 
     def reconfigure_plan(self, new_landing, newmode="move_em"):
+        """Reconfigure the flight plan to go to some new landing location."""
         self.make_goals(self.dofs.s.get('x', 'y', 'z'), new_landing)
         self.m.set_mode(newmode)
         self.s.pt = 1
         self.s.goal = self.s.goals[self.s.pt]
 
     def update_goal(self):
+        """Update the goal (includes checking if landing spot is occupied). """
         vis = self.c.components['vision']
         land_occupied = vis.check_if_occupied(self.environment, self.dofs)
         # reconfigure path based on mode
@@ -251,23 +261,38 @@ class PlanPath(PlanPathRural):
             self.s.goal[2] -= 1
 
     def find_nearest(self):
+        """Find the nearest allowed landing location."""
         return self.environment.g.find_closest(self.dofs.s.x, self.dofs.s.y,
                                                "all_allowed", include_pt=False)
 
     def calc_ground_height(self):
+        """Calculate the ground height given urban environement."""
         self.s.ground_height = self.environment.ground_height(self.dofs)
 
 
-
 class HoldPayload(HoldPayloadRural):
+    """Adaptation of HoldPayload given a changing ground height."""
+
     _init_environment = UrbanDroneEnvironment
 
     def at_ground(self):
+        """Check if at ground (at changing ground height)."""
         ground_height = self.environment.ground_height(self.dofs)
         return ground_height <= 0.0
 
 
 class DroneParam(Parameter):
+    """
+    Overall parameters for the urban Drone model.
+
+    Fields
+    -------
+    respolicy: ResPolicy
+    plan:param: PlanPathParam
+    env_param: UrbanGridParam
+    phys_param: DronePhysicalParameters
+    """
+
     respolicy: ResPolicy = ResPolicy()
     plan_param: PlanPathParam = PlanPathParam()
     env_param: UrbanGridParam = UrbanGridParam()
@@ -276,6 +301,8 @@ class DroneParam(Parameter):
 
 
 class Drone(DroneRural):
+    """Overall rural drone model."""
+
     _init_p = DroneParam
     default_sp = dict(phases=(('ascend', 0, 0),
                               ('forward', 1, 11),
@@ -315,29 +342,28 @@ class Drone(DroneRural):
         self.add_fxn('ctl_dof', CtlDOF, 'ee_ctl', 'des_traj', 'ctl', 'dofs', 'force_st')
         self.add_fxn('plan_path',   PlanPath, 'ee_ctl', 'dofs', 'des_traj', 'force_st',
                      'rsig_traj', 'environment', p=self.p.plan_param)
-        self.add_fxn('hold_payload', HoldPayload, 'dofs', 'force_lin', 'force_st', 
+        self.add_fxn('hold_payload', HoldPayload, 'dofs', 'force_lin', 'force_st',
                      'environment')
 
         self.build()
 
     def indicate_landed(self, time):
-        """Returns true if the drone has entered the "landed" state."""
-
+        """Return true if the drone has entered the "landed" state."""
         return time > 1 and self.fxns['plan_path'].m.mode == 'taxi'
 
-    def at_start(self, dofs):
-        return self.flows['environment'].g.in_area(dofs.s.x, dofs.s.y, "start")
-    
     def at_safe(self, dofs):
+        """Check if drone is at a safe location (if in designated safe collection)."""
         return self.flows['environment'].g.in_area(dofs.s.x, dofs.s.y, "all_safe")
-    
+
     def at_dangerous(self, dofs):
+        """Check if drone is at a dangerous location (if occupied)."""
         return self.flows['environment'].g.in_area(dofs.s.x, dofs.s.y, "all_occupied")
 
     def find_classification(self, scen, mdlhist):
+        """Classify a given scenario based on land_metrics and expected cost model."""
         faulttime = self.h.get_fault_time(metric='total')
 
-        land_metrics = self.calc_land_metrics(scen, mdlhist, faulttime)
+        land_metrics = self.calc_land_metrics(scen, faulttime)
 
         # repair costs
         repcost = self.calc_repaircost(max_cost=1500)

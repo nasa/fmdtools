@@ -200,6 +200,7 @@ class StoreEE(FxnBlock):
     flownames = {"ee_1": "ee_out", "force_st": "fs"}
 
     def behavior(self, time):
+        """Source loses voltage in nocharge mode."""
         if self.m.has_fault("nocharge"):
             self.ee_out.s.effort = 0.0
         else:
@@ -260,14 +261,35 @@ class DistEE(FxnBlock):
     flownames = {"ee_1": "ee_in", "force_st": "st"}
 
     def condfaults(self, time):
+        """Add faults if current is too high or support is broken."""
         if self.st.s.support < 0.5 or max(self.ee_mot.s.rate, self.ee_ctl.s.rate) > 2:
             self.m.add_fault("break")
         if self.ee_in.s.rate > 2:
             self.m.add_fault("short")
 
     def behavior(self, time):
+        """
+        Power distribution behavior.
+
+        Change transference in fault modes and send EE out based on input/transferrence.
+        e.g., when nominal, high effort gets passed to outgoing EE flows::
+        >>> d = DistEE()
+        >>> d.ee_in.s.effort = 2.0
+        >>> d.behavior(1.0)
+        >>> d.ee_mot
+        ee_mot EE flow: EEState(rate=1.0, effort=2.0)
+
+        while fault modes modify this relationship::
+        >>> d = DistEE()
+        >>> d.m.add_fault("short")
+        >>> d.behavior(1.0)
+        >>> d.ee_mot
+        ee_mot EE flow: EEState(rate=1.0, effort=0.0)
+        >>> d.ee_in
+        ee_in EE flow: EEState(rate=10.0, effort=1.0)
+        """
         if self.m.has_fault("short"):
-            self.s.put(ee_tr=0.0, ee_te=10.0)
+            self.s.put(ee_tr=10.0, ee_te=0.0)
         elif self.m.has_fault("break"):
             self.s.put(ee_tr=0.0, ee_te=0.0)
         elif self.m.has_fault("degr"):
@@ -319,15 +341,38 @@ class HoldPayload(FxnBlock):
     _init_force_lin = Force
 
     def at_ground(self):
+        """Call to check if the drone is at ground level (modified in subclasses)."""
         return self.dofs.s.z <= 0.0
 
     def calc_force_gr(self):
+        """Calculate ground force if at ground (modified in subclasses)."""
         if self.at_ground():
             self.s.force_gr = -1.0
         else:
             self.s.force_gr = 0.0
 
     def behavior(self, time):
+        """
+        Ground support behavior.
+
+        If at the ground assume crash and add a break. Then assign force/support to
+        lines (force_lin) and control units (force_st).
+
+        e.g., in the nominal case::
+        >>> h = HoldPayload()
+        >>> h.dofs.s.z = 1.0
+        >>> h.behavior(1.0)
+        >>> h.force_st.s
+        ForceState(support=1.0)
+
+        Or, in the drone has fallen::
+        >>> h.dofs.s.z = 0.0
+        >>> h.behavior(2.0)
+        >>> h.m.faults
+        {'break'}
+        >>> h.force_st.s
+        ForceState(support=0.0)
+        """
         self.calc_force_gr()
 
         if self.s.force_gr < -0.8:
@@ -351,15 +396,15 @@ class AffectDOFState(State):
 
     Fields
     -------
-    Eto: float
+    e_to: float
         Electricity transfer (out)
-    Eti: float
+    e_ti: float
         Electricity pull (in)
-    Ct: float
+    ct: float
         Control transferrence
-    Mt: float
+    mt: float
         Mechanical support
-    Pt: float
+    pt: float
         Physical tranferrence (ability of rotor to spin)
     """
 
@@ -371,6 +416,33 @@ class AffectDOFState(State):
 
 
 class AffectDOFMode(Mode):
+    """
+    Fault modes for drone rotors/lines.
+
+    Modes
+    -------
+    short : Fault
+        High EE rate in, no/low power output.
+    openc : Fault
+        No EE rate in, no power output.
+    ctlup : Fault
+        Too much power output (should fly up).
+    ctldn : Fault
+        Too little power output (should fly down).
+    ctlbreak : Fault
+        No power output. (should fall).
+    mechbreak : Fault
+        Rotor(s) break. Loss of power output (should fall).
+    mechfriction : Fault
+        Rotors have adverse fiction. EEin should go up while drone descends.
+    propwarp : Fault
+        Warped rotors. Should cause flight deviations (descent?).
+    propstuck : Fault
+        Rotor stuck. Should cause a fall and high current.
+    propbreak : Fault
+        Rotor breaks. Should cause a loss of power/support.
+    """
+
     failrate = 1e-5
     faultparams = {
         "short": (0.1, 200),
@@ -429,6 +501,29 @@ class AffectDOF(FxnBlock, BaseLine):
                  "force_lin": "force"}
 
     def behavior(self, time):
+        """
+        Drone locomotive behaviors.
+
+        Changes drone position, velocity and power based on control inputs and fualts.
+        In this (static) version, this means maintaining drone height. e.g, in the
+        nominal case ::
+        >>> a = AffectDOF()
+        >>> a.dofs.s.z
+        0.0
+        >>> a.behavior(0.0)
+        >>> a.dofs.s.z
+        1.0
+
+        Mechanical breakages (And other faults) cause a fall::
+        >>> a.m.add_fault("mechbreak")
+        >>> a.behavior(0.0)
+        >>> a.s.mt
+        0.0
+        >>> a.dofs.s.uppwr
+        0.0
+        >>> a.dofs.s.z
+        0.0
+        """
         self.calc_faults()
         self.calc_pwr()
         self.calc_vel()
@@ -493,10 +588,26 @@ class CtlDOF(FxnBlock):
     flownames = {"ee_ctl": "ee_in", "force_st": "fs"}
 
     def condfaults(self, time):
+        """If no/reduced support (from force), lose control."""
         if self.fs.s.support < 0.5:
             self.m.add_fault("noctl")
 
     def behavior(self, time):
+        """
+        Translate desired trajectory into control signals.
+
+        e.g., in the nominal case::
+        >>> c = CtlDOF()
+        >>> c.behavior(0.0)
+        >>> c.ctl.s
+        ControlState(forward=1.0, upward=1.0)
+
+        and in the off-nominal case::
+        >>> c.m.add_fault("noctl")
+        >>> c.behavior(0.0)
+        >>> c.ctl.s
+        ControlState(forward=0.0, upward=0.0)
+        """
         self.calc_cs()
         up, forward = self.calc_throttle()
         self.update_ctl(up, forward)
@@ -547,18 +658,35 @@ class PlanPath(FxnBlock):
     flownames = {"ee_ctl": "ee_in", "force_st": "fs"}
 
     def condfaults(self, time):
+        """Enter "noloc" fault if loses support or velocity too high."""
         if self.fs.s.support < 0.5:
             self.m.add_fault("noloc")
         if self.dofs.s.planvel > 1.5 or self.dofs.s.planvel < 0.5:
             self.m.add_fault("noloc")
 
     def behavior(self, t):
+        """
+        Path planning behavior.
+
+        Assigns trajectory based on current point. In the static case, this is just
+        going forward 1.0 in the x, e.g.::
+        >>> p = PlanPath()
+        >>> p.behavior(0.0)
+        >>> p.des_traj.s
+        DesTrajState(dx=1.0, dy=0.0, dz=0.0, power=1.0)
+
+        If it loses location, navigation not provided:
+        >>> p.m.add_fault("noloc")
+        >>> p.behavior(0.0)
+        >>> p.des_traj.s
+        DesTrajState(dx=0.0, dy=0.0, dz=0.0, power=1.0)
+        """
         self.des_traj.s.assign([1.0, 0.0, 0.0], "dx", "dy", "dz")
         # faulty behaviors
         if self.m.has_fault("noloc"):
-            self.des_traj.s.assign([0, 0, 0], "dx", "dy", "dz")
+            self.des_traj.s.assign([0.0, 0.0, 0.0], "dx", "dy", "dz")
         elif self.m.has_fault("degloc"):
-            self.des_traj.s.assign([0, 0, -1], "dx", "dy", "dz")
+            self.des_traj.s.assign([0.0, 0.0, -1.0], "dx", "dy", "dz")
         if self.ee_in.s.effort < 0.5:
             self.des_traj.s.assign([0.0, 0.0, 0.0, 0.0], "dx", "dy", "dz", "power")
 
@@ -635,6 +763,7 @@ class Drone(Model):
         self.build()
 
     def find_classification(self, scen, mdlhist):
+        """Calculate rate, cost, expected cost based on cost of repair information."""
         modes, modeprops = self.return_faultmodes()
         repcost = sum([c["rcost"] for f, m in modeprops.items() for a, c in m.items()])
 
