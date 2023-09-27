@@ -64,13 +64,15 @@ class LineGeomArch(GeomArchitecture):
         self.add_shape('start', Start, p={'x': ls[0][0], 'y': ls[0][1]})
         self.add_shape('end', Start, p={'x': ls[-1][0], 'y': ls[-1][1]})
 
-lf = LineGeomArch()
+if __name__ == "__main__":
 
-plt.plot(*lf.line.near.exterior.xy)
-plt.plot(*lf.line.on.exterior.xy)
-
-
-plt.plot(np.array([*lf.line.shape.coords])[:,0],
-         np.array([*lf.line.shape.coords])[:,1])
-plt.scatter(lf.start.shape.x, lf.start.shape.y)
-plt.scatter(lf.end.shape.x, lf.end.shape.y)
+    lf = LineGeomArch()
+    
+    plt.plot(*lf.line.near.exterior.xy)
+    plt.plot(*lf.line.on.exterior.xy)
+    
+    
+    plt.plot(np.array([*lf.line.shape.coords])[:,0],
+             np.array([*lf.line.shape.coords])[:,1])
+    plt.scatter(lf.start.shape.x, lf.start.shape.y)
+    plt.scatter(lf.end.shape.x, lf.end.shape.y)
