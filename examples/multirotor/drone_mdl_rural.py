@@ -333,7 +333,7 @@ class StoreEE(FxnBlock):
     __slots__ = ('hsig_bat', 'ee_1', 'force_st')
     _init_s = StoreEEState
     _init_m = StoreEEMode
-    _init_c = BatArch
+    _init_ca = BatArch
     _init_hsig_bat = HSig
     _init_ee_1 = EE
     _init_force_st = Force
@@ -345,28 +345,28 @@ class StoreEE(FxnBlock):
         if self.s.soc < 1:
             self.m.replace_fault('lowcharge', 'nocharge')
         if self.m.has_fault('lowcharge'):
-            for batname, bat in self.c.components.items():
+            for batname, bat in self.ca.components.items():
                 bat.s.limit(soc=(0, 19))
         elif self.m.has_fault('nocharge'):
-            for batname, bat in self.c.components.items():
+            for batname, bat in self.ca.components.items():
                 bat.s.soc = 0
 
     def behavior(self, time):
         """Calculate overall behavior for StoreEE architecture."""
         ee, soc = {}, {}
         rate_res = 0
-        for batname, bat in self.c.components.items():
+        for batname, bat in self.ca.components.items():
             ee[bat.name], soc[bat.name], rate_res = \
                 bat.behavior(self.force_st.s.support, self.ee_1.s.rate /
-                             (self.c.series*self.c.parallel)+rate_res, time)
+                             (self.ca.series*self.ca.parallel)+rate_res, time)
         # need to incorporate max current draw somehow + draw when reconfigured
-        if self.c.archtype == 'monolithic':
+        if self.ca.archtype == 'monolithic':
             self.ee_1.s.effort = ee['s1p1']
-        elif self.c.archtype == 'series-split':
+        elif self.ca.archtype == 'series-split':
             self.ee_1.s.effort = np.max(list(ee.values()))
-        elif self.c.archtype == 'parallel-split':
+        elif self.ca.archtype == 'parallel-split':
             self.ee_1.s.effort = np.sum(list(ee.values()))
-        elif self.c.archtype == 'split-both':
+        elif self.ca.archtype == 'split-both':
             e = list(ee.values())
             e.sort()
             self.ee_1.effort = e[-1]+e[-2]
@@ -678,11 +678,11 @@ class Drone(Model):
         store_ee_p = {'archtype': self.p.phys_param.bat,
                       'weight': self.p.phys_param.batweight+self.p.phys_param.archweight,
                       'drag': self.p.phys_param.archdrag}
-        self.add_fxn('store_ee', StoreEE, 'ee_1', 'force_st', 'hsig_bat', c=store_ee_p)
+        self.add_fxn('store_ee', StoreEE, 'ee_1', 'force_st', 'hsig_bat', ca=store_ee_p)
         self.add_fxn('dist_ee', DistEE, 'ee_1', 'ee_mot', 'ee_ctl', 'force_st')
         self.add_fxn('affect_dof', AffectDOF, 'ee_mot', 'ctl', 'dofs', 'des_traj',
                      'force_lin', 'hsig_dofs',
-                     c={'archtype': self.p.phys_param.linearch})
+                     ca={'archtype': self.p.phys_param.linearch})
         self.add_fxn('ctl_dof', CtlDOF, 'ee_ctl', 'des_traj', 'ctl', 'dofs', 'force_st')
         self.add_fxn('plan_path', PlanPath, 'ee_ctl', 'dofs', 'des_traj', 'force_st',
                      'rsig_traj', p=asdict(self.p))
@@ -693,15 +693,15 @@ class Drone(Model):
 
     def at_start(self, dofs):
         """Check if drone is at start location."""
-        return self.flows['environment'].g.in_area(dofs.s.x, dofs.s.y, 'start')
+        return self.flows['environment'].c.in_area(dofs.s.x, dofs.s.y, 'start')
 
     def at_safe(self, dofs):
         """Check if drone is at a safe location."""
-        return self.flows['environment'].g.in_area(dofs.s.x, dofs.s.y, 'safe')
+        return self.flows['environment'].c.in_area(dofs.s.x, dofs.s.y, 'safe')
 
     def at_dangerous(self, dofs):
         """Check if drone is at a dangerous location."""
-        return self.flows['environment'].g.get(dofs.s.x, dofs.s.y, 'target')
+        return self.flows['environment'].c.get(dofs.s.x, dofs.s.y, 'target')
 
     def calc_land_metrics(self, scen, faulttime):
         """
@@ -761,7 +761,7 @@ class Drone(Model):
 
     def find_classification(self, scen, mdlhist):
         """Classify a given scenario based on land_metrics and expected cost model."""
-        viewed = 0.5 + np.sum(self.flows['environment'].g.viewed*self.flows['environment'].g.target)
+        viewed = 0.5 + np.sum(self.flows['environment'].c.viewed*self.flows['environment'].c.target)
         # to fix: need to find fault time more efficiently (maybe in the toolkit?)
         faulttime = self.h.get_fault_time(metric='total')
 
@@ -811,7 +811,7 @@ def plot_goals(ax, flightplan):
 
 
 def plot_env_with_traj3d(hist, mdl):
-    fig, ax = show.grid3d(mdl.flows['environment'].g, "target", z="",
+    fig, ax = show.coord3d(mdl.flows['environment'].c, "target", z="",
                           collections={"start": {"color": "yellow"},
                                        "safe": {"color": "yellow"}})
     fig, ax = show.trajectories(hist, "dofs.s.x", "dofs.s.y", "dofs.s.z",
@@ -822,7 +822,7 @@ def plot_env_with_traj3d(hist, mdl):
 
 
 def plot_env_with_traj(mdlhists, mdl):
-    fig, ax = show.grid(mdl.flows['environment'].g, "target",
+    fig, ax = show.coord(mdl.flows['environment'].c, "target",
                         collections={"start": {"color": "yellow"},
                                      "safe": {"color": "yellow"}})
     fig, ax = show.trajectories(mdlhists, "dofs.s.x", "dofs.s.y", fig=fig, ax=ax)

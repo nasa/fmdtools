@@ -17,7 +17,8 @@ from fmdtools.define.mode import Mode
 from fmdtools.define.state import State
 from fmdtools.define.parameter import Parameter
 from fmdtools.define.model import Model
-from fmdtools.define.environment import Grid, GridParam, Environment
+from fmdtools.define.environment import Environment
+from fmdtools.define.coords import Coords, CoordsParam
 
 from fmdtools.analyze import show
 
@@ -47,7 +48,7 @@ class EnvironmentState(State):
     occupied: bool = False
 
 
-class UrbanGridParam(GridParam):
+class UrbanGridParam(CoordsParam):
     """
     Define the grid parameters (by default a 10-10 grid of 100m blocks).
 
@@ -91,7 +92,7 @@ class UrbanGridParam(GridParam):
     collect_all_allowed: tuple = ("allowed", True)
 
 
-class StreetGrid(Grid):
+class StreetGrid(Coords):
     """Define the urban environment (buildings, streets, etc)."""
 
     _init_p = UrbanGridParam
@@ -116,18 +117,18 @@ class UrbanDroneEnvironment(Environment):
     """ Drone environment for an urban area with buildings."""
 
     _init_p = UrbanGridParam
-    _init_g = StreetGrid
+    _init_c = StreetGrid
     _init_s = EnvironmentState
 
     def ground_height(self, dofs):
         """Get the distance of the height z above the ground at point x,y."""
-        env_height = self.g.get(dofs.s.x, dofs.s.y, 'height', dofs.s.z)
+        env_height = self.c.get(dofs.s.x, dofs.s.y, 'height', dofs.s.z)
         return dofs.s.z-env_height
 
     def set_states(self, dofs):
         """Set the landing states safe_land and allowed_land for landing."""
-        if self.g.in_range(dofs.s.x, dofs.s.y):
-            props = self.g.get_properties(dofs.s.x, dofs.s.y)
+        if self.c.in_range(dofs.s.x, dofs.s.y):
+            props = self.c.get_properties(dofs.s.x, dofs.s.y)
             self.s.safe = props['safe']
             self.s.allowed = props['allowed']
             self.s.occupied = props['occupied']
@@ -180,7 +181,7 @@ class ComputerVision(Component):
         elif self.m.has_fault("lack_of_detection"):
             occ = False
         else:
-            occ = environment.g.get(dofs.s.x, dofs.s.y, 'occupied', True)
+            occ = environment.c.get(dofs.s.x, dofs.s.y, 'occupied', True)
         self.m.remove_fault("undesired_detection")
         return occ
 
@@ -188,12 +189,12 @@ class ComputerVision(Component):
         """Find the nearest open place to land in the grid."""
         if self.m.has_fault("undesired_detection"):
             pt = environment.open[round(len(environment.open)/3)]
-            return np.array([*pt, environment.g.get(*pt, "height", 0.0)])
+            return np.array([*pt, environment.c.get(*pt, "height", 0.0)])
         elif self.m.has_fault("lack_of_detection"):
-            return environment.g.find_closest(dofs.s.x, dofs.s.y, 'pts',
+            return environment.c.find_closest(dofs.s.x, dofs.s.y, 'pts',
                                               include_pt=include_pt)
         else:
-            return environment.g.find_closest(dofs.s.x, dofs.s.y, "all_allowed",
+            return environment.c.find_closest(dofs.s.x, dofs.s.y, "all_allowed",
                                               include_pt=include_pt)
 
 
@@ -215,12 +216,12 @@ class PlanPath(PlanPathRural):
     """Path planning adaptation for urban environment."""
 
     _init_environment = UrbanDroneEnvironment
-    _init_c = VisionArch
+    _init_ca = VisionArch
     _init_p = PlanPathParam
 
     def init_goals(self):
         """Initialize goals from start to end point."""
-        self.make_goals([*self.environment.g.start, 0], [*self.environment.g.end, 0])
+        self.make_goals([*self.environment.c.start, 0], [*self.environment.c.end, 0])
 
     def make_goals(self, start, end):
         """Make goals from given start location to given end location."""
@@ -238,7 +239,7 @@ class PlanPath(PlanPathRural):
 
     def update_goal(self):
         """Update the goal (includes checking if landing spot is occupied). """
-        vis = self.c.components['vision']
+        vis = self.ca.components['vision']
         land_occupied = vis.check_if_occupied(self.environment, self.dofs)
         # reconfigure path based on mode
         if (self.m.in_mode('emland') and land_occupied):
@@ -248,7 +249,7 @@ class PlanPath(PlanPathRural):
         elif self.m.in_mode('to_nearest'):
             self.reconfigure_plan(self.find_nearest())
         elif self.m.in_mode('to_home'):
-            self.reconfigure_plan([*self.environment.g.start, 0.0])
+            self.reconfigure_plan([*self.environment.c.start, 0.0])
         elif self.m.in_mode('emland', 'land'):
             z_down = self.dofs.s.z - self.s.ground_height/2
             self.s.goal = (self.dofs.s.x, self.dofs.s.y, z_down)
@@ -262,7 +263,7 @@ class PlanPath(PlanPathRural):
 
     def find_nearest(self):
         """Find the nearest allowed landing location."""
-        return self.environment.g.find_closest(self.dofs.s.x, self.dofs.s.y,
+        return self.environment.c.find_closest(self.dofs.s.x, self.dofs.s.y,
                                                "all_allowed", include_pt=False)
 
     def calc_ground_height(self):
@@ -325,7 +326,7 @@ class Drone(DroneRural):
         self.add_flow('ctl', Control)
         self.add_flow('dofs', DOFs)
         self.add_flow('des_traj', DesTraj)
-        self.add_flow('environment', UrbanDroneEnvironment, g=dict(p=self.p.env_param))
+        self.add_flow('environment', UrbanDroneEnvironment, c=dict(p=self.p.env_param))
 
         # add functions to the model
         flows = ['ee_ctl', 'force_st', 'hsig_dofs', 'hsig_bat', 'rsig_traj']
@@ -334,11 +335,11 @@ class Drone(DroneRural):
         store_ee_p = {'archtype': self.p.phys_param.bat,
                       'weight': self.p.phys_param.batweight+self.p.phys_param.archweight,
                       'drag': self.p.phys_param.archdrag}
-        self.add_fxn('store_ee', StoreEE, 'ee_1', 'force_st', 'hsig_bat', c=store_ee_p)
+        self.add_fxn('store_ee', StoreEE, 'ee_1', 'force_st', 'hsig_bat', ca=store_ee_p)
         self.add_fxn('dist_ee', DistEE, 'ee_1', 'ee_mot', 'ee_ctl', 'force_st')
         self.add_fxn('affect_dof', AffectDOF, 'ee_mot', 'ctl', 'dofs', 'des_traj',
                      'force_lin', 'hsig_dofs', 'environment',
-                     c={'archtype': self.p.phys_param.linearch})
+                     ca={'archtype': self.p.phys_param.linearch})
         self.add_fxn('ctl_dof', CtlDOF, 'ee_ctl', 'des_traj', 'ctl', 'dofs', 'force_st')
         self.add_fxn('plan_path',   PlanPath, 'ee_ctl', 'dofs', 'des_traj', 'force_st',
                      'rsig_traj', 'environment', p=self.p.plan_param)
@@ -353,11 +354,11 @@ class Drone(DroneRural):
 
     def at_safe(self, dofs):
         """Check if drone is at a safe location (if in designated safe collection)."""
-        return self.flows['environment'].g.in_area(dofs.s.x, dofs.s.y, "all_safe")
+        return self.flows['environment'].c.in_area(dofs.s.x, dofs.s.y, "all_safe")
 
     def at_dangerous(self, dofs):
         """Check if drone is at a dangerous location (if occupied)."""
-        return self.flows['environment'].g.in_area(dofs.s.x, dofs.s.y, "all_occupied")
+        return self.flows['environment'].c.in_area(dofs.s.x, dofs.s.y, "all_occupied")
 
     def find_classification(self, scen, mdlhist):
         """Classify a given scenario based on land_metrics and expected cost model."""
@@ -401,7 +402,7 @@ def plot_env_with_traj(mdlhists, mdl, legend=True, title="trajectory"):
     fig : matplotlib figure
     ax : matplotlib axis
     """
-    fig, ax = show.grid(mdl.flows['environment'].g, "height",
+    fig, ax = show.coord(mdl.flows['environment'].c, "height",
                         collections={"all_occupied": {"color": "red"},
                                      "all_allowed": {"color": "blue"},
                                      "start": {"color": "blue"},
@@ -435,8 +436,8 @@ def plot_env_with_traj3d(mdlhists, mdl, legend=True, title="trajectory"):
                    "all_allowed": {"color": "yellow", "label": False},
                    "start": {"color": "yellow", "label": True, "text_z_offset": 30},
                    "end": {"color": "yellow", "label": True, "text_z_offset": 30}}
-    
-    fig, ax = show.grid3d(mdl.flows['environment'].g, "height", voxels=False,
+
+    fig, ax = show.coord3d(mdl.flows['environment'].c, "height", voxels=False,
                         collections=collections)
     fig, ax = show.trajectories(mdlhists, "dofs.s.x", "dofs.s.y", "dofs.s.z",
                                 fig=fig, ax=ax, legend=legend, title=title)
@@ -488,10 +489,10 @@ if __name__ == "__main__":
     #p = PlanPath("test", {})
     
     e = UrbanDroneEnvironment("env")
-    show.grid(e.g, "height")
-    show.grid3d(e.g, "height")
+    show.coord(e.c, "height")
+    show.coord3d(e.c, "height")
     
-    show.grid_collection(e.g, 'all_safe', z='height')
+    show.coord_collection(e.c, 'all_safe', z='height')
     
     mdl = Drone(p={'respolicy': ResPolicy(bat="to_nearest", line="to_nearest")})
     # ec, mdlhist_fault = propagate.one_fault(mdl, "plan_path", "vision_lack_of_detection", time=4.5)

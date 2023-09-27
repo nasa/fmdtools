@@ -19,8 +19,7 @@ Flows:
     - EE
     - Camera
 """
-from recordclass import asdict
-from fmdtools.define.parameter import Parameter, SimParam
+from fmdtools.define.parameter import Parameter
 from fmdtools.define.state import State
 from fmdtools.define.mode import Mode
 from fmdtools.define.block import FxnBlock
@@ -36,14 +35,15 @@ import multiprocessing as mp
 
 
 class DegParam(Parameter, readonly=True):
-    """Parameters for rover degradation"""
-    
+    """Parameters for rover degradation."""
+
     friction: float = 0.0
     drift: float = 0.0
 
-# MODEL PARAMETERS
+
 class RoverParam(Parameter, readonly=True):
-    """Parameters for rover"""
+    """Parameters for rover."""
+
     linetype: str = "sine"  # line type (sine or turn)
     period: float = 1.0  # period of the curve (for sine linetype)
     end: tuple = (10.0, 10.0)  # end of the curve (requires instantiation)
@@ -78,8 +78,7 @@ class RoverParam(Parameter, readonly=True):
             start = self.get_true_field("start", *args, **kwargs)
             kwargs["end"] = (radius + start, radius + start)
         super().__init__(*args, strict_immutability=False, **kwargs)
-        
-## MODEL FLOWS
+
 
 class GroundState(State):
     x: float = 0.0
@@ -176,16 +175,10 @@ class FaultyStates(State):
     transfer: float = 1.0
     friction: float = 1.0
     drift: float = 0.0
-   
-
 
 
 class Fault(Flow):
     _init_s = FaultyStates
-
-          
-    #    self.s.inc(friction = self.p.friction,
-    #               drift = self.p.drift)
 
 
 # MODEL FUNCTIONS
@@ -1176,39 +1169,7 @@ if __name__ == "__main__":
 
     from fmdtools.sim import search
 
-    from pymoo.optimize import minimize
-
-    from pymoo.algorithms.soo.nonconvex.pattern import PatternSearch
-    import numpy as np
-
-    mdl = Rover(sp=SimParam(times=(0, 100), phases=(("start", 0, 30), ("end", 31, 60))))
-    track = {"functions": {"Environment": "in_bound"}, "flows": {"ground": "all"}}
-    rover_prob = search.ProblemInterface(
-        "rover_problem", mdl, pool=mp.Pool(5), staged=True, track=track
-    )
-    app_drive = SampleApproach(
-        mdl,
-        faults="drive",
-        phases={"global": [0, 39]},
-        defaultsamp={"samp": "evenspacing", "numpts": 3},
-    )
-    rover_prob.add_simulation("drive_faults", "multi", app_drive.scenlist)
-    rover_prob.add_variables(
-        "drive_faults",
-        ("cor_f", (-10, 100)),
-        ("cor_d", (-100, 100)),
-        ("cor_t", (-10, 100)),
-        vartype="param",
-    )
-    rover_prob.add_objectives(
-        "drive_faults", end_dist="end_dist", tot_deviation="tot_deviation"
-    )
-
     p = RoverParam(linetype="turn")
-
-    pymoo_prob = rover_prob.to_pymoo_problem(objectives="end_dist")
-    algorithm = PatternSearch(x0=np.array([0.0, 0.0, 0.0]))
-    # res = minimize(pymoo_prob, algorithm, verbose=True)
 
     # dot = an.graph.show(mdl, gtype="fxnflowgraph", renderer='graphviz')
 

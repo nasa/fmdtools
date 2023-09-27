@@ -5,15 +5,15 @@ grids, environments, trajectories, etc).
 
 Uses the following primary methods:
 
-- :func: `grid`: Plots a Grid collections/properties on an x-y grid.
-- :func: `grid3d`: Plots a Grid collection.property on an x-y grid.
+- :func: `coord`: Plots a Coords collections/properties on an x-y grid.
+- :func: `coord3d`: Plots a Coords collection.property on an x-y grid.
 - :func: `trajectories`: Plots trajectories from a history.
 
 And secondary methods:
 
-- :func:`grid_property`: Plots a given Grid property on an x-y grid.
-- :func:`grid_property3d`: Plots a given Grid property in 3d space.
-- :func: `grid_collection`: Plots a given Grid collections on an x-y grid.
+- :func:`coord_property`: Plots a given Coords property on an x-y grid.
+- :func:`coord_property3d`: Plots a given Coords property in 3d space.
+- :func: `coord_collection`: Plots a given Coords collections on an x-y grid.
 
 And helper functions:
 
@@ -29,7 +29,7 @@ import numpy as np
 from fmdtools.analyze.plot import prep_hists
 
 
-def grid_property(grd, prop, xlab="x", ylab="y", proplab="prop", **kwargs):
+def coord_property(crd, prop, xlab="x", ylab="y", proplab="prop", **kwargs):
     """
     Plot a given property 'prop' as a colormesh on an x-y grid.
 
@@ -37,8 +37,8 @@ def grid_property(grd, prop, xlab="x", ylab="y", proplab="prop", **kwargs):
 
     Parameters
     ----------
-    grd: Grid
-        define.environment.grid to plot
+    crd: Coords
+        coord to plot
     prop : str
         Name of the property to plot.
     xlab : str, optional
@@ -63,11 +63,11 @@ def grid_property(grd, prop, xlab="x", ylab="y", proplab="prop", **kwargs):
 
     fig, ax = plt.subplots(1)
 
-    p = getattr(grd, prop)
+    p = getattr(crd, prop)
     # im = ax.matshow(p, **kwargs)
-    offset = grd.p.blocksize/2
-    x = np.linspace(0., grd.p.blocksize*(grd.p.x_size-1), grd.p.x_size)
-    y = np.linspace(0., grd.p.blocksize*(grd.p.y_size-1), grd.p.y_size)
+    offset = crd.p.blocksize/2
+    x = np.linspace(0., crd.p.blocksize*(crd.p.x_size-1), crd.p.x_size)
+    y = np.linspace(0., crd.p.blocksize*(crd.p.y_size-1), crd.p.y_size)
     X, Y = np.meshgrid(x, y)
 
     im = ax.pcolormesh(X, Y, p.swapaxes(0, 1), **kwargs)
@@ -84,7 +84,7 @@ def grid_property(grd, prop, xlab="x", ylab="y", proplab="prop", **kwargs):
     return fig, ax
 
 
-def grid_property3d(grd, prop, z="prop", z_res=10, collections={},
+def coord_property3d(crd, prop, z="prop", z_res=10, collections={},
                     xlab="x", ylab="y", zlab="prop",
                     proplab="prop", cmap="Greens",
                     fig=None, ax=None, figsize=(4, 5), **kwargs):
@@ -95,8 +95,8 @@ def grid_property3d(grd, prop, z="prop", z_res=10, collections={},
 
     Parameters
     ----------
-    grd: Grid
-        define.environment.grid to plot
+    crd: Coord
+        coord to plot
     prop : str
         Name of the property to represent a color.
     z : str, optional
@@ -135,13 +135,13 @@ def grid_property3d(grd, prop, z="prop", z_res=10, collections={},
 
     fig, ax = init_figure(fig=fig, ax=ax, z=True, figsize=figsize)
 
-    c_array = getattr(grd, prop)
+    c_array = getattr(crd, prop)
     if z == "prop":
         z_array = c_array
     elif not z:
         z_array = c_array * 0
     else:
-        z_array = getattr(grd, z)
+        z_array = getattr(crd, z)
 
     dims = z_array.shape
     X, Y, Z = np.indices((dims[0]+1, dims[1]+1, z_res+1))
@@ -153,8 +153,8 @@ def grid_property3d(grd, prop, z="prop", z_res=10, collections={},
     round_z_array = np.digitize(norm_z_array, [i for i in range(z_res)])
     shape = z_shape < round_z_array
     shape = shape.swapaxes(0, 1).swapaxes(1, 2)
-    X_scale = X * grd.p.blocksize - grd.p.blocksize/2
-    Y_scale = Y * grd.p.blocksize - grd.p.blocksize/2
+    X_scale = X * crd.p.blocksize - crd.p.blocksize/2
+    Y_scale = Y * crd.p.blocksize - crd.p.blocksize/2
     Z_scale = Z * (max_z - min_z) / z_res + min_z
 
     color_shape = np.array([c_array for i in range(z_res)])
@@ -164,7 +164,7 @@ def grid_property3d(grd, prop, z="prop", z_res=10, collections={},
 
     for i, (prop, coll_kwargs) in enumerate(collections.items()):
         coll_colors = cm.rainbow(np.linspace(0, 1, len(collections)))
-        coll = grd.get_collection(prop)
+        coll = crd.get_collection(prop)
         if 'color' not in coll_kwargs:
             coll_color = colormaps['rainbow'](coll_colors[i])
         else:
@@ -173,7 +173,7 @@ def grid_property3d(grd, prop, z="prop", z_res=10, collections={},
         if "text_z_offset" not in coll_kwargs:
             coll_kwargs['text_z_offset'] = (max_z - min_z) / z_res
         for pt in coll:
-            index = grd.to_index(*pt)
+            index = crd.to_index(*pt)
             inds = np.where(shape[index])
             if any(inds[0]):
                 z_index = inds[0][-1]
@@ -203,15 +203,15 @@ def init_figure(fig=None, ax=None, z=False, figsize=()):
     return fig, ax
 
 
-def grid_collection(grd, prop, fig=None, ax=None, label=True, z="",
-                    legend_args=False, text_z_offset=0.0, figsize=(4, 4), **kwargs):
+def coord_collection(crd, prop, fig=None, ax=None, label=True, z="",
+                     legend_args=False, text_z_offset=0.0, figsize=(4, 4), **kwargs):
     """
     Show a collection on the grid as square patches.
 
     Parameters
     ----------
-    grd: Grid
-        define.environment.grid to plot
+    crd: Coords
+        coord to plot
     prop : str
         Name of the collection
     fig : matplotlib.figure, optional
@@ -243,24 +243,24 @@ def grid_collection(grd, prop, fig=None, ax=None, label=True, z="",
         Ploted axis object.
 
     """
-    offset = grd.p.blocksize/2
+    offset = crd.p.blocksize/2
     if not ax:
         fig, ax = init_figure(z=z, figsize=figsize)
         if type(z) == str and z:
-            ax.set_zlim(getattr(grd, z).min(), getattr(grd, z).max())
-        ax.set_xlim(-offset, grd.p.x_size*grd.p.blocksize+offset)
-        ax.set_ylim(-offset, grd.p.y_size*grd.p.blocksize+offset)
+            ax.set_zlim(getattr(crd, z).min(), getattr(crd, z).max())
+        ax.set_xlim(-offset, crd.p.x_size*crd.p.blocksize+offset)
+        ax.set_ylim(-offset, crd.p.y_size*crd.p.blocksize+offset)
     else:
         fig, ax = init_figure(fig=fig, ax=ax, z=z, figsize=figsize)
 
-    coll = grd.get_collection(prop)
+    coll = crd.get_collection(prop)
     for i, pt in enumerate(coll):
         corner = pt - np.array([offset, offset])
-        rect = Rectangle(corner, grd.p.blocksize, grd.p.blocksize,
+        rect = Rectangle(corner, crd.p.blocksize, crd.p.blocksize,
                          label=prop, **kwargs)
         ax.add_patch(rect)
         if type(z) == str and z:
-            z_h = grd.get(pt[0], pt[1], z)
+            z_h = crd.get(pt[0], pt[1], z)
             art3d.patch_2d_to_3d(rect, z=z_h)
         elif type(z) in [float, int]:
             z_h = z
@@ -285,14 +285,14 @@ def grid_collection(grd, prop, fig=None, ax=None, label=True, z="",
     return fig, ax
 
 
-def grid(grd, prop, collections={}, legend_args=False, **kwargs):
+def coord(crd, prop, collections={}, legend_args=False, **kwargs):
     """
     Plot a property and set of collections on the grid.
 
     Parameters
     ----------
-    grd: Grid
-        define.environment.grid to plot
+    crd: Coords
+        coord to plot
     prop : str
         Property to plot.
     collections : dict, optional
@@ -308,21 +308,21 @@ def grid(grd, prop, collections={}, legend_args=False, **kwargs):
     ax : mpl.axis
         Ploted axis object.
     """
-    fig, ax = grid_property(grd, prop, **kwargs)
+    fig, ax = coord_property(crd, prop, **kwargs)
     for coll in collections:
-        grid_collection(grd, coll, fig=fig, ax=ax, **collections[coll])
+        coord_collection(crd, coll, fig=fig, ax=ax, **collections[coll])
     return fig, ax
 
 
-def grid3d(grd, prop, z="prop", collections={}, legend_args=False, voxels=True,
+def coord3d(crd, prop, z="prop", collections={}, legend_args=False, voxels=True,
            **kwargs):
     """
     Plot a property and set of collections in a discretized version of the grid.
 
     Parameters
     ----------
-    grd: Grid
-        define.environment.grid to plot
+    crd: Coords
+        coord to plot
     prop : str
         Property to plot.
     z : str, optional
@@ -349,12 +349,12 @@ def grid3d(grd, prop, z="prop", collections={}, legend_args=False, voxels=True,
     elif z == '':
         z = 0.0
     if voxels:
-        fig, ax = grid_property3d(grd, prop, z=z, collections=collections, **kwargs)
+        fig, ax = coord_property3d(crd, prop, z=z, collections=collections, **kwargs)
     else:
-        fig, ax = grid_collection(grd, "pts", z=z,
+        fig, ax = coord_collection(crd, "pts", z=z,
                                   legend_args=legend_args, label=False, **kwargs)
     for coll in collections:
-        grid_collection(grd, coll, fig=fig, ax=ax, legend_args=legend_args,
+        coord_collection(crd, coll, fig=fig, ax=ax, legend_args=legend_args,
                         **collections[coll], z=z)
     return fig, ax
 
@@ -559,21 +559,21 @@ def consolidate_legend(ax, **kwargs):
 
 
 if __name__ == "__main__":
-    from fmdtools.define.environment import ExampleGrid
+    from fmdtools.define.coords import ExampleCoords
 
-    ex = ExampleGrid()
-    grid_property(ex, "v", cmap="Greys")
-    grid_collection(ex, "high_v")
-    grid(ex, "h", collections={"high_v": {"alpha": 0.5, "color": "red"}})
-    grid_property3d(ex, "h", z="v",
-                    collections={"high_v": {"alpha": 0.5, "color": "red"}})
+    ex = ExampleCoords()
+    coord_property(ex, "v", cmap="Greys")
+    coord_collection(ex, "high_v")
+    coord(ex, "h", collections={"high_v": {"alpha": 0.5, "color": "red"}})
+    coord_property3d(ex, "h", z="v",
+                     collections={"high_v": {"alpha": 0.5, "color": "red"}})
 
-    grid_property(ex, "v", cmap="Greys")
-    grid_property3d(ex, "v")
-    grid_property3d(ex, "h", z="v")
-    grid_collection(ex, "high_v")
-    grid_collection(ex, "high_v", z="v")
-    grid3d(ex, "h", z="v",
-           collections={"pts": {"color": "blue"},
-                        "high_v": {"alpha": 0.5, "color": "red"}},
-           legend_args=True)
+    coord_property(ex, "v", cmap="Greys")
+    coord_property3d(ex, "v")
+    coord_property3d(ex, "h", z="v")
+    coord_collection(ex, "high_v")
+    coord_collection(ex, "high_v", z="v")
+    coord3d(ex, "h", z="v",
+            collections={"pts": {"color": "blue"},
+                         "high_v": {"alpha": 0.5, "color": "red"}},
+            legend_args=True)

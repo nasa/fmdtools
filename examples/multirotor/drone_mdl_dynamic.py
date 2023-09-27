@@ -13,7 +13,8 @@ from fmdtools.define.mode import Mode
 from fmdtools.define.block import FxnBlock
 from fmdtools.define.model import Model
 from fmdtools.sim.approach import SampleApproach
-from fmdtools.define.environment import Grid, GridParam, Environment
+from fmdtools.define.environment import Environment
+from fmdtools.define.coords import Coords, CoordsParam
 
 import fmdtools.sim as fs
 
@@ -25,7 +26,7 @@ from examples.multirotor.drone_mdl_static import CtlDOF
 from examples.multirotor.drone_mdl_static import Force, EE, Control, DOFs, DesTraj
 
 
-class DroneEnvironmentGridParam(GridParam):
+class DroneEnvironmentGridParam(CoordsParam):
     """
     Define the grid parameters.
 
@@ -58,7 +59,7 @@ class DroneEnvironmentGridParam(GridParam):
     loc: str = 'rural'
 
 
-class SightGrid(Grid):
+class SightGrid(Coords):
     """
     Define the Drone Grid environment.
 
@@ -75,7 +76,7 @@ class SightGrid(Grid):
 class DroneEnvironment(Environment):
     """Drone environment flow (contains grid)."""
 
-    _init_g = SightGrid
+    _init_c = SightGrid
     _init_p = DroneEnvironmentGridParam
 
 
@@ -362,7 +363,7 @@ class ViewEnvironment(FxnBlock):
         """Set points in grid as viewed if in range of view."""
         width = self.dofs.s.z
         height = self.dofs.s.z
-        self.environment.g.set_range("viewed", True,
+        self.environment.c.set_range("viewed", True,
                                      self.dofs.s.x - width/2,
                                      self.dofs.s.x + width/2,
                                      self.dofs.s.y - height/2,
