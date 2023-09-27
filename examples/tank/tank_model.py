@@ -26,7 +26,7 @@ from fmdtools.define.state import State
 from fmdtools.define.mode import Mode
 from fmdtools.define.flow import Flow
 from fmdtools.define.model import Model
-from fmdtools.define.block import FxnBlock, Action, ASG
+from fmdtools.define.block import FxnBlock, Action, ActArch
 
 
 class WatState(State):
@@ -180,7 +180,7 @@ class HumanParam(Parameter):
     reacttime: int = 1
 
 
-class HumanASG(ASG):
+class HumanASG(ActArch):
     initial_action = "look"
 
     def __init__(self, *args, reacttime=0, **kwargs):
@@ -212,7 +212,7 @@ class HumanASG(ASG):
 
 class HumanActions(FxnBlock):
     _init_p = HumanParam
-    _init_a = HumanASG
+    _init_aa = HumanASG
     _init_valve1_sig = Signal
     _init_tank_sig = Signal
     _init_valve2_sig = Signal
@@ -222,23 +222,23 @@ class HumanActions(FxnBlock):
         Some testing code for ASG behavior and copying, etc. Raises exceptions when
         flows aren't copied correctly
         """
-        if self.a.actions['look'].looked.__self__.__hash__() != self.a.conditions['looked'].__self__.__hash__():
+        if self.aa.actions['look'].looked.__self__.__hash__() != self.aa.conditions['looked'].__self__.__hash__():
             raise Exception("Condition not passed")
-        if self.a.flows['valve1_sig'].__hash__() != self.valve1_sig.__hash__():
+        if self.aa.flows['valve1_sig'].__hash__() != self.valve1_sig.__hash__():
             raise Exception("Invalid connection hash in asg.flows")
-        if self.a.actions['detect'].tank_sig.__hash__() != self.tank_sig.__hash__():
+        if self.aa.actions['detect'].tank_sig.__hash__() != self.tank_sig.__hash__():
             raise Exception("Invalid connection hash in asg.flows")
-        if self.a.flows['detect_sig'].__hash__() != self.a.actions['detect'].detect_sig.__hash__():
+        if self.aa.flows['detect_sig'].__hash__() != self.aa.actions['detect'].detect_sig.__hash__():
             raise Exception("Invalid connection hash in asg.flows")
-        if self.a.flows['valve2_sig'].__hash__() != self.valve2_sig.__hash__():
+        if self.aa.flows['valve2_sig'].__hash__() != self.valve2_sig.__hash__():
             raise Exception("Invalid connection hash in asg.flows")
-        if self.a.actions['turn'].valve2_sig.__hash__() != self.valve2_sig.__hash__():
+        if self.aa.actions['turn'].valve2_sig.__hash__() != self.valve2_sig.__hash__():
             raise Exception("Invalid connection hash")
 
-        if not self.a.actions['turn'].valve2_sig.s.action == self.valve2_sig.s.action:
+        if not self.aa.actions['turn'].valve2_sig.s.action == self.valve2_sig.s.action:
             raise Exception("invalid connection: valve2_sig")
 
-        if not self.a.actions['turn'].valve1_sig.s.action == self.valve1_sig.s.action:
+        if not self.aa.actions['turn'].valve1_sig.s.action == self.valve1_sig.s.action:
             raise Exception("invalid connection: valve1_sig")
 
 
@@ -382,7 +382,7 @@ class Tank(Model):
         self.add_fxn('guide_water_out', GuideLiquidOut, 'wat_out_1', 'wat_out_2')
         self.add_fxn('export_water', ExportLiquid, 'wat_out_2', 'valve2_sig')
         self.add_fxn('human', HumanActions, 'valve1_sig', 'tank_sig',
-                     'valve2_sig', a={'reacttime': self.p.reacttime})
+                     'valve2_sig', aa={'reacttime': self.p.reacttime})
 
         self.build()
 
@@ -455,6 +455,6 @@ if __name__ == '__main__':
     mg.set_exec_order(mdl)
     mg.draw()
 
-    from fmdtools.analyze.graph import ASGGraph
-    ag = ASGGraph(mdl.fxns['human'].a)
+    from fmdtools.analyze.graph import ActArchGraph
+    ag = ActArchGraph(mdl.fxns['human'].aa)
     ag.draw()

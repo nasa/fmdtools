@@ -106,11 +106,11 @@ class AffectDOF(AffectDOFDynamic):
     """Rotor locomotion (multi-component extension)."""
 
     _init_s = OverallAffectDOFState
-    _init_c = AffectDOFArch
+    _init_ca = AffectDOFArch
 
     def behavior(self, time):
         """Rotor dynamic behavior with architecture-base recovery."""
-        if self.c.opposite:
+        if self.ca.opposite:
             self.reconfig_faults()
         self.calc_pwr()
 
@@ -118,17 +118,17 @@ class AffectDOF(AffectDOFDynamic):
         """Corrects for individual line faultmodes by turning off the opposite rotor
         and upping the throttle (amp_factor)"""
         for fault in self.m.faults:
-            if fault in self.c.faultmodes:
-                comp = self.c.faultmodes[fault]
-                opp = self.c.opposite[comp]
-                if self.c.forward[comp] != 0.0:
-                    self.c.forward[comp] = 0.0
-                    self.c.upward[comp] = 0.0
-                if self.c.forward[opp] != 0.0:
-                    self.c.forward[opp] = 0.0
-                    self.c.upward[opp] = 0.0
-        tot_comps = len(self.c.components)
-        empty_comps = len([c for c in self.c.forward if self.c.forward[c] == 0.0])
+            if fault in self.ca.faultmodes:
+                comp = self.ca.faultmodes[fault]
+                opp = self.ca.opposite[comp]
+                if self.ca.forward[comp] != 0.0:
+                    self.ca.forward[comp] = 0.0
+                    self.ca.upward[comp] = 0.0
+                if self.ca.forward[opp] != 0.0:
+                    self.ca.forward[opp] = 0.0
+                    self.ca.upward[opp] = 0.0
+        tot_comps = len(self.ca.components)
+        empty_comps = len([c for c in self.ca.forward if self.ca.forward[c] == 0.0])
         try:
             self.s.amp_factor = tot_comps / (tot_comps - empty_comps)
         except ZeroDivisionError:
@@ -152,11 +152,11 @@ class AffectDOF(AffectDOFDynamic):
         """
         air, ee_in = {}, {}
         # injects faults into lines
-        for linname, lin in self.c.components.items():
+        for linname, lin in self.ca.components.items():
             a, ee = lin.behavior(self.ee_in.s.effort,
                                  self.ctl_in,
-                                 self.c.upward[linname] * self.s.amp_factor,
-                                 self.c.forward[linname] * self.s.amp_factor,
+                                 self.ca.upward[linname] * self.s.amp_factor,
+                                 self.ca.forward[linname] * self.s.amp_factor,
                                  self.force.s.support)
             air[lin.name] = a
             ee_in[lin.name] = ee
@@ -169,10 +169,10 @@ class AffectDOF(AffectDOFDynamic):
         else:
             self.ee_in.s.rate = 0.0
 
-        self.s.lrstab = (sum([air[comp] for comp in self.c.lr_dict['l']]) -
-                         sum([air[comp] for comp in self.c.lr_dict['r']]))/len(air)
-        self.s.frstab = (sum([air[comp] for comp in self.c.fr_dict['r']]) -
-                         sum([air[comp] for comp in self.c.fr_dict['f']]))/len(air)
+        self.s.lrstab = (sum([air[comp] for comp in self.ca.lr_dict['l']]) -
+                         sum([air[comp] for comp in self.ca.lr_dict['r']]))/len(air)
+        self.s.frstab = (sum([air[comp] for comp in self.ca.fr_dict['r']]) -
+                         sum([air[comp] for comp in self.ca.fr_dict['f']]))/len(air)
         if abs(self.s.lrstab) >= 0.4 or abs(self.s.frstab) >= 0.75:
             self.dofs.s.put(uppwr=0.0, planpwr=0.0)
         else:
@@ -235,7 +235,7 @@ class Drone(DynDrone):
         self.add_fxn('store_ee', StoreEE, 'ee_1', 'force_st')
         self.add_fxn('dist_ee', DistEE, 'ee_1', 'ee_mot', 'ee_ctl', 'force_st')
         self.add_fxn('affect_dof', AffectDOF, 'ee_mot', 'ctl', 'des_traj',
-                     'dofs', 'force_lin', c={'archtype': self.p.arch})
+                     'dofs', 'force_lin', ca={'archtype': self.p.arch})
         self.add_fxn('ctl_dof', CtlDOF, 'ee_ctl', 'des_traj', 'ctl', 'dofs', 'force_st')
         self.add_fxn('plan_path', PlanPath, 'ee_ctl', 'des_traj', 'force_st', 'dofs')
         self.add_fxn('hold_payload', HoldPayload, 'force_lin', 'force_st', 'dofs')
