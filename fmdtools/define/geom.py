@@ -9,9 +9,12 @@ Future:
 from fmdtools.define.common import init_obj_attr, init_obj_dict
 from fmdtools.define.parameter import Parameter
 from fmdtools.define.state import State
+from fmdtools.define.common import get_obj_track
+from fmdtools.analyze.result import History, get_sub_include, init_indicator_hist
 
 from shapely import LineString, Point, Polygon
 from typing import ClassVar
+from recordclass import astuple, asdict
 
 
 class Geom(object):
@@ -28,8 +31,11 @@ class Geom(object):
     p : Param
         Parameter defining immutable geom characteristics (e.g., shapely inputs, buffer)
     """
+
     _init_s = State
     _init_p = Parameter
+    default_track = ['s']
+    all_possible = ['s']
 
     def __init__(self, *args, s={}, p={}, **kwargs):
         init_obj_attr(self, s=s, p=p)
@@ -97,6 +103,18 @@ class Geom(object):
         """Reset the Geom to initial state."""
         self.s = self._init_s(**self._args_s)
 
+    def return_mutables(self):
+        return astuple(self.s)
+
+    def create_hist(self, timerange, track):
+        track = get_obj_track(self, track, all_possible=self.all_possible)
+        h = History()
+        for att in track:
+            att_track = get_sub_include(att, track)
+            val = getattr(self, att)
+            h[att] = val.create_hist(timerange, att_track)
+        return h
+
 
 class PointParam(Parameter):
     """
@@ -126,7 +144,7 @@ class PointParam(Parameter):
 
     def as_args(self):
         """Create arguments for shapely Point class based on fields."""
-        return ([self[i] for i in ['x', 'y', 'z'] if i in self.__fields__], )
+        return ([self[i] for i in ['x', 'y', 'z'] if i in dir(self)], )
 
 
 class GeomPoint(Geom):
@@ -323,22 +341,22 @@ class ExPoly(GeomPoly):
     _init_s = ExGeomState
 
 
-class GeomArchitecture(object):
+class GeomArch(object):
     """
     Agglomeration of multiple geoms/shapes.
 
     Architecture is defined using add_shape method in user-defined init_shapes method.
     e.g., for an architecture with the geoms already defined::
-    >>> class ExGeomArch(GeomArchitecture):
-    ...    def init_shapes(self):
+    >>> class ExGeomArch(GeomArch):
+    ...    def init_geoms(self):
     ...        self.add_geom("ex_point", ExPoint)
     ...        self.add_geom("ex_line", ExLine)
     ...        self.add_geom("ex_poly", ExPoly)
 
     This can then be used in containing classes (e.g., environments) that need multiple
-    geoms. We can then access the individual geoms in the shapes dict, e.g.:...
+    geoms. We can then access the individual geoms in the geoms dict, e.g.:...
     >>> ega = ExGeomArch()
-    >>> ega.shapes['ex_point'].s
+    >>> ega.geoms['ex_point'].s
     ExGeomState(occupied=False)
     """
 
@@ -350,17 +368,17 @@ class GeomArchitecture(object):
         self.points = []
         self.lines = []
         self.polys = []
-        self.shapes = {}
+        self.geoms = {}
         init_obj_attr(self, p=p)
-        self.init_shapes(**kwargs)
+        self.init_geoms(**kwargs)
 
-    def init_shapes(self, **kwargs):
-        """Use this placeholder method to define custom shape architectures."""
+    def init_geoms(self, **kwargs):
+        """Use this placeholder method to define custom architectures."""
         a = 1
 
     def add_geom(self, name, gclass, *args, **kwargs):
         """
-        Add/instantiate an individual shape to the overall architecture.
+        Add/instantiate an individual geom to the overall architecture.
 
         Parameters
         ----------
@@ -382,22 +400,22 @@ class GeomArchitecture(object):
             self.polys.append(name)
         elif not issubclass(gclass, Geom):
             raise Exception(name + " gclass " + str(gclass) + " not a Geom")
-        self.shapes[name] = getattr(self, name)
+        self.geoms[name] = getattr(self, name)
 
     def copy(self):
-        """Copy shapes in the architecture (mirrors current states)."""
+        """Copy geoms in the architecture (mirrors current states)."""
         cop = self.__class__()
-        for shape in self.shapes:
-            cop.shapes[shape].s.assign(self.shapes[shape].s)
+        for geom in self.geoms:
+            cop.geoms[geom].s.assign(self.geoms[geom].s)
         return cop
 
     def reset(self):
-        for shape in self.shapes:
-            self.shapes[shape].reset()
+        for geom in self.geoms:
+            self.geoms[geom].reset()
 
     def all_at(self, *pt):
         """
-        Find all shapes (and buffers) a given is at.
+        Find all geoms (and buffers) a given is at.
 
         Parameters
         ----------
@@ -407,7 +425,7 @@ class GeomArchitecture(object):
         Returns
         -------
         all_at : dict
-            Names of shapes where the point is at (and their properties)
+            Names of geoms where the point is at (and their properties)
 
         e.g.,::
         >>> exga = ExGeomArch()
@@ -419,24 +437,62 @@ class GeomArchitecture(object):
         {'ex_point': ['on'], 'ex_line': ['on']}
         """
         all_at = {}
-        for shapename, shape in self.shapes.items():
-            at_shape = shape.all_at(*pt)
-            if at_shape:
-                all_at[shapename] = at_shape
+        for geomname, geom in self.geoms.items():
+            at_geom = geom.all_at(*pt)
+            if at_geom:
+                all_at[geomname] = at_geom
         return all_at
 
 
-class ExGeomArch(GeomArchitecture):
+class ExGeomArch(GeomArch):
     """Example Geometric Architecture for testing etc."""
 
-    def init_shapes(self):
-        """Initialize example shapes."""
+    default_track = ['geoms']
+    all_possible = ['geoms']
+
+    def init_geoms(self):
+        """Initialize example geoms."""
         self.add_geom("ex_point", ExPoint)
         self.add_geom("ex_line", ExLine)
         self.add_geom("ex_poly", ExPoly)
-    
 
-        
+    def create_hist(self, timerange, track):
+        """
+        Create history for the architecture.
+
+        >>> ega = ExGeomArch()
+        >>> h = ega.create_hist([0.0], 'default')
+        >>> h.flatten()
+        geoms.ex_point.s.occupied:      array(1)
+        geoms.ex_line.s.occupied:       array(1)
+        geoms.ex_poly.s.occupied:       array(1)
+        <BLANKLINE>
+        """
+        track = get_obj_track(self, track, all_possible=self.all_possible)
+        hist = History()
+        init_indicator_hist(self, hist, timerange, track)
+        geoms_track = get_sub_include('geoms', track)
+        if geoms_track:
+            hist['geoms'] = History()
+            for geomname, geom in self.geoms.items():
+                sh = geom.create_hist(timerange,
+                                      get_sub_include(geomname, geoms_track))
+                if sh:
+                    hist.geoms[geomname] = sh
+        return hist
+
+    def return_states(self):
+        states = {}
+        for geomname, geom in self.geoms.items():
+            states[geomname] = asdict(geom.s)
+        return states
+
+    def create_mutables(self):
+        mutes = []
+        for geom in self.geoms.values():
+            mutes.append(geom.return_mutables())
+        return tuple(mutes)
+
 
 if __name__ == "__main__":
     import doctest
