@@ -27,6 +27,7 @@ from mpl_toolkits.mplot3d import art3d
 from matplotlib.colors import to_rgba
 import numpy as np
 from fmdtools.analyze.plot import prep_hists
+from shapely import LineString, Point, Polygon
 
 
 def coord_property(crd, prop, xlab="x", ylab="y", proplab="prop", **kwargs):
@@ -195,7 +196,7 @@ def init_figure(fig=None, ax=None, z=False, figsize=()):
     If there is a pre-existing figure or axis, uses that instead.
     """
     if not fig:
-        if z:
+        if z or (type(z) in (int, float)):
             fig = plt.figure(figsize=figsize)
             ax = fig.add_subplot(111, projection='3d')
         else:
@@ -223,7 +224,7 @@ def coord_collection(crd, prop, fig=None, ax=None, label=True, z="",
         name. If False, no label is provided. If a string, the string is used as
         the label.
     z: str
-        Argument to plot as third dimension on 3d plot. Default is "", which
+        Argument to plot as third dimension on 3d plot. Default is '', which
         returns a 2d plot. If a number is provided, the plot will be 3d with
         the height at that constant z-value.
     legend_args : dict/False
@@ -513,6 +514,107 @@ def traj3(ax, hists, xlab, ylab, zlab,
         if mark_time:
             mark_times(ax, time_ticks, times[i], x, ys[i], zs[i],
                        fontsize=time_fontsize)
+
+
+def geomarch(geomarch, geoms = {'all': {}}, fig=None, ax=None, figsize = (4, 4),
+             z=False, **kwargs):
+    """
+    Show the shapes of a GeomArch all on one plot.
+
+    Parameters
+    ----------
+    geomarch : GeomArch
+        Geometric architecture to plot.
+    geoms : dict, optional
+        Individual shapes to plot and their corresponding kwargs.
+        The default is {'all': {}}.
+    fig : matplotlib.figure, optional
+        Existing Figure. The default is None.
+    ax : matplotlib.axis, optional
+        Existing axis. The default is None.
+    figsize : tuple, optional
+        Size for figure (if instantiating). The default is (4, 4).
+    z : bool/number, optional
+        If plotting on a 3d axis, set z to a number which will be the z-level.
+        The default is False.
+    **kwargs : kwargs
+        Overall kwargs to show.geom for all geoms.
+
+    Returns
+    -------
+    fig : figure
+        Matplotlib figure object
+    ax : axis
+        Corresponding matplotlib axis
+    """
+    if not ax:
+        fig, ax = init_figure(z=z, figsize=figsize)
+    if 'all' in geoms:
+        geoms = {g: {'shapes': 'all'} for g in geomarch.geoms}
+
+    for geomname, geom_kwargs in geoms.items():
+        local_kwargs = {**kwargs, 'geomlabel': geomname, **geom_kwargs}
+        fig, ax = geom(geomarch.geoms[geomname], ax=ax, fig=fig, z=z, **local_kwargs)
+    return fig, ax
+
+
+def geom(geom, shapes={'all': {}}, fig=None, ax=None, figsize=(4, 4), z=False,
+         geomlabel='', **kwargs):
+    """
+    Show a Geom (shape and buffers) as lines on a plot.
+
+    Parameters
+    ----------
+    geom : Geom
+        Geom object.
+    shapes : dict, optional
+        Aspects of the Geom to plot and their corresponding plot kwargs.
+        The default is {'all': {}}.
+    fig : matplotlib.figure, optional
+        Existing Figure. The default is None.
+    ax : matplotlib.axis, optional
+        Existing axis. The default is None.
+    figsize : tuple, optional
+        Size for figure (if instantiating). The default is (4, 4).
+    z : bool/number, optional
+        If plotting on a 3d axis, set z to a number which will be the z-level.
+        The default is False.
+    geomlabel : str, optional
+        Overall label for the geom (if desired). The default is ''.
+    **kwargs : kwargs
+        overall kwargs for plt.plot for all shapes.
+
+    Returns
+    -------
+    fig : figure
+        Matplotlib figure object
+    ax : axis
+        Corresponding matplotlib axis
+    """
+    if not ax:
+        fig, ax = init_figure(z=z, figsize=figsize)
+    if 'all' in shapes:
+        shapes = {'shape': {}, **{v: {} for v in geom.buffers}}
+    if type(z) in (int, float):
+        plot_kwargs = {'zs': z, 'zdir': 'z', **kwargs}
+    else:
+        plot_kwargs = kwargs
+    for shape, shape_kwargs in shapes.items():
+        if geomlabel:
+            shape_label = geomlabel + "." + shape
+        else:
+            shape_label = shape
+        local_kwargs = {**plot_kwargs, 'label': shape_label, **shape_kwargs}
+        shap = getattr(geom, shape)
+        if isinstance(shap, Point):
+            ax.scatter(shap.x, shap.y, **local_kwargs)
+        elif isinstance(shap, LineString):
+            linecoords = np.array([*shap.coords])
+            ax.plot(linecoords[:, 0], linecoords[:, 1], **local_kwargs)
+        elif isinstance(shap, Polygon):
+            ax.plot(*shap.exterior.xy, **local_kwargs)
+    consolidate_legend(ax, **kwargs)
+    return fig, ax
 
 
 def mark_times(ax, tick, time, *plot_values, fontsize=8):
