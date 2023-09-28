@@ -361,6 +361,8 @@ class GeomArch(object):
     """
 
     _init_p = Parameter
+    default_track = ['geoms']
+    all_possible = ['geoms']
 
     def __init__(self, *args, p={}, **kwargs):
         self._args = args
@@ -443,19 +445,6 @@ class GeomArch(object):
                 all_at[geomname] = at_geom
         return all_at
 
-
-class ExGeomArch(GeomArch):
-    """Example Geometric Architecture for testing etc."""
-
-    default_track = ['geoms']
-    all_possible = ['geoms']
-
-    def init_geoms(self):
-        """Initialize example geoms."""
-        self.add_geom("ex_point", ExPoint)
-        self.add_geom("ex_line", ExLine)
-        self.add_geom("ex_poly", ExPoly)
-
     def create_hist(self, timerange, track):
         """
         Create history for the architecture.
@@ -487,11 +476,28 @@ class ExGeomArch(GeomArch):
             states[geomname] = asdict(geom.s)
         return states
 
-    def create_mutables(self):
+    def return_mutables(self):
+        """
+        Return all mutables (geom states).
+
+        >>> ega = ExGeomArch()
+        >>> ega.return_mutables()
+        (False, False, False)
+        """
         mutes = []
         for geom in self.geoms.values():
-            mutes.append(geom.return_mutables())
+            mutes.extend(geom.return_mutables())
         return tuple(mutes)
+
+
+class ExGeomArch(GeomArch):
+    """Example Geometric Architecture for testing etc."""
+
+    def init_geoms(self):
+        """Initialize example geoms."""
+        self.add_geom("ex_point", ExPoint)
+        self.add_geom("ex_line", ExLine)
+        self.add_geom("ex_poly", ExPoly)
 
 
 if __name__ == "__main__":
