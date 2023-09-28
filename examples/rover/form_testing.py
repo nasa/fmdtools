@@ -7,6 +7,7 @@ import numpy as np
 from fmdtools.define.geom import PointParam, GeomPoint, LineParam, GeomLine
 from fmdtools.define.geom import GeomArch
 from fmdtools.define.parameter import Parameter
+from fmdtools.define.state import State
 from matplotlib import pyplot as plt
 
 
@@ -14,22 +15,42 @@ def sin_func(x, amp, period):
     return amp * np.sin(x * 2 * np.pi / period)
 
 
-#ls_xy = LineString(xy)
+class DestParam(PointParam):
+    """
+    Parameter defining start and end points.
 
-class StartParam(PointParam):
+    Has a 1.0-m buffer for being 'on' the location and a 2.0-m buffer for being 'near'
+    the location.
+    """
+
     x: float = 0.0
     y: float = 0.0
     buffer_on = 1.0
     buffer_near = 2.0
 
-class Start(GeomPoint):
-    _init_p = StartParam
 
-sp = Start()
+class DestState(State):
+    """State defining whether rover is on or near point."""
+
+    on: bool = False
+    near: bool = False
+
+
+class Dest(GeomPoint):
+    """Start/end/point."""
+
+    _init_p = DestParam
+    _init_s = DestState
+
+
+sp = Dest()
 
 
 class PathParam(LineParam):
-    xys: tuple = tuple([[x, sin_func(x, 1,1)] for x in np.arange(0,100, 1)])
+    """
+    Parameter defining the path. 
+    """
+    xys: tuple = tuple([[x, sin_func(x, 1,1)] for x in np.arange(0, 100, 1)])
     buffer_on: float = 0.1
     buffer_poor: float = 0.2
     buffer_near: float = 0.3
