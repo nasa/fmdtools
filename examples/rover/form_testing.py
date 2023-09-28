@@ -25,8 +25,8 @@ class DestParam(PointParam):
 
     x: float = 0.0
     y: float = 0.0
-    buffer_on = 1.0
-    buffer_near = 2.0
+    buffer_on: float = 1.0
+    buffer_near: float = 2.0
 
 
 class DestState(State):
@@ -78,8 +78,8 @@ class LineGeomArch(GeomArch):
         ls = tuple([[x, sin_func(x, self.p.amp, self.p.period)]
               for x in np.arange(self.p.x_min, self.p.x_max, self.p.x_res)])
         self.add_geom('line', PathLine, p={'xys': ls})
-        self.add_geom('start', Start, p={'x': ls[0][0], 'y': ls[0][1]})
-        self.add_geom('end', Start, p={'x': ls[-1][0], 'y': ls[-1][1]})
+        self.add_geom('start', Dest, p={'x': ls[0][0], 'y': ls[0][1]})
+        self.add_geom('end', Dest, p={'x': ls[-1][0], 'y': ls[-1][1]})
 
 
 if __name__ == "__main__":
@@ -94,3 +94,11 @@ if __name__ == "__main__":
              np.array([*lf.geoms['line'].shape.coords])[:,1])
     plt.scatter(lf.geoms['start'].shape.x, lf.geoms['start'].shape.y)
     plt.scatter(lf.geoms['end'].shape.x, lf.geoms['end'].shape.y)
+    
+    from fmdtools.analyze import show
+    fig, ax = show.geom(lf.geoms['line'], shapes = {'all'}, geomlabel='line')
+    fig, ax = show.geom(lf.geoms['start'], shapes = {'all'}, ax=ax, fig=fig, geomlabel='start')
+    fig, ax = show.geom(lf.geoms['end'], shapes = {'all'}, ax=ax, fig=fig, geomlabel='end')
+    
+    fig, ax = show.geomarch(lf)
+    
