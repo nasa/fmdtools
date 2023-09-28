@@ -556,7 +556,10 @@ class Block(Simulable):
         states : tuple
             tuple of all states in the block
         """
-        return (*astuple(self.s), *self.m.return_mutables(), *self.r.return_mutables(), *self.t.return_mutables())
+        return (*astuple(self.s),
+                *self.m.return_mutables(),
+                *self.r.return_mutables(),
+                *self.t.return_mutables())
 
     def return_probdens(self):
         """Gets the probability density associated with a Block and its components/actions (if any)"""

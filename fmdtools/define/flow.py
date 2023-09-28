@@ -68,6 +68,7 @@ class Flow(object):
         for state in self.s.__fields__:
             mem+=2*sys.getsizeof(getattr(self.s, state)) # (*2 to account for initstates)
         return mem
+
     def copy(self):
         """
         Returns a copy of the flow object (used when copying the model)
@@ -76,8 +77,10 @@ class Flow(object):
         if hasattr(self, 'h'): 
             cop.h = self.h.copy()
         return cop
+
     def get_typename(self):
         return "Flow"
+
     def create_hist(self, timerange, track):
         """
         Creates the history for the flow
@@ -101,7 +104,8 @@ class Flow(object):
             if track:
                 h=History()
                 sh = self.s.create_hist(timerange, get_sub_include('s', track))
-                if sh: h['s'] = sh
+                if sh:
+                    h['s'] = sh
                 init_indicator_hist(self, h, timerange, track)
                 self.h = h
                 return h
