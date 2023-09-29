@@ -15,6 +15,7 @@ not.
 - :func:`check_pickleability`:Checks to see which attributes of an object will pickle
   (and thus parallelize)"
 - :func:`init_obj_attr`:Initializes attributes to a given object
+- :func:`init_obj_dict`: Create a dict in an object for the attribute 'spec'.
 - :func:`get_dataobj_track`:Gets tracking params for a given dataobject
   (State, Mode, Rand, etc)
 - :func:`get_obj_track`:Gets tracking params for a given object (block, model, etc)
@@ -189,6 +190,34 @@ def init_obj_attr(obj, **attrs):
         setattr(obj, '_args_'+at, at_arg)
         init_at = getattr(obj, '_init_'+at)
         setattr(obj, at, init_at(**at_arg))
+
+
+def init_obj_dict(obj, spec, name_end="s", set_attr=False):
+    """
+    Create a dict for the attribute 'spec'.
+
+    Works by finding all attributes from the obj's parameter with the name 'spec' in
+    them and adding them to the dict. Adds the dict to the object.
+
+    Parameters
+    ----------
+    obj : object
+        Object with _spec_ attributes
+    spec : str
+        Name of the attributes to initialize
+    set_attr : bool
+        Whether to also add the individual attributes attr to the obj
+    sub_obj : str
+        Sub-object to form the object from (e.g., 'p' if defined in a parameter).
+        Default is '', which gets from obj.
+    """
+    spec_len = len(spec) + 1
+    specs = {p[spec_len:]: obj.p[p] for p in obj.p.__fields__ if spec in p}
+    specname = spec + name_end
+    setattr(obj, specname, specs)
+    if set_attr:
+        for s_name in specs:
+            setattr(obj, s_name, specs[s_name])
 
 
 def get_dataobj_track(obj, track):

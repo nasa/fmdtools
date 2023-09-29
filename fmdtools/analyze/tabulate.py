@@ -527,52 +527,55 @@ def fmea(endclasses, app, metrics=[], weight_metrics=[], avg_metrics = [], perc_
     Returns
     -------
     fmea_table : DataFrame
-        pandas table with given metrics grouped as 
+        pandas table with given metrics grouped as
     """
-    group_dict={}
-    if group_by in ['fxnclassfault','fxnclass']: 
-        if not mdl: raise Exception("No model mdl provided.")
-        group_dict = {cl:mdl.fxns_of_class(cl) for cl in mdl.fxnclasses()}
-    elif group_by=='modetype':
-        group_dict=mode_types
+    group_dict = {}
+    if group_by in ['fxnclassfault','fxnclass']:
+        if not mdl:
+            raise Exception("No model mdl provided.")
+        group_dict = {cl: mdl.fxns_of_class(cl) for cl in mdl.fxnclasses()}
+    elif group_by == 'modetype':
+        group_dict = mode_types
     grouped_scens = app.get_scenid_groups(group_by, group_dict)
-    
-    if type(metrics)==str:          metrics=[metrics]
-    if type(weight_metrics)==str:   weight_metrics=[weight_metrics]
-    if type(perc_metrics)==str:     perc_metrics=[perc_metrics]
-    if type(avg_metrics)==str:      avg_metrics=[avg_metrics]
-    
+
+    if type(metrics) == str:
+        metrics = [metrics]
+    if type(weight_metrics) == str:
+        weight_metrics = [weight_metrics]
+    if type(perc_metrics) == str:
+        perc_metrics = [perc_metrics]
+    if type(avg_metrics) == str:
+        avg_metrics = [avg_metrics]
+
     if not metrics and not weight_metrics and not perc_metrics and not avg_metrics and not mult_metrics:
-        #default fmea is a cost-based table
-        weight_metrics=["rate"]; avg_metrics = ["cost"] 
-        mult_metrics={"expected cost":['rate', 'cost']}
-    
+        # default fmea is a cost-based table
+        weight_metrics = ["rate"]
+        avg_metrics = ["cost"]
+        mult_metrics = {"expected cost": ['rate', 'cost']}
+
     endclasses.update(extra_classes)
-    
+
     id_weights = app.get_id_weights()
-    id_weights['nominal']=1.0
-    
+    id_weights['nominal'] = 1.0
+
     allmetrics = metrics+weight_metrics+avg_metrics+perc_metrics+[*mult_metrics.keys()]
-    
-    if group_by=='modetype':
-        a=1
-    
+
     if not sort_by:
         if "expected cost" in mult_metrics:
             sort_by = "expected_cost"
         else:
             sort_by = allmetrics[-1]
-    
-    fmeadict = {g:dict.fromkeys(allmetrics) for g in grouped_scens}
+
+    fmeadict = {g: dict.fromkeys(allmetrics) for g in grouped_scens}
     for group, ids in grouped_scens.items():
         for metric in metrics:
             fmeadict[group][metric] = sum([endclasses.get(scenid).get('endclass.'+metric) for scenid in ids])
         for metric in weight_metrics:
             fmeadict[group][metric] = sum([endclasses.get(scenid).get('endclass.'+metric)*id_weights[scenid] for scenid in ids])
         for metric in perc_metrics:
-            fmeadict[group][metric] = Result({scenid:endclasses.get(scenid) for scenid in ids}).percent(metric)
+            fmeadict[group][metric] = Result({scenid: endclasses.get(scenid) for scenid in ids}).percent(metric)
         for metric in avg_metrics:    
-            fmeadict[group][metric] = Result({scenid:endclasses.get(scenid) for scenid in ids}).average(metric, empty_as=empty_as)
+            fmeadict[group][metric] = Result({scenid: endclasses.get(scenid) for scenid in ids}).average(metric, empty_as=empty_as)
         for metric, to_mult in mult_metrics.items():
             if set(to_mult).intersection(weight_metrics):
                 fmeadict[group][metric] = sum([np.prod([endclasses.get(scenid).get('endclass.'+m) 
@@ -580,13 +583,14 @@ def fmea(endclasses, app, metrics=[], weight_metrics=[], avg_metrics = [], perc_
             else:
                 fmeadict[group][metric] = sum([np.prod([endclasses.get(scenid).get('endclass.'+m) 
                                                         for m in to_mult]) for scenid in ids])
+
     table = pd.DataFrame(fmeadict)
-    table = table.transpose() 
-    if sort_by not in allmetrics: 
+    table = table.transpose()
+    if sort_by not in allmetrics:
         sort_by = allmetrics[0]
-    table=table.sort_values(sort_by, ascending=ascending)
+    table = table.sort_values(sort_by, ascending=ascending)
     return table
-        
+
     
 def phasefmea(endclasses, app, metrics=["rate", "expected cost"], weight_metrics=["cost"], sort_by=None, ascending=False):
     """

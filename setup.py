@@ -13,11 +13,12 @@ required = ["scipy",
             "dill",
             "recordclass",
             "pytest",
-            "graphviz"]
+            "graphviz",
+            "shapely"]
 
 setuptools.setup(
     name="fmdtools",
-    version="2.0-beta-0.0",
+    version="2.0-beta-0",
     author="Daniel Hulse",
     author_email="daniel.e.hulse@nasa.gov",
     description="System resilience modelling, simulation, and assessment in Python",

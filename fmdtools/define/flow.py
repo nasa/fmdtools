@@ -30,8 +30,10 @@ class Flow(object):
 
         Parameters
         ----------
-        states : dict
-            states and their values to be associated with the flow
+        s : dict
+            non-default state-values to be associated with the flow
+        p : dict
+            non-default parameter-values to be associated with the flow
         name : str
             name of the flow
         """
@@ -66,6 +68,7 @@ class Flow(object):
         for state in self.s.__fields__:
             mem+=2*sys.getsizeof(getattr(self.s, state)) # (*2 to account for initstates)
         return mem
+
     def copy(self):
         """
         Returns a copy of the flow object (used when copying the model)
@@ -74,8 +77,10 @@ class Flow(object):
         if hasattr(self, 'h'): 
             cop.h = self.h.copy()
         return cop
+
     def get_typename(self):
         return "Flow"
+
     def create_hist(self, timerange, track):
         """
         Creates the history for the flow
@@ -95,11 +100,12 @@ class Flow(object):
         if hasattr(self, 'h'): 
             return self.h
         else:
-            track = get_obj_track(self, track, all_possible =Flow.default_track)
+            track = get_obj_track(self, track, all_possible = Flow.default_track)
             if track:
                 h=History()
                 sh = self.s.create_hist(timerange, get_sub_include('s', track))
-                if sh: h['s'] = sh
+                if sh:
+                    h['s'] = sh
                 init_indicator_hist(self, h, timerange, track)
                 self.h = h
                 return h
@@ -207,7 +213,8 @@ class MultiFlow(Flow):
         Parameters
         ----------
         to_update : str/list, optional
-            Name of the view to update. The default is "local". If "all", updates all locals (or ports for commsflows). 
+            Name of the view to update. The default is "local". If "all", updates all locals
+            (or ports for commsflows).
             If a list is provided, updates the list (in locals)
         to_get : str, optional
             Name of the view to update from. The default is "global".
@@ -235,7 +242,7 @@ class MultiFlow(Flow):
             stat[l]=getattr(self, l).status()
         return stat
     def return_states(self):
-        states = super().status()
+        states = self.status()
         for l in self.locals:
             states.update({l+"."+k:v for k, v in getattr(self, l).status().items()})
         return states
@@ -249,7 +256,7 @@ class MultiFlow(Flow):
         cop = self.__class__(self.name, glob=glob, p=p, s=s)
         for loc in self.locals:
             local = getattr(self, loc)
-            cop.create_local(local.name, s=asdict(local.s))
+            cop.create_local(local.name, s=asdict(local.s), p=local.p)
         return cop
     def create_hist(self, timerange, track):
         super().create_hist(timerange, track)
@@ -313,10 +320,10 @@ class CommsFlow(MultiFlow):
             for port in ports:
                 ins.create_local(port)
                 outs.create_local(port)
-            self.fxns[name]={"internal":    ins, 
-                                "out":      outs, 
-                                "in":       kwargs.get("prev_in", {}),
-                                "received": kwargs.get("received", {})}
+            self.fxns[name] = {"internal": ins,
+                               "out": outs,
+                               "in": kwargs.get("prev_in", {}),
+                               "received": kwargs.get("received", {})}
         return self.fxns[name]["internal"]
 
     def send(self, fxn_to, fxn_from="local", *states):
@@ -435,9 +442,10 @@ class CommsFlow(MultiFlow):
             comms_mutes.append([f['in'], f['received']])
         return (*mutes, *comms_mutes)
 
-def init_flow(flowname, fclass=Flow, p={}, s={}):
-    """Factory method for flows. Enables one to instantiate different types of flows with given states/parameters
-    or  pass an already-constructured flow class.
+
+def init_flow(flowname, fclass=Flow, p={}, s={}, **kwargs):
+    """Factory method for flows. Enables one to instantiate different types of flows with given
+    states/parameters or  pass an already-constructured flow class.
 
     Parameters
     ----------
@@ -447,9 +455,13 @@ def init_flow(flowname, fclass=Flow, p={}, s={}):
         Flow class to instantiate OR already-instanced object to pass
     p : dict
         Parameter values to override from defaults.
-    p : dict
+    s : dict
         State values to override from defaults.
+    **kwargs :dict
+        Other specialized roles to overrride
     """
-    if not callable(fclass):        fl = fclass
-    else:                           fl = fclass(flowname, p=p, s=s)
+    if not callable(fclass):
+        fl = fclass
+    else:
+        fl = fclass(flowname, p=p, s=s, **kwargs)
     return fl

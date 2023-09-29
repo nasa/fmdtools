@@ -130,7 +130,7 @@ The EPS model is a model of a simple electric power system in `eps.py`, which sh
 Action Sequence Graph
 +++++++++++++++++++++++++++++++++++++++++++++
 
-`Action Sequence Graph <../examples/eps/Action_Sequence_Graph.ipynb>`_ shows a very basic example of using the :class:`fmdtools.define.block.ASG` structure to define sequences of actions or modes, which is helpful for modelling human and autonomous behaviors.
+`Action Sequence Graph <../examples/eps/Action_Sequence_Graph.ipynb>`_ shows a very basic example of using the :class:`fmdtools.define.block.ActArch` structure to define sequences of actions or modes, which is helpful for modelling human and autonomous behaviors.
 
 .. toctree::
    :hidden:

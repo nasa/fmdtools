@@ -412,9 +412,10 @@ class Result(UserDict):
     def get_values(self, *values):
         """Gets a dict with all values corresponding to the strings in *values"""
         h = self.__class__()
-        k_vs = [k for k in self.keys() for v in values if k.endswith(v)]
+        flatself = self.flatten()
+        k_vs = [k for k in flatself.keys() for v in values if k.endswith(v)]
         for k in k_vs:
-            h[k] = self[k]
+            h[k] = flatself[k]
         return h
 
     def get_scens(self, *scens):
@@ -1053,6 +1054,8 @@ class History(Result):
                 self[att] = np.empty([len(timerange)], dtype=str_size)
             elif type(val) == dict:
                 self[att] = init_dicthist(val, timerange, sub_track)
+            elif type(val) == np.ndarray or dtype == np.ndarray:
+                self[att] = np.array([val for i in timerange])
             elif dtype:
                 self[att] = np.empty([len(timerange)], dtype=dtype)
             else:
@@ -1227,13 +1230,13 @@ class History(Result):
             index in the history when the fault is present
         """
         flatdict = self.flatten()
-        has_faults_hist = np.prod([v for k, v in flatdict.items() if 'faults' in k], 0)
+        all_faults_hist = np.sum([v for k, v in flatdict.items() if 'faults' in k], 0)
         if metric == 'earliest':
-            return np.where(has_faults_hist == 1)
+            return np.where(all_faults_hist >= 1)
         elif metric == 'latest':
-            return np.where(np.flip(has_faults_hist) == 1)
+            return np.where(np.flip(all_faults_hist) >= 1)
         elif metric == 'total':
-            return np.sum(has_faults_hist)
+            return np.sum(all_faults_hist >= 1)
 
     def _prep_faulty(self):
         """Helper that creates a faulty history of states from the current history"""
