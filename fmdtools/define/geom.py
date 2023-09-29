@@ -13,8 +13,10 @@ from fmdtools.define.common import get_obj_track
 from fmdtools.analyze.result import History, get_sub_include, init_indicator_hist
 
 from shapely import LineString, Point, Polygon
+from shapely.ops import nearest_points
 from typing import ClassVar
 from recordclass import astuple, asdict
+import numpy as np
 
 
 class Geom(object):
@@ -114,6 +116,64 @@ class Geom(object):
             val = getattr(self, att)
             h[att] = val.create_hist(timerange, att_track)
         return h
+
+    def vect_to_shape(self, pt, buffername='shape'):
+        """
+        Gets the vector (x, y) to a given shape.
+
+        Parameters
+        ----------
+        pt : tuple/list
+            Point to get vector from
+        buffername : str
+            Name of shape/buffer. Default is 'shape'.
+
+        >>> e = ExPoint()
+        >>> e.vect_to_shape((0,0))
+        array([[1.],
+               [1.]])
+        >>> e.vect_to_shape((2,0))
+        array([[-1.],
+               [ 1.]])
+        >>> e.vect_to_shape((1,1))
+        array([[0.],
+               [0.]])
+        """
+        buffer = getattr(self, buffername)
+        geom_pt = Point(pt)
+        geom_c, close_pt = nearest_points(geom_pt, buffer)
+        vect_to_shape = np.array(close_pt.xy) - np.array(geom_pt.xy)
+        return vect_to_shape
+
+    def vect_at_shape(self, pt, buffername='shape', dist_forward=0.1):
+        """
+        Get the vector (x, y) at a given shape (e.g., direction of a line at pt).
+
+        Parameters
+        ----------
+        pt : tuple/lost
+            Point closest to shape
+        buffername : str
+            Name of shape/buffer. Default is 'shape'.
+        dist_forward : float
+            Distance forward along line segment to project. Give a negative number to
+            reverse directions
+
+        >>> e=ExLine(p={'xys':((0,0),(1,1), (1,0))})
+        >>> e.vect_at_shape((0,0))
+        array([[0.07071068],
+               [0.07071068]])
+        >>> e.vect_at_shape((1.5,0.5))
+        array([[ 0. ],
+               [-0.1]])
+        """
+        buffer = getattr(self, buffername)
+        geom_pt = Point(pt)
+        geom_c, close_pt = nearest_points(geom_pt, buffer)
+        line_dist = buffer.line_locate_point(geom_pt)
+        next_pt = buffer.line_interpolate_point(line_dist + dist_forward)
+        vect_at_shape = np.array(next_pt.xy) - np.array(close_pt.xy)
+        return vect_at_shape
 
 
 class PointParam(Parameter):

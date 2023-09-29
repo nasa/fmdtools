@@ -46,8 +46,11 @@ class Environment(CommsFlow):
 
     def __init__(self, name, glob=[], p={}, s={}, r={}, c={}, ga={}):
         super().__init__(name, glob=glob, p=p, s=s)
-        if 'p' not in c:
+        if 'p' not in c and self._init_c._init_p == self._init_p:
             c = {**c, 'p': self.p}
+        if 'p' not in ga and self._init_ga._init_p == self._init_p:
+            ga = {**ga, 'p': self.p}
+
         init_obj_attr(self, r=r, c=c, ga=ga)
         self.update_seed()
 

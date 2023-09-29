@@ -613,6 +613,7 @@ def geom(geom, shapes={'all': {}}, fig=None, ax=None, figsize=(4, 4), z=False,
             ax.plot(linecoords[:, 0], linecoords[:, 1], **local_kwargs)
         elif isinstance(shap, Polygon):
             ax.plot(*shap.exterior.xy, **local_kwargs)
+    ax.axis('equal')
     consolidate_legend(ax, **kwargs)
     return fig, ax
 
