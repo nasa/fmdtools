@@ -16,10 +16,10 @@
    "execution_count": 1,
    "metadata": {
     "execution": {
-     "iopub.execute_input": "2023-08-11T03:12:26.895351Z",
-     "iopub.status.busy": "2023-08-11T03:12:26.895351Z",
-     "iopub.status.idle": "2023-08-11T03:12:28.371443Z",
-     "shell.execute_reply": "2023-08-11T03:12:28.371443Z"
+     "iopub.execute_input": "2023-09-29T21:51:23.810430Z",
+     "iopub.status.busy": "2023-09-29T21:51:23.809434Z",
+     "iopub.status.idle": "2023-09-29T21:51:26.105810Z",
+     "shell.execute_reply": "2023-09-29T21:51:26.105810Z"
     }
    },
    "outputs": [],
@@ -55,10 +55,10 @@
    "execution_count": 2,
    "metadata": {
     "execution": {
-     "iopub.execute_input": "2023-08-11T03:12:28.373531Z",
-     "iopub.status.busy": "2023-08-11T03:12:28.373531Z",
-     "iopub.status.idle": "2023-08-11T03:12:28.392278Z",
-     "shell.execute_reply": "2023-08-11T03:12:28.392278Z"
+     "iopub.execute_input": "2023-09-29T21:51:26.109799Z",
+     "iopub.status.busy": "2023-09-29T21:51:26.109799Z",
+     "iopub.status.idle": "2023-09-29T21:51:26.124036Z",
+     "shell.execute_reply": "2023-09-29T21:51:26.124036Z"
     }
    },
    "outputs": [
@@ -320,7 +320,9 @@
       " |  \n",
       " |  __fields__ = ('faults', 'faultmodes', 'mode_state_dict')\n",
       " |  \n",
-      " |  __options__ = {'deep_dealloc': False, 'fast_new': True, 'gc': False, '...\n",
+      " |  __match_args__ = ('faults', 'faultmodes', 'mode_state_dict')\n",
+      " |  \n",
+      " |  __options__ = {'fast_new': True}\n",
       " |  \n",
       " |  default_track = ('mode', 'faults')\n",
       " |  \n",
@@ -406,10 +408,10 @@
    "execution_count": 3,
    "metadata": {
     "execution": {
-     "iopub.execute_input": "2023-08-11T03:12:28.394403Z",
-     "iopub.status.busy": "2023-08-11T03:12:28.394403Z",
-     "iopub.status.idle": "2023-08-11T03:12:28.413507Z",
-     "shell.execute_reply": "2023-08-11T03:12:28.413507Z"
+     "iopub.execute_input": "2023-09-29T21:51:26.128024Z",
+     "iopub.status.busy": "2023-09-29T21:51:26.128024Z",
+     "iopub.status.idle": "2023-09-29T21:51:26.136103Z",
+     "shell.execute_reply": "2023-09-29T21:51:26.136103Z"
     }
    },
    "outputs": [
@@ -574,8 +576,14 @@
       " |      - grouped_scens: dict\n",
       " |            A dictionary of the scenario ids associated with the given group {group:scenids}\n",
       " |  \n",
+      " |  init_jointmode_rate(self, jointfaults, j_ind, jointmode)\n",
+      " |  \n",
+      " |  init_jointmode_rates(self, jointfaults)\n",
+      " |  \n",
       " |  init_modelist(self, mdl, faults, jointfaults={'faults': 'None'})\n",
       " |      Initializes comprates, jointmodes internal list of modes\n",
+      " |  \n",
+      " |  init_rate(self, mdl, fxnname, mode, modephases={}, join_modephases=False)\n",
       " |  \n",
       " |  init_rates(self, mdl, jointfaults={'faults': 'None'}, modephases={}, join_modephases=False)\n",
       " |      Initializes rates, rates_timeless\n",
@@ -656,10 +664,10 @@
    "execution_count": 4,
    "metadata": {
     "execution": {
-     "iopub.execute_input": "2023-08-11T03:12:28.415633Z",
-     "iopub.status.busy": "2023-08-11T03:12:28.415633Z",
-     "iopub.status.idle": "2023-08-11T03:12:28.434885Z",
-     "shell.execute_reply": "2023-08-11T03:12:28.434885Z"
+     "iopub.execute_input": "2023-09-29T21:51:26.140125Z",
+     "iopub.status.busy": "2023-09-29T21:51:26.139092Z",
+     "iopub.status.idle": "2023-09-29T21:51:26.144431Z",
+     "shell.execute_reply": "2023-09-29T21:51:26.144431Z"
     }
    },
    "outputs": [
@@ -726,10 +734,10 @@
    "execution_count": 5,
    "metadata": {
     "execution": {
-     "iopub.execute_input": "2023-08-11T03:12:28.437011Z",
-     "iopub.status.busy": "2023-08-11T03:12:28.437011Z",
-     "iopub.status.idle": "2023-08-11T03:12:28.456200Z",
-     "shell.execute_reply": "2023-08-11T03:12:28.456200Z"
+     "iopub.execute_input": "2023-09-29T21:51:26.147453Z",
+     "iopub.status.busy": "2023-09-29T21:51:26.147453Z",
+     "iopub.status.idle": "2023-09-29T21:51:26.152217Z",
+     "shell.execute_reply": "2023-09-29T21:51:26.152217Z"
     }
    },
    "outputs": [],
@@ -758,10 +766,10 @@
    "execution_count": 6,
    "metadata": {
     "execution": {
-     "iopub.execute_input": "2023-08-11T03:12:28.458323Z",
-     "iopub.status.busy": "2023-08-11T03:12:28.458323Z",
-     "iopub.status.idle": "2023-08-11T03:12:28.477509Z",
-     "shell.execute_reply": "2023-08-11T03:12:28.477509Z"
+     "iopub.execute_input": "2023-09-29T21:51:26.155239Z",
+     "iopub.status.busy": "2023-09-29T21:51:26.155239Z",
+     "iopub.status.idle": "2023-09-29T21:51:26.160862Z",
+     "shell.execute_reply": "2023-09-29T21:51:26.160862Z"
     }
    },
    "outputs": [],
@@ -797,10 +805,10 @@
    "execution_count": 7,
    "metadata": {
     "execution": {
-     "iopub.execute_input": "2023-08-11T03:12:28.479634Z",
-     "iopub.status.busy": "2023-08-11T03:12:28.479634Z",
-     "iopub.status.idle": "2023-08-11T03:12:28.498304Z",
-     "shell.execute_reply": "2023-08-11T03:12:28.498304Z"
+     "iopub.execute_input": "2023-09-29T21:51:26.163882Z",
+     "iopub.status.busy": "2023-09-29T21:51:26.163882Z",
+     "iopub.status.idle": "2023-09-29T21:51:26.170490Z",
+     "shell.execute_reply": "2023-09-29T21:51:26.170490Z"
     }
    },
    "outputs": [],
@@ -838,10 +846,10 @@
    "execution_count": 8,
    "metadata": {
     "execution": {
-     "iopub.execute_input": "2023-08-11T03:12:28.500351Z",
-     "iopub.status.busy": "2023-08-11T03:12:28.500351Z",
-     "iopub.status.idle": "2023-08-11T03:12:28.519042Z",
-     "shell.execute_reply": "2023-08-11T03:12:28.519042Z"
+     "iopub.execute_input": "2023-09-29T21:51:26.173479Z",
+     "iopub.status.busy": "2023-09-29T21:51:26.173479Z",
+     "iopub.status.idle": "2023-09-29T21:51:26.179717Z",
+     "shell.execute_reply": "2023-09-29T21:51:26.179717Z"
     }
    },
    "outputs": [],
@@ -890,10 +898,10 @@
    "execution_count": 9,
    "metadata": {
     "execution": {
-     "iopub.execute_input": "2023-08-11T03:12:28.521133Z",
-     "iopub.status.busy": "2023-08-11T03:12:28.521133Z",
-     "iopub.status.idle": "2023-08-11T03:12:29.032627Z",
-     "shell.execute_reply": "2023-08-11T03:12:29.032627Z"
+     "iopub.execute_input": "2023-09-29T21:51:26.182712Z",
+     "iopub.status.busy": "2023-09-29T21:51:26.182712Z",
+     "iopub.status.idle": "2023-09-29T21:51:27.943153Z",
+     "shell.execute_reply": "2023-09-29T21:51:27.942188Z"
     }
    },
    "outputs": [
@@ -904,16 +912,16 @@
      "traceback": [
       "\u001b[1;31m---------------------------------------------------------------------------\u001b[0m",
       "\u001b[1;31mTypeError\u001b[0m                                 Traceback (most recent call last)",
-      "\u001b[1;32mc:\\users\\dhulse\\documents\\github\\fmdtools\\fmdtools\\define\\parameter.py\u001b[0m in \u001b[0;36m__init__\u001b[1;34m(self, strict_immutability, check_type, check_pickle, *args, **kwargs)\u001b[0m\n\u001b[0;32m     62\u001b[0m         \u001b[1;32mtry\u001b[0m\u001b[1;33m:\u001b[0m\u001b[1;33m\u001b[0m\u001b[1;33m\u001b[0m\u001b[0m\n\u001b[1;32m---> 63\u001b[1;33m             \u001b[0msuper\u001b[0m\u001b[1;33m(\u001b[0m\u001b[1;33m)\u001b[0m\u001b[1;33m.\u001b[0m\u001b[0m__init__\u001b[0m\u001b[1;33m(\u001b[0m\u001b[1;33m*\u001b[0m\u001b[0margs\u001b[0m\u001b[1;33m,\u001b[0m \u001b[1;33m**\u001b[0m\u001b[0mkwargs\u001b[0m\u001b[1;33m)\u001b[0m\u001b[1;33m\u001b[0m\u001b[1;33m\u001b[0m\u001b[0m\n\u001b[0m\u001b[0;32m     64\u001b[0m         \u001b[1;32mexcept\u001b[0m \u001b[0mTypeError\u001b[0m\u001b[1;33m:\u001b[0m\u001b[1;33m\u001b[0m\u001b[1;33m\u001b[0m\u001b[0m\n",
-      "\u001b[1;31mTypeError\u001b[0m: Invalid kwarg",
+      "File \u001b[1;32mc:\\users\\dhulse\\documents\\github\\fmdtools\\fmdtools\\define\\parameter.py:63\u001b[0m, in \u001b[0;36mParameter.__init__\u001b[1;34m(self, strict_immutability, check_type, check_pickle, *args, **kwargs)\u001b[0m\n\u001b[0;32m     62\u001b[0m \u001b[38;5;28;01mtry\u001b[39;00m:\n\u001b[1;32m---> 63\u001b[0m     \u001b[38;5;28msuper\u001b[39m()\u001b[38;5;241m.\u001b[39m\u001b[38;5;21m__init__\u001b[39m(\u001b[38;5;241m*\u001b[39margs, \u001b[38;5;241m*\u001b[39m\u001b[38;5;241m*\u001b[39mkwargs)\n\u001b[0;32m     64\u001b[0m \u001b[38;5;28;01mexcept\u001b[39;00m \u001b[38;5;167;01mTypeError\u001b[39;00m:\n",
+      "\u001b[1;31mTypeError\u001b[0m: Invalid kwarg: times not in __fields__ and has not __dict__",
       "\nDuring handling of the above exception, another exception occurred:\n",
       "\u001b[1;31mException\u001b[0m                                 Traceback (most recent call last)",
-      "\u001b[1;32m~\\AppData\\Local\\Temp\\1/ipykernel_4204/3690765673.py\u001b[0m in \u001b[0;36m<module>\u001b[1;34m\u001b[0m\n\u001b[1;32m----> 1\u001b[1;33m \u001b[0mmdl\u001b[0m \u001b[1;33m=\u001b[0m \u001b[0mRover\u001b[0m\u001b[1;33m(\u001b[0m\u001b[1;33m)\u001b[0m\u001b[1;33m\u001b[0m\u001b[1;33m\u001b[0m\u001b[0m\n\u001b[0m\u001b[0;32m      2\u001b[0m \u001b[0mapp\u001b[0m \u001b[1;33m=\u001b[0m \u001b[0mSampleApproach\u001b[0m\u001b[1;33m(\u001b[0m\u001b[0mmdl\u001b[0m\u001b[1;33m)\u001b[0m\u001b[1;33m\u001b[0m\u001b[1;33m\u001b[0m\u001b[0m\n",
-      "\u001b[1;32m~\\AppData\\Local\\Temp\\1/ipykernel_4204/3942537109.py\u001b[0m in \u001b[0;36m__init__\u001b[1;34m(self, params, modelparams, valparams)\u001b[0m\n\u001b[0;32m      4\u001b[0m                  \u001b[0mmodelparams\u001b[0m\u001b[1;33m=\u001b[0m\u001b[1;33m{\u001b[0m\u001b[1;34m'times'\u001b[0m\u001b[1;33m:\u001b[0m\u001b[1;33m[\u001b[0m\u001b[1;36m0\u001b[0m\u001b[1;33m,\u001b[0m\u001b[1;36m60\u001b[0m\u001b[1;33m]\u001b[0m\u001b[1;33m,\u001b[0m \u001b[1;34m'tstep'\u001b[0m\u001b[1;33m:\u001b[0m\u001b[1;36m1\u001b[0m\u001b[1;33m,\u001b[0m \u001b[1;34m'phases'\u001b[0m\u001b[1;33m:\u001b[0m \u001b[1;33m{\u001b[0m\u001b[1;34m'firsthalf'\u001b[0m\u001b[1;33m:\u001b[0m\u001b[1;33m[\u001b[0m\u001b[1;36m0\u001b[0m\u001b[1;33m,\u001b[0m\u001b[1;36m30\u001b[0m\u001b[1;33m]\u001b[0m\u001b[1;33m,\u001b[0m \u001b[1;34m'secondhalf'\u001b[0m\u001b[1;33m:\u001b[0m\u001b[1;33m[\u001b[0m\u001b[1;36m31\u001b[0m\u001b[1;33m,\u001b[0m\u001b[1;36m60\u001b[0m\u001b[1;33m]\u001b[0m\u001b[1;33m}\u001b[0m\u001b[1;33m}\u001b[0m\u001b[1;33m,\u001b[0m\u001b[0;31m\\\u001b[0m\u001b[1;33m\u001b[0m\u001b[1;33m\u001b[0m\u001b[0m\n\u001b[0;32m      5\u001b[0m                  valparams={}):\n\u001b[1;32m----> 6\u001b[1;33m         \u001b[0msuper\u001b[0m\u001b[1;33m(\u001b[0m\u001b[1;33m)\u001b[0m\u001b[1;33m.\u001b[0m\u001b[0m__init__\u001b[0m\u001b[1;33m(\u001b[0m\u001b[0mparams\u001b[0m\u001b[1;33m,\u001b[0m \u001b[0mmodelparams\u001b[0m\u001b[1;33m,\u001b[0m \u001b[0mvalparams\u001b[0m\u001b[1;33m)\u001b[0m\u001b[1;33m\u001b[0m\u001b[1;33m\u001b[0m\u001b[0m\n\u001b[0m\u001b[0;32m      7\u001b[0m \u001b[1;33m\u001b[0m\u001b[0m\n\u001b[0;32m      8\u001b[0m         \u001b[0mself\u001b[0m\u001b[1;33m.\u001b[0m\u001b[0madd_flow\u001b[0m\u001b[1;33m(\u001b[0m\u001b[1;34m'Ground'\u001b[0m\u001b[1;33m,\u001b[0m \u001b[1;33m{\u001b[0m\u001b[1;34m'x'\u001b[0m\u001b[1;33m:\u001b[0m\u001b[1;36m0.0\u001b[0m\u001b[1;33m,\u001b[0m\u001b[1;34m'y'\u001b[0m\u001b[1;33m:\u001b[0m\u001b[1;36m0.0\u001b[0m\u001b[1;33m,\u001b[0m \u001b[1;34m'dir'\u001b[0m\u001b[1;33m:\u001b[0m\u001b[1;36m0.0\u001b[0m\u001b[1;33m,\u001b[0m \u001b[1;34m'vel'\u001b[0m\u001b[1;33m:\u001b[0m\u001b[1;36m0.0\u001b[0m\u001b[1;33m}\u001b[0m\u001b[1;33m)\u001b[0m\u001b[1;33m\u001b[0m\u001b[1;33m\u001b[0m\u001b[0m\n",
-      "\u001b[1;32mc:\\users\\dhulse\\documents\\github\\fmdtools\\fmdtools\\define\\model.py\u001b[0m in \u001b[0;36m__init__\u001b[1;34m(self, name, p, sp, r, track)\u001b[0m\n\u001b[0;32m     51\u001b[0m     \"\"\"\n\u001b[0;32m     52\u001b[0m     \u001b[1;32mdef\u001b[0m \u001b[0m__init__\u001b[0m\u001b[1;33m(\u001b[0m\u001b[0mself\u001b[0m\u001b[1;33m,\u001b[0m \u001b[0mname\u001b[0m\u001b[1;33m=\u001b[0m\u001b[1;34m''\u001b[0m\u001b[1;33m,\u001b[0m \u001b[0mp\u001b[0m\u001b[1;33m=\u001b[0m\u001b[1;33m{\u001b[0m\u001b[1;33m}\u001b[0m\u001b[1;33m,\u001b[0m \u001b[0msp\u001b[0m\u001b[1;33m=\u001b[0m\u001b[1;33m{\u001b[0m\u001b[1;33m}\u001b[0m\u001b[1;33m,\u001b[0m \u001b[0mr\u001b[0m\u001b[1;33m=\u001b[0m\u001b[1;33m{\u001b[0m\u001b[1;33m}\u001b[0m\u001b[1;33m,\u001b[0m \u001b[0mtrack\u001b[0m\u001b[1;33m=\u001b[0m\u001b[1;34m''\u001b[0m\u001b[1;33m)\u001b[0m\u001b[1;33m:\u001b[0m\u001b[1;33m\u001b[0m\u001b[1;33m\u001b[0m\u001b[0m\n\u001b[1;32m---> 53\u001b[1;33m         \u001b[0msuper\u001b[0m\u001b[1;33m(\u001b[0m\u001b[1;33m)\u001b[0m\u001b[1;33m.\u001b[0m\u001b[0m__init__\u001b[0m\u001b[1;33m(\u001b[0m\u001b[0mname\u001b[0m\u001b[1;33m=\u001b[0m\u001b[0mname\u001b[0m\u001b[1;33m,\u001b[0m \u001b[0mp\u001b[0m\u001b[1;33m=\u001b[0m\u001b[0mp\u001b[0m\u001b[1;33m,\u001b[0m \u001b[0msp\u001b[0m\u001b[1;33m=\u001b[0m\u001b[0msp\u001b[0m\u001b[1;33m,\u001b[0m \u001b[0mr\u001b[0m\u001b[1;33m=\u001b[0m\u001b[0mr\u001b[0m\u001b[1;33m,\u001b[0m \u001b[0mtrack\u001b[0m\u001b[1;33m=\u001b[0m\u001b[0mtrack\u001b[0m\u001b[1;33m)\u001b[0m\u001b[1;33m\u001b[0m\u001b[1;33m\u001b[0m\u001b[0m\n\u001b[0m\u001b[0;32m     54\u001b[0m \u001b[1;33m\u001b[0m\u001b[0m\n\u001b[0;32m     55\u001b[0m         \u001b[0mself\u001b[0m\u001b[1;33m.\u001b[0m\u001b[0mfxns\u001b[0m\u001b[1;33m=\u001b[0m\u001b[0mdict\u001b[0m\u001b[1;33m(\u001b[0m\u001b[1;33m)\u001b[0m\u001b[1;33m\u001b[0m\u001b[1;33m\u001b[0m\u001b[0m\n",
-      "\u001b[1;32mc:\\users\\dhulse\\documents\\github\\fmdtools\\fmdtools\\define\\block.py\u001b[0m in \u001b[0;36m__init__\u001b[1;34m(self, name, p, sp, r, track)\u001b[0m\n\u001b[0;32m    131\u001b[0m         \u001b[1;32mif\u001b[0m \u001b[1;32mnot\u001b[0m \u001b[0msp\u001b[0m\u001b[1;33m:\u001b[0m\u001b[1;33m\u001b[0m\u001b[1;33m\u001b[0m\u001b[0m\n\u001b[0;32m    132\u001b[0m             \u001b[0msp\u001b[0m \u001b[1;33m=\u001b[0m \u001b[0mself\u001b[0m\u001b[1;33m.\u001b[0m\u001b[0mdefault_sp\u001b[0m\u001b[1;33m\u001b[0m\u001b[1;33m\u001b[0m\u001b[0m\n\u001b[1;32m--> 133\u001b[1;33m         \u001b[0minit_obj_attr\u001b[0m\u001b[1;33m(\u001b[0m\u001b[0mself\u001b[0m\u001b[1;33m,\u001b[0m \u001b[0mp\u001b[0m\u001b[1;33m=\u001b[0m\u001b[0mp\u001b[0m\u001b[1;33m,\u001b[0m \u001b[0msp\u001b[0m\u001b[1;33m=\u001b[0m\u001b[0msp\u001b[0m\u001b[1;33m,\u001b[0m \u001b[0mr\u001b[0m\u001b[1;33m=\u001b[0m\u001b[0mr\u001b[0m\u001b[1;33m)\u001b[0m\u001b[1;33m\u001b[0m\u001b[1;33m\u001b[0m\u001b[0m\n\u001b[0m\u001b[0;32m    134\u001b[0m \u001b[1;33m\u001b[0m\u001b[0m\n\u001b[0;32m    135\u001b[0m     \u001b[1;32mdef\u001b[0m \u001b[0madd_flow_hist\u001b[0m\u001b[1;33m(\u001b[0m\u001b[0mself\u001b[0m\u001b[1;33m,\u001b[0m \u001b[0mhist\u001b[0m\u001b[1;33m,\u001b[0m \u001b[0mtimerange\u001b[0m\u001b[1;33m,\u001b[0m \u001b[0mtrack\u001b[0m\u001b[1;33m)\u001b[0m\u001b[1;33m:\u001b[0m\u001b[1;33m\u001b[0m\u001b[1;33m\u001b[0m\u001b[0m\n",
-      "\u001b[1;32mc:\\users\\dhulse\\documents\\github\\fmdtools\\fmdtools\\define\\common.py\u001b[0m in \u001b[0;36minit_obj_attr\u001b[1;34m(obj, **attrs)\u001b[0m\n\u001b[0;32m    189\u001b[0m         \u001b[0msetattr\u001b[0m\u001b[1;33m(\u001b[0m\u001b[0mobj\u001b[0m\u001b[1;33m,\u001b[0m \u001b[1;34m'_args_'\u001b[0m\u001b[1;33m+\u001b[0m\u001b[0mat\u001b[0m\u001b[1;33m,\u001b[0m \u001b[0mat_arg\u001b[0m\u001b[1;33m)\u001b[0m\u001b[1;33m\u001b[0m\u001b[1;33m\u001b[0m\u001b[0m\n\u001b[0;32m    190\u001b[0m         \u001b[0minit_at\u001b[0m \u001b[1;33m=\u001b[0m \u001b[0mgetattr\u001b[0m\u001b[1;33m(\u001b[0m\u001b[0mobj\u001b[0m\u001b[1;33m,\u001b[0m \u001b[1;34m'_init_'\u001b[0m\u001b[1;33m+\u001b[0m\u001b[0mat\u001b[0m\u001b[1;33m)\u001b[0m\u001b[1;33m\u001b[0m\u001b[1;33m\u001b[0m\u001b[0m\n\u001b[1;32m--> 191\u001b[1;33m         \u001b[0msetattr\u001b[0m\u001b[1;33m(\u001b[0m\u001b[0mobj\u001b[0m\u001b[1;33m,\u001b[0m \u001b[0mat\u001b[0m\u001b[1;33m,\u001b[0m \u001b[0minit_at\u001b[0m\u001b[1;33m(\u001b[0m\u001b[1;33m**\u001b[0m\u001b[0mat_arg\u001b[0m\u001b[1;33m)\u001b[0m\u001b[1;33m)\u001b[0m\u001b[1;33m\u001b[0m\u001b[1;33m\u001b[0m\u001b[0m\n\u001b[0m\u001b[0;32m    192\u001b[0m \u001b[1;33m\u001b[0m\u001b[0m\n\u001b[0;32m    193\u001b[0m \u001b[1;33m\u001b[0m\u001b[0m\n",
-      "\u001b[1;32mc:\\users\\dhulse\\documents\\github\\fmdtools\\fmdtools\\define\\parameter.py\u001b[0m in \u001b[0;36m__init__\u001b[1;34m(self, strict_immutability, check_type, check_pickle, *args, **kwargs)\u001b[0m\n\u001b[0;32m     63\u001b[0m             \u001b[0msuper\u001b[0m\u001b[1;33m(\u001b[0m\u001b[1;33m)\u001b[0m\u001b[1;33m.\u001b[0m\u001b[0m__init__\u001b[0m\u001b[1;33m(\u001b[0m\u001b[1;33m*\u001b[0m\u001b[0margs\u001b[0m\u001b[1;33m,\u001b[0m \u001b[1;33m**\u001b[0m\u001b[0mkwargs\u001b[0m\u001b[1;33m)\u001b[0m\u001b[1;33m\u001b[0m\u001b[1;33m\u001b[0m\u001b[0m\n\u001b[0;32m     64\u001b[0m         \u001b[1;32mexcept\u001b[0m \u001b[0mTypeError\u001b[0m\u001b[1;33m:\u001b[0m\u001b[1;33m\u001b[0m\u001b[1;33m\u001b[0m\u001b[0m\n\u001b[1;32m---> 65\u001b[1;33m             raise Exception(\"Invalid args/kwargs: \"+str(args)+\" , \" +\n\u001b[0m\u001b[0;32m     66\u001b[0m                             str(kwargs)+\" in \"+str(self.__class__))\n\u001b[0;32m     67\u001b[0m         \u001b[1;32mif\u001b[0m \u001b[0mstrict_immutability\u001b[0m\u001b[1;33m:\u001b[0m\u001b[1;33m\u001b[0m\u001b[1;33m\u001b[0m\u001b[0m\n",
+      "Cell \u001b[1;32mIn[9], line 1\u001b[0m\n\u001b[1;32m----> 1\u001b[0m mdl \u001b[38;5;241m=\u001b[39m Rover()\n\u001b[0;32m      2\u001b[0m app \u001b[38;5;241m=\u001b[39m SampleApproach(mdl)\n",
+      "Cell \u001b[1;32mIn[8], line 6\u001b[0m, in \u001b[0;36mRover.__init__\u001b[1;34m(self, params, modelparams, valparams)\u001b[0m\n\u001b[0;32m      3\u001b[0m \u001b[38;5;28;01mdef\u001b[39;00m \u001b[38;5;21m__init__\u001b[39m(\u001b[38;5;28mself\u001b[39m, params\u001b[38;5;241m=\u001b[39m{},\\\n\u001b[0;32m      4\u001b[0m              modelparams\u001b[38;5;241m=\u001b[39m{\u001b[38;5;124m'\u001b[39m\u001b[38;5;124mtimes\u001b[39m\u001b[38;5;124m'\u001b[39m:[\u001b[38;5;241m0\u001b[39m,\u001b[38;5;241m60\u001b[39m], \u001b[38;5;124m'\u001b[39m\u001b[38;5;124mtstep\u001b[39m\u001b[38;5;124m'\u001b[39m:\u001b[38;5;241m1\u001b[39m, \u001b[38;5;124m'\u001b[39m\u001b[38;5;124mphases\u001b[39m\u001b[38;5;124m'\u001b[39m: {\u001b[38;5;124m'\u001b[39m\u001b[38;5;124mfirsthalf\u001b[39m\u001b[38;5;124m'\u001b[39m:[\u001b[38;5;241m0\u001b[39m,\u001b[38;5;241m30\u001b[39m], \u001b[38;5;124m'\u001b[39m\u001b[38;5;124msecondhalf\u001b[39m\u001b[38;5;124m'\u001b[39m:[\u001b[38;5;241m31\u001b[39m,\u001b[38;5;241m60\u001b[39m]}},\\\n\u001b[0;32m      5\u001b[0m              valparams\u001b[38;5;241m=\u001b[39m{}):\n\u001b[1;32m----> 6\u001b[0m     \u001b[38;5;28msuper\u001b[39m()\u001b[38;5;241m.\u001b[39m\u001b[38;5;21m__init__\u001b[39m(params, modelparams, valparams)\n\u001b[0;32m      8\u001b[0m     \u001b[38;5;28mself\u001b[39m\u001b[38;5;241m.\u001b[39madd_flow(\u001b[38;5;124m'\u001b[39m\u001b[38;5;124mGround\u001b[39m\u001b[38;5;124m'\u001b[39m, {\u001b[38;5;124m'\u001b[39m\u001b[38;5;124mx\u001b[39m\u001b[38;5;124m'\u001b[39m:\u001b[38;5;241m0.0\u001b[39m,\u001b[38;5;124m'\u001b[39m\u001b[38;5;124my\u001b[39m\u001b[38;5;124m'\u001b[39m:\u001b[38;5;241m0.0\u001b[39m, \u001b[38;5;124m'\u001b[39m\u001b[38;5;124mdir\u001b[39m\u001b[38;5;124m'\u001b[39m:\u001b[38;5;241m0.0\u001b[39m, \u001b[38;5;124m'\u001b[39m\u001b[38;5;124mvel\u001b[39m\u001b[38;5;124m'\u001b[39m:\u001b[38;5;241m0.0\u001b[39m})\n\u001b[0;32m      9\u001b[0m     \u001b[38;5;28mself\u001b[39m\u001b[38;5;241m.\u001b[39madd_flow(\u001b[38;5;124m'\u001b[39m\u001b[38;5;124mEE\u001b[39m\u001b[38;5;124m'\u001b[39m, {\u001b[38;5;124m'\u001b[39m\u001b[38;5;124mv_supply\u001b[39m\u001b[38;5;124m'\u001b[39m:\u001b[38;5;241m0.0\u001b[39m, \u001b[38;5;124m'\u001b[39m\u001b[38;5;124ma_supply\u001b[39m\u001b[38;5;124m'\u001b[39m:\u001b[38;5;241m0.0\u001b[39m})\n",
+      "File \u001b[1;32mc:\\users\\dhulse\\documents\\github\\fmdtools\\fmdtools\\define\\model.py:53\u001b[0m, in \u001b[0;36mModel.__init__\u001b[1;34m(self, name, p, sp, r, track)\u001b[0m\n\u001b[0;32m     52\u001b[0m \u001b[38;5;28;01mdef\u001b[39;00m \u001b[38;5;21m__init__\u001b[39m(\u001b[38;5;28mself\u001b[39m, name\u001b[38;5;241m=\u001b[39m\u001b[38;5;124m'\u001b[39m\u001b[38;5;124m'\u001b[39m, p\u001b[38;5;241m=\u001b[39m{}, sp\u001b[38;5;241m=\u001b[39m{}, r\u001b[38;5;241m=\u001b[39m{}, track\u001b[38;5;241m=\u001b[39m\u001b[38;5;124m'\u001b[39m\u001b[38;5;124m'\u001b[39m):\n\u001b[1;32m---> 53\u001b[0m     \u001b[38;5;28msuper\u001b[39m()\u001b[38;5;241m.\u001b[39m\u001b[38;5;21m__init__\u001b[39m(name\u001b[38;5;241m=\u001b[39mname, p\u001b[38;5;241m=\u001b[39mp, sp\u001b[38;5;241m=\u001b[39msp, r\u001b[38;5;241m=\u001b[39mr, track\u001b[38;5;241m=\u001b[39mtrack)\n\u001b[0;32m     55\u001b[0m     \u001b[38;5;28mself\u001b[39m\u001b[38;5;241m.\u001b[39mfxns\u001b[38;5;241m=\u001b[39m\u001b[38;5;28mdict\u001b[39m()\n\u001b[0;32m     56\u001b[0m     \u001b[38;5;28mself\u001b[39m\u001b[38;5;241m.\u001b[39mfunctionorder\u001b[38;5;241m=\u001b[39mOrderedSet() \u001b[38;5;66;03m#set is ordered and executed in the order specified in the model\u001b[39;00m\n",
+      "File \u001b[1;32mc:\\users\\dhulse\\documents\\github\\fmdtools\\fmdtools\\define\\block.py:133\u001b[0m, in \u001b[0;36mSimulable.__init__\u001b[1;34m(self, name, p, sp, r, track)\u001b[0m\n\u001b[0;32m    131\u001b[0m \u001b[38;5;28;01mif\u001b[39;00m \u001b[38;5;129;01mnot\u001b[39;00m sp:\n\u001b[0;32m    132\u001b[0m     sp \u001b[38;5;241m=\u001b[39m \u001b[38;5;28mself\u001b[39m\u001b[38;5;241m.\u001b[39mdefault_sp\n\u001b[1;32m--> 133\u001b[0m init_obj_attr(\u001b[38;5;28mself\u001b[39m, p\u001b[38;5;241m=\u001b[39mp, sp\u001b[38;5;241m=\u001b[39msp, r\u001b[38;5;241m=\u001b[39mr)\n",
+      "File \u001b[1;32mc:\\users\\dhulse\\documents\\github\\fmdtools\\fmdtools\\define\\common.py:192\u001b[0m, in \u001b[0;36minit_obj_attr\u001b[1;34m(obj, **attrs)\u001b[0m\n\u001b[0;32m    190\u001b[0m \u001b[38;5;28msetattr\u001b[39m(obj, \u001b[38;5;124m'\u001b[39m\u001b[38;5;124m_args_\u001b[39m\u001b[38;5;124m'\u001b[39m\u001b[38;5;241m+\u001b[39mat, at_arg)\n\u001b[0;32m    191\u001b[0m init_at \u001b[38;5;241m=\u001b[39m \u001b[38;5;28mgetattr\u001b[39m(obj, \u001b[38;5;124m'\u001b[39m\u001b[38;5;124m_init_\u001b[39m\u001b[38;5;124m'\u001b[39m\u001b[38;5;241m+\u001b[39mat)\n\u001b[1;32m--> 192\u001b[0m \u001b[38;5;28msetattr\u001b[39m(obj, at, init_at(\u001b[38;5;241m*\u001b[39m\u001b[38;5;241m*\u001b[39mat_arg))\n",
+      "File \u001b[1;32mc:\\users\\dhulse\\documents\\github\\fmdtools\\fmdtools\\define\\parameter.py:65\u001b[0m, in \u001b[0;36mParameter.__init__\u001b[1;34m(self, strict_immutability, check_type, check_pickle, *args, **kwargs)\u001b[0m\n\u001b[0;32m     63\u001b[0m     \u001b[38;5;28msuper\u001b[39m()\u001b[38;5;241m.\u001b[39m\u001b[38;5;21m__init__\u001b[39m(\u001b[38;5;241m*\u001b[39margs, \u001b[38;5;241m*\u001b[39m\u001b[38;5;241m*\u001b[39mkwargs)\n\u001b[0;32m     64\u001b[0m \u001b[38;5;28;01mexcept\u001b[39;00m \u001b[38;5;167;01mTypeError\u001b[39;00m:\n\u001b[1;32m---> 65\u001b[0m     \u001b[38;5;28;01mraise\u001b[39;00m \u001b[38;5;167;01mException\u001b[39;00m(\u001b[38;5;124m\"\u001b[39m\u001b[38;5;124mInvalid args/kwargs: \u001b[39m\u001b[38;5;124m\"\u001b[39m\u001b[38;5;241m+\u001b[39m\u001b[38;5;28mstr\u001b[39m(args)\u001b[38;5;241m+\u001b[39m\u001b[38;5;124m\"\u001b[39m\u001b[38;5;124m , \u001b[39m\u001b[38;5;124m\"\u001b[39m \u001b[38;5;241m+\u001b[39m\n\u001b[0;32m     66\u001b[0m                     \u001b[38;5;28mstr\u001b[39m(kwargs)\u001b[38;5;241m+\u001b[39m\u001b[38;5;124m\"\u001b[39m\u001b[38;5;124m in \u001b[39m\u001b[38;5;124m\"\u001b[39m\u001b[38;5;241m+\u001b[39m\u001b[38;5;28mstr\u001b[39m(\u001b[38;5;28mself\u001b[39m\u001b[38;5;241m.\u001b[39m\u001b[38;5;18m__class__\u001b[39m))\n\u001b[0;32m     67\u001b[0m \u001b[38;5;28;01mif\u001b[39;00m strict_immutability:\n\u001b[0;32m     68\u001b[0m     \u001b[38;5;28mself\u001b[39m\u001b[38;5;241m.\u001b[39mcheck_immutable()\n",
       "\u001b[1;31mException\u001b[0m: Invalid args/kwargs: () , {'times': [0, 60], 'tstep': 1, 'phases': {'firsthalf': [0, 30], 'secondhalf': [31, 60]}} in <class 'fmdtools.define.parameter.Parameter'>"
      ]
     }
@@ -1392,7 +1400,7 @@
    "name": "python",
    "nbconvert_exporter": "python",
    "pygments_lexer": "ipython3",
-   "version": "3.9.7"
+   "version": "3.11.4"
   }
  },
  "nbformat": 4,
