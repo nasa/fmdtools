@@ -91,7 +91,8 @@ class Environment(CommsFlow):
         cop.r.assign(self.r)
         cop.c = self.c.copy()
         cop.ga = self.ga.copy()
-        cop.h = self.h.copy()
+        if hasattr(self, 'h'):
+            cop.h = self.h.copy()
         return cop
 
     def status(self):

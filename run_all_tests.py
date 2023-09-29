@@ -15,8 +15,15 @@ if __name__=="__main__":
     # requires pytest, nbmake, pytest-html
     
     # for testing modules with doctests
-    #doctest_modules = ["fmdtools/define/state.py", "fmdtools/define/parameter.py"]
-    #retcode = pytest.main(["--doctest-modules", *doctest_modules])
+    doctest_modules = ["fmdtools/define/state.py",
+                       "fmdtools/define/parameter.py",
+                       "fmdtools/define/geom.py",
+                       "fmdtools/define/coords.py",
+                       "fmdtools/define/environment.py",
+                       "examples/multirotor/drone_mdl_static.py",
+                       "examples/multirotor/drone_mdl_dynamic.py",
+                       "examples/multirotor/drone_mdl_hierarchical.py"]
+    # retcode = pytest.main(["--doctest-modules", *doctest_modules])
     
     # retcode = pytest.main(["--html=./reports/junit/report.html",
     #                        "--self-contained-html",
@@ -43,29 +50,28 @@ if __name__=="__main__":
                       "examples/pump/AST_Sampling.ipynb",
                       "examples/pump/Optimization.ipynb",
                       "examples/pump/Parallelism_Tutorial.ipynb",
-                      "examples/pump/IDETC Results/IDETC_Figures.ipynb",
-                      "examples/rover/degradation_modelling/Degradation Modelling Notebook.ipynb",
-                      "examples/rover/fault_sampling/Rover Mode Notebook.ipynb",
-                      "examples/rover/HFAC_Analyses/HFAC Analyses.ipynb",
+                      "examples/rover/degradation_modelling/Degradation_Modelling_Notebook.ipynb",
+                      "examples/rover/fault_sampling/Rover_Mode_Notebook.ipynb",
+                      "examples/rover/HFAC_Analyses/HFAC_Analyses.ipynb",
                       "examples/rover/HFAC_Analyses/IDETC_Human_Paper_Analysis.ipynb",
-                      "examples/rover/optimization/Rover Response Optimization.ipynb",
-                      "examples/rover/optimization/Search Comparison.ipynb",
-                      "examples/tank/Tank Optimization.ipynb"]
+                      "examples/rover/optimization/Rover_Response_Optimization.ipynb",
+                      "examples/rover/optimization/Search_Comparison.ipynb",
+                      "examples/tank/Tank_Optimization.ipynb"]
 
     # for testing longer-running notebooks
-    # retcode = pytest.main(["--nbmake", *slow_notebooks])
+    retcode = pytest.main(["--nbmake", *slow_notebooks])
 
     # for testing all unittests
-    # retcode = pytest.main()
+    # retcode = pytest.main(["--continue-on-collection-errors"])
 
     # for creating comprehensive test report:
 
-    retcode = pytest.main(["--html=./reports/junit/report.html",
-                           "--junitxml=./reports/junit/junit.xml",
-                           "--nbmake",
-                           "--overwrite",
-                           "--doctest-modules",
-                           "--continue-on-collection-errors"])
+    #retcode = pytest.main(["--html=./reports/junit/report.html",
+    #                       "--junitxml=./reports/junit/junit.xml",
+    #                       "--nbmake",
+    #                       "--overwrite",
+    #                       "--doctest-modules",
+    #                       "--continue-on-collection-errors"])
     
     # after creating test report, update the badge using this in powershell:
     # !Powershell.exe -Command "genbadge tests"
