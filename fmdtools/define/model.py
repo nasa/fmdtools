@@ -88,7 +88,8 @@ class Model(Simulable):
             if fxn.get_rand_states(auto_update_only=auto_update_only): 
                 rand_states[fxnname]= fxn.get_rand_states(auto_update_only=auto_update_only)
         return rand_states
-    def add_flows(self, flownames, fclass=Flow, p={}, s={}):
+
+    def add_flows(self, flownames, fclass=Flow, **kwargs):
         """
         Adds a set of flows with the same type and initial parameters
 
@@ -100,14 +101,13 @@ class Model(Simulable):
             Class to instantiate (e.g. CommsFlow, MultiFlow). Default is Flow.
             Class must take flowname, p, s as input to __init__()
             May alternatively provide already-instanced object.
-        p : dict, optional
-            Parameter dictionary to instantiate the flow with
-        s : dict, optional
-            State dictionary to overwrite Flow default state values with
+        kwargs: kwargs
+            Dicts for non-default values to p, s, etc
         """
         for flowname in flownames:
-            self.add_flow(flowname, fclass, p=p, s=s)
-    def add_flow(self,flowname, fclass=Flow, p={}, s={}):
+            self.add_flow(flowname, fclass, **kwargs)
+
+    def add_flow(self, flowname, fclass=Flow, **kwargs):
         """
         Adds a flow with given attributes to the model.
 
@@ -119,14 +119,13 @@ class Model(Simulable):
             Class to instantiate (e.g. CommsFlow, MultiFlow). Default is Flow.
             Class must take flowname, p, s as input to __init__()
             May alternatively provide already-instanced object.
-        p : dict, optional
-            Parameter dictionary to instantiate the flow with
-        s : dict, optional
-            State dictionary to overwrite Flow default state values with
+        kwargs: kwargs
+            Dicts for non-default values to p, s, etc
         """
         if not getattr(self, 'is_copy', False):
-            self.flows[flowname] = init_flow(flowname,fclass, p=p, s=s)
-    def add_fxn(self,name, fclass, *flownames, args_f='None', **fkwargs):
+            self.flows[flowname] = init_flow(flowname, fclass, **kwargs)
+
+    def add_fxn(self, name, fclass, *flownames, args_f='None', **fkwargs):
         """
         Instantiates a given function in the model.
 
@@ -511,9 +510,12 @@ class Model(Simulable):
                 #Check to see what flows now have new values and add connected functions (done for each because of communications potential)
                 for flowname in self.fxns[fxnname].flows:
                     if flowname in flows_to_check:
-                        if self._flowstates[flowname]!=self.flows[flowname].return_mutables():
-                            nextfxns.update(set([n for n in self.graph.neighbors(flowname) if n in self.staticfxns]))
-                            flows_to_check.remove(flowname)
+                        try:
+                            if self._flowstates[flowname]!=self.flows[flowname].return_mutables():
+                                nextfxns.update(set([n for n in self.graph.neighbors(flowname) if n in self.staticfxns]))
+                                flows_to_check.remove(flowname)
+                        except ValueError as e:
+                            raise Exception("Invalid mutables in flow: "+flowname) from e
             # check remaining flows that have not been checked already
             for flowname in flows_to_check:
                 if self._flowstates[flowname]!=self.flows[flowname].return_mutables():

@@ -78,7 +78,7 @@ def inject_faults_internal(obj, faults):
     faults : TYPE
         DESCRIPTION.
     """
-    if isinstance(obj, ASG):
+    if isinstance(obj, ActArch):
         compdict = obj.actions
     elif isinstance(obj, CompArch):
         compdict = obj.components
@@ -252,7 +252,9 @@ class Simulable(object):
         """
         fxn = self.get_fxns()[fxnname]
         fm = fxn.m
-        rate_time = eq_units(fm.faultmodes[faultmode]['units'], self.sp.units)*(self.sp.times[-1]-self.sp.times[0])  # this rate is on a per-simulation basis
+        # this rate is on a per-simulation basis
+        tot_time = self.sp.times[-1] - self.sp.times[0] + self.sp.dt
+        rate_time = eq_units(fm.faultmodes[faultmode]['units'], self.sp.units)*tot_time
         if not fm.faultmodes.get(faultmode, False): 
             raise Exception("faultmode "+faultmode+" not in "+str(fm.__class__))
         else:
@@ -378,12 +380,12 @@ class Block(Simulable):
         """Checks if Block has static execution step"""
         return (getattr(self, 'behavior', False) or 
                 getattr(self, 'static_behavior', False) or
-                (hasattr(self, 'a') and getattr(self.a, 'proptype','') == 'static'))
+                (hasattr(self, 'aa') and getattr(self.aa, 'proptype','') == 'static'))
         
     def is_dynamic(self):
         """Checks if Block has dynamic execution step"""
         return (getattr(self, 'dynamic_behavior', False) or
-                (hasattr(self, 'a') and getattr(self.a, 'proptype','') == 'dynamic'))
+                (hasattr(self, 'aa') and getattr(self.aa, 'proptype','') == 'dynamic'))
         
 
     def __repr__(self):
@@ -416,10 +418,10 @@ class Block(Simulable):
 
         """
         rand_states = self.r.get_rand_states(auto_update_only)
-        if hasattr(self, 'c'):
-            rand_states.update(self.c.get_rand_states(auto_update_only=auto_update_only))
-        if hasattr(self, 'actions'):
-            for actname, act in self.actions.items():
+        if hasattr(self, 'ca'):
+            rand_states.update(self.ca.get_rand_states(auto_update_only=auto_update_only))
+        if hasattr(self, 'aa'):
+            for actname, act in self.aa.actions.items():
                 if act.get_rand_states(auto_update_only=auto_update_only): 
                     rand_states[actname] = act.get_rand_states(auto_update_only=auto_update_only)
         return rand_states
@@ -533,11 +535,11 @@ class Block(Simulable):
         if hasattr(self, 'internal_flows'):
             for flowname, flow in self.internal_flows.items():
                 mem+= flow.get_memory()
-        if hasattr(self, 'components'):
-            for name, comp in self.c.components.items():
+        if hasattr(self, 'ca'):
+            for name, comp in self.ca.components.items():
                 mem+=comp.get_memory()
-        if hasattr(self, 'actions'):
-            for name, comp in self.actions.items():
+        if hasattr(self, 'aa'):
+            for name, comp in self.aa.actions.items():
                 mem+=comp.get_memory()
         for state in asdict(self.s):
             mem+=2*sys.getsizeof(state)  # (*2 because both the initstate and the actual state should be counted)
@@ -545,24 +547,28 @@ class Block(Simulable):
 
     def return_mutables(self):
         """
-        Returns all mutable values in the block. Used in static propagation steps to
-        check if the block has changed
+        Return all mutable values in the block.
+
+        Used in static propagation steps to check if the block has changed.
 
         Returns
         -------
         states : tuple
-            tuple of all states in the block 
+            tuple of all states in the block
         """
-        return (*astuple(self.s), *self.m.return_mutables(), *self.r.return_mutables(), *self.t.return_mutables())
+        return (*astuple(self.s),
+                *self.m.return_mutables(),
+                *self.r.return_mutables(),
+                *self.t.return_mutables())
 
     def return_probdens(self):
         """Gets the probability density associated with a Block and its components/actions (if any)"""
         state_pd = self.r.return_probdens()
-        if hasattr(self, 'c'): 
-            for compname, comp in self.c.components:
+        if hasattr(self, 'ca'): 
+            for compname, comp in self.ca.components:
                 state_pd*=comp.return_probdens()
-        if hasattr(self, 'a'):
-            for actionname, action in self.a.actions:
+        if hasattr(self, 'aa'):
+            for actionname, action in self.aa.actions:
                 state_pd*=action.return_probdens()
         return state_pd
 
@@ -678,7 +684,8 @@ class Component(Block):
 
 
 class CompArch(dataobject, mapping=True):
-    """Container for holding component architectures"""
+    """Container for holding component architectures."""
+
     archtype: ClassVar[str] = 'default'
     components: dict = dict()
     faultmodes: dict = dict()
@@ -701,7 +708,7 @@ class CompArch(dataobject, mapping=True):
             self.components = dict()
         if not self.faultmodes:
             self.faultmodes = dict()
-        
+
         for arg in args:
             if arg in kwargs:
                 kwargs_comp = kwargs[arg]
@@ -826,7 +833,7 @@ class Action(Block):
         a = 0
 
 
-class ASG(object):
+class ActArch(object):
     """
     Constructs the Action Sequence Graph with the given parameters.
     
@@ -1044,7 +1051,7 @@ class ASG(object):
         cop = self.__class__(flows=newflows, is_copy=True, **kwargs)
         for flowname, flow in newflows.items():
             if flow.__hash__() != cop.flows[flowname].__hash__():
-                raise Exception("Flow not associated with lower level of ASG: " + flowname)
+                raise Exception("Flow not associated w- lower level of ASG: " + flowname)
         
         for actname, action in self.actions.items(): 
             cop_act = cop.actions[actname]
@@ -1065,7 +1072,7 @@ class ASG(object):
 
     def create_hist(self, timerange, track):
         """
-        Creates a history corresponding to ASG attributes.
+        Create a history corresponding to ASG attributes.
 
         Parameters
         ----------
@@ -1109,39 +1116,47 @@ class ASG(object):
 
 
 class FxnBlock(Block):
-    __slots__ = ["c", "_args_c", "a", "_args_a", "args_f"]
-    default_track = ["c", "a"]+Block.default_track
     """
-    Superclass class for functions which is a special type of Block\
-    with c and a attributes for CompArch and ASGs, as well as a defined method for propagation
+    Superclass for representing system functions.
+
+    Additional roles
+    ----------
+    ca : CompArch
+        Component Architecture fulfilling function.
+    aa : ActArch
+        Action Architecture performed by function.
     """
 
-    def __init__(self, name='', flows={}, c=dict(), a=dict(), local=dict(), args_f=dict(), **kwargs):
+    __slots__ = ["ca", "_args_ca", "aa", "_args_aa", "args_f"]
+    default_track = ["ca", "aa"]+Block.default_track
+
+    def __init__(self, name='', flows={}, ca=dict(), aa=dict(), local=dict(),
+                 args_f=dict(), **kwargs):
         """
-        Instantiates the function superclass with the relevant parameters.
+        Instantiate the function superclass with the relevant parameters.
 
         Parameters
         ----------
         flows :dict
-            Flow objects passed from the model level to use instead of instantiating locally.
-        c : dict, optional
-            Internal CompArch fields/arguments override from defaults. The default is {}.
-        a : dict, optional
-            Internal ASG fields/arguments override from defaults. The default is {}.
+            Flow objects passed to use instead of instantiating locally.
+        ca : dict, optional
+            Internal CompArch fields/arguments. The default is {}.
+        aa : dict, optional
+            Internal ASG fields/arguments. The default is {}.
         args_f : dict, optional
-            arguments to pass to custom __init__ function 
-        """        
+            arguments to pass to custom __init__ function.
+        """
         super().__init__(name=name, flows=flows.copy(), **kwargs)
         self.args_f = args_f
-        
-        for at in ['c', 'a']:  # NOTE: similar to init_obj_attr()
+
+        for at in ['ca', 'aa']:  # NOTE: similar to init_obj_attr()
             at_arg = eval(at)
             at_init = getattr(self, '_init_'+at, False)
             if at_init:
                 try:
-                    if at == "a":
+                    if at == "aa":
                         setattr(self, at, at_init(flows=self.flows.copy(), **at_arg))
-                    elif at == "c":
+                    elif at == "ca":
                         setattr(self, at, at_init(**at_arg))
                 except TypeError as e:
                     invalid_args = [a for a in at_arg if a not in at_init.__fields__]
@@ -1149,37 +1164,39 @@ class FxnBlock(Block):
                         argstr = ", Invalid args: "+', '.join(invalid_args)
                     else:
                         argstr = ''
-                    raise TypeError("Poor specification for : " + str(at_init) + " with kwargs: " + str(at_arg) + argstr) from e
+                    raise TypeError("Poor specification for : " + str(at_init) +
+                                    " with kwargs: " + str(at_arg) + argstr) from e
                 setattr(self, '_args_' + at, at_arg)
                 self.update_contained_modes(at)
-            elif at_arg: 
-                raise Exception(at + " argument provided: " + str(at_arg) + "without associating a CompArch/ASG to _init_" + at)
+            elif at_arg:
+                raise Exception(at + " argument provided: " + str(at_arg) +
+                                "without associating a CompArch/ActArch to _init_" + at)
         self.update_seed()
-    
+
     def update_contained_modes(self, at):
         """
-        Adds contained faultmodes for the role at to the FxnBlock model.
+        Add contained faultmodes for the role at to the FxnBlock model.
 
         Parameters
         ----------
-        at : str ('c' or 'a')
-            Role to update (for CompArch or ASG roles)
+        at : str ('ca' or 'aa')
+            Role to update (for CompArch or ActArch roles)
         """
-        if at == 'c':
-            compacts = self.c.components
-        elif at == 'a':
-            compacts = self.a.actions
+        if at == 'ca':
+            compacts = self.ca.components
+        elif at == 'aa':
+            compacts = self.aa.actions
         for ca in compacts.values():
-            self.m.faultmodes.update({ca.name + "_" + f: vals 
+            self.m.faultmodes.update({ca.name + "_" + f: vals
                                       for f, vals in ca.m.faultmodes.items()})
-        
+
 
     def get_typename(self):
         return "FxnBlock"
 
     def return_faultmodes(self):
         """
-        Gets the fault modes present in the simulation (for propagate/model)
+        Get the fault modes present in the simulation (for propagate/model).
 
         Returns
         -------
@@ -1190,15 +1207,17 @@ class FxnBlock(Block):
         """
         ms = [m for m in self.m.faults.copy() if m != 'nom']
         modeprops = dict.fromkeys(ms)
-        for mode in ms: 
+        for mode in ms:
             modeprops[mode] = self.m.faultmodes.get(mode)
-            if mode not in self.m.faultmodes: 
-                raise Exception("Mode "+mode+" not in m.faultmodes for fxn "+self.__class__.__name__+" and may not be tracked.")
+            if mode not in self.m.faultmodes:
+                raise Exception("Mode " + mode + " not in m.faultmodes for fxn " +
+                                self.__class__.__name__+" and may not be tracked.")
         return ms, modeprops
 
     def update_seed(self, seed=[]):
         """
-        Updates seed and propogates update to contained actions/components.
+        Update seed and propogates update to contained actions/components.
+
         (keeps seeds in sync)
 
         Parameters
@@ -1207,15 +1226,17 @@ class FxnBlock(Block):
             Random seed. The default is [].
         """
         super().update_seed(seed)
-        
-        if hasattr(self, 'c'):
-            self.c.update_seed(self.r.seed)
-        if hasattr(self, 'a'):
-            self.a.update_seed(self.r.seed)
+
+        if hasattr(self, 'ca'):
+            self.ca.update_seed(self.r.seed)
+        if hasattr(self, 'aa'):
+            self.aa.update_seed(self.r.seed)
 
     def copy(self, newflows, *args, **kwargs):
         """
-        Creates a copy of the function object with newflows and arbitrary parameters associated with the copy. Used when
+        Create a copy of the function object.
+
+        Adds newflows and arbitrary parameters to be associated with the copy. Used when
         copying the model.
 
         Parameters
@@ -1229,38 +1250,38 @@ class FxnBlock(Block):
             Copy of the given function with new flows
         """
         cop = super().copy(newflows, *args, **kwargs)
-        if hasattr(self, 'c'): 
-            cop.c = self.c.copy_with_arg(**self._args_c)
-            cop.update_contained_modes('c')
-        if hasattr(self, 'a'): 
-            cop.a = self.a.copy(flows=cop.flows.copy(), **self._args_a)
-            cop.update_contained_modes('a')
+        if hasattr(self, 'ca'):
+            cop.ca = self.ca.copy_with_arg(**self._args_ca)
+            cop.update_contained_modes('ca')
+        if hasattr(self, 'aa'):
+            cop.aa = self.aa.copy(flows=cop.flows.copy(), **self._args_aa)
+            cop.update_contained_modes('aa')
         if hasattr(self, 'h'):
-            if hasattr(self, 'c'): 
-                for compname, comp in cop.c.components.items():
-                    ex_hist = cop.h.get("c.components." + compname)
-                    if ex_hist: 
+            if hasattr(self, 'ca'):
+                for compname, comp in cop.ca.components.items():
+                    ex_hist = cop.h.get("ca.components." + compname)
+                    if ex_hist:
                         comp.h = ex_hist.copy()
                         for k, v in comp.h.items():
-                            cop.h["c.components." + compname + "." + k] = v
-            if hasattr(self, 'a'):
+                            cop.h["ca.components." + compname + "." + k] = v
+            if hasattr(self, 'aa'):
                 #if "a.active_actions" in self.h.keys():
                 #    cop.h["a.active_actions"] = self.h['a.active_actions'].copy()
                 for actname, act in cop.a.actions.items():
-                    ex_hist = cop.h.get("a.actions." + actname)
+                    ex_hist = cop.h.get("aa.actions." + actname)
                     if ex_hist: 
                         act.h = ex_hist.copy()
                         for k, v in act.h.items():
-                            cop.h["a.actions." + actname + "." + k] = v
+                            cop.h["aa.actions." + actname + "." + k] = v
         return cop
 
     def return_mutables(self):
         bm = super().return_mutables()
         cm, am = (), ()
-        if hasattr(self, 'c'):
-            cm = self.c.return_mutables()
-        if hasattr(self, 'a'):
-            am = self.a.return_mutables()
+        if hasattr(self, 'ca'):
+            cm = self.ca.return_mutables()
+        if hasattr(self, 'aa'):
+            am = self.aa.return_mutables()
         return *bm, *cm, *am
 
     def __call__(self, proptype, faults=[], time=0, run_stochastic=False):
@@ -1280,22 +1301,23 @@ class FxnBlock(Block):
         """
         self.r.run_stochastic = run_stochastic
         if faults:
-            self.m.add_fault(*faults)  # if there is a fault, it is instantiated in the function
+            self.m.add_fault(*faults)  # if there is a fault, it is instantiated
         if hasattr(self, 'mode_state_dict') and any(faults):
             self.update_modestates()
         if hasattr(self, 'condfaults'):
             self.condfaults(time)    # conditional faults and behavior are then run
         if time > self.t.time:
             self.r.update_stochastic_states()
-        if hasattr(self, 'c'):    
-            inject_faults_internal(self.c, faults)
-        if hasattr(self, 'a'):
-            inject_faults_internal(self.a, faults)
+        if hasattr(self, 'ca'):
+            inject_faults_internal(self.ca, faults)
+        if hasattr(self, 'aa'):
+            inject_faults_internal(self.aa, faults)
             try:
-                self.a(time, run_stochastic, proptype, self.t.dt)
+                self.aa(time, run_stochastic, proptype, self.t.dt)
             except TypeError as e:
-                raise Exception("Poorly specified ASG: "+str(self.a.__class__)) from e
-        
+                raise Exception("Poorly specified ActArch: "
+                                + str(self.a.__class__)) from e
+
         if proptype == 'static' and hasattr(self, 'behavior'):
             self.behavior(time)     # generic behavioral methods are run at all steps
         if proptype == 'static' and hasattr(self, 'static_behavior'):
@@ -1304,7 +1326,7 @@ class FxnBlock(Block):
             if self.t.run_times >= 1:
                 for i in range(self.t.run_times):
                     self.dynamic_behavior(time)
-            elif not Decimal(str(time))%Decimal(str(self.t.dt)):
+            elif not Decimal(str(time)) % Decimal(str(self.t.dt)):
                 self.dynamic_behavior(time)
         elif proptype == 'reset':
             if hasattr(self, 'static_behavior'):
@@ -1313,27 +1335,31 @@ class FxnBlock(Block):
                 self.behavior(time)
             if hasattr(self, 'dynamic_behavior'):
                 self.dynamic_behavior(time)
-        
-        if hasattr(self, 'a') and self.a.actions: # propagate faults from component level to function level
-            self.m.faults.difference_update(self.a.faultmodes)
-            self.m.faults.update(self.a.get_faults())
-        comps = getattr(self, 'c', {'components': {}})['components']
+
+        # propagate faults from action/component level to function level
+        if hasattr(self, 'aa') and self.aa.actions:
+            self.m.faults.difference_update(self.aa.faultmodes)
+            self.m.faults.update(self.aa.get_faults())
+        comps = getattr(self, 'ca', {'components': {}})['components']
         if comps:
-            self.m.faults.difference_update(self.c.faultmodes)
-            self.m.faults.update(self.c.get_faults())
+            self.m.faults.difference_update(self.ca.faultmodes)
+            self.m.faults.update(self.ca.get_faults())
         self.t.time = time
         if run_stochastic == 'track_pdf':
             self.r.probdens = self.r.return_probdens()
         if self.m.exclusive is True and len(self.m.faults) > 1:
-            raise Exception("More than one fault present in "+self.name+"\n at t= "+str(time)+"\n faults: "+str(self.m.faults)+"\n Is the mode representation nonexclusive?")  # noqa
+            raise Exception("More than one fault present in " + self.name +
+                            "\n at t= " + str(time) +
+                            "\n faults: " + str(self.m.faults) +
+                            "\n Is the mode representation nonexclusive?")
         return
 
     def reset(self):
         super().reset()
-        if hasattr(self, 'c'):
-            self.c.reset()
-        if hasattr(self, 'a'):
-            self.a.reset()
+        if hasattr(self, 'ca'):
+            self.ca.reset()
+        if hasattr(self, 'aa'):
+            self.aa.reset()
         self('reset', faults=[], time=0)
 
 

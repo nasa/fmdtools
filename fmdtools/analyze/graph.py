@@ -23,14 +23,14 @@ Main user-facing individual graphing classes:
     - :class:`CommsFlowGraph`: Creates a graph representation of the CommsFlow
     (assuming no additional locals).
 
-    - :class:`ASGGraph`: Shows a visualization of the internal Action Sequence Graph of
+    - :class:`ActArchGraph`: Shows a visualization of the internal Action Sequence Graph of
     the Function Block, with Sequences as edges, with Flows (circular) and Actions
     (square) as nodes.
 
-    - :class:`ASGActGraph`: Variant of ASGGraph where only the sequence between actions
-    is shown.
+    - :class:`ActArchActGraph`: Variant of ActArchGraph where only the sequence between
+    actions is shown.
 
-    - :class:`ASGFlowGraph`: Variant of ASGGraph where only the flow relationships
+    - :class:`ActArchFlowGraph`: Variant of ActArchGraph where only the flow relationships
     between actions is shown.
 
 Shared Method Parameters:
@@ -96,9 +96,7 @@ default_edge_kwargs = {'sends': dict(edge_color='grey', style='dashed'),
 
 
 class EdgeStyle(dataobject):
-    """
-    Holds kwargs for nx.draw_networkx_edges to be applied as a style for multiple edges
-    """
+    """Hold kwargs for nx.draw_networkx_edges to apply as a style for multiple edges."""
     edge_color: str = 'black'
     style:      str = 'solid'
     arrows:     bool = False
@@ -107,7 +105,7 @@ class EdgeStyle(dataobject):
 
     def from_styles(styles, label):
         """
-        Gets the keywords for networkx plotting
+        Get the keywords for networkx plotting.
 
         Parameters
         ----------
@@ -128,7 +126,7 @@ class EdgeStyle(dataobject):
 
     def as_gv_kwargs(self):
         """
-        Transates elements of the style (arrow, color, style) into kwargs for graphviz
+        Transate elements of the style (arrow, color, style) into kwargs for graphviz.
 
         Returns
         -------
@@ -164,9 +162,8 @@ default_node_kwargs = {'Model': dict(node_shape='^'),
 
 
 class NodeStyle(dataobject):
-    """
-    Holds kwargs for nx.draw_networkx_nodes to be applied as a style for multiple nodes
-    """
+    """Hold kwargs for nx.draw_networkx_nodes to apply as a style for multiple nodes."""
+
     node_color: str = "lightgrey"
     node_size:  int = 500
     node_shape: str = 'o'
@@ -176,7 +173,7 @@ class NodeStyle(dataobject):
 
     def from_styles(styles, label):
         """
-        Gets the keywords for networkx plotting
+        Get the keywords for networkx plotting.
 
         Parameters
         ----------
@@ -200,7 +197,7 @@ class NodeStyle(dataobject):
 
     def as_gv_kwargs(self):
         """
-        Transates elements of the style (shape, color, width) into kwargs for graphviz
+        Transate elements of the style (shape, color, width) into kwargs for graphviz.
 
         Returns
         -------
@@ -221,9 +218,8 @@ class NodeStyle(dataobject):
 
 
 class LabelStyle(dataobject):
-    """
-    Holds kwargs for nx.draw_networkx_labels to be applied as a style for labels
-    """
+    """Holds kwargs for nx.draw_networkx_labels to be applied as a style for labels."""
+
     font_size: int = 12
     font_color: str = "k"
     font_weight: str = "normal"
@@ -243,7 +239,7 @@ class EdgeLabelStyle(LabelStyle):
 
 def label_for_entry(g, iterator, entryname):
     """
-    Creates the label dictionary for a given entry value of interest
+    Create the label dictionary for a given entry value of interest.
 
     Parameters
     ----------
@@ -265,7 +261,7 @@ def label_for_entry(g, iterator, entryname):
         - <str> : Any other property corresponding to the key in the node/edge dict
 
     Returns
-    ----------
+    -------
     entryvals : dict
         Dictionary of values to show for the given entry
     """
@@ -382,7 +378,7 @@ class Labels(dataobject, mapping=True):
 
 def get_style_kwargs(styles, label, default_kwargs={}, style_class=EdgeStyle):
     """
-    Gets the keywords for networkx plotting
+    Get the keywords for networkx plotting.
 
     Parameters
     ----------
@@ -406,7 +402,7 @@ def get_style_kwargs(styles, label, default_kwargs={}, style_class=EdgeStyle):
 
 def get_label_groups(iterator, *tags):
     """
-    Creates groups of nodes/edges in terms of discrete values for the given tags.
+    Create groups of nodes/edges in terms of discrete values for the given tags.
 
     Parameters
     ----------
@@ -439,7 +435,7 @@ def get_label_groups(iterator, *tags):
 
 def to_legend_label(group_label, style_labels):
     """
-    Creates a legend label string for the group corresponding to style_labels
+    Create a legend label string for the group corresponding to style_labels.
 
     Parameters
     ----------
@@ -467,7 +463,7 @@ def to_legend_label(group_label, style_labels):
 class Graph(object):
     def __init__(self, obj, get_states=True, **kwargs):
         """
-        Creates a Graph.
+        Create a Graph.
 
         Parameters
         ----------
@@ -478,7 +474,7 @@ class Graph(object):
             whether to get states for the graph
         **kwargs:
             keyword arguments for self.nx_from_obj
-        """
+        """    
         if isinstance(obj, nx.Graph):
             self.g = obj
         elif hasattr(self, 'nx_from_obj'):
@@ -486,7 +482,7 @@ class Graph(object):
 
     def set_pos(self, auto=True, **pos):
         """
-        Sets graph positions to given positions, (automatically or manually)
+        Set graph positions to given positions, (automatically or manually).
 
         Parameters
         ----------
@@ -508,7 +504,7 @@ class Graph(object):
 
     def set_edge_styles(self, **edge_styles):
         """
-        Sets self.edge_styles and self.edge_groups given the provided edge styles.
+        Set self.edge_styles and self.edge_groups given the provided edge styles.
 
         Parameters
         ----------
@@ -528,7 +524,7 @@ class Graph(object):
 
     def set_node_styles(self, **node_styles):
         """
-        Sets self.node_styles and self.edge_groups given the provided node styles.
+        Set self.node_styles and self.edge_groups given the provided node styles.
 
         Parameters
         ----------
@@ -549,7 +545,7 @@ class Graph(object):
     def set_edge_labels(self, title='label', title2='', subtext='states',
                         **edge_label_styles):
         """
-        Creates labels using Labels.from_iterator for the edges in the graph
+        Create labels using Labels.from_iterator for the edges in the graph.
 
         Parameters
         ----------
@@ -561,10 +557,6 @@ class Graph(object):
             property to get for the subtext. The default is ''.
         **node_label_styles : dict
             LabelStyle arguments to overwrite.
-
-        Returns
-        -------
-
         """
         self.edge_labels = Labels.from_iterator(self.g, self.g.edges, EdgeLabelStyle,
                                                 title=title, title2=title2,
@@ -572,7 +564,7 @@ class Graph(object):
 
     def set_node_labels(self, title='id', title2='', subtext='', **node_label_styles):
         """
-        Creates labels using Labels.from_iterator for the nodes in the graph
+        Create labels using Labels.from_iterator for the nodes in the graph.
 
         Parameters
         ----------
@@ -580,10 +572,6 @@ class Graph(object):
         title2
         subtext
         node_label_styles
-
-        Returns
-        -------
-
         """
         self.node_labels = Labels.from_iterator(self.g, self.g.nodes, LabelStyle,
                                                 title=title, title2=title2,
@@ -591,8 +579,7 @@ class Graph(object):
 
     def add_node_groups(self, **node_groups):
         """
-        Creates arbitrary groups of nodes which may be then be displayed with different
-        styles
+        Create arbitrary groups of nodes to displayed with different styles.
 
         Parameters
         ----------
@@ -615,7 +602,7 @@ class Graph(object):
 
     def set_resgraph(self, other=False):
         """
-        Standard results processing for results graphs (show faults and degradations)
+        Process results for results graphs (show faults and degradations).
 
         Parameters
         ----------
@@ -630,8 +617,9 @@ class Graph(object):
 
     def set_degraded(self, other):
         """
-        Sets 'degraded' state in underlying networkx graph based on difference between
-        states with another Graph object
+        Set 'degraded' state in networkx graph.
+
+        Uses difference between states with another Graph object.
 
         Parameters
         ----------
@@ -647,7 +635,7 @@ class Graph(object):
 
     def set_heatmap(self, heatmap, cmap=plt.cm.coolwarm, default_color_val=0.0):
         """
-        Enables the association and plotting of a heatmap on a graph.
+        Set the association and plotting of a heatmap on a graph.
 
         e.g. graph.set_heatmap({'node_1':1.0, 'node_2': 0.0, 'node_3':0.5})
         graph.draw()
@@ -674,8 +662,7 @@ class Graph(object):
              legend_bbox=(1, 0.5), legend_loc="center left", legend_labelspacing=2,
              legend_borderpad=1, **kwargs):
         """
-        Draws a networkx graph g with given styles corresponding to the node/edge
-        properties.
+        Draw a graph with given styles corresponding to the node/edge properties.
 
         Parameters
         ----------
@@ -754,7 +741,8 @@ class Graph(object):
 
     def move_nodes(self, **kwargs):
         """
-        Sets the position of nodes for plots in analyze.graph using a graphical tool.
+        Set the position of nodes for plots in analyze.graph using a graphical tool.
+
         Note: make sure matplotlib is set to plot in an external window
         (e.g using '%matplotlib qt)
 
@@ -823,7 +811,7 @@ class Graph(object):
 
     def animate_from(self, history, times='all', figsize=(6, 4), **kwargs):
         """
-        Successively animates a plot using Graph.draw_from
+        Successively animate a plot using Graph.draw_from.
 
         Parameters
         ----------
@@ -854,7 +842,7 @@ class Graph(object):
 
     def draw_graphviz(self, filename='', filetype='png', **kwargs):
         """
-        Draws the graph using pygraphviz for publication-quality figures.
+        Draw the graph using pygraphviz for publication-quality figures.
 
         Note that the style may not match one-to-one with the defined none/edge styles.
 
@@ -907,7 +895,7 @@ class Graph(object):
     def draw_pyvis(self, filename="graph", width=1000, filt=True, physics=False,
                    notebook=False):
         """
-        Method for plotting graphs with pyvis. Produces interactive HTML!
+        Plot graphs with pyvis. Produces interactive HTML.
 
         Parameters
         ----------
@@ -921,6 +909,7 @@ class Graph(object):
             Whether to use physics during node placement. The default is False.
         notebook : Bool, optional
             passes notebook arg to pyviz Network (for displaying in jupyter)
+
         Returns
         -------
         n : pyvis object
@@ -951,7 +940,7 @@ class Graph(object):
 
     def calc_aspl(self):
         """
-        Computes average shortest path length of
+        Compute average shortest path length of
 
         Returns
         -------
@@ -962,7 +951,7 @@ class Graph(object):
 
     def calc_modularity(self):
         """
-        Computes network modularity of the graph.
+        Compute network modularity of the graph.
 
         Returns
         -------
@@ -975,7 +964,7 @@ class Graph(object):
 
     def find_bridging_nodes(self):
         """
-        Determines bridging nodes in a graph representation of model mdl.
+        Determine bridging nodes in a graph representation of model mdl.
 
         Returns
         -------
@@ -1008,7 +997,7 @@ class Graph(object):
     def plot_bridging_nodes(self, title='bridging nodes',
                             node_kwargs={'node_color': 'red'}, **kwargs):
         """
-        Plots bridging nodes using self.draw()
+        Plot bridging nodes using self.draw().
 
         Parameters
         ----------
@@ -1031,8 +1020,7 @@ class Graph(object):
 
     def find_high_degree_nodes(self, p=90):
         """
-        Determines highest degree nodes, up to percentile p, in graph representation of
-        model mdl.
+        Determine highest degree nodes, up to percentile p, in graph.
 
         Parameters
         ----------
@@ -1066,7 +1054,7 @@ class Graph(object):
     def plot_high_degree_nodes(self, p=90, title='', node_kwargs={'node_color': 'red'},
                                **kwargs):
         """
-        Plots high-degree nodes using self.draw()
+        Plot high-degree nodes using self.draw()
 
         Parameters
         ----------
@@ -1093,7 +1081,7 @@ class Graph(object):
 
     def calc_robustness_coefficient(self, trials=100, seed=False):
         """
-        Computes robustness coefficient of graph representation of model mdl.
+        Compute robustness coefficient of graph representation of model mdl.
 
         Parameters
         ----------
@@ -1237,7 +1225,7 @@ class Graph(object):
 
 def sff_one_trial(start_node_selected, g, endtime=5, pi=.1, pr=.1):
     """
-    Calculates one trial of the sff model
+    Calculate one trial of the sff model.
 
     Parameters
     ----------
@@ -2161,8 +2149,8 @@ def get_node_info(flow, get_states, get_indicators, time):
     return kwargs
 
 
-# ASG
-class ASGGraph(Graph):
+# ActArch
+class ActArchGraph(Graph):
     """
     Shows a visual representation of the internal Action Sequence Graph of
     the Function Block, with:
@@ -2171,20 +2159,20 @@ class ASGGraph(Graph):
         - Actions as (square) Nodes
     """
 
-    def __init__(self, asg, time=0.0, get_states=True):
-        self.g = nx.compose(asg.flow_graph, asg.action_graph)
-        self.set_nx_labels(asg)
+    def __init__(self, aa, time=0.0, get_states=True):
+        self.g = nx.compose(aa.flow_graph, aa.action_graph)
+        self.set_nx_labels(aa)
         if get_states:
             self.time = time
-            self.set_nx_states(asg)
+            self.set_nx_states(aa)
 
-    def set_nx_labels(self, asg):
+    def set_nx_labels(self, aa):
         """
         Labels the underlying networkx graph structure with type attributes
-        corresponding to the ASG.
+        corresponding to the ActArch.
         Parameters
         ----------
-        asg : ASG
+        aa : ActArch
             Action Sequence Graph object to represent
 
         Returns
@@ -2192,23 +2180,23 @@ class ASGGraph(Graph):
 
         """
         for n in self.g.nodes():
-            if n in asg.action_graph.nodes():
+            if n in aa.action_graph.nodes():
                 self.g.nodes[n]['label'] = 'Action'
-            elif n in asg.flow_graph.nodes():
+            elif n in aa.flow_graph.nodes():
                 self.g.nodes[n]['label'] = 'Flow'
         for e in self.g.edges():
-            if e in asg.action_graph.edges():
+            if e in aa.action_graph.edges():
                 self.g.edges[e]['label'] = 'condition'
-            elif e in asg.flow_graph.edges():
+            elif e in aa.flow_graph.edges():
                 self.g.edges[e]['label'] = 'contains'
 
-    def set_nx_states(self, asg):
+    def set_nx_states(self, aa):
         """
         Attaches state and fault information to the underlying graph.
 
         Parameters
         ----------
-        asg : ASG
+        aa : ActArch
             Underlying action sequence graph object to get states from
 
         Returns
@@ -2216,15 +2204,15 @@ class ASGGraph(Graph):
 
         """
         for g in self.g.nodes():
-            self.g.nodes[g]['active'] = g in asg.active_actions
+            self.g.nodes[g]['active'] = g in aa.active_actions
         states = {}
         faults = {}
         indicators = {}
-        for aname, action in asg.actions.items():
+        for aname, action in aa.actions.items():
             states[aname] = asdict(action.s)
             faults[aname] = [*action.m.faults]
             indicators[aname] = return_true_indicators(action, self.time)
-        for fname, flow in asg.flows.items():
+        for fname, flow in aa.flows.items():
             states[fname] = asdict(flow.s)
             indicators[fname] = return_true_indicators(flow, self.time)
         nx.set_node_attributes(self.g, states, 'states')
@@ -2276,7 +2264,7 @@ class ASGGraph(Graph):
         return super().draw_graphviz(layout=layout, overlap=overlap, **kwargs)
 
     def draw_from(self, time, history=History(), **kwargs):
-        # TODO: make this so that it works with multiple ASGs
+        # TODO: make this so that it works with multiple ActArchs
         fault_act_hist = history._prep_faulty().get_values("a.active_actions")
         activities = fault_act_hist.get_slice(time)
         activity = {i for v in activities.values() for i in v}
@@ -2288,33 +2276,31 @@ class ASGGraph(Graph):
         return super().draw_from(time, history=history, **kwargs)
 
 
-class ASGActGraph(ASGGraph):
-    """
-    Variant of ASGGraph where only the sequence between actions is shown.
-    """
+class ActArchActGraph(ActArchGraph):
+    """Variant of ActArchGraph where only the sequence between actions is shown."""
 
-    def __init__(self, asg, get_states=True):
-        self.g = asg.action_graph.copy()
-        self.set_nx_labels(asg)
+    def __init__(self, aa, get_states=True):
+        self.g = aa.action_graph.copy()
+        self.set_nx_labels(aa)
         if get_states:
-            self.set_nx_states(asg)
+            self.set_nx_states(aa)
 
 
-class ASGFlowGraph(ASGGraph):
+class ActArchFlowGraph(ActArchGraph):
     """
-    Variant of ASGGraph where only the flow relationships between actions is shown.
+    Variant of ActArchGraph where only the flow relationships between actions is shown.
     """
 
-    def __init__(self, asg, get_states=True):
-        self.g = asg.flow_graph.copy()
-        self.set_nx_labels(asg)
+    def __init__(self, aa, get_states=True):
+        self.g = aa.flow_graph.copy()
+        self.set_nx_labels(aa)
         if get_states:
-            self.set_nx_states(asg)
+            self.set_nx_states(aa)
 
 
 def graph_factory(obj, **kwargs):
     """
-    Creates the default Graph for a given object. Used in fmdtools.sim.get_result
+    Create the default Graph for a given object. Used in fmdtools.sim.get_result.
 
     Parameters
     ----------
@@ -2330,7 +2316,7 @@ def graph_factory(obj, **kwargs):
     """
     from fmdtools.define.model import Model
     from fmdtools.define.flow import CommsFlow, MultiFlow
-    from fmdtools.define.block import ASG
+    from fmdtools.define.block import ActArch
 
     if isinstance(obj, Model):
         return ModelGraph(obj, **kwargs)
@@ -2338,7 +2324,7 @@ def graph_factory(obj, **kwargs):
         return CommsFlowGraph(obj, **kwargs)
     elif isinstance(obj, MultiFlow):
         return MultiFlowGraph(obj, **kwargs)
-    elif isinstance(obj, ASG):
-        return ASGGraph(obj, **kwargs)
+    elif isinstance(obj, ActArch):
+        return ActArchGraph(obj, **kwargs)
     else:
         raise Exception("No default graph for class "+obj.__class__.__name__)
