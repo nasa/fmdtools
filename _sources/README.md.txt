@@ -8,7 +8,7 @@
 
 **fmdtools** (Fault Model Design tools) is a toolkit for modelling system resilience in the early design phase. With it, one can simulate the effects of faults in a system to build resilience into the system design at a high level.  To achieve this, fmdtools provides a Python-based *design environment* where one can represent the system in a model, simulate the resilience of the model to faults, and analyze the resulting model responses to iteratively improve the resilience of the design.
 
-Note: This version (**2.0-beta-0.0**) is currently in development, and thus not all interfaces may be fully stable and not all examples or documentation may be up-to-date. For stable versions, download packages releases without the -alpha or -beta tags.
+Note: This version (**2.0-beta-1**) is currently in development, and thus not all interfaces may be fully stable and not all examples or documentation may be up-to-date. For stable versions, download packages releases without the -alpha or -beta tags.
 
 [Click here to view the the full documentation website.](https://nasa.github.io/fmdtools)
 
@@ -56,6 +56,8 @@ pytest
 # license: (MIT) https://docs.pytest.org/en/7.3.x/license.html
 graphviz
 # license: (MIT) https://github.com/xflr6/graphviz/blob/master/LICENSE.txt
+shapely
+# license: (BSD 3-clause) https://github.com/shapely/shapely/blob/main/LICENSE.txt
 ```
 
 These external (non-python) packages are recommended to enable specific fmdtools use-cases and to test/develop fmdtools as well as work with examples in the repository:
@@ -79,9 +81,6 @@ These must be installed within the system environment (e.g. using ``conda instal
 
 Additionally, the following python packages are not included but are necessary for development/testing of the code:
 ```
-shapely
-# used for: multirotor model
-# license: (BSD 3-clause) https://github.com/shapely/shapely/blob/main/LICENSE.txt
 deap
 # used for: optimization of rover faults
 # license: (LGPL-3.0) https://github.com/DEAP/deap/blob/master/LICENSE.txt
@@ -103,9 +102,9 @@ pathos
 ```
 They can be installed using ``pip install packagename``.
 
-## Examples
+### Examples
 
-For tutorials, see the [examples folder](https://github.com/nasa/fmdtools/tree/main/examples) and [examples page of the documentation](https://nasa.github.io/fmdtools/docs/Examples.html). These folders include the following: 
+For tutorials, see the [examples folder](https://github.com/nasa/fmdtools/tree/main/examples) and [examples page of the documentation]((https://nasa.github.io/fmdtools/examples/Examples.html). These folders include the following: 
 
 - [**asg_demo**](https://github.com/nasa/fmdtools/tree/main/examples/asg_demo): A tutorial covering the use of the Action Sequence Graph in the FxnBlock class, which is useful for representing a Function's Progress through a sequence of actions \(e.g., modes of operation, etc\).
 
