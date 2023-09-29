@@ -4,7 +4,7 @@ Functions/classes for optimizing the drone defined in drone_mdl_opt.py.
 """
 
 from fmdtools.sim.search import ProblemInterface
-from drone_mdl_opt import Drone
+from drone_mdl_rural import Drone, DroneParam
 from fmdtools.sim.approach import SampleApproach
 import numpy as np
 
@@ -227,4 +227,3 @@ if __name__ == "__main__":
     #opt_prob.iter_hist
 
     #plt.show()
-

@@ -1267,7 +1267,7 @@ class FxnBlock(Block):
             if hasattr(self, 'aa'):
                 #if "a.active_actions" in self.h.keys():
                 #    cop.h["a.active_actions"] = self.h['a.active_actions'].copy()
-                for actname, act in cop.a.actions.items():
+                for actname, act in cop.aa.actions.items():
                     ex_hist = cop.h.get("aa.actions." + actname)
                     if ex_hist: 
                         act.h = ex_hist.copy()

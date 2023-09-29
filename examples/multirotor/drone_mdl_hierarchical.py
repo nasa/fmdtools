@@ -21,7 +21,7 @@ from examples.multirotor.drone_mdl_static import AffectDOFMode, AffectDOFState
 from examples.multirotor.drone_mdl_dynamic import StoreEE, CtlDOF, PlanPath, HoldPayload
 from examples.multirotor.drone_mdl_dynamic import ViewEnvironment, DroneEnvironment
 from examples.multirotor.drone_mdl_dynamic import Drone as DynDrone
-from drone_mdl_dynamic import AffectDOF as AffectDOFDynamic
+from examples.multirotor.drone_mdl_dynamic import AffectDOF as AffectDOFDynamic
 
 
 class OverallAffectDOFState(State):
