@@ -59,19 +59,19 @@ if __name__=="__main__":
                       "examples/tank/Tank_Optimization.ipynb"]
 
     # for testing longer-running notebooks
-    retcode = pytest.main(["--nbmake", *slow_notebooks])
+    # retcode = pytest.main(["--nbmake", *slow_notebooks])
 
     # for testing all unittests
     # retcode = pytest.main(["--continue-on-collection-errors"])
 
     # for creating comprehensive test report:
 
-    #retcode = pytest.main(["--html=./reports/junit/report.html",
-    #                       "--junitxml=./reports/junit/junit.xml",
-    #                       "--nbmake",
-    #                       "--overwrite",
-    #                       "--doctest-modules",
-    #                       "--continue-on-collection-errors"])
+    retcode = pytest.main(["--html=./reports/junit/report.html",
+                           "--junitxml=./reports/junit/junit.xml",
+                           "--nbmake",
+                           "--overwrite",
+                           "--doctest-modules",
+                           "--continue-on-collection-errors"])
     
     # after creating test report, update the badge using this in powershell:
     # !Powershell.exe -Command "genbadge tests"

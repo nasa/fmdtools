@@ -7,7 +7,7 @@ marp: true
 
 # Intro to resilience modelling, simulation, and visualization in Python with fmdtools.
 ### Author: Daniel Hulse 
-### Version: 2.0-alpha5
+### Version: 2.0-beta-1
 
 -----------------
 
