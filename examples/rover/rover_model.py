@@ -34,6 +34,7 @@ import itertools
 import numpy as np
 import matplotlib.pyplot as plt
 import multiprocessing as mp
+from shapely import Point
 
 
 class DegParam(Parameter, readonly=True):
@@ -202,9 +203,9 @@ class PathParam(LineParam):
     """Parameter defining the path."""
 
     xys: tuple = tuple([[x, sin_func(x, 1, 1)] for x in np.arange(0, 100, 1)])
-    buffer_on: float = 0.1
-    buffer_poor: float = 0.2
-    buffer_near: float = 0.3
+    buffer_on: float = 0.2
+    buffer_poor: float = 0.3
+    buffer_near: float = 0.4
 
 
 class GroundGeomArch(GeomArch):
@@ -237,6 +238,18 @@ class Ground(Environment):
     def at_end(self, pos_state):
         return self.ga.geoms['end'].at(pos_state.get("x", "y"), 'on')
 
+    def end_dist(self, pos_state):
+        return self.ga.geoms['end'].on.distance(Point(pos_state.get("x", "y")))
+
+    def max_line_dist(self, pos_hist):
+        xhist = pos_hist.x
+        yhist = pos_hist.y
+        max_dist = 0.0
+        for i, x in enumerate(xhist):
+            dist = self.ga.geoms['line'].shape.distance(Point(x, yhist[i]))
+            if dist > max_dist:
+                max_dist = dist
+        return max_dist
 
 
 class PathLine(GeomLine):
@@ -415,7 +428,7 @@ class PlanPath(FxnBlock):
         if not self.m.in_mode("no_con"):
             if time == 5:
                 self.m.set_mode("drive")
-            if time == 100:
+            if time == 149:
                 self.m.set_mode("standby")
 
         if self.m.in_mode("drive"):
@@ -434,11 +447,19 @@ class PlanPath(FxnBlock):
 
     def drive_control(self):
         """Control of rpower/lpower signal based on percieved line."""
-        rdiff = 1
+        u_self = self.pos_signal.s.get('ux', 'uy')
+        u_lin = self.video.s.get('lin_ux', 'lin_uy')
+        rdiff_track = rdiff_from_vects(u_self, u_lin)
+        
+        u_lin_dev = self.video.s.get('lin_dx', 'lin_dy')
+        rdiff_err = rdiff_from_vects(u_self, u_lin_dev) * np.linalg.norm(u_lin_dev)
+        
+        rdiff = rdiff_track + 0.15 * rdiff_err
+        
         turn_fault_correction = self.p.cor_d * self.fault_sig.s.drift
-        vel_fault_correction = (1 + self.p.cor_f * (self.fault_sig.s.friction)
+        vel_fault_correction = (self.p.cor_f * (self.fault_sig.s.friction)
                                 + self.p.cor_t * (self.fault_sig.s.transfer - 1))
-        vel_adj = max(0.2, 1 - 0.9 * abs(rdiff * 20)) * vel_fault_correction
+        vel_adj = max(0.2, 1 - 0.9 * abs(rdiff_err * 50)) * vel_fault_correction
         self.control.s.put(rpower=vel_adj * (1 + (rdiff)),
                            lpower=vel_adj * (1 - (rdiff)))
         self.control.s.limit(rpower=(-1, 2), lpower=(-1, 2))
@@ -450,12 +471,12 @@ class PlanPath(FxnBlock):
                 and self.p.lb_t <= self.fault_sig.s.transfer <= self.p.ub_t)
 
 
-def translate_angle(angle):
-    if angle < -180:
-        angle = angle % 180
-    elif angle > 180:
-        angle = angle % -180
-    return angle
+def rdiff_from_vects(u_self, u_lin):
+    d = np.dot(u_self, u_lin)
+    dr = np.sign(np.cross(u_self, u_lin))
+    rdiff = dr * np.arccos(d/(np.linalg.norm(u_self)*np.linalg.norm(u_lin)+0.00001))
+    return rdiff
+    
 
 
 class DriveMode(Mode):
@@ -581,15 +602,16 @@ class Drive(FxnBlock):
             self.add_fault("elec_open")
         else:
             self.drive_nominal(rpower, lpower)
+        self.ground.s.in_bound = self.ground.on_course(self.pos.s)
+
     def drive_nominal(self, rpower, lpower):
         self.pos.s.vel = (rpower + lpower) / (1.0 + self.m.s.friction)
         ang_inc = np.arctan((rpower - lpower) / (rpower + lpower + 0.001))
-        ux_inc = np.cos(ang_inc*self.pos.s.ux) - np.sin(ang_inc*self.pos.s.uy)
-        uy_inc = np.sin(ang_inc*self.pos.s.ux) + np.cos(ang_inc*self.pos.s.uy)
-        self.pos.s.inc(ux=ux_inc, uy=uy_inc)
-
+        ux = np.cos(ang_inc) * self.pos.s.ux - np.sin(ang_inc) * self.pos.s.uy
+        uy = np.sin(ang_inc) * self.pos.s.ux + np.cos(ang_inc) * self.pos.s.uy
+        mag_u = np.linalg.norm([ux, uy])
+        self.pos.s.put(ux=ux/mag_u, uy=uy/mag_u)
         self.pos.s.inc(x=self.pos.s.ux*self.pos.s.vel, y=self.pos.s.uy*self.pos.s.vel)
-
 
 
 class PerceptionMode(Mode):
@@ -621,7 +643,7 @@ class Perception(FxnBlock):
                 if self.ground.on_course(self.pos.s):
                     self.get_line_ang()
                 else:
-                    self.video.quality = 0.0
+                    self.video.s.quality = 0.0
             elif self.ee.s.v == 0:
                 self.m.set_mode("off")
         elif self.m.has_fault("bad_feed"):
@@ -631,7 +653,8 @@ class Perception(FxnBlock):
         xy = self.pos.s.get('x', 'y')
         ux, uy = self.ground.ga.geoms['line'].vect_at_shape(xy)
         dx, dy = self.ground.ga.geoms['line'].vect_to_shape(xy)
-        self.video.s.put(lin_ux=ux, lin_uy=uy, lin_dx=dx, lin_dy=dy, quality=1.0)
+        self.video.s.put(lin_ux=ux[0], lin_uy=uy[0],
+                         lin_dx=dx[0], lin_dy=dy[0], quality=1.0)
 
 
 class PowerState(State):
@@ -794,11 +817,9 @@ def gen_model_params(x, scen):
 class Rover(Model):
     __slots__ = ()
     _init_p = RoverParam
-    default_sp = dict(
-        times=(0, 100),
-        phases=(("start", 0, 30), ("end", 31, 60)),
-        end_condition="indicate_finished",
-    )
+    default_sp = dict(times=(0, 150),
+                      phases=(("start", 0, 30), ("end", 31, 150)),
+                      end_condition="indicate_finished")
 
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
@@ -822,7 +843,7 @@ class Rover(Model):
         self.add_fxn("operator", Operator, "switch")
         self.add_fxn("communications", Communications, "comms", "ee_12", "pos_signal")
         self.add_fxn("perception", Perception, "ground", 'pos', "ee_12", "video")
-        self.add_fxn("plan_path", PlanPath, "video", "pos_signal", "ground",
+        self.add_fxn("plan_path", PlanPath, "video", "pos_signal", "ground", 'pos',
                      "auto_control", "fault_sig", p=self.p.correction)
         self.add_fxn("override", Override, "override_comms", "ee_5", "motor_control",
                      "auto_control")
@@ -852,14 +873,9 @@ class Rover(Model):
         if not classification:
             classification = "nominal mission"
         num_modes = len(modes)
-        end_dist = 1
-        # TODO: re-add end distance
-        #dist(
-        #    self.flows["ground"].s.x,
-        #    self.flows["ground"].s.y,
-        #    self.p.end[0],
-        #    self.p.end[1],
-        #)
+
+        end_dist = self.flows['ground'].end_dist(self.flows['pos'].s)
+
         endpt = [self.flows["pos"].s.x, self.flows["pos"].s.y]
         x_nom = mdlhist.nominal.flows.pos.s.x
         y_nom = mdlhist.nominal.flows.pos.s.x
@@ -868,20 +884,14 @@ class Rover(Model):
 
         f_t = min(len(x_nom), len(y_nom))
 
-        tot_deviation = np.sum(np.sqrt((x_nom[:f_t]- x_fault[:f_t])** 2 + 
+        tot_deviation = np.sum(np.sqrt((x_nom[:f_t]- x_fault[:f_t])** 2 +
                                        (y_nom[:f_t]- y_fault[:f_t])** 2))
 
         in_bound = all(mdlhist.faulty.flows.ground.s.in_bound)
         
         line_dist = 1
-        # TODO: re-add line distance
-        # line_dist = find_line_dist(
-        #   self.flows["pos"].s.x,
-        #    self.flows["pos"].s.y,
-        #    mdlhist.nominal.flows.ground.s.linex,
-        #    mdlhist.nominal.flows.ground.s.liney,
-        #)
-
+        hist_xy = mdlhist.faulty.flows.pos.s.get('x', 'y')
+        end_dist = self.flows['ground'].max_line_dist(hist_xy)
         return {
             "rate": scen.rate,
             "cost": 0,
@@ -899,10 +909,6 @@ class Rover(Model):
         }
 
 
-def find_line_dist(x, y, linex, liney):
-    return np.min(np.sqrt((linex - x) ** 2 + (liney - y) ** 2))
-
-
 def gen_param_space():
     paramspace = []
     ranges = [x for x in itertools.product(np.arange(0, 10, 0.2), range(10, 50, 10))]
@@ -918,8 +924,25 @@ def gen_param_space():
 
 if __name__ == "__main__":
     import multiprocessing as mp
+    from fmdtools.analyze import show
 
 
     mdl = Rover()
     ec, hist = prop.nominal(mdl)
+    fig, ax = show.trajectories(hist, 'flows.pos.s.x','flows.pos.s.y',
+                                time_groups = ['nominal'])
+    show.geomarch(mdl.flows['ground'].ga, fig=fig, ax=ax)
+    fig, ax = show.trajectories(hist, 'flows.pos.s.x','flows.pos.s.y')
+    
+    mdl = Rover(p={'ground': GroundParam(linetype='turn')})
+    ec, hist = prop.nominal(mdl)
+    fig, ax = show.geomarch(mdl.flows['ground'].ga, 
+                            geoms={'line': {'shapes': {'on': {} ,'shape': {}}},
+                                   'start': {},
+                                   'end': {}})
+    fig, ax = show.trajectories(hist, 'flows.pos.s.x','flows.pos.s.y',
+                                time_groups = ['nominal'], fig=fig, ax=ax)
+    #ax.set_xlim(0, 5.0)
+    #ax.set_ylim(-2.5, 2.5)
     hist.flows.pos.s.x
+    fig, ax = show.trajectories(hist, 'flows.pos.s.x','flows.pos.s.y')
