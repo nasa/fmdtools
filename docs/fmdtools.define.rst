@@ -96,8 +96,7 @@ fmdtools.define.state
 --------------------------------
 
 .. automodule:: fmdtools.define.state
-   :members:
-   :undoc-members:
+   :members: State
    :show-inheritance:
 
 fmdtools.define.time
@@ -112,16 +111,14 @@ fmdtools.define.geom
 --------------------------------
 
 .. automodule:: fmdtools.define.geom
-   :members:
-   :undoc-members:
+   :members: Geom, GeomPoint, PointParam, GeomLine, LineParam, GeomPoly, PolyParam, GeomArch
    :show-inheritance:
 
 fmdtools.define.environment
 --------------------------------
 
 .. automodule:: fmdtools.define.environment
-   :members:
-   :undoc-members:
+   :members: Environment
    :show-inheritance:
 
 
@@ -129,6 +126,5 @@ fmdtools.define.coords
 --------------------------------
 
 .. automodule:: fmdtools.define.coords
-   :members:
-   :undoc-members:
+   :members: Coords, CoordsParam
    :show-inheritance:
