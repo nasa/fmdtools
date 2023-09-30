@@ -108,5 +108,27 @@ fmdtools.define.time
    :undoc-members:
    :show-inheritance:
 
+fmdtools.define.geom
+--------------------------------
 
+.. automodule:: fmdtools.define.geom
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+fmdtools.define.environment
+--------------------------------
+
+.. automodule:: fmdtools.define.environment
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+
+fmdtools.define.coords
+--------------------------------
+
+.. automodule:: fmdtools.define.coords
+   :members:
+   :undoc-members:
    :show-inheritance:
