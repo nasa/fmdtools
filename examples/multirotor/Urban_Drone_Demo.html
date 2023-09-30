@@ -23,7 +23,9 @@
         <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
     <script src="../../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../../genindex.html" />
-    <link rel="search" title="Search" href="../../search.html" /> 
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="Integrated Resilience Optimization Architectures" href="Multirotor_Optimization.html" />
+    <link rel="prev" title="fmdtools Paper Demonstration" href="Demonstration.html" /> 
 </head>
 
 <body class="wy-body-for-nav"> 
@@ -46,7 +48,7 @@
   </form>
 </div>
         </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
-              <ul>
+              <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="../../README.html">Overview</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="../../README.html#getting-started">Getting Started</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="../../README.html#prerequisites">Prerequisites</a></li>
@@ -141,7 +143,7 @@
 </li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="../Examples.html">Examples</a><ul>
+<li class="toctree-l1 current"><a class="reference internal" href="../Examples.html">Examples</a><ul class="current">
 <li class="toctree-l2"><a class="reference internal" href="../Examples.html#pump">Pump</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="../pump/Tutorial_complete.html">fmdtools Tutorial</a><ul>
 <li class="toctree-l4"><a class="reference internal" href="../pump/Tutorial_complete.html#1.)-Loading-the-environment-and-model">1.) Loading the environment and model</a></li>
@@ -189,13 +191,19 @@
 </li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="../Examples.html#multirotor">Multirotor</a><ul>
+<li class="toctree-l2 current"><a class="reference internal" href="../Examples.html#multirotor">Multirotor</a><ul class="current">
 <li class="toctree-l3"><a class="reference internal" href="Demonstration.html">fmdtools Paper Demonstration</a><ul>
 <li class="toctree-l4"><a class="reference internal" href="Demonstration.html#Initial-Network-Model">Initial Network Model</a></li>
 <li class="toctree-l4"><a class="reference internal" href="Demonstration.html#Setting-Node-Positions">Setting Node Positions</a></li>
 <li class="toctree-l4"><a class="reference internal" href="Demonstration.html#Static-Model">Static Model</a></li>
 <li class="toctree-l4"><a class="reference internal" href="Demonstration.html#Dynamic-Model">Dynamic Model</a></li>
 <li class="toctree-l4"><a class="reference internal" href="Demonstration.html#Hierarchical-Model">Hierarchical Model</a></li>
+</ul>
+</li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">Urban Drone Demo</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#Model-Overview">Model Overview</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#Nominal-Simulation">Nominal Simulation</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#Resilience-model">Resilience model</a></li>
 </ul>
 </li>
 <li class="toctree-l3"><a class="reference internal" href="Multirotor_Optimization.html">Integrated Resilience Optimization Architectures</a><ul>
@@ -359,7 +367,6 @@
 </ul>
 </li>
 <li class="toctree-l3"><a class="reference internal" href="../../docs/fmdtools.define.html#module-fmdtools.define.state">fmdtools.define.state</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.define.html#fmdtools.define.state.ExamplePoint"><code class="docutils literal notranslate"><span class="pre">ExamplePoint</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.define.html#fmdtools.define.state.State"><code class="docutils literal notranslate"><span class="pre">State</span></code></a></li>
 </ul>
 </li>
@@ -369,14 +376,6 @@
 </ul>
 </li>
 <li class="toctree-l3"><a class="reference internal" href="../../docs/fmdtools.define.html#module-fmdtools.define.geom">fmdtools.define.geom</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.define.html#fmdtools.define.geom.ExGeomArch"><code class="docutils literal notranslate"><span class="pre">ExGeomArch</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.define.html#fmdtools.define.geom.ExGeomState"><code class="docutils literal notranslate"><span class="pre">ExGeomState</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.define.html#fmdtools.define.geom.ExLine"><code class="docutils literal notranslate"><span class="pre">ExLine</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.define.html#fmdtools.define.geom.ExLineParam"><code class="docutils literal notranslate"><span class="pre">ExLineParam</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.define.html#fmdtools.define.geom.ExPoint"><code class="docutils literal notranslate"><span class="pre">ExPoint</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.define.html#fmdtools.define.geom.ExPointParam"><code class="docutils literal notranslate"><span class="pre">ExPointParam</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.define.html#fmdtools.define.geom.ExPoly"><code class="docutils literal notranslate"><span class="pre">ExPoly</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.define.html#fmdtools.define.geom.ExPolyParam"><code class="docutils literal notranslate"><span class="pre">ExPolyParam</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.define.html#fmdtools.define.geom.Geom"><code class="docutils literal notranslate"><span class="pre">Geom</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.define.html#fmdtools.define.geom.GeomArch"><code class="docutils literal notranslate"><span class="pre">GeomArch</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.define.html#fmdtools.define.geom.GeomLine"><code class="docutils literal notranslate"><span class="pre">GeomLine</span></code></a></li>
@@ -389,14 +388,11 @@
 </li>
 <li class="toctree-l3"><a class="reference internal" href="../../docs/fmdtools.define.html#module-fmdtools.define.environment">fmdtools.define.environment</a><ul>
 <li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.define.html#fmdtools.define.environment.Environment"><code class="docutils literal notranslate"><span class="pre">Environment</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.define.html#fmdtools.define.environment.ExampleEnvironment"><code class="docutils literal notranslate"><span class="pre">ExampleEnvironment</span></code></a></li>
 </ul>
 </li>
 <li class="toctree-l3"><a class="reference internal" href="../../docs/fmdtools.define.html#module-fmdtools.define.coords">fmdtools.define.coords</a><ul>
 <li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.define.html#fmdtools.define.coords.Coords"><code class="docutils literal notranslate"><span class="pre">Coords</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.define.html#fmdtools.define.coords.CoordsParam"><code class="docutils literal notranslate"><span class="pre">CoordsParam</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.define.html#fmdtools.define.coords.ExampleCoords"><code class="docutils literal notranslate"><span class="pre">ExampleCoords</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.define.html#fmdtools.define.coords.ExampleCoordsParam"><code class="docutils literal notranslate"><span class="pre">ExampleCoordsParam</span></code></a></li>
 </ul>
 </li>
 </ul>
@@ -610,6 +606,7 @@
           <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
       <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../Examples.html">Examples</a></li>
       <li class="breadcrumb-item active">Urban Drone Demo</li>
       <li class="wy-breadcrumbs-aside">
             <a href="../../_sources/examples/multirotor/Urban_Drone_Demo.ipynb.txt" rel="nofollow"> View page source</a>
@@ -2056,7 +2053,10 @@ time:                         array(301)
 
            </div>
           </div>
-          <footer>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="Demonstration.html" class="btn btn-neutral float-left" title="fmdtools Paper Demonstration" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="Multirotor_Optimization.html" class="btn btn-neutral float-right" title="Integrated Resilience Optimization Architectures" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
 
   <hr/>
 
