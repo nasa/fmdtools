@@ -46,8 +46,11 @@ class CoordsParam(Parameter):
     point_pointname: tuple
         Tuple (x, y) referring to a point in the grid with a given name.
 
-    e.g., defining the following classes will define a grid with a, v features, an
-    h state, a point "start", and a "high_v" collection::
+    Examples
+    --------
+    Defining the following classes will define a grid with a, v features, an
+    h state, a point "start", and a "high_v" collection:
+
     >>> class ExampleCoordsParam(CoordsParam):
     ...     feature_a: tuple = (bool, False)
     ...     feature_v: tuple = (float, 1.0)
@@ -80,16 +83,18 @@ class Coords(object):
     init_properties: method
         Method that initializes the (non-default) properties of the Coords.
 
+    Examples
+    --------
     >>> class ExampleCoords(Coords):
     ...    _init_p = ExampleCoordsParam
     ...    def init_properties(self, *args, **kwargs):
     ...        self.set_pts([[0.0, 0.0], [10.0, 0.0]], "v", 10.0)
 
     Instantiating this class a class with (see ExampleCoordsParam):
-        - immutable arrays a and v,
-        - mutable array h,
-        - point start at (0.0), and
-        - collection high made up of all points where v > 10.0
+    - immutable arrays a and v,
+    - mutable array h,
+    - point start at (0.0), and
+    - collection high made up of all points where v > 10.0
 
     As shown, features are normal numpy arrays set to readonly:
 
@@ -193,8 +198,8 @@ class Coords(object):
         all: np.array
             List of points where the comparator method returns true.
 
-        e.g.,
-
+        Examples
+        --------
         >>> ex = ExampleCoords()
         >>> ex.find_all("v", 10.0, np.equal)
         array([[ 0.,  0.],
@@ -219,8 +224,8 @@ class Coords(object):
         gridpoint: tuple
             x-y integer values corresponding to the corresponding array index.
 
-        e.g.,
-
+        Examples
+        --------
         >>> ex = ExampleCoords()
         >>> ex.to_index(10, 20)
         (1, 2)
@@ -243,8 +248,8 @@ class Coords(object):
         pt : np.array
             x-y location corresponding to the (rounded) scalar location in the grid
 
-        e.g.,
-
+        Examples
+        --------
         >>> ex = ExampleCoords()
         >>> ex.to_gridpoint(3.5, 4)
         array([0., 0.])
@@ -269,8 +274,8 @@ class Coords(object):
         properties : dict
             Dictionary of property values at the given point.
 
-        e.g.,
-
+        Examples
+        --------
         >>> ex = ExampleCoords()
         >>> ex.get_properties(0, 0)
         {'a': False, 'v': 10.0, 'h': 0.0}
@@ -300,7 +305,8 @@ class Coords(object):
         value: int/bool/float/...
             Value to get from that point
 
-        e.g.,
+        Examples
+        --------
         >>> ex = ExampleCoords()
         >>> ex.get(10.0, 0.0, "v")
         10.0
@@ -333,7 +339,8 @@ class Coords(object):
         value: int/bool/float/...
             Value to set at that point
 
-        e.g.,
+        Examples
+        --------
         >>> ex = ExampleCoords()
         >>> ex.set(15.0, 12.0, "h", 100.0)
         >>> ex.get(15.0, 12.0, "h")
@@ -365,7 +372,8 @@ class Coords(object):
         inclusive : bool, optional
             whether to include the end of the range. The default is False.
 
-        e.g.,
+        Examples
+        --------
         >>> ex = ExampleCoords()
         >>> ex.set_range("h", 100.0, 20, 40, 20, 40)
         >>> ex.h
@@ -433,7 +441,8 @@ class Coords(object):
         value : int/bool/float or list...
             Value to set the points to. Can also pass a list.
 
-        e.g.,
+        Examples
+        --------
         >>> ex = ExampleCoords()
         >>> ex.set_pts([(50,50), [80,80]], "h", -20.0)
         >>> ex.get(50, 50, "h")
@@ -441,7 +450,8 @@ class Coords(object):
         >>> ex.get(80, 80, "h")
         -20.0
 
-        or,
+        or,:
+
         >>> ex.set_pts([(50,50), [80,80]], "h", [-10.0, -5.0])
         >>> ex.get(50, 50, "h")
         -10.0
@@ -485,6 +495,8 @@ class Coords(object):
         pt: np.array
             x-y position of the closest point satisfying the property.
 
+        Examples
+        --------
         Can be used with default options to check collections, e,g.:
 
         >>> ex = ExampleCoords()
@@ -554,7 +566,8 @@ class Coords(object):
         in: bool
             Whether the point is in the collection
 
-        e.g.,
+        Examples
+        --------
         >>> ex = ExampleCoords()
         >>> ex.in_area(0.4, 0.2, 'start')
         True
@@ -589,7 +602,8 @@ class Coords(object):
         replace : bool, optional
             Whether to select with replacement. The default is False.
 
-        e.g.,
+        Examples
+        --------
         >>> ex = ExampleCoords()
         >>> ex.set_rand_pts("h", 40, 5)
         >>> len(ex.find_all("h", 40))
@@ -631,7 +645,8 @@ class Coords(object):
         """
         Copy the Coords object.
 
-        e.g.,
+        Examples
+        --------
         >>> ex = ExampleCoords()
         >>> ex.set(0, 0, "h", 25.0)
         >>> cop = ex.copy()
@@ -664,7 +679,8 @@ class Coords(object):
         hist : History
             History of fields specified in track.
 
-        e.g.,
+        Examples
+        --------
         >>> ex = ExampleCoords()
         >>> h = ex.create_hist([0, 1, 2], "all")
         >>> h.keys()

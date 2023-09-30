@@ -29,8 +29,8 @@ class Environment(CommsFlow):
     ga: GeomArch
         Representaion of shapes/forms
 
-
-    e.g., an example of an environment::
+    Examples
+    --------
     >>> class ExampleEnvironment(Environment):
     ...    _init_c = ExampleCoords
     ...    _init_ga = ExGeomArch
@@ -67,19 +67,24 @@ class Environment(CommsFlow):
         """
         Copy the Environment.
 
+        Examples
+        --------
         Copies should be identical but independent after copying, e.g.:
+
         >>> e = ExampleEnvironment("env")
         >>> e.ga.geoms['ex_point'].s.occupied = True
         >>> e.c.h[0, 0] = 1
 
-        Given these changes, the copy should have the same states (and not default)::
+        Given these changes, the copy should have the same states (and not default):
+
         >>> d = e.copy()
         >>> d.ga.geoms['ex_point'].s.occupied
         True
         >>> d.c.h[0, 0]
         1.0
 
-        It should also be independent, meaning changes don't effect the original::
+        It should also be independent, meaning changes don't effect the original:
+
         >>> d.c.h[0, 1] = 1.0
         >>> e.c.h[0, 1]
         0.0
@@ -119,6 +124,8 @@ class Environment(CommsFlow):
         """
         Creates/returns history of states at self.h.
 
+        Examples
+        --------
         >>> e = ExampleEnvironment("env")
         >>> e.create_hist([1.0], 'default').flatten()
         c.h:                            array(1)

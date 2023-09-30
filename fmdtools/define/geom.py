@@ -79,7 +79,8 @@ class Geom(object):
         all_at : list
             Buffer/shape containing the pt.
 
-        e.g.,::
+        Examples
+        --------
         >>> exp = ExPoint()
         >>> exp.all_at(1.0, 1.0)
         ['shape', 'on']
@@ -128,6 +129,8 @@ class Geom(object):
         buffername : str
             Name of shape/buffer. Default is 'shape'.
 
+        Examples
+        --------
         >>> e = ExPoint()
         >>> e.vect_to_shape((0,0))
         array([[1.],
@@ -159,6 +162,8 @@ class Geom(object):
             Distance forward along line segment to project. Give a negative number to
             reverse directions
 
+        Examples
+        --------
         >>> e=ExLine(p={'xys':((0,0),(1,1), (1,0))})
         >>> e.vect_at_shape((0,0))
         array([[0.07071068],
@@ -187,8 +192,11 @@ class PointParam(Parameter):
     y : float
         y-location of point.
 
-    e.g., a point with center at 1.0, 1.0 and radius of 1.0 definining whether something
-    is on the point would be defined by the parameter::
+    Examples
+    --------
+    a point with center at 1.0, 1.0 and radius of 1.0 definining whether something
+    is on the point would be defined by the parameter:
+
     >>> class ExPointParam(PointParam):
     ...    x: float = 1.0
     ...    y: float = 1.0
@@ -212,7 +220,10 @@ class GeomPoint(Geom):
     Point geometry representing x-y coordinate and buffers.
 
     Defined by parameter (x, y and buffer(s)) as well as states (properties of
-    of point). e.g.::
+    of point).
+
+    Examples
+    --------
     >>> class ExPoint(GeomPoint):
     ...    _init_p = ExPointParam
     ...    _init_s = ExGeomState
@@ -224,11 +235,13 @@ class GeomPoint(Geom):
     >>> exp.at((1.0, 0.1), "on")
     True
 
-    Additionally, note the underlying shapely attribute at .shape::
+    Additionally, note the underlying shapely attribute at .shape:
+
     >>> type(exp.shape)
     <class 'shapely.geometry.point.Point'>
 
-    as well as the buffer (on)::
+    as well as the buffer (on):
+
     >>> type(exp.on)
     <class 'shapely.geometry.polygon.Polygon'>
     """
@@ -275,8 +288,11 @@ class LineParam(Parameter):
     xys : tuple
         tuple of points ((x1, y1), ...) defining shapely.LineString.
 
-    e.g., a point with ends at (0.0, 0.0) and (1.0, 1.0) and radius of 1.0 defining
-    whether something is on the line would be defined by the parameter::
+    Examples
+    --------
+    A point with ends at (0.0, 0.0) and (1.0, 1.0) and radius of 1.0 defining
+    whether something is on the line would be defined by the parameter:
+
     >>> class ExLineParam(LineParam):
     ...     xys: tuple = ((0.0, 0.0), (1.0, 1.0))
     ...     buffer_on: float = 1.0
@@ -303,7 +319,10 @@ class GeomLine(Geom):
     """Point geometry representing a line and possible buffers.
 
     Defined by parameter (xys and buffer(s)) as well as states (properties of
-    of point). e.g.::
+    of point).
+
+    Examples
+    --------
     >>> class ExLine(GeomLine):
     ...    _init_p = ExLineParam
     ...    _init_s = ExGeomState
@@ -315,11 +334,13 @@ class GeomLine(Geom):
     >>> exp.at((2.0, 2.0), "on")
     False
 
-    Additionally, note the underlying shapely attribute at .shape::
+    Additionally, note the underlying shapely attribute at .shape ::
+
     >>> type(exp.shape)
     <class 'shapely.geometry.linestring.LineString'>
 
-    as well as the buffer (on)::
+    As well as the buffer (on)::
+
     >>> type(exp.on)
     <class 'shapely.geometry.polygon.Polygon'>
     """
@@ -346,7 +367,10 @@ class PolyParam(Parameter):
     holes : tuple
         tuple of points defining holes.
 
-    e.g., the following PolyParam defines a hollow right triangle::
+    Examples
+    --------
+    The following PolyParam defines a hollow right triangle:
+
     >>> class ExPolyParam(PolyParam):
     ...     shell: tuple = ((0.0, 0.0), (1.0, 0.0), (1.0, 1.0))
     ...     holes: tuple = (((0.3, 0.2), (0.6, 0.2), (0.6, 0.5)), )
@@ -375,7 +399,10 @@ class GeomPoly(Geom):
     Polygon geometry defining shape and possible buffers.
 
     Defined by PolyParam, which is used to instantiate the Polygon class. Also may
-    contain a state for the given status (e.g., occupied, red/blue, etc.). e.g.::
+    contain a state for the given status (e.g., occupied, red/blue, etc.).
+
+    Examples
+    --------
     >>> class ExPoly(GeomPoly):
     ...    _init_p = ExPolyParam
     ...    _init_s = ExGeomState
@@ -385,7 +412,8 @@ class GeomPoly(Geom):
     >>> egp.at((0.4, 0.3))
     False
 
-    Additionally, note the underlying shapely attribute at .shape::
+    Additionally, note the underlying shapely attribute at .shape:
+
     >>> type(egp.shape)
     <class 'shapely.geometry.polygon.Polygon'>
     """
@@ -406,7 +434,10 @@ class GeomArch(object):
     Agglomeration of multiple geoms/shapes.
 
     Architecture is defined using add_shape method in user-defined init_shapes method.
-    e.g., for an architecture with the geoms already defined::
+
+    Examples
+    --------
+    for an architecture with the geoms already defined:
     >>> class ExGeomArch(GeomArch):
     ...    def init_geoms(self):
     ...        self.add_geom("ex_point", ExPoint)
@@ -414,7 +445,8 @@ class GeomArch(object):
     ...        self.add_geom("ex_poly", ExPoly)
 
     This can then be used in containing classes (e.g., environments) that need multiple
-    geoms. We can then access the individual geoms in the geoms dict, e.g.:...
+    geoms. We can then access the individual geoms in the geoms dict, e.g.:
+
     >>> ega = ExGeomArch()
     >>> ega.geoms['ex_point'].s
     ExGeomState(occupied=False)
@@ -489,7 +521,8 @@ class GeomArch(object):
         all_at : dict
             Names of geoms where the point is at (and their properties)
 
-        e.g.,::
+        Examples
+        --------
         >>> exga = ExGeomArch()
         >>> exga.all_at(1.0, 1.0)
         {'ex_point': ['shape', 'on'], 'ex_line': ['shape', 'on'], 'ex_poly': ['shape']}
@@ -509,6 +542,8 @@ class GeomArch(object):
         """
         Create history for the architecture.
 
+        Examples
+        --------
         >>> ega = ExGeomArch()
         >>> h = ega.create_hist([0.0], 'default')
         >>> h.flatten()
@@ -540,6 +575,8 @@ class GeomArch(object):
         """
         Return all mutables (geom states).
 
+        Examples
+        --------
         >>> ega = ExGeomArch()
         >>> ega.return_mutables()
         (False, False, False)
