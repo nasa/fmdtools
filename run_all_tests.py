@@ -46,6 +46,7 @@ if __name__=="__main__":
     # retcode = pytest.main(["--nbmake", *fast_notebooks])
 
     slow_notebooks = ["examples/multirotor/Demonstration.ipynb",
+                      "examples/multirotor/Urban_Drone_Demo.ipynb",
                       "examples/multirotor/Multirotor_Optimization.ipynb",
                       "examples/pump/AST_Sampling.ipynb",
                       "examples/pump/Optimization.ipynb",
