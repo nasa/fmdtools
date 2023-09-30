@@ -197,6 +197,12 @@
 <li class="toctree-l4"><a class="reference internal" href="../examples/multirotor/Demonstration.html#Hierarchical-Model">Hierarchical Model</a></li>
 </ul>
 </li>
+<li class="toctree-l3"><a class="reference internal" href="../examples/multirotor/Urban_Drone_Demo.html">Urban Drone Demo</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../examples/multirotor/Urban_Drone_Demo.html#Model-Overview">Model Overview</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../examples/multirotor/Urban_Drone_Demo.html#Nominal-Simulation">Nominal Simulation</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../examples/multirotor/Urban_Drone_Demo.html#Resilience-model">Resilience model</a></li>
+</ul>
+</li>
 <li class="toctree-l3"><a class="reference internal" href="../examples/multirotor/Multirotor_Optimization.html">Integrated Resilience Optimization Architectures</a><ul>
 <li class="toctree-l4"><a class="reference internal" href="../examples/multirotor/Multirotor_Optimization.html#Design-Model">Design Model</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../examples/multirotor/Multirotor_Optimization.html#Operational-Model">Operational Model</a></li>
@@ -358,7 +364,6 @@
 </ul>
 </li>
 <li class="toctree-l3"><a class="reference internal" href="#module-fmdtools.define.state">fmdtools.define.state</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="#fmdtools.define.state.ExamplePoint"><code class="docutils literal notranslate"><span class="pre">ExamplePoint</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#fmdtools.define.state.State"><code class="docutils literal notranslate"><span class="pre">State</span></code></a></li>
 </ul>
 </li>
@@ -368,14 +373,6 @@
 </ul>
 </li>
 <li class="toctree-l3"><a class="reference internal" href="#module-fmdtools.define.geom">fmdtools.define.geom</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="#fmdtools.define.geom.ExGeomArch"><code class="docutils literal notranslate"><span class="pre">ExGeomArch</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="#fmdtools.define.geom.ExGeomState"><code class="docutils literal notranslate"><span class="pre">ExGeomState</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="#fmdtools.define.geom.ExLine"><code class="docutils literal notranslate"><span class="pre">ExLine</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="#fmdtools.define.geom.ExLineParam"><code class="docutils literal notranslate"><span class="pre">ExLineParam</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="#fmdtools.define.geom.ExPoint"><code class="docutils literal notranslate"><span class="pre">ExPoint</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="#fmdtools.define.geom.ExPointParam"><code class="docutils literal notranslate"><span class="pre">ExPointParam</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="#fmdtools.define.geom.ExPoly"><code class="docutils literal notranslate"><span class="pre">ExPoly</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="#fmdtools.define.geom.ExPolyParam"><code class="docutils literal notranslate"><span class="pre">ExPolyParam</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#fmdtools.define.geom.Geom"><code class="docutils literal notranslate"><span class="pre">Geom</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#fmdtools.define.geom.GeomArch"><code class="docutils literal notranslate"><span class="pre">GeomArch</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#fmdtools.define.geom.GeomLine"><code class="docutils literal notranslate"><span class="pre">GeomLine</span></code></a></li>
@@ -388,14 +385,11 @@
 </li>
 <li class="toctree-l3"><a class="reference internal" href="#module-fmdtools.define.environment">fmdtools.define.environment</a><ul>
 <li class="toctree-l4"><a class="reference internal" href="#fmdtools.define.environment.Environment"><code class="docutils literal notranslate"><span class="pre">Environment</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="#fmdtools.define.environment.ExampleEnvironment"><code class="docutils literal notranslate"><span class="pre">ExampleEnvironment</span></code></a></li>
 </ul>
 </li>
 <li class="toctree-l3"><a class="reference internal" href="#module-fmdtools.define.coords">fmdtools.define.coords</a><ul>
 <li class="toctree-l4"><a class="reference internal" href="#fmdtools.define.coords.Coords"><code class="docutils literal notranslate"><span class="pre">Coords</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#fmdtools.define.coords.CoordsParam"><code class="docutils literal notranslate"><span class="pre">CoordsParam</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="#fmdtools.define.coords.ExampleCoords"><code class="docutils literal notranslate"><span class="pre">ExampleCoords</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="#fmdtools.define.coords.ExampleCoordsParam"><code class="docutils literal notranslate"><span class="pre">ExampleCoordsParam</span></code></a></li>
 </ul>
 </li>
 </ul>
@@ -3553,23 +3547,6 @@ attributes that change over time.</p>
 <li><p><a class="reference internal" href="#fmdtools.define.state.State" title="fmdtools.define.state.State"><code class="xref py py-class docutils literal notranslate"><span class="pre">State</span></code></a>: Superclass for Model States.</p></li>
 </ul>
 <dl class="py class">
-<dt class="sig sig-object py" id="fmdtools.define.state.ExamplePoint">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">fmdtools.define.state.</span></span><span class="sig-name descname"><span class="pre">ExamplePoint</span></span><a class="headerlink" href="#fmdtools.define.state.ExamplePoint" title="Link to this definition"></a></dt>
-<dd><p>Bases: <a class="reference internal" href="#fmdtools.define.state.State" title="fmdtools.define.state.State"><code class="xref py py-class docutils literal notranslate"><span class="pre">State</span></code></a></p>
-<p>Example State class used for docstring tests</p>
-<dl class="py attribute">
-<dt class="sig sig-object py" id="fmdtools.define.state.ExamplePoint.x">
-<span class="sig-name descname"><span class="pre">x</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">float</span></em><a class="headerlink" href="#fmdtools.define.state.ExamplePoint.x" title="Link to this definition"></a></dt>
-<dd></dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="fmdtools.define.state.ExamplePoint.y">
-<span class="sig-name descname"><span class="pre">y</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">float</span></em><a class="headerlink" href="#fmdtools.define.state.ExamplePoint.y" title="Link to this definition"></a></dt>
-<dd></dd></dl>
-
-</dd></dl>
-
-<dl class="py class">
 <dt class="sig sig-object py" id="fmdtools.define.state.State">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">fmdtools.define.state.</span></span><span class="sig-name descname"><span class="pre">State</span></span><a class="headerlink" href="#fmdtools.define.state.State" title="Link to this definition"></a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">dataobject</span></code></p>
@@ -3665,11 +3642,6 @@ The default is None.</p></li>
 </dd>
 </dl>
 </dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="fmdtools.define.state.State.default_track">
-<span class="sig-name descname"><span class="pre">default_track</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'all'</span></em><a class="headerlink" href="#fmdtools.define.state.State.default_track" title="Link to this definition"></a></dt>
-<dd></dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="fmdtools.define.state.State.div">
@@ -3823,11 +3795,6 @@ reducing length/adding clarity to assignment statements in __init__ methods
 </pre></div>
 </div>
 </dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="fmdtools.define.state.State.values">
-<span class="sig-name descname"><span class="pre">values</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.define.state.State.values" title="Link to this definition"></a></dt>
-<dd></dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="fmdtools.define.state.State.warn">
@@ -4182,110 +4149,6 @@ allocations.</p>
 </dd>
 </dl>
 <dl class="py class">
-<dt class="sig sig-object py" id="fmdtools.define.geom.ExGeomArch">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">fmdtools.define.geom.</span></span><span class="sig-name descname"><span class="pre">ExGeomArch</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">p</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">{}</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.define.geom.ExGeomArch" title="Link to this definition"></a></dt>
-<dd><p>Bases: <a class="reference internal" href="#fmdtools.define.geom.GeomArch" title="fmdtools.define.geom.GeomArch"><code class="xref py py-class docutils literal notranslate"><span class="pre">GeomArch</span></code></a></p>
-<p>Example Geometric Architecture for testing etc.</p>
-<dl class="py method">
-<dt class="sig sig-object py" id="fmdtools.define.geom.ExGeomArch.init_geoms">
-<span class="sig-name descname"><span class="pre">init_geoms</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.define.geom.ExGeomArch.init_geoms" title="Link to this definition"></a></dt>
-<dd><p>Initialize example geoms.</p>
-</dd></dl>
-
-</dd></dl>
-
-<dl class="py class">
-<dt class="sig sig-object py" id="fmdtools.define.geom.ExGeomState">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">fmdtools.define.geom.</span></span><span class="sig-name descname"><span class="pre">ExGeomState</span></span><a class="headerlink" href="#fmdtools.define.geom.ExGeomState" title="Link to this definition"></a></dt>
-<dd><p>Bases: <a class="reference internal" href="#fmdtools.define.state.State" title="fmdtools.define.state.State"><code class="xref py py-class docutils literal notranslate"><span class="pre">State</span></code></a></p>
-<p>Example Geom state for testing.</p>
-<p>Has ‘occupied’ property defining whether something is at the geom or not.</p>
-<dl class="py attribute">
-<dt class="sig sig-object py" id="fmdtools.define.geom.ExGeomState.occupied">
-<span class="sig-name descname"><span class="pre">occupied</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">bool</span></em><a class="headerlink" href="#fmdtools.define.geom.ExGeomState.occupied" title="Link to this definition"></a></dt>
-<dd></dd></dl>
-
-</dd></dl>
-
-<dl class="py class">
-<dt class="sig sig-object py" id="fmdtools.define.geom.ExLine">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">fmdtools.define.geom.</span></span><span class="sig-name descname"><span class="pre">ExLine</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">s</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">{}</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">p</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">{}</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.define.geom.ExLine" title="Link to this definition"></a></dt>
-<dd><p>Bases: <a class="reference internal" href="#fmdtools.define.geom.GeomLine" title="fmdtools.define.geom.GeomLine"><code class="xref py py-class docutils literal notranslate"><span class="pre">GeomLine</span></code></a></p>
-<p>Example GeomLine to use in testing.</p>
-</dd></dl>
-
-<dl class="py class">
-<dt class="sig sig-object py" id="fmdtools.define.geom.ExLineParam">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">fmdtools.define.geom.</span></span><span class="sig-name descname"><span class="pre">ExLineParam</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">strict_immutability</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">check_type</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">check_pickle</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.define.geom.ExLineParam" title="Link to this definition"></a></dt>
-<dd><p>Bases: <a class="reference internal" href="#fmdtools.define.geom.LineParam" title="fmdtools.define.geom.LineParam"><code class="xref py py-class docutils literal notranslate"><span class="pre">LineParam</span></code></a></p>
-<p>Example parameter defining a line with a given buffer ‘on’.</p>
-<dl class="py attribute">
-<dt class="sig sig-object py" id="fmdtools.define.geom.ExLineParam.buffer_on">
-<span class="sig-name descname"><span class="pre">buffer_on</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">float</span></em><a class="headerlink" href="#fmdtools.define.geom.ExLineParam.buffer_on" title="Link to this definition"></a></dt>
-<dd></dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="fmdtools.define.geom.ExLineParam.xys">
-<span class="sig-name descname"><span class="pre">xys</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">tuple</span></em><a class="headerlink" href="#fmdtools.define.geom.ExLineParam.xys" title="Link to this definition"></a></dt>
-<dd></dd></dl>
-
-</dd></dl>
-
-<dl class="py class">
-<dt class="sig sig-object py" id="fmdtools.define.geom.ExPoint">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">fmdtools.define.geom.</span></span><span class="sig-name descname"><span class="pre">ExPoint</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">s</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">{}</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">p</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">{}</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.define.geom.ExPoint" title="Link to this definition"></a></dt>
-<dd><p>Bases: <a class="reference internal" href="#fmdtools.define.geom.GeomPoint" title="fmdtools.define.geom.GeomPoint"><code class="xref py py-class docutils literal notranslate"><span class="pre">GeomPoint</span></code></a></p>
-<p>Example point for testing.</p>
-</dd></dl>
-
-<dl class="py class">
-<dt class="sig sig-object py" id="fmdtools.define.geom.ExPointParam">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">fmdtools.define.geom.</span></span><span class="sig-name descname"><span class="pre">ExPointParam</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">strict_immutability</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">check_type</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">check_pickle</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.define.geom.ExPointParam" title="Link to this definition"></a></dt>
-<dd><p>Bases: <a class="reference internal" href="#fmdtools.define.geom.PointParam" title="fmdtools.define.geom.PointParam"><code class="xref py py-class docutils literal notranslate"><span class="pre">PointParam</span></code></a></p>
-<p>Example point parameter for testing.</p>
-<p>Has a default center at (1.0, 1.0) and radius defining “on” of 1.0.</p>
-<dl class="py attribute">
-<dt class="sig sig-object py" id="fmdtools.define.geom.ExPointParam.buffer_on">
-<span class="sig-name descname"><span class="pre">buffer_on</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">float</span></em><a class="headerlink" href="#fmdtools.define.geom.ExPointParam.buffer_on" title="Link to this definition"></a></dt>
-<dd></dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="fmdtools.define.geom.ExPointParam.x">
-<span class="sig-name descname"><span class="pre">x</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">float</span></em><a class="headerlink" href="#fmdtools.define.geom.ExPointParam.x" title="Link to this definition"></a></dt>
-<dd></dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="fmdtools.define.geom.ExPointParam.y">
-<span class="sig-name descname"><span class="pre">y</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">float</span></em><a class="headerlink" href="#fmdtools.define.geom.ExPointParam.y" title="Link to this definition"></a></dt>
-<dd></dd></dl>
-
-</dd></dl>
-
-<dl class="py class">
-<dt class="sig sig-object py" id="fmdtools.define.geom.ExPoly">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">fmdtools.define.geom.</span></span><span class="sig-name descname"><span class="pre">ExPoly</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">s</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">{}</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">p</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">{}</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.define.geom.ExPoly" title="Link to this definition"></a></dt>
-<dd><p>Bases: <a class="reference internal" href="#fmdtools.define.geom.GeomPoly" title="fmdtools.define.geom.GeomPoly"><code class="xref py py-class docutils literal notranslate"><span class="pre">GeomPoly</span></code></a></p>
-<p>Example Polygon for use in testing.</p>
-</dd></dl>
-
-<dl class="py class">
-<dt class="sig sig-object py" id="fmdtools.define.geom.ExPolyParam">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">fmdtools.define.geom.</span></span><span class="sig-name descname"><span class="pre">ExPolyParam</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">strict_immutability</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">check_type</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">check_pickle</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.define.geom.ExPolyParam" title="Link to this definition"></a></dt>
-<dd><p>Bases: <a class="reference internal" href="#fmdtools.define.geom.PolyParam" title="fmdtools.define.geom.PolyParam"><code class="xref py py-class docutils literal notranslate"><span class="pre">PolyParam</span></code></a></p>
-<p>Example polygon parameter defining a basic triangle for use in testing.</p>
-<dl class="py attribute">
-<dt class="sig sig-object py" id="fmdtools.define.geom.ExPolyParam.holes">
-<span class="sig-name descname"><span class="pre">holes</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">tuple</span></em><a class="headerlink" href="#fmdtools.define.geom.ExPolyParam.holes" title="Link to this definition"></a></dt>
-<dd></dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="fmdtools.define.geom.ExPolyParam.shell">
-<span class="sig-name descname"><span class="pre">shell</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">tuple</span></em><a class="headerlink" href="#fmdtools.define.geom.ExPolyParam.shell" title="Link to this definition"></a></dt>
-<dd></dd></dl>
-
-</dd></dl>
-
-<dl class="py class">
 <dt class="sig sig-object py" id="fmdtools.define.geom.Geom">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">fmdtools.define.geom.</span></span><span class="sig-name descname"><span class="pre">Geom</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">s</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">{}</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">p</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">{}</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.define.geom.Geom" title="Link to this definition"></a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
@@ -4309,26 +4172,23 @@ convey the spacial properties of a model.</p>
 <dd class="field-odd"><p><strong>*pt</strong> (<em>x</em><em>,</em><em>y</em><em>,</em><em>z</em>) – Locations of x, y, z coordinates.</p>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p><ul class="simple">
-<li><p><strong>all_at</strong> (<em>list</em>) – Buffer/shape containing the pt.</p></li>
-<li><p><em>e.g.,::</em></p></li>
-<li><p><em>&gt;&gt;&gt; exp = ExPoint()</em></p></li>
-<li><p><em>&gt;&gt;&gt; exp.all_at(1.0, 1.0)</em></p></li>
-<li><p><em>[‘shape’, ‘on’]</em></p></li>
-<li><p><em>&gt;&gt;&gt; exp.all_at(1.0, 0.1)</em></p></li>
-<li><p><em>[‘on’]</em></p></li>
-<li><p><em>&gt;&gt;&gt; exp.all_at(0.0, 0.0)</em></p></li>
-<li><p><em>[]</em></p></li>
-</ul>
-</p>
+<dd class="field-even"><p><strong>all_at</strong> – Buffer/shape containing the pt.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>list</p>
 </dd>
 </dl>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">exp</span> <span class="o">=</span> <span class="n">ExPoint</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">exp</span><span class="o">.</span><span class="n">all_at</span><span class="p">(</span><span class="mf">1.0</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">)</span>
+<span class="go">[&#39;shape&#39;, &#39;on&#39;]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">exp</span><span class="o">.</span><span class="n">all_at</span><span class="p">(</span><span class="mf">1.0</span><span class="p">,</span> <span class="mf">0.1</span><span class="p">)</span>
+<span class="go">[&#39;on&#39;]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">exp</span><span class="o">.</span><span class="n">all_at</span><span class="p">(</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">)</span>
+<span class="go">[]</span>
+</pre></div>
+</div>
 </dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="fmdtools.define.geom.Geom.all_possible">
-<span class="sig-name descname"><span class="pre">all_possible</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">['s']</span></em><a class="headerlink" href="#fmdtools.define.geom.Geom.all_possible" title="Link to this definition"></a></dt>
-<dd></dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="fmdtools.define.geom.Geom.at">
@@ -4357,25 +4217,10 @@ convey the spacial properties of a model.</p>
 </dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="fmdtools.define.geom.Geom.create_hist">
-<span class="sig-name descname"><span class="pre">create_hist</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">timerange</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">track</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.define.geom.Geom.create_hist" title="Link to this definition"></a></dt>
-<dd></dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="fmdtools.define.geom.Geom.default_track">
-<span class="sig-name descname"><span class="pre">default_track</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">['s']</span></em><a class="headerlink" href="#fmdtools.define.geom.Geom.default_track" title="Link to this definition"></a></dt>
-<dd></dd></dl>
-
-<dl class="py method">
 <dt class="sig sig-object py" id="fmdtools.define.geom.Geom.reset">
 <span class="sig-name descname"><span class="pre">reset</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.define.geom.Geom.reset" title="Link to this definition"></a></dt>
 <dd><p>Reset the Geom to initial state.</p>
 </dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="fmdtools.define.geom.Geom.return_mutables">
-<span class="sig-name descname"><span class="pre">return_mutables</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.define.geom.Geom.return_mutables" title="Link to this definition"></a></dt>
-<dd></dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="fmdtools.define.geom.Geom.vect_at_shape">
@@ -4388,18 +4233,19 @@ convey the spacial properties of a model.</p>
 <li><p><strong>buffername</strong> (<em>str</em>) – Name of shape/buffer. Default is ‘shape’.</p></li>
 <li><p><strong>dist_forward</strong> (<em>float</em>) – Distance forward along line segment to project. Give a negative number to
 reverse directions</p></li>
-<li><p><strong>e=ExLine</strong><strong>(</strong><strong>p={'xys'</strong> (<em>&gt;&gt;&gt;</em>) – </p></li>
-<li><p><strong>e.vect_at_shape</strong><strong>(</strong><strong>(</strong><strong>0</strong> (<em>&gt;&gt;&gt;</em>) – </p></li>
-<li><p><strong>0</strong><strong>)</strong><strong>)</strong> – </p></li>
-<li><p><strong>array</strong><strong>(</strong><strong>[</strong><strong>[</strong><strong>0.07071068</strong><strong>]</strong> – [0.07071068]])</p></li>
 </ul>
 </dd>
 </dl>
-<p>:param : [0.07071068]])
-:param &gt;&gt;&gt; e.vect_at_shape((1.5:
-:param 0.5)):
-:param array([[ 0. ]: [-0.1]])
-:param : [-0.1]])</p>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">e</span><span class="o">=</span><span class="n">ExLine</span><span class="p">(</span><span class="n">p</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;xys&#39;</span><span class="p">:((</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">),(</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">),</span> <span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">))})</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">e</span><span class="o">.</span><span class="n">vect_at_shape</span><span class="p">((</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">))</span>
+<span class="go">array([[0.07071068],</span>
+<span class="go">       [0.07071068]])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">e</span><span class="o">.</span><span class="n">vect_at_shape</span><span class="p">((</span><span class="mf">1.5</span><span class="p">,</span><span class="mf">0.5</span><span class="p">))</span>
+<span class="go">array([[ 0. ],</span>
+<span class="go">       [-0.1]])</span>
+</pre></div>
+</div>
 </dd></dl>
 
 <dl class="py method">
@@ -4411,22 +4257,22 @@ reverse directions</p></li>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>pt</strong> (<em>tuple/list</em>) – Point to get vector from</p></li>
 <li><p><strong>buffername</strong> (<em>str</em>) – Name of shape/buffer. Default is ‘shape’.</p></li>
-<li><p><strong>ExPoint</strong><strong>(</strong><strong>)</strong> (<em>&gt;&gt;&gt; e =</em>) – </p></li>
-<li><p><strong>e.vect_to_shape</strong><strong>(</strong><strong>(</strong><strong>0</strong> (<em>&gt;&gt;&gt;</em>) – </p></li>
-<li><p><strong>0</strong><strong>)</strong><strong>)</strong> – </p></li>
-<li><p><strong>array</strong><strong>(</strong><strong>[</strong><strong>[</strong><strong>1.</strong><strong>]</strong> – [1.]])</p></li>
 </ul>
 </dd>
 </dl>
-<p>:param : [1.]])
-:param &gt;&gt;&gt; e.vect_to_shape((2:
-:param 0)):
-:param array([[-1.]: [ 1.]])
-:param : [ 1.]])
-:param &gt;&gt;&gt; e.vect_to_shape((1:
-:param 1)):
-:param array([[0.]: [0.]])
-:param : [0.]])</p>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">e</span> <span class="o">=</span> <span class="n">ExPoint</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">e</span><span class="o">.</span><span class="n">vect_to_shape</span><span class="p">((</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">))</span>
+<span class="go">array([[1.],</span>
+<span class="go">       [1.]])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">e</span><span class="o">.</span><span class="n">vect_to_shape</span><span class="p">((</span><span class="mi">2</span><span class="p">,</span><span class="mi">0</span><span class="p">))</span>
+<span class="go">array([[-1.],</span>
+<span class="go">       [ 1.]])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">e</span><span class="o">.</span><span class="n">vect_to_shape</span><span class="p">((</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">))</span>
+<span class="go">array([[0.],</span>
+<span class="go">       [0.]])</span>
+</pre></div>
+</div>
 </dd></dl>
 
 </section>
@@ -4437,18 +4283,21 @@ reverse directions</p></li>
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">fmdtools.define.geom.</span></span><span class="sig-name descname"><span class="pre">GeomArch</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">p</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">{}</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.define.geom.GeomArch" title="Link to this definition"></a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
 <p>Agglomeration of multiple geoms/shapes.</p>
-<p>Architecture is defined using add_shape method in user-defined init_shapes method.
-e.g., for an architecture with the geoms already defined::
+<p>Architecture is defined using add_shape method in user-defined init_shapes method.</p>
+<p class="rubric">Examples</p>
+<p>for an architecture with the geoms already defined:
 &gt;&gt;&gt; class ExGeomArch(GeomArch):
 …    def init_geoms(self):
 …        self.add_geom(“ex_point”, ExPoint)
 …        self.add_geom(“ex_line”, ExLine)
 …        self.add_geom(“ex_poly”, ExPoly)</p>
 <p>This can then be used in containing classes (e.g., environments) that need multiple
-geoms. We can then access the individual geoms in the geoms dict, e.g.:…
-&gt;&gt;&gt; ega = ExGeomArch()
-&gt;&gt;&gt; ega.geoms[‘ex_point’].s
-ExGeomState(occupied=False)</p>
+geoms. We can then access the individual geoms in the geoms dict, e.g.:</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">ega</span> <span class="o">=</span> <span class="n">ExGeomArch</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ega</span><span class="o">.</span><span class="n">geoms</span><span class="p">[</span><span class="s1">&#39;ex_point&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">s</span>
+<span class="go">ExGeomState(occupied=False)</span>
+</pre></div>
+</div>
 <dl class="py method">
 <dt class="sig sig-object py" id="fmdtools.define.geom.GeomArch.add_geom">
 <span class="sig-name descname"><span class="pre">add_geom</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gclass</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.define.geom.GeomArch.add_geom" title="Link to this definition"></a></dt>
@@ -4474,26 +4323,23 @@ ExGeomState(occupied=False)</p>
 <dd class="field-odd"><p><strong>*pt</strong> (<em>x</em><em>,</em><em>y</em>) – x, y, z location to check.</p>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p><ul class="simple">
-<li><p><strong>all_at</strong> (<em>dict</em>) – Names of geoms where the point is at (and their properties)</p></li>
-<li><p><em>e.g.,::</em></p></li>
-<li><p><em>&gt;&gt;&gt; exga = ExGeomArch()</em></p></li>
-<li><p><em>&gt;&gt;&gt; exga.all_at(1.0, 1.0)</em></p></li>
-<li><p><strong>{‘ex_point’</strong> (<em>[‘shape’, ‘on’], ‘ex_line’: [‘shape’, ‘on’], ‘ex_poly’: [‘shape’]}</em>)</p></li>
-<li><p><em>&gt;&gt;&gt; exga.all_at(0.0, 0.0)</em></p></li>
-<li><p><strong>{‘ex_line’</strong> (<em>[‘shape’, ‘on’], ‘ex_poly’: [‘shape’]}</em>)</p></li>
-<li><p><em>&gt;&gt;&gt; exga.all_at(0.4, 0.3)</em></p></li>
-<li><p><strong>{‘ex_point’</strong> (<em>[‘on’], ‘ex_line’: [‘on’]}</em>)</p></li>
-</ul>
-</p>
+<dd class="field-even"><p><strong>all_at</strong> – Names of geoms where the point is at (and their properties)</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>dict</p>
 </dd>
 </dl>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">exga</span> <span class="o">=</span> <span class="n">ExGeomArch</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">exga</span><span class="o">.</span><span class="n">all_at</span><span class="p">(</span><span class="mf">1.0</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">)</span>
+<span class="go">{&#39;ex_point&#39;: [&#39;shape&#39;, &#39;on&#39;], &#39;ex_line&#39;: [&#39;shape&#39;, &#39;on&#39;], &#39;ex_poly&#39;: [&#39;shape&#39;]}</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">exga</span><span class="o">.</span><span class="n">all_at</span><span class="p">(</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">)</span>
+<span class="go">{&#39;ex_line&#39;: [&#39;shape&#39;, &#39;on&#39;], &#39;ex_poly&#39;: [&#39;shape&#39;]}</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">exga</span><span class="o">.</span><span class="n">all_at</span><span class="p">(</span><span class="mf">0.4</span><span class="p">,</span> <span class="mf">0.3</span><span class="p">)</span>
+<span class="go">{&#39;ex_point&#39;: [&#39;on&#39;], &#39;ex_line&#39;: [&#39;on&#39;]}</span>
+</pre></div>
+</div>
 </dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="fmdtools.define.geom.GeomArch.all_possible">
-<span class="sig-name descname"><span class="pre">all_possible</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">['geoms']</span></em><a class="headerlink" href="#fmdtools.define.geom.GeomArch.all_possible" title="Link to this definition"></a></dt>
-<dd></dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="fmdtools.define.geom.GeomArch.copy">
@@ -4505,6 +4351,7 @@ ExGeomState(occupied=False)</p>
 <dt class="sig sig-object py" id="fmdtools.define.geom.GeomArch.create_hist">
 <span class="sig-name descname"><span class="pre">create_hist</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">timerange</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">track</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.define.geom.GeomArch.create_hist" title="Link to this definition"></a></dt>
 <dd><p>Create history for the architecture.</p>
+<p class="rubric">Examples</p>
 <div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">ega</span> <span class="o">=</span> <span class="n">ExGeomArch</span><span class="p">()</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">h</span> <span class="o">=</span> <span class="n">ega</span><span class="o">.</span><span class="n">create_hist</span><span class="p">([</span><span class="mf">0.0</span><span class="p">],</span> <span class="s1">&#39;default&#39;</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">h</span><span class="o">.</span><span class="n">flatten</span><span class="p">()</span>
@@ -4515,11 +4362,6 @@ ExGeomState(occupied=False)</p>
 </div>
 </dd></dl>
 
-<dl class="py attribute">
-<dt class="sig sig-object py" id="fmdtools.define.geom.GeomArch.default_track">
-<span class="sig-name descname"><span class="pre">default_track</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">['geoms']</span></em><a class="headerlink" href="#fmdtools.define.geom.GeomArch.default_track" title="Link to this definition"></a></dt>
-<dd></dd></dl>
-
 <dl class="py method">
 <dt class="sig sig-object py" id="fmdtools.define.geom.GeomArch.init_geoms">
 <span class="sig-name descname"><span class="pre">init_geoms</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.define.geom.GeomArch.init_geoms" title="Link to this definition"></a></dt>
@@ -4527,25 +4369,16 @@ ExGeomState(occupied=False)</p>
 </dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="fmdtools.define.geom.GeomArch.reset">
-<span class="sig-name descname"><span class="pre">reset</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.define.geom.GeomArch.reset" title="Link to this definition"></a></dt>
-<dd></dd></dl>
-
-<dl class="py method">
 <dt class="sig sig-object py" id="fmdtools.define.geom.GeomArch.return_mutables">
 <span class="sig-name descname"><span class="pre">return_mutables</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.define.geom.GeomArch.return_mutables" title="Link to this definition"></a></dt>
 <dd><p>Return all mutables (geom states).</p>
+<p class="rubric">Examples</p>
 <div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">ega</span> <span class="o">=</span> <span class="n">ExGeomArch</span><span class="p">()</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">ega</span><span class="o">.</span><span class="n">return_mutables</span><span class="p">()</span>
 <span class="go">(False, False, False)</span>
 </pre></div>
 </div>
 </dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="fmdtools.define.geom.GeomArch.return_states">
-<span class="sig-name descname"><span class="pre">return_states</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.define.geom.GeomArch.return_states" title="Link to this definition"></a></dt>
-<dd></dd></dl>
 
 </dd></dl>
 
@@ -4555,23 +4388,30 @@ ExGeomState(occupied=False)</p>
 <dd><p>Bases: <a class="reference internal" href="#fmdtools.define.geom.Geom" title="fmdtools.define.geom.Geom"><code class="xref py py-class docutils literal notranslate"><span class="pre">Geom</span></code></a></p>
 <p>Point geometry representing a line and possible buffers.</p>
 <p>Defined by parameter (xys and buffer(s)) as well as states (properties of
-of point). e.g.::
-&gt;&gt;&gt; class ExLine(GeomLine):
-…    _init_p = ExLineParam
-…    _init_s = ExGeomState
-&gt;&gt;&gt; exp = ExLine()
-&gt;&gt;&gt; exp.at((1.0, 1.0), “on”)
-True
-&gt;&gt;&gt; exp.at((0.0, 0.0), “on”)
-True
-&gt;&gt;&gt; exp.at((2.0, 2.0), “on”)
-False</p>
-<p>Additionally, note the underlying shapely attribute at .shape::
-&gt;&gt;&gt; type(exp.shape)
-&lt;class ‘shapely.geometry.linestring.LineString’&gt;</p>
-<p>as well as the buffer (on)::
-&gt;&gt;&gt; type(exp.on)
-&lt;class ‘shapely.geometry.polygon.Polygon’&gt;</p>
+of point).</p>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="k">class</span> <span class="nc">ExLine</span><span class="p">(</span><span class="n">GeomLine</span><span class="p">):</span>
+<span class="gp">... </span>   <span class="n">_init_p</span> <span class="o">=</span> <span class="n">ExLineParam</span>
+<span class="gp">... </span>   <span class="n">_init_s</span> <span class="o">=</span> <span class="n">ExGeomState</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">exp</span> <span class="o">=</span> <span class="n">ExLine</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">exp</span><span class="o">.</span><span class="n">at</span><span class="p">((</span><span class="mf">1.0</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">),</span> <span class="s2">&quot;on&quot;</span><span class="p">)</span>
+<span class="go">True</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">exp</span><span class="o">.</span><span class="n">at</span><span class="p">((</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">),</span> <span class="s2">&quot;on&quot;</span><span class="p">)</span>
+<span class="go">True</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">exp</span><span class="o">.</span><span class="n">at</span><span class="p">((</span><span class="mf">2.0</span><span class="p">,</span> <span class="mf">2.0</span><span class="p">),</span> <span class="s2">&quot;on&quot;</span><span class="p">)</span>
+<span class="go">False</span>
+</pre></div>
+</div>
+<p>Additionally, note the underlying shapely attribute at .shape</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="nb">type</span><span class="p">(</span><span class="n">exp</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>&lt;class ‘shapely.geometry.linestring.LineString’&gt;</p>
+<p>As well as the buffer (on):</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="nb">type</span><span class="p">(</span><span class="n">exp</span><span class="o">.</span><span class="n">on</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>&lt;class ‘shapely.geometry.polygon.Polygon’&gt;</p>
 <dl class="py attribute">
 <dt class="sig sig-object py" id="fmdtools.define.geom.GeomLine.shapely_class">
 <span class="sig-name descname"><span class="pre">shapely_class</span></span><a class="headerlink" href="#fmdtools.define.geom.GeomLine.shapely_class" title="Link to this definition"></a></dt>
@@ -4586,23 +4426,30 @@ False</p>
 <dd><p>Bases: <a class="reference internal" href="#fmdtools.define.geom.Geom" title="fmdtools.define.geom.Geom"><code class="xref py py-class docutils literal notranslate"><span class="pre">Geom</span></code></a></p>
 <p>Point geometry representing x-y coordinate and buffers.</p>
 <p>Defined by parameter (x, y and buffer(s)) as well as states (properties of
-of point). e.g.::
-&gt;&gt;&gt; class ExPoint(GeomPoint):
-…    _init_p = ExPointParam
-…    _init_s = ExGeomState
-&gt;&gt;&gt; exp = ExPoint()
-&gt;&gt;&gt; exp.at((1.0, 1.0), “on”)
-True
-&gt;&gt;&gt; exp.at((0.0, 0.0), “on”)
-False
-&gt;&gt;&gt; exp.at((1.0, 0.1), “on”)
-True</p>
-<p>Additionally, note the underlying shapely attribute at .shape::
-&gt;&gt;&gt; type(exp.shape)
-&lt;class ‘shapely.geometry.point.Point’&gt;</p>
-<p>as well as the buffer (on)::
-&gt;&gt;&gt; type(exp.on)
-&lt;class ‘shapely.geometry.polygon.Polygon’&gt;</p>
+of point).</p>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="k">class</span> <span class="nc">ExPoint</span><span class="p">(</span><span class="n">GeomPoint</span><span class="p">):</span>
+<span class="gp">... </span>   <span class="n">_init_p</span> <span class="o">=</span> <span class="n">ExPointParam</span>
+<span class="gp">... </span>   <span class="n">_init_s</span> <span class="o">=</span> <span class="n">ExGeomState</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">exp</span> <span class="o">=</span> <span class="n">ExPoint</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">exp</span><span class="o">.</span><span class="n">at</span><span class="p">((</span><span class="mf">1.0</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">),</span> <span class="s2">&quot;on&quot;</span><span class="p">)</span>
+<span class="go">True</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">exp</span><span class="o">.</span><span class="n">at</span><span class="p">((</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">),</span> <span class="s2">&quot;on&quot;</span><span class="p">)</span>
+<span class="go">False</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">exp</span><span class="o">.</span><span class="n">at</span><span class="p">((</span><span class="mf">1.0</span><span class="p">,</span> <span class="mf">0.1</span><span class="p">),</span> <span class="s2">&quot;on&quot;</span><span class="p">)</span>
+<span class="go">True</span>
+</pre></div>
+</div>
+<p>Additionally, note the underlying shapely attribute at .shape:</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="nb">type</span><span class="p">(</span><span class="n">exp</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
+<span class="go">&lt;class &#39;shapely.geometry.point.Point&#39;&gt;</span>
+</pre></div>
+</div>
+<p>as well as the buffer (on):</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="nb">type</span><span class="p">(</span><span class="n">exp</span><span class="o">.</span><span class="n">on</span><span class="p">)</span>
+<span class="go">&lt;class &#39;shapely.geometry.polygon.Polygon&#39;&gt;</span>
+</pre></div>
+</div>
 <dl class="py attribute">
 <dt class="sig sig-object py" id="fmdtools.define.geom.GeomPoint.shapely_class">
 <span class="sig-name descname"><span class="pre">shapely_class</span></span><a class="headerlink" href="#fmdtools.define.geom.GeomPoint.shapely_class" title="Link to this definition"></a></dt>
@@ -4617,18 +4464,23 @@ True</p>
 <dd><p>Bases: <a class="reference internal" href="#fmdtools.define.geom.Geom" title="fmdtools.define.geom.Geom"><code class="xref py py-class docutils literal notranslate"><span class="pre">Geom</span></code></a></p>
 <p>Polygon geometry defining shape and possible buffers.</p>
 <p>Defined by PolyParam, which is used to instantiate the Polygon class. Also may
-contain a state for the given status (e.g., occupied, red/blue, etc.). e.g.::
-&gt;&gt;&gt; class ExPoly(GeomPoly):
-…    _init_p = ExPolyParam
-…    _init_s = ExGeomState
-&gt;&gt;&gt; egp = ExPoly()
-&gt;&gt;&gt; egp.at((0.1, 0.05))
-True
-&gt;&gt;&gt; egp.at((0.4, 0.3))
-False</p>
-<p>Additionally, note the underlying shapely attribute at .shape::
-&gt;&gt;&gt; type(egp.shape)
-&lt;class ‘shapely.geometry.polygon.Polygon’&gt;</p>
+contain a state for the given status (e.g., occupied, red/blue, etc.).</p>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="k">class</span> <span class="nc">ExPoly</span><span class="p">(</span><span class="n">GeomPoly</span><span class="p">):</span>
+<span class="gp">... </span>   <span class="n">_init_p</span> <span class="o">=</span> <span class="n">ExPolyParam</span>
+<span class="gp">... </span>   <span class="n">_init_s</span> <span class="o">=</span> <span class="n">ExGeomState</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">egp</span> <span class="o">=</span> <span class="n">ExPoly</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">egp</span><span class="o">.</span><span class="n">at</span><span class="p">((</span><span class="mf">0.1</span><span class="p">,</span> <span class="mf">0.05</span><span class="p">))</span>
+<span class="go">True</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">egp</span><span class="o">.</span><span class="n">at</span><span class="p">((</span><span class="mf">0.4</span><span class="p">,</span> <span class="mf">0.3</span><span class="p">))</span>
+<span class="go">False</span>
+</pre></div>
+</div>
+<p>Additionally, note the underlying shapely attribute at .shape:</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="nb">type</span><span class="p">(</span><span class="n">egp</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
+<span class="go">&lt;class &#39;shapely.geometry.polygon.Polygon&#39;&gt;</span>
+</pre></div>
+</div>
 <dl class="py attribute">
 <dt class="sig sig-object py" id="fmdtools.define.geom.GeomPoly.shapely_class">
 <span class="sig-name descname"><span class="pre">shapely_class</span></span><a class="headerlink" href="#fmdtools.define.geom.GeomPoly.shapely_class" title="Link to this definition"></a></dt>
@@ -4648,24 +4500,22 @@ False</p>
 <dt>xys<span class="classifier">tuple</span></dt><dd><p>tuple of points ((x1, y1), …) defining shapely.LineString.</p>
 </dd>
 </dl>
-<p>e.g., a point with ends at (0.0, 0.0) and (1.0, 1.0) and radius of 1.0 defining
-whether something is on the line would be defined by the parameter::
-&gt;&gt;&gt; class ExLineParam(LineParam):
-…     xys: tuple = ((0.0, 0.0), (1.0, 1.0))
-…     buffer_on: float = 1.0
-&gt;&gt;&gt; exlp = ExLineParam()
-&gt;&gt;&gt; exlp.as_args()
-(((0.0, 0.0), (1.0, 1.0)),)</p>
+<p class="rubric">Examples</p>
+<p>A point with ends at (0.0, 0.0) and (1.0, 1.0) and radius of 1.0 defining
+whether something is on the line would be defined by the parameter:</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="k">class</span> <span class="nc">ExLineParam</span><span class="p">(</span><span class="n">LineParam</span><span class="p">):</span>
+<span class="gp">... </span>    <span class="n">xys</span><span class="p">:</span> <span class="nb">tuple</span> <span class="o">=</span> <span class="p">((</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">),</span> <span class="p">(</span><span class="mf">1.0</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">))</span>
+<span class="gp">... </span>    <span class="n">buffer_on</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">1.0</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">exlp</span> <span class="o">=</span> <span class="n">ExLineParam</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">exlp</span><span class="o">.</span><span class="n">as_args</span><span class="p">()</span>
+<span class="go">(((0.0, 0.0), (1.0, 1.0)),)</span>
+</pre></div>
+</div>
 <dl class="py method">
 <dt class="sig sig-object py" id="fmdtools.define.geom.LineParam.as_args">
 <span class="sig-name descname"><span class="pre">as_args</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.define.geom.LineParam.as_args" title="Link to this definition"></a></dt>
 <dd><p>Create arguments for shapely LineString class based on fields.</p>
 </dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="fmdtools.define.geom.LineParam.xys">
-<span class="sig-name descname"><span class="pre">xys</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">()</span></em><a class="headerlink" href="#fmdtools.define.geom.LineParam.xys" title="Link to this definition"></a></dt>
-<dd></dd></dl>
 
 </section>
 </dd></dl>
@@ -4683,12 +4533,15 @@ whether something is on the line would be defined by the parameter::
 <dt>y<span class="classifier">float</span></dt><dd><p>y-location of point.</p>
 </dd>
 </dl>
-<p>e.g., a point with center at 1.0, 1.0 and radius of 1.0 definining whether something
-is on the point would be defined by the parameter::
-&gt;&gt;&gt; class ExPointParam(PointParam):
-…    x: float = 1.0
-…    y: float = 1.0
-…    buffer_on: float = 1.0</p>
+<p class="rubric">Examples</p>
+<p>a point with center at 1.0, 1.0 and radius of 1.0 definining whether something
+is on the point would be defined by the parameter:</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="k">class</span> <span class="nc">ExPointParam</span><span class="p">(</span><span class="n">PointParam</span><span class="p">):</span>
+<span class="gp">... </span>   <span class="n">x</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">1.0</span>
+<span class="gp">... </span>   <span class="n">y</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">1.0</span>
+<span class="gp">... </span>   <span class="n">buffer_on</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">1.0</span>
+</pre></div>
+</div>
 <div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">expa</span> <span class="o">=</span> <span class="n">ExPointParam</span><span class="p">()</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">expa</span><span class="o">.</span><span class="n">as_args</span><span class="p">()</span>
 <span class="go">([1.0, 1.0],)</span>
@@ -4699,16 +4552,6 @@ is on the point would be defined by the parameter::
 <span class="sig-name descname"><span class="pre">as_args</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.define.geom.PointParam.as_args" title="Link to this definition"></a></dt>
 <dd><p>Create arguments for shapely Point class based on fields.</p>
 </dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="fmdtools.define.geom.PointParam.x">
-<span class="sig-name descname"><span class="pre">x</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">0.0</span></em><a class="headerlink" href="#fmdtools.define.geom.PointParam.x" title="Link to this definition"></a></dt>
-<dd></dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="fmdtools.define.geom.PointParam.y">
-<span class="sig-name descname"><span class="pre">y</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">0.0</span></em><a class="headerlink" href="#fmdtools.define.geom.PointParam.y" title="Link to this definition"></a></dt>
-<dd></dd></dl>
 
 </section>
 </dd></dl>
@@ -4726,28 +4569,21 @@ is on the point would be defined by the parameter::
 <dt>holes<span class="classifier">tuple</span></dt><dd><p>tuple of points defining holes.</p>
 </dd>
 </dl>
-<p>e.g., the following PolyParam defines a hollow right triangle::
-&gt;&gt;&gt; class ExPolyParam(PolyParam):
-…     shell: tuple = ((0.0, 0.0), (1.0, 0.0), (1.0, 1.0))
-…     holes: tuple = (((0.3, 0.2), (0.6, 0.2), (0.6, 0.5)), )
-&gt;&gt;&gt; expp = ExPolyParam()
-&gt;&gt;&gt; expp.as_args()
-(((0.0, 0.0), (1.0, 0.0), (1.0, 1.0)), (((0.3, 0.2), (0.6, 0.2), (0.6, 0.5)),))</p>
+<p class="rubric">Examples</p>
+<p>The following PolyParam defines a hollow right triangle:</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="k">class</span> <span class="nc">ExPolyParam</span><span class="p">(</span><span class="n">PolyParam</span><span class="p">):</span>
+<span class="gp">... </span>    <span class="n">shell</span><span class="p">:</span> <span class="nb">tuple</span> <span class="o">=</span> <span class="p">((</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">),</span> <span class="p">(</span><span class="mf">1.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">),</span> <span class="p">(</span><span class="mf">1.0</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">))</span>
+<span class="gp">... </span>    <span class="n">holes</span><span class="p">:</span> <span class="nb">tuple</span> <span class="o">=</span> <span class="p">(((</span><span class="mf">0.3</span><span class="p">,</span> <span class="mf">0.2</span><span class="p">),</span> <span class="p">(</span><span class="mf">0.6</span><span class="p">,</span> <span class="mf">0.2</span><span class="p">),</span> <span class="p">(</span><span class="mf">0.6</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">)),</span> <span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">expp</span> <span class="o">=</span> <span class="n">ExPolyParam</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">expp</span><span class="o">.</span><span class="n">as_args</span><span class="p">()</span>
+<span class="go">(((0.0, 0.0), (1.0, 0.0), (1.0, 1.0)), (((0.3, 0.2), (0.6, 0.2), (0.6, 0.5)),))</span>
+</pre></div>
+</div>
 <dl class="py method">
 <dt class="sig sig-object py" id="fmdtools.define.geom.PolyParam.as_args">
 <span class="sig-name descname"><span class="pre">as_args</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.define.geom.PolyParam.as_args" title="Link to this definition"></a></dt>
 <dd><p>Create arguments for shapely Polygon class based on fields.</p>
 </dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="fmdtools.define.geom.PolyParam.holes">
-<span class="sig-name descname"><span class="pre">holes</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">()</span></em><a class="headerlink" href="#fmdtools.define.geom.PolyParam.holes" title="Link to this definition"></a></dt>
-<dd></dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="fmdtools.define.geom.PolyParam.shell">
-<span class="sig-name descname"><span class="pre">shell</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">()</span></em><a class="headerlink" href="#fmdtools.define.geom.PolyParam.shell" title="Link to this definition"></a></dt>
-<dd></dd></dl>
 
 </section>
 </dd></dl>
@@ -4775,43 +4611,48 @@ they also contain the roles:</p>
 <dt>ga: GeomArch</dt><dd><p>Representaion of shapes/forms</p>
 </dd>
 </dl>
-<p>e.g., an example of an environment::
-&gt;&gt;&gt; class ExampleEnvironment(Environment):
-…    _init_c = ExampleCoords
-…    _init_ga = ExGeomArch
-&gt;&gt;&gt; env = ExampleEnvironment(‘env’)</p>
-<dl class="py attribute">
-<dt class="sig sig-object py" id="fmdtools.define.environment.Environment.all_possible">
-<span class="sig-name descname"><span class="pre">all_possible</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">('s',</span> <span class="pre">'i',</span> <span class="pre">'c',</span> <span class="pre">'r',</span> <span class="pre">'ga')</span></em><a class="headerlink" href="#fmdtools.define.environment.Environment.all_possible" title="Link to this definition"></a></dt>
-<dd></dd></dl>
-
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="k">class</span> <span class="nc">ExampleEnvironment</span><span class="p">(</span><span class="n">Environment</span><span class="p">):</span>
+<span class="gp">... </span>   <span class="n">_init_c</span> <span class="o">=</span> <span class="n">ExampleCoords</span>
+<span class="gp">... </span>   <span class="n">_init_ga</span> <span class="o">=</span> <span class="n">ExGeomArch</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">env</span> <span class="o">=</span> <span class="n">ExampleEnvironment</span><span class="p">(</span><span class="s1">&#39;env&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
 <dl class="py method">
 <dt class="sig sig-object py" id="fmdtools.define.environment.Environment.copy">
 <span class="sig-name descname"><span class="pre">copy</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">glob</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[]</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">p</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">{}</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">s</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">{}</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.define.environment.Environment.copy" title="Link to this definition"></a></dt>
 <dd><p>Copy the Environment.</p>
-<p>Copies should be identical but independent after copying, e.g.:
-&gt;&gt;&gt; e = ExampleEnvironment(“env”)
-&gt;&gt;&gt; e.ga.geoms[‘ex_point’].s.occupied = True
-&gt;&gt;&gt; e.c.h[0, 0] = 1</p>
-<p>Given these changes, the copy should have the same states (and not default)::
-&gt;&gt;&gt; d = e.copy()
-&gt;&gt;&gt; d.ga.geoms[‘ex_point’].s.occupied
-True
-&gt;&gt;&gt; d.c.h[0, 0]
-1.0</p>
-<p>It should also be independent, meaning changes don’t effect the original::
-&gt;&gt;&gt; d.c.h[0, 1] = 1.0
-&gt;&gt;&gt; e.c.h[0, 1]
-0.0
-&gt;&gt;&gt; d.ga.geoms[‘ex_line’].s.occupied = True
-&gt;&gt;&gt; e.ga.geoms[‘ex_line’].s.occupied
-False</p>
+<p class="rubric">Examples</p>
+<p>Copies should be identical but independent after copying, e.g.:</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">e</span> <span class="o">=</span> <span class="n">ExampleEnvironment</span><span class="p">(</span><span class="s2">&quot;env&quot;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">e</span><span class="o">.</span><span class="n">ga</span><span class="o">.</span><span class="n">geoms</span><span class="p">[</span><span class="s1">&#39;ex_point&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">s</span><span class="o">.</span><span class="n">occupied</span> <span class="o">=</span> <span class="kc">True</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">e</span><span class="o">.</span><span class="n">c</span><span class="o">.</span><span class="n">h</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span>
+</pre></div>
+</div>
+<p>Given these changes, the copy should have the same states (and not default):</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">d</span> <span class="o">=</span> <span class="n">e</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">d</span><span class="o">.</span><span class="n">ga</span><span class="o">.</span><span class="n">geoms</span><span class="p">[</span><span class="s1">&#39;ex_point&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">s</span><span class="o">.</span><span class="n">occupied</span>
+<span class="go">True</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">d</span><span class="o">.</span><span class="n">c</span><span class="o">.</span><span class="n">h</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span>
+<span class="go">1.0</span>
+</pre></div>
+</div>
+<p>It should also be independent, meaning changes don’t effect the original:</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">d</span><span class="o">.</span><span class="n">c</span><span class="o">.</span><span class="n">h</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="mf">1.0</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">e</span><span class="o">.</span><span class="n">c</span><span class="o">.</span><span class="n">h</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">]</span>
+<span class="go">0.0</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">d</span><span class="o">.</span><span class="n">ga</span><span class="o">.</span><span class="n">geoms</span><span class="p">[</span><span class="s1">&#39;ex_line&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">s</span><span class="o">.</span><span class="n">occupied</span> <span class="o">=</span> <span class="kc">True</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">e</span><span class="o">.</span><span class="n">ga</span><span class="o">.</span><span class="n">geoms</span><span class="p">[</span><span class="s1">&#39;ex_line&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">s</span><span class="o">.</span><span class="n">occupied</span>
+<span class="go">False</span>
+</pre></div>
+</div>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="fmdtools.define.environment.Environment.create_hist">
 <span class="sig-name descname"><span class="pre">create_hist</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">timerange</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">track</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.define.environment.Environment.create_hist" title="Link to this definition"></a></dt>
 <dd><p>Creates/returns history of states at self.h.</p>
+<p class="rubric">Examples</p>
 <div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">e</span> <span class="o">=</span> <span class="n">ExampleEnvironment</span><span class="p">(</span><span class="s2">&quot;env&quot;</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">e</span><span class="o">.</span><span class="n">create_hist</span><span class="p">([</span><span class="mf">1.0</span><span class="p">],</span> <span class="s1">&#39;default&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">flatten</span><span class="p">()</span>
 <span class="go">c.h:                            array(1)</span>
@@ -4829,55 +4670,10 @@ False</p>
 </dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="fmdtools.define.environment.Environment.get_typename">
-<span class="sig-name descname"><span class="pre">get_typename</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.define.environment.Environment.get_typename" title="Link to this definition"></a></dt>
-<dd></dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="fmdtools.define.environment.Environment.h">
-<span class="sig-name descname"><span class="pre">h</span></span><a class="headerlink" href="#fmdtools.define.environment.Environment.h" title="Link to this definition"></a></dt>
-<dd></dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="fmdtools.define.environment.Environment.is_copy">
-<span class="sig-name descname"><span class="pre">is_copy</span></span><a class="headerlink" href="#fmdtools.define.environment.Environment.is_copy" title="Link to this definition"></a></dt>
-<dd></dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="fmdtools.define.environment.Environment.name">
-<span class="sig-name descname"><span class="pre">name</span></span><a class="headerlink" href="#fmdtools.define.environment.Environment.name" title="Link to this definition"></a></dt>
-<dd></dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="fmdtools.define.environment.Environment.p">
-<span class="sig-name descname"><span class="pre">p</span></span><a class="headerlink" href="#fmdtools.define.environment.Environment.p" title="Link to this definition"></a></dt>
-<dd></dd></dl>
-
-<dl class="py method">
 <dt class="sig sig-object py" id="fmdtools.define.environment.Environment.reset">
 <span class="sig-name descname"><span class="pre">reset</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.define.environment.Environment.reset" title="Link to this definition"></a></dt>
 <dd><p>Resets the flow to the initial state</p>
 </dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="fmdtools.define.environment.Environment.return_mutables">
-<span class="sig-name descname"><span class="pre">return_mutables</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.define.environment.Environment.return_mutables" title="Link to this definition"></a></dt>
-<dd></dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="fmdtools.define.environment.Environment.return_probdens">
-<span class="sig-name descname"><span class="pre">return_probdens</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.define.environment.Environment.return_probdens" title="Link to this definition"></a></dt>
-<dd></dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="fmdtools.define.environment.Environment.s">
-<span class="sig-name descname"><span class="pre">s</span></span><a class="headerlink" href="#fmdtools.define.environment.Environment.s" title="Link to this definition"></a></dt>
-<dd></dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="fmdtools.define.environment.Environment.slots">
-<span class="sig-name descname"><span class="pre">slots</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">['c',</span> <span class="pre">'_args_c',</span> <span class="pre">'r',</span> <span class="pre">'_args_r',</span> <span class="pre">'ga',</span> <span class="pre">'args_ga']</span></em><a class="headerlink" href="#fmdtools.define.environment.Environment.slots" title="Link to this definition"></a></dt>
-<dd></dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="fmdtools.define.environment.Environment.status">
@@ -4885,44 +4681,7 @@ False</p>
 <dd><p>Returns a dict with the current states of the flow.</p>
 </dd></dl>
 
-<dl class="py method">
-<dt class="sig sig-object py" id="fmdtools.define.environment.Environment.update_seed">
-<span class="sig-name descname"><span class="pre">update_seed</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">seed</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[]</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.define.environment.Environment.update_seed" title="Link to this definition"></a></dt>
-<dd></dd></dl>
-
 </section>
-</dd></dl>
-
-<dl class="py class">
-<dt class="sig sig-object py" id="fmdtools.define.environment.ExampleEnvironment">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">fmdtools.define.environment.</span></span><span class="sig-name descname"><span class="pre">ExampleEnvironment</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">glob</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[]</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">p</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">{}</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">s</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">{}</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">r</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">{}</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">c</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">{}</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ga</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">{}</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.define.environment.ExampleEnvironment" title="Link to this definition"></a></dt>
-<dd><p>Bases: <a class="reference internal" href="#fmdtools.define.environment.Environment" title="fmdtools.define.environment.Environment"><code class="xref py py-class docutils literal notranslate"><span class="pre">Environment</span></code></a></p>
-<p>Example environment for testing.</p>
-<dl class="py attribute">
-<dt class="sig sig-object py" id="fmdtools.define.environment.ExampleEnvironment.h">
-<span class="sig-name descname"><span class="pre">h</span></span><a class="headerlink" href="#fmdtools.define.environment.ExampleEnvironment.h" title="Link to this definition"></a></dt>
-<dd></dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="fmdtools.define.environment.ExampleEnvironment.is_copy">
-<span class="sig-name descname"><span class="pre">is_copy</span></span><a class="headerlink" href="#fmdtools.define.environment.ExampleEnvironment.is_copy" title="Link to this definition"></a></dt>
-<dd></dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="fmdtools.define.environment.ExampleEnvironment.name">
-<span class="sig-name descname"><span class="pre">name</span></span><a class="headerlink" href="#fmdtools.define.environment.ExampleEnvironment.name" title="Link to this definition"></a></dt>
-<dd></dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="fmdtools.define.environment.ExampleEnvironment.p">
-<span class="sig-name descname"><span class="pre">p</span></span><a class="headerlink" href="#fmdtools.define.environment.ExampleEnvironment.p" title="Link to this definition"></a></dt>
-<dd></dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="fmdtools.define.environment.ExampleEnvironment.s">
-<span class="sig-name descname"><span class="pre">s</span></span><a class="headerlink" href="#fmdtools.define.environment.ExampleEnvironment.s" title="Link to this definition"></a></dt>
-<dd></dd></dl>
-
 </dd></dl>
 
 </section>
@@ -4947,21 +4706,18 @@ properties of interest. Sets the .p role.</p>
 <dt>init_properties: method</dt><dd><p>Method that initializes the (non-default) properties of the Coords.</p>
 </dd>
 </dl>
+<p class="rubric">Examples</p>
 <div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="k">class</span> <span class="nc">ExampleCoords</span><span class="p">(</span><span class="n">Coords</span><span class="p">):</span>
 <span class="gp">... </span>   <span class="n">_init_p</span> <span class="o">=</span> <span class="n">ExampleCoordsParam</span>
 <span class="gp">... </span>   <span class="k">def</span> <span class="nf">init_properties</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
 <span class="gp">... </span>       <span class="bp">self</span><span class="o">.</span><span class="n">set_pts</span><span class="p">([[</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">],</span> <span class="p">[</span><span class="mf">10.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">]],</span> <span class="s2">&quot;v&quot;</span><span class="p">,</span> <span class="mf">10.0</span><span class="p">)</span>
 </pre></div>
 </div>
-<dl class="simple">
-<dt>Instantiating this class a class with (see ExampleCoordsParam):</dt><dd><ul class="simple">
-<li><p>immutable arrays a and v,</p></li>
-<li><p>mutable array h,</p></li>
-<li><p>point start at (0.0), and</p></li>
-<li><p>collection high made up of all points where v &gt; 10.0</p></li>
-</ul>
-</dd>
-</dl>
+<p>Instantiating this class a class with (see ExampleCoordsParam):
+- immutable arrays a and v,
+- mutable array h,
+- point start at (0.0), and
+- collection high made up of all points where v &gt; 10.0</p>
 <p>As shown, features are normal numpy arrays set to readonly:</p>
 <div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">ex</span> <span class="o">=</span> <span class="n">ExampleCoords</span><span class="p">()</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="nb">type</span><span class="p">(</span><span class="n">ex</span><span class="o">.</span><span class="n">a</span><span class="p">)</span>
@@ -4998,25 +4754,22 @@ all points where v &gt; 5.0 should be a part of high_v, as shown:</p>
 <dd><p>Set features as immutable.</p>
 </dd></dl>
 
-<dl class="py attribute">
-<dt class="sig sig-object py" id="fmdtools.define.coords.Coords.collections">
-<span class="sig-name descname"><span class="pre">collections</span></span><a class="headerlink" href="#fmdtools.define.coords.Coords.collections" title="Link to this definition"></a></dt>
-<dd></dd></dl>
-
 <dl class="py method">
 <dt class="sig sig-object py" id="fmdtools.define.coords.Coords.copy">
 <span class="sig-name descname"><span class="pre">copy</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.define.coords.Coords.copy" title="Link to this definition"></a></dt>
 <dd><p>Copy the Coords object.</p>
-<p>e.g.,
-&gt;&gt;&gt; ex = ExampleCoords()
-&gt;&gt;&gt; ex.set(0, 0, “h”, 25.0)
-&gt;&gt;&gt; cop = ex.copy()
-&gt;&gt;&gt; cop.get(0, 0, “h”)
-25.0
-&gt;&gt;&gt; np.all(ex.h == cop.h)
-True
-&gt;&gt;&gt; id(ex.h) == id(cop.h)
-False</p>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">ex</span> <span class="o">=</span> <span class="n">ExampleCoords</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ex</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;h&quot;</span><span class="p">,</span> <span class="mf">25.0</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">cop</span> <span class="o">=</span> <span class="n">ex</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">cop</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;h&quot;</span><span class="p">)</span>
+<span class="go">25.0</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">np</span><span class="o">.</span><span class="n">all</span><span class="p">(</span><span class="n">ex</span><span class="o">.</span><span class="n">h</span> <span class="o">==</span> <span class="n">cop</span><span class="o">.</span><span class="n">h</span><span class="p">)</span>
+<span class="go">True</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">id</span><span class="p">(</span><span class="n">ex</span><span class="o">.</span><span class="n">h</span><span class="p">)</span> <span class="o">==</span> <span class="nb">id</span><span class="p">(</span><span class="n">cop</span><span class="o">.</span><span class="n">h</span><span class="p">)</span>
+<span class="go">False</span>
+</pre></div>
+</div>
 </dd></dl>
 
 <dl class="py method">
@@ -5032,38 +4785,31 @@ The default is None.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p><ul class="simple">
-<li><p><strong>hist</strong> (<em>History</em>) – History of fields specified in track.</p></li>
-<li><p><em>e.g.,</em></p></li>
-<li><p><em>&gt;&gt;&gt; ex = ExampleCoords()</em></p></li>
-<li><p><em>&gt;&gt;&gt; h = ex.create_hist([0, 1, 2], “all”)</em></p></li>
-<li><p><em>&gt;&gt;&gt; h.keys()</em></p></li>
-<li><p><em>dict_keys([‘h’])</em></p></li>
-<li><p><em>&gt;&gt;&gt; h.h[0]</em></p></li>
-<li><p><em>array([[0., 0., 0., 0., 0., 0., 0., 0., 0., 0.],</em> – [0., 0., 0., 0., 0., 0., 0., 0., 0., 0.],
-[0., 0., 0., 0., 0., 0., 0., 0., 0., 0.],
-[0., 0., 0., 0., 0., 0., 0., 0., 0., 0.],
-[0., 0., 0., 0., 0., 0., 0., 0., 0., 0.],
-[0., 0., 0., 0., 0., 0., 0., 0., 0., 0.],
-[0., 0., 0., 0., 0., 0., 0., 0., 0., 0.],
-[0., 0., 0., 0., 0., 0., 0., 0., 0., 0.],
-[0., 0., 0., 0., 0., 0., 0., 0., 0., 0.],
-[0., 0., 0., 0., 0., 0., 0., 0., 0., 0.]])</p></li>
-</ul>
-</p>
+<dd class="field-even"><p><strong>hist</strong> – History of fields specified in track.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="fmdtools.analyze.html#fmdtools.analyze.result.History" title="fmdtools.analyze.result.History">History</a></p>
 </dd>
 </dl>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">ex</span> <span class="o">=</span> <span class="n">ExampleCoords</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">h</span> <span class="o">=</span> <span class="n">ex</span><span class="o">.</span><span class="n">create_hist</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">],</span> <span class="s2">&quot;all&quot;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">h</span><span class="o">.</span><span class="n">keys</span><span class="p">()</span>
+<span class="go">dict_keys([&#39;h&#39;])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">h</span><span class="o">.</span><span class="n">h</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+<span class="go">array([[0., 0., 0., 0., 0., 0., 0., 0., 0., 0.],</span>
+<span class="go">       [0., 0., 0., 0., 0., 0., 0., 0., 0., 0.],</span>
+<span class="go">       [0., 0., 0., 0., 0., 0., 0., 0., 0., 0.],</span>
+<span class="go">       [0., 0., 0., 0., 0., 0., 0., 0., 0., 0.],</span>
+<span class="go">       [0., 0., 0., 0., 0., 0., 0., 0., 0., 0.],</span>
+<span class="go">       [0., 0., 0., 0., 0., 0., 0., 0., 0., 0.],</span>
+<span class="go">       [0., 0., 0., 0., 0., 0., 0., 0., 0., 0.],</span>
+<span class="go">       [0., 0., 0., 0., 0., 0., 0., 0., 0., 0.],</span>
+<span class="go">       [0., 0., 0., 0., 0., 0., 0., 0., 0., 0.],</span>
+<span class="go">       [0., 0., 0., 0., 0., 0., 0., 0., 0., 0.]])</span>
+</pre></div>
+</div>
 </dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="fmdtools.define.coords.Coords.default_track">
-<span class="sig-name descname"><span class="pre">default_track</span></span><a class="headerlink" href="#fmdtools.define.coords.Coords.default_track" title="Link to this definition"></a></dt>
-<dd></dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="fmdtools.define.coords.Coords.features">
-<span class="sig-name descname"><span class="pre">features</span></span><a class="headerlink" href="#fmdtools.define.coords.Coords.features" title="Link to this definition"></a></dt>
-<dd></dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="fmdtools.define.coords.Coords.find_all">
@@ -5079,16 +4825,19 @@ The default is None.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p><ul class="simple">
-<li><p><strong>all</strong> (<em>np.array</em>) – List of points where the comparator method returns true.</p></li>
-<li><p><em>e.g.,</em></p></li>
-<li><p><em>&gt;&gt;&gt; ex = ExampleCoords()</em></p></li>
-<li><p><em>&gt;&gt;&gt; ex.find_all(“v”, 10.0, np.equal)</em></p></li>
-<li><p><em>array([[ 0.,  0.],</em> – [10.,  0.]])</p></li>
-</ul>
-</p>
+<dd class="field-even"><p><strong>all</strong> – List of points where the comparator method returns true.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>np.array</p>
 </dd>
 </dl>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">ex</span> <span class="o">=</span> <span class="n">ExampleCoords</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ex</span><span class="o">.</span><span class="n">find_all</span><span class="p">(</span><span class="s2">&quot;v&quot;</span><span class="p">,</span> <span class="mf">10.0</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">equal</span><span class="p">)</span>
+<span class="go">array([[ 0.,  0.],</span>
+<span class="go">       [10.,  0.]])</span>
+</pre></div>
+</div>
 </dd></dl>
 
 <dl class="py method">
@@ -5109,21 +4858,26 @@ The default is np.equal.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p><ul class="simple">
-<li><p><strong>pt</strong> (<em>np.array</em>) – x-y position of the closest point satisfying the property.</p></li>
-<li><p><em>Can be used with default options to check collections, e,g.</em></p></li>
-<li><p><em>&gt;&gt;&gt; ex = ExampleCoords()</em></p></li>
-<li><p><em>&gt;&gt;&gt; ex.find_closest(20, 0, “high_v”)</em></p></li>
-<li><p><em>array([10.,  0.])</em></p></li>
-<li><p><em>Alternatively can be used to search for the closest with a given property value,</em></p></li>
-<li><p><em>e.g.,</em></p></li>
-<li><p><em>&gt;&gt;&gt; ex.set(0, 0, “h”, 1.0)</em></p></li>
-<li><p><em>&gt;&gt;&gt; ex.find_closest(20, 0, “h”, value=1.0, comparator=np.equal)</em></p></li>
-<li><p><em>array([0., 0.])</em></p></li>
-</ul>
-</p>
+<dd class="field-even"><p><strong>pt</strong> – x-y position of the closest point satisfying the property.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>np.array</p>
 </dd>
 </dl>
+<p class="rubric">Examples</p>
+<p>Can be used with default options to check collections, e,g.:</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">ex</span> <span class="o">=</span> <span class="n">ExampleCoords</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ex</span><span class="o">.</span><span class="n">find_closest</span><span class="p">(</span><span class="mi">20</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;high_v&quot;</span><span class="p">)</span>
+<span class="go">array([10.,  0.])</span>
+</pre></div>
+</div>
+<p>Alternatively can be used to search for the closest with a given property value,
+e.g.,:</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">ex</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;h&quot;</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ex</span><span class="o">.</span><span class="n">find_closest</span><span class="p">(</span><span class="mi">20</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;h&quot;</span><span class="p">,</span> <span class="n">value</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span> <span class="n">comparator</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">equal</span><span class="p">)</span>
+<span class="go">array([0., 0.])</span>
+</pre></div>
+</div>
 </dd></dl>
 
 <dl class="py method">
@@ -5140,20 +4894,22 @@ The default is np.equal.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p><ul class="simple">
-<li><p><strong>value</strong> (<em>int/bool/float/…</em>) – Value to get from that point</p></li>
-<li><p><em>e.g.,</em></p></li>
-<li><p><em>&gt;&gt;&gt; ex = ExampleCoords()</em></p></li>
-<li><p><em>&gt;&gt;&gt; ex.get(10.0, 0.0, “v”)</em></p></li>
-<li><p><em>10.0</em></p></li>
-<li><p><em>&gt;&gt;&gt; ex.get(12.0, 4.9, “v”)</em></p></li>
-<li><p><em>10.0</em></p></li>
-<li><p><em>&gt;&gt;&gt; ex.get(50.0, 50.0, “v”)</em></p></li>
-<li><p><em>1.0</em></p></li>
-</ul>
-</p>
+<dd class="field-even"><p><strong>value</strong> – Value to get from that point</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>int/bool/float/…</p>
 </dd>
 </dl>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">ex</span> <span class="o">=</span> <span class="n">ExampleCoords</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ex</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="mf">10.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="s2">&quot;v&quot;</span><span class="p">)</span>
+<span class="go">10.0</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ex</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="mf">12.0</span><span class="p">,</span> <span class="mf">4.9</span><span class="p">,</span> <span class="s2">&quot;v&quot;</span><span class="p">)</span>
+<span class="go">10.0</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ex</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="mf">50.0</span><span class="p">,</span> <span class="mf">50.0</span><span class="p">,</span> <span class="s2">&quot;v&quot;</span><span class="p">)</span>
+<span class="go">1.0</span>
+</pre></div>
+</div>
 </dd></dl>
 
 <dl class="py method">
@@ -5185,22 +4941,19 @@ The default is np.equal.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p><ul class="simple">
-<li><p><strong>properties</strong> (<em>dict</em>) – Dictionary of property values at the given point.</p></li>
-<li><p><em>e.g.,</em></p></li>
-<li><p><em>&gt;&gt;&gt; ex = ExampleCoords()</em></p></li>
-<li><p><em>&gt;&gt;&gt; ex.get_properties(0, 0)</em></p></li>
-<li><p><strong>{‘a’</strong> (<em>False, ‘v’: 10.0, ‘h’: 0.0}</em>)</p></li>
-</ul>
-</p>
+<dd class="field-even"><p><strong>properties</strong> – Dictionary of property values at the given point.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>dict</p>
 </dd>
 </dl>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">ex</span> <span class="o">=</span> <span class="n">ExampleCoords</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ex</span><span class="o">.</span><span class="n">get_properties</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+<span class="go">{&#39;a&#39;: False, &#39;v&#39;: 10.0, &#39;h&#39;: 0.0}</span>
+</pre></div>
+</div>
 </dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="fmdtools.define.coords.Coords.grid">
-<span class="sig-name descname"><span class="pre">grid</span></span><a class="headerlink" href="#fmdtools.define.coords.Coords.grid" title="Link to this definition"></a></dt>
-<dd></dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="fmdtools.define.coords.Coords.in_area">
@@ -5222,12 +4975,13 @@ The default is np.equal.</p></li>
 <dt>in: bool</dt><dd><p>Whether the point is in the collection</p>
 </dd>
 </dl>
-<p>e.g.,
-&gt;&gt;&gt; ex = ExampleCoords()
-&gt;&gt;&gt; ex.in_area(0.4, 0.2, ‘start’)
-True
-&gt;&gt;&gt; ex.in_area(10, 10, ‘start’)
-False</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">ex</span> <span class="o">=</span> <span class="n">ExampleCoords</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ex</span><span class="o">.</span><span class="n">in_area</span><span class="p">(</span><span class="mf">0.4</span><span class="p">,</span> <span class="mf">0.2</span><span class="p">,</span> <span class="s1">&#39;start&#39;</span><span class="p">)</span>
+<span class="go">True</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ex</span><span class="o">.</span><span class="n">in_area</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="s1">&#39;start&#39;</span><span class="p">)</span>
+<span class="go">False</span>
+</pre></div>
+</div>
 </dd>
 </dl>
 </dd></dl>
@@ -5264,31 +5018,6 @@ False</p>
 <dd><p>Initialize arrays with non-default values.</p>
 </dd></dl>
 
-<dl class="py attribute">
-<dt class="sig sig-object py" id="fmdtools.define.coords.Coords.p">
-<span class="sig-name descname"><span class="pre">p</span></span><a class="headerlink" href="#fmdtools.define.coords.Coords.p" title="Link to this definition"></a></dt>
-<dd></dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="fmdtools.define.coords.Coords.points">
-<span class="sig-name descname"><span class="pre">points</span></span><a class="headerlink" href="#fmdtools.define.coords.Coords.points" title="Link to this definition"></a></dt>
-<dd></dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="fmdtools.define.coords.Coords.properties">
-<span class="sig-name descname"><span class="pre">properties</span></span><a class="headerlink" href="#fmdtools.define.coords.Coords.properties" title="Link to this definition"></a></dt>
-<dd></dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="fmdtools.define.coords.Coords.pts">
-<span class="sig-name descname"><span class="pre">pts</span></span><a class="headerlink" href="#fmdtools.define.coords.Coords.pts" title="Link to this definition"></a></dt>
-<dd></dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="fmdtools.define.coords.Coords.r">
-<span class="sig-name descname"><span class="pre">r</span></span><a class="headerlink" href="#fmdtools.define.coords.Coords.r" title="Link to this definition"></a></dt>
-<dd></dd></dl>
-
 <dl class="py method">
 <dt class="sig sig-object py" id="fmdtools.define.coords.Coords.return_mutables">
 <span class="sig-name descname"><span class="pre">return_mutables</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.define.coords.Coords.return_mutables" title="Link to this definition"></a></dt>
@@ -5312,20 +5041,16 @@ False</p>
 <li><p><strong>y</strong> (<em>number</em>) – Scalar y location</p></li>
 <li><p><strong>prop</strong> (<em>str</em>) – Name of the property to get.</p></li>
 <li><p><strong>value</strong> (<em>int/bool/float/</em><em>...</em>) – Value to set at that point</p></li>
-<li><p><strong>e.g.</strong> – </p></li>
 </ul>
 </dd>
 </dl>
-<p>:param :
-:param &gt;&gt;&gt; ex = ExampleCoords():
-:param &gt;&gt;&gt; ex.set(15.0:
-:param 12.0:
-:param “h”:
-:param 100.0):
-:param &gt;&gt;&gt; ex.get(15.0:
-:param 12.0:
-:param “h”):
-:param 100.0:</p>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">ex</span> <span class="o">=</span> <span class="n">ExampleCoords</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ex</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="mf">15.0</span><span class="p">,</span> <span class="mf">12.0</span><span class="p">,</span> <span class="s2">&quot;h&quot;</span><span class="p">,</span> <span class="mf">100.0</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ex</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="mf">15.0</span><span class="p">,</span> <span class="mf">12.0</span><span class="p">,</span> <span class="s2">&quot;h&quot;</span><span class="p">)</span>
+<span class="go">100.0</span>
+</pre></div>
+</div>
 </dd></dl>
 
 <dl class="py method">
@@ -5355,43 +5080,26 @@ False</p>
 <li><p><strong>pts</strong> (<em>list</em>) – List of points (e.g. [(1.0, 2.0), (3.0, 4.0)]) to set.</p></li>
 <li><p><strong>prop</strong> (<em>str</em>) – Name of the property to set.</p></li>
 <li><p><strong>value</strong> (<em>int/bool/float</em><em> or </em><em>list</em><em>...</em>) – Value to set the points to. Can also pass a list.</p></li>
-<li><p><strong>e.g.</strong> – </p></li>
 </ul>
 </dd>
 </dl>
-<p>:param :
-:param &gt;&gt;&gt; ex = ExampleCoords():
-:param &gt;&gt;&gt; ex.set_pts([(50:
-:param 50):
-:param [80:
-:param 80]]:
-:param “h”:
-:param -20.0):
-:param &gt;&gt;&gt; ex.get(50:
-:param 50:
-:param “h”):
-:param -20.0:
-:param &gt;&gt;&gt; ex.get(80:
-:param 80:
-:param “h”):
-:param -20.0:
-:param or:
-:param :
-:param &gt;&gt;&gt; ex.set_pts([(50:
-:param 50):
-:param [80:
-:param 80]]:
-:param “h”:
-:param [-10.0:
-:param -5.0]):
-:param &gt;&gt;&gt; ex.get(50:
-:param 50:
-:param “h”):
-:param -10.0:
-:param &gt;&gt;&gt; ex.get(80:
-:param 80:
-:param “h”):
-:param -5.0:</p>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">ex</span> <span class="o">=</span> <span class="n">ExampleCoords</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ex</span><span class="o">.</span><span class="n">set_pts</span><span class="p">([(</span><span class="mi">50</span><span class="p">,</span><span class="mi">50</span><span class="p">),</span> <span class="p">[</span><span class="mi">80</span><span class="p">,</span><span class="mi">80</span><span class="p">]],</span> <span class="s2">&quot;h&quot;</span><span class="p">,</span> <span class="o">-</span><span class="mf">20.0</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ex</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="mi">50</span><span class="p">,</span> <span class="mi">50</span><span class="p">,</span> <span class="s2">&quot;h&quot;</span><span class="p">)</span>
+<span class="go">-20.0</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ex</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="mi">80</span><span class="p">,</span> <span class="mi">80</span><span class="p">,</span> <span class="s2">&quot;h&quot;</span><span class="p">)</span>
+<span class="go">-20.0</span>
+</pre></div>
+</div>
+<p>or,:</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">ex</span><span class="o">.</span><span class="n">set_pts</span><span class="p">([(</span><span class="mi">50</span><span class="p">,</span><span class="mi">50</span><span class="p">),</span> <span class="p">[</span><span class="mi">80</span><span class="p">,</span><span class="mi">80</span><span class="p">]],</span> <span class="s2">&quot;h&quot;</span><span class="p">,</span> <span class="p">[</span><span class="o">-</span><span class="mf">10.0</span><span class="p">,</span> <span class="o">-</span><span class="mf">5.0</span><span class="p">])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ex</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="mi">50</span><span class="p">,</span> <span class="mi">50</span><span class="p">,</span> <span class="s2">&quot;h&quot;</span><span class="p">)</span>
+<span class="go">-10.0</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ex</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="mi">80</span><span class="p">,</span> <span class="mi">80</span><span class="p">,</span> <span class="s2">&quot;h&quot;</span><span class="p">)</span>
+<span class="go">-5.0</span>
+</pre></div>
+</div>
 </dd></dl>
 
 <dl class="py method">
@@ -5407,18 +5115,16 @@ False</p>
 <li><p><strong>pts</strong> (<em>list</em><em>, </em><em>optional</em>) – List of points to select from.
 The default is None (which selects from all points).</p></li>
 <li><p><strong>replace</strong> (<em>bool</em><em>, </em><em>optional</em>) – Whether to select with replacement. The default is False.</p></li>
-<li><p><strong>e.g.</strong> – </p></li>
 </ul>
 </dd>
 </dl>
-<p>:param :
-:param &gt;&gt;&gt; ex = ExampleCoords():
-:param &gt;&gt;&gt; ex.set_rand_pts(“h”:
-:param 40:
-:param 5):
-:param &gt;&gt;&gt; len(ex.find_all(“h”:
-:param 40)):
-:param 5:</p>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">ex</span> <span class="o">=</span> <span class="n">ExampleCoords</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ex</span><span class="o">.</span><span class="n">set_rand_pts</span><span class="p">(</span><span class="s2">&quot;h&quot;</span><span class="p">,</span> <span class="mi">40</span><span class="p">,</span> <span class="mi">5</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">len</span><span class="p">(</span><span class="n">ex</span><span class="o">.</span><span class="n">find_all</span><span class="p">(</span><span class="s2">&quot;h&quot;</span><span class="p">,</span> <span class="mi">40</span><span class="p">))</span>
+<span class="go">5</span>
+</pre></div>
+</div>
 </dd></dl>
 
 <dl class="py method">
@@ -5435,359 +5141,50 @@ The default is None (which selects from all points).</p></li>
 <li><p><strong>ymin</strong> (<em>number</em><em>, </em><em>optional</em>) – minimum y-value. The default is 0.</p></li>
 <li><p><strong>ymax</strong> (<em>number</em><em>, </em><em>optional</em>) – maximum y-value. The default is ‘max’.</p></li>
 <li><p><strong>inclusive</strong> (<em>bool</em><em>, </em><em>optional</em>) – whether to include the end of the range. The default is False.</p></li>
-<li><p><strong>e.g.</strong> – </p></li>
 </ul>
 </dd>
 </dl>
-<p>:param :
-:param &gt;&gt;&gt; ex = ExampleCoords():
-:param &gt;&gt;&gt; ex.set_range(“h”:
-:param 100.0:
-:param 20:
-:param 40:
-:param 20:
-:param 40):
-:param &gt;&gt;&gt; ex.h:
-:param array([[  0.: [  0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.],</p>
-<blockquote>
-<div><p>[  0.,   0., 100., 100., 100.,   0.,   0.,   0.,   0.,   0.],
-[  0.,   0., 100., 100., 100.,   0.,   0.,   0.,   0.,   0.],
-[  0.,   0., 100., 100., 100.,   0.,   0.,   0.,   0.,   0.],
-[  0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.],
-[  0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.],
-[  0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.],
-[  0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.],
-[  0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.]])</p>
-</div></blockquote>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>0.</strong> – [  0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.],
-[  0.,   0., 100., 100., 100.,   0.,   0.,   0.,   0.,   0.],
-[  0.,   0., 100., 100., 100.,   0.,   0.,   0.,   0.,   0.],
-[  0.,   0., 100., 100., 100.,   0.,   0.,   0.,   0.,   0.],
-[  0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.],
-[  0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.],
-[  0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.],
-[  0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.],
-[  0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.]])</p></li>
-<li><p><strong>0.</strong> – [  0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.],
-[  0.,   0., 100., 100., 100.,   0.,   0.,   0.,   0.,   0.],
-[  0.,   0., 100., 100., 100.,   0.,   0.,   0.,   0.,   0.],
-[  0.,   0., 100., 100., 100.,   0.,   0.,   0.,   0.,   0.],
-[  0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.],
-[  0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.],
-[  0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.],
-[  0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.],
-[  0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.]])</p></li>
-<li><p><strong>0.</strong> – [  0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.],
-[  0.,   0., 100., 100., 100.,   0.,   0.,   0.,   0.,   0.],
-[  0.,   0., 100., 100., 100.,   0.,   0.,   0.,   0.,   0.],
-[  0.,   0., 100., 100., 100.,   0.,   0.,   0.,   0.,   0.],
-[  0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.],
-[  0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.],
-[  0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.],
-[  0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.],
-[  0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.]])</p></li>
-<li><p><strong>0.</strong> – [  0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.],
-[  0.,   0., 100., 100., 100.,   0.,   0.,   0.,   0.,   0.],
-[  0.,   0., 100., 100., 100.,   0.,   0.,   0.,   0.,   0.],
-[  0.,   0., 100., 100., 100.,   0.,   0.,   0.,   0.,   0.],
-[  0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.],
-[  0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.],
-[  0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.],
-[  0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.],
-[  0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.]])</p></li>
-<li><p><strong>0.</strong> – [  0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.],
-[  0.,   0., 100., 100., 100.,   0.,   0.,   0.,   0.,   0.],
-[  0.,   0., 100., 100., 100.,   0.,   0.,   0.,   0.,   0.],
-[  0.,   0., 100., 100., 100.,   0.,   0.,   0.,   0.,   0.],
-[  0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.],
-[  0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.],
-[  0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.],
-[  0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.],
-[  0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.]])</p></li>
-<li><p><strong>0.</strong> – [  0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.],
-[  0.,   0., 100., 100., 100.,   0.,   0.,   0.,   0.,   0.],
-[  0.,   0., 100., 100., 100.,   0.,   0.,   0.,   0.,   0.],
-[  0.,   0., 100., 100., 100.,   0.,   0.,   0.,   0.,   0.],
-[  0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.],
-[  0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.],
-[  0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.],
-[  0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.],
-[  0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.]])</p></li>
-<li><p><strong>0.</strong> – [  0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.],
-[  0.,   0., 100., 100., 100.,   0.,   0.,   0.,   0.,   0.],
-[  0.,   0., 100., 100., 100.,   0.,   0.,   0.,   0.,   0.],
-[  0.,   0., 100., 100., 100.,   0.,   0.,   0.,   0.,   0.],
-[  0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.],
-[  0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.],
-[  0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.],
-[  0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.],
-[  0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.]])</p></li>
-<li><p><strong>0.</strong> – [  0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.],
-[  0.,   0., 100., 100., 100.,   0.,   0.,   0.,   0.,   0.],
-[  0.,   0., 100., 100., 100.,   0.,   0.,   0.,   0.,   0.],
-[  0.,   0., 100., 100., 100.,   0.,   0.,   0.,   0.,   0.],
-[  0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.],
-[  0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.],
-[  0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.],
-[  0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.],
-[  0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.]])</p></li>
-<li><p><strong>0.</strong><strong>]</strong> – [  0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.],
-[  0.,   0., 100., 100., 100.,   0.,   0.,   0.,   0.,   0.],
-[  0.,   0., 100., 100., 100.,   0.,   0.,   0.,   0.,   0.],
-[  0.,   0., 100., 100., 100.,   0.,   0.,   0.,   0.,   0.],
-[  0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.],
-[  0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.],
-[  0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.],
-[  0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.],
-[  0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.]])</p></li>
-</ul>
-</dd>
-</dl>
-<dl class="simple">
-<dt>:param<span class="classifier">[  0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.],</span></dt><dd><p>[  0.,   0., 100., 100., 100.,   0.,   0.,   0.,   0.,   0.],
-[  0.,   0., 100., 100., 100.,   0.,   0.,   0.,   0.,   0.],
-[  0.,   0., 100., 100., 100.,   0.,   0.,   0.,   0.,   0.],
-[  0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.],
-[  0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.],
-[  0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.],
-[  0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.],
-[  0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.]])</p>
-</dd>
-</dl>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>ex.set_range</strong><strong>(</strong><strong>&quot;h&quot;</strong> (<em>&gt;&gt;&gt;</em>) – </p></li>
-<li><p><strong>0.0</strong><strong>)</strong> – </p></li>
-<li><p><strong>ex.h</strong> (<em>&gt;&gt;&gt;</em>) – </p></li>
-<li><p><strong>array</strong><strong>(</strong><strong>[</strong><strong>[</strong><strong>0.</strong> – [0., 0., 0., 0., 0., 0., 0., 0., 0., 0.],
-[0., 0., 0., 0., 0., 0., 0., 0., 0., 0.],
-[0., 0., 0., 0., 0., 0., 0., 0., 0., 0.],
-[0., 0., 0., 0., 0., 0., 0., 0., 0., 0.],
-[0., 0., 0., 0., 0., 0., 0., 0., 0., 0.],
-[0., 0., 0., 0., 0., 0., 0., 0., 0., 0.],
-[0., 0., 0., 0., 0., 0., 0., 0., 0., 0.],
-[0., 0., 0., 0., 0., 0., 0., 0., 0., 0.],
-[0., 0., 0., 0., 0., 0., 0., 0., 0., 0.]])</p></li>
-<li><p><strong>0.</strong> – [0., 0., 0., 0., 0., 0., 0., 0., 0., 0.],
-[0., 0., 0., 0., 0., 0., 0., 0., 0., 0.],
-[0., 0., 0., 0., 0., 0., 0., 0., 0., 0.],
-[0., 0., 0., 0., 0., 0., 0., 0., 0., 0.],
-[0., 0., 0., 0., 0., 0., 0., 0., 0., 0.],
-[0., 0., 0., 0., 0., 0., 0., 0., 0., 0.],
-[0., 0., 0., 0., 0., 0., 0., 0., 0., 0.],
-[0., 0., 0., 0., 0., 0., 0., 0., 0., 0.],
-[0., 0., 0., 0., 0., 0., 0., 0., 0., 0.]])</p></li>
-<li><p><strong>0.</strong> – [0., 0., 0., 0., 0., 0., 0., 0., 0., 0.],
-[0., 0., 0., 0., 0., 0., 0., 0., 0., 0.],
-[0., 0., 0., 0., 0., 0., 0., 0., 0., 0.],
-[0., 0., 0., 0., 0., 0., 0., 0., 0., 0.],
-[0., 0., 0., 0., 0., 0., 0., 0., 0., 0.],
-[0., 0., 0., 0., 0., 0., 0., 0., 0., 0.],
-[0., 0., 0., 0., 0., 0., 0., 0., 0., 0.],
-[0., 0., 0., 0., 0., 0., 0., 0., 0., 0.],
-[0., 0., 0., 0., 0., 0., 0., 0., 0., 0.]])</p></li>
-<li><p><strong>0.</strong> – [0., 0., 0., 0., 0., 0., 0., 0., 0., 0.],
-[0., 0., 0., 0., 0., 0., 0., 0., 0., 0.],
-[0., 0., 0., 0., 0., 0., 0., 0., 0., 0.],
-[0., 0., 0., 0., 0., 0., 0., 0., 0., 0.],
-[0., 0., 0., 0., 0., 0., 0., 0., 0., 0.],
-[0., 0., 0., 0., 0., 0., 0., 0., 0., 0.],
-[0., 0., 0., 0., 0., 0., 0., 0., 0., 0.],
-[0., 0., 0., 0., 0., 0., 0., 0., 0., 0.],
-[0., 0., 0., 0., 0., 0., 0., 0., 0., 0.]])</p></li>
-<li><p><strong>0.</strong> – [0., 0., 0., 0., 0., 0., 0., 0., 0., 0.],
-[0., 0., 0., 0., 0., 0., 0., 0., 0., 0.],
-[0., 0., 0., 0., 0., 0., 0., 0., 0., 0.],
-[0., 0., 0., 0., 0., 0., 0., 0., 0., 0.],
-[0., 0., 0., 0., 0., 0., 0., 0., 0., 0.],
-[0., 0., 0., 0., 0., 0., 0., 0., 0., 0.],
-[0., 0., 0., 0., 0., 0., 0., 0., 0., 0.],
-[0., 0., 0., 0., 0., 0., 0., 0., 0., 0.],
-[0., 0., 0., 0., 0., 0., 0., 0., 0., 0.]])</p></li>
-<li><p><strong>0.</strong> – [0., 0., 0., 0., 0., 0., 0., 0., 0., 0.],
-[0., 0., 0., 0., 0., 0., 0., 0., 0., 0.],
-[0., 0., 0., 0., 0., 0., 0., 0., 0., 0.],
-[0., 0., 0., 0., 0., 0., 0., 0., 0., 0.],
-[0., 0., 0., 0., 0., 0., 0., 0., 0., 0.],
-[0., 0., 0., 0., 0., 0., 0., 0., 0., 0.],
-[0., 0., 0., 0., 0., 0., 0., 0., 0., 0.],
-[0., 0., 0., 0., 0., 0., 0., 0., 0., 0.],
-[0., 0., 0., 0., 0., 0., 0., 0., 0., 0.]])</p></li>
-<li><p><strong>0.</strong> – [0., 0., 0., 0., 0., 0., 0., 0., 0., 0.],
-[0., 0., 0., 0., 0., 0., 0., 0., 0., 0.],
-[0., 0., 0., 0., 0., 0., 0., 0., 0., 0.],
-[0., 0., 0., 0., 0., 0., 0., 0., 0., 0.],
-[0., 0., 0., 0., 0., 0., 0., 0., 0., 0.],
-[0., 0., 0., 0., 0., 0., 0., 0., 0., 0.],
-[0., 0., 0., 0., 0., 0., 0., 0., 0., 0.],
-[0., 0., 0., 0., 0., 0., 0., 0., 0., 0.],
-[0., 0., 0., 0., 0., 0., 0., 0., 0., 0.]])</p></li>
-<li><p><strong>0.</strong> – [0., 0., 0., 0., 0., 0., 0., 0., 0., 0.],
-[0., 0., 0., 0., 0., 0., 0., 0., 0., 0.],
-[0., 0., 0., 0., 0., 0., 0., 0., 0., 0.],
-[0., 0., 0., 0., 0., 0., 0., 0., 0., 0.],
-[0., 0., 0., 0., 0., 0., 0., 0., 0., 0.],
-[0., 0., 0., 0., 0., 0., 0., 0., 0., 0.],
-[0., 0., 0., 0., 0., 0., 0., 0., 0., 0.],
-[0., 0., 0., 0., 0., 0., 0., 0., 0., 0.],
-[0., 0., 0., 0., 0., 0., 0., 0., 0., 0.]])</p></li>
-<li><p><strong>0.</strong> – [0., 0., 0., 0., 0., 0., 0., 0., 0., 0.],
-[0., 0., 0., 0., 0., 0., 0., 0., 0., 0.],
-[0., 0., 0., 0., 0., 0., 0., 0., 0., 0.],
-[0., 0., 0., 0., 0., 0., 0., 0., 0., 0.],
-[0., 0., 0., 0., 0., 0., 0., 0., 0., 0.],
-[0., 0., 0., 0., 0., 0., 0., 0., 0., 0.],
-[0., 0., 0., 0., 0., 0., 0., 0., 0., 0.],
-[0., 0., 0., 0., 0., 0., 0., 0., 0., 0.],
-[0., 0., 0., 0., 0., 0., 0., 0., 0., 0.]])</p></li>
-<li><p><strong>0.</strong><strong>]</strong> – [0., 0., 0., 0., 0., 0., 0., 0., 0., 0.],
-[0., 0., 0., 0., 0., 0., 0., 0., 0., 0.],
-[0., 0., 0., 0., 0., 0., 0., 0., 0., 0.],
-[0., 0., 0., 0., 0., 0., 0., 0., 0., 0.],
-[0., 0., 0., 0., 0., 0., 0., 0., 0., 0.],
-[0., 0., 0., 0., 0., 0., 0., 0., 0., 0.],
-[0., 0., 0., 0., 0., 0., 0., 0., 0., 0.],
-[0., 0., 0., 0., 0., 0., 0., 0., 0., 0.],
-[0., 0., 0., 0., 0., 0., 0., 0., 0., 0.]])</p></li>
-</ul>
-</dd>
-</dl>
-<dl class="simple">
-<dt>:param<span class="classifier">[0., 0., 0., 0., 0., 0., 0., 0., 0., 0.],</span></dt><dd><p>[0., 0., 0., 0., 0., 0., 0., 0., 0., 0.],
-[0., 0., 0., 0., 0., 0., 0., 0., 0., 0.],
-[0., 0., 0., 0., 0., 0., 0., 0., 0., 0.],
-[0., 0., 0., 0., 0., 0., 0., 0., 0., 0.],
-[0., 0., 0., 0., 0., 0., 0., 0., 0., 0.],
-[0., 0., 0., 0., 0., 0., 0., 0., 0., 0.],
-[0., 0., 0., 0., 0., 0., 0., 0., 0., 0.],
-[0., 0., 0., 0., 0., 0., 0., 0., 0., 0.]])</p>
-</dd>
-</dl>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>ex.set_range</strong><strong>(</strong><strong>&quot;h&quot;</strong> (<em>&gt;&gt;&gt;</em>) – </p></li>
-<li><p><strong>20.0</strong> – </p></li>
-<li><p><strong>20</strong> – </p></li>
-<li><p><strong>40</strong> – </p></li>
-<li><p><strong>20</strong> – </p></li>
-<li><p><strong>40</strong> – </p></li>
-<li><p><strong>inclusive=False</strong><strong>)</strong> – </p></li>
-<li><p><strong>ex.h</strong> (<em>&gt;&gt;&gt;</em>) – </p></li>
-<li><p><strong>0.</strong> (<em>array</em><em>(</em><em>[</em><em>[</em>) – [ 0.,  0.,  0.,  0.,  0.,  0.,  0.,  0.,  0.,  0.],
-[ 0.,  0., 20., 20.,  0.,  0.,  0.,  0.,  0.,  0.],
-[ 0.,  0., 20., 20.,  0.,  0.,  0.,  0.,  0.,  0.],
-[ 0.,  0.,  0.,  0.,  0.,  0.,  0.,  0.,  0.,  0.],
-[ 0.,  0.,  0.,  0.,  0.,  0.,  0.,  0.,  0.,  0.],
-[ 0.,  0.,  0.,  0.,  0.,  0.,  0.,  0.,  0.,  0.],
-[ 0.,  0.,  0.,  0.,  0.,  0.,  0.,  0.,  0.,  0.],
-[ 0.,  0.,  0.,  0.,  0.,  0.,  0.,  0.,  0.,  0.],
-[ 0.,  0.,  0.,  0.,  0.,  0.,  0.,  0.,  0.,  0.]])</p></li>
-<li><p><strong>0.</strong> – [ 0.,  0.,  0.,  0.,  0.,  0.,  0.,  0.,  0.,  0.],
-[ 0.,  0., 20., 20.,  0.,  0.,  0.,  0.,  0.,  0.],
-[ 0.,  0., 20., 20.,  0.,  0.,  0.,  0.,  0.,  0.],
-[ 0.,  0.,  0.,  0.,  0.,  0.,  0.,  0.,  0.,  0.],
-[ 0.,  0.,  0.,  0.,  0.,  0.,  0.,  0.,  0.,  0.],
-[ 0.,  0.,  0.,  0.,  0.,  0.,  0.,  0.,  0.,  0.],
-[ 0.,  0.,  0.,  0.,  0.,  0.,  0.,  0.,  0.,  0.],
-[ 0.,  0.,  0.,  0.,  0.,  0.,  0.,  0.,  0.,  0.],
-[ 0.,  0.,  0.,  0.,  0.,  0.,  0.,  0.,  0.,  0.]])</p></li>
-<li><p><strong>0.</strong> – [ 0.,  0.,  0.,  0.,  0.,  0.,  0.,  0.,  0.,  0.],
-[ 0.,  0., 20., 20.,  0.,  0.,  0.,  0.,  0.,  0.],
-[ 0.,  0., 20., 20.,  0.,  0.,  0.,  0.,  0.,  0.],
-[ 0.,  0.,  0.,  0.,  0.,  0.,  0.,  0.,  0.,  0.],
-[ 0.,  0.,  0.,  0.,  0.,  0.,  0.,  0.,  0.,  0.],
-[ 0.,  0.,  0.,  0.,  0.,  0.,  0.,  0.,  0.,  0.],
-[ 0.,  0.,  0.,  0.,  0.,  0.,  0.,  0.,  0.,  0.],
-[ 0.,  0.,  0.,  0.,  0.,  0.,  0.,  0.,  0.,  0.],
-[ 0.,  0.,  0.,  0.,  0.,  0.,  0.,  0.,  0.,  0.]])</p></li>
-<li><p><strong>0.</strong> – [ 0.,  0.,  0.,  0.,  0.,  0.,  0.,  0.,  0.,  0.],
-[ 0.,  0., 20., 20.,  0.,  0.,  0.,  0.,  0.,  0.],
-[ 0.,  0., 20., 20.,  0.,  0.,  0.,  0.,  0.,  0.],
-[ 0.,  0.,  0.,  0.,  0.,  0.,  0.,  0.,  0.,  0.],
-[ 0.,  0.,  0.,  0.,  0.,  0.,  0.,  0.,  0.,  0.],
-[ 0.,  0.,  0.,  0.,  0.,  0.,  0.,  0.,  0.,  0.],
-[ 0.,  0.,  0.,  0.,  0.,  0.,  0.,  0.,  0.,  0.],
-[ 0.,  0.,  0.,  0.,  0.,  0.,  0.,  0.,  0.,  0.],
-[ 0.,  0.,  0.,  0.,  0.,  0.,  0.,  0.,  0.,  0.]])</p></li>
-<li><p><strong>0.</strong> – [ 0.,  0.,  0.,  0.,  0.,  0.,  0.,  0.,  0.,  0.],
-[ 0.,  0., 20., 20.,  0.,  0.,  0.,  0.,  0.,  0.],
-[ 0.,  0., 20., 20.,  0.,  0.,  0.,  0.,  0.,  0.],
-[ 0.,  0.,  0.,  0.,  0.,  0.,  0.,  0.,  0.,  0.],
-[ 0.,  0.,  0.,  0.,  0.,  0.,  0.,  0.,  0.,  0.],
-[ 0.,  0.,  0.,  0.,  0.,  0.,  0.,  0.,  0.,  0.],
-[ 0.,  0.,  0.,  0.,  0.,  0.,  0.,  0.,  0.,  0.],
-[ 0.,  0.,  0.,  0.,  0.,  0.,  0.,  0.,  0.,  0.],
-[ 0.,  0.,  0.,  0.,  0.,  0.,  0.,  0.,  0.,  0.]])</p></li>
-<li><p><strong>0.</strong> – [ 0.,  0.,  0.,  0.,  0.,  0.,  0.,  0.,  0.,  0.],
-[ 0.,  0., 20., 20.,  0.,  0.,  0.,  0.,  0.,  0.],
-[ 0.,  0., 20., 20.,  0.,  0.,  0.,  0.,  0.,  0.],
-[ 0.,  0.,  0.,  0.,  0.,  0.,  0.,  0.,  0.,  0.],
-[ 0.,  0.,  0.,  0.,  0.,  0.,  0.,  0.,  0.,  0.],
-[ 0.,  0.,  0.,  0.,  0.,  0.,  0.,  0.,  0.,  0.],
-[ 0.,  0.,  0.,  0.,  0.,  0.,  0.,  0.,  0.,  0.],
-[ 0.,  0.,  0.,  0.,  0.,  0.,  0.,  0.,  0.,  0.],
-[ 0.,  0.,  0.,  0.,  0.,  0.,  0.,  0.,  0.,  0.]])</p></li>
-<li><p><strong>0.</strong> – [ 0.,  0.,  0.,  0.,  0.,  0.,  0.,  0.,  0.,  0.],
-[ 0.,  0., 20., 20.,  0.,  0.,  0.,  0.,  0.,  0.],
-[ 0.,  0., 20., 20.,  0.,  0.,  0.,  0.,  0.,  0.],
-[ 0.,  0.,  0.,  0.,  0.,  0.,  0.,  0.,  0.,  0.],
-[ 0.,  0.,  0.,  0.,  0.,  0.,  0.,  0.,  0.,  0.],
-[ 0.,  0.,  0.,  0.,  0.,  0.,  0.,  0.,  0.,  0.],
-[ 0.,  0.,  0.,  0.,  0.,  0.,  0.,  0.,  0.,  0.],
-[ 0.,  0.,  0.,  0.,  0.,  0.,  0.,  0.,  0.,  0.],
-[ 0.,  0.,  0.,  0.,  0.,  0.,  0.,  0.,  0.,  0.]])</p></li>
-<li><p><strong>0.</strong> – [ 0.,  0.,  0.,  0.,  0.,  0.,  0.,  0.,  0.,  0.],
-[ 0.,  0., 20., 20.,  0.,  0.,  0.,  0.,  0.,  0.],
-[ 0.,  0., 20., 20.,  0.,  0.,  0.,  0.,  0.,  0.],
-[ 0.,  0.,  0.,  0.,  0.,  0.,  0.,  0.,  0.,  0.],
-[ 0.,  0.,  0.,  0.,  0.,  0.,  0.,  0.,  0.,  0.],
-[ 0.,  0.,  0.,  0.,  0.,  0.,  0.,  0.,  0.,  0.],
-[ 0.,  0.,  0.,  0.,  0.,  0.,  0.,  0.,  0.,  0.],
-[ 0.,  0.,  0.,  0.,  0.,  0.,  0.,  0.,  0.,  0.],
-[ 0.,  0.,  0.,  0.,  0.,  0.,  0.,  0.,  0.,  0.]])</p></li>
-<li><p><strong>0.</strong> – [ 0.,  0.,  0.,  0.,  0.,  0.,  0.,  0.,  0.,  0.],
-[ 0.,  0., 20., 20.,  0.,  0.,  0.,  0.,  0.,  0.],
-[ 0.,  0., 20., 20.,  0.,  0.,  0.,  0.,  0.,  0.],
-[ 0.,  0.,  0.,  0.,  0.,  0.,  0.,  0.,  0.,  0.],
-[ 0.,  0.,  0.,  0.,  0.,  0.,  0.,  0.,  0.,  0.],
-[ 0.,  0.,  0.,  0.,  0.,  0.,  0.,  0.,  0.,  0.],
-[ 0.,  0.,  0.,  0.,  0.,  0.,  0.,  0.,  0.,  0.],
-[ 0.,  0.,  0.,  0.,  0.,  0.,  0.,  0.,  0.,  0.],
-[ 0.,  0.,  0.,  0.,  0.,  0.,  0.,  0.,  0.,  0.]])</p></li>
-<li><p><strong>0.</strong><strong>]</strong> – [ 0.,  0.,  0.,  0.,  0.,  0.,  0.,  0.,  0.,  0.],
-[ 0.,  0., 20., 20.,  0.,  0.,  0.,  0.,  0.,  0.],
-[ 0.,  0., 20., 20.,  0.,  0.,  0.,  0.,  0.,  0.],
-[ 0.,  0.,  0.,  0.,  0.,  0.,  0.,  0.,  0.,  0.],
-[ 0.,  0.,  0.,  0.,  0.,  0.,  0.,  0.,  0.,  0.],
-[ 0.,  0.,  0.,  0.,  0.,  0.,  0.,  0.,  0.,  0.],
-[ 0.,  0.,  0.,  0.,  0.,  0.,  0.,  0.,  0.,  0.],
-[ 0.,  0.,  0.,  0.,  0.,  0.,  0.,  0.,  0.,  0.],
-[ 0.,  0.,  0.,  0.,  0.,  0.,  0.,  0.,  0.,  0.]])</p></li>
-</ul>
-</dd>
-</dl>
-<dl class="simple">
-<dt>:param<span class="classifier">[ 0.,  0.,  0.,  0.,  0.,  0.,  0.,  0.,  0.,  0.],</span></dt><dd><p>[ 0.,  0., 20., 20.,  0.,  0.,  0.,  0.,  0.,  0.],
-[ 0.,  0., 20., 20.,  0.,  0.,  0.,  0.,  0.,  0.],
-[ 0.,  0.,  0.,  0.,  0.,  0.,  0.,  0.,  0.,  0.],
-[ 0.,  0.,  0.,  0.,  0.,  0.,  0.,  0.,  0.,  0.],
-[ 0.,  0.,  0.,  0.,  0.,  0.,  0.,  0.,  0.,  0.],
-[ 0.,  0.,  0.,  0.,  0.,  0.,  0.,  0.,  0.,  0.],
-[ 0.,  0.,  0.,  0.,  0.,  0.,  0.,  0.,  0.,  0.],
-[ 0.,  0.,  0.,  0.,  0.,  0.,  0.,  0.,  0.,  0.]])</p>
-</dd>
-</dl>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">ex</span> <span class="o">=</span> <span class="n">ExampleCoords</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ex</span><span class="o">.</span><span class="n">set_range</span><span class="p">(</span><span class="s2">&quot;h&quot;</span><span class="p">,</span> <span class="mf">100.0</span><span class="p">,</span> <span class="mi">20</span><span class="p">,</span> <span class="mi">40</span><span class="p">,</span> <span class="mi">20</span><span class="p">,</span> <span class="mi">40</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ex</span><span class="o">.</span><span class="n">h</span>
+<span class="go">array([[  0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.],</span>
+<span class="go">       [  0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.],</span>
+<span class="go">       [  0.,   0., 100., 100., 100.,   0.,   0.,   0.,   0.,   0.],</span>
+<span class="go">       [  0.,   0., 100., 100., 100.,   0.,   0.,   0.,   0.,   0.],</span>
+<span class="go">       [  0.,   0., 100., 100., 100.,   0.,   0.,   0.,   0.,   0.],</span>
+<span class="go">       [  0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.],</span>
+<span class="go">       [  0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.],</span>
+<span class="go">       [  0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.],</span>
+<span class="go">       [  0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.],</span>
+<span class="go">       [  0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.]])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ex</span><span class="o">.</span><span class="n">set_range</span><span class="p">(</span><span class="s2">&quot;h&quot;</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ex</span><span class="o">.</span><span class="n">h</span>
+<span class="go">array([[0., 0., 0., 0., 0., 0., 0., 0., 0., 0.],</span>
+<span class="go">       [0., 0., 0., 0., 0., 0., 0., 0., 0., 0.],</span>
+<span class="go">       [0., 0., 0., 0., 0., 0., 0., 0., 0., 0.],</span>
+<span class="go">       [0., 0., 0., 0., 0., 0., 0., 0., 0., 0.],</span>
+<span class="go">       [0., 0., 0., 0., 0., 0., 0., 0., 0., 0.],</span>
+<span class="go">       [0., 0., 0., 0., 0., 0., 0., 0., 0., 0.],</span>
+<span class="go">       [0., 0., 0., 0., 0., 0., 0., 0., 0., 0.],</span>
+<span class="go">       [0., 0., 0., 0., 0., 0., 0., 0., 0., 0.],</span>
+<span class="go">       [0., 0., 0., 0., 0., 0., 0., 0., 0., 0.],</span>
+<span class="go">       [0., 0., 0., 0., 0., 0., 0., 0., 0., 0.]])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ex</span><span class="o">.</span><span class="n">set_range</span><span class="p">(</span><span class="s2">&quot;h&quot;</span><span class="p">,</span> <span class="mf">20.0</span><span class="p">,</span> <span class="mi">20</span><span class="p">,</span> <span class="mi">40</span><span class="p">,</span> <span class="mi">20</span><span class="p">,</span> <span class="mi">40</span><span class="p">,</span> <span class="n">inclusive</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ex</span><span class="o">.</span><span class="n">h</span>
+<span class="go">array([[ 0.,  0.,  0.,  0.,  0.,  0.,  0.,  0.,  0.,  0.],</span>
+<span class="go">       [ 0.,  0.,  0.,  0.,  0.,  0.,  0.,  0.,  0.,  0.],</span>
+<span class="go">       [ 0.,  0., 20., 20.,  0.,  0.,  0.,  0.,  0.,  0.],</span>
+<span class="go">       [ 0.,  0., 20., 20.,  0.,  0.,  0.,  0.,  0.,  0.],</span>
+<span class="go">       [ 0.,  0.,  0.,  0.,  0.,  0.,  0.,  0.,  0.,  0.],</span>
+<span class="go">       [ 0.,  0.,  0.,  0.,  0.,  0.,  0.,  0.,  0.,  0.],</span>
+<span class="go">       [ 0.,  0.,  0.,  0.,  0.,  0.,  0.,  0.,  0.,  0.],</span>
+<span class="go">       [ 0.,  0.,  0.,  0.,  0.,  0.,  0.,  0.,  0.,  0.],</span>
+<span class="go">       [ 0.,  0.,  0.,  0.,  0.,  0.,  0.,  0.,  0.,  0.],</span>
+<span class="go">       [ 0.,  0.,  0.,  0.,  0.,  0.,  0.,  0.,  0.,  0.]])</span>
+</pre></div>
+</div>
 </dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="fmdtools.define.coords.Coords.states">
-<span class="sig-name descname"><span class="pre">states</span></span><a class="headerlink" href="#fmdtools.define.coords.Coords.states" title="Link to this definition"></a></dt>
-<dd></dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="fmdtools.define.coords.Coords.to_gridpoint">
@@ -5798,18 +5195,20 @@ The default is None (which selects from all points).</p></li>
 <dd class="field-odd"><p><strong>*args</strong> (<em>number</em><em>, </em><em>number</em>) – x-y value corresponding to the (unrounded) scalar location in the grid</p>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p><ul class="simple">
-<li><p><strong>pt</strong> (<em>np.array</em>) – x-y location corresponding to the (rounded) scalar location in the grid</p></li>
-<li><p><em>e.g.,</em></p></li>
-<li><p><em>&gt;&gt;&gt; ex = ExampleCoords()</em></p></li>
-<li><p><em>&gt;&gt;&gt; ex.to_gridpoint(3.5, 4)</em></p></li>
-<li><p><em>array([0., 0.])</em></p></li>
-<li><p><em>&gt;&gt;&gt; ex.to_gridpoint(14.0, 12.0)</em></p></li>
-<li><p><em>array([10., 10.])</em></p></li>
-</ul>
-</p>
+<dd class="field-even"><p><strong>pt</strong> – x-y location corresponding to the (rounded) scalar location in the grid</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>np.array</p>
 </dd>
 </dl>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">ex</span> <span class="o">=</span> <span class="n">ExampleCoords</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ex</span><span class="o">.</span><span class="n">to_gridpoint</span><span class="p">(</span><span class="mf">3.5</span><span class="p">,</span> <span class="mi">4</span><span class="p">)</span>
+<span class="go">array([0., 0.])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ex</span><span class="o">.</span><span class="n">to_gridpoint</span><span class="p">(</span><span class="mf">14.0</span><span class="p">,</span> <span class="mf">12.0</span><span class="p">)</span>
+<span class="go">array([10., 10.])</span>
+</pre></div>
+</div>
 </dd></dl>
 
 <dl class="py method">
@@ -5821,18 +5220,20 @@ The default is None (which selects from all points).</p></li>
 <dd class="field-odd"><p><strong>*args</strong> (<em>number</em><em>, </em><em>number</em><em>,</em><em>...</em>) – x-y values corresponding to the scalar location of the point in the grid.</p>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p><ul class="simple">
-<li><p><strong>gridpoint</strong> (<em>tuple</em>) – x-y integer values corresponding to the corresponding array index.</p></li>
-<li><p><em>e.g.,</em></p></li>
-<li><p><em>&gt;&gt;&gt; ex = ExampleCoords()</em></p></li>
-<li><p><em>&gt;&gt;&gt; ex.to_index(10, 20)</em></p></li>
-<li><p><em>(1, 2)</em></p></li>
-<li><p><em>&gt;&gt;&gt; ex.to_index(54.234, 23.41)</em></p></li>
-<li><p><em>(5, 2)</em></p></li>
-</ul>
-</p>
+<dd class="field-even"><p><strong>gridpoint</strong> – x-y integer values corresponding to the corresponding array index.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>tuple</p>
 </dd>
 </dl>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">ex</span> <span class="o">=</span> <span class="n">ExampleCoords</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ex</span><span class="o">.</span><span class="n">to_index</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">20</span><span class="p">)</span>
+<span class="go">(1, 2)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ex</span><span class="o">.</span><span class="n">to_index</span><span class="p">(</span><span class="mf">54.234</span><span class="p">,</span> <span class="mf">23.41</span><span class="p">)</span>
+<span class="go">(5, 2)</span>
+</pre></div>
+</div>
 </dd></dl>
 
 </section>
@@ -5874,131 +5275,19 @@ instantiate as a list, where the tuple is arguments to Coords.find_all</p>
 <dt>point_pointname: tuple</dt><dd><p>Tuple (x, y) referring to a point in the grid with a given name.</p>
 </dd>
 </dl>
-<p>e.g., defining the following classes will define a grid with a, v features, an
-h state, a point “start”, and a “high_v” collection::
-&gt;&gt;&gt; class ExampleCoordsParam(CoordsParam):
-…     feature_a: tuple = (bool, False)
-…     feature_v: tuple = (float, 1.0)
-…     state_h: tuple = (float, 0.0)
-…     point_start: tuple = (0.0, 0.0)
-…     collect_high_v: tuple = (“v”, 5.0, np.greater)
-&gt;&gt;&gt; ex = ExampleCoordsParam()</p>
-<dl class="py attribute">
-<dt class="sig sig-object py" id="fmdtools.define.coords.CoordsParam.blocksize">
-<span class="sig-name descname"><span class="pre">blocksize</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">10.0</span></em><a class="headerlink" href="#fmdtools.define.coords.CoordsParam.blocksize" title="Link to this definition"></a></dt>
-<dd></dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="fmdtools.define.coords.CoordsParam.gapwidth">
-<span class="sig-name descname"><span class="pre">gapwidth</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">0.0</span></em><a class="headerlink" href="#fmdtools.define.coords.CoordsParam.gapwidth" title="Link to this definition"></a></dt>
-<dd></dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="fmdtools.define.coords.CoordsParam.x_size">
-<span class="sig-name descname"><span class="pre">x_size</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">10</span></em><a class="headerlink" href="#fmdtools.define.coords.CoordsParam.x_size" title="Link to this definition"></a></dt>
-<dd></dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="fmdtools.define.coords.CoordsParam.y_size">
-<span class="sig-name descname"><span class="pre">y_size</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">10</span></em><a class="headerlink" href="#fmdtools.define.coords.CoordsParam.y_size" title="Link to this definition"></a></dt>
-<dd></dd></dl>
-
+<p class="rubric">Examples</p>
+<p>Defining the following classes will define a grid with a, v features, an
+h state, a point “start”, and a “high_v” collection:</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="k">class</span> <span class="nc">ExampleCoordsParam</span><span class="p">(</span><span class="n">CoordsParam</span><span class="p">):</span>
+<span class="gp">... </span>    <span class="n">feature_a</span><span class="p">:</span> <span class="nb">tuple</span> <span class="o">=</span> <span class="p">(</span><span class="nb">bool</span><span class="p">,</span> <span class="kc">False</span><span class="p">)</span>
+<span class="gp">... </span>    <span class="n">feature_v</span><span class="p">:</span> <span class="nb">tuple</span> <span class="o">=</span> <span class="p">(</span><span class="nb">float</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">)</span>
+<span class="gp">... </span>    <span class="n">state_h</span><span class="p">:</span> <span class="nb">tuple</span> <span class="o">=</span> <span class="p">(</span><span class="nb">float</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">)</span>
+<span class="gp">... </span>    <span class="n">point_start</span><span class="p">:</span> <span class="nb">tuple</span> <span class="o">=</span> <span class="p">(</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">)</span>
+<span class="gp">... </span>    <span class="n">collect_high_v</span><span class="p">:</span> <span class="nb">tuple</span> <span class="o">=</span> <span class="p">(</span><span class="s2">&quot;v&quot;</span><span class="p">,</span> <span class="mf">5.0</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">greater</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ex</span> <span class="o">=</span> <span class="n">ExampleCoordsParam</span><span class="p">()</span>
+</pre></div>
+</div>
 </section>
-</dd></dl>
-
-<dl class="py class">
-<dt class="sig sig-object py" id="fmdtools.define.coords.ExampleCoords">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">fmdtools.define.coords.</span></span><span class="sig-name descname"><span class="pre">ExampleCoords</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.define.coords.ExampleCoords" title="Link to this definition"></a></dt>
-<dd><p>Bases: <a class="reference internal" href="#fmdtools.define.coords.Coords" title="fmdtools.define.coords.Coords"><code class="xref py py-class docutils literal notranslate"><span class="pre">Coords</span></code></a></p>
-<p>Example of Coords class for use in documentation and testing.</p>
-<dl class="py attribute">
-<dt class="sig sig-object py" id="fmdtools.define.coords.ExampleCoords.collections">
-<span class="sig-name descname"><span class="pre">collections</span></span><a class="headerlink" href="#fmdtools.define.coords.ExampleCoords.collections" title="Link to this definition"></a></dt>
-<dd></dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="fmdtools.define.coords.ExampleCoords.default_track">
-<span class="sig-name descname"><span class="pre">default_track</span></span><a class="headerlink" href="#fmdtools.define.coords.ExampleCoords.default_track" title="Link to this definition"></a></dt>
-<dd></dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="fmdtools.define.coords.ExampleCoords.features">
-<span class="sig-name descname"><span class="pre">features</span></span><a class="headerlink" href="#fmdtools.define.coords.ExampleCoords.features" title="Link to this definition"></a></dt>
-<dd></dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="fmdtools.define.coords.ExampleCoords.grid">
-<span class="sig-name descname"><span class="pre">grid</span></span><a class="headerlink" href="#fmdtools.define.coords.ExampleCoords.grid" title="Link to this definition"></a></dt>
-<dd></dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="fmdtools.define.coords.ExampleCoords.init_properties">
-<span class="sig-name descname"><span class="pre">init_properties</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.define.coords.ExampleCoords.init_properties" title="Link to this definition"></a></dt>
-<dd><p>Initialize points where v=10.0.</p>
-</dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="fmdtools.define.coords.ExampleCoords.p">
-<span class="sig-name descname"><span class="pre">p</span></span><a class="headerlink" href="#fmdtools.define.coords.ExampleCoords.p" title="Link to this definition"></a></dt>
-<dd></dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="fmdtools.define.coords.ExampleCoords.points">
-<span class="sig-name descname"><span class="pre">points</span></span><a class="headerlink" href="#fmdtools.define.coords.ExampleCoords.points" title="Link to this definition"></a></dt>
-<dd></dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="fmdtools.define.coords.ExampleCoords.properties">
-<span class="sig-name descname"><span class="pre">properties</span></span><a class="headerlink" href="#fmdtools.define.coords.ExampleCoords.properties" title="Link to this definition"></a></dt>
-<dd></dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="fmdtools.define.coords.ExampleCoords.pts">
-<span class="sig-name descname"><span class="pre">pts</span></span><a class="headerlink" href="#fmdtools.define.coords.ExampleCoords.pts" title="Link to this definition"></a></dt>
-<dd></dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="fmdtools.define.coords.ExampleCoords.r">
-<span class="sig-name descname"><span class="pre">r</span></span><a class="headerlink" href="#fmdtools.define.coords.ExampleCoords.r" title="Link to this definition"></a></dt>
-<dd></dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="fmdtools.define.coords.ExampleCoords.states">
-<span class="sig-name descname"><span class="pre">states</span></span><a class="headerlink" href="#fmdtools.define.coords.ExampleCoords.states" title="Link to this definition"></a></dt>
-<dd></dd></dl>
-
-</dd></dl>
-
-<dl class="py class">
-<dt class="sig sig-object py" id="fmdtools.define.coords.ExampleCoordsParam">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">fmdtools.define.coords.</span></span><span class="sig-name descname"><span class="pre">ExampleCoordsParam</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">strict_immutability</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">check_type</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">check_pickle</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.define.coords.ExampleCoordsParam" title="Link to this definition"></a></dt>
-<dd><p>Bases: <a class="reference internal" href="#fmdtools.define.coords.CoordsParam" title="fmdtools.define.coords.CoordsParam"><code class="xref py py-class docutils literal notranslate"><span class="pre">CoordsParam</span></code></a></p>
-<p>Example of a Coords param for use in documentation/testing.</p>
-<dl class="py attribute">
-<dt class="sig sig-object py" id="fmdtools.define.coords.ExampleCoordsParam.collect_high_v">
-<span class="sig-name descname"><span class="pre">collect_high_v</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">tuple</span></em><a class="headerlink" href="#fmdtools.define.coords.ExampleCoordsParam.collect_high_v" title="Link to this definition"></a></dt>
-<dd></dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="fmdtools.define.coords.ExampleCoordsParam.feature_a">
-<span class="sig-name descname"><span class="pre">feature_a</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">tuple</span></em><a class="headerlink" href="#fmdtools.define.coords.ExampleCoordsParam.feature_a" title="Link to this definition"></a></dt>
-<dd></dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="fmdtools.define.coords.ExampleCoordsParam.feature_v">
-<span class="sig-name descname"><span class="pre">feature_v</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">tuple</span></em><a class="headerlink" href="#fmdtools.define.coords.ExampleCoordsParam.feature_v" title="Link to this definition"></a></dt>
-<dd></dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="fmdtools.define.coords.ExampleCoordsParam.point_start">
-<span class="sig-name descname"><span class="pre">point_start</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">tuple</span></em><a class="headerlink" href="#fmdtools.define.coords.ExampleCoordsParam.point_start" title="Link to this definition"></a></dt>
-<dd></dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="fmdtools.define.coords.ExampleCoordsParam.state_h">
-<span class="sig-name descname"><span class="pre">state_h</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">tuple</span></em><a class="headerlink" href="#fmdtools.define.coords.ExampleCoordsParam.state_h" title="Link to this definition"></a></dt>
-<dd></dd></dl>
-
 </dd></dl>
 
 </section>
