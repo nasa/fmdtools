@@ -69,7 +69,7 @@ The multirotor example model has several models of drones modelled at differing 
   
   - Analysis using Basic analysis/results processing capabilities
  
- - `Urban Drone Demo <../examples/multirotor/Urban_Drone_demo.ipynb>`_ is helpful for understanding how to set up gridworlds using :class:`fmdtools.define.coords.Coords` and an Environment class.
+ - `Urban Drone Demo <../examples/multirotor/Urban_Drone_Demo.ipynb>`_ is helpful for understanding how to set up gridworlds using :class:`fmdtools.define.coords.Coords` and an Environment class.
  
 - `Multirotor Optimization <../examples/multirotor/Multirotor_Optimization.ipynb>`_ shows how the design, operations, and contingency management of a system can be co-optimized with the :class:`fmdtools.sim.search.ProblemInterface` class. 
 
@@ -88,7 +88,7 @@ The multirotor example model has several models of drones modelled at differing 
    :hidden:
    
    ../examples/multirotor/Demonstration.ipynb
-   ../examples/multirotor/Urban_Drone_demo.ipynb
+   ../examples/multirotor/Urban_Drone_Demo.ipynb
    ../examples/multirotor/Multirotor_Optimization.ipynb
 
 Tank
@@ -107,7 +107,7 @@ The support files include various implementations of the tank model.
 
 - A demonstration Optimization Tank Model (`tank_opt.py`), resilience optimization architectures using :class:`fmdtools.sim.search.ProblemInterface` 
  
-- The main `Tank optimization model (`tank_optimization.py`)similar to `tank_model` and `tank_opt` and is a dynamical implementation of a tank system with contingency management. 
+- The main Tank optimization model (`tank_optimization.py`) similar to `tank_model` and `tank_opt` and is a dynamical implementation of a tank system with contingency management. 
 
 .. toctree::
    :hidden:
