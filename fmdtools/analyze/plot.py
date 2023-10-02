@@ -1034,9 +1034,6 @@ def samplemetric(app, endclasses, fxnmode,
 
             - 'std' for a single point for each interval
             - 'quadrature' for a set of points with weights defined by a quadrature
-            - 'pruned piecewise-linear' for a set of points with weights defined by a
-            pruned approach (from app.prune_scenarios())
-            - 'fullint' for the full integral (sampling every possible time)
     """
     associated_scens = []
     for phasetup in app.mode_phase_map[fxnmode]:
@@ -1100,7 +1097,7 @@ def samplemetric(app, endclasses, fxnmode,
     if samptype == 'fullint':
         axes[0].plot(times, costs, label=metric)
     else:
-        if samptype == 'quadrature' or samptype == 'pruned piecewise-linear':
+        if samptype == 'quadrature':
             sizes = 1000 * np.array([weight if weight != 1 / len(timeweights) else 0.0
                                     for (phasetype, phase), timeweights in app.weights[fxnmode].items() if timeweights
                                     for time, weight in timeweights.items() if time in times])
