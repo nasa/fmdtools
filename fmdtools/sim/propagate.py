@@ -433,9 +433,9 @@ def sequence(mdl, seq={}, faultseq={}, disturbances={}, scen={}, rate=np.NaN, **
     faultseq : dict
         Dict of times and modes defining the fault scenario {time:{fxns: [modes]},}
     disturbances : dict
-        Dict of times and modes defining the disturbances in the scenario::
+        Dict of times and states defining the disturbances in the scenario::
 
-        {time:{fxns: [modes]},}
+        {time: {path.to.state: stateval}}
 
     scen : Scenario, optional
         Scenario dictionary, if already constructed (for external calls)
