@@ -295,18 +295,28 @@ class NominalApproach():
             where randfunc is the method producing random outputs (e.g. numpy.random.rand)
             and the successive parameters param1, param2, etc are inputs to the method
         """
-        if type(seeds)==list: 
-            if len(seeds)!=replicates: raise Exception("list seeds must be of length replicates")
-        else: seedstr=seeds;  seeds=np.random.SeedSequence.generate_state(np.random.SeedSequence(),replicates)
-        if seedstr=='shared':         mdlseeds=seeds
-        elif seedstr=='independent':  mdlseeds=np.random.SeedSequence.generate_state(np.random.SeedSequence(),replicates)
-        elif seedstr=='keep_model':   mdlseeds= [None for i in range(replicates)]
-        
-        self.ranges[rangeid] = {'fixedargs':fixedargs, 'randvars':randvars, 'scenarios':[], 'num_pts':replicates}
+        if type(seeds) == list:
+            if len(seeds) != replicates:
+                raise Exception("list seeds must be of length replicates")
+        else:
+            seedstr = seeds
+            seeds = np.random.SeedSequence.generate_state(
+                np.random.SeedSequence(), replicates)
+        if seedstr == 'shared':
+            mdlseeds = seeds
+        elif seedstr == 'independent':
+            mdlseeds = np.random.SeedSequence.generate_state(
+                np.random.SeedSequence(), replicates)
+        elif seedstr == 'keep_model':
+            mdlseeds = [None for i in range(replicates)]
+
+        self.ranges[rangeid] = {'fixedargs': fixedargs,
+                                'randvars': randvars, 'scenarios': [], 'num_pts': replicates}
         for i in range(replicates):
-            self.num_scenarios+=1
+            self.num_scenarios += 1
             np.random.seed(seeds[i])
-            inputparams = {name: (ins() if callable(ins) else ins[0](*ins[1:])) for name, ins in randvars.items()}
+            inputparams = {name: (ins() if callable(ins) else ins[0](*ins[1:]))
+                           for name, ins in randvars.items()}
             p = paramfunc(*fixedargs, **inputparams)
             scenname = rangeid+'_'+str(self.num_scenarios)
             self.scenarios[scenname] = ParamScenario(name=scenname,
@@ -881,75 +891,7 @@ class SampleApproach():
         if samp_size<len(self.scenlist):
             rng = np.random.default_rng(seed)
             self.scenlist = rng.choice(self.scenlist, samp_size, replace=False)
-    def prune_scenarios(self,endclasses, value="cost", samptype='piecewise', threshold=0.1, sampparam={'samp':'evenspacing','numpts':1}):
-        """
-        Finds the best sample approach to approximate the full integral (given the approach was the full integral).
 
-        Parameters
-        ----------
-        endclasses : dict
-            dict of results (cost, rate, expected cost) for the model run indexed by scenid 
-        value: str
-            balue to prune scenarios over. The default is "cost"
-        samptype : str ('piecewise' or 'bestpt'), optional
-            Method to use. 
-            If 'bestpt', finds the point in the interval that gives the average cost. 
-            If 'piecewise', attempts to split the inverval into sub-intervals of continuity
-            The default is 'piecewise'.
-        threshold : float, optional
-            If 'piecewise,' the threshold for detecting a discontinuity based on deviation from linearity. The default is 0.1.
-        sampparam : float, optional
-            If 'piecewise,' the sampparam sampparam to prune to. The default is {'samp':'evenspacing','numpts':1}, which would be a single point (optimal for linear).
-        """
-        warn("Prune_scenarios may not be up-to-date, see: RAD-222")
-        newscenids = dict.fromkeys(self.scenids.keys())
-        newsampletimes = {key:{} for key in self.sampletimes.keys()}
-        newweights = {fault:dict.fromkeys(phasetimes) for fault, phasetimes in self.weights.items()}
-        for modeinphase in self.scenids:
-            costs= np.array([endclasses.get(scen).get('endclass.'+value) for scen in self.scenids[modeinphase]])
-            if samptype=='bestpt':
-                errs = abs(np.mean(costs) - costs)
-                mins = np.where(errs == errs.min())[0]
-                pts=[mins[int(len(mins)/2)]]
-                weights=[1]
-            elif samptype=='piecewise':
-                if not self.phases or modeinphase[1][0]=='global': 
-                    beginning, end = self.globalphases[modeinphase[1][1]]
-                else: 
-                    beginning, end = self.phases[modeinphase[1][0]][modeinphase[1][1]]
-                partlocs=[0, len(list(np.arange(beginning,end, self.tstep)))]
-                reset=False
-                for ind, cost in enumerate(costs[1:-1]): # find where fxn is no longer linear
-                    if reset==True:
-                        reset=False
-                        continue
-                    if abs(((cost-costs[ind]) - (costs[ind+2]-cost))/(costs[ind+2]-cost + 0.0001)) > threshold:  
-                        partlocs = partlocs + [ind+2]
-                        reset=True
-                partlocs.sort()
-                pts=[]
-                weights=[]
-                for (ind_part, partloc) in enumerate(partlocs[1:]): # add points in each section
-                    partition = [i for i in range(partlocs[ind_part], partloc)]
-                    part_pts, part_weights = self.select_points(sampparam, partition)
-                    pts = pts + part_pts
-                    overall_part_weight =  (partloc-partlocs[ind_part])/(partlocs[-1]-partlocs[0])
-                    weights = weights + list(np.array(part_weights)*overall_part_weight)
-                pts.sort()
-            newscenids[modeinphase] =  [self.scenids[modeinphase][pt] for pt in pts]
-            newscens = [scen for scen in self.scenlist if scen.name in newscenids[modeinphase]]
-            newweights[modeinphase[0]][modeinphase[1]] = {scen.time:weights[ind] for (ind, scen) in enumerate(newscens)}
-            newscenids[modeinphase] =  [self.scenids[modeinphase][pt] for pt in pts]
-            for newscen in newscens:
-                if not newsampletimes[modeinphase[1]].get(newscen.time):
-                    newsampletimes[modeinphase[1]][newscen.time] = [modeinphase[0]]
-                else:
-                    newsampletimes[modeinphase[1]][newscen.time] = newsampletimes[modeinphase[1]][newscen.time] + [modeinphase[0]]
-        self.scenids = newscenids
-        self.weights = newweights
-        self.sampletimes = newsampletimes
-        self.create_scenarios()
-        self.sampparams={key:{'samp':'pruned '+samptype} for key in self.sampparams}
     def list_modes(self, joint=False):
         """ Returns a list of modes in the approach """
         if joint and hasattr(self, 'jointmodes'):
@@ -1026,31 +968,45 @@ class SampleApproach():
                 if not grouped: grouped_scens['ungrouped'].update(ids)    
         else: raise Exception("Invalid option for group_by: "+group_by)
         return grouped_scens
+
     def get_id_weights(self):
-        """Returns a dictionary with weights for each scenario with structure {scenid:weight}"""
-        id_weights ={}
+        """
+        Return a dictionary with weights for each scenario.
+
+        Dict has structure.{scenid: weight}.
+        """
+        id_weights = {}
         for scens, ids in self.scenids.items():
-            num_phases = len([n for n,i in self.weights[scens[0]].items() if i])
+            num_phases = len([n for n, i in self.weights[scens[0]].items() if i])
             weights = np.array([*self.weights[scens[0]][scens[1]].values()])/num_phases
-            id_weights.update({scenid:weights[i] for i,scenid in enumerate(ids)})
+            id_weights.update({scenid: weights[i] for i, scenid in enumerate(ids)})
         return id_weights
-    
+
 def find_overlap_n(intervals):
-    """Finds the overlap between given intervals.
-    Used to sample joint fault modes with different (potentially overlapping) phases """
+    """
+    Find the overlap between given intervals.
+
+    Used to sample joint fault modes with different (potentially overlapping) phases
+    """
     try:
-        joined_times={}
+        joined_times = {}
         intervals_times = []
         for i, interval in enumerate(intervals):
-            if type(interval[0]) in [float, int]: interval=[interval]
+            if type(interval[0]) in [float, int]:
+                interval = [interval]
             possible_times = set()
-            possible_times.update(*[{*np.arange(i[0],i[-1]+1)} for i in interval])
-            if i==0:    joined_times = possible_times
-            else:       joined_times = joined_times.intersection(possible_times)
+            possible_times.update(*[{*np.arange(i[0], i[-1]+1)} for i in interval])
+            if i == 0:
+                joined_times = possible_times
+            else:
+                joined_times = joined_times.intersection(possible_times)
             intervals_times.append(len(possible_times))
-        if not joined_times:    return [], intervals_times
-        else:                   return [*np.sort([*joined_times])], intervals_times
+        if not joined_times:
+            return [], intervals_times
+        else:
+            return [*np.sort([*joined_times])], intervals_times
     except IndexError:
-        if all(intervals[0]==i for i in intervals): return intervals[0]
-        else:                                       return 0
-    
+        if all(intervals[0] == i for i in intervals):
+            return intervals[0]
+        else:
+            return 0
