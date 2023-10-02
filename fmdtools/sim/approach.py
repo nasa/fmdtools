@@ -484,7 +484,7 @@ class SampleApproach():
         self.tstep = mdl.sp.dt
         self.units = mdl.sp.units
         self.fxns = mdl.get_fxns()
-        
+
         self.init_modelist(mdl,faults, jointfaults)
         self.init_rates(mdl, jointfaults=jointfaults, modephases=modephases, join_modephases=join_modephases)
         self.create_sampletimes(mdl, sampparams, defaultsamp)
