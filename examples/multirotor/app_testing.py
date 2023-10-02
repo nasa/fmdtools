@@ -120,6 +120,7 @@ class FaultDomain(object):
         --------
         >>> fd = FaultDomain(Drone())
         >>> fd.add_all_fxn_modes("store_ee")
+        >>> fd.faults
         {'store_ee.m.faults.nocharge': Fault(dist=1, oppvect=[1.0], rcost=300, probtype='rate', units='hr')}
         """
         for fxnname in fxnnames:
