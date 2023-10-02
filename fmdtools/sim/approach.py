@@ -20,12 +20,14 @@ from warnings import warn
 
 class NominalApproach():
     """
-    Class for defining sets of nominal simulations. To explain, a given system 
-    may have a number of input situations (missions, terrain, etc) which the 
-    user may want to simulate to ensure the system operates as desired. This 
-    class (in conjunction with propagate.nominal_approach()) can be used to 
+    Class for defining sets of nominal simulations.
+
+    To explain, a given system
+    may have a number of input situations (missions, terrain, etc) which the
+    user may want to simulate to ensure the system operates as desired. This
+    class (in conjunction with propagate.nominal_approach()) can be used to
     perform these simulations.
-    
+
     Attributes
     ----------
     scenarios : dict
@@ -35,11 +37,13 @@ class NominalApproach():
     ranges : dict
         dict of the parameters defined in each method for the approach
     """
+
     def __init__(self):
-        """Instantiates NominalApproach (simulation p are defined using methods)"""
+        """Instantiate NominalApproach (simulation p are defined using methods)."""
         self.scenarios = {}
         self.num_scenarios = 0
         self.ranges = {}
+
     def __repr__(self):
         all_range_str=""
         for r, rangedict in self.ranges.items():
@@ -50,6 +54,7 @@ class NominalApproach():
             all_range_str=all_range_str+rangestr+subrangestr
         #rangestr = "\n- "+"\n- ".join([k+": "+str(len(v['scenarios']))+' scenarios' for k,v in self.ranges.items()])
         return "NominalApproach ("+str(self.num_scenarios)+" scenarios) with ranges:"+all_range_str
+
     def add_seed_replicates(self, rangeid, seeds):
         """
         Generates an approach with different seeds to use for the model's internal stochastic behaviors
@@ -68,6 +73,7 @@ class NominalApproach():
             scenname = rangeid+'_'+str(self.num_scenarios)
             self.scenarios[scenname]= NominalScenario(rangeid=rangeid, r={'seed':int(seeds[i])}, prob=1/len(seeds), name=scenname)
             self.ranges[rangeid]['scenarios'].append(scenname)
+
     def add_param_replicates(self,paramfunc, rangeid, replicates, *args, ind_seeds=True, **kwargs):
         """
         Adds a set of repeated scenarios to the approach. For use in (external) random scenario generation.
@@ -107,6 +113,7 @@ class NominalApproach():
                                                    fixedargs=args,
                                                    prob=1/replicates)
             self.ranges[rangeid]['scenarios'].append(scenname)
+
     def get_param_scens(self, rangeid, *level_params):
         """
         Returns the scenarios of a range associated with given parameter ranges
@@ -135,10 +142,12 @@ class NominalApproach():
             if type(scenarios)==str: scenarios = [scenarios]
             param_scens[new_index].update(scenarios)
         return param_scens
+
     def range_to_space(self,inputranges):
         ranges = (np.arange(*arg) if type(arg)==tuple else tuple(arg) for k,arg in inputranges.items())
         space = [x for x in itertools.product(*ranges)]
         return space
+
     def add_param_ranges(self,paramfunc, rangeid, *args, replicates=1, seeds='shared',set_args={}, **kwargs):
         """
         Adds a set of scenarios to the approach.
@@ -203,6 +212,7 @@ class NominalApproach():
                 self.ranges[rangeid]['scenarios'].append(scenname)
                 if replicates>1:    self.ranges[rangeid]['levels'][level_key].append(scenname)
                 else:               self.ranges[rangeid]['levels'][level_key]=scenname
+
     def update_factor_seeds(self, rangeid, inputparam, seeds='new'):
         """
         Changes/randomizes the seeds along a given factor in a range
@@ -227,6 +237,7 @@ class NominalApproach():
             scens = [scen for lev, scen in self.ranges[rangeid]['levels'].items() if lev[param_loc]==level]
             for scen in scens:
                 self.scenarios[scen].r['seed'] = int(seeds[i])
+
     def assoc_probs(self, rangeid, prob_weight=1.0, **inputpdfs):
         """
         Associates a probability model (assuming variable independence) with a 
@@ -255,6 +266,7 @@ class NominalApproach():
         for scenname in self.ranges[rangeid]['scenarios']:
             prob = scenprobs[scenname]*prob_weight/totprobs
             self.scenarios[scenname] = self.scenarios[scenname].copy_with(prob=prob)
+
     def add_rand_params(self, paramfunc, rangeid, *fixedargs, prob_weight=1.0, replicates=1000, seeds='shared', **randvars):
         """
         Adds a set of random scenarios to the approach.
@@ -306,13 +318,15 @@ class NominalApproach():
                                                      inputparams=inputparams,
                                                      prob=prob_weight/replicates)
             self.ranges[rangeid]['scenarios'].append(scenname)
+
     def copy(self):
-        """Copies the given sampleapproach. Used in nested scenario sampling."""
+        """Copy the given sampleapproach. Used in nested scenario sampling."""
         newapp = NominalApproach()
         newapp.scenarios = copy.deepcopy(self.scenarios)
         newapp.ranges = copy.deepcopy(self.ranges)
         newapp.num_scenarios = self.num_scenarios
         return newapp
+
     def get_param_scens(self, *params, only_params=False, default="NA"):
         data = [(scenname, scen.get_params(*params, default=default))
                 for scenname, scen in self.scenarios.items()
