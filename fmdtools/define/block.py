@@ -216,11 +216,11 @@ class Simulable(object):
         if not track:
             track = copy.deepcopy(self.track)
         return p, sp, r, track
-    
+
     def get_fxns(self):
         """
-        Gets the fxns associated with the given Simulable (self if FxnBlock, self.fxns if Model)
-        
+        Get fxns associated with the Simulable (self if FxnBlock, self.fxns if Model).
+
         Returns
         -------
         fxns: dict
@@ -231,11 +231,11 @@ class Simulable(object):
         else:
             fxns = {self.name: self}
         return fxns
-    
+
     def get_scen_rate(self, fxnname, faultmode, time):
         """
-        Gets the scenario rate for the given single-fault scenario.
-        
+        Get the scenario rate for the given single-fault scenario.
+
         Parameters
         ----------
         fxnname: str
@@ -263,11 +263,11 @@ class Simulable(object):
             elif fm.faultmodes[faultmode].probtype == 'prob':
                 rate = fm.failrate*fm.faultmodes[faultmode]['dist'] 
         return rate
-    
+
     def get_args(self, **kwargs):
         """
-        Gets the current arguments for a given Simulable stored in _at_args
-        
+        Get the current arguments for a given Simulable stored in _at_args
+
         Parameters
         ----------
         kwargs: dict
@@ -624,9 +624,11 @@ class Block(Simulable):
         time : float
             The current timestep.
         faults : dict
-            Faults to inject during this propagation step. With structure {fname:['fault1', 'fault2'...]}
+            Faults to inject during this propagation step.
+            With structure {fname: ['fault1', 'fault2'...]}
         disturbances : dict
-            Variables to change during this propagation step. With structure {'var1':value}
+            Variables to change during this propagation step.
+            With structure {'var1': value}
         run_stochastic : bool
             Whether to run stochastic behaviors or use default values. Default is False.
             Can set as 'track_pdf' to calculate/track the probability densities of random states over time.

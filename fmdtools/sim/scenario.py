@@ -204,7 +204,7 @@ class SingleFaultScenario(BaseScenario):
 
 class JointFaultScenario(BaseScenario):
     """
-    Class defining a joint fault occuring. Extends BaseScenario
+    Class defining a joint fault occuring. Extends BaseScenario.
 
     Parameters
     ----------
@@ -245,6 +245,7 @@ class NominalScenario(BaseScenario, readonly=True):
     name : str
         scenario name
     """
+
     p: dict = {}
     r: dict = {}
     sp: dict = {}
