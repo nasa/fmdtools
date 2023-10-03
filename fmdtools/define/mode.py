@@ -13,7 +13,7 @@ from typing import ClassVar
 import numpy as np
 import itertools
 import copy
-from .common import get_true_fields, get_true_field, get_dataobj_track
+from fmdtools.define.common import get_true_fields, get_true_field, get_dataobj_track
 from fmdtools.analyze.result import History, init_hist_iter
 
 
@@ -96,20 +96,35 @@ class Mode(dataobject, readonly=False):
     fsm_args : tuple
         Arguments for self.init_faultstates_modes (manual_modes, {kwargs})
 
-    These properties can then be used in simulation
-    ------------
+    These fields are then used in simulation and elsewhere:
+
+    Fields
+    ------
     faults : set
         Set of faults present (or not) at any given time
     mode : str
         Name of the current mode. the default is 'nominal'
     mode_state_dict: dict
-        Maps modes to states. Assigned by assoc_faultstates
-
-    While these properties are used for determining scenario information
-    ------------
+        Maps modes to states. Assigned by init_faultstates methods.
     faultmodes : dict
             Dictionary of :class:`Fault` defining possible fault modes and
             their properties
+
+    Examples
+    --------
+    >>> class ExampleMode(Mode):
+    ...    fm_args = {"no_charge": (1e-5, 100, {'standby': 1.0}),
+    ...              "short": (1e-5, 100, {'supply': 1.0})}
+    ...    opermodes = ("supply", "charge", "standby")
+    ...    exclusive = True
+    ...    mode: str = "standby"
+    >>> exm = ExampleMode()
+    >>> exm.mode
+    'standby'
+    >>> exm.any_faults()
+    False
+    >>> exm.faultmodes
+    {'no_charge': Fault(prob=1e-05, cost=100, phases={'standby': 1.0}, units='sim'), 'short': Fault(prob=1e-05, cost=100, phases={'supply': 1.0}, units='sim')}
     """
 
     mode: ClassVar[str] = 'nominal'
@@ -230,7 +245,7 @@ class Mode(dataobject, readonly=False):
                 args[2] = {ph: 1.0 for ph in args[1] for ph in args[1]}
             self.faultmodes[mode] = Fault(*args)
 
-    def assoc_single_faultstates(self, franges, **kwargs):
+    def init_single_faultstates(self, franges, **kwargs):
         """
         Associate modes with given faultstates as faults.
 
@@ -255,7 +270,7 @@ class Mode(dataobject, readonly=False):
             self.faultmodes.update(modes)
             self.mode_state_dict.update(modestates)
 
-    def assoc_n_faultstates(self, franges, n='all', seed=42, **kwargs):
+    def init_n_faultstates(self, franges, n='all', seed=42, **kwargs):
         """
         Associate n faultstate mode combinations as faults.
 
@@ -293,7 +308,7 @@ class Mode(dataobject, readonly=False):
                                       for j, state in enumerate(statecombos[i])}
                                      for i in range(len(statecombos))})
 
-    def assoc_faultstate_modes(self, manual_modes, **kwargs):
+    def init_faultstate_modes(self, manual_modes, **kwargs):
         """
         Associate modes manual_modes with provided faultstates.
 
@@ -322,7 +337,7 @@ class Mode(dataobject, readonly=False):
         """
         Update states of the model associated with a specific fault mode.
 
-        (see assoc_faultstates)
+        (see init_faultstates)
         """
         num_update = 0
         for fault in self.faults:
@@ -518,3 +533,16 @@ class Mode(dataobject, readonly=False):
             if mode is None or mode is False:
                 mode = self.__defaults__[self.__fields__.index('mode')]
             self.mode = mode
+
+
+class ExampleMode(Mode):
+    fm_args = {"no_charge": (1e-5, 100, {'standby': 1.0}),
+               "short": (1e-5, 100, {'supply': 1.0})}
+    opermodes = ("supply", "charge", "standby")
+    exclusive = True
+    mode: str = "standby"
+
+
+if __name__ == "__main__":
+    import doctest
+    doctest.testmod(verbose=True)

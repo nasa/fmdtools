@@ -407,7 +407,7 @@ class FaultSig(Flow):
 
 # MODEL FUNCTIONS
 class PlanPathMode(Mode):
-    faultparams = {"no_con": (1e-4, 200), "crash": (1e-4, 200)}
+    fm_args = {"no_con": (1e-4, 200), "crash": (1e-4, 200)}
     opermodes = ("drive", "standby", "em_off", "finished")
     mode: str = "standby"
 
@@ -483,8 +483,7 @@ class DriveMode(Mode):
     s: FaultStates = FaultStates()
     mode_args: tuple = tuple()
     deg_params: dict = dict
-    faultparams = dict()
-    key_phases_by = "plan_path"
+    fm_args = dict()
 
     def __init__(self, *args, mode_args=tuple(), deg_params=dict(), **kwargs):
         super().__init__(*args, **kwargs)
@@ -615,7 +614,7 @@ class Drive(FxnBlock):
 
 
 class PerceptionMode(Mode):
-    faultparams = ("bad_feed",)
+    fm_args = ("bad_feed",)
     opermodes = ("off", "feed")
     mode: str = "off"
     exclusive = True
@@ -674,14 +673,11 @@ class PowerState(State):
 
 
 class PowerMode(Mode):
-    faultparams = {
-        "no_charge": (1e-5, {"standby": 1.0}, 100),
-        "short": (1e-5, {"supply": 1.0}, 100),
-    }
+    fm_args = {"no_charge": (1e-5, 100, {"standby": 1.0}),
+               "short": (1e-5, 100, {"supply": 1.0})}
     opermodes = ("supply", "charge", "standby", "off")
     mode: str = "off"
     exclusive = True
-    key_phases_by = "self"
 
 
 class Power(FxnBlock):

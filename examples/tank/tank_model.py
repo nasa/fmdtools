@@ -52,9 +52,9 @@ class TransportLiquidState(State):
 
 
 class TransportLiquidMode(Mode):
-    faultparams = {'stuck': (1e-5, [1, 0], 0)}
+    fm_args = {'stuck': (1e-5,)}
+    phases = {'na': 1.0}
     units = 'hr'
-    key_phases_by = 'global'
 
 
 class ImportLiquid(FxnBlock):
@@ -96,9 +96,8 @@ class ExportLiquid(FxnBlock):
 
 
 class GuideLiquidMode(Mode):
-    faultparams = {'leak': (1e-5, [1, 0], 0),
-                   'clogged': (1e-5, [1, 0], 0)}
-    key_phases_by = 'global'
+    fm_args = {'leak': (1e-5,), 'clogged': (1e-5,)}
+    phases = {'na': 1.0}
 
 
 class GuideLiquid(FxnBlock):
@@ -135,8 +134,7 @@ class StoreLiquidState(State):
 
 
 class StoreLiquidMode(Mode):
-    faultparams = {'leak': (1e-5, [1, 0], 0)}
-    key_phases_by = 'global'
+    fm_args = {'leak': (1e-5, 0, {'na': 1.0})}
 
 
 class StoreLiquid(FxnBlock):
@@ -244,8 +242,8 @@ class HumanActions(FxnBlock):
 
 class LookMode(Mode):
     failrate: float
-    faultparams = {'not_visible': (1, [1, 0], 0)}
-    proptype = 'prob'
+    fm_args = {'not_visible': (1, )}
+    phases = {'na': 1.0}
     # using lists as inputs leaves the EPCs unlabeled
     he_args = (0.02, [[4, 0.1], [4, 0.6], [1.1, 0.9]])
 
@@ -258,11 +256,8 @@ class Look(Action):
 
 
 class DetectMode(Mode):
-    failrate: float
-    faultparams = {'not_detected': (1, [1, 0], 0),
-                   'false_high': (1, [1, 1], 0),
-                   'false_low': (1, [1, 1], 0)}
-    probtype = 'prob'
+    fm_args = ('not_detected', 'false_high', 'false_low')
+    phases = {'na': 1.0}
     he_args = (0.03, {2: [11, 0.1], 10: [10, 0.2], 13: [4, 0],
                       14: [4, 0.1], 17: [3, 0], 34: [1.1, 0.6]})
 
@@ -293,16 +288,14 @@ class Detect(Action):
 
 
 class ReachMode(Mode):
-    failrate: float
-    faultparams = {'unable': (0.5, [1, 0], 0)}
-    probtype = 'prob'
+    fm_args = {'unable': (0.5, )}
+    phases = {'na': 1.0}
     he_args = (0.09, {2: [11, 0.1], 10: [10, 0.0],
                       13: [4, 0], 14: [4, 0.1],
                       17: [3, 0], 34: [1.1, 0]})
 
 
 class Reach(Action):
-    failrate: float
     _init_m = ReachMode
 
     def reached(self):
@@ -310,9 +303,8 @@ class Reach(Action):
 
 
 class GraspMode(Mode):
-    failrate: float
-    faultparams = {'cannot': (1, [1, 0], 0)}
-    probtype = 'prob'
+    fm_args = {'cannot': (1, )}
+    phases = {'na': 1.0}
     failrate = 0.02
 
 
@@ -324,10 +316,9 @@ class Grasp(Action):
 
 
 class TurnMode(Mode):
-    failrate: float
-    faultparams = {'cannot': (1, [1, 0], 0),
-                   'wrong_valve': (0.5, [1, 0], 0)}
-    probtype = 'prob'
+    fm_args = {'cannot': (1,),
+                 'wrong_valve': (0.5,)}
+    phases = {'na': 1.0}
     he_args = (0.009, {2: [11, 0.4], 10: [10, 0.2],
                        13: [4, 0], 14: [4, 0],
                        17: [3, 0.6], 34: [1.1, 0]})
