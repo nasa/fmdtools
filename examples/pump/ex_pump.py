@@ -131,7 +131,7 @@ class ImportEEMode(Mode):
     Mode contains the probability model for faults is associated with each function:
         - failrate = X sets the failure rate for the function
         (to be distributed over all modes)
-        - faultparams defines a probability model for each mode, where modes is:
+        - fm_args defines a probability model for each mode, where modes is:
             - {modename: (%of failures, (% at each phase in mdl.phases), repaircosts)
     These failure rates will then be used to generate a list of scenarios for
     propagate.single_faults and SampleApproach()
@@ -140,8 +140,9 @@ class ImportEEMode(Mode):
     use the option units='sec'/'min'/'hr'/'day' etc.
     """
     failrate = 1e-5
-    faultparams = {'no_v': (0.80, [0, 1, 0], 10000),
-                   'inf_v': (0.20, [0, 1, 0], 5000)}
+    fm_args = {'no_v': (0.80, 10000),
+               'inf_v': (0.20, 5000)}
+    phases = {'start': 0, 'on': 1, 'end': 0}
 
 
 class ImportEEState(State):
@@ -206,8 +207,7 @@ Import Water Classes
 
 class ImportWaterMode(Mode):
     failrate = 1e-5
-    faultparams = {'no_wat': (1.0, [1, 1, 1], 1000)}
-    key_phases_by = 'global'
+    fm_args = {'no_wat': (1.0, 1000)}
 
 
 class ImportWater(FxnBlock):
@@ -232,8 +232,8 @@ Export Water Classes
 
 class ExportWaterMode(Mode):
     failrate = 1e-5
-    faultparams = {'block': (1.0, [1.5, 1.0, 1.0], 5000)}
-    key_phases_by = 'global'
+    fm_args = {'block': (1.0, 5000)}
+    phases = {'start': 1.5, 'on': 1, 'end': 1}
 
 
 class ExportWater(FxnBlock):
@@ -256,8 +256,7 @@ Import Signal Classes
 
 class ImportSigMode(Mode):
     failrate = 1e-6
-    faultparams = {'no_sig': (1.0, [1.5, 1.0, 1.0], 10000)}
-    key_phases_by = 'global'
+    fm_args = {'no_sig': (1.0, 10000, {'start': 1.5, 'on': 1, 'end': 1})}
 
 
 class ImportSig(FxnBlock):
@@ -305,9 +304,8 @@ class MoveWatParams(Parameter, readonly=True):
 
 class MoveWatMode(Mode):
     failrate = 1e-5
-    faultparams = {'mech_break': (0.6, [0.1, 1.2, 0.1], 5000),
-                   'short': (1.0, [1.5, 1.0, 1.0], 10000)}
-    key_phases_by = 'global'
+    fm_args = {'mech_break': (0.6, 5000, {'start': 0.1, 'on': 1.2, 'end': 0.1}),
+               'short': (1.0, 10000, {'start': 1.5, 'on': 1, 'end': 1})}
 
 
 class MoveWat(FxnBlock):

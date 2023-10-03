@@ -52,10 +52,10 @@ def make_tankparam(*args, **kwargs):
 
 
 class TransportLiquidMode(Mode):
-    faultparams = {'stuck': (1e-5, [1, 0], 0),
-                   'blockage': (1e-5, [1, 0], 0)}
+    fp_args = {'stuck': (1e-5,),
+               'blockage': (1e-5,)}
+    phases = {'na': 1.0}
     units = 'hr'
-    key_phases_by = 'global'
 
 
 class ImportLiquid(FxnBlock):
