@@ -179,7 +179,7 @@ Notice the definitions and structure:
     - **Flows**
     - **Modes** (e.g., `ImportEEMode`, `ImportSigMode`)
         - Mode probability model
-        - Actual modes in `faultparams` entry
+        - Actual modes in `fm_args` entry
     - others attributes, e.g., `Timer`
 - **Model**: `Pump` connects functions, flows, and defines `end_classification`
 - **Parameter**: `PumpParam` defines values we can change in the simulation

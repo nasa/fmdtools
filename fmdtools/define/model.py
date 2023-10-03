@@ -233,7 +233,7 @@ class Model(Simulable):
 
         """
         repmodes, modeprops = self.return_faultmodes()
-        modecost = sum([ c['rcost'] if c['rcost']>0.0 else default_cost for m in modeprops.values() for c in m.values()])
+        modecost = sum([ c['cost'] if c['cost']>0.0 else default_cost for m in modeprops.values() for c in m.values()])
         repair_cost = np.min([modecost, max_cost])
         return repair_cost
     def return_faultmodes(self):

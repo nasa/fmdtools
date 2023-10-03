@@ -139,8 +139,8 @@ class PlanPathMode(Mode):
     """
 
     failrate = 1e-5
-    faultparams = {'noloc': (0.2, 10000),
-                   'degloc': (0.8, 10000)}
+    args_fm = {'noloc': (0.2, 10000),
+               'degloc': (0.8, 10000)}
     opermodes = ('taxi', 'hover', 'move', 'descend', 'land')
     mode: int = 'taxi'
 
@@ -424,7 +424,7 @@ class Drone(Model):
             lostcost = 50000
         else:
             lostcost = 0
-
+        a = 1
         if any(mdlhists.faulty.fxns.hold_payload.m.faults['break']):
             crashcost = 100000
         else:
@@ -453,7 +453,7 @@ def vectdist(p1, p2):
 
 if __name__ == "__main__":
     import doctest
-    doctest.testmod(verbose=True)
+    #doctest.testmod(verbose=True)
     
     from fmdtools import analyze as an
     mdl = Drone()

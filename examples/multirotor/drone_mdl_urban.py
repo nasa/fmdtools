@@ -165,8 +165,8 @@ class ComputerVisionMode(Mode):
         doesn't detect occupied spaces
     """
 
-    faultparams = {'undesired_detection': (0.5, {'move': 1.0}, 0),
-                   'lack_of_detection': (0.5, {'move': 1.0}, 0)}
+    fm_args = {'undesired_detection': (0.5,),
+               'lack_of_detection': (0.5,)}
 
 
 class ComputerVision(Component):

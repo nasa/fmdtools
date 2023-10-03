@@ -175,12 +175,11 @@ class BatMode(Mode):
     """
 
     failrate = 1e-4
-    faultparams = {'short': (0.2, {"taxi": 0.3, "move": 0.3, "land": 0.3}, 100),
-                   'degr': (0.2, {"taxi": 0.3, "move": 0.3, "land": 0.3}, 100),
-                   'break': (0.2, {"taxi": 0.3, "move": 0.3, "land": 0.3}, 100),
-                   'nocharge': (0.6, {"taxi": 0.7, "move": 0.2, "land": 0.1}, 100),
-                   'lowcharge': (0.4, {"taxi": 0.5, "move": 0.2, "land": 0.3}, 100)}
-    key_phases_by = 'plan_path'
+    fm_args = {'short': (0.2, 100, {"taxi": 0.3, "move": 0.3, "land": 0.3}),
+               'degr': (0.2, 100, {"taxi": 0.3, "move": 0.3, "land": 0.3}),
+                'break': (0.2, 100, {"taxi": 0.3, "move": 0.3, "land": 0.3}),
+                'nocharge': (0.6, 100, {"taxi": 0.7, "move": 0.2, "land": 0.1}),
+                'lowcharge': (0.4, 100, {"taxi": 0.5, "move": 0.2, "land": 0.3})}
 
 
 class BatParam(Parameter):
@@ -322,9 +321,9 @@ class StoreEEMode(Mode):
     """Overall StoreEE mode."""
 
     failrate = 1e-4
-    faultparams = {'nocharge':  (0.2, {"taxi": 0.6, "move": 0.2, "land": 0.2}, 0),
-                   'lowcharge': (0.7, {"taxi": 0.6, "move": 0.2, "land": 0.2}, 0)}
-    key_phases_by = "plan_path"
+    fm_args = {'nocharge':  (0.2, 0, {"taxi": 0.6, "move": 0.2, "land": 0.2}),
+               'lowcharge': (0.7, 0, {"taxi": 0.6, "move": 0.2, "land": 0.2})}
+
 
 
 class StoreEE(FxnBlock):
@@ -390,9 +389,8 @@ class HoldPayloadMode(Mode):
     """
 
     failrate = 1e-6
-    faultparams = {'break': (0.2, {"taxi": 0.3, "move": 0.3, "land": 0.3}, 1000),
-                   'deform': (0.8, {"taxi": 0.3, "move": 0.3, "land": 0.3}, 1000)}
-    key_phases_by = 'plan_path'
+    fm_args = {'break': (0.2, 1000, {"taxi": 0.3, "move": 0.3, "land": 0.3}),
+               'deform': (0.8, 1000, {"taxi": 0.3, "move": 0.3, "land": 0.3})}
 
 
 class HoldPayload(HoldPayloadDyn):
@@ -412,9 +410,7 @@ class ManageHealthMode(Mode):
     """
 
     failrate = 1e-6
-    faultparams = {'lostfunction':
-                   (0.05, {"taxi": 0.3, "move": 0.3, "land": 0.3}, 1000)}
-    key_phases_by = "plan_path"
+    fm_args = {'lostfunction': (0.05, 1000, {"taxi": 0.3, "move": 0.3, "land": 0.3})}
 
 
 class ManageHealth(FxnBlock):
@@ -481,10 +477,9 @@ class CtlDOFMode(Mode):
     """
 
     failrate = 1e-5
-    faultparams = {'noctl':   (0.2, {"taxi": 0.6, "move": 0.3, "land": 0.1}, 1000),
-                   'degctl':  (0.8, {"taxi": 0.6, "move": 0.3, "land": 0.1}, 1000)}
-    key_phases_by = 'plan_path'
-    mode:   str = 'nominal'
+    fm_args = {'noctl': (0.2, 1000, {"taxi": 0.6, "move": 0.3, "land": 0.1}),
+               'degctl': (0.8, 1000, {"taxi": 0.6, "move": 0.3, "land": 0.1})}
+    mode: str = 'nominal'
 
 
 class CtlDOF(CtlDOFStat):
@@ -518,8 +513,9 @@ class PlanPathMode(Mode):
     """
 
     failrate = 1e-5
-    faultparams = {'noloc': (0.2, {"taxi": 0.6, "move": 0.3, "land": 0.1}, 1000),
-                   'degloc': (0.8, {"taxi": 0.6, "move": 0.3, "land": 0.1}, 1000)}
+    fm_args = {'noloc': (0.2, 1000),
+               'degloc': (0.8, 1000)}
+    phases = {"taxi": 0.6, "move": 0.3, "land": 0.1}
     opermodes = ('taxi', 'to_nearest', 'to_home', 'emland', 'land', 'move')
     mode: str = 'taxi'
     exclusive = False

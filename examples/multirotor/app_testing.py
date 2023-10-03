@@ -64,9 +64,31 @@ class FaultDomain(object):
         ----------
         *faults : tuple
             Faults (simname, faultmode) to inject
+
+        Examples
+        --------
+        >>> fd= FaultDomain(Drone())
+        >>> fd.add_faults(('ctl_dof', 'noctl'), ('affect_dof', 'rr_ctldn'))
+        >>> list(fd.faults)
+        ['ctl_dof.m.faults.noctl', 'affect_dof.m.faults.rr_ctldn']
         """
         for fault in faults:
             self.add_fault(fault[0], fault[1])
+
+    def add_all(self):
+        """
+        Add all faults in the Simulable to the FaultDomain.
+
+        Examples
+        --------
+        >>> fd = FaultDomain(Drone().fxns['ctl_dof'])
+        >>> fd.add_all()
+        >>> list(fd.faults)
+        ['ctl_dof.m.faults.noctl', 'ctl_dof.m.faults.degctl']
+        """
+        faults = [(fxnname, mode) for fxnname, fxn in self.fxns.items()
+                  for mode in fxn.m.faultmodes]
+        self.add_faults(*faults)
 
     def add_all_modes(self, *modenames, exact=True):
         """
@@ -152,6 +174,7 @@ class FaultDomain(object):
                               for fmode, comp in self.fxns[fxn].ca.faultmodes.items()
                               if firstcomp == comp]
                 self.add_faults(*compfaults)
+
 
 
 
