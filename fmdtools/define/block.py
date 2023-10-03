@@ -252,16 +252,15 @@ class Simulable(object):
         """
         fxn = self.get_fxns()[fxnname]
         fm = fxn.m
-        # this rate is on a per-simulation basis
-        tot_time = self.sp.times[-1] - self.sp.times[0] + self.sp.dt
-        rate_time = eq_units(fm.faultmodes[faultmode]['units'], self.sp.units)*tot_time
         if not fm.faultmodes.get(faultmode, False): 
             raise Exception("faultmode "+faultmode+" not in "+str(fm.__class__))
         else:
-            if fm.faultmodes[faultmode].probtype == 'rate':
-                rate = fm.failrate*fm.faultmodes[faultmode]['dist']*rate_time
-            elif fm.faultmodes[faultmode].probtype == 'prob':
-                rate = fm.failrate*fm.faultmodes[faultmode]['dist'] 
+            if fm.faultmodes[faultmode].units == 'sim':
+                rate = fm.failrate*fm.faultmodes[faultmode]['prob']
+            else:
+                tot_time = self.sp.times[-1] - self.sp.times[0] + self.sp.dt
+                rate_time = eq_units(fm.faultmodes[faultmode]['units'], self.sp.units) * tot_time
+                rate = fm.faultmodes[faultmode]['prob'] * rate_time
         return rate
 
     def get_args(self, **kwargs):
