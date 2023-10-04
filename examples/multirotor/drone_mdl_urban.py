@@ -167,6 +167,7 @@ class ComputerVisionMode(Mode):
 
     fm_args = {'undesired_detection': (0.5,),
                'lack_of_detection': (0.5,)}
+    units = 'hr'
 
 
 class ComputerVision(Component):

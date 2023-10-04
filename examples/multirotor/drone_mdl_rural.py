@@ -177,9 +177,10 @@ class BatMode(Mode):
     failrate = 1e-4
     fm_args = {'short': (0.2, 100, {"taxi": 0.3, "move": 0.3, "land": 0.3}),
                'degr': (0.2, 100, {"taxi": 0.3, "move": 0.3, "land": 0.3}),
-                'break': (0.2, 100, {"taxi": 0.3, "move": 0.3, "land": 0.3}),
-                'nocharge': (0.6, 100, {"taxi": 0.7, "move": 0.2, "land": 0.1}),
-                'lowcharge': (0.4, 100, {"taxi": 0.5, "move": 0.2, "land": 0.3})}
+               'break': (0.2, 100, {"taxi": 0.3, "move": 0.3, "land": 0.3}),
+               'nocharge': (0.6, 100, {"taxi": 0.7, "move": 0.2, "land": 0.1}),
+               'lowcharge': (0.4, 100, {"taxi": 0.5, "move": 0.2, "land": 0.3})}
+    units = 'hr'
 
 
 class BatParam(Parameter):
@@ -323,6 +324,7 @@ class StoreEEMode(Mode):
     failrate = 1e-4
     fm_args = {'nocharge':  (0.2, 0, {"taxi": 0.6, "move": 0.2, "land": 0.2}),
                'lowcharge': (0.7, 0, {"taxi": 0.6, "move": 0.2, "land": 0.2})}
+    units = 'hr'
 
 
 
@@ -391,6 +393,7 @@ class HoldPayloadMode(Mode):
     failrate = 1e-6
     fm_args = {'break': (0.2, 1000, {"taxi": 0.3, "move": 0.3, "land": 0.3}),
                'deform': (0.8, 1000, {"taxi": 0.3, "move": 0.3, "land": 0.3})}
+    units = 'hr'
 
 
 class HoldPayload(HoldPayloadDyn):
@@ -411,6 +414,7 @@ class ManageHealthMode(Mode):
 
     failrate = 1e-6
     fm_args = {'lostfunction': (0.05, 1000, {"taxi": 0.3, "move": 0.3, "land": 0.3})}
+    units = 'hr'
 
 
 class ManageHealth(FxnBlock):
@@ -445,7 +449,7 @@ class ManageHealth(FxnBlock):
 class AffectMode(Mode):
     """Overall Effect DOF mode - combines all line modes."""
 
-    key_phases_by = 'plan_path'
+    units = 'hr'
 
 
 class AffectDOF(AffectDOFHierarchical):
@@ -480,6 +484,7 @@ class CtlDOFMode(Mode):
     fm_args = {'noctl': (0.2, 1000, {"taxi": 0.6, "move": 0.3, "land": 0.1}),
                'degctl': (0.8, 1000, {"taxi": 0.6, "move": 0.3, "land": 0.1})}
     mode: str = 'nominal'
+    units = 'hr'
 
 
 class CtlDOF(CtlDOFStat):
@@ -519,7 +524,7 @@ class PlanPathMode(Mode):
     opermodes = ('taxi', 'to_nearest', 'to_home', 'emland', 'land', 'move')
     mode: str = 'taxi'
     exclusive = False
-    key_phases_by = 'self'
+    units = 'hr'
 
 
 class PlanPathState(PlanPathStateDyn):
