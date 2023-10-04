@@ -17,7 +17,7 @@ import time
 import copy
 
 from .flow import Flow, init_flow
-from .common import check_pickleability, get_var, set_var, init_obj_attr, get_obj_track, eq_units
+from .common import check_pickleability, get_var, set_var, init_obj_attr, get_obj_track
 from .parameter import Parameter, SimParam
 from .rand import Rand
 from .block import Simulable

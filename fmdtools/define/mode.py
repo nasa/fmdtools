@@ -14,7 +14,7 @@ import numpy as np
 import itertools
 import copy
 from fmdtools.define.common import get_true_fields, get_true_field, get_dataobj_track
-from fmdtools.analyze.result import History, init_hist_iter
+from fmdtools.analyze.result import History
 
 
 class Fault(dataobject, readonly=True, mapping=True):
@@ -40,12 +40,209 @@ class Fault(dataobject, readonly=True, mapping=True):
     phases: dict = {}
     units: str = 'sim'
 
+    def calc_rate(self, time, phases={}, modephases={},
+                  sim_time=1.0, sim_units='hr', sim_dt=1.0, num_samples=1):
+        """
+        Calculate the rate of a given fault mode.
+
+        Parameters
+        ----------
+        time : float
+            Time the fault will be injected.
+        phases : dict, optional
+            Phases the mode will be injected during. Used to determine opportunity
+            factor defined by the dict in fault.phases. The default is {}.
+        modephases : dict, optional
+            Modes that the phases occur in. Used to determine opportunity vector defined
+            by the dict in fault.phases (if .phases maps to modes of occurence an not
+            phases). The default is {}.
+        sim_time : float, optional
+            Duration of the simulation. Used to determine fault exposure time when
+            time-units ('sec', 'min', etc) define the fault rate. The default is 1.0.
+        sim_units : float, optional
+            Simulation time units. Used to determine fault exposure time when time-units
+            define the fault rate. The default is 'hr'.
+        sim_dt : float, optional
+            simulation time-step. Used to determine time interval lenght.
+            The default is 1.0.
+        num_samples : int, optional
+            Number of samples the rate will be spread out over. The default is 1.
+
+        Returns
+        -------
+        rate : float
+            Calculated rate of the scenario with the given information.
+
+        Examples
+        --------
+        >>> # Calculating the rate of a mode in the 'on phase':
+        >>> exfault = Fault(prob=0.5, phases = {'on': 0.9, 'off': 0.1}, units='hr')
+        >>> phases = {'on': [0, 5], 'off': [6, 10]}
+        >>> rate = exfault.calc_rate(4, phases, sim_time=10.0, sim_units='min')
+        >>> # note that this rate is the same as what we would calculate:
+        >>> manual_calc = 0.5 * 6 * 0.9 / 60
+        >>> manual_calc == rate
+        True
+        >>> rate_off = exfault.calc_rate(7, phases, sim_time=10.0, sim_units='min')
+        >>> # note that the interval for off (6-10) is 5 while (0-5) is 6
+        >>> manual_calc_off = 0.5 * 5 * 0.1 / 60
+        >>> manual_calc_off == rate_off
+        True
+        """
+        if self.units == 'sim':
+            sim_exposure_time = 1.0
+            baserate = self['prob']
+        else:
+            sim_exposure_time = eq_units(self['units'], sim_units) * sim_time
+            baserate = self['prob'] * sim_exposure_time
+
+        if not phases:
+            return baserate / num_samples
+        else:
+            phase = find_phase(time, phases, dt=sim_dt)
+            if modephases:
+                phase = find_modephase(phase, modephases)
+                t_exposure = eq_units(self['units'], sim_units) * calc_modephase_time(phase, phases, modephases, dt=sim_dt)
+            else:
+                t_exposure = eq_units(self['units'], sim_units) * calc_phase_time(phase, phases, dt=sim_dt)
+            if self.units == 'sim':
+                t_factor = 1.0
+            else:
+                t_factor = t_exposure/sim_exposure_time
+            if self.phases:
+                opp_factor = self.phases.get(phase, 0.0)
+            else:
+                opp_factor = 1.0
+            return baserate * opp_factor * t_factor / num_samples
+
+
+def find_phase(time, phases, dt=1.0):
+    """
+    Find the phase that a time occurs in. 
+
+    Parameters
+    ----------
+    time : float
+        Occurence time.
+    phases : dict
+        Dict of phases {'phase1': [starttime, endtime]}.
+
+    Returns
+    -------
+    phase : str
+        Name of the phase time occurs in.
+    """
+    for phase, times in phases.items():
+        if times[0] <= time <= times[1]+dt:
+            return phase
+    raise Exception("time "+str(time)+" not in phases: "+str(phases))
+
+
+def find_modephase(phase, modephases):
+    """
+    Find the mode in modephases that a given phse occurs in.
+
+    Parameters
+    ----------
+    phase : str
+        Name of the phase (e.g., 'on1').
+    modephases : dict
+        Dictionary of modes. e.g. {'on': {'on1', 'on2', 'on3'}}
+
+    Returns
+    -------
+    mode : str
+        Name of the corresponding mode (e.g., 'on').
+
+    Examples
+    --------
+    >>> find_modephase("on1", {"on": {"on0", "on1", "on2"}})
+    'on'
+    """
+    for mode, mode_phases in modephases.items():
+        if phase in mode_phases:
+            return mode
+    raise Exception("Phase "+phase+" not in modephases: "+str(modephases))
+
+
+def calc_phase_time(phase, phases, dt=1.0):
+    """
+    Calculate the length of a phase.
+
+    Parameters
+    ----------
+    phase : str
+        phase to calculate.
+    phases : dict
+        dict of phases and time intervals.
+    dt : float, optional
+        Timestep length. The default is 1.0.
+
+    Returns
+    -------
+    phase_time : float
+        Time of the phase
+
+
+    Examples
+    --------
+    >>> calc_phase_time("on", {"on": [0, 4], "off": [5, 10]}, dt=1.0)
+    5.0
+    """
+    phasetimes = phases[phase]
+    phase_time = phasetimes[1] - phasetimes[0] + dt
+    return phase_time
+
+
+def calc_modephase_time(modephase, phases, modephases, dt=1.0):
+    """
+    Calculate the amount of time in a mode, given that mode maps to multiple phases.
+
+    Parameters
+    ----------
+    modephase : str
+        Name of the mode to check.
+    phases : dict
+        Dict mapping phases to times.
+    modephases : dict
+        Dict mapping modes to phases
+    dt : float, optional
+        Timestep. The default is 1.0.
+
+    Returns
+    -------
+    modephase_time : float
+        Amount of time in the modephase
+
+    Examples
+    --------
+    >>> calc_modephase_time("on", {"on1": [0, 1], "on2": [2, 3]}, {"on": {"on1", "on2"}})
+    4.0
+    """
+    modephase_time = sum([calc_phase_time(mode_phase, phases, dt=dt)
+                          for mode_phase in modephases[modephase]])
+    return modephase_time
+
+
+def eq_units(rateunit, timeunit):
+    """
+    Find conversion factor for from rateunit (str) to timeunit (str).
+
+    Options for units are: 'sec', 'min', 'hr', 'day', 'wk', 'month', and 'year'.
+    """
+    factors = {'sec': 1,
+               'min': 60,
+               'hr': 3600,
+               'day': 86400,
+               'wk': 604800,
+               'month': 2629746,
+               'year': 31556952}
+    return factors[timeunit]/factors[rateunit]
 
 
 class Mode(dataobject, readonly=False):
     """
-    Description: Class for defining the mode property (and associated probability model)
-    held in Blocks.
+    Class for defining the mode property (and probability model) held in Blocks.
 
     Mode is meant to be inherited in order to define the specific faults related to a
     given Block.
@@ -544,5 +741,11 @@ class ExampleMode(Mode):
 
 
 if __name__ == "__main__":
+    exfault = Fault(prob=0.5, phases = {'on': 0.9, 'off': 0.1}, units='hr')
+    phases = {'on': [0, 5], 'off': [6, 10]}
+    rate = exfault.calc_rate(4, phases, sim_time=10.0, sim_units='min')
+
+    
+    
     import doctest
     doctest.testmod(verbose=True)
