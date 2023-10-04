@@ -57,8 +57,8 @@ import tqdm
 import dill
 import os
 from fmdtools.define.common import get_var, t_key
-from .approach import SampleApproach
-from .scenario import Sequence, Scenario, SingleFaultScenario
+from fmdtools.sim.approach import SampleApproach
+from fmdtools.sim.scenario import Sequence, Scenario, SingleFaultScenario
 from fmdtools.analyze.result import Result, History,  create_indiv_filename, file_check
 from fmdtools.analyze.graph import graph_factory
 

@@ -5,7 +5,7 @@ Created on Mon Oct  2 10:58:59 2023
 @author: dhulse
 """
 
-from drone_mdl_hierarchical import Drone
+from drone_mdl_rural import Drone
 from examples.eps.eps import EPS
 
 from fmdtools.sim.approach import SampleApproach
@@ -13,7 +13,7 @@ from recordclass import dataobject, asdict
 from fmdtools.define.common import set_var, get_var
 
 mdl = Drone()
-app = SampleApproach(mdl)
+#app = SampleApproach(mdl)
 
 # class ParamDomain
 
@@ -42,6 +42,13 @@ class FaultDomain(object):
         self.fxns = mdl.get_fxns()
         self.faults = {}
 
+    def __repr__(self):
+        faultlist = list(self.faults)
+        if len(faultlist) > 10:
+            faultlist = faultlist[0:10] + [["...more"]]
+        modestr = "FaultDomain with faults:" + "\n -" + "\n -".join(faultlist)
+        return modestr
+
     def add_fault(self, fxnname, faultmode):
         """
         Add a fault to the FaultDomain.
@@ -69,8 +76,10 @@ class FaultDomain(object):
         --------
         >>> fd= FaultDomain(Drone())
         >>> fd.add_faults(('ctl_dof', 'noctl'), ('affect_dof', 'rr_ctldn'))
-        >>> list(fd.faults)
-        ['ctl_dof.m.faults.noctl', 'affect_dof.m.faults.rr_ctldn']
+        >>> fd
+        FaultDomain with faults:
+         -ctl_dof.m.faults.noctl
+         -affect_dof.m.faults.rr_ctldn
         """
         for fault in faults:
             self.add_fault(fault[0], fault[1])
@@ -83,8 +92,10 @@ class FaultDomain(object):
         --------
         >>> fd = FaultDomain(Drone().fxns['ctl_dof'])
         >>> fd.add_all()
-        >>> list(fd.faults)
-        ['ctl_dof.m.faults.noctl', 'ctl_dof.m.faults.degctl']
+        >>> fd
+        FaultDomain with faults:
+         -ctl_dof.m.faults.noctl
+         -ctl_dof.m.faults.degctl
         """
         faults = [(fxnname, mode) for fxnname, fxn in self.fxns.items()
                   for mode in fxn.m.faultmodes]
@@ -120,8 +131,16 @@ class FaultDomain(object):
         --------
         >>> fd1 = FaultDomain(EPS())
         >>> fd1.add_all_fxnclass_modes("ExportHE")
-        >>> list(fd1.faults.keys())
-        ['export_he.m.faults.hot_sink', 'export_he.m.faults.ineffective_sink', 'export_waste_h1.m.faults.hot_sink', 'export_waste_h1.m.faults.ineffective_sink', 'export_waste_ho.m.faults.hot_sink', 'export_waste_ho.m.faults.ineffective_sink', 'export_waste_hm.m.faults.hot_sink', 'export_waste_hm.m.faults.ineffective_sink']
+        >>> fd1
+        FaultDomain with faults:
+         -export_he.m.faults.hot_sink
+         -export_he.m.faults.ineffective_sink
+         -export_waste_h1.m.faults.hot_sink
+         -export_waste_h1.m.faults.ineffective_sink
+         -export_waste_ho.m.faults.hot_sink
+         -export_waste_ho.m.faults.ineffective_sink
+         -export_waste_hm.m.faults.hot_sink
+         -export_waste_hm.m.faults.ineffective_sink
         """
         for fxnclass in fxnclasses:
             faults = [(fxnname, mode)
@@ -141,9 +160,11 @@ class FaultDomain(object):
         Examples
         --------
         >>> fd = FaultDomain(Drone())
-        >>> fd.add_all_fxn_modes("store_ee")
-        >>> fd.faults
-        {'store_ee.m.faults.nocharge': Fault(dist=1, oppvect=[1.0], rcost=300, probtype='rate', units='hr')}
+        >>> fd.add_all_fxn_modes("hold_payload")
+        >>> fd
+        FaultDomain with faults:
+         -hold_payload.m.faults.break
+         -hold_payload.m.faults.deform
         """
         for fxnname in fxnnames:
             faults = [(fxnname, mode) for mode in self.fxns[fxnname].m.faultmodes]
@@ -162,8 +183,18 @@ class FaultDomain(object):
         --------
         >>> fd = FaultDomain(Drone())
         >>> fd.add_singlecomp_modes("affect_dof")
-        >>> list(fd.faults)
-        ['affect_dof.m.faults.lf_short', 'affect_dof.m.faults.lf_openc', 'affect_dof.m.faults.lf_ctlup', 'affect_dof.m.faults.lf_ctldn', 'affect_dof.m.faults.lf_ctlbreak', 'affect_dof.m.faults.lf_mechbreak', 'affect_dof.m.faults.lf_mechfriction', 'affect_dof.m.faults.lf_propwarp', 'affect_dof.m.faults.lf_propstuck', 'affect_dof.m.faults.lf_propbreak']
+        >>> fd
+        FaultDomain with faults:
+         -affect_dof.m.faults.lf_short
+         -affect_dof.m.faults.lf_openc
+         -affect_dof.m.faults.lf_ctlup
+         -affect_dof.m.faults.lf_ctldn
+         -affect_dof.m.faults.lf_ctlbreak
+         -affect_dof.m.faults.lf_mechbreak
+         -affect_dof.m.faults.lf_mechfriction
+         -affect_dof.m.faults.lf_propwarp
+         -affect_dof.m.faults.lf_propstuck
+         -affect_dof.m.faults.lf_propbreak
         """
         if not fxns:
             fxns = tuple(self.fxns)
@@ -178,7 +209,7 @@ class FaultDomain(object):
 
 
 
-
+mdl = Drone()
 fd = FaultDomain(mdl)
 fd.add_fault("affect_dof", "rf_propwarp")
 fd.add_faults(("affect_dof", "rf_propwarp"), ("affect_dof", "lf_propwarp"))
