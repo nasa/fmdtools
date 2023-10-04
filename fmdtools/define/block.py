@@ -25,13 +25,13 @@ import inspect
 import warnings
 from recordclass import dataobject, asdict, astuple
 
-from .state import State
-from .parameter import Parameter, SimParam
-from .rand import Rand
-from .common import get_true_fields, get_true_field, init_obj_attr, get_obj_track, eq_units, set_var
-from .time import Time
-from .mode import Mode
-from .flow import init_flow, Flow
+from fmdtools.define.state import State
+from fmdtools.define.parameter import Parameter, SimParam
+from fmdtools.define.rand import Rand
+from fmdtools.define.common import get_true_fields, get_true_field, init_obj_attr, get_obj_track, set_var
+from fmdtools.define.time import Time
+from fmdtools.define.mode import Mode
+from fmdtools.define.flow import init_flow, Flow
 from fmdtools.analyze.result import Result, History, get_sub_include, init_indicator_hist
 
 
@@ -232,7 +232,8 @@ class Simulable(object):
             fxns = {self.name: self}
         return fxns
 
-    def get_scen_rate(self, fxnname, faultmode, time):
+    def get_scen_rate(self, fxnname, faultmode, time, phases={}, modephases={},
+                      num_samples=1):
         """
         Get the scenario rate for the given single-fault scenario.
 
@@ -244,6 +245,15 @@ class Simulable(object):
             Name of the fault mode
         time: int
             Time when the scenario is to occur
+        phases : dict, optional
+            Phases the mode will be injected during. Used to determine opportunity
+            factor defined by the dict in fault.phases. The default is {}.
+        modephases : dict, optional
+            Modes that the phases occur in. Used to determine opportunity vector defined
+            by the dict in fault.phases (if .phases maps to modes of occurence an not
+            phases). The default is {}.
+        num_samples : int, optional
+            Number of samples the rate will be spread out over. The default is 1.
 
         Returns
         -------
@@ -251,21 +261,19 @@ class Simulable(object):
             Rate of the scenario
         """
         fxn = self.get_fxns()[fxnname]
-        fm = fxn.m
-        if not fm.faultmodes.get(faultmode, False): 
-            raise Exception("faultmode "+faultmode+" not in "+str(fm.__class__))
+        fm = fxn.m.faultmodes.get(faultmode, False)
+        if not fm:
+            raise Exception("faultmode "+faultmode+" not in "+str(fxn.m.__class__))
         else:
-            if fm.faultmodes[faultmode].units == 'sim':
-                rate = fm.failrate*fm.faultmodes[faultmode]['prob']
-            else:
-                tot_time = self.sp.times[-1] - self.sp.times[0] + self.sp.dt
-                rate_time = eq_units(fm.faultmodes[faultmode]['units'], self.sp.units) * tot_time
-                rate = fm.faultmodes[faultmode]['prob'] * rate_time
+            sim_time = self.sp.times[-1] - self.sp.times[0] + self.sp.dt
+            rate = fm.calc_rate(time, phases=phases, modephases=modephases,
+                                sim_time=sim_time, sim_units=self.sp.units,
+                                sim_dt=self.sp.dt, num_samples=num_samples)
         return rate
 
     def get_args(self, **kwargs):
         """
-        Get the current arguments for a given Simulable stored in _at_args
+        Get the current arguments for a given Simulable stored in _at_args.
 
         Parameters
         ----------

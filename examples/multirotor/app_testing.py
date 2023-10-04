@@ -26,28 +26,10 @@ def same_mode(modename1, modename2, exact=True):
         return modename1 in modename2
 
 
-def calc_fault_rate(fault, time, phases={}, modephases={},
-                    sim_time=1.0, sim_units='hr', num_samples=1):
-    if fault.units == 'sim':
-        baserate = fault['prob']
-    else:
-        rate_time = eq_units(fault['units'], sim_units) * sim_time
-        baserate = fault['prob'] * rate_time
 
-    if not phases:
-        return baserate
-    else:
-        return 1
-        #overallrate*opp*dist*dt*unitfactor
 
-def find_phase(time, phases, modephases={}):
-    for phase, times in phases.items():
-        if times[0] <= time <= times[1]:
-            break
-    if not modephases:
-        return phase
-    else:
-        return modephases[phase]
+        
+
     
 
 class FaultDomain(object):

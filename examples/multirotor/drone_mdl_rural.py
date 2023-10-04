@@ -913,11 +913,11 @@ if __name__ == "__main__":
     fault_kwargs = {'alpha': 0.2, 'color': 'red'}
 
     plot.hist(mdlhists, 'flows.dofs.s.x', 'dofs.s.y', 'dofs.s.z', 'store_ee.s.soc',
-                 indiv_kwargs={'faulty': fault_kwargs})
+              indiv_kwargs={'faulty': fault_kwargs})
     fig, ax = show.trajectories(mdlhists,
-                                   "dofs.s.x", "dofs.s.y", "dofs.s.z",
-                                   time_groups=['nominal'],
-                                   indiv_kwargs={'faulty': fault_kwargs})
+                                "dofs.s.x", "dofs.s.y", "dofs.s.z",
+                                time_groups=['nominal'],
+                                indiv_kwargs={'faulty': fault_kwargs})
     
     fig, ax = show.trajectories(mdlhists, "dofs.s.x", "dofs.s.y",
                                 time_groups=['nominal'],
