@@ -25,7 +25,6 @@ def same_mode(modename1, modename2, exact=True):
         return modename1 in modename2
 
 
-
 class FaultDomain(object):
     """
     Defines the faults which will be sampled from in an approach.
@@ -145,7 +144,7 @@ class FaultDomain(object):
         """
         for fxnclass in fxnclasses:
             faults = [(fxnname, mode)
-                      for fxnname, fxn in mdl.fxns_of_class(fxnclass).items()
+                      for fxnname, fxn in self.mdl.fxns_of_class(fxnclass).items()
                       for mode in fxn.m.faultmodes]
             self.add_faults(*faults)
 
@@ -207,24 +206,49 @@ class FaultDomain(object):
                               if firstcomp == comp]
                 self.add_faults(*compfaults)
 
-    def calc_rates(self, phases={}, modephases={}):
-        rates = {}
-        for fault in self.faults:
-            rates[fault] = self.mdl.get_scen_rate()
-        return rates
-    
 
 def create_scenname(faulttup, time):
     return ' '.join([fm[0]+'_'+fm[1]+'_' for fm in faulttup])+t_key(time)
 
+
 class FaultSample():
+    """
+    Defines a sample of a given faultdomain.
+
+    Parameters
+    ----------
+    faultdomain: FaultDomain
+        Domain of faults to sample from
+    phasemap: PhaseMap, (optional)
+        Phases of operation to sample over.
+
+    Attributes
+    ----------
+    scenarios : list
+        List of scenarios to sample.
+    times : set
+        Set of times where the scenarios will occur
+    """
+
     def __init__(self, faultdomain, phasemap={}):
         self.faultdomain = faultdomain
         self.phasemap = phasemap
-        self.scenlist = []
+        self.scenarios = []
         self.times = set()
 
     def add_single_fault_scenario(self, faulttup, time, weight=1.0):
+        """
+        Add a single fault scenario to the list of scenarios.
+
+        Parameters
+        ----------
+        faulttup : tuple
+            Fault to add ('blockname', 'faultname').
+        time : float
+            Time of the fault scenario.
+        weight : float, optional
+            Weighting factor for the scenario rate. The default is 1.0.
+        """
         self.times.add(time)
         if len(faulttup) == 1:
             faulttup = faulttup[0]
@@ -236,10 +260,19 @@ class FaultSample():
                                    rate=rate,
                                    name=create_scenname((faulttup,), time),
                                    time=time)
-        self.scenlist.append(scen)
+        self.scenarios.append(scen)
 
     def add_single_fault_times(self, times, weights=[]):
+        """
+        Add all single-fault scenarios to the list of scenarios at the given times.
 
+        Parameters
+        ----------
+        times : list
+            List of times.
+        weights : list, optional
+            Weight factors corresponding to the times The default is [].
+        """
         for faulttup in self.faultdomain.faults:
             for i, time in enumerate(times):
                 if weights:
@@ -254,8 +287,27 @@ class FaultSample():
 
     def add_single_fault_phases(self, *phases_to_sample, method='even', args=(1,),
                                 phase_methods={}, phase_args={}):
+        """
+        Sample scenarios in the given phases using a set sampling method.
+
+        Parameters
+        ----------
+        *phases_to_sample : str
+            Names of phases to sample. If no
+        method : str, optional
+            'even' or 'quad', which selects whether to use sample_times_even or
+            sample_times_quad, respectively. The default is 'even'.
+        args : tuple, optional
+            Arguments to the sampling method. The default is (1,).
+        phase_methods : dict, optional
+            Method ('even' or 'quad') to use of individual phases (if not default).
+            The default is {}.
+        phase_args : dict, optional
+            Method args to use for individual phases (if not default).
+            The default is {}.
+        """
         if self.phasemap:
-            phasetimes = self.phasemap.gen_sample_times()
+            phasetimes = self.phasemap.get_sample_times(*phases_to_sample)
         else:
             interval = [0, self.faultdomain.mdl.sp.times[-1]]
             tstep = self.faultdomain.mdl.sp.dt
@@ -272,6 +324,34 @@ class FaultSample():
                 raise Exception("Invalid method: "+loc_method)
             self.add_single_fault_times(sampletimes, weights)
 
+
+class FaultSampleApproach(object):
+    def __init__(self, mdl, phasemaps={}):
+        self.mdl = mdl
+        self.phasemaps = phasemaps
+        self.faultdomains = {}
+        self.faultsamples = {}
+
+    def add_faultdomain(self, name, method, *args, **kwargs):
+        faultdomain = FaultDomain(self.mdl)
+        meth = getattr(faultdomain, 'add_'+method)
+        meth(*args, **kwargs)
+        self.faultdomains[name] = faultdomain
+
+    def add_faultsample(self, name, method, faultdomain, phasemap, *args, **kwargs):
+
+        faultsample = FaultSample(self.faultdomains[faultdomain],
+                                  phasemap=self.phasemaps[phasemap])
+        meth = getattr(faultsample, 'add_'+method)
+        meth(*args, **kwargs)
+        self.faultsamples[name] = faultsample
+
+    def times(self):
+        return set(np.concat([samp.times for samp in self.faultsamples.values()]))
+
+    def scenarios(self):
+        return [scen for faultsample in self.faultsamples.values()
+                for scen in faultsample.scenarios]
 
 def sample_times_even(times, numpts):
     """
@@ -339,31 +419,7 @@ def sample_times_quad(times, nodes, weights):
         sampletimes = [int(round(np.quantile(times, q))) for q in quantiles]
         weights = np.array(weights)/sum(weights)
     return sampletimes, list(weights)
-   
 
-        
-# 'all', 'quad': {'nodes':[], 'weights': []}, n_pts = int
-
-#class JointFaultSample
-
-#class 
-
-
-
-mdl = Drone()
-fd = FaultDomain(mdl)
-fd.add_fault("affect_dof", "rf_propwarp")
-fd.add_faults(("affect_dof", "rf_propwarp"), ("affect_dof", "lf_propwarp"))
-fd.add_all_modes("propwarp")
-
-fs = FaultSample(fd)
-fs.add_single_fault_scenario(("affect_dof", "rf_propwarp"), 5)
-fs.add_single_fault_times([1,2,3])
-
-from examples.eps.eps import EPS
-mdl = EPS()
-fd1 = FaultDomain(mdl)
-fd1.add_all_fxnclass_modes("ExportHE")
 
 # faults
 # phases, modephases -> rates/probs
@@ -372,3 +428,14 @@ fd1.add_all_fxnclass_modes("ExportHE")
 if __name__ == "__main__":
     import doctest
     doctest.testmod(verbose=True)
+    
+    mdl = Drone()
+    fd = FaultDomain(mdl)
+    fd.add_fault("affect_dof", "rf_propwarp")
+    fd.add_faults(("affect_dof", "rf_propwarp"), ("affect_dof", "lf_propwarp"))
+    fd.add_all_modes("propwarp")
+    
+    fs = FaultSample(fd)
+    fs.add_single_fault_scenario(("affect_dof", "rf_propwarp"), 5)
+    fs.add_single_fault_times([1,2,3])
+
