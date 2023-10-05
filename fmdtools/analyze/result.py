@@ -1408,8 +1408,9 @@ class History(Result):
 
     def get_modephases(self):
         """
-        Identifies the phases of operation for the system based on its modes.
+        Identify the phases of operation for the system based on its modes.
 
+        These phases and modephases may then be used to define a PhaseMap.
         Returns
         -------
         phases : dict

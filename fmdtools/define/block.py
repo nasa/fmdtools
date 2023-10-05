@@ -232,8 +232,7 @@ class Simulable(object):
             fxns = {self.name: self}
         return fxns
 
-    def get_scen_rate(self, fxnname, faultmode, time, phases={}, modephases={},
-                      num_samples=1):
+    def get_scen_rate(self, fxnname, faultmode, time, phasemap, weight=1.0):
         """
         Get the scenario rate for the given single-fault scenario.
 
@@ -245,15 +244,12 @@ class Simulable(object):
             Name of the fault mode
         time: int
             Time when the scenario is to occur
-        phases : dict, optional
-            Phases the mode will be injected during. Used to determine opportunity
-            factor defined by the dict in fault.phases. The default is {}.
-        modephases : dict, optional
-            Modes that the phases occur in. Used to determine opportunity vector defined
-            by the dict in fault.phases (if .phases maps to modes of occurence an not
-            phases). The default is {}.
-        num_samples : int, optional
-            Number of samples the rate will be spread out over. The default is 1.
+        phasemap : PhaseMap, optional
+            Map of phases/modephases that define operations the mode will be injected
+            during (and maps to the opportunity vector phases). The default is {}.
+        weight : int, optional
+            Scenario weight (e.g., if more than one scenario is sampled for the fault).
+            The default is 1.
 
         Returns
         -------
@@ -266,9 +262,8 @@ class Simulable(object):
             raise Exception("faultmode "+faultmode+" not in "+str(fxn.m.__class__))
         else:
             sim_time = self.sp.times[-1] - self.sp.times[0] + self.sp.dt
-            rate = fm.calc_rate(time, phases=phases, modephases=modephases,
-                                sim_time=sim_time, sim_units=self.sp.units,
-                                sim_dt=self.sp.dt, num_samples=num_samples)
+            rate = fm.calc_rate(time, phasemap=phasemap, sim_time=sim_time,
+                                sim_units=self.sp.units, weight=weight)
         return rate
 
     def get_args(self, **kwargs):
