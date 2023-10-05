@@ -279,6 +279,22 @@ def get_obj_track(obj, track, all_possible=()):
     return track
 
 
+def eq_units(rateunit, timeunit):
+    """
+    Find conversion factor for from rateunit (str) to timeunit (str).
+
+    Options for units are: 'sec', 'min', 'hr', 'day', 'wk', 'month', and 'year'.
+    """
+    factors = {'sec': 1,
+               'min': 60,
+               'hr': 3600,
+               'day': 86400,
+               'wk': 604800,
+               'month': 2629746,
+               'year': 31556952}
+    return factors[timeunit]/factors[rateunit]
+
+
 def t_key(time):
     """Used to generate keys for a given (float) time that is queryable
     as an attribute of an object/dict, e.g. endresults.t10p0, the result at time
