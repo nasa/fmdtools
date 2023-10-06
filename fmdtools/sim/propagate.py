@@ -596,10 +596,10 @@ def approach(mdl, app,  **kwargs):
     """
     kwargs.update(pack_run_kwargs(**kwargs))
     n_outs = nom_helper(mdl,
-                        copy.copy(app.times),
+                        app.times(),
                         **{**kwargs, 'use_end_condition': False})
     nomresult, nomhist, nomscen, c_mdl, t_end_nom = n_outs
-    scenlist = app.scenlist
+    scenlist = app.scenarios()
 
     results, mdlhists = scenlist_helper(mdl,
                                         scenlist,

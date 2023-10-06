@@ -472,10 +472,13 @@ def result_summary_fmea(endresult, mdlhist, *attrs, metrics=()):
     fulltable = pd.concat([degradedtable, faulttable, simplefmea.transpose()])
     return fulltable.transpose()
 
-def fmea(endclasses, app, metrics=[], weight_metrics=[], avg_metrics = [], perc_metrics=[],
-         mult_metrics={}, extra_classes={}, group_by='none', sort_by=False, mdl={}, mode_types={}, ascending=False, empty_as=0.0):
+
+def fmea(endclasses, app, metrics=[],
+         weight_metrics=[], avg_metrics=[], perc_metrics=[], mult_metrics={},
+         extra_classes={}, group_by='none', sort_by=False, mdl={},
+         mode_types={}, ascending=False, empty_as=0.0):
     """
-    Makes a user-definable fmea of the endclasses of a set of fault scenarios.
+    Make a user-definable fmea of the endclasses of a set of fault scenarios.
 
     Parameters
     ----------

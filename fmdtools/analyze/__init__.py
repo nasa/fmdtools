@@ -4,3 +4,4 @@ from fmdtools.analyze import graph
 from fmdtools.analyze import plot
 from fmdtools.analyze import result
 from fmdtools.analyze import show
+from fmdtools.analyze import phases

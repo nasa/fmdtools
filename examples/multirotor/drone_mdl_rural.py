@@ -17,15 +17,15 @@ from fmdtools.analyze.result import History
 
 from examples.multirotor.drone_mdl_static import EE, Force, Control, DesTraj, DOFs
 from examples.multirotor.drone_mdl_static import DistEE, StoreEEState
-from drone_mdl_static import CtlDOF as CtlDOFStat
+from examples.multirotor.drone_mdl_static import CtlDOF as CtlDOFStat
 
 from examples.multirotor.drone_mdl_dynamic import DroneEnvironmentGridParam
 from examples.multirotor.drone_mdl_dynamic import DroneEnvironment, ViewEnvironment
-from drone_mdl_dynamic import PlanPathState as PlanPathStateDyn
-from drone_mdl_dynamic import PlanPath as PlanPathDyn
-from drone_mdl_dynamic import HoldPayload as HoldPayloadDyn
+from examples.multirotor.drone_mdl_dynamic import PlanPathState as PlanPathStateDyn
+from examples.multirotor.drone_mdl_dynamic import PlanPath as PlanPathDyn
+from examples.multirotor.drone_mdl_dynamic import HoldPayload as HoldPayloadDyn
 
-from drone_mdl_hierarchical import AffectDOF as AffectDOFHierarchical
+from examples.multirotor.drone_mdl_hierarchical import AffectDOF as AffectDOFHierarchical
 
 from recordclass import asdict
 
@@ -896,13 +896,14 @@ hazards = {'VH-1': 'loss of control',
 
 if __name__ == "__main__":
     import fmdtools.sim.propagate as prop
-    from fmdtools.analyze import show, plot
+    from fmdtools.analyze import show, plot, phases
 
     mdl = Drone()
 
     ec, mdlhist = prop.nominal(mdl)
-    phases, modephases = mdlhist.get_modephases()
-    plot.phases(phases, modephases)
+    phasemaps = phases.from_hist(mdlhist)
+    phases.phaseplot(phasemaps)
+    phases.phaseplot(phasemaps['plan_path'])
 
     mdl = Drone()
     app = SampleApproach(mdl,  phases={'move'})
