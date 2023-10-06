@@ -42,8 +42,8 @@ def sample_times_even(times, numpts, dt=1.0):
 
     Examples
     --------
-    >>> sample_times_even([0,1,2,3,4], 2)
-    ([1, 3], [0.5, 0.5])
+    >>> sample_times_even([0.0, 1.0, 2.0, 3.0, 4.0], 2)
+    ([1.0, 3.0], [0.5, 0.5])
     """
     if numpts+2 > len(times):
         sampletimes = times
