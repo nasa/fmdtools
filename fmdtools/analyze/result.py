@@ -56,7 +56,6 @@ import copy
 import sys
 import os
 from collections import UserDict
-from ordered_set import OrderedSet
 from fmdtools.define.common import get_var, t_key, get_obj_indicators
 
 
@@ -692,7 +691,7 @@ class Result(UserDict):
         newhists = {k: hist for k, hist in mh.items()
                     if not ('nominal' in k and not (with_nominal))}
         if app:
-            weights = [w.rate for w in app.scenlist]
+            weights = [w.rate for w in app.scenarios()]
             if with_nominal:
                 weights.append(1)
         else:
@@ -1405,54 +1404,6 @@ class History(Result):
         deg_hist = self.get_degraded_hist(*attrs, withtotal=False, withtime=False)
         degraded = [k for k, v in deg_hist.items() if not np.all(v)]
         return Result(faulty=faulty, degraded=degraded)
-
-    def get_modephases(self):
-        """
-        Identify the phases of operation for the system based on its modes.
-
-        These phases and modephases may then be used to define a PhaseMap.
-        Returns
-        -------
-        phases : dict
-            Dictionary of distict phases that the system functions pass through,
-            of the form:
-                {'fxn':{'phase1':[beg, end], phase2:[beg, end]}}
-                where each phase is defined by its corresponding mode in the modelhist
-                (numbered mode, mode1, mode2... for multiple modes)
-        modephases : dict
-            Dictionary of phases that the system passes through, of the form:
-                {'fxn':{'mode1':{'phase1', 'phase2''}}}
-        """
-        modephases = {}
-        phases = {}
-        times = self['time']
-        f_hist = self.flatten()
-        modehists = self.get_values('m.mode')
-        for k, modehist in modehists.items():
-            if type(k) == str:
-                k = k.split(".")
-            fxn = k[k.index('m')-1]
-            if len(modehist) != 0:
-                modes = OrderedSet(modehist)
-                modephases[fxn] = dict.fromkeys(modes)
-                phases_unsorted = dict()
-                for mode in modes:
-                    modeinds = [ind for ind, m in enumerate(modehist) if m == mode]
-                    startind = modeinds[0]
-                    phasenum = 0
-                    phaseid = mode
-                    modephases[fxn][mode] = set()
-                    for i, ind in enumerate(modeinds):
-                        if ind+1 not in modeinds:
-                            phases_unsorted[phaseid] = [times[startind], times[ind]]
-                            modephases[fxn][mode].add(phaseid)
-                            if i != len(modeinds)-1:
-                                startind = modeinds[i+1]
-                                phasenum += 1
-                                phaseid = mode+str(phasenum)
-                phases[fxn] = dict(sorted(phases_unsorted.items(),
-                                          key=lambda item: item[1][0]))
-        return phases, modephases
 
     def get_metric(self, value, metric=np.mean, args=(), axis=None):
         """

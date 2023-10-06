@@ -232,7 +232,7 @@ class Simulable(object):
             fxns = {self.name: self}
         return fxns
 
-    def get_scen_rate(self, fxnname, faultmode, time, phasemap, weight=1.0):
+    def get_scen_rate(self, fxnname, faultmode, time, phasemap={}, weight=1.0):
         """
         Get the scenario rate for the given single-fault scenario.
 

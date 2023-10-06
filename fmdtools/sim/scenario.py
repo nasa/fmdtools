@@ -319,7 +319,6 @@ class ParamScenario(NominalScenario):
     fixedkwargs: dict = {}
 
 
-
 if __name__ == "__main__":
     import doctest
     doctest.testmod(verbose=True)
@@ -328,5 +327,3 @@ if __name__ == "__main__":
     b = SingleFaultScenario()
     
     seq = Sequence(faultseq={1:"fault"})
-
-

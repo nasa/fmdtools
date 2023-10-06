@@ -25,7 +25,7 @@ The flows are:
 from fmdtools.define.block import FxnBlock, Mode
 from fmdtools.define.flow import Flow
 from fmdtools.define.model import Model, check_model_pickleability
-from fmdtools.sim.approach import SampleApproach, NominalApproach
+from fmdtools.sim.approach import NominalApproach
 from fmdtools.define.parameter import Parameter
 from fmdtools.define.state import State
 from fmdtools.define.time import Time
@@ -506,6 +506,7 @@ class Pump(Model):
 
 
 if __name__ == "__main__":
+    from fmdtools.sim.sample import SampleApproach
 
     mdl = Pump()
     endclass, mdlhist = propagate.nominal(mdl, track='all')
@@ -567,6 +568,9 @@ if __name__ == "__main__":
     app.add_seed_replicates('test', 10)
 
     faultapp = SampleApproach(mdl)
+    faultapp.add_faultdomain("testdomain", "all")
+    faultapp.add_faultsample("testsample", "single_fault_phases", "testdomain",
+                             phasemap=mdl.sp.phases)
 
     endclasses, mdlhists = propagate.approach(mdl, faultapp)
     flat = mdlhists.flatten()

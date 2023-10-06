@@ -15,7 +15,6 @@ import itertools
 import copy
 from fmdtools.define.common import get_true_fields, get_true_field, get_dataobj_track, eq_units
 from fmdtools.analyze.result import History
-from fmdtools.sim.approach import PhaseMap
 
 
 class Fault(dataobject, readonly=True, mapping=True):
@@ -92,11 +91,11 @@ class Fault(dataobject, readonly=True, mapping=True):
         if not phasemap:
             return baserate * weight
         else:
-            t_exposure = phasemap.calc_scen_exposure_time(time)
-            t_exposure *= eq_units(self['units'], sim_units)
             if self.units == 'sim':
                 t_factor = 1.0
             else:
+                t_exposure = phasemap.calc_scen_exposure_time(time)
+                t_exposure *= eq_units(self['units'], sim_units)
                 t_factor = t_exposure/sim_exposure_time
             if self.phases:
                 phase = phasemap.find_base_phase(time)
