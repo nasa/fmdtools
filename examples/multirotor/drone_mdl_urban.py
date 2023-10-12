@@ -514,16 +514,19 @@ if __name__ == "__main__":
     app.add_faultsample("move_scens", "single_fault_phases", "drone_faults", "move",
                         phasemap="plan_path", method='quad',
                         args=(move_quad['quad']['nodes'], move_quad['quad']['weights']))
+    
+    app.faultsamples['move_scens'].get_scen_groups('phase')
 
     endresults, hists = propagate.approach(mdl, app, staged=False,
                                            mdl_kwargs = {'sp':{'dt':1.0}})
-    statsfmea = an.tabulate.fmea(endresults, app, group_by='fxnfault',
+    plot_env_with_traj3d(hists, mdl)
+    plot_env_with_traj(hists, mdl)
+    statsfmea = an.tabulate.fmea(endresults, app, group_by=('function', 'fault'),
                                  weight_metrics=['rate'],
                                  avg_metrics=['unsafe_flight_time', 'cost', 'repcost',
                                               'landcost', 'body_strikes',
                                               'head_strikes', 'property_restrictions'],
                                  sort_by='cost')
-    plot_env_with_traj3d(hists, mdl)
-    plot_env_with_traj(hists, mdl)
+
 
     #move_quad = make_move_quad(mdlhist, phases['PlanPath']['move'])

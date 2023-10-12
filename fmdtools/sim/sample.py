@@ -276,7 +276,95 @@ class FaultDomain(object):
                 self.add_faults(*compfaults)
 
 
-class FaultSample():
+class BaseSample():
+    """
+    Overarching sample class (for FaultSample and SampleApproach).
+
+    Subclasses should have methods:
+        - scenarios() for getting all scenarios from the sample
+        - times() for getting all times from the sample
+    """
+
+    def get_scens(self, **kwargs):
+        """
+        Get scenarios with the values corresponding to **kwargs.
+
+        Parameters
+        ----------
+        **kwargs : kwargs
+            key-value pairs for the Scenario (e.g., fault='faultname')
+
+        Returns
+        -------
+        scens : dict
+            Dict of scenarios with the given properties.
+        """
+        scens = {i.name: i for i in self.scenarios()}
+        for kwarg in kwargs:
+            scens = {k: v for k, v in scens.items() if v[kwarg] == kwargs[kwarg]}
+        return scens
+
+    def get_groups_scens(self, groupnames, groups):
+        """
+        Get scenarios related to the given groups.
+
+        Parameters
+        ----------
+        groupnames : list
+            List of scenario properties to group (e.g., 'function'', 'fault')
+        groups : list
+            Groups to get e.g, [ ('fxnname1', 'fault1')]
+
+        Returns
+        -------
+        scen_groups : dict
+            dict of scenarios for each group with structure
+            {(field1_val, field2_val) : [scenarios]}
+        """
+        scen_groups = {}
+        for group in groups:
+            group_kwargs = {groupname: group[i]
+                            for i, groupname in enumerate(groupnames)}
+            scen_groups[group] = list(self.get_scens(**group_kwargs))
+        return scen_groups
+
+    def group_scens(self, *groupnames):
+        """
+        Get the groups of scenario parameters corresponding to *groupnames.
+
+        Parameters
+        ----------
+        *groupnames : str
+            Fields of the scenarios to group. e.g., 'function' or 'fault'
+
+        Returns
+        -------
+        groups : list
+            List of tuples corresponding to the groups
+        """
+        groups = list(set([tuple([v[groupname] for groupname in groupnames])
+                           for v in self.scenarios()]))
+        return groups
+
+    def get_scen_groups(self, *groupnames):
+        """
+        Get all groups of scenarios grouped by *groupnames.
+
+        Parameters
+        ----------
+        *groupnames : str
+            Fields of the underlying scenarios in self.scenarios()
+
+        Returns
+        -------
+        scen_groups : dict
+            Dict of scenarios
+        """
+        groups = self.group_scens(*groupnames)
+        return self.get_groups_scens(groupnames, groups)
+
+
+class FaultSample(BaseSample):
     """
     Defines a sample of a given faultdomain.
 
@@ -317,6 +405,28 @@ class FaultSample():
         """Get all sampled scenarios."""
         return [*self._scenarios]
 
+    def get_scens(self, phase='', **kwargs):
+        """
+        Get scenarios with the values corresponding to **kwargs.
+
+        Parameters
+        ----------
+        phase : str
+            phase to get scens for
+        **kwargs : kwargs
+            key-value pairs for the Scenario (e.g., fault='faultname')
+
+        Returns
+        -------
+        scens : dict
+            Dict of scenarios with the given properties.
+        """
+        scens = super().get_scens(**kwargs)
+        if phase:
+            scens = {k: v for k, v in scens.items()
+                     if self.phasemap.find_phase(v.time) == phase}
+        return scens
+
     def add_single_fault_scenario(self, faulttup, time, weight=1.0):
         """
         Add a single fault scenario to the list of scenarios.
@@ -333,6 +443,10 @@ class FaultSample():
         self._times.add(time)
         if len(faulttup) == 1:
             faulttup = faulttup[0]
+        if self.phasemap:
+            phase = self.phasemap.find_base_phase(time)
+        else:
+            phase = ''
         rate = self.faultdomain.mdl.get_scen_rate(faulttup[0], faulttup[1], time,
                                                   phasemap=self.phasemap,
                                                   weight=weight)
@@ -342,7 +456,8 @@ class FaultSample():
                                    fault=faulttup[1],
                                    rate=rate,
                                    name=create_scenname((faulttup,), time),
-                                   time=time)
+                                   time=time,
+                                   phase=phase)
         self._scenarios.append(scen)
 
     def add_single_fault_times(self, times, weights=[]):
@@ -406,34 +521,10 @@ class FaultSample():
                 sampletimes, weights = sample_times_quad(times, *loc_args)
             else:
                 raise Exception("Invalid method: "+loc_method)
-            self.add_single_fault_times(sampletimes, weights)
-
-    def get_scens(self, phase='', **kwargs):
-        """
-        Get scenarios with the values corresponding to **kwargs.
-
-        Parameters
-        ----------
-        phase : str, optional
-            Name of a phase in self.phasemap the scenario is in. The default is ''.
-        **kwargs : kwargs
-            key-value pairs for the Scenario (e.g., fault='faultname')
-
-        Returns
-        -------
-        scens : dict
-            Dict of scenarios with the given properties.
-        """
-        scens = {i.name: i for i in self.scenarios()}
-        for kwarg in kwargs:
-            scens = {k: v for k, v in scens.items() if v[kwarg] == kwargs[kwarg]}
-        if phase:
-            scens = {k: v for k, v in scens.items()
-                     if self.phasemap.find_phase(v.time) == phase}
-        return scens
+            self.add_single_fault_times(sampletimes, weights)        
 
 
-class SampleApproach(object):
+class SampleApproach(BaseSample):
     """
     Class for defining an agglomeration of fault samples accross an entire model.
 
@@ -533,8 +624,6 @@ class SampleApproach(object):
 
 
 if __name__ == "__main__":
-    import doctest
-    doctest.testmod(verbose=True)
     from examples.multirotor.drone_mdl_rural import Drone
     mdl = Drone()
     fd = FaultDomain(mdl)
@@ -542,10 +631,16 @@ if __name__ == "__main__":
     fd.add_faults(("affect_dof", "rf_propwarp"), ("affect_dof", "lf_propwarp"))
     fd.add_all_modes("propwarp")
     
-    fs = FaultSample(fd)
+    fs = FaultSample(fd, phasemap=PhaseMap({"on": [0, 2], "off": [3, 5]}))
     fs.add_single_fault_scenario(("affect_dof", "rf_propwarp"), 5)
     fs.add_single_fault_times([1,2,3])
+    fs.get_scen_groups("function")
+    fs.get_scen_groups("phase")
     
     s = SampleApproach(mdl)
     s.add_faultdomain("all_faults", "all")
     s.add_faultsample("start_times", "single_fault_times", "all_faults", [1,3,4])
+    s.get_scen_groups("phase")
+
+    import doctest
+    doctest.testmod(verbose=True)
