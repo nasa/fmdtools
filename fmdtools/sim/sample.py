@@ -301,12 +301,20 @@ class FaultSample():
         self._scenarios = []
         self._times = set()
 
+    def __repr__(self):
+        scens = [s.name for s in self.scenarios()]
+        tot = len(scens)
+        if tot > 10:
+            scens = scens[0:10]+["... (" + str(tot) + " total)"]
+        rep = "FaultSample of scenarios: " + "\n - " + "\n - ".join(scens)
+        return rep
+
     def times(self):
-        """ Get all sampled times."""
+        """Get all sampled times."""
         return list(self._times)
 
     def scenarios(self):
-        """Get all sampled scenarios.""" 
+        """Get all sampled scenarios."""
         return [*self._scenarios]
 
     def add_single_fault_scenario(self, faulttup, time, weight=1.0):
@@ -400,6 +408,30 @@ class FaultSample():
                 raise Exception("Invalid method: "+loc_method)
             self.add_single_fault_times(sampletimes, weights)
 
+    def get_scens(self, phase='', **kwargs):
+        """
+        Get scenarios with the values corresponding to **kwargs.
+
+        Parameters
+        ----------
+        phase : str, optional
+            Name of a phase in self.phasemap the scenario is in. The default is ''.
+        **kwargs : kwargs
+            key-value pairs for the Scenario (e.g., fault='faultname')
+
+        Returns
+        -------
+        scens : dict
+            Dict of scenarios with the given properties.
+        """
+        scens = {i.name: i for i in self.scenarios()}
+        for kwarg in kwargs:
+            scens = {k: v for k, v in scens.items() if v[kwarg] == kwargs[kwarg]}
+        if phase:
+            scens = {k: v for k, v in scens.items()
+                     if self.phasemap.find_phase(v.time) == phase}
+        return scens
+
 
 class SampleApproach(object):
     """
@@ -423,6 +455,14 @@ class SampleApproach(object):
         self.phasemaps = phasemaps
         self.faultdomains = {}
         self.faultsamples = {}
+
+    def __repr__(self):
+        fd_str = ", ".join(self.faultdomains)
+        fs_str = ", ".join(self.faultsamples)
+        rep = "SampleApproach for " + self.mdl.name + " with:" +\
+            " \n faultdomains: " + fd_str +\
+            "\n faultsamples: " + fs_str
+        return rep
 
     def add_faultdomain(self, name, add_method, *args, **kwargs):
         """
@@ -491,6 +531,7 @@ class SampleApproach(object):
         return [scen for faultsample in self.faultsamples.values()
                 for scen in faultsample.scenarios()]
 
+
 if __name__ == "__main__":
     import doctest
     doctest.testmod(verbose=True)
@@ -506,5 +547,5 @@ if __name__ == "__main__":
     fs.add_single_fault_times([1,2,3])
     
     s = SampleApproach(mdl)
-    s.add_faultdomain("test", "all")
-    s.add_faultsample("test", "single_fault_times", "test", [1,3,4])
+    s.add_faultdomain("all_faults", "all")
+    s.add_faultsample("start_times", "single_fault_times", "all_faults", [1,3,4])

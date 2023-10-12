@@ -475,18 +475,17 @@ def make_move_quad(mdlhist, move_phase, weights = [0.003, 0.5, 0.46]):
             node = 2*(time-move_phase[0])/(move_phase[1]-move_phase[0])-1.0
             nodes.append(node)
             ws.append(2*weights[i])
-    return {'samp': 'quadrature', 'quad': {'nodes': nodes, 'weights': weights}}
+    return {'samp': 'quadrature', 'quad': {'nodes': nodes, 'weights': ws}}
 
 
 if __name__ == "__main__":
     from fmdtools.sim import propagate
     from fmdtools import analyze as an
-    from fmdtools.sim.approach import SampleApproach
-    
-    #UrbanDroneEnvironment("a")
-    
-    #PlanPath._init_environment("a")
+    from fmdtools.sim.sample import SampleApproach
+    from fmdtools.analyze import phases
 
+    #UrbanDroneEnvironment("a")
+    #PlanPath._init_environment("a")
     #p = PlanPath("test", {})
     
     e = UrbanDroneEnvironment("env")
@@ -499,22 +498,23 @@ if __name__ == "__main__":
     # ec, mdlhist_fault = propagate.one_fault(mdl, "plan_path", "vision_lack_of_detection", time=4.5)
 
     ec, mdlhist = propagate.nominal(mdl, dt=1.0)
-    
-    phases, modephases = mdlhist.get_modephases()
-    an.plot.phases(phases, modephases)
-    
+
+    phasemaps = phases.from_hist(mdlhist)
+    phases.phaseplot(phasemaps['plan_path'])
+
     an.plot.hist(mdlhist, "flows.dofs.s.planvel","flows.dofs.s.vertvel", "fxns.store_ee.s.soc")
     plot_env_with_traj(mdlhist, mdl)
     plot_env_with_traj3d(mdlhist, mdl)
-    
-    
-    move_quad=make_move_quad(mdlhist, phases['plan_path']['move'])
-    
+
+    move_quad = make_move_quad(mdlhist, phasemaps['plan_path'].phases['move'])
 
     ec, mdlhist = propagate.one_fault(mdl, 'store_ee', 'lowcharge', 4.0)
-    app = SampleApproach(mdl, phases=phases, modephases=modephases,
-                         sampparams = {('PlanPath','move'): move_quad})
-    app
+    app = SampleApproach(mdl, phasemaps=phasemaps)
+    app.add_faultdomain("drone_faults", "all")
+    app.add_faultsample("move_scens", "single_fault_phases", "drone_faults", "move",
+                        phasemap="plan_path", method='quad',
+                        args=(move_quad['quad']['nodes'], move_quad['quad']['weights']))
+
     endresults, hists = propagate.approach(mdl, app, staged=False,
                                            mdl_kwargs = {'sp':{'dt':1.0}})
     statsfmea = an.tabulate.fmea(endresults, app, group_by='fxnfault',

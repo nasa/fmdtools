@@ -12,7 +12,6 @@ from fmdtools.define.time import Time
 from fmdtools.define.mode import Mode
 from fmdtools.define.block import FxnBlock
 from fmdtools.define.model import Model
-from fmdtools.sim.approach import SampleApproach
 from fmdtools.define.environment import Environment
 from fmdtools.define.coords import Coords, CoordsParam
 
@@ -139,7 +138,7 @@ class PlanPathMode(Mode):
     """
 
     failrate = 1e-5
-    args_fm = {'noloc': (0.2, 10000),
+    fm_args = {'noloc': (0.2, 10000),
                'degloc': (0.8, 10000)}
     opermodes = ('taxi', 'hover', 'move', 'descend', 'land')
     mode: int = 'taxi'
@@ -431,7 +430,7 @@ class Drone(Model):
             crashcost = 0
 
         modes, modeprops = self.return_faultmodes()
-        repcost = sum([c['rcost']
+        repcost = sum([c['cost']
                        for f, m in modeprops.items()
                        for a, c in m.items()])
 
@@ -453,37 +452,40 @@ def vectdist(p1, p2):
 
 if __name__ == "__main__":
     import doctest
-    #doctest.testmod(verbose=True)
-    
+    doctest.testmod(verbose=True)
+    from fmdtools.sim.sample import SampleApproach
+    from fmdtools.analyze.phases import PhaseMap
     from fmdtools import analyze as an
     mdl = Drone()
     ec, mdlhist = fs.propagate.nominal(mdl)
     fig, ax = an.show.trajectories(mdlhist, "dofs.s.x", "dofs.s.y", "dofs.s.z",
                                    time_groups=['nominal'], time_ticks=2.0)
-    app = SampleApproach(mdl)
 
-    mdl_quad_comp = Drone()
-    quad_comp_app = SampleApproach(mdl_quad_comp,
-                                   faults=[('affect_dof', 'mechbreak')],
-                                   defaultsamp={'samp': 'evenspacing', 'numpts': 5})
-    quad_comp_endclasses, quad_comp_mdlhists = fs.propagate.approach(mdl_quad_comp,
-                                                                     quad_comp_app,
+    app_mechfaults = SampleApproach(mdl, phasemaps={'mdl': PhaseMap(mdl.sp.phases)})
+    app_mechfaults.add_faultdomain("mechfaults", "fault", "affect_dof", "mechbreak")
+    app_mechfaults.add_faultsample("mechfault_scens", "single_fault_phases",
+                                   "mechfaults", phasemap='mdl', args=(5,))
+
+    quad_comp_endclasses, quad_comp_mdlhists = fs.propagate.approach(mdl,
+                                                                     app_mechfaults,
                                                                      staged=True)
-    an.plot.hist(quad_comp_mdlhists.nominal, 'flows.dofs.s.x', 'dofs.s.y', 'dofs.s.z', 'store_ee.s.soc')
-    
-    fig, ax = an.show.trajectories(quad_comp_mdlhists, "dofs.s.x", "dofs.s.y", "dofs.s.z",
-                                   time_groups=['nominal'], indiv_kwargs={'faulty':{'alpha':0.15, 'color':'red'}})
+    an.plot.hist(quad_comp_mdlhists.nominal, 'flows.dofs.s.x', 'dofs.s.y', 'dofs.s.z',
+                 'store_ee.s.soc')
+
+    fig, ax = an.show.trajectories(quad_comp_mdlhists,
+                                   "dofs.s.x", "dofs.s.y", "dofs.s.z",
+                                   time_groups=['nominal'],
+                                   indiv_kwargs={'faulty':{'alpha': 0.15,
+                                                           'color': 'red'}})
 
     import fmdtools.analyze as an
-    an.plot.samplemetric(quad_comp_app,
-                         quad_comp_endclasses,
-                         ('affect_dof', 'mechbreak'))
+    an.phases.phaseplot(app_mechfaults.phasemaps)
+    an.phases.samplemetric(app_mechfaults.faultsamples['mechfault_scens'],
+                           quad_comp_endclasses)
+    an.phases.samplemetrics(app_mechfaults, quad_comp_endclasses)
 
-    quad_comp_endclasses_1, quad_comp_mdlhists_1 = fs.propagate.approach(mdl_quad_comp,
-                                                                         quad_comp_app)
+    quad_comp_endclasses_1, quad_comp_mdlhists_1 = fs.propagate.approach(mdl,
+                                                                         app_mechfaults)
 
     cost_tests = [ec for ec in quad_comp_endclasses
                   if quad_comp_endclasses[ec] != quad_comp_endclasses_1[ec]]
-
-    dist_tests = [ec for ec in quad_comp_mdlhists
-                  if any(quad_comp_mdlhists.get(ec) != quad_comp_mdlhists_1.get(ec))]
