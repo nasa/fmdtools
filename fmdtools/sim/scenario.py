@@ -200,6 +200,7 @@ class SingleFaultScenario(BaseScenario):
     rate: float = 1.0
     name: str = 'faulty'
     time: float = 0.0
+    phase: str = ''
 
 
 class JointFaultScenario(BaseScenario):
@@ -222,6 +223,7 @@ class JointFaultScenario(BaseScenario):
     rate: float = 1.0
     name: str = 'faulty'
     time: float = 0.0
+    phase: tuple = ()
 
 
 class NominalScenario(BaseScenario, readonly=True):
