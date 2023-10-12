@@ -372,7 +372,7 @@ def phaseplot(phasemaps, modephases=[], mdl=[], dt=1.0, singleplot=True,
               phase_ticks='both', figsize="default", v_padding=0.5, title_padding=-0.05,
               title="Progression of model through operational phases"):
     """
-    Plots the phases of operation that the model progresses through.
+    Plot the phases of operation that the model progresses through.
 
     Parameters
     ----------
@@ -428,38 +428,8 @@ def phaseplot(phasemaps, modephases=[], mdl=[], dt=1.0, singleplot=True,
             ax = plt.subplot(num_plots, 1, i+1, label=fxn)
         else:
             fig, ax = plt.subplots(figsize=figsize)
-        modephases = phasemap.modephases
-        phases = phasemap.phases
+        single_phaseplot(phasemap, dt, phase_ticks, ax)
 
-        if modephases:
-            mode_nums = {ph: i for i, (k, v) in enumerate(modephases.items())
-                         for ph in v}
-            ylabels = list(modephases.keys())
-        else:
-            mode_nums = {ph: i for i, ph in enumerate(phases)}
-            ylabels = list(mode_nums.keys())
-
-        phaseboxes = [((v[0]-.5*dt, mode_nums[k]-.4),
-                       (v[0]-.5*dt, mode_nums[k]+.4),
-                       (v[1]+.5*dt, mode_nums[k]+.4),
-                       (v[1]+.5*dt, mode_nums[k]-.4)) for k, v in phases.items()]
-        color_options = list(mcolors.TABLEAU_COLORS.keys())[0:len(ylabels)]
-        colors = [color_options[mode_nums[phase]] for phase in phases]
-        bars = PolyCollection(phaseboxes, facecolors=colors)
-
-        ax.add_collection(bars)
-        ax.autoscale()
-
-        ax.set_yticks(list(set(mode_nums.values())))
-        ax.set_yticklabels(ylabels)
-
-        times = [0]+[v[1] for k, v in phases.items()]
-        if phase_ticks == 'both':
-            ax.set_xticks(list(set(list(ax.get_xticks())+times)))
-        elif phase_ticks == 'phases':
-            ax.set_xticks(times)
-        ax.set_xlim(times[0], times[-1])
-        plt.grid(which='both', axis='x')
         if singleplot:
             plt.title(fxn)
         else:
@@ -473,8 +443,44 @@ def phaseplot(phasemaps, modephases=[], mdl=[], dt=1.0, singleplot=True,
         return figs
 
 
-def samplemetric(app, endclasses, fxnmode,
-                 samptype='std', title="", metric='cost', ylims=None):
+def single_phaseplot(phasemap, dt=1.0, phase_ticks='both', ax=None):
+    """Plot phasemap on existing axis."""
+    modephases = phasemap.modephases
+    phases = phasemap.phases
+
+    if modephases:
+        mode_nums = {ph: i for i, (k, v) in enumerate(modephases.items())
+                     for ph in v}
+        ylabels = list(modephases.keys())
+    else:
+        mode_nums = {ph: i for i, ph in enumerate(phases)}
+        ylabels = list(mode_nums.keys())
+
+    phaseboxes = [((v[0]-.5*dt, mode_nums[k]-.4),
+                   (v[0]-.5*dt, mode_nums[k]+.4),
+                   (v[1]+.5*dt, mode_nums[k]+.4),
+                   (v[1]+.5*dt, mode_nums[k]-.4)) for k, v in phases.items()]
+    color_options = list(mcolors.TABLEAU_COLORS.keys())[0:len(ylabels)]
+    colors = [color_options[mode_nums[phase]] for phase in phases]
+    bars = PolyCollection(phaseboxes, facecolors=colors)
+
+    ax.add_collection(bars)
+    ax.autoscale()
+
+    ax.set_yticks(list(set(mode_nums.values())))
+    ax.set_yticklabels(ylabels)
+
+    times = [0]+[v[1] for k, v in phases.items()]
+    if phase_ticks == 'both':
+        ax.set_xticks(list(set(list(ax.get_xticks())+times)))
+    elif phase_ticks == 'phases':
+        ax.set_xticks(times)
+    ax.set_xlim(times[0], times[-1])
+    plt.grid(which='both', axis='x')
+
+
+def samplemetric(faultsamp, endclasses, metric='cost', rad='rate', rad_scale=0.01,
+                 label_rad="{:.2e}", line='stem', title="", ylims=None, **scen_kwargs):
     """
     Plots the sample metric and rate of a given fault over the injection times defined
     in the app sampleapproach
@@ -483,108 +489,79 @@ def samplemetric(app, endclasses, fxnmode,
 
     Parameters
     ----------
-    app : sampleapproach
-        Sample approach defining the underlying samples to take and probability model of
-        the list of scenarios.
+    app : FaultSamp
+        Fault sampledefining the underlying samples to take with phasemap
     endclasses : Result
         A Result with the end classification of each fault (metrics, etc)
-    fxnmode : tuple
-        tuple (or tuple of tuples) with structure ('function name', 'mode name')
-        defining the fault mode
     metric : str
         Metric to plot. The default is 'cost'
-    samptype : str, optional
-        The type of sample approach used.
-        Options include:
-
-            - 'std' for a single point for each interval
-            - 'quadrature' for a set of points with weights defined by a quadrature
+    rad : str
+        Metric to plot as a radius at each sample. Default is 'rate'.
+    rad_scale : float
+        Scale factor for radius. Default is 0.01, which makes the max rad size 1/100 of
+        the max metric value.
+    label_rad : str
+        Format string for the radius (if any). Default is "{:.2e}".
+    line : str ('stem' or 'line')
+        Whether to plot metrics as a stem or line plot
+    title : str
+        Title for the plot
+    ylims : tuple
+        y-limits for plot
+    **scen_kwargs : kwargs
+        Arguments to FaultSample.get_scens (e.g., modes etc to sample).
+    Returns
+    -------
+    fig : matplotlib figure
+        Figure for the plot
     """
-    associated_scens = []
-    for phasetup in app.mode_phase_map[fxnmode]:
-        associated_scens = associated_scens + app.scenids.get((fxnmode, phasetup), [])
-    associated_scens = list(set(associated_scens))
-    costs = np.array([endclasses.get(scen).endclass[metric]
-                     for scen in associated_scens])
+    scens = faultsamp.get_scens(**scen_kwargs)
 
-    times = np.array([[a.time for a in app.scenlist if a.name == scen][0]
-                      for scen in associated_scens])
+    fig, axes = plt.subplots(2, 1, sharey=False, gridspec_kw={
+                               'height_ratios': [3, 1]})
+    # phase plot
+    ax = single_phaseplot(faultsamp.phasemap, ax=axes[1])
+
+    # cost/metric plots
+    costs = np.array([endclasses.get(scen).endclass[metric] for scen in scens])
+    times = np.array([v.time for v in scens.values()])
     timesort = np.argsort(times)
     times = times[timesort]
     costs = costs[timesort]
-    a = 1
-    tPlot, axes = plt.subplots(2, 1, sharey=False, gridspec_kw={
-                               'height_ratios': [3, 1]})
-
-    phasetimes_start = []
-    phasetimes_end = []
-    ratesvect = []
-    phaselabels = []
-    for phase, ptimes in app.mode_phase_map[fxnmode].items():
-        if type(ptimes[0]) == list:
-            phasetimes_start += [t[0] for t in ptimes]
-            phasetimes_end += [t[1] for t in ptimes]
-            ratesvect += [app.rates_timeless[fxnmode][phase] for t in ptimes] * 2
-            phaselabels += [phase[1] for t in ptimes]
-        else:
-            phasetimes_start.append(ptimes[0])
-            phasetimes_end.append(ptimes[1])
-            ratesvect = ratesvect + [app.rates_timeless[fxnmode][phase]]*2
-            phaselabels.append(phase[1])
-    ratetimes = []
-    phaselocs = []
-    for (ind, phasetime) in enumerate(phasetimes_start):
-        axes[0].axvline(phasetime, color="black")
-        phaselocs= phaselocs + [(phasetimes_end[ind] - phasetimes_start[ind])/2 + phasetimes_start[ind]]
-
-        axes[1].axvline(phasetime, color="black")
-        ratetimes = ratetimes + [phasetimes_start[ind]] + [phasetimes_end[ind]]
-        # axes[1].text(middletime, 0.5*max(rates),  list(app.phases.keys())[ind], ha='center', backgroundcolor="white")
-    # rate plots
-    axes[1].set_xticks(phaselocs)
-    axes[1].set_xticklabels(phaselabels)
-
-    sorty = np.argsort(phasetimes_start)
-    phasetimes_start = np.array(phasetimes_start)[sorty]
-    phasetimes_end = np.array(phasetimes_end)[sorty]
-    sortx = np.argsort(ratetimes)
-    axes[1].plot(np.array(ratetimes)[sortx], np.array(ratesvect)[sortx])
-    axes[1].set_xlim(phasetimes_start[0], phasetimes_end[-1])
-    axes[1].set_ylim(0, np.max(ratesvect)*1.2)
-    axes[1].set_ylabel("Rate")
-    axes[1].set_xlabel("Time ("+str(app.units)+")")
-    axes[1].grid()
-    #cost plots
-    axes[0].set_xlim(phasetimes_start[0], phasetimes_end[-1])
-    if not ylims:
-        ylims = [min(1.2*np.min(costs), -1e-5), max(1.2*np.max(costs), 1e-5)]
-    axes[0].set_ylim(*ylims)
-    if samptype == 'fullint':
+    
+    if line == 'line':
         axes[0].plot(times, costs, label=metric)
-    else:
-        if samptype == 'quadrature':
-            sizes = 1000 * np.array([weight if weight != 1 / len(timeweights) else 0.0
-                                    for (phasetype, phase), timeweights in app.weights[fxnmode].items() if timeweights
-                                    for time, weight in timeweights.items() if time in times])
-            axes[0].scatter(times, costs,s=sizes, label=metric, alpha=0.5)
-        axes[0].stem(times, costs, label=metric, markerfmt=",", use_line_collection=True)
+    elif line == 'stem':
+        axes[0].stem(times, costs, label=metric, markerfmt=",",
+                     use_line_collection=True)
+
+    # rate/metric plot
+    if rad:
+        sizes = np.array([endclasses.get(scen).endclass[rad] for scen in scens])
+        sizes = sizes[timesort]
+        rad_scale *= np.max(abs(costs))/np.max(abs(sizes))
+        axes[0].scatter(times, costs, s=rad_scale*sizes, label=rad, alpha=0.5)
+        if label_rad:
+            for i, t in enumerate(times):
+                axes[0].text(times[i], costs[i], s=label_rad.format(sizes[i]))
+
+    ts = faultsamp.faultdomain.mdl.sp.times
+    axes[0].set_xlim(ts[0], ts[-1])
+    if ylims:
+        axes[0].set_ylim(*ylims)
 
     axes[0].set_ylabel(metric)
     axes[0].grid()
     if title:
         axes[0].set_title(title)
-    elif type(fxnmode[0]) == tuple:
-        axes[0].set_title(metric+" function of "+str(fxnmode)+" over time")
-    else:
-        axes[0].set_title(metric+" function of "+fxnmode[0] +
-                          ": "+fxnmode[1]+" over time")
     # plt.subplot_adjust()
     plt.tight_layout()
+    return fig
 
 
-def samplemetrics(app, endclasses, joint=False, title="", metric='cost'):
+def samplemetrics(app, endclasses, **kwargs):
     """
-    Plots the costs and rates of a set of faults injected over time according to the
+    Plot the costs and rates of a set of faults injected over time according to the
     approach app.
 
     Parameters
@@ -593,28 +570,25 @@ def samplemetrics(app, endclasses, joint=False, title="", metric='cost'):
         The sample approach used to run the list of faults
     endclasses : Result
         Results over the scenarios defined in app.
-    joint : bool, optional
-        Whether to include joint fault scenarios. The default is False.
     title : str
         Optional title.
-    metric : str
-        Metric to plot. The default is 'cost'
+    **kwargs : kwargs
+        kwargs to samplemetric
+    Returns
+    -------
+    figs : dict
+        dict of figures for each fault sample in the SampleApproach
     """
-    for fxnmode in app.list_modes(joint):
-        if any([True for (fm, phase), val in app.sampparams.items()
-                if val['samp'] == 'fullint' and fm == fxnmode]):
-            st = 'fullint'
-        elif any([True for (fm, phase), val in app.sampparams.items()
-                  if val['samp'] == 'quadrature' and fm == fxnmode]):
-            st = 'quadrature'
-        else:
-            st = 'std'
-        samplemetric(app, endclasses, fxnmode, samptype=st, title="", metric=metric)
+    figs = {}
+    for faultsampname, faultsamp in app.faultsamples.items():
+        figs[faultsampname] = samplemetric(faultsamp, endclasses,
+                                           title=faultsampname, **kwargs)
+    return figs
 
 
 def metricovertime(endclasses, app, metric='cost', metrictype='expected cost'):
     """
-    Plots the total cost or total expected cost of faults over time.
+    Plot the total cost or total expected cost of faults over time.
 
     Parameters
     ----------
