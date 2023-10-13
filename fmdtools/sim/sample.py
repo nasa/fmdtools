@@ -405,28 +405,6 @@ class FaultSample(BaseSample):
         """Get all sampled scenarios."""
         return [*self._scenarios]
 
-    def get_scens(self, phase='', **kwargs):
-        """
-        Get scenarios with the values corresponding to **kwargs.
-
-        Parameters
-        ----------
-        phase : str
-            phase to get scens for
-        **kwargs : kwargs
-            key-value pairs for the Scenario (e.g., fault='faultname')
-
-        Returns
-        -------
-        scens : dict
-            Dict of scenarios with the given properties.
-        """
-        scens = super().get_scens(**kwargs)
-        if phase:
-            scens = {k: v for k, v in scens.items()
-                     if self.phasemap.find_phase(v.time) == phase}
-        return scens
-
     def add_single_fault_scenario(self, faulttup, time, weight=1.0):
         """
         Add a single fault scenario to the list of scenarios.
@@ -439,6 +417,18 @@ class FaultSample(BaseSample):
             Time of the fault scenario.
         weight : float, optional
             Weighting factor for the scenario rate. The default is 1.0.
+
+        Examples
+        --------
+        >>> from examples.multirotor.drone_mdl_rural import Drone
+        >>> mdl = Drone()
+        >>> fd = FaultDomain(mdl)
+        >>> fd.add_fault("affect_dof", "rf_propwarp")
+        >>> fs = FaultSample(fd, phasemap=PhaseMap({"on": [0, 2], "off": [3, 5]}))
+        >>> fs.add_single_fault_scenario(("affect_dof", "rf_propwarp"), 5)
+        >>> fs
+        FaultSample of scenarios: 
+         - affect_dof_rf_propwarp_t5
         """
         self._times.add(time)
         if len(faulttup) == 1:
@@ -470,6 +460,20 @@ class FaultSample(BaseSample):
             List of times.
         weights : list, optional
             Weight factors corresponding to the times The default is [].
+
+        Examples
+        --------
+        >>> from examples.multirotor.drone_mdl_rural import Drone
+        >>> mdl = Drone()
+        >>> fd = FaultDomain(mdl)
+        >>> fd.add_fault("affect_dof", "rf_propwarp")
+        >>> fs = FaultSample(fd, phasemap=PhaseMap({"on": [0, 2], "off": [3, 5]}))
+        >>> fs.add_single_fault_times([1,2,3])
+        >>> fs
+        FaultSample of scenarios: 
+         - affect_dof_rf_propwarp_t1
+         - affect_dof_rf_propwarp_t2
+         - affect_dof_rf_propwarp_t3
         """
         for faulttup in self.faultdomain.faults:
             for i, time in enumerate(times):
@@ -503,6 +507,18 @@ class FaultSample(BaseSample):
         phase_args : dict, optional
             Method args to use for individual phases (if not default).
             The default is {}.
+
+        Examples
+        --------
+        >>> from examples.multirotor.drone_mdl_rural import Drone
+        >>> mdl = Drone()
+        >>> fd = FaultDomain(mdl)
+        >>> fd.add_fault("affect_dof", "rf_propwarp")
+        >>> fs = FaultSample(fd, phasemap=PhaseMap({"on": [0, 2], "off": [3, 5]}))
+        >>> fs.add_single_fault_phases("off")
+        >>> fs
+        FaultSample of scenarios: 
+         - affect_dof_rf_propwarp_t4p0
         """
         if self.phasemap:
             phasetimes = self.phasemap.get_sample_times(*phases_to_sample)
@@ -570,6 +586,29 @@ class SampleApproach(BaseSample):
             Arguments to add_method.
         **kwargs : kwargs
             Keyword arguments to add_method
+
+        Examples
+        --------
+        >>> from examples.multirotor.drone_mdl_rural import Drone
+        >>> s = SampleApproach(Drone())
+        >>> s.add_faultdomain("all_faults", "all")
+        >>> s
+        SampleApproach for drone with: 
+         faultdomains: all_faults
+         faultsamples: 
+        >>> s.faultdomains['all_faults']
+        FaultDomain with faults:
+         -(('manage_health', 'lostfunction'),)
+         -(('store_ee', 'nocharge'),)
+         -(('store_ee', 'lowcharge'),)
+         -(('store_ee', 's1p1_short'),)
+         -(('store_ee', 's1p1_degr'),)
+         -(('store_ee', 's1p1_break'),)
+         -(('store_ee', 's1p1_nocharge'),)
+         -(('store_ee', 's1p1_lowcharge'),)
+         -(('dist_ee', 'short'),)
+         -(('dist_ee', 'degr'),)
+         -...more
         """
         faultdomain = FaultDomain(self.mdl)
         meth = getattr(faultdomain, 'add_'+add_method)
@@ -597,6 +636,30 @@ class SampleApproach(BaseSample):
             uses a PhaseMap with the dict/tuple as phases. The default is {}.
         **kwargs : kwargs
             add_method kwargs.
+
+        Examples
+        --------
+        >>> from examples.multirotor.drone_mdl_rural import Drone
+        >>> s = SampleApproach(Drone())
+        >>> s.add_faultdomain("all_faults", "all")
+        >>> s.add_faultsample("start_times", "single_fault_times", "all_faults", [1,3,4])
+        >>> s
+        SampleApproach for drone with: 
+         faultdomains: all_faults
+         faultsamples: start_times
+        >>> s.faultsamples['start_times']
+        FaultSample of scenarios: 
+         - manage_health_lostfunction_t1
+         - manage_health_lostfunction_t3
+         - manage_health_lostfunction_t4
+         - store_ee_nocharge_t1
+         - store_ee_nocharge_t3
+         - store_ee_nocharge_t4
+         - store_ee_lowcharge_t1
+         - store_ee_lowcharge_t3
+         - store_ee_lowcharge_t4
+         - store_ee_s1p1_short_t1
+         - ... (171 total)
         """
         if type(phasemap) == str:
             phasemap = self.phasemaps[phasemap]
@@ -628,8 +691,8 @@ if __name__ == "__main__":
     mdl = Drone()
     fd = FaultDomain(mdl)
     fd.add_fault("affect_dof", "rf_propwarp")
-    fd.add_faults(("affect_dof", "rf_propwarp"), ("affect_dof", "lf_propwarp"))
-    fd.add_all_modes("propwarp")
+    # fd.add_faults(("affect_dof", "rf_propwarp"), ("affect_dof", "lf_propwarp"))
+    # fd.add_all_modes("propwarp")
     
     fs = FaultSample(fd, phasemap=PhaseMap({"on": [0, 2], "off": [3, 5]}))
     fs.add_single_fault_scenario(("affect_dof", "rf_propwarp"), 5)

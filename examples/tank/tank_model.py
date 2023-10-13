@@ -256,6 +256,7 @@ class Look(Action):
 
 
 class DetectMode(Mode):
+    failrate: float
     fm_args = ('not_detected', 'false_high', 'false_low')
     phases = {'na': 1.0}
     he_args = (0.03, {2: [11, 0.1], 10: [10, 0.2], 13: [4, 0],
@@ -288,6 +289,7 @@ class Detect(Action):
 
 
 class ReachMode(Mode):
+    failrate: float
     fm_args = {'unable': (0.5, )}
     phases = {'na': 1.0}
     he_args = (0.09, {2: [11, 0.1], 10: [10, 0.0],
@@ -303,6 +305,7 @@ class Reach(Action):
 
 
 class GraspMode(Mode):
+    failrate: float
     fm_args = {'cannot': (1, )}
     phases = {'na': 1.0}
     failrate = 0.02
@@ -316,6 +319,7 @@ class Grasp(Action):
 
 
 class TurnMode(Mode):
+    failrate: float
     fm_args = {'cannot': (1,),
                  'wrong_valve': (0.5,)}
     phases = {'na': 1.0}
@@ -393,11 +397,9 @@ class Tank(Model):
 if __name__ == '__main__':
     import fmdtools.sim.propagate as propagate
     import fmdtools.analyze as an
-    from fmdtools.sim.approach import SampleApproach
+    from fmdtools.sim.sample import FaultDomain, FaultSample
 
     mdl = Tank()
-
-    app = SampleApproach(mdl)
 
     endclass, mdlhist = propagate.one_fault(mdl, 'human', 'look_not_visible', time=2)
 
@@ -437,8 +439,11 @@ if __name__ == '__main__':
     # run all faults - note: all faults get caught!
     endclasses, hist = propagate.single_faults(mdl)
 
-    app_full = SampleApproach(mdl)
-    endclasses, hist = propagate.approach(mdl, app_full)
+    fd = FaultDomain(mdl)
+    fd.add_all()
+    fs = FaultSample(fd)
+    fs.add_single_fault_times((0, 5, 10, 15, 20))
+    endclasses, hist = propagate.approach(mdl, fs)
 
     from fmdtools.analyze.graph import ModelGraph
     mdl.fxns['human'].t.dt = 2.0

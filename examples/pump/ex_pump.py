@@ -400,7 +400,7 @@ class Pump(Model):
         values to use in the model.
 
         Note that sp is the SimParam defining the simulation. phases in this dictionary
-        are queues for fault sampling which can be used by SampleApproach
+        are queues for fault sampling which can be used by SampleApproach/FaultSample
 
         We can also chage dt to change the timestep, but note that this can change
         behavior.

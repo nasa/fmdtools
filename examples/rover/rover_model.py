@@ -27,12 +27,9 @@ from fmdtools.define.model import Model
 from fmdtools.define.flow import Flow
 from fmdtools.define.geom import PointParam, GeomPoint, LineParam, GeomLine, GeomArch
 from fmdtools.define.environment import Environment
-from fmdtools.sim.approach import SampleApproach
-import fmdtools.analyze as an
 import fmdtools.sim.propagate as prop
 import itertools
 import numpy as np
-import matplotlib.pyplot as plt
 import multiprocessing as mp
 from shapely import Point
 

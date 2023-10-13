@@ -14,11 +14,6 @@ Uses methods:
     - :meth:`label_faults`:Labels the faults
     - :meth:`dicttab`:Makes table of a generic dictionary
     - :meth:`maptab`:Makes table of a generic map
-
-
-Legacy Functions:
--meth:`phasefmea`:(Use tabulate.fmea with option group_by='phase' instead) Makes a simple fmea of the endclasses of a set of fault scenarios run grouped by phase.
--meth:`summfmea`: (Use tabulate.fmea with group_by='fxnfault' instead.) Makes a simple fmea of the endclasses of a set of fault scenarios run grouped by fault.
     
 """
 # File Name: analyze/tabulate.py
