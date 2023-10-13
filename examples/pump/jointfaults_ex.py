@@ -8,36 +8,35 @@ This code tests some approaches to sampling joing fault scenarios
 """
 import fmdtools.sim.propagate as prop
 import fmdtools.analyze as an
-from fmdtools.sim.approach import SampleApproach
+from fmdtools.sim.sample import SampleApproach, FaultSample, FaultDomain
+from fmdtools.analyze.phases import PhaseMap
+from fmdtools.analyze.result import History
 from ex_pump import Pump  # required to import entire module
 
 mdl = Pump()
 
-app_jf1 = SampleApproach(mdl, jointfaults={'faults': 2, 'pcond': 0.1})
+all_fd = FaultDomain(mdl)
+all_fd.add_all()
+
+fs_2 = FaultSample(all_fd, phasemap=PhaseMap(mdl.sp.phases))
+fs_2.add_fault_phases(n_joint=2, baserate='max', p_cond=0.1)
+
+
 # if a function can have multiple modes injected at the same time
-app_jf2 = SampleApproach(
-    mdl, jointfaults={'faults': 3, 'jointfuncs': True, 'pcond': 0.1})
+fs_3 = FaultSample(all_fd, phasemap=PhaseMap(mdl.sp.phases))
+fs_3.add_fault_phases(n_joint=3, baserate='max', p_cond=0.1)
 
-app_jf3 = SampleApproach(mdl, jointfaults={'faults': 3, 'jointfuncs': True})
+# note that faults above level 4 have very low rates, even with p_cond
+fs_5 = FaultSample(all_fd, phasemap=PhaseMap(mdl.sp.phases))
+fs_5.add_fault_phases(n_joint=5, baserate='max', p_cond=0.1)
 
-# note that faults above level 4 aren't made here because the rate is so low that it rounds to zero
-app_jf5 = SampleApproach(mdl, jointfaults={'faults': 5})
 
-app_list = SampleApproach(mdl, jointfaults={'faults': [(
-    ('ImportEE', 'inf_v'), ('ImportWater', 'no_wat'))], 'pcond': 0.1})
+endclasses, mdlhists = prop.approach(mdl, fs_2)
 
-endclasses, mdlhists = prop.approach(mdl, app_jf5)
-fmea = an.tabulate.phasefmea(endclasses, app_jf5).sort_values(
-    'expected cost', ascending=False)
+fmea = an.tabulate.fmea(endclasses, fs_2, group_by=('phase','functions', 'modes'))
 
-fmea_small = an.tabulate.summfmea(endclasses, app_jf5).sort_values(
-    'expected cost', ascending=False)
+endclasses, mdlhists = prop.approach(mdl, fs_5)
 
-endclasses, mdlhists = prop.approach(mdl, app_jf2)
-
-# rp.plot_samplecosts(app_jf2, endclasses, joint=True)
-reshists, diffs, summaries = an.process.hists(mdlhists)
-
-mdlhist = {'nominal': mdlhists['nominal'],
-           'faulty': mdlhists['ImportEE: no_v, ImportWater: no_wat, MoveWater: mech_break, t=27']}
-an.plot.mdlhist(mdlhist, fault='IE:no_v, IW: no_w, MW: m_b', time=27)
+mdlhist = History({'nominal': mdlhists.get('nominal'),
+           'faulty': mdlhists.get('import_ee_no_v__import_water_no_wat__import_signal_no_sig__move_water_mech_break__export_water_block_t27p0')})
+an.plot.hist(mdlhist, 'flows.ee_1.s.current', 'flows.wat_2.s.flowrate', time_slice=27)

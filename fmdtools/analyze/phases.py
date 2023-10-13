@@ -22,6 +22,7 @@ And functions:
 
 import numpy as np
 import matplotlib.pyplot as plt
+import itertools
 from matplotlib.collections import PolyCollection
 import matplotlib.colors as mcolors
 from fmdtools.analyze.tabulate import metricovertime as metric_table
@@ -615,38 +616,85 @@ def metricovertime(endclasses, app, metric='cost', metrictype='expected cost'):
     return plt.gcf()
 
 
-def find_overlap_n(intervals):
+def get_joint_phase(**phases):
+    phasetup = tuple([*phases])
+    intervals = [i for i in phases.values()]
+    joined_interval = find_interval_overlap(*intervals)
+    return phasetup, joined_interval
+
+
+def find_interval_overlap(*intervals, dt=1.0):
     """
     Find the overlap between given intervals.
 
-    Used to sample joint fault modes with different (potentially overlapping) phases
+    Used to sample joint fault modes with different (potentially overlapping) phases.
+
+    Examples
+    --------
+    >>> find_interval_overlap([0, 10], [4, 12])
+    [4.0, 10.0]
+    >>> find_interval_overlap([0, 3], [4, 12])
+    []
     """
     try:
         joined_times = {}
-        intervals_times = []
         for i, interval in enumerate(intervals):
-            if type(interval[0]) in [float, int]:
-                interval = [interval]
             possible_times = set()
-            possible_times.update(*[{*np.arange(i[0], i[-1]+1)} for i in interval])
+            possible_times.update(*[{*gen_interval_times(interval, dt)}
+                                    for i in interval])
             if i == 0:
                 joined_times = possible_times
             else:
                 joined_times = joined_times.intersection(possible_times)
-            intervals_times.append(len(possible_times))
         if not joined_times:
-            return [], intervals_times
+            return []
         else:
-            return [*np.sort([*joined_times])], intervals_times
-    except IndexError:
+            joined_times = [*np.sort([*joined_times])]
+            return [joined_times[0], joined_times[-1]]
+    except IndexError as e:
         if all(intervals[0] == i for i in intervals):
             return intervals[0]
         else:
-            return 0
+            raise Exception("Invalid intervals: " + str(intervals)) from e
+
 
 def gen_interval_times(interval, dt):
     """Generate the times in a given interval given the timestep dt."""
     return np.arange(interval[0], interval[-1] + dt, dt)
+
+
+def join_phasemaps(*phasemaps):
+    """
+    Join multiple PhaseMaps into a single PhaseMap.
+
+    Note that modephases are removed in this process.
+
+    Parameters
+    ----------
+    *phasemaps : PhaseMap
+        PhaseMaps with phases to join.
+
+    Returns
+    -------
+    joint_phasemap : PhaseMap
+        Phasemap keyed by tuples for joint phases
+
+    Examples
+    --------
+    >>> a = PhaseMap({"a": [1, 3], "b": [4, 10]})
+    >>> b = PhaseMap({"c": [2, 6], "d": [7, 9]})
+    >>> join_phasemaps(a, b)
+    PhaseMap({('a', 'c'): [2.0, 3.0], ('b', 'c'): [4.0, 6.0], ('b', 'd'): [7.0, 9.0]}, {})
+    """
+    joint_phases = {}
+    all_combos = [*itertools.product(*[phasemap.phases for phasemap in phasemaps])]
+    for combo in all_combos:
+        phases = {c: phasemaps[i].phases[c] for i, c in enumerate(combo)}
+        intervals = [i for i in phases.values()]
+        joined_interval = find_interval_overlap(*intervals)
+        if joined_interval:
+            joint_phases[combo] = joined_interval
+    return PhaseMap(joint_phases)
 
 
 if __name__ == "__main__":
