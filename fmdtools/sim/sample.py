@@ -4,9 +4,10 @@ Module for Fault Sampling. Takes the place of approach classes.
 
 """
 from fmdtools.define.common import set_var, get_var, t_key
-from fmdtools.sim.scenario import SingleFaultScenario, Injection
-from fmdtools.analyze.phases import gen_interval_times, PhaseMap
+from fmdtools.sim.scenario import SingleFaultScenario, Injection, JointFaultScenario
+from fmdtools.analyze.phases import gen_interval_times, PhaseMap, join_phasemaps
 import numpy as np
+import itertools
 
 
 def same_mode(modename1, modename2, exact=True):
@@ -19,7 +20,7 @@ def same_mode(modename1, modename2, exact=True):
 
 def create_scenname(faulttup, time):
     """Create a scenario name for a given fault scenario."""
-    return ' '.join([fm[0]+'_'+fm[1]+'_' for fm in faulttup])+t_key(time)
+    return '_'.join([fm[0]+'_'+fm[1]+'_' for fm in faulttup])+t_key(time)
 
 
 def sample_times_even(times, numpts, dt=1.0):
@@ -125,7 +126,7 @@ class FaultDomain(object):
             Name of the faultmode to inject.
         """
         fault = self.fxns[fxnname].m.faultmodes[faultmode]
-        self.faults[((fxnname, faultmode),)] = fault
+        self.faults[(fxnname, faultmode)] = fault
 
     def add_faults(self, *faults):
         """
@@ -143,8 +144,8 @@ class FaultDomain(object):
         >>> fd.add_faults(('ctl_dof', 'noctl'), ('affect_dof', 'rr_ctldn'))
         >>> fd
         FaultDomain with faults:
-         -(('ctl_dof', 'noctl'),)
-         -(('affect_dof', 'rr_ctldn'),)
+         -('ctl_dof', 'noctl')
+         -('affect_dof', 'rr_ctldn')
         """
         for fault in faults:
             self.add_fault(fault[0], fault[1])
@@ -160,8 +161,8 @@ class FaultDomain(object):
         >>> fd.add_all()
         >>> fd
         FaultDomain with faults:
-         -(('ctl_dof', 'noctl'),)
-         -(('ctl_dof', 'degctl'),)
+         -('ctl_dof', 'noctl')
+         -('ctl_dof', 'degctl')
         """
         faults = [(fxnname, mode) for fxnname, fxn in self.fxns.items()
                   for mode in fxn.m.faultmodes]
@@ -200,14 +201,14 @@ class FaultDomain(object):
         >>> fd1.add_all_fxnclass_modes("ExportHE")
         >>> fd1
         FaultDomain with faults:
-         -(('export_he', 'hot_sink'),)
-         -(('export_he', 'ineffective_sink'),)
-         -(('export_waste_h1', 'hot_sink'),)
-         -(('export_waste_h1', 'ineffective_sink'),)
-         -(('export_waste_ho', 'hot_sink'),)
-         -(('export_waste_ho', 'ineffective_sink'),)
-         -(('export_waste_hm', 'hot_sink'),)
-         -(('export_waste_hm', 'ineffective_sink'),)
+         -('export_he', 'hot_sink')
+         -('export_he', 'ineffective_sink')
+         -('export_waste_h1', 'hot_sink')
+         -('export_waste_h1', 'ineffective_sink')
+         -('export_waste_ho', 'hot_sink')
+         -('export_waste_ho', 'ineffective_sink')
+         -('export_waste_hm', 'hot_sink')
+         -('export_waste_hm', 'ineffective_sink')
         """
         for fxnclass in fxnclasses:
             faults = [(fxnname, mode)
@@ -231,8 +232,8 @@ class FaultDomain(object):
         >>> fd.add_all_fxn_modes("hold_payload")
         >>> fd
         FaultDomain with faults:
-         -(('hold_payload', 'break'),)
-         -(('hold_payload', 'deform'),)
+         -('hold_payload', 'break')
+         -('hold_payload', 'deform')
         """
         for fxnname in fxnnames:
             faults = [(fxnname, mode) for mode in self.fxns[fxnname].m.faultmodes]
@@ -254,16 +255,16 @@ class FaultDomain(object):
         >>> fd.add_singlecomp_modes("affect_dof")
         >>> fd
         FaultDomain with faults:
-         -(('affect_dof', 'lf_short'),)
-         -(('affect_dof', 'lf_openc'),)
-         -(('affect_dof', 'lf_ctlup'),)
-         -(('affect_dof', 'lf_ctldn'),)
-         -(('affect_dof', 'lf_ctlbreak'),)
-         -(('affect_dof', 'lf_mechbreak'),)
-         -(('affect_dof', 'lf_mechfriction'),)
-         -(('affect_dof', 'lf_propwarp'),)
-         -(('affect_dof', 'lf_propstuck'),)
-         -(('affect_dof', 'lf_propbreak'),)
+         -('affect_dof', 'lf_short')
+         -('affect_dof', 'lf_openc')
+         -('affect_dof', 'lf_ctlup')
+         -('affect_dof', 'lf_ctldn')
+         -('affect_dof', 'lf_ctlbreak')
+         -('affect_dof', 'lf_mechbreak')
+         -('affect_dof', 'lf_mechfriction')
+         -('affect_dof', 'lf_propwarp')
+         -('affect_dof', 'lf_propstuck')
+         -('affect_dof', 'lf_propbreak')
         """
         if not fxns:
             fxns = tuple(self.fxns)
@@ -447,10 +448,89 @@ class FaultSample(BaseSample):
                                    rate=rate,
                                    name=create_scenname((faulttup,), time),
                                    time=time,
+                                   times=(time,),
                                    phase=phase)
         self._scenarios.append(scen)
 
-    def add_single_fault_times(self, times, weights=[]):
+    def add_joint_fault_scenario(self, faulttups, time, weight=1.0, baserate='ind',
+                           p_cond=1.0):
+        """
+        Add a single fault scenario to the list of scenarios.
+
+        Parameters
+        ----------
+        faulttups : tuple
+            Faults to add (('blockname', 'faultname'), ('blockname2', 'faultname2')).
+        time : float
+            Time of the fault scenario.
+        weight : float, optional
+            Weighting factor for the scenario rate. The default is 1.0.
+        baserate : str/tuple
+            Fault (fxn, mode) to get base rate for the scenario from (for joint faults).
+            Default is 'ind' which calculates the rate as independent (rate1*rate2*...).
+            Can also be 'max', which uses the max fault likelihood.
+        p_cond : float
+            Conditional fault probability for joint fault modes. Used if not using
+            independent base rate assumptions to calculate. Default is 1.0.
+
+        Examples
+        --------
+        >>> from examples.multirotor.drone_mdl_rural import Drone
+        >>> fd = FaultDomain(Drone())
+        >>> fd.add_fault("affect_dof", "rf_propwarp")
+        >>> fd.add_fault("affect_dof", "lf_propwarp")
+        >>> fs = FaultSample(fd, phasemap=PhaseMap({"on": [0, 2], "off": [3, 5]}))
+        >>> fs.add_joint_fault_scenario((("affect_dof", "rf_propwarp"),("affect_dof", "lf_propwarp")), 5)
+        >>> fs
+        FaultSample of scenarios: 
+         - affect_dof_rf_propwarp__affect_dof_lf_propwarp_t5
+        >>> fs.scenarios()[0].sequence[5].faults
+        {'affect_dof': ['rf_propwarp', 'lf_propwarp']}
+        >>> fs.add_single_fault_scenario(("affect_dof", "rf_propwarp"), 5)
+        >>> fs.add_single_fault_scenario(("affect_dof", "lf_propwarp"), 5)
+        >>> fs.scenarios()[0].rate == fs.scenarios()[1].rate*fs.scenarios()[2].rate
+        True
+        """
+        self._times.add(time)
+        if self.phasemap:
+            phase = self.phasemap.find_base_phase(time)
+        else:
+            phase = ''
+        # calculate rate
+        rates = {}
+        for i, faulttup in enumerate(faulttups):
+            rates[faulttup] = self.faultdomain.mdl.get_scen_rate(*faulttup,
+                                                                 time,
+                                                                 phasemap=self.phasemap,
+                                                                 weight=weight)
+        if baserate == 'ind':
+            rate = np.prod([*rates.values()])
+        elif baserate == 'max':
+            rate = np.max([*rates.values()])
+        else:
+            rate = rates[baserate]
+        rate *= p_cond
+        # create sequence
+        faults = {}
+        for faulttup in faulttups:
+            if faulttup[0] not in faults:
+                faults[faulttup[0]] = [faulttup[1]]
+            else:
+                faults[faulttup[0]].append(faulttup[1])
+        sequence = {time: Injection(faults=faults)}
+        # add fault scenario
+        scen = JointFaultScenario(sequence=sequence,
+                                  joint_faults=len(faulttups),
+                                  functions=tuple(set([f[0] for f in faulttups])),
+                                  modes=tuple(set([f[1] for f in faulttups])),
+                                  rate=rate,
+                                  name=create_scenname(faulttups, time),
+                                  time=time,
+                                  times=(time,),
+                                  phase=phase)
+        self._scenarios.append(scen)
+
+    def add_fault_times(self, times, weights=[], n_joint=1, **joint_kwargs):
         """
         Add all single-fault scenarios to the list of scenarios at the given times.
 
@@ -460,6 +540,10 @@ class FaultSample(BaseSample):
             List of times.
         weights : list, optional
             Weight factors corresponding to the times The default is [].
+        n_joint : int
+            Number of joint fault modes.
+        **joint_kwargs : kwargs
+            baserate and p_cond arguments to add_joint_fault_scenario.
 
         Examples
         --------
@@ -468,14 +552,29 @@ class FaultSample(BaseSample):
         >>> fd = FaultDomain(mdl)
         >>> fd.add_fault("affect_dof", "rf_propwarp")
         >>> fs = FaultSample(fd, phasemap=PhaseMap({"on": [0, 2], "off": [3, 5]}))
-        >>> fs.add_single_fault_times([1,2,3])
+        >>> fs.add_fault_times([1,2,3])
         >>> fs
         FaultSample of scenarios: 
          - affect_dof_rf_propwarp_t1
          - affect_dof_rf_propwarp_t2
          - affect_dof_rf_propwarp_t3
+         >>> fd.add_fault("affect_dof", "lf_propwarp")
+         >>> fd.add_fault("affect_dof", "rr_propwarp")
+         >>> fs = FaultSample(fd)
+         >>> fs.add_fault_times([5], n_joint=2)
+         >>> fs
+         FaultSample of scenarios: 
+          - affect_dof_rf_propwarp__affect_dof_lf_propwarp_t5
+          - affect_dof_rf_propwarp__affect_dof_rr_propwarp_t5
+          - affect_dof_lf_propwarp__affect_dof_rr_propwarp_t5
+         >>> fs = FaultSample(fd)
+         >>> fs.add_fault_times([5], n_joint=3)
+         >>> fs
+         FaultSample of scenarios: 
+          - affect_dof_rf_propwarp__affect_dof_lf_propwarp__affect_dof_rr_propwarp_t5
         """
-        for faulttup in self.faultdomain.faults:
+        jointfaults = itertools.combinations(self.faultdomain.faults, n_joint)
+        for faulttups in jointfaults:
             for i, time in enumerate(times):
                 if weights:
                     weight = weights[i]
@@ -485,10 +584,14 @@ class FaultSample(BaseSample):
                     weight = 1/phase_samples[phase]
                 else:
                     weight = 1.0
-                self.add_single_fault_scenario(faulttup, time, weight=weight)
+                if n_joint == 1:
+                    self.add_single_fault_scenario(faulttups[0], time, weight=weight)
+                else:
+                    self.add_joint_fault_scenario(faulttups, time, **joint_kwargs)
 
-    def add_single_fault_phases(self, *phases_to_sample, method='even', args=(1,),
-                                phase_methods={}, phase_args={}):
+    def add_fault_phases(self, *phases_to_sample, method='even', args=(1,),
+                         phase_methods={}, phase_args={},
+                         n_joint=1, **joint_kwargs):
         """
         Sample scenarios in the given phases using a set sampling method.
 
@@ -507,6 +610,10 @@ class FaultSample(BaseSample):
         phase_args : dict, optional
             Method args to use for individual phases (if not default).
             The default is {}.
+        n_joint : int
+            Number of joint fault modes to include in sample.
+        **joint_kwargs : kwargs
+            baserate and p_cond arguments to add_joint_fault_scenario.
 
         Examples
         --------
@@ -515,7 +622,7 @@ class FaultSample(BaseSample):
         >>> fd = FaultDomain(mdl)
         >>> fd.add_fault("affect_dof", "rf_propwarp")
         >>> fs = FaultSample(fd, phasemap=PhaseMap({"on": [0, 2], "off": [3, 5]}))
-        >>> fs.add_single_fault_phases("off")
+        >>> fs.add_fault_phases("off")
         >>> fs
         FaultSample of scenarios: 
          - affect_dof_rf_propwarp_t4p0
@@ -537,7 +644,18 @@ class FaultSample(BaseSample):
                 sampletimes, weights = sample_times_quad(times, *loc_args)
             else:
                 raise Exception("Invalid method: "+loc_method)
-            self.add_single_fault_times(sampletimes, weights)        
+            self.add_fault_times(sampletimes, weights, n_joint=n_joint, **joint_kwargs)
+
+
+class JointFaultSample(FaultSample):
+    """FaultSample for faults in multiple faultdomains and phasemaps."""
+
+    def __init__(self, *faultdomains, phasemaps=[]):
+        self.faultdomain = FaultDomain(faultdomains[0].mdl)
+        for faultdomain in faultdomains:
+            self.faultdomain.faults.update(faultdomain.faults)
+        if phasemaps:
+            self.phasemap = join_phasemaps(phasemaps)
 
 
 class SampleApproach(BaseSample):
@@ -598,16 +716,16 @@ class SampleApproach(BaseSample):
          faultsamples: 
         >>> s.faultdomains['all_faults']
         FaultDomain with faults:
-         -(('manage_health', 'lostfunction'),)
-         -(('store_ee', 'nocharge'),)
-         -(('store_ee', 'lowcharge'),)
-         -(('store_ee', 's1p1_short'),)
-         -(('store_ee', 's1p1_degr'),)
-         -(('store_ee', 's1p1_break'),)
-         -(('store_ee', 's1p1_nocharge'),)
-         -(('store_ee', 's1p1_lowcharge'),)
-         -(('dist_ee', 'short'),)
-         -(('dist_ee', 'degr'),)
+         -('manage_health', 'lostfunction')
+         -('store_ee', 'nocharge')
+         -('store_ee', 'lowcharge')
+         -('store_ee', 's1p1_short')
+         -('store_ee', 's1p1_degr')
+         -('store_ee', 's1p1_break')
+         -('store_ee', 's1p1_nocharge')
+         -('store_ee', 's1p1_lowcharge')
+         -('dist_ee', 'short')
+         -('dist_ee', 'degr')
          -...more
         """
         faultdomain = FaultDomain(self.mdl)
@@ -615,7 +733,7 @@ class SampleApproach(BaseSample):
         meth(*args, **kwargs)
         self.faultdomains[name] = faultdomain
 
-    def add_faultsample(self, name, add_method, faultdomain, *args, phasemap={},
+    def add_faultsample(self, name, add_method, faultdomains, *args, phasemap={},
                         **kwargs):
         """
         Instantiate and associate a FaultSample with the SampleApproach.
@@ -626,14 +744,15 @@ class SampleApproach(BaseSample):
             Name for the faultsample.
         add_method : str
             Method to add scenarios to the FaultSample with.
-            (e.g., to call Faultdomain.add_single_fault_times, use "single_fault_times")
-        faultdomain : str
+            (e.g., to call Faultdomain.add_fault_times, use "fault_times")
+        faultdomain : str or list
             Name of faultdomain to sample from (must be in SampleApproach already).
         *args : args
             args to add_method.
         phasemap : str/PhaseMap/dict/tuple, optional
             Phasemap to instantiate the FaultSample with. If a dict/tuple is provided,
             uses a PhaseMap with the dict/tuple as phases. The default is {}.
+            If a list, passes to JointFaultSample
         **kwargs : kwargs
             add_method kwargs.
 
@@ -642,7 +761,7 @@ class SampleApproach(BaseSample):
         >>> from examples.multirotor.drone_mdl_rural import Drone
         >>> s = SampleApproach(Drone())
         >>> s.add_faultdomain("all_faults", "all")
-        >>> s.add_faultsample("start_times", "single_fault_times", "all_faults", [1,3,4])
+        >>> s.add_faultsample("start_times", "fault_times", "all_faults", [1,3,4])
         >>> s
         SampleApproach for drone with: 
          faultdomains: all_faults
@@ -667,10 +786,17 @@ class SampleApproach(BaseSample):
             phasemap = phasemap
         elif isinstance(phasemap, dict) or isinstance(phasemap, tuple):
             phasemap = PhaseMap(phasemap)
+        elif isinstance(phasemap, list):
+            phasemap = [self.phasemaps[ph] for ph in phasemap]
         else:
             raise Exception("Invalid arg for phasemap: "+str(phasemap))
-
-        faultsample = FaultSample(self.faultdomains[faultdomain], phasemap=phasemap)
+        if type(faultdomains) == list:
+            if len(faultdomains) > 1:
+                faultsample = JointFaultSample(faultdomains, phasemap)
+            else:
+                faultsample = FaultSample(self.faultdomains[faultdomains[0]], phasemap)
+        else:
+            faultsample = FaultSample(self.faultdomains[faultdomains], phasemap)
         meth = getattr(faultsample, 'add_'+add_method)
         meth(*args, **kwargs)
         self.faultsamples[name] = faultsample
@@ -696,13 +822,13 @@ if __name__ == "__main__":
     
     fs = FaultSample(fd, phasemap=PhaseMap({"on": [0, 2], "off": [3, 5]}))
     fs.add_single_fault_scenario(("affect_dof", "rf_propwarp"), 5)
-    fs.add_single_fault_times([1,2,3])
+    fs.add_fault_times([1,2,3])
     fs.get_scen_groups("function")
     fs.get_scen_groups("phase")
     
     s = SampleApproach(mdl)
     s.add_faultdomain("all_faults", "all")
-    s.add_faultsample("start_times", "single_fault_times", "all_faults", [1,3,4])
+    s.add_faultsample("start_times", "fault_times", "all_faults", [1,3,4])
     s.get_scen_groups("phase")
 
     import doctest
