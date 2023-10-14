@@ -11,7 +11,7 @@ from fmdtools import sim
 from fmdtools.analyze import tabulate as tabulate
 from fmdtools.analyze.result import load, load_folder, History, Result
 class CommonTests():
-    def check_var_setting(self,mdl, statenames, newvalues):
+    def check_var_setting(self, mdl, statenames, newvalues):
         """ Tests to see that given variable values are set to new values"""
         mdl.set_vars(statenames, newvalues)
         values_to_check = mdl.get_vars(*statenames)
@@ -263,7 +263,7 @@ class CommonTests():
         mfile : name of file to save mdlhists in
         ecfile : name of file to save endclasses in
         runtype : propagate method to test ('single_faults', 'nominal_approach', 'nested_approach', 'approach')
-        app : nominal/sampleapproach to send to the method (if any)
+        app : sample to send to the method (if any)
         **kwargs : kwargs to send to the propagate method (if any)
         """
         self.start_approach_test(mfile, ecfile)
@@ -355,4 +355,3 @@ class CommonTests():
         
 
         
-

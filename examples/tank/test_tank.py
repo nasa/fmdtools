@@ -7,13 +7,20 @@ Created on Tue Dec 21 10:51:57 2021
 import unittest
 from examples.tank.tank_model import Tank
 from fmdtools.sim import propagate
-from fmdtools.sim.approach import SampleApproach, NominalApproach
+from fmdtools.sim.approach import NominalApproach
+from fmdtools.sim.sample import FaultDomain, FaultSample
 from tests.common import CommonTests
 
 
 class TankTests(unittest.TestCase, CommonTests):
     def setUp(self):
         self.mdl = Tank()
+        self.fd = FaultDomain(self.mdl)
+        self.fd.add_all()
+        self.fs = FaultSample(self.fd)
+        self.fs.add_fault_phases()
+        self.fs1 = FaultSample(self.fd)
+        self.fs1.add_fault_phases(args=(5,))
 
     def test_model_copy_same(self):
         self.check_model_copy_same(Tank(), Tank(), [5, 10, 15], 10, max_time=20)
@@ -33,10 +40,9 @@ class TankTests(unittest.TestCase, CommonTests):
         self.assertEqual(mdl_cop_2.fxns['human'].aa.actions['detect'].duration, 2)
 
     def test_approach(self):
-        app = SampleApproach(self.mdl)
         endresults, mdlhists = propagate.approach(
-            self.mdl, app, track="all", showprogress=False)
-        for scen in app.scenlist:
+            self.mdl, self.fs, track="all", showprogress=False)
+        for scen in self.fs.scenarios():
             seq = scen.sequence
             name = scen.name
             endresult, mdlhist = propagate.sequence(self.mdl, seq=seq)
@@ -51,19 +57,15 @@ class TankTests(unittest.TestCase, CommonTests):
     def test_approach_parallelism_notrack(self):
         """Test whether the pump simulates the same when simulated using parallel or
         staged options"""
-        app = SampleApproach(self.mdl)
-        self.check_approach_parallelism(self.mdl, app, track="default")
+        self.check_approach_parallelism(self.mdl, self.fs, track="default")
 
     def test_approach_parallelism_0(self):
         """Test whether the pump simulates the same when simulated using parallel or
         staged options"""
-        app = SampleApproach(self.mdl)
-        self.check_approach_parallelism(self.mdl, app)
+        self.check_approach_parallelism(self.mdl, self.fs)
 
     def test_approach_parallelism_1(self):
-        app1 = SampleApproach(self.mdl, defaultsamp={
-                              'samp': 'evenspacing', 'numpts': 4})
-        self.check_approach_parallelism(self.mdl, app1)
+        self.check_approach_parallelism(self.mdl, self.fs1)
 
     def test_comp_mode_inj(self):
         """ Tests that action modes injected in functions end up in their respective
@@ -203,26 +205,27 @@ class TankTests(unittest.TestCase, CommonTests):
         self.check_save_load_nestapproach_indiv(self.mdl, *indiv_names, "json", app=app)
 
     def test_save_load_approach(self):
-        app = SampleApproach(self.mdl)
         self.check_save_load_approach(
-            self.mdl, "tank_mdlhists.pkl", "tank_endclasses.pkl", app=app)
+            self.mdl, "tank_mdlhists.pkl", "tank_endclasses.pkl", app=self.fs)
         self.check_save_load_approach(
-            self.mdl, "tank_mdlhists.csv", "tank_endclasses.csv", app=app)
+            self.mdl, "tank_mdlhists.csv", "tank_endclasses.csv", app=self.fs)
         self.check_save_load_approach(
-            self.mdl, "tank_mdlhists.json", "tank_endclasses.json", app=app)
+            self.mdl, "tank_mdlhists.json", "tank_endclasses.json", app=self.fs)
 
     def test_save_load_approach_indiv(self):
-        app = SampleApproach(self.mdl)
         indiv_names = ("tank_mdlhists", "tank_endclasses")
-        self.check_save_load_approach_indiv(self.mdl, *indiv_names, "pkl", app=app)
-        self.check_save_load_approach_indiv(self.mdl, *indiv_names, "csv", app=app)
-        self.check_save_load_approach_indiv(self.mdl, *indiv_names, "json", app=app)
+        self.check_save_load_approach_indiv(self.mdl, *indiv_names, "pkl", app=self.fs)
+        self.check_save_load_approach_indiv(self.mdl, *indiv_names, "csv", app=self.fs)
+        self.check_save_load_approach_indiv(self.mdl, *indiv_names, "json", app=self.fs)
 
 
 def check_parallel():
     """Informal test setup for checking that parallel execution is working/consistent"""
     mdl = Tank()
-    app = SampleApproach(mdl, defaultsamp={'samp': 'evenspacing', 'numpts': 4})
+    fd = FaultDomain(mdl)
+    fd.add_all()
+    app = FaultSample(fd)
+    app.add_fault_phases(args=(4,))
     import multiprocessing as mp
     print("normal")
     endclasses, mdlhists = propagate.approach(

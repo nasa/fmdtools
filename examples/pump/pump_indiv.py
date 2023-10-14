@@ -7,7 +7,8 @@ Created on Fri May 12 09:59:41 2023
 
 from examples.pump.ex_pump import MoveWat
 from fmdtools.sim.propagate import nominal, one_fault, approach, single_faults, nominal_approach, nested_approach
-from fmdtools.sim.approach import SampleApproach, NominalApproach
+from fmdtools.sim.approach import NominalApproach
+from fmdtools.sim.sample import FaultSample, FaultDomain
 from fmdtools.analyze import plot
 
 
@@ -36,8 +37,12 @@ result, mdlhist = nominal(a, track='all', disturbances={10: {"wat_in.s.level": 0
 plot.hist(mdlhist, 'flows.sig_in.s.power', 'flows.wat_out.s.flowrate',
           'flows.wat_in.s.level', 'flows.wat_in.s.flowrate')
 
-app = SampleApproach(a)
-results, mdlhists = approach(a, app)
+fd = FaultDomain(a)
+fd.add_all()
+fs = FaultSample(fd)
+fs.add_fault_phases()
+
+results, mdlhists = approach(a, fs)
 
 result, mdlhist = nominal(a, track='all')
 
