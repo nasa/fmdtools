@@ -134,7 +134,7 @@ class ImportEEMode(Mode):
         - fm_args defines a probability model for each mode, where modes is:
             - {modename: (%of failures, (% at each phase in mdl.phases), repaircosts)
     These failure rates will then be used to generate a list of scenarios for
-    propagate.single_faults and SampleApproach()
+    propagate.single_faults and FaultSample()
 
     Note that these rates are given in occurences/hr by default. To change the units,
     use the option units='sec'/'min'/'hr'/'day' etc.

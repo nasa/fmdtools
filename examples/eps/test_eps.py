@@ -8,7 +8,7 @@ import unittest
 from examples.eps.eps import EPS
 from fmdtools.sim import propagate
 import fmdtools.analyze as an
-from fmdtools.sim.approach import SampleApproach
+from fmdtools.sim.sample import FaultDomain, FaultSample
 from fmdtools.define.common import check_pickleability
 import numpy as np
 import math
@@ -18,6 +18,8 @@ from tests.common import CommonTests
 class epsTests(unittest.TestCase, CommonTests):
     def setUp(self):
         self.mdl = EPS()
+        self.fd = FaultDomain(self.mdl)
+        self.fd.add_all()
 
     def test_backward_fault_prop_1(self):
         """Tests that defined fault cases that require reverse propagation propagate
@@ -51,12 +53,8 @@ class epsTests(unittest.TestCase, CommonTests):
         all_have_costs = all(v > 0 for k, v in endclasses.get_values('.cost').items()
                              if 'nominal' not in k)
         self.assertTrue(all_have_costs)  # all endresults have positive costs
-        repcosts = np.sum(
-            [
-                np.sum([m["rcost"] for m in f.m.faultmodes.values()])
-                for f in mdl.fxns.values()
-            ]
-        )
+        repcosts = np.sum([np.sum([m["cost"] for m in f.m.faultmodes.values()])
+                           for f in mdl.fxns.values()])
         # fault costs higher than if it was just repairs
         total_simcosts = sum([v for v in endclasses.get_values('.cost').values()])
         self.assertGreater(total_simcosts, repcosts)
@@ -64,25 +62,14 @@ class epsTests(unittest.TestCase, CommonTests):
     def test_fault_app(self):
         """Tests that the expected number of scenarios are generated for a given
         approach"""
-        actual_num_faults = int(
-            np.sum([len(f.m.faultmodes) for f in self.mdl.fxns.values()])
-        )
-        for num_joint in [2, 3, actual_num_faults]:
-            approach = SampleApproach(
-                self.mdl,
-                jointfaults={
-                    "faults": num_joint,
-                    "jointfuncs": True,
-                    "pcond": 1.0,
-                    "inclusive": False,
-                },
-            )
-            self.assertEqual(
-                len(approach.scenlist), math.comb(actual_num_faults, num_joint)
-            )  # tests the length
-            endclasses, reshists = propagate.approach(
-                self.mdl, approach, showprogress=False
-            )
+        tot_faults = [len(f.m.faultmodes) for f in self.mdl.fxns.values()]
+        actual_num_faults = int(np.sum(tot_faults))
+        for n_joint in [2, 3, actual_num_faults]:
+            fs = FaultSample(self.fd)
+            fs.add_fault_phases(n_joint=n_joint)
+            # tests the length
+            self.assertEqual(len(fs.scenarios()), math.comb(actual_num_faults, n_joint))
+            endclasses, reshists = propagate.approach(self.mdl, fs, showprogress=False)
 
     def test_pickleability(self):
         unpickleable = check_pickleability(self.mdl, verbose=False)
@@ -134,7 +121,6 @@ if __name__ == "__main__":
 
     mdl = EPS()
 
-    approach = SampleApproach(mdl)
 
     # endresults, resgraph, mdlhist = propagate.one_fault(mdl, 'Distribute_EE', 'short')
 
