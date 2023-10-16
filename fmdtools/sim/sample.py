@@ -384,8 +384,10 @@ class FaultSample(BaseSample):
         Set of times where the scenarios will occur
     """
 
-    def __init__(self, faultdomain, phasemap={}):
+    def __init__(self, faultdomain, phasemap={}, def_mdl_phasemap=True):
         self.faultdomain = faultdomain
+        if not phasemap and def_mdl_phasemap:
+            phasemap = PhaseMap(faultdomain.mdl.sp.phases)
         self.phasemap = phasemap
         self._scenarios = []
         self._times = set()
@@ -600,8 +602,8 @@ class FaultSample(BaseSample):
         *phases_to_sample : str
             Names of phases to sample. If no
         method : str, optional
-            'even' or 'quad', which selects whether to use sample_times_even or
-            sample_times_quad, respectively. The default is 'even'.
+            'even', 'quad', 'all', which selects whether to use sample_times_even or
+            sample_times_quad, or gets all times, respectively. The default is 'even'.
         args : tuple, optional
             Arguments to the sampling method. The default is (1,).
         phase_methods : dict, optional
@@ -642,6 +644,9 @@ class FaultSample(BaseSample):
                                                          dt=self.faultdomain.mdl.sp.dt)
             elif loc_method == 'quad':
                 sampletimes, weights = sample_times_quad(times, *loc_args)
+            elif loc_method == 'all':
+                sampletimes = times
+                weights = [1/len(sampletimes) for i in sampletimes]
             else:
                 raise Exception("Invalid method: "+loc_method)
             self.add_fault_times(sampletimes, weights, n_joint=n_joint, **joint_kwargs)
@@ -650,12 +655,14 @@ class FaultSample(BaseSample):
 class JointFaultSample(FaultSample):
     """FaultSample for faults in multiple faultdomains and phasemaps."""
 
-    def __init__(self, *faultdomains, phasemaps=[]):
+    def __init__(self, *faultdomains, phasemaps=[], def_mdl_phasemap=True):
         self.faultdomain = FaultDomain(faultdomains[0].mdl)
         for faultdomain in faultdomains:
             self.faultdomain.faults.update(faultdomain.faults)
         if phasemaps:
             self.phasemap = join_phasemaps(phasemaps)
+        elif def_mdl_phasemap:
+            self.phasemap = PhaseMap(faultdomains[0].mdl.sp.phases)
 
 
 class SampleApproach(BaseSample):
@@ -675,8 +682,10 @@ class SampleApproach(BaseSample):
         Dict of the FaultSamples making up the approach {'samplename': FaultSample}
     """
 
-    def __init__(self, mdl, phasemaps={}):
+    def __init__(self, mdl, phasemaps={}, def_mdl_phasemap=True):
         self.mdl = mdl
+        if def_mdl_phasemap:
+            phasemaps['mdl'] = PhaseMap(self.mdl.sp.phases)
         self.phasemaps = phasemaps
         self.faultdomains = {}
         self.faultsamples = {}

@@ -6,7 +6,6 @@ Created on Fri Mar 26 12:23:14 2021
 """
 
 from ex_pump import * 
-from fmdtools.sim.approach import SampleApproach
 import fmdtools.sim.propagate as propagate
 import fmdtools.analyze as an
 from fmdtools.define.model import SimParam
@@ -41,7 +40,7 @@ def compare_pools(mdl, app, pools, staged=False, track=False, verbose= True, tra
     ----------
     mdl : Model
         fmdtools model
-    app : SampleApproach
+    app : FaultSample
         SampleApproach of fault scenarios to simulate the model over using propagate.approach
     pools : dict
         Dictionary of parallel/process pools {'poolname':pool} to compare. Pools must have a map function.
@@ -123,26 +122,30 @@ def instantiate_pools(cores):
 
 if __name__=='__main__':
     mdl=Pump(sp = dict(phases=(('start',0,4),('on',5, 49),('end',50,500)),times=(0,20, 500)))
-    app = SampleApproach(mdl,jointfaults={'faults':1},defaultsamp={'samp':'evenspacing','numpts':3})
-    
+    from fmdtools.sim.sample import FaultDomain, FaultSample
+    fd = FaultDomain(mdl)
+    fd.add_all()
+    fs = FaultSample(fd)
+    fs.add_fault_phases(phase_args=(3,))
+
     cores = 4
     pools = instantiate_pools(cores)
     
     print("STAGED + FULL MODEL TRACKING")
-    compare_pools(mdl,app,pools, staged=True, track='all')
+    compare_pools(mdl, fs, pools, staged=True, track='all')
     
     print("STAGED + SOME TRACKING")
     
-    compare_pools(mdl,app,pools, staged=True, track={'flows':{'EE_1':'all', 'Wat_2':['pressure', 'flowrate']}})
+    compare_pools(mdl,fs,pools, staged=True, track={'flows':{'EE_1':'all', 'Wat_2':['pressure', 'flowrate']}})
 
     
 
     print("STAGED + FLOW TRACKING")
-    compare_pools(mdl,app,pools, staged=True, track='flows')
+    compare_pools(mdl, fs, pools, staged=True, track='flows')
 
     print("STAGED + FUNCTION TRACKING")
-    compare_pools(mdl,app,pools, staged=True, track='fxns')
+    compare_pools(mdl, fs, pools, staged=True, track='fxns')
 
     print("STAGED + NO TRACKING")
-    compare_pools(mdl,app,pools, staged=True, track='none')
+    compare_pools(mdl, fs, pools, staged=True, track='none')
     for pool in pools.values(): pool.terminate()
