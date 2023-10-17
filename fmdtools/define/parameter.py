@@ -61,9 +61,9 @@ class Parameter(dataobject, readonly=True, mapping=True, iterable=True):
             self.check_lim(k, v)
         try:
             super().__init__(*args, **kwargs)
-        except TypeError:
+        except TypeError as e:
             raise Exception("Invalid args/kwargs: "+str(args)+" , " +
-                            str(kwargs)+" in "+str(self.__class__))
+                            str(kwargs)+" in "+str(self.__class__)) from e
         if strict_immutability:
             self.check_immutable()
         if check_type:
