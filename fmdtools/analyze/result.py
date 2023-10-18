@@ -56,7 +56,7 @@ import copy
 import sys
 import os
 from collections import UserDict
-from fmdtools.define.common import get_var, t_key, get_obj_indicators
+from fmdtools.define.common import get_var, t_key, get_obj_indicators, nest_dict
 
 
 def file_check(filename, overwrite):
@@ -166,6 +166,33 @@ def check_include_error(result, to_include):
     if to_include not in ('all', 'default') and to_include not in result:
         raise Exception("to_include key " + to_include +
                         " not in result keys: " + str(result.keys()))
+
+def is_numeric(val):
+    """Checks if a given value is numeric"""
+    try:
+        return np.issubdtype(np.array(val).dtype, np.number)
+    except:
+        return type(val) in [float, bool, int]
+
+
+def get_sub_include(att, to_include):
+    """Determines what attributes of att to include based on the provided
+    dict/str/list/set to_include"""
+    if type(to_include) in [list, set, tuple, str]:
+        if att in to_include:
+            new_to_include = 'default'
+        elif type(to_include) == str and to_include == 'all':
+            new_to_include = 'all'
+        elif type(to_include) == str and to_include == 'default':
+            new_to_include = 'default'
+        else:
+            new_to_include = False
+    elif type(to_include) == dict and att in to_include:
+        new_to_include = to_include[att]
+    else:
+        new_to_include = False
+    return new_to_include
+
 
 
 def bootstrap_confidence_interval(data, method=np.mean, return_anyway=False, **kwargs):
@@ -543,22 +570,8 @@ class Result(UserDict):
         """
         Re-nests a flattened result
         """
-        newhist = self.__class__()
-        key_options = set([h.split('.')[0] for h in self.keys()])
-        for key in key_options:
-            if key in self:
-                newhist[key] = self[key]
-            else:
-                subdict = {histkey[len(key)+1:]: val
-                           for histkey, val in self.items()
-                           if histkey.startswith(key+".")}
-                subhist = self.__class__(**subdict)
-                lev = levels-1
-                if lev > 0:
-                    newhist[key] = subhist.nest(levels=lev)
-                else:
-                    newhist[key] = subhist
-        return newhist
+        return nest_dict(self, levels=levels)
+
 
     def get_memory(self):
         """
@@ -885,12 +898,7 @@ def is_bool(val):
         return type(val) in [bool]
 
 
-def is_numeric(val):
-    """Checks if a given value is numeric"""
-    try:
-        return np.issubdtype(np.array(val).dtype, np.number)
-    except:
-        return type(val) in [float, bool, int]
+
 
 
 def join_key(k):
@@ -921,25 +929,6 @@ def to_include_keys(to_include):
             add = to_include_keys(v)
             keys.extend([k+'.'+v for v in add])
         return tuple(keys)
-
-
-def get_sub_include(att, to_include):
-    """Determines what attributes of att to include based on the provided
-    dict/str/list/set to_include"""
-    if type(to_include) in [list, set, tuple, str]:
-        if att in to_include:
-            new_to_include = 'default'
-        elif type(to_include) == str and to_include == 'all':
-            new_to_include = 'all'
-        elif type(to_include) == str and to_include == 'default':
-            new_to_include = 'default'
-        else:
-            new_to_include = False
-    elif type(to_include) == dict and att in to_include:
-        new_to_include = to_include[att]
-    else:
-        new_to_include = False
-    return new_to_include
 
 
 def init_indicator_hist(obj, h, timerange, track):
