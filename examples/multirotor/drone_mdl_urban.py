@@ -511,7 +511,7 @@ if __name__ == "__main__":
     ec, mdlhist = propagate.one_fault(mdl, 'store_ee', 'lowcharge', 4.0)
     app = SampleApproach(mdl, phasemaps=phasemaps)
     app.add_faultdomain("drone_faults", "all")
-    app.add_faultsample("move_scens", "single_fault_phases", "drone_faults", "move",
+    app.add_faultsample("move_scens", "fault_phases", "drone_faults", "move",
                         phasemap="plan_path", method='quad',
                         args=(move_quad['quad']['nodes'], move_quad['quad']['weights']))
     
