@@ -484,16 +484,16 @@ if __name__ == "__main__":
     from fmdtools.sim.sample import SampleApproach
     from fmdtools.analyze import phases
 
-    #UrbanDroneEnvironment("a")
-    #PlanPath._init_environment("a")
-    #p = PlanPath("test", {})
-    
+    # UrbanDroneEnvironment("a")
+    # PlanPath._init_environment("a")
+    # p = PlanPath("test", {})
+
     e = UrbanDroneEnvironment("env")
     show.coord(e.c, "height")
     show.coord3d(e.c, "height")
-    
+
     show.coord_collection(e.c, 'all_safe', z='height')
-    
+
     mdl = Drone(p={'respolicy': ResPolicy(bat="to_nearest", line="to_nearest")})
     # ec, mdlhist_fault = propagate.one_fault(mdl, "plan_path", "vision_lack_of_detection", time=4.5)
 
@@ -517,8 +517,8 @@ if __name__ == "__main__":
     
     app.faultsamples['move_scens'].get_scen_groups('phase')
 
-    endresults, hists = propagate.approach(mdl, app, staged=False,
-                                           mdl_kwargs = {'sp':{'dt':1.0}})
+    endresults, hists = propagate.fault_sample(mdl, app, staged=False,
+                                               mdl_kwargs = {'sp':{'dt':1.0}})
     plot_env_with_traj3d(hists, mdl)
     plot_env_with_traj(hists, mdl)
     statsfmea = an.tabulate.fmea(endresults, app, group_by=('function', 'fault'),

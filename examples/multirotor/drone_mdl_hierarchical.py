@@ -263,23 +263,19 @@ if __name__ == "__main__":
     rr2_faults = FaultDomain(mdl)
     rr2_faults.add_fault('affect_dof', 'rr2_propstuck')
 
-    rr2_faultscens = FaultSample(rr2_faults, phasemap=PhaseMap(mdl.sp.phases))
-    rr2_faultscens.add_single_fault_phases()
+    rr2_samp = FaultSample(rr2_faults, phasemap=PhaseMap(mdl.sp.phases))
+    rr2_samp.add_fault_phases()
 
-    endclasses, mdlhists = fs.propagate.approach(mdl,
-                                                 rr2_faultscens,
-                                                 staged=True,
-                                                 pool=mp.Pool(4))
+    ec, hist = fs.propagate.fault_sample(mdl, rr2_samp, staged=True, pool=mp.Pool(4))
 
     # plot a single scen (at t=8)
     fault_kwargs = {'alpha': 0.2, 'color': 'red'}
-    an.plot.hist(mdlhists.get('nominal', 'affect_dof_rr2_propstuck_t8p0').flatten(),
+    an.plot.hist(hist.get('nominal', 'affect_dof_rr2_propstuck_t8p0').flatten(),
                  'flows.dofs.s.x', 'dofs.s.y', 'dofs.s.z', 'store_ee.s.soc')
 
     # plot all scens
-    an.plot.hist(mdlhists, 'flows.dofs.s.x', 'dofs.s.y', 'dofs.s.z', 'store_ee.s.soc',
+    an.plot.hist(hist, 'flows.dofs.s.x', 'dofs.s.y', 'dofs.s.z', 'store_ee.s.soc',
                  indiv_kwargs={'faulty': fault_kwargs})
-    fig, ax = an.show.trajectories(mdlhists,
-                                   "dofs.s.x", "dofs.s.y", "dofs.s.z",
+    fig, ax = an.show.trajectories(hist, "dofs.s.x", "dofs.s.y", "dofs.s.z",
                                    time_groups=['nominal'],
                                    indiv_kwargs={'faulty': fault_kwargs})

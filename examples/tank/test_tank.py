@@ -7,8 +7,7 @@ Created on Tue Dec 21 10:51:57 2021
 import unittest
 from examples.tank.tank_model import Tank
 from fmdtools.sim import propagate
-from fmdtools.sim.approach import NominalApproach
-from fmdtools.sim.sample import FaultDomain, FaultSample
+from fmdtools.sim.sample import FaultDomain, FaultSample, ParameterSample
 from tests.common import CommonTests
 
 
@@ -21,6 +20,8 @@ class TankTests(unittest.TestCase, CommonTests):
         self.fs.add_fault_phases()
         self.fs1 = FaultSample(self.fd)
         self.fs1.add_fault_phases(args=(5,))
+        self.ps = ParameterSample()
+        self.ps.add_variable_replicates([], replicates=10)
 
     def test_model_copy_same(self):
         self.check_model_copy_same(Tank(), Tank(), [5, 10, 15], 10, max_time=20)
@@ -169,40 +170,32 @@ class TankTests(unittest.TestCase, CommonTests):
         self.check_save_load_singlefaults_indiv(self.mdl, *indiv_names, "json")
 
     def test_save_load_nominalapproach(self):
-        app = NominalApproach()
-        app.add_seed_replicates("replicates", 10)
         self.check_save_load_nomapproach(
-            self.mdl, "tank_mdlhists.pkl", "tank_endclasses.pkl", app=app)
+            self.mdl, "tank_mdlhists.pkl", "tank_endclasses.pkl", app=self.ps)
         self.check_save_load_nomapproach(
-            self.mdl, "tank_mdlhists.csv", "tank_endclasses.csv", app=app)
+            self.mdl, "tank_mdlhists.csv", "tank_endclasses.csv", app=self.ps)
         self.check_save_load_nomapproach(
-            self.mdl, "tank_mdlhists.json", "tank_endclasses.json", app=app)
+            self.mdl, "tank_mdlhists.json", "tank_endclasses.json", app=self.ps)
 
     def test_save_load_nominalapproach_indiv(self):
-        app = NominalApproach()
-        app.add_seed_replicates("replicates", 10)
         indiv_names = ("tank_mdlhists", "tank_endclasses")
-        self.check_save_load_nomapproach_indiv(self.mdl, *indiv_names, "pkl", app=app)
-        self.check_save_load_nomapproach_indiv(self.mdl, *indiv_names, "csv", app=app)
-        self.check_save_load_nomapproach_indiv(self.mdl, *indiv_names, "json", app=app)
+        self.check_save_load_nomapproach_indiv(self.mdl, *indiv_names, "pkl", app=self.ps)
+        self.check_save_load_nomapproach_indiv(self.mdl, *indiv_names, "csv", app=self.ps)
+        self.check_save_load_nomapproach_indiv(self.mdl, *indiv_names, "json", app=self.ps)
 
     def test_save_load_nestedapproach(self):
-        app = NominalApproach()
-        app.add_seed_replicates("replicates", 10)
         self.check_save_load_nestapproach(
-            self.mdl, "tank_mdlhists.pkl", "tank_endclasses.pkl", app=app)
+            self.mdl, "tank_mdlhists.pkl", "tank_endclasses.pkl", app=self.ps)
         self.check_save_load_nestapproach(
-            self.mdl, "tank_mdlhists.csv", "tank_endclasses.csv", app=app)
+            self.mdl, "tank_mdlhists.csv", "tank_endclasses.csv", app=self.ps)
         self.check_save_load_nestapproach(
-            self.mdl, "tank_mdlhists.json", "tank_endclasses.json", app=app)
+            self.mdl, "tank_mdlhists.json", "tank_endclasses.json", app=self.ps)
 
     def test_save_load_nestedapproach_indiv(self):
-        app = NominalApproach()
-        app.add_seed_replicates("replicates", 10)
         indiv_names = ("tank_mdlhists", "tank_endclasses")
-        self.check_save_load_nestapproach_indiv(self.mdl, *indiv_names, "pkl", app=app)
-        self.check_save_load_nestapproach_indiv(self.mdl, *indiv_names, "csv", app=app)
-        self.check_save_load_nestapproach_indiv(self.mdl, *indiv_names, "json", app=app)
+        self.check_save_load_nestapproach_indiv(self.mdl, *indiv_names, "pkl", app=self.ps)
+        self.check_save_load_nestapproach_indiv(self.mdl, *indiv_names, "csv", app=self.ps)
+        self.check_save_load_nestapproach_indiv(self.mdl, *indiv_names, "json", app=self.ps)
 
     def test_save_load_approach(self):
         self.check_save_load_approach(

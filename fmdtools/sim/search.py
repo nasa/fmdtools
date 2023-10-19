@@ -9,7 +9,7 @@ Classes:
 import copy
 import fmdtools.sim.propagate as prop
 import fmdtools.analyze.plot as plot
-from fmdtools.sim.approach import SampleApproach
+from fmdtools.sim.sample import SampleApproach
 from fmdtools.analyze.result import History
 from .scenario import Scenario
 import networkx as nx

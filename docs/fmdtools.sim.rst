@@ -28,10 +28,10 @@ fmdtools.sim.scenario
    :undoc-members:
    :show-inheritance:
    
-fmdtools.sim.approach
+fmdtools.sim.sample
 ----------------------------------
 
-.. automodule:: fmdtools.sim.approach
+.. automodule:: fmdtools.sim.sample
    :members:
    :undoc-members:
    :show-inheritance:

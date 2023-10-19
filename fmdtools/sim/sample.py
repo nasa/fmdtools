@@ -1,11 +1,18 @@
-# -*- coding: utf-8 -*-
+
 """
 Module for Fault Sampling. Takes the place of approach classes.
 
+Has classes:
+- :class:`ParameterDomain`: Defines domain for sampling from Parameters.
+- :class:`FaultDomain`: Defines domain for sampling from Faults.
+- :class:`FaultSample`: Defines a sample of fault scenarios.
+- :class:`SampleApproach`: Defines a set of fault scenario samples.
+- :Class:`ParameterSample`: Defines a sample of a set of parameters.
 """
-from fmdtools.define.common import set_var, get_var, t_key, nest_dict
+from fmdtools.define.common import get_var, t_key, nest_dict
 from fmdtools.define.parameter import Parameter
-from fmdtools.sim.scenario import SingleFaultScenario, Injection, JointFaultScenario, ParameterScenario
+from fmdtools.sim.scenario import SingleFaultScenario, Injection, JointFaultScenario
+from fmdtools.sim.scenario import ParameterScenario
 from fmdtools.analyze.phases import gen_interval_times, PhaseMap, join_phasemaps
 import numpy as np
 import itertools
@@ -1087,6 +1094,34 @@ class SampleApproach(BaseSample):
         meth(*args, **kwargs)
         self.faultsamples[name] = faultsample
 
+    def add_faultdomains(self, **faultdomains):
+        """
+        Add dict of faultdomains to the SampleApproach.
+
+        Parameters
+        ----------
+        **faultdomains : tuple
+            FaultDomains to add to the SampleApproach and their arguments.
+            Has structure: {'fd_name': (*args, **kwargs)}, where args and kwargs are
+            arguments/kwargs to SampleApproach.add_faultdomain (after name).
+        """
+        for fd in faultdomains:
+            self.add_faultdomain(fd, *faultdomains[fd][0], **faultdomains[fd][1])
+
+    def add_faultsamples(self, **faultsamples):
+        """
+        Add dict of faultsamples to the SampleApproach.
+
+        Parameters
+        ----------
+        **faultsamples : tuple
+            FaultSamples to add to othe SampleApproach and their arguments.
+            Has structure: fs_name = (*args, **kwargs)}, where args and kwargs are
+            arguments/kwargs to SampleApproach.add_faultsample (after name).
+        """
+        for fs in faultsamples:
+            self.add_faultsample(fs, *faultsamples[fs][0], **faultsamples[fs][1])
+
     def times(self):
         """Get all sampletimes covered by the SampleApproach."""
         return list(set(np.concatenate([list(samp.times())
@@ -1113,7 +1148,7 @@ class ParameterSample(BaseSample):
         Parameter domain object to sample
     """
 
-    def __init__(self, paramdomain, seed=None, sp={}):
+    def __init__(self, paramdomain=ParameterDomain(Parameter), seed=None, sp={}):
         self.seed = seed
         self.seedsequence = np.random.SeedSequence(seed)
         self.sp = sp
@@ -1185,7 +1220,8 @@ class ParameterSample(BaseSample):
         Parameters
         ----------
         x_combos : list
-            List of combinations of variable values. [x_1, x_2...]
+            List of combinations of variable values. [x_1, x_2...]. If empty, the
+            default values of x are used.
         replicates : int, optional
             Number of replicates to add of the variable. The default is 1.
         seed_comb : str, optional
@@ -1211,6 +1247,8 @@ class ParameterSample(BaseSample):
         >>> ex_ps.scenarios()[1]
         ParameterScenario(sequence={}, times=(), p={'z': 20, 'x': 2, 'y': 2}, r={}, sp={}, prob=0.5, inputparams=(2, 2), rangeid='', name='rep0_var_1')
         """
+        if len(x_combos) == 0:
+            x_combos = [self.paramdomain.get_x_defaults()]
         n_scens = replicates * len(x_combos)
         weight = weight/n_scens
         if seed_comb == 'shared' and replicates > 1:

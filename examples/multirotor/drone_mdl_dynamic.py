@@ -463,16 +463,14 @@ if __name__ == "__main__":
 
     app_mechfaults = SampleApproach(mdl, phasemaps={'mdl': PhaseMap(mdl.sp.phases)})
     app_mechfaults.add_faultdomain("mechfaults", "fault", "affect_dof", "mechbreak")
-    app_mechfaults.add_faultsample("mechfault_scens", "single_fault_phases",
+    app_mechfaults.add_faultsample("mechfault_scens", "fault_phases",
                                    "mechfaults", phasemap='mdl', args=(5,))
 
-    quad_comp_endclasses, quad_comp_mdlhists = fs.propagate.approach(mdl,
-                                                                     app_mechfaults,
-                                                                     staged=True)
-    an.plot.hist(quad_comp_mdlhists.nominal, 'flows.dofs.s.x', 'dofs.s.y', 'dofs.s.z',
+    quad_ec, quad_hist = fs.propagate.fault_sample(mdl, app_mechfaults, staged=True)
+    an.plot.hist(quad_hist.nominal, 'flows.dofs.s.x', 'dofs.s.y', 'dofs.s.z',
                  'store_ee.s.soc')
 
-    fig, ax = an.show.trajectories(quad_comp_mdlhists,
+    fig, ax = an.show.trajectories(quad_hist,
                                    "dofs.s.x", "dofs.s.y", "dofs.s.z",
                                    time_groups=['nominal'],
                                    indiv_kwargs={'faulty':{'alpha': 0.15,
@@ -480,12 +478,9 @@ if __name__ == "__main__":
 
     import fmdtools.analyze as an
     an.phases.phaseplot(app_mechfaults.phasemaps)
-    an.phases.samplemetric(app_mechfaults.faultsamples['mechfault_scens'],
-                           quad_comp_endclasses)
-    an.phases.samplemetrics(app_mechfaults, quad_comp_endclasses)
+    an.phases.samplemetric(app_mechfaults.faultsamples['mechfault_scens'], quad_ec)
+    an.phases.samplemetrics(app_mechfaults, quad_ec)
 
-    quad_comp_endclasses_1, quad_comp_mdlhists_1 = fs.propagate.approach(mdl,
-                                                                         app_mechfaults)
+    quad_ec_1, quad_hist_1 = fs.propagate.fault_sample(mdl, app_mechfaults)
 
-    cost_tests = [ec for ec in quad_comp_endclasses
-                  if quad_comp_endclasses[ec] != quad_comp_endclasses_1[ec]]
+    cost_tests = [ec for ec in quad_ec if quad_ec[ec] != quad_ec_1[ec]]

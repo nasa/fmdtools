@@ -9,7 +9,7 @@ from fmdtools.define.state import State
 from fmdtools.define.rand import Rand
 from fmdtools.define.block import FxnBlock
 from fmdtools.define.model import Model
-from fmdtools.sim.approach import NominalApproach
+from fmdtools.sim.sample import ParameterApproach
 import numpy as np
 from fmdtools.sim import propagate as prop
 import fmdtools.analyze as an

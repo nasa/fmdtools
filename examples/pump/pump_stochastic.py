@@ -10,7 +10,6 @@ This model is an extension of ex_pump.py that includes stochastic behaviors
 from examples.pump.ex_pump  import MoveWat as DetMoveWat
 from fmdtools.define.rand import Rand
 from fmdtools.define.state import State
-from fmdtools.sim.approach import NominalApproach
 import fmdtools.analyze as an
 import fmdtools.sim.propagate as propagate
 import numpy as np
@@ -133,15 +132,12 @@ class Pump(DetPump):
         self.build()
 
 
-def paramfunc(delay):
-    return {'delay': delay}
-
-
 if __name__ == "__main__":
     import multiprocessing as mp
     from fmdtools.define.model import check_model_pickleability
     from fmdtools.define.common import check_pickleability
-    
+    from fmdtools.sim.sample import ParameterDomain, ParameterSample
+
     # convert to tests 1:
     mdl = Pump()
     """
@@ -171,24 +167,30 @@ if __name__ == "__main__":
     mdl.set_vars([['ee_1', 'current']],[2])
     """
     # convert to test 3:
-    app_comp = NominalApproach()
-    app_comp.add_param_replicates(paramfunc, 'delay_1', 10, (1))
-    app_comp.add_param_replicates(paramfunc, 'delay_10', 10, (10))
+    pd = ParameterDomain(PumpParam)
+    pd.add_variable("delay")
 
-    endclasses, mdlhists, apps = propagate.nested_approach(
-        mdl, app_comp, run_stochastic=True, faults=[('export_water', 'block')], pool=mp.Pool(4))
+    ps = ParameterSample(pd)
+    ps.add_variable_replicates([[1]], replicates=10, name="delay1")
+    ps.add_variable_replicates([[10]], replicates=10, name="delay10")
 
-    an.tabulate.nested_stats(app_comp, endclasses, average_metrics=[
-                             'cost'], inputparams=['delay'])
+    faultdomains = {'fd': (('fault', 'export_water', 'block'), {})}
+    faultsamples = {'fs': (('fault_phases', 'fd'), {})}
 
-    an.tabulate.nested_factor_comparison(
-        app_comp, endclasses, ['delay'], 'cost',  difference=False, percent=False)
+    ecs, hists, apps = propagate.nested_sample(mdl, ps, run_stochastic=True,
+                                               faultdomains=faultdomains,
+                                               faultsamples=faultsamples,
+                                               pool=mp.Pool(4))
 
-    #endclasses, mdlhists, apps =propagate.nested_approach(mdl,app_comp, run_stochastic=True, faults=[('export_water', 'block')], staged=True) #pool=mp.Pool(4)
+    # an.tabulate.nested_stats(ps, ecs, average_metrics=['cost'], inputparams=['delay'])
 
-    comp_mdlhists = mdlhists.get_scens('export_water_block_t27p0')
-    comp_groups = {'delay_1': app_comp.ranges['delay_1']['scenarios'],
-                   'delay_10': app_comp.ranges['delay_10']['scenarios']}
+    # an.tabulate.nested_factor_comparison(ps, ecs, ['delay'], 'cost',
+    #                                      difference=False, percent=False)
+
+
+    comp_mdlhists = hists.get_scens('export_water_block_t27p0')
+    comp_groups = {'delay_1': ps.get_scens(p={'delay': 1}),
+                   'delay_10': ps.get_scens(p={'delay': 10})}
     fig = an.plot.hist(comp_mdlhists,
                        'fxns.move_water.s.eff',
                        'fxns.move_water.s.total_flow',
@@ -205,28 +207,21 @@ if __name__ == "__main__":
                        'flows.wat_2.s.pressure',
                        aggregation='percentile', time_slice=27)
 
-
-    app = NominalApproach()
-    app.add_param_replicates(paramfunc, 'no_delay', 100, (0))
-    app.add_param_replicates(paramfunc, 'delay_10', 100, (10))
-    
     fig = an.plot.metric_dist_from(comp_mdlhists, [5,10,15],
                        'fxns.move_water.s.eff',
                        'fxns.move_water.s.total_flow',
                        'flows.wat_2.s.flowrate',
                        'flows.wat_2.s.pressure')
-    
-    nomhist, nomres, = propagate.nominal_approach(mdl, app)
-    an.plot.nominal_vals_1d,(app, nomres, )
-    
+
+    ps2 = ParameterSample(pd)
+    ps2.add_variable_replicates([[0]], replicates=100, name="nodelay")
+    ps2.add_variable_replicates([[10]], replicates=100, name="delay10")
+    nomhist, nomres, = propagate.parameter_sample(mdl, ps)
+
+    # an.plot.nominal_vals_1d(ps2, nomres, 'delay')
 
 
-    # endresults, resgraph, mdlhist=propagate.nominal(mdl)
-    # an.plot.mdlhistvals(mdlhist, fxnflowvals={'MoveWater':'eff', 'Wat_1':'flowrate', 'Wat_2':['flowrate', 'pressure']})
-
-    # endresults, resgraph, mdlhist=propagate.nominal(mdl,run_stochastic=True)
-    # an.plot.mdlhistvals(mdlhist, fxnflowvals={'MoveWater':['eff', 'total_flow'], 'Wat_2':['flowrate', 'pressure']})
-
+    # test prob dense?
     for i in range(1, 10):
         mdl.update_seed(i)
         mdl.propagate(i, run_stochastic='track_pdf')
@@ -252,50 +247,4 @@ if __name__ == "__main__":
                  'flows.ee_1.s.voltage', 'flows.ee_1.s.current')
     #an.plot.mdlhists(mdlhist, fxnflowvals={'ImportEE'})
     
-    """
-    endresults, resgraph, mdlhist=propagate.one_fault(mdl, 'ExportWater', 'block', time=20, staged=False, run_stochastic=True, modelparams={'seed':10})
-    an.plot.mdlhistvals(mdlhist, fxnflowvals={'MoveWater':['eff', 'total_flow'], 'Wat_2':['flowrate', 'pressure']}, legend=False)
-    
-    an.plot.mdlhists(mdlhist, fxnflowvals={'MoveWater':['eff', 'total_flow'], 'Wat_2':['flowrate', 'pressure']})
-    
-    app_comp = NominalApproach()
-    app_comp.add_param_replicates(paramfunc, 'delay_1', 100, (1))
-    app_comp.add_param_replicates(paramfunc, 'delay_10', 100, (10))
-    endclasses, mdlhists, apps =propagate.nested_approach(mdl,app_comp, run_stochastic=True, faults=[('ExportWater', 'block')], staged=True)
-    
-    comp_mdlhists = {scen:mdlhist['ExportWater block, t=27'] for scen,mdlhist in mdlhists.items()}
-    comp_groups = {'delay_1': app_comp.ranges['delay_1']['scenarios'], 'delay_10':app_comp.ranges['delay_10']['scenarios']}
-    fig = an.plot.mdlhists(comp_mdlhists, {'MoveWater':['eff', 'total_flow'], 'Wat_2':['flowrate', 'pressure']}, comp_groups=comp_groups, aggregation='percentile', time_slice=27) 
-    
-    
-    tab = an.tabulate.nested_factor_comparison(app_comp, endclasses, ['delay'], 'cost')
-    """
-    # app = NominalApproach()
-    # app.add_seed_replicates('test_seeds', 100)
-    # an.plot.nominal_vals_1d(app, endclasses, 'test_seeds')
-    # endclasses, mdlhists=propagate.nominal_approach(mdl,app, run_stochastic=True)
-    # an.plot.mdlhists(mdlhists, {'MoveWater':['eff', 'total_flow'], 'Wat_2':['flowrate', 'pressure']},\
-    #                               ylabels={('Wat_2', 'flowrate'):'liters/s'}, color='blue', alpha=0.1, legend_loc=False)
-    # an.plot.mdlhists(mdlhists, {'MoveWater':['eff', 'total_flow'], 'Wat_2':['flowrate', 'pressure']}, aggregation='mean_std',\
-    #                               ylabels={('Wat_2', 'flowrate'):'liters/s'})
-    # an.plot.mdlhists(mdlhists, {'MoveWater':['eff', 'total_flow'], 'Wat_2':['flowrate', 'pressure']}, aggregation='mean_bound',\
-    #                               ylabels={('Wat_2', 'flowrate'):'liters/s'})
-    # an.plot.mdlhists(mdlhists, {'MoveWater':['eff', 'total_flow'], 'Wat_2':['flowrate', 'pressure']}, aggregation='percentile',\
-    #                           ylabels={('Wat_2', 'flowrate'):'liters/s'})     
-    
-    # an.plot.mdlhists(mdlhists, {'MoveWater':['eff', 'total_flow'], 'Wat_2':['flowrate', 'pressure']}, aggregation='mean_ci',\
-    #                               ylabels={('Wat_2', 'flowrate'):'liters/s'}, time_slice=[3,5,7])
-        
-    # an.plot.mdlhists(mdlhists, {'MoveWater':['eff', 'total_flow'], 'Wat_2':['flowrate', 'pressure']}, aggregation='mean_ci',\
-    #                  comp_groups={'test_1':[*mdlhists.keys()][:50], 'test_2':[*mdlhists.keys()][50:]},\
-    #                               ylabels={('Wat_2', 'flowrate'):'liters/s'}, time_slice=[3,5,7])
-    # an.plot.mdlhists(mdlhists, {'MoveWater':['eff', 'total_flow'], 'Wat_2':['flowrate', 'pressure'], 'ImportEE':['effstate', 'grid_noise'], 'EE_1':['voltage', 'current'], 'Sig_1':['power']},\
-    #                               ylabels={('Wat_2', 'flowrate'):'liters/s'}, cols=2, color='blue', alpha=0.1, legend_loc=False)
-    # an.plot.mdlhists(mdlhists, {'MoveWater':['eff', 'total_flow'], 'Wat_2':['flowrate', 'pressure'], 'ImportEE':['effstate', 'grid_noise'], 'EE_1':['voltage', 'current'], 'Sig_1':['power']}, aggregation='percentile',\
-    #                               ylabels={('Wat_2', 'flowrate'):'liters/s'}, cols=2, color='blue', alpha=0.1, legend_loc=False)
-    #
-    endclasses, mdlhists=propagate.nominal_approach(mdl,app, run_stochastic=True)
-    an.plot.nominal_vals_1d(app, endclasses, 'test_seeds')
-    
-    
-    
+

@@ -209,7 +209,7 @@ def unpack_mult_kwargs(kwargs):
 
 def nominal(mdl, **kwargs):
     """
-    Runs the model over time in the nominal scenario.
+    Run the model over time in the nominal scenario.
 
     Parameters
     ----------
@@ -333,14 +333,14 @@ def parameter_sample(mdl, ps, **kwargs):
 
     if pool:
         check_mdl_memory(mdl, num_scens, max_mem=kwargs['max_mem'])
-        inputs = [(mdl, sc, name, kwargs) for name, sc in ps.named_scenarios.items()]
+        inputs = [(mdl, sc, name, kwargs) for name, sc in ps.named_scenarios().items()]
         res_list = list(tqdm.tqdm(pool.map(exec_nom_par, inputs),
                                   total=len(inputs),
                                   disable=not (showprogress),
                                   desc="SCENARIOS COMPLETE"))
         n_results, n_mdlhists = unpack_res_list(scennames, res_list)
     else:
-        for scenname, scen in tqdm.tqdm(ps.named_scenarios.items(),
+        for scenname, scen in tqdm.tqdm(ps.named_scenarios().items(),
                                         disable=not (showprogress),
                                         desc="SCENARIOS COMPLETE"):
             loc_kwargs = {**kwargs, 'use_end_condition': False}
@@ -853,13 +853,13 @@ def nested_sample(mdl, ps, get_phasemap=False, faultdomains={}, faultsamples={},
     get_phasemap : Bool/List/Dict, optional
         Whether to use nominal simulation phasemap to set up the SampleApproach.
     faultdomains : dict
-        FaultDomains to add to the SampleApproach and their arguments.
-        Has structure: {'fd_name': (*args, **kwargs)}, where args and kwargs are
-        arguments/kwargs to SampleApproach.add_faultdomain.
+        Dict of arguments to SampleApproach.add_faultdomains
+        
     faultsamples : dict
-        FaultSamples to add t othe SampleApproach and their arguments.
+        Dict of arguments to SampleApproach.add_faultsamples
+        FaultSamples to add to othe SampleApproach and their arguments.
         Has structure: {'fs_name': (*args, **kwargs)}, where args and kwargs are
-        arguments/kwargs to SampleApproach.add_faultsample.
+        arguments/kwargs to SampleApproach.add_faultsamples.
     **kwargs : kwargs
         Additional keyword arguments, may include:
 
@@ -871,7 +871,7 @@ def nested_sample(mdl, ps, get_phasemap=False, faultdomains={}, faultsamples={},
               Multi-scenario options
         - app_args : mdl_kwargs
               Keyword arguments for the SampleApproach.
-              See sim.approach.SampleApproach documentation.
+              See sim.sample.SampleApproach documentation.
 
     Returns
     -------
@@ -895,7 +895,7 @@ def nested_sample(mdl, ps, get_phasemap=False, faultdomains={}, faultsamples={},
     nest_hist = History.fromkeys(scennames)
     nest_res = Result.fromkeys(scennames)
     apps = dict.fromkeys(scennames)
-    for scenname, scen in tqdm.tqdm(ps.named_scenarios.items(),
+    for scenname, scen in tqdm.tqdm(ps.named_scenarios().items(),
                                     disable=not (showprogress),
                                     desc="NESTED SCENARIOS COMPLETE"):
         mdl = mdl.new_with_params(p=scen.p, sp=scen.sp, r=scen.r)
@@ -907,6 +907,8 @@ def nested_sample(mdl, ps, get_phasemap=False, faultdomains={}, faultsamples={},
         else:
             pm = {}
         app = SampleApproach(mdl, phasemaps=pm)
+        app.add_faultdomains(**faultdomains)
+        app.add_faultsamples(**faultsamples)
         check_hist_memory(nomhist, num_params*app.num_scenarios(), max_mem=max_mem)
 
         loc_kwargs = {**sim_kwarg, 'p': scen.p, 'r': scen.r}

@@ -6,9 +6,8 @@ Created on Fri May 12 09:59:41 2023
 """
 
 from examples.pump.ex_pump import MoveWat
-from fmdtools.sim.propagate import nominal, one_fault, approach, single_faults, nominal_approach, nested_approach
-from fmdtools.sim.approach import NominalApproach
-from fmdtools.sim.sample import FaultSample, FaultDomain
+import fmdtools.sim.propagate as prop
+from fmdtools.sim.sample import FaultSample, FaultDomain, ParameterSample
 from fmdtools.analyze import plot
 
 
@@ -33,7 +32,8 @@ class MoveWatDynamic(MoveWat):
 
 a = MoveWatDynamic()
 
-result, mdlhist = nominal(a, track='all', disturbances={10: {"wat_in.s.level": 0.0}})
+result, mdlhist = prop.nominal(a, track='all',
+                               disturbances={10: {"wat_in.s.level": 0.0}})
 plot.hist(mdlhist, 'flows.sig_in.s.power', 'flows.wat_out.s.flowrate',
           'flows.wat_in.s.level', 'flows.wat_in.s.flowrate')
 
@@ -42,21 +42,25 @@ fd.add_all()
 fs = FaultSample(fd)
 fs.add_fault_phases()
 
-results, mdlhists = approach(a, fs)
+results, mdlhists = prop.fault_sample(a, fs)
 
-result, mdlhist = nominal(a, track='all')
-
-plot.hist(mdlhist, 'flows.sig_in.s.power', 'flows.wat_out.s.flowrate')
-
-result, mdlhist = one_fault(a, "short", time=10, track='all')
+result, mdlhist = prop.nominal(a, track='all')
 
 plot.hist(mdlhist, 'flows.sig_in.s.power', 'flows.wat_out.s.flowrate')
 
-results, mdlhists = single_faults(a)
+result, mdlhist = prop.one_fault(a, "short", time=10, track='all')
 
-nomapp = NominalApproach()
-nomapp.add_seed_replicates("seed_range", 10)
+plot.hist(mdlhist, 'flows.sig_in.s.power', 'flows.wat_out.s.flowrate')
 
-results, mdlhists = nominal_approach(a, nomapp)
+results, mdlhists = prop.single_faults(a)
 
-results, mdlhists, apps = nested_approach(a, nomapp)
+
+ps = ParameterSample()
+ps.add_variable_replicates([], replicates=10)
+
+
+results, mdlhists = prop.parameter_sample(a, ps)
+
+fds = {"fd": (('all',), {})}
+fss = {"fs": (('fault_phases', ["fd"]), {})}
+results, mdlhists, apps = prop.nested_sample(a, ps, faultdomains=fds, faultsamples=fss)
