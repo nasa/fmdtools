@@ -9,12 +9,11 @@ Main Methods:
 - :func:`sequence()`: Runs arbitrary scenario of fault modes at specified times.
 - :func:`single_faults()`: Creates and propagates a list of failure scenarios in a model
   over given model times.
-- :func:`approach`: Injects and propagates faults in the model defined by a given
-  sample approach.
-- :func:`nominal_approach`: Simulates a model over a range of parameters defined by a
-  nominal approach.
-- :func:`nested_approach`: Injects and propagates faults in the model defined by a
-  given sample approach over a range of parameters defined by a nominal approach.
+- :func:`fault_sample`: Injects and propagates faults defined by a FaultSample.
+- :func:`parameter_sample`: Simulates a model over a range of parameters defined by a
+  ParameterSample
+- :func:`nested_sample`: Injects and propagates faults in the model defined by a
+  given SampleApproach over a range of parameters defined by a ParameterSample.
 
 Shared Method Parameters:
 
@@ -57,10 +56,11 @@ import tqdm
 import dill
 import os
 from fmdtools.define.common import get_var, t_key
-from fmdtools.sim.approach import SampleApproach
+from fmdtools.sim.sample import SampleApproach
 from fmdtools.sim.scenario import Sequence, Scenario, SingleFaultScenario
 from fmdtools.analyze.result import Result, History,  create_indiv_filename, file_check
 from fmdtools.analyze.graph import graph_factory
+from fmdtools.analyze.phases import from_hist
 
 # DEFAULT ARGUMENTS
 sim_kwargs = {'desired_result': 'endclass',
@@ -201,7 +201,7 @@ Parameters
 
 
 def unpack_mult_kwargs(kwargs):
-    """Unpacks the mult kwarg parameters for the :func:`approach`"""
+    """Unpack the mult kwarg parameters for the :func:`parameter_sample`."""
     return (kwargs.pop(k, v) for k, v in mult_kwargs.items())
 
 # FAULT PROPAGATION
@@ -289,18 +289,19 @@ def save_helper(save_args, endclass, mdlhist, indiv_id='', result_id=''):
             endclass.save(**save_args['endclass'])
 
 
-def nominal_approach(mdl, nomapp, **kwargs):
+def parameter_sample(mdl, ps, **kwargs):
     """
-    Simulates a set of nominal scenarios through a model. Useful to understand
-    the sets of parameters where the system will run nominally and/or lead to
-    a fault.
+    Simulate a set of nominal scenarios through a model.
+
+    Useful for exploring/understanding the sets of parameters where the system will run
+    nominally and/or fail.
 
     Parameters
     ----------
     mdl : Simulable
         Model to simulate
-    nomapp : NominalApproach
-        Nominal Approach defining the nominal scenarios to run the system over.
+    ps: ParameterSample
+        Parameter Sample defining the nominal scenarios to run the system over.
     get_endclass : bool
         Whether to return endclasses from mdl.find_classification. Default is True.
     **kwargs : kwargs
@@ -323,23 +324,29 @@ def nominal_approach(mdl, nomapp, **kwargs):
     kwargs.update(pack_run_kwargs(**kwargs))
     check_overwrite(kwargs['save_args'])
     kwargs['max_mem'], showprogress, pool, close_p = unpack_mult_kwargs(kwargs)
-    kwargs['num_scens'] = nomapp.num_scenarios
+    num_scens = ps.num_scenarios()
+    kwargs['num_scens'] = num_scens
 
-    n_results = Result.fromkeys(nomapp.scenarios)
-    n_mdlhists = History.fromkeys(nomapp.scenarios)
+    scennames = ps.scen_names()
+    n_results = Result.fromkeys(scennames)
+    n_mdlhists = History.fromkeys(scennames)
+
     if pool:
-        check_mdl_memory(mdl, nomapp.num_scenarios, max_mem=kwargs['max_mem'])
-        inputs = [(mdl, scen, name, kwargs) for name, scen in nomapp.scenarios.items()]
+        check_mdl_memory(mdl, num_scens, max_mem=kwargs['max_mem'])
+        inputs = [(mdl, sc, name, kwargs) for name, sc in ps.named_scenarios.items()]
         res_list = list(tqdm.tqdm(pool.map(exec_nom_par, inputs),
                                   total=len(inputs),
                                   disable=not (showprogress),
                                   desc="SCENARIOS COMPLETE"))
-        n_results, n_mdlhists = unpack_res_list([*nomapp.scenarios.values()], res_list)
+        n_results, n_mdlhists = unpack_res_list(scennames, res_list)
     else:
-        for scenname, scen in tqdm.tqdm(nomapp.scenarios.items(),
+        for scenname, scen in tqdm.tqdm(ps.named_scenarios.items(),
                                         disable=not (showprogress),
                                         desc="SCENARIOS COMPLETE"):
-            n_results[scenname], n_mdlhists[scenname] = exec_nom_helper(mdl, scen, scenname, **{**kwargs, 'use_end_condition':False})
+            loc_kwargs = {**kwargs, 'use_end_condition': False}
+            n_results[scenname], n_mdlhists[scenname] = exec_nom_helper(mdl, scen,
+                                                                        scenname,
+                                                                        **loc_kwargs)
     save_helper(kwargs['save_args'], n_results, n_mdlhists)
     close_pool(kwargs)
     return n_results.flatten(), n_mdlhists.flatten()
@@ -370,7 +377,7 @@ def exec_nom_helper(mdl, scen, name, **kwargs):
 
 def one_fault(mdl, *fxnfault, time=0, **kwargs):
     """
-    Runs one fault in the model at a specified time.
+    Run one fault in the model at a specified time.
 
     Parameters
     ----------
@@ -557,15 +564,15 @@ def nom_helper(mdl, ctimes, protect=True, save_args={}, mdl_kwargs={}, scen={},
     return result, nommdlhist, nomscen, mdls, t_end_nom
 
 
-def approach(mdl, app,  **kwargs):
+def fault_sample(mdl, fs,  **kwargs):
     """
-    Injects and propagates faults in the model defined by a given sample approach
+    Injects and propagates faults in the model defined by a FaultSample/SampleApproach.
 
     NOTE: When calling in a script/module using parallel=True, execute using the
     protection statement ::
 
         if __name__ == 'main':
-            results, mdlhists = approach(mdl, app)
+            results, mdlhists = fault_sample(mdl, fs)
 
     Otherwise, the method will keep spawning parallel processes.
     See multiprocessing documentation.
@@ -574,8 +581,8 @@ def approach(mdl, app,  **kwargs):
     ----------
     mdl : Simulable
         The model to inject faults in.
-    app : sampleapproach
-        SampleApproach used to define the list of faults and sample time for the model.
+    fs : FaultSample/SampleApproach
+        FaultSample used to define the list of faults and sample time for the model.
     **kwargs : kwargs
         Additional keyword arguments, may include:
 
@@ -596,10 +603,10 @@ def approach(mdl, app,  **kwargs):
     """
     kwargs.update(pack_run_kwargs(**kwargs))
     n_outs = nom_helper(mdl,
-                        app.times(),
+                        fs.times(),
                         **{**kwargs, 'use_end_condition': False})
     nomresult, nomhist, nomscen, c_mdl, t_end_nom = n_outs
-    scenlist = app.scenarios()
+    scenlist = fs.scenarios()
 
     results, mdlhists = scenlist_helper(mdl,
                                         scenlist,
@@ -824,16 +831,15 @@ def check_overwrite(save_args):
                     os.makedirs(foldername)
 
 
-def nested_approach(mdl, nomapp, get_phases=False, **kwargs):
+def nested_sample(mdl, ps, get_phasemap=False, faultdomains={}, faultsamples={}, **kwargs):
     """
-    Simulates a set of fault modes within a set of nominal scenarios defined by a
-    nominal approach.
+    Simulate a set of fault scenarios within a ParameterSample.
 
     NOTE: When calling in a script/module using parallel=True, execute using the
     protection statement ::
 
         if __name__ == "main":
-            results, mdlhists = nested_approach(mdl, nomapp)
+            results, mdlhists = nested_sample(mdl, ps)
 
     Otherwise, the method will keep spawning parallel processes.
     See multiprocessing documentation.
@@ -842,16 +848,18 @@ def nested_approach(mdl, nomapp, get_phases=False, **kwargs):
     ----------
     mdl : Simulable
         Model Object to use in the simulation.
-    nomapp : NominalApproach
-        NominalApproach defining the nominal situations the model will be run over
-    get_phases : Bool/List/Dict, optional
-        Whether and how to use nominal simulation phases to set up the SampleApproach.
-        The default is False.
-        - If True, all phases from the nominal simulation are passed to SampleApproach()
-        - If a list ['Fxn1', 'Fxn2' etc.], only the phases from the listed functions
-        will be passed.
-        - If a dict {'Fxn1':'phase1'}, only the phase 'phase1' in the function 'Fxn1'
-        will be passed.
+    ps : ParameterSample
+        Parameter Scenario defining the parameters the model will be run over
+    get_phasemap : Bool/List/Dict, optional
+        Whether to use nominal simulation phasemap to set up the SampleApproach.
+    faultdomains : dict
+        FaultDomains to add to the SampleApproach and their arguments.
+        Has structure: {'fd_name': (*args, **kwargs)}, where args and kwargs are
+        arguments/kwargs to SampleApproach.add_faultdomain.
+    faultsamples : dict
+        FaultSamples to add t othe SampleApproach and their arguments.
+        Has structure: {'fs_name': (*args, **kwargs)}, where args and kwargs are
+        arguments/kwargs to SampleApproach.add_faultsample.
     **kwargs : kwargs
         Additional keyword arguments, may include:
 
@@ -882,63 +890,39 @@ def nested_approach(mdl, nomapp, get_phases=False, **kwargs):
     max_mem, showprogress, pool, close_p = unpack_mult_kwargs(kwargs)
     sim_kwarg = pack_sim_kwargs(**kwargs)
     run_kwargs_nest = pack_run_kwargs(**kwargs)
-    app_args = {k: v for k, v in kwargs.items()
-                if k not in [*sim_kwarg,
-                             *run_kwargs_nest,
-                             'max_mem',
-                             'showprogress',
-                             'pool']}
-
-    nest_mdlhists = History.fromkeys(nomapp.scenarios)
-    nest_results = Result.fromkeys(nomapp.scenarios)
-    apps = dict.fromkeys(nomapp.scenarios)
-    for scenname, scen in tqdm.tqdm(nomapp.scenarios.items(),
+    scennames = ps.scen_names()
+    num_params = ps.num_scenarios()
+    nest_hist = History.fromkeys(scennames)
+    nest_res = Result.fromkeys(scennames)
+    apps = dict.fromkeys(scennames)
+    for scenname, scen in tqdm.tqdm(ps.named_scenarios.items(),
                                     disable=not (showprogress),
                                     desc="NESTED SCENARIOS COMPLETE"):
         mdl = mdl.new_with_params(p=scen.p, sp=scen.sp, r=scen.r)
-        _, nomhist, _, t_end,  = prop_one_scen(mdl,
-                                               scen,
-                                               **{**sim_kwarg, 'staged': False})
-        if get_phases:
-            app_args.update({'phases': phases_from_hist(get_phases, t_end, nomhist)})
-        app = SampleApproach(mdl, **app_args)
-        apps[scenname] = app
-        check_hist_memory(nomhist,
-                          len(app.scenlist)*nomapp.num_scenarios,
-                          max_mem=max_mem)
+        loc_kwargs = {**sim_kwarg, 'staged': False}
+        _, nomhist, _, t_end,  = prop_one_scen(mdl, scen, **loc_kwargs)
 
-        nest_results[scenname], nest_mdlhists[scenname] = approach(mdl,
-                                                                   app,
-                                                                   pool=pool,
-                                                                   close_pool=False,
-                                                                   showprogress=False,
-                                                                   **{**sim_kwarg,
-                                                                      'p': scen.p,
-                                                                      'r': scen.r})
-        save_helper(save_args,
-                    nest_results[scenname],
-                    nest_mdlhists[scenname],
-                    indiv_id=scenname,
-                    result_id=scenname)
-    save_helper(save_args, nest_results, nest_mdlhists)
+        if get_phasemap:
+            pm = from_hist(nomhist)
+        else:
+            pm = {}
+        app = SampleApproach(mdl, phasemaps=pm)
+        check_hist_memory(nomhist, num_params*app.num_scenarios(), max_mem=max_mem)
+
+        loc_kwargs = {**sim_kwarg, 'p': scen.p, 'r': scen.r}
+        res, hist = fault_sample(mdl, app, pool=pool, close_pool=False,
+                                 showprogress=False, **loc_kwargs)
+        save_helper(save_args, res, hist, indiv_id=scenname, result_id=scenname)
+
+        nest_res[scenname] = res
+        nest_hist[scenname] = hist
+        apps[scenname] = app
+    save_helper(save_args, nest_res, nest_hist)
     if save_app:
         with open(save_app['filename'], 'wb') as file_handle:
             dill.dump(apps, file_handle)
     close_pool(kwargs)
-    return nest_results.flatten(), nest_mdlhists.flatten(), apps
-
-
-def phases_from_hist(get_phases, t_end, nomhist):
-    if get_phases == 'global':
-        phases = {'global': [0, t_end]}
-    else:
-        phases, modephases = nomhist.get_modephases()
-        if type(get_phases) == list:
-            phases = {fxnname: phases[fxnname] for fxnname in get_phases}
-        elif type(get_phases) == dict:
-            phases = {phase: phases[fxnname][phase]
-                      for fxnname, phase in get_phases.items()}
-    return phases
+    return nest_res.flatten(), nest_hist.flatten(), apps
 
 
 def list_init_faults(mdl):
@@ -1183,7 +1167,7 @@ def prop_one_scen(mdl, scen, ctimes=[], nomhist={}, nomresult={}, cut_hist=True,
                                  time=t))
     # if len(result)==1: result = [*result.values()][0]
     if None in c_mdl.values():
-        raise Exception("Approach times" + str(ctimes)
+        raise Exception("Sample times" + str(ctimes)
                         + " go beyond simulation time " + str(t))
     return result, mdlhist, c_mdl, t_ind + shift
 
