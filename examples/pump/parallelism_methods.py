@@ -41,7 +41,7 @@ def compare_pools(mdl, app, pools, staged=False, track=False, verbose= True, tra
     mdl : Model
         fmdtools model
     app : FaultSample
-        SampleApproach of fault scenarios to simulate the model over using propagate.approach
+        SampleApproach of fault scenarios to simulate the model over using propagate.fault_sample
     pools : dict
         Dictionary of parallel/process pools {'poolname':pool} to compare. Pools must have a map function.
     staged : bool, optional
@@ -63,16 +63,28 @@ def compare_pools(mdl, app, pools, staged=False, track=False, verbose= True, tra
     """
     exectimes = {}
     starttime = time.time()
-    endclasses, mdlhists = propagate.approach(mdl,app, pool=False, staged = staged, track=track, showprogress=False, track_times=track_times, desired_result={})
+    endclasses, mdlhists = propagate.fault_sample(mdl, app, pool=False, staged=staged,
+                                                  track=track, showprogress=False,
+                                                  track_times=track_times,
+                                                  desired_result={})
     exectime_single = time.time() - starttime
-    if verbose: print("single-thread exec time: "+str(exectime_single))
+    if verbose:
+        print("single-thread exec time: "+str(exectime_single))
     exectimes['single'] = exectime_single
-    
+
     for pool in pools:
         starttime = time.time()
-        endclasses, mdlhists = propagate.approach(mdl,app, pool=pools[pool], staged = staged, track=track, showprogress=False, track_times=track_times, desired_result={}, close_pool=False)
+        loc_kwargs = dict(pool=pools[pool],
+                          staged=staged,
+                          track=track,
+                          showprogress=False,
+                          track_times=track_times,
+                          desired_result={},
+                          close_pool=False)
+        endclasses, mdlhists = propagate.fault_sample(mdl, app, **loc_kwargs)
         exectime_par = time.time() - starttime
-        if verbose: print(pool+" exec time: "+str(exectime_par))
+        if verbose:
+            print(pool+" exec time: "+str(exectime_par))
         exectimes[pool] = exectime_par
     return exectimes
 
@@ -130,15 +142,16 @@ if __name__=='__main__':
 
     cores = 4
     pools = instantiate_pools(cores)
-    
+
     print("STAGED + FULL MODEL TRACKING")
     compare_pools(mdl, fs, pools, staged=True, track='all')
-    
-    print("STAGED + SOME TRACKING")
-    
-    compare_pools(mdl,fs,pools, staged=True, track={'flows':{'EE_1':'all', 'Wat_2':['pressure', 'flowrate']}})
 
-    
+    print("STAGED + SOME TRACKING")
+
+    compare_pools(mdl, fs, pools, staged=True,
+                  track={'flows': {'EE_1': 'all', 'Wat_2': ['pressure', 'flowrate']}})
+
+
 
     print("STAGED + FLOW TRACKING")
     compare_pools(mdl, fs, pools, staged=True, track='flows')

@@ -14,7 +14,7 @@ from examples.tank.tank_optimization_model import make_tankparam
 from tests.common import CommonTests
 import multiprocessing as mp
 from fmdtools.sim.search import ProblemInterface
-from fmdtools.sim.approach import SampleApproach
+from fmdtools.sim.sample import SampleApproach
 
 
 class TankOptTests(unittest.TestCase, CommonTests):

@@ -25,7 +25,6 @@ The flows are:
 from fmdtools.define.block import FxnBlock, Mode
 from fmdtools.define.flow import Flow
 from fmdtools.define.model import Model, check_model_pickleability
-from fmdtools.sim.approach import NominalApproach
 from fmdtools.define.parameter import Parameter
 from fmdtools.define.state import State
 from fmdtools.define.time import Time
@@ -506,7 +505,7 @@ class Pump(Model):
 
 
 if __name__ == "__main__":
-    from fmdtools.sim.sample import SampleApproach
+    from fmdtools.sim.sample import SampleApproach, ParameterSample, ParameterDomain
 
     mdl = Pump()
     endclass, mdlhist = propagate.nominal(mdl, track='all')
@@ -564,21 +563,24 @@ if __name__ == "__main__":
     endclass, mdlhist = propagate.one_fault(
         mdl, 'move_water', 'mech_break', time=0, staged=False)
 
-    app = NominalApproach()
-    app.add_seed_replicates('test', 10)
+    pd = ParameterDomain(PumpParam)
+    pd.add_variable("delay")
+    pd.add_constant("cost", ('repair', 'water'))
+    ps = ParameterSample(pd)
+    ps.add_variable_replicates([], replicates=10)
 
     faultapp = SampleApproach(mdl)
     faultapp.add_faultdomain("testdomain", "all")
-    faultapp.add_faultsample("testsample", "single_fault_phases", "testdomain",
+    faultapp.add_faultsample("testsample", "fault_phases", "testdomain",
                              phasemap=mdl.sp.phases)
 
-    endclasses, mdlhists = propagate.approach(mdl, faultapp)
+    endclasses, mdlhists = propagate.fault_sample(mdl, faultapp)
     flat = mdlhists.flatten()
 
     gh = mdlhists.get_comp_groups('flows.ee_1.s.current')
 
-    endclasses, mdlhists_staged = propagate.approach(
-        mdl, faultapp, staged=True, track='all')
+    endclasses, mdlhists_staged = propagate.fault_sample(mdl, faultapp,
+                                                         staged=True, track='all')
     flat_staged = mdlhists_staged.flatten()
 
     [all(flat[k] == flat_staged[k]) for k in flat]

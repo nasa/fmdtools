@@ -69,7 +69,7 @@ class epsTests(unittest.TestCase, CommonTests):
             fs.add_fault_phases(n_joint=n_joint)
             # tests the length
             self.assertEqual(len(fs.scenarios()), math.comb(actual_num_faults, n_joint))
-            endclasses, reshists = propagate.approach(self.mdl, fs, showprogress=False)
+            ec, hists = propagate.fault_sample(self.mdl, fs, showprogress=False)
 
     def test_pickleability(self):
         unpickleable = check_pickleability(self.mdl, verbose=False)

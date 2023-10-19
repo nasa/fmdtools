@@ -42,16 +42,16 @@ class CommonTests():
     def check_approach_parallelism(self, mdl, app, track="all"):
         """Test whether the model simulates the same when simulated using parallel or staged options"""
         from multiprocessing import Pool
-        endclasses, mdlhists = sim.propagate.approach(mdl, app, showprogress=False, pool=False, track=track)
+        endclasses, mdlhists = sim.propagate.fault_sample(mdl, app, showprogress=False, pool=False, track=track)
         mdlhists_by_scen = mdlhists.nest(1)
         
-        endclasses_staged, mdlhist_staged = sim.propagate.approach(mdl, app, showprogress=False, pool=False, staged=True, track=track)
+        endclasses_staged, mdlhist_staged = sim.propagate.fault_sample(mdl, app, showprogress=False, pool=False, staged=True, track=track)
         staged_by_scen = mdlhist_staged.nest(1)
         
-        endclasses_par, mdlhists_par = sim.propagate.approach(mdl, app, showprogress=False, pool=Pool(4), staged=False, track=track)
+        endclasses_par, mdlhists_par = sim.propagate.fault_sample(mdl, app, showprogress=False, pool=Pool(4), staged=False, track=track)
         par_by_scen = mdlhists_par.nest(1)
         
-        endclasses_staged_par, mdlhists_staged_par = sim.propagate.approach(mdl, app, showprogress=False, pool=Pool(4), staged=True, track=track)
+        endclasses_staged_par, mdlhists_staged_par = sim.propagate.fault_sample(mdl, app, showprogress=False, pool=Pool(4), staged=True, track=track)
         par_staged_by_scen = mdlhists_staged_par.nest(1)
         
         for scen in mdlhists_by_scen.keys():
@@ -268,7 +268,7 @@ class CommonTests():
         """
         self.start_approach_test(mfile, ecfile)
         
-        endclasses, mdlhists = sim.propagate.approach(mdl, app, showprogress=False, \
+        endclasses, mdlhists = sim.propagate.fault_sample(mdl, app, showprogress=False, \
                                                   save_args={'mdlhist':{'filename':mfile},\
                                                              'endclass':{'filename':ecfile}}, **kwargs)
         
@@ -284,14 +284,14 @@ class CommonTests():
     def check_save_load_nomapproach(self, mdl, mfile, ecfile, app={}, **kwargs):
         self.start_approach_test(mfile, ecfile)
         
-        endclasses, mdlhists = sim.propagate.nominal_approach(mdl, app, showprogress=False, \
+        endclasses, mdlhists = sim.propagate.parameter_sample(mdl, app, showprogress=False, \
                                                         save_args={'mdlhist':{'filename':mfile},\
                                                                    'endclass':{'filename':ecfile}}, **kwargs)
         
         self.end_approach_test(mdlhists, mfile, endclasses, ecfile)
     def check_save_load_nestapproach(self, mdl, mfile, ecfile, app={}, **kwargs):
         self.start_approach_test(mfile, ecfile)
-        endclasses, mdlhists, apps = sim.propagate.nested_approach(mdl, app, showprogress=False, \
+        endclasses, mdlhists, apps = sim.propagate.nested_sample(mdl, app, showprogress=False, \
                                                         save_args={'mdlhist':{'filename':mfile},\
                                                                    'endclass':{'filename':ecfile}}, **kwargs)
         self.end_approach_test(mdlhists, mfile, endclasses, ecfile)
@@ -331,7 +331,7 @@ class CommonTests():
     
     def check_save_load_approach_indiv(self, mdl, mfolder, ecfolder, ext, app={}, **kwargs):
         self.start_save_load_indiv(mfolder, ecfolder)
-        endclasses, mdlhists = sim.propagate.approach(mdl, app, showprogress=False, \
+        endclasses, mdlhists = sim.propagate.fault_sample(mdl, app, showprogress=False, \
                                                   save_args={'mdlhist':{'filename':mfolder+"."+ext},\
                                                              'endclass':{'filename':ecfolder+"."+ext},\
                                                             'indiv':True}, **kwargs)
@@ -339,7 +339,7 @@ class CommonTests():
         
     def check_save_load_nomapproach_indiv(self, mdl, mfolder, ecfolder, ext, app={}, **kwargs):
         self.start_save_load_indiv(mfolder, ecfolder)
-        endclasses, mdlhists = sim.propagate.nominal_approach(mdl, app, showprogress=False, \
+        endclasses, mdlhists = sim.propagate.parameter_sample(mdl, app, showprogress=False, \
                                                         save_args={'mdlhist':{'filename':mfolder+"."+ext},\
                                                                    'endclass':{'filename':ecfolder+"."+ext},\
                                                                    'indiv':True}, **kwargs)
@@ -347,7 +347,7 @@ class CommonTests():
         
     def check_save_load_nestapproach_indiv(self, mdl, mfolder, ecfolder, ext, app={}, **kwargs):
         self.start_save_load_indiv(mfolder, ecfolder)
-        endclasses, mdlhists, apps = sim.propagate.nested_approach(mdl, app, showprogress=False, \
+        endclasses, mdlhists, apps = sim.propagate.nested_sample(mdl, app, showprogress=False, \
                                                                    save_args={'mdlhist':{'filename':mfolder+"."+ext},\
                                                                               'endclass':{'filename':ecfolder+"."+ext},\
                                                                             'indiv':True}, **kwargs)

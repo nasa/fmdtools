@@ -443,7 +443,7 @@ if __name__ == '__main__':
     fd.add_all()
     fs = FaultSample(fd)
     fs.add_single_fault_times((0, 5, 10, 15, 20))
-    endclasses, hist = propagate.approach(mdl, fs)
+    endclasses, hist = propagate.fault_sample(mdl, fs)
 
     from fmdtools.analyze.graph import ModelGraph
     mdl.fxns['human'].t.dt = 2.0

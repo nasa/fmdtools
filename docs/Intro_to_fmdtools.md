@@ -237,15 +237,15 @@ For more info, (syntax/arguments), see documentation for [`fmdtools.sim.propagat
 
 These classes define **multi-run simulations** which can be used to quantify uncertain performance/resiliences:
 
-- **SampleApproach**: Which faults to sample and when
+- **SampleApproach**/**FaultSample**: Which faults to sample and when
     - Relies on **mode** information encoded in the model
-    - Simulated using `propagate.approach()`
+    - Simulated using `propagate.fault_sample()`
 
-- **NominalApproach**: Nominal parameters or random seeds to sample
-    - Can be simulated in `propagate.nominal_approach()`
-    - Can be simulated in conjunction with faults using `propagate.nested_approach`
+- **ParameterSample**: Nominal parameters or random seeds to sample
+    - Can be simulated in `propagate.parameter_sample()`
+    - Can be simulated in conjunction with faults using `propagate.nested_sample`
 
-See docs for: [`fmdtools.sim.approach`](https://nasa.github.io/fmdtools/docs/fmdtools.sim.html#module-fmdtools.sim.approach)
+See docs for: [`fmdtools.sim.fault_sample`](https://nasa.github.io/fmdtools/docs/fmdtools.sim.html#module-fmdtools.sim.fault_sample)
 
 -----------------
 
@@ -268,14 +268,14 @@ See docs for: [`fmdtools.sim.approach`](https://nasa.github.io/fmdtools/docs/fmd
 Run fault propagation methods:
 - `propagate.nominal()`
 - `propagate.one_fault()`
-- `propagate.approach()`
+- `propagate.fault_sample()`
 
 What do the results look like? Explore data structures:
 - `analyze.result.Result`
 - `analyze.result.History`
 
 Explore:
-- What happens when you change `SampleApproach` parameters?
+- What happens when you change `FaultSample` parameters?
 - What happens when you change `Model` parameters?
 - How do these methods compare in terms of computational time?
 
