@@ -13,7 +13,7 @@ import numpy as np
 from collections.abc import Hashable
 from operator import itemgetter
 from fmdtools.define.common import t_key, eq_units
-from fmdtools.sim.scenario import Scenario, SingleFaultScenario, JointFaultScenario, NominalScenario, ParamScenario, Injection
+from fmdtools.sim.scenario import Scenario, SingleFaultScenario, JointFaultScenario, ParameterScenario, Injection
 import itertools
 import copy
 from warnings import warn

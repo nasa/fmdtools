@@ -226,7 +226,7 @@ class JointFaultScenario(BaseScenario):
     phase: tuple = ()
 
 
-class NominalScenario(BaseScenario, readonly=True):
+class ParameterScenario(BaseScenario, readonly=True):
     """
     Class defining a nominal (non-fault-injection) Scenario.
 
@@ -302,30 +302,11 @@ class NominalScenario(BaseScenario, readonly=True):
         return [self.get_param(param, default=default) for param in params]
 
 
-class ParamScenario(NominalScenario):
-    """
-    Defines a nominal scenario defined by a parameter.
-
-    Fields
-    ------
-    paramfunc : callable
-        Parameter-generating function
-    fixedargs : tuple
-        Fixed args in the scenario
-    fixedkwargs : dict
-        Fixed kwargs in the scenario
-    """
-
-    paramfunc: callable
-    fixedargs: tuple = ()
-    fixedkwargs: dict = {}
-
-
 if __name__ == "__main__":
     import doctest
     doctest.testmod(verbose=True)
     a = Scenario()
-    
+
     b = SingleFaultScenario()
-    
+
     seq = Sequence(faultseq={1:"fault"})
