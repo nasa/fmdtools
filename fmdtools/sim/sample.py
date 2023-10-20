@@ -177,7 +177,7 @@ class ParameterDomain(object):
 
     def get_param_kwargs(self, *x):
         """Get kwargs for the parameter at the given value of x."""
-        return {**self.constants, **x_to_kwargs(self.variables, *x)}
+        return {**x_to_kwargs(self.constants, self.variables, *x)}
 
     def __call__(self, *x):
         """Generate the parameter at a given value of the variables."""
@@ -245,7 +245,7 @@ class ParameterDomain(object):
         return tuple(x_defaults)
 
 
-def x_to_kwargs(variables, *x):
+def x_to_kwargs(constants, variables, *x):
     """Convert x over the defined variables into a set of kwargs."""
     var_args = {}
     for i, variable in enumerate(variables):
@@ -253,7 +253,7 @@ def x_to_kwargs(variables, *x):
             var_args[variable] = x[i]
         else:
             raise Exception("x of invalid length: "+str(len(x)))
-    return nest_dict(var_args)
+    return nest_dict({**var_args, **constants})
 
 
 
@@ -1192,7 +1192,7 @@ class ParameterSample(BaseSample):
         ParameterSample of scenarios:
          - var_0
         >>> ex_ps.scenarios()[0]
-        ParameterScenario(sequence={}, times=(), p={'z': 20, 'x': 2, 'y': 1}, r={}, sp={}, prob=1.0, inputparams=(1, 2), rangeid='', name='var_0')
+        ParameterScenario(sequence={}, times=(), p={'z': 20, 'y': 1, 'x': 2}, r={}, sp={}, prob=1.0, inputparams=(1, 2), rangeid='', name='var_0')
         """
         param_args = self.paramdomain.get_param_kwargs(*x)
         if seed:
@@ -1243,9 +1243,9 @@ class ParameterSample(BaseSample):
          - rep0_var_0
          - rep0_var_1
         >>> ex_ps.scenarios()[0]
-        ParameterScenario(sequence={}, times=(), p={'z': 20, 'x': 1, 'y': 1}, r={}, sp={}, prob=0.5, inputparams=(1, 1), rangeid='', name='rep0_var_0')
+        ParameterScenario(sequence={}, times=(), p={'z': 20, 'y': 1, 'x': 1}, r={}, sp={}, prob=0.5, inputparams=(1, 1), rangeid='', name='rep0_var_0')
         >>> ex_ps.scenarios()[1]
-        ParameterScenario(sequence={}, times=(), p={'z': 20, 'x': 2, 'y': 2}, r={}, sp={}, prob=0.5, inputparams=(2, 2), rangeid='', name='rep0_var_1')
+        ParameterScenario(sequence={}, times=(), p={'z': 20, 'y': 2, 'x': 2}, r={}, sp={}, prob=0.5, inputparams=(2, 2), rangeid='', name='rep0_var_1')
         """
         if len(x_combos) == 0:
             x_combos = [self.paramdomain.get_x_defaults()]
