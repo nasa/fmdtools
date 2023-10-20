@@ -182,7 +182,7 @@ if __name__ == "__main__":
                                                faultsamples=faultsamples,
                                                pool=mp.Pool(4))
 
-    an.plot.nominal_vals_1d(ps, ecs, 'delay')
+    an.plot.nominal_vals_1d(ps, ecs, 'p.delay')
     # an.tabulate.nested_stats(ps, ecs, average_metrics=['cost'], inputparams=['delay'])
 
     # an.tabulate.nested_factor_comparison(ps, ecs, ['delay'], 'cost',

@@ -48,6 +48,8 @@ def get_var(obj, var):
     if len(var) == 1:
         if type(obj) == dict:
             return obj[var[0]]
+        elif type(obj) in {tuple, list} and var[0].isnumeric():
+            return obj[int(var[0])]
         else:
             return getattr(obj, var[0])
     else:

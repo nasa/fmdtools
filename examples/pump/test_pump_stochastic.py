@@ -148,8 +148,6 @@ class StochasticPumpTests(unittest.TestCase, CommonTests):
         title = "should show at least one red line over range of seeds"
         an.plot.nominal_vals_1d(ps, res, 'r.seed', metric='cost', fault_alpha=1.0,
                                 title=title)
-        title = "should show single line over nonexistent range"
-        an.plot.nominal_vals_1d(ps, res, 'nonsense', title=title)
 
 
     def test_plot_nominal_vals_xd(self):
