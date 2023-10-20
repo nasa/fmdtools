@@ -338,7 +338,7 @@ def parameter_sample(mdl, ps, **kwargs):
                                   total=len(inputs),
                                   disable=not (showprogress),
                                   desc="SCENARIOS COMPLETE"))
-        n_results, n_mdlhists = unpack_res_list(scennames, res_list)
+        n_results, n_mdlhists = unpack_res_list(ps.scenarios(), res_list)
     else:
         for scenname, scen in tqdm.tqdm(ps.named_scenarios().items(),
                                         disable=not (showprogress),

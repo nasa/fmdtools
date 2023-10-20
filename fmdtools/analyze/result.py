@@ -79,7 +79,7 @@ def auto_filetype(filename, filetype=""):
     of a given filename"""
     if not filetype:
         if '.' not in filename:
-            raise Exception("No file extension")
+            raise Exception("No file extension in: " + filename)
         if filename[-4:] == '.pkl':
             filetype = "pickle"
         elif filename[-4:] == '.csv':

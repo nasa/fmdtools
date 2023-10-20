@@ -6,7 +6,7 @@ Created on Mon Dec 20 10:32:00 2021
 """
 import unittest
 from examples.eps.eps import EPS
-from fmdtools.sim import propagate
+from fmdtools.sim import propagate as prop
 import fmdtools.analyze as an
 from fmdtools.sim.sample import FaultDomain, FaultSample
 from fmdtools.define.common import check_pickleability
@@ -25,38 +25,36 @@ class epsTests(unittest.TestCase, CommonTests):
         """Tests that defined fault cases that require reverse propagation propagate
         backwards through the graph as expected - distributor short leads to empty battery
         """
-        endresults, mdlhist = propagate.one_fault(
-            self.mdl, "distribute_ee", "short", desired_result="endfaults"
-        )
-        self.assertEqual(endresults["endfaults"]["store_ee"], ["no_storage"])
+        res, hist = prop.one_fault(self.mdl, "distribute_ee", "short",
+                                   desired_result="endfaults")
+        self.assertEqual(res["endfaults"]["store_ee"], ["no_storage"])
 
     def test_backward_fault_prop_2(self):
         """Tests that defined fault cases that require reverse propagation propagate
         backwards through the graph as expected - motor short leads to distributor short
         """
-        endresults, mdlhist = propagate.one_fault(
-            self.mdl, "ee_to_me", "short", desired_result="endfaults"
-        )
-        self.assertEqual(endresults["endfaults"]["store_ee"], ["no_storage"])
-        self.assertEqual(endresults["endfaults"]["distribute_ee"], ["short"])
+        res, hist = prop.one_fault(self.mdl, "ee_to_me", "short",
+                                   desired_result="endfaults")
+        self.assertEqual(res["endfaults"]["store_ee"], ["no_storage"])
+        self.assertEqual(res["endfaults"]["distribute_ee"], ["short"])
 
     def test_all_faults(self):
         """Some basic tests for propagating lists of faults in the model--
         that histories have length 1, endresults have >0 costs, and total costs are higher
         than repairs"""
         mdl = self.mdl
-        endclasses, reshists = propagate.single_faults(mdl, showprogress=False)
+        res, hist = prop.single_faults(mdl, showprogress=False)
         actual_num_faults = np.sum([len(f.m.faultmodes) for f in mdl.fxns.values()])
-        self.assertEqual(len(endclasses.nest(1)), actual_num_faults + 1)
-        hist_len_is_1 = all([len(v) == 1 for v in reshists.values()])
+        self.assertEqual(len(res.nest(1)), actual_num_faults + 1)
+        hist_len_is_1 = all([len(v) == 1 for v in hist.values()])
         self.assertTrue(hist_len_is_1)  # all histories have length 1
-        all_have_costs = all(v > 0 for k, v in endclasses.get_values('.cost').items()
+        all_have_costs = all(v > 0 for k, v in res.get_values('.cost').items()
                              if 'nominal' not in k)
         self.assertTrue(all_have_costs)  # all endresults have positive costs
         repcosts = np.sum([np.sum([m["cost"] for m in f.m.faultmodes.values()])
                            for f in mdl.fxns.values()])
         # fault costs higher than if it was just repairs
-        total_simcosts = sum([v for v in endclasses.get_values('.cost').values()])
+        total_simcosts = sum([v for v in res.get_values('.cost').values()])
         self.assertGreater(total_simcosts, repcosts)
 
     def test_fault_app(self):
@@ -69,52 +67,39 @@ class epsTests(unittest.TestCase, CommonTests):
             fs.add_fault_phases(n_joint=n_joint)
             # tests the length
             self.assertEqual(len(fs.scenarios()), math.comb(actual_num_faults, n_joint))
-            ec, hists = propagate.fault_sample(self.mdl, fs, showprogress=False)
+            ec, hists = prop.fault_sample(self.mdl, fs, showprogress=False)
 
     def test_pickleability(self):
         unpickleable = check_pickleability(self.mdl, verbose=False)
         self.assertTrue(unpickleable == [])
 
-    def test_save_load_nominal(self):
+    def test_nominal_saving(self):
         for extension in [".pkl", ".csv", ".json"]:
-            self.check_save_load_onerun(
-                self.mdl,
-                "eps_mdlhist" + extension,
-                "eps_endclass" + extension,
-                "nominal",
-            )
+            resname = "eps_hist" + extension
+            histname = "eps_res" + extension
+            self.check_onerun_save(self.mdl, 'nominal', resname, histname)
 
     def test_save_load_onefault(self):
+        faultscen = ("store_ee", "no_storage", 0)
         for extension in [".pkl", ".csv", ".json"]:
-            self.check_save_load_onerun(
-                self.mdl,
-                "eps_mdlhist" + extension,
-                "eps_endclass" + extension,
-                "one_fault",
-                faultscen=("store_ee", "no_storage", 0),
-            )
+            resname = "eps_hist" + extension
+            histname = "eps_res" + extension
+            self.check_onerun_save(self.mdl, 'one_fault', resname, histname,
+                                   faultscen=faultscen)
 
-    def test_save_load_multfault(self):
+    def test_multfault_saving(self):
+        faultscen = {0: {"store_ee": ["no_storage"], "distribute_ee": "short"}}
         for extension in [".pkl", ".csv", ".json"]:
-            faultscen = {0: {"store_ee": ["no_storage"], "distribute_ee": "short"}}
-            self.check_save_load_onerun(
-                self.mdl,
-                "eps_mdlhist" + extension,
-                "eps_endclass" + extension,
-                "sequence",
-                faultscen=faultscen,
-            )
+            resname = "eps_hist" + extension
+            histname = "eps_res" + extension
+            self.check_onerun_save(self.mdl, "sequence", resname, histname,
+                                   faultscen=faultscen)
 
     def test_save_load_singlefaults(self):
-        self.check_save_load_singlefaults(
-            self.mdl, "eps_mdlhists.pkl", "eps_endclasses.pkl"
-        )
-        self.check_save_load_singlefaults(
-            self.mdl, "eps_mdlhists.csv", "eps_endclasses.csv"
-        )
-        self.check_save_load_singlefaults(
-            self.mdl, "eps_mdlhists.json", "eps_endclasses.json"
-        )
+        self.check_sf_save(self.mdl, "eps_res.pkl", "eps_hist.pkl")
+        self.check_sf_save(self.mdl, "eps_res.csv", "eps_hist.csv")
+        self.check_sf_save(self.mdl, "eps_res.json", "eps_hist.json")
+
 
 if __name__ == "__main__":
     unittest.main()
