@@ -35,9 +35,9 @@ if __name__=="__main__":
                       "examples/eps/EPS_Example_Notebook.ipynb", 
                       "examples/pump/Pump_Example_Notebook.ipynb",
                       "examples/pump/Stochastic_Modelling.ipynb",
-                      "examples/rover/Approach_Use-Cases.ipynb",
+                      "examples/rover/ParameterSample_Use-Cases.ipynb",
                       "examples/rover/Model_Structure_Visualization_Tutorial.ipynb",
-                      "examples/rover/Nominal_Approach_Use-Cases.ipynb",
+                      "examples/rover/FaultSample_Use-Cases.ipynb",
                       "examples/rover/Rover_Setup_Notebook.ipynb",
                       "examples/tank/Tank_Analysis.ipynb"
                       ]

@@ -574,7 +574,7 @@ class BaseSample():
         """
         scens = {i.name: i for i in self.scenarios()}
         for kwarg in kwargs:
-            scens = {k: v for k, v in scens.items() if v[kwarg] == kwargs[kwarg]}
+            scens = {k: v for k, v in scens.items() if get_var(v, kwarg) == kwargs[kwarg]}
         return scens
 
     def get_groups_scens(self, groupnames, groups):
@@ -615,7 +615,7 @@ class BaseSample():
         groups : list
             List of tuples corresponding to the groups
         """
-        groups = list(set([tuple([v[groupname] for groupname in groupnames])
+        groups = list(set([tuple([get_var(v, groupname) for groupname in groupnames])
                            for v in self.scenarios()]))
         return groups
 
@@ -1166,40 +1166,6 @@ class ParameterSample(BaseSample):
     def scenarios(self):
         """Return list of scenarios that make up the ParameterSample."""
         return [*self._scenarios]
-
-    def group_variable_scens(self, *var):
-        """
-        Groups the scenarios by input variables.
-
-        Parameters
-        ----------
-        *var : str
-            Names of variables to group by.
-
-        Returns
-        -------
-        var_scens : dict
-            Dict of scenarios grouped by input variable values
-
-        Examples
-        --------
-        >>> ex_ps = ParameterSample(expd)
-        >>> ex_ps.add_variable_ranges()
-        >>> exp_ps.group_variable_scens("y").keys()
-        dict_keys([(3.0,), (1.0,), (4.0,), (2.0,)])
-        """
-        if not var:
-            var = [*self.paramdomain.variables]
-        var_scen_combos = self.get_scen_groups("inputparams")
-        var_inds = [i for i, k in enumerate(self.paramdomain.variables) if k in var]
-        var_scens = {}
-        for combo_scen, scens in var_scen_combos.items():
-            combo_key = tuple([combo_scen[0][i] for i in var_inds])
-            if combo_key not in var_scens:
-                var_scens[combo_key] = scens
-            else:
-                var_scens[combo_key].extend(scens)
-        return var_scens
 
     def add_variable_scenario(self, *x, seed=False, sp={}, weight=1.0, name='var'):
         """

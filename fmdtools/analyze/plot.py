@@ -385,7 +385,7 @@ def multiplot_legend_title(groupmetrics, axs, ax,
         plt.suptitle(title, y=1.0+title_padding)
 
 
-def make_consolidated_legend(ax):
+def make_consolidated_legend(ax, loc='upper left'):
     """Creates a single legend for a given multiplot where multiple groups are
     being compared"""
     ax.legend()
@@ -393,7 +393,7 @@ def make_consolidated_legend(ax):
     by_label = dict(zip(labels, handles))
     ax.get_legend().remove()
     ax.legend(by_label.values(), by_label.keys(),
-              bbox_to_anchor=(1.05, 1), loc='upper left')
+              bbox_to_anchor=(1.05, 1), loc=loc)
 
 
 def metric_dist(result, *plot_values, cols=2, comp_groups={},
@@ -546,7 +546,7 @@ def metric_dist_from(mdlhists, times, *plot_values, **kwargs):
 def get_nominal_classes(ps, endclasses, params, metric):
     """helper function for nominal_values_xd functions that gets the parameters and
     metrics to plot"""
-    variable_groups = ps.group_variable_scens(*params)
+    variable_groups = ps.get_scen_groups(*params)
     if not variable_groups:
         raise Exception("No matching scenarios--are parameters " +
                         params + " in the nomapp Scenarios?")
@@ -693,19 +693,20 @@ def nominal_vals_2d(ps, endclasses, x_param, y_param,
         Figure for the plot.
     """
     fig = plt.figure(figsize=figsize)
-    nom_c = get_nominal_classes(ps, endclasses, (x_param, y_param), metric, nom_func)
-    data, classifications, discrete_classes = nom_c
+    nom_c = get_nominal_classes(ps, endclasses, (x_param, y_param), metric)
+    variable_groups, group_classes = nom_c
 
-    for cl in discrete_classes:
-        xdata = get_dim_data(data, classifications, cl, 0)
-        ydata = get_dim_data(data, classifications, cl, 1)
-        if nom_func(cl):
-            plt.scatter(xdata, ydata, label=cl,
-                        marker=nom_marker, alpha=nom_alpha, color=nom_color)
-        else:
-            plt.scatter(xdata, ydata, label=cl,
-                        marker=fault_marker, color=fault_color)
-    plt.legend(loc=legend_loc)
+    for var, vals in group_classes.items():
+        for val in vals:
+            if nom_func(val):
+                plt.scatter([var[0]], [var[1]], label='nominal', marker=nom_marker,
+                            alpha=nom_alpha, color=nom_color)
+            else:
+                plt.scatter([var[0]], [var[1]], label='faulty', marker=fault_marker,
+                            alpha=fault_alpha, color=fault_color)
+
+    axis = plt.gca()
+    make_consolidated_legend(axis, loc=legend_loc)
     if not xlabel:
         xlabel = x_param
     if not ylabel:
@@ -724,7 +725,7 @@ def nominal_vals_3d(ps, endclasses, x_param, y_param, z_param,
                     fault_alpha=0.5, fault_color="red", fault_marker="X",
                     legend_loc="best", markersize=50):
     """
-    Visualizes the nominal operational envelope along two given parameters
+    Visualize the nominal operational envelope along two given parameters.
 
     Parameters
     ----------
@@ -778,21 +779,19 @@ def nominal_vals_3d(ps, endclasses, x_param, y_param, z_param,
     fig = plt.figure(figsize=figsize)
     ax = fig.add_subplot(projection='3d')
 
-    nom_c = get_nominal_classes(ps, endclasses, (x_param, y_param, z_param),
-                                metric, nom_func)
-    data, classifications, discrete_classes = nom_c
-    for cl in discrete_classes:
-        xdata = get_dim_data(data, classifications, cl, 0)
-        ydata = get_dim_data(data, classifications, cl, 1)
-        zdata = get_dim_data(data, classifications, cl, 2)
-        s = np.ones(len(xdata))*markersize
-        if nom_func(cl):
-            ax.scatter(xdata, ydata, zdata, label=cl, s=s,
-                       marker=nom_marker, alpha=nom_alpha, color=nom_color)
-        else:
-            ax.scatter(xdata, ydata, zdata, label=cl, s=s,
-                       marker=fault_marker, color=fault_color)
-    ax.legend()
+    nom_c = get_nominal_classes(ps, endclasses, (x_param, y_param, z_param), metric)
+    variable_groups, group_classes = nom_c
+
+    for var, vals in group_classes.items():
+        for val in vals:
+            if nom_func(val):
+                ax.scatter([var[0]], [var[1]], [var[2]], label='nominal',
+                           marker=nom_marker, alpha=nom_alpha, color=nom_color)
+            else:
+                ax.scatter([var[0]], [var[1]], [var[2]], label='faulty',
+                           marker=fault_marker, alpha=fault_alpha, color=fault_color)
+
+    make_consolidated_legend(ax, loc=legend_loc)
     if not xlabel:
         xlabel = x_param
     if not ylabel:
@@ -809,7 +808,7 @@ def nominal_vals_3d(ps, endclasses, x_param, y_param, z_param,
 
 def dyn_order(mdl, rotateticks=False, title="Dynamic Run Order"):
     """
-    Plots the run order for the model during the dynamic propagation step used
+    Plot the run order for the model during the dynamic propagation step used
     by dynamic_behavior() methods, where the x-direction is the order of each
     function executed and the y are the corresponding flows acted on by the
     given methods.
