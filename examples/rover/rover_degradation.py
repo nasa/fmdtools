@@ -14,7 +14,7 @@ import numpy as np
 from fmdtools.sim import propagate as prop
 import fmdtools.analyze as an
 import matplotlib.pyplot as plt
-from rover_model import Rover, plot_trajectories, DegParam
+from rover_model import Rover, DegParam
 
 
 
@@ -46,9 +46,6 @@ class DriveDegradation(FxnBlock):
 
     def __init__(self, name, **kwargs):
         super().__init__(name, **kwargs)
-        # self.assoc_rand_state('corrode_rate', 0.01, auto_update = ['pareto', (50,)])
-        # self.assoc_rand_state('wear_rate', 0.02, auto_update = ['pareto', (25,)])
-        # self.assoc_rand_state('yaw_load', 0.01, auto_update = ['uniform', (-0.1, 0.1)])
 
     def dynamic_behavior(self, time):
         self.s.inc(corrosion=self.r.s.corrode_rate, wear=self.r.s.wear_rate)
@@ -162,7 +159,7 @@ def sample_params(mdlhists, histname, t=1, scen=1):
 
 def gen_sample_params(mdlhists, histname, t=1, scen=1):
     degparams = sample_params(mdlhists, histname, t=t, scen=scen)
-    return {"linetype": "turn", 'drive_modes': {"mode_args": "degradation"}, "degradation": DegParam(**degparams)}
+    return { 'drive_modes': {"mode_args": "degradation"}, "degradation": DegParam(**degparams)}
 
 
 def gen_long_degPSF_param(experience_param, scen=1):
