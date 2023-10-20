@@ -62,7 +62,7 @@ class GroundParam(Parameter):
     x_min: float
         minimum x-value for line generation (sine or turn)
     x_max: float
-        maximum x-value for line generation (sine or turn)
+        maximum x-value for line generation (sine)
     x_res: float
         resolution for line generation
     """
@@ -87,9 +87,7 @@ class GroundParam(Parameter):
     def gen_ls_turn(self):
         """Generate line coordinates in turn environment"""
         ls = [[x, turn_func(x, self.radius, self.x_start)]
-              for x in np.arange(self.x_min, self.x_max, self.x_res)]
-        if self.x_max >= self.x_start + self.radius:
-            ls.append([self.x_max, self.radius + self.y_end])
+              for x in np.arange(self.x_min, self.radius+self.x_start, self.x_res)]
         return tuple(ls)
 
     def gen_ls(self):
@@ -488,89 +486,47 @@ class DriveMode(Mode):
             self.mode_args = mode_args["mode_args"]
         else:
             self.mode_args = mode_args
+        ph = {'drive': 1.0}
         if self.mode_args == "degradation":
             self.s.friction = deg_params.friction
             self.s.drift = deg_params.drift
-            self.assoc_faultstates(
-                {
-                    "friction": {
-                        (self.s.friction + 0.5),
-                        2 * (self.s.friction + 0.5),
-                        5 * (self.s.friction + 0.5),
-                    },
-                    "transfer": {0.0},
-                    "drift": {self.s.drift + 0.2, self.s.drift - 0.2},
-                },
-                "all",
-                oppvect={"drive": 1.0},
-            )
+            franges = {"friction": {(self.s.friction + 0.5), 2 * (self.s.friction + 0.5), 5 * (self.s.friction + 0.5)},
+                       "transfer": {0.0},
+                       "drift": {self.s.drift + 0.2, self.s.drift - 0.2}}
+            self.init_n_faultstates(franges, phases=ph)
+
         elif type(self.mode_args) == int:
-            self.assoc_faultstates(
-                {
-                    "friction": {*np.linspace(0.0, 20, 100)},
-                    "transfer": {*np.linspace(1.0, 0.0, 100)},
-                    "drift": {*np.linspace(-0.5, 0.5, 100)},
-                },
-                self.mode_args,
-                oppvect={"drive": 1.0},
-            )
+            franges = {"friction": np.linspace(0.0, 20, 10),
+                       "transfer":  np.linspace(1.0, 0.0, 10),
+                       "drift": np.linspace(-0.5, 0.5, 10)}
+            self.init_n_faultstates(franges, n=self.mode_args, phases=ph)
         elif type(self.mode_args) == list:
-            self.assoc_faultstates(
-                manual_modes={
-                    "s_"
-                    + str(i): {
-                        "friction": mode[0],
-                        "transfer": mode[1],
-                        "drift": mode[2],
-                    }
-                    for i, mode in enumerate(self.mode_args)
-                },
-                oppvect={"drive": 1.0},
-            )
+            manual_modes = {"s_" + str(i):
+                            {"friction": mode[0], "transfer": mode[1], "drift": mode[2]}
+                            for i, mode in enumerate(self.mode_args)}
+            self.init_faultstate_modes(manual_modes, phases=ph)
         elif type(self.mode_args) == dict:
-            self.assoc_faultstates(manual_modes=self.mode_args, oppvect={"drive": 1.0})
+            self.init_faultstate_modes(manual_modes=self.mode_args, phases=ph)
         else:
             if "manual" in self.mode_args:
-                self.assoc_faultstates(
-                    manual_modes={
-                        "elec_open": {"transfer": 0.0},
-                        "stuck": {"friction": 10.0},
-                        "stuck_right": {"friction": 3.0, "drift": 0.2},
-                        "stuck_left": {"friction": 3.0, "drift": -0.2},
-                    },
-                    oppvect={"drive": 1.0},
-                )
+                manual_modes={"elec_open": {"transfer": 0.0},
+                              "stuck": {"friction": 10.0},
+                              "stuck_right": {"friction": 3.0, "drift": 0.2},
+                              "stuck_left": {"friction": 3.0, "drift": -0.2}}
+                self.init_faultstate_modes(manual_modes, phases=ph)
             if "set" in self.mode_args:
-                self.assoc_faultstates(
-                    {
-                        "friction": {1.5, 3.0, 10.0},
-                        "transfer": {0.5, 0.0},
-                        "drift": {-0.2, 0.2},
-                    },
-                    "all",
-                    oppvect={"drive": 1.0},
-                )
+                franges = {"friction": {1.5, 3.0, 10.0},
+                           "transfer": {0.5, 0.0},
+                           "drift": {-0.2, 0.2}}
+                self.init_n_faultstates(franges, phases=ph)
             if "range" in self.mode_args:
+                franges = {"friction": np.linspace(0.0, 20, 10),
+                           "transfer":  np.linspace(1.0, 0.0, 10),
+                           "drift": np.linspace(-0.5, 0.5, 10)}
                 if "all" in kwargs["drive_modes"]:
-                    self.assoc_faultstates(
-                        {
-                            "friction": np.linspace(0.0, 20, 10),
-                            "transfer": np.linspace(1.0, 0.0, 10),
-                            "drift": np.linspace(-0.5, 0.5, 10),
-                        },
-                        "all",
-                        oppvect={"drive": 1.0},
-                    )
+                    self.init_n_faultstates(franges, phases=ph, n="all")
                 else:
-                    self.assoc_faultstates(
-                        {
-                            "friction": np.linspace(0.0, 20, 100),
-                            "transfer": np.linspace(1.0, 0.0, 100),
-                            "drift": np.linspace(-0.5, 0.5, 100),
-                        },
-                        1000,
-                        oppvect={"drive": 1.0},
-                    )
+                    self.init_n_faultstates(franges, phases=ph, n=1)
 
 
 class Drive(FxnBlock):
