@@ -182,6 +182,7 @@ if __name__ == "__main__":
                                                faultsamples=faultsamples,
                                                pool=mp.Pool(4))
 
+    an.plot.nominal_vals_1d(ps, ecs, 'delay')
     # an.tabulate.nested_stats(ps, ecs, average_metrics=['cost'], inputparams=['delay'])
 
     # an.tabulate.nested_factor_comparison(ps, ecs, ['delay'], 'cost',
@@ -217,8 +218,9 @@ if __name__ == "__main__":
     ps2.add_variable_replicates([[0]], replicates=100, name="nodelay")
     ps2.add_variable_replicates([[10]], replicates=100, name="delay10")
     nomhist, nomres, = propagate.parameter_sample(mdl, ps)
+    ps2.group_scens("inputparams")
 
-    # an.plot.nominal_vals_1d(ps2, nomres, 'delay')
+
 
 
     # test prob dense?

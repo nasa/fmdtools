@@ -1167,6 +1167,40 @@ class ParameterSample(BaseSample):
         """Return list of scenarios that make up the ParameterSample."""
         return [*self._scenarios]
 
+    def group_variable_scens(self, *var):
+        """
+        Groups the scenarios by input variables.
+
+        Parameters
+        ----------
+        *var : str
+            Names of variables to group by.
+
+        Returns
+        -------
+        var_scens : dict
+            Dict of scenarios grouped by input variable values
+
+        Examples
+        --------
+        >>> ex_ps = ParameterSample(expd)
+        >>> ex_ps.add_variable_ranges()
+        >>> exp_ps.group_variable_scens("y").keys()
+        dict_keys([(3.0,), (1.0,), (4.0,), (2.0,)])
+        """
+        if not var:
+            var = [*self.paramdomain.variables]
+        var_scen_combos = self.get_scen_groups("inputparams")
+        var_inds = [i for i, k in enumerate(self.paramdomain.variables) if k in var]
+        var_scens = {}
+        for combo_scen, scens in var_scen_combos.items():
+            combo_key = tuple([combo_scen[0][i] for i in var_inds])
+            if combo_key not in var_scens:
+                var_scens[combo_key] = scens
+            else:
+                var_scens[combo_key].extend(scens)
+        return var_scens
+
     def add_variable_scenario(self, *x, seed=False, sp={}, weight=1.0, name='var'):
         """
         Add a scenario to the ParamSample.
@@ -1192,7 +1226,7 @@ class ParameterSample(BaseSample):
         ParameterSample of scenarios:
          - var_0
         >>> ex_ps.scenarios()[0]
-        ParameterScenario(sequence={}, times=(), p={'z': 20, 'y': 1, 'x': 2}, r={}, sp={}, prob=1.0, inputparams=(1, 2), rangeid='', name='var_0')
+        ParameterScenario(sequence={}, times=(), p={'y': 1, 'x': 2, 'z': 20}, r={}, sp={}, prob=1.0, inputparams=(1, 2), rangeid='', name='var_0')
         """
         param_args = self.paramdomain.get_param_kwargs(*x)
         if seed:
@@ -1243,9 +1277,9 @@ class ParameterSample(BaseSample):
          - rep0_var_0
          - rep0_var_1
         >>> ex_ps.scenarios()[0]
-        ParameterScenario(sequence={}, times=(), p={'z': 20, 'y': 1, 'x': 1}, r={}, sp={}, prob=0.5, inputparams=(1, 1), rangeid='', name='rep0_var_0')
+        ParameterScenario(sequence={}, times=(), p={'y': 1, 'x': 1, 'z': 20}, r={}, sp={}, prob=0.5, inputparams=(1, 1), rangeid='', name='rep0_var_0')
         >>> ex_ps.scenarios()[1]
-        ParameterScenario(sequence={}, times=(), p={'z': 20, 'y': 2, 'x': 2}, r={}, sp={}, prob=0.5, inputparams=(2, 2), rangeid='', name='rep0_var_1')
+        ParameterScenario(sequence={}, times=(), p={'y': 2, 'x': 2, 'z': 20}, r={}, sp={}, prob=0.5, inputparams=(2, 2), rangeid='', name='rep0_var_1')
         """
         if len(x_combos) == 0:
             x_combos = [self.paramdomain.get_x_defaults()]
