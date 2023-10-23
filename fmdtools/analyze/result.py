@@ -1317,7 +1317,7 @@ class History(Result):
 
     def get_faulty_hist(self, *attrs, withtime=True, withtotal=True, operator=np.any):
         """
-        Gets the times when the attributes *attrs have faults present
+        Get the times when the attributes *attrs have faults present.
 
         Parameters
         ----------
@@ -1341,8 +1341,10 @@ class History(Result):
         for att in attrs:
             if faults_hist[att]:
                 has_faults_hist[att] = operator([*faults_hist[att].values()], 0)
-        if withtotal:
+        if withtotal and has_faults_hist:
             has_faults_hist['total'] = np.sum([*has_faults_hist.values()], axis=0)
+        elif withtotal:
+            has_faults_hist['total'] = 0 * faulthist['time']
         if withtime:
             has_faults_hist['time'] = faulthist['time']
         return has_faults_hist
