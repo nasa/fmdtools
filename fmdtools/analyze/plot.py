@@ -385,15 +385,18 @@ def multiplot_legend_title(groupmetrics, axs, ax,
         plt.suptitle(title, y=1.0+title_padding)
 
 
-def make_consolidated_legend(ax, loc='upper left'):
+def make_consolidated_legend(ax, loc='upper left', bbox_to_anchor=(1.05, 1),
+                             add_handles=[], **kwargs):
     """Creates a single legend for a given multiplot where multiple groups are
     being compared"""
     ax.legend()
     handles, labels = ax.get_legend_handles_labels()
     by_label = dict(zip(labels, handles))
     ax.get_legend().remove()
-    ax.legend(by_label.values(), by_label.keys(),
-              bbox_to_anchor=(1.05, 1), loc=loc)
+    ax.legend(by_label.values(), by_label.keys())
+    hands, labs = ax.get_legend_handles_labels()
+    ax.legend(handles=add_handles+hands,
+              bbox_to_anchor=bbox_to_anchor, loc=loc, **kwargs)
 
 
 def metric_dist(result, *plot_values, cols=2, comp_groups={},
