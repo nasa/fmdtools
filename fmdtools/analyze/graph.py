@@ -77,13 +77,15 @@ import numpy as np
 import copy
 import matplotlib.animation
 import matplotlib.pyplot as plt
+import matplotlib.lines as mlines
 from numpy.random import random
 from matplotlib.widgets import Button
 from matplotlib import get_backend
 from matplotlib.colors import Colormap
 from recordclass import dataobject, asdict
-from .result import Result, History
 from fmdtools.define.common import return_true_indicators
+from fmdtools.analyze.result import Result, History
+from fmdtools.analyze.plot import make_consolidated_legend
 
 
 plt.rcParams['pdf.fonttype'] = 42
@@ -97,11 +99,12 @@ default_edge_kwargs = {'sends': dict(edge_color='grey', style='dashed'),
 
 class EdgeStyle(dataobject):
     """Hold kwargs for nx.draw_networkx_edges to apply as a style for multiple edges."""
+
     edge_color: str = 'black'
-    style:      str = 'solid'
-    arrows:     bool = False
+    style: str = 'solid'
+    arrows: bool = False
     arrowstyle: str = '-|>'
-    arrowsize:  int = 15
+    arrowsize: int = 15
 
     def from_styles(styles, label):
         """
@@ -123,6 +126,9 @@ class EdgeStyle(dataobject):
     def kwargs(self):
         return {k: v for k, v in asdict(self).items()
                 if not (not self.arrows and k in ('arrowstyle', 'arrowsize'))}
+
+    def line_kwargs(self):
+        return {'color': self.edge_color, 'linestyle': self.style}
 
     def as_gv_kwargs(self):
         """
@@ -706,12 +712,17 @@ class Graph(object):
             if to_set in kwargs or not hasattr(self, to_set):
                 set_func = getattr(self, 'set_'+to_set)
                 set_func(**kwargs.get(to_set, {}))
-
+        # edge handles: used to fix edge legend bug in matplotlib/networkx
+        edge_handles = []
         for label, edges in self.edge_groups.items():
             legend_label = to_legend_label(label, self.edge_style_labels)
-            nx.draw_networkx_edges(self.g, self.pos, edges,
-                                   **self.edge_styles[label].kwargs(),
-                                   label=legend_label, ax=ax)
+            eds = nx.draw_networkx_edges(self.g, self.pos, edges,
+                                         **self.edge_styles[label].kwargs(),
+                                         label=legend_label, ax=ax)
+            if eds and isinstance(eds, list):
+                lin = mlines.Line2D([], [], **self.edge_styles[label].line_kwargs(),
+                                    label=legend_label)
+                edge_handles.append(lin)
 
         for level in self.edge_labels.iter_groups():
             nx.draw_networkx_edge_labels(self.g, self.pos, self.edge_labels[level],
@@ -729,10 +740,11 @@ class Graph(object):
                                     **self.node_labels[level+'_style'].kwargs(), ax=ax)
 
         if withlegend:
-            legend = plt.legend(labelspacing=legend_labelspacing,
-                                borderpad=legend_borderpad,
-                                bbox_to_anchor=legend_bbox,
-                                loc=legend_loc)
+            make_consolidated_legend(ax, labelspacing=legend_labelspacing,
+                                     borderpad=legend_borderpad,
+                                     bbox_to_anchor=legend_bbox,
+                                     loc=legend_loc,
+                                     add_handles=edge_handles)
         plt.axis('off')
 
         if title:

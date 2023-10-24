@@ -403,7 +403,6 @@ def phaseplot(phasemaps, modephases=[], mdl=[], dt=1.0, singleplot=True,
     -------
     fig/figs : Figure or list of Figures
         Matplotlib figures to edit/use.
-
     """
     if mdl:
         phasemaps["Model"] = PhaseMap(mdl.phases)
@@ -473,11 +472,16 @@ def single_phaseplot(phasemap, dt=1.0, phase_ticks='both', ax=None):
 
     times = [0]+[v[1] for k, v in phases.items()]
     if phase_ticks == 'both':
-        ax.set_xticks(list(set(list(ax.get_xticks())+times)))
+        xmin = list(ax.get_xticks())[0]
+        xmax = list(ax.get_xticks())[-1]
+        minor_ticks = [i for i in np.arange(xmin, xmax, dt)]
+        ax.set_xticks(minor_ticks, minor=True)
+        for t in times:
+            ax.axvline(x=t, color='k')
     elif phase_ticks == 'phases':
         ax.set_xticks(times)
     ax.set_xlim(times[0], times[-1])
-    plt.grid(which='both', axis='x')
+    plt.grid(which='major', axis='x')
 
 
 def samplemetric(faultsamp, endclasses, metric='cost', rad='rate', rad_scale=0.01,
