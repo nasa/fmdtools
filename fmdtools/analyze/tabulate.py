@@ -2,19 +2,22 @@
 Description: Translates simulation outputs to pandas tables for display, export, etc.
 
 Uses methods:
-    - :meth:`fmea`:           Makes a simple fmea of the endclasses of a set of fault scenarios.
-    - :meth:`result_summary_fmea`: Makes a table of endclass metrics, along with degraded functions/flows
-    - :meth:`metricovertime`: Makes a table of the total metric, rate, and expected metric of all faults over time
-    - :meth:`samptime`:       Makes a table of the times sampled for each phase given a dict (i.e. app.sampletimes)
-    - :meth:`result_summary:`        Makes a table of a summary dictionary from a given model run
-    - :meth:`nominal_stats`:  Makes a table of quantities of interest from endclasses from a nominal approach.
-    - :meth:`nested_stats`:   Makes a table of quantities of interest from endclasses from a nested approach.
-    - :meth:`nominal_factor_comparison`: Compares a metric for a given set of model parameters/factors over a set of nominal scenarios.
-    - :meth:`nested_factor_comparison`: Compares a metric for a given set of model parameters/factors over a nested set of nominal and fault scenarios.
-    - :meth:`label_faults`:Labels the faults
-    - :meth:`dicttab`:Makes table of a generic dictionary
-    - :meth:`maptab`:Makes table of a generic map
-    
+- :meth:`fmea`: Make a simple fmea of the endclasses of a set of fault scenarios.
+- :meth:`result_summary_fmea`: Make a table of endclass metrics, along with degraded
+functions/flows.
+- :meth:`metricovertime`: Make a table of the total metric, rate, and expected metric
+of all faults over time.
+- :meth:`result_summary:` Make a a table of a summary dictionary from a given model run.
+- :meth:`nominal_stats`: Makes a table of quantities of interest from endclasses from a
+nominal approach.
+- :meth:`nested_stats`: Make a table of quantities of interest from endclasses from a
+nested approach.
+- :meth:`nominal_factor_comparison`: Compare a metric for a given set of model
+parameters/factors over a set of nominal scenarios.
+- :meth:`nested_factor_comparison`: Compare a metric for a given set of model
+parameters/factors over a nested set of nominal and fault scenarios.
+- :meth:`dicttab`: Make table of a generic dictionary.
+- :meth:`maptab`: Make table of a generic map.
 """
 # File Name: analyze/tabulate.py
 # Author: Daniel Hulse
@@ -24,63 +27,157 @@ import pandas as pd
 import numpy as np
 from fmdtools.analyze.result import nan_to_x, Result, bootstrap_confidence_interval
 
-
-def label_faults(faulthist, df, fxnlab, labels):
-    if type(faulthist) == dict:
-        for fault in faulthist:
-            label = (fxnlab, fault+' fault')
-            labels+=[label]
-            df[label] = faulthist[fault]
-    elif len(faulthist) == 1:
-        label = (fxnlab, 'faults')
-        labels+=[label]
-        df[label] = faulthist
+# stable methods:
 
 
-def metricovertime(endclasses, app, metric='cost'):
+def result_summary_fmea(endresult, mdlhist, *attrs, metrics=()):
     """
-    Makes a table of the total metric, rate, and expected metric of all faults over time
+    Make full fmea table with degraded attributes noted.
 
     Parameters
     ----------
-    endclasses : dict
-        dict with rate, metric, and expected metric values for each injected scenario
-    app : sampleapproach
-        sample approach used to generate the list of scenarios
-    metric : str
-        metric from dict to tabulate over time. Default is 'cost'
+    endresult : Result
+        Result (over scenarios) to get metrics from
+    mdlhist : History
+        History (over scenarios) to get degradations/faults from
+    *attrs : strs
+        Model constructs to check if faulty/degraded.
+    metrics : tuple, optional
+        Metrics to include from endresult. The default is ().
+
     Returns
     -------
-    met_overtime : dataframe
-        pandas dataframe with the total metric, rate, and expected metric for the set of scenarios
+    pandas.DataFrame
+        Table of metrics and degraded functions/flows over scenarios
     """
-    expected_metric = "expected "+metric
-    met_overtime = {metric:{time:0.0 for time in app.times}, 'rate':{time:0.0 for time in app.times}, expected_metric:{time:0.0 for time in app.times}}
-    for scen in app.scenlist:
-        met_overtime[metric][scen.time]+=endclasses[scen.name][metric]
-        met_overtime['rate'][scen.time]+=endclasses[scen.name]['rate']
-        met_overtime[expected_metric][scen.time]+=endclasses[scen.name][expected_metric] 
-    return pd.DataFrame.from_dict(met_overtime)
+    from fmdtools.analyze.result import History
+    deg_summaries = {}
+    fault_summaries = {}
+    mdlhist = mdlhist.nest(levels=1)
+    for scen, hist in mdlhist.items():
+        hist_comp = History(faulty=hist, nominal=mdlhist.nominal)
+        hist_summary = hist_comp.get_fault_degradation_summary(*attrs)
+        deg_summaries[scen] = str(hist_summary.degraded)
+        fault_summaries[scen] = str(hist_summary.faulty)
+    degradedtable = pd.DataFrame(deg_summaries, index=['degraded'])
+    faulttable = pd.DataFrame(fault_summaries, index=['faulty'])
+    simplefmea = endresult.create_simple_fmea(*metrics)
+    fulltable = pd.concat([degradedtable, faulttable, simplefmea.transpose()])
+    return fulltable.transpose()
 
 
-def samptime(sampletimes):
-    """Makes a table of the times sampled for each phase given a dict (i.e. app.sampletimes)"""
-    table = pd.DataFrame()
-    for phase, times in sampletimes.items():
-        table[phase] = [str(list(times.keys()))]
-    return table.transpose() 
+def fmea(res, fs, metrics=[],
+         weight_metrics=[], avg_metrics=[], perc_metrics=[], mult_metrics={},
+         extra_classes={}, group_by=('function', 'fault'), sort_by=False, mdl={},
+         mode_types={}, ascending=False, empty_as=0.0):
+    """
+    Make a user-definable fmea of the endclasses of a set of fault scenarios.
+
+    Parameters
+    ----------
+    res : Result
+        Result corresponding to the the simulation runs
+    fs : sampleapproach/faultsample
+        FaultSample used for the underlying probability model of the set of scenarios.
+    metrics : list
+        generic unweighted metrics to query. metrics are summed over grouped scenarios.
+        The default is []. 'all' presents all metrics.
+    weight_metrics: list
+        weighted metrics to query. weight metrics are summed over groups.
+        The default is ['rate'].
+    avg_metrics: list
+        metrics to average and query. The default is ['cost'].
+        avg_metrics are averaged over groups, rather than a total.
+    perc_metrics : list, optional
+        metrics to treat as indicator variables to calculate a percentage.
+        perc_metrics are treated as indicator variables and averaged over groups.
+        The default is [].
+    mult_metrics : dict, optional
+        mult_metrics are new metrics calculated by multiplying existing metrics.
+        (e.g., to calculate expectations or risk values like an expected cost or RPN)
+        The default is {"expected cost":['rate', 'cost']}.
+    extra_classes : dict, optional
+        An additional set of endclasses to include in the table.
+        The default is {}.
+    group_by : tuple, optional
+        Way of grouping fmea rows by scenario fields.
+        The default is ('function', 'fault').
+    mode_types : set
+        Mode types to group by in 'mode type' option
+    mdl : Model
+        Model for use in 'fxnclassfault' and 'fxnclass' options
+    sort_by : str, optional
+        Column value to sort the table by. The default is "expected cost".
+    ascending : bool, optional
+        Whether to sort in ascending order. The default is False.
+    empty_as : float/'nan'
+        How to calculate stats of empty variables (for avg_metrics). Default is 0.0.
+
+    Returns
+    -------
+    fmea_table : DataFrame
+        pandas table with given metrics grouped as
+    """
+    grouped_scens = fs.get_scen_groups(*group_by)
+
+    if type(metrics) == str:
+        metrics = [metrics]
+    if type(weight_metrics) == str:
+        weight_metrics = [weight_metrics]
+    if type(perc_metrics) == str:
+        perc_metrics = [perc_metrics]
+    if type(avg_metrics) == str:
+        avg_metrics = [avg_metrics]
+
+    if not metrics and not weight_metrics and not perc_metrics and not avg_metrics and not mult_metrics:
+        # default fmea is a cost-based table
+        weight_metrics = ["rate"]
+        avg_metrics = ["cost"]
+        mult_metrics = {"expected cost": ['rate', 'cost']}
+
+    res.update(extra_classes)
+
+    allmetrics = metrics+weight_metrics+avg_metrics+perc_metrics+[*mult_metrics.keys()]
+
+    if not sort_by:
+        if "expected cost" in mult_metrics:
+            sort_by = "expected_cost"
+        else:
+            sort_by = allmetrics[-1]
+
+    fmeadict = {g: dict.fromkeys(allmetrics) for g in grouped_scens}
+    for group, ids in grouped_scens.items():
+        sub_result = Result({scenid: res.get(scenid) for scenid in ids})
+        for metric in metrics + weight_metrics:
+            fmeadict[group][metric] = sum([res.get(scenid).get('endclass.'+metric)
+                                           for scenid in ids])
+        for metric in perc_metrics:
+            fmeadict[group][metric] = sub_result.percent(metric)
+        for metric in avg_metrics:
+            fmeadict[group][metric] = sub_result.average(metric, empty_as=empty_as)
+        for metric, to_mult in mult_metrics.items():
+            fmeadict[group][metric] = sum([np.prod([res.get(scenid).get('endclass.'+m)
+                                                    for m in to_mult])
+                                           for scenid in ids])
+
+    table = pd.DataFrame(fmeadict)
+    table = table.transpose()
+    if sort_by not in allmetrics:
+        sort_by = allmetrics[0]
+    table = table.sort_values(sort_by, ascending=ascending)
+    return table
 
 
 def result_summary(endresult, mdlhist, *attrs):
     """
-    Makes a table of results (degraded functions/flows, classification) of a single run
+    Make a table of results (degraded functions/flows, classification) of a single run.
 
     Parameters
     ----------
     endresult : Result
         Result with end-state classification
     mdlhist : History
-        History 
+        History of model states
     *attrs : str
         Names of attributes to check in the history for degradation/faulty.
 
@@ -99,14 +196,45 @@ def result_summary(endresult, mdlhist, *attrs):
 
 
 def dicttab(dictionary):
-    """Makes table of a generic dictionary"""
+    """Make table of a generic dictionary."""
     return pd.DataFrame(dictionary, index=[0])
 
 
 def maptab(mapping):
-    """Makes table of a generic map"""
+    """Make table of a generic map."""
     table = pd.DataFrame(mapping)
     return table.transpose()
+
+
+# to refactor:
+
+def metricovertime(endclasses, app, metric='cost'):
+    """
+    Make a table of the total metric, rate, and expected metric of all faults over time.
+
+    Parameters
+    ----------
+    endclasses : dict
+        dict with rate, metric, and expected metric values for each injected scenario
+    app : sampleapproach
+        sample approach used to generate the list of scenarios
+    metric : str
+        metric from dict to tabulate over time. Default is 'cost'
+    Returns
+    -------
+    met_overtime : dataframe
+        pandas dataframe with the total metric, rate, and expected metric for the set of
+        scenarios
+    """
+    expected_metric = "expected "+metric
+    met_overtime = {metric: {time: 0.0 for time in app.times},
+                    'rate': {time: 0.0 for time in app.times},
+                    expected_metric: {time: 0.0 for time in app.times}}
+    for scen in app.scenlist:
+        met_overtime[metric][scen.time] += endclasses[scen.name][metric]
+        met_overtime['rate'][scen.time] += endclasses[scen.name]['rate']
+        met_overtime[expected_metric][scen.time] += endclasses[scen.name][expected_metric]
+    return pd.DataFrame.from_dict(met_overtime)
 
 
 def nominal_stats(nomapp, nomapp_endclasses, metrics='all', inputparams='from_range', scenarios='all'):
@@ -431,137 +559,5 @@ def nested_stats(nomapp, nested_endclasses, percent_metrics=[], rate_metrics=[],
     table = pd.DataFrame(table_values, columns=[*nested_endclasses], index=table_rows)
     return table
 
-##FMEA-like tables
-def result_summary_fmea(endresult, mdlhist, *attrs, metrics=()):
-    """
-    Makes full fmea table (degraded functions/flows, all metrics in endclasses) 
-    of scenarios given endclasses dict and summaries dict (degraded functions, degraded flows)
+# FMEA-like tables
 
-    Parameters
-    ----------
-    endresult : Result
-        Result (over scenarios) to get metrics from
-    mdlhist : History
-        History (over scenarios) to get degradations/faults from
-    *attrs : strs
-        Model constructs to check if faulty/degraded.
-    metrics : tuple, optional
-        Metrics to include from endresult. The default is ().
-
-    Returns
-    -------
-    pandas.DataFrame
-        Table of metrics and degraded functions/flows over scenarios
-    """
-    from fmdtools.analyze.result import History
-    deg_summaries={}; fault_summaries={}
-    mdlhist = mdlhist.nest(levels=1)
-    for scen, hist in mdlhist.items():
-        hist_comp = History(faulty=hist, nominal=mdlhist.nominal)
-        hist_summary = hist_comp.get_fault_degradation_summary(*attrs)
-        deg_summaries[scen] = str(hist_summary.degraded)
-        fault_summaries[scen] = str(hist_summary.faulty)
-    degradedtable = pd.DataFrame(deg_summaries, index=['degraded'])
-    faulttable = pd.DataFrame(fault_summaries, index=['faulty'])
-    simplefmea=endresult.create_simple_fmea(*metrics)
-    fulltable = pd.concat([degradedtable, faulttable, simplefmea.transpose()])
-    return fulltable.transpose()
-
-
-def fmea(endclasses, app, metrics=[],
-         weight_metrics=[], avg_metrics=[], perc_metrics=[], mult_metrics={},
-         extra_classes={}, group_by=('function', 'fault'), sort_by=False, mdl={},
-         mode_types={}, ascending=False, empty_as=0.0):
-    """
-    Make a user-definable fmea of the endclasses of a set of fault scenarios.
-
-    Parameters
-    ----------
-    endclasses : dict
-        dict of endclasses of the simulation runs
-    app : sampleapproach/faultsample
-        sample approach used for the underlying probability model of the set of scenarios run
-    metrics : list
-        generic unweighted metrics to query. The default is []. 'all' presents all metrics.
-        metrics are summed over grouped scenarios.
-    weight_metrics: list
-        weighted metrics to query. The default is ['rate']. 
-        weight metrics are summed over groups. 
-    avg_metrics: list
-        metrics to average and query. The default is ['cost']. 
-        avg_metrics are averaged over groups, rather than a total.
-    perc_metrics : list, optional
-        metrics to treat as indicator variables to calculate a percentage. The default is [].
-        perc_metrics are treated as indicator variables and averaged over groups.
-    mult_metrics : dict, optional
-        mult_metrics are new metrics calculated by multiplying existing metrics 
-        (e.g., to calculate expectations or risk values like an expected cost or RPN)
-        The default is {"expected cost":['rate', 'cost']}.
-    extra_classes : dict, optional
-        An additional set of endclasses to include in the table (e.g., summaries from process.hists). 
-        The default is {}.
-    group_by : tuple, optional
-        Way of grouping fmea rows by scenario fields.
-        The default is ('function', 'fault').
-    mode_types : set
-        Mode types to group by in 'mode type' option
-    mdl : Model
-        Model for use in 'fxnclassfault' and 'fxnclass' options
-    sort_by : str, optional
-        Column value to sort the table by. The default is "expected cost".
-    ascending : bool, optional
-        Whether to sort in ascending order. The default is False.
-    empty_as : float/'nan'
-        How to calculate stats of empty variables (for avg_metrics). Default is 0.0.
-
-    Returns
-    -------
-    fmea_table : DataFrame
-        pandas table with given metrics grouped as
-    """
-    grouped_scens = app.get_scen_groups(*group_by)
-
-    if type(metrics) == str:
-        metrics = [metrics]
-    if type(weight_metrics) == str:
-        weight_metrics = [weight_metrics]
-    if type(perc_metrics) == str:
-        perc_metrics = [perc_metrics]
-    if type(avg_metrics) == str:
-        avg_metrics = [avg_metrics]
-
-    if not metrics and not weight_metrics and not perc_metrics and not avg_metrics and not mult_metrics:
-        # default fmea is a cost-based table
-        weight_metrics = ["rate"]
-        avg_metrics = ["cost"]
-        mult_metrics = {"expected cost": ['rate', 'cost']}
-
-    endclasses.update(extra_classes)
-
-    allmetrics = metrics+weight_metrics+avg_metrics+perc_metrics+[*mult_metrics.keys()]
-
-    if not sort_by:
-        if "expected cost" in mult_metrics:
-            sort_by = "expected_cost"
-        else:
-            sort_by = allmetrics[-1]
-
-    fmeadict = {g: dict.fromkeys(allmetrics) for g in grouped_scens}
-    for group, ids in grouped_scens.items():
-        sub_result = Result({scenid: endclasses.get(scenid) for scenid in ids})
-        for metric in metrics + weight_metrics:
-            fmeadict[group][metric] = sum([endclasses.get(scenid).get('endclass.'+metric) for scenid in ids])
-        for metric in perc_metrics:
-            fmeadict[group][metric] = sub_result.percent(metric)
-        for metric in avg_metrics:    
-            fmeadict[group][metric] = sub_result.average(metric, empty_as=empty_as)
-        for metric, to_mult in mult_metrics.items():
-            fmeadict[group][metric] = sum([np.prod([endclasses.get(scenid).get('endclass.'+m) 
-                                                    for m in to_mult]) for scenid in ids])
-
-    table = pd.DataFrame(fmeadict)
-    table = table.transpose()
-    if sort_by not in allmetrics:
-        sort_by = allmetrics[0]
-    table = table.sort_values(sort_by, ascending=ascending)
-    return table
