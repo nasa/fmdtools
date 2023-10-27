@@ -878,6 +878,73 @@ def dyn_order(mdl, rotateticks=False, title="Dynamic Run Order"):
     return fig, ax
 
 
+def multibar_helper(ax, bar_index, maxy):
+    """Shared plotting helper for nested_factor_comparison and
+    nominal_factor_comparison. Adds seperators to table groups (if any), limits the
+    bounds of the plot, adds a grid, etc."""
+    ax.set_ylim(top=maxy)
+    plt.grid(axis='y')
+    if 'MultiIndex' in str(type(bar_index)):
+        if bar_index[0][1] == '':
+            bar_index = [ind[0] for ind in bar_index][0:-1:3]  # catches error bars
+        if len(bar_index[0]) > 2:  # color top-level categories
+            first_inds = [i[0] for i in bar_index]
+            reverse_inds = [i[0] for i in bar_index]
+            reverse_inds.reverse()
+            first_vals = set(first_inds)
+            first_areas = {i: [first_inds.index(i), len(
+                reverse_inds)-reverse_inds.index(i)] for i in first_vals}
+            for i, area in enumerate(first_areas.values()):
+                if i % 2:
+                    ax.axvspan(area[0]-0.5, area[1]-0.5, color="ivory", zorder=-2)
+        if len(bar_index[0]) > 1:  # put lines between mid-level categories
+            second_inds = {i[0:len(bar_index[0])-1]: pos for pos,
+                           i in enumerate(bar_index)}
+            second_inds = [*second_inds.values()]
+            for i in second_inds[:-1]:
+                ax.axvline(i+0.5, color='black')
+    ax.set_xlim(-0.5, len(bar_index)-0.5)
+
+
+def suite_for_plots(testclass, plottests=False):
+    """
+    Enables qualitative testing suite with or without plots in unittest. Plot tests
+    should have "plot" in the title of their method, this enables this function to
+    filter them out (or include them).
+
+    Parameters
+    ----------
+    testclass : unittest.TestCase
+        Test-case to create the suite for.
+    plottests : bool/list, optional
+        Whether to show the plot tests (True) or the non-plot tests (False). If a
+        list is provided, only tests provided in the list will be run.
+
+    Returns
+    -------
+    suite : unittest.TestSuite
+        Test Suite to run with unittest.TextTestRunner() using runner.run
+        (e.g., runner = unittest.TextTestRunner();
+        runner.run(suite_for_plots(UnitTests, plottests=False)))
+    """
+    import unittest
+    suite = unittest.TestSuite()
+    if not plottests:
+        tests = [func for func in dir(testclass)
+                 if (func.startswith("test") and not ('plot' in func))]
+    elif type(plottests) == list:
+        tests = [func for func in dir(testclass)
+                 if (func.startswith("test") and func in plottests)]
+    else:
+        tests = [func for func in dir(testclass)
+                 if (func.startswith("test") and 'plot' in func)]
+    for test in tests:
+        suite.addTest(testclass(test))
+    return suite
+
+
+# to refactor: 
+
 def nominal_factor_comparison(comparison_table, metric, ylabel='proportion',
                               figsize=(6, 4), title='', maxy='max', xlabel=True,
                               error_bars=False):
@@ -1088,67 +1155,3 @@ def nested_factor_comparison(comparison_table, faults='all', rows=1, stat='propo
         figure.suptitle(title)
     return figure
 
-
-def multibar_helper(ax, bar_index, maxy):
-    """Shared plotting helper for nested_factor_comparison and
-    nominal_factor_comparison. Adds seperators to table groups (if any), limits the
-    bounds of the plot, adds a grid, etc."""
-    ax.set_ylim(top=maxy)
-    plt.grid(axis='y')
-    if 'MultiIndex' in str(type(bar_index)):
-        if bar_index[0][1] == '':
-            bar_index = [ind[0] for ind in bar_index][0:-1:3]  # catches error bars
-        if len(bar_index[0]) > 2:  # color top-level categories
-            first_inds = [i[0] for i in bar_index]
-            reverse_inds = [i[0] for i in bar_index]
-            reverse_inds.reverse()
-            first_vals = set(first_inds)
-            first_areas = {i: [first_inds.index(i), len(
-                reverse_inds)-reverse_inds.index(i)] for i in first_vals}
-            for i, area in enumerate(first_areas.values()):
-                if i % 2:
-                    ax.axvspan(area[0]-0.5, area[1]-0.5, color="ivory", zorder=-2)
-        if len(bar_index[0]) > 1:  # put lines between mid-level categories
-            second_inds = {i[0:len(bar_index[0])-1]: pos for pos,
-                           i in enumerate(bar_index)}
-            second_inds = [*second_inds.values()]
-            for i in second_inds[:-1]:
-                ax.axvline(i+0.5, color='black')
-    ax.set_xlim(-0.5, len(bar_index)-0.5)
-
-
-def suite_for_plots(testclass, plottests=False):
-    """
-    Enables qualitative testing suite with or without plots in unittest. Plot tests
-    should have "plot" in the title of their method, this enables this function to
-    filter them out (or include them).
-
-    Parameters
-    ----------
-    testclass : unittest.TestCase
-        Test-case to create the suite for.
-    plottests : bool/list, optional
-        Whether to show the plot tests (True) or the non-plot tests (False). If a
-        list is provided, only tests provided in the list will be run.
-
-    Returns
-    -------
-    suite : unittest.TestSuite
-        Test Suite to run with unittest.TextTestRunner() using runner.run
-        (e.g., runner = unittest.TextTestRunner();
-        runner.run(suite_for_plots(UnitTests, plottests=False)))
-    """
-    import unittest
-    suite = unittest.TestSuite()
-    if not plottests:
-        tests = [func for func in dir(testclass)
-                 if (func.startswith("test") and not ('plot' in func))]
-    elif type(plottests) == list:
-        tests = [func for func in dir(testclass)
-                 if (func.startswith("test") and func in plottests)]
-    else:
-        tests = [func for func in dir(testclass)
-                 if (func.startswith("test") and 'plot' in func)]
-    for test in tests:
-        suite.addTest(testclass(test))
-    return suite
