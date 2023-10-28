@@ -14,8 +14,6 @@ And functions:
   over time with rates
 - :func:`samplemetrics`: plots a metric for a set of faults sampled by a SampleApproach
   over time with rates on separate plots
-- :func:`metricovertime`: plots the total metric/explected metric of a set of faults
-  sampled by a SampleApproach over time
 - :func:`find_overlap_n`: Find overlap between given intervals.
 - :func:`gen_interval_times`: Creates times in a given interval.
 """
@@ -25,7 +23,6 @@ import matplotlib.pyplot as plt
 import itertools
 from matplotlib.collections import PolyCollection
 import matplotlib.colors as mcolors
-from fmdtools.analyze.tabulate import metricovertime as metric_table
 from ordered_set import OrderedSet
 
 plt.rcParams['pdf.fonttype'] = 42
@@ -589,35 +586,6 @@ def samplemetrics(app, endclasses, **kwargs):
         figs[faultsampname] = samplemetric(faultsamp, endclasses,
                                            title=faultsampname, **kwargs)
     return figs
-
-
-def metricovertime(endclasses, app, metric='cost', metrictype='expected cost'):
-    """
-    Plot the total cost or total expected cost of faults over time.
-
-    Parameters
-    ----------
-    endclasses : Result
-        Result with metrics for each injected scenario over the approach app
-        (e.g. from run_approach())
-    app : sampleapproach
-        sample approach used to generate the list of scenarios
-    metric : str
-        metric to plot over time. Default is 'cost'
-    metrictype : str, optional
-        type of metric to plot (e.g, 'cost', 'expected cost' or 'rate').
-        The default is 'expected cost'.
-    Returns
-    -------
-    figure: matplotlib figure
-    """
-    costovertime = metric_table(endclasses, app, metric=metric)
-    plt.plot(list(costovertime.index), costovertime[metrictype])
-    plt.title('Total '+metrictype+' of all faults over time.')
-    plt.ylabel(metrictype)
-    plt.xlabel("Time ("+str(app.units)+")")
-    plt.grid()
-    return plt.gcf()
 
 
 def get_joint_phase(**phases):

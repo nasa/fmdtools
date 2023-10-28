@@ -721,6 +721,83 @@ class Result(UserDict):
                                        axis=0, weights=weights)
         return expres
 
+    def get_metric(self, value, metric=np.mean, args=(), axis=None):
+        """
+        Calculate a statistic of the value using a provided metric function.
+
+        Parameters
+        ----------
+        value : str
+            Value of the history to calculate the statistic over
+        metric : func/'str', optional
+            Function to process the history (e.g. np.mean, np.min...).
+            The default is np.mean.
+            May alternatively provide name of Result method (e.g., 'expected', 'rate')
+        args : args
+            Arguments for the metric function. Default is ().
+        axis : None or 0 or 1
+            Whether to take the metric over variables (0) or over time (1) or
+            both (None). The default is None.
+        """
+        if type(metric) == str:
+            method = getattr(self, metric)
+            return method("."+value, *args)
+        else:
+            vals = self.get_values(value)
+            return metric([*vals.values()], *args, axis=axis)
+
+    def get_metric_ci(self, value, metric=np.mean, **kwargs):
+        """
+        Get the confidence interval for the given value over the set of scenarios.
+
+        Parameters
+        ----------
+        value : str
+            Value of the history to calculate the statistic over
+        metric : func, optional
+            Function to process the history (e.g. np.mean, np.min...).
+            The default is np.mean.
+        **kwargs : kwargs
+            kwargs to bootstrap_confidence_interval.
+
+        Returns
+        -------
+        statistic: number
+            nominal statistic for the given metric.
+        lower bound : number
+            lower bound of the statistic in the ci.
+        upper bound : number
+            upper bound of the statistic in the ci.
+        """
+        vals = self.get_values(value)
+        ci = bootstrap_confidence_interval([*vals.values()], method=metric, **kwargs)
+        return ci
+
+    def get_metrics(self, *values, metric=np.mean, args=(), axis=None):
+        """
+        Calculate a statistic of the values using a provided metric function.
+
+        Parameters
+        ----------
+        *values : strs
+            Values of the history to calculate the statistic over
+            (if none provided, creates metric of all)
+        metric : func, optional
+            Function to process the history (e.g. np.mean, np.min...).
+            The default is np.mean.
+        args : args, optional
+            Arguments for the metric function. Default is ().
+        axis : None or 0 or 1
+            Whether to take the metric over variables (0) or over time (1)
+            or both (None). The default is None.
+        """
+        if not values:
+            values = self.keys()
+        metrics = Result()
+        for value in values:
+            metrics[value] = self.get_metric(value, metric=metric, args=args, axis=axis)
+        return metrics
+
     def total(self, metric):
         """
         Tabulates the total (non-weighted sum) of a metric over a number of runs.
@@ -1395,51 +1472,6 @@ class History(Result):
         deg_hist = self.get_degraded_hist(*attrs, withtotal=False, withtime=False)
         degraded = [k for k, v in deg_hist.items() if not np.all(v)]
         return Result(faulty=faulty, degraded=degraded)
-
-    def get_metric(self, value, metric=np.mean, args=(), axis=None):
-        """
-        Calculates a statistic of the value using a provided metric function.
-
-        Parameters
-        ----------
-        value : str
-            Value of the history to calculate the statistic over
-        metric : func, optional
-            Function to process the history (e.g. np.mean, np.min...).
-            The default is np.mean.
-        args : args
-            Arguments for the metric function. Default is ().
-        axis : None or 0 or 1
-            Whether to take the metric over variables (0) or over time (1) or
-            both (None). The default is None.
-        """
-        vals = self.get_values(value)
-        return metric([*vals.values()], *args, axis=axis)
-
-    def get_metrics(self, *values, metric=np.mean, args=(), axis=None):
-        """
-        Calculates a statistic of the values using a provided metric function.
-
-        Parameters
-        ----------
-        *values : strs
-            Values of the history to calculate the statistic over
-            (if none provided, creates metric of all)
-        metric : func, optional
-            Function to process the history (e.g. np.mean, np.min...).
-            The default is np.mean.
-        args : args, optional
-            Arguments for the metric function. Default is ().
-        axis : None or 0 or 1
-            Whether to take the metric over variables (0) or over time (1)
-            or both (None). The default is None.
-        """
-        if not values:
-            values = self.keys()
-        metrics = Result()
-        for value in values:
-            metrics[value] = self.get_metric(value, metric=metric, args=args, axis=axis)
-        return metrics
 
 
 def load(filename, filetype="", renest_dict=True, indiv=False, Rclass=History):

@@ -206,358 +206,58 @@ def maptab(mapping):
     return table.transpose()
 
 
-# to refactor:
-
-def metricovertime(endclasses, app, metric='cost'):
+def factor_metrics(res, samp, metrics=['cost'], factors=["time"],
+                   default_stat="expected", stats={}, ci_metrics=[], ci_kwargs={}):
     """
-    Make a table of the total metric, rate, and expected metric of all faults over time.
+    Make a table of the statistic for given metrics over given factors.
 
     Parameters
     ----------
-    endclasses : dict
-        dict with rate, metric, and expected metric values for each injected scenario
-    app : sampleapproach
-        sample approach used to generate the list of scenarios
-    metric : str
-        metric from dict to tabulate over time. Default is 'cost'
+    res : Result
+        Result with the given metrics over a number of scenarios.
+    samp : BaseSample
+        Sample object used to generate the scenarios
+    metrics : list
+        metrics in res to tabulate over time. Default is ['cost'].
+    factors : list
+        Factors (Scenario properties e.g., 'name', 'time', 'var') in samp to take the
+        statistic over. Default is ['time']
+    default_stat : str
+        statistic to take for given metrics my default.
+        (e.g., 'average', 'percent'... see Result methods). Default is 'expected'.
+    stats : dict
+        Non-default statistics to take for each individual metric.
+        e.g. {'cost': 'average'}. Default is {}
+    ci_metrics : list
+        Metrics to calculate a confidence interval for (using bootstrap_ci).
+        Default is [].
+    ci_kwargs : dict
+        kwargs to bootstrap_ci
+
     Returns
     -------
-    met_overtime : dataframe
-        pandas dataframe with the total metric, rate, and expected metric for the set of
-        scenarios
+    met_table : dataframe
+        pandas dataframe with the statistic of the metric over the corresponding
+        set of scenarios for the given factor level.
     """
-    expected_metric = "expected "+metric
-    met_overtime = {metric: {time: 0.0 for time in app.times},
-                    'rate': {time: 0.0 for time in app.times},
-                    expected_metric: {time: 0.0 for time in app.times}}
-    for scen in app.scenlist:
-        met_overtime[metric][scen.time] += endclasses[scen.name][metric]
-        met_overtime['rate'][scen.time] += endclasses[scen.name]['rate']
-        met_overtime[expected_metric][scen.time] += endclasses[scen.name][expected_metric]
-    return pd.DataFrame.from_dict(met_overtime)
+    scen_groups = samp.get_scen_groups(*factors)
+    met_dict = {met: {} for met in metrics}
+    met_dict.update({met+"_lb": {} for met in ci_metrics})
+    met_dict.update({met+"_ub": {} for met in ci_metrics})
 
-
-def nominal_stats(nomapp, nomapp_endclasses, metrics='all', inputparams='from_range', scenarios='all'):
-    """
-    Makes a table of quantities of interest from endclasses.
-
-    Parameters
-    ----------
-    nomapp : NominalApproach
-        NominalApproach used to generate the simulation.
-    nomapp_endclasses: dict
-        End-state classifcations for the set of simulations from propagate.nominalapproach()
-    metrics : 'all'/list, optional
-        Metrics to show on the plot. The default is 'all'.
-    inputparams : 'from_range'/'all',list, optional
-        Parameters to show on the plot. The default is 'from_range'.
-    scenarios : 'all','range'/list, optional
-        Scenarios to include in the plot. 'range' is a given range_id in the nominalapproach.
-    Returns
-    -------
-    table : pandas DataFrame
-        Table with the metrics of interest layed out over the input parameters for the set of scenarios in endclasses
-    """
-    if metrics == 'all':
-        metrics = [*nomapp_endclasses[[*nomapp_endclasses][0]]]
-    if scenarios == 'all':
-        scens = [*nomapp_endclasses]
-    elif type(scenarios) == str:
-        scens = nomapp.ranges[scenarios]['scenarios']
-    elif not type(scenarios) == list:
-        raise Exception("Invalid option for scenarios. Provide 'all'/'rangeid' or list")
-    else:
-        scens = scenarios
-    if inputparams == 'from_range':
-        ranges = [*nomapp.ranges]
-        if not(scenarios == 'all') and not(type(scenarios) == list):
-            app_range = scenarios
-        elif len(ranges) == 1:
-            app_range = ranges[0]
-        else:
-            raise Exception("Multiple approach ranges "+str(ranges)+" in approach. Use inputparams=`all` or inputparams=[param1, param2,...]")
-        inputparams = [*nomapp.ranges[app_range]['inputranges']]
-    elif inputparams == 'all':
-        inputparams = [*nomapp.scenarios.values()][0].inputparams
-    elif inputparams == 'none':
-        inputparams = []
-    table_values = []
-    for inputparam in inputparams:
-        table_values.append([nomapp.scenarios[e].inputparams[inputparam] for e in scens])
-    for metric in metrics:
-        table_values.append([nomapp_endclasses[e][metric] for e in scens])
-    table = pd.DataFrame(table_values, columns=[*nomapp_endclasses], index=inputparams+metrics)
-    return table
-
-
-def nominal_factor_comparison(nomapp, endclasses, params, metrics='all', rangeid='default', nan_as=np.nan, percent=True,  give_ci=False, **kwargs):
-    """
-    Compares a metric for a given set of model parameters/factors over set of nominal scenarios.
-
-    Parameters
-    ----------
-    nomapp : NominalApproach
-        Nominal Approach used to generate the simulations
-    endclasses : dict
-        dict of endclasses from propagate.nominal_approach or nested_approach with structure: 
-            {scen_x:{metric1:x, metric2:x...}} or {scen_x:{fault:{metric1:x, metric2:x...}}} 
-    params : list/str
-        List of parameters (or parameter) to use for the factor levels in the comparison
-    metrics : 'all'/list, optional
-        Metrics to show in the table. The default is 'all'.
-    rangeid : str, optional
-        Nominal Approach range to use for the test, if run over a single range.
-        The default is 'default', which either:
-            - picks the only range (if there is only one), or
-            - compares between ranges (if more than one)
-    nan_as : float, optional
-        Number to parse NaNs as (if present). The default is np.nan.
-    percent : bool, optional
-        Whether to compare metrics as bools (True - results in a comparison of percentages of indicator variables) 
-        or as averages (False - results in a comparison of average values of real valued variables). The default is True.
-    give_ci = bool:
-        gives the bootstrap confidence interval for the given statistic using the given kwargs
-        'combined' combines the values as a strings in the table (for display)
-    give_ci : bool
-        ....
-    kwargs : keyword arguments for bootstrap_confidence_interval (sample_size, num_samples, interval, seed)
-    Returns
-    -------
-    table : pandas table
-        Table with the metric statistic (percent or average) over the nominal scenario and each listed function/mode (as differences or averages)
-    """
-    if rangeid == 'default':
-        if len(nomapp.ranges.keys()) == 1:
-            rangeid = [*nomapp.ranges.keys()][0]
-            factors = nomapp.get_param_scens(rangeid, *params)
-        else:
-            factors = {rangeid:nomapp.ranges[rangeid]['scenarios'] for rangeid in nomapp.ranges}
-    else:
-        factors = nomapp.get_param_scens(rangeid, *params)
-    if [*endclasses.values()][0].get('nominal', False):
-        endclasses = {scen:ec['nominal'] for scen, ec in endclasses.items()}
-    if metrics == 'all':
-        metrics = [ec for ec, val in [*endclasses.values()][0].items() if type(val) in [float, int]]
-    
-    if type(params) == str:
-        params = [params]
-    full_stats = []
-    for metric in metrics:
-        factor_stats = []
-        for factor, scens in factors.items():
-            endclass_fact = {scen:endclass for scen, endclass in endclasses.items() if scen in scens}
-
-            if not percent:
-                nominal_metrics = [nan_to_x(scen[metric], nan_as) for scen in endclass_fact.values()]
+    for fact_tup, scens in scen_groups.items():
+        sub_res = res.get_scens(*scens)
+        for met in metrics+ci_metrics:
+            if met in stats:
+                stat = stats[met]
             else:
-                nominal_metrics = [np.sign(float(nan_to_x(scen[metric], nan_as))) for scen in endclass_fact.values()]
-            factor_stats = factor_stats + [sum(nominal_metrics)/len(nominal_metrics)]
-            if give_ci: 
-                factor_boot, factor_lb, factor_ub = bootstrap_confidence_interval(nominal_metrics, **kwargs)
-                factor_stats = factor_stats + [factor_lb, factor_ub]
-        full_stats.append(factor_stats)
-    if give_ci == 'combined':
-        full_stats = [[str(round(v, 3))+' ('+str(round(f[i+1], 3))+','+str(round(f[i+2], 3))+')' for i, v in enumerate(f) if not i%3] for f in full_stats]
-    if not give_ci:
-        table = pd.DataFrame(full_stats, columns=factors, index=metrics)
-        table.columns.name = tuple(params)
-    else:           
-        columns = [(f, stat) for f in factors for stat in ["", "LB", "UB"]]
-        table = pd.DataFrame(full_stats, columns=columns, index=metrics)
-        table.columns = pd.MultiIndex.from_tuples(table.columns, names=['metric', ''])
-        table.columns.name = tuple(params)
-    return table
+                stat = default_stat
+            if met in ci_metrics:
+                mv, lb, ub = sub_res.get_metric_ci(met, metric=stat, **ci_kwargs)
+                met_dict[met][fact_tup] = mv
+                met_dict[met+"_lb"][fact_tup] = lb
+                met_dict[met+"_ub"][fact_tup] = ub
+            else:
+                met_dict[met][fact_tup] = sub_res.get_metric(met, metric=stat)
 
-
-def nested_factor_comparison(nomapp, nested_endclasses, params, value, faults='functions', rangeid='default', nan_as=np.nan, percent=True, difference=True, give_ci=False, **kwargs):
-    """
-    Compares a metric for a given set of model parameters/factors over a nested set of nominal and fault scenarios.
-
-    Parameters
-    ----------
-    nomapp : NominalApproach
-        Nominal Approach used to generate the simulations
-    nested_endclasses : dict
-        dict of endclasses from propagate.nested_approach with structure: {scen_x:{fault:{metric1:x, metric2:x...}}}
-    params : list/str
-        List of parameters (or parameter) to use for the factor levels in the comparison
-    value : string
-        metric of the endclass (returned by mdl.find_classification) to use for the comparison.
-    faults : str/list, optional
-        Set of faults to run the comparison over
-            --'modes' (all fault modes),
-            --'functions' (modes for each function are grouped)
-            --'mode type' (modes with the same name are grouped)
-            -- or a set of specific modes/functions. The default is 'functions'.
-            -- or a tuple of form (group_by, apps, *arg), where
-                - group_by is an argument to SampleApproach.get_scenid_groups
-                - apps is a dictionary of approaches corresponding to the endclasses (from prop.nested_approach)
-                - arg is:
-                    - when using 'fxnclassfault' and 'fxnclass' options: a model
-                    - when using 'modetype' options: a dictionary grouping modes by type
-    rangeid : str, optional
-        Nominal Approach range to use for the test, if run over a single range.
-        The default is 'default', which either:
-            - picks the only range (if there is only one), or
-            - compares between ranges (if more than one)
-    nan_as : float, optional
-        Number to parse NaNs as (if present). The default is np.nan.
-    percent : bool, optional
-        Whether to compare metrics as bools (True - results in a comparison of percentages of indicator variables) 
-        or as averages (False - results in a comparison of average values of real valued variables). The default is True.
-    difference : bool, optional
-        Whether to tabulate the difference of the metric from the nominal over each scenario (True),
-        or the value of the metric over all (False). The default is True.
-    give_ci = bool:
-        gives the bootstrap confidence interval for the given statistic using the given kwargs
-        'combined' combines the values as a strings in the table (for display)
-    kwargs : keyword arguments for bootstrap_confidence_interval (sample_size, num_samples, interval, seed)
-    Returns
-    -------
-    table : pandas table
-        Table with the metric statistic (percent or average) over the nominal scenario and each listed function/mode (as differences or averages)
-    """
-    nested_endclasses=nested_endclasses.nest()
-    if rangeid == 'default':
-        if len(nomapp.ranges.keys()) == 1:
-            rangeid = [*nomapp.ranges.keys()][0]
-            factors = nomapp.get_param_scens(rangeid, *params)
-        else:
-            factors = {rangeid:nomapp.ranges[rangeid]['scenarios'] for rangeid in nomapp.ranges}
-    else:
-        factors = nomapp.get_param_scens(rangeid, *params)
-    if faults == 'functions':
-        faultlist = set(["_".join(e.split("_")[:-2]) for scen in nested_endclasses.nest() 
-                         for e in nested_endclasses.get(scen).nest()])
-    elif faults == 'modes':
-        faultlist = set(["_".join(e.split("_")[:-1]) for scen in nested_endclasses.nest()
-                         for e in nested_endclasses.get(scen).nest()])
-    elif faults == 'mode type':
-        faultlist = set(["_".join(e.split("_")[-1]) for scen in nested_endclasses.nest()
-                         for e in nested_endclasses.get(scen).nest()])
-    elif type(faults) == str:
-        raise Exception("Invalid faults option: "+faults)
-    elif type(faults) == list:
-        faultlist = set(faults)
-    elif type(faults) == tuple:
-        group_by=faults[0]; apps=faults[1]; group_dict={}
-        if group_by in ['fxnclassfault','fxnclass']: 
-            mdl = faults[2]
-            group_dict = {cl:mdl.fxns_of_class(cl) for cl in mdl.fxnclasses()}
-        elif group_by == 'modetype':
-            group_dict=faults[2]
-        fault_scen_groups = {factor:{scen:apps[scen].get_scenid_groups(group_by, group_dict) for scen in scens} for factor, scens in factors.items()}
-        faultlist = {fsname:set() for dicts in fault_scen_groups.values() for group in dicts.values() for fsname in group}
-    else:
-        faultlist = faults
-    if type(faults) == tuple:
-        faultlist.pop('nominal', 'nothing')
-    else:
-        faultlist.discard('nominal'); faultlist.discard(' '); faultlist.discard('')
-    if type(params) == str:
-        params=[params]
-    full_stats=[]
-    for factor, scens in factors.items():
-        endclass_fact = Result({scen:endclass for scen, endclass in nested_endclasses.items() if scen in scens})
-        ec_metrics = endclass_fact.overall_diff(value, nan_as=nan_as, as_ind=percent, no_diff=not difference)
-
-        if not percent: 
-            nominal_metrics = [nan_to_x(res_scens['nominal'].endclass[value], nan_as) for res_scens in endclass_fact.values()]
-        else:           
-            nominal_metrics = [np.sign(float(nan_to_x(nan_to_x(res_scens.endclass['nominal'][value]), nan_as))) for res_scens in endclass_fact.values()]
-        factor_stats=[sum(nominal_metrics)/len(nominal_metrics)]
-        if give_ci: 
-            factor_boot, factor_lb, factor_ub = bootstrap_confidence_interval(nominal_metrics, **kwargs)
-            factor_stats = factor_stats + [factor_lb, factor_ub]
-        if type(faults)==tuple:
-            faultlist = {f:set() for f in faultlist}
-            for scen, groups in fault_scen_groups[factor].items():
-                for group, faultscens in groups.items():
-                    if not faultlist.get(group, False) and faultscens:  faultlist[group]=set(faultscens)
-                    else:                                               faultlist[group].update(faultscens)
-                faultlist.pop('nominal', 'nothing')
-        for fault in faultlist:
-            if type(faults)==tuple:     fault_metrics=[metric for res_scens in ec_metrics.values() for res_scen,metric in res_scens.items() if res_scen in faultlist[fault]]
-            elif faults=='functions':     fault_metrics = [metric for res_scens in ec_metrics.values() for res_scen,metric in res_scens.items() if fault in res_scen.partition(' ')[0]]
-            else:                       fault_metrics = [metric for res_scens in ec_metrics.values() for res_scen,metric in res_scens.items() if fault in res_scen.partition(',')[0]]
-            if len(fault_metrics)>0:    
-                factor_stats.append(sum(fault_metrics)/len(fault_metrics))
-                if give_ci: 
-                    factor_boot, factor_lb, factor_ub = bootstrap_confidence_interval(fault_metrics, **kwargs)
-                    factor_stats= factor_stats+[factor_lb, factor_ub]
-            else:                       
-                if not give_ci:
-                    factor_stats.append(np.NaN)
-                else:
-                    factor_stats= factor_stats + [np.NaN,np.NaN,np.NaN]
-        full_stats.append(factor_stats)
-    if give_ci=='combined': full_stats = [[str(round(v,3))+' ('+str(round(f[i+1],3))+','+str(round(f[i+2],3))+')' for i,v in enumerate(f) if not i%3] for f in full_stats]
-    if give_ci !=True: 
-        table = pd.DataFrame(full_stats, columns = ['nominal']+list(faultlist), index=factors)
-        table.columns.name=tuple(params)
-    else:           
-        columns = [(f, stat) for f in ['nominal']+list(faultlist) for stat in ["", "LB", "UB"]]
-        table = pd.DataFrame(full_stats, columns=columns, index=factors)
-        table.columns = pd.MultiIndex.from_tuples(table.columns, names=['fault', ''])
-        table.columns.name=tuple(params)
-    return table
-
-def nested_stats(nomapp, nested_endclasses, percent_metrics=[], rate_metrics=[], average_metrics=[], expected_metrics=[], inputparams='from_range', scenarios='all'):
-    """
-    Makes a table of quantities of interest from endclasses.
-
-    Parameters
-    ----------
-    nomapp : NominalApproach
-        NominalApproach used to generate the simulation.
-    endclasses : Result
-        End-state classifcations for the set of simulations from propagate.nested_approach()
-    percent_metrics : list
-        List of metrics to calculate a percent of (e.g. use with an indicator variable like failure=1/0 or True/False)
-    rate_metrics : list
-        List of metrics to calculate the probability of using the rate variable in endclasses
-    average_metrics : list
-        List of metrics to calculate an average of (e.g., use for float values like speed=25)
-    expected_metrics : list
-        List of metrics to calculate the expected value of using the rate variable in endclasses
-    inputparams : 'from_range'/'all',list, optional
-        Parameters to show on the table. The default is 'from_range'.
-    scenarios : 'all','range'/list, optional
-        Scenarios to include in the table. 'range' is a given range_id in the nominalapproach.
-    Returns
-    -------
-    table : pandas DataFrame
-        Table with the averages/percentages of interest layed out over the input parameters for the set of scenarios in endclasses
-    """
-    if scenarios=='all':            scens = [k.split('.')[0] for k in nested_endclasses]
-    elif type(scenarios)==str:      scens = nomapp.ranges[scenarios]['scenarios']
-    elif not type(scenarios)==list: raise Exception("Invalid option for scenarios. Provide 'all'/'rangeid' or list")
-    else:                           scens = scenarios
-    if inputparams=='from_range': 
-        ranges=[*nomapp.ranges]
-        if not(scenarios=='all') and not(type(scenarios)==list):    app_range= scenarios
-        elif len(ranges)==1:                                        app_range=ranges[0]
-        else: raise Exception("Multiple approach ranges "+str(ranges)+" in approach. Use inputparams=`all` or inputparams=[param1, param2,...]")
-        inputparams= [*nomapp.ranges[app_range]['p']]
-    elif inputparams=='all':
-        inputparams=[*nomapp.scenarios.values()][0].p
-    table_values=[]; table_rows = inputparams
-    for inputparam in inputparams:
-        table_values.append([nomapp.scenarios[e].p[inputparam] for e in scens])
-    for metric in percent_metrics:  
-        table_values.append([nested_endclasses.get(e).percent(metric) for e in scens])
-        table_rows.append('perc_'+metric)
-    for metric in rate_metrics:     
-        table_values.append([nested_endclasses.get(e).rate(metric) for e in scens])
-        table_rows.append('rate_'+metric)
-    for metric in average_metrics:  
-        table_values.append([nested_endclasses.get(e).average(metric) for e in scens])
-        table_rows.append('ave_'+metric)
-    for metric in expected_metrics: 
-        table_values.append([nested_endclasses.get(e).expected(metric) for e in scens])
-        table_rows.append('exp_'+metric)
-    table = pd.DataFrame(table_values, columns=[*nested_endclasses], index=table_rows)
-    return table
-
-# FMEA-like tables
-
+    return pd.DataFrame.from_dict(met_dict)
