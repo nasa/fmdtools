@@ -943,7 +943,25 @@ def suite_for_plots(testclass, plottests=False):
     return suite
 
 
-# to refactor: 
+# to refactor:
+
+def factor_metrics(met_table, metric='cost', ylabel='', figsize=(6,4), title=''):
+
+
+    fig = plt.figure(figsize=figsize)
+    tab_dict = met_table.to_dict()
+    met_dict = tab_dict[metric]
+    factors = [str(k) for k in met_dict.keys()]
+    values = np.array([*met_dict.values()])
+    if metric+"_lb" in tab_dict:
+        lb_err = values - np.array([*tab_dict[metric+"_lb"].values()])
+        ub_err = np.array([*tab_dict[metric+"_ub"].values()]) - values
+        errs = [lb_err, ub_err]
+    else:
+        errs = 0.0
+    plt.bar(factors, values, yerr = errs)
+
+
 
 def nominal_factor_comparison(comparison_table, metric, ylabel='proportion',
                               figsize=(6, 4), title='', maxy='max', xlabel=True,

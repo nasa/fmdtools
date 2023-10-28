@@ -622,3 +622,4 @@ if __name__ == "__main__":
 
     t = an.tabulate.factor_metrics(endclasses, faultapp)
     t = an.tabulate.factor_metrics(endclasses, faultapp, ci_metrics=['cost'], default_stat=np.mean)
+    an.plot.factor_metrics(t)
