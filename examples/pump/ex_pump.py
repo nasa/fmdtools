@@ -620,6 +620,15 @@ if __name__ == "__main__":
     mg.set_exec_order(mdl)
     mg.draw()
 
-    t = an.tabulate.factor_metrics(endclasses, faultapp)
-    t = an.tabulate.factor_metrics(endclasses, faultapp, ci_metrics=['cost'], default_stat=np.mean)
-    an.plot.factor_metrics(t)
+    c = an.tabulate.Comparison(endclasses, faultapp, default_stat=np.mean,
+                               metrics=['cost', 'rate'],
+                               ci_metrics=['cost'])
+    c.as_table()
+    c.as_plot("cost")
+    c.as_plots("cost", "rate")
+
+    fmea = an.tabulate.FMEA(endclasses, faultapp)
+    fmea.as_table()
+    fmea.as_plot("cost")
+    #t = an.tabulate.factor_metrics(endclasses, faultapp, ci_metrics=['cost'], default_stat=np.mean)
+    #an.plot.factor_metrics(t)

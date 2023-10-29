@@ -175,22 +175,8 @@ def hist(simhists, *plot_values, cols=2, aggregation='individual',
                                                                  plot_values,
                                                                  comp_groups,
                                                                  indiv_kwargs)
-
-    num_plots = len(plot_values)
-    if num_plots == 1:
-        cols = 1
-    rows = int(np.ceil(num_plots/cols))
-    if figsize == 'default':
-        figsize = (cols*3, 2*rows)
-    fig, axs = plt.subplots(rows, cols, sharex=True, figsize=figsize)
-
-    if type(axs) == np.ndarray:
-        axs = axs.flatten()
-    else:
-        axs = [axs]
-
-    subplot_titles = {plot_value: plot_value for plot_value in plot_values}
-    subplot_titles.update(titles)
+    fig, axs, cols, rows, subplot_titles = multiplot_helper(cols, *plot_values,
+                                                            figsize, titles=titles)
 
     for i, plot_value in enumerate(plot_values):
         ax = axs[i]
@@ -273,7 +259,7 @@ def prep_hists(simhists, plot_values, comp_groups, indiv_kwargs):
     plot_values = unpack_plot_values(plot_values)
 
     grouphists = simhists.get_comp_groups(*plot_values, **comp_groups)
-    
+
     # Set up plots and iteration
     if 'nominal' in grouphists.keys() and len(grouphists) > 1:
         indiv_kwargs['nominal'] = indiv_kwargs.get(
@@ -286,8 +272,26 @@ def prep_hists(simhists, plot_values, comp_groups, indiv_kwargs):
     else:
         indiv_kwargs.pop('faulty', '')
 
-    
     return simhists, plot_values, grouphists, indiv_kwargs
+
+
+def multiplot_helper(cols, *plot_values, figsize='default', titles={}):
+    num_plots = len(plot_values)
+    if num_plots == 1:
+        cols = 1
+    rows = int(np.ceil(num_plots/cols))
+    if figsize == 'default':
+        figsize = (cols*3, 2*rows)
+    fig, axs = plt.subplots(rows, cols, sharex=True, figsize=figsize)
+
+    if type(axs) == np.ndarray:
+        axs = axs.flatten()
+    else:
+        axs = [axs]
+
+    subplot_titles = {plot_value: plot_value for plot_value in plot_values}
+    subplot_titles.update(titles)
+    return fig, axs, cols, rows, subplot_titles
 
 
 def plot_line_and_err(ax, times, line, lows, highs, boundtype,
@@ -387,7 +391,7 @@ def multiplot_legend_title(groupmetrics, axs, ax,
 
 def make_consolidated_legend(ax, loc='upper left', bbox_to_anchor=(1.05, 1),
                              add_handles=[], **kwargs):
-    """Creates a single legend for a given multiplot where multiple groups are
+    """Create a single legend for a given multiplot where multiple groups are
     being compared"""
     ax.legend()
     handles, labels = ax.get_legend_handles_labels()
@@ -941,235 +945,3 @@ def suite_for_plots(testclass, plottests=False):
     for test in tests:
         suite.addTest(testclass(test))
     return suite
-
-
-# to refactor:
-
-def factor_metrics(met_table, metric='cost', ylabel='', figsize=(6,4), title=''):
-
-
-    fig = plt.figure(figsize=figsize)
-    tab_dict = met_table.to_dict()
-    met_dict = tab_dict[metric]
-    factors = [str(k) for k in met_dict.keys()]
-    values = np.array([*met_dict.values()])
-    if metric+"_lb" in tab_dict:
-        lb_err = values - np.array([*tab_dict[metric+"_lb"].values()])
-        ub_err = np.array([*tab_dict[metric+"_ub"].values()]) - values
-        errs = [lb_err, ub_err]
-    else:
-        errs = 0.0
-    plt.bar(factors, values, yerr = errs)
-
-
-
-def nominal_factor_comparison(comparison_table, metric, ylabel='proportion',
-                              figsize=(6, 4), title='', maxy='max', xlabel=True,
-                              error_bars=False):
-    """
-    Compares/plots a comparison table from tabulate.nominal_factor_comparison as a bar
-    plot for a given metric.
-
-    Parameters
-    ----------
-    comparison_table : pandas table
-        Table from tabulate.nominal_factor_comparison
-    metrics : string
-        Metric to use in the plot
-    ylabel : string, optional
-        label for the y-axis. The default is 'proportion'.
-    figsize : tuple, optional
-        Size for the plot. The default is (12,8).
-    title : str, optional
-        Plot title. The default is ''.
-    maxy : float
-        Cutoff for the y-axis (to use if the default is bad). The default is 'max'
-    xlabel : bool/str
-        The x-label descriptor for the design factors. Defaults to the column values.
-    error_bars : bool
-        Whether to include error bars for the factor. Requires comparison_table to have
-        lower and upper bound information
-
-    Returns
-    -------
-    figure: matplotlib figure
-    """
-    figure = plt.figure(figsize=figsize)
-
-    # bounded table
-    if type(comparison_table.columns[0]) == tuple and '' in comparison_table.columns[0]:
-        bar = np.array([comparison_table.at[metric, col]
-                       for col in comparison_table.columns if col[1] == ''])
-        labels = [str(i[0]) for i in comparison_table.columns if i[1] == '']
-        if error_bars:
-            UB = np.array([comparison_table.at[metric, col]
-                           for col in comparison_table.columns
-                           if col[1] == 'UB'])
-            LB = np.array([comparison_table.at[metric, col]
-                           for col in comparison_table.columns
-                           if col[1] == 'LB'])
-            yerr = [bar-LB, UB-bar]
-            if maxy == 'max':
-                maxy = comparison_table.loc[metric].max()
-        else:
-            yerr = []
-            if maxy == 'max':
-                maxy = max(bar)
-    else:
-        bar = [*comparison_table.loc[metric]]
-        yerr = []
-        labels = [str(i) for i in comparison_table.columns]
-        if maxy == 'max':
-            maxy = max(bar)
-
-    ax = figure.add_subplot(1, 1, 1)
-    multibar_helper(ax, comparison_table.columns, maxy)
-    ax.set_ylabel(ylabel)
-    if title:
-        plt.title(title)
-    xs = np.array([i for i in range(len(bar))])
-    if yerr:
-        plt.bar(xs, bar, tick_label=labels, linewidth=4,
-                yerr=yerr, error_kw={'elinewidth': 3})
-    else:
-        plt.bar(xs, bar, tick_label=labels, linewidth=4)
-    return figure
-
-
-def nested_factor_comparison(comparison_table, faults='all', rows=1, stat='proportion',
-                             figsize=(12, 8), title='', maxy='max', legend="single",
-                             stack=False, xlabel=True, error_bars=False):
-    """
-    Plots a comparison_table from tabulate.nested_factor_comparison as a bar plot for
-    each fault scenario/set of fault scenarios.
-
-    Parameters
-    ----------
-    comparison_table : pandas table
-        Table from tabulate.nested_factor_comparison with factors as rows and fault
-        scenarios as columns
-    faults : list, optional
-        iterable of faults/fault types to include in the bar plot
-        (the columns of the table). The default is 'all'.
-        a dictionary {'fault':'title'} will associate the given fault with a title
-        (otherwise 'fault' is used)
-    rows : int, optional
-        Number of rows in the multplot. The default is 1.
-    stat : str, optional
-        Metric being presented in the table (for the y-axis).
-        The default is 'proportion'.
-    figsize : tuple(int, int), optional
-        Size of the figure in (width, height). The default is (12,8).
-    title : string, optional
-        Overall title for the plots. The default is ''.
-    maxy : float, optional
-        Maximum y-value (to ensure same scale). The default is 'max'
-        (finds max value of table).
-    legend : str, optional
-        'all'/'single'/'none'. The default is "single".
-    stack : bool, optional
-        Whether or not to stack the nominal and resilience plots. The default is False.
-    xlabel : bool/str
-        The x-label descriptor for the design factors. Defaults to the column values.
-    error_bars : bool
-        Whether to include error bars for the factor. Requires comparison_table to have
-        lower and upper bound information
-
-    Returns
-    -------
-    figure: matplotlib figure
-        Plot handle of the figure.
-    """
-    figure = plt.figure(figsize=figsize)
-    if type(comparison_table.columns[0]) == tuple:
-        has_bounds = True
-    else:
-        has_bounds = False
-    if faults == 'all':
-        if has_bounds:
-            faults = [f[0] for f in comparison_table][0:-1:3]
-        else:
-            faults = [*comparison_table.columns]
-        faults.remove('nominal')
-    columns = int(np.ceil(len(faults)/rows))
-    n = 0
-    if maxy == 'max':
-        if stack == False:
-            maxy = comparison_table.max().max()
-        else:
-            maxy = comparison_table.iloc[:, 1:].max().max() + comparison_table['nominal'].max()
-    for fault in faults:
-        n += 1
-        ax = figure.add_subplot(rows, columns, n, label=str(n))
-        multibar_helper(ax, comparison_table.index, maxy)
-        xs = np.array([i for i in range(len(comparison_table.index))])
-        if has_bounds:
-            nominal_bars = [*comparison_table['nominal', '']]
-            fault_bars = [*comparison_table[fault, '']]
-        else:
-            nominal_bars = [*comparison_table['nominal']]
-            fault_bars = [*comparison_table[fault]]
-        if stack:
-            bottom = nominal_bars
-        else:
-            bottom = np.zeros(len(fault_bars))
-
-        if error_bars:
-            if not has_bounds:
-                raise Exception("No bounds in the data to construct error bars out of")
-            lower_nom_error = comparison_table['nominal', ''] - comparison_table['nominal', 'LB']
-            upper_nom_error =  comparison_table['nominal', 'UB'] - comparison_table['nominal', '']
-            yerror_nom = [[*lower_nom_error], [*upper_nom_error]]
-            lower_error = comparison_table[fault, ''] - comparison_table[fault, 'LB']
-            upper_error = comparison_table[fault, 'UB'] - comparison_table[fault, '']
-            yerror = [[*lower_error], [*upper_error]]
-        else:
-            yerror_nom = None
-            yerror = None
-
-        plt.bar(xs, nominal_bars,
-                tick_label=[str(i) for i in comparison_table.index],
-                linewidth=4,
-                fill=False,
-                hatch='//',
-                edgecolor='grey',
-                label='nominal',
-                yerr=yerror_nom,
-                ecolor='grey',
-                error_kw={'elinewidth': 6})
-        plt.bar(xs, fault_bars, tick_label=[str(i) for i in comparison_table.index],
-                alpha=0.75,
-                linewidth=4,
-                label='fault scenarios',
-                bottom=bottom,
-                yerr=yerror,
-                ecolor='red',
-                error_kw={'elinewidth': 2})
-        if len(faults) > 1:
-            if type(faults) == dict:
-                plt.title(faults[fault])
-            else:
-                plt.title(fault)
-        elif title:
-            plt.title(title)
-        if not (n-1) % columns:
-            ax.set_ylabel(stat)
-        else:
-            ax.set_ylabel('')
-            ax.axes.yaxis.set_ticklabels([])
-        if (n-1) >= (rows-1)*columns:
-            if xlabel == True:
-                ax.set_xlabel(comparison_table.columns.name)
-            else:
-                ax.set_xlabel(xlabel)
-        if legend == 'all':
-            plt.legend()
-        elif legend == 'single' and n == 1:
-            plt.legend()
-        elif legend == n:
-            plt.legend()
-    figure.tight_layout(pad=0.3)
-    if title and len(faults) > 1:
-        figure.suptitle(title)
-    return figure
-
