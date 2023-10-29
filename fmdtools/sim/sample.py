@@ -648,6 +648,62 @@ class BaseSample():
         """Get list of scen names"""
         return [s.name for s in self.scenarios()]
 
+    def get_factor_metrics(self, res, metrics=['cost'], factors=["time"],
+                           default_stat="expected", stats={}, ci_metrics=[],
+                           ci_kwargs={}):
+        """
+        Make a dict of the statistic for given metrics over given factors.
+
+        Parameters
+        ----------
+        res : Result
+            Result with the given metrics over a number of scenarios.
+        samp : BaseSample
+            Sample object used to generate the scenarios
+        metrics : list
+            metrics in res to tabulate over time. Default is ['cost'].
+        factors : list
+            Factors (Scenario properties e.g., 'name', 'time', 'var') in samp to take the
+            statistic over. Default is ['time']
+        default_stat : str
+            statistic to take for given metrics my default.
+            (e.g., 'average', 'percent'... see Result methods). Default is 'expected'.
+        stats : dict
+            Non-default statistics to take for each individual metric.
+            e.g. {'cost': 'average'}. Default is {}
+        ci_metrics : list
+            Metrics to calculate a confidence interval for (using bootstrap_ci).
+            Default is [].
+        ci_kwargs : dict
+            kwargs to bootstrap_ci
+
+        Returns
+        -------
+        met_table : dict
+            pandas dataframe with the statistic of the metric over the corresponding
+            set of scenarios for the given factor level.
+        """
+        scen_groups = self.get_scen_groups(*factors)
+        met_dict = {met: {} for met in metrics}
+        met_dict.update({met+"_lb": {} for met in ci_metrics})
+        met_dict.update({met+"_ub": {} for met in ci_metrics})
+
+        for fact_tup, scens in scen_groups.items():
+            sub_res = res.get_scens(*scens)
+            for met in metrics+ci_metrics:
+                if met in stats:
+                    stat = stats[met]
+                else:
+                    stat = default_stat
+                if met in ci_metrics:
+                    mv, lb, ub = sub_res.get_metric_ci(met, metric=stat, **ci_kwargs)
+                    met_dict[met][fact_tup] = mv
+                    met_dict[met+"_lb"][fact_tup] = lb
+                    met_dict[met+"_ub"][fact_tup] = ub
+                else:
+                    met_dict[met][fact_tup] = sub_res.get_metric(met, metric=stat)
+        return met_dict
+
 
 class FaultSample(BaseSample):
     """
@@ -683,6 +739,22 @@ class FaultSample(BaseSample):
             scens = scens[0:10]+["... (" + str(tot) + " total)"]
         rep = "FaultSample of scenarios: " + "\n - " + "\n - ".join(scens)
         return rep
+
+    def prune_scenarios(self, scen_var='rate', comparator=np.greater, value=0.0):
+        """
+        Prune scenarios from the FaultSample.
+
+        Parameters
+        ----------
+        scen_var : str, optional
+            Variable to prune. The default is 'rate'.
+        comparator : method, optional
+            Numpy method. The default is np.greater_equal.
+        value : float, optional
+            Value to compare against. The default is 0.0.
+        """
+        self._scenarios = [scen for scen in self._scenarios
+                           if comparator(get_var(scen, scen_var), value)]
 
     def times(self):
         """Get all sampled times."""
@@ -1131,6 +1203,23 @@ class SampleApproach(BaseSample):
         """Get all scenarios in the SampleApproach."""
         return [scen for faultsample in self.faultsamples.values()
                 for scen in faultsample.scenarios()]
+
+    def prune_scenarios(self, scen_var='rate', comparator=np.greater, value=0.0):
+        """
+        Prune scenarios from the FaultSample.
+
+        Parameters
+        ----------
+        scen_var : str, optional
+            Variable to prune. The default is 'rate'.
+        comparator : method, optional
+            Numpy method. The default is np.greater_equal.
+        value : float, optional
+            Value to compare against. The default is 0.0.
+        """
+        for fd in self.faultdomains.items():
+            fd.prune_scenarios(scen_var=scen_var, comparator=comparator, value=value)
+
 
 class ParameterSample(BaseSample):
     """

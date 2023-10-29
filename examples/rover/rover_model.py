@@ -771,9 +771,9 @@ class PowerMode(Mode):
         power supply is off
     """
     
-    fm_args = {"no_charge": (1e-5, 100, {"standby": 1.0}),
+    fm_args = {"no_charge": (1e-5, 100, {"off": 1.0}),
                "short": (1e-5, 100, {"supply": 1.0})}
-    opermodes = ("supply", "charge", "standby", "off")
+    opermodes = ("supply", "charge", "off")
     mode: str = "off"
     exclusive = True
 
@@ -861,8 +861,6 @@ class Power(FxnBlock):
             self.m.set_mode("no_charge")
         if self.switch.s.power == 0:
             self.m.set_mode("off")
-        
-        
 
 
 
