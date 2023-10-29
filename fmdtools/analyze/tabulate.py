@@ -95,6 +95,55 @@ class BaseTab(UserDict):
     Userdict has structure {metric: {comp_group: value}} which enables plots/tables.
     """
 
+    def sort_by_factor(self, factor, reverse=False):
+        """
+        Sort the table by the given factor.
+
+        Parameters
+        ----------
+        factor : str/int
+            Name or index of factor to sort by.
+        reverse : bool, optional
+            Whether to sort in descending order. The default is False.
+        """
+        metric = [*self.keys()][0]
+        keys = [*self[metric].keys()]
+        ex_key = keys[0]
+
+        if hasattr(self, 'factors') and type(factor) == str:
+            value = self.factors.index(factor)
+
+        if len(ex_key) > 1:
+            order = np.argsort(keys, axis=0)[value]
+        else:
+            order = np.argsort([k[0] for k in keys], axis=0)
+
+        if reverse:
+            order = order[::-1]
+        ordered_keys = [keys[o] for o in order]
+        for met in self.keys():
+            self[met] = {k: self[met][k] for k in ordered_keys}
+
+    def sort_by_metric(self, metric, reverse=False):
+        """
+        Sort the table by a given metric.
+
+        Parameters
+        ----------
+        metric : str
+            Name of metric to sort by.
+        reverse : bool, optional
+            Whether to sort in descending order. The default is False.
+        """
+        keys = [*self[metric].keys()]
+        vals = [*self[metric].values()]
+        order = np.argsort(vals)
+        if reverse:
+            order = order[::-1]
+        ordered_keys = [keys[o] for o in order]
+        for met in self.keys():
+            self[met] = {k: self[met][k] for k in ordered_keys}
+
     def all_metrics(self):
         """Return metrics in Table."""
         return [*self.keys()]
@@ -128,7 +177,7 @@ class BaseTab(UserDict):
         return table
 
     def as_plot(self, metric, title="", fig=False, ax=False, figsize=(6,4),
-                xlab='', ylab='', **kwargs):
+                xlab='', xlab_ang=-90, ylab='', **kwargs):
         """
         Return bar plot of a metric in the comparison.
 
@@ -144,6 +193,8 @@ class BaseTab(UserDict):
             Corresponding matplotlib axis
         figsize : tuple, optional
             Figsize (if fig not provided). The default is (6,4).
+        xlab_ang : number
+            Angle to tilt the xlabel at. The default is 90.
         xlab : str, optional
             label for x-axis. The default is ''.
         ylab : str, optional
@@ -162,7 +213,7 @@ class BaseTab(UserDict):
             from matplotlib import pyplot as plt
             fig, ax = plt.subplots(figsize=figsize)
         met_dict = self[metric]
-        factors = [str(k) for k in met_dict.keys()]
+        factors = [str(k[0]) if len(k) == 1 else str(k) for k in met_dict.keys()]
         values = np.array([*met_dict.values()])
         if metric+"_lb" in self:
             lb_err = values - np.array([*self[metric+"_lb"].values()])
@@ -172,7 +223,11 @@ class BaseTab(UserDict):
             errs = 0.0
         ax.bar(factors, values, yerr=errs, **kwargs)
         if not xlab:
-            ax.set_xlabel(str(self.factors))
+            if len(self.factors) == 1:
+                ax.set_xlabel(self.factors[0])
+            else:
+                ax.set_xlabel(str(self.factors))
+        ax.tick_params(axis='x', rotation=xlab_ang)
         if ylab:
             ax.set_ylab(ylab)
         if title:

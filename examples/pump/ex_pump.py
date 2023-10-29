@@ -624,11 +624,13 @@ if __name__ == "__main__":
                                metrics=['cost', 'rate'],
                                ci_metrics=['cost'])
     c.as_table()
+    c.sort_by_factor("time")
     c.as_plot("cost")
     c.as_plots("cost", "rate")
 
     fmea = an.tabulate.FMEA(endclasses, faultapp)
     fmea.as_table()
+    fmea.sort_by_metric("cost")
     fmea.as_plot("cost")
     #t = an.tabulate.factor_metrics(endclasses, faultapp, ci_metrics=['cost'], default_stat=np.mean)
     #an.plot.factor_metrics(t)
