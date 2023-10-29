@@ -394,12 +394,12 @@ def make_consolidated_legend(ax, loc='upper left', bbox_to_anchor=(1.05, 1),
     """Create a single legend for a given multiplot where multiple groups are
     being compared"""
     ax.legend()
+    hands, labels = ax.get_legend_handles_labels()
+    ax.legend(handles=add_handles+hands)
     handles, labels = ax.get_legend_handles_labels()
     by_label = dict(zip(labels, handles))
     ax.get_legend().remove()
-    ax.legend(by_label.values(), by_label.keys())
-    hands, labs = ax.get_legend_handles_labels()
-    ax.legend(handles=add_handles+hands,
+    ax.legend(by_label.values(), by_label.keys(),
               bbox_to_anchor=bbox_to_anchor, loc=loc, **kwargs)
 
 
