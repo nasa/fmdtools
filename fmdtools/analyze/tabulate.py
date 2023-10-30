@@ -19,7 +19,10 @@ and classes:
 import pandas as pd
 import numpy as np
 from fmdtools.analyze.result import Result
-from fmdtools.analyze.plot import multiplot_helper
+from fmdtools.analyze.plot import multiplot_helper, make_consolidated_legend
+from fmdtools.analyze.plot import multiplot_legend_title
+from matplotlib import colors as mcolors
+from matplotlib import pyplot as plt
 from collections import UserDict
 
 # stable methods:
@@ -93,7 +96,28 @@ class BaseTab(UserDict):
     Base class for tables that extends Userdict.
 
     Userdict has structure {metric: {comp_group: value}} which enables plots/tables.
+
+    Attributes
+    factors : list
+        List of factors in the table
     """
+
+    def sort_by_factors(self, *factors):
+        """
+        Sort the table by its factors.
+
+        Parameters
+        ----------
+        *factor : str/int
+            Name of factor(s) to sort by, in order of sorting. (non-included factors
+                                                                will be sorted last)
+        """
+        factors = list(factors)
+        factors.reverse()
+        other_factors = [f for f in self.factors if f not in factors]
+        all_factors = other_factors + factors
+        for factor in all_factors:
+            self.sort_by_factor(factor)
 
     def sort_by_factor(self, factor, reverse=False):
         """
@@ -113,10 +137,7 @@ class BaseTab(UserDict):
         if hasattr(self, 'factors') and type(factor) == str:
             value = self.factors.index(factor)
 
-        if len(ex_key) > 1:
-            order = np.argsort(keys, axis=0)[value]
-        else:
-            order = np.argsort([k[0] for k in keys], axis=0)
+        order = np.argsort([k[value] for k in keys], axis=0)
 
         if reverse:
             order = order[::-1]
@@ -176,8 +197,10 @@ class BaseTab(UserDict):
         table = table.sort_values(sort_by, ascending=ascending)
         return table
 
-    def as_plot(self, metric, title="", fig=False, ax=False, figsize=(6,4),
-                xlab='', xlab_ang=-90, ylab='', **kwargs):
+    def as_plot(self, metric, title="", fig=False, ax=False, figsize=(6, 4),
+                xlab='', xlab_ang=-90, ylab='', color_factor='',
+                pallette=[*mcolors.TABLEAU_COLORS.keys()], suppress_legend=False,
+                **kwargs):
         """
         Return bar plot of a metric in the comparison.
 
@@ -192,13 +215,19 @@ class BaseTab(UserDict):
         ax : axis
             Corresponding matplotlib axis
         figsize : tuple, optional
-            Figsize (if fig not provided). The default is (6,4).
-        xlab_ang : number
-            Angle to tilt the xlabel at. The default is 90.
+            Figsize (if fig not provided). The default is (6, 4).
         xlab : str, optional
             label for x-axis. The default is ''.
+        xlab_ang : number
+            Angle to tilt the xlabel at. The default is 90.
         ylab : str, optional
             label for y-axis. The default is ''.
+        color_factor : ''
+            Factor to label with a color (instead of the x-axis)
+        pallette : list
+            list of colors to . Defaults to matplotlib.colors.TABLEAU_COLORS.
+        suppress_legend : bool
+            Whether to suppress the generated legend (for multiplots)
         **kwargs : kwargs
             Keyword arguments to ax.bar
 
@@ -209,32 +238,66 @@ class BaseTab(UserDict):
         ax : axis
             Corresponding matplotlib axis
         """
+        # add figure
         if not ax:
-            from matplotlib import pyplot as plt
             fig, ax = plt.subplots(figsize=figsize)
         met_dict = self[metric]
-        factors = [str(k[0]) if len(k) == 1 else str(k) for k in met_dict.keys()]
+
+        # sort into color vs tick bars
+        all_factors = [*met_dict.keys()]
+        if color_factor:
+            if type(color_factor) == int:
+                c_fact = color_factor
+                color_factor = self.factors[c_fact]
+            else:
+                c_fact = self.factors.index(color_factor)
+            color_factors = [k[c_fact] for k in all_factors]
+            color_options = list(set(color_factors))
+            colors = [pallette[color_options.index(c)] for c in color_factors]
+            factors = [tuple([k for i, k in enumerate(k) if i != c_fact])
+                       for k in all_factors]
+        else:
+            factors = all_factors
+            color_factors = ['' for k in factors]
+            colors = [pallette[0] for factor in factors]
+        factors = [str(k[0]) if len(k) == 1 else str(k) for k in factors]
+        x = [i for i, k in enumerate(factors)]
         values = np.array([*met_dict.values()])
+
+        # degermine error bars
         if metric+"_lb" in self:
             lb_err = values - np.array([*self[metric+"_lb"].values()])
             ub_err = np.array([*self[metric+"_ub"].values()]) - values
             errs = [lb_err, ub_err]
         else:
             errs = 0.0
-        ax.bar(factors, values, yerr=errs, **kwargs)
+
+        # plot bars
+        ax.bar(x, values, yerr=errs, color=colors, label=color_factors, **kwargs)
+
+        # label axes
         if not xlab:
-            if len(self.factors) == 1:
-                ax.set_xlabel(self.factors[0])
+            non_color_factors = [f for f in self.factors if f != color_factor]
+            if len(non_color_factors) == 1:
+                ax.set_xlabel(non_color_factors[0])
             else:
-                ax.set_xlabel(str(self.factors))
+                ax.set_xlabel(str(non_color_factors))
+
+        ax.set_xticks(x)
+        ax.set_xticklabels(factors)
         ax.tick_params(axis='x', rotation=xlab_ang)
+        # legend, title, etc.
+        if color_factor and not suppress_legend:
+            make_consolidated_legend(ax, title=color_factor)
         if ylab:
             ax.set_ylab(ylab)
         if title:
             ax.set_title(title)
         return fig, ax
 
-    def as_plots(self, *metrics, cols=1, figsize='default', titles={}, **kwargs):
+    def as_plots(self, *metrics, cols=1, figsize='default', titles={},
+                 legend_loc=-1, title='', v_padding=None, h_padding=None,
+                 title_padding=0.0, xlab='', **kwargs):
         """
         Plot multiple metrics on multiple plots.
 
@@ -248,6 +311,18 @@ class BaseTab(UserDict):
             Figure size. The default is 'default'.
         titles : dict, optional
             Individual plot titles. The default is {}.
+        legend_loc : str
+            Plot to put the legend on. The default is -1 (the last plot).
+        title : str
+            Overall title for the plots. the default is '
+        v_padding : float
+            Vertical padding between plots.
+        h_padding : float
+            Horizontal padding between plots.
+        title_padding : float
+            Padding for the overall title
+        xlab : str
+            Label for the x-axis. Default is '', which generates it automatically.
         **kwargs : kwargs
             Keyword arguments to BaseTab.as_plot
 
@@ -264,8 +339,23 @@ class BaseTab(UserDict):
                                                                 figsize=figsize,
                                                                 titles=titles)
         for i, metric in enumerate(metrics):
-            fig, ax = self.as_plot(metric, title=subplot_titles[metric],
-                                   ax=axs[i], fig=fig, **kwargs)
+            if i >= (rows-1)*cols:
+                xlabel = xlab
+            else:
+                xlabel = ' '
+            fig, ax = self.as_plot(metric, title=subplot_titles[metric], xlab=xlabel,
+                                   ax=axs[i], fig=fig, suppress_legend=True,
+                                   **kwargs)
+
+        color_factor = kwargs.get('color_factor', '')
+        if not color_factor:
+            legend_loc = False
+
+        multiplot_legend_title(metrics, axs, ax, title=title,
+                               v_padding=v_padding, h_padding=h_padding,
+                               title_padding=title_padding,
+                               legend_loc=legend_loc,
+                               legend_title=color_factor)
         return fig, axs
 
 class FMEA(BaseTab):

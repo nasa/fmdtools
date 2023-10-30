@@ -631,6 +631,6 @@ if __name__ == "__main__":
     fmea = an.tabulate.FMEA(endclasses, faultapp)
     fmea.as_table()
     fmea.sort_by_metric("cost")
-    fmea.as_plot("cost")
+    fmea.as_plot("cost", color_factor="function")
     #t = an.tabulate.factor_metrics(endclasses, faultapp, ci_metrics=['cost'], default_stat=np.mean)
     #an.plot.factor_metrics(t)

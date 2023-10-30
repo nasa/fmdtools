@@ -1097,7 +1097,7 @@ def gen_param_space():
 
 if __name__ == "__main__":
     import multiprocessing as mp
-    from fmdtools.analyze import show
+    from fmdtools.analyze import show, tabulate
 
     import doctest
     doctest.testmod(verbose=True)
@@ -1121,3 +1121,34 @@ if __name__ == "__main__":
     #ax.set_ylim(-2.5, 2.5)
     hist.flows.pos.s.x
     fig, ax = show.trajectories(hist, 'flows.pos.s.x','flows.pos.s.y')
+
+
+    from fmdtools.sim.sample import ParameterSample, ParameterDomain
+    pd_sine = ParameterDomain(RoverParam)
+    pd_sine.add_constant("ground.linetype", "sine")
+    pd_sine.add_variables("ground.amp", "ground.period", lims={"ground.amp":(0, 8), "ground.period": (10, 50)})
+
+    ps_sine = ParameterSample(pd_sine)
+    ps_sine.add_variable_ranges(comb_kwargs={'resolutions':{'ground.amp': 2, "ground.period": 20}})
+
+    res, hist = prop.parameter_sample(mdl, ps_sine)
+    comp = tabulate.Comparison(res, ps_sine,
+                              metrics=['end_dist'],
+                              factors=['p.ground.amp', 'p.ground.period'])
+    #comp.sort_by_factor('p.ground.amp')
+    comp.as_table()
+    comp.as_plot("end_dist")
+
+    comp1 = tabulate.Comparison(res, ps_sine,
+                              metrics=['end_dist', "rate"],
+                              factors=['p.ground.amp', 'p.ground.period'])
+    #comp.sort_by_factor('p.ground.amp')
+    comp1.as_table()
+    #comp1.sort_by_factor('p.ground.period')
+    #comp1.sort_by_factor('p.ground.amp')
+    comp1.sort_by_factors()
+    comp1.as_plot("end_dist")
+    comp1.as_plot("end_dist", color_factor = "p.ground.period")
+    comp1.as_plot("end_dist", color_factor = "p.ground.amp")
+    comp1.as_plots("end_dist", "rate", color_factor = "p.ground.amp")
+    comp1.as_plots("end_dist", "rate", color_factor = "p.ground.amp", title="hi", v_padding=0.4)
