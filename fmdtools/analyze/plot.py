@@ -41,12 +41,11 @@ plt.rcParams['pdf.fonttype'] = 42
 
 
 def hist(simhists, *plot_values, cols=2, aggregation='individual',
-         legend_loc=-1, xlabel='time', ylabels={}, max_ind='max', boundtype='fill',
-         fillalpha=0.3, boundcolor='gray', boundlinestyle='--', ci=0.95, titles={},
+         legend_loc=-1, xlabel='time', ylabels={}, max_ind='max', titles={},
          title='', indiv_kwargs={}, time_slice=[], time_slice_label=None,
          figsize='default', comp_groups={},
          v_padding=None, h_padding=None, title_padding=0.0,
-         phases={}, modephases={}, label_phases=True, legend_title=None,  **kwargs):
+         phases={}, phase_kwargs={}, legend_title=None,  **kwargs):
     """
     Plot the behavior over time of the given function/flow values
     over a set of scenarios, with ability to aggregate behaviors as needed.
@@ -111,9 +110,6 @@ def hist(simhists, *plot_values, cols=2, aggregation='individual',
         color to make the bounds in aggregated plots. Default is 'gray'
     boundlinestyle : str, optional
         linestyle to use for bounds in aggregated plots. Default is '--'
-    ci : float, optional
-        Bootstrap confidence interval (0-1) to use in 'mean_ci' bound argument.
-        Default is 0.95.
     perc_range : int, optional
         Percentile range of inner bars when using the 'percentile' option. Default is 50
     title : str, optional
@@ -147,17 +143,13 @@ def hist(simhists, *plot_values, cols=2, aggregation='individual',
         padding for title as a fraction of figure height.
     phases : dict, optional
         Provide to overlay phases on the individual function histories, where phases
-        is from an.process.mdlhist and of structure::
-            {'fxnname': {'phase':[start, end]}}.
-
-        Default is {}.
-    modephases : dict, optional
-        dictionary that maps the phases to operational modes, if it is desired to track
-        the progression through modes
+        is a dict of PhaseMaps from analyze.phases.from_hist. Default is {}.
+    phase_kwargs : dict
+        kwargs to plot.phase_overlay.
     legend_title : str, optional
         title for the legend. Default is None
     **kwargs : kwargs
-        Global/default keyword arguments to mpl.plot e.g., linestyle, color, etc.
+        Global/default keyword arguments to plot_line_and_err.
 
     Returns
     -------
@@ -183,58 +175,26 @@ def hist(simhists, *plot_values, cols=2, aggregation='individual',
             ax.set_ylabel(ylabels[plot_value])
         for group, hists in grouphists.items():
             # TODO: find a better way to do this that will be compatible with timers
-            times = hists.get_metric('time', axis=0)
-            local_kwargs = {**kwargs, **indiv_kwargs.get(group, {})}
+            loc_kwargs = {**kwargs, **indiv_kwargs.get(group, {}), 'label': group}
             try:
-                if aggregation=='individual':
-                    hist_to_plot = hists.get_values(plot_value)
-                    if 'color' not in local_kwargs: 
-                        local_kwargs['color'] = next(ax._get_lines.prop_cycler)['color']
-                    for h in hist_to_plot.values():
-                        ax.plot(times, h, label=group, **local_kwargs)
-                elif aggregation=='mean_std':
-                    mean = hists.get_metric(plot_value, np.mean, axis=0)
-                    std_dev = hists.get_metric(plot_value, np.std)
-                    plot_line_and_err(ax, times, mean, mean-std_dev/2, mean+std_dev/2,boundtype,boundcolor, boundlinestyle,fillalpha,label=group, **local_kwargs)
-                elif aggregation=='mean_ci':
-                    mean = hists.get_metric(plot_value, np.mean, axis=0)
-                    if max_ind=='max': 
-                        max_ind = min([len(h) for h in hists.values()])
-                    vals = [[hist[t] for hist in hists.get_values(plot_value).values()] for t in range(max_ind)]
-                    boot_stats = np.array([bootstrap_confidence_interval(val, return_anyway=True, confidence_level=ci) for val in vals]).transpose()
-                    plot_line_and_err(ax, times, mean, boot_stats[1], boot_stats[2],boundtype,boundcolor, boundlinestyle,fillalpha,label=group, **local_kwargs)
-                elif aggregation=='mean_bound':
-                    mean = hists.get_metric(plot_value, np.mean, axis=0)
-                    maxs = hists.get_metric(plot_value, np.max, axis=0)
-                    mins = hists.get_metric(plot_value, np.min, axis=0)
-                    plot_line_and_err(ax, times, mean, mins, maxs,boundtype,boundcolor, boundlinestyle,fillalpha,label=group, **local_kwargs)
-                elif aggregation=='percentile':
-                    median = hists.get_metric(plot_value, np.median, axis=0)
-                    maxs = hists.get_metric(plot_value, np.max, axis=0)
-                    mins = hists.get_metric(plot_value, np.min, axis=0)
-                    low_perc = hists.get_metric(plot_value, np.percentile, args=(50-kwargs.get('perc_range',50)/2,), axis=0)
-                    high_perc = hists.get_metric(plot_value, np.percentile, args=(50+kwargs.get('perc_range',50)/2,), axis=0)
-                    plot_line_and_err(ax, times, median, mins, maxs,boundtype,boundcolor, boundlinestyle,fillalpha,label=group, **local_kwargs)
-                    if boundtype=='fill': 
-                        ax.fill_between(times,low_perc, high_perc, alpha=fillalpha, color=ax.lines[-1].get_color())
-                    elif boundtype=='line': 
-                        plot_err_lines(ax, times,low_perc,high_perc, color=boundcolor, linestyle=boundlinestyle)
-                else: 
+                if aggregation == 'individual':
+                    individual_hists(hists, plot_value, group, ax, fig, **loc_kwargs)
+                elif aggregation == 'mean_std':
+                    mean_std(hists, plot_value, group, ax, fig, **loc_kwargs)
+                elif aggregation == 'mean_ci':
+                    mean_ci(hists, plot_value, group, ax, fig, max_ind=max_ind,
+                            **loc_kwargs)
+                elif aggregation == 'mean_bound':
+                    mean_bound(hists, plot_value, group, ax, fig, **loc_kwargs)
+                elif aggregation == 'percentile':
+                    percentile(hists, plot_value, group, ax, fig, **loc_kwargs)
+                else:
                     raise Exception("Invalid aggregation option: "+aggregation)
             except Exception as e:
-                raise Exception("Error at plot_value "+str(plot_value)+" and group: "+str(group))
-            if phases.get(plot_value[1]):
-                ymin, ymax = ax.get_ylim()
-                phaseseps = [i[0] for i in list(phases[plot_value[1]].values())[1:]]
-                ax.vlines(phaseseps,ymin, ymax, colors='gray',linestyles='dashed')
-                if label_phases:
-                    for phase in phases[plot_value[1]]:
-                        if modephases: 
-                            phasetext = [m for m,p in modephases[plot_value[1]].items() if phase in p][0]
-                        else: 
-                            phasetext = phase
-                        bbox_props = dict(boxstyle="round,pad=0.3", fc="white", lw=0, alpha=0.5)
-                        ax.text(np.average(phases[plot_value[1]][phase]),(ymin+ymax)/2, phasetext, ha='center', bbox=bbox_props)
+                raise Exception("Error at plot_value " + str(plot_value)
+                                + " and group: " + str(group)) from e
+            if plot_value[1] in phases:
+                phase_overlay(ax, phases[plot_value[1]], plot_value[1])
         if type(time_slice) == int:
             ax.axvline(x=time_slice, color='k', label=time_slice_label)
         else:
@@ -244,7 +204,102 @@ def hist(simhists, *plot_values, cols=2, aggregation='individual',
                            v_padding, h_padding, title_padding, legend_title)
     return fig, axs
 
+
+def phase_overlay(ax, phasemap, label_phases=True):
+    """Overlay phasemap information on plot."""
+    ymin, ymax = ax.get_ylim()
+    phaseseps = [i[0] for i in list(phasemap.phases.values())[1:]]
+    ax.vlines(phaseseps, ymin, ymax, colors='gray', linestyles='dashed')
+    if label_phases:
+        for phase in phasemap.phases:
+            if phasemap.modephases:
+                phasetext = [m for m, p in phasemap.modephases.items() if phase in p][0]
+            else:
+                phasetext = phase
+            bbox_props = dict(boxstyle="round,pad=0.3", fc="white", lw=0, alpha=0.5)
+            ax.text(np.average(phasemap.phases[phase]),
+                    (ymin+ymax)/2, phasetext, ha='center', bbox=bbox_props)
+
+
+def hist_plot_helper(hists, ax=None, fig=None, figsize=(6, 4)):
+    """Set up hist plot time/fig/ax."""
+    if not ax:
+        fig, ax = plt.subplots(figsize=figsize)
+    times = hists.get_metric('time', axis=0)
+    return fig, ax, times
+
+
+def individual_hists(hists, value, ax=None, fig=None, figsize=(6, 4),
+                     **kwargs):
+    """Plot plot_value in hist as individual lines."""
+    fig, ax, times = hist_plot_helper(hists, ax=ax, fig=fig, figsize=figsize)
+    hist_to_plot = hists.get_values(value)
+    if 'color' not in kwargs:
+        kwargs['color'] = next(ax._get_lines.prop_cycler)['color']
+    for h in hist_to_plot.values():
+        ax.plot(times, h, **kwargs)
+    return fig, ax
+
+
+def mean_std(hists, value, ax=None, fig=None, figsize=(6, 4), **kwargs):
+    """Plot plot_value in hist aggregated by mean and standard devation."""
+    fig, ax, times = hist_plot_helper(hists, ax=ax, fig=fig, figsize=figsize)
+    mean = hists.get_metric(value, np.mean, axis=0)
+    std_dev = hists.get_metric(value, np.std)
+    plot_line_and_err(ax, times, mean, mean-std_dev/2, mean+std_dev/2, **kwargs)
+    return fig, ax
+
+
+def mean_ci(hists, value, ax=None, fig=None, figsize=(6, 4),
+            max_ind='max', ci=0.95, **kwargs):
+    """Plot plot_value in hist aggregated by bootstrap confidence interval for mean."""
+    fig, ax, times = hist_plot_helper(hists, ax=ax, fig=fig, figsize=figsize)
+    mean = hists.get_metric(value, np.mean, axis=0)
+    if max_ind == 'max':
+        max_ind = min([len(h) for h in hists.values()])
+    vals = [[hist[t] for hist in hists.get_values(value).values()]
+            for t in range(max_ind)]
+    boot_stats = np.array([bootstrap_confidence_interval(val, return_anyway=True,
+                                                         confidence_level=ci)
+                           for val in vals]).transpose()
+    plot_line_and_err(ax, times, mean, boot_stats[1], boot_stats[2], **kwargs)
+    return fig, ax
+
+
+def mean_bound(hists, value, ax=None, fig=None, figsize=(6, 4), **kwargs):
+    """Plot the value in hist aggregated by the mean and variable bounds."""
+    fig, ax, times = hist_plot_helper(hists, ax=ax, fig=fig, figsize=figsize)
+    mean = hists.get_metric(value, np.mean, axis=0)
+    maxs = hists.get_metric(value, np.max, axis=0)
+    mins = hists.get_metric(value, np.min, axis=0)
+    plot_line_and_err(ax, times, mean, mins, maxs, **kwargs)
+    return fig, ax
+
+
+def percentile(hists, value, ax=None, fig=None, figsize=(6, 4), prange=50,
+               boundtype='fill', fillalpha=0.3, boundcolor='gray', boundlinestyle='--',
+               **kwargs):
+    """Plot the value in hist aggregated by percentiles."""
+    fig, ax, times = hist_plot_helper(hists, ax=ax, fig=fig, figsize=figsize)
+    median = hists.get_metric(value, np.median, axis=0)
+    maxs = hists.get_metric(value, np.max, axis=0)
+    mins = hists.get_metric(value, np.min, axis=0)
+    plot_line_and_err(ax, times, median, mins, maxs, fillalpha=fillalpha,
+                      boundcolor=boundcolor, boundlinestyle=boundlinestyle, **kwargs)
+
+    low_perc = hists.get_metric(value, np.percentile, args=(50-prange/2,), axis=0)
+    high_perc = hists.get_metric(value, np.percentile, args=(50+prange/2,), axis=0)
+    if boundtype == 'fill':
+        col = ax.lines[-1].get_color()
+        ax.fill_between(times, low_perc, high_perc, alpha=fillalpha, color=col)
+    elif boundtype == 'line':
+        plot_err_lines(ax, times, low_perc, high_perc, color=boundcolor,
+                       linestyle=boundlinestyle)
+    return fig, ax
+
+
 def prep_hists(simhists, plot_values, comp_groups, indiv_kwargs):
+    """Prepare hists for plotting."""
     # Process data - clip and flatten
     if "time" in simhists:
         simhists = History(nominal=simhists).flatten()
@@ -271,6 +326,7 @@ def prep_hists(simhists, plot_values, comp_groups, indiv_kwargs):
 
 
 def multiplot_helper(cols, *plot_values, figsize='default', titles={}):
+    """Create multiple plot axes for plotting."""
     num_plots = len(plot_values)
     if num_plots == 1:
         cols = 1
@@ -289,10 +345,10 @@ def multiplot_helper(cols, *plot_values, figsize='default', titles={}):
     return fig, axs, cols, rows, subplot_titles
 
 
-def plot_line_and_err(ax, times, line, lows, highs, boundtype,
+def plot_line_and_err(ax, times, line, lows, highs, boundtype='fill',
                       boundcolor='gray', boundlinestyle='--', fillalpha=0.3, **kwargs):
     """
-    Plots a line with a given range of uncertainty around it.
+    Plot a line with a given range of uncertainty around it.
 
     Parameters
     ----------
