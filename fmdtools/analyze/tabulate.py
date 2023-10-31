@@ -131,13 +131,13 @@ class BaseTab(UserDict):
             Whether to sort in descending order. The default is False.
         """
         metric = [*self.keys()][0]
-        keys = [*self[metric].keys()]
+        keys = [k for k in self[metric].keys()]
         ex_key = keys[0]
 
         if hasattr(self, 'factors') and type(factor) == str:
             value = self.factors.index(factor)
 
-        order = np.argsort([k[value] for k in keys], axis=0)
+        order = np.argsort([k[value] for k in keys], axis=0, kind='stable')
 
         if reverse:
             order = order[::-1]
@@ -169,7 +169,7 @@ class BaseTab(UserDict):
         """Return metrics in Table."""
         return [*self.keys()]
 
-    def as_table(self, sort_by=False, ascending=False):
+    def as_table(self, sort_by=False, ascending=False, sort=True):
         """
         Return pandas table of the Table.
 
@@ -194,13 +194,14 @@ class BaseTab(UserDict):
         table = pd.DataFrame(self.data)
         if sort_by not in self.all_metrics():
             sort_by = self.all_metrics()[0]
-        table = table.sort_values(sort_by, ascending=ascending)
+        if sort: 
+            table = table.sort_values(sort_by, ascending=ascending)
         return table
 
     def as_plot(self, metric, title="", fig=False, ax=False, figsize=(6, 4),
                 xlab='', xlab_ang=-90, ylab='', color_factor='',
                 pallette=[*mcolors.TABLEAU_COLORS.keys()], suppress_legend=False,
-                **kwargs):
+                suppress_ticklabels=False, **kwargs):
         """
         Return bar plot of a metric in the comparison.
 
@@ -228,6 +229,8 @@ class BaseTab(UserDict):
             list of colors to . Defaults to matplotlib.colors.TABLEAU_COLORS.
         suppress_legend : bool
             Whether to suppress the generated legend (for multiplots)
+        suppress_ticklabels : bool
+            Whether to suppress tick labels.
         **kwargs : kwargs
             Keyword arguments to ax.bar
 
@@ -283,8 +286,11 @@ class BaseTab(UserDict):
             else:
                 ax.set_xlabel(str(non_color_factors))
 
-        ax.set_xticks(x)
-        ax.set_xticklabels(factors)
+        if not suppress_ticklabels:
+            ax.set_xticks(x)
+            ax.set_xticklabels(factors)
+        else:
+            ax.set_xticks([])
         ax.tick_params(axis='x', rotation=xlab_ang)
         # legend, title, etc.
         if color_factor and not suppress_legend:
@@ -441,23 +447,18 @@ class FMEA(BaseTab):
         self.data = fmeadict
 
 
-class Comparison(BaseTab):
-    def __init__(self, res, samp, metrics=['cost'], factors=["time"],
+class BaseComparison(BaseTab):
+    def __init__(self, res, scen_groups, metrics=['cost'],
                  default_stat="expected", stats={}, ci_metrics=[], ci_kwargs={}):
         """
-        Make a table of the statistic for given metrics over given factors.
-
         Parameters
         ----------
         res : Result
             Result with the given metrics over a number of scenarios.
-        samp : BaseSample
-            Sample object used to generate the scenarios
+        scen_groups : dict
+            Grouped scenarios.
         metrics : list
             metrics in res to tabulate over time. Default is ['cost'].
-        factors : list
-            Factors (Scenario properties e.g., 'name', 'time', 'var') in samp to take the
-            statistic over. Default is ['time']
         default_stat : str
             statistic to take for given metrics my default.
             (e.g., 'average', 'percent'... see Result methods). Default is 'expected'.
@@ -469,15 +470,7 @@ class Comparison(BaseTab):
             Default is [].
         ci_kwargs : dict
             kwargs to bootstrap_ci
-
-        Returns
-        -------
-        met_table : dataframe
-            pandas dataframe with the statistic of the metric over the corresponding
-            set of scenarios for the given factor level.
         """
-        self.factors = factors
-        scen_groups = samp.get_scen_groups(*factors)
         met_dict = {met: {} for met in metrics}
         met_dict.update({met+"_lb": {} for met in ci_metrics})
         met_dict.update({met+"_ub": {} for met in ci_metrics})
@@ -503,3 +496,157 @@ class Comparison(BaseTab):
                 else:
                     met_dict[met][fact_tup] = sub_res.get_metric(met, metric=stat)
         self.data = met_dict
+
+
+class Comparison(BaseComparison):
+    def __init__(self, res, samp, factors=['time'], **kwargs):
+        """
+        Make a table of the statistic for given metrics over given factors.
+
+        Parameters
+        ----------
+        res : Result
+            Result with the given metrics over a number of scenarios.
+        samp : BaseSample
+            Sample object used to generate the scenarios
+        factors : list
+            Factors (Scenario properties e.g., 'name', 'time', 'var') in samp to take
+            statistic over. Default is ['time']
+        **kwargs : kwargs
+            keyword arguments to BaseComparison
+
+        Returns
+        -------
+        met_table : dataframe
+            pandas dataframe with the statistic of the metric over the corresponding
+            set of scenarios for the given factor level.
+
+        Examples
+        -------
+        >>> from fmdtools.sim.sample import exp_ps
+        >>> from fmdtools.analyze.result import Result
+        >>> res = Result({k.name: Result({'a': k.p['x']**2, "b": k.p['y']*k.p['x'], 'rate':k.rate}) for i, k in enumerate(exp_ps.scenarios())})
+        >>> res = res.flatten()
+
+        # example 1: checking the x = x^2 accross variables
+        >>> comp = Comparison(res, exp_ps, metrics=['a'], factors=['p.x'], default_stat='average')
+        >>> comp.sort_by_factors("p.x")
+        >>> comp
+        {'a': {(0,): 0.0, (1,): 1.0, (2,): 4.0, (3,): 9.0, (4,): 16.0, (5,): 25.0, (6,): 36.0, (7,): 49.0, (8,): 64.0, (9,): 81.0, (10,): 100.0}}
+        >>> comp.as_table()
+                a
+        10  100.0
+        9    81.0
+        8    64.0
+        7    49.0
+        6    36.0
+        5    25.0
+        4    16.0
+        3     9.0
+        2     4.0
+        1     1.0
+        0     0.0
+        >>> fig, ax = comp.as_plot("a")
+
+        # example 2: viewing interaction between x and y:
+        >>> comp = Comparison(res, exp_ps, metrics=['b'], factors=['p.x', 'p.y'], default_stat='average')
+        >>> comp.sort_by_factors("p.x", "p.y")
+        >>> comp.as_table(sort=False)
+                   b
+        0  1.0   0.0
+           2.0   0.0
+           3.0   0.0
+           4.0   0.0
+        1  1.0   1.0
+           2.0   2.0
+           3.0   3.0
+           4.0   4.0
+        2  1.0   2.0
+           2.0   4.0
+           3.0   6.0
+           4.0   8.0
+        3  1.0   3.0
+           2.0   6.0
+           3.0   9.0
+           4.0  12.0
+        4  1.0   4.0
+           2.0   8.0
+           3.0  12.0
+           4.0  16.0
+        5  1.0   5.0
+           2.0  10.0
+           3.0  15.0
+           4.0  20.0
+        6  1.0   6.0
+           2.0  12.0
+           3.0  18.0
+           4.0  24.0
+        7  1.0   7.0
+           2.0  14.0
+           3.0  21.0
+           4.0  28.0
+        8  1.0   8.0
+           2.0  16.0
+           3.0  24.0
+           4.0  32.0
+        9  1.0   9.0
+           2.0  18.0
+           3.0  27.0
+           4.0  36.0
+        10 1.0  10.0
+           2.0  20.0
+           3.0  30.0
+           4.0  40.0
+        >>> fig, ax = comp.as_plot("b", color_factor="p.y", figsize=(10, 4))
+        """
+        self.factors = factors
+        scen_groups = samp.get_scen_groups(*factors)
+        super().__init__(res, scen_groups, **kwargs)
+
+
+
+class NestedComparison(BaseComparison):
+    def __init__(self, res, samp, samp_factors, samps, samps_factors, **kwargs):
+        """
+        Make a nested table of the statistic for samples taken in other samples.
+
+        Parameters
+        ----------
+        res : Result
+            Result with the given metrics over a number of scenarios.
+        samp : BaseSample
+            Sample object used to generate the scenarios
+        samp_factors : list
+            Factors (Scenario properties e.g., 'name', 'time', 'var') in samp to take
+            statistic over. Default is ['time']
+        samps : dict
+            Sample objects used to generate the scenarios. {'name': samp}
+        samps_factors : list
+            Factors (Scenario properties e.g., 'name', 'time', 'var') in samp to take
+            statistic over in the apps. Default is ['time']
+        **kwargs : kwargs
+            keyword arguments to BaseComparison
+
+        Returns
+        -------
+        met_table : dataframe
+            pandas dataframe with the statistic of the metric over the corresponding
+            set of scenarios for the given factor level.
+        """
+        overall_scen_groups = {}
+        scen_groups = samp.get_scen_groups(*samp_factors)
+        for n_samp in samps.values():
+            n_scen_groups = n_samp.get_scen_groups(*samps_factors)
+            for scen_group, scens in scen_groups.items():
+                for n_scen_group, n_scens in n_scen_groups.items():
+                    k = tuple(list(scen_group)+list(n_scen_group))
+                    v = [s+"."+ns for s in scens for ns in n_scens]
+                    overall_scen_groups[k] = v
+
+        self.factors = samp_factors + samps_factors
+        super().__init__(res, overall_scen_groups, **kwargs)
+
+
+if __name__ == "__main__":
+    import doctest
+    doctest.testmod(verbose=True)

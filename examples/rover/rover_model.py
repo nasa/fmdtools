@@ -1048,21 +1048,11 @@ class Rover(Model):
         end_dist = self.flows['ground'].end_dist(self.flows['pos'].s)
 
         endpt = [self.flows["pos"].s.x, self.flows["pos"].s.y]
-        x_nom = mdlhist.nominal.flows.pos.s.x
-        y_nom = mdlhist.nominal.flows.pos.s.x
-        x_fault = mdlhist.faulty.flows.pos.s.x
-        y_fault = mdlhist.faulty.flows.pos.s.x
-
-        f_t = min(len(x_nom), len(y_nom))
-
-        tot_deviation = np.sum(np.sqrt((x_nom[:f_t]- x_fault[:f_t])** 2 +
-                                       (y_nom[:f_t]- y_fault[:f_t])** 2))
 
         in_bound = all(mdlhist.faulty.flows.ground.s.in_bound)
-        
-        line_dist = 1 # looks like this is not used. Is this needed?
+        line_dist = 1  # looks like this is not used. Is this needed? TODO: reimplement
         hist_xy = mdlhist.faulty.flows.pos.s.get('x', 'y')
-        end_dist = self.flows['ground'].max_line_dist(hist_xy)
+        tot_deviation = self.flows['ground'].max_line_dist(hist_xy)
         return {
             "rate": scen.rate,
             "cost": 0,

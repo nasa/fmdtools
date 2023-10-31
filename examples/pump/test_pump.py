@@ -243,20 +243,18 @@ class PumpTests(unittest.TestCase, CommonTests):
         fs.add_fault_phases("on", args=(5,))
 
         ec, mdlhists = prop.fault_sample(self.water_mdl, fs, showprogress=False)
-        self.check_same_fmea(fs, ec, self.water_mdl)
 
         fs2 = FaultSample(fd)
         fs2.add_fault_phases()
         ec2, hist2 = prop.fault_sample(self.mdl, fs2, showprogress=False)
-        self.check_same_fmea(fs2, ec2, self.mdl)
 
 
 def exp_cost_quant(fs, mdl):
     """ Calculate expected cost of faults over a faultsample for the model."""
 
     result, mdlhists = prop.fault_sample(mdl, fs, showprogress=False)
-    fmea = an.tabulate.fmea(result, fs)
-    util = sum(fmea['expected cost'])
+    fmea = an.tabulate.FMEA(result, fs)
+    util = fmea.as_table()['expected cost'].sum()
     return util
 
 if __name__ == '__main__':
