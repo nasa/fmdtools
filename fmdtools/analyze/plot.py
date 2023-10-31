@@ -22,12 +22,7 @@ Uses the following methods:
   (3-D) range of nominal runs
 - :func:`dyn_order`: Plots the run order for the model during the dynamic propagation
   step used by dynamic_behavior() methods.
-- :func:`nominal_factor_comparison`: gives a bar plot of nominal simulation
-  statistics over given factors
-- :func:`nested_factor_comparison`: gives a bar plot of fault simulation statistics
   over given factors
-- :func:`multibar_helper`: Shared plotting helper for nested_factor_comparison and
-  nominal_factor_comparison
 - :func:`suite_for_plots`: enables plots to be checked and turned on/off when testing
   using unittest
 """
@@ -880,34 +875,6 @@ def dyn_order(mdl, rotateticks=False, title="Dynamic Run Order"):
         else:
             fig.suptitle(title, fontweight='bold')
     return fig, ax
-
-
-def multibar_helper(ax, bar_index, maxy):
-    """Shared plotting helper for nested_factor_comparison and
-    nominal_factor_comparison. Adds seperators to table groups (if any), limits the
-    bounds of the plot, adds a grid, etc."""
-    ax.set_ylim(top=maxy)
-    plt.grid(axis='y')
-    if 'MultiIndex' in str(type(bar_index)):
-        if bar_index[0][1] == '':
-            bar_index = [ind[0] for ind in bar_index][0:-1:3]  # catches error bars
-        if len(bar_index[0]) > 2:  # color top-level categories
-            first_inds = [i[0] for i in bar_index]
-            reverse_inds = [i[0] for i in bar_index]
-            reverse_inds.reverse()
-            first_vals = set(first_inds)
-            first_areas = {i: [first_inds.index(i), len(
-                reverse_inds)-reverse_inds.index(i)] for i in first_vals}
-            for i, area in enumerate(first_areas.values()):
-                if i % 2:
-                    ax.axvspan(area[0]-0.5, area[1]-0.5, color="ivory", zorder=-2)
-        if len(bar_index[0]) > 1:  # put lines between mid-level categories
-            second_inds = {i[0:len(bar_index[0])-1]: pos for pos,
-                           i in enumerate(bar_index)}
-            second_inds = [*second_inds.values()]
-            for i in second_inds[:-1]:
-                ax.axvline(i+0.5, color='black')
-    ax.set_xlim(-0.5, len(bar_index)-0.5)
 
 
 def suite_for_plots(testclass, plottests=False):

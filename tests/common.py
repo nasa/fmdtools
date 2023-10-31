@@ -242,13 +242,13 @@ class CommonTests():
         os.remove(mfile),
         os.remove(ecfile)
 
-    def check_same_fmea(self, fs, res, mdl):
+    def check_same_fmea(self, fs, res, mdl, val='expected cost'):
         """Test to ensure results from the fmea are the same over all options."""
-        fmea = tabulate.fmea(res, fs, mdl=mdl)
-        none_exp_cost = sum(fmea['expected cost'])
+        fmea = tabulate.FMEA(res, fs, mdl=mdl)
+        none_exp_cost = fmea.as_table()[val].sum()
         for group_by in ['phase', 'function', 'fault']:
-            fmea = tabulate.fmea(res, fs, group_by=[group_by], mdl=mdl)
-            exp_cost = sum(fmea['expected cost'])
+            fmea = tabulate.FMEA(res, fs, group_by=[group_by], mdl=mdl)
+            exp_cost = fmea.as_table()[val].sum()
             self.assertAlmostEqual(none_exp_cost, exp_cost)
 
     def check_same_file(self, result, resfile, check_link=False):

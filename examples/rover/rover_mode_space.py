@@ -25,8 +25,6 @@ endclasses_id, mdlhists_id = prop.approach(mdl_id, app_id)  # pool=mp.Pool(4))
 
 # behave_endclasses_nested, behave_mdlhists_nested = prop.nested_approach(mdl, behave_nomapp, pool=mp.Pool(5), faults='drive')
 
-# res_comp = an.tabulate.nested_factor_comparison(behave_nomapp, behave_endclasses_nested, ['t'], 'at_finish', percent=False)
-# fig = an.plot.nested_factor_comparison(res_comp, stack=True)
 
 # endresults,  mdlhist = prop.one_fault(mdl, 'drive','hmode_34', time=1, staged=False)
 # an.plot.mdlhistvals(mdlhist, fxnflowvals={'drive':['friction','drift']})

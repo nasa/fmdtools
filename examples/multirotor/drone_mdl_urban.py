@@ -521,12 +521,16 @@ if __name__ == "__main__":
                                                mdl_kwargs = {'sp':{'dt':1.0}})
     plot_env_with_traj3d(hists, mdl)
     plot_env_with_traj(hists, mdl)
-    statsfmea = an.tabulate.fmea(endresults, app, group_by=('function', 'fault'),
+    statsfmea = an.tabulate.FMEA(endresults, app, group_by=('function', 'fault'),
                                  weight_metrics=['rate'],
                                  avg_metrics=['unsafe_flight_time', 'cost', 'repcost',
                                               'landcost', 'body_strikes',
-                                              'head_strikes', 'property_restrictions'],
-                                 sort_by='cost')
+                                              'head_strikes', 'property_restrictions'])
+    statsfmea.sort_by_metric("cost")
+    statsfmea.as_table()
+    statsfmea.as_plots("repcost", "unsafe_flight_time", "cost", "rate",
+                       color_factor="function", suppress_ticklabels=True,
+                       legend_loc=2)
 
 
     #move_quad = make_move_quad(mdlhist, phases['PlanPath']['move'])

@@ -33,7 +33,9 @@ fs_5.add_fault_phases(n_joint=5, baserate='max', p_cond=0.1)
 
 endclasses, mdlhists = prop.fault_sample(mdl, fs_2)
 
-fmea = an.tabulate.fmea(endclasses, fs_2, group_by=('phase','functions', 'modes'))
+fmea = an.tabulate.FMEA(endclasses, fs_2, group_by=('phase', 'functions', 'modes'))
+fmea.sort_by_metric("expected cost")
+fmea.as_plot("expected cost", color_factor='phase', suppress_ticklabels=True)
 
 endclasses, mdlhists = prop.fault_sample(mdl, fs_5)
 

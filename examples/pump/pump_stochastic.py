@@ -183,11 +183,6 @@ if __name__ == "__main__":
                                                pool=mp.Pool(4))
 
     an.plot.nominal_vals_1d(ps, ecs, 'p.delay')
-    # an.tabulate.nested_stats(ps, ecs, average_metrics=['cost'], inputparams=['delay'])
-
-    # an.tabulate.nested_factor_comparison(ps, ecs, ['delay'], 'cost',
-    #                                      difference=False, percent=False)
-
 
     comp_mdlhists = hists.get_scens('export_water_block_t27p0')
     comp_groups = {'delay_1': ps.get_scens(p={'delay': 1}),
