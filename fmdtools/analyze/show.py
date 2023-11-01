@@ -1,13 +1,14 @@
 # -*- coding: utf-8 -*-
 """
-Module for showing the physical 2d/3d properties of the model (mainly focused on
+Module for showing the properties of the model (mainly focused on
 grids, environments, trajectories, etc).
 
 Uses the following primary methods:
 
 - :func: `coord`: Plots a Coords collections/properties on an x-y grid.
 - :func: `coord3d`: Plots a Coords collection.property on an x-y grid.
-- :func: `trajectories`: Plots trajectories from a history.
+- :func:`sim_order`: Plots the run order for the model during the dynamic propagation
+  step used by dynamic_behavior() methods.
 
 And secondary methods:
 
@@ -25,8 +26,10 @@ from matplotlib.patches import Rectangle
 from matplotlib import colormaps, cm
 from mpl_toolkits.mplot3d import art3d
 from matplotlib.colors import to_rgba
+from matplotlib.collections import PolyCollection
+from matplotlib.ticker import AutoMinorLocator
 import numpy as np
-from fmdtools.analyze.plot import prep_hists
+from fmdtools.analyze.plot import consolidate_legend, setup_plot
 from shapely import LineString, Point, Polygon
 
 
@@ -134,7 +137,7 @@ def coord_property3d(crd, prop, z="prop", z_res=10, collections={},
     default_kwargs = dict(edgecolor='k')
     kwargs = {**kwargs, **default_kwargs}
 
-    fig, ax = init_figure(fig=fig, ax=ax, z=True, figsize=figsize)
+    fig, ax = setup_plot(fig=fig, ax=ax, z=True, figsize=figsize)
 
     c_array = getattr(crd, prop)
     if z == "prop":
@@ -189,21 +192,6 @@ def coord_property3d(crd, prop, z="prop", z_res=10, collections={},
     return fig, ax
 
 
-def init_figure(fig=None, ax=None, z=False, figsize=()):
-    """
-    Initialize a 2d or 3d figure at a given size.
-
-    If there is a pre-existing figure or axis, uses that instead.
-    """
-    if not fig:
-        if z or (type(z) in (int, float)):
-            fig = plt.figure(figsize=figsize)
-            ax = fig.add_subplot(111, projection='3d')
-        else:
-            fig, ax = plt.subplots(1, figsize=figsize)
-    return fig, ax
-
-
 def coord_collection(crd, prop, fig=None, ax=None, label=True, z="",
                      legend_args=False, text_z_offset=0.0, figsize=(4, 4), **kwargs):
     """
@@ -246,13 +234,13 @@ def coord_collection(crd, prop, fig=None, ax=None, label=True, z="",
     """
     offset = crd.p.blocksize/2
     if not ax:
-        fig, ax = init_figure(z=z, figsize=figsize)
+        fig, ax = setup_plot(z=z, figsize=figsize)
         if type(z) == str and z:
             ax.set_zlim(getattr(crd, z).min(), getattr(crd, z).max())
         ax.set_xlim(-offset, crd.p.x_size*crd.p.blocksize+offset)
         ax.set_ylim(-offset, crd.p.y_size*crd.p.blocksize+offset)
     else:
-        fig, ax = init_figure(fig=fig, ax=ax, z=z, figsize=figsize)
+        fig, ax = setup_plot(fig=fig, ax=ax, z=z, figsize=figsize)
 
     coll = crd.get_collection(prop)
     for i, pt in enumerate(coll):
@@ -360,68 +348,21 @@ def coord3d(crd, prop, z="prop", collections={}, legend_args=False, voxels=True,
     return fig, ax
 
 
-def trajectories(simhists, *plot_values,
-                 comp_groups={}, indiv_kwargs={}, figsize=(4, 4),
-                 time_groups=[], time_ticks=5.0, time_fontsize=8,
-                 xlim=(), ylim=(), zlim=(), legend=True, title='',
-                 fig=None, ax=None, **kwargs):
+def sim_order(mdl, rotateticks=False, title="Dynamic Run Order"):
     """
-    Show trajectories from the environment in 2d or 3d space.
+    Plot the run order for the model during the dynamic propagation step used
+    by dynamic_behavior() methods, where the x-direction is the order of each
+    function executed and the y are the corresponding flows acted on by the
+    given methods.
 
     Parameters
     ----------
-    simhists : History
-        History to get trajectories from.
-    *plot_values : str
-        Plot values corresponding to the x/y/z values (e.g, 'position.s.x')
-    comp_groups : dict, optional
-        Dictionary for comparison groups (if more than one) with structure given by:
-        ::
-            {'group1': ('scen1', 'scen2'),
-             'group2':('scen3', 'scen4')}.
-
-        Default is {}, which compares nominal and faulty.
-        If {'default': 'default'} is passed, all scenarios will be put in one group.
-        If a legend is shown, group names are used as labels.
-    indiv_kwargs : dict, optional
-        Dict of kwargs to use to differentiate each comparison group.
-        Has structure::
-            {comp1: kwargs1, comp2: kwargs2}
-
-        where kwargs is an individual dict of plt.plot arguments for the
-        comparison group comp (or scenario, if not aggregated) which overrides
-        the global kwargs (or default behavior). If no comparison groups are given,
-        use 'default' for a single history or 'nominal'/'faulty' for a fault history
-        e.g.::
-            kwargs = {'nominal': {color: 'green'}}
-
-        would make the nominal color green. Default is {}.
-    figsize : tuple (float,float)
-        x-y size for the figure. The default is 'default', which dymanically gives 3 for
-        each column and 2 for each row.
-    time_groups : list, optional
-        List of strings corresponding to groups (e.g., 'nominal') to label the time
-        at each point in the trajectory. The default is [].
-    time_ticks : float, optional
-        Ticks for times (if used). The default is 5.0.
-    time_fontsize : int, optional
-        Fontsize for time-ticks. The default is 8.
-    xlim : tuple, optional
-        Limits on the x-axis. The default is ().
-    ylim : tuple, optional
-        Limits on the y-axis. The default is ().
-    zlim : tuple, optional
-        Limits on the z-axis. The default is ().
-    legend : bool, optional
-        Whether to show a legend. The default is True.
+    mdl : Model
+        fmdtools model
+    rotateticks : Bool, optional
+        Whether to rotate the x-ticks (for bigger plots). The default is False.
     title : str, optional
-        Title to add. Default is '' (no title).
-    fig : matplotlib.figure, optional
-        Existing Figure. The default is None.
-    ax : matplotlib.axis, optional
-        Existing axis. The default is None.
-    **kwargs : TYPE
-        DESCRIPTION.
+        String to use for the title (if any). The default is "Dynamic Run Order".
 
     Returns
     -------
@@ -429,91 +370,52 @@ def trajectories(simhists, *plot_values,
         Matplotlib figure object
     ax : axis
         Corresponding matplotlib axis
+
     """
-    simhists, plot_values, grouphists, indiv_kwargs = prep_hists(simhists,
-                                                                 plot_values,
-                                                                 comp_groups,
-                                                                 indiv_kwargs)
-    if len(plot_values) == 2:
-        fig, ax = init_figure(fig=fig, ax=ax, z=False, figsize=figsize)
-        plot_meth = traj
-    elif len(plot_values) == 3:
-        fig, ax = init_figure(fig=fig, ax=ax, z=True, figsize=figsize)
-        plot_meth = traj3
-    else:
-        raise Exception("Number of plot values must be 2 or 3, not "+len(plot_values))
+    fxnorder = list(mdl.dynamicfxns)
+    times = [i+0.5 for i in range(len(fxnorder))]
+    fxntimes = {f: i for i, f in enumerate(fxnorder)}
 
-    for group, hists in grouphists.items():
-        local_kwargs = {**kwargs, **indiv_kwargs.get(group, {})}
-        mark_time = group in time_groups
-        plot_meth(ax, hists, *plot_values, label=group,
-                  mark_time=mark_time, time_ticks=time_ticks,
-                  time_fontsize=time_fontsize, **local_kwargs)
+    flowtimes = {f: [fxntimes[n] for n in mdl.graph.neighbors(
+        f) if n in mdl.dynamicfxns] for f in mdl.flows}
 
-    if xlim:
-        ax.set_xlim(*xlim)
-    if ylim:
-        ax.set_ylim(*ylim)
-    if zlim:
-        ax.set_zlim(*zlim)
-    if legend:
-        handles, labels = ax.get_legend_handles_labels()
-        by_label = dict(zip(labels, handles))
-        ax.legend(by_label.values(), by_label.keys())
+    lengthorder = {k: v for k, v in
+                   sorted(flowtimes.items(), key=lambda x: len(x[1]), reverse=True)
+                   if len(v) > 0}
+    starttimeorder = {k: v for k, v in
+                      sorted(lengthorder.items(), key=lambda x: x[1][0], reverse=True)}
+    endtimeorder = [k for k, v in
+                    sorted(starttimeorder.items(), key=lambda x: x[1][-1], reverse=True)]
+    flowtimedict = {flow: i for i, flow in enumerate(endtimeorder)}
+
+    fig, ax = plt.subplots()
+
+    for flow in flowtimes:
+        phaseboxes = [((t, flowtimedict[flow]-0.5),
+                       (t, flowtimedict[flow]+0.5),
+                       (t+1.0, flowtimedict[flow]+0.5),
+                       (t+1.0, flowtimedict[flow]-0.5))
+                      for t in flowtimes[flow]]
+        bars = PolyCollection(phaseboxes)
+        ax.add_collection(bars)
+
+    flowtimes = [i+0.5 for i in range(len(mdl.flows))]
+    ax.set_yticks(list(flowtimedict.values()))
+    ax.set_yticklabels(list(flowtimedict.keys()))
+    ax.set_ylim(-0.5, len(flowtimes)-0.5)
+    ax.set_xticks(times)
+    ax.set_xticklabels(fxnorder, rotation=90*rotateticks)
+    ax.set_xlim(0, len(times))
+    ax.xaxis.set_minor_locator(AutoMinorLocator(2))
+    ax.yaxis.set_minor_locator(AutoMinorLocator(2))
+    ax.grid(which='minor',  linewidth=2)
+    ax.tick_params(axis='x', bottom=False, top=False, labelbottom=False, labeltop=True)
     if title:
-        ax.set_title(title)
+        if rotateticks:
+            fig.suptitle(title, fontweight='bold', y=1.15)
+        else:
+            fig.suptitle(title, fontweight='bold')
     return fig, ax
-
-
-def traj(ax, hists, xlab, ylab,
-         mark_time=False, time_ticks=1.0, time_fontsize=8, **kwargs):
-    """
-    Plot a single set of trajectories on an existing matplotlib axis.
-
-    Parameters
-    ----------
-    ax : matplotlib axis
-        Axis object to mark on
-    hists : History
-        History to get the values from
-    xlab : str
-        Name to use for the x-values.
-    ylab : str
-        Name to use for the y-values.
-    mark_time : bool, optional
-        Whether to mark the time of the trajectory at given ticks. The default is False.
-    time_ticks : float, optional
-        Time tick frequency. The default is 1.0.
-    time_fontsize : int, optional
-        Size of font for time ticks. The default is 8.
-    **kwargs : kwargs
-        kwargs to ax.plot
-    """
-    xs = [*hists.get_values(xlab).values()]
-    ys = [*hists.get_values(ylab).values()]
-    times = [*hists.get_values("time").values()]
-    for i, x in enumerate(xs):
-        ax.plot(x, ys[i], **kwargs)
-        if mark_time:
-            mark_times(ax, time_ticks, times[i], x, ys[i], fontsize=time_fontsize)
-
-
-def traj3(ax, hists, xlab, ylab, zlab,
-          mark_time=False, time_ticks=1.0, time_fontsize=8, **kwargs):
-    """
-    Plot a single set of trajectories on an existing matplotlib axis.
-
-    See show.traj.
-    """
-    xs = [*hists.get_values(xlab).values()]
-    ys = [*hists.get_values(ylab).values()]
-    zs = [*hists.get_values(zlab).values()]
-    times = [*hists.get_values("time").values()]
-    for i, x in enumerate(xs):
-        ax.plot(x, ys[i], zs[i], **kwargs)
-        if mark_time:
-            mark_times(ax, time_ticks, times[i], x, ys[i], zs[i],
-                       fontsize=time_fontsize)
 
 
 def geomarch(geomarch, geoms = {'all': {}}, fig=None, ax=None, figsize = (4, 4),
@@ -548,7 +450,7 @@ def geomarch(geomarch, geoms = {'all': {}}, fig=None, ax=None, figsize = (4, 4),
         Corresponding matplotlib axis
     """
     if not ax:
-        fig, ax = init_figure(z=z, figsize=figsize)
+        fig, ax = setup_plot(z=z, figsize=figsize)
     if 'all' in geoms:
         geoms = {g: {'shapes': 'all'} for g in geomarch.geoms}
 
@@ -592,7 +494,7 @@ def geom(geom, shapes={'all': {}}, fig=None, ax=None, figsize=(4, 4), z=False,
         Corresponding matplotlib axis
     """
     if not ax:
-        fig, ax = init_figure(z=z, figsize=figsize)
+        fig, ax = setup_plot(z=z, figsize=figsize)
     if 'all' in shapes:
         shapes = {'shape': {}, **{v: {} for v in geom.buffers}}
     if type(z) in (int, float):
@@ -616,49 +518,6 @@ def geom(geom, shapes={'all': {}}, fig=None, ax=None, figsize=(4, 4), z=False,
     ax.axis('equal')
     consolidate_legend(ax, **kwargs)
     return fig, ax
-
-
-def mark_times(ax, tick, time, *plot_values, fontsize=8):
-    """
-    Mark times on an axis at a particular tick interval.
-
-    Parameters
-    ----------
-    ax : matplotlib axis
-        Axis object to mark on
-    tick : float
-        Tick frequency.
-    time : np.array
-        Time vector.
-    *plot_values : np.array
-        x,y,z vectors
-    fontsize : int, optional
-        Size of the font. The default is 8.
-    """
-    for st in zip(*plot_values, time):
-        tt = st[-1]
-        xyz = st[:-1]
-        if tt % tick == 0:
-            ax.text(*xyz, 't='+str(tt), fontsize=fontsize)
-
-
-def consolidate_legend(ax, **kwargs):
-    """
-    Create a consolidated legend with all grid properties.
-
-    Parameters
-    ----------
-    ax : axis
-        Matplotlib axis.
-    **kwargs : kwargs
-        kwargs to ax.legend
-    """
-    kwargs = {**dict(bbox_to_anchor=(1.05, 1), loc='upper left'), **kwargs}
-    ax.legend()
-    handles, labels = ax.get_legend_handles_labels()
-    by_label = dict(zip(labels, handles))
-    ax.get_legend().remove()
-    ax.legend(by_label.values(), by_label.keys(), **kwargs)
 
 
 if __name__ == "__main__":

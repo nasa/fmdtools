@@ -34,8 +34,8 @@ a = MoveWatDynamic()
 
 result, mdlhist = prop.nominal(a, track='all',
                                disturbances={10: {"wat_in.s.level": 0.0}})
-plot.hist(mdlhist, 'flows.sig_in.s.power', 'flows.wat_out.s.flowrate',
-          'flows.wat_in.s.level', 'flows.wat_in.s.flowrate')
+mdlhist.plot_line('flows.sig_in.s.power', 'flows.wat_out.s.flowrate',
+                  'flows.wat_in.s.level', 'flows.wat_in.s.flowrate')
 
 fd = FaultDomain(a)
 fd.add_all()
@@ -46,11 +46,11 @@ results, mdlhists = prop.fault_sample(a, fs)
 
 result, mdlhist = prop.nominal(a, track='all')
 
-plot.hist(mdlhist, 'flows.sig_in.s.power', 'flows.wat_out.s.flowrate')
+mdlhist.plot_line('flows.sig_in.s.power', 'flows.wat_out.s.flowrate')
 
 result, mdlhist = prop.one_fault(a, "short", time=10, track='all')
 
-plot.hist(mdlhist, 'flows.sig_in.s.power', 'flows.wat_out.s.flowrate')
+mdlhist.plot_line('flows.sig_in.s.power', 'flows.wat_out.s.flowrate')
 
 results, mdlhists = prop.single_faults(a)
 

@@ -9,7 +9,8 @@ import shutil
 import numpy as np
 from fmdtools.sim import propagate as prop
 from fmdtools.analyze import tabulate as tabulate
-from fmdtools.analyze.result import History, Result
+from fmdtools.analyze.result import Result
+from fmdtools.analyze.history import History
 
 
 class CommonTests():

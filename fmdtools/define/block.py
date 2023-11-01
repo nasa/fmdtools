@@ -28,11 +28,14 @@ from recordclass import dataobject, asdict, astuple
 from fmdtools.define.state import State
 from fmdtools.define.parameter import Parameter, SimParam
 from fmdtools.define.rand import Rand
-from fmdtools.define.common import get_true_fields, get_true_field, init_obj_attr, get_obj_track, set_var
+from fmdtools.define.common import get_true_fields, get_true_field, init_obj_attr
+from fmdtools.define.common import get_obj_track, set_var
 from fmdtools.define.time import Time
 from fmdtools.define.mode import Mode
 from fmdtools.define.flow import init_flow, Flow
-from fmdtools.analyze.result import Result, History, get_sub_include, init_indicator_hist
+from fmdtools.analyze.result import Result
+from fmdtools.analyze.common import get_sub_include
+from fmdtools.analyze.history import History, init_indicator_hist
 
 
 def assoc_flows(obj, flows={}):

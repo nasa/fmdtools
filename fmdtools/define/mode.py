@@ -14,7 +14,7 @@ import numpy as np
 import itertools
 import copy
 from fmdtools.define.common import get_true_fields, get_true_field, get_dataobj_track, eq_units
-from fmdtools.analyze.result import History
+from fmdtools.analyze.history import History
 
 
 class Fault(dataobject, readonly=True, mapping=True):

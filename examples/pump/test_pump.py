@@ -13,7 +13,8 @@ from fmdtools.define.common import check_pickleability
 from fmdtools.sim.sample import FaultDomain, FaultSample, ParameterSample
 from tests.common import CommonTests
 import numpy as np
-from fmdtools.analyze.result import load, History
+from fmdtools.analyze.result import load
+from fmdtools.analyze.history import History
 
 
 class PumpTests(unittest.TestCase, CommonTests):

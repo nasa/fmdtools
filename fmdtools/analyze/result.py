@@ -3,8 +3,7 @@
 Description: A module defining how simulation results (histories) structured and
 processed. Has classes:
 
-- :class:`History`: Class for defining simulation histories
-  (nested dictionaries of arrays or lists)
+- :class:`Result`: Class for defining simulation results.
 
 And functions:
 
@@ -27,23 +26,21 @@ Private Methods:
 - :func:`check_include_errors`: Helper function for Result Class, Cycles through
   `check_include_error`.
 - :func:`check_include_error`: Helper function to raise exceptions for errors.
-- :func:`bootstrap_confidence_interval`: Convenience wrapper for scipy.bootstrap
-- :func:`nan_to_x`: Helper function for Result Class, returns nan as zero if present,
-  otherwise returns the number
-- :func:`is_numeric`: Helper function for Result Class, checks if a given value is
-  numeric
-- :func:`join_key`: Helper function for Result Class
 - :func:`get_sub_include`: Determines what attributes of att to include based on the
   provided dict/str/list/set to_include
 """
 
 import numpy as np
 import pandas as pd
-import copy
 import sys
 import os
 from collections import UserDict
 from fmdtools.define.common import t_key, nest_dict
+from fmdtools.analyze.common import to_include_keys, is_numeric, nan_to_x, is_bool
+from fmdtools.analyze.common import bootstrap_confidence_interval, join_key
+from fmdtools.analyze.common import get_sub_include
+from fmdtools.analyze.plot import multiplot_legend_title, multiplot_helper
+from fmdtools.analyze.plot import unpack_plot_values
 
 
 def file_check(filename, overwrite):
@@ -153,61 +150,6 @@ def check_include_error(result, to_include):
     if to_include not in ('all', 'default') and to_include not in result:
         raise Exception("to_include key " + to_include +
                         " not in result keys: " + str(result.keys()))
-
-def is_numeric(val):
-    """Checks if a given value is numeric"""
-    try:
-        return np.issubdtype(np.array(val).dtype, np.number)
-    except:
-        return type(val) in [float, bool, int]
-
-
-def get_sub_include(att, to_include):
-    """Determines what attributes of att to include based on the provided
-    dict/str/list/set to_include"""
-    if type(to_include) in [list, set, tuple, str]:
-        if att in to_include:
-            new_to_include = 'default'
-        elif type(to_include) == str and to_include == 'all':
-            new_to_include = 'all'
-        elif type(to_include) == str and to_include == 'default':
-            new_to_include = 'default'
-        else:
-            new_to_include = False
-    elif type(to_include) == dict and att in to_include:
-        new_to_include = to_include[att]
-    else:
-        new_to_include = False
-    return new_to_include
-
-
-
-def bootstrap_confidence_interval(data, method=np.mean, return_anyway=False, **kwargs):
-    """
-    Convenience wrapper for scipy.bootstrap.
-
-    Parameters
-    ----------
-    data : list/array/etc
-        Iterable with the data. May be float (for mean) or indicator (for proportion)
-    method : method
-        numpy method to give scipy.bootstrap.
-    return_anyway: bool
-        Gives a dummy interval of (stat, stat) if no . Used for plotting
-    Returns
-    ----------
-    statistic, lower bound, upper bound
-    """
-    from scipy.stats import bootstrap
-    if 'interval' in kwargs:
-        kwargs['confidence_level'] = kwargs.pop('interval')*0.01
-    if data.count(data[0]) != len(data):
-        bs = bootstrap([data], np.mean, **kwargs)
-        return method(data), bs.confidence_interval.low, bs.confidence_interval.high
-    elif return_anyway:
-        return method(data), method(data), method(data)
-    else:
-        raise Exception("All data are the same!")
 
 
 class Result(UserDict):
@@ -932,42 +874,104 @@ class Result(UserDict):
                 endclass.end_diff(metric, nan_as=nan_as, as_ind=as_ind, no_diff=no_diff)
                 for scen, endclass in self.items()}
 
+    def plot_metric_dist(self, *values, cols=2, comp_groups={}, bins=10, metric_bins={},
+                         legend_loc=-1, xlabels={}, ylabel='count', title='', titles={},
+                         figsize='default',  v_padding=0.4, h_padding=0.05,
+                         title_padding=0.1, legend_title=None, indiv_kwargs={},
+                         **kwargs):
+        """
+        Plot histogram of given metric(s) over comparison groups of scenarios.
 
-def nan_to_x(metric, x=0.0):
-    """returns nan as zero if present, otherwise returns the number"""
-    if np.isnan(metric):
-        return x
-    else:
-        return metric
+        Parameters
+        ----------
+        result : Result
+            Result dictionary of metrics over set of scenarios
+        *plot_values : str
+            names of values to pull from the result (e.g., 'fxns.move_water.s.flowrate')
+            Can also be specified as a dict (e.g. {'fxns':'move_water'}) to get all keys
+            from a given fxn/flow/mode/etc.
+        cols : int, optional
+            columns to use in the figure. The default is 2.
+        comp_groups : dict, optional
+            Dictionary for comparison groups (if more than one).
+            Has structure::
+                {'group1': ('scen1', 'scen2'), 'group2': ('scen3', 'scen4')}.
 
+            Default is {}, which compares nominal and faulty.
+            If {'default': 'default'} is passed, all scenarios will be put in one group.
+            If a legend is shown, group names are used as labels.
+        bins : int
+            Number of bins to use (for all plots). Default is None
+        metric_bins : dict,
+            Dictionary of number of bins to use for each metric.
+            Has structure::
+                {'metric':num}.
 
-def is_bool(val):
-    try:
-        return val.dtype in ['bool']
-    except:
-        return type(val) in [bool]
+            Default is {}
+        legend_loc : int, optional
+            Specifies the plot to place the legend on, if runs are being compared.
+            Default is -1 (the last plot)
+            To remove the legend, give a value of False
+        xlabels : dict, optional
+            Label for the x-axes.
+            Has structure::
+                {'metric':'label'}
 
+        ylabel : str, optional
+            Label for the y-axes. Default is 'time'
+        title : str, optional
+            overall title for the plot. Default is ''
+        indiv_kwargs : dict, optional
+            dict of kwargs to differentiate the comparison groups.
+            Has structure::
+                {comp1: kwargs1, comp2: kwargs2}
 
-def join_key(k):
-    if not isinstance(k, str):
-        return '.'.join(k)
-    else:
-        return k
+            where kwargs is an individual dict of keyword arguments for the
+            comparison group comp (or scenario, if not aggregated) which overrides
+            the global kwargs (or default behavior).
+        figsize : tuple (float,float)
+            x-y size for the figure. The default is 'default', which dymanically gives 3 for
+            each column and 2 for each row
+        v_padding : float
+            vertical padding between subplots as a fraction of axis height.
+        h_padding : float
+            horizontal padding between subplots as a fraction of axis width.
+        title_padding : float
+            padding for title as a fraction of figure height.
+        legend_title : str, optional
+            title for the legend. Default is None.
+        **kwargs : kwargs
+            keyword arguments to mpl.hist e.g. bins, etc.
+        """
+        # Sort into comparison groups
+        plot_values = unpack_plot_values(values)
+        fig, axs, cols, rows, titles = multiplot_helper(cols, *plot_values,
+                                                        figsize=figsize,
+                                                        titles=titles,
+                                                        sharey=True, sharex=False)
+        groupmetrics = self.get_comp_groups(*plot_values, **comp_groups)
+        num_bins = bins
+        for i, plot_value in enumerate(plot_values):
+            ax = axs[i]
+            xlabel = xlabels.get(plot_value, plot_value)
+            if type(xlabel) == str:
+                ax.set_xlabel(xlabel)
+            else:
+                ax.set_xlabel(' '.join(xlabel))
+            ax.grid(axis='y')
+            fulldata = [i for endc in groupmetrics.values()
+                        for i in [*endc.get_values(plot_value).values()]]
+            bins = np.histogram(fulldata, metric_bins.get(plot_value, num_bins))[1]
+            if not i % cols:
+                ax.set_ylabel(ylabel)
+            for group, endclasses in groupmetrics.items():
+                local_kwargs = {**kwargs, **indiv_kwargs.get(group, {})}
+                x = [*endclasses.get_values(plot_value).values()]
+                ax.hist(x, bins, label=group, **local_kwargs)
 
-
-def to_include_keys(to_include):
-    """Determine what dict keys to include from Result given nested to_include
-    dictionary"""
-    if type(to_include) == str:
-        return [to_include]
-    elif type(to_include) in [list, set, tuple]:
-        return [to_i for to_i in to_include]
-    elif type(to_include) == dict:
-        keys = []
-        for k, v in to_include.items():
-            add = to_include_keys(v)
-            keys.extend([k+'.'+v for v in add])
-        return tuple(keys)
+        multiplot_legend_title(groupmetrics, axs, ax, legend_loc, title,
+                               v_padding, h_padding, title_padding, legend_title)
+        return fig, axs
 
 
 def load(filename, filetype="", renest_dict=True, indiv=False, Rclass=Result):

@@ -1,30 +1,23 @@
 """
-Description: Plots quantities of interest over time using matplotlib.
+Description: Some helper functions for working with matplotlib.
 
-Uses the following methods:
-
-- :func:`hist`: plots function and flow histories over time
-  (with different plots for each function/flow)
-- :func:`plot_line_and_err`: Plots a line with a given range of uncertainty around it.
-- :func:`plot_err_lines`: Plots error lines on the given plot.
-- :func:`multiplot_legend_title`: Helper function for multiplot legends and titles.
-- :func:`make_consolidated_legend`: Creates a single legend for a given multiplot where
-  multiple groups are being compared.
-- :func:`metric_dist`: Plots the histogram of given metric(s) separated by
-  comparison groups over a set of scenarios.
-- :func:`metric_dist_from`:Plot the distribution of model history function/flow value
-  over at defined time(s) over a number of scenarios.
+Provides the following methods:
 - :func:`nominal_vals_1d`: plots the end-state classification of a system over a
   (1-D) range of nominal runs
 - :func:`nominal_vals_2d`: plots the end-state classification of a system over a
   (2-D) range of nominal runs
 - :func:`nominal_vals_3d`: plots the end-state classification of a system over a
   (3-D) range of nominal runs
-- :func:`dyn_order`: Plots the run order for the model during the dynamic propagation
-  step used by dynamic_behavior() methods.
-  over given factors
 - :func:`suite_for_plots`: enables plots to be checked and turned on/off when testing
   using unittest
+
+Also provides the following library methods:
+- :func: setup_plot : initializes mpl figure.
+- :func:`plot_err_hist`: Plots a line with a given range of uncertainty around it.
+- :func:`plot_err_lines`: Plots error lines on the given plot.
+- :func:`multiplot_legend_title`: Helper function for multiplot legends and titles.
+- :func:`consolidate_legend`: Creates a single legend for a given multiplot where
+  multiple groups are being compared.
 """
 # File Name: analyze/plot.py
 # Author: Daniel Hulse
@@ -32,177 +25,24 @@ Uses the following methods:
 
 import numpy as np
 import matplotlib.pyplot as plt
-from fmdtools.analyze.result import bootstrap_confidence_interval, to_include_keys, is_numeric
-from fmdtools.analyze.result import History, Result
-from matplotlib.collections import PolyCollection
-from matplotlib.ticker import AutoMinorLocator
+from fmdtools.analyze.common import to_include_keys, is_numeric
 
 plt.rcParams['pdf.fonttype'] = 42
 
 
-def hist(simhists, *plot_values, cols=2, aggregation='individual',
-         legend_loc=-1, xlabel='time', ylabels={}, max_ind='max', titles={},
-         title='', indiv_kwargs={}, time_slice=[], time_slice_label=None,
-         figsize='default', comp_groups={},
-         v_padding=None, h_padding=None, title_padding=0.0,
-         phases={}, phase_kwargs={}, legend_title=None,  **kwargs):
+def setup_plot(fig=None, ax=None, z=False, figsize=(6, 4)):
     """
-    Plot the behavior over time of the given function/flow values
-    over a set of scenarios, with ability to aggregate behaviors as needed.
+    Initialize a 2d or 3d figure at a given size.
 
-    Parameters
-    ----------
-    simhists : History
-        Simulation history
-    *plot_values : strs
-        names of values to pull from the history (e.g., 'fxns.move_water.s.flowrate').
-        Can also be specified as a dict (e.g. {'fxns': 'move_water'}) to get all keys
-        from a given fxn/flow/mode/etc.
-    cols : int, optional
-        columns to use in the figure. The default is 2.
-    aggregation : str, optional
-        Way of aggregating the plot values. The default is 'individual'.
-
-        Note that only the `individual` option can be used for histories of non-numeric
-        quantities (e.g., modes, which are recorded as strings):
-
-        - 'individual' plots each run individually.
-        - 'mean_std' plots the mean values over the sim with standard deviation error
-          bars.
-        - 'mean_ci' plots the mean values over the sim with mean confidence interval
-          error bars given by optional argument `ci`.
-        - 'mean_bound' plots the mean values over the sim with variable bound error 
-          bars.
-        - 'percentile' plots the percentile distribution of the sim over time
-          (does not reject outliers). Modified by 'perc_range' argument.
-    comp_groups : dict, optional
-        Dictionary for comparison groups (if more than one) with structure given by:
-        ::
-            {'group1': ('scen1', 'scen2'),
-             'group2':('scen3', 'scen4')}.
-
-        Default is {}, which compares nominal and faulty.
-        If {'default': 'default'} is passed, all scenarios will be put in one group.
-        If a legend is shown, group names are used as labels.
-    legend_loc : int, optional
-        Specifies the plot to place the legend on, if runs are bine compared. Default is
-        -1 (the last plot). To remove the legend, give a value of False
-    xlabel : str, optional
-        Label for the x-axes. Default is 'time'
-    ylabels : dict, optional
-        Label for the y-axes.
-        Has structure::
-            {(fxnflowname, value): 'label'}
-
-    max_ind : int, optional
-        index (usually correlates to time) cutoff for the simulation. Default is 'max',
-        which uses the first simulation termination time.
-    boundtype : str, optional
-        Way to represent the bound ('fill' or 'line'):
-
-        - 'fill' plots the error bounds as a filled area with alpha define by optional 
-         'fillalpha' argument.
-        - 'line' plots the error bounds as lines modified by the optional 'boundcolor'
-          and 'boundlinestyle' arguments.
-    fillalpha : float
-        alpha value for fill in aggregated plots. Default is 0.3.
-    boundcolor : str, optional
-        color to make the bounds in aggregated plots. Default is 'gray'
-    boundlinestyle : str, optional
-        linestyle to use for bounds in aggregated plots. Default is '--'
-    perc_range : int, optional
-        Percentile range of inner bars when using the 'percentile' option. Default is 50
-    title : str, optional
-        overall title for the plot. Default is ''
-    indiv_kwargs : dict, optional
-        Dict of kwargs to use to differentiate each comparison group.
-        Has structure::
-            {comp1: kwargs1, comp2: kwargs2}
-
-        where kwargs is an individual dict of plt.plot arguments for the
-        comparison group comp (or scenario, if not aggregated) which overrides
-        the global kwargs (or default behavior). If no comparison groups are given,
-        use 'default' for a single history or 'nominal'/'faulty' for a fault history
-        e.g.::
-            kwargs = {'nominal': {color: 'green'}} 
-
-        would make the nominal color green. Default is {}.
-    time_slice : int/list, optional
-        overlays a bar or bars at the given index when the fault was injected (if any).
-        Default is []
-    time_slice_label : str, optional
-        label to use for the time slice bars in the legend. Default is None.
-    figsize : tuple (float,float)
-        x-y size for the figure. The default is 'default', which dymanically gives 3 for
-        each column and 2 for each row.
-    v_padding : float
-        vertical padding between subplots as a fraction of axis height.
-    h_padding : float
-        horizontal padding between subplots as a fraction of axis width.
-    title_padding : float
-        padding for title as a fraction of figure height.
-    phases : dict, optional
-        Provide to overlay phases on the individual function histories, where phases
-        is a dict of PhaseMaps from analyze.phases.from_hist. Default is {}.
-    phase_kwargs : dict
-        kwargs to plot.phase_overlay.
-    legend_title : str, optional
-        title for the legend. Default is None
-    **kwargs : kwargs
-        Global/default keyword arguments to plot_line_and_err.
-
-    Returns
-    -------
-    fig : figure
-        Matplotlib figure object
-    ax : axis
-        Corresponding matplotlib axis
+    If there is a pre-existing figure or axis, uses that instead.
     """
-    simhists, plot_values, grouphists, indiv_kwargs = prep_hists(simhists,
-                                                                 plot_values,
-                                                                 comp_groups,
-                                                                 indiv_kwargs)
-    fig, axs, cols, rows, subplot_titles = multiplot_helper(cols, *plot_values,
-                                                            figsize, titles=titles)
-
-    for i, plot_value in enumerate(plot_values):
-        ax = axs[i]
-        ax.set_title(subplot_titles[plot_value])
-        ax.grid()
-        if i >= (rows-1)*cols and xlabel:
-            ax.set_xlabel(xlabel)
-        if ylabels.get(plot_value, False):
-            ax.set_ylabel(ylabels[plot_value])
-        for group, hists in grouphists.items():
-            # TODO: find a better way to do this that will be compatible with timers
-            loc_kwargs = {**kwargs, **indiv_kwargs.get(group, {}), 'label': group}
-            try:
-                if aggregation == 'individual':
-                    individual_hists(hists, plot_value, group, ax, fig, **loc_kwargs)
-                elif aggregation == 'mean_std':
-                    mean_std(hists, plot_value, group, ax, fig, **loc_kwargs)
-                elif aggregation == 'mean_ci':
-                    mean_ci(hists, plot_value, group, ax, fig, max_ind=max_ind,
-                            **loc_kwargs)
-                elif aggregation == 'mean_bound':
-                    mean_bound(hists, plot_value, group, ax, fig, **loc_kwargs)
-                elif aggregation == 'percentile':
-                    percentile(hists, plot_value, group, ax, fig, **loc_kwargs)
-                else:
-                    raise Exception("Invalid aggregation option: "+aggregation)
-            except Exception as e:
-                raise Exception("Error at plot_value " + str(plot_value)
-                                + " and group: " + str(group)) from e
-            if plot_value[1] in phases:
-                phase_overlay(ax, phases[plot_value[1]], plot_value[1])
-        if type(time_slice) == int:
-            ax.axvline(x=time_slice, color='k', label=time_slice_label)
+    if not fig:
+        if z or (type(z) in (int, float)):
+            fig = plt.figure(figsize=figsize)
+            ax = fig.add_subplot(111, projection='3d')
         else:
-            for ts in time_slice:
-                ax.axvline(x=ts, color='k', label=time_slice_label)
-    multiplot_legend_title(grouphists, axs, ax, legend_loc, title,
-                           v_padding, h_padding, title_padding, legend_title)
-    return fig, axs
+            fig, ax = plt.subplots(1, figsize=figsize)
+    return fig, ax
 
 
 def phase_overlay(ax, phasemap, label_phases=True):
@@ -221,147 +61,23 @@ def phase_overlay(ax, phasemap, label_phases=True):
                     (ymin+ymax)/2, phasetext, ha='center', bbox=bbox_props)
 
 
-def hist_plot_helper(hists, ax=None, fig=None, figsize=(6, 4)):
-    """Set up hist plot time/fig/ax."""
-    if not ax:
-        fig, ax = plt.subplots(figsize=figsize)
-    times = hists.get_metric('time', axis=0)
-    return fig, ax, times
-
-
-def individual_hists(hists, value, ax=None, fig=None, figsize=(6, 4),
-                     **kwargs):
-    """Plot plot_value in hist as individual lines."""
-    fig, ax, times = hist_plot_helper(hists, ax=ax, fig=fig, figsize=figsize)
-    hist_to_plot = hists.get_values(value)
-    if 'color' not in kwargs:
-        kwargs['color'] = next(ax._get_lines.prop_cycler)['color']
-    for h in hist_to_plot.values():
-        ax.plot(times, h, **kwargs)
-    return fig, ax
-
-
-def mean_std(hists, value, ax=None, fig=None, figsize=(6, 4), **kwargs):
-    """Plot plot_value in hist aggregated by mean and standard devation."""
-    fig, ax, times = hist_plot_helper(hists, ax=ax, fig=fig, figsize=figsize)
-    mean = hists.get_metric(value, np.mean, axis=0)
-    std_dev = hists.get_metric(value, np.std)
-    plot_line_and_err(ax, times, mean, mean-std_dev/2, mean+std_dev/2, **kwargs)
-    return fig, ax
-
-
-def mean_ci(hists, value, ax=None, fig=None, figsize=(6, 4),
-            max_ind='max', ci=0.95, **kwargs):
-    """Plot plot_value in hist aggregated by bootstrap confidence interval for mean."""
-    fig, ax, times = hist_plot_helper(hists, ax=ax, fig=fig, figsize=figsize)
-    mean = hists.get_metric(value, np.mean, axis=0)
-    if max_ind == 'max':
-        max_ind = min([len(h) for h in hists.values()])
-    vals = [[hist[t] for hist in hists.get_values(value).values()]
-            for t in range(max_ind)]
-    boot_stats = np.array([bootstrap_confidence_interval(val, return_anyway=True,
-                                                         confidence_level=ci)
-                           for val in vals]).transpose()
-    plot_line_and_err(ax, times, mean, boot_stats[1], boot_stats[2], **kwargs)
-    return fig, ax
-
-
-def mean_bound(hists, value, ax=None, fig=None, figsize=(6, 4), **kwargs):
-    """Plot the value in hist aggregated by the mean and variable bounds."""
-    fig, ax, times = hist_plot_helper(hists, ax=ax, fig=fig, figsize=figsize)
-    mean = hists.get_metric(value, np.mean, axis=0)
-    maxs = hists.get_metric(value, np.max, axis=0)
-    mins = hists.get_metric(value, np.min, axis=0)
-    plot_line_and_err(ax, times, mean, mins, maxs, **kwargs)
-    return fig, ax
-
-
-def percentile(hists, value, ax=None, fig=None, figsize=(6, 4), prange=50,
-               boundtype='fill', fillalpha=0.3, boundcolor='gray', boundlinestyle='--',
-               **kwargs):
-    """Plot the value in hist aggregated by percentiles."""
-    fig, ax, times = hist_plot_helper(hists, ax=ax, fig=fig, figsize=figsize)
-    median = hists.get_metric(value, np.median, axis=0)
-    maxs = hists.get_metric(value, np.max, axis=0)
-    mins = hists.get_metric(value, np.min, axis=0)
-    plot_line_and_err(ax, times, median, mins, maxs, fillalpha=fillalpha,
-                      boundcolor=boundcolor, boundlinestyle=boundlinestyle, **kwargs)
-
-    low_perc = hists.get_metric(value, np.percentile, args=(50-prange/2,), axis=0)
-    high_perc = hists.get_metric(value, np.percentile, args=(50+prange/2,), axis=0)
-    if boundtype == 'fill':
-        col = ax.lines[-1].get_color()
-        ax.fill_between(times, low_perc, high_perc, alpha=fillalpha, color=col)
-    elif boundtype == 'line':
-        plot_err_lines(ax, times, low_perc, high_perc, color=boundcolor,
-                       linestyle=boundlinestyle)
-    return fig, ax
-
-
-def prep_hists(simhists, plot_values, comp_groups, indiv_kwargs):
-    """Prepare hists for plotting."""
-    # Process data - clip and flatten
-    if "time" in simhists:
-        simhists = History(nominal=simhists).flatten()
-    else:
-        simhists = simhists.flatten()
-
-    plot_values = unpack_plot_values(plot_values)
-
-    grouphists = simhists.get_comp_groups(*plot_values, **comp_groups)
-
-    # Set up plots and iteration
-    if 'nominal' in grouphists.keys() and len(grouphists) > 1:
-        indiv_kwargs['nominal'] = indiv_kwargs.get(
-            'nominal', {'color': 'blue', 'ls': '--'})
-    else:
-        indiv_kwargs.pop('nominal', '')
-
-    if 'faulty' in grouphists.keys():
-        indiv_kwargs['faulty'] = indiv_kwargs.get('faulty', {'color': 'red'})
-    else:
-        indiv_kwargs.pop('faulty', '')
-
-    return simhists, plot_values, grouphists, indiv_kwargs
-
-
-def multiplot_helper(cols, *plot_values, figsize='default', titles={}):
-    """Create multiple plot axes for plotting."""
-    num_plots = len(plot_values)
-    if num_plots == 1:
-        cols = 1
-    rows = int(np.ceil(num_plots/cols))
-    if figsize == 'default':
-        figsize = (cols*3, 2*rows)
-    fig, axs = plt.subplots(rows, cols, sharex=True, figsize=figsize)
-
-    if type(axs) == np.ndarray:
-        axs = axs.flatten()
-    else:
-        axs = [axs]
-
-    subplot_titles = {plot_value: plot_value for plot_value in plot_values}
-    subplot_titles.update(titles)
-    return fig, axs, cols, rows, subplot_titles
-
-
-def plot_line_and_err(ax, times, line, lows, highs, boundtype='fill',
-                      boundcolor='gray', boundlinestyle='--', fillalpha=0.3, **kwargs):
+def plot_err_hist(err_hist, ax=None, fig=None, figsize=(6, 4), boundtype='fill',
+                  boundcolor='gray', boundlinestyle='--', fillalpha=0.3,
+                  xlabel='time', ylabel='', title='', **kwargs):
     """
     Plot a line with a given range of uncertainty around it.
 
     Parameters
     ----------
-    ax : mpl axis
+    err_hist : History
+        hist of line, low, high values. Has the form:
+        {'time': times, 'stat': stat_values, 'low': low_values, 'high': high_values}
+    ax : mpl axis (optional)
         axis to plot the line on
-    times : list/array
-        x data (time, typically)
-    line : list/array
-        y center data to plot
-    lows : list/array
-        y lower bound to plot
-    highs : list/array
-        y upper bound to plot
+    fig : mpl figure (optional)
+        figure to plot line on
+    figsize : tuple
+        figure size (optional)
     boundtype : 'fill' or 'line'
         Whether the bounds should be marked with lines or a fill
     boundcolor : str, optional
@@ -372,16 +88,59 @@ def plot_line_and_err(ax, times, line, lows, highs, boundtype='fill',
         Alpha for fill. The default is 0.3.
     **kwargs : kwargs
         kwargs for the line
+
+    Returns
+    -------
+    fig : mpl figure
+    ax :mpl, axis
     """
-    ax.plot(line, **kwargs)
+    fig, ax = setup_plot(fig, ax, figsize)
+    ax.plot(err_hist['stat'], **kwargs)
     if boundtype == 'fill':
-        ax.fill_between(times, lows, highs,
-                        alpha=fillalpha, color=ax.lines[-1].get_color())
+        col = ax.lines[-1].get_color()
+        ax.fill_between(err_hist['time'], err_hist['low'], err_hist['high'],
+                        alpha=fillalpha, color=col)
+        if 'med_high' in err_hist and 'med_low' in err_hist:
+            ax.fill_between(err_hist['time'], err_hist['med_low'], err_hist['med_high'],
+                            alpha=fillalpha, color=col)
     elif boundtype == 'line':
-        plot_err_lines(ax, times, lows, highs,
-                       color=boundcolor, linestyle=boundlinestyle)
+        plot_err_lines(err_hist['time'], err_hist['low'], err_hist['high'], ax=ax,
+                       fig=fig, color=boundcolor, linestyle=boundlinestyle)
+        if 'med_high' in err_hist and 'med_low' in err_hist:
+            plot_err_lines(err_hist['time'], err_hist['med_low'], err_hist['med_high'],
+                           ax=ax, fig=fig, color=boundcolor, linestyle=boundlinestyle)
     else:
         raise Exception("Invalid bound type: "+boundtype)
+    if xlabel:
+        ax.set_xlabel(xlabel)
+    if ylabel:
+        ax.set_ylabel(ylabel)
+    if title:
+        ax.set_title(title)
+    return fig, ax
+
+
+def plot_err_lines(times, lows, highs, ax=None, fig=None, figsize=(6, 4), **kwargs):
+    """
+    Plot error lines on the given plot.
+
+    Parameters
+    ----------
+    times : list/array
+        x data (time, typically)
+    line : list/array
+        y center data to plot
+    lows : list/array
+        y lower bound to plot
+    highs : list/array
+        y upper bound to plot
+    **kwargs : kwargs
+        kwargs for the line
+    """
+    fig, ax = setup_plot(ax, fig, figsize)
+    ax.plot(times, highs, **kwargs)
+    ax.plot(times, lows, **kwargs)
+    return fig, ax
 
 
 def unpack_plot_values(plot_values):
@@ -393,27 +152,25 @@ def unpack_plot_values(plot_values):
     return plot_values
 
 
-def plot_err_lines(ax, times, lows, highs, **kwargs):
-    """
-    Plots error lines on the given plot
+def multiplot_helper(cols, *plot_values, figsize='default', titles={}, sharex=True,
+                     sharey=False):
+    """Create multiple plot axes for plotting."""
+    num_plots = len(plot_values)
+    if num_plots == 1:
+        cols = 1
+    rows = int(np.ceil(num_plots/cols))
+    if figsize == 'default':
+        figsize = (cols*3, 2*rows)
+    fig, axs = plt.subplots(rows, cols, sharex=sharex, sharey=sharey, figsize=figsize)
 
-    Parameters
-    ----------
-    ax : mpl axis
-        axis to plot the line on
-    times : list/array
-        x data (time, typically)
-    line : list/array
-        y center data to plot
-    lows : list/array
-        y lower bound to plot
-    highs : list/array
-        y upper bound to plot
-    **kwargs : kwargs
-        kwargs for the line
-    """
-    ax.plot(times, highs, **kwargs)
-    ax.plot(times, lows, **kwargs)
+    if type(axs) == np.ndarray:
+        axs = axs.flatten()
+    else:
+        axs = [axs]
+
+    subplot_titles = {plot_value: plot_value for plot_value in plot_values}
+    subplot_titles.update(titles)
+    return fig, axs, cols, rows, subplot_titles
 
 
 def multiplot_legend_title(groupmetrics, axs, ax,
@@ -440,8 +197,8 @@ def multiplot_legend_title(groupmetrics, axs, ax,
         plt.suptitle(title, y=1.0+title_padding)
 
 
-def make_consolidated_legend(ax, loc='upper left', bbox_to_anchor=(1.05, 1),
-                             add_handles=[], **kwargs):
+def consolidate_legend(ax, loc='upper left', bbox_to_anchor=(1.05, 1),
+                       add_handles=[], **kwargs):
     """Create a single legend for a given multiplot where multiple groups are
     being compared"""
     ax.legend()
@@ -454,152 +211,29 @@ def make_consolidated_legend(ax, loc='upper left', bbox_to_anchor=(1.05, 1),
               bbox_to_anchor=bbox_to_anchor, loc=loc, **kwargs)
 
 
-def metric_dist(result, *plot_values, cols=2, comp_groups={},
-                bins=10, metric_bins={},
-                legend_loc=-1, xlabels={}, ylabel='count', title='', indiv_kwargs={},
-                figsize='default',  v_padding=0.4, h_padding=0.05, title_padding=0.1,
-                legend_title=None, **kwargs):
+def mark_times(ax, tick, time, *plot_values, fontsize=8):
     """
-    Plots the histogram of given metric(s) separated by comparison groups over a set of
-    scenarios.
+    Mark times on an axis at a particular tick interval.
 
     Parameters
     ----------
-    result : Result
-        Result dictionary of metrics over set of scenarios
-    *plot_values : str
-        names of values to pull from the result (e.g., 'fxns.move_water.s.flowrate').
-        Can also be specified as a dict (e.g. {'fxns':'move_water'}) to get all keys
-        from a given fxn/flow/mode/etc.
-    cols : int, optional
-        columns to use in the figure. The default is 2.
-    comp_groups : dict, optional
-        Dictionary for comparison groups (if more than one).
-        Has structure::
-            {'group1': ('scen1', 'scen2'), 'group2': ('scen3', 'scen4')}.
-
-        Default is {}, which compares nominal and faulty.
-        If {'default': 'default'} is passed, all scenarios will be put in one group.
-        If a legend is shown, group names are used as labels.
-    bins : int
-        Number of bins to use (for all plots). Default is None
-    metric_bins : dict,
-        Dictionary of number of bins to use for each metric.
-        Has structure::
-            {'metric':num}.
-        
-        Default is {}
-    legend_loc : int, optional
-        Specifies the plot to place the legend on, if runs are being compared.
-        Default is -1 (the last plot)
-        To remove the legend, give a value of False
-    xlabels : dict, optional
-        Label for the x-axes.
-        Has structure::
-            {'metric':'label'}
-
-    ylabel : str, optional
-        Label for the y-axes. Default is 'time'
-    title : str, optional
-        overall title for the plot. Default is ''
-    indiv_kwargs : dict, optional
-        dict of kwargs to differentiate the comparison groups.
-        Has structure::
-            {comp1: kwargs1, comp2: kwargs2}
-
-        where kwargs is an individual dict of keyword arguments for the
-        comparison group comp (or scenario, if not aggregated) which overrides
-        the global kwargs (or default behavior).
-    figsize : tuple (float,float)
-        x-y size for the figure. The default is 'default', which dymanically gives 3 for
-        each column and 2 for each row
-    v_padding : float
-        vertical padding between subplots as a fraction of axis height.
-    h_padding : float
-        horizontal padding between subplots as a fraction of axis width.
-    title_padding : float
-        padding for title as a fraction of figure height.
-    legend_title : str, optional
-        title for the legend. Default is None.
-    **kwargs : kwargs
-        keyword arguments to mpl.hist e.g. bins, etc.
+    ax : matplotlib axis
+        Axis object to mark on
+    tick : float
+        Tick frequency.
+    time : np.array
+        Time vector.
+    *plot_values : np.array
+        x,y,z vectors
+    fontsize : int, optional
+        Size of the font. The default is 8.
     """
-    # Sort into comparison groups
-    plot_values = unpack_plot_values(plot_values)
-    groupmetrics = result.get_comp_groups(*plot_values, **comp_groups)
+    for st in zip(*plot_values, time):
+        tt = st[-1]
+        xyz = st[:-1]
+        if tt % tick == 0:
+            ax.text(*xyz, 't='+str(tt), fontsize=fontsize)
 
-    num_plots = len(plot_values)
-    if num_plots == 1:
-        cols = 1
-    rows = int(np.ceil(num_plots/cols))
-    if figsize == 'default':
-        figsize = (cols*3, 2*rows)
-    fig, axs = plt.subplots(rows, cols, sharey=True, sharex=False, figsize=figsize)
-    if type(axs) == np.ndarray:
-        axs = axs.flatten()
-    else:
-        axs = [axs]
-    num_bins = bins
-    for i, plot_value in enumerate(plot_values):
-        ax = axs[i]
-        xlabel = xlabels.get(plot_value, plot_value)
-        if type(xlabel) == str:
-            ax.set_xlabel(xlabel)
-        else:
-            ax.set_xlabel(' '.join(xlabel))
-        ax.grid(axis='y')
-        fulldata = [i for endc in groupmetrics.values()
-                    for i in [*endc.get_values(plot_value).values()]]
-        bins = np.histogram(fulldata, metric_bins.get(plot_value, num_bins))[1]
-        if not i % cols:
-            ax.set_ylabel(ylabel)
-        for group, endclasses in groupmetrics.items():
-            local_kwargs = {**kwargs, **indiv_kwargs.get(group, {})}
-            x = [*endclasses.get_values(plot_value).values()]
-            ax.hist(x, bins, label=group, **local_kwargs)
-
-    multiplot_legend_title(groupmetrics, axs, ax, legend_loc, title,
-                           v_padding, h_padding, title_padding, legend_title)
-    return fig, axs
-
-
-def metric_dist_from(mdlhists, times, *plot_values, **kwargs):
-    """
-    Plot the distribution of model history function/flow value over at defined time(s)
-    over a number of scenarios.
-
-    Parameters
-    ----------
-    mdlhists : History
-        Aggregate model histories over a set of scenarios.
-    times : list/int
-        List of times (or single time) to key the model history from.
-        If more than one time is provided, it takes the place of comp_groups.
-    *plot_values : strs
-        names of values to pull from the history (e.g., 'fxns.move_water.s.flowrate').
-        Can also be specified as a dict (e.g. {'fxns':'move_water'}) to get all keys
-        from a given fxn/flow/mode/etc.
-    **kwargs : kwargs
-        keyword arguments to plot.metric_dist
-    """
-    flat_mdlhists = mdlhists.nest(levels=1)
-    if type(times) in [int, float]:
-        times = [times]
-    if len(times) == 1 and kwargs.get('comp_groups', False):
-        time_classes = Result({scen: Result(flat_hist.get_slice(times[0]))
-                               for scen, flat_hist in flat_mdlhists.items()})
-        comp_groups = kwargs.pop('comp_groups')
-    elif kwargs.get('comp_groups', False):
-        raise Exception("Cannot compare times and comp_groups at the same time")
-    else:
-        time_classes = Result({str(t)+'_'+scen: Result(flat_hist.get_slice(t))
-                               for scen, flat_hist in flat_mdlhists.items()
-                               for t in times})
-        comp_groups = {str(t): {str(t)+'_'+scen for scen in flat_mdlhists}
-                       for t in times}
-    fig, axs = metric_dist(time_classes.flatten(), *plot_values,
-                           comp_groups=comp_groups, **kwargs)
-    return fig, axs
 
 def get_nominal_classes(ps, endclasses, params, metric):
     """helper function for nominal_values_xd functions that gets the parameters and
@@ -684,7 +318,7 @@ def nominal_vals_1d(ps, endclasses, x_param,
                 plt.eventplot(var, label='faulty', color=fault_color, alpha=fault_alpha)
 
     axis = plt.gca()
-    make_consolidated_legend(axis)
+    consolidate_legend(axis)
     axis.yaxis.set_ticklabels([])
     if not xlabel:
         xlabel = x_param
@@ -764,7 +398,7 @@ def nominal_vals_2d(ps, endclasses, x_param, y_param,
                             alpha=fault_alpha, color=fault_color)
 
     axis = plt.gca()
-    make_consolidated_legend(axis, loc=legend_loc)
+    consolidate_legend(axis, loc=legend_loc)
     if not xlabel:
         xlabel = x_param
     if not ylabel:
@@ -849,7 +483,7 @@ def nominal_vals_3d(ps, endclasses, x_param, y_param, z_param,
                 ax.scatter([var[0]], [var[1]], [var[2]], label='faulty',
                            marker=fault_marker, alpha=fault_alpha, color=fault_color)
 
-    make_consolidated_legend(ax, loc=legend_loc)
+    consolidate_legend(ax, loc=legend_loc)
     if not xlabel:
         xlabel = x_param
     if not ylabel:
@@ -862,75 +496,6 @@ def nominal_vals_3d(ps, endclasses, x_param, y_param, z_param,
     plt.title(title)
     plt.grid(which='both')
     return fig
-
-
-def dyn_order(mdl, rotateticks=False, title="Dynamic Run Order"):
-    """
-    Plot the run order for the model during the dynamic propagation step used
-    by dynamic_behavior() methods, where the x-direction is the order of each
-    function executed and the y are the corresponding flows acted on by the
-    given methods.
-
-    Parameters
-    ----------
-    mdl : Model
-        fmdtools model
-    rotateticks : Bool, optional
-        Whether to rotate the x-ticks (for bigger plots). The default is False.
-    title : str, optional
-        String to use for the title (if any). The default is "Dynamic Run Order".
-
-    Returns
-    -------
-    fig : figure
-        Matplotlib figure object
-    ax : axis
-        Corresponding matplotlib axis
-
-    """
-    fxnorder = list(mdl.dynamicfxns)
-    times = [i+0.5 for i in range(len(fxnorder))]
-    fxntimes = {f: i for i, f in enumerate(fxnorder)}
-
-    flowtimes = {f: [fxntimes[n] for n in mdl.graph.neighbors(
-        f) if n in mdl.dynamicfxns] for f in mdl.flows}
-
-    lengthorder = {k: v for k, v in
-                   sorted(flowtimes.items(), key=lambda x: len(x[1]), reverse=True) if len(v) > 0}
-    starttimeorder = {k: v for k, v in
-                      sorted(lengthorder.items(), key=lambda x: x[1][0], reverse=True)}
-    endtimeorder = [k for k, v in
-                    sorted(starttimeorder.items(), key=lambda x: x[1][-1], reverse=True)]
-    flowtimedict = {flow: i for i, flow in enumerate(endtimeorder)}
-
-    fig, ax = plt.subplots()
-
-    for flow in flowtimes:
-        phaseboxes = [((t, flowtimedict[flow]-0.5),
-                       (t, flowtimedict[flow]+0.5),
-                       (t+1.0, flowtimedict[flow]+0.5),
-                       (t+1.0, flowtimedict[flow]-0.5))
-                      for t in flowtimes[flow]]
-        bars = PolyCollection(phaseboxes)
-        ax.add_collection(bars)
-
-    flowtimes = [i+0.5 for i in range(len(mdl.flows))]
-    ax.set_yticks(list(flowtimedict.values()))
-    ax.set_yticklabels(list(flowtimedict.keys()))
-    ax.set_ylim(-0.5, len(flowtimes)-0.5)
-    ax.set_xticks(times)
-    ax.set_xticklabels(fxnorder, rotation=90*rotateticks)
-    ax.set_xlim(0, len(times))
-    ax.xaxis.set_minor_locator(AutoMinorLocator(2))
-    ax.yaxis.set_minor_locator(AutoMinorLocator(2))
-    ax.grid(which='minor',  linewidth=2)
-    ax.tick_params(axis='x', bottom=False, top=False, labelbottom=False, labeltop=True)
-    if title:
-        if rotateticks:
-            fig.suptitle(title, fontweight='bold', y=1.15)
-        else:
-            fig.suptitle(title, fontweight='bold')
-    return fig, ax
 
 
 def suite_for_plots(testclass, plottests=False):
