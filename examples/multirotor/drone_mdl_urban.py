@@ -408,8 +408,8 @@ def plot_env_with_traj(mdlhists, mdl, legend=True, title="trajectory"):
                                      "all_allowed": {"color": "blue"},
                                      "start": {"color": "blue"},
                                      "end": {"color": "blue"}})
-    fig, ax = show.trajectories(mdlhists, "dofs.s.x", "dofs.s.y",
-                                fig=fig, ax=ax, legend=legend, title=title)
+    fig, ax = mdlhists.plot_trajectories("dofs.s.x", "dofs.s.y",
+                                         fig=fig, ax=ax, legend=legend, title=title)
     return fig, ax
 
 
@@ -440,8 +440,8 @@ def plot_env_with_traj3d(mdlhists, mdl, legend=True, title="trajectory"):
 
     fig, ax = show.coord3d(mdl.flows['environment'].c, "height", voxels=False,
                         collections=collections)
-    fig, ax = show.trajectories(mdlhists, "dofs.s.x", "dofs.s.y", "dofs.s.z",
-                                fig=fig, ax=ax, legend=legend, title=title)
+    fig, ax = mdlhists.plot_trajectories("dofs.s.x", "dofs.s.y", "dofs.s.z",
+                                         fig=fig, ax=ax, legend=legend, title=title)
     ax.set_zlim3d(0, mdl.p.plan_param.height)
     for goal, loc in mdl.fxns['plan_path'].s.goals.items():
         ax.text(loc[0], loc[1], loc[2], str(goal), fontweight='bold', fontsize=12)
