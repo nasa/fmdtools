@@ -405,35 +405,35 @@ if __name__ == '__main__':
 
     # nominal run
     endresults, mdlhist = propagate.nominal(mdl, desired_result=['endclass', 'graph'])
-    an.plot.hist(mdlhist, "fxns.store_water.s.level")
+    mdlhist.plot_line("fxns.store_water.s.level")
     endresults.graph.draw()
 
     # faulty run
     endres, mdlhist = propagate.one_fault(
         mdl, 'store_water', 'leak', time=2, desired_result='graph')
-    an.plot.hist(mdlhist,  "fxns.store_water.s.level",
-                 title='Leak Response', time_slice=2)
+    mdlhist.plot_line("fxns.store_water.s.level",
+                      title='Leak Response', time_slice=2)
     endres.graph.draw(title="leak response at time=end")
 
     resgraph, mdlhist = propagate.one_fault(
         mdl, 'human', 'detect_false_high', time=2, desired_result='graph')
 
-    an.plot.hist(mdlhist, "fxns.store_water.s.level",
-                 title='detect_false_high', time_slice=2)
+    mdlhist.plot_line("fxns.store_water.s.level",
+                      title='detect_false_high', time_slice=2)
     resgraph.graph.draw(title='detect_false_high, t=2')
 
     resgraph, mdlhist = propagate.one_fault(
         mdl, 'human', 'turn_wrong_valve', time=2, desired_result='graph')
 
-    an.plot.hist(mdlhist, "fxns.store_water.s.level",
-                 title='turn_wrong_valve', time_slice=2)
+    mdlhist.plot_line("fxns.store_water.s.level",
+                      title='turn_wrong_valve', time_slice=2)
     resgraph.graph.draw(title='turn_wrong_valve, t=2')
 
     mdl = Tank(p=TankParam(reacttime=2), sp=dict(dt=3.0))
     resgraph, mdlhist = propagate.one_fault(
         mdl, 'store_water', 'leak', time=2, desired_result='graph')
-    an.plot.hist(mdlhist, "fxns.store_water.s.level",
-                 title='Leak Response', time_slice=2)
+    mdlhist.plot_line("fxns.store_water.s.level",
+                      title='Leak Response', time_slice=2)
     resgraph.graph.draw(title='turn_wrong_valve, t=end')
 
     # run all faults - note: all faults get caught!
@@ -442,7 +442,7 @@ if __name__ == '__main__':
     fd = FaultDomain(mdl)
     fd.add_all()
     fs = FaultSample(fd)
-    fs.add_single_fault_times((0, 5, 10, 15, 20))
+    fs.add_fault_times((0, 5, 10, 15, 20))
     endclasses, hist = propagate.fault_sample(mdl, fs)
 
     from fmdtools.analyze.graph import ModelGraph

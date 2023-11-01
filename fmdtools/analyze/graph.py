@@ -84,8 +84,9 @@ from matplotlib import get_backend
 from matplotlib.colors import Colormap
 from recordclass import dataobject, asdict
 from fmdtools.define.common import return_true_indicators
-from fmdtools.analyze.result import Result, History
-from fmdtools.analyze.plot import make_consolidated_legend
+from fmdtools.analyze.result import Result
+from fmdtools.analyze.history import History
+from fmdtools.analyze.plot import consolidate_legend
 
 
 plt.rcParams['pdf.fonttype'] = 42
@@ -740,11 +741,11 @@ class Graph(object):
                                     **self.node_labels[level+'_style'].kwargs(), ax=ax)
 
         if withlegend:
-            make_consolidated_legend(ax, labelspacing=legend_labelspacing,
-                                     borderpad=legend_borderpad,
-                                     bbox_to_anchor=legend_bbox,
-                                     loc=legend_loc,
-                                     add_handles=edge_handles)
+            consolidate_legend(ax, labelspacing=legend_labelspacing,
+                               borderpad=legend_borderpad,
+                               bbox_to_anchor=legend_bbox,
+                               loc=legend_loc,
+                               add_handles=edge_handles)
         plt.axis('off')
 
         if title:

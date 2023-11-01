@@ -458,8 +458,8 @@ if __name__ == "__main__":
     from fmdtools import analyze as an
     mdl = Drone()
     ec, mdlhist = fs.propagate.nominal(mdl)
-    fig, ax = an.show.trajectories(mdlhist, "dofs.s.x", "dofs.s.y", "dofs.s.z",
-                                   time_groups=['nominal'], time_ticks=2.0)
+    fig, ax = mdlhist.plot_trajectories("dofs.s.x", "dofs.s.y", "dofs.s.z",
+                                        time_groups=['nominal'], time_ticks=2.0)
 
     app_mechfaults = SampleApproach(mdl, phasemaps={'mdl': PhaseMap(mdl.sp.phases)})
     app_mechfaults.add_faultdomain("mechfaults", "fault", "affect_dof", "mechbreak")
@@ -467,14 +467,13 @@ if __name__ == "__main__":
                                    "mechfaults", phasemap='mdl', args=(5,))
 
     quad_ec, quad_hist = fs.propagate.fault_sample(mdl, app_mechfaults, staged=True)
-    an.plot.hist(quad_hist.nominal, 'flows.dofs.s.x', 'dofs.s.y', 'dofs.s.z',
-                 'store_ee.s.soc')
+    quad_hist.nominal.plot_line('flows.dofs.s.x', 'dofs.s.y', 'dofs.s.z',
+                                'store_ee.s.soc')
 
-    fig, ax = an.show.trajectories(quad_hist,
-                                   "dofs.s.x", "dofs.s.y", "dofs.s.z",
-                                   time_groups=['nominal'],
-                                   indiv_kwargs={'faulty':{'alpha': 0.15,
-                                                           'color': 'red'}})
+    fig, ax = quad_hist.plot_trajectories("dofs.s.x", "dofs.s.y", "dofs.s.z",
+                                          time_groups=['nominal'],
+                                          indiv_kwargs={'faulty': {'alpha': 0.15,
+                                                                   'color': 'red'}})
 
     import fmdtools.analyze as an
     an.phases.phaseplot(app_mechfaults.phasemaps)

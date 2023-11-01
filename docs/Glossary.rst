@@ -97,4 +97,4 @@ Glossary
 		How a the states of a system unfold over time. Defined using :term:`behavior`.
 	
 	Model History
-		A history of model states over a set of timesteps defined in :class:`fmdtools.analyze.result.History`. Returned in fmdtools as a nested dictionary from methods in :mod:`fmdtools.sim.propagate`.
+		A history of model states over a set of timesteps defined in :class:`fmdtools.analyze.history.History`. Returned in fmdtools as a nested dictionary from methods in :mod:`fmdtools.sim.propagate`.

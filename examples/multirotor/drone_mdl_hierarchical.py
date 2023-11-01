@@ -256,7 +256,7 @@ if __name__ == "__main__":
                                                'affect_dof',
                                                'rf_mechbreak',
                                                time=5)
-    an.plot.hist(mdlhist, 'flows.dofs.s.x', 'dofs.s.y', 'dofs.s.z', 'store_ee.s.soc')
+    mdlhist.plot_line('flows.dofs.s.x', 'dofs.s.y', 'dofs.s.z', 'store_ee.s.soc')
 
     # check rr2_propstuck fault in oct architecture over several times:
     mdl = Drone(p=DroneParam(arch='oct'))
@@ -270,12 +270,12 @@ if __name__ == "__main__":
 
     # plot a single scen (at t=8)
     fault_kwargs = {'alpha': 0.2, 'color': 'red'}
-    an.plot.hist(hist.get('nominal', 'affect_dof_rr2_propstuck_t8p0').flatten(),
-                 'flows.dofs.s.x', 'dofs.s.y', 'dofs.s.z', 'store_ee.s.soc')
+    h_plot = hist.get('nominal', 'affect_dof_rr2_propstuck_t8p0').flatten()
+    h_plot.plot_line('flows.dofs.s.x', 'dofs.s.y', 'dofs.s.z', 'store_ee.s.soc')
 
     # plot all scens
-    an.plot.hist(hist, 'flows.dofs.s.x', 'dofs.s.y', 'dofs.s.z', 'store_ee.s.soc',
-                 indiv_kwargs={'faulty': fault_kwargs})
-    fig, ax = an.show.trajectories(hist, "dofs.s.x", "dofs.s.y", "dofs.s.z",
-                                   time_groups=['nominal'],
-                                   indiv_kwargs={'faulty': fault_kwargs})
+    hist.plot_line('flows.dofs.s.x', 'dofs.s.y', 'dofs.s.z', 'store_ee.s.soc',
+                   indiv_kwargs={'faulty': fault_kwargs})
+    fig, ax = hist.plot_trajectories("dofs.s.x", "dofs.s.y", "dofs.s.z",
+                                     time_groups=['nominal'],
+                                     indiv_kwargs={'faulty': fault_kwargs})

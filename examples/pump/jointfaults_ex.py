@@ -10,7 +10,7 @@ import fmdtools.sim.propagate as prop
 import fmdtools.analyze as an
 from fmdtools.sim.sample import SampleApproach, FaultSample, FaultDomain
 from fmdtools.analyze.phases import PhaseMap
-from fmdtools.analyze.result import History
+from fmdtools.analyze.history import History
 from ex_pump import Pump  # required to import entire module
 
 mdl = Pump()
@@ -41,4 +41,4 @@ endclasses, mdlhists = prop.fault_sample(mdl, fs_5)
 
 mdlhist = History({'nominal': mdlhists.get('nominal'),
            'faulty': mdlhists.get('import_ee_no_v__import_water_no_wat__import_signal_no_sig__move_water_mech_break__export_water_block_t27p0')})
-an.plot.hist(mdlhist, 'flows.ee_1.s.current', 'flows.wat_2.s.flowrate', time_slice=27)
+mdlhist.plot_line('flows.ee_1.s.current', 'flows.wat_2.s.flowrate', time_slice=27)

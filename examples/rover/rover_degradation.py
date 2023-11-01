@@ -265,11 +265,11 @@ if __name__ == "__main__":
     # nominal
     deg_mdl = DriveDegradation('DriveDeg')
     endresults, mdlhist = prop.nominal(deg_mdl)
-    an.plot.hist(mdlhist, "s.wear")
+    mdlhist.plot_line("s.wear")
     # stochastic
     deg_mdl = DriveDegradation('DriveDeg')
     endresults, mdlhist = prop.nominal(deg_mdl, run_stochastic=True)
-    an.plot.hist(mdlhist, "s.friction")
+    mdlhist.plot_line("s.friction")
 
     # stochastic over replicates
     nomapp = NominalApproach()

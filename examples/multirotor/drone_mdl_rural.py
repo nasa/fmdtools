@@ -12,7 +12,7 @@ from fmdtools.define.mode import Mode
 from fmdtools.define.block import FxnBlock, Component, CompArch
 from fmdtools.define.flow import Flow
 from fmdtools.define.model import Model
-from fmdtools.analyze.result import History
+from fmdtools.analyze.history import History
 
 from examples.multirotor.drone_mdl_static import EE, Force, Control, DesTraj, DOFs
 from examples.multirotor.drone_mdl_static import DistEE, StoreEEState
@@ -814,9 +814,9 @@ def plot_env_with_traj3d(hist, mdl):
     fig, ax = show.coord3d(mdl.flows['environment'].c, "target", z="",
                           collections={"start": {"color": "yellow"},
                                        "safe": {"color": "yellow"}})
-    fig, ax = show.trajectories(hist, "dofs.s.x", "dofs.s.y", "dofs.s.z",
-                                time_groups=['nominal'], time_ticks=1.0,
-                                fig=fig, ax=ax)
+    fig, ax = hist.plot_trajectories("dofs.s.x", "dofs.s.y", "dofs.s.z",
+                                     time_groups=['nominal'], time_ticks=1.0,
+                                     fig=fig, ax=ax)
     plot_goals(ax, mdl.p.flightplan)
     return fig, ax
 
@@ -825,7 +825,7 @@ def plot_env_with_traj(mdlhists, mdl):
     fig, ax = show.coord(mdl.flows['environment'].c, "target",
                         collections={"start": {"color": "yellow"},
                                      "safe": {"color": "yellow"}})
-    fig, ax = show.trajectories(mdlhists, "dofs.s.x", "dofs.s.y", fig=fig, ax=ax)
+    fig, ax = mdlhists.plot_trajectories("dofs.s.x", "dofs.s.y", fig=fig, ax=ax)
     return fig, ax
 
 # likelihood class schedule (pfh)
@@ -915,20 +915,19 @@ if __name__ == "__main__":
 
     # plot trajectories over fault scenarios
     fault_kwargs = {'alpha': 0.2, 'color': 'red'}
-    plot.hist(mdlhists, 'flows.dofs.s.x', 'dofs.s.y', 'dofs.s.z', 'store_ee.s.soc',
-              indiv_kwargs={'faulty': fault_kwargs})
-    fig, ax = show.trajectories(mdlhists,
-                                "dofs.s.x", "dofs.s.y", "dofs.s.z",
-                                time_groups=['nominal'],
-                                indiv_kwargs={'faulty': fault_kwargs})
+    mdlhists.plot_line('flows.dofs.s.x', 'dofs.s.y', 'dofs.s.z', 'store_ee.s.soc',
+                       indiv_kwargs={'faulty': fault_kwargs})
+    fig, ax = mdlhists.plot_trajectories("dofs.s.x", "dofs.s.y", "dofs.s.z",
+                                         time_groups=['nominal'],
+                                         indiv_kwargs={'faulty': fault_kwargs})
 
-    fig, ax = show.trajectories(mdlhists, "dofs.s.x", "dofs.s.y",
-                                time_groups=['nominal'],
-                                indiv_kwargs={'faulty': fault_kwargs})
+    fig, ax = mdlhists.plot_trajectories("dofs.s.x", "dofs.s.y",
+                                         time_groups=['nominal'],
+                                         indiv_kwargs={'faulty': fault_kwargs})
 
     # check single lowcharge fault from approach
     h = History(nominal=mdlhists.nominal,
                 faulty=mdlhists.store_ee_lowcharge_t6p0)
     fig, ax = plot_env_with_traj3d(h, mdl)
     fig, ax = plot_env_with_traj(mdlhists, mdl)
-    
+

@@ -19,7 +19,7 @@ and classes:
 import pandas as pd
 import numpy as np
 from fmdtools.analyze.result import Result
-from fmdtools.analyze.plot import multiplot_helper, make_consolidated_legend
+from fmdtools.analyze.plot import multiplot_helper, consolidate_legend
 from fmdtools.analyze.plot import multiplot_legend_title
 from matplotlib import colors as mcolors
 from matplotlib import pyplot as plt
@@ -48,7 +48,7 @@ def result_summary_fmea(endresult, mdlhist, *attrs, metrics=()):
     pandas.DataFrame
         Table of metrics and degraded functions/flows over scenarios
     """
-    from fmdtools.analyze.result import History
+    from fmdtools.analyze.history import History
     deg_summaries = {}
     fault_summaries = {}
     mdlhist = mdlhist.nest(levels=1)
@@ -294,7 +294,7 @@ class BaseTab(UserDict):
         ax.tick_params(axis='x', rotation=xlab_ang)
         # legend, title, etc.
         if color_factor and not suppress_legend:
-            make_consolidated_legend(ax, title=color_factor)
+            consolidate_legend(ax, title=color_factor)
         if ylab:
             ax.set_ylab(ylab)
         if title:

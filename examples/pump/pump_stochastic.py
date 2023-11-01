@@ -105,9 +105,9 @@ class MoveWat(DetMoveWat):
         if time > self.t.time:
             self.s.inc(total_flow=self.wat_out.s.flowrate)
 
+
 from examples.pump.ex_pump import PumpParam, Electricity, Water, Signal
 from examples.pump.ex_pump import Pump as DetPump
-from fmdtools.define.model import SimParam
 
 
 class Pump(DetPump):
@@ -146,17 +146,17 @@ if __name__ == "__main__":
     
     endclasses, mdlhists=propagate.nominal_approach(mdl,app, run_stochastic=True)
     
-    fig = an.plot.hist(mdlhists, 'move_water.r.s.eff', 'move_water.s.total_flow',
-                   'wat_2.s.flowrate', 'wat_2.s.pressure',
-                   'import_ee.r.s.effstate', 'import_ee.r.s.grid_noise',
-                   'ee_1.s.voltage', 'sig_1.s.power',
-                   color='blue', comp_groups={}, aggregation='percentile')
+    fig = mdlhists.plot_line('move_water.r.s.eff', 'move_water.s.total_flow',
+                             'wat_2.s.flowrate', 'wat_2.s.pressure',
+                             'import_ee.r.s.effstate', 'import_ee.r.s.grid_noise',
+                             'ee_1.s.voltage', 'sig_1.s.power',
+                             color='blue', comp_groups={}, aggregation='percentile')
     
-    fig = an.plot.hist(mdlhists, 'move_water.r.s.eff', 'move_water.s.total_flow',
-                   'wat_2.s.flowrate', 'wat_2.s.pressure',
-                   'import_ee.r.s.effstate', 'import_ee.r.s.grid_noise',
-                   'ee_1.s.voltage', 'sig_1.s.power',
-                   color='blue', comp_groups={}, aggregation='mean_ci')
+    fig = mdlhists.plot_line( 'move_water.r.s.eff', 'move_water.s.total_flow',
+                             'wat_2.s.flowrate', 'wat_2.s.pressure',
+                             'import_ee.r.s.effstate', 'import_ee.r.s.grid_noise',
+                             'ee_1.s.voltage', 'sig_1.s.power',
+                             color='blue', comp_groups={}, aggregation='mean_ci')
     
     # convert to test 2:
     rp = SimParam(phases=(('start',0,4),('on',5,49),('end',50,55)), times=(0,20, 55), dt=1.0, units='hr')
@@ -183,31 +183,30 @@ if __name__ == "__main__":
                                                pool=mp.Pool(4))
 
     an.plot.nominal_vals_1d(ps, ecs, 'p.delay')
-
+    # convert to plot tests:
     comp_mdlhists = hists.get_scens('export_water_block_t27p0')
     comp_groups = {'delay_1': ps.get_scens(p={'delay': 1}),
                    'delay_10': ps.get_scens(p={'delay': 10})}
-    fig = an.plot.hist(comp_mdlhists,
-                       'fxns.move_water.s.eff',
-                       'fxns.move_water.s.total_flow',
-                       'flows.wat_2.s.flowrate',
-                       'flows.wat_2.s.pressure',
-                       comp_groups=comp_groups,
-                       aggregation='percentile',
-                       time_slice=27)
+    comp_mdlhists.plot_line('fxns.move_water.s.eff',
+                            'fxns.move_water.s.total_flow',
+                            'flows.wat_2.s.flowrate',
+                            'flows.wat_2.s.pressure',
+                            comp_groups=comp_groups,
+                            aggregation='percentile',
+                            time_slice=27)
 
-    fig = an.plot.hist(comp_mdlhists,
-                       'fxns.move_water.s.eff',
-                       'fxns.move_water.s.total_flow',
-                       'flows.wat_2.s.flowrate',
-                       'flows.wat_2.s.pressure',
-                       aggregation='percentile', time_slice=27)
+    comp_mdlhists.plot_line('fxns.move_water.s.eff',
+                           'fxns.move_water.s.eff',
+                           'fxns.move_water.s.total_flow',
+                           'flows.wat_2.s.flowrate',
+                           'flows.wat_2.s.pressure',
+                           aggregation='percentile', time_slice=27)
 
-    fig = an.plot.metric_dist_from(comp_mdlhists, [5,10,15],
-                       'fxns.move_water.s.eff',
-                       'fxns.move_water.s.total_flow',
-                       'flows.wat_2.s.flowrate',
-                       'flows.wat_2.s.pressure')
+    comp_mdlhists.plot_metric_dist([5,10,15],
+                                   'fxns.move_water.s.eff',
+                                   'fxns.move_water.s.total_flow',
+                                   'flows.wat_2.s.flowrate',
+                                   'flows.wat_2.s.pressure')
 
     ps2 = ParameterSample(pd)
     ps2.add_variable_replicates([[0]], replicates=100, name="nodelay")
@@ -240,8 +239,8 @@ if __name__ == "__main__":
 
     #mdlhist['faulty']['functions']['ImportEE']['probdens']
 
-    an.plot.hist(mdlhist, 'fxns.import_ee.s.effstate', 'fxns.import_ee.r.s.grid_noise',
-                 'flows.ee_1.s.voltage', 'flows.ee_1.s.current')
+    mdlhist.plot_line('fxns.import_ee.s.effstate', 'fxns.import_ee.r.s.grid_noise',
+                      'flows.ee_1.s.voltage', 'flows.ee_1.s.current')
     #an.plot.mdlhists(mdlhist, fxnflowvals={'ImportEE'})
     
 

@@ -10,7 +10,8 @@ from fmdtools.define.common import init_obj_attr, init_obj_dict
 from fmdtools.define.parameter import Parameter
 from fmdtools.define.state import State
 from fmdtools.define.common import get_obj_track
-from fmdtools.analyze.result import History, get_sub_include, init_indicator_hist
+from fmdtools.analyze.common import get_sub_include
+from fmdtools.analyze.history import History, init_indicator_hist
 
 from shapely import LineString, Point, Polygon
 from shapely.ops import nearest_points

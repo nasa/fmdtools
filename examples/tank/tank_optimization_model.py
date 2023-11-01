@@ -230,11 +230,11 @@ if __name__ == "__main__":
     mdl = Tank()
 
     endresults, mdlhist = propagate.nominal(mdl, desired_result=['endclass', 'graph'])
-    an.plot.hist(mdlhist, {'fxns': 'store_coolant'})
+    mdlhist.plot_line({'fxns': 'store_coolant'})
 
     # check faulty run
     result, mdlhist = propagate.one_fault(mdl, 'export_coolant', 'blockage', time=2,
                                           desired_result=['endclass', 'graph'])
 
-    an.plot.hist(mdlhist, {'fxns': 'store_coolant'}, time_slice=2, title='NotVisible')
+    mdlhist.plot_line({'fxns': 'store_coolant'}, time_slice=2, title='NotVisible')
     result.graph.draw(title='NotVisible, time=2')
