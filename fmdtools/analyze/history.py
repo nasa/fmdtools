@@ -287,7 +287,7 @@ class History(Result):
                     val = modename in get_var(obj, fault_att).faults
                 else:
                     val = get_var(obj, att)
-            except: 
+            except:
                 raise Exception("Unable to log att " + str(att) + " in " +
                                 str(obj.__class__.__name__) + ', val=' + str(val))
 
@@ -326,7 +326,7 @@ class History(Result):
         for name, att in hist.items():
             if isinstance(att, History):
                 hist[name] = hist[name].cut(end_ind, start_ind, newcopy=False)
-            else: 
+            else:
                 try:
                     if end_ind is None:
                         hist[name] = att[start_ind:]
