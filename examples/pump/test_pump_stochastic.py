@@ -44,13 +44,13 @@ class StochasticPumpTests(unittest.TestCase, CommonTests):
         """Test so models with the same seed will run the same/produce same results."""
         for seed in [1, 10, 209840]:
             mdl = Pump(r={'seed': seed})
-            res_1, hist_1 = prop.nominal(mdl, run_stochastic=True)
+            res_1, hist_1 = prop.nominal(mdl, run_stochastic=True, showprogress=False)
             res_f1, hist_f1 = prop.single_faults(mdl, run_stochastic=True,
                                                  showprogress=False)
             if seed == None:
                 seed = mdl.r.seed
             mdl2 = Pump(r={'seed': seed})
-            res_2,  hist_2 = prop.nominal(mdl2, run_stochastic=True)
+            res_2,  hist_2 = prop.nominal(mdl2, run_stochastic=True, showprogress=False)
             res_f2, hist_f2 = prop.single_faults(mdl2, run_stochastic=True,
                                                 showprogress=False)
             self.assertTrue(all(hist_1.fxns.move_water.s.eff ==
@@ -195,6 +195,7 @@ class StochasticPumpTests(unittest.TestCase, CommonTests):
         faultsamples = {'fs': (('fault_phases', 'fd'), {})}
 
         ecs, hists, apps = prop.nested_sample(mdl, ps, run_stochastic=True,
+                                              showprogress=False,
                                               faultdomains=faultdomains,
                                               faultsamples=faultsamples,
                                               pool=mp.Pool(4))
@@ -225,7 +226,8 @@ class StochasticPumpTests(unittest.TestCase, CommonTests):
         ps = ParameterSample()
         ps.add_variable_replicates([], 20)
         mdl = Pump()
-        res, hist = prop.parameter_sample(mdl, ps, run_stochastic=True)
+        res, hist = prop.parameter_sample(mdl, ps, run_stochastic=True,
+                                          showprogress=False)
 
         title = "should show bounds and perc of random variables over time"
         hist.plot_line('move_water.r.s.eff', 'move_water.s.total_flow',
