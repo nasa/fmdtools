@@ -68,6 +68,7 @@ class Fault(dataobject, readonly=True, mapping=True):
         Examples
         --------
         >>> # Calculating the rate of a mode in the 'on phase':
+        >>> from fmdtools.analyze.phases import PhaseMap
         >>> pm = PhaseMap({'on': [0, 5], 'off': [6, 10]})
         >>> exfault = Fault(prob=0.5, phases = {'on': 0.9, 'off': 0.1}, units='hr')
         >>> rate = exfault.calc_rate(4, pm, sim_time=10.0, sim_units='min')
@@ -606,11 +607,10 @@ class ExampleMode(Mode):
 
 
 if __name__ == "__main__":
-    exfault = Fault(prob=0.5, phases = {'on': 0.9, 'off': 0.1}, units='hr')
+    from fmdtools.analyze.phases import PhaseMap
+    exfault = Fault(prob=0.5, phases={'on': 0.9, 'off': 0.1}, units='hr')
     phases = PhaseMap({'on': [0, 5], 'off': [6, 10]})
     rate = exfault.calc_rate(4, phases, sim_time=10.0, sim_units='min')
 
-    
-    
     import doctest
     doctest.testmod(verbose=True)
