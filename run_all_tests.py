@@ -17,9 +17,17 @@ if __name__=="__main__":
     # for testing modules with doctests
     doctest_modules = ["fmdtools/define/state.py",
                        "fmdtools/define/parameter.py",
+                       "fmdtools/define/mode.py",
                        "fmdtools/define/geom.py",
                        "fmdtools/define/coords.py",
                        "fmdtools/define/environment.py",
+                       "fmdtools/sim/scenario.py",
+                       "fmdtools/sim/sample.py",
+                       "fmdtools/analyze/result.py",
+                       "fmdtools/analyze/history.py",
+                       "fmdtools/analyze/phases.py",
+                       "fmdtools/analyze/tabulate.py",
+                       "examples/rover/rover_model.py",
                        "examples/multirotor/drone_mdl_static.py",
                        "examples/multirotor/drone_mdl_dynamic.py",
                        "examples/multirotor/drone_mdl_hierarchical.py"]
@@ -32,7 +40,7 @@ if __name__=="__main__":
     #                        "--continue-on-collection-errors"])
 
     fast_notebooks = ["examples/asg_demo/Action_Sequence_Graph.ipynb",
-                      "examples/eps/EPS_Example_Notebook.ipynb", 
+                      "examples/eps/EPS_Example_Notebook.ipynb",
                       "examples/pump/Pump_Example_Notebook.ipynb",
                       "examples/pump/Stochastic_Modelling.ipynb",
                       "examples/rover/ParameterSample_Use-Cases.ipynb",
@@ -63,7 +71,7 @@ if __name__=="__main__":
     # retcode = pytest.main(["--nbmake", *slow_notebooks])
 
     # for testing all unittests
-    retcode = pytest.main(["--continue-on-collection-errors"])
+    # retcode = pytest.main(["--continue-on-collection-errors"])
 
     # for creating comprehensive test report:
 
