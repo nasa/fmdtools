@@ -611,7 +611,6 @@ class GeomArch(object):
         geoms.ex_point.s.occupied:      array(1)
         geoms.ex_line.s.occupied:       array(1)
         geoms.ex_poly.s.occupied:       array(1)
-        <BLANKLINE>
         """
         track = get_obj_track(self, track, all_possible=self.all_possible)
         hist = History()

@@ -237,6 +237,7 @@ def is_iter(data):
 
 def check_pickleability(obj, verbose=True, try_pick=False, pause=0.2):
     """Check to see which attributes of an object will pickle (and parallelize)."""
+    from pickle import PicklingError
     unpickleable = []
     try:
         itera = vars(obj)
@@ -261,8 +262,8 @@ def check_pickleability(obj, verbose=True, try_pick=False, pause=0.2):
         try:
             a = pickle.dumps(obj)
             b = pickle.loads(a)
-        except:
-            raise Exception(obj.name + " will not pickle")
+        except PicklingError as e:
+            raise Exception(obj.name + " will not pickle") from e
     if verbose:
         if unpickleable:
             print("The following attributes will not pickle: " + str(unpickleable))
