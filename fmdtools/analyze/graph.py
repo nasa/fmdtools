@@ -141,10 +141,10 @@ class EdgeStyle(dataobject):
             kwargs for graphviz
         """
         gv_arrowstyles = {'-|>': 'open',
-                          '':   'none',
+                          '': 'none',
                           '->': 'normal'}
-        gv = {'color':      self.edge_color,
-              'style':      self.style}
+        gv = {'color': self.edge_color,
+              'style': self.style}
         if self.arrows:
             gv['arrowhead'] = gv_arrowstyles.get(self.arrowstyle, 'none')
         else:
@@ -172,7 +172,7 @@ class NodeStyle(dataobject):
     """Hold kwargs for nx.draw_networkx_nodes to apply as a style for multiple nodes."""
 
     node_color: str = "lightgrey"
-    node_size:  int = 500
+    node_size: int = 500
     node_shape: str = 'o'
     edgecolors: str = 'grey'
     linewidths: int = 0
@@ -1340,12 +1340,7 @@ def data_error(data, average):
 
 
 def gv_import_check():
-    """
-    Checks if graphviz is installed on the system before plotting.
-    Returns
-    -------
-
-    """
+    """Check if graphviz is installed on the system before plotting."""
     try:
         from graphviz import Digraph, Graph
     except ImportError as error:
@@ -1364,6 +1359,7 @@ class GraphInteractor:
 
     def __init__(self, g_obj, **kwargs):
         """
+        Initialize the interactive graph.
 
         Parameters
         ----------
@@ -1388,14 +1384,11 @@ class GraphInteractor:
 
     def get_closest_point(self, event):
         """
-        Finds the closest node to the given click to see if it should be moved
+        Find the closest node to the given click to see if it should be moved.
+
         Parameters
         ----------
         event
-
-        Returns
-        -------
-
         """
         pt_x = np.array([x[0] for x in self.g_obj.pos.values()])
         pt_y = np.array([x[1] for x in self.g_obj.pos.values()])
@@ -1409,16 +1402,11 @@ class GraphInteractor:
 
     def on_button_press(self, event):
         """
-        Determines what to do when a button is pressed
+        Determine what to do when a button is pressed.
 
         Parameters
         ----------
         event
-
-        Returns
-        -------
-        Returns nothing (intended)
-
         """
         """"""
         if event.inaxes is None:
@@ -1432,15 +1420,11 @@ class GraphInteractor:
 
     def on_button_release(self, event):
         """
-        Determines what to do when the mouse is released
+        Determine what to do when the mouse is released.
 
         Parameters
         ----------
         event
-
-        Returns
-        -------
-        Returns nothing (intended)
         """
         if event.button != 1:
             return
@@ -1450,14 +1434,11 @@ class GraphInteractor:
 
     def on_mouse_move(self, event):
         """
-        Changes the node position when the user drags it
+        Change the node position when the user drags it.
+
         Parameters
         ----------
         event
-
-        Returns
-        -------
-        Returns nothing (intended)
         """
         if not self.showverts:
             return
@@ -1470,13 +1451,7 @@ class GraphInteractor:
             self.g_obj.pos[self._clicked_node] = [x, y]
 
     def refresh_plot(self):
-        """
-        Refreshes the plot with the new positions.
-
-        Returns
-        -------
-
-        """
+        """Refresh the plot with the new positions."""
         self.g_obj.pos = {pt: np.round(loc, 2) for pt, loc in self.g_obj.pos.items()}
         self.g_obj.draw(fig=self.fig, ax=self.ax, withlegend=False, **self.kwargs)
         self.ax.set_xlim(-1, 1)
@@ -1494,9 +1469,6 @@ class GraphInteractor:
         """
         Prints the current node positions in the graph so they can be viewed
         (and copied) from the console.
-        Returns
-        -------
-
         """
         print({k: list(v) for k, v in self.g_obj.pos.items()})
 
@@ -1514,7 +1486,7 @@ class ModelGraph(Graph):
 
     def __init__(self, mdl, get_states=True, time=0.0, **kwargs):
         """
-        Generates the ModelGraph corresponding to a given Model
+        Generate the ModelGraph corresponding to a given Model.
 
         Parameters
         ----------
@@ -1535,7 +1507,8 @@ class ModelGraph(Graph):
 
     def nx_from_obj(self, mdl):
         """
-        Generates the networkx.graph object corresponding to the model.
+        Generate the networkx.graph object corresponding to the model.
+
         Parameters
         ----------
         mdl: Model
@@ -1556,15 +1529,12 @@ class ModelGraph(Graph):
 
     def set_nx_states(self, mdl):
         """
-        Attaches state attributes to Graph corresponding to the states of the model
+        Attach state attributes to Graph corresponding to the states of the model.
+
         Parameters
         ----------
         mdl: Model
             Model to represent.
-
-        Returns
-        -------
-
         """
         self.set_flow_nodestates(mdl)
         self.set_fxn_nodestates(mdl)
@@ -1616,7 +1586,7 @@ class ModelGraph(Graph):
 
     def get_multi_edges(self, mdl, subedges):
         """
-        Used by subclasses to attach functions/flows (subedges arg) to edges
+        Attach functions/flows (subedges arg) to edges.
 
         Parameters
         ----------
@@ -1640,10 +1610,26 @@ class ModelGraph(Graph):
             flows[edge] = [midedge[2] for midedge in midedges]
         return flows
 
+    def get_staticnodes(self, mdl):
+        """Get static node information for set_exec_order."""
+        staticfxns = list(mdl.staticfxns)
+        staticflows = list(set([n for node in mdl.staticfxns
+                                for n in mdl.graph.neighbors(node)]))
+        staticnodes = staticfxns + staticflows
+        static_node_dict = {n: n in staticnodes for n in self.g.nodes()}
+        return static_node_dict
+
+    def get_dynamicnodes(self, mdl):
+        """Get dynamic node information for set_exec_order."""
+        dynamicnodes = list(mdl.dynamicfxns)
+        orders = {n: str(i) for i, n in enumerate(dynamicnodes)}
+        dynamic_node_dict = {n: n in orders for n in self.g.nodes()}
+        return dynamic_node_dict, orders, dynamicnodes
+
     def set_exec_order(self, mdl, static={}, dynamic={}, next_edges={},
                        label_order=True, label_tstep=True):
         """
-        Enables the plotting of ModelGraph execution order.
+        Overlay ModelGraph execution order data on graph structure.
 
         Parameters
         ----------
@@ -1668,23 +1654,17 @@ class ModelGraph(Graph):
             The default is True.
         """
         node_style_kwargs = {}
-        if not static == False:
-            staticfxns = list(mdl.staticfxns)
-            staticflows = list(set([n for node in mdl.staticfxns
-                                    for n in mdl.graph.neighbors(node)]))
-            staticnodes = staticfxns + staticflows
-            static_node_dict = {n: n in staticnodes for n in self.g.nodes()}
+        if not (type(static) == bool and not static):
+            static_node_dict = self.get_staticnodes(mdl)
             nx.set_node_attributes(self.g, static_node_dict, name='static')
             node_style_kwargs['static'] = static
 
-        if not dynamic == False:
-            dynamicnodes = list(mdl.dynamicfxns)
-            orders = {n: str(i) for i, n in enumerate(dynamicnodes)}
-            dynamic_node_dict = {n: n in orders for n in self.g.nodes()}
+        if not (type(dynamic) == bool and not dynamic):
+            dynamic_node_dict, orders, dynamicnodes = self.get_dynamicnodes(mdl)
             nx.set_node_attributes(self.g, dynamic_node_dict, name='dynamic')
             node_style_kwargs['dynamic'] = dynamic
 
-        if not next_edges == False:
+        if not (type(next_edges) == bool and not next_edges):
             next_edges_dict = [(dynamicnodes[n], dynamicnodes[n+1])
                                for n in range(len(dynamicnodes)-1)
                                if (dynamicnodes[n] in self.g.nodes
@@ -1926,7 +1906,7 @@ class MultiFlowGraph(Graph):
                  connections_as_tags=True, include_states=False, get_states=True,
                  get_indicators=True, time=0.0):
         """
-        Creates a networkx graph corresponding to the MultiFlow.
+        Create a networkx graph corresponding to the MultiFlow.
 
         Parameters
         ----------
@@ -2004,7 +1984,7 @@ class CommsFlowGraph(MultiFlowGraph):
     def __init__(self, flow, include_glob=False, ports_only=False,
                  get_states=True, get_indicators=True, time=0.0):
         """
-        Creates a graph representation of the CommsFlow (assuming no additional locals)
+        Create a graph representation of the CommsFlow (assuming no additional locals).
 
         Parameters
         ----------
@@ -2019,6 +1999,7 @@ class CommsFlowGraph(MultiFlowGraph):
             Whether to attach indicators as attributs to the graph. The default is False
         time : float
             Time to run the indicator methods at.
+
         Returns
         -------
         g : networkx.DiGraph
@@ -2136,7 +2117,7 @@ def add_g_nested(g, multiflow, base_name, include_states=False,
 
 def get_node_info(flow, get_states, get_indicators, time):
     """
-    Gets the state/indicator information for a given flow
+    Get the state/indicator information for a given flow.
 
     Parameters
     ----------
@@ -2165,8 +2146,9 @@ def get_node_info(flow, get_states, get_indicators, time):
 # ActArch
 class ActArchGraph(Graph):
     """
-    Shows a visual representation of the internal Action Sequence Graph of
-    the Function Block, with:
+    Create a visual representation of an Action Architecture.
+
+    Represents:
         - Sequence as edges
         - Flows as (circular) Nodes
         - Actions as (square) Nodes
@@ -2205,16 +2187,12 @@ class ActArchGraph(Graph):
 
     def set_nx_states(self, aa):
         """
-        Attaches state and fault information to the underlying graph.
+        Attach state and fault information to the underlying graph.
 
         Parameters
         ----------
         aa : ActArch
             Underlying action sequence graph object to get states from
-
-        Returns
-        -------
-
         """
         for g in self.g.nodes():
             self.g.nodes[g]['active'] = g in aa.active_actions
@@ -2235,7 +2213,8 @@ class ActArchGraph(Graph):
     def set_edge_labels(self, title='label', title2='', subtext='name',
                         **edge_label_styles):
         """
-        set / define the edge labels.
+        Set / define the edge labels.
+
         Parameters
         ----------
         title : str, optional
@@ -2246,18 +2225,13 @@ class ActArchGraph(Graph):
             property to get for the subtext. The default is ''.
         **edge_label_styles : dict
             edgeStyle arguments to overwrite.
-
-
-        Returns
-        -------
-
         """
         super().set_edge_labels(title=title, title2=title2, subtext=subtext,
                                 **edge_label_styles)
 
     def set_node_styles(self, active={}, **node_styles):
         """
-        Sets self.node_styles and self.edge_groups given the provided node styles.
+        Set self.node_styles and self.edge_groups given the provided node styles.
 
         Parameters
         ----------
@@ -2271,13 +2245,10 @@ class ActArchGraph(Graph):
         super().set_node_styles(active=active, **node_styles)
 
     def draw_graphviz(self, layout="twopi", overlap='voronoi', **kwargs):
-        """
-        calls Graph.draw_graphviz
-        """
+        """Calls Graph.draw_graphviz."""
         return super().draw_graphviz(layout=layout, overlap=overlap, **kwargs)
 
     def draw_from(self, time, history=History(), **kwargs):
-        # TODO: make this so that it works with multiple ActArchs
         fault_act_hist = history._prep_faulty().get_values("a.active_actions")
         activities = fault_act_hist.get_slice(time)
         activity = {i for v in activities.values() for i in v}
@@ -2300,9 +2271,7 @@ class ActArchActGraph(ActArchGraph):
 
 
 class ActArchFlowGraph(ActArchGraph):
-    """
-    Variant of ActArchGraph where only the flow relationships between actions is shown.
-    """
+    """Variant of ActArchGraph where only showing flow relationships between actions."""
 
     def __init__(self, aa, get_states=True):
         self.g = aa.flow_graph.copy()

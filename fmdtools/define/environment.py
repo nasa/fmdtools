@@ -132,7 +132,6 @@ class Environment(CommsFlow):
         ga.geoms.ex_point.s.occupied:   array(1)
         ga.geoms.ex_line.s.occupied:    array(1)
         ga.geoms.ex_poly.s.occupied:    array(1)
-        <BLANKLINE>
         """
         self.h = CommsFlow.create_hist(self, timerange, track)
         track = get_obj_track(self, track, all_possible=self.all_possible)

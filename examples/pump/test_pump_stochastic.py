@@ -14,8 +14,9 @@ from fmdtools.analyze.tabulate import NominalEnvelope
 import numpy as np
 import multiprocessing as mp
 
+
 class StochasticPumpTests(unittest.TestCase, CommonTests):
-    maxDiff=None
+    maxDiff = None
 
     def setUp(self):
         self.mdl = Pump()
@@ -178,6 +179,83 @@ class StochasticPumpTests(unittest.TestCase, CommonTests):
 
         ne2 = NominalEnvelope(ps2, res, 'cost', 'r.seed', 'p.delay', 'prob')
         ne2.as_plot(title=title, f_kwargs=f_kwargs, n_kwargs=n_kwargs)
+
+    def test_plot_nested_hists(self):
+        """Qualitative test to show that distributions carry over to fault scenarios
+        in a nested approach."""
+        mdl = Pump()
+        pd = ParameterDomain(PumpParam)
+        pd.add_variable("delay")
+
+        ps = ParameterSample(pd)
+        ps.add_variable_replicates([[5]], replicates=10, name="delay5")
+        ps.add_variable_replicates([[15]], replicates=10, name="delay15")
+
+        faultdomains = {'fd': (('fault', 'export_water', 'block'), {})}
+        faultsamples = {'fs': (('fault_phases', 'fd'), {})}
+
+        ecs, hists, apps = prop.nested_sample(mdl, ps, run_stochastic=True,
+                                              faultdomains=faultdomains,
+                                              faultsamples=faultsamples,
+                                              pool=mp.Pool(4))
+
+        # test plot groups (and make sure behavior is different/expected in faults):
+        comp_mdlhists = hists.get_scens('export_water_block_t27p0')
+        comp_groups = {'delay_5': ps.get_scens(p={'delay': 5}),
+                       'delay_15': ps.get_scens(p={'delay': 15})}
+        title = "should show stochastic behavior in two groups"
+        comp_mdlhists.plot_line('fxns.move_water.s.eff',
+                                'fxns.move_water.s.total_flow',
+                                'flows.wat_2.s.flowrate',
+                                'flows.wat_2.s.pressure',
+                                comp_groups=comp_groups,
+                                aggregation='percentile',
+                                time_slice=27,
+                                title=title)
+        # test metric dist
+        title = "should show three groups for total_flow but one for eff"
+        comp_mdlhists.plot_metric_dist([5, 10, 15],
+                                       'fxns.move_water.s.eff',
+                                       'fxns.move_water.s.total_flow',
+                                       'flows.wat_2.s.flowrate',
+                                       'flows.wat_2.s.pressure',
+                                       title=title, alpha=0.5)
+
+    def test_rand_paramsample_plot(self):
+        ps = ParameterSample()
+        ps.add_variable_replicates([], 20)
+        mdl = Pump()
+        res, hist = prop.parameter_sample(mdl, ps, run_stochastic=True)
+
+        title = "should show bounds and perc of random variables over time"
+        hist.plot_line('move_water.r.s.eff', 'move_water.s.total_flow',
+                       'wat_2.s.flowrate', 'wat_2.s.pressure',
+                       'import_ee.r.s.effstate', 'import_ee.r.s.grid_noise',
+                       'ee_1.s.voltage', 'sig_1.s.power',
+                       color='blue', comp_groups={}, aggregation='percentile',
+                       title=title)
+
+        title = 'should show mean and ci of random variables over time'
+        hist.plot_line('move_water.r.s.eff', 'move_water.s.total_flow',
+                       'wat_2.s.flowrate', 'wat_2.s.pressure',
+                       'import_ee.r.s.effstate', 'import_ee.r.s.grid_noise',
+                       'ee_1.s.voltage', 'sig_1.s.power',
+                       color='blue', comp_groups={}, aggregation='mean_ci',
+                       title=title)
+
+    def test_mdl_pickle(self):
+        from fmdtools.define.block import SimParam
+        from fmdtools.define.model import check_model_pickleability
+        sp = SimParam(phases=(('start', 0, 4), ('on', 5, 49), ('end', 50, 55)),
+                      times=(0, 20, 55), dt=1.0, units='hr')
+        mdl = Pump(r={'seed': 5}, sp=sp)
+        check_model_pickleability(mdl, try_pick=True)
+
+    def test_model_set_vars(self):
+        """Test that vars are set to using set_vars."""
+        mdl = Pump()
+        mdl.set_vars([['ee_1', 's', 'current']], [3.0])
+        self.assertEqual(mdl.flows['ee_1'].s.current, 3.0)
 
 
 if __name__ == '__main__':

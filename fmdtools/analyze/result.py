@@ -158,16 +158,28 @@ class Result(UserDict):
 
     As a dictionary, it supports dict-based item assignement (e.g. r['x']=10) but
     also enables convenient access via __getattr__, e.g.:
-        r[x] = 10
-        r.x
-        > 10
+
+    >>> r = Result()
+    >>> r['x'] = 10
+    >>> r
+    x:                                    10
 
     It also can return a flattened version of its nested sturcture via Result.flatten(),
     e.g.:
-        r = Result(y=Result(z=1))
-        rf = r.flatten()
-        r[('y','z')]
-        > 1
+
+    >>> r = Result(y=Result(z=1))
+    >>> r
+    y: 
+    --z:                                   1
+    >>> r.keys()
+    dict_keys(['y'])
+    >>> rf = r.flatten()
+    >>> rf
+    y.z:                                   1
+    >>> rf['y.z']
+    1
+    >>> rf.keys()
+    dict_keys(['y.z'])
 
     It also enables saving and loading to files via r.save(), r.load(), and
     r.load_folder()
@@ -197,6 +209,8 @@ class Result(UserDict):
                 form = '{:>'+str(40-len(val_rep))+'}'
                 vv = form.format(str(val))
                 str_rep = str_rep+val_rep+vv+'\n'
+        if str_rep.endswith('\n') and ind == 0:
+            str_rep = str_rep[:-1]
         return str_rep
 
     def all(self):
@@ -846,8 +860,7 @@ class Result(UserDict):
 
     def overall_diff(self, metric, nan_as=np.nan, as_ind=False, no_diff=False):
         """
-        Calculates the difference between the nominal and fault scenarios over a set of
-        endclasses
+        Calculate difference between the nominal and fault scenarios.
 
         Parameters
         ----------
@@ -863,6 +876,7 @@ class Result(UserDict):
         no_diff : bool, optional
             Option for not computing the difference
             (but still performing the processing here). The default is False.
+
         Returns
         -------
         differences : dict
@@ -1075,3 +1089,8 @@ def load_folder(folder, filetype):
         if read_filetype == filetype:
             files_toread.append(file)
     return files_toread
+
+
+if __name__ == "__main__":
+    import doctest
+    doctest.testmod(verbose=True)

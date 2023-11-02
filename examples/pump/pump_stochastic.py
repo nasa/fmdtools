@@ -134,39 +134,12 @@ class Pump(DetPump):
 
 if __name__ == "__main__":
     import multiprocessing as mp
-    from fmdtools.define.model import check_model_pickleability
-    from fmdtools.define.common import check_pickleability
     from fmdtools.sim.sample import ParameterDomain, ParameterSample
 
     # convert to tests 1:
     mdl = Pump()
-    """
-    app = NominalApproach()
-    app.add_seed_replicates('test_seeds', 100)
-    
-    endclasses, mdlhists=propagate.nominal_approach(mdl,app, run_stochastic=True)
-    
-    fig = mdlhists.plot_line('move_water.r.s.eff', 'move_water.s.total_flow',
-                             'wat_2.s.flowrate', 'wat_2.s.pressure',
-                             'import_ee.r.s.effstate', 'import_ee.r.s.grid_noise',
-                             'ee_1.s.voltage', 'sig_1.s.power',
-                             color='blue', comp_groups={}, aggregation='percentile')
-    
-    fig = mdlhists.plot_line( 'move_water.r.s.eff', 'move_water.s.total_flow',
-                             'wat_2.s.flowrate', 'wat_2.s.pressure',
-                             'import_ee.r.s.effstate', 'import_ee.r.s.grid_noise',
-                             'ee_1.s.voltage', 'sig_1.s.power',
-                             color='blue', comp_groups={}, aggregation='mean_ci')
-    
-    # convert to test 2:
-    rp = SimParam(phases=(('start',0,4),('on',5,49),('end',50,55)), times=(0,20, 55), dt=1.0, units='hr')
-    mdl = Pump(sp = rp, r={'seed':5})
-    
-    check_model_pickleability(mdl, try_pick=True)
-    
-    mdl.set_vars([['ee_1', 'current']],[2])
-    """
-    # convert to test 3:
+
+    # now tested in test_plot_nested_hist
     pd = ParameterDomain(PumpParam)
     pd.add_variable("delay")
 
@@ -182,13 +155,9 @@ if __name__ == "__main__":
                                                faultsamples=faultsamples,
                                                pool=mp.Pool(4))
 
-    from fmdtools.analyze.tabulate import NominalEnvelope
-    ne = NominalEnvelope(ps, ecs, 'cost', 'p.delay')
-
-    ne.as_plot()
     # convert to plot tests:
     comp_mdlhists = hists.get_scens('export_water_block_t27p0')
-    comp_groups = {'delay_1': ps.get_scens(p={'delay': 1}),
+    comp_groups = {'delay_1': ps.get_scens(p={'delay': 2}),
                    'delay_10': ps.get_scens(p={'delay': 10})}
     comp_mdlhists.plot_line('fxns.move_water.s.eff',
                             'fxns.move_water.s.total_flow',
@@ -216,9 +185,6 @@ if __name__ == "__main__":
     ps2.add_variable_replicates([[10]], replicates=100, name="delay10")
     nomhist, nomres, = propagate.parameter_sample(mdl, ps)
     ps2.group_scens("inputparams")
-
-
-
 
     # test prob dense?
     for i in range(1, 10):

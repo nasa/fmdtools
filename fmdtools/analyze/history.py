@@ -182,6 +182,28 @@ class History(Result):
 
     It can be updated over time t using h.log(obj, t), where obj is an object with
     (nested) attributes that match the keys of the (nested) dictionary.
+
+    Examples
+    --------
+    # histories act the same as results, but with the values being arrays:
+    >>> hist = History({"a": [1, 2, 3], "b": [4, 5, 6], "time": [0, 1, 2]})
+    >>> hist
+    a:                              array(3)
+    b:                              array(3)
+    time:                           array(3)
+
+    # history access is the same as a result:
+    >>> hist.a
+    [1, 2, 3]
+
+    # metrics can be gotten from histories over time:
+    >>> hist = History({"a.a": [1, 2, 3], "b.a": [4, 5, 6], "time": [0, 1, 2]})
+    >>> hist.get_metric("a", axis=0)
+    array([2.5, 3.5, 4.5])
+
+    # or over all times:
+    >>> hist.get_metric("a")
+    3.5
     """
 
     def init_att(self, att, val,
@@ -318,7 +340,25 @@ class History(Result):
                                             + att + "=" + str(val)) from e
 
     def cut(self, end_ind=None, start_ind=None, newcopy=False):
-        """Cut the history to a given index."""
+        """
+        Cut the history to a given index.
+
+        Examples
+        --------
+        >>> hist = History({'a':[2,3,4,5], 'b':[5,4,3,2,1,0], 'time': [0,1,2,3,4,5]})
+        >>> cut_hist = hist.cut(3)
+        >>> cut_hist
+        a:                              array(4)
+        b:                              array(4)
+        time:                           array(4)
+
+        >>> cut_hist.a
+        [2, 3, 4, 5]
+        >>> cut_hist.b
+        [5, 4, 3, 2]
+        >>> cut_hist.time
+        [0, 1, 2, 3]
+        """
         if newcopy:
             hist = self.copy()
         else:
@@ -378,14 +418,14 @@ class History(Result):
             return np.sum(all_faults_hist >= 1)
 
     def _prep_faulty(self):
-        """Helper that creates a faulty history of states from the current history"""
+        """Create a faulty history of states from the current history."""
         if self.is_in('faulty'):
             return self.faulty.flatten()
         else:
             return self.flatten()
 
     def _prep_nom_faulty(self, nomhist={}):
-        """Helper that creates a nominal history of states from the current history"""
+        """Create a nominal history of states from the current history."""
         if not nomhist:
             nomhist = self.nominal.flatten()
         else:
@@ -663,7 +703,7 @@ class History(Result):
                 except Exception as e:
                     raise Exception("Error at plot_value " + str(value)
                                     + " and group: " + str(group)) from e
-                if value[1] in phases:
+                if len(value) > 1 and value[1] in phases:
                     phase_overlay(ax, phases[value[1]], value[1])
             if type(time_slice) == int:
                 ax.axvline(x=time_slice, color='k', label=time_slice_label)
@@ -773,6 +813,17 @@ class History(Result):
         err_hist : History
             hist of line, low, high values. Has the form:
             {'time': times, 'stat': stat_values, 'low': low_values, 'high': high_values}
+
+        Examples
+        --------
+        >>> hist = History({'a.b': [1], 'b.b': [2], 'c.b': [3], 'time': [0]})
+        >>> errhist = hist.get_mean_bound_errhist("b")
+        >>> errhist.stat
+        array([2.])
+        >>> errhist.high
+        array([3])
+        >>> errhist.low
+        array([1])
         """
         hist = History()
         hist['time'] = self.get_metric('time', axis=0)
@@ -1009,3 +1060,7 @@ class History(Result):
             if mark_time:
                 mark_times(ax, time_ticks, times[i], x, ys[i], zs[i],
                            fontsize=time_fontsize)
+
+if __name__ == "__main__":
+    import doctest
+    doctest.testmod(verbose=True)
