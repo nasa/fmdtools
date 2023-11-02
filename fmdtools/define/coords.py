@@ -791,7 +791,7 @@ class Coords(object):
         cbar.set_label(proplab, rotation=270)
         return fig, ax
 
-    def show_property3d(self, prop, z="prop", z_res=10, collections={},
+    def show_property_z(self, prop, z="prop", z_res=10, collections={},
                         xlab="x", ylab="y", zlab="prop",
                         proplab="prop", cmap="Greens",
                         fig=None, ax=None, figsize=(4, 5), **kwargs):
@@ -996,7 +996,7 @@ class Coords(object):
             self.show_collection(coll, fig=fig, ax=ax, **collections[coll])
         return fig, ax
 
-    def show3d(self, prop, z="prop", collections={}, legend_args=False, voxels=True,
+    def show_z(self, prop, z="prop", collections={}, legend_args=False, voxels=True,
                **kwargs):
         """
         Plot a property and set of collections in a discretized version of the grid.
@@ -1029,7 +1029,7 @@ class Coords(object):
         elif z == '':
             z = 0.0
         if voxels:
-            fig, ax = self.show_property3d(prop, z=z, collections=collections, **kwargs)
+            fig, ax = self.show_property_z(prop, z=z, collections=collections, **kwargs)
         else:
             fig, ax = self.show_collection("pts", z=z, legend_args=legend_args,
                                            label=False, **kwargs)
@@ -1066,18 +1066,18 @@ if __name__ == "__main__":
     doctest.testmod(verbose=True)
 
     ex = ExampleCoords()
-    coord_property(ex, "v", cmap="Greys")
-    coord_collection(ex, "high_v")
-    coord(ex, "h", collections={"high_v": {"alpha": 0.5, "color": "red"}})
-    coord_property3d(ex, "h", z="v",
-                     collections={"high_v": {"alpha": 0.5, "color": "red"}})
+    ex.show_property("v", cmap="Greys")
+    ex.show_collection("high_v")
+    ex.show("h", collections={"high_v": {"alpha": 0.5, "color": "red"}})
+    ex.show_property_z("h", z="v",
+                       collections={"high_v": {"alpha": 0.5, "color": "red"}})
 
-    coord_property(ex, "v", cmap="Greys")
-    coord_property3d(ex, "v")
-    coord_property3d(ex, "h", z="v")
-    coord_collection(ex, "high_v")
-    coord_collection(ex, "high_v", z="v")
-    coord3d(ex, "h", z="v",
+    ex.show_property("v", cmap="Greys")
+    ex.show_property_z("v")
+    ex.show_property_z("h", z="v")
+    ex.show_collection("high_v")
+    ex.show_collection("high_v", z="v")
+    ex.show_z("h", z="v",
             collections={"pts": {"color": "blue"},
                          "high_v": {"alpha": 0.5, "color": "red"}},
             legend_args=True)
