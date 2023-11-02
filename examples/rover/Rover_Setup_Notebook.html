@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Rover Model Explanation and Preliminaries &mdash; fmdtools 2.0-beta-1 documentation</title>
+  <title>Rover Model Explanation and Preliminaries &mdash; fmdtools 2.0-beta-2 documentation</title>
       <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
       <link rel="stylesheet" href="../../_static/nbsphinx-code-cells.css" type="text/css" />
@@ -13,18 +13,18 @@
     <script src="../../_static/js/html5shiv.min.js"></script>
   <![endif]-->
   
-        <script src="../../_static/jquery.js?v=5d32c60e"></script>
-        <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-        <script src="../../_static/documentation_options.js?v=04ccac41"></script>
-        <script src="../../_static/doctools.js?v=888ff710"></script>
-        <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+        <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+        <script src="../../_static/jquery.js"></script>
+        <script src="../../_static/underscore.js"></script>
+        <script src="../../_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script src="../../_static/doctools.js"></script>
         <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
         <script>window.MathJax = {"tex": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true}, "options": {"ignoreHtmlClass": "tex2jax_ignore|mathjax_ignore|document", "processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
         <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
     <script src="../../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
-    <link rel="next" title="Defining Fault Sampling Approaches in fmdtools" href="Approach_Use-Cases.html" />
+    <link rel="next" title="More Human Failure Analyses" href="HFAC_Analyses/HFAC_Analyses.html" />
     <link rel="prev" title="Action Sequence Graph Tutorial" href="../asg_demo/Action_Sequence_Graph.html" /> 
 </head>
 
@@ -73,7 +73,7 @@
 <li class="toctree-l2"><a class="reference internal" href="../../docs/Development%20Guide.html#intro-to-fmdtools">Intro to fmdtools</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="../../docs/Intro_to_fmdtools.html">Intro to resilience modelling, simulation, and visualization in Python with fmdtools.</a><ul>
 <li class="toctree-l4"><a class="reference internal" href="../../docs/Intro_to_fmdtools.html#author-daniel-hulse">Author: Daniel Hulse</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/Intro_to_fmdtools.html#version-2-0-beta-1">Version: 2.0-beta-1</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../docs/Intro_to_fmdtools.html#version-2-0-beta-2">Version: 2.0-beta-2</a></li>
 </ul>
 </li>
 <li class="toctree-l3"><a class="reference internal" href="../../docs/Intro_to_fmdtools.html#overview">Overview</a></li>
@@ -255,20 +255,6 @@
 <li class="toctree-l4"><a class="reference internal" href="#Model-simulation">Model simulation</a></li>
 </ul>
 </li>
-<li class="toctree-l3"><a class="reference internal" href="Approach_Use-Cases.html">Defining Fault Sampling Approaches in fmdtools</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="Approach_Use-Cases.html#Basics">Basics</a></li>
-<li class="toctree-l4"><a class="reference internal" href="Approach_Use-Cases.html#Model-Setup">Model Setup</a></li>
-<li class="toctree-l4"><a class="reference internal" href="Approach_Use-Cases.html#Setting-up-an-approach">Setting up an approach</a></li>
-<li class="toctree-l4"><a class="reference internal" href="Approach_Use-Cases.html#Propagating-Faults">Propagating Faults</a></li>
-<li class="toctree-l4"><a class="reference internal" href="Approach_Use-Cases.html#Pruning">Pruning</a></li>
-</ul>
-</li>
-<li class="toctree-l3"><a class="reference internal" href="Nominal_Approach_Use-Cases.html">Defining Nominal Approaches in fmdtools</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="Nominal_Approach_Use-Cases.html#Quantifying-probabilities">Quantifying probabilities</a></li>
-<li class="toctree-l4"><a class="reference internal" href="Nominal_Approach_Use-Cases.html#Random-input-generation">Random input generation</a></li>
-<li class="toctree-l4"><a class="reference internal" href="Nominal_Approach_Use-Cases.html#Nested-Scenario-Sampling">Nested Scenario Sampling</a></li>
-</ul>
-</li>
 <li class="toctree-l3"><a class="reference internal" href="HFAC_Analyses/HFAC_Analyses.html">More Human Failure Analyses</a></li>
 <li class="toctree-l3"><a class="reference internal" href="HFAC_Analyses/IDETC_Human_Paper_Analysis.html">Human Failure Representation</a><ul>
 <li class="toctree-l4"><a class="reference internal" href="HFAC_Analyses/IDETC_Human_Paper_Analysis.html#Testing-behavioral-simulation">Testing behavioral simulation</a></li>
@@ -307,285 +293,34 @@
 <li class="toctree-l1"><a class="reference internal" href="../../docs/Glossary.html">Glossary</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../docs/fmdtools.html">Module Reference</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="../../docs/fmdtools.define.html">fmdtools.define package</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="../../docs/fmdtools.define.html#fmdtools-define-block">fmdtools.define.block</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.define.html#fmdtools.define.block.ActArch"><code class="docutils literal notranslate"><span class="pre">ActArch</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.define.html#fmdtools.define.block.Action"><code class="docutils literal notranslate"><span class="pre">Action</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.define.html#fmdtools.define.block.Block"><code class="docutils literal notranslate"><span class="pre">Block</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.define.html#fmdtools.define.block.CompArch"><code class="docutils literal notranslate"><span class="pre">CompArch</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.define.html#fmdtools.define.block.Component"><code class="docutils literal notranslate"><span class="pre">Component</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.define.html#fmdtools.define.block.FxnBlock"><code class="docutils literal notranslate"><span class="pre">FxnBlock</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.define.html#fmdtools.define.block.GenericFxn"><code class="docutils literal notranslate"><span class="pre">GenericFxn</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.define.html#fmdtools.define.block.Simulable"><code class="docutils literal notranslate"><span class="pre">Simulable</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.define.html#fmdtools.define.block.assoc_flows"><code class="docutils literal notranslate"><span class="pre">assoc_flows()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.define.html#fmdtools.define.block.inject_faults_internal"><code class="docutils literal notranslate"><span class="pre">inject_faults_internal()</span></code></a></li>
-</ul>
-</li>
-<li class="toctree-l3"><a class="reference internal" href="../../docs/fmdtools.define.html#module-fmdtools.define.common">fmdtools.define.common</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.define.html#fmdtools.define.common.check_pickleability"><code class="docutils literal notranslate"><span class="pre">check_pickleability()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.define.html#fmdtools.define.common.eq_units"><code class="docutils literal notranslate"><span class="pre">eq_units()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.define.html#fmdtools.define.common.get_dataobj_track"><code class="docutils literal notranslate"><span class="pre">get_dataobj_track()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.define.html#fmdtools.define.common.get_obj_indicators"><code class="docutils literal notranslate"><span class="pre">get_obj_indicators()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.define.html#fmdtools.define.common.get_obj_track"><code class="docutils literal notranslate"><span class="pre">get_obj_track()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.define.html#fmdtools.define.common.get_true_field"><code class="docutils literal notranslate"><span class="pre">get_true_field()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.define.html#fmdtools.define.common.get_true_fields"><code class="docutils literal notranslate"><span class="pre">get_true_fields()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.define.html#fmdtools.define.common.get_var"><code class="docutils literal notranslate"><span class="pre">get_var()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.define.html#fmdtools.define.common.init_obj_attr"><code class="docutils literal notranslate"><span class="pre">init_obj_attr()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.define.html#fmdtools.define.common.init_obj_dict"><code class="docutils literal notranslate"><span class="pre">init_obj_dict()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.define.html#fmdtools.define.common.is_iter"><code class="docutils literal notranslate"><span class="pre">is_iter()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.define.html#fmdtools.define.common.return_true_indicators"><code class="docutils literal notranslate"><span class="pre">return_true_indicators()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.define.html#fmdtools.define.common.set_var"><code class="docutils literal notranslate"><span class="pre">set_var()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.define.html#fmdtools.define.common.t_key"><code class="docutils literal notranslate"><span class="pre">t_key()</span></code></a></li>
-</ul>
-</li>
-<li class="toctree-l3"><a class="reference internal" href="../../docs/fmdtools.define.html#module-fmdtools.define.flow">fmdtools.define.flow</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.define.html#fmdtools.define.flow.CommsFlow"><code class="docutils literal notranslate"><span class="pre">CommsFlow</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.define.html#fmdtools.define.flow.Flow"><code class="docutils literal notranslate"><span class="pre">Flow</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.define.html#fmdtools.define.flow.MultiFlow"><code class="docutils literal notranslate"><span class="pre">MultiFlow</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.define.html#fmdtools.define.flow.init_flow"><code class="docutils literal notranslate"><span class="pre">init_flow()</span></code></a></li>
-</ul>
-</li>
-<li class="toctree-l3"><a class="reference internal" href="../../docs/fmdtools.define.html#module-fmdtools.define.mode">fmdtools.define.mode</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.define.html#fmdtools.define.mode.Fault"><code class="docutils literal notranslate"><span class="pre">Fault</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.define.html#fmdtools.define.mode.Mode"><code class="docutils literal notranslate"><span class="pre">Mode</span></code></a></li>
-</ul>
-</li>
-<li class="toctree-l3"><a class="reference internal" href="../../docs/fmdtools.define.html#fmdtools-define-model">fmdtools.define.model</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.define.html#fmdtools.define.model.Model"><code class="docutils literal notranslate"><span class="pre">Model</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.define.html#fmdtools.define.model.check_model_pickleability"><code class="docutils literal notranslate"><span class="pre">check_model_pickleability()</span></code></a></li>
-</ul>
-</li>
-<li class="toctree-l3"><a class="reference internal" href="../../docs/fmdtools.define.html#module-fmdtools.define.parameter">fmdtools.define.parameter</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.define.html#fmdtools.define.parameter.Parameter"><code class="docutils literal notranslate"><span class="pre">Parameter</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.define.html#fmdtools.define.parameter.SimParam"><code class="docutils literal notranslate"><span class="pre">SimParam</span></code></a></li>
-</ul>
-</li>
-<li class="toctree-l3"><a class="reference internal" href="../../docs/fmdtools.define.html#module-fmdtools.define.rand">fmdtools.define.rand</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.define.html#fmdtools.define.rand.Rand"><code class="docutils literal notranslate"><span class="pre">Rand</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.define.html#fmdtools.define.rand.get_pdf_for_dist"><code class="docutils literal notranslate"><span class="pre">get_pdf_for_dist()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.define.html#fmdtools.define.rand.get_pdf_for_rand"><code class="docutils literal notranslate"><span class="pre">get_pdf_for_rand()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.define.html#fmdtools.define.rand.get_scipy_pdf_helper"><code class="docutils literal notranslate"><span class="pre">get_scipy_pdf_helper()</span></code></a></li>
-</ul>
-</li>
-<li class="toctree-l3"><a class="reference internal" href="../../docs/fmdtools.define.html#module-fmdtools.define.state">fmdtools.define.state</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.define.html#fmdtools.define.state.State"><code class="docutils literal notranslate"><span class="pre">State</span></code></a></li>
-</ul>
-</li>
-<li class="toctree-l3"><a class="reference internal" href="../../docs/fmdtools.define.html#module-fmdtools.define.time">fmdtools.define.time</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.define.html#fmdtools.define.time.Time"><code class="docutils literal notranslate"><span class="pre">Time</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.define.html#fmdtools.define.time.Timer"><code class="docutils literal notranslate"><span class="pre">Timer</span></code></a></li>
-</ul>
-</li>
-<li class="toctree-l3"><a class="reference internal" href="../../docs/fmdtools.define.html#module-fmdtools.define.geom">fmdtools.define.geom</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.define.html#fmdtools.define.geom.Geom"><code class="docutils literal notranslate"><span class="pre">Geom</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.define.html#fmdtools.define.geom.GeomArch"><code class="docutils literal notranslate"><span class="pre">GeomArch</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.define.html#fmdtools.define.geom.GeomLine"><code class="docutils literal notranslate"><span class="pre">GeomLine</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.define.html#fmdtools.define.geom.GeomPoint"><code class="docutils literal notranslate"><span class="pre">GeomPoint</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.define.html#fmdtools.define.geom.GeomPoly"><code class="docutils literal notranslate"><span class="pre">GeomPoly</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.define.html#fmdtools.define.geom.LineParam"><code class="docutils literal notranslate"><span class="pre">LineParam</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.define.html#fmdtools.define.geom.PointParam"><code class="docutils literal notranslate"><span class="pre">PointParam</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.define.html#fmdtools.define.geom.PolyParam"><code class="docutils literal notranslate"><span class="pre">PolyParam</span></code></a></li>
-</ul>
-</li>
-<li class="toctree-l3"><a class="reference internal" href="../../docs/fmdtools.define.html#module-fmdtools.define.environment">fmdtools.define.environment</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.define.html#fmdtools.define.environment.Environment"><code class="docutils literal notranslate"><span class="pre">Environment</span></code></a></li>
-</ul>
-</li>
-<li class="toctree-l3"><a class="reference internal" href="../../docs/fmdtools.define.html#module-fmdtools.define.coords">fmdtools.define.coords</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.define.html#fmdtools.define.coords.Coords"><code class="docutils literal notranslate"><span class="pre">Coords</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.define.html#fmdtools.define.coords.CoordsParam"><code class="docutils literal notranslate"><span class="pre">CoordsParam</span></code></a></li>
-</ul>
-</li>
+<li class="toctree-l3"><a class="reference internal" href="../../docs/fmdtools.define.html#fmdtools-define-block">fmdtools.define.block</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../docs/fmdtools.define.html#module-fmdtools.define.common">fmdtools.define.common</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../docs/fmdtools.define.html#module-fmdtools.define.flow">fmdtools.define.flow</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../docs/fmdtools.define.html#module-fmdtools.define.mode">fmdtools.define.mode</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../docs/fmdtools.define.html#fmdtools-define-model">fmdtools.define.model</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../docs/fmdtools.define.html#module-fmdtools.define.parameter">fmdtools.define.parameter</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../docs/fmdtools.define.html#module-fmdtools.define.rand">fmdtools.define.rand</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../docs/fmdtools.define.html#module-fmdtools.define.state">fmdtools.define.state</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../docs/fmdtools.define.html#module-fmdtools.define.time">fmdtools.define.time</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../docs/fmdtools.define.html#module-fmdtools.define.geom">fmdtools.define.geom</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../docs/fmdtools.define.html#module-fmdtools.define.environment">fmdtools.define.environment</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../docs/fmdtools.define.html#module-fmdtools.define.coords">fmdtools.define.coords</a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="../../docs/fmdtools.sim.html">fmdtools.sim</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="../../docs/fmdtools.sim.html#fmdtools-sim-propagate">fmdtools.sim.propagate</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.sim.html#fmdtools.sim.propagate.approach"><code class="docutils literal notranslate"><span class="pre">approach()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.sim.html#fmdtools.sim.propagate.check_end_condition"><code class="docutils literal notranslate"><span class="pre">check_end_condition()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.sim.html#fmdtools.sim.propagate.check_hist_memory"><code class="docutils literal notranslate"><span class="pre">check_hist_memory()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.sim.html#fmdtools.sim.propagate.check_mdl_memory"><code class="docutils literal notranslate"><span class="pre">check_mdl_memory()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.sim.html#fmdtools.sim.propagate.check_overwrite"><code class="docutils literal notranslate"><span class="pre">check_overwrite()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.sim.html#fmdtools.sim.propagate.close_pool"><code class="docutils literal notranslate"><span class="pre">close_pool()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.sim.html#fmdtools.sim.propagate.copy_staged"><code class="docutils literal notranslate"><span class="pre">copy_staged()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.sim.html#fmdtools.sim.propagate.exec_nom_helper"><code class="docutils literal notranslate"><span class="pre">exec_nom_helper()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.sim.html#fmdtools.sim.propagate.exec_nom_par"><code class="docutils literal notranslate"><span class="pre">exec_nom_par()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.sim.html#fmdtools.sim.propagate.exec_scen"><code class="docutils literal notranslate"><span class="pre">exec_scen()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.sim.html#fmdtools.sim.propagate.exec_scen_par"><code class="docutils literal notranslate"><span class="pre">exec_scen_par()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.sim.html#fmdtools.sim.propagate.get_endclass_vars"><code class="docutils literal notranslate"><span class="pre">get_endclass_vars()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.sim.html#fmdtools.sim.propagate.get_result"><code class="docutils literal notranslate"><span class="pre">get_result()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.sim.html#fmdtools.sim.propagate.init_histrange"><code class="docutils literal notranslate"><span class="pre">init_histrange()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.sim.html#fmdtools.sim.propagate.list_init_faults"><code class="docutils literal notranslate"><span class="pre">list_init_faults()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.sim.html#fmdtools.sim.propagate.mult_kwargs"><code class="docutils literal notranslate"><span class="pre">mult_kwargs</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.sim.html#fmdtools.sim.propagate.nested_approach"><code class="docutils literal notranslate"><span class="pre">nested_approach()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.sim.html#fmdtools.sim.propagate.nom_helper"><code class="docutils literal notranslate"><span class="pre">nom_helper()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.sim.html#fmdtools.sim.propagate.nominal"><code class="docutils literal notranslate"><span class="pre">nominal()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.sim.html#fmdtools.sim.propagate.nominal_approach"><code class="docutils literal notranslate"><span class="pre">nominal_approach()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.sim.html#fmdtools.sim.propagate.one_fault"><code class="docutils literal notranslate"><span class="pre">one_fault()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.sim.html#fmdtools.sim.propagate.pack_run_kwargs"><code class="docutils literal notranslate"><span class="pre">pack_run_kwargs()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.sim.html#fmdtools.sim.propagate.pack_sim_kwargs"><code class="docutils literal notranslate"><span class="pre">pack_sim_kwargs()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.sim.html#fmdtools.sim.propagate.phases_from_hist"><code class="docutils literal notranslate"><span class="pre">phases_from_hist()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.sim.html#fmdtools.sim.propagate.prop_one_scen"><code class="docutils literal notranslate"><span class="pre">prop_one_scen()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.sim.html#fmdtools.sim.propagate.run_kwargs"><code class="docutils literal notranslate"><span class="pre">run_kwargs</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.sim.html#fmdtools.sim.propagate.save_helper"><code class="docutils literal notranslate"><span class="pre">save_helper()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.sim.html#fmdtools.sim.propagate.scenlist_helper"><code class="docutils literal notranslate"><span class="pre">scenlist_helper()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.sim.html#fmdtools.sim.propagate.sequence"><code class="docutils literal notranslate"><span class="pre">sequence()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.sim.html#fmdtools.sim.propagate.sim_kwargs"><code class="docutils literal notranslate"><span class="pre">sim_kwargs</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.sim.html#fmdtools.sim.propagate.single_faults"><code class="docutils literal notranslate"><span class="pre">single_faults()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.sim.html#fmdtools.sim.propagate.unpack_mult_kwargs"><code class="docutils literal notranslate"><span class="pre">unpack_mult_kwargs()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.sim.html#fmdtools.sim.propagate.unpack_res_list"><code class="docutils literal notranslate"><span class="pre">unpack_res_list()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.sim.html#fmdtools.sim.propagate.unpack_sim_kwargs"><code class="docutils literal notranslate"><span class="pre">unpack_sim_kwargs()</span></code></a></li>
-</ul>
-</li>
-<li class="toctree-l3"><a class="reference internal" href="../../docs/fmdtools.sim.html#module-fmdtools.sim.scenario">fmdtools.sim.scenario</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.sim.html#fmdtools.sim.scenario.BaseScenario"><code class="docutils literal notranslate"><span class="pre">BaseScenario</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.sim.html#fmdtools.sim.scenario.Injection"><code class="docutils literal notranslate"><span class="pre">Injection</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.sim.html#fmdtools.sim.scenario.JointFaultScenario"><code class="docutils literal notranslate"><span class="pre">JointFaultScenario</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.sim.html#fmdtools.sim.scenario.NominalScenario"><code class="docutils literal notranslate"><span class="pre">NominalScenario</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.sim.html#fmdtools.sim.scenario.ParamScenario"><code class="docutils literal notranslate"><span class="pre">ParamScenario</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.sim.html#fmdtools.sim.scenario.Scenario"><code class="docutils literal notranslate"><span class="pre">Scenario</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.sim.html#fmdtools.sim.scenario.Sequence"><code class="docutils literal notranslate"><span class="pre">Sequence</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.sim.html#fmdtools.sim.scenario.SingleFaultScenario"><code class="docutils literal notranslate"><span class="pre">SingleFaultScenario</span></code></a></li>
-</ul>
-</li>
-<li class="toctree-l3"><a class="reference internal" href="../../docs/fmdtools.sim.html#module-fmdtools.sim.approach">fmdtools.sim.approach</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.sim.html#fmdtools.sim.approach.NominalApproach"><code class="docutils literal notranslate"><span class="pre">NominalApproach</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.sim.html#fmdtools.sim.approach.SampleApproach"><code class="docutils literal notranslate"><span class="pre">SampleApproach</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.sim.html#fmdtools.sim.approach.find_overlap_n"><code class="docutils literal notranslate"><span class="pre">find_overlap_n()</span></code></a></li>
-</ul>
-</li>
-<li class="toctree-l3"><a class="reference internal" href="../../docs/fmdtools.sim.html#module-fmdtools.sim.search">fmdtools.sim.search</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.sim.html#fmdtools.sim.search.DynamicInterface"><code class="docutils literal notranslate"><span class="pre">DynamicInterface</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.sim.html#fmdtools.sim.search.ProblemInterface"><code class="docutils literal notranslate"><span class="pre">ProblemInterface</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.sim.html#fmdtools.sim.search.eval_con"><code class="docutils literal notranslate"><span class="pre">eval_con()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.sim.html#fmdtools.sim.search.get_pos_negative"><code class="docutils literal notranslate"><span class="pre">get_pos_negative()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.sim.html#fmdtools.sim.search.get_pos_str"><code class="docutils literal notranslate"><span class="pre">get_pos_str()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.sim.html#fmdtools.sim.search.get_text_time"><code class="docutils literal notranslate"><span class="pre">get_text_time()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.sim.html#fmdtools.sim.search.greater_to_factor"><code class="docutils literal notranslate"><span class="pre">greater_to_factor()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.sim.html#fmdtools.sim.search.n_to_factor"><code class="docutils literal notranslate"><span class="pre">n_to_factor()</span></code></a></li>
-</ul>
-</li>
+<li class="toctree-l3"><a class="reference internal" href="../../docs/fmdtools.sim.html#fmdtools-sim-propagate">fmdtools.sim.propagate</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../docs/fmdtools.sim.html#module-fmdtools.sim.scenario">fmdtools.sim.scenario</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../docs/fmdtools.sim.html#module-fmdtools.sim.sample">fmdtools.sim.sample</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../docs/fmdtools.sim.html#module-fmdtools.sim.search">fmdtools.sim.search</a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="../../docs/fmdtools.analyze.html">fmdtools.analyze package</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="../../docs/fmdtools.analyze.html#module-fmdtools.analyze.result">fmdtools.analyze.result</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.analyze.html#fmdtools.analyze.result.History"><code class="docutils literal notranslate"><span class="pre">History</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.analyze.html#fmdtools.analyze.result.Result"><code class="docutils literal notranslate"><span class="pre">Result</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.analyze.html#fmdtools.analyze.result.auto_filetype"><code class="docutils literal notranslate"><span class="pre">auto_filetype()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.analyze.html#fmdtools.analyze.result.bootstrap_confidence_interval"><code class="docutils literal notranslate"><span class="pre">bootstrap_confidence_interval()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.analyze.html#fmdtools.analyze.result.check_include_error"><code class="docutils literal notranslate"><span class="pre">check_include_error()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.analyze.html#fmdtools.analyze.result.check_include_errors"><code class="docutils literal notranslate"><span class="pre">check_include_errors()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.analyze.html#fmdtools.analyze.result.clean_resultdict_keys"><code class="docutils literal notranslate"><span class="pre">clean_resultdict_keys()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.analyze.html#fmdtools.analyze.result.create_indiv_filename"><code class="docutils literal notranslate"><span class="pre">create_indiv_filename()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.analyze.html#fmdtools.analyze.result.diff"><code class="docutils literal notranslate"><span class="pre">diff()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.analyze.html#fmdtools.analyze.result.file_check"><code class="docutils literal notranslate"><span class="pre">file_check()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.analyze.html#fmdtools.analyze.result.fromdict"><code class="docutils literal notranslate"><span class="pre">fromdict()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.analyze.html#fmdtools.analyze.result.get_dict_attr"><code class="docutils literal notranslate"><span class="pre">get_dict_attr()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.analyze.html#fmdtools.analyze.result.get_sub_include"><code class="docutils literal notranslate"><span class="pre">get_sub_include()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.analyze.html#fmdtools.analyze.result.init_dicthist"><code class="docutils literal notranslate"><span class="pre">init_dicthist()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.analyze.html#fmdtools.analyze.result.init_hist_iter"><code class="docutils literal notranslate"><span class="pre">init_hist_iter()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.analyze.html#fmdtools.analyze.result.init_indicator_hist"><code class="docutils literal notranslate"><span class="pre">init_indicator_hist()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.analyze.html#fmdtools.analyze.result.is_bool"><code class="docutils literal notranslate"><span class="pre">is_bool()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.analyze.html#fmdtools.analyze.result.is_known_immutable"><code class="docutils literal notranslate"><span class="pre">is_known_immutable()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.analyze.html#fmdtools.analyze.result.is_known_mutable"><code class="docutils literal notranslate"><span class="pre">is_known_mutable()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.analyze.html#fmdtools.analyze.result.is_numeric"><code class="docutils literal notranslate"><span class="pre">is_numeric()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.analyze.html#fmdtools.analyze.result.join_key"><code class="docutils literal notranslate"><span class="pre">join_key()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.analyze.html#fmdtools.analyze.result.load"><code class="docutils literal notranslate"><span class="pre">load()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.analyze.html#fmdtools.analyze.result.load_folder"><code class="docutils literal notranslate"><span class="pre">load_folder()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.analyze.html#fmdtools.analyze.result.nan_to_x"><code class="docutils literal notranslate"><span class="pre">nan_to_x()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.analyze.html#fmdtools.analyze.result.to_include_keys"><code class="docutils literal notranslate"><span class="pre">to_include_keys()</span></code></a></li>
-</ul>
-</li>
-<li class="toctree-l3"><a class="reference internal" href="../../docs/fmdtools.analyze.html#module-fmdtools.analyze.plot">fmdtools.analyze.plot</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.analyze.html#fmdtools.analyze.plot.dyn_order"><code class="docutils literal notranslate"><span class="pre">dyn_order()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.analyze.html#fmdtools.analyze.plot.get_dim_data"><code class="docutils literal notranslate"><span class="pre">get_dim_data()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.analyze.html#fmdtools.analyze.plot.get_nominal_classes"><code class="docutils literal notranslate"><span class="pre">get_nominal_classes()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.analyze.html#fmdtools.analyze.plot.hist"><code class="docutils literal notranslate"><span class="pre">hist()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.analyze.html#fmdtools.analyze.plot.make_consolidated_legend"><code class="docutils literal notranslate"><span class="pre">make_consolidated_legend()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.analyze.html#fmdtools.analyze.plot.metric_dist"><code class="docutils literal notranslate"><span class="pre">metric_dist()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.analyze.html#fmdtools.analyze.plot.metric_dist_from"><code class="docutils literal notranslate"><span class="pre">metric_dist_from()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.analyze.html#fmdtools.analyze.plot.metricovertime"><code class="docutils literal notranslate"><span class="pre">metricovertime()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.analyze.html#fmdtools.analyze.plot.multibar_helper"><code class="docutils literal notranslate"><span class="pre">multibar_helper()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.analyze.html#fmdtools.analyze.plot.multiplot_legend_title"><code class="docutils literal notranslate"><span class="pre">multiplot_legend_title()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.analyze.html#fmdtools.analyze.plot.nested_factor_comparison"><code class="docutils literal notranslate"><span class="pre">nested_factor_comparison()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.analyze.html#fmdtools.analyze.plot.nominal_factor_comparison"><code class="docutils literal notranslate"><span class="pre">nominal_factor_comparison()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.analyze.html#fmdtools.analyze.plot.nominal_vals_1d"><code class="docutils literal notranslate"><span class="pre">nominal_vals_1d()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.analyze.html#fmdtools.analyze.plot.nominal_vals_2d"><code class="docutils literal notranslate"><span class="pre">nominal_vals_2d()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.analyze.html#fmdtools.analyze.plot.nominal_vals_3d"><code class="docutils literal notranslate"><span class="pre">nominal_vals_3d()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.analyze.html#fmdtools.analyze.plot.phases"><code class="docutils literal notranslate"><span class="pre">phases()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.analyze.html#fmdtools.analyze.plot.plot_err_lines"><code class="docutils literal notranslate"><span class="pre">plot_err_lines()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.analyze.html#fmdtools.analyze.plot.plot_line_and_err"><code class="docutils literal notranslate"><span class="pre">plot_line_and_err()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.analyze.html#fmdtools.analyze.plot.prep_hists"><code class="docutils literal notranslate"><span class="pre">prep_hists()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.analyze.html#fmdtools.analyze.plot.samplemetric"><code class="docutils literal notranslate"><span class="pre">samplemetric()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.analyze.html#fmdtools.analyze.plot.samplemetrics"><code class="docutils literal notranslate"><span class="pre">samplemetrics()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.analyze.html#fmdtools.analyze.plot.suite_for_plots"><code class="docutils literal notranslate"><span class="pre">suite_for_plots()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.analyze.html#fmdtools.analyze.plot.unpack_plot_values"><code class="docutils literal notranslate"><span class="pre">unpack_plot_values()</span></code></a></li>
-</ul>
-</li>
-<li class="toctree-l3"><a class="reference internal" href="../../docs/fmdtools.analyze.html#module-fmdtools.analyze.graph">fmdtools.analyze.graph</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.analyze.html#fmdtools.analyze.graph.ActArchActGraph"><code class="docutils literal notranslate"><span class="pre">ActArchActGraph</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.analyze.html#fmdtools.analyze.graph.ActArchFlowGraph"><code class="docutils literal notranslate"><span class="pre">ActArchFlowGraph</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.analyze.html#fmdtools.analyze.graph.ActArchGraph"><code class="docutils literal notranslate"><span class="pre">ActArchGraph</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.analyze.html#fmdtools.analyze.graph.CommsFlowGraph"><code class="docutils literal notranslate"><span class="pre">CommsFlowGraph</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.analyze.html#fmdtools.analyze.graph.EdgeLabelStyle"><code class="docutils literal notranslate"><span class="pre">EdgeLabelStyle</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.analyze.html#fmdtools.analyze.graph.EdgeStyle"><code class="docutils literal notranslate"><span class="pre">EdgeStyle</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.analyze.html#fmdtools.analyze.graph.Graph"><code class="docutils literal notranslate"><span class="pre">Graph</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.analyze.html#fmdtools.analyze.graph.GraphInteractor"><code class="docutils literal notranslate"><span class="pre">GraphInteractor</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.analyze.html#fmdtools.analyze.graph.LabelStyle"><code class="docutils literal notranslate"><span class="pre">LabelStyle</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.analyze.html#fmdtools.analyze.graph.Labels"><code class="docutils literal notranslate"><span class="pre">Labels</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.analyze.html#fmdtools.analyze.graph.ModelCompGraph"><code class="docutils literal notranslate"><span class="pre">ModelCompGraph</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.analyze.html#fmdtools.analyze.graph.ModelFlowGraph"><code class="docutils literal notranslate"><span class="pre">ModelFlowGraph</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.analyze.html#fmdtools.analyze.graph.ModelFxnGraph"><code class="docutils literal notranslate"><span class="pre">ModelFxnGraph</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.analyze.html#fmdtools.analyze.graph.ModelGraph"><code class="docutils literal notranslate"><span class="pre">ModelGraph</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.analyze.html#fmdtools.analyze.graph.ModelTypeGraph"><code class="docutils literal notranslate"><span class="pre">ModelTypeGraph</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.analyze.html#fmdtools.analyze.graph.MultiFlowGraph"><code class="docutils literal notranslate"><span class="pre">MultiFlowGraph</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.analyze.html#fmdtools.analyze.graph.NodeStyle"><code class="docutils literal notranslate"><span class="pre">NodeStyle</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.analyze.html#fmdtools.analyze.graph.add_g_nested"><code class="docutils literal notranslate"><span class="pre">add_g_nested()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.analyze.html#fmdtools.analyze.graph.data_average"><code class="docutils literal notranslate"><span class="pre">data_average()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.analyze.html#fmdtools.analyze.graph.data_error"><code class="docutils literal notranslate"><span class="pre">data_error()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.analyze.html#fmdtools.analyze.graph.get_label_groups"><code class="docutils literal notranslate"><span class="pre">get_label_groups()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.analyze.html#fmdtools.analyze.graph.get_node_info"><code class="docutils literal notranslate"><span class="pre">get_node_info()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.analyze.html#fmdtools.analyze.graph.get_style_kwargs"><code class="docutils literal notranslate"><span class="pre">get_style_kwargs()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.analyze.html#fmdtools.analyze.graph.graph_factory"><code class="docutils literal notranslate"><span class="pre">graph_factory()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.analyze.html#fmdtools.analyze.graph.gv_import_check"><code class="docutils literal notranslate"><span class="pre">gv_import_check()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.analyze.html#fmdtools.analyze.graph.label_for_entry"><code class="docutils literal notranslate"><span class="pre">label_for_entry()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.analyze.html#fmdtools.analyze.graph.node_is_tagged"><code class="docutils literal notranslate"><span class="pre">node_is_tagged()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.analyze.html#fmdtools.analyze.graph.random"><code class="docutils literal notranslate"><span class="pre">random()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.analyze.html#fmdtools.analyze.graph.sff_one_trial"><code class="docutils literal notranslate"><span class="pre">sff_one_trial()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.analyze.html#fmdtools.analyze.graph.to_legend_label"><code class="docutils literal notranslate"><span class="pre">to_legend_label()</span></code></a></li>
-</ul>
-</li>
-<li class="toctree-l3"><a class="reference internal" href="../../docs/fmdtools.analyze.html#module-fmdtools.analyze.tabulate">fmdtools.analyze.tabulate</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.analyze.html#fmdtools.analyze.tabulate.dicttab"><code class="docutils literal notranslate"><span class="pre">dicttab()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.analyze.html#fmdtools.analyze.tabulate.fmea"><code class="docutils literal notranslate"><span class="pre">fmea()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.analyze.html#fmdtools.analyze.tabulate.label_faults"><code class="docutils literal notranslate"><span class="pre">label_faults()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.analyze.html#fmdtools.analyze.tabulate.maptab"><code class="docutils literal notranslate"><span class="pre">maptab()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.analyze.html#fmdtools.analyze.tabulate.metricovertime"><code class="docutils literal notranslate"><span class="pre">metricovertime()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.analyze.html#fmdtools.analyze.tabulate.nested_factor_comparison"><code class="docutils literal notranslate"><span class="pre">nested_factor_comparison()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.analyze.html#fmdtools.analyze.tabulate.nested_stats"><code class="docutils literal notranslate"><span class="pre">nested_stats()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.analyze.html#fmdtools.analyze.tabulate.nominal_factor_comparison"><code class="docutils literal notranslate"><span class="pre">nominal_factor_comparison()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.analyze.html#fmdtools.analyze.tabulate.nominal_stats"><code class="docutils literal notranslate"><span class="pre">nominal_stats()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.analyze.html#fmdtools.analyze.tabulate.phasefmea"><code class="docutils literal notranslate"><span class="pre">phasefmea()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.analyze.html#fmdtools.analyze.tabulate.result_summary"><code class="docutils literal notranslate"><span class="pre">result_summary()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.analyze.html#fmdtools.analyze.tabulate.result_summary_fmea"><code class="docutils literal notranslate"><span class="pre">result_summary_fmea()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.analyze.html#fmdtools.analyze.tabulate.samptime"><code class="docutils literal notranslate"><span class="pre">samptime()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.analyze.html#fmdtools.analyze.tabulate.summfmea"><code class="docutils literal notranslate"><span class="pre">summfmea()</span></code></a></li>
-</ul>
-</li>
-<li class="toctree-l3"><a class="reference internal" href="../../docs/fmdtools.analyze.html#module-fmdtools.analyze.show">fmdtools.analyze.show</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.analyze.html#fmdtools.analyze.show.consolidate_legend"><code class="docutils literal notranslate"><span class="pre">consolidate_legend()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.analyze.html#fmdtools.analyze.show.coord"><code class="docutils literal notranslate"><span class="pre">coord()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.analyze.html#fmdtools.analyze.show.coord3d"><code class="docutils literal notranslate"><span class="pre">coord3d()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.analyze.html#fmdtools.analyze.show.coord_collection"><code class="docutils literal notranslate"><span class="pre">coord_collection()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.analyze.html#fmdtools.analyze.show.coord_property"><code class="docutils literal notranslate"><span class="pre">coord_property()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.analyze.html#fmdtools.analyze.show.coord_property3d"><code class="docutils literal notranslate"><span class="pre">coord_property3d()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.analyze.html#fmdtools.analyze.show.geom"><code class="docutils literal notranslate"><span class="pre">geom()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.analyze.html#fmdtools.analyze.show.geomarch"><code class="docutils literal notranslate"><span class="pre">geomarch()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.analyze.html#fmdtools.analyze.show.init_figure"><code class="docutils literal notranslate"><span class="pre">init_figure()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.analyze.html#fmdtools.analyze.show.mark_times"><code class="docutils literal notranslate"><span class="pre">mark_times()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.analyze.html#fmdtools.analyze.show.traj"><code class="docutils literal notranslate"><span class="pre">traj()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.analyze.html#fmdtools.analyze.show.traj3"><code class="docutils literal notranslate"><span class="pre">traj3()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.analyze.html#fmdtools.analyze.show.trajectories"><code class="docutils literal notranslate"><span class="pre">trajectories()</span></code></a></li>
-</ul>
-</li>
+<li class="toctree-l3"><a class="reference internal" href="../../docs/fmdtools.analyze.html#module-fmdtools.analyze.common">fmdtools.analyze.common</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../docs/fmdtools.analyze.html#module-fmdtools.analyze.result">fmdtools.analyze.result</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../docs/fmdtools.analyze.html#module-fmdtools.analyze.history">fmdtools.analyze.history</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../docs/fmdtools.analyze.html#module-fmdtools.analyze.graph">fmdtools.analyze.graph</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../docs/fmdtools.analyze.html#module-fmdtools.analyze.tabulate">fmdtools.analyze.tabulate</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../docs/fmdtools.analyze.html#module-fmdtools.analyze.phases">fmdtools.analyze.phases</a></li>
 </ul>
 </li>
 </ul>
@@ -618,17 +353,13 @@
            <div itemprop="articleBody">
              
   <section id="Rover-Model-Explanation-and-Preliminaries">
-<h1>Rover Model Explanation and Preliminaries<a class="headerlink" href="#Rover-Model-Explanation-and-Preliminaries" title="Link to this heading"></a></h1>
+<h1>Rover Model Explanation and Preliminaries<a class="headerlink" href="#Rover-Model-Explanation-and-Preliminaries" title="Permalink to this heading"></a></h1>
 <p>This notebook covers the setup of a lane-following rover fault model for understanding the effects of faults in AI-driven systems. This model uses the fmdtools simulation toolkit to simulate the nominal and faulty behaviors of the rover over a set of fault scenarios and classify/assess risk.</p>
-<p>TODO: Need to update NominalApproach for sub-parameters</p>
 <div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[1]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">fmdtools.analyze</span> <span class="k">as</span> <span class="nn">an</span>
-<span class="kn">import</span> <span class="nn">fmdtools.sim.propagate</span> <span class="k">as</span> <span class="nn">prop</span>
-<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
-<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">fmdtools.sim.propagate</span> <span class="k">as</span> <span class="nn">prop</span>
 <span class="kn">import</span> <span class="nn">multiprocessing</span> <span class="k">as</span> <span class="nn">mp</span>
 </pre></div>
 </div>
@@ -643,7 +374,7 @@
 </div>
 </div>
 <section id="Model-Setup">
-<h2>Model Setup<a class="headerlink" href="#Model-Setup" title="Link to this heading"></a></h2>
+<h2>Model Setup<a class="headerlink" href="#Model-Setup" title="Permalink to this heading"></a></h2>
 <div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[3]:
 </pre></div>
@@ -652,21 +383,13 @@
 </pre></div>
 </div>
 </div>
-<div class="nbinput nblast docutils container">
+<p>The functions and flows of the model are shown below, and were taken from the design of the system:</p>
+<div class="nbinput docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[4]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1">#%matplotlib qt</span>
-<span class="c1">#an.graph.set_pos(mdl, gtype=&#39;fxnflowgraph&#39;)</span>
-</pre></div>
-</div>
-</div>
-<p>The functions and flows of the model are shown below, and were taken from the design of the system:</p>
-<div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[5]:
-</pre></div>
-</div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">mg</span> <span class="o">=</span> <span class="n">an</span><span class="o">.</span><span class="n">graph</span><span class="o">.</span><span class="n">ModelFxnGraph</span><span class="p">(</span><span class="n">mdl</span><span class="p">)</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">fmdtools.analyze.graph</span> <span class="kn">import</span> <span class="n">ModelFxnGraph</span>
+<span class="n">mg</span> <span class="o">=</span> <span class="n">ModelFxnGraph</span><span class="p">(</span><span class="n">mdl</span><span class="p">)</span>
 <span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">mg</span><span class="o">.</span><span class="n">draw</span><span class="p">()</span>
 </pre></div>
 </div>
@@ -675,7 +398,7 @@
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area docutils container">
-<img alt="../../_images/examples_rover_Rover_Setup_Notebook_8_0.png" src="../../_images/examples_rover_Rover_Setup_Notebook_8_0.png" />
+<img alt="../../_images/examples_rover_Rover_Setup_Notebook_7_0.png" src="../../_images/examples_rover_Rover_Setup_Notebook_7_0.png" />
 </div>
 </div>
 <p>The functions are: - <code class="docutils literal notranslate"><span class="pre">Operator</span></code>, the operator of the rover who turns it on/off and takes control if needed (not fully implemented) - <code class="docutils literal notranslate"><span class="pre">Power</span></code>, the battery and power supply - <code class="docutils literal notranslate"><span class="pre">Communications</span></code>, the radio used to relay back position/etc. to the operator - <code class="docutils literal notranslate"><span class="pre">Avionics</span></code>, the computer/control system which determines where to direct the given position information - <code class="docutils literal notranslate"><span class="pre">Override</span></code>, the system that enables the operator to control the rover instead - <code class="docutils literal notranslate"><span class="pre">Perception</span></code>, the camera/AI system which percieves
@@ -684,7 +407,7 @@ the ground and then (not fully implemented) - <code class="docutils literal notr
 <code class="docutils literal notranslate"><span class="pre">Video</span></code>, the video feed/signal from the camera to the avionics - <code class="docutils literal notranslate"><span class="pre">MotorControl</span></code>, the control signals to the drive system(s) - <code class="docutils literal notranslate"><span class="pre">Ground</span></code>, the real position of the rover and the ground/environment/etc.</p>
 <p>The model is presently a mixed static/dynamic propagation model in which most function behaviors propagate over time, except for the power system, which propagates in a dynamic step. This may change depending on the necessity to model interactions between these systems. This is shown below.</p>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[6]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[5]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">mg</span><span class="o">.</span><span class="n">set_exec_order</span><span class="p">(</span><span class="n">mdl</span><span class="p">)</span>
@@ -696,20 +419,20 @@ the ground and then (not fully implemented) - <code class="docutils literal notr
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area docutils container">
-<img alt="../../_images/examples_rover_Rover_Setup_Notebook_11_0.png" src="../../_images/examples_rover_Rover_Setup_Notebook_11_0.png" />
+<img alt="../../_images/examples_rover_Rover_Setup_Notebook_10_0.png" src="../../_images/examples_rover_Rover_Setup_Notebook_10_0.png" />
 </div>
 </div>
 <p>The run order for this model is additionally shown below.</p>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[7]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[6]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">an</span><span class="o">.</span><span class="n">plot</span><span class="o">.</span><span class="n">dyn_order</span><span class="p">(</span><span class="n">mdl</span><span class="p">,</span> <span class="n">rotateticks</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">mdl</span><span class="o">.</span><span class="n">plot_dynamic_run_order</span><span class="p">(</span><span class="n">rotateticks</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
 <div class="nboutput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[7]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[6]:
 </pre></div>
 </div>
 <div class="output_area docutils container">
@@ -721,80 +444,76 @@ the ground and then (not fully implemented) - <code class="docutils literal notr
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area docutils container">
-<img alt="../../_images/examples_rover_Rover_Setup_Notebook_13_1.png" src="../../_images/examples_rover_Rover_Setup_Notebook_13_1.png" />
+<img alt="../../_images/examples_rover_Rover_Setup_Notebook_12_1.png" src="../../_images/examples_rover_Rover_Setup_Notebook_12_1.png" />
 </div>
 </div>
 </section>
 <section id="Model-simulation">
-<h2>Model simulation<a class="headerlink" href="#Model-simulation" title="Link to this heading"></a></h2>
+<h2>Model simulation<a class="headerlink" href="#Model-simulation" title="Permalink to this heading"></a></h2>
 <p>Currently, the model can be simulated in a few situations for lane-tracking: a sine wave and a 90-degree turn.</p>
 <p>Below shows the 90-degree turn. As shown, the centerline tracking is not perfect, with a fairly large deviation in distance (current limit for viewing the line in the model is 1 meter). This should be controlled in the future by lowering the timestep (enabling more corrections) or enabling some reduction to velocity when going around corners.</p>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[8]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[7]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">mdl</span> <span class="o">=</span> <span class="n">Rover</span><span class="p">(</span><span class="n">p</span><span class="o">=</span><span class="n">RoverParam</span><span class="p">(</span><span class="n">ground</span> <span class="o">=</span> <span class="n">GroundParam</span><span class="p">(</span><span class="n">linetype</span><span class="o">=</span><span class="s1">&#39;turn&#39;</span><span class="p">)))</span>
 <span class="n">endresults</span><span class="p">,</span> <span class="n">mdlhist</span> <span class="o">=</span> <span class="n">prop</span><span class="o">.</span><span class="n">nominal</span><span class="p">(</span><span class="n">mdl</span><span class="p">)</span>
-<span class="n">an</span><span class="o">.</span><span class="n">show</span><span class="o">.</span><span class="n">trajectories</span><span class="p">(</span><span class="n">mdlhist</span><span class="p">,</span> <span class="s1">&#39;pos.s.x&#39;</span><span class="p">,</span> <span class="s1">&#39;pos.s.y&#39;</span><span class="p">)</span>
+<span class="n">mdlhist</span><span class="o">.</span><span class="n">plot_trajectories</span><span class="p">(</span><span class="s1">&#39;pos.s.x&#39;</span><span class="p">,</span> <span class="s1">&#39;pos.s.y&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
 <div class="nboutput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[7]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+(&lt;Figure size 400x400 with 1 Axes&gt;, &lt;Axes: &gt;)
+</pre></div></div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../../_images/examples_rover_Rover_Setup_Notebook_14_1.png" src="../../_images/examples_rover_Rover_Setup_Notebook_14_1.png" />
+</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[8]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">mdlhist</span><span class="p">[</span><span class="s1">&#39;time&#39;</span><span class="p">]</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[8]:
 </pre></div>
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-(&lt;Figure size 400x400 with 1 Axes&gt;, &lt;Axes: &gt;)
-</pre></div></div>
-</div>
-<div class="nboutput nblast docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area docutils container">
-<img alt="../../_images/examples_rover_Rover_Setup_Notebook_15_1.png" src="../../_images/examples_rover_Rover_Setup_Notebook_15_1.png" />
-</div>
-</div>
-<div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[9]:
-</pre></div>
-</div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">mdlhist</span><span class="p">[</span><span class="s1">&#39;time&#39;</span><span class="p">]</span>
-</pre></div>
-</div>
-</div>
-<div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[9]:
-</pre></div>
-</div>
-<div class="output_area docutils container">
-<div class="highlight"><pre>
-array([  0.,   1.,   2.,   3.,   4.,   5.,   6.,   7.,   8.,   9.,  10.,
-        11.,  12.,  13.,  14.,  15.,  16.,  17.,  18.,  19.,  20.,  21.,
-        22.,  23.,  24.,  25.,  26.,  27.,  28.,  29.,  30.,  31.,  32.,
-        33.,  34.,  35.,  36.,  37.,  38.,  39.,  40.,  41.,  42.,  43.,
-        44.,  45.,  46.,  47.,  48.,  49.,  50.,  51.,  52.,  53.,  54.,
-        55.,  56.,  57.,  58.,  59.,  60.,  61.,  62.,  63.,  64.,  65.,
-        66.,  67.,  68.,  69.,  70.,  71.,  72.,  73.,  74.,  75.,  76.,
-        77.,  78.,  79.,  80.,  81.,  82.,  83.,  84.,  85.,  86.,  87.,
-        88.,  89.,  90.,  91.,  92.,  93.,  94.,  95.,  96.,  97.,  98.,
-        99., 100., 101., 102., 103., 104., 105., 106., 107., 108., 109.,
-       110., 111., 112., 113., 114., 115., 116., 117.])
+array([ 0.,  1.,  2.,  3.,  4.,  5.,  6.,  7.,  8.,  9., 10., 11., 12.,
+       13., 14., 15., 16., 17., 18., 19., 20., 21., 22., 23., 24., 25.,
+       26., 27., 28., 29., 30., 31., 32., 33., 34., 35., 36., 37., 38.,
+       39., 40., 41., 42., 43., 44., 45., 46., 47., 48., 49., 50., 51.,
+       52., 53., 54., 55., 56., 57., 58., 59., 60., 61., 62., 63., 64.,
+       65., 66., 67., 68., 69., 70., 71., 72., 73., 74., 75., 76., 77.,
+       78., 79., 80., 81., 82., 83.])
 </pre></div></div>
 </div>
 <p>Below shows the sine wave. As shown, this curve has a relatively low amplitude (see the y-axis), which results in low tracking error.</p>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[10]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[9]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">mdl</span> <span class="o">=</span> <span class="n">Rover</span><span class="p">(</span><span class="n">p</span><span class="o">=</span><span class="n">RoverParam</span><span class="p">(</span><span class="n">ground</span> <span class="o">=</span> <span class="n">GroundParam</span><span class="p">(</span><span class="n">linetype</span><span class="o">=</span><span class="s1">&#39;sine&#39;</span><span class="p">)))</span>
 <span class="n">endresults</span><span class="p">,</span> <span class="n">mdlhist</span> <span class="o">=</span> <span class="n">prop</span><span class="o">.</span><span class="n">nominal</span><span class="p">(</span><span class="n">mdl</span><span class="p">)</span>
-<span class="n">an</span><span class="o">.</span><span class="n">show</span><span class="o">.</span><span class="n">trajectories</span><span class="p">(</span><span class="n">mdlhist</span><span class="p">,</span> <span class="s1">&#39;pos.s.x&#39;</span><span class="p">,</span> <span class="s1">&#39;pos.s.y&#39;</span><span class="p">)</span>
+<span class="n">mdlhist</span><span class="o">.</span><span class="n">plot_trajectories</span><span class="p">(</span><span class="s1">&#39;pos.s.x&#39;</span><span class="p">,</span> <span class="s1">&#39;pos.s.y&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
 <div class="nboutput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[10]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[9]:
 </pre></div>
 </div>
 <div class="output_area docutils container">
@@ -806,11 +525,11 @@ array([  0.,   1.,   2.,   3.,   4.,   5.,   6.,   7.,   8.,   9.,  10.,
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area docutils container">
-<img alt="../../_images/examples_rover_Rover_Setup_Notebook_18_1.png" src="../../_images/examples_rover_Rover_Setup_Notebook_18_1.png" />
+<img alt="../../_images/examples_rover_Rover_Setup_Notebook_17_1.png" src="../../_images/examples_rover_Rover_Setup_Notebook_17_1.png" />
 </div>
 </div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[11]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[10]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">mdlhist</span><span class="p">[</span><span class="s1">&#39;time&#39;</span><span class="p">]</span>
@@ -818,7 +537,7 @@ array([  0.,   1.,   2.,   3.,   4.,   5.,   6.,   7.,   8.,   9.,  10.,
 </div>
 </div>
 <div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[11]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[10]:
 </pre></div>
 </div>
 <div class="output_area docutils container">
@@ -839,23 +558,424 @@ array([  0.,   1.,   2.,   3.,   4.,   5.,   6.,   7.,   8.,   9.,  10.,
        143., 144., 145., 146., 147., 148., 149.])
 </pre></div></div>
 </div>
-<p>The performance of the rover in these situations is dependent on the parameters of the situation (e.g., the radius of the curve and the amplitude of the sine wave). Thus, it is important to define the operational envelope for the system. This can be done using a <code class="docutils literal notranslate"><span class="pre">NominalApproach</span></code>, which can be used to define ranges of variables to simulate the system under.</p>
-<div class="nbinput nblast docutils container">
+<p>The performance of the rover in these situations is dependent on the parameters of the situation (e.g., the radius of the curve and the amplitude of the sine wave). Thus, it is important to define the operational envelope for the system. This can be done using a <code class="docutils literal notranslate"><span class="pre">ParameterSample</span></code> and <code class="docutils literal notranslate"><span class="pre">ParameterDomain</span></code>, which can be used to define ranges of variables to simulate the system under.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[11]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">fmdtools.sim.sample</span> <span class="kn">import</span> <span class="n">ParameterDomain</span><span class="p">,</span> <span class="n">ParameterSample</span>
+<span class="n">pd_turn</span> <span class="o">=</span> <span class="n">ParameterDomain</span><span class="p">(</span><span class="n">RoverParam</span><span class="p">)</span>
+<span class="n">pd_turn</span><span class="o">.</span><span class="n">add_constant</span><span class="p">(</span><span class="s2">&quot;ground.linetype&quot;</span><span class="p">,</span> <span class="s2">&quot;turn&quot;</span><span class="p">)</span>
+<span class="n">pd_turn</span><span class="o">.</span><span class="n">add_variables</span><span class="p">(</span><span class="s2">&quot;ground.radius&quot;</span><span class="p">,</span> <span class="s2">&quot;ground.x_start&quot;</span><span class="p">,</span> <span class="n">lims</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;ground.radius&quot;</span><span class="p">:</span> <span class="p">(</span><span class="mi">5</span><span class="p">,</span> <span class="mi">25</span><span class="p">),</span> <span class="s2">&quot;ground.x_start&quot;</span><span class="p">:</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">5</span><span class="p">)})</span>
+
+<span class="n">pd_turn</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[11]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+ParameterDomain with:
+ - variables: {&#39;ground.radius&#39;: (5, 25), &#39;ground.x_start&#39;: (0, 5)}
+ - constants: {&#39;ground.linetype&#39;: &#39;turn&#39;}
+ - parameter_initializer: RoverParam
+</pre></div></div>
+</div>
+<div class="nbinput docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[12]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">fmdtools.sim.approach</span> <span class="kn">import</span> <span class="n">NominalApproach</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">pd_sine</span> <span class="o">=</span> <span class="n">ParameterDomain</span><span class="p">(</span><span class="n">RoverParam</span><span class="p">)</span>
+<span class="n">pd_sine</span><span class="o">.</span><span class="n">add_constant</span><span class="p">(</span><span class="s2">&quot;ground.linetype&quot;</span><span class="p">,</span> <span class="s2">&quot;sine&quot;</span><span class="p">)</span>
+<span class="n">pd_sine</span><span class="o">.</span><span class="n">add_variables</span><span class="p">(</span><span class="s2">&quot;ground.amp&quot;</span><span class="p">,</span> <span class="s2">&quot;ground.period&quot;</span><span class="p">,</span> <span class="n">lims</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;ground.amp&quot;</span><span class="p">:(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">8</span><span class="p">),</span> <span class="s2">&quot;ground.period&quot;</span><span class="p">:</span> <span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">50</span><span class="p">)})</span>
+
+<span class="n">pd_sine</span>
 </pre></div>
 </div>
 </div>
-<p>In this approach we define parameter ranges for the two major situations–a wavelength and amplitude for the sine wave, and a radius and start location for the turn.</p>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[12]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+ParameterDomain with:
+ - variables: {&#39;ground.amp&#39;: (0, 8), &#39;ground.period&#39;: (10, 50)}
+ - constants: {&#39;ground.linetype&#39;: &#39;sine&#39;}
+ - parameter_initializer: RoverParam
+</pre></div></div>
+</div>
+<p>In this sample we then sample two major situations–a wavelength and amplitude for the sine wave, and a radius and start location for the turn.</p>
 <div class="nbinput docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[13]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">app</span> <span class="o">=</span> <span class="n">NominalApproach</span><span class="p">()</span>
-<span class="n">app</span><span class="o">.</span><span class="n">add_param_ranges</span><span class="p">(</span><span class="n">RoverParam</span><span class="p">,</span><span class="s1">&#39;sine&#39;</span><span class="p">,</span> <span class="s1">&#39;sine&#39;</span><span class="p">,</span> <span class="n">amp</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">8</span><span class="p">,</span> <span class="mf">0.2</span><span class="p">),</span> <span class="n">wavelength</span><span class="o">=</span><span class="p">(</span><span class="mf">10.0</span><span class="p">,</span><span class="mi">50</span><span class="p">,</span><span class="mi">10</span><span class="p">))</span>
-<span class="n">app</span><span class="o">.</span><span class="n">add_param_ranges</span><span class="p">(</span><span class="n">RoverParam</span><span class="p">,</span><span class="s1">&#39;turn&#39;</span><span class="p">,</span><span class="s1">&#39;turn&#39;</span><span class="p">,</span> <span class="n">radius</span><span class="o">=</span><span class="p">(</span><span class="mi">5</span><span class="p">,</span><span class="mi">40</span><span class="p">,</span><span class="mf">5.0</span><span class="p">),</span> <span class="n">start</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mf">20.0</span><span class="p">,</span><span class="mi">5</span><span class="p">))</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">ps_sine</span> <span class="o">=</span> <span class="n">ParameterSample</span><span class="p">(</span><span class="n">pd_sine</span><span class="p">)</span>
+<span class="n">ps_sine</span><span class="o">.</span><span class="n">add_variable_ranges</span><span class="p">(</span><span class="n">comb_kwargs</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;resolutions&#39;</span><span class="p">:{</span><span class="s1">&#39;ground.amp&#39;</span><span class="p">:</span> <span class="mf">0.2</span><span class="p">,</span> <span class="s2">&quot;ground.period&quot;</span><span class="p">:</span> <span class="mi">10</span><span class="p">}})</span>
+
+<span class="n">ps_sine</span><span class="o">.</span><span class="n">scenarios</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[13]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+[ParameterScenario(sequence={}, times=(), p={&#39;ground&#39;: {&#39;amp&#39;: 0.0, &#39;period&#39;: 10, &#39;linetype&#39;: &#39;sine&#39;}}, r={}, sp={}, prob=0.004878048780487805, inputparams=(0.0, 10), rangeid=&#39;&#39;, name=&#39;rep0_range_0&#39;),
+ ParameterScenario(sequence={}, times=(), p={&#39;ground&#39;: {&#39;amp&#39;: 0.0, &#39;period&#39;: 20, &#39;linetype&#39;: &#39;sine&#39;}}, r={}, sp={}, prob=0.004878048780487805, inputparams=(0.0, 20), rangeid=&#39;&#39;, name=&#39;rep0_range_1&#39;),
+ ParameterScenario(sequence={}, times=(), p={&#39;ground&#39;: {&#39;amp&#39;: 0.0, &#39;period&#39;: 30, &#39;linetype&#39;: &#39;sine&#39;}}, r={}, sp={}, prob=0.004878048780487805, inputparams=(0.0, 30), rangeid=&#39;&#39;, name=&#39;rep0_range_2&#39;),
+ ParameterScenario(sequence={}, times=(), p={&#39;ground&#39;: {&#39;amp&#39;: 0.0, &#39;period&#39;: 40, &#39;linetype&#39;: &#39;sine&#39;}}, r={}, sp={}, prob=0.004878048780487805, inputparams=(0.0, 40), rangeid=&#39;&#39;, name=&#39;rep0_range_3&#39;),
+ ParameterScenario(sequence={}, times=(), p={&#39;ground&#39;: {&#39;amp&#39;: 0.0, &#39;period&#39;: 50, &#39;linetype&#39;: &#39;sine&#39;}}, r={}, sp={}, prob=0.004878048780487805, inputparams=(0.0, 50), rangeid=&#39;&#39;, name=&#39;rep0_range_4&#39;),
+ ParameterScenario(sequence={}, times=(), p={&#39;ground&#39;: {&#39;amp&#39;: 0.2, &#39;period&#39;: 10, &#39;linetype&#39;: &#39;sine&#39;}}, r={}, sp={}, prob=0.004878048780487805, inputparams=(0.2, 10), rangeid=&#39;&#39;, name=&#39;rep0_range_5&#39;),
+ ParameterScenario(sequence={}, times=(), p={&#39;ground&#39;: {&#39;amp&#39;: 0.2, &#39;period&#39;: 20, &#39;linetype&#39;: &#39;sine&#39;}}, r={}, sp={}, prob=0.004878048780487805, inputparams=(0.2, 20), rangeid=&#39;&#39;, name=&#39;rep0_range_6&#39;),
+ ParameterScenario(sequence={}, times=(), p={&#39;ground&#39;: {&#39;amp&#39;: 0.2, &#39;period&#39;: 30, &#39;linetype&#39;: &#39;sine&#39;}}, r={}, sp={}, prob=0.004878048780487805, inputparams=(0.2, 30), rangeid=&#39;&#39;, name=&#39;rep0_range_7&#39;),
+ ParameterScenario(sequence={}, times=(), p={&#39;ground&#39;: {&#39;amp&#39;: 0.2, &#39;period&#39;: 40, &#39;linetype&#39;: &#39;sine&#39;}}, r={}, sp={}, prob=0.004878048780487805, inputparams=(0.2, 40), rangeid=&#39;&#39;, name=&#39;rep0_range_8&#39;),
+ ParameterScenario(sequence={}, times=(), p={&#39;ground&#39;: {&#39;amp&#39;: 0.2, &#39;period&#39;: 50, &#39;linetype&#39;: &#39;sine&#39;}}, r={}, sp={}, prob=0.004878048780487805, inputparams=(0.2, 50), rangeid=&#39;&#39;, name=&#39;rep0_range_9&#39;),
+ ParameterScenario(sequence={}, times=(), p={&#39;ground&#39;: {&#39;amp&#39;: 0.4, &#39;period&#39;: 10, &#39;linetype&#39;: &#39;sine&#39;}}, r={}, sp={}, prob=0.004878048780487805, inputparams=(0.4, 10), rangeid=&#39;&#39;, name=&#39;rep0_range_10&#39;),
+ ParameterScenario(sequence={}, times=(), p={&#39;ground&#39;: {&#39;amp&#39;: 0.4, &#39;period&#39;: 20, &#39;linetype&#39;: &#39;sine&#39;}}, r={}, sp={}, prob=0.004878048780487805, inputparams=(0.4, 20), rangeid=&#39;&#39;, name=&#39;rep0_range_11&#39;),
+ ParameterScenario(sequence={}, times=(), p={&#39;ground&#39;: {&#39;amp&#39;: 0.4, &#39;period&#39;: 30, &#39;linetype&#39;: &#39;sine&#39;}}, r={}, sp={}, prob=0.004878048780487805, inputparams=(0.4, 30), rangeid=&#39;&#39;, name=&#39;rep0_range_12&#39;),
+ ParameterScenario(sequence={}, times=(), p={&#39;ground&#39;: {&#39;amp&#39;: 0.4, &#39;period&#39;: 40, &#39;linetype&#39;: &#39;sine&#39;}}, r={}, sp={}, prob=0.004878048780487805, inputparams=(0.4, 40), rangeid=&#39;&#39;, name=&#39;rep0_range_13&#39;),
+ ParameterScenario(sequence={}, times=(), p={&#39;ground&#39;: {&#39;amp&#39;: 0.4, &#39;period&#39;: 50, &#39;linetype&#39;: &#39;sine&#39;}}, r={}, sp={}, prob=0.004878048780487805, inputparams=(0.4, 50), rangeid=&#39;&#39;, name=&#39;rep0_range_14&#39;),
+ ParameterScenario(sequence={}, times=(), p={&#39;ground&#39;: {&#39;amp&#39;: 0.6000000000000001, &#39;period&#39;: 10, &#39;linetype&#39;: &#39;sine&#39;}}, r={}, sp={}, prob=0.004878048780487805, inputparams=(0.6000000000000001, 10), rangeid=&#39;&#39;, name=&#39;rep0_range_15&#39;),
+ ParameterScenario(sequence={}, times=(), p={&#39;ground&#39;: {&#39;amp&#39;: 0.6000000000000001, &#39;period&#39;: 20, &#39;linetype&#39;: &#39;sine&#39;}}, r={}, sp={}, prob=0.004878048780487805, inputparams=(0.6000000000000001, 20), rangeid=&#39;&#39;, name=&#39;rep0_range_16&#39;),
+ ParameterScenario(sequence={}, times=(), p={&#39;ground&#39;: {&#39;amp&#39;: 0.6000000000000001, &#39;period&#39;: 30, &#39;linetype&#39;: &#39;sine&#39;}}, r={}, sp={}, prob=0.004878048780487805, inputparams=(0.6000000000000001, 30), rangeid=&#39;&#39;, name=&#39;rep0_range_17&#39;),
+ ParameterScenario(sequence={}, times=(), p={&#39;ground&#39;: {&#39;amp&#39;: 0.6000000000000001, &#39;period&#39;: 40, &#39;linetype&#39;: &#39;sine&#39;}}, r={}, sp={}, prob=0.004878048780487805, inputparams=(0.6000000000000001, 40), rangeid=&#39;&#39;, name=&#39;rep0_range_18&#39;),
+ ParameterScenario(sequence={}, times=(), p={&#39;ground&#39;: {&#39;amp&#39;: 0.6000000000000001, &#39;period&#39;: 50, &#39;linetype&#39;: &#39;sine&#39;}}, r={}, sp={}, prob=0.004878048780487805, inputparams=(0.6000000000000001, 50), rangeid=&#39;&#39;, name=&#39;rep0_range_19&#39;),
+ ParameterScenario(sequence={}, times=(), p={&#39;ground&#39;: {&#39;amp&#39;: 0.8, &#39;period&#39;: 10, &#39;linetype&#39;: &#39;sine&#39;}}, r={}, sp={}, prob=0.004878048780487805, inputparams=(0.8, 10), rangeid=&#39;&#39;, name=&#39;rep0_range_20&#39;),
+ ParameterScenario(sequence={}, times=(), p={&#39;ground&#39;: {&#39;amp&#39;: 0.8, &#39;period&#39;: 20, &#39;linetype&#39;: &#39;sine&#39;}}, r={}, sp={}, prob=0.004878048780487805, inputparams=(0.8, 20), rangeid=&#39;&#39;, name=&#39;rep0_range_21&#39;),
+ ParameterScenario(sequence={}, times=(), p={&#39;ground&#39;: {&#39;amp&#39;: 0.8, &#39;period&#39;: 30, &#39;linetype&#39;: &#39;sine&#39;}}, r={}, sp={}, prob=0.004878048780487805, inputparams=(0.8, 30), rangeid=&#39;&#39;, name=&#39;rep0_range_22&#39;),
+ ParameterScenario(sequence={}, times=(), p={&#39;ground&#39;: {&#39;amp&#39;: 0.8, &#39;period&#39;: 40, &#39;linetype&#39;: &#39;sine&#39;}}, r={}, sp={}, prob=0.004878048780487805, inputparams=(0.8, 40), rangeid=&#39;&#39;, name=&#39;rep0_range_23&#39;),
+ ParameterScenario(sequence={}, times=(), p={&#39;ground&#39;: {&#39;amp&#39;: 0.8, &#39;period&#39;: 50, &#39;linetype&#39;: &#39;sine&#39;}}, r={}, sp={}, prob=0.004878048780487805, inputparams=(0.8, 50), rangeid=&#39;&#39;, name=&#39;rep0_range_24&#39;),
+ ParameterScenario(sequence={}, times=(), p={&#39;ground&#39;: {&#39;amp&#39;: 1.0, &#39;period&#39;: 10, &#39;linetype&#39;: &#39;sine&#39;}}, r={}, sp={}, prob=0.004878048780487805, inputparams=(1.0, 10), rangeid=&#39;&#39;, name=&#39;rep0_range_25&#39;),
+ ParameterScenario(sequence={}, times=(), p={&#39;ground&#39;: {&#39;amp&#39;: 1.0, &#39;period&#39;: 20, &#39;linetype&#39;: &#39;sine&#39;}}, r={}, sp={}, prob=0.004878048780487805, inputparams=(1.0, 20), rangeid=&#39;&#39;, name=&#39;rep0_range_26&#39;),
+ ParameterScenario(sequence={}, times=(), p={&#39;ground&#39;: {&#39;amp&#39;: 1.0, &#39;period&#39;: 30, &#39;linetype&#39;: &#39;sine&#39;}}, r={}, sp={}, prob=0.004878048780487805, inputparams=(1.0, 30), rangeid=&#39;&#39;, name=&#39;rep0_range_27&#39;),
+ ParameterScenario(sequence={}, times=(), p={&#39;ground&#39;: {&#39;amp&#39;: 1.0, &#39;period&#39;: 40, &#39;linetype&#39;: &#39;sine&#39;}}, r={}, sp={}, prob=0.004878048780487805, inputparams=(1.0, 40), rangeid=&#39;&#39;, name=&#39;rep0_range_28&#39;),
+ ParameterScenario(sequence={}, times=(), p={&#39;ground&#39;: {&#39;amp&#39;: 1.0, &#39;period&#39;: 50, &#39;linetype&#39;: &#39;sine&#39;}}, r={}, sp={}, prob=0.004878048780487805, inputparams=(1.0, 50), rangeid=&#39;&#39;, name=&#39;rep0_range_29&#39;),
+ ParameterScenario(sequence={}, times=(), p={&#39;ground&#39;: {&#39;amp&#39;: 1.2000000000000002, &#39;period&#39;: 10, &#39;linetype&#39;: &#39;sine&#39;}}, r={}, sp={}, prob=0.004878048780487805, inputparams=(1.2000000000000002, 10), rangeid=&#39;&#39;, name=&#39;rep0_range_30&#39;),
+ ParameterScenario(sequence={}, times=(), p={&#39;ground&#39;: {&#39;amp&#39;: 1.2000000000000002, &#39;period&#39;: 20, &#39;linetype&#39;: &#39;sine&#39;}}, r={}, sp={}, prob=0.004878048780487805, inputparams=(1.2000000000000002, 20), rangeid=&#39;&#39;, name=&#39;rep0_range_31&#39;),
+ ParameterScenario(sequence={}, times=(), p={&#39;ground&#39;: {&#39;amp&#39;: 1.2000000000000002, &#39;period&#39;: 30, &#39;linetype&#39;: &#39;sine&#39;}}, r={}, sp={}, prob=0.004878048780487805, inputparams=(1.2000000000000002, 30), rangeid=&#39;&#39;, name=&#39;rep0_range_32&#39;),
+ ParameterScenario(sequence={}, times=(), p={&#39;ground&#39;: {&#39;amp&#39;: 1.2000000000000002, &#39;period&#39;: 40, &#39;linetype&#39;: &#39;sine&#39;}}, r={}, sp={}, prob=0.004878048780487805, inputparams=(1.2000000000000002, 40), rangeid=&#39;&#39;, name=&#39;rep0_range_33&#39;),
+ ParameterScenario(sequence={}, times=(), p={&#39;ground&#39;: {&#39;amp&#39;: 1.2000000000000002, &#39;period&#39;: 50, &#39;linetype&#39;: &#39;sine&#39;}}, r={}, sp={}, prob=0.004878048780487805, inputparams=(1.2000000000000002, 50), rangeid=&#39;&#39;, name=&#39;rep0_range_34&#39;),
+ ParameterScenario(sequence={}, times=(), p={&#39;ground&#39;: {&#39;amp&#39;: 1.4000000000000001, &#39;period&#39;: 10, &#39;linetype&#39;: &#39;sine&#39;}}, r={}, sp={}, prob=0.004878048780487805, inputparams=(1.4000000000000001, 10), rangeid=&#39;&#39;, name=&#39;rep0_range_35&#39;),
+ ParameterScenario(sequence={}, times=(), p={&#39;ground&#39;: {&#39;amp&#39;: 1.4000000000000001, &#39;period&#39;: 20, &#39;linetype&#39;: &#39;sine&#39;}}, r={}, sp={}, prob=0.004878048780487805, inputparams=(1.4000000000000001, 20), rangeid=&#39;&#39;, name=&#39;rep0_range_36&#39;),
+ ParameterScenario(sequence={}, times=(), p={&#39;ground&#39;: {&#39;amp&#39;: 1.4000000000000001, &#39;period&#39;: 30, &#39;linetype&#39;: &#39;sine&#39;}}, r={}, sp={}, prob=0.004878048780487805, inputparams=(1.4000000000000001, 30), rangeid=&#39;&#39;, name=&#39;rep0_range_37&#39;),
+ ParameterScenario(sequence={}, times=(), p={&#39;ground&#39;: {&#39;amp&#39;: 1.4000000000000001, &#39;period&#39;: 40, &#39;linetype&#39;: &#39;sine&#39;}}, r={}, sp={}, prob=0.004878048780487805, inputparams=(1.4000000000000001, 40), rangeid=&#39;&#39;, name=&#39;rep0_range_38&#39;),
+ ParameterScenario(sequence={}, times=(), p={&#39;ground&#39;: {&#39;amp&#39;: 1.4000000000000001, &#39;period&#39;: 50, &#39;linetype&#39;: &#39;sine&#39;}}, r={}, sp={}, prob=0.004878048780487805, inputparams=(1.4000000000000001, 50), rangeid=&#39;&#39;, name=&#39;rep0_range_39&#39;),
+ ParameterScenario(sequence={}, times=(), p={&#39;ground&#39;: {&#39;amp&#39;: 1.6, &#39;period&#39;: 10, &#39;linetype&#39;: &#39;sine&#39;}}, r={}, sp={}, prob=0.004878048780487805, inputparams=(1.6, 10), rangeid=&#39;&#39;, name=&#39;rep0_range_40&#39;),
+ ParameterScenario(sequence={}, times=(), p={&#39;ground&#39;: {&#39;amp&#39;: 1.6, &#39;period&#39;: 20, &#39;linetype&#39;: &#39;sine&#39;}}, r={}, sp={}, prob=0.004878048780487805, inputparams=(1.6, 20), rangeid=&#39;&#39;, name=&#39;rep0_range_41&#39;),
+ ParameterScenario(sequence={}, times=(), p={&#39;ground&#39;: {&#39;amp&#39;: 1.6, &#39;period&#39;: 30, &#39;linetype&#39;: &#39;sine&#39;}}, r={}, sp={}, prob=0.004878048780487805, inputparams=(1.6, 30), rangeid=&#39;&#39;, name=&#39;rep0_range_42&#39;),
+ ParameterScenario(sequence={}, times=(), p={&#39;ground&#39;: {&#39;amp&#39;: 1.6, &#39;period&#39;: 40, &#39;linetype&#39;: &#39;sine&#39;}}, r={}, sp={}, prob=0.004878048780487805, inputparams=(1.6, 40), rangeid=&#39;&#39;, name=&#39;rep0_range_43&#39;),
+ ParameterScenario(sequence={}, times=(), p={&#39;ground&#39;: {&#39;amp&#39;: 1.6, &#39;period&#39;: 50, &#39;linetype&#39;: &#39;sine&#39;}}, r={}, sp={}, prob=0.004878048780487805, inputparams=(1.6, 50), rangeid=&#39;&#39;, name=&#39;rep0_range_44&#39;),
+ ParameterScenario(sequence={}, times=(), p={&#39;ground&#39;: {&#39;amp&#39;: 1.8, &#39;period&#39;: 10, &#39;linetype&#39;: &#39;sine&#39;}}, r={}, sp={}, prob=0.004878048780487805, inputparams=(1.8, 10), rangeid=&#39;&#39;, name=&#39;rep0_range_45&#39;),
+ ParameterScenario(sequence={}, times=(), p={&#39;ground&#39;: {&#39;amp&#39;: 1.8, &#39;period&#39;: 20, &#39;linetype&#39;: &#39;sine&#39;}}, r={}, sp={}, prob=0.004878048780487805, inputparams=(1.8, 20), rangeid=&#39;&#39;, name=&#39;rep0_range_46&#39;),
+ ParameterScenario(sequence={}, times=(), p={&#39;ground&#39;: {&#39;amp&#39;: 1.8, &#39;period&#39;: 30, &#39;linetype&#39;: &#39;sine&#39;}}, r={}, sp={}, prob=0.004878048780487805, inputparams=(1.8, 30), rangeid=&#39;&#39;, name=&#39;rep0_range_47&#39;),
+ ParameterScenario(sequence={}, times=(), p={&#39;ground&#39;: {&#39;amp&#39;: 1.8, &#39;period&#39;: 40, &#39;linetype&#39;: &#39;sine&#39;}}, r={}, sp={}, prob=0.004878048780487805, inputparams=(1.8, 40), rangeid=&#39;&#39;, name=&#39;rep0_range_48&#39;),
+ ParameterScenario(sequence={}, times=(), p={&#39;ground&#39;: {&#39;amp&#39;: 1.8, &#39;period&#39;: 50, &#39;linetype&#39;: &#39;sine&#39;}}, r={}, sp={}, prob=0.004878048780487805, inputparams=(1.8, 50), rangeid=&#39;&#39;, name=&#39;rep0_range_49&#39;),
+ ParameterScenario(sequence={}, times=(), p={&#39;ground&#39;: {&#39;amp&#39;: 2.0, &#39;period&#39;: 10, &#39;linetype&#39;: &#39;sine&#39;}}, r={}, sp={}, prob=0.004878048780487805, inputparams=(2.0, 10), rangeid=&#39;&#39;, name=&#39;rep0_range_50&#39;),
+ ParameterScenario(sequence={}, times=(), p={&#39;ground&#39;: {&#39;amp&#39;: 2.0, &#39;period&#39;: 20, &#39;linetype&#39;: &#39;sine&#39;}}, r={}, sp={}, prob=0.004878048780487805, inputparams=(2.0, 20), rangeid=&#39;&#39;, name=&#39;rep0_range_51&#39;),
+ ParameterScenario(sequence={}, times=(), p={&#39;ground&#39;: {&#39;amp&#39;: 2.0, &#39;period&#39;: 30, &#39;linetype&#39;: &#39;sine&#39;}}, r={}, sp={}, prob=0.004878048780487805, inputparams=(2.0, 30), rangeid=&#39;&#39;, name=&#39;rep0_range_52&#39;),
+ ParameterScenario(sequence={}, times=(), p={&#39;ground&#39;: {&#39;amp&#39;: 2.0, &#39;period&#39;: 40, &#39;linetype&#39;: &#39;sine&#39;}}, r={}, sp={}, prob=0.004878048780487805, inputparams=(2.0, 40), rangeid=&#39;&#39;, name=&#39;rep0_range_53&#39;),
+ ParameterScenario(sequence={}, times=(), p={&#39;ground&#39;: {&#39;amp&#39;: 2.0, &#39;period&#39;: 50, &#39;linetype&#39;: &#39;sine&#39;}}, r={}, sp={}, prob=0.004878048780487805, inputparams=(2.0, 50), rangeid=&#39;&#39;, name=&#39;rep0_range_54&#39;),
+ ParameterScenario(sequence={}, times=(), p={&#39;ground&#39;: {&#39;amp&#39;: 2.2, &#39;period&#39;: 10, &#39;linetype&#39;: &#39;sine&#39;}}, r={}, sp={}, prob=0.004878048780487805, inputparams=(2.2, 10), rangeid=&#39;&#39;, name=&#39;rep0_range_55&#39;),
+ ParameterScenario(sequence={}, times=(), p={&#39;ground&#39;: {&#39;amp&#39;: 2.2, &#39;period&#39;: 20, &#39;linetype&#39;: &#39;sine&#39;}}, r={}, sp={}, prob=0.004878048780487805, inputparams=(2.2, 20), rangeid=&#39;&#39;, name=&#39;rep0_range_56&#39;),
+ ParameterScenario(sequence={}, times=(), p={&#39;ground&#39;: {&#39;amp&#39;: 2.2, &#39;period&#39;: 30, &#39;linetype&#39;: &#39;sine&#39;}}, r={}, sp={}, prob=0.004878048780487805, inputparams=(2.2, 30), rangeid=&#39;&#39;, name=&#39;rep0_range_57&#39;),
+ ParameterScenario(sequence={}, times=(), p={&#39;ground&#39;: {&#39;amp&#39;: 2.2, &#39;period&#39;: 40, &#39;linetype&#39;: &#39;sine&#39;}}, r={}, sp={}, prob=0.004878048780487805, inputparams=(2.2, 40), rangeid=&#39;&#39;, name=&#39;rep0_range_58&#39;),
+ ParameterScenario(sequence={}, times=(), p={&#39;ground&#39;: {&#39;amp&#39;: 2.2, &#39;period&#39;: 50, &#39;linetype&#39;: &#39;sine&#39;}}, r={}, sp={}, prob=0.004878048780487805, inputparams=(2.2, 50), rangeid=&#39;&#39;, name=&#39;rep0_range_59&#39;),
+ ParameterScenario(sequence={}, times=(), p={&#39;ground&#39;: {&#39;amp&#39;: 2.4000000000000004, &#39;period&#39;: 10, &#39;linetype&#39;: &#39;sine&#39;}}, r={}, sp={}, prob=0.004878048780487805, inputparams=(2.4000000000000004, 10), rangeid=&#39;&#39;, name=&#39;rep0_range_60&#39;),
+ ParameterScenario(sequence={}, times=(), p={&#39;ground&#39;: {&#39;amp&#39;: 2.4000000000000004, &#39;period&#39;: 20, &#39;linetype&#39;: &#39;sine&#39;}}, r={}, sp={}, prob=0.004878048780487805, inputparams=(2.4000000000000004, 20), rangeid=&#39;&#39;, name=&#39;rep0_range_61&#39;),
+ ParameterScenario(sequence={}, times=(), p={&#39;ground&#39;: {&#39;amp&#39;: 2.4000000000000004, &#39;period&#39;: 30, &#39;linetype&#39;: &#39;sine&#39;}}, r={}, sp={}, prob=0.004878048780487805, inputparams=(2.4000000000000004, 30), rangeid=&#39;&#39;, name=&#39;rep0_range_62&#39;),
+ ParameterScenario(sequence={}, times=(), p={&#39;ground&#39;: {&#39;amp&#39;: 2.4000000000000004, &#39;period&#39;: 40, &#39;linetype&#39;: &#39;sine&#39;}}, r={}, sp={}, prob=0.004878048780487805, inputparams=(2.4000000000000004, 40), rangeid=&#39;&#39;, name=&#39;rep0_range_63&#39;),
+ ParameterScenario(sequence={}, times=(), p={&#39;ground&#39;: {&#39;amp&#39;: 2.4000000000000004, &#39;period&#39;: 50, &#39;linetype&#39;: &#39;sine&#39;}}, r={}, sp={}, prob=0.004878048780487805, inputparams=(2.4000000000000004, 50), rangeid=&#39;&#39;, name=&#39;rep0_range_64&#39;),
+ ParameterScenario(sequence={}, times=(), p={&#39;ground&#39;: {&#39;amp&#39;: 2.6, &#39;period&#39;: 10, &#39;linetype&#39;: &#39;sine&#39;}}, r={}, sp={}, prob=0.004878048780487805, inputparams=(2.6, 10), rangeid=&#39;&#39;, name=&#39;rep0_range_65&#39;),
+ ParameterScenario(sequence={}, times=(), p={&#39;ground&#39;: {&#39;amp&#39;: 2.6, &#39;period&#39;: 20, &#39;linetype&#39;: &#39;sine&#39;}}, r={}, sp={}, prob=0.004878048780487805, inputparams=(2.6, 20), rangeid=&#39;&#39;, name=&#39;rep0_range_66&#39;),
+ ParameterScenario(sequence={}, times=(), p={&#39;ground&#39;: {&#39;amp&#39;: 2.6, &#39;period&#39;: 30, &#39;linetype&#39;: &#39;sine&#39;}}, r={}, sp={}, prob=0.004878048780487805, inputparams=(2.6, 30), rangeid=&#39;&#39;, name=&#39;rep0_range_67&#39;),
+ ParameterScenario(sequence={}, times=(), p={&#39;ground&#39;: {&#39;amp&#39;: 2.6, &#39;period&#39;: 40, &#39;linetype&#39;: &#39;sine&#39;}}, r={}, sp={}, prob=0.004878048780487805, inputparams=(2.6, 40), rangeid=&#39;&#39;, name=&#39;rep0_range_68&#39;),
+ ParameterScenario(sequence={}, times=(), p={&#39;ground&#39;: {&#39;amp&#39;: 2.6, &#39;period&#39;: 50, &#39;linetype&#39;: &#39;sine&#39;}}, r={}, sp={}, prob=0.004878048780487805, inputparams=(2.6, 50), rangeid=&#39;&#39;, name=&#39;rep0_range_69&#39;),
+ ParameterScenario(sequence={}, times=(), p={&#39;ground&#39;: {&#39;amp&#39;: 2.8000000000000003, &#39;period&#39;: 10, &#39;linetype&#39;: &#39;sine&#39;}}, r={}, sp={}, prob=0.004878048780487805, inputparams=(2.8000000000000003, 10), rangeid=&#39;&#39;, name=&#39;rep0_range_70&#39;),
+ ParameterScenario(sequence={}, times=(), p={&#39;ground&#39;: {&#39;amp&#39;: 2.8000000000000003, &#39;period&#39;: 20, &#39;linetype&#39;: &#39;sine&#39;}}, r={}, sp={}, prob=0.004878048780487805, inputparams=(2.8000000000000003, 20), rangeid=&#39;&#39;, name=&#39;rep0_range_71&#39;),
+ ParameterScenario(sequence={}, times=(), p={&#39;ground&#39;: {&#39;amp&#39;: 2.8000000000000003, &#39;period&#39;: 30, &#39;linetype&#39;: &#39;sine&#39;}}, r={}, sp={}, prob=0.004878048780487805, inputparams=(2.8000000000000003, 30), rangeid=&#39;&#39;, name=&#39;rep0_range_72&#39;),
+ ParameterScenario(sequence={}, times=(), p={&#39;ground&#39;: {&#39;amp&#39;: 2.8000000000000003, &#39;period&#39;: 40, &#39;linetype&#39;: &#39;sine&#39;}}, r={}, sp={}, prob=0.004878048780487805, inputparams=(2.8000000000000003, 40), rangeid=&#39;&#39;, name=&#39;rep0_range_73&#39;),
+ ParameterScenario(sequence={}, times=(), p={&#39;ground&#39;: {&#39;amp&#39;: 2.8000000000000003, &#39;period&#39;: 50, &#39;linetype&#39;: &#39;sine&#39;}}, r={}, sp={}, prob=0.004878048780487805, inputparams=(2.8000000000000003, 50), rangeid=&#39;&#39;, name=&#39;rep0_range_74&#39;),
+ ParameterScenario(sequence={}, times=(), p={&#39;ground&#39;: {&#39;amp&#39;: 3.0, &#39;period&#39;: 10, &#39;linetype&#39;: &#39;sine&#39;}}, r={}, sp={}, prob=0.004878048780487805, inputparams=(3.0, 10), rangeid=&#39;&#39;, name=&#39;rep0_range_75&#39;),
+ ParameterScenario(sequence={}, times=(), p={&#39;ground&#39;: {&#39;amp&#39;: 3.0, &#39;period&#39;: 20, &#39;linetype&#39;: &#39;sine&#39;}}, r={}, sp={}, prob=0.004878048780487805, inputparams=(3.0, 20), rangeid=&#39;&#39;, name=&#39;rep0_range_76&#39;),
+ ParameterScenario(sequence={}, times=(), p={&#39;ground&#39;: {&#39;amp&#39;: 3.0, &#39;period&#39;: 30, &#39;linetype&#39;: &#39;sine&#39;}}, r={}, sp={}, prob=0.004878048780487805, inputparams=(3.0, 30), rangeid=&#39;&#39;, name=&#39;rep0_range_77&#39;),
+ ParameterScenario(sequence={}, times=(), p={&#39;ground&#39;: {&#39;amp&#39;: 3.0, &#39;period&#39;: 40, &#39;linetype&#39;: &#39;sine&#39;}}, r={}, sp={}, prob=0.004878048780487805, inputparams=(3.0, 40), rangeid=&#39;&#39;, name=&#39;rep0_range_78&#39;),
+ ParameterScenario(sequence={}, times=(), p={&#39;ground&#39;: {&#39;amp&#39;: 3.0, &#39;period&#39;: 50, &#39;linetype&#39;: &#39;sine&#39;}}, r={}, sp={}, prob=0.004878048780487805, inputparams=(3.0, 50), rangeid=&#39;&#39;, name=&#39;rep0_range_79&#39;),
+ ParameterScenario(sequence={}, times=(), p={&#39;ground&#39;: {&#39;amp&#39;: 3.2, &#39;period&#39;: 10, &#39;linetype&#39;: &#39;sine&#39;}}, r={}, sp={}, prob=0.004878048780487805, inputparams=(3.2, 10), rangeid=&#39;&#39;, name=&#39;rep0_range_80&#39;),
+ ParameterScenario(sequence={}, times=(), p={&#39;ground&#39;: {&#39;amp&#39;: 3.2, &#39;period&#39;: 20, &#39;linetype&#39;: &#39;sine&#39;}}, r={}, sp={}, prob=0.004878048780487805, inputparams=(3.2, 20), rangeid=&#39;&#39;, name=&#39;rep0_range_81&#39;),
+ ParameterScenario(sequence={}, times=(), p={&#39;ground&#39;: {&#39;amp&#39;: 3.2, &#39;period&#39;: 30, &#39;linetype&#39;: &#39;sine&#39;}}, r={}, sp={}, prob=0.004878048780487805, inputparams=(3.2, 30), rangeid=&#39;&#39;, name=&#39;rep0_range_82&#39;),
+ ParameterScenario(sequence={}, times=(), p={&#39;ground&#39;: {&#39;amp&#39;: 3.2, &#39;period&#39;: 40, &#39;linetype&#39;: &#39;sine&#39;}}, r={}, sp={}, prob=0.004878048780487805, inputparams=(3.2, 40), rangeid=&#39;&#39;, name=&#39;rep0_range_83&#39;),
+ ParameterScenario(sequence={}, times=(), p={&#39;ground&#39;: {&#39;amp&#39;: 3.2, &#39;period&#39;: 50, &#39;linetype&#39;: &#39;sine&#39;}}, r={}, sp={}, prob=0.004878048780487805, inputparams=(3.2, 50), rangeid=&#39;&#39;, name=&#39;rep0_range_84&#39;),
+ ParameterScenario(sequence={}, times=(), p={&#39;ground&#39;: {&#39;amp&#39;: 3.4000000000000004, &#39;period&#39;: 10, &#39;linetype&#39;: &#39;sine&#39;}}, r={}, sp={}, prob=0.004878048780487805, inputparams=(3.4000000000000004, 10), rangeid=&#39;&#39;, name=&#39;rep0_range_85&#39;),
+ ParameterScenario(sequence={}, times=(), p={&#39;ground&#39;: {&#39;amp&#39;: 3.4000000000000004, &#39;period&#39;: 20, &#39;linetype&#39;: &#39;sine&#39;}}, r={}, sp={}, prob=0.004878048780487805, inputparams=(3.4000000000000004, 20), rangeid=&#39;&#39;, name=&#39;rep0_range_86&#39;),
+ ParameterScenario(sequence={}, times=(), p={&#39;ground&#39;: {&#39;amp&#39;: 3.4000000000000004, &#39;period&#39;: 30, &#39;linetype&#39;: &#39;sine&#39;}}, r={}, sp={}, prob=0.004878048780487805, inputparams=(3.4000000000000004, 30), rangeid=&#39;&#39;, name=&#39;rep0_range_87&#39;),
+ ParameterScenario(sequence={}, times=(), p={&#39;ground&#39;: {&#39;amp&#39;: 3.4000000000000004, &#39;period&#39;: 40, &#39;linetype&#39;: &#39;sine&#39;}}, r={}, sp={}, prob=0.004878048780487805, inputparams=(3.4000000000000004, 40), rangeid=&#39;&#39;, name=&#39;rep0_range_88&#39;),
+ ParameterScenario(sequence={}, times=(), p={&#39;ground&#39;: {&#39;amp&#39;: 3.4000000000000004, &#39;period&#39;: 50, &#39;linetype&#39;: &#39;sine&#39;}}, r={}, sp={}, prob=0.004878048780487805, inputparams=(3.4000000000000004, 50), rangeid=&#39;&#39;, name=&#39;rep0_range_89&#39;),
+ ParameterScenario(sequence={}, times=(), p={&#39;ground&#39;: {&#39;amp&#39;: 3.6, &#39;period&#39;: 10, &#39;linetype&#39;: &#39;sine&#39;}}, r={}, sp={}, prob=0.004878048780487805, inputparams=(3.6, 10), rangeid=&#39;&#39;, name=&#39;rep0_range_90&#39;),
+ ParameterScenario(sequence={}, times=(), p={&#39;ground&#39;: {&#39;amp&#39;: 3.6, &#39;period&#39;: 20, &#39;linetype&#39;: &#39;sine&#39;}}, r={}, sp={}, prob=0.004878048780487805, inputparams=(3.6, 20), rangeid=&#39;&#39;, name=&#39;rep0_range_91&#39;),
+ ParameterScenario(sequence={}, times=(), p={&#39;ground&#39;: {&#39;amp&#39;: 3.6, &#39;period&#39;: 30, &#39;linetype&#39;: &#39;sine&#39;}}, r={}, sp={}, prob=0.004878048780487805, inputparams=(3.6, 30), rangeid=&#39;&#39;, name=&#39;rep0_range_92&#39;),
+ ParameterScenario(sequence={}, times=(), p={&#39;ground&#39;: {&#39;amp&#39;: 3.6, &#39;period&#39;: 40, &#39;linetype&#39;: &#39;sine&#39;}}, r={}, sp={}, prob=0.004878048780487805, inputparams=(3.6, 40), rangeid=&#39;&#39;, name=&#39;rep0_range_93&#39;),
+ ParameterScenario(sequence={}, times=(), p={&#39;ground&#39;: {&#39;amp&#39;: 3.6, &#39;period&#39;: 50, &#39;linetype&#39;: &#39;sine&#39;}}, r={}, sp={}, prob=0.004878048780487805, inputparams=(3.6, 50), rangeid=&#39;&#39;, name=&#39;rep0_range_94&#39;),
+ ParameterScenario(sequence={}, times=(), p={&#39;ground&#39;: {&#39;amp&#39;: 3.8000000000000003, &#39;period&#39;: 10, &#39;linetype&#39;: &#39;sine&#39;}}, r={}, sp={}, prob=0.004878048780487805, inputparams=(3.8000000000000003, 10), rangeid=&#39;&#39;, name=&#39;rep0_range_95&#39;),
+ ParameterScenario(sequence={}, times=(), p={&#39;ground&#39;: {&#39;amp&#39;: 3.8000000000000003, &#39;period&#39;: 20, &#39;linetype&#39;: &#39;sine&#39;}}, r={}, sp={}, prob=0.004878048780487805, inputparams=(3.8000000000000003, 20), rangeid=&#39;&#39;, name=&#39;rep0_range_96&#39;),
+ ParameterScenario(sequence={}, times=(), p={&#39;ground&#39;: {&#39;amp&#39;: 3.8000000000000003, &#39;period&#39;: 30, &#39;linetype&#39;: &#39;sine&#39;}}, r={}, sp={}, prob=0.004878048780487805, inputparams=(3.8000000000000003, 30), rangeid=&#39;&#39;, name=&#39;rep0_range_97&#39;),
+ ParameterScenario(sequence={}, times=(), p={&#39;ground&#39;: {&#39;amp&#39;: 3.8000000000000003, &#39;period&#39;: 40, &#39;linetype&#39;: &#39;sine&#39;}}, r={}, sp={}, prob=0.004878048780487805, inputparams=(3.8000000000000003, 40), rangeid=&#39;&#39;, name=&#39;rep0_range_98&#39;),
+ ParameterScenario(sequence={}, times=(), p={&#39;ground&#39;: {&#39;amp&#39;: 3.8000000000000003, &#39;period&#39;: 50, &#39;linetype&#39;: &#39;sine&#39;}}, r={}, sp={}, prob=0.004878048780487805, inputparams=(3.8000000000000003, 50), rangeid=&#39;&#39;, name=&#39;rep0_range_99&#39;),
+ ParameterScenario(sequence={}, times=(), p={&#39;ground&#39;: {&#39;amp&#39;: 4.0, &#39;period&#39;: 10, &#39;linetype&#39;: &#39;sine&#39;}}, r={}, sp={}, prob=0.004878048780487805, inputparams=(4.0, 10), rangeid=&#39;&#39;, name=&#39;rep0_range_100&#39;),
+ ParameterScenario(sequence={}, times=(), p={&#39;ground&#39;: {&#39;amp&#39;: 4.0, &#39;period&#39;: 20, &#39;linetype&#39;: &#39;sine&#39;}}, r={}, sp={}, prob=0.004878048780487805, inputparams=(4.0, 20), rangeid=&#39;&#39;, name=&#39;rep0_range_101&#39;),
+ ParameterScenario(sequence={}, times=(), p={&#39;ground&#39;: {&#39;amp&#39;: 4.0, &#39;period&#39;: 30, &#39;linetype&#39;: &#39;sine&#39;}}, r={}, sp={}, prob=0.004878048780487805, inputparams=(4.0, 30), rangeid=&#39;&#39;, name=&#39;rep0_range_102&#39;),
+ ParameterScenario(sequence={}, times=(), p={&#39;ground&#39;: {&#39;amp&#39;: 4.0, &#39;period&#39;: 40, &#39;linetype&#39;: &#39;sine&#39;}}, r={}, sp={}, prob=0.004878048780487805, inputparams=(4.0, 40), rangeid=&#39;&#39;, name=&#39;rep0_range_103&#39;),
+ ParameterScenario(sequence={}, times=(), p={&#39;ground&#39;: {&#39;amp&#39;: 4.0, &#39;period&#39;: 50, &#39;linetype&#39;: &#39;sine&#39;}}, r={}, sp={}, prob=0.004878048780487805, inputparams=(4.0, 50), rangeid=&#39;&#39;, name=&#39;rep0_range_104&#39;),
+ ParameterScenario(sequence={}, times=(), p={&#39;ground&#39;: {&#39;amp&#39;: 4.2, &#39;period&#39;: 10, &#39;linetype&#39;: &#39;sine&#39;}}, r={}, sp={}, prob=0.004878048780487805, inputparams=(4.2, 10), rangeid=&#39;&#39;, name=&#39;rep0_range_105&#39;),
+ ParameterScenario(sequence={}, times=(), p={&#39;ground&#39;: {&#39;amp&#39;: 4.2, &#39;period&#39;: 20, &#39;linetype&#39;: &#39;sine&#39;}}, r={}, sp={}, prob=0.004878048780487805, inputparams=(4.2, 20), rangeid=&#39;&#39;, name=&#39;rep0_range_106&#39;),
+ ParameterScenario(sequence={}, times=(), p={&#39;ground&#39;: {&#39;amp&#39;: 4.2, &#39;period&#39;: 30, &#39;linetype&#39;: &#39;sine&#39;}}, r={}, sp={}, prob=0.004878048780487805, inputparams=(4.2, 30), rangeid=&#39;&#39;, name=&#39;rep0_range_107&#39;),
+ ParameterScenario(sequence={}, times=(), p={&#39;ground&#39;: {&#39;amp&#39;: 4.2, &#39;period&#39;: 40, &#39;linetype&#39;: &#39;sine&#39;}}, r={}, sp={}, prob=0.004878048780487805, inputparams=(4.2, 40), rangeid=&#39;&#39;, name=&#39;rep0_range_108&#39;),
+ ParameterScenario(sequence={}, times=(), p={&#39;ground&#39;: {&#39;amp&#39;: 4.2, &#39;period&#39;: 50, &#39;linetype&#39;: &#39;sine&#39;}}, r={}, sp={}, prob=0.004878048780487805, inputparams=(4.2, 50), rangeid=&#39;&#39;, name=&#39;rep0_range_109&#39;),
+ ParameterScenario(sequence={}, times=(), p={&#39;ground&#39;: {&#39;amp&#39;: 4.4, &#39;period&#39;: 10, &#39;linetype&#39;: &#39;sine&#39;}}, r={}, sp={}, prob=0.004878048780487805, inputparams=(4.4, 10), rangeid=&#39;&#39;, name=&#39;rep0_range_110&#39;),
+ ParameterScenario(sequence={}, times=(), p={&#39;ground&#39;: {&#39;amp&#39;: 4.4, &#39;period&#39;: 20, &#39;linetype&#39;: &#39;sine&#39;}}, r={}, sp={}, prob=0.004878048780487805, inputparams=(4.4, 20), rangeid=&#39;&#39;, name=&#39;rep0_range_111&#39;),
+ ParameterScenario(sequence={}, times=(), p={&#39;ground&#39;: {&#39;amp&#39;: 4.4, &#39;period&#39;: 30, &#39;linetype&#39;: &#39;sine&#39;}}, r={}, sp={}, prob=0.004878048780487805, inputparams=(4.4, 30), rangeid=&#39;&#39;, name=&#39;rep0_range_112&#39;),
+ ParameterScenario(sequence={}, times=(), p={&#39;ground&#39;: {&#39;amp&#39;: 4.4, &#39;period&#39;: 40, &#39;linetype&#39;: &#39;sine&#39;}}, r={}, sp={}, prob=0.004878048780487805, inputparams=(4.4, 40), rangeid=&#39;&#39;, name=&#39;rep0_range_113&#39;),
+ ParameterScenario(sequence={}, times=(), p={&#39;ground&#39;: {&#39;amp&#39;: 4.4, &#39;period&#39;: 50, &#39;linetype&#39;: &#39;sine&#39;}}, r={}, sp={}, prob=0.004878048780487805, inputparams=(4.4, 50), rangeid=&#39;&#39;, name=&#39;rep0_range_114&#39;),
+ ParameterScenario(sequence={}, times=(), p={&#39;ground&#39;: {&#39;amp&#39;: 4.6000000000000005, &#39;period&#39;: 10, &#39;linetype&#39;: &#39;sine&#39;}}, r={}, sp={}, prob=0.004878048780487805, inputparams=(4.6000000000000005, 10), rangeid=&#39;&#39;, name=&#39;rep0_range_115&#39;),
+ ParameterScenario(sequence={}, times=(), p={&#39;ground&#39;: {&#39;amp&#39;: 4.6000000000000005, &#39;period&#39;: 20, &#39;linetype&#39;: &#39;sine&#39;}}, r={}, sp={}, prob=0.004878048780487805, inputparams=(4.6000000000000005, 20), rangeid=&#39;&#39;, name=&#39;rep0_range_116&#39;),
+ ParameterScenario(sequence={}, times=(), p={&#39;ground&#39;: {&#39;amp&#39;: 4.6000000000000005, &#39;period&#39;: 30, &#39;linetype&#39;: &#39;sine&#39;}}, r={}, sp={}, prob=0.004878048780487805, inputparams=(4.6000000000000005, 30), rangeid=&#39;&#39;, name=&#39;rep0_range_117&#39;),
+ ParameterScenario(sequence={}, times=(), p={&#39;ground&#39;: {&#39;amp&#39;: 4.6000000000000005, &#39;period&#39;: 40, &#39;linetype&#39;: &#39;sine&#39;}}, r={}, sp={}, prob=0.004878048780487805, inputparams=(4.6000000000000005, 40), rangeid=&#39;&#39;, name=&#39;rep0_range_118&#39;),
+ ParameterScenario(sequence={}, times=(), p={&#39;ground&#39;: {&#39;amp&#39;: 4.6000000000000005, &#39;period&#39;: 50, &#39;linetype&#39;: &#39;sine&#39;}}, r={}, sp={}, prob=0.004878048780487805, inputparams=(4.6000000000000005, 50), rangeid=&#39;&#39;, name=&#39;rep0_range_119&#39;),
+ ParameterScenario(sequence={}, times=(), p={&#39;ground&#39;: {&#39;amp&#39;: 4.800000000000001, &#39;period&#39;: 10, &#39;linetype&#39;: &#39;sine&#39;}}, r={}, sp={}, prob=0.004878048780487805, inputparams=(4.800000000000001, 10), rangeid=&#39;&#39;, name=&#39;rep0_range_120&#39;),
+ ParameterScenario(sequence={}, times=(), p={&#39;ground&#39;: {&#39;amp&#39;: 4.800000000000001, &#39;period&#39;: 20, &#39;linetype&#39;: &#39;sine&#39;}}, r={}, sp={}, prob=0.004878048780487805, inputparams=(4.800000000000001, 20), rangeid=&#39;&#39;, name=&#39;rep0_range_121&#39;),
+ ParameterScenario(sequence={}, times=(), p={&#39;ground&#39;: {&#39;amp&#39;: 4.800000000000001, &#39;period&#39;: 30, &#39;linetype&#39;: &#39;sine&#39;}}, r={}, sp={}, prob=0.004878048780487805, inputparams=(4.800000000000001, 30), rangeid=&#39;&#39;, name=&#39;rep0_range_122&#39;),
+ ParameterScenario(sequence={}, times=(), p={&#39;ground&#39;: {&#39;amp&#39;: 4.800000000000001, &#39;period&#39;: 40, &#39;linetype&#39;: &#39;sine&#39;}}, r={}, sp={}, prob=0.004878048780487805, inputparams=(4.800000000000001, 40), rangeid=&#39;&#39;, name=&#39;rep0_range_123&#39;),
+ ParameterScenario(sequence={}, times=(), p={&#39;ground&#39;: {&#39;amp&#39;: 4.800000000000001, &#39;period&#39;: 50, &#39;linetype&#39;: &#39;sine&#39;}}, r={}, sp={}, prob=0.004878048780487805, inputparams=(4.800000000000001, 50), rangeid=&#39;&#39;, name=&#39;rep0_range_124&#39;),
+ ParameterScenario(sequence={}, times=(), p={&#39;ground&#39;: {&#39;amp&#39;: 5.0, &#39;period&#39;: 10, &#39;linetype&#39;: &#39;sine&#39;}}, r={}, sp={}, prob=0.004878048780487805, inputparams=(5.0, 10), rangeid=&#39;&#39;, name=&#39;rep0_range_125&#39;),
+ ParameterScenario(sequence={}, times=(), p={&#39;ground&#39;: {&#39;amp&#39;: 5.0, &#39;period&#39;: 20, &#39;linetype&#39;: &#39;sine&#39;}}, r={}, sp={}, prob=0.004878048780487805, inputparams=(5.0, 20), rangeid=&#39;&#39;, name=&#39;rep0_range_126&#39;),
+ ParameterScenario(sequence={}, times=(), p={&#39;ground&#39;: {&#39;amp&#39;: 5.0, &#39;period&#39;: 30, &#39;linetype&#39;: &#39;sine&#39;}}, r={}, sp={}, prob=0.004878048780487805, inputparams=(5.0, 30), rangeid=&#39;&#39;, name=&#39;rep0_range_127&#39;),
+ ParameterScenario(sequence={}, times=(), p={&#39;ground&#39;: {&#39;amp&#39;: 5.0, &#39;period&#39;: 40, &#39;linetype&#39;: &#39;sine&#39;}}, r={}, sp={}, prob=0.004878048780487805, inputparams=(5.0, 40), rangeid=&#39;&#39;, name=&#39;rep0_range_128&#39;),
+ ParameterScenario(sequence={}, times=(), p={&#39;ground&#39;: {&#39;amp&#39;: 5.0, &#39;period&#39;: 50, &#39;linetype&#39;: &#39;sine&#39;}}, r={}, sp={}, prob=0.004878048780487805, inputparams=(5.0, 50), rangeid=&#39;&#39;, name=&#39;rep0_range_129&#39;),
+ ParameterScenario(sequence={}, times=(), p={&#39;ground&#39;: {&#39;amp&#39;: 5.2, &#39;period&#39;: 10, &#39;linetype&#39;: &#39;sine&#39;}}, r={}, sp={}, prob=0.004878048780487805, inputparams=(5.2, 10), rangeid=&#39;&#39;, name=&#39;rep0_range_130&#39;),
+ ParameterScenario(sequence={}, times=(), p={&#39;ground&#39;: {&#39;amp&#39;: 5.2, &#39;period&#39;: 20, &#39;linetype&#39;: &#39;sine&#39;}}, r={}, sp={}, prob=0.004878048780487805, inputparams=(5.2, 20), rangeid=&#39;&#39;, name=&#39;rep0_range_131&#39;),
+ ParameterScenario(sequence={}, times=(), p={&#39;ground&#39;: {&#39;amp&#39;: 5.2, &#39;period&#39;: 30, &#39;linetype&#39;: &#39;sine&#39;}}, r={}, sp={}, prob=0.004878048780487805, inputparams=(5.2, 30), rangeid=&#39;&#39;, name=&#39;rep0_range_132&#39;),
+ ParameterScenario(sequence={}, times=(), p={&#39;ground&#39;: {&#39;amp&#39;: 5.2, &#39;period&#39;: 40, &#39;linetype&#39;: &#39;sine&#39;}}, r={}, sp={}, prob=0.004878048780487805, inputparams=(5.2, 40), rangeid=&#39;&#39;, name=&#39;rep0_range_133&#39;),
+ ParameterScenario(sequence={}, times=(), p={&#39;ground&#39;: {&#39;amp&#39;: 5.2, &#39;period&#39;: 50, &#39;linetype&#39;: &#39;sine&#39;}}, r={}, sp={}, prob=0.004878048780487805, inputparams=(5.2, 50), rangeid=&#39;&#39;, name=&#39;rep0_range_134&#39;),
+ ParameterScenario(sequence={}, times=(), p={&#39;ground&#39;: {&#39;amp&#39;: 5.4, &#39;period&#39;: 10, &#39;linetype&#39;: &#39;sine&#39;}}, r={}, sp={}, prob=0.004878048780487805, inputparams=(5.4, 10), rangeid=&#39;&#39;, name=&#39;rep0_range_135&#39;),
+ ParameterScenario(sequence={}, times=(), p={&#39;ground&#39;: {&#39;amp&#39;: 5.4, &#39;period&#39;: 20, &#39;linetype&#39;: &#39;sine&#39;}}, r={}, sp={}, prob=0.004878048780487805, inputparams=(5.4, 20), rangeid=&#39;&#39;, name=&#39;rep0_range_136&#39;),
+ ParameterScenario(sequence={}, times=(), p={&#39;ground&#39;: {&#39;amp&#39;: 5.4, &#39;period&#39;: 30, &#39;linetype&#39;: &#39;sine&#39;}}, r={}, sp={}, prob=0.004878048780487805, inputparams=(5.4, 30), rangeid=&#39;&#39;, name=&#39;rep0_range_137&#39;),
+ ParameterScenario(sequence={}, times=(), p={&#39;ground&#39;: {&#39;amp&#39;: 5.4, &#39;period&#39;: 40, &#39;linetype&#39;: &#39;sine&#39;}}, r={}, sp={}, prob=0.004878048780487805, inputparams=(5.4, 40), rangeid=&#39;&#39;, name=&#39;rep0_range_138&#39;),
+ ParameterScenario(sequence={}, times=(), p={&#39;ground&#39;: {&#39;amp&#39;: 5.4, &#39;period&#39;: 50, &#39;linetype&#39;: &#39;sine&#39;}}, r={}, sp={}, prob=0.004878048780487805, inputparams=(5.4, 50), rangeid=&#39;&#39;, name=&#39;rep0_range_139&#39;),
+ ParameterScenario(sequence={}, times=(), p={&#39;ground&#39;: {&#39;amp&#39;: 5.6000000000000005, &#39;period&#39;: 10, &#39;linetype&#39;: &#39;sine&#39;}}, r={}, sp={}, prob=0.004878048780487805, inputparams=(5.6000000000000005, 10), rangeid=&#39;&#39;, name=&#39;rep0_range_140&#39;),
+ ParameterScenario(sequence={}, times=(), p={&#39;ground&#39;: {&#39;amp&#39;: 5.6000000000000005, &#39;period&#39;: 20, &#39;linetype&#39;: &#39;sine&#39;}}, r={}, sp={}, prob=0.004878048780487805, inputparams=(5.6000000000000005, 20), rangeid=&#39;&#39;, name=&#39;rep0_range_141&#39;),
+ ParameterScenario(sequence={}, times=(), p={&#39;ground&#39;: {&#39;amp&#39;: 5.6000000000000005, &#39;period&#39;: 30, &#39;linetype&#39;: &#39;sine&#39;}}, r={}, sp={}, prob=0.004878048780487805, inputparams=(5.6000000000000005, 30), rangeid=&#39;&#39;, name=&#39;rep0_range_142&#39;),
+ ParameterScenario(sequence={}, times=(), p={&#39;ground&#39;: {&#39;amp&#39;: 5.6000000000000005, &#39;period&#39;: 40, &#39;linetype&#39;: &#39;sine&#39;}}, r={}, sp={}, prob=0.004878048780487805, inputparams=(5.6000000000000005, 40), rangeid=&#39;&#39;, name=&#39;rep0_range_143&#39;),
+ ParameterScenario(sequence={}, times=(), p={&#39;ground&#39;: {&#39;amp&#39;: 5.6000000000000005, &#39;period&#39;: 50, &#39;linetype&#39;: &#39;sine&#39;}}, r={}, sp={}, prob=0.004878048780487805, inputparams=(5.6000000000000005, 50), rangeid=&#39;&#39;, name=&#39;rep0_range_144&#39;),
+ ParameterScenario(sequence={}, times=(), p={&#39;ground&#39;: {&#39;amp&#39;: 5.800000000000001, &#39;period&#39;: 10, &#39;linetype&#39;: &#39;sine&#39;}}, r={}, sp={}, prob=0.004878048780487805, inputparams=(5.800000000000001, 10), rangeid=&#39;&#39;, name=&#39;rep0_range_145&#39;),
+ ParameterScenario(sequence={}, times=(), p={&#39;ground&#39;: {&#39;amp&#39;: 5.800000000000001, &#39;period&#39;: 20, &#39;linetype&#39;: &#39;sine&#39;}}, r={}, sp={}, prob=0.004878048780487805, inputparams=(5.800000000000001, 20), rangeid=&#39;&#39;, name=&#39;rep0_range_146&#39;),
+ ParameterScenario(sequence={}, times=(), p={&#39;ground&#39;: {&#39;amp&#39;: 5.800000000000001, &#39;period&#39;: 30, &#39;linetype&#39;: &#39;sine&#39;}}, r={}, sp={}, prob=0.004878048780487805, inputparams=(5.800000000000001, 30), rangeid=&#39;&#39;, name=&#39;rep0_range_147&#39;),
+ ParameterScenario(sequence={}, times=(), p={&#39;ground&#39;: {&#39;amp&#39;: 5.800000000000001, &#39;period&#39;: 40, &#39;linetype&#39;: &#39;sine&#39;}}, r={}, sp={}, prob=0.004878048780487805, inputparams=(5.800000000000001, 40), rangeid=&#39;&#39;, name=&#39;rep0_range_148&#39;),
+ ParameterScenario(sequence={}, times=(), p={&#39;ground&#39;: {&#39;amp&#39;: 5.800000000000001, &#39;period&#39;: 50, &#39;linetype&#39;: &#39;sine&#39;}}, r={}, sp={}, prob=0.004878048780487805, inputparams=(5.800000000000001, 50), rangeid=&#39;&#39;, name=&#39;rep0_range_149&#39;),
+ ParameterScenario(sequence={}, times=(), p={&#39;ground&#39;: {&#39;amp&#39;: 6.0, &#39;period&#39;: 10, &#39;linetype&#39;: &#39;sine&#39;}}, r={}, sp={}, prob=0.004878048780487805, inputparams=(6.0, 10), rangeid=&#39;&#39;, name=&#39;rep0_range_150&#39;),
+ ParameterScenario(sequence={}, times=(), p={&#39;ground&#39;: {&#39;amp&#39;: 6.0, &#39;period&#39;: 20, &#39;linetype&#39;: &#39;sine&#39;}}, r={}, sp={}, prob=0.004878048780487805, inputparams=(6.0, 20), rangeid=&#39;&#39;, name=&#39;rep0_range_151&#39;),
+ ParameterScenario(sequence={}, times=(), p={&#39;ground&#39;: {&#39;amp&#39;: 6.0, &#39;period&#39;: 30, &#39;linetype&#39;: &#39;sine&#39;}}, r={}, sp={}, prob=0.004878048780487805, inputparams=(6.0, 30), rangeid=&#39;&#39;, name=&#39;rep0_range_152&#39;),
+ ParameterScenario(sequence={}, times=(), p={&#39;ground&#39;: {&#39;amp&#39;: 6.0, &#39;period&#39;: 40, &#39;linetype&#39;: &#39;sine&#39;}}, r={}, sp={}, prob=0.004878048780487805, inputparams=(6.0, 40), rangeid=&#39;&#39;, name=&#39;rep0_range_153&#39;),
+ ParameterScenario(sequence={}, times=(), p={&#39;ground&#39;: {&#39;amp&#39;: 6.0, &#39;period&#39;: 50, &#39;linetype&#39;: &#39;sine&#39;}}, r={}, sp={}, prob=0.004878048780487805, inputparams=(6.0, 50), rangeid=&#39;&#39;, name=&#39;rep0_range_154&#39;),
+ ParameterScenario(sequence={}, times=(), p={&#39;ground&#39;: {&#39;amp&#39;: 6.2, &#39;period&#39;: 10, &#39;linetype&#39;: &#39;sine&#39;}}, r={}, sp={}, prob=0.004878048780487805, inputparams=(6.2, 10), rangeid=&#39;&#39;, name=&#39;rep0_range_155&#39;),
+ ParameterScenario(sequence={}, times=(), p={&#39;ground&#39;: {&#39;amp&#39;: 6.2, &#39;period&#39;: 20, &#39;linetype&#39;: &#39;sine&#39;}}, r={}, sp={}, prob=0.004878048780487805, inputparams=(6.2, 20), rangeid=&#39;&#39;, name=&#39;rep0_range_156&#39;),
+ ParameterScenario(sequence={}, times=(), p={&#39;ground&#39;: {&#39;amp&#39;: 6.2, &#39;period&#39;: 30, &#39;linetype&#39;: &#39;sine&#39;}}, r={}, sp={}, prob=0.004878048780487805, inputparams=(6.2, 30), rangeid=&#39;&#39;, name=&#39;rep0_range_157&#39;),
+ ParameterScenario(sequence={}, times=(), p={&#39;ground&#39;: {&#39;amp&#39;: 6.2, &#39;period&#39;: 40, &#39;linetype&#39;: &#39;sine&#39;}}, r={}, sp={}, prob=0.004878048780487805, inputparams=(6.2, 40), rangeid=&#39;&#39;, name=&#39;rep0_range_158&#39;),
+ ParameterScenario(sequence={}, times=(), p={&#39;ground&#39;: {&#39;amp&#39;: 6.2, &#39;period&#39;: 50, &#39;linetype&#39;: &#39;sine&#39;}}, r={}, sp={}, prob=0.004878048780487805, inputparams=(6.2, 50), rangeid=&#39;&#39;, name=&#39;rep0_range_159&#39;),
+ ParameterScenario(sequence={}, times=(), p={&#39;ground&#39;: {&#39;amp&#39;: 6.4, &#39;period&#39;: 10, &#39;linetype&#39;: &#39;sine&#39;}}, r={}, sp={}, prob=0.004878048780487805, inputparams=(6.4, 10), rangeid=&#39;&#39;, name=&#39;rep0_range_160&#39;),
+ ParameterScenario(sequence={}, times=(), p={&#39;ground&#39;: {&#39;amp&#39;: 6.4, &#39;period&#39;: 20, &#39;linetype&#39;: &#39;sine&#39;}}, r={}, sp={}, prob=0.004878048780487805, inputparams=(6.4, 20), rangeid=&#39;&#39;, name=&#39;rep0_range_161&#39;),
+ ParameterScenario(sequence={}, times=(), p={&#39;ground&#39;: {&#39;amp&#39;: 6.4, &#39;period&#39;: 30, &#39;linetype&#39;: &#39;sine&#39;}}, r={}, sp={}, prob=0.004878048780487805, inputparams=(6.4, 30), rangeid=&#39;&#39;, name=&#39;rep0_range_162&#39;),
+ ParameterScenario(sequence={}, times=(), p={&#39;ground&#39;: {&#39;amp&#39;: 6.4, &#39;period&#39;: 40, &#39;linetype&#39;: &#39;sine&#39;}}, r={}, sp={}, prob=0.004878048780487805, inputparams=(6.4, 40), rangeid=&#39;&#39;, name=&#39;rep0_range_163&#39;),
+ ParameterScenario(sequence={}, times=(), p={&#39;ground&#39;: {&#39;amp&#39;: 6.4, &#39;period&#39;: 50, &#39;linetype&#39;: &#39;sine&#39;}}, r={}, sp={}, prob=0.004878048780487805, inputparams=(6.4, 50), rangeid=&#39;&#39;, name=&#39;rep0_range_164&#39;),
+ ParameterScenario(sequence={}, times=(), p={&#39;ground&#39;: {&#39;amp&#39;: 6.6000000000000005, &#39;period&#39;: 10, &#39;linetype&#39;: &#39;sine&#39;}}, r={}, sp={}, prob=0.004878048780487805, inputparams=(6.6000000000000005, 10), rangeid=&#39;&#39;, name=&#39;rep0_range_165&#39;),
+ ParameterScenario(sequence={}, times=(), p={&#39;ground&#39;: {&#39;amp&#39;: 6.6000000000000005, &#39;period&#39;: 20, &#39;linetype&#39;: &#39;sine&#39;}}, r={}, sp={}, prob=0.004878048780487805, inputparams=(6.6000000000000005, 20), rangeid=&#39;&#39;, name=&#39;rep0_range_166&#39;),
+ ParameterScenario(sequence={}, times=(), p={&#39;ground&#39;: {&#39;amp&#39;: 6.6000000000000005, &#39;period&#39;: 30, &#39;linetype&#39;: &#39;sine&#39;}}, r={}, sp={}, prob=0.004878048780487805, inputparams=(6.6000000000000005, 30), rangeid=&#39;&#39;, name=&#39;rep0_range_167&#39;),
+ ParameterScenario(sequence={}, times=(), p={&#39;ground&#39;: {&#39;amp&#39;: 6.6000000000000005, &#39;period&#39;: 40, &#39;linetype&#39;: &#39;sine&#39;}}, r={}, sp={}, prob=0.004878048780487805, inputparams=(6.6000000000000005, 40), rangeid=&#39;&#39;, name=&#39;rep0_range_168&#39;),
+ ParameterScenario(sequence={}, times=(), p={&#39;ground&#39;: {&#39;amp&#39;: 6.6000000000000005, &#39;period&#39;: 50, &#39;linetype&#39;: &#39;sine&#39;}}, r={}, sp={}, prob=0.004878048780487805, inputparams=(6.6000000000000005, 50), rangeid=&#39;&#39;, name=&#39;rep0_range_169&#39;),
+ ParameterScenario(sequence={}, times=(), p={&#39;ground&#39;: {&#39;amp&#39;: 6.800000000000001, &#39;period&#39;: 10, &#39;linetype&#39;: &#39;sine&#39;}}, r={}, sp={}, prob=0.004878048780487805, inputparams=(6.800000000000001, 10), rangeid=&#39;&#39;, name=&#39;rep0_range_170&#39;),
+ ParameterScenario(sequence={}, times=(), p={&#39;ground&#39;: {&#39;amp&#39;: 6.800000000000001, &#39;period&#39;: 20, &#39;linetype&#39;: &#39;sine&#39;}}, r={}, sp={}, prob=0.004878048780487805, inputparams=(6.800000000000001, 20), rangeid=&#39;&#39;, name=&#39;rep0_range_171&#39;),
+ ParameterScenario(sequence={}, times=(), p={&#39;ground&#39;: {&#39;amp&#39;: 6.800000000000001, &#39;period&#39;: 30, &#39;linetype&#39;: &#39;sine&#39;}}, r={}, sp={}, prob=0.004878048780487805, inputparams=(6.800000000000001, 30), rangeid=&#39;&#39;, name=&#39;rep0_range_172&#39;),
+ ParameterScenario(sequence={}, times=(), p={&#39;ground&#39;: {&#39;amp&#39;: 6.800000000000001, &#39;period&#39;: 40, &#39;linetype&#39;: &#39;sine&#39;}}, r={}, sp={}, prob=0.004878048780487805, inputparams=(6.800000000000001, 40), rangeid=&#39;&#39;, name=&#39;rep0_range_173&#39;),
+ ParameterScenario(sequence={}, times=(), p={&#39;ground&#39;: {&#39;amp&#39;: 6.800000000000001, &#39;period&#39;: 50, &#39;linetype&#39;: &#39;sine&#39;}}, r={}, sp={}, prob=0.004878048780487805, inputparams=(6.800000000000001, 50), rangeid=&#39;&#39;, name=&#39;rep0_range_174&#39;),
+ ParameterScenario(sequence={}, times=(), p={&#39;ground&#39;: {&#39;amp&#39;: 7.0, &#39;period&#39;: 10, &#39;linetype&#39;: &#39;sine&#39;}}, r={}, sp={}, prob=0.004878048780487805, inputparams=(7.0, 10), rangeid=&#39;&#39;, name=&#39;rep0_range_175&#39;),
+ ParameterScenario(sequence={}, times=(), p={&#39;ground&#39;: {&#39;amp&#39;: 7.0, &#39;period&#39;: 20, &#39;linetype&#39;: &#39;sine&#39;}}, r={}, sp={}, prob=0.004878048780487805, inputparams=(7.0, 20), rangeid=&#39;&#39;, name=&#39;rep0_range_176&#39;),
+ ParameterScenario(sequence={}, times=(), p={&#39;ground&#39;: {&#39;amp&#39;: 7.0, &#39;period&#39;: 30, &#39;linetype&#39;: &#39;sine&#39;}}, r={}, sp={}, prob=0.004878048780487805, inputparams=(7.0, 30), rangeid=&#39;&#39;, name=&#39;rep0_range_177&#39;),
+ ParameterScenario(sequence={}, times=(), p={&#39;ground&#39;: {&#39;amp&#39;: 7.0, &#39;period&#39;: 40, &#39;linetype&#39;: &#39;sine&#39;}}, r={}, sp={}, prob=0.004878048780487805, inputparams=(7.0, 40), rangeid=&#39;&#39;, name=&#39;rep0_range_178&#39;),
+ ParameterScenario(sequence={}, times=(), p={&#39;ground&#39;: {&#39;amp&#39;: 7.0, &#39;period&#39;: 50, &#39;linetype&#39;: &#39;sine&#39;}}, r={}, sp={}, prob=0.004878048780487805, inputparams=(7.0, 50), rangeid=&#39;&#39;, name=&#39;rep0_range_179&#39;),
+ ParameterScenario(sequence={}, times=(), p={&#39;ground&#39;: {&#39;amp&#39;: 7.2, &#39;period&#39;: 10, &#39;linetype&#39;: &#39;sine&#39;}}, r={}, sp={}, prob=0.004878048780487805, inputparams=(7.2, 10), rangeid=&#39;&#39;, name=&#39;rep0_range_180&#39;),
+ ParameterScenario(sequence={}, times=(), p={&#39;ground&#39;: {&#39;amp&#39;: 7.2, &#39;period&#39;: 20, &#39;linetype&#39;: &#39;sine&#39;}}, r={}, sp={}, prob=0.004878048780487805, inputparams=(7.2, 20), rangeid=&#39;&#39;, name=&#39;rep0_range_181&#39;),
+ ParameterScenario(sequence={}, times=(), p={&#39;ground&#39;: {&#39;amp&#39;: 7.2, &#39;period&#39;: 30, &#39;linetype&#39;: &#39;sine&#39;}}, r={}, sp={}, prob=0.004878048780487805, inputparams=(7.2, 30), rangeid=&#39;&#39;, name=&#39;rep0_range_182&#39;),
+ ParameterScenario(sequence={}, times=(), p={&#39;ground&#39;: {&#39;amp&#39;: 7.2, &#39;period&#39;: 40, &#39;linetype&#39;: &#39;sine&#39;}}, r={}, sp={}, prob=0.004878048780487805, inputparams=(7.2, 40), rangeid=&#39;&#39;, name=&#39;rep0_range_183&#39;),
+ ParameterScenario(sequence={}, times=(), p={&#39;ground&#39;: {&#39;amp&#39;: 7.2, &#39;period&#39;: 50, &#39;linetype&#39;: &#39;sine&#39;}}, r={}, sp={}, prob=0.004878048780487805, inputparams=(7.2, 50), rangeid=&#39;&#39;, name=&#39;rep0_range_184&#39;),
+ ParameterScenario(sequence={}, times=(), p={&#39;ground&#39;: {&#39;amp&#39;: 7.4, &#39;period&#39;: 10, &#39;linetype&#39;: &#39;sine&#39;}}, r={}, sp={}, prob=0.004878048780487805, inputparams=(7.4, 10), rangeid=&#39;&#39;, name=&#39;rep0_range_185&#39;),
+ ParameterScenario(sequence={}, times=(), p={&#39;ground&#39;: {&#39;amp&#39;: 7.4, &#39;period&#39;: 20, &#39;linetype&#39;: &#39;sine&#39;}}, r={}, sp={}, prob=0.004878048780487805, inputparams=(7.4, 20), rangeid=&#39;&#39;, name=&#39;rep0_range_186&#39;),
+ ParameterScenario(sequence={}, times=(), p={&#39;ground&#39;: {&#39;amp&#39;: 7.4, &#39;period&#39;: 30, &#39;linetype&#39;: &#39;sine&#39;}}, r={}, sp={}, prob=0.004878048780487805, inputparams=(7.4, 30), rangeid=&#39;&#39;, name=&#39;rep0_range_187&#39;),
+ ParameterScenario(sequence={}, times=(), p={&#39;ground&#39;: {&#39;amp&#39;: 7.4, &#39;period&#39;: 40, &#39;linetype&#39;: &#39;sine&#39;}}, r={}, sp={}, prob=0.004878048780487805, inputparams=(7.4, 40), rangeid=&#39;&#39;, name=&#39;rep0_range_188&#39;),
+ ParameterScenario(sequence={}, times=(), p={&#39;ground&#39;: {&#39;amp&#39;: 7.4, &#39;period&#39;: 50, &#39;linetype&#39;: &#39;sine&#39;}}, r={}, sp={}, prob=0.004878048780487805, inputparams=(7.4, 50), rangeid=&#39;&#39;, name=&#39;rep0_range_189&#39;),
+ ParameterScenario(sequence={}, times=(), p={&#39;ground&#39;: {&#39;amp&#39;: 7.6000000000000005, &#39;period&#39;: 10, &#39;linetype&#39;: &#39;sine&#39;}}, r={}, sp={}, prob=0.004878048780487805, inputparams=(7.6000000000000005, 10), rangeid=&#39;&#39;, name=&#39;rep0_range_190&#39;),
+ ParameterScenario(sequence={}, times=(), p={&#39;ground&#39;: {&#39;amp&#39;: 7.6000000000000005, &#39;period&#39;: 20, &#39;linetype&#39;: &#39;sine&#39;}}, r={}, sp={}, prob=0.004878048780487805, inputparams=(7.6000000000000005, 20), rangeid=&#39;&#39;, name=&#39;rep0_range_191&#39;),
+ ParameterScenario(sequence={}, times=(), p={&#39;ground&#39;: {&#39;amp&#39;: 7.6000000000000005, &#39;period&#39;: 30, &#39;linetype&#39;: &#39;sine&#39;}}, r={}, sp={}, prob=0.004878048780487805, inputparams=(7.6000000000000005, 30), rangeid=&#39;&#39;, name=&#39;rep0_range_192&#39;),
+ ParameterScenario(sequence={}, times=(), p={&#39;ground&#39;: {&#39;amp&#39;: 7.6000000000000005, &#39;period&#39;: 40, &#39;linetype&#39;: &#39;sine&#39;}}, r={}, sp={}, prob=0.004878048780487805, inputparams=(7.6000000000000005, 40), rangeid=&#39;&#39;, name=&#39;rep0_range_193&#39;),
+ ParameterScenario(sequence={}, times=(), p={&#39;ground&#39;: {&#39;amp&#39;: 7.6000000000000005, &#39;period&#39;: 50, &#39;linetype&#39;: &#39;sine&#39;}}, r={}, sp={}, prob=0.004878048780487805, inputparams=(7.6000000000000005, 50), rangeid=&#39;&#39;, name=&#39;rep0_range_194&#39;),
+ ParameterScenario(sequence={}, times=(), p={&#39;ground&#39;: {&#39;amp&#39;: 7.800000000000001, &#39;period&#39;: 10, &#39;linetype&#39;: &#39;sine&#39;}}, r={}, sp={}, prob=0.004878048780487805, inputparams=(7.800000000000001, 10), rangeid=&#39;&#39;, name=&#39;rep0_range_195&#39;),
+ ParameterScenario(sequence={}, times=(), p={&#39;ground&#39;: {&#39;amp&#39;: 7.800000000000001, &#39;period&#39;: 20, &#39;linetype&#39;: &#39;sine&#39;}}, r={}, sp={}, prob=0.004878048780487805, inputparams=(7.800000000000001, 20), rangeid=&#39;&#39;, name=&#39;rep0_range_196&#39;),
+ ParameterScenario(sequence={}, times=(), p={&#39;ground&#39;: {&#39;amp&#39;: 7.800000000000001, &#39;period&#39;: 30, &#39;linetype&#39;: &#39;sine&#39;}}, r={}, sp={}, prob=0.004878048780487805, inputparams=(7.800000000000001, 30), rangeid=&#39;&#39;, name=&#39;rep0_range_197&#39;),
+ ParameterScenario(sequence={}, times=(), p={&#39;ground&#39;: {&#39;amp&#39;: 7.800000000000001, &#39;period&#39;: 40, &#39;linetype&#39;: &#39;sine&#39;}}, r={}, sp={}, prob=0.004878048780487805, inputparams=(7.800000000000001, 40), rangeid=&#39;&#39;, name=&#39;rep0_range_198&#39;),
+ ParameterScenario(sequence={}, times=(), p={&#39;ground&#39;: {&#39;amp&#39;: 7.800000000000001, &#39;period&#39;: 50, &#39;linetype&#39;: &#39;sine&#39;}}, r={}, sp={}, prob=0.004878048780487805, inputparams=(7.800000000000001, 50), rangeid=&#39;&#39;, name=&#39;rep0_range_199&#39;),
+ ParameterScenario(sequence={}, times=(), p={&#39;ground&#39;: {&#39;amp&#39;: 8.0, &#39;period&#39;: 10, &#39;linetype&#39;: &#39;sine&#39;}}, r={}, sp={}, prob=0.004878048780487805, inputparams=(8.0, 10), rangeid=&#39;&#39;, name=&#39;rep0_range_200&#39;),
+ ParameterScenario(sequence={}, times=(), p={&#39;ground&#39;: {&#39;amp&#39;: 8.0, &#39;period&#39;: 20, &#39;linetype&#39;: &#39;sine&#39;}}, r={}, sp={}, prob=0.004878048780487805, inputparams=(8.0, 20), rangeid=&#39;&#39;, name=&#39;rep0_range_201&#39;),
+ ParameterScenario(sequence={}, times=(), p={&#39;ground&#39;: {&#39;amp&#39;: 8.0, &#39;period&#39;: 30, &#39;linetype&#39;: &#39;sine&#39;}}, r={}, sp={}, prob=0.004878048780487805, inputparams=(8.0, 30), rangeid=&#39;&#39;, name=&#39;rep0_range_202&#39;),
+ ParameterScenario(sequence={}, times=(), p={&#39;ground&#39;: {&#39;amp&#39;: 8.0, &#39;period&#39;: 40, &#39;linetype&#39;: &#39;sine&#39;}}, r={}, sp={}, prob=0.004878048780487805, inputparams=(8.0, 40), rangeid=&#39;&#39;, name=&#39;rep0_range_203&#39;),
+ ParameterScenario(sequence={}, times=(), p={&#39;ground&#39;: {&#39;amp&#39;: 8.0, &#39;period&#39;: 50, &#39;linetype&#39;: &#39;sine&#39;}}, r={}, sp={}, prob=0.004878048780487805, inputparams=(8.0, 50), rangeid=&#39;&#39;, name=&#39;rep0_range_204&#39;)]
+</pre></div></div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[14]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">ps_turn</span> <span class="o">=</span> <span class="n">ParameterSample</span><span class="p">(</span><span class="n">pd_turn</span><span class="p">)</span>
+<span class="n">ps_turn</span><span class="o">.</span><span class="n">add_variable_ranges</span><span class="p">(</span><span class="n">comb_kwargs</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;resolutions&#39;</span><span class="p">:{</span><span class="s1">&#39;ground.radius&#39;</span><span class="p">:</span> <span class="mf">5.0</span><span class="p">,</span> <span class="s2">&quot;ground.start&quot;</span><span class="p">:</span> <span class="mi">5</span><span class="p">}})</span>
+
+<span class="n">ps_turn</span><span class="o">.</span><span class="n">scenarios</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[14]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+[ParameterScenario(sequence={}, times=(), p={&#39;ground&#39;: {&#39;radius&#39;: 5.0, &#39;x_start&#39;: 0, &#39;linetype&#39;: &#39;turn&#39;}}, r={}, sp={}, prob=0.03333333333333333, inputparams=(5.0, 0), rangeid=&#39;&#39;, name=&#39;rep0_range_0&#39;),
+ ParameterScenario(sequence={}, times=(), p={&#39;ground&#39;: {&#39;radius&#39;: 5.0, &#39;x_start&#39;: 1, &#39;linetype&#39;: &#39;turn&#39;}}, r={}, sp={}, prob=0.03333333333333333, inputparams=(5.0, 1), rangeid=&#39;&#39;, name=&#39;rep0_range_1&#39;),
+ ParameterScenario(sequence={}, times=(), p={&#39;ground&#39;: {&#39;radius&#39;: 5.0, &#39;x_start&#39;: 2, &#39;linetype&#39;: &#39;turn&#39;}}, r={}, sp={}, prob=0.03333333333333333, inputparams=(5.0, 2), rangeid=&#39;&#39;, name=&#39;rep0_range_2&#39;),
+ ParameterScenario(sequence={}, times=(), p={&#39;ground&#39;: {&#39;radius&#39;: 5.0, &#39;x_start&#39;: 3, &#39;linetype&#39;: &#39;turn&#39;}}, r={}, sp={}, prob=0.03333333333333333, inputparams=(5.0, 3), rangeid=&#39;&#39;, name=&#39;rep0_range_3&#39;),
+ ParameterScenario(sequence={}, times=(), p={&#39;ground&#39;: {&#39;radius&#39;: 5.0, &#39;x_start&#39;: 4, &#39;linetype&#39;: &#39;turn&#39;}}, r={}, sp={}, prob=0.03333333333333333, inputparams=(5.0, 4), rangeid=&#39;&#39;, name=&#39;rep0_range_4&#39;),
+ ParameterScenario(sequence={}, times=(), p={&#39;ground&#39;: {&#39;radius&#39;: 5.0, &#39;x_start&#39;: 5, &#39;linetype&#39;: &#39;turn&#39;}}, r={}, sp={}, prob=0.03333333333333333, inputparams=(5.0, 5), rangeid=&#39;&#39;, name=&#39;rep0_range_5&#39;),
+ ParameterScenario(sequence={}, times=(), p={&#39;ground&#39;: {&#39;radius&#39;: 10.0, &#39;x_start&#39;: 0, &#39;linetype&#39;: &#39;turn&#39;}}, r={}, sp={}, prob=0.03333333333333333, inputparams=(10.0, 0), rangeid=&#39;&#39;, name=&#39;rep0_range_6&#39;),
+ ParameterScenario(sequence={}, times=(), p={&#39;ground&#39;: {&#39;radius&#39;: 10.0, &#39;x_start&#39;: 1, &#39;linetype&#39;: &#39;turn&#39;}}, r={}, sp={}, prob=0.03333333333333333, inputparams=(10.0, 1), rangeid=&#39;&#39;, name=&#39;rep0_range_7&#39;),
+ ParameterScenario(sequence={}, times=(), p={&#39;ground&#39;: {&#39;radius&#39;: 10.0, &#39;x_start&#39;: 2, &#39;linetype&#39;: &#39;turn&#39;}}, r={}, sp={}, prob=0.03333333333333333, inputparams=(10.0, 2), rangeid=&#39;&#39;, name=&#39;rep0_range_8&#39;),
+ ParameterScenario(sequence={}, times=(), p={&#39;ground&#39;: {&#39;radius&#39;: 10.0, &#39;x_start&#39;: 3, &#39;linetype&#39;: &#39;turn&#39;}}, r={}, sp={}, prob=0.03333333333333333, inputparams=(10.0, 3), rangeid=&#39;&#39;, name=&#39;rep0_range_9&#39;),
+ ParameterScenario(sequence={}, times=(), p={&#39;ground&#39;: {&#39;radius&#39;: 10.0, &#39;x_start&#39;: 4, &#39;linetype&#39;: &#39;turn&#39;}}, r={}, sp={}, prob=0.03333333333333333, inputparams=(10.0, 4), rangeid=&#39;&#39;, name=&#39;rep0_range_10&#39;),
+ ParameterScenario(sequence={}, times=(), p={&#39;ground&#39;: {&#39;radius&#39;: 10.0, &#39;x_start&#39;: 5, &#39;linetype&#39;: &#39;turn&#39;}}, r={}, sp={}, prob=0.03333333333333333, inputparams=(10.0, 5), rangeid=&#39;&#39;, name=&#39;rep0_range_11&#39;),
+ ParameterScenario(sequence={}, times=(), p={&#39;ground&#39;: {&#39;radius&#39;: 15.0, &#39;x_start&#39;: 0, &#39;linetype&#39;: &#39;turn&#39;}}, r={}, sp={}, prob=0.03333333333333333, inputparams=(15.0, 0), rangeid=&#39;&#39;, name=&#39;rep0_range_12&#39;),
+ ParameterScenario(sequence={}, times=(), p={&#39;ground&#39;: {&#39;radius&#39;: 15.0, &#39;x_start&#39;: 1, &#39;linetype&#39;: &#39;turn&#39;}}, r={}, sp={}, prob=0.03333333333333333, inputparams=(15.0, 1), rangeid=&#39;&#39;, name=&#39;rep0_range_13&#39;),
+ ParameterScenario(sequence={}, times=(), p={&#39;ground&#39;: {&#39;radius&#39;: 15.0, &#39;x_start&#39;: 2, &#39;linetype&#39;: &#39;turn&#39;}}, r={}, sp={}, prob=0.03333333333333333, inputparams=(15.0, 2), rangeid=&#39;&#39;, name=&#39;rep0_range_14&#39;),
+ ParameterScenario(sequence={}, times=(), p={&#39;ground&#39;: {&#39;radius&#39;: 15.0, &#39;x_start&#39;: 3, &#39;linetype&#39;: &#39;turn&#39;}}, r={}, sp={}, prob=0.03333333333333333, inputparams=(15.0, 3), rangeid=&#39;&#39;, name=&#39;rep0_range_15&#39;),
+ ParameterScenario(sequence={}, times=(), p={&#39;ground&#39;: {&#39;radius&#39;: 15.0, &#39;x_start&#39;: 4, &#39;linetype&#39;: &#39;turn&#39;}}, r={}, sp={}, prob=0.03333333333333333, inputparams=(15.0, 4), rangeid=&#39;&#39;, name=&#39;rep0_range_16&#39;),
+ ParameterScenario(sequence={}, times=(), p={&#39;ground&#39;: {&#39;radius&#39;: 15.0, &#39;x_start&#39;: 5, &#39;linetype&#39;: &#39;turn&#39;}}, r={}, sp={}, prob=0.03333333333333333, inputparams=(15.0, 5), rangeid=&#39;&#39;, name=&#39;rep0_range_17&#39;),
+ ParameterScenario(sequence={}, times=(), p={&#39;ground&#39;: {&#39;radius&#39;: 20.0, &#39;x_start&#39;: 0, &#39;linetype&#39;: &#39;turn&#39;}}, r={}, sp={}, prob=0.03333333333333333, inputparams=(20.0, 0), rangeid=&#39;&#39;, name=&#39;rep0_range_18&#39;),
+ ParameterScenario(sequence={}, times=(), p={&#39;ground&#39;: {&#39;radius&#39;: 20.0, &#39;x_start&#39;: 1, &#39;linetype&#39;: &#39;turn&#39;}}, r={}, sp={}, prob=0.03333333333333333, inputparams=(20.0, 1), rangeid=&#39;&#39;, name=&#39;rep0_range_19&#39;),
+ ParameterScenario(sequence={}, times=(), p={&#39;ground&#39;: {&#39;radius&#39;: 20.0, &#39;x_start&#39;: 2, &#39;linetype&#39;: &#39;turn&#39;}}, r={}, sp={}, prob=0.03333333333333333, inputparams=(20.0, 2), rangeid=&#39;&#39;, name=&#39;rep0_range_20&#39;),
+ ParameterScenario(sequence={}, times=(), p={&#39;ground&#39;: {&#39;radius&#39;: 20.0, &#39;x_start&#39;: 3, &#39;linetype&#39;: &#39;turn&#39;}}, r={}, sp={}, prob=0.03333333333333333, inputparams=(20.0, 3), rangeid=&#39;&#39;, name=&#39;rep0_range_21&#39;),
+ ParameterScenario(sequence={}, times=(), p={&#39;ground&#39;: {&#39;radius&#39;: 20.0, &#39;x_start&#39;: 4, &#39;linetype&#39;: &#39;turn&#39;}}, r={}, sp={}, prob=0.03333333333333333, inputparams=(20.0, 4), rangeid=&#39;&#39;, name=&#39;rep0_range_22&#39;),
+ ParameterScenario(sequence={}, times=(), p={&#39;ground&#39;: {&#39;radius&#39;: 20.0, &#39;x_start&#39;: 5, &#39;linetype&#39;: &#39;turn&#39;}}, r={}, sp={}, prob=0.03333333333333333, inputparams=(20.0, 5), rangeid=&#39;&#39;, name=&#39;rep0_range_23&#39;),
+ ParameterScenario(sequence={}, times=(), p={&#39;ground&#39;: {&#39;radius&#39;: 25.0, &#39;x_start&#39;: 0, &#39;linetype&#39;: &#39;turn&#39;}}, r={}, sp={}, prob=0.03333333333333333, inputparams=(25.0, 0), rangeid=&#39;&#39;, name=&#39;rep0_range_24&#39;),
+ ParameterScenario(sequence={}, times=(), p={&#39;ground&#39;: {&#39;radius&#39;: 25.0, &#39;x_start&#39;: 1, &#39;linetype&#39;: &#39;turn&#39;}}, r={}, sp={}, prob=0.03333333333333333, inputparams=(25.0, 1), rangeid=&#39;&#39;, name=&#39;rep0_range_25&#39;),
+ ParameterScenario(sequence={}, times=(), p={&#39;ground&#39;: {&#39;radius&#39;: 25.0, &#39;x_start&#39;: 2, &#39;linetype&#39;: &#39;turn&#39;}}, r={}, sp={}, prob=0.03333333333333333, inputparams=(25.0, 2), rangeid=&#39;&#39;, name=&#39;rep0_range_26&#39;),
+ ParameterScenario(sequence={}, times=(), p={&#39;ground&#39;: {&#39;radius&#39;: 25.0, &#39;x_start&#39;: 3, &#39;linetype&#39;: &#39;turn&#39;}}, r={}, sp={}, prob=0.03333333333333333, inputparams=(25.0, 3), rangeid=&#39;&#39;, name=&#39;rep0_range_27&#39;),
+ ParameterScenario(sequence={}, times=(), p={&#39;ground&#39;: {&#39;radius&#39;: 25.0, &#39;x_start&#39;: 4, &#39;linetype&#39;: &#39;turn&#39;}}, r={}, sp={}, prob=0.03333333333333333, inputparams=(25.0, 4), rangeid=&#39;&#39;, name=&#39;rep0_range_28&#39;),
+ ParameterScenario(sequence={}, times=(), p={&#39;ground&#39;: {&#39;radius&#39;: 25.0, &#39;x_start&#39;: 5, &#39;linetype&#39;: &#39;turn&#39;}}, r={}, sp={}, prob=0.03333333333333333, inputparams=(25.0, 5), rangeid=&#39;&#39;, name=&#39;rep0_range_29&#39;)]
+</pre></div></div>
+</div>
+<p>These samples can then be run using <code class="docutils literal notranslate"><span class="pre">prop.parameter_sample</span></code></p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[15]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">res_turn</span><span class="p">,</span> <span class="n">hist_turn</span> <span class="o">=</span> <span class="n">prop</span><span class="o">.</span><span class="n">parameter_sample</span><span class="p">(</span><span class="n">mdl</span><span class="p">,</span> <span class="n">ps_turn</span><span class="p">,</span> <span class="n">pool</span> <span class="o">=</span> <span class="n">mp</span><span class="o">.</span><span class="n">Pool</span><span class="p">(</span><span class="mi">5</span><span class="p">))</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area stderr docutils container">
+<div class="highlight"><pre>
+SCENARIOS COMPLETE: 100%|██████████| 30/30 [00:00&lt;?, ?it/s]
+</pre></div></div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[16]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">res_sine</span><span class="p">,</span> <span class="n">hist_sine</span> <span class="o">=</span> <span class="n">prop</span><span class="o">.</span><span class="n">parameter_sample</span><span class="p">(</span><span class="n">mdl</span><span class="p">,</span> <span class="n">ps_sine</span><span class="p">,</span> <span class="n">pool</span><span class="o">=</span><span class="n">mp</span><span class="o">.</span><span class="n">Pool</span><span class="p">(</span><span class="mi">5</span><span class="p">))</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area stderr docutils container">
+<div class="highlight"><pre>
+SCENARIOS COMPLETE: 100%|██████████| 205/205 [00:00&lt;?, ?it/s]
+</pre></div></div>
+</div>
+<p>We can then use these results to visualize the operational envelope for the system–which sets of parameters lead to the system getting lost/going off track, and which sets of parameters the system is capable of accomodating.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[17]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">fmdtools.analyze.tabulate</span> <span class="kn">import</span> <span class="n">NominalEnvelope</span>
+<span class="n">na</span> <span class="o">=</span> <span class="n">NominalEnvelope</span><span class="p">(</span><span class="n">ps_sine</span><span class="p">,</span> <span class="n">res_sine</span><span class="p">,</span> <span class="s1">&#39;at_finish&#39;</span><span class="p">,</span> <span class="s1">&#39;p.ground.amp&#39;</span><span class="p">,</span> <span class="s1">&#39;p.ground.period&#39;</span><span class="p">,</span> <span class="n">func</span><span class="o">=</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span> <span class="o">==</span> <span class="kc">True</span><span class="p">)</span>
+<span class="n">na</span><span class="o">.</span><span class="n">as_plot</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[17]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+(&lt;Figure size 600x400 with 1 Axes&gt;,
+ &lt;Axes: xlabel=&#39;p.ground.amp&#39;, ylabel=&#39;p.ground.period&#39;&gt;)
+</pre></div></div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../../_images/examples_rover_Rover_Setup_Notebook_29_1.png" src="../../_images/examples_rover_Rover_Setup_Notebook_29_1.png" />
+</div>
+</div>
+<p>As shown, if the amplitude of the sine curve is too high at low wavelength, it causes the rover to go off track and not be able to complete the mission.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[18]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">na</span> <span class="o">=</span> <span class="n">NominalEnvelope</span><span class="p">(</span><span class="n">ps_turn</span><span class="p">,</span> <span class="n">res_turn</span><span class="p">,</span> <span class="s1">&#39;at_finish&#39;</span><span class="p">,</span> <span class="s1">&#39;p.ground.x_start&#39;</span><span class="p">,</span> <span class="s1">&#39;p.ground.radius&#39;</span><span class="p">,</span> <span class="n">func</span><span class="o">=</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span> <span class="o">==</span> <span class="kc">True</span><span class="p">)</span>
+<span class="n">na</span><span class="o">.</span><span class="n">as_plot</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[18]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+(&lt;Figure size 600x400 with 1 Axes&gt;,
+ &lt;Axes: xlabel=&#39;p.ground.x_start&#39;, ylabel=&#39;p.ground.radius&#39;&gt;)
+</pre></div></div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../../_images/examples_rover_Rover_Setup_Notebook_31_1.png" src="../../_images/examples_rover_Rover_Setup_Notebook_31_1.png" />
+</div>
+</div>
+<p>Similarly, if the radius of the curve is too small, it can additionally lead to the rover going off course by overshooting the curve.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[19]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">fig</span> <span class="o">=</span> <span class="n">hist_turn</span><span class="o">.</span><span class="n">plot_trajectories</span><span class="p">(</span><span class="s1">&#39;flows.pos.s.x&#39;</span><span class="p">,</span><span class="s1">&#39;flows.pos.s.y&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -863,109 +983,22 @@ array([  0.,   1.,   2.,   3.,   4.,   5.,   6.,   7.,   8.,   9.,  10.,
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area docutils container">
-<div class="highlight"><pre>
-<span class="ansi-red-intense-fg ansi-bold">---------------------------------------------------------------------------</span>
-<span class="ansi-red-intense-fg ansi-bold">TypeError</span>                                 Traceback (most recent call last)
-File <span class="ansi-green-intense-fg ansi-bold">c:\users\dhulse\documents\github\fmdtools\fmdtools\define\parameter.py:63</span>, in <span class="ansi-cyan-fg">Parameter.__init__</span><span class="ansi-blue-intense-fg ansi-bold">(self, strict_immutability, check_type, check_pickle, *args, **kwargs)</span>
-<span class="ansi-green-fg">     62</span> <span class="ansi-bold" style="color: rgb(0,135,0)">try</span>:
-<span class="ansi-green-intense-fg ansi-bold">---&gt; 63</span>     <span style="color: rgb(0,135,0)">super</span>()<span style="color: rgb(98,98,98)">.</span><span style="color: rgb(0,0,255)">__init__</span>(<span style="color: rgb(98,98,98)">*</span>args, <span style="color: rgb(98,98,98)">*</span><span style="color: rgb(98,98,98)">*</span>kwargs)
-<span class="ansi-green-fg">     64</span> <span class="ansi-bold" style="color: rgb(0,135,0)">except</span> <span class="ansi-bold" style="color: rgb(215,95,95)">TypeError</span>:
-
-<span class="ansi-red-intense-fg ansi-bold">TypeError</span>: Invalid kwarg: amp not in __fields__ and has not __dict__
-
-During handling of the above exception, another exception occurred:
-
-<span class="ansi-red-intense-fg ansi-bold">Exception</span>                                 Traceback (most recent call last)
-Cell <span class="ansi-green-intense-fg ansi-bold">In[13], line 2</span>
-<span class="ansi-green-fg">      1</span> app <span style="color: rgb(98,98,98)">=</span> NominalApproach()
-<span class="ansi-green-intense-fg ansi-bold">----&gt; 2</span> app<span style="color: rgb(98,98,98)">.</span>add_param_ranges(RoverParam,<span style="color: rgb(175,0,0)">&#39;</span><span style="color: rgb(175,0,0)">sine</span><span style="color: rgb(175,0,0)">&#39;</span>, <span style="color: rgb(175,0,0)">&#39;</span><span style="color: rgb(175,0,0)">sine</span><span style="color: rgb(175,0,0)">&#39;</span>, amp<span style="color: rgb(98,98,98)">=</span>(<span style="color: rgb(98,98,98)">0</span>, <span style="color: rgb(98,98,98)">8</span>, <span style="color: rgb(98,98,98)">0.2</span>), wavelength<span style="color: rgb(98,98,98)">=</span>(<span style="color: rgb(98,98,98)">10.0</span>,<span style="color: rgb(98,98,98)">50</span>,<span style="color: rgb(98,98,98)">10</span>))
-<span class="ansi-green-fg">      3</span> app<span style="color: rgb(98,98,98)">.</span>add_param_ranges(RoverParam,<span style="color: rgb(175,0,0)">&#39;</span><span style="color: rgb(175,0,0)">turn</span><span style="color: rgb(175,0,0)">&#39;</span>,<span style="color: rgb(175,0,0)">&#39;</span><span style="color: rgb(175,0,0)">turn</span><span style="color: rgb(175,0,0)">&#39;</span>, radius<span style="color: rgb(98,98,98)">=</span>(<span style="color: rgb(98,98,98)">5</span>,<span style="color: rgb(98,98,98)">40</span>,<span style="color: rgb(98,98,98)">5.0</span>), start<span style="color: rgb(98,98,98)">=</span>(<span style="color: rgb(98,98,98)">0</span>, <span style="color: rgb(98,98,98)">20.0</span>,<span style="color: rgb(98,98,98)">5</span>))
-
-File <span class="ansi-green-intense-fg ansi-bold">c:\users\dhulse\documents\github\fmdtools\fmdtools\sim\approach.py:191</span>, in <span class="ansi-cyan-fg">NominalApproach.add_param_ranges</span><span class="ansi-blue-intense-fg ansi-bold">(self, paramfunc, rangeid, replicates, seeds, set_args, *args, **kwargs)</span>
-<span class="ansi-green-fg">    189</span> np<span style="color: rgb(98,98,98)">.</span>random<span style="color: rgb(98,98,98)">.</span>seed(seeds[i])
-<span class="ansi-green-fg">    190</span> <span style="color: rgb(0,135,0)">self</span><span style="color: rgb(98,98,98)">.</span>num_scenarios<span style="color: rgb(98,98,98)">+</span><span style="color: rgb(98,98,98)">=</span><span style="color: rgb(98,98,98)">1</span>
-<span class="ansi-green-intense-fg ansi-bold">--&gt; 191</span> p <span style="color: rgb(98,98,98)">=</span> paramfunc(<span style="color: rgb(98,98,98)">*</span>args, <span style="color: rgb(98,98,98)">*</span><span style="color: rgb(98,98,98)">*</span>inputparams)
-<span class="ansi-green-fg">    192</span> scenname <span style="color: rgb(98,98,98)">=</span> rangeid<span style="color: rgb(98,98,98)">+</span><span style="color: rgb(175,0,0)">&#39;</span><span style="color: rgb(175,0,0)">_</span><span style="color: rgb(175,0,0)">&#39;</span><span style="color: rgb(98,98,98)">+</span><span style="color: rgb(0,135,0)">str</span>(<span style="color: rgb(0,135,0)">self</span><span style="color: rgb(98,98,98)">.</span>num_scenarios)
-<span class="ansi-green-fg">    193</span> <span style="color: rgb(0,135,0)">self</span><span style="color: rgb(98,98,98)">.</span>scenarios[scenname]<span style="color: rgb(98,98,98)">=</span> ParamScenario(name<span style="color: rgb(98,98,98)">=</span>scenname,
-<span class="ansi-green-fg">    194</span>                                         rangeid<span style="color: rgb(98,98,98)">=</span>rangeid,
-<span class="ansi-green-fg">    195</span>                                         p<span style="color: rgb(98,98,98)">=</span>p,
-<span class="ansi-green-intense-fg ansi-bold">   (...)</span>
-<span class="ansi-green-fg">    200</span>                                         fixedkwargs<span style="color: rgb(98,98,98)">=</span>fixedkwargs,
-<span class="ansi-green-fg">    201</span>                                         prob <span style="color: rgb(98,98,98)">=</span> <span style="color: rgb(98,98,98)">1</span><span style="color: rgb(98,98,98)">/</span>(<span style="color: rgb(0,135,0)">len</span>(fullspace)<span style="color: rgb(98,98,98)">*</span>replicates))
-
-File <span class="ansi-green-intense-fg ansi-bold">~\Documents\GitHub\fmdtools\examples\rover\rover_model.py:154</span>, in <span class="ansi-cyan-fg">RoverParam.__init__</span><span class="ansi-blue-intense-fg ansi-bold">(self, *args, **kwargs)</span>
-<span class="ansi-green-fg">    153</span> <span class="ansi-bold" style="color: rgb(0,135,0)">def</span> <span style="color: rgb(0,0,255)">__init__</span>(<span style="color: rgb(0,135,0)">self</span>, <span style="color: rgb(98,98,98)">*</span>args, <span style="color: rgb(98,98,98)">*</span><span style="color: rgb(98,98,98)">*</span>kwargs):
-<span class="ansi-green-intense-fg ansi-bold">--&gt; 154</span>     <span style="color: rgb(0,135,0)">super</span>()<span style="color: rgb(98,98,98)">.</span><span style="color: rgb(0,0,255)">__init__</span>(<span style="color: rgb(98,98,98)">*</span>args, strict_immutability<span style="color: rgb(98,98,98)">=</span><span class="ansi-bold" style="color: rgb(0,135,0)">False</span>, <span style="color: rgb(98,98,98)">*</span><span style="color: rgb(98,98,98)">*</span>kwargs)
-
-File <span class="ansi-green-intense-fg ansi-bold">c:\users\dhulse\documents\github\fmdtools\fmdtools\define\parameter.py:65</span>, in <span class="ansi-cyan-fg">Parameter.__init__</span><span class="ansi-blue-intense-fg ansi-bold">(self, strict_immutability, check_type, check_pickle, *args, **kwargs)</span>
-<span class="ansi-green-fg">     63</span>     <span style="color: rgb(0,135,0)">super</span>()<span style="color: rgb(98,98,98)">.</span><span style="color: rgb(0,0,255)">__init__</span>(<span style="color: rgb(98,98,98)">*</span>args, <span style="color: rgb(98,98,98)">*</span><span style="color: rgb(98,98,98)">*</span>kwargs)
-<span class="ansi-green-fg">     64</span> <span class="ansi-bold" style="color: rgb(0,135,0)">except</span> <span class="ansi-bold" style="color: rgb(215,95,95)">TypeError</span>:
-<span class="ansi-green-intense-fg ansi-bold">---&gt; 65</span>     <span class="ansi-bold" style="color: rgb(0,135,0)">raise</span> <span class="ansi-bold" style="color: rgb(215,95,95)">Exception</span>(<span style="color: rgb(175,0,0)">&#34;</span><span style="color: rgb(175,0,0)">Invalid args/kwargs: </span><span style="color: rgb(175,0,0)">&#34;</span><span style="color: rgb(98,98,98)">+</span><span style="color: rgb(0,135,0)">str</span>(args)<span style="color: rgb(98,98,98)">+</span><span style="color: rgb(175,0,0)">&#34;</span><span style="color: rgb(175,0,0)"> , </span><span style="color: rgb(175,0,0)">&#34;</span> <span style="color: rgb(98,98,98)">+</span>
-<span class="ansi-green-fg">     66</span>                     <span style="color: rgb(0,135,0)">str</span>(kwargs)<span style="color: rgb(98,98,98)">+</span><span style="color: rgb(175,0,0)">&#34;</span><span style="color: rgb(175,0,0)"> in </span><span style="color: rgb(175,0,0)">&#34;</span><span style="color: rgb(98,98,98)">+</span><span style="color: rgb(0,135,0)">str</span>(<span style="color: rgb(0,135,0)">self</span><span style="color: rgb(98,98,98)">.</span><span style="color: rgb(0,0,135)">__class__</span>))
-<span class="ansi-green-fg">     67</span> <span class="ansi-bold" style="color: rgb(0,135,0)">if</span> strict_immutability:
-<span class="ansi-green-fg">     68</span>     <span style="color: rgb(0,135,0)">self</span><span style="color: rgb(98,98,98)">.</span>check_immutable()
-
-<span class="ansi-red-intense-fg ansi-bold">Exception</span>: Invalid args/kwargs: (&#39;sine&#39;,) , {&#39;amp&#39;: 0.0, &#39;wavelength&#39;: 10.0} in &lt;class &#39;rover_model.RoverParam&#39;&gt;
-</pre></div></div>
+<img alt="../../_images/examples_rover_Rover_Setup_Notebook_33_0.png" src="../../_images/examples_rover_Rover_Setup_Notebook_33_0.png" />
 </div>
-<div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[20]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">app</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">fig</span> <span class="o">=</span> <span class="n">hist_sine</span><span class="o">.</span><span class="n">plot_trajectories</span><span class="p">(</span><span class="s1">&#39;flows.pos.s.x&#39;</span><span class="p">,</span><span class="s1">&#39;flows.pos.s.y&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
-<p>This approach can then be run using <code class="docutils literal notranslate"><span class="pre">prop.nominal_approach</span></code></p>
-<div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
-</pre></div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">endclasses</span><span class="p">,</span> <span class="n">mdlhists</span><span class="o">=</span> <span class="n">prop</span><span class="o">.</span><span class="n">nominal_approach</span><span class="p">(</span><span class="n">mdl</span><span class="p">,</span> <span class="n">app</span><span class="p">,</span> <span class="n">pool</span> <span class="o">=</span> <span class="n">mp</span><span class="o">.</span><span class="n">Pool</span><span class="p">(</span><span class="mi">5</span><span class="p">))</span>
-</pre></div>
-</div>
-</div>
-<p>We can then use these results to visualize the operational envelope for the system–which sets of parameters lead to the system getting lost/going off track, and which sets of parameters the system is capable of accomodating.</p>
-<div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
-</pre></div>
-</div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">fig</span> <span class="o">=</span> <span class="n">an</span><span class="o">.</span><span class="n">plot</span><span class="o">.</span><span class="n">nominal_vals_2d</span><span class="p">(</span><span class="n">app</span><span class="p">,</span> <span class="n">endclasses</span><span class="p">,</span> <span class="s1">&#39;inputparams.amp&#39;</span><span class="p">,</span> <span class="s1">&#39;inputparams.wavelength&#39;</span><span class="p">,</span> <span class="n">nom_func</span><span class="o">=</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span> <span class="o">==</span> <span class="kc">True</span><span class="p">,</span> <span class="n">metric</span><span class="o">=</span><span class="s1">&#39;at_finish&#39;</span><span class="p">)</span>
-</pre></div>
-</div>
-</div>
-<p>As shown, if the amplitude of the sine curve is too high at low wavelength, it causes the rover to go off track and not be able to complete the mission.</p>
-<div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
-</pre></div>
-</div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">fig</span> <span class="o">=</span> <span class="n">an</span><span class="o">.</span><span class="n">plot</span><span class="o">.</span><span class="n">nominal_vals_2d</span><span class="p">(</span><span class="n">app</span><span class="p">,</span> <span class="n">endclasses</span><span class="p">,</span> <span class="s1">&#39;inputparams.radius&#39;</span><span class="p">,</span> <span class="s1">&#39;inputparams.start&#39;</span><span class="p">,</span> <span class="n">nom_func</span><span class="o">=</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span> <span class="o">==</span> <span class="kc">True</span><span class="p">,</span> <span class="n">metric</span><span class="o">=</span><span class="s1">&#39;at_finish&#39;</span><span class="p">)</span>
-</pre></div>
-</div>
-</div>
-<p>Similarly, if the radius of the curve is too small, it can additionally lead to the rover going off course by overshooting the curve.</p>
-<div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
-</pre></div>
-</div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">fig</span> <span class="o">=</span> <span class="n">plot_trajectories</span><span class="p">(</span><span class="n">mdlhists</span><span class="o">.</span><span class="n">get_scens</span><span class="p">(</span><span class="o">*</span><span class="n">app</span><span class="o">.</span><span class="n">ranges</span><span class="p">[</span><span class="s1">&#39;sine&#39;</span><span class="p">][</span><span class="s1">&#39;scenarios&#39;</span><span class="p">]))</span>
-</pre></div>
-</div>
-</div>
-<div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
-</pre></div>
-</div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">fig</span> <span class="o">=</span> <span class="n">plot_trajectories</span><span class="p">(</span><span class="n">mdlhists</span><span class="o">.</span><span class="n">get_scens</span><span class="p">(</span><span class="o">*</span><span class="n">app</span><span class="o">.</span><span class="n">ranges</span><span class="p">[</span><span class="s1">&#39;turn&#39;</span><span class="p">][</span><span class="s1">&#39;scenarios&#39;</span><span class="p">]))</span>
-</pre></div>
-</div>
-</div>
-<div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
-</pre></div>
-</div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>
-</pre></div>
+<div class="output_area docutils container">
+<img alt="../../_images/examples_rover_Rover_Setup_Notebook_34_0.png" src="../../_images/examples_rover_Rover_Setup_Notebook_34_0.png" />
 </div>
 </div>
 </section>
@@ -976,7 +1009,7 @@ File <span class="ansi-green-intense-fg ansi-bold">c:\users\dhulse\documents\git
           </div>
           <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
         <a href="../asg_demo/Action_Sequence_Graph.html" class="btn btn-neutral float-left" title="Action Sequence Graph Tutorial" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
-        <a href="Approach_Use-Cases.html" class="btn btn-neutral float-right" title="Defining Fault Sampling Approaches in fmdtools" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="HFAC_Analyses/HFAC_Analyses.html" class="btn btn-neutral float-right" title="More Human Failure Analyses" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 
   <hr/>

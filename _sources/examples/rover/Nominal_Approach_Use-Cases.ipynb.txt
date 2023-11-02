@@ -17,10 +17,10 @@
    "execution_count": 1,
    "metadata": {
     "execution": {
-     "iopub.execute_input": "2023-09-29T21:51:59.021327Z",
-     "iopub.status.busy": "2023-09-29T21:51:59.021327Z",
-     "iopub.status.idle": "2023-09-29T21:52:01.059440Z",
-     "shell.execute_reply": "2023-09-29T21:52:01.058438Z"
+     "iopub.execute_input": "2023-07-20T21:28:02.294629Z",
+     "iopub.status.busy": "2023-07-20T21:28:02.293633Z",
+     "iopub.status.idle": "2023-07-20T21:28:03.131061Z",
+     "shell.execute_reply": "2023-07-20T21:28:03.131061Z"
     }
    },
    "outputs": [],
@@ -37,108 +37,7 @@
    "cell_type": "markdown",
    "metadata": {},
    "source": [
-    "The rover model (rover_model.py) from the examples module will be used to demonstrate this approach. The main task of the rover is to follow a given line from a starting location to an ending location. It model is made of following functions and flows.\n",
-    "\n",
-    "Functions:\n",
-    "    - Power\n",
-    "    - Operator\n",
-    "    - Communications\n",
-    "    - Perception\n",
-    "    - Avionics\n",
-    "    - Override\n",
-    "    - Drive\n",
-    "    - Environment\n",
-    "\n",
-    "Flows:\n",
-    "    - Groud\n",
-    "    - Pos_Signal\n",
-    "    - EE_12\n",
-    "    - EE_15\n",
-    "    - EE_5\n",
-    "    - Video\n",
-    "    - Avionics_Control\n",
-    "    - Motor_control\n",
-    "    - Switch\n",
-    "    - Comms\n",
-    "    - Ovverride_comms\n",
-    "    - Faultystates\n",
-    "\n",
-    "It has helper functions that help visualize the rovers behavior overtime.\n",
-    "\n",
-    "    - plot_map(mdl, mdlhist): helps visualize the ability of the rover to track a given line\n",
-    "    - plot_trajectories(\n",
-    "                            mdlhists,\n",
-    "                            nomhist=[],\n",
-    "                            app=[],\n",
-    "                            faultlabel=\"Faulty\",\n",
-    "                            faultalpha=0.1,\n",
-    "                            range_hist={},\n",
-    "                            rangealpha=0.1,\n",
-    "                            setalpha=0.3,\n",
-    "                            show_labels=True,\n",
-    "                            title=\"Fault Trajectories\",\n",
-    "                            textoffset=2.0,\n",
-    "                            mode_trunc=5,\n",
-    "                            mode_trunc_end=5,\n",
-    "                            xlim=None,\n",
-    "                            ylim=None,\n",
-    "                            figsize=(4, 4),\n",
-    "                            ax=False,\n",
-    "                            legend=True,\n",
-    "                        ): helps visualize the rover trajectories\n",
-    "\n",
-    "    - plot_centerline_err(mdl, mdlhist): helps visualize how mucht the rover has deviated from the centerline.\n",
-    "\n",
-    "Additionally, this model has a corresponding *parameter generation* class which generates the design parameters of the model given a reduced space of input parameters. The pssoible parameter inputs and their dafaults are listed below.\n",
-    "\n",
-    "    linetype: str = \"sine\"              # line type (sine or turn)\n",
-    "    period: float = 1.0                 # period of the curve (for sine linetype)\n",
-    "    end: tuple = (10.0, 10.0)           # end of the curve (requires instantiation)\n",
-    "    initangle: float = 0.0              # initial rover angle\n",
-    "    linetype_set = (\"sine\", \"turn\")\n",
-    "    amp: float = 1.0                    # amplitude of sine wave   (input for sine linetype)\n",
-    "    wavelength: float = 50.0            # wavelength of sine wave (input for sine linetype)\n",
-    "    radius: float = 20.0                # radius of turn (input for turn linetype)\n",
-    "    start: float = 20.0                 # start of turn (input for turn linetype)\n",
-    "    ub_f: float = 10.0                  \n",
-    "    lb_f: float = -1.0\n",
-    "    ub_t: float = 10.0\n",
-    "    lb_t: float = -1.0\n",
-    "    ub_d: float = 2.0\n",
-    "    lb_d: float = -2.0\n",
-    "    cor_d: float = 1.0\n",
-    "    cor_t: float = 1.0\n",
-    "    cor_f: float = 1.0\n",
-    "    degradation: DegParam = DegParam()  # Degradation parameters\n",
-    "    drive_modes: dict = {\"mode_args\": \"set\"}   "
-   ]
-  },
-  {
-   "cell_type": "code",
-   "execution_count": 2,
-   "metadata": {
-    "execution": {
-     "iopub.execute_input": "2023-09-29T21:52:01.062430Z",
-     "iopub.status.busy": "2023-09-29T21:52:01.062430Z",
-     "iopub.status.idle": "2023-09-29T21:52:02.096708Z",
-     "shell.execute_reply": "2023-09-29T21:52:02.095711Z"
-    }
-   },
-   "outputs": [
-    {
-     "ename": "ImportError",
-     "evalue": "cannot import name 'plot_map' from 'rover_model' (C:\\Users\\dhulse\\Documents\\GitHub\\fmdtools\\examples\\rover\\rover_model.py)",
-     "output_type": "error",
-     "traceback": [
-      "\u001b[1;31m---------------------------------------------------------------------------\u001b[0m",
-      "\u001b[1;31mImportError\u001b[0m                               Traceback (most recent call last)",
-      "Cell \u001b[1;32mIn[2], line 1\u001b[0m\n\u001b[1;32m----> 1\u001b[0m \u001b[38;5;28;01mfrom\u001b[39;00m \u001b[38;5;21;01mrover_model\u001b[39;00m \u001b[38;5;28;01mimport\u001b[39;00m Rover, plot_map, plot_centerline_err, RoverParam\n",
-      "\u001b[1;31mImportError\u001b[0m: cannot import name 'plot_map' from 'rover_model' (C:\\Users\\dhulse\\Documents\\GitHub\\fmdtools\\examples\\rover\\rover_model.py)"
-     ]
-    }
-   ],
-   "source": [
-    "from rover_model import Rover, plot_map, plot_centerline_err, RoverParam"
+    "The following rover model will be used to demonstrate this approach. The main task of the rover is to follow a given lane from a starting location to an ending location."
    ]
   },
   {
@@ -146,7 +45,66 @@
    "cell_type": "markdown",
    "metadata": {},
    "source": [
-    "Below shows the performance of the rover during a (default) turn with a radius of 20 meters that begins at 20 meters. As shown, there is a slight drift from the centerline, but not enough for the rover to get lost (that would take 1 meter of drift)."
+    "We can view the ability of the rover to track a given line with the following function:"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 2,
+   "metadata": {
+    "execution": {
+     "iopub.execute_input": "2023-07-20T21:28:03.134052Z",
+     "iopub.status.busy": "2023-07-20T21:28:03.134052Z",
+     "iopub.status.idle": "2023-07-20T21:28:03.147677Z",
+     "shell.execute_reply": "2023-07-20T21:28:03.146663Z"
+    }
+   },
+   "outputs": [],
+   "source": [
+    "import matplotlib.pyplot as plt\n",
+    "def plot_map(mdl, mdlhist):\n",
+    "    fig = plt.figure()\n",
+    "    ax = fig.add_subplot(111)\n",
+    "    x_ground = mdlhist['flows']['Ground']['x']\n",
+    "    y_ground = mdlhist['flows']['Ground']['liney']\n",
+    "    plt.plot(x_ground,y_ground, label=\"Centerline\")\n",
+    "    \n",
+    "    x_rover = mdlhist['flows']['Ground']['x']\n",
+    "    y_rover = mdlhist['flows']['Ground']['y']\n",
+    "    plt.plot(x_rover,y_rover, label = \"Rover\")\n",
+    "    \n",
+    "    plt.scatter(mdl.params['end'][0],mdl.params['end'][1], label=\"End Location\")\n",
+    "    plt.scatter(mdlhist['flows']['Ground']['x'][-1],mdlhist['flows']['Ground']['y'][-1], label=\"Final Position\")\n",
+    "    \n",
+    "    plt.scatter(0,0, label=\"Start Location\")\n",
+    "\n",
+    "    plt.xlabel(\"x-distance (meters)\")\n",
+    "    plt.ylabel(\"y-distance (meters)\")\n",
+    "    plt.title(\"Rover Centerline Tracking\")\n",
+    "    plt.grid()\n",
+    "\n",
+    "    plt.legend()\n",
+    "    \n",
+    "    fig = plt.figure()\n",
+    "    if mdl.params['linetype']=='sine':\n",
+    "        y_line = [sin_func(x,y_rover[i], mdl.params['amp'], mdl.params['period'])[1] for i,x in enumerate(x_rover)]\n",
+    "    elif mdl.params['linetype']=='turn':\n",
+    "        y_line = [turn_func(x,y_rover[i], mdl.params['radius'], mdl.params['start'])[1] for i,x in enumerate(x_rover)]\n",
+    "        \n",
+    "    plt.plot(x_rover, y_rover-y_line)\n",
+    "    plt.xlabel(\"x-distance (meters)\")\n",
+    "    plt.ylabel(\"y-error (meters)\")\n",
+    "    plt.title(\"Rover Centerline Error\")"
+   ]
+  },
+  {
+   "attachments": {},
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "Additionally, this model has a corresponding *parameter generation* function which generates the design parameters (`params`) of the model given a reduced space of input parameters. This is the set use-case because often the *explored* set of variables is smaller than the full set. Parameter generation functions are specified in the form `method(staticargs, rangearg1=x, rangearg2=y)`, where staticargs are arguments used to define discrete cases and rangeargs are arguments used to define corresponding varied parameters. \n",
+    "\n",
+    "In this case, the static cases are 'sine' or 'turn', the type of curve being generated in the function, with the corresponding range parameters of `amplitude` and `period` (of the wave used to generate the lane), and `radius` (of the turn) and `start` (distance before/after the curve starts/ends), respectively."
    ]
   },
   {
@@ -154,16 +112,300 @@
    "execution_count": 3,
    "metadata": {
     "execution": {
-     "iopub.execute_input": "2023-08-11T03:12:59.511884Z",
-     "iopub.status.busy": "2023-08-11T03:12:59.511884Z",
-     "iopub.status.idle": "2023-08-11T03:12:59.817728Z",
-     "shell.execute_reply": "2023-08-11T03:12:59.817728Z"
+     "iopub.execute_input": "2023-07-20T21:28:03.150658Z",
+     "iopub.status.busy": "2023-07-20T21:28:03.149658Z",
+     "iopub.status.idle": "2023-07-20T21:28:03.163641Z",
+     "shell.execute_reply": "2023-07-20T21:28:03.162649Z"
     }
    },
    "outputs": [],
    "source": [
-    "p = RoverParam(linetype=\"turn\")\n",
-    "mdl = Rover(p=p)\n",
+    "def gen_params(linetype, **kwargs):\n",
+    "    if linetype == 'sine':\n",
+    "        amp = kwargs.pop('amp',0.2)\n",
+    "        wavelength=kwargs.pop('wavelength', 50.0)\n",
+    "        period = 2*np.pi/wavelength\n",
+    "        initangle = sin_angle_func(0.0, amp, period)\n",
+    "        lineparams = {'linetype':linetype, 'amp':amp, 'period':period, 'initangle':initangle, 'end':[wavelength,0.0]}\n",
+    "    elif linetype == 'turn':\n",
+    "        radius = kwargs.pop('radius',20.0)\n",
+    "        start = kwargs.pop('start', 20.0)\n",
+    "        lineparams = {'linetype':linetype, 'radius':radius, 'start':start, 'initangle':0.0, 'end':[radius+start,radius+start]}\n",
+    "    return lineparams"
+   ]
+  },
+  {
+   "attachments": {},
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "Below is the rest of the model setup:"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 4,
+   "metadata": {
+    "execution": {
+     "iopub.execute_input": "2023-07-20T21:28:03.167634Z",
+     "iopub.status.busy": "2023-07-20T21:28:03.166631Z",
+     "iopub.status.idle": "2023-07-20T21:28:03.209547Z",
+     "shell.execute_reply": "2023-07-20T21:28:03.209547Z"
+    }
+   },
+   "outputs": [],
+   "source": [
+    "import numpy as np\n",
+    "class Avionics(FxnBlock):\n",
+    "    def __init__(self,name, flows, params):\n",
+    "        self.add_params(params)\n",
+    "        super().__init__(name, flows, flownames={'AvionicsControl':'Control'})\n",
+    "        self.assoc_modes({'no_con':[1e-4, 200]}, ['drive','standby'], initmode='standby')\n",
+    "    def dynamic_behavior(self,time):\n",
+    "        if not self.in_mode('no_con'):\n",
+    "            if time == 5: self.set_mode('drive')\n",
+    "            if time == 50 or in_area(self.end[0],self.end[1],1,self.Pos_Signal.x,self.Pos_Signal.y): \n",
+    "                self.set_mode('standby')\n",
+    "                self.Control.completed=1\n",
+    "            \n",
+    "        if self.in_mode('drive'):\n",
+    "            self.Pos_Signal.assign(self.Video, 'angle', 'linex', 'liney')\n",
+    "            self.Pos_Signal.heading = self.Ground.ang \n",
+    "            self.Pos_Signal.assign(self.Ground, 'x', 'y', 'vel')\n",
+    "            \n",
+    "            if in_area(self.end[0],self.end[1],1,self.Pos_Signal.x,self.Pos_Signal.y):\n",
+    "                self.set_mode('standby')\n",
+    "            elif self.Video.quality==0: self.set_mode('standby')\n",
+    "            else:\n",
+    "                ycorrection= np.arctan((self.Pos_Signal.y-self.Pos_Signal.liney)/(self.Pos_Signal.vel*np.cos(np.pi/180 * self.Pos_Signal.heading)+0.001))\n",
+    "                xcorrection= np.arctan((self.Pos_Signal.x-self.Pos_Signal.linex)/(self.Pos_Signal.vel*np.sin(np.pi/180 * self.Pos_Signal.heading)+0.001))\n",
+    "                rdiff = (self.Pos_Signal.angle - self.Pos_Signal.heading -5*(xcorrection+ycorrection))/180\n",
+    "                self.Control.put(rpower = 1+rdiff, lpower = 1-rdiff)\n",
+    "                self.Control.limit(rpower=(-1,2), lpower=(-1,2))  \n",
+    "        if self.in_mode('standby'):   self.Control.put(rpower = 0, lpower = 0)\n",
+    "\n",
+    "class Drive(FxnBlock):\n",
+    "    def __init__(self,name, flows):\n",
+    "        super().__init__(name, flows, flownames={\"EE_15\":\"EE_in\"})\n",
+    "        self.assoc_modes({\"mech_loss\", \"elec_open\"})\n",
+    "    def dynamic_behavior(self, time):\n",
+    "        rpower = self.EE_in.v*self.MotorControl.rpower*self.no_fault(\"elec_open\")/15\n",
+    "        lpower = self.EE_in.v*self.MotorControl.lpower*self.no_fault(\"elec_open\")/15\n",
+    "        self.EE_in.a = (lpower + rpower)/12\n",
+    "        if (lpower + rpower) >100: self.add_fault(\"elec_open\")\n",
+    "        else:\n",
+    "            self.Ground.vel= rpower + lpower\n",
+    "            self.Ground.inc(ang = 180*(rpower-lpower)/(rpower+lpower +0.001))\n",
+    "            self.Ground.inc(x = np.cos(np.pi/180 *self.Ground.ang) * self.Ground.vel, \\\n",
+    "                            y = np.sin(np.pi/180 *self.Ground.ang) * self.Ground.vel)\n",
+    "\n",
+    "class Perception(FxnBlock):\n",
+    "    def __init__(self, name, flows):\n",
+    "        self.set_atts(rad=1)\n",
+    "        super().__init__(name, flows, flownames={'EE_12':'EE'})\n",
+    "        self.assoc_modes({}, ['off', 'feed'], initmode='off')\n",
+    "    def dynamic_behavior(self,time):\n",
+    "        if self.in_mode('off'):\n",
+    "            self.EE.a=0\n",
+    "            self.Video.put(linex = 0,liney=0, angle = 0, quality = 0)\n",
+    "            if self.EE.v ==12: self.set_mode(\"feed\")\n",
+    "        elif self.in_mode(\"feed\"):\n",
+    "            if self.EE.v > 8:\n",
+    "                if in_area(self.Ground.x, self.Ground.liney, self.rad, self.Ground.x, self.Ground.y):\n",
+    "                    self.Video.assign(self.Ground, 'linex','liney', 'angle')\n",
+    "                    self.Video.quality = 1\n",
+    "                else:\n",
+    "                    self.Video.quality=0\n",
+    "            elif self.EE.v == 0: self.set_mode(\"off\")\n",
+    "            else: self.Video.quality = 0\n",
+    "\n",
+    "def in_area(x,y,rad,xc,yc):\n",
+    "    dist = np.sqrt((x-xc)**2+(y-yc)**2)\n",
+    "    return not dist > rad\n",
+    "    \n",
+    "\n",
+    "class Power(FxnBlock):\n",
+    "    def __init__(self, name, flows):\n",
+    "        super().__init__(name,flows, states={\"charge\": 100.0, 'power':0.0})\n",
+    "        self.assoc_modes({\"no_charge\":[1e-5, {'off':1.0}, 100],\"open_circ\":[1e-5, {'supply':1.0}, 100]}, [\"supply\",\"charge\",\"standby\",\"off\"], initmode=\"off\", exclusive = True, key_phases_by='self')\n",
+    "    def static_behavior(self,time):\n",
+    "        if self.in_mode(\"off\"):     \n",
+    "            self.EE_5.put(v=0,a=0); self.EE_12.put(v=0,a=0);self.EE_15.put(v=0,a=0)\n",
+    "            if self.Control.power==1 and self.AvionicsControl.completed==0:   self.set_mode(\"supply\")\n",
+    "        elif self.in_mode(\"supply\"):\n",
+    "            if self.charge > 0:         self.EE_5.v = 5; self.EE_12.v = 12; self.EE_15.v = 15; \n",
+    "            else:                       self.set_mode(\"no_charge\")\n",
+    "            if self.Control.power==0:   self.set_mode(\"off\")\n",
+    "            elif self.AvionicsControl.completed==1: self.set_mode(\"off\")\n",
+    "        elif self.in_mode(\"no_charge\",\"open_circ\"): self.EE_5.v = 0; self.EE_12.v = 0; self.EE_15.v = 0; \n",
+    "        if self.in_mode(\"charge\"):\n",
+    "            self.power = - 1\n",
+    "            if self.charge==100:self.set_mode(\"off\")\n",
+    "        else:\n",
+    "            self.power=1+self.EE_12.mul('v','a')+self.EE_5.mul('v','a')+self.EE_15.mul('v','a')\n",
+    "    def dynamic_behavior(self,time):\n",
+    "        self.inc(charge = - self.power/100)\n",
+    "        self.limit(charge=(0,100))\n",
+    "\n",
+    "class Override(FxnBlock):\n",
+    "    def __init__(self,name,flows):\n",
+    "        super().__init__(name,flows, flownames={'EE_5':'EE'})\n",
+    "        self.assoc_modes({}, ['off','standby','override'], initmode = 'off')\n",
+    "    def dynamic_behavior(self,time):\n",
+    "        if self.in_mode('off'):\n",
+    "            self.EE.a=0\n",
+    "            if self.EE.v==5: self.set_mode('standby')\n",
+    "        elif self.in_mode('standby'):\n",
+    "            self.MotorControl.assign(self.AvionicsControl, 'rpower','lpower')\n",
+    "            if self.OverrideComms =='active' and self.EE.v>4: self.set_mode('override')\n",
+    "        elif self.in_mode('override'):\n",
+    "            self.MotorControl.assign(self.OverrideComms, 'rpower', 'lpower')\n",
+    "   \n",
+    "class Communications(FxnBlock):\n",
+    "    def __init__(self, name, flows):\n",
+    "        super().__init__(name,flows)\n",
+    "    def dynamic_behavior(self,time):\n",
+    "        if self.EE_12.v == 12:\n",
+    "            self.EE_12.a=1\n",
+    "            self.Comms.assign(self.Pos_Signal, 'x', 'y', 'vel', 'heading')\n",
+    "        else:   self.Comms.put(x=0, y=0, vel=0, heading=0)\n",
+    "\n",
+    "class Operator(FxnBlock):\n",
+    "    def __init__(self, name, flows):\n",
+    "        super().__init__(name,flows)\n",
+    "    def dynamic_behavior(self, t):\n",
+    "        if t==3:    self.Control.power=1\n",
+    "        elif t==55: self.Control.power=0\n",
+    "\n",
+    "class Environment(FxnBlock):\n",
+    "    def __init__(self, name, flows,params):\n",
+    "        self.add_params(params)\n",
+    "        super().__init__(name,flows)\n",
+    "    def dynamic_behavior(self, t):\n",
+    "        if self.linetype=='sine':\n",
+    "            self.Ground.angle = sin_angle_func(self.Ground.x, self.amp, self.period)\n",
+    "            self.Ground.linex,self.Ground.liney = sin_func(self.Ground.x,self.Ground.y, self.amp, self.period)\n",
+    "        elif self.linetype=='turn':\n",
+    "            self.Ground.angle = turn_angle_func(self.Ground.x, self.radius, self.start)\n",
+    "            self.Ground.linex, self.Ground.liney = turn_func(self.Ground.x, self.Ground.y, self.radius, self.start)\n",
+    "\n",
+    "def sin_func(x,y, amp, period):\n",
+    "    return x, amp * np.sin(period*x)\n",
+    "def sin_angle_func(x, amp, period):\n",
+    "    return amp * period * np.cos(period*x)*180/np.pi\n",
+    "\n",
+    "def turn_func(x,y, radius,start):\n",
+    "    if   x >= start+radius: return start+radius, y\n",
+    "    elif y >= radius:       return start+radius, y\n",
+    "    elif x >= start:        return x, radius - np.sqrt(radius**2 - (x-start)**2)\n",
+    "    elif x < start:         return x, 0.0\n",
+    "def turn_angle_func(x, radius, start):\n",
+    "    if   x >= start+radius: return 90.0\n",
+    "    elif x >= start:        return 90.0 - np.arccos(((x-start)/radius))*180/np.pi  #np.arctan((x-start)/(radius**2-(start-x)**2))*180/np.pi\n",
+    "    elif x<start:           return 0.0\n",
+    "\n",
+    "class Rover(Model):\n",
+    "    def __init__(self, params=gen_params('turn'),\\\n",
+    "                 modelparams={'times':[0,60], 'tstep':1, 'phases':{'start':[1,30], 'end':[31, 60]}},\\\n",
+    "                     valparams={}):\n",
+    "        super().__init__(params, modelparams, valparams)\n",
+    "        \n",
+    "        self.add_flow('Ground', {'x':0.0,'y':0.0,'liney':0.0,'linex':0.0, 'vel':0.0, 'line':0.0, 'angle':params['initangle'], 'ang':0.0})\n",
+    "        self.add_flow('Pos_Signal', {'x':0.0,'y':0.0,'liney':0.0,'linex':0.0, 'heading':0.0, 'vel':0.0, 'line':0, 'angle':0.0})\n",
+    "        self.add_flow('EE_12', {'v':0.0, 'a':0.0})\n",
+    "        self.add_flow('EE_5', {'v':0.0, 'a':0.0})\n",
+    "        self.add_flow('EE_15', {'v':0.0, 'a':0.0})\n",
+    "        self.add_flow('Video', {'liney':0.0,'linex':0.0, 'angle':params['initangle'], 'quality':1})\n",
+    "        self.add_flow('AvionicsControl', {'rpower':0.0, 'lpower':0.0, 'completed':0})\n",
+    "        self.add_flow('MotorControl', {'rpower':0.0, 'lpower':0.0})\n",
+    "        self.add_flow('Control', {'power':0.0})\n",
+    "        self.add_flow('Comms', {'x':0.0,'y':0.0, 'vel':0.0, 'heading':0.0})\n",
+    "        self.add_flow('OverrideComms', {'rpower':0.0, 'lpower':0.0, 'active':0} ) \n",
+    "        #self.add_flow('Example_Disconnect')\n",
+    "        \n",
+    "        self.add_fxn(\"Power\", [\"EE_15\",\"EE_5\",'EE_12', \"Control\", \"AvionicsControl\"], Power)\n",
+    "        self.add_fxn(\"Operator\", [\"Comms\", \"OverrideComms\", \"Pos_Signal\", \"Control\"], Operator)\n",
+    "        self.add_fxn(\"Communications\", [\"Comms\", \"EE_12\", 'Pos_Signal'], Communications)\n",
+    "        self.add_fxn(\"Perception\", [\"Ground\", \"EE_12\", \"Video\"], Perception)\n",
+    "        self.add_fxn(\"Avionics\",[\"Video\",\"Comms\", \"EE_5\",'Pos_Signal',\"Ground\", \"AvionicsControl\"], fclass=Avionics, fparams=params)\n",
+    "        self.add_fxn(\"Override\", [\"OverrideComms\", \"EE_5\", 'MotorControl','AvionicsControl'], Override)\n",
+    "        self.add_fxn(\"Drive\", [\"Ground\",\"EE_15\",\"EE_5\", \"MotorControl\"], fclass = Drive)\n",
+    "        self.add_fxn(\"Environment\", ['Ground'], Environment, fparams = params)\n",
+    "        \n",
+    "        pos_bip = {'Power': [-0.684772948203272, -0.2551613615446115],\n",
+    "                 'Operator': [-0.798933011500376, 0.565156755693186],\n",
+    "                 'Communications': [-0.5566050878414673, 0.14159180700630447],\n",
+    "                 'Perception': [0.996672509613648, 0.2507215448302319],\n",
+    "                 'Avionics': [0.28027473355741117, 0.47255264233968597],\n",
+    "                 'Override': [0.28987624783062627, -0.17144760874154652],\n",
+    "                 'Drive': [0.6671719569482308, -0.571646956655247],\n",
+    "                 'Environment': [1.1329643169383754, -0.6375225566564033],\n",
+    "                 'Ground': [1.108432946123935, -0.3228541151507237],\n",
+    "                 'Pos_Signal': [-0.256557435572734, 0.5411037985681082],\n",
+    "                 'EE_12': [-0.3676879520509888, -0.04754907961317867],\n",
+    "                 'EE_5': [-0.2181352416728437, -0.2015320865756482],\n",
+    "                 'EE_15': [-0.5352906801304353, -0.5288715575154177],\n",
+    "                 'Video': [0.6726175830840695, 0.396008366729458],\n",
+    "                 'AvionicsControl': [0.45997843863482324, 0.04522869632581994],\n",
+    "                 'MotorControl': [0.6350063940085445, -0.3013633829278297],\n",
+    "                 'Control': [-0.9857988678463686, 0.07960895587242012],\n",
+    "                 'Comms': [-0.642370284813957, 0.35285736707043763],\n",
+    "                 'OverrideComms': [-0.14607433032593392, 0.2981956996230818]}\n",
+    "        \n",
+    "        self.build_model(fxnflowgraph_pos = pos_bip)\n",
+    "    def find_classification(self,scen,mdlhist):\n",
+    "        modes, modeproperties = self.return_faultmodes()\n",
+    "        classification = str()\n",
+    "        if not in_area(self.flows['Ground'].x,self.flows['Ground'].y,1,self.params['end'][0],self.params['end'][1]):\n",
+    "                                classification = \"incomplete mission\"; cost=500\n",
+    "        if not classification:  classification = 'nominal mission'; cost=0\n",
+    "        if any(modes):          classification = classification +' faulty'; cost+=100\n",
+    "        return {'rate':0,'cost':cost, 'prob':scen.rate, 'expected cost':scen.rate*cost, 'faults':modes, 'classification':classification}"
+   ]
+  },
+  {
+   "attachments": {},
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "Below shows the performance of the rover during a (default) turn with a radius of 20 meters that begins at 20 meters. As shown, there is a significant amount of drift, but not enough for the rover to get lost (that would take 1 meter of drift)."
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 5,
+   "metadata": {
+    "execution": {
+     "iopub.execute_input": "2023-07-20T21:28:03.212539Z",
+     "iopub.status.busy": "2023-07-20T21:28:03.212539Z",
+     "iopub.status.idle": "2023-07-20T21:28:04.068206Z",
+     "shell.execute_reply": "2023-07-20T21:28:04.068206Z"
+    }
+   },
+   "outputs": [
+    {
+     "ename": "Exception",
+     "evalue": "Invalid args/kwargs: () , {'times': [0, 60], 'tstep': 1, 'phases': {'start': [1, 30], 'end': [31, 60]}} in <class 'fmdtools.define.parameter.Parameter'>",
+     "output_type": "error",
+     "traceback": [
+      "\u001b[1;31m---------------------------------------------------------------------------\u001b[0m",
+      "\u001b[1;31mTypeError\u001b[0m                                 Traceback (most recent call last)",
+      "File \u001b[1;32mc:\\users\\dhulse\\documents\\github\\fmdtools\\fmdtools\\define\\parameter.py:58\u001b[0m, in \u001b[0;36mParameter.__init__\u001b[1;34m(self, strict_immutability, check_type, check_pickle, *args, **kwargs)\u001b[0m\n\u001b[0;32m     57\u001b[0m \u001b[38;5;28;01mtry\u001b[39;00m:\n\u001b[1;32m---> 58\u001b[0m     \u001b[38;5;28msuper\u001b[39m()\u001b[38;5;241m.\u001b[39m\u001b[38;5;21m__init__\u001b[39m(\u001b[38;5;241m*\u001b[39margs, \u001b[38;5;241m*\u001b[39m\u001b[38;5;241m*\u001b[39mkwargs)\n\u001b[0;32m     59\u001b[0m \u001b[38;5;28;01mexcept\u001b[39;00m \u001b[38;5;167;01mTypeError\u001b[39;00m:\n",
+      "\u001b[1;31mTypeError\u001b[0m: Invalid kwarg",
+      "\nDuring handling of the above exception, another exception occurred:\n",
+      "\u001b[1;31mException\u001b[0m                                 Traceback (most recent call last)",
+      "Cell \u001b[1;32mIn[5], line 1\u001b[0m\n\u001b[1;32m----> 1\u001b[0m mdl \u001b[38;5;241m=\u001b[39m \u001b[43mRover\u001b[49m\u001b[43m(\u001b[49m\u001b[43mparams\u001b[49m\u001b[38;5;241;43m=\u001b[39;49m\u001b[43mgen_params\u001b[49m\u001b[43m(\u001b[49m\u001b[38;5;124;43m'\u001b[39;49m\u001b[38;5;124;43mturn\u001b[39;49m\u001b[38;5;124;43m'\u001b[39;49m\u001b[43m)\u001b[49m\u001b[43m)\u001b[49m\n\u001b[0;32m      2\u001b[0m results, mdlhist \u001b[38;5;241m=\u001b[39m prop\u001b[38;5;241m.\u001b[39mnominal(mdl)\n\u001b[0;32m      3\u001b[0m plot_map(mdl, mdlhist)\n",
+      "Cell \u001b[1;32mIn[4], line 154\u001b[0m, in \u001b[0;36mRover.__init__\u001b[1;34m(self, params, modelparams, valparams)\u001b[0m\n\u001b[0;32m    151\u001b[0m \u001b[38;5;28;01mdef\u001b[39;00m \u001b[38;5;21m__init__\u001b[39m(\u001b[38;5;28mself\u001b[39m, params\u001b[38;5;241m=\u001b[39mgen_params(\u001b[38;5;124m'\u001b[39m\u001b[38;5;124mturn\u001b[39m\u001b[38;5;124m'\u001b[39m),\\\n\u001b[0;32m    152\u001b[0m              modelparams\u001b[38;5;241m=\u001b[39m{\u001b[38;5;124m'\u001b[39m\u001b[38;5;124mtimes\u001b[39m\u001b[38;5;124m'\u001b[39m:[\u001b[38;5;241m0\u001b[39m,\u001b[38;5;241m60\u001b[39m], \u001b[38;5;124m'\u001b[39m\u001b[38;5;124mtstep\u001b[39m\u001b[38;5;124m'\u001b[39m:\u001b[38;5;241m1\u001b[39m, \u001b[38;5;124m'\u001b[39m\u001b[38;5;124mphases\u001b[39m\u001b[38;5;124m'\u001b[39m:{\u001b[38;5;124m'\u001b[39m\u001b[38;5;124mstart\u001b[39m\u001b[38;5;124m'\u001b[39m:[\u001b[38;5;241m1\u001b[39m,\u001b[38;5;241m30\u001b[39m], \u001b[38;5;124m'\u001b[39m\u001b[38;5;124mend\u001b[39m\u001b[38;5;124m'\u001b[39m:[\u001b[38;5;241m31\u001b[39m, \u001b[38;5;241m60\u001b[39m]}},\\\n\u001b[0;32m    153\u001b[0m                  valparams\u001b[38;5;241m=\u001b[39m{}):\n\u001b[1;32m--> 154\u001b[0m     \u001b[38;5;28;43msuper\u001b[39;49m\u001b[43m(\u001b[49m\u001b[43m)\u001b[49m\u001b[38;5;241;43m.\u001b[39;49m\u001b[38;5;21;43m__init__\u001b[39;49m\u001b[43m(\u001b[49m\u001b[43mparams\u001b[49m\u001b[43m,\u001b[49m\u001b[43m \u001b[49m\u001b[43mmodelparams\u001b[49m\u001b[43m,\u001b[49m\u001b[43m \u001b[49m\u001b[43mvalparams\u001b[49m\u001b[43m)\u001b[49m\n\u001b[0;32m    156\u001b[0m     \u001b[38;5;28mself\u001b[39m\u001b[38;5;241m.\u001b[39madd_flow(\u001b[38;5;124m'\u001b[39m\u001b[38;5;124mGround\u001b[39m\u001b[38;5;124m'\u001b[39m, {\u001b[38;5;124m'\u001b[39m\u001b[38;5;124mx\u001b[39m\u001b[38;5;124m'\u001b[39m:\u001b[38;5;241m0.0\u001b[39m,\u001b[38;5;124m'\u001b[39m\u001b[38;5;124my\u001b[39m\u001b[38;5;124m'\u001b[39m:\u001b[38;5;241m0.0\u001b[39m,\u001b[38;5;124m'\u001b[39m\u001b[38;5;124mliney\u001b[39m\u001b[38;5;124m'\u001b[39m:\u001b[38;5;241m0.0\u001b[39m,\u001b[38;5;124m'\u001b[39m\u001b[38;5;124mlinex\u001b[39m\u001b[38;5;124m'\u001b[39m:\u001b[38;5;241m0.0\u001b[39m, \u001b[38;5;124m'\u001b[39m\u001b[38;5;124mvel\u001b[39m\u001b[38;5;124m'\u001b[39m:\u001b[38;5;241m0.0\u001b[39m, \u001b[38;5;124m'\u001b[39m\u001b[38;5;124mline\u001b[39m\u001b[38;5;124m'\u001b[39m:\u001b[38;5;241m0.0\u001b[39m, \u001b[38;5;124m'\u001b[39m\u001b[38;5;124mangle\u001b[39m\u001b[38;5;124m'\u001b[39m:params[\u001b[38;5;124m'\u001b[39m\u001b[38;5;124minitangle\u001b[39m\u001b[38;5;124m'\u001b[39m], \u001b[38;5;124m'\u001b[39m\u001b[38;5;124mang\u001b[39m\u001b[38;5;124m'\u001b[39m:\u001b[38;5;241m0.0\u001b[39m})\n\u001b[0;32m    157\u001b[0m     \u001b[38;5;28mself\u001b[39m\u001b[38;5;241m.\u001b[39madd_flow(\u001b[38;5;124m'\u001b[39m\u001b[38;5;124mPos_Signal\u001b[39m\u001b[38;5;124m'\u001b[39m, {\u001b[38;5;124m'\u001b[39m\u001b[38;5;124mx\u001b[39m\u001b[38;5;124m'\u001b[39m:\u001b[38;5;241m0.0\u001b[39m,\u001b[38;5;124m'\u001b[39m\u001b[38;5;124my\u001b[39m\u001b[38;5;124m'\u001b[39m:\u001b[38;5;241m0.0\u001b[39m,\u001b[38;5;124m'\u001b[39m\u001b[38;5;124mliney\u001b[39m\u001b[38;5;124m'\u001b[39m:\u001b[38;5;241m0.0\u001b[39m,\u001b[38;5;124m'\u001b[39m\u001b[38;5;124mlinex\u001b[39m\u001b[38;5;124m'\u001b[39m:\u001b[38;5;241m0.0\u001b[39m, \u001b[38;5;124m'\u001b[39m\u001b[38;5;124mheading\u001b[39m\u001b[38;5;124m'\u001b[39m:\u001b[38;5;241m0.0\u001b[39m, \u001b[38;5;124m'\u001b[39m\u001b[38;5;124mvel\u001b[39m\u001b[38;5;124m'\u001b[39m:\u001b[38;5;241m0.0\u001b[39m, \u001b[38;5;124m'\u001b[39m\u001b[38;5;124mline\u001b[39m\u001b[38;5;124m'\u001b[39m:\u001b[38;5;241m0\u001b[39m, \u001b[38;5;124m'\u001b[39m\u001b[38;5;124mangle\u001b[39m\u001b[38;5;124m'\u001b[39m:\u001b[38;5;241m0.0\u001b[39m})\n",
+      "File \u001b[1;32mc:\\users\\dhulse\\documents\\github\\fmdtools\\fmdtools\\define\\model.py:53\u001b[0m, in \u001b[0;36mModel.__init__\u001b[1;34m(self, name, p, sp, r, track)\u001b[0m\n\u001b[0;32m     52\u001b[0m \u001b[38;5;28;01mdef\u001b[39;00m \u001b[38;5;21m__init__\u001b[39m(\u001b[38;5;28mself\u001b[39m, name\u001b[38;5;241m=\u001b[39m\u001b[38;5;124m'\u001b[39m\u001b[38;5;124m'\u001b[39m, p\u001b[38;5;241m=\u001b[39m{}, sp\u001b[38;5;241m=\u001b[39m{}, r\u001b[38;5;241m=\u001b[39m{}, track\u001b[38;5;241m=\u001b[39m\u001b[38;5;124m'\u001b[39m\u001b[38;5;124m'\u001b[39m):\n\u001b[1;32m---> 53\u001b[0m     \u001b[38;5;28;43msuper\u001b[39;49m\u001b[43m(\u001b[49m\u001b[43m)\u001b[49m\u001b[38;5;241;43m.\u001b[39;49m\u001b[38;5;21;43m__init__\u001b[39;49m\u001b[43m(\u001b[49m\u001b[43mname\u001b[49m\u001b[38;5;241;43m=\u001b[39;49m\u001b[43mname\u001b[49m\u001b[43m,\u001b[49m\u001b[43m \u001b[49m\u001b[43mp\u001b[49m\u001b[38;5;241;43m=\u001b[39;49m\u001b[43mp\u001b[49m\u001b[43m,\u001b[49m\u001b[43m \u001b[49m\u001b[43msp\u001b[49m\u001b[38;5;241;43m=\u001b[39;49m\u001b[43msp\u001b[49m\u001b[43m,\u001b[49m\u001b[43m \u001b[49m\u001b[43mr\u001b[49m\u001b[38;5;241;43m=\u001b[39;49m\u001b[43mr\u001b[49m\u001b[43m,\u001b[49m\u001b[43m \u001b[49m\u001b[43mtrack\u001b[49m\u001b[38;5;241;43m=\u001b[39;49m\u001b[43mtrack\u001b[49m\u001b[43m)\u001b[49m\n\u001b[0;32m     55\u001b[0m     \u001b[38;5;28mself\u001b[39m\u001b[38;5;241m.\u001b[39mfxns\u001b[38;5;241m=\u001b[39m\u001b[38;5;28mdict\u001b[39m()\n\u001b[0;32m     56\u001b[0m     \u001b[38;5;28mself\u001b[39m\u001b[38;5;241m.\u001b[39mfunctionorder\u001b[38;5;241m=\u001b[39mOrderedSet() \u001b[38;5;66;03m#set is ordered and executed in the order specified in the model\u001b[39;00m\n",
+      "File \u001b[1;32mc:\\users\\dhulse\\documents\\github\\fmdtools\\fmdtools\\define\\block.py:133\u001b[0m, in \u001b[0;36mSimulable.__init__\u001b[1;34m(self, name, p, sp, r, track)\u001b[0m\n\u001b[0;32m    131\u001b[0m \u001b[38;5;28;01mif\u001b[39;00m \u001b[38;5;129;01mnot\u001b[39;00m sp:\n\u001b[0;32m    132\u001b[0m     sp \u001b[38;5;241m=\u001b[39m \u001b[38;5;28mself\u001b[39m\u001b[38;5;241m.\u001b[39mdefault_sp\n\u001b[1;32m--> 133\u001b[0m \u001b[43minit_obj_attr\u001b[49m\u001b[43m(\u001b[49m\u001b[38;5;28;43mself\u001b[39;49m\u001b[43m,\u001b[49m\u001b[43m \u001b[49m\u001b[43mp\u001b[49m\u001b[38;5;241;43m=\u001b[39;49m\u001b[43mp\u001b[49m\u001b[43m,\u001b[49m\u001b[43m \u001b[49m\u001b[43msp\u001b[49m\u001b[38;5;241;43m=\u001b[39;49m\u001b[43msp\u001b[49m\u001b[43m,\u001b[49m\u001b[43m \u001b[49m\u001b[43mr\u001b[49m\u001b[38;5;241;43m=\u001b[39;49m\u001b[43mr\u001b[49m\u001b[43m)\u001b[49m\n",
+      "File \u001b[1;32mc:\\users\\dhulse\\documents\\github\\fmdtools\\fmdtools\\define\\common.py:191\u001b[0m, in \u001b[0;36minit_obj_attr\u001b[1;34m(obj, **attrs)\u001b[0m\n\u001b[0;32m    189\u001b[0m \u001b[38;5;28msetattr\u001b[39m(obj, \u001b[38;5;124m'\u001b[39m\u001b[38;5;124m_args_\u001b[39m\u001b[38;5;124m'\u001b[39m\u001b[38;5;241m+\u001b[39mat, at_arg)\n\u001b[0;32m    190\u001b[0m init_at \u001b[38;5;241m=\u001b[39m \u001b[38;5;28mgetattr\u001b[39m(obj, \u001b[38;5;124m'\u001b[39m\u001b[38;5;124m_init_\u001b[39m\u001b[38;5;124m'\u001b[39m\u001b[38;5;241m+\u001b[39mat)\n\u001b[1;32m--> 191\u001b[0m \u001b[38;5;28msetattr\u001b[39m(obj, at, init_at(\u001b[38;5;241m*\u001b[39m\u001b[38;5;241m*\u001b[39mat_arg))\n",
+      "File \u001b[1;32mc:\\users\\dhulse\\documents\\github\\fmdtools\\fmdtools\\define\\parameter.py:60\u001b[0m, in \u001b[0;36mParameter.__init__\u001b[1;34m(self, strict_immutability, check_type, check_pickle, *args, **kwargs)\u001b[0m\n\u001b[0;32m     58\u001b[0m     \u001b[38;5;28msuper\u001b[39m()\u001b[38;5;241m.\u001b[39m\u001b[38;5;21m__init__\u001b[39m(\u001b[38;5;241m*\u001b[39margs, \u001b[38;5;241m*\u001b[39m\u001b[38;5;241m*\u001b[39mkwargs)\n\u001b[0;32m     59\u001b[0m \u001b[38;5;28;01mexcept\u001b[39;00m \u001b[38;5;167;01mTypeError\u001b[39;00m:\n\u001b[1;32m---> 60\u001b[0m     \u001b[38;5;28;01mraise\u001b[39;00m \u001b[38;5;167;01mException\u001b[39;00m(\u001b[38;5;124m\"\u001b[39m\u001b[38;5;124mInvalid args/kwargs: \u001b[39m\u001b[38;5;124m\"\u001b[39m\u001b[38;5;241m+\u001b[39m\u001b[38;5;28mstr\u001b[39m(args)\u001b[38;5;241m+\u001b[39m\u001b[38;5;124m\"\u001b[39m\u001b[38;5;124m , \u001b[39m\u001b[38;5;124m\"\u001b[39m \u001b[38;5;241m+\u001b[39m\n\u001b[0;32m     61\u001b[0m                     \u001b[38;5;28mstr\u001b[39m(kwargs)\u001b[38;5;241m+\u001b[39m\u001b[38;5;124m\"\u001b[39m\u001b[38;5;124m in \u001b[39m\u001b[38;5;124m\"\u001b[39m\u001b[38;5;241m+\u001b[39m\u001b[38;5;28mstr\u001b[39m(\u001b[38;5;28mself\u001b[39m\u001b[38;5;241m.\u001b[39m\u001b[38;5;18m__class__\u001b[39m))\n\u001b[0;32m     62\u001b[0m \u001b[38;5;28;01mif\u001b[39;00m strict_immutability:\n\u001b[0;32m     63\u001b[0m     \u001b[38;5;28mself\u001b[39m\u001b[38;5;241m.\u001b[39mcheck_immutable()\n",
+      "\u001b[1;31mException\u001b[0m: Invalid args/kwargs: () , {'times': [0, 60], 'tstep': 1, 'phases': {'start': [1, 30], 'end': [31, 60]}} in <class 'fmdtools.define.parameter.Parameter'>"
+     ]
+    }
+   ],
+   "source": [
+    "mdl = Rover(params=gen_params('turn'))\n",
     "results, mdlhist = prop.nominal(mdl)\n",
     "plot_map(mdl, mdlhist)"
    ]
@@ -173,24 +415,16 @@
    "cell_type": "markdown",
    "metadata": {},
    "source": [
-    "Below shows the performance of the model over a sine wave. As shown, similar to the turn line type, the drift small enough to where the rover completes its mission within acceptable bounds."
+    "Below shows the performance of the model over a sine wave. As shown, the drift is much smaller because the turns are much less pronounced (a movement of 0.2 meters over 25 meters). "
    ]
   },
   {
    "cell_type": "code",
-   "execution_count": 4,
-   "metadata": {
-    "execution": {
-     "iopub.execute_input": "2023-08-11T03:12:59.817728Z",
-     "iopub.status.busy": "2023-08-11T03:12:59.817728Z",
-     "iopub.status.idle": "2023-08-11T03:13:00.097996Z",
-     "shell.execute_reply": "2023-08-11T03:13:00.097996Z"
-    }
-   },
+   "execution_count": 6,
+   "metadata": {},
    "outputs": [],
    "source": [
-    "p = RoverParam(linetype=\"sine\")\n",
-    "mdl = Rover(p=p)\n",
+    "mdl = Rover(params=gen_params('sine'))\n",
     "results, mdlhist = prop.nominal(mdl)\n",
     "plot_map(mdl, mdlhist)"
    ]
@@ -205,15 +439,8 @@
   },
   {
    "cell_type": "code",
-   "execution_count": 5,
-   "metadata": {
-    "execution": {
-     "iopub.execute_input": "2023-08-11T03:13:00.097996Z",
-     "iopub.status.busy": "2023-08-11T03:13:00.097996Z",
-     "iopub.status.idle": "2023-08-11T03:13:00.113613Z",
-     "shell.execute_reply": "2023-08-11T03:13:00.113613Z"
-    }
-   },
+   "execution_count": 7,
+   "metadata": {},
    "outputs": [],
    "source": [
     "from fmdtools.sim.approach import NominalApproach"
@@ -221,15 +448,8 @@
   },
   {
    "cell_type": "code",
-   "execution_count": 6,
-   "metadata": {
-    "execution": {
-     "iopub.execute_input": "2023-08-11T03:13:00.113613Z",
-     "iopub.status.busy": "2023-08-11T03:13:00.113613Z",
-     "iopub.status.idle": "2023-08-11T03:13:00.129235Z",
-     "shell.execute_reply": "2023-08-11T03:13:00.129235Z"
-    }
-   },
+   "execution_count": 8,
+   "metadata": {},
    "outputs": [],
    "source": [
     "help(NominalApproach)"
@@ -247,15 +467,8 @@
   },
   {
    "cell_type": "code",
-   "execution_count": 7,
-   "metadata": {
-    "execution": {
-     "iopub.execute_input": "2023-08-11T03:13:00.129235Z",
-     "iopub.status.busy": "2023-08-11T03:13:00.129235Z",
-     "iopub.status.idle": "2023-08-11T03:13:00.151272Z",
-     "shell.execute_reply": "2023-08-11T03:13:00.151272Z"
-    }
-   },
+   "execution_count": 9,
+   "metadata": {},
    "outputs": [],
    "source": [
     "nomapp = NominalApproach()\n",
@@ -264,19 +477,12 @@
   },
   {
    "cell_type": "code",
-   "execution_count": 8,
-   "metadata": {
-    "execution": {
-     "iopub.execute_input": "2023-08-11T03:13:00.151272Z",
-     "iopub.status.busy": "2023-08-11T03:13:00.151272Z",
-     "iopub.status.idle": "2023-08-11T03:13:00.182631Z",
-     "shell.execute_reply": "2023-08-11T03:13:00.182631Z"
-    }
-   },
+   "execution_count": 10,
+   "metadata": {},
    "outputs": [],
    "source": [
-    "nomapp.add_param_ranges(RoverParam,'sine', linetype='sine', amp=(0, 10, 0.2), wavelength=(10.0,50.0,10.0))\n",
-    "nomapp.add_param_ranges(RoverParam,'turn', linetype='turn', radius=(5.0,40.0,5.0), start=(0.0, 20.0,5.0))"
+    "nomapp.add_param_ranges(gen_params,'sine','sine', amp=(0, 10, 0.2), wavelength=(10,50,10))\n",
+    "nomapp.add_param_ranges(gen_params,'turn','turn', radius=(5,40,5), start=(0, 20,5))"
    ]
   },
   {
@@ -284,22 +490,15 @@
    "cell_type": "markdown",
    "metadata": {},
    "source": [
-    "Notice that `RoverParam` is the class that generatse the nominal parameters of the model, `linetype = 'sine'` is a fixed parameter defining a discrete case of scenarios, and `amp` and `wavelenth` are parameters that are varied (the given tuples define the respective ranges).\n",
+    "Notice that `gen_params` is the handle of the method defined earlier to generate the nominal parameters of the model, `sine` is a fixed parameter defining a discrete case of scenarios, and `amp` and `wavelenth` are parameters that are varied (the given tuples define the respective ranges).\n",
     "\n",
     "The result is a defined set of scenarios which can be run in the model:"
    ]
   },
   {
    "cell_type": "code",
-   "execution_count": 9,
-   "metadata": {
-    "execution": {
-     "iopub.execute_input": "2023-08-11T03:13:00.182631Z",
-     "iopub.status.busy": "2023-08-11T03:13:00.182631Z",
-     "iopub.status.idle": "2023-08-11T03:13:00.213712Z",
-     "shell.execute_reply": "2023-08-11T03:13:00.213712Z"
-    }
-   },
+   "execution_count": 11,
+   "metadata": {},
    "outputs": [],
    "source": [
     "nomapp.scenarios"
@@ -315,15 +514,8 @@
   },
   {
    "cell_type": "code",
-   "execution_count": 10,
-   "metadata": {
-    "execution": {
-     "iopub.execute_input": "2023-08-11T03:13:00.213712Z",
-     "iopub.status.busy": "2023-08-11T03:13:00.213712Z",
-     "iopub.status.idle": "2023-08-11T03:13:00.229490Z",
-     "shell.execute_reply": "2023-08-11T03:13:00.229490Z"
-    }
-   },
+   "execution_count": 12,
+   "metadata": {},
    "outputs": [],
    "source": [
     "help(prop.nominal_approach)"
@@ -331,15 +523,8 @@
   },
   {
    "cell_type": "code",
-   "execution_count": 11,
-   "metadata": {
-    "execution": {
-     "iopub.execute_input": "2023-08-11T03:13:00.229490Z",
-     "iopub.status.busy": "2023-08-11T03:13:00.229490Z",
-     "iopub.status.idle": "2023-08-11T03:13:13.253198Z",
-     "shell.execute_reply": "2023-08-11T03:13:13.253198Z"
-    }
-   },
+   "execution_count": 13,
+   "metadata": {},
    "outputs": [],
    "source": [
     "endclasses, mdlhists= prop.nominal_approach(mdl, nomapp)"
@@ -365,15 +550,8 @@
   },
   {
    "cell_type": "code",
-   "execution_count": 12,
-   "metadata": {
-    "execution": {
-     "iopub.execute_input": "2023-08-11T03:13:13.253198Z",
-     "iopub.status.busy": "2023-08-11T03:13:13.253198Z",
-     "iopub.status.idle": "2023-08-11T03:13:13.269081Z",
-     "shell.execute_reply": "2023-08-11T03:13:13.269081Z"
-    }
-   },
+   "execution_count": 14,
+   "metadata": {},
    "outputs": [],
    "source": [
     "help(an.plot.nominal_vals_2d)"
@@ -389,18 +567,11 @@
   },
   {
    "cell_type": "code",
-   "execution_count": 13,
-   "metadata": {
-    "execution": {
-     "iopub.execute_input": "2023-08-11T03:13:13.269081Z",
-     "iopub.status.busy": "2023-08-11T03:13:13.269081Z",
-     "iopub.status.idle": "2023-08-11T03:13:13.685434Z",
-     "shell.execute_reply": "2023-08-11T03:13:13.685434Z"
-    }
-   },
+   "execution_count": 15,
+   "metadata": {},
    "outputs": [],
    "source": [
-    "fig = an.plot.nominal_vals_2d(nomapp, endclasses, 'inputparams.amp', 'inputparams.wavelength', metric = 'at_finish')"
+    "fig = an.plot.nominal_vals_2d(nomapp, endclasses, 'amp', 'wavelength')"
    ]
   },
   {
@@ -413,18 +584,11 @@
   },
   {
    "cell_type": "code",
-   "execution_count": 14,
-   "metadata": {
-    "execution": {
-     "iopub.execute_input": "2023-08-11T03:13:13.685434Z",
-     "iopub.status.busy": "2023-08-11T03:13:13.685434Z",
-     "iopub.status.idle": "2023-08-11T03:13:14.101963Z",
-     "shell.execute_reply": "2023-08-11T03:13:14.101963Z"
-    }
-   },
+   "execution_count": 16,
+   "metadata": {},
    "outputs": [],
    "source": [
-    "fig = an.plot.nominal_vals_2d(nomapp, endclasses, 'inputparams.radius', 'inputparams.start', metric = 'at_finish')"
+    "fig = an.plot.nominal_vals_2d(nomapp, endclasses, 'radius', 'start')"
    ]
   },
   {
@@ -437,18 +601,11 @@
   },
   {
    "cell_type": "code",
-   "execution_count": 15,
-   "metadata": {
-    "execution": {
-     "iopub.execute_input": "2023-08-11T03:13:14.101963Z",
-     "iopub.status.busy": "2023-08-11T03:13:14.101963Z",
-     "iopub.status.idle": "2023-08-11T03:13:14.487459Z",
-     "shell.execute_reply": "2023-08-11T03:13:14.487459Z"
-    }
-   },
+   "execution_count": 17,
+   "metadata": {},
    "outputs": [],
    "source": [
-    "fig = an.plot.nominal_vals_1d(nomapp, endclasses, 'inputparams.radius', metric = 'at_finish')"
+    "fig = an.plot.nominal_vals_1d(nomapp, endclasses, 'radius')"
    ]
   },
   {
@@ -461,15 +618,8 @@
   },
   {
    "cell_type": "code",
-   "execution_count": 16,
-   "metadata": {
-    "execution": {
-     "iopub.execute_input": "2023-08-11T03:13:14.487459Z",
-     "iopub.status.busy": "2023-08-11T03:13:14.487459Z",
-     "iopub.status.idle": "2023-08-11T03:13:14.503053Z",
-     "shell.execute_reply": "2023-08-11T03:13:14.503053Z"
-    }
-   },
+   "execution_count": 18,
+   "metadata": {},
    "outputs": [],
    "source": [
     "help(an.tabulate.nominal_factor_comparison)"
@@ -477,39 +627,16 @@
   },
   {
    "cell_type": "code",
-   "execution_count": 17,
-   "metadata": {
-    "execution": {
-     "iopub.execute_input": "2023-08-11T03:13:14.503053Z",
-     "iopub.status.busy": "2023-08-11T03:13:14.503053Z",
-     "iopub.status.idle": "2023-08-11T03:13:14.518772Z",
-     "shell.execute_reply": "2023-08-11T03:13:14.518772Z"
-    }
-   },
+   "execution_count": 19,
+   "metadata": {},
    "outputs": [],
    "source": [
-    "endclasses.state_probabilities()"
+    "nomtab = an.tabulate.nominal_factor_comparison(nomapp, endclasses, ['radius', 'start'], rangeid='turn', percent=False)"
    ]
   },
   {
    "cell_type": "code",
-   "execution_count": 18,
-   "metadata": {
-    "execution": {
-     "iopub.execute_input": "2023-08-11T03:13:14.518772Z",
-     "iopub.status.busy": "2023-08-11T03:13:14.518772Z",
-     "iopub.status.idle": "2023-08-11T03:13:15.079343Z",
-     "shell.execute_reply": "2023-08-11T03:13:15.079343Z"
-    }
-   },
-   "outputs": [],
-   "source": [
-    "nomtab = an.tabulate.nominal_factor_comparison(nomapp, endclasses, ['inputparams.radius', 'inputparams.start'], rangeid='turn', percent=False)"
-   ]
-  },
-  {
-   "cell_type": "code",
-   "execution_count": null,
+   "execution_count": 20,
    "metadata": {},
    "outputs": [],
    "source": [
@@ -526,7 +653,7 @@
   },
   {
    "cell_type": "code",
-   "execution_count": null,
+   "execution_count": 21,
    "metadata": {},
    "outputs": [],
    "source": [
@@ -544,7 +671,7 @@
   },
   {
    "cell_type": "code",
-   "execution_count": null,
+   "execution_count": 22,
    "metadata": {},
    "outputs": [],
    "source": [
@@ -553,7 +680,7 @@
   },
   {
    "cell_type": "code",
-   "execution_count": null,
+   "execution_count": 23,
    "metadata": {},
    "outputs": [],
    "source": [
@@ -580,11 +707,11 @@
   },
   {
    "cell_type": "code",
-   "execution_count": 19,
+   "execution_count": 24,
    "metadata": {},
    "outputs": [],
    "source": [
-    "state_probabilities = endclasses.state_probabilities()\n",
+    "state_probabilities = an.process.state_probabilities(endclasses)\n",
     "state_probabilities"
    ]
   },
@@ -601,7 +728,7 @@
   },
   {
    "cell_type": "code",
-   "execution_count": 20,
+   "execution_count": 25,
    "metadata": {},
    "outputs": [],
    "source": [
@@ -618,7 +745,7 @@
   },
   {
    "cell_type": "code",
-   "execution_count": 21,
+   "execution_count": 26,
    "metadata": {},
    "outputs": [],
    "source": [
@@ -627,7 +754,7 @@
   },
   {
    "cell_type": "code",
-   "execution_count": 22,
+   "execution_count": 27,
    "metadata": {},
    "outputs": [],
    "source": [
@@ -645,7 +772,7 @@
   },
   {
    "cell_type": "code",
-   "execution_count": 23,
+   "execution_count": 28,
    "metadata": {},
    "outputs": [],
    "source": [
@@ -654,11 +781,11 @@
   },
   {
    "cell_type": "code",
-   "execution_count": 24,
+   "execution_count": 29,
    "metadata": {},
    "outputs": [],
    "source": [
-    "state_probabilities = endclasses.state_probabilities()\n",
+    "state_probabilities = an.process.state_probabilities(endclasses)\n",
     "state_probabilities"
    ]
   },
@@ -682,7 +809,7 @@
   },
   {
    "cell_type": "code",
-   "execution_count": 25,
+   "execution_count": 30,
    "metadata": {},
    "outputs": [],
    "source": [
@@ -700,7 +827,7 @@
   },
   {
    "cell_type": "code",
-   "execution_count": null,
+   "execution_count": 31,
    "metadata": {},
    "outputs": [],
    "source": [
@@ -709,12 +836,12 @@
   },
   {
    "cell_type": "code",
-   "execution_count": null,
+   "execution_count": 32,
    "metadata": {},
    "outputs": [],
    "source": [
-    "nomapp_rand.add_rand_params(RoverParam,'sine', 'sine', prob_weight=0.5, replicates=100, amp=(np.random.uniform, 0, 10), wavelength=(np.random.uniform,10,40))\n",
-    "nomapp_rand.add_rand_params(RoverParam,'turn', 'turn', prob_weight=0.5, replicates=100, radius=(np.random.uniform,5,40), start=(np.random.uniform,0, 20))"
+    "nomapp_rand.add_rand_params(gen_params,'sine','sine', prob_weight=0.5, replicates=100, amp=(np.random.uniform, 0, 10), wavelength=(np.random.uniform,10,40))\n",
+    "nomapp_rand.add_rand_params(gen_params,'turn','turn', prob_weight=0.5, replicates=100, radius=(np.random.uniform,5,40), start=(np.random.uniform,0, 20))"
    ]
   },
   {
@@ -727,7 +854,7 @@
   },
   {
    "cell_type": "code",
-   "execution_count": null,
+   "execution_count": 33,
    "metadata": {},
    "outputs": [],
    "source": [
@@ -736,29 +863,29 @@
   },
   {
    "cell_type": "code",
-   "execution_count": null,
+   "execution_count": 34,
    "metadata": {},
    "outputs": [],
    "source": [
-    "fig = an.plot.nominal_vals_2d(nomapp_rand, endclasses,'inputparams.amp', 'inputparams.wavelength', metric = 'at_finish')"
+    "fig = an.plot.nominal_vals_2d(nomapp_rand, endclasses, 'amp', 'wavelength')"
    ]
   },
   {
    "cell_type": "code",
-   "execution_count": null,
+   "execution_count": 35,
    "metadata": {},
    "outputs": [],
    "source": [
-    "fig = an.plot.nominal_vals_2d(nomapp_rand, endclasses, 'inputparams.radius', 'inputparams.start', metric = 'at_finish')"
+    "fig = an.plot.nominal_vals_2d(nomapp_rand, endclasses, 'radius', 'start')"
    ]
   },
   {
    "cell_type": "code",
-   "execution_count": null,
+   "execution_count": 36,
    "metadata": {},
    "outputs": [],
    "source": [
-    "fig = an.plot.nominal_vals_1d(nomapp_rand, endclasses, 'inputparams.radius', metric = 'at_finish')"
+    "fig = an.plot.nominal_vals_1d(nomapp_rand, endclasses, 'radius')"
    ]
   },
   {
@@ -771,7 +898,7 @@
   },
   {
    "cell_type": "code",
-   "execution_count": null,
+   "execution_count": 37,
    "metadata": {},
    "outputs": [],
    "source": [
@@ -805,7 +932,7 @@
   },
   {
    "cell_type": "code",
-   "execution_count": null,
+   "execution_count": 38,
    "metadata": {},
    "outputs": [],
    "source": [
@@ -822,7 +949,7 @@
   },
   {
    "cell_type": "code",
-   "execution_count": null,
+   "execution_count": 39,
    "metadata": {},
    "outputs": [],
    "source": [
@@ -839,7 +966,7 @@
   },
   {
    "cell_type": "code",
-   "execution_count": null,
+   "execution_count": 40,
    "metadata": {},
    "outputs": [],
    "source": [
@@ -848,11 +975,11 @@
   },
   {
    "cell_type": "code",
-   "execution_count": null,
+   "execution_count": 41,
    "metadata": {},
    "outputs": [],
    "source": [
-    "nested_endclasses.sine_1.nominal"
+    "nested_endclasses['sine_1']['nominal']"
    ]
   },
   {
@@ -865,7 +992,7 @@
   },
   {
    "cell_type": "code",
-   "execution_count": null,
+   "execution_count": 42,
    "metadata": {},
    "outputs": [],
    "source": [
@@ -874,7 +1001,7 @@
   },
   {
    "cell_type": "code",
-   "execution_count": null,
+   "execution_count": 43,
    "metadata": {},
    "outputs": [],
    "source": [
@@ -891,7 +1018,7 @@
   },
   {
    "cell_type": "code",
-   "execution_count": null,
+   "execution_count": 44,
    "metadata": {},
    "outputs": [],
    "source": [
@@ -900,7 +1027,7 @@
   },
   {
    "cell_type": "code",
-   "execution_count": null,
+   "execution_count": 45,
    "metadata": {},
    "outputs": [],
    "source": [
@@ -924,7 +1051,7 @@
   },
   {
    "cell_type": "code",
-   "execution_count": null,
+   "execution_count": 46,
    "metadata": {},
    "outputs": [],
    "source": [
@@ -933,7 +1060,7 @@
   },
   {
    "cell_type": "code",
-   "execution_count": null,
+   "execution_count": 47,
    "metadata": {},
    "outputs": [],
    "source": [
@@ -943,7 +1070,7 @@
   },
   {
    "cell_type": "code",
-   "execution_count": null,
+   "execution_count": 48,
    "metadata": {},
    "outputs": [],
    "source": [
@@ -982,7 +1109,7 @@
    "name": "python",
    "nbconvert_exporter": "python",
    "pygments_lexer": "ipython3",
-   "version": "3.11.4"
+   "version": "3.10.9"
   }
  },
  "nbformat": 4,
