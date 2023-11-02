@@ -25,7 +25,6 @@ The flows are:
 from fmdtools.define.block import FxnBlock, Mode
 from fmdtools.define.flow import Flow
 from fmdtools.define.model import Model, check_model_pickleability
-from fmdtools.sim.approach import SampleApproach, NominalApproach
 from fmdtools.define.parameter import Parameter
 from fmdtools.define.state import State
 from fmdtools.define.time import Time
@@ -131,17 +130,18 @@ class ImportEEMode(Mode):
     Mode contains the probability model for faults is associated with each function:
         - failrate = X sets the failure rate for the function
         (to be distributed over all modes)
-        - faultparams defines a probability model for each mode, where modes is:
+        - fm_args defines a probability model for each mode, where modes is:
             - {modename: (%of failures, (% at each phase in mdl.phases), repaircosts)
     These failure rates will then be used to generate a list of scenarios for
-    propagate.single_faults and SampleApproach()
+    propagate.single_faults and FaultSample()
 
     Note that these rates are given in occurences/hr by default. To change the units,
     use the option units='sec'/'min'/'hr'/'day' etc.
     """
     failrate = 1e-5
-    faultparams = {'no_v': (0.80, [0, 1, 0], 10000),
-                   'inf_v': (0.20, [0, 1, 0], 5000)}
+    fm_args = {'no_v': (0.80, 10000),
+               'inf_v': (0.20, 5000)}
+    phases = {'start': 0, 'on': 1, 'end': 0}
 
 
 class ImportEEState(State):
@@ -206,8 +206,7 @@ Import Water Classes
 
 class ImportWaterMode(Mode):
     failrate = 1e-5
-    faultparams = {'no_wat': (1.0, [1, 1, 1], 1000)}
-    key_phases_by = 'global'
+    fm_args = {'no_wat': (1.0, 1000)}
 
 
 class ImportWater(FxnBlock):
@@ -232,8 +231,8 @@ Export Water Classes
 
 class ExportWaterMode(Mode):
     failrate = 1e-5
-    faultparams = {'block': (1.0, [1.5, 1.0, 1.0], 5000)}
-    key_phases_by = 'global'
+    fm_args = {'block': (1.0, 5000)}
+    phases = {'start': 1.5, 'on': 1, 'end': 1}
 
 
 class ExportWater(FxnBlock):
@@ -256,8 +255,7 @@ Import Signal Classes
 
 class ImportSigMode(Mode):
     failrate = 1e-6
-    faultparams = {'no_sig': (1.0, [1.5, 1.0, 1.0], 10000)}
-    key_phases_by = 'global'
+    fm_args = {'no_sig': (1.0, 10000, {'start': 1.5, 'on': 1, 'end': 1})}
 
 
 class ImportSig(FxnBlock):
@@ -305,9 +303,8 @@ class MoveWatParams(Parameter, readonly=True):
 
 class MoveWatMode(Mode):
     failrate = 1e-5
-    faultparams = {'mech_break': (0.6, [0.1, 1.2, 0.1], 5000),
-                   'short': (1.0, [1.5, 1.0, 1.0], 10000)}
-    key_phases_by = 'global'
+    fm_args = {'mech_break': (0.6, 5000, {'start': 0.1, 'on': 1.2, 'end': 0.1}),
+               'short': (1.0, 10000, {'start': 1.5, 'on': 1, 'end': 1})}
 
 
 class MoveWat(FxnBlock):
@@ -402,7 +399,7 @@ class Pump(Model):
         values to use in the model.
 
         Note that sp is the SimParam defining the simulation. phases in this dictionary
-        are queues for fault sampling which can be used by SampleApproach
+        are queues for fault sampling which can be used by SampleApproach/FaultSample
 
         We can also chage dt to change the timestep, but note that this can change
         behavior.
@@ -508,10 +505,11 @@ class Pump(Model):
 
 
 if __name__ == "__main__":
+    from fmdtools.sim.sample import SampleApproach, ParameterSample, ParameterDomain
 
     mdl = Pump()
     endclass, mdlhist = propagate.nominal(mdl, track='all')
-    fig, ax = an.plot.hist(mdlhist, 'flows.wat_1.s', 'i.on')
+    fig, ax = mdlhist.plot_line('flows.wat_1.s', 'i.on')
 
     mdl = Pump()
     newhist2 = mdl.create_hist(range(10), 'default')
@@ -565,18 +563,24 @@ if __name__ == "__main__":
     endclass, mdlhist = propagate.one_fault(
         mdl, 'move_water', 'mech_break', time=0, staged=False)
 
-    app = NominalApproach()
-    app.add_seed_replicates('test', 10)
+    pd = ParameterDomain(PumpParam)
+    pd.add_variable("delay")
+    pd.add_constant("cost", ('repair', 'water'))
+    ps = ParameterSample(pd)
+    ps.add_variable_replicates([], replicates=10)
 
     faultapp = SampleApproach(mdl)
+    faultapp.add_faultdomain("testdomain", "all")
+    faultapp.add_faultsample("testsample", "fault_phases", "testdomain",
+                             phasemap=mdl.sp.phases)
 
-    endclasses, mdlhists = propagate.approach(mdl, faultapp)
+    endclasses, mdlhists = propagate.fault_sample(mdl, faultapp)
     flat = mdlhists.flatten()
 
     gh = mdlhists.get_comp_groups('flows.ee_1.s.current')
 
-    endclasses, mdlhists_staged = propagate.approach(
-        mdl, faultapp, staged=True, track='all')
+    endclasses, mdlhists_staged = propagate.fault_sample(mdl, faultapp,
+                                                         staged=True, track='all')
     flat_staged = mdlhists_staged.flatten()
 
     [all(flat[k] == flat_staged[k]) for k in flat]
@@ -615,3 +619,18 @@ if __name__ == "__main__":
     mg = ModelGraph(mdl)
     mg.set_exec_order(mdl)
     mg.draw()
+
+    c = an.tabulate.Comparison(endclasses, faultapp, default_stat=np.mean,
+                               metrics=['cost', 'rate'],
+                               ci_metrics=['cost'])
+    c.as_table()
+    c.sort_by_factor("time")
+    c.as_plot("cost")
+    c.as_plots("cost", "rate")
+
+    fmea = an.tabulate.FMEA(endclasses, faultapp)
+    fmea.as_table()
+    fmea.sort_by_metric("cost")
+    fmea.as_plot("cost", color_factor="function")
+    #t = an.tabulate.factor_metrics(endclasses, faultapp, ci_metrics=['cost'], default_stat=np.mean)
+    #an.plot.factor_metrics(t)

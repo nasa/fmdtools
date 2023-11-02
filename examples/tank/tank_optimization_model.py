@@ -52,10 +52,10 @@ def make_tankparam(*args, **kwargs):
 
 
 class TransportLiquidMode(Mode):
-    faultparams = {'stuck': (1e-5, [1, 0], 0),
-                   'blockage': (1e-5, [1, 0], 0)}
+    fp_args = {'stuck': (1e-5,),
+               'blockage': (1e-5,)}
+    phases = {'na': 1.0}
     units = 'hr'
-    key_phases_by = 'global'
 
 
 class ImportLiquid(FxnBlock):
@@ -230,11 +230,11 @@ if __name__ == "__main__":
     mdl = Tank()
 
     endresults, mdlhist = propagate.nominal(mdl, desired_result=['endclass', 'graph'])
-    an.plot.hist(mdlhist, {'fxns': 'store_coolant'})
+    mdlhist.plot_line({'fxns': 'store_coolant'})
 
     # check faulty run
     result, mdlhist = propagate.one_fault(mdl, 'export_coolant', 'blockage', time=2,
                                           desired_result=['endclass', 'graph'])
 
-    an.plot.hist(mdlhist, {'fxns': 'store_coolant'}, time_slice=2, title='NotVisible')
+    mdlhist.plot_line({'fxns': 'store_coolant'}, time_slice=2, title='NotVisible')
     result.graph.draw(title='NotVisible, time=2')

@@ -41,7 +41,7 @@ In addition to `ex_pump.py`, more use-cases are demonstrated in the derivative m
   
   - Simulating stochastic models using the `run_stochastic` parameter in :mod:`fmdtools.sim.propagate` functions, as well as setting up a :class:`fmdtools.define.NominalApproach` with multiple seeds to run a set of random simulations.
   
-  - Using :func:`fmdtools.analyze.plot.mdlhists()` to visualize the results of multiple stochastic simulations over time, and analyze quantities of interest using :func:`fmdtools.analyze.tabulate.nested_stats()`, :func:`fmdtools.analyze.tabulate.nested_factor_comparison()`
+  - Using :func:`History.plot_line` to visualize the results of multiple stochastic simulations over time, and analyze quantities of interest using :class:`fmdtools.analyze.tabulate.FMEA`, :class:`fmdtools.analyze.tabulate.Comparison()`
 
 - `AST Sampling <../examples/pump/AST_Sampling.ipynb>`_, shows how fmdtools models called from the `AdaSress Julia<https://www.nasa.gov/content/tech/rse/research/adastress>` package to leverage the adaptive stress testing methodology using the :class:`fmdtools.sim.search.DynamicInterface` class.
 
@@ -65,7 +65,7 @@ The multirotor example model has several models of drones modelled at differing 
 
   - The :mod:`fmdtools.analyze.graph` module.
   
-  - Basic simulation of dynamic and static models using methods in :mod:`fmdtools.sim.propagate` and usage of class :class:`fmdtools.define.SampleApproach` for fault sampling
+  - Basic simulation of dynamic and static models using methods in :mod:`fmdtools.sim.propagate` and usage of class :class:`fmdtools.sim.sample.SampleApproach` for fault sampling
   
   - Analysis using Basic analysis/results processing capabilities
  
@@ -96,7 +96,7 @@ Tank
 
 The tank example is a fairly simple model of a tank, inlet valve, and outlet valve. This example is shown in the notebook
 
-- `Hold-up Tank Model <../examples/tank/Tank_Analysis.ipynb>`_ uses the :class:`fmdtools.define.SampleApproach` class to model human interactions with the modelled system (in `tank_model.py`).
+- `Hold-up Tank Model <../examples/tank/Tank_Analysis.ipynb>`_ uses the :class:`fmdtools.sim.sample.SampleApproach` class to model human interactions with the modelled system (in `tank_model.py`).
 
 - `Tank Optimization <../examples/tank/Tank_Optimization.ipynb>`_ shows how design and contingency management of a system (in `tank_optimization_model.py`) can be co-optimized with the :class:`fmdtools.sim.search.ProblemInterface` class, as well as external solvers.
 
@@ -153,19 +153,17 @@ The Rover model showcases more advanced methodologies that can be used in fmdtoo
 
   - Setting up a nominal parameter sampling approach using :class:`fmdtools.define.NominalApproach` and simulating it with :func:`fmdtools.sim.propagate.nominal_approach()` and :func:`fmdtools.sim.propagate.nested_approach()` methods for nominal and faulty simulations.
 
-  - Using analysis functions like :func:`fmdtools.analyze.tabulate.nominal_vals_1d()` and :func:`fmdtools.analyze.plot.nominal_factor_comparison()` to visualize quantities of interest for the simulation over a range of nominal parameters.
-
-  - Using analysis functions like :func:`fmdtools.analyze.tabulate.nested_factor_comparison()` and :func:`fmdtools.analyze.plot.nested_factor_comparison()` to visualize resilience metrics of the model to a set of fault modes over a range of nominal parameters.
+  - Using analysis classes like :func:`fmdtools.analyze.tabulate.NominalEnvelope` and :func:`fmdtools.analyze.tabulate.Comparison` to visualize quantities of interest for the simulation over a range of nominal parameters.
   
 - `Defining Fault Sampling Approaches in fmdtools <../examples/rover/Approach_Use-Cases.ipynb>`_ covers how to set up a fault sampling approach and use it to simulate a large number of hazardous scenarios in a model. This includes:
 
   - Adding fault and operational modes to Model functions using the method :meth:`fmdtools.define.Block.assoc_modes()` and explanation of the `key_phases_by` and `exclusive` options.
   
-  - Using :func:`fmdtools.analyze.result.History.get_modephases()` to setting a :class:`fmdtools.define.SampleApproach` up which samples individual faults based on the phases of the model and/or function defined by their operational modes.
+  - Using :func:`fmdtools.analyze.phases.from_hist` to setting a :class:`fmdtools.sim.sample.SampleApproach` up which samples individual faults based on the phases of the model and/or function defined by their operational modes.
 
-  - Using :func:`fmdtools.analyze.plot.phases()` to visualize the phases and modes of a model over time and :func:`fmdtools.analyze.plot.samplecosts()` to visualize the consequences of each fault scenario in the approach within each phase.
+  - Using :func:`fmdtools.analyze.phases.PhaseMap` to visualize the phases and modes of a model over time and to visualize the consequences of each fault scenario in the approach within each phase.
   
-  - Using the `defaultsamp` option and :meth:`fmdtools.define.SampleApproach.prune_scenarios()` in :class:`fmdtools.define.SampleApproach` to control how many time-steps in each phase are sampled (and when).
+  - Using the `defaultsamp` option to control how many time-steps in each phase are sampled (and when).
 
 - `HFAC Analyses <../examples/rover/HFAC_Analyses.ipynb>`_ and `IDETC_Human_Paper_Analysis <../examples/rover/IDETC_Human_Paper_Analysis.ipynb>`_ showcase fmdtools human factors modelling capabilities (action sequence graphs, performance shaping factors, etc.) in
   

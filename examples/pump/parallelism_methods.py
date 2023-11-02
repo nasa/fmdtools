@@ -5,19 +5,13 @@ Created on Fri Mar 26 12:23:14 2021
 @author: dhulse
 """
 
-from ex_pump import * 
-from fmdtools.sim.approach import SampleApproach
+from ex_pump import Pump, PumpParam
 import fmdtools.sim.propagate as propagate
-import fmdtools.analyze as an
-from fmdtools.define.model import SimParam
 
 import time
-import pickle
 
 import multiprocessing as mp
 import multiprocess as ms
-
-from pathos.pools import ParallelPool, ProcessPool, SerialPool, ThreadPool
 
 
 def delay_test(delays =  [i for i in range(0,100,10)]):
@@ -41,8 +35,8 @@ def compare_pools(mdl, app, pools, staged=False, track=False, verbose= True, tra
     ----------
     mdl : Model
         fmdtools model
-    app : SampleApproach
-        SampleApproach of fault scenarios to simulate the model over using propagate.approach
+    app : FaultSample
+        SampleApproach of fault scenarios to simulate the model over using propagate.fault_sample
     pools : dict
         Dictionary of parallel/process pools {'poolname':pool} to compare. Pools must have a map function.
     staged : bool, optional
@@ -64,16 +58,28 @@ def compare_pools(mdl, app, pools, staged=False, track=False, verbose= True, tra
     """
     exectimes = {}
     starttime = time.time()
-    endclasses, mdlhists = propagate.approach(mdl,app, pool=False, staged = staged, track=track, showprogress=False, track_times=track_times, desired_result={})
+    endclasses, mdlhists = propagate.fault_sample(mdl, app, pool=False, staged=staged,
+                                                  track=track, showprogress=False,
+                                                  track_times=track_times,
+                                                  desired_result={})
     exectime_single = time.time() - starttime
-    if verbose: print("single-thread exec time: "+str(exectime_single))
+    if verbose:
+        print("single-thread exec time: "+str(exectime_single))
     exectimes['single'] = exectime_single
-    
+
     for pool in pools:
         starttime = time.time()
-        endclasses, mdlhists = propagate.approach(mdl,app, pool=pools[pool], staged = staged, track=track, showprogress=False, track_times=track_times, desired_result={})
+        loc_kwargs = dict(pool=pools[pool],
+                          staged=staged,
+                          track=track,
+                          showprogress=False,
+                          track_times=track_times,
+                          desired_result={},
+                          close_pool=False)
+        endclasses, mdlhists = propagate.fault_sample(mdl, app, **loc_kwargs)
         exectime_par = time.time() - starttime
-        if verbose: print(pool+" exec time: "+str(exectime_par))
+        if verbose:
+            print(pool+" exec time: "+str(exectime_par))
         exectimes[pool] = exectime_par
     return exectimes
 
@@ -114,31 +120,40 @@ def parallel_mc3():
 def instantiate_pools(cores):
     """Used to instantiate multiprocessing pools for comparison"""
     from pathos.pools import ParallelPool, ProcessPool, SerialPool, ThreadPool
-    return  {'multiprocessing':mp.Pool(cores), 'ProcessPool':ProcessPool(nodes=cores), 'ParallelPool': ParallelPool(nodes=cores), 'ThreadPool':ThreadPool(nodes=cores), 'multiprocess':ms.Pool(cores)} #, 'Ray': RayPool(cores) }
+    return {'multiprocessing': mp.Pool(cores),
+            'ProcessPool': ProcessPool(nodes=cores),
+            'ParallelPool': ParallelPool(nodes=cores),
+            'ThreadPool': ThreadPool(nodes=cores),
+            'multiprocess': ms.Pool(cores)}
 
 
 if __name__=='__main__':
     mdl=Pump(sp = dict(phases=(('start',0,4),('on',5, 49),('end',50,500)),times=(0,20, 500)))
-    app = SampleApproach(mdl,jointfaults={'faults':1},defaultsamp={'samp':'evenspacing','numpts':3})
-    
+    from fmdtools.sim.sample import FaultDomain, FaultSample
+    fd = FaultDomain(mdl)
+    fd.add_all()
+    fs = FaultSample(fd)
+    fs.add_fault_phases(phase_args=(3,))
+
     cores = 4
     pools = instantiate_pools(cores)
-    
-    print("STAGED + FULL MODEL TRACKING")
-    compare_pools(mdl,app,pools, staged=True, track='all')
-    
-    print("STAGED + SOME TRACKING")
-    
-    compare_pools(mdl,app,pools, staged=True, track={'flows':{'EE_1':'all', 'Wat_2':['pressure', 'flowrate']}})
 
-    
+    print("STAGED + FULL MODEL TRACKING")
+    compare_pools(mdl, fs, pools, staged=True, track='all')
+
+    print("STAGED + SOME TRACKING")
+
+    compare_pools(mdl, fs, pools, staged=True,
+                  track={'flows': {'EE_1': 'all', 'Wat_2': ['pressure', 'flowrate']}})
+
+
 
     print("STAGED + FLOW TRACKING")
-    compare_pools(mdl,app,pools, staged=True, track='flows')
+    compare_pools(mdl, fs, pools, staged=True, track='flows')
 
     print("STAGED + FUNCTION TRACKING")
-    compare_pools(mdl,app,pools, staged=True, track='fxns')
+    compare_pools(mdl, fs, pools, staged=True, track='fxns')
 
     print("STAGED + NO TRACKING")
-    compare_pools(mdl,app,pools, staged=True, track='none')
+    compare_pools(mdl, fs, pools, staged=True, track='none')
     for pool in pools.values(): pool.terminate()

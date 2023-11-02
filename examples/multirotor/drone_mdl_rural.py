@@ -12,20 +12,19 @@ from fmdtools.define.mode import Mode
 from fmdtools.define.block import FxnBlock, Component, CompArch
 from fmdtools.define.flow import Flow
 from fmdtools.define.model import Model
-from fmdtools.sim.approach import SampleApproach
-from fmdtools.analyze.result import History
+from fmdtools.analyze.history import History
 
 from examples.multirotor.drone_mdl_static import EE, Force, Control, DesTraj, DOFs
 from examples.multirotor.drone_mdl_static import DistEE, StoreEEState
-from drone_mdl_static import CtlDOF as CtlDOFStat
+from examples.multirotor.drone_mdl_static import CtlDOF as CtlDOFStat
 
 from examples.multirotor.drone_mdl_dynamic import DroneEnvironmentGridParam
 from examples.multirotor.drone_mdl_dynamic import DroneEnvironment, ViewEnvironment
-from drone_mdl_dynamic import PlanPathState as PlanPathStateDyn
-from drone_mdl_dynamic import PlanPath as PlanPathDyn
-from drone_mdl_dynamic import HoldPayload as HoldPayloadDyn
+from examples.multirotor.drone_mdl_dynamic import PlanPathState as PlanPathStateDyn
+from examples.multirotor.drone_mdl_dynamic import PlanPath as PlanPathDyn
+from examples.multirotor.drone_mdl_dynamic import HoldPayload as HoldPayloadDyn
 
-from drone_mdl_hierarchical import AffectDOF as AffectDOFHierarchical
+from examples.multirotor.drone_mdl_hierarchical import AffectDOF as AffectDOFHierarchical
 
 from recordclass import asdict
 
@@ -175,12 +174,12 @@ class BatMode(Mode):
     """
 
     failrate = 1e-4
-    faultparams = {'short': (0.2, {"taxi": 0.3, "move": 0.3, "land": 0.3}, 100),
-                   'degr': (0.2, {"taxi": 0.3, "move": 0.3, "land": 0.3}, 100),
-                   'break': (0.2, {"taxi": 0.3, "move": 0.3, "land": 0.3}, 100),
-                   'nocharge': (0.6, {"taxi": 0.7, "move": 0.2, "land": 0.1}, 100),
-                   'lowcharge': (0.4, {"taxi": 0.5, "move": 0.2, "land": 0.3}, 100)}
-    key_phases_by = 'plan_path'
+    fm_args = {'short': (0.2, 100, {"taxi": 0.3, "move": 0.3, "land": 0.3}),
+               'degr': (0.2, 100, {"taxi": 0.3, "move": 0.3, "land": 0.3}),
+               'break': (0.2, 100, {"taxi": 0.3, "move": 0.3, "land": 0.3}),
+               'nocharge': (0.6, 100, {"taxi": 0.7, "move": 0.2, "land": 0.1}),
+               'lowcharge': (0.4, 100, {"taxi": 0.5, "move": 0.2, "land": 0.3})}
+    units = 'hr'
 
 
 class BatParam(Parameter):
@@ -322,9 +321,10 @@ class StoreEEMode(Mode):
     """Overall StoreEE mode."""
 
     failrate = 1e-4
-    faultparams = {'nocharge':  (0.2, {"taxi": 0.6, "move": 0.2, "land": 0.2}, 0),
-                   'lowcharge': (0.7, {"taxi": 0.6, "move": 0.2, "land": 0.2}, 0)}
-    key_phases_by = "plan_path"
+    fm_args = {'nocharge':  (0.2, 0, {"taxi": 0.6, "move": 0.2, "land": 0.2}),
+               'lowcharge': (0.7, 0, {"taxi": 0.6, "move": 0.2, "land": 0.2})}
+    units = 'hr'
+
 
 
 class StoreEE(FxnBlock):
@@ -390,9 +390,9 @@ class HoldPayloadMode(Mode):
     """
 
     failrate = 1e-6
-    faultparams = {'break': (0.2, {"taxi": 0.3, "move": 0.3, "land": 0.3}, 1000),
-                   'deform': (0.8, {"taxi": 0.3, "move": 0.3, "land": 0.3}, 1000)}
-    key_phases_by = 'plan_path'
+    fm_args = {'break': (0.2, 1000, {"taxi": 0.3, "move": 0.3, "land": 0.3}),
+               'deform': (0.8, 1000, {"taxi": 0.3, "move": 0.3, "land": 0.3})}
+    units = 'hr'
 
 
 class HoldPayload(HoldPayloadDyn):
@@ -412,9 +412,8 @@ class ManageHealthMode(Mode):
     """
 
     failrate = 1e-6
-    faultparams = {'lostfunction':
-                   (0.05, {"taxi": 0.3, "move": 0.3, "land": 0.3}, 1000)}
-    key_phases_by = "plan_path"
+    fm_args = {'lostfunction': (0.05, 1000, {"taxi": 0.3, "move": 0.3, "land": 0.3})}
+    units = 'hr'
 
 
 class ManageHealth(FxnBlock):
@@ -449,7 +448,7 @@ class ManageHealth(FxnBlock):
 class AffectMode(Mode):
     """Overall Effect DOF mode - combines all line modes."""
 
-    key_phases_by = 'plan_path'
+    units = 'hr'
 
 
 class AffectDOF(AffectDOFHierarchical):
@@ -481,10 +480,10 @@ class CtlDOFMode(Mode):
     """
 
     failrate = 1e-5
-    faultparams = {'noctl':   (0.2, {"taxi": 0.6, "move": 0.3, "land": 0.1}, 1000),
-                   'degctl':  (0.8, {"taxi": 0.6, "move": 0.3, "land": 0.1}, 1000)}
-    key_phases_by = 'plan_path'
-    mode:   str = 'nominal'
+    fm_args = {'noctl': (0.2, 1000, {"taxi": 0.6, "move": 0.3, "land": 0.1}),
+               'degctl': (0.8, 1000, {"taxi": 0.6, "move": 0.3, "land": 0.1})}
+    mode: str = 'nominal'
+    units = 'hr'
 
 
 class CtlDOF(CtlDOFStat):
@@ -518,12 +517,13 @@ class PlanPathMode(Mode):
     """
 
     failrate = 1e-5
-    faultparams = {'noloc': (0.2, {"taxi": 0.6, "move": 0.3, "land": 0.1}, 1000),
-                   'degloc': (0.8, {"taxi": 0.6, "move": 0.3, "land": 0.1}, 1000)}
+    fm_args = {'noloc': (0.2, 1000),
+               'degloc': (0.8, 1000)}
+    phases = {"taxi": 0.6, "move": 0.3, "land": 0.1}
     opermodes = ('taxi', 'to_nearest', 'to_home', 'emland', 'land', 'move')
     mode: str = 'taxi'
     exclusive = False
-    key_phases_by = 'self'
+    units = 'hr'
 
 
 class PlanPathState(PlanPathStateDyn):
@@ -810,22 +810,22 @@ def plot_goals(ax, flightplan):
                 markersize=10, color='red', alpha=0.5)
 
 
-def plot_env_with_traj3d(hist, mdl):
-    fig, ax = show.coord3d(mdl.flows['environment'].c, "target", z="",
+def plot_env_with_traj_z(hist, mdl):
+    fig, ax = mdl.flows['environment'].c.show_z("target", z="",
                           collections={"start": {"color": "yellow"},
                                        "safe": {"color": "yellow"}})
-    fig, ax = show.trajectories(hist, "dofs.s.x", "dofs.s.y", "dofs.s.z",
-                                time_groups=['nominal'], time_ticks=1.0,
-                                fig=fig, ax=ax)
+    fig, ax = hist.plot_trajectories("dofs.s.x", "dofs.s.y", "dofs.s.z",
+                                     time_groups=['nominal'], time_ticks=1.0,
+                                     fig=fig, ax=ax)
     plot_goals(ax, mdl.p.flightplan)
     return fig, ax
 
 
 def plot_env_with_traj(mdlhists, mdl):
-    fig, ax = show.coord(mdl.flows['environment'].c, "target",
+    fig, ax = mdl.flows['environment'].c.show( "target",
                         collections={"start": {"color": "yellow"},
                                      "safe": {"color": "yellow"}})
-    fig, ax = show.trajectories(mdlhists, "dofs.s.x", "dofs.s.y", fig=fig, ax=ax)
+    fig, ax = mdlhists.plot_trajectories("dofs.s.x", "dofs.s.y", fig=fig, ax=ax)
     return fig, ax
 
 # likelihood class schedule (pfh)
@@ -895,34 +895,39 @@ hazards = {'VH-1': 'loss of control',
 
 if __name__ == "__main__":
     import fmdtools.sim.propagate as prop
-    from fmdtools.analyze import show, plot
+    from fmdtools.analyze import phases
+    from fmdtools.sim.sample import SampleApproach
 
+    # check operational phases
     mdl = Drone()
-
     ec, mdlhist = prop.nominal(mdl)
-    phases, modephases = mdlhist.get_modephases()
-    plot.phases(phases, modephases)
+    phasemaps = phases.from_hist(mdlhist)
+    phases.phaseplot(phasemaps)
+    phases.phaseplot(phasemaps['plan_path'])
 
+    # run approach - all faults in "move" mode
     mdl = Drone()
-    app = SampleApproach(mdl,  phases={'move'})
-    endclasses, mdlhists = prop.approach(mdl, app, staged=True)
+    app = SampleApproach(mdl,  phasemaps=phasemaps)
+    app.add_faultdomain("drone_faults", "all")
+    app.add_faultsample("move_scens", "fault_phases", "drone_faults", "move",
+                        phasemap='plan_path', args=(3,))
+    endclasses, mdlhists = prop.fault_sample(mdl, app, staged=True)
+
+    # plot trajectories over fault scenarios
+    fault_kwargs = {'alpha': 0.2, 'color': 'red'}
+    mdlhists.plot_line('flows.dofs.s.x', 'dofs.s.y', 'dofs.s.z', 'store_ee.s.soc',
+                       indiv_kwargs={'faulty': fault_kwargs})
+    fig, ax = mdlhists.plot_trajectories("dofs.s.x", "dofs.s.y", "dofs.s.z",
+                                         time_groups=['nominal'],
+                                         indiv_kwargs={'faulty': fault_kwargs})
+
+    fig, ax = mdlhists.plot_trajectories("dofs.s.x", "dofs.s.y",
+                                         time_groups=['nominal'],
+                                         indiv_kwargs={'faulty': fault_kwargs})
+
+    # check single lowcharge fault from approach
     h = History(nominal=mdlhists.nominal,
                 faulty=mdlhists.store_ee_lowcharge_t6p0)
-    
-    fault_kwargs = {'alpha': 0.2, 'color': 'red'}
-
-    plot.hist(mdlhists, 'flows.dofs.s.x', 'dofs.s.y', 'dofs.s.z', 'store_ee.s.soc',
-                 indiv_kwargs={'faulty': fault_kwargs})
-    fig, ax = show.trajectories(mdlhists,
-                                   "dofs.s.x", "dofs.s.y", "dofs.s.z",
-                                   time_groups=['nominal'],
-                                   indiv_kwargs={'faulty': fault_kwargs})
-    
-    fig, ax = show.trajectories(mdlhists, "dofs.s.x", "dofs.s.y",
-                                time_groups=['nominal'],
-                                indiv_kwargs={'faulty': fault_kwargs})
-    
-    
-    fig, ax = plot_env_with_traj3d(h, mdl)
+    fig, ax = plot_env_with_traj_z(h, mdl)
     fig, ax = plot_env_with_traj(mdlhists, mdl)
-    
+

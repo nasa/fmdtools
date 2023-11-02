@@ -4,7 +4,7 @@ fmdtools.sim
 The :mod:`fmdtools.sim` package is used to simulate :class:`fmdtools.define.Model` models. It consists of four modules: 
  - :mod:`fmdtools.sim.propagate`, which simulates the user-defined behaviors of a model over set time(s).
  - :mod:`fmdtools.sim.scenario`, which defines scenario information for simulations.
- - :mod:`fmdtools.sim.approach`, which defines the classes :class:`SampleApproach` and :class`NominalApproach` for defining sets of scenarios to simulate. 
+ - :mod:`fmdtools.sim.sample`, which provides classes for defining sets of scenarios to simulate. 
  - :mod:`fmdtools.sim.search`, which provides an the :class:`ProblemInterface` and `DynamicInterface` classes for enabling the search of parameters and/or scenarios.
 
 fmdtools.sim.propagate 
@@ -28,10 +28,10 @@ fmdtools.sim.scenario
    :undoc-members:
    :show-inheritance:
    
-fmdtools.sim.approach
+fmdtools.sim.sample
 ----------------------------------
 
-.. automodule:: fmdtools.sim.approach
+.. automodule:: fmdtools.sim.sample
    :members:
    :undoc-members:
    :show-inheritance:

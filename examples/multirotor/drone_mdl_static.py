@@ -180,7 +180,7 @@ class StoreEEMode(Mode):
     """Specifies fault modes for battery (e.g., lowcharge)."""
 
     failrate = 1e-5
-    faultparams = {"nocharge": (1, 300)}
+    fm_args = {"nocharge": (1, 300)}
 
 
 class StoreEEState(State):
@@ -222,9 +222,9 @@ class DistEEMode(Mode):
     """
 
     failrate = 1e-5
-    faultparams = {"short": (0.3, 3000),
-                   "degr": (0.5, 1000),
-                   "break": (0.2, 2000)}
+    fm_args = {"short": (0.3, 3000),
+               "degr": (0.5, 1000),
+               "break": (0.2, 2000)}
 
 
 class DistEEState(State):
@@ -313,8 +313,8 @@ class HoldPayloadMode(Mode):
     """
 
     failrate = 1e-6
-    faultparams = {"break": (0.2, 10000),
-                   "deform": (0.8, 10000)}
+    fm_args = {"break": (0.2, 10000),
+               "deform": (0.8, 10000)}
 
 
 class HoldPayloadState(State):
@@ -444,7 +444,7 @@ class AffectDOFMode(Mode):
     """
 
     failrate = 1e-5
-    faultparams = {
+    fm_args = {
         "short": (0.1, 200),
         "openc": (0.1, 200),
         "ctlup": (0.2, 500),
@@ -570,8 +570,8 @@ class CtlDOFMode(Mode):
     """Controller Modes, noctl (lack of control) and degctl (degraded control)."""
 
     failrate = 1e-5
-    faultparams = {"noctl": (0.2, 10000),
-                   "degctl": (0.8, 10000)}
+    fm_args = {"noctl": (0.2, 10000),
+               "degctl": (0.8, 10000)}
 
 
 class CtlDOF(FxnBlock):
@@ -643,7 +643,7 @@ class PlanPathMode(Mode):
     """Path planning modes (no location and degraded location)."""
 
     failrate = 1e-5
-    faultparams = {"noloc": (0.2, 10000), "degloc": (0.8, 10000)}
+    fm_args = {"noloc": (0.2, 10000), "degloc": (0.8, 10000)}
 
 
 class PlanPath(FxnBlock):
@@ -725,7 +725,7 @@ class ViewModes(Mode):
     """Drone camera modes (no view of environment)."""
 
     failrate = 1e-5
-    faultparams = {"poorview": (0.2, 10000)}
+    fm_args = {"poorview": (0.2, 10000)}
 
 
 class ViewEnvironment(FxnBlock):
@@ -765,7 +765,7 @@ class Drone(Model):
     def find_classification(self, scen, mdlhist):
         """Calculate rate, cost, expected cost based on cost of repair information."""
         modes, modeprops = self.return_faultmodes()
-        repcost = sum([c["rcost"] for f, m in modeprops.items() for a, c in m.items()])
+        repcost = sum([c["cost"] for f, m in modeprops.items() for a, c in m.items()])
 
         totcost = repcost
         rate = scen.rate

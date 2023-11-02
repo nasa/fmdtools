@@ -14,7 +14,8 @@ from recordclass import asdict, astuple
 from .parameter import Parameter
 from .state import State
 from .common import init_obj_attr, get_obj_track
-from fmdtools.analyze.result import History, get_sub_include, init_indicator_hist
+from fmdtools.analyze.common import get_sub_include
+from fmdtools.analyze.history import History, init_indicator_hist
 
 class Flow(object):
     __slots__ = ['p', '_args_p', 's', '_args_s', 'h', 'name' ,'is_copy']

@@ -12,7 +12,7 @@ from recordclass import dataobject, asdict
 import warnings
 import numpy as np
 
-from .common import get_true_fields, get_true_field
+from .common import get_true_fields, get_true_field, set_obj_arg_type
 
 
 class Parameter(dataobject, readonly=True, mapping=True, iterable=True):
@@ -42,7 +42,7 @@ class Parameter(dataobject, readonly=True, mapping=True, iterable=True):
     """
 
     def __init__(self, *args, strict_immutability=True, check_type=True,
-                 check_pickle=True, **kwargs):
+                 check_pickle=True, set_type=True, check_lim=True, **kwargs):
         """
         Initializes the parameter with given kwargs.
 
@@ -57,15 +57,22 @@ class Parameter(dataobject, readonly=True, mapping=True, iterable=True):
         if not self.__doc__:
             raise Exception("Please provide docstring")
             # self.__doc__=Parameter.__doc__
-        for k, v in kwargs.items():
-            self.check_lim(k, v)
+        if check_lim:
+            for i, k in enumerate(self.__fields__):
+                if i < len(args):
+                    self.check_lim(k, args[i])
+                elif k in kwargs:
+                    self.check_lim(k, kwargs[k])
+        if set_type:
+            args, kwargs = set_obj_arg_type(self, *args, **kwargs)
         try:
             super().__init__(*args, **kwargs)
-        except TypeError:
+        except TypeError as e:
             raise Exception("Invalid args/kwargs: "+str(args)+" , " +
-                            str(kwargs)+" in "+str(self.__class__))
+                            str(kwargs)+" in "+str(self.__class__)) from e
         if strict_immutability:
             self.check_immutable()
+
         if check_type:
             self.check_type()
         if check_pickle:
@@ -104,9 +111,9 @@ class Parameter(dataobject, readonly=True, mapping=True, iterable=True):
 
     def check_immutable(self):
         """
-        (woefully incomplete) check to ensure defined field values are immutable.
-        Checks if a known/common mutable or a known/common immutable, otherwise
-        gives a warning.
+        Check if a known/common mutable or a known/common immutable.
+
+        If known immutable, raise exception. If not known mutable, give a warning.
 
         Raises
         ------
@@ -125,7 +132,7 @@ class Parameter(dataobject, readonly=True, mapping=True, iterable=True):
 
     def check_type(self):
         """
-        Checks to ensure Parameter type-hints are being followed.
+        Check to ensure Parameter type-hints are being followed.
 
         Raises
         ------
@@ -157,6 +164,21 @@ class Parameter(dataobject, readonly=True, mapping=True, iterable=True):
 
     def get_true_fields(self, *args, **kwargs):
         return get_true_fields(self, *args, **kwargs)
+
+    @classmethod
+    def get_set_const(cls, field):
+        if "." in field:
+            field_split = field.split(".")
+            true_field = field_split[0]
+            subfield = ".".join(field_split[1:])
+            return cls.__annotations__[true_field].get_set_const(subfield)
+        var_lims = getattr(cls, field+"_lim", False)
+        if var_lims:
+            return var_lims
+        var_set = getattr(cls, field+"_set", False)
+        if var_set:
+            return set(var_set)
+        return ()
 
 
 class SimParam(Parameter, readonly=True):

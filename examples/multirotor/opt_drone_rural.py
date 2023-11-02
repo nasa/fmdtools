@@ -1,11 +1,13 @@
 # -*- coding: utf-8 -*-
 """
 Functions/classes for optimizing the drone defined in drone_mdl_opt.py.
+
+TODO: Adapt to new sample/optimization methods.
 """
 
 from fmdtools.sim.search import ProblemInterface
 from drone_mdl_rural import Drone, DroneParam
-from fmdtools.sim.approach import SampleApproach
+from fmdtools.sim.sample import FaultSample
 import numpy as np
 
 
@@ -158,7 +160,7 @@ def calc_res(mdl, fullcosts=False, faultmodes='all', include_nominal=True,
     #app = SampleApproach(mdl, faults=('single-component', faultmodes), phases={'forward'})
     app = SampleApproach(mdl, faults=('single-component', 'store_ee'),
                          phases={'move': phases['plan_path']['move']})
-    result, mdlhists = propagate.approach(
+    result, mdlhists = propagate.fault_sample(
         mdl, app, staged=staged, pool=pool, showprogress=False)  # , staged=False)
     rescost = result.total('expected cost')-(not include_nominal) * \
         result.nominal.endclass['expected cost']

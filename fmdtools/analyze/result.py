@@ -3,10 +3,7 @@
 Description: A module defining how simulation results (histories) structured and
 processed. Has classes:
 
-- :class:`Result`:  Class for defining result dictionaries
-  (nested dictionaries of metric(s))
-- :class:`History`: Class for defining simulation histories
-  (nested dictionaries of arrays or lists)
+- :class:`Result`: Class for defining simulation results.
 
 And functions:
 
@@ -29,35 +26,20 @@ Private Methods:
 - :func:`check_include_errors`: Helper function for Result Class, Cycles through
   `check_include_error`.
 - :func:`check_include_error`: Helper function to raise exceptions for errors.
-- :func:`bootstrap_confidence_interval`: Convenience wrapper for scipy.bootstrap
-- :func:`diff`: Helper function for finding inconsistent states between val1, val2, with
-  the difftype option
-- :func:`nan_to_x`: Helper function for Result Class, returns nan as zero if present,
-  otherwise returns the number
-- :func:`is_numeric`: Helper function for Result Class, checks if a given value is
-  numeric
-- :func:`join_key`: Helper function for Result Class
-- :func:`is_known_immutable`: Helper function for History Class
-- :func:`is_known_mutable`: Helper function for History Class
-- :func:`to_include_keys`: Determine what dict keys to include from Result given nested
-  to_include dictionary
 - :func:`get_sub_include`: Determines what attributes of att to include based on the
   provided dict/str/list/set to_include
-- :func:`init_indicator_hist`: Creates a history for an object with indicator methods
-  (e.g., obj.indicate_XX)
-- :func:`init_hist_iter`: Initializes the history for a given attribute att with value
-  val. Enables the recursive definition of a history as a nested structure.
-- :func:`init_dicthist`: Initializes histories for dictionary attributes (if any)
 """
 
 import numpy as np
 import pandas as pd
-import copy
 import sys
 import os
 from collections import UserDict
-from ordered_set import OrderedSet
-from fmdtools.define.common import get_var, t_key, get_obj_indicators
+from fmdtools.define.common import t_key, nest_dict
+from fmdtools.analyze.common import to_include_keys, is_numeric, nan_to_x, is_bool
+from fmdtools.analyze.common import bootstrap_confidence_interval, join_key
+from fmdtools.analyze.common import get_sub_include, unpack_plot_values
+from fmdtools.analyze.common import multiplot_legend_title, multiplot_helper
 
 
 def file_check(filename, overwrite):
@@ -80,7 +62,7 @@ def auto_filetype(filename, filetype=""):
     of a given filename"""
     if not filetype:
         if '.' not in filename:
-            raise Exception("No file extension")
+            raise Exception("No file extension in: " + filename)
         if filename[-4:] == '.pkl':
             filetype = "pickle"
         elif filename[-4:] == '.csv':
@@ -169,34 +151,6 @@ def check_include_error(result, to_include):
                         " not in result keys: " + str(result.keys()))
 
 
-def bootstrap_confidence_interval(data, method=np.mean, return_anyway=False, **kwargs):
-    """
-    Convenience wrapper for scipy.bootstrap.
-
-    Parameters
-    ----------
-    data : list/array/etc
-        Iterable with the data. May be float (for mean) or indicator (for proportion)
-    method : method
-        numpy method to give scipy.bootstrap.
-    return_anyway: bool
-        Gives a dummy interval of (stat, stat) if no . Used for plotting
-    Returns
-    ----------
-    statistic, lower bound, upper bound
-    """
-    from scipy.stats import bootstrap
-    if 'interval' in kwargs:
-        kwargs['confidence_level'] = kwargs.pop('interval')*0.01
-    if data.count(data[0]) != len(data):
-        bs = bootstrap([data], np.mean, **kwargs)
-        return method(data), bs.confidence_interval.low, bs.confidence_interval.high
-    elif return_anyway:
-        return method(data), method(data), method(data)
-    else:
-        raise Exception("All data are the same!")
-
-
 class Result(UserDict):
     """
     Result is a special type of dictionary that makes it convenient to store, access,
@@ -204,16 +158,28 @@ class Result(UserDict):
 
     As a dictionary, it supports dict-based item assignement (e.g. r['x']=10) but
     also enables convenient access via __getattr__, e.g.:
-        r[x] = 10
-        r.x
-        > 10
+
+    >>> r = Result()
+    >>> r['x'] = 10
+    >>> r
+    x:                                    10
 
     It also can return a flattened version of its nested sturcture via Result.flatten(),
     e.g.:
-        r = Result(y=Result(z=1))
-        rf = r.flatten()
-        r[('y','z')]
-        > 1
+
+    >>> r = Result(y=Result(z=1))
+    >>> r
+    y: 
+    --z:                                   1
+    >>> r.keys()
+    dict_keys(['y'])
+    >>> rf = r.flatten()
+    >>> rf
+    y.z:                                   1
+    >>> rf['y.z']
+    1
+    >>> rf.keys()
+    dict_keys(['y.z'])
 
     It also enables saving and loading to files via r.save(), r.load(), and
     r.load_folder()
@@ -243,6 +209,8 @@ class Result(UserDict):
                 form = '{:>'+str(40-len(val_rep))+'}'
                 vv = form.format(str(val))
                 str_rep = str_rep+val_rep+vv+'\n'
+        if str_rep.endswith('\n') and ind == 0:
+            str_rep = str_rep[:-1]
         return str_rep
 
     def all(self):
@@ -544,22 +512,8 @@ class Result(UserDict):
         """
         Re-nests a flattened result
         """
-        newhist = self.__class__()
-        key_options = set([h.split('.')[0] for h in self.keys()])
-        for key in key_options:
-            if key in self:
-                newhist[key] = self[key]
-            else:
-                subdict = {histkey[len(key)+1:]: val
-                           for histkey, val in self.items()
-                           if histkey.startswith(key+".")}
-                subhist = self.__class__(**subdict)
-                lev = levels-1
-                if lev > 0:
-                    newhist[key] = subhist.nest(levels=lev)
-                else:
-                    newhist[key] = subhist
-        return newhist
+        return nest_dict(self, levels=levels)
+
 
     def get_memory(self):
         """
@@ -692,7 +646,7 @@ class Result(UserDict):
         newhists = {k: hist for k, hist in mh.items()
                     if not ('nominal' in k and not (with_nominal))}
         if app:
-            weights = [w.rate for w in app.scenlist]
+            weights = [w.rate for w in app.scenarios()]
             if with_nominal:
                 weights.append(1)
         else:
@@ -708,6 +662,83 @@ class Result(UserDict):
                 expres[k] = np.average([hist[k] for hist in newhists.values()],
                                        axis=0, weights=weights)
         return expres
+
+    def get_metric(self, value, metric=np.mean, args=(), axis=None):
+        """
+        Calculate a statistic of the value using a provided metric function.
+
+        Parameters
+        ----------
+        value : str
+            Value of the history to calculate the statistic over
+        metric : func/'str', optional
+            Function to process the history (e.g. np.mean, np.min...).
+            The default is np.mean.
+            May alternatively provide name of Result method (e.g., 'expected', 'rate')
+        args : args
+            Arguments for the metric function. Default is ().
+        axis : None or 0 or 1
+            Whether to take the metric over variables (0) or over time (1) or
+            both (None). The default is None.
+        """
+        if type(metric) == str:
+            method = getattr(self, metric)
+            return method("."+value, *args)
+        else:
+            vals = self.get_values(value)
+            return metric([*vals.values()], *args, axis=axis)
+
+    def get_metric_ci(self, value, metric=np.mean, **kwargs):
+        """
+        Get the confidence interval for the given value over the set of scenarios.
+
+        Parameters
+        ----------
+        value : str
+            Value of the history to calculate the statistic over
+        metric : func, optional
+            Function to process the history (e.g. np.mean, np.min...).
+            The default is np.mean.
+        **kwargs : kwargs
+            kwargs to bootstrap_confidence_interval.
+
+        Returns
+        -------
+        statistic: number
+            nominal statistic for the given metric.
+        lower bound : number
+            lower bound of the statistic in the ci.
+        upper bound : number
+            upper bound of the statistic in the ci.
+        """
+        vals = self.get_values(value)
+        ci = bootstrap_confidence_interval([*vals.values()], method=metric, **kwargs)
+        return ci
+
+    def get_metrics(self, *values, metric=np.mean, args=(), axis=None):
+        """
+        Calculate a statistic of the values using a provided metric function.
+
+        Parameters
+        ----------
+        *values : strs
+            Values of the history to calculate the statistic over
+            (if none provided, creates metric of all)
+        metric : func, optional
+            Function to process the history (e.g. np.mean, np.min...).
+            The default is np.mean.
+        args : args, optional
+            Arguments for the metric function. Default is ().
+        axis : None or 0 or 1
+            Whether to take the metric over variables (0) or over time (1)
+            or both (None). The default is None.
+        """
+        if not values:
+            values = self.keys()
+        metrics = Result()
+        for value in values:
+            metrics[value] = self.get_metric(value, metric=metric, args=args, axis=axis)
+        return metrics
 
     def total(self, metric):
         """
@@ -829,8 +860,7 @@ class Result(UserDict):
 
     def overall_diff(self, metric, nan_as=np.nan, as_ind=False, no_diff=False):
         """
-        Calculates the difference between the nominal and fault scenarios over a set of
-        endclasses
+        Calculate difference between the nominal and fault scenarios.
 
         Parameters
         ----------
@@ -846,6 +876,7 @@ class Result(UserDict):
         no_diff : bool, optional
             Option for not computing the difference
             (but still performing the processing here). The default is False.
+
         Returns
         -------
         differences : dict
@@ -856,650 +887,107 @@ class Result(UserDict):
                 endclass.end_diff(metric, nan_as=nan_as, as_ind=as_ind, no_diff=no_diff)
                 for scen, endclass in self.items()}
 
+    def plot_metric_dist(self, *values, cols=2, comp_groups={}, bins=10, metric_bins={},
+                         legend_loc=-1, xlabels={}, ylabel='count', title='', titles={},
+                         figsize='default',  v_padding=0.4, h_padding=0.05,
+                         title_padding=0.1, legend_title=None, indiv_kwargs={},
+                         **kwargs):
+        """
+        Plot histogram of given metric(s) over comparison groups of scenarios.
 
-def diff(val1, val2, difftype='bool'):
-    """
-    Helper function for finding inconsistent states between val1, val2, with the
-    difftype option ('diff' (takes the difference), 'bool' (checks if the same),
-                     and float (checks if under the provided tolerance))
-    """
-    if difftype == 'diff':
-        return val1-val2
-    elif difftype == 'bool':
-        return val1 == val2
-    elif type(difftype) == float:
-        return abs(val1-val2) > difftype
+        Parameters
+        ----------
+        result : Result
+            Result dictionary of metrics over set of scenarios
+        *plot_values : str
+            names of values to pull from the result (e.g., 'fxns.move_water.s.flowrate')
+            Can also be specified as a dict (e.g. {'fxns':'move_water'}) to get all keys
+            from a given fxn/flow/mode/etc.
+        cols : int, optional
+            columns to use in the figure. The default is 2.
+        comp_groups : dict, optional
+            Dictionary for comparison groups (if more than one).
+            Has structure::
+                {'group1': ('scen1', 'scen2'), 'group2': ('scen3', 'scen4')}.
 
+            Default is {}, which compares nominal and faulty.
+            If {'default': 'default'} is passed, all scenarios will be put in one group.
+            If a legend is shown, group names are used as labels.
+        bins : int
+            Number of bins to use (for all plots). Default is None
+        metric_bins : dict,
+            Dictionary of number of bins to use for each metric.
+            Has structure::
+                {'metric':num}.
 
-def nan_to_x(metric, x=0.0):
-    """returns nan as zero if present, otherwise returns the number"""
-    if np.isnan(metric):
-        return x
-    else:
-        return metric
+            Default is {}
+        legend_loc : int, optional
+            Specifies the plot to place the legend on, if runs are being compared.
+            Default is -1 (the last plot)
+            To remove the legend, give a value of False
+        xlabels : dict, optional
+            Label for the x-axes.
+            Has structure::
+                {'metric':'label'}
 
+        ylabel : str, optional
+            Label for the y-axes. Default is 'time'
+        title : str, optional
+            overall title for the plot. Default is ''
+        indiv_kwargs : dict, optional
+            dict of kwargs to differentiate the comparison groups.
+            Has structure::
+                {comp1: kwargs1, comp2: kwargs2}
 
-def is_bool(val):
-    try:
-        return val.dtype in ['bool']
-    except:
-        return type(val) in [bool]
-
-
-def is_numeric(val):
-    """Checks if a given value is numeric"""
-    try:
-        return np.issubdtype(np.array(val).dtype, np.number)
-    except:
-        return type(val) in [float, bool, int]
-
-
-def join_key(k):
-    if not isinstance(k, str):
-        return '.'.join(k)
-    else:
-        return k
-
-
-def is_known_immutable(val):
-    return type(val) in [int, float, str, tuple, bool] or isinstance(val, np.number)
-
-
-def is_known_mutable(val):
-    return type(val) in [dict, set]
-
-
-def to_include_keys(to_include):
-    """Determine what dict keys to include from Result given nested to_include
-    dictionary"""
-    if type(to_include) == str:
-        return [to_include]
-    elif type(to_include) in [list, set, tuple]:
-        return [to_i for to_i in to_include]
-    elif type(to_include) == dict:
-        keys = []
-        for k, v in to_include.items():
-            add = to_include_keys(v)
-            keys.extend([k+'.'+v for v in add])
-        return tuple(keys)
-
-
-def get_sub_include(att, to_include):
-    """Determines what attributes of att to include based on the provided
-    dict/str/list/set to_include"""
-    if type(to_include) in [list, set, tuple, str]:
-        if att in to_include:
-            new_to_include = 'default'
-        elif type(to_include) == str and to_include == 'all':
-            new_to_include = 'all'
-        elif type(to_include) == str and to_include == 'default':
-            new_to_include = 'default'
-        else:
-            new_to_include = False
-    elif type(to_include) == dict and att in to_include:
-        new_to_include = to_include[att]
-    else:
-        new_to_include = False
-    return new_to_include
-
-
-def init_indicator_hist(obj, h, timerange, track):
-    """
-    Creates a history for an object with indicator methods (e.g., obj.indicate_XX)
-
-    Parameters
-    ----------
-    obj : object
-        Function/Flow/Model object with indicators
-    h : History
-        History of Function/Flow/Model object with indicators appended in h['i']
-    timerange : iterable, optional
-        Time-range to initialize the history over. The default is None.
-    track : list/str/dict, optional
-        argument specifying attributes for :func:`get_sub_include'. The default is None.
-
-    Returns
-    -------
-    h : History
-        History of states with structure {'XX':log} for indicator `obj.indicate_XX`
-    """
-    sub_track = get_sub_include('i', track)
-    if sub_track:
-        indicators = get_obj_indicators(obj)
-        if indicators:
-            h['i'] = History()
-            for i, val in indicators.items():
-                h['i'].init_att(i, val, timerange, sub_track, dtype=bool)
-
-
-def init_hist_iter(att, val, timerange=None, track=None, dtype=None, str_size='<U20'):
-    """
-    Initializes the history for a given attribute att with value val. Enables
-    the recursive definition of a history as a nested structure.
-
-    If a timerange is given, the base fields are initializes as fixed-length numpy
-    arrays corresponding to the data type of the field. Otherwise, an emty list
-    is initialized.
-
-    Parameters
-    ----------
-    att : str
-        Name of the attribute.
-    val : dict/field
-        dict to be initialized as a History or field to be initialized as a list or
-        numpy array
-    timerange : iterable, optional
-        Time-range to initialize the history over. The default is None.
-    track : list/str/dict, optional
-        argument specifying attributes for :func:`get_sub_include'. The default is None.
-    dtype : str, optional
-        Datatype to initialze the array as (if given). The default is None.
-    str_size : str, optional
-        Data type for strings. The default is '<U20'.
-
-    Returns
-    ---------
-    Hist : History, List, or np.array
-        Initialized history structure corresponding to the attribute
-    """
-    sub_track = get_sub_include(att, track)
-    if sub_track and hasattr(val, 'create_hist'):
-        return val.create_hist(timerange, sub_track)
-    elif sub_track and isinstance(val, dict):
-        return init_dicthist(val, timerange, sub_track)
-    elif sub_track:
-        hist = History()
-        hist.init_att(att, val, timerange, track, dtype, str_size)
-
-
-def init_dicthist(start_dict, timerange, track="all"):
-    """
-    Initializes histories for dictionary attributes (if any)
-
-    Parameters
-    ----------
-    start_dict : dict
-        Dictionary to initialize.
-    timerange : iterable
-        Timerange to initalize the hist over
-    track : TYPE, optional
-        DESCRIPTION. The default is "all".
-    Returns
-    -------
-    Hist : History
-        Initialized history structure corresponding to the attribute
-    """
-    hist = History()
-    for att, val in start_dict.items():
-        hist.init_att(att, val, timerange, track)
-    return hist
-
-
-class History(Result):
-    """
-    History is a special time of :class:'Result' specifically for keeping simulation
-    histories (e.g., a log of states over time).
-
-    It can be updated over time t using h.log(obj, t), where obj is an object with
-    (nested) attributes that match the keys of the (nested) dictionary.
-    """
-
-    def init_att(self, att, val,
-                 timerange=None, track=None, dtype=None, str_size='<U20'):
-        sub_track = get_sub_include(att, track)
-        if sub_track:
-            if timerange is None:
-                self[att] = [val]
-            elif type(val) == str:
-                self[att] = np.empty([len(timerange)], dtype=str_size)
-            elif type(val) == dict:
-                self[att] = init_dicthist(val, timerange, sub_track)
-            elif type(val) == np.ndarray or dtype == np.ndarray:
-                self[att] = np.array([val for i in timerange])
-            elif dtype:
-                self[att] = np.empty([len(timerange)], dtype=dtype)
+            where kwargs is an individual dict of keyword arguments for the
+            comparison group comp (or scenario, if not aggregated) which overrides
+            the global kwargs (or default behavior).
+        figsize : tuple (float,float)
+            x-y size for the figure. The default is 'default', which dymanically gives 3 for
+            each column and 2 for each row
+        v_padding : float
+            vertical padding between subplots as a fraction of axis height.
+        h_padding : float
+            horizontal padding between subplots as a fraction of axis width.
+        title_padding : float
+            padding for title as a fraction of figure height.
+        legend_title : str, optional
+            title for the legend. Default is None.
+        **kwargs : kwargs
+            keyword arguments to mpl.hist e.g. bins, etc.
+        """
+        # Sort into comparison groups
+        plot_values = unpack_plot_values(values)
+        fig, axs, cols, rows, titles = multiplot_helper(cols, *plot_values,
+                                                        figsize=figsize,
+                                                        titles=titles,
+                                                        sharey=True, sharex=False)
+        groupmetrics = self.get_comp_groups(*plot_values, **comp_groups)
+        num_bins = bins
+        for i, plot_value in enumerate(plot_values):
+            ax = axs[i]
+            xlabel = xlabels.get(plot_value, plot_value)
+            if type(xlabel) == str:
+                ax.set_xlabel(xlabel)
             else:
-                try:
-                    self[att] = np.full(len(timerange), val)
-                except:
-                    self[att] = np.empty((len(timerange),), dtype=object)
+                ax.set_xlabel(' '.join(xlabel))
+            ax.grid(axis='y')
+            fulldata = [i for endc in groupmetrics.values()
+                        for i in [*endc.get_values(plot_value).values()]]
+            bins = np.histogram(fulldata, metric_bins.get(plot_value, num_bins))[1]
+            if not i % cols:
+                ax.set_ylabel(ylabel)
+            for group, endclasses in groupmetrics.items():
+                local_kwargs = {**kwargs, **indiv_kwargs.get(group, {})}
+                x = [*endclasses.get_values(plot_value).values()]
+                ax.hist(x, bins, label=group, **local_kwargs)
 
-    def fromdict(inputdict):
-        return fromdict(History, inputdict)
-
-    def load(filename, filetype="", renest_dict=False, indiv=False):
-        """Loads file as History using :func:`load'"""
-        inputdict = load(filename, filetype=filetype,
-                         renest_dict=renest_dict, indiv=indiv, Rclass=History)
-        return fromdict(History, inputdict)
-
-    def load_folder(folder, filetype, renest_dict=False):
-        """Loads folder as History using :func:`load_folder'"""
-        files_toread = load_folder(folder, filetype)
-        hist = History()
-        for filename in files_toread:
-            hist.update(History.load(folder+'/'+filename, filetype,
-                                     renest_dict=renest_dict, indiv=True))
-        if renest_dict == False:
-            hist = hist.flatten()
-        return hist
+        multiplot_legend_title(groupmetrics, axs, ax, legend_loc, title,
+                               v_padding, h_padding, title_padding, legend_title)
+        return fig, axs
 
 
-    def get_different(self, other):
-        """
-        Finds the values of two histories which are different.
-
-        Parameters
-        ----------
-        other : History
-            History to compare against
-
-        Returns
-        -------
-        different : History
-            History with entries corresponding to the difference between the two
-            histories.
-        """
-        diff = self-other
-        different = self.__class__()
-        different.data = {k: v for k, v in diff.items() if any(v)}
-        return different
-
-    def copy(self):
-        """Creates a new independent copy of the current history dict"""
-        newhist = History()
-        for k, v in self.items():
-            if isinstance(v, History):
-                newhist[k] = v.copy()
-            else:
-                newhist[k] = np.copy(v)
-        return newhist
-
-    def log(self, obj, t_ind, time=None):
-        """
-        Updates the history from obj at the time t_ind
-
-        Parameters
-        ----------
-        obj : Model/Function/State...
-            Object to log
-        t_ind : int
-            Time-index of the log.
-        time : float
-            Real time for the history (if initialized). Used at the top level of the
-            history.
-        """
-        for att, hist in self.items():
-            try:
-                val = None
-                if att == 'time' and time is not None:
-                    val = time
-                elif att.startswith('i.') or '.i.' in att:
-                    split_att = att.split('.')
-                    i_ind = split_att.index('i')
-                    new_split_att = split_att[:i_ind] + ['indicate_'+split_att[-1]]
-                    methname = '.'.join(new_split_att)
-                    val = get_var(obj, methname)(time)
-                elif 'faults' in att:
-                    split_att = att.split('.')
-                    faultind = split_att.index('faults')
-                    modename = split_att[faultind+1]
-                    fault_att = '.'.join(split_att[:faultind])
-                    val = modename in get_var(obj, fault_att).faults
-                else:
-                    val = get_var(obj, att)
-            except: 
-                raise Exception("Unable to log att " + str(att) + " in " +
-                                str(obj.__class__.__name__) + ', val=' + str(val))
-
-            if type(hist) == History:
-                hist.log(val, t_ind)
-            else:
-                if is_known_mutable(val):
-                    val = copy.deepcopy(val)
-                if type(hist) == list:
-                    hist.append(val)
-                elif isinstance(hist, np.ndarray):
-                    try:
-                        hist[t_ind] = val
-                    except Exception as e:
-                        obj_str = "Error logging obj "+obj.__class__.__name__+": "
-                        if t_ind >= len(hist):
-                            raise Exception(obj_str + "Time beyond range of model" +
-                                            "history--check staged execution " +
-                                            "and simulation time settings" +
-                                            " (end condition, mdl.sp.times)") from e
-                        elif not np.can_cast(type(val), type(hist[t_ind])):
-                            raise Exception(obj_str + str(att)+" changed type: " +
-                                            str(type(hist[t_ind])) + " to " +
-                                            str(type(val)) + " at t_ind=" +
-                                            str(t_ind)) from e
-                        else:
-                            raise Exception(obj_str + "Value too large to represent: "
-                                            + att + "=" + str(val)) from e
-
-    def cut(self, end_ind=None, start_ind=None, newcopy=False):
-        """Cuts the history to a given index"""
-        if newcopy:
-            hist = self.copy()
-        else:
-            hist = self
-        for name, att in hist.items():
-            if isinstance(att, History):
-                hist[name] = hist[name].cut(end_ind, start_ind, newcopy=False)
-            else: 
-                try:
-                    if end_ind is None:
-                        hist[name] = att[start_ind:]
-                    elif start_ind is None:
-                        hist[name] = att[:end_ind+1]
-                    else:
-                        hist[name] = att[start_ind:end_ind+1]
-                except TypeError as e:
-                    raise Exception("Invalid history for name " + name +
-                                    " in history "+str(hist.data)) from e
-        return hist
-
-    def get_slice(self, t_ind=0):
-        """
-        Returns a dictionary of values from (flattenned) version of the history at t_ind
-        """
-        flathist = self.flatten()
-        slice_dict = dict.fromkeys(flathist)
-        for key, arr in flathist.items():
-            slice_dict[key] = flathist[key][t_ind]
-        return slice_dict
-
-    def is_in(self, at):
-        """ checks if at is in the dictionary"""
-        return any([k for k in self.keys() if at in k])
-
-    def get_fault_time(self, metric="earliest"):
-        """
-        Gets the time a fault is present in the system
-
-        Parameters
-        ----------
-        metric : 'earliest','latest','total', optional
-            Earliest, latest, or total time fault(s) are present.
-            The default is "earliest".
-
-        Returns
-        -------
-        int
-            index in the history when the fault is present
-        """
-        flatdict = self.flatten()
-        all_faults_hist = np.sum([v for k, v in flatdict.items() if 'faults' in k], 0)
-        if metric == 'earliest':
-            return np.where(all_faults_hist >= 1)
-        elif metric == 'latest':
-            return np.where(np.flip(all_faults_hist) >= 1)
-        elif metric == 'total':
-            return np.sum(all_faults_hist >= 1)
-
-    def _prep_faulty(self):
-        """Helper that creates a faulty history of states from the current history"""
-        if self.is_in('faulty'):
-            return self.faulty.flatten()
-        else:
-            return self.flatten()
-
-    def _prep_nom_faulty(self, nomhist={}):
-        """Helper that creates a nominal history of states from the current history"""
-        if not nomhist:
-            nomhist = self.nominal.flatten()
-        else:
-            nomhist = nomhist.flatten()
-        return nomhist, self._prep_faulty()
-
-    def get_degraded_hist(self, *attrs, nomhist={}, operator=np.prod, difftype='bool',
-                          withtime=True, withtotal=True):
-        """
-        Gets history of times when the attributes *attrs deviate from their nominal
-        values
-
-        Parameters
-        ----------
-        *attrs : names of attributes
-            Names to check (e.g., `flow_1`, `fxn_2`)
-        nomhist : History, optional
-            Nominal history to compare against
-            (otherwise uses internal nomhist, if available)
-        operator : function
-            Method of combining multiple degraded values. The default is np.prod
-        difftype : 'bool'/'diff'/float
-            Way to calculate the difference:
-
-                - for 'bool', it is calculated as an equality nom == faulty
-                - for 'diff', it is calculated as a difference nom - faulty
-                - if a float, is provided, it is calculated as nom - fault > diff
-        threshold : 0.000001
-            Threshold for degradation
-        withtime : bool
-            Whether to include time in the dict. Default is True.
-        withtotal : bool
-            Whether to include a total in the dict. Default is True.
-
-        Returns
-        -------
-        deghist : History
-            History of degraded attributes
-        """
-        if not attrs:
-            attrs = self.keys()
-
-        nomhist, faulthist = self._prep_nom_faulty(nomhist)
-        deghist = History()
-        for att in attrs:
-            att_diff = [diff(nomhist[k], v, difftype)
-                        for k, v in faulthist.items()
-                        if att in k]
-            if att_diff:
-                deghist[att] = operator(att_diff, 0)
-        if withtotal:
-            deghist['total'] = len(deghist.values()) - np.sum([*deghist.values()], axis=0)
-        if withtime:
-            deghist['time'] = nomhist['time']
-        return deghist
-
-    def get_faults_hist(self, *attrs):
-        """
-        Gets fault names associated with the given attributes
-
-        Parameters
-        ----------
-        *attrs : strs
-            Names to find in the history.
-
-        Returns
-        -------
-        faults_hist : History
-            History of the attrs and their corresponding faults
-        """
-        faulthist = self._prep_faulty()
-        faults_hist = History()
-        if not attrs:
-            attrs = self.keys()
-        for att in attrs:
-            faults_hist[att] = History({k.split('.')[-1]: v for k, v in faulthist.items()
-                                        if ('.'+att+'.m.faults' in k) or
-                                        (att+'.m.faults' in k and k.startswith(att))})
-        return faults_hist
-
-    def get_faulty_hist(self, *attrs, withtime=True, withtotal=True, operator=np.any):
-        """
-        Gets the times when the attributes *attrs have faults present
-
-        Parameters
-        ----------
-        *attrs : names of attributes
-            Names to check (e.g., `fxn_1`, `fxn_2`)
-        withtime : bool
-            Whether to include time in the dict. Default is True.
-        withtotal : bool
-            Whether to include a total in the dict. Default is True.
-        operator : function
-            Method of combining multiple degraded values. The default is np.any
-
-        Returns
-        -------
-        has_faults_hist : History
-            History of attrs being faulty/not faulty
-        """
-        faulthist = self._prep_faulty()
-        faults_hist = self.get_faults_hist(*attrs)
-        has_faults_hist = History()
-        for att in attrs:
-            if faults_hist[att]:
-                has_faults_hist[att] = operator([*faults_hist[att].values()], 0)
-        if withtotal:
-            has_faults_hist['total'] = np.sum([*has_faults_hist.values()], axis=0)
-        if withtime:
-            has_faults_hist['time'] = faulthist['time']
-        return has_faults_hist
-
-    def get_summary(self, *attrs, operator=np.max):
-        """
-        Creates summary of the history based on a given metric
-
-        Parameters
-        ----------
-        *attrs : names of attributes
-            Names to check (e.g., `fxn_1`, `fxn_2`). If not provided, uses all.
-        operator : aggregation function, optional
-            Way to aggregate the time history (E.g., np.max, np.min, np.average, etc).
-            The default is np.max.
-
-        Returns
-        -------
-        summary : Result
-            Corresponding summary metrics from this history
-        """
-        flathist = self.flatten()
-        summary = Result()
-        if not attrs:
-            attrs = self.keys()
-        for att in attrs:
-            if att in self:
-                summary[att] = operator(self[att])
-        return summary
-
-    def get_fault_degradation_summary(self, *attrs):
-        """
-        Creates a Result with values for the *attrs that are faulty/degraded
-
-        Parameters
-        ----------
-        *attrs : str
-            Attribute(s) to check.
-
-        Returns
-        -------
-        Result
-            Result dict with structure {'degraded':['degattrname'],
-                                        'faulty':['faultyattrname']]}
-        """
-        faulty_hist = self.get_faulty_hist(*attrs, withtotal=False, withtime=False)
-        faulty = [k for k, v in faulty_hist.items() if np.any(v)]
-        deg_hist = self.get_degraded_hist(*attrs, withtotal=False, withtime=False)
-        degraded = [k for k, v in deg_hist.items() if not np.all(v)]
-        return Result(faulty=faulty, degraded=degraded)
-
-    def get_modephases(self):
-        """
-        Identifies the phases of operation for the system based on its modes.
-
-        Returns
-        -------
-        phases : dict
-            Dictionary of distict phases that the system functions pass through,
-            of the form:
-                {'fxn':{'phase1':[beg, end], phase2:[beg, end]}}
-                where each phase is defined by its corresponding mode in the modelhist
-                (numbered mode, mode1, mode2... for multiple modes)
-        modephases : dict
-            Dictionary of phases that the system passes through, of the form:
-                {'fxn':{'mode1':{'phase1', 'phase2''}}}
-        """
-        modephases = {}
-        phases = {}
-        times = self['time']
-        f_hist = self.flatten()
-        modehists = self.get_values('m.mode')
-        for k, modehist in modehists.items():
-            if type(k) == str:
-                k = k.split(".")
-            fxn = k[k.index('m')-1]
-            if len(modehist) != 0:
-                modes = OrderedSet(modehist)
-                modephases[fxn] = dict.fromkeys(modes)
-                phases_unsorted = dict()
-                for mode in modes:
-                    modeinds = [ind for ind, m in enumerate(modehist) if m == mode]
-                    startind = modeinds[0]
-                    phasenum = 0
-                    phaseid = mode
-                    modephases[fxn][mode] = set()
-                    for i, ind in enumerate(modeinds):
-                        if ind+1 not in modeinds:
-                            phases_unsorted[phaseid] = [times[startind], times[ind]]
-                            modephases[fxn][mode].add(phaseid)
-                            if i != len(modeinds)-1:
-                                startind = modeinds[i+1]
-                                phasenum += 1
-                                phaseid = mode+str(phasenum)
-                phases[fxn] = dict(sorted(phases_unsorted.items(),
-                                          key=lambda item: item[1][0]))
-        return phases, modephases
-
-    def get_metric(self, value, metric=np.mean, args=(), axis=None):
-        """
-        Calculates a statistic of the value using a provided metric function.
-
-        Parameters
-        ----------
-        value : str
-            Value of the history to calculate the statistic over
-        metric : func, optional
-            Function to process the history (e.g. np.mean, np.min...).
-            The default is np.mean.
-        args : args
-            Arguments for the metric function. Default is ().
-        axis : None or 0 or 1
-            Whether to take the metric over variables (0) or over time (1) or
-            both (None). The default is None.
-        """
-        vals = self.get_values(value)
-        return metric([*vals.values()], *args, axis=axis)
-
-    def get_metrics(self, *values, metric=np.mean, args=(), axis=None):
-        """
-        Calculates a statistic of the values using a provided metric function.
-
-        Parameters
-        ----------
-        *values : strs
-            Values of the history to calculate the statistic over
-            (if none provided, creates metric of all)
-        metric : func, optional
-            Function to process the history (e.g. np.mean, np.min...).
-            The default is np.mean.
-        args : args, optional
-            Arguments for the metric function. Default is ().
-        axis : None or 0 or 1
-            Whether to take the metric over variables (0) or over time (1)
-            or both (None). The default is None.
-        """
-        if not values:
-            values = self.keys()
-        metrics = Result()
-        for value in values:
-            metrics[value] = self.get_metric(value, metric=metric, args=args, axis=axis)
-        return metrics
-
-
-def load(filename, filetype="", renest_dict=True, indiv=False, Rclass=History):
+def load(filename, filetype="", renest_dict=True, indiv=False, Rclass=Result):
     """
     Loads a given (endclasses or mdlhists) results dictionary from a (pickle/csv/json)
     file.
@@ -1601,3 +1089,8 @@ def load_folder(folder, filetype):
         if read_filetype == filetype:
             files_toread.append(file)
     return files_toread
+
+
+if __name__ == "__main__":
+    import doctest
+    doctest.testmod(verbose=True)
