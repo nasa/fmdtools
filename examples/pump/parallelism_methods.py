@@ -5,18 +5,13 @@ Created on Fri Mar 26 12:23:14 2021
 @author: dhulse
 """
 
-from ex_pump import * 
+from ex_pump import Pump, PumpParam
 import fmdtools.sim.propagate as propagate
-import fmdtools.analyze as an
-from fmdtools.define.model import SimParam
 
 import time
-import pickle
 
 import multiprocessing as mp
 import multiprocess as ms
-
-from pathos.pools import ParallelPool, ProcessPool, SerialPool, ThreadPool
 
 
 def delay_test(delays =  [i for i in range(0,100,10)]):

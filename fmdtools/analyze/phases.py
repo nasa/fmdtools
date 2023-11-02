@@ -24,6 +24,7 @@ import itertools
 from matplotlib.collections import PolyCollection
 import matplotlib.colors as mcolors
 from ordered_set import OrderedSet
+from fmdtools.analyze.common import setup_plot
 
 plt.rcParams['pdf.fonttype'] = 42
 
@@ -306,6 +307,47 @@ class PhaseMap(object):
             sampletimes[phase] = self.get_phase_times(phase)
         return sampletimes
 
+    def plot(self, dt=1.0, phase_ticks='both', fig=None, ax=None):
+        """Plot phasemap on existing axis."""
+        fig, ax = setup_plot(fig=fig, ax=ax)
+        modephases = self.modephases
+        phases = self.phases
+
+        if modephases:
+            mode_nums = {ph: i for i, (k, v) in enumerate(modephases.items())
+                         for ph in v}
+            ylabels = list(modephases.keys())
+        else:
+            mode_nums = {ph: i for i, ph in enumerate(phases)}
+            ylabels = list(mode_nums.keys())
+
+        phaseboxes = [((v[0]-.5*dt, mode_nums[k]-.4),
+                       (v[0]-.5*dt, mode_nums[k]+.4),
+                       (v[1]+.5*dt, mode_nums[k]+.4),
+                       (v[1]+.5*dt, mode_nums[k]-.4)) for k, v in phases.items()]
+        color_options = list(mcolors.TABLEAU_COLORS.keys())[0:len(ylabels)]
+        colors = [color_options[mode_nums[phase]] for phase in phases]
+        bars = PolyCollection(phaseboxes, facecolors=colors)
+
+        ax.add_collection(bars)
+        ax.autoscale()
+
+        ax.set_yticks(list(set(mode_nums.values())))
+        ax.set_yticklabels(ylabels)
+
+        times = [0]+[v[1] for k, v in phases.items()]
+        if phase_ticks == 'both':
+            xmin = list(ax.get_xticks())[0]
+            xmax = list(ax.get_xticks())[-1]
+            minor_ticks = [i for i in np.arange(xmin, xmax, dt)]
+            ax.set_xticks(minor_ticks, minor=True)
+            for t in times:
+                ax.axvline(x=t, color='k')
+        elif phase_ticks == 'phases':
+            ax.set_xticks(times)
+        ax.set_xlim(times[0], times[-1])
+        plt.grid(which='major', axis='x')
+
 
 def from_hist(hist, fxn_modephases = 'all'):
     """
@@ -425,7 +467,7 @@ def phaseplot(phasemaps, modephases=[], mdl=[], dt=1.0, singleplot=True,
             ax = plt.subplot(num_plots, 1, i+1, label=fxn)
         else:
             fig, ax = plt.subplots(figsize=figsize)
-        single_phaseplot(phasemap, dt, phase_ticks, ax)
+        phasemap.plot(dt, phase_ticks, fig=fig, ax=ax)
 
         if singleplot:
             plt.title(fxn)
@@ -438,47 +480,6 @@ def phaseplot(phasemaps, modephases=[], mdl=[], dt=1.0, singleplot=True,
         return fig
     else:
         return figs
-
-
-def single_phaseplot(phasemap, dt=1.0, phase_ticks='both', ax=None):
-    """Plot phasemap on existing axis."""
-    modephases = phasemap.modephases
-    phases = phasemap.phases
-
-    if modephases:
-        mode_nums = {ph: i for i, (k, v) in enumerate(modephases.items())
-                     for ph in v}
-        ylabels = list(modephases.keys())
-    else:
-        mode_nums = {ph: i for i, ph in enumerate(phases)}
-        ylabels = list(mode_nums.keys())
-
-    phaseboxes = [((v[0]-.5*dt, mode_nums[k]-.4),
-                   (v[0]-.5*dt, mode_nums[k]+.4),
-                   (v[1]+.5*dt, mode_nums[k]+.4),
-                   (v[1]+.5*dt, mode_nums[k]-.4)) for k, v in phases.items()]
-    color_options = list(mcolors.TABLEAU_COLORS.keys())[0:len(ylabels)]
-    colors = [color_options[mode_nums[phase]] for phase in phases]
-    bars = PolyCollection(phaseboxes, facecolors=colors)
-
-    ax.add_collection(bars)
-    ax.autoscale()
-
-    ax.set_yticks(list(set(mode_nums.values())))
-    ax.set_yticklabels(ylabels)
-
-    times = [0]+[v[1] for k, v in phases.items()]
-    if phase_ticks == 'both':
-        xmin = list(ax.get_xticks())[0]
-        xmax = list(ax.get_xticks())[-1]
-        minor_ticks = [i for i in np.arange(xmin, xmax, dt)]
-        ax.set_xticks(minor_ticks, minor=True)
-        for t in times:
-            ax.axvline(x=t, color='k')
-    elif phase_ticks == 'phases':
-        ax.set_xticks(times)
-    ax.set_xlim(times[0], times[-1])
-    plt.grid(which='major', axis='x')
 
 
 def samplemetric(faultsamp, endclasses, metric='cost', rad='rate', rad_scale=0.01,
@@ -522,7 +523,7 @@ def samplemetric(faultsamp, endclasses, metric='cost', rad='rate', rad_scale=0.0
     fig, axes = plt.subplots(2, 1, sharey=False, gridspec_kw={
                                'height_ratios': [3, 1]})
     # phase plot
-    ax = single_phaseplot(faultsamp.phasemap, ax=axes[1])
+    ax = faultsamp.phasemap.plot(ax=axes[1], fig=fig)
 
     # cost/metric plots
     costs = np.array([endclasses.get(scen).endclass[metric] for scen in scens])

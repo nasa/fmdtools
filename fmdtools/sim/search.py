@@ -8,7 +8,7 @@ Classes:
 """
 import copy
 import fmdtools.sim.propagate as prop
-import fmdtools.analyze.plot as plot
+#import fmdtools.analyze.common as plot
 from fmdtools.sim.sample import SampleApproach
 from fmdtools.analyze.history import History
 from .scenario import Scenario

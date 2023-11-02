@@ -86,7 +86,7 @@ from recordclass import dataobject, asdict
 from fmdtools.define.common import return_true_indicators
 from fmdtools.analyze.result import Result
 from fmdtools.analyze.history import History
-from fmdtools.analyze.plot import consolidate_legend
+from fmdtools.analyze.common import consolidate_legend
 
 
 plt.rcParams['pdf.fonttype'] = 42

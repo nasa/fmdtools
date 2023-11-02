@@ -7,7 +7,7 @@ from examples.pump.ex_pump import Pump
 from examples.rover.rover_model import Rover
 from fmdtools.analyze.graph import ModelGraph, ModelFxnGraph, ModelFlowGraph
 from fmdtools.analyze.graph import ModelTypeGraph
-from fmdtools.analyze.plot import suite_for_plots
+from fmdtools.analyze.common import suite_for_plots
 from fmdtools.sim import propagate
 
 
@@ -57,13 +57,13 @@ class ModelGraphTests(unittest.TestCase):
     def test_fault_plot(self):
         er, mh = propagate.one_fault(self.mdl, 'move_water', 'short', time=10,
                                      desired_result=['graph', 'endclass', 'endfaults'])
-        endresults.graph.set_node_styles(degraded={}, faulty={})
-        endresults.graph.draw(title="Should show Faults (color edges) as well as"
+        er.graph.set_node_styles(degraded={}, faulty={})
+        er.graph.draw(title="Should show Faults (color edges) as well as"
                               + "degradations (orange color)")
-        degraded = {'node_color': 'green'},
+        degraded = {'node_color': 'green'}
         faulty = {'node_size': 1500, 'edgecolors': 'purple'}
-        endresults.graph.set_node_styles(degraded=degraded, faulty=faulty)
-        endresults.graph.draw(title="Should be identical but faulty nodes are large"
+        er.graph.set_node_styles(degraded=degraded, faulty=faulty)
+        er.graph.draw(title="Should be identical but faulty nodes are large"
                               + " and have purple edges while degradations are green")
 
     def test_result_from_plot(self):
@@ -71,7 +71,7 @@ class ModelGraphTests(unittest.TestCase):
         er, hist = propagate.one_fault(self.mdl, 'move_water', 'short',
                                        time=10, track='all', desired_result=des_res)
         mg = ModelGraph(self.mdl)
-        mg.draw_from(11, mdlhist)
+        mg.draw_from(11, hist)
 
 # def test_move_nodes(self):
 #    p = endresults.graph.move_nodes()

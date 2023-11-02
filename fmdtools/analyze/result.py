@@ -38,9 +38,8 @@ from collections import UserDict
 from fmdtools.define.common import t_key, nest_dict
 from fmdtools.analyze.common import to_include_keys, is_numeric, nan_to_x, is_bool
 from fmdtools.analyze.common import bootstrap_confidence_interval, join_key
-from fmdtools.analyze.common import get_sub_include
-from fmdtools.analyze.plot import multiplot_legend_title, multiplot_helper
-from fmdtools.analyze.plot import unpack_plot_values
+from fmdtools.analyze.common import get_sub_include, unpack_plot_values
+from fmdtools.analyze.common import multiplot_legend_title, multiplot_helper
 
 
 def file_check(filename, overwrite):
