@@ -50,7 +50,7 @@ class ParameterDomain(object):
     ParameterDomain with:
      - variables: {'y': {1.0, 2.0, 3.0, 4.0}, 'x': (0, 10)}
      - constants: {'z': 20}
-     - parameter_initializer: <class '__main__.ExParam'>
+     - parameter_initializer: ExParam
 
     This ParameterDomain then becomes a callable with the given variables:
     >>> expd(1, 2)
@@ -195,7 +195,7 @@ class ParameterDomain(object):
         rep = ("ParameterDomain with:" +
                "\n - variables: " + str(self.variables) +
                "\n - constants: " + str(self.constants) +
-               "\n - parameter_initializer: " + str(self.parameter_init))
+               "\n - parameter_initializer: " + self.parameter_init.__name__)
         return rep
 
     def get_var_iters(self, resolution=1.0, resolutions={}):
@@ -1217,8 +1217,8 @@ class SampleApproach(BaseSample):
         value : float, optional
             Value to compare against. The default is 0.0.
         """
-        for fd in self.faultdomains.items():
-            fd.prune_scenarios(scen_var=scen_var, comparator=comparator, value=value)
+        for fs in self.faultsamples.values():
+            fs.prune_scenarios(scen_var=scen_var, comparator=comparator, value=value)
 
 
 class ParameterSample(BaseSample):
@@ -1572,7 +1572,7 @@ def combine_orthogonal(defaults, ranges):
 
 
 exp_ps = ParameterSample(expd, seed=1)
-exp_ps.add_variable_scenario(1,2)
+exp_ps.add_variable_scenario(1, 2)
 exp_ps.add_variable_ranges(replicates=10)
 
 
