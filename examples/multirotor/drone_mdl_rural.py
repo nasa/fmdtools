@@ -810,8 +810,8 @@ def plot_goals(ax, flightplan):
                 markersize=10, color='red', alpha=0.5)
 
 
-def plot_env_with_traj3d(hist, mdl):
-    fig, ax = show.coord3d(mdl.flows['environment'].c, "target", z="",
+def plot_env_with_traj_z(hist, mdl):
+    fig, ax = mdl.flows['environment'].c.show_z("target", z="",
                           collections={"start": {"color": "yellow"},
                                        "safe": {"color": "yellow"}})
     fig, ax = hist.plot_trajectories("dofs.s.x", "dofs.s.y", "dofs.s.z",
@@ -822,7 +822,7 @@ def plot_env_with_traj3d(hist, mdl):
 
 
 def plot_env_with_traj(mdlhists, mdl):
-    fig, ax = show.coord(mdl.flows['environment'].c, "target",
+    fig, ax = mdl.flows['environment'].c.show( "target",
                         collections={"start": {"color": "yellow"},
                                      "safe": {"color": "yellow"}})
     fig, ax = mdlhists.plot_trajectories("dofs.s.x", "dofs.s.y", fig=fig, ax=ax)
@@ -895,7 +895,7 @@ hazards = {'VH-1': 'loss of control',
 
 if __name__ == "__main__":
     import fmdtools.sim.propagate as prop
-    from fmdtools.analyze import show, plot, phases
+    from fmdtools.analyze import phases
     from fmdtools.sim.sample import SampleApproach
 
     # check operational phases
@@ -928,6 +928,6 @@ if __name__ == "__main__":
     # check single lowcharge fault from approach
     h = History(nominal=mdlhists.nominal,
                 faulty=mdlhists.store_ee_lowcharge_t6p0)
-    fig, ax = plot_env_with_traj3d(h, mdl)
+    fig, ax = plot_env_with_traj_z(h, mdl)
     fig, ax = plot_env_with_traj(mdlhists, mdl)
 

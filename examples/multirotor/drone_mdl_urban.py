@@ -411,7 +411,7 @@ def plot_env_with_traj(mdlhists, mdl, legend=True, title="trajectory"):
     return fig, ax
 
 
-def plot_env_with_traj3d(mdlhists, mdl, legend=True, title="trajectory"):
+def plot_env_with_traj_z(mdlhists, mdl, legend=True, title="trajectory"):
     """
     Plot given 3d Drone trajectories over the gridword.
 
@@ -436,7 +436,7 @@ def plot_env_with_traj3d(mdlhists, mdl, legend=True, title="trajectory"):
                    "start": {"color": "yellow", "label": True, "text_z_offset": 30},
                    "end": {"color": "yellow", "label": True, "text_z_offset": 30}}
 
-    fig, ax = mdl.flows['environment'].c.show3d("height", voxels=False,
+    fig, ax = mdl.flows['environment'].c.show_z("height", voxels=False,
                                                 collections=collections)
     fig, ax = mdlhists.plot_trajectories("dofs.s.x", "dofs.s.y", "dofs.s.z",
                                          fig=fig, ax=ax, legend=legend, title=title)
@@ -488,7 +488,7 @@ if __name__ == "__main__":
 
     e = UrbanDroneEnvironment("env")
     e.c.show("height")
-    e.c.show3d("height")
+    e.c.show_z("height")
 
     e.c.show_collection('all_safe', z='height')
 
@@ -502,7 +502,7 @@ if __name__ == "__main__":
 
     mdlhist.plot_line("flows.dofs.s.planvel","flows.dofs.s.vertvel", "fxns.store_ee.s.soc")
     plot_env_with_traj(mdlhist, mdl)
-    plot_env_with_traj3d(mdlhist, mdl)
+    plot_env_with_traj_z(mdlhist, mdl)
 
     move_quad = make_move_quad(mdlhist, phasemaps['plan_path'].phases['move'])
 
@@ -517,7 +517,7 @@ if __name__ == "__main__":
 
     endresults, hists = propagate.fault_sample(mdl, app, staged=False,
                                                mdl_kwargs = {'sp':{'dt':1.0}})
-    plot_env_with_traj3d(hists, mdl)
+    plot_env_with_traj_z(hists, mdl)
     plot_env_with_traj(hists, mdl)
     statsfmea = an.tabulate.FMEA(endresults, app, group_by=('function', 'fault'),
                                  weight_metrics=['rate'],
