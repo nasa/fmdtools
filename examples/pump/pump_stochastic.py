@@ -182,7 +182,10 @@ if __name__ == "__main__":
                                                faultsamples=faultsamples,
                                                pool=mp.Pool(4))
 
-    an.plot.nominal_vals_1d(ps, ecs, 'p.delay')
+    from fmdtools.analyze.tabulate import NominalEnvelope
+    ne = NominalEnvelope(ps, ecs, 'cost', 'p.delay')
+
+    ne.as_plot()
     # convert to plot tests:
     comp_mdlhists = hists.get_scens('export_water_block_t27p0')
     comp_groups = {'delay_1': ps.get_scens(p={'delay': 1}),

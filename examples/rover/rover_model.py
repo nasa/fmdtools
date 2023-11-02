@@ -621,8 +621,9 @@ class Drive(FxnBlock):
         self.ground.s.in_bound = self.ground.on_course(self.pos.s)
 
     def drive_nominal(self, rpower, lpower):
-        '''
-        calculate the new rover state based on left and right motor power
+        """
+        Calculate the new rover state based on left and right motor power.
+
         e.g.::
             >>> d = Drive()
             >>> d.pos.s
@@ -630,7 +631,7 @@ class Drive(FxnBlock):
             >>> d.drive_nominal(10, 10)
             >>> d.pos.s
             PosState(x=10.0, y=0.0, vel=10.0, ux=1.0, uy=0.0)
-            
+
             >>> d = Drive()
             >>> d.pos.s.uy = 1
             >>> d.pos.s.ux = 0
@@ -639,7 +640,7 @@ class Drive(FxnBlock):
             >>> d.drive_nominal(10, 10)
             >>> d.pos.s
             PosState(x=0.0, y=10.0, vel=10.0, ux=0.0, uy=1.0)
-            
+
             >>> d = Drive()
             >>> d.pos.s.uy = -1
             >>> d.pos.s.ux = 0
@@ -648,8 +649,7 @@ class Drive(FxnBlock):
             >>> d.drive_nominal(10, 10)
             >>> d.pos.s
             PosState(x=0.0, y=-10.0, vel=10.0, ux=0.0, uy=-1.0)
-        '''
-        
+        """
         self.pos.s.vel = (rpower + lpower) / (1.0 + self.m.s.friction)
         ang_inc = np.arctan((rpower - lpower) / (rpower + lpower + 0.001))
         ux = np.cos(ang_inc) * self.pos.s.ux - np.sin(ang_inc) * self.pos.s.uy
@@ -671,7 +671,7 @@ class PerceptionMode(Mode):
         video feed is off
     feed : Mode
         video feed is on
-    
+
     Other Features
     -----------
     exlusive = True: Only one mode can be active at any given time
@@ -842,7 +842,7 @@ class Power(FxnBlock):
             self.m.set_mode("no_charge")
         if self.switch.s.power == 0:
             self.m.set_mode("off")
-        
+
     def power_usage(self):
         '''calculates the power usage in general'''
         self.s.power = (1.0 + self.ee_12.s.mul("v", "a") +
@@ -850,10 +850,10 @@ class Power(FxnBlock):
 
     def charge_power_usage(self):
         '''power usage during the battery is charging'''
-        self.s.power = -1 
+        self.s.power = -1
         if self.s.charge == 100:
             self.m.set_mode("off")
-    
+
     def short_power_usage(self):
         '''power usage is doubled when there is a short'''
         self.s.power = self.s.power * 2
@@ -1087,30 +1087,30 @@ def gen_param_space():
 
 if __name__ == "__main__":
     import multiprocessing as mp
-    from fmdtools.analyze import show, tabulate
+    from fmdtools.analyze import tabulate
 
     import doctest
     doctest.testmod(verbose=True)
 
     mdl = Rover()
     ec, hist = prop.nominal(mdl)
-    fig, ax = show.trajectories(hist, 'flows.pos.s.x','flows.pos.s.y',
-                                time_groups = ['nominal'])
-    show.geomarch(mdl.flows['ground'].ga, fig=fig, ax=ax)
-    fig, ax = show.trajectories(hist, 'flows.pos.s.x','flows.pos.s.y')
+    fig, ax = hist.plot_trajectories('flows.pos.s.x','flows.pos.s.y',
+                                     time_groups = ['nominal'])
+    mdl.flows['ground'].ga.show(fig=fig, ax=ax)
+    fig, ax = hist.plot_trajectories('flows.pos.s.x','flows.pos.s.y')
     
     mdl = Rover(p={'ground': GroundParam(linetype='turn')})
     ec, hist = prop.nominal(mdl)
-    fig, ax = show.geomarch(mdl.flows['ground'].ga, 
-                            geoms={'line': {'shapes': {'on': {} ,'shape': {}}},
-                                   'start': {},
-                                   'end': {}})
-    fig, ax = show.trajectories(hist, 'flows.pos.s.x','flows.pos.s.y',
-                                time_groups = ['nominal'], fig=fig, ax=ax)
+
+    geoms = {'line': {'shapes': {'on': {}, 'shape': {}}}, 'start': {}, 'end': {}}
+    fig, ax = mdl.flows['ground'].ga.show(geoms = geoms)
+
+    fig, ax = hist.plot_trajectories('flows.pos.s.x','flows.pos.s.y',
+                                     time_groups = ['nominal'], fig=fig, ax=ax)
     #ax.set_xlim(0, 5.0)
     #ax.set_ylim(-2.5, 2.5)
     hist.flows.pos.s.x
-    fig, ax = show.trajectories(hist, 'flows.pos.s.x','flows.pos.s.y')
+    fig, ax = hist.plot_trajectories('flows.pos.s.x','flows.pos.s.y')
 
 
     from fmdtools.sim.sample import ParameterSample, ParameterDomain

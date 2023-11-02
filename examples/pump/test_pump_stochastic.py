@@ -9,7 +9,8 @@ from examples.pump.pump_stochastic import Pump, PumpParam
 from fmdtools.sim import propagate as prop
 from fmdtools.sim.sample import ParameterSample, ParameterDomain
 from tests.common import CommonTests
-from fmdtools.analyze.plot import suite_for_plots
+from fmdtools.analyze.common import suite_for_plots
+from fmdtools.analyze.tabulate import NominalEnvelope
 import numpy as np
 import multiprocessing as mp
 
@@ -137,22 +138,21 @@ class StochasticPumpTests(unittest.TestCase, CommonTests):
 
     def test_plot_nominal_vals(self):
         """tests nominal_vals_1d"""
-        from fmdtools import analyze as an
         mdl = Pump()
         ps = ParameterSample()
         ps.add_variable_replicates([], replicates=10)
         res, hist = prop.parameter_sample(mdl, ps, run_stochastic=True,
                                           showprogress=False)
-        res['test_seeds_1.endclass.cost'] = 10.0
+        res['rep0_var_0.endclass.cost'] = 10.0
         # an.plot.nominal_vals_1d(app, endres, 'r.seed', metric="nonsense")
         title = "should show at least one red line over range of seeds"
-        an.plot.nominal_vals_1d(ps, res, 'r.seed', metric='cost', fault_alpha=1.0,
-                                title=title)
+
+        ne = NominalEnvelope(ps, res, 'cost', 'r.seed')
+        ne.as_plot(title=title, f_kwargs={'alpha': 1.0})
 
 
     def test_plot_nominal_vals_xd(self):
         """tests nominal_vals_2d and nominal_vals_3d"""
-        from fmdtools import analyze as an
         mdl = Pump()
 
         pd = ParameterDomain(PumpParam)
@@ -170,16 +170,19 @@ class StochasticPumpTests(unittest.TestCase, CommonTests):
         res['delay_10_20.endclass.cost'] = 10.0
         title = ("should show at least one red x over range of seeds," +
                  " probs, and delay={1, 10}")
-        an.plot.nominal_vals_2d(ps2, res, 'r.seed', 'p.delay',
-                                metric="cost", title=title)
+        f_kwargs = {'alpha': 1.0}
+        n_kwargs = {'alpha': 0.01}
+        ne1 = NominalEnvelope(ps2, res, 'cost', 'r.seed', 'p.delay')
+        a=1
+        ne1.as_plot(title=title, f_kwargs=f_kwargs, n_kwargs=n_kwargs)
 
-        an.plot.nominal_vals_3d(ps2, res, 'r.seed', 'p.delay', 'prob',
-                                metric="cost", title=title)
+        ne2 = NominalEnvelope(ps2, res, 'cost', 'r.seed', 'p.delay', 'prob')
+        ne2.as_plot(title=title, f_kwargs=f_kwargs, n_kwargs=n_kwargs)
 
 
 if __name__ == '__main__':
     # suite = unittest.TestSuite()
-    # suite.addTest(StochasticPumpTests("test_run_safety"))
+    # suite.addTest(StochasticPumpTests("test_plot_nominal_vals_xd"))
     # suite.addTest(StochasticPumpTests("test_run_approach"))
 
     # suite.addTest(StochasticPumpTests("test_save_load_nominalapproach"))

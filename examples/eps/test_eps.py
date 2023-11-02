@@ -7,7 +7,6 @@ Created on Mon Dec 20 10:32:00 2021
 import unittest
 from examples.eps.eps import EPS
 from fmdtools.sim import propagate as prop
-import fmdtools.analyze as an
 from fmdtools.sim.sample import FaultDomain, FaultSample
 from fmdtools.define.common import check_pickleability
 import numpy as np

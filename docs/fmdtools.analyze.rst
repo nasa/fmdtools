@@ -9,13 +9,19 @@ The analyze package is organized into the modules:
 - :mod:`fmdtools.analyze.common`, which is used for common analysis functions
 - :mod:`fmdtools.analyze.result`, which defines the :class:`fmdtools.analyze.result.Result` class for sim results
 - :mod:`fmdtools.analyze.history`, which defines the :class:`fmdtools.analyze.result.History` classe for tracking, saving, and processing simulation logs/histories. 
-- :mod:`fmdtools.analyze.plot`, which provides functions for plotting `History` and `Result` metrics (and is essentially a convenience interface for `matplotlib`)
 - :mod:`fmdtools.analyze.graph`, which provides classes for creating and visualizing Graphs of simulation structures (and is a sort of convenience iterface for `networkx`/`graphviz` and other graphing libraries).
-- :mod:`fmdtools.analyze.tabulate`, which provides functions to generate tables of metrics of interest using `pandas` (e.g., FMEAs).
-- :mod:`fmdtools.analyze.show`, which shows geometric and other spacial aspects (e.g., shapes, coords, trajectories) of the model using `matplotlib`.
+- :mod:`fmdtools.analyze.tabulate`, which provides functions to generate tables and visualizations of metrics of interest using (e.g., FMEAs).
 - :mod:`fmdtools.analyze.phases`, which enables the analysis of phase information from model histories.
 
 The model reference for each of these is provided below:
+
+fmdtools.analyze.common
+-------------------------------
+
+.. automodule:: fmdtools.analyze.common
+   :members:
+   :undoc-members:
+   :show-inheritance:
 
 fmdtools.analyze.result 
 --------------------------------
@@ -29,14 +35,6 @@ fmdtools.analyze.history
 --------------------------------
 
 .. automodule:: fmdtools.analyze.history
-   :members:
-   :undoc-members:
-   :show-inheritance:
-
-fmdtools.analyze.plot 
--------------------------------
-
-.. automodule:: fmdtools.analyze.plot
    :members:
    :undoc-members:
    :show-inheritance:
@@ -57,13 +55,6 @@ fmdtools.analyze.tabulate
    :undoc-members:
    :show-inheritance:
 
-fmdtools.analyze.show
------------------------------------
-
-.. automodule:: fmdtools.analyze.show
-   :members:
-   :undoc-members:
-   :show-inheritance:
 
 fmdtools.analyze.phases
 -----------------------------------

@@ -20,8 +20,6 @@ from fmdtools.define.model import Model
 from fmdtools.define.environment import Environment
 from fmdtools.define.coords import Coords, CoordsParam
 
-from fmdtools.analyze import show
-
 import numpy as np
 from recordclass import asdict
 
@@ -403,11 +401,11 @@ def plot_env_with_traj(mdlhists, mdl, legend=True, title="trajectory"):
     fig : matplotlib figure
     ax : matplotlib axis
     """
-    fig, ax = show.coord(mdl.flows['environment'].c, "height",
-                        collections={"all_occupied": {"color": "red"},
-                                     "all_allowed": {"color": "blue"},
-                                     "start": {"color": "blue"},
-                                     "end": {"color": "blue"}})
+    collections={"all_occupied": {"color": "red"},
+                 "all_allowed": {"color": "blue"},
+                 "start": {"color": "blue"},
+                 "end": {"color": "blue"}}
+    fig, ax = mdl.flows['environment'].c.show("height", collections=collections)
     fig, ax = mdlhists.plot_trajectories("dofs.s.x", "dofs.s.y",
                                          fig=fig, ax=ax, legend=legend, title=title)
     return fig, ax
@@ -438,8 +436,8 @@ def plot_env_with_traj3d(mdlhists, mdl, legend=True, title="trajectory"):
                    "start": {"color": "yellow", "label": True, "text_z_offset": 30},
                    "end": {"color": "yellow", "label": True, "text_z_offset": 30}}
 
-    fig, ax = show.coord3d(mdl.flows['environment'].c, "height", voxels=False,
-                        collections=collections)
+    fig, ax = mdl.flows['environment'].c.show3d("height", voxels=False,
+                                                collections=collections)
     fig, ax = mdlhists.plot_trajectories("dofs.s.x", "dofs.s.y", "dofs.s.z",
                                          fig=fig, ax=ax, legend=legend, title=title)
     ax.set_zlim3d(0, mdl.p.plan_param.height)
@@ -489,10 +487,10 @@ if __name__ == "__main__":
     # p = PlanPath("test", {})
 
     e = UrbanDroneEnvironment("env")
-    show.coord(e.c, "height")
-    show.coord3d(e.c, "height")
+    e.c.show("height")
+    e.c.show3d("height")
 
-    show.coord_collection(e.c, 'all_safe', z='height')
+    e.c.show_collection('all_safe', z='height')
 
     mdl = Drone(p={'respolicy': ResPolicy(bat="to_nearest", line="to_nearest")})
     # ec, mdlhist_fault = propagate.one_fault(mdl, "plan_path", "vision_lack_of_detection", time=4.5)
@@ -502,7 +500,7 @@ if __name__ == "__main__":
     phasemaps = phases.from_hist(mdlhist)
     phases.phaseplot(phasemaps['plan_path'])
 
-    an.plot.hist(mdlhist, "flows.dofs.s.planvel","flows.dofs.s.vertvel", "fxns.store_ee.s.soc")
+    mdlhist.plot_line("flows.dofs.s.planvel","flows.dofs.s.vertvel", "fxns.store_ee.s.soc")
     plot_env_with_traj(mdlhist, mdl)
     plot_env_with_traj3d(mdlhist, mdl)
 

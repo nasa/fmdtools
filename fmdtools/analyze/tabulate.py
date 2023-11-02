@@ -11,6 +11,7 @@ nominal approach.
 and classes:
 - :class:`FMEA`: Class defining FMEA tables (with plotting/tabular export).
 - :class:`Comparison`: Class defining metric comparison (with plot/tab export).
+- :class:`NominalEnvelope`: Class defining performance envelope (with plot export).
 """
 # File Name: analyze/tabulate.py
 # Author: Daniel Hulse
@@ -19,8 +20,8 @@ and classes:
 import pandas as pd
 import numpy as np
 from fmdtools.analyze.result import Result
-from fmdtools.analyze.plot import multiplot_helper, consolidate_legend
-from fmdtools.analyze.plot import multiplot_legend_title
+from fmdtools.analyze.common import multiplot_helper, consolidate_legend
+from fmdtools.analyze.common import multiplot_legend_title, is_numeric, setup_plot
 from matplotlib import colors as mcolors
 from matplotlib import pyplot as plt
 from collections import UserDict
@@ -645,6 +646,193 @@ class NestedComparison(BaseComparison):
 
         self.factors = samp_factors + samps_factors
         super().__init__(res, overall_scen_groups, **kwargs)
+
+
+class NominalEnvelope(object):
+    """
+    Class defining nominal performance envelope.
+
+    Attributes
+    ----------
+    params : tuple
+        Parameters explored in the envelope.
+    variable_groups : dict
+        Variable groups and their corresponding scenarios.
+    group_values : dict
+        Nominal/Faulty values for the scenarios/groups in variable groups.
+    """
+
+    def __init__(self, ps, res, metric, *params, func=lambda x: x == 0.0):
+        """
+        Make an object showing the nominal envelope of operations.
+
+        Parameters
+        ----------
+        ps : ParameterSample
+            ParameterSample sample approach simulated in the model.
+        res : Result
+            Result dict for the set of simulations produced by running the model over ps
+        metric : str
+            Value to get from endclasses for the scenario(s). The default is 'cost'.
+        x_param : str
+            Parameter range desired to visualize in the operational envelope. Can be any
+            property that changes over the nomapp
+            (e.g., `r.seed`, `inputparam.x_in`, `p.x`...)
+        func : method, optional
+            Function to classify metric values as "nominal".
+            Default is lambda x: x == 0.0
+        """
+        self.params = params
+        self.variable_groups = ps.get_scen_groups(*params)
+        if not self.variable_groups:
+            raise Exception("No matching scenarios--are parameters " +
+                            params + " in the nomapp Scenarios?")
+        gv = {group:
+              [func(v) for v in res.get_scens(*scens).get_values("."+metric).values()]
+              for group, scens in self.variable_groups.items()}
+        self.group_values = gv
+
+    def as_plot(self, **kwargs):
+        """
+        Plot nominal envelope. Overall function that calls plot_event/plot_scatter.
+
+        Parameters
+        ----------
+        **kwargs : kwargs
+            kwargs to plot_event/plot_scatter
+
+        Returns
+        -------
+        fig : mpl figure
+            Figure with scatter plot
+        ax :mpl, axis
+            Axis with scatter plot
+        """
+        if len(self.params) == 1:
+            return self.plot_event(**kwargs)
+        elif len(self.params) in [2, 3]:
+            return self.plot_scatter(**kwargs)
+        else:
+            raise Exception("Must have 1, 2, or 3 params to plot.")
+
+    def plot_event(self, n_kwargs={}, f_kwargs={}, figsize=(6, 4), legend_loc='best',
+                   xlabel='', title=''):
+        """
+        Make an eventplot of the Nominal Envelope (for 1D).
+
+        Parameters
+        ----------
+        n_kwargs : dict, optional
+            Nominal kwargs to ax.scatter. The default is {}.
+        f_kwargs : dict, optional
+            Faulty kwargs to ax.scatter. The default is {}.
+        figsize : tuple, optional
+            Figure size. The default is (6, 4).
+        legend_loc : str, optional
+            Location for the legend. The default is 'best'.
+        xlabel : str, optional
+            label for x-axis (defaults to parameter name for x_param)
+        title : str, optional
+            title for the figure. The default is ''.
+
+        Returns
+        -------
+        fig : mpl figure
+            Figure with scatter plot
+        ax :mpl, axis
+            Axis with scatter plot
+        """
+        n_kwargs = {**dict(label='nominal', alpha=0.5, color='blue'),  **n_kwargs}
+        f_kwargs = {**dict(label='faulty', alpha=0.5, color='red'),  **f_kwargs}
+
+        fig, ax = setup_plot(figsize=figsize)
+
+        data_values = [k[0] for k in self.variable_groups.keys()]
+        if is_numeric(data_values):
+            min_x = np.min(data_values)
+            max_x = np.max(data_values)
+            ax.hlines(1, min_x-1, max_x+1)
+            ax.set_xlim(min_x-1, max_x+1)
+
+        for var, vals in self.group_values.items():
+            for val in vals:
+                if val:
+                    ax.eventplot(var, **n_kwargs)
+                else:
+                    ax.eventplot(var, **f_kwargs)
+        consolidate_legend(ax, loc=legend_loc)
+        ax.yaxis.set_ticklabels([])
+        if not xlabel:
+            xlabel = self.params[0]
+        ax.set_xlabel(xlabel)
+        ax.set_title(title)
+        ax.grid(which='both', axis='x')
+        return fig, ax
+
+    def plot_scatter(self, n_kwargs={}, f_kwargs={}, figsize=(6, 4), legend_loc='best',
+                     xlabel='', ylabel='', zlabel='', title=''):
+        """
+        Make a scatter plot of the Nominal Envelope (for 2D/3D).
+
+        Parameters
+        ----------
+        n_kwargs : dict, optional
+            Nominal kwargs to ax.scatter. The default is {}.
+        f_kwargs : dict, optional
+            Faulty kwargs to ax.scatter. The default is {}.
+        figsize : tuple, optional
+            Figure size. The default is (6, 4).
+        legend_loc : str, optional
+            Location for the legend. The default is 'best'.
+        xlabel : str, optional
+            label for x-axis (defaults to parameter name for x_param)
+        ylabel : str, optional
+            label for y-axis (defaults to parameter name for y_param)
+        zlabel : str, optional
+            label for z-axis (defaults to parameter name for z_param)
+        title : str, optional
+            title for the figure. The default is ''.
+
+        Returns
+        -------
+        fig : mpl figure
+            Figure with scatter plot
+        ax :mpl, axis
+            Axis with scatter plot
+        """
+        default_n_kwargs = dict(label='nominal', alpha=0.5, color='blue', marker='o')
+        default_f_kwargs = dict(label='faulty', alpha=0.5, color='red', marker='x')
+        n_kwargs = {**default_n_kwargs,  **n_kwargs}
+        f_kwargs = {**default_f_kwargs,  **f_kwargs}
+
+        if len(self.params) == 3:
+            z = 0
+        else:
+            z = False
+        fig, ax = setup_plot(figsize=figsize, z=z)
+
+        for var, vals in self.group_values.items():
+            for val in vals:
+                x = [[i] for i in var]
+                if val:
+                    ax.scatter(*x, **n_kwargs)
+                else:
+                    ax.scatter(*x, **f_kwargs)
+
+        consolidate_legend(ax, loc=legend_loc)
+        if not xlabel:
+            xlabel = self.params[0]
+        if not ylabel:
+            ylabel = self.params[1]
+        ax.set_xlabel(xlabel)
+        ax.set_ylabel(ylabel)
+        if len(self.params) == 3:
+            if not zlabel:
+                zlabel = self.params[2]
+            ax.set_zlabel(zlabel)
+        ax.set_title(title)
+        return fig, ax
+
 
 
 if __name__ == "__main__":
