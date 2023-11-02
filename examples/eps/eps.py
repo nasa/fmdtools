@@ -38,7 +38,9 @@ class Signal(Flow):
 
 
 class ImportEEModes(Mode):
-    faultparams = {"low_v": (1e-5, 100), "high_v": (5e-6, 100), "no_v": (1e-5, 300)}
+    fm_args = {"low_v": (1e-5, 100),
+               "high_v": (5e-6, 100),
+               "no_v": (1e-5, 300)}
 
 
 class ImportEE(FxnBlock):
@@ -68,7 +70,8 @@ class ImportEE(FxnBlock):
 
 
 class ImportSigModes(Mode):
-    faultparams = {"partial_signal": (1e-5, 750), "no_signal": (1e-6, 750)}
+    fm_args = {"partial_signal": (1e-5, 750),
+               "no_signal": (1e-6, 750)}
 
 
 class ImportSig(FxnBlock):
@@ -87,7 +90,8 @@ class ImportSig(FxnBlock):
 
 
 class StoreEEModes(Mode):
-    faultparams = {"low_storage": (5e-6, 2000), "no_storage": (5e-6, 2000)}
+    fm_args = {"low_storage": (5e-6, 2000),
+               "no_storage": (5e-6, 2000)}
 
 
 class StoreEE(FxnBlock):
@@ -116,13 +120,11 @@ class StoreEE(FxnBlock):
 
 
 class SupplyEEModes(Mode):
-    faultparams = {
-        "adverse_resist": (2e-6, 400),
-        "minor_overload": (1e-5, 400),
-        "major_overload": (3e-6, 400),
-        "short": (1e-7, 400),
-        "open_circuit": (5e-8, 200),
-    }
+    fm_args = {"adverse_resist": (2e-6, 400),
+               "minor_overload": (1e-5, 400),
+               "major_overload": (3e-6, 400),
+               "short": (1e-7, 400),
+               "open_circuit": (5e-8, 200)}
 
 
 class SupplyEE(FxnBlock):
@@ -160,12 +162,10 @@ class SupplyEE(FxnBlock):
 
 
 class DistEEModes(Mode):
-    faultparams = {
-        "adverse_resist": (1e-5, 1500),
-        "poor_alloc": (2e-5, 500),
-        "short": (2e-5, 1500),
-        "open_circuit": (3e-5, 1500),
-    }
+    fm_args = {"adverse_resist": (1e-5, 1500),
+               "poor_alloc": (2e-5, 500),
+               "short": (2e-5, 1500),
+               "open_circuit": (3e-5, 1500)}
 
 
 class DistEE(FxnBlock):
@@ -214,7 +214,8 @@ class DistEE(FxnBlock):
 
 
 class ExportHEModes(Mode):
-    faultparams = {"hot_sink": (1e-5, 500), "ineffective_sink": (0.5e-5, 1000)}
+    fm_args = {"hot_sink": (1e-5, 500),
+               "ineffective_sink": (0.5e-5, 1000)}
 
 
 class ExportHE(FxnBlock):
@@ -249,13 +250,11 @@ class ExportOE(FxnBlock):
 
 
 class EEtoMEModes(Mode):
-    faultparams = {
-        "high_torque": (1e-4, 200),
-        "low_torque": (1e-4, 200),
-        "toohigh_torque": (5e-5, 200),
-        "open_circuit": (5e-5, 200),
-        "short": (5e-5, 200),
-    }
+    fm_args = {"high_torque": (1e-4, 200),
+               "low_torque": (1e-4, 200),
+               "toohigh_torque": (5e-5, 200),
+               "open_circuit": (5e-5, 200),
+               "short": (5e-5, 200)}
 
 
 class EEtoME(FxnBlock):
@@ -297,12 +296,10 @@ class EEtoME(FxnBlock):
 
 
 class EEtoHEModes(Mode):
-    faultparams = {
-        "low_heat": (2e-6, 200),
-        "high_heat": (1e-7, 200),
-        "toohigh_heat": (5e-7, 200),
-        "open_circuit": (1e-7, 200),
-    }
+    fm_args = {"low_heat": (2e-6, 200),
+               "high_heat": (1e-7, 200),
+               "toohigh_heat": (5e-7, 200),
+               "open_circuit": (1e-7, 200)}
 
 
 class EEtoHE(FxnBlock):
@@ -337,7 +334,8 @@ class EEtoHE(FxnBlock):
 
 
 class EEtoOEModes(Mode):
-    faultparams = {"optical_resist": (5e-7, 70), "burnt_out": (2e-6, 100)}
+    fm_args = {"optical_resist": (5e-7, 70),
+               "burnt_out": (2e-6, 100)}
 
 
 class EEtoOE(FxnBlock):

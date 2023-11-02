@@ -10,7 +10,9 @@ from fmdtools.define.common import init_obj_attr, init_obj_dict
 from fmdtools.define.parameter import Parameter
 from fmdtools.define.state import State
 from fmdtools.define.common import get_obj_track
-from fmdtools.analyze.result import History, get_sub_include, init_indicator_hist
+from fmdtools.analyze.common import get_sub_include
+from fmdtools.analyze.history import History, init_indicator_hist
+from fmdtools.analyze.common import setup_plot, consolidate_legend
 
 from shapely import LineString, Point, Polygon
 from shapely.ops import nearest_points
@@ -179,6 +181,65 @@ class Geom(object):
         next_pt = buffer.line_interpolate_point(line_dist + dist_forward)
         vect_at_shape = np.array(next_pt.xy) - np.array(close_pt.xy)
         return vect_at_shape
+
+    def show(self, shapes={'all': {}}, fig=None, ax=None, figsize=(4, 4), z=False,
+             geomlabel='', **kwargs):
+        """
+        Show a Geom (shape and buffers) as lines on a plot.
+
+        Parameters
+        ----------
+        geom : Geom
+            Geom object.
+        shapes : dict, optional
+            Aspects of the Geom to plot and their corresponding plot kwargs.
+            The default is {'all': {}}.
+        fig : matplotlib.figure, optional
+            Existing Figure. The default is None.
+        ax : matplotlib.axis, optional
+            Existing axis. The default is None.
+        figsize : tuple, optional
+            Size for figure (if instantiating). The default is (4, 4).
+        z : bool/number, optional
+            If plotting on a 3d axis, set z to a number which will be the z-level.
+            The default is False.
+        geomlabel : str, optional
+            Overall label for the geom (if desired). The default is ''.
+        **kwargs : kwargs
+            overall kwargs for plt.plot for all shapes.
+
+        Returns
+        -------
+        fig : figure
+            Matplotlib figure object
+        ax : axis
+            Corresponding matplotlib axis
+        """
+        if not ax:
+            fig, ax = setup_plot(z=z, figsize=figsize)
+        if 'all' in shapes:
+            shapes = {'shape': {}, **{v: {} for v in self.buffers}}
+        if type(z) in (int, float):
+            plot_kwargs = {'zs': z, 'zdir': 'z', **kwargs}
+        else:
+            plot_kwargs = kwargs
+        for shape, shape_kwargs in shapes.items():
+            if geomlabel:
+                shape_label = geomlabel + "." + shape
+            else:
+                shape_label = shape
+            local_kwargs = {**plot_kwargs, 'label': shape_label, **shape_kwargs}
+            shap = getattr(self, shape)
+            if isinstance(shap, Point):
+                ax.scatter(shap.x, shap.y, **local_kwargs)
+            elif isinstance(shap, LineString):
+                linecoords = np.array([*shap.coords])
+                ax.plot(linecoords[:, 0], linecoords[:, 1], **local_kwargs)
+            elif isinstance(shap, Polygon):
+                ax.plot(*shap.exterior.xy, **local_kwargs)
+        ax.axis('equal')
+        consolidate_legend(ax, **kwargs)
+        return fig, ax
 
 
 class PointParam(Parameter):
@@ -550,7 +611,6 @@ class GeomArch(object):
         geoms.ex_point.s.occupied:      array(1)
         geoms.ex_line.s.occupied:       array(1)
         geoms.ex_poly.s.occupied:       array(1)
-        <BLANKLINE>
         """
         track = get_obj_track(self, track, all_possible=self.all_possible)
         hist = History()
@@ -585,6 +645,47 @@ class GeomArch(object):
         for geom in self.geoms.values():
             mutes.extend(geom.return_mutables())
         return tuple(mutes)
+
+    def show(self, geoms={'all': {}}, fig=None, ax=None, figsize=(4, 4), z=False,
+             **kwargs):
+        """
+        Show the shapes of a GeomArch all on one plot.
+
+        Parameters
+        ----------
+        geomarch : GeomArch
+            Geometric architecture to plot.
+        geoms : dict, optional
+            Individual shapes to plot and their corresponding kwargs.
+            The default is {'all': {}}.
+        fig : matplotlib.figure, optional
+            Existing Figure. The default is None.
+        ax : matplotlib.axis, optional
+            Existing axis. The default is None.
+        figsize : tuple, optional
+            Size for figure (if instantiating). The default is (4, 4).
+        z : bool/number, optional
+            If plotting on a 3d axis, set z to a number which will be the z-level.
+            The default is False.
+        **kwargs : kwargs
+            Overall kwargs to show.geom for all geoms.
+
+        Returns
+        -------
+        fig : figure
+            Matplotlib figure object
+        ax : axis
+            Corresponding matplotlib axis
+        """
+        if not ax:
+            fig, ax = setup_plot(z=z, figsize=figsize)
+        if 'all' in geoms:
+            geoms = {g: {'shapes': 'all'} for g in self.geoms}
+
+        for geomname, geom_kwargs in geoms.items():
+            local_kwargs = {**kwargs, 'geomlabel': geomname, **geom_kwargs}
+            fig, ax = self.geoms[geomname].show(ax=ax, fig=fig, z=z, **local_kwargs)
+        return fig, ax
 
 
 class ExGeomArch(GeomArch):

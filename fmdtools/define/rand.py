@@ -23,7 +23,7 @@ import math
 from .common import get_true_fields, get_true_field, get_dataobj_track
 import copy
 
-from fmdtools.analyze.result import History, init_hist_iter
+from fmdtools.analyze.history import History, init_hist_iter
 
 
 class Rand(dataobject, mapping=True):

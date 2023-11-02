@@ -25,14 +25,17 @@ import inspect
 import warnings
 from recordclass import dataobject, asdict, astuple
 
-from .state import State
-from .parameter import Parameter, SimParam
-from .rand import Rand
-from .common import get_true_fields, get_true_field, init_obj_attr, get_obj_track, eq_units, set_var
-from .time import Time
-from .mode import Mode
-from .flow import init_flow, Flow
-from fmdtools.analyze.result import Result, History, get_sub_include, init_indicator_hist
+from fmdtools.define.state import State
+from fmdtools.define.parameter import Parameter, SimParam
+from fmdtools.define.rand import Rand
+from fmdtools.define.common import get_true_fields, get_true_field, init_obj_attr
+from fmdtools.define.common import get_obj_track, set_var
+from fmdtools.define.time import Time
+from fmdtools.define.mode import Mode
+from fmdtools.define.flow import init_flow, Flow
+from fmdtools.analyze.result import Result
+from fmdtools.analyze.common import get_sub_include
+from fmdtools.analyze.history import History, init_indicator_hist
 
 
 def assoc_flows(obj, flows={}):
@@ -216,11 +219,11 @@ class Simulable(object):
         if not track:
             track = copy.deepcopy(self.track)
         return p, sp, r, track
-    
+
     def get_fxns(self):
         """
-        Gets the fxns associated with the given Simulable (self if FxnBlock, self.fxns if Model)
-        
+        Get fxns associated with the Simulable (self if FxnBlock, self.fxns if Model).
+
         Returns
         -------
         fxns: dict
@@ -231,11 +234,11 @@ class Simulable(object):
         else:
             fxns = {self.name: self}
         return fxns
-    
-    def get_scen_rate(self, fxnname, faultmode, time):
+
+    def get_scen_rate(self, fxnname, faultmode, time, phasemap={}, weight=1.0):
         """
-        Gets the scenario rate for the given single-fault scenario.
-        
+        Get the scenario rate for the given single-fault scenario.
+
         Parameters
         ----------
         fxnname: str
@@ -244,6 +247,12 @@ class Simulable(object):
             Name of the fault mode
         time: int
             Time when the scenario is to occur
+        phasemap : PhaseMap, optional
+            Map of phases/modephases that define operations the mode will be injected
+            during (and maps to the opportunity vector phases). The default is {}.
+        weight : int, optional
+            Scenario weight (e.g., if more than one scenario is sampled for the fault).
+            The default is 1.
 
         Returns
         -------
@@ -251,23 +260,19 @@ class Simulable(object):
             Rate of the scenario
         """
         fxn = self.get_fxns()[fxnname]
-        fm = fxn.m
-        # this rate is on a per-simulation basis
-        tot_time = self.sp.times[-1] - self.sp.times[0] + self.sp.dt
-        rate_time = eq_units(fm.faultmodes[faultmode]['units'], self.sp.units)*tot_time
-        if not fm.faultmodes.get(faultmode, False): 
-            raise Exception("faultmode "+faultmode+" not in "+str(fm.__class__))
+        fm = fxn.m.faultmodes.get(faultmode, False)
+        if not fm:
+            raise Exception("faultmode "+faultmode+" not in "+str(fxn.m.__class__))
         else:
-            if fm.faultmodes[faultmode].probtype == 'rate':
-                rate = fm.failrate*fm.faultmodes[faultmode]['dist']*rate_time
-            elif fm.faultmodes[faultmode].probtype == 'prob':
-                rate = fm.failrate*fm.faultmodes[faultmode]['dist'] 
+            sim_time = self.sp.times[-1] - self.sp.times[0] + self.sp.dt
+            rate = fm.calc_rate(time, phasemap=phasemap, sim_time=sim_time,
+                                sim_units=self.sp.units, weight=weight)
         return rate
-    
+
     def get_args(self, **kwargs):
         """
-        Gets the current arguments for a given Simulable stored in _at_args
-        
+        Get the current arguments for a given Simulable stored in _at_args.
+
         Parameters
         ----------
         kwargs: dict
@@ -624,9 +629,11 @@ class Block(Simulable):
         time : float
             The current timestep.
         faults : dict
-            Faults to inject during this propagation step. With structure {fname:['fault1', 'fault2'...]}
+            Faults to inject during this propagation step.
+            With structure {fname: ['fault1', 'fault2'...]}
         disturbances : dict
-            Variables to change during this propagation step. With structure {'var1':value}
+            Variables to change during this propagation step.
+            With structure {'var1': value}
         run_stochastic : bool
             Whether to run stochastic behaviors or use default values. Default is False.
             Can set as 'track_pdf' to calculate/track the probability densities of random states over time.
@@ -1366,5 +1373,5 @@ class FxnBlock(Block):
 class GenericFxn(FxnBlock):
     """Generic function block. For use when the user has not yet defined a class for the
     given (to be implemented) function block. Acts as a placeholder that enables simulation."""
-    def __init__(self, name='', flows={}):
-        super().__init__(name=name, flows=flows)
+    def __init__(self, name='', flows={}, args_f={}, **kwargs):
+        super().__init__(name=name, flows=flows, **kwargs)

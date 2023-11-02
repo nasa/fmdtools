@@ -6,7 +6,7 @@ Created on Tue Sep 26 15:05:01 2023
 """
 from pymoo.optimize import minimize
 from fmdtools.sim import search
-from fmdtools.sim.approach import SampleApproach
+from fmdtools.sim.sample import SampleApproach
 from fmdtools.define.parameter import SimParam
 from examples.rover.rover_model import Rover
 

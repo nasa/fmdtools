@@ -13,93 +13,180 @@ from typing import ClassVar
 import numpy as np
 import itertools
 import copy
-from .common import get_true_fields, get_true_field, get_dataobj_track
-from fmdtools.analyze.result import History, init_hist_iter
+from fmdtools.define.common import get_true_fields, get_true_field, get_dataobj_track, eq_units
+from fmdtools.analyze.history import History
 
 
 class Fault(dataobject, readonly=True, mapping=True):
-    """Stores Default Attributes for for modes to use in Mode.faultmodes."""
+    """
+    Stores Default Attributes for for modes to use in Mode.faultmodes.
 
-    dist: float = 1.0
-    oppvect: dict = {"operating": 1.0}
-    rcost: float = 0.0
-    probtype: str = 'rate'
-    units: str = 'hr'
+    Fields
+    ------
+    prob : float
+        Mode probability or rate per operation
+    cost : float
+        Individual mode cost (e.g., of repair)
+    phases : dict
+        Opportunity vector mapping phases of operation to relative probability.
+        i.e., phase_probability = Fault.prob * Fault.phases[phase]
+    units : str
+        Units on probability. Can be a unit of continuous ('sec', 'min', 'hr', 'day') or
+        discrete ('sim') time. Default is 'sim'.
+    """
+
+    prob: float = 1.0
+    cost: float = 0.0
+    phases: dict = {}
+    units: str = 'sim'
+
+    def calc_rate(self, time, phasemap={}, sim_time=1.0, sim_units='hr', weight=1.0):
+        """
+        Calculate the rate of a given fault mode.
+
+        Parameters
+        ----------
+        time : float
+            Time the fault will be injected.
+        phasemap : PhaseMap, optional
+            Map of phases/modephases that define operations the mode will be injected
+            during (and maps to the opportunity vector phases). The default is {}.
+        sim_time : float, optional
+            Duration of the simulation. Used to determine fault exposure time when
+            time-units ('sec', 'min', etc) define the fault rate. The default is 1.0.
+        sim_units : float, optional
+            Simulation time units. Used to determine fault exposure time when time-units
+            define the fault rate. The default is 'hr'.
+        weight : float, optional
+            Weight for the fault/scenario (e.g., for multiple scens.). The default is 1.
+
+        Returns
+        -------
+        rate : float
+            Calculated rate of the scenario with the given information.
+
+        Examples
+        --------
+        >>> # Calculating the rate of a mode in the 'on phase':
+        >>> pm = PhaseMap({'on': [0, 5], 'off': [6, 10]})
+        >>> exfault = Fault(prob=0.5, phases = {'on': 0.9, 'off': 0.1}, units='hr')
+        >>> rate = exfault.calc_rate(4, pm, sim_time=10.0, sim_units='min')
+        >>> # note that this rate is the same as what we would calculate:
+        >>> manual_calc = 0.5 * 6 * 0.9 / 60
+        >>> manual_calc == rate
+        True
+        >>> rate_off = exfault.calc_rate(7, pm, sim_time=10.0, sim_units='min')
+        >>> # note that the interval for off (6-10) is 5 while (0-5) is 6
+        >>> manual_calc_off = 0.5 * 5 * 0.1 / 60
+        >>> manual_calc_off == rate_off
+        True
+        """
+        if self.units == 'sim':
+            sim_exposure_time = 1.0
+            baserate = self['prob']
+        else:
+            sim_exposure_time = eq_units(self['units'], sim_units) * sim_time
+            baserate = self['prob'] * sim_exposure_time
+
+        if not phasemap:
+            return baserate * weight
+        else:
+            if self.units == 'sim':
+                t_factor = 1.0
+            else:
+                t_exposure = phasemap.calc_scen_exposure_time(time)
+                t_exposure *= eq_units(self['units'], sim_units)
+                t_factor = t_exposure/sim_exposure_time
+            if self.phases:
+                phase = phasemap.find_base_phase(time)
+                opp_factor = self.phases.get(phase, 0.0)
+            else:
+                opp_factor = 1.0
+            return baserate * opp_factor * t_factor * weight
 
 
 class Mode(dataobject, readonly=False):
     """
-    Description: Class for defining the mode property (and associated probability model)
-    held in Blocks.
+    Class for defining the mode property (and probability model) held in Blocks.
 
     Mode is meant to be inherited in order to define the specific faults related to a
     given Block.
 
     e.g.,
     class ExampleMode(Mode):
-        faultmodes = {"high_heat", "low_heat"}
+        fm_args = {"high_heat", "low_heat"}
         mode = "start"
     Will create a Mode structure where m.mode = 'start' that can enter the given
     fault modes 'high_heat' and 'low_heat'.
 
-    Mode has the following fields which can be modified to define the underlying
+    Mode has the following class variables  which can be modified to define the
     representation and probability model:
-    -------------
 
+    Class Variables
+    ---------------
     opermodes : tuple
         Names of non-faulty operational modes.
     failrate : float
-        Overall failure rate for the block. The default is 1.0.
-    faultparams : dict
-            Dictionary/tuple of arguments defining faultmodes, which can have the forms:
-                - tuple ('fault1', 'fault2', 'fault3') (just the respective faults)
-                - dict {'fault1': faultattributes, 'fault2': faultattributes}, where faultattributes is:
-                    - float: rate for the mode
-                    - dict/set/str: opportunity vector for the mode specified as a dictionary/set/string
-                    - tuple: (rate, oppvect, rcost) or (rate, rcost)
-                        - a list of arguments where the float arguments are specified in the order rate, rcost (if provided) and
-                            an oppvect opportunity vector is provided (anywhere) with the form:
-                                -list: [float1, float2,...], a vector of relative likelihoods for each phase, or
-                                -dict: {opermode:float1, opermode:float1}, a dict of relative likelihoods for each phase/mode
-                                -set: {opermode, opermode,...}, a set of applicable phases (assumed equally likely).
-                                the phases/modes to key by are defined in "key_phases_by"
-                                -str: 'all'/'modename', either specifying all operational modes/phases or a single operational mode/phase
+        Overall failure rate for the block. The default is 1.0. Note that if a failrate
+        is provided, the prob argument in faultparams is a conditional probability
+        (e.g. Fault.prob = Mode.failrate * Mode.faultparams['mode']['prob'])
     probtype : str, optional
         Type of probability in the probability model, a per-time 'rate' or
         per-run 'prob'.The default is 'rate'
     units : str, optional
-        Type of units ('sec'/'min'/'hr'/'day') used for the rates. Default is 'hr'
+        Type of units ('sec'/'min'/'hr'/'day') used for the rates.
+        Default is 'sim', which is unitless (prob/simulation)
+    phases : dict
+        Phases to inject faults in.
     exclusive : True/False
         Whether fault modes are exclusive of each other or not.
         Default is False (i.e. more than one can be present).
-    key_phases_by : 'self'/'none'/'global'/'fxnname'
-        Phases to key the faultmodes by
-        (using local, global, or an external function's modes').
-        Default is 'global'
     longnames : dict
         Longer names for the faults (if desired). {faultname: longname}
     faults : set
         Set of faults present (or not) at any given time
     mode : str
         Name of the current mode. the default is 'nominal'
+    fm_args : dict
+        Arguments to Mode.init_faultmodes()
     he_args : tuple
         Arguments for add_he_rate defining a human error probability model.
+    sfs_args : tuple
+        Arguments for self.init_single_faultstates (franges, {kwargs})
+    nfs_args : tuple
+        Arguments for self.init_n_faultstates (*args, {kwargs})
+    fsm_args : tuple
+        Arguments for self.init_faultstates_modes (manual_modes, {kwargs})
 
+    These fields are then used in simulation and elsewhere:
 
-    These properties can then be used in simulation
-    ------------
+    Fields
+    ------
     faults : set
         Set of faults present (or not) at any given time
     mode : str
         Name of the current mode. the default is 'nominal'
     mode_state_dict: dict
-        Maps modes to states. Assigned by assoc_faultstates
-
-    While these properties are used for determining scenario information
-    ------------
+        Maps modes to states. Assigned by init_faultstates methods.
     faultmodes : dict
             Dictionary of :class:`Fault` defining possible fault modes and
             their properties
+
+    Examples
+    --------
+    >>> class ExampleMode(Mode):
+    ...    fm_args = {"no_charge": (1e-5, 100, {'standby': 1.0}),
+    ...              "short": (1e-5, 100, {'supply': 1.0})}
+    ...    opermodes = ("supply", "charge", "standby")
+    ...    exclusive = True
+    ...    mode: str = "standby"
+    >>> exm = ExampleMode()
+    >>> exm.mode
+    'standby'
+    >>> exm.any_faults()
+    False
+    >>> exm.faultmodes
+    {'no_charge': Fault(prob=1e-05, cost=100, phases={'standby': 1.0}, units='sim'), 'short': Fault(prob=1e-05, cost=100, phases={'supply': 1.0}, units='sim')}
     """
 
     mode: ClassVar[str] = 'nominal'
@@ -107,14 +194,16 @@ class Mode(dataobject, readonly=False):
     faults: set = set()
     faultmodes: dict = {}
     mode_state_dict: dict = {}
-    faultparams = {}
+    fm_args = {}
     he_args = tuple()
+    sfs_args = tuple()
+    nfs_args = tuple()
+    fsm_args = tuple()
     opermodes = ('nominal',)
-    probtype = 'rate'
-    units = 'hr'
-    units_set = ('sec', 'min', 'hr', 'day')
+    units = 'sim'
+    units_set = ('sec', 'min', 'hr', 'day', 'sim')
+    phases = {}
     exclusive = False
-    key_phases_by = 'global'
     longnames = {}
     default_track = ('mode', 'faults')
 
@@ -138,7 +227,14 @@ class Mode(dataobject, readonly=False):
         if 's' in self.__fields__:
             self.s.set_atts(**s_kwargs)
 
-        self.init_faultmodes()
+        if self.fm_args:
+            self.init_faultmodes(self.fm_args)
+        if self.sfs_args:
+            self.init_single_faultstates(self.sfs_args[0], **self.sfs_args[1])
+        if self.nfs_args:
+            self.init_n_faultstates(self.nfs_args[0], **self.nfs_args[1])
+        if self.fsm_args:
+            self.init_faultstates_modes(self.fsm_args[0], **self.fsm_args[1])
 
     def __repr__(self):
         reprstr = (self.__class__.__name__ +
@@ -176,131 +272,134 @@ class Mode(dataobject, readonly=False):
     def return_mutables(self):
         return (self.mode, copy.copy(self.faults))
 
-    def init_faultmodes(self):
-        """Initialize the self.faultmodes dictionary from the parameters of the Mode."""
-        if self.key_phases_by == 'self':
-            oppvect = 'all'
-        else:
-            oppvect = [1.0]
-        default_kwargs = {'dist': 1.0 / max(len(self.faultparams), 1),
-                          'probtype': self.probtype,
-                          'units': self.units,
-                          'oppvect': oppvect}
-        for mode in self.faultparams:
-            if type(self.faultparams) == tuple:
+    def init_faultmodes(self, fm_args):
+        """
+        Initialize the self.faultmodes dictionary from the parameters of the Mode.
+
+        Parameters
+        ----------
+        fm_args : dict or tuple
+                Dictionary/tuple of arguments defining faultmodes, which can have forms:
+                    - tuple ('fault1', 'fault2', 'fault3') (just the respective faults)
+                    - dict {'fault1': args, 'fault2': kwargs}, where args and kwargs are
+                    args or kwargs to Fault (prob, phases, cost, units, etc).
+        """
+        default_kwargs = {'prob': 1.0 / max(len(fm_args), 1),
+                          'phases': self.phases,
+                          'units': self.units}
+        for mode in fm_args:
+            if type(fm_args) == tuple:
+                args = ()
                 kwargs = {**default_kwargs}
-            elif type(self.faultparams[mode]) == float:
-                # dict of modes: dist is the distribution ((individual rate/probability)
-                kwargs = {**{**default_kwargs, 'dist': self.faultparams[mode]}}
-            elif type(self.faultparams[mode]) == dict:
-                kwargs = {**{**default_kwargs, 'dist': self.faultparams[mode],
-                             **self.faultparams[mode]}}
-            elif type(self.faultparams[mode]) == tuple:
-                # provided list with oppvect, dist, rcost (rcost always after dist)
-                if len(self.faultparams[mode]) == 2:
-                    kwargs = {['dist', 'rcost'][i]: val
-                              for i, val in enumerate(self.faultparams[mode])}
-                else:
-                    kwargs = {['dist', 'oppvect', 'rcost'][i]: val
-                              for i, val in enumerate(self.faultparams[mode])}
-                kwargs = {**{**default_kwargs, 'dist': self.faultparams[mode],
-                             **kwargs}}
+            elif type(fm_args[mode]) == dict:
+                args = ()
+                kwargs = {**default_kwargs, **fm_args[mode]}
+            elif type(fm_args[mode]) == tuple:
+                args = fm_args[mode]
+                kwargs = {**default_kwargs}
             else:
                 raise Exception("Invalid mode definition in " +
                                 str(self.__class__) + ", " + mode +
-                                " modeparams values should be float/dict/tuple")
+                                " modeparams values should be dict or tuple")
+            args = get_true_fields(Fault, *args, **kwargs)
+            args[0] *= self.failrate
+            if type(args[2]) in [tuple, list, set]:
+                args[2] = {ph: 1.0 for ph in args[1] for ph in args[1]}
+            self.faultmodes[mode] = Fault(*args)
 
-            if kwargs['oppvect'] == 'all':
-                kwargs['oppvect'] = {*self.opermodes}
-            if type(kwargs['oppvect']) == set:
-                kwargs['oppvect'] = {o: 1.0 for o in kwargs['oppvect']}
-            self.faultmodes[mode] = Fault(**kwargs)
-
-    def assoc_faultstates(self, franges={}, mode_app='none', manual_modes={},
-                          probtype='prob', units='hr', key_phases_by='global',
-                          seed=42, **kwargs):
+    def init_single_faultstates(self, franges, **kwargs):
         """
-        Associate modes with given faultstates.
+        Associate modes with given faultstates as faults.
+
+        Modes generated for each frange (but not combined).
+
+        Parameters
+        ----------
+        franges : dict, optional
+            Dictionary of form {'state':{val1, val2...}) of ranges for each health state
+            (if used to generate modes). The default is {}.
+        **kwargs : kwargs
+            Entries for the Fault (e.g., phases, etc)
+        """
+        tot_faults = len([f for s in franges.values() for f in s])
+        prob = kwargs.get('prob', 1/tot_faults) * self.failrate
+        loc_kwargs = {**kwargs, 'prob': prob}
+        for state in franges:
+            modes = {state + '_' + str(value): Fault(*loc_kwargs)
+                     for value in franges[state]}
+            modestates = {state + '_' + str(value):
+                          {state: value} for value in franges[state]}
+            self.faultmodes.update(modes)
+            self.mode_state_dict.update(modestates)
+
+    def init_n_faultstates(self, franges, n='all', seed=42, **kwargs):
+        """
+        Associate n faultstate mode combinations as faults.
 
         Parameters
         ----------
         franges : dict, optional
             Dictionary of form {'state':{val1, val2...}) of ranges for each health state
                                 (if used to generate modes). The default is {}.
-        mode_app : str
-            type of modes to elaborate from the given health states.
+        n : int, optional
+            Number of faultstate combinations to sample. The default is 'all'.
+        seed : int, optional
+            Seed used in selection (if n!='all). The default is 42.
+        **kwargs : kwargs
+            Entries for the Fault (e.g., phases, etc)
+        """
+        nom_fstates = {state: self.s.__defaults__[self.s.__fields__.index(state)]
+                       for state in franges}
+        for state in franges:
+            franges[state].add(nom_fstates[state])
+        nomvals = tuple([*nom_fstates.values()])
+        statecombos = [i for i in itertools.product(*franges.values())
+                       if i != nomvals]
+        if type(n) == int and len(statecombos) > 0:
+            rng = np.random.default_rng(seed)
+            full_list = [i for i, _ in enumerate(statecombos)]
+            sample = rng.choice(full_list, size=n, replace=False)
+            statecombos = [statecombos[i] for i in sample]
+
+        prob = kwargs.get('prob', 1/len(statecombos)) * self.failrate
+        loc_kwargs = {**kwargs, 'prob': prob}
+        self.faultmodes.update({'hmode_' + str(i): Fault(**loc_kwargs)
+                                for i in range(len(statecombos))})
+        self.mode_state_dict.update({'hmode_'+str(i):
+                                     {list(franges)[j]: state
+                                      for j, state in enumerate(statecombos[i])}
+                                     for i in range(len(statecombos))})
+
+    def init_faultstate_modes(self, manual_modes, **kwargs):
+        """
+        Associate modes manual_modes with provided faultstates.
+
+        Parameters
+        ----------
         manual_modes : dict, optional
             Dictionary/Set of faultmodes with structure, which has the form:
                 - dict {'fault1': [atts], 'fault2': atts}, where atts may be of form:
                     - states: {state1: val1, state2, val2}
-                    - [states, faultattributes], where faultattributes is the same as in
-                    assoc_modes
-        probtype : str, optional
-            Type of probability in the probability model, a per-time 'rate' or
-            per-run 'prob'. The default is 'rate'
-        units : str, optional
-            Type of units ('sec'/'min'/'hr'/'day') used for the rates. Default is 'hr'
         **kwargs : kwargs
-            Entries for the Faults (e.g., oppvect, etc)
+            Entries for the Fault (e.g., phases, etc)
         """
-        nom_fstates = {state: self.s.__defaults__[self.s.__fields__.index(state)]
-                       for state in franges}
-        if mode_app == 'none':
-            a = 0
-        elif mode_app == 'single-state':
-            tot_faults = len([f for s in franges.values() for f in s])
-            for state in franges:
-                modes = {state + '_' + str(value):
-                         Fault(probtype='prob', dist=1/tot_faults, **kwargs)
-                         for value in franges[state]}
-                modestates = {state + '_' + str(value):
-                              {state: value} for value in franges[state]}
-                self.faultmodes.update(modes)
-                self.mode_state_dict.update(modestates)
-        elif mode_app == 'all' or type(mode_app) == int:
-            for state in franges:
-                franges[state].add(nom_fstates[state])
-            nomvals = tuple([*nom_fstates.values()])
-            statecombos = [i for i in itertools.product(*franges.values())
-                           if i != nomvals]
-            if type(mode_app) == int and len(statecombos) > 0:
-                rng = np.random.default_rng(seed)
-                full_list = [i for i, _ in enumerate(statecombos)]
-                sample = rng.choice(full_list, size=mode_app, replace=False)
-                statecombos = [statecombos[i] for i in sample]
-            self.faultmodes.update({'hmode_' + str(i):
-                                    Fault(probtype='prob', dist=1/len(statecombos), **kwargs)
-                                    for i in range(len(statecombos))})
-            self.mode_state_dict.update({'hmode_'+str(i):
-                                         {list(franges)[j]: state
-                                          for j, state in enumerate(statecombos[i])}
-                                         for i in range(len(statecombos))})
-        else:
-            raise Exception("Invalid mode elaboration approach")
-
+        p_def = 1/len(manual_modes)
         for mode, atts in manual_modes.items():
             if type(atts) == list:
-                self.mode_state_dict.update({mode: atts[0]})
-                if not getattr(self, 'exclusive', False):
-                    print("Changing fault mode exclusivity to True")
-                self.assoc_modes(faultmodes={mode: atts[1]},
-                                 initmode=getattr(self, 'mode', 'nom'),
-                                 probtype=probtype,
-                                 proptype=probtype,
-                                 exclusive=True,
-                                 key_phases_by=key_phases_by)
+                states = atts[0]
+                loc_kwargs = {**kwargs, **atts[1]}
             elif type(atts) == dict:
-                self.mode_state_dict.update({mode: atts})
-                self.faultmodes.update({mode:
-                                        Fault(probtype='prob',
-                                              dist=1 / len(manual_modes),
-                                              **kwargs)})
+                states = atts
+                loc_kwargs = {**kwargs}
+            loc_kwargs['prob'] = loc_kwargs.get('prob', p_def) * self.failrate
+            self.mode_state_dict.update({mode: states})
+            self.faultmodes.update({mode: Fault(**loc_kwargs)})
 
     def update_modestates(self):
         """
         Update states of the model associated with a specific fault mode.
 
-        (see assoc_modes)
+        (see init_faultstates)
         """
         num_update = 0
         for fault in self.faults:
@@ -496,3 +595,22 @@ class Mode(dataobject, readonly=False):
             if mode is None or mode is False:
                 mode = self.__defaults__[self.__fields__.index('mode')]
             self.mode = mode
+
+
+class ExampleMode(Mode):
+    fm_args = {"no_charge": (1e-5, 100, {'standby': 1.0}),
+               "short": (1e-5, 100, {'supply': 1.0})}
+    opermodes = ("supply", "charge", "standby")
+    exclusive = True
+    mode: str = "standby"
+
+
+if __name__ == "__main__":
+    exfault = Fault(prob=0.5, phases = {'on': 0.9, 'off': 0.1}, units='hr')
+    phases = PhaseMap({'on': [0, 5], 'off': [6, 10]})
+    rate = exfault.calc_rate(4, phases, sim_time=10.0, sim_units='min')
+
+    
+    
+    import doctest
+    doctest.testmod(verbose=True)

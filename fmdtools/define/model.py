@@ -8,20 +8,16 @@ Description: A module for defining Models, which are aggregations of Functions a
 """
 import numpy as np
 from ordered_set import OrderedSet
-from inspect import signature
 import networkx as nx
-import warnings
 import sys
-from recordclass import asdict
 import time
 import copy
 
-from .flow import Flow, init_flow
-from .common import check_pickleability, get_var, set_var, init_obj_attr, get_obj_track, eq_units
-from .parameter import Parameter, SimParam
-from .rand import Rand
-from .block import Simulable
-from fmdtools.analyze.result import History, get_sub_include, init_hist_iter, init_indicator_hist
+from fmdtools.define.flow import Flow, init_flow
+from fmdtools.define.common import check_pickleability, get_var, set_var, get_obj_track
+from fmdtools.define.block import Simulable
+from fmdtools.analyze.common import get_sub_include
+from fmdtools.analyze.history import History, init_indicator_hist, init_hist_iter
 
 #Model superclass    
 class Model(Simulable):
@@ -233,7 +229,7 @@ class Model(Simulable):
 
         """
         repmodes, modeprops = self.return_faultmodes()
-        modecost = sum([ c['rcost'] if c['rcost']>0.0 else default_cost for m in modeprops.values() for c in m.values()])
+        modecost = sum([ c['cost'] if c['cost']>0.0 else default_cost for m in modeprops.values() for c in m.values()])
         repair_cost = np.min([modecost, max_cost])
         return repair_cost
     def return_faultmodes(self):
@@ -529,7 +525,78 @@ class Model(Simulable):
             if n > 1000: #break if this is going for too long
                 raise Exception("Undesired looping between functions in static propagation step",
                                 "at t=" + str(time) + ", these functions remain active:" + str(activefxns))
-        
+
+    def plot_dynamic_run_order(self, rotateticks=False, title="Dynamic Run Order"):
+        """
+        Plot the run order for the model during the dynamic propagation step.
+
+        The x-direction is the order of each function executed and the y are the
+        corresponding flows acted on by the given methods.
+
+        Parameters
+        ----------
+        rotateticks : Bool, optional
+            Whether to rotate the x-ticks (for bigger plots). The default is False.
+        title : str, optional
+            String to use for the title (if any). The default is "Dynamic Run Order".
+
+        Returns
+        -------
+        fig : figure
+            Matplotlib figure object
+        ax : axis
+            Corresponding matplotlib axis
+        """
+        from matplotlib import pyplot as plt
+        from matplotlib.collections import PolyCollection
+        from matplotlib.ticker import AutoMinorLocator
+        fxnorder = list(self.dynamicfxns)
+        times = [i+0.5 for i in range(len(fxnorder))]
+        fxntimes = {f: i for i, f in enumerate(fxnorder)}
+
+        flowtimes = {f: [fxntimes[n] for n in self.graph.neighbors(
+            f) if n in self.dynamicfxns] for f in self.flows}
+
+        lengthorder = {k: v for k, v in
+                       sorted(flowtimes.items(), key=lambda x: len(x[1]), reverse=True)
+                       if len(v) > 0}
+        starttimeorder = {k: v for k, v in sorted(lengthorder.items(),
+                                                  key=lambda x: x[1][0], reverse=True)}
+        endtimeorder = [k for k, v in sorted(starttimeorder.items(),
+                                             key=lambda x: x[1][-1], reverse=True)]
+        flowtimedict = {flow: i for i, flow in enumerate(endtimeorder)}
+
+        fig, ax = plt.subplots()
+
+        for flow in flowtimes:
+            phaseboxes = [((t, flowtimedict[flow]-0.5),
+                           (t, flowtimedict[flow]+0.5),
+                           (t+1.0, flowtimedict[flow]+0.5),
+                           (t+1.0, flowtimedict[flow]-0.5))
+                          for t in flowtimes[flow]]
+            bars = PolyCollection(phaseboxes)
+            ax.add_collection(bars)
+
+        flowtimes = [i+0.5 for i in range(len(self.flows))]
+        ax.set_yticks(list(flowtimedict.values()))
+        ax.set_yticklabels(list(flowtimedict.keys()))
+        ax.set_ylim(-0.5, len(flowtimes)-0.5)
+        ax.set_xticks(times)
+        ax.set_xticklabels(fxnorder, rotation=90*rotateticks)
+        ax.set_xlim(0, len(times))
+        ax.xaxis.set_minor_locator(AutoMinorLocator(2))
+        ax.yaxis.set_minor_locator(AutoMinorLocator(2))
+        ax.grid(which='minor',  linewidth=2)
+        ax.tick_params(axis='x', bottom=False, top=False,
+                       labelbottom=False, labeltop=True)
+        if title:
+            if rotateticks:
+                fig.suptitle(title, fontweight='bold', y=1.15)
+            else:
+                fig.suptitle(title, fontweight='bold')
+        return fig, ax
+
+
 def check_model_pickleability(model, try_pick=False):
     """ Checks to see which attributes of a model object will pickle, providing more detail about functions/flows"""
     print('FLOWS ')
