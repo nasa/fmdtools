@@ -69,11 +69,11 @@ Glossary
 	Disturbances
 		A specific sequence of variable values over time which may modify system behavior.
 
-	Approach
-		A set of :term:`scenario` s to simulate a model over to represent certain hazards or parameters of interest. May be generated using :class:`fmdtools.sim.approach.SampleApproach` for fault modes or :class:`fmdtools.sim.approach.NominalApproach` for nominal parameters. 
+	Sample
+		A set of :term:`scenario` s to simulate a model over to represent certain hazards or parameters of interest. May be generated using :class:`fmdtools.sim.sample.FaultSample` for fault modes or :class:`fmdtools.sim.sample.ParameterSample` for nominal parameters. 
 	
 	Nested Approach
-		The result of simulating a fault sampling :term:`Approach` (:class:`fmdtools.sim.approach.SampleApproach`) within a nominal :term:`Approach` (:class:`fmdtools.sim.approach.NominalApproach`). Created in :func:`fmdtools.sim.propagate.nested_approach`
+		The result of simulating a fault sampling :term:`Approach` (:class:`fmdtools.sim.sample.SampleApproach`) within a nominal :term:`Approach` (:class:`fmdtools.sim.sample.ParameterSample`). Created in :func:`fmdtools.sim.propagate.nested_approach`
 	
 	Static Propagation
 		The undirected propagation of model behaviors within a timestep. Defined for each function using :meth:`fmdtools.define.block.FxnBlock.static_behavior`, which may run multiple times in a timestep until behavior has converged.
@@ -97,5 +97,4 @@ Glossary
 		How a the states of a system unfold over time. Defined using :term:`behavior`.
 	
 	Model History
-		A history of model states over a set of timesteps defined in :class:`fmdtools.analyze.result.History`. Returned in fmdtools as a nested dictionary from methods in :mod:`fmdtools.sim.propagate`.
-
+		A history of model states over a set of timesteps defined in :class:`fmdtools.analyze.history.History`. Returned in fmdtools as a nested dictionary from methods in :mod:`fmdtools.sim.propagate`.

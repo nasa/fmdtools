@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Cooling Tank Model Optimization &mdash; fmdtools 2.0-beta-1 documentation</title>
+  <title>Cooling Tank Model Optimization &mdash; fmdtools 2.0-beta-2 documentation</title>
       <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
       <link rel="stylesheet" href="../../_static/nbsphinx-code-cells.css" type="text/css" />
@@ -13,11 +13,11 @@
     <script src="../../_static/js/html5shiv.min.js"></script>
   <![endif]-->
   
-        <script src="../../_static/jquery.js?v=5d32c60e"></script>
-        <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-        <script src="../../_static/documentation_options.js?v=04ccac41"></script>
-        <script src="../../_static/doctools.js?v=888ff710"></script>
-        <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+        <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+        <script src="../../_static/jquery.js"></script>
+        <script src="../../_static/underscore.js"></script>
+        <script src="../../_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script src="../../_static/doctools.js"></script>
         <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
         <script>window.MathJax = {"tex": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true}, "options": {"ignoreHtmlClass": "tex2jax_ignore|mathjax_ignore|document", "processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
         <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
@@ -73,7 +73,7 @@
 <li class="toctree-l2"><a class="reference internal" href="../../docs/Development%20Guide.html#intro-to-fmdtools">Intro to fmdtools</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="../../docs/Intro_to_fmdtools.html">Intro to resilience modelling, simulation, and visualization in Python with fmdtools.</a><ul>
 <li class="toctree-l4"><a class="reference internal" href="../../docs/Intro_to_fmdtools.html#author-daniel-hulse">Author: Daniel Hulse</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/Intro_to_fmdtools.html#version-2-0-beta-1">Version: 2.0-beta-1</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../docs/Intro_to_fmdtools.html#version-2-0-beta-2">Version: 2.0-beta-2</a></li>
 </ul>
 </li>
 <li class="toctree-l3"><a class="reference internal" href="../../docs/Intro_to_fmdtools.html#overview">Overview</a></li>
@@ -255,20 +255,6 @@
 <li class="toctree-l4"><a class="reference internal" href="../rover/Rover_Setup_Notebook.html#Model-simulation">Model simulation</a></li>
 </ul>
 </li>
-<li class="toctree-l3"><a class="reference internal" href="../rover/Approach_Use-Cases.html">Defining Fault Sampling Approaches in fmdtools</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="../rover/Approach_Use-Cases.html#Basics">Basics</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../rover/Approach_Use-Cases.html#Model-Setup">Model Setup</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../rover/Approach_Use-Cases.html#Setting-up-an-approach">Setting up an approach</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../rover/Approach_Use-Cases.html#Propagating-Faults">Propagating Faults</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../rover/Approach_Use-Cases.html#Pruning">Pruning</a></li>
-</ul>
-</li>
-<li class="toctree-l3"><a class="reference internal" href="../rover/Nominal_Approach_Use-Cases.html">Defining Nominal Approaches in fmdtools</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="../rover/Nominal_Approach_Use-Cases.html#Quantifying-probabilities">Quantifying probabilities</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../rover/Nominal_Approach_Use-Cases.html#Random-input-generation">Random input generation</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../rover/Nominal_Approach_Use-Cases.html#Nested-Scenario-Sampling">Nested Scenario Sampling</a></li>
-</ul>
-</li>
 <li class="toctree-l3"><a class="reference internal" href="../rover/HFAC_Analyses/HFAC_Analyses.html">More Human Failure Analyses</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../rover/HFAC_Analyses/IDETC_Human_Paper_Analysis.html">Human Failure Representation</a><ul>
 <li class="toctree-l4"><a class="reference internal" href="../rover/HFAC_Analyses/IDETC_Human_Paper_Analysis.html#Testing-behavioral-simulation">Testing behavioral simulation</a></li>
@@ -307,285 +293,34 @@
 <li class="toctree-l1"><a class="reference internal" href="../../docs/Glossary.html">Glossary</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../docs/fmdtools.html">Module Reference</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="../../docs/fmdtools.define.html">fmdtools.define package</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="../../docs/fmdtools.define.html#fmdtools-define-block">fmdtools.define.block</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.define.html#fmdtools.define.block.ActArch"><code class="docutils literal notranslate"><span class="pre">ActArch</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.define.html#fmdtools.define.block.Action"><code class="docutils literal notranslate"><span class="pre">Action</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.define.html#fmdtools.define.block.Block"><code class="docutils literal notranslate"><span class="pre">Block</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.define.html#fmdtools.define.block.CompArch"><code class="docutils literal notranslate"><span class="pre">CompArch</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.define.html#fmdtools.define.block.Component"><code class="docutils literal notranslate"><span class="pre">Component</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.define.html#fmdtools.define.block.FxnBlock"><code class="docutils literal notranslate"><span class="pre">FxnBlock</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.define.html#fmdtools.define.block.GenericFxn"><code class="docutils literal notranslate"><span class="pre">GenericFxn</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.define.html#fmdtools.define.block.Simulable"><code class="docutils literal notranslate"><span class="pre">Simulable</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.define.html#fmdtools.define.block.assoc_flows"><code class="docutils literal notranslate"><span class="pre">assoc_flows()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.define.html#fmdtools.define.block.inject_faults_internal"><code class="docutils literal notranslate"><span class="pre">inject_faults_internal()</span></code></a></li>
-</ul>
-</li>
-<li class="toctree-l3"><a class="reference internal" href="../../docs/fmdtools.define.html#module-fmdtools.define.common">fmdtools.define.common</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.define.html#fmdtools.define.common.check_pickleability"><code class="docutils literal notranslate"><span class="pre">check_pickleability()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.define.html#fmdtools.define.common.eq_units"><code class="docutils literal notranslate"><span class="pre">eq_units()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.define.html#fmdtools.define.common.get_dataobj_track"><code class="docutils literal notranslate"><span class="pre">get_dataobj_track()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.define.html#fmdtools.define.common.get_obj_indicators"><code class="docutils literal notranslate"><span class="pre">get_obj_indicators()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.define.html#fmdtools.define.common.get_obj_track"><code class="docutils literal notranslate"><span class="pre">get_obj_track()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.define.html#fmdtools.define.common.get_true_field"><code class="docutils literal notranslate"><span class="pre">get_true_field()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.define.html#fmdtools.define.common.get_true_fields"><code class="docutils literal notranslate"><span class="pre">get_true_fields()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.define.html#fmdtools.define.common.get_var"><code class="docutils literal notranslate"><span class="pre">get_var()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.define.html#fmdtools.define.common.init_obj_attr"><code class="docutils literal notranslate"><span class="pre">init_obj_attr()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.define.html#fmdtools.define.common.init_obj_dict"><code class="docutils literal notranslate"><span class="pre">init_obj_dict()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.define.html#fmdtools.define.common.is_iter"><code class="docutils literal notranslate"><span class="pre">is_iter()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.define.html#fmdtools.define.common.return_true_indicators"><code class="docutils literal notranslate"><span class="pre">return_true_indicators()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.define.html#fmdtools.define.common.set_var"><code class="docutils literal notranslate"><span class="pre">set_var()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.define.html#fmdtools.define.common.t_key"><code class="docutils literal notranslate"><span class="pre">t_key()</span></code></a></li>
-</ul>
-</li>
-<li class="toctree-l3"><a class="reference internal" href="../../docs/fmdtools.define.html#module-fmdtools.define.flow">fmdtools.define.flow</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.define.html#fmdtools.define.flow.CommsFlow"><code class="docutils literal notranslate"><span class="pre">CommsFlow</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.define.html#fmdtools.define.flow.Flow"><code class="docutils literal notranslate"><span class="pre">Flow</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.define.html#fmdtools.define.flow.MultiFlow"><code class="docutils literal notranslate"><span class="pre">MultiFlow</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.define.html#fmdtools.define.flow.init_flow"><code class="docutils literal notranslate"><span class="pre">init_flow()</span></code></a></li>
-</ul>
-</li>
-<li class="toctree-l3"><a class="reference internal" href="../../docs/fmdtools.define.html#module-fmdtools.define.mode">fmdtools.define.mode</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.define.html#fmdtools.define.mode.Fault"><code class="docutils literal notranslate"><span class="pre">Fault</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.define.html#fmdtools.define.mode.Mode"><code class="docutils literal notranslate"><span class="pre">Mode</span></code></a></li>
-</ul>
-</li>
-<li class="toctree-l3"><a class="reference internal" href="../../docs/fmdtools.define.html#fmdtools-define-model">fmdtools.define.model</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.define.html#fmdtools.define.model.Model"><code class="docutils literal notranslate"><span class="pre">Model</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.define.html#fmdtools.define.model.check_model_pickleability"><code class="docutils literal notranslate"><span class="pre">check_model_pickleability()</span></code></a></li>
-</ul>
-</li>
-<li class="toctree-l3"><a class="reference internal" href="../../docs/fmdtools.define.html#module-fmdtools.define.parameter">fmdtools.define.parameter</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.define.html#fmdtools.define.parameter.Parameter"><code class="docutils literal notranslate"><span class="pre">Parameter</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.define.html#fmdtools.define.parameter.SimParam"><code class="docutils literal notranslate"><span class="pre">SimParam</span></code></a></li>
-</ul>
-</li>
-<li class="toctree-l3"><a class="reference internal" href="../../docs/fmdtools.define.html#module-fmdtools.define.rand">fmdtools.define.rand</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.define.html#fmdtools.define.rand.Rand"><code class="docutils literal notranslate"><span class="pre">Rand</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.define.html#fmdtools.define.rand.get_pdf_for_dist"><code class="docutils literal notranslate"><span class="pre">get_pdf_for_dist()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.define.html#fmdtools.define.rand.get_pdf_for_rand"><code class="docutils literal notranslate"><span class="pre">get_pdf_for_rand()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.define.html#fmdtools.define.rand.get_scipy_pdf_helper"><code class="docutils literal notranslate"><span class="pre">get_scipy_pdf_helper()</span></code></a></li>
-</ul>
-</li>
-<li class="toctree-l3"><a class="reference internal" href="../../docs/fmdtools.define.html#module-fmdtools.define.state">fmdtools.define.state</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.define.html#fmdtools.define.state.State"><code class="docutils literal notranslate"><span class="pre">State</span></code></a></li>
-</ul>
-</li>
-<li class="toctree-l3"><a class="reference internal" href="../../docs/fmdtools.define.html#module-fmdtools.define.time">fmdtools.define.time</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.define.html#fmdtools.define.time.Time"><code class="docutils literal notranslate"><span class="pre">Time</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.define.html#fmdtools.define.time.Timer"><code class="docutils literal notranslate"><span class="pre">Timer</span></code></a></li>
-</ul>
-</li>
-<li class="toctree-l3"><a class="reference internal" href="../../docs/fmdtools.define.html#module-fmdtools.define.geom">fmdtools.define.geom</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.define.html#fmdtools.define.geom.Geom"><code class="docutils literal notranslate"><span class="pre">Geom</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.define.html#fmdtools.define.geom.GeomArch"><code class="docutils literal notranslate"><span class="pre">GeomArch</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.define.html#fmdtools.define.geom.GeomLine"><code class="docutils literal notranslate"><span class="pre">GeomLine</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.define.html#fmdtools.define.geom.GeomPoint"><code class="docutils literal notranslate"><span class="pre">GeomPoint</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.define.html#fmdtools.define.geom.GeomPoly"><code class="docutils literal notranslate"><span class="pre">GeomPoly</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.define.html#fmdtools.define.geom.LineParam"><code class="docutils literal notranslate"><span class="pre">LineParam</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.define.html#fmdtools.define.geom.PointParam"><code class="docutils literal notranslate"><span class="pre">PointParam</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.define.html#fmdtools.define.geom.PolyParam"><code class="docutils literal notranslate"><span class="pre">PolyParam</span></code></a></li>
-</ul>
-</li>
-<li class="toctree-l3"><a class="reference internal" href="../../docs/fmdtools.define.html#module-fmdtools.define.environment">fmdtools.define.environment</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.define.html#fmdtools.define.environment.Environment"><code class="docutils literal notranslate"><span class="pre">Environment</span></code></a></li>
-</ul>
-</li>
-<li class="toctree-l3"><a class="reference internal" href="../../docs/fmdtools.define.html#module-fmdtools.define.coords">fmdtools.define.coords</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.define.html#fmdtools.define.coords.Coords"><code class="docutils literal notranslate"><span class="pre">Coords</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.define.html#fmdtools.define.coords.CoordsParam"><code class="docutils literal notranslate"><span class="pre">CoordsParam</span></code></a></li>
-</ul>
-</li>
+<li class="toctree-l3"><a class="reference internal" href="../../docs/fmdtools.define.html#fmdtools-define-block">fmdtools.define.block</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../docs/fmdtools.define.html#module-fmdtools.define.common">fmdtools.define.common</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../docs/fmdtools.define.html#module-fmdtools.define.flow">fmdtools.define.flow</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../docs/fmdtools.define.html#module-fmdtools.define.mode">fmdtools.define.mode</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../docs/fmdtools.define.html#fmdtools-define-model">fmdtools.define.model</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../docs/fmdtools.define.html#module-fmdtools.define.parameter">fmdtools.define.parameter</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../docs/fmdtools.define.html#module-fmdtools.define.rand">fmdtools.define.rand</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../docs/fmdtools.define.html#module-fmdtools.define.state">fmdtools.define.state</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../docs/fmdtools.define.html#module-fmdtools.define.time">fmdtools.define.time</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../docs/fmdtools.define.html#module-fmdtools.define.geom">fmdtools.define.geom</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../docs/fmdtools.define.html#module-fmdtools.define.environment">fmdtools.define.environment</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../docs/fmdtools.define.html#module-fmdtools.define.coords">fmdtools.define.coords</a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="../../docs/fmdtools.sim.html">fmdtools.sim</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="../../docs/fmdtools.sim.html#fmdtools-sim-propagate">fmdtools.sim.propagate</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.sim.html#fmdtools.sim.propagate.approach"><code class="docutils literal notranslate"><span class="pre">approach()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.sim.html#fmdtools.sim.propagate.check_end_condition"><code class="docutils literal notranslate"><span class="pre">check_end_condition()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.sim.html#fmdtools.sim.propagate.check_hist_memory"><code class="docutils literal notranslate"><span class="pre">check_hist_memory()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.sim.html#fmdtools.sim.propagate.check_mdl_memory"><code class="docutils literal notranslate"><span class="pre">check_mdl_memory()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.sim.html#fmdtools.sim.propagate.check_overwrite"><code class="docutils literal notranslate"><span class="pre">check_overwrite()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.sim.html#fmdtools.sim.propagate.close_pool"><code class="docutils literal notranslate"><span class="pre">close_pool()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.sim.html#fmdtools.sim.propagate.copy_staged"><code class="docutils literal notranslate"><span class="pre">copy_staged()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.sim.html#fmdtools.sim.propagate.exec_nom_helper"><code class="docutils literal notranslate"><span class="pre">exec_nom_helper()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.sim.html#fmdtools.sim.propagate.exec_nom_par"><code class="docutils literal notranslate"><span class="pre">exec_nom_par()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.sim.html#fmdtools.sim.propagate.exec_scen"><code class="docutils literal notranslate"><span class="pre">exec_scen()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.sim.html#fmdtools.sim.propagate.exec_scen_par"><code class="docutils literal notranslate"><span class="pre">exec_scen_par()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.sim.html#fmdtools.sim.propagate.get_endclass_vars"><code class="docutils literal notranslate"><span class="pre">get_endclass_vars()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.sim.html#fmdtools.sim.propagate.get_result"><code class="docutils literal notranslate"><span class="pre">get_result()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.sim.html#fmdtools.sim.propagate.init_histrange"><code class="docutils literal notranslate"><span class="pre">init_histrange()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.sim.html#fmdtools.sim.propagate.list_init_faults"><code class="docutils literal notranslate"><span class="pre">list_init_faults()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.sim.html#fmdtools.sim.propagate.mult_kwargs"><code class="docutils literal notranslate"><span class="pre">mult_kwargs</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.sim.html#fmdtools.sim.propagate.nested_approach"><code class="docutils literal notranslate"><span class="pre">nested_approach()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.sim.html#fmdtools.sim.propagate.nom_helper"><code class="docutils literal notranslate"><span class="pre">nom_helper()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.sim.html#fmdtools.sim.propagate.nominal"><code class="docutils literal notranslate"><span class="pre">nominal()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.sim.html#fmdtools.sim.propagate.nominal_approach"><code class="docutils literal notranslate"><span class="pre">nominal_approach()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.sim.html#fmdtools.sim.propagate.one_fault"><code class="docutils literal notranslate"><span class="pre">one_fault()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.sim.html#fmdtools.sim.propagate.pack_run_kwargs"><code class="docutils literal notranslate"><span class="pre">pack_run_kwargs()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.sim.html#fmdtools.sim.propagate.pack_sim_kwargs"><code class="docutils literal notranslate"><span class="pre">pack_sim_kwargs()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.sim.html#fmdtools.sim.propagate.phases_from_hist"><code class="docutils literal notranslate"><span class="pre">phases_from_hist()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.sim.html#fmdtools.sim.propagate.prop_one_scen"><code class="docutils literal notranslate"><span class="pre">prop_one_scen()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.sim.html#fmdtools.sim.propagate.run_kwargs"><code class="docutils literal notranslate"><span class="pre">run_kwargs</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.sim.html#fmdtools.sim.propagate.save_helper"><code class="docutils literal notranslate"><span class="pre">save_helper()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.sim.html#fmdtools.sim.propagate.scenlist_helper"><code class="docutils literal notranslate"><span class="pre">scenlist_helper()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.sim.html#fmdtools.sim.propagate.sequence"><code class="docutils literal notranslate"><span class="pre">sequence()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.sim.html#fmdtools.sim.propagate.sim_kwargs"><code class="docutils literal notranslate"><span class="pre">sim_kwargs</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.sim.html#fmdtools.sim.propagate.single_faults"><code class="docutils literal notranslate"><span class="pre">single_faults()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.sim.html#fmdtools.sim.propagate.unpack_mult_kwargs"><code class="docutils literal notranslate"><span class="pre">unpack_mult_kwargs()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.sim.html#fmdtools.sim.propagate.unpack_res_list"><code class="docutils literal notranslate"><span class="pre">unpack_res_list()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.sim.html#fmdtools.sim.propagate.unpack_sim_kwargs"><code class="docutils literal notranslate"><span class="pre">unpack_sim_kwargs()</span></code></a></li>
-</ul>
-</li>
-<li class="toctree-l3"><a class="reference internal" href="../../docs/fmdtools.sim.html#module-fmdtools.sim.scenario">fmdtools.sim.scenario</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.sim.html#fmdtools.sim.scenario.BaseScenario"><code class="docutils literal notranslate"><span class="pre">BaseScenario</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.sim.html#fmdtools.sim.scenario.Injection"><code class="docutils literal notranslate"><span class="pre">Injection</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.sim.html#fmdtools.sim.scenario.JointFaultScenario"><code class="docutils literal notranslate"><span class="pre">JointFaultScenario</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.sim.html#fmdtools.sim.scenario.NominalScenario"><code class="docutils literal notranslate"><span class="pre">NominalScenario</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.sim.html#fmdtools.sim.scenario.ParamScenario"><code class="docutils literal notranslate"><span class="pre">ParamScenario</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.sim.html#fmdtools.sim.scenario.Scenario"><code class="docutils literal notranslate"><span class="pre">Scenario</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.sim.html#fmdtools.sim.scenario.Sequence"><code class="docutils literal notranslate"><span class="pre">Sequence</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.sim.html#fmdtools.sim.scenario.SingleFaultScenario"><code class="docutils literal notranslate"><span class="pre">SingleFaultScenario</span></code></a></li>
-</ul>
-</li>
-<li class="toctree-l3"><a class="reference internal" href="../../docs/fmdtools.sim.html#module-fmdtools.sim.approach">fmdtools.sim.approach</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.sim.html#fmdtools.sim.approach.NominalApproach"><code class="docutils literal notranslate"><span class="pre">NominalApproach</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.sim.html#fmdtools.sim.approach.SampleApproach"><code class="docutils literal notranslate"><span class="pre">SampleApproach</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.sim.html#fmdtools.sim.approach.find_overlap_n"><code class="docutils literal notranslate"><span class="pre">find_overlap_n()</span></code></a></li>
-</ul>
-</li>
-<li class="toctree-l3"><a class="reference internal" href="../../docs/fmdtools.sim.html#module-fmdtools.sim.search">fmdtools.sim.search</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.sim.html#fmdtools.sim.search.DynamicInterface"><code class="docutils literal notranslate"><span class="pre">DynamicInterface</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.sim.html#fmdtools.sim.search.ProblemInterface"><code class="docutils literal notranslate"><span class="pre">ProblemInterface</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.sim.html#fmdtools.sim.search.eval_con"><code class="docutils literal notranslate"><span class="pre">eval_con()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.sim.html#fmdtools.sim.search.get_pos_negative"><code class="docutils literal notranslate"><span class="pre">get_pos_negative()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.sim.html#fmdtools.sim.search.get_pos_str"><code class="docutils literal notranslate"><span class="pre">get_pos_str()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.sim.html#fmdtools.sim.search.get_text_time"><code class="docutils literal notranslate"><span class="pre">get_text_time()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.sim.html#fmdtools.sim.search.greater_to_factor"><code class="docutils literal notranslate"><span class="pre">greater_to_factor()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.sim.html#fmdtools.sim.search.n_to_factor"><code class="docutils literal notranslate"><span class="pre">n_to_factor()</span></code></a></li>
-</ul>
-</li>
+<li class="toctree-l3"><a class="reference internal" href="../../docs/fmdtools.sim.html#fmdtools-sim-propagate">fmdtools.sim.propagate</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../docs/fmdtools.sim.html#module-fmdtools.sim.scenario">fmdtools.sim.scenario</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../docs/fmdtools.sim.html#module-fmdtools.sim.sample">fmdtools.sim.sample</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../docs/fmdtools.sim.html#module-fmdtools.sim.search">fmdtools.sim.search</a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="../../docs/fmdtools.analyze.html">fmdtools.analyze package</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="../../docs/fmdtools.analyze.html#module-fmdtools.analyze.result">fmdtools.analyze.result</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.analyze.html#fmdtools.analyze.result.History"><code class="docutils literal notranslate"><span class="pre">History</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.analyze.html#fmdtools.analyze.result.Result"><code class="docutils literal notranslate"><span class="pre">Result</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.analyze.html#fmdtools.analyze.result.auto_filetype"><code class="docutils literal notranslate"><span class="pre">auto_filetype()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.analyze.html#fmdtools.analyze.result.bootstrap_confidence_interval"><code class="docutils literal notranslate"><span class="pre">bootstrap_confidence_interval()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.analyze.html#fmdtools.analyze.result.check_include_error"><code class="docutils literal notranslate"><span class="pre">check_include_error()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.analyze.html#fmdtools.analyze.result.check_include_errors"><code class="docutils literal notranslate"><span class="pre">check_include_errors()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.analyze.html#fmdtools.analyze.result.clean_resultdict_keys"><code class="docutils literal notranslate"><span class="pre">clean_resultdict_keys()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.analyze.html#fmdtools.analyze.result.create_indiv_filename"><code class="docutils literal notranslate"><span class="pre">create_indiv_filename()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.analyze.html#fmdtools.analyze.result.diff"><code class="docutils literal notranslate"><span class="pre">diff()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.analyze.html#fmdtools.analyze.result.file_check"><code class="docutils literal notranslate"><span class="pre">file_check()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.analyze.html#fmdtools.analyze.result.fromdict"><code class="docutils literal notranslate"><span class="pre">fromdict()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.analyze.html#fmdtools.analyze.result.get_dict_attr"><code class="docutils literal notranslate"><span class="pre">get_dict_attr()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.analyze.html#fmdtools.analyze.result.get_sub_include"><code class="docutils literal notranslate"><span class="pre">get_sub_include()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.analyze.html#fmdtools.analyze.result.init_dicthist"><code class="docutils literal notranslate"><span class="pre">init_dicthist()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.analyze.html#fmdtools.analyze.result.init_hist_iter"><code class="docutils literal notranslate"><span class="pre">init_hist_iter()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.analyze.html#fmdtools.analyze.result.init_indicator_hist"><code class="docutils literal notranslate"><span class="pre">init_indicator_hist()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.analyze.html#fmdtools.analyze.result.is_bool"><code class="docutils literal notranslate"><span class="pre">is_bool()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.analyze.html#fmdtools.analyze.result.is_known_immutable"><code class="docutils literal notranslate"><span class="pre">is_known_immutable()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.analyze.html#fmdtools.analyze.result.is_known_mutable"><code class="docutils literal notranslate"><span class="pre">is_known_mutable()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.analyze.html#fmdtools.analyze.result.is_numeric"><code class="docutils literal notranslate"><span class="pre">is_numeric()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.analyze.html#fmdtools.analyze.result.join_key"><code class="docutils literal notranslate"><span class="pre">join_key()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.analyze.html#fmdtools.analyze.result.load"><code class="docutils literal notranslate"><span class="pre">load()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.analyze.html#fmdtools.analyze.result.load_folder"><code class="docutils literal notranslate"><span class="pre">load_folder()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.analyze.html#fmdtools.analyze.result.nan_to_x"><code class="docutils literal notranslate"><span class="pre">nan_to_x()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.analyze.html#fmdtools.analyze.result.to_include_keys"><code class="docutils literal notranslate"><span class="pre">to_include_keys()</span></code></a></li>
-</ul>
-</li>
-<li class="toctree-l3"><a class="reference internal" href="../../docs/fmdtools.analyze.html#module-fmdtools.analyze.plot">fmdtools.analyze.plot</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.analyze.html#fmdtools.analyze.plot.dyn_order"><code class="docutils literal notranslate"><span class="pre">dyn_order()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.analyze.html#fmdtools.analyze.plot.get_dim_data"><code class="docutils literal notranslate"><span class="pre">get_dim_data()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.analyze.html#fmdtools.analyze.plot.get_nominal_classes"><code class="docutils literal notranslate"><span class="pre">get_nominal_classes()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.analyze.html#fmdtools.analyze.plot.hist"><code class="docutils literal notranslate"><span class="pre">hist()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.analyze.html#fmdtools.analyze.plot.make_consolidated_legend"><code class="docutils literal notranslate"><span class="pre">make_consolidated_legend()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.analyze.html#fmdtools.analyze.plot.metric_dist"><code class="docutils literal notranslate"><span class="pre">metric_dist()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.analyze.html#fmdtools.analyze.plot.metric_dist_from"><code class="docutils literal notranslate"><span class="pre">metric_dist_from()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.analyze.html#fmdtools.analyze.plot.metricovertime"><code class="docutils literal notranslate"><span class="pre">metricovertime()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.analyze.html#fmdtools.analyze.plot.multibar_helper"><code class="docutils literal notranslate"><span class="pre">multibar_helper()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.analyze.html#fmdtools.analyze.plot.multiplot_legend_title"><code class="docutils literal notranslate"><span class="pre">multiplot_legend_title()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.analyze.html#fmdtools.analyze.plot.nested_factor_comparison"><code class="docutils literal notranslate"><span class="pre">nested_factor_comparison()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.analyze.html#fmdtools.analyze.plot.nominal_factor_comparison"><code class="docutils literal notranslate"><span class="pre">nominal_factor_comparison()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.analyze.html#fmdtools.analyze.plot.nominal_vals_1d"><code class="docutils literal notranslate"><span class="pre">nominal_vals_1d()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.analyze.html#fmdtools.analyze.plot.nominal_vals_2d"><code class="docutils literal notranslate"><span class="pre">nominal_vals_2d()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.analyze.html#fmdtools.analyze.plot.nominal_vals_3d"><code class="docutils literal notranslate"><span class="pre">nominal_vals_3d()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.analyze.html#fmdtools.analyze.plot.phases"><code class="docutils literal notranslate"><span class="pre">phases()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.analyze.html#fmdtools.analyze.plot.plot_err_lines"><code class="docutils literal notranslate"><span class="pre">plot_err_lines()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.analyze.html#fmdtools.analyze.plot.plot_line_and_err"><code class="docutils literal notranslate"><span class="pre">plot_line_and_err()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.analyze.html#fmdtools.analyze.plot.prep_hists"><code class="docutils literal notranslate"><span class="pre">prep_hists()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.analyze.html#fmdtools.analyze.plot.samplemetric"><code class="docutils literal notranslate"><span class="pre">samplemetric()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.analyze.html#fmdtools.analyze.plot.samplemetrics"><code class="docutils literal notranslate"><span class="pre">samplemetrics()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.analyze.html#fmdtools.analyze.plot.suite_for_plots"><code class="docutils literal notranslate"><span class="pre">suite_for_plots()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.analyze.html#fmdtools.analyze.plot.unpack_plot_values"><code class="docutils literal notranslate"><span class="pre">unpack_plot_values()</span></code></a></li>
-</ul>
-</li>
-<li class="toctree-l3"><a class="reference internal" href="../../docs/fmdtools.analyze.html#module-fmdtools.analyze.graph">fmdtools.analyze.graph</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.analyze.html#fmdtools.analyze.graph.ActArchActGraph"><code class="docutils literal notranslate"><span class="pre">ActArchActGraph</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.analyze.html#fmdtools.analyze.graph.ActArchFlowGraph"><code class="docutils literal notranslate"><span class="pre">ActArchFlowGraph</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.analyze.html#fmdtools.analyze.graph.ActArchGraph"><code class="docutils literal notranslate"><span class="pre">ActArchGraph</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.analyze.html#fmdtools.analyze.graph.CommsFlowGraph"><code class="docutils literal notranslate"><span class="pre">CommsFlowGraph</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.analyze.html#fmdtools.analyze.graph.EdgeLabelStyle"><code class="docutils literal notranslate"><span class="pre">EdgeLabelStyle</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.analyze.html#fmdtools.analyze.graph.EdgeStyle"><code class="docutils literal notranslate"><span class="pre">EdgeStyle</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.analyze.html#fmdtools.analyze.graph.Graph"><code class="docutils literal notranslate"><span class="pre">Graph</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.analyze.html#fmdtools.analyze.graph.GraphInteractor"><code class="docutils literal notranslate"><span class="pre">GraphInteractor</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.analyze.html#fmdtools.analyze.graph.LabelStyle"><code class="docutils literal notranslate"><span class="pre">LabelStyle</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.analyze.html#fmdtools.analyze.graph.Labels"><code class="docutils literal notranslate"><span class="pre">Labels</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.analyze.html#fmdtools.analyze.graph.ModelCompGraph"><code class="docutils literal notranslate"><span class="pre">ModelCompGraph</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.analyze.html#fmdtools.analyze.graph.ModelFlowGraph"><code class="docutils literal notranslate"><span class="pre">ModelFlowGraph</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.analyze.html#fmdtools.analyze.graph.ModelFxnGraph"><code class="docutils literal notranslate"><span class="pre">ModelFxnGraph</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.analyze.html#fmdtools.analyze.graph.ModelGraph"><code class="docutils literal notranslate"><span class="pre">ModelGraph</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.analyze.html#fmdtools.analyze.graph.ModelTypeGraph"><code class="docutils literal notranslate"><span class="pre">ModelTypeGraph</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.analyze.html#fmdtools.analyze.graph.MultiFlowGraph"><code class="docutils literal notranslate"><span class="pre">MultiFlowGraph</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.analyze.html#fmdtools.analyze.graph.NodeStyle"><code class="docutils literal notranslate"><span class="pre">NodeStyle</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.analyze.html#fmdtools.analyze.graph.add_g_nested"><code class="docutils literal notranslate"><span class="pre">add_g_nested()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.analyze.html#fmdtools.analyze.graph.data_average"><code class="docutils literal notranslate"><span class="pre">data_average()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.analyze.html#fmdtools.analyze.graph.data_error"><code class="docutils literal notranslate"><span class="pre">data_error()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.analyze.html#fmdtools.analyze.graph.get_label_groups"><code class="docutils literal notranslate"><span class="pre">get_label_groups()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.analyze.html#fmdtools.analyze.graph.get_node_info"><code class="docutils literal notranslate"><span class="pre">get_node_info()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.analyze.html#fmdtools.analyze.graph.get_style_kwargs"><code class="docutils literal notranslate"><span class="pre">get_style_kwargs()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.analyze.html#fmdtools.analyze.graph.graph_factory"><code class="docutils literal notranslate"><span class="pre">graph_factory()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.analyze.html#fmdtools.analyze.graph.gv_import_check"><code class="docutils literal notranslate"><span class="pre">gv_import_check()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.analyze.html#fmdtools.analyze.graph.label_for_entry"><code class="docutils literal notranslate"><span class="pre">label_for_entry()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.analyze.html#fmdtools.analyze.graph.node_is_tagged"><code class="docutils literal notranslate"><span class="pre">node_is_tagged()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.analyze.html#fmdtools.analyze.graph.random"><code class="docutils literal notranslate"><span class="pre">random()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.analyze.html#fmdtools.analyze.graph.sff_one_trial"><code class="docutils literal notranslate"><span class="pre">sff_one_trial()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.analyze.html#fmdtools.analyze.graph.to_legend_label"><code class="docutils literal notranslate"><span class="pre">to_legend_label()</span></code></a></li>
-</ul>
-</li>
-<li class="toctree-l3"><a class="reference internal" href="../../docs/fmdtools.analyze.html#module-fmdtools.analyze.tabulate">fmdtools.analyze.tabulate</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.analyze.html#fmdtools.analyze.tabulate.dicttab"><code class="docutils literal notranslate"><span class="pre">dicttab()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.analyze.html#fmdtools.analyze.tabulate.fmea"><code class="docutils literal notranslate"><span class="pre">fmea()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.analyze.html#fmdtools.analyze.tabulate.label_faults"><code class="docutils literal notranslate"><span class="pre">label_faults()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.analyze.html#fmdtools.analyze.tabulate.maptab"><code class="docutils literal notranslate"><span class="pre">maptab()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.analyze.html#fmdtools.analyze.tabulate.metricovertime"><code class="docutils literal notranslate"><span class="pre">metricovertime()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.analyze.html#fmdtools.analyze.tabulate.nested_factor_comparison"><code class="docutils literal notranslate"><span class="pre">nested_factor_comparison()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.analyze.html#fmdtools.analyze.tabulate.nested_stats"><code class="docutils literal notranslate"><span class="pre">nested_stats()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.analyze.html#fmdtools.analyze.tabulate.nominal_factor_comparison"><code class="docutils literal notranslate"><span class="pre">nominal_factor_comparison()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.analyze.html#fmdtools.analyze.tabulate.nominal_stats"><code class="docutils literal notranslate"><span class="pre">nominal_stats()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.analyze.html#fmdtools.analyze.tabulate.phasefmea"><code class="docutils literal notranslate"><span class="pre">phasefmea()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.analyze.html#fmdtools.analyze.tabulate.result_summary"><code class="docutils literal notranslate"><span class="pre">result_summary()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.analyze.html#fmdtools.analyze.tabulate.result_summary_fmea"><code class="docutils literal notranslate"><span class="pre">result_summary_fmea()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.analyze.html#fmdtools.analyze.tabulate.samptime"><code class="docutils literal notranslate"><span class="pre">samptime()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.analyze.html#fmdtools.analyze.tabulate.summfmea"><code class="docutils literal notranslate"><span class="pre">summfmea()</span></code></a></li>
-</ul>
-</li>
-<li class="toctree-l3"><a class="reference internal" href="../../docs/fmdtools.analyze.html#module-fmdtools.analyze.show">fmdtools.analyze.show</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.analyze.html#fmdtools.analyze.show.consolidate_legend"><code class="docutils literal notranslate"><span class="pre">consolidate_legend()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.analyze.html#fmdtools.analyze.show.coord"><code class="docutils literal notranslate"><span class="pre">coord()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.analyze.html#fmdtools.analyze.show.coord3d"><code class="docutils literal notranslate"><span class="pre">coord3d()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.analyze.html#fmdtools.analyze.show.coord_collection"><code class="docutils literal notranslate"><span class="pre">coord_collection()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.analyze.html#fmdtools.analyze.show.coord_property"><code class="docutils literal notranslate"><span class="pre">coord_property()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.analyze.html#fmdtools.analyze.show.coord_property3d"><code class="docutils literal notranslate"><span class="pre">coord_property3d()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.analyze.html#fmdtools.analyze.show.geom"><code class="docutils literal notranslate"><span class="pre">geom()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.analyze.html#fmdtools.analyze.show.geomarch"><code class="docutils literal notranslate"><span class="pre">geomarch()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.analyze.html#fmdtools.analyze.show.init_figure"><code class="docutils literal notranslate"><span class="pre">init_figure()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.analyze.html#fmdtools.analyze.show.mark_times"><code class="docutils literal notranslate"><span class="pre">mark_times()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.analyze.html#fmdtools.analyze.show.traj"><code class="docutils literal notranslate"><span class="pre">traj()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.analyze.html#fmdtools.analyze.show.traj3"><code class="docutils literal notranslate"><span class="pre">traj3()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.analyze.html#fmdtools.analyze.show.trajectories"><code class="docutils literal notranslate"><span class="pre">trajectories()</span></code></a></li>
-</ul>
-</li>
+<li class="toctree-l3"><a class="reference internal" href="../../docs/fmdtools.analyze.html#module-fmdtools.analyze.common">fmdtools.analyze.common</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../docs/fmdtools.analyze.html#module-fmdtools.analyze.result">fmdtools.analyze.result</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../docs/fmdtools.analyze.html#module-fmdtools.analyze.history">fmdtools.analyze.history</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../docs/fmdtools.analyze.html#module-fmdtools.analyze.graph">fmdtools.analyze.graph</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../docs/fmdtools.analyze.html#module-fmdtools.analyze.tabulate">fmdtools.analyze.tabulate</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../docs/fmdtools.analyze.html#module-fmdtools.analyze.phases">fmdtools.analyze.phases</a></li>
 </ul>
 </li>
 </ul>
@@ -618,11 +353,11 @@
            <div itemprop="articleBody">
              
   <section id="Cooling-Tank-Model-Optimization">
-<h1>Cooling Tank Model Optimization<a class="headerlink" href="#Cooling-Tank-Model-Optimization" title="Link to this heading"></a></h1>
+<h1>Cooling Tank Model Optimization<a class="headerlink" href="#Cooling-Tank-Model-Optimization" title="Permalink to this heading"></a></h1>
 <p><strong>DISCLAIMER: Optimization modules do not work currently, see RAD-225</strong></p>
 <p>This notebook demonstrates the optimization of the tank model described in <code class="docutils literal notranslate"><span class="pre">tank_optimization_model.py</span></code> using the <code class="docutils literal notranslate"><span class="pre">ProblemInterface</span></code> class in the <code class="docutils literal notranslate"><span class="pre">fmdtools.search</span></code> module. This is identical to <code class="docutils literal notranslate"><span class="pre">tank_opt.py</span></code> in functionality.</p>
 <p>Note that this problem/notebook was adapted from the identical problem here: <a class="reference external" href="https://github.com/DesignEngrLab/resil_opt_examples/tree/main/Cooling%20Tank%20Problem">https://github.com/DesignEngrLab/resil_opt_examples/tree/main/Cooling%20Tank%20Problem</a>, which shows more comparisions of these architectures.</p>
-<div class="nbinput nblast docutils container">
+<div class="nbinput docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[1]:
 </pre></div>
 </div>
@@ -642,13 +377,30 @@
 <br/></pre></div>
 </div>
 </div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+<span class="ansi-red-intense-fg ansi-bold">---------------------------------------------------------------------------</span>
+<span class="ansi-red-intense-fg ansi-bold">ModuleNotFoundError</span>                       Traceback (most recent call last)
+Cell <span class="ansi-green-intense-fg ansi-bold">In[1], line 10</span>
+<span class="ansi-green-fg">      8</span> <span class="ansi-bold" style="color: rgb(0,135,0)">from</span> <span class="ansi-bold" style="color: rgb(0,0,255)">tank_optimization_model</span> <span class="ansi-bold" style="color: rgb(0,135,0)">import</span> Tank
+<span class="ansi-green-fg">      9</span> <span class="ansi-bold" style="color: rgb(0,135,0)">import</span> <span class="ansi-bold" style="color: rgb(0,0,255)">matplotlib</span><span class="ansi-bold" style="color: rgb(0,0,255)">.</span><span class="ansi-bold" style="color: rgb(0,0,255)">pyplot</span> <span class="ansi-bold" style="color: rgb(0,135,0)">as</span> <span class="ansi-bold" style="color: rgb(0,0,255)">plt</span>
+<span class="ansi-green-intense-fg ansi-bold">---&gt; 10</span> <span class="ansi-bold" style="color: rgb(0,135,0)">from</span> <span class="ansi-bold" style="color: rgb(0,0,255)">fmdtools</span><span class="ansi-bold" style="color: rgb(0,0,255)">.</span><span class="ansi-bold" style="color: rgb(0,0,255)">sim</span><span class="ansi-bold" style="color: rgb(0,0,255)">.</span><span class="ansi-bold" style="color: rgb(0,0,255)">approach</span> <span class="ansi-bold" style="color: rgb(0,135,0)">import</span> SampleApproach
+<span class="ansi-green-fg">     12</span> <span class="ansi-bold" style="color: rgb(0,135,0)">from</span> <span class="ansi-bold" style="color: rgb(0,0,255)">fmdtools</span><span class="ansi-bold" style="color: rgb(0,0,255)">.</span><span class="ansi-bold" style="color: rgb(0,0,255)">analyze</span><span class="ansi-bold" style="color: rgb(0,0,255)">.</span><span class="ansi-bold" style="color: rgb(0,0,255)">graph</span> <span class="ansi-bold" style="color: rgb(0,135,0)">import</span> ModelFxnGraph
+<span class="ansi-green-fg">     13</span> <span class="ansi-bold" style="color: rgb(0,135,0)">from</span> <span class="ansi-bold" style="color: rgb(0,0,255)">fmdtools</span><span class="ansi-bold" style="color: rgb(0,0,255)">.</span><span class="ansi-bold" style="color: rgb(0,0,255)">analyze</span><span class="ansi-bold" style="color: rgb(0,0,255)">.</span><span class="ansi-bold" style="color: rgb(0,0,255)">graph</span> <span class="ansi-bold" style="color: rgb(0,135,0)">import</span> ModelGraph
+
+<span class="ansi-red-intense-fg ansi-bold">ModuleNotFoundError</span>: No module named &#39;fmdtools.sim.approach&#39;
+</pre></div></div>
+</div>
 </section>
 <section id="Simulation">
-<h1>Simulation<a class="headerlink" href="#Simulation" title="Link to this heading"></a></h1>
+<h1>Simulation<a class="headerlink" href="#Simulation" title="Permalink to this heading"></a></h1>
 <section id="Verifying-the-nominal-state:">
-<h2>Verifying the nominal state:<a class="headerlink" href="#Verifying-the-nominal-state:" title="Link to this heading"></a></h2>
+<h2>Verifying the nominal state:<a class="headerlink" href="#Verifying-the-nominal-state:" title="Permalink to this heading"></a></h2>
 <p>In the nominal state, no change in system state should occurs. Flows will be constant and no signal is on.</p>
-<div class="nbinput nblast docutils container">
+<div class="nbinput docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[2]:
 </pre></div>
 </div>
@@ -656,6 +408,20 @@
 <span class="n">result</span><span class="p">,</span> <span class="n">mdlhist</span> <span class="o">=</span> <span class="n">propagate</span><span class="o">.</span><span class="n">nominal</span><span class="p">(</span><span class="n">mdl</span><span class="p">,</span><span class="n">track</span><span class="o">=</span><span class="s1">&#39;all&#39;</span><span class="p">,</span> <span class="n">desired_result</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;graph&#39;</span><span class="p">:</span><span class="n">ModelGraph</span><span class="p">})</span>
 </pre></div>
 </div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+<span class="ansi-red-intense-fg ansi-bold">---------------------------------------------------------------------------</span>
+<span class="ansi-red-intense-fg ansi-bold">NameError</span>                                 Traceback (most recent call last)
+Cell <span class="ansi-green-intense-fg ansi-bold">In[2], line 2</span>
+<span class="ansi-green-fg">      1</span> mdl <span style="color: rgb(98,98,98)">=</span> Tank()
+<span class="ansi-green-intense-fg ansi-bold">----&gt; 2</span> result, mdlhist <span style="color: rgb(98,98,98)">=</span> propagate<span style="color: rgb(98,98,98)">.</span>nominal(mdl,track<span style="color: rgb(98,98,98)">=</span><span style="color: rgb(175,0,0)">&#39;</span><span style="color: rgb(175,0,0)">all</span><span style="color: rgb(175,0,0)">&#39;</span>, desired_result<span style="color: rgb(98,98,98)">=</span>{<span style="color: rgb(175,0,0)">&#39;</span><span style="color: rgb(175,0,0)">graph</span><span style="color: rgb(175,0,0)">&#39;</span>:<span class="ansi-yellow-bg">ModelGraph</span>})
+
+<span class="ansi-red-intense-fg ansi-bold">NameError</span>: name &#39;ModelGraph&#39; is not defined
+</pre></div></div>
 </div>
 <div class="nbinput docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[3]:
@@ -669,8 +435,14 @@
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area docutils container">
-<img alt="../../_images/examples_tank_Tank_Optimization_4_0.png" src="../../_images/examples_tank_Tank_Optimization_4_0.png" />
-</div>
+<div class="highlight"><pre>
+<span class="ansi-red-intense-fg ansi-bold">---------------------------------------------------------------------------</span>
+<span class="ansi-red-intense-fg ansi-bold">NameError</span>                                 Traceback (most recent call last)
+Cell <span class="ansi-green-intense-fg ansi-bold">In[3], line 1</span>
+<span class="ansi-green-intense-fg ansi-bold">----&gt; 1</span> fig <span style="color: rgb(98,98,98)">=</span> <span class="ansi-yellow-bg">result</span><span style="color: rgb(98,98,98)">.</span>graph<span style="color: rgb(98,98,98)">.</span>draw(figsize<span style="color: rgb(98,98,98)">=</span>(<span style="color: rgb(98,98,98)">8</span>,<span style="color: rgb(98,98,98)">6</span>))
+
+<span class="ansi-red-intense-fg ansi-bold">NameError</span>: name &#39;result&#39; is not defined
+</pre></div></div>
 </div>
 <div class="nbinput docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[4]:
@@ -681,36 +453,16 @@
 </div>
 </div>
 <div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[4]:
-</pre></div>
+<div class="prompt empty docutils container">
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-fxns.import_coolant.s.amt_open: array(21)
-fxns.import_coolant.m.faults.stuck: array(21)
-fxns.import_coolant.m.faults.blockage: array(21)
-fxns.import_coolant.m.mode:    array(21)
-fxns.store_coolant.s.level:    array(21)
-fxns.store_coolant.s.net_flow: array(21)
-fxns.store_coolant.s.coolingbuffer: array(21)
-fxns.store_coolant.m.faults.leak: array(21)
-fxns.store_coolant.m.mode:     array(21)
-fxns.export_coolant.s.amt_open: array(21)
-fxns.export_coolant.m.faults.stuck: array(21)
-fxns.export_coolant.m.faults.blockage: array(21)
-fxns.export_coolant.m.mode:    array(21)
-fxns.contingency.m.mode:       array(21)
-flows.coolant_in.s.effort:     array(21)
-flows.coolant_in.s.rate:       array(21)
-flows.coolant_out.s.effort:    array(21)
-flows.coolant_out.s.rate:      array(21)
-flows.input_sig.s.indicator:   array(21)
-flows.input_sig.s.action:      array(21)
-flows.tank_sig.s.indicator:    array(21)
-flows.tank_sig.s.action:       array(21)
-flows.output_sig.s.indicator:  array(21)
-flows.output_sig.s.action:     array(21)
-time:                          array(21)
+<span class="ansi-red-intense-fg ansi-bold">---------------------------------------------------------------------------</span>
+<span class="ansi-red-intense-fg ansi-bold">NameError</span>                                 Traceback (most recent call last)
+Cell <span class="ansi-green-intense-fg ansi-bold">In[4], line 1</span>
+<span class="ansi-green-intense-fg ansi-bold">----&gt; 1</span> <span class="ansi-yellow-bg">mdlhist</span>
+
+<span class="ansi-red-intense-fg ansi-bold">NameError</span>: name &#39;mdlhist&#39; is not defined
 </pre></div></div>
 </div>
 <div class="nbinput docutils container">
@@ -728,12 +480,21 @@ time:                          array(21)
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area docutils container">
-<img alt="../../_images/examples_tank_Tank_Optimization_6_0.png" src="../../_images/examples_tank_Tank_Optimization_6_0.png" />
-</div>
+<div class="highlight"><pre>
+<span class="ansi-red-intense-fg ansi-bold">---------------------------------------------------------------------------</span>
+<span class="ansi-red-intense-fg ansi-bold">AttributeError</span>                            Traceback (most recent call last)
+Cell <span class="ansi-green-intense-fg ansi-bold">In[5], line 1</span>
+<span class="ansi-green-intense-fg ansi-bold">----&gt; 1</span> fig, ax <span style="color: rgb(98,98,98)">=</span><span class="ansi-yellow-bg">an</span><span class="ansi-yellow-bg" style="color: rgb(98,98,98)">.</span><span class="ansi-yellow-bg">plot</span><span style="color: rgb(98,98,98)">.</span>hist(mdlhist ,<span style="color: rgb(175,0,0)">&#39;</span><span style="color: rgb(175,0,0)">flows.coolant_in.s.rate</span><span style="color: rgb(175,0,0)">&#39;</span>,
+<span class="ansi-green-fg">      2</span>                                <span style="color: rgb(175,0,0)">&#39;</span><span style="color: rgb(175,0,0)">flows.coolant_out.s.rate</span><span style="color: rgb(175,0,0)">&#39;</span>,
+<span class="ansi-green-fg">      3</span>                                <span style="color: rgb(175,0,0)">&#39;</span><span style="color: rgb(175,0,0)">fxns.store_coolant.s.level</span><span style="color: rgb(175,0,0)">&#39;</span>,
+<span class="ansi-green-fg">      4</span>                                <span style="color: rgb(175,0,0)">&#39;</span><span style="color: rgb(175,0,0)">flows.tank_sig.s.indicator</span><span style="color: rgb(175,0,0)">&#39;</span>)
+
+<span class="ansi-red-intense-fg ansi-bold">AttributeError</span>: module &#39;fmdtools.analyze&#39; has no attribute &#39;plot&#39;
+</pre></div></div>
 </div>
 </section>
 <section id="What-happens-under-component-faults?">
-<h2>What happens under component faults?<a class="headerlink" href="#What-happens-under-component-faults?" title="Link to this heading"></a></h2>
+<h2>What happens under component faults?<a class="headerlink" href="#What-happens-under-component-faults?" title="Permalink to this heading"></a></h2>
 <p>Here we model a leak of the tank. As shown, the coolant leaks until there is no more coolant left in the tank. While this results in a warning signal, the default contingency management policy is to take no actions to alleviate the condition.</p>
 <div class="nbinput docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[6]:
@@ -752,8 +513,18 @@ time:                          array(21)
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area docutils container">
-<img alt="../../_images/examples_tank_Tank_Optimization_8_0.png" src="../../_images/examples_tank_Tank_Optimization_8_0.png" />
-</div>
+<div class="highlight"><pre>
+<span class="ansi-red-intense-fg ansi-bold">---------------------------------------------------------------------------</span>
+<span class="ansi-red-intense-fg ansi-bold">AttributeError</span>                            Traceback (most recent call last)
+Cell <span class="ansi-green-intense-fg ansi-bold">In[6], line 3</span>
+<span class="ansi-green-fg">      1</span> resgraph, mdlhist <span style="color: rgb(98,98,98)">=</span> propagate<span style="color: rgb(98,98,98)">.</span>one_fault(mdl,<span style="color: rgb(175,0,0)">&#39;</span><span style="color: rgb(175,0,0)">store_coolant</span><span style="color: rgb(175,0,0)">&#39;</span>,<span style="color: rgb(175,0,0)">&#39;</span><span style="color: rgb(175,0,0)">leak</span><span style="color: rgb(175,0,0)">&#39;</span>, time<span style="color: rgb(98,98,98)">=</span><span style="color: rgb(98,98,98)">3</span>, track<span style="color: rgb(98,98,98)">=</span><span style="color: rgb(175,0,0)">&#39;</span><span style="color: rgb(175,0,0)">all</span><span style="color: rgb(175,0,0)">&#39;</span>,desired_result<span style="color: rgb(98,98,98)">=</span>[<span style="color: rgb(175,0,0)">&#39;</span><span style="color: rgb(175,0,0)">graph</span><span style="color: rgb(175,0,0)">&#39;</span>,<span style="color: rgb(175,0,0)">&#39;</span><span style="color: rgb(175,0,0)">endclass</span><span style="color: rgb(175,0,0)">&#39;</span>,<span style="color: rgb(175,0,0)">&#39;</span><span style="color: rgb(175,0,0)">endfaults</span><span style="color: rgb(175,0,0)">&#39;</span>])
+<span class="ansi-green-intense-fg ansi-bold">----&gt; 3</span> fig, ax <span style="color: rgb(98,98,98)">=</span><span class="ansi-yellow-bg">an</span><span class="ansi-yellow-bg" style="color: rgb(98,98,98)">.</span><span class="ansi-yellow-bg">plot</span><span style="color: rgb(98,98,98)">.</span>hist(mdlhist ,<span style="color: rgb(175,0,0)">&#39;</span><span style="color: rgb(175,0,0)">flows.coolant_in.s.rate</span><span style="color: rgb(175,0,0)">&#39;</span>,
+<span class="ansi-green-fg">      4</span>                                <span style="color: rgb(175,0,0)">&#39;</span><span style="color: rgb(175,0,0)">flows.coolant_out.s.rate</span><span style="color: rgb(175,0,0)">&#39;</span>,
+<span class="ansi-green-fg">      5</span>                                <span style="color: rgb(175,0,0)">&#39;</span><span style="color: rgb(175,0,0)">fxns.store_coolant.s.level</span><span style="color: rgb(175,0,0)">&#39;</span>,
+<span class="ansi-green-fg">      6</span>                                <span style="color: rgb(175,0,0)">&#39;</span><span style="color: rgb(175,0,0)">flows.tank_sig.s.indicator</span><span style="color: rgb(175,0,0)">&#39;</span>)
+
+<span class="ansi-red-intense-fg ansi-bold">AttributeError</span>: module &#39;fmdtools.analyze&#39; has no attribute &#39;plot&#39;
+</pre></div></div>
 </div>
 <div class="nbinput docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[7]:
@@ -768,12 +539,19 @@ time:                          array(21)
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area docutils container">
-<img alt="../../_images/examples_tank_Tank_Optimization_9_0.png" src="../../_images/examples_tank_Tank_Optimization_9_0.png" />
-</div>
+<div class="highlight"><pre>
+<span class="ansi-red-intense-fg ansi-bold">---------------------------------------------------------------------------</span>
+<span class="ansi-red-intense-fg ansi-bold">NameError</span>                                 Traceback (most recent call last)
+Cell <span class="ansi-green-intense-fg ansi-bold">In[7], line 1</span>
+<span class="ansi-green-intense-fg ansi-bold">----&gt; 1</span> mg <span style="color: rgb(98,98,98)">=</span> <span class="ansi-yellow-bg">ModelGraph</span>(mdl)
+<span class="ansi-green-fg">      2</span> fig, ax <span style="color: rgb(98,98,98)">=</span> mg<span style="color: rgb(98,98,98)">.</span>draw_from(<span style="color: rgb(98,98,98)">10</span>,mdlhist)
+
+<span class="ansi-red-intense-fg ansi-bold">NameError</span>: name &#39;ModelGraph&#39; is not defined
+</pre></div></div>
 </div>
 </section>
 <section id="Full-set-of-modes">
-<h2>Full set of modes<a class="headerlink" href="#Full-set-of-modes" title="Link to this heading"></a></h2>
+<h2>Full set of modes<a class="headerlink" href="#Full-set-of-modes" title="Permalink to this heading"></a></h2>
 <p>The tank leak mode will not be the only mode considered, but also leak and blockage faults in the Imput/Output blocks.</p>
 <div class="nbinput docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[8]:
@@ -786,100 +564,24 @@ time:                          array(21)
 </pre></div>
 </div>
 </div>
-<div class="nboutput docutils container">
+<div class="nboutput nblast docutils container">
 <div class="prompt empty docutils container">
 </div>
-<div class="output_area stderr docutils container">
+<div class="output_area docutils container">
 <div class="highlight"><pre>
-SCENARIOS COMPLETE: 100%|██████████| 5/5 [00:00&lt;00:00, 141.24it/s]
+<span class="ansi-red-intense-fg ansi-bold">---------------------------------------------------------------------------</span>
+<span class="ansi-red-intense-fg ansi-bold">NameError</span>                                 Traceback (most recent call last)
+Cell <span class="ansi-green-intense-fg ansi-bold">In[8], line 1</span>
+<span class="ansi-green-intense-fg ansi-bold">----&gt; 1</span> app_joint_faults <span style="color: rgb(98,98,98)">=</span> <span class="ansi-yellow-bg">SampleApproach</span>(mdl)
+<span class="ansi-green-fg">      2</span> endclasses, mdlhists <span style="color: rgb(98,98,98)">=</span> propagate<span style="color: rgb(98,98,98)">.</span>approach(mdl, app_joint_faults)
+<span class="ansi-green-fg">      3</span> fmea_tab <span style="color: rgb(98,98,98)">=</span> an<span style="color: rgb(98,98,98)">.</span>tabulate<span style="color: rgb(98,98,98)">.</span>result_summary_fmea(endclasses,mdlhists)
+
+<span class="ansi-red-intense-fg ansi-bold">NameError</span>: name &#39;SampleApproach&#39; is not defined
 </pre></div></div>
-</div>
-<div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[8]:
-</pre></div>
-</div>
-<div class="output_area rendered_html docutils container">
-<div>
-<style scoped>
-    .dataframe tbody tr th:only-of-type {
-        vertical-align: middle;
-    }
-
-    .dataframe tbody tr th {
-        vertical-align: top;
-    }
-
-    .dataframe thead th {
-        text-align: right;
-    }
-</style>
-<table border="1" class="dataframe">
-  <thead>
-    <tr style="text-align: right;">
-      <th></th>
-      <th>degraded</th>
-      <th>faulty</th>
-      <th>rate</th>
-      <th>cost</th>
-      <th>expected cost</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <th>store_coolant_leak_t0p0</th>
-      <td>[]</td>
-      <td>[]</td>
-      <td>0.000002</td>
-      <td>1000000.0</td>
-      <td>166666.666667</td>
-    </tr>
-    <tr>
-      <th>export_coolant_blockage_t0p0</th>
-      <td>[]</td>
-      <td>[]</td>
-      <td>0.000002</td>
-      <td>100000.0</td>
-      <td>16666.666667</td>
-    </tr>
-    <tr>
-      <th>nominal</th>
-      <td>[]</td>
-      <td>[]</td>
-      <td>1.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-    </tr>
-    <tr>
-      <th>export_coolant_stuck_t0p0</th>
-      <td>[]</td>
-      <td>[]</td>
-      <td>0.000002</td>
-      <td>0.0</td>
-      <td>0.0</td>
-    </tr>
-    <tr>
-      <th>import_coolant_blockage_t0p0</th>
-      <td>[]</td>
-      <td>[]</td>
-      <td>0.000002</td>
-      <td>2100000.0</td>
-      <td>350000.0</td>
-    </tr>
-    <tr>
-      <th>import_coolant_stuck_t0p0</th>
-      <td>[]</td>
-      <td>[]</td>
-      <td>0.000002</td>
-      <td>0.0</td>
-      <td>0.0</td>
-    </tr>
-  </tbody>
-</table>
-</div></div>
 </div>
 </section>
 <section id="Defining-Optimization-Problem">
-<h2>Defining Optimization Problem<a class="headerlink" href="#Defining-Optimization-Problem" title="Link to this heading"></a></h2>
+<h2>Defining Optimization Problem<a class="headerlink" href="#Defining-Optimization-Problem" title="Permalink to this heading"></a></h2>
 <p>We can define an optimization problem around this model using the <code class="docutils literal notranslate"><span class="pre">ProblemInterface</span></code> class.</p>
 <p>In this case, we consider the joint minimization of design cost (defined in a function) and resilience cost (expected cost over the above list of scenarios). This is over two sets of variables</p>
 <ul class="simple">
@@ -940,7 +642,7 @@ Problem res_problem                                                     current 
 </pre></div></div>
 </div>
 <p>Since the design variables affect both design and resilience costs, we can use the <code class="docutils literal notranslate"><span class="pre">upstream_sims</span></code> option to translate “des_cost” variables into “res_sim” simulation parameters.</p>
-<div class="nbinput nblast docutils container">
+<div class="nbinput docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[12]:
 </pre></div>
 </div>
@@ -957,6 +659,23 @@ Problem res_problem                                                     current 
 <span class="n">prob</span><span class="o">.</span><span class="n">add_objectives</span><span class="p">(</span><span class="s2">&quot;res_sim&quot;</span><span class="p">,</span> <span class="n">cost</span><span class="o">=</span><span class="s2">&quot;expected cost&quot;</span><span class="p">,</span> <span class="n">objtype</span><span class="o">=</span><span class="s2">&quot;endclass&quot;</span><span class="p">)</span>
 </pre></div>
 </div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+<span class="ansi-red-intense-fg ansi-bold">---------------------------------------------------------------------------</span>
+<span class="ansi-red-intense-fg ansi-bold">NameError</span>                                 Traceback (most recent call last)
+Cell <span class="ansi-green-intense-fg ansi-bold">In[12], line 2</span>
+<span class="ansi-green-fg">      1</span> <span class="ansi-bold" style="color: rgb(0,135,0)">from</span> <span class="ansi-bold" style="color: rgb(0,0,255)">examples</span><span class="ansi-bold" style="color: rgb(0,0,255)">.</span><span class="ansi-bold" style="color: rgb(0,0,255)">tank</span><span class="ansi-bold" style="color: rgb(0,0,255)">.</span><span class="ansi-bold" style="color: rgb(0,0,255)">tank_optimization_model</span> <span class="ansi-bold" style="color: rgb(0,135,0)">import</span> Tank, TankParam, make_tankparam
+<span class="ansi-green-intense-fg ansi-bold">----&gt; 2</span> app <span style="color: rgb(98,98,98)">=</span> <span class="ansi-yellow-bg">SampleApproach</span>(mdl)
+<span class="ansi-green-fg">      3</span> prob<span style="color: rgb(98,98,98)">.</span>add_simulation(<span style="color: rgb(175,0,0)">&#34;</span><span style="color: rgb(175,0,0)">res_sim</span><span style="color: rgb(175,0,0)">&#34;</span>, <span style="color: rgb(175,0,0)">&#34;</span><span style="color: rgb(175,0,0)">multi</span><span style="color: rgb(175,0,0)">&#34;</span>, app<span style="color: rgb(98,98,98)">.</span>scenlist, include_nominal<span style="color: rgb(98,98,98)">=</span><span class="ansi-bold" style="color: rgb(0,135,0)">True</span>,
+<span class="ansi-green-fg">      4</span>                     upstream_sims <span style="color: rgb(98,98,98)">=</span> {<span style="color: rgb(175,0,0)">&#34;</span><span style="color: rgb(175,0,0)">des_cost</span><span style="color: rgb(175,0,0)">&#34;</span>:{<span style="color: rgb(175,0,0)">&#39;</span><span style="color: rgb(175,0,0)">p</span><span style="color: rgb(175,0,0)">&#39;</span>:{<span style="color: rgb(175,0,0)">&#34;</span><span style="color: rgb(175,0,0)">capacity</span><span style="color: rgb(175,0,0)">&#34;</span>:<span style="color: rgb(175,0,0)">&#34;</span><span style="color: rgb(175,0,0)">capacity</span><span style="color: rgb(175,0,0)">&#34;</span>, <span style="color: rgb(175,0,0)">&#34;</span><span style="color: rgb(175,0,0)">turnup</span><span style="color: rgb(175,0,0)">&#34;</span>:<span style="color: rgb(175,0,0)">&#34;</span><span style="color: rgb(175,0,0)">turnup</span><span style="color: rgb(175,0,0)">&#34;</span>}}})
+<span class="ansi-green-fg">      6</span> res_vars_i <span style="color: rgb(98,98,98)">=</span> {(v[<span style="color: rgb(98,98,98)">0</span>],v[<span style="color: rgb(98,98,98)">1</span>],v[<span style="color: rgb(98,98,98)">2</span>],v[<span style="color: rgb(98,98,98)">3</span>]):<span style="color: rgb(98,98,98)">1</span> <span class="ansi-bold" style="color: rgb(0,135,0)">for</span> v <span class="ansi-bold" style="color: rgb(175,0,255)">in</span> mdl<span style="color: rgb(98,98,98)">.</span>p<span style="color: rgb(98,98,98)">.</span>faultpolicy}
+
+<span class="ansi-red-intense-fg ansi-bold">NameError</span>: name &#39;SampleApproach&#39; is not defined
+</pre></div></div>
 </div>
 <p>Finally, to get a callable for both objectives, we can use <code class="docutils literal notranslate"><span class="pre">add_combined_objective</span></code>, which will perform an opteration (default is sum) to combine the objectives:</p>
 <div class="nbinput nblast docutils container">
@@ -986,68 +705,12 @@ Problem res_problem                                                     current 
  Variables
  -vars capacity at t=0: None                                                      nan
  -vars turnup at t=0: None                                                        nan
- -&lt;function make_tankparam at 0x00000257892D6C00&gt; (-1, -1, -1, &#39;l&#39;) at t=0: None                 nan
- -&lt;function make_tankparam at 0x00000257892D6C00&gt; (-1, -1, 0, &#39;l&#39;) at t=0: None                 nan
- -&lt;function make_tankparam at 0x00000257892D6C00&gt; (-1, -1, 1, &#39;l&#39;) at t=0: None                 nan
- -&lt;function make_tankparam at 0x00000257892D6C00&gt; (-1, 0, -1, &#39;l&#39;) at t=0: None                 nan
- -&lt;function make_tankparam at 0x00000257892D6C00&gt; (-1, 0, 0, &#39;l&#39;) at t=0: None                 nan
- -&lt;function make_tankparam at 0x00000257892D6C00&gt; (-1, 0, 1, &#39;l&#39;) at t=0: None                 nan
- -&lt;function make_tankparam at 0x00000257892D6C00&gt; (-1, 1, -1, &#39;l&#39;) at t=0: None                 nan
- -&lt;function make_tankparam at 0x00000257892D6C00&gt; (-1, 1, 0, &#39;l&#39;) at t=0: None                 nan
- -&lt;function make_tankparam at 0x00000257892D6C00&gt; (-1, 1, 1, &#39;l&#39;) at t=0: None                 nan
- -&lt;function make_tankparam at 0x00000257892D6C00&gt; (0, -1, -1, &#39;l&#39;) at t=0: None                 nan
- -&lt;function make_tankparam at 0x00000257892D6C00&gt; (0, -1, 0, &#39;l&#39;) at t=0: None                 nan
- -&lt;function make_tankparam at 0x00000257892D6C00&gt; (0, -1, 1, &#39;l&#39;) at t=0: None                 nan
- -&lt;function make_tankparam at 0x00000257892D6C00&gt; (0, 0, -1, &#39;l&#39;) at t=0: None                 nan
- -&lt;function make_tankparam at 0x00000257892D6C00&gt; (0, 0, 0, &#39;l&#39;) at t=0: None                 nan
- -&lt;function make_tankparam at 0x00000257892D6C00&gt; (0, 0, 1, &#39;l&#39;) at t=0: None                 nan
- -&lt;function make_tankparam at 0x00000257892D6C00&gt; (0, 1, -1, &#39;l&#39;) at t=0: None                 nan
- -&lt;function make_tankparam at 0x00000257892D6C00&gt; (0, 1, 0, &#39;l&#39;) at t=0: None                 nan
- -&lt;function make_tankparam at 0x00000257892D6C00&gt; (0, 1, 1, &#39;l&#39;) at t=0: None                 nan
- -&lt;function make_tankparam at 0x00000257892D6C00&gt; (1, -1, -1, &#39;l&#39;) at t=0: None                 nan
- -&lt;function make_tankparam at 0x00000257892D6C00&gt; (1, -1, 0, &#39;l&#39;) at t=0: None                 nan
- -&lt;function make_tankparam at 0x00000257892D6C00&gt; (1, -1, 1, &#39;l&#39;) at t=0: None                 nan
- -&lt;function make_tankparam at 0x00000257892D6C00&gt; (1, 0, -1, &#39;l&#39;) at t=0: None                 nan
- -&lt;function make_tankparam at 0x00000257892D6C00&gt; (1, 0, 0, &#39;l&#39;) at t=0: None                 nan
- -&lt;function make_tankparam at 0x00000257892D6C00&gt; (1, 0, 1, &#39;l&#39;) at t=0: None                 nan
- -&lt;function make_tankparam at 0x00000257892D6C00&gt; (1, 1, -1, &#39;l&#39;) at t=0: None                 nan
- -&lt;function make_tankparam at 0x00000257892D6C00&gt; (1, 1, 0, &#39;l&#39;) at t=0: None                 nan
- -&lt;function make_tankparam at 0x00000257892D6C00&gt; (1, 1, 1, &#39;l&#39;) at t=0: None                 nan
- -&lt;function make_tankparam at 0x00000257892D6C00&gt; (-1, -1, -1, &#39;u&#39;) at t=0: None                 nan
- -&lt;function make_tankparam at 0x00000257892D6C00&gt; (-1, -1, 0, &#39;u&#39;) at t=0: None                 nan
- -&lt;function make_tankparam at 0x00000257892D6C00&gt; (-1, -1, 1, &#39;u&#39;) at t=0: None                 nan
- -&lt;function make_tankparam at 0x00000257892D6C00&gt; (-1, 0, -1, &#39;u&#39;) at t=0: None                 nan
- -&lt;function make_tankparam at 0x00000257892D6C00&gt; (-1, 0, 0, &#39;u&#39;) at t=0: None                 nan
- -&lt;function make_tankparam at 0x00000257892D6C00&gt; (-1, 0, 1, &#39;u&#39;) at t=0: None                 nan
- -&lt;function make_tankparam at 0x00000257892D6C00&gt; (-1, 1, -1, &#39;u&#39;) at t=0: None                 nan
- -&lt;function make_tankparam at 0x00000257892D6C00&gt; (-1, 1, 0, &#39;u&#39;) at t=0: None                 nan
- -&lt;function make_tankparam at 0x00000257892D6C00&gt; (-1, 1, 1, &#39;u&#39;) at t=0: None                 nan
- -&lt;function make_tankparam at 0x00000257892D6C00&gt; (0, -1, -1, &#39;u&#39;) at t=0: None                 nan
- -&lt;function make_tankparam at 0x00000257892D6C00&gt; (0, -1, 0, &#39;u&#39;) at t=0: None                 nan
- -&lt;function make_tankparam at 0x00000257892D6C00&gt; (0, -1, 1, &#39;u&#39;) at t=0: None                 nan
- -&lt;function make_tankparam at 0x00000257892D6C00&gt; (0, 0, -1, &#39;u&#39;) at t=0: None                 nan
- -&lt;function make_tankparam at 0x00000257892D6C00&gt; (0, 0, 0, &#39;u&#39;) at t=0: None                 nan
- -&lt;function make_tankparam at 0x00000257892D6C00&gt; (0, 0, 1, &#39;u&#39;) at t=0: None                 nan
- -&lt;function make_tankparam at 0x00000257892D6C00&gt; (0, 1, -1, &#39;u&#39;) at t=0: None                 nan
- -&lt;function make_tankparam at 0x00000257892D6C00&gt; (0, 1, 0, &#39;u&#39;) at t=0: None                 nan
- -&lt;function make_tankparam at 0x00000257892D6C00&gt; (0, 1, 1, &#39;u&#39;) at t=0: None                 nan
- -&lt;function make_tankparam at 0x00000257892D6C00&gt; (1, -1, -1, &#39;u&#39;) at t=0: None                 nan
- -&lt;function make_tankparam at 0x00000257892D6C00&gt; (1, -1, 0, &#39;u&#39;) at t=0: None                 nan
- -&lt;function make_tankparam at 0x00000257892D6C00&gt; (1, -1, 1, &#39;u&#39;) at t=0: None                 nan
- -&lt;function make_tankparam at 0x00000257892D6C00&gt; (1, 0, -1, &#39;u&#39;) at t=0: None                 nan
- -&lt;function make_tankparam at 0x00000257892D6C00&gt; (1, 0, 0, &#39;u&#39;) at t=0: None                 nan
- -&lt;function make_tankparam at 0x00000257892D6C00&gt; (1, 0, 1, &#39;u&#39;) at t=0: None                 nan
- -&lt;function make_tankparam at 0x00000257892D6C00&gt; (1, 1, -1, &#39;u&#39;) at t=0: None                 nan
- -&lt;function make_tankparam at 0x00000257892D6C00&gt; (1, 1, 0, &#39;u&#39;) at t=0: None                 nan
- -&lt;function make_tankparam at 0x00000257892D6C00&gt; (1, 1, 1, &#39;u&#39;) at t=0: None                 nan
  Objectives
  -cd: +(des_cost   at t=)                                                         nan
- -cost: +sum(res_sim endclass expected cost at t=end)                             nan
  Constraints
  -
  Simulations
  -des_cost: external scen:
- -res_sim: multi scen:
 </pre></div></div>
 </div>
 <p>Note that because the simulations are linked, changes to xdes in the <code class="docutils literal notranslate"><span class="pre">cd</span></code> function in turn change the lower-level <code class="docutils literal notranslate"><span class="pre">cost</span></code> function by default.</p>
@@ -1078,12 +741,16 @@ Problem res_problem                                                     current 
 </div>
 </div>
 <div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[16]:
-</pre></div>
+<div class="prompt empty docutils container">
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-310001900000.0
+<span class="ansi-red-intense-fg ansi-bold">---------------------------------------------------------------------------</span>
+<span class="ansi-red-intense-fg ansi-bold">AttributeError</span>                            Traceback (most recent call last)
+Cell <span class="ansi-green-intense-fg ansi-bold">In[16], line 1</span>
+<span class="ansi-green-intense-fg ansi-bold">----&gt; 1</span> <span class="ansi-yellow-bg">prob</span><span class="ansi-yellow-bg" style="color: rgb(98,98,98)">.</span><span class="ansi-yellow-bg">cost</span>([<span style="color: rgb(98,98,98)">*</span>res_vars_i<span style="color: rgb(98,98,98)">.</span>values()])
+
+<span class="ansi-red-intense-fg ansi-bold">AttributeError</span>: &#39;ProblemInterface&#39; object has no attribute &#39;cost&#39;
 </pre></div></div>
 </div>
 <div class="nbinput docutils container">
@@ -1113,12 +780,16 @@ Problem res_problem                                                     current 
 </div>
 </div>
 <div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[18]:
-</pre></div>
+<div class="prompt empty docutils container">
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-310002583333.3333
+<span class="ansi-red-intense-fg ansi-bold">---------------------------------------------------------------------------</span>
+<span class="ansi-red-intense-fg ansi-bold">AttributeError</span>                            Traceback (most recent call last)
+Cell <span class="ansi-green-intense-fg ansi-bold">In[18], line 1</span>
+<span class="ansi-green-intense-fg ansi-bold">----&gt; 1</span> <span class="ansi-yellow-bg">prob</span><span class="ansi-yellow-bg" style="color: rgb(98,98,98)">.</span><span class="ansi-yellow-bg">cost</span>([<span style="color: rgb(98,98,98)">*</span>res_vars_i<span style="color: rgb(98,98,98)">.</span>values()])
+
+<span class="ansi-red-intense-fg ansi-bold">AttributeError</span>: &#39;ProblemInterface&#39; object has no attribute &#39;cost&#39;
 </pre></div></div>
 </div>
 <p>These costs can be treated as independent by clearing the problem prior to the lower-level cost evalutation.</p>
@@ -1133,21 +804,39 @@ Problem res_problem                                                     current 
 </div>
 </div>
 <div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[19]:
-</pre></div>
+<div class="prompt empty docutils container">
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-0.0
+<span class="ansi-red-intense-fg ansi-bold">---------------------------------------------------------------------------</span>
+<span class="ansi-red-intense-fg ansi-bold">KeyError</span>                                  Traceback (most recent call last)
+Cell <span class="ansi-green-intense-fg ansi-bold">In[19], line 2</span>
+<span class="ansi-green-fg">      1</span> prob<span style="color: rgb(98,98,98)">.</span>clear()
+<span class="ansi-green-intense-fg ansi-bold">----&gt; 2</span> <span class="ansi-yellow-bg">prob</span><span class="ansi-yellow-bg" style="color: rgb(98,98,98)">.</span><span class="ansi-yellow-bg">update_sim_vars</span><span class="ansi-yellow-bg">(</span><span class="ansi-yellow-bg" style="color: rgb(175,0,0)">&#34;</span><span class="ansi-yellow-bg" style="color: rgb(175,0,0)">res_sim</span><span class="ansi-yellow-bg" style="color: rgb(175,0,0)">&#34;</span><span class="ansi-yellow-bg">,</span><span class="ansi-yellow-bg"> </span><span class="ansi-yellow-bg">new_p</span><span class="ansi-yellow-bg" style="color: rgb(98,98,98)">=</span><span class="ansi-yellow-bg">{</span><span class="ansi-yellow-bg" style="color: rgb(175,0,0)">&#39;</span><span class="ansi-yellow-bg" style="color: rgb(175,0,0)">capacity</span><span class="ansi-yellow-bg" style="color: rgb(175,0,0)">&#39;</span><span class="ansi-yellow-bg">:</span><span class="ansi-yellow-bg" style="color: rgb(98,98,98)">1</span><span class="ansi-yellow-bg">,</span><span class="ansi-yellow-bg"> </span><span class="ansi-yellow-bg" style="color: rgb(175,0,0)">&#39;</span><span class="ansi-yellow-bg" style="color: rgb(175,0,0)">turnup</span><span class="ansi-yellow-bg" style="color: rgb(175,0,0)">&#39;</span><span class="ansi-yellow-bg">:</span><span class="ansi-yellow-bg" style="color: rgb(98,98,98)">2</span><span class="ansi-yellow-bg">}</span><span class="ansi-yellow-bg">)</span>
+<span class="ansi-green-fg">      3</span> prob<span style="color: rgb(98,98,98)">.</span>cost([<span style="color: rgb(98,98,98)">*</span>res_vars_i<span style="color: rgb(98,98,98)">.</span>values()])
+
+File <span class="ansi-green-intense-fg ansi-bold">c:\users\dhulse\documents\github\fmdtools\fmdtools\sim\search.py:768</span>, in <span class="ansi-cyan-fg">ProblemInterface.update_sim_vars</span><span class="ansi-blue-intense-fg ansi-bold">(self, simname, new_p, newvars, newsequence)</span>
+<span class="ansi-green-fg">    753</span> <span style="color: rgb(175,0,0)">&#34;&#34;&#34;</span>
+<span class="ansi-green-fg">    754</span> <span style="color: rgb(175,0,0)">Update the simulation with new default variables/parameters</span>
+<span class="ansi-green-fg">    755</span>
+<span class="ansi-green-intense-fg ansi-bold">   (...)</span>
+<span class="ansi-green-fg">    765</span> <span style="color: rgb(175,0,0)">    New default sequence of faults/disturbances (updated accross all scenarios). The default is {}.</span>
+<span class="ansi-green-fg">    766</span> <span style="color: rgb(175,0,0)">&#34;&#34;&#34;</span>
+<span class="ansi-green-fg">    767</span> <span style="color: rgb(0,135,0)">self</span><span style="color: rgb(98,98,98)">.</span>clear(simname, clearvars<span style="color: rgb(98,98,98)">=</span><span class="ansi-bold" style="color: rgb(0,135,0)">False</span>, clearhist<span style="color: rgb(98,98,98)">=</span><span class="ansi-bold" style="color: rgb(0,135,0)">False</span>)
+<span class="ansi-green-intense-fg ansi-bold">--&gt; 768</span> <span class="ansi-bold" style="color: rgb(0,135,0)">if</span> <span style="color: rgb(175,0,0)">&#39;</span><span style="color: rgb(175,0,0)">p</span><span style="color: rgb(175,0,0)">&#39;</span> <span class="ansi-bold" style="color: rgb(175,0,255)">in</span> <span class="ansi-yellow-bg" style="color: rgb(0,135,0)">self</span><span class="ansi-yellow-bg" style="color: rgb(98,98,98)">.</span><span class="ansi-yellow-bg">simulations</span><span class="ansi-yellow-bg">[</span><span class="ansi-yellow-bg">simname</span><span class="ansi-yellow-bg">]</span>[<span style="color: rgb(98,98,98)">2</span>]: <span style="color: rgb(0,135,0)">self</span><span style="color: rgb(98,98,98)">.</span>simulations[simname][<span style="color: rgb(98,98,98)">2</span>][<span style="color: rgb(175,0,0)">&#39;</span><span style="color: rgb(175,0,0)">p</span><span style="color: rgb(175,0,0)">&#39;</span>]<span style="color: rgb(98,98,98)">.</span>update(new_p)
+<span class="ansi-green-fg">    769</span> <span class="ansi-bold" style="color: rgb(0,135,0)">else</span>:   <span style="color: rgb(0,135,0)">self</span><span style="color: rgb(98,98,98)">.</span>simulations[simname][<span style="color: rgb(98,98,98)">2</span>][<span style="color: rgb(175,0,0)">&#39;</span><span style="color: rgb(175,0,0)">p</span><span style="color: rgb(175,0,0)">&#39;</span>] <span style="color: rgb(98,98,98)">=</span> new_p
+<span class="ansi-green-fg">    770</span> newsequence<span style="color: rgb(98,98,98)">.</span>update({<span style="color: rgb(98,98,98)">0</span>:{<span style="color: rgb(175,0,0)">&#39;</span><span style="color: rgb(175,0,0)">disturbances</span><span style="color: rgb(175,0,0)">&#39;</span>:newvars}})
+
+<span class="ansi-red-intense-fg ansi-bold">KeyError</span>: &#39;res_sim&#39;
 </pre></div></div>
 </div>
 </section>
 <section id="Optimization">
-<h2>Optimization<a class="headerlink" href="#Optimization" title="Link to this heading"></a></h2>
+<h2>Optimization<a class="headerlink" href="#Optimization" title="Permalink to this heading"></a></h2>
 <p>This problem is optimized here using four different architectures, following the example in:</p>
 <p>Hulse, D., &amp; Hoyle, C. (2022). Understanding Resilience Optimization Architectures: Alignment and Coupling in Multilevel Decomposition Strategies. Journal of Mechanical Design, 144(11), 111704.</p>
 <p>The implementation of these architectures is provided in <code class="docutils literal notranslate"><span class="pre">tank_opt</span></code> using the <code class="docutils literal notranslate"><span class="pre">ProblemInterface</span></code> class. Here we show some results for comparing the architectures, which as shown are consistent with the reference.</p>
-<div class="nbinput nblast docutils container">
+<div class="nbinput docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[20]:
 </pre></div>
 </div>
@@ -1159,6 +848,29 @@ Problem res_problem                                                     current 
 </pre></div>
 </div>
 </div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+<span class="ansi-red-intense-fg ansi-bold">---------------------------------------------------------------------------</span>
+<span class="ansi-red-intense-fg ansi-bold">ModuleNotFoundError</span>                       Traceback (most recent call last)
+Cell <span class="ansi-green-intense-fg ansi-bold">In[20], line 2</span>
+<span class="ansi-green-fg">      1</span> <span class="ansi-bold" style="color: rgb(0,135,0)">import</span> <span class="ansi-bold" style="color: rgb(0,0,255)">importlib</span>
+<span class="ansi-green-intense-fg ansi-bold">----&gt; 2</span> <span class="ansi-bold" style="color: rgb(0,135,0)">import</span> <span class="ansi-bold" style="color: rgb(0,0,255)">tank_opt</span>
+<span class="ansi-green-fg">      3</span> <span class="ansi-bold" style="color: rgb(0,135,0)">import</span> <span class="ansi-bold" style="color: rgb(0,0,255)">multiprocessing</span> <span class="ansi-bold" style="color: rgb(0,135,0)">as</span> <span class="ansi-bold" style="color: rgb(0,0,255)">mp</span>
+<span class="ansi-green-fg">      4</span> importlib<span style="color: rgb(98,98,98)">.</span>reload(tank_opt)
+
+File <span class="ansi-green-intense-fg ansi-bold">~\Documents\GitHub\fmdtools\examples\tank\tank_opt.py:24</span>
+<span class="ansi-green-fg">     22</span> <span class="ansi-bold" style="color: rgb(0,135,0)">import</span> <span class="ansi-bold" style="color: rgb(0,0,255)">fmdtools</span><span class="ansi-bold" style="color: rgb(0,0,255)">.</span><span class="ansi-bold" style="color: rgb(0,0,255)">analyze</span> <span class="ansi-bold" style="color: rgb(0,135,0)">as</span> <span class="ansi-bold" style="color: rgb(0,0,255)">an</span>
+<span class="ansi-green-fg">     23</span> <span class="ansi-bold" style="color: rgb(0,135,0)">from</span> <span class="ansi-bold" style="color: rgb(0,0,255)">examples</span><span class="ansi-bold" style="color: rgb(0,0,255)">.</span><span class="ansi-bold" style="color: rgb(0,0,255)">tank</span><span class="ansi-bold" style="color: rgb(0,0,255)">.</span><span class="ansi-bold" style="color: rgb(0,0,255)">tank_optimization_model</span> <span class="ansi-bold" style="color: rgb(0,135,0)">import</span> Tank, TankParam, make_tankparam
+<span class="ansi-green-intense-fg ansi-bold">---&gt; 24</span> <span class="ansi-bold" style="color: rgb(0,135,0)">from</span> <span class="ansi-bold" style="color: rgb(0,0,255)">fmdtools</span><span class="ansi-bold" style="color: rgb(0,0,255)">.</span><span class="ansi-bold" style="color: rgb(0,0,255)">sim</span><span class="ansi-bold" style="color: rgb(0,0,255)">.</span><span class="ansi-bold" style="color: rgb(0,0,255)">approach</span> <span class="ansi-bold" style="color: rgb(0,135,0)">import</span> SampleApproach
+<span class="ansi-green-fg">     25</span> <span class="ansi-bold" style="color: rgb(0,135,0)">import</span> <span class="ansi-bold" style="color: rgb(0,0,255)">multiprocessing</span> <span class="ansi-bold" style="color: rgb(0,135,0)">as</span> <span class="ansi-bold" style="color: rgb(0,0,255)">mp</span>
+<span class="ansi-green-fg">     26</span> <span class="ansi-bold" style="color: rgb(0,135,0)">from</span> <span class="ansi-bold" style="color: rgb(0,0,255)">fmdtools</span><span class="ansi-bold" style="color: rgb(0,0,255)">.</span><span class="ansi-bold" style="color: rgb(0,0,255)">sim</span><span class="ansi-bold" style="color: rgb(0,0,255)">.</span><span class="ansi-bold" style="color: rgb(0,0,255)">search</span> <span class="ansi-bold" style="color: rgb(0,135,0)">import</span> ProblemInterface
+
+<span class="ansi-red-intense-fg ansi-bold">ModuleNotFoundError</span>: No module named &#39;fmdtools.sim.approach&#39;
+</pre></div></div>
+</div>
 <p>alternating optimization structure</p>
 <div class="nbinput docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[21]:
@@ -1168,126 +880,20 @@ Problem res_problem                                                     current 
 </pre></div>
 </div>
 </div>
-<div class="nboutput docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area docutils container">
-<div class="highlight"><pre>
-[18.9     0.5375]
-[17.85     0.50625]
-[13.125     0.565625]
-[10.         0.5328125]
-[10.         0.5328125]
-[10.         0.5328125]
-[10.          0.45390625]
-[10.          0.36132812]
-[10.          0.15722656]
-[10.  0.]
-[10.  0.]
-[10.  0.]
-[10.  0.]
-Optimization terminated successfully.
-         Current function value: 533333.333333
-         Iterations: 13
-         Function evaluations: 24
-[&#39;iter 0: &#39;, 533333.3333333333]
-[&#39;iter 1: &#39;, 533333.3333333333]
-[&#39;iter 2: &#39;, 533333.3333333333]
-[&#39;iter 3: &#39;, 533333.3333333333]
-[&#39;iter 4: &#39;, 533333.3333333333]
-[&#39;iter 5: &#39;, 533333.3333333333]
-[&#39;iter 6: &#39;, 533333.3333333333]
-[&#39;iter 7: &#39;, 533333.3333333333]
-[&#39;iter 8: &#39;, 533333.3333333333]
-</pre></div></div>
-</div>
 <div class="nboutput nblast docutils container">
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
 <span class="ansi-red-intense-fg ansi-bold">---------------------------------------------------------------------------</span>
-<span class="ansi-red-intense-fg ansi-bold">IndexError</span>                                Traceback (most recent call last)
-File <span class="ansi-green-intense-fg ansi-bold">~\AppData\Local\anaconda3\Lib\multiprocessing\pool.py:856</span>, in <span class="ansi-cyan-fg">IMapIterator.next</span><span class="ansi-blue-intense-fg ansi-bold">(self, timeout)</span>
-<span class="ansi-green-fg">    855</span> <span class="ansi-bold" style="color: rgb(0,135,0)">try</span>:
-<span class="ansi-green-intense-fg ansi-bold">--&gt; 856</span>     item <span style="color: rgb(98,98,98)">=</span> <span style="color: rgb(0,135,0)">self</span><span style="color: rgb(98,98,98)">.</span>_items<span style="color: rgb(98,98,98)">.</span>popleft()
-<span class="ansi-green-fg">    857</span> <span class="ansi-bold" style="color: rgb(0,135,0)">except</span> <span class="ansi-bold" style="color: rgb(215,95,95)">IndexError</span>:
-
-<span class="ansi-red-intense-fg ansi-bold">IndexError</span>: pop from an empty deque
-
-During handling of the above exception, another exception occurred:
-
-<span class="ansi-red-intense-fg ansi-bold">KeyboardInterrupt</span>                         Traceback (most recent call last)
+<span class="ansi-red-intense-fg ansi-bold">NameError</span>                                 Traceback (most recent call last)
 Cell <span class="ansi-green-intense-fg ansi-bold">In[21], line 1</span>
-<span class="ansi-green-intense-fg ansi-bold">----&gt; 1</span> result_alt, llargs_alt, fhist_alt, thist_alt, xdhist_alt <span style="color: rgb(98,98,98)">=</span> tank_opt<span style="color: rgb(98,98,98)">.</span>alternating_opt(pool<span style="color: rgb(98,98,98)">=</span>pool, max_alts<span style="color: rgb(98,98,98)">=</span><span style="color: rgb(98,98,98)">1</span>)
+<span class="ansi-green-intense-fg ansi-bold">----&gt; 1</span> result_alt, llargs_alt, fhist_alt, thist_alt, xdhist_alt <span style="color: rgb(98,98,98)">=</span> <span class="ansi-yellow-bg">tank_opt</span><span style="color: rgb(98,98,98)">.</span>alternating_opt(pool<span style="color: rgb(98,98,98)">=</span>pool, max_alts<span style="color: rgb(98,98,98)">=</span><span style="color: rgb(98,98,98)">1</span>)
 
-File <span class="ansi-green-intense-fg ansi-bold">~\Documents\GitHub\fmdtools\examples\tank\tank_opt.py:118</span>, in <span class="ansi-cyan-fg">alternating_opt</span><span class="ansi-blue-intense-fg ansi-bold">(option, pool, xdes, max_alts)</span>
-<span class="ansi-green-fg">    114</span> xdes <span style="color: rgb(98,98,98)">=</span> result[<span style="color: rgb(175,0,0)">&#39;</span><span style="color: rgb(175,0,0)">x</span><span style="color: rgb(175,0,0)">&#39;</span>]
-<span class="ansi-green-fg">    115</span> <span style="color: rgb(95,135,135)">#result = minimize(x_to_totcost, xdes, method=&#39;Powell&#39;, callback=callbackF1,  args = (bestsol[0],bestsol[1]), options={&#39;disp&#39;:True,&#39;ftol&#39;: 0.000001})</span>
-<span class="ansi-green-fg">    116</span> <span style="color: rgb(95,135,135)"># doesn&#39;t really work: trust-constr, SLSQP, Nelder-Mead (doesn&#39;t respect bounds), COBYLA (a bit better, but converges poorly), </span>
-<span class="ansi-green-fg">    117</span> <span style="color: rgb(95,135,135)"># powell does okay but I&#39;m not sure if it&#39;s actually searching the x-direction</span>
-<span class="ansi-green-intense-fg ansi-bold">--&gt; 118</span> bestsol, rcost, runtime <span style="color: rgb(98,98,98)">=</span> EA(args<span style="color: rgb(98,98,98)">=</span>args, popsize<span style="color: rgb(98,98,98)">=</span><span style="color: rgb(98,98,98)">50</span>, mutations<span style="color: rgb(98,98,98)">=</span><span style="color: rgb(98,98,98)">10</span>,numselect<span style="color: rgb(98,98,98)">=</span><span style="color: rgb(98,98,98)">20</span>, crossovers<span style="color: rgb(98,98,98)">=</span><span style="color: rgb(98,98,98)">5</span>, iters<span style="color: rgb(98,98,98)">=</span><span style="color: rgb(98,98,98)">100</span>, verbose<span style="color: rgb(98,98,98)">=</span><span style="color: rgb(175,0,0)">&#34;</span><span style="color: rgb(175,0,0)">iters</span><span style="color: rgb(175,0,0)">&#34;</span>)
-<span class="ansi-green-fg">    119</span> lastmin <span style="color: rgb(98,98,98)">=</span> newmin; newmin <span style="color: rgb(98,98,98)">=</span> x_to_descost(xdes) <span style="color: rgb(98,98,98)">+</span> rcost
-<span class="ansi-green-fg">    120</span> fhist<span style="color: rgb(98,98,98)">.</span>append(newmin)
-
-File <span class="ansi-green-intense-fg ansi-bold">~\Documents\GitHub\fmdtools\examples\tank\tank_opt.py:151</span>, in <span class="ansi-cyan-fg">EA</span><span class="ansi-blue-intense-fg ansi-bold">(popsize, iters, mutations, crossovers, numselect, args, verbose)</span>
-<span class="ansi-green-fg">    149</span> newpop <span style="color: rgb(98,98,98)">=</span>  np<span style="color: rgb(98,98,98)">.</span>concatenate(<span style="color: rgb(0,135,0)">tuple</span>([oper(goodpop,used_numopers[i]) <span class="ansi-bold" style="color: rgb(0,135,0)">for</span> i,oper <span class="ansi-bold" style="color: rgb(175,0,255)">in</span> <span style="color: rgb(0,135,0)">enumerate</span>(used_opers)]))
-<span class="ansi-green-fg">    150</span> makefeasible(newpop)
-<span class="ansi-green-intense-fg ansi-bold">--&gt; 151</span> newvals <span style="color: rgb(98,98,98)">=</span> np<span style="color: rgb(98,98,98)">.</span>array([prob<span style="color: rgb(98,98,98)">.</span>cost([<span style="color: rgb(98,98,98)">*</span>x[<span style="color: rgb(98,98,98)">0</span>],<span style="color: rgb(98,98,98)">*</span>x[<span style="color: rgb(98,98,98)">1</span>]]) <span class="ansi-bold" style="color: rgb(0,135,0)">for</span> x <span class="ansi-bold" style="color: rgb(175,0,255)">in</span> newpop])
-<span class="ansi-green-fg">    152</span> pop, values <span style="color: rgb(98,98,98)">=</span> np<span style="color: rgb(98,98,98)">.</span>concatenate((goodpop, newpop)), np<span style="color: rgb(98,98,98)">.</span>concatenate((goodvals, newvals))
-<span class="ansi-green-fg">    153</span> <span class="ansi-bold" style="color: rgb(0,135,0)">if</span> verbose<span style="color: rgb(98,98,98)">==</span><span style="color: rgb(175,0,0)">&#34;</span><span style="color: rgb(175,0,0)">iters</span><span style="color: rgb(175,0,0)">&#34;</span>: <span style="color: rgb(0,135,0)">print</span>([<span style="color: rgb(175,0,0)">&#34;</span><span style="color: rgb(175,0,0)">iter </span><span style="color: rgb(175,0,0)">&#34;</span><span style="color: rgb(98,98,98)">+</span><span style="color: rgb(0,135,0)">str</span>(i)<span style="color: rgb(98,98,98)">+</span><span style="color: rgb(175,0,0)">&#34;</span><span style="color: rgb(175,0,0)">: </span><span style="color: rgb(175,0,0)">&#34;</span>,<span style="color: rgb(0,135,0)">min</span>(values)])
-
-File <span class="ansi-green-intense-fg ansi-bold">~\Documents\GitHub\fmdtools\examples\tank\tank_opt.py:151</span>, in <span class="ansi-cyan-fg">&lt;listcomp&gt;</span><span class="ansi-blue-intense-fg ansi-bold">(.0)</span>
-<span class="ansi-green-fg">    149</span> newpop <span style="color: rgb(98,98,98)">=</span>  np<span style="color: rgb(98,98,98)">.</span>concatenate(<span style="color: rgb(0,135,0)">tuple</span>([oper(goodpop,used_numopers[i]) <span class="ansi-bold" style="color: rgb(0,135,0)">for</span> i,oper <span class="ansi-bold" style="color: rgb(175,0,255)">in</span> <span style="color: rgb(0,135,0)">enumerate</span>(used_opers)]))
-<span class="ansi-green-fg">    150</span> makefeasible(newpop)
-<span class="ansi-green-intense-fg ansi-bold">--&gt; 151</span> newvals <span style="color: rgb(98,98,98)">=</span> np<span style="color: rgb(98,98,98)">.</span>array([prob<span style="color: rgb(98,98,98)">.</span>cost([<span style="color: rgb(98,98,98)">*</span>x[<span style="color: rgb(98,98,98)">0</span>],<span style="color: rgb(98,98,98)">*</span>x[<span style="color: rgb(98,98,98)">1</span>]]) <span class="ansi-bold" style="color: rgb(0,135,0)">for</span> x <span class="ansi-bold" style="color: rgb(175,0,255)">in</span> newpop])
-<span class="ansi-green-fg">    152</span> pop, values <span style="color: rgb(98,98,98)">=</span> np<span style="color: rgb(98,98,98)">.</span>concatenate((goodpop, newpop)), np<span style="color: rgb(98,98,98)">.</span>concatenate((goodvals, newvals))
-<span class="ansi-green-fg">    153</span> <span class="ansi-bold" style="color: rgb(0,135,0)">if</span> verbose<span style="color: rgb(98,98,98)">==</span><span style="color: rgb(175,0,0)">&#34;</span><span style="color: rgb(175,0,0)">iters</span><span style="color: rgb(175,0,0)">&#34;</span>: <span style="color: rgb(0,135,0)">print</span>([<span style="color: rgb(175,0,0)">&#34;</span><span style="color: rgb(175,0,0)">iter </span><span style="color: rgb(175,0,0)">&#34;</span><span style="color: rgb(98,98,98)">+</span><span style="color: rgb(0,135,0)">str</span>(i)<span style="color: rgb(98,98,98)">+</span><span style="color: rgb(175,0,0)">&#34;</span><span style="color: rgb(175,0,0)">: </span><span style="color: rgb(175,0,0)">&#34;</span>,<span style="color: rgb(0,135,0)">min</span>(values)])
-
-File <span class="ansi-green-intense-fg ansi-bold">c:\users\dhulse\documents\github\fmdtools\fmdtools\sim\search.py:254</span>, in <span class="ansi-cyan-fg">ProblemInterface._assoc_obj_con.&lt;locals&gt;.newobj</span><span class="ansi-blue-intense-fg ansi-bold">(x)</span>
-<span class="ansi-green-fg">    253</span> <span class="ansi-bold" style="color: rgb(0,135,0)">def</span> <span style="color: rgb(0,0,255)">newobj</span>(x):
-<span class="ansi-green-intense-fg ansi-bold">--&gt; 254</span>     <span class="ansi-bold" style="color: rgb(0,135,0)">return</span> <span style="color: rgb(0,135,0)">self</span><span style="color: rgb(98,98,98)">.</span>x_to_obj_const(x, simname)[<span style="color: rgb(98,98,98)">0</span>][objname]
-
-File <span class="ansi-green-intense-fg ansi-bold">c:\users\dhulse\documents\github\fmdtools\fmdtools\sim\search.py:635</span>, in <span class="ansi-cyan-fg">ProblemInterface.x_to_obj_const</span><span class="ansi-blue-intense-fg ansi-bold">(self, x, simnames)</span>
-<span class="ansi-green-fg">    633</span> <span style="color: rgb(95,135,135)"># run sims</span>
-<span class="ansi-green-fg">    634</span> <span class="ansi-bold" style="color: rgb(0,135,0)">if</span> simname <span class="ansi-bold" style="color: rgb(175,0,255)">in</span> <span style="color: rgb(0,135,0)">self</span><span style="color: rgb(98,98,98)">.</span>current_iter[<span style="color: rgb(175,0,0)">&#39;</span><span style="color: rgb(175,0,0)">sims_to_update</span><span style="color: rgb(175,0,0)">&#39;</span>]:
-<span class="ansi-green-intense-fg ansi-bold">--&gt; 635</span>     objs, consts <span style="color: rgb(98,98,98)">=</span> <span style="color: rgb(0,135,0)">self</span><span style="color: rgb(98,98,98)">.</span>_run_sim_type(<span style="color: rgb(0,135,0)">self</span><span style="color: rgb(98,98,98)">.</span>simulations[simname][<span style="color: rgb(98,98,98)">0</span>], simname, x)
-<span class="ansi-green-fg">    636</span>     <span style="color: rgb(0,135,0)">self</span><span style="color: rgb(98,98,98)">.</span>current_iter[<span style="color: rgb(175,0,0)">&#39;</span><span style="color: rgb(175,0,0)">objs</span><span style="color: rgb(175,0,0)">&#39;</span>]<span style="color: rgb(98,98,98)">.</span>update(objs)
-<span class="ansi-green-fg">    637</span>     <span style="color: rgb(0,135,0)">self</span><span style="color: rgb(98,98,98)">.</span>current_iter[<span style="color: rgb(175,0,0)">&#39;</span><span style="color: rgb(175,0,0)">consts</span><span style="color: rgb(175,0,0)">&#39;</span>]<span style="color: rgb(98,98,98)">.</span>update(consts)
-
-File <span class="ansi-green-intense-fg ansi-bold">c:\users\dhulse\documents\github\fmdtools\fmdtools\sim\search.py:499</span>, in <span class="ansi-cyan-fg">ProblemInterface._run_sim_type</span><span class="ansi-blue-intense-fg ansi-bold">(self, simtype, simname, x)</span>
-<span class="ansi-green-fg">    497</span> <span class="ansi-bold" style="color: rgb(0,135,0)">if</span> simtype<span style="color: rgb(98,98,98)">==</span><span style="color: rgb(175,0,0)">&#39;</span><span style="color: rgb(175,0,0)">set_const</span><span style="color: rgb(175,0,0)">&#39;</span>:    <span class="ansi-bold" style="color: rgb(0,135,0)">return</span> <span style="color: rgb(0,135,0)">self</span><span style="color: rgb(98,98,98)">.</span>_get_set_const(x)
-<span class="ansi-green-fg">    498</span> <span class="ansi-bold" style="color: rgb(0,135,0)">elif</span> simtype<span style="color: rgb(98,98,98)">==</span><span style="color: rgb(175,0,0)">&#39;</span><span style="color: rgb(175,0,0)">single</span><span style="color: rgb(175,0,0)">&#39;</span>:     <span class="ansi-bold" style="color: rgb(0,135,0)">return</span> <span style="color: rgb(0,135,0)">self</span><span style="color: rgb(98,98,98)">.</span>_run_single_sim(simname, x)
-<span class="ansi-green-intense-fg ansi-bold">--&gt; 499</span> <span class="ansi-bold" style="color: rgb(0,135,0)">elif</span> simtype<span style="color: rgb(98,98,98)">==</span><span style="color: rgb(175,0,0)">&#39;</span><span style="color: rgb(175,0,0)">multi</span><span style="color: rgb(175,0,0)">&#39;</span>:      <span class="ansi-bold" style="color: rgb(0,135,0)">return</span> <span style="color: rgb(0,135,0)">self</span><span style="color: rgb(98,98,98)">.</span>_run_multi_sim(simname,x)
-<span class="ansi-green-fg">    500</span> <span class="ansi-bold" style="color: rgb(0,135,0)">elif</span> simtype<span style="color: rgb(98,98,98)">==</span><span style="color: rgb(175,0,0)">&#39;</span><span style="color: rgb(175,0,0)">external</span><span style="color: rgb(175,0,0)">&#39;</span>:   <span class="ansi-bold" style="color: rgb(0,135,0)">return</span> <span style="color: rgb(0,135,0)">self</span><span style="color: rgb(98,98,98)">.</span>_run_external_sim(simname, x)
-<span class="ansi-green-fg">    501</span> <span class="ansi-bold" style="color: rgb(0,135,0)">else</span>: <span class="ansi-bold" style="color: rgb(0,135,0)">raise</span> <span class="ansi-bold" style="color: rgb(215,95,95)">Exception</span>(<span style="color: rgb(175,0,0)">&#34;</span><span style="color: rgb(175,0,0)">Invalid simulation type: </span><span style="color: rgb(175,0,0)">&#34;</span><span style="color: rgb(98,98,98)">+</span>simtype)
-
-File <span class="ansi-green-intense-fg ansi-bold">c:\users\dhulse\documents\github\fmdtools\fmdtools\sim\search.py:428</span>, in <span class="ansi-cyan-fg">ProblemInterface._run_multi_sim</span><span class="ansi-blue-intense-fg ansi-bold">(self, simname, x)</span>
-<span class="ansi-green-fg">    425</span>     <span class="ansi-bold" style="color: rgb(0,135,0)">else</span>:
-<span class="ansi-green-fg">    426</span>         inputs <span style="color: rgb(98,98,98)">=</span> [(<span style="color: rgb(0,135,0)">self</span><span style="color: rgb(98,98,98)">.</span>_check_new_mdl(simname, var_time, mdl, x, obj_time), scen,  kwargs, <span style="color: rgb(0,135,0)">str</span>(i))
-<span class="ansi-green-fg">    427</span>                   <span class="ansi-bold" style="color: rgb(0,135,0)">for</span> i, scen <span class="ansi-bold" style="color: rgb(175,0,255)">in</span> <span style="color: rgb(0,135,0)">enumerate</span>(scenlist)]
-<span class="ansi-green-intense-fg ansi-bold">--&gt; 428</span>     res_list <span style="color: rgb(98,98,98)">=</span> <span style="color: rgb(0,135,0)">list</span>(pool<span style="color: rgb(98,98,98)">.</span>imap(prop<span style="color: rgb(98,98,98)">.</span>exec_scen_par, inputs))
-<span class="ansi-green-fg">    429</span>     results, mh <span style="color: rgb(98,98,98)">=</span> prop<span style="color: rgb(98,98,98)">.</span>unpack_res_list(scenlist, res_list)
-<span class="ansi-green-fg">    430</span> <span class="ansi-bold" style="color: rgb(0,135,0)">else</span>:
-
-File <span class="ansi-green-intense-fg ansi-bold">~\AppData\Local\anaconda3\Lib\multiprocessing\pool.py:861</span>, in <span class="ansi-cyan-fg">IMapIterator.next</span><span class="ansi-blue-intense-fg ansi-bold">(self, timeout)</span>
-<span class="ansi-green-fg">    859</span>     <span style="color: rgb(0,135,0)">self</span><span style="color: rgb(98,98,98)">.</span>_pool <span style="color: rgb(98,98,98)">=</span> <span class="ansi-bold" style="color: rgb(0,135,0)">None</span>
-<span class="ansi-green-fg">    860</span>     <span class="ansi-bold" style="color: rgb(0,135,0)">raise</span> <span class="ansi-bold" style="color: rgb(215,95,95)">StopIteration</span> <span class="ansi-bold" style="color: rgb(0,135,0)">from</span> <span class="ansi-bold" style="color: rgb(0,135,0)">None</span>
-<span class="ansi-green-intense-fg ansi-bold">--&gt; 861</span> <span style="color: rgb(0,135,0)">self</span><span style="color: rgb(98,98,98)">.</span>_cond<span style="color: rgb(98,98,98)">.</span>wait(timeout)
-<span class="ansi-green-fg">    862</span> <span class="ansi-bold" style="color: rgb(0,135,0)">try</span>:
-<span class="ansi-green-fg">    863</span>     item <span style="color: rgb(98,98,98)">=</span> <span style="color: rgb(0,135,0)">self</span><span style="color: rgb(98,98,98)">.</span>_items<span style="color: rgb(98,98,98)">.</span>popleft()
-
-File <span class="ansi-green-intense-fg ansi-bold">~\AppData\Local\anaconda3\Lib\threading.py:320</span>, in <span class="ansi-cyan-fg">Condition.wait</span><span class="ansi-blue-intense-fg ansi-bold">(self, timeout)</span>
-<span class="ansi-green-fg">    318</span> <span class="ansi-bold" style="color: rgb(0,135,0)">try</span>:    <span style="color: rgb(95,135,135)"># restore state no matter what (e.g., KeyboardInterrupt)</span>
-<span class="ansi-green-fg">    319</span>     <span class="ansi-bold" style="color: rgb(0,135,0)">if</span> timeout <span class="ansi-bold" style="color: rgb(175,0,255)">is</span> <span class="ansi-bold" style="color: rgb(0,135,0)">None</span>:
-<span class="ansi-green-intense-fg ansi-bold">--&gt; 320</span>         waiter<span style="color: rgb(98,98,98)">.</span>acquire()
-<span class="ansi-green-fg">    321</span>         gotit <span style="color: rgb(98,98,98)">=</span> <span class="ansi-bold" style="color: rgb(0,135,0)">True</span>
-<span class="ansi-green-fg">    322</span>     <span class="ansi-bold" style="color: rgb(0,135,0)">else</span>:
-
-<span class="ansi-red-intense-fg ansi-bold">KeyboardInterrupt</span>:
+<span class="ansi-red-intense-fg ansi-bold">NameError</span>: name &#39;tank_opt&#39; is not defined
 </pre></div></div>
 </div>
-<div class="nbinput nblast docutils container">
+<div class="nbinput docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[22]:
 </pre></div>
 </div>
@@ -1295,7 +901,20 @@ File <span class="ansi-green-intense-fg ansi-bold">~\AppData\Local\anaconda3\Lib
 </pre></div>
 </div>
 </div>
-<div class="nbinput nblast docutils container">
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+<span class="ansi-red-intense-fg ansi-bold">---------------------------------------------------------------------------</span>
+<span class="ansi-red-intense-fg ansi-bold">NameError</span>                                 Traceback (most recent call last)
+Cell <span class="ansi-green-intense-fg ansi-bold">In[22], line 1</span>
+<span class="ansi-green-intense-fg ansi-bold">----&gt; 1</span> <span class="ansi-yellow-bg">result_alt</span><span style="color: rgb(98,98,98)">.</span>fun
+
+<span class="ansi-red-intense-fg ansi-bold">NameError</span>: name &#39;result_alt&#39; is not defined
+</pre></div></div>
+</div>
+<div class="nbinput docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[23]:
 </pre></div>
 </div>
@@ -1303,7 +922,20 @@ File <span class="ansi-green-intense-fg ansi-bold">~\AppData\Local\anaconda3\Lib
 </pre></div>
 </div>
 </div>
-<div class="nbinput nblast docutils container">
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+<span class="ansi-red-intense-fg ansi-bold">---------------------------------------------------------------------------</span>
+<span class="ansi-red-intense-fg ansi-bold">NameError</span>                                 Traceback (most recent call last)
+Cell <span class="ansi-green-intense-fg ansi-bold">In[23], line 1</span>
+<span class="ansi-green-intense-fg ansi-bold">----&gt; 1</span> result_alt_nocr, llargs_alt_nocr, fhist_alt_nocr, thist_alt_nocr, xdhist_alt_nocr <span style="color: rgb(98,98,98)">=</span> <span class="ansi-yellow-bg">tank_opt</span><span style="color: rgb(98,98,98)">.</span>alternating_opt(option<span style="color: rgb(98,98,98)">=</span><span style="color: rgb(175,0,0)">&#34;</span><span style="color: rgb(175,0,0)">without_cr</span><span style="color: rgb(175,0,0)">&#34;</span>,pool<span style="color: rgb(98,98,98)">=</span>pool, max_alts<span style="color: rgb(98,98,98)">=</span><span style="color: rgb(98,98,98)">1</span>)
+
+<span class="ansi-red-intense-fg ansi-bold">NameError</span>: name &#39;tank_opt&#39; is not defined
+</pre></div></div>
+</div>
+<div class="nbinput docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[24]:
 </pre></div>
 </div>
@@ -1311,7 +943,20 @@ File <span class="ansi-green-intense-fg ansi-bold">~\AppData\Local\anaconda3\Lib
 </pre></div>
 </div>
 </div>
-<div class="nbinput nblast docutils container">
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+<span class="ansi-red-intense-fg ansi-bold">---------------------------------------------------------------------------</span>
+<span class="ansi-red-intense-fg ansi-bold">NameError</span>                                 Traceback (most recent call last)
+Cell <span class="ansi-green-intense-fg ansi-bold">In[24], line 1</span>
+<span class="ansi-green-intense-fg ansi-bold">----&gt; 1</span> result_bi, llargs_bi, bestf_bi, bestxdes_bi <span style="color: rgb(98,98,98)">=</span> <span class="ansi-yellow-bg">tank_opt</span><span style="color: rgb(98,98,98)">.</span>bilevel_opt(pool<span style="color: rgb(98,98,98)">=</span>pool, maxiter<span style="color: rgb(98,98,98)">=</span><span style="color: rgb(98,98,98)">2</span>)
+
+<span class="ansi-red-intense-fg ansi-bold">NameError</span>: name &#39;tank_opt&#39; is not defined
+</pre></div></div>
+</div>
+<div class="nbinput docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[25]:
 </pre></div>
 </div>
@@ -1336,6 +981,30 @@ File <span class="ansi-green-intense-fg ansi-bold">~\AppData\Local\anaconda3\Lib
 </pre></div>
 </div>
 </div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+<span class="ansi-red-intense-fg ansi-bold">---------------------------------------------------------------------------</span>
+<span class="ansi-red-intense-fg ansi-bold">NameError</span>                                 Traceback (most recent call last)
+Cell <span class="ansi-green-intense-fg ansi-bold">In[25], line 2</span>
+<span class="ansi-green-fg">      1</span> fig <span style="color: rgb(98,98,98)">=</span> plt<span style="color: rgb(98,98,98)">.</span>figure()
+<span class="ansi-green-intense-fg ansi-bold">----&gt; 2</span> fhist_alt_plot <span style="color: rgb(98,98,98)">=</span> [<span style="color: rgb(0,135,0)">min</span>(fhist_alt[:f<span style="color: rgb(98,98,98)">+</span><span style="color: rgb(98,98,98)">1</span>]) <span class="ansi-bold" style="color: rgb(0,135,0)">for</span> f,_ <span class="ansi-bold" style="color: rgb(175,0,255)">in</span> <span style="color: rgb(0,135,0)">enumerate</span>(<span class="ansi-yellow-bg">fhist_alt</span>)]
+<span class="ansi-green-fg">      3</span> plt<span style="color: rgb(98,98,98)">.</span>plot(thist_alt, fhist_alt_plot, label<span style="color: rgb(98,98,98)">=</span><span style="color: rgb(175,0,0)">&#34;</span><span style="color: rgb(175,0,0)">Alternating (with $C_R$)</span><span style="color: rgb(175,0,0)">&#34;</span>)
+<span class="ansi-green-fg">      5</span> fhist_alt_nocr_plot <span style="color: rgb(98,98,98)">=</span> [<span style="color: rgb(0,135,0)">min</span>(fhist_alt_nocr[:f<span style="color: rgb(98,98,98)">+</span><span style="color: rgb(98,98,98)">1</span>]) <span class="ansi-bold" style="color: rgb(0,135,0)">for</span> f,_ <span class="ansi-bold" style="color: rgb(175,0,255)">in</span> <span style="color: rgb(0,135,0)">enumerate</span>(fhist_alt_nocr)]
+
+<span class="ansi-red-intense-fg ansi-bold">NameError</span>: name &#39;fhist_alt&#39; is not defined
+</pre></div></div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+&lt;Figure size 640x480 with 0 Axes&gt;
+</pre></div></div>
+</div>
 <div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[26]:
 </pre></div>
@@ -1344,7 +1013,7 @@ File <span class="ansi-green-intense-fg ansi-bold">~\AppData\Local\anaconda3\Lib
 </pre></div>
 </div>
 </div>
-<div class="nbinput nblast docutils container">
+<div class="nbinput docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[27]:
 </pre></div>
 </div>
@@ -1357,13 +1026,63 @@ File <span class="ansi-green-intense-fg ansi-bold">~\AppData\Local\anaconda3\Lib
 </pre></div>
 </div>
 </div>
-<div class="nbinput nblast docutils container">
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+<span class="ansi-red-intense-fg ansi-bold">---------------------------------------------------------------------------</span>
+<span class="ansi-red-intense-fg ansi-bold">NameError</span>                                 Traceback (most recent call last)
+Cell <span class="ansi-green-intense-fg ansi-bold">In[27], line 2</span>
+<span class="ansi-green-fg">      1</span> tab <span style="color: rgb(98,98,98)">=</span> pd<span style="color: rgb(98,98,98)">.</span>DataFrame(columns <span style="color: rgb(98,98,98)">=</span> [<span style="color: rgb(175,0,0)">&#34;</span><span style="color: rgb(175,0,0)">$x_t$</span><span style="color: rgb(175,0,0)">&#34;</span>, <span style="color: rgb(175,0,0)">&#34;</span><span style="color: rgb(175,0,0)">$x_l$</span><span style="color: rgb(175,0,0)">&#34;</span>, <span style="color: rgb(175,0,0)">&#34;</span><span style="color: rgb(175,0,0)">$f^*$</span><span style="color: rgb(175,0,0)">&#34;</span>, <span style="color: rgb(175,0,0)">&#34;</span><span style="color: rgb(175,0,0)">time</span><span style="color: rgb(175,0,0)">&#34;</span>])
+<span class="ansi-green-intense-fg ansi-bold">----&gt; 2</span> tab<span style="color: rgb(98,98,98)">.</span>loc[<span style="color: rgb(175,0,0)">&#39;</span><span style="color: rgb(175,0,0)">Bilevel</span><span style="color: rgb(175,0,0)">&#39;</span>] <span style="color: rgb(98,98,98)">=</span> <span style="color: rgb(0,135,0)">list</span>(<span class="ansi-yellow-bg">result_bi</span>[<span style="color: rgb(175,0,0)">&#39;</span><span style="color: rgb(175,0,0)">x</span><span style="color: rgb(175,0,0)">&#39;</span>]) <span style="color: rgb(98,98,98)">+</span>  [result_bi[<span style="color: rgb(175,0,0)">&#39;</span><span style="color: rgb(175,0,0)">fun</span><span style="color: rgb(175,0,0)">&#39;</span>], llargs_bi[<span style="color: rgb(175,0,0)">&#39;</span><span style="color: rgb(175,0,0)">thist</span><span style="color: rgb(175,0,0)">&#39;</span>][<span style="color: rgb(98,98,98)">-</span><span style="color: rgb(98,98,98)">1</span>]]
+<span class="ansi-green-fg">      3</span> tab<span style="color: rgb(98,98,98)">.</span>loc[<span style="color: rgb(175,0,0)">&#39;</span><span style="color: rgb(175,0,0)">Alt. (no $C_R$)</span><span style="color: rgb(175,0,0)">&#39;</span>] <span style="color: rgb(98,98,98)">=</span> <span style="color: rgb(0,135,0)">list</span>(result_alt_nocr[<span style="color: rgb(175,0,0)">&#39;</span><span style="color: rgb(175,0,0)">x</span><span style="color: rgb(175,0,0)">&#39;</span>]) <span style="color: rgb(98,98,98)">+</span> [llargs_alt_nocr[<span style="color: rgb(175,0,0)">&#39;</span><span style="color: rgb(175,0,0)">ll_opt</span><span style="color: rgb(175,0,0)">&#39;</span>], thist_alt_nocr[<span style="color: rgb(98,98,98)">-</span><span style="color: rgb(98,98,98)">1</span>]]
+<span class="ansi-green-fg">      4</span> tab<span style="color: rgb(98,98,98)">.</span>loc[<span style="color: rgb(175,0,0)">&#39;</span><span style="color: rgb(175,0,0)">Alt. (with $C_R$)</span><span style="color: rgb(175,0,0)">&#39;</span>] <span style="color: rgb(98,98,98)">=</span> <span style="color: rgb(0,135,0)">list</span>(result_alt[<span style="color: rgb(175,0,0)">&#39;</span><span style="color: rgb(175,0,0)">x</span><span style="color: rgb(175,0,0)">&#39;</span>]) <span style="color: rgb(98,98,98)">+</span> [result_alt[<span style="color: rgb(175,0,0)">&#39;</span><span style="color: rgb(175,0,0)">fun</span><span style="color: rgb(175,0,0)">&#39;</span>], thist_alt[<span style="color: rgb(98,98,98)">-</span><span style="color: rgb(98,98,98)">1</span>]]
+
+<span class="ansi-red-intense-fg ansi-bold">NameError</span>: name &#39;result_bi&#39; is not defined
+</pre></div></div>
+</div>
+<div class="nbinput docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[28]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">tab</span>
 </pre></div>
 </div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[28]:
+</pre></div>
+</div>
+<div class="output_area rendered_html docutils container">
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>$x_t$</th>
+      <th>$x_l$</th>
+      <th>$f^*$</th>
+      <th>time</th>
+    </tr>
+  </thead>
+  <tbody>
+  </tbody>
+</table>
+</div></div>
 </div>
 <p>Note that these are the previously-recorded results:</p>
 <table class="docutils align-default">

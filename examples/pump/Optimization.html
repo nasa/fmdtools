@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Optimization using the ProblemInterface class &mdash; fmdtools 2.0-beta-1 documentation</title>
+  <title>Optimization using the ProblemInterface class &mdash; fmdtools 2.0-beta-2 documentation</title>
       <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
       <link rel="stylesheet" href="../../_static/nbsphinx-code-cells.css" type="text/css" />
@@ -13,11 +13,11 @@
     <script src="../../_static/js/html5shiv.min.js"></script>
   <![endif]-->
   
-        <script src="../../_static/jquery.js?v=5d32c60e"></script>
-        <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-        <script src="../../_static/documentation_options.js?v=04ccac41"></script>
-        <script src="../../_static/doctools.js?v=888ff710"></script>
-        <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+        <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+        <script src="../../_static/jquery.js"></script>
+        <script src="../../_static/underscore.js"></script>
+        <script src="../../_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script src="../../_static/doctools.js"></script>
         <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
         <script>window.MathJax = {"tex": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true}, "options": {"ignoreHtmlClass": "tex2jax_ignore|mathjax_ignore|document", "processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
         <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
@@ -73,7 +73,7 @@
 <li class="toctree-l2"><a class="reference internal" href="../../docs/Development%20Guide.html#intro-to-fmdtools">Intro to fmdtools</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="../../docs/Intro_to_fmdtools.html">Intro to resilience modelling, simulation, and visualization in Python with fmdtools.</a><ul>
 <li class="toctree-l4"><a class="reference internal" href="../../docs/Intro_to_fmdtools.html#author-daniel-hulse">Author: Daniel Hulse</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/Intro_to_fmdtools.html#version-2-0-beta-1">Version: 2.0-beta-1</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../docs/Intro_to_fmdtools.html#version-2-0-beta-2">Version: 2.0-beta-2</a></li>
 </ul>
 </li>
 <li class="toctree-l3"><a class="reference internal" href="../../docs/Intro_to_fmdtools.html#overview">Overview</a></li>
@@ -255,20 +255,6 @@
 <li class="toctree-l4"><a class="reference internal" href="../rover/Rover_Setup_Notebook.html#Model-simulation">Model simulation</a></li>
 </ul>
 </li>
-<li class="toctree-l3"><a class="reference internal" href="../rover/Approach_Use-Cases.html">Defining Fault Sampling Approaches in fmdtools</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="../rover/Approach_Use-Cases.html#Basics">Basics</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../rover/Approach_Use-Cases.html#Model-Setup">Model Setup</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../rover/Approach_Use-Cases.html#Setting-up-an-approach">Setting up an approach</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../rover/Approach_Use-Cases.html#Propagating-Faults">Propagating Faults</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../rover/Approach_Use-Cases.html#Pruning">Pruning</a></li>
-</ul>
-</li>
-<li class="toctree-l3"><a class="reference internal" href="../rover/Nominal_Approach_Use-Cases.html">Defining Nominal Approaches in fmdtools</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="../rover/Nominal_Approach_Use-Cases.html#Quantifying-probabilities">Quantifying probabilities</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../rover/Nominal_Approach_Use-Cases.html#Random-input-generation">Random input generation</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../rover/Nominal_Approach_Use-Cases.html#Nested-Scenario-Sampling">Nested Scenario Sampling</a></li>
-</ul>
-</li>
 <li class="toctree-l3"><a class="reference internal" href="../rover/HFAC_Analyses/HFAC_Analyses.html">More Human Failure Analyses</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../rover/HFAC_Analyses/IDETC_Human_Paper_Analysis.html">Human Failure Representation</a><ul>
 <li class="toctree-l4"><a class="reference internal" href="../rover/HFAC_Analyses/IDETC_Human_Paper_Analysis.html#Testing-behavioral-simulation">Testing behavioral simulation</a></li>
@@ -307,285 +293,34 @@
 <li class="toctree-l1"><a class="reference internal" href="../../docs/Glossary.html">Glossary</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../docs/fmdtools.html">Module Reference</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="../../docs/fmdtools.define.html">fmdtools.define package</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="../../docs/fmdtools.define.html#fmdtools-define-block">fmdtools.define.block</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.define.html#fmdtools.define.block.ActArch"><code class="docutils literal notranslate"><span class="pre">ActArch</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.define.html#fmdtools.define.block.Action"><code class="docutils literal notranslate"><span class="pre">Action</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.define.html#fmdtools.define.block.Block"><code class="docutils literal notranslate"><span class="pre">Block</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.define.html#fmdtools.define.block.CompArch"><code class="docutils literal notranslate"><span class="pre">CompArch</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.define.html#fmdtools.define.block.Component"><code class="docutils literal notranslate"><span class="pre">Component</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.define.html#fmdtools.define.block.FxnBlock"><code class="docutils literal notranslate"><span class="pre">FxnBlock</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.define.html#fmdtools.define.block.GenericFxn"><code class="docutils literal notranslate"><span class="pre">GenericFxn</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.define.html#fmdtools.define.block.Simulable"><code class="docutils literal notranslate"><span class="pre">Simulable</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.define.html#fmdtools.define.block.assoc_flows"><code class="docutils literal notranslate"><span class="pre">assoc_flows()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.define.html#fmdtools.define.block.inject_faults_internal"><code class="docutils literal notranslate"><span class="pre">inject_faults_internal()</span></code></a></li>
-</ul>
-</li>
-<li class="toctree-l3"><a class="reference internal" href="../../docs/fmdtools.define.html#module-fmdtools.define.common">fmdtools.define.common</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.define.html#fmdtools.define.common.check_pickleability"><code class="docutils literal notranslate"><span class="pre">check_pickleability()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.define.html#fmdtools.define.common.eq_units"><code class="docutils literal notranslate"><span class="pre">eq_units()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.define.html#fmdtools.define.common.get_dataobj_track"><code class="docutils literal notranslate"><span class="pre">get_dataobj_track()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.define.html#fmdtools.define.common.get_obj_indicators"><code class="docutils literal notranslate"><span class="pre">get_obj_indicators()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.define.html#fmdtools.define.common.get_obj_track"><code class="docutils literal notranslate"><span class="pre">get_obj_track()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.define.html#fmdtools.define.common.get_true_field"><code class="docutils literal notranslate"><span class="pre">get_true_field()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.define.html#fmdtools.define.common.get_true_fields"><code class="docutils literal notranslate"><span class="pre">get_true_fields()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.define.html#fmdtools.define.common.get_var"><code class="docutils literal notranslate"><span class="pre">get_var()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.define.html#fmdtools.define.common.init_obj_attr"><code class="docutils literal notranslate"><span class="pre">init_obj_attr()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.define.html#fmdtools.define.common.init_obj_dict"><code class="docutils literal notranslate"><span class="pre">init_obj_dict()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.define.html#fmdtools.define.common.is_iter"><code class="docutils literal notranslate"><span class="pre">is_iter()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.define.html#fmdtools.define.common.return_true_indicators"><code class="docutils literal notranslate"><span class="pre">return_true_indicators()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.define.html#fmdtools.define.common.set_var"><code class="docutils literal notranslate"><span class="pre">set_var()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.define.html#fmdtools.define.common.t_key"><code class="docutils literal notranslate"><span class="pre">t_key()</span></code></a></li>
-</ul>
-</li>
-<li class="toctree-l3"><a class="reference internal" href="../../docs/fmdtools.define.html#module-fmdtools.define.flow">fmdtools.define.flow</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.define.html#fmdtools.define.flow.CommsFlow"><code class="docutils literal notranslate"><span class="pre">CommsFlow</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.define.html#fmdtools.define.flow.Flow"><code class="docutils literal notranslate"><span class="pre">Flow</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.define.html#fmdtools.define.flow.MultiFlow"><code class="docutils literal notranslate"><span class="pre">MultiFlow</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.define.html#fmdtools.define.flow.init_flow"><code class="docutils literal notranslate"><span class="pre">init_flow()</span></code></a></li>
-</ul>
-</li>
-<li class="toctree-l3"><a class="reference internal" href="../../docs/fmdtools.define.html#module-fmdtools.define.mode">fmdtools.define.mode</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.define.html#fmdtools.define.mode.Fault"><code class="docutils literal notranslate"><span class="pre">Fault</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.define.html#fmdtools.define.mode.Mode"><code class="docutils literal notranslate"><span class="pre">Mode</span></code></a></li>
-</ul>
-</li>
-<li class="toctree-l3"><a class="reference internal" href="../../docs/fmdtools.define.html#fmdtools-define-model">fmdtools.define.model</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.define.html#fmdtools.define.model.Model"><code class="docutils literal notranslate"><span class="pre">Model</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.define.html#fmdtools.define.model.check_model_pickleability"><code class="docutils literal notranslate"><span class="pre">check_model_pickleability()</span></code></a></li>
-</ul>
-</li>
-<li class="toctree-l3"><a class="reference internal" href="../../docs/fmdtools.define.html#module-fmdtools.define.parameter">fmdtools.define.parameter</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.define.html#fmdtools.define.parameter.Parameter"><code class="docutils literal notranslate"><span class="pre">Parameter</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.define.html#fmdtools.define.parameter.SimParam"><code class="docutils literal notranslate"><span class="pre">SimParam</span></code></a></li>
-</ul>
-</li>
-<li class="toctree-l3"><a class="reference internal" href="../../docs/fmdtools.define.html#module-fmdtools.define.rand">fmdtools.define.rand</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.define.html#fmdtools.define.rand.Rand"><code class="docutils literal notranslate"><span class="pre">Rand</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.define.html#fmdtools.define.rand.get_pdf_for_dist"><code class="docutils literal notranslate"><span class="pre">get_pdf_for_dist()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.define.html#fmdtools.define.rand.get_pdf_for_rand"><code class="docutils literal notranslate"><span class="pre">get_pdf_for_rand()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.define.html#fmdtools.define.rand.get_scipy_pdf_helper"><code class="docutils literal notranslate"><span class="pre">get_scipy_pdf_helper()</span></code></a></li>
-</ul>
-</li>
-<li class="toctree-l3"><a class="reference internal" href="../../docs/fmdtools.define.html#module-fmdtools.define.state">fmdtools.define.state</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.define.html#fmdtools.define.state.State"><code class="docutils literal notranslate"><span class="pre">State</span></code></a></li>
-</ul>
-</li>
-<li class="toctree-l3"><a class="reference internal" href="../../docs/fmdtools.define.html#module-fmdtools.define.time">fmdtools.define.time</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.define.html#fmdtools.define.time.Time"><code class="docutils literal notranslate"><span class="pre">Time</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.define.html#fmdtools.define.time.Timer"><code class="docutils literal notranslate"><span class="pre">Timer</span></code></a></li>
-</ul>
-</li>
-<li class="toctree-l3"><a class="reference internal" href="../../docs/fmdtools.define.html#module-fmdtools.define.geom">fmdtools.define.geom</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.define.html#fmdtools.define.geom.Geom"><code class="docutils literal notranslate"><span class="pre">Geom</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.define.html#fmdtools.define.geom.GeomArch"><code class="docutils literal notranslate"><span class="pre">GeomArch</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.define.html#fmdtools.define.geom.GeomLine"><code class="docutils literal notranslate"><span class="pre">GeomLine</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.define.html#fmdtools.define.geom.GeomPoint"><code class="docutils literal notranslate"><span class="pre">GeomPoint</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.define.html#fmdtools.define.geom.GeomPoly"><code class="docutils literal notranslate"><span class="pre">GeomPoly</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.define.html#fmdtools.define.geom.LineParam"><code class="docutils literal notranslate"><span class="pre">LineParam</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.define.html#fmdtools.define.geom.PointParam"><code class="docutils literal notranslate"><span class="pre">PointParam</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.define.html#fmdtools.define.geom.PolyParam"><code class="docutils literal notranslate"><span class="pre">PolyParam</span></code></a></li>
-</ul>
-</li>
-<li class="toctree-l3"><a class="reference internal" href="../../docs/fmdtools.define.html#module-fmdtools.define.environment">fmdtools.define.environment</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.define.html#fmdtools.define.environment.Environment"><code class="docutils literal notranslate"><span class="pre">Environment</span></code></a></li>
-</ul>
-</li>
-<li class="toctree-l3"><a class="reference internal" href="../../docs/fmdtools.define.html#module-fmdtools.define.coords">fmdtools.define.coords</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.define.html#fmdtools.define.coords.Coords"><code class="docutils literal notranslate"><span class="pre">Coords</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.define.html#fmdtools.define.coords.CoordsParam"><code class="docutils literal notranslate"><span class="pre">CoordsParam</span></code></a></li>
-</ul>
-</li>
+<li class="toctree-l3"><a class="reference internal" href="../../docs/fmdtools.define.html#fmdtools-define-block">fmdtools.define.block</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../docs/fmdtools.define.html#module-fmdtools.define.common">fmdtools.define.common</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../docs/fmdtools.define.html#module-fmdtools.define.flow">fmdtools.define.flow</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../docs/fmdtools.define.html#module-fmdtools.define.mode">fmdtools.define.mode</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../docs/fmdtools.define.html#fmdtools-define-model">fmdtools.define.model</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../docs/fmdtools.define.html#module-fmdtools.define.parameter">fmdtools.define.parameter</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../docs/fmdtools.define.html#module-fmdtools.define.rand">fmdtools.define.rand</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../docs/fmdtools.define.html#module-fmdtools.define.state">fmdtools.define.state</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../docs/fmdtools.define.html#module-fmdtools.define.time">fmdtools.define.time</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../docs/fmdtools.define.html#module-fmdtools.define.geom">fmdtools.define.geom</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../docs/fmdtools.define.html#module-fmdtools.define.environment">fmdtools.define.environment</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../docs/fmdtools.define.html#module-fmdtools.define.coords">fmdtools.define.coords</a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="../../docs/fmdtools.sim.html">fmdtools.sim</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="../../docs/fmdtools.sim.html#fmdtools-sim-propagate">fmdtools.sim.propagate</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.sim.html#fmdtools.sim.propagate.approach"><code class="docutils literal notranslate"><span class="pre">approach()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.sim.html#fmdtools.sim.propagate.check_end_condition"><code class="docutils literal notranslate"><span class="pre">check_end_condition()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.sim.html#fmdtools.sim.propagate.check_hist_memory"><code class="docutils literal notranslate"><span class="pre">check_hist_memory()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.sim.html#fmdtools.sim.propagate.check_mdl_memory"><code class="docutils literal notranslate"><span class="pre">check_mdl_memory()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.sim.html#fmdtools.sim.propagate.check_overwrite"><code class="docutils literal notranslate"><span class="pre">check_overwrite()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.sim.html#fmdtools.sim.propagate.close_pool"><code class="docutils literal notranslate"><span class="pre">close_pool()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.sim.html#fmdtools.sim.propagate.copy_staged"><code class="docutils literal notranslate"><span class="pre">copy_staged()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.sim.html#fmdtools.sim.propagate.exec_nom_helper"><code class="docutils literal notranslate"><span class="pre">exec_nom_helper()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.sim.html#fmdtools.sim.propagate.exec_nom_par"><code class="docutils literal notranslate"><span class="pre">exec_nom_par()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.sim.html#fmdtools.sim.propagate.exec_scen"><code class="docutils literal notranslate"><span class="pre">exec_scen()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.sim.html#fmdtools.sim.propagate.exec_scen_par"><code class="docutils literal notranslate"><span class="pre">exec_scen_par()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.sim.html#fmdtools.sim.propagate.get_endclass_vars"><code class="docutils literal notranslate"><span class="pre">get_endclass_vars()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.sim.html#fmdtools.sim.propagate.get_result"><code class="docutils literal notranslate"><span class="pre">get_result()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.sim.html#fmdtools.sim.propagate.init_histrange"><code class="docutils literal notranslate"><span class="pre">init_histrange()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.sim.html#fmdtools.sim.propagate.list_init_faults"><code class="docutils literal notranslate"><span class="pre">list_init_faults()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.sim.html#fmdtools.sim.propagate.mult_kwargs"><code class="docutils literal notranslate"><span class="pre">mult_kwargs</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.sim.html#fmdtools.sim.propagate.nested_approach"><code class="docutils literal notranslate"><span class="pre">nested_approach()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.sim.html#fmdtools.sim.propagate.nom_helper"><code class="docutils literal notranslate"><span class="pre">nom_helper()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.sim.html#fmdtools.sim.propagate.nominal"><code class="docutils literal notranslate"><span class="pre">nominal()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.sim.html#fmdtools.sim.propagate.nominal_approach"><code class="docutils literal notranslate"><span class="pre">nominal_approach()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.sim.html#fmdtools.sim.propagate.one_fault"><code class="docutils literal notranslate"><span class="pre">one_fault()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.sim.html#fmdtools.sim.propagate.pack_run_kwargs"><code class="docutils literal notranslate"><span class="pre">pack_run_kwargs()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.sim.html#fmdtools.sim.propagate.pack_sim_kwargs"><code class="docutils literal notranslate"><span class="pre">pack_sim_kwargs()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.sim.html#fmdtools.sim.propagate.phases_from_hist"><code class="docutils literal notranslate"><span class="pre">phases_from_hist()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.sim.html#fmdtools.sim.propagate.prop_one_scen"><code class="docutils literal notranslate"><span class="pre">prop_one_scen()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.sim.html#fmdtools.sim.propagate.run_kwargs"><code class="docutils literal notranslate"><span class="pre">run_kwargs</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.sim.html#fmdtools.sim.propagate.save_helper"><code class="docutils literal notranslate"><span class="pre">save_helper()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.sim.html#fmdtools.sim.propagate.scenlist_helper"><code class="docutils literal notranslate"><span class="pre">scenlist_helper()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.sim.html#fmdtools.sim.propagate.sequence"><code class="docutils literal notranslate"><span class="pre">sequence()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.sim.html#fmdtools.sim.propagate.sim_kwargs"><code class="docutils literal notranslate"><span class="pre">sim_kwargs</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.sim.html#fmdtools.sim.propagate.single_faults"><code class="docutils literal notranslate"><span class="pre">single_faults()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.sim.html#fmdtools.sim.propagate.unpack_mult_kwargs"><code class="docutils literal notranslate"><span class="pre">unpack_mult_kwargs()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.sim.html#fmdtools.sim.propagate.unpack_res_list"><code class="docutils literal notranslate"><span class="pre">unpack_res_list()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.sim.html#fmdtools.sim.propagate.unpack_sim_kwargs"><code class="docutils literal notranslate"><span class="pre">unpack_sim_kwargs()</span></code></a></li>
-</ul>
-</li>
-<li class="toctree-l3"><a class="reference internal" href="../../docs/fmdtools.sim.html#module-fmdtools.sim.scenario">fmdtools.sim.scenario</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.sim.html#fmdtools.sim.scenario.BaseScenario"><code class="docutils literal notranslate"><span class="pre">BaseScenario</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.sim.html#fmdtools.sim.scenario.Injection"><code class="docutils literal notranslate"><span class="pre">Injection</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.sim.html#fmdtools.sim.scenario.JointFaultScenario"><code class="docutils literal notranslate"><span class="pre">JointFaultScenario</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.sim.html#fmdtools.sim.scenario.NominalScenario"><code class="docutils literal notranslate"><span class="pre">NominalScenario</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.sim.html#fmdtools.sim.scenario.ParamScenario"><code class="docutils literal notranslate"><span class="pre">ParamScenario</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.sim.html#fmdtools.sim.scenario.Scenario"><code class="docutils literal notranslate"><span class="pre">Scenario</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.sim.html#fmdtools.sim.scenario.Sequence"><code class="docutils literal notranslate"><span class="pre">Sequence</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.sim.html#fmdtools.sim.scenario.SingleFaultScenario"><code class="docutils literal notranslate"><span class="pre">SingleFaultScenario</span></code></a></li>
-</ul>
-</li>
-<li class="toctree-l3"><a class="reference internal" href="../../docs/fmdtools.sim.html#module-fmdtools.sim.approach">fmdtools.sim.approach</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.sim.html#fmdtools.sim.approach.NominalApproach"><code class="docutils literal notranslate"><span class="pre">NominalApproach</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.sim.html#fmdtools.sim.approach.SampleApproach"><code class="docutils literal notranslate"><span class="pre">SampleApproach</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.sim.html#fmdtools.sim.approach.find_overlap_n"><code class="docutils literal notranslate"><span class="pre">find_overlap_n()</span></code></a></li>
-</ul>
-</li>
-<li class="toctree-l3"><a class="reference internal" href="../../docs/fmdtools.sim.html#module-fmdtools.sim.search">fmdtools.sim.search</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.sim.html#fmdtools.sim.search.DynamicInterface"><code class="docutils literal notranslate"><span class="pre">DynamicInterface</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.sim.html#fmdtools.sim.search.ProblemInterface"><code class="docutils literal notranslate"><span class="pre">ProblemInterface</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.sim.html#fmdtools.sim.search.eval_con"><code class="docutils literal notranslate"><span class="pre">eval_con()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.sim.html#fmdtools.sim.search.get_pos_negative"><code class="docutils literal notranslate"><span class="pre">get_pos_negative()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.sim.html#fmdtools.sim.search.get_pos_str"><code class="docutils literal notranslate"><span class="pre">get_pos_str()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.sim.html#fmdtools.sim.search.get_text_time"><code class="docutils literal notranslate"><span class="pre">get_text_time()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.sim.html#fmdtools.sim.search.greater_to_factor"><code class="docutils literal notranslate"><span class="pre">greater_to_factor()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.sim.html#fmdtools.sim.search.n_to_factor"><code class="docutils literal notranslate"><span class="pre">n_to_factor()</span></code></a></li>
-</ul>
-</li>
+<li class="toctree-l3"><a class="reference internal" href="../../docs/fmdtools.sim.html#fmdtools-sim-propagate">fmdtools.sim.propagate</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../docs/fmdtools.sim.html#module-fmdtools.sim.scenario">fmdtools.sim.scenario</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../docs/fmdtools.sim.html#module-fmdtools.sim.sample">fmdtools.sim.sample</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../docs/fmdtools.sim.html#module-fmdtools.sim.search">fmdtools.sim.search</a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="../../docs/fmdtools.analyze.html">fmdtools.analyze package</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="../../docs/fmdtools.analyze.html#module-fmdtools.analyze.result">fmdtools.analyze.result</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.analyze.html#fmdtools.analyze.result.History"><code class="docutils literal notranslate"><span class="pre">History</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.analyze.html#fmdtools.analyze.result.Result"><code class="docutils literal notranslate"><span class="pre">Result</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.analyze.html#fmdtools.analyze.result.auto_filetype"><code class="docutils literal notranslate"><span class="pre">auto_filetype()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.analyze.html#fmdtools.analyze.result.bootstrap_confidence_interval"><code class="docutils literal notranslate"><span class="pre">bootstrap_confidence_interval()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.analyze.html#fmdtools.analyze.result.check_include_error"><code class="docutils literal notranslate"><span class="pre">check_include_error()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.analyze.html#fmdtools.analyze.result.check_include_errors"><code class="docutils literal notranslate"><span class="pre">check_include_errors()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.analyze.html#fmdtools.analyze.result.clean_resultdict_keys"><code class="docutils literal notranslate"><span class="pre">clean_resultdict_keys()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.analyze.html#fmdtools.analyze.result.create_indiv_filename"><code class="docutils literal notranslate"><span class="pre">create_indiv_filename()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.analyze.html#fmdtools.analyze.result.diff"><code class="docutils literal notranslate"><span class="pre">diff()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.analyze.html#fmdtools.analyze.result.file_check"><code class="docutils literal notranslate"><span class="pre">file_check()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.analyze.html#fmdtools.analyze.result.fromdict"><code class="docutils literal notranslate"><span class="pre">fromdict()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.analyze.html#fmdtools.analyze.result.get_dict_attr"><code class="docutils literal notranslate"><span class="pre">get_dict_attr()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.analyze.html#fmdtools.analyze.result.get_sub_include"><code class="docutils literal notranslate"><span class="pre">get_sub_include()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.analyze.html#fmdtools.analyze.result.init_dicthist"><code class="docutils literal notranslate"><span class="pre">init_dicthist()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.analyze.html#fmdtools.analyze.result.init_hist_iter"><code class="docutils literal notranslate"><span class="pre">init_hist_iter()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.analyze.html#fmdtools.analyze.result.init_indicator_hist"><code class="docutils literal notranslate"><span class="pre">init_indicator_hist()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.analyze.html#fmdtools.analyze.result.is_bool"><code class="docutils literal notranslate"><span class="pre">is_bool()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.analyze.html#fmdtools.analyze.result.is_known_immutable"><code class="docutils literal notranslate"><span class="pre">is_known_immutable()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.analyze.html#fmdtools.analyze.result.is_known_mutable"><code class="docutils literal notranslate"><span class="pre">is_known_mutable()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.analyze.html#fmdtools.analyze.result.is_numeric"><code class="docutils literal notranslate"><span class="pre">is_numeric()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.analyze.html#fmdtools.analyze.result.join_key"><code class="docutils literal notranslate"><span class="pre">join_key()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.analyze.html#fmdtools.analyze.result.load"><code class="docutils literal notranslate"><span class="pre">load()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.analyze.html#fmdtools.analyze.result.load_folder"><code class="docutils literal notranslate"><span class="pre">load_folder()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.analyze.html#fmdtools.analyze.result.nan_to_x"><code class="docutils literal notranslate"><span class="pre">nan_to_x()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.analyze.html#fmdtools.analyze.result.to_include_keys"><code class="docutils literal notranslate"><span class="pre">to_include_keys()</span></code></a></li>
-</ul>
-</li>
-<li class="toctree-l3"><a class="reference internal" href="../../docs/fmdtools.analyze.html#module-fmdtools.analyze.plot">fmdtools.analyze.plot</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.analyze.html#fmdtools.analyze.plot.dyn_order"><code class="docutils literal notranslate"><span class="pre">dyn_order()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.analyze.html#fmdtools.analyze.plot.get_dim_data"><code class="docutils literal notranslate"><span class="pre">get_dim_data()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.analyze.html#fmdtools.analyze.plot.get_nominal_classes"><code class="docutils literal notranslate"><span class="pre">get_nominal_classes()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.analyze.html#fmdtools.analyze.plot.hist"><code class="docutils literal notranslate"><span class="pre">hist()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.analyze.html#fmdtools.analyze.plot.make_consolidated_legend"><code class="docutils literal notranslate"><span class="pre">make_consolidated_legend()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.analyze.html#fmdtools.analyze.plot.metric_dist"><code class="docutils literal notranslate"><span class="pre">metric_dist()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.analyze.html#fmdtools.analyze.plot.metric_dist_from"><code class="docutils literal notranslate"><span class="pre">metric_dist_from()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.analyze.html#fmdtools.analyze.plot.metricovertime"><code class="docutils literal notranslate"><span class="pre">metricovertime()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.analyze.html#fmdtools.analyze.plot.multibar_helper"><code class="docutils literal notranslate"><span class="pre">multibar_helper()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.analyze.html#fmdtools.analyze.plot.multiplot_legend_title"><code class="docutils literal notranslate"><span class="pre">multiplot_legend_title()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.analyze.html#fmdtools.analyze.plot.nested_factor_comparison"><code class="docutils literal notranslate"><span class="pre">nested_factor_comparison()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.analyze.html#fmdtools.analyze.plot.nominal_factor_comparison"><code class="docutils literal notranslate"><span class="pre">nominal_factor_comparison()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.analyze.html#fmdtools.analyze.plot.nominal_vals_1d"><code class="docutils literal notranslate"><span class="pre">nominal_vals_1d()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.analyze.html#fmdtools.analyze.plot.nominal_vals_2d"><code class="docutils literal notranslate"><span class="pre">nominal_vals_2d()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.analyze.html#fmdtools.analyze.plot.nominal_vals_3d"><code class="docutils literal notranslate"><span class="pre">nominal_vals_3d()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.analyze.html#fmdtools.analyze.plot.phases"><code class="docutils literal notranslate"><span class="pre">phases()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.analyze.html#fmdtools.analyze.plot.plot_err_lines"><code class="docutils literal notranslate"><span class="pre">plot_err_lines()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.analyze.html#fmdtools.analyze.plot.plot_line_and_err"><code class="docutils literal notranslate"><span class="pre">plot_line_and_err()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.analyze.html#fmdtools.analyze.plot.prep_hists"><code class="docutils literal notranslate"><span class="pre">prep_hists()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.analyze.html#fmdtools.analyze.plot.samplemetric"><code class="docutils literal notranslate"><span class="pre">samplemetric()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.analyze.html#fmdtools.analyze.plot.samplemetrics"><code class="docutils literal notranslate"><span class="pre">samplemetrics()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.analyze.html#fmdtools.analyze.plot.suite_for_plots"><code class="docutils literal notranslate"><span class="pre">suite_for_plots()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.analyze.html#fmdtools.analyze.plot.unpack_plot_values"><code class="docutils literal notranslate"><span class="pre">unpack_plot_values()</span></code></a></li>
-</ul>
-</li>
-<li class="toctree-l3"><a class="reference internal" href="../../docs/fmdtools.analyze.html#module-fmdtools.analyze.graph">fmdtools.analyze.graph</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.analyze.html#fmdtools.analyze.graph.ActArchActGraph"><code class="docutils literal notranslate"><span class="pre">ActArchActGraph</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.analyze.html#fmdtools.analyze.graph.ActArchFlowGraph"><code class="docutils literal notranslate"><span class="pre">ActArchFlowGraph</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.analyze.html#fmdtools.analyze.graph.ActArchGraph"><code class="docutils literal notranslate"><span class="pre">ActArchGraph</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.analyze.html#fmdtools.analyze.graph.CommsFlowGraph"><code class="docutils literal notranslate"><span class="pre">CommsFlowGraph</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.analyze.html#fmdtools.analyze.graph.EdgeLabelStyle"><code class="docutils literal notranslate"><span class="pre">EdgeLabelStyle</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.analyze.html#fmdtools.analyze.graph.EdgeStyle"><code class="docutils literal notranslate"><span class="pre">EdgeStyle</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.analyze.html#fmdtools.analyze.graph.Graph"><code class="docutils literal notranslate"><span class="pre">Graph</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.analyze.html#fmdtools.analyze.graph.GraphInteractor"><code class="docutils literal notranslate"><span class="pre">GraphInteractor</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.analyze.html#fmdtools.analyze.graph.LabelStyle"><code class="docutils literal notranslate"><span class="pre">LabelStyle</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.analyze.html#fmdtools.analyze.graph.Labels"><code class="docutils literal notranslate"><span class="pre">Labels</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.analyze.html#fmdtools.analyze.graph.ModelCompGraph"><code class="docutils literal notranslate"><span class="pre">ModelCompGraph</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.analyze.html#fmdtools.analyze.graph.ModelFlowGraph"><code class="docutils literal notranslate"><span class="pre">ModelFlowGraph</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.analyze.html#fmdtools.analyze.graph.ModelFxnGraph"><code class="docutils literal notranslate"><span class="pre">ModelFxnGraph</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.analyze.html#fmdtools.analyze.graph.ModelGraph"><code class="docutils literal notranslate"><span class="pre">ModelGraph</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.analyze.html#fmdtools.analyze.graph.ModelTypeGraph"><code class="docutils literal notranslate"><span class="pre">ModelTypeGraph</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.analyze.html#fmdtools.analyze.graph.MultiFlowGraph"><code class="docutils literal notranslate"><span class="pre">MultiFlowGraph</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.analyze.html#fmdtools.analyze.graph.NodeStyle"><code class="docutils literal notranslate"><span class="pre">NodeStyle</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.analyze.html#fmdtools.analyze.graph.add_g_nested"><code class="docutils literal notranslate"><span class="pre">add_g_nested()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.analyze.html#fmdtools.analyze.graph.data_average"><code class="docutils literal notranslate"><span class="pre">data_average()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.analyze.html#fmdtools.analyze.graph.data_error"><code class="docutils literal notranslate"><span class="pre">data_error()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.analyze.html#fmdtools.analyze.graph.get_label_groups"><code class="docutils literal notranslate"><span class="pre">get_label_groups()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.analyze.html#fmdtools.analyze.graph.get_node_info"><code class="docutils literal notranslate"><span class="pre">get_node_info()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.analyze.html#fmdtools.analyze.graph.get_style_kwargs"><code class="docutils literal notranslate"><span class="pre">get_style_kwargs()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.analyze.html#fmdtools.analyze.graph.graph_factory"><code class="docutils literal notranslate"><span class="pre">graph_factory()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.analyze.html#fmdtools.analyze.graph.gv_import_check"><code class="docutils literal notranslate"><span class="pre">gv_import_check()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.analyze.html#fmdtools.analyze.graph.label_for_entry"><code class="docutils literal notranslate"><span class="pre">label_for_entry()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.analyze.html#fmdtools.analyze.graph.node_is_tagged"><code class="docutils literal notranslate"><span class="pre">node_is_tagged()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.analyze.html#fmdtools.analyze.graph.random"><code class="docutils literal notranslate"><span class="pre">random()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.analyze.html#fmdtools.analyze.graph.sff_one_trial"><code class="docutils literal notranslate"><span class="pre">sff_one_trial()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.analyze.html#fmdtools.analyze.graph.to_legend_label"><code class="docutils literal notranslate"><span class="pre">to_legend_label()</span></code></a></li>
-</ul>
-</li>
-<li class="toctree-l3"><a class="reference internal" href="../../docs/fmdtools.analyze.html#module-fmdtools.analyze.tabulate">fmdtools.analyze.tabulate</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.analyze.html#fmdtools.analyze.tabulate.dicttab"><code class="docutils literal notranslate"><span class="pre">dicttab()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.analyze.html#fmdtools.analyze.tabulate.fmea"><code class="docutils literal notranslate"><span class="pre">fmea()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.analyze.html#fmdtools.analyze.tabulate.label_faults"><code class="docutils literal notranslate"><span class="pre">label_faults()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.analyze.html#fmdtools.analyze.tabulate.maptab"><code class="docutils literal notranslate"><span class="pre">maptab()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.analyze.html#fmdtools.analyze.tabulate.metricovertime"><code class="docutils literal notranslate"><span class="pre">metricovertime()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.analyze.html#fmdtools.analyze.tabulate.nested_factor_comparison"><code class="docutils literal notranslate"><span class="pre">nested_factor_comparison()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.analyze.html#fmdtools.analyze.tabulate.nested_stats"><code class="docutils literal notranslate"><span class="pre">nested_stats()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.analyze.html#fmdtools.analyze.tabulate.nominal_factor_comparison"><code class="docutils literal notranslate"><span class="pre">nominal_factor_comparison()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.analyze.html#fmdtools.analyze.tabulate.nominal_stats"><code class="docutils literal notranslate"><span class="pre">nominal_stats()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.analyze.html#fmdtools.analyze.tabulate.phasefmea"><code class="docutils literal notranslate"><span class="pre">phasefmea()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.analyze.html#fmdtools.analyze.tabulate.result_summary"><code class="docutils literal notranslate"><span class="pre">result_summary()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.analyze.html#fmdtools.analyze.tabulate.result_summary_fmea"><code class="docutils literal notranslate"><span class="pre">result_summary_fmea()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.analyze.html#fmdtools.analyze.tabulate.samptime"><code class="docutils literal notranslate"><span class="pre">samptime()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.analyze.html#fmdtools.analyze.tabulate.summfmea"><code class="docutils literal notranslate"><span class="pre">summfmea()</span></code></a></li>
-</ul>
-</li>
-<li class="toctree-l3"><a class="reference internal" href="../../docs/fmdtools.analyze.html#module-fmdtools.analyze.show">fmdtools.analyze.show</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.analyze.html#fmdtools.analyze.show.consolidate_legend"><code class="docutils literal notranslate"><span class="pre">consolidate_legend()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.analyze.html#fmdtools.analyze.show.coord"><code class="docutils literal notranslate"><span class="pre">coord()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.analyze.html#fmdtools.analyze.show.coord3d"><code class="docutils literal notranslate"><span class="pre">coord3d()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.analyze.html#fmdtools.analyze.show.coord_collection"><code class="docutils literal notranslate"><span class="pre">coord_collection()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.analyze.html#fmdtools.analyze.show.coord_property"><code class="docutils literal notranslate"><span class="pre">coord_property()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.analyze.html#fmdtools.analyze.show.coord_property3d"><code class="docutils literal notranslate"><span class="pre">coord_property3d()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.analyze.html#fmdtools.analyze.show.geom"><code class="docutils literal notranslate"><span class="pre">geom()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.analyze.html#fmdtools.analyze.show.geomarch"><code class="docutils literal notranslate"><span class="pre">geomarch()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.analyze.html#fmdtools.analyze.show.init_figure"><code class="docutils literal notranslate"><span class="pre">init_figure()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.analyze.html#fmdtools.analyze.show.mark_times"><code class="docutils literal notranslate"><span class="pre">mark_times()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.analyze.html#fmdtools.analyze.show.traj"><code class="docutils literal notranslate"><span class="pre">traj()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.analyze.html#fmdtools.analyze.show.traj3"><code class="docutils literal notranslate"><span class="pre">traj3()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.analyze.html#fmdtools.analyze.show.trajectories"><code class="docutils literal notranslate"><span class="pre">trajectories()</span></code></a></li>
-</ul>
-</li>
+<li class="toctree-l3"><a class="reference internal" href="../../docs/fmdtools.analyze.html#module-fmdtools.analyze.common">fmdtools.analyze.common</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../docs/fmdtools.analyze.html#module-fmdtools.analyze.result">fmdtools.analyze.result</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../docs/fmdtools.analyze.html#module-fmdtools.analyze.history">fmdtools.analyze.history</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../docs/fmdtools.analyze.html#module-fmdtools.analyze.graph">fmdtools.analyze.graph</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../docs/fmdtools.analyze.html#module-fmdtools.analyze.tabulate">fmdtools.analyze.tabulate</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../docs/fmdtools.analyze.html#module-fmdtools.analyze.phases">fmdtools.analyze.phases</a></li>
 </ul>
 </li>
 </ul>
@@ -618,10 +353,10 @@
            <div itemprop="articleBody">
              
   <section id="Optimization-using-the-ProblemInterface-class">
-<h1>Optimization using the ProblemInterface class<a class="headerlink" href="#Optimization-using-the-ProblemInterface-class" title="Link to this heading"></a></h1>
+<h1>Optimization using the ProblemInterface class<a class="headerlink" href="#Optimization-using-the-ProblemInterface-class" title="Permalink to this heading"></a></h1>
 <p><strong>DISCLAIMER: Optimization modules do not work currently, see RAD-225</strong></p>
 <p>This notebook will show the basics of setting up a resilience optimization problem with the <code class="docutils literal notranslate"><span class="pre">Problem</span></code> class in <code class="docutils literal notranslate"><span class="pre">fmdtools.sim.search</span></code> module.</p>
-<div class="nbinput nblast docutils container">
+<div class="nbinput docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[1]:
 </pre></div>
 </div>
@@ -633,10 +368,26 @@
 </pre></div>
 </div>
 </div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+<span class="ansi-red-intense-fg ansi-bold">---------------------------------------------------------------------------</span>
+<span class="ansi-red-intense-fg ansi-bold">ModuleNotFoundError</span>                       Traceback (most recent call last)
+Cell <span class="ansi-green-intense-fg ansi-bold">In[1], line 2</span>
+<span class="ansi-green-fg">      1</span> <span class="ansi-bold" style="color: rgb(0,135,0)">from</span> <span class="ansi-bold" style="color: rgb(0,0,255)">fmdtools</span><span class="ansi-bold" style="color: rgb(0,0,255)">.</span><span class="ansi-bold" style="color: rgb(0,0,255)">sim</span><span class="ansi-bold" style="color: rgb(0,0,255)">.</span><span class="ansi-bold" style="color: rgb(0,0,255)">search</span> <span class="ansi-bold" style="color: rgb(0,135,0)">import</span> ProblemInterface
+<span class="ansi-green-intense-fg ansi-bold">----&gt; 2</span> <span class="ansi-bold" style="color: rgb(0,135,0)">from</span> <span class="ansi-bold" style="color: rgb(0,0,255)">fmdtools</span><span class="ansi-bold" style="color: rgb(0,0,255)">.</span><span class="ansi-bold" style="color: rgb(0,0,255)">sim</span><span class="ansi-bold" style="color: rgb(0,0,255)">.</span><span class="ansi-bold" style="color: rgb(0,0,255)">approach</span> <span class="ansi-bold" style="color: rgb(0,135,0)">import</span> SampleApproach
+<span class="ansi-green-fg">      3</span> <span class="ansi-bold" style="color: rgb(0,135,0)">from</span> <span class="ansi-bold" style="color: rgb(0,0,255)">matplotlib</span> <span class="ansi-bold" style="color: rgb(0,135,0)">import</span> pyplot <span class="ansi-bold" style="color: rgb(0,135,0)">as</span> plt
+<span class="ansi-green-fg">      4</span> <span class="ansi-bold" style="color: rgb(0,135,0)">import</span> <span class="ansi-bold" style="color: rgb(0,0,255)">fmdtools</span><span class="ansi-bold" style="color: rgb(0,0,255)">.</span><span class="ansi-bold" style="color: rgb(0,0,255)">analyze</span> <span class="ansi-bold" style="color: rgb(0,135,0)">as</span> <span class="ansi-bold" style="color: rgb(0,0,255)">an</span>
+
+<span class="ansi-red-intense-fg ansi-bold">ModuleNotFoundError</span>: No module named &#39;fmdtools.sim.approach&#39;
+</pre></div></div>
+</div>
 <section id="ProblemInterface-Setup">
-<h2>ProblemInterface Setup<a class="headerlink" href="#ProblemInterface-Setup" title="Link to this heading"></a></h2>
+<h2>ProblemInterface Setup<a class="headerlink" href="#ProblemInterface-Setup" title="Permalink to this heading"></a></h2>
 <p>The <code class="docutils literal notranslate"><span class="pre">ProblemInterface</span></code> class can be used to define an optimization problem around and fmdtools model/simulation in terms of variables, objectives, and constraints. See below:</p>
-<div class="nbinput docutils container">
+<div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[2]:
 </pre></div>
 </div>
@@ -644,63 +395,14 @@
 </pre></div>
 </div>
 </div>
-<div class="nboutput nblast docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area docutils container">
-<div class="highlight"><pre>
-
-    Interfaces for resilience optimization problems.
-
-    Attributes
-    ----------
-        simulations : dict
-            Dictionary of simulations and their corresponding arguments
-        variables : list
-            List of variables and their properties
-        objectives : dict
-            Dictionary of objectives and their times/arguments
-        constraints : dict
-            Dictionary of constraints and their times/arguments
-        current_iter : dict
-            Dictionary of current values for variables/objectives/constraints/etc.
-
-</pre></div></div>
-</div>
 <p>The problem class has many of the same objects as the methods in the <code class="docutils literal notranslate"><span class="pre">sim.propagate</span></code> module:</p>
-<div class="nbinput docutils container">
+<div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[3]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">help</span><span class="p">(</span><span class="n">ProblemInterface</span><span class="o">.</span><span class="fm">__init__</span><span class="p">)</span>
 </pre></div>
 </div>
-</div>
-<div class="nboutput nblast docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area docutils container">
-<div class="highlight"><pre>
-Help on function __init__ in module fmdtools.sim.search:
-
-__init__(self, name, mdl, default_p={}, negative_form=True, log_iter_hist=False, **kwargs)
-    Instantiates the Problem object.
-
-    Parameters
-    ----------
-
-    name : str
-        Name for the problem
-    mdl : Model
-        Model to optimize
-    negative_form : bool
-        Whether constraints are negative when feasible (True) or positive when feasible (False)
-    default_p : dict
-        Default parameters for the model
-    **kwargs : kwargs
-        Default run kwargs. See :data:`sim_kwargs`, :data:`run_kwargs`, :data:`mult_kwargs`
-
-</pre></div></div>
 </div>
 <p>Below we send the pump model and specify to simulate it using the <code class="docutils literal notranslate"><span class="pre">staged</span></code> option (which should be much faster to iterate over).</p>
 <div class="nbinput nblast docutils container">
@@ -713,54 +415,13 @@ __init__(self, name, mdl, default_p={}, negative_form=True, log_iter_hist=False,
 </div>
 </div>
 <p>Next, a simulation is added to the <code class="docutils literal notranslate"><span class="pre">Problem</span></code> using <code class="docutils literal notranslate"><span class="pre">Problem.add_simulation</span></code></p>
-<div class="nbinput docutils container">
+<div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[5]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">help</span><span class="p">(</span><span class="n">ProblemInterface</span><span class="o">.</span><span class="n">add_simulation</span><span class="p">)</span>
 </pre></div>
 </div>
-</div>
-<div class="nboutput nblast docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area docutils container">
-<div class="highlight"><pre>
-Help on function add_simulation in module fmdtools.sim.search:
-
-add_simulation(self, simname, simtype, *args, **kwargs)
-    Defines a simulation to be used with the model
-
-    Parameters
-    ----------
-    simname : str
-        Name/identifier for the simulation.
-    simtype : str, optional
-        Type of simulation(s) to run (aligns with propagate methods):
-            - single:      simulates a single scenario (the default)
-                - args: sequence: sequence defining fault scenario {time:{&#39;faults&#39;:(fxn:mode), &#39;disturbances&#39;:{&#39;Fxn1.var1&#39;}})}
-            - multi:       simulates multiple scenarios (provided approach or nominalapproach)
-                - args: scenlist: dict with structure {&#34;scenname&#34;:Scenario}
-                        (can be gotten from prop.list_init_faults, SampleApproach, or NominalApproach)
-            - nested:      simulates nested scenarios (provided approach and nominalapproach)
-                - args: see prop.nested_approach
-            - external_func:    calls an external function (rather than a simulation)
-                - args: callable
-            - custom_sim:       calls an external function with arguments (mdl) or (mdl, mdlhist)
-                - args: callable
-            - set_const:        used for set constraints
-    *args : args
-        Custom arguments for the given simulation type (see above)
-    **kwargs : dict
-        run, sim, and mult_kwargs from prop.
-
-        include_nominal: bool
-            whether to include nominal scenario in multi simulation. default is True
-        upstream_sims: dict
-            Dictionary specifying connection with an upstream simulation. With structure:
-                {&#39;upstream_simname&#39;:{&#39;p&#39;:{&#39;ext_varname&#39;:&#39;paramname&#39;}}}, &#39;vars&#39;:{&#39;ext_varname&#39;:&#39;varname&#39;}}
-
-</pre></div></div>
 </div>
 <p>In this case, we will optimize over a single scenario, passing <code class="docutils literal notranslate"><span class="pre">single</span></code> as the simtype.</p>
 <div class="nbinput nblast docutils container">
@@ -772,51 +433,13 @@ add_simulation(self, simname, simtype, *args, **kwargs)
 </div>
 </div>
 <p>Variables may then be added using <code class="docutils literal notranslate"><span class="pre">Problem.add_variables</span></code>.</p>
-<div class="nbinput docutils container">
+<div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[7]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">help</span><span class="p">(</span><span class="n">ProblemInterface</span><span class="o">.</span><span class="n">add_variables</span><span class="p">)</span>
 </pre></div>
 </div>
-</div>
-<div class="nboutput nblast docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area docutils container">
-<div class="highlight"><pre>
-Help on function add_variables in module fmdtools.sim.search:
-
-add_variables(self, simnames, *args, vartype=&#39;vars&#39;, t=0)
-    Adds variable of specified type (&#39;p&#39;, &#39;vars&#39;, or &#39;faults&#39;) to a given problem.
-    Also adds variable set constraints (if given)
-
-    Parameters
-    ----------
-    simnames : str/list
-        identifier for the simulation(s) the variable is optimized over
-    *args : tuples
-        variables to add, where each tuple has the form:
-        (varname, set_const (optional), vartype (optional), t (optional)), where
-        - varname is:
-            an element of mdl.p (if vartype=&#39;params&#39;)
-            a model variable (if vartype=&#39;vars&#39;)
-            a function name (if vartype=&#39;faults&#39;)
-        - set_const defines the variable set constraints, which may be:
-            None (for none/inf)
-            A two-element tuple (for continuous variable bounds)
-            A multi-element list (for discrete variables)
-        - vartype is the individual variable type (overrides vartype)
-        - t is the individual time (overrides t)
-    vartype : str
-        overall variable type defining the variable(s). The default is &#39;vars&#39;
-            - `param`: element(s) of mdl.p (set pre-simulation)
-            - `vars`: function/flow variables (set during the simulation)
-            - &#39;faults&#39;: fault scenario variables (set during the simulation)
-            - &#39;external&#39;: variables for external func
-            - paramfunc: generates p from variable in function paramfunc
-
-</pre></div></div>
 </div>
 <p>In this case, we are optimizing a change in the <code class="docutils literal notranslate"><span class="pre">eff</span></code> parameter at time t=10. Note that using the <code class="docutils literal notranslate"><span class="pre">staged</span></code> option, this means that the model will be copied at this time and then simulated to the final simulation time.</p>
 <p>This variable is also given the set constraint (bounds) of [0,5], which will show up in the <code class="docutils literal notranslate"><span class="pre">constraints</span></code> dictionary.</p>
@@ -829,53 +452,13 @@ add_variables(self, simnames, *args, vartype=&#39;vars&#39;, t=0)
 </div>
 </div>
 <p>We can further add objectives using <code class="docutils literal notranslate"><span class="pre">Problem.add_objectives</span></code></p>
-<div class="nbinput docutils container">
+<div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[9]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">help</span><span class="p">(</span><span class="n">ProblemInterface</span><span class="o">.</span><span class="n">add_objectives</span><span class="p">)</span>
 </pre></div>
 </div>
-</div>
-<div class="nboutput nblast docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area docutils container">
-<div class="highlight"><pre>
-Help on function add_objectives in module fmdtools.sim.search:
-
-add_objectives(self, simname, *args, objtype=&#39;endclass&#39;, t=&#39;end&#39;, obj_const=&#39;objectives&#39;, agg=(&#39;+&#39;, &#39;sum&#39;), **kwargs)
-    Adds objective to the given problem.
-
-    Parameters
-    ----------
-    simname : str
-        identifier for the simulation
-    *args : strs/tuples
-        variables to use as objectives (auto-named to f1, f2...)
-        may take form: (variablename, objtype (optional), t (optional), agg (optional))
-        or variablename, where variablename is the name of the variable (from Parameter, SimParam)
-        or index of the callable (for external)and objtype, t, and agg may override
-        the default objtype and t (see below)
-    objtype : str (optional)
-        default type of objective: `vars`, `endclass`, or `external`. Default is &#39;endclass&#39;
-    t : int (optional)
-        default time to get objective: &#39;end&#39; or set time t
-    obj_const: str (optional)
-        default value : objectives
-    agg : tuple
-        Specifies the aggregation of the objective/constraint:
-        - for objectives: (&#39;+&#39;/&#39;-&#39;,&#39;sum&#39;/&#39;difference&#39;/&#39;mult&#39;/&#39;max&#39;/&#39;min&#39;), specifying
-        (1) whether the objective is:
-                - &#34;+&#34;: positive (for minimization of the variable if the algorithm minimizes)
-                - &#34;-&#34;: negative (for maximization of the variable if the algorithm minimizes)
-        (2) how to aggregate objectives over scenarios
-        - for constraints: (less&#39;/&#39;greater&#39;, val) where value is the threshold value
-    **kwargs : str=strs/tuples
-        Named objectives with their corresponding arg values (see args)
-        objectivename = variablename
-
-</pre></div></div>
 </div>
 <p>In this case, we are optimizing the total flow in the <code class="docutils literal notranslate"><span class="pre">MoveWater</span></code> function as read at time t=25.</p>
 <div class="nbinput nblast docutils container">
@@ -896,7 +479,7 @@ add_objectives(self, simname, *args, objtype=&#39;endclass&#39;, t=&#39;end&#39;
 </div>
 </div>
 <p>Note that if all objectives and constraints are sampled in time before the defined simulation end-point, it will finish before completion to save computational time.</p>
-<div class="nbinput docutils container">
+<div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[12]:
 </pre></div>
 </div>
@@ -904,30 +487,13 @@ add_objectives(self, simname, *args, objtype=&#39;endclass&#39;, t=&#39;end&#39;
 </pre></div>
 </div>
 </div>
-<div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[12]:
-</pre></div>
-</div>
-<div class="output_area docutils container">
-<div class="highlight"><pre>
-Problem new_problem                                                     current value
- Variables
- -vars move_water.s.eff at t=10: [0, 5]                                           nan
- Objectives
- -obj_1: +sum(test_sim vars move_water.s.total_flow at t=25)                      nan
- Constraints
- -con_1: -(test_sim vars wat_1.s.pressure at t=11 -20)                            nan
- Simulations
- -test_sim: single scen: {20: {&#39;faults&#39;: {&#39;import_ee&#39;: &#39;no_v&#39;}}}
-</pre></div></div>
-</div>
 <p>The string representation of the problem shows how the objectives/constraints have been set up, that reflects: - the form of the objectives as positive or negative for maximization/minimization (set with the <code class="docutils literal notranslate"><span class="pre">agg</span></code> parameter in <code class="docutils literal notranslate"><span class="pre">add_objectives</span></code>). - the form of the constraints as positive or negative based on the <code class="docutils literal notranslate"><span class="pre">threshold</span></code> parameter in <code class="docutils literal notranslate"><span class="pre">add_constraints</span></code> and overall <code class="docutils literal notranslate"><span class="pre">negative_form</span></code> setting.</p>
 <p>These parameters will need to be adjusted depending on whether the interfacing optimization package is set up for minimization or maximization or in positive or negative null form (where feasible means positive or negative constraint values).</p>
 </section>
 <section id="Problem-interfaces">
-<h2>Problem interfaces<a class="headerlink" href="#Problem-interfaces" title="Link to this heading"></a></h2>
+<h2>Problem interfaces<a class="headerlink" href="#Problem-interfaces" title="Permalink to this heading"></a></h2>
 <p>Now that this problem is set up, we now have interfaces which can be passed to optimization methods. These are methods which <em>match the names of the objectives/constraints defined earlier</em> which can be passed as callables to optimizaiton methods.</p>
-<div class="nbinput docutils container">
+<div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[13]:
 </pre></div>
 </div>
@@ -935,18 +501,9 @@ Problem new_problem                                                     current 
 </pre></div>
 </div>
 </div>
-<div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[13]:
-</pre></div>
-</div>
-<div class="output_area docutils container">
-<div class="highlight"><pre>
-2.6999999999999997
-</pre></div></div>
-</div>
 <p>Note that despite being different callables, to reduce simulation costs, <code class="docutils literal notranslate"><span class="pre">obj_1</span></code> and <code class="docutils literal notranslate"><span class="pre">con_1</span></code> only <em>simulate the model</em> when a new variable value is entered into the problem. This can be seen by looking at the <code class="docutils literal notranslate"><span class="pre">current_iter</span></code> <strong>repr</strong>, which shows the values of the objectives/constraints a the current variable value.</p>
 <p>Additionally, provided the tracking options are set to on, the <code class="docutils literal notranslate"><span class="pre">plot_obj_const</span></code> method enables rapid visualization of objectives, constraints, and variables (and where they are queried):</p>
-<div class="nbinput docutils container">
+<div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[14]:
 </pre></div>
 </div>
@@ -954,29 +511,9 @@ Problem new_problem                                                     current 
 </pre></div>
 </div>
 </div>
-<div class="nboutput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[14]:
-</pre></div>
-</div>
-<div class="output_area docutils container">
-<div class="highlight"><pre>
-(&lt;Figure size 600x400 with 4 Axes&gt;,
- array([&lt;Axes: title={&#39;center&#39;: &#39;move_water.s.total_flow&#39;}&gt;,
-        &lt;Axes: title={&#39;center&#39;: &#39;wat_1.s.pressure&#39;}&gt;,
-        &lt;Axes: title={&#39;center&#39;: &#39;move_water.s.eff&#39;}, xlabel=&#39;time&#39;&gt;,
-        &lt;Axes: &gt;], dtype=object))
-</pre></div></div>
-</div>
-<div class="nboutput nblast docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area docutils container">
-<img alt="../../_images/examples_pump_Optimization_29_1.png" src="../../_images/examples_pump_Optimization_29_1.png" />
-</div>
-</div>
 </section>
 <section id="Optimization:">
-<h2>Optimization:<a class="headerlink" href="#Optimization:" title="Link to this heading"></a></h2>
+<h2>Optimization:<a class="headerlink" href="#Optimization:" title="Permalink to this heading"></a></h2>
 <p>Now, we will demonstrate optimization using this problem as it is set up:</p>
 <div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[15]:
@@ -986,26 +523,13 @@ Problem new_problem                                                     current 
 </pre></div>
 </div>
 </div>
-<div class="nbinput docutils container">
+<div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[16]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">new_problem</span><span class="o">.</span><span class="n">current_iter</span>
 </pre></div>
 </div>
-</div>
-<div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[16]:
-</pre></div>
-</div>
-<div class="output_area docutils container">
-<div class="highlight"><pre>
-{&#39;vars&#39;: array([3]),
- &#39;objs&#39;: {&#39;obj_1&#39;: 2.6999999999999997},
- &#39;consts&#39;: {&#39;con_1&#39;: 20.0},
- &#39;sims&#39;: {&#39;test_sim&#39;},
- &#39;sims_to_update&#39;: {&#39;set_const&#39;}}
-</pre></div></div>
 </div>
 <div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[17]:
@@ -1015,22 +539,13 @@ Problem new_problem                                                     current 
 </pre></div>
 </div>
 </div>
-<div class="nbinput docutils container">
+<div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[18]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">constraints</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="s1">&#39;fun&#39;</span><span class="p">]([</span><span class="mi">8</span><span class="p">])</span>
 </pre></div>
 </div>
-</div>
-<div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[18]:
-</pre></div>
-</div>
-<div class="output_area docutils container">
-<div class="highlight"><pre>
-8
-</pre></div></div>
 </div>
 <p>Note that scipy minimize assumes that: - objectives are to be minimized, and - constraints must be held positive</p>
 <p>The problem should thus be set up to accomodate this, by stating whether objectives should be positive/negative and by setting <code class="docutils literal notranslate"><span class="pre">negative_form=False</span></code>.</p>
@@ -1042,7 +557,7 @@ Problem new_problem                                                     current 
 </pre></div>
 </div>
 </div>
-<div class="nbinput docutils container">
+<div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[20]:
 </pre></div>
 </div>
@@ -1050,25 +565,8 @@ Problem new_problem                                                     current 
 </pre></div>
 </div>
 </div>
-<div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[20]:
-</pre></div>
-</div>
-<div class="output_area docutils container">
-<div class="highlight"><pre>
- message: Optimization terminated successfully
- success: True
-  status: 0
-     fun: 2.6999999999999997
-       x: [ 1.000e+00]
-     nit: 1
-     jac: [ 0.000e+00]
-    nfev: 2
-    njev: 1
-</pre></div></div>
-</div>
 <p>As shown, the variables are optimized to a value of x=0.0, the minimum possible value of MoveWater.eff which was put in the problem. We can further verify the optimized result by looking at the problem:</p>
-<div class="nbinput docutils container">
+<div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[21]:
 </pre></div>
 </div>
@@ -1076,51 +574,14 @@ Problem new_problem                                                     current 
 </pre></div>
 </div>
 </div>
-<div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[21]:
-</pre></div>
-</div>
-<div class="output_area docutils container">
-<div class="highlight"><pre>
-Problem new_problem                                                     current value
- Variables
- -vars move_water.s.eff at t=10: [0, 5]                                        1.0000
- Objectives
- -obj_1: +sum(test_sim vars move_water.s.total_flow at t=25)                   2.7000
- Constraints
- -con_1: -(test_sim vars wat_1.s.pressure at t=11 -20)                        20.0000
- Simulations
- -test_sim: single scen: {20: {&#39;faults&#39;: {&#39;import_ee&#39;: &#39;no_v&#39;}}}
-</pre></div></div>
-</div>
 <p>As shown, the bound set constraint x&gt;0 is active at the found minimum, as we would expect.</p>
 <p>We can further visualize this solution using:</p>
-<div class="nbinput docutils container">
+<div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[22]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">new_problem</span><span class="o">.</span><span class="n">plot_obj_const</span><span class="p">(</span><span class="s1">&#39;test_sim&#39;</span><span class="p">)</span>
 </pre></div>
-</div>
-</div>
-<div class="nboutput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[22]:
-</pre></div>
-</div>
-<div class="output_area docutils container">
-<div class="highlight"><pre>
-(&lt;Figure size 600x400 with 4 Axes&gt;,
- array([&lt;Axes: title={&#39;center&#39;: &#39;move_water.s.total_flow&#39;}&gt;,
-        &lt;Axes: title={&#39;center&#39;: &#39;wat_1.s.pressure&#39;}&gt;,
-        &lt;Axes: title={&#39;center&#39;: &#39;move_water.s.eff&#39;}, xlabel=&#39;time&#39;&gt;,
-        &lt;Axes: &gt;], dtype=object))
-</pre></div></div>
-</div>
-<div class="nboutput nblast docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area docutils container">
-<img alt="../../_images/examples_pump_Optimization_41_1.png" src="../../_images/examples_pump_Optimization_41_1.png" />
 </div>
 </div>
 <p>This result for this minimization is somewhat obvious. Alternatively, it may be interesting to see what would happen if we instead maximized the objective (as in, searched for the <code class="docutils literal notranslate"><span class="pre">eff</span></code> value that maximized total flow despite constraints/fault modes).</p>
@@ -1137,7 +598,7 @@ Problem new_problem                                                     current 
 </pre></div>
 </div>
 </div>
-<div class="nbinput docutils container">
+<div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[24]:
 </pre></div>
 </div>
@@ -1145,24 +606,7 @@ Problem new_problem                                                     current 
 </pre></div>
 </div>
 </div>
-<div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[24]:
-</pre></div>
-</div>
-<div class="output_area docutils container">
-<div class="highlight"><pre>
-Problem new_problem                                                     current value
- Variables
- -vars move_water.s.eff at t=10: [0, 5]                                           nan
- Objectives
- -obj_1: -sum(test_sim vars move_water.s.total_flow at t=25)                      nan
- Constraints
- -con_1: -(test_sim vars wat_1.s.pressure at t=11 -20)                            nan
- Simulations
- -test_sim: single scen: {20: {&#39;faults&#39;: {&#39;import_ee&#39;: &#39;no_v&#39;}}}
-</pre></div></div>
-</div>
-<div class="nbinput docutils container">
+<div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[25]:
 </pre></div>
 </div>
@@ -1170,31 +614,13 @@ Problem new_problem                                                     current 
 </pre></div>
 </div>
 </div>
-<div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[25]:
-</pre></div>
-</div>
-<div class="output_area docutils container">
-<div class="highlight"><pre>
-20.0
-</pre></div></div>
-</div>
-<div class="nbinput docutils container">
+<div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[26]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">problem_2</span><span class="o">.</span><span class="n">x_to_obj_const</span><span class="p">([</span><span class="mi">1</span><span class="p">],</span> <span class="s2">&quot;set_const&quot;</span><span class="p">)</span>
 </pre></div>
 </div>
-</div>
-<div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[26]:
-</pre></div>
-</div>
-<div class="output_area docutils container">
-<div class="highlight"><pre>
-({&#39;obj_1&#39;: -0.0}, {&#39;con_1&#39;: 20.0, &#39;set_var_0_ub&#39;: 4, &#39;set_var_0_lb&#39;: 1})
-</pre></div></div>
 </div>
 <div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[27]:
@@ -1204,7 +630,7 @@ Problem new_problem                                                     current 
 </pre></div>
 </div>
 </div>
-<div class="nbinput docutils container">
+<div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[28]:
 </pre></div>
 </div>
@@ -1212,24 +638,7 @@ Problem new_problem                                                     current 
 </pre></div>
 </div>
 </div>
-<div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[28]:
-</pre></div>
-</div>
-<div class="output_area docutils container">
-<div class="highlight"><pre>
- message: Optimization terminated successfully
- success: True
-  status: 0
-     fun: -0.0
-       x: [ 1.000e+00]
-     nit: 1
-     jac: [ 0.000e+00]
-    nfev: 2
-    njev: 1
-</pre></div></div>
-</div>
-<div class="nbinput docutils container">
+<div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[29]:
 </pre></div>
 </div>
@@ -1237,26 +646,9 @@ Problem new_problem                                                     current 
 </pre></div>
 </div>
 </div>
-<div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[29]:
-</pre></div>
-</div>
-<div class="output_area docutils container">
-<div class="highlight"><pre>
-Problem new_problem                                                     current value
- Variables
- -vars move_water.s.eff at t=10: [0, 5]                                        1.0000
- Objectives
- -obj_1: -sum(test_sim vars move_water.s.total_flow at t=25)                  -0.0000
- Constraints
- -con_1: -(test_sim vars wat_1.s.pressure at t=11 -20)                        20.0000
- Simulations
- -test_sim: single scen: {20: {&#39;faults&#39;: {&#39;import_ee&#39;: &#39;no_v&#39;}}}
-</pre></div></div>
-</div>
 <p>As shown, the constraint <code class="docutils literal notranslate"><span class="pre">con_1</span></code> is active, meaning the optimal presure at <code class="docutils literal notranslate"><span class="pre">t=11</span></code> is just at the threshold of 20. This corresponds to the optimized <code class="docutils literal notranslate"><span class="pre">MoveWater.eff</span></code> value of 2.0.</p>
 <p>We can see this below:</p>
-<div class="nbinput docutils container">
+<div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[30]:
 </pre></div>
 </div>
@@ -1264,29 +656,9 @@ Problem new_problem                                                     current 
 </pre></div>
 </div>
 </div>
-<div class="nboutput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[30]:
-</pre></div>
-</div>
-<div class="output_area docutils container">
-<div class="highlight"><pre>
-(&lt;Figure size 600x400 with 4 Axes&gt;,
- array([&lt;Axes: title={&#39;center&#39;: &#39;move_water.s.total_flow&#39;}&gt;,
-        &lt;Axes: title={&#39;center&#39;: &#39;wat_1.s.pressure&#39;}&gt;,
-        &lt;Axes: title={&#39;center&#39;: &#39;move_water.s.eff&#39;}, xlabel=&#39;time&#39;&gt;,
-        &lt;Axes: &gt;], dtype=object))
-</pre></div></div>
-</div>
-<div class="nboutput nblast docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area docutils container">
-<img alt="../../_images/examples_pump_Optimization_51_1.png" src="../../_images/examples_pump_Optimization_51_1.png" />
-</div>
-</div>
 </section>
 <section id="Multi-scenario-Optimization">
-<h2>Multi-scenario Optimization<a class="headerlink" href="#Multi-scenario-Optimization" title="Link to this heading"></a></h2>
+<h2>Multi-scenario Optimization<a class="headerlink" href="#Multi-scenario-Optimization" title="Permalink to this heading"></a></h2>
 <p>In addition to optimizing over single-scenarios <code class="docutils literal notranslate"><span class="pre">Problem</span></code> can be used to optimize over lists of scenarios from an <code class="docutils literal notranslate"><span class="pre">SampleApproach</span></code> or <code class="docutils literal notranslate"><span class="pre">NominalApproach</span></code>.</p>
 <p>Here we define a slightly different problem, where instead of optimizing variable changes at specific times (e.g., faults), we instead optimize the model parameter <code class="docutils literal notranslate"><span class="pre">delay</span></code>, which changes how long of a delay there is before a fault when there is adverse pressure.</p>
 <p>To see the effect of this accross scenarios, we first define an approach:</p>
@@ -1298,29 +670,13 @@ Problem new_problem                                                     current 
 </pre></div>
 </div>
 </div>
-<div class="nbinput docutils container">
+<div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[32]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">app</span>
 </pre></div>
 </div>
-</div>
-<div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[32]:
-</pre></div>
-</div>
-<div class="output_area docutils container">
-<div class="highlight"><pre>
-SampleApproach for Pump model with 1 modes:
- -export_water: block
-None joint modes (0 combinations),
-in 1 phases:
- -(&#39;global&#39;, &#39;on&#39;): [5, 49]
-sampled at 4 times:
- -[14.0, 23.0, 31.0, 40.0]
-resulting in 4 total fault scenarios.
-</pre></div></div>
 </div>
 <p>The scenlist from this approach is given to the same model.</p>
 <div class="nbinput nblast docutils container">
@@ -1351,7 +707,7 @@ resulting in 4 total fault scenarios.
 </div>
 </div>
 <p>We can then verify the problem setup. Note that no constraints will be used in this problem:</p>
-<div class="nbinput docutils container">
+<div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[36]:
 </pre></div>
 </div>
@@ -1359,171 +715,14 @@ resulting in 4 total fault scenarios.
 </pre></div>
 </div>
 </div>
-<div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[36]:
-</pre></div>
-</div>
-<div class="output_area docutils container">
-<div class="highlight"><pre>
-Problem multi_problem                                                   current value
- Variables
- -param delay at t=0: [0, 45]                                                     nan
- Objectives
- -cost: +sum(test_multi endclass expected cost at t=end)                          nan
- Constraints
- -
- Simulations
- -test_multi: multi scen:
-</pre></div></div>
-</div>
 <p>We may now minimize the objective function:</p>
-<div class="nbinput docutils container">
+<div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[37]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">res</span> <span class="o">=</span> <span class="n">minimize</span><span class="p">(</span><span class="n">multi_problem</span><span class="o">.</span><span class="n">cost</span><span class="p">,</span> <span class="p">[</span><span class="mi">5</span><span class="p">],</span> <span class="n">method</span><span class="o">=</span><span class="s2">&quot;SLSQP&quot;</span><span class="p">,</span> <span class="n">bounds</span><span class="o">=</span><span class="p">[[</span><span class="mi">0</span><span class="p">,</span><span class="mi">40</span><span class="p">]])</span>
 </pre></div>
 </div>
-</div>
-<div class="nboutput nblast docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area docutils container">
-<div class="highlight"><pre>
-<span class="ansi-red-intense-fg ansi-bold">---------------------------------------------------------------------------</span>
-<span class="ansi-red-intense-fg ansi-bold">Exception</span>                                 Traceback (most recent call last)
-Cell <span class="ansi-green-intense-fg ansi-bold">In[37], line 1</span>
-<span class="ansi-green-intense-fg ansi-bold">----&gt; 1</span> res <span style="color: rgb(98,98,98)">=</span> minimize(multi_problem<span style="color: rgb(98,98,98)">.</span>cost, [<span style="color: rgb(98,98,98)">5</span>], method<span style="color: rgb(98,98,98)">=</span><span style="color: rgb(175,0,0)">&#34;</span><span style="color: rgb(175,0,0)">SLSQP</span><span style="color: rgb(175,0,0)">&#34;</span>, bounds<span style="color: rgb(98,98,98)">=</span>[[<span style="color: rgb(98,98,98)">0</span>,<span style="color: rgb(98,98,98)">40</span>]])
-
-File <span class="ansi-green-intense-fg ansi-bold">~\AppData\Local\anaconda3\Lib\site-packages\scipy\optimize\_minimize.py:705</span>, in <span class="ansi-cyan-fg">minimize</span><span class="ansi-blue-intense-fg ansi-bold">(fun, x0, args, method, jac, hess, hessp, bounds, constraints, tol, callback, options)</span>
-<span class="ansi-green-fg">    702</span>     res <span style="color: rgb(98,98,98)">=</span> _minimize_cobyla(fun, x0, args, constraints, callback<span style="color: rgb(98,98,98)">=</span>callback,
-<span class="ansi-green-fg">    703</span>                             <span style="color: rgb(98,98,98)">*</span><span style="color: rgb(98,98,98)">*</span>options)
-<span class="ansi-green-fg">    704</span> <span class="ansi-bold" style="color: rgb(0,135,0)">elif</span> meth <span style="color: rgb(98,98,98)">==</span> <span style="color: rgb(175,0,0)">&#39;</span><span style="color: rgb(175,0,0)">slsqp</span><span style="color: rgb(175,0,0)">&#39;</span>:
-<span class="ansi-green-intense-fg ansi-bold">--&gt; 705</span>     res <span style="color: rgb(98,98,98)">=</span> _minimize_slsqp(fun, x0, args, jac, bounds,
-<span class="ansi-green-fg">    706</span>                           constraints, callback<span style="color: rgb(98,98,98)">=</span>callback, <span style="color: rgb(98,98,98)">*</span><span style="color: rgb(98,98,98)">*</span>options)
-<span class="ansi-green-fg">    707</span> <span class="ansi-bold" style="color: rgb(0,135,0)">elif</span> meth <span style="color: rgb(98,98,98)">==</span> <span style="color: rgb(175,0,0)">&#39;</span><span style="color: rgb(175,0,0)">trust-constr</span><span style="color: rgb(175,0,0)">&#39;</span>:
-<span class="ansi-green-fg">    708</span>     res <span style="color: rgb(98,98,98)">=</span> _minimize_trustregion_constr(fun, x0, args, jac, hess, hessp,
-<span class="ansi-green-fg">    709</span>                                        bounds, constraints,
-<span class="ansi-green-fg">    710</span>                                        callback<span style="color: rgb(98,98,98)">=</span>callback, <span style="color: rgb(98,98,98)">*</span><span style="color: rgb(98,98,98)">*</span>options)
-
-File <span class="ansi-green-intense-fg ansi-bold">~\AppData\Local\anaconda3\Lib\site-packages\scipy\optimize\_slsqp_py.py:374</span>, in <span class="ansi-cyan-fg">_minimize_slsqp</span><span class="ansi-blue-intense-fg ansi-bold">(func, x0, args, jac, bounds, constraints, maxiter, ftol, iprint, disp, eps, callback, finite_diff_rel_step, **unknown_options)</span>
-<span class="ansi-green-fg">    371</span>     xu[infbnd[:, <span style="color: rgb(98,98,98)">1</span>]] <span style="color: rgb(98,98,98)">=</span> np<span style="color: rgb(98,98,98)">.</span>nan
-<span class="ansi-green-fg">    373</span> <span style="color: rgb(95,135,135)"># ScalarFunction provides function and gradient evaluation</span>
-<span class="ansi-green-intense-fg ansi-bold">--&gt; 374</span> sf <span style="color: rgb(98,98,98)">=</span> _prepare_scalar_function(func, x, jac<span style="color: rgb(98,98,98)">=</span>jac, args<span style="color: rgb(98,98,98)">=</span>args, epsilon<span style="color: rgb(98,98,98)">=</span>eps,
-<span class="ansi-green-fg">    375</span>                               finite_diff_rel_step<span style="color: rgb(98,98,98)">=</span>finite_diff_rel_step,
-<span class="ansi-green-fg">    376</span>                               bounds<span style="color: rgb(98,98,98)">=</span>new_bounds)
-<span class="ansi-green-fg">    377</span> <span style="color: rgb(95,135,135)"># gh11403 SLSQP sometimes exceeds bounds by 1 or 2 ULP, make sure this</span>
-<span class="ansi-green-fg">    378</span> <span style="color: rgb(95,135,135)"># doesn&#39;t get sent to the func/grad evaluator.</span>
-<span class="ansi-green-fg">    379</span> wrapped_fun <span style="color: rgb(98,98,98)">=</span> _clip_x_for_func(sf<span style="color: rgb(98,98,98)">.</span>fun, new_bounds)
-
-File <span class="ansi-green-intense-fg ansi-bold">~\AppData\Local\anaconda3\Lib\site-packages\scipy\optimize\_optimize.py:332</span>, in <span class="ansi-cyan-fg">_prepare_scalar_function</span><span class="ansi-blue-intense-fg ansi-bold">(fun, x0, jac, args, bounds, epsilon, finite_diff_rel_step, hess)</span>
-<span class="ansi-green-fg">    328</span>     bounds <span style="color: rgb(98,98,98)">=</span> (<span style="color: rgb(98,98,98)">-</span>np<span style="color: rgb(98,98,98)">.</span>inf, np<span style="color: rgb(98,98,98)">.</span>inf)
-<span class="ansi-green-fg">    330</span> <span style="color: rgb(95,135,135)"># ScalarFunction caches. Reuse of fun(x) during grad</span>
-<span class="ansi-green-fg">    331</span> <span style="color: rgb(95,135,135)"># calculation reduces overall function evaluations.</span>
-<span class="ansi-green-intense-fg ansi-bold">--&gt; 332</span> sf <span style="color: rgb(98,98,98)">=</span> ScalarFunction(fun, x0, args, grad, hess,
-<span class="ansi-green-fg">    333</span>                     finite_diff_rel_step, bounds, epsilon<span style="color: rgb(98,98,98)">=</span>epsilon)
-<span class="ansi-green-fg">    335</span> <span class="ansi-bold" style="color: rgb(0,135,0)">return</span> sf
-
-File <span class="ansi-green-intense-fg ansi-bold">~\AppData\Local\anaconda3\Lib\site-packages\scipy\optimize\_differentiable_functions.py:158</span>, in <span class="ansi-cyan-fg">ScalarFunction.__init__</span><span class="ansi-blue-intense-fg ansi-bold">(self, fun, x0, args, grad, hess, finite_diff_rel_step, finite_diff_bounds, epsilon)</span>
-<span class="ansi-green-fg">    155</span>     <span style="color: rgb(0,135,0)">self</span><span style="color: rgb(98,98,98)">.</span>f <span style="color: rgb(98,98,98)">=</span> fun_wrapped(<span style="color: rgb(0,135,0)">self</span><span style="color: rgb(98,98,98)">.</span>x)
-<span class="ansi-green-fg">    157</span> <span style="color: rgb(0,135,0)">self</span><span style="color: rgb(98,98,98)">.</span>_update_fun_impl <span style="color: rgb(98,98,98)">=</span> update_fun
-<span class="ansi-green-intense-fg ansi-bold">--&gt; 158</span> <span style="color: rgb(0,135,0)">self</span><span style="color: rgb(98,98,98)">.</span>_update_fun()
-<span class="ansi-green-fg">    160</span> <span style="color: rgb(95,135,135)"># Gradient evaluation</span>
-<span class="ansi-green-fg">    161</span> <span class="ansi-bold" style="color: rgb(0,135,0)">if</span> <span style="color: rgb(0,135,0)">callable</span>(grad):
-
-File <span class="ansi-green-intense-fg ansi-bold">~\AppData\Local\anaconda3\Lib\site-packages\scipy\optimize\_differentiable_functions.py:251</span>, in <span class="ansi-cyan-fg">ScalarFunction._update_fun</span><span class="ansi-blue-intense-fg ansi-bold">(self)</span>
-<span class="ansi-green-fg">    249</span> <span class="ansi-bold" style="color: rgb(0,135,0)">def</span> <span style="color: rgb(0,0,255)">_update_fun</span>(<span style="color: rgb(0,135,0)">self</span>):
-<span class="ansi-green-fg">    250</span>     <span class="ansi-bold" style="color: rgb(0,135,0)">if</span> <span class="ansi-bold" style="color: rgb(175,0,255)">not</span> <span style="color: rgb(0,135,0)">self</span><span style="color: rgb(98,98,98)">.</span>f_updated:
-<span class="ansi-green-intense-fg ansi-bold">--&gt; 251</span>         <span style="color: rgb(0,135,0)">self</span><span style="color: rgb(98,98,98)">.</span>_update_fun_impl()
-<span class="ansi-green-fg">    252</span>         <span style="color: rgb(0,135,0)">self</span><span style="color: rgb(98,98,98)">.</span>f_updated <span style="color: rgb(98,98,98)">=</span> <span class="ansi-bold" style="color: rgb(0,135,0)">True</span>
-
-File <span class="ansi-green-intense-fg ansi-bold">~\AppData\Local\anaconda3\Lib\site-packages\scipy\optimize\_differentiable_functions.py:155</span>, in <span class="ansi-cyan-fg">ScalarFunction.__init__.&lt;locals&gt;.update_fun</span><span class="ansi-blue-intense-fg ansi-bold">()</span>
-<span class="ansi-green-fg">    154</span> <span class="ansi-bold" style="color: rgb(0,135,0)">def</span> <span style="color: rgb(0,0,255)">update_fun</span>():
-<span class="ansi-green-intense-fg ansi-bold">--&gt; 155</span>     <span style="color: rgb(0,135,0)">self</span><span style="color: rgb(98,98,98)">.</span>f <span style="color: rgb(98,98,98)">=</span> fun_wrapped(<span style="color: rgb(0,135,0)">self</span><span style="color: rgb(98,98,98)">.</span>x)
-
-File <span class="ansi-green-intense-fg ansi-bold">~\AppData\Local\anaconda3\Lib\site-packages\scipy\optimize\_differentiable_functions.py:137</span>, in <span class="ansi-cyan-fg">ScalarFunction.__init__.&lt;locals&gt;.fun_wrapped</span><span class="ansi-blue-intense-fg ansi-bold">(x)</span>
-<span class="ansi-green-fg">    133</span> <span style="color: rgb(0,135,0)">self</span><span style="color: rgb(98,98,98)">.</span>nfev <span style="color: rgb(98,98,98)">+</span><span style="color: rgb(98,98,98)">=</span> <span style="color: rgb(98,98,98)">1</span>
-<span class="ansi-green-fg">    134</span> <span style="color: rgb(95,135,135)"># Send a copy because the user may overwrite it.</span>
-<span class="ansi-green-fg">    135</span> <span style="color: rgb(95,135,135)"># Overwriting results in undefined behaviour because</span>
-<span class="ansi-green-fg">    136</span> <span style="color: rgb(95,135,135)"># fun(self.x) will change self.x, with the two no longer linked.</span>
-<span class="ansi-green-intense-fg ansi-bold">--&gt; 137</span> fx <span style="color: rgb(98,98,98)">=</span> fun(np<span style="color: rgb(98,98,98)">.</span>copy(x), <span style="color: rgb(98,98,98)">*</span>args)
-<span class="ansi-green-fg">    138</span> <span style="color: rgb(95,135,135)"># Make sure the function returns a true scalar</span>
-<span class="ansi-green-fg">    139</span> <span class="ansi-bold" style="color: rgb(0,135,0)">if</span> <span class="ansi-bold" style="color: rgb(175,0,255)">not</span> np<span style="color: rgb(98,98,98)">.</span>isscalar(fx):
-
-File <span class="ansi-green-intense-fg ansi-bold">c:\users\dhulse\documents\github\fmdtools\fmdtools\sim\search.py:254</span>, in <span class="ansi-cyan-fg">ProblemInterface._assoc_obj_con.&lt;locals&gt;.newobj</span><span class="ansi-blue-intense-fg ansi-bold">(x)</span>
-<span class="ansi-green-fg">    253</span> <span class="ansi-bold" style="color: rgb(0,135,0)">def</span> <span style="color: rgb(0,0,255)">newobj</span>(x):
-<span class="ansi-green-intense-fg ansi-bold">--&gt; 254</span>     <span class="ansi-bold" style="color: rgb(0,135,0)">return</span> <span style="color: rgb(0,135,0)">self</span><span style="color: rgb(98,98,98)">.</span>x_to_obj_const(x, simname)[<span style="color: rgb(98,98,98)">0</span>][objname]
-
-File <span class="ansi-green-intense-fg ansi-bold">c:\users\dhulse\documents\github\fmdtools\fmdtools\sim\search.py:630</span>, in <span class="ansi-cyan-fg">ProblemInterface.x_to_obj_const</span><span class="ansi-blue-intense-fg ansi-bold">(self, x, simnames)</span>
-<span class="ansi-green-fg">    628</span> <span style="color: rgb(95,135,135)"># prep sims</span>
-<span class="ansi-green-fg">    629</span> <span class="ansi-bold" style="color: rgb(0,135,0)">if</span> simname <span class="ansi-bold" style="color: rgb(175,0,255)">not</span> <span class="ansi-bold" style="color: rgb(175,0,255)">in</span> <span style="color: rgb(0,135,0)">self</span><span style="color: rgb(98,98,98)">.</span>current_iter<span style="color: rgb(98,98,98)">.</span>get(<span style="color: rgb(175,0,0)">&#39;</span><span style="color: rgb(175,0,0)">sims</span><span style="color: rgb(175,0,0)">&#39;</span>, {}):
-<span class="ansi-green-intense-fg ansi-bold">--&gt; 630</span>     <span style="color: rgb(0,135,0)">self</span><span style="color: rgb(98,98,98)">.</span>_prep_sim_type(<span style="color: rgb(0,135,0)">self</span><span style="color: rgb(98,98,98)">.</span>simulations[simname][<span style="color: rgb(98,98,98)">0</span>], simname, x)
-<span class="ansi-green-fg">    631</span>     <span style="color: rgb(0,135,0)">self</span><span style="color: rgb(98,98,98)">.</span>current_iter[<span style="color: rgb(175,0,0)">&#39;</span><span style="color: rgb(175,0,0)">sims</span><span style="color: rgb(175,0,0)">&#39;</span>]<span style="color: rgb(98,98,98)">.</span>add(simname)
-<span class="ansi-green-fg">    633</span> <span style="color: rgb(95,135,135)"># run sims</span>
-
-File <span class="ansi-green-intense-fg ansi-bold">c:\users\dhulse\documents\github\fmdtools\fmdtools\sim\search.py:495</span>, in <span class="ansi-cyan-fg">ProblemInterface._prep_sim_type</span><span class="ansi-blue-intense-fg ansi-bold">(self, simtype, simname, x)</span>
-<span class="ansi-green-fg">    493</span> <span class="ansi-bold" style="color: rgb(0,135,0)">def</span> <span style="color: rgb(0,0,255)">_prep_sim_type</span>(<span style="color: rgb(0,135,0)">self</span>, simtype, simname, x):
-<span class="ansi-green-fg">    494</span>     <span class="ansi-bold" style="color: rgb(0,135,0)">if</span> simtype<span style="color: rgb(98,98,98)">==</span><span style="color: rgb(175,0,0)">&#39;</span><span style="color: rgb(175,0,0)">single</span><span style="color: rgb(175,0,0)">&#39;</span>: <span style="color: rgb(0,135,0)">self</span><span style="color: rgb(98,98,98)">.</span>_prep_single_sim(simname, x)
-<span class="ansi-green-intense-fg ansi-bold">--&gt; 495</span>     <span class="ansi-bold" style="color: rgb(0,135,0)">if</span> simtype<span style="color: rgb(98,98,98)">==</span><span style="color: rgb(175,0,0)">&#39;</span><span style="color: rgb(175,0,0)">multi</span><span style="color: rgb(175,0,0)">&#39;</span>: <span style="color: rgb(0,135,0)">self</span><span style="color: rgb(98,98,98)">.</span>_prep_multi_sim(simname, x)
-
-File <span class="ansi-green-intense-fg ansi-bold">c:\users\dhulse\documents\github\fmdtools\fmdtools\sim\search.py:340</span>, in <span class="ansi-cyan-fg">ProblemInterface._prep_multi_sim</span><span class="ansi-blue-intense-fg ansi-bold">(self, simname, x)</span>
-<span class="ansi-green-fg">    338</span> var_time, obj_time <span style="color: rgb(98,98,98)">=</span> <span style="color: rgb(0,135,0)">self</span><span style="color: rgb(98,98,98)">.</span>_get_var_obj_time(simname)
-<span class="ansi-green-fg">    339</span> kwar <span style="color: rgb(98,98,98)">=</span> <span style="color: rgb(0,135,0)">self</span><span style="color: rgb(98,98,98)">.</span>simulations[simname][<span style="color: rgb(98,98,98)">2</span>]
-<span class="ansi-green-intense-fg ansi-bold">--&gt; 340</span> mdl <span style="color: rgb(98,98,98)">=</span> <span style="color: rgb(0,135,0)">self</span><span style="color: rgb(98,98,98)">.</span>_check_new_mdl(simname, <span style="color: rgb(98,98,98)">0</span>, <span style="color: rgb(0,135,0)">self</span><span style="color: rgb(98,98,98)">.</span>mdl, x, obj_time, default_p <span style="color: rgb(98,98,98)">=</span> kwar<span style="color: rgb(98,98,98)">.</span>get(<span style="color: rgb(175,0,0)">&#39;</span><span style="color: rgb(175,0,0)">p</span><span style="color: rgb(175,0,0)">&#39;</span>, {}))
-<span class="ansi-green-fg">    341</span> result, nomhist, nomscen, c_mdls_nom, t_end <span style="color: rgb(98,98,98)">=</span> prop<span style="color: rgb(98,98,98)">.</span>nom_helper(mdl, [var_time], <span style="color: rgb(98,98,98)">*</span><span style="color: rgb(98,98,98)">*</span>{<span style="color: rgb(98,98,98)">*</span><span style="color: rgb(98,98,98)">*</span>kwar, <span style="color: rgb(175,0,0)">&#39;</span><span style="color: rgb(175,0,0)">scen</span><span style="color: rgb(175,0,0)">&#39;</span>:{}, <span style="color: rgb(175,0,0)">&#39;</span><span style="color: rgb(175,0,0)">use_end_condition</span><span style="color: rgb(175,0,0)">&#39;</span>:<span class="ansi-bold" style="color: rgb(0,135,0)">False</span>})
-<span class="ansi-green-fg">    343</span> scenlist<span style="color: rgb(98,98,98)">=</span>[]
-
-File <span class="ansi-green-intense-fg ansi-bold">c:\users\dhulse\documents\github\fmdtools\fmdtools\sim\search.py:374</span>, in <span class="ansi-cyan-fg">ProblemInterface._check_new_mdl</span><span class="ansi-blue-intense-fg ansi-bold">(self, simname, var_time, mdl, x, obj_time, staged, default_p)</span>
-<span class="ansi-green-fg">    372</span>     <span class="ansi-bold" style="color: rgb(0,135,0)">for</span> func, fvars <span class="ansi-bold" style="color: rgb(175,0,255)">in</span> <span style="color: rgb(0,135,0)">self</span><span style="color: rgb(98,98,98)">.</span>var_mapping[simname]<span style="color: rgb(98,98,98)">.</span>get(<span style="color: rgb(175,0,0)">&#39;</span><span style="color: rgb(175,0,0)">paramfunc</span><span style="color: rgb(175,0,0)">&#39;</span>,{})<span style="color: rgb(98,98,98)">.</span>items():
-<span class="ansi-green-fg">    373</span>         p<span style="color: rgb(98,98,98)">.</span>update(func(<span style="color: rgb(98,98,98)">*</span>[x[ind] <span class="ansi-bold" style="color: rgb(0,135,0)">for</span> ind <span class="ansi-bold" style="color: rgb(175,0,255)">in</span> fvars<span style="color: rgb(98,98,98)">.</span>values()]))
-<span class="ansi-green-intense-fg ansi-bold">--&gt; 374</span>     mdl <span style="color: rgb(98,98,98)">=</span> mdl<span style="color: rgb(98,98,98)">.</span>new_with_params(p<span style="color: rgb(98,98,98)">=</span>p, sp<span style="color: rgb(98,98,98)">=</span>{<span style="color: rgb(175,0,0)">&#39;</span><span style="color: rgb(175,0,0)">times</span><span style="color: rgb(175,0,0)">&#39;</span>:(<span style="color: rgb(98,98,98)">0</span>, obj_time)})
-<span class="ansi-green-fg">    376</span> prop<span style="color: rgb(98,98,98)">.</span>init_histrange(mdl, var_time, staged, <span style="color: rgb(175,0,0)">&#34;</span><span style="color: rgb(175,0,0)">all</span><span style="color: rgb(175,0,0)">&#34;</span>, <span style="color: rgb(175,0,0)">&#34;</span><span style="color: rgb(175,0,0)">all</span><span style="color: rgb(175,0,0)">&#34;</span>)
-<span class="ansi-green-fg">    377</span> <span class="ansi-bold" style="color: rgb(0,135,0)">return</span> mdl
-
-File <span class="ansi-green-intense-fg ansi-bold">c:\users\dhulse\documents\github\fmdtools\fmdtools\define\model.py:277</span>, in <span class="ansi-cyan-fg">Model.new_with_params</span><span class="ansi-blue-intense-fg ansi-bold">(self, **kwargs)</span>
-<span class="ansi-green-fg">    272</span> <span class="ansi-bold" style="color: rgb(0,135,0)">def</span> <span style="color: rgb(0,0,255)">new_with_params</span>(<span style="color: rgb(0,135,0)">self</span>, <span style="color: rgb(98,98,98)">*</span><span style="color: rgb(98,98,98)">*</span>kwargs):
-<span class="ansi-green-fg">    273</span> <span style="color: rgb(188,188,188)">    </span><span style="color: rgb(175,0,0)">&#34;&#34;&#34;</span>
-<span class="ansi-green-fg">    274</span> <span style="color: rgb(175,0,0)">    Creates a new Model with the same parameters as the current model but</span>
-<span class="ansi-green-fg">    275</span> <span style="color: rgb(175,0,0)">    with changes to params (p, sp, track, rand etc.)</span>
-<span class="ansi-green-fg">    276</span> <span style="color: rgb(175,0,0)">    &#34;&#34;&#34;</span>
-<span class="ansi-green-intense-fg ansi-bold">--&gt; 277</span>     p, sp, r, track <span style="color: rgb(98,98,98)">=</span> <span style="color: rgb(0,135,0)">super</span>()<span style="color: rgb(98,98,98)">.</span>new_params(<span style="color: rgb(98,98,98)">*</span><span style="color: rgb(98,98,98)">*</span>kwargs)
-<span class="ansi-green-fg">    278</span>     <span class="ansi-bold" style="color: rgb(0,135,0)">return</span> <span style="color: rgb(0,135,0)">self</span><span style="color: rgb(98,98,98)">.</span><span style="color: rgb(0,0,135)">__class__</span>(p<span style="color: rgb(98,98,98)">=</span>p, sp<span style="color: rgb(98,98,98)">=</span>sp, r<span style="color: rgb(98,98,98)">=</span>r, track<span style="color: rgb(98,98,98)">=</span>track)
-
-File <span class="ansi-green-intense-fg ansi-bold">c:\users\dhulse\documents\github\fmdtools\fmdtools\define\block.py:212</span>, in <span class="ansi-cyan-fg">Simulable.new_params</span><span class="ansi-blue-intense-fg ansi-bold">(self, p, sp, r, track)</span>
-<span class="ansi-green-fg">    187</span> <span class="ansi-bold" style="color: rgb(0,135,0)">def</span> <span style="color: rgb(0,0,255)">new_params</span>(<span style="color: rgb(0,135,0)">self</span>, p<span style="color: rgb(98,98,98)">=</span>{}, sp<span style="color: rgb(98,98,98)">=</span>{}, r<span style="color: rgb(98,98,98)">=</span>{}, track<span style="color: rgb(98,98,98)">=</span>{}):
-<span class="ansi-green-fg">    188</span> <span style="color: rgb(188,188,188)">    </span><span style="color: rgb(175,0,0)">&#34;&#34;&#34;</span>
-<span class="ansi-green-fg">    189</span> <span style="color: rgb(175,0,0)">    Creates a copy of the defining parameters for use in a new Simulable</span>
-<span class="ansi-green-fg">    190</span> <span style="color: rgb(175,0,0)">    Parameters</span>
-<span class="ansi-green-intense-fg ansi-bold">   (...)</span>
-<span class="ansi-green-fg">    210</span> <span style="color: rgb(175,0,0)">        track args</span>
-<span class="ansi-green-fg">    211</span> <span style="color: rgb(175,0,0)">    &#34;&#34;&#34;</span>
-<span class="ansi-green-intense-fg ansi-bold">--&gt; 212</span>     p <span style="color: rgb(98,98,98)">=</span> <span style="color: rgb(0,135,0)">self</span><span style="color: rgb(98,98,98)">.</span>p<span style="color: rgb(98,98,98)">.</span>copy_with_vals(<span style="color: rgb(98,98,98)">*</span><span style="color: rgb(98,98,98)">*</span>p)
-<span class="ansi-green-fg">    213</span>     sp <span style="color: rgb(98,98,98)">=</span> <span style="color: rgb(0,135,0)">self</span><span style="color: rgb(98,98,98)">.</span>sp<span style="color: rgb(98,98,98)">.</span>copy_with_vals(<span style="color: rgb(98,98,98)">*</span><span style="color: rgb(98,98,98)">*</span>sp)
-<span class="ansi-green-fg">    214</span>     <span class="ansi-bold" style="color: rgb(0,135,0)">if</span> <span class="ansi-bold" style="color: rgb(175,0,255)">not</span> r:
-
-File <span class="ansi-green-intense-fg ansi-bold">c:\users\dhulse\documents\github\fmdtools\fmdtools\define\parameter.py:147</span>, in <span class="ansi-cyan-fg">Parameter.copy_with_vals</span><span class="ansi-blue-intense-fg ansi-bold">(self, **kwargs)</span>
-<span class="ansi-green-fg">    145</span> <span class="ansi-bold" style="color: rgb(0,135,0)">def</span> <span style="color: rgb(0,0,255)">copy_with_vals</span>(<span style="color: rgb(0,135,0)">self</span>, <span style="color: rgb(98,98,98)">*</span><span style="color: rgb(98,98,98)">*</span>kwargs):
-<span class="ansi-green-fg">    146</span> <span style="color: rgb(188,188,188)">    </span><span style="color: rgb(175,0,0)">&#34;&#34;&#34;Creates a copy of itself with modified values given by kwargs&#34;&#34;&#34;</span>
-<span class="ansi-green-intense-fg ansi-bold">--&gt; 147</span>     <span class="ansi-bold" style="color: rgb(0,135,0)">return</span> <span style="color: rgb(0,135,0)">self</span><span style="color: rgb(98,98,98)">.</span><span style="color: rgb(0,0,135)">__class__</span>(<span style="color: rgb(98,98,98)">*</span><span style="color: rgb(98,98,98)">*</span>{<span style="color: rgb(98,98,98)">*</span><span style="color: rgb(98,98,98)">*</span>asdict(<span style="color: rgb(0,135,0)">self</span>), <span style="color: rgb(98,98,98)">*</span><span style="color: rgb(98,98,98)">*</span>kwargs})
-
-File <span class="ansi-green-intense-fg ansi-bold">c:\users\dhulse\documents\github\fmdtools\fmdtools\define\parameter.py:70</span>, in <span class="ansi-cyan-fg">Parameter.__init__</span><span class="ansi-blue-intense-fg ansi-bold">(self, strict_immutability, check_type, check_pickle, *args, **kwargs)</span>
-<span class="ansi-green-fg">     68</span>     <span style="color: rgb(0,135,0)">self</span><span style="color: rgb(98,98,98)">.</span>check_immutable()
-<span class="ansi-green-fg">     69</span> <span class="ansi-bold" style="color: rgb(0,135,0)">if</span> check_type:
-<span class="ansi-green-intense-fg ansi-bold">---&gt; 70</span>     <span style="color: rgb(0,135,0)">self</span><span style="color: rgb(98,98,98)">.</span>check_type()
-<span class="ansi-green-fg">     71</span> <span class="ansi-bold" style="color: rgb(0,135,0)">if</span> check_pickle:
-<span class="ansi-green-fg">     72</span>     <span style="color: rgb(0,135,0)">self</span><span style="color: rgb(98,98,98)">.</span>check_pickle()
-
-File <span class="ansi-green-intense-fg ansi-bold">c:\users\dhulse\documents\github\fmdtools\fmdtools\define\parameter.py:141</span>, in <span class="ansi-cyan-fg">Parameter.check_type</span><span class="ansi-blue-intense-fg ansi-bold">(self)</span>
-<span class="ansi-green-fg">    137</span> true_type <span style="color: rgb(98,98,98)">=</span> <span style="color: rgb(0,135,0)">self</span><span style="color: rgb(98,98,98)">.</span><span style="color: rgb(0,0,135)">__annotations__</span><span style="color: rgb(98,98,98)">.</span>get(typed_field, <span class="ansi-bold" style="color: rgb(0,135,0)">False</span>)
-<span class="ansi-green-fg">    138</span> <span class="ansi-bold" style="color: rgb(0,135,0)">if</span> ((true_type <span class="ansi-bold" style="color: rgb(175,0,255)">and</span> <span class="ansi-bold" style="color: rgb(175,0,255)">not</span> attr_type <span style="color: rgb(98,98,98)">==</span> true_type) <span class="ansi-bold" style="color: rgb(175,0,255)">and</span>
-<span class="ansi-green-fg">    139</span>         <span style="color: rgb(0,135,0)">str</span>(true_type)<span style="color: rgb(98,98,98)">.</span>split(<span style="color: rgb(175,0,0)">&#34;</span><span style="color: rgb(175,0,0)">&#39;</span><span style="color: rgb(175,0,0)">&#34;</span>)[<span style="color: rgb(98,98,98)">1</span>] <span class="ansi-bold" style="color: rgb(175,0,255)">not</span> <span class="ansi-bold" style="color: rgb(175,0,255)">in</span> <span style="color: rgb(0,135,0)">str</span>(attr_type)):
-<span class="ansi-green-fg">    140</span>     <span style="color: rgb(95,135,135)"># weaker, but enables use of np.str, np.float, etc</span>
-<span class="ansi-green-intense-fg ansi-bold">--&gt; 141</span>     <span class="ansi-bold" style="color: rgb(0,135,0)">raise</span> <span class="ansi-bold" style="color: rgb(215,95,95)">Exception</span>(typed_field<span style="color: rgb(98,98,98)">+</span><span style="color: rgb(175,0,0)">&#34;</span><span style="color: rgb(175,0,0)"> in </span><span style="color: rgb(175,0,0)">&#34;</span><span style="color: rgb(98,98,98)">+</span><span style="color: rgb(0,135,0)">str</span>(<span style="color: rgb(0,135,0)">self</span><span style="color: rgb(98,98,98)">.</span><span style="color: rgb(0,0,135)">__class__</span>) <span style="color: rgb(98,98,98)">+</span>
-<span class="ansi-green-fg">    142</span>                     <span style="color: rgb(175,0,0)">&#34;</span><span style="color: rgb(175,0,0)"> assigned incorrect type: </span><span style="color: rgb(175,0,0)">&#34;</span> <span style="color: rgb(98,98,98)">+</span> <span style="color: rgb(0,135,0)">str</span>(attr_type) <span style="color: rgb(98,98,98)">+</span>
-<span class="ansi-green-fg">    143</span>                     <span style="color: rgb(175,0,0)">&#34;</span><span style="color: rgb(175,0,0)"> (should be </span><span style="color: rgb(175,0,0)">&#34;</span><span style="color: rgb(98,98,98)">+</span><span style="color: rgb(0,135,0)">str</span>(true_type)<span style="color: rgb(98,98,98)">+</span><span style="color: rgb(175,0,0)">&#34;</span><span style="color: rgb(175,0,0)">)</span><span style="color: rgb(175,0,0)">&#34;</span>)
-
-<span class="ansi-red-intense-fg ansi-bold">Exception</span>: delay in &lt;class &#39;examples.pump.ex_pump.PumpParam&#39;&gt; assigned incorrect type: &lt;class &#39;numpy.float64&#39;&gt; (should be &lt;class &#39;int&#39;&gt;)
-</pre></div></div>
 </div>
 <div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[39]:

@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Defining Fault Sampling Approaches in fmdtools &mdash; fmdtools 2.0-beta-1 documentation</title>
+  <title>Defining Fault Sampling Approaches in fmdtools &mdash; fmdtools 2.0-alpha4 documentation</title>
       <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
       <link rel="stylesheet" href="../../_static/nbsphinx-code-cells.css" type="text/css" />
@@ -13,11 +13,11 @@
     <script src="../../_static/js/html5shiv.min.js"></script>
   <![endif]-->
   
-        <script src="../../_static/jquery.js?v=5d32c60e"></script>
-        <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-        <script src="../../_static/documentation_options.js?v=04ccac41"></script>
-        <script src="../../_static/doctools.js?v=888ff710"></script>
-        <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+        <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+        <script src="../../_static/jquery.js"></script>
+        <script src="../../_static/underscore.js"></script>
+        <script src="../../_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script src="../../_static/doctools.js"></script>
         <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
         <script>window.MathJax = {"tex": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true}, "options": {"ignoreHtmlClass": "tex2jax_ignore|mathjax_ignore|document", "processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
         <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
@@ -52,9 +52,9 @@
 <li class="toctree-l1"><a class="reference internal" href="../../README.html">Overview</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="../../README.html#getting-started">Getting Started</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="../../README.html#prerequisites">Prerequisites</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../../README.html#examples">Examples</a></li>
 </ul>
 </li>
+<li class="toctree-l2"><a class="reference internal" href="../../README.html#examples">Examples</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../README.html#contributions">Contributions</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="../../README.html#contributors">Contributors</a></li>
 </ul>
@@ -73,7 +73,7 @@
 <li class="toctree-l2"><a class="reference internal" href="../../docs/Development%20Guide.html#intro-to-fmdtools">Intro to fmdtools</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="../../docs/Intro_to_fmdtools.html">Intro to resilience modelling, simulation, and visualization in Python with fmdtools.</a><ul>
 <li class="toctree-l4"><a class="reference internal" href="../../docs/Intro_to_fmdtools.html#author-daniel-hulse">Author: Daniel Hulse</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/Intro_to_fmdtools.html#version-2-0-beta-1">Version: 2.0-beta-1</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../docs/Intro_to_fmdtools.html#version-2-0-alpha4">Version: 2.0-alpha4</a></li>
 </ul>
 </li>
 <li class="toctree-l3"><a class="reference internal" href="../../docs/Intro_to_fmdtools.html#overview">Overview</a></li>
@@ -193,17 +193,12 @@
 </li>
 <li class="toctree-l2"><a class="reference internal" href="../Examples.html#multirotor">Multirotor</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="../multirotor/Demonstration.html">fmdtools Paper Demonstration</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="../multirotor/Demonstration.html#Initial-Network-Model">Initial Network Model</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../multirotor/Demonstration.html#Initial-Model">Initial Model</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../multirotor/Demonstration.html#Setting-Node-Positions">Setting Node Positions</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../multirotor/Demonstration.html#Network-Model">Network Model</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../multirotor/Demonstration.html#Static-Model">Static Model</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../multirotor/Demonstration.html#Dynamic-Model">Dynamic Model</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../multirotor/Demonstration.html#Hierarchical-Model">Hierarchical Model</a></li>
-</ul>
-</li>
-<li class="toctree-l3"><a class="reference internal" href="../multirotor/Urban_Drone_Demo.html">Urban Drone Demo</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="../multirotor/Urban_Drone_Demo.html#Model-Overview">Model Overview</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../multirotor/Urban_Drone_Demo.html#Nominal-Simulation">Nominal Simulation</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../multirotor/Urban_Drone_Demo.html#Resilience-model">Resilience model</a></li>
 </ul>
 </li>
 <li class="toctree-l3"><a class="reference internal" href="../multirotor/Multirotor_Optimization.html">Integrated Resilience Optimization Architectures</a><ul>
@@ -307,285 +302,29 @@
 <li class="toctree-l1"><a class="reference internal" href="../../docs/Glossary.html">Glossary</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../docs/fmdtools.html">Module Reference</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="../../docs/fmdtools.define.html">fmdtools.define package</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="../../docs/fmdtools.define.html#fmdtools-define-block">fmdtools.define.block</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.define.html#fmdtools.define.block.ActArch"><code class="docutils literal notranslate"><span class="pre">ActArch</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.define.html#fmdtools.define.block.Action"><code class="docutils literal notranslate"><span class="pre">Action</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.define.html#fmdtools.define.block.Block"><code class="docutils literal notranslate"><span class="pre">Block</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.define.html#fmdtools.define.block.CompArch"><code class="docutils literal notranslate"><span class="pre">CompArch</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.define.html#fmdtools.define.block.Component"><code class="docutils literal notranslate"><span class="pre">Component</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.define.html#fmdtools.define.block.FxnBlock"><code class="docutils literal notranslate"><span class="pre">FxnBlock</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.define.html#fmdtools.define.block.GenericFxn"><code class="docutils literal notranslate"><span class="pre">GenericFxn</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.define.html#fmdtools.define.block.Simulable"><code class="docutils literal notranslate"><span class="pre">Simulable</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.define.html#fmdtools.define.block.assoc_flows"><code class="docutils literal notranslate"><span class="pre">assoc_flows()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.define.html#fmdtools.define.block.inject_faults_internal"><code class="docutils literal notranslate"><span class="pre">inject_faults_internal()</span></code></a></li>
-</ul>
-</li>
-<li class="toctree-l3"><a class="reference internal" href="../../docs/fmdtools.define.html#module-fmdtools.define.common">fmdtools.define.common</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.define.html#fmdtools.define.common.check_pickleability"><code class="docutils literal notranslate"><span class="pre">check_pickleability()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.define.html#fmdtools.define.common.eq_units"><code class="docutils literal notranslate"><span class="pre">eq_units()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.define.html#fmdtools.define.common.get_dataobj_track"><code class="docutils literal notranslate"><span class="pre">get_dataobj_track()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.define.html#fmdtools.define.common.get_obj_indicators"><code class="docutils literal notranslate"><span class="pre">get_obj_indicators()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.define.html#fmdtools.define.common.get_obj_track"><code class="docutils literal notranslate"><span class="pre">get_obj_track()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.define.html#fmdtools.define.common.get_true_field"><code class="docutils literal notranslate"><span class="pre">get_true_field()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.define.html#fmdtools.define.common.get_true_fields"><code class="docutils literal notranslate"><span class="pre">get_true_fields()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.define.html#fmdtools.define.common.get_var"><code class="docutils literal notranslate"><span class="pre">get_var()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.define.html#fmdtools.define.common.init_obj_attr"><code class="docutils literal notranslate"><span class="pre">init_obj_attr()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.define.html#fmdtools.define.common.init_obj_dict"><code class="docutils literal notranslate"><span class="pre">init_obj_dict()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.define.html#fmdtools.define.common.is_iter"><code class="docutils literal notranslate"><span class="pre">is_iter()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.define.html#fmdtools.define.common.return_true_indicators"><code class="docutils literal notranslate"><span class="pre">return_true_indicators()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.define.html#fmdtools.define.common.set_var"><code class="docutils literal notranslate"><span class="pre">set_var()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.define.html#fmdtools.define.common.t_key"><code class="docutils literal notranslate"><span class="pre">t_key()</span></code></a></li>
-</ul>
-</li>
-<li class="toctree-l3"><a class="reference internal" href="../../docs/fmdtools.define.html#module-fmdtools.define.flow">fmdtools.define.flow</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.define.html#fmdtools.define.flow.CommsFlow"><code class="docutils literal notranslate"><span class="pre">CommsFlow</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.define.html#fmdtools.define.flow.Flow"><code class="docutils literal notranslate"><span class="pre">Flow</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.define.html#fmdtools.define.flow.MultiFlow"><code class="docutils literal notranslate"><span class="pre">MultiFlow</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.define.html#fmdtools.define.flow.init_flow"><code class="docutils literal notranslate"><span class="pre">init_flow()</span></code></a></li>
-</ul>
-</li>
-<li class="toctree-l3"><a class="reference internal" href="../../docs/fmdtools.define.html#module-fmdtools.define.mode">fmdtools.define.mode</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.define.html#fmdtools.define.mode.Fault"><code class="docutils literal notranslate"><span class="pre">Fault</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.define.html#fmdtools.define.mode.Mode"><code class="docutils literal notranslate"><span class="pre">Mode</span></code></a></li>
-</ul>
-</li>
-<li class="toctree-l3"><a class="reference internal" href="../../docs/fmdtools.define.html#fmdtools-define-model">fmdtools.define.model</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.define.html#fmdtools.define.model.Model"><code class="docutils literal notranslate"><span class="pre">Model</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.define.html#fmdtools.define.model.check_model_pickleability"><code class="docutils literal notranslate"><span class="pre">check_model_pickleability()</span></code></a></li>
-</ul>
-</li>
-<li class="toctree-l3"><a class="reference internal" href="../../docs/fmdtools.define.html#module-fmdtools.define.parameter">fmdtools.define.parameter</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.define.html#fmdtools.define.parameter.Parameter"><code class="docutils literal notranslate"><span class="pre">Parameter</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.define.html#fmdtools.define.parameter.SimParam"><code class="docutils literal notranslate"><span class="pre">SimParam</span></code></a></li>
-</ul>
-</li>
-<li class="toctree-l3"><a class="reference internal" href="../../docs/fmdtools.define.html#module-fmdtools.define.rand">fmdtools.define.rand</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.define.html#fmdtools.define.rand.Rand"><code class="docutils literal notranslate"><span class="pre">Rand</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.define.html#fmdtools.define.rand.get_pdf_for_dist"><code class="docutils literal notranslate"><span class="pre">get_pdf_for_dist()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.define.html#fmdtools.define.rand.get_pdf_for_rand"><code class="docutils literal notranslate"><span class="pre">get_pdf_for_rand()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.define.html#fmdtools.define.rand.get_scipy_pdf_helper"><code class="docutils literal notranslate"><span class="pre">get_scipy_pdf_helper()</span></code></a></li>
-</ul>
-</li>
-<li class="toctree-l3"><a class="reference internal" href="../../docs/fmdtools.define.html#module-fmdtools.define.state">fmdtools.define.state</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.define.html#fmdtools.define.state.State"><code class="docutils literal notranslate"><span class="pre">State</span></code></a></li>
-</ul>
-</li>
-<li class="toctree-l3"><a class="reference internal" href="../../docs/fmdtools.define.html#module-fmdtools.define.time">fmdtools.define.time</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.define.html#fmdtools.define.time.Time"><code class="docutils literal notranslate"><span class="pre">Time</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.define.html#fmdtools.define.time.Timer"><code class="docutils literal notranslate"><span class="pre">Timer</span></code></a></li>
-</ul>
-</li>
-<li class="toctree-l3"><a class="reference internal" href="../../docs/fmdtools.define.html#module-fmdtools.define.geom">fmdtools.define.geom</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.define.html#fmdtools.define.geom.Geom"><code class="docutils literal notranslate"><span class="pre">Geom</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.define.html#fmdtools.define.geom.GeomArch"><code class="docutils literal notranslate"><span class="pre">GeomArch</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.define.html#fmdtools.define.geom.GeomLine"><code class="docutils literal notranslate"><span class="pre">GeomLine</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.define.html#fmdtools.define.geom.GeomPoint"><code class="docutils literal notranslate"><span class="pre">GeomPoint</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.define.html#fmdtools.define.geom.GeomPoly"><code class="docutils literal notranslate"><span class="pre">GeomPoly</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.define.html#fmdtools.define.geom.LineParam"><code class="docutils literal notranslate"><span class="pre">LineParam</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.define.html#fmdtools.define.geom.PointParam"><code class="docutils literal notranslate"><span class="pre">PointParam</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.define.html#fmdtools.define.geom.PolyParam"><code class="docutils literal notranslate"><span class="pre">PolyParam</span></code></a></li>
-</ul>
-</li>
-<li class="toctree-l3"><a class="reference internal" href="../../docs/fmdtools.define.html#module-fmdtools.define.environment">fmdtools.define.environment</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.define.html#fmdtools.define.environment.Environment"><code class="docutils literal notranslate"><span class="pre">Environment</span></code></a></li>
-</ul>
-</li>
-<li class="toctree-l3"><a class="reference internal" href="../../docs/fmdtools.define.html#module-fmdtools.define.coords">fmdtools.define.coords</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.define.html#fmdtools.define.coords.Coords"><code class="docutils literal notranslate"><span class="pre">Coords</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.define.html#fmdtools.define.coords.CoordsParam"><code class="docutils literal notranslate"><span class="pre">CoordsParam</span></code></a></li>
-</ul>
-</li>
+<li class="toctree-l3"><a class="reference internal" href="../../docs/fmdtools.define.html#fmdtools-define-block">fmdtools.define.block</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../docs/fmdtools.define.html#module-fmdtools.define.common">fmdtools.define.common</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../docs/fmdtools.define.html#module-fmdtools.define.flow">fmdtools.define.flow</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../docs/fmdtools.define.html#module-fmdtools.define.mode">fmdtools.define.mode</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../docs/fmdtools.define.html#fmdtools-define-model">fmdtools.define.model</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../docs/fmdtools.define.html#module-fmdtools.define.parameter">fmdtools.define.parameter</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../docs/fmdtools.define.html#module-fmdtools.define.rand">fmdtools.define.rand</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../docs/fmdtools.define.html#module-fmdtools.define.state">fmdtools.define.state</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../docs/fmdtools.define.html#module-fmdtools.define.time">fmdtools.define.time</a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="../../docs/fmdtools.sim.html">fmdtools.sim</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="../../docs/fmdtools.sim.html#fmdtools-sim-propagate">fmdtools.sim.propagate</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.sim.html#fmdtools.sim.propagate.approach"><code class="docutils literal notranslate"><span class="pre">approach()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.sim.html#fmdtools.sim.propagate.check_end_condition"><code class="docutils literal notranslate"><span class="pre">check_end_condition()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.sim.html#fmdtools.sim.propagate.check_hist_memory"><code class="docutils literal notranslate"><span class="pre">check_hist_memory()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.sim.html#fmdtools.sim.propagate.check_mdl_memory"><code class="docutils literal notranslate"><span class="pre">check_mdl_memory()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.sim.html#fmdtools.sim.propagate.check_overwrite"><code class="docutils literal notranslate"><span class="pre">check_overwrite()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.sim.html#fmdtools.sim.propagate.close_pool"><code class="docutils literal notranslate"><span class="pre">close_pool()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.sim.html#fmdtools.sim.propagate.copy_staged"><code class="docutils literal notranslate"><span class="pre">copy_staged()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.sim.html#fmdtools.sim.propagate.exec_nom_helper"><code class="docutils literal notranslate"><span class="pre">exec_nom_helper()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.sim.html#fmdtools.sim.propagate.exec_nom_par"><code class="docutils literal notranslate"><span class="pre">exec_nom_par()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.sim.html#fmdtools.sim.propagate.exec_scen"><code class="docutils literal notranslate"><span class="pre">exec_scen()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.sim.html#fmdtools.sim.propagate.exec_scen_par"><code class="docutils literal notranslate"><span class="pre">exec_scen_par()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.sim.html#fmdtools.sim.propagate.get_endclass_vars"><code class="docutils literal notranslate"><span class="pre">get_endclass_vars()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.sim.html#fmdtools.sim.propagate.get_result"><code class="docutils literal notranslate"><span class="pre">get_result()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.sim.html#fmdtools.sim.propagate.init_histrange"><code class="docutils literal notranslate"><span class="pre">init_histrange()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.sim.html#fmdtools.sim.propagate.list_init_faults"><code class="docutils literal notranslate"><span class="pre">list_init_faults()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.sim.html#fmdtools.sim.propagate.mult_kwargs"><code class="docutils literal notranslate"><span class="pre">mult_kwargs</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.sim.html#fmdtools.sim.propagate.nested_approach"><code class="docutils literal notranslate"><span class="pre">nested_approach()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.sim.html#fmdtools.sim.propagate.nom_helper"><code class="docutils literal notranslate"><span class="pre">nom_helper()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.sim.html#fmdtools.sim.propagate.nominal"><code class="docutils literal notranslate"><span class="pre">nominal()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.sim.html#fmdtools.sim.propagate.nominal_approach"><code class="docutils literal notranslate"><span class="pre">nominal_approach()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.sim.html#fmdtools.sim.propagate.one_fault"><code class="docutils literal notranslate"><span class="pre">one_fault()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.sim.html#fmdtools.sim.propagate.pack_run_kwargs"><code class="docutils literal notranslate"><span class="pre">pack_run_kwargs()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.sim.html#fmdtools.sim.propagate.pack_sim_kwargs"><code class="docutils literal notranslate"><span class="pre">pack_sim_kwargs()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.sim.html#fmdtools.sim.propagate.phases_from_hist"><code class="docutils literal notranslate"><span class="pre">phases_from_hist()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.sim.html#fmdtools.sim.propagate.prop_one_scen"><code class="docutils literal notranslate"><span class="pre">prop_one_scen()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.sim.html#fmdtools.sim.propagate.run_kwargs"><code class="docutils literal notranslate"><span class="pre">run_kwargs</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.sim.html#fmdtools.sim.propagate.save_helper"><code class="docutils literal notranslate"><span class="pre">save_helper()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.sim.html#fmdtools.sim.propagate.scenlist_helper"><code class="docutils literal notranslate"><span class="pre">scenlist_helper()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.sim.html#fmdtools.sim.propagate.sequence"><code class="docutils literal notranslate"><span class="pre">sequence()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.sim.html#fmdtools.sim.propagate.sim_kwargs"><code class="docutils literal notranslate"><span class="pre">sim_kwargs</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.sim.html#fmdtools.sim.propagate.single_faults"><code class="docutils literal notranslate"><span class="pre">single_faults()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.sim.html#fmdtools.sim.propagate.unpack_mult_kwargs"><code class="docutils literal notranslate"><span class="pre">unpack_mult_kwargs()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.sim.html#fmdtools.sim.propagate.unpack_res_list"><code class="docutils literal notranslate"><span class="pre">unpack_res_list()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.sim.html#fmdtools.sim.propagate.unpack_sim_kwargs"><code class="docutils literal notranslate"><span class="pre">unpack_sim_kwargs()</span></code></a></li>
-</ul>
-</li>
-<li class="toctree-l3"><a class="reference internal" href="../../docs/fmdtools.sim.html#module-fmdtools.sim.scenario">fmdtools.sim.scenario</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.sim.html#fmdtools.sim.scenario.BaseScenario"><code class="docutils literal notranslate"><span class="pre">BaseScenario</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.sim.html#fmdtools.sim.scenario.Injection"><code class="docutils literal notranslate"><span class="pre">Injection</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.sim.html#fmdtools.sim.scenario.JointFaultScenario"><code class="docutils literal notranslate"><span class="pre">JointFaultScenario</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.sim.html#fmdtools.sim.scenario.NominalScenario"><code class="docutils literal notranslate"><span class="pre">NominalScenario</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.sim.html#fmdtools.sim.scenario.ParamScenario"><code class="docutils literal notranslate"><span class="pre">ParamScenario</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.sim.html#fmdtools.sim.scenario.Scenario"><code class="docutils literal notranslate"><span class="pre">Scenario</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.sim.html#fmdtools.sim.scenario.Sequence"><code class="docutils literal notranslate"><span class="pre">Sequence</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.sim.html#fmdtools.sim.scenario.SingleFaultScenario"><code class="docutils literal notranslate"><span class="pre">SingleFaultScenario</span></code></a></li>
-</ul>
-</li>
-<li class="toctree-l3"><a class="reference internal" href="../../docs/fmdtools.sim.html#module-fmdtools.sim.approach">fmdtools.sim.approach</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.sim.html#fmdtools.sim.approach.NominalApproach"><code class="docutils literal notranslate"><span class="pre">NominalApproach</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.sim.html#fmdtools.sim.approach.SampleApproach"><code class="docutils literal notranslate"><span class="pre">SampleApproach</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.sim.html#fmdtools.sim.approach.find_overlap_n"><code class="docutils literal notranslate"><span class="pre">find_overlap_n()</span></code></a></li>
-</ul>
-</li>
-<li class="toctree-l3"><a class="reference internal" href="../../docs/fmdtools.sim.html#module-fmdtools.sim.search">fmdtools.sim.search</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.sim.html#fmdtools.sim.search.DynamicInterface"><code class="docutils literal notranslate"><span class="pre">DynamicInterface</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.sim.html#fmdtools.sim.search.ProblemInterface"><code class="docutils literal notranslate"><span class="pre">ProblemInterface</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.sim.html#fmdtools.sim.search.eval_con"><code class="docutils literal notranslate"><span class="pre">eval_con()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.sim.html#fmdtools.sim.search.get_pos_negative"><code class="docutils literal notranslate"><span class="pre">get_pos_negative()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.sim.html#fmdtools.sim.search.get_pos_str"><code class="docutils literal notranslate"><span class="pre">get_pos_str()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.sim.html#fmdtools.sim.search.get_text_time"><code class="docutils literal notranslate"><span class="pre">get_text_time()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.sim.html#fmdtools.sim.search.greater_to_factor"><code class="docutils literal notranslate"><span class="pre">greater_to_factor()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.sim.html#fmdtools.sim.search.n_to_factor"><code class="docutils literal notranslate"><span class="pre">n_to_factor()</span></code></a></li>
-</ul>
-</li>
+<li class="toctree-l3"><a class="reference internal" href="../../docs/fmdtools.sim.html#fmdtools-sim-propagate">fmdtools.sim.propagate</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../docs/fmdtools.sim.html#module-fmdtools.sim.scenario">fmdtools.sim.scenario</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../docs/fmdtools.sim.html#module-fmdtools.sim.approach">fmdtools.sim.approach</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../docs/fmdtools.sim.html#module-fmdtools.sim.search">fmdtools.sim.search</a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="../../docs/fmdtools.analyze.html">fmdtools.analyze package</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="../../docs/fmdtools.analyze.html#module-fmdtools.analyze.result">fmdtools.analyze.result</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.analyze.html#fmdtools.analyze.result.History"><code class="docutils literal notranslate"><span class="pre">History</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.analyze.html#fmdtools.analyze.result.Result"><code class="docutils literal notranslate"><span class="pre">Result</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.analyze.html#fmdtools.analyze.result.auto_filetype"><code class="docutils literal notranslate"><span class="pre">auto_filetype()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.analyze.html#fmdtools.analyze.result.bootstrap_confidence_interval"><code class="docutils literal notranslate"><span class="pre">bootstrap_confidence_interval()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.analyze.html#fmdtools.analyze.result.check_include_error"><code class="docutils literal notranslate"><span class="pre">check_include_error()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.analyze.html#fmdtools.analyze.result.check_include_errors"><code class="docutils literal notranslate"><span class="pre">check_include_errors()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.analyze.html#fmdtools.analyze.result.clean_resultdict_keys"><code class="docutils literal notranslate"><span class="pre">clean_resultdict_keys()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.analyze.html#fmdtools.analyze.result.create_indiv_filename"><code class="docutils literal notranslate"><span class="pre">create_indiv_filename()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.analyze.html#fmdtools.analyze.result.diff"><code class="docutils literal notranslate"><span class="pre">diff()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.analyze.html#fmdtools.analyze.result.file_check"><code class="docutils literal notranslate"><span class="pre">file_check()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.analyze.html#fmdtools.analyze.result.fromdict"><code class="docutils literal notranslate"><span class="pre">fromdict()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.analyze.html#fmdtools.analyze.result.get_dict_attr"><code class="docutils literal notranslate"><span class="pre">get_dict_attr()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.analyze.html#fmdtools.analyze.result.get_sub_include"><code class="docutils literal notranslate"><span class="pre">get_sub_include()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.analyze.html#fmdtools.analyze.result.init_dicthist"><code class="docutils literal notranslate"><span class="pre">init_dicthist()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.analyze.html#fmdtools.analyze.result.init_hist_iter"><code class="docutils literal notranslate"><span class="pre">init_hist_iter()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.analyze.html#fmdtools.analyze.result.init_indicator_hist"><code class="docutils literal notranslate"><span class="pre">init_indicator_hist()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.analyze.html#fmdtools.analyze.result.is_bool"><code class="docutils literal notranslate"><span class="pre">is_bool()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.analyze.html#fmdtools.analyze.result.is_known_immutable"><code class="docutils literal notranslate"><span class="pre">is_known_immutable()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.analyze.html#fmdtools.analyze.result.is_known_mutable"><code class="docutils literal notranslate"><span class="pre">is_known_mutable()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.analyze.html#fmdtools.analyze.result.is_numeric"><code class="docutils literal notranslate"><span class="pre">is_numeric()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.analyze.html#fmdtools.analyze.result.join_key"><code class="docutils literal notranslate"><span class="pre">join_key()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.analyze.html#fmdtools.analyze.result.load"><code class="docutils literal notranslate"><span class="pre">load()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.analyze.html#fmdtools.analyze.result.load_folder"><code class="docutils literal notranslate"><span class="pre">load_folder()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.analyze.html#fmdtools.analyze.result.nan_to_x"><code class="docutils literal notranslate"><span class="pre">nan_to_x()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.analyze.html#fmdtools.analyze.result.to_include_keys"><code class="docutils literal notranslate"><span class="pre">to_include_keys()</span></code></a></li>
-</ul>
-</li>
-<li class="toctree-l3"><a class="reference internal" href="../../docs/fmdtools.analyze.html#module-fmdtools.analyze.plot">fmdtools.analyze.plot</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.analyze.html#fmdtools.analyze.plot.dyn_order"><code class="docutils literal notranslate"><span class="pre">dyn_order()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.analyze.html#fmdtools.analyze.plot.get_dim_data"><code class="docutils literal notranslate"><span class="pre">get_dim_data()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.analyze.html#fmdtools.analyze.plot.get_nominal_classes"><code class="docutils literal notranslate"><span class="pre">get_nominal_classes()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.analyze.html#fmdtools.analyze.plot.hist"><code class="docutils literal notranslate"><span class="pre">hist()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.analyze.html#fmdtools.analyze.plot.make_consolidated_legend"><code class="docutils literal notranslate"><span class="pre">make_consolidated_legend()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.analyze.html#fmdtools.analyze.plot.metric_dist"><code class="docutils literal notranslate"><span class="pre">metric_dist()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.analyze.html#fmdtools.analyze.plot.metric_dist_from"><code class="docutils literal notranslate"><span class="pre">metric_dist_from()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.analyze.html#fmdtools.analyze.plot.metricovertime"><code class="docutils literal notranslate"><span class="pre">metricovertime()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.analyze.html#fmdtools.analyze.plot.multibar_helper"><code class="docutils literal notranslate"><span class="pre">multibar_helper()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.analyze.html#fmdtools.analyze.plot.multiplot_legend_title"><code class="docutils literal notranslate"><span class="pre">multiplot_legend_title()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.analyze.html#fmdtools.analyze.plot.nested_factor_comparison"><code class="docutils literal notranslate"><span class="pre">nested_factor_comparison()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.analyze.html#fmdtools.analyze.plot.nominal_factor_comparison"><code class="docutils literal notranslate"><span class="pre">nominal_factor_comparison()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.analyze.html#fmdtools.analyze.plot.nominal_vals_1d"><code class="docutils literal notranslate"><span class="pre">nominal_vals_1d()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.analyze.html#fmdtools.analyze.plot.nominal_vals_2d"><code class="docutils literal notranslate"><span class="pre">nominal_vals_2d()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.analyze.html#fmdtools.analyze.plot.nominal_vals_3d"><code class="docutils literal notranslate"><span class="pre">nominal_vals_3d()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.analyze.html#fmdtools.analyze.plot.phases"><code class="docutils literal notranslate"><span class="pre">phases()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.analyze.html#fmdtools.analyze.plot.plot_err_lines"><code class="docutils literal notranslate"><span class="pre">plot_err_lines()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.analyze.html#fmdtools.analyze.plot.plot_line_and_err"><code class="docutils literal notranslate"><span class="pre">plot_line_and_err()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.analyze.html#fmdtools.analyze.plot.prep_hists"><code class="docutils literal notranslate"><span class="pre">prep_hists()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.analyze.html#fmdtools.analyze.plot.samplemetric"><code class="docutils literal notranslate"><span class="pre">samplemetric()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.analyze.html#fmdtools.analyze.plot.samplemetrics"><code class="docutils literal notranslate"><span class="pre">samplemetrics()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.analyze.html#fmdtools.analyze.plot.suite_for_plots"><code class="docutils literal notranslate"><span class="pre">suite_for_plots()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.analyze.html#fmdtools.analyze.plot.unpack_plot_values"><code class="docutils literal notranslate"><span class="pre">unpack_plot_values()</span></code></a></li>
-</ul>
-</li>
-<li class="toctree-l3"><a class="reference internal" href="../../docs/fmdtools.analyze.html#module-fmdtools.analyze.graph">fmdtools.analyze.graph</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.analyze.html#fmdtools.analyze.graph.ActArchActGraph"><code class="docutils literal notranslate"><span class="pre">ActArchActGraph</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.analyze.html#fmdtools.analyze.graph.ActArchFlowGraph"><code class="docutils literal notranslate"><span class="pre">ActArchFlowGraph</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.analyze.html#fmdtools.analyze.graph.ActArchGraph"><code class="docutils literal notranslate"><span class="pre">ActArchGraph</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.analyze.html#fmdtools.analyze.graph.CommsFlowGraph"><code class="docutils literal notranslate"><span class="pre">CommsFlowGraph</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.analyze.html#fmdtools.analyze.graph.EdgeLabelStyle"><code class="docutils literal notranslate"><span class="pre">EdgeLabelStyle</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.analyze.html#fmdtools.analyze.graph.EdgeStyle"><code class="docutils literal notranslate"><span class="pre">EdgeStyle</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.analyze.html#fmdtools.analyze.graph.Graph"><code class="docutils literal notranslate"><span class="pre">Graph</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.analyze.html#fmdtools.analyze.graph.GraphInteractor"><code class="docutils literal notranslate"><span class="pre">GraphInteractor</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.analyze.html#fmdtools.analyze.graph.LabelStyle"><code class="docutils literal notranslate"><span class="pre">LabelStyle</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.analyze.html#fmdtools.analyze.graph.Labels"><code class="docutils literal notranslate"><span class="pre">Labels</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.analyze.html#fmdtools.analyze.graph.ModelCompGraph"><code class="docutils literal notranslate"><span class="pre">ModelCompGraph</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.analyze.html#fmdtools.analyze.graph.ModelFlowGraph"><code class="docutils literal notranslate"><span class="pre">ModelFlowGraph</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.analyze.html#fmdtools.analyze.graph.ModelFxnGraph"><code class="docutils literal notranslate"><span class="pre">ModelFxnGraph</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.analyze.html#fmdtools.analyze.graph.ModelGraph"><code class="docutils literal notranslate"><span class="pre">ModelGraph</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.analyze.html#fmdtools.analyze.graph.ModelTypeGraph"><code class="docutils literal notranslate"><span class="pre">ModelTypeGraph</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.analyze.html#fmdtools.analyze.graph.MultiFlowGraph"><code class="docutils literal notranslate"><span class="pre">MultiFlowGraph</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.analyze.html#fmdtools.analyze.graph.NodeStyle"><code class="docutils literal notranslate"><span class="pre">NodeStyle</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.analyze.html#fmdtools.analyze.graph.add_g_nested"><code class="docutils literal notranslate"><span class="pre">add_g_nested()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.analyze.html#fmdtools.analyze.graph.data_average"><code class="docutils literal notranslate"><span class="pre">data_average()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.analyze.html#fmdtools.analyze.graph.data_error"><code class="docutils literal notranslate"><span class="pre">data_error()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.analyze.html#fmdtools.analyze.graph.get_label_groups"><code class="docutils literal notranslate"><span class="pre">get_label_groups()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.analyze.html#fmdtools.analyze.graph.get_node_info"><code class="docutils literal notranslate"><span class="pre">get_node_info()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.analyze.html#fmdtools.analyze.graph.get_style_kwargs"><code class="docutils literal notranslate"><span class="pre">get_style_kwargs()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.analyze.html#fmdtools.analyze.graph.graph_factory"><code class="docutils literal notranslate"><span class="pre">graph_factory()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.analyze.html#fmdtools.analyze.graph.gv_import_check"><code class="docutils literal notranslate"><span class="pre">gv_import_check()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.analyze.html#fmdtools.analyze.graph.label_for_entry"><code class="docutils literal notranslate"><span class="pre">label_for_entry()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.analyze.html#fmdtools.analyze.graph.node_is_tagged"><code class="docutils literal notranslate"><span class="pre">node_is_tagged()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.analyze.html#fmdtools.analyze.graph.random"><code class="docutils literal notranslate"><span class="pre">random()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.analyze.html#fmdtools.analyze.graph.sff_one_trial"><code class="docutils literal notranslate"><span class="pre">sff_one_trial()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.analyze.html#fmdtools.analyze.graph.to_legend_label"><code class="docutils literal notranslate"><span class="pre">to_legend_label()</span></code></a></li>
-</ul>
-</li>
-<li class="toctree-l3"><a class="reference internal" href="../../docs/fmdtools.analyze.html#module-fmdtools.analyze.tabulate">fmdtools.analyze.tabulate</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.analyze.html#fmdtools.analyze.tabulate.dicttab"><code class="docutils literal notranslate"><span class="pre">dicttab()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.analyze.html#fmdtools.analyze.tabulate.fmea"><code class="docutils literal notranslate"><span class="pre">fmea()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.analyze.html#fmdtools.analyze.tabulate.label_faults"><code class="docutils literal notranslate"><span class="pre">label_faults()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.analyze.html#fmdtools.analyze.tabulate.maptab"><code class="docutils literal notranslate"><span class="pre">maptab()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.analyze.html#fmdtools.analyze.tabulate.metricovertime"><code class="docutils literal notranslate"><span class="pre">metricovertime()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.analyze.html#fmdtools.analyze.tabulate.nested_factor_comparison"><code class="docutils literal notranslate"><span class="pre">nested_factor_comparison()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.analyze.html#fmdtools.analyze.tabulate.nested_stats"><code class="docutils literal notranslate"><span class="pre">nested_stats()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.analyze.html#fmdtools.analyze.tabulate.nominal_factor_comparison"><code class="docutils literal notranslate"><span class="pre">nominal_factor_comparison()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.analyze.html#fmdtools.analyze.tabulate.nominal_stats"><code class="docutils literal notranslate"><span class="pre">nominal_stats()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.analyze.html#fmdtools.analyze.tabulate.phasefmea"><code class="docutils literal notranslate"><span class="pre">phasefmea()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.analyze.html#fmdtools.analyze.tabulate.result_summary"><code class="docutils literal notranslate"><span class="pre">result_summary()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.analyze.html#fmdtools.analyze.tabulate.result_summary_fmea"><code class="docutils literal notranslate"><span class="pre">result_summary_fmea()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.analyze.html#fmdtools.analyze.tabulate.samptime"><code class="docutils literal notranslate"><span class="pre">samptime()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.analyze.html#fmdtools.analyze.tabulate.summfmea"><code class="docutils literal notranslate"><span class="pre">summfmea()</span></code></a></li>
-</ul>
-</li>
-<li class="toctree-l3"><a class="reference internal" href="../../docs/fmdtools.analyze.html#module-fmdtools.analyze.show">fmdtools.analyze.show</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.analyze.html#fmdtools.analyze.show.consolidate_legend"><code class="docutils literal notranslate"><span class="pre">consolidate_legend()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.analyze.html#fmdtools.analyze.show.coord"><code class="docutils literal notranslate"><span class="pre">coord()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.analyze.html#fmdtools.analyze.show.coord3d"><code class="docutils literal notranslate"><span class="pre">coord3d()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.analyze.html#fmdtools.analyze.show.coord_collection"><code class="docutils literal notranslate"><span class="pre">coord_collection()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.analyze.html#fmdtools.analyze.show.coord_property"><code class="docutils literal notranslate"><span class="pre">coord_property()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.analyze.html#fmdtools.analyze.show.coord_property3d"><code class="docutils literal notranslate"><span class="pre">coord_property3d()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.analyze.html#fmdtools.analyze.show.geom"><code class="docutils literal notranslate"><span class="pre">geom()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.analyze.html#fmdtools.analyze.show.geomarch"><code class="docutils literal notranslate"><span class="pre">geomarch()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.analyze.html#fmdtools.analyze.show.init_figure"><code class="docutils literal notranslate"><span class="pre">init_figure()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.analyze.html#fmdtools.analyze.show.mark_times"><code class="docutils literal notranslate"><span class="pre">mark_times()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.analyze.html#fmdtools.analyze.show.traj"><code class="docutils literal notranslate"><span class="pre">traj()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.analyze.html#fmdtools.analyze.show.traj3"><code class="docutils literal notranslate"><span class="pre">traj3()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.analyze.html#fmdtools.analyze.show.trajectories"><code class="docutils literal notranslate"><span class="pre">trajectories()</span></code></a></li>
-</ul>
-</li>
+<li class="toctree-l3"><a class="reference internal" href="../../docs/fmdtools.analyze.html#module-fmdtools.analyze.result">fmdtools.analyze.result</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../docs/fmdtools.analyze.html#module-fmdtools.analyze.plot">fmdtools.analyze.plot</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../docs/fmdtools.analyze.html#module-fmdtools.analyze.graph">fmdtools.analyze.graph</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../docs/fmdtools.analyze.html#module-fmdtools.analyze.tabulate">fmdtools.analyze.tabulate</a></li>
 </ul>
 </li>
 </ul>
@@ -618,18 +357,14 @@
            <div itemprop="articleBody">
              
   <section id="Defining-Fault-Sampling-Approaches-in-fmdtools">
-<h1>Defining Fault Sampling Approaches in fmdtools<a class="headerlink" href="#Defining-Fault-Sampling-Approaches-in-fmdtools" title="Link to this heading"></a></h1>
+<h1>Defining Fault Sampling Approaches in fmdtools<a class="headerlink" href="#Defining-Fault-Sampling-Approaches-in-fmdtools" title="Permalink to this heading"></a></h1>
 <p>Fault Sampling is used to evaluate the overall resilience of a system to a set of faults and the corresponding risks associated with these faults. There is no single best way to define the set of scenarios to evaluate resilience with, because a given resilience analysis may need more or less detail, support more or less computational time, or be interested in specific scenario types of interest.</p>
 <p>Thus, there are a number of use-cases supported by fmdtools for different sampling models. This document will demonstrate and showcase a few of them.</p>
 <div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[1]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">recordclass</span> <span class="kn">import</span> <span class="n">asdict</span>
-<span class="kn">from</span> <span class="nn">fmdtools.define.parameter</span> <span class="kn">import</span> <span class="n">Parameter</span><span class="p">,</span> <span class="n">SimParam</span>
-<span class="kn">from</span> <span class="nn">fmdtools.define.state</span> <span class="kn">import</span> <span class="n">State</span>
-<span class="kn">from</span> <span class="nn">fmdtools.define.mode</span> <span class="kn">import</span> <span class="n">Mode</span>
-<span class="kn">from</span> <span class="nn">fmdtools.define.block</span> <span class="kn">import</span> <span class="n">FxnBlock</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">fmdtools.define.block</span> <span class="kn">import</span> <span class="n">FxnBlock</span><span class="p">,</span> <span class="n">Action</span>
 <span class="kn">from</span> <span class="nn">fmdtools.define.model</span> <span class="kn">import</span> <span class="n">Model</span>
 <span class="kn">from</span> <span class="nn">fmdtools.define.flow</span> <span class="kn">import</span> <span class="n">Flow</span>
 <span class="kn">from</span> <span class="nn">fmdtools.sim.approach</span> <span class="kn">import</span> <span class="n">SampleApproach</span>
@@ -640,13 +375,13 @@
 </div>
 </div>
 <section id="Basics">
-<h2>Basics<a class="headerlink" href="#Basics" title="Link to this heading"></a></h2>
-<p>Fault sampling involves: - Defining faults and fault models for each function/component/flows of the model is done using the ‘Mode’ Class - Defining a fault sampling approach (using the <code class="docutils literal notranslate"><span class="pre">SampleApproach</span></code> class) - Propagating faults through the model (using the <code class="docutils literal notranslate"><span class="pre">propagate.approach</span></code> method) Before proceeding, it can be helpful to look through their respective documentation.</p>
+<h2>Basics<a class="headerlink" href="#Basics" title="Permalink to this heading"></a></h2>
+<p>Fault sampling involves: - Defining faults and fault models within each function/component of the model (using the <code class="docutils literal notranslate"><span class="pre">.assoc_modes()</span></code> method) - Defining a fault sampling approach (using the <code class="docutils literal notranslate"><span class="pre">SampleApproach</span></code> class) - Propagating faults through the model (using the <code class="docutils literal notranslate"><span class="pre">propagate.approach</span></code> method) Before proceeding, it can be helpful to look through their respective documentation.</p>
 <div class="nbinput docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[2]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">help</span><span class="p">(</span><span class="n">Mode</span><span class="p">)</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">help</span><span class="p">(</span><span class="n">FxnBlock</span><span class="o">.</span><span class="n">assoc_modes</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -655,339 +390,15 @@
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-Help on class Mode in module fmdtools.define.mode:
+<span class="ansi-red-intense-fg ansi-bold">---------------------------------------------------------------------------</span>
+<span class="ansi-red-intense-fg ansi-bold">AttributeError</span>                            Traceback (most recent call last)
+Cell <span class="ansi-green-intense-fg ansi-bold">In[2], line 1</span>
+<span class="ansi-green-intense-fg ansi-bold">----&gt; 1</span> help(<span class="ansi-yellow-bg">FxnBlock</span><span class="ansi-yellow-bg" style="color: rgb(98,98,98)">.</span><span class="ansi-yellow-bg">assoc_modes</span>)
 
-class Mode(recordclass.datatype.dataobject)
- |  Mode(*args, s_kwargs={}, **kwargs)
- |
- |  Description: Class for defining the mode property (and associated probability model)
- |  held in Blocks.
- |
- |  Mode is meant to be inherited in order to define the specific faults related to a
- |  given Block.
- |
- |  e.g.,
- |  class ExampleMode(Mode):
- |      faultmodes = {&#34;high_heat&#34;, &#34;low_heat&#34;}
- |      mode = &#34;start&#34;
- |  Will create a Mode structure where m.mode = &#39;start&#39; that can enter the given
- |  fault modes &#39;high_heat&#39; and &#39;low_heat&#39;.
- |
- |  Mode has the following fields which can be modified to define the underlying
- |  representation and probability model:
- |  -------------
- |
- |  opermodes : tuple
- |      Names of non-faulty operational modes.
- |  failrate : float
- |      Overall failure rate for the block. The default is 1.0.
- |  faultparams : dict
- |          Dictionary/tuple of arguments defining faultmodes, which can have the forms:
- |              - tuple (&#39;fault1&#39;, &#39;fault2&#39;, &#39;fault3&#39;) (just the respective faults)
- |              - dict {&#39;fault1&#39;: faultattributes, &#39;fault2&#39;: faultattributes}, where faultattributes is:
- |                  - float: rate for the mode
- |                  - dict/set/str: opportunity vector for the mode specified as a dictionary/set/string
- |                  - tuple: (rate, oppvect, rcost) or (rate, rcost)
- |                      - a list of arguments where the float arguments are specified in the order rate, rcost (if provided) and
- |                          an oppvect opportunity vector is provided (anywhere) with the form:
- |                              -list: [float1, float2,...], a vector of relative likelihoods for each phase, or
- |                              -dict: {opermode:float1, opermode:float1}, a dict of relative likelihoods for each phase/mode
- |                              -set: {opermode, opermode,...}, a set of applicable phases (assumed equally likely).
- |                              the phases/modes to key by are defined in &#34;key_phases_by&#34;
- |                              -str: &#39;all&#39;/&#39;modename&#39;, either specifying all operational modes/phases or a single operational mode/phase
- |  probtype : str, optional
- |      Type of probability in the probability model, a per-time &#39;rate&#39; or
- |      per-run &#39;prob&#39;.The default is &#39;rate&#39;
- |  units : str, optional
- |      Type of units (&#39;sec&#39;/&#39;min&#39;/&#39;hr&#39;/&#39;day&#39;) used for the rates. Default is &#39;hr&#39;
- |  exclusive : True/False
- |      Whether fault modes are exclusive of each other or not.
- |      Default is False (i.e. more than one can be present).
- |  key_phases_by : &#39;self&#39;/&#39;none&#39;/&#39;global&#39;/&#39;fxnname&#39;
- |      Phases to key the faultmodes by
- |      (using local, global, or an external function&#39;s modes&#39;).
- |      Default is &#39;global&#39;
- |  longnames : dict
- |      Longer names for the faults (if desired). {faultname: longname}
- |  faults : set
- |      Set of faults present (or not) at any given time
- |  mode : str
- |      Name of the current mode. the default is &#39;nominal&#39;
- |  he_args : tuple
- |      Arguments for add_he_rate defining a human error probability model.
- |
- |
- |  These properties can then be used in simulation
- |  ------------
- |  faults : set
- |      Set of faults present (or not) at any given time
- |  mode : str
- |      Name of the current mode. the default is &#39;nominal&#39;
- |  mode_state_dict: dict
- |      Maps modes to states. Assigned by assoc_faultstates
- |
- |  While these properties are used for determining scenario information
- |  ------------
- |  faultmodes : dict
- |          Dictionary of :class:`Fault` defining possible fault modes and
- |          their properties
- |
- |  Method resolution order:
- |      Mode
- |      recordclass.datatype.dataobject
- |      builtins.object
- |
- |  Methods defined here:
- |
- |  __init__(self, *args, s_kwargs={}, **kwargs)
- |      Initialize self.  See help(type(self)) for accurate signature.
- |
- |  __repr__(self)
- |      T.__repr__() -- representation of T
- |
- |  add_fault(self, *faults)
- |      Add fault (a str) to the block.
- |
- |      Parameters
- |      ----------
- |      *fault : str(s)
- |          name(s) of the fault to add to the black
- |
- |  add_he_rate(self, gtp, EPCs={&#39;na&#39;: [1, 0]})
- |      Calculate self.failrate based on a human error probability model.
- |
- |      Parameters
- |      ----------
- |      gtp : float
- |          Generic Task Probability. (from HEART)
- |      EPCs : Dict or list
- |          Error producing conditions (and respective factors) for a given task
- |          (from HEART). Used in format:
- |
- |          - Dict {&#39;name&#39;:[EPC factor, Effect proportion]} or
- |
- |          - list [[EPC factor, Effect proportion],[[EPC factor, Effect proportion]]]
- |
- |  any_faults(self)
- |      Check if the block has any fault modes.
- |
- |  assoc_faultstates(self, franges={}, mode_app=&#39;none&#39;, manual_modes={}, probtype=&#39;prob&#39;, units=&#39;hr&#39;, key_phases_by=&#39;global&#39;, seed=42, **kwargs)
- |      Associate modes with given faultstates.
- |
- |      Parameters
- |      ----------
- |      franges : dict, optional
- |          Dictionary of form {&#39;state&#39;:{val1, val2...}) of ranges for each health state
- |                              (if used to generate modes). The default is {}.
- |      mode_app : str
- |          type of modes to elaborate from the given health states.
- |      manual_modes : dict, optional
- |          Dictionary/Set of faultmodes with structure, which has the form:
- |              - dict {&#39;fault1&#39;: [atts], &#39;fault2&#39;: atts}, where atts may be of form:
- |                  - states: {state1: val1, state2, val2}
- |                  - [states, faultattributes], where faultattributes is the same as in
- |                  assoc_modes
- |      probtype : str, optional
- |          Type of probability in the probability model, a per-time &#39;rate&#39; or
- |          per-run &#39;prob&#39;. The default is &#39;rate&#39;
- |      units : str, optional
- |          Type of units (&#39;sec&#39;/&#39;min&#39;/&#39;hr&#39;/&#39;day&#39;) used for the rates. Default is &#39;hr&#39;
- |      **kwargs : kwargs
- |          Entries for the Faults (e.g., oppvect, etc)
- |
- |  create_hist(self, timerange, track)
- |
- |  get_true_field(self, fieldname, *args, **kwargs)
- |
- |  get_true_fields(self, *args, **kwargs)
- |
- |  has_fault(self, *faults)
- |      Check if the block has fault (a str).
- |
- |      Parameters
- |      ----------
- |      *faults : strs
- |          names of the fault to check.
- |
- |  in_mode(self, *modes)
- |      Check if the system is in a given operational mode.
- |
- |      Parameters
- |      ----------
- |      *modes : strs
- |          names of the mode to check
- |
- |  init_faultmodes(self)
- |      Initialize the self.faultmodes dictionary from the parameters of the Mode.
- |
- |  mirror(self, mode_to_mirror)
- |
- |  no_fault(self, fault)
- |      Check if the block does not have fault (a str).
- |
- |      Parameters
- |      ----------
- |      fault : str
- |          name of the fault to check.
- |
- |  remove_any_faults(self, opermode=False, warnmessage=False)
- |      Reset fault mode to nominal and returns to the given operational mode.
- |
- |      Parameters
- |      ----------
- |      opermode : str (optional)
- |          operational mode to return to when the fault mode is removed
- |      warnmessage : str/False
- |          Warning to give when performing operation. Default is False (no warning)
- |
- |  remove_fault(self, fault_to_remove, opermode=False, warnmessage=False)
- |      Remove fault in the set of faults and returns to given operational mode.
- |
- |      Parameters
- |      ----------
- |      fault_to_replace : str
- |          name of the fault to remove
- |      opermode : str (optional)
- |          operational mode to return to when the fault mode is removed
- |      warnmessage : str/False
- |          Warning to give when performing operation. Default is False (no warning)
- |
- |  replace_fault(self, fault_to_replace, fault_to_add)
- |      Replace fault_to_replace with fault_to_add in the set of faults.
- |
- |      Parameters
- |      ----------
- |      fault_to_replace : str
- |          name of the fault to replace
- |      fault_to_add : str
- |          name of the fault to add in its place
- |
- |  return_mutables(self)
- |
- |  set_mode(self, mode)
- |      Set a mode in the block.
- |
- |      Parameters
- |      ----------
- |      mode : str
- |          name of the mode to enter.
- |
- |  to_fault(self, fault)
- |      Move from the current fault mode to a new fault mode.
- |
- |      Parameters
- |      ----------
- |      fault : str
- |          name of the fault mode to switch to
- |
- |  update_modestates(self)
- |      Update states of the model associated with a specific fault mode.
- |
- |      (see assoc_modes)
- |
- |  ----------------------------------------------------------------------
- |  Data descriptors defined here:
- |
- |  __dict__
- |      dictionary for instance variables (if defined)
- |
- |  __weakref__
- |      list of weak references to the object (if defined)
- |
- |  faultmodes
- |
- |  faults
- |
- |  mode_state_dict
- |
- |  ----------------------------------------------------------------------
- |  Data and other attributes defined here:
- |
- |  __annotations__ = {&#39;faultmodes&#39;: &lt;class &#39;dict&#39;&gt;, &#39;faults&#39;: &lt;class &#39;set...
- |
- |  __defaults__ = (set(), {}, {})
- |
- |  __fields__ = (&#39;faults&#39;, &#39;faultmodes&#39;, &#39;mode_state_dict&#39;)
- |
- |  __match_args__ = (&#39;faults&#39;, &#39;faultmodes&#39;, &#39;mode_state_dict&#39;)
- |
- |  __options__ = {&#39;fast_new&#39;: True}
- |
- |  default_track = (&#39;mode&#39;, &#39;faults&#39;)
- |
- |  exclusive = False
- |
- |  failrate = 1.0
- |
- |  faultparams = {}
- |
- |  he_args = ()
- |
- |  key_phases_by = &#39;global&#39;
- |
- |  longnames = {}
- |
- |  mode = &#39;nominal&#39;
- |
- |  opermodes = (&#39;nominal&#39;,)
- |
- |  probtype = &#39;rate&#39;
- |
- |  units = &#39;hr&#39;
- |
- |  units_set = (&#39;sec&#39;, &#39;min&#39;, &#39;hr&#39;, &#39;day&#39;)
- |
- |  ----------------------------------------------------------------------
- |  Methods inherited from recordclass.datatype.dataobject:
- |
- |  __copy__(...)
- |      T.__copy__() -- copy of T
- |
- |  __eq__(self, value, /)
- |      Return self==value.
- |
- |  __ge__(self, value, /)
- |      Return self&gt;=value.
- |
- |  __getstate__(...)
- |      T.__getstate__()
- |
- |  __gt__(self, value, /)
- |      Return self&gt;value.
- |
- |  __hash__(self, /)
- |      Return hash(self).
- |
- |  __le__(self, value, /)
- |      Return self&lt;=value.
- |
- |  __len__(self, /)
- |      Return len(self).
- |
- |  __lt__(self, value, /)
- |      Return self&lt;value.
- |
- |  __ne__(self, value, /)
- |      Return self!=value.
- |
- |  __reduce__(...)
- |      T.__reduce__()
- |
- |  __setstate__(...)
- |      T.__setstate__()
- |
- |  __sizeof__(...)
- |      T.__sizeof__() -- size of T
- |
- |  ----------------------------------------------------------------------
- |  Static methods inherited from recordclass.datatype.dataobject:
- |
- |  __new__(*args, **kwargs) from recordclass.datatype.datatype
- |      Create and return a new object.  See help(type) for accurate signature.
-
+<span class="ansi-red-intense-fg ansi-bold">AttributeError</span>: type object &#39;FxnBlock&#39; has no attribute &#39;assoc_modes&#39;
 </pre></div></div>
 </div>
-<div class="nbinput docutils container">
+<div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[3]:
 </pre></div>
 </div>
@@ -995,247 +406,7 @@ class Mode(recordclass.datatype.dataobject)
 </pre></div>
 </div>
 </div>
-<div class="nboutput nblast docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area docutils container">
-<div class="highlight"><pre>
-Help on class SampleApproach in module fmdtools.sim.approach:
-
-class SampleApproach(builtins.object)
- |  SampleApproach(mdl, faults=&#39;all&#39;, phases=&#39;global&#39;, modephases={}, join_modephases=False, jointfaults={&#39;faults&#39;: &#39;None&#39;}, sampparams={}, defaultsamp={&#39;samp&#39;: &#39;evenspacing&#39;, &#39;numpts&#39;: 1}, reduce_to=False)
- |
- |  Class for defining the sample approach to be used for a set of faults.
- |
- |  Attributes
- |  ----------
- |  phases : dict
- |      phases given to sample the fault modes in
- |  globalphases : dict
- |      phases defined in the model
- |  modephases : dict
- |      Dictionary of modes associated with each state
- |  mode_phase_map : dict
- |      Mapping of modes to their corresponding phases
- |  tstep : float
- |      timestep defined in the model
- |  fxnrates : dict
- |      overall failure rates for each function
- |  comprates : dict
- |      overall failure rates for each component
- |  jointmodes : list
- |      (if any) joint fault modes to be injected in the approach
- |  rates/comprates/rates_timeless : dict
- |      rates of each mode (fxn, mode) in each model phase, structured {fxnmode: {phaseid:rate}}
- |  sampletimes : dict
- |      faults to inject at each time in each phase, structured {phaseid:time:fnxmode}
- |  weights : dict
- |      weight to put on each time each fault was injected, structured {fxnmode:phaseid:time:weight}
- |  sampparams : dict
- |      parameters used to sample each mode
- |  scenlist : list
- |      list of fault scenarios (dicts of faults and properties) that fault propagation iterates through
- |  scenids : dict
- |      a list of scenario ids associated with a given fault in a given phase, structured {(fxnmode,phaseid):listofnames}
- |  mode_phase_map : dict
- |      a dict of modes and their respective phases to inject with structure {fxnmode:{mode_phase_map:[starttime, endtime]}}
- |  units : str
- |      time-units to use in the approach probability model
- |  unit_factors : dict
- |      multiplication factors for converting some time units to others.
- |
- |  Methods defined here:
- |
- |  __init__(self, mdl, faults=&#39;all&#39;, phases=&#39;global&#39;, modephases={}, join_modephases=False, jointfaults={&#39;faults&#39;: &#39;None&#39;}, sampparams={}, defaultsamp={&#39;samp&#39;: &#39;evenspacing&#39;, &#39;numpts&#39;: 1}, reduce_to=False)
- |      Initializes the sample approach for a given model
- |
- |      Parameters
- |      ----------
- |      mdl : Model or Block
- |          Model to sample.
- |      faults : str/list/tuple, optional
- |          - The default is &#39;all&#39;, which gets all fault modes from the model.
- |          - &#39;single-component&#39; uses faults from a single component to represent faults from all components
- |          - &#39;single-function&#39; uses faults from a single function to represent faults from that type
- |          - passing the function name only includes modes from that function
- |          - List of faults of form [(fxn, mode)] to inject in the model.
- |          -Tuple arguments
- |              - (&#39;mode type&#39;, &#39;mode&#39;,&#39;notmode&#39;), gets all modes with &#39;mode&#39; as a string (e.g. &#34;mech&#34;, &#34;comms&#34;, &#34;loss&#34; faults). &#39;notmode&#39; (if given) specifies strings to remove
- |              - (&#39;mode types&#39;, (&#39;mode1&#39;, &#39;mode2&#39;)), gets all modes with the listed strings (e.g. &#34;mech&#34;, &#34;comms&#34;, &#34;loss&#34; faults)
- |              - (&#39;mode name&#39;, &#39;mode&#39;), gets all modes with the exact name &#39;mode&#39;
- |              - (&#39;mode names&#39;, (&#39;mode1&#39;, &#39;mode2&#39;)), gets all modes with the exact names defined in the tuple
- |              - (&#39;function class&#39;, &#39;Classname&#39;), which gets all modes from a function with class &#39;Classname&#39;
- |              - (&#39;function classes&#39;, (&#39;Classname1&#39;, &#39;Classname2&#39;)), which gets all modes from a function with the names in the tuple
- |              - (&#39;single-component&#39;, (&#39;fxnname2&#39;, &#39;fxnname2&#39;)), which specifies single-component modes in the given functions
- |      phases: dict or &#39;global&#39; or list
- |          Local phases in the model to sample.
- |              Dict has structure: {&#39;Function&#39;:{&#39;phase&#39;:[starttime, endtime]}}
- |              List has structure: [&#39;phase1&#39;, &#39;phase2&#39;] where phases are phases in mdl.sp.phases
- |          Defaults to &#39;global&#39;,here only the phases defined in mdl.sp.phases are used.
- |          Phases and modephases can be gotten from process.modephases(mdlhist)
- |      modephases: dict
- |          Dictionary of modes associated with each phase.
- |          For use when the opportunity vector is keyed to modes and each mode is
- |          entered multiple times in a simulation, resulting in
- |          multiple phases associated with that mode. Has structure:
- |              {&#39;Function&#39;:{&#39;mode&#39;:{&#39;phase&#39;,&#39;phase1&#39;, &#39;phase2&#39;...}}}
- |              Phases and modephases can be gotten from process.modephases(mdlhist)
- |      join_modephases: bool
- |          Whether to join phases with the same modes defined in modephases. Default is False
- |      jointfaults : dict, optional
- |          Defines how the approach considers joint faults. The default is {&#39;faults&#39;:&#39;None&#39;}. Has structure:
- |              - faults : float
- |                  # of joint faults to inject. &#39;all&#39; specifies all faults at the same time
- |              - jointfuncs :  bool
- |                  determines whether more than one mode can be injected in a single function
- |              - pcond (optional) : float in range (0,1)
- |                  conditional probabilities for joint faults. If not give, independence is assumed.
- |              - inclusive (optional) : bool
- |                  specifies whether the fault set includes all joint faults up to the given level, or only the given level
- |                  (e.g., True with &#39;all&#39; means SampleApproach includes every combination of joint fault modes while
- |                         False with &#39;all&#39; means SampleApproach only includes the joint fault mode with all faults)
- |              - limit jointphases (optional) : int
- |                  Limits the number of jointphases to sample (by randomly sampling them instead). Necessary when the
- |                  number of faults is large
- |      sampparams : dict, optional
- |          Defines how specific modes in the model will be sampled over time. The default is {}.
- |          Has structure: {key: sampparam}, where a key may be &#39;fxnmode&#39;,&#39;fxnname&#39;,&#39;mode&#39;, &#39;phase&#39;, or (&#39;fxnmode&#39;,&#39;phase&#39;)
- |          and sampparam has structure:
- |              - &#39;samp&#39; : str (&#39;quad&#39;, &#39;fullint&#39;, &#39;evenspacing&#39;,&#39;randtimes&#39;,&#39;symrandtimes&#39;)
- |                  sample strategy to use (quadrature, full integral, even spacing, random times, likeliest, or symmetric random times)
- |              - &#39;numpts&#39; : float
- |                  number of points to use (for evenspacing, randtimes, and symrandtimes only)
- |              - &#39;quad&#39; : dict
- |                  dict with structure {&#39;nodes&#39;[nodelist], &#39;weights&#39;:weightlist}
- |                  where the nodes in the nodelist range between -1 and 1
- |                  and the weights in the weightlist sum to 2.
- |      defaultsamp : TYPE, optional
- |          Defines how the model will be sampled over time by default. The default is {&#39;samp&#39;:&#39;evenspacing&#39;,&#39;numpts&#39;:1}. Has structure:
- |              - &#39;samp&#39; : str (&#39;quad&#39;, &#39;fullint&#39;, &#39;evenspacing&#39;,&#39;randtimes&#39;,&#39;symrandtimes&#39;)
- |                  sample strategy to use (quadrature, full integral, even spacing, random times,likeliest, or symmetric random times)
- |              - &#39;numpts&#39; : float
- |                  number of points to use (for evenspacing, randtimes, and symrandtimes only)
- |              - &#39;quad&#39; : dict
- |                  dict with structure {&#39;nodes&#39;[nodelist], &#39;weights&#39;:weightlist}
- |                  where the nodes in the nodelist range between -1 and 1
- |                  and the weights in the weightlist sum to 2.
- |      reduce_to : int, optional
- |          Size of random sample to reduce the number of scenarios to (if any). Default is False.
- |
- |  __repr__(self)
- |      Return repr(self).
- |
- |  add_phasetimes(self, fxnmode, phaseid, phasetimes, weights=[])
- |      Adds a set of times for a given mode to sampletimes
- |
- |  calc_intervaltime(self, times, tstep)
- |
- |  create_sampletimes(self, mdl, params={}, default={&#39;samp&#39;: &#39;evenspacing&#39;, &#39;numpts&#39;: 1})
- |      Initializes weights and sampletimes
- |
- |  create_scenarios(self)
- |      Creates list of scenarios to be iterated over in fault injection. Added as scenlist and scenids
- |
- |  get_id_weights(self)
- |      Returns a dictionary with weights for each scenario with structure {scenid:weight}
- |
- |  get_scenid_groups(self, group_by=&#39;phases&#39;, group_dict={})
- |      Returns a dict with different scenario ids grouped according to group_by.
- |      group_by: str, with options:
- |      - &#39;none&#39;:           Returns {&#39;scenid&#39;:&#39;scenid&#39;} for all scenarios
- |      - &#39;phase&#39;:          Returns {(fxnmode, fxnphase):{scenids}}--identical scenarios within a given phase are grouped
- |      - &#39;fxnfault&#39;:       Returns {fxnmode:{scenids}} All identical scenarios (fxn, mode) are grouped
- |      - &#39;mode&#39;:           Returns {mode:{scenids}}. All scenarios with the same mode name are grouped
- |      - &#39;mode type&#39;:      Returns {modetype:scenids}. All scenarios with the same mode type (mode types must be given to the sampleapproach) are grouped
- |      - &#39;functions&#39;:      Returns {function:scenids}. All scenarios and modes from a given function are grouped.
- |      - &#39;times&#39;:          Returns {time:scenids}. All scenarios at a given time are grouped.
- |      - &#39;fxnclassfault&#39;:  Returns {(fxnclass, mode):scenids}. All scenarios (fxnclass, mode) from a given function class are grouped.
- |      - &#39;fxnclass&#39;:       Returns {fxnclass:scendis}. All scenarios from a given function class are grouped.
- |      For &#39;fxnclass&#39;, &#39;fxnclassfault&#39;, and &#39;modetype&#39;, a group_dict dictionary must be provided that groups the function/mode classes/types.
- |      -------------------
- |      Returns:
- |      - grouped_scens: dict
- |            A dictionary of the scenario ids associated with the given group {group:scenids}
- |
- |  init_jointmode_rate(self, jointfaults, j_ind, jointmode)
- |
- |  init_jointmode_rates(self, jointfaults)
- |
- |  init_modelist(self, mdl, faults, jointfaults={&#39;faults&#39;: &#39;None&#39;})
- |      Initializes comprates, jointmodes internal list of modes
- |
- |  init_rate(self, mdl, fxnname, mode, modephases={}, join_modephases=False)
- |
- |  init_rates(self, mdl, jointfaults={&#39;faults&#39;: &#39;None&#39;}, modephases={}, join_modephases=False)
- |      Initializes rates, rates_timeless
- |
- |  list_moderates(self)
- |      Returns the rates for each mode
- |
- |  list_modes(self, joint=False)
- |      Returns a list of modes in the approach
- |
- |  prune_scenarios(self, endclasses, value=&#39;cost&#39;, samptype=&#39;piecewise&#39;, threshold=0.1, sampparam={&#39;samp&#39;: &#39;evenspacing&#39;, &#39;numpts&#39;: 1})
- |      Finds the best sample approach to approximate the full integral (given the approach was the full integral).
- |
- |      Parameters
- |      ----------
- |      endclasses : dict
- |          dict of results (cost, rate, expected cost) for the model run indexed by scenid
- |      value: str
- |          balue to prune scenarios over. The default is &#34;cost&#34;
- |      samptype : str (&#39;piecewise&#39; or &#39;bestpt&#39;), optional
- |          Method to use.
- |          If &#39;bestpt&#39;, finds the point in the interval that gives the average cost.
- |          If &#39;piecewise&#39;, attempts to split the inverval into sub-intervals of continuity
- |          The default is &#39;piecewise&#39;.
- |      threshold : float, optional
- |          If &#39;piecewise,&#39; the threshold for detecting a discontinuity based on deviation from linearity. The default is 0.1.
- |      sampparam : float, optional
- |          If &#39;piecewise,&#39; the sampparam sampparam to prune to. The default is {&#39;samp&#39;:&#39;evenspacing&#39;,&#39;numpts&#39;:1}, which would be a single point (optimal for linear).
- |
- |  reduce_scens_to_samp(self, samp_size=100, seed=None)
- |      Reduces the number of scenarios (in the scenlist) to a given sample size samp_size. Useful for
- |      choosing a random subset of an approach which would otherwise have a large number of scenarios.
- |      Note that many structures may not be preserved and some artefacts may be present.
- |
- |  select_points(self, param, possible_pts)
- |      Selects points in the list possible_points according to a given sample strategy.
- |
- |      Parameters
- |      ----------
- |      param : dict
- |          Sample parameter. Has structure:
- |              - &#39;samp&#39; : str (&#39;quad&#39;, &#39;fullint&#39;, &#39;evenspacing&#39;,&#39;randtimes&#39;,&#39;symrandtimes&#39;)
- |                  sample strategy to use (quadrature, full integral, even spacing, random times, or symmetric random times)
- |              - &#39;numpts&#39; : float
- |                  number of points to use (for evenspacing, randtimes, and symrandtimes only)
- |              - &#39;quad&#39; : dict
- |                  dict with structure {&#39;nodes&#39;[nodelist], &#39;weights&#39;:weightlist}
- |                  where the nodes in the nodelist range between -1 and 1
- |                  and the weights in the weightlist sum to 2.
- |      possible_pts :
- |          list of possible points in time.
- |
- |      Returns
- |      -------
- |      pts : list
- |          selected points
- |      weights : list
- |          weights for each point
- |
- |  ----------------------------------------------------------------------
- |  Data descriptors defined here:
- |
- |  __dict__
- |      dictionary for instance variables (if defined)
- |
- |  __weakref__
- |      list of weak references to the object (if defined)
-
-</pre></div></div>
-</div>
-<div class="nbinput docutils container">
+<div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[4]:
 </pre></div>
 </div>
@@ -1243,54 +414,9 @@ class SampleApproach(builtins.object)
 </pre></div>
 </div>
 </div>
-<div class="nboutput nblast docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area docutils container">
-<div class="highlight"><pre>
-Help on function approach in module fmdtools.sim.propagate:
-
-approach(mdl, app, **kwargs)
-    Injects and propagates faults in the model defined by a given sample approach
-
-    NOTE: When calling in a script/module using parallel=True, execute using the
-    protection statement ::
-
-        if __name__ == &#39;main&#39;:
-            results, mdlhists = approach(mdl, app)
-
-    Otherwise, the method will keep spawning parallel processes.
-    See multiprocessing documentation.
-
-    Parameters
-    ----------
-    mdl : Simulable
-        The model to inject faults in.
-    app : sampleapproach
-        SampleApproach used to define the list of faults and sample time for the model.
-    **kwargs : kwargs
-        Additional keyword arguments, may include:
-
-        - :data:`sim_kwargs` : kwargs
-              Simulation options for :func:`prop_one_scen`
-        - :data:`run_kwargs` : kwargs
-              Run options for :func:`nom_helper` and others
-        - :data:`mult_kwargs` : kwargs
-              Multi-scenario options
-
-    Returns
-    -------
-    results : Result
-        A Result dictionary with results desired from each scenario corresponding to
-        desired_result over the set of scenarios.
-    mdlhists : History
-        A History dictionary with the tracked scenario (including the nominal)
-
-</pre></div></div>
-</div>
 </section>
 <section id="Model-Setup">
-<h2>Model Setup<a class="headerlink" href="#Model-Setup" title="Link to this heading"></a></h2>
+<h2>Model Setup<a class="headerlink" href="#Model-Setup" title="Permalink to this heading"></a></h2>
 <p>Consider the following (highly simplified) rover electrical/navigation model. We can define the functions of this rover using the classes:</p>
 <div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[5]:
@@ -1392,9 +518,9 @@ approach(mdl, app, **kwargs)
 <p><code class="docutils literal notranslate"><span class="pre">&quot;global&quot;</span></code> phases in the model are defined using the ‘phases’ string in model parameters. Phases define distinct periods or activities of operation when the model may be in a different state (resulting in different potential failure mode effects and opportunities for failure modes to be entered).</p>
 </section>
 <section id="Setting-up-an-approach">
-<h2>Setting up an approach<a class="headerlink" href="#Setting-up-an-approach" title="Link to this heading"></a></h2>
+<h2>Setting up an approach<a class="headerlink" href="#Setting-up-an-approach" title="Permalink to this heading"></a></h2>
 <p>Because this model has an opportunity vector which is keyed by its operational modes, the history of modes needs to be generated for the model to set up the sample approach–otherwise this information cannot be used, as shown below:</p>
-<div class="nbinput docutils container">
+<div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[9]:
 </pre></div>
 </div>
@@ -1402,62 +528,6 @@ approach(mdl, app, **kwargs)
 <span class="n">app</span> <span class="o">=</span> <span class="n">SampleApproach</span><span class="p">(</span><span class="n">mdl</span><span class="p">)</span>
 </pre></div>
 </div>
-</div>
-<div class="nboutput nblast docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area docutils container">
-<div class="highlight"><pre>
-<span class="ansi-red-intense-fg ansi-bold">---------------------------------------------------------------------------</span>
-<span class="ansi-red-intense-fg ansi-bold">TypeError</span>                                 Traceback (most recent call last)
-File <span class="ansi-green-intense-fg ansi-bold">c:\users\dhulse\documents\github\fmdtools\fmdtools\define\parameter.py:63</span>, in <span class="ansi-cyan-fg">Parameter.__init__</span><span class="ansi-blue-intense-fg ansi-bold">(self, strict_immutability, check_type, check_pickle, *args, **kwargs)</span>
-<span class="ansi-green-fg">     62</span> <span class="ansi-bold" style="color: rgb(0,135,0)">try</span>:
-<span class="ansi-green-intense-fg ansi-bold">---&gt; 63</span>     <span style="color: rgb(0,135,0)">super</span>()<span style="color: rgb(98,98,98)">.</span><span style="color: rgb(0,0,255)">__init__</span>(<span style="color: rgb(98,98,98)">*</span>args, <span style="color: rgb(98,98,98)">*</span><span style="color: rgb(98,98,98)">*</span>kwargs)
-<span class="ansi-green-fg">     64</span> <span class="ansi-bold" style="color: rgb(0,135,0)">except</span> <span class="ansi-bold" style="color: rgb(215,95,95)">TypeError</span>:
-
-<span class="ansi-red-intense-fg ansi-bold">TypeError</span>: Invalid kwarg: times not in __fields__ and has not __dict__
-
-During handling of the above exception, another exception occurred:
-
-<span class="ansi-red-intense-fg ansi-bold">Exception</span>                                 Traceback (most recent call last)
-Cell <span class="ansi-green-intense-fg ansi-bold">In[9], line 1</span>
-<span class="ansi-green-intense-fg ansi-bold">----&gt; 1</span> mdl <span style="color: rgb(98,98,98)">=</span> Rover()
-<span class="ansi-green-fg">      2</span> app <span style="color: rgb(98,98,98)">=</span> SampleApproach(mdl)
-
-Cell <span class="ansi-green-intense-fg ansi-bold">In[8], line 6</span>, in <span class="ansi-cyan-fg">Rover.__init__</span><span class="ansi-blue-intense-fg ansi-bold">(self, params, modelparams, valparams)</span>
-<span class="ansi-green-fg">      3</span> <span class="ansi-bold" style="color: rgb(0,135,0)">def</span> <span style="color: rgb(0,0,255)">__init__</span>(<span style="color: rgb(0,135,0)">self</span>, params<span style="color: rgb(98,98,98)">=</span>{},\
-<span class="ansi-green-fg">      4</span>              modelparams<span style="color: rgb(98,98,98)">=</span>{<span style="color: rgb(175,0,0)">&#39;</span><span style="color: rgb(175,0,0)">times</span><span style="color: rgb(175,0,0)">&#39;</span>:[<span style="color: rgb(98,98,98)">0</span>,<span style="color: rgb(98,98,98)">60</span>], <span style="color: rgb(175,0,0)">&#39;</span><span style="color: rgb(175,0,0)">tstep</span><span style="color: rgb(175,0,0)">&#39;</span>:<span style="color: rgb(98,98,98)">1</span>, <span style="color: rgb(175,0,0)">&#39;</span><span style="color: rgb(175,0,0)">phases</span><span style="color: rgb(175,0,0)">&#39;</span>: {<span style="color: rgb(175,0,0)">&#39;</span><span style="color: rgb(175,0,0)">firsthalf</span><span style="color: rgb(175,0,0)">&#39;</span>:[<span style="color: rgb(98,98,98)">0</span>,<span style="color: rgb(98,98,98)">30</span>], <span style="color: rgb(175,0,0)">&#39;</span><span style="color: rgb(175,0,0)">secondhalf</span><span style="color: rgb(175,0,0)">&#39;</span>:[<span style="color: rgb(98,98,98)">31</span>,<span style="color: rgb(98,98,98)">60</span>]}},\
-<span class="ansi-green-fg">      5</span>              valparams<span style="color: rgb(98,98,98)">=</span>{}):
-<span class="ansi-green-intense-fg ansi-bold">----&gt; 6</span>     <span style="color: rgb(0,135,0)">super</span>()<span style="color: rgb(98,98,98)">.</span><span style="color: rgb(0,0,255)">__init__</span>(params, modelparams, valparams)
-<span class="ansi-green-fg">      8</span>     <span style="color: rgb(0,135,0)">self</span><span style="color: rgb(98,98,98)">.</span>add_flow(<span style="color: rgb(175,0,0)">&#39;</span><span style="color: rgb(175,0,0)">Ground</span><span style="color: rgb(175,0,0)">&#39;</span>, {<span style="color: rgb(175,0,0)">&#39;</span><span style="color: rgb(175,0,0)">x</span><span style="color: rgb(175,0,0)">&#39;</span>:<span style="color: rgb(98,98,98)">0.0</span>,<span style="color: rgb(175,0,0)">&#39;</span><span style="color: rgb(175,0,0)">y</span><span style="color: rgb(175,0,0)">&#39;</span>:<span style="color: rgb(98,98,98)">0.0</span>, <span style="color: rgb(175,0,0)">&#39;</span><span style="color: rgb(175,0,0)">dir</span><span style="color: rgb(175,0,0)">&#39;</span>:<span style="color: rgb(98,98,98)">0.0</span>, <span style="color: rgb(175,0,0)">&#39;</span><span style="color: rgb(175,0,0)">vel</span><span style="color: rgb(175,0,0)">&#39;</span>:<span style="color: rgb(98,98,98)">0.0</span>})
-<span class="ansi-green-fg">      9</span>     <span style="color: rgb(0,135,0)">self</span><span style="color: rgb(98,98,98)">.</span>add_flow(<span style="color: rgb(175,0,0)">&#39;</span><span style="color: rgb(175,0,0)">EE</span><span style="color: rgb(175,0,0)">&#39;</span>, {<span style="color: rgb(175,0,0)">&#39;</span><span style="color: rgb(175,0,0)">v_supply</span><span style="color: rgb(175,0,0)">&#39;</span>:<span style="color: rgb(98,98,98)">0.0</span>, <span style="color: rgb(175,0,0)">&#39;</span><span style="color: rgb(175,0,0)">a_supply</span><span style="color: rgb(175,0,0)">&#39;</span>:<span style="color: rgb(98,98,98)">0.0</span>})
-
-File <span class="ansi-green-intense-fg ansi-bold">c:\users\dhulse\documents\github\fmdtools\fmdtools\define\model.py:53</span>, in <span class="ansi-cyan-fg">Model.__init__</span><span class="ansi-blue-intense-fg ansi-bold">(self, name, p, sp, r, track)</span>
-<span class="ansi-green-fg">     52</span> <span class="ansi-bold" style="color: rgb(0,135,0)">def</span> <span style="color: rgb(0,0,255)">__init__</span>(<span style="color: rgb(0,135,0)">self</span>, name<span style="color: rgb(98,98,98)">=</span><span style="color: rgb(175,0,0)">&#39;</span><span style="color: rgb(175,0,0)">&#39;</span>, p<span style="color: rgb(98,98,98)">=</span>{}, sp<span style="color: rgb(98,98,98)">=</span>{}, r<span style="color: rgb(98,98,98)">=</span>{}, track<span style="color: rgb(98,98,98)">=</span><span style="color: rgb(175,0,0)">&#39;</span><span style="color: rgb(175,0,0)">&#39;</span>):
-<span class="ansi-green-intense-fg ansi-bold">---&gt; 53</span>     <span style="color: rgb(0,135,0)">super</span>()<span style="color: rgb(98,98,98)">.</span><span style="color: rgb(0,0,255)">__init__</span>(name<span style="color: rgb(98,98,98)">=</span>name, p<span style="color: rgb(98,98,98)">=</span>p, sp<span style="color: rgb(98,98,98)">=</span>sp, r<span style="color: rgb(98,98,98)">=</span>r, track<span style="color: rgb(98,98,98)">=</span>track)
-<span class="ansi-green-fg">     55</span>     <span style="color: rgb(0,135,0)">self</span><span style="color: rgb(98,98,98)">.</span>fxns<span style="color: rgb(98,98,98)">=</span><span style="color: rgb(0,135,0)">dict</span>()
-<span class="ansi-green-fg">     56</span>     <span style="color: rgb(0,135,0)">self</span><span style="color: rgb(98,98,98)">.</span>functionorder<span style="color: rgb(98,98,98)">=</span>OrderedSet() <span style="color: rgb(95,135,135)">#set is ordered and executed in the order specified in the model</span>
-
-File <span class="ansi-green-intense-fg ansi-bold">c:\users\dhulse\documents\github\fmdtools\fmdtools\define\block.py:133</span>, in <span class="ansi-cyan-fg">Simulable.__init__</span><span class="ansi-blue-intense-fg ansi-bold">(self, name, p, sp, r, track)</span>
-<span class="ansi-green-fg">    131</span> <span class="ansi-bold" style="color: rgb(0,135,0)">if</span> <span class="ansi-bold" style="color: rgb(175,0,255)">not</span> sp:
-<span class="ansi-green-fg">    132</span>     sp <span style="color: rgb(98,98,98)">=</span> <span style="color: rgb(0,135,0)">self</span><span style="color: rgb(98,98,98)">.</span>default_sp
-<span class="ansi-green-intense-fg ansi-bold">--&gt; 133</span> init_obj_attr(<span style="color: rgb(0,135,0)">self</span>, p<span style="color: rgb(98,98,98)">=</span>p, sp<span style="color: rgb(98,98,98)">=</span>sp, r<span style="color: rgb(98,98,98)">=</span>r)
-
-File <span class="ansi-green-intense-fg ansi-bold">c:\users\dhulse\documents\github\fmdtools\fmdtools\define\common.py:192</span>, in <span class="ansi-cyan-fg">init_obj_attr</span><span class="ansi-blue-intense-fg ansi-bold">(obj, **attrs)</span>
-<span class="ansi-green-fg">    190</span> <span style="color: rgb(0,135,0)">setattr</span>(obj, <span style="color: rgb(175,0,0)">&#39;</span><span style="color: rgb(175,0,0)">_args_</span><span style="color: rgb(175,0,0)">&#39;</span><span style="color: rgb(98,98,98)">+</span>at, at_arg)
-<span class="ansi-green-fg">    191</span> init_at <span style="color: rgb(98,98,98)">=</span> <span style="color: rgb(0,135,0)">getattr</span>(obj, <span style="color: rgb(175,0,0)">&#39;</span><span style="color: rgb(175,0,0)">_init_</span><span style="color: rgb(175,0,0)">&#39;</span><span style="color: rgb(98,98,98)">+</span>at)
-<span class="ansi-green-intense-fg ansi-bold">--&gt; 192</span> <span style="color: rgb(0,135,0)">setattr</span>(obj, at, init_at(<span style="color: rgb(98,98,98)">*</span><span style="color: rgb(98,98,98)">*</span>at_arg))
-
-File <span class="ansi-green-intense-fg ansi-bold">c:\users\dhulse\documents\github\fmdtools\fmdtools\define\parameter.py:65</span>, in <span class="ansi-cyan-fg">Parameter.__init__</span><span class="ansi-blue-intense-fg ansi-bold">(self, strict_immutability, check_type, check_pickle, *args, **kwargs)</span>
-<span class="ansi-green-fg">     63</span>     <span style="color: rgb(0,135,0)">super</span>()<span style="color: rgb(98,98,98)">.</span><span style="color: rgb(0,0,255)">__init__</span>(<span style="color: rgb(98,98,98)">*</span>args, <span style="color: rgb(98,98,98)">*</span><span style="color: rgb(98,98,98)">*</span>kwargs)
-<span class="ansi-green-fg">     64</span> <span class="ansi-bold" style="color: rgb(0,135,0)">except</span> <span class="ansi-bold" style="color: rgb(215,95,95)">TypeError</span>:
-<span class="ansi-green-intense-fg ansi-bold">---&gt; 65</span>     <span class="ansi-bold" style="color: rgb(0,135,0)">raise</span> <span class="ansi-bold" style="color: rgb(215,95,95)">Exception</span>(<span style="color: rgb(175,0,0)">&#34;</span><span style="color: rgb(175,0,0)">Invalid args/kwargs: </span><span style="color: rgb(175,0,0)">&#34;</span><span style="color: rgb(98,98,98)">+</span><span style="color: rgb(0,135,0)">str</span>(args)<span style="color: rgb(98,98,98)">+</span><span style="color: rgb(175,0,0)">&#34;</span><span style="color: rgb(175,0,0)"> , </span><span style="color: rgb(175,0,0)">&#34;</span> <span style="color: rgb(98,98,98)">+</span>
-<span class="ansi-green-fg">     66</span>                     <span style="color: rgb(0,135,0)">str</span>(kwargs)<span style="color: rgb(98,98,98)">+</span><span style="color: rgb(175,0,0)">&#34;</span><span style="color: rgb(175,0,0)"> in </span><span style="color: rgb(175,0,0)">&#34;</span><span style="color: rgb(98,98,98)">+</span><span style="color: rgb(0,135,0)">str</span>(<span style="color: rgb(0,135,0)">self</span><span style="color: rgb(98,98,98)">.</span><span style="color: rgb(0,0,135)">__class__</span>))
-<span class="ansi-green-fg">     67</span> <span class="ansi-bold" style="color: rgb(0,135,0)">if</span> strict_immutability:
-<span class="ansi-green-fg">     68</span>     <span style="color: rgb(0,135,0)">self</span><span style="color: rgb(98,98,98)">.</span>check_immutable()
-
-<span class="ansi-red-intense-fg ansi-bold">Exception</span>: Invalid args/kwargs: () , {&#39;times&#39;: [0, 60], &#39;tstep&#39;: 1, &#39;phases&#39;: {&#39;firsthalf&#39;: [0, 30], &#39;secondhalf&#39;: [31, 60]}} in &lt;class &#39;fmdtools.define.parameter.Parameter&#39;&gt;
-</pre></div></div>
 </div>
 <p>To form this history, the model is run in the nominal scenario, as shown.</p>
 <div class="nbinput nblast docutils container">
@@ -1560,7 +630,7 @@ File <span class="ansi-green-intense-fg ansi-bold">c:\users\dhulse\documents\git
 </div>
 </section>
 <section id="Propagating-Faults">
-<h2>Propagating Faults<a class="headerlink" href="#Propagating-Faults" title="Link to this heading"></a></h2>
+<h2>Propagating Faults<a class="headerlink" href="#Propagating-Faults" title="Permalink to this heading"></a></h2>
 <p>Given the fault sampling approach, the faults can then be propagated through the model to get results. Note that these faults can be sampled in parallel if desired using a user-provided pool (see the parallel pool tutorial in the <code class="docutils literal notranslate"><span class="pre">\pump</span> <span class="pre">example</span></code> folder).</p>
 <div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
@@ -1589,7 +659,7 @@ File <span class="ansi-green-intense-fg ansi-bold">c:\users\dhulse\documents\git
 </div>
 </div>
 <section id="Time-Sampling-Options">
-<h3>Time Sampling Options<a class="headerlink" href="#Time-Sampling-Options" title="Link to this heading"></a></h3>
+<h3>Time Sampling Options<a class="headerlink" href="#Time-Sampling-Options" title="Permalink to this heading"></a></h3>
 <p>Above shows the default time-sampling option–a single fault sample in the middle of the operational phase. However, this approach can be varied to include multiple points for a more accurate sample. This is varied using the options: - defaultsamp (a dict), which specifies the default sampling approach for all faults/phases - sampparams (a dict), which specifies the sampling approach for individual faults/phases not included in the default</p>
 <p>For example, in the following approach, we specify that each phase is represented by three evenly-spaced points</p>
 <div class="nbinput nblast docutils container">
@@ -1698,7 +768,7 @@ File <span class="ansi-green-intense-fg ansi-bold">c:\users\dhulse\documents\git
 </section>
 </section>
 <section id="Pruning">
-<h2>Pruning<a class="headerlink" href="#Pruning" title="Link to this heading"></a></h2>
+<h2>Pruning<a class="headerlink" href="#Pruning" title="Permalink to this heading"></a></h2>
 <p>SampleApproach pruning can be used to reduce the number of points used to represent the overall costs. A pruned approach could then be used to re-run the set of faults at reduced computational costs, provided the time-based behavior has not changed significantly. This is performed using the SampleApproach.prune_scenarios method.</p>
 <div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
