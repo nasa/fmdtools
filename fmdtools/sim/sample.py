@@ -1280,8 +1280,12 @@ class ParameterSample(BaseSample):
         >>> ex_ps
         ParameterSample of scenarios:
          - var_0
-        >>> ex_ps.scenarios()[0]
-        ParameterScenario(sequence={}, times=(), p={'y': 1, 'x': 2, 'z': 20}, r={}, sp={}, prob=1.0, inputparams=(1, 2), rangeid='', name='var_0')
+        >>> ex_ps.scenarios()[0].p['z']
+        20
+        >>> ex_ps.scenarios()[0].p['y']
+        1
+        >>> ex_ps.scenarios()[0].p['x']
+        2
         """
         param_args = self.paramdomain.get_param_kwargs(*x)
         if seed:
@@ -1331,10 +1335,24 @@ class ParameterSample(BaseSample):
         ParameterSample of scenarios:
          - rep0_var_0
          - rep0_var_1
-        >>> ex_ps.scenarios()[0]
-        ParameterScenario(sequence={}, times=(), p={'y': 1, 'x': 1, 'z': 20}, r={}, sp={}, prob=0.5, inputparams=(1, 1), rangeid='', name='rep0_var_0')
-        >>> ex_ps.scenarios()[1]
-        ParameterScenario(sequence={}, times=(), p={'y': 2, 'x': 2, 'z': 20}, r={}, sp={}, prob=0.5, inputparams=(2, 2), rangeid='', name='rep0_var_1')
+        >>> scen0 =ex_ps.scenarios()[0]
+        >>> scen0.prob
+        0.5
+        >>> scen0.p['x']
+        1
+        >>> scen0.p['y']
+        1
+        >>> scen0.inputparams
+        (1, 1)
+        >>> scen1 =ex_ps.scenarios()[1]
+        >>> scen1.prob
+        0.5
+        >>> scen1.p['x']
+        2
+        >>> scen1.p['y']
+        2
+        >>> scen1.inputparams
+        (2, 2)
         """
         if len(x_combos) == 0:
             x_combos = [self.paramdomain.get_x_defaults()]
