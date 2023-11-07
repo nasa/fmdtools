@@ -171,7 +171,11 @@ class Parameter(dataobject, readonly=True, mapping=True, iterable=True):
             field_split = field.split(".")
             true_field = field_split[0]
             subfield = ".".join(field_split[1:])
-            return cls.__annotations__[true_field].get_set_const(subfield)
+            subparam = cls.__annotations__[true_field]
+            if isinstance(subparam, Parameter):
+                return cls.__annotations__[true_field].get_set_const(subfield)
+            else:
+                return ()
         var_lims = getattr(cls, field+"_lim", False)
         if var_lims:
             return var_lims
