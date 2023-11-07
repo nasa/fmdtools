@@ -189,7 +189,10 @@ def set_arg_as_type(true_type, new_arg):
     arg_type = type(new_arg)
     if arg_type != true_type:
         if arg_type == dict:
-            new_arg = true_type(**new_arg)
+            if true_type == tuple:
+                new_arg = true_type(new_arg.values())
+            else:
+                new_arg = true_type(**new_arg)
         else:
             new_arg = true_type(new_arg)
     return new_arg
