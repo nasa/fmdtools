@@ -6,8 +6,8 @@ TODO: Adapt to new sample/optimization methods.
 """
 
 from fmdtools.sim.search import ProblemInterface
-from drone_mdl_rural import Drone, DroneParam
-from fmdtools.sim.sample import FaultSample
+from drone_mdl_rural import Drone, DroneParam, ResPolicy
+from fmdtools.sim.sample import FaultDomain, FaultSample
 import numpy as np
 
 
@@ -104,7 +104,7 @@ opt_prob.add_variables("dcost", ('batteryarch', (0, 3)), ('linearch', (0, 3)))
 
 opt_prob.add_simulation("ocost", "single", {}, staged=False,
                         upstream_sims={"dcost": {'paramfunc': xd_paramfunc}})
-opt_prob.add_objectives("ocost", co="expected cost")
+opt_prob.add_objectives("ocost", co="expected_cost")
 opt_prob.add_constraints("ocost", g_soc=("store_ee.s.soc", "vars", "end",("greater", 20)),
                                   g_max_height=("dofs.s.z", "vars", "all", ("less", 122)),
                                   g_faults=("repcost", "endclass", "end", ("less", 0.1)))
@@ -119,14 +119,18 @@ def spec_respol(bat, line):
     return {'respolicy': ResPolicy(bat=respols[int(bat)], line=respols[int(line)])}
 
 
-app = SampleApproach(def_mdl,  phases={'move'},
-                     faults=('single-component', 'store_ee'))
-opt_prob.add_simulation("rcost", "multi", app.scenlist, include_nominal=False,
+fd = FaultDomain(def_mdl)
+fd.add_singlecomp_modes("store_ee")
+
+fs = FaultSample(fd)
+fs.add_fault_phases("move")
+
+opt_prob.add_simulation("rcost", "multi", fs.scenarios(), include_nominal=False,
                         upstream_sims={'ocost': {'phases': {
                             'plan_path': 'move'}, 'pass_mdl': []}},
                         app_args={'faults': ('single-component', 'store_ee')},
                         staged=True)
-opt_prob.add_objectives("rcost", cr="expected cost")
+opt_prob.add_objectives("rcost", cr="expected_cost")
 opt_prob.add_variables("rcost", "bat", "line", vartype=spec_respol)
 
 #opt_prob.cr([1,0])
@@ -137,8 +141,8 @@ opt_prob.add_variables("rcost", "bat", "line", vartype=spec_respol)
 
 
 def calc_oper(mdl):
-    endresults_nom, mdlhist = propagate.nominal(mdl)
-    opercost = endresults_nom.endclass['expected cost']
+    endresults_nom, mdlhist = prop.nominal(mdl)
+    opercost = endresults_nom.endclass['expected_cost']
     g_soc = 20 - mdlhist.fxns.store_ee.s.soc[-1]
     #g_faults = any(endresults_nom['faults'])
     g_max_height = sum([i for i in mdlhist.flows.dofs.s.z-122 if i > 0])
@@ -158,18 +162,20 @@ def x_to_ocost(xdes, xoper, loc='rural'):
 def calc_res(mdl, fullcosts=False, faultmodes='all', include_nominal=True,
              pool=False, phases={}, staged=True):
     #app = SampleApproach(mdl, faults=('single-component', faultmodes), phases={'forward'})
-    app = SampleApproach(mdl, faults=('single-component', 'store_ee'),
-                         phases={'move': phases['plan_path']['move']})
-    result, mdlhists = propagate.fault_sample(
-        mdl, app, staged=staged, pool=pool, showprogress=False)  # , staged=False)
-    rescost = result.total('expected cost')-(not include_nominal) * \
-        result.nominal.endclass['expected cost']
+
+    fs = FaultSample(fd, phasemap=phases['plan_path'])
+    fs.add_fault_phases("move")
+
+    result, mdlhists = prop.fault_sample(mdl, fs, staged=staged, pool=pool,
+                                         showprogress=False)  # , staged=False)
+    rescost = result.total('expected_cost')-(not include_nominal) * \
+        result.nominal.endclass['expected_cost']
     #an.plot.mdlhists({'faulty':mdlhists['store_ee lowcharge, t=6.0'], 'nominal':mdlhists['nominal']}, fxnflowvals={'dofs'}, time_slice=6)
     #an.plot.mdlhists({'faulty':mdlhists['store_ee lowcharge, t=7.0'], 'nominal':mdlhists['nominal']}, fxnflowvals={'store_ee'}, time_slice=6)
     #an.plot.mdlhists({'faulty':mdlhists['store_ee lowcharge, t=6.0'], 'nominal':mdlhists['nominal']}, fxnflowvals={'plan_path'}, time_slice=6)
     #an.plot.mdlhists({'faulty':mdlhists['store_ee lowcharge, t=6.0'], 'nominal':mdlhists['nominal']}, fxnflowvals={'rsig_traj', 'hsig_bat','hsig_dofs'})
-    #[ec['expected cost'] for ec in endclasses.values()]
-    #[ec['endclass']['expected cost'] for ec in opt_prob._sims['rcost']['results'].values()]
+    #[ec['expected_cost'] for ec in endclasses.values()]
+    #[ec['endclass']['expected_cost'] for ec in opt_prob._sims['rcost']['results'].values()]
     #plot_faulttraj({'nominal':mdlhists['nominal'], 'faulty':mdlhists['store_ee lowcharge, t=7.0']}, mdl.params, title='Fault response to store_ee lowcharge, t=6.0')
     #phases, modephases = an.process.modephases(mdlhists['nominal'])
     #an.plot.phases({p:ph for p,ph in phases.items() if p=='plan_path'}, modephases)
@@ -204,7 +210,7 @@ def x_to_rcost(xdes, xoper, xres, loc='rural', fullcosts=False, faultmodes='all'
 if __name__ == "__main__":
     import fmdtools.sim.propagate as prop
     import matplotlib.pyplot as plt
-    from fmdtools.analyze import show
+    import multiprocess as mp
 
 
     #opt_prob.add_combined_objective("total_cost", 'cd', 'co', 'cr')
