@@ -11,6 +11,7 @@ import fmdtools.sim.propagate as prop
 #import fmdtools.analyze.common as plot
 from fmdtools.sim.sample import SampleApproach
 from fmdtools.analyze.history import History
+from fmdtools.analyze import phases
 from .scenario import Scenario
 import networkx as nx
 import matplotlib.pyplot as plt
@@ -613,7 +614,7 @@ class ProblemInterface:
                     if 'phases' in upstream_sims[up_name]:
                         nomhist = self._sims[up_name]['mdlhists']['faulty']
                         t_end = self._sims[up_name]['c_mdls'][0].sp.times[-1]
-                        newphases={'phases':prop.phases_from_hist(upstream_sims[up_name]['phases'], t_end, nomhist)}
+                        newphases={'phases': phases.from_hist(nomhist)}
                 if any([k not in old_p for k in new_p]) or any([new_p[k]!=old_p[k] for k in old_p]):
                     self.update_sim_vars(simname, new_p=new_p)
                     self.current_iter['sims_to_update'].add(simname)
