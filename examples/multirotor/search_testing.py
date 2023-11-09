@@ -60,3 +60,17 @@ from fmdtools.sim.sample import ParameterDomain
 expd1 = ParameterDomain(DroneParam)
 expd1.add_variables("phys_param.bat", "phys_param.linearch")
 expd1("series-split", "oct")
+
+# two types of variables:
+# parameter variable
+# varnames + mapping
+# -> creation of a parameterdomain to sample from
+# -> mapping tells us whether to sample directly or call mapping first
+
+# scenario variable
+# fault or disturbance
+# fault variable is the time or type of fault
+# disturbance is the time or str of disturbance
+# maybe we have a domain for these?
+# faultdomain - callable in terms of what?
+# disturbancedomain - callable in terms of what?
