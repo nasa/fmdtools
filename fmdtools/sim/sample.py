@@ -17,6 +17,9 @@ from fmdtools.analyze.phases import gen_interval_times, PhaseMap, join_phasemaps
 import numpy as np
 import itertools
 
+def pass_var(*x):
+    return x
+
 
 class ParameterDomain(object):
     """
@@ -76,9 +79,10 @@ class ParameterDomain(object):
     def __init__(self, parameter_init):
         self.parameter_init = parameter_init
         self.variables = {}
+        self.var_maps = {}
         self.constants = {}
 
-    def add_variable(self, variable, var_set=(),  var_lim=()):
+    def add_variable(self, variable, var_set=(),  var_lim=(), var_map=pass_var):
         """
         Add a variable to the ParameterDomain.
 
@@ -90,6 +94,11 @@ class ParameterDomain(object):
             Discrete set constraints for the variable. The default is ().
         var_lim : tuple, optional
             Variable limits. The default is ().
+        var_map: function, optional
+            Preprocessing variable mapping, mapping the input to the parameter domain
+            to the actual variable value. May be used to e.g., encode different discrete
+            options listed as strings ('arch1', 'arch2') as integers (1, 2).
+            The default is pass_var, which passes the input variable.
         """
         if var_set:
             var_domain = set(var_set)
@@ -100,8 +109,10 @@ class ParameterDomain(object):
         else:
             var_domain = ()
         self.variables[variable] = var_domain
+        if var_map:
+            self.var_maps[(variable,)] = var_map
 
-    def add_variables(self, *variables, sets={}, lims={}):
+    def add_variables(self, *variables, sets={}, lims={}, var_map=pass_var):
         """
         Add a list of variables to the ParameterDomain.
 
@@ -113,11 +124,19 @@ class ParameterDomain(object):
             Set constraints for the variables. The default is {}.
         lims : dict, optional
             Variable limits. The default is {}.
+        var_map: function, optional
+            Preprocessing variable mapping, mapping the input to the parameter domain
+            to the actual variable value. May be used to e.g., encode different discrete
+            options listed as strings ('arch1', 'arch2') as integers (1, 2).
+            The default is pass_var, which passes the input variable.
         """
         for variable in variables:
             self.add_variable(variable,
                               var_set=sets.get(variable, ()),
-                              var_lim=lims.get(variable, ()))
+                              var_lim=lims.get(variable, ()),
+                              var_map=False)
+        if var_map:
+            self.var_maps[variables] = var_map
 
     def add_constant(self, constant, value):
         """
@@ -175,9 +194,20 @@ class ParameterDomain(object):
             set_constraints.append(set_const)
         return tuple(set_constraints)
 
+    def get_map_vars(self, *x):
+        """Get the mapped variables for x."""
+        x_mapped = []
+        i = 0
+        for var_group in self.var_maps:
+            x_map = self.var_maps[var_group](*x[i:i+len(var_group)])
+            x_mapped.extend(x_map)
+            i += len(var_group)
+        return x_mapped
+
     def get_param_kwargs(self, *x):
         """Get kwargs for the parameter at the given value of x."""
-        return {**x_to_kwargs(self.constants, self.variables, *x)}
+        x_mapped = self.get_map_vars(*x)
+        return {**x_to_kwargs(self.constants, self.variables, *x_mapped)}
 
     def __call__(self, *x):
         """Generate the parameter at a given value of the variables."""
