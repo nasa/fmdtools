@@ -169,7 +169,7 @@ mdl_kwargs: dict (optional)
     Parameter dictionary to be instantiated in the model prior to simulation.
     Has structure ::
 
-        {"p":Parameter, "sp":SimParam, "track":track}
+        {"p": Parameter, "sp":SimParam, "track":track}
 
     Parameter dictionaries do not need to be complete (if incomplete).
 """
@@ -1102,7 +1102,7 @@ def prop_one_scen(mdl, scen, ctimes=[], nomhist={}, nomresult={}, cut_hist=True,
     for t_ind, t in enumerate(timerange):
         # inject fault when it occurs, track defined flow states and graph
         try:
-            if t in ctimes: 
+            if t in ctimes:
                 c_mdl[t] = mdl.copy()
                 if 'time' in mdl.h:
                     c_mdl[t].h['time'] = np.copy(mdl.h.time)
