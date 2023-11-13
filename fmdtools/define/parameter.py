@@ -12,7 +12,7 @@ from recordclass import dataobject, asdict
 import warnings
 import numpy as np
 
-from .common import get_true_fields, get_true_field, set_obj_arg_type
+from fmdtools.define.common import get_true_fields, get_true_field, set_obj_arg_type
 
 
 class Parameter(dataobject, readonly=True, mapping=True, iterable=True):
@@ -22,11 +22,12 @@ class Parameter(dataobject, readonly=True, mapping=True, iterable=True):
     inherit from recordclass, giving them a low memory footprint, and use type
     hints and ranges to ensure parameter values are valid. e.g.,:
 
-    >>> class Param(Parameter, readonly=True):
-    ...     x: float = 30.0
-    ...     y:          float = 30.0
-    ...     x_lim = (0.0,100.0)
-    ...     y_set = (0.0,30.0,100.0)
+    >>> class ExampleParameter(Parameter, readonly=True):
+    ...    x: float = 1.0
+    ...    y: float = 10.0
+    ...    z: float = 0.0
+    ...    x_lim = (0, 10)
+    ...    y_set = (1.0, 2.0, 3.0, 4.0)
 
     defines a parameter with float x and y fields with default values of 30 and
     x_lim minimum/maximum values for x and y_set possible values for y. Note that
@@ -34,7 +35,7 @@ class Parameter(dataobject, readonly=True, mapping=True, iterable=True):
 
     This parameter can then be instantiated using:
 
-    >>> p = Param(x=1.0, y=0.0)
+    >>> p = ExampleParameter(x=1.0, y=0.0)
     >>> p.x
     1.0
     >>> p.y
@@ -183,6 +184,16 @@ class Parameter(dataobject, readonly=True, mapping=True, iterable=True):
         if var_set:
             return set(var_set)
         return ()
+
+
+class ExampleParameter(Parameter, readonly=True):
+    """Example parameter for testing and documentation."""
+
+    x: float = 1.0
+    y: float = 10.0
+    z: float = 0.0
+    x_lim = (0, 10)
+    y_set = (1.0, 2.0, 3.0, 4.0)
 
 
 class SimParam(Parameter, readonly=True):

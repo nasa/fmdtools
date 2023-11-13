@@ -25,13 +25,13 @@ import inspect
 import warnings
 from recordclass import dataobject, asdict, astuple
 
-from fmdtools.define.state import State
-from fmdtools.define.parameter import Parameter, SimParam
+from fmdtools.define.state import State, ExampleState
+from fmdtools.define.parameter import Parameter, SimParam, ExampleParameter
 from fmdtools.define.rand import Rand
 from fmdtools.define.common import get_true_fields, get_true_field, init_obj_attr
-from fmdtools.define.common import get_obj_track, set_var
+from fmdtools.define.common import get_obj_track, set_var, get_var
 from fmdtools.define.time import Time
-from fmdtools.define.mode import Mode
+from fmdtools.define.mode import Mode, ExampleMode
 from fmdtools.define.flow import init_flow, Flow
 from fmdtools.analyze.result import Result
 from fmdtools.analyze.common import get_sub_include
@@ -235,6 +235,47 @@ class Simulable(object):
             fxns = {self.name: self}
         return fxns
 
+    def get_vars(self, *variables, trunc_tuple=True):
+        """
+        Get variable values in the simulable.
+
+        Parameters
+        ----------
+        *variables : list/string
+            Variables to get from the model. Can be specified as a list
+            ['fxnname2', 'comp1', 'att2'], or a str 'fxnname.comp1.att2'
+
+        Returns
+        -------
+        variable_values: tuple
+            Values of variables. Passes (non-tuple) single value if only one variable.
+        """
+        if type(variables) == str:
+            variables = [variables]
+        variable_values = [None]*len(variables)
+        for i, var in enumerate(variables):
+            if type(var) == str:
+                var = var.split(".")
+            if var[0] in ['functions', 'fxns']:
+                f = self.get_fxns()[var[1]]
+                var = var[2:]
+            elif var[0] == 'flows':
+                f = self.flows[var[1]]
+                var = var[2:]
+            elif var[0] in self.get_fxns():
+                f = self.get_fxns()[var[0]]
+                var = var[1:]
+            elif var[0] in self.flows:
+                f = self.flows[var[0]]
+                var = var[1:]
+            else:
+                f = self
+            variable_values[i] = get_var(f, var)
+        if len(variable_values) == 1 and trunc_tuple:
+            return variable_values[0]
+        else:
+            return tuple(variable_values)
+
     def get_scen_rate(self, fxnname, faultmode, time, phasemap={}, weight=1.0):
         """
         Get the scenario rate for the given single-fault scenario.
@@ -389,9 +430,8 @@ class Block(Simulable):
         
     def is_dynamic(self):
         """Checks if Block has dynamic execution step"""
-        return (getattr(self, 'dynamic_behavior', False) or
-                (hasattr(self, 'aa') and getattr(self.aa, 'proptype','') == 'dynamic'))
-        
+        return (hasattr(self, 'dynamic_behavior') or
+                (hasattr(self, 'aa') and getattr(self.aa, 'proptype', '') == 'dynamic'))
 
     def __repr__(self):
         """
@@ -642,16 +682,15 @@ class Block(Simulable):
         for var, val in disturbances.items():
             set_var(self, var, val)
         faults = faults.get(self.name, [])
-        
+
         # Step 1: Run Dynamic Propagation Methods in Order Specified and Inject Faults if Applicable
         if hasattr(self, 'dynamic_loading_before'):
             self.dynamic_loading_before(self, time)
         if self.is_dynamic():
             self("dynamic", time=time, faults=faults, run_stochastic=run_stochastic)
-        
         if hasattr(self, 'dynamic_loading_after'):
             self.dynamic_loading_after(self, time)
-        
+
         # Step 2: Run Static Propagation Methods
         active = True
         oldmutables = self.return_mutables()
@@ -659,7 +698,7 @@ class Block(Simulable):
         while active:
             if self.is_static():
                 self("static", time=time, faults=faults, run_stochastic=run_stochastic)
-            
+
             if hasattr(self, 'static_loading'):
                 self.static_loading(time)
             # Check to see what flows now have new values and add connected functions (done for each because of communications potential)
@@ -1004,7 +1043,7 @@ class ActArch(object):
         dt : float
             Timestep to propagate over.
         """
-        if self.per_timestep: 
+        if self.per_timestep:
             self.set_active_actions(self.initial_action)
             for action in self.active_actions:
                 self.actions[action].t.t_loc = 0.0
@@ -1368,6 +1407,26 @@ class FxnBlock(Block):
         if hasattr(self, 'aa'):
             self.aa.reset()
         self('reset', faults=[], time=0)
+
+
+class ExampleFxnBlock(FxnBlock):
+    """Example Function block for testing"""
+
+    _init_p = ExampleParameter
+    _init_s = ExampleState
+    _init_m = ExampleMode
+
+    def dynamic_behavior(self, time):
+        """Increment x if nominal, else increment y."""
+        if not self.m.any_faults():
+            self.s.x += self.p.x
+        else:
+            self.s.y += self.p.y
+        if time < 1.0:
+            self.s.put(x=0.0, y=0.0)
+
+    def find_classification(self, scen, hist):
+        return {"xy": self.s.x + self.s.y}
 
 
 class GenericFxn(FxnBlock):

@@ -386,45 +386,7 @@ class Model(Simulable):
                 else:
                     raise Exception(var[0] + " not a function, flow, or seed")
                 set_var(f, var, varvalues[i])
-    def get_vars(self, *variables, trunc_tuple=True):
-        """
-        Gets variable values in the model.
 
-        Parameters
-        ----------
-        *variables : list/string
-            Variables to get from the model. Can be specifid as: 
-            a list ['fxnname2', 'comp1', 'att2'], or
-            a str 'fxnname.comp1.att2'
-
-        Returns
-        -------
-        variable_values: tuple 
-            Values of variables. Passes (non-tuple) single value if only one variable.
-        """
-        if type(variables)==str:
-            variables = [variables]
-        variable_values = [None]*len(variables)
-        for i, var in enumerate(variables):
-            if type(var)==str: 
-                var=var.split(".")
-            if var[0] in ['functions', 'fxns']: 
-                f = self.fxns[var[1]] 
-                var=var[2:]
-            elif var[0] == 'flows': 
-                f = self.flows[var[1]] 
-                var = var[2:]
-            elif var[0] in self.fxns:
-                f = self.fxns[var[0]] 
-                var = var[1:]
-            elif var[0] in self.flows:
-                f = self.flows[var[0]] 
-                var = var[1:]
-            else: 
-                raise Exception(var[0] + " not a function or flow")
-            variable_values[i]=get_var(f, var)
-        if len(variable_values)==1 and trunc_tuple: return variable_values[0]
-        else:                                       return tuple(variable_values)
     def create_hist(self, timerange, track):
         if not hasattr(self, 'h'):
             hist = History()
