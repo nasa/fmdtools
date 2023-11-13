@@ -178,8 +178,8 @@ class ParameterProblem(object):
     >>> exprob
     ParameterProblem with:
     VARIABLES
-     -y                                                          0.0000
-     -x                                                          0.0000
+     -y                                                             nan
+     -x                                                             nan
     OBJECTIVES
      -s.x:                                                          inf
      -s.y:                                                          inf
@@ -245,7 +245,7 @@ class ParameterProblem(object):
         self.args = args
         self.kwargs = kwargs
 
-        self.variables = {v: 0.0 for v in self.parameterdomain.variables}
+        self.variables = {v: np.NaN for v in self.parameterdomain.variables}
         self.objectives = {}
         self.constraints = {}
 
@@ -375,7 +375,7 @@ class ParameterProblem(object):
                                      mdl_kwargs=mdl_kwargs,
                                      desired_result=desired_result,
                                      **self.kwargs)
-        return res, hist
+        return res.flatten(), hist.flatten()
 
     def current_x(self):
         """Get the current variable value x."""
