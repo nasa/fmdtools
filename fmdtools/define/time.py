@@ -150,7 +150,7 @@ class Time(dataobject):
     timernames: tuple
         Names of timers to instantiate.
     """
-    time: float = 0.0
+    time: float = -0.1
     t_ind: int = 0
     t_loc: float = 0.0
     timers: dict = {}

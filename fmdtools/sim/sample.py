@@ -10,7 +10,7 @@ Has classes:
 - :Class:`ParameterSample`: Defines a sample of a set of parameters.
 """
 from fmdtools.define.common import get_var, t_key, nest_dict
-from fmdtools.define.parameter import Parameter
+from fmdtools.define.parameter import Parameter, ExampleParameter
 from fmdtools.sim.scenario import SingleFaultScenario, Injection, JointFaultScenario
 from fmdtools.sim.scenario import ParameterScenario
 from fmdtools.analyze.phases import gen_interval_times, PhaseMap, join_phasemaps
@@ -38,7 +38,7 @@ class ParameterDomain(object):
     Examples
     --------
     Given the parameter:
-    >>> class ExParam(Parameter):
+    >>> class ExampleParameter(Parameter):
     ...    x: float = 1.0
     ...    y: float = 10.0
     ...    z: float = 0.0
@@ -46,18 +46,18 @@ class ParameterDomain(object):
     ...    y_set = (1.0, 2.0, 3.0, 4.0)
 
     We can then define the following domain, which by default gets set constraints:
-    >>> expd = ParameterDomain(ExParam)
+    >>> expd = ParameterDomain(ExampleParameter)
     >>> expd.add_variables("y", "x")
     >>> expd.add_constants(z=20)
     >>> expd
     ParameterDomain with:
      - variables: {'y': {1.0, 2.0, 3.0, 4.0}, 'x': (0, 10)}
      - constants: {'z': 20}
-     - parameter_initializer: ExParam
+     - parameter_initializer: ExampleParameter
 
     This ParameterDomain then becomes a callable with the given variables:
     >>> expd(1, 2)
-    ExParam(x=2.0, y=1.0, z=20.0)
+    ExampleParameter(x=2.0, y=1.0, z=20.0)
 
     And we can separately check the set contraints for the variables:
     >>> expd.get_set_constraints(1, 2)
@@ -67,13 +67,13 @@ class ParameterDomain(object):
 
     This can also work with nested parameters:
     >>> class ExNestedParam(Parameter):
-    ...    ex_param: ExParam = ExParam()
+    ...    ex_param: ExampleParameter = ExampleParameter()
     ...    k: float = 20.0
 
     >>> expd1 = ParameterDomain(ExNestedParam)
     >>> expd1.add_variables("ex_param.x", "ex_param.y", "k")
     >>> expd1(1,2, 3)
-    ExNestedParam(ex_param=ExParam(x=1.0, y=2.0, z=0.0), k=3.0)
+    ExNestedParam(ex_param=ExampleParameter(x=1.0, y=2.0, z=0.0), k=3.0)
     """
 
     def __init__(self, parameter_init):
@@ -286,30 +286,18 @@ def x_to_kwargs(constants, variables, *x):
     return nest_dict({**var_args, **constants})
 
 
-
-
-
-class ExParam(Parameter):
-    """Example parameter for testing ParamDomain."""
-
-    x: float = 1.0
-    y: float = 10.0
-    z: float = 0.0
-    x_lim = (0, 10)
-    y_set = (1.0, 2.0, 3.0, 4.0)
-
 # example paramdomain/sample for testing
-expd = ParameterDomain(ExParam)
+expd = ParameterDomain(ExampleParameter)
 expd.add_variables("y", "x")
 expd.add_constants(z=20)
 expd
 
+
 class ExNestedParam(Parameter):
     """Example nested parameter for testing ParamDomain."""
-    ex_param: ExParam = ExParam()
+
+    ex_param: ExampleParameter = ExampleParameter()
     k: float = 20.0
-
-
 
 
 def same_mode(modename1, modename2, exact=True):
@@ -671,11 +659,11 @@ class BaseSample():
         return len(self.scenarios())
 
     def named_scenarios(self):
-        """Get dict of scenarios by name"""
+        """Get dict of scenarios by name."""
         return {scen.name: scen for scen in self.scenarios()}
 
     def scen_names(self):
-        """Get list of scen names"""
+        """Get list of scen names."""
         return [s.name for s in self.scenarios()]
 
     def get_factor_metrics(self, res, metrics=['cost'], factors=["time"],
