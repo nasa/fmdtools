@@ -30,7 +30,263 @@ class BaseObjCon(dataobject):
     value: float = np.inf
 
 
-class ResultObjective(BaseObjCon):
+class Objective(BaseObjCon):
+    """
+    
+    Fields
+    ------
+    negative : bool
+        Whether the objective is the negative of the value.
+    """
+
+    negative: bool = False
+
+    def obj_from_value(self, value):
+        """Get the (+ or 0) objective corresponding to value give self.negative."""
+        if self.negative:
+            value = - value
+        else:
+            value = value
+        return value
+
+    def update(self, value):
+        """Update with given value."""
+        self.value = self.obj_from_value(value)
+
+
+class Constraint(Objective):
+    """
+    Base class for constraints which derive from results.
+
+    Fields
+    ------
+    threshold : float
+        Theshold for the constraint. Default is 0.0
+    comparator : str
+        Whether the constraint is 'greater' or 'less'.
+    """
+
+    threshold: float = 0.0
+    comparator: str = 'greater'
+
+    def con_from_value(self, value):
+        """
+        Get the constraint given the value of its variable given threshold.
+
+        By default, constraints follow the form:
+            g(x) = threshold - value > 0.0 for 'greater' constraints or
+            g(x) = value - theshold > 0.0 for 'less' constraints.
+
+        Parameters
+        ----------
+        value : float
+            Variable value corresponding to the constraint
+
+        Returns
+        -------
+        con : float
+            Constraint function at value.
+        """
+        if self.comparator == 'greater':
+            value = self.threshold - value
+        elif self.comparator == 'less':
+            value = value - self.threshold
+        else:
+            raise Exception("Invalid comparator: "+self.comparator)
+        return self.obj_from_value(value)
+
+    def update(self, value):
+        """Update with given value."""
+        self.value = self.con_from_value(value)
+
+
+class BaseProblem(object):
+    """
+    Base optimization problem.
+
+    Attributes
+    ----------
+    variables : dict
+        Variables being optimized.
+    objectives : dict
+        Objectives returned.
+    constraints : dict
+        Constraints returned.
+    """
+
+    def __init__(self):
+        self.variables = {}
+        self.objectives = {}
+        self.constraints = {}
+
+    def name_repr(self):
+        """Single-line name representation."""
+        return self.__class__.__name__
+
+    def prob_repr(self):
+        """Representation of the problem variables, objectives, constraints."""
+        rep_str = ""
+        var_str = " -" + "\n -".join(['{:<45}{:>20.4f}'.format(k, v)
+                                      for k, v in self.variables.items()])
+        if self.variables:
+            rep_str += "\n"+"VARIABLES\n" + var_str
+        obj_str = " -" + "\n -".join(['{:<45}{:>20.4f}'.format(v.name+":", v.value)
+                                      for v in self.objectives.values()])
+        if self.objectives:
+            rep_str += "\n" + "OBJECTIVES\n" + obj_str
+        con_str = " -" + "\n -".join(['{:<45}{:>20.4f}'.format(v.name+":", v.value)
+                                      for v in self.constraints.values()])
+        if self.constraints:
+            rep_str += "\n" + "CONSTRAINTS\n" + con_str
+        return rep_str
+
+    def add_objective(self, name, varname, objclass=Objective, **kwargs):
+        """Add an objective to the Problem."""
+        self.objectives[name] = objclass(varname, **kwargs)
+        self.add_objective_callable(name)
+
+    def add_objective_callable(self, name):
+        """Add callable objective function with name name."""
+        def newobj(*x):
+            return self.call_objective(*x, objective=name)
+        setattr(self, name, newobj)
+
+    def add_constraint(self, name, varname, conclass=Constraint, **kwargs):
+        """Add a constraint to the Problem."""
+        self.constraints[name] = conclass(varname, **kwargs)
+        self.add_constraint_callable(name)
+
+    def add_constraint_callable(self, name):
+        """Add callable constraint function with name name."""
+        def newcon(*x):
+            return self.call_constraint(*x, constraint=name)
+        setattr(self, name, newcon)
+
+    def __repr__(self):
+        return self.name_repr()+" with:"+self.prob_repr()
+
+    def current_x(self):
+        """Get the current variable value x."""
+        return [v for v in self.variables.values()]
+
+    def new_x(self, *x):
+        """Check if a given x is the same as the current value of x."""
+        return not self.current_x() == list(x)
+
+    def get_objectives(self):
+        """Get all current objective values."""
+        return [v.value for v in self.objectives.values()]
+
+    def get_constraints(self):
+        """Get all current constraint values."""
+        return [v.value for v in self.constraints.values()]
+
+    def call_outputs(self, *x):
+        """
+        Get all outputs at the given value of x.
+
+        Parameters
+        ----------
+        *x : values
+            Variable values
+
+        Returns
+        -------
+        objectives : list
+            values of the objectives
+        constraints : list
+            values of the constraints
+        """
+        if self.new_x(*x):
+            self.update_objectives(*x)
+        return self.get_objectives(), self.get_constraints()
+
+    def update_variables(self, *x):
+        """Update variables at x."""
+        for i, v in enumerate(self.variables):
+            self.variables[v] = x[i]
+
+    def call_objective(self, *x, objective=''):
+        """Call a given objective at x."""
+        if self.new_x(*x):
+            self.update_objectives(*x)
+        return self.objectives[objective].value
+
+    def call_constraint(self, *x, constraint=''):
+        """Call a given constraint at x."""
+        if self.new_x(*x):
+            self.update_objectives(*x)
+        return self.constraints[constraint].value
+
+
+class SimpleProblem(BaseProblem):
+    """
+    Simple optimization problem (without any given model constructs).
+
+    Attributes
+    ----------
+    callables : dict
+        dict of callables for objectives/constraints
+
+    Examples
+    --------
+    >>> sp = SimpleProblem("x0", "x1")
+    >>> f1 = lambda x0, x1: x0 + x1
+    >>> sp.add_objective("f1", f1)
+    >>> g1 = lambda x0, x1: x0 - x1
+    >>> sp.add_constraint("g1", g1, threshold=3.0, comparator="less")
+
+    >>> sp.f1(1, 1)
+    2
+    >>> sp.g1(1, 1)
+    -3.0
+    """
+
+    def __init__(self, *variables):
+        super().__init__()
+        self.variables = {v: np.NaN for v in variables}
+        self.callables = {}
+
+    def update_objectives(self, *x):
+        """Update objectives/constraints by calling callables."""
+        self.update_variables(*x)
+        for objname, obj in {**self.objectives, **self.constraints}.items():
+            obj.update(self.callables[objname](*x))
+
+    def add_objective(self, name, call, **kwargs):
+        """
+        Add an objective to the problem.
+
+        Parameters
+        ----------
+        name : str
+            Name for the objective.
+        call : callable
+            Function to call for the objective in terms of the variables.
+        **kwargs : kwargs
+            kwargs to Objective.
+        """
+        self.callables[name] = call
+        super().add_objective(name, name, **kwargs)
+
+    def add_constraint(self, name, call, **kwargs):
+        """
+        Add an constraint to the problem.
+
+        Parameters
+        ----------
+        name : str
+            Name for the objective.
+        call : callable
+            Function to call for the objective in terms of the variables.
+        **kwargs : kwargs
+            kwargs to Constraint
+        """
+        self.callables[name] = call
+        super().add_constraint(name, name, **kwargs)
+
+
+class ResultObjective(Objective):
     """
     Base class of objectives which derive from Results.
 
@@ -40,13 +296,11 @@ class ResultObjective(BaseObjCon):
         Time the objective is called at. If None, time will be the end of the sim.
     metric : callable
         Metric to tabulate for the objective. Default is np.sum.
-    negative : bool
-        Whether the objective is the negative of the value.
+
     """
 
     time: float = None
     metric: callable = np.sum
-    negative: bool = False
 
     def get_result_value(self, res):
         """
@@ -82,14 +336,6 @@ class ResultObjective(BaseObjCon):
             val = res.get_metric(t+"."+self.name, metric=self.metric)
         return val
 
-    def obj_from_value(self, value):
-        """Get the (+ or 0) objective corresponding to value give self.negative."""
-        if self.negative:
-            value = - value
-        else:
-            value = value
-        return value
-
     def update(self, res):
         """Update the value of the objective given the result."""
         value = self.get_result_value(res)
@@ -111,23 +357,14 @@ class ResultConstraint(ResultObjective):
     threshold: float = 0.0
     comparator: str = 'greater'
 
+    def update(self, res):
+        """Update the value of the constraint given the result."""
+        value = self.get_result_value(res)
+        self.value = self.con_from_value(value)
+
     def con_from_value(self, value):
         """
-        Get the constraint given the value of its variable given threshold.
-
-        By default, constraints follow the form:
-            g(x) = threshold - value > 0.0 for 'greater' constraints or
-            g(x) = value - theshold > 0.0 for 'less' constraints.
-
-        Parameters
-        ----------
-        value : float
-            Variable value corresponding to the constraint
-
-        Returns
-        -------
-        con : float
-            Constraint function at value.
+        Call con_from_value from Constraint for the ResultConstraint.
 
         Examples
         --------
@@ -139,32 +376,17 @@ class ResultConstraint(ResultObjective):
         >>> con2.con_from_value(11.0)
         1.0
         """
-        if self.comparator == 'greater':
-            value = self.threshold - value
-        elif self.comparator == 'less':
-            value = value - self.threshold
-        else:
-            raise Exception("Invalid comparator: "+self.comparator)
-        return self.obj_from_value(value)
-
-    def update(self, res):
-        """Update the value of the constraint given the result."""
-        value = self.get_result_value(res)
-        self.value = self.con_from_value(value)
+        return Constraint.con_from_value(self, value)
 
 
-class BaseSimProblem(object):
+class BaseSimProblem(BaseProblem):
     """
     Base optimization problem for optimizing over simulations.
 
     Attributes
     ----------
-    variables : dict
-        Variables being optimized.
-    objectives : dict
-        Objectives returned.
-    constraints : dict
-        Constraints returned.
+    prop_method : callable
+        Method in propagate to call.
     """
 
     def __init__(self, mdl, prop_method, *args, **kwargs):
@@ -178,36 +400,9 @@ class BaseSimProblem(object):
 
         self.args = args
         self.kwargs = kwargs
+        super().__init__()
 
-        self.variables = {}
-        self.objectives = {}
-        self.constraints = {}
-
-    def name_repr(self):
-        """Single-line name representation."""
-        return self.__class__.__name__
-
-    def prob_repr(self):
-        """Representation of the problem variables, objectives, constraints."""
-        rep_str = ""
-        var_str = " -" + "\n -".join(['{:<45}{:>20.4f}'.format(k, v)
-                                      for k, v in self.variables.items()])
-        if self.variables:
-            rep_str += "\n"+"VARIABLES\n" + var_str
-        obj_str = " -" + "\n -".join(['{:<45}{:>20.4f}'.format(v.name+":", v.value)
-                                      for v in self.objectives.values()])
-        if self.objectives:
-            rep_str += "\n" + "OBJECTIVES\n" + obj_str
-        con_str = " -" + "\n -".join(['{:<45}{:>20.4f}'.format(v.name+":", v.value)
-                                      for v in self.constraints.values()])
-        if self.constraints:
-            rep_str += "\n" + "CONSTRAINTS\n" + con_str
-        return rep_str
-
-    def __repr__(self):
-        return self.name_repr()+" with:"+self.prob_repr()
-
-    def add_result_objective(self, name, varname, objclass=ResultObjective, **kwargs):
+    def add_result_objective(self, name, varname, **kwargs):
         """
         Add an objective corresponding to a possible desired_result.
 
@@ -220,18 +415,12 @@ class BaseSimProblem(object):
             Name to give the objective
         varname : str
             Name of the variable to get for the variable.
-        objclass : class, optional
-            Class inheritying ResultObjective. The default is ResultObjective.
         **kwargs : kwargs
             Arguments to ResultObjective
         """
-        self.objectives[name] = objclass(varname, **kwargs)
+        self.add_objective(name, varname, objclass=ResultObjective, **kwargs)
 
-        def newobj(*x):
-            return self.call_objective(*x, objective=name)
-        setattr(self, name, newobj)
-
-    def add_result_constraint(self, name, varname, conclass=ResultConstraint, **kwargs):
+    def add_result_constraint(self, name, varname, **kwargs):
         """
         Add an objective corresponding to a possible desired_result.
 
@@ -244,16 +433,10 @@ class BaseSimProblem(object):
             Name to give the constraint.
         varname : str
             Name of the variable to get for the constraint.
-        conclass : class, optional
-            Class inheritying ResultConstraint. The default is ResultConstraint.
         **kwargs : kwargs
             Arguments to ResultConstraint
         """
-        self.constraints[name] = conclass(varname, **kwargs)
-
-        def newcon(*x):
-            return self.call_constraint(*x, constraint=name)
-        setattr(self, name, newcon)
+        self.add_constraint(name, varname, conclass=ResultConstraint, **kwargs)
 
     def get_end_time(self):
         """
@@ -294,65 +477,16 @@ class BaseSimProblem(object):
                 des_res[t] = [n.name]
         return des_res
 
-    def current_x(self):
-        """Get the current variable value x."""
-        return [v for v in self.variables.values()]
-
-    def new_x(self, *x):
-        """Check if a given x is the same as the current value of x."""
-        return not self.current_x() == list(x)
-
     def update_objectives(self, *x):
         """Update objectives/constraints by simulating the model at x."""
-        for i, v in enumerate(self.variables):
-            self.variables[v] = x[i]
+        self.update_variables(*x)
         res, hist = self.sim_mdl(*x)
         res = res.flatten()
         for obj in {**self.objectives, **self.constraints}.values():
             obj.update(res)
 
-    def call_objective(self, *x, objective=''):
-        """Call a given objective at x."""
-        if self.new_x(*x):
-            self.update_objectives(*x)
-        return self.objectives[objective].value
 
-    def call_constraint(self, *x, constraint=''):
-        """Call a given constraint at x."""
-        if self.new_x(*x):
-            self.update_objectives(*x)
-        return self.constraints[constraint].value
-
-    def get_objectives(self):
-        """Get all current objective values."""
-        return [v.value for v in self.objectives.values()]
-
-    def get_constraints(self):
-        """Get all current constraint values."""
-        return [v.value for v in self.constraints.values()]
-
-    def call_outputs(self, *x):
-        """
-        Get all outputs at the given value of x.
-
-        Parameters
-        ----------
-        *x : values
-            Variable values
-
-        Returns
-        -------
-        objectives : list
-            values of the objectives
-        constraints : list
-            values of the constraints
-        """
-        if self.new_x(*x):
-            self.update_objectives(*x)
-        return self.get_objectives(), self.get_constraints()
-
-
-class ParameterProblem(BaseSimProblem):
+class ParameterSimProblem(BaseSimProblem):
     """
     Optimization problem defining the optimization of model parameters over simulations.
 
@@ -363,12 +497,12 @@ class ParameterProblem(BaseSimProblem):
 
     # below, we show basic setup of a parameter problem where objectives get values
     # from the sim at particular times.
-    >>> exprob = ParameterProblem(ExampleFxnBlock(), expd, "nominal")
+    >>> exprob = ParameterSimProblem(ExampleFxnBlock(), expd, "nominal")
     >>> exprob.add_result_objective("f1", "s.x", time=5)
     >>> exprob.add_result_objective("f2", "s.y", time=5)
     >>> exprob.add_result_constraint("g1", "s.x", time=10, threshold=10, comparator='greater')
     >>> exprob
-    ParameterProblem with:
+    ParameterSimProblem with:
     VARIABLES
      -y                                                             nan
      -x                                                             nan
@@ -391,7 +525,7 @@ class ParameterProblem(BaseSimProblem):
     -10.0
 
     # below, we use the endclass as an objective instead of the variable:
-    >>> exprob = ParameterProblem(ExampleFxnBlock(), expd, "nominal")
+    >>> exprob = ParameterSimProblem(ExampleFxnBlock(), expd, "nominal")
     >>> exprob.add_result_objective("f1", "endclass.xy")
     >>> exprob.f1(1, 1)
     100.0
@@ -399,7 +533,7 @@ class ParameterProblem(BaseSimProblem):
     200.0
 
     # finally, note that this class can work with a variety of methods:
-    >>> exprob = ParameterProblem(ExampleFxnBlock("ex"), expd, "one_fault", "ex", "short", 2)
+    >>> exprob = ParameterSimProblem(ExampleFxnBlock("ex"), expd, "one_fault", "ex", "short", 2)
     >>> exprob.add_result_objective("f1", "s.y", time=3)
     >>> exprob.add_result_objective("f2", "s.y", time=5)
     >>> exprob.f1(1, 1)
