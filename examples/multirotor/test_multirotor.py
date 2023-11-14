@@ -7,7 +7,7 @@ Created on Wed Dec 14 13:51:18 2022
 import unittest
 from examples.multirotor.drone_mdl_rural import Drone, DroneParam
 from fmdtools.sim.sample import ParameterDomain
-from fmdtools.sim.search import ParameterProblem, SingleFaultScenarioProblem
+from fmdtools.sim.search import ParameterSimProblem, SingleFaultScenarioProblem
 from fmdtools.sim.search import DisturbanceProblem
 import fmdtools.sim.propagate as propagate
 import numpy as np
@@ -31,8 +31,9 @@ expd1.add_variable("phys_param.bat", var_map=bat_var_map, var_lim=(0, 3))
 expd1.add_variable("phys_param.linearch", var_map=line_arch_map, var_lim=(0, 2))
 
 
-ex_soc_opt = ParameterProblem(Drone(), expd1, 'nominal', track=None)
+ex_soc_opt = ParameterSimProblem(Drone(), expd1, 'nominal', track=None)
 ex_soc_opt.add_result_objective("f1", "store_ee.s.soc", time=16)
+ex_soc_opt.add_result_constraint("g1", "store_ee.s.soc", time=16)
 
 
 class DroneParameterTests(unittest.TestCase):
