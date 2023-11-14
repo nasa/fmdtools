@@ -10,6 +10,8 @@ import numpy as np
 from recordclass import dataobject
 import fmdtools.sim.propagate as propagate
 from fmdtools.define.common import t_key
+from fmdtools.sim.scenario import Sequence, SingleFaultScenario, Scenario
+from fmdtools.sim.sample import FaultDomain
 
 
 class BaseObjCon(dataobject):
@@ -151,9 +153,9 @@ class ResultConstraint(ResultObjective):
         self.value = self.con_from_value(value)
 
 
-class ParameterProblem(object):
+class BaseSimProblem(object):
     """
-    Optimization problem defining the optimization of model parameters over simulations.
+    Base optimization problem for optimizing over simulations.
 
     Attributes
     ----------
@@ -163,78 +165,10 @@ class ParameterProblem(object):
         Objectives returned.
     constraints : dict
         Constraints returned.
-
-    Examples
-    --------
-    >>> from fmdtools.sim.sample import expd
-    >>> from fmdtools.define.block import ExampleFxnBlock
-
-    # below, we show basic setup of a parameter problem where objectives get values
-    # from the sim at particular times.
-    >>> exprob = ParameterProblem(ExampleFxnBlock(), expd, "nominal")
-    >>> exprob.add_result_objective("f1", "s.x", time=5)
-    >>> exprob.add_result_objective("f2", "s.y", time=5)
-    >>> exprob.add_result_constraint("g1", "s.x", time=10, threshold=10, comparator='greater')
-    >>> exprob
-    ParameterProblem with:
-    VARIABLES
-     -y                                                             nan
-     -x                                                             nan
-    OBJECTIVES
-     -s.x:                                                          inf
-     -s.y:                                                          inf
-    CONSTRAINTS
-     -s.x:                                                          inf
-
-    # once this is set up, you can use the objectives/constraints as callables, like so:
-    >>> exprob.f1(1, 0)
-    0.0
-    >>> exprob.f1(1, 1)
-    5.0
-    >>> exprob.f1(1, 2)
-    10.0
-    >>> exprob.f2(1, 2)
-    0.0
-    >>> exprob.g1(1, 2)
-    -10.0
-
-    # below, we use the endclass as an objective instead of the variable:
-    >>> exprob = ParameterProblem(ExampleFxnBlock(), expd, "nominal")
-    >>> exprob.add_result_objective("f1", "endclass.xy")
-    >>> exprob.f1(1, 1)
-    100.0
-    >>> exprob.f1(1, 2)
-    200.0
-
-    # finally, note that this class can work with a variety of methods:
-    >>> exprob = ParameterProblem(ExampleFxnBlock("ex"), expd, "one_fault", "ex", "short", 2)
-    >>> exprob.add_result_objective("f1", "s.y", time=3)
-    >>> exprob.add_result_objective("f2", "s.y", time=5)
-    >>> exprob.f1(1, 1)
-    2.0
-    >>> exprob.f2(1, 1)
-    4.0
     """
 
-    def __init__(self, mdl, parameterdomain, prop_method, *args, **kwargs):
-        """
-        Define the Parameter problem model, domain, and simulation.
-
-        Parameters
-        ----------
-        mdl : Simulable
-            Model to simulate.
-        parameterdomain : ParameterDomain
-            ParameterDomain defining variables to optimize over
-        prop_method : str/callable
-            Name of function to call in fmdtools.sim.propagate
-        *args : args
-            Arguments to prop_method.
-        **kwargs : kwargs
-            Keyword arguments to prop_method.
-        """
+    def __init__(self, mdl, prop_method, *args, **kwargs):
         self.mdl = mdl
-        self.parameterdomain = parameterdomain
         if type(prop_method) == str:
             self.prop_method = getattr(propagate, prop_method)
         elif callable(prop_method):
@@ -245,15 +179,21 @@ class ParameterProblem(object):
         self.args = args
         self.kwargs = kwargs
 
-        self.variables = {v: np.NaN for v in self.parameterdomain.variables}
+        self.variables = {}
         self.objectives = {}
         self.constraints = {}
 
-    def __repr__(self):
-        rep_str = "ParameterProblem with:"
+    def name_repr(self):
+        """Single-line name representation."""
+        return self.__class__.__name__
+
+    def prob_repr(self):
+        """Representation of the problem variables, objectives, constraints."""
+        rep_str = ""
         var_str = " -" + "\n -".join(['{:<45}{:>20.4f}'.format(k, v)
                                       for k, v in self.variables.items()])
-        rep_str += "\n"+"VARIABLES\n" + var_str
+        if self.variables:
+            rep_str += "\n"+"VARIABLES\n" + var_str
         obj_str = " -" + "\n -".join(['{:<45}{:>20.4f}'.format(v.name+":", v.value)
                                       for v in self.objectives.values()])
         if self.objectives:
@@ -263,6 +203,9 @@ class ParameterProblem(object):
         if self.constraints:
             rep_str += "\n" + "CONSTRAINTS\n" + con_str
         return rep_str
+
+    def __repr__(self):
+        return self.name_repr()+" with:"+self.prob_repr()
 
     def add_result_objective(self, name, varname, objclass=ResultObjective, **kwargs):
         """
@@ -351,32 +294,6 @@ class ParameterProblem(object):
                 des_res[t] = [n.name]
         return des_res
 
-    def sim_mdl(self, *x):
-        """
-        Simulate the model at the given variable value.
-
-        Parameters
-        ----------
-        *x : args
-            Variable inputs for parameterdomain.
-
-        Returns
-        -------
-        res : Result
-            result for the sim.
-        hist : History
-            history for the sim.
-        """
-        p = self.parameterdomain(*x)
-        end_time = self.get_end_time()
-        mdl_kwargs = {'p': p, 'sp': {'times': (0.0, end_time)}}
-        desired_result = self.obj_con_des_res()
-        res, hist = self.prop_method(self.mdl, *self.args,
-                                     mdl_kwargs=mdl_kwargs,
-                                     desired_result=desired_result,
-                                     **self.kwargs)
-        return res.flatten(), hist.flatten()
-
     def current_x(self):
         """Get the current variable value x."""
         return [v for v in self.variables.values()]
@@ -434,6 +351,323 @@ class ParameterProblem(object):
             self.update_objectives(*x)
         return self.get_objectives(), self.get_constraints()
 
+
+class ParameterProblem(BaseSimProblem):
+    """
+    Optimization problem defining the optimization of model parameters over simulations.
+
+    Examples
+    --------
+    >>> from fmdtools.sim.sample import expd
+    >>> from fmdtools.define.block import ExampleFxnBlock
+
+    # below, we show basic setup of a parameter problem where objectives get values
+    # from the sim at particular times.
+    >>> exprob = ParameterProblem(ExampleFxnBlock(), expd, "nominal")
+    >>> exprob.add_result_objective("f1", "s.x", time=5)
+    >>> exprob.add_result_objective("f2", "s.y", time=5)
+    >>> exprob.add_result_constraint("g1", "s.x", time=10, threshold=10, comparator='greater')
+    >>> exprob
+    ParameterProblem with:
+    VARIABLES
+     -y                                                             nan
+     -x                                                             nan
+    OBJECTIVES
+     -s.x:                                                          inf
+     -s.y:                                                          inf
+    CONSTRAINTS
+     -s.x:                                                          inf
+
+    # once this is set up, you can use the objectives/constraints as callables, like so:
+    >>> exprob.f1(1, 0)
+    0.0
+    >>> exprob.f1(1, 1)
+    5.0
+    >>> exprob.f1(1, 2)
+    10.0
+    >>> exprob.f2(1, 2)
+    0.0
+    >>> exprob.g1(1, 2)
+    -10.0
+
+    # below, we use the endclass as an objective instead of the variable:
+    >>> exprob = ParameterProblem(ExampleFxnBlock(), expd, "nominal")
+    >>> exprob.add_result_objective("f1", "endclass.xy")
+    >>> exprob.f1(1, 1)
+    100.0
+    >>> exprob.f1(1, 2)
+    200.0
+
+    # finally, note that this class can work with a variety of methods:
+    >>> exprob = ParameterProblem(ExampleFxnBlock("ex"), expd, "one_fault", "ex", "short", 2)
+    >>> exprob.add_result_objective("f1", "s.y", time=3)
+    >>> exprob.add_result_objective("f2", "s.y", time=5)
+    >>> exprob.f1(1, 1)
+    2.0
+    >>> exprob.f2(1, 1)
+    4.0
+    """
+
+    def __init__(self, mdl, parameterdomain, prop_method, *args, **kwargs):
+        """
+        Define the Parameter problem model, domain, and simulation.
+
+        Parameters
+        ----------
+        mdl : Simulable
+            Model to simulate.
+        parameterdomain : ParameterDomain
+            ParameterDomain defining variables to optimize over
+        prop_method : str/callable
+            Name of function to call in fmdtools.sim.propagate
+        *args : args
+            Arguments to prop_method.
+        **kwargs : kwargs
+            Keyword arguments to prop_method.
+        """
+        super().__init__(mdl, prop_method, *args, **kwargs)
+        self.parameterdomain = parameterdomain
+        self.variables = {v: np.NaN for v in self.parameterdomain.variables}
+
+    def sim_mdl(self, *x):
+        """
+        Simulate the model at the given variable value.
+
+        Parameters
+        ----------
+        *x : args
+            Variable inputs for parameterdomain.
+
+        Returns
+        -------
+        res : Result
+            result for the sim.
+        hist : History
+            history for the sim.
+        """
+        p = self.parameterdomain(*x)
+        end_time = self.get_end_time()
+        mdl_kwargs = {'p': p, 'sp': {'times': (0.0, end_time)}}
+        desired_result = self.obj_con_des_res()
+        res, hist = self.prop_method(self.mdl, *self.args,
+                                     mdl_kwargs=mdl_kwargs,
+                                     desired_result=desired_result,
+                                     **self.kwargs)
+        return res.flatten(), hist.flatten()
+
+
+class ScenarioProblem(BaseSimProblem):
+    """
+    Base class for optimizing scenario parameters.
+
+    Attributes
+    ----------
+    prepped_sims : dict
+        Dict of outputs from propagate.nom_helper. Used for staged execution of
+        scenarios (where the model is copied instead of re-simulated).
+    """
+
+    def __init__(self, mdl, faultdomain=None, phasemap=None, **kwargs):
+        super().__init__(mdl, "prop_one_scen", **kwargs)
+        self.prepped_sims = {}
+
+    def prep_sim(self):
+        """Prepare simulation by simulating it until the start of the scenario."""
+        end_time = self.get_end_time()
+        mdl_kwargs = {'sp': {'times': (0.0, end_time)}}
+        run_kwarg = propagate.pack_run_kwargs(**self.kwargs, mdl_kwargs=mdl_kwargs)
+        desired_result = self.obj_con_des_res()
+        sim_kwarg = propagate.pack_sim_kwargs(**self.kwargs,
+                                              desired_result=desired_result,
+                                              staged=True)
+        n_outs = propagate.nom_helper(self.mdl, [self.get_start_time()],
+                                      **{**sim_kwarg, 'use_end_condition': False},
+                                      **run_kwarg)
+        self.prepped_sims = {"result": n_outs[0],
+                             "hist": n_outs[1],
+                             "scen": n_outs[2],
+                             "mdls": n_outs[3],
+                             "t_end_nom": n_outs[4]}
+
+    def sim_mdl(self, *x):
+        """
+        Simulate the model at the given variable value.
+
+        Parameters
+        ----------
+        *x : args
+            Variable inputs for parameterdomain.
+
+        Returns
+        -------
+        res : Result
+            result for the sim.
+        hist : History
+            history for the sim.
+        """
+        if not self.prepped_sims:
+            self.prep_sim()
+
+        scen = self.gen_scenario(*x)
+
+        mdl = propagate.copy_staged([*self.prepped_sims['mdls'].values()][0])
+        desired_result = self.obj_con_des_res()
+        sim_kwarg = propagate.pack_sim_kwargs(**self.kwargs,
+                                              desired_result=desired_result,
+                                              staged=True)
+        res, hist, _, t_end = self.prop_method(mdl,
+                                               scen,
+                                               nomhist=self.prepped_sims['hist'],
+                                               nomresult=self.prepped_sims['result'],
+                                               **sim_kwarg)
+        return res.flatten(), hist.flatten()
+
+
+class SingleFaultScenarioProblem(ScenarioProblem):
+    """
+    Class for optimizing the time of a given fault scenario.
+
+    Attributes
+    ----------
+    faultdomain : FaultDomain
+        FaultDomain containing the fault
+    phasemap : PhaseMap
+        PhaseMap for fault sampling
+    t_start : float
+        Minimum start time for the simulation and lower bound on scenario time..
+        Default is 0.0.
+
+    Examples
+    --------
+    >>> from fmdtools.define.block import ExampleFxnBlock
+    >>> sp = SingleFaultScenarioProblem(ExampleFxnBlock(), ("examplefxnblock", "short"))
+    >>> sp.add_result_objective("f1", "s.y", time=5)
+
+    # objective value should be 1.0 (init value) + 3 * time_with_fault
+    >>> sp.f1(5.0)
+    4.0
+    >>> sp.f1(4.0)
+    7.0
+    """
+
+    def name_repr(self):
+        """Get name of the class and faults."""
+        faulttup = [*self.faultdomain.faults.keys()][0]
+        return "SingleScenarioProblem("+faulttup[0]+", "+faulttup[1]+")"
+
+    def __init__(self, mdl, faulttup, phasemap=None, t_start=0.0, **kwargs):
+        """
+        Initialize the SingleFaultScenarioProblem with a given fault to optimize.
+
+        Parameters
+        ----------
+        mdl : Model
+            Model to simulate/optimize.
+        faulttup : tuple
+            (fxn, fault) defining the fault.
+        phasemap : PhaseMap, optional
+            PhaseMap for fault sampling. The default is None.
+        t_start : float, optional
+            Minimum start time for the simulation and lower bound on scenario time..
+            Default is 0.0.
+        **kwargs : kwargs
+            Keyword arguments to prop_one_scen (e.g., track, etc.).
+        """
+        faultdomain = FaultDomain(mdl)
+        faultdomain.add_fault(*faulttup)
+        self.faultdomain = faultdomain
+        self.phasemap = phasemap
+        self.t_start = t_start
+        super().__init__(mdl, **kwargs)
+        self.variables = {"time": np.nan}
+
+    def get_start_time(self):
+        """Get the scenario start time to copy the model at."""
+        return self.t_start
+
+    def gen_scenario(self, x):
+        """
+        Generate the scenario to simulate in the model.
+
+        Parameters
+        ----------
+        x : float
+            Fault scenario time.
+
+        Returns
+        -------
+        scen : SingleFaultScenario
+            SingleFaultScenario to simulate.
+        """
+        starttime=self.get_start_time()
+        end_time = self.get_end_time()
+        if not starttime <= x <= end_time:
+            raise Exception("time out of range: "+str((starttime, end_time)))
+        fault = [*self.faultdomain.faults][0]
+        scen = SingleFaultScenario.from_fault(fault, time=x, mdl=self.mdl,
+                                              phasemap=self.phasemap,
+                                              starttime=self.get_start_time())
+        return scen
+
+
+class DisturbanceProblem(ScenarioProblem):
+    """Class for optimizing disturbances that occur at a set time."""
+
+    def __init__(self, mdl, time, *disturbances, **kwargs):
+        """
+        Initialize the DisturbanceProblem.
+
+        Parameters
+        ----------
+        mdl : Simulable
+            Model to optimize.
+        time : float
+            Time to inject the disturbances at.
+        *disturbances : str
+            Names of variables to perturb at time t (which become the variables)
+        **kwargs : TYPE
+            DESCRIPTION.
+
+        Examples
+        --------
+        >>> from fmdtools.define.block import ExampleFxnBlock
+        >>> dp = DisturbanceProblem(ExampleFxnBlock(), 3, "s.y")
+        >>> dp.add_result_objective("f1", "s.y", time=5)
+
+        # objective value should the same as the input value
+        >>> dp.f1(5.0)
+        5.0
+        >>> dp.f1(4.0)
+        4.0
+        """
+        super().__init__(mdl, **kwargs)
+        self.variables = {d: np.nan for d in disturbances}
+        self.time = time
+
+    def get_start_time(self):
+        """Get the scenario start time to copy the model at."""
+        return self.time
+
+    def gen_scenario(self, *x):
+        """
+        Generate the scenario to simulate in the model.
+
+        Parameters
+        ----------
+        x : float
+            Fault scenario time.
+
+        Returns
+        -------
+        scen : SingleFaultScenario
+            SingleFaultScenario to simulate.
+        """
+        dist = {self.time: {v: x[i] for i, v in enumerate(self.variables)}}
+        seq = Sequence(disturbances=dist)
+        scen = Scenario(sequence=seq,
+                        name='disturbance',
+                        time=self.time)
+        return scen
 
 
 class DynamicInterface():

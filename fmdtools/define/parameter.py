@@ -22,9 +22,11 @@ class Parameter(dataobject, readonly=True, mapping=True, iterable=True):
     inherit from recordclass, giving them a low memory footprint, and use type
     hints and ranges to ensure parameter values are valid. e.g.,:
 
+    Examples
+    --------
     >>> class ExampleParameter(Parameter, readonly=True):
     ...    x: float = 1.0
-    ...    y: float = 10.0
+    ...    y: float = 3.0
     ...    z: float = 0.0
     ...    x_lim = (0, 10)
     ...    y_set = (1.0, 2.0, 3.0, 4.0)
@@ -35,11 +37,11 @@ class Parameter(dataobject, readonly=True, mapping=True, iterable=True):
 
     This parameter can then be instantiated using:
 
-    >>> p = ExampleParameter(x=1.0, y=0.0)
+    >>> p = ExampleParameter(x=1.0, y=2.0)
     >>> p.x
     1.0
     >>> p.y
-    0.0
+    2.0
     """
 
     def __init__(self, *args, strict_immutability=True, check_type=True,
@@ -190,7 +192,7 @@ class ExampleParameter(Parameter, readonly=True):
     """Example parameter for testing and documentation."""
 
     x: float = 1.0
-    y: float = 10.0
+    y: float = 3.0
     z: float = 0.0
     x_lim = (0, 10)
     y_set = (1.0, 2.0, 3.0, 4.0)
@@ -243,3 +245,8 @@ class SimParam(Parameter, readonly=True):
                 raise Exception("Global phases overlap in " + self.__class__.__name__ +
                                 ": " + str(self.phases) +
                                 " Ensure max of each phase < min of each other phase")
+
+
+if __name__ == "__main__":
+    import doctest
+    doctest.testmod(verbose=True)

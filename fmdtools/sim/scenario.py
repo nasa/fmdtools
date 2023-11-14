@@ -21,6 +21,13 @@ faults and disturbances.
 from recordclass import dataobject, asdict
 from collections import UserDict
 from typing import ClassVar
+from fmdtools.define.common import t_key
+import numpy as np
+
+
+def create_scenname(faulttup, time):
+    """Create a scenario name for a given fault scenario."""
+    return '_'.join([fm[0]+'_'+fm[1]+'_' for fm in faulttup])+t_key(time)
 
 
 class BaseScenObj(dataobject, readonly=True, mapping=True):
@@ -143,6 +150,11 @@ class Sequence(UserDict):
             else:
                 self[i].update(new_sequence[i])
 
+    @classmethod
+    def from_fault(cls, faulttup, time):
+        """Generate sequence from single fault mode faulttup (fxn, mode)."""
+        return cls(faultseq={float(time): {faulttup[0]: [faulttup[1]]}})
+
 
 class BaseScenario(BaseScenObj):
     """
@@ -174,6 +186,10 @@ class BaseScenario(BaseScenObj):
     name: ClassVar[str] = "nominal"
     time: ClassVar[float] = 0.0
 
+    def start_time(self):
+        """Get the first time in the scenario."""
+        return np.min(self.sequence)
+
 
 class Scenario(BaseScenario):
     """Class defining generic scenarios. Extends BaseScenario."""
@@ -202,6 +218,33 @@ class SingleFaultScenario(BaseScenario):
     time: float = 0.0
     phase: str = ''
 
+    @classmethod
+    def from_fault(cls, faulttup, time, mdl=None, weight=1.0, phasemap=None,
+                   starttime=None):
+        """Generate the fault scenario for faulttup at time."""
+        if len(faulttup) == 1:
+            faulttup = faulttup[0]
+        if phasemap:
+            phase = phasemap.find_base_phase(time)
+        else:
+            phase = ''
+        if mdl:
+            rate = mdl.get_scen_rate(faulttup[0], faulttup[1], time,
+                                     phasemap=phasemap, weight=weight)
+        else:
+            rate = weight
+        if not starttime:
+            starttime = time
+        scen = cls(sequence=Sequence.from_fault(faulttup, time),
+                   function=faulttup[0],
+                   fault=faulttup[1],
+                   rate=rate,
+                   name=create_scenname((faulttup,), time),
+                   time=starttime,
+                   times=(time,),
+                   phase=phase)
+        return scen
+
 
 class JointFaultScenario(BaseScenario):
     """
@@ -224,6 +267,52 @@ class JointFaultScenario(BaseScenario):
     name: str = 'faulty'
     time: float = 0.0
     phase: tuple = ()
+
+    @classmethod
+    def from_faults(cls, faulttups, time, mdl=None, phasemap=None, weight=1.0,
+                    baserate='ind', p_cond=1.0, starttime=None):
+        """Generate JointFaultScenario given fault names, time."""
+        if phasemap:
+            phase = phasemap.find_base_phase(time)
+        else:
+            phase = ''
+        # calculate rate
+        rates = {}
+        for i, faulttup in enumerate(faulttups):
+            if mdl:
+                rate = mdl.get_scen_rate(*faulttup, time,
+                                         phasemap=phasemap, weight=weight)
+            else:
+                rate = weight
+            rates[faulttup] = rate
+        if baserate == 'ind':
+            rate = np.prod([*rates.values()])
+        elif baserate == 'max':
+            rate = np.max([*rates.values()])
+        else:
+            rate = rates[baserate]
+        rate *= p_cond
+        # create sequence
+        faults = {}
+        for faulttup in faulttups:
+            if faulttup[0] not in faults:
+                faults[faulttup[0]] = [faulttup[1]]
+            else:
+                faults[faulttup[0]].append(faulttup[1])
+        sequence = {time: Injection(faults=faults)}
+        if not starttime:
+            starttime = time
+        # add fault scenario
+        scen = cls(sequence=sequence,
+                   joint_faults=len(faulttups),
+                   functions=tuple(set([f[0] for f in faulttups])),
+                   modes=tuple(set([f[1] for f in faulttups])),
+                   rate=rate,
+                   name=create_scenname(faulttups, time),
+                   time=starttime,
+                   times=(time,),
+                   phase=phase)
+        return scen
 
 
 class ParameterScenario(BaseScenario, readonly=True):
@@ -300,6 +389,10 @@ class ParameterScenario(BaseScenario, readonly=True):
             List of parameters.
         """
         return [self.get_param(param, default=default) for param in params]
+
+    def start_time(self):
+        """Return the start time for a parameter scenario--0.0."""
+        return 0.0
 
 
 if __name__ == "__main__":

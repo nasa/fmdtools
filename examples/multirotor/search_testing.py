@@ -4,11 +4,25 @@ Created on Mon Nov  6 18:45:28 2023
 
 @author: dhulse
 """
-from fmdtools.sim.sample import ParameterDomain
-from fmdtools.sim.search import ParameterProblem
-from examples.multirotor.drone_mdl_rural import Drone, DroneParam
+from examples.multirotor.drone_mdl_rural import Drone
 
 
+from fmdtools.sim.search import BaseSimProblem
+from fmdtools.sim import propagate
+import numpy as np
+
+
+
+# Fault set / sequence generator
+def gen_single_fault_times(fd, *x):
+    sequences = []
+    for i, fault in enumerate(fd.faults):
+        seq = Sequence.from_fault(fault, x[i])
+        sequences.append(seq)
+    return sequences
+
+
+seqs = gen_single_fault_times(fd1, *[i for i in range(len(fd1.faults))])
 
 
 #expd1("series-split", "oct")
