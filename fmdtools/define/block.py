@@ -524,15 +524,13 @@ class Block(Simulable):
         for flow in self.flows.values():
             flow.reset()
 
-    def copy(self, flows, *args, **kwargs):
+    def copy(self, *args, **kwargs):
         """
 
         Parameters
         ----------
-        flows  : dict
-            Dictionary of new flows to add to the block
         args   : tuple
-            New arguments to use to instantiate the block
+            New arguments to use to instantiate the block, (e.g., flows, p, s)
         kwargs :
             New kwargs to use to instantiate the block 
 
@@ -546,7 +544,7 @@ class Block(Simulable):
         cop.is_copy=True
         try:
             saved_kwargs = self.get_args(**kwargs)
-            cop.__init__(self.name, flows, *args, **saved_kwargs)
+            cop.__init__(self.name, *args, **saved_kwargs)
         except TypeError as e:
             raise Exception("Poor specification of "+str(self.__class__)) from e
         cop.m.mirror(self.m)
@@ -1278,24 +1276,19 @@ class FxnBlock(Block):
         if hasattr(self, 'aa'):
             self.aa.update_seed(self.r.seed)
 
-    def copy(self, newflows, *args, **kwargs):
+    def copy(self, *args, **kwargs):
         """
         Create a copy of the function object.
 
         Adds newflows and arbitrary parameters to be associated with the copy. Used when
         copying the model.
 
-        Parameters
-        ----------
-        newflows : list
-            list of new flow objects to be associated with the copy of the function
-
         Returns
         -------
         copy : FxnBlock
             Copy of the given function with new flows
         """
-        cop = super().copy(newflows, *args, **kwargs)
+        cop = super().copy(*args, **kwargs)
         if hasattr(self, 'ca'):
             cop.ca = self.ca.copy_with_arg(**self._args_ca)
             cop.update_contained_modes('ca')

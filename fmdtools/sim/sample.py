@@ -9,7 +9,7 @@ Has classes:
 - :class:`SampleApproach`: Defines a set of fault scenario samples.
 - :Class:`ParameterSample`: Defines a sample of a set of parameters.
 """
-from fmdtools.define.common import get_var, t_key, nest_dict
+from fmdtools.define.common import get_var, nest_dict
 from fmdtools.define.parameter import Parameter, ExampleParameter
 from fmdtools.sim.scenario import SingleFaultScenario, Injection, JointFaultScenario
 from fmdtools.sim.scenario import ParameterScenario
@@ -306,11 +306,6 @@ def same_mode(modename1, modename2, exact=True):
         return modename1 == modename2
     else:
         return modename1 in modename2
-
-
-def create_scenname(faulttup, time):
-    """Create a scenario name for a given fault scenario."""
-    return '_'.join([fm[0]+'_'+fm[1]+'_' for fm in faulttup])+t_key(time)
 
 
 def sample_times_even(times, numpts, dt=1.0):
@@ -808,28 +803,12 @@ class FaultSample(BaseSample):
          - affect_dof_rf_propwarp_t5
         """
         self._times.add(time)
-        if len(faulttup) == 1:
-            faulttup = faulttup[0]
-        if self.phasemap:
-            phase = self.phasemap.find_base_phase(time)
-        else:
-            phase = ''
-        rate = self.faultdomain.mdl.get_scen_rate(faulttup[0], faulttup[1], time,
-                                                  phasemap=self.phasemap,
-                                                  weight=weight)
-        sequence = {time: Injection(faults={faulttup[0]: [faulttup[1]]})}
-        scen = SingleFaultScenario(sequence=sequence,
-                                   function=faulttup[0],
-                                   fault=faulttup[1],
-                                   rate=rate,
-                                   name=create_scenname((faulttup,), time),
-                                   time=time,
-                                   times=(time,),
-                                   phase=phase)
+        scen = SingleFaultScenario.from_fault(faulttup, time, mdl=self.faultdomain.mdl,
+                                              weight=weight, phasemap=self.phasemap)
         self._scenarios.append(scen)
 
     def add_joint_fault_scenario(self, faulttups, time, weight=1.0, baserate='ind',
-                           p_cond=1.0):
+                                 p_cond=1.0):
         """
         Add a single fault scenario to the list of scenarios.
 
@@ -868,42 +847,9 @@ class FaultSample(BaseSample):
         True
         """
         self._times.add(time)
-        if self.phasemap:
-            phase = self.phasemap.find_base_phase(time)
-        else:
-            phase = ''
-        # calculate rate
-        rates = {}
-        for i, faulttup in enumerate(faulttups):
-            rates[faulttup] = self.faultdomain.mdl.get_scen_rate(*faulttup,
-                                                                 time,
-                                                                 phasemap=self.phasemap,
-                                                                 weight=weight)
-        if baserate == 'ind':
-            rate = np.prod([*rates.values()])
-        elif baserate == 'max':
-            rate = np.max([*rates.values()])
-        else:
-            rate = rates[baserate]
-        rate *= p_cond
-        # create sequence
-        faults = {}
-        for faulttup in faulttups:
-            if faulttup[0] not in faults:
-                faults[faulttup[0]] = [faulttup[1]]
-            else:
-                faults[faulttup[0]].append(faulttup[1])
-        sequence = {time: Injection(faults=faults)}
-        # add fault scenario
-        scen = JointFaultScenario(sequence=sequence,
-                                  joint_faults=len(faulttups),
-                                  functions=tuple(set([f[0] for f in faulttups])),
-                                  modes=tuple(set([f[1] for f in faulttups])),
-                                  rate=rate,
-                                  name=create_scenname(faulttups, time),
-                                  time=time,
-                                  times=(time,),
-                                  phase=phase)
+        scen = JointFaultScenario.from_faults(faulttups, time, mdl=self.faultdomain.mdl,
+                                              weight=weight, baserate=baserate,
+                                              p_cond=p_cond)
         self._scenarios.append(scen)
 
     def add_fault_times(self, times, weights=[], n_joint=1, **joint_kwargs):
