@@ -24,7 +24,7 @@ def descost(*x):
 def set_con(*x):
     return 0.5 - float(0 <= x[0] <= 3 and 0 <= x[1] <= 2)
 
-sp0 = SimpleProblem("bat", "arch")
+sp0 = SimpleProblem("bat", "linearch")
 sp0.add_objective("cost", descost)
 sp0.add_constraint("set", set_con, comparator="less")
 sp0.cost(1,1)
@@ -34,42 +34,98 @@ class ProblemArchitecture(BaseProblem):
 
     def __init__(self):
         self.problems = {}
+        self.variables = {}
+        self.connectors = {}
         self.problem_graph = nx.DiGraph()
         super().__init__()
 
-    def add_problem(self, probname, problem, upstream_problems={}):
-        self.problems[probname] = problem
-        for upprob in upstream_problems:
-            self.problem_graph.add_edge(upprob, probname,
-                                        label=upstream_problems[upprob])
-        self.variables.update({probname+"."+k: v for k, v in problem.variables.items()})
-        self.objectives.update({probname+"."+k: v
+    def add_connector_variable(self, name, *varnames):
+        self.connectors[name] = {v: np.nan for v in varnames}
+        self.problem_graph.add_node(name)
+
+    def add_problem(self, name, problem, inputs=[], outputs=[]):
+        if self.problems:
+            upstream_problem = [*self.problems][-1]
+            self.problem_graph.add_edge(upstream_problem, name,
+                                        label = "next")
+        self.problems[name] = problem
+        self.problem_graph.add_node(name, order = len(self.problems))
+
+        for con in inputs:
+            self.problem_graph.add_edge(con, name, label="input")
+        for con in outputs:
+            self.problem_graph.add_edge(name, con, label="output")
+
+        self.variables.update({name+"."+k: v for k, v in problem.variables.items()})
+        self.objectives.update({name+"."+k: v
                                 for k, v in problem.objectives.items()})
-        self.constraints.update({probname+"."+k: v
+        self.constraints.update({name+"."+k: v
                                  for k, v in problem.constraints.items()})
 
     def update_problem(self, probname, *x):
         # TODO: need a way update upstream sims and then update problem
+        #x_upstream = 
         self.problems[probname].update_objectives(*x)
+
+    def update_problem_outputs(self, probname):
+        outputs = self.get_outputs(probname)
+        for output, outputdict in outputs.items():
+            outputdict = {o: self.problems[probname].variables[o] for o in outputdict}
+            self.connectors[output] = outputdict
+
+    def find_inputs(self, probname):
+        return [e[0] for e in self.problem_graph.in_edges(probname)
+                if self.problem_graph.edges[e]['label']=='input']
+
+    def find_outputs(self, probname):
+        return [e[1] for e in self.problem_graph.out_edges(probname)
+                if self.problem_graph.edges[e]['label']=='output']
+
+    def get_inputs(self, probname):
+        return {c: self.connectors[c] for c in self.find_inputs(probname)}
+
+    def get_outputs(self, probname):
+        return {c: self.connectors[c] for c in self.find_outputs(probname)}
+
+    def get_downstream_sims(self, probname):
+        return [s for s in nx.traversal.bfs_tree(self.problem_graph, probname)
+                if s != probname]
+
+    def get_upstream_sims(self, probname):
+        return [s for s in
+                nx.traversal.bfs_tree(self.problem_graph, probname, reverse=True)
+                if s != probname]
+
+    def get_connections(self):
+        return {k: v for k, v in self.problem_graph.edges().items()}
 
     def show_sequence(self):
         fig, ax = setup_plot()
         pos = nx.kamada_kawai_layout(self.problem_graph, dim=2)
-        nx.draw(self.problem_graph, with_labels=True, pos=pos)
+        nx.draw(self.problem_graph, pos=pos)
+        orders = nx.get_node_attributes(self.problem_graph, "order")
+        names = nx.get_node_attributes(self.problem_graph, "label")
+        labels = {node: str(orders[node]) + ": " + node if node in orders else node
+                  for node in self.problem_graph}
+        nx.draw_networkx_labels(self.problem_graph, pos, labels=labels)
         edge_labels = nx.get_edge_attributes(self.problem_graph, "label")
         nx.draw_networkx_edge_labels(self.problem_graph, pos, edge_labels=edge_labels)
         return fig, ax
 
 
 pa = ProblemArchitecture()
-pa.add_problem("arch_cost", sp0)
-pa.add_problem("arch_performance", ex_soc_opt, upstream_problems={"arch_cost": "vars"})
-pa.add_problem("mechfault_recovery", sp, upstream_problems={"arch_performance": 'mdl'})
-pa.add_problem("charge_resilience", sp2, upstream_problems={"arch_performance": 'mdl'})
+pa.add_connector_variable("vars", "bat", "linearch")
+pa.add_problem("arch_cost", sp0, outputs=["vars"])
+
+pa.add_problem("arch_performance", ex_soc_opt, inputs=["vars"])
+#pa.add_problem("mechfault_recovery", sp, inputs=["vars"])
+#pa.add_problem("charge_resilience", sp2, inputs=["vars"])
 
 pa.show_sequence()
 
+pa.get_downstream_sims("arch_cost")
 
+pa.update_problem_outputs("arch_cost")
 
 # Fault set / sequence generator
 # def gen_single_fault_times(fd, *x):
