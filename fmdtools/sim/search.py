@@ -130,12 +130,12 @@ class BaseProblem(object):
                                       for k, v in self.variables.items()])
         if self.variables:
             rep_str += "\n"+"VARIABLES\n" + var_str
-        obj_str = " -" + "\n -".join(['{:<45}{:>20.4f}'.format(v.name+":", v.value)
-                                      for v in self.objectives.values()])
+        obj_str = " -" + "\n -".join(['{:<45}{:>20.4f}'.format(k, v.value)
+                                      for k, v in self.objectives.items()])
         if self.objectives:
             rep_str += "\n" + "OBJECTIVES\n" + obj_str
-        con_str = " -" + "\n -".join(['{:<45}{:>20.4f}'.format(v.name+":", v.value)
-                                      for v in self.constraints.values()])
+        con_str = " -" + "\n -".join(['{:<45}{:>20.4f}'.format(k, v.value)
+                                      for k, v in self.constraints.items()])
         if self.constraints:
             rep_str += "\n" + "CONSTRAINTS\n" + con_str
         return rep_str
@@ -507,10 +507,10 @@ class ParameterSimProblem(BaseSimProblem):
      -y                                                             nan
      -x                                                             nan
     OBJECTIVES
-     -s.x:                                                          inf
-     -s.y:                                                          inf
+     -f1                                                            inf
+     -f2                                                            inf
     CONSTRAINTS
-     -s.x:                                                          inf
+     -g1                                                            inf
 
     # once this is set up, you can use the objectives/constraints as callables, like so:
     >>> exprob.f1(1, 0)

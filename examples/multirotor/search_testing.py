@@ -4,7 +4,7 @@ Created on Mon Nov  6 18:45:28 2023
 
 @author: dhulse
 """
-from fmdtools.sim.search import SimpleProblem
+from fmdtools.sim.search import SimpleProblem, BaseProblem
 from examples.multirotor.test_multirotor import ex_soc_opt, sp, sp2
 
 import networkx as nx
@@ -24,23 +24,32 @@ def descost(*x):
 def set_con(*x):
     return 0.5 - float(0 <= x[0] <= 3 and 0 <= x[1] <= 2)
 
-sp = SimpleProblem("bat", "arch")
-sp.add_objective("cost", descost)
-sp.add_constraint("set", set_con, comparator="less")
-sp.cost(1,1)
+sp0 = SimpleProblem("bat", "arch")
+sp0.add_objective("cost", descost)
+sp0.add_constraint("set", set_con, comparator="less")
+sp0.cost(1,1)
 
 
-class ProblemArchitecture(object):
+class ProblemArchitecture(BaseProblem):
 
     def __init__(self):
         self.problems = {}
         self.problem_graph = nx.DiGraph()
+        super().__init__()
 
     def add_problem(self, probname, problem, upstream_problems={}):
         self.problems[probname] = problem
         for upprob in upstream_problems:
             self.problem_graph.add_edge(upprob, probname,
                                         label=upstream_problems[upprob])
+        self.variables.update({probname+"."+k: v for k, v in problem.variables.items()})
+        self.objectives.update({probname+"."+k: v
+                                for k, v in problem.objectives.items()})
+        self.constraints.update({probname+"."+k: v
+                                 for k, v in problem.constraints.items()})
+
+    def update_problem(self, probname, *x):
+        self.problems[probname].update_objectives(*x)
 
     def show_sequence(self):
         fig, ax = setup_plot()
@@ -52,7 +61,7 @@ class ProblemArchitecture(object):
 
 
 pa = ProblemArchitecture()
-pa.add_problem("arch_cost", sp)
+pa.add_problem("arch_cost", sp0)
 pa.add_problem("arch_performance", ex_soc_opt, upstream_problems={"arch_cost": "vars"})
 pa.add_problem("mechfault_recovery", sp, upstream_problems={"arch_performance": 'mdl'})
 pa.add_problem("charge_resilience", sp2, upstream_problems={"arch_performance": 'mdl'})
