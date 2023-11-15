@@ -49,6 +49,7 @@ class ProblemArchitecture(BaseProblem):
                                  for k, v in problem.constraints.items()})
 
     def update_problem(self, probname, *x):
+        # TODO: need a way update upstream sims and then update problem
         self.problems[probname].update_objectives(*x)
 
     def show_sequence(self):
