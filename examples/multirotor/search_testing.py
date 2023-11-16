@@ -4,31 +4,50 @@ Created on Mon Nov  6 18:45:28 2023
 
 @author: dhulse
 """
-from fmdtools.sim.search import SimpleProblem, BaseProblem
+from fmdtools.define.block import Simulable
+from fmdtools.sim.search import SimpleProblem, BaseProblem, BaseObjCon
+from fmdtools.sim.search import ex_sp, ex_scenprob, ex_dp
 from examples.multirotor.test_multirotor import ex_soc_opt, sp, sp2
 
 import networkx as nx
 import numpy as np
+from recordclass import dataobject
 
 
 from fmdtools.analyze.common import setup_plot
 
+class BaseConnector(dataobject):
+    name: str=''
 
 
-def descost(*x):
-    batcostdict = {'monolithic': 0, 'series-split': 300,
-                   'parallel-split': 300, 'split-both': 600}
-    linecostdict = {'quad': 0, 'hex': 1000, 'oct': 2000}
-    return [*batcostdict.values()][x[0]]+[*batcostdict.values()][x[1]]
+class VariableConnector(BaseConnector):
+    keys: tuple=()
+    values: np.array=np.array([])
 
-def set_con(*x):
-    return 0.5 - float(0 <= x[0] <= 3 and 0 <= x[1] <= 2)
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        if not self.values:
+            self.values = np.array([np.nan for k in self.keys])
 
-sp0 = SimpleProblem("bat", "linearch")
-sp0.add_objective("cost", descost)
-sp0.add_constraint("set", set_con, comparator="less")
-sp0.cost(1,1)
+    def update(self, valuedict):
+        for i, k in enumerate(self.keys):
+            self.values[i] = valuedict[k]
 
+    def update_values(self, *x):
+        for i, x_i in enumerate(x):
+            self.values[i]=x
+
+class ModelConnector(BaseConnector):
+    mdl: Simulable
+
+class ObjectiveConnector(VariableConnector):
+    a=1
+
+class ConstraintConnector(ObjectiveConnector):
+    a=1
+
+
+"""Problem prototyping"""
 
 class ProblemArchitecture(BaseProblem):
 
@@ -41,9 +60,8 @@ class ProblemArchitecture(BaseProblem):
 
     def prob_repr(self):
         repstr = ""
-        constr = " -" + "\n -".join(['{:<45}{:>20.4f}'.format(k+"."+kv, v)
-                                     for k, var in self.connectors.items()
-                                     for kv, v in var.items()])
+        constr = " -" + "\n -".join(['{:<45}{:>20}'.format(k, str(var.values))
+                                     for k, var in self.connectors.items()])
         if constr:
             repstr += "\nCONNECTORS\n" + constr
         probstr = " -" + "\n -".join([pn+"("+str(self.find_inputs(pn)+["x"])+")"
@@ -54,7 +72,7 @@ class ProblemArchitecture(BaseProblem):
         return repstr
 
     def add_connector_variable(self, name, *varnames):
-        self.connectors[name] = {v: np.nan for v in varnames}
+        self.connectors[name] = VariableConnector(name, varnames)
         self.problem_graph.add_node(name)
 
     def add_problem(self, name, problem, inputs=[], outputs=[]):
@@ -84,9 +102,19 @@ class ProblemArchitecture(BaseProblem):
 
     def update_problem_outputs(self, probname):
         outputs = self.get_outputs(probname)
-        for output, outputdict in outputs.items():
-            outputdict = {o: self.problems[probname].variables[o] for o in outputdict}
-            self.connectors[output] = outputdict
+        for output, connector in outputs.items():
+            if isinstance(connector, VariableConnector):
+                connector.update(self.problems[probname].variables)
+            elif isinstance(connector, ObjectiveConnector):
+                connector.update(self.problems[probname].objectives)
+            elif isinstance(connector, ConstraintConnector):
+                connector.update(self.problems[probname].constraints)
+            elif isinstance(connector, ModelConnector):
+                # TODO: find a way to cache model in ParameterProb
+                # TODO: make sure to handle ScenarioProb well
+                connector.update(self.problems[probname].mdl)
+            else:
+                raise Exception("Invalid connector: "+connector)
 
     def find_inputs(self, probname):
         return [e[0] for e in self.problem_graph.in_edges(probname)
@@ -98,7 +126,7 @@ class ProblemArchitecture(BaseProblem):
 
     def get_inputs_as_x(self, probname):
         inputs = self.get_inputs(probname)
-        return [vv for v in inputs.values() for vv in v.values()]
+        return [vv for v in inputs.values() for vv in v.values]
 
     def get_inputs(self, probname):
         return {c: self.connectors[c] for c in self.find_inputs(probname)}
@@ -116,12 +144,9 @@ class ProblemArchitecture(BaseProblem):
         ind = probs.index(probname)
         return probs[:ind]
 
-    def get_connections(self):
-        return {k: v for k, v in self.problem_graph.edges().items()}
-
     def show_sequence(self):
         fig, ax = setup_plot()
-        pos = nx.kamada_kawai_layout(self.problem_graph, dim=2)
+        pos = nx.planar_layout(self.problem_graph, dim=2)
         nx.draw(self.problem_graph, pos=pos)
         orders = nx.get_node_attributes(self.problem_graph, "order")
         names = nx.get_node_attributes(self.problem_graph, "label")
@@ -132,6 +157,46 @@ class ProblemArchitecture(BaseProblem):
         nx.draw_networkx_edge_labels(self.problem_graph, pos, edge_labels=edge_labels)
         return fig, ax
 
+ex_sp, ex_scenprob, ex_dp
+
+ex_pa = ProblemArchitecture()
+ex_pa.add_connector_variable("x0", "x0")
+ex_pa.add_connector_variable("x1", "x1")
+ex_pa.add_problem("ex_sp", ex_sp, outputs=["x0", "x1"])
+ex_pa.add_problem("ex_scenprob", ex_scenprob, inputs=["x0"])
+ex_pa.add_problem("ex_dp", ex_dp, inputs=["x1"])
+
+ex_pa.show_sequence()
+
+ex_pa.update_problem("ex_sp", 1, 2)
+
+# should reflect new variable values:
+ex_pa.problems["ex_sp"]
+
+# variables should propagate:
+ex_pa.update_problem("ex_scenprob")
+ex_pa.problems["ex_scenprob"]
+
+#variables shoudl propagate again:
+ex_pa.update_problem("ex_dp")
+ex_pa.problems['ex_dp']
+
+
+"""multirotor example cost problem"""
+
+def descost(*x):
+    batcostdict = {'monolithic': 0, 'series-split': 300,
+                   'parallel-split': 300, 'split-both': 600}
+    linecostdict = {'quad': 0, 'hex': 1000, 'oct': 2000}
+    return [*batcostdict.values()][x[0]]+[*batcostdict.values()][x[1]]
+
+def set_con(*x):
+    return 0.5 - float(0 <= x[0] <= 3 and 0 <= x[1] <= 2)
+
+sp0 = SimpleProblem("bat", "linearch")
+sp0.add_objective("cost", descost)
+sp0.add_constraint("set", set_con, comparator="less")
+sp0.cost(1,1)
 
 pa = ProblemArchitecture()
 pa.add_connector_variable("vars", "bat", "linearch")

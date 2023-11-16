@@ -12,6 +12,7 @@ import fmdtools.sim.propagate as propagate
 from fmdtools.define.common import t_key
 from fmdtools.sim.scenario import Sequence, SingleFaultScenario, Scenario
 from fmdtools.sim.sample import FaultDomain
+from fmdtools.define.block import ExampleFxnBlock
 
 
 class BaseObjCon(dataobject):
@@ -27,7 +28,7 @@ class BaseObjCon(dataobject):
     """
 
     name: str = ''
-    value: float = np.inf
+    value: float = np.nan
 
 
 class Objective(BaseObjCon):
@@ -230,15 +231,15 @@ class SimpleProblem(BaseProblem):
 
     Examples
     --------
-    >>> sp = SimpleProblem("x0", "x1")
+    >>> ex_sp = SimpleProblem("x0", "x1")
     >>> f1 = lambda x0, x1: x0 + x1
-    >>> sp.add_objective("f1", f1)
+    >>> ex_sp.add_objective("f1", f1)
     >>> g1 = lambda x0, x1: x0 - x1
-    >>> sp.add_constraint("g1", g1, threshold=3.0, comparator="less")
+    >>> ex_sp.add_constraint("g1", g1, threshold=3.0, comparator="less")
 
-    >>> sp.f1(1, 1)
+    >>> ex_sp.f1(1, 1)
     2
-    >>> sp.g1(1, 1)
+    >>> ex_sp.g1(1, 1)
     -3.0
     """
 
@@ -284,6 +285,13 @@ class SimpleProblem(BaseProblem):
         """
         self.callables[name] = call
         super().add_constraint(name, name, **kwargs)
+
+
+ex_sp = SimpleProblem("x0", "x1")
+f1 = lambda x0, x1: x0 + x1
+ex_sp.add_objective("f1", f1)
+g1 = lambda x0, x1: x0 - x1
+ex_sp.add_constraint("g1", g1, threshold=3.0, comparator="less")
 
 
 class ResultObjective(Objective):
@@ -507,10 +515,10 @@ class ParameterSimProblem(BaseSimProblem):
      -y                                                             nan
      -x                                                             nan
     OBJECTIVES
-     -f1                                                            inf
-     -f2                                                            inf
+     -f1                                                            nan
+     -f2                                                            nan
     CONSTRAINTS
-     -g1                                                            inf
+     -g1                                                            nan
 
     # once this is set up, you can use the objectives/constraints as callables, like so:
     >>> exprob.f1(1, 0)
@@ -673,14 +681,13 @@ class SingleFaultScenarioProblem(ScenarioProblem):
 
     Examples
     --------
-    >>> from fmdtools.define.block import ExampleFxnBlock
-    >>> sp = SingleFaultScenarioProblem(ExampleFxnBlock(), ("examplefxnblock", "short"))
-    >>> sp.add_result_objective("f1", "s.y", time=5)
+    >>> ex_scenprob = SingleFaultScenarioProblem(ExampleFxnBlock(), ("examplefxnblock", "short"))
+    >>> ex_scenprob.add_result_objective("f1", "s.y", time=5)
 
     # objective value should be 1.0 (init value) + 3 * time_with_fault
-    >>> sp.f1(5.0)
+    >>> ex_scenprob.f1(5.0)
     4.0
-    >>> sp.f1(4.0)
+    >>> ex_scenprob.f1(4.0)
     7.0
     """
 
@@ -744,6 +751,10 @@ class SingleFaultScenarioProblem(ScenarioProblem):
         return scen
 
 
+ex_scenprob = SingleFaultScenarioProblem(ExampleFxnBlock(), ("examplefxnblock", "short"))
+ex_scenprob.add_result_objective("f1", "s.y", time=5)
+
+
 class DisturbanceProblem(ScenarioProblem):
     """Class for optimizing disturbances that occur at a set time."""
 
@@ -764,14 +775,13 @@ class DisturbanceProblem(ScenarioProblem):
 
         Examples
         --------
-        >>> from fmdtools.define.block import ExampleFxnBlock
-        >>> dp = DisturbanceProblem(ExampleFxnBlock(), 3, "s.y")
-        >>> dp.add_result_objective("f1", "s.y", time=5)
+        >>> ex_dp = DisturbanceProblem(ExampleFxnBlock(), 3, "s.y")
+        >>> ex_dp.add_result_objective("f1", "s.y", time=5)
 
         # objective value should the same as the input value
-        >>> dp.f1(5.0)
+        >>> ex_dp.f1(5.0)
         5.0
-        >>> dp.f1(4.0)
+        >>> ex_dp.f1(4.0)
         4.0
         """
         super().__init__(mdl, **kwargs)
@@ -802,6 +812,10 @@ class DisturbanceProblem(ScenarioProblem):
                         name='disturbance',
                         time=self.time)
         return scen
+
+
+ex_dp = DisturbanceProblem(ExampleFxnBlock(), 3, "s.y")
+ex_dp.add_result_objective("f1", "s.y", time=5)
 
 
 class DynamicInterface():
