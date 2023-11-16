@@ -39,6 +39,20 @@ class ProblemArchitecture(BaseProblem):
         self.problem_graph = nx.DiGraph()
         super().__init__()
 
+    def prob_repr(self):
+        repstr = ""
+        constr = " -" + "\n -".join(['{:<45}{:>20.4f}'.format(k+"."+kv, v)
+                                     for k, var in self.connectors.items()
+                                     for kv, v in var.items()])
+        if constr:
+            repstr += "\nCONNECTORS\n" + constr
+        probstr = " -" + "\n -".join([pn+"("+str(self.find_inputs(pn)+["x"])+")"
+                                      + " -> "+ str(self.find_outputs(pn))
+                                      for pn in self.problems])
+        if probstr:
+            repstr += "\nPROBLEMS\n" + probstr
+        return repstr
+
     def add_connector_variable(self, name, *varnames):
         self.connectors[name] = {v: np.nan for v in varnames}
         self.problem_graph.add_node(name)
@@ -64,8 +78,9 @@ class ProblemArchitecture(BaseProblem):
 
     def update_problem(self, probname, *x):
         # TODO: need a way update upstream sims and then update problem
-        #x_upstream = 
-        self.problems[probname].update_objectives(*x)
+        x_inputs = self.get_inputs_as_x(probname)
+        self.problems[probname].update_objectives(*x_inputs, *x)
+        self.update_problem_outputs(probname)
 
     def update_problem_outputs(self, probname):
         outputs = self.get_outputs(probname)
@@ -81,20 +96,25 @@ class ProblemArchitecture(BaseProblem):
         return [e[1] for e in self.problem_graph.out_edges(probname)
                 if self.problem_graph.edges[e]['label']=='output']
 
+    def get_inputs_as_x(self, probname):
+        inputs = self.get_inputs(probname)
+        return [vv for v in inputs.values() for vv in v.values()]
+
     def get_inputs(self, probname):
         return {c: self.connectors[c] for c in self.find_inputs(probname)}
 
     def get_outputs(self, probname):
         return {c: self.connectors[c] for c in self.find_outputs(probname)}
 
-    def get_downstream_sims(self, probname):
-        return [s for s in nx.traversal.bfs_tree(self.problem_graph, probname)
-                if s != probname]
+    def get_downstream_probs(self, probname):
+        probs = [*self.problems]
+        ind = probs.index(probname)
+        return probs[ind+1:]
 
-    def get_upstream_sims(self, probname):
-        return [s for s in
-                nx.traversal.bfs_tree(self.problem_graph, probname, reverse=True)
-                if s != probname]
+    def get_upstream_probs(self, probname):
+        probs = [*self.problems]
+        ind = probs.index(probname)
+        return probs[:ind]
 
     def get_connections(self):
         return {k: v for k, v in self.problem_graph.edges().items()}
@@ -123,9 +143,14 @@ pa.add_problem("arch_performance", ex_soc_opt, inputs=["vars"])
 
 pa.show_sequence()
 
-pa.get_downstream_sims("arch_cost")
+pa.get_downstream_probs("arch_cost")
 
 pa.update_problem_outputs("arch_cost")
+pa.get_inputs_as_x("arch_performance")
+
+# output should propagate as input:
+pa.update_problem("arch_cost", 2, 2)
+pa.update_problem("arch_performance")
 
 # Fault set / sequence generator
 # def gen_single_fault_times(fd, *x):
