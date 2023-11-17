@@ -50,11 +50,23 @@ class ConstraintConnector(ObjectiveConnector):
 """Problem prototyping"""
 
 class ProblemArchitecture(BaseProblem):
+    """
+    Class enabling the representation of combined joint optimization problems.
+
+    Combined optimization problems involve multiple variables and objectives which
+    interact (e.g., Integrated Resilience Optimization, Two-Stage Optimization, etc.)
+
+    Attributes
+    ----------
+    connectors : dict
+        Dictionary of Connector (variables, models, etc) added using .add_connector
+    problems : dict
+        Dictionary of optimization problems added using .add_problem
+    """
 
     def __init__(self):
-        self.problems = {}
-        self.variables = {}
         self.connectors = {}
+        self.problems = {}
         self.problem_graph = nx.DiGraph()
         super().__init__()
 
@@ -72,10 +84,35 @@ class ProblemArchitecture(BaseProblem):
         return repstr
 
     def add_connector_variable(self, name, *varnames):
+        """
+        Add a connector linking variables between problems.
+
+        Parameters
+        ----------
+        name : str
+            Name for the connector
+        *varnames : strs
+            Names of the variable values (used in each problem) to link as a part of the
+            connector.
+        """
         self.connectors[name] = VariableConnector(name, varnames)
         self.problem_graph.add_node(name)
 
     def add_problem(self, name, problem, inputs=[], outputs=[]):
+        """
+        Add a problem to the ProblemArchitecture.
+
+        Parameters
+        ----------
+        name : str
+            Name for the problem.
+        problem : BaseProblem/ScenProblem/SimpleProblem...
+            Problem object to add to the architecture.
+        inputs : list, optional
+            List of input connector names (by name). The default is [].
+        outputs : list, optional
+            List of output connector names (by name). The default is [].
+        """
         if self.problems:
             upstream_problem = [*self.problems][-1]
             self.problem_graph.add_edge(upstream_problem, name,
@@ -88,19 +125,32 @@ class ProblemArchitecture(BaseProblem):
         for con in outputs:
             self.problem_graph.add_edge(name, con, label="output")
 
-        self.variables.update({name+"."+k: v for k, v in problem.variables.items()})
-        self.objectives.update({name+"."+k: v
-                                for k, v in problem.objectives.items()})
-        self.constraints.update({name+"."+k: v
-                                 for k, v in problem.constraints.items()})
-
     def update_problem(self, probname, *x):
+        """
+        Updates a given problem with new values for inputs (and non-input variables).
+
+        Parameters
+        ----------
+        probname : str
+            Name of the problem to update.
+        *x : float
+            Input variables to update (aside from inputs).
+        """
         # TODO: need a way update upstream sims and then update problem
+        # TODO: need to sort variables so connectors fit in the right place?
         x_inputs = self.get_inputs_as_x(probname)
         self.problems[probname].update_objectives(*x_inputs, *x)
         self.update_problem_outputs(probname)
 
     def update_problem_outputs(self, probname):
+        """
+        Update the output connectors from a problem.
+
+        Parameters
+        ----------
+        probname : str
+            Name of the problem.
+        """
         outputs = self.get_outputs(probname)
         for output, connector in outputs.items():
             if isinstance(connector, VariableConnector):
@@ -117,34 +167,87 @@ class ProblemArchitecture(BaseProblem):
                 raise Exception("Invalid connector: "+connector)
 
     def find_inputs(self, probname):
+        """
+        List input connectors for a given problem.
+
+        Parameters
+        ----------
+        probname : str
+            Name of the problem.
+
+        Returns
+        -------
+        inputs : list
+            List of names of connectors used as inputs.
+        """
         return [e[0] for e in self.problem_graph.in_edges(probname)
                 if self.problem_graph.edges[e]['label']=='input']
 
     def find_outputs(self, probname):
+        """
+        List output connectors for a given problem.
+
+        Parameters
+        ----------
+        probname : str
+            Name of the problem.
+
+        Returns
+        -------
+        outputs : list
+            List of names of connectors used as outputs.
+        """
         return [e[1] for e in self.problem_graph.out_edges(probname)
                 if self.problem_graph.edges[e]['label']=='output']
 
     def get_inputs_as_x(self, probname):
+        """
+        Get variable values for inputs.
+
+        Parameters
+        ----------
+        probname : str
+            Name of the problem..
+
+        Returns
+        -------
+        inputs : list
+            Input connectors and their values.
+        """
         inputs = self.get_inputs(probname)
         return [vv for v in inputs.values() for vv in v.values]
 
     def get_inputs(self, probname):
+        """Return a dict of input connectors for problem probname."""
         return {c: self.connectors[c] for c in self.find_inputs(probname)}
 
     def get_outputs(self, probname):
+        """Return a dict of output connectors for problem probname."""
         return {c: self.connectors[c] for c in self.find_outputs(probname)}
 
     def get_downstream_probs(self, probname):
+        """Return a list of all problems to be executed after the problem probname."""
         probs = [*self.problems]
         ind = probs.index(probname)
         return probs[ind+1:]
 
     def get_upstream_probs(self, probname):
+        """Return a list of all problems to be executed before the problem probname."""
         probs = [*self.problems]
         ind = probs.index(probname)
         return probs[:ind]
 
     def show_sequence(self):
+        """
+        Show a visualization of the problem architecture.
+
+        Returns
+        -------
+        fig : mpl.figure
+            Figure object.
+        ax : mpl.axis
+            Axis object.
+        """
         fig, ax = setup_plot()
         pos = nx.planar_layout(self.problem_graph, dim=2)
         nx.draw(self.problem_graph, pos=pos)
