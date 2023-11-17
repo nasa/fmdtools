@@ -102,6 +102,7 @@ class Simulable(object):
     """
     __slots__ = ('p', '_args_p', 'sp', '_args_sp', 'r', '_args_r', 'h', 'track', 'flows', 'name', 'is_copy')
     default_sp = {}
+    default_track = ["all"]
     _init_p = Parameter
     _init_r = Rand
     _init_sp = SimParam
