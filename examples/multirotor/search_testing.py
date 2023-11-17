@@ -26,7 +26,7 @@ class VariableConnector(BaseConnector):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        if not self.values:
+        if self.values.size == 0:
             self.values = np.array([np.nan for k in self.keys])
 
     def update(self, valuedict):
@@ -62,6 +62,24 @@ class ProblemArchitecture(BaseProblem):
         Dictionary of Connector (variables, models, etc) added using .add_connector
     problems : dict
         Dictionary of optimization problems added using .add_problem
+
+    Examples
+    --------
+    >>> ex_pa = ProblemArchitecture()
+    >>> ex_pa.add_connector_variable("x0", "x0")
+    >>> ex_pa.add_connector_variable("x1", "x1")
+    >>> ex_pa.add_problem("ex_sp", ex_sp, outputs=["x0", "x1"])
+    >>> ex_pa.add_problem("ex_scenprob", ex_scenprob, inputs=["x0"])
+    >>> ex_pa.add_problem("ex_dp", ex_dp, inputs=["x1"])
+    >>> ex_pa
+    ProblemArchitecture with:
+    CONNECTORS
+     -x0                                                          [nan]
+     -x1                                                          [nan]
+    PROBLEMS
+     -ex_sp(['x']) -> ['x0', 'x1']
+     -ex_scenprob(['x0', 'x']) -> []
+     -ex_dp(['x1', 'x']) -> []
     """
 
     def __init__(self):
@@ -129,12 +147,40 @@ class ProblemArchitecture(BaseProblem):
         """
         Updates a given problem with new values for inputs (and non-input variables).
 
+        Additionally updates output connectors.
+
         Parameters
         ----------
         probname : str
             Name of the problem to update.
         *x : float
             Input variables to update (aside from inputs).
+
+        Examples
+        --------
+        >>> ex_pa.update_problem("ex_sp", 1, 2)
+        >>> ex_pa.problems["ex_sp"]
+        SimpleProblem with:
+        VARIABLES
+         -x0                                                         1.0000
+         -x1                                                         2.0000
+        OBJECTIVES
+         -f1                                                         3.0000
+        CONSTRAINTS
+         -g1                                                        -4.0000
+
+        This update should further update connectors:
+         >>> ex_pa.get_outputs("ex_sp")
+         {'x0': VariableConnector(name='x0', keys=('x0',), values=array([1.])), 'x1': VariableConnector(name='x1', keys=('x1',), values=array([2.]))}
+
+        Which should then propagate to downstream sims:
+        >>> ex_pa.update_problem("ex_scenprob")
+        >>> ex_pa.problems["ex_scenprob"]
+        SingleScenarioProblem(examplefxnblock, short) with:
+        VARIABLES
+         -time                                                       1.0000
+        OBJECTIVES
+         -f1                                                        16.0000
         """
         # TODO: need a way update upstream sims and then update problem
         # TODO: need to sort variables so connectors fit in the right place?
@@ -181,7 +227,7 @@ class ProblemArchitecture(BaseProblem):
             List of names of connectors used as inputs.
         """
         return [e[0] for e in self.problem_graph.in_edges(probname)
-                if self.problem_graph.edges[e]['label']=='input']
+                if self.problem_graph.edges[e]['label'] == 'input']
 
     def find_outputs(self, probname):
         """
@@ -198,7 +244,7 @@ class ProblemArchitecture(BaseProblem):
             List of names of connectors used as outputs.
         """
         return [e[1] for e in self.problem_graph.out_edges(probname)
-                if self.problem_graph.edges[e]['label']=='output']
+                if self.problem_graph.edges[e]['label'] == 'output']
 
     def get_inputs_as_x(self, probname):
         """
@@ -272,17 +318,6 @@ ex_pa.add_problem("ex_dp", ex_dp, inputs=["x1"])
 ex_pa.show_sequence()
 
 ex_pa.update_problem("ex_sp", 1, 2)
-
-# should reflect new variable values:
-ex_pa.problems["ex_sp"]
-
-# variables should propagate:
-ex_pa.update_problem("ex_scenprob")
-ex_pa.problems["ex_scenprob"]
-
-#variables shoudl propagate again:
-ex_pa.update_problem("ex_dp")
-ex_pa.problems['ex_dp']
 
 
 """multirotor example cost problem"""
