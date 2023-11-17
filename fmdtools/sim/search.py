@@ -1455,26 +1455,28 @@ ex_pa.add_problem("ex_scenprob", ex_scenprob, inputs={"x0": ["time"]})
 ex_pa.add_problem("ex_dp", ex_dp, inputs={"x1": ["s.y"]})
 
 
-
 class DynamicInterface():
-    """ 
-    Interface for dynamic search of model states (e.g., AST)
-    
-    Attributes:
-        t : float
-            time
-        t_max : float
-            max time
-        t_ind : int
-            time index in log
-        desired_result : list
-            variables to get from the model at each time-step
-        hist : History
-            mdlhist for simulation
     """
-    def __init__(self, mdl, mdl_kwargs={}, t_max=False, track="all", run_stochastic="track_pdf", desired_result=[], use_end_condition=None):
+    Interface for dynamic search of model states (e.g., AST).
+
+    Attributes
+    ----------
+    t : float
+        time
+    t_max : float
+        max time
+    t_ind : int
+        time index in log
+    desired_result : list
+        variables to get from the model at each time-step
+    hist : History
+        mdlhist for simulation
+    """
+
+    def __init__(self, mdl, mdl_kwargs={}, t_max=False, track="all",
+                 run_stochastic="track_pdf", desired_result=[], use_end_condition=None):
         """
-        Initializing the problem
+        Initialize the problem.
 
         Parameters
         ----------
@@ -1487,65 +1489,80 @@ class DynamicInterface():
         track : str/dict, optional
             Properties of the model to track over time. The default is "all".
         run_stochastic : bool/str, optional
-            Whether to run stochastic behaviors (True/False) and/or return pdf "track_pdf". The default is "track_pdf".
+            Whether to run stochastic behaviors (True/False) and/or
+            return pdf ("track_pdf"). The default is "track_pdf".
         desired_result : list, optional
             List of desired results to return at each update. The default is [].
         use_end_condition : bool, optional
             Whether to use model end-condition. The default is None.
         """
-        self.t=0.0
-        self.t_ind=0
-        if not t_max:   self.t_max=mdl.sp.times[-1]
-        else:           self.t_max = t_max
-        if type(desired_result)==str:   self.desired_result=[desired_result]
-        else:                           self.desired_result = desired_result
+        self.t = 0.0
+        self.t_ind = 0
+        if not t_max:
+            self.t_max = mdl.sp.times[-1]
+        else:
+            self.t_max = t_max
+        if type(desired_result) == str:
+            self.desired_result = [desired_result]
+        else:
+            self.desired_result = desired_result
         self.mdl = mdl.new_with_params(**mdl_kwargs)
-        timerange= np.arange(self.t, self.t_max+2*mdl.sp.dt, mdl.sp.dt)
+        timerange = np.arange(self.t, self.t_max+2*mdl.sp.dt, mdl.sp.dt)
         self.hist = mdl.create_hist(timerange, track)
-        if 'time' not in self.hist: 
-            self.hist.init_att('time', timerange[0], timerange=timerange, track='all', dtype=float)
-        self.run_stochastic=run_stochastic
+        if 'time' not in self.hist:
+            self.hist.init_att('time', timerange[0], timerange=timerange, track='all',
+                               dtype=float)
+        self.run_stochastic = run_stochastic
         self.use_end_condition = use_end_condition
+
     def update(self, seed={}, faults={}, disturbances={}):
         """
-        Updates the model states at the simulation time and iterates time
+        Update the model states at the simulation time and iterates time.
 
         Parameters
         ----------
         seed : seed, optional
             Seed for the simulation. The default is {}.
         faults : dict, optional
-            faults to inject in the model, with structure {fxn:[faults]}. The default is {}.
+            faults to inject in the model, with structure {fxn:[faults]}.
+            The default is {}.
         disturbances : dict, optional
-            Variables to change in the model, with structure {fxn.var:value}. The default is {}.
+            Variables to change in the model, with structure {fxn.var:value}.
+            The default is {}.
 
         Returns
         -------
         returns : dict
             dictionary of returns with values corresponding to desired_result
         """
-        if seed: self.mdl.update_seed(seed)
-        self.mdl.propagate(self.t, fxnfaults=faults, disturbances=disturbances, run_stochastic=self.run_stochastic)
+        if seed:
+            self.mdl.update_seed(seed)
+        self.mdl.propagate(self.t, fxnfaults=faults, disturbances=disturbances,
+                           run_stochastic=self.run_stochastic)
         self.hist.log(self.mdl, self.t_ind, time=self.t)
-        
+
         returns = {}
-        for result in self.desired_result:      returns[result] = self.mdl.get_vars(result)
-        if self.run_stochastic=="track_pdf":    returns['pdf'] = self.mdl.return_probdens()
+        for result in self.desired_result:
+            returns[result] = self.mdl.get_vars(result)
+        if self.run_stochastic == "track_pdf":
+            returns['pdf'] = self.mdl.return_probdens()
 
         self.t += self.mdl.sp.dt
-        self.t_ind +=1
-        if returns: return returns
+        self.t_ind += 1
+        if returns:
+            return returns
+
     def check_sim_end(self, external_condition=False):
         """
-        Checks the model end-condition (and sim time) and clips the simulation log if necessary
-        
+        Check the model end-condition (and sim time) and clips the simulation log.
+
         Parameters
         ----------
         external_condition : bool, optional
             External end-condition to trigger simulation end. The default is False.
-        
+
         Returns
-        ----------
+        -------
         end : bool
             Whether the simulation is finished
         """
