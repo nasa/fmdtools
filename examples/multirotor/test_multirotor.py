@@ -16,14 +16,14 @@ bats = ['monolithic', 'series-split', 'parallel-split', 'split-both']
 
 
 def bat_var_map(x):
-    return (bats[x], )
+    return (bats[int(x)], )
 
 
 linarchs = ['quad', 'hex', 'oct']
 
 
 def line_arch_map(x):
-    return (linarchs[x], )
+    return (linarchs[int(x)], )
 
 
 expd1 = ParameterDomain(DroneParam)
