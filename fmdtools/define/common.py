@@ -208,7 +208,7 @@ def get_true_fields(dataobject, *args, force_kwargs=False, **kwargs):
     NOTE: must be used for pickling, since pickle passes arguments as *args and not
     **kwargs.
     """
-    true_args = list(dataobject.__defaults__)
+    true_args = list([*dataobject.__default_vals__])
     for i, n in enumerate(dataobject.__fields__):
         if force_kwargs:
             true_args[i] = kwargs[n]
