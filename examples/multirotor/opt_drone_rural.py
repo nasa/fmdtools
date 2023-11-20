@@ -1,8 +1,6 @@
 # -*- coding: utf-8 -*-
 """
 Functions/classes for optimizing the drone defined in drone_mdl_opt.py.
-
-TODO: Adapt to new sample/optimization methods.
 """
 
 from drone_mdl_rural import Drone, DroneParam, ResPolicy, DronePhysicalParameters
@@ -165,11 +163,11 @@ def calc_res(mdl, fullcosts=False, faultmodes='all', include_nominal=True,
 
 def x_to_rcost(xdes, xoper, xres, loc='rural', fullcosts=False, faultmodes='all',
                include_nominal=False, pool=False, phases={}, staged=True):
-    """Calcualte resilience cost at xdes, xoper, xres variables."""
-    fp = plan_flight(xoper[0])
+    """Calculate resilience cost at xdes, xoper, xres variables."""
+    fp = plan_flight(xoper[0])[0]
     phys_p = DronePhysicalParameters(bat=bats[xdes[0]], linearch=linarchs[xdes[1]])
     params = DroneParam(phys_param=phys_p,
-                        respolicy=ResPolicy(bat='continue', line='continue'),
+                        respolicy=ResPolicy(*xr_paramfunc(*xres)),
                         flightplan=fp,
                         env_param=DroneEnvironmentGridParam(loc=loc))
     mdl = Drone(p=params)
@@ -198,8 +196,8 @@ pd.add_variable("flightplan", var_map=plan_flight)
 
 oper_prob = ParameterSimProblem(def_mdl, pd, "nominal")
 oper_prob.add_result_objective("co", "expected_cost")
-oper_prob.add_result_objective("g_soc", "store_ee.s.soc")  # end > 20
-oper_prob.add_result_objective("g_faults", "faults")
+oper_prob.add_result_constraint("g_soc", "store_ee.s.soc", time=20, threshold=10)
+oper_prob.add_result_constraint("g_faults", "faults")
 # TODO: add way of adding history objectives (make sure tracked)
 # oper_prob.add_history_constraint("g_max_height", "dofs.s.z") # all < 122
 
@@ -212,13 +210,30 @@ pdr.add_variable("flightplan", var_map=plan_flight)
 pdr.add_variables("respolicy.bat", "respolicy.line", var_map=xr_paramfunc)
 
 
-res_prob = ParameterSimProblem(def_mdl, pdr, "fault_sample", fs)
+res_prob = ParameterSimProblem(def_mdl, pdr, "fault_sample", fs, include_nominal=False)
 res_prob.add_result_objective("rcost", "expected_cost")
-res_prob.rcost(1, 1, 105, 1, 1)
+# res_prob.rcost(1, 1, 105, 1, 1)
 
+# combined architecture
+prob_arch = ProblemArchitecture()
+prob_arch.add_connector_variable("xd", "bat", "line")
+prob_arch.add_connector_variable("xo", "flightplan")
+prob_arch.add_problem("des", des_prob, outputs={"xd": ("bat", "line")})
+prob_arch.add_problem("oper", oper_prob,
+                      inputs={"xd": ("phys_param.bat", "phys_param.linearch")},
+                      outputs={"xo": ("flightplan",)})
+prob_arch.add_problem("res", res_prob,
+                      inputs={"xd": ("phys_param.bat", "phys_param.linearch"),
+                              "xo": ("flightplan",)})
+
+prob_arch.oper_co_full(1, 1, 105)
+
+prob_arch.res_rcost_full(1, 1, 105, 1, 1)
+
+# x_to_rcost([1,1], [100], [1,1])
 
 if __name__ == "__main__":
     a = 1
     # re-implement:
-    # opt_prob.time_sims([1, 1, 100, 1, 1])
-    # opt_prob.iter_hist
+    # TODO: opt_prob.time_sims([1, 1, 100, 1, 1])
+    # TODO: opt_prob.iter_hist
