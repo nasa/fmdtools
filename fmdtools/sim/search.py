@@ -8,6 +8,7 @@ Classes:
 """
 import numpy as np
 import networkx as nx
+import time
 from recordclass import dataobject
 import fmdtools.sim.propagate as propagate
 from fmdtools.define.common import t_key
@@ -15,6 +16,7 @@ from fmdtools.define.block import Simulable, ExampleFxnBlock
 from fmdtools.sim.scenario import Sequence, SingleFaultScenario, Scenario
 from fmdtools.sim.sample import FaultDomain
 from fmdtools.analyze.common import setup_plot
+from fmdtools.analyze.history import History, init_dicthist
 
 
 class BaseObjCon(dataobject):
@@ -118,9 +120,14 @@ class BaseProblem(object):
     """
 
     def __init__(self):
-        self.variables = {}
+        if not hasattr(self, 'variables'):
+            self.variables = {}
         self.objectives = {}
         self.constraints = {}
+        self.iter_hist = History({"time": [],
+                                  "variables": History({k: [] for k in self.variables}),
+                                  "objectives": History(),
+                                  "constraints": History()})
 
     def name_repr(self):
         """Single-line name representation."""
@@ -147,6 +154,7 @@ class BaseProblem(object):
         """Add an objective to the Problem."""
         self.objectives[name] = objclass(varname, **kwargs)
         self.add_objective_callable(name)
+        self.iter_hist["objectives"][name] = []
 
     def add_objective_callable(self, name):
         """Add callable objective function with name name."""
@@ -158,6 +166,7 @@ class BaseProblem(object):
         """Add a constraint to the Problem."""
         self.constraints[name] = conclass(varname, **kwargs)
         self.add_constraint_callable(name)
+        self.iter_hist["constraints"][name] = []
 
     def add_constraint_callable(self, name):
         """Add callable constraint function with name name."""
@@ -184,7 +193,7 @@ class BaseProblem(object):
         """Get all current constraint values."""
         return [v.value for v in self.constraints.values()]
 
-    def call_outputs(self, *x):
+    def call_outputs(self, *x, force_update=False):
         """
         Get all outputs at the given value of x.
 
@@ -200,7 +209,7 @@ class BaseProblem(object):
         constraints : list
             values of the constraints
         """
-        if self.new_x(*x):
+        if self.new_x(*x) or force_update:
             self.update_objectives(*x)
         return self.get_objectives(), self.get_constraints()
 
@@ -220,6 +229,46 @@ class BaseProblem(object):
         if self.new_x(*x):
             self.update_objectives(*x)
         return self.constraints[constraint].value
+
+    def log_time(self):
+        if not hasattr(self, 't_start'):
+            self.t_start = time.time()
+        self.iter_hist.time.append(time.time()-self.t_start)
+
+    def log_hist(self):
+        """Log the history for objectives, constraints, time, etc."""
+        self.log_time()
+        self.iter_hist.objectives.log(self.objectives, 1)
+        self.iter_hist.constraints.log(self.constraints, 1)
+        self.iter_hist.variables.log(self.variables, 1)
+
+    def get_default_x(self, *x):
+        if not x:
+            return tuple([*self.variables.values()])
+
+    def time_execution(self, *x, reps=1):
+        """
+        Time the amount of time it takes to update the problem.
+
+        Parameters
+        ----------
+        *x : vars
+            Variable values to execute at, optional. If not provided, uses the current
+            values.
+        reps : int, optional
+            Number of replicates to average/loop over. The default is 1.
+
+        Returns
+        -------
+        t_ave : float
+            Avarage time over all replicates
+        """
+        x = self.get_default_x(*x)
+        starttime = time.time()
+        for rep in range(reps):
+            self.update_objectives(*x)
+        t_ave = (time.time() - starttime) / reps
+        return t_ave
 
 
 class SimpleProblem(BaseProblem):
@@ -246,8 +295,8 @@ class SimpleProblem(BaseProblem):
     """
 
     def __init__(self, *variables):
-        super().__init__()
         self.variables = {v: np.NaN for v in variables}
+        super().__init__()
         self.callables = {}
 
     def update_objectives(self, *x):
@@ -255,6 +304,7 @@ class SimpleProblem(BaseProblem):
         self.update_variables(*x)
         for objname, obj in {**self.objectives, **self.constraints}.items():
             obj.update(self.callables[objname](*x))
+        self.log_hist()
 
     def add_objective(self, name, call, **kwargs):
         """
@@ -494,6 +544,7 @@ class BaseSimProblem(BaseProblem):
         res = res.flatten()
         for obj in {**self.objectives, **self.constraints}.values():
             obj.update(res)
+        self.log_hist()
 
 
 class ParameterSimProblem(BaseSimProblem):
@@ -569,9 +620,9 @@ class ParameterSimProblem(BaseSimProblem):
         **kwargs : kwargs
             Keyword arguments to prop_method.
         """
-        super().__init__(mdl, prop_method, *args, **kwargs)
         self.parameterdomain = parameterdomain
         self.variables = {v: np.NaN for v in self.parameterdomain.variables}
+        super().__init__(mdl, prop_method, *args, **kwargs)
 
     def sim_mdl(self, *x):
         """
@@ -721,8 +772,8 @@ class SingleFaultScenarioProblem(ScenarioProblem):
         self.faultdomain = faultdomain
         self.phasemap = phasemap
         self.t_start = t_start
-        super().__init__(mdl, **kwargs)
         self.variables = {"time": np.nan}
+        super().__init__(mdl, **kwargs)
 
     def get_start_time(self):
         """Get the scenario start time to copy the model at."""
@@ -755,6 +806,7 @@ class SingleFaultScenarioProblem(ScenarioProblem):
 
 ex_scenprob = SingleFaultScenarioProblem(ExampleFxnBlock(), ("examplefxnblock", "short"))
 ex_scenprob.add_result_objective("f1", "s.y", time=5)
+ex_scenprob.f1(5.0)
 
 
 class DisturbanceProblem(ScenarioProblem):
@@ -786,9 +838,9 @@ class DisturbanceProblem(ScenarioProblem):
         >>> ex_dp.f1(4.0)
         4.0
         """
-        super().__init__(mdl, **kwargs)
         self.variables = {d: np.nan for d in disturbances}
         self.time = time
+        super().__init__(mdl, **kwargs)
 
     def get_start_time(self):
         """Get the scenario start time to copy the model at."""
@@ -885,9 +937,12 @@ class VariableConnector(BaseConnector):
         for i, x_i in enumerate(x):
             self.values[i] = x_i
 
-    def get(self, key):
+    def get(self, key, defaultval=None):
         """Get a value for a particular key."""
         return self.values[self.keys.index(key)]
+
+    def items(self):
+        return {k: self.values[i] for i, k in enumerate(self.keys)}.items()
 
 
 class ObjectiveConnector(VariableConnector):
@@ -1110,8 +1165,9 @@ class ProblemArchitecture(BaseProblem):
         self.create_var_mapping(name)
         self.add_objective_callables(name)
         self.add_constraint_callables(name)
-        self.update_objectives(name)
-        self.update_constraints(name)
+        self.update_problem_objectives(name)
+        self.update_problem_constraints(name)
+        self.iter_hist.variables = init_dicthist(self.variables, None)
 
     def create_var_mapping(self, probname):
         """Create a dict mapping problem variables to input/connector variables."""
@@ -1157,6 +1213,7 @@ class ProblemArchitecture(BaseProblem):
         aname = obj_name(probname, objname)
         setattr(self, aname, newobj)
         setattr(self, aname+"_full", new_full_obj)
+        self.iter_hist.objectives[aname] = []
 
     def add_constraint_callables(self, probname):
         """Add callable constraint function with name name."""
@@ -1173,8 +1230,9 @@ class ProblemArchitecture(BaseProblem):
         aname = obj_name(probname, conname)
         setattr(self, aname, newcon)
         setattr(self, aname+"_full", new_full_con)
+        self.iter_hist.constraints[aname] = []
 
-    def update_objectives(self, probname):
+    def update_problem_objectives(self, probname):
         """Update architecture-level objectives from problem."""
         for objname, obj in self.problems[probname].objectives.items():
             aname = obj_name(probname, objname)
@@ -1183,7 +1241,7 @@ class ProblemArchitecture(BaseProblem):
             else:
                 self.objectives[aname] = np.nan
 
-    def update_constraints(self, probname):
+    def update_problem_constraints(self, probname):
         """Update architecture-level constraints from problem."""
         for objname, obj in self.problems[probname].constraints.items():
             aname = obj_name(probname, objname)
@@ -1221,7 +1279,7 @@ class ProblemArchitecture(BaseProblem):
         self.update_problem(probname, *x_loc)
         return self.problems[probname].constraints[conname].value
 
-    def update_full_problem(self, *x_full, probname=''):
+    def update_full_problem(self, *x_full, probname='', force_update=False):
         """
         Update the variables for the entire problem (or, problems up to probname).
 
@@ -1272,9 +1330,16 @@ class ProblemArchitecture(BaseProblem):
                 x_loc = [x_to_split.pop(0) for k in self.variables[loc_var].keys]
             else:
                 x_loc = []
-            self.update_problem(problem, *x_loc)
+            self.update_problem(problem, *x_loc, force_update=force_update)
 
-    def update_problem(self, probname, *x):
+    def get_default_x(self, *x):
+        return tuple([v for gv in self.variables.values() for v in gv.values])
+
+    def update_objectives(self, *x):
+        """Take place of update_objectives in base problem."""
+        self.update_full_problem(*x, force_update=True)
+
+    def update_problem(self, probname, *x, force_update=False):
         """
         Update a given problem with new values for inputs (and non-input variables).
 
@@ -1315,14 +1380,15 @@ class ProblemArchitecture(BaseProblem):
         """
         inconsistent_upstream = self.find_inconsistent_upstream(probname)
         for upstream_prob in inconsistent_upstream:
-            self.update_problem(upstream_prob)
+            self.update_problem(upstream_prob, force_update=force_update)
         x_inputs = self.get_inputs_as_x(probname, *x)
-        self.problems[probname].update_objectives(*x_inputs)
+        self.problems[probname].call_outputs(*x_inputs, force_update=force_update)
         self.problems[probname].consistent = True
-        self.update_objectives(probname)
-        self.update_constraints(probname)
+        self.update_problem_objectives(probname)
+        self.update_problem_constraints(probname)
         self.update_problem_outputs(probname)
         self.update_downstream_consistency(probname)
+        self.log_hist()
 
     def update_problem_outputs(self, probname):
         """
@@ -1454,6 +1520,10 @@ class ProblemArchitecture(BaseProblem):
         nx.draw_networkx_edge_labels(self.problem_graph, pos, edge_labels=edge_labels)
         return fig, ax
 
+    # def log_hist(self):
+    #    """Log overall problem arch history."""
+    #    self.log_time()
+
 
 ex_pa = ProblemArchitecture()
 ex_pa.add_connector_variable("x0", "x0")
@@ -1461,7 +1531,7 @@ ex_pa.add_connector_variable("x1", "x1")
 ex_pa.add_problem("ex_sp", ex_sp, outputs={"x0": ["x0"], "x1": ["x1"]})
 ex_pa.add_problem("ex_scenprob", ex_scenprob, inputs={"x0": ["time"]})
 ex_pa.add_problem("ex_dp", ex_dp, inputs={"x1": ["s.y"]})
-
+# ex_pa.ex_dp_f1_full(3, 3)
 
 class DynamicInterface():
     """

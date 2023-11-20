@@ -44,19 +44,32 @@ def get_var(obj, var):
         value of the variable
     """
     if type(var) == str:
-        var = var.split(".")
-    if len(var) == 1:
-        if type(obj) == dict:
-            return obj.get(var[0], None)
-        elif type(obj) in {tuple, list} and var[0].isnumeric():
-            return obj[int(var[0])]
+        var_s = var.split(".")
+    else:
+        var_s = var
+        var = ".".join(var_s)
+    if len(var_s) == 1:
+        k = var_s[0]
+        if type(obj) == dict or (hasattr(obj, 'keys') and hasattr(obj, 'values')):
+            val = obj.get(k, None)
+        elif type(obj) in {tuple, list} and k.isnumeric():
+            val = obj[int(k)]
         else:
-            return getattr(obj, var[0])
+            val = getattr(obj, k)
+        if hasattr(val, 'value'):
+            return val.value
+        else:
+            return val
     else:
         if type(obj) == dict:
-            return get_var(obj[var[0]], var[1:])
+            if var_s[0] in obj:
+                return get_var(obj[var_s[0]], var_s[1:])
+            elif var in obj:
+                return obj[var]
+            else:
+                raise Exception(var + "not in " + str(obj))
         else:
-            return get_var(getattr(obj, var[0]), var[1:])
+            return get_var(getattr(obj, var_s[0]), var_s[1:])
 
 
 def set_var(obj, var, val):
