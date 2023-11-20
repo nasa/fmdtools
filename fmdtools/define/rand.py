@@ -50,7 +50,7 @@ class Rand(dataobject, mapping=True):
     Which enables the use of set_rand, update_stochastic_states, etc for updating
     these states with methods called from the rng.
     """
-    rng: np.random.default_rng
+    rng: np.random._generator.Generator = np.random.default_rng()
     probs: list = list()
     probdens: float = 1.0
     seed: int = 42

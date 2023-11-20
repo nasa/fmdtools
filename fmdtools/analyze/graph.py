@@ -98,7 +98,7 @@ default_edge_kwargs = {'sends': dict(edge_color='grey', style='dashed'),
                                     arrowsize=30, style='dashed')}
 
 
-class EdgeStyle(dataobject):
+class EdgeStyle(dataobject, copy_default=True):
     """Hold kwargs for nx.draw_networkx_edges to apply as a style for multiple edges."""
 
     edge_color: str = 'black'
@@ -168,7 +168,7 @@ default_node_kwargs = {'Model': dict(node_shape='^'),
                        'dynamic': dict(edgecolors='teal')}
 
 
-class NodeStyle(dataobject):
+class NodeStyle(dataobject, copy_default=True):
     """Hold kwargs for nx.draw_networkx_nodes to apply as a style for multiple nodes."""
 
     node_color: str = "lightgrey"

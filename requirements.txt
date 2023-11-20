@@ -7,7 +7,7 @@ matplotlib
 pandas
 ordered-set
 dill
-recordclass >= 0.14.4
+recordclass == 0.21.1
 pytest
 graphviz
 shapely >= 2.0
