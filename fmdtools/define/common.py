@@ -68,6 +68,13 @@ def get_var(obj, var):
                 return obj[var]
             else:
                 raise Exception(var + "not in " + str(obj))
+        elif (hasattr(obj, 'keys') and hasattr(obj, 'values')):
+            if var_s[0] in obj.keys:
+                return get_var(obj.get(var_s[0]), var_s[1:])
+            elif var in obj.keys:
+                return obj.get(var)
+            else:
+                raise Exception(var + "not in " + str(obj))
         else:
             return get_var(getattr(obj, var_s[0]), var_s[1:])
 

@@ -439,6 +439,23 @@ class ResultConstraint(ResultObjective):
         return Constraint.con_from_value(self, value)
 
 
+class HistoryObjective(ResultObjective):
+    """
+    Same as ResultObjective but marks that the result is a history.
+
+    Examples
+    --------
+    >>> obj = HistoryObjective("a.b", metric=np.max)
+    >>> hist = History({'t1p0.a.b': [5.0, 10.0], 't2p0.a.b': [1.0, 13.0]})
+    >>> obj.get_result_value(hist)
+    13.0
+    """
+
+
+class HistoryConstraint(ResultConstraint):
+    """Same as ResultConstraint but with different name."""
+
+
 class BaseSimProblem(BaseProblem):
     """
     Base optimization problem for optimizing over simulations.
@@ -498,6 +515,14 @@ class BaseSimProblem(BaseProblem):
         """
         self.add_constraint(name, varname, conclass=ResultConstraint, **kwargs)
 
+    def add_history_objective(self, name, varname, **kwargs):
+        """Add an objective corresponding to a given history attribute."""
+        self.add_objective(name, varname, objclass=HistoryObjective, **kwargs)
+
+    def add_history_constraint(self, name, varname, **kwargs):
+        """Add an objective corresponding to a given history attribute."""
+        self.add_constraint(name, varname, conclass=HistoryConstraint, **kwargs)
+
     def get_end_time(self):
         """
         Get the end_time for the simulation that minimizes simulation time.
@@ -541,9 +566,13 @@ class BaseSimProblem(BaseProblem):
         """Update objectives/constraints by simulating the model at x."""
         self.update_variables(*x)
         res, hist = self.sim_mdl(*x)
-        res = res.flatten()
+        self.res = res.flatten()
+        self.hist = hist.flatten()
         for obj in {**self.objectives, **self.constraints}.values():
-            obj.update(res)
+            if isinstance(obj, HistoryObjective) or isinstance(obj, HistoryConstraint):
+                obj.update(self.hist)
+            elif isinstance(obj, ResultObjective):
+                obj.update(self.res)
         self.log_hist()
 
 
@@ -943,6 +972,9 @@ class VariableConnector(BaseConnector):
 
     def items(self):
         return {k: self.values[i] for i, k in enumerate(self.keys)}.items()
+
+    def in_(self, k):
+        return k in self.keys
 
 
 class ObjectiveConnector(VariableConnector):

@@ -197,9 +197,10 @@ pd.add_variable("flightplan", var_map=plan_flight)
 oper_prob = ParameterSimProblem(def_mdl, pd, "nominal")
 oper_prob.add_result_objective("co", "expected_cost")
 oper_prob.add_result_constraint("g_soc", "store_ee.s.soc", time=20, threshold=10)
-oper_prob.add_result_constraint("g_faults", "faults")
+oper_prob.add_result_constraint("g_fault", "faults")
 # TODO: add way of adding history objectives (make sure tracked)
-# oper_prob.add_history_constraint("g_max_height", "dofs.s.z") # all < 122
+oper_prob.add_history_constraint("g_max_height", "dofs.s.z", metric=np.max,
+                                 threshold=122, comparator='less')  # all < 122
 
 oper_prob.co(1, 1, 105)
 
@@ -212,7 +213,6 @@ pdr.add_variables("respolicy.bat", "respolicy.line", var_map=xr_paramfunc)
 
 res_prob = ParameterSimProblem(def_mdl, pdr, "fault_sample", fs, include_nominal=False)
 res_prob.add_result_objective("rcost", "expected_cost")
-# res_prob.rcost(1, 1, 105, 1, 1)
 
 # combined architecture
 prob_arch = ProblemArchitecture()
@@ -234,6 +234,4 @@ prob_arch.res_rcost_full(1, 1, 105, 1, 1)
 
 if __name__ == "__main__":
     a = 1
-    # re-implement:
-    # TODO: opt_prob.time_sims([1, 1, 100, 1, 1])
-    # TODO: opt_prob.iter_hist
+
