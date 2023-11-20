@@ -27,7 +27,7 @@ from collections.abc import Iterable
 import dill
 import pickle
 import time
-from recordclass import asdict
+from recordclass import asdict, dataobject
 
 
 def get_var(obj, var):
@@ -164,9 +164,12 @@ def set_obj_arg_type(obj, *args, **kwargs):
                 new_kwargs[typed_field] = new_arg
 
         except TypeError as e:
-            raise Exception("For field " + typed_field + " " + str(true_type) +
-                            ": unable to convert from " + str(new_arg) + " " +
-                            str(type(new_arg))) from e
+            try:
+                raise Exception("For field " + typed_field + " " + str(true_type) +
+                                ": unable to convert from " + str(new_arg) + " " +
+                                str(type(new_arg))) from e
+            except UnboundLocalError as e1:
+                raise e
     return tuple(new_args), new_kwargs
 
 
@@ -188,7 +191,7 @@ def set_arg_as_type(true_type, new_arg):
     """
     arg_type = type(new_arg)
     if arg_type != true_type:
-        if arg_type == dict:
+        if arg_type == dict or issubclass(arg_type, dataobject):
             if true_type == tuple:
                 new_arg = true_type(new_arg.values())
             else:

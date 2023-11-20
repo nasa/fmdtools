@@ -8,7 +8,7 @@ system attributes that do not change.
 """
 
 import inspect
-from recordclass import dataobject, asdict
+from recordclass import dataobject, asdict, astuple
 import warnings
 import numpy as np
 
@@ -60,6 +60,8 @@ class Parameter(dataobject, readonly=True, mapping=True, iterable=True):
         if not self.__doc__:
             raise Exception("Please provide docstring")
             # self.__doc__=Parameter.__doc__
+        if args and isinstance(args[0], self.__class__):
+            args = astuple(args[0])
         if check_lim:
             for i, k in enumerate(self.__fields__):
                 if i < len(args):
