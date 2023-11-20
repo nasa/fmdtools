@@ -427,9 +427,10 @@ def one_fault(mdl, *fxnfault, time=0, **kwargs):
     return result.flatten(), mdlhists.flatten()
 
 
-def sequence(mdl, seq={}, faultseq={}, disturbances={}, scen={}, rate=np.NaN, **kwargs):
+def sequence(mdl, seq={}, faultseq={}, disturbances={}, scen={}, rate=np.NaN,
+             include_nominal=True, **kwargs):
     """
-    Runs a sequence of faults and disturbances in the model at given times.
+    Run a sequence of faults and disturbances in the model at given times.
 
     Parameters
     ----------
@@ -449,6 +450,8 @@ def sequence(mdl, seq={}, faultseq={}, disturbances={}, scen={}, rate=np.NaN, **
         Scenario dictionary, if already constructed (for external calls)
     rate : float, optional
         Input rate for the sequence (must be calculated elsewhere)
+    include_nominal : bool, optional
+        Whether to return nominal hists/results back. Default is True.
     **kwargs : kwargs
         Additional keyword arguments, may include:
 
@@ -492,8 +495,9 @@ def sequence(mdl, seq={}, faultseq={}, disturbances={}, scen={}, rate=np.NaN, **
                                                 **sim_kwarg,
                                                 nomhist=nomhist,
                                                 nomresult=nomresult)
-    nomhist.cut(t_end_nom)
-    mdlhists = History(nominal=nomhist, faulty=faulthist)
+    if include_nominal:
+        nomhist.cut(t_end_nom)
+        mdlhists = History(nominal=nomhist, faulty=faulthist)
     if kwargs.get('protect', False):
         mdl.reset()
     save_helper(kwargs.get('save_args', {}), result, mdlhists)
@@ -565,7 +569,7 @@ def nom_helper(mdl, ctimes, protect=True, save_args={}, mdl_kwargs={}, scen={},
     return result, nommdlhist, nomscen, mdls, t_end_nom
 
 
-def fault_sample(mdl, fs,  **kwargs):
+def fault_sample(mdl, fs, include_nominal=True, **kwargs):
     """
     Injects and propagates faults in the model defined by a FaultSample/SampleApproach.
 
@@ -584,6 +588,8 @@ def fault_sample(mdl, fs,  **kwargs):
         The model to inject faults in.
     fs : FaultSample/SampleApproach
         FaultSample used to define the list of faults and sample time for the model.
+    include_nominal : bool, optional
+        Whether to return nominal hists/results back. Default is True.
     **kwargs : kwargs
         Additional keyword arguments, may include:
 
@@ -616,6 +622,15 @@ def fault_sample(mdl, fs,  **kwargs):
                                         nomhist=nomhist,
                                         nomresult=nomresult)
 
+    if include_nominal:
+        process_nominal(mdlhists, nomhist, results, nomresult, t_end_nom, **kwargs)
+    save_helper(kwargs['save_args'], results, mdlhists)
+    close_pool(kwargs)
+    return results.flatten(), mdlhists.flatten()
+
+
+def process_nominal(mdlhists, nomhist, results, nomresult, t_end_nom, **kwargs):
+    """Add/save nominal hists/result to overall hist/result."""
     nomhist.cut(t_end_nom)
     mdlhists['nominal'] = nomhist
     results['nominal'] = nomresult
@@ -624,14 +639,11 @@ def fault_sample(mdl, fs,  **kwargs):
                 mdlhists['nominal'],
                 indiv_id=str(len(results)-1),
                 result_id='nominal')
-    save_helper(kwargs['save_args'], results, mdlhists)
-    close_pool(kwargs)
-    return results.flatten(), mdlhists.flatten()
 
 
-def single_faults(mdl, **kwargs):
+def single_faults(mdl, include_nominal=True, **kwargs):
     """
-    Creates and propagates a list of failure scenarios in a model.
+    Create and propagates a list of failure scenarios in a model.
 
     NOTE: When calling in a script/module using parallel=True, execute using the
     protection statement ::
@@ -646,6 +658,8 @@ def single_faults(mdl, **kwargs):
     ----------
     mdl : Simulable
         The model to inject faults in
+    include_nominal : bool, optional
+        Whether to return nominal hists/results back. Default is True.
     **kwargs : kwargs
         Additional keyword arguments, may include:
 
@@ -677,13 +691,8 @@ def single_faults(mdl, **kwargs):
                                         **kwargs,
                                         nomhist=nomhist,
                                         nomresult=nomresult)
-    nomhist.cut(t_end_nom)
-    mdlhists['nominal'] = nomhist
-    results['nominal'] = nomresult
-    save_helper(kwargs.get('save_args', {}),
-                nomresult, mdlhists['nominal'],
-                indiv_id=str(len(results)-1),
-                result_id='nominal')
+    if include_nominal:
+        process_nominal(mdlhists, nomhist, results, nomresult, t_end_nom, **kwargs)
     save_helper(kwargs['save_args'], results, mdlhists)
     close_pool(kwargs)
     return results.flatten(), mdlhists.flatten()

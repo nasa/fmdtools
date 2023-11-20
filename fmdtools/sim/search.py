@@ -1143,28 +1143,36 @@ class ProblemArchitecture(BaseProblem):
         return inconsistent_probs
 
     def add_objective_callables(self, probname):
-        """Add callable objective function with name name."""
+        """Add callable objective functions from problem."""
         for objname in self.problems[probname].objectives:
-            def newobj(*x):
-                return self.call_objective(probname, objname, *x)
+            self.add_objective_callable(probname, objname)
 
-            def new_full_obj(*x):
-                return self.call_full_objective(probname, objname, *x)
-            aname = obj_name(probname, objname)
-            setattr(self, aname, newobj)
-            setattr(self, aname+"_full", new_full_obj)
+    def add_objective_callable(self, probname, objname):
+        """Add callable objective function from problem probname."""
+        def newobj(*x):
+            return self.call_objective(probname, objname, *x)
+
+        def new_full_obj(*x):
+            return self.call_full_objective(probname, objname, *x)
+        aname = obj_name(probname, objname)
+        setattr(self, aname, newobj)
+        setattr(self, aname+"_full", new_full_obj)
 
     def add_constraint_callables(self, probname):
         """Add callable constraint function with name name."""
         for conname in self.problems[probname].constraints:
-            def newcon(*x):
-                return self.call_constraint(probname, conname, *x)
+            self.add_constraint_callable(probname, conname)
 
-            def new_full_con(*x):
-                return self.call_full_constraint(probname, conname, *x)
-            aname = obj_name(probname, conname)
-            setattr(self, aname, newcon)
-            setattr(self, aname+"_full", new_full_con)
+    def add_constraint_callable(self, probname, conname):
+        """Add callable constraint function from problem probname."""
+        def newcon(*x):
+            return self.call_constraint(probname, conname, *x)
+
+        def new_full_con(*x):
+            return self.call_full_constraint(probname, conname, *x)
+        aname = obj_name(probname, conname)
+        setattr(self, aname, newcon)
+        setattr(self, aname+"_full", new_full_con)
 
     def update_objectives(self, probname):
         """Update architecture-level objectives from problem."""
