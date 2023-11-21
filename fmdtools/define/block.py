@@ -549,11 +549,11 @@ class Block(Simulable):
         except TypeError as e:
             raise Exception("Poor specification of "+str(self.__class__)) from e
         cop.m.mirror(self.m)
-        cop.t=self.t.copy(**self._args_t)
+        cop.t = self.t.copy(**self._args_t)
         cop.s.assign(self.s)
         cop.r.assign(self.r)
         if hasattr(self, 'h'): 
-            cop.h =self.h.copy()
+            cop.h = self.h.copy()
         return cop
 
     def get_memory(self):

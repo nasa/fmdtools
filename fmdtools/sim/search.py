@@ -9,6 +9,7 @@ Classes:
 import numpy as np
 import networkx as nx
 import time
+from collections.abc import Iterable
 from recordclass import dataobject
 import fmdtools.sim.propagate as propagate
 from fmdtools.define.common import t_key
@@ -215,6 +216,8 @@ class BaseProblem(object):
 
     def update_variables(self, *x):
         """Update variables at x."""
+        if len(x) == 1 and isinstance(x[0], Iterable):
+            x = tuple(x[0])
         for i, v in enumerate(self.variables):
             self.variables[v] = x[i]
 
@@ -703,7 +706,8 @@ class ScenarioProblem(BaseSimProblem):
         sim_kwarg = propagate.pack_sim_kwargs(**self.kwargs,
                                               desired_result=desired_result,
                                               staged=True)
-        n_outs = propagate.nom_helper(self.mdl, [self.get_start_time()],
+        n_outs = propagate.nom_helper(self.mdl.copy(),
+                                      [self.get_start_time()],
                                       **{**sim_kwarg, 'use_end_condition': False},
                                       **run_kwarg)
         self.prepped_sims = {"result": n_outs[0],
@@ -734,14 +738,16 @@ class ScenarioProblem(BaseSimProblem):
         scen = self.gen_scenario(*x)
 
         mdl = propagate.copy_staged([*self.prepped_sims['mdls'].values()][0])
+        nomhist = self.prepped_sims['hist'].copy()
+        nomresult = self.prepped_sims['result'].copy()
         desired_result = self.obj_con_des_res()
         sim_kwarg = propagate.pack_sim_kwargs(**self.kwargs,
                                               desired_result=desired_result,
                                               staged=True)
         res, hist, _, t_end = self.prop_method(mdl,
                                                scen,
-                                               nomhist=self.prepped_sims['hist'],
-                                               nomresult=self.prepped_sims['result'],
+                                               nomhist=nomhist,
+                                               nomresult=nomresult,
                                                **sim_kwarg)
         return res.flatten(), hist.flatten()
 
@@ -889,10 +895,16 @@ class DisturbanceProblem(ScenarioProblem):
             SingleFaultScenario to simulate.
         """
         dist = {self.time: {v: x[i] for i, v in enumerate(self.variables)}}
-        seq = Sequence(disturbances=dist)
+        faultseq = self.kwargs.get('faultseq', None)
+        if faultseq:
+            t = np.min([*dist.keys(), *faultseq.keys()])
+            seq = Sequence(disturbances=dist, faultseq=faultseq)
+        else:
+            t = self.time
+            seq = Sequence(disturbances=dist)
         scen = Scenario(sequence=seq,
                         name='disturbance',
-                        time=self.time)
+                        time=t)
         return scen
 
 

@@ -27,6 +27,7 @@ from collections.abc import Iterable
 import dill
 import pickle
 import time
+import copy
 from recordclass import asdict, dataobject
 
 
@@ -228,7 +229,7 @@ def get_true_fields(dataobject, *args, force_kwargs=False, **kwargs):
     NOTE: must be used for pickling, since pickle passes arguments as *args and not
     **kwargs.
     """
-    true_args = list([*dataobject.__default_vals__])
+    true_args = list([copy.copy(i) for i in dataobject.__default_vals__])
     for i, n in enumerate(dataobject.__fields__):
         if force_kwargs:
             true_args[i] = kwargs[n]
@@ -247,7 +248,7 @@ def get_true_field(dataobject, fieldname, *args, **kwargs):
     if args and len(args) > field_ind:
         return args[field_ind]
     else:
-        return dataobject.__defaults__[field_ind]
+        return copy.copy(dataobject.__defaults__[field_ind])
 
 
 def is_iter(data):

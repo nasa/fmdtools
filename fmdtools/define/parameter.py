@@ -15,7 +15,7 @@ import numpy as np
 from fmdtools.define.common import get_true_fields, get_true_field, set_obj_arg_type
 
 
-class Parameter(dataobject, readonly=True, mapping=True, iterable=True):
+class Parameter(dataobject, readonly=True, mapping=True, iterable=True, copy_default=True):
     """
     The Parameter class defines model/function/flow values which are immutable,
     that is, the same from model instantiation through a simulation. Parameters

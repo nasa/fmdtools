@@ -1204,7 +1204,7 @@ def prop_one_scen(mdl, scen, ctimes=[], nomhist={}, nomresult={}, cut_hist=True,
                     raise Exception("Invalid argument, track_times=" + str(track_times))
                 mdlhist.log(mdl, t_ind_rec, time=t)
 
-            if type(desired_result) == dict: 
+            if type(desired_result) == dict:
                 if "all" in desired_result:
                     des_res = desired_result['all']
                     nom_res = nomresult

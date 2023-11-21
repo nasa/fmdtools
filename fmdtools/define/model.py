@@ -290,7 +290,7 @@ class Model(Simulable):
         
         for flowname, flow in self.flows.items():
             cop.flows[flowname] = flow.copy()
-        
+
         for fxnname, fxn in self.fxns.items():
             flownames = copy.deepcopy(self._fxninput[fxnname]['flows'])
             args_f = copy.deepcopy(self._fxninput[fxnname]['args_f'])
@@ -304,11 +304,11 @@ class Model(Simulable):
         cop._fxninput = copy.deepcopy(self._fxninput)
         cop._fxnflows = copy.deepcopy(self._fxnflows)
         cop._flowstates = copy.deepcopy(self._flowstates)
-        
+
         cop.is_copy = False
         cop.build(functionorder=copy.deepcopy(self.functionorder))
         cop.is_copy = True
-        if hasattr(self, 'h'): 
+        if hasattr(self, 'h'):
             hist = History()
             for k in self.h:
                 for att in ['fxns', 'flows']:

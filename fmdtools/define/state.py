@@ -13,7 +13,7 @@ import warnings
 from fmdtools.analyze.history import History
 
 
-class State(dataobject, mapping=True):
+class State(dataobject, mapping=True, copy_default=True):
     """
     Class for working with model states, which are variables in the model which
     change over time. This class inherits from dataobject for low memory footprint
