@@ -106,6 +106,14 @@ class Constraint(Objective):
         self.value = self.con_from_value(value)
 
 
+def unpack_x(*x):
+    if len(x) == 1 and isinstance(x[0], Iterable):
+        x = tuple(x[0])
+    elif len(x) == 2 and isinstance(x[0], Iterable) and isinstance(x[1], Iterable):
+        x = tuple([*x[0], *x[1]])
+    return x
+
+
 class BaseProblem(object):
     """
     Base optimization problem.
@@ -216,8 +224,7 @@ class BaseProblem(object):
 
     def update_variables(self, *x):
         """Update variables at x."""
-        if len(x) == 1 and isinstance(x[0], Iterable):
-            x = tuple(x[0])
+        x = unpack_x(*x)
         for i, v in enumerate(self.variables):
             self.variables[v] = x[i]
 
@@ -927,12 +934,6 @@ class BaseConnector(dataobject):
     name: str = ''
 
 
-class ModelConnector(BaseConnector):
-    """Class for linking models between problems."""
-
-    mdl: Simulable = Simulable()
-
-
 class VariableConnector(BaseConnector):
     """
     Class connecting variables in one problem to use as variables in another problem.
@@ -974,6 +975,7 @@ class VariableConnector(BaseConnector):
         *x : iterable
             Variable values to update (must be in order of self.keys).
         """
+        x = unpack_x(*x)
         for i, x_i in enumerate(x):
             self.values[i] = x_i
 
@@ -990,6 +992,10 @@ class VariableConnector(BaseConnector):
 
 class ObjectiveConnector(VariableConnector):
     """Class for linking objectives. Same as VariableConnector but used differently."""
+
+    def update(self, valuedict):
+        for i, k in enumerate(self.keys):
+            self.values[i] = valuedict[k].value
 
 
 class ConstraintConnector(ObjectiveConnector):
@@ -1157,16 +1163,6 @@ class ProblemArchitecture(BaseProblem):
         """
         self.add_connector(name, connames, conclass=ConstraintConnector)
 
-    def add_connector_model(self, name):
-        """
-        Add a connector linking the model in one problem to a model in another problem.
-
-        Parameters
-        ----------
-        name : str
-            Name for the connector.
-        """
-        self.add_connector(name, conclass=ModelConnector)
 
     def add_problem(self, name, problem, inputs={}, outputs={}):
         """
@@ -1444,16 +1440,13 @@ class ProblemArchitecture(BaseProblem):
         """
         outputs = self.get_outputs(probname)
         for output, connector in outputs.items():
-            if isinstance(connector, VariableConnector):
-                connector.update(self.problems[probname].variables)
+            # note: must be put in order of inheritance
+            if isinstance(connector, ConstraintConnector):
+                connector.update(self.problems[probname].constraints)
             elif isinstance(connector, ObjectiveConnector):
                 connector.update(self.problems[probname].objectives)
-            elif isinstance(connector, ConstraintConnector):
-                connector.update(self.problems[probname].constraints)
-            elif isinstance(connector, ModelConnector):
-                # TODO: find a way to cache model in ParameterProb
-                # TODO: make sure to handle ScenarioProb well
-                connector.update(self.problems[probname].mdl)
+            elif isinstance(connector, VariableConnector):
+                connector.update(self.problems[probname].variables)
             else:
                 raise Exception("Invalid connector: "+connector)
 
