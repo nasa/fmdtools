@@ -504,7 +504,7 @@ class Pump(Model):
 
         life = 1e5
         expcost = rate*life*totcost
-        return {'rate': rate, 'cost': totcost, 'expected cost': expcost}
+        return {'rate': rate, 'cost': totcost, 'expected_cost': expcost}
 
 
 if __name__ == "__main__":

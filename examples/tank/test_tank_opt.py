@@ -45,7 +45,7 @@ class TankOptTests(unittest.TestCase, CommonTests):
                                                              "turnup": "turnup"}}})
             res_vars = [(var, None) for var in res_vars_i.keys()]
             prob.add_variables("res_sim", *res_vars, vartype=make_tankparam)
-            prob.add_objectives("res_sim", cost="expected cost", objtype="endclass")
+            prob.add_objectives("res_sim", cost="expected_cost", objtype="endclass")
             prob.add_combined_objective('tot_cost', 'cd', 'cost')
 
             for des_var in [[15, 0.5], [22, 0.1], [18, 0]]:

@@ -770,7 +770,7 @@ class Drone(Model):
         totcost = repcost
         rate = scen.rate
         expcost = totcost * rate * 1e5
-        return {"rate": rate, "cost": totcost, "expected cost": expcost}
+        return {"rate": rate, "cost": totcost, "expected_cost": expcost}
 
 
 if __name__ == "__main__":

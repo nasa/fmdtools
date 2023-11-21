@@ -436,7 +436,7 @@ class Drone(Model):
         totcost = repcost + crashcost + lostcost
         rate = scen.rate
         expcost = totcost*rate*1e5
-        return {'rate': rate, 'cost': totcost, 'expected cost': expcost}
+        return {'rate': rate, 'cost': totcost, 'expected_cost': expcost}
 
 
 def finddist(p1, p2):

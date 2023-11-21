@@ -391,7 +391,7 @@ class Tank(Model):
             totcost = 0
         rate = scen.rate
         life = 1e5
-        return {'rate': rate, 'cost': totcost, 'expected cost': rate*life*totcost}
+        return {'rate': rate, 'cost': totcost, 'expected_cost': rate*life*totcost}
 
 
 if __name__ == '__main__':
