@@ -84,6 +84,9 @@ Additionally, the following python packages are not included but are necessary f
 deap
 # used for: optimization of rover faults
 # license: (LGPL-3.0) https://github.com/DEAP/deap/blob/master/LICENSE.txt
+pymoo
+# used for: optimization of tank example
+# license: (Apache 2.0) https://github.com/anyoptimization/pymoo/blob/main/LICENSE
 nbmake
 # used for: for notebook tests
 # license: (Apache 2.0) https://github.com/treebeardtech/nbmake/blob/main/LICENSE

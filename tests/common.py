@@ -243,7 +243,7 @@ class CommonTests():
         os.remove(mfile),
         os.remove(ecfile)
 
-    def check_same_fmea(self, fs, res, mdl, val='expected cost'):
+    def check_same_fmea(self, fs, res, mdl, val='expected_cost'):
         """Test to ensure results from the fmea are the same over all options."""
         fmea = tabulate.FMEA(res, fs, mdl=mdl)
         none_exp_cost = fmea.as_table()[val].sum()

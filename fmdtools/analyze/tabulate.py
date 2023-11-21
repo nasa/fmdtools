@@ -187,8 +187,8 @@ class BaseTab(UserDict):
             pandas table with given metrics grouped as
         """
         if not sort_by:
-            if "expected cost" in self.all_metrics():
-                sort_by = "expected cost"
+            if "expected_cost" in self.all_metrics():
+                sort_by = "expected_cost"
             else:
                 sort_by = self.all_metrics()[-1]
 
@@ -394,8 +394,8 @@ class FMEA(BaseTab):
             The default is [].
         mult_metrics : dict, optional
             mult_metrics are new metrics calculated by multiplying existing metrics.
-            (e.g., to calculate expectations or risk values like an expected cost/RPN)
-            The default is {"expected cost":['rate', 'cost']}.
+            (e.g., to calculate expectations or risk values like an expected_cost/RPN)
+            The default is {"expected_cost":['rate', 'cost']}.
         extra_classes : dict, optional
             An additional set of endclasses to include in the table.
             The default is {}.
@@ -425,7 +425,7 @@ class FMEA(BaseTab):
             # default fmea is a cost-based table
             weight_metrics = ["rate"]
             avg_metrics = ["cost"]
-            mult_metrics = {"expected cost": ['rate', 'cost']}
+            mult_metrics = {"expected_cost": ['rate', 'cost']}
 
         res.update(extra_classes)
 

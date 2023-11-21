@@ -184,9 +184,9 @@ class Simulable(object):
         Returns
         -------
         endclass: Result
-            Result dictionary with rate, cost, and expected cost values
+            Result dictionary with rate, cost, and expecte_cost values
         """
-        return Result({'rate': scen.rate, 'cost': 1, 'expected cost': scen.rate})
+        return Result({'rate': scen.rate, 'cost': 1, 'expected_cost': scen.rate})
 
     def new_params(self, p={}, sp={}, r={}, track={}):
         """
