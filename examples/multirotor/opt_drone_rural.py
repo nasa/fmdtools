@@ -1,12 +1,13 @@
 # -*- coding: utf-8 -*-
 """
 Functions/classes for optimizing the drone defined in drone_mdl_opt.py.
+
+Used/tested in opt_drone_rural to demonstrate fmdtools.sim.search.
 """
 
 from drone_mdl_rural import Drone, DroneParam, ResPolicy, DronePhysicalParameters
 from drone_mdl_dynamic import DroneEnvironmentGridParam
-from fmdtools.sim.search import ParameterSimProblem, ProblemArchitecture, SimpleProblem
-from fmdtools.sim.sample import FaultDomain, FaultSample, ParameterDomain
+from fmdtools.sim.sample import FaultDomain, FaultSample
 from fmdtools.sim import propagate as prop
 from fmdtools.analyze.phases import from_hist
 import numpy as np
@@ -182,56 +183,5 @@ def x_to_rcost(xdes, xoper, xres, loc='rural', fullcosts=False, faultmodes='all'
                     staged=staged)
 
 
-"""Problem architecture (using search module)."""
-
-# design problem
-des_prob = SimpleProblem("bat", "line")
-des_prob.add_objective("cd", cd)
-des_prob.cd(1, 2)
-
-# operational problem
-pd = ParameterDomain(DroneParam)
-pd.add_variables("phys_param.bat", "phys_param.linearch", var_map=xd_paramfunc)
-pd.add_variable("flightplan", var_map=plan_flight)
-
-oper_prob = ParameterSimProblem(def_mdl, pd, "nominal")
-oper_prob.add_result_objective("co", "expected_cost")
-oper_prob.add_result_constraint("g_soc", "store_ee.s.soc", time=20, threshold=10)
-oper_prob.add_result_constraint("g_fault", "faults")
-# TODO: add way of adding history objectives (make sure tracked)
-oper_prob.add_history_constraint("g_max_height", "dofs.s.z", metric=np.max,
-                                 threshold=122, comparator='less')  # all < 122
-
-oper_prob.co(1, 1, 105)
-
-# resilience problem
-pdr = ParameterDomain(DroneParam)
-pdr.add_variables("phys_param.bat", "phys_param.linearch", var_map=xd_paramfunc)
-pdr.add_variable("flightplan", var_map=plan_flight)
-pdr.add_variables("respolicy.bat", "respolicy.line", var_map=xr_paramfunc)
-
-
-res_prob = ParameterSimProblem(def_mdl, pdr, "fault_sample", fs, include_nominal=False)
-res_prob.add_result_objective("rcost", "expected_cost")
-
-# combined architecture
-prob_arch = ProblemArchitecture()
-prob_arch.add_connector_variable("xd", "bat", "line")
-prob_arch.add_connector_variable("xo", "flightplan")
-prob_arch.add_problem("des", des_prob, outputs={"xd": ("bat", "line")})
-prob_arch.add_problem("oper", oper_prob,
-                      inputs={"xd": ("phys_param.bat", "phys_param.linearch")},
-                      outputs={"xo": ("flightplan",)})
-prob_arch.add_problem("res", res_prob,
-                      inputs={"xd": ("phys_param.bat", "phys_param.linearch"),
-                              "xo": ("flightplan",)})
-
-prob_arch.oper_co_full(1, 1, 105)
-
-prob_arch.res_rcost_full(1, 1, 105, 1, 1)
-
-# x_to_rcost([1,1], [100], [1,1])
-
 if __name__ == "__main__":
     a = 1
-

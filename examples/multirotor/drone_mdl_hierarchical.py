@@ -195,14 +195,14 @@ class Line(Component, BaseLine):
 
         self.calc_faults()
 
+        pwr = ctlin.s.upward * u_fact + ctlin.s.forward * f_fact
         airout = m2to1([ee_in,
                         self.s.e_ti,
-                        ctlin.s.upward * u_fact +
-                        ctlin.s.forward * f_fact,
+                        pwr,
                         self.s.ct,
                         self.s.mt,
                         self.s.pt])
-        ee_in = m2to1([ee_in, self.s.e_to])
+        ee_in = m2to1([ee_in, self.s.e_to, pwr])
         return airout, ee_in
 
 

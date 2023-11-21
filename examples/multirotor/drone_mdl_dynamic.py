@@ -240,7 +240,6 @@ class PlanPath(FxnBlock):
         self.s.goal = self.p.goals[self.s.pt]
         self.calc_dist_to_goal()
 
-
         if self.m.mode == 'taxi' and t > 5:
             self.m.mode = 'taxi'
         elif self.dofs.s.z < 1 and self.s.pt == 5:
