@@ -26,7 +26,7 @@ import copy
 from fmdtools.analyze.history import History, init_hist_iter
 
 
-class Rand(dataobject, mapping=True):
+class Rand(dataobject, mapping=True, copy_default=True):
     """
     Class for defining and interacting with random states of the model.
 
@@ -50,6 +50,7 @@ class Rand(dataobject, mapping=True):
     Which enables the use of set_rand, update_stochastic_states, etc for updating
     these states with methods called from the rng.
     """
+
     rng: np.random._generator.Generator = np.random.default_rng()
     probs: list = list()
     probdens: float = 1.0
@@ -63,6 +64,7 @@ class Rand(dataobject, mapping=True):
         super().__init__(*args)
         self.rng = np.random.default_rng(self.seed)
         if 's' in self.__fields__:
+            self.s = self.s.__class__()
             self.s.set_atts(**s_kwargs)
         if self.seed == None:
             raise Exception("Invalid seed: None")
