@@ -609,7 +609,7 @@ class PlanPath(PlanPathDyn):
         elif self.m.in_mode('to_home', 'taxi'):
             self.s.goal = self.p.flightplan[0]
         elif self.m.in_mode('to_nearest'):
-            self.s.goal = (*self.p.safe[:2], 0.0)
+            self.s.goal = (*self.p.env_param.point_safe[:2], 0.0)
         elif self.m.in_mode('move', 'move_em'):
             self.s.goal = self.s.goals[self.s.pt]
         elif self.m.in_mode('noloc'):
@@ -701,7 +701,7 @@ class Drone(Model):
 
     def at_dangerous(self, dofs):
         """Check if drone is at a dangerous location."""
-        return self.flows['environment'].c.get(dofs.s.x, dofs.s.y, 'target')
+        return self.flows['environment'].c.get(dofs.s.x, dofs.s.y, 'target', outside="")
 
     def calc_land_metrics(self, scen, faulttime):
         """

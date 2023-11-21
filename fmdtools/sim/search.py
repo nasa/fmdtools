@@ -565,9 +565,7 @@ class BaseSimProblem(BaseProblem):
     def update_objectives(self, *x):
         """Update objectives/constraints by simulating the model at x."""
         self.update_variables(*x)
-        res, hist = self.sim_mdl(*x)
-        self.res = res.flatten()
-        self.hist = hist.flatten()
+        self.res, self.hist = self.sim_mdl(*x)
         for obj in {**self.objectives, **self.constraints}.values():
             if isinstance(obj, HistoryObjective) or isinstance(obj, HistoryConstraint):
                 obj.update(self.hist)
@@ -673,11 +671,12 @@ class ParameterSimProblem(BaseSimProblem):
         end_time = self.get_end_time()
         mdl_kwargs = {'p': p, 'sp': {'times': (0.0, end_time)}}
         desired_result = self.obj_con_des_res()
-        res, hist = self.prop_method(self.mdl, *self.args,
-                                     mdl_kwargs=mdl_kwargs,
-                                     desired_result=desired_result,
-                                     **self.kwargs)
-        return res.flatten(), hist.flatten()
+        all_res = self.prop_method(self.mdl, *self.args,
+                                   mdl_kwargs=mdl_kwargs,
+                                   desired_result=desired_result,
+                                   showprogress=False,
+                                   **self.kwargs)
+        return all_res[0].flatten(), all_res[1].flatten()
 
 
 class ScenarioProblem(BaseSimProblem):

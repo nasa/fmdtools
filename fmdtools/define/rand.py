@@ -153,7 +153,7 @@ class Rand(dataobject, mapping=True):
     def to_default(self, *statenames):
         """Resets given random states to their default values"""
         for statename in statenames:
-            default = self.s.__defaults__[self.s.__fields__.index(statename)]
+            default = self.s.__default_vals__[self.s.__fields__.index(statename)]
             self.s[statename] = default
 
     def create_hist(self, timerange, track):
