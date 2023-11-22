@@ -8,7 +8,7 @@
 
 **fmdtools** (Fault Model Design tools) is a toolkit for modelling system resilience in the early design phase. With it, one can simulate the effects of faults in a system to build resilience into the system design at a high level.  To achieve this, fmdtools provides a Python-based *design environment* where one can represent the system in a model, simulate the resilience of the model to faults, and analyze the resulting model responses to iteratively improve the resilience of the design.
 
-Note: This version (**2.0-beta-2**) is currently in development, and thus not all interfaces may be fully stable and not all examples or documentation may be up-to-date. For stable versions, download packages releases without the -alpha or -beta tags.
+Note: This version (**2.0-beta-3**) is currently in development, and thus not all interfaces may be fully stable and not all examples or documentation may be up-to-date. For stable versions, download packages releases without the -alpha or -beta tags.
 
 [Click here to view the the full documentation website.](https://nasa.github.io/fmdtools)
 
@@ -50,8 +50,8 @@ ordered-set
 # license: (MIT) https://github.com/rspeer/ordered-set/blob/master/MIT-LICENSE
 dill 
 # license: (MIT) https://github.com/uqfoundation/dill/blob/master/LICENSE
-recordclass >=0.14.4
-# license: (MIT) https://bitbucket.org/intellimath/recordclass/src/master/LICENSE.txt
+recordclass == 0.21.1
+# license: (MIT) https://github.com/intellimath/recordclass/blob/main/LICENSE.txt
 pytest
 # license: (MIT) https://docs.pytest.org/en/7.3.x/license.html
 graphviz
@@ -71,7 +71,7 @@ graphviz
 # license: (CPL 1.0) https://graphviz.org/license/ 
 pyvis
 # used for: interactive html views of model graphs
-# license: (BSD-3)
+# license: (BSD-3) https://github.com/WestHealth/pyvis/blob/master/LICENSE_BSD.txt
 ffmpeg
 # used for: animations in demo notebook(s)
 # license: (LGPL version) https://www.ffmpeg.org/legal.html
@@ -84,12 +84,21 @@ Additionally, the following python packages are not included but are necessary f
 deap
 # used for: optimization of rover faults
 # license: (LGPL-3.0) https://github.com/DEAP/deap/blob/master/LICENSE.txt
+pymoo
+# used for: optimization of tank example
+# license: (Apache 2.0) https://github.com/anyoptimization/pymoo/blob/main/LICENSE
 nbmake
 # used for: for notebook tests
 # license: (Apache 2.0) https://github.com/treebeardtech/nbmake/blob/main/LICENSE
 pytest-html  
 # used for: development test report generation
 # license: (MPL-3) https://github.com/pytest-dev/pytest-html/blob/master/LICENSE
+coverage
+# used for: measuring test coverage
+# license: (Apache 2.0) https://github.com/nedbat/coveragepy/blob/master/NOTICE.txt
+pytest-cov
+# used for: measuring test coverage
+# license: (MIT) https://github.com/pytest-dev/pytest-cov/blob/master/LICENSE
 genbadge
 # used for: generating test badges for the README
 # license: (BSD 3-Clause) https://github.com/smarie/python-genbadge/blob/main/LICENSE
@@ -98,7 +107,7 @@ multiprocess
 # license: (BSD-3 Clause) https://github.com/uqfoundation/multiprocess/blob/master/LICENSE      
 pathos          
 # used for: parallelism tutorial profiling
-# license: (BSD-3 Clause) https://github.com/uqfoundation/pathos/blob/master/LICENSE 
+# license: (BSD-3 Clause) https://github.com/uqfoundation/pathos/blob/master/LICENSE
 ```
 They can be installed using ``pip install packagename``.
 

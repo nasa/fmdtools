@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Defining Fault Sampling Approaches in fmdtools &mdash; fmdtools 2.0-beta-2 documentation</title>
+  <title>Defining Fault Sampling Approaches in fmdtools &mdash; fmdtools 2.0-beta-3 documentation</title>
       <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
       <link rel="stylesheet" href="../../_static/nbsphinx-code-cells.css" type="text/css" />
@@ -71,7 +71,7 @@
 <li class="toctree-l2"><a class="reference internal" href="../../docs/Development%20Guide.html#intro-to-fmdtools">Intro to fmdtools</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="../../docs/Intro_to_fmdtools.html">Intro to resilience modelling, simulation, and visualization in Python with fmdtools.</a><ul>
 <li class="toctree-l4"><a class="reference internal" href="../../docs/Intro_to_fmdtools.html#author-daniel-hulse">Author: Daniel Hulse</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/Intro_to_fmdtools.html#version-2-0-beta-2">Version: 2.0-beta-2</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../docs/Intro_to_fmdtools.html#version-2-0-beta-3">Version: 2.0-beta-3</a></li>
 </ul>
 </li>
 <li class="toctree-l3"><a class="reference internal" href="../../docs/Intro_to_fmdtools.html#overview">Overview</a></li>
@@ -168,7 +168,7 @@
 </ul>
 </li>
 <li class="toctree-l3"><a class="reference internal" href="../pump/Optimization.html">Optimization using the ProblemInterface class</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="../pump/Optimization.html#ProblemInterface-Setup">ProblemInterface Setup</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../pump/Optimization.html#Problem-Setup">Problem Setup</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../pump/Optimization.html#Problem-interfaces">Problem interfaces</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../pump/Optimization.html#Optimization:">Optimization:</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../pump/Optimization.html#Multi-scenario-Optimization">Multi-scenario Optimization</a></li>
@@ -676,12 +676,12 @@ FaultSample of scenarios:
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-[SingleFaultScenario(sequence={2: Injection(faults={&#39;power&#39;: [&#39;no_charge&#39;]}, disturbances={})}, times=(2,), function=&#39;power&#39;, fault=&#39;no_charge&#39;, rate=1e-05, name=&#39;power_no_charge_t2&#39;, time=2, phase=&#39;&#39;),
- SingleFaultScenario(sequence={5: Injection(faults={&#39;power&#39;: [&#39;no_charge&#39;]}, disturbances={})}, times=(5,), function=&#39;power&#39;, fault=&#39;no_charge&#39;, rate=1e-05, name=&#39;power_no_charge_t5&#39;, time=5, phase=&#39;&#39;),
- SingleFaultScenario(sequence={10: Injection(faults={&#39;power&#39;: [&#39;no_charge&#39;]}, disturbances={})}, times=(10,), function=&#39;power&#39;, fault=&#39;no_charge&#39;, rate=1e-05, name=&#39;power_no_charge_t10&#39;, time=10, phase=&#39;&#39;),
- SingleFaultScenario(sequence={2: Injection(faults={&#39;power&#39;: [&#39;short&#39;]}, disturbances={})}, times=(2,), function=&#39;power&#39;, fault=&#39;short&#39;, rate=1e-05, name=&#39;power_short_t2&#39;, time=2, phase=&#39;&#39;),
- SingleFaultScenario(sequence={5: Injection(faults={&#39;power&#39;: [&#39;short&#39;]}, disturbances={})}, times=(5,), function=&#39;power&#39;, fault=&#39;short&#39;, rate=1e-05, name=&#39;power_short_t5&#39;, time=5, phase=&#39;&#39;),
- SingleFaultScenario(sequence={10: Injection(faults={&#39;power&#39;: [&#39;short&#39;]}, disturbances={})}, times=(10,), function=&#39;power&#39;, fault=&#39;short&#39;, rate=1e-05, name=&#39;power_short_t10&#39;, time=10, phase=&#39;&#39;)]
+[SingleFaultScenario(sequence={2.0: Injection(faults={&#39;power&#39;: [&#39;no_charge&#39;]}, disturbances={})}, times=(2,), function=&#39;power&#39;, fault=&#39;no_charge&#39;, rate=1e-05, name=&#39;power_no_charge_t2&#39;, time=2, phase=&#39;&#39;),
+ SingleFaultScenario(sequence={5.0: Injection(faults={&#39;power&#39;: [&#39;no_charge&#39;]}, disturbances={})}, times=(5,), function=&#39;power&#39;, fault=&#39;no_charge&#39;, rate=1e-05, name=&#39;power_no_charge_t5&#39;, time=5, phase=&#39;&#39;),
+ SingleFaultScenario(sequence={10.0: Injection(faults={&#39;power&#39;: [&#39;no_charge&#39;]}, disturbances={})}, times=(10,), function=&#39;power&#39;, fault=&#39;no_charge&#39;, rate=1e-05, name=&#39;power_no_charge_t10&#39;, time=10, phase=&#39;&#39;),
+ SingleFaultScenario(sequence={2.0: Injection(faults={&#39;power&#39;: [&#39;short&#39;]}, disturbances={})}, times=(2,), function=&#39;power&#39;, fault=&#39;short&#39;, rate=1e-05, name=&#39;power_short_t2&#39;, time=2, phase=&#39;&#39;),
+ SingleFaultScenario(sequence={5.0: Injection(faults={&#39;power&#39;: [&#39;short&#39;]}, disturbances={})}, times=(5,), function=&#39;power&#39;, fault=&#39;short&#39;, rate=1e-05, name=&#39;power_short_t5&#39;, time=5, phase=&#39;&#39;),
+ SingleFaultScenario(sequence={10.0: Injection(faults={&#39;power&#39;: [&#39;short&#39;]}, disturbances={})}, times=(10,), function=&#39;power&#39;, fault=&#39;short&#39;, rate=1e-05, name=&#39;power_short_t10&#39;, time=10, phase=&#39;&#39;)]
 </pre></div></div>
 </div>
 <p>But we know better than this–some of the faults should have zero rate if they are going to occur in phases they don’t apply to!</p>
@@ -715,7 +715,7 @@ FaultSample of scenarios:
  &#39;operator&#39;: PhaseMap({&#39;nominal&#39;: [0.0, 149.0]}, {&#39;nominal&#39;: {&#39;nominal&#39;}}),
  &#39;communications&#39;: PhaseMap({&#39;nominal&#39;: [0.0, 149.0]}, {&#39;nominal&#39;: {&#39;nominal&#39;}}),
  &#39;perception&#39;: PhaseMap({&#39;off&#39;: [0.0, 1.0], &#39;feed&#39;: [2.0, 149.0]}, {&#39;off&#39;: {&#39;off&#39;}, &#39;feed&#39;: {&#39;feed&#39;}}),
- &#39;plan_path&#39;: PhaseMap({&#39;standby&#39;: [0.0, 4.0], &#39;drive&#39;: [5.0, 148.0], &#39;standby1&#39;: [149.0, 149.0]}, {&#39;standby&#39;: {&#39;standby&#39;, &#39;standby1&#39;}, &#39;drive&#39;: {&#39;drive&#39;}}),
+ &#39;plan_path&#39;: PhaseMap({&#39;standby&#39;: [0.0, 4.0], &#39;drive&#39;: [5.0, 148.0], &#39;standby1&#39;: [149.0, 149.0]}, {&#39;standby&#39;: {&#39;standby1&#39;, &#39;standby&#39;}, &#39;drive&#39;: {&#39;drive&#39;}}),
  &#39;override&#39;: PhaseMap({&#39;off&#39;: [0.0, 1.0], &#39;standby&#39;: [2.0, 149.0]}, {&#39;off&#39;: {&#39;off&#39;}, &#39;standby&#39;: {&#39;standby&#39;}}),
  &#39;drive&#39;: PhaseMap({&#39;nominal&#39;: [0.0, 149.0]}, {&#39;nominal&#39;: {&#39;nominal&#39;}})}
 </pre></div></div>
@@ -924,7 +924,7 @@ SampleApproach for rover with:
 </div>
 <div class="output_area stderr docutils container">
 <div class="highlight"><pre>
-SCENARIOS COMPLETE: 100%|██████████| 2/2 [00:00&lt;00:00, 17.76it/s]
+SCENARIOS COMPLETE: 100%|██████████| 2/2 [00:00&lt;00:00, 10.26it/s]
 </pre></div></div>
 </div>
 <div class="nbinput docutils container">
@@ -970,7 +970,7 @@ power_short_t75p0.endclass.endpt: array(2)
 nominal.endclass.rate:               1.0
 nominal.endclass.cost:                 0
 nominal.endclass.prob:               1.0
-nominal.endclass.expected cost:        0
+nominal.endclass.expected_cost:        0
 nominal.endclass.in_bound:          True
 nominal.endclass.at_finish:        False
 nominal.endclass.line_dist:            1

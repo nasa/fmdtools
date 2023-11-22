@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Overview &mdash; fmdtools 2.0-beta-2 documentation</title>
+  <title>Overview &mdash; fmdtools 2.0-beta-3 documentation</title>
       <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
     <link rel="shortcut icon" href="_static/fmdtools_ico.ico"/>
@@ -22,7 +22,7 @@
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
     <link rel="next" title="Development Guide" href="docs/Development%20Guide.html" />
-    <link rel="prev" title="fmdtools Version 2.0-beta-2" href="index.html" /> 
+    <link rel="prev" title="fmdtools Version 2.0-beta-3" href="index.html" /> 
 </head>
 
 <body class="wy-body-for-nav"> 
@@ -70,7 +70,7 @@
 <li class="toctree-l2"><a class="reference internal" href="docs/Development%20Guide.html#intro-to-fmdtools">Intro to fmdtools</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="docs/Intro_to_fmdtools.html">Intro to resilience modelling, simulation, and visualization in Python with fmdtools.</a><ul>
 <li class="toctree-l4"><a class="reference internal" href="docs/Intro_to_fmdtools.html#author-daniel-hulse">Author: Daniel Hulse</a></li>
-<li class="toctree-l4"><a class="reference internal" href="docs/Intro_to_fmdtools.html#version-2-0-beta-2">Version: 2.0-beta-2</a></li>
+<li class="toctree-l4"><a class="reference internal" href="docs/Intro_to_fmdtools.html#version-2-0-beta-3">Version: 2.0-beta-3</a></li>
 </ul>
 </li>
 <li class="toctree-l3"><a class="reference internal" href="docs/Intro_to_fmdtools.html#overview">Overview</a></li>
@@ -167,7 +167,7 @@
 </ul>
 </li>
 <li class="toctree-l3"><a class="reference internal" href="examples/pump/Optimization.html">Optimization using the ProblemInterface class</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="examples/pump/Optimization.html#ProblemInterface-Setup">ProblemInterface Setup</a></li>
+<li class="toctree-l4"><a class="reference internal" href="examples/pump/Optimization.html#Problem-Setup">Problem Setup</a></li>
 <li class="toctree-l4"><a class="reference internal" href="examples/pump/Optimization.html#Problem-interfaces">Problem interfaces</a></li>
 <li class="toctree-l4"><a class="reference internal" href="examples/pump/Optimization.html#Optimization:">Optimization:</a></li>
 <li class="toctree-l4"><a class="reference internal" href="examples/pump/Optimization.html#Multi-scenario-Optimization">Multi-scenario Optimization</a></li>
@@ -356,7 +356,7 @@
 <a class="reference external" href="https://htmlpreview.github.io/?https://github.com/nasa/fmdtools/blob/main/reports/junit/report.html"><img alt="Tests Status" src="_images/tests-badge.svg" /></a>
 <a class="reference external" href="https://github.com/nasa/fmdtools/blob/main/NASA_Open_Source_Agreement_fmdtools.pdf"><img alt="GitHub License" src="https://img.shields.io/badge/License-NOSA-green" /></a></p>
 <p><strong>fmdtools</strong> (Fault Model Design tools) is a toolkit for modelling system resilience in the early design phase. With it, one can simulate the effects of faults in a system to build resilience into the system design at a high level.  To achieve this, fmdtools provides a Python-based <em>design environment</em> where one can represent the system in a model, simulate the resilience of the model to faults, and analyze the resulting model responses to iteratively improve the resilience of the design.</p>
-<p>Note: This version (<strong>2.0-beta-2</strong>) is currently in development, and thus not all interfaces may be fully stable and not all examples or documentation may be up-to-date. For stable versions, download packages releases without the -alpha or -beta tags.</p>
+<p>Note: This version (<strong>2.0-beta-3</strong>) is currently in development, and thus not all interfaces may be fully stable and not all examples or documentation may be up-to-date. For stable versions, download packages releases without the -alpha or -beta tags.</p>
 <p><a class="reference external" href="https://nasa.github.io/fmdtools">Click here to view the the full documentation website.</a></p>
 <section id="getting-started">
 <h2>Getting Started<a class="headerlink" href="#getting-started" title="Permalink to this heading"></a></h2>
@@ -388,8 +388,8 @@
 <span class="c1"># license: (MIT) https://github.com/rspeer/ordered-set/blob/master/MIT-LICENSE</span>
 <span class="n">dill</span> 
 <span class="c1"># license: (MIT) https://github.com/uqfoundation/dill/blob/master/LICENSE</span>
-<span class="n">recordclass</span> <span class="o">&gt;=</span><span class="mf">0.14.4</span>
-<span class="c1"># license: (MIT) https://bitbucket.org/intellimath/recordclass/src/master/LICENSE.txt</span>
+<span class="n">recordclass</span> <span class="o">==</span> <span class="mf">0.21.1</span>
+<span class="c1"># license: (MIT) https://github.com/intellimath/recordclass/blob/main/LICENSE.txt</span>
 <span class="n">pytest</span>
 <span class="c1"># license: (MIT) https://docs.pytest.org/en/7.3.x/license.html</span>
 <span class="n">graphviz</span>
@@ -407,7 +407,7 @@
 <span class="c1"># license: (CPL 1.0) https://graphviz.org/license/ </span>
 <span class="n">pyvis</span>
 <span class="c1"># used for: interactive html views of model graphs</span>
-<span class="c1"># license: (BSD-3)</span>
+<span class="c1"># license: (BSD-3) https://github.com/WestHealth/pyvis/blob/master/LICENSE_BSD.txt</span>
 <span class="n">ffmpeg</span>
 <span class="c1"># used for: animations in demo notebook(s)</span>
 <span class="c1"># license: (LGPL version) https://www.ffmpeg.org/legal.html</span>
@@ -418,12 +418,21 @@
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">deap</span>
 <span class="c1"># used for: optimization of rover faults</span>
 <span class="c1"># license: (LGPL-3.0) https://github.com/DEAP/deap/blob/master/LICENSE.txt</span>
+<span class="n">pymoo</span>
+<span class="c1"># used for: optimization of tank example</span>
+<span class="c1"># license: (Apache 2.0) https://github.com/anyoptimization/pymoo/blob/main/LICENSE</span>
 <span class="n">nbmake</span>
 <span class="c1"># used for: for notebook tests</span>
 <span class="c1"># license: (Apache 2.0) https://github.com/treebeardtech/nbmake/blob/main/LICENSE</span>
 <span class="n">pytest</span><span class="o">-</span><span class="n">html</span>  
 <span class="c1"># used for: development test report generation</span>
 <span class="c1"># license: (MPL-3) https://github.com/pytest-dev/pytest-html/blob/master/LICENSE</span>
+<span class="n">coverage</span>
+<span class="c1"># used for: measuring test coverage</span>
+<span class="c1"># license: (Apache 2.0) https://github.com/nedbat/coveragepy/blob/master/NOTICE.txt</span>
+<span class="n">pytest</span><span class="o">-</span><span class="n">cov</span>
+<span class="c1"># used for: measuring test coverage</span>
+<span class="c1"># license: (MIT) https://github.com/pytest-dev/pytest-cov/blob/master/LICENSE</span>
 <span class="n">genbadge</span>
 <span class="c1"># used for: generating test badges for the README</span>
 <span class="c1"># license: (BSD 3-Clause) https://github.com/smarie/python-genbadge/blob/main/LICENSE</span>
@@ -432,7 +441,7 @@
 <span class="c1"># license: (BSD-3 Clause) https://github.com/uqfoundation/multiprocess/blob/master/LICENSE      </span>
 <span class="n">pathos</span>          
 <span class="c1"># used for: parallelism tutorial profiling</span>
-<span class="c1"># license: (BSD-3 Clause) https://github.com/uqfoundation/pathos/blob/master/LICENSE </span>
+<span class="c1"># license: (BSD-3 Clause) https://github.com/uqfoundation/pathos/blob/master/LICENSE</span>
 </pre></div>
 </div>
 <p>They can be installed using <code class="docutils literal notranslate"><span class="pre">pip</span> <span class="pre">install</span> <span class="pre">packagename</span></code>.</p>
@@ -482,7 +491,7 @@
            </div>
           </div>
           <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
-        <a href="index.html" class="btn btn-neutral float-left" title="fmdtools Version 2.0-beta-2" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="index.html" class="btn btn-neutral float-left" title="fmdtools Version 2.0-beta-3" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
         <a href="docs/Development%20Guide.html" class="btn btn-neutral float-right" title="Development Guide" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 

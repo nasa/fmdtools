@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>fmdtools Paper Demonstration &mdash; fmdtools 2.0-beta-2 documentation</title>
+  <title>fmdtools Paper Demonstration &mdash; fmdtools 2.0-beta-3 documentation</title>
       <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
       <link rel="stylesheet" href="../../_static/nbsphinx-code-cells.css" type="text/css" />
@@ -73,7 +73,7 @@
 <li class="toctree-l2"><a class="reference internal" href="../../docs/Development%20Guide.html#intro-to-fmdtools">Intro to fmdtools</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="../../docs/Intro_to_fmdtools.html">Intro to resilience modelling, simulation, and visualization in Python with fmdtools.</a><ul>
 <li class="toctree-l4"><a class="reference internal" href="../../docs/Intro_to_fmdtools.html#author-daniel-hulse">Author: Daniel Hulse</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/Intro_to_fmdtools.html#version-2-0-beta-2">Version: 2.0-beta-2</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../docs/Intro_to_fmdtools.html#version-2-0-beta-3">Version: 2.0-beta-3</a></li>
 </ul>
 </li>
 <li class="toctree-l3"><a class="reference internal" href="../../docs/Intro_to_fmdtools.html#overview">Overview</a></li>
@@ -170,7 +170,7 @@
 </ul>
 </li>
 <li class="toctree-l3"><a class="reference internal" href="../pump/Optimization.html">Optimization using the ProblemInterface class</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="../pump/Optimization.html#ProblemInterface-Setup">ProblemInterface Setup</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../pump/Optimization.html#Problem-Setup">Problem Setup</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../pump/Optimization.html#Problem-interfaces">Problem interfaces</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../pump/Optimization.html#Optimization:">Optimization:</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../pump/Optimization.html#Multi-scenario-Optimization">Multi-scenario Optimization</a></li>
@@ -547,7 +547,7 @@ c:\users\dhulse\documents\github\fmdtools\fmdtools\define\block.py:71: UserWarni
 <div class="highlight"><pre>
 ASPL: 1.14
 Modularity: 0.00
-Robustness Coefficient: 99.22
+Robustness Coefficient: 98.94
 </pre></div></div>
 </div>
 <p>Next, we visualize network vulnerabilities using find_bridging_nodes and find_high_degree_nodes.</p>
@@ -643,7 +643,7 @@ High Degree Nodes: [(&#39;ctl_dof&#39;, 6), (&#39;plan_path&#39;, 6), (&#39;hold
 <div class="highlight"><pre>
 ASPL, functions and flows: 2.30
 Modularity, functions and flows: 0.32
-Robustness Coefficient, functions and flows: 84.60
+Robustness Coefficient, functions and flows: 86.98
 </pre></div></div>
 </div>
 <div class="nbinput docutils container">
@@ -749,7 +749,7 @@ High Degree Nodes: [(&#39;ctl_dof&#39;, 5), (&#39;force_st&#39;, 5), (&#39;dofs&
 </div>
 <div class="output_area stderr docutils container">
 <div class="highlight"><pre>
-SCENARIOS COMPLETE: 100%|██████████| 21/21 [00:00&lt;00:00, 303.79it/s]
+SCENARIOS COMPLETE: 100%|██████████| 21/21 [00:00&lt;00:00, 198.55it/s]
 </pre></div></div>
 </div>
 <p>Here we produce a scenario-based FMEA to show which scenarios are most important in the model:</p>
@@ -759,7 +759,7 @@ SCENARIOS COMPLETE: 100%|██████████| 21/21 [00:00&lt;00:00, 
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">fmdtools.analyze</span> <span class="kn">import</span> <span class="n">tabulate</span>
 <span class="n">static_fmea</span> <span class="o">=</span> <span class="n">tabulate</span><span class="o">.</span><span class="n">result_summary_fmea</span><span class="p">(</span><span class="n">endclasses</span><span class="p">,</span> <span class="n">mdlhists</span><span class="p">,</span> <span class="o">*</span><span class="n">static_mdl</span><span class="o">.</span><span class="n">fxns</span><span class="p">,</span> <span class="o">*</span><span class="n">static_mdl</span><span class="o">.</span><span class="n">flows</span><span class="p">)</span>
-<span class="n">static_fmea</span><span class="o">.</span><span class="n">sort_values</span><span class="p">(</span><span class="s1">&#39;expected cost&#39;</span><span class="p">,</span> <span class="n">ascending</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+<span class="n">static_fmea</span><span class="o">.</span><span class="n">sort_values</span><span class="p">(</span><span class="s1">&#39;expected_cost&#39;</span><span class="p">,</span> <span class="n">ascending</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -790,7 +790,7 @@ SCENARIOS COMPLETE: 100%|██████████| 21/21 [00:00&lt;00:00, 
       <th>faulty</th>
       <th>rate</th>
       <th>cost</th>
-      <th>expected cost</th>
+      <th>expected_cost</th>
     </tr>
   </thead>
   <tbody>
@@ -843,7 +843,7 @@ SCENARIOS COMPLETE: 100%|██████████| 21/21 [00:00&lt;00:00, 
       <td>6600.0</td>
     </tr>
     <tr>
-      <th>ctl_dof_noctl_t0</th>
+      <th>dist_ee_break_t0</th>
       <td>['dist_ee', 'affect_dof', 'ctl_dof', 'plan_pat...</td>
       <td>['dist_ee', 'affect_dof', 'ctl_dof', 'plan_pat...</td>
       <td>0.000002</td>
@@ -851,7 +851,7 @@ SCENARIOS COMPLETE: 100%|██████████| 21/21 [00:00&lt;00:00, 
       <td>6500.0</td>
     </tr>
     <tr>
-      <th>dist_ee_break_t0</th>
+      <th>ctl_dof_noctl_t0</th>
       <td>['dist_ee', 'affect_dof', 'ctl_dof', 'plan_pat...</td>
       <td>['dist_ee', 'affect_dof', 'ctl_dof', 'plan_pat...</td>
       <td>0.000002</td>
@@ -883,17 +883,17 @@ SCENARIOS COMPLETE: 100%|██████████| 21/21 [00:00&lt;00:00, 
       <td>3250.0</td>
     </tr>
     <tr>
-      <th>view_env_poorview_t0</th>
-      <td>['view_env']</td>
-      <td>['view_env']</td>
+      <th>plan_path_noloc_t0</th>
+      <td>['plan_path', 'ctl', 'dofs', 'des_traj']</td>
+      <td>['plan_path']</td>
       <td>0.000002</td>
       <td>10000.0</td>
       <td>2000.0</td>
     </tr>
     <tr>
-      <th>plan_path_noloc_t0</th>
-      <td>['plan_path', 'ctl', 'dofs', 'des_traj']</td>
-      <td>['plan_path']</td>
+      <th>view_env_poorview_t0</th>
+      <td>['view_env']</td>
+      <td>['view_env']</td>
       <td>0.000002</td>
       <td>10000.0</td>
       <td>2000.0</td>
@@ -940,7 +940,7 @@ SCENARIOS COMPLETE: 100%|██████████| 21/21 [00:00&lt;00:00, 
     </tr>
     <tr>
       <th>affect_dof_ctldn_t0</th>
-      <td>['affect_dof', 'ctl', 'dofs']</td>
+      <td>['affect_dof', 'ee_1', 'ee_mot', 'ctl', 'dofs']</td>
       <td>['affect_dof']</td>
       <td>0.000002</td>
       <td>500.0</td>
@@ -948,7 +948,7 @@ SCENARIOS COMPLETE: 100%|██████████| 21/21 [00:00&lt;00:00, 
     </tr>
     <tr>
       <th>affect_dof_mechfriction_t0</th>
-      <td>['affect_dof', 'ee_1', 'ee_mot']</td>
+      <td>['affect_dof']</td>
       <td>['affect_dof']</td>
       <td>0.000001</td>
       <td>500.0</td>
@@ -956,7 +956,7 @@ SCENARIOS COMPLETE: 100%|██████████| 21/21 [00:00&lt;00:00, 
     </tr>
     <tr>
       <th>affect_dof_propwarp_t0</th>
-      <td>['affect_dof', 'dofs']</td>
+      <td>['affect_dof', 'ee_1', 'ee_mot', 'dofs']</td>
       <td>['affect_dof']</td>
       <td>0.0</td>
       <td>200.0</td>
@@ -987,39 +987,33 @@ SCENARIOS COMPLETE: 100%|██████████| 21/21 [00:00&lt;00:00, 
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-\begin{tabular}{llllll}
-\toprule
- &amp; degraded &amp; faulty &amp; rate &amp; cost &amp; expected cost \\
-\midrule
-store_ee_nocharge_t0 &amp; [&#39;store_ee&#39;, &#39;dist_ee&#39;, &#39;affect_dof&#39;, &#39;ctl_dof&#39;, &#39;plan_path&#39;, &#39;hold_payload&#39;, &#39;force_st&#39;, &#39;force_lin&#39;, &#39;ee_1&#39;, &#39;ee_mot&#39;, &#39;ee_ctl&#39;, &#39;ctl&#39;, &#39;dofs&#39;, &#39;des_traj&#39;] &amp; [&#39;store_ee&#39;, &#39;dist_ee&#39;, &#39;affect_dof&#39;, &#39;ctl_dof&#39;, &#39;plan_path&#39;, &#39;hold_payload&#39;] &amp; 0.000010 &amp; 32800.000000 &amp; 32800.000000 \\
-plan_path_degloc_t0 &amp; [&#39;plan_path&#39;, &#39;ctl&#39;, &#39;dofs&#39;, &#39;des_traj&#39;] &amp; [&#39;plan_path&#39;] &amp; 0.000008 &amp; 20000.000000 &amp; 16000.000000 \\
-dist_ee_short_t0 &amp; [&#39;dist_ee&#39;, &#39;affect_dof&#39;, &#39;ctl_dof&#39;, &#39;plan_path&#39;, &#39;hold_payload&#39;, &#39;force_st&#39;, &#39;force_lin&#39;, &#39;ee_1&#39;, &#39;ee_mot&#39;, &#39;ee_ctl&#39;, &#39;ctl&#39;, &#39;dofs&#39;, &#39;des_traj&#39;] &amp; [&#39;dist_ee&#39;, &#39;affect_dof&#39;, &#39;ctl_dof&#39;, &#39;plan_path&#39;, &#39;hold_payload&#39;] &amp; 0.000003 &amp; 35500.000000 &amp; 10650.000000 \\
-ctl_dof_degctl_t0 &amp; [&#39;ctl_dof&#39;, &#39;ctl&#39;, &#39;dofs&#39;] &amp; [&#39;ctl_dof&#39;] &amp; 0.000008 &amp; 10000.000000 &amp; 8000.000000 \\
-affect_dof_ctlbreak_t0 &amp; [&#39;dist_ee&#39;, &#39;affect_dof&#39;, &#39;ctl_dof&#39;, &#39;plan_path&#39;, &#39;hold_payload&#39;, &#39;force_st&#39;, &#39;force_lin&#39;, &#39;ee_1&#39;, &#39;ee_mot&#39;, &#39;ee_ctl&#39;, &#39;ctl&#39;, &#39;dofs&#39;, &#39;des_traj&#39;] &amp; [&#39;dist_ee&#39;, &#39;affect_dof&#39;, &#39;ctl_dof&#39;, &#39;plan_path&#39;, &#39;hold_payload&#39;] &amp; 0.000002 &amp; 33500.000000 &amp; 6700.000000 \\
-affect_dof_ctlup_t0 &amp; [&#39;dist_ee&#39;, &#39;affect_dof&#39;, &#39;ctl_dof&#39;, &#39;plan_path&#39;, &#39;hold_payload&#39;, &#39;force_st&#39;, &#39;force_lin&#39;, &#39;ee_1&#39;, &#39;ee_mot&#39;, &#39;ee_ctl&#39;, &#39;ctl&#39;, &#39;dofs&#39;, &#39;des_traj&#39;] &amp; [&#39;dist_ee&#39;, &#39;affect_dof&#39;, &#39;ctl_dof&#39;, &#39;plan_path&#39;, &#39;hold_payload&#39;] &amp; 0.000002 &amp; 33000.000000 &amp; 6600.000000 \\
-ctl_dof_noctl_t0 &amp; [&#39;dist_ee&#39;, &#39;affect_dof&#39;, &#39;ctl_dof&#39;, &#39;plan_path&#39;, &#39;hold_payload&#39;, &#39;force_st&#39;, &#39;force_lin&#39;, &#39;ee_1&#39;, &#39;ee_mot&#39;, &#39;ee_ctl&#39;, &#39;ctl&#39;, &#39;dofs&#39;, &#39;des_traj&#39;] &amp; [&#39;dist_ee&#39;, &#39;affect_dof&#39;, &#39;ctl_dof&#39;, &#39;plan_path&#39;, &#39;hold_payload&#39;] &amp; 0.000002 &amp; 32500.000000 &amp; 6500.000000 \\
-dist_ee_break_t0 &amp; [&#39;dist_ee&#39;, &#39;affect_dof&#39;, &#39;ctl_dof&#39;, &#39;plan_path&#39;, &#39;hold_payload&#39;, &#39;force_st&#39;, &#39;force_lin&#39;, &#39;ee_1&#39;, &#39;ee_mot&#39;, &#39;ee_ctl&#39;, &#39;ctl&#39;, &#39;dofs&#39;, &#39;des_traj&#39;] &amp; [&#39;dist_ee&#39;, &#39;affect_dof&#39;, &#39;ctl_dof&#39;, &#39;plan_path&#39;, &#39;hold_payload&#39;] &amp; 0.000002 &amp; 32500.000000 &amp; 6500.000000 \\
-affect_dof_openc_t0 &amp; [&#39;dist_ee&#39;, &#39;affect_dof&#39;, &#39;ctl_dof&#39;, &#39;plan_path&#39;, &#39;hold_payload&#39;, &#39;force_st&#39;, &#39;force_lin&#39;, &#39;ee_1&#39;, &#39;ee_mot&#39;, &#39;ee_ctl&#39;, &#39;ctl&#39;, &#39;dofs&#39;, &#39;des_traj&#39;] &amp; [&#39;dist_ee&#39;, &#39;affect_dof&#39;, &#39;ctl_dof&#39;, &#39;plan_path&#39;, &#39;hold_payload&#39;] &amp; 0.000001 &amp; 32700.000000 &amp; 3270.000000 \\
-affect_dof_short_t0 &amp; [&#39;dist_ee&#39;, &#39;affect_dof&#39;, &#39;ctl_dof&#39;, &#39;plan_path&#39;, &#39;hold_payload&#39;, &#39;force_st&#39;, &#39;force_lin&#39;, &#39;ee_1&#39;, &#39;ee_mot&#39;, &#39;ee_ctl&#39;, &#39;ctl&#39;, &#39;dofs&#39;, &#39;des_traj&#39;] &amp; [&#39;dist_ee&#39;, &#39;affect_dof&#39;, &#39;ctl_dof&#39;, &#39;plan_path&#39;, &#39;hold_payload&#39;] &amp; 0.000001 &amp; 32700.000000 &amp; 3270.000000 \\
-affect_dof_mechbreak_t0 &amp; [&#39;dist_ee&#39;, &#39;affect_dof&#39;, &#39;ctl_dof&#39;, &#39;plan_path&#39;, &#39;hold_payload&#39;, &#39;force_st&#39;, &#39;force_lin&#39;, &#39;ee_1&#39;, &#39;ee_mot&#39;, &#39;ee_ctl&#39;, &#39;ctl&#39;, &#39;dofs&#39;, &#39;des_traj&#39;] &amp; [&#39;dist_ee&#39;, &#39;affect_dof&#39;, &#39;ctl_dof&#39;, &#39;plan_path&#39;, &#39;hold_payload&#39;] &amp; 0.000001 &amp; 32500.000000 &amp; 3250.000000 \\
-view_env_poorview_t0 &amp; [&#39;view_env&#39;] &amp; [&#39;view_env&#39;] &amp; 0.000002 &amp; 10000.000000 &amp; 2000.000000 \\
-plan_path_noloc_t0 &amp; [&#39;plan_path&#39;, &#39;ctl&#39;, &#39;dofs&#39;, &#39;des_traj&#39;] &amp; [&#39;plan_path&#39;] &amp; 0.000002 &amp; 10000.000000 &amp; 2000.000000 \\
-affect_dof_propbreak_t0 &amp; [&#39;dist_ee&#39;, &#39;affect_dof&#39;, &#39;ctl_dof&#39;, &#39;plan_path&#39;, &#39;hold_payload&#39;, &#39;force_st&#39;, &#39;force_lin&#39;, &#39;ee_1&#39;, &#39;ee_mot&#39;, &#39;ee_ctl&#39;, &#39;ctl&#39;, &#39;dofs&#39;, &#39;des_traj&#39;] &amp; [&#39;dist_ee&#39;, &#39;affect_dof&#39;, &#39;ctl_dof&#39;, &#39;plan_path&#39;, &#39;hold_payload&#39;] &amp; 0.000000 &amp; 32700.000000 &amp; 981.000000 \\
-hold_payload_deform_t0 &amp; [&#39;hold_payload&#39;, &#39;force_st&#39;, &#39;force_lin&#39;] &amp; [&#39;hold_payload&#39;] &amp; 0.000001 &amp; 10000.000000 &amp; 800.000000 \\
-affect_dof_propstuck_t0 &amp; [&#39;dist_ee&#39;, &#39;affect_dof&#39;, &#39;ctl_dof&#39;, &#39;plan_path&#39;, &#39;hold_payload&#39;, &#39;force_st&#39;, &#39;force_lin&#39;, &#39;ee_1&#39;, &#39;ee_mot&#39;, &#39;ee_ctl&#39;, &#39;ctl&#39;, &#39;dofs&#39;, &#39;des_traj&#39;] &amp; [&#39;dist_ee&#39;, &#39;affect_dof&#39;, &#39;ctl_dof&#39;, &#39;plan_path&#39;, &#39;hold_payload&#39;] &amp; 0.000000 &amp; 32700.000000 &amp; 654.000000 \\
-hold_payload_break_t0 &amp; [&#39;dist_ee&#39;, &#39;affect_dof&#39;, &#39;ctl_dof&#39;, &#39;plan_path&#39;, &#39;hold_payload&#39;, &#39;force_st&#39;, &#39;force_lin&#39;, &#39;ee_1&#39;, &#39;ee_mot&#39;, &#39;ee_ctl&#39;, &#39;ctl&#39;, &#39;dofs&#39;, &#39;des_traj&#39;] &amp; [&#39;dist_ee&#39;, &#39;affect_dof&#39;, &#39;ctl_dof&#39;, &#39;plan_path&#39;, &#39;hold_payload&#39;] &amp; 0.000000 &amp; 32500.000000 &amp; 650.000000 \\
-dist_ee_degr_t0 &amp; [&#39;dist_ee&#39;, &#39;ctl_dof&#39;, &#39;ee_mot&#39;, &#39;ee_ctl&#39;, &#39;ctl&#39;, &#39;dofs&#39;] &amp; [&#39;dist_ee&#39;] &amp; 0.000005 &amp; 1000.000000 &amp; 500.000000 \\
-affect_dof_ctldn_t0 &amp; [&#39;affect_dof&#39;, &#39;ctl&#39;, &#39;dofs&#39;] &amp; [&#39;affect_dof&#39;] &amp; 0.000002 &amp; 500.000000 &amp; 100.000000 \\
-affect_dof_mechfriction_t0 &amp; [&#39;affect_dof&#39;, &#39;ee_1&#39;, &#39;ee_mot&#39;] &amp; [&#39;affect_dof&#39;] &amp; 0.000001 &amp; 500.000000 &amp; 25.000000 \\
-affect_dof_propwarp_t0 &amp; [&#39;affect_dof&#39;, &#39;dofs&#39;] &amp; [&#39;affect_dof&#39;] &amp; 0.000000 &amp; 200.000000 &amp; 2.000000 \\
-nominal &amp; [] &amp; [] &amp; 1.000000 &amp; 0.000000 &amp; 0.000000 \\
-\bottomrule
-\end{tabular}
+<span class="ansi-red-intense-fg ansi-bold">---------------------------------------------------------------------------</span>
+<span class="ansi-red-intense-fg ansi-bold">KeyError</span>                                  Traceback (most recent call last)
+Cell <span class="ansi-green-intense-fg ansi-bold">In[21], line 1</span>
+<span class="ansi-green-intense-fg ansi-bold">----&gt; 1</span> <span style="color: rgb(0,135,0)">print</span>(<span class="ansi-yellow-bg">static_fmea</span><span class="ansi-yellow-bg" style="color: rgb(98,98,98)">.</span><span class="ansi-yellow-bg">sort_values</span><span class="ansi-yellow-bg">(</span><span class="ansi-yellow-bg" style="color: rgb(175,0,0)">&#39;</span><span class="ansi-yellow-bg" style="color: rgb(175,0,0)">expected cost</span><span class="ansi-yellow-bg" style="color: rgb(175,0,0)">&#39;</span><span class="ansi-yellow-bg">,</span><span class="ansi-yellow-bg"> </span><span class="ansi-yellow-bg">ascending</span><span class="ansi-yellow-bg" style="color: rgb(98,98,98)">=</span><span class="ansi-yellow-bg ansi-bold" style="color: rgb(0,135,0)">False</span><span class="ansi-yellow-bg">)</span><span style="color: rgb(98,98,98)">.</span>to_latex())
 
+File <span class="ansi-green-intense-fg ansi-bold">~\AppData\Roaming\Python\Python310\site-packages\pandas\core\frame.py:6758</span>, in <span class="ansi-cyan-fg">DataFrame.sort_values</span><span class="ansi-blue-intense-fg ansi-bold">(self, by, axis, ascending, inplace, kind, na_position, ignore_index, key)</span>
+<span class="ansi-green-fg">   6754</span> <span class="ansi-bold" style="color: rgb(0,135,0)">elif</span> <span style="color: rgb(0,135,0)">len</span>(by):
+<span class="ansi-green-fg">   6755</span>     <span style="color: rgb(95,135,135)"># len(by) == 1</span>
+<span class="ansi-green-fg">   6757</span>     by <span style="color: rgb(98,98,98)">=</span> by[<span style="color: rgb(98,98,98)">0</span>]
+<span class="ansi-green-intense-fg ansi-bold">-&gt; 6758</span>     k <span style="color: rgb(98,98,98)">=</span> <span class="ansi-yellow-bg" style="color: rgb(0,135,0)">self</span><span class="ansi-yellow-bg" style="color: rgb(98,98,98)">.</span><span class="ansi-yellow-bg">_get_label_or_level_values</span><span class="ansi-yellow-bg">(</span><span class="ansi-yellow-bg">by</span><span class="ansi-yellow-bg">,</span><span class="ansi-yellow-bg"> </span><span class="ansi-yellow-bg">axis</span><span class="ansi-yellow-bg" style="color: rgb(98,98,98)">=</span><span class="ansi-yellow-bg">axis</span><span class="ansi-yellow-bg">)</span>
+<span class="ansi-green-fg">   6760</span>     <span style="color: rgb(95,135,135)"># need to rewrap column in Series to apply key function</span>
+<span class="ansi-green-fg">   6761</span>     <span class="ansi-bold" style="color: rgb(0,135,0)">if</span> key <span class="ansi-bold" style="color: rgb(175,0,255)">is</span> <span class="ansi-bold" style="color: rgb(175,0,255)">not</span> <span class="ansi-bold" style="color: rgb(0,135,0)">None</span>:
+<span class="ansi-green-fg">   6762</span>         <span style="color: rgb(95,135,135)"># error: Incompatible types in assignment (expression has type</span>
+<span class="ansi-green-fg">   6763</span>         <span style="color: rgb(95,135,135)"># &#34;Series&#34;, variable has type &#34;ndarray&#34;)</span>
+
+File <span class="ansi-green-intense-fg ansi-bold">~\AppData\Roaming\Python\Python310\site-packages\pandas\core\generic.py:1778</span>, in <span class="ansi-cyan-fg">NDFrame._get_label_or_level_values</span><span class="ansi-blue-intense-fg ansi-bold">(self, key, axis)</span>
+<span class="ansi-green-fg">   1776</span>     values <span style="color: rgb(98,98,98)">=</span> <span style="color: rgb(0,135,0)">self</span><span style="color: rgb(98,98,98)">.</span>axes[axis]<span style="color: rgb(98,98,98)">.</span>get_level_values(key)<span style="color: rgb(98,98,98)">.</span>_values
+<span class="ansi-green-fg">   1777</span> <span class="ansi-bold" style="color: rgb(0,135,0)">else</span>:
+<span class="ansi-green-intense-fg ansi-bold">-&gt; 1778</span>     <span class="ansi-bold" style="color: rgb(0,135,0)">raise</span> <span class="ansi-bold" style="color: rgb(215,95,95)">KeyError</span>(key)
+<span class="ansi-green-fg">   1780</span> <span style="color: rgb(95,135,135)"># Check for duplicates</span>
+<span class="ansi-green-fg">   1781</span> <span class="ansi-bold" style="color: rgb(0,135,0)">if</span> values<span style="color: rgb(98,98,98)">.</span>ndim <span style="color: rgb(98,98,98)">&gt;</span> <span style="color: rgb(98,98,98)">1</span>:
+
+<span class="ansi-red-intense-fg ansi-bold">KeyError</span>: &#39;expected cost&#39;
 </pre></div></div>
 </div>
 <p>We can in turn visualize these faults on the graph representation of the system. Here we will focus on the break of one of the rotors in the AffectDOF function, the effects of which are shown below:</p>
-<div class="nbinput docutils container">
+<div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[22]:
 </pre></div>
 </div>
@@ -1030,13 +1024,6 @@ nominal &amp; [] &amp; [] &amp; 1.000000 &amp; 0.000000 &amp; 0.000000 \\
 <span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">result</span><span class="o">.</span><span class="n">graph</span><span class="o">.</span><span class="n">draw</span><span class="p">(</span><span class="n">title</span> <span class="o">=</span> <span class="s1">&#39;AffectDOF: Mechbreak at final sim time&#39;</span><span class="p">)</span>
 <span class="c1">#fig.savefig(&#39;static_propagation.pdf&#39;, format=&quot;pdf&quot;, bbox_inches = &#39;tight&#39;, pad_inches = 0)</span>
 </pre></div>
-</div>
-</div>
-<div class="nboutput nblast docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area docutils container">
-<img alt="../../_images/examples_multirotor_Demonstration_40_0.png" src="../../_images/examples_multirotor_Demonstration_40_0.png" />
 </div>
 </div>
 </section>
@@ -1064,7 +1051,7 @@ nominal &amp; [] &amp; [] &amp; 1.000000 &amp; 0.000000 &amp; 0.000000 \\
 </pre></div>
 </div>
 </div>
-<div class="nbinput docutils container">
+<div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[25]:
 </pre></div>
 </div>
@@ -1078,13 +1065,6 @@ nominal &amp; [] &amp; [] &amp; 1.000000 &amp; 0.000000 &amp; 0.000000 \\
 </pre></div>
 </div>
 </div>
-<div class="nboutput nblast docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area docutils container">
-<img alt="../../_images/examples_multirotor_Demonstration_45_0.png" src="../../_images/examples_multirotor_Demonstration_45_0.png" />
-</div>
-</div>
 <p>As shown below, in the case of the break in the AffectDOF function, the system crashes:</p>
 <div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[26]:
@@ -1095,7 +1075,7 @@ nominal &amp; [] &amp; [] &amp; 1.000000 &amp; 0.000000 &amp; 0.000000 \\
 </pre></div>
 </div>
 </div>
-<div class="nbinput docutils container">
+<div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[27]:
 </pre></div>
 </div>
@@ -1106,13 +1086,6 @@ nominal &amp; [] &amp; [] &amp; 1.000000 &amp; 0.000000 &amp; 0.000000 \\
 
 <span class="n">fig</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="s2">&quot;fault_behavior.pdf&quot;</span><span class="p">,</span> <span class="nb">format</span><span class="o">=</span><span class="s2">&quot;pdf&quot;</span><span class="p">,</span> <span class="n">bbox_inches</span> <span class="o">=</span> <span class="s1">&#39;tight&#39;</span><span class="p">,</span> <span class="n">pad_inches</span> <span class="o">=</span> <span class="mi">0</span><span class="p">)</span>
 </pre></div>
-</div>
-</div>
-<div class="nboutput nblast docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area docutils container">
-<img alt="../../_images/examples_multirotor_Demonstration_48_0.png" src="../../_images/examples_multirotor_Demonstration_48_0.png" />
 </div>
 </div>
 <p>Finally, we can see how the cost function of this scenario changes over time. As shown, when the fault is injected early, it has a lower cost because it crashes at the landing pad and not in a dangerous area. When it is injected at the end, the cost is minimal because the drone has already landed.</p>
@@ -1130,7 +1103,7 @@ nominal &amp; [] &amp; [] &amp; 1.000000 &amp; 0.000000 &amp; 0.000000 \\
 </pre></div>
 </div>
 </div>
-<div class="nbinput docutils container">
+<div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[29]:
 </pre></div>
 </div>
@@ -1138,15 +1111,7 @@ nominal &amp; [] &amp; [] &amp; 1.000000 &amp; 0.000000 &amp; 0.000000 \\
 </pre></div>
 </div>
 </div>
-<div class="nboutput nblast docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area stderr docutils container">
-<div class="highlight"><pre>
-SCENARIOS COMPLETE: 100%|██████████| 13/13 [00:00&lt;00:00, 88.23it/s]
-</pre></div></div>
-</div>
-<div class="nbinput docutils container">
+<div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[30]:
 </pre></div>
 </div>
@@ -1154,16 +1119,7 @@ SCENARIOS COMPLETE: 100%|██████████| 13/13 [00:00&lt;00:00, 
 </pre></div>
 </div>
 </div>
-<div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[30]:
-</pre></div>
-</div>
-<div class="output_area docutils container">
-<div class="highlight"><pre>
-0.0
-</pre></div></div>
-</div>
-<div class="nbinput docutils container">
+<div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[31]:
 </pre></div>
 </div>
@@ -1173,70 +1129,13 @@ SCENARIOS COMPLETE: 100%|██████████| 13/13 [00:00&lt;00:00, 
 </pre></div>
 </div>
 </div>
-<div class="nboutput nblast docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area docutils container">
-<img alt="../../_images/examples_multirotor_Demonstration_53_0.png" src="../../_images/examples_multirotor_Demonstration_53_0.png" />
-</div>
-</div>
-<div class="nbinput docutils container">
+<div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[32]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">quad_comp_endclasses</span>
 </pre></div>
 </div>
-</div>
-<div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[32]:
-</pre></div>
-</div>
-<div class="output_area docutils container">
-<div class="highlight"><pre>
-affect_dof_mechbreak5.000000000000001e-07
-affect_dof_mechbreak                 500
-affect_dof_mechbreak  25.000000000000007
-affect_dof_mechbreak5.000000000000001e-07
-affect_dof_mechbreak              132500
-affect_dof_mechbreak   6625.000000000002
-affect_dof_mechbreak2.0000000000000004e-07
-affect_dof_mechbreak              182500
-affect_dof_mechbreak  3650.0000000000005
-affect_dof_mechbreak2.0000000000000004e-07
-affect_dof_mechbreak              182500
-affect_dof_mechbreak  3650.0000000000005
-affect_dof_mechbreak2.0000000000000004e-07
-affect_dof_mechbreak              182500
-affect_dof_mechbreak  3650.0000000000005
-affect_dof_mechbreak2.0000000000000004e-07
-affect_dof_mechbreak              182500
-affect_dof_mechbreak  3650.0000000000005
-affect_dof_mechbreak2.0000000000000004e-07
-affect_dof_mechbreak              182500
-affect_dof_mechbreak  3650.0000000000005
-affect_dof_mechbreak2.5000000000000004e-07
-affect_dof_mechbreak              132500
-affect_dof_mechbreak   3312.500000000001
-affect_dof_mechbreak2.5000000000000004e-07
-affect_dof_mechbreak                 500
-affect_dof_mechbreak  12.500000000000004
-affect_dof_mechbreak2.5000000000000004e-07
-affect_dof_mechbreak                 500
-affect_dof_mechbreak  12.500000000000004
-affect_dof_mechbreak2.5000000000000004e-07
-affect_dof_mechbreak                 500
-affect_dof_mechbreak  12.500000000000004
-affect_dof_mechbreak5.000000000000001e-07
-affect_dof_mechbreak                 500
-affect_dof_mechbreak  25.000000000000007
-affect_dof_mechbreak5.000000000000001e-07
-affect_dof_mechbreak                 500
-affect_dof_mechbreak  25.000000000000007
-nominal.endclass.rate:               1.0
-nominal.endclass.cost:                 0
-nominal.endclass.expected cost:      0.0
-</pre></div></div>
 </div>
 </section>
 <section id="Hierarchical-Model">
@@ -1261,20 +1160,13 @@ nominal.endclass.expected cost:      0.0
 </pre></div>
 </div>
 </div>
-<div class="nbinput docutils container">
+<div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[35]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">fig</span><span class="p">,</span> <span class="n">axs</span> <span class="o">=</span> <span class="n">mdlhist</span><span class="o">.</span><span class="n">plot_line</span><span class="p">(</span><span class="s1">&#39;dofs.s.x&#39;</span><span class="p">,</span> <span class="s1">&#39;dofs.s.y&#39;</span><span class="p">,</span> <span class="s1">&#39;dofs.s.z&#39;</span><span class="p">,</span> <span class="s1">&#39;store_ee.s.soc&#39;</span><span class="p">,</span>
                         <span class="n">title</span><span class="o">=</span><span class="s1">&#39;Response of Drone to AffectDOF mechbreak&#39;</span><span class="p">,</span> <span class="n">time_slice</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">legend_loc</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
 </pre></div>
-</div>
-</div>
-<div class="nboutput nblast docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area docutils container">
-<img alt="../../_images/examples_multirotor_Demonstration_59_0.png" src="../../_images/examples_multirotor_Demonstration_59_0.png" />
 </div>
 </div>
 <p>Then we can see how the octorotor architecture performs in the same case:</p>
@@ -1287,7 +1179,7 @@ nominal.endclass.expected cost:      0.0
 </pre></div>
 </div>
 </div>
-<div class="nbinput docutils container">
+<div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[37]:
 </pre></div>
 </div>
@@ -1298,13 +1190,6 @@ nominal.endclass.expected cost:      0.0
 
 <span class="n">fig</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="s2">&quot;red_fault_behavior.pdf&quot;</span><span class="p">,</span> <span class="nb">format</span><span class="o">=</span><span class="s2">&quot;pdf&quot;</span><span class="p">,</span> <span class="n">bbox_inches</span> <span class="o">=</span> <span class="s1">&#39;tight&#39;</span><span class="p">,</span> <span class="n">pad_inches</span> <span class="o">=</span> <span class="mi">0</span><span class="p">)</span>
 </pre></div>
-</div>
-</div>
-<div class="nboutput nblast docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area docutils container">
-<img alt="../../_images/examples_multirotor_Demonstration_62_0.png" src="../../_images/examples_multirotor_Demonstration_62_0.png" />
 </div>
 </div>
 <p>As shown, the octorotor architecture enables the quadrotor to recover from the fault and land.</p>
@@ -1320,7 +1205,7 @@ nominal.endclass.expected cost:      0.0
 </pre></div>
 </div>
 </div>
-<div class="nbinput docutils container">
+<div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[39]:
 </pre></div>
 </div>
@@ -1330,27 +1215,7 @@ nominal.endclass.expected cost:      0.0
 </pre></div>
 </div>
 </div>
-<div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[39]:
-</pre></div>
-</div>
-<div class="output_area docutils container">
-<div class="highlight"><pre>
-FaultDomain with faults:
- -(&#39;affect_dof&#39;, &#39;short&#39;)
- -(&#39;affect_dof&#39;, &#39;openc&#39;)
- -(&#39;affect_dof&#39;, &#39;ctlup&#39;)
- -(&#39;affect_dof&#39;, &#39;ctldn&#39;)
- -(&#39;affect_dof&#39;, &#39;ctlbreak&#39;)
- -(&#39;affect_dof&#39;, &#39;mechbreak&#39;)
- -(&#39;affect_dof&#39;, &#39;mechfriction&#39;)
- -(&#39;affect_dof&#39;, &#39;propwarp&#39;)
- -(&#39;affect_dof&#39;, &#39;propstuck&#39;)
- -(&#39;affect_dof&#39;, &#39;propbreak&#39;)
- -...more
-</pre></div></div>
-</div>
-<div class="nbinput docutils container">
+<div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[40]:
 </pre></div>
 </div>
@@ -1360,27 +1225,7 @@ FaultDomain with faults:
 </pre></div>
 </div>
 </div>
-<div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[40]:
-</pre></div>
-</div>
-<div class="output_area docutils container">
-<div class="highlight"><pre>
-FaultSample of scenarios:
- - affect_dof_short_t8p0
- - affect_dof_openc_t8p0
- - affect_dof_ctlup_t8p0
- - affect_dof_ctldn_t8p0
- - affect_dof_ctlbreak_t8p0
- - affect_dof_mechbreak_t8p0
- - affect_dof_mechfriction_t8p0
- - affect_dof_propwarp_t8p0
- - affect_dof_propstuck_t8p0
- - affect_dof_propbreak_t8p0
- - ... (50 total)
-</pre></div></div>
-</div>
-<div class="nbinput docutils container">
+<div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[41]:
 </pre></div>
 </div>
@@ -1388,15 +1233,7 @@ FaultSample of scenarios:
 </pre></div>
 </div>
 </div>
-<div class="nboutput nblast docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area stderr docutils container">
-<div class="highlight"><pre>
-SCENARIOS COMPLETE: 100%|██████████| 50/50 [00:01&lt;00:00, 42.89it/s]
-</pre></div></div>
-</div>
-<div class="nbinput docutils container">
+<div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[42]:
 </pre></div>
 </div>
@@ -1405,347 +1242,8 @@ SCENARIOS COMPLETE: 100%|██████████| 50/50 [00:01&lt;00:00, 
 </pre></div>
 </div>
 </div>
-<div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[42]:
-</pre></div>
-</div>
-<div class="output_area rendered_html docutils container">
-<div>
-<style scoped>
-    .dataframe tbody tr th:only-of-type {
-        vertical-align: middle;
-    }
-
-    .dataframe tbody tr th {
-        vertical-align: top;
-    }
-
-    .dataframe thead th {
-        text-align: right;
-    }
-</style>
-<table border="1" class="dataframe">
-  <thead>
-    <tr style="text-align: right;">
-      <th></th>
-      <th>rate</th>
-      <th>cost</th>
-      <th>expected cost</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <th>affect_dof_rf_ctlbreak_t8p0</th>
-      <td>2.000000e-06</td>
-      <td>185800.0</td>
-      <td>37160.0</td>
-    </tr>
-    <tr>
-      <th>affect_dof_lr_ctlbreak_t8p0</th>
-      <td>2.000000e-06</td>
-      <td>185800.0</td>
-      <td>37160.0</td>
-    </tr>
-    <tr>
-      <th>affect_dof_lf_ctlbreak_t8p0</th>
-      <td>2.000000e-06</td>
-      <td>185800.0</td>
-      <td>37160.0</td>
-    </tr>
-    <tr>
-      <th>affect_dof_rr_ctlbreak_t8p0</th>
-      <td>2.000000e-06</td>
-      <td>185800.0</td>
-      <td>37160.0</td>
-    </tr>
-    <tr>
-      <th>affect_dof_rf_ctldn_t8p0</th>
-      <td>2.000000e-06</td>
-      <td>185300.0</td>
-      <td>37060.0</td>
-    </tr>
-    <tr>
-      <th>affect_dof_lr_ctldn_t8p0</th>
-      <td>2.000000e-06</td>
-      <td>185300.0</td>
-      <td>37060.0</td>
-    </tr>
-    <tr>
-      <th>affect_dof_rr_ctlup_t8p0</th>
-      <td>2.000000e-06</td>
-      <td>185300.0</td>
-      <td>37060.0</td>
-    </tr>
-    <tr>
-      <th>affect_dof_rf_ctlup_t8p0</th>
-      <td>2.000000e-06</td>
-      <td>185300.0</td>
-      <td>37060.0</td>
-    </tr>
-    <tr>
-      <th>affect_dof_lf_ctlup_t8p0</th>
-      <td>2.000000e-06</td>
-      <td>185300.0</td>
-      <td>37060.0</td>
-    </tr>
-    <tr>
-      <th>affect_dof_lf_ctldn_t8p0</th>
-      <td>2.000000e-06</td>
-      <td>185300.0</td>
-      <td>37060.0</td>
-    </tr>
-    <tr>
-      <th>affect_dof_rr_ctldn_t8p0</th>
-      <td>2.000000e-06</td>
-      <td>185300.0</td>
-      <td>37060.0</td>
-    </tr>
-    <tr>
-      <th>affect_dof_lr_ctlup_t8p0</th>
-      <td>2.000000e-06</td>
-      <td>185300.0</td>
-      <td>37060.0</td>
-    </tr>
-    <tr>
-      <th>affect_dof_lf_short_t8p0</th>
-      <td>1.000000e-06</td>
-      <td>185000.0</td>
-      <td>18500.0</td>
-    </tr>
-    <tr>
-      <th>affect_dof_rr_short_t8p0</th>
-      <td>1.000000e-06</td>
-      <td>185000.0</td>
-      <td>18500.0</td>
-    </tr>
-    <tr>
-      <th>affect_dof_lr_openc_t8p0</th>
-      <td>1.000000e-06</td>
-      <td>185000.0</td>
-      <td>18500.0</td>
-    </tr>
-    <tr>
-      <th>affect_dof_rf_openc_t8p0</th>
-      <td>1.000000e-06</td>
-      <td>185000.0</td>
-      <td>18500.0</td>
-    </tr>
-    <tr>
-      <th>affect_dof_lr_short_t8p0</th>
-      <td>1.000000e-06</td>
-      <td>185000.0</td>
-      <td>18500.0</td>
-    </tr>
-    <tr>
-      <th>affect_dof_rr_openc_t8p0</th>
-      <td>1.000000e-06</td>
-      <td>185000.0</td>
-      <td>18500.0</td>
-    </tr>
-    <tr>
-      <th>affect_dof_rf_short_t8p0</th>
-      <td>1.000000e-06</td>
-      <td>185000.0</td>
-      <td>18500.0</td>
-    </tr>
-    <tr>
-      <th>affect_dof_lf_openc_t8p0</th>
-      <td>1.000000e-06</td>
-      <td>185000.0</td>
-      <td>18500.0</td>
-    </tr>
-    <tr>
-      <th>affect_dof_rr_mechbreak_t8p0</th>
-      <td>1.000000e-06</td>
-      <td>184800.0</td>
-      <td>18480.0</td>
-    </tr>
-    <tr>
-      <th>affect_dof_rf_mechbreak_t8p0</th>
-      <td>1.000000e-06</td>
-      <td>184800.0</td>
-      <td>18480.0</td>
-    </tr>
-    <tr>
-      <th>affect_dof_lr_mechbreak_t8p0</th>
-      <td>1.000000e-06</td>
-      <td>184800.0</td>
-      <td>18480.0</td>
-    </tr>
-    <tr>
-      <th>affect_dof_lf_mechbreak_t8p0</th>
-      <td>1.000000e-06</td>
-      <td>184800.0</td>
-      <td>18480.0</td>
-    </tr>
-    <tr>
-      <th>affect_dof_rr_mechfriction_t8p0</th>
-      <td>5.000000e-07</td>
-      <td>185300.0</td>
-      <td>9265.0</td>
-    </tr>
-    <tr>
-      <th>affect_dof_lf_mechfriction_t8p0</th>
-      <td>5.000000e-07</td>
-      <td>185300.0</td>
-      <td>9265.0</td>
-    </tr>
-    <tr>
-      <th>affect_dof_lr_mechfriction_t8p0</th>
-      <td>5.000000e-07</td>
-      <td>185300.0</td>
-      <td>9265.0</td>
-    </tr>
-    <tr>
-      <th>affect_dof_rf_mechfriction_t8p0</th>
-      <td>5.000000e-07</td>
-      <td>185300.0</td>
-      <td>9265.0</td>
-    </tr>
-    <tr>
-      <th>affect_dof_lf_propbreak_t8p0</th>
-      <td>3.000000e-07</td>
-      <td>184800.0</td>
-      <td>5544.0</td>
-    </tr>
-    <tr>
-      <th>affect_dof_rf_propbreak_t8p0</th>
-      <td>3.000000e-07</td>
-      <td>184800.0</td>
-      <td>5544.0</td>
-    </tr>
-    <tr>
-      <th>affect_dof_lr_propbreak_t8p0</th>
-      <td>3.000000e-07</td>
-      <td>184800.0</td>
-      <td>5544.0</td>
-    </tr>
-    <tr>
-      <th>affect_dof_rr_propbreak_t8p0</th>
-      <td>3.000000e-07</td>
-      <td>184800.0</td>
-      <td>5544.0</td>
-    </tr>
-    <tr>
-      <th>affect_dof_lr_propstuck_t8p0</th>
-      <td>2.000000e-07</td>
-      <td>185000.0</td>
-      <td>3700.0</td>
-    </tr>
-    <tr>
-      <th>affect_dof_rf_propstuck_t8p0</th>
-      <td>2.000000e-07</td>
-      <td>185000.0</td>
-      <td>3700.0</td>
-    </tr>
-    <tr>
-      <th>affect_dof_lf_propstuck_t8p0</th>
-      <td>2.000000e-07</td>
-      <td>185000.0</td>
-      <td>3700.0</td>
-    </tr>
-    <tr>
-      <th>affect_dof_rr_propstuck_t8p0</th>
-      <td>2.000000e-07</td>
-      <td>185000.0</td>
-      <td>3700.0</td>
-    </tr>
-    <tr>
-      <th>affect_dof_rr_propwarp_t8p0</th>
-      <td>1.000000e-07</td>
-      <td>185000.0</td>
-      <td>1850.0</td>
-    </tr>
-    <tr>
-      <th>affect_dof_rf_propwarp_t8p0</th>
-      <td>1.000000e-07</td>
-      <td>185000.0</td>
-      <td>1850.0</td>
-    </tr>
-    <tr>
-      <th>affect_dof_lr_propwarp_t8p0</th>
-      <td>1.000000e-07</td>
-      <td>185000.0</td>
-      <td>1850.0</td>
-    </tr>
-    <tr>
-      <th>affect_dof_lf_propwarp_t8p0</th>
-      <td>1.000000e-07</td>
-      <td>185000.0</td>
-      <td>1850.0</td>
-    </tr>
-    <tr>
-      <th>affect_dof_ctlbreak_t8p0</th>
-      <td>2.000000e-06</td>
-      <td>1000.0</td>
-      <td>200.0</td>
-    </tr>
-    <tr>
-      <th>affect_dof_ctldn_t8p0</th>
-      <td>2.000000e-06</td>
-      <td>500.0</td>
-      <td>100.0</td>
-    </tr>
-    <tr>
-      <th>affect_dof_ctlup_t8p0</th>
-      <td>2.000000e-06</td>
-      <td>500.0</td>
-      <td>100.0</td>
-    </tr>
-    <tr>
-      <th>affect_dof_mechbreak_t8p0</th>
-      <td>1.000000e-06</td>
-      <td>500.0</td>
-      <td>50.0</td>
-    </tr>
-    <tr>
-      <th>affect_dof_mechfriction_t8p0</th>
-      <td>5.000000e-07</td>
-      <td>500.0</td>
-      <td>25.0</td>
-    </tr>
-    <tr>
-      <th>affect_dof_short_t8p0</th>
-      <td>1.000000e-06</td>
-      <td>200.0</td>
-      <td>20.0</td>
-    </tr>
-    <tr>
-      <th>affect_dof_openc_t8p0</th>
-      <td>1.000000e-06</td>
-      <td>200.0</td>
-      <td>20.0</td>
-    </tr>
-    <tr>
-      <th>affect_dof_propbreak_t8p0</th>
-      <td>3.000000e-07</td>
-      <td>200.0</td>
-      <td>6.0</td>
-    </tr>
-    <tr>
-      <th>affect_dof_propstuck_t8p0</th>
-      <td>2.000000e-07</td>
-      <td>200.0</td>
-      <td>4.0</td>
-    </tr>
-    <tr>
-      <th>affect_dof_propwarp_t8p0</th>
-      <td>1.000000e-07</td>
-      <td>200.0</td>
-      <td>2.0</td>
-    </tr>
-    <tr>
-      <th>nominal</th>
-      <td>1.000000e+00</td>
-      <td>0.0</td>
-      <td>0.0</td>
-    </tr>
-  </tbody>
-</table>
-</div></div>
-</div>
 <p>Based on this model, we can calculate some metrics that quantify how resilient the system was to the set of faults, such as the cost of resilience:</p>
-<div class="nbinput docutils container">
+<div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[43]:
 </pre></div>
 </div>
@@ -1754,17 +1252,8 @@ SCENARIOS COMPLETE: 100%|██████████| 50/50 [00:01&lt;00:00, 
 </pre></div>
 </div>
 </div>
-<div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[43]:
-</pre></div>
-</div>
-<div class="output_area docutils container">
-<div class="highlight"><pre>
-749003.0000000001
-</pre></div></div>
-</div>
 <p>The overall rate of crashes:</p>
-<div class="nbinput docutils container">
+<div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[44]:
 </pre></div>
 </div>
@@ -1774,17 +1263,8 @@ SCENARIOS COMPLETE: 100%|██████████| 50/50 [00:01&lt;00:00, 
 </pre></div>
 </div>
 </div>
-<div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[44]:
-</pre></div>
-</div>
-<div class="output_area docutils container">
-<div class="highlight"><pre>
-4.04e-05
-</pre></div></div>
-</div>
 <p>The number of crashes:</p>
-<div class="nbinput docutils container">
+<div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[45]:
 </pre></div>
 </div>
@@ -1793,17 +1273,8 @@ SCENARIOS COMPLETE: 100%|██████████| 50/50 [00:01&lt;00:00, 
 </pre></div>
 </div>
 </div>
-<div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[45]:
-</pre></div>
-</div>
-<div class="output_area docutils container">
-<div class="highlight"><pre>
-40
-</pre></div></div>
-</div>
 <p>The percentage of crashes:</p>
-<div class="nbinput docutils container">
+<div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[46]:
 </pre></div>
 </div>
@@ -1812,19 +1283,10 @@ SCENARIOS COMPLETE: 100%|██████████| 50/50 [00:01&lt;00:00, 
 </pre></div>
 </div>
 </div>
-<div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[46]:
-</pre></div>
-</div>
-<div class="output_area docutils container">
-<div class="highlight"><pre>
-0.7843137254901961
-</pre></div></div>
-</div>
 <section id="Octocopter-Resilience">
 <h3>Octocopter Resilience<a class="headerlink" href="#Octocopter-Resilience" title="Permalink to this heading"></a></h3>
 <p>Here we quantify the expected costs of faults originiating in the octocopter architecture:</p>
-<div class="nbinput docutils container">
+<div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[47]:
 </pre></div>
 </div>
@@ -1833,105 +1295,7 @@ SCENARIOS COMPLETE: 100%|██████████| 50/50 [00:01&lt;00:00, 
 </pre></div>
 </div>
 </div>
-<div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[47]:
-</pre></div>
-</div>
-<div class="output_area docutils container">
-<div class="highlight"><pre>
-{&#39;short&#39;: Fault(prob=1.0000000000000002e-06, cost=200, phases={}, units=&#39;sim&#39;),
- &#39;openc&#39;: Fault(prob=1.0000000000000002e-06, cost=200, phases={}, units=&#39;sim&#39;),
- &#39;ctlup&#39;: Fault(prob=2.0000000000000003e-06, cost=500, phases={}, units=&#39;sim&#39;),
- &#39;ctldn&#39;: Fault(prob=2.0000000000000003e-06, cost=500, phases={}, units=&#39;sim&#39;),
- &#39;ctlbreak&#39;: Fault(prob=2.0000000000000003e-06, cost=1000, phases={}, units=&#39;sim&#39;),
- &#39;mechbreak&#39;: Fault(prob=1.0000000000000002e-06, cost=500, phases={}, units=&#39;sim&#39;),
- &#39;mechfriction&#39;: Fault(prob=5.000000000000001e-07, cost=500, phases={}, units=&#39;sim&#39;),
- &#39;propwarp&#39;: Fault(prob=1.0000000000000001e-07, cost=200, phases={}, units=&#39;sim&#39;),
- &#39;propstuck&#39;: Fault(prob=2.0000000000000002e-07, cost=200, phases={}, units=&#39;sim&#39;),
- &#39;propbreak&#39;: Fault(prob=3.0000000000000004e-07, cost=200, phases={}, units=&#39;sim&#39;),
- &#39;lf_short&#39;: Fault(prob=1.0000000000000002e-06, cost=200, phases={}, units=&#39;sim&#39;),
- &#39;lf_openc&#39;: Fault(prob=1.0000000000000002e-06, cost=200, phases={}, units=&#39;sim&#39;),
- &#39;lf_ctlup&#39;: Fault(prob=2.0000000000000003e-06, cost=500, phases={}, units=&#39;sim&#39;),
- &#39;lf_ctldn&#39;: Fault(prob=2.0000000000000003e-06, cost=500, phases={}, units=&#39;sim&#39;),
- &#39;lf_ctlbreak&#39;: Fault(prob=2.0000000000000003e-06, cost=1000, phases={}, units=&#39;sim&#39;),
- &#39;lf_mechbreak&#39;: Fault(prob=1.0000000000000002e-06, cost=500, phases={}, units=&#39;sim&#39;),
- &#39;lf_mechfriction&#39;: Fault(prob=5.000000000000001e-07, cost=500, phases={}, units=&#39;sim&#39;),
- &#39;lf_propwarp&#39;: Fault(prob=1.0000000000000001e-07, cost=200, phases={}, units=&#39;sim&#39;),
- &#39;lf_propstuck&#39;: Fault(prob=2.0000000000000002e-07, cost=200, phases={}, units=&#39;sim&#39;),
- &#39;lf_propbreak&#39;: Fault(prob=3.0000000000000004e-07, cost=200, phases={}, units=&#39;sim&#39;),
- &#39;rf_short&#39;: Fault(prob=1.0000000000000002e-06, cost=200, phases={}, units=&#39;sim&#39;),
- &#39;rf_openc&#39;: Fault(prob=1.0000000000000002e-06, cost=200, phases={}, units=&#39;sim&#39;),
- &#39;rf_ctlup&#39;: Fault(prob=2.0000000000000003e-06, cost=500, phases={}, units=&#39;sim&#39;),
- &#39;rf_ctldn&#39;: Fault(prob=2.0000000000000003e-06, cost=500, phases={}, units=&#39;sim&#39;),
- &#39;rf_ctlbreak&#39;: Fault(prob=2.0000000000000003e-06, cost=1000, phases={}, units=&#39;sim&#39;),
- &#39;rf_mechbreak&#39;: Fault(prob=1.0000000000000002e-06, cost=500, phases={}, units=&#39;sim&#39;),
- &#39;rf_mechfriction&#39;: Fault(prob=5.000000000000001e-07, cost=500, phases={}, units=&#39;sim&#39;),
- &#39;rf_propwarp&#39;: Fault(prob=1.0000000000000001e-07, cost=200, phases={}, units=&#39;sim&#39;),
- &#39;rf_propstuck&#39;: Fault(prob=2.0000000000000002e-07, cost=200, phases={}, units=&#39;sim&#39;),
- &#39;rf_propbreak&#39;: Fault(prob=3.0000000000000004e-07, cost=200, phases={}, units=&#39;sim&#39;),
- &#39;lf2_short&#39;: Fault(prob=1.0000000000000002e-06, cost=200, phases={}, units=&#39;sim&#39;),
- &#39;lf2_openc&#39;: Fault(prob=1.0000000000000002e-06, cost=200, phases={}, units=&#39;sim&#39;),
- &#39;lf2_ctlup&#39;: Fault(prob=2.0000000000000003e-06, cost=500, phases={}, units=&#39;sim&#39;),
- &#39;lf2_ctldn&#39;: Fault(prob=2.0000000000000003e-06, cost=500, phases={}, units=&#39;sim&#39;),
- &#39;lf2_ctlbreak&#39;: Fault(prob=2.0000000000000003e-06, cost=1000, phases={}, units=&#39;sim&#39;),
- &#39;lf2_mechbreak&#39;: Fault(prob=1.0000000000000002e-06, cost=500, phases={}, units=&#39;sim&#39;),
- &#39;lf2_mechfriction&#39;: Fault(prob=5.000000000000001e-07, cost=500, phases={}, units=&#39;sim&#39;),
- &#39;lf2_propwarp&#39;: Fault(prob=1.0000000000000001e-07, cost=200, phases={}, units=&#39;sim&#39;),
- &#39;lf2_propstuck&#39;: Fault(prob=2.0000000000000002e-07, cost=200, phases={}, units=&#39;sim&#39;),
- &#39;lf2_propbreak&#39;: Fault(prob=3.0000000000000004e-07, cost=200, phases={}, units=&#39;sim&#39;),
- &#39;rf2_short&#39;: Fault(prob=1.0000000000000002e-06, cost=200, phases={}, units=&#39;sim&#39;),
- &#39;rf2_openc&#39;: Fault(prob=1.0000000000000002e-06, cost=200, phases={}, units=&#39;sim&#39;),
- &#39;rf2_ctlup&#39;: Fault(prob=2.0000000000000003e-06, cost=500, phases={}, units=&#39;sim&#39;),
- &#39;rf2_ctldn&#39;: Fault(prob=2.0000000000000003e-06, cost=500, phases={}, units=&#39;sim&#39;),
- &#39;rf2_ctlbreak&#39;: Fault(prob=2.0000000000000003e-06, cost=1000, phases={}, units=&#39;sim&#39;),
- &#39;rf2_mechbreak&#39;: Fault(prob=1.0000000000000002e-06, cost=500, phases={}, units=&#39;sim&#39;),
- &#39;rf2_mechfriction&#39;: Fault(prob=5.000000000000001e-07, cost=500, phases={}, units=&#39;sim&#39;),
- &#39;rf2_propwarp&#39;: Fault(prob=1.0000000000000001e-07, cost=200, phases={}, units=&#39;sim&#39;),
- &#39;rf2_propstuck&#39;: Fault(prob=2.0000000000000002e-07, cost=200, phases={}, units=&#39;sim&#39;),
- &#39;rf2_propbreak&#39;: Fault(prob=3.0000000000000004e-07, cost=200, phases={}, units=&#39;sim&#39;),
- &#39;lr_short&#39;: Fault(prob=1.0000000000000002e-06, cost=200, phases={}, units=&#39;sim&#39;),
- &#39;lr_openc&#39;: Fault(prob=1.0000000000000002e-06, cost=200, phases={}, units=&#39;sim&#39;),
- &#39;lr_ctlup&#39;: Fault(prob=2.0000000000000003e-06, cost=500, phases={}, units=&#39;sim&#39;),
- &#39;lr_ctldn&#39;: Fault(prob=2.0000000000000003e-06, cost=500, phases={}, units=&#39;sim&#39;),
- &#39;lr_ctlbreak&#39;: Fault(prob=2.0000000000000003e-06, cost=1000, phases={}, units=&#39;sim&#39;),
- &#39;lr_mechbreak&#39;: Fault(prob=1.0000000000000002e-06, cost=500, phases={}, units=&#39;sim&#39;),
- &#39;lr_mechfriction&#39;: Fault(prob=5.000000000000001e-07, cost=500, phases={}, units=&#39;sim&#39;),
- &#39;lr_propwarp&#39;: Fault(prob=1.0000000000000001e-07, cost=200, phases={}, units=&#39;sim&#39;),
- &#39;lr_propstuck&#39;: Fault(prob=2.0000000000000002e-07, cost=200, phases={}, units=&#39;sim&#39;),
- &#39;lr_propbreak&#39;: Fault(prob=3.0000000000000004e-07, cost=200, phases={}, units=&#39;sim&#39;),
- &#39;rr_short&#39;: Fault(prob=1.0000000000000002e-06, cost=200, phases={}, units=&#39;sim&#39;),
- &#39;rr_openc&#39;: Fault(prob=1.0000000000000002e-06, cost=200, phases={}, units=&#39;sim&#39;),
- &#39;rr_ctlup&#39;: Fault(prob=2.0000000000000003e-06, cost=500, phases={}, units=&#39;sim&#39;),
- &#39;rr_ctldn&#39;: Fault(prob=2.0000000000000003e-06, cost=500, phases={}, units=&#39;sim&#39;),
- &#39;rr_ctlbreak&#39;: Fault(prob=2.0000000000000003e-06, cost=1000, phases={}, units=&#39;sim&#39;),
- &#39;rr_mechbreak&#39;: Fault(prob=1.0000000000000002e-06, cost=500, phases={}, units=&#39;sim&#39;),
- &#39;rr_mechfriction&#39;: Fault(prob=5.000000000000001e-07, cost=500, phases={}, units=&#39;sim&#39;),
- &#39;rr_propwarp&#39;: Fault(prob=1.0000000000000001e-07, cost=200, phases={}, units=&#39;sim&#39;),
- &#39;rr_propstuck&#39;: Fault(prob=2.0000000000000002e-07, cost=200, phases={}, units=&#39;sim&#39;),
- &#39;rr_propbreak&#39;: Fault(prob=3.0000000000000004e-07, cost=200, phases={}, units=&#39;sim&#39;),
- &#39;lr2_short&#39;: Fault(prob=1.0000000000000002e-06, cost=200, phases={}, units=&#39;sim&#39;),
- &#39;lr2_openc&#39;: Fault(prob=1.0000000000000002e-06, cost=200, phases={}, units=&#39;sim&#39;),
- &#39;lr2_ctlup&#39;: Fault(prob=2.0000000000000003e-06, cost=500, phases={}, units=&#39;sim&#39;),
- &#39;lr2_ctldn&#39;: Fault(prob=2.0000000000000003e-06, cost=500, phases={}, units=&#39;sim&#39;),
- &#39;lr2_ctlbreak&#39;: Fault(prob=2.0000000000000003e-06, cost=1000, phases={}, units=&#39;sim&#39;),
- &#39;lr2_mechbreak&#39;: Fault(prob=1.0000000000000002e-06, cost=500, phases={}, units=&#39;sim&#39;),
- &#39;lr2_mechfriction&#39;: Fault(prob=5.000000000000001e-07, cost=500, phases={}, units=&#39;sim&#39;),
- &#39;lr2_propwarp&#39;: Fault(prob=1.0000000000000001e-07, cost=200, phases={}, units=&#39;sim&#39;),
- &#39;lr2_propstuck&#39;: Fault(prob=2.0000000000000002e-07, cost=200, phases={}, units=&#39;sim&#39;),
- &#39;lr2_propbreak&#39;: Fault(prob=3.0000000000000004e-07, cost=200, phases={}, units=&#39;sim&#39;),
- &#39;rr2_short&#39;: Fault(prob=1.0000000000000002e-06, cost=200, phases={}, units=&#39;sim&#39;),
- &#39;rr2_openc&#39;: Fault(prob=1.0000000000000002e-06, cost=200, phases={}, units=&#39;sim&#39;),
- &#39;rr2_ctlup&#39;: Fault(prob=2.0000000000000003e-06, cost=500, phases={}, units=&#39;sim&#39;),
- &#39;rr2_ctldn&#39;: Fault(prob=2.0000000000000003e-06, cost=500, phases={}, units=&#39;sim&#39;),
- &#39;rr2_ctlbreak&#39;: Fault(prob=2.0000000000000003e-06, cost=1000, phases={}, units=&#39;sim&#39;),
- &#39;rr2_mechbreak&#39;: Fault(prob=1.0000000000000002e-06, cost=500, phases={}, units=&#39;sim&#39;),
- &#39;rr2_mechfriction&#39;: Fault(prob=5.000000000000001e-07, cost=500, phases={}, units=&#39;sim&#39;),
- &#39;rr2_propwarp&#39;: Fault(prob=1.0000000000000001e-07, cost=200, phases={}, units=&#39;sim&#39;),
- &#39;rr2_propstuck&#39;: Fault(prob=2.0000000000000002e-07, cost=200, phases={}, units=&#39;sim&#39;),
- &#39;rr2_propbreak&#39;: Fault(prob=3.0000000000000004e-07, cost=200, phases={}, units=&#39;sim&#39;)}
-</pre></div></div>
-</div>
-<div class="nbinput docutils container">
+<div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[48]:
 </pre></div>
 </div>
@@ -1941,27 +1305,7 @@ SCENARIOS COMPLETE: 100%|██████████| 50/50 [00:01&lt;00:00, 
 </pre></div>
 </div>
 </div>
-<div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[48]:
-</pre></div>
-</div>
-<div class="output_area docutils container">
-<div class="highlight"><pre>
-FaultDomain with faults:
- -(&#39;affect_dof&#39;, &#39;short&#39;)
- -(&#39;affect_dof&#39;, &#39;openc&#39;)
- -(&#39;affect_dof&#39;, &#39;ctlup&#39;)
- -(&#39;affect_dof&#39;, &#39;ctldn&#39;)
- -(&#39;affect_dof&#39;, &#39;ctlbreak&#39;)
- -(&#39;affect_dof&#39;, &#39;mechbreak&#39;)
- -(&#39;affect_dof&#39;, &#39;mechfriction&#39;)
- -(&#39;affect_dof&#39;, &#39;propwarp&#39;)
- -(&#39;affect_dof&#39;, &#39;propstuck&#39;)
- -(&#39;affect_dof&#39;, &#39;propbreak&#39;)
- -...more
-</pre></div></div>
-</div>
-<div class="nbinput docutils container">
+<div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[49]:
 </pre></div>
 </div>
@@ -1971,27 +1315,7 @@ FaultDomain with faults:
 </pre></div>
 </div>
 </div>
-<div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[49]:
-</pre></div>
-</div>
-<div class="output_area docutils container">
-<div class="highlight"><pre>
-FaultSample of scenarios:
- - affect_dof_short_t8p0
- - affect_dof_openc_t8p0
- - affect_dof_ctlup_t8p0
- - affect_dof_ctldn_t8p0
- - affect_dof_ctlbreak_t8p0
- - affect_dof_mechbreak_t8p0
- - affect_dof_mechfriction_t8p0
- - affect_dof_propwarp_t8p0
- - affect_dof_propstuck_t8p0
- - affect_dof_propbreak_t8p0
- - ... (90 total)
-</pre></div></div>
-</div>
-<div class="nbinput docutils container">
+<div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[50]:
 </pre></div>
 </div>
@@ -1999,125 +1323,17 @@ FaultSample of scenarios:
 </pre></div>
 </div>
 </div>
-<div class="nboutput nblast docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area stderr docutils container">
-<div class="highlight"><pre>
-SCENARIOS COMPLETE: 100%|██████████| 90/90 [00:03&lt;00:00, 28.99it/s]
-</pre></div></div>
-</div>
-<div class="nbinput docutils container">
+<div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[51]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">oct_tab</span> <span class="o">=</span> <span class="n">oct_endclasses</span><span class="o">.</span><span class="n">create_simple_fmea</span><span class="p">()</span>
-<span class="n">oct_tab</span><span class="o">.</span><span class="n">sort_values</span><span class="p">(</span><span class="s1">&#39;expected cost&#39;</span><span class="p">,</span> <span class="n">ascending</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+<span class="n">oct_tab</span><span class="o">.</span><span class="n">sort_values</span><span class="p">(</span><span class="s1">&#39;expected_cost&#39;</span><span class="p">,</span> <span class="n">ascending</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
 </pre></div>
 </div>
-</div>
-<div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[51]:
-</pre></div>
-</div>
-<div class="output_area rendered_html docutils container">
-<div>
-<style scoped>
-    .dataframe tbody tr th:only-of-type {
-        vertical-align: middle;
-    }
-
-    .dataframe tbody tr th {
-        vertical-align: top;
-    }
-
-    .dataframe thead th {
-        text-align: right;
-    }
-</style>
-<table border="1" class="dataframe">
-  <thead>
-    <tr style="text-align: right;">
-      <th></th>
-      <th>rate</th>
-      <th>cost</th>
-      <th>expected cost</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <th>affect_dof_ctlbreak_t8p0</th>
-      <td>2.000000e-06</td>
-      <td>1000.0</td>
-      <td>200.0</td>
-    </tr>
-    <tr>
-      <th>affect_dof_rr2_ctlbreak_t8p0</th>
-      <td>2.000000e-06</td>
-      <td>1000.0</td>
-      <td>200.0</td>
-    </tr>
-    <tr>
-      <th>affect_dof_lr2_ctlbreak_t8p0</th>
-      <td>2.000000e-06</td>
-      <td>1000.0</td>
-      <td>200.0</td>
-    </tr>
-    <tr>
-      <th>affect_dof_lf_ctlbreak_t8p0</th>
-      <td>2.000000e-06</td>
-      <td>1000.0</td>
-      <td>200.0</td>
-    </tr>
-    <tr>
-      <th>affect_dof_rf_ctlbreak_t8p0</th>
-      <td>2.000000e-06</td>
-      <td>1000.0</td>
-      <td>200.0</td>
-    </tr>
-    <tr>
-      <th>...</th>
-      <td>...</td>
-      <td>...</td>
-      <td>...</td>
-    </tr>
-    <tr>
-      <th>affect_dof_rr_propwarp_t8p0</th>
-      <td>1.000000e-07</td>
-      <td>200.0</td>
-      <td>2.0</td>
-    </tr>
-    <tr>
-      <th>affect_dof_rf_propwarp_t8p0</th>
-      <td>1.000000e-07</td>
-      <td>200.0</td>
-      <td>2.0</td>
-    </tr>
-    <tr>
-      <th>affect_dof_propwarp_t8p0</th>
-      <td>1.000000e-07</td>
-      <td>200.0</td>
-      <td>2.0</td>
-    </tr>
-    <tr>
-      <th>affect_dof_lr2_propwarp_t8p0</th>
-      <td>1.000000e-07</td>
-      <td>200.0</td>
-      <td>2.0</td>
-    </tr>
-    <tr>
-      <th>nominal</th>
-      <td>1.000000e+00</td>
-      <td>0.0</td>
-      <td>0.0</td>
-    </tr>
-  </tbody>
-</table>
-<p>91 rows × 3 columns</p>
-</div></div>
 </div>
 <p>Based on this model, we can calculate some metrics that quantify how resilient the system was to the set of faults, such as the cost of resilience:</p>
-<div class="nbinput docutils container">
+<div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[52]:
 </pre></div>
 </div>
@@ -2126,17 +1342,8 @@ SCENARIOS COMPLETE: 100%|██████████| 90/90 [00:03&lt;00:00, 
 </pre></div>
 </div>
 </div>
-<div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[52]:
-</pre></div>
-</div>
-<div class="output_area docutils container">
-<div class="highlight"><pre>
-4743.000000000001
-</pre></div></div>
-</div>
 <p>The overall rate of crashes:</p>
-<div class="nbinput docutils container">
+<div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[53]:
 </pre></div>
 </div>
@@ -2146,17 +1353,8 @@ SCENARIOS COMPLETE: 100%|██████████| 90/90 [00:03&lt;00:00, 
 </pre></div>
 </div>
 </div>
-<div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[53]:
-</pre></div>
-</div>
-<div class="output_area docutils container">
-<div class="highlight"><pre>
-0
-</pre></div></div>
-</div>
 <p>Number of crashes:</p>
-<div class="nbinput docutils container">
+<div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[54]:
 </pre></div>
 </div>
@@ -2165,17 +1363,8 @@ SCENARIOS COMPLETE: 100%|██████████| 90/90 [00:03&lt;00:00, 
 </pre></div>
 </div>
 </div>
-<div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[54]:
-</pre></div>
-</div>
-<div class="output_area docutils container">
-<div class="highlight"><pre>
-0
-</pre></div></div>
-</div>
 <p>Percent of crashes:</p>
-<div class="nbinput docutils container">
+<div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[55]:
 </pre></div>
 </div>
@@ -2183,15 +1372,6 @@ SCENARIOS COMPLETE: 100%|██████████| 90/90 [00:03&lt;00:00, 
 <span class="n">oct_perc_crashes</span>
 </pre></div>
 </div>
-</div>
-<div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[55]:
-</pre></div>
-</div>
-<div class="output_area docutils container">
-<div class="highlight"><pre>
-0.0
-</pre></div></div>
 </div>
 </section>
 </section>
