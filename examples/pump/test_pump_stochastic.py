@@ -265,11 +265,11 @@ if __name__ == '__main__':
 
     # suite.addTest(StochasticPumpTests("test_save_load_nominalapproach"))
     # suite.addTest(StochasticPumpTests("test_save_load_nominalapproach_indiv"))
-    runner = unittest.TextTestRunner()
-    runner.run(suite)
+    # runner = unittest.TextTestRunner()
+    # runner.run(suite)
     # runner = unittest.TextTestRunner()
     # runner.run(suite_for_plots(StochasticPumpTests))
 
     # runner = unittest.TextTestRunner()
     # runner.run(suite_for_plots(StochasticPumpTests, True))
-    # unittest.main()
+    unittest.main()

@@ -1308,7 +1308,7 @@ class FxnBlock(Block):
                 #    cop.h["a.active_actions"] = self.h['a.active_actions'].copy()
                 for actname, act in cop.aa.actions.items():
                     ex_hist = cop.h.get("aa.actions." + actname)
-                    if ex_hist: 
+                    if ex_hist:
                         act.h = ex_hist.copy()
                         for k, v in act.h.items():
                             cop.h["aa.actions." + actname + "." + k] = v
@@ -1367,13 +1367,6 @@ class FxnBlock(Block):
                     self.dynamic_behavior(time)
             elif not Decimal(str(time)) % Decimal(str(self.t.dt)):
                 self.dynamic_behavior(time)
-        elif proptype == 'reset':
-            if hasattr(self, 'static_behavior'):
-                self.static_behavior(time)
-            if hasattr(self, 'behavior'):
-                self.behavior(time)
-            if hasattr(self, 'dynamic_behavior'):
-                self.dynamic_behavior(time)
 
         # propagate faults from action/component level to function level
         if hasattr(self, 'aa') and self.aa.actions:
@@ -1394,13 +1387,11 @@ class FxnBlock(Block):
         return
 
     def reset(self):
-        # run_stochastic = self.r.run_stochastic
         super().reset()
         if hasattr(self, 'ca'):
             self.ca.reset()
         if hasattr(self, 'aa'):
             self.aa.reset()
-        #self('reset', faults=[], time=0)
 
 
 class ExampleFxnBlock(FxnBlock):
