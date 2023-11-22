@@ -206,7 +206,7 @@ Import Water Classes
 
 class ImportWaterMode(Mode):
     failrate = 1e-5
-    fm_args = {'no_wat': (1.0, 1000)}
+    fm_args = {'no_wat': (1.0, 1000), 'less_wat': (1.0, 0.0)}
 
 
 class ImportWater(FxnBlock):
@@ -220,6 +220,8 @@ class ImportWater(FxnBlock):
         level goes to zero"""
         if self.m.has_fault('no_wat'):
             self.wat_out.s.level = 0.0
+        elif self.m.has_fault('less_wat'):
+            self.wat_out.s.level = 0.5
         else:
             self.wat_out.s.level = 1.0
 
@@ -374,7 +376,8 @@ class MoveWat(FxnBlock):
         else:
             self.ee_in.s.current = 10/5000*self.sig_in.s.power * \
                 self.ee_in.s.voltage*min(13.0, self.wat_out.s.pressure)
-            self.s.eff = 1.0
+            # if we wanted to enforce nominall eff state, we would include:
+            # self.s.eff = 1.0
 
         velocity = self.sig_in.s.power*self.s.eff * \
             min(1000, self.ee_in.s.voltage)*self.wat_in.s.level
@@ -501,7 +504,7 @@ class Pump(Model):
 
         life = 1e5
         expcost = rate*life*totcost
-        return {'rate': rate, 'cost': totcost, 'expected cost': expcost}
+        return {'rate': rate, 'cost': totcost, 'expected_cost': expcost}
 
 
 if __name__ == "__main__":

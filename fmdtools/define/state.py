@@ -13,7 +13,7 @@ import warnings
 from fmdtools.analyze.history import History
 
 
-class State(dataobject, mapping=True):
+class State(dataobject, mapping=True, copy_default=True):
     """
     Class for working with model states, which are variables in the model which
     change over time. This class inherits from dataobject for low memory footprint
@@ -22,7 +22,7 @@ class State(dataobject, mapping=True):
     State is meant to be extended in the model definition object to add the
     corresponding field related to a simulation, e.g.,
 
-    >>> class ExamplePoint(State):
+    >>> class ExampleState(State):
     ...     x : float=1.0
     ...     y : float=1.0
 
@@ -31,13 +31,13 @@ class State(dataobject, mapping=True):
 
     Instancing State gives normal read/write access, e.g., one can do:
 
-    >>> p = ExamplePoint()
+    >>> p = ExampleState()
     >>> p.x
     1.0
 
     or:
 
-    >>> p = ExamplePoint(x=10.0)
+    >>> p = ExampleState(x=10.0)
     >>> p.x
     10.0
     """
@@ -49,7 +49,7 @@ class State(dataobject, mapping=True):
         (self.put is reccomended otherwise so that the iteration is on function/flow
         *states*) e.g.,
 
-        >>> p = ExamplePoint()
+        >>> p = ExampleState()
         >>> p.set_atts(x=2.0, y=2.0)
         >>> p.x
         2.0
@@ -63,7 +63,7 @@ class State(dataobject, mapping=True):
         """Sets the given arguments to a given value. Mainly useful for
         reducing length/adding clarity to assignment statements. e.g.,
 
-        >>> p = ExamplePoint()
+        >>> p = ExampleState()
         >>> p.put(x=2.0, y=2.0)
         >>> p.x
         2.0
@@ -85,8 +85,8 @@ class State(dataobject, mapping=True):
 
         Further arguments specify which values.e.g.,
 
-        >>> p1 = ExamplePoint(x=0.0, y=0.0)
-        >>> p2 = ExamplePoint(x=10.0, y=20.0)
+        >>> p1 = ExampleState(x=0.0, y=0.0)
+        >>> p2 = ExampleState(x=10.0, y=20.0)
         >>> p1.assign(p2, 'x', 'y')
         >>> p1.x
         10.0
@@ -137,10 +137,10 @@ class State(dataobject, mapping=True):
                 setattr(self, set_state, val)
 
     def get(self, *attnames, **kwargs):
-        """Returns the given attribute names (strings) as a numpy array. Mainly useful
+        """Return the given attribute names (strings) as a numpy array. Mainly useful
         for reducing length of lines/adding clarity to assignment statements. e.g.,:
 
-        >>> p = ExamplePoint(x=1.0, y=2.0)
+        >>> p = ExampleState(x=1.0, y=2.0)
         >>> p_arr = p.get("x", "y")
         >>> p_arr
         array([1., 2.])
@@ -178,7 +178,7 @@ class State(dataobject, mapping=True):
         """Increments the given arguments by a given value. Mainly useful for
         reducing length/adding clarity to increment statements, e.g.:
 
-        >>> p = ExamplePoint(x=1.0, y=1.0)
+        >>> p = ExampleState(x=1.0, y=1.0)
         >>> p.inc(x=1, y=2)
         >>> p.x
         2.0
@@ -187,7 +187,7 @@ class State(dataobject, mapping=True):
 
         Can additionally be provided with a second value denoting a limit on the
         increments e.g.:
-        >>> p = ExamplePoint(x=1.0, y=1.0)
+        >>> p = ExampleState(x=1.0, y=1.0)
         >>> p.inc(x=(3, 5.0))
         >>> p.x
         4.0
@@ -213,7 +213,7 @@ class State(dataobject, mapping=True):
         """
         Rounds the given arguments to a given resolution. e.g.:
 
-        >>> p = ExamplePoint(x=1.75850)
+        >>> p = ExampleState(x=1.75850)
         >>> p.roundto(x=0.1)
         >>> p.x
         1.8
@@ -227,7 +227,7 @@ class State(dataobject, mapping=True):
         """Enforces limits on the value of a given property. Mainly useful for
         reducing length/adding clarity to increment statements. e.g.,:
 
-        >>> p = ExamplePoint(x=200.0, y=-200.0)
+        >>> p = ExampleState(x=200.0, y=-200.0)
         >>> p.limit(x=(0.0,100.0), y=(0.0, 100.0))
         >>> p.x
         100.0
@@ -244,9 +244,9 @@ class State(dataobject, mapping=True):
                                 ": "+str(getattr(self, name))) from e
 
     def mul(self, *states):
-        """Returns the multiplication of given attributes of the State. e.g.:
+        """Return the multiplication of given attributes of the State. e.g.:
 
-        >>> p = ExamplePoint(x=2.0, y=3.0)
+        >>> p = ExampleState(x=2.0, y=3.0)
         >>> p.mul("x","y")
         6.0
         """
@@ -256,9 +256,9 @@ class State(dataobject, mapping=True):
         return a
 
     def div(self, *states):
-        """Returns the division of given attributes of the State, e.g.:
+        """Return the division of given attributes of the State, e.g.:
 
-        >>> p = ExamplePoint(x=1.0, y=2.0)
+        >>> p = ExampleState(x=1.0, y=2.0)
         >>> p.div('x','y')
         0.5
         """
@@ -268,9 +268,9 @@ class State(dataobject, mapping=True):
         return a
 
     def add(self, *states):
-        """Returns the addition of given attributes of the State, e.g.:
+        """Return the addition of given attributes of the State, e.g.:
 
-        >>> p = ExamplePoint(x=1.0, y=2.0)
+        >>> p = ExampleState(x=1.0, y=2.0)
         >>> p.add('x','y')
         3.0
         """
@@ -280,9 +280,9 @@ class State(dataobject, mapping=True):
         return a
 
     def sub(self, *states):
-        """Returns the subtraction of given attributes of the State, e.g.:
+        """Return the subtraction of given attributes of the State, e.g.:
 
-        >>> p = ExamplePoint(x=1.0, y=2.0)
+        >>> p = ExampleState(x=1.0, y=2.0)
         >>> p.sub('x','y')
         -1.0
         """
@@ -295,7 +295,7 @@ class State(dataobject, mapping=True):
         """Tests whether a given iterable values has the same value as each
         give state in the State, e.g.:
 
-        >>> p = ExamplePoint(x=1.0, y=2.0)
+        >>> p = ExampleState(x=1.0, y=2.0)
         >>> p.same([1.0, 2.0], "x", "y")
         True
         >>> p.same([0.0, 2.0], "x", "y")
@@ -353,7 +353,7 @@ class State(dataobject, mapping=True):
         return hist
 
 
-class ExamplePoint(State):
+class ExampleState(State):
     """Example State class used for docstring tests"""
     x: float = 1.0
     y: float = 1.0

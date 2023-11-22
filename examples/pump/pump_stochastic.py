@@ -10,7 +10,6 @@ This model is an extension of ex_pump.py that includes stochastic behaviors
 from examples.pump.ex_pump  import MoveWat as DetMoveWat
 from fmdtools.define.rand import Rand
 from fmdtools.define.state import State
-import fmdtools.analyze as an
 import fmdtools.sim.propagate as propagate
 import numpy as np
 
@@ -24,8 +23,8 @@ class ImportEERandState(State):
     grid_noise: float = 1.0
 
 
-class ImportEERand(Rand):
-    s = ImportEERandState()
+class ImportEERand(Rand, copy_default=True):
+    s: ImportEERandState = ImportEERandState()
 
 
 class ImportEE(DetImportEE):
@@ -57,7 +56,7 @@ class ImportSigRandState(State):
 
 
 class ImportSigRand(Rand):
-    s = ImportSigRandState()
+    s: ImportSigRandState = ImportSigRandState()
 
 
 class ImportSig(DetImportSig):
@@ -91,7 +90,7 @@ class MoveWatRandState(State):
 
 
 class MoveWatRand(Rand):
-    s = MoveWatRandState()
+    s: MoveWatRandState = MoveWatRandState()
 
 
 class MoveWat(DetMoveWat):

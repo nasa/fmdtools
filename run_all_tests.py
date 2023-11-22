@@ -23,6 +23,7 @@ if __name__=="__main__":
                        "fmdtools/define/environment.py",
                        "fmdtools/sim/scenario.py",
                        "fmdtools/sim/sample.py",
+                       "fmdtools/sim/search.py",
                        "fmdtools/analyze/result.py",
                        "fmdtools/analyze/history.py",
                        "fmdtools/analyze/phases.py",
@@ -72,7 +73,7 @@ if __name__=="__main__":
     # retcode = pytest.main(["--nbmake", *slow_notebooks])
 
     # for testing all unittests
-    # retcode = pytest.main(["--continue-on-collection-errors"])
+    retcode = pytest.main(["--continue-on-collection-errors"])
 
     # for creating comprehensive test report:
 

@@ -674,7 +674,7 @@ class Rover(Model):
         #tot_deviation = np.sum(np.sqrt((mdlhist['nominal']['flows']['Ground']['x']-mdlhist['faulty']['flows']['Ground']['x'])**2 + (mdlhist['nominal']['flows']['Ground']['y']-mdlhist['faulty']['flows']['Ground']['y'])**2))
         line_dist = find_line_dist(self.flows['Ground'].x,self.flows['Ground'].y, mdlhist['nominal']['flows']['Ground']['linex'], mdlhist['nominal']['flows']['Ground']['liney'])
 
-        return {'rate':0,'cost':0, 'prob':scen.prob, 'expected cost':0,'at_finish':at_finish, 'line_dist':line_dist, 'num_modes':num_modes, 'end_dist':end_dist, 'faults':modes, 'classification':classification, 'x':self.flows['Ground'].x ,'y':self.flows['Ground'].y}
+        return {'rate':0,'cost':0, 'prob':scen.prob, 'expected_cost':0,'at_finish':at_finish, 'line_dist':line_dist, 'num_modes':num_modes, 'end_dist':end_dist, 'faults':modes, 'classification':classification, 'x':self.flows['Ground'].x ,'y':self.flows['Ground'].y}
 
 
 
