@@ -2,15 +2,15 @@
 """
 Some common methods for analysis used by other modules.
 
-Methods
--------
+Has methods:
+
 - :func:`bootstrap_confidence_interval`: Convenience wrapper for scipy.bootstrap
 - :func:`nan_to_x`: Helper function for Result Class, returns nan as zero if present,
   otherwise returns the number
 - :func:`is_numeric`: Helper function for Result Class, checks if a given value is
   numeric
 - :func:`join_key`: Helper function for Result Class
-- :func: setup_plot : initializes mpl figure.
+- :func: `setup_plot` : initializes mpl figure.
 - :func:`plot_err_hist`: Plots a line with a given range of uncertainty around it.
 - :func:`plot_err_lines`: Plots error lines on the given plot.
 - :func:`multiplot_legend_title`: Helper function for multiplot legends and titles.
