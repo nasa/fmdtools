@@ -52,7 +52,7 @@ if __name__=="__main__":
                       ]
 
     # for testing notebooks during development:
-    retcode = pytest.main(["--nbmake", *fast_notebooks])
+    # retcode = pytest.main(["--nbmake", *fast_notebooks])
 
     slow_notebooks = ["examples/multirotor/Demonstration.ipynb",
                       "examples/multirotor/Urban_Drone_Demo.ipynb",
@@ -72,7 +72,7 @@ if __name__=="__main__":
     # retcode = pytest.main(["--nbmake", *slow_notebooks])
 
     # for testing all unittests
-    # retcode = pytest.main(["--continue-on-collection-errors"])
+    retcode = pytest.main(["--continue-on-collection-errors"])
 
     # for creating comprehensive test report:
 

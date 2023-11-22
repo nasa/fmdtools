@@ -177,7 +177,7 @@ class Model(Simulable):
                 class_relationship[obj.__class__.__name__].update(obj.get_flowtypes())
             else: class_relationship[obj.__class__.__name__] = set(obj.get_flowtypes())
         return class_relationship
-    def build(self, functionorder=[], require_connections=True):
+    def build(self, functionorder=[], require_connections=True, update_seed=True):
         """
         Builds the model graph after the functions have been added.
 
@@ -186,8 +186,9 @@ class Model(Simulable):
         functionorder : list, optional
             The order for the functions to be executed in. The default is [].
         """
-        self.update_seed()
         if not getattr(self, 'is_copy', False):
+            if update_seed:
+                self.update_seed()
             if functionorder:
                 self.set_functionorder(functionorder)
             self.staticfxns = OrderedSet([fxnname for fxnname, fxn in self.fxns.items() 
@@ -307,7 +308,7 @@ class Model(Simulable):
         cop._flowstates = copy.deepcopy(self._flowstates)
 
         cop.is_copy = False
-        cop.build(functionorder=copy.deepcopy(self.functionorder))
+        cop.build(functionorder=copy.deepcopy(self.functionorder), update_seed=False)
         cop.is_copy = True
         if hasattr(self, 'h'):
             hist = History()
