@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>EPS Example Notebook &mdash; fmdtools 2.0-beta-2 documentation</title>
+  <title>EPS Example Notebook &mdash; fmdtools 2.0-beta-3 documentation</title>
       <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
       <link rel="stylesheet" href="../../_static/nbsphinx-code-cells.css" type="text/css" />
@@ -73,7 +73,7 @@
 <li class="toctree-l2"><a class="reference internal" href="../../docs/Development%20Guide.html#intro-to-fmdtools">Intro to fmdtools</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="../../docs/Intro_to_fmdtools.html">Intro to resilience modelling, simulation, and visualization in Python with fmdtools.</a><ul>
 <li class="toctree-l4"><a class="reference internal" href="../../docs/Intro_to_fmdtools.html#author-daniel-hulse">Author: Daniel Hulse</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/Intro_to_fmdtools.html#version-2-0-beta-2">Version: 2.0-beta-2</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../docs/Intro_to_fmdtools.html#version-2-0-beta-3">Version: 2.0-beta-3</a></li>
 </ul>
 </li>
 <li class="toctree-l3"><a class="reference internal" href="../../docs/Intro_to_fmdtools.html#overview">Overview</a></li>
@@ -170,7 +170,7 @@
 </ul>
 </li>
 <li class="toctree-l3"><a class="reference internal" href="../pump/Optimization.html">Optimization using the ProblemInterface class</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="../pump/Optimization.html#ProblemInterface-Setup">ProblemInterface Setup</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../pump/Optimization.html#Problem-Setup">Problem Setup</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../pump/Optimization.html#Problem-interfaces">Problem interfaces</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../pump/Optimization.html#Optimization:">Optimization:</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../pump/Optimization.html#Multi-scenario-Optimization">Multi-scenario Optimization</a></li>
@@ -440,7 +440,7 @@
 </div>
 <div class="output_area stderr docutils container">
 <div class="highlight"><pre>
-SCENARIOS COMPLETE: 100%|██████████| 70/70 [00:00&lt;00:00, 122.63it/s]
+SCENARIOS COMPLETE: 100%|██████████| 70/70 [00:00&lt;00:00, 75.32it/s]
 </pre></div></div>
 </div>
 <p>Using <code class="docutils literal notranslate"><span class="pre">analyze.tabulate.result_summary_fmea</span></code>, one can see the degradation effects of this fault on the flows:</p>
@@ -488,121 +488,17 @@ SCENARIOS COMPLETE: 100%|██████████| 70/70 [00:00&lt;00:00, 
       <th>faulty</th>
       <th>rate</th>
       <th>cost</th>
-      <th>expected cost</th>
+      <th>expected_cost</th>
     </tr>
   </thead>
   <tbody>
     <tr>
-      <th>ee_to_me_toohigh_torque_t0</th>
+      <th>supply_ee_minor_overload_t0</th>
       <td>['me', 'oe', 'he']</td>
-      <td>[]</td>
-      <td>0.00005</td>
-      <td>5050.0</td>
-      <td>11059.5</td>
-    </tr>
-    <tr>
-      <th>ee_to_he_high_heat_t0</th>
-      <td>['he']</td>
-      <td>[]</td>
-      <td>0.0</td>
-      <td>2500.0</td>
-      <td>10.95</td>
-    </tr>
-    <tr>
-      <th>export_he_ineffective_sink_t0</th>
-      <td>['he']</td>
-      <td>[]</td>
-      <td>0.000005</td>
-      <td>1500.0</td>
-      <td>328.5</td>
-    </tr>
-    <tr>
-      <th>supply_ee_major_overload_t0</th>
-      <td>['me', 'oe', 'he']</td>
-      <td>[]</td>
-      <td>0.000003</td>
-      <td>3650.0</td>
-      <td>479.61</td>
-    </tr>
-    <tr>
-      <th>supply_ee_open_circuit_t0</th>
-      <td>['me', 'oe', 'he']</td>
-      <td>[]</td>
-      <td>0.0</td>
-      <td>1450.0</td>
-      <td>3.1755</td>
-    </tr>
-    <tr>
-      <th>ee_to_me_low_torque_t0</th>
-      <td>['me', 'oe', 'he']</td>
-      <td>[]</td>
-      <td>0.0001</td>
-      <td>4950.0</td>
-      <td>21681.0</td>
-    </tr>
-    <tr>
-      <th>export_he_hot_sink_t0</th>
-      <td>['he']</td>
       <td>[]</td>
       <td>0.00001</td>
-      <td>600.0</td>
-      <td>262.8</td>
-    </tr>
-    <tr>
-      <th>import_signal_no_signal_t0</th>
-      <td>['me', 'oe', 'he']</td>
-      <td>[]</td>
-      <td>0.000001</td>
-      <td>2000.0</td>
-      <td>87.6</td>
-    </tr>
-    <tr>
-      <th>ee_to_he_toohigh_heat_t0</th>
-      <td>['me', 'oe', 'he']</td>
-      <td>[]</td>
-      <td>0.0</td>
-      <td>5100.0</td>
-      <td>111.69</td>
-    </tr>
-    <tr>
-      <th>supply_ee_short_t0</th>
-      <td>['me', 'oe', 'he']</td>
-      <td>[]</td>
-      <td>0.0</td>
       <td>5150.0</td>
-      <td>22.557</td>
-    </tr>
-    <tr>
-      <th>export_waste_hm_ineffective_sink_t0</th>
-      <td>[]</td>
-      <td>[]</td>
-      <td>0.000005</td>
-      <td>1000.0</td>
-      <td>219.0</td>
-    </tr>
-    <tr>
-      <th>ee_to_me_high_torque_t0</th>
-      <td>['me']</td>
-      <td>[]</td>
-      <td>0.0001</td>
-      <td>450.0</td>
-      <td>1971.0</td>
-    </tr>
-    <tr>
-      <th>ee_to_oe_burnt_out_t0</th>
-      <td>['oe']</td>
-      <td>[]</td>
-      <td>0.000002</td>
-      <td>550.0</td>
-      <td>48.18</td>
-    </tr>
-    <tr>
-      <th>ee_to_he_open_circuit_t0</th>
-      <td>['he']</td>
-      <td>[]</td>
-      <td>0.0</td>
-      <td>550.0</td>
-      <td>2.409</td>
+      <td>2255.7</td>
     </tr>
     <tr>
       <th>store_ee_low_storage_t0</th>
@@ -613,28 +509,12 @@ SCENARIOS COMPLETE: 100%|██████████| 70/70 [00:00&lt;00:00, 
       <td>438.0</td>
     </tr>
     <tr>
-      <th>ee_to_oe_optical_resist_t0</th>
-      <td>['oe']</td>
+      <th>ee_to_he_low_heat_t0</th>
+      <td>['he']</td>
       <td>[]</td>
-      <td>0.0</td>
-      <td>520.0</td>
-      <td>11.388</td>
-    </tr>
-    <tr>
-      <th>import_ee_high_v_t0</th>
-      <td>['me', 'oe', 'he']</td>
-      <td>[]</td>
-      <td>0.000005</td>
-      <td>3350.0</td>
-      <td>733.65</td>
-    </tr>
-    <tr>
-      <th>import_ee_low_v_t0</th>
-      <td>['me', 'oe', 'he']</td>
-      <td>[]</td>
-      <td>0.00001</td>
-      <td>700.0</td>
-      <td>306.6</td>
+      <td>0.000002</td>
+      <td>550.0</td>
+      <td>48.18</td>
     </tr>
     <tr>
       <th>ee_to_me_open_circuit_t0</th>
@@ -653,52 +533,36 @@ SCENARIOS COMPLETE: 100%|██████████| 70/70 [00:00&lt;00:00, 
       <td>10840.5</td>
     </tr>
     <tr>
-      <th>distribute_ee_adverse_resist_t0</th>
-      <td>['me', 'oe', 'he']</td>
+      <th>export_waste_hm_ineffective_sink_t0</th>
       <td>[]</td>
-      <td>0.00001</td>
-      <td>2750.0</td>
-      <td>1204.5</td>
-    </tr>
-    <tr>
-      <th>supply_ee_adverse_resist_t0</th>
-      <td>['me', 'oe', 'he']</td>
-      <td>[]</td>
-      <td>0.000002</td>
-      <td>1650.0</td>
-      <td>144.54</td>
-    </tr>
-    <tr>
-      <th>import_signal_partial_signal_t0</th>
-      <td>['me', 'oe', 'he']</td>
-      <td>[]</td>
-      <td>0.00001</td>
-      <td>2000.0</td>
-      <td>876.0</td>
-    </tr>
-    <tr>
-      <th>export_waste_ho_hot_sink_t0</th>
-      <td>[]</td>
-      <td>[]</td>
-      <td>0.00001</td>
-      <td>500.0</td>
-      <td>219.0</td>
-    </tr>
-    <tr>
-      <th>export_waste_hm_hot_sink_t0</th>
-      <td>[]</td>
-      <td>[]</td>
-      <td>0.00001</td>
-      <td>500.0</td>
-      <td>219.0</td>
-    </tr>
-    <tr>
-      <th>store_ee_no_storage_t0</th>
-      <td>['me', 'oe', 'he']</td>
       <td>[]</td>
       <td>0.000005</td>
-      <td>3250.0</td>
-      <td>711.75</td>
+      <td>1000.0</td>
+      <td>219.0</td>
+    </tr>
+    <tr>
+      <th>ee_to_oe_burnt_out_t0</th>
+      <td>['oe']</td>
+      <td>[]</td>
+      <td>0.000002</td>
+      <td>550.0</td>
+      <td>48.18</td>
+    </tr>
+    <tr>
+      <th>ee_to_me_low_torque_t0</th>
+      <td>['me', 'oe', 'he']</td>
+      <td>[]</td>
+      <td>0.0001</td>
+      <td>4950.0</td>
+      <td>21681.0</td>
+    </tr>
+    <tr>
+      <th>export_he_ineffective_sink_t0</th>
+      <td>['he']</td>
+      <td>[]</td>
+      <td>0.000005</td>
+      <td>1500.0</td>
+      <td>328.5</td>
     </tr>
     <tr>
       <th>export_waste_h1_hot_sink_t0</th>
@@ -709,44 +573,20 @@ SCENARIOS COMPLETE: 100%|██████████| 70/70 [00:00&lt;00:00, 
       <td>219.0</td>
     </tr>
     <tr>
-      <th>supply_ee_minor_overload_t0</th>
+      <th>supply_ee_adverse_resist_t0</th>
       <td>['me', 'oe', 'he']</td>
-      <td>[]</td>
-      <td>0.00001</td>
-      <td>5150.0</td>
-      <td>2255.7</td>
-    </tr>
-    <tr>
-      <th>export_waste_ho_ineffective_sink_t0</th>
-      <td>[]</td>
-      <td>[]</td>
-      <td>0.000005</td>
-      <td>1000.0</td>
-      <td>219.0</td>
-    </tr>
-    <tr>
-      <th>import_ee_no_v_t0</th>
-      <td>['me', 'oe', 'he']</td>
-      <td>[]</td>
-      <td>0.00001</td>
-      <td>1550.0</td>
-      <td>678.9</td>
-    </tr>
-    <tr>
-      <th>nominal</th>
-      <td>[]</td>
-      <td>[]</td>
-      <td>1.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-    </tr>
-    <tr>
-      <th>ee_to_he_low_heat_t0</th>
-      <td>['he']</td>
       <td>[]</td>
       <td>0.000002</td>
-      <td>550.0</td>
-      <td>48.18</td>
+      <td>1650.0</td>
+      <td>144.54</td>
+    </tr>
+    <tr>
+      <th>export_waste_ho_hot_sink_t0</th>
+      <td>[]</td>
+      <td>[]</td>
+      <td>0.00001</td>
+      <td>500.0</td>
+      <td>219.0</td>
     </tr>
     <tr>
       <th>distribute_ee_short_t0</th>
@@ -757,12 +597,132 @@ SCENARIOS COMPLETE: 100%|██████████| 70/70 [00:00&lt;00:00, 
       <td>4161.0</td>
     </tr>
     <tr>
-      <th>distribute_ee_poor_alloc_t0</th>
+      <th>export_waste_ho_ineffective_sink_t0</th>
+      <td>[]</td>
+      <td>[]</td>
+      <td>0.000005</td>
+      <td>1000.0</td>
+      <td>219.0</td>
+    </tr>
+    <tr>
+      <th>supply_ee_short_t0</th>
       <td>['me', 'oe', 'he']</td>
       <td>[]</td>
-      <td>0.00002</td>
-      <td>1750.0</td>
-      <td>1533.0</td>
+      <td>0.0</td>
+      <td>5150.0</td>
+      <td>22.557</td>
+    </tr>
+    <tr>
+      <th>supply_ee_major_overload_t0</th>
+      <td>['me', 'oe', 'he']</td>
+      <td>[]</td>
+      <td>0.000003</td>
+      <td>3650.0</td>
+      <td>479.61</td>
+    </tr>
+    <tr>
+      <th>nominal</th>
+      <td>[]</td>
+      <td>[]</td>
+      <td>1.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+    </tr>
+    <tr>
+      <th>import_ee_low_v_t0</th>
+      <td>['me', 'oe', 'he']</td>
+      <td>[]</td>
+      <td>0.00001</td>
+      <td>700.0</td>
+      <td>306.6</td>
+    </tr>
+    <tr>
+      <th>ee_to_he_high_heat_t0</th>
+      <td>['he']</td>
+      <td>[]</td>
+      <td>0.0</td>
+      <td>2500.0</td>
+      <td>10.95</td>
+    </tr>
+    <tr>
+      <th>distribute_ee_open_circuit_t0</th>
+      <td>['me', 'oe', 'he']</td>
+      <td>[]</td>
+      <td>0.00003</td>
+      <td>2750.0</td>
+      <td>3613.5</td>
+    </tr>
+    <tr>
+      <th>ee_to_me_high_torque_t0</th>
+      <td>['me']</td>
+      <td>[]</td>
+      <td>0.0001</td>
+      <td>450.0</td>
+      <td>1971.0</td>
+    </tr>
+    <tr>
+      <th>import_signal_no_signal_t0</th>
+      <td>['me', 'oe', 'he']</td>
+      <td>[]</td>
+      <td>0.000001</td>
+      <td>2000.0</td>
+      <td>87.6</td>
+    </tr>
+    <tr>
+      <th>ee_to_oe_optical_resist_t0</th>
+      <td>['oe']</td>
+      <td>[]</td>
+      <td>0.0</td>
+      <td>520.0</td>
+      <td>11.388</td>
+    </tr>
+    <tr>
+      <th>supply_ee_open_circuit_t0</th>
+      <td>['me', 'oe', 'he']</td>
+      <td>[]</td>
+      <td>0.0</td>
+      <td>1450.0</td>
+      <td>3.1755</td>
+    </tr>
+    <tr>
+      <th>ee_to_he_open_circuit_t0</th>
+      <td>['he']</td>
+      <td>[]</td>
+      <td>0.0</td>
+      <td>550.0</td>
+      <td>2.409</td>
+    </tr>
+    <tr>
+      <th>import_ee_high_v_t0</th>
+      <td>['me', 'oe', 'he']</td>
+      <td>[]</td>
+      <td>0.000005</td>
+      <td>3350.0</td>
+      <td>733.65</td>
+    </tr>
+    <tr>
+      <th>store_ee_no_storage_t0</th>
+      <td>['me', 'oe', 'he']</td>
+      <td>[]</td>
+      <td>0.000005</td>
+      <td>3250.0</td>
+      <td>711.75</td>
+    </tr>
+    <tr>
+      <th>export_he_hot_sink_t0</th>
+      <td>['he']</td>
+      <td>[]</td>
+      <td>0.00001</td>
+      <td>600.0</td>
+      <td>262.8</td>
+    </tr>
+    <tr>
+      <th>ee_to_me_toohigh_torque_t0</th>
+      <td>['me', 'oe', 'he']</td>
+      <td>[]</td>
+      <td>0.00005</td>
+      <td>5050.0</td>
+      <td>11059.5</td>
     </tr>
     <tr>
       <th>export_waste_h1_ineffective_sink_t0</th>
@@ -773,12 +733,52 @@ SCENARIOS COMPLETE: 100%|██████████| 70/70 [00:00&lt;00:00, 
       <td>219.0</td>
     </tr>
     <tr>
-      <th>distribute_ee_open_circuit_t0</th>
+      <th>distribute_ee_adverse_resist_t0</th>
       <td>['me', 'oe', 'he']</td>
       <td>[]</td>
-      <td>0.00003</td>
+      <td>0.00001</td>
       <td>2750.0</td>
-      <td>3613.5</td>
+      <td>1204.5</td>
+    </tr>
+    <tr>
+      <th>export_waste_hm_hot_sink_t0</th>
+      <td>[]</td>
+      <td>[]</td>
+      <td>0.00001</td>
+      <td>500.0</td>
+      <td>219.0</td>
+    </tr>
+    <tr>
+      <th>import_signal_partial_signal_t0</th>
+      <td>['me', 'oe', 'he']</td>
+      <td>[]</td>
+      <td>0.00001</td>
+      <td>2000.0</td>
+      <td>876.0</td>
+    </tr>
+    <tr>
+      <th>distribute_ee_poor_alloc_t0</th>
+      <td>['me', 'oe', 'he']</td>
+      <td>[]</td>
+      <td>0.00002</td>
+      <td>1750.0</td>
+      <td>1533.0</td>
+    </tr>
+    <tr>
+      <th>ee_to_he_toohigh_heat_t0</th>
+      <td>['me', 'oe', 'he']</td>
+      <td>[]</td>
+      <td>0.0</td>
+      <td>5100.0</td>
+      <td>111.69</td>
+    </tr>
+    <tr>
+      <th>import_ee_no_v_t0</th>
+      <td>['me', 'oe', 'he']</td>
+      <td>[]</td>
+      <td>0.00001</td>
+      <td>1550.0</td>
+      <td>678.9</td>
     </tr>
   </tbody>
 </table>

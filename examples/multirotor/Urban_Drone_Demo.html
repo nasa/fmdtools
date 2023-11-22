@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Urban Drone Demo &mdash; fmdtools 2.0-beta-2 documentation</title>
+  <title>Urban Drone Demo &mdash; fmdtools 2.0-beta-3 documentation</title>
       <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
       <link rel="stylesheet" href="../../_static/nbsphinx-code-cells.css" type="text/css" />
@@ -73,7 +73,7 @@
 <li class="toctree-l2"><a class="reference internal" href="../../docs/Development%20Guide.html#intro-to-fmdtools">Intro to fmdtools</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="../../docs/Intro_to_fmdtools.html">Intro to resilience modelling, simulation, and visualization in Python with fmdtools.</a><ul>
 <li class="toctree-l4"><a class="reference internal" href="../../docs/Intro_to_fmdtools.html#author-daniel-hulse">Author: Daniel Hulse</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/Intro_to_fmdtools.html#version-2-0-beta-2">Version: 2.0-beta-2</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../docs/Intro_to_fmdtools.html#version-2-0-beta-3">Version: 2.0-beta-3</a></li>
 </ul>
 </li>
 <li class="toctree-l3"><a class="reference internal" href="../../docs/Intro_to_fmdtools.html#overview">Overview</a></li>
@@ -170,7 +170,7 @@
 </ul>
 </li>
 <li class="toctree-l3"><a class="reference internal" href="../pump/Optimization.html">Optimization using the ProblemInterface class</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="../pump/Optimization.html#ProblemInterface-Setup">ProblemInterface Setup</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../pump/Optimization.html#Problem-Setup">Problem Setup</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../pump/Optimization.html#Problem-interfaces">Problem interfaces</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../pump/Optimization.html#Optimization:">Optimization:</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../pump/Optimization.html#Multi-scenario-Optimization">Multi-scenario Optimization</a></li>
@@ -556,7 +556,7 @@
 endclass:
 --rate:                              1.0
 --cost:                              0.0
---expected cost:                     0.0
+--expected_cost:                     0.0
 --repcost:                             0
 --unsafe_flight_time:                  0
 --body_strikes:                      0.0
@@ -721,9 +721,9 @@ endclass:
 <div class="output_area docutils container">
 <div class="highlight"><pre>
 endclass.rate:    1.0000000000000002e-06
-endclass.cost:                   28600.0
-endclass.expected cost: 2860.0000000000005
-endclass.repcost:                    500
+endclass.cost:                   28700.0
+endclass.expected_cost: 2870.0000000000005
+endclass.repcost:                    600
 endclass.unsafe_flight_time:         281
 endclass.body_strikes:               0.0
 endclass.head_strikes:               0.0
@@ -837,7 +837,7 @@ FaultSample of scenarios:
 </div>
 <div class="output_area stderr docutils container">
 <div class="highlight"><pre>
-SCENARIOS COMPLETE: 100%|██████████| 118/118 [00:34&lt;00:00,  3.40it/s]
+SCENARIOS COMPLETE: 100%|██████████| 118/118 [00:53&lt;00:00,  2.20it/s]
 </pre></div></div>
 </div>
 <div class="nbinput docutils container">
@@ -961,7 +961,7 @@ SCENARIOS COMPLETE: 100%|██████████| 118/118 [00:34&lt;00:00
     </tr>
     <tr>
       <th rowspan="2" valign="top">affect_dof</th>
-      <th>lf_ctlbreak</th>
+      <th>rf_ctlbreak</th>
       <td>2.000000e-06</td>
       <td>246.0</td>
       <td>1.096325e+04</td>
@@ -972,7 +972,7 @@ SCENARIOS COMPLETE: 100%|██████████| 118/118 [00:34&lt;00:00
       <td>0.0</td>
     </tr>
     <tr>
-      <th>rf_ctlbreak</th>
+      <th>lf_ctlbreak</th>
       <td>2.000000e-06</td>
       <td>246.0</td>
       <td>1.096325e+04</td>
@@ -996,22 +996,22 @@ SCENARIOS COMPLETE: 100%|██████████| 118/118 [00:34&lt;00:00
     </tr>
     <tr>
       <th rowspan="12" valign="top">affect_dof</th>
-      <th>rr_ctlbreak</th>
+      <th>lr_ctlbreak</th>
       <td>2.000000e-06</td>
       <td>246.0</td>
-      <td>1.085804e+04</td>
-      <td>1250.0</td>
+      <td>1.087908e+04</td>
+      <td>1300.0</td>
       <td>0.0</td>
       <td>0.0</td>
       <td>0.0</td>
       <td>0.0</td>
     </tr>
     <tr>
-      <th>lr_ctlbreak</th>
+      <th>rr_ctlbreak</th>
       <td>2.000000e-06</td>
       <td>246.0</td>
-      <td>1.085804e+04</td>
-      <td>1250.0</td>
+      <td>1.087908e+04</td>
+      <td>1300.0</td>
       <td>0.0</td>
       <td>0.0</td>
       <td>0.0</td>
@@ -1051,6 +1051,28 @@ SCENARIOS COMPLETE: 100%|██████████| 118/118 [00:34&lt;00:00
       <td>0.0</td>
     </tr>
     <tr>
+      <th>lf_openc</th>
+      <td>1.000000e-06</td>
+      <td>246.0</td>
+      <td>1.070162e+04</td>
+      <td>1500.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+    </tr>
+    <tr>
+      <th>rf_openc</th>
+      <td>1.000000e-06</td>
+      <td>246.0</td>
+      <td>1.070162e+04</td>
+      <td>1500.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+    </tr>
+    <tr>
       <th>lf_mechbreak</th>
       <td>1.000000e-06</td>
       <td>246.0</td>
@@ -1062,7 +1084,7 @@ SCENARIOS COMPLETE: 100%|██████████| 118/118 [00:34&lt;00:00
       <td>0.0</td>
     </tr>
     <tr>
-      <th>rf_short</th>
+      <th>lf_short</th>
       <td>1.000000e-06</td>
       <td>246.0</td>
       <td>1.070162e+04</td>
@@ -1073,7 +1095,7 @@ SCENARIOS COMPLETE: 100%|██████████| 118/118 [00:34&lt;00:00
       <td>0.0</td>
     </tr>
     <tr>
-      <th>lf_short</th>
+      <th>rf_short</th>
       <td>1.000000e-06</td>
       <td>246.0</td>
       <td>1.070162e+04</td>
@@ -1106,40 +1128,7 @@ SCENARIOS COMPLETE: 100%|██████████| 118/118 [00:34&lt;00:00
       <td>0.0</td>
     </tr>
     <tr>
-      <th>lf_openc</th>
-      <td>1.000000e-06</td>
-      <td>246.0</td>
-      <td>1.070162e+04</td>
-      <td>1500.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-    </tr>
-    <tr>
-      <th>rf_openc</th>
-      <td>1.000000e-06</td>
-      <td>246.0</td>
-      <td>1.070162e+04</td>
-      <td>1500.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-    </tr>
-    <tr>
       <th rowspan="5" valign="top">store_ee</th>
-      <th>s1p1_break</th>
-      <td>6.800000e-07</td>
-      <td>246.0</td>
-      <td>1.061791e+04</td>
-      <td>1500.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-    </tr>
-    <tr>
       <th>s1p1_short</th>
       <td>6.800000e-07</td>
       <td>246.0</td>
@@ -1152,6 +1141,17 @@ SCENARIOS COMPLETE: 100%|██████████| 118/118 [00:34&lt;00:00
     </tr>
     <tr>
       <th>s1p1_degr</th>
+      <td>6.800000e-07</td>
+      <td>246.0</td>
+      <td>1.061791e+04</td>
+      <td>1500.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+    </tr>
+    <tr>
+      <th>s1p1_break</th>
       <td>6.800000e-07</td>
       <td>246.0</td>
       <td>1.061791e+04</td>
@@ -1184,8 +1184,19 @@ SCENARIOS COMPLETE: 100%|██████████| 118/118 [00:34&lt;00:00
       <td>0.0</td>
     </tr>
     <tr>
-      <th rowspan="8" valign="top">affect_dof</th>
-      <th>lr_ctldn</th>
+      <th rowspan="10" valign="top">affect_dof</th>
+      <th>lf_ctldn</th>
+      <td>2.000000e-06</td>
+      <td>246.0</td>
+      <td>1.054325e+04</td>
+      <td>500.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+    </tr>
+    <tr>
+      <th>lr_ctlup</th>
       <td>2.000000e-06</td>
       <td>246.0</td>
       <td>1.054325e+04</td>
@@ -1218,29 +1229,18 @@ SCENARIOS COMPLETE: 100%|██████████| 118/118 [00:34&lt;00:00
       <td>0.0</td>
     </tr>
     <tr>
+      <th>lr_ctldn</th>
+      <td>2.000000e-06</td>
+      <td>246.0</td>
+      <td>1.054325e+04</td>
+      <td>500.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+    </tr>
+    <tr>
       <th>rr_ctlup</th>
-      <td>2.000000e-06</td>
-      <td>246.0</td>
-      <td>1.054325e+04</td>
-      <td>500.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-    </tr>
-    <tr>
-      <th>lf_ctldn</th>
-      <td>2.000000e-06</td>
-      <td>246.0</td>
-      <td>1.054325e+04</td>
-      <td>500.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-    </tr>
-    <tr>
-      <th>lr_ctlup</th>
       <td>2.000000e-06</td>
       <td>246.0</td>
       <td>1.054325e+04</td>
@@ -1273,6 +1273,28 @@ SCENARIOS COMPLETE: 100%|██████████| 118/118 [00:34&lt;00:00
       <td>0.0</td>
     </tr>
     <tr>
+      <th>rr_mechbreak</th>
+      <td>1.000000e-06</td>
+      <td>246.0</td>
+      <td>1.051694e+04</td>
+      <td>1050.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+    </tr>
+    <tr>
+      <th>lr_mechbreak</th>
+      <td>1.000000e-06</td>
+      <td>246.0</td>
+      <td>1.051694e+04</td>
+      <td>1050.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+    </tr>
+    <tr>
       <th>plan_path</th>
       <th>degloc</th>
       <td>2.720000e-07</td>
@@ -1297,30 +1319,8 @@ SCENARIOS COMPLETE: 100%|██████████| 118/118 [00:34&lt;00:00
       <td>0.0</td>
     </tr>
     <tr>
-      <th rowspan="4" valign="top">affect_dof</th>
-      <th>rr_mechbreak</th>
-      <td>1.000000e-06</td>
-      <td>246.0</td>
-      <td>1.049642e+04</td>
-      <td>1000.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-    </tr>
-    <tr>
-      <th>lr_mechbreak</th>
-      <td>1.000000e-06</td>
-      <td>246.0</td>
-      <td>1.049642e+04</td>
-      <td>1000.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-    </tr>
-    <tr>
-      <th>lf_propstuck</th>
+      <th rowspan="2" valign="top">affect_dof</th>
+      <th>rf_propstuck</th>
       <td>2.000000e-07</td>
       <td>246.0</td>
       <td>1.049233e+04</td>
@@ -1331,7 +1331,7 @@ SCENARIOS COMPLETE: 100%|██████████| 118/118 [00:34&lt;00:00
       <td>0.0</td>
     </tr>
     <tr>
-      <th>rf_propstuck</th>
+      <th>lf_propstuck</th>
       <td>2.000000e-07</td>
       <td>246.0</td>
       <td>1.049233e+04</td>
@@ -1389,7 +1389,7 @@ SCENARIOS COMPLETE: 100%|██████████| 118/118 [00:34&lt;00:00
       <td>0.0</td>
     </tr>
     <tr>
-      <th rowspan="4" valign="top">affect_dof</th>
+      <th rowspan="6" valign="top">affect_dof</th>
       <th>rr_openc</th>
       <td>1.000000e-06</td>
       <td>246.0</td>
@@ -1415,8 +1415,8 @@ SCENARIOS COMPLETE: 100%|██████████| 118/118 [00:34&lt;00:00
       <th>lr_propbreak</th>
       <td>3.000000e-07</td>
       <td>246.0</td>
-      <td>1.025646e+04</td>
-      <td>850.0</td>
+      <td>1.027661e+04</td>
+      <td>900.0</td>
       <td>0.0</td>
       <td>0.0</td>
       <td>0.0</td>
@@ -1426,8 +1426,30 @@ SCENARIOS COMPLETE: 100%|██████████| 118/118 [00:34&lt;00:00
       <th>rr_propbreak</th>
       <td>3.000000e-07</td>
       <td>246.0</td>
-      <td>1.025646e+04</td>
-      <td>850.0</td>
+      <td>1.027661e+04</td>
+      <td>900.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+    </tr>
+    <tr>
+      <th>lr_propstuck</th>
+      <td>2.000000e-07</td>
+      <td>246.0</td>
+      <td>1.025108e+04</td>
+      <td>900.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+    </tr>
+    <tr>
+      <th>rr_propstuck</th>
+      <td>2.000000e-07</td>
+      <td>246.0</td>
+      <td>1.025108e+04</td>
+      <td>900.0</td>
       <td>0.0</td>
       <td>0.0</td>
       <td>0.0</td>
@@ -1440,29 +1462,6 @@ SCENARIOS COMPLETE: 100%|██████████| 118/118 [00:34&lt;00:00
       <td>246.0</td>
       <td>1.024044e+04</td>
       <td>1000.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-    </tr>
-    <tr>
-      <th rowspan="2" valign="top">affect_dof</th>
-      <th>rr_propstuck</th>
-      <td>2.000000e-07</td>
-      <td>246.0</td>
-      <td>1.023097e+04</td>
-      <td>850.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-    </tr>
-    <tr>
-      <th>lr_propstuck</th>
-      <td>2.000000e-07</td>
-      <td>246.0</td>
-      <td>1.023097e+04</td>
-      <td>850.0</td>
       <td>0.0</td>
       <td>0.0</td>
       <td>0.0</td>
@@ -1482,18 +1481,7 @@ SCENARIOS COMPLETE: 100%|██████████| 118/118 [00:34&lt;00:00
     </tr>
     <tr>
       <th rowspan="4" valign="top">affect_dof</th>
-      <th>rf_mechfriction</th>
-      <td>5.000000e-07</td>
-      <td>246.0</td>
-      <td>1.016581e+04</td>
-      <td>500.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-    </tr>
-    <tr>
-      <th>lr_mechfriction</th>
+      <th>rr_mechfriction</th>
       <td>5.000000e-07</td>
       <td>246.0</td>
       <td>1.016581e+04</td>
@@ -1515,7 +1503,18 @@ SCENARIOS COMPLETE: 100%|██████████| 118/118 [00:34&lt;00:00
       <td>0.0</td>
     </tr>
     <tr>
-      <th>rr_mechfriction</th>
+      <th>lr_mechfriction</th>
+      <td>5.000000e-07</td>
+      <td>246.0</td>
+      <td>1.016581e+04</td>
+      <td>500.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+    </tr>
+    <tr>
+      <th>rf_mechfriction</th>
       <td>5.000000e-07</td>
       <td>246.0</td>
       <td>1.016581e+04</td>
@@ -1550,17 +1549,6 @@ SCENARIOS COMPLETE: 100%|██████████| 118/118 [00:34&lt;00:00
       <td>0.0</td>
     </tr>
     <tr>
-      <th>rf_propwarp</th>
-      <td>1.000000e-07</td>
-      <td>246.0</td>
-      <td>9.944862e+03</td>
-      <td>200.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-    </tr>
-    <tr>
       <th>lf_propwarp</th>
       <td>1.000000e-07</td>
       <td>246.0</td>
@@ -1573,6 +1561,17 @@ SCENARIOS COMPLETE: 100%|██████████| 118/118 [00:34&lt;00:00
     </tr>
     <tr>
       <th>lr_propwarp</th>
+      <td>1.000000e-07</td>
+      <td>246.0</td>
+      <td>9.944862e+03</td>
+      <td>200.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+    </tr>
+    <tr>
+      <th>rf_propwarp</th>
       <td>1.000000e-07</td>
       <td>246.0</td>
       <td>9.944862e+03</td>
