@@ -255,7 +255,7 @@ class PointParam(Parameter):
 
     Examples
     --------
-    a point with center at 1.0, 1.0 and radius of 1.0 definining whether something
+    a point with center at 1.0, 1.0 and radius of 1.0 defining whether something
     is on the point would be defined by the parameter:
 
     >>> class ExPointParam(PointParam):

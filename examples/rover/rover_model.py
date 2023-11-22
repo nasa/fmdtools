@@ -1015,7 +1015,7 @@ class Rover(Model):
             "rate": failure rate of the scenario
             "cost": cost of the resulting failure
             "prob": scenario probability
-            "expected cost": expected cost of the failure
+            "expected_cost": expected cost of the failure
             "in_bound": is true if the rover is within the path bounds
             "at_finish": is true if the rover has reached the end point
             "line_dist": line distance
@@ -1057,7 +1057,7 @@ class Rover(Model):
             "rate": scen.rate,
             "cost": 0,
             "prob": scen.prob,
-            "expected cost": 0,
+            "expected_cost": 0,
             "in_bound": in_bound,
             "at_finish": at_finish,
             "line_dist": line_dist,

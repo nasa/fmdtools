@@ -26,7 +26,7 @@ import copy
 from fmdtools.analyze.history import History, init_hist_iter
 
 
-class Rand(dataobject, mapping=True):
+class Rand(dataobject, mapping=True, copy_default=True):
     """
     Class for defining and interacting with random states of the model.
 
@@ -50,7 +50,8 @@ class Rand(dataobject, mapping=True):
     Which enables the use of set_rand, update_stochastic_states, etc for updating
     these states with methods called from the rng.
     """
-    rng: np.random.default_rng
+
+    rng: np.random._generator.Generator = np.random.default_rng()
     probs: list = list()
     probdens: float = 1.0
     seed: int = 42
@@ -58,11 +59,14 @@ class Rand(dataobject, mapping=True):
     default_track = ('s', 'probdens')
 
     def __init__(self, *args, seed=42, run_stochastic=False, probs=list(), s_kwargs={}):
-        args = get_true_fields(self, *args, seed=seed,
-                               run_stochastic=run_stochastic, probs=probs)
+        args = get_true_fields(self, *args,
+                               seed=seed,
+                               run_stochastic=run_stochastic,
+                               probs=probs,
+                               rng=np.random.default_rng(self.seed))
         super().__init__(*args)
-        self.rng = np.random.default_rng(self.seed)
         if 's' in self.__fields__:
+            self.s = self.s.__class__()
             self.s.set_atts(**s_kwargs)
         if self.seed == None:
             raise Exception("Invalid seed: None")
@@ -141,8 +145,10 @@ class Rand(dataobject, mapping=True):
         if hasattr(self, 's'):
             self.s.assign(other_rand.s)
         self.seed = other_rand.seed
+        self.rng = np.random.default_rng(self.seed)
         self.rng.__setstate__(other_rand.rng.__getstate__())
         self.probs = copy.copy(other_rand.probs)
+        self.run_stochastic = other_rand.run_stochastic
 
     def get_true_field(self, fieldname, *args, **kwargs):
         return get_true_field(self, fieldname, *args, **kwargs)
@@ -153,7 +159,7 @@ class Rand(dataobject, mapping=True):
     def to_default(self, *statenames):
         """Resets given random states to their default values"""
         for statename in statenames:
-            default = self.s.__defaults__[self.s.__fields__.index(statename)]
+            default = self.s.__default_vals__[self.s.__fields__.index(statename)]
             self.s[statename] = default
 
     def create_hist(self, timerange, track):

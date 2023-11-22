@@ -8,25 +8,28 @@ system attributes that do not change.
 """
 
 import inspect
-from recordclass import dataobject, asdict
+from recordclass import dataobject, asdict, astuple
 import warnings
 import numpy as np
 
-from .common import get_true_fields, get_true_field, set_obj_arg_type
+from fmdtools.define.common import get_true_fields, get_true_field, set_obj_arg_type
 
 
-class Parameter(dataobject, readonly=True, mapping=True, iterable=True):
+class Parameter(dataobject, readonly=True, mapping=True, iterable=True, copy_default=True):
     """
     The Parameter class defines model/function/flow values which are immutable,
     that is, the same from model instantiation through a simulation. Parameters
     inherit from recordclass, giving them a low memory footprint, and use type
     hints and ranges to ensure parameter values are valid. e.g.,:
 
-    >>> class Param(Parameter, readonly=True):
-    ...     x: float = 30.0
-    ...     y:          float = 30.0
-    ...     x_lim = (0.0,100.0)
-    ...     y_set = (0.0,30.0,100.0)
+    Examples
+    --------
+    >>> class ExampleParameter(Parameter, readonly=True):
+    ...    x: float = 1.0
+    ...    y: float = 3.0
+    ...    z: float = 0.0
+    ...    x_lim = (0, 10)
+    ...    y_set = (1.0, 2.0, 3.0, 4.0)
 
     defines a parameter with float x and y fields with default values of 30 and
     x_lim minimum/maximum values for x and y_set possible values for y. Note that
@@ -34,11 +37,11 @@ class Parameter(dataobject, readonly=True, mapping=True, iterable=True):
 
     This parameter can then be instantiated using:
 
-    >>> p = Param(x=1.0, y=0.0)
+    >>> p = ExampleParameter(x=1.0, y=2.0)
     >>> p.x
     1.0
     >>> p.y
-    0.0
+    2.0
     """
 
     def __init__(self, *args, strict_immutability=True, check_type=True,
@@ -57,6 +60,8 @@ class Parameter(dataobject, readonly=True, mapping=True, iterable=True):
         if not self.__doc__:
             raise Exception("Please provide docstring")
             # self.__doc__=Parameter.__doc__
+        if args and isinstance(args[0], self.__class__):
+            args = astuple(args[0])
         if check_lim:
             for i, k in enumerate(self.__fields__):
                 if i < len(args):
@@ -171,7 +176,11 @@ class Parameter(dataobject, readonly=True, mapping=True, iterable=True):
             field_split = field.split(".")
             true_field = field_split[0]
             subfield = ".".join(field_split[1:])
-            return cls.__annotations__[true_field].get_set_const(subfield)
+            subparam = cls.__annotations__[true_field]
+            if isinstance(subparam, Parameter):
+                return cls.__annotations__[true_field].get_set_const(subfield)
+            else:
+                return ()
         var_lims = getattr(cls, field+"_lim", False)
         if var_lims:
             return var_lims
@@ -179,6 +188,16 @@ class Parameter(dataobject, readonly=True, mapping=True, iterable=True):
         if var_set:
             return set(var_set)
         return ()
+
+
+class ExampleParameter(Parameter, readonly=True):
+    """Example parameter for testing and documentation."""
+
+    x: float = 1.0
+    y: float = 3.0
+    z: float = 0.0
+    x_lim = (0, 10)
+    y_set = (1.0, 2.0, 3.0, 4.0)
 
 
 class SimParam(Parameter, readonly=True):
@@ -228,3 +247,8 @@ class SimParam(Parameter, readonly=True):
                 raise Exception("Global phases overlap in " + self.__class__.__name__ +
                                 ": " + str(self.phases) +
                                 " Ensure max of each phase < min of each other phase")
+
+
+if __name__ == "__main__":
+    import doctest
+    doctest.testmod(verbose=True)

@@ -349,7 +349,8 @@ class Mode(dataobject, readonly=False):
         **kwargs : kwargs
             Entries for the Fault (e.g., phases, etc)
         """
-        nom_fstates = {state: self.s.__defaults__[self.s.__fields__.index(state)]
+        nom_fstates = {state:
+                       copy.copy(self.s.__default_vals__[self.s.__fields__.index(state)])
                        for state in franges}
         for state in franges:
             franges[state].add(nom_fstates[state])
