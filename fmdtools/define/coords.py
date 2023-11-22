@@ -324,7 +324,7 @@ class Coords(object):
         """
         if not self.in_range(x, y):
             if outside == "error":
-                raise Exception("Outside bounds of grid: "+str(x, y))
+                raise Exception("Outside bounds of grid: "+str(x)+','+str(y))
             else:
                 return outside
         proparray = getattr(self, prop)
@@ -582,11 +582,13 @@ class Coords(object):
         False
         """
         pts = getattr(self, coll)
-        if coll in self.points:
+        try:
             pt = self.to_gridpoint(x, y)
+        except IndexError:
+            return False
+        if coll in self.points:
             return np.all(pt == pts)
         elif coll in self.collections:
-            pt = self.to_gridpoint(x, y)
             return pt in pts
         else:
             raise Exception("coll "+coll+" not a point or collection")

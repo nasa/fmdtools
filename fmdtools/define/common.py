@@ -27,7 +27,8 @@ from collections.abc import Iterable
 import dill
 import pickle
 import time
-from recordclass import asdict
+import copy
+from recordclass import asdict, dataobject
 
 
 def get_var(obj, var):
@@ -44,19 +45,39 @@ def get_var(obj, var):
         value of the variable
     """
     if type(var) == str:
-        var = var.split(".")
-    if len(var) == 1:
-        if type(obj) == dict:
-            return obj.get(var[0], None)
-        elif type(obj) in {tuple, list} and var[0].isnumeric():
-            return obj[int(var[0])]
+        var_s = var.split(".")
+    else:
+        var_s = var
+        var = ".".join(var_s)
+    if len(var_s) == 1:
+        k = var_s[0]
+        if type(obj) == dict or (hasattr(obj, 'keys') and hasattr(obj, 'values')):
+            val = obj.get(k, None)
+        elif type(obj) in {tuple, list} and k.isnumeric():
+            val = obj[int(k)]
         else:
-            return getattr(obj, var[0])
+            val = getattr(obj, k)
+        if hasattr(val, 'value'):
+            return val.value
+        else:
+            return val
     else:
         if type(obj) == dict:
-            return get_var(obj[var[0]], var[1:])
+            if var_s[0] in obj:
+                return get_var(obj[var_s[0]], var_s[1:])
+            elif var in obj:
+                return obj[var]
+            else:
+                raise Exception(var + "not in " + str(obj))
+        elif (hasattr(obj, 'keys') and hasattr(obj, 'values')):
+            if var_s[0] in obj.keys:
+                return get_var(obj.get(var_s[0]), var_s[1:])
+            elif var in obj.keys:
+                return obj.get(var)
+            else:
+                raise Exception(var + "not in " + str(obj))
         else:
-            return get_var(getattr(obj, var[0]), var[1:])
+            return get_var(getattr(obj, var_s[0]), var_s[1:])
 
 
 def set_var(obj, var, val):
@@ -164,9 +185,12 @@ def set_obj_arg_type(obj, *args, **kwargs):
                 new_kwargs[typed_field] = new_arg
 
         except TypeError as e:
-            raise Exception("For field " + typed_field + " " + str(true_type) +
-                            ": unable to convert from " + str(new_arg) + " " +
-                            str(type(new_arg))) from e
+            try:
+                raise Exception("For field " + typed_field + " " + str(true_type) +
+                                ": unable to convert from " + str(new_arg) + " " +
+                                str(type(new_arg))) from e
+            except UnboundLocalError as e1:
+                raise e
     return tuple(new_args), new_kwargs
 
 
@@ -188,8 +212,11 @@ def set_arg_as_type(true_type, new_arg):
     """
     arg_type = type(new_arg)
     if arg_type != true_type:
-        if arg_type == dict:
-            new_arg = true_type(**new_arg)
+        if arg_type == dict or issubclass(arg_type, dataobject):
+            if true_type == tuple:
+                new_arg = true_type(new_arg.values())
+            else:
+                new_arg = true_type(**new_arg)
         else:
             new_arg = true_type(new_arg)
     return new_arg
@@ -202,7 +229,7 @@ def get_true_fields(dataobject, *args, force_kwargs=False, **kwargs):
     NOTE: must be used for pickling, since pickle passes arguments as *args and not
     **kwargs.
     """
-    true_args = list(dataobject.__defaults__)
+    true_args = list([copy.copy(i) for i in dataobject.__default_vals__])
     for i, n in enumerate(dataobject.__fields__):
         if force_kwargs:
             true_args[i] = kwargs[n]
@@ -221,7 +248,7 @@ def get_true_field(dataobject, fieldname, *args, **kwargs):
     if args and len(args) > field_ind:
         return args[field_ind]
     else:
-        return dataobject.__defaults__[field_ind]
+        return copy.copy(dataobject.__defaults__[field_ind])
 
 
 def is_iter(data):

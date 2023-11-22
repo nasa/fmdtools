@@ -49,6 +49,7 @@ class CommonTests():
                     self.check_same_model(mdl, mdl2)
                     if t == copy_time:
                         mdl_copy = mdl.copy()
+                        self.check_same_model(mdl, mdl_copy)
                     if t > copy_time:
                         mdl_copy.propagate(t, run_stochastic=run_stochastic,
                                            fxnfaults=scen)
@@ -243,7 +244,7 @@ class CommonTests():
         os.remove(mfile),
         os.remove(ecfile)
 
-    def check_same_fmea(self, fs, res, mdl, val='expected cost'):
+    def check_same_fmea(self, fs, res, mdl, val='expected_cost'):
         """Test to ensure results from the fmea are the same over all options."""
         fmea = tabulate.FMEA(res, fs, mdl=mdl)
         none_exp_cost = fmea.as_table()[val].sum()

@@ -46,7 +46,7 @@ class Mover(FxnBlock):
             self.internal_info.send("all", "local", "y")   
     def find_classification(self, scen, fxnhist):
         return {"last_x": self.loc.s.x, "min_x": fxnhist.faulty.location.get(self.name).x}
-        
+
 class Coordinator(FxnBlock):
     _init_communications = Communications
     def __init__(self, name='coordinator', flows={}, **kwargs):
@@ -64,14 +64,14 @@ class TestModel(Model):
     default_sp = dict(times=(0,10))
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
-        
+
         self.add_flow("communications", Communications)
         self.add_flow("location",       Location)
         self.add_fxn("mover_1",     Mover, "communications", "location", p = {"x_up":1.0})
         self.add_fxn("mover_2",     Mover, "communications", "location", p = {"y_up":1.0})
-        
+
         self.add_fxn("coordinator", Coordinator, "communications")
-        
+
         self.build()
 
 if __name__=='__main__':

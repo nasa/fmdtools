@@ -96,7 +96,7 @@ class StochasticPumpTests(unittest.TestCase, CommonTests):
     def test_model_reset(self):
         mdl = Pump()
         mdl2 = Pump()
-        mdl2.r.seed = mdl.r.seed
+        mdl2.update_seed(mdl.r.seed)
         self.check_model_reset(mdl, mdl2, [10, 20, 30],
                                max_time=55, run_stochastic=True)
 
@@ -195,6 +195,7 @@ class StochasticPumpTests(unittest.TestCase, CommonTests):
         faultsamples = {'fs': (('fault_phases', 'fd'), {})}
 
         ecs, hists, apps = prop.nested_sample(mdl, ps, run_stochastic=True,
+                                              showprogress=False,
                                               faultdomains=faultdomains,
                                               faultsamples=faultsamples,
                                               pool=mp.Pool(4))
@@ -259,9 +260,8 @@ class StochasticPumpTests(unittest.TestCase, CommonTests):
 
 
 if __name__ == '__main__':
-    # suite = unittest.TestSuite()
-    # suite.addTest(StochasticPumpTests("test_plot_nominal_vals_xd"))
-    # suite.addTest(StochasticPumpTests("test_run_approach"))
+    suite = unittest.TestSuite()
+    suite.addTest(StochasticPumpTests("test_model_copy_same"))
 
     # suite.addTest(StochasticPumpTests("test_save_load_nominalapproach"))
     # suite.addTest(StochasticPumpTests("test_save_load_nominalapproach_indiv"))

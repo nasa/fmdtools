@@ -255,7 +255,7 @@ def exp_cost_quant(fs, mdl):
 
     result, mdlhists = prop.fault_sample(mdl, fs, showprogress=False)
     fmea = an.tabulate.FMEA(result, fs)
-    util = fmea.as_table()['expected cost'].sum()
+    util = fmea.as_table()['expected_cost'].sum()
     return util
 
 if __name__ == '__main__':

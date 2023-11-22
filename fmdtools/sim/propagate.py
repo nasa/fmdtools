@@ -69,7 +69,8 @@ sim_kwargs = {'desired_result': 'endclass',
               'track_times': 'all',
               'staged': False,
               'run_stochastic': False,
-              'use_end_condition': True}
+              'use_end_condition': True,
+              'warn_faults': True}
 """
 Simulation keyword arguments.
 
@@ -122,6 +123,8 @@ staged : bool, optional
     Whether to inject the faults in a copy of the nominal model at the fault time
     (True) or instantiate a new model for the fault (False). Setting to True
     roughly halves execution time. The default is False.
+warn_faults : bool
+    Whether to produce a warning when faults occur in a nominal sim.
 """
 
 
@@ -169,7 +172,7 @@ mdl_kwargs: dict (optional)
     Parameter dictionary to be instantiated in the model prior to simulation.
     Has structure ::
 
-        {"p":Parameter, "sp":SimParam, "track":track}
+        {"p": Parameter, "sp":SimParam, "track":track}
 
     Parameter dictionaries do not need to be complete (if incomplete).
 """
@@ -184,6 +187,8 @@ mult_kwargs = {'max_mem': 2e9,
                'showprogress': True,
                'pool': False,
                'close_pool': True}
+
+
 """
 Multi-scenario keyword arguments.
 
@@ -199,6 +204,11 @@ Parameters
     max_mem : int
         Max memory (warns the user when memory is above threshold)
 """
+
+
+def pack_mult_kwargs(**kwargs):
+    """Create subset of mult kwargs."""
+    return {k: kwargs.get(k, v) for k, v in mult_kwargs.items()}
 
 
 def unpack_mult_kwargs(kwargs):
@@ -427,9 +437,10 @@ def one_fault(mdl, *fxnfault, time=0, **kwargs):
     return result.flatten(), mdlhists.flatten()
 
 
-def sequence(mdl, seq={}, faultseq={}, disturbances={}, scen={}, rate=np.NaN, **kwargs):
+def sequence(mdl, seq={}, faultseq={}, disturbances={}, scen={}, rate=np.NaN,
+             include_nominal=True, **kwargs):
     """
-    Runs a sequence of faults and disturbances in the model at given times.
+    Run a sequence of faults and disturbances in the model at given times.
 
     Parameters
     ----------
@@ -449,6 +460,8 @@ def sequence(mdl, seq={}, faultseq={}, disturbances={}, scen={}, rate=np.NaN, **
         Scenario dictionary, if already constructed (for external calls)
     rate : float, optional
         Input rate for the sequence (must be calculated elsewhere)
+    include_nominal : bool, optional
+        Whether to return nominal hists/results back. Default is True.
     **kwargs : kwargs
         Additional keyword arguments, may include:
 
@@ -492,8 +505,9 @@ def sequence(mdl, seq={}, faultseq={}, disturbances={}, scen={}, rate=np.NaN, **
                                                 **sim_kwarg,
                                                 nomhist=nomhist,
                                                 nomresult=nomresult)
-    nomhist.cut(t_end_nom)
-    mdlhists = History(nominal=nomhist, faulty=faulthist)
+    if include_nominal:
+        nomhist.cut(t_end_nom)
+        mdlhists = History(nominal=nomhist, faulty=faulthist)
     if kwargs.get('protect', False):
         mdl.reset()
     save_helper(kwargs.get('save_args', {}), result, mdlhists)
@@ -501,7 +515,7 @@ def sequence(mdl, seq={}, faultseq={}, disturbances={}, scen={}, rate=np.NaN, **
 
 
 def nom_helper(mdl, ctimes, protect=True, save_args={}, mdl_kwargs={}, scen={},
-               **kwargs):
+               warn_faults=True, **kwargs):
     """
     Helper function for initial run of nominal scenario.
 
@@ -555,7 +569,7 @@ def nom_helper(mdl, ctimes, protect=True, save_args={}, mdl_kwargs={}, scen={},
                                                         **kwargs)
 
     endfaults, endfaultprops = mdl.return_faultmodes()
-    if any(endfaults):
+    if any(endfaults) and warn_faults:
         print("Faults found during the nominal run " + str(endfaults))
 
     # mdl.reset()
@@ -565,7 +579,7 @@ def nom_helper(mdl, ctimes, protect=True, save_args={}, mdl_kwargs={}, scen={},
     return result, nommdlhist, nomscen, mdls, t_end_nom
 
 
-def fault_sample(mdl, fs,  **kwargs):
+def fault_sample(mdl, fs, include_nominal=True, get_phasemap=False, **kwargs):
     """
     Injects and propagates faults in the model defined by a FaultSample/SampleApproach.
 
@@ -584,6 +598,10 @@ def fault_sample(mdl, fs,  **kwargs):
         The model to inject faults in.
     fs : FaultSample/SampleApproach
         FaultSample used to define the list of faults and sample time for the model.
+    include_nominal : bool, optional
+        Whether to return nominal hists/results back. Default is True.
+    get_phasemap : bool, optional
+        Whether to regenerate the FaultSample using new phase information.
     **kwargs : kwargs
         Additional keyword arguments, may include:
 
@@ -616,6 +634,70 @@ def fault_sample(mdl, fs,  **kwargs):
                                         nomhist=nomhist,
                                         nomresult=nomresult)
 
+    if include_nominal:
+        process_nominal(mdlhists, nomhist, results, nomresult, t_end_nom, **kwargs)
+    save_helper(kwargs['save_args'], results, mdlhists)
+    close_pool(kwargs)
+    return results.flatten(), mdlhists.flatten()
+
+
+#  pool=pool, close_pool=False, showprogress=False,
+
+def fault_sample_from(mdl, faultdomains={}, faultsamples={}, get_phasemap=True,
+                      scen={}, include_nominal=False, **kwargs):
+    """
+    Create and simulate a fault_sample from the given arguments.
+
+    Use to generate and sample from phases in the same simulation.
+
+    Parameters
+    ----------
+    mdl : Simulable
+        Model to simulate
+    get_phasemap : Bool/List/Dict, optional
+        Whether to use nominal simulation phasemap to set up the SampleApproach.
+    faultdomains : dict
+        Dict of arguments to SampleApproach.add_faultdomains
+    faultsamples : dict
+        Dict of arguments to SampleApproach.add_faultsamples
+        FaultSamples to add to othe SampleApproach and their arguments.
+        Has structure: {'fs_name': (*args, **kwargs)}, where args and kwargs are
+        arguments/kwargs to SampleApproach.add_faultsamples.
+    get_phasemap : bool, optional
+        Whether to generate the FaultSample from the phasemap. The default is True.
+    scen : scenario, optional
+        Scenario to use as nominal. The default is {}.
+    **kwargs : kwargs
+        kwargs to simulate over
+
+    Returns
+    -------
+    res : Result
+        A Result dictionary with results desired from each scenario corresponding to
+        desired_result over the set of scenarios.
+    hist : History
+        A History dictionary with the tracked scenario (including the nominal)
+    app : SampleApproach
+        Generated SampleApproach
+    """
+    run_kwarg = pack_run_kwargs(**kwargs)
+    sim_kwarg = pack_sim_kwargs(**kwargs)
+    mult_kwarg = pack_mult_kwargs(**kwargs)
+    loc_kwargs = {**sim_kwarg, **run_kwarg, 'staged': False}
+    if not scen:
+        mdl = mdl.new_with_params(**run_kwarg.get('mdl_kwargs', {}))
+        _, nomhist, _, _, t_end = nom_helper(mdl, [], **loc_kwargs)
+    else:
+        mdl = mdl.new_with_params(p=scen.p, sp=scen.sp, r=scen.r)
+        _, nomhist, _, t_end,  = prop_one_scen(mdl, scen, **loc_kwargs)
+    app = gen_sampleapproach(mdl, faultdomains, faultsamples, get_phasemap, nomhist)
+    res, hist = fault_sample(mdl, app, **sim_kwarg, **run_kwargs, **mult_kwarg,
+                             include_nominal=include_nominal)
+    return res, hist, app
+
+
+def process_nominal(mdlhists, nomhist, results, nomresult, t_end_nom, **kwargs):
+    """Add/save nominal hists/result to overall hist/result."""
     nomhist.cut(t_end_nom)
     mdlhists['nominal'] = nomhist
     results['nominal'] = nomresult
@@ -624,14 +706,11 @@ def fault_sample(mdl, fs,  **kwargs):
                 mdlhists['nominal'],
                 indiv_id=str(len(results)-1),
                 result_id='nominal')
-    save_helper(kwargs['save_args'], results, mdlhists)
-    close_pool(kwargs)
-    return results.flatten(), mdlhists.flatten()
 
 
-def single_faults(mdl, **kwargs):
+def single_faults(mdl, include_nominal=True, **kwargs):
     """
-    Creates and propagates a list of failure scenarios in a model.
+    Create and propagates a list of failure scenarios in a model.
 
     NOTE: When calling in a script/module using parallel=True, execute using the
     protection statement ::
@@ -646,6 +725,8 @@ def single_faults(mdl, **kwargs):
     ----------
     mdl : Simulable
         The model to inject faults in
+    include_nominal : bool, optional
+        Whether to return nominal hists/results back. Default is True.
     **kwargs : kwargs
         Additional keyword arguments, may include:
 
@@ -677,13 +758,8 @@ def single_faults(mdl, **kwargs):
                                         **kwargs,
                                         nomhist=nomhist,
                                         nomresult=nomresult)
-    nomhist.cut(t_end_nom)
-    mdlhists['nominal'] = nomhist
-    results['nominal'] = nomresult
-    save_helper(kwargs.get('save_args', {}),
-                nomresult, mdlhists['nominal'],
-                indiv_id=str(len(results)-1),
-                result_id='nominal')
+    if include_nominal:
+        process_nominal(mdlhists, nomhist, results, nomresult, t_end_nom, **kwargs)
     save_helper(kwargs['save_args'], results, mdlhists)
     close_pool(kwargs)
     return results.flatten(), mdlhists.flatten()
@@ -832,7 +908,8 @@ def check_overwrite(save_args):
                     os.makedirs(foldername)
 
 
-def nested_sample(mdl, ps, get_phasemap=False, faultdomains={}, faultsamples={}, **kwargs):
+def nested_sample(mdl, ps, get_phasemap=False, faultdomains={}, faultsamples={},
+                  include_nominal=True, **kwargs):
     """
     Simulate a set of fault scenarios within a ParameterSample.
 
@@ -892,31 +969,17 @@ def nested_sample(mdl, ps, get_phasemap=False, faultdomains={}, faultsamples={},
     sim_kwarg = pack_sim_kwargs(**kwargs)
     run_kwargs_nest = pack_run_kwargs(**kwargs)
     scennames = ps.scen_names()
-    num_params = ps.num_scenarios()
     nest_hist = History.fromkeys(scennames)
     nest_res = Result.fromkeys(scennames)
     apps = dict.fromkeys(scennames)
     for scenname, scen in tqdm.tqdm(ps.named_scenarios().items(),
                                     disable=not (showprogress),
                                     desc="NESTED SCENARIOS COMPLETE"):
-        mdl = mdl.new_with_params(p=scen.p, sp=scen.sp, r=scen.r)
-        loc_kwargs = {**sim_kwarg, 'staged': False}
-        _, nomhist, _, t_end,  = prop_one_scen(mdl, scen, **loc_kwargs)
-
-        if get_phasemap:
-            pm = from_hist(nomhist)
-        else:
-            pm = {}
-        app = SampleApproach(mdl, phasemaps=pm)
-        app.add_faultdomains(**faultdomains)
-        app.add_faultsamples(**faultsamples)
-        check_hist_memory(nomhist, num_params*app.num_scenarios(), max_mem=max_mem)
-
-        loc_kwargs = {**sim_kwarg, 'p': scen.p, 'r': scen.r}
-        res, hist = fault_sample(mdl, app, pool=pool, close_pool=False,
-                                 showprogress=False, **loc_kwargs)
+        loc_kwarg = {**sim_kwarg, 'scen': scen, 'close_pool': False,
+                     'get_phasemap': get_phasemap, 'showprogress': False,
+                     'include_nominal': include_nominal}
+        res, hist, app = fault_sample_from(mdl, faultdomains, faultsamples, **loc_kwarg)
         save_helper(save_args, res, hist, indiv_id=scenname, result_id=scenname)
-
         nest_res[scenname] = res
         nest_hist[scenname] = hist
         apps[scenname] = app
@@ -926,6 +989,19 @@ def nested_sample(mdl, ps, get_phasemap=False, faultdomains={}, faultsamples={},
             dill.dump(apps, file_handle)
     close_pool(kwargs)
     return nest_res.flatten(), nest_hist.flatten(), apps
+
+
+def gen_sampleapproach(mdl, faultdomains={}, faultsamples={},
+                       get_phasemap=False, nomhist={}):
+    """Generate a SampleApproach from faultdomain and faultsample arguments."""
+    if get_phasemap:
+        pm = from_hist(nomhist)
+    else:
+        pm = {}
+    app = SampleApproach(mdl, phasemaps=pm)
+    app.add_faultdomains(**faultdomains)
+    app.add_faultsamples(**faultsamples)
+    return app
 
 
 def list_init_faults(mdl):
@@ -1088,7 +1164,7 @@ def prop_one_scen(mdl, scen, ctimes=[], nomhist={}, nomresult={}, cut_hist=True,
     t_end: float
         Last sim time
     """
-    desired_result, track, track_times, staged, run_stochastic, use_end_condition = unpack_sim_kwargs(**kwargs)
+    desired_result, track, track_times, staged, run_stochastic, use_end_condition, warn_faults = unpack_sim_kwargs(**kwargs)
     # if staged, we want it to start a new run from the starting time of the scenario,
     # using a copy of the input model (which is the nominal run) at this time
     mdlhist, histrange, timerange, shift = init_histrange(mdl,
@@ -1102,7 +1178,7 @@ def prop_one_scen(mdl, scen, ctimes=[], nomhist={}, nomresult={}, cut_hist=True,
     for t_ind, t in enumerate(timerange):
         # inject fault when it occurs, track defined flow states and graph
         try:
-            if t in ctimes: 
+            if t in ctimes:
                 c_mdl[t] = mdl.copy()
                 if 'time' in mdl.h:
                     c_mdl[t].h['time'] = np.copy(mdl.h.time)
@@ -1128,7 +1204,7 @@ def prop_one_scen(mdl, scen, ctimes=[], nomhist={}, nomresult={}, cut_hist=True,
                     raise Exception("Invalid argument, track_times=" + str(track_times))
                 mdlhist.log(mdl, t_ind_rec, time=t)
 
-            if type(desired_result) == dict: 
+            if type(desired_result) == dict:
                 if "all" in desired_result:
                     des_res = desired_result['all']
                     nom_res = nomresult

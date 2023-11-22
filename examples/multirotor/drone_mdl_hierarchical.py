@@ -86,7 +86,7 @@ class AffectDOFArch(CompArch):
                                 'rr': -0.5, 'r': -0.75, 'f': 0.75})
             self.lr_dict.update({'l': {'lf', 'lr'}, 'r': {'rf', 'rr'}})
             self.fr_dict.update({'f': {'lf', 'rf', 'f'}, 'r': {'lr', 'rr', 'r'}})
-            self.opposite.update({{'f': 'r', 'rf': 'lr', 'rr': 'lf'}})
+            self.opposite.update({'f': 'r', 'rf': 'lr', 'rr': 'lf'})
         elif self.archtype == "oct":
             self.make_components(Line, 'lf', 'rf', 'lf2', 'rf2',
                                  'lr', 'rr', 'lr2', 'rr2')
@@ -195,14 +195,14 @@ class Line(Component, BaseLine):
 
         self.calc_faults()
 
+        pwr = ctlin.s.upward * u_fact + ctlin.s.forward * f_fact
         airout = m2to1([ee_in,
                         self.s.e_ti,
-                        ctlin.s.upward * u_fact +
-                        ctlin.s.forward * f_fact,
+                        pwr,
                         self.s.ct,
                         self.s.mt,
                         self.s.pt])
-        ee_in = m2to1([ee_in, self.s.e_to])
+        ee_in = m2to1([ee_in, self.s.e_to, pwr])
         return airout, ee_in
 
 

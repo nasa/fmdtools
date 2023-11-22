@@ -6,856 +6,1591 @@ Classes:
     - :class:`ProblemInterface`:  Creates an interface for model simulations for optimization methods
     - :class:`DynamicInterface`:  Creates an interface for model simulations for dynamic optimization of a single sim
 """
-import copy
-import fmdtools.sim.propagate as prop
-#import fmdtools.analyze.common as plot
-from fmdtools.sim.sample import SampleApproach
-from fmdtools.analyze.history import History
-from fmdtools.analyze import phases
-from .scenario import Scenario
-import networkx as nx
-import matplotlib.pyplot as plt
 import numpy as np
-import warnings
+import networkx as nx
 import time
-from recordclass import asdict
+from collections.abc import Iterable
+from recordclass import dataobject
+import fmdtools.sim.propagate as propagate
+from fmdtools.define.common import t_key
+from fmdtools.define.block import Simulable, ExampleFxnBlock
+from fmdtools.sim.scenario import Sequence, SingleFaultScenario, Scenario
+from fmdtools.sim.sample import FaultDomain
+from fmdtools.analyze.common import setup_plot
+from fmdtools.analyze.history import History, init_dicthist
 
-class ProblemInterface:
+
+class BaseObjCon(dataobject):
     """
-    Interfaces for resilience optimization problems. 
+    Base class for objectives and constraints.
+
+    Fields
+    ------
+    name : str
+        Name of the objective/constraint
+    value : float
+        Value of the objective/constraint
+    """
+
+    name: str = ''
+    value: float = np.nan
+
+
+class Objective(BaseObjCon):
+    """
     
+    Fields
+    ------
+    negative : bool
+        Whether the objective is the negative of the value.
+    """
+
+    negative: bool = False
+
+    def obj_from_value(self, value):
+        """Get the (+ or 0) objective corresponding to value give self.negative."""
+        if self.negative:
+            value = - value
+        else:
+            value = value
+        return value
+
+    def update(self, value):
+        """Update with given value."""
+        self.value = self.obj_from_value(value)
+
+
+class Constraint(Objective):
+    """
+    Base class for constraints which derive from results.
+
+    Fields
+    ------
+    threshold : float
+        Theshold for the constraint. Default is 0.0
+    comparator : str
+        Whether the constraint is 'greater' or 'less'.
+    """
+
+    threshold: float = 0.0
+    comparator: str = 'greater'
+
+    def con_from_value(self, value):
+        """
+        Get the constraint given the value of its variable given threshold.
+
+        By default, constraints follow the form:
+            g(x) = threshold - value > 0.0 for 'greater' constraints or
+            g(x) = value - theshold > 0.0 for 'less' constraints.
+
+        Parameters
+        ----------
+        value : float
+            Variable value corresponding to the constraint
+
+        Returns
+        -------
+        con : float
+            Constraint function at value.
+        """
+        if self.comparator == 'greater':
+            value = self.threshold - value
+        elif self.comparator == 'less':
+            value = value - self.threshold
+        else:
+            raise Exception("Invalid comparator: "+self.comparator)
+        return self.obj_from_value(value)
+
+    def update(self, value):
+        """Update with given value."""
+        self.value = self.con_from_value(value)
+
+
+def unpack_x(*x):
+    if len(x) == 1 and isinstance(x[0], Iterable):
+        x = tuple(x[0])
+    elif len(x) == 2 and isinstance(x[0], Iterable) and isinstance(x[1], Iterable):
+        x = tuple([*x[0], *x[1]])
+    return x
+
+
+class BaseProblem(object):
+    """
+    Base optimization problem.
+
     Attributes
     ----------
-        simulations : dict
-            Dictionary of simulations and their corresponding arguments
-        variables : list
-            List of variables and their properties
-        objectives : dict
-            Dictionary of objectives and their times/arguments
-        constraints : dict
-            Dictionary of constraints and their times/arguments
-        current_iter : dict
-            Dictionary of current values for variables/objectives/constraints/etc.
+    variables : dict
+        Variables being optimized.
+    objectives : dict
+        Objectives returned.
+    constraints : dict
+        Constraints returned.
     """
-    def __init__(self, name, mdl, default_p={}, negative_form=True, log_iter_hist=False, **kwargs):
-        """
-        Instantiates the Problem object.
-        
-        Parameters
-        ----------
-        
-        name : str
-            Name for the problem
-        mdl : Model
-            Model to optimize
-        negative_form : bool
-            Whether constraints are negative when feasible (True) or positive when feasible (False)
-        default_p : dict
-            Default parameters for the model
-        **kwargs : kwargs
-            Default run kwargs. See :data:`sim_kwargs`, :data:`run_kwargs`, :data:`mult_kwargs`
-        """
-        self.name=name
-        self.mdl=mdl
-        self.default_p=asdict(mdl.p)
-        
-        self.default_sim_kwargs = {k:kwargs[k] if k in kwargs else copy.deepcopy(v) for k,v in prop.sim_kwargs.items()}
-        self.default_run_kwargs = {k:kwargs[k] if k in kwargs else copy.deepcopy(v) for k,v in prop.run_kwargs.items()}
-        self.default_mult_kwargs = {k:kwargs[k] if k in kwargs else copy.deepcopy(v) for k,v in prop.mult_kwargs.items()}
-        
-        self.sim_graph = nx.DiGraph()
-        self.negative_form =negative_form
-        self.simulations={}
-        self.variables=[]
-        self.objectives=dict()
-        self.constraints=dict()
-        self.var_mapping={}
-        self.obj_const_mapping={}
-        self._sim_vars={}
-        self.init_iter_hist(log_iter_hist)
-        self.current_iter={}
-        self._sims={}
+
+    def __init__(self):
+        if not hasattr(self, 'variables'):
+            self.variables = {}
+        self.objectives = {}
+        self.constraints = {}
+        self.iter_hist = History({"time": [],
+                                  "variables": History({k: [] for k in self.variables}),
+                                  "objectives": History(),
+                                  "constraints": History()})
+
+    def name_repr(self):
+        """Single-line name representation."""
+        return self.__class__.__name__
+
+    def prob_repr(self):
+        """Representation of the problem variables, objectives, constraints."""
+        rep_str = ""
+        var_str = " -" + "\n -".join(['{:<45}{:>20.4f}'.format(k, v)
+                                      for k, v in self.variables.items()])
+        if self.variables:
+            rep_str += "\n"+"VARIABLES\n" + var_str
+        obj_str = " -" + "\n -".join(['{:<45}{:>20.4f}'.format(k, v.value)
+                                      for k, v in self.objectives.items()])
+        if self.objectives:
+            rep_str += "\n" + "OBJECTIVES\n" + obj_str
+        con_str = " -" + "\n -".join(['{:<45}{:>20.4f}'.format(k, v.value)
+                                      for k, v in self.constraints.items()])
+        if self.constraints:
+            rep_str += "\n" + "CONSTRAINTS\n" + con_str
+        return rep_str
+
+    def add_objective(self, name, varname, objclass=Objective, **kwargs):
+        """Add an objective to the Problem."""
+        self.objectives[name] = objclass(varname, **kwargs)
+        self.add_objective_callable(name)
+        self.iter_hist["objectives"][name] = []
+
+    def add_objective_callable(self, name):
+        """Add callable objective function with name name."""
+        def newobj(*x):
+            return self.call_objective(*x, objective=name)
+        setattr(self, name, newobj)
+
+    def add_constraint(self, name, varname, conclass=Constraint, **kwargs):
+        """Add a constraint to the Problem."""
+        self.constraints[name] = conclass(varname, **kwargs)
+        self.add_constraint_callable(name)
+        self.iter_hist["constraints"][name] = []
+
+    def add_constraint_callable(self, name):
+        """Add callable constraint function with name name."""
+        def newcon(*x):
+            return self.call_constraint(*x, constraint=name)
+        setattr(self, name, newcon)
+
     def __repr__(self):
-        var_str = "\n -"+"\n -".join('{:<63}{:>20.4f}'.format(str(var[2])+" "+str(var[0])+" at t="+str(var[3])+": "+str(var[1]), self.current_iter.get('vars', [np.NaN for j in range(i+1)])[i]) for i,var in enumerate(self.variables))
-        con_str = "\n -"+"\n -".join('{:<63}{:>20.4f}'.format(name+": "+get_pos_str(greater_to_factor(con[4][0])*n_to_factor(self.negative_form))+"("+str(con[0])+" "+str(con[2])+" "+str(con[1])+" at t="+str(con[3])+" -"+str(con[4][1])+")", self.current_iter.get('consts', {name:np.NaN}).get(name, np.NaN)) for name, con in self.constraints.items() if not con[0]=="set_const")
-        obj_str = "\n -"+"\n -".join('{:<63}{:>20.4f}'.format(name+": "+con[4][0]+con[4][1]+"("+con[0]+" "+str(con[2])+" "+str(con[1])+" at t="+str(con[3])+")", self.current_iter.get('objs', {name:np.NaN}).get(name, np.NaN)) for name, con in self.objectives.items())
-        sim_str = "\n -"+"\n -".join(name+": "+sim[0]+" scen: "+str(sim[2].get('sequence', "")) for name, sim in self.simulations.items() if sim[0] !="set_const")
-        str_repr = '{:<65}{:>20}'.format("Problem "+self.name, "current value")
-        return str_repr+"\n Variables"+var_str+"\n Objectives"+obj_str+"\n Constraints"+con_str+"\n Simulations"+sim_str
-    def init_iter_hist(self, log_iter_hist=False):
-        self.log_iter_hist = log_iter_hist
-        self.iter_hist={"vars":[],**{k:[] for k in self.objectives}, **{k:[] for k in self.constraints}}
-    def add_simulation(self, simname, simtype, *args, **kwargs):
+        return self.name_repr()+" with:"+self.prob_repr()
+
+    def current_x(self):
+        """Get the current variable value x."""
+        return [v for v in self.variables.values()]
+
+    def new_x(self, *x):
+        """Check if a given x is the same as the current value of x."""
+        return not self.current_x() == list(x)
+
+    def get_objectives(self):
+        """Get all current objective values."""
+        return [v.value for v in self.objectives.values()]
+
+    def get_constraints(self):
+        """Get all current constraint values."""
+        return [v.value for v in self.constraints.values()]
+
+    def call_outputs(self, *x, force_update=False):
         """
-        Defines a simulation to be used with the model
+        Get all outputs at the given value of x.
 
         Parameters
         ----------
-        simname : str
-            Name/identifier for the simulation.
-        simtype : str, optional
-            Type of simulation(s) to run (aligns with propagate methods):
-                - single:      simulates a single scenario (the default)
-                    - args: sequence: sequence defining fault scenario {time:{'faults':(fxn:mode), 'disturbances':{'Fxn1.var1'}})}
-                - multi:       simulates multiple scenarios (provided approach or nominalapproach)
-                    - args: scenlist: dict with structure {"scenname":Scenario}
-                            (can be gotten from prop.list_init_faults, SampleApproach, or NominalApproach)
-                - nested:      simulates nested scenarios (provided approach and nominalapproach)
-                    - args: see prop.nested_approach
-                - external_func:    calls an external function (rather than a simulation)
-                    - args: callable
-                - custom_sim:       calls an external function with arguments (mdl) or (mdl, mdlhist)
-                    - args: callable
-                - set_const:        used for set constraints
-        *args : args
-            Custom arguments for the given simulation type (see above)
-        **kwargs : dict
-            run, sim, and mult_kwargs from prop. 
-            
-            include_nominal: bool
-                whether to include nominal scenario in multi simulation. default is True
-            upstream_sims: dict
-                Dictionary specifying connection with an upstream simulation. With structure:
-                    {'upstream_simname':{'p':{'ext_varname':'paramname'}}}, 'vars':{'ext_varname':'varname'}}
-        """
-        kwargs = {**self.default_run_kwargs,**self.default_sim_kwargs, **self.default_mult_kwargs, **kwargs}
-        self.simulations[simname]=(simtype, args, kwargs)
-        self.sim_graph.add_node(simname)
-        for upsim in kwargs.get('upstream_sims', {}):
-            self.sim_graph.add_edge(upsim, simname, label=", ".join(kwargs['upstream_sims'][upsim].keys()))
-    def add_variables(self, simnames, *args, vartype='vars', t=0): 
-        """
-        Adds variable of specified type ('p', 'vars', or 'faults') to a given problem. 
-        Also adds variable set constraints (if given)
-        
-        Parameters
-        ----------
-        simnames : str/list
-            identifier for the simulation(s) the variable is optimized over
-        *args : tuples
-            variables to add, where each tuple has the form:
-            (varname, set_const (optional), vartype (optional), t (optional)), where
-            - varname is:
-                an element of mdl.p (if vartype='params')
-                a model variable (if vartype='vars')
-                a function name (if vartype='faults')
-            - set_const defines the variable set constraints, which may be:
-                None (for none/inf)
-                A two-element tuple (for continuous variable bounds)
-                A multi-element list (for discrete variables)
-            - vartype is the individual variable type (overrides vartype)
-            - t is the individual time (overrides t)
-        vartype : str
-            overall variable type defining the variable(s). The default is 'vars'
-                - `param`: element(s) of mdl.p (set pre-simulation)
-                - `vars`: function/flow variables (set during the simulation)
-                - 'faults': fault scenario variables (set during the simulation)
-                - 'external': variables for external func
-                - paramfunc: generates p from variable in function paramfunc
-        """
-        self.clear(clearvars=False)
-        simnames = self._names_to_list(simnames)
-        for arg in args:
-            self._add_var(simnames, arg,vartype=vartype, t=t)
-    def _add_var(self, simnames, arg, vartype='vars', t=None):
-        if type(arg)==str: arg = (arg, None, None, None)
-        arg = [*arg, *(None, None, None, None)][0:4]
-        if not arg[2]: arg[2]=vartype
-        if not arg[3]: arg[3]=t
-        if arg[2] not in {'param', 'vars', 'faults', 'external'} and not callable(arg[2]):
-            raise Exception(arg[2]+" not a legal legal variable type (param, vars, faults, or external)")
-        self.variables.append(arg)
-        if arg[2] in ['var', 'vars']:       vartype='disturbances'
-        elif arg[2] in ['fault', 'faults']: vartype='faults'
-        else:                               vartype=arg[2]
-        
-        ind = len(self.variables)-1
-        for simname in simnames:
-            if simname not in self._sim_vars:   self._sim_vars[simname]=[ind]
-            else:                               self._sim_vars[simname].append(ind)
-        
-        if arg[1]!=None: 
-            if 'set_const' not in self.simulations: 
-                self.simulations['set_const'] = ('set_const', [ind],[arg[1]])
-                self._sim_vars['set_const']=[ind]
-            else:                                   
-                self.simulations['set_const'][1].append(ind)
-                self.simulations['set_const'][2].append(arg[1])
-                self._sim_vars['set_const'].append(ind)
-            self._add_obj_const('set_const', 'set_var_'+str(ind)+'_lb', (ind, 'external', 'na', ('greater',arg[1][0])), obj_const="constraints")
-            self._add_obj_const('set_const', 'set_var_'+str(ind)+'_ub', (ind, 'external', 'na', ('less',arg[1][1])), obj_const="constraints")
-        
-        if callable(vartype):                           label="paramfunc"
-        elif vartype not in ['faults', 'disturbances']: label=vartype
-        else:                                           label=arg[3]
-        for simname in simnames:
-            self._make_mapping(self.var_mapping, simname, label, vartype, arg[0],ind)
-        self.current_iter['vars']=[*self.current_iter.get('vars',[]), *[np.NaN for i in range(len(self.variables)-len(self.current_iter.get('vars',[])))]]
-    def add_objectives(self, simname, *args, objtype='endclass', t='end', obj_const='objectives', agg=("+",'sum'), **kwargs):
-        """
-        Adds objective to the given problem.
-        
-        Parameters
-        ----------
-        simname : str
-            identifier for the simulation
-        *args : strs/tuples
-            variables to use as objectives (auto-named to f1, f2...)
-            may take form: (variablename, objtype (optional), t (optional), agg (optional)) 
-            or variablename, where variablename is the name of the variable (from Parameter, SimParam)
-            or index of the callable (for external)and objtype, t, and agg may override
-            the default objtype and t (see below)
-        objtype : str (optional)
-            default type of objective: `vars`, `endclass`, or `external`. Default is 'endclass'
-        t : int (optional)
-            default time to get objective: 'end' or set time t
-        obj_const: str (optional)
-            default value : objectives
-        agg : tuple
-            Specifies the aggregation of the objective/constraint:
-            - for objectives: ('+'/'-','sum'/'difference'/'mult'/'max'/'min'), specifying 
-            (1) whether the objective is:
-                    - "+": positive (for minimization of the variable if the algorithm minimizes)
-                    - "-": negative (for maximization of the variable if the algorithm minimizes)
-            (2) how to aggregate objectives over scenarios 
-            - for constraints: (less'/'greater', val) where value is the threshold value
-        **kwargs : str=strs/tuples
-            Named objectives with their corresponding arg values (see args)
-            objectivename = variablename
-        """
-        if obj_const not in {'objectives', 'constraints'}:
-            raise Exception("Invalid obj_const: "+obj_const+" (should be 'objectives' or 'constraints')")
-        unnamed_objs = {'f'+str(i+len(getattr(self,obj_const, {}))):j for i,j in enumerate(args)}
-        all_objs = {**unnamed_objs, **kwargs}
-        for obj in all_objs:
-            if self.simulations[simname][0]=='external':
-                self._add_obj_ext(simname, obj, obj_const)
-            else:
-                self._add_obj_const(simname, obj, all_objs[obj], objtype=objtype, t=t, agg=agg, obj_const=obj_const)
-    def _add_obj_ext(self,simname,objname, obj_const):
-        self._make_mapping(self.obj_const_mapping, simname, obj_const, [])
-        self.obj_const_mapping[simname][obj_const].append(objname)
-        self._assoc_obj_con(simname, objname, obj_const, ('', '', '', ["+", ""]))
-    def _add_obj_const(self, simname, objname, arg, objtype='endclass', t='end',agg=("-",'sum'), obj_const='objectives'):
-        if simname not in self.simulations: raise Exception("Undefined simulation: "+simname)
-        if type(arg)==str: arg=[arg, objtype, t, agg]
-        arg = [*arg, *(None,None,None,None)][:4]
-        if not arg[1]: arg[1]=objtype
-        if arg[1] not in ['vars', 'endclass', 'external']: raise Exception("Invalid objtype: "+arg[1])
-        if not arg[2]:  arg[2]=t
-        if not arg[3]:  arg[3]=agg
-        if hasattr(self, objname): warnings.warn("Objective already defined: "+objname)
-        self._assoc_obj_con(simname, objname, obj_const, arg)
-        
-        vname, objtype, t, _ = arg
-        self._make_mapping(self.obj_const_mapping, simname, t,objtype,vname, exclusive_vars=False)
-        self.iter_hist[objname]=[]
-    def _assoc_obj_con(self, simname, objname, obj_const, arg):
-        def newobj(x):
-            return self.x_to_obj_const(x, simname)[0][objname]
-        def newconst(x):
-            return self.x_to_obj_const(x, simname)[1][objname]
-        if obj_const=='objectives':     objfunc = newobj
-        elif obj_const=='constraints':  objfunc = newconst
-        setattr(self, objname, objfunc)
-        getattr(self, obj_const)[objname]=[simname,*arg]
-    def _make_mapping(self, mapping, *args, exclusive_vars=True):
-        if len(args)>2:
-            if args[0] not in mapping:  mapping[args[0]]=self._make_nested_dict(*args[1:])
-            else:                       self._make_mapping(mapping[args[0]], *args[1:], exclusive_vars=exclusive_vars)
-        elif len(args)==2:
-            if args[0] not in mapping:  mapping[args[0]]=args[1]
-            elif exclusive_vars:        raise Exception("Overwriting variable: "+str(args))
-            elif type(mapping[args[0]])==list: mapping[args[0]].append(args[1])
-            else:                               mapping[args[0]] = [mapping[args[0]], args[1]]
-        else:                           raise Exception("Not enough args: "+str(args))
-    def _make_nested_dict(self, *args):
-        if len(args)==1:    return args[0]
-        else:               return {args[0]:self._make_nested_dict(*args[1:])}
-
-    def add_constraints(self, simname, *args, objtype='endclass', t='end', threshold=('less', 0.0), **kwargs):
-        """
-        Adds constraints to the given problem.
-        
-        Parameters
-        ----------
-        simname : str
-            identifier for the simulation
-        *args : strs/tuples
-            variables to use as constraints (auto-named to f1, f2...)
-            may take form: (variablename, objtype (optional), t (optional), threshold) or variablename, where
-            variablename is the name of the variable (from Parameter, SimParam) or index of the callable (for external)
-            and objtype and t may override the default objtype and t (see below)
-        objtype : str (optional)
-            default type of constraint: `vars`, `endclass`, or `external`. Default is 'endclass'
-        t : int (optional)
-            default time to get constraint: 'end' or set time t
-        threshold : tuple
-            Specifies the threshold for the constraint ('less'/'greater', val) where value is the threshold value
-        **kwargs : str=strs/tuples
-            Named objectives with their corresponding arg values (see args)
-            constraintname = variablename
-        """
-        self.add_objectives(simname, *args, objtype=objtype, t=t, obj_const='constraints', agg=threshold, **kwargs)
-
-    def _get_var_obj_time(self, simname):
-        var_times = [v[3] for v in self.variables]
-        if 'start' in var_times:
-            var_time = 0
-        else:
-            var_time = min(var_times)
-        obj_times = [v[3] for v in [*self.objectives.values(),*self.constraints.values()] 
-                     if v[3]!='na' and v[0]==simname]
-        if 'end' in obj_times:
-            obj_time = self.mdl.sp.times[-1]
-        else:
-            obj_time = max(obj_times)
-        return var_time, obj_time
-
-    def _prep_single_sim(self, simname, x):
-        # Get variable and objective times for the simulation
-        var_time, obj_time = self._get_var_obj_time(simname)
-        # Get keyword arguments for the simulation
-        kwar = self.simulations[simname][2]
-        # Check if a new model is needed and create it
-        mdl = self._check_new_mdl(simname, 0, self.mdl, x, obj_time,  default_p = kwar.get('p', {}))
-        # Prepare nominal values, scenarios, and other variables using prop.nom_helper()
-        result, nomhist, nomscen, c_mdls, t_end = prop.nom_helper(mdl, [var_time], **{**kwar, 'scen':{}, 'use_end_condition':False})
-        if kwar.get('sequence', False):
-            mdl_s = mdl.new_with_params()
-            # Create a new model and scenario for sequence simulation
-            scen= Scenario(rate=1.0, sequence=kwar['sequence'])
-            kwargs = {**kwar, 'desired_result':{}, 'staged':False}
-            kwargs.pop("sequence")
-            # Perform propagation for the scenario
-            _, prevhist, c_mdls, _  = prop.prop_one_scen(mdl, scen, ctimes = [var_time], **kwargs)
-        else:
-            # Use nominal history if sequence simulation is not required
-            prevhist = nomhist; mdl=mdl
-        # Store simulation data in the _sims dictionary
-        self._sims[simname] = {'var_time':var_time, 'nomhist':nomhist, 'prevhist':prevhist, 'obj_time': obj_time, 'mdl':mdl, 'c_mdls':c_mdls}
-
-    def _prep_multi_sim(self, simname, x):
-        var_time, obj_time = self._get_var_obj_time(simname)
-        kwar = self.simulations[simname][2]
-        mdl = self._check_new_mdl(simname, 0, self.mdl, x, obj_time, default_p = kwar.get('p', {}))
-        result, nomhist, nomscen, c_mdls_nom, t_end = prop.nom_helper(mdl, [var_time], **{**kwar, 'scen':{}, 'use_end_condition':False})
-        
-        scenlist=[]
-        for scen in copy.deepcopy(self.simulations[simname][1][0]):
-            scenlist.append(scen.copy_with(time=var_time))
-        
-        prevhists = dict(); c_mdls = dict()
-        include_nominal = self.simulations[simname][2].get('include_nominal', True)
-
-        ## only do copying below if var_time isn't 0?
-        if var_time>0:
-            for scen in scenlist:
-                kwargs =  {**kwar.copy(), 'desired_result':{}, 'staged':False}
-                mdl_i = mdl.new_with_params()
-                _, prevhists[scen.name], c_mdls[scen.name], _  = prop.prop_one_scen(mdl_i, scen, ctimes = [var_time], **kwargs)
-        else: 
-            c_mdls={scen.name:{var_time:c_mdls_nom[var_time]} for scen in scenlist}
-            prevhists={scen.name:nomhist for scen in scenlist}
-        if include_nominal and scenlist[-1].name!='nominal': 
-            scenlist.append(nomscen.copy_with(name='nominal'))
-            prevhists['nominal']=nomhist
-            c_mdls['nominal']=c_mdls_nom
-        self.update_scenlist(simname, scenlist)
-        self._sims[simname] = {'var_time':var_time, 'nomhist':nomhist, 'prevhists':prevhists, 'obj_time': obj_time, 'mdl':c_mdls_nom[var_time], 'c_mdls':c_mdls}
-
-
-    def _check_new_mdl(self,simname, var_time, mdl, x, obj_time, staged=False, default_p={}):
-        if var_time==0 or not staged: # set model parameters that are a part of the sim
-            paramvars = self.var_mapping[simname].get('param',{'param':{}})
-            p=copy.deepcopy(default_p)
-            p.update({param: x[ind] for param, ind in paramvars['param'].items()})
-            for func, fvars in self.var_mapping[simname].get('paramfunc',{}).items():
-                p.update(func(*[x[ind] for ind in fvars.values()]))
-            mdl = mdl.new_with_params(p=p, sp={'times':(0, obj_time)})
-            
-        prop.init_histrange(mdl, var_time, staged, "all", "all")
-        return mdl
-
-    def _run_single_sim(self, simname, x):
-        sim = self._sims[simname]
-        var_time, prevhist, nomhist, obj_time, mdl, c_mdl = sim['var_time'], sim['prevhist'], sim['nomhist'], sim['obj_time'], sim['mdl'], sim['c_mdls']
-        
-        if not self.simulations[simname][2]['staged']:  mdl = self._check_new_mdl(simname, var_time, mdl, x, obj_time, staged=self.simulations[simname][2]['staged'])
-        else:                                           
-            mdl = c_mdl[var_time].copy(); 
-            mdl.sp= mdl.sp.copy_with_vals(times=(0,obj_time))
-        # set model faults/disturbances as elements of scenario 
-        ##NOTE: need to make sure scenarios don't overwrite each other
-        sequence = self._update_sequence(self.simulations[simname][2].get('sequence',{}), simname, x)
-        scen = Scenario(sequence=sequence, time=var_time)
-        #propagate scenario, get results
-        des_r=copy.deepcopy(self.obj_const_mapping[simname])
-        kwargs = {**self.simulations[simname][2], "desired_result":des_r, "nomhist":nomhist, "prevhist":prevhist}
-        mdl.sp=mdl.sp.copy_with_vals(times=(0,obj_time))
-        result, mdlhist, _, _ = prop.prop_one_scen(mdl, scen, **kwargs)
-        self._sims[simname]['mdlhists'] = {"faulty":mdlhist, "nominal":nomhist}
-        self._sims[simname]['results'] = result
-        # log, return objectives, etc
-        objs = self._get_obj_from_result(simname, result, "objectives")
-        consts = self._get_obj_from_result(simname, result, "constraints")
-        return objs, consts
-    def _run_multi_sim(self, simname, x):
-        sim = self._sims[simname]
-        var_time, prevhists, nomhist, obj_time, mdl, c_mdls = sim['var_time'], sim['prevhists'], sim['nomhist'], sim['obj_time'], sim['mdl'], sim['c_mdls']
-        
-        pool = self.simulations[simname][2]['pool']
-        scenlist = self.simulations[simname][1][0]
-        staged = self.simulations[simname][2]['staged']
-        mdl = self._check_new_mdl(simname, var_time, mdl, x, obj_time, staged)
-        
-        kwargs = self.simulations[simname][2]
-        kwargs = {**kwargs, 'desired_result':copy.deepcopy(self.obj_const_mapping[simname]), "pool":False}
-        results, objs, consts, mh = {}, {}, {}, {}
-        new_scenlist = []
-        for scen in scenlist:
-            newscen=scen.copy_with(sequence=self._update_sequence(scen.sequence, simname, x),
-                                   time=var_time)
-            new_scenlist.append(newscen)
-        scenlist = new_scenlist
-        if pool: 
-            if staged:  
-                inputs = [(self._check_new_mdl(simname, var_time, c_mdls[scen.name][var_time], x, obj_time), scen, 
-                           {**kwargs, 'nomhist':prevhists[scen.name]},  str(i)) 
-                          for i, scen in enumerate(scenlist)]
-            else:       
-                inputs = [(self._check_new_mdl(simname, var_time, mdl, x, obj_time), scen,  kwargs, str(i)) 
-                          for i, scen in enumerate(scenlist)]
-            res_list = list(pool.imap(prop.exec_scen_par, inputs))
-            results, mh = prop.unpack_res_list(scenlist, res_list)
-        else:
-            for i, scen in enumerate(scenlist):
-                name = scen.name
-                prevhist = prevhists[name]
-                kwargs['nomhist'] = nomhist
-                kwargs['desired_result'] = copy.deepcopy(self.obj_const_mapping[simname])
-                if staged:  mdl_i = c_mdls[name][var_time]
-                else:       mdl_i = mdl
-                results[name], mh[name], t_end = prop.exec_scen(mdl_i, scen, indiv_id=str(i), **kwargs, prevhist=prevhist)
-        objs = self._get_obj_from_result(simname, results, "objectives")
-        consts = self._get_obj_from_result(simname, results, "constraints")
-        self._sims[simname]['mdlhists'] = mh
-        self._sims[simname]['results'] =results
-        return objs, consts
-    def _run_external_sim(self,simname,x):
-        #self.var_mapping[simname]
-        func = self.simulations[simname][1][0]
-        returns = func(x)
-        objs, consts = self._get_obj_con_res(simname, returns)
-        return objs, consts
-    def _get_obj_con_res(self,simname,returns):
-        objnames=self.obj_const_mapping[simname].get('objectives', {})
-        connames = self.obj_const_mapping[simname].get('constraints',{})
-        objs, cons = {}, {}
-        if type(returns)==tuple:
-            objs = {obj:returns[0][i] for i, obj in enumerate(objnames)}
-            cons = {con:returns[1][i] for i, con in enumerate(connames)}
-        elif type(returns) in [list, np.array]:
-            if objnames:    objs = {obj:returns[i] for i, obj in enumerate(objnames)}
-            elif connames:  cons = {con:returns[i] for i, con in enumerate(connames)}
-        else:
-            if objnames:    objs = {[*objnames][0]:returns}
-            elif connames:  cons = {[*connames][0]:returns}
-        return objs, cons
-    def _update_sequence(self, existing_sequence, simname, x):
-        new_sequence = {t:{k:{var: x[ind] for var,ind in v.items()} for k,v in v.items()} 
-                        for t,v in self.var_mapping[simname].items() if isinstance(t, (int, float, np.number))}
-        return {**existing_sequence, **new_sequence}
-    def _eval_mult_objs(self, objname, values):
-        pos_fact = get_pos_negative(self.objectives[objname][-1][0])
-        aggfunc = getattr(np, self.objectives[objname][-1][1])
-        return pos_fact*aggfunc(values)
-    def _eval_mult_cons(self, conname, values, thresholds):
-        values = [eval_con(value,thresholds[1], thresholds[0], self.negative_form) for value in values]
-        if self.negative_form:  return np.max(values)
-        else:                   return np.min(values)
-    def _get_obj_from_result(self, simname, result, obj_const):
-        objs={}
-        obj_dict = getattr(self, obj_const)
-        for objname, var_to_get in obj_dict.items():
-            if simname ==var_to_get[0]:
-                if var_to_get[3] in result:     values = [result[var_to_get[3]][var_to_get[2]][var_to_get[1]]]
-                elif var_to_get[3]=='all':      values = [r[var_to_get[2]][var_to_get[1]] for t,r in result.items() if t!='end']
-                elif var_to_get[2] in result:   values = [result[var_to_get[2]][var_to_get[1]]]
-                else: values = [r[var_to_get[3]][var_to_get[2]][var_to_get[1]] if var_to_get[3] in r else r[var_to_get[2]][var_to_get[1]] for r in result.values()]
-                if obj_const == 'objectives':       objs[objname] = self._eval_mult_objs(objname, values)
-                elif obj_const == 'constraints':    objs[objname] = self._eval_mult_cons(objname, values, var_to_get[4])
-                else: raise Exception("Invalid type: "+obj_const)
-        return objs
-    def _get_set_const(self,x):
-        ubs = {"set_var_"+str(i)+"_ub": eval_con(x[i], self.simulations['set_const'][2][i][1], "less", self.negative_form) for i in self.simulations['set_const'][1]}
-        lbs = {"set_var_"+str(i)+"_lb": eval_con(x[i], self.simulations['set_const'][2][i][0], "greater", self.negative_form) for i in self.simulations['set_const'][1]}
-        return {}, {**ubs, **lbs}
-    def _prep_sim_type(self, simtype, simname, x):
-        if simtype=='single': self._prep_single_sim(simname, x)
-        if simtype=='multi': self._prep_multi_sim(simname, x)
-    def _run_sim_type(self, simtype, simname, x):
-        if simtype=='set_const':    return self._get_set_const(x)
-        elif simtype=='single':     return self._run_single_sim(simname, x)
-        elif simtype=='multi':      return self._run_multi_sim(simname,x)
-        elif simtype=='external':   return self._run_external_sim(simname, x)
-        else: raise Exception("Invalid simulation type: "+simtype)
-    def add_combined_objective(self, objname, *objnames, agg="sum"):
-        def comb_obj(*args):
-            objs =[]
-            if len(args)!=len(objnames): 
-                if len(args)==1:    args = [args[0] for obj in objnames]
-                else:               raise Exception("Invalid input vector: "+str(args)+"for objectives: "+str(objnames))
-            for i, obj in enumerate(objnames):
-                func = getattr(self, obj)
-                objs.append(func(args[i]))
-            aggfunc = getattr(np, agg)
-            return aggfunc(objs)
-        setattr(self, objname, comb_obj)
-    def update_current_iter(self, **kwargs):
-        if not hasattr(self, 'current_iter'): self.current_iter={}
-        blank_iter = {'vars':np.array([np.nan for i in range(len(self.variables))]), 'objs':{},'consts':{}, 'sims':set(), 'sims_to_update':set()}
-        for k, v in blank_iter.items():
-            if k not in self.current_iter: 
-                if k in kwargs: self.current_iter[k]=kwargs[k]
-                else:           self.current_iter[k]=blank_iter[k]
-    def time_sims(self, x, simnames="all", printtimes=True, with_prep=False):
-        """
-        Prints/returns the simulation time for the given simulations
-
-        Parameters
-        ----------
-        x : list
-            List of variables (must be for all sims)
-        simnames : list/str, optional
-            Simname/simnames to check. The default is "all".
-        printtimes : bool, optional
-            Whether to print times. The default is True.
+        *x : values
+            Variable values
 
         Returns
         -------
-        simtimes : dict
-            Dictionary of times for each sim
+        objectives : list
+            values of the objectives
+        constraints : list
+            values of the constraints
         """
-        simtimes = {}
-        simnames = self._names_to_list(simnames)
-        if printtimes: print("Simulation Times:")
-        for simname in simnames:
-            if with_prep: self.current_iter['sims'].discard(simname)
-            self.current_iter['sims_to_update'].add(simname)
-            starttime = time.time()
-            self.x_to_obj_const(x,simname)
-            t_elapsed = time.time()-starttime
-            simtimes[simname]=t_elapsed
-            if printtimes: print(simname+": "+str(t_elapsed)+str(" s"))
-        if printtimes: print("total: "+str(sum(simtimes.values())))
-        return simtimes
-    def x_to_obj_const(self, x, simnames):
+        if self.new_x(*x) or force_update:
+            self.update_objectives(*x)
+        return self.get_objectives(), self.get_constraints()
+
+    def update_variables(self, *x):
+        """Update variables at x."""
+        x = unpack_x(*x)
+        for i, v in enumerate(self.variables):
+            self.variables[v] = x[i]
+
+    def call_objective(self, *x, objective=''):
+        """Call a given objective at x."""
+        if self.new_x(*x):
+            self.update_objectives(*x)
+        return self.objectives[objective].value
+
+    def call_constraint(self, *x, constraint=''):
+        """Call a given constraint at x."""
+        if self.new_x(*x):
+            self.update_objectives(*x)
+        return self.constraints[constraint].value
+
+    def log_time(self):
+        if not hasattr(self, 't_start'):
+            self.t_start = time.time()
+        self.iter_hist.time.append(time.time()-self.t_start)
+
+    def log_hist(self):
+        """Log the history for objectives, constraints, time, etc."""
+        self.log_time()
+        self.iter_hist.objectives.log(self.objectives, 1)
+        self.iter_hist.constraints.log(self.constraints, 1)
+        self.iter_hist.variables.log(self.variables, 1)
+
+    def get_default_x(self, *x):
+        if not x:
+            return tuple([*self.variables.values()])
+
+    def time_execution(self, *x, reps=1):
         """
-        Calculates objectives and constraints for a given variable value
+        Time the amount of time it takes to update the problem.
 
         Parameters
         ----------
-        x : list/array
-            Variable values corresponding to self.variables
+        *x : vars
+            Variable values to execute at, optional. If not provided, uses the current
+            values.
+        reps : int, optional
+            Number of replicates to average/loop over. The default is 1.
 
         Returns
         -------
-        objectives : dict
-            Dictionary of objectives and their values
-        constraints
-            Dictionary of constraints and their values
+        t_ave : float
+            Avarage time over all replicates
+        """
+        x = self.get_default_x(*x)
+        starttime = time.time()
+        for rep in range(reps):
+            self.update_objectives(*x)
+        t_ave = (time.time() - starttime) / reps
+        return t_ave
 
+
+class SimpleProblem(BaseProblem):
+    """
+    Simple optimization problem (without any given model constructs).
+
+    Attributes
+    ----------
+    callables : dict
+        dict of callables for objectives/constraints
+
+    Examples
+    --------
+    >>> ex_sp = SimpleProblem("x0", "x1")
+    >>> f1 = lambda x0, x1: x0 + x1
+    >>> ex_sp.add_objective("f1", f1)
+    >>> g1 = lambda x0, x1: x0 - x1
+    >>> ex_sp.add_constraint("g1", g1, threshold=3.0, comparator="less")
+
+    >>> ex_sp.f1(1, 1)
+    2
+    >>> ex_sp.g1(1, 1)
+    -3.0
+    """
+
+    def __init__(self, *variables):
+        self.variables = {v: np.NaN for v in variables}
+        super().__init__()
+        self.callables = {}
+
+    def update_objectives(self, *x):
+        """Update objectives/constraints by calling callables."""
+        self.update_variables(*x)
+        for objname, obj in {**self.objectives, **self.constraints}.items():
+            obj.update(self.callables[objname](*x))
+        self.log_hist()
+
+    def add_objective(self, name, call, **kwargs):
         """
-        #format/order simnames 
-        simnames = self._names_to_list(simnames)
-        if len(simnames)>1:
-            if 'set_const' in simnames:
-                simnames = [simname for simname in self.simulations.keys() if (simname in simnames) and (simname!='set_const')]+['set_const']
-            else:
-                simnames = [simname for simname in self.simulations.keys() if simname in simnames]
-        
-        self.update_current_iter()
-        #format x (which may be a subset of x) correctly
-        if type(x)==list: x=np.array(x)
-        if len(x)!=len(self.variables):
-            x_new = np.copy(self.current_iter['vars'])
-            for simname in simnames: 
-                for ind, x_i in enumerate(self._sim_vars[simname]):
-                    x_new[x_i]= x[ind]
-            x=x_new
-        #check sims to update
-        new_var_inds = np.where(x!=self.current_iter['vars'])
-        for simname, simvars in self._sim_vars.items():
-            if any([i in simvars for i in new_var_inds[0]]) or simname not in self.current_iter['sims']: 
-                if simname!='set_const': self.current_iter['sims_to_update'].update([*nx.traversal.bfs_tree(self.sim_graph, simname)]) # adds all downstream sims
-                else:                    self.current_iter['sims_to_update'].add(simname)
-        #add upstream sims to simnames (if not updated)
-        sims_to_run = set()
-        for simname in simnames:
-            if simname!="set_const": sims_to_run.update([s for s in nx.traversal.bfs_tree(self.sim_graph, simname, reverse=True) if s in self.current_iter['sims_to_update']])
-        simnames = [simname for simname in self.simulations if simname in sims_to_run]+('set_const' in simnames)*['set_const']
-        
-        for simname in simnames:
-            # update from upstream sims
-            if 'upstream_sims' in self.simulations[simname][2]:
-                upstream_sims = self.simulations[simname][2]['upstream_sims']
-                old_p = self.simulations[simname][2].get('p', {})
-                new_p=copy.deepcopy(old_p)
-                for up_name in upstream_sims:
-                    if 'params' in upstream_sims[up_name]:
-                        up_vars = {self.variables[i][0]:x[i] for i in self._sim_vars[up_name] if x[i]!=np.NaN}  
-                        new_p.update({k:up_vars[v] for k,v in upstream_sims[up_name]['p'].items() if v in up_vars and not np.isnan(up_vars[v])})
-                    if 'paramfunc' in upstream_sims[up_name]:
-                        pvars = [x[i] for i in self._sim_vars[up_name]]
-                        new_p.update(upstream_sims[up_name]['paramfunc'](pvars))
-                    if 'pass_mdl' in upstream_sims[up_name]:
-                        new_p=copy.deepcopy(asdict(self._sims[up_name]['c_mdls'][0].p))
-                    if 'phases' in upstream_sims[up_name]:
-                        nomhist = self._sims[up_name]['mdlhists']['faulty']
-                        t_end = self._sims[up_name]['c_mdls'][0].sp.times[-1]
-                        newphases={'phases': phases.from_hist(nomhist)}
-                if any([k not in old_p for k in new_p]) or any([new_p[k]!=old_p[k] for k in old_p]):
-                    self.update_sim_vars(simname, new_p=new_p)
-                    self.current_iter['sims_to_update'].add(simname)
-                    self.current_iter['sims'].discard(simname)
-            if 'app_args' in self.simulations[simname][2]:
-                app_args = self.simulations[simname][2]['app_args']
-                if 'newphases' in locals(): app_args.update(newphases) 
-                mdl = self.mdl.new_with_params(p=self.simulations[simname][2]['p'])
-                self.update_scenlist(simname, SampleApproach(mdl, **app_args).scenlist)
-                self.simulations[simname] = self.simulations[simname][0], [SampleApproach(mdl, **app_args).scenlist], *self.simulations[simname][2:]
-                self.current_iter['sims'].discard(simname)
-            # prep sims
-            if simname not in self.current_iter.get('sims', {}):
-                self._prep_sim_type(self.simulations[simname][0], simname, x)
-                self.current_iter['sims'].add(simname)
-            
-            # run sims
-            if simname in self.current_iter['sims_to_update']:
-                objs, consts = self._run_sim_type(self.simulations[simname][0], simname, x)
-                self.current_iter['objs'].update(objs)
-                self.current_iter['consts'].update(consts) 
-                self.current_iter['sims_to_update'].remove(simname)
-        # update x for iter
-        self.current_iter['vars'] = x
-        if self.log_iter_hist:
-            self.iter_hist['vars'].append(x)
-            for obj in {*self.objectives, *self.constraints}:
-                self.iter_hist[obj].append(self.current_iter['objs'].get(obj,np.NaN))
-        return self.current_iter['objs'], self.current_iter['consts']
-    def update_scenlist(self, simname, scenlist):
-        self.simulations[simname] = self.simulations[simname][0], [scenlist], *self.simulations[simname][2:]
-    def _get_plot_vals(self, simname, obj_con_var):
-        vals = {n:o[1] for n,o in obj_con_var.items() if o[0]==simname and o[2]=='vars'}
-        return vals
-    def _get_plot_vars(self, simname, variables):
-        vals = {"x_"+str(i):o[0] for i,o in enumerate(variables) if  o[2]=='vars'}
-        return vals
-    def _get_plot_times(self, simname, obj_con_var, endtime):
-        vals = {n:get_text_time(o[3], end=endtime) for n,o in obj_con_var.items() if o[0]==simname and o[2]=='vars'}
-        return vals
-    def _get_var_times(self):
-        vals = {"x_"+str(i):get_text_time(o[3]) for i,o in enumerate(self.variables) if o[2]=='vars'}
-        return vals
-    def get_var_obj_con(self):
-        variables = {"x_"+str(i): self.current_iter['vars'][i] for i, var in enumerate(self.current_iter['vars'])}
-        return {**variables, **self.current_iter['objs'], **self.current_iter['consts']}
-    def plot_obj_const(self, simname, **kwargs):
-        """
-        Plots the objectives, variables, and constraints over time at the current variable value. Note that simulation tracking must be turned on.
-        
-        Parameters
-        ----------
-        simname : str
-            Name of the simulation.
-        kwargs : kwargs
-            Keyword arguments for plot.mdlhists
-        """
-        objs_to_plot = self._get_plot_vals(simname, {**self.objectives, **self.constraints})
-        vars_to_plot = self._get_plot_vars(simname, self.variables)
-        all_to_plot = {**objs_to_plot, **vars_to_plot}
-        
-        vals = [objname for objname in all_to_plot.values()]
-            
-        if self.simulations[simname][0]=='multi':      f_times = {get_text_time(t)  for seq in self.simulations[simname][1][0] for t in seq['sequence'].keys()}
-        elif self.simulations[simname][0]=='single':   f_times = {get_text_time(t) for t in self.simulations[simname][2]['sequence'].keys()}
-        
-        hist = History(self._sims[simname]['mdlhists']).flatten()
-        fig, axs = plot.hist(hist, *vals, time_slice=f_times, **kwargs)
-        
-        vars_ordered = [".".join(ax.get_title().split(": ")) for ax in axs]
-        rev_all_to_plot = {v:k for k,v in all_to_plot.items()}
-        objnames_ordered = [rev_all_to_plot[v] for v in vars_ordered if v in rev_all_to_plot]
-        
-        vartimes = self._get_var_times()
-        objcontimes = self._get_plot_times(simname, {**self.objectives, **self.constraints}, self._sims[simname]['mdlhists']['faulty'].time[-1])
-        times = {**vartimes, **objcontimes}
-        current_vars = self.get_var_obj_con()
-        for i, val in enumerate(objnames_ordered):
-            #axs[i].vlines([times[val]], *axs[i].get_ylim())
-            axs[i].axvline([times[val]], color="grey", ls="--")
-            mid = np.mean(axs[i].get_ylim())
-            axs[i].text(times[val], mid, val+"="+'{0:.2f}'.format(current_vars[val]),horizontalalignment='center', bbox=dict(facecolor='white', alpha=0.5, edgecolor='white'))
-        return fig, axs
-    def get_constraint_dict(self, include_set_consts=True):
-        constraint_dict = {}
-        for con in self.constraints:
-            if (not "set_var" in con) or include_set_consts:
-                if self.constraints[con][4][0] in ["greater", "less"]:  con_type="ineq"
-                else:                                                   con_type="eq"
-                constraint_dict[con]={"type":con_type, "fun":getattr(self, con)}
-        return constraint_dict
-    def get_constraint_list(self, include_set_consts=True):
-        return [*self.get_constraint_dict().values()]
-    def to_pymoo_problem(self, objectives='all'):
-        """Creates and exports a pymoo Problem object for the interface"""
-        from pymoo.core.problem import ElementwiseProblem
-        class Prob(ElementwiseProblem):
-            def __init__(self, problem_inter):
-                self.problem_inter = problem_inter
-                if objectives=='all':       self.objectives = [*problem_inter.objectives.keys()]
-                elif type(objectives)==str: self.objectives=[objectives]
-                else:                       self.objectives=objectives
-                self.non_set_constraints = problem_iter.get_constraint_dict(include_set_consts=False)
-                super().__init__(n_var=len(problem_inter.variables),\
-                                 n_obj=len(self.objectives),\
-                                 n_con=len(self.non_set_constraints),\
-                                 xl=[i[1][0] for i in problem_inter.variables],\
-                                 xu=[i[1][1] for i in problem_inter.variables])
-            def _evaluate(self,x,out, *args, **kwargs):
-                objs, consts = self.problem_inter.x_to_obj_const(x, [k for k in self.problem_inter.simulations if k!='set_const'])
-                out["F"] = np.column_stack([objs[o] for o in self.objectives])
-                if self.non_set_constraints: out["G"] = np.column_stack([consts[c] for c in self.non_set_constraints])
-        problem_iter = self
-        return Prob(problem_iter)
-    def clear(self, simnames='all', clearvars=True, clearhist=True):
-        """Clears the optimization variables/constraints/sim"""
-        if simnames=='all' and clearvars: self.current_iter = {}
-        else:
-            simnames = self._names_to_list(simnames)
-            for simname in simnames:
-                for objname, args in self.objectives.items():  
-                    if args[0]==simname and 'objs' in self.current_iter: 
-                        self.current_iter['objs'][objname] = np.NaN
-                for conname, args in self.constraints.items(): 
-                    if args[0]==simname and 'consts' in self.current_iter: 
-                        self.current_iter['consts'][conname] = np.NaN
-                for varind in self._sim_vars.get(simname, {}):
-                    if 'vars' in self.current_iter and clearvars==True:
-                        self.current_iter['vars'][varind] = np.NaN
-                if 'sims' in self.current_iter: self.current_iter['sims'].discard(simname)
-        if clearhist: self.init_iter_hist(log_iter_hist=self.log_iter_hist)
-    def _names_to_list(self,simnames):
-        if simnames=='all':          simnames = [*self.simulations]
-        elif type(simnames)==str:    simnames=[simnames]
-        return simnames
-    def update_sim_vars(self, simname, new_p={}, newvars={}, newsequence={}):
-        """
-        Update the simulation with new default variables/parameters
+        Add an objective to the problem.
 
         Parameters
         ----------
-        simname : string
-            Name of simulation to update.
-        new_kwargs : dict, optional
-            Params to update in the sim. The default is {}.
-        newvars : dict, optional
-            Variables to update in the sim (at t=0). The default is {}.
-        newsequence : TYPE, optional
-            New default sequence of faults/disturbances (updated accross all scenarios). The default is {}.
-        """
-        self.clear(simname, clearvars=False, clearhist=False)
-        if 'p' in self.simulations[simname][2]: self.simulations[simname][2]['p'].update(new_p)
-        else:   self.simulations[simname][2]['p'] = new_p
-        newsequence.update({0:{'disturbances':newvars}})
-        if self.simulations[simname][0]=='single':
-            seq = self.simulations[simname][2].get('sequence',{})
-            seq.update(newsequence)
-        elif self.simulations[simname][0]=='multi':
-            for i,_ in enumerate(self.simulations[simname][1][0]):
-                seq = self.simulations[simname][1][0][i].sequence
-                seq.update(newsequence)
-
-    def update_sim_options(self, simnames, **kwargs):
-        """
-        Update options for simulation kwargs. Useful for changing simulation parameters, e.g.:
-            - passing pools that can't be instantiated in a script
-            - turning off unnecessary model histories for optimization
-            - turning on/off sim logs
-
-        Parameters
-        ----------
-        simnames : list/str
-            Name(s) of the simulation (or "all")
-        log_iter_hist : bool
-            Whether to log the history of variables/objectives
+        name : str
+            Name for the objective.
+        call : callable
+            Function to call for the objective in terms of the variables.
         **kwargs : kwargs
-            kwargs for the simulation.
+            kwargs to Objective.
         """
-        if 'log_iter_hist' in kwargs: self.init_iter_hist(log_iter_hist=kwargs.pop('log_iter_hist'))
-        simnames = self._names_to_list(simnames)
-        for simname in simnames:
-            self.simulations[simname][2].update(kwargs)
-            self.clear(simname, clearvars=False)
-    def show_architecture(self):
-        #TODO: leverage Graph to draw this
-        fig = plt.figure()
-        pos=nx.planar_layout(self.sim_graph)
-        nx.draw(self.sim_graph, with_labels=True, pos=pos)
-        nx.draw_networkx_edge_labels(self.sim_graph, pos, edge_labels=nx.get_edge_attributes(self.sim_graph, "label"))
-        return fig
+        self.callables[name] = call
+        super().add_objective(name, name, **kwargs)
+
+    def add_constraint(self, name, call, **kwargs):
+        """
+        Add an constraint to the problem.
+
+        Parameters
+        ----------
+        name : str
+            Name for the objective.
+        call : callable
+            Function to call for the objective in terms of the variables.
+        **kwargs : kwargs
+            kwargs to Constraint
+        """
+        self.callables[name] = call
+        super().add_constraint(name, name, **kwargs)
 
 
+ex_sp = SimpleProblem("x0", "x1")
+f1 = lambda x0, x1: x0 + x1
+ex_sp.add_objective("f1", f1)
+g1 = lambda x0, x1: x0 - x1
+ex_sp.add_constraint("g1", g1, threshold=3.0, comparator="less")
 
-def eval_con(value, threshold, greater_less, negative_form):
-    g_factor = greater_to_factor(greater_less)
-    n_factor = n_to_factor(negative_form)
-    return g_factor*n_factor*(value-threshold)
 
-def greater_to_factor(greater_less):
-    if greater_less =="greater":    g_factor = 1
-    elif greater_less=="less":      g_factor = -1
-    else: raise Exception("Invalid option for greater_less: "+str(greater_less))
-    return g_factor
-def n_to_factor(n):
-    if n:          f_factor = -1
-    else:          f_factor = 1
-    return f_factor
-def get_pos_negative(pos_str):
-    if pos_str=="-":    pos_fact= -1
-    elif pos_str=="+":  pos_fact= +1
-    else: raise Exception("Invalid aggregation: "+pos_str)
-    return pos_fact
-def get_pos_str(factor):
-    if factor>=0:   pos_str = "+"
-    else:           pos_str = "-"
-    return pos_str
-def get_text_time(time,start=0,end=0):
-    if time=='start':   t=start
-    elif time=='end':   t=end
-    else:               t=time
-    return t
+class ResultObjective(Objective):
+    """
+    Base class of objectives which derive from Results.
+
+    Fields
+    ------
+    time : float
+        Time the objective is called at. If None, time will be the end of the sim.
+    metric : callable
+        Metric to tabulate for the objective. Default is np.sum.
+
+    """
+
+    time: float = None
+    metric: callable = np.sum
+
+    def get_result_value(self, res):
+        """
+        Get the value corresponding to the objective from the result.
+
+        Parameters
+        ----------
+        res : Result
+            Result containing the metric desired.
+
+        Returns
+        -------
+        val : value
+            Value corresponding to the result.
+
+        Examples
+        --------
+        >>> from fmdtools.analyze.result import Result
+        >>> obj = ResultObjective("a.b", time=1.0)
+        >>> res = Result({'t1p0.a.b': 10.0, 't2p0.a.b': 13.0})
+        >>> obj.get_result_value(res)
+        10.0
+
+        >>> obj = ResultObjective("a.b", time=1.0, metric=np.sum)
+        >>> res = Result({'scen1.t1p0.a.b': 10.0, 'scen2.t1p0.a.b': 12.0})
+        >>> obj.get_result_value(res)
+        22.0
+        """
+        if not self.time:
+            val = res.get_metric(self.name, metric=self.metric)
+        else:
+            t = t_key(float(self.time))
+            val = res.get_metric(t+"."+self.name, metric=self.metric)
+        return val
+
+    def update(self, res):
+        """Update the value of the objective given the result."""
+        value = self.get_result_value(res)
+        self.value = self.obj_from_value(value)
+
+
+class ResultConstraint(ResultObjective):
+    """
+    Base class for constraints which derive from results.
+
+    Fields
+    ------
+    threshold : float
+        Theshold for the constraint. Default is 0.0
+    comparator : str
+        Whether the constraint is 'greater' or 'less'.
+    """
+
+    threshold: float = 0.0
+    comparator: str = 'greater'
+
+    def update(self, res):
+        """Update the value of the constraint given the result."""
+        value = self.get_result_value(res)
+        self.value = self.con_from_value(value)
+
+    def con_from_value(self, value):
+        """
+        Call con_from_value from Constraint for the ResultConstraint.
+
+        Examples
+        --------
+        >>> con = ResultConstraint("a", threshold=10.0, comparator='greater')
+        >>> con.con_from_value(11.0)
+        -1.0
+
+        >>> con2 = ResultConstraint("a", threshold=10.0, comparator='less')
+        >>> con2.con_from_value(11.0)
+        1.0
+        """
+        return Constraint.con_from_value(self, value)
+
+
+class HistoryObjective(ResultObjective):
+    """
+    Same as ResultObjective but marks that the result is a history.
+
+    Examples
+    --------
+    >>> obj = HistoryObjective("a.b", metric=np.max)
+    >>> hist = History({'t1p0.a.b': [5.0, 10.0], 't2p0.a.b': [1.0, 13.0]})
+    >>> obj.get_result_value(hist)
+    13.0
+    """
+
+
+class HistoryConstraint(ResultConstraint):
+    """Same as ResultConstraint but with different name."""
+
+
+class BaseSimProblem(BaseProblem):
+    """
+    Base optimization problem for optimizing over simulations.
+
+    Attributes
+    ----------
+    prop_method : callable
+        Method in propagate to call.
+    """
+
+    def __init__(self, mdl, prop_method, *args, **kwargs):
+        self.mdl = mdl
+        if type(prop_method) == str:
+            self.prop_method = getattr(propagate, prop_method)
+        elif callable(prop_method):
+            self.prop_method = prop_method
+        else:
+            raise Exception("Invalid prop_method "+str(prop_method))
+
+        self.args = args
+        self.kwargs = kwargs
+        super().__init__()
+
+    def add_result_objective(self, name, varname, **kwargs):
+        """
+        Add an objective corresponding to a possible desired_result.
+
+        Associates a callable to the problem with name 'name' which may be called to
+        evaluate the objective at a value of x.
+
+        Parameters
+        ----------
+        name : str
+            Name to give the objective
+        varname : str
+            Name of the variable to get for the variable.
+        **kwargs : kwargs
+            Arguments to ResultObjective
+        """
+        self.add_objective(name, varname, objclass=ResultObjective, **kwargs)
+
+    def add_result_constraint(self, name, varname, **kwargs):
+        """
+        Add an objective corresponding to a possible desired_result.
+
+        Associates a callable to the problem with name 'name' which may be called to
+        evaluate the constraint at a value of x.
+
+        Parameters
+        ----------
+        name : str
+            Name to give the constraint.
+        varname : str
+            Name of the variable to get for the constraint.
+        **kwargs : kwargs
+            Arguments to ResultConstraint
+        """
+        self.add_constraint(name, varname, conclass=ResultConstraint, **kwargs)
+
+    def add_history_objective(self, name, varname, **kwargs):
+        """Add an objective corresponding to a given history attribute."""
+        self.add_objective(name, varname, objclass=HistoryObjective, **kwargs)
+
+    def add_history_constraint(self, name, varname, **kwargs):
+        """Add an objective corresponding to a given history attribute."""
+        self.add_constraint(name, varname, conclass=HistoryConstraint, **kwargs)
+
+    def get_end_time(self):
+        """
+        Get the end_time for the simulation that minimizes simulation time.
+
+        Used so that simulations only run until the last objective is called, rather
+        than the full set of potential timesteps.
+
+        Returns
+        -------
+        end_time : float
+            Simulation time to simulate to.
+        """
+        last_time = self.mdl.sp.times[-1]
+        all_times = [a.time if a.time else last_time
+                     for a in {**self.objectives, **self.constraints}.values()]
+        end_time = max(all_times)
+        return end_time
+
+    def obj_con_des_res(self):
+        """
+        Get the desired_result argument for the problem given objectives/constraints.
+
+        Returns
+        -------
+        des_res : dict
+            desired_result argument to prop_method.
+        """
+        des_res = {}
+        for n in {**self.objectives, **self.constraints}.values():
+            if n.time:
+                t = n.time
+            else:
+                t = 'endclass'
+            if t in des_res:
+                des_res[t].append(n.name)
+            else:
+                des_res[t] = [n.name]
+        return des_res
+
+    def update_objectives(self, *x):
+        """Update objectives/constraints by simulating the model at x."""
+        self.update_variables(*x)
+        self.res, self.hist = self.sim_mdl(*x)
+        for obj in {**self.objectives, **self.constraints}.values():
+            if isinstance(obj, HistoryObjective) or isinstance(obj, HistoryConstraint):
+                obj.update(self.hist)
+            elif isinstance(obj, ResultObjective):
+                obj.update(self.res)
+        self.log_hist()
+
+
+class ParameterSimProblem(BaseSimProblem):
+    """
+    Optimization problem defining the optimization of model parameters over simulations.
+
+    Examples
+    --------
+    >>> from fmdtools.sim.sample import expd
+    >>> from fmdtools.define.block import ExampleFxnBlock
+
+    # below, we show basic setup of a parameter problem where objectives get values
+    # from the sim at particular times.
+    >>> exprob = ParameterSimProblem(ExampleFxnBlock(), expd, "nominal")
+    >>> exprob.add_result_objective("f1", "s.x", time=5)
+    >>> exprob.add_result_objective("f2", "s.y", time=5)
+    >>> exprob.add_result_constraint("g1", "s.x", time=10, threshold=10, comparator='greater')
+    >>> exprob
+    ParameterSimProblem with:
+    VARIABLES
+     -y                                                             nan
+     -x                                                             nan
+    OBJECTIVES
+     -f1                                                            nan
+     -f2                                                            nan
+    CONSTRAINTS
+     -g1                                                            nan
+
+    # once this is set up, you can use the objectives/constraints as callables, like so:
+    >>> exprob.f1(1, 0)
+    0.0
+    >>> exprob.f1(1, 1)
+    5.0
+    >>> exprob.f1(1, 2)
+    10.0
+    >>> exprob.f2(1, 2)
+    0.0
+    >>> exprob.g1(1, 2)
+    -10.0
+
+    # below, we use the endclass as an objective instead of the variable:
+    >>> exprob = ParameterSimProblem(ExampleFxnBlock(), expd, "nominal")
+    >>> exprob.add_result_objective("f1", "endclass.xy")
+    >>> exprob.f1(1, 1)
+    100.0
+    >>> exprob.f1(1, 2)
+    200.0
+
+    # finally, note that this class can work with a variety of methods:
+    >>> exprob = ParameterSimProblem(ExampleFxnBlock("ex"), expd, "one_fault", "ex", "short", 2)
+    >>> exprob.add_result_objective("f1", "s.y", time=3)
+    >>> exprob.add_result_objective("f2", "s.y", time=5)
+    >>> exprob.f1(1, 1)
+    2.0
+    >>> exprob.f2(1, 1)
+    4.0
+    """
+
+    def __init__(self, mdl, parameterdomain, prop_method, *args, **kwargs):
+        """
+        Define the Parameter problem model, domain, and simulation.
+
+        Parameters
+        ----------
+        mdl : Simulable
+            Model to simulate.
+        parameterdomain : ParameterDomain
+            ParameterDomain defining variables to optimize over
+        prop_method : str/callable
+            Name of function to call in fmdtools.sim.propagate
+        *args : args
+            Arguments to prop_method.
+        **kwargs : kwargs
+            Keyword arguments to prop_method.
+        """
+        self.parameterdomain = parameterdomain
+        self.variables = {v: np.NaN for v in self.parameterdomain.variables}
+        super().__init__(mdl, prop_method, *args, **kwargs)
+
+    def sim_mdl(self, *x):
+        """
+        Simulate the model at the given variable value.
+
+        Parameters
+        ----------
+        *x : args
+            Variable inputs for parameterdomain.
+
+        Returns
+        -------
+        res : Result
+            result for the sim.
+        hist : History
+            history for the sim.
+        """
+        p = self.parameterdomain(*x)
+        end_time = self.get_end_time()
+        mdl_kwargs = {'p': p, 'sp': {'times': (0.0, end_time)}}
+        desired_result = self.obj_con_des_res()
+        all_res = self.prop_method(self.mdl, *self.args,
+                                   mdl_kwargs=mdl_kwargs,
+                                   desired_result=desired_result,
+                                   showprogress=False,
+                                   **self.kwargs)
+        return all_res[0].flatten(), all_res[1].flatten()
+
+
+class ScenarioProblem(BaseSimProblem):
+    """
+    Base class for optimizing scenario parameters.
+
+    Attributes
+    ----------
+    prepped_sims : dict
+        Dict of outputs from propagate.nom_helper. Used for staged execution of
+        scenarios (where the model is copied instead of re-simulated).
+    """
+
+    def __init__(self, mdl, faultdomain=None, phasemap=None, **kwargs):
+        super().__init__(mdl, "prop_one_scen", **kwargs)
+        self.prepped_sims = {}
+
+    def prep_sim(self):
+        """Prepare simulation by simulating it until the start of the scenario."""
+        end_time = self.get_end_time()
+        mdl_kwargs = {'sp': {'times': (0.0, end_time)}}
+        run_kwarg = propagate.pack_run_kwargs(**self.kwargs, mdl_kwargs=mdl_kwargs)
+        desired_result = self.obj_con_des_res()
+        sim_kwarg = propagate.pack_sim_kwargs(**self.kwargs,
+                                              desired_result=desired_result,
+                                              staged=True)
+        n_outs = propagate.nom_helper(self.mdl.copy(),
+                                      [self.get_start_time()],
+                                      **{**sim_kwarg, 'use_end_condition': False},
+                                      **run_kwarg)
+        self.prepped_sims = {"result": n_outs[0],
+                             "hist": n_outs[1],
+                             "scen": n_outs[2],
+                             "mdls": n_outs[3],
+                             "t_end_nom": n_outs[4]}
+
+    def sim_mdl(self, *x):
+        """
+        Simulate the model at the given variable value.
+
+        Parameters
+        ----------
+        *x : args
+            Variable inputs for parameterdomain.
+
+        Returns
+        -------
+        res : Result
+            result for the sim.
+        hist : History
+            history for the sim.
+        """
+        if not self.prepped_sims:
+            self.prep_sim()
+
+        scen = self.gen_scenario(*x)
+
+        mdl = propagate.copy_staged([*self.prepped_sims['mdls'].values()][0])
+        nomhist = self.prepped_sims['hist'].copy()
+        nomresult = self.prepped_sims['result'].copy()
+        desired_result = self.obj_con_des_res()
+        sim_kwarg = propagate.pack_sim_kwargs(**self.kwargs,
+                                              desired_result=desired_result,
+                                              staged=True)
+        res, hist, _, t_end = self.prop_method(mdl,
+                                               scen,
+                                               nomhist=nomhist,
+                                               nomresult=nomresult,
+                                               **sim_kwarg)
+        return res.flatten(), hist.flatten()
+
+
+class SingleFaultScenarioProblem(ScenarioProblem):
+    """
+    Class for optimizing the time of a given fault scenario.
+
+    Attributes
+    ----------
+    faultdomain : FaultDomain
+        FaultDomain containing the fault
+    phasemap : PhaseMap
+        PhaseMap for fault sampling
+    t_start : float
+        Minimum start time for the simulation and lower bound on scenario time..
+        Default is 0.0.
+
+    Examples
+    --------
+    >>> ex_scenprob = SingleFaultScenarioProblem(ExampleFxnBlock(), ("examplefxnblock", "short"))
+    >>> ex_scenprob.add_result_objective("f1", "s.y", time=5)
+
+    # objective value should be 1.0 (init value) + 3 * time_with_fault
+    >>> ex_scenprob.f1(5.0)
+    4.0
+    >>> ex_scenprob.f1(4.0)
+    7.0
+    """
+
+    def name_repr(self):
+        """Get name of the class and faults."""
+        faulttup = [*self.faultdomain.faults.keys()][0]
+        return "SingleScenarioProblem("+faulttup[0]+", "+faulttup[1]+")"
+
+    def __init__(self, mdl, faulttup, phasemap=None, t_start=0.0, **kwargs):
+        """
+        Initialize the SingleFaultScenarioProblem with a given fault to optimize.
+
+        Parameters
+        ----------
+        mdl : Model
+            Model to simulate/optimize.
+        faulttup : tuple
+            (fxn, fault) defining the fault.
+        phasemap : PhaseMap, optional
+            PhaseMap for fault sampling. The default is None.
+        t_start : float, optional
+            Minimum start time for the simulation and lower bound on scenario time..
+            Default is 0.0.
+        **kwargs : kwargs
+            Keyword arguments to prop_one_scen (e.g., track, etc.).
+        """
+        faultdomain = FaultDomain(mdl)
+        faultdomain.add_fault(*faulttup)
+        self.faultdomain = faultdomain
+        self.phasemap = phasemap
+        self.t_start = t_start
+        self.variables = {"time": np.nan}
+        super().__init__(mdl, **kwargs)
+
+    def get_start_time(self):
+        """Get the scenario start time to copy the model at."""
+        return self.t_start
+
+    def gen_scenario(self, x):
+        """
+        Generate the scenario to simulate in the model.
+
+        Parameters
+        ----------
+        x : float
+            Fault scenario time.
+
+        Returns
+        -------
+        scen : SingleFaultScenario
+            SingleFaultScenario to simulate.
+        """
+        starttime=self.get_start_time()
+        end_time = self.get_end_time()
+        if not starttime <= x <= end_time:
+            raise Exception("time out of range: "+str((starttime, end_time)))
+        fault = [*self.faultdomain.faults][0]
+        scen = SingleFaultScenario.from_fault(fault, time=x, mdl=self.mdl,
+                                              phasemap=self.phasemap,
+                                              starttime=self.get_start_time())
+        return scen
+
+
+ex_scenprob = SingleFaultScenarioProblem(ExampleFxnBlock(), ("examplefxnblock", "short"))
+ex_scenprob.add_result_objective("f1", "s.y", time=5)
+ex_scenprob.f1(5.0)
+
+
+class DisturbanceProblem(ScenarioProblem):
+    """Class for optimizing disturbances that occur at a set time."""
+
+    def __init__(self, mdl, time, *disturbances, **kwargs):
+        """
+        Initialize the DisturbanceProblem.
+
+        Parameters
+        ----------
+        mdl : Simulable
+            Model to optimize.
+        time : float
+            Time to inject the disturbances at.
+        *disturbances : str
+            Names of variables to perturb at time t (which become the variables)
+        **kwargs : TYPE
+            DESCRIPTION.
+
+        Examples
+        --------
+        >>> ex_dp = DisturbanceProblem(ExampleFxnBlock(), 3, "s.y")
+        >>> ex_dp.add_result_objective("f1", "s.y", time=5)
+
+        # objective value should the same as the input value
+        >>> ex_dp.f1(5.0)
+        5.0
+        >>> ex_dp.f1(4.0)
+        4.0
+        """
+        self.variables = {d: np.nan for d in disturbances}
+        self.time = time
+        super().__init__(mdl, **kwargs)
+
+    def get_start_time(self):
+        """Get the scenario start time to copy the model at."""
+        return self.time
+
+    def gen_scenario(self, *x):
+        """
+        Generate the scenario to simulate in the model.
+
+        Parameters
+        ----------
+        x : float
+            Fault scenario time.
+
+        Returns
+        -------
+        scen : SingleFaultScenario
+            SingleFaultScenario to simulate.
+        """
+        dist = {self.time: {v: x[i] for i, v in enumerate(self.variables)}}
+        faultseq = self.kwargs.get('faultseq', None)
+        if faultseq:
+            t = np.min([*dist.keys(), *faultseq.keys()])
+            seq = Sequence(disturbances=dist, faultseq=faultseq)
+        else:
+            t = self.time
+            seq = Sequence(disturbances=dist)
+        scen = Scenario(sequence=seq,
+                        name='disturbance',
+                        time=t)
+        return scen
+
+
+ex_dp = DisturbanceProblem(ExampleFxnBlock(), 3, "s.y")
+ex_dp.add_result_objective("f1", "s.y", time=5)
+
+
+class BaseConnector(dataobject):
+    """
+    Base class for connectors.
+
+    Connectectors are used in ProblemArchitectures to link the outputs of one problem
+    as the inputs to another.
+
+    Fields
+    ------
+    name : name to give the Connector
+    """
+
+    name: str = ''
+
+
+class VariableConnector(BaseConnector):
+    """
+    Class connecting variables in one problem to use as variables in another problem.
+
+    Fields
+    ------
+    keys : tuple
+        Names of the variables.
+    values : np.array
+        Array of values for the variables.
+    """
+
+    keys: tuple = ()
+    values: np.array = np.array([])
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        if self.values.size == 0:
+            self.values = np.array([np.nan for k in self.keys])
+
+    def update(self, valuedict):
+        """
+        Update the value of the connector given a dict of values.
+
+        Parameters
+        ----------
+        valuedict : dict
+            dict with structure {k: value}, where k corresponds to a key in self.keys.
+        """
+        for i, k in enumerate(self.keys):
+            self.values[i] = valuedict[k]
+
+    def update_values(self, *x):
+        """
+        Update values of the connector given input variable x.
+
+        Parameters
+        ----------
+        *x : iterable
+            Variable values to update (must be in order of self.keys).
+        """
+        x = unpack_x(*x)
+        for i, x_i in enumerate(x):
+            self.values[i] = x_i
+
+    def get(self, key, defaultval=None):
+        """Get a value for a particular key."""
+        return self.values[self.keys.index(key)]
+
+    def items(self):
+        return {k: self.values[i] for i, k in enumerate(self.keys)}.items()
+
+    def in_(self, k):
+        return k in self.keys
+
+
+class ObjectiveConnector(VariableConnector):
+    """Class for linking objectives. Same as VariableConnector but used differently."""
+
+    def update(self, valuedict):
+        for i, k in enumerate(self.keys):
+            self.values[i] = valuedict[k].value
+
+
+class ConstraintConnector(ObjectiveConnector):
+    """Class for linking constraints. Same as VariableConnector but used differently."""
+
+
+def obj_name(probname, objname):
+    """Create architecture-level objective name for problem."""
+    return probname + "_" + objname
+
+
+class ProblemArchitecture(BaseProblem):
+    """
+    Class enabling the representation of combined joint optimization problems.
+
+    Combined optimization problems involve multiple variables and objectives which
+    interact (e.g., Integrated Resilience Optimization, Two-Stage Optimization, etc.)
+
+    Note that ProblemArchitectures are (presently) limited in the sense that they assume
+    problems are sequentially linked in the order of instantiation. While this works
+    well for nested problems, there are some limitations when workign with parallel
+    problems which we hope to resolve in future work.
+
+    Attributes
+    ----------
+    connectors : dict
+        Dictionary of Connector (variables, models, etc) added using .add_connector
+    problems : dict
+        Dictionary of optimization problems added using .add_problem
+    problem_graph : nx.DiGraph
+        Graph structure containing information about how each problem is connected.
+    var_mapping : dict
+        Dict mapping inputs to each problem to problem variables.
+
+    Examples
+    --------
+    Below we connect three example problems in a single architecture, linking the vars
+    x0 and x1 from ex_sp to be inputs to the scenario simulation (time) as well as the
+    disturbance simulation variable (s.y).
+    >>> ex_pa = ProblemArchitecture()
+    >>> ex_pa.add_connector_variable("x0", "x0")
+    >>> ex_pa.add_connector_variable("x1", "x1")
+    >>> ex_pa.add_problem("ex_sp", ex_sp, outputs={"x0": ["x0"], "x1": ["x1"]})
+    >>> ex_pa.add_problem("ex_scenprob", ex_scenprob, inputs={"x0": ["time"]})
+    >>> ex_pa.add_problem("ex_dp", ex_dp, inputs={"x1": ["s.y"]})
+    >>> ex_pa
+    ProblemArchitecture with:
+    CONNECTORS
+     -x0                                                          [nan]
+     -x1                                                          [nan]
+    PROBLEMS
+     -ex_sp({'ex_sp_xloc': ['x0', 'x1']}) -> ['x0', 'x1']
+     -ex_scenprob({'x0': ['time']}) -> []
+     -ex_dp({'x1': ['s.y']}) -> []
+    VARIABLES
+     -ex_sp_xloc                                              [nan nan]
+    OBJECTIVES
+     -ex_sp_f1                                                      nan
+     -ex_scenprob_f1                                                nan
+     -ex_dp_f1                                                      nan
+    CONSTRAINTS
+     -ex_sp_g1                                                      nan
+
+    Setting up this problem gives us callables for each problem which we can use to
+    call each objective in each problem in terms of its local variables:
+    >>> ex_pa.ex_sp_f1(1, 1)
+    2.0
+    >>> ex_pa.ex_scenprob_f1()
+    16.0
+    >>> ex_pa.ex_dp_f1()
+    1.0
+
+    We can also call these in terms of the full set of variables:
+    >>> ex_pa.ex_scenprob_f1_full(2, 2)
+    13.0
+    >>> ex_pa.ex_dp_f1_full(3, 3)
+    3.0
+    """
+
+    def __init__(self):
+        self.connectors = {}
+        self.problems = {}
+        self.problem_graph = nx.DiGraph()
+        self.var_mapping = {}
+        super().__init__()
+
+    def prob_repr(self):
+        repstr = ""
+        constr = " -" + "\n -".join(['{:<45}{:>20}'.format(k, str(var.values))
+                                     for k, var in self.connectors.items()])
+        if constr:
+            repstr += "\nCONNECTORS\n" + constr
+        probstr = " -" + "\n -".join([pn+"("+str(self.find_inputs(pn))+")"
+                                      + " -> " + str(self.find_outputs(pn))
+                                      for pn in self.problems])
+        if probstr:
+            repstr += "\nPROBLEMS\n" + probstr
+        var_str = " -" + "\n -".join(['{:<45}{:>20}'.format(k, str(var.values))
+                                      for k, var in self.variables.items()])
+        if self.variables:
+            repstr += "\n"+"VARIABLES\n" + var_str
+        obj_str = " -" + "\n -".join(['{:<45}{:>20.4f}'.format(k, v)
+                                      for k, v in self.objectives.items()])
+        if self.objectives:
+            repstr += "\n"+"OBJECTIVES\n" + obj_str
+        con_str = " -" + "\n -".join(['{:<45}{:>20.4f}'.format(k, v)
+                                      for k, v in self.constraints.items()])
+        if self.constraints:
+            repstr += "\n"+"CONSTRAINTS\n" + con_str
+        return repstr
+
+    def add_connector(self, name, *args, conclass=VariableConnector):
+        """
+        Add a connector linking variables between problems.
+
+        Parameters
+        ----------
+        name : str
+            Name for the connector
+        *args : strs
+            arguments to conclass
+        conclass : Connector
+            Class to instantiate.
+        """
+        self.connectors[name] = conclass(name, *args)
+        self.problem_graph.add_node(name, label=name)
+
+    def add_connector_variable(self, name, *varnames):
+        """
+        Add a connector linking variables between problems.
+
+        Parameters
+        ----------
+        name : str
+            Name for the connector
+        *varnames : strs
+            Names of the variable values (used in each problem) to link as a part of the
+            connector.
+        """
+        self.add_connector(name, varnames, conclass=VariableConnector)
+
+    def add_connector_objective(self, name, *objnames):
+        """
+        Add a connector linking an objective to an input variable in another problem.
+
+        Parameters
+        ----------
+        name : str
+            Name for the connector
+        *objnames : strs
+            Names of the objective values to link as a part of the connector.
+        """
+        self.add_connector(name, objnames, conclass=ObjectiveConnector)
+
+    def add_connector_constraint(self, name, *connames):
+        """
+        Add a connector linking a constraint to an input variable in another problem.
+
+        Parameters
+        ----------
+        name : str
+            Name for the connector
+        *varnames : strs
+            Names of the constraint values to link as a part of the connector.
+        """
+        self.add_connector(name, connames, conclass=ConstraintConnector)
+
+
+    def add_problem(self, name, problem, inputs={}, outputs={}):
+        """
+        Add a problem to the ProblemArchitecture.
+
+        Parameters
+        ----------
+        name : str
+            Name for the problem.
+        problem : BaseProblem/ScenProblem/SimpleProblem...
+            Problem object to add to the architecture.
+        inputs : dict, optional
+            List of input connector names (by name) and their corresponding problem
+            variables. The default is [].
+        outputs : dict, optional
+            List of output connector names (by name) and their corresponding problem
+            variables/objectives/constraints. The default is [].
+        """
+        if self.problems:
+            upstream_problem = [*self.problems][-1]
+            self.problem_graph.add_edge(upstream_problem, name,
+                                        label="next")
+            problem.consistent = False
+        else:
+            problem.consistent = True
+        self.problems[name] = problem
+        self.problem_graph.add_node(name, order=len(self.problems))
+
+        for con in inputs:
+            self.problem_graph.add_edge(con, name, label="input", var=inputs[con])
+        for con in outputs:
+            self.problem_graph.add_edge(name, con, label="output", var=outputs[con])
+        xloc_vars = self.find_xloc_vars(name)
+        if xloc_vars:
+            xloc_name = name+"_xloc"
+            self.variables[xloc_name] = VariableConnector(xloc_name, xloc_vars)
+            self.problem_graph.add_node(xloc_name, label="xloc")
+            self.problem_graph.add_edge(xloc_name, name, label="input", var=xloc_vars)
+        self.create_var_mapping(name)
+        self.add_objective_callables(name)
+        self.add_constraint_callables(name)
+        self.update_problem_objectives(name)
+        self.update_problem_constraints(name)
+        self.iter_hist.variables = init_dicthist(self.variables, None)
+
+    def create_var_mapping(self, probname):
+        """Create a dict mapping problem variables to input/connector variables."""
+        var_mapping = dict()
+        vars_to_match = [*self.problems[probname].variables]
+        inputdict = self.find_inputs(probname)
+        inputconnectors = self.get_inputs(probname)
+        for inputname, inputvars in inputdict.items():
+            for i, inputvar in enumerate(inputvars):
+                var_mapping[inputvar] = (inputname, inputconnectors[inputname].keys[i])
+                vars_to_match.remove(inputvar)
+        if vars_to_match:
+            raise Exception("Dangling variables: "+str(vars_to_match))
+        self.var_mapping[probname] = var_mapping
+
+    def update_downstream_consistency(self, probname):
+        """Mark downstream problems as inconsistent (when current problem updated)."""
+        probs = self.get_downstream_probs(probname)
+        for prob in probs:
+            self.problems[prob].consistent = False
+
+    def find_inconsistent_upstream(self, probname):
+        """Check that all upstream problems are consistent with current probname."""
+        probs = self.get_upstream_probs(probname)
+        inconsistent_probs = []
+        for prob in probs:
+            if not self.problems[prob].consistent:
+                inconsistent_probs.append(prob)
+        return inconsistent_probs
+
+    def add_objective_callables(self, probname):
+        """Add callable objective functions from problem."""
+        for objname in self.problems[probname].objectives:
+            self.add_objective_callable(probname, objname)
+
+    def add_objective_callable(self, probname, objname):
+        """Add callable objective function from problem probname."""
+        def newobj(*x):
+            return self.call_objective(probname, objname, *x)
+
+        def new_full_obj(*x):
+            return self.call_full_objective(probname, objname, *x)
+        aname = obj_name(probname, objname)
+        setattr(self, aname, newobj)
+        setattr(self, aname+"_full", new_full_obj)
+        self.iter_hist.objectives[aname] = []
+
+    def add_constraint_callables(self, probname):
+        """Add callable constraint function with name name."""
+        for conname in self.problems[probname].constraints:
+            self.add_constraint_callable(probname, conname)
+
+    def add_constraint_callable(self, probname, conname):
+        """Add callable constraint function from problem probname."""
+        def newcon(*x):
+            return self.call_constraint(probname, conname, *x)
+
+        def new_full_con(*x):
+            return self.call_full_constraint(probname, conname, *x)
+        aname = obj_name(probname, conname)
+        setattr(self, aname, newcon)
+        setattr(self, aname+"_full", new_full_con)
+        self.iter_hist.constraints[aname] = []
+
+    def update_problem_objectives(self, probname):
+        """Update architecture-level objectives from problem."""
+        for objname, obj in self.problems[probname].objectives.items():
+            aname = obj_name(probname, objname)
+            if self.problems[probname].consistent:
+                self.objectives[aname] = obj.value
+            else:
+                self.objectives[aname] = np.nan
+
+    def update_problem_constraints(self, probname):
+        """Update architecture-level constraints from problem."""
+        for objname, obj in self.problems[probname].constraints.items():
+            aname = obj_name(probname, objname)
+            if self.problems[probname].consistent:
+                self.constraints[aname] = obj.value
+            else:
+                self.constraints[aname] = np.nan
+
+    def find_input_vars(self, probname):
+        """Find variables for a problem that are in an input connector."""
+        return [var for con in self.find_inputs(probname).values() for var in con]
+
+    def find_xloc_vars(self, probname):
+        """Find variables for a problem that aren't in an input connector."""
+        return [x for x in self.problems[probname].variables
+                if x not in self.find_input_vars(probname)]
+
+    def call_full_objective(self, probname, objname, *x_full):
+        """Call objective of a problem over full set of variables *x_full."""
+        self.update_full_problem(*x_full, probname=probname)
+        return self.problems[probname].objectives[objname].value
+
+    def call_full_constraint(self, probname, conname, *x_full):
+        """Call objective of a problem over full set of variables *x_full."""
+        self.update_full_problem(*x_full, probname=probname)
+        return self.problems[probname].constraints[conname].value
+
+    def call_objective(self, probname, objname, *x_loc):
+        """Call objective of a problem over partial its local variables *x_loc."""
+        self.update_problem(probname, *x_loc)
+        return self.problems[probname].objectives[objname].value
+
+    def call_constraint(self, probname, conname, *x_loc):
+        """Call constraint of a problem over partial its local variables *x_loc."""
+        self.update_problem(probname, *x_loc)
+        return self.problems[probname].constraints[conname].value
+
+    def update_full_problem(self, *x_full, probname='', force_update=False):
+        """
+        Update the variables for the entire problem (or, problems up to probname).
+
+        Parameters
+        ----------
+        *x_full : float
+            Variable values for all local variables in the problem architecture up to
+            the probname.
+        probname : str, optional
+            If provided, the problems will be updated up to the given problem.
+            The default is ''.
+
+        Examples
+        --------
+        >>> ex_pa.update_full_problem(1, 2)
+        >>> ex_pa
+        ProblemArchitecture with:
+        CONNECTORS
+         -x0                                                           [1.]
+         -x1                                                           [2.]
+        PROBLEMS
+         -ex_sp({'ex_sp_xloc': ['x0', 'x1']}) -> ['x0', 'x1']
+         -ex_scenprob({'x0': ['time']}) -> []
+         -ex_dp({'x1': ['s.y']}) -> []
+        VARIABLES
+         -ex_sp_xloc                                                [1. 2.]
+        OBJECTIVES
+         -ex_sp_f1                                                   3.0000
+         -ex_scenprob_f1                                            16.0000
+         -ex_dp_f1                                                   2.0000
+        CONSTRAINTS
+         -ex_sp_g1                                                  -4.0000
+
+        >>> ex_pa.problems['ex_dp']
+        DisturbanceProblem with:
+        VARIABLES
+         -s.y                                                        2.0000
+        OBJECTIVES
+         -f1                                                         2.0000
+        """
+        if not probname:
+            probname = [*self.problems][-1]
+        probs_to_call = [*self.get_upstream_probs(probname), probname]
+        x_to_split = [*x_full]
+        for problem in probs_to_call:
+            loc_var = problem + "_xloc"
+            if loc_var in self.variables:
+                x_loc = [x_to_split.pop(0) for k in self.variables[loc_var].keys]
+            else:
+                x_loc = []
+            self.update_problem(problem, *x_loc, force_update=force_update)
+
+    def get_default_x(self, *x):
+        return tuple([v for gv in self.variables.values() for v in gv.values])
+
+    def update_objectives(self, *x):
+        """Take place of update_objectives in base problem."""
+        self.update_full_problem(*x, force_update=True)
+
+    def update_problem(self, probname, *x, force_update=False):
+        """
+        Update a given problem with new values for inputs (and non-input variables).
+
+        Additionally updates output connectors.
+
+        Parameters
+        ----------
+        probname : str
+            Name of the problem to update.
+        *x : float
+            Input variables to update (aside from inputs).
+
+        Examples
+        --------
+        >>> ex_pa.update_problem("ex_sp", 1, 2)
+        >>> ex_pa.problems["ex_sp"]
+        SimpleProblem with:
+        VARIABLES
+         -x0                                                         1.0000
+         -x1                                                         2.0000
+        OBJECTIVES
+         -f1                                                         3.0000
+        CONSTRAINTS
+         -g1                                                        -4.0000
+
+        This update should further update connectors:
+         >>> ex_pa.get_outputs("ex_sp")
+         {'x0': VariableConnector(name='x0', keys=('x0',), values=array([1.])), 'x1': VariableConnector(name='x1', keys=('x1',), values=array([2.]))}
+
+        Which should then propagate to downstream sims:
+        >>> ex_pa.update_problem("ex_scenprob")
+        >>> ex_pa.problems["ex_scenprob"]
+        SingleScenarioProblem(examplefxnblock, short) with:
+        VARIABLES
+         -time                                                       1.0000
+        OBJECTIVES
+         -f1                                                        16.0000
+        """
+        inconsistent_upstream = self.find_inconsistent_upstream(probname)
+        for upstream_prob in inconsistent_upstream:
+            self.update_problem(upstream_prob, force_update=force_update)
+        x_inputs = self.get_inputs_as_x(probname, *x)
+        self.problems[probname].call_outputs(*x_inputs, force_update=force_update)
+        self.problems[probname].consistent = True
+        self.update_problem_objectives(probname)
+        self.update_problem_constraints(probname)
+        self.update_problem_outputs(probname)
+        self.update_downstream_consistency(probname)
+        self.log_hist()
+
+    def update_problem_outputs(self, probname):
+        """
+        Update the output connectors from a problem.
+
+        Parameters
+        ----------
+        probname : str
+            Name of the problem.
+        """
+        outputs = self.get_outputs(probname)
+        for output, connector in outputs.items():
+            # note: must be put in order of inheritance
+            if isinstance(connector, ConstraintConnector):
+                connector.update(self.problems[probname].constraints)
+            elif isinstance(connector, ObjectiveConnector):
+                connector.update(self.problems[probname].objectives)
+            elif isinstance(connector, VariableConnector):
+                connector.update(self.problems[probname].variables)
+            else:
+                raise Exception("Invalid connector: "+connector)
+
+    def find_inputs(self, probname):
+        """
+        List input connectors for a given problem.
+
+        Parameters
+        ----------
+        probname : str
+            Name of the problem.
+
+        Returns
+        -------
+        inputs : list
+            List of names of connectors used as inputs.
+        """
+        return {e[0]: self.problem_graph.edges[e]['var']
+                for e in self.problem_graph.in_edges(probname)
+                if self.problem_graph.edges[e]['label'] == 'input'}
+
+    def find_outputs(self, probname):
+        """
+        List output connectors for a given problem.
+
+        Parameters
+        ----------
+        probname : str
+            Name of the problem.
+
+        Returns
+        -------
+        outputs : list
+            List of names of connectors used as outputs.
+        """
+        return [e[1] for e in self.problem_graph.out_edges(probname)
+                if self.problem_graph.edges[e]['label'] == 'output']
+
+    def get_inputs_as_x(self, probname, *x):
+        """
+        Get variable values for inputs.
+
+        Parameters
+        ----------
+        probname : str
+            Name of the problem..
+
+        Returns
+        -------
+        inputs : list
+            Input connectors and their values.
+        """
+        if x:
+            self.variables[probname+"_xloc"].update_values(*x)
+        vars_to_match = [*self.problems[probname].variables]
+        inputs = self.get_inputs(probname)
+        x_input = []
+        for var in vars_to_match:
+            inputname, inputkey = self.var_mapping[probname][var]
+            x_input.append(inputs[inputname].get(inputkey))
+        return x_input
+
+    def get_inputs(self, probname):
+        """Return a dict of input connectors for problem probname."""
+        return {c: self.connectors[c] if c in self.connectors else self.variables[c]
+                for c in self.find_inputs(probname)}
+
+    def get_outputs(self, probname):
+        """Return a dict of output connectors for problem probname."""
+        return {c: self.connectors[c] for c in self.find_outputs(probname)}
+
+    def get_downstream_probs(self, probname):
+        """Return a list of all problems to be executed after the problem probname."""
+        probs = [*self.problems]
+        ind = probs.index(probname)
+        return probs[ind+1:]
+
+    def get_upstream_probs(self, probname):
+        """Return a list of all problems to be executed before the problem probname."""
+        probs = [*self.problems]
+        ind = probs.index(probname)
+        return probs[:ind]
+
+    def show_sequence(self):
+        """
+        Show a visualization of the problem architecture.
+
+        Returns
+        -------
+        fig : mpl.figure
+            Figure object.
+        ax : mpl.axis
+            Axis object.
+        """
+        fig, ax = setup_plot()
+        pos = nx.planar_layout(self.problem_graph, dim=2)
+        nx.draw(self.problem_graph, pos=pos)
+        orders = nx.get_node_attributes(self.problem_graph, "order")
+        labels = {node: str(orders[node]) + ": " + node
+                  if node in orders else self.problem_graph.nodes[node]['label']
+                  for node in self.problem_graph}
+        nx.draw_networkx_labels(self.problem_graph, pos, labels=labels)
+        edge_labels = nx.get_edge_attributes(self.problem_graph, "label")
+        edge_vars = nx.get_edge_attributes(self.problem_graph, "var")
+        edge_labels = {e: lab+": "+str(edge_vars[e]) if e in edge_vars else lab
+                       for e, lab in edge_labels.items()}
+        nx.draw_networkx_edge_labels(self.problem_graph, pos, edge_labels=edge_labels)
+        return fig, ax
+
+    # def log_hist(self):
+    #    """Log overall problem arch history."""
+    #    self.log_time()
+
+
+ex_pa = ProblemArchitecture()
+ex_pa.add_connector_variable("x0", "x0")
+ex_pa.add_connector_variable("x1", "x1")
+ex_pa.add_problem("ex_sp", ex_sp, outputs={"x0": ["x0"], "x1": ["x1"]})
+ex_pa.add_problem("ex_scenprob", ex_scenprob, inputs={"x0": ["time"]})
+ex_pa.add_problem("ex_dp", ex_dp, inputs={"x1": ["s.y"]})
+# ex_pa.ex_dp_f1_full(3, 3)
 
 class DynamicInterface():
-    """ 
-    Interface for dynamic search of model states (e.g., AST)
-    
-    Attributes:
-        t : float
-            time
-        t_max : float
-            max time
-        t_ind : int
-            time index in log
-        desired_result : list
-            variables to get from the model at each time-step
-        hist : History
-            mdlhist for simulation
     """
-    def __init__(self, mdl, mdl_kwargs={}, t_max=False, track="all", run_stochastic="track_pdf", desired_result=[], use_end_condition=None):
+    Interface for dynamic search of model states (e.g., AST).
+
+    Attributes
+    ----------
+    t : float
+        time
+    t_max : float
+        max time
+    t_ind : int
+        time index in log
+    desired_result : list
+        variables to get from the model at each time-step
+    hist : History
+        mdlhist for simulation
+    """
+
+    def __init__(self, mdl, mdl_kwargs={}, t_max=False, track="all",
+                 run_stochastic="track_pdf", desired_result=[], use_end_condition=None):
         """
-        Initializing the problem
+        Initialize the problem.
 
         Parameters
         ----------
@@ -868,65 +1603,80 @@ class DynamicInterface():
         track : str/dict, optional
             Properties of the model to track over time. The default is "all".
         run_stochastic : bool/str, optional
-            Whether to run stochastic behaviors (True/False) and/or return pdf "track_pdf". The default is "track_pdf".
+            Whether to run stochastic behaviors (True/False) and/or
+            return pdf ("track_pdf"). The default is "track_pdf".
         desired_result : list, optional
             List of desired results to return at each update. The default is [].
         use_end_condition : bool, optional
             Whether to use model end-condition. The default is None.
         """
-        self.t=0.0
-        self.t_ind=0
-        if not t_max:   self.t_max=mdl.sp.times[-1]
-        else:           self.t_max = t_max
-        if type(desired_result)==str:   self.desired_result=[desired_result]
-        else:                           self.desired_result = desired_result
+        self.t = 0.0
+        self.t_ind = 0
+        if not t_max:
+            self.t_max = mdl.sp.times[-1]
+        else:
+            self.t_max = t_max
+        if type(desired_result) == str:
+            self.desired_result = [desired_result]
+        else:
+            self.desired_result = desired_result
         self.mdl = mdl.new_with_params(**mdl_kwargs)
-        timerange= np.arange(self.t, self.t_max+2*mdl.sp.dt, mdl.sp.dt)
+        timerange = np.arange(self.t, self.t_max+2*mdl.sp.dt, mdl.sp.dt)
         self.hist = mdl.create_hist(timerange, track)
-        if 'time' not in self.hist: 
-            self.hist.init_att('time', timerange[0], timerange=timerange, track='all', dtype=float)
-        self.run_stochastic=run_stochastic
+        if 'time' not in self.hist:
+            self.hist.init_att('time', timerange[0], timerange=timerange, track='all',
+                               dtype=float)
+        self.run_stochastic = run_stochastic
         self.use_end_condition = use_end_condition
+
     def update(self, seed={}, faults={}, disturbances={}):
         """
-        Updates the model states at the simulation time and iterates time
+        Update the model states at the simulation time and iterates time.
 
         Parameters
         ----------
         seed : seed, optional
             Seed for the simulation. The default is {}.
         faults : dict, optional
-            faults to inject in the model, with structure {fxn:[faults]}. The default is {}.
+            faults to inject in the model, with structure {fxn:[faults]}.
+            The default is {}.
         disturbances : dict, optional
-            Variables to change in the model, with structure {fxn.var:value}. The default is {}.
+            Variables to change in the model, with structure {fxn.var:value}.
+            The default is {}.
 
         Returns
         -------
         returns : dict
             dictionary of returns with values corresponding to desired_result
         """
-        if seed: self.mdl.update_seed(seed)
-        self.mdl.propagate(self.t, fxnfaults=faults, disturbances=disturbances, run_stochastic=self.run_stochastic)
+        if seed:
+            self.mdl.update_seed(seed)
+        self.mdl.propagate(self.t, fxnfaults=faults, disturbances=disturbances,
+                           run_stochastic=self.run_stochastic)
         self.hist.log(self.mdl, self.t_ind, time=self.t)
-        
+
         returns = {}
-        for result in self.desired_result:      returns[result] = self.mdl.get_vars(result)
-        if self.run_stochastic=="track_pdf":    returns['pdf'] = self.mdl.return_probdens()
+        for result in self.desired_result:
+            returns[result] = self.mdl.get_vars(result)
+        if self.run_stochastic == "track_pdf":
+            returns['pdf'] = self.mdl.return_probdens()
 
         self.t += self.mdl.sp.dt
-        self.t_ind +=1
-        if returns: return returns
+        self.t_ind += 1
+        if returns:
+            return returns
+
     def check_sim_end(self, external_condition=False):
         """
-        Checks the model end-condition (and sim time) and clips the simulation log if necessary
-        
+        Check the model end-condition (and sim time) and clips the simulation log.
+
         Parameters
         ----------
         external_condition : bool, optional
             External end-condition to trigger simulation end. The default is False.
-        
+
         Returns
-        ----------
+        -------
         end : bool
             Whether the simulation is finished
         """
@@ -935,9 +1685,14 @@ class DynamicInterface():
         elif external_condition:
             end = True
         else:
-            end = prop.check_end_condition(self.mdl, self.use_end_condition, self.t)
+            end = propagate.check_end_condition(self.mdl,
+                                                self.use_end_condition, self.t)
         if end:
-            prop.cut_mdlhist(self.log, self.t_ind)
+            propagate.cut_mdlhist(self.log, self.t_ind)
         return end
-    
-                
+
+
+if __name__ == "__main__":
+    import doctest
+    doctest.testmod(verbose=True)
+    ex_pa.show_sequence()

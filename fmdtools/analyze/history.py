@@ -210,12 +210,12 @@ class History(Result):
                  timerange=None, track=None, dtype=None, str_size='<U20'):
         sub_track = get_sub_include(att, track)
         if sub_track:
-            if timerange is None:
+            if type(val) == dict or (hasattr(val, 'keys') and hasattr(val, 'values')):
+                self[att] = init_dicthist(val, timerange, sub_track)
+            elif timerange is None:
                 self[att] = [val]
             elif type(val) == str:
                 self[att] = np.empty([len(timerange)], dtype=str_size)
-            elif type(val) == dict:
-                self[att] = init_dicthist(val, timerange, sub_track)
             elif type(val) == np.ndarray or dtype == np.ndarray:
                 self[att] = np.array([val for i in timerange])
             elif dtype:
