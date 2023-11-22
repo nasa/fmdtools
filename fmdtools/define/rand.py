@@ -59,10 +59,12 @@ class Rand(dataobject, mapping=True, copy_default=True):
     default_track = ('s', 'probdens')
 
     def __init__(self, *args, seed=42, run_stochastic=False, probs=list(), s_kwargs={}):
-        args = get_true_fields(self, *args, seed=seed,
-                               run_stochastic=run_stochastic, probs=probs)
+        args = get_true_fields(self, *args,
+                               seed=seed,
+                               run_stochastic=run_stochastic,
+                               probs=probs,
+                               rng=np.random.default_rng(self.seed))
         super().__init__(*args)
-        self.rng = np.random.default_rng(self.seed)
         if 's' in self.__fields__:
             self.s = self.s.__class__()
             self.s.set_atts(**s_kwargs)
@@ -143,8 +145,10 @@ class Rand(dataobject, mapping=True, copy_default=True):
         if hasattr(self, 's'):
             self.s.assign(other_rand.s)
         self.seed = other_rand.seed
+        self.rng = np.random.default_rng(self.seed)
         self.rng.__setstate__(other_rand.rng.__getstate__())
         self.probs = copy.copy(other_rand.probs)
+        self.run_stochastic = other_rand.run_stochastic
 
     def get_true_field(self, fieldname, *args, **kwargs):
         return get_true_field(self, fieldname, *args, **kwargs)

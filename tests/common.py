@@ -49,6 +49,7 @@ class CommonTests():
                     self.check_same_model(mdl, mdl2)
                     if t == copy_time:
                         mdl_copy = mdl.copy()
+                        self.check_same_model(mdl, mdl_copy)
                     if t > copy_time:
                         mdl_copy.propagate(t, run_stochastic=run_stochastic,
                                            fxnfaults=scen)

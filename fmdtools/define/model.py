@@ -284,10 +284,11 @@ class Model(Simulable):
         cop = self.__new__(self.__class__)  # Is this adequate? Wouldn't this give it new components?
         cop.is_copy = True
         cop.__init__(p=getattr(self, 'p', {}),
-                      sp=getattr(self, 'sp', {}),
-                      track=getattr(self, 'track', {}),
-                      r={'seed':self.r.seed})
-        
+                     sp=getattr(self, 'sp', {}),
+                     track=getattr(self, 'track', {}),
+                     r = {'seed': self.r.seed})
+        cop.r.assign(self.r)
+
         for flowname, flow in self.flows.items():
             cop.flows[flowname] = flow.copy()
 
@@ -296,9 +297,9 @@ class Model(Simulable):
             args_f = copy.deepcopy(self._fxninput[fxnname]['args_f'])
             kwargs = copy.deepcopy(self._fxninput[fxnname]['kwargs'])
             flows = cop.get_flows(flownames)
-            if args_f == 'None':     
+            if args_f == 'None':
                 cop.fxns[fxnname] = fxn.copy(flows, **kwargs)
-            else:                   
+            else:
                 cop.fxns[fxnname] = fxn.copy(flows, args_f, **kwargs)
 
         cop._fxninput = copy.deepcopy(self._fxninput)
@@ -320,6 +321,7 @@ class Model(Simulable):
                     hist[k] = self.h[k].copy()
             cop.h = hist.flatten()
         return cop
+
     def reset(self):
         """Resets the model to the initial state (with no faults, etc)"""
         for flowname, flow in self.flows.items():
@@ -327,6 +329,7 @@ class Model(Simulable):
         for fxnname, fxn in self.fxns.items():
             fxn.reset()
         self.r.reset()
+
     def return_probdens(self):
         """Returns the probability desnity of the model distributions given a """
         probdens=1.0
@@ -422,15 +425,15 @@ class Model(Simulable):
         """
         #Step 0: Update model states with disturbances
         self.set_vars(**disturbances)
-        
+
         #Step 1: Run Dynamic Propagation Methods in Order Specified and Inject Faults if Applicable
         for fxnname in self.dynamicfxns.union(fxnfaults.keys()):
             fxn = self.fxns[fxnname]
             faults = fxnfaults.get(fxnname, [])
-            if type(faults) != list: 
+            if type(faults) != list:
                 faults = [faults]
             fxn('dynamic', faults=faults, time=time, run_stochastic=run_stochastic)
-            
+
         #Step 2: Run Static Propagation Methods
         try:
             self.prop_static(time, run_stochastic=run_stochastic)

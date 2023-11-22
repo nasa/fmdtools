@@ -1450,7 +1450,7 @@ class ParameterSample(BaseSample):
         --------
         >>> ex_ps = ParameterSample(expd, seed=1)
         >>> ex_ps.combine_orthogonal()
-        [[1.0, 1.0], [2.0, 1.0], [3.0, 1.0], [4.0, 1.0], [10.0, 0], [10.0, 1], [10.0, 2], [10.0, 3], [10.0, 4], [10.0, 5], [10.0, 6], [10.0, 7], [10.0, 8], [10.0, 9], [10.0, 10]]
+        [[1.0, 1.0], [2.0, 1.0], [3.0, 1.0], [4.0, 1.0], [3.0, 0], [3.0, 1], [3.0, 2], [3.0, 3], [3.0, 4], [3.0, 5], [3.0, 6], [3.0, 7], [3.0, 8], [3.0, 9], [3.0, 10]]
         """
         var_iters = self.paramdomain.get_var_iters(resolution, resolutions=resolutions)
         x_def = self.paramdomain.get_x_defaults()

@@ -23,6 +23,7 @@ if __name__=="__main__":
                        "fmdtools/define/environment.py",
                        "fmdtools/sim/scenario.py",
                        "fmdtools/sim/sample.py",
+                       "fmdtools/sim/search.py",
                        "fmdtools/analyze/result.py",
                        "fmdtools/analyze/history.py",
                        "fmdtools/analyze/phases.py",
@@ -51,7 +52,7 @@ if __name__=="__main__":
                       ]
 
     # for testing notebooks during development:
-    # retcode = pytest.main(["--nbmake", *fast_notebooks])
+    retcode = pytest.main(["--nbmake", *fast_notebooks])
 
     slow_notebooks = ["examples/multirotor/Demonstration.ipynb",
                       "examples/multirotor/Urban_Drone_Demo.ipynb",
