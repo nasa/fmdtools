@@ -73,7 +73,7 @@ if __name__=="__main__":
     # retcode = pytest.main(["--nbmake", *slow_notebooks])
 
     # for testing all unittests
-    retcode = pytest.main(["--continue-on-collection-errors"])
+    # retcode = pytest.main(["--continue-on-collection-errors"])
 
     # for creating comprehensive test report:
 
