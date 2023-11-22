@@ -508,7 +508,7 @@ class Block(Simulable):
         """
         return {obj.__class__.__name__ for name, obj in self.flows.items()}
 
-    def reset(self):            #
+    def reset(self):
         """
         reset requires flows to be cleared first. Resets the block to the initial state with no faults. Used by default
         in derived objects when resetting the model. Requires associated flows to be cleared first.
@@ -520,7 +520,7 @@ class Block(Simulable):
 
         self.m.remove_any_faults()
         self.s = self._init_s(**self._args_s)
-        self.r = self._init_r(**self._args_r)
+        self.r = self._init_r(**self._args_r, run_stochastic=self.r.run_stochastic)
         self.t.reset()
         for flow in self.flows.values():
             flow.reset()
@@ -539,10 +539,9 @@ class Block(Simulable):
         -------
         cop : Block
             copy of the exising block
-
         """
-        cop = self.__new__(self.__class__)  # Is this adequate? Wouldn't this give it new components?
-        cop.is_copy=True
+        cop = self.__new__(self.__class__)
+        cop.is_copy = True
         try:
             saved_kwargs = self.get_args(**kwargs)
             cop.__init__(self.name, *args, **saved_kwargs)
@@ -552,7 +551,7 @@ class Block(Simulable):
         cop.t = self.t.copy(**self._args_t)
         cop.s.assign(self.s)
         cop.r.assign(self.r)
-        if hasattr(self, 'h'): 
+        if hasattr(self, 'h'):
             cop.h = self.h.copy()
         return cop
 
@@ -1097,7 +1096,7 @@ class ActArch(object):
         for flowname, flow in newflows.items():
             if flow.__hash__() != cop.flows[flowname].__hash__():
                 raise Exception("Flow not associated w- lower level of ASG: " + flowname)
-        
+
         for actname, action in self.actions.items(): 
             cop_act = cop.actions[actname]
             cop_act.duration = action.duration
@@ -1106,7 +1105,7 @@ class ActArch(object):
             cop_act.t = action.t.copy()
             if hasattr(action, 'h'):
                 cop_act.h = action.h.copy()
-            
+
         cop.active_actions = copy.deepcopy(self.active_actions)
         return cop
 
@@ -1155,7 +1154,7 @@ class ActArch(object):
             am.extend(f.return_mutables())
         am.append(copy.copy(self.active_actions))
         return am
-        
+
 
 # Function superclass
 
@@ -1395,12 +1394,13 @@ class FxnBlock(Block):
         return
 
     def reset(self):
+        # run_stochastic = self.r.run_stochastic
         super().reset()
         if hasattr(self, 'ca'):
             self.ca.reset()
         if hasattr(self, 'aa'):
             self.aa.reset()
-        self('reset', faults=[], time=0)
+        #self('reset', faults=[], time=0)
 
 
 class ExampleFxnBlock(FxnBlock):
