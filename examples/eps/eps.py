@@ -431,7 +431,7 @@ class EPS(Model):
         cost = repcost + flowcost
 
         rate = scen.rate
-        return {"rate": rate, "cost": cost, "expected cost": 24 * 365 * 5 * rate * cost}
+        return {"rate": rate, "cost": cost, "expected_cost": 24 * 365 * 5 * rate * cost}
 
 
 def discrep(value):

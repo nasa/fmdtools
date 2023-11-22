@@ -9,13 +9,16 @@ Has classes:
 - :class:`SampleApproach`: Defines a set of fault scenario samples.
 - :Class:`ParameterSample`: Defines a sample of a set of parameters.
 """
-from fmdtools.define.common import get_var, t_key, nest_dict
-from fmdtools.define.parameter import Parameter
+from fmdtools.define.common import get_var, nest_dict
+from fmdtools.define.parameter import Parameter, ExampleParameter
 from fmdtools.sim.scenario import SingleFaultScenario, Injection, JointFaultScenario
 from fmdtools.sim.scenario import ParameterScenario
 from fmdtools.analyze.phases import gen_interval_times, PhaseMap, join_phasemaps
 import numpy as np
 import itertools
+
+def pass_var(*x):
+    return x
 
 
 class ParameterDomain(object):
@@ -35,7 +38,7 @@ class ParameterDomain(object):
     Examples
     --------
     Given the parameter:
-    >>> class ExParam(Parameter):
+    >>> class ExampleParameter(Parameter):
     ...    x: float = 1.0
     ...    y: float = 10.0
     ...    z: float = 0.0
@@ -43,18 +46,18 @@ class ParameterDomain(object):
     ...    y_set = (1.0, 2.0, 3.0, 4.0)
 
     We can then define the following domain, which by default gets set constraints:
-    >>> expd = ParameterDomain(ExParam)
+    >>> expd = ParameterDomain(ExampleParameter)
     >>> expd.add_variables("y", "x")
     >>> expd.add_constants(z=20)
     >>> expd
     ParameterDomain with:
      - variables: {'y': {1.0, 2.0, 3.0, 4.0}, 'x': (0, 10)}
      - constants: {'z': 20}
-     - parameter_initializer: ExParam
+     - parameter_initializer: ExampleParameter
 
     This ParameterDomain then becomes a callable with the given variables:
     >>> expd(1, 2)
-    ExParam(x=2.0, y=1.0, z=20.0)
+    ExampleParameter(x=2.0, y=1.0, z=20.0)
 
     And we can separately check the set contraints for the variables:
     >>> expd.get_set_constraints(1, 2)
@@ -64,21 +67,22 @@ class ParameterDomain(object):
 
     This can also work with nested parameters:
     >>> class ExNestedParam(Parameter):
-    ...    ex_param: ExParam = ExParam()
+    ...    ex_param: ExampleParameter = ExampleParameter()
     ...    k: float = 20.0
 
     >>> expd1 = ParameterDomain(ExNestedParam)
     >>> expd1.add_variables("ex_param.x", "ex_param.y", "k")
     >>> expd1(1,2, 3)
-    ExNestedParam(ex_param=ExParam(x=1.0, y=2.0, z=0.0), k=3.0)
+    ExNestedParam(ex_param=ExampleParameter(x=1.0, y=2.0, z=0.0), k=3.0)
     """
 
     def __init__(self, parameter_init):
         self.parameter_init = parameter_init
         self.variables = {}
+        self.var_maps = {}
         self.constants = {}
 
-    def add_variable(self, variable, var_set=(),  var_lim=()):
+    def add_variable(self, variable, var_set=(),  var_lim=(), var_map=pass_var):
         """
         Add a variable to the ParameterDomain.
 
@@ -90,6 +94,11 @@ class ParameterDomain(object):
             Discrete set constraints for the variable. The default is ().
         var_lim : tuple, optional
             Variable limits. The default is ().
+        var_map: function, optional
+            Preprocessing variable mapping, mapping the input to the parameter domain
+            to the actual variable value. May be used to e.g., encode different discrete
+            options listed as strings ('arch1', 'arch2') as integers (1, 2).
+            The default is pass_var, which passes the input variable.
         """
         if var_set:
             var_domain = set(var_set)
@@ -100,8 +109,10 @@ class ParameterDomain(object):
         else:
             var_domain = ()
         self.variables[variable] = var_domain
+        if var_map:
+            self.var_maps[(variable,)] = var_map
 
-    def add_variables(self, *variables, sets={}, lims={}):
+    def add_variables(self, *variables, sets={}, lims={}, var_map=pass_var):
         """
         Add a list of variables to the ParameterDomain.
 
@@ -113,11 +124,19 @@ class ParameterDomain(object):
             Set constraints for the variables. The default is {}.
         lims : dict, optional
             Variable limits. The default is {}.
+        var_map: function, optional
+            Preprocessing variable mapping, mapping the input to the parameter domain
+            to the actual variable value. May be used to e.g., encode different discrete
+            options listed as strings ('arch1', 'arch2') as integers (1, 2).
+            The default is pass_var, which passes the input variable.
         """
         for variable in variables:
             self.add_variable(variable,
                               var_set=sets.get(variable, ()),
-                              var_lim=lims.get(variable, ()))
+                              var_lim=lims.get(variable, ()),
+                              var_map=False)
+        if var_map:
+            self.var_maps[variables] = var_map
 
     def add_constant(self, constant, value):
         """
@@ -175,9 +194,20 @@ class ParameterDomain(object):
             set_constraints.append(set_const)
         return tuple(set_constraints)
 
+    def get_map_vars(self, *x):
+        """Get the mapped variables for x."""
+        x_mapped = []
+        i = 0
+        for var_group in self.var_maps:
+            x_map = self.var_maps[var_group](*x[i:i+len(var_group)])
+            x_mapped.extend(x_map)
+            i += len(var_group)
+        return x_mapped
+
     def get_param_kwargs(self, *x):
         """Get kwargs for the parameter at the given value of x."""
-        return {**x_to_kwargs(self.constants, self.variables, *x)}
+        x_mapped = self.get_map_vars(*x)
+        return {**x_to_kwargs(self.constants, self.variables, *x_mapped)}
 
     def __call__(self, *x):
         """Generate the parameter at a given value of the variables."""
@@ -256,30 +286,18 @@ def x_to_kwargs(constants, variables, *x):
     return nest_dict({**var_args, **constants})
 
 
-
-
-
-class ExParam(Parameter):
-    """Example parameter for testing ParamDomain."""
-
-    x: float = 1.0
-    y: float = 10.0
-    z: float = 0.0
-    x_lim = (0, 10)
-    y_set = (1.0, 2.0, 3.0, 4.0)
-
 # example paramdomain/sample for testing
-expd = ParameterDomain(ExParam)
+expd = ParameterDomain(ExampleParameter)
 expd.add_variables("y", "x")
 expd.add_constants(z=20)
 expd
 
+
 class ExNestedParam(Parameter):
     """Example nested parameter for testing ParamDomain."""
-    ex_param: ExParam = ExParam()
+
+    ex_param: ExampleParameter = ExampleParameter()
     k: float = 20.0
-
-
 
 
 def same_mode(modename1, modename2, exact=True):
@@ -288,11 +306,6 @@ def same_mode(modename1, modename2, exact=True):
         return modename1 == modename2
     else:
         return modename1 in modename2
-
-
-def create_scenname(faulttup, time):
-    """Create a scenario name for a given fault scenario."""
-    return '_'.join([fm[0]+'_'+fm[1]+'_' for fm in faulttup])+t_key(time)
 
 
 def sample_times_even(times, numpts, dt=1.0):
@@ -641,11 +654,11 @@ class BaseSample():
         return len(self.scenarios())
 
     def named_scenarios(self):
-        """Get dict of scenarios by name"""
+        """Get dict of scenarios by name."""
         return {scen.name: scen for scen in self.scenarios()}
 
     def scen_names(self):
-        """Get list of scen names"""
+        """Get list of scen names."""
         return [s.name for s in self.scenarios()]
 
     def get_factor_metrics(self, res, metrics=['cost'], factors=["time"],
@@ -790,28 +803,12 @@ class FaultSample(BaseSample):
          - affect_dof_rf_propwarp_t5
         """
         self._times.add(time)
-        if len(faulttup) == 1:
-            faulttup = faulttup[0]
-        if self.phasemap:
-            phase = self.phasemap.find_base_phase(time)
-        else:
-            phase = ''
-        rate = self.faultdomain.mdl.get_scen_rate(faulttup[0], faulttup[1], time,
-                                                  phasemap=self.phasemap,
-                                                  weight=weight)
-        sequence = {time: Injection(faults={faulttup[0]: [faulttup[1]]})}
-        scen = SingleFaultScenario(sequence=sequence,
-                                   function=faulttup[0],
-                                   fault=faulttup[1],
-                                   rate=rate,
-                                   name=create_scenname((faulttup,), time),
-                                   time=time,
-                                   times=(time,),
-                                   phase=phase)
+        scen = SingleFaultScenario.from_fault(faulttup, time, mdl=self.faultdomain.mdl,
+                                              weight=weight, phasemap=self.phasemap)
         self._scenarios.append(scen)
 
     def add_joint_fault_scenario(self, faulttups, time, weight=1.0, baserate='ind',
-                           p_cond=1.0):
+                                 p_cond=1.0):
         """
         Add a single fault scenario to the list of scenarios.
 
@@ -850,42 +847,9 @@ class FaultSample(BaseSample):
         True
         """
         self._times.add(time)
-        if self.phasemap:
-            phase = self.phasemap.find_base_phase(time)
-        else:
-            phase = ''
-        # calculate rate
-        rates = {}
-        for i, faulttup in enumerate(faulttups):
-            rates[faulttup] = self.faultdomain.mdl.get_scen_rate(*faulttup,
-                                                                 time,
-                                                                 phasemap=self.phasemap,
-                                                                 weight=weight)
-        if baserate == 'ind':
-            rate = np.prod([*rates.values()])
-        elif baserate == 'max':
-            rate = np.max([*rates.values()])
-        else:
-            rate = rates[baserate]
-        rate *= p_cond
-        # create sequence
-        faults = {}
-        for faulttup in faulttups:
-            if faulttup[0] not in faults:
-                faults[faulttup[0]] = [faulttup[1]]
-            else:
-                faults[faulttup[0]].append(faulttup[1])
-        sequence = {time: Injection(faults=faults)}
-        # add fault scenario
-        scen = JointFaultScenario(sequence=sequence,
-                                  joint_faults=len(faulttups),
-                                  functions=tuple(set([f[0] for f in faulttups])),
-                                  modes=tuple(set([f[1] for f in faulttups])),
-                                  rate=rate,
-                                  name=create_scenname(faulttups, time),
-                                  time=time,
-                                  times=(time,),
-                                  phase=phase)
+        scen = JointFaultScenario.from_faults(faulttups, time, mdl=self.faultdomain.mdl,
+                                              weight=weight, baserate=baserate,
+                                              p_cond=p_cond)
         self._scenarios.append(scen)
 
     def add_fault_times(self, times, weights=[], n_joint=1, **joint_kwargs):
@@ -1486,7 +1450,7 @@ class ParameterSample(BaseSample):
         --------
         >>> ex_ps = ParameterSample(expd, seed=1)
         >>> ex_ps.combine_orthogonal()
-        [[1.0, 1.0], [2.0, 1.0], [3.0, 1.0], [4.0, 1.0], [10.0, 0], [10.0, 1], [10.0, 2], [10.0, 3], [10.0, 4], [10.0, 5], [10.0, 6], [10.0, 7], [10.0, 8], [10.0, 9], [10.0, 10]]
+        [[1.0, 1.0], [2.0, 1.0], [3.0, 1.0], [4.0, 1.0], [3.0, 0], [3.0, 1], [3.0, 2], [3.0, 3], [3.0, 4], [3.0, 5], [3.0, 6], [3.0, 7], [3.0, 8], [3.0, 9], [3.0, 10]]
         """
         var_iters = self.paramdomain.get_var_iters(resolution, resolutions=resolutions)
         x_def = self.paramdomain.get_x_defaults()

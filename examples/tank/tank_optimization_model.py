@@ -43,16 +43,24 @@ class TankParam(Parameter, readonly=True):
         return fp
 
 
+def x_to_fp(*x):
+    a = 1
+    fp = tuple((v[0], v[1], v[2], v[3], int(x[i]))
+               for i, v in enumerate(TankParam.__defaults__['faultpolicy']))
+    return fp
+
+
+
 def make_tankparam(*args, **kwargs):
     if args:
         fp = tuple((v[0], v[1], v[2], v[3], args[i])
-                   for i, v in enumerate(TankParam.__defaults__[2]))
+                   for i, v in enumerate(TankParam.__defaults__['faultpolicy']))
         kwargs['faultpolicy'] = fp
     return kwargs
 
 
 class TransportLiquidMode(Mode):
-    fp_args = {'stuck': (1e-5,),
+    fm_args = {'stuck': (1e-5,),
                'blockage': (1e-5,)}
     phases = {'na': 1.0}
     units = 'hr'
@@ -220,12 +228,11 @@ class Tank(Model):
         totcost = overfullcost + emptycost + buffercost + mitigationcost
         rate = scen.rate
         life = 1e5
-        return {'rate': rate, 'cost': totcost, 'expected cost': rate*life*totcost}
+        return {'rate': rate, 'cost': totcost, 'expected_cost': rate*life*totcost}
 
 
 if __name__ == "__main__":
     import fmdtools.sim.propagate as propagate
-    import fmdtools.analyze as an
 
     mdl = Tank()
 
@@ -238,3 +245,14 @@ if __name__ == "__main__":
 
     mdlhist.plot_line({'fxns': 'store_coolant'}, time_slice=2, title='NotVisible')
     result.graph.draw(title='NotVisible, time=2')
+
+    from fmdtools.sim.sample import ParameterDomain
+    pd = ParameterDomain(TankParam)
+    pd.add_variables("capacity", "turnup")
+    fp_vars = [1 for i, v in enumerate(TankParam.__defaults__['faultpolicy'])]
+    fp_varnames = ['faultpolicy.'+str(i) for i, v in enumerate(TankParam.__defaults__['faultpolicy'])]
+    x_to_fp(*fp_vars)
+    pd = ParameterDomain(TankParam)
+    pd.add_variables("capacity", "turnup")
+    pd.add_variables(*fp_varnames, var_map=x_to_fp)
+    pd(1, 1, *fp_vars)

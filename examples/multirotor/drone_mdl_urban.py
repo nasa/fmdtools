@@ -374,7 +374,7 @@ class Drone(DroneRural):
 
         metrics = {'rate': scen.rate,
                    'cost': totcost,
-                   'expected cost': totcost * scen.rate * 1e5,
+                   'expected_cost': totcost * scen.rate * 1e5,
                    'repcost': repcost,
                    'unsafe_flight_time': faulttime,
                    **land_metrics}

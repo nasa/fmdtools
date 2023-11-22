@@ -126,7 +126,7 @@ class Timer():
         return h
 
 
-class Time(dataobject):
+class Time(dataobject, copy_default=True):
     """
     Class for defining all time-based aspects of a Block (e.g., time, timestep, timers).
 
@@ -150,7 +150,7 @@ class Time(dataobject):
     timernames: tuple
         Names of timers to instantiate.
     """
-    time: float = 0.0
+    time: float = -0.1
     t_ind: int = 0
     t_loc: float = 0.0
     timers: dict = {}
@@ -209,7 +209,7 @@ class Time(dataobject):
 
     def reset(self):
         """Resets time to the initial state"""
-        self.time = 0.0
+        self.time = -0.1
         self.t_ind = 0
         self.t_loc = 0.0
         for timer in self.timers.values():

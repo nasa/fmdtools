@@ -2,23 +2,43 @@
 """
 Functions/classes for optimizing the drone defined in drone_mdl_opt.py.
 
-TODO: Adapt to new sample/optimization methods.
+Used/tested in opt_drone_rural to demonstrate fmdtools.sim.search.
 """
 
-from fmdtools.sim.search import ProblemInterface
-from drone_mdl_rural import Drone, DroneParam, ResPolicy
+from drone_mdl_rural import Drone, DroneParam, ResPolicy, DronePhysicalParameters
+from drone_mdl_dynamic import DroneEnvironmentGridParam
 from fmdtools.sim.sample import FaultDomain, FaultSample
+from fmdtools.sim import propagate as prop
+from fmdtools.analyze.phases import from_hist
 import numpy as np
 
-
-respols = ['continue', 'to_home', 'to_nearest', 'emland']
-
+# environmental parameters/constants
 target = [0, 150, 160, 160]
 safe = [0, 50, 10, 10]
 start = [0.0, 0.0, 10, 10]
+
+# variable options/costs
+bats = ['monolithic', 'series-split', 'parallel-split', 'split-both']
+batcostdict = {'monolithic': 0, 'series-split': 300,
+               'parallel-split': 300, 'split-both': 600}
+
+linarchs = ['quad', 'hex', 'oct']
+linecostdict = {'quad': 0, 'hex': 1000, 'oct': 2000}
+
+respols = ['continue', 'to_home', 'to_nearest', 'emland']
+
+# template model
 def_mdl = Drone()
 
+# fault modes to optimize over
+fd = FaultDomain(def_mdl)
+fd.add_singlecomp_modes("store_ee")
+fs = FaultSample(fd)
+fs.add_fault_phases("move")
+
+
 def plan_flight(z):
+    """Plan a flightplan that covers an area at the given height z."""
     sq = rect(target[0:2], target[2], target[3])
     landing = start
 
@@ -52,12 +72,12 @@ def plan_flight(z):
     flightplan.update(newplan)
     flightplan.update(
         {max(flightplan)+1: flightplan[1], max(flightplan)+2: flightplan[0]})
-    return {'flightplan': tuple(tuple(v) for v in flightplan.values())}
+    return (tuple(tuple(v) for v in flightplan.values()), )
 
-# creates list of corner coordinates for a square, given a center, xwidth, and ywidth
+
 def rect(center, xw, yw):
     """
-    creates list of corner coordinates for a rect, given a center, xwidth, and ywidth
+    Create list of corner coordinates for a rect, given a center, xwidth, and ywidth.
 
     Parameters
     ----------
@@ -80,122 +100,77 @@ def rect(center, xw, yw):
               [center[0]-xw/2, center[1]+yw/2]]
     return square
 
-# Optimization Functions
-bats = ['monolithic', 'series-split', 'parallel-split', 'split-both']
-linarchs = ['quad', 'hex', 'oct']
-batcostdict = {'monolithic': 0, 'series-split': 300,
-               'parallel-split': 300, 'split-both': 600}
-linecostdict = {'quad': 0, 'hex': 1000, 'oct': 2000}
+
+"""Manually-constructed optimization functions:"""
 
 
 def x_to_dcost(xdes):
+    """Calculate overall design cost from cost dictionaries."""
     descost = batcostdict[bats[int(xdes[0])]] + linecostdict[linarchs[int(xdes[1])]]
     return descost
 
 
-def xd_paramfunc(xdes):
-    return {'bat': bats[int(xdes[0])], 'linearch': linarchs[int(xdes[1])]}
+def cd(*xd):
+    """Calculate design cost (where xd is a tuple)."""
+    return x_to_dcost(xd)
 
 
-opt_prob = ProblemInterface("drone_problem", def_mdl)
-opt_prob.add_simulation("dcost", "external", x_to_dcost)
-opt_prob.add_objectives("dcost", cd="cd")
-opt_prob.add_variables("dcost", ('batteryarch', (0, 3)), ('linearch', (0, 3)))
-
-opt_prob.add_simulation("ocost", "single", {}, staged=False,
-                        upstream_sims={"dcost": {'paramfunc': xd_paramfunc}})
-opt_prob.add_objectives("ocost", co="expected_cost")
-opt_prob.add_constraints("ocost", g_soc=("store_ee.s.soc", "vars", "end",("greater", 20)),
-                                  g_max_height=("dofs.s.z", "vars", "all", ("less", 122)),
-                                  g_faults=("repcost", "endclass", "end", ("less", 0.1)))
-opt_prob.add_variables("ocost", "height", vartype=plan_flight)
-#opt_prob.cd([2,2])
-#opt_prob.co([10])
-
-respols = ['continue', 'to_home', 'to_nearest', 'emland']
-
-
-def spec_respol(bat, line):
-    return {'respolicy': ResPolicy(bat=respols[int(bat)], line=respols[int(line)])}
-
-
-fd = FaultDomain(def_mdl)
-fd.add_singlecomp_modes("store_ee")
-
-fs = FaultSample(fd)
-fs.add_fault_phases("move")
-
-opt_prob.add_simulation("rcost", "multi", fs.scenarios(), include_nominal=False,
-                        upstream_sims={'ocost': {'phases': {
-                            'plan_path': 'move'}, 'pass_mdl': []}},
-                        app_args={'faults': ('single-component', 'store_ee')},
-                        staged=True)
-opt_prob.add_objectives("rcost", cr="expected_cost")
-opt_prob.add_variables("rcost", "bat", "line", vartype=spec_respol)
-
-#opt_prob.cr([1,0])
-
-#an.plot.mdlhists(opt_prob._sims['rcost']['mdlhists']['store_ee lowcharge, t=7.0'], fxnflowvals={'dofs'}, time_slice=6)
-#an.plot.mdlhists(opt_prob._sims['rcost']['mdlhists']['store_ee lowcharge, t=7.0'], fxnflowvals={'store_ee'}, time_slice=6)
-#(variablename, objtype (optional), t (optional))
+def xd_paramfunc(*xdes):
+    """Transform x_des into corresponding bats/linearchs."""
+    return bats[int(xdes[0])], linarchs[int(xdes[1])]
 
 
 def calc_oper(mdl):
+    """Calculate operational objective, constraints, and phasedict for a given model."""
     endresults_nom, mdlhist = prop.nominal(mdl)
     opercost = endresults_nom.endclass['expected_cost']
     g_soc = 20 - mdlhist.fxns.store_ee.s.soc[-1]
-    #g_faults = any(endresults_nom['faults'])
+    # g_faults = any(endresults_nom['faults'])
     g_max_height = sum([i for i in mdlhist.flows.dofs.s.z-122 if i > 0])
 
-    phases, modephases = mdlhist.get_modephases()
-    return opercost, g_soc, g_max_height, phases
+    phasemaps = from_hist(mdlhist)
+    return opercost, g_soc, g_max_height, phasemaps
 
 
 def x_to_ocost(xdes, xoper, loc='rural'):
-    fp = plan_flight(xoper[0], def_mdl)
-    params = DroneParam(bat=bats[xdes[0]], linearch=linarchs[xdes[1]], respolicy=ResPolicy(
-        bat='continue', line='continue'))
-    mdl = Drone(params=params)
+    """Calculate operational cost (obj, const, phases) at x_des, x_oper, and loc."""
+    fp = plan_flight(xoper[0])[0]
+    phys_p = DronePhysicalParameters(bat=bats[xdes[0]], linearch=linarchs[xdes[1]])
+    params = DroneParam(respolicy=ResPolicy(bat='continue', line='continue'),
+                        flightplan=fp,
+                        env_param=DroneEnvironmentGridParam(loc=loc),
+                        phys_param=phys_p)
+    mdl = Drone(p=params)
     return calc_oper(mdl)
+
+
+def xr_paramfunc(*x_res):
+    """Convert x_res into corresponding bat/line resilience policy."""
+    return respols[int(x_res[0])], respols[int(x_res[1])]
 
 
 def calc_res(mdl, fullcosts=False, faultmodes='all', include_nominal=True,
              pool=False, phases={}, staged=True):
-    #app = SampleApproach(mdl, faults=('single-component', faultmodes), phases={'forward'})
-
+    """Calculate resilience cost for a given model."""
     fs = FaultSample(fd, phasemap=phases['plan_path'])
     fs.add_fault_phases("move")
 
     result, mdlhists = prop.fault_sample(mdl, fs, staged=staged, pool=pool,
-                                         showprogress=False)  # , staged=False)
+                                         showprogress=False)
     rescost = result.total('expected_cost')-(not include_nominal) * \
         result.nominal.endclass['expected_cost']
-    #an.plot.mdlhists({'faulty':mdlhists['store_ee lowcharge, t=6.0'], 'nominal':mdlhists['nominal']}, fxnflowvals={'dofs'}, time_slice=6)
-    #an.plot.mdlhists({'faulty':mdlhists['store_ee lowcharge, t=7.0'], 'nominal':mdlhists['nominal']}, fxnflowvals={'store_ee'}, time_slice=6)
-    #an.plot.mdlhists({'faulty':mdlhists['store_ee lowcharge, t=6.0'], 'nominal':mdlhists['nominal']}, fxnflowvals={'plan_path'}, time_slice=6)
-    #an.plot.mdlhists({'faulty':mdlhists['store_ee lowcharge, t=6.0'], 'nominal':mdlhists['nominal']}, fxnflowvals={'rsig_traj', 'hsig_bat','hsig_dofs'})
-    #[ec['expected_cost'] for ec in endclasses.values()]
-    #[ec['endclass']['expected_cost'] for ec in opt_prob._sims['rcost']['results'].values()]
-    #plot_faulttraj({'nominal':mdlhists['nominal'], 'faulty':mdlhists['store_ee lowcharge, t=7.0']}, mdl.params, title='Fault response to store_ee lowcharge, t=6.0')
-    #phases, modephases = an.process.modephases(mdlhists['nominal'])
-    #an.plot.phases({p:ph for p,ph in phases.items() if p=='plan_path'}, modephases)
     return rescost
 
 
 def x_to_rcost(xdes, xoper, xres, loc='rural', fullcosts=False, faultmodes='all',
                include_nominal=False, pool=False, phases={}, staged=True):
-    bats = ['monolithic', 'series-split', 'parallel-split', 'split-both']
-    linarchs = ['quad', 'hex', 'oct']
-    respols = ['continue', 'to_home', 'to_nearest', 'emland']
-    # start locs
-    target = [0, 150, 160, 160]
-    safe = [0, 50, 10, 10]
-    start = [0.0, 0.0, 10, 10]
-
-    fp = plan_flight(xoper[0])
-
-    params = DroneParam(bat=bats[xdes[0]], linearch=linarchs[xdes[1]], respolicy=ResPolicy(
-        bat=respols[xres[0]], line=respols[xres[1]]))
+    """Calculate resilience cost at xdes, xoper, xres variables."""
+    fp = plan_flight(xoper[0])[0]
+    phys_p = DronePhysicalParameters(bat=bats[xdes[0]], linearch=linarchs[xdes[1]])
+    params = DroneParam(phys_param=phys_p,
+                        respolicy=ResPolicy(*xr_paramfunc(*xres)),
+                        flightplan=fp,
+                        env_param=DroneEnvironmentGridParam(loc=loc))
     mdl = Drone(p=params)
     if not phases:
         _, _, _, phases = calc_oper(mdl)
@@ -207,31 +182,6 @@ def x_to_rcost(xdes, xoper, xres, loc='rural', fullcosts=False, faultmodes='all'
                     phases=phases,
                     staged=staged)
 
+
 if __name__ == "__main__":
-    import fmdtools.sim.propagate as prop
-    import matplotlib.pyplot as plt
-    import multiprocess as mp
-
-
-    #opt_prob.add_combined_objective("total_cost", 'cd', 'co', 'cr')
-    #opt_prob.total_cost([1,1],[100],[1,1])
-    #opt_prob.total_cost([1,1,100,1,1])
-    #opt_prob.time_sims([1,1,100,1,1])
-
-    opt_prob.cr([2, 2, 100, 0, 0])
-
-    x_to_rcost([2, 2], [100], [0, 0], faultmodes='store_ee')
-    x_to_rcost([0, 0], [100], [0, 0], faultmodes='store_ee')
-    opt_prob.show_architecture()
-
-    opt_prob.update_sim_options("ocost", track={"functions":{"plan_path":"all"}, "flows":{"dofs":"all"}})
-    opt_prob.update_sim_options("rcost", log_iter_hist=True, pool=mp.Pool(4), track={"functions":{"store_ee":"faults"}, "flows":{"dofs":"all"}})
-
-    opt_prob.total_cost([1,1,120,1,1])
-    opt_prob.total_cost([1,1,60,1,1])
-
-    #opt_prob.time_sims([1, 1, 100, 1, 1])
-
-    #opt_prob.iter_hist
-
-    #plt.show()
+    a = 1

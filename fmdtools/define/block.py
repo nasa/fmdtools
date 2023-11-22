@@ -25,13 +25,13 @@ import inspect
 import warnings
 from recordclass import dataobject, asdict, astuple
 
-from fmdtools.define.state import State
-from fmdtools.define.parameter import Parameter, SimParam
+from fmdtools.define.state import State, ExampleState
+from fmdtools.define.parameter import Parameter, SimParam, ExampleParameter
 from fmdtools.define.rand import Rand
 from fmdtools.define.common import get_true_fields, get_true_field, init_obj_attr
-from fmdtools.define.common import get_obj_track, set_var
+from fmdtools.define.common import get_obj_track, set_var, get_var
 from fmdtools.define.time import Time
-from fmdtools.define.mode import Mode
+from fmdtools.define.mode import Mode, ExampleMode
 from fmdtools.define.flow import init_flow, Flow
 from fmdtools.analyze.result import Result
 from fmdtools.analyze.common import get_sub_include
@@ -102,6 +102,7 @@ class Simulable(object):
     """
     __slots__ = ('p', '_args_p', 'sp', '_args_sp', 'r', '_args_r', 'h', 'track', 'flows', 'name', 'is_copy')
     default_sp = {}
+    default_track = ["all"]
     _init_p = Parameter
     _init_r = Rand
     _init_sp = SimParam
@@ -183,9 +184,9 @@ class Simulable(object):
         Returns
         -------
         endclass: Result
-            Result dictionary with rate, cost, and expected cost values
+            Result dictionary with rate, cost, and expecte_cost values
         """
-        return Result({'rate': scen.rate, 'cost': 1, 'expected cost': scen.rate})
+        return Result({'rate': scen.rate, 'cost': 1, 'expected_cost': scen.rate})
 
     def new_params(self, p={}, sp={}, r={}, track={}):
         """
@@ -234,6 +235,47 @@ class Simulable(object):
         else:
             fxns = {self.name: self}
         return fxns
+
+    def get_vars(self, *variables, trunc_tuple=True):
+        """
+        Get variable values in the simulable.
+
+        Parameters
+        ----------
+        *variables : list/string
+            Variables to get from the model. Can be specified as a list
+            ['fxnname2', 'comp1', 'att2'], or a str 'fxnname.comp1.att2'
+
+        Returns
+        -------
+        variable_values: tuple
+            Values of variables. Passes (non-tuple) single value if only one variable.
+        """
+        if type(variables) == str:
+            variables = [variables]
+        variable_values = [None]*len(variables)
+        for i, var in enumerate(variables):
+            if type(var) == str:
+                var = var.split(".")
+            if var[0] in ['functions', 'fxns']:
+                f = self.get_fxns()[var[1]]
+                var = var[2:]
+            elif var[0] == 'flows':
+                f = self.flows[var[1]]
+                var = var[2:]
+            elif var[0] in self.get_fxns():
+                f = self.get_fxns()[var[0]]
+                var = var[1:]
+            elif var[0] in self.flows:
+                f = self.flows[var[0]]
+                var = var[1:]
+            else:
+                f = self
+            variable_values[i] = get_var(f, var)
+        if len(variable_values) == 1 and trunc_tuple:
+            return variable_values[0]
+        else:
+            return tuple(variable_values)
 
     def get_scen_rate(self, fxnname, faultmode, time, phasemap={}, weight=1.0):
         """
@@ -389,9 +431,8 @@ class Block(Simulable):
         
     def is_dynamic(self):
         """Checks if Block has dynamic execution step"""
-        return (getattr(self, 'dynamic_behavior', False) or
-                (hasattr(self, 'aa') and getattr(self.aa, 'proptype','') == 'dynamic'))
-        
+        return (hasattr(self, 'dynamic_behavior') or
+                (hasattr(self, 'aa') and getattr(self.aa, 'proptype', '') == 'dynamic'))
 
     def __repr__(self):
         """
@@ -467,7 +508,7 @@ class Block(Simulable):
         """
         return {obj.__class__.__name__ for name, obj in self.flows.items()}
 
-    def reset(self):            #
+    def reset(self):
         """
         reset requires flows to be cleared first. Resets the block to the initial state with no faults. Used by default
         in derived objects when resetting the model. Requires associated flows to be cleared first.
@@ -479,20 +520,18 @@ class Block(Simulable):
 
         self.m.remove_any_faults()
         self.s = self._init_s(**self._args_s)
-        self.r = self._init_r(**self._args_r)
+        self.r = self._init_r(**self._args_r, run_stochastic=self.r.run_stochastic)
         self.t.reset()
         for flow in self.flows.values():
             flow.reset()
 
-    def copy(self, flows, *args, **kwargs):
+    def copy(self, *args, **kwargs):
         """
 
         Parameters
         ----------
-        flows  : dict
-            Dictionary of new flows to add to the block
         args   : tuple
-            New arguments to use to instantiate the block
+            New arguments to use to instantiate the block, (e.g., flows, p, s)
         kwargs :
             New kwargs to use to instantiate the block 
 
@@ -500,21 +539,20 @@ class Block(Simulable):
         -------
         cop : Block
             copy of the exising block
-
         """
-        cop = self.__new__(self.__class__)  # Is this adequate? Wouldn't this give it new components?
-        cop.is_copy=True
+        cop = self.__new__(self.__class__)
+        cop.is_copy = True
         try:
             saved_kwargs = self.get_args(**kwargs)
-            cop.__init__(self.name, flows, *args, **saved_kwargs)
+            cop.__init__(self.name, *args, **saved_kwargs)
         except TypeError as e:
             raise Exception("Poor specification of "+str(self.__class__)) from e
         cop.m.mirror(self.m)
-        cop.t=self.t.copy(**self._args_t)
+        cop.t = self.t.copy(**self._args_t)
         cop.s.assign(self.s)
         cop.r.assign(self.r)
-        if hasattr(self, 'h'): 
-            cop.h =self.h.copy()
+        if hasattr(self, 'h'):
+            cop.h = self.h.copy()
         return cop
 
     def get_memory(self):
@@ -642,16 +680,15 @@ class Block(Simulable):
         for var, val in disturbances.items():
             set_var(self, var, val)
         faults = faults.get(self.name, [])
-        
+
         # Step 1: Run Dynamic Propagation Methods in Order Specified and Inject Faults if Applicable
         if hasattr(self, 'dynamic_loading_before'):
             self.dynamic_loading_before(self, time)
         if self.is_dynamic():
             self("dynamic", time=time, faults=faults, run_stochastic=run_stochastic)
-        
         if hasattr(self, 'dynamic_loading_after'):
             self.dynamic_loading_after(self, time)
-        
+
         # Step 2: Run Static Propagation Methods
         active = True
         oldmutables = self.return_mutables()
@@ -659,7 +696,7 @@ class Block(Simulable):
         while active:
             if self.is_static():
                 self("static", time=time, faults=faults, run_stochastic=run_stochastic)
-            
+
             if hasattr(self, 'static_loading'):
                 self.static_loading(time)
             # Check to see what flows now have new values and add connected functions (done for each because of communications potential)
@@ -1004,7 +1041,7 @@ class ActArch(object):
         dt : float
             Timestep to propagate over.
         """
-        if self.per_timestep: 
+        if self.per_timestep:
             self.set_active_actions(self.initial_action)
             for action in self.active_actions:
                 self.actions[action].t.t_loc = 0.0
@@ -1059,7 +1096,7 @@ class ActArch(object):
         for flowname, flow in newflows.items():
             if flow.__hash__() != cop.flows[flowname].__hash__():
                 raise Exception("Flow not associated w- lower level of ASG: " + flowname)
-        
+
         for actname, action in self.actions.items(): 
             cop_act = cop.actions[actname]
             cop_act.duration = action.duration
@@ -1068,7 +1105,7 @@ class ActArch(object):
             cop_act.t = action.t.copy()
             if hasattr(action, 'h'):
                 cop_act.h = action.h.copy()
-            
+
         cop.active_actions = copy.deepcopy(self.active_actions)
         return cop
 
@@ -1117,7 +1154,7 @@ class ActArch(object):
             am.extend(f.return_mutables())
         am.append(copy.copy(self.active_actions))
         return am
-        
+
 
 # Function superclass
 
@@ -1239,24 +1276,19 @@ class FxnBlock(Block):
         if hasattr(self, 'aa'):
             self.aa.update_seed(self.r.seed)
 
-    def copy(self, newflows, *args, **kwargs):
+    def copy(self, *args, **kwargs):
         """
         Create a copy of the function object.
 
         Adds newflows and arbitrary parameters to be associated with the copy. Used when
         copying the model.
 
-        Parameters
-        ----------
-        newflows : list
-            list of new flow objects to be associated with the copy of the function
-
         Returns
         -------
         copy : FxnBlock
             Copy of the given function with new flows
         """
-        cop = super().copy(newflows, *args, **kwargs)
+        cop = super().copy(*args, **kwargs)
         if hasattr(self, 'ca'):
             cop.ca = self.ca.copy_with_arg(**self._args_ca)
             cop.update_contained_modes('ca')
@@ -1276,7 +1308,7 @@ class FxnBlock(Block):
                 #    cop.h["a.active_actions"] = self.h['a.active_actions'].copy()
                 for actname, act in cop.aa.actions.items():
                     ex_hist = cop.h.get("aa.actions." + actname)
-                    if ex_hist: 
+                    if ex_hist:
                         act.h = ex_hist.copy()
                         for k, v in act.h.items():
                             cop.h["aa.actions." + actname + "." + k] = v
@@ -1335,13 +1367,6 @@ class FxnBlock(Block):
                     self.dynamic_behavior(time)
             elif not Decimal(str(time)) % Decimal(str(self.t.dt)):
                 self.dynamic_behavior(time)
-        elif proptype == 'reset':
-            if hasattr(self, 'static_behavior'):
-                self.static_behavior(time)
-            if hasattr(self, 'behavior'):
-                self.behavior(time)
-            if hasattr(self, 'dynamic_behavior'):
-                self.dynamic_behavior(time)
 
         # propagate faults from action/component level to function level
         if hasattr(self, 'aa') and self.aa.actions:
@@ -1367,7 +1392,26 @@ class FxnBlock(Block):
             self.ca.reset()
         if hasattr(self, 'aa'):
             self.aa.reset()
-        self('reset', faults=[], time=0)
+
+
+class ExampleFxnBlock(FxnBlock):
+    """Example Function block for testing"""
+
+    _init_p = ExampleParameter
+    _init_s = ExampleState
+    _init_m = ExampleMode
+
+    def dynamic_behavior(self, time):
+        """Increment x if nominal, else increment y."""
+        if not self.m.any_faults():
+            self.s.x += self.p.x
+        else:
+            self.s.y += self.p.y
+        if time < 1.0:
+            self.s.put(x=0.0, y=0.0)
+
+    def find_classification(self, scen, hist):
+        return {"xy": self.s.x + self.s.y}
 
 
 class GenericFxn(FxnBlock):

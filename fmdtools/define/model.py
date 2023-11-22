@@ -177,7 +177,7 @@ class Model(Simulable):
                 class_relationship[obj.__class__.__name__].update(obj.get_flowtypes())
             else: class_relationship[obj.__class__.__name__] = set(obj.get_flowtypes())
         return class_relationship
-    def build(self, functionorder=[], require_connections=True):
+    def build(self, functionorder=[], require_connections=True, update_seed=True):
         """
         Builds the model graph after the functions have been added.
 
@@ -186,8 +186,9 @@ class Model(Simulable):
         functionorder : list, optional
             The order for the functions to be executed in. The default is [].
         """
-        self.update_seed()
         if not getattr(self, 'is_copy', False):
+            if update_seed:
+                self.update_seed()
             if functionorder:
                 self.set_functionorder(functionorder)
             self.staticfxns = OrderedSet([fxnname for fxnname, fxn in self.fxns.items() 
@@ -284,31 +285,32 @@ class Model(Simulable):
         cop = self.__new__(self.__class__)  # Is this adequate? Wouldn't this give it new components?
         cop.is_copy = True
         cop.__init__(p=getattr(self, 'p', {}),
-                      sp=getattr(self, 'sp', {}),
-                      track=getattr(self, 'track', {}),
-                      r={'seed':self.r.seed})
-        
+                     sp=getattr(self, 'sp', {}),
+                     track=getattr(self, 'track', {}),
+                     r = {'seed': self.r.seed})
+        cop.r.assign(self.r)
+
         for flowname, flow in self.flows.items():
             cop.flows[flowname] = flow.copy()
-        
+
         for fxnname, fxn in self.fxns.items():
             flownames = copy.deepcopy(self._fxninput[fxnname]['flows'])
             args_f = copy.deepcopy(self._fxninput[fxnname]['args_f'])
             kwargs = copy.deepcopy(self._fxninput[fxnname]['kwargs'])
             flows = cop.get_flows(flownames)
-            if args_f == 'None':     
+            if args_f == 'None':
                 cop.fxns[fxnname] = fxn.copy(flows, **kwargs)
-            else:                   
+            else:
                 cop.fxns[fxnname] = fxn.copy(flows, args_f, **kwargs)
 
         cop._fxninput = copy.deepcopy(self._fxninput)
         cop._fxnflows = copy.deepcopy(self._fxnflows)
         cop._flowstates = copy.deepcopy(self._flowstates)
-        
+
         cop.is_copy = False
-        cop.build(functionorder=copy.deepcopy(self.functionorder))
+        cop.build(functionorder=copy.deepcopy(self.functionorder), update_seed=False)
         cop.is_copy = True
-        if hasattr(self, 'h'): 
+        if hasattr(self, 'h'):
             hist = History()
             for k in self.h:
                 for att in ['fxns', 'flows']:
@@ -320,6 +322,7 @@ class Model(Simulable):
                     hist[k] = self.h[k].copy()
             cop.h = hist.flatten()
         return cop
+
     def reset(self):
         """Resets the model to the initial state (with no faults, etc)"""
         for flowname, flow in self.flows.items():
@@ -327,6 +330,7 @@ class Model(Simulable):
         for fxnname, fxn in self.fxns.items():
             fxn.reset()
         self.r.reset()
+
     def return_probdens(self):
         """Returns the probability desnity of the model distributions given a """
         probdens=1.0
@@ -386,45 +390,7 @@ class Model(Simulable):
                 else:
                     raise Exception(var[0] + " not a function, flow, or seed")
                 set_var(f, var, varvalues[i])
-    def get_vars(self, *variables, trunc_tuple=True):
-        """
-        Gets variable values in the model.
 
-        Parameters
-        ----------
-        *variables : list/string
-            Variables to get from the model. Can be specifid as: 
-            a list ['fxnname2', 'comp1', 'att2'], or
-            a str 'fxnname.comp1.att2'
-
-        Returns
-        -------
-        variable_values: tuple 
-            Values of variables. Passes (non-tuple) single value if only one variable.
-        """
-        if type(variables)==str:
-            variables = [variables]
-        variable_values = [None]*len(variables)
-        for i, var in enumerate(variables):
-            if type(var)==str: 
-                var=var.split(".")
-            if var[0] in ['functions', 'fxns']: 
-                f = self.fxns[var[1]] 
-                var=var[2:]
-            elif var[0] == 'flows': 
-                f = self.flows[var[1]] 
-                var = var[2:]
-            elif var[0] in self.fxns:
-                f = self.fxns[var[0]] 
-                var = var[1:]
-            elif var[0] in self.flows:
-                f = self.flows[var[0]] 
-                var = var[1:]
-            else: 
-                raise Exception(var[0] + " not a function or flow")
-            variable_values[i]=get_var(f, var)
-        if len(variable_values)==1 and trunc_tuple: return variable_values[0]
-        else:                                       return tuple(variable_values)
     def create_hist(self, timerange, track):
         if not hasattr(self, 'h'):
             hist = History()
@@ -460,15 +426,15 @@ class Model(Simulable):
         """
         #Step 0: Update model states with disturbances
         self.set_vars(**disturbances)
-        
+
         #Step 1: Run Dynamic Propagation Methods in Order Specified and Inject Faults if Applicable
         for fxnname in self.dynamicfxns.union(fxnfaults.keys()):
             fxn = self.fxns[fxnname]
             faults = fxnfaults.get(fxnname, [])
-            if type(faults) != list: 
+            if type(faults) != list:
                 faults = [faults]
             fxn('dynamic', faults=faults, time=time, run_stochastic=run_stochastic)
-            
+
         #Step 2: Run Static Propagation Methods
         try:
             self.prop_static(time, run_stochastic=run_stochastic)

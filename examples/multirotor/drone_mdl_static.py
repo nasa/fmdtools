@@ -531,8 +531,8 @@ class AffectDOF(FxnBlock, BaseLine):
 
     def calc_pwr(self):
         """Calculate immediate power/support from AffectDOF function."""
-        self.ee_in.s.rate = self.s.e_ti
         pwr = self.s.mul("e_to", "e_ti", "ct", "mt", "pt")
+        self.ee_in.s.rate = pwr
         self.dofs.s.uppwr = self.ctl_in.s.upward * pwr
         self.dofs.s.planpwr = self.ctl_in.s.forward * pwr
 
@@ -770,7 +770,7 @@ class Drone(Model):
         totcost = repcost
         rate = scen.rate
         expcost = totcost * rate * 1e5
-        return {"rate": rate, "cost": totcost, "expected cost": expcost}
+        return {"rate": rate, "cost": totcost, "expected_cost": expcost}
 
 
 if __name__ == "__main__":
