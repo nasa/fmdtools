@@ -8,7 +8,7 @@
 
 **fmdtools** (Fault Model Design tools) is a toolkit for modelling system resilience in the early design phase. With it, one can simulate the effects of faults in a system to build resilience into the system design at a high level.  To achieve this, fmdtools provides a Python-based *design environment* where one can represent the system in a model, simulate the resilience of the model to faults, and analyze the resulting model responses to iteratively improve the resilience of the design.
 
-Note: This version (**2.0-beta-2**) is currently in development, and thus not all interfaces may be fully stable and not all examples or documentation may be up-to-date. For stable versions, download packages releases without the -alpha or -beta tags.
+Note: This version (**2.0-beta-3**) is currently in development, and thus not all interfaces may be fully stable and not all examples or documentation may be up-to-date. For stable versions, download packages releases without the -alpha or -beta tags.
 
 [Click here to view the the full documentation website.](https://nasa.github.io/fmdtools)
 

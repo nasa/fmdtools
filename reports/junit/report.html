@@ -253,10 +253,10 @@ function filterTable(elem) { // eslint-disable-line no-unused-vars
 }
 </script>
     <h1>report.html</h1>
-    <p>Report generated on 02-Nov-2023 at 12:16:13 by <a href="https://pypi.python.org/pypi/pytest-html">pytest-html</a> v3.2.0</p>
+    <p>Report generated on 22-Nov-2023 at 03:02:53 by <a href="https://pypi.python.org/pypi/pytest-html">pytest-html</a> v3.2.0</p>
     <h2>Summary</h2>
-    <p>216 tests ran in 486.91 seconds. </p>
-    <p class="filter" hidden="true">(Un)check the boxes to filter the results.</p><input checked="true" class="filter" data-test-result="passed" hidden="true" name="filter_checkbox" onChange="filterTable(this)" type="checkbox"/><span class="passed">206 passed</span>, <input checked="true" class="filter" data-test-result="skipped" disabled="true" hidden="true" name="filter_checkbox" onChange="filterTable(this)" type="checkbox"/><span class="skipped">0 skipped</span>, <input checked="true" class="filter" data-test-result="failed" hidden="true" name="filter_checkbox" onChange="filterTable(this)" type="checkbox"/><span class="failed">10 failed</span>, <input checked="true" class="filter" data-test-result="error" hidden="true" name="filter_checkbox" onChange="filterTable(this)" type="checkbox"/><span class="error">22 errors</span>, <input checked="true" class="filter" data-test-result="xfailed" disabled="true" hidden="true" name="filter_checkbox" onChange="filterTable(this)" type="checkbox"/><span class="xfailed">0 expected failures</span>, <input checked="true" class="filter" data-test-result="xpassed" disabled="true" hidden="true" name="filter_checkbox" onChange="filterTable(this)" type="checkbox"/><span class="xpassed">0 unexpected passes</span>
+    <p>236 tests ran in 902.90 seconds. </p>
+    <p class="filter" hidden="true">(Un)check the boxes to filter the results.</p><input checked="true" class="filter" data-test-result="passed" hidden="true" name="filter_checkbox" onChange="filterTable(this)" type="checkbox"/><span class="passed">226 passed</span>, <input checked="true" class="filter" data-test-result="skipped" disabled="true" hidden="true" name="filter_checkbox" onChange="filterTable(this)" type="checkbox"/><span class="skipped">0 skipped</span>, <input checked="true" class="filter" data-test-result="failed" hidden="true" name="filter_checkbox" onChange="filterTable(this)" type="checkbox"/><span class="failed">10 failed</span>, <input checked="true" class="filter" data-test-result="error" hidden="true" name="filter_checkbox" onChange="filterTable(this)" type="checkbox"/><span class="error">15 errors</span>, <input checked="true" class="filter" data-test-result="xfailed" disabled="true" hidden="true" name="filter_checkbox" onChange="filterTable(this)" type="checkbox"/><span class="xfailed">0 expected failures</span>, <input checked="true" class="filter" data-test-result="xpassed" disabled="true" hidden="true" name="filter_checkbox" onChange="filterTable(this)" type="checkbox"/><span class="xpassed">0 unexpected passes</span>
     <h2>Results</h2>
     <table id="results-table">
       <thead id="results-table-head">
@@ -267,15 +267,6 @@ function filterTable(elem) { // eslint-disable-line no-unused-vars
           <th class="sortable links" col="links">Links</th></tr>
         <tr hidden="true" id="not-found-message">
           <th colspan="4">No results found. Try to check the filters</th></tr></thead>
-      <tbody class="error results-table-row">
-        <tr>
-          <td class="col-result">Error</td>
-          <td class="col-name">_build/html/_downloads/2d21039b77573642ec58edd287cbcd64/ex_pump.py::collect</td>
-          <td class="col-duration"></td>
-          <td class="col-links"></td></tr>
-        <tr>
-          <td class="extra" colspan="4">
-            <div class="log">_build\html\_downloads\2d21039b77573642ec58edd287cbcd64\ex_pump.py:28: in &lt;module&gt;<br/>    from fmdtools.sim.approach import SampleApproach, NominalApproach<br/><span class="error">E   ModuleNotFoundError: No module named &#x27;fmdtools.sim.approach&#x27;</span><br/></div></td></tr></tbody>
       <tbody class="error results-table-row">
         <tr>
           <td class="col-result">Error</td>
@@ -293,25 +284,7 @@ function filterTable(elem) { // eslint-disable-line no-unused-vars
           <td class="col-links"></td></tr>
         <tr>
           <td class="extra" colspan="4">
-            <div class="log">examples\multirotor\opt_drone_rural.py:9: in &lt;module&gt;<br/>    from drone_mdl_rural import Drone, DroneParam<br/><span class="error">E   ModuleNotFoundError: No module named &#x27;drone_mdl_rural&#x27;</span><br/></div></td></tr></tbody>
-      <tbody class="error results-table-row">
-        <tr>
-          <td class="col-result">Error</td>
-          <td class="col-name">examples/multirotor/test_multirotor.py::collect</td>
-          <td class="col-duration"></td>
-          <td class="col-links"></td></tr>
-        <tr>
-          <td class="extra" colspan="4">
-            <div class="log">..\..\..\AppData\Local\anaconda3\lib\importlib\__init__.py:126: in import_module<br/>    return _bootstrap._gcd_import(name[level:], package, level)<br/>&lt;frozen importlib._bootstrap&gt;:1050: in _gcd_import<br/>    ???<br/>&lt;frozen importlib._bootstrap&gt;:1027: in _find_and_load<br/>    ???<br/>&lt;frozen importlib._bootstrap&gt;:1006: in _find_and_load_unlocked<br/>    ???<br/>&lt;frozen importlib._bootstrap&gt;:688: in _load_unlocked<br/>    ???<br/>..\..\..\AppData\Local\anaconda3\lib\site-packages\_pytest\assertion\rewrite.py:172: in exec_module<br/>    exec(co, module.__dict__)<br/>examples\multirotor\test_multirotor.py:8: in &lt;module&gt;<br/>    from examples.multirotor.opt_drone_rural import opt_prob, x_to_rcost, x_to_ocost<br/>examples\multirotor\opt_drone_rural.py:9: in &lt;module&gt;<br/>    from drone_mdl_rural import Drone, DroneParam<br/><span class="error">E   ModuleNotFoundError: No module named &#x27;drone_mdl_rural&#x27;</span><br/></div></td></tr></tbody>
-      <tbody class="error results-table-row">
-        <tr>
-          <td class="col-result">Error</td>
-          <td class="col-name">examples/multirotor/test_multirotor.py::collect</td>
-          <td class="col-duration"></td>
-          <td class="col-links"></td></tr>
-        <tr>
-          <td class="extra" colspan="4">
-            <div class="log">ImportError while importing test module &#x27;C:\Users\dhulse\Documents\GitHub\fmdtools\examples\multirotor\test_multirotor.py&#x27;.<br/>Hint: make sure your test modules/packages have valid Python names.<br/>Traceback:<br/>[1m[31m..\..\..\AppData\Local\anaconda3\lib\importlib\__init__.py[0m:126: in import_module<br/>    [94mreturn[39;49;00m _bootstrap._gcd_import(name[level:], package, level)[90m[39;49;00m<br/>[1m[31mexamples\multirotor\test_multirotor.py[0m:8: in &lt;module&gt;<br/>    [94mfrom[39;49;00m [04m[96mexamples[39;49;00m[04m[96m.[39;49;00m[04m[96mmultirotor[39;49;00m[04m[96m.[39;49;00m[04m[96mopt_drone_rural[39;49;00m [94mimport[39;49;00m opt_prob, x_to_rcost, x_to_ocost[90m[39;49;00m<br/>[1m[31mexamples\multirotor\opt_drone_rural.py[0m:9: in &lt;module&gt;<br/>    [94mfrom[39;49;00m [04m[96mdrone_mdl_rural[39;49;00m [94mimport[39;49;00m Drone, DroneParam[90m[39;49;00m<br/>[1m[31mE   ModuleNotFoundError: No module named &#x27;drone_mdl_rural&#x27;[0m<br/></div></td></tr></tbody>
+            <div class="log">examples\multirotor\opt_drone_rural.py:8: in &lt;module&gt;<br/>    from drone_mdl_rural import Drone, DroneParam, ResPolicy, DronePhysicalParameters<br/><span class="error">E   ModuleNotFoundError: No module named &#x27;drone_mdl_rural&#x27;</span><br/></div></td></tr></tbody>
       <tbody class="error results-table-row">
         <tr>
           <td class="col-result">Error</td>
@@ -320,7 +293,7 @@ function filterTable(elem) { // eslint-disable-line no-unused-vars
           <td class="col-links"></td></tr>
         <tr>
           <td class="extra" colspan="4">
-            <div class="log">examples\pump\jointfaults_ex.py:14: in &lt;module&gt;<br/>    from ex_pump import Pump  # required to import entire module<br/>_build\html\_downloads\2d21039b77573642ec58edd287cbcd64\ex_pump.py:28: in &lt;module&gt;<br/>    from fmdtools.sim.approach import SampleApproach, NominalApproach<br/><span class="error">E   ModuleNotFoundError: No module named &#x27;fmdtools.sim.approach&#x27;</span><br/></div></td></tr></tbody>
+            <div class="log">examples\pump\jointfaults_ex.py:14: in &lt;module&gt;<br/>    from ex_pump import Pump  # required to import entire module<br/><span class="error">E   ModuleNotFoundError: No module named &#x27;ex_pump&#x27;</span><br/></div></td></tr></tbody>
       <tbody class="error results-table-row">
         <tr>
           <td class="col-result">Error</td>
@@ -329,7 +302,7 @@ function filterTable(elem) { // eslint-disable-line no-unused-vars
           <td class="col-links"></td></tr>
         <tr>
           <td class="extra" colspan="4">
-            <div class="log">examples\pump\parallelism_methods.py:8: in &lt;module&gt;<br/>    from ex_pump import Pump, PumpParam<br/>_build\html\_downloads\2d21039b77573642ec58edd287cbcd64\ex_pump.py:28: in &lt;module&gt;<br/>    from fmdtools.sim.approach import SampleApproach, NominalApproach<br/><span class="error">E   ModuleNotFoundError: No module named &#x27;fmdtools.sim.approach&#x27;</span><br/></div></td></tr></tbody>
+            <div class="log">examples\pump\parallelism_methods.py:8: in &lt;module&gt;<br/>    from ex_pump import Pump, PumpParam<br/><span class="error">E   ModuleNotFoundError: No module named &#x27;ex_pump&#x27;</span><br/></div></td></tr></tbody>
       <tbody class="error results-table-row">
         <tr>
           <td class="col-result">Error</td>
@@ -339,15 +312,6 @@ function filterTable(elem) { // eslint-disable-line no-unused-vars
         <tr>
           <td class="extra" colspan="4">
             <div class="log">examples\pump\pump_indiv.py:11: in &lt;module&gt;<br/>    from fmdtools.analyze import plot<br/><span class="error">E   ImportError: cannot import name &#x27;plot&#x27; from &#x27;fmdtools.analyze&#x27; (C:\Users\dhulse\Documents\GitHub\fmdtools\fmdtools\analyze\__init__.py)</span><br/></div></td></tr></tbody>
-      <tbody class="error results-table-row">
-        <tr>
-          <td class="col-result">Error</td>
-          <td class="col-name">examples/rover/opt_rover.py::collect</td>
-          <td class="col-duration"></td>
-          <td class="col-links"></td></tr>
-        <tr>
-          <td class="extra" colspan="4">
-            <div class="log">examples\rover\opt_rover.py:7: in &lt;module&gt;<br/>    from pymoo.optimize import minimize<br/><span class="error">E   ModuleNotFoundError: No module named &#x27;pymoo&#x27;</span><br/></div></td></tr></tbody>
       <tbody class="error results-table-row">
         <tr>
           <td class="col-result">Error</td>
@@ -392,7 +356,7 @@ function filterTable(elem) { // eslint-disable-line no-unused-vars
           <td class="col-links"></td></tr>
         <tr>
           <td class="extra" colspan="4">
-            <div class="log">..\..\..\AppData\Local\anaconda3\lib\importlib\__init__.py:126: in import_module<br/>    return _bootstrap._gcd_import(name[level:], package, level)<br/>&lt;frozen importlib._bootstrap&gt;:1050: in _gcd_import<br/>    ???<br/>&lt;frozen importlib._bootstrap&gt;:1027: in _find_and_load<br/>    ???<br/>&lt;frozen importlib._bootstrap&gt;:1006: in _find_and_load_unlocked<br/>    ???<br/>&lt;frozen importlib._bootstrap&gt;:688: in _load_unlocked<br/>    ???<br/>..\..\..\AppData\Local\anaconda3\lib\site-packages\_pytest\assertion\rewrite.py:172: in exec_module<br/>    exec(co, module.__dict__)<br/>examples\rover\test_rover.py:8: in &lt;module&gt;<br/>    from examples.rover.optimization.search_rover import line_dist, line_dist_faster<br/>examples\rover\optimization\search_rover.py:10: in &lt;module&gt;<br/>    from fmdtools.sim.approach import SampleApproach<br/><span class="error">E   ModuleNotFoundError: No module named &#x27;fmdtools.sim.approach&#x27;</span><br/></div></td></tr></tbody>
+            <div class="log">examples\rover\test_rover.py:8: in &lt;module&gt;<br/>    from examples.rover.optimization.search_rover import line_dist, line_dist_faster<br/>examples\rover\optimization\search_rover.py:10: in &lt;module&gt;<br/>    from fmdtools.sim.approach import SampleApproach<br/><span class="error">E   ModuleNotFoundError: No module named &#x27;fmdtools.sim.approach&#x27;</span><br/></div></td></tr></tbody>
       <tbody class="error results-table-row">
         <tr>
           <td class="col-result">Error</td>
@@ -432,53 +396,26 @@ function filterTable(elem) { // eslint-disable-line no-unused-vars
       <tbody class="error results-table-row">
         <tr>
           <td class="col-result">Error</td>
-          <td class="col-name">examples/tank/tank_opt.py::collect</td>
-          <td class="col-duration"></td>
-          <td class="col-links"></td></tr>
-        <tr>
-          <td class="extra" colspan="4">
-            <div class="log">examples\tank\tank_opt.py:24: in &lt;module&gt;<br/>    from fmdtools.sim.approach import SampleApproach<br/><span class="error">E   ModuleNotFoundError: No module named &#x27;fmdtools.sim.approach&#x27;</span><br/></div></td></tr></tbody>
-      <tbody class="error results-table-row">
-        <tr>
-          <td class="col-result">Error</td>
           <td class="col-name">examples/tank/tank_script.py::collect</td>
           <td class="col-duration"></td>
           <td class="col-links"></td></tr>
         <tr>
           <td class="extra" colspan="4">
             <div class="log">examples\tank\tank_script.py:13: in &lt;module&gt;<br/>    from tank_model import Tank<br/><span class="error">E   ModuleNotFoundError: No module named &#x27;tank_model&#x27;</span><br/></div></td></tr></tbody>
-      <tbody class="error results-table-row">
-        <tr>
-          <td class="col-result">Error</td>
-          <td class="col-name">examples/tank/test_tank_opt.py::collect</td>
-          <td class="col-duration"></td>
-          <td class="col-links"></td></tr>
-        <tr>
-          <td class="extra" colspan="4">
-            <div class="log">examples\tank\test_tank_opt.py:10: in &lt;module&gt;<br/>    from examples.tank.tank_opt import x_to_rcost_leg, x_to_totcost_leg, x_to_descost<br/>examples\tank\tank_opt.py:24: in &lt;module&gt;<br/>    from fmdtools.sim.approach import SampleApproach<br/><span class="error">E   ModuleNotFoundError: No module named &#x27;fmdtools.sim.approach&#x27;</span><br/></div></td></tr></tbody>
-      <tbody class="error results-table-row">
-        <tr>
-          <td class="col-result">Error</td>
-          <td class="col-name">examples/tank/test_tank_opt.py::collect</td>
-          <td class="col-duration"></td>
-          <td class="col-links"></td></tr>
-        <tr>
-          <td class="extra" colspan="4">
-            <div class="log">ImportError while importing test module &#x27;C:\Users\dhulse\Documents\GitHub\fmdtools\examples\tank\test_tank_opt.py&#x27;.<br/>Hint: make sure your test modules/packages have valid Python names.<br/>Traceback:<br/>[1m[31m..\..\..\AppData\Local\anaconda3\lib\importlib\__init__.py[0m:126: in import_module<br/>    [94mreturn[39;49;00m _bootstrap._gcd_import(name[level:], package, level)[90m[39;49;00m<br/>[1m[31mexamples\tank\test_tank_opt.py[0m:10: in &lt;module&gt;<br/>    [94mfrom[39;49;00m [04m[96mexamples[39;49;00m[04m[96m.[39;49;00m[04m[96mtank[39;49;00m[04m[96m.[39;49;00m[04m[96mtank_opt[39;49;00m [94mimport[39;49;00m x_to_rcost_leg, x_to_totcost_leg, x_to_descost[90m[39;49;00m<br/>[1m[31mexamples\tank\tank_opt.py[0m:24: in &lt;module&gt;<br/>    [94mfrom[39;49;00m [04m[96mfmdtools[39;49;00m[04m[96m.[39;49;00m[04m[96msim[39;49;00m[04m[96m.[39;49;00m[04m[96mapproach[39;49;00m [94mimport[39;49;00m SampleApproach[90m[39;49;00m<br/>[1m[31mE   ModuleNotFoundError: No module named &#x27;fmdtools.sim.approach&#x27;[0m<br/></div></td></tr></tbody>
       <tbody class="failed results-table-row">
         <tr>
           <td class="col-result">Failed</td>
-          <td class="col-name">examples/multirotor/Multirotor_Optimization.ipynb::</td>
-          <td class="col-duration">3.26</td>
+          <td class="col-name">examples/multirotor/Demonstration.ipynb::</td>
+          <td class="col-duration">9.61</td>
           <td class="col-links"></td></tr>
         <tr>
           <td class="extra" colspan="4">
-            <div class="log">---------------------------------------------------------------------------<br/>from drone_mdl_opt import Drone<br/><br/>mdl = Drone()<br/>[1;31m---------------------------------------------------------------------------[0m<br/>[1;31mModuleNotFoundError[0m                       Traceback (most recent call last)<br/>Cell [1;32mIn[2], line 1[0m<br/>[1;32m----&gt; 1[0m [38;5;28;01mfrom[39;00m [38;5;21;01mdrone_mdl_opt[39;00m [38;5;28;01mimport[39;00m Drone<br/>[0;32m      3[0m mdl [38;5;241m=[39m Drone()<br/><br/>[1;31mModuleNotFoundError[0m: No module named &#x27;drone_mdl_opt&#x27;<br/></div></td></tr></tbody>
+            <div class="log">---------------------------------------------------------------------------<br/>print(static_fmea.sort_values(&#x27;expected cost&#x27;, ascending=False).to_latex())<br/>[1;31m---------------------------------------------------------------------------[0m<br/>[1;31mKeyError[0m                                  Traceback (most recent call last)<br/>Cell [1;32mIn[21], line 1[0m<br/>[1;32m----&gt; 1[0m [38;5;28mprint[39m([43mstatic_fmea[49m[38;5;241;43m.[39;49m[43msort_values[49m[43m([49m[38;5;124;43m&#x27;[39;49m[38;5;124;43mexpected cost[39;49m[38;5;124;43m&#x27;[39;49m[43m,[49m[43m [49m[43mascending[49m[38;5;241;43m=[39;49m[38;5;28;43;01mFalse[39;49;00m[43m)[49m[38;5;241m.[39mto_latex())<br/><br/>File [1;32m~\AppData\Roaming\Python\Python310\site-packages\pandas\core\frame.py:6758[0m, in [0;36mDataFrame.sort_values[1;34m(self, by, axis, ascending, inplace, kind, na_position, ignore_index, key)[0m<br/>[0;32m   6754[0m [38;5;28;01melif[39;00m [38;5;28mlen[39m(by):<br/>[0;32m   6755[0m     [38;5;66;03m# len(by) == 1[39;00m<br/>[0;32m   6757[0m     by [38;5;241m=[39m by[[38;5;241m0[39m]<br/>[1;32m-&gt; 6758[0m     k [38;5;241m=[39m [38;5;28;43mself[39;49m[38;5;241;43m.[39;49m[43m_get_label_or_level_values[49m[43m([49m[43mby[49m[43m,[49m[43m [49m[43maxis[49m[38;5;241;43m=[39;49m[43maxis[49m[43m)[49m<br/>[0;32m   6760[0m     [38;5;66;03m# need to rewrap column in Series to apply key function[39;00m<br/>[0;32m   6761[0m     [38;5;28;01mif[39;00m key [38;5;129;01mis[39;00m [38;5;129;01mnot[39;00m [38;5;28;01mNone[39;00m:<br/>[0;32m   6762[0m         [38;5;66;03m# error: Incompatible types in assignment (expression has type[39;00m<br/>[0;32m   6763[0m         [38;5;66;03m# &quot;Series&quot;, variable has type &quot;ndarray&quot;)[39;00m<br/><br/>File [1;32m~\AppData\Roaming\Python\Python310\site-packages\pandas\core\generic.py:1778[0m, in [0;36mNDFrame._get_label_or_level_values[1;34m(self, key, axis)[0m<br/>[0;32m   1776[0m     values [38;5;241m=[39m [38;5;28mself[39m[38;5;241m.[39maxes[axis][38;5;241m.[39mget_level_values(key)[38;5;241m.[39m_values<br/>[0;32m   1777[0m [38;5;28;01melse[39;00m:<br/>[1;32m-&gt; 1778[0m     [38;5;28;01mraise[39;00m [38;5;167;01mKeyError[39;00m(key)<br/>[0;32m   1780[0m [38;5;66;03m# Check for duplicates[39;00m<br/>[0;32m   1781[0m [38;5;28;01mif[39;00m values[38;5;241m.[39mndim [38;5;241m&gt;[39m [38;5;241m1[39m:<br/><br/>[1;31mKeyError[0m: &#x27;expected cost&#x27;<br/></div></td></tr></tbody>
       <tbody class="failed results-table-row">
         <tr>
           <td class="col-result">Failed</td>
           <td class="col-name">examples/pump/AST_Sampling.ipynb::</td>
-          <td class="col-duration">0.01</td>
+          <td class="col-duration">0.04</td>
           <td class="col-links"></td></tr>
         <tr>
           <td class="extra" colspan="4">
@@ -502,17 +439,8 @@ jupyter_client.kernelspec.NoSuchKernel: No such kernel named julia-1.8
       <tbody class="failed results-table-row">
         <tr>
           <td class="col-result">Failed</td>
-          <td class="col-name">examples/pump/Optimization.ipynb::</td>
-          <td class="col-duration">3.15</td>
-          <td class="col-links"></td></tr>
-        <tr>
-          <td class="extra" colspan="4">
-            <div class="log">---------------------------------------------------------------------------<br/>from fmdtools.sim.search import ProblemInterface<br/>from fmdtools.sim.approach import SampleApproach<br/>from matplotlib import pyplot as plt<br/>import fmdtools.analyze as an<br/>from pump_stochastic import Pump<br/>[1;31m---------------------------------------------------------------------------[0m<br/>[1;31mModuleNotFoundError[0m                       Traceback (most recent call last)<br/>Cell [1;32mIn[1], line 2[0m<br/>[0;32m      1[0m [38;5;28;01mfrom[39;00m [38;5;21;01mfmdtools[39;00m[38;5;21;01m.[39;00m[38;5;21;01msim[39;00m[38;5;21;01m.[39;00m[38;5;21;01msearch[39;00m [38;5;28;01mimport[39;00m ProblemInterface<br/>[1;32m----&gt; 2[0m [38;5;28;01mfrom[39;00m [38;5;21;01mfmdtools[39;00m[38;5;21;01m.[39;00m[38;5;21;01msim[39;00m[38;5;21;01m.[39;00m[38;5;21;01mapproach[39;00m [38;5;28;01mimport[39;00m SampleApproach<br/>[0;32m      3[0m [38;5;28;01mfrom[39;00m [38;5;21;01mmatplotlib[39;00m [38;5;28;01mimport[39;00m pyplot [38;5;28;01mas[39;00m plt<br/>[0;32m      4[0m [38;5;28;01mimport[39;00m [38;5;21;01mfmdtools[39;00m[38;5;21;01m.[39;00m[38;5;21;01manalyze[39;00m [38;5;28;01mas[39;00m [38;5;21;01man[39;00m<br/><br/>[1;31mModuleNotFoundError[0m: No module named &#x27;fmdtools.sim.approach&#x27;<br/></div></td></tr></tbody>
-      <tbody class="failed results-table-row">
-        <tr>
-          <td class="col-result">Failed</td>
           <td class="col-name">examples/pump/Tutorial_unfilled.ipynb::</td>
-          <td class="col-duration">3.24</td>
+          <td class="col-duration">4.22</td>
           <td class="col-links"></td></tr>
         <tr>
           <td class="extra" colspan="4">
@@ -521,16 +449,17 @@ jupyter_client.kernelspec.NoSuchKernel: No such kernel named julia-1.8
         <tr>
           <td class="col-result">Failed</td>
           <td class="col-name">examples/rover/HFAC_Analyses/HFAC_Analyses.ipynb::</td>
-          <td class="col-duration">3.18</td>
+          <td class="col-duration">7.11</td>
           <td class="col-links"></td></tr>
         <tr>
           <td class="extra" colspan="4">
-            <div class="log">---------------------------------------------------------------------------<br/>from fmdtools.sim.approach import SampleApproach, NominalApproach<br/>import fmdtools.analyze as an<br/>import fmdtools.sim.propagate as prop<br/>import numpy as np<br/>import matplotlib.pyplot as plt<br/>plt.rcParams[&#x27;pdf.fonttype&#x27;] = 42<br/>import multiprocessing as mp<br/>import scipy.stats as stats<br/><br/><br/>import multiprocessing as mp<br/>[1;31m---------------------------------------------------------------------------[0m<br/>[1;31mModuleNotFoundError[0m                       Traceback (most recent call last)<br/>Cell [1;32mIn[1], line 1[0m<br/>[1;32m----&gt; 1[0m [38;5;28;01mfrom[39;00m [38;5;21;01mfmdtools[39;00m[38;5;21;01m.[39;00m[38;5;21;01msim[39;00m[38;5;21;01m.[39;00m[38;5;21;01mapproach[39;00m [38;5;28;01mimport[39;00m SampleApproach, NominalApproach<br/>[0;32m      2[0m [38;5;28;01mimport[39;00m [38;5;21;01mfmdtools[39;00m[38;5;21;01m.[39;00m[38;5;21;01manalyze[39;00m [38;5;28;01mas[39;00m [38;5;21;01man[39;00m<br/>[0;32m      3[0m [38;5;28;01mimport[39;00m [38;5;21;01mfmdtools[39;00m[38;5;21;01m.[39;00m[38;5;21;01msim[39;00m[38;5;21;01m.[39;00m[38;5;21;01mpropagate[39;00m [38;5;28;01mas[39;00m [38;5;21;01mprop[39;00m<br/><br/>[1;31mModuleNotFoundError[0m: No module named &#x27;fmdtools.sim.approach&#x27;<br/></div></td></tr></tbody>
+            <div class="log">---------------------------------------------------------------------------<br/>from fmdtools.sim.approach import SampleApproach, NominalApproach<br/>import fmdtools.analyze as an<br/>import fmdtools.sim.propagate as prop<br/>import numpy as np<br/>import matplotlib.pyplot as plt<br/>plt.rcParams[&#x27;pdf.fonttype&#x27;] = 42<br/>import multiprocessing as mp<br/>import scipy.stats as stats<br/><br/><br/>import multiprocessing as mp<br/>[1;31m---------------------------------------------------------------------------[0m<br/>[1;31mModuleNotFoundError[0m                       Traceback (most recent call last)<br/>Cell [1;32mIn[1], line 1[0m<br/>[1;32m----&gt; 1[0m [38;5;28;01mfrom[39;00m [38;5;21;01mfmdtools[39;00m[38;5;21;01m.[39;00m[38;5;21;01msim[39;00m[38;5;21;01m.[39;00m[38;5;21;01mapproach[39;00m [38;5;28;01mimport[39;00m SampleApproach, NominalApproach<br/>[0;32m      2[0m [38;5;28;01mimport[39;00m [38;5;21;01mfmdtools[39;00m[38;5;21;01m.[39;00m[38;5;21;01manalyze[39;00m [38;5;28;01mas[39;00m [38;5;21;01man[39;00m<br/>[0;32m      3[0m [38;5;28;01mimport[39;00m [38;5;21;01mfmdtools[39;00m[38;5;21;01m.[39;00m[38;5;21;01msim[39;00m[38;5;21;01m.[39;00m[38;5;21;01mpropagate[39;00m [38;5;28;01mas[39;00m [38;5;21;01mprop[39;00m<br/><br/>[1;31mModuleNotFoundError[0m: No module named &#x27;fmdtools.sim.approach&#x27;<br/> ------------------------------Captured stderr call------------------------------ <br/>Assertion failed: pfd.revents &amp; POLLIN (C:\ci\zeromq_1616055400030\work\src\signaler.cpp:265)
+<br/></div></td></tr></tbody>
       <tbody class="failed results-table-row">
         <tr>
           <td class="col-result">Failed</td>
           <td class="col-name">examples/rover/HFAC_Analyses/IDETC_Human_Paper_Analysis.ipynb::</td>
-          <td class="col-duration">1.85</td>
+          <td class="col-duration">2.67</td>
           <td class="col-links"></td></tr>
         <tr>
           <td class="extra" colspan="4">
@@ -539,7 +468,7 @@ jupyter_client.kernelspec.NoSuchKernel: No such kernel named julia-1.8
         <tr>
           <td class="col-result">Failed</td>
           <td class="col-name">examples/rover/degradation_modelling/Degradation_Modelling_Notebook.ipynb::</td>
-          <td class="col-duration">3.11</td>
+          <td class="col-duration">4.30</td>
           <td class="col-links"></td></tr>
         <tr>
           <td class="extra" colspan="4">
@@ -548,7 +477,7 @@ jupyter_client.kernelspec.NoSuchKernel: No such kernel named julia-1.8
         <tr>
           <td class="col-result">Failed</td>
           <td class="col-name">examples/rover/fault_sampling/Rover_Mode_Notebook.ipynb::</td>
-          <td class="col-duration">3.10</td>
+          <td class="col-duration">4.33</td>
           <td class="col-links"></td></tr>
         <tr>
           <td class="extra" colspan="4">
@@ -557,7 +486,7 @@ jupyter_client.kernelspec.NoSuchKernel: No such kernel named julia-1.8
         <tr>
           <td class="col-result">Failed</td>
           <td class="col-name">examples/rover/optimization/Rover_Response_Optimization.ipynb::</td>
-          <td class="col-duration">3.11</td>
+          <td class="col-duration">4.23</td>
           <td class="col-links"></td></tr>
         <tr>
           <td class="extra" colspan="4">
@@ -566,16 +495,26 @@ jupyter_client.kernelspec.NoSuchKernel: No such kernel named julia-1.8
         <tr>
           <td class="col-result">Failed</td>
           <td class="col-name">examples/rover/optimization/Search_Comparison.ipynb::</td>
-          <td class="col-duration">3.23</td>
+          <td class="col-duration">4.47</td>
           <td class="col-links"></td></tr>
         <tr>
           <td class="extra" colspan="4">
             <div class="log">---------------------------------------------------------------------------<br/>from search_rover import *<br/>import pandas as pd<br/>[1;31m---------------------------------------------------------------------------[0m<br/>[1;31mModuleNotFoundError[0m                       Traceback (most recent call last)<br/>Cell [1;32mIn[1], line 1[0m<br/>[1;32m----&gt; 1[0m [38;5;28;01mfrom[39;00m [38;5;21;01msearch_rover[39;00m [38;5;28;01mimport[39;00m [38;5;241m*[39m<br/>[0;32m      2[0m [38;5;28;01mimport[39;00m [38;5;21;01mpandas[39;00m [38;5;28;01mas[39;00m [38;5;21;01mpd[39;00m<br/><br/>File [1;32m~\Documents\GitHub\fmdtools\examples\rover\optimization\search_rover.py:10[0m<br/>[0;32m      8[0m [38;5;28;01mimport[39;00m [38;5;21;01mfmdtools[39;00m[38;5;21;01m.[39;00m[38;5;21;01msim[39;00m[38;5;21;01m.[39;00m[38;5;21;01mpropagate[39;00m [38;5;28;01mas[39;00m [38;5;21;01mprop[39;00m<br/>[0;32m      9[0m [38;5;28;01mimport[39;00m [38;5;21;01mfmdtools[39;00m[38;5;21;01m.[39;00m[38;5;21;01manalyze[39;00m [38;5;28;01mas[39;00m [38;5;21;01man[39;00m<br/>[1;32m---&gt; 10[0m [38;5;28;01mfrom[39;00m [38;5;21;01mfmdtools[39;00m[38;5;21;01m.[39;00m[38;5;21;01msim[39;00m[38;5;21;01m.[39;00m[38;5;21;01mapproach[39;00m [38;5;28;01mimport[39;00m SampleApproach<br/>[0;32m     11[0m [38;5;28;01mfrom[39;00m [38;5;21;01mfmdtools[39;00m[38;5;21;01m.[39;00m[38;5;21;01msim[39;00m[38;5;21;01m.[39;00m[38;5;21;01msearch[39;00m [38;5;28;01mimport[39;00m ProblemInterface<br/>[0;32m     12[0m [38;5;28;01mimport[39;00m [38;5;21;01mexamples[39;00m[38;5;21;01m.[39;00m[38;5;21;01mrover[39;00m[38;5;21;01m.[39;00m[38;5;21;01mrover_model[39;00m [38;5;28;01mas[39;00m [38;5;21;01mrvr[39;00m<br/><br/>[1;31mModuleNotFoundError[0m: No module named &#x27;fmdtools.sim.approach&#x27;<br/></div></td></tr></tbody>
+      <tbody class="failed results-table-row">
+        <tr>
+          <td class="col-result">Failed</td>
+          <td class="col-name">examples/tank/Tank_Optimization.ipynb::</td>
+          <td class="col-duration">33.56</td>
+          <td class="col-links"></td></tr>
+        <tr>
+          <td class="extra" colspan="4">
+            <div class="log">A cell timed out while it was being executed, after 20 seconds.<br/>The message was: Cell execution timed out.<br/>Here is a preview of the cell contents:<br/>-------------------<br/>result, args, fhist, thist, xdhist = alternating_opt(pa.tot_tot_cost_full, pa.des_cd, pa.res_cr, max_alts=1)<br/>-------------------<br/> ------------------------------Captured stderr call------------------------------ <br/>[SpyderKernelApp] ERROR | Timeout waiting for execute reply (20s).
+<br/></div></td></tr></tbody>
       <tbody class="passed results-table-row">
         <tr>
           <td class="col-result">Passed</td>
           <td class="col-name">examples/asg_demo/Action_Sequence_Graph.ipynb::</td>
-          <td class="col-duration">6.61</td>
+          <td class="col-duration">8.71</td>
           <td class="col-links"></td></tr>
         <tr>
           <td class="extra" colspan="4">
@@ -584,7 +523,7 @@ jupyter_client.kernelspec.NoSuchKernel: No such kernel named julia-1.8
         <tr>
           <td class="col-result">Passed</td>
           <td class="col-name">examples/eps/EPS_Example_Notebook.ipynb::</td>
-          <td class="col-duration">4.26</td>
+          <td class="col-duration">6.03</td>
           <td class="col-links"></td></tr>
         <tr>
           <td class="extra" colspan="4">
@@ -593,7 +532,7 @@ jupyter_client.kernelspec.NoSuchKernel: No such kernel named julia-1.8
         <tr>
           <td class="col-result">Passed</td>
           <td class="col-name">examples/eps/test_eps.py::epsTests::test_all_faults</td>
-          <td class="col-duration">0.27</td>
+          <td class="col-duration">0.44</td>
           <td class="col-links"></td></tr>
         <tr>
           <td class="extra" colspan="4">
@@ -620,7 +559,7 @@ jupyter_client.kernelspec.NoSuchKernel: No such kernel named julia-1.8
         <tr>
           <td class="col-result">Passed</td>
           <td class="col-name">examples/eps/test_eps.py::epsTests::test_fault_app</td>
-          <td class="col-duration">26.74</td>
+          <td class="col-duration">43.33</td>
           <td class="col-links"></td></tr>
         <tr>
           <td class="extra" colspan="4">
@@ -629,7 +568,7 @@ jupyter_client.kernelspec.NoSuchKernel: No such kernel named julia-1.8
         <tr>
           <td class="col-result">Passed</td>
           <td class="col-name">examples/eps/test_eps.py::epsTests::test_multfault_saving</td>
-          <td class="col-duration">0.03</td>
+          <td class="col-duration">0.07</td>
           <td class="col-links"></td></tr>
         <tr>
           <td class="extra" colspan="4">
@@ -638,7 +577,7 @@ jupyter_client.kernelspec.NoSuchKernel: No such kernel named julia-1.8
         <tr>
           <td class="col-result">Passed</td>
           <td class="col-name">examples/eps/test_eps.py::epsTests::test_nominal_saving</td>
-          <td class="col-duration">0.03</td>
+          <td class="col-duration">0.05</td>
           <td class="col-links"></td></tr>
         <tr>
           <td class="extra" colspan="4">
@@ -656,7 +595,7 @@ jupyter_client.kernelspec.NoSuchKernel: No such kernel named julia-1.8
         <tr>
           <td class="col-result">Passed</td>
           <td class="col-name">examples/eps/test_eps.py::epsTests::test_save_load_onefault</td>
-          <td class="col-duration">0.03</td>
+          <td class="col-duration">0.06</td>
           <td class="col-links"></td></tr>
         <tr>
           <td class="extra" colspan="4">
@@ -665,7 +604,7 @@ jupyter_client.kernelspec.NoSuchKernel: No such kernel named julia-1.8
         <tr>
           <td class="col-result">Passed</td>
           <td class="col-name">examples/eps/test_eps.py::epsTests::test_save_load_singlefaults</td>
-          <td class="col-duration">0.85</td>
+          <td class="col-duration">1.40</td>
           <td class="col-links"></td></tr>
         <tr>
           <td class="extra" colspan="4">
@@ -674,7 +613,7 @@ jupyter_client.kernelspec.NoSuchKernel: No such kernel named julia-1.8
         <tr>
           <td class="col-result">Passed</td>
           <td class="col-name">examples/multiflow_demo/Multiflow_and_Commsflow_Demonstration.ipynb::</td>
-          <td class="col-duration">3.20</td>
+          <td class="col-duration">4.28</td>
           <td class="col-links"></td></tr>
         <tr>
           <td class="extra" colspan="4">
@@ -683,7 +622,7 @@ jupyter_client.kernelspec.NoSuchKernel: No such kernel named julia-1.8
         <tr>
           <td class="col-result">Passed</td>
           <td class="col-name">examples/multiflow_demo/test_multiflow.py::define_Tests::test_multiflows</td>
-          <td class="col-duration">0.01</td>
+          <td class="col-duration">0.02</td>
           <td class="col-links"></td></tr>
         <tr>
           <td class="extra" colspan="4">
@@ -691,8 +630,8 @@ jupyter_client.kernelspec.NoSuchKernel: No such kernel named julia-1.8
       <tbody class="passed results-table-row">
         <tr>
           <td class="col-result">Passed</td>
-          <td class="col-name">examples/multirotor/Demonstration.ipynb::</td>
-          <td class="col-duration">13.42</td>
+          <td class="col-name">examples/multirotor/Multirotor_Optimization.ipynb::</td>
+          <td class="col-duration">26.49</td>
           <td class="col-links"></td></tr>
         <tr>
           <td class="extra" colspan="4">
@@ -701,7 +640,7 @@ jupyter_client.kernelspec.NoSuchKernel: No such kernel named julia-1.8
         <tr>
           <td class="col-result">Passed</td>
           <td class="col-name">examples/multirotor/Urban_Drone_Demo.ipynb::</td>
-          <td class="col-duration">43.97</td>
+          <td class="col-duration">66.44</td>
           <td class="col-links"></td></tr>
         <tr>
           <td class="extra" colspan="4">
@@ -808,8 +747,8 @@ jupyter_client.kernelspec.NoSuchKernel: No such kernel named julia-1.8
       <tbody class="passed results-table-row">
         <tr>
           <td class="col-result">Passed</td>
-          <td class="col-name">examples/pump/Parallelism_Tutorial.ipynb::</td>
-          <td class="col-duration">87.75</td>
+          <td class="col-name">examples/multirotor/test_multirotor.py::DroneParameterTests::test_objectives</td>
+          <td class="col-duration">0.06</td>
           <td class="col-links"></td></tr>
         <tr>
           <td class="extra" colspan="4">
@@ -817,8 +756,8 @@ jupyter_client.kernelspec.NoSuchKernel: No such kernel named julia-1.8
       <tbody class="passed results-table-row">
         <tr>
           <td class="col-result">Passed</td>
-          <td class="col-name">examples/pump/Pump_Example_Notebook.ipynb::</td>
-          <td class="col-duration">13.07</td>
+          <td class="col-name">examples/multirotor/test_multirotor.py::DroneParameterTests::test_param_domain_1</td>
+          <td class="col-duration">0.00</td>
           <td class="col-links"></td></tr>
         <tr>
           <td class="extra" colspan="4">
@@ -826,8 +765,8 @@ jupyter_client.kernelspec.NoSuchKernel: No such kernel named julia-1.8
       <tbody class="passed results-table-row">
         <tr>
           <td class="col-result">Passed</td>
-          <td class="col-name">examples/pump/Stochastic_Modelling.ipynb::</td>
-          <td class="col-duration">36.39</td>
+          <td class="col-name">examples/multirotor/test_multirotor.py::DroneParameterTests::test_param_domain_2</td>
+          <td class="col-duration">0.00</td>
           <td class="col-links"></td></tr>
         <tr>
           <td class="extra" colspan="4">
@@ -835,8 +774,8 @@ jupyter_client.kernelspec.NoSuchKernel: No such kernel named julia-1.8
       <tbody class="passed results-table-row">
         <tr>
           <td class="col-result">Passed</td>
-          <td class="col-name">examples/pump/Tutorial_complete.ipynb::</td>
-          <td class="col-duration">5.32</td>
+          <td class="col-name">examples/multirotor/test_multirotor.py::DroneParameterTests::test_set_constraints_1</td>
+          <td class="col-duration">0.00</td>
           <td class="col-links"></td></tr>
         <tr>
           <td class="extra" colspan="4">
@@ -844,8 +783,8 @@ jupyter_client.kernelspec.NoSuchKernel: No such kernel named julia-1.8
       <tbody class="passed results-table-row">
         <tr>
           <td class="col-result">Passed</td>
-          <td class="col-name">examples/pump/test_pump.py::PumpTests::test_app_prop_values</td>
-          <td class="col-duration">0.05</td>
+          <td class="col-name">examples/multirotor/test_multirotor.py::DroneParameterTests::test_set_constraints_2</td>
+          <td class="col-duration">0.00</td>
           <td class="col-links"></td></tr>
         <tr>
           <td class="extra" colspan="4">
@@ -853,115 +792,7 @@ jupyter_client.kernelspec.NoSuchKernel: No such kernel named julia-1.8
       <tbody class="passed results-table-row">
         <tr>
           <td class="col-result">Passed</td>
-          <td class="col-name">examples/pump/test_pump.py::PumpTests::test_approach_cost_calc</td>
-          <td class="col-duration">4.52</td>
-          <td class="col-links"></td></tr>
-        <tr>
-          <td class="extra" colspan="4">
-            <div class="empty log">No log output captured.</div></td></tr></tbody>
-      <tbody class="passed results-table-row">
-        <tr>
-          <td class="col-result">Passed</td>
-          <td class="col-name">examples/pump/test_pump.py::PumpTests::test_approach_parallelism</td>
-          <td class="col-duration">9.20</td>
-          <td class="col-links"></td></tr>
-        <tr>
-          <td class="extra" colspan="4">
-            <div class="empty log">No log output captured.</div></td></tr></tbody>
-      <tbody class="passed results-table-row">
-        <tr>
-          <td class="col-result">Passed</td>
-          <td class="col-name">examples/pump/test_pump.py::PumpTests::test_dynamic_prop_values</td>
-          <td class="col-duration">0.05</td>
-          <td class="col-links"></td></tr>
-        <tr>
-          <td class="extra" colspan="4">
-            <div class="empty log">No log output captured.</div></td></tr></tbody>
-      <tbody class="passed results-table-row">
-        <tr>
-          <td class="col-result">Passed</td>
-          <td class="col-name">examples/pump/test_pump.py::PumpTests::test_dynamic_prop_values_2</td>
-          <td class="col-duration">0.10</td>
-          <td class="col-links"></td></tr>
-        <tr>
-          <td class="extra" colspan="4">
-            <div class="empty log">No log output captured.</div></td></tr></tbody>
-      <tbody class="passed results-table-row">
-        <tr>
-          <td class="col-result">Passed</td>
-          <td class="col-name">examples/pump/test_pump.py::PumpTests::test_fault_sample_isave</td>
-          <td class="col-duration">0.84</td>
-          <td class="col-links"></td></tr>
-        <tr>
-          <td class="extra" colspan="4">
-            <div class="empty log">No log output captured.</div></td></tr></tbody>
-      <tbody class="passed results-table-row">
-        <tr>
-          <td class="col-result">Passed</td>
-          <td class="col-name">examples/pump/test_pump.py::PumpTests::test_fault_sample_save</td>
-          <td class="col-duration">0.57</td>
-          <td class="col-links"></td></tr>
-        <tr>
-          <td class="extra" colspan="4">
-            <div class="empty log">No log output captured.</div></td></tr></tbody>
-      <tbody class="passed results-table-row">
-        <tr>
-          <td class="col-result">Passed</td>
-          <td class="col-name">examples/pump/test_pump.py::PumpTests::test_fmea_options</td>
-          <td class="col-duration">0.08</td>
-          <td class="col-links"></td></tr>
-        <tr>
-          <td class="extra" colspan="4">
-            <div class="empty log">No log output captured.</div></td></tr></tbody>
-      <tbody class="passed results-table-row">
-        <tr>
-          <td class="col-result">Passed</td>
-          <td class="col-name">examples/pump/test_pump.py::PumpTests::test_model_copy_different</td>
-          <td class="col-duration">0.24</td>
-          <td class="col-links"></td></tr>
-        <tr>
-          <td class="extra" colspan="4">
-            <div class="empty log">No log output captured.</div></td></tr></tbody>
-      <tbody class="passed results-table-row">
-        <tr>
-          <td class="col-result">Passed</td>
-          <td class="col-name">examples/pump/test_pump.py::PumpTests::test_model_copy_same</td>
-          <td class="col-duration">0.38</td>
-          <td class="col-links"></td></tr>
-        <tr>
-          <td class="extra" colspan="4">
-            <div class="empty log">No log output captured.</div></td></tr></tbody>
-      <tbody class="passed results-table-row">
-        <tr>
-          <td class="col-result">Passed</td>
-          <td class="col-name">examples/pump/test_pump.py::PumpTests::test_model_reset</td>
-          <td class="col-duration">0.42</td>
-          <td class="col-links"></td></tr>
-        <tr>
-          <td class="extra" colspan="4">
-            <div class="empty log">No log output captured.</div></td></tr></tbody>
-      <tbody class="passed results-table-row">
-        <tr>
-          <td class="col-result">Passed</td>
-          <td class="col-name">examples/pump/test_pump.py::PumpTests::test_nested_sample_isave</td>
-          <td class="col-duration">6.09</td>
-          <td class="col-links"></td></tr>
-        <tr>
-          <td class="extra" colspan="4">
-            <div class="empty log">No log output captured.</div></td></tr></tbody>
-      <tbody class="passed results-table-row">
-        <tr>
-          <td class="col-result">Passed</td>
-          <td class="col-name">examples/pump/test_pump.py::PumpTests::test_nested_sample_save</td>
-          <td class="col-duration">5.97</td>
-          <td class="col-links"></td></tr>
-        <tr>
-          <td class="extra" colspan="4">
-            <div class="empty log">No log output captured.</div></td></tr></tbody>
-      <tbody class="passed results-table-row">
-        <tr>
-          <td class="col-result">Passed</td>
-          <td class="col-name">examples/pump/test_pump.py::PumpTests::test_nominal_save</td>
+          <td class="col-name">examples/multirotor/test_multirotor.py::DroneParameterTests::test_sim_mdl</td>
           <td class="col-duration">0.04</td>
           <td class="col-links"></td></tr>
         <tr>
@@ -970,8 +801,215 @@ jupyter_client.kernelspec.NoSuchKernel: No such kernel named julia-1.8
       <tbody class="passed results-table-row">
         <tr>
           <td class="col-result">Passed</td>
+          <td class="col-name">examples/multirotor/test_multirotor.py::DroneScenarioTest::test_scenprob_results</td>
+          <td class="col-duration">0.15</td>
+          <td class="col-links"></td></tr>
+        <tr>
+          <td class="extra" colspan="4">
+            <div class="empty log">No log output captured.</div></td></tr></tbody>
+      <tbody class="passed results-table-row">
+        <tr>
+          <td class="col-result">Passed</td>
+          <td class="col-name">examples/multirotor/test_multirotor.py::DroneScenarioTest2::test_scenprob_results</td>
+          <td class="col-duration">0.11</td>
+          <td class="col-links"></td></tr>
+        <tr>
+          <td class="extra" colspan="4">
+            <div class="empty log">No log output captured.</div></td></tr></tbody>
+      <tbody class="passed results-table-row">
+        <tr>
+          <td class="col-result">Passed</td>
+          <td class="col-name">examples/multirotor/test_multirotor.py::DroneScenarioTest3::test_scenprob_results</td>
+          <td class="col-duration">0.10</td>
+          <td class="col-links"></td></tr>
+        <tr>
+          <td class="extra" colspan="4">
+            <div class="empty log">No log output captured.</div></td></tr></tbody>
+      <tbody class="passed results-table-row">
+        <tr>
+          <td class="col-result">Passed</td>
+          <td class="col-name">examples/multirotor/test_multirotor.py::DroneDisturbanceTest::test_disturbance_set</td>
+          <td class="col-duration">0.07</td>
+          <td class="col-links"></td></tr>
+        <tr>
+          <td class="extra" colspan="4">
+            <div class="empty log">No log output captured.</div></td></tr></tbody>
+      <tbody class="passed results-table-row">
+        <tr>
+          <td class="col-result">Passed</td>
+          <td class="col-name">examples/pump/Optimization.ipynb::</td>
+          <td class="col-duration">26.01</td>
+          <td class="col-links"></td></tr>
+        <tr>
+          <td class="extra" colspan="4">
+            <div class="empty log">No log output captured.</div></td></tr></tbody>
+      <tbody class="passed results-table-row">
+        <tr>
+          <td class="col-result">Passed</td>
+          <td class="col-name">examples/pump/Parallelism_Tutorial.ipynb::</td>
+          <td class="col-duration">165.13</td>
+          <td class="col-links"></td></tr>
+        <tr>
+          <td class="extra" colspan="4">
+            <div class="empty log">No log output captured.</div></td></tr></tbody>
+      <tbody class="passed results-table-row">
+        <tr>
+          <td class="col-result">Passed</td>
+          <td class="col-name">examples/pump/Pump_Example_Notebook.ipynb::</td>
+          <td class="col-duration">17.62</td>
+          <td class="col-links"></td></tr>
+        <tr>
+          <td class="extra" colspan="4">
+            <div class="empty log">No log output captured.</div></td></tr></tbody>
+      <tbody class="passed results-table-row">
+        <tr>
+          <td class="col-result">Passed</td>
+          <td class="col-name">examples/pump/Stochastic_Modelling.ipynb::</td>
+          <td class="col-duration">52.82</td>
+          <td class="col-links"></td></tr>
+        <tr>
+          <td class="extra" colspan="4">
+            <div class="empty log">No log output captured.</div></td></tr></tbody>
+      <tbody class="passed results-table-row">
+        <tr>
+          <td class="col-result">Passed</td>
+          <td class="col-name">examples/pump/Tutorial_complete.ipynb::</td>
+          <td class="col-duration">7.06</td>
+          <td class="col-links"></td></tr>
+        <tr>
+          <td class="extra" colspan="4">
+            <div class="empty log">No log output captured.</div></td></tr></tbody>
+      <tbody class="passed results-table-row">
+        <tr>
+          <td class="col-result">Passed</td>
+          <td class="col-name">examples/pump/test_pump.py::PumpTests::test_app_prop_values</td>
+          <td class="col-duration">0.08</td>
+          <td class="col-links"></td></tr>
+        <tr>
+          <td class="extra" colspan="4">
+            <div class="empty log">No log output captured.</div></td></tr></tbody>
+      <tbody class="passed results-table-row">
+        <tr>
+          <td class="col-result">Passed</td>
+          <td class="col-name">examples/pump/test_pump.py::PumpTests::test_approach_cost_calc</td>
+          <td class="col-duration">7.76</td>
+          <td class="col-links"></td></tr>
+        <tr>
+          <td class="extra" colspan="4">
+            <div class="empty log">No log output captured.</div></td></tr></tbody>
+      <tbody class="passed results-table-row">
+        <tr>
+          <td class="col-result">Passed</td>
+          <td class="col-name">examples/pump/test_pump.py::PumpTests::test_approach_parallelism</td>
+          <td class="col-duration">13.28</td>
+          <td class="col-links"></td></tr>
+        <tr>
+          <td class="extra" colspan="4">
+            <div class="empty log">No log output captured.</div></td></tr></tbody>
+      <tbody class="passed results-table-row">
+        <tr>
+          <td class="col-result">Passed</td>
+          <td class="col-name">examples/pump/test_pump.py::PumpTests::test_dynamic_prop_values</td>
+          <td class="col-duration">0.07</td>
+          <td class="col-links"></td></tr>
+        <tr>
+          <td class="extra" colspan="4">
+            <div class="empty log">No log output captured.</div></td></tr></tbody>
+      <tbody class="passed results-table-row">
+        <tr>
+          <td class="col-result">Passed</td>
+          <td class="col-name">examples/pump/test_pump.py::PumpTests::test_dynamic_prop_values_2</td>
+          <td class="col-duration">0.16</td>
+          <td class="col-links"></td></tr>
+        <tr>
+          <td class="extra" colspan="4">
+            <div class="empty log">No log output captured.</div></td></tr></tbody>
+      <tbody class="passed results-table-row">
+        <tr>
+          <td class="col-result">Passed</td>
+          <td class="col-name">examples/pump/test_pump.py::PumpTests::test_fault_sample_isave</td>
+          <td class="col-duration">1.35</td>
+          <td class="col-links"></td></tr>
+        <tr>
+          <td class="extra" colspan="4">
+            <div class="empty log">No log output captured.</div></td></tr></tbody>
+      <tbody class="passed results-table-row">
+        <tr>
+          <td class="col-result">Passed</td>
+          <td class="col-name">examples/pump/test_pump.py::PumpTests::test_fault_sample_save</td>
+          <td class="col-duration">0.96</td>
+          <td class="col-links"></td></tr>
+        <tr>
+          <td class="extra" colspan="4">
+            <div class="empty log">No log output captured.</div></td></tr></tbody>
+      <tbody class="passed results-table-row">
+        <tr>
+          <td class="col-result">Passed</td>
+          <td class="col-name">examples/pump/test_pump.py::PumpTests::test_fmea_options</td>
+          <td class="col-duration">0.13</td>
+          <td class="col-links"></td></tr>
+        <tr>
+          <td class="extra" colspan="4">
+            <div class="empty log">No log output captured.</div></td></tr></tbody>
+      <tbody class="passed results-table-row">
+        <tr>
+          <td class="col-result">Passed</td>
+          <td class="col-name">examples/pump/test_pump.py::PumpTests::test_model_copy_different</td>
+          <td class="col-duration">0.34</td>
+          <td class="col-links"></td></tr>
+        <tr>
+          <td class="extra" colspan="4">
+            <div class="empty log">No log output captured.</div></td></tr></tbody>
+      <tbody class="passed results-table-row">
+        <tr>
+          <td class="col-result">Passed</td>
+          <td class="col-name">examples/pump/test_pump.py::PumpTests::test_model_copy_same</td>
+          <td class="col-duration">0.55</td>
+          <td class="col-links"></td></tr>
+        <tr>
+          <td class="extra" colspan="4">
+            <div class="empty log">No log output captured.</div></td></tr></tbody>
+      <tbody class="passed results-table-row">
+        <tr>
+          <td class="col-result">Passed</td>
+          <td class="col-name">examples/pump/test_pump.py::PumpTests::test_model_reset</td>
+          <td class="col-duration">0.60</td>
+          <td class="col-links"></td></tr>
+        <tr>
+          <td class="extra" colspan="4">
+            <div class="empty log">No log output captured.</div></td></tr></tbody>
+      <tbody class="passed results-table-row">
+        <tr>
+          <td class="col-result">Passed</td>
+          <td class="col-name">examples/pump/test_pump.py::PumpTests::test_nested_sample_isave</td>
+          <td class="col-duration">9.95</td>
+          <td class="col-links"></td></tr>
+        <tr>
+          <td class="extra" colspan="4">
+            <div class="empty log">No log output captured.</div></td></tr></tbody>
+      <tbody class="passed results-table-row">
+        <tr>
+          <td class="col-result">Passed</td>
+          <td class="col-name">examples/pump/test_pump.py::PumpTests::test_nested_sample_save</td>
+          <td class="col-duration">9.70</td>
+          <td class="col-links"></td></tr>
+        <tr>
+          <td class="extra" colspan="4">
+            <div class="empty log">No log output captured.</div></td></tr></tbody>
+      <tbody class="passed results-table-row">
+        <tr>
+          <td class="col-result">Passed</td>
+          <td class="col-name">examples/pump/test_pump.py::PumpTests::test_nominal_save</td>
+          <td class="col-duration">0.06</td>
+          <td class="col-links"></td></tr>
+        <tr>
+          <td class="extra" colspan="4">
+            <div class="empty log">No log output captured.</div></td></tr></tbody>
+      <tbody class="passed results-table-row">
+        <tr>
+          <td class="col-result">Passed</td>
           <td class="col-name">examples/pump/test_pump.py::PumpTests::test_one_run_csv</td>
-          <td class="col-duration">0.02</td>
+          <td class="col-duration">0.03</td>
           <td class="col-links"></td></tr>
         <tr>
           <td class="extra" colspan="4">
@@ -980,7 +1018,7 @@ jupyter_client.kernelspec.NoSuchKernel: No such kernel named julia-1.8
         <tr>
           <td class="col-result">Passed</td>
           <td class="col-name">examples/pump/test_pump.py::PumpTests::test_one_run_json</td>
-          <td class="col-duration">0.02</td>
+          <td class="col-duration">0.03</td>
           <td class="col-links"></td></tr>
         <tr>
           <td class="extra" colspan="4">
@@ -989,7 +1027,7 @@ jupyter_client.kernelspec.NoSuchKernel: No such kernel named julia-1.8
         <tr>
           <td class="col-result">Passed</td>
           <td class="col-name">examples/pump/test_pump.py::PumpTests::test_one_run_pickle</td>
-          <td class="col-duration">0.02</td>
+          <td class="col-duration">0.03</td>
           <td class="col-links"></td></tr>
         <tr>
           <td class="extra" colspan="4">
@@ -998,7 +1036,7 @@ jupyter_client.kernelspec.NoSuchKernel: No such kernel named julia-1.8
         <tr>
           <td class="col-result">Passed</td>
           <td class="col-name">examples/pump/test_pump.py::PumpTests::test_onefault_save</td>
-          <td class="col-duration">0.06</td>
+          <td class="col-duration">0.09</td>
           <td class="col-links"></td></tr>
         <tr>
           <td class="extra" colspan="4">
@@ -1007,7 +1045,7 @@ jupyter_client.kernelspec.NoSuchKernel: No such kernel named julia-1.8
         <tr>
           <td class="col-result">Passed</td>
           <td class="col-name">examples/pump/test_pump.py::PumpTests::test_param_sample_isave</td>
-          <td class="col-duration">0.37</td>
+          <td class="col-duration">0.56</td>
           <td class="col-links"></td></tr>
         <tr>
           <td class="extra" colspan="4">
@@ -1016,7 +1054,7 @@ jupyter_client.kernelspec.NoSuchKernel: No such kernel named julia-1.8
         <tr>
           <td class="col-result">Passed</td>
           <td class="col-name">examples/pump/test_pump.py::PumpTests::test_param_sample_save</td>
-          <td class="col-duration">0.27</td>
+          <td class="col-duration">0.40</td>
           <td class="col-links"></td></tr>
         <tr>
           <td class="extra" colspan="4">
@@ -1025,7 +1063,7 @@ jupyter_client.kernelspec.NoSuchKernel: No such kernel named julia-1.8
         <tr>
           <td class="col-result">Passed</td>
           <td class="col-name">examples/pump/test_pump.py::PumpTests::test_pickleability</td>
-          <td class="col-duration">0.00</td>
+          <td class="col-duration">0.01</td>
           <td class="col-links"></td></tr>
         <tr>
           <td class="extra" colspan="4">
@@ -1034,7 +1072,7 @@ jupyter_client.kernelspec.NoSuchKernel: No such kernel named julia-1.8
         <tr>
           <td class="col-result">Passed</td>
           <td class="col-name">examples/pump/test_pump.py::PumpTests::test_save_load_multfault</td>
-          <td class="col-duration">0.06</td>
+          <td class="col-duration">0.10</td>
           <td class="col-links"></td></tr>
         <tr>
           <td class="extra" colspan="4">
@@ -1043,7 +1081,7 @@ jupyter_client.kernelspec.NoSuchKernel: No such kernel named julia-1.8
         <tr>
           <td class="col-result">Passed</td>
           <td class="col-name">examples/pump/test_pump.py::PumpTests::test_single_faults_isave</td>
-          <td class="col-duration">0.84</td>
+          <td class="col-duration">1.33</td>
           <td class="col-links"></td></tr>
         <tr>
           <td class="extra" colspan="4">
@@ -1052,7 +1090,7 @@ jupyter_client.kernelspec.NoSuchKernel: No such kernel named julia-1.8
         <tr>
           <td class="col-result">Passed</td>
           <td class="col-name">examples/pump/test_pump.py::PumpTests::test_single_faults_save</td>
-          <td class="col-duration">0.57</td>
+          <td class="col-duration">0.95</td>
           <td class="col-links"></td></tr>
         <tr>
           <td class="extra" colspan="4">
@@ -1061,7 +1099,7 @@ jupyter_client.kernelspec.NoSuchKernel: No such kernel named julia-1.8
         <tr>
           <td class="col-result">Passed</td>
           <td class="col-name">examples/pump/test_pump.py::PumpTests::test_value_setting</td>
-          <td class="col-duration">0.00</td>
+          <td class="col-duration">0.01</td>
           <td class="col-links"></td></tr>
         <tr>
           <td class="extra" colspan="4">
@@ -1160,7 +1198,7 @@ jupyter_client.kernelspec.NoSuchKernel: No such kernel named julia-1.8
         <tr>
           <td class="col-result">Passed</td>
           <td class="col-name">examples/pump/test_pump_example.py::Integration_Tests::test_blockage_results</td>
-          <td class="col-duration">0.03</td>
+          <td class="col-duration">0.05</td>
           <td class="col-links"></td></tr>
         <tr>
           <td class="extra" colspan="4">
@@ -1178,7 +1216,7 @@ jupyter_client.kernelspec.NoSuchKernel: No such kernel named julia-1.8
         <tr>
           <td class="col-result">Passed</td>
           <td class="col-name">examples/pump/test_pump_example.py::Integration_Tests::test_nominal_results</td>
-          <td class="col-duration">0.02</td>
+          <td class="col-duration">0.03</td>
           <td class="col-links"></td></tr>
         <tr>
           <td class="extra" colspan="4">
@@ -1187,7 +1225,7 @@ jupyter_client.kernelspec.NoSuchKernel: No such kernel named julia-1.8
         <tr>
           <td class="col-result">Passed</td>
           <td class="col-name">examples/pump/test_pump_stochastic.py::StochasticPumpTests::test_mdl_pickle</td>
-          <td class="col-duration">0.60</td>
+          <td class="col-duration">0.64</td>
           <td class="col-links"></td></tr>
         <tr>
           <td class="extra" colspan="4">
@@ -1220,7 +1258,7 @@ The object is pickleable
         <tr>
           <td class="col-result">Passed</td>
           <td class="col-name">examples/pump/test_pump_stochastic.py::StochasticPumpTests::test_model_copy_different</td>
-          <td class="col-duration">0.24</td>
+          <td class="col-duration">0.39</td>
           <td class="col-links"></td></tr>
         <tr>
           <td class="extra" colspan="4">
@@ -1229,7 +1267,7 @@ The object is pickleable
         <tr>
           <td class="col-result">Passed</td>
           <td class="col-name">examples/pump/test_pump_stochastic.py::StochasticPumpTests::test_model_copy_same</td>
-          <td class="col-duration">0.34</td>
+          <td class="col-duration">0.49</td>
           <td class="col-links"></td></tr>
         <tr>
           <td class="extra" colspan="4">
@@ -1238,7 +1276,7 @@ The object is pickleable
         <tr>
           <td class="col-result">Passed</td>
           <td class="col-name">examples/pump/test_pump_stochastic.py::StochasticPumpTests::test_model_reset</td>
-          <td class="col-duration">0.42</td>
+          <td class="col-duration">0.65</td>
           <td class="col-links"></td></tr>
         <tr>
           <td class="extra" colspan="4">
@@ -1256,7 +1294,7 @@ The object is pickleable
         <tr>
           <td class="col-result">Passed</td>
           <td class="col-name">examples/pump/test_pump_stochastic.py::StochasticPumpTests::test_nested_sample_isave</td>
-          <td class="col-duration">11.11</td>
+          <td class="col-duration">24.10</td>
           <td class="col-links"></td></tr>
         <tr>
           <td class="extra" colspan="4">
@@ -1265,19 +1303,16 @@ The object is pickleable
         <tr>
           <td class="col-result">Passed</td>
           <td class="col-name">examples/pump/test_pump_stochastic.py::StochasticPumpTests::test_nested_sample_save</td>
-          <td class="col-duration">11.05</td>
+          <td class="col-duration">24.77</td>
           <td class="col-links"></td></tr>
         <tr>
           <td class="extra" colspan="4">
-            <div class="log"> ------------------------------Captured stdout call------------------------------ <br/>Faults found during the nominal run {&#x27;import_ee&#x27;: [&#x27;no_v&#x27;]}
-Faults found during the nominal run {&#x27;import_ee&#x27;: [&#x27;no_v&#x27;]}
-Faults found during the nominal run {&#x27;import_ee&#x27;: [&#x27;no_v&#x27;]}
-<br/></div></td></tr></tbody>
+            <div class="empty log">No log output captured.</div></td></tr></tbody>
       <tbody class="passed results-table-row">
         <tr>
           <td class="col-result">Passed</td>
           <td class="col-name">examples/pump/test_pump_stochastic.py::StochasticPumpTests::test_param_sample_isave</td>
-          <td class="col-duration">4.61</td>
+          <td class="col-duration">5.92</td>
           <td class="col-links"></td></tr>
         <tr>
           <td class="extra" colspan="4">
@@ -1286,7 +1321,7 @@ Faults found during the nominal run {&#x27;import_ee&#x27;: [&#x27;no_v&#x27;]}
         <tr>
           <td class="col-result">Passed</td>
           <td class="col-name">examples/pump/test_pump_stochastic.py::StochasticPumpTests::test_param_sample_save</td>
-          <td class="col-duration">4.66</td>
+          <td class="col-duration">6.06</td>
           <td class="col-links"></td></tr>
         <tr>
           <td class="extra" colspan="4">
@@ -1295,7 +1330,7 @@ Faults found during the nominal run {&#x27;import_ee&#x27;: [&#x27;no_v&#x27;]}
         <tr>
           <td class="col-result">Passed</td>
           <td class="col-name">examples/pump/test_pump_stochastic.py::StochasticPumpTests::test_plot_nested_hists</td>
-          <td class="col-duration">3.77</td>
+          <td class="col-duration">6.58</td>
           <td class="col-links"></td></tr>
         <tr>
           <td class="extra" colspan="4">
@@ -1304,7 +1339,7 @@ Faults found during the nominal run {&#x27;import_ee&#x27;: [&#x27;no_v&#x27;]}
         <tr>
           <td class="col-result">Passed</td>
           <td class="col-name">examples/pump/test_pump_stochastic.py::StochasticPumpTests::test_plot_nominal_vals</td>
-          <td class="col-duration">0.20</td>
+          <td class="col-duration">0.84</td>
           <td class="col-links"></td></tr>
         <tr>
           <td class="extra" colspan="4">
@@ -1313,7 +1348,7 @@ Faults found during the nominal run {&#x27;import_ee&#x27;: [&#x27;no_v&#x27;]}
         <tr>
           <td class="col-result">Passed</td>
           <td class="col-name">examples/pump/test_pump_stochastic.py::StochasticPumpTests::test_plot_nominal_vals_xd</td>
-          <td class="col-duration">11.01</td>
+          <td class="col-duration">37.19</td>
           <td class="col-links"></td></tr>
         <tr>
           <td class="extra" colspan="4">
@@ -1322,7 +1357,7 @@ Faults found during the nominal run {&#x27;import_ee&#x27;: [&#x27;no_v&#x27;]}
         <tr>
           <td class="col-result">Passed</td>
           <td class="col-name">examples/pump/test_pump_stochastic.py::StochasticPumpTests::test_rand_paramsample_plot</td>
-          <td class="col-duration">1.86</td>
+          <td class="col-duration">4.91</td>
           <td class="col-links"></td></tr>
         <tr>
           <td class="extra" colspan="4">
@@ -1331,7 +1366,7 @@ Faults found during the nominal run {&#x27;import_ee&#x27;: [&#x27;no_v&#x27;]}
         <tr>
           <td class="col-result">Passed</td>
           <td class="col-name">examples/pump/test_pump_stochastic.py::StochasticPumpTests::test_run_approach</td>
-          <td class="col-duration">11.56</td>
+          <td class="col-duration">32.44</td>
           <td class="col-links"></td></tr>
         <tr>
           <td class="extra" colspan="4">
@@ -1340,7 +1375,7 @@ Faults found during the nominal run {&#x27;import_ee&#x27;: [&#x27;no_v&#x27;]}
         <tr>
           <td class="col-result">Passed</td>
           <td class="col-name">examples/pump/test_pump_stochastic.py::StochasticPumpTests::test_run_safety</td>
-          <td class="col-duration">2.21</td>
+          <td class="col-duration">4.47</td>
           <td class="col-links"></td></tr>
         <tr>
           <td class="extra" colspan="4">
@@ -1349,7 +1384,7 @@ Faults found during the nominal run {&#x27;import_ee&#x27;: [&#x27;no_v&#x27;]}
         <tr>
           <td class="col-result">Passed</td>
           <td class="col-name">examples/pump/test_pump_stochastic.py::StochasticPumpTests::test_set_seeds</td>
-          <td class="col-duration">0.01</td>
+          <td class="col-duration">0.03</td>
           <td class="col-links"></td></tr>
         <tr>
           <td class="extra" colspan="4">
@@ -1367,7 +1402,7 @@ Faults found during the nominal run {&#x27;import_ee&#x27;: [&#x27;no_v&#x27;]}
         <tr>
           <td class="col-result">Passed</td>
           <td class="col-name">examples/rover/FaultSample_Use-Cases.ipynb::</td>
-          <td class="col-duration">5.92</td>
+          <td class="col-duration">8.75</td>
           <td class="col-links"></td></tr>
         <tr>
           <td class="extra" colspan="4">
@@ -1376,7 +1411,7 @@ Faults found during the nominal run {&#x27;import_ee&#x27;: [&#x27;no_v&#x27;]}
         <tr>
           <td class="col-result">Passed</td>
           <td class="col-name">examples/rover/Model_Structure_Visualization_Tutorial.ipynb::</td>
-          <td class="col-duration">14.95</td>
+          <td class="col-duration">21.73</td>
           <td class="col-links"></td></tr>
         <tr>
           <td class="extra" colspan="4">
@@ -1385,7 +1420,7 @@ Faults found during the nominal run {&#x27;import_ee&#x27;: [&#x27;no_v&#x27;]}
         <tr>
           <td class="col-result">Passed</td>
           <td class="col-name">examples/rover/ParameterSample_Use-Cases.ipynb::</td>
-          <td class="col-duration">38.64</td>
+          <td class="col-duration">74.97</td>
           <td class="col-links"></td></tr>
         <tr>
           <td class="extra" colspan="4">
@@ -1394,7 +1429,7 @@ Faults found during the nominal run {&#x27;import_ee&#x27;: [&#x27;no_v&#x27;]}
         <tr>
           <td class="col-result">Passed</td>
           <td class="col-name">examples/rover/Rover_Setup_Notebook.ipynb::</td>
-          <td class="col-duration">15.76</td>
+          <td class="col-duration">22.33</td>
           <td class="col-links"></td></tr>
         <tr>
           <td class="extra" colspan="4">
@@ -1403,7 +1438,7 @@ Faults found during the nominal run {&#x27;import_ee&#x27;: [&#x27;no_v&#x27;]}
         <tr>
           <td class="col-result">Passed</td>
           <td class="col-name">examples/rover/rover_model.py::examples.rover.rover_model.Drive.drive_nominal</td>
-          <td class="col-duration">0.02</td>
+          <td class="col-duration">0.01</td>
           <td class="col-links"></td></tr>
         <tr>
           <td class="extra" colspan="4">
@@ -1412,16 +1447,7 @@ Faults found during the nominal run {&#x27;import_ee&#x27;: [&#x27;no_v&#x27;]}
         <tr>
           <td class="col-result">Passed</td>
           <td class="col-name">examples/tank/Tank_Analysis.ipynb::</td>
-          <td class="col-duration">9.11</td>
-          <td class="col-links"></td></tr>
-        <tr>
-          <td class="extra" colspan="4">
-            <div class="empty log">No log output captured.</div></td></tr></tbody>
-      <tbody class="passed results-table-row">
-        <tr>
-          <td class="col-result">Passed</td>
-          <td class="col-name">examples/tank/Tank_Optimization.ipynb::</td>
-          <td class="col-duration">4.19</td>
+          <td class="col-duration">12.92</td>
           <td class="col-links"></td></tr>
         <tr>
           <td class="extra" colspan="4">
@@ -1430,7 +1456,7 @@ Faults found during the nominal run {&#x27;import_ee&#x27;: [&#x27;no_v&#x27;]}
         <tr>
           <td class="col-result">Passed</td>
           <td class="col-name">examples/tank/test_tank.py::TankTests::test_approach</td>
-          <td class="col-duration">0.63</td>
+          <td class="col-duration">0.97</td>
           <td class="col-links"></td></tr>
         <tr>
           <td class="extra" colspan="4">
@@ -1439,7 +1465,7 @@ Faults found during the nominal run {&#x27;import_ee&#x27;: [&#x27;no_v&#x27;]}
         <tr>
           <td class="col-result">Passed</td>
           <td class="col-name">examples/tank/test_tank.py::TankTests::test_approach_parallelism_0</td>
-          <td class="col-duration">3.88</td>
+          <td class="col-duration">5.14</td>
           <td class="col-links"></td></tr>
         <tr>
           <td class="extra" colspan="4">
@@ -1448,7 +1474,7 @@ Faults found during the nominal run {&#x27;import_ee&#x27;: [&#x27;no_v&#x27;]}
         <tr>
           <td class="col-result">Passed</td>
           <td class="col-name">examples/tank/test_tank.py::TankTests::test_approach_parallelism_1</td>
-          <td class="col-duration">5.74</td>
+          <td class="col-duration">7.85</td>
           <td class="col-links"></td></tr>
         <tr>
           <td class="extra" colspan="4">
@@ -1457,7 +1483,7 @@ Faults found during the nominal run {&#x27;import_ee&#x27;: [&#x27;no_v&#x27;]}
         <tr>
           <td class="col-result">Passed</td>
           <td class="col-name">examples/tank/test_tank.py::TankTests::test_approach_parallelism_notrack</td>
-          <td class="col-duration">3.64</td>
+          <td class="col-duration">4.70</td>
           <td class="col-links"></td></tr>
         <tr>
           <td class="extra" colspan="4">
@@ -1466,7 +1492,7 @@ Faults found during the nominal run {&#x27;import_ee&#x27;: [&#x27;no_v&#x27;]}
         <tr>
           <td class="col-result">Passed</td>
           <td class="col-name">examples/tank/test_tank.py::TankTests::test_comp_mode_inj</td>
-          <td class="col-duration">0.02</td>
+          <td class="col-duration">0.04</td>
           <td class="col-links"></td></tr>
         <tr>
           <td class="extra" colspan="4">
@@ -1475,7 +1501,7 @@ Faults found during the nominal run {&#x27;import_ee&#x27;: [&#x27;no_v&#x27;]}
         <tr>
           <td class="col-result">Passed</td>
           <td class="col-name">examples/tank/test_tank.py::TankTests::test_different_components</td>
-          <td class="col-duration">0.01</td>
+          <td class="col-duration">0.02</td>
           <td class="col-links"></td></tr>
         <tr>
           <td class="extra" colspan="4">
@@ -1484,7 +1510,7 @@ Faults found during the nominal run {&#x27;import_ee&#x27;: [&#x27;no_v&#x27;]}
         <tr>
           <td class="col-result">Passed</td>
           <td class="col-name">examples/tank/test_tank.py::TankTests::test_epc_math</td>
-          <td class="col-duration">0.00</td>
+          <td class="col-duration">0.01</td>
           <td class="col-links"></td></tr>
         <tr>
           <td class="extra" colspan="4">
@@ -1493,7 +1519,7 @@ Faults found during the nominal run {&#x27;import_ee&#x27;: [&#x27;no_v&#x27;]}
         <tr>
           <td class="col-result">Passed</td>
           <td class="col-name">examples/tank/test_tank.py::TankTests::test_fault_sample_isave</td>
-          <td class="col-duration">0.89</td>
+          <td class="col-duration">1.32</td>
           <td class="col-links"></td></tr>
         <tr>
           <td class="extra" colspan="4">
@@ -1502,7 +1528,7 @@ Faults found during the nominal run {&#x27;import_ee&#x27;: [&#x27;no_v&#x27;]}
         <tr>
           <td class="col-result">Passed</td>
           <td class="col-name">examples/tank/test_tank.py::TankTests::test_fault_sample_save</td>
-          <td class="col-duration">0.57</td>
+          <td class="col-duration">0.86</td>
           <td class="col-links"></td></tr>
         <tr>
           <td class="extra" colspan="4">
@@ -1511,7 +1537,7 @@ Faults found during the nominal run {&#x27;import_ee&#x27;: [&#x27;no_v&#x27;]}
         <tr>
           <td class="col-result">Passed</td>
           <td class="col-name">examples/tank/test_tank.py::TankTests::test_local_tstep</td>
-          <td class="col-duration">0.04</td>
+          <td class="col-duration">0.07</td>
           <td class="col-links"></td></tr>
         <tr>
           <td class="extra" colspan="4">
@@ -1520,7 +1546,7 @@ Faults found during the nominal run {&#x27;import_ee&#x27;: [&#x27;no_v&#x27;]}
         <tr>
           <td class="col-result">Passed</td>
           <td class="col-name">examples/tank/test_tank.py::TankTests::test_model_copy_different</td>
-          <td class="col-duration">0.19</td>
+          <td class="col-duration">0.32</td>
           <td class="col-links"></td></tr>
         <tr>
           <td class="extra" colspan="4">
@@ -1529,7 +1555,7 @@ Faults found during the nominal run {&#x27;import_ee&#x27;: [&#x27;no_v&#x27;]}
         <tr>
           <td class="col-result">Passed</td>
           <td class="col-name">examples/tank/test_tank.py::TankTests::test_model_copy_same</td>
-          <td class="col-duration">0.26</td>
+          <td class="col-duration">0.45</td>
           <td class="col-links"></td></tr>
         <tr>
           <td class="extra" colspan="4">
@@ -1538,7 +1564,7 @@ Faults found during the nominal run {&#x27;import_ee&#x27;: [&#x27;no_v&#x27;]}
         <tr>
           <td class="col-result">Passed</td>
           <td class="col-name">examples/tank/test_tank.py::TankTests::test_model_reset</td>
-          <td class="col-duration">0.28</td>
+          <td class="col-duration">0.58</td>
           <td class="col-links"></td></tr>
         <tr>
           <td class="extra" colspan="4">
@@ -1547,7 +1573,7 @@ Faults found during the nominal run {&#x27;import_ee&#x27;: [&#x27;no_v&#x27;]}
         <tr>
           <td class="col-result">Passed</td>
           <td class="col-name">examples/tank/test_tank.py::TankTests::test_nested_sample_isave</td>
-          <td class="col-duration">5.81</td>
+          <td class="col-duration">15.82</td>
           <td class="col-links"></td></tr>
         <tr>
           <td class="extra" colspan="4">
@@ -1556,7 +1582,7 @@ Faults found during the nominal run {&#x27;import_ee&#x27;: [&#x27;no_v&#x27;]}
         <tr>
           <td class="col-result">Passed</td>
           <td class="col-name">examples/tank/test_tank.py::TankTests::test_nested_sample_save</td>
-          <td class="col-duration">5.70</td>
+          <td class="col-duration">13.74</td>
           <td class="col-links"></td></tr>
         <tr>
           <td class="extra" colspan="4">
@@ -1565,7 +1591,7 @@ Faults found during the nominal run {&#x27;import_ee&#x27;: [&#x27;no_v&#x27;]}
         <tr>
           <td class="col-result">Passed</td>
           <td class="col-name">examples/tank/test_tank.py::TankTests::test_param_sample_save</td>
-          <td class="col-duration">0.29</td>
+          <td class="col-duration">0.45</td>
           <td class="col-links"></td></tr>
         <tr>
           <td class="extra" colspan="4">
@@ -1574,7 +1600,7 @@ Faults found during the nominal run {&#x27;import_ee&#x27;: [&#x27;no_v&#x27;]}
         <tr>
           <td class="col-result">Passed</td>
           <td class="col-name">examples/tank/test_tank.py::TankTests::test_save_load_multfault</td>
-          <td class="col-duration">0.04</td>
+          <td class="col-duration">0.07</td>
           <td class="col-links"></td></tr>
         <tr>
           <td class="extra" colspan="4">
@@ -1583,7 +1609,7 @@ Faults found during the nominal run {&#x27;import_ee&#x27;: [&#x27;no_v&#x27;]}
         <tr>
           <td class="col-result">Passed</td>
           <td class="col-name">examples/tank/test_tank.py::TankTests::test_save_load_nominal</td>
-          <td class="col-duration">0.04</td>
+          <td class="col-duration">0.06</td>
           <td class="col-links"></td></tr>
         <tr>
           <td class="extra" colspan="4">
@@ -1592,7 +1618,7 @@ Faults found during the nominal run {&#x27;import_ee&#x27;: [&#x27;no_v&#x27;]}
         <tr>
           <td class="col-result">Passed</td>
           <td class="col-name">examples/tank/test_tank.py::TankTests::test_save_load_onefault</td>
-          <td class="col-duration">0.04</td>
+          <td class="col-duration">0.07</td>
           <td class="col-links"></td></tr>
         <tr>
           <td class="extra" colspan="4">
@@ -1601,7 +1627,7 @@ Faults found during the nominal run {&#x27;import_ee&#x27;: [&#x27;no_v&#x27;]}
         <tr>
           <td class="col-result">Passed</td>
           <td class="col-name">examples/tank/test_tank.py::TankTests::test_save_load_singlefaults</td>
-          <td class="col-duration">1.30</td>
+          <td class="col-duration">1.98</td>
           <td class="col-links"></td></tr>
         <tr>
           <td class="extra" colspan="4">
@@ -1610,7 +1636,7 @@ Faults found during the nominal run {&#x27;import_ee&#x27;: [&#x27;no_v&#x27;]}
         <tr>
           <td class="col-result">Passed</td>
           <td class="col-name">examples/tank/test_tank.py::TankTests::test_singlefaults_isave</td>
-          <td class="col-duration">2.11</td>
+          <td class="col-duration">3.14</td>
           <td class="col-links"></td></tr>
         <tr>
           <td class="extra" colspan="4">
@@ -1619,7 +1645,7 @@ Faults found during the nominal run {&#x27;import_ee&#x27;: [&#x27;no_v&#x27;]}
         <tr>
           <td class="col-result">Passed</td>
           <td class="col-name">examples/tank/test_tank.py::TankTests::test_tank_copy_args</td>
-          <td class="col-duration">0.01</td>
+          <td class="col-duration">0.02</td>
           <td class="col-links"></td></tr>
         <tr>
           <td class="extra" colspan="4">
@@ -1736,7 +1762,7 @@ Faults found during the nominal run {&#x27;import_ee&#x27;: [&#x27;no_v&#x27;]}
         <tr>
           <td class="col-result">Passed</td>
           <td class="col-name">fmdtools/analyze/tabulate.py::fmdtools.analyze.tabulate.Comparison.__init__</td>
-          <td class="col-duration">0.36</td>
+          <td class="col-duration">0.49</td>
           <td class="col-links"></td></tr>
         <tr>
           <td class="extra" colspan="4">
@@ -2168,7 +2194,7 @@ Faults found during the nominal run {&#x27;import_ee&#x27;: [&#x27;no_v&#x27;]}
         <tr>
           <td class="col-result">Passed</td>
           <td class="col-name">fmdtools/sim/sample.py::fmdtools.sim.sample.FaultDomain.add_all</td>
-          <td class="col-duration">0.00</td>
+          <td class="col-duration">0.01</td>
           <td class="col-links"></td></tr>
         <tr>
           <td class="extra" colspan="4">
@@ -2177,7 +2203,7 @@ Faults found during the nominal run {&#x27;import_ee&#x27;: [&#x27;no_v&#x27;]}
         <tr>
           <td class="col-result">Passed</td>
           <td class="col-name">fmdtools/sim/sample.py::fmdtools.sim.sample.FaultDomain.add_all_fxn_modes</td>
-          <td class="col-duration">0.00</td>
+          <td class="col-duration">0.01</td>
           <td class="col-links"></td></tr>
         <tr>
           <td class="extra" colspan="4">
@@ -2186,7 +2212,7 @@ Faults found during the nominal run {&#x27;import_ee&#x27;: [&#x27;no_v&#x27;]}
         <tr>
           <td class="col-result">Passed</td>
           <td class="col-name">fmdtools/sim/sample.py::fmdtools.sim.sample.FaultDomain.add_all_fxnclass_modes</td>
-          <td class="col-duration">0.00</td>
+          <td class="col-duration">0.01</td>
           <td class="col-links"></td></tr>
         <tr>
           <td class="extra" colspan="4">
@@ -2213,7 +2239,7 @@ Faults found during the nominal run {&#x27;import_ee&#x27;: [&#x27;no_v&#x27;]}
         <tr>
           <td class="col-result">Passed</td>
           <td class="col-name">fmdtools/sim/sample.py::fmdtools.sim.sample.FaultSample.add_fault_phases</td>
-          <td class="col-duration">0.00</td>
+          <td class="col-duration">0.01</td>
           <td class="col-links"></td></tr>
         <tr>
           <td class="extra" colspan="4">
@@ -2222,7 +2248,7 @@ Faults found during the nominal run {&#x27;import_ee&#x27;: [&#x27;no_v&#x27;]}
         <tr>
           <td class="col-result">Passed</td>
           <td class="col-name">fmdtools/sim/sample.py::fmdtools.sim.sample.FaultSample.add_fault_times</td>
-          <td class="col-duration">0.00</td>
+          <td class="col-duration">0.01</td>
           <td class="col-links"></td></tr>
         <tr>
           <td class="extra" colspan="4">
@@ -2231,7 +2257,7 @@ Faults found during the nominal run {&#x27;import_ee&#x27;: [&#x27;no_v&#x27;]}
         <tr>
           <td class="col-result">Passed</td>
           <td class="col-name">fmdtools/sim/sample.py::fmdtools.sim.sample.FaultSample.add_joint_fault_scenario</td>
-          <td class="col-duration">0.00</td>
+          <td class="col-duration">0.01</td>
           <td class="col-links"></td></tr>
         <tr>
           <td class="extra" colspan="4">
@@ -2240,7 +2266,7 @@ Faults found during the nominal run {&#x27;import_ee&#x27;: [&#x27;no_v&#x27;]}
         <tr>
           <td class="col-result">Passed</td>
           <td class="col-name">fmdtools/sim/sample.py::fmdtools.sim.sample.FaultSample.add_single_fault_scenario</td>
-          <td class="col-duration">0.00</td>
+          <td class="col-duration">0.01</td>
           <td class="col-links"></td></tr>
         <tr>
           <td class="extra" colspan="4">
@@ -2321,7 +2347,7 @@ Faults found during the nominal run {&#x27;import_ee&#x27;: [&#x27;no_v&#x27;]}
         <tr>
           <td class="col-result">Passed</td>
           <td class="col-name">fmdtools/sim/sample.py::fmdtools.sim.sample.SampleApproach.add_faultdomain</td>
-          <td class="col-duration">0.00</td>
+          <td class="col-duration">0.01</td>
           <td class="col-links"></td></tr>
         <tr>
           <td class="extra" colspan="4">
@@ -2330,7 +2356,7 @@ Faults found during the nominal run {&#x27;import_ee&#x27;: [&#x27;no_v&#x27;]}
         <tr>
           <td class="col-result">Passed</td>
           <td class="col-name">fmdtools/sim/sample.py::fmdtools.sim.sample.SampleApproach.add_faultsample</td>
-          <td class="col-duration">0.00</td>
+          <td class="col-duration">0.01</td>
           <td class="col-links"></td></tr>
         <tr>
           <td class="extra" colspan="4">
@@ -2392,8 +2418,98 @@ Faults found during the nominal run {&#x27;import_ee&#x27;: [&#x27;no_v&#x27;]}
       <tbody class="passed results-table-row">
         <tr>
           <td class="col-result">Passed</td>
+          <td class="col-name">fmdtools/sim/search.py::fmdtools.sim.search.DisturbanceProblem.__init__</td>
+          <td class="col-duration">0.00</td>
+          <td class="col-links"></td></tr>
+        <tr>
+          <td class="extra" colspan="4">
+            <div class="empty log">No log output captured.</div></td></tr></tbody>
+      <tbody class="passed results-table-row">
+        <tr>
+          <td class="col-result">Passed</td>
+          <td class="col-name">fmdtools/sim/search.py::fmdtools.sim.search.HistoryObjective</td>
+          <td class="col-duration">0.00</td>
+          <td class="col-links"></td></tr>
+        <tr>
+          <td class="extra" colspan="4">
+            <div class="empty log">No log output captured.</div></td></tr></tbody>
+      <tbody class="passed results-table-row">
+        <tr>
+          <td class="col-result">Passed</td>
+          <td class="col-name">fmdtools/sim/search.py::fmdtools.sim.search.ParameterSimProblem</td>
+          <td class="col-duration">0.02</td>
+          <td class="col-links"></td></tr>
+        <tr>
+          <td class="extra" colspan="4">
+            <div class="empty log">No log output captured.</div></td></tr></tbody>
+      <tbody class="passed results-table-row">
+        <tr>
+          <td class="col-result">Passed</td>
+          <td class="col-name">fmdtools/sim/search.py::fmdtools.sim.search.ProblemArchitecture</td>
+          <td class="col-duration">0.01</td>
+          <td class="col-links"></td></tr>
+        <tr>
+          <td class="extra" colspan="4">
+            <div class="empty log">No log output captured.</div></td></tr></tbody>
+      <tbody class="passed results-table-row">
+        <tr>
+          <td class="col-result">Passed</td>
+          <td class="col-name">fmdtools/sim/search.py::fmdtools.sim.search.ProblemArchitecture.update_full_problem</td>
+          <td class="col-duration">0.00</td>
+          <td class="col-links"></td></tr>
+        <tr>
+          <td class="extra" colspan="4">
+            <div class="empty log">No log output captured.</div></td></tr></tbody>
+      <tbody class="passed results-table-row">
+        <tr>
+          <td class="col-result">Passed</td>
+          <td class="col-name">fmdtools/sim/search.py::fmdtools.sim.search.ProblemArchitecture.update_problem</td>
+          <td class="col-duration">0.00</td>
+          <td class="col-links"></td></tr>
+        <tr>
+          <td class="extra" colspan="4">
+            <div class="empty log">No log output captured.</div></td></tr></tbody>
+      <tbody class="passed results-table-row">
+        <tr>
+          <td class="col-result">Passed</td>
+          <td class="col-name">fmdtools/sim/search.py::fmdtools.sim.search.ResultConstraint.con_from_value</td>
+          <td class="col-duration">0.00</td>
+          <td class="col-links"></td></tr>
+        <tr>
+          <td class="extra" colspan="4">
+            <div class="empty log">No log output captured.</div></td></tr></tbody>
+      <tbody class="passed results-table-row">
+        <tr>
+          <td class="col-result">Passed</td>
+          <td class="col-name">fmdtools/sim/search.py::fmdtools.sim.search.ResultObjective.get_result_value</td>
+          <td class="col-duration">0.00</td>
+          <td class="col-links"></td></tr>
+        <tr>
+          <td class="extra" colspan="4">
+            <div class="empty log">No log output captured.</div></td></tr></tbody>
+      <tbody class="passed results-table-row">
+        <tr>
+          <td class="col-result">Passed</td>
+          <td class="col-name">fmdtools/sim/search.py::fmdtools.sim.search.SimpleProblem</td>
+          <td class="col-duration">0.00</td>
+          <td class="col-links"></td></tr>
+        <tr>
+          <td class="extra" colspan="4">
+            <div class="empty log">No log output captured.</div></td></tr></tbody>
+      <tbody class="passed results-table-row">
+        <tr>
+          <td class="col-result">Passed</td>
+          <td class="col-name">fmdtools/sim/search.py::fmdtools.sim.search.SingleFaultScenarioProblem</td>
+          <td class="col-duration">0.00</td>
+          <td class="col-links"></td></tr>
+        <tr>
+          <td class="extra" colspan="4">
+            <div class="empty log">No log output captured.</div></td></tr></tbody>
+      <tbody class="passed results-table-row">
+        <tr>
+          <td class="col-result">Passed</td>
           <td class="col-name">tests/test_graph.py::ModelGraphTests::test_fault_plot</td>
-          <td class="col-duration">0.08</td>
+          <td class="col-duration">0.11</td>
           <td class="col-links"></td></tr>
         <tr>
           <td class="extra" colspan="4">
@@ -2402,7 +2518,7 @@ Faults found during the nominal run {&#x27;import_ee&#x27;: [&#x27;no_v&#x27;]}
         <tr>
           <td class="col-result">Passed</td>
           <td class="col-name">tests/test_graph.py::ModelGraphTests::test_flowgraph_plot</td>
-          <td class="col-duration">0.08</td>
+          <td class="col-duration">0.21</td>
           <td class="col-links"></td></tr>
         <tr>
           <td class="extra" colspan="4">
@@ -2411,7 +2527,7 @@ Faults found during the nominal run {&#x27;import_ee&#x27;: [&#x27;no_v&#x27;]}
         <tr>
           <td class="col-result">Passed</td>
           <td class="col-name">tests/test_graph.py::ModelGraphTests::test_fxngraph_plot</td>
-          <td class="col-duration">0.06</td>
+          <td class="col-duration">0.09</td>
           <td class="col-links"></td></tr>
         <tr>
           <td class="extra" colspan="4">
@@ -2420,7 +2536,7 @@ Faults found during the nominal run {&#x27;import_ee&#x27;: [&#x27;no_v&#x27;]}
         <tr>
           <td class="col-result">Passed</td>
           <td class="col-name">tests/test_graph.py::ModelGraphTests::test_modelgraph_plot</td>
-          <td class="col-duration">0.13</td>
+          <td class="col-duration">0.17</td>
           <td class="col-links"></td></tr>
         <tr>
           <td class="extra" colspan="4">
@@ -2429,7 +2545,7 @@ Faults found during the nominal run {&#x27;import_ee&#x27;: [&#x27;no_v&#x27;]}
         <tr>
           <td class="col-result">Passed</td>
           <td class="col-name">tests/test_graph.py::ModelGraphTests::test_result_from_plot</td>
-          <td class="col-duration">0.07</td>
+          <td class="col-duration">0.08</td>
           <td class="col-links"></td></tr>
         <tr>
           <td class="extra" colspan="4">
@@ -2438,7 +2554,7 @@ Faults found during the nominal run {&#x27;import_ee&#x27;: [&#x27;no_v&#x27;]}
         <tr>
           <td class="col-result">Passed</td>
           <td class="col-name">tests/test_graph.py::ModelGraphTests::test_typegraph_plot</td>
-          <td class="col-duration">0.04</td>
+          <td class="col-duration">0.05</td>
           <td class="col-links"></td></tr>
         <tr>
           <td class="extra" colspan="4">
