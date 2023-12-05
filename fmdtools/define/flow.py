@@ -176,9 +176,9 @@ class MultiFlow(Flow):
             oldflow = getattr(self, name)
             newflow = oldflow.copy(glob=self)
         else: 
-            if p=='global':
+            if p == 'global':
                 p = self.p
-            if s=='global':
+            if s == 'global':
                 s = asdict(self.s)
             newflow = self.__class__(name, glob=self, p=p, s=s)
         setattr(self, name, newflow)

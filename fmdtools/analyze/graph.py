@@ -636,8 +636,9 @@ class Graph(object):
         g = self.g
         nomg = other.g
         for node in g.nodes:
-            g.nodes[node]['degraded'] = (g.nodes[node]['states'] !=
-                                         nomg.nodes[node]['states'])
+            degstates = (g.nodes[node]['states'] != nomg.nodes[node]['states'])
+            degindicators = (g.nodes[node]['indicators'] != nomg.nodes[node]['indicators'])
+            g.nodes[node]['degraded'] = degstates or degindicators
             g.nodes[node]['faulty'] = any(g.nodes[node].get('faults', []))
 
     def set_heatmap(self, heatmap, cmap=plt.cm.coolwarm, default_color_val=0.0):

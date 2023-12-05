@@ -142,7 +142,7 @@ def diff(val1, val2, difftype='bool'):
     if difftype == 'diff':
         return val1-val2
     elif difftype == 'bool':
-        return val1 == val2
+        return val1 != val2
     elif type(difftype) == float:
         return abs(val1-val2) > difftype
 
