@@ -637,7 +637,7 @@ class Graph(object):
         nomg = other.g
         for node in g.nodes:
             degstates = (g.nodes[node]['states'] != nomg.nodes[node]['states'])
-            degindicators = (g.nodes[node]['indicators'] != nomg.nodes[node]['indicators'])
+            degindicators = (set(g.nodes[node]['indicators']) != set(nomg.nodes[node]['indicators']))
             g.nodes[node]['degraded'] = degstates or degindicators
             g.nodes[node]['faulty'] = any(g.nodes[node].get('faults', []))
 
