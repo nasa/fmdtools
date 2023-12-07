@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 """
 Description: A module to define Functions, Components, Actions, and other classes with behaviors.
-    
+
 - :class:`Block`:       Superclass for Functions, Components, Actions, etc.
 - :class:`FxnBlock`:    Class for defining model Functions
 - :class:`Component`:   Class for defining Components (which have behaviors and live in a function)
@@ -28,6 +28,7 @@ from recordclass import dataobject, asdict, astuple
 from fmdtools.define.role.state import State, ExampleState
 from fmdtools.define.role.parameter import Parameter, SimParam, ExampleParameter
 from fmdtools.define.role.rand import Rand
+from fmdtools.define.common import BaseObject
 from fmdtools.define.common import get_true_fields, get_true_field, init_obj_attr
 from fmdtools.define.common import get_obj_track, set_var, get_var
 from fmdtools.define.role.time import Time
@@ -40,17 +41,19 @@ from fmdtools.analyze.history import History, init_indicator_hist
 
 def assoc_flows(obj, flows={}):
     """
-    Associates flows with the given object (Block, ASG, etc.) Flows must be defined with the _init_ class variable
-    pointing to the class to initialize (e.g., _init_flowname = FlowClass).
-    
+    Associates flows with the given object (Block, ASG, etc.).
+
+    Flows must be defined with the _init_ class variable pointing to the class to
+    initialize (e.g., _init_flowname = FlowClass).
+
     Parameters
     ----------
     obj: object (Block, ASG)
         block requiring the flows
-    
+
     flows : dict, optional
         If flows is provided AND it contains a flowname corresponding to the
-        function's flowname, it will be used instead (so that it can act as a 
+        function's flowname, it will be used instead (so that it can act as a
         connection to the rest of the model)
     """
     if hasattr(obj, 'flownames'):
@@ -68,11 +71,12 @@ def assoc_flows(obj, flows={}):
                 if not isinstance(obj, dataobject):
                     setattr(obj, attname, obj.flows[attname])
     if flows:
-        warnings.warn("these flows sent from model "+str([*flows.keys()])+" not added to class "+str(obj.__class__))
+        warnings.warn("these flows sent from model "+str([*flows.keys()])
+                      + " not added to class "+str(obj.__class__))
 
 def inject_faults_internal(obj, faults):
     """
-    Injects faults in the CompArch/ASG object obj.
+    Inject faults in the CompArch/ASG object obj.
 
     Parameters
     ----------
@@ -94,11 +98,11 @@ def inject_faults_internal(obj, faults):
             comp.m.add_fault(fault[len(comp.name)+1:])
 
 
-class Simulable(object):
+class Simulable(BaseObject):
     """
-    Base class for object which simulate (blocks and models).
-    
-    Note that classes soley based on Simulable may not themselves be able to be simulated.
+    Base class for object which simulate (blocks and architectures).
+
+    Note that classes solely based on Simulable may not be able to be simulated.
     """
     __slots__ = ('p', '_args_p', 'sp', '_args_sp', 'r', '_args_r', 'h', 'track', 'flows', 'name', 'is_copy')
     default_sp = {}
@@ -109,8 +113,8 @@ class Simulable(object):
 
     def __init__(self, name='', p={}, sp={}, r={}, track={}):
         """
-        Instantiates internal Simulable attributes with predetermined:
-        
+        Instantiates internal Simulable attributes.
+
         Parameters
         ----------
         p : dict 
@@ -134,6 +138,8 @@ class Simulable(object):
             self.name = name
         if not sp:
             sp = self.default_sp
+        self.init_roles()
+        self.init_indicators()
         init_obj_attr(self, p=p, sp=sp, r=r)
 
     def add_flow_hist(self, hist, timerange, track):
@@ -190,7 +196,8 @@ class Simulable(object):
 
     def new_params(self, p={}, sp={}, r={}, track={}):
         """
-        Creates a copy of the defining parameters for use in a new Simulable
+        Create a copy of the defining parameters for use in a new Simulable.
+
         Parameters
         ----------
         p     : dict

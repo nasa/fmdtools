@@ -83,7 +83,6 @@ from matplotlib.widgets import Button
 from matplotlib import get_backend
 from matplotlib.colors import Colormap
 from recordclass import dataobject, asdict
-from fmdtools.define.common import return_true_indicators
 from fmdtools.analyze.result import Result
 from fmdtools.analyze.history import History
 from fmdtools.analyze.common import consolidate_legend
@@ -1559,7 +1558,7 @@ class ModelGraph(Graph):
         for fxnname, fxn in mdl.fxns.items():
             fxnstates[fxnname] = asdict(mdl.fxns[fxnname].s)
             fxnfaults[fxnname] = [*mdl.fxns[fxnname].m.faults]
-            indicators[fxnname] = return_true_indicators(fxn, self.time)
+            indicators[fxnname] = fxn.return_true_indicators(self.time)
         nx.set_node_attributes(self.g, fxnstates, 'states')
         nx.set_node_attributes(self.g, fxnfaults, 'faults')
         nx.set_node_attributes(self.g, indicators, 'indicators')
@@ -1581,7 +1580,7 @@ class ModelGraph(Graph):
         flowstates, indicators = {}, {}
         for flowname, flow in mdl.flows.items():
             flowstates[flowname] = asdict(flow.s)
-            indicators[flowname] = return_true_indicators(flow, self.time)
+            indicators[flowname] = flow.return_true_indicators(self.time)
         nx.set_node_attributes(self.g, flowstates, 'states')
         nx.set_node_attributes(self.g, indicators, 'indicators')
 
@@ -1746,12 +1745,12 @@ class ModelCompGraph(ModelGraph):
         for fxnname, fxn in mdl.fxns.items():
             fxnstates[fxnname] = asdict(mdl.fxns[fxnname].s)
             fxnfaults[fxnname] = copy.copy(mdl.fxns[fxnname].m.faults)
-            indicators[fxnname] = return_true_indicators(fxn, self.time)
+            indicators[fxnname] = fxn.return_true_indicators(self.time)
             for mode in fxnfaults[fxnname].copy():
                 for compname, comp in {**fxn.actions, **fxn.components}.items():
                     compstates[compname] = {}
                     comptypes[compname] = True
-                    indicators[compname] = return_true_indicators(comp, self.time)
+                    indicators[compname] = comp.return_true_indicators(self.time)
                     if mode in comp.faultfaults:
                         compfaults[compname] = compfaults.get(compname, set())
                         compfaults[compname].update([mode])
@@ -1857,7 +1856,7 @@ class ModelTypeGraph(ModelGraph):
             indicators[flowtype] = {}
             for flow in mdl.flows_of_type(flowtype):
                 flowstates[flowtype][flow] = asdict(mdl.flows[flow].s)
-                indicators[flowtype][flow] = return_true_indicators(flow, self.time)
+                indicators[flowtype][flow] = flow.return_true_indicators(self.time)
         nx.set_node_attributes(graph, flowstates, 'states')
 
         fxnstates = {}
@@ -1869,7 +1868,7 @@ class ModelTypeGraph(ModelGraph):
             for fxn in mdl.fxns_of_class(fxnclass):
                 fxnstates[fxnclass][fxn] = asdict(mdl.fxns[fxn].s)
                 fxnfaults[fxnclass][fxn] = copy.copy(mdl.fxns[fxn].m.faults)
-                indicators[fxnclass][fxn] = return_true_indicators(fxn, self.time)
+                indicators[fxnclass][fxn] = fxn.return_true_indicators(self.time)
 
         nx.set_node_attributes(graph, fxnstates, 'states')
         nx.set_node_attributes(graph, fxnfaults, 'faults')
@@ -2140,7 +2139,7 @@ def get_node_info(flow, get_states, get_indicators, time):
     if get_states:
         kwargs.update({"states": flow.return_states()})
     if get_indicators:
-        kwargs.update({"indicators": return_true_indicators(flow, time)})
+        kwargs.update({"indicators": flow.return_true_indicators(time)})
     return kwargs
 
 
@@ -2203,10 +2202,10 @@ class ActArchGraph(Graph):
         for aname, action in aa.actions.items():
             states[aname] = asdict(action.s)
             faults[aname] = [*action.m.faults]
-            indicators[aname] = return_true_indicators(action, self.time)
+            indicators[aname] = action.return_true_indicators(self.time)
         for fname, flow in aa.flows.items():
             states[fname] = asdict(flow.s)
-            indicators[fname] = return_true_indicators(flow, self.time)
+            indicators[fname] = flow.return_true_indicators(self.time)
         nx.set_node_attributes(self.g, states, 'states')
         nx.set_node_attributes(self.g, faults, 'faults')
         nx.set_node_attributes(self.g, indicators, 'indicators')
