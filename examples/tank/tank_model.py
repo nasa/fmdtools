@@ -35,7 +35,7 @@ class WatState(State):
 
 
 class Liquid(Flow):
-    _init_s = WatState
+    role_s = WatState
 
 
 class SigState(State):
@@ -44,7 +44,7 @@ class SigState(State):
 
 
 class Signal(Flow):
-    _init_s = SigState
+    role_s = SigState
 
 
 class TransportLiquidState(State):
@@ -59,8 +59,8 @@ class TransportLiquidMode(Mode):
 
 class ImportLiquid(FxnBlock):
     __slots__ = ('sig', 'watout')
-    _init_s = TransportLiquidState
-    _init_m = TransportLiquidMode
+    role_s = TransportLiquidState
+    role_m = TransportLiquidMode
     _init_sig = Signal
     _init_watout = Liquid
     flownames = {'wat_in_1': 'watout', 'valve1_sig': 'sig'}
@@ -79,8 +79,8 @@ class ImportLiquid(FxnBlock):
 
 class ExportLiquid(FxnBlock):
     __slots__ = ('sig', 'watin')
-    _init_s = TransportLiquidState
-    _init_m = TransportLiquidMode
+    role_s = TransportLiquidState
+    role_m = TransportLiquidMode
     _init_sig = Signal
     _init_watin = Liquid
     flownames = {'wat_out_2': 'watin', 'valve2_sig': 'sig'}
@@ -104,7 +104,7 @@ class GuideLiquid(FxnBlock):
     __slots__ = ('watin', 'watout')
     _init_watin = Liquid
     _init_watout = Liquid
-    _init_m = GuideLiquidMode
+    role_m = GuideLiquidMode
 
     def static_behavior(self, time):
         if self.m.has_fault('clogged'):
@@ -139,8 +139,8 @@ class StoreLiquidMode(Mode):
 
 class StoreLiquid(FxnBlock):
     __slots__ = ('watin', 'watout', 'sig')
-    _init_s = StoreLiquidState
-    _init_m = StoreLiquidMode
+    role_s = StoreLiquidState
+    role_m = StoreLiquidMode
     _init_watin = Liquid
     _init_watout = Liquid
     _init_sig = Signal
@@ -209,7 +209,7 @@ class HumanASG(ActArch):
 
 
 class HumanActions(FxnBlock):
-    _init_p = HumanParam
+    role_p = HumanParam
     _init_aa = HumanASG
     _init_valve1_sig = Signal
     _init_tank_sig = Signal
@@ -249,7 +249,7 @@ class LookMode(Mode):
 
 
 class Look(Action):
-    _init_m = LookMode
+    role_m = LookMode
 
     def looked(self):
         return not self.m.has_fault('not_visible')
@@ -264,7 +264,7 @@ class DetectMode(Mode):
 
 
 class Detect(Action):
-    _init_m = DetectMode
+    role_m = DetectMode
     _init_detect_sig = Signal
     _init_tank_sig = Signal
 
@@ -298,7 +298,7 @@ class ReachMode(Mode):
 
 
 class Reach(Action):
-    _init_m = ReachMode
+    role_m = ReachMode
 
     def reached(self):
         return not self.m.has_fault('unable')
@@ -312,7 +312,7 @@ class GraspMode(Mode):
 
 
 class Grasp(Action):
-    _init_m = GraspMode
+    role_m = GraspMode
 
     def grasped(self):
         return not self.m.has_fault('cannot')
@@ -329,7 +329,7 @@ class TurnMode(Mode):
 
 
 class Turn(Action):
-    _init_m = TurnMode
+    role_m = TurnMode
     _init_detect_sig = Signal
     _init_valve1_sig = Signal
     _init_valve2_sig = Signal
@@ -355,7 +355,7 @@ class TankParam(Parameter, readonly=True):
 
 class Tank(Model):
     __slots__ = ()
-    _init_p = TankParam
+    role_p = TankParam
     default_sp = dict(phases=(('na', 0, 0), ('operation', 1, 20)),
                       times=(0, 5, 10, 15, 20), units='min')
     default_track = {'fxns': {'store_water': {'s': 'level'}}}

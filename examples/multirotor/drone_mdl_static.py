@@ -29,7 +29,7 @@ class EEState(State):
 class EE(Flow):
     """Electrical Energy Flow."""
 
-    _init_s = EEState
+    role_s = EEState
 
 
 class ForceState(State):
@@ -41,7 +41,7 @@ class ForceState(State):
 class Force(Flow):
     """Force flow."""
 
-    _init_s = ForceState
+    role_s = ForceState
 
 
 class ControlState(State):
@@ -63,7 +63,7 @@ class ControlState(State):
 class Control(Flow):
     """Control Flow."""
 
-    _init_s = ControlState
+    role_s = ControlState
 
 
 class DOFstate(State):
@@ -106,8 +106,8 @@ class DOFParam(Parameter):
 class DOFs(Flow):
     """Flow defining the Drone degrees of freedom."""
 
-    _init_s = DOFstate
-    _init_p = DOFParam
+    role_s = DOFstate
+    role_p = DOFParam
 
 
 class DesTrajState(State):
@@ -171,7 +171,7 @@ class DesTrajState(State):
 class DesTraj(Flow):
     """Desired trajectory flow."""
 
-    _init_s = DesTrajState
+    role_s = DesTrajState
 
 
 # MODEL FUNCTIONS
@@ -193,8 +193,8 @@ class StoreEE(FxnBlock):
     """Class for the battery architecture/energy storage."""
 
     __slots__ = ("ee_out", "fs")
-    _init_s = StoreEEState
-    _init_m = StoreEEMode
+    role_s = StoreEEState
+    role_m = StoreEEMode
     _init_ee_out = EE
     _init_fs = Force
     flownames = {"ee_1": "ee_out", "force_st": "fs"}
@@ -252,8 +252,8 @@ class DistEE(FxnBlock):
     """
 
     __slots__ = ("ee_in", "ee_mot", "ee_ctl", "st")
-    _init_s = DistEEState
-    _init_m = DistEEMode
+    role_s = DistEEState
+    role_m = DistEEMode
     _init_ee_in = EE
     _init_ee_mot = EE
     _init_ee_ctl = EE
@@ -334,8 +334,8 @@ class HoldPayload(FxnBlock):
     """Drone landing gear."""
 
     __slots__ = ('dofs', 'force_st', 'force_lin')
-    _init_m = HoldPayloadMode
-    _init_s = HoldPayloadState
+    role_m = HoldPayloadMode
+    role_s = HoldPayloadState
     _init_dofs = DOFs
     _init_force_st = Force
     _init_force_lin = Force
@@ -490,8 +490,8 @@ class AffectDOF(FxnBlock, BaseLine):
     """Drone rotors that the drone through the air."""
 
     __slots__ = ("ee_in", "ctl_in", "dofs", "force")
-    _init_s = AffectDOFState
-    _init_m = AffectDOFMode
+    role_s = AffectDOFState
+    role_m = AffectDOFMode
     _init_ee_in = EE
     _init_ctl_in = Control
     _init_dofs = DOFs
@@ -578,8 +578,8 @@ class CtlDOF(FxnBlock):
     """Drone rotor control."""
 
     __slots__ = ("ee_in", "des_traj", "ctl", "dofs", "fs")
-    _init_s = CtlDOFstate
-    _init_m = CtlDOFMode
+    role_s = CtlDOFstate
+    role_m = CtlDOFMode
     _init_ee_in = EE
     _init_des_traj = DesTraj
     _init_ctl = Control
@@ -650,7 +650,7 @@ class PlanPath(FxnBlock):
     """Drone path planning function."""
 
     __slots__ = ("ee_in", "dofs", "des_traj", "fs")
-    _init_m = PlanPathMode
+    role_m = PlanPathMode
     _init_ee_in = EE
     _init_dofs = DOFs
     _init_des_traj = DesTraj
@@ -731,7 +731,7 @@ class ViewModes(Mode):
 class ViewEnvironment(FxnBlock):
     """Drone camera placeholder."""
 
-    _init_m = ViewModes
+    role_m = ViewModes
     _init_dofs = DOFs
 
 

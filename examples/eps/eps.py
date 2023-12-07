@@ -26,7 +26,7 @@ class GenericState(State):
 
 
 class GenericFlow(Flow):
-    _init_s = GenericState
+    role_s = GenericState
 
 
 class SigState(State):
@@ -34,7 +34,7 @@ class SigState(State):
 
 
 class Signal(Flow):
-    _init_s = SigState
+    role_s = SigState
 
 
 class ImportEEModes(Mode):
@@ -45,7 +45,7 @@ class ImportEEModes(Mode):
 
 class ImportEE(FxnBlock):
     __slots__ = ("ee_out",)
-    _init_m = ImportEEModes
+    role_m = ImportEEModes
     _init_ee_out = GenericFlow
     flownames = {"ee_1": "ee_out"}
     """ Static model representation is the same as the dynamic model respresentation, except in this case 
@@ -76,7 +76,7 @@ class ImportSigModes(Mode):
 
 class ImportSig(FxnBlock):
     __slots__ = ("sig_out",)
-    _init_m = ImportSigModes
+    role_m = ImportSigModes
     _init_sig_out = Signal
     flownames = {"sig_in": "sig_out"}
 
@@ -96,7 +96,7 @@ class StoreEEModes(Mode):
 
 class StoreEE(FxnBlock):
     __slots__ = ("ee_in", "ee_out")
-    _init_m = StoreEEModes
+    role_m = StoreEEModes
     _init_ee_in = GenericFlow
     _init_ee_out = GenericFlow
     flownames = {"ee_2": "ee_in", "ee_3": "ee_out"}
@@ -129,7 +129,7 @@ class SupplyEEModes(Mode):
 
 class SupplyEE(FxnBlock):
     __slots__ = ("ee_in", "ee_out", "heat_out")
-    _init_m = SupplyEEModes
+    role_m = SupplyEEModes
     _init_ee_in = GenericFlow
     _init_ee_out = GenericFlow
     _init_heat_out = GenericFlow
@@ -170,7 +170,7 @@ class DistEEModes(Mode):
 
 class DistEE(FxnBlock):
     __slots__ = ("sig_in", "ee_in", "ee_m", "ee_h", "ee_o")
-    _init_m = DistEEModes
+    role_m = DistEEModes
     _init_sig_in = GenericFlow
     _init_ee_in = GenericFlow
     _init_ee_m = GenericFlow
@@ -220,7 +220,7 @@ class ExportHEModes(Mode):
 
 class ExportHE(FxnBlock):
     __slots__ = ("he",)
-    _init_m = ExportHEModes
+    role_m = ExportHEModes
     _init_he = GenericFlow
     flownames = {"waste_he_1": "he", "waste_he_o": "he", "waste_he_m": "he"}
 
@@ -259,7 +259,7 @@ class EEtoMEModes(Mode):
 
 class EEtoME(FxnBlock):
     __slots__ = ("ee_in", "me", "he_out")
-    _init_m = EEtoMEModes
+    role_m = EEtoMEModes
     _init_ee_in = GenericFlow
     _init_me = GenericFlow
     _init_he_out = GenericFlow
@@ -304,7 +304,7 @@ class EEtoHEModes(Mode):
 
 class EEtoHE(FxnBlock):
     __slots__ = ("ee_in", "he")
-    _init_m = EEtoHEModes
+    role_m = EEtoHEModes
     _init_ee_in = GenericFlow
     _init_he = GenericFlow
     flownames = {"ee_h": "ee_in"}
@@ -340,7 +340,7 @@ class EEtoOEModes(Mode):
 
 class EEtoOE(FxnBlock):
     __slots__ = ("ee_in", "oe", "he_out")
-    _init_m = EEtoOEModes
+    role_m = EEtoOEModes
     _init_ee_in = GenericFlow
     _init_oe = GenericFlow
     _init_he_out = GenericFlow

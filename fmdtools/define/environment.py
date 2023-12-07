@@ -32,26 +32,25 @@ class Environment(CommsFlow):
     Examples
     --------
     >>> class ExampleEnvironment(Environment):
-    ...    _init_c = ExampleCoords
+    ...    role_c = ExampleCoords
     ...    _init_ga = ExGeomArch
     >>> env = ExampleEnvironment('env')
     """
 
     slots = ["c", "_args_c", "r", "_args_r", "ga", "args_ga"]
-    _init_c = Coords
-    _init_r = Rand
+    role_c = Coords
+    role_r = Rand
     _init_ga = GeomArch
     default_track = ('s', 'i', 'c', 'ga')
     all_possible = ('s', 'i', 'c', 'r', 'ga')
 
     def __init__(self, name, glob=[], p={}, s={}, r={}, c={}, ga={}):
-        super().__init__(name, glob=glob, p=p, s=s)
-        if 'p' not in c and self._init_c._init_p == self._init_p:
-            c = {**c, 'p': self.p}
-        if 'p' not in ga and self._init_ga._init_p == self._init_p:
-            ga = {**ga, 'p': self.p}
+        if 'p' not in c and self.role_c.role_p == self.role_p:
+            c = {**c, 'p': p}
+        if 'p' not in ga and self._init_ga.role_p == self.role_p:
+            ga = {**ga, 'p': p}
+        super().__init__(name, glob=glob, p=p, s=s, r=r, c=c, ga=ga)
 
-        init_obj_attr(self, r=r, c=c, ga=ga)
         self.update_seed()
 
     def get_typename(self):
@@ -109,7 +108,7 @@ class Environment(CommsFlow):
     def reset(self):
         super().reset()
         self.r.reset()
-        self.c = self._init_c(**self._args_c)
+        self.c = self.role_c(**self._args_c)
         self.ga.reset()
 
     def update_seed(self, seed=[]):
@@ -147,7 +146,7 @@ class Environment(CommsFlow):
 class ExampleEnvironment(Environment):
     """Example environment for testing."""
 
-    _init_c = ExampleCoords
+    role_c = ExampleCoords
     _init_ga = ExGeomArch
 
 

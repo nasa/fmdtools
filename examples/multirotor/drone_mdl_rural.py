@@ -121,7 +121,7 @@ class HSigState(State):
 class HSig(Flow):
     """Health signal flow."""
 
-    _init_s = HSigState
+    role_s = HSigState
 
 
 class RSigState(State):
@@ -133,7 +133,7 @@ class RSigState(State):
 class RSig(Flow):
     """Recovery signal flow."""
 
-    _init_s = RSigState
+    role_s = RSigState
 
 # DEFINE FUNCTIONS
 
@@ -228,9 +228,9 @@ class BatParam(Parameter):
 class Battery(Component):
     """Battery component used to hold energy in distributed architecture."""
 
-    _init_s = BatState
-    _init_m = BatMode
-    _init_p = BatParam
+    role_s = BatState
+    role_m = BatMode
+    role_p = BatParam
 
     def behavior(self, fs, ee_outr, time):
         """Battery behavior returning electrical transference, soc, and fault state."""
@@ -331,8 +331,8 @@ class StoreEE(FxnBlock):
     """Class defining energy storage function with battery architecture."""
 
     __slots__ = ('hsig_bat', 'ee_1', 'force_st')
-    _init_s = StoreEEState
-    _init_m = StoreEEMode
+    role_s = StoreEEState
+    role_m = StoreEEMode
     _init_ca = BatArch
     _init_hsig_bat = HSig
     _init_ee_1 = EE
@@ -398,7 +398,7 @@ class HoldPayloadMode(Mode):
 class HoldPayload(HoldPayloadDyn):
     """Adaptation of HoldPayload with new mode information."""
 
-    _init_m = HoldPayloadMode
+    role_m = HoldPayloadMode
 
 
 class ManageHealthMode(Mode):
@@ -420,8 +420,8 @@ class ManageHealth(FxnBlock):
     """Health management function for rotor and battery."""
 
     __slots__ = ('force_st', 'ee_ctl', 'hsig_dofs', 'hsig_bat', 'rsig_traj')
-    _init_m = ManageHealthMode
-    _init_p = ResPolicy
+    role_m = ManageHealthMode
+    role_p = ResPolicy
     _init_force_st = Force
     _init_ee_ctl = EE
     _init_hsig_dofs = HSig
@@ -455,7 +455,7 @@ class AffectDOF(AffectDOFHierarchical):
     """Adaptation of hierarchical AffecDOF function which returns fault signals."""
 
     __slots__ = ('hsig_dofs',)
-    _init_m = AffectMode
+    role_m = AffectMode
     _init_hsig_dofs = HSig
 
     def reconfig_faults(self):
@@ -489,7 +489,7 @@ class CtlDOFMode(Mode):
 class CtlDOF(CtlDOFStat):
     """Adaptation of CtlDOFMode with more mode information."""
 
-    _init_m = CtlDOFMode
+    role_m = CtlDOFMode
 
 
 class PlanPathMode(Mode):
@@ -546,9 +546,9 @@ class PlanPath(PlanPathDyn):
     """Path planning function of the drone. Follows a sequence defined in flightplan."""
 
     __slots__ = ('rsig_traj', )
-    _init_s = PlanPathState
-    _init_m = PlanPathMode
-    _init_p = DroneParam
+    role_s = PlanPathState
+    role_m = PlanPathMode
+    role_p = DroneParam
     _init_rsig_traj = RSig
     default_track = {'s': ['ground_height', 'pt', 'goal'], 'm': 'all'}
 
@@ -648,7 +648,7 @@ class Drone(Model):
     """Rural surveillance Drone model."""
 
     __slots__ = ('start_area', 'safe_area', 'target_area')
-    _init_p = DroneParam
+    role_p = DroneParam
     default_sp = dict(phases=(('taxi', 0, 0),
                               ('move', 1, 11),
                               ('land', 12, 20)),

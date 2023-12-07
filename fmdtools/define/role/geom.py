@@ -6,7 +6,7 @@ Now:
 Future:
     Dynamic Geoms, with properties tied to states
 """
-from fmdtools.define.common import init_obj_attr, init_obj_dict
+from fmdtools.define.common import BaseObject, init_obj_dict
 from fmdtools.define.role.parameter import Parameter
 from fmdtools.define.role.state import State
 from fmdtools.define.common import get_obj_track
@@ -21,7 +21,7 @@ from recordclass import astuple, asdict
 import numpy as np
 
 
-class Geom(object):
+class Geom(BaseObject):
     """
     Base class for defining geometries.
 
@@ -36,13 +36,13 @@ class Geom(object):
         Parameter defining immutable geom characteristics (e.g., shapely inputs, buffer)
     """
 
-    _init_s = State
-    _init_p = Parameter
+    role_s = State
+    role_p = Parameter
     default_track = ['s']
     all_possible = ['s']
 
     def __init__(self, *args, s={}, p={}, **kwargs):
-        init_obj_attr(self, s=s, p=p)
+        super().__init__(*args, s=s, p=p)
         self.shape = self.shapely_class(*self.p.as_args())
         init_obj_dict(self, "buffer")
         for b, dist in self.buffers.items():
@@ -106,7 +106,7 @@ class Geom(object):
 
     def reset(self):
         """Reset the Geom to initial state."""
-        self.s = self._init_s(**self._args_s)
+        self.s = self.role_s(**self._args_s)
 
     def return_mutables(self):
         return astuple(self.s)
@@ -286,8 +286,8 @@ class GeomPoint(Geom):
     Examples
     --------
     >>> class ExPoint(GeomPoint):
-    ...    _init_p = ExPointParam
-    ...    _init_s = ExGeomState
+    ...    role_p = ExPointParam
+    ...    role_s = ExGeomState
     >>> exp = ExPoint()
     >>> exp.at((1.0, 1.0), "on")
     True
@@ -307,7 +307,7 @@ class GeomPoint(Geom):
     <class 'shapely.geometry.polygon.Polygon'>
     """
 
-    _init_p = PointParam
+    role_p = PointParam
     shapely_class = Point
 
 
@@ -336,8 +336,8 @@ class ExPointParam(PointParam):
 class ExPoint(GeomPoint):
     """Example point for testing."""
 
-    _init_p = ExPointParam
-    _init_s = ExGeomState
+    role_p = ExPointParam
+    role_s = ExGeomState
 
 
 class LineParam(Parameter):
@@ -385,8 +385,8 @@ class GeomLine(Geom):
     Examples
     --------
     >>> class ExLine(GeomLine):
-    ...    _init_p = ExLineParam
-    ...    _init_s = ExGeomState
+    ...    role_p = ExLineParam
+    ...    role_s = ExGeomState
     >>> exp = ExLine()
     >>> exp.at((1.0, 1.0), "on")
     True
@@ -406,15 +406,15 @@ class GeomLine(Geom):
     <class 'shapely.geometry.polygon.Polygon'>
     """
 
-    _init_p = LineParam
+    role_p = LineParam
     shapely_class = LineString
 
 
 class ExLine(GeomLine):
     """Example GeomLine to use in testing."""
 
-    _init_p = ExLineParam
-    _init_s = ExGeomState
+    role_p = ExLineParam
+    role_s = ExGeomState
 
 
 class PolyParam(Parameter):
@@ -465,8 +465,8 @@ class GeomPoly(Geom):
     Examples
     --------
     >>> class ExPoly(GeomPoly):
-    ...    _init_p = ExPolyParam
-    ...    _init_s = ExGeomState
+    ...    role_p = ExPolyParam
+    ...    role_s = ExGeomState
     >>> egp = ExPoly()
     >>> egp.at((0.1, 0.05))
     True
@@ -479,15 +479,15 @@ class GeomPoly(Geom):
     <class 'shapely.geometry.polygon.Polygon'>
     """
 
-    _init_p = PolyParam
+    role_p = PolyParam
     shapely_class = Polygon
 
 
 class ExPoly(GeomPoly):
     """Example Polygon for use in testing."""
 
-    _init_p = ExPolyParam
-    _init_s = ExGeomState
+    role_p = ExPolyParam
+    role_s = ExGeomState
 
 
 class GeomArch(object):
@@ -513,7 +513,7 @@ class GeomArch(object):
     ExGeomState(occupied=False)
     """
 
-    _init_p = Parameter
+    role_p = Parameter
     default_track = ['geoms']
     all_possible = ['geoms']
 

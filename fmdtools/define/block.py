@@ -29,7 +29,7 @@ from fmdtools.define.role.state import State, ExampleState
 from fmdtools.define.role.parameter import Parameter, SimParam, ExampleParameter
 from fmdtools.define.role.rand import Rand
 from fmdtools.define.common import BaseObject
-from fmdtools.define.common import get_true_fields, get_true_field, init_obj_attr
+from fmdtools.define.common import get_true_fields, get_true_field
 from fmdtools.define.common import get_obj_track, set_var, get_var
 from fmdtools.define.role.time import Time
 from fmdtools.define.role.mode import Mode, ExampleMode
@@ -104,14 +104,14 @@ class Simulable(BaseObject):
 
     Note that classes solely based on Simulable may not be able to be simulated.
     """
-    __slots__ = ('p', '_args_p', 'sp', '_args_sp', 'r', '_args_r', 'h', 'track', 'flows', 'name', 'is_copy')
+    __slots__ = ('p', '_args_p', 'sp', '_args_sp', 'r', '_args_r', 'h', 'track', 'flows', 'is_copy')
     default_sp = {}
     default_track = ["all"]
-    _init_p = Parameter
-    _init_r = Rand
-    _init_sp = SimParam
+    role_p = Parameter
+    role_r = Rand
+    role_sp = SimParam
 
-    def __init__(self, name='', p={}, sp={}, r={}, track={}):
+    def __init__(self, name='', track={}, **kwargs):
         """
         Instantiates internal Simulable attributes.
 
@@ -132,15 +132,10 @@ class Simulable(BaseObject):
             self.track = self.default_track
         else:
             self.track = track
-        if not name:
-            self.name = self.__class__.__name__.lower()
-        else:
-            self.name = name
-        if not sp:
-            sp = self.default_sp
-        self.init_roles()
-        self.init_indicators()
-        init_obj_attr(self, p=p, sp=sp, r=r)
+
+        if 'sp' not in kwargs:
+            kwargs['sp'] = self.default_sp
+        BaseObject.__init__(self, **kwargs)
 
     def add_flow_hist(self, hist, timerange, track):
         """
@@ -348,24 +343,24 @@ class Simulable(BaseObject):
 class Block(Simulable):
     __slots__ = ['s', '_args_s', 'm', '_args_m', 't', '_args_t']
     default_track = ['s', 'm', 'r', 't', 'i']
-    _init_s = State
-    _init_m = Mode
-    _init_t = Time
+    role_s = State
+    role_m = Mode
+    role_t = Time
     """ 
     Superclass for FxnBlock and Component subclasses. Has functions for model setup, querying state, reseting the model
     
     Attributes
     ----------
     p : Parameter
-        Internal Parameter for the block. Instanced from _init_p
+        Internal Parameter for the block. Instanced from role_p
     s : State
-        Internal State of the block. Instanced from _init_s.
+        Internal State of the block. Instanced from role_s.
     m : Mode
-        Internal Mode for the block. Instanced from _init_m
+        Internal Mode for the block. Instanced from role_m
     r : Rand
-        Internal Rand for the block. Instanced from _init_r
+        Internal Rand for the block. Instanced from role_r
     t : Time
-        Internal Time for the block. Instanced from _init_t
+        Internal Time for the block. Instanced from role_t
     name : str
         Block name
     flows : dict
@@ -373,7 +368,7 @@ class Block(Simulable):
     is_copy : bool
         Marker for whether the object is a copy.
     """
-    def __init__(self, name='', flows={}, s={}, p={}, m={}, r={}, t={}, sp={}, track=''):
+    def __init__(self, name='', flows={}, **kwargs):
         """
         Instance superclass. Called by FxnBlock and Component classes.
 
@@ -389,10 +384,10 @@ class Block(Simulable):
             Internal states to override from defaults. The default is {}.
         c : dict, optional
             Internal CompArch fields/arguments override from defaults. The default is {}.
-            FxnBlock must have an _init_c property.
+            FxnBlock must have an role_c property.
         a : dict, optional
             Internal ASG fields/arguments override from defaults. The default is {}.
-            FxnBlock must have an _init_a property.
+            FxnBlock must have an role_a property.
         r : dict, optional
             Internal Rand fields/arguments override from defaults. The default is {}.
         m : dict, optional
@@ -400,9 +395,8 @@ class Block(Simulable):
         t : dict, optional
             Internal Time fields/arguments to override from defaults. The defautl is {}
         """
-        super().__init__(name=name, p=p, sp=sp, r=r, track=track)
+        Simulable.__init__(self, name=name, **kwargs)
         assoc_flows(self, flows=flows)
-        init_obj_attr(self, s=s, m=m, t=t)
         self.update_seed()
 
     def new_with_params(self, s={}, m={}, t={}, **kwargs):
@@ -526,8 +520,8 @@ class Block(Simulable):
         """
 
         self.m.remove_any_faults()
-        self.s = self._init_s(**self._args_s)
-        self.r = self._init_r(**self._args_r, run_stochastic=self.r.run_stochastic)
+        self.s = self.role_s(**self._args_s)
+        self.r = self.role_r(**self._args_r, run_stochastic=self.r.run_stochastic)
         self.t.reset()
         for flow in self.flows.values():
             flow.reset()
@@ -773,7 +767,7 @@ class CompArch(dataobject, mapping=True):
         cop = self.__class__(**kwargs)
         for compname, component in self.components.items():  # TODO: needs to cover all attributes, copy should a part of Block
             cop_comp = cop.components[compname]
-            cop_comp.s = cop_comp._init_s(**asdict(component.s))
+            cop_comp.s = cop_comp.role_s(**asdict(component.s))
             cop_comp.m.mirror(component.m)
             cop_comp.t = component.t.copy()
             if hasattr(component, 'h'):
@@ -1107,7 +1101,7 @@ class ActArch(object):
         for actname, action in self.actions.items(): 
             cop_act = cop.actions[actname]
             cop_act.duration = action.duration
-            cop_act.s = action._init_s(**asdict(action.s))
+            cop_act.s = action.role_s(**asdict(action.s))
             cop_act.m.mirror(action.m)
             cop_act.t = action.t.copy()
             if hasattr(action, 'h'):
@@ -1404,9 +1398,9 @@ class FxnBlock(Block):
 class ExampleFxnBlock(FxnBlock):
     """Example Function block for testing"""
 
-    _init_p = ExampleParameter
-    _init_s = ExampleState
-    _init_m = ExampleMode
+    role_p = ExampleParameter
+    role_s = ExampleState
+    role_m = ExampleMode
 
     def dynamic_behavior(self, time):
         """Increment x if nominal, else increment y."""

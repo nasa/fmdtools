@@ -68,9 +68,9 @@ class TransportLiquidMode(Mode):
 
 class ImportLiquid(FxnBlock):
     __slots__ = ('sig', 'wat_out')
-    _init_p = TankParam
-    _init_s = TransportLiquidState
-    _init_m = TransportLiquidMode
+    role_p = TankParam
+    role_s = TransportLiquidState
+    role_m = TransportLiquidMode
     _init_sig = Signal
     _init_wat_out = Liquid
     flownames = {'coolant_in': 'wat_out', 'input_sig': 'sig'}
@@ -96,9 +96,9 @@ class ImportLiquid(FxnBlock):
 
 class ExportLiquid(FxnBlock):
     __slots__ = ('sig', 'wat_in')
-    _init_p = TankParam
-    _init_s = TransportLiquidState
-    _init_m = TransportLiquidMode
+    role_p = TankParam
+    role_s = TransportLiquidState
+    role_m = TransportLiquidMode
     _init_sig = Signal
     _init_wat_in = Liquid
     flownames = {'coolant_out': 'wat_in', 'output_sig': 'sig'}
@@ -130,9 +130,9 @@ class StoreLiquidState(State):
 
 class StoreLiquid(FxnBlock):
     __slots__ = ('wat_in', 'wat_out', 'sig')
-    _init_s = StoreLiquidState
-    _init_m = StoreLiquidMode
-    _init_p = TankParam
+    role_s = StoreLiquidState
+    role_m = StoreLiquidMode
+    role_p = TankParam
     _init_wat_in = Liquid
     _init_wat_out = Liquid
     _init_sig = Signal
@@ -167,7 +167,7 @@ class StoreLiquid(FxnBlock):
 
 
 class ContingencyActions(FxnBlock):
-    _init_p = TankParam
+    role_p = TankParam
     _init_input_sig = Signal
     _init_output_sig = Signal
     _init_tank_sig = Signal
@@ -183,7 +183,7 @@ class ContingencyActions(FxnBlock):
 
 class Tank(Model):
     __slots__ = ()
-    _init_p = TankParam
+    role_p = TankParam
     default_sp = dict(phases=(('na', 0, 0),
                               ('operation', 1, 20)),
                       times=(0, 5, 10, 15, 20),

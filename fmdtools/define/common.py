@@ -299,31 +299,6 @@ def check_pickleability(obj, verbose=True, try_pick=False, pause=0.2):
     return unpickleable
 
 
-def init_obj_attr(obj, **attrs):
-    """
-    Initialize attributes to a given object, provided the object has a given
-    _init_x in its class variables for the attribute x.
-
-    Object is instantiated with the attribute x corresponding to the output of _init_x
-    along with _args_x corresponding to the input dictionary given for x.
-
-    Parameters
-    ----------
-    obj : object (Block/Flow/Model)
-        Object to instantiate the attributes in
-    **attrs : dict
-        Dictionary arguments (or already instantiated objects) to use for the
-        attributes.
-    """
-    for at in attrs:
-        at_arg = attrs[at]
-        if type(at_arg) != dict:
-            at_arg = asdict(at_arg)
-        setattr(obj, '_args_'+at, at_arg)
-        init_at = getattr(obj, '_init_'+at)
-        setattr(obj, at, init_at(**at_arg))
-
-
 def init_obj_dict(obj, spec, name_end="s", set_attr=False):
     """
     Create a dict for the attribute 'spec'.
@@ -435,11 +410,70 @@ def t_key(time):
     return 't'+'p'.join(str(time).split('.'))
 
 
-class BaseObject(object):
-    __slots__ = ('roles', 'indicators')
+def init_obj_attr(obj, **attrs):
+    """
+    Initialize attributes to a given object, provided the object has a given
+    _init_x in its class variables for the attribute x.
 
-    def init_roles(self):
+    Object is instantiated with the attribute x corresponding to the output of _init_x
+    along with _args_x corresponding to the input dictionary given for x.
+
+    Parameters
+    ----------
+    obj : object (Block/Flow/Model)
+        Object to instantiate the attributes in
+    **attrs : dict
+        Dictionary arguments (or already instantiated objects) to use for the
+        attributes.
+    """
+    for at in attrs:
+        at_arg = attrs[at]
+        if type(at_arg) != dict:
+            at_arg = asdict(at_arg)
+        setattr(obj, '_args_'+at, at_arg)
+        init_at = getattr(obj, '_init_'+at)
+        setattr(obj, at, init_at(**at_arg))
+
+
+class BaseObject(object):
+    __slots__ = ('name', 'roles', 'indicators')
+
+    def __init__(self, name='', **kwargs):
+        if not name:
+            self.name = self.__class__.__name__.lower()
+        else:
+            self.name = name
+        self.init_indicators()
+        self.init_roles(**kwargs)
+
+    def init_roles(self, **kwargs):
+        """
+        Initialize the roles for a given object.
+
+        Roles defined using role_x in its class variables for the attribute x.
+
+        Object is instantiated with the attribute x corresponding to the output of _init_x
+        along with _args_x corresponding to the input dictionary given for x.
+
+        Parameters
+        ----------
+        **kwargs : dict
+            Dictionary arguments (or already instantiated objects) to use for the
+            attributes.
+        """
         self.roles = tuple([at[5:] for at in dir(self) if at.startswith('role_')])
+        for rolename in self.roles:
+            role_initializer = getattr(self, 'role_'+rolename)
+            if rolename in kwargs:
+                role_args = kwargs[rolename]
+                if type(role_args) != dict:
+                    role_args = asdict(role_args)
+            else:
+                role_args = {}
+            # TODO: args should be folded into the 
+            setattr(self, '_args_'+rolename, role_args)
+            setattr(self, rolename, role_initializer(**role_args))
+
 
     def init_indicators(self):
         self.indicators = tuple([at[9:] for at in dir(self)

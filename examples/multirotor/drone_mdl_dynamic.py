@@ -65,7 +65,7 @@ class SightGrid(Coords):
     Used to calculate environmental risk and number of points viewed.
     """
 
-    _init_p = DroneEnvironmentGridParam
+    role_p = DroneEnvironmentGridParam
 
     def init_properties(self, *args, **kwargs):
         """Set target true between 0 and 150 in the x and 10 and 160 in the y."""
@@ -75,8 +75,8 @@ class SightGrid(Coords):
 class DroneEnvironment(Environment):
     """Drone environment flow (contains grid)."""
 
-    _init_c = SightGrid
-    _init_p = DroneEnvironmentGridParam
+    role_c = SightGrid
+    role_p = DroneEnvironmentGridParam
 
 
 class StoreEE(StaticstoreEE):
@@ -184,10 +184,10 @@ class PlanPath(FxnBlock):
     """Path planning for the drone."""
 
     __slots__ = ('ee_ctl', 'dofs', 'des_traj', 'fs', 'dofs')
-    _init_t = PlanPathTime
-    _init_m = PlanPathMode
-    _init_s = PlanPathState
-    _init_p = PlanPathParams
+    role_t = PlanPathTime
+    role_m = PlanPathMode
+    role_s = PlanPathState
+    role_p = PlanPathParams
     _init_ee_ctl = EE
     _init_dofs = DOFs
     _init_des_traj = DesTraj
