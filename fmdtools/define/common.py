@@ -115,11 +115,11 @@ def set_var(obj, var, val):
 
 def nest_dict(dic, levels=float('inf'), separator="."):
     """
-    Nests a dictionary by 
+    Nest a dictionary a certain number of levels by separator.
 
     Parameters
     ----------
-    dic : dict
+    dict : dict
         Dictionary to nest. e.g. {'a.b': 1.0}
     levels : int, optional
         DESCRIPTION. The default is float('inf').
@@ -253,7 +253,7 @@ def get_true_field(dataobject, fieldname, *args, **kwargs):
 
 def is_iter(data):
     """
-    Checks whether a data type should be interpreted as an iterable or not and returned
+    Check whether a data type should be interpreted as an iterable or not and returned
     as a single value or tuple/array
     """
     if isinstance(data, Iterable) and type(data) != str:
@@ -301,7 +301,7 @@ def check_pickleability(obj, verbose=True, try_pick=False, pause=0.2):
 
 def init_obj_attr(obj, **attrs):
     """
-    Initializes attributes to a given object, provided the object has a given
+    Initialize attributes to a given object, provided the object has a given
     _init_x in its class variables for the attribute x.
 
     Object is instantiated with the attribute x corresponding to the output of _init_x
@@ -435,39 +435,40 @@ def t_key(time):
     return 't'+'p'.join(str(time).split('.'))
 
 
-def get_obj_indicators(obj):
-    """
-    Gets the names of the indicators
+class BaseObject(object):
+    __slots__ = ('roles', 'indicators')
 
-    Parameters
-    ----------
-    obj : Simulable or Flow
-        Object with indicators
+    def init_roles(self):
+        self.roles = tuple([at[5:] for at in dir(self) if at.startswith('role_')])
 
-    Returns
-    -------
-    indicators : dict
-        dict of indicator names and their associated method handles.
-    """
-    indicators = {i[9:]: getattr(obj, i) for i in dir(obj) if i.startswith('indicate_')}
-    return indicators
+    def init_indicators(self):
+        self.indicators = tuple([at[9:] for at in dir(self)
+                                 if at.startswith('indicate_')])
 
+    def get_indicators(self):
+        """
+        Gets the names of the indicators
 
-def return_true_indicators(obj, time):
-    """
-    Get list of indicators.
+        Returns
+        -------
+        indicators : dict
+            dict of indicator names and their associated method handles.
+        """
+        return {i: getattr(self, 'indicate_'+i) for i in self.indicators}
 
-    Parameters
-    ----------
-    obj : flow/fxn/etc
-        Object with an indicator
-    time : float
-        Time to execute the indicator method at.
+    def return_true_indicators(self, time):
+        """
+        Get list of indicators.
 
-    Returns
-    -------
-    list
-        List of inticators that return true at time
+        Parameters
+        ----------
+        time : float
+            Time to execute the indicator method at.
 
-    """
-    return [f for f, ind in get_obj_indicators(obj).items() if ind(time)]
+        Returns
+        -------
+        list
+            List of inticators that return true at time
+
+        """
+        return [f for f, ind in self.get_indicators().items() if ind(time)]

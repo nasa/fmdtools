@@ -19,7 +19,7 @@ And functions/methods:
 """
 from fmdtools.analyze.result import Result, load_folder, load, fromdict
 from fmdtools.analyze.common import bootstrap_confidence_interval, get_sub_include
-from fmdtools.define.common import get_var, get_obj_indicators
+from fmdtools.define.common import get_var
 from fmdtools.analyze.common import unpack_plot_values, phase_overlay
 from fmdtools.analyze.common import multiplot_legend_title, multiplot_helper
 from fmdtools.analyze.common import plot_err_hist, setup_plot
@@ -60,7 +60,7 @@ def init_indicator_hist(obj, h, timerange, track):
     """
     sub_track = get_sub_include('i', track)
     if sub_track:
-        indicators = get_obj_indicators(obj)
+        indicators = obj.get_indicators()
         if indicators:
             h['i'] = History()
             for i, val in indicators.items():
