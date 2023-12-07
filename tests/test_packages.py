@@ -5,7 +5,7 @@ Created on Tue Aug  9 12:44:01 2022
 @author: dhulse
 """
 import unittest
-from fmdtools.define.rand import get_pdf_for_rand
+from fmdtools.define.role.rand import get_pdf_for_rand
 import numpy as np
 
 

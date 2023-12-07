@@ -10,7 +10,7 @@ Glossary
 		A data structure which connects functions--traditionally energy, material, or signal. Defined using the :class:`fmdtools.define.flow.Flow` class.
 	
 	Role
-		A defined attribute of an fmdtools class which refers to a user-defined (or default) subclass of a corresponding fmdtools data structure. For example, Blocks have the role `Block.s` (for state) which may be filled by a subclass of :class:`fmdtools.define.state.State`.
+		A defined attribute of an fmdtools class which refers to a user-defined (or default) subclass of a corresponding fmdtools data structure. For example, Blocks have the role `Block.s` (for state) which may be filled by a subclass of :class:`fmdtools.define.role.state.State`.
 
 	Internal Flow
 		A flow object that is internal to a :class:`fmdtools.define.block.FxnBlock` which is not present in the overall model definition.
@@ -31,7 +31,7 @@ Glossary
 		The physical embodiment of a :term:`function` that encompasses multiple :term:`Component` s. Represented via the :class:`fmdtools.define.block.CompArch` class. 
 	
 	Mode
-		Discrete modifications of a :term:`behavior` specified as entries in the :meth:`fmdtools.define.mode.Mode` class. Often used to control if/else statements in a :meth:`fmdtools.define.Block.behavior` method.
+		Discrete modifications of a :term:`behavior` specified as entries in the :meth:`fmdtools.define.role.mode.Mode` class. Often used to control if/else statements in a :meth:`fmdtools.define.Block.behavior` method.
 	
 	Fault Mode
 		Undesired :term:`mode`, which leads to hazardous behavior. For example, a lamp may have "burn-out" and "flicker" modes
@@ -52,7 +52,7 @@ Glossary
 		A specific task to be performed by an :term:`agent` used to represent human/autonomous operations. May be specified by extending the :class:`fmdtools.define.block.Action` class and added to a :class:`fmdtools.define.block.FxnBlock` as a part of an Action Sequence Graph :class:`fmdtools.define.block.ASG`
 	
 	Rate
-		The expected occurence (frequency) of a given :term:`mode`, which may be specified in a number of ways using :meth:`fmdtools.define.mode.Mode.faultmodes`.
+		The expected occurence (frequency) of a given :term:`mode`, which may be specified in a number of ways using :meth:`fmdtools.define.role.mode.Mode.faultmodes`.
 		
 	Cost
 		A metric used to define severity of a scenario. While cost is defined in a monetary sense, it should often be defined holistically to account for indirect costs and externalities (e.g., safety, disruption, etc). One of the default outputs from :meth:`fmdtools.define.block.Simulable.find_classification` for models or blocks.

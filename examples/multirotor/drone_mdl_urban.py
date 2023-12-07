@@ -13,12 +13,12 @@ from drone_mdl_rural import AffectDOF as AffectDOFRural
 from drone_mdl_rural import Drone as DroneRural
 
 from fmdtools.define.block import CompArch, Component
-from fmdtools.define.mode import Mode
-from fmdtools.define.state import State
-from fmdtools.define.parameter import Parameter
+from fmdtools.define.role.mode import Mode
+from fmdtools.define.role.state import State
+from fmdtools.define.role.parameter import Parameter
 from fmdtools.define.model import Model
 from fmdtools.define.environment import Environment
-from fmdtools.define.coords import Coords, CoordsParam
+from fmdtools.define.role.coords import Coords, CoordsParam
 
 import numpy as np
 from recordclass import asdict

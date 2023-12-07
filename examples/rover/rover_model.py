@@ -27,13 +27,13 @@ Flows:
     - Switch Signals
 """
 
-from fmdtools.define.parameter import Parameter
-from fmdtools.define.state import State
-from fmdtools.define.mode import Mode
+from fmdtools.define.role.parameter import Parameter
+from fmdtools.define.role.state import State
+from fmdtools.define.role.mode import Mode
 from fmdtools.define.block import FxnBlock
 from fmdtools.define.model import Model
 from fmdtools.define.flow import Flow
-from fmdtools.define.geom import PointParam, GeomPoint, LineParam, GeomLine, GeomArch
+from fmdtools.define.role.geom import PointParam, GeomPoint, LineParam, GeomLine, GeomArch
 from fmdtools.define.environment import Environment
 import fmdtools.sim.propagate as prop
 import itertools

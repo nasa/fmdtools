@@ -69,7 +69,7 @@ The multirotor example model has several models of drones modelled at differing 
   
   - Analysis using Basic analysis/results processing capabilities
  
- - `Urban Drone Demo <../examples/multirotor/Urban_Drone_Demo.ipynb>`_ is helpful for understanding how to set up gridworlds using :class:`fmdtools.define.coords.Coords` and an Environment class.
+ - `Urban Drone Demo <../examples/multirotor/Urban_Drone_Demo.ipynb>`_ is helpful for understanding how to set up gridworlds using :class:`fmdtools.define.role.coords.Coords` and an Environment class.
  
 - `Multirotor Optimization <../examples/multirotor/Multirotor_Optimization.ipynb>`_ shows how the design, operations, and contingency management of a system can be co-optimized with the :class:`fmdtools.sim.search.ProblemInterface` class. 
 

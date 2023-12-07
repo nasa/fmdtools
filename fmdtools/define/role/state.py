@@ -7,10 +7,10 @@ attributes that change over time.
 """
 from recordclass import dataobject
 import numpy as np
-from .common import is_iter, get_dataobj_track
 import copy
 import warnings
 from fmdtools.analyze.history import History
+from fmdtools.define.common import is_iter, get_dataobj_track
 
 
 class State(dataobject, mapping=True, copy_default=True):

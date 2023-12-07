@@ -2,12 +2,12 @@
 """
 Class for creating environments.
 """
-from fmdtools.define.rand import Rand
+from fmdtools.define.role.rand import Rand
 from fmdtools.define.common import get_obj_track, init_obj_attr
 from fmdtools.analyze.common import get_sub_include
 from fmdtools.define.flow import CommsFlow
-from fmdtools.define.coords import Coords, ExampleCoords
-from fmdtools.define.geom import GeomArch, ExGeomArch
+from fmdtools.define.role.coords import Coords, ExampleCoords
+from fmdtools.define.role.geom import GeomArch, ExGeomArch
 
 
 class Environment(CommsFlow):

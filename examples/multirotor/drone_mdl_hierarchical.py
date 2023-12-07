@@ -9,8 +9,8 @@ import numpy as np
 import fmdtools.sim as fs
 import fmdtools.analyze as an
 
-from fmdtools.define.parameter import Parameter
-from fmdtools.define.state import State
+from fmdtools.define.role.parameter import Parameter
+from fmdtools.define.role.state import State
 from fmdtools.define.block import Component, CompArch
 from fmdtools.define.model import Model
 

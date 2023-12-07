@@ -10,7 +10,7 @@ Has classes:
 - :Class:`ParameterSample`: Defines a sample of a set of parameters.
 """
 from fmdtools.define.common import get_var, nest_dict
-from fmdtools.define.parameter import Parameter, ExampleParameter
+from fmdtools.define.role.parameter import Parameter, ExampleParameter
 from fmdtools.sim.scenario import SingleFaultScenario, Injection, JointFaultScenario
 from fmdtools.sim.scenario import ParameterScenario
 from fmdtools.analyze.phases import gen_interval_times, PhaseMap, join_phasemaps

@@ -7,8 +7,8 @@ Module for creating x-y arrays to represent gridworlds.
 import numpy as np
 import copy
 from typing import ClassVar
-from fmdtools.define.parameter import Parameter
-from fmdtools.define.rand import Rand
+from fmdtools.define.role.parameter import Parameter
+from fmdtools.define.role.rand import Rand
 from fmdtools.define.common import is_iter, get_obj_track, init_obj_dict
 from fmdtools.analyze.history import History
 from fmdtools.analyze.common import setup_plot, consolidate_legend

@@ -6,9 +6,9 @@ Created: June 2019, revised Nov 2022
 Description: A fault model of a multi-rotor drone.
 """
 import numpy as np
-from fmdtools.define.parameter import Parameter
-from fmdtools.define.state import State
-from fmdtools.define.mode import Mode
+from fmdtools.define.role.parameter import Parameter
+from fmdtools.define.role.state import State
+from fmdtools.define.role.mode import Mode
 from fmdtools.define.block import FxnBlock, Component, CompArch
 from fmdtools.define.flow import Flow
 from fmdtools.define.model import Model

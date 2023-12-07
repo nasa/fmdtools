@@ -7,8 +7,8 @@ Future:
     Dynamic Geoms, with properties tied to states
 """
 from fmdtools.define.common import init_obj_attr, init_obj_dict
-from fmdtools.define.parameter import Parameter
-from fmdtools.define.state import State
+from fmdtools.define.role.parameter import Parameter
+from fmdtools.define.role.state import State
 from fmdtools.define.common import get_obj_track
 from fmdtools.analyze.common import get_sub_include
 from fmdtools.analyze.history import History, init_indicator_hist
