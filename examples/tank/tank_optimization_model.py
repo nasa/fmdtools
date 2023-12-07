@@ -9,9 +9,9 @@ The functions of the system are:
 The Tank stores a set amount of water, the level of which is controlled by 
 inlet and outlet valves. 
 """
-from fmdtools.define.parameter import Parameter
-from fmdtools.define.state import State
-from fmdtools.define.mode import Mode
+from fmdtools.define.role.parameter import Parameter
+from fmdtools.define.role.state import State
+from fmdtools.define.role.mode import Mode
 from fmdtools.define.model import Model
 from fmdtools.define.block import FxnBlock
 import numpy as np

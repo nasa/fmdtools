@@ -11,9 +11,9 @@ import copy
 import sys
 from recordclass import asdict, astuple
 
-from .parameter import Parameter
-from .state import State
-from .common import init_obj_attr, get_obj_track
+from fmdtools.define.role.parameter import Parameter
+from fmdtools.define.role.state import State
+from fmdtools.define.common import init_obj_attr, get_obj_track
 from fmdtools.analyze.common import get_sub_include
 from fmdtools.analyze.history import History, init_indicator_hist
 

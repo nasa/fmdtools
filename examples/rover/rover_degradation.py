@@ -4,9 +4,9 @@ Created on Tue Feb 28 11:53:00 2023
 
 @author: dhulse
 """
-from fmdtools.define.parameter import Parameter
-from fmdtools.define.state import State
-from fmdtools.define.rand import Rand
+from fmdtools.define.role.parameter import Parameter
+from fmdtools.define.role.state import State
+from fmdtools.define.role.rand import Rand
 from fmdtools.define.block import FxnBlock
 from fmdtools.define.model import Model
 from fmdtools.sim.sample import ParameterApproach

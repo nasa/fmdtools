@@ -4,7 +4,7 @@ Created on Mon Jun 12 17:44:15 2023
 
 @author: dhulse
 """
-from fmdtools.define.state import State
+from fmdtools.define.role.state import State
 class LocationState(State):
     x: float=0.0
     y: float=0.0
@@ -15,7 +15,7 @@ class Communications(CommsFlow):
 class Location(MultiFlow):
     _init_s = LocationState
 
-from fmdtools.define.parameter import Parameter
+from fmdtools.define.role.parameter import Parameter
 class MoveParam(Parameter):
     x_up: float=0.0
     y_up: float=0.0

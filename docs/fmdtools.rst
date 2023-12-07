@@ -17,9 +17,10 @@ Thus, working with fmdtools often means creating a model file which extends clas
 **Submodule Links**
 
 .. toctree::
-   :maxdepth: 4
+   :maxdepth: 5
    
    fmdtools.define
+   fmdtools.define.role
    fmdtools.sim
    fmdtools.analyze
 

@@ -8,8 +8,8 @@ Description: A simple model for explaining stochastic behavior modelling
 This model is an extension of ex_pump.py that includes stochastic behaviors
 """
 from examples.pump.ex_pump  import MoveWat as DetMoveWat
-from fmdtools.define.rand import Rand
-from fmdtools.define.state import State
+from fmdtools.define.role.rand import Rand
+from fmdtools.define.role.state import State
 import fmdtools.sim.propagate as propagate
 import numpy as np
 

@@ -20,7 +20,7 @@ from scipy import stats
 from recordclass import dataobject, asdict, astuple
 import numpy as np
 import math
-from .common import get_true_fields, get_true_field, get_dataobj_track
+from fmdtools.define.common import get_true_fields, get_true_field, get_dataobj_track
 import copy
 
 from fmdtools.analyze.history import History, init_hist_iter

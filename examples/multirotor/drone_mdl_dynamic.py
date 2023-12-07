@@ -6,14 +6,14 @@ Created: June 2019
 Description: A fault model of a multi-rotor drone.
 """
 import numpy as np
-from fmdtools.define.parameter import Parameter
-from fmdtools.define.state import State
-from fmdtools.define.time import Time
-from fmdtools.define.mode import Mode
+from fmdtools.define.role.parameter import Parameter
+from fmdtools.define.role.state import State
+from fmdtools.define.role.time import Time
+from fmdtools.define.role.mode import Mode
 from fmdtools.define.block import FxnBlock
 from fmdtools.define.model import Model
 from fmdtools.define.environment import Environment
-from fmdtools.define.coords import Coords, CoordsParam
+from fmdtools.define.role.coords import Coords, CoordsParam
 
 import fmdtools.sim as fs
 

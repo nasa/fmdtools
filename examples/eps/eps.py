@@ -15,8 +15,8 @@ at: https://c3.nasa.gov/dashlink/projects/3/
 """
 from fmdtools.define.block import FxnBlock, Mode
 from fmdtools.define.model import Model
-from fmdtools.define.parameter import Parameter, SimParam
-from fmdtools.define.state import State
+from fmdtools.define.role.parameter import Parameter, SimParam
+from fmdtools.define.role.state import State
 from fmdtools.define.flow import Flow
 
 

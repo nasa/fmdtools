@@ -15,11 +15,11 @@ if __name__=="__main__":
     # requires pytest, nbmake, pytest-html
     
     # for testing modules with doctests
-    doctest_modules = ["fmdtools/define/state.py",
-                       "fmdtools/define/parameter.py",
-                       "fmdtools/define/mode.py",
-                       "fmdtools/define/geom.py",
-                       "fmdtools/define/coords.py",
+    doctest_modules = ["fmdtools.define.role.state.py",
+                       "fmdtools.define.role.parameter.py",
+                       "fmdtools.define.role.mode.py",
+                       "fmdtools.define.role.geom.py",
+                       "fmdtools.define.role.coords.py",
                        "fmdtools/define/environment.py",
                        "fmdtools/sim/scenario.py",
                        "fmdtools/sim/sample.py",

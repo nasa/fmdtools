@@ -21,9 +21,9 @@ human errors during early design stage functional failure analysis. In ASME
 Information in Engineering Conference. American Society of Mechanical Engineers
 Digital Collection.
 """
-from fmdtools.define.parameter import Parameter
-from fmdtools.define.state import State
-from fmdtools.define.mode import Mode
+from fmdtools.define.role.parameter import Parameter
+from fmdtools.define.role.state import State
+from fmdtools.define.role.mode import Mode
 from fmdtools.define.flow import Flow
 from fmdtools.define.model import Model
 from fmdtools.define.block import FxnBlock, Action, ActArch

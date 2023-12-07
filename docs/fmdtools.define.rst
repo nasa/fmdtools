@@ -11,16 +11,6 @@ The define package provides the building blocks to develop a simulation. Simulat
  
 Aside from their internal methods defining behavior, events/indicators, and results, Simulations are additionally composed of internal :term:`role` s, or sub-attributes of the class which are defined in their own class. 
 
-These sub-attributes are provided in the modules:
-
-* :mod:`block`: for :class:`CompArch` and :class:`ASG` aggomerations of :class:`Component` and :class:`Action` blocks, respectively,
-* :mod:`state`: for :class:`State`, which represents values of the simulation which change over time,
-* :mod:`flow`: for :class:`Flow`, which represents variables/states shared between :class:`Block` s (e.g., in a :class:`Model`),
-* :mod:`mode`: for :class:`Mode`, which represents discrete modes (nominal and faulty) which the system may progress through over time,
-* :mod:`parameter`: for :class:`Parameter`, which represents variables which do not change over time,
-* :mod:`rand`: for :class:`Rand`, which represents random states and behavior, and
-* :mod:`time`: for :class:`Time`, which represents the internal time and timers of the block.
-
 Common methods and data structures are kept in :mod:`common`.
 
 
@@ -55,14 +45,6 @@ fmdtools.define.flow
    :undoc-members:
    :show-inheritance:
 
-fmdtools.define.mode
---------------------------------
-
-.. automodule:: fmdtools.define.mode
-   :members:
-   :undoc-members:
-   :show-inheritance:
-
 fmdtools.define.model
 --------------------------------
 
@@ -77,54 +59,9 @@ fmdtools.define.model
    :undoc-members:
    :show-inheritance:
 
-fmdtools.define.parameter
---------------------------------
-
-.. automodule:: fmdtools.define.parameter
-   :members:
-   :undoc-members:
-
-fmdtools.define.rand
---------------------------------
-
-.. automodule:: fmdtools.define.rand
-   :members:
-   :undoc-members:
-   :show-inheritance:
-
-fmdtools.define.state
---------------------------------
-
-.. automodule:: fmdtools.define.state
-   :members: State
-   :show-inheritance:
-
-fmdtools.define.time
---------------------------------
-
-.. automodule:: fmdtools.define.time
-   :members:
-   :undoc-members:
-   :show-inheritance:
-
-fmdtools.define.geom
---------------------------------
-
-.. automodule:: fmdtools.define.geom
-   :members: Geom, GeomPoint, PointParam, GeomLine, LineParam, GeomPoly, PolyParam, GeomArch
-   :show-inheritance:
-
 fmdtools.define.environment
 --------------------------------
 
 .. automodule:: fmdtools.define.environment
    :members: Environment
-   :show-inheritance:
-
-
-fmdtools.define.coords
---------------------------------
-
-.. automodule:: fmdtools.define.coords
-   :members: Coords, CoordsParam
    :show-inheritance:

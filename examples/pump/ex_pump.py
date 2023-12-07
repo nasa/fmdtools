@@ -25,9 +25,9 @@ The flows are:
 from fmdtools.define.block import FxnBlock, Mode
 from fmdtools.define.flow import Flow
 from fmdtools.define.model import Model, check_model_pickleability
-from fmdtools.define.parameter import Parameter
-from fmdtools.define.state import State
-from fmdtools.define.time import Time
+from fmdtools.define.role.parameter import Parameter
+from fmdtools.define.role.state import State
+from fmdtools.define.role.time import Time
 import fmdtools.analyze as an
 import fmdtools.sim.propagate as propagate
 import numpy as np

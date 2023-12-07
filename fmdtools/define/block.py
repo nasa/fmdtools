@@ -25,13 +25,13 @@ import inspect
 import warnings
 from recordclass import dataobject, asdict, astuple
 
-from fmdtools.define.state import State, ExampleState
-from fmdtools.define.parameter import Parameter, SimParam, ExampleParameter
-from fmdtools.define.rand import Rand
+from fmdtools.define.role.state import State, ExampleState
+from fmdtools.define.role.parameter import Parameter, SimParam, ExampleParameter
+from fmdtools.define.role.rand import Rand
 from fmdtools.define.common import get_true_fields, get_true_field, init_obj_attr
 from fmdtools.define.common import get_obj_track, set_var, get_var
-from fmdtools.define.time import Time
-from fmdtools.define.mode import Mode, ExampleMode
+from fmdtools.define.role.time import Time
+from fmdtools.define.role.mode import Mode, ExampleMode
 from fmdtools.define.flow import init_flow, Flow
 from fmdtools.analyze.result import Result
 from fmdtools.analyze.common import get_sub_include
