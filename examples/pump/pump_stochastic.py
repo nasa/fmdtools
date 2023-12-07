@@ -29,7 +29,7 @@ class ImportEERand(Rand, copy_default=True):
 
 class ImportEE(DetImportEE):
     __slots__ = ()
-    _init_r = ImportEERand
+    role_r = ImportEERand
 
     def condfaults(self, time):
         if self.ee_out.s.current > 20.0:
@@ -61,7 +61,7 @@ class ImportSigRand(Rand):
 
 class ImportSig(DetImportSig):
     __slots__ = ()
-    _init_r = ImportSigRand
+    role_r = ImportSigRand
 
     def behavior(self, time):
         if self.m.has_fault('no_sig'):
@@ -95,8 +95,8 @@ class MoveWatRand(Rand):
 
 class MoveWat(DetMoveWat):
     __slots__ = ()
-    _init_s = MoveWatStates
-    _init_r = MoveWatRand
+    role_s = MoveWatStates
+    role_r = MoveWatRand
 
     def behavior(self, time):
         self.s.eff = self.r.s.eff

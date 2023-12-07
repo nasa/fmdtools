@@ -50,7 +50,7 @@ class WaterStates(State):
 
 
 class Water(Flow):
-    _init_s = WaterStates
+    role_s = WaterStates
 
 
 class EEStates(State):
@@ -60,7 +60,7 @@ class EEStates(State):
 
 
 class Electricity(Flow):
-    _init_s = EEStates
+    role_s = EEStates
 
 
 class SignalStates(State):
@@ -69,7 +69,7 @@ class SignalStates(State):
 
 
 class Signal(Flow):
-    _init_s = SignalStates
+    role_s = SignalStates
 
 
 """
@@ -150,8 +150,8 @@ class ImportEEState(State):
 
 class ImportEE(FxnBlock):
     __slots__ = ['ee_out']
-    _init_m = ImportEEMode
-    _init_s = ImportEEState
+    role_m = ImportEEMode
+    role_s = ImportEEState
     _init_ee_out = Electricity
     flownames = {"ee_1": "ee_out"}
     """
@@ -159,7 +159,7 @@ class ImportEE(FxnBlock):
     We define it here as a subclass of the FxnBlock superclass (imported from define.py)
     the FxnBlock superclass, which adds the common aspects of the function objects.
 
-    Notice how _init_m, _init_s, _init_ee_out variables are assigned to the classes for
+    Notice how role_m, role_s, _init_ee_out variables are assigned to the classes for
     Modes, States, and the Electricity flow used in this FxnBlock. This binds those
     types to the FxnBlock so they are instiantiated and take the `m` (for mode) and `s`
     (for state) role in the FxnBlock, respectively. For the flow `ee_out`, this defines
@@ -211,7 +211,7 @@ class ImportWaterMode(Mode):
 
 class ImportWater(FxnBlock):
     __slots__ = ['wat_out']
-    _init_m = ImportWaterMode
+    role_m = ImportWaterMode
     _init_wat_out = Water
     flownames = {"wat_1": "wat_out"}
 
@@ -240,7 +240,7 @@ class ExportWaterMode(Mode):
 class ExportWater(FxnBlock):
     """ Import Water is the pipe with water going into the pump """
     __slots__ = ['wat_in']
-    _init_m = ExportWaterMode
+    role_m = ExportWaterMode
     _init_wat_in = Water
     flownames = {'wat_2': 'wat_in'}
 
@@ -263,7 +263,7 @@ class ImportSigMode(Mode):
 class ImportSig(FxnBlock):
     """ Import Signal is the on/off switch """
     __slots__ = ['sig_out']
-    _init_m = ImportSigMode
+    role_m = ImportSigMode
     _init_sig_out = Signal
     flownames = {'sig_1': 'sig_out'}
 
@@ -322,10 +322,10 @@ class MoveWat(FxnBlock):
     - t (time) by MoveWatTime, which will be used so we can have a timer
     """
     __slots__ = ['ee_in', 'sig_in', 'wat_in', 'wat_out']
-    _init_s = MoveWatStates
-    _init_p = MoveWatParams
-    _init_m = MoveWatMode
-    _init_t = MoveWatTime
+    role_s = MoveWatStates
+    role_p = MoveWatParams
+    role_m = MoveWatMode
+    role_t = MoveWatTime
     _init_ee_in = Electricity
     _init_sig_in = Signal
     _init_wat_in = Water
@@ -390,7 +390,7 @@ class MoveWat(FxnBlock):
 # DEFINE MODEL OBJECT
 class Pump(Model):
     __slots__ = ()
-    _init_p = PumpParam
+    role_p = PumpParam
     default_sp = dict(phases=(('start', 0, 4), ('on', 5, 49),
                       ('end', 50, 55)), times=(0, 20, 55), dt=1.0, units='hr')
     default_track = {'flows': {'wat_2': {'s': 'flowrate'},

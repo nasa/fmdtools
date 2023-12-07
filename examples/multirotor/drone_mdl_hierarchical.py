@@ -104,7 +104,7 @@ class AffectDOFArch(CompArch):
 class AffectDOF(AffectDOFDynamic):
     """Rotor locomotion (multi-component extension)."""
 
-    _init_s = OverallAffectDOFState
+    role_s = OverallAffectDOFState
     _init_ca = AffectDOFArch
 
     def behavior(self, time):
@@ -183,8 +183,8 @@ class AffectDOF(AffectDOFDynamic):
 class Line(Component, BaseLine):
     """Individual version of a line (extends BaseLine in static model)."""
 
-    _init_s = AffectDOFState
-    _init_m = AffectDOFMode
+    role_s = AffectDOFState
+    role_m = AffectDOFMode
 
     def behavior(self, ee_in, ctlin, u_fact, f_fact, force):
         """Calculate air, ee out based on inputs and modes."""
@@ -216,7 +216,7 @@ class DroneParam(Parameter, readonly=True):
 class Drone(DynDrone):
     """Hierarchical version of the drone model."""
 
-    _init_p = DroneParam
+    role_p = DroneParam
 
     def __init__(self, **kwargs):
         Model.__init__(self, **kwargs)

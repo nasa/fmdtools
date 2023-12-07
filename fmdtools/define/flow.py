@@ -13,7 +13,7 @@ from recordclass import asdict, astuple
 
 from fmdtools.define.role.parameter import Parameter
 from fmdtools.define.role.state import State
-from fmdtools.define.common import init_obj_attr, get_obj_track, BaseObject
+from fmdtools.define.common import get_obj_track, BaseObject
 from fmdtools.analyze.common import get_sub_include
 from fmdtools.analyze.history import History, init_indicator_hist
 
@@ -21,28 +21,10 @@ from fmdtools.analyze.history import History, init_indicator_hist
 class Flow(BaseObject):
     """Superclass for flows."""
 
-    __slots__ = ['p', '_args_p', 's', '_args_s', 'h', 'name', 'is_copy']
-    _init_p = Parameter
-    _init_s = State
+    __slots__ = ['p', '_args_p', 's', '_args_s', 'h', 'is_copy']
+    role_p = Parameter
+    role_s = State
     default_track = ('s', 'i')
-
-    def __init__(self, name, s={}, p={}):
-        """
-        Instances the flow with given states.
-
-        Parameters
-        ----------
-        s : dict
-            non-default state-values to be associated with the flow
-        p : dict
-            non-default parameter-values to be associated with the flow
-        name : str
-            name of the flow
-        """
-        self.name = name
-        init_obj_attr(self, s=s, p=p)
-        self.init_roles()
-        self.init_indicators()
 
     def __repr__(self):
         if hasattr(self,'name'):
@@ -52,7 +34,7 @@ class Flow(BaseObject):
 
     def reset(self):
         """Reset the flow to the initial state."""
-        self.s = self._init_s(**self._args_s)
+        self.s = self.role_s(**self._args_s)
 
     def return_mutables(self):
         return astuple(self.s)

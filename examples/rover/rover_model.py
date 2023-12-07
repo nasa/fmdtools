@@ -198,8 +198,8 @@ class DestState(State):
 class Dest(GeomPoint):
     """Start/end/point."""
 
-    _init_p = DestParam
-    _init_s = DestState
+    role_p = DestParam
+    role_s = DestState
 
 
 class PathParam(LineParam):
@@ -214,7 +214,7 @@ class PathParam(LineParam):
 class GroundGeomArch(GeomArch):
     """Geometry of rover environment--start, end, and line."""
 
-    _init_p = GroundParam
+    role_p = GroundParam
 
     def init_geoms(self, **kwargs):
         """Initialize geometry with line and start/end points."""
@@ -232,8 +232,8 @@ class Ground(Environment):
     """Ground environment of the rover."""
 
     _init_ga = GroundGeomArch
-    _init_p = GroundParam
-    _init_s = GroundState
+    role_p = GroundParam
+    role_s = GroundState
 
     def on_course(self, pos_state):
         """check if the rover is on_course (i.e., within the 'on' buffer)"""
@@ -264,7 +264,7 @@ class Ground(Environment):
 class PathLine(GeomLine):
     """Rover Line."""
 
-    _init_p = PathParam
+    role_p = PathParam
 
 
 class PosState(State):
@@ -295,13 +295,13 @@ class PosState(State):
 class Pos(Flow):
     """Rover position/velocity flow."""
 
-    _init_s = PosState
+    role_s = PosState
 
 
 class Pos_Signal(Flow):
     """Rover position signal flow."""
 
-    _init_s = PosState
+    role_s = PosState
 
 
 class EEState(State):
@@ -314,7 +314,7 @@ class EEState(State):
 class EE(Flow):
     """Electricity flow."""
 
-    _init_s = EEState
+    role_s = EEState
 
 
 class VideoState(State):
@@ -345,7 +345,7 @@ class VideoState(State):
 class Video(Flow):
     """Video flow."""
 
-    _init_s = VideoState
+    role_s = VideoState
 
 
 class ControlState(State):
@@ -367,7 +367,7 @@ class ControlState(State):
 class Control(Flow):
     """Control flow."""
 
-    _init_s = ControlState
+    role_s = ControlState
 
 
 class SwitchState(State):
@@ -379,13 +379,13 @@ class SwitchState(State):
 class Switch(Flow):
     """Power switch."""
 
-    _init_s = SwitchState
+    role_s = SwitchState
 
 
 class Comms(Flow):
     """External communications flow."""
 
-    _init_s = PosState
+    role_s = PosState
 
 
 class OverrideState(ControlState):
@@ -397,7 +397,7 @@ class OverrideState(ControlState):
 class OverrideComms(Flow):
     """Override communications flow."""
 
-    _init_s = OverrideState
+    role_s = OverrideState
 
 
 class FaultStates(State):
@@ -411,7 +411,7 @@ class FaultStates(State):
 class FaultSig(Flow):
     """Rover fault signal."""
 
-    _init_s = FaultStates
+    role_s = FaultStates
 
 
 # MODEL FUNCTIONS
@@ -444,8 +444,8 @@ class PlanPath(FxnBlock):
     "Plans the next drive move based on the current state of the rover"
     
     __slots__ = ("video", "pos_signal", "ground", "control", "fault_sig", 'pos')
-    _init_m = PlanPathMode
-    _init_p = ResCorrection
+    role_m = PlanPathMode
+    role_p = ResCorrection
     _init_video = Video
     _init_pos_signal = Pos_Signal
     _init_pos = Pos
@@ -588,7 +588,7 @@ class DriveMode(Mode):
 class Drive(FxnBlock):
     '''The drive function determines the rover drive functionality'''
     __slots__ = ("ground", "motor_control", "ee_in", 'fault_sig', 'pos')
-    _init_m = DriveMode
+    role_m = DriveMode
     _init_fault_sig = FaultSig
     _init_ground = Ground
     _init_pos = Pos
@@ -690,7 +690,7 @@ class Perception(FxnBlock):
     '''
     __slots__ = ("ground", "ee", "video", 'pos')
     rad = 1         # not used. Is it needeD?
-    _init_m = PerceptionMode
+    role_m = PerceptionMode
     _init_pos = Pos
     _init_ground = Ground
     _init_ee = EE
@@ -782,8 +782,8 @@ class Power(FxnBlock):
     """Rover power supply."""
 
     __slots__ = ("ee_15", "ee_5", "ee_12", "switch")
-    _init_s = PowerState
-    _init_m = PowerMode
+    role_s = PowerState
+    role_m = PowerMode
     _init_ee_15 = EE
     _init_ee_5 = EE
     _init_ee_12 = EE
@@ -883,7 +883,7 @@ class OverrideMode(Mode):
 
 class Override(FxnBlock):
     __slots__ = ("override_comms", "ee", "motor_control", "auto_control")
-    _init_m = OverrideMode
+    role_m = OverrideMode
     _init_override_comms = OverrideComms
     _init_ee = EE
     _init_motor_control = Control
@@ -956,7 +956,7 @@ class Rover(Model):
                          ground is expected to be high).
     '''
     __slots__ = ()
-    _init_p = RoverParam
+    role_p = RoverParam
     default_sp = dict(times=(0, 150),
                       phases=(("start", 0, 30), ("end", 31, 150)),
                       end_condition="indicate_finished")

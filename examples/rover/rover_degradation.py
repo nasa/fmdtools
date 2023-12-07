@@ -40,8 +40,8 @@ class DriveRand(Rand):
 
 
 class DriveDegradation(FxnBlock):
-    _init_s = DriveDegradationStates
-    _init_r = DriveRand
+    role_s = DriveDegradationStates
+    role_r = DriveRand
     default_sp = dict(times=(0, 100))
 
     def __init__(self, name, **kwargs):
@@ -79,9 +79,9 @@ class PSFShortParams(Parameter, readonly=True):
 
 
 class PSFDegradationShort(FxnBlock):
-    _init_s = PSFDegradationShortStates
-    _init_r = PSFDegShortRand
-    _init_p = PSFShortParams
+    role_s = PSFDegradationShortStates
+    role_r = PSFDegShortRand
+    role_p = PSFShortParams
     default_sp = dict(times=(0, 100))
 
     def __init__(self, name, **kwargs):
@@ -111,8 +111,8 @@ class PSFDegradationLongStates(State):
 
 
 class PSFDegradationLong(FxnBlock):
-    _init_s = PSFDegradationLongStates
-    _init_p = LongParams
+    role_s = PSFDegradationLongStates
+    role_p = LongParams
     default_sp = dict(times=(0, 100))
 
     def __init__(self, name, **kwargs):

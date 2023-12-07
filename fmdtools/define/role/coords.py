@@ -93,7 +93,7 @@ class Coords(object):
     Examples
     --------
     >>> class ExampleCoords(Coords):
-    ...    _init_p = ExampleCoordsParam
+    ...    role_p = ExampleCoordsParam
     ...    def init_properties(self, *args, **kwargs):
     ...        self.set_pts([[0.0, 0.0], [10.0, 0.0]], "v", 10.0)
 
@@ -136,8 +136,8 @@ class Coords(object):
 
     __slots__ = ("p", "r", "grid", "pts", "points", "collections", "features", "states",
                  "properties", "_args", "_kwargs", "default_track", )
-    _init_p = CoordsParam
-    _init_r = Rand
+    role_p = CoordsParam
+    role_r = Rand
 
     def __init__(self, *args, **kwargs):
         """Initialize class with properties in init_properties."""
@@ -152,8 +152,8 @@ class Coords(object):
 
     def init_grids(self, *args, **kwargs):
         """Prepare class with defined features."""
-        self.p = self._init_p(**kwargs.get('p', {}))
-        self.r = self._init_r(**kwargs.get('r', {}))
+        self.p = self.role_p(**kwargs.get('p', {}))
+        self.r = self.role_r(**kwargs.get('r', {}))
         self.grid = np.array([[(i, j) for j in range(0, self.p.y_size)]
                              for i in range(0, self.p.x_size)]) * self.p.blocksize
         self.pts = self.grid.reshape(int(self.grid.size/2), 2)
@@ -1055,7 +1055,7 @@ class ExampleCoordsParam(CoordsParam):
 class ExampleCoords(Coords):
     """Example of Coords class for use in documentation and testing."""
 
-    _init_p = ExampleCoordsParam
+    role_p = ExampleCoordsParam
 
     def init_properties(self, *args, **kwargs):
         """Initialize points where v=10.0."""

@@ -93,7 +93,7 @@ class UrbanGridParam(CoordsParam):
 class StreetGrid(Coords):
     """Define the urban environment (buildings, streets, etc)."""
 
-    _init_p = UrbanGridParam
+    role_p = UrbanGridParam
 
     def init_properties(self, *args, **kwargs):
         """Randomly allocate the allowed/occupied points, and the building heights."""
@@ -114,9 +114,9 @@ class StreetGrid(Coords):
 class UrbanDroneEnvironment(Environment):
     """ Drone environment for an urban area with buildings."""
 
-    _init_p = UrbanGridParam
-    _init_c = StreetGrid
-    _init_s = EnvironmentState
+    role_p = UrbanGridParam
+    role_c = StreetGrid
+    role_s = EnvironmentState
 
     def ground_height(self, dofs):
         """Get the distance of the height z above the ground at point x,y."""
@@ -171,7 +171,7 @@ class ComputerVisionMode(Mode):
 class ComputerVision(Component):
     """Component for percieving if a landing location is occupied."""
 
-    _init_m = ComputerVisionMode
+    role_m = ComputerVisionMode
 
     def check_if_occupied(self, environment, dofs):
         """Check if the grid area below is occupied (before landing)."""
@@ -216,7 +216,7 @@ class PlanPath(PlanPathRural):
 
     _init_environment = UrbanDroneEnvironment
     _init_ca = VisionArch
-    _init_p = PlanPathParam
+    role_p = PlanPathParam
 
     def init_goals(self):
         """Initialize goals from start to end point."""
@@ -303,7 +303,7 @@ class DroneParam(Parameter):
 class Drone(DroneRural):
     """Overall rural drone model."""
 
-    _init_p = DroneParam
+    role_p = DroneParam
     default_sp = dict(phases=(('ascend', 0, 0),
                               ('forward', 1, 11),
                               ('taxi', 12, 20)),

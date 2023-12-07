@@ -11,9 +11,9 @@ class LocationState(State):
 
 from fmdtools.define.flow import CommsFlow, MultiFlow
 class Communications(CommsFlow):
-    _init_s = LocationState
+    role_s = LocationState
 class Location(MultiFlow):
-    _init_s = LocationState
+    role_s = LocationState
 
 from fmdtools.define.role.parameter import Parameter
 class MoveParam(Parameter):
@@ -22,7 +22,7 @@ class MoveParam(Parameter):
 
 from fmdtools.define.block import FxnBlock
 class Mover(FxnBlock):
-    _init_p = MoveParam
+    role_p = MoveParam
     _init_communications = Communications
     _init_location = Location 
     def __init__(self, name='mover', flows={}, **kwargs):
