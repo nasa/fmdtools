@@ -3,11 +3,11 @@
 Class for creating environments.
 """
 from fmdtools.define.role.rand import Rand
-from fmdtools.define.common import get_obj_track, init_obj_attr
+from fmdtools.define.common import get_obj_track
 from fmdtools.analyze.common import get_sub_include
 from fmdtools.define.flow import CommsFlow
-from fmdtools.define.role.coords import Coords, ExampleCoords
-from fmdtools.define.role.geom import GeomArch, ExGeomArch
+from fmdtools.define.environment.coords import Coords, ExampleCoords
+from fmdtools.define.environment.geom import GeomArch, ExGeomArch
 
 
 class Environment(CommsFlow):
@@ -32,24 +32,27 @@ class Environment(CommsFlow):
     Examples
     --------
     >>> class ExampleEnvironment(Environment):
-    ...    role_c = ExampleCoords
-    ...    _init_ga = ExGeomArch
+    ...    coords_c = ExampleCoords
+    ...    arch_ga = ExGeomArch
     >>> env = ExampleEnvironment('env')
     """
 
-    slots = ["c", "_args_c", "r", "_args_r", "ga", "args_ga"]
-    role_c = Coords
+    slots = ["c", "r", "ga"]
     role_r = Rand
-    _init_ga = GeomArch
+    coords_c = Coords
+    arch_ga = GeomArch
     default_track = ('s', 'i', 'c', 'ga')
     all_possible = ('s', 'i', 'c', 'r', 'ga')
 
     def __init__(self, name, glob=[], p={}, s={}, r={}, c={}, ga={}):
-        if 'p' not in c and self.role_c.role_p == self.role_p:
+        if 'p' not in c and self.coords_c.role_p == self.role_p:
             c = {**c, 'p': p}
-        if 'p' not in ga and self._init_ga.role_p == self.role_p:
+        if 'p' not in ga and self.arch_ga.role_p == self.role_p:
             ga = {**ga, 'p': p}
-        super().__init__(name, glob=glob, p=p, s=s, r=r, c=c, ga=ga)
+        super().__init__(name, glob=glob, p=p, s=s)
+        self.init_roles('role', r=r)
+        self.init_roles('coords', c=c)
+        self.init_roles('arch', ga=ga)
 
         self.update_seed()
 
@@ -108,7 +111,7 @@ class Environment(CommsFlow):
     def reset(self):
         super().reset()
         self.r.reset()
-        self.c = self.role_c(**self._args_c)
+        self.c = self.coords_c(**self._args_c)
         self.ga.reset()
 
     def update_seed(self, seed=[]):
@@ -146,8 +149,8 @@ class Environment(CommsFlow):
 class ExampleEnvironment(Environment):
     """Example environment for testing."""
 
-    role_c = ExampleCoords
-    _init_ga = ExGeomArch
+    coords_c = ExampleCoords
+    arch_ga = ExGeomArch
 
 
 if __name__ == "__main__":

@@ -13,7 +13,8 @@ from typing import ClassVar
 import numpy as np
 import itertools
 import copy
-from fmdtools.define.common import get_true_fields, get_true_field, get_dataobj_track, eq_units
+from fmdtools.define.common import get_true_fields, get_true_field, eq_units
+from fmdtools.define.role.common import BaseRole
 from fmdtools.analyze.history import History
 
 
@@ -106,7 +107,7 @@ class Fault(dataobject, readonly=True, mapping=True):
             return baserate * opp_factor * t_factor * weight
 
 
-class Mode(dataobject, readonly=False):
+class Mode(BaseRole, readonly=False):
     """
     Class for defining the mode property (and probability model) held in Blocks.
 
@@ -190,6 +191,7 @@ class Mode(dataobject, readonly=False):
     {'no_charge': Fault(prob=1e-05, cost=100, phases={'standby': 1.0}, units='sim'), 'short': Fault(prob=1e-05, cost=100, phases={'supply': 1.0}, units='sim')}
     """
 
+    rolename = "m"
     mode: ClassVar[str] = 'nominal'
     failrate: ClassVar[float] = 1.0
     faults: set = set()
@@ -579,7 +581,7 @@ class Mode(dataobject, readonly=False):
 
     def create_hist(self, timerange, track):
         h = History()
-        track = get_dataobj_track(self, track)
+        track = self.get_track(track)
         if 'faults' in track:
             fh = History()
             for faultmode in self.faultmodes:

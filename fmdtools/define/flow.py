@@ -77,7 +77,7 @@ class Flow(BaseObject):
         h : History
             History to initialize.
         """
-        if hasattr(self, 'h'): 
+        if hasattr(self, 'h'):
             return self.h
         else:
             track = get_obj_track(self, track, all_possible = Flow.default_track)

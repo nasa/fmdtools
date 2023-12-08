@@ -4,5 +4,3 @@ from fmdtools.define.role import parameter
 from fmdtools.define.role import rand
 from fmdtools.define.role import state
 from fmdtools.define.role import time
-from fmdtools.define.role import coords
-from fmdtools.define.role import geom

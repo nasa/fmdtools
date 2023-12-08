@@ -12,8 +12,8 @@ from fmdtools.define.role.time import Time
 from fmdtools.define.role.mode import Mode
 from fmdtools.define.block import FxnBlock
 from fmdtools.define.model import Model
-from fmdtools.define.environment import Environment
-from fmdtools.define.role.coords import Coords, CoordsParam
+from fmdtools.define.environment.environment import Environment
+from fmdtools.define.environment.coords import Coords, CoordsParam
 
 import fmdtools.sim as fs
 

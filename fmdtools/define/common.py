@@ -16,8 +16,6 @@ not.
   (and thus parallelize)"
 - :func:`init_obj_attr`:Initializes attributes to a given object
 - :func:`init_obj_dict`: Create a dict in an object for the attribute 'spec'.
-- :func:`get_dataobj_track`:Gets tracking params for a given dataobject
-  (State, Mode, Rand, etc)
 - :func:`get_obj_track`:Gets tracking params for a given object (block, model, etc)
 - :func:`t_key`:Used to generate keys for a given (float) time that is queryable as
   an attribute of an object/dict
@@ -327,36 +325,6 @@ def init_obj_dict(obj, spec, name_end="s", set_attr=False):
             setattr(obj, s_name, specs[s_name])
 
 
-def get_dataobj_track(obj, track):
-    """
-    Get tracking params for a given dataobject (State, Mode, Rand, etc).
-
-    Parameters
-    ----------
-    obj : dataobject
-        State/Mode/Rand. Requires .default_track class variable.
-    track : track
-        str/tuple. Attributes to track.
-        'all' tracks all fields
-        'default' tracks fields defined in default_track for the dataobject
-        'none' tracks none of the fields
-
-    Returns
-    -------
-    track : tuple
-        fields to track
-    """
-    if not track or track == 'default':
-        track = obj.default_track
-    if track == 'all':
-        track = obj.__fields__
-    elif track == 'none':
-        track = ()
-    elif type(track) == str:
-        track = (track,)
-    return track
-
-
 def get_obj_track(obj, track, all_possible=()):
     """
     Get tracking params for a given object (block, model, etc).
@@ -410,31 +378,6 @@ def t_key(time):
     return 't'+'p'.join(str(time).split('.'))
 
 
-def init_obj_attr(obj, **attrs):
-    """
-    Initialize attributes to a given object, provided the object has a given
-    _init_x in its class variables for the attribute x.
-
-    Object is instantiated with the attribute x corresponding to the output of _init_x
-    along with _args_x corresponding to the input dictionary given for x.
-
-    Parameters
-    ----------
-    obj : object (Block/Flow/Model)
-        Object to instantiate the attributes in
-    **attrs : dict
-        Dictionary arguments (or already instantiated objects) to use for the
-        attributes.
-    """
-    for at in attrs:
-        at_arg = attrs[at]
-        if type(at_arg) != dict:
-            at_arg = asdict(at_arg)
-        setattr(obj, '_args_'+at, at_arg)
-        init_at = getattr(obj, '_init_'+at)
-        setattr(obj, at, init_at(**at_arg))
-
-
 class BaseObject(object):
     __slots__ = ('name', 'roles', 'indicators')
 
@@ -444,35 +387,43 @@ class BaseObject(object):
         else:
             self.name = name
         self.init_indicators()
-        self.init_roles(**kwargs)
+        self.init_roles('role', **kwargs)
 
-    def init_roles(self, **kwargs):
+    def init_roles(self, roletype, **kwargs):
         """
         Initialize the roles for a given object.
 
         Roles defined using role_x in its class variables for the attribute x.
 
-        Object is instantiated with the attribute x corresponding to the output of _init_x
-        along with _args_x corresponding to the input dictionary given for x.
+        Object is instantiated with the attribute x corresponding to output of role_x.
 
         Parameters
         ----------
+        *roles : str
+            Roles to initialize. If none provided, initializes all.
         **kwargs : dict
             Dictionary arguments (or already instantiated objects) to use for the
             attributes.
         """
-        self.roles = tuple([at[5:] for at in dir(self) if at.startswith('role_')])
-        for rolename in self.roles:
-            role_initializer = getattr(self, 'role_'+rolename)
+        role_collection = roletype + 's'
+        roles = tuple([at[len(roletype)+1:]
+                       for at in dir(self) if at.startswith(roletype+'_')])
+        setattr(self, role_collection, roles)
+
+        if not roles:
+            roles = getattr(self, role_collection)
+
+        for rolename in roles:
+            role_initializer = getattr(self, roletype+'_'+rolename)
             if rolename in kwargs:
                 role_args = kwargs[rolename]
                 if type(role_args) != dict:
                     role_args = asdict(role_args)
             else:
                 role_args = {}
-            # TODO: args should be folded into the 
-            setattr(self, '_args_'+rolename, role_args)
-            setattr(self, rolename, role_initializer(**role_args))
+            role = role_initializer(**role_args)
+            role.check_role(rolename)
+            setattr(self, rolename, role)
 
 
     def init_indicators(self):

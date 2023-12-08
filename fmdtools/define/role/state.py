@@ -10,10 +10,11 @@ import numpy as np
 import copy
 import warnings
 from fmdtools.analyze.history import History
-from fmdtools.define.common import is_iter, get_dataobj_track
+from fmdtools.define.common import is_iter
+from fmdtools.define.role.common import BaseRole
 
 
-class State(dataobject, mapping=True, copy_default=True):
+class State(BaseRole):
     """
     Class for working with model states, which are variables in the model which
     change over time. This class inherits from dataobject for low memory footprint
@@ -42,6 +43,7 @@ class State(dataobject, mapping=True, copy_default=True):
     10.0
     """
     default_track = 'all'
+    rolename = 's'
 
     def set_atts(self, **kwargs):
         """Sets the given arguments to a given value. Mainly useful for
@@ -338,7 +340,7 @@ class State(dataobject, mapping=True, copy_default=True):
         hist : History
             History of fields specified in track.
         """
-        track = get_dataobj_track(self, track)
+        track = self.get_track(track)
         hist = History()
         for att in track:
             val = getattr(self, att)

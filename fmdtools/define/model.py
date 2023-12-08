@@ -1,7 +1,9 @@
 # -*- coding: utf-8 -*-
 """
-Description: A module for defining Models, which are aggregations of Functions and Flows. Has Classes and Functions:
-    
+Description: A module for defining Models, which are aggregations of Functions and Flows.
+
+Has Classes and Functions:
+
 - :class:`Model`:                       Superclass for defining simulation models.
 
 - :func:`check_model_pickleability` :   Checks if a model is pickleable (and thus able to be parallelized)
@@ -14,10 +16,10 @@ import time
 import copy
 
 from fmdtools.define.flow import Flow, init_flow
-from fmdtools.define.common import check_pickleability, get_var, set_var, get_obj_track
+from fmdtools.define.common import check_pickleability, set_var, get_obj_track
 from fmdtools.define.block import Simulable
 from fmdtools.analyze.common import get_sub_include
-from fmdtools.analyze.history import History, init_indicator_hist, init_hist_iter
+from fmdtools.analyze.history import History, init_indicator_hist
 
 #Model superclass    
 class Model(Simulable):
@@ -266,13 +268,7 @@ class Model(Simulable):
             mem_profile[flowname]=flow.get_memory()
         mem = np.sum([i for i in mem_profile.values()])
         return mem, mem_profile
-    def new_with_params(self, **kwargs):
-        """
-        Creates a new Model with the same parameters as the current model but
-        with changes to params (p, sp, track, rand etc.)
-        """
-        p, sp, r, track = super().new_params(**kwargs)
-        return self.__class__(p=p, sp=sp, r=r, track=track)
+
     def copy(self):
         """
         Copies the model at the current state.

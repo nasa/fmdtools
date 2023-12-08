@@ -149,6 +149,9 @@ class Coords(object):
         if not hasattr(self, 'default_track'):
             self.default_track = self.states
 
+    def check_role(self, rolename):
+        if rolename != 'c':
+            raise Exception("Invalid role name for Coords: "+rolename)
 
     def init_grids(self, *args, **kwargs):
         """Prepare class with defined features."""
