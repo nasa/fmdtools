@@ -7,15 +7,15 @@ Created on Thu Dec  7 14:12:11 2023
 from recordclass import dataobject, asdict, astuple
 
 
-class BaseRole(dataobject, mapping=True, iterable=True, copy_default=True):
-    """Base role class."""
+class BaseContainer(dataobject, mapping=True, iterable=True, copy_default=True):
+    """Base container class."""
     rolename = 'x'
 
     def check_role(self, rolename):
         """
-        Check that the role will be given the correct name for its class.
+        Check that the container will be given the correct name for its class.
 
-        The correct role-names correspond to the roles that the classes embody, e.g.:
+        The correct container-names correspond to the roles that the classes embody, e.g.:
             State : s
             Rand : r
             Mode : m

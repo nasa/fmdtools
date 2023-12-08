@@ -8,8 +8,8 @@ Description: A simple model for explaining stochastic behavior modelling
 This model is an extension of ex_pump.py that includes stochastic behaviors
 """
 from examples.pump.ex_pump  import MoveWat as DetMoveWat
-from fmdtools.define.role.rand import Rand
-from fmdtools.define.role.state import State
+from fmdtools.define.container.rand import Rand
+from fmdtools.define.container.state import State
 import fmdtools.sim.propagate as propagate
 import numpy as np
 
@@ -29,7 +29,7 @@ class ImportEERand(Rand, copy_default=True):
 
 class ImportEE(DetImportEE):
     __slots__ = ()
-    role_r = ImportEERand
+    container_r = ImportEERand
 
     def condfaults(self, time):
         if self.ee_out.s.current > 20.0:
@@ -61,7 +61,7 @@ class ImportSigRand(Rand):
 
 class ImportSig(DetImportSig):
     __slots__ = ()
-    role_r = ImportSigRand
+    container_r = ImportSigRand
 
     def behavior(self, time):
         if self.m.has_fault('no_sig'):
@@ -95,8 +95,8 @@ class MoveWatRand(Rand):
 
 class MoveWat(DetMoveWat):
     __slots__ = ()
-    role_s = MoveWatStates
-    role_r = MoveWatRand
+    container_s = MoveWatStates
+    container_r = MoveWatRand
 
     def behavior(self, time):
         self.s.eff = self.r.s.eff

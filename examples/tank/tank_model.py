@@ -21,12 +21,12 @@ human errors during early design stage functional failure analysis. In ASME
 Information in Engineering Conference. American Society of Mechanical Engineers
 Digital Collection.
 """
-from fmdtools.define.role.parameter import Parameter
-from fmdtools.define.role.state import State
-from fmdtools.define.role.mode import Mode
-from fmdtools.define.flow import Flow
-from fmdtools.define.model import Model
-from fmdtools.define.block import FxnBlock, Action, ActArch
+from fmdtools.define.container.parameter import Parameter
+from fmdtools.define.container.state import State
+from fmdtools.define.container.mode import Mode
+from fmdtools.define.flow.base import Flow
+from fmdtools.define.architecture.function import FunctionArchitecture
+from fmdtools.define.block.function import Function, Action, ActionArchitecture
 
 
 class WatState(State):
@@ -35,7 +35,7 @@ class WatState(State):
 
 
 class Liquid(Flow):
-    role_s = WatState
+    container_s = WatState
 
 
 class SigState(State):
@@ -44,7 +44,7 @@ class SigState(State):
 
 
 class Signal(Flow):
-    role_s = SigState
+    container_s = SigState
 
 
 class TransportLiquidState(State):
@@ -57,10 +57,10 @@ class TransportLiquidMode(Mode):
     units = 'hr'
 
 
-class ImportLiquid(FxnBlock):
+class ImportLiquid(Function):
     __slots__ = ('sig', 'watout')
-    role_s = TransportLiquidState
-    role_m = TransportLiquidMode
+    container_s = TransportLiquidState
+    container_m = TransportLiquidMode
     _init_sig = Signal
     _init_watout = Liquid
     flownames = {'wat_in_1': 'watout', 'valve1_sig': 'sig'}
@@ -77,10 +77,10 @@ class ImportLiquid(FxnBlock):
         self.sig.s.indicator = self.s.amt_open
 
 
-class ExportLiquid(FxnBlock):
+class ExportLiquid(Function):
     __slots__ = ('sig', 'watin')
-    role_s = TransportLiquidState
-    role_m = TransportLiquidMode
+    container_s = TransportLiquidState
+    container_m = TransportLiquidMode
     _init_sig = Signal
     _init_watin = Liquid
     flownames = {'wat_out_2': 'watin', 'valve2_sig': 'sig'}
@@ -100,11 +100,11 @@ class GuideLiquidMode(Mode):
     phases = {'na': 1.0}
 
 
-class GuideLiquid(FxnBlock):
+class GuideLiquid(Function):
     __slots__ = ('watin', 'watout')
     _init_watin = Liquid
     _init_watout = Liquid
-    role_m = GuideLiquidMode
+    container_m = GuideLiquidMode
 
     def static_behavior(self, time):
         if self.m.has_fault('clogged'):
@@ -137,10 +137,10 @@ class StoreLiquidMode(Mode):
     fm_args = {'leak': (1e-5, 0, {'na': 1.0})}
 
 
-class StoreLiquid(FxnBlock):
+class StoreLiquid(Function):
     __slots__ = ('watin', 'watout', 'sig')
-    role_s = StoreLiquidState
-    role_m = StoreLiquidMode
+    container_s = StoreLiquidState
+    container_m = StoreLiquidMode
     _init_watin = Liquid
     _init_watout = Liquid
     _init_sig = Signal
@@ -178,7 +178,7 @@ class HumanParam(Parameter):
     reacttime: int = 1
 
 
-class HumanASG(ActArch):
+class HumanASG(ActionArchitecture):
     initial_action = "look"
 
     def __init__(self, *args, reacttime=0, **kwargs):
@@ -208,8 +208,8 @@ class HumanASG(ActArch):
         self.build()
 
 
-class HumanActions(FxnBlock):
-    role_p = HumanParam
+class HumanActions(Function):
+    container_p = HumanParam
     _init_aa = HumanASG
     _init_valve1_sig = Signal
     _init_tank_sig = Signal
@@ -249,7 +249,7 @@ class LookMode(Mode):
 
 
 class Look(Action):
-    role_m = LookMode
+    container_m = LookMode
 
     def looked(self):
         return not self.m.has_fault('not_visible')
@@ -264,7 +264,7 @@ class DetectMode(Mode):
 
 
 class Detect(Action):
-    role_m = DetectMode
+    container_m = DetectMode
     _init_detect_sig = Signal
     _init_tank_sig = Signal
 
@@ -298,7 +298,7 @@ class ReachMode(Mode):
 
 
 class Reach(Action):
-    role_m = ReachMode
+    container_m = ReachMode
 
     def reached(self):
         return not self.m.has_fault('unable')
@@ -312,7 +312,7 @@ class GraspMode(Mode):
 
 
 class Grasp(Action):
-    role_m = GraspMode
+    container_m = GraspMode
 
     def grasped(self):
         return not self.m.has_fault('cannot')
@@ -329,7 +329,7 @@ class TurnMode(Mode):
 
 
 class Turn(Action):
-    role_m = TurnMode
+    container_m = TurnMode
     _init_detect_sig = Signal
     _init_valve1_sig = Signal
     _init_valve2_sig = Signal
@@ -353,9 +353,9 @@ class TankParam(Parameter, readonly=True):
     store_tstep: float = 1.0
 
 
-class Tank(Model):
+class Tank(FunctionArchitecture):
     __slots__ = ()
-    role_p = TankParam
+    container_p = TankParam
     default_sp = dict(phases=(('na', 0, 0), ('operation', 1, 20)),
                       times=(0, 5, 10, 15, 20), units='min')
     default_track = {'fxns': {'store_water': {'s': 'level'}}}
@@ -445,12 +445,12 @@ if __name__ == '__main__':
     fs.add_fault_times((0, 5, 10, 15, 20))
     endclasses, hist = propagate.fault_sample(mdl, fs)
 
-    from fmdtools.analyze.graph import ModelGraph
+    from fmdtools.analyze.graph import FunctionArchitectureGraph
     mdl.fxns['human'].t.dt = 2.0
     mg = ModelGraph(mdl)
     mg.set_exec_order(mdl)
     mg.draw()
 
-    from fmdtools.analyze.graph import ActArchGraph
-    ag = ActArchGraph(mdl.fxns['human'].aa)
+    from fmdtools.analyze.graph import ActionArchitectureGraph
+    ag = ActionArchitectureGraph(mdl.fxns['human'].aa)
     ag.draw()

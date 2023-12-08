@@ -379,7 +379,7 @@ def t_key(time):
 
 
 class BaseObject(object):
-    __slots__ = ('name', 'roles', 'indicators')
+    __slots__ = ('name', 'containers', 'indicators')
 
     def __init__(self, name='', **kwargs):
         if not name:
@@ -387,15 +387,15 @@ class BaseObject(object):
         else:
             self.name = name
         self.init_indicators()
-        self.init_roles('role', **kwargs)
+        self.init_roles('container', **kwargs)
 
     def init_roles(self, roletype, **kwargs):
         """
         Initialize the roles for a given object.
 
-        Roles defined using role_x in its class variables for the attribute x.
+        Roles defined using container_x in its class variables for the attribute x.
 
-        Object is instantiated with the attribute x corresponding to output of role_x.
+        Object is instantiated with the attribute x corresponding to output of container_x.
 
         Parameters
         ----------
@@ -405,25 +405,25 @@ class BaseObject(object):
             Dictionary arguments (or already instantiated objects) to use for the
             attributes.
         """
-        role_collection = roletype + 's'
+        container_collection = roletype + 's'
         roles = tuple([at[len(roletype)+1:]
                        for at in dir(self) if at.startswith(roletype+'_')])
-        setattr(self, role_collection, roles)
+        setattr(self, container_collection, roles)
 
         if not roles:
-            roles = getattr(self, role_collection)
+            roles = getattr(self, container_collection)
 
         for rolename in roles:
-            role_initializer = getattr(self, roletype+'_'+rolename)
+            container_initializer = getattr(self, roletype+'_'+rolename)
             if rolename in kwargs:
-                role_args = kwargs[rolename]
-                if type(role_args) != dict:
-                    role_args = asdict(role_args)
+                container_args = kwargs[rolename]
+                if type(container_args) != dict:
+                    container_args = asdict(container_args)
             else:
-                role_args = {}
-            role = role_initializer(**role_args)
-            role.check_role(rolename)
-            setattr(self, rolename, role)
+                container_args = {}
+            container = container_initializer(**container_args)
+            container.check_role(rolename)
+            setattr(self, rolename, container)
 
 
     def init_indicators(self):
@@ -457,3 +457,5 @@ class BaseObject(object):
 
         """
         return [f for f, ind in self.get_indicators().items() if ind(time)]
+
+

@@ -262,7 +262,7 @@ The advantages of inheritance are:
 
 In fmdtools, these patterns can be helpful:
 
-* Instead of creating two very similar :class:`fmdtools.define.FxnBlock` classes (e.g. Drone and PilotedAircraft) and copying code between each, create a single class (e.g. Aircraft) with common methods/structures (e.g., Fly, Taxi, Park, etc.) and then use sub-classes to extend and/or replace methods/structures the common class as needed (e.g., Autonomous Navigation in the Drone vs. Piloted Navigation in the normal aircraft).
+* Instead of creating two very similar :class:`fmdtools.define.Function` classes (e.g. Drone and PilotedAircraft) and copying code between each, create a single class (e.g. Aircraft) with common methods/structures (e.g., Fly, Taxi, Park, etc.) and then use sub-classes to extend and/or replace methods/structures the common class as needed (e.g., Autonomous Navigation in the Drone vs. Piloted Navigation in the normal aircraft).
 * In a :class:`fmdtools.define.Model` definition, instead of having several flow dictionaries with similar/the same data inputs, define one dictionary at the beginning and use it in each of the :meth:`fmdtools.define.Model.add_flow` methods.
 * Instead copying code for the same operations to several different places in a model, write a single function instead. This method can then be documented/tested and extended to a variety of different use-cases which require the same basic operation to be done. 
 
@@ -286,7 +286,7 @@ For fmdtools models, documentation should at the very least take the following f
 * Docstrings which document the classes and functions which make up your model. These are most important for development and should include:
 	* An overall module description (top of file)
 	* Docstrings for flows: What does the state represent? What are the states? What values may these take?
-	* Docstrings for :class:`fmdtools.define.FxnBlock`: What are the states, parameters, behaviors, and modes?
+	* Docstrings for :class:`fmdtools.define.Function`: What are the states, parameters, behaviors, and modes?
 	* For any method/function, try to follow existing docstring conventions, with a summary of the purpose/behavior of the method, and a description of all input/output data types.
 
 Documentation can best be thought of as a *contract that your code should fulfill*. As such, it can be very helpful to think of the documentation first, as a way of specifying your work. Tests (formal and informal) can then be defined based on the stated behavior of the function. It is thus recommended to *document your code as you write it*, instead of waiting until the end of the development process, to avoid technical debt. 
@@ -402,7 +402,7 @@ The fmdtools codebase is quite large, and, as a result, it can be tempting to di
 * While modes can be used to describe fault modes in a very general way, faulty behavior that can also be queried from the model using the concept of a *disturbance*, which is merely a change in a given variable value. While disturbances are less general, they requie much less to be implemented in the model.
 * parameters and parameter-generating functions are helpful for understanding the model operating envelope. In general, try to avoid having parameters that duplicate each other in some way.
 * Randomness can be used throughout, but use the specified interfaces (`seed`, :meth:`fmdtools.define.Block.assoc_rand_states`, etc.) so that a single seed is used to generate all of the rngs in the model. Not using these interfaces can get you in trouble.
-* A variety of custom attributes can be added to :class:`fmdtools.define.FxnBlock` and :class:`fmdtools.define.Flow`, but not every custom attribute is going to work with staged execution and parallelism options. In general, all function constructs that change should be `states`, while parameters may be attributes. If you want to do something fancy with data structures, you may need to re-implement :class:`fmdtools.define.FxnBlock` methods for copying and returning states to `propagate`.
+* A variety of custom attributes can be added to :class:`fmdtools.define.Function` and :class:`fmdtools.define.Flow`, but not every custom attribute is going to work with staged execution and parallelism options. In general, all function constructs that change should be `states`, while parameters may be attributes. If you want to do something fancy with data structures, you may need to re-implement :class:`fmdtools.define.Function` methods for copying and returning states to `propagate`.
 * If there's something that you'd like to do in an fmdtools model that is difficult with existing model structures, consider filing a bug report before implementing you own ad-hoc solution. Alternatively, try devoping your solution as a *feature* rather than a hack to solve a single use-case. If the features is in our scope and well-developed, we may try to incorporate it in our next release.
 
 Style advice
@@ -410,7 +410,7 @@ Style advice
 
 Development of fmdtools models should follow the `PEP 8 Style Guide <https://peps.python.org/pep-0008/#introduction>`_ as much as possible. While this won't be entirely re-iterated here, the following applies:
 
-* Use CamelCase for classes like :class:`fmdtools.define.Model`, :class:`fmdtools.define.FxnBlock`, :class:`fmdtools.define.Flow`, :class:`fmdtools.define.Component`, etc. Use lowercase for object instantiations of these classes, and lower_case_with_underscores (e.g. do_this()) for methods/functions.
+* Use CamelCase for classes like :class:`fmdtools.define.Model`, :class:`fmdtools.define.Function`, :class:`fmdtools.define.Flow`, :class:`fmdtools.define.Component`, etc. Use lowercase for object instantiations of these classes, and lower_case_with_underscores (e.g. do_this()) for methods/functions.
 	* if a model class is named Model (e.g., Drone), the instance should be named model_X, where X is an identifying string for the model being used (e.g. drone_test). 
 * Names should be descriptive, but keep the length down. Use abbreviations if needed.
 * Try to use the code formatting structure to show what your code is doing as much as possible. Single-line if statements can be good for this, as long as they don't go too long.

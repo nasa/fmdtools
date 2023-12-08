@@ -9,8 +9,8 @@ Has classes:
 - :class:`SampleApproach`: Defines a set of fault scenario samples.
 - :Class:`ParameterSample`: Defines a sample of a set of parameters.
 """
-from fmdtools.define.common import get_var, nest_dict
-from fmdtools.define.role.parameter import Parameter, ExampleParameter
+from fmdtools.define.base import get_var, nest_dict
+from fmdtools.define.container.parameter import Parameter, ExampleParameter
 from fmdtools.sim.scenario import SingleFaultScenario, Injection, JointFaultScenario
 from fmdtools.sim.scenario import ParameterScenario
 from fmdtools.analyze.phases import gen_interval_times, PhaseMap, join_phasemaps

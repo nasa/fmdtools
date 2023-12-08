@@ -19,7 +19,7 @@ And functions/methods:
 """
 from fmdtools.analyze.result import Result, load_folder, load, fromdict
 from fmdtools.analyze.common import bootstrap_confidence_interval, get_sub_include
-from fmdtools.define.common import get_var
+from fmdtools.define.base import get_var
 from fmdtools.analyze.common import unpack_plot_values, phase_overlay
 from fmdtools.analyze.common import multiplot_legend_title, multiplot_helper
 from fmdtools.analyze.common import plot_err_hist, setup_plot

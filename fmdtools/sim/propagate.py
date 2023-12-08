@@ -55,7 +55,7 @@ import copy
 import tqdm
 import dill
 import os
-from fmdtools.define.common import get_var, t_key
+from fmdtools.define.base import get_var, t_key
 from fmdtools.sim.sample import SampleApproach
 from fmdtools.sim.scenario import Sequence, Scenario, SingleFaultScenario
 from fmdtools.analyze.result import Result, create_indiv_filename, file_check
@@ -395,7 +395,7 @@ def one_fault(mdl, *fxnfault, time=0, **kwargs):
     *fxnfault : str
         Has options:
         - 'fxnname', 'faultmode' when a Model is provided, or
-        - 'faultmode' when a Block/FxnBlock is provided
+        - 'faultmode' when a Block/Function is provided
     time : float, optional
         Time to inject fault. Must be in the range of model times
         (i.e. in range(0, end, mdl.sp.dt)). The default is 0.
@@ -1006,7 +1006,7 @@ def list_init_faults(mdl):
 
     Parameters
     ----------
-    mdl : Simulable/FxnBlock
+    mdl : Simulable/Function
         Simulable with list of times in mdl.sp.times
 
     Returns

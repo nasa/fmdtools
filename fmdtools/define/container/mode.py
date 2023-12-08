@@ -13,8 +13,8 @@ from typing import ClassVar
 import numpy as np
 import itertools
 import copy
-from fmdtools.define.common import get_true_fields, get_true_field, eq_units
-from fmdtools.define.role.common import BaseRole
+from fmdtools.define.base import get_true_fields, get_true_field, eq_units
+from fmdtools.define.container.base import BaseContainer
 from fmdtools.analyze.history import History
 
 
@@ -107,7 +107,7 @@ class Fault(dataobject, readonly=True, mapping=True):
             return baserate * opp_factor * t_factor * weight
 
 
-class Mode(BaseRole, readonly=False):
+class Mode(BaseContainer, readonly=False):
     """
     Class for defining the mode property (and probability model) held in Blocks.
 

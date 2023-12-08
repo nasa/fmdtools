@@ -9,11 +9,11 @@ The functions of the system are:
 The Tank stores a set amount of water, the level of which is controlled by 
 inlet and outlet valves. 
 """
-from fmdtools.define.role.parameter import Parameter
-from fmdtools.define.role.state import State
-from fmdtools.define.role.mode import Mode
-from fmdtools.define.model import Model
-from fmdtools.define.block import FxnBlock
+from fmdtools.define.container.parameter import Parameter
+from fmdtools.define.container.state import State
+from fmdtools.define.container.mode import Mode
+from fmdtools.define.architecture.function import FunctionArchitecture
+from fmdtools.define.block.function import Function
 import numpy as np
 
 from examples.tank.tank_model import TransportLiquidState, Signal, Liquid
@@ -66,11 +66,11 @@ class TransportLiquidMode(Mode):
     units = 'hr'
 
 
-class ImportLiquid(FxnBlock):
+class ImportLiquid(Function):
     __slots__ = ('sig', 'wat_out')
-    role_p = TankParam
-    role_s = TransportLiquidState
-    role_m = TransportLiquidMode
+    container_p = TankParam
+    container_s = TransportLiquidState
+    container_m = TransportLiquidMode
     _init_sig = Signal
     _init_wat_out = Liquid
     flownames = {'coolant_in': 'wat_out', 'input_sig': 'sig'}
@@ -94,11 +94,11 @@ class ImportLiquid(FxnBlock):
             self.sig.s.indicator = 0
 
 
-class ExportLiquid(FxnBlock):
+class ExportLiquid(Function):
     __slots__ = ('sig', 'wat_in')
-    role_p = TankParam
-    role_s = TransportLiquidState
-    role_m = TransportLiquidMode
+    container_p = TankParam
+    container_s = TransportLiquidState
+    container_m = TransportLiquidMode
     _init_sig = Signal
     _init_wat_in = Liquid
     flownames = {'coolant_out': 'wat_in', 'output_sig': 'sig'}
@@ -128,11 +128,11 @@ class StoreLiquidState(State):
     coolingbuffer: float = 10.0
 
 
-class StoreLiquid(FxnBlock):
+class StoreLiquid(Function):
     __slots__ = ('wat_in', 'wat_out', 'sig')
-    role_s = StoreLiquidState
-    role_m = StoreLiquidMode
-    role_p = TankParam
+    container_s = StoreLiquidState
+    container_m = StoreLiquidMode
+    container_p = TankParam
     _init_wat_in = Liquid
     _init_wat_out = Liquid
     _init_sig = Signal
@@ -166,8 +166,8 @@ class StoreLiquid(FxnBlock):
         self.s.coolingbuffer = max(self.s.coolingbuffer - 1.0 + self.wat_in.s.rate, 0)
 
 
-class ContingencyActions(FxnBlock):
-    role_p = TankParam
+class ContingencyActions(Function):
+    container_p = TankParam
     _init_input_sig = Signal
     _init_output_sig = Signal
     _init_tank_sig = Signal
@@ -181,9 +181,9 @@ class ContingencyActions(FxnBlock):
                                                     self.output_sig.s.indicator][1]
 
 
-class Tank(Model):
+class Tank(FunctionArchitecture):
     __slots__ = ()
-    role_p = TankParam
+    container_p = TankParam
     default_sp = dict(phases=(('na', 0, 0),
                               ('operation', 1, 20)),
                       times=(0, 5, 10, 15, 20),

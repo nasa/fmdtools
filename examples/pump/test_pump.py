@@ -9,7 +9,7 @@ import unittest
 from examples.pump.ex_pump import Pump
 from fmdtools.sim import propagate as prop
 import fmdtools.analyze as an
-from fmdtools.define.common import check_pickleability
+from fmdtools.define.base import check_pickleability
 from fmdtools.sim.sample import FaultDomain, FaultSample, ParameterSample
 from tests.common import CommonTests
 import numpy as np

@@ -4,11 +4,11 @@ Created on Tue Feb 28 11:53:00 2023
 
 @author: dhulse
 """
-from fmdtools.define.role.parameter import Parameter
-from fmdtools.define.role.state import State
-from fmdtools.define.role.rand import Rand
-from fmdtools.define.block import FxnBlock
-from fmdtools.define.model import Model
+from fmdtools.define.container.parameter import Parameter
+from fmdtools.define.container.state import State
+from fmdtools.define.container.rand import Rand
+from fmdtools.define.block.function import Function
+from fmdtools.define.architecture.function import FunctionArchitecture
 from fmdtools.sim.sample import ParameterApproach
 import numpy as np
 from fmdtools.sim import propagate as prop
@@ -39,9 +39,9 @@ class DriveRand(Rand):
     s: DriveRandStates = DriveRandStates()
 
 
-class DriveDegradation(FxnBlock):
-    role_s = DriveDegradationStates
-    role_r = DriveRand
+class DriveDegradation(Function):
+    container_s = DriveDegradationStates
+    container_r = DriveRand
     default_sp = dict(times=(0, 100))
 
     def __init__(self, name, **kwargs):
@@ -78,10 +78,10 @@ class PSFShortParams(Parameter, readonly=True):
     stoch_fatigue: bool = False
 
 
-class PSFDegradationShort(FxnBlock):
-    role_s = PSFDegradationShortStates
-    role_r = PSFDegShortRand
-    role_p = PSFShortParams
+class PSFDegradationShort(Function):
+    container_s = PSFDegradationShortStates
+    container_r = PSFDegShortRand
+    container_p = PSFShortParams
     default_sp = dict(times=(0, 100))
 
     def __init__(self, name, **kwargs):
@@ -110,9 +110,9 @@ class PSFDegradationLongStates(State):
     experience: float = 0.0
 
 
-class PSFDegradationLong(FxnBlock):
-    role_s = PSFDegradationLongStates
-    role_p = LongParams
+class PSFDegradationLong(Function):
+    container_s = PSFDegradationLongStates
+    container_p = LongParams
     default_sp = dict(times=(0, 100))
 
     def __init__(self, name, **kwargs):

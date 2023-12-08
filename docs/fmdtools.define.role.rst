@@ -1,4 +1,4 @@
-fmdtools.define.role subpackage
+fmdtools.define.container subpackage
 ===========================
 
 The roles subpackage provides the building blocks for developing simulations like blocks and architectures.
@@ -13,56 +13,56 @@ These sub-attributes are provided in the follwoing modules:
 * :mod:`geom`: for :class:`Geom`, class and subclasses which represent geometric attributes.
 * :mod:`coords`: for :class:`Coords`, which is used to define coordinate systems.
 
-fmdtools.define.role.mode
+fmdtools.define.container.mode
 --------------------------------
 
-.. automodule:: fmdtools.define.role.mode
+.. automodule:: fmdtools.define.container.mode
    :members:
    :undoc-members:
    :show-inheritance:
 
-fmdtools.define.role.state
+fmdtools.define.container.state
 --------------------------------
 
-.. automodule:: fmdtools.define.role.state
+.. automodule:: fmdtools.define.container.state
    :members: State
    :show-inheritance:
 
 
-fmdtools.define.role.parameter
+fmdtools.define.container.parameter
 --------------------------------
 
-.. automodule:: fmdtools.define.role.parameter
+.. automodule:: fmdtools.define.container.parameter
    :members:
    :undoc-members:
 
-fmdtools.define.role.rand
+fmdtools.define.container.rand
 --------------------------------
 
-.. automodule:: fmdtools.define.role.rand
-   :members:
-   :undoc-members:
-   :show-inheritance:
-
-fmdtools.define.role.time
---------------------------------
-
-.. automodule:: fmdtools.define.role.time
+.. automodule:: fmdtools.define.container.rand
    :members:
    :undoc-members:
    :show-inheritance:
 
-fmdtools.define.role.geom
+fmdtools.define.container.time
 --------------------------------
 
-.. automodule:: fmdtools.define.role.geom
+.. automodule:: fmdtools.define.container.time
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+fmdtools.define.container.geom
+--------------------------------
+
+.. automodule:: fmdtools.define.container.geom
    :members: Geom, GeomPoint, PointParam, GeomLine, LineParam, GeomPoly, PolyParam, GeomArch
    :show-inheritance:
 
 
-fmdtools.define.role.coords
+fmdtools.define.container.coords
 --------------------------------
 
-.. automodule:: fmdtools.define.role.coords
+.. automodule:: fmdtools.define.container.coords
    :members: Coords, CoordsParam
    :show-inheritance:

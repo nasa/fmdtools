@@ -12,10 +12,10 @@ from recordclass import dataobject, asdict, astuple
 import warnings
 import numpy as np
 
-from fmdtools.define.common import get_true_fields, get_true_field, set_obj_arg_type
-from fmdtools.define.role.common import BaseRole
+from fmdtools.define.base import get_true_fields, get_true_field, set_obj_arg_type
+from fmdtools.define.container.base import BaseContainer
 
-class Parameter(BaseRole, readonly=True):
+class Parameter(BaseContainer, readonly=True):
     """
     The Parameter class defines model/function/flow values which are immutable,
     that is, the same from model instantiation through a simulation. Parameters

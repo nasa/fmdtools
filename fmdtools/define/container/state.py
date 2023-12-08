@@ -10,11 +10,11 @@ import numpy as np
 import copy
 import warnings
 from fmdtools.analyze.history import History
-from fmdtools.define.common import is_iter
-from fmdtools.define.role.common import BaseRole
+from fmdtools.define.base import is_iter
+from fmdtools.define.container.base import BaseContainer
 
 
-class State(BaseRole):
+class State(BaseContainer):
     """
     Class for working with model states, which are variables in the model which
     change over time. This class inherits from dataobject for low memory footprint

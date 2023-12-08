@@ -32,7 +32,7 @@ The pump example model is located in `examples/pump/ex_pump.py`, which is then u
 
 - `Optimization <../examples/pump/Optimization.ipynb>`_, shows some of the basics of working with the :class:`fmdtools.sim.search.ProblemInterface` class for optimization. 
 
-In addition to `ex_pump.py`, more use-cases are demonstrated in the derivative models `pump_indiv.py` (which shows how individual :class:`fmdtools.define.block.FxnBlock` objects can be simulated individually outside of a model) and `pump_stochastic.py`, which is demonstrates stochastic modelling in fmdtools and is shown in the notebook:
+In addition to `ex_pump.py`, more use-cases are demonstrated in the derivative models `pump_indiv.py` (which shows how individual :class:`fmdtools.define.block.Function` objects can be simulated individually outside of a model) and `pump_stochastic.py`, which is demonstrates stochastic modelling in fmdtools and is shown in the notebook:
 
 
 - `Stochastic Modelling in fmdtools <../examples/pump/Stochastic_Modelling.ipynb>`_ , which covers defining and simulating stochastic models--models with random internal behaviors. This includees:
@@ -69,7 +69,7 @@ The multirotor example model has several models of drones modelled at differing 
   
   - Analysis using Basic analysis/results processing capabilities
  
- - `Urban Drone Demo <../examples/multirotor/Urban_Drone_Demo.ipynb>`_ is helpful for understanding how to set up gridworlds using :class:`fmdtools.define.role.coords.Coords` and an Environment class.
+ - `Urban Drone Demo <../examples/multirotor/Urban_Drone_Demo.ipynb>`_ is helpful for understanding how to set up gridworlds using :class:`fmdtools.define.container.coords.Coords` and an Environment class.
  
 - `Multirotor Optimization <../examples/multirotor/Multirotor_Optimization.ipynb>`_ shows how the design, operations, and contingency management of a system can be co-optimized with the :class:`fmdtools.sim.search.ProblemInterface` class. 
 
@@ -133,7 +133,7 @@ The EPS model is a model of a simple electric power system in `eps.py`, which sh
 Action Sequence Graph
 +++++++++++++++++++++++++++++++++++++++++++++
 
-`Action Sequence Graph <../examples/eps/Action_Sequence_Graph.ipynb>`_ shows a very basic example of using the :class:`fmdtools.define.block.ActArch` structure to define sequences of actions or modes, which is helpful for modelling human and autonomous behaviors.
+`Action Sequence Graph <../examples/eps/Action_Sequence_Graph.ipynb>`_ shows a very basic example of using the :class:`fmdtools.define.block.ActionArchitecture` structure to define sequences of actions or modes, which is helpful for modelling human and autonomous behaviors.
 
 .. toctree::
    :hidden:

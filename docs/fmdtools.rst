@@ -20,7 +20,7 @@ Thus, working with fmdtools often means creating a model file which extends clas
    :maxdepth: 5
    
    fmdtools.define
-   fmdtools.define.role
+   fmdtools.define.container
    fmdtools.sim
    fmdtools.analyze
 

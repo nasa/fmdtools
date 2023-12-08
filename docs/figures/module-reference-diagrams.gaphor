@@ -5144,7 +5144,7 @@
 </reflist>
 </generalization>
 <name>
-<val>FxnBlock</val>
+<val>Function</val>
 </name>
 <ownedAttribute>
 <reflist>
@@ -5200,7 +5200,7 @@
 <val>c</val>
 </name>
 <typeValue>
-<val>CompArch</val>
+<val>ComponentArchitecture</val>
 </typeValue>
 </Property>
 <GeneralizationItem id="7848d13a-1097-11ee-8c80-10f60af7e3a0">
@@ -5667,7 +5667,7 @@
 </reflist>
 </annotatedElement>
 <body>
-<val>Used to represent physical components in a Component Architecture (CompArch)</val>
+<val>Used to represent physical components in a Component Architecture (ComponentArchitecture)</val>
 </body>
 <presentation>
 <reflist>
