@@ -140,7 +140,7 @@ class UrbanDroneEnvironment(Environment):
 class AffectDOF(AffectDOFRural):
     """Adaptation of AffectDOF for urban environment."""
 
-    _init_environment = UrbanDroneEnvironment
+    flow_environment = UrbanDroneEnvironment
 
     def get_fall_dist(self):
         """Get fall distance based on height above buildings."""
@@ -214,8 +214,8 @@ class PlanPathParam(Parameter):
 class PlanPath(PlanPathRural):
     """Path planning adaptation for urban environment."""
 
-    _init_environment = UrbanDroneEnvironment
-    _init_ca = VisionArch
+    flow_environment = UrbanDroneEnvironment
+    arch_ca = VisionArch
     container_p = PlanPathParam
 
     def init_goals(self):
@@ -273,7 +273,7 @@ class PlanPath(PlanPathRural):
 class HoldPayload(HoldPayloadRural):
     """Adaptation of HoldPayload given a changing ground height."""
 
-    _init_environment = UrbanDroneEnvironment
+    flow_environment = UrbanDroneEnvironment
 
     def at_ground(self):
         """Check if at ground (at changing ground height)."""

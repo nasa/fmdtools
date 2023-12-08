@@ -213,7 +213,7 @@ class FunctionArchitecture(Simulable):
 
     def build(self, functionorder=[], require_connections=True, update_seed=True):
         """
-        Builds the model graph after the functions have been added.
+        Build the model graph after the functions have been added.
 
         Parameters
         ----------
@@ -446,7 +446,7 @@ class FunctionArchitecture(Simulable):
 
     def propagate(self, time, fxnfaults={}, disturbances={}, run_stochastic=False):
         """
-        Injects and propagates faults through the graph at one time-step.
+        Inject and propagates faults through the graph at one time-step.
 
         Parameters
         ----------
@@ -508,7 +508,7 @@ class FunctionArchitecture(Simulable):
                 # Update functions with new values, check to see if new faults or states
                 oldmutables = self.fxns[fxnname].return_mutables()
                 self.fxns[fxnname]('static', time=time, run_stochastic=run_stochastic)
-                if oldmutables!=self.fxns[fxnname].return_mutables(): 
+                if oldmutables != self.fxns[fxnname].return_mutables():
                     nextfxns.update([fxnname])
 
                 # Check what flows now have new values and add connected functions
@@ -516,11 +516,13 @@ class FunctionArchitecture(Simulable):
                 for flowname in self.fxns[fxnname].flows:
                     if flowname in flows_to_check:
                         try:
-                            if self._flowstates[flowname]!=self.flows[flowname].return_mutables():
-                                nextfxns.update(set([n for n in self.graph.neighbors(flowname) if n in self.staticfxns]))
+                            if self._flowstates[flowname] != self.flows[flowname].return_mutables():
+                                nextfxns.update(set([n for n in self.graph.neighbors(flowname)
+                                                     if n in self.staticfxns]))
                                 flows_to_check.remove(flowname)
                         except ValueError as e:
-                            raise Exception("Invalid mutables in flow: "+flowname) from e
+                            raise Exception("Invalid mutables in flow: "
+                                            + flowname) from e
             # check remaining flows that have not been checked already
             for flowname in flows_to_check:
                 if self._flowstates[flowname] != self.flows[flowname].return_mutables():

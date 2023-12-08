@@ -17,7 +17,7 @@ probability
 for outcome x for probability distributions with name 'randname' in numpy.
 """
 from scipy import stats
-from recordclass import dataobject, asdict, astuple
+from recordclass import asdict, astuple
 import numpy as np
 import math
 from fmdtools.define.container.base import BaseContainer
@@ -69,7 +69,7 @@ class Rand(BaseContainer):
         if 's' in self.__fields__:
             self.s = self.s.__class__()
             self.s.set_atts(**s_kwargs)
-        if self.seed == None:
+        if self.seed is None:
             raise Exception("Invalid seed: None")
 
     def get_rand_states(self, auto_update_only=False):
@@ -87,7 +87,7 @@ class Rand(BaseContainer):
 
     def set_rand(self, statename, methodname, *args):
         """
-        Update the given random state with a given method and arguments
+        Update the given random state with a given method and arguments.
         (if in run_stochastic mode)
 
         Parameters
@@ -120,7 +120,7 @@ class Rand(BaseContainer):
         return state_pd
 
     def update_stochastic_states(self):
-        """Updates the defined stochastic states defined to auto-update."""
+        """Update the defined stochastic states defined to auto-update."""
         if hasattr(self, 's'):
             if self.run_stochastic == 'track_pdf':
                 self.probs.clear()
@@ -130,14 +130,14 @@ class Rand(BaseContainer):
                                   *getattr(self.s, state+'_update')[1])
 
     def reset(self):
-        """Resets Rand to the initial state."""
+        """Reset Rand to the initial state."""
         self.probs.clear()
         if 's' in self.__fields__:
             self.s.reset()
         self.rng = np.random.default_rng(self.seed)
 
     def update_seed(self, seed):
-        """Updates the random seed to the given value"""
+        """Update the random seed to the given value."""
         self.seed = seed
         BitGen = type(self.rng.bit_generator)
         self.rng.bit_generator.state = BitGen(seed).state
@@ -152,14 +152,14 @@ class Rand(BaseContainer):
         self.run_stochastic = other_rand.run_stochastic
 
     def to_default(self, *statenames):
-        """Resets given random states to their default values"""
+        """Reset given random states to their default values."""
         for statename in statenames:
             default = self.s.__default_vals__[self.s.__fields__.index(statename)]
             self.s[statename] = default
 
     def create_hist(self, timerange, track):
         """
-        Creates a History corresponding to Rand
+        Create a History corresponding to Rand.
 
         Parameters
         ----------
@@ -192,8 +192,9 @@ class Rand(BaseContainer):
 
 def get_pdf_for_rand(x, randname, args):
     """
-    Gets the corresponding probability mass/density for
-    for random sample x from 'randname' function in numpy.
+    Get the probability density/mass function for random sample x.
+
+    Pulled from 'randname' function in numpy.
 
     Parameters
     ----------
@@ -247,8 +248,9 @@ def get_pdf_for_rand(x, randname, args):
 
 def get_scipy_pdf_helper(x, randname, args, pmf=False):
     """
-    Gets probability mass/density for the outcome x from the distribution "randname"
-    with arguments "args".
+    Get probability mass/density for the outcome x.
+
+    Pulled from the distribution "randname" in scipy with arguments "args".
 
     Used as a helper function in determining stochastic model state probability
 

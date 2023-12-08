@@ -23,8 +23,8 @@ class MoveParam(Parameter):
 from fmdtools.define.block.function import Function
 class Mover(Function):
     container_p = MoveParam
-    _init_communications = Communications
-    _init_location = Location 
+    flow_communications = Communications
+    flow_location = Location 
     def __init__(self, name='mover', flows={}, **kwargs):
         super().__init__(name=name, flows=flows, **kwargs)
         self.internal_info = self.communications.create_comms(name)
@@ -48,7 +48,7 @@ class Mover(Function):
         return {"last_x": self.loc.s.x, "min_x": fxnhist.faulty.location.get(self.name).x}
 
 class Coordinator(Function):
-    _init_communications = Communications
+    flow_communications = Communications
     def __init__(self, name='coordinator', flows={}, **kwargs):
         super().__init__(name=name, flows=flows, **kwargs)
         self.coord_view= self.communications.create_comms(name, ports=["mover_1", "mover_2"])

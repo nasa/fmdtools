@@ -9,7 +9,7 @@ import copy
 from typing import ClassVar
 from fmdtools.define.container.parameter import Parameter
 from fmdtools.define.container.rand import Rand
-from fmdtools.define.base import is_iter, init_obj_dict
+from fmdtools.define.base import is_iter, BaseObject
 from fmdtools.analyze.history import History
 from fmdtools.analyze.common import setup_plot, consolidate_legend
 from matplotlib import pyplot as plt
@@ -73,7 +73,7 @@ class CoordsParam(Parameter):
     gapwidth: ClassVar[float] = 0.0
 
 
-class Coords(object):
+class Coords(BaseObject):
     """
     Class for generating, accessing, and setting gridworld properties.
 
@@ -161,10 +161,10 @@ class Coords(object):
                              for i in range(0, self.p.x_size)]) * self.p.blocksize
         self.pts = self.grid.reshape(int(self.grid.size/2), 2)
 
-        init_obj_dict(self, "point", set_attr=True)
-        init_obj_dict(self, "collect", "ions")
-        init_obj_dict(self, "feature")
-        init_obj_dict(self, "state")
+        self.init_dict("point", set_attr=True)
+        self.init_dict("collect", "ions")
+        self.init_dict("feature")
+        self.init_dict("state")
         self.properties = {**self.features, **self.states}
         for propname, prop in self.properties.items():
             prop_type, prop_default = prop

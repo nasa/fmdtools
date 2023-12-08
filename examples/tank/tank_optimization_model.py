@@ -71,8 +71,8 @@ class ImportLiquid(Function):
     container_p = TankParam
     container_s = TransportLiquidState
     container_m = TransportLiquidMode
-    _init_sig = Signal
-    _init_wat_out = Liquid
+    flow_sig = Signal
+    flow_wat_out = Liquid
     flownames = {'coolant_in': 'wat_out', 'input_sig': 'sig'}
 
     def behavior(self, time):
@@ -99,8 +99,8 @@ class ExportLiquid(Function):
     container_p = TankParam
     container_s = TransportLiquidState
     container_m = TransportLiquidMode
-    _init_sig = Signal
-    _init_wat_in = Liquid
+    flow_sig = Signal
+    flow_wat_in = Liquid
     flownames = {'coolant_out': 'wat_in', 'output_sig': 'sig'}
 
     def behavior(self, time):
@@ -133,9 +133,9 @@ class StoreLiquid(Function):
     container_s = StoreLiquidState
     container_m = StoreLiquidMode
     container_p = TankParam
-    _init_wat_in = Liquid
-    _init_wat_out = Liquid
-    _init_sig = Signal
+    flow_wat_in = Liquid
+    flow_wat_out = Liquid
+    flow_sig = Signal
     flownames = {'coolant_in': 'wat_in', 'coolant_out': 'wat_out', 'tank_sig': 'sig'}
 
     def behavior(self, time):
@@ -168,9 +168,9 @@ class StoreLiquid(Function):
 
 class ContingencyActions(Function):
     container_p = TankParam
-    _init_input_sig = Signal
-    _init_output_sig = Signal
-    _init_tank_sig = Signal
+    flow_input_sig = Signal
+    flow_output_sig = Signal
+    flow_tank_sig = Signal
 
     def dynamic_behavior(self, time):
         self.input_sig.s.action = self.p.policymap[self.input_sig.s.indicator,

@@ -6,7 +6,7 @@ Now:
 Future:
     Dynamic Geoms, with properties tied to states
 """
-from fmdtools.define.base import BaseObject, init_obj_dict
+from fmdtools.define.base import BaseObject
 from fmdtools.define.container.parameter import Parameter
 from fmdtools.define.container.state import State
 from fmdtools.analyze.common import get_sub_include
@@ -43,7 +43,7 @@ class Geom(BaseObject):
     def __init__(self, *args, s={}, p={}, **kwargs):
         super().__init__(*args, s=s, p=p)
         self.shape = self.shapely_class(*self.p.as_args())
-        init_obj_dict(self, "buffer")
+        self.init_dict("buffer")
         for b, dist in self.buffers.items():
             setattr(self, b, self.shape.buffer(dist))
 

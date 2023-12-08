@@ -66,7 +66,7 @@ class Function(Block):
                 self.update_contained_modes(at)
             elif at_arg:
                 raise Exception(at + " argument provided: " + str(at_arg) +
-                                "without associating a ComponentArchitecture/ActionArchitecture to _init_" + at)
+                                "without associating a ComponentArchitecture/ActionArchitecture to flow_" + at)
         self.update_seed()
 
     def update_contained_modes(self, at):
