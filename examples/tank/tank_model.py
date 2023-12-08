@@ -61,8 +61,8 @@ class ImportLiquid(Function):
     __slots__ = ('sig', 'watout')
     container_s = TransportLiquidState
     container_m = TransportLiquidMode
-    _init_sig = Signal
-    _init_watout = Liquid
+    flow_sig = Signal
+    flow_watout = Liquid
     flownames = {'wat_in_1': 'watout', 'valve1_sig': 'sig'}
 
     def static_behavior(self, time):
@@ -81,8 +81,8 @@ class ExportLiquid(Function):
     __slots__ = ('sig', 'watin')
     container_s = TransportLiquidState
     container_m = TransportLiquidMode
-    _init_sig = Signal
-    _init_watin = Liquid
+    flow_sig = Signal
+    flow_watin = Liquid
     flownames = {'wat_out_2': 'watin', 'valve2_sig': 'sig'}
 
     def static_behavior(self, time):
@@ -102,8 +102,8 @@ class GuideLiquidMode(Mode):
 
 class GuideLiquid(Function):
     __slots__ = ('watin', 'watout')
-    _init_watin = Liquid
-    _init_watout = Liquid
+    flow_watin = Liquid
+    flow_watout = Liquid
     container_m = GuideLiquidMode
 
     def static_behavior(self, time):
@@ -141,9 +141,9 @@ class StoreLiquid(Function):
     __slots__ = ('watin', 'watout', 'sig')
     container_s = StoreLiquidState
     container_m = StoreLiquidMode
-    _init_watin = Liquid
-    _init_watout = Liquid
-    _init_sig = Signal
+    flow_watin = Liquid
+    flow_watout = Liquid
+    flow_sig = Signal
     flownames = {'wat_in_2': 'watin', 'wat_out_1': 'watout', 'tank_sig': 'sig'}
 
     def static_behavior(self, time):
@@ -210,10 +210,10 @@ class HumanASG(ActionArchitecture):
 
 class HumanActions(Function):
     container_p = HumanParam
-    _init_aa = HumanASG
-    _init_valve1_sig = Signal
-    _init_tank_sig = Signal
-    _init_valve2_sig = Signal
+    arch_aa = HumanASG
+    flow_valve1_sig = Signal
+    flow_tank_sig = Signal
+    flow_valve2_sig = Signal
 
     def dynamic_behavior(self, time):
         """
@@ -265,8 +265,8 @@ class DetectMode(Mode):
 
 class Detect(Action):
     container_m = DetectMode
-    _init_detect_sig = Signal
-    _init_tank_sig = Signal
+    flow_detect_sig = Signal
+    flow_tank_sig = Signal
 
     def behavior(self, time):
         if self.m.has_fault('not_detected'):
@@ -330,9 +330,9 @@ class TurnMode(Mode):
 
 class Turn(Action):
     container_m = TurnMode
-    _init_detect_sig = Signal
-    _init_valve1_sig = Signal
-    _init_valve2_sig = Signal
+    flow_detect_sig = Signal
+    flow_valve1_sig = Signal
+    flow_valve2_sig = Signal
 
     def behavior(self, time):
         if self.m.has_fault('cannot'):

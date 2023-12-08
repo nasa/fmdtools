@@ -46,7 +46,7 @@ class ImportEEModes(Mode):
 class ImportEE(Function):
     __slots__ = ("ee_out",)
     container_m = ImportEEModes
-    _init_ee_out = GenericFlow
+    flow_ee_out = GenericFlow
     flownames = {"ee_1": "ee_out"}
     """ Static model representation is the same as the dynamic model respresentation, except in this case 
     there is no opportunity vector. Thus the self.assoc_modes function takes a dictionary of modes with 
@@ -77,7 +77,7 @@ class ImportSigModes(Mode):
 class ImportSig(Function):
     __slots__ = ("sig_out",)
     container_m = ImportSigModes
-    _init_sig_out = Signal
+    flow_sig_out = Signal
     flownames = {"sig_in": "sig_out"}
 
     def behavior(self, time):
@@ -97,8 +97,8 @@ class StoreEEModes(Mode):
 class StoreEE(Function):
     __slots__ = ("ee_in", "ee_out")
     container_m = StoreEEModes
-    _init_ee_in = GenericFlow
-    _init_ee_out = GenericFlow
+    flow_ee_in = GenericFlow
+    flow_ee_out = GenericFlow
     flownames = {"ee_2": "ee_in", "ee_3": "ee_out"}
 
     def condfaults(self, time):
@@ -130,9 +130,9 @@ class SupplyEEModes(Mode):
 class SupplyEE(Function):
     __slots__ = ("ee_in", "ee_out", "heat_out")
     container_m = SupplyEEModes
-    _init_ee_in = GenericFlow
-    _init_ee_out = GenericFlow
-    _init_heat_out = GenericFlow
+    flow_ee_in = GenericFlow
+    flow_ee_out = GenericFlow
+    flow_heat_out = GenericFlow
     flownames = {"ee_1": "ee_in", "ee_2": "ee_out", "waste_he_1": "heat_out"}
 
     def condfaults(self, time):
@@ -171,11 +171,11 @@ class DistEEModes(Mode):
 class DistEE(Function):
     __slots__ = ("sig_in", "ee_in", "ee_m", "ee_h", "ee_o")
     container_m = DistEEModes
-    _init_sig_in = GenericFlow
-    _init_ee_in = GenericFlow
-    _init_ee_m = GenericFlow
-    _init_ee_h = GenericFlow
-    _init_ee_o = GenericFlow
+    flow_sig_in = GenericFlow
+    flow_ee_in = GenericFlow
+    flow_ee_m = GenericFlow
+    flow_ee_h = GenericFlow
+    flow_ee_o = GenericFlow
     flownames = {"ee_3": "ee_in"}
 
     def condfaults(self, time):
@@ -221,7 +221,7 @@ class ExportHEModes(Mode):
 class ExportHE(Function):
     __slots__ = ("he",)
     container_m = ExportHEModes
-    _init_he = GenericFlow
+    flow_he = GenericFlow
     flownames = {"waste_he_1": "he", "waste_he_o": "he", "waste_he_m": "he"}
 
     def behavior(self, time):
@@ -235,7 +235,7 @@ class ExportHE(Function):
 
 class ExportME(Function):
     __slots__ = ("me",)
-    _init_me = GenericFlow
+    flow_me = GenericFlow
 
     def behavior(self, time):
         self.me.s.rate = self.me.s.effort
@@ -243,7 +243,7 @@ class ExportME(Function):
 
 class ExportOE(Function):
     __slots__ = ("oe",)
-    _init_oe = GenericFlow
+    flow_oe = GenericFlow
 
     def behavior(self, time):
         self.oe.s.rate = self.oe.s.effort
@@ -260,9 +260,9 @@ class EEtoMEModes(Mode):
 class EEtoME(Function):
     __slots__ = ("ee_in", "me", "he_out")
     container_m = EEtoMEModes
-    _init_ee_in = GenericFlow
-    _init_me = GenericFlow
-    _init_he_out = GenericFlow
+    flow_ee_in = GenericFlow
+    flow_me = GenericFlow
+    flow_he_out = GenericFlow
     flownames = {"ee_m": "ee_in", "waste_he_m": "he_out"}
 
     def behavior(self, time):
@@ -305,8 +305,8 @@ class EEtoHEModes(Mode):
 class EEtoHE(Function):
     __slots__ = ("ee_in", "he")
     container_m = EEtoHEModes
-    _init_ee_in = GenericFlow
-    _init_he = GenericFlow
+    flow_ee_in = GenericFlow
+    flow_he = GenericFlow
     flownames = {"ee_h": "ee_in"}
 
     def cond_faults(self, time):
@@ -341,9 +341,9 @@ class EEtoOEModes(Mode):
 class EEtoOE(Function):
     __slots__ = ("ee_in", "oe", "he_out")
     container_m = EEtoOEModes
-    _init_ee_in = GenericFlow
-    _init_oe = GenericFlow
-    _init_he_out = GenericFlow
+    flow_ee_in = GenericFlow
+    flow_oe = GenericFlow
+    flow_he_out = GenericFlow
     flownames = {"waste_he_o": "he_out", "ee_o": "ee_in"}
 
     def cond_faults(self, time):

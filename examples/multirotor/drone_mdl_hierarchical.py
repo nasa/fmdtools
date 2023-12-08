@@ -105,7 +105,7 @@ class AffectDOF(AffectDOFDynamic):
     """Rotor locomotion (multi-component extension)."""
 
     container_s = OverallAffectDOFState
-    _init_ca = AffectDOFArch
+    arch_ca = AffectDOFArch
 
     def behavior(self, time):
         """Rotor dynamic behavior with architecture-base recovery."""

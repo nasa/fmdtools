@@ -188,10 +188,10 @@ class PlanPath(Function):
     container_m = PlanPathMode
     container_s = PlanPathState
     container_p = PlanPathParams
-    _init_ee_ctl = EE
-    _init_dofs = DOFs
-    _init_des_traj = DesTraj
-    _init_fs = Force
+    flow_ee_ctl = EE
+    flow_dofs = DOFs
+    flow_des_traj = DesTraj
+    flow_fs = Force
     flownames = {'force_st': 'fs'}
 
     def condfaults(self, time):
@@ -283,7 +283,7 @@ class PlanPath(Function):
 class AffectDOF(AffectDOFStatic):
     """Dynamic extension of drone locomotion."""
 
-    _init_des_traj = DesTraj
+    flow_des_traj = DesTraj
 
     def behavior(self, time):
         """Behavior in-time (fault effects on states and instantaneous power/force)."""
@@ -354,8 +354,8 @@ class AffectDOF(AffectDOFStatic):
 class ViewEnvironment(Function):
     """Camera for the drone. Determines which aspects of the environment are viewed."""
 
-    _init_dofs = DOFs
-    _init_environment = DroneEnvironment
+    flow_dofs = DOFs
+    flow_environment = DroneEnvironment
 
     def behavior(self, time):
         """Set points in grid as viewed if in range of view."""

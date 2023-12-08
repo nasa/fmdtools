@@ -335,10 +335,10 @@ class StoreEE(Function):
     __slots__ = ('hsig_bat', 'ee_1', 'force_st')
     container_s = StoreEEState
     container_m = StoreEEMode
-    _init_ca = BatArch
-    _init_hsig_bat = HSig
-    _init_ee_1 = EE
-    _init_force_st = Force
+    arch_ca = BatArch
+    flow_hsig_bat = HSig
+    flow_ee_1 = EE
+    flow_force_st = Force
 
     def condfaults(self, time):
         """Calculate overall conditional faults for StoreEE architecture."""
@@ -424,11 +424,11 @@ class ManageHealth(Function):
     __slots__ = ('force_st', 'ee_ctl', 'hsig_dofs', 'hsig_bat', 'rsig_traj')
     container_m = ManageHealthMode
     container_p = ResPolicy
-    _init_force_st = Force
-    _init_ee_ctl = EE
-    _init_hsig_dofs = HSig
-    _init_hsig_bat = HSig
-    _init_rsig_traj = RSig
+    flow_force_st = Force
+    flow_ee_ctl = EE
+    flow_hsig_dofs = HSig
+    flow_hsig_bat = HSig
+    flow_rsig_traj = RSig
 
     def condfaults(self, time):
         """If no support (e.g., in a crash), unit breaks."""
@@ -458,7 +458,7 @@ class AffectDOF(AffectDOFHierarchical):
 
     __slots__ = ('hsig_dofs',)
     container_m = AffectMode
-    _init_hsig_dofs = HSig
+    flow_hsig_dofs = HSig
 
     def reconfig_faults(self):
         """Send a faulty health state when in a fault mode."""
@@ -551,7 +551,7 @@ class PlanPath(PlanPathDyn):
     container_s = PlanPathState
     container_m = PlanPathMode
     container_p = DroneParam
-    _init_rsig_traj = RSig
+    flow_rsig_traj = RSig
     default_track = {'s': ['ground_height', 'pt', 'goal'], 'm': 'all'}
 
     def __init__(self, name, flows, **kwargs):

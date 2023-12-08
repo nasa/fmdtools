@@ -446,12 +446,12 @@ class PlanPath(Function):
     __slots__ = ("video", "pos_signal", "ground", "control", "fault_sig", 'pos')
     container_m = PlanPathMode
     container_p = ResCorrection
-    _init_video = Video
-    _init_pos_signal = Pos_Signal
-    _init_pos = Pos
-    _init_ground = Ground
-    _init_control = Control
-    _init_fault_sig = FaultSig
+    flow_video = Video
+    flow_pos_signal = Pos_Signal
+    flow_pos = Pos
+    flow_ground = Ground
+    flow_control = Control
+    flow_fault_sig = FaultSig
     flownames = {"auto_control": "control"}
 
     def dynamic_behavior(self, time):
@@ -590,11 +590,11 @@ class Drive(Function):
     '''The drive function determines the rover drive functionality'''
     __slots__ = ("ground", "motor_control", "ee_in", 'fault_sig', 'pos')
     container_m = DriveMode
-    _init_fault_sig = FaultSig
-    _init_ground = Ground
-    _init_pos = Pos
-    _init_motor_control = Control
-    _init_ee_in = EE
+    flow_fault_sig = FaultSig
+    flow_ground = Ground
+    flow_pos = Pos
+    flow_motor_control = Control
+    flow_ee_in = EE
     flownames = {"ee_15": "ee_in"}
 
     def dynamic_behavior(self, time):
@@ -692,10 +692,10 @@ class Perception(Function):
     __slots__ = ("ground", "ee", "video", 'pos')
     rad = 1         # not used. Is it needeD?
     container_m = PerceptionMode
-    _init_pos = Pos
-    _init_ground = Ground
-    _init_ee = EE
-    _init_video = Video
+    flow_pos = Pos
+    flow_ground = Ground
+    flow_ee = EE
+    flow_video = Video
     flownames = {"ee_12": "ee"}
 
     def dynamic_behavior(self, time):
@@ -785,10 +785,10 @@ class Power(Function):
     __slots__ = ("ee_15", "ee_5", "ee_12", "switch")
     container_s = PowerState
     container_m = PowerMode
-    _init_ee_15 = EE
-    _init_ee_5 = EE
-    _init_ee_12 = EE
-    _init_switch = Switch
+    flow_ee_15 = EE
+    flow_ee_5 = EE
+    flow_ee_12 = EE
+    flow_switch = Switch
 
     def static_behavior(self, time):
         """Determining power use based on mode."""
@@ -885,10 +885,10 @@ class OverrideMode(Mode):
 class Override(Function):
     __slots__ = ("override_comms", "ee", "motor_control", "auto_control")
     container_m = OverrideMode
-    _init_override_comms = OverrideComms
-    _init_ee = EE
-    _init_motor_control = Control
-    _init_auto_control = Control
+    flow_override_comms = OverrideComms
+    flow_ee = EE
+    flow_motor_control = Control
+    flow_auto_control = Control
     flownames = {"ee_5": "ee"}
 
     def dynamic_behavior(self, time):
@@ -907,9 +907,9 @@ class Override(Function):
 class Communications(Function):
     ''' The communcation hub'''
     __slots__ = ("ee_12", "comms", "pos_signal")
-    _init_ee_12 = EE
-    _init_comms = Comms
-    _init_pos_signal = Pos_Signal
+    flow_ee_12 = EE
+    flow_comms = Comms
+    flow_pos_signal = Pos_Signal
 
     def dynamic_behavior(self, time):
         '''when active, converts position signals to communication signals'''
@@ -923,7 +923,7 @@ class Communications(Function):
 class Operator(Function):
     '''Operator turns on or off the rover'''
     __slots__ = ("switch",)
-    _init_switch = Switch
+    flow_switch = Switch
 
     def dynamic_behavior(self, t):
         if t == 1:

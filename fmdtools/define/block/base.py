@@ -1,11 +1,9 @@
 # -*- coding: utf-8 -*-
 """
-Description: A module to define blocks
+Description: A module to define blocks.
 
 - :class:`Simulable`: Superclass for architectures and blocks.
 - :class:`Block`: Superclass for Functions, Components, Actions, etc.
-
-- :func:`assoc_flows`:  Associates flows with the given object (Block, ASG, etc.) 
 """
 import sys
 import itertools
@@ -26,48 +24,13 @@ from fmdtools.analyze.common import get_sub_include
 from fmdtools.analyze.history import History, init_indicator_hist
 
 
-def assoc_flows(obj, flows={}):
-    """
-    Associates flows with the given object (Block, ASG, etc.).
-
-    Flows must be defined with the _init_ class variable pointing to the class to
-    initialize (e.g., _init_flowname = FlowClass).
-
-    Parameters
-    ----------
-    obj: object (Block, ASG)
-        block requiring the flows
-
-    flows : dict, optional
-        If flows is provided AND it contains a flowname corresponding to the
-        function's flowname, it will be used instead (so that it can act as a
-        connection to the rest of the model)
-    """
-    if hasattr(obj, 'flownames'):
-        flows = {obj.flownames.get(fn, fn): flow for fn, flow in flows.items()}
-    flows = flows.copy()
-    for init_att in dir(obj):
-        if init_att.startswith("_init_"):
-            att = getattr(obj, init_att)
-            attname = init_att[6:]
-            if inspect.isclass(att) and issubclass(att, Flow) and not(attname in obj.flows):
-                if attname in flows:
-                    obj.flows[attname] = flows.pop(attname)
-                else:
-                    obj.flows[attname] = att(attname)
-                if not isinstance(obj, dataobject):
-                    setattr(obj, attname, obj.flows[attname])
-    if flows:
-        warnings.warn("these flows sent from model "+str([*flows.keys()])
-                      + " not added to class "+str(obj.__class__))
-
-
 class Simulable(BaseObject):
     """
     Base class for object which simulate (blocks and architectures).
 
     Note that classes solely based on Simulable may not be able to be simulated.
     """
+
     __slots__ = ('p', 'sp', 'r', 'h', 'track', 'flows', 'is_copy')
     default_sp = {}
     default_track = ["all"]
@@ -81,7 +44,7 @@ class Simulable(BaseObject):
 
         Parameters
         ----------
-        p : dict 
+        p : dict =
             Parameter values to set
         sp : dict
             Simulation parameter values to set
@@ -105,7 +68,7 @@ class Simulable(BaseObject):
 
     def add_flow_hist(self, hist, timerange, track):
         """
-        Creates a history of flows for the Simulable and appends it to the History hist.
+        Create a history of flows for the Simulable and appends it to the History hist.
 
         Parameters
         ----------
@@ -114,7 +77,8 @@ class Simulable(BaseObject):
         timerange : iterable, optional
             Time-range to initialize the history over. The default is None.
         track : list/str/dict, optional
-            argument specifying attributes for :func:`get_sub_include'. The default is None.
+            argument specifying attributes for :func:`get_sub_include'.
+            The default is None.
         """
         flow_track = get_sub_include('flows', track)
         if flow_track:
@@ -126,7 +90,8 @@ class Simulable(BaseObject):
 
     def update_seed(self, seed=[]):
         """
-        Updates seed and propogates update to contained actions/components.
+        Update seed and propogates update to contained actions/components.
+
         (keeps seeds in sync)
 
         Parameters
@@ -139,7 +104,7 @@ class Simulable(BaseObject):
 
     def find_classification(self, scen, mdlhists):
         """
-        Placeholder for model find_classification methods (for running nominal models)
+        Placeholder for model find_classification methods (for running nominal models).
 
         Parameters
         ----------
@@ -191,7 +156,7 @@ class Simulable(BaseObject):
 
     def new(self, **kwargs):
         """
-        Creates a new Model with the same parameters as the current model but
+        Create a new Model with the same parameters as the current model but
         with changes to params (p, sp, track, rand etc.)
         """
         p, sp, r, track = self.new_params(**kwargs)
@@ -309,7 +274,7 @@ class Block(Simulable):
     name : str
         Block name
     flows : dict
-        Dictionary of flows included in the Block (if any are added via _init_flowname)
+        Dictionary of flows included in the Block (if any are added via flow_flowname)
     is_copy : bool
         Marker for whether the object is a copy.
     """
@@ -334,8 +299,42 @@ class Block(Simulable):
             Roles and tracking to override the defaults. See Simulable.__init__
         """
         Simulable.__init__(self, name=name, **kwargs)
-        assoc_flows(self, flows=flows)
+        self.assoc_flows(flows=flows)
         self.update_seed()
+
+    def assoc_flows(self, flows={}):
+        """
+        Associate flows with the given Simulable.
+
+        Flows must be defined with the flow_ class variable pointing to the class to
+        initialize (e.g., flow_flowname = FlowClass).
+
+        Parameters
+        ----------
+        flows : dict, optional
+            If flows is provided AND it contains a flowname corresponding to the
+            function's flowname, it will be used instead (so that it can act as a
+            connection to the rest of the model)
+        """
+        if hasattr(self, 'flownames'):
+            flows = {self.flownames.get(fn, fn): flow for fn, flow in flows.items()}
+        flows = flows.copy()
+        for init_att in dir(self):
+            if init_att.startswith("flow_"):
+                att = getattr(self, init_att)
+                attname = init_att[5:]
+                if (inspect.isclass(att) and
+                        issubclass(att, Flow) and
+                        not (attname in self.flows)):
+                    if attname in flows:
+                        self.flows[attname] = flows.pop(attname)
+                    else:
+                        self.flows[attname] = att(attname)
+                    if not isinstance(self, dataobject):
+                        setattr(self, attname, self.flows[attname])
+        if flows:
+            warnings.warn("these flows sent from model "+str([*flows.keys()])
+                          + " not added to class "+str(self.__class__))
 
     def get_typename(self):
         """
@@ -407,11 +406,11 @@ class Block(Simulable):
         faults : list
             list of fault modes to choose from
         default : str/list, optional
-            Default fault to inject when model is run deterministically. 
-            The default is 'first', which chooses the first in the list. 
+            Default fault to inject when model is run deterministically.
+            The default is 'first', which chooses the first in the list.
             Can provide a mode as a str or a list of modes
         combinations : int, optional
-            Number of combinations of faults to elaborate and select from. 
+            Number of combinations of faults to elaborate and select from.
             The default is 1, which just chooses single fault modes.
         """
         if getattr(self.r, 'run_stochastic', True):
@@ -430,7 +429,8 @@ class Block(Simulable):
 
         Returns
         -------
-
+        flowtypes : set
+            Set of flow type names in the model.
         """
         return {obj.__class__.__name__ for name, obj in self.flows.items()}
 
@@ -471,31 +471,33 @@ class Block(Simulable):
 
         Returns
         -------
-
+        mem : Float
+            Approximate impact of the block.
         """
         mem = 0
-        mem+=sys.getsizeof(self.m.opermodes)
+        mem += sys.getsizeof(self.m.opermodes)
         if hasattr(self, 'r'):
-            mem+=sys.getsizeof(self.r)
+            mem += sys.getsizeof(self.r)
         if hasattr(self, 'm'):
             for fm in self.m.faultmodes.values():
-                mem+=sys.getsizeof(fm)
+                mem += sys.getsizeof(fm)
         if hasattr(self, 'mode_state_dict'):
-            mem+=sys.getsizeof(self.mode_state_dict)
+            mem += sys.getsizeof(self.mode_state_dict)
         if hasattr(self, 'timers'):
             for timer in self.timers:
-                mem+=sys.getsizeof(timer)
+                mem += sys.getsizeof(timer)
         if hasattr(self, 'internal_flows'):
             for flowname, flow in self.internal_flows.items():
-                mem+= flow.get_memory()
+                mem += flow.get_memory()
         if hasattr(self, 'ca'):
             for name, comp in self.ca.components.items():
-                mem+=comp.get_memory()
+                mem += comp.get_memory()
         if hasattr(self, 'aa'):
             for name, comp in self.aa.actions.items():
-                mem+=comp.get_memory()
+                mem += comp.get_memory()
         for state in asdict(self.s):
-            mem+=2*sys.getsizeof(state)  # (*2 because both the initstate and the actual state should be counted)
+            # (*2 because both the initstate and the actual state should be counted)
+            mem += 2*sys.getsizeof(state)
         return mem
 
     def return_mutables(self):
@@ -515,28 +517,31 @@ class Block(Simulable):
                 *self.t.return_mutables())
 
     def return_probdens(self):
-        """Gets the probability density associated with a Block and its components/actions (if any)"""
+        """Get the probability density associated with Block and things it contains."""
         state_pd = self.r.return_probdens()
-        if hasattr(self, 'ca'): 
+        if hasattr(self, 'ca'):
             for compname, comp in self.ca.components:
-                state_pd*=comp.return_probdens()
+                state_pd *= comp.return_probdens()
         if hasattr(self, 'aa'):
             for actionname, action in self.aa.actions:
-                state_pd*=action.return_probdens()
+                state_pd *= action.return_probdens()
         return state_pd
 
     def create_hist(self, timerange, track='default'):
-        """Initializes the function state history fxnhist of the model mdl over the time range timerange.
+        """
+        Initialize state history of the model mdl over the timerange.
+
         A pointer to the history is then stored at self.h.
-        
+
         Parameters
         ----------
         timerange : array
             Numpy array of times to initialize in the dictionary.
         track : 'all' or dict, 'none', optional
-            Which model states to track over time, which can be given as 'all' or a 
+            Which model states to track over time, which can be given as 'all' or a
             dict of form {'functions':{'fxn1':'att1'}, 'flows':{'flow1':'att1'}}
             The default is 'all'.
+
         Returns
         -------
         fxnhist : dict
@@ -555,11 +560,11 @@ class Block(Simulable):
                 for at in other_tracks:
                     at_track = get_sub_include(at, track)
                     attr = getattr(self, at, False)
-                    if attr: 
+                    if attr:
                         at_h = attr.create_hist(timerange, at_track)
                         if at_h:
                             hist[at] = at_h
-                
+
                 self.h = hist.flatten()
                 return self.h
             else:
@@ -567,7 +572,7 @@ class Block(Simulable):
 
     def propagate(self, time, faults={}, disturbances={}, run_stochastic=False):
         """
-        Injects and propagates faults through the graph at one time-step
+        Inject and propagates faults through the graph at one time-step.
 
         Parameters
         ----------
@@ -581,14 +586,16 @@ class Block(Simulable):
             With structure {'var1': value}
         run_stochastic : bool
             Whether to run stochastic behaviors or use default values. Default is False.
-            Can set as 'track_pdf' to calculate/track the probability densities of random states over time.
+            Can set as 'track_pdf' to calculate/track the probability densities of
+            random states over time.
         """
         # Step 0: Update block states with disturbances
         for var, val in disturbances.items():
             set_var(self, var, val)
         faults = faults.get(self.name, [])
 
-        # Step 1: Run Dynamic Propagation Methods in Order Specified and Inject Faults if Applicable
+        # Step 1: Run Dynamic Propagation Methods in Order Specified
+        # and Inject Faults if Applicable
         if hasattr(self, 'dynamic_loading_before'):
             self.dynamic_loading_before(self, time)
         if self.is_dynamic():
@@ -606,7 +613,8 @@ class Block(Simulable):
 
             if hasattr(self, 'static_loading'):
                 self.static_loading(time)
-            # Check to see what flows now have new values and add connected functions (done for each because of communications potential)
+            # Check to see what flows now have new values and add connected functions
+            # (done for each because of communications potential)
             active = False
             newmutables = self.return_mutables()
             if oldmutables != newmutables:

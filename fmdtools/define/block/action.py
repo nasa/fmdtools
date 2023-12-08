@@ -2,21 +2,19 @@
 """
 Description: A module to define Actions.
 
-- :class:`Action`:      Class for defining Actions (which have behaviors and live in a function, but have __call__ method for updating)
-- :class:`ComponentArchitecture`:    Class for defining Component Architectures, or sets of components to be contained by a Function
-- :class:`ASG`:         Class for defining Action Sequence Graphs, or sets of actions with specific relationships.
-- :class:`Simulable`:   Base class for object which simulate (blocks and models).
-- :class:`GenericFxn`:  Generic function block. For use when the user has not yet defined a class for the given (to be implemented) 
-                        function block. Acts as a placeholder that enables simulation.
+- :class:`Action`: Class for defining Actions.
 
-- :func:`assoc_flows`:  Associates flows with the given object (Block, ASG, etc.) 
 """
 from fmdtools.define.block.base import Block
 # Actions/ASGs
 
 
 class Action(Block):
-    """Superclass for actions."""
+    """
+    Superclass for actions.
+
+    Actions are blocks which have behaviors and live in an ActionArchitecture.
+    """
 
     __slots__ = ('duration',)
 
@@ -50,6 +48,7 @@ class Action(Block):
         cop = super().copy(*args, **kwargs)
         cop.duration = self.duration
         return cop
+
     def behavior(self, time):
-        """Placeholder behavior method for actions"""
+        """Placeholder behavior method for actions."""
         a = 0

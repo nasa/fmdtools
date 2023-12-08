@@ -195,8 +195,8 @@ class StoreEE(Function):
     __slots__ = ("ee_out", "fs")
     container_s = StoreEEState
     container_m = StoreEEMode
-    _init_ee_out = EE
-    _init_fs = Force
+    flow_ee_out = EE
+    flow_fs = Force
     flownames = {"ee_1": "ee_out", "force_st": "fs"}
 
     def behavior(self, time):
@@ -254,10 +254,10 @@ class DistEE(Function):
     __slots__ = ("ee_in", "ee_mot", "ee_ctl", "st")
     container_s = DistEEState
     container_m = DistEEMode
-    _init_ee_in = EE
-    _init_ee_mot = EE
-    _init_ee_ctl = EE
-    _init_st = Force
+    flow_ee_in = EE
+    flow_ee_mot = EE
+    flow_ee_ctl = EE
+    flow_st = Force
     flownames = {"ee_1": "ee_in", "force_st": "st"}
 
     def condfaults(self, time):
@@ -336,9 +336,9 @@ class HoldPayload(Function):
     __slots__ = ('dofs', 'force_st', 'force_lin')
     container_m = HoldPayloadMode
     container_s = HoldPayloadState
-    _init_dofs = DOFs
-    _init_force_st = Force
-    _init_force_lin = Force
+    flow_dofs = DOFs
+    flow_force_st = Force
+    flow_force_lin = Force
 
     def at_ground(self):
         """Call to check if the drone is at ground level (modified in subclasses)."""
@@ -492,10 +492,10 @@ class AffectDOF(Function, BaseLine):
     __slots__ = ("ee_in", "ctl_in", "dofs", "force")
     container_s = AffectDOFState
     container_m = AffectDOFMode
-    _init_ee_in = EE
-    _init_ctl_in = Control
-    _init_dofs = DOFs
-    _init_force = Force
+    flow_ee_in = EE
+    flow_ctl_in = Control
+    flow_dofs = DOFs
+    flow_force = Force
     flownames = {"ee_mot": "ee_in",
                  "ctl": "ctl_in",
                  "force_lin": "force"}
@@ -580,11 +580,11 @@ class CtlDOF(Function):
     __slots__ = ("ee_in", "des_traj", "ctl", "dofs", "fs")
     container_s = CtlDOFstate
     container_m = CtlDOFMode
-    _init_ee_in = EE
-    _init_des_traj = DesTraj
-    _init_ctl = Control
-    _init_dofs = DOFs
-    _init_fs = Force
+    flow_ee_in = EE
+    flow_des_traj = DesTraj
+    flow_ctl = Control
+    flow_dofs = DOFs
+    flow_fs = Force
     flownames = {"ee_ctl": "ee_in", "force_st": "fs"}
 
     def condfaults(self, time):
@@ -651,10 +651,10 @@ class PlanPath(Function):
 
     __slots__ = ("ee_in", "dofs", "des_traj", "fs")
     container_m = PlanPathMode
-    _init_ee_in = EE
-    _init_dofs = DOFs
-    _init_des_traj = DesTraj
-    _init_fs = Force
+    flow_ee_in = EE
+    flow_dofs = DOFs
+    flow_des_traj = DesTraj
+    flow_fs = Force
     flownames = {"ee_ctl": "ee_in", "force_st": "fs"}
 
     def condfaults(self, time):
@@ -732,7 +732,7 @@ class ViewEnvironment(Function):
     """Drone camera placeholder."""
 
     container_m = ViewModes
-    _init_dofs = DOFs
+    flow_dofs = DOFs
 
 
 class Drone(FunctionArchitecture):

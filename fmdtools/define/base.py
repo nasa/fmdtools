@@ -26,7 +26,7 @@ from recordclass import asdict, dataobject
 
 def get_var(obj, var):
     """
-    Gets the variable value of the object
+    Get the variable value of the object.
 
     Parameters
     ----------
@@ -75,7 +75,7 @@ def get_var(obj, var):
 
 def set_var(obj, var, val):
     """
-    Sets variable of the object to a given value
+    Set variable of the object to a given value.
 
     Parameters
     ----------
@@ -128,7 +128,7 @@ def nest_dict(dic, levels=float('inf'), separator="."):
     key_options = set([h.split(separator)[0] for h in dic.keys()])
     for key in key_options:
         if key in dic:
-            newhist[key] =dic[key]
+            newhist[key] = dic[key]
         else:
             subdict = {histkey[len(key)+1:]: val
                        for histkey, val in dic.items()
@@ -219,34 +219,6 @@ def check_pickleability(obj, verbose=True, try_pick=False, pause=0.2):
     return unpickleable
 
 
-def init_obj_dict(obj, spec, name_end="s", set_attr=False):
-    """
-    Create a dict for the attribute 'spec'.
-
-    Works by finding all attributes from the obj's parameter with the name 'spec' in
-    them and adding them to the dict. Adds the dict to the object.
-
-    Parameters
-    ----------
-    obj : object
-        Object with _spec_ attributes
-    spec : str
-        Name of the attributes to initialize
-    set_attr : bool
-        Whether to also add the individual attributes attr to the obj
-    sub_obj : str
-        Sub-object to form the object from (e.g., 'p' if defined in a parameter).
-        Default is '', which gets from obj.
-    """
-    spec_len = len(spec) + 1
-    specs = {p[spec_len:]: obj.p[p] for p in obj.p.__fields__ if spec in p}
-    specname = spec + name_end
-    setattr(obj, specname, specs)
-    if set_attr:
-        for s_name in specs:
-            setattr(obj, s_name, specs[s_name])
-
-
 def eq_units(rateunit, timeunit):
     """
     Find conversion factor for from rateunit (str) to timeunit (str).
@@ -291,20 +263,19 @@ class BaseObject(object):
 
         Parameters
         ----------
-        *roles : str
-            Roles to initialize. If none provided, initializes all.
+        roletype : str
+            Role to initialize (e.g., 'container'). If none provided, initializes all.
         **kwargs : dict
             Dictionary arguments (or already instantiated objects) to use for the
             attributes.
         """
+        # creates tuple of roles at .roletypes
         container_collection = roletype + 's'
         roles = tuple([at[len(roletype)+1:]
                        for at in dir(self) if at.startswith(roletype+'_')])
         setattr(self, container_collection, roles)
 
-        if not roles:
-            roles = getattr(self, container_collection)
-
+        # initialize roles and add as attributes to the object
         for rolename in roles:
             container_initializer = getattr(self, roletype+'_'+rolename)
             if rolename in kwargs:
@@ -317,6 +288,32 @@ class BaseObject(object):
             container.check_role(rolename)
             setattr(self, rolename, container)
 
+    def init_dict(self, spec, name_end="s", set_attr=False):
+        """
+        Create a collection dict for the attribute 'spec'.
+
+        Works by finding all attributes from the obj's parameter with the name 'spec' in
+        them and adding them to the dict. Adds the dict to the object.
+
+        Parameters
+        ----------
+        obj : object
+            Object with _spec_ attributes
+        spec : str
+            Name of the attributes to initialize
+        set_attr : bool
+            Whether to also add the individual attributes attr to the obj
+        sub_obj : str
+            Sub-object to form the object from (e.g., 'p' if defined in a parameter).
+            Default is '', which gets from obj.
+        """
+        spec_len = len(spec) + 1
+        specs = {p[spec_len:]: self.p[p] for p in self.p.__fields__ if spec in p}
+        specname = spec + name_end
+        setattr(self, specname, specs)
+        if set_attr:
+            for s_name in specs:
+                setattr(self, s_name, specs[s_name])
 
     def init_indicators(self):
         self.indicators = tuple([at[9:] for at in dir(self)

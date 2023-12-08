@@ -85,7 +85,7 @@ Below we define certain functions used in the value function in find_classificat
 
 def reseting_accumulate(vec):
     """
-    Accummulates vector for all positive output.
+    Accummulate vector for all positive output.
 
     (e.g. if input =[1,1,1, 0, 1,1], output = [1,2,3,0,1,2])
     """
@@ -113,6 +113,7 @@ Below we define a class that defines the parameter of the model
 
 class PumpParam(Parameter, readonly=True):
     """PumpParam defines the parameters which the pump may be simulated over."""
+
     # costs to tabulate in cost model (see find_classification)
     cost: tuple = ("repair", "water")
     # delay to use in MoveWater function
@@ -135,7 +136,9 @@ Functions are additionally composed of the following classes:
 
 class ImportEEMode(Mode):
     """
-    Mode contains the probability model for faults is associated with each function:
+    Mode contains the probability model for faults.
+
+    Mode may be associated with each function:
         - failrate = X sets the failure rate for the function
         (to be distributed over all modes)
         - fm_args defines a probability model for each mode, where modes is:
@@ -146,6 +149,7 @@ class ImportEEMode(Mode):
     Note that these rates are given in occurences/hr by default. To change the units,
     use the option units='sec'/'min'/'hr'/'day' etc.
     """
+
     failrate = 1e-5
     fm_args = {'no_v': (0.80, 10000),
                'inf_v': (0.20, 5000)}
@@ -157,17 +161,13 @@ class ImportEEState(State):
 
 
 class ImportEE(Function):
-    __slots__ = ['ee_out']
-    container_m = ImportEEMode
-    container_s = ImportEEState
-    _init_ee_out = Electricity
-    flownames = {"ee_1": "ee_out"}
     """
-    Import EE is the line of electricity going into the pump
+    Import EE is the line of electricity going into the pump.
+
     We define it here as a subclass of the Function superclass (imported from define.py)
     the Function superclass, which adds the common aspects of the function objects.
 
-    Notice how container_m, container_s, _init_ee_out variables are assigned to
+    Notice how container_m, container_s, flow_ee_out variables are assigned to
     Modes, States classes, and the Electricity flow used in this Function. This binds
     types to the Function so they are instiantiated and take the `m` (for mode) and `s`
     (for state) container in the Function, respectively. For flow `ee_out`, this defines
@@ -177,8 +177,16 @@ class ImportEE(Function):
     (which isn't necessary if they are given the same name).
     """
 
+    __slots__ = ['ee_out']
+    container_m = ImportEEMode
+    container_s = ImportEEState
+    flow_ee_out = Electricity
+    flownames = {"ee_1": "ee_out"}
+
     def condfaults(self, time):
         """
+        Conditional fault behavior.
+
         condfaults() changes the state of the system if there is a change in state in a
         flow.
 
@@ -195,6 +203,8 @@ class ImportEE(Function):
 
     def behavior(self, time):
         """
+        Electricity input behavior.
+
         behavior() defines the behavior of the function in terms of
         how the system behaves normally and under faults.
         """
@@ -220,12 +230,11 @@ class ImportWaterMode(Mode):
 class ImportWater(Function):
     __slots__ = ['wat_out']
     container_m = ImportWaterMode
-    _init_wat_out = Water
+    flow_wat_out = Water
     flownames = {"wat_1": "wat_out"}
 
     def behavior(self, time):
-        """ The behavior is that if the flow has a no_wat fault, the water
-        level goes to zero"""
+        """If the flow has a no_wat fault, the water level goes to zero."""
         if self.m.has_fault('no_wat'):
             self.wat_out.s.level = 0.0
         elif self.m.has_fault('less_wat'):
@@ -246,14 +255,15 @@ class ExportWaterMode(Mode):
 
 
 class ExportWater(Function):
-    """ Import Water is the pipe with water going into the pump """
+    """Import Water is the pipe with water going into the pump """
+
     __slots__ = ['wat_in']
     container_m = ExportWaterMode
-    _init_wat_in = Water
+    flow_wat_in = Water
     flownames = {'wat_2': 'wat_in'}
 
     def behavior(self, time):
-        """ Here a blockage changes the area the output water flows through """
+        """Blockage changes the area the output water flows through."""
         if self.m.has_fault('block'):
             self.wat_in.s.area = 0.01
 
@@ -269,14 +279,17 @@ class ImportSigMode(Mode):
 
 
 class ImportSig(Function):
-    """ Import Signal is the on/off switch """
+    """Import Signal is the on/off switch."""
+
     __slots__ = ['sig_out']
     container_m = ImportSigMode
-    _init_sig_out = Signal
+    flow_sig_out = Signal
     flownames = {'sig_1': 'sig_out'}
 
     def behavior(self, time):
-        """ This function has time-dependent behavior.
+        """
+        This function has time-dependent behavior.
+
         To have different operational modes depending on the time, use if/else
         statements on the time variable, which is the simulation time.
 
@@ -319,8 +332,9 @@ class MoveWatMode(Mode):
 
 class MoveWat(Function):
     """
-    Move Water is the pump itself. While one could decompose this further, one function
-    is used for simplicity.
+    Move Water is the pump itself.
+
+    While one could decompose this further, one function is used for simplicity.
 
     Note how this Function has more roles being filled:
 
@@ -329,15 +343,16 @@ class MoveWat(Function):
     - m (mode) by MoveWatMode
     - t (time) by MoveWatTime, which will be used so we can have a timer
     """
+
     __slots__ = ['ee_in', 'sig_in', 'wat_in', 'wat_out']
     container_s = MoveWatStates
     container_p = MoveWatParams
     container_m = MoveWatMode
     container_t = MoveWatTime
-    _init_ee_in = Electricity
-    _init_sig_in = Signal
-    _init_wat_in = Water
-    _init_wat_out = Water
+    flow_ee_in = Electricity
+    flow_sig_in = Signal
+    flow_wat_in = Water
+    flow_wat_out = Water
     flownames = {"ee_1": "ee_in", "sig_1": "sig_in",
                  "wat_1": "wat_in", "wat_2": "wat_out"}
 
@@ -367,14 +382,15 @@ class MoveWat(Function):
 
     def indicate_over_pressure(self, time):
         """
-        Indicators (methods with names indicate_XXX) can be used to mark individual
-        conditions present in the model. Indicators return booleans which are then
-        recorded in the .i structure in the model history
+        Use methods with names indicate_XXX to mark conditions met by the model.
+
+        Indicators return booleans which are then recorded in the .i structure in the
+        model history.
         """
         return self.wat_out.s.pressure > 15.0
 
     def behavior(self, time):
-        """ here we can define how the function will behave with different faults """
+        """Define how the function will behave with different faults."""
         if self.m.has_fault('short'):
             self.ee_in.s.current = 500*10/5000*self.sig_in.s.power*self.ee_in.s.voltage
             self.s.eff = 0.0
