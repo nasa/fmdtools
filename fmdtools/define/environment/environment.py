@@ -3,7 +3,6 @@
 Class for creating environments.
 """
 from fmdtools.define.container.rand import Rand
-from fmdtools.define.base import get_obj_track
 from fmdtools.analyze.common import get_sub_include
 from fmdtools.define.flow.commsflow import CommsFlow
 from fmdtools.define.environment.coords import Coords, ExampleCoords
@@ -136,7 +135,7 @@ class Environment(CommsFlow):
         ga.geoms.ex_poly.s.occupied:    array(1)
         """
         self.h = CommsFlow.create_hist(self, timerange, track)
-        track = get_obj_track(self, track, all_possible=self.all_possible)
+        track = self.get_track(track, all_possible=self.all_possible)
         track = [t for t in track if t not in ('s', 'i')]
         for att in track:
             val = getattr(self, att)

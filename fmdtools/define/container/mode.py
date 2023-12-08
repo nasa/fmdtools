@@ -8,17 +8,16 @@ Has classes:
 - :class:`Mode`: Class for defining the mode property (and associated probability model)
   held in Blocks.
 """
-from recordclass import dataobject
 from typing import ClassVar
 import numpy as np
 import itertools
 import copy
-from fmdtools.define.base import get_true_fields, get_true_field, eq_units
+from fmdtools.define.base import eq_units
 from fmdtools.define.container.base import BaseContainer
 from fmdtools.analyze.history import History
 
 
-class Fault(dataobject, readonly=True, mapping=True):
+class Fault(BaseContainer, readonly=True):
     """
     Stores Default Attributes for for modes to use in Mode.faultmodes.
 
@@ -216,7 +215,7 @@ class Mode(BaseContainer, readonly=False):
                 raise Exception("failrate must be added to " + self.__class__.__name__ +
                                 " Mode definition to calculate failrate from he_args")
             kwargs['failrate'] = self.add_he_rate(*self.he_args)
-        args = get_true_fields(self, *args, **kwargs)
+        args = self.get_true_fields(*args, **kwargs)
         super().__init__(*args)
         if not self.mode:
             self.mode = 'nominal'
@@ -304,7 +303,7 @@ class Mode(BaseContainer, readonly=False):
                 raise Exception("Invalid mode definition in " +
                                 str(self.__class__) + ", " + mode +
                                 " modeparams values should be dict or tuple")
-            args = get_true_fields(Fault, *args, **kwargs)
+            args = Fault().get_true_fields(*args, **kwargs)
             args[0] *= self.failrate
             if type(args[2]) in [tuple, list, set]:
                 args[2] = {ph: 1.0 for ph in args[1] for ph in args[1]}
@@ -572,12 +571,6 @@ class Mode(BaseContainer, readonly=False):
             self.mode = mode_to_mirror.mode
         self.faults.clear()
         self.faults.update(mode_to_mirror.faults)
-
-    def get_true_field(self, fieldname, *args, **kwargs):
-        return get_true_field(self, fieldname, *args, **kwargs)
-
-    def get_true_fields(self, *args, **kwargs):
-        return get_true_fields(self, *args, **kwargs)
 
     def create_hist(self, timerange, track):
         h = History()

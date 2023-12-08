@@ -8,11 +8,10 @@ system attributes that do not change.
 """
 
 import inspect
-from recordclass import dataobject, asdict, astuple
+from recordclass import asdict, astuple
 import warnings
 import numpy as np
 
-from fmdtools.define.base import get_true_fields, get_true_field, set_obj_arg_type
 from fmdtools.define.container.base import BaseContainer
 
 class Parameter(BaseContainer, readonly=True):
@@ -70,7 +69,7 @@ class Parameter(BaseContainer, readonly=True):
                 elif k in kwargs:
                     self.check_lim(k, kwargs[k])
         if set_type:
-            args, kwargs = set_obj_arg_type(self, *args, **kwargs)
+            args, kwargs = self.set_arg_type(*args, **kwargs)
         try:
             super().__init__(*args, **kwargs)
         except TypeError as e:
@@ -165,12 +164,6 @@ class Parameter(BaseContainer, readonly=True):
         if not ('*args' in signature) and ('**kwargs' in signature):
             raise Exception("*args and **kwargs not in __init__()--will not pickle.")
 
-    def get_true_field(self, fieldname, *args, **kwargs):
-        return get_true_field(self, fieldname, *args, **kwargs)
-
-    def get_true_fields(self, *args, **kwargs):
-        return get_true_fields(self, *args, **kwargs)
-
     @classmethod
     def get_set_const(cls, field):
         if "." in field:
@@ -222,6 +215,7 @@ class SimParam(Parameter, readonly=True):
             Whether to use locally-defined timesteps in functions (if any).
             Default is True.
     """
+
     rolename = "sp"
     phases: tuple = (('na', 0, 100),)
     times: tuple = (0, 100)

@@ -1,35 +1,28 @@
 # -*- coding: utf-8 -*-
 """
-Description: A module for defining Models, which are aggregations of Functions and Flows.
+Description: A module for defining Functional Architectures.
 
 Has Classes and Functions:
 
-- :class:`Model`:                       Superclass for defining simulation models.
-
-- :func:`check_model_pickleability` :   Checks if a model is pickleable (and thus able to be parallelized)
+- :class:`FunctionArchitecture`:  Superclass for functional architectures.
 """
 import numpy as np
 from ordered_set import OrderedSet
 import networkx as nx
 import sys
-import time
 import copy
 
 from fmdtools.define.flow.base import Flow, init_flow
-from fmdtools.define.base import check_pickleability, set_var, get_obj_track
+from fmdtools.define.base import set_var
 from fmdtools.define.block.base import Simulable
 from fmdtools.analyze.common import get_sub_include
 from fmdtools.analyze.history import History, init_indicator_hist
 
-#Model superclass    
+
 class FunctionArchitecture(Simulable):
-    __slots__ =['fxns', 'functionorder', '_fxnflows', '_fxninput', '_flowstates',
-                'graph', 'staticfxns', 'dynamicfxns', 'staticflows']
-    default_track=('fxns', 'flows', 'i')
-    default_name='model'
     """
-    Model superclass used to construct the model, return representations of the model, and copy and reset the model when run.
-    
+    Class representing a functional architecture.
+
     Attributes
     ----------
     flows : dict
@@ -40,36 +33,51 @@ class FunctionArchitecture(Simulable):
         dictionaries of (optional) parameters for a given instantiation of a model
     sp : ModelParam
         Simulation Parameters.
-    track : 
-        dictionary of parameters for defining what simulation constructs to record for find_classification
+    track : dict
+        dictionary of parameters for defining what simulation constructs
+        to record for find_classification.
     graph : networkx graph
         fxnflowgraph graph view of the functions and flows (fxnflowgraph)
     graph : networkx graph
         multigraph view of functions and flows
     """
+
+    __slots__ = ['fxns', 'functionorder', '_fxnflows', '_fxninput', '_flowstates',
+                 'graph', 'staticfxns', 'dynamicfxns', 'staticflows']
+    default_track = ('fxns', 'flows', 'i')
+    default_name = 'model'
+
     def __init__(self, name='', p={}, sp={}, r={}, track=''):
         super().__init__(name=name, p=p, sp=sp, r=r, track=track)
-        
-        self.fxns=dict()
-        self.functionorder=OrderedSet() #set is ordered and executed in the order specified in the model
-        self._fxnflows=[]
-        self._fxninput={}
-        self._flowstates={}
+
+        self.fxns = dict()
+        # set is ordered and executed in the order specified in the model
+        self.functionorder = OrderedSet()
+        self._fxnflows = []
+        self._fxninput = {}
+        self._flowstates = {}
+
     def __repr__(self):
         fxnlist = [fxn.__repr__() for fxn in self.fxns.values()]
-        fxnlist = [fstr[:115]+'...'if len(fstr)>120 else fstr for fstr in fxnlist]
-        if len(fxnlist)>15: fxnlist=fxnlist[:15]+["...("+str(len(fxnlist))+' total) \n']
+        fxnlist = [fstr[:115] + '...' if len(fstr) > 120 else fstr for fstr in fxnlist]
+        if len(fxnlist) > 15:
+            fxnlist = fxnlist[:15]+["...("+str(len(fxnlist))+' total) \n']
         fxnstr = ''.join(fxnlist)
         flowlist = [flow.__repr__()+'\n' for flow in self.flows.values()]
-        flowlist = [fstr[:115]+'...\n'if len(fstr)>120 else fstr for fstr in flowlist]
-        if len(flowlist)>15:  flowlist=flowlist[:15]+["...("+str(len(flowlist))+' total) \n']
+        flowlist = [fstr[:115]+'...\n'if len(fstr) > 120 else fstr for fstr in flowlist]
+        if len(flowlist) > 15:
+            flowlist = flowlist[:15]+["...("+str(len(flowlist))+' total) \n']
         flowstr = ''.join(flowlist)
-        return self.__class__.__name__+' model at '+hex(id(self))+' \n'+'FUNCTIONS: \n'+fxnstr+'FLOWS: \n'+flowstr
+        repstr = (self.__class__.__name__ + ' model at ' + hex(id(self)) +
+                  ' \n' + 'FUNCTIONS: \n' + fxnstr + 'FLOWS: \n' + flowstr)
+        return repstr
+
     def get_typename(self):
         return "Model"
-    def update_seed(self,seed=[]):
+
+    def update_seed(self, seed=[]):
         """
-        Updates model seed and the seed in all functions. 
+        Update model seed and the seed in all functions.
 
         Parameters
         ----------
@@ -79,17 +87,18 @@ class FunctionArchitecture(Simulable):
         super().update_seed(seed)
         for fxn in self.fxns:
             self.fxns[fxn].update_seed(self.r.seed)
+
     def get_rand_states(self, auto_update_only=False):
-        """Gets dictionary of random states throughout the model functions"""
+        """Get dictionary of random states throughout the model functions."""
         rand_states = {}
         for fxnname, fxn in self.fxns.items():
-            if fxn.get_rand_states(auto_update_only=auto_update_only): 
-                rand_states[fxnname]= fxn.get_rand_states(auto_update_only=auto_update_only)
+            if fxn.get_rand_states(auto_update_only=auto_update_only):
+                rand_states[fxnname] = fxn.get_rand_states(auto_update_only=auto_update_only)
         return rand_states
 
     def add_flows(self, flownames, fclass=Flow, **kwargs):
         """
-        Adds a set of flows with the same type and initial parameters
+        Add a set of flows with the same type and initial parameters.
 
         Parameters
         ----------
@@ -107,7 +116,7 @@ class FunctionArchitecture(Simulable):
 
     def add_flow(self, flowname, fclass=Flow, **kwargs):
         """
-        Adds a flow with given attributes to the model.
+        Add a flow with given attributes to the model.
 
         Parameters
         ----------
@@ -125,7 +134,7 @@ class FunctionArchitecture(Simulable):
 
     def add_fxn(self, name, fclass, *flownames, args_f='None', **fkwargs):
         """
-        Instantiates a given function in the model.
+        Instantiate a given function in the model.
 
         Parameters
         ----------
@@ -142,43 +151,66 @@ class FunctionArchitecture(Simulable):
             Parameters to send to __init__ method of the Function superclass
         """
         if not getattr(self, 'is_copy', False):
-            flows=self.get_flows(flownames)
-            fkwargs = {**{'r':{"seed":self.r.seed}}, **{'t':{'dt': self.sp.dt}}, **fkwargs}
+            flows = self.get_flows(flownames)
+            fkwargs = {**{'r': {"seed": self.r.seed}},
+                       **{'t': {'dt': self.sp.dt}},
+                       **fkwargs}
             try:
                 self.fxns[name] = fclass(name, flows=flows, args_f=args_f, **fkwargs)
             except TypeError as e:
-                raise TypeError("Poorly specified class "+str(fclass)+" (or poor arguments) ") from e
-            self._fxninput[name]={'name':name, 'flows': flownames, 'args_f': args_f, 'kwargs': fkwargs}
+                raise TypeError("Poorly specified class "+str(fclass) +
+                                " (or poor arguments) ") from e
+            self._fxninput[name] = {'name': name,
+                                    'flows': flownames,
+                                    'args_f': args_f,
+                                    'kwargs': fkwargs}
             for flowname in flownames:
                 self._fxnflows.append((name, flowname))
             self.functionorder.update([name])
-    def set_functionorder(self,functionorder):
-        """Manually sets the order of functions to be executed (otherwise it will be executed based on the sequence of add_fxn calls)"""
-        if not self.functionorder.difference(functionorder): self.functionorder=OrderedSet(functionorder)
-        else:                                       raise Exception("Invalid list: "+str(functionorder)+" should have elements: "+str(self.functionorder))
+
+    def set_functionorder(self, functionorder):
+        """
+        Manually sets the order of functions to be executed.
+
+        (otherwise it will be executed based on the sequence of add_fxn calls)
+        """
+        if not self.functionorder.difference(functionorder):
+            self.functionorder = OrderedSet(functionorder)
+        else:
+            raise Exception("Invalid list: "+str(functionorder) +
+                            " should have elements: "+str(self.functionorder))
     def get_flows(self,flownames):
-        """ Returns a list of the model flow objects """
-        return {flowname:self.flows[flowname] for flowname in flownames}
+        """Return a list of the model flow objects."""
+        return {flowname: self.flows[flowname] for flowname in flownames}
+
     def fxns_of_class(self, ftype):
-        """Returns dict of functionname:functionobjects corresponding to the given class name ftype"""
-        return {fxn:obj for fxn, obj in self.fxns.items() if obj.__class__.__name__==ftype}
+        """Return dict of funcitons corresponding to the given class name ftype."""
+        return {fxn: obj for fxn, obj in self.fxns.items()
+                if obj.__class__.__name__ == ftype}
+
     def fxnclasses(self):
-        """Returns the set of class names used in the model"""
+        """Return the set of class names used in the model."""
         return {obj.__class__.__name__ for fxn, obj in self.fxns.items()}
+
     def flowtypes(self):
-        """Returns the set of flow types used in the model"""
+        """Return the set of flow types used in the model."""
         return {obj.__class__.__name__ for f, obj in self.flows.items()}
+
     def flows_of_type(self, ftype):
-        """Returns the set of flows for each flow type"""
-        return {flow for flow, obj in self.flows.items() if obj.__class__.__name__==ftype}
+        """Return the set of flows for each flow type."""
+        return {flow for flow, obj in self.flows.items()
+                if obj.__class__.__name__ == ftype}
+
     def flowtypes_for_fxnclasses(self):
-        """Returns the flows required by each function class in the model (as a dict)"""
+        """Return the flows required by each function class in the model (as a dict)."""
         class_relationship = dict()
         for fxn, obj in self.fxns.items():
-            if class_relationship.get(obj.__class__.__name__,False):
+            if class_relationship.get(obj.__class__.__name__, False):
                 class_relationship[obj.__class__.__name__].update(obj.get_flowtypes())
-            else: class_relationship[obj.__class__.__name__] = set(obj.get_flowtypes())
+            else:
+                class_relationship[obj.__class__.__name__] = set(obj.get_flowtypes())
         return class_relationship
+
     def build(self, functionorder=[], require_connections=True, update_seed=True):
         """
         Builds the model graph after the functions have been added.
@@ -193,23 +225,25 @@ class FunctionArchitecture(Simulable):
                 self.update_seed()
             if functionorder:
                 self.set_functionorder(functionorder)
-            self.staticfxns = OrderedSet([fxnname for fxnname, fxn in self.fxns.items() 
+            self.staticfxns = OrderedSet([fxnname for fxnname, fxn in self.fxns.items()
                                           if fxn.is_static()])
-            self.dynamicfxns = OrderedSet([fxnname for fxnname, fxn in self.fxns.items() 
+            self.dynamicfxns = OrderedSet([fxnname for fxnname, fxn in self.fxns.items()
                                            if fxn.is_dynamic()])
             self.construct_graph(require_connections=require_connections)
-            self.staticflows = [flow for flow in self.flows if any([ n in self.staticfxns for n in self.graph.neighbors(flow)])]
+            self.staticflows = [flow for flow in self.flows
+                                if any([n in self.staticfxns
+                                        for n in self.graph.neighbors(flow)])]
+
     def construct_graph(self, require_connections=True):
-        """
-        Creates .graph nx.graph representation of the model
-        """
-        self.graph=nx.Graph()
+        """Create .graph nx.graph representation of the model."""
+        self.graph = nx.Graph()
         self.graph.add_nodes_from(self.fxns, bipartite=0)
         self.graph.add_nodes_from(self.flows, bipartite=1)
         self.graph.add_edges_from(self._fxnflows)
-        
+
         dangling_nodes = [e for e in nx.isolates(self.graph)] # check to see that all functions/flows are connected
         if dangling_nodes and require_connections: raise Exception("Fxns/flows disconnected from model: "+str(dangling_nodes))
+
     def calc_repaircost(self, additional_cost=0, default_cost=0, max_cost=np.inf):
         """
         Calculates the repair cost of the fault modes in the model based on given
@@ -220,7 +254,7 @@ class FunctionArchitecture(Simulable):
         additional_cost : int/float
             Additional cost to add if there are faults in the model. Default is 0.
         default_cost : int/float
-            Cost to use for each fault mode if no fault cost information given 
+            Cost to use for each fault mode if no fault cost information given
             in assoc_faultmodes/ Default is 0.
         max_cost : int/float
             Maximum cost of repair (e.g. cost of replacement). Default is np.inf
@@ -229,49 +263,54 @@ class FunctionArchitecture(Simulable):
         -------
         repair_cost : float
             Cost of repairing the fault modes in the given model
-
         """
         repmodes, modeprops = self.return_faultmodes()
-        modecost = sum([ c['cost'] if c['cost']>0.0 else default_cost for m in modeprops.values() for c in m.values()])
+        modecost = sum([c['cost'] if c['cost'] > 0.0 else default_cost
+                        for m in modeprops.values() for c in m.values()])
         repair_cost = np.min([modecost, max_cost])
         return repair_cost
+
     def return_faultmodes(self):
         """
-        Returns faultmodes present in the model
+        Return faultmodes present in the model.
 
         Returns
         -------
         modes : dict
             Fault modes present in the model indexed by function name
         modeprops : dict
-            Fault mode properties (defined in the function definition) with structure {fxn:mode:properties}
+            Fault mode properties (defined in the function definition).
+            Has structure {fxn:mode:properties}.
         """
         modes, modeprops = {}, {}
         for fxnname, fxn in self.fxns.items():
             ms, mps = fxn.return_faultmodes()
-            if ms: 
+            if ms:
                 modeprops[fxnname] = mps
                 modes[fxnname] = ms
         return modes, modeprops
+
     def get_memory(self):
         """
-        Returns the approximate memory usage of the model, along with a profile of fxn/flow memory usage.
+        Return the approximate memory usage of the model.
+
+        Includes profile of fxn/flow memory usage.
         """
-        mem_profile={}
+        mem_profile = {}
         mem = 0
         mem_profile['params'] = sys.getsizeof(self.p)
         mem_profile['params'] += sys.getsizeof(self.sp)
         mem_profile['params'] += sys.getsizeof(self.track)
         for fxnname, fxn in self.fxns.items():
-            mem_profile[fxnname]=fxn.get_memory()
-        for flowname,flow in self.flows.items():
-            mem_profile[flowname]=flow.get_memory()
+            mem_profile[fxnname] = fxn.get_memory()
+        for flowname, flow in self.flows.items():
+            mem_profile[flowname] = flow.get_memory()
         mem = np.sum([i for i in mem_profile.values()])
         return mem, mem_profile
 
     def copy(self):
         """
-        Copies the model at the current state.
+        Copy the model at the current state.
 
         Returns
         -------
@@ -283,7 +322,7 @@ class FunctionArchitecture(Simulable):
         cop.__init__(p=getattr(self, 'p', {}),
                      sp=getattr(self, 'sp', {}),
                      track=getattr(self, 'track', {}),
-                     r = {'seed': self.r.seed})
+                     r={'seed': self.r.seed})
         cop.r.assign(self.r)
 
         for flowname, flow in self.flows.items():
@@ -320,7 +359,7 @@ class FunctionArchitecture(Simulable):
         return cop
 
     def reset(self):
-        """Resets the model to the initial state (with no faults, etc)"""
+        """Reset the model to the initial state (with no faults, etc)."""
         for flowname, flow in self.flows.items():
             flow.reset()
         for fxnname, fxn in self.fxns.items():
@@ -328,14 +367,15 @@ class FunctionArchitecture(Simulable):
         self.r.reset()
 
     def return_probdens(self):
-        """Returns the probability desnity of the model distributions given a """
-        probdens=1.0
+        """Return the probability density of the model distributions."""
+        probdens = 1.0
         for fxn in self.fxns.values():
             probdens *= fxn.return_probdens()
         return probdens
+
     def set_vars(self, *args, **kwargs):
         """
-        Sets variables in the model to set values (useful for optimization, etc.)
+        Set variables in the model to set values (useful for optimization, etc.).
 
         Parameters
         ----------
@@ -349,7 +389,7 @@ class FunctionArchitecture(Simulable):
             attribute-value pairs. If provided, must be passed using ** syntax:
             mdl.set_vars(**{'fxnname.varname':value})
         """
-        if len(args) > 0: 
+        if len(args) > 0:
             varlist = args[0]
             varvalues = args[1]
             if type(varlist) == str:
@@ -360,8 +400,8 @@ class FunctionArchitecture(Simulable):
                 raise Exception("length of varlist and varvalues do not correspond: "
                                 + str(len(varlist)) + ", "+str(len(varvalues)))
         else:
-            varlist=[]
-            varvalues=[]
+            varlist = []
+            varvalues = []
         if kwargs:
             varlist = varlist + [*kwargs.keys()]
             varvalues = varvalues + [*kwargs.values()]
@@ -390,8 +430,8 @@ class FunctionArchitecture(Simulable):
     def create_hist(self, timerange, track):
         if not hasattr(self, 'h'):
             hist = History()
-            track = get_obj_track(self, track,
-                                  all_possible=FunctionArchitecture.default_track)
+            track = self.get_track(track,
+                                   all_possible=FunctionArchitecture.default_track)
             init_indicator_hist(self, hist, timerange, track)
             fxn_track = get_sub_include('fxns', track)
             if fxn_track:
@@ -401,30 +441,33 @@ class FunctionArchitecture(Simulable):
                     if fh:
                         hist.fxns[fxnname] = fh
             self.add_flow_hist(hist, timerange, track)
-            #if len(hist)<len(track) and track!='all': #TODO: this warning should be valid for all hists
-            #    raise Exception("History doesn't match tracking options (are names correct?): \n track="+str(track)+"\n hist= \n"+str(hist))
             self.h = hist.flatten()
         return self.h
+
     def propagate(self, time, fxnfaults={}, disturbances={}, run_stochastic=False):
         """
-        Injects and propagates faults through the graph at one time-step
+        Injects and propagates faults through the graph at one time-step.
 
         Parameters
         ----------
         time : float
             The current timestep.
         fxnfaults : dict
-            Faults to inject during this propagation step. With structure {'function':['fault1', 'fault2'...]}
-        disturbances : 
-            Variables to change during this propagation step. With structure {'function.var1':value}
+            Faults to inject during this propagation step.
+            With structure {'function':['fault1', 'fault2'...]}
+        disturbances : dict
+            Variables to change during this propagation step.
+            With structure {'function.var1':value}
         run_stochastic : bool
             Whether to run stochastic behaviors or use default values. Default is False.
-            Can set as 'track_pdf' to calculate/track the probability densities of random states over time.
+            Can set as 'track_pdf' to calculate/track the probability densities of
+            random states over time.
         """
-        #Step 0: Update model states with disturbances
+        # Step 0: Update model states with disturbances
         self.set_vars(**disturbances)
 
-        #Step 1: Run Dynamic Propagation Methods in Order Specified and Inject Faults if Applicable
+        # Step 1: Run Dynamic Propagation Methods in Order Specified
+        # Inject Faults if Applicable
         for fxnname in self.dynamicfxns.union(fxnfaults.keys()):
             fxn = self.fxns[fxnname]
             faults = fxnfaults.get(fxnname, [])
@@ -432,14 +475,15 @@ class FunctionArchitecture(Simulable):
                 faults = [faults]
             fxn('dynamic', faults=faults, time=time, run_stochastic=run_stochastic)
 
-        #Step 2: Run Static Propagation Methods
+        # Step 2: Run Static Propagation Methods
         try:
             self.prop_static(time, run_stochastic=run_stochastic)
         except Exception as e:
-            raise Exception("Error in static propagation at time t="+str(time)) 
+            raise Exception("Error in static propagation at time t=" + str(time)) from e
+
     def prop_static(self, time, run_stochastic=False):
         """
-        Propagates behaviors through model graph (static propagation step)
+        Propagate behaviors through model graph (static propagation step).
 
         Parameters
         ----------
@@ -447,26 +491,28 @@ class FunctionArchitecture(Simulable):
             Current time-step.
         run_stochastic : bool
             Whether to run stochastic behaviors or use default values. Default is False.
-            Can set as 'track_pdf' to calculate/track the probability densities of random states over time.
+            Can set as 'track_pdf' to calculate/track the probability densities of
+            random states over time.
         """
-        #set up history of flows to see if any has changed
-        activefxns=self.staticfxns.copy()
-        nextfxns=set()
-        if not self._flowstates: 
-            self._flowstates=dict.fromkeys(self.staticflows)
+        # set up history of flows to see if any has changed
+        activefxns = self.staticfxns.copy()
+        nextfxns = set()
+        if not self._flowstates:
+            self._flowstates = dict.fromkeys(self.staticflows)
             for flowname in self.staticflows:
-                self._flowstates[flowname]=self.flows[flowname].return_mutables()
-        n=0
+                self._flowstates[flowname] = self.flows[flowname].return_mutables()
+        n = 0
         while activefxns:
             flows_to_check = {*self.staticflows}
             for fxnname in list(activefxns).copy():
-                #Update functions with new values, check to see if new faults or states
+                # Update functions with new values, check to see if new faults or states
                 oldmutables = self.fxns[fxnname].return_mutables()
                 self.fxns[fxnname]('static', time=time, run_stochastic=run_stochastic)
                 if oldmutables!=self.fxns[fxnname].return_mutables(): 
                     nextfxns.update([fxnname])
-                
-                #Check to see what flows now have new values and add connected functions (done for each because of communications potential)
+
+                # Check what flows now have new values and add connected functions
+                # (done for each because of communications potential)
                 for flowname in self.fxns[fxnname].flows:
                     if flowname in flows_to_check:
                         try:
@@ -477,17 +523,19 @@ class FunctionArchitecture(Simulable):
                             raise Exception("Invalid mutables in flow: "+flowname) from e
             # check remaining flows that have not been checked already
             for flowname in flows_to_check:
-                if self._flowstates[flowname]!=self.flows[flowname].return_mutables():
-                    nextfxns.update(set([n for n in self.graph.neighbors(flowname) if n in self.staticfxns]))
+                if self._flowstates[flowname] != self.flows[flowname].return_mutables():
+                    nextfxns.update(set([n for n in self.graph.neighbors(flowname)
+                                         if n in self.staticfxns]))
             # update flowstates
             for flowname in self.staticflows:
-                self._flowstates[flowname]=self.flows[flowname].return_mutables()
-            activefxns=nextfxns.copy()
+                self._flowstates[flowname] = self.flows[flowname].return_mutables()
+            activefxns = nextfxns.copy()
             nextfxns.clear()
             n += 1
-            if n > 1000: #break if this is going for too long
-                raise Exception("Undesired looping between functions in static propagation step",
-                                "at t=" + str(time) + ", these functions remain active:" + str(activefxns))
+            if n > 1000:  # break if this is going for too long
+                raise Exception("Undesired looping for functions in static propagation",
+                                "at t=" + str(time) + ", these functions remain active:"
+                                + str(activefxns))
 
     def plot_dynamic_run_order(self, rotateticks=False, title="Dynamic Run Order"):
         """
@@ -559,20 +607,3 @@ class FunctionArchitecture(Simulable):
                 fig.suptitle(title, fontweight='bold')
         return fig, ax
 
-
-def check_model_pickleability(model, try_pick=False):
-    """ Checks to see which attributes of a model object will pickle, providing more detail about functions/flows"""
-    print('FLOWS ')
-    for flowname, flow in model.flows.items():
-        print(flowname)
-        check_pickleability(flow, try_pick=try_pick)
-    print('FUNCTIONS ')
-    for fxnname, fxn in model.fxns.items():
-        print(fxnname)
-        check_pickleability(fxn, try_pick=try_pick)
-    time.sleep(0.2)
-    print('MODEL')
-    unpickleable = check_pickleability(model, try_pick=try_pick)
-
-
-        

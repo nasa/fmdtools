@@ -247,7 +247,7 @@ class StochasticPumpTests(unittest.TestCase, CommonTests):
 
     def test_mdl_pickle(self):
         from fmdtools.define.block import SimParam
-        from fmdtools.define.architecture.function import check_model_pickleability
+        from fmdtools.define.architecture.base import check_model_pickleability
         sp = SimParam(phases=(('start', 0, 4), ('on', 5, 49), ('end', 50, 55)),
                       times=(0, 20, 55), dt=1.0, units='hr')
         mdl = Pump(r={'seed': 5}, sp=sp)

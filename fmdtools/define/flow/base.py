@@ -7,13 +7,12 @@ Description: A module to define flows used to conect functions in a model. Conta
 - :class:`CommsFlow`:   Class for flows which enable communications (e.g., sending/recieving messages) between functions
 - :func:`init_flow`:    Flow constructor/factory method.
 """
-import copy
 import sys
 from recordclass import asdict, astuple
 
 from fmdtools.define.container.parameter import Parameter
 from fmdtools.define.container.state import State
-from fmdtools.define.base import get_obj_track, BaseObject
+from fmdtools.define.base import BaseObject
 from fmdtools.analyze.common import get_sub_include
 from fmdtools.analyze.history import History, init_indicator_hist
 
@@ -80,9 +79,9 @@ class Flow(BaseObject):
         if hasattr(self, 'h'):
             return self.h
         else:
-            track = get_obj_track(self, track, all_possible = Flow.default_track)
+            track = self.get_track(track, all_possible=Flow.default_track)
             if track:
-                h=History()
+                h = History()
                 sh = self.s.create_hist(timerange, get_sub_include('s', track))
                 if sh:
                     h['s'] = sh

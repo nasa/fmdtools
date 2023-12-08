@@ -8,7 +8,6 @@ from typing import ClassVar
 from recordclass import dataobject, asdict
 from fmdtools.analyze.common import get_sub_include
 from fmdtools.analyze.history import History, init_indicator_hist
-from fmdtools.define.base import get_true_fields, get_true_field
 
 
 class ComponentArchitecture(dataobject, mapping=True):
@@ -74,12 +73,6 @@ class ComponentArchitecture(dataobject, mapping=True):
     def reset(self):
         for name, component in self.components.items():
             component.reset()
-
-    def get_true_field(self, fieldname, *args, **kwargs):
-        return get_true_field(self, fieldname, *args, **kwargs)
-
-    def get_true_fields(self, *args, **kwargs):
-        return get_true_fields(self, *args, **kwargs)
 
     def create_hist(self, timerange, track):
         """

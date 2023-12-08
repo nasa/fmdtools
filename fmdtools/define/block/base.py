@@ -14,8 +14,7 @@ import inspect
 import warnings
 from recordclass import dataobject, asdict, astuple
 
-from fmdtools.define.base import BaseObject
-from fmdtools.define.base import get_obj_track, set_var, get_var
+from fmdtools.define.base import BaseObject, set_var, get_var
 from fmdtools.define.container.state import State
 from fmdtools.define.container.parameter import Parameter, SimParam
 from fmdtools.define.container.rand import Rand
@@ -547,7 +546,7 @@ class Block(Simulable):
             return self.h
         else:
             all_track = self.default_track+['flows']
-            track = get_obj_track(self, track, all_track)
+            track = self.get_track(track, all_track)
             if track:
                 hist = History()
                 init_indicator_hist(self, hist, timerange, track)

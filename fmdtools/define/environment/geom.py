@@ -9,7 +9,6 @@ Future:
 from fmdtools.define.base import BaseObject, init_obj_dict
 from fmdtools.define.container.parameter import Parameter
 from fmdtools.define.container.state import State
-from fmdtools.define.base import get_obj_track
 from fmdtools.analyze.common import get_sub_include
 from fmdtools.analyze.history import History, init_indicator_hist
 from fmdtools.analyze.common import setup_plot, consolidate_legend
@@ -112,7 +111,7 @@ class Geom(BaseObject):
         return astuple(self.s)
 
     def create_hist(self, timerange, track):
-        track = get_obj_track(self, track, all_possible=self.all_possible)
+        track = self.get_track(track, all_possible=self.all_possible)
         h = History()
         for att in track:
             att_track = get_sub_include(att, track)
@@ -616,7 +615,7 @@ class GeomArch(BaseObject):
         geoms.ex_line.s.occupied:       array(1)
         geoms.ex_poly.s.occupied:       array(1)
         """
-        track = get_obj_track(self, track, all_possible=self.all_possible)
+        track = self.get_track(track, all_possible=self.all_possible)
         hist = History()
         init_indicator_hist(self, hist, timerange, track)
         geoms_track = get_sub_include('geoms', track)

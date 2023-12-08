@@ -25,7 +25,8 @@ The flows are:
 from fmdtools.define.block.function import Function
 from fmdtools.define.container.mode import Mode
 from fmdtools.define.flow.base import Flow
-from fmdtools.define.architecture.function import FunctionArchitecture, check_model_pickleability
+from fmdtools.define.architecture.function import FunctionArchitecture
+from fmdtools.define.architecture.base import check_model_pickleability
 from fmdtools.define.container.parameter import Parameter
 from fmdtools.define.container.state import State
 from fmdtools.define.container.time import Time
@@ -43,7 +44,8 @@ Flows contain State objects which hold variables, but may be given other attribu
 
 
 class WaterStates(State):
-    """States for Water Flows"""
+    """States for Water Flows."""
+
     flowrate: float = 1.0
     pressure: float = 1.0
     area: float = 1.0
@@ -55,7 +57,8 @@ class Water(Flow):
 
 
 class EEStates(State):
-    """States for EE flows"""
+    """States for EE flows."""
+
     current: float = 1.0
     voltage: float = 1.0
 
@@ -65,7 +68,8 @@ class Electricity(Flow):
 
 
 class SignalStates(State):
-    """States of Signal Flows"""
+    """States of Signal Flows."""
+
     power: float = 1.0
 
 
@@ -80,8 +84,11 @@ Below we define certain functions used in the value function in find_classificat
 
 
 def reseting_accumulate(vec):
-    """ Accummulates vector for all positive output
-    (e.g. if input =[1,1,1, 0, 1,1], output = [1,2,3,0,1,2])"""
+    """
+    Accummulates vector for all positive output.
+
+    (e.g. if input =[1,1,1, 0, 1,1], output = [1,2,3,0,1,2])
+    """
     newvec = vec
     val = 0
     for ind, i in enumerate(vec):
@@ -94,7 +101,7 @@ def reseting_accumulate(vec):
 
 
 def accumulate(vec):
-    """ Accummulates vector (e.g. if input =[1,1,1, 0, 1,1], output = [1,2,3,3,4,5])"""
+    """Accummulate vector (e.g. if input =[1,1,1, 0, 1,1], output = [1,2,3,3,4,5])."""
     return [sum(vec[:i+1]) for i in range(len(vec))]
 
 
