@@ -19,12 +19,12 @@ Flows:
     - EE
     - Camera
 """
-from fmdtools.define.role.parameter import Parameter, SimParam
-from fmdtools.define.role.state import State
-from fmdtools.define.role.mode import Mode
-from fmdtools.define.block import FxnBlock
-from fmdtools.define.model import Model
-from fmdtools.define.flow import Flow
+from fmdtools.define.container.parameter import Parameter, SimParam
+from fmdtools.define.container.state import State
+from fmdtools.define.container.mode import Mode
+from fmdtools.define.block.function import Function
+from fmdtools.define.architecture.function import FunctionArchitecture
+from fmdtools.define.flow.base import Flow
 from fmdtools.sim.approach import SampleApproach, NominalApproach
 
 
@@ -38,7 +38,7 @@ from rover_model import translate_angle, turn_func, sin_func, sin_angle_func, in
 from rover_model import Environment, Power
 from rover_model import DegParam
 
-class Operations(FxnBlock):
+class Operations(Function):
     def __init__(self, name, flows, params):
         self.p=params
         super().__init__(name, flows, flownames={'Stimulus': 'Control'}, states={'t_comp':np.NaN})
@@ -70,7 +70,7 @@ class Operations(FxnBlock):
 
 # Check about mech_loss
 ## Drive - inherit most parts from Drive (but not faults)
-class Drive(FxnBlock):
+class Drive(Function):
     def __init__(self, name, flows, params):
         super().__init__(name, flows, flownames={"EE_15":"EE_in"})
         base_f, base_d = params.friction, params.drift
@@ -93,7 +93,7 @@ class Drive(FxnBlock):
                             y = np.sin(np.pi/180 *self.Ground.ang) * self.Ground.vel)
 
 
-class GenerateVideo(FxnBlock):
+class GenerateVideo(Function):
     def __init__(self, name, flows):
         self.set_atts(rad=1)
         super().__init__(name, flows, flownames={'EE_12': 'EE'})
@@ -127,7 +127,7 @@ class GenerateVideo(FxnBlock):
             self.Video.heading = self.Ground.ang
 
 
-class Communications(FxnBlock):
+class Communications(Function):
     def __init__(self, name, flows):
         super().__init__(name, flows,  flownames={'EE_12': 'EE'})
         self.assoc_modes({'failed_video', 'failed_motorcontrol', 'failed_powercontrol'}, [
@@ -495,7 +495,7 @@ class RoverParam(Parameter, readonly=True):
 
 
 
-class Controller(FxnBlock):
+class Controller(Function):
     def __init__(self, name, flows,params):
         #self.add_params(params)
         super().__init__(name, flows, states={'attention':params.attention})
@@ -608,7 +608,7 @@ class Controller(FxnBlock):
             return False
 
 
-class Rover(Model):
+class Rover(FunctionArchitecture):
     def __init__(self, params=RoverParam(),
                  modelparams=ModelParam(times=(0, 80),phases=(('start',0, 30), ('end', 31, 80))),
                  valparams={'end_rad':1.0}):

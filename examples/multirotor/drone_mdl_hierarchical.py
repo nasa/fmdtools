@@ -7,12 +7,12 @@ Description: A fault model of a multi-rotor drone.
 """
 import numpy as np
 import fmdtools.sim as fs
-import fmdtools.analyze as an
 
-from fmdtools.define.role.parameter import Parameter
-from fmdtools.define.role.state import State
-from fmdtools.define.block import Component, CompArch
-from fmdtools.define.model import Model
+from fmdtools.define.container.parameter import Parameter
+from fmdtools.define.container.state import State
+from fmdtools.define.block.component import Component
+from fmdtools.define.architecture.component import ComponentArchitecture
+from fmdtools.define.architecture.function import FunctionArchitecture
 
 from examples.multirotor.drone_mdl_static import m2to1, DistEE, BaseLine
 from examples.multirotor.drone_mdl_static import Force, EE, Control, DOFs, DesTraj
@@ -42,7 +42,7 @@ class OverallAffectDOFState(State):
     amp_factor: float = 1.0
 
 
-class AffectDOFArch(CompArch):
+class AffectDOFArch(ComponentArchitecture):
     """
     Line Architecture defined by parameter 'archtype'.
 
@@ -104,7 +104,7 @@ class AffectDOFArch(CompArch):
 class AffectDOF(AffectDOFDynamic):
     """Rotor locomotion (multi-component extension)."""
 
-    role_s = OverallAffectDOFState
+    container_s = OverallAffectDOFState
     _init_ca = AffectDOFArch
 
     def behavior(self, time):
@@ -183,8 +183,8 @@ class AffectDOF(AffectDOFDynamic):
 class Line(Component, BaseLine):
     """Individual version of a line (extends BaseLine in static model)."""
 
-    role_s = AffectDOFState
-    role_m = AffectDOFMode
+    container_s = AffectDOFState
+    container_m = AffectDOFMode
 
     def behavior(self, ee_in, ctlin, u_fact, f_fact, force):
         """Calculate air, ee out based on inputs and modes."""
@@ -216,10 +216,10 @@ class DroneParam(Parameter, readonly=True):
 class Drone(DynDrone):
     """Hierarchical version of the drone model."""
 
-    role_p = DroneParam
+    container_p = DroneParam
 
     def __init__(self, **kwargs):
-        Model.__init__(self, **kwargs)
+        FunctionArchitecture().__init__(self, **kwargs)
         # add flows to the model
         self.add_flow('force_st', Force)
         self.add_flow('force_lin', Force)

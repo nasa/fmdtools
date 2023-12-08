@@ -6,12 +6,12 @@ Created: June 2019
 Description: A fault model of a multi-rotor drone.
 """
 import numpy as np
-from fmdtools.define.role.parameter import Parameter
-from fmdtools.define.role.state import State
-from fmdtools.define.role.time import Time
-from fmdtools.define.role.mode import Mode
-from fmdtools.define.block import FxnBlock
-from fmdtools.define.model import Model
+from fmdtools.define.container.parameter import Parameter
+from fmdtools.define.container.state import State
+from fmdtools.define.container.time import Time
+from fmdtools.define.container.mode import Mode
+from fmdtools.define.block.function import Function
+from fmdtools.define.architecture.function import FunctionArchitecture
 from fmdtools.define.environment.environment import Environment
 from fmdtools.define.environment.coords import Coords, CoordsParam
 
@@ -65,7 +65,7 @@ class SightGrid(Coords):
     Used to calculate environmental risk and number of points viewed.
     """
 
-    role_p = DroneEnvironmentGridParam
+    container_p = DroneEnvironmentGridParam
 
     def init_properties(self, *args, **kwargs):
         """Set target true between 0 and 150 in the x and 10 and 160 in the y."""
@@ -75,8 +75,8 @@ class SightGrid(Coords):
 class DroneEnvironment(Environment):
     """Drone environment flow (contains grid)."""
 
-    role_c = SightGrid
-    role_p = DroneEnvironmentGridParam
+    container_c = SightGrid
+    container_p = DroneEnvironmentGridParam
 
 
 class StoreEE(StaticstoreEE):
@@ -180,14 +180,14 @@ class PlanPathTime(Time):
     timernames = ('pause',)
 
 
-class PlanPath(FxnBlock):
+class PlanPath(Function):
     """Path planning for the drone."""
 
     __slots__ = ('ee_ctl', 'dofs', 'des_traj', 'fs', 'dofs')
-    role_t = PlanPathTime
-    role_m = PlanPathMode
-    role_s = PlanPathState
-    role_p = PlanPathParams
+    container_t = PlanPathTime
+    container_m = PlanPathMode
+    container_s = PlanPathState
+    container_p = PlanPathParams
     _init_ee_ctl = EE
     _init_dofs = DOFs
     _init_des_traj = DesTraj
@@ -351,7 +351,7 @@ class AffectDOF(AffectDOFStatic):
         self.dofs.s.roundto(x=0.01, y=0.01, z=0.01)
 
 
-class ViewEnvironment(FxnBlock):
+class ViewEnvironment(Function):
     """Camera for the drone. Determines which aspects of the environment are viewed."""
 
     _init_dofs = DOFs
@@ -368,7 +368,7 @@ class ViewEnvironment(FxnBlock):
                                      self.dofs.s.y + height/2)
 
 
-class Drone(Model):
+class Drone(FunctionArchitecture):
     """Dynamic drone model."""
 
     __slots__ = ()

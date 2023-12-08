@@ -6,12 +6,14 @@ Created: June 2019, revised Nov 2022
 Description: A fault model of a multi-rotor drone.
 """
 import numpy as np
-from fmdtools.define.role.parameter import Parameter
-from fmdtools.define.role.state import State
-from fmdtools.define.role.mode import Mode
-from fmdtools.define.block import FxnBlock, Component, CompArch
-from fmdtools.define.flow import Flow
-from fmdtools.define.model import Model
+from fmdtools.define.container.parameter import Parameter
+from fmdtools.define.container.state import State
+from fmdtools.define.container.mode import Mode
+from fmdtools.define.block.function import Function
+from fmdtools.define.block.component import Component
+from fmdtools.define.architecture.component import ComponentArchitecture
+from fmdtools.define.flow.base import Flow
+from fmdtools.define.architecture.function import FunctionArchitecture
 from fmdtools.analyze.history import History
 
 from examples.multirotor.drone_mdl_static import EE, Force, Control, DesTraj, DOFs
@@ -121,7 +123,7 @@ class HSigState(State):
 class HSig(Flow):
     """Health signal flow."""
 
-    role_s = HSigState
+    container_s = HSigState
 
 
 class RSigState(State):
@@ -133,7 +135,7 @@ class RSigState(State):
 class RSig(Flow):
     """Recovery signal flow."""
 
-    role_s = RSigState
+    container_s = RSigState
 
 # DEFINE FUNCTIONS
 
@@ -228,9 +230,9 @@ class BatParam(Parameter):
 class Battery(Component):
     """Battery component used to hold energy in distributed architecture."""
 
-    role_s = BatState
-    role_m = BatMode
-    role_p = BatParam
+    container_s = BatState
+    container_m = BatMode
+    container_p = BatParam
 
     def behavior(self, fs, ee_outr, time):
         """Battery behavior returning electrical transference, soc, and fault state."""
@@ -266,7 +268,7 @@ class Battery(Component):
         return self.s.e_t, self.s.soc, er_res
 
 
-class BatArch(CompArch):
+class BatArch(ComponentArchitecture):
     """
     Battery architecture.
 
@@ -327,12 +329,12 @@ class StoreEEMode(Mode):
 
 
 
-class StoreEE(FxnBlock):
+class StoreEE(Function):
     """Class defining energy storage function with battery architecture."""
 
     __slots__ = ('hsig_bat', 'ee_1', 'force_st')
-    role_s = StoreEEState
-    role_m = StoreEEMode
+    container_s = StoreEEState
+    container_m = StoreEEMode
     _init_ca = BatArch
     _init_hsig_bat = HSig
     _init_ee_1 = EE
@@ -398,7 +400,7 @@ class HoldPayloadMode(Mode):
 class HoldPayload(HoldPayloadDyn):
     """Adaptation of HoldPayload with new mode information."""
 
-    role_m = HoldPayloadMode
+    container_m = HoldPayloadMode
 
 
 class ManageHealthMode(Mode):
@@ -416,12 +418,12 @@ class ManageHealthMode(Mode):
     units = 'hr'
 
 
-class ManageHealth(FxnBlock):
+class ManageHealth(Function):
     """Health management function for rotor and battery."""
 
     __slots__ = ('force_st', 'ee_ctl', 'hsig_dofs', 'hsig_bat', 'rsig_traj')
-    role_m = ManageHealthMode
-    role_p = ResPolicy
+    container_m = ManageHealthMode
+    container_p = ResPolicy
     _init_force_st = Force
     _init_ee_ctl = EE
     _init_hsig_dofs = HSig
@@ -455,7 +457,7 @@ class AffectDOF(AffectDOFHierarchical):
     """Adaptation of hierarchical AffecDOF function which returns fault signals."""
 
     __slots__ = ('hsig_dofs',)
-    role_m = AffectMode
+    container_m = AffectMode
     _init_hsig_dofs = HSig
 
     def reconfig_faults(self):
@@ -489,7 +491,7 @@ class CtlDOFMode(Mode):
 class CtlDOF(CtlDOFStat):
     """Adaptation of CtlDOFMode with more mode information."""
 
-    role_m = CtlDOFMode
+    container_m = CtlDOFMode
 
 
 class PlanPathMode(Mode):
@@ -546,14 +548,14 @@ class PlanPath(PlanPathDyn):
     """Path planning function of the drone. Follows a sequence defined in flightplan."""
 
     __slots__ = ('rsig_traj', )
-    role_s = PlanPathState
-    role_m = PlanPathMode
-    role_p = DroneParam
+    container_s = PlanPathState
+    container_m = PlanPathMode
+    container_p = DroneParam
     _init_rsig_traj = RSig
     default_track = {'s': ['ground_height', 'pt', 'goal'], 'm': 'all'}
 
     def __init__(self, name, flows, **kwargs):
-        FxnBlock.__init__(self, name, flows, **kwargs)
+        Function.__init__(self, name, flows, **kwargs)
         self.init_goals()
 
     def init_goals(self):
@@ -644,11 +646,11 @@ class PlanPath(PlanPathDyn):
             self.s.pt += 1
 
 
-class Drone(Model):
+class Drone(FunctionArchitecture):
     """Rural surveillance Drone model."""
 
     __slots__ = ('start_area', 'safe_area', 'target_area')
-    role_p = DroneParam
+    container_p = DroneParam
     default_sp = dict(phases=(('taxi', 0, 0),
                               ('move', 1, 11),
                               ('land', 12, 20)),

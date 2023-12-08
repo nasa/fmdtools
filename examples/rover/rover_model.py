@@ -27,12 +27,12 @@ Flows:
     - Switch Signals
 """
 
-from fmdtools.define.role.parameter import Parameter
-from fmdtools.define.role.state import State
-from fmdtools.define.role.mode import Mode
-from fmdtools.define.block import FxnBlock
-from fmdtools.define.model import Model
-from fmdtools.define.flow import Flow
+from fmdtools.define.container.parameter import Parameter
+from fmdtools.define.container.state import State
+from fmdtools.define.container.mode import Mode
+from fmdtools.define.block.function import Function
+from fmdtools.define.architecture.function import FunctionArchitecture
+from fmdtools.define.flow.base import Flow
 from fmdtools.define.environment.geom import PointParam, GeomPoint, LineParam, GeomLine, GeomArch
 from fmdtools.define.environment.environment import Environment
 import fmdtools.sim.propagate as prop
@@ -198,8 +198,8 @@ class DestState(State):
 class Dest(GeomPoint):
     """Start/end/point."""
 
-    role_p = DestParam
-    role_s = DestState
+    container_p = DestParam
+    container_s = DestState
 
 
 class PathParam(LineParam):
@@ -214,7 +214,7 @@ class PathParam(LineParam):
 class GroundGeomArch(GeomArch):
     """Geometry of rover environment--start, end, and line."""
 
-    role_p = GroundParam
+    container_p = GroundParam
 
     def init_geoms(self, **kwargs):
         """Initialize geometry with line and start/end points."""
@@ -232,8 +232,8 @@ class Ground(Environment):
     """Ground environment of the rover."""
 
     arch_ga = GroundGeomArch
-    role_p = GroundParam
-    role_s = GroundState
+    container_p = GroundParam
+    container_s = GroundState
 
     def on_course(self, pos_state):
         """check if the rover is on_course (i.e., within the 'on' buffer)"""
@@ -264,7 +264,7 @@ class Ground(Environment):
 class PathLine(GeomLine):
     """Rover Line."""
 
-    role_p = PathParam
+    container_p = PathParam
 
 
 class PosState(State):
@@ -295,13 +295,13 @@ class PosState(State):
 class Pos(Flow):
     """Rover position/velocity flow."""
 
-    role_s = PosState
+    container_s = PosState
 
 
 class Pos_Signal(Flow):
     """Rover position signal flow."""
 
-    role_s = PosState
+    container_s = PosState
 
 
 class EEState(State):
@@ -314,7 +314,7 @@ class EEState(State):
 class EE(Flow):
     """Electricity flow."""
 
-    role_s = EEState
+    container_s = EEState
 
 
 class VideoState(State):
@@ -345,7 +345,7 @@ class VideoState(State):
 class Video(Flow):
     """Video flow."""
 
-    role_s = VideoState
+    container_s = VideoState
 
 
 class ControlState(State):
@@ -367,7 +367,7 @@ class ControlState(State):
 class Control(Flow):
     """Control flow."""
 
-    role_s = ControlState
+    container_s = ControlState
 
 
 class SwitchState(State):
@@ -379,13 +379,13 @@ class SwitchState(State):
 class Switch(Flow):
     """Power switch."""
 
-    role_s = SwitchState
+    container_s = SwitchState
 
 
 class Comms(Flow):
     """External communications flow."""
 
-    role_s = PosState
+    container_s = PosState
 
 
 class OverrideState(ControlState):
@@ -397,7 +397,7 @@ class OverrideState(ControlState):
 class OverrideComms(Flow):
     """Override communications flow."""
 
-    role_s = OverrideState
+    container_s = OverrideState
 
 
 class FaultStates(State):
@@ -411,7 +411,7 @@ class FaultStates(State):
 class FaultSig(Flow):
     """Rover fault signal."""
 
-    role_s = FaultStates
+    container_s = FaultStates
 
 
 # MODEL FUNCTIONS
@@ -440,12 +440,12 @@ class PlanPathMode(Mode):
     mode: str = "standby"
     
 
-class PlanPath(FxnBlock):
+class PlanPath(Function):
     "Plans the next drive move based on the current state of the rover"
     
     __slots__ = ("video", "pos_signal", "ground", "control", "fault_sig", 'pos')
-    role_m = PlanPathMode
-    role_p = ResCorrection
+    container_m = PlanPathMode
+    container_p = ResCorrection
     _init_video = Video
     _init_pos_signal = Pos_Signal
     _init_pos = Pos
@@ -586,10 +586,10 @@ class DriveMode(Mode):
                     self.init_n_faultstates(franges, phases=ph, n=1)
 
 
-class Drive(FxnBlock):
+class Drive(Function):
     '''The drive function determines the rover drive functionality'''
     __slots__ = ("ground", "motor_control", "ee_in", 'fault_sig', 'pos')
-    role_m = DriveMode
+    container_m = DriveMode
     _init_fault_sig = FaultSig
     _init_ground = Ground
     _init_pos = Pos
@@ -684,14 +684,14 @@ class PerceptionMode(Mode):
     exclusive = True
 
 
-class Perception(FxnBlock):
+class Perception(Function):
     ''' 
     Rover function that percieves the environment and creates
     the video feed.
     '''
     __slots__ = ("ground", "ee", "video", 'pos')
     rad = 1         # not used. Is it needeD?
-    role_m = PerceptionMode
+    container_m = PerceptionMode
     _init_pos = Pos
     _init_ground = Ground
     _init_ee = EE
@@ -779,12 +779,12 @@ class PowerMode(Mode):
     exclusive = True
 
 
-class Power(FxnBlock):
+class Power(Function):
     """Rover power supply."""
 
     __slots__ = ("ee_15", "ee_5", "ee_12", "switch")
-    role_s = PowerState
-    role_m = PowerMode
+    container_s = PowerState
+    container_m = PowerMode
     _init_ee_15 = EE
     _init_ee_5 = EE
     _init_ee_12 = EE
@@ -882,9 +882,9 @@ class OverrideMode(Mode):
     mode: str = "off"
 
 
-class Override(FxnBlock):
+class Override(Function):
     __slots__ = ("override_comms", "ee", "motor_control", "auto_control")
-    role_m = OverrideMode
+    container_m = OverrideMode
     _init_override_comms = OverrideComms
     _init_ee = EE
     _init_motor_control = Control
@@ -904,7 +904,7 @@ class Override(FxnBlock):
             self.motor_control.s.assign(self.override_comms.s, "rpower", "lpower")
 
 
-class Communications(FxnBlock):
+class Communications(Function):
     ''' The communcation hub'''
     __slots__ = ("ee_12", "comms", "pos_signal")
     _init_ee_12 = EE
@@ -920,7 +920,7 @@ class Communications(FxnBlock):
             self.comms.s.put(x=0, y=0, vel=0, ux=0, uy=0)
 
 
-class Operator(FxnBlock):
+class Operator(Function):
     '''Operator turns on or off the rover'''
     __slots__ = ("switch",)
     _init_switch = Switch
@@ -940,7 +940,7 @@ def gen_model_params(x, scen):
     return params
 
 
-class Rover(Model):
+class Rover(FunctionArchitecture):
     ''' 
     The functions override, communications, and operator are place holders
     in this model and do not affect the Rover Behavior. The remaining functions
@@ -957,7 +957,7 @@ class Rover(Model):
                          ground is expected to be high).
     '''
     __slots__ = ()
-    role_p = RoverParam
+    container_p = RoverParam
     default_sp = dict(times=(0, 150),
                       phases=(("start", 0, 30), ("end", 31, 150)),
                       end_condition="indicate_finished")

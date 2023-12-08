@@ -7,9 +7,9 @@ Module for creating x-y arrays to represent gridworlds.
 import numpy as np
 import copy
 from typing import ClassVar
-from fmdtools.define.role.parameter import Parameter
-from fmdtools.define.role.rand import Rand
-from fmdtools.define.common import is_iter, get_obj_track, init_obj_dict
+from fmdtools.define.container.parameter import Parameter
+from fmdtools.define.container.rand import Rand
+from fmdtools.define.base import is_iter, get_obj_track, init_obj_dict
 from fmdtools.analyze.history import History
 from fmdtools.analyze.common import setup_plot, consolidate_legend
 from matplotlib import pyplot as plt
@@ -84,16 +84,16 @@ class Coords(object):
     ---------------
     init_p: CoordsParam
         Parameter controlling default grid matrix (see CoordsParam), along with other
-        properties of interest. Sets the .p role.
+        properties of interest. Sets the .p container.
     init_r: Rand
-        Random number generator. sets the .r role.
+        Random number generator. sets the .r container.
     init_properties: method
         Method that initializes the (non-default) properties of the Coords.
 
     Examples
     --------
     >>> class ExampleCoords(Coords):
-    ...    role_p = ExampleCoordsParam
+    ...    container_p = ExampleCoordsParam
     ...    def init_properties(self, *args, **kwargs):
     ...        self.set_pts([[0.0, 0.0], [10.0, 0.0]], "v", 10.0)
 
@@ -136,8 +136,8 @@ class Coords(object):
 
     __slots__ = ("p", "r", "grid", "pts", "points", "collections", "features", "states",
                  "properties", "_args", "_kwargs", "default_track", )
-    role_p = CoordsParam
-    role_r = Rand
+    container_p = CoordsParam
+    container_r = Rand
 
     def __init__(self, *args, **kwargs):
         """Initialize class with properties in init_properties."""
@@ -151,12 +151,12 @@ class Coords(object):
 
     def check_role(self, rolename):
         if rolename != 'c':
-            raise Exception("Invalid role name for Coords: "+rolename)
+            raise Exception("Invalid container name for Coords: "+rolename)
 
     def init_grids(self, *args, **kwargs):
         """Prepare class with defined features."""
-        self.p = self.role_p(**kwargs.get('p', {}))
-        self.r = self.role_r(**kwargs.get('r', {}))
+        self.p = self.container_p(**kwargs.get('p', {}))
+        self.r = self.container_r(**kwargs.get('r', {}))
         self.grid = np.array([[(i, j) for j in range(0, self.p.y_size)]
                              for i in range(0, self.p.x_size)]) * self.p.blocksize
         self.pts = self.grid.reshape(int(self.grid.size/2), 2)
@@ -1058,7 +1058,7 @@ class ExampleCoordsParam(CoordsParam):
 class ExampleCoords(Coords):
     """Example of Coords class for use in documentation and testing."""
 
-    role_p = ExampleCoordsParam
+    container_p = ExampleCoordsParam
 
     def init_properties(self, *args, **kwargs):
         """Initialize points where v=10.0."""

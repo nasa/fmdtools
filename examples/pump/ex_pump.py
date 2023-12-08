@@ -22,12 +22,13 @@ The flows are:
     - Signal input (on/off)
 """
 
-from fmdtools.define.block import FxnBlock, Mode
-from fmdtools.define.flow import Flow
-from fmdtools.define.model import Model, check_model_pickleability
-from fmdtools.define.role.parameter import Parameter
-from fmdtools.define.role.state import State
-from fmdtools.define.role.time import Time
+from fmdtools.define.block.function import Function
+from fmdtools.define.container.mode import Mode
+from fmdtools.define.flow.base import Flow
+from fmdtools.define.architecture.function import FunctionArchitecture, check_model_pickleability
+from fmdtools.define.container.parameter import Parameter
+from fmdtools.define.container.state import State
+from fmdtools.define.container.time import Time
 import fmdtools.analyze as an
 import fmdtools.sim.propagate as propagate
 import numpy as np
@@ -50,7 +51,7 @@ class WaterStates(State):
 
 
 class Water(Flow):
-    role_s = WaterStates
+    container_s = WaterStates
 
 
 class EEStates(State):
@@ -60,7 +61,7 @@ class EEStates(State):
 
 
 class Electricity(Flow):
-    role_s = EEStates
+    container_s = EEStates
 
 
 class SignalStates(State):
@@ -69,7 +70,7 @@ class SignalStates(State):
 
 
 class Signal(Flow):
-    role_s = SignalStates
+    container_s = SignalStates
 
 
 """
@@ -148,21 +149,21 @@ class ImportEEState(State):
     effstate: float = 1.0
 
 
-class ImportEE(FxnBlock):
+class ImportEE(Function):
     __slots__ = ['ee_out']
-    role_m = ImportEEMode
-    role_s = ImportEEState
+    container_m = ImportEEMode
+    container_s = ImportEEState
     _init_ee_out = Electricity
     flownames = {"ee_1": "ee_out"}
     """
     Import EE is the line of electricity going into the pump
-    We define it here as a subclass of the FxnBlock superclass (imported from define.py)
-    the FxnBlock superclass, which adds the common aspects of the function objects.
+    We define it here as a subclass of the Function superclass (imported from define.py)
+    the Function superclass, which adds the common aspects of the function objects.
 
-    Notice how role_m, role_s, _init_ee_out variables are assigned to the classes for
-    Modes, States, and the Electricity flow used in this FxnBlock. This binds those
-    types to the FxnBlock so they are instiantiated and take the `m` (for mode) and `s`
-    (for state) role in the FxnBlock, respectively. For the flow `ee_out`, this defines
+    Notice how container_m, container_s, _init_ee_out variables are assigned to
+    Modes, States classes, and the Electricity flow used in this Function. This binds
+    types to the Function so they are instiantiated and take the `m` (for mode) and `s`
+    (for state) container in the Function, respectively. For flow `ee_out`, this defines
     a Flow variable which will be electricity and will additional be held in .flows
     here. The flownames variable then tells us that `ee_1` at the model level will be
     `ee_out` at the function level
@@ -209,9 +210,9 @@ class ImportWaterMode(Mode):
     fm_args = {'no_wat': (1.0, 1000), 'less_wat': (1.0, 0.0)}
 
 
-class ImportWater(FxnBlock):
+class ImportWater(Function):
     __slots__ = ['wat_out']
-    role_m = ImportWaterMode
+    container_m = ImportWaterMode
     _init_wat_out = Water
     flownames = {"wat_1": "wat_out"}
 
@@ -237,10 +238,10 @@ class ExportWaterMode(Mode):
     phases = {'start': 1.5, 'on': 1, 'end': 1}
 
 
-class ExportWater(FxnBlock):
+class ExportWater(Function):
     """ Import Water is the pipe with water going into the pump """
     __slots__ = ['wat_in']
-    role_m = ExportWaterMode
+    container_m = ExportWaterMode
     _init_wat_in = Water
     flownames = {'wat_2': 'wat_in'}
 
@@ -260,10 +261,10 @@ class ImportSigMode(Mode):
     fm_args = {'no_sig': (1.0, 10000, {'start': 1.5, 'on': 1, 'end': 1})}
 
 
-class ImportSig(FxnBlock):
+class ImportSig(Function):
     """ Import Signal is the on/off switch """
     __slots__ = ['sig_out']
-    role_m = ImportSigMode
+    container_m = ImportSigMode
     _init_sig_out = Signal
     flownames = {'sig_1': 'sig_out'}
 
@@ -309,7 +310,7 @@ class MoveWatMode(Mode):
                'short': (1.0, 10000, {'start': 1.5, 'on': 1, 'end': 1})}
 
 
-class MoveWat(FxnBlock):
+class MoveWat(Function):
     """
     Move Water is the pump itself. While one could decompose this further, one function
     is used for simplicity.
@@ -322,10 +323,10 @@ class MoveWat(FxnBlock):
     - t (time) by MoveWatTime, which will be used so we can have a timer
     """
     __slots__ = ['ee_in', 'sig_in', 'wat_in', 'wat_out']
-    role_s = MoveWatStates
-    role_p = MoveWatParams
-    role_m = MoveWatMode
-    role_t = MoveWatTime
+    container_s = MoveWatStates
+    container_p = MoveWatParams
+    container_m = MoveWatMode
+    container_t = MoveWatTime
     _init_ee_in = Electricity
     _init_sig_in = Signal
     _init_wat_in = Water
@@ -388,9 +389,9 @@ class MoveWat(FxnBlock):
 
 
 # DEFINE MODEL OBJECT
-class Pump(Model):
+class Pump(FunctionArchitecture):
     __slots__ = ()
-    role_p = PumpParam
+    container_p = PumpParam
     default_sp = dict(phases=(('start', 0, 4), ('on', 5, 49),
                       ('end', 50, 55)), times=(0, 20, 55), dt=1.0, units='hr')
     default_track = {'flows': {'wat_2': {'s': 'flowrate'},
@@ -611,15 +612,15 @@ if __name__ == "__main__":
 
     exp = deghist.get_metrics()
 
-    from fmdtools.analyze.graph import ModelGraph
-    mg = ModelGraph(mdl)
+    from fmdtools.analyze.graph import FunctionArchitectureGraph
+    mg = FunctionArchitectureGraph(mdl)
     mg.set_heatmap(exp)
     mg.draw()
 
-    mg = ModelGraph(mdl)
+    mg = FunctionArchitectureGraph(mdl)
     fig, ax = mg.plot_high_degree_nodes()
 
-    mg = ModelGraph(mdl)
+    mg = FunctionArchitectureGraph(mdl)
     mg.set_exec_order(mdl)
     mg.draw()
 

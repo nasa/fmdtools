@@ -12,11 +12,11 @@ from drone_mdl_rural import HoldPayload as HoldPayloadRural
 from drone_mdl_rural import AffectDOF as AffectDOFRural
 from drone_mdl_rural import Drone as DroneRural
 
-from fmdtools.define.block import CompArch, Component
-from fmdtools.define.role.mode import Mode
-from fmdtools.define.role.state import State
-from fmdtools.define.role.parameter import Parameter
-from fmdtools.define.model import Model
+from fmdtools.define.block import ComponentArchitecture, Component
+from fmdtools.define.container.mode import Mode
+from fmdtools.define.container.state import State
+from fmdtools.define.container.parameter import Parameter
+from fmdtools.define.architecture.function import FunctionArchitecture
 from fmdtools.define.environment.environment import Environment
 from fmdtools.define.environment.coords import Coords, CoordsParam
 
@@ -93,7 +93,7 @@ class UrbanGridParam(CoordsParam):
 class StreetGrid(Coords):
     """Define the urban environment (buildings, streets, etc)."""
 
-    role_p = UrbanGridParam
+    container_p = UrbanGridParam
 
     def init_properties(self, *args, **kwargs):
         """Randomly allocate the allowed/occupied points, and the building heights."""
@@ -114,9 +114,9 @@ class StreetGrid(Coords):
 class UrbanDroneEnvironment(Environment):
     """ Drone environment for an urban area with buildings."""
 
-    role_p = UrbanGridParam
-    role_c = StreetGrid
-    role_s = EnvironmentState
+    container_p = UrbanGridParam
+    container_c = StreetGrid
+    container_s = EnvironmentState
 
     def ground_height(self, dofs):
         """Get the distance of the height z above the ground at point x,y."""
@@ -171,7 +171,7 @@ class ComputerVisionMode(Mode):
 class ComputerVision(Component):
     """Component for percieving if a landing location is occupied."""
 
-    role_m = ComputerVisionMode
+    container_m = ComputerVisionMode
 
     def check_if_occupied(self, environment, dofs):
         """Check if the grid area below is occupied (before landing)."""
@@ -197,7 +197,7 @@ class ComputerVision(Component):
                                               include_pt=include_pt)
 
 
-class VisionArch(CompArch):
+class VisionArch(ComponentArchitecture):
     """Computer vision architecture (one camera)."""
 
     def __init__(self, *args, **kwargs):
@@ -216,7 +216,7 @@ class PlanPath(PlanPathRural):
 
     _init_environment = UrbanDroneEnvironment
     _init_ca = VisionArch
-    role_p = PlanPathParam
+    container_p = PlanPathParam
 
     def init_goals(self):
         """Initialize goals from start to end point."""
@@ -303,7 +303,7 @@ class DroneParam(Parameter):
 class Drone(DroneRural):
     """Overall rural drone model."""
 
-    role_p = DroneParam
+    container_p = DroneParam
     default_sp = dict(phases=(('ascend', 0, 0),
                               ('forward', 1, 11),
                               ('taxi', 12, 20)),

@@ -2,10 +2,10 @@
 """
 Class for creating environments.
 """
-from fmdtools.define.role.rand import Rand
-from fmdtools.define.common import get_obj_track
+from fmdtools.define.container.rand import Rand
+from fmdtools.define.base import get_obj_track
 from fmdtools.analyze.common import get_sub_include
-from fmdtools.define.flow import CommsFlow
+from fmdtools.define.flow.commsflow import CommsFlow
 from fmdtools.define.environment.coords import Coords, ExampleCoords
 from fmdtools.define.environment.geom import GeomArch, ExGeomArch
 
@@ -38,19 +38,19 @@ class Environment(CommsFlow):
     """
 
     slots = ["c", "r", "ga"]
-    role_r = Rand
+    container_r = Rand
     coords_c = Coords
     arch_ga = GeomArch
     default_track = ('s', 'i', 'c', 'ga')
     all_possible = ('s', 'i', 'c', 'r', 'ga')
 
     def __init__(self, name, glob=[], p={}, s={}, r={}, c={}, ga={}):
-        if 'p' not in c and self.coords_c.role_p == self.role_p:
+        if 'p' not in c and self.coords_c.container_p == self.container_p:
             c = {**c, 'p': p}
-        if 'p' not in ga and self.arch_ga.role_p == self.role_p:
+        if 'p' not in ga and self.arch_ga.container_p == self.container_p:
             ga = {**ga, 'p': p}
         super().__init__(name, glob=glob, p=p, s=s)
-        self.init_roles('role', r=r)
+        self.init_roles('container', r=r)
         self.init_roles('coords', c=c)
         self.init_roles('arch', ga=ga)
 

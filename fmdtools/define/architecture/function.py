@@ -15,16 +15,16 @@ import sys
 import time
 import copy
 
-from fmdtools.define.flow import Flow, init_flow
-from fmdtools.define.common import check_pickleability, set_var, get_obj_track
-from fmdtools.define.block import Simulable
+from fmdtools.define.flow.base import Flow, init_flow
+from fmdtools.define.base import check_pickleability, set_var, get_obj_track
+from fmdtools.define.block.base import Simulable
 from fmdtools.analyze.common import get_sub_include
 from fmdtools.analyze.history import History, init_indicator_hist
 
 #Model superclass    
-class Model(Simulable):
+class FunctionArchitecture(Simulable):
     __slots__ =['fxns', 'functionorder', '_fxnflows', '_fxninput', '_flowstates',
-                'graph', 'staticfxns', 'dynamicfxns', 'staticflows'] #added in self.build())
+                'graph', 'staticfxns', 'dynamicfxns', 'staticflows']
     default_track=('fxns', 'flows', 'i')
     default_name='model'
     """
@@ -139,7 +139,7 @@ class Model(Simulable):
         args_f : dict.
             Other parameters to send to the __init__ method of the function class
         fkwargs : dict
-            Parameters to send to __init__ method of the FxnBlock superclass
+            Parameters to send to __init__ method of the Function superclass
         """
         if not getattr(self, 'is_copy', False):
             flows=self.get_flows(flownames)
@@ -370,19 +370,19 @@ class Model(Simulable):
                 self.update_seed(seed=varvalues[i])
             else:
                 if type(var) == str:
-                    var = var.split(".")             
+                    var = var.split(".")
                 if var[0] in ['functions', 'fxns']:
-                    f = self.fxns[var[1]] 
+                    f = self.fxns[var[1]]
                     var = var[2:]
                 elif var[0] == 'flows':
-                    f = self.flows[var[1]] 
+                    f = self.flows[var[1]]
                     var = var[2:]
                 elif var[0] in self.fxns:
-                    f = self.fxns[var[0]] 
+                    f = self.fxns[var[0]]
                     var = var[1:]
                 elif var[0] in self.flows:
-                    f = self.flows[var[0]] 
-                    var = var[1:]             
+                    f = self.flows[var[0]]
+                    var = var[1:]
                 else:
                     raise Exception(var[0] + " not a function, flow, or seed")
                 set_var(f, var, varvalues[i])
@@ -390,14 +390,15 @@ class Model(Simulable):
     def create_hist(self, timerange, track):
         if not hasattr(self, 'h'):
             hist = History()
-            track = get_obj_track(self, track, all_possible=Model.default_track)
+            track = get_obj_track(self, track,
+                                  all_possible=FunctionArchitecture.default_track)
             init_indicator_hist(self, hist, timerange, track)
             fxn_track = get_sub_include('fxns', track)
             if fxn_track:
                 hist['fxns'] = History()
                 for fxnname, fxn in self.fxns.items():
                     fh = fxn.create_hist(timerange, get_sub_include(fxnname, fxn_track))
-                    if fh: 
+                    if fh:
                         hist.fxns[fxnname] = fh
             self.add_flow_hist(hist, timerange, track)
             #if len(hist)<len(track) and track!='all': #TODO: this warning should be valid for all hists

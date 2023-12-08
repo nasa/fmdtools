@@ -20,14 +20,14 @@ from scipy import stats
 from recordclass import dataobject, asdict, astuple
 import numpy as np
 import math
-from fmdtools.define.common import get_true_fields, get_true_field
-from fmdtools.define.role.common import BaseRole
+from fmdtools.define.base import get_true_fields, get_true_field
+from fmdtools.define.container.base import BaseContainer
 import copy
 
 from fmdtools.analyze.history import History, init_hist_iter
 
 
-class Rand(BaseRole):
+class Rand(BaseContainer):
     """
     Class for defining and interacting with random states of the model.
 

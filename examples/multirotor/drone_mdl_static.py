@@ -1,11 +1,11 @@
 import numpy as np
 
-from fmdtools.define.role.parameter import Parameter, SimParam
-from fmdtools.define.role.state import State
-from fmdtools.define.block import FxnBlock
-from fmdtools.define.role.mode import Mode
-from fmdtools.define.model import Model
-from fmdtools.define.flow import Flow
+from fmdtools.define.container.parameter import Parameter, SimParam
+from fmdtools.define.container.state import State
+from fmdtools.define.block.function import Function
+from fmdtools.define.container.mode import Mode
+from fmdtools.define.architecture.function import FunctionArchitecture
+from fmdtools.define.flow.base import Flow
 
 
 # MODEL FLOWS
@@ -29,7 +29,7 @@ class EEState(State):
 class EE(Flow):
     """Electrical Energy Flow."""
 
-    role_s = EEState
+    container_s = EEState
 
 
 class ForceState(State):
@@ -41,7 +41,7 @@ class ForceState(State):
 class Force(Flow):
     """Force flow."""
 
-    role_s = ForceState
+    container_s = ForceState
 
 
 class ControlState(State):
@@ -63,7 +63,7 @@ class ControlState(State):
 class Control(Flow):
     """Control Flow."""
 
-    role_s = ControlState
+    container_s = ControlState
 
 
 class DOFstate(State):
@@ -106,8 +106,8 @@ class DOFParam(Parameter):
 class DOFs(Flow):
     """Flow defining the Drone degrees of freedom."""
 
-    role_s = DOFstate
-    role_p = DOFParam
+    container_s = DOFstate
+    container_p = DOFParam
 
 
 class DesTrajState(State):
@@ -171,7 +171,7 @@ class DesTrajState(State):
 class DesTraj(Flow):
     """Desired trajectory flow."""
 
-    role_s = DesTrajState
+    container_s = DesTrajState
 
 
 # MODEL FUNCTIONS
@@ -189,12 +189,12 @@ class StoreEEState(State):
     soc: float = 100.0
 
 
-class StoreEE(FxnBlock):
+class StoreEE(Function):
     """Class for the battery architecture/energy storage."""
 
     __slots__ = ("ee_out", "fs")
-    role_s = StoreEEState
-    role_m = StoreEEMode
+    container_s = StoreEEState
+    container_m = StoreEEMode
     _init_ee_out = EE
     _init_fs = Force
     flownames = {"ee_1": "ee_out", "force_st": "fs"}
@@ -243,7 +243,7 @@ class DistEEState(State):
     ee_te: float = 1.0
 
 
-class DistEE(FxnBlock):
+class DistEE(Function):
     """
     Power distribution for the drone.
 
@@ -252,8 +252,8 @@ class DistEE(FxnBlock):
     """
 
     __slots__ = ("ee_in", "ee_mot", "ee_ctl", "st")
-    role_s = DistEEState
-    role_m = DistEEMode
+    container_s = DistEEState
+    container_m = DistEEMode
     _init_ee_in = EE
     _init_ee_mot = EE
     _init_ee_ctl = EE
@@ -330,12 +330,12 @@ class HoldPayloadState(State):
     force_gr:   float = 1.0
 
 
-class HoldPayload(FxnBlock):
+class HoldPayload(Function):
     """Drone landing gear."""
 
     __slots__ = ('dofs', 'force_st', 'force_lin')
-    role_m = HoldPayloadMode
-    role_s = HoldPayloadState
+    container_m = HoldPayloadMode
+    container_s = HoldPayloadState
     _init_dofs = DOFs
     _init_force_st = Force
     _init_force_lin = Force
@@ -486,12 +486,12 @@ class BaseLine(object):
             self.s.pt = 0.5
 
 
-class AffectDOF(FxnBlock, BaseLine):
+class AffectDOF(Function, BaseLine):
     """Drone rotors that the drone through the air."""
 
     __slots__ = ("ee_in", "ctl_in", "dofs", "force")
-    role_s = AffectDOFState
-    role_m = AffectDOFMode
+    container_s = AffectDOFState
+    container_m = AffectDOFMode
     _init_ee_in = EE
     _init_ctl_in = Control
     _init_dofs = DOFs
@@ -574,12 +574,12 @@ class CtlDOFMode(Mode):
                "degctl": (0.8, 10000)}
 
 
-class CtlDOF(FxnBlock):
+class CtlDOF(Function):
     """Drone rotor control."""
 
     __slots__ = ("ee_in", "des_traj", "ctl", "dofs", "fs")
-    role_s = CtlDOFstate
-    role_m = CtlDOFMode
+    container_s = CtlDOFstate
+    container_m = CtlDOFMode
     _init_ee_in = EE
     _init_des_traj = DesTraj
     _init_ctl = Control
@@ -646,11 +646,11 @@ class PlanPathMode(Mode):
     fm_args = {"noloc": (0.2, 10000), "degloc": (0.8, 10000)}
 
 
-class PlanPath(FxnBlock):
+class PlanPath(Function):
     """Drone path planning function."""
 
     __slots__ = ("ee_in", "dofs", "des_traj", "fs")
-    role_m = PlanPathMode
+    container_m = PlanPathMode
     _init_ee_in = EE
     _init_dofs = DOFs
     _init_des_traj = DesTraj
@@ -728,14 +728,14 @@ class ViewModes(Mode):
     fm_args = {"poorview": (0.2, 10000)}
 
 
-class ViewEnvironment(FxnBlock):
+class ViewEnvironment(Function):
     """Drone camera placeholder."""
 
-    role_m = ViewModes
+    container_m = ViewModes
     _init_dofs = DOFs
 
 
-class Drone(Model):
+class Drone(FunctionArchitecture):
     """Static multirotor drone model (executes in a single timestep)."""
 
     __slots__ = ()

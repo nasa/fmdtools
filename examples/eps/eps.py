@@ -13,11 +13,11 @@ using solely the functions of the system.
 Further information about this system (data, more detailed models) is presented
 at: https://c3.nasa.gov/dashlink/projects/3/
 """
-from fmdtools.define.block import FxnBlock, Mode
-from fmdtools.define.model import Model
-from fmdtools.define.role.parameter import Parameter, SimParam
-from fmdtools.define.role.state import State
-from fmdtools.define.flow import Flow
+from fmdtools.define.block.function import Function, Mode
+from fmdtools.define.architecture.function import FunctionArchitecture
+from fmdtools.define.container.parameter import Parameter, SimParam
+from fmdtools.define.container.state import State
+from fmdtools.define.flow.base import Flow
 
 
 class GenericState(State):
@@ -26,7 +26,7 @@ class GenericState(State):
 
 
 class GenericFlow(Flow):
-    role_s = GenericState
+    container_s = GenericState
 
 
 class SigState(State):
@@ -34,7 +34,7 @@ class SigState(State):
 
 
 class Signal(Flow):
-    role_s = SigState
+    container_s = SigState
 
 
 class ImportEEModes(Mode):
@@ -43,9 +43,9 @@ class ImportEEModes(Mode):
                "no_v": (1e-5, 300)}
 
 
-class ImportEE(FxnBlock):
+class ImportEE(Function):
     __slots__ = ("ee_out",)
-    role_m = ImportEEModes
+    container_m = ImportEEModes
     _init_ee_out = GenericFlow
     flownames = {"ee_1": "ee_out"}
     """ Static model representation is the same as the dynamic model respresentation, except in this case 
@@ -74,9 +74,9 @@ class ImportSigModes(Mode):
                "no_signal": (1e-6, 750)}
 
 
-class ImportSig(FxnBlock):
+class ImportSig(Function):
     __slots__ = ("sig_out",)
-    role_m = ImportSigModes
+    container_m = ImportSigModes
     _init_sig_out = Signal
     flownames = {"sig_in": "sig_out"}
 
@@ -94,9 +94,9 @@ class StoreEEModes(Mode):
                "no_storage": (5e-6, 2000)}
 
 
-class StoreEE(FxnBlock):
+class StoreEE(Function):
     __slots__ = ("ee_in", "ee_out")
-    role_m = StoreEEModes
+    container_m = StoreEEModes
     _init_ee_in = GenericFlow
     _init_ee_out = GenericFlow
     flownames = {"ee_2": "ee_in", "ee_3": "ee_out"}
@@ -127,9 +127,9 @@ class SupplyEEModes(Mode):
                "open_circuit": (5e-8, 200)}
 
 
-class SupplyEE(FxnBlock):
+class SupplyEE(Function):
     __slots__ = ("ee_in", "ee_out", "heat_out")
-    role_m = SupplyEEModes
+    container_m = SupplyEEModes
     _init_ee_in = GenericFlow
     _init_ee_out = GenericFlow
     _init_heat_out = GenericFlow
@@ -168,9 +168,9 @@ class DistEEModes(Mode):
                "open_circuit": (3e-5, 1500)}
 
 
-class DistEE(FxnBlock):
+class DistEE(Function):
     __slots__ = ("sig_in", "ee_in", "ee_m", "ee_h", "ee_o")
-    role_m = DistEEModes
+    container_m = DistEEModes
     _init_sig_in = GenericFlow
     _init_ee_in = GenericFlow
     _init_ee_m = GenericFlow
@@ -218,9 +218,9 @@ class ExportHEModes(Mode):
                "ineffective_sink": (0.5e-5, 1000)}
 
 
-class ExportHE(FxnBlock):
+class ExportHE(Function):
     __slots__ = ("he",)
-    role_m = ExportHEModes
+    container_m = ExportHEModes
     _init_he = GenericFlow
     flownames = {"waste_he_1": "he", "waste_he_o": "he", "waste_he_m": "he"}
 
@@ -233,7 +233,7 @@ class ExportHE(FxnBlock):
             self.he.s.rate = 1.0
 
 
-class ExportME(FxnBlock):
+class ExportME(Function):
     __slots__ = ("me",)
     _init_me = GenericFlow
 
@@ -241,7 +241,7 @@ class ExportME(FxnBlock):
         self.me.s.rate = self.me.s.effort
 
 
-class ExportOE(FxnBlock):
+class ExportOE(Function):
     __slots__ = ("oe",)
     _init_oe = GenericFlow
 
@@ -257,9 +257,9 @@ class EEtoMEModes(Mode):
                "short": (5e-5, 200)}
 
 
-class EEtoME(FxnBlock):
+class EEtoME(Function):
     __slots__ = ("ee_in", "me", "he_out")
-    role_m = EEtoMEModes
+    container_m = EEtoMEModes
     _init_ee_in = GenericFlow
     _init_me = GenericFlow
     _init_he_out = GenericFlow
@@ -302,9 +302,9 @@ class EEtoHEModes(Mode):
                "open_circuit": (1e-7, 200)}
 
 
-class EEtoHE(FxnBlock):
+class EEtoHE(Function):
     __slots__ = ("ee_in", "he")
-    role_m = EEtoHEModes
+    container_m = EEtoHEModes
     _init_ee_in = GenericFlow
     _init_he = GenericFlow
     flownames = {"ee_h": "ee_in"}
@@ -338,9 +338,9 @@ class EEtoOEModes(Mode):
                "burnt_out": (2e-6, 100)}
 
 
-class EEtoOE(FxnBlock):
+class EEtoOE(Function):
     __slots__ = ("ee_in", "oe", "he_out")
-    role_m = EEtoOEModes
+    container_m = EEtoOEModes
     _init_ee_in = GenericFlow
     _init_oe = GenericFlow
     _init_he_out = GenericFlow
@@ -365,7 +365,7 @@ class EEtoOE(FxnBlock):
             self.oe.s.effort = self.ee_in.s.effort
 
 
-class EPS(Model):
+class EPS(FunctionArchitecture):
     __slots__ = ()
     default_track = {"flows": ["he", "me", "oe"]}
 
@@ -449,7 +449,7 @@ def discrep(value):
 
 if __name__ == "__main__":
     import fmdtools.sim.propagate as propagate
-    from fmdtools.analyze.graph import ModelGraph
+    from fmdtools.analyze.graph import FunctionArchitectureGraph
     import numpy as np
 
     mdl = EPS()

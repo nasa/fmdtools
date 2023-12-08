@@ -3,19 +3,19 @@ Description: Gives graph-level visualizations of the model using installed rende
 
 
 Main user-facing individual graphing classes:
-    - :class:`ModelGraph`: Graphs Model of functions and flow for display,
+    - :class:`FunctionArchitectureGraph`: Graphs Model of functions and flow for display
     where both functions and flows are nodes.
 
-    - :class:`ModelFlowGraph`: Graphs Model of flows for display, where flows are set as
+    - :class:`FunctionArchitectureFlowgraph`: Graphs Model of flows for display, where flows are set as
     nodes and connections (via functions) are edges.
 
-    - :class:`ModelCompGraph`: Graphs Model of functions, and flows, with component
+    - :class:`FunctionArchitectureCompGraph`: Graphs Model of functions, and flows, with component
     containment relationships shown for functions.
 
-    - :class:`ModelFxnGraph`: Graphs representation of the functions of the model, where
+    - :class:`FunctionArchitectureFxnGraph`: Graphs representation of the functions of the model, where
     functions are nodes and flows are edges
 
-    - :class:`ModelTypeGraph`: Graph representation of model Classes, showing the
+    - :class:`FunctionArchitectureTypeGraph`: Graph representation of model Classes, showing the
     containment relationship between function classes and flow classes in the model.
 
     - :class:`MultiFlowGraph`: Creates a networkx graph corresponding to the MultiFlow.
@@ -23,14 +23,14 @@ Main user-facing individual graphing classes:
     - :class:`CommsFlowGraph`: Creates a graph representation of the CommsFlow
     (assuming no additional locals).
 
-    - :class:`ActArchGraph`: Shows a visualization of the internal Action Sequence Graph of
+    - :class:`ActionArchitectureGraph`: Shows a visualization of the internal Action Sequence Graph of
     the Function Block, with Sequences as edges, with Flows (circular) and Actions
     (square) as nodes.
 
-    - :class:`ActArchActGraph`: Variant of ActArchGraph where only the sequence between
+    - :class:`ActionArchitectureActGraph`: Variant of ActionArchitectureGraph where only the sequence between
     actions is shown.
 
-    - :class:`ActArchFlowGraph`: Variant of ActArchGraph where only the flow relationships
+    - :class:`ActionArchitectureFlowGraph`: Variant of ActionArchitectureGraph where only the flow relationships
     between actions is shown.
 
 Shared Method Parameters:
@@ -153,7 +153,7 @@ class EdgeStyle(dataobject, copy_default=True):
 
 default_node_kwargs = {'Model': dict(node_shape='^'),
                        'Block': dict(node_shape='s', linewidths=2),
-                       'FxnBlock': dict(node_shape='s', linewidths=2),
+                       'Function': dict(node_shape='s', linewidths=2),
                        'Action': dict(node_shape='s', linewidths=2),
                        'Flow': dict(node_shape='o'),
                        'MultiFlow': dict(node_shape='h'),
@@ -931,7 +931,7 @@ class Graph(object):
         from pyvis.network import Network
         width = str(width)+"px"
 
-        if isinstance(self, ModelTypeGraph):
+        if isinstance(self, FunctionArchitectureTypeGraph):
             n = Network(directed=True, layout='hierarchical', width=width,
                         notebook=notebook)
         else:
@@ -1475,7 +1475,7 @@ class GraphInteractor:
 
 # INDIVIDUAL GRAPH VARIANTS
 # MODELS
-class ModelGraph(Graph):
+class FunctionArchitectureGraph(Graph):
     """
     Creates a Graph of Model functions and flow for display, where both functions
     and flows are nodes.
@@ -1486,7 +1486,7 @@ class ModelGraph(Graph):
 
     def __init__(self, mdl, get_states=True, time=0.0, **kwargs):
         """
-        Generate the ModelGraph corresponding to a given Model.
+        Generate the FunctionArchitectureGraph corresponding to a given Model.
 
         Parameters
         ----------
@@ -1629,7 +1629,7 @@ class ModelGraph(Graph):
     def set_exec_order(self, mdl, static={}, dynamic={}, next_edges={},
                        label_order=True, label_tstep=True):
         """
-        Overlay ModelGraph execution order data on graph structure.
+        Overlay FunctionArchitectureGraph execution order data on graph structure.
 
         Parameters
         ----------
@@ -1694,7 +1694,7 @@ class ModelGraph(Graph):
         return super().draw_graphviz(layout=layout, overlap=overlap, **kwargs)
 
 
-class ModelFlowGraph(ModelGraph):
+class FunctionArchitectureFlowgraph(FunctionArchitectureGraph):
     """
     Creates a Graph of model flows for display, where flows are
     set as nodes and connections (via functions) are edges
@@ -1719,7 +1719,7 @@ class ModelFlowGraph(ModelGraph):
                                 **edge_label_styles)
 
 
-class ModelCompGraph(ModelGraph):
+class FunctionArchitectureCompGraph(FunctionArchitectureGraph):
     """
     Creates a graph of model functions, and flows, with component containment
     relationships shown for functions.
@@ -1764,7 +1764,7 @@ class ModelCompGraph(ModelGraph):
         nx.set_node_attributes(self.g, indicators, 'indicators')
 
 
-class ModelFxnGraph(ModelGraph):
+class FunctionArchitectureFxnGraph(FunctionArchitectureGraph):
     """ Returns a graph representation of the functions of the model, where
     functions are nodes and flows are edges"""
 
@@ -1809,7 +1809,7 @@ class ModelFxnGraph(ModelGraph):
                                 **edge_label_styles)
 
 
-class ModelTypeGraph(ModelGraph):
+class FunctionArchitectureTypeGraph(FunctionArchitectureGraph):
     """
     Creates a graph representation of model Classes, showing the containment
     relationship between function classes and flow classes in the model.
@@ -1836,7 +1836,7 @@ class ModelTypeGraph(ModelGraph):
         g = nx.DiGraph()
         modelname = type(mdl).__name__
         g.add_node(modelname, level=1, label="Model")
-        g.add_nodes_from(mdl.fxnclasses(), level=2, label="FxnBlock")
+        g.add_nodes_from(mdl.fxnclasses(), level=2, label="Function")
         function_connections = [(modelname, fname) for fname in mdl.fxnclasses()]
         g.add_edges_from(function_connections, label="contains")
         if withflows:
@@ -1897,7 +1897,7 @@ class ModelTypeGraph(ModelGraph):
         return super().draw_graphviz(layout=layout, ranksep=ranksep, **kwargs)
 
     def set_exec_order(self, *args, **kwargs):
-        raise Exception("Cannot specify exec_order for ModelTypeGraph")
+        raise Exception("Cannot specify exec_order for FunctionArchitectureTypeGraph")
 
 
 # FLOW/MULTIFLOW/COMMSFLOW
@@ -2143,8 +2143,8 @@ def get_node_info(flow, get_states, get_indicators, time):
     return kwargs
 
 
-# ActArch
-class ActArchGraph(Graph):
+# ActionArchitecture
+class ActionArchitectureGraph(Graph):
     """
     Create a visual representation of an Action Architecture.
 
@@ -2164,10 +2164,10 @@ class ActArchGraph(Graph):
     def set_nx_labels(self, aa):
         """
         Labels the underlying networkx graph structure with type attributes
-        corresponding to the ActArch.
+        corresponding to the ActionArchitecture.
         Parameters
         ----------
-        aa : ActArch
+        aa : ActionArchitecture
             Action Sequence Graph object to represent
 
         Returns
@@ -2191,7 +2191,7 @@ class ActArchGraph(Graph):
 
         Parameters
         ----------
-        aa : ActArch
+        aa : ActionArchitecture
             Underlying action sequence graph object to get states from
         """
         for g in self.g.nodes():
@@ -2260,8 +2260,8 @@ class ActArchGraph(Graph):
         return super().draw_from(time, history=history, **kwargs)
 
 
-class ActArchActGraph(ActArchGraph):
-    """Variant of ActArchGraph where only the sequence between actions is shown."""
+class ActionArchitectureActGraph(ActionArchitectureGraph):
+    """Variant of ActionArchitectureGraph where only the sequence between actions is shown."""
 
     def __init__(self, aa, get_states=True):
         self.g = aa.action_graph.copy()
@@ -2270,8 +2270,8 @@ class ActArchActGraph(ActArchGraph):
             self.set_nx_states(aa)
 
 
-class ActArchFlowGraph(ActArchGraph):
-    """Variant of ActArchGraph where only showing flow relationships between actions."""
+class ActionArchitectureFlowGraph(ActionArchitectureGraph):
+    """Variant of ActionArchitectureGraph where only showing flow relationships between actions."""
 
     def __init__(self, aa, get_states=True):
         self.g = aa.flow_graph.copy()
@@ -2296,17 +2296,17 @@ def graph_factory(obj, **kwargs):
     graph : Graph
         Graph of the appropriate (default) class
     """
-    from fmdtools.define.model import Model
+    from fmdtools.define.architecture.function import FunctionArchitecture
     from fmdtools.define.flow import CommsFlow, MultiFlow
-    from fmdtools.define.block import ActArch
+    from fmdtools.define.block import ActionArchitecture
 
     if isinstance(obj, Model):
-        return ModelGraph(obj, **kwargs)
+        return FunctionArchitectureGraph(obj, **kwargs)
     elif isinstance(obj, CommsFlow):
         return CommsFlowGraph(obj, **kwargs)
     elif isinstance(obj, MultiFlow):
         return MultiFlowGraph(obj, **kwargs)
-    elif isinstance(obj, ActArch):
-        return ActArchGraph(obj, **kwargs)
+    elif isinstance(obj, ActionArchitecture):
+        return ActionArchitectureGraph(obj, **kwargs)
     else:
         raise Exception("No default graph for class "+obj.__class__.__name__)

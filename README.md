@@ -115,7 +115,7 @@ They can be installed using ``pip install packagename``.
 
 For tutorials, see the [examples folder](https://github.com/nasa/fmdtools/tree/main/examples) and [examples page of the documentation](https://nasa.github.io/fmdtools/examples/Examples.html). These folders include the following: 
 
-- [**asg_demo**](https://github.com/nasa/fmdtools/tree/main/examples/asg_demo): A tutorial covering the use of the Action Sequence Graph in the FxnBlock class, which is useful for representing a Function's Progress through a sequence of actions \(e.g., modes of operation, etc\).
+- [**asg_demo**](https://github.com/nasa/fmdtools/tree/main/examples/asg_demo): A tutorial covering the use of the Action Sequence Graph in the Function class, which is useful for representing a Function's Progress through a sequence of actions \(e.g., modes of operation, etc\).
 
 - [**eps**](https://github.com/nasa/fmdtools/tree/main/examples/eps): A model of a simple electric power system in eps.py, which shows how undirected propagation can be used in a simple static (i.e., one time-step) moelling use-case.
 

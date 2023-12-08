@@ -8,7 +8,7 @@ import unittest
 from examples.eps.eps import EPS
 from fmdtools.sim import propagate as prop
 from fmdtools.sim.sample import FaultDomain, FaultSample
-from fmdtools.define.common import check_pickleability
+from fmdtools.define.base import check_pickleability
 import numpy as np
 import math
 from tests.common import CommonTests

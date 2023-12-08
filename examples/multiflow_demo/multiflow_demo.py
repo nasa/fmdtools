@@ -4,25 +4,25 @@ Created on Mon Jun 12 17:44:15 2023
 
 @author: dhulse
 """
-from fmdtools.define.role.state import State
+from fmdtools.define.container.state import State
 class LocationState(State):
     x: float=0.0
     y: float=0.0
 
 from fmdtools.define.flow import CommsFlow, MultiFlow
 class Communications(CommsFlow):
-    role_s = LocationState
+    container_s = LocationState
 class Location(MultiFlow):
-    role_s = LocationState
+    container_s = LocationState
 
-from fmdtools.define.role.parameter import Parameter
+from fmdtools.define.container.parameter import Parameter
 class MoveParam(Parameter):
     x_up: float=0.0
     y_up: float=0.0
 
-from fmdtools.define.block import FxnBlock
-class Mover(FxnBlock):
-    role_p = MoveParam
+from fmdtools.define.block.function import Function
+class Mover(Function):
+    container_p = MoveParam
     _init_communications = Communications
     _init_location = Location 
     def __init__(self, name='mover', flows={}, **kwargs):
@@ -47,7 +47,7 @@ class Mover(FxnBlock):
     def find_classification(self, scen, fxnhist):
         return {"last_x": self.loc.s.x, "min_x": fxnhist.faulty.location.get(self.name).x}
 
-class Coordinator(FxnBlock):
+class Coordinator(Function):
     _init_communications = Communications
     def __init__(self, name='coordinator', flows={}, **kwargs):
         super().__init__(name=name, flows=flows, **kwargs)
@@ -59,8 +59,8 @@ class Coordinator(FxnBlock):
         self.coord_view.update("local", "mover_1", "y")
         self.coord_view.update("local", "mover_2", "x")
 
-from fmdtools.define.model import Model
-class TestModel(Model):
+from fmdtools.define.architecture.function import FunctionArchitecture
+class TestModel(FunctionArchitecture):
     default_sp = dict(times=(0,10))
     def __init__(self, **kwargs):
         super().__init__(**kwargs)

@@ -9,8 +9,8 @@ Has Classes:
 from decimal import Decimal
 from fmdtools.analyze.common import get_sub_include
 from fmdtools.analyze.history import History
-from fmdtools.define.common import get_obj_track
-from fmdtools.define.role.common import BaseRole
+from fmdtools.define.base import get_obj_track
+from fmdtools.define.container.base import BaseContainer
 
 
 class Timer():
@@ -129,7 +129,7 @@ class Timer():
         return h
 
 
-class Time(BaseRole):
+class Time(BaseContainer):
     """
     Class for defining all time-based aspects of a Block (e.g., time, timestep, timers).
 
