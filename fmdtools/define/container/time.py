@@ -9,11 +9,11 @@ Has Classes:
 from decimal import Decimal
 from fmdtools.analyze.common import get_sub_include
 from fmdtools.analyze.history import History
-from fmdtools.define.base import get_obj_track
+from fmdtools.define.base import BaseObject
 from fmdtools.define.container.base import BaseContainer
 
 
-class Timer():
+class Timer(BaseObject):
     """
     Class for model timers used in functions (e.g. for conditional faults).
 
@@ -28,6 +28,7 @@ class Timer():
     mode : str (standby/ticking/complete)
         the internal state of the timer
     """
+
     default_track = ('time', 'mode')
 
     def __init__(self, name):
@@ -123,7 +124,7 @@ class Timer():
 
     def create_hist(self, timerange, track):
         h = History()
-        track = get_obj_track(self, track, all_possible=('time', 'mode'))
+        track = self.get_track(track, all_possible=('time', 'mode'))
         h.init_att('time', self.time, timerange=timerange, track=track, dtype=float)
         h.init_att('mode', self.mode, timerange=timerange, track=track, str_size='<U8')
         return h

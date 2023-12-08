@@ -9,7 +9,7 @@ import copy
 from typing import ClassVar
 from fmdtools.define.container.parameter import Parameter
 from fmdtools.define.container.rand import Rand
-from fmdtools.define.base import is_iter, get_obj_track, init_obj_dict
+from fmdtools.define.base import is_iter, init_obj_dict
 from fmdtools.analyze.history import History
 from fmdtools.analyze.common import setup_plot, consolidate_legend
 from matplotlib import pyplot as plt
@@ -709,7 +709,7 @@ class Coords(object):
                [0., 0., 0., 0., 0., 0., 0., 0., 0., 0.],
                [0., 0., 0., 0., 0., 0., 0., 0., 0., 0.]])
         """
-        track = get_obj_track(self, track, all_possible=self.states)
+        track = self.get_track(track, all_possible=self.states)
         h = History()
         for att in track:
             val = getattr(self, att)

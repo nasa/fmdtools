@@ -20,7 +20,6 @@ from scipy import stats
 from recordclass import dataobject, asdict, astuple
 import numpy as np
 import math
-from fmdtools.define.base import get_true_fields, get_true_field
 from fmdtools.define.container.base import BaseContainer
 import copy
 
@@ -61,11 +60,11 @@ class Rand(BaseContainer):
     default_track = ('s', 'probdens')
 
     def __init__(self, *args, seed=42, run_stochastic=False, probs=list(), s_kwargs={}):
-        args = get_true_fields(self, *args,
-                               seed=seed,
-                               run_stochastic=run_stochastic,
-                               probs=probs,
-                               rng=np.random.default_rng(self.seed))
+        args = self.get_true_fields(*args,
+                                    seed=seed,
+                                    run_stochastic=run_stochastic,
+                                    probs=probs,
+                                    rng=np.random.default_rng(self.seed))
         super().__init__(*args)
         if 's' in self.__fields__:
             self.s = self.s.__class__()
@@ -151,12 +150,6 @@ class Rand(BaseContainer):
         self.rng.__setstate__(other_rand.rng.__getstate__())
         self.probs = copy.copy(other_rand.probs)
         self.run_stochastic = other_rand.run_stochastic
-
-    def get_true_field(self, fieldname, *args, **kwargs):
-        return get_true_field(self, fieldname, *args, **kwargs)
-
-    def get_true_fields(self, *args, **kwargs):
-        return get_true_fields(self, *args, **kwargs)
 
     def to_default(self, *statenames):
         """Resets given random states to their default values"""
