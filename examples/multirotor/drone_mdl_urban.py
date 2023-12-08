@@ -17,8 +17,8 @@ from fmdtools.define.role.mode import Mode
 from fmdtools.define.role.state import State
 from fmdtools.define.role.parameter import Parameter
 from fmdtools.define.model import Model
-from fmdtools.define.environment import Environment
-from fmdtools.define.role.coords import Coords, CoordsParam
+from fmdtools.define.environment.environment import Environment
+from fmdtools.define.environment.coords import Coords, CoordsParam
 
 import numpy as np
 from recordclass import asdict

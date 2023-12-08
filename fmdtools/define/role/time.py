@@ -1,19 +1,22 @@
 # -*- coding: utf-8 -*-
 """
-Description: A module for defining time-based properties for use in blocks. Has Classes:
+Description: A module for defining time-based properties for use in blocks.
 
+Has Classes:
 - :class:`Timer`: Class defining timers
 - :class:`Time`: Class containing all time-related Block constructs (e.g., timers).
 """
 from decimal import Decimal
-from recordclass import dataobject
 from fmdtools.analyze.common import get_sub_include
 from fmdtools.analyze.history import History
-from fmdtools.define.common import get_dataobj_track, get_obj_track
+from fmdtools.define.common import get_obj_track
+from fmdtools.define.role.common import BaseRole
 
 
 class Timer():
-    """class for model timers used in functions (e.g. for conditional faults)
+    """
+    Class for model timers used in functions (e.g. for conditional faults).
+
     Attributes
     ----------
     name : str
@@ -126,7 +129,7 @@ class Timer():
         return h
 
 
-class Time(dataobject, copy_default=True):
+class Time(BaseRole):
     """
     Class for defining all time-based aspects of a Block (e.g., time, timestep, timers).
 
@@ -150,6 +153,7 @@ class Time(dataobject, copy_default=True):
     timernames: tuple
         Names of timers to instantiate.
     """
+    rolename = "t"
     time: float = -0.1
     t_ind: int = 0
     t_loc: float = 0.0
@@ -245,7 +249,7 @@ class Time(dataobject, copy_default=True):
             History of time/timer attribues specified in track.
         """
         hist = History()
-        track = get_dataobj_track(self, track)
+        track = self.get_track(track)
         hist.init_att('time', self.time, timerange=timerange, track=track, dtype=float)
         if 'timers' in track:
             track_timers = get_sub_include('timers', track)

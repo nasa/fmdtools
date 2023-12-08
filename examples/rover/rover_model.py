@@ -33,8 +33,8 @@ from fmdtools.define.role.mode import Mode
 from fmdtools.define.block import FxnBlock
 from fmdtools.define.model import Model
 from fmdtools.define.flow import Flow
-from fmdtools.define.role.geom import PointParam, GeomPoint, LineParam, GeomLine, GeomArch
-from fmdtools.define.environment import Environment
+from fmdtools.define.environment.geom import PointParam, GeomPoint, LineParam, GeomLine, GeomArch
+from fmdtools.define.environment.environment import Environment
 import fmdtools.sim.propagate as prop
 import itertools
 import numpy as np
@@ -231,7 +231,7 @@ class GroundState(State):
 class Ground(Environment):
     """Ground environment of the rover."""
 
-    _init_ga = GroundGeomArch
+    arch_ga = GroundGeomArch
     role_p = GroundParam
     role_s = GroundState
 
@@ -524,7 +524,8 @@ def rdiff_from_vects(u_self, u_lin):
 
 class DriveMode(Mode):
     '''
-    Instantiates Modes for the Drive Function. 
+    Instantiate Modes for the Drive Function.
+
     key_phases_by = 'plan_path' defines that the modes may be intantiated for 
     certain phases of PlanPath. The phases are defined by opptvect.
     mode_args: determines if the how the modes in Drivemodes should be 

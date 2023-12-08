@@ -13,9 +13,9 @@ import warnings
 import numpy as np
 
 from fmdtools.define.common import get_true_fields, get_true_field, set_obj_arg_type
+from fmdtools.define.role.common import BaseRole
 
-
-class Parameter(dataobject, readonly=True, mapping=True, iterable=True, copy_default=True):
+class Parameter(BaseRole, readonly=True):
     """
     The Parameter class defines model/function/flow values which are immutable,
     that is, the same from model instantiation through a simulation. Parameters
@@ -43,6 +43,7 @@ class Parameter(dataobject, readonly=True, mapping=True, iterable=True, copy_def
     >>> p.y
     2.0
     """
+    rolename = "p"
 
     def __init__(self, *args, strict_immutability=True, check_type=True,
                  check_pickle=True, set_type=True, check_lim=True, **kwargs):
@@ -221,13 +222,14 @@ class SimParam(Parameter, readonly=True):
             Whether to use locally-defined timesteps in functions (if any).
             Default is True.
     """
-    phases:            tuple = (('na', 0, 100),)
-    times:             tuple = (0, 100)
-    dt:                float = 1.0
-    units:             str = "hr"
+    rolename = "sp"
+    phases: tuple = (('na', 0, 100),)
+    times: tuple = (0, 100)
+    dt: float = 1.0
+    units: str = "hr"
     units_set = ('sec', 'min', 'hr', 'day', 'wk', 'month', 'year')
-    end_condition:     str = ''
-    use_local:         bool = True
+    end_condition: str = ''
+    use_local: bool = True
 
     def __init__(self, *args, **kwargs):
         if ('times' in kwargs) and not ('phases' in kwargs):

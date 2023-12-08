@@ -20,13 +20,14 @@ from scipy import stats
 from recordclass import dataobject, asdict, astuple
 import numpy as np
 import math
-from fmdtools.define.common import get_true_fields, get_true_field, get_dataobj_track
+from fmdtools.define.common import get_true_fields, get_true_field
+from fmdtools.define.role.common import BaseRole
 import copy
 
 from fmdtools.analyze.history import History, init_hist_iter
 
 
-class Rand(dataobject, mapping=True, copy_default=True):
+class Rand(BaseRole):
     """
     Class for defining and interacting with random states of the model.
 
@@ -51,6 +52,7 @@ class Rand(dataobject, mapping=True, copy_default=True):
     these states with methods called from the rng.
     """
 
+    rolename = "r"
     rng: np.random._generator.Generator = np.random.default_rng()
     probs: list = list()
     probdens: float = 1.0
@@ -180,13 +182,19 @@ class Rand(dataobject, mapping=True, copy_default=True):
             History of fields specified in track.
         """
         h = History()
-        track = get_dataobj_track(self, track)
+        track = self.get_track(track)
         if self.run_stochastic == 'track_pdf' and 'track_pdf' in track:
             h.init_att('probdens', self.return_probdens(),
                        timerange=timerange, track='all')
         if 's' in track and hasattr(self, 's'):
             h['s'] = init_hist_iter('s', self.s, timerange=timerange, track=track)
         return h
+
+    def copy(self):
+        """Copy the rand."""
+        cop = self.__class__().__init__()
+        cop.assign(self)
+        return cop
 
 
 def get_pdf_for_rand(x, randname, args):

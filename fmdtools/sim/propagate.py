@@ -248,8 +248,6 @@ def nominal(mdl, **kwargs):
         A History dict with a history of modelstates
     """
     result, mdlhist, _, mdl, t_end = nom_helper(mdl, None, cut_hist=True, **kwargs)
-    if kwargs.get('protect', False):
-        mdl.reset()
     save_helper(kwargs.get('save_args', {}), result, mdlhist)
     return result, mdlhist
 
@@ -379,7 +377,7 @@ def exec_nom_par(arg):
 
 def exec_nom_helper(mdl, scen, name, **kwargs):
     """Helper function for executing nominal scenarios"""
-    mdl = mdl.new_with_params(p=scen.p, sp=scen.sp, r=scen.r)
+    mdl = mdl.new(p=scen.p, sp=scen.sp, r=scen.r)
     result, mdlhist, _, t_end = prop_one_scen(mdl, scen, **kwargs)
     check_hist_memory(mdlhist, kwargs['num_scens'], max_mem=kwargs['max_mem'])
     save_helper(kwargs['save_args'], result, mdlhist, name, name)
@@ -508,8 +506,6 @@ def sequence(mdl, seq={}, faultseq={}, disturbances={}, scen={}, rate=np.NaN,
     if include_nominal:
         nomhist.cut(t_end_nom)
         mdlhists = History(nominal=nomhist, faulty=faulthist)
-    if kwargs.get('protect', False):
-        mdl.reset()
     save_helper(kwargs.get('save_args', {}), result, mdlhists)
     return result.flatten(), mdlhists.flatten()
 
@@ -547,7 +543,7 @@ def nom_helper(mdl, ctimes, protect=True, save_args={}, mdl_kwargs={}, scen={},
     if isinstance(mdl, type):
         mdl = mdl(**mdl_kwargs)
     elif protect or mdl_kwargs:
-        mdl = mdl.new_with_params(**mdl_kwargs)
+        mdl = mdl.new(**mdl_kwargs)
 
     if not scen:
         nomscen = Scenario(sequence=Sequence(disturbances=kwargs.get('disturbances',
@@ -572,9 +568,8 @@ def nom_helper(mdl, ctimes, protect=True, save_args={}, mdl_kwargs={}, scen={},
     if any(endfaults) and warn_faults:
         print("Faults found during the nominal run " + str(endfaults))
 
-    # mdl.reset()
     if not staged:
-        mdls = {0: mdl.new_with_params(**mdl_kwargs)}
+        mdls = {0: mdl.new(**mdl_kwargs)}
 
     return result, nommdlhist, nomscen, mdls, t_end_nom
 
@@ -685,10 +680,10 @@ def fault_sample_from(mdl, faultdomains={}, faultsamples={}, get_phasemap=True,
     mult_kwarg = pack_mult_kwargs(**kwargs)
     loc_kwargs = {**sim_kwarg, **run_kwarg, 'staged': False}
     if not scen:
-        mdl = mdl.new_with_params(**run_kwarg.get('mdl_kwargs', {}))
+        mdl = mdl.new(**run_kwarg.get('mdl_kwargs', {}))
         _, nomhist, _, _, t_end = nom_helper(mdl, [], **loc_kwargs)
     else:
-        mdl = mdl.new_with_params(p=scen.p, sp=scen.sp, r=scen.r)
+        mdl = mdl.new(p=scen.p, sp=scen.sp, r=scen.r)
         _, nomhist, _, t_end,  = prop_one_scen(mdl, scen, **loc_kwargs)
     app = gen_sampleapproach(mdl, faultdomains, faultsamples, get_phasemap, nomhist)
     res, hist = fault_sample(mdl, app, **sim_kwarg, **run_kwargs, **mult_kwarg,
@@ -796,7 +791,7 @@ def scenlist_helper(mdl, scenlist, c_mdl, **kwargs):
             if staged:
                 mdl_i = copy_staged(c_mdl[scen.time])
             else:
-                mdl_i = c_mdl[0].new_with_params()
+                mdl_i = c_mdl[0].new()
             ec, mh, t_end = exec_scen(mdl_i, scen, indiv_id=str(i), **kwargs)
             results[name], mdlhists[name] = ec, mh
     return results, mdlhists
@@ -838,7 +833,7 @@ def exec_scen_par(args):
     if args[2].get('staged', False):
         mdl_out = copy_staged(mdl_in)
     else:
-        mdl_out = mdl_in.new_with_params()
+        mdl_out = mdl_in.copy()
     return exec_scen(mdl_out, args[1], **args[2], indiv_id=args[3])
 
 

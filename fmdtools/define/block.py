@@ -104,7 +104,7 @@ class Simulable(BaseObject):
 
     Note that classes solely based on Simulable may not be able to be simulated.
     """
-    __slots__ = ('p', '_args_p', 'sp', '_args_sp', 'r', '_args_r', 'h', 'track', 'flows', 'is_copy')
+    __slots__ = ('p', 'sp', 'r', 'h', 'track', 'flows', 'is_copy')
     default_sp = {}
     default_track = ["all"]
     role_p = Parameter
@@ -133,9 +133,11 @@ class Simulable(BaseObject):
         else:
             self.track = track
 
-        if 'sp' not in kwargs:
-            kwargs['sp'] = self.default_sp
-        BaseObject.__init__(self, **kwargs)
+        if 'sp' in kwargs:
+            sp = {**self.default_sp, **kwargs.pop('sp')}
+        else:
+            sp = self.default_sp
+        BaseObject.__init__(self, sp=sp, **kwargs)
 
     def add_flow_hist(self, hist, timerange, track):
         """
@@ -189,7 +191,7 @@ class Simulable(BaseObject):
         """
         return Result({'rate': scen.rate, 'cost': 1, 'expected_cost': scen.rate})
 
-    def new_params(self, p={}, sp={}, r={}, track={}):
+    def new_params(self, p={}, sp={}, r={}, track={}, **kwargs):
         """
         Create a copy of the defining parameters for use in a new Simulable.
 
@@ -222,6 +224,14 @@ class Simulable(BaseObject):
         if not track:
             track = copy.deepcopy(self.track)
         return p, sp, r, track
+
+    def new(self, **kwargs):
+        """
+        Creates a new Model with the same parameters as the current model but
+        with changes to params (p, sp, track, rand etc.)
+        """
+        p, sp, r, track = self.new_params(**kwargs)
+        return self.__class__(p=p, sp=sp, r=r, track=track)
 
     def get_fxns(self):
         """
@@ -313,42 +323,13 @@ class Simulable(BaseObject):
                                 sim_units=self.sp.units, weight=weight)
         return rate
 
-    def get_args(self, **kwargs):
-        """
-        Get the current arguments for a given Simulable stored in _at_args.
-
-        Parameters
-        ----------
-        kwargs: dict
-            Attributes to overwrite (and their values)
-
-        Returns
-        -------
-        saved_args : dict
-            Dictionary of saved arguments.
-        """
-        args = {}
-        for at in dir(self):
-            if at.startswith("_args"):
-                role = at[6:]
-                if role in kwargs:
-                    args[role] = kwargs[role]
-                else:
-                    saved_arg = getattr(self, at, {})
-                    if saved_arg:
-                        args[role] = saved_arg
-        return args
-
 
 class Block(Simulable):
-    __slots__ = ['s', '_args_s', 'm', '_args_m', 't', '_args_t']
-    default_track = ['s', 'm', 'r', 't', 'i']
-    role_s = State
-    role_m = Mode
-    role_t = Time
-    """ 
-    Superclass for FxnBlock and Component subclasses. Has functions for model setup, querying state, reseting the model
-    
+    """
+    Superclass for FxnBlock and Component subclasses.
+
+    Has functions for model setup, querying state, reseting the model
+
     Attributes
     ----------
     p : Parameter
@@ -368,6 +349,13 @@ class Block(Simulable):
     is_copy : bool
         Marker for whether the object is a copy.
     """
+
+    __slots__ = ['s', 'm', 't']
+    default_track = ['s', 'm', 'r', 't', 'i']
+    role_s = State
+    role_m = Mode
+    role_t = Time
+
     def __init__(self, name='', flows={}, **kwargs):
         """
         Instance superclass. Called by FxnBlock and Component classes.
@@ -377,68 +365,40 @@ class Block(Simulable):
         name : str
             Name for the Block instance.
         flows :dict
-            Flow objects passed from the model level to use instead of instantiating locally.
-        p : dict, optional
-            Internal parameters to override from defaults. The default is {}.
-        s : dict, optional
-            Internal states to override from defaults. The default is {}.
-        c : dict, optional
-            Internal CompArch fields/arguments override from defaults. The default is {}.
-            FxnBlock must have an role_c property.
-        a : dict, optional
-            Internal ASG fields/arguments override from defaults. The default is {}.
-            FxnBlock must have an role_a property.
-        r : dict, optional
-            Internal Rand fields/arguments override from defaults. The default is {}.
-        m : dict, optional
-            Internal Mode fields/arguments override from defaults. The default is {}.
-        t : dict, optional
-            Internal Time fields/arguments to override from defaults. The defautl is {}
+            Flow objects passed from the model level.
+        kwargs : kwargs
+            Roles and tracking to override the defaults. See Simulable.__init__
         """
         Simulable.__init__(self, name=name, **kwargs)
         assoc_flows(self, flows=flows)
         self.update_seed()
 
-    def new_with_params(self, s={}, m={}, t={}, **kwargs):
-        """
-        Creates a new Block with the same parameters as the current model but
-        with changes to params (p, sp, track, rand etc.). For use when simulating
-        individually.
-        """
-        p, sp, r, track = super().new_params(**kwargs)
-        if not s:
-            s = self._args_s
-        if not m:
-            m = self._args_m
-        if not t:
-            t = self._args_t
-        return self.__class__(name=self.name, s=s, p=p, m=m, t=t, sp=sp, r=r, track=track)
-
     def get_typename(self):
         """
-        Gets the name of the type (Block for Blocks)
+        Get the name of the type (Block for Blocks).
+
         Returns
         -------
         typename: str
             Block
         """
         return "Block"
-    
+
     def is_static(self):
-        """Checks if Block has static execution step"""
-        return (getattr(self, 'behavior', False) or 
+        """Check if Block has static execution step."""
+        return (getattr(self, 'behavior', False) or
                 getattr(self, 'static_behavior', False) or
-                (hasattr(self, 'aa') and getattr(self.aa, 'proptype','') == 'static'))
-        
+                (hasattr(self, 'aa') and getattr(self.aa, 'proptype', '') == 'static'))
+
     def is_dynamic(self):
-        """Checks if Block has dynamic execution step"""
+        """Check if Block has dynamic execution step."""
         return (hasattr(self, 'dynamic_behavior') or
                 (hasattr(self, 'aa') and getattr(self.aa, 'proptype', '') == 'dynamic'))
 
     def __repr__(self):
         """
-        Provides a repl-friendly string showing the states of the Block
-        
+        Provide a repl-friendly string showing the states of the Block.
+
         Returns
         -------
         repr: str
@@ -454,7 +414,7 @@ class Block(Simulable):
 
     def get_rand_states(self, auto_update_only=False):
         """
-        Gets dict of random states from block and associated actions/components
+        Get dict of random states from block and associated actions/components.
 
         Parameters
         ----------
@@ -462,20 +422,21 @@ class Block(Simulable):
 
         Returns
         -------
-
+        rand_states : dict
+            Random states from the block and associated actions/components.
         """
         rand_states = self.r.get_rand_states(auto_update_only)
         if hasattr(self, 'ca'):
             rand_states.update(self.ca.get_rand_states(auto_update_only=auto_update_only))
         if hasattr(self, 'aa'):
             for actname, act in self.aa.actions.items():
-                if act.get_rand_states(auto_update_only=auto_update_only): 
+                if act.get_rand_states(auto_update_only=auto_update_only):
                     rand_states[actname] = act.get_rand_states(auto_update_only=auto_update_only)
         return rand_states
 
     def choose_rand_fault(self, faults, default='first', combinations=1):
         """
-        Randomly chooses a fault or combination of faults to insert in fxn.m. 
+        Randomly chooses a fault or combination of faults to insert in fxn.m.
 
         Parameters
         ----------
@@ -501,7 +462,7 @@ class Block(Simulable):
 
     def get_flowtypes(self):
         """
-        Returns the names of the flow types in the model
+        Return the names of the flow types in the model.
 
         Returns
         -------
@@ -509,32 +470,16 @@ class Block(Simulable):
         """
         return {obj.__class__.__name__ for name, obj in self.flows.items()}
 
-    def reset(self):
-        """
-        reset requires flows to be cleared first. Resets the block to the initial state with no faults. Used by default
-        in derived objects when resetting the model. Requires associated flows to be cleared first.
-
-        Returns
-        -------
-
-        """
-
-        self.m.remove_any_faults()
-        self.s = self.role_s(**self._args_s)
-        self.r = self.role_r(**self._args_r, run_stochastic=self.r.run_stochastic)
-        self.t.reset()
-        for flow in self.flows.values():
-            flow.reset()
-
     def copy(self, *args, **kwargs):
         """
+        Copy the block with its current attributes.
 
         Parameters
         ----------
         args   : tuple
             New arguments to use to instantiate the block, (e.g., flows, p, s)
         kwargs :
-            New kwargs to use to instantiate the block 
+            New kwargs to use to instantiate the block.
 
         Returns
         -------
@@ -544,12 +489,12 @@ class Block(Simulable):
         cop = self.__new__(self.__class__)
         cop.is_copy = True
         try:
-            saved_kwargs = self.get_args(**kwargs)
-            cop.__init__(self.name, *args, **saved_kwargs)
+            p, sp, r, track = self.new_params(**kwargs)
+            cop.__init__(self.name, *args, p=p, sp=sp, r=r, track=track)
         except TypeError as e:
             raise Exception("Poor specification of "+str(self.__class__)) from e
         cop.m.mirror(self.m)
-        cop.t = self.t.copy(**self._args_t)
+        cop.t = self.t.copy()
         cop.s.assign(self.s)
         cop.r.assign(self.r)
         if hasattr(self, 'h'):
@@ -558,7 +503,7 @@ class Block(Simulable):
 
     def get_memory(self):
         """
-        Gets the approximate memory usage of the block in bytes (not complete)
+        Get the approximate memory usage of the block in bytes (not complete).
 
         Returns
         -------
@@ -818,7 +763,7 @@ class CompArch(dataobject, mapping=True):
         if track == 'default':
             track = self.default_track
         init_indicator_hist(self, h, timerange, track)
-        
+
         components_track = get_sub_include('components', track)
         if components_track:
             hc = History()
@@ -1172,7 +1117,7 @@ class FxnBlock(Block):
         Action Architecture performed by function.
     """
 
-    __slots__ = ["ca", "_args_ca", "aa", "_args_aa", "args_f"]
+    __slots__ = ["ca", "aa", "args_f"]
     default_track = ["ca", "aa"]+Block.default_track
 
     def __init__(self, name='', flows={}, ca=dict(), aa=dict(), local=dict(),
@@ -1211,7 +1156,6 @@ class FxnBlock(Block):
                         argstr = ''
                     raise TypeError("Poor specification for : " + str(at_init) +
                                     " with kwargs: " + str(at_arg) + argstr) from e
-                setattr(self, '_args_' + at, at_arg)
                 self.update_contained_modes(at)
             elif at_arg:
                 raise Exception(at + " argument provided: " + str(at_arg) +
@@ -1291,10 +1235,10 @@ class FxnBlock(Block):
         """
         cop = super().copy(*args, **kwargs)
         if hasattr(self, 'ca'):
-            cop.ca = self.ca.copy_with_arg(**self._args_ca)
+            cop.ca = self.ca.copy()
             cop.update_contained_modes('ca')
         if hasattr(self, 'aa'):
-            cop.aa = self.aa.copy(flows=cop.flows.copy(), **self._args_aa)
+            cop.aa = self.aa.copy(flows=cop.flows.copy())
             cop.update_contained_modes('aa')
         if hasattr(self, 'h'):
             if hasattr(self, 'ca'):

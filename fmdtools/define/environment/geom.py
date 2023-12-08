@@ -490,7 +490,7 @@ class ExPoly(GeomPoly):
     role_s = ExGeomState
 
 
-class GeomArch(object):
+class GeomArch(BaseObject):
     """
     Agglomeration of multiple geoms/shapes.
 
@@ -524,8 +524,12 @@ class GeomArch(object):
         self.lines = []
         self.polys = []
         self.geoms = {}
-        init_obj_attr(self, p=p)
+        super().__init__(p=p)
         self.init_geoms(**kwargs)
+
+    def check_role(self, rolename):
+        if rolename != 'ga':
+            raise Exception("Invalid rolename for GeomArch: "+rolename)
 
     def init_geoms(self, **kwargs):
         """Use this placeholder method to define custom architectures."""
