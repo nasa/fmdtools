@@ -379,8 +379,7 @@ class Drone(FunctionArchitecture):
                       times=(0, 20),
                       units='sec')
 
-    def __init__(self, **kwargs):
-        super().__init__(**kwargs)
+    def init_architecture(self, **kwargs):
         # add flows to the model
         self.add_flow('force_st', Force)
         self.add_flow('force_lin', Force)
@@ -400,8 +399,6 @@ class Drone(FunctionArchitecture):
         self.add_fxn('plan_path', PlanPath, 'ee_ctl', 'des_traj', 'force_st', 'dofs')
         self.add_fxn('hold_payload', HoldPayload, 'force_lin', 'force_st', 'dofs')
         self.add_fxn('view_env', ViewEnvironment, 'dofs', 'environment')
-
-        self.build()
 
     def find_classification(self, scen, mdlhists):
         """

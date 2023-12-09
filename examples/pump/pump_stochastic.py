@@ -113,9 +113,7 @@ class Pump(DetPump):
     __slots__ = ()
     default_track = 'all'
 
-    def __init__(self, **kwargs):
-        super().__init__(**kwargs)
-
+    def init_architecture(self, **kwargs):
         self.add_flow('ee_1', Electricity)
         self.add_flow('sig_1', Signal)
         self.add_flow('wat_1', Water('Wat_1'))
@@ -127,8 +125,6 @@ class Pump(DetPump):
         self.add_fxn('move_water', MoveWat, 'ee_1', 'sig_1', 'wat_1', 'wat_2',
                      p={'delay': self.p.delay})
         self.add_fxn('export_water', ExportWater, 'wat_2')
-
-        self.build()
 
 
 if __name__ == "__main__":

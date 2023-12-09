@@ -2297,10 +2297,11 @@ def graph_factory(obj, **kwargs):
         Graph of the appropriate (default) class
     """
     from fmdtools.define.architecture.function import FunctionArchitecture
-    from fmdtools.define.flow import CommsFlow, MultiFlow
-    from fmdtools.define.block import ActionArchitecture
+    from fmdtools.define.flow.multiflow import MultiFlow
+    from fmdtools.define.flow.commsflow import CommsFlow
+    from fmdtools.define.architecture.action import ActionArchitecture
 
-    if isinstance(obj, Model):
+    if isinstance(obj, FunctionArchitecture):
         return FunctionArchitectureGraph(obj, **kwargs)
     elif isinstance(obj, CommsFlow):
         return CommsFlowGraph(obj, **kwargs)

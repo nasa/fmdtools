@@ -739,9 +739,9 @@ class Drone(FunctionArchitecture):
     """Static multirotor drone model (executes in a single timestep)."""
 
     __slots__ = ()
+    default_sp = {'times': (0, )}
 
-    def __init__(self, sp=SimParam(times=(0,)), **kwargs):
-        super().__init__(sp=sp, **kwargs)
+    def init_architecture(self, **kwargs):
         # add flows to the model
         self.add_flow("force_st", Force)
         self.add_flow("force_lin", Force)
@@ -759,8 +759,6 @@ class Drone(FunctionArchitecture):
         self.add_fxn("plan_path", PlanPath, "ee_ctl", "des_traj", "force_st", "dofs")
         self.add_fxn("hold_payload", HoldPayload, "dofs", "force_lin", "force_st")
         self.add_fxn("view_env", ViewEnvironment, "dofs")
-
-        self.build()
 
     def find_classification(self, scen, mdlhist):
         """Calculate rate, cost, expected cost based on cost of repair information."""

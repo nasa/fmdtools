@@ -12,11 +12,11 @@ from drone_mdl_rural import HoldPayload as HoldPayloadRural
 from drone_mdl_rural import AffectDOF as AffectDOFRural
 from drone_mdl_rural import Drone as DroneRural
 
-from fmdtools.define.block import ComponentArchitecture, Component
+from fmdtools.define.block.component import Component
 from fmdtools.define.container.mode import Mode
 from fmdtools.define.container.state import State
 from fmdtools.define.container.parameter import Parameter
-from fmdtools.define.architecture.function import FunctionArchitecture
+from fmdtools.define.architecture.component import ComponentArchitecture
 from fmdtools.define.environment.environment import Environment
 from fmdtools.define.environment.coords import Coords, CoordsParam
 
@@ -115,7 +115,7 @@ class UrbanDroneEnvironment(Environment):
     """ Drone environment for an urban area with buildings."""
 
     container_p = UrbanGridParam
-    container_c = StreetGrid
+    coords_c = StreetGrid
     container_s = EnvironmentState
 
     def ground_height(self, dofs):
@@ -311,9 +311,7 @@ class Drone(DroneRural):
                       units='min',
                       dt=0.1)
 
-    def __init__(self, name='drone', **kwargs):
-        Model.__init__(self, name=name, **kwargs)
-
+    def init_architecture(self, **kwargs):
         self.add_flow('force_st', Force)
         self.add_flow('force_lin', Force)
         self.add_flow('hsig_dofs', HSig)
@@ -344,8 +342,6 @@ class Drone(DroneRural):
                      'rsig_traj', 'environment', p=self.p.plan_param)
         self.add_fxn('hold_payload', HoldPayload, 'dofs', 'force_lin', 'force_st',
                      'environment')
-
-        self.build()
 
     def indicate_landed(self, time):
         """Return true if the drone has entered the "landed" state."""
@@ -512,7 +508,7 @@ if __name__ == "__main__":
     app.add_faultsample("move_scens", "fault_phases", "drone_faults", "move",
                         phasemap="plan_path", method='quad',
                         args=(move_quad['quad']['nodes'], move_quad['quad']['weights']))
-    
+
     app.faultsamples['move_scens'].get_scen_groups('phase')
 
     endresults, hists = propagate.fault_sample(mdl, app, staged=False,

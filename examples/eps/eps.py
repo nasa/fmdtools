@@ -13,9 +13,9 @@ using solely the functions of the system.
 Further information about this system (data, more detailed models) is presented
 at: https://c3.nasa.gov/dashlink/projects/3/
 """
-from fmdtools.define.block.function import Function, Mode
+from fmdtools.define.block.function import Function
+from fmdtools.define.container.mode import Mode
 from fmdtools.define.architecture.function import FunctionArchitecture
-from fmdtools.define.container.parameter import Parameter, SimParam
 from fmdtools.define.container.state import State
 from fmdtools.define.flow.base import Flow
 
@@ -368,14 +368,13 @@ class EEtoOE(Function):
 class EPS(FunctionArchitecture):
     __slots__ = ()
     default_track = {"flows": ["he", "me", "oe"]}
+    default_sp = {'times': (0, 0)}
 
-    def __init__(self, sp=SimParam(times=(0, 0)), **kwargs):
+    def init_architecture(self, **kwargs):
         """
         The Model superclass uses a static model representation by default if
         there are no parameters for times, phases, etc.
         """
-        super().__init__(sp=sp, **kwargs)
-
         self.add_flow("ee_1", GenericFlow)
         self.add_flow("ee_2", GenericFlow)
         self.add_flow("ee_3", GenericFlow)
@@ -404,8 +403,6 @@ class EPS(FunctionArchitecture):
         self.add_fxn("export_waste_h1", ExportHE, "waste_he_1")
         self.add_fxn("export_waste_ho", ExportHE, "waste_he_o")
         self.add_fxn("export_waste_hm", ExportHE, "waste_he_m")
-
-        self.build()
 
     def find_classification(self, scen, mdlhists):
         outflows = ["he", "me", "oe"]
@@ -470,7 +467,7 @@ if __name__ == "__main__":
 
     degtimemap = degradation.get_summary(operator=np.sum)
 
-    mg = ModelGraph(mdl)
+    mg = FunctionArchitectureGraph(mdl)
     mg.set_heatmap(degtimemap)
     mg.draw()
 

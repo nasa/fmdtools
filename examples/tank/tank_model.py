@@ -25,8 +25,10 @@ from fmdtools.define.container.parameter import Parameter
 from fmdtools.define.container.state import State
 from fmdtools.define.container.mode import Mode
 from fmdtools.define.flow.base import Flow
+from fmdtools.define.block.function import Function
 from fmdtools.define.architecture.function import FunctionArchitecture
-from fmdtools.define.block.function import Function, Action, ActionArchitecture
+from fmdtools.define.block.action import Action
+from fmdtools.define.architecture.action import ActionArchitecture
 
 
 class WatState(State):
@@ -360,9 +362,7 @@ class Tank(FunctionArchitecture):
                       times=(0, 5, 10, 15, 20), units='min')
     default_track = {'fxns': {'store_water': {'s': 'level'}}}
 
-    def __init__(self, **kwargs):
-        super().__init__(**kwargs)
-
+    def init_architecture(self, **kwargs):
         self.add_flow('wat_in_1', Liquid)
         self.add_flow('wat_in_2', Liquid)
         self.add_flow('wat_out_1', Liquid)
@@ -378,8 +378,6 @@ class Tank(FunctionArchitecture):
         self.add_fxn('export_water', ExportLiquid, 'wat_out_2', 'valve2_sig')
         self.add_fxn('human', HumanActions, 'valve1_sig', 'tank_sig',
                      'valve2_sig', aa={'reacttime': self.p.reacttime})
-
-        self.build()
 
     def find_classification(self, scen, hist):
         # here we define failure in terms of the water level getting too low or too high
@@ -447,7 +445,7 @@ if __name__ == '__main__':
 
     from fmdtools.analyze.graph import FunctionArchitectureGraph
     mdl.fxns['human'].t.dt = 2.0
-    mg = ModelGraph(mdl)
+    mg = FunctionArchitectureGraph(mdl)
     mg.set_exec_order(mdl)
     mg.draw()
 

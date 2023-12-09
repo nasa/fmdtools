@@ -47,7 +47,7 @@ class FunctionArchitecture(Simulable):
     default_track = ('fxns', 'flows', 'i')
     default_name = 'model'
 
-    def __init__(self, name='', p={}, sp={}, r={}, track=''):
+    def __init__(self, name='', p={}, sp={}, r={}, track='', **kwargs):
         super().__init__(name=name, p=p, sp=sp, r=r, track=track)
 
         self.fxns = dict()
@@ -56,6 +56,8 @@ class FunctionArchitecture(Simulable):
         self._fxnflows = []
         self._fxninput = {}
         self._flowstates = {}
+        self.init_architecture(name=name, p=p, sp=sp, r=r, track=track, **kwargs)
+        self.build()
 
     def __repr__(self):
         fxnlist = [fxn.__repr__() for fxn in self.fxns.values()]
@@ -179,7 +181,8 @@ class FunctionArchitecture(Simulable):
         else:
             raise Exception("Invalid list: "+str(functionorder) +
                             " should have elements: "+str(self.functionorder))
-    def get_flows(self,flownames):
+
+    def get_flows(self, flownames):
         """Return a list of the model flow objects."""
         return {flowname: self.flows[flowname] for flowname in flownames}
 
@@ -241,13 +244,16 @@ class FunctionArchitecture(Simulable):
         self.graph.add_nodes_from(self.flows, bipartite=1)
         self.graph.add_edges_from(self._fxnflows)
 
-        dangling_nodes = [e for e in nx.isolates(self.graph)] # check to see that all functions/flows are connected
-        if dangling_nodes and require_connections: raise Exception("Fxns/flows disconnected from model: "+str(dangling_nodes))
+        # check to see that all functions/flows are connected
+        dangling_nodes = [e for e in nx.isolates(self.graph)]
+        if dangling_nodes and require_connections:
+            raise Exception("Fxns/flows disconnected from model: "+str(dangling_nodes))
 
     def calc_repaircost(self, additional_cost=0, default_cost=0, max_cost=np.inf):
         """
-        Calculates the repair cost of the fault modes in the model based on given
-        mode cost information for each function mode (in fxn.assoc_faultmodes).
+        Calculate the repair cost of the fault modes in the model.
+
+        Uses given mode cost information for each function mode (in fxn.m).
 
         Parameters
         ----------
@@ -317,7 +323,8 @@ class FunctionArchitecture(Simulable):
         copy : Model
             Copy of the curent model.
         """
-        cop = self.__new__(self.__class__)  # Is this adequate? Wouldn't this give it new components?
+        # Is this adequate? Wouldn't this give it new components?
+        cop = self.__new__(self.__class__)
         cop.is_copy = True
         cop.__init__(p=getattr(self, 'p', {}),
                      sp=getattr(self, 'sp', {}),

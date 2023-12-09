@@ -435,9 +435,10 @@ class Pump(FunctionArchitecture):
         be tuned, we can easily use the timestep t=1 OR t=5.
     """
 
-    def __init__(self, **kwargs):
-        super().__init__(**kwargs)
+    def init_architecture(self, **kwargs):
         """
+        Use init_architecture to create the model architecture.
+
         Here add_flow() is used to instantiate a given flow object with a given type
         to a given name. Non-default values (for s, p, etc) can be passed, and we
         can also pass already-instantiated objects if desired.
@@ -461,10 +462,6 @@ class Pump(FunctionArchitecture):
         self.add_fxn('move_water', MoveWat, 'ee_1', 'sig_1',
                      'wat_1', 'wat_2', p={'delay': self.p.delay})
         self.add_fxn('export_water', ExportWater, 'wat_2')
-
-        """ __init__ for models ends with a build command to construct the underlying
-        structure"""
-        self.build()
 
     def indicate_finished(self, time):
         """

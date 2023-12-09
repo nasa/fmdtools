@@ -810,7 +810,7 @@ class Coords(BaseObject):
         prop : str
             Name of the property to represent a color.
         z : str, optional
-            Name of the property to plot as z. The default is "prop", which uses the same
+            Name of the property to plot as z. The default is "prop", which uses same
             property as prop.
         z_res : int, optional
             Resolution to plot z at. The default is 10.

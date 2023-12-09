@@ -48,7 +48,7 @@ class Function(Block):
 
         for at in ['ca', 'aa']:  # NOTE: similar to init_obj_attr()
             at_arg = eval(at)
-            at_init = getattr(self, '_init_'+at, False)
+            at_init = getattr(self, 'arch_'+at, False)
             if at_init:
                 try:
                     if at == "aa":
@@ -66,7 +66,7 @@ class Function(Block):
                 self.update_contained_modes(at)
             elif at_arg:
                 raise Exception(at + " argument provided: " + str(at_arg) +
-                                "without associating a ComponentArchitecture/ActionArchitecture to flow_" + at)
+                                "without associating an archiecture to arch_" + at)
         self.update_seed()
 
     def update_contained_modes(self, at):
