@@ -12,8 +12,8 @@ from fmdtools.define.container.time import Time
 from fmdtools.define.container.mode import Mode
 from fmdtools.define.block.function import Function
 from fmdtools.define.architecture.function import FunctionArchitecture
-from fmdtools.define.environment.environment import Environment
-from fmdtools.define.environment.coords import Coords, CoordsParam
+from fmdtools.define.flow.environment import Environment
+from fmdtools.define.object.coords import Coords, CoordsParam
 
 import fmdtools.sim as fs
 
@@ -75,7 +75,7 @@ class SightGrid(Coords):
 class DroneEnvironment(Environment):
     """Drone environment flow (contains grid)."""
 
-    container_c = SightGrid
+    coords_c = SightGrid
     container_p = DroneEnvironmentGridParam
 
 

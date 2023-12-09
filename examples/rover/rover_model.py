@@ -33,8 +33,9 @@ from fmdtools.define.container.mode import Mode
 from fmdtools.define.block.function import Function
 from fmdtools.define.architecture.function import FunctionArchitecture
 from fmdtools.define.flow.base import Flow
-from fmdtools.define.environment.geom import PointParam, GeomPoint, LineParam, GeomLine, GeomArch
-from fmdtools.define.environment.environment import Environment
+from fmdtools.define.object.geom import PointParam, GeomPoint, LineParam, GeomLine
+from fmdtools.define.architecture.geom import GeomArchitecture
+from fmdtools.define.flow.environment import Environment
 import fmdtools.sim.propagate as prop
 import itertools
 import numpy as np
@@ -211,7 +212,7 @@ class PathParam(LineParam):
     buffer_near: float = 0.4
 
 
-class GroundGeomArch(GeomArch):
+class GroundGeomArch(GeomArchitecture):
     """Geometry of rover environment--start, end, and line."""
 
     container_p = GroundParam

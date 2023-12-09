@@ -12,7 +12,8 @@ import inspect
 import warnings
 from recordclass import dataobject, asdict, astuple
 
-from fmdtools.define.base import BaseObject, set_var, get_var
+from fmdtools.define.base import set_var, get_var
+from fmdtools.define.object.base import BaseObject
 from fmdtools.define.container.state import State
 from fmdtools.define.container.parameter import Parameter, SimParam
 from fmdtools.define.container.rand import Rand

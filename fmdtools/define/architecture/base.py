@@ -2,7 +2,7 @@
 """
 Description: Module defining the base architecture class.
 """
-from fmdtools.define.base import check_pickleability
+from fmdtools.define.object.base import check_pickleability
 from fmdtools.define.block.base import Simulable
 import time
 
