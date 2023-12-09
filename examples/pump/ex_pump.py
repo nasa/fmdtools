@@ -1,9 +1,6 @@
 # -*- coding: utf-8 -*-
 """
-File name: ex_pump.py
-Author: Daniel Hulse
-Created: October 2019
-Description: A simple model for explaining fault model definition
+Description: A simple model for explaining fault model definition.
 
 This model constitudes an extremely simple functional model of an
 electric-powered pump.
@@ -53,17 +50,21 @@ class WaterStates(State):
 
 
 class Water(Flow):
+    """Flow connecting water from input to pump."""
+
     container_s = WaterStates
 
 
 class EEStates(State):
-    """States for EE flows."""
+    """States for electrical energy flows."""
 
     current: float = 1.0
     voltage: float = 1.0
 
 
 class Electricity(Flow):
+    """Flow connecting electricity from input to pump."""
+
     container_s = EEStates
 
 
@@ -74,6 +75,8 @@ class SignalStates(State):
 
 
 class Signal(Flow):
+    """Flow connecting signal from input to pump."""
+
     container_s = SignalStates
 
 
@@ -157,6 +160,8 @@ class ImportEEMode(Mode):
 
 
 class ImportEEState(State):
+    """Effectiveness of importing electrical energy."""
+
     effstate: float = 1.0
 
 
@@ -217,17 +222,16 @@ class ImportEE(Function):
         self.ee_out.s.voltage = self.s.effstate * 500
 
 
-"""
-Import Water Classes
-"""
-
-
 class ImportWaterMode(Mode):
+    """Fault modes for importing water."""
+
     failrate = 1e-5
     fm_args = {'no_wat': (1.0, 1000), 'less_wat': (1.0, 0.0)}
 
 
 class ImportWater(Function):
+    """Import Water is the pipe with water going into the pump."""
+
     __slots__ = ['wat_out']
     container_m = ImportWaterMode
     flow_wat_out = Water
@@ -243,19 +247,16 @@ class ImportWater(Function):
             self.wat_out.s.level = 1.0
 
 
-"""
-Export Water Classes
-"""
-
-
 class ExportWaterMode(Mode):
+    """Fault modes for exporting water."""
+
     failrate = 1e-5
     fm_args = {'block': (1.0, 5000)}
     phases = {'start': 1.5, 'on': 1, 'end': 1}
 
 
 class ExportWater(Function):
-    """Import Water is the pipe with water going into the pump """
+    """Export Water is the pipe with water going out of the pump."""
 
     __slots__ = ['wat_in']
     container_m = ExportWaterMode
@@ -268,12 +269,9 @@ class ExportWater(Function):
             self.wat_in.s.area = 0.01
 
 
-"""
-Import Signal Classes
-"""
-
-
 class ImportSigMode(Mode):
+    """Fault modes for signal input."""
+
     failrate = 1e-6
     fm_args = {'no_sig': (1.0, 10000, {'start': 1.5, 'on': 1, 'end': 1})}
 
@@ -288,7 +286,7 @@ class ImportSig(Function):
 
     def behavior(self, time):
         """
-        This function has time-dependent behavior.
+        Time-dependent behavior for the function.
 
         To have different operational modes depending on the time, use if/else
         statements on the time variable, which is the simulation time.
@@ -307,24 +305,27 @@ class ImportSig(Function):
                 self.sig_out.s.power = 0.0
 
 
-"""
-Move Water Classes
-"""
-
-
 class MoveWatTime(Time):
+    """Specialized time class specifying to keep a pressure_limit timer."""
+
     timernames = ('pressure_limit',)
 
 
 class MoveWatStates(State):
-    eff: float = 1.0  # effectiveness state
+    """State of the pump effectiveness."""
+
+    eff: float = 1.0
 
 
 class MoveWatParams(Parameter, readonly=True):
-    delay: int = 1  # delay parameter
+    """Delay parameter affecting how long it takes for the pumpt to break."""
+
+    delay: int = 1
 
 
 class MoveWatMode(Mode):
+    """Failure modes involved in moving water."""
+
     failrate = 1e-5
     fm_args = {'mech_break': (0.6, 5000, {'start': 0.1, 'on': 1.2, 'end': 0.1}),
                'short': (1.0, 10000, {'start': 1.5, 'on': 1, 'end': 1})}
@@ -413,27 +414,28 @@ class MoveWat(Function):
 
 # DEFINE MODEL OBJECT
 class Pump(FunctionArchitecture):
+    """
+    Define the pump model as a Model.
+
+    Models take a dictionary of parameters as input defining any veriables and
+    values to use in the model.
+
+    Note that sp is the SimParam defining the simulation. phases in this dictionary
+    are queues for fault sampling which can be used by SampleApproach/FaultSample
+
+    We can also chage dt to change the timestep, but note that this can change
+    behavior.
+    In this model, because every time we've entered occurs at a factor of 5, and
+    there aren't any complicated controls/dynamics interactions that would need to
+    be tuned, we can easily use the timestep t=1 OR t=5.
+    """
+
     __slots__ = ()
     container_p = PumpParam
     default_sp = dict(phases=(('start', 0, 4), ('on', 5, 49),
                       ('end', 50, 55)), times=(0, 20, 55), dt=1.0, units='hr')
     default_track = {'flows': {'wat_2': {'s': 'flowrate'},
                                'ee_1': {'s': {'current'}}}, 'i': 'all'}
-    """
-        This defines the pump model as a Model.
-
-        Models take a dictionary of parameters as input defining any veriables and
-        values to use in the model.
-
-        Note that sp is the SimParam defining the simulation. phases in this dictionary
-        are queues for fault sampling which can be used by SampleApproach/FaultSample
-
-        We can also chage dt to change the timestep, but note that this can change
-        behavior.
-        In this model, because every time we've entered occurs at a factor of 5, and
-        there aren't any complicated controls/dynamics interactions that would need to
-        be tuned, we can easily use the timestep t=1 OR t=5.
-    """
 
     def init_architecture(self, **kwargs):
         """
@@ -465,6 +467,8 @@ class Pump(FunctionArchitecture):
 
     def indicate_finished(self, time):
         """
+        Indicate that the pump is finished.
+
         Indicators can addtionally be used to log conditions and even stop the
         simulation when these conditions are met.
 
@@ -481,17 +485,20 @@ class Pump(FunctionArchitecture):
             return False
 
     def indicate_on(self, time):
+        """Indicate that the pump is on."""
         return self.flows['wat_1'].s.flowrate > 0
 
     def find_classification(self, scen, mdlhists):
         """
+        Classify the simulation run/scenario.
+
         Propagation methods use find_classification() to classify the results based on
         the effects of a fault scenario, returning whatever metrics are desired. In this
         case, a dictionary with rate, cost, and expected cost is calculated.
 
-       In this example, there are three costs--water, electrical, and repair costs:
-       - repair costs depends on the cost of each mode, while
-       - electrical and water costs depend on the lost water in the non-nominal case
+        In this example, there are three costs--water, electrical, and repair costs:
+        - repair costs depends on the cost of each mode, while
+        - electrical and water costs depend on the lost water in the non-nominal case
         """
         # get fault costs and rates
         if 'repair' in self.p.cost:

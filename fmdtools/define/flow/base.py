@@ -12,7 +12,7 @@ from recordclass import asdict, astuple
 
 from fmdtools.define.container.parameter import Parameter
 from fmdtools.define.container.state import State
-from fmdtools.define.base import BaseObject
+from fmdtools.define.object.base import BaseObject
 from fmdtools.analyze.common import get_sub_include
 from fmdtools.analyze.history import History, init_indicator_hist
 

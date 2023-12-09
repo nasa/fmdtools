@@ -17,8 +17,8 @@ from fmdtools.define.container.mode import Mode
 from fmdtools.define.container.state import State
 from fmdtools.define.container.parameter import Parameter
 from fmdtools.define.architecture.component import ComponentArchitecture
-from fmdtools.define.environment.environment import Environment
-from fmdtools.define.environment.coords import Coords, CoordsParam
+from fmdtools.define.flow.environment import Environment
+from fmdtools.define.object.coords import Coords, CoordsParam
 
 import numpy as np
 from recordclass import asdict

@@ -5,8 +5,8 @@ Class for creating environments.
 from fmdtools.define.container.rand import Rand
 from fmdtools.analyze.common import get_sub_include
 from fmdtools.define.flow.commsflow import CommsFlow
-from fmdtools.define.environment.coords import Coords, ExampleCoords
-from fmdtools.define.environment.geom import GeomArch, ExGeomArch
+from fmdtools.define.object.coords import Coords, ExampleCoords
+from fmdtools.define.architecture.geom import GeomArchitecture, ExGeomArch
 
 
 class Environment(CommsFlow):
@@ -39,7 +39,7 @@ class Environment(CommsFlow):
     slots = ["c", "r", "ga"]
     container_r = Rand
     coords_c = Coords
-    arch_ga = GeomArch
+    arch_ga = GeomArchitecture
     default_track = ('s', 'i', 'c', 'ga')
     all_possible = ('s', 'i', 'c', 'r', 'ga')
 
