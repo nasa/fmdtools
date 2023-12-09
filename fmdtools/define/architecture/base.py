@@ -1,6 +1,10 @@
 # -*- coding: utf-8 -*-
 """
-Description: Module defining the base architecture class.
+Module for action architectures.
+
+Classes
+-------
+:class:`Architecture`: Generic Architecture Class.
 """
 from fmdtools.define.object.base import check_pickleability
 from fmdtools.define.block.base import Simulable

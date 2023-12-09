@@ -50,5 +50,5 @@ class Action(Block):
         return cop
 
     def behavior(self, time):
-        """Placeholder behavior method for actions."""
+        """Simulate action behavior (placeholder for user-defined method)."""
         a = 0

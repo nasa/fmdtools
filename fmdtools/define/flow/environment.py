@@ -1,7 +1,5 @@
 # -*- coding: utf-8 -*-
-"""
-Class for creating environments.
-"""
+"""Module for creating environments."""
 from fmdtools.define.container.rand import Rand
 from fmdtools.analyze.common import get_sub_include
 from fmdtools.define.flow.commsflow import CommsFlow

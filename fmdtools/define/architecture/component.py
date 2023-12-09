@@ -1,8 +1,10 @@
 # -*- coding: utf-8 -*-
 """
-Created on Thu Dec  7 11:22:12 2023
+Module for action architectures.
 
-@author: dhulse
+Classes
+-------
+:class:`ComponentArchitecture`: Architecture defining agglomeration of Components.
 """
 from typing import ClassVar
 from recordclass import dataobject, asdict
@@ -11,15 +13,16 @@ from fmdtools.analyze.history import History, init_indicator_hist
 
 
 class ComponentArchitecture(dataobject, mapping=True):
-    """Container for holding component architectures."""
+    """Class defining Component Architectures."""
 
     archtype: ClassVar[str] = 'default'
     components: dict = dict()
     faultmodes: dict = dict()
     default_track = ('i', 'components')
+
     def make_components(self, CompClass, *args, **kwargs): # noqa
         """
-        Adds components to the component architecture.
+        Add components to the component architecture.
 
         Parameters
         ----------
@@ -47,7 +50,8 @@ class ComponentArchitecture(dataobject, mapping=True):
 
     def copy_with_arg(self, **kwargs):
         cop = self.__class__(**kwargs)
-        for compname, component in self.components.items():  # TODO: needs to cover all attributes, copy should a part of Block
+        # TODO: needs to cover all attributes, copy should a part of Block
+        for compname, component in self.components.items():
             cop_comp = cop.components[compname]
             cop_comp.s = cop_comp.container_s(**asdict(component.s))
             cop_comp.m.mirror(component.m)
@@ -61,14 +65,15 @@ class ComponentArchitecture(dataobject, mapping=True):
             comp.update_seed(seed)
 
     def get_rand_states(self, auto_update_only=False):
-        rand_states={}
+        rand_states = {}
         for compname, comp in self.components.items():
-            if comp.get_rand_states(auto_update_only=auto_update_only): 
+            if comp.get_rand_states(auto_update_only=auto_update_only):
                 rand_states[compname] = comp.get_rand_states(auto_update_only=auto_update_only)
         return rand_states
 
     def get_faults(self):
-        return {comp.name+'_'+f for comp in self.components.values() for f in comp.m.faults}
+        return {comp.name+'_'+f for comp in self.components.values()
+                for f in comp.m.faults}
 
     def reset(self):
         for name, component in self.components.items():
@@ -76,14 +81,15 @@ class ComponentArchitecture(dataobject, mapping=True):
 
     def create_hist(self, timerange, track):
         """
-        Creates a history corresponding to ComponentArchitecture attributes.
+        Create a history corresponding to ComponentArchitecture attributes.
 
         Parameters
         ----------
         timerange : iterable, optional
             Time-range to initialize the history over. The default is None.
         track : list/str/dict, optional
-            argument specifying attributes for :func:`get_sub_include'. The default is None.
+            argument specifying attributes for :func:`get_sub_include'.
+            The default is None.
 
         Returns
         -------
@@ -100,7 +106,7 @@ class ComponentArchitecture(dataobject, mapping=True):
             hc = History()
             for c, comp in self.components.items():
                 comp_track = get_sub_include(c, components_track)
-                if comp_track: 
+                if comp_track:
                     hc[c] = comp.create_hist(timerange, comp_track)
             h['components'] = hc
         return h

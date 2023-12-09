@@ -1,10 +1,11 @@
 # -*- coding: utf-8 -*-
 """
-Now:
-    Static Geoms, with properties tied to parameters and states representing
-    allocations.
-Future:
-    Dynamic Geoms, with properties tied to states
+Module for defining Geometry Architectures, agglomerations of individual geometries.
+
+Classes
+-------
+:class:`GeomArchitecture`: Architecture of multiple geometries.
+:class:`ExGeomArch`: Example GeomArchitecture.
 """
 from fmdtools.define.object.base import BaseObject
 from fmdtools.define.container.parameter import Parameter
