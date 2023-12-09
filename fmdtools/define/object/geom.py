@@ -1,5 +1,7 @@
 # -*- coding: utf-8 -*-
 """
+Module for defining geometries using the shapely library.
+
 Now:
     Static Geoms, with properties tied to parameters and states representing
     allocations.
@@ -10,13 +12,13 @@ from fmdtools.define.object.base import BaseObject
 from fmdtools.define.container.parameter import Parameter
 from fmdtools.define.container.state import State
 from fmdtools.analyze.common import get_sub_include
-from fmdtools.analyze.history import History, init_indicator_hist
+from fmdtools.analyze.history import History
 from fmdtools.analyze.common import setup_plot, consolidate_legend
 
 from shapely import LineString, Point, Polygon
 from shapely.ops import nearest_points
 from typing import ClassVar
-from recordclass import astuple, asdict
+from recordclass import astuple
 import numpy as np
 
 

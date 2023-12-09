@@ -2,7 +2,7 @@
 """
 Description: A module to define Functions.
 
-- :class:`Function`:    Class for defining model Functions.
+- :class:`Function`: Class for defining model Functions.
 """
 from decimal import Decimal
 from fmdtools.define.block.base import Block
@@ -155,8 +155,8 @@ class Function(Block):
                         for k, v in comp.h.items():
                             cop.h["ca.components." + compname + "." + k] = v
             if hasattr(self, 'aa'):
-                #if "a.active_actions" in self.h.keys():
-                #    cop.h["a.active_actions"] = self.h['a.active_actions'].copy()
+                # if "a.active_actions" in self.h.keys():
+                #     cop.h["a.active_actions"] = self.h['a.active_actions'].copy()
                 for actname, act in cop.aa.actions.items():
                     ex_hist = cop.h.get("aa.actions." + actname)
                     if ex_hist:
@@ -176,12 +176,13 @@ class Function(Block):
 
     def __call__(self, proptype, faults=[], time=0, run_stochastic=False):
         """
-        Updates the state of the function at a given time and injects faults.
+        Update the state of the function at a given time and injects faults.
 
         Parameters
         ----------
         proptype : str
-            Type of propagation step to update ('behavior', 'static_behavior', or 'dynamic_behavior')
+            Type of propagation step to update
+            ('behavior', 'static_behavior', or 'dynamic_behavior')
         faults : list, optional
             Faults to inject in the function. The default is [].
         time : float, optional
@@ -246,7 +247,7 @@ class Function(Block):
 
 
 class ExampleFunction(Function):
-    """Example Function block for testing"""
+    """Example Function block for testing."""
 
     container_p = ExampleParameter
     container_s = ExampleState
@@ -262,11 +263,17 @@ class ExampleFunction(Function):
             self.s.put(x=0.0, y=0.0)
 
     def find_classification(self, scen, hist):
+        """Classify via metric xy = s.x + s.y."""
         return {"xy": self.s.x + self.s.y}
 
 
 class GenericFxn(Function):
-    """Generic function block. For use when the user has not yet defined a class for the
-    given (to be implemented) function block. Acts as a placeholder that enables simulation."""
+    """
+    Generic function block.
+
+    For use when the user has not yet defined a class for the given (to be implemented)
+    function block. Acts as a placeholder that enables simulation.
+    """
+
     def __init__(self, name='', flows={}, args_f={}, **kwargs):
         super().__init__(name=name, flows=flows, **kwargs)

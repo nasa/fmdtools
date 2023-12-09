@@ -3,7 +3,6 @@
 Description: A module for defining time-based properties for use in blocks.
 
 Has Classes:
-- :class:`Timer`: Class defining timers
 - :class:`Time`: Class containing all time-related Block constructs (e.g., timers).
 """
 from decimal import Decimal
@@ -11,6 +10,7 @@ from fmdtools.analyze.common import get_sub_include
 from fmdtools.analyze.history import History
 from fmdtools.define.container.base import BaseContainer
 from fmdtools.define.object.timer import Timer
+
 
 class Time(BaseContainer):
     """
@@ -36,6 +36,7 @@ class Time(BaseContainer):
     timernames: tuple
         Names of timers to instantiate.
     """
+
     rolename = "t"
     time: float = -0.1
     t_ind: int = 0
@@ -70,8 +71,12 @@ class Time(BaseContainer):
                 self.run_times)
 
     def set_timestep(self):
-        """Sets the timestep of the function given the option use_local
-        (which selects whether it uses local_timestep or global_timestep)"""
+        """
+        Set the timestep of the function given.
+
+        If using the option use_local, local_timestep is used instead of
+        global_timestep.
+        """
         global_tstep = Decimal(str(self.dt))
         local_tstep = Decimal(self.local_dt)
         if self.use_local:
@@ -95,7 +100,7 @@ class Time(BaseContainer):
             timer.dt = -self.dt
 
     def reset(self):
-        """Resets time to the initial state"""
+        """Reset time to the initial state."""
         self.time = -0.1
         self.t_ind = 0
         self.t_loc = 0.0
@@ -103,7 +108,7 @@ class Time(BaseContainer):
             timer.reset()
 
     def copy(self, *args, **t_args):
-        """ Copies the timer"""
+        """Copy the timer."""
         cop = self.__class__(*args, **t_args)
         for timer in self.timers:
             cop.timers[timer] = self.timers[timer].copy()
@@ -116,7 +121,7 @@ class Time(BaseContainer):
 
     def create_hist(self, timerange, track):
         """
-        Creates a History corresponding to Time
+        Create a History corresponding to Time.
 
         Parameters
         ----------

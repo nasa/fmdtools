@@ -41,7 +41,7 @@ class Simulable(BaseObject):
 
     def __init__(self, name='', track={}, **kwargs):
         """
-        Instantiates internal Simulable attributes.
+        Instantiate internal Simulable attributes.
 
         Parameters
         ----------
@@ -105,7 +105,7 @@ class Simulable(BaseObject):
 
     def find_classification(self, scen, mdlhists):
         """
-        Placeholder for model find_classification methods (for running nominal models).
+        Classify the results of the simulation (placeholder).
 
         Parameters
         ----------
@@ -157,8 +157,9 @@ class Simulable(BaseObject):
 
     def new(self, **kwargs):
         """
-        Create a new Model with the same parameters as the current model but
-        with changes to params (p, sp, track, rand etc.)
+        Create a new Model with the same parameters as the current model.
+
+        Can initiate with with changes to mutable parameters (p, sp, track, rand etc.).
         """
         p, sp, r, track = self.new_params(**kwargs)
         return self.__class__(p=p, sp=sp, r=r, track=track)

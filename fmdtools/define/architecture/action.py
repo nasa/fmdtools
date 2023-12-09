@@ -1,8 +1,10 @@
 # -*- coding: utf-8 -*-
 """
-Created on Thu Dec  7 11:22:12 2023
+Module for action architectures.
 
-@author: dhulse
+Classes
+-------
+:class:`ActionArchitecture`: Architecture of multiple Actions.
 """
 import networkx as nx
 import copy
@@ -22,20 +24,27 @@ class ActionArchitecture(object):
         Initial action to set as active. Default is 'auto'
             - 'auto' finds the starting node of the graph and uses it
             - 'ActionName' sets the given action as the first active action
-            - providing a list of actions will set them all to active (if multi-state rep is used)
+            - providing a list of actions will set them all to active
+            (if multi-state rep is used)
     state_rep : 'finite-state'/'multi-state'
         How the states of the system are represented. Default is 'finite-state'
-            - 'finite-state' means only one action in the system can be active at once (i.e., a finite state machine)
+            - 'finite-state' means only one action in the system can be active at once
+            (i.e., a finite state machine)
             - 'multi-state' means multiple actions can be performed at once
     max_action_prop : 'until_false'/'manual'/int
         How actions progress. Default is 'until_false'
-            - 'until_false' means actions are simulated until all outgoing conditions are false
-            - providing an integer places a limit on the number of actions that can be performed per timestep
+            - 'until_false' means actions are simulated until all outgoing conditions
+            are false
+            - providing an integer places a limit on the number of actions that can be
+            performed per timestep
     proptype : 'static'/'dynamic'/'manual'
-        Which propagation step to execute the Action Sequence Graph in. Default is 'dynamic'
-            - 'manual' means that the propagation is performed manually (defined in a behavior method)
+        Which propagation step to execute the Action Sequence Graph in.
+        Default is 'dynamic'
+            - 'manual' means that the propagation is performed manually
+            (defined in a behavior method)
     per_timestep : bool
-        Defines whether the action sequence graph is reset to the initial state each time-step (True) or stays in the current action (False). Default is False
+        Defines whether the action sequence graph is reset to the initial state each
+        time-step (True) or stays in the current action (False). Default is False.
     """
 
     initial_action = "auto"
@@ -47,7 +56,7 @@ class ActionArchitecture(object):
 
     def __init__(self, flows={}, is_copy=False):
         self.actions = {}
-        self.flows = flows 
+        self.flows = flows
         self.conditions = {}
         self.action_graph = nx.DiGraph()
         self.flow_graph = nx.DiGraph()
@@ -58,19 +67,22 @@ class ActionArchitecture(object):
 
     def build(self):
         if self.initial_action == 'auto':
-            initial_action = [act for act, in_degree in self.action_graph.in_degree if in_degree == 0]
+            initial_action = [act for act, in_degree in self.action_graph.in_degree
+                              if in_degree == 0]
             if not initial_action:
                 raise Exception("Cannot set initial action--no starting node")
         elif type(self.initial_action) == str:
             initial_action = [self.initial_action]
         self.set_active_actions(initial_action)
         if self.state_rep == 'finite-state' and len(self.active_actions) > 1:
-            raise Exception("Cannot have more than one initial action with finite-state representation")
+            raise Exception("Cannot have more than one initial action with" +
+                            " finite-state representation")
 
     def add_flow(self, flowname, fclass=Flow, p={}, s={}):
         """
-        Adds a flow with given attributes to ASG. Used to enable a flexible
-        internal flow architecture in the ASG.
+        Add a flow with given attributes to ASG.
+
+        Used to enable a flexible internal flow architecture in the ASG.
 
         Parameters
         ----------
@@ -90,7 +102,7 @@ class ActionArchitecture(object):
 
     def add_act(self, name, actclass, *flownames, duration=0.0, **params):
         """
-        Associate an Action with the Function Block for use in the Action Sequence Graph
+        Associate an Action with the architecture. Called after add_flow.
 
         Parameters
         ----------
@@ -103,32 +115,38 @@ class ActionArchitecture(object):
         duration:
             Duration of the action. Default is 0.0
         **params : any
-            parameters to instantiate the Action with. 
+            parameters to instantiate the Action with.
         """
         flows = {fl: self.flows[fl] for fl in flownames}
         action = actclass(name=name, flows={**flows}, **params)
-        
+
         self.actions[name] = action
         self.actions[name].duration = duration
-        
+
         self.action_graph.add_node(name)
         self.flow_graph.add_node(name, bipartite=0)
         for flow in flows:
             self.flow_graph.add_node(flow, bipartite=1)
             self.flow_graph.add_edge(name, flow)
-            
-        modes_to_add = {action.name+'_'+f: val for f, val in action.m.faultmodes.items()}
+
+        modes_to_add = {action.name+'_'+f: val
+                        for f, val in action.m.faultmodes.items()}
         fmode_intersect = set(modes_to_add).intersection(self.faultmodes)
         if any(fmode_intersect):
-            raise Exception("Action "+name+" overwrites existing fault modes: "+str(fmode_intersect)+". Rename the faults")
-        self.faultmodes.update({action.name+'_'+modename: name for modename in action.m.faultmodes})
+            raise Exception("Action "+name +
+                            " overwrites existing fault modes: "+str(fmode_intersect) +
+                            ". Rename the faults")
+        self.faultmodes.update({action.name+'_'+modename: name
+                                for modename in action.m.faultmodes})
 
     def cond_pass(self): # noqa
         return True
 
     def add_cond(self, start_action, end_action, name='auto', condition='pass'):
         """
-        Associates a Condition with the Function Block for use in the Action Sequence Graph
+        Associate a Condition with the ActionArchitecture.
+
+        Conditions specify when to precede from one action to the next.
 
         Parameters
         ----------
@@ -137,34 +155,40 @@ class ActionArchitecture(object):
         end_action : str
             Action that the condition leads to.
         name : str
-            Name for the condition. Defaults to numbered conditions if none are provided.
+            Name for the condition.
+            Defaults to numbered conditions if none are provided.
         condition : method
-            Method in the class to use as a condition. Defaults to self.condition_pass if none are provided
+            Method in the class to use as a condition.
+            Defaults to self.condition_pass if none are provided.
         """
         if name == 'auto':
             name = str(len(self.conditions)+1)
         if condition == 'pass':
             condition = self.cond_pass
         self.conditions[name] = condition
-        self.action_graph.add_edge(start_action, end_action, **{'name': name, name: 'name', 'arrow': True})
+        self.action_graph.add_edge(start_action,
+                                   end_action,
+                                   **{'name': name, name: 'name', 'arrow': True})
 
     def set_active_actions(self, actions):
-        """Helper method for setting given action(s) as active"""
+        """Set given action(s) as active."""
         if type(actions) == str:
             if actions in self.actions:
                 actions = [actions]
             else:
-                raise Exception("initial_action="+actions+" not in self.actions: "+str(self.actions))
+                raise Exception("initial_action=" + actions +
+                                " not in self.actions: "+str(self.actions))
         if type(actions) == list:
             self.active_actions = set(actions)
             if any(self.active_actions.difference(self.actions)):
-                raise Exception("Initial actions not associated with model: "+str(self.active_actions.difference(self.actions)))
+                raise Exception("Initial actions not associated with model: " +
+                                str(self.active_actions.difference(self.actions)))
         else:
-            raise Exception("Invalid option for initial_action")
+            raise Exception("Invalid option for initial_action.")
 
     def __call__(self, time, run_stochastic, proptype, dt):
         """
-        Propagates behaviors through the internal Action Sequence Graph
+        Propagates behaviors through the ActionArchitecture.
 
         Parameters
         ----------
@@ -173,7 +197,8 @@ class ActionArchitecture(object):
         run_stochastic : bool/str
             Whether to run the simulation using stochastic or deterministic behavior
         proptype : str
-            Type of propagation step to update ('behavior', 'static_behavior', or 'dynamic_behavior')
+            Type of propagation step to update
+            ('behavior', 'static_behavior', or 'dynamic_behavior')
         dt : float
             Timestep to propagate over.
         """
@@ -194,13 +219,15 @@ class ActionArchitecture(object):
                         try:
                             cond = self.conditions[atts['name']]()
                         except TypeError as e:
-                            raise TypeError("Poorly specified condition "+str(atts['name'])+": ") from e
+                            raise TypeError("Poorly specified condition " +
+                                            str(atts['name'])+": ") from e
                         if cond and getattr(self.actions[action], 'duration', 0.0)+dt <= self.actions[action].t.t_loc:
                             self.actions[action].t.t_loc = 0.0
                             new_active_actions.add(act_out)
                             new_active_actions.discard(act_in)
                 if len(new_active_actions) > 1 and self.state_rep == 'finite-state':
-                    raise Exception("Multiple active actions in a finite-state representation: "+str(new_active_actions))
+                    raise Exception("Multiple active actions in a finite-state " +
+                                    "representation: "+str(new_active_actions))
                 num_prop += 1
                 if type(self.proptype) == int and num_prop >= self.proptype:
                     break
@@ -231,9 +258,10 @@ class ActionArchitecture(object):
         cop = self.__class__(flows=newflows, is_copy=True, **kwargs)
         for flowname, flow in newflows.items():
             if flow.__hash__() != cop.flows[flowname].__hash__():
-                raise Exception("Flow not associated w- lower level of ASG: " + flowname)
+                raise Exception("Flow not associated w- lower level of ASG: " +
+                                flowname)
 
-        for actname, action in self.actions.items(): 
+        for actname, action in self.actions.items():
             cop_act = cop.actions[actname]
             cop_act.duration = action.duration
             cop_act.s = action.container_s(**asdict(action.s))
@@ -259,7 +287,8 @@ class ActionArchitecture(object):
         timerange : iterable, optional
             Time-range to initialize the history over. The default is None.
         track : list/str/dict, optional
-            argument specifying attributes for :func:`get_sub_include'. The default is None.
+            argument specifying attributes for :func:`get_sub_include'.
+            The default is None.
 
         Returns
         -------
@@ -276,10 +305,11 @@ class ActionArchitecture(object):
             ha = History()
             for a, act in self.actions.items():
                 act_track = get_sub_include(a, actions_track)
-                if act_track: 
+                if act_track:
                     ha[a] = act.create_hist(timerange, act_track)
             h['actions'] = ha
-        h.init_att('active_actions', self.active_actions, timerange=timerange, track=track)
+        h.init_att('active_actions', self.active_actions,
+                   timerange=timerange, track=track)
         return h
 
     def return_mutables(self):

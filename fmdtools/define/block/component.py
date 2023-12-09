@@ -1,7 +1,5 @@
 # -*- coding: utf-8 -*-
-"""
-Description: A module to define Components.
-"""
+"""Description: A module to define Components."""
 from fmdtools.define.block.base import Block
 
 
@@ -10,7 +8,7 @@ class Component(Block):
 
     def behavior(self, time):
         """
-        Placeholder for component behavior methods.
+        Simulate behavior provided (placeholder).
 
         Enables one to include components without yet having a defined behavior for
         them.
