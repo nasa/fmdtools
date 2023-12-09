@@ -217,7 +217,7 @@ class GroundGeomArch(GeomArchitecture):
 
     container_p = GroundParam
 
-    def init_geoms(self, **kwargs):
+    def init_architecture(self, **kwargs):
         """Initialize geometry with line and start/end points."""
         ls = self.p.gen_ls()
         self.add_geom('line', PathLine, p={'xys': ls})

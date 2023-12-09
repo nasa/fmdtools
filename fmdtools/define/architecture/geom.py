@@ -26,7 +26,7 @@ class GeomArchitecture(BaseObject):
     --------
     for an architecture with the geoms already defined:
     >>> class ExGeomArch(GeomArchitecture):
-    ...    def init_geoms(self):
+    ...    def init_architecture(self):
     ...        self.add_geom("ex_point", ExPoint)
     ...        self.add_geom("ex_line", ExLine)
     ...        self.add_geom("ex_poly", ExPoly)
@@ -51,13 +51,13 @@ class GeomArchitecture(BaseObject):
         self.polys = []
         self.geoms = {}
         super().__init__(p=p)
-        self.init_geoms(**kwargs)
+        self.init_architecture(**kwargs)
 
     def check_role(self, rolename):
         if rolename != 'ga':
             raise Exception("Invalid rolename for GeomArchitecture: "+rolename)
 
-    def init_geoms(self, **kwargs):
+    def init_architecture(self, **kwargs):
         """Use this placeholder method to define custom architectures."""
         a = 1
 
@@ -219,7 +219,7 @@ class GeomArchitecture(BaseObject):
 class ExGeomArch(GeomArchitecture):
     """Example Geometric Architecture for testing etc."""
 
-    def init_geoms(self):
+    def init_architecture(self):
         """Initialize example geoms."""
         self.add_geom("ex_point", ExPoint)
         self.add_geom("ex_line", ExLine)
