@@ -9,7 +9,8 @@ class LocationState(State):
     x: float=0.0
     y: float=0.0
 
-from fmdtools.define.flow import CommsFlow, MultiFlow
+from fmdtools.define.flow.multiflow import MultiFlow
+from fmdtools.define.flow.commsflow import CommsFlow, MultiFlow
 class Communications(CommsFlow):
     container_s = LocationState
 class Location(MultiFlow):
@@ -43,7 +44,7 @@ class Mover(Function):
             self.internal_info.send("all", "local", "x")
         elif self.p.y_up!=0.0:   
             self.internal_info.s.y=self.loc.s.y
-            self.internal_info.send("all", "local", "y")   
+            self.internal_info.send("all", "local", "y")
     def find_classification(self, scen, fxnhist):
         return {"last_x": self.loc.s.x, "min_x": fxnhist.faulty.location.get(self.name).x}
 
@@ -62,8 +63,7 @@ class Coordinator(Function):
 from fmdtools.define.architecture.function import FunctionArchitecture
 class TestModel(FunctionArchitecture):
     default_sp = dict(times=(0,10))
-    def __init__(self, **kwargs):
-        super().__init__(**kwargs)
+    def init_architecture(self, **kwargs):
 
         self.add_flow("communications", Communications)
         self.add_flow("location",       Location)
@@ -71,8 +71,6 @@ class TestModel(FunctionArchitecture):
         self.add_fxn("mover_2",     Mover, "communications", "location", p = {"y_up":1.0})
 
         self.add_fxn("coordinator", Coordinator, "communications")
-
-        self.build()
 
 if __name__=='__main__':
     mdl = TestModel()

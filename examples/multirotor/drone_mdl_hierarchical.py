@@ -218,7 +218,7 @@ class Drone(DynDrone):
 
     container_p = DroneParam
 
-    def __init__(self, **kwargs):
+    def init_architecture(self, **kwargs):
         FunctionArchitecture().__init__(self, **kwargs)
         # add flows to the model
         self.add_flow('force_st', Force)
@@ -239,8 +239,6 @@ class Drone(DynDrone):
         self.add_fxn('plan_path', PlanPath, 'ee_ctl', 'des_traj', 'force_st', 'dofs')
         self.add_fxn('hold_payload', HoldPayload, 'force_lin', 'force_st', 'dofs')
         self.add_fxn('view_env', ViewEnvironment, 'dofs', 'environment')
-
-        self.build()
 
 
 if __name__ == "__main__":

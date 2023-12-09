@@ -189,9 +189,7 @@ class Tank(FunctionArchitecture):
                       times=(0, 5, 10, 15, 20),
                       units='min')
 
-    def __init__(self, **kwargs):
-        super().__init__(**kwargs)
-
+    def init_architecture(self, **kwargs):
         self.add_flow('coolant_in', Liquid)
         self.add_flow('coolant_out', Liquid)
         self.add_flow('input_sig', Signal)
@@ -210,8 +208,6 @@ class Tank(FunctionArchitecture):
                      p=self.p)
         self.add_fxn('contingency', ContingencyActions,
                      'input_sig', 'tank_sig', 'output_sig', p=self.p)
-
-        self.build()
 
     def find_classification(self, scen, mdlhists):
         # here we define failure in terms of the water level getting too low or too high

@@ -962,9 +962,7 @@ class Rover(FunctionArchitecture):
                       phases=(("start", 0, 30), ("end", 31, 150)),
                       end_condition="indicate_finished")
 
-    def __init__(self, **kwargs):
-        super().__init__(**kwargs)
-
+    def init_architecture(self, **kwargs):
         self.add_flow("ground", Ground, p=self.p.ground)
         self.add_flow("pos_signal", Pos_Signal)
         self.add_flow('pos', Pos)
@@ -991,8 +989,6 @@ class Rover(FunctionArchitecture):
         drive_m = {"mode_args": self.p.drive_modes, 'deg_params': self.p.degradation}
         self.add_fxn("drive", Drive, "ground", 'pos', "ee_15", "motor_control",
                      "fault_sig", m=drive_m)
-
-        self.build()
 
     def indicate_finished(self, time):
         ''' 

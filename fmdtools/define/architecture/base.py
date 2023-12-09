@@ -1,11 +1,17 @@
 # -*- coding: utf-8 -*-
 """
-Created on Thu Dec  7 11:22:12 2023
-
-@author: dhulse
+Description: Module defining the base architecture class.
 """
 from fmdtools.define.base import check_pickleability
+from fmdtools.define.block.base import Simulable
 import time
+
+
+class Architecture(Simulable):
+
+    def init_architecture(self, *args, **kwargs):
+        """Use to initialize architecture."""
+        return 0
 
 def inject_faults_internal(obj, faults, compdict):
     """
