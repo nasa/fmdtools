@@ -190,6 +190,9 @@ class Parameter(BaseContainer, readonly=True):
         field_dict = self.get_field_dict(self)
         return self.__class__(**field_dict)
 
+    def return_mutables(self):
+        return ()
+
 
 class ExampleParameter(Parameter, readonly=True):
     """Example parameter for testing and documentation."""

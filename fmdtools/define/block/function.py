@@ -190,7 +190,8 @@ class Function(Block):
         run_stochastic : book
             Whether to run the simulation using stochastic or deterministic behavior
         """
-        self.r.run_stochastic = run_stochastic
+        if hasattr(self, 'r'):
+            self.r.run_stochastic = run_stochastic
         if faults:
             self.m.add_fault(*faults)  # if there is a fault, it is instantiated
         if hasattr(self, 'mode_state_dict') and any(faults):
@@ -198,7 +199,8 @@ class Function(Block):
         if hasattr(self, 'condfaults'):
             self.condfaults(time)    # conditional faults and behavior are then run
         if time > self.t.time:
-            self.r.update_stochastic_states()
+            if hasattr(self, 'r'):
+                self.r.update_stochastic_states()
         if hasattr(self, 'ca'):
             inject_faults_internal(self.ca, faults, self.ca.components)
         if hasattr(self, 'aa'):
@@ -230,7 +232,8 @@ class Function(Block):
             self.m.faults.update(self.ca.get_faults())
         self.t.time = time
         if run_stochastic == 'track_pdf':
-            self.r.probdens = self.r.return_probdens()
+            if hasattr(self, 'r'):
+                self.r.probdens = self.r.return_probdens()
         if self.m.exclusive is True and len(self.m.faults) > 1:
             raise Exception("More than one fault present in " + self.name +
                             "\n at t= " + str(time) +

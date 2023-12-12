@@ -20,14 +20,15 @@ from fmdtools.analyze.history import History, init_indicator_hist
 class Flow(BaseObject):
     """Superclass for flows."""
 
-    __slots__ = ['p', '_args_p', 's', '_args_s', 'h', 'is_copy']
+    __slots__ = ['p', 's', 'h', 'is_copy']
     container_p = Parameter
     container_s = State
     default_track = ('s', 'i')
 
     def __repr__(self):
-        if hasattr(self,'name'):
-            return getattr(self, 'name')+' '+self.__class__.__name__+' flow: '+self.s.__repr__()
+        if hasattr(self, 'name'):
+            return (getattr(self, 'name') + ' ' + self.__class__.__name__ +
+                    ' flow: ' + self.s.__repr__())
         else:
             return "Uninitialized Flow"
 
@@ -41,14 +42,6 @@ class Flow(BaseObject):
     def status(self):
         """Return a dict with the current states of the flow."""
         return asdict(self.s)
-
-    def get_memory(self):
-        """Return the approximate memory usage of the flow."""
-        mem = 0
-        for state in self.s.__fields__:
-            # (*2 to account for initstates)
-            mem += 2*sys.getsizeof(getattr(self.s, state))
-        return mem
 
     def copy(self):
         """Return a copy of the flow object (used when copying the model)."""
