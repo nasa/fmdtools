@@ -66,7 +66,6 @@ from fmdtools.analyze.phases import from_hist
 # DEFAULT ARGUMENTS
 sim_kwargs = {'desired_result': 'endclass',
               'track': 'default',
-              'track_times': 'all',
               'staged': False,
               'run_stochastic': False,
               'use_end_condition': True,
@@ -106,14 +105,6 @@ track : str, optional
         {'functions':{'fxn1':'att1'}, 'flows':{'flow1':'att1'}}
 
     The default is 'all'.
-track_times : str/tuple
-    Defines what times to include in the history.
-    Options are:
-
-    - 'all'--all simulated times
-    - ('interval', n)--includes every nth time in the history
-    - ('times', [t1, ... tn])--only includes times defined in the
-      vector [t1 ... tn]
 
 run_stochastic : bool
     Whether to run stochastic behaviors or use default values. Default is False.
@@ -927,7 +918,6 @@ def nested_sample(mdl, ps, get_phasemap=False, faultdomains={}, faultsamples={},
         Whether to use nominal simulation phasemap to set up the SampleApproach.
     faultdomains : dict
         Dict of arguments to SampleApproach.add_faultdomains
-        
     faultsamples : dict
         Dict of arguments to SampleApproach.add_faultsamples
         FaultSamples to add to othe SampleApproach and their arguments.
@@ -1033,7 +1023,7 @@ def list_init_faults(mdl):
     return faultlist
 
 
-def init_histrange(mdl, start_time, staged, track, track_times):
+def init_histrange(mdl, start_time, track):
     """
     Determines the timerange the model will be simulated over and initializes
     the history
@@ -1048,8 +1038,6 @@ def init_histrange(mdl, start_time, staged, track, track_times):
         Whether the simulation will be staged.
     track : dict
         Tracking dictionary.
-    track_times : dict/list
-        Specific tracking times to include in the history
 
     Returns
     -------
@@ -1062,25 +1050,9 @@ def init_histrange(mdl, start_time, staged, track, track_times):
     shift : int
         Time index to shift the history by.
     """
-    if staged:
-        timerange = np.arange(start_time, mdl.sp.times[-1] + mdl.sp.dt, mdl.sp.dt)
-        prevtimerange = np.arange(mdl.sp.times[0], start_time, mdl.sp.dt)
-        if track_times == "all":
-            shift = len(prevtimerange)
-        elif track_times[0] == 'interval':
-            shift = len(prevtimerange[0:len(prevtimerange):track_times[1]])
-        elif track_times[0] == 'times':
-            shift = 0
-    else:
-        timerange = np.arange(mdl.sp.times[0], mdl.sp.times[-1] + mdl.sp.dt, mdl.sp.dt)
-        shift = 0
-
-    if track_times == "all":
-        histrange = timerange
-    elif track_times[0] == 'interval':
-        histrange = timerange[0:len(timerange):track_times[1]]
-    elif track_times[0] == 'times':
-        histrange = track_times[1]
+    timerange = mdl.sp.get_timerange(start_time)
+    histrange = mdl.sp.get_histrange(start_time)
+    shift = mdl.sp.get_shift()
 
     mdlhist = mdl.create_hist(histrange, track)
     if 'time' not in mdlhist:
@@ -1159,14 +1131,16 @@ def prop_one_scen(mdl, scen, ctimes=[], nomhist={}, nomresult={}, cut_hist=True,
     t_end: float
         Last sim time
     """
-    desired_result, track, track_times, staged, run_stochastic, use_end_condition, warn_faults = unpack_sim_kwargs(**kwargs)
+    desired_result, track, staged, run_stochastic, use_end_condition, warn_faults = unpack_sim_kwargs(**kwargs)
     # if staged, we want it to start a new run from the starting time of the scenario,
     # using a copy of the input model (which is the nominal run) at this time
+    if staged:
+        start_time = scen.time
+    else:
+        start_time = 0
     mdlhist, histrange, timerange, shift = init_histrange(mdl,
-                                                          scen.time,
-                                                          staged,
-                                                          track,
-                                                          track_times)
+                                                          start_time,
+                                                          track)
     # run model through the time range defined in the object
     c_mdl = dict.fromkeys(ctimes)
     result = Result()
@@ -1188,15 +1162,8 @@ def prop_one_scen(mdl, scen, ctimes=[], nomhist={}, nomresult={}, cut_hist=True,
             except Exception as e:
                 raise Exception("Error in scenario " + str(scen)) from e
 
-            if track_times:
-                if track_times == 'all':
-                    t_ind_rec = t_ind + shift
-                elif track_times[0] == 'interval':
-                    t_ind_rec = t_ind//track_times[1]+shift
-                elif track_times[0] == 'times':
-                    t_ind_rec = track_times[1].index(t)
-                else:
-                    raise Exception("Invalid argument, track_times=" + str(track_times))
+            if mdl.sp.track_times:
+                t_ind_rec = mdl.sp.get_hist_ind(t_ind, t, shift)
                 mdlhist.log(mdl, t_ind_rec, time=t)
 
             if type(desired_result) == dict:

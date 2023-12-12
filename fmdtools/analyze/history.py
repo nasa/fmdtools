@@ -11,8 +11,6 @@ And functions/methods:
 - :func:`bootstrap_confidence_interval`: Convenience wrapper for scipy.bootstrap
 - :func:`diff`: Helper function for finding inconsistent states between val1, val2, with
   the difftype option
-- :func:`init_indicator_hist`: Creates a history for an object with indicator methods
-  (e.g., obj.indicate_XX)
 - :func:`init_hist_iter`: Initializes the history for a given attribute att with value
   val. Enables the recursive definition of a history as a nested structure.
 - :func:`init_dicthist`: Initializes histories for dictionary attributes (if any)
@@ -36,35 +34,6 @@ def is_known_immutable(val):
 def is_known_mutable(val):
     """Check if value is a known mutable."""
     return type(val) in [dict, set]
-
-
-def init_indicator_hist(obj, h, timerange, track):
-    """
-    Create a history for an object with indicator methods (e.g., obj.indicate_XX).
-
-    Parameters
-    ----------
-    obj : object
-        Function/Flow/Model object with indicators
-    h : History
-        History of Function/Flow/Model object with indicators appended in h['i']
-    timerange : iterable, optional
-        Time-range to initialize the history over. The default is None.
-    track : list/str/dict, optional
-        argument specifying attributes for :func:`get_sub_include'. The default is None.
-
-    Returns
-    -------
-    h : History
-        History of states with structure {'XX':log} for indicator `obj.indicate_XX`
-    """
-    sub_track = get_sub_include('i', track)
-    if sub_track:
-        indicators = obj.get_indicators()
-        if indicators:
-            h['i'] = History()
-            for i, val in indicators.items():
-                h['i'].init_att(i, val, timerange, sub_track, dtype=bool)
 
 
 def init_hist_iter(att, val, timerange=None, track=None, dtype=None, str_size='<U20'):
@@ -329,7 +298,7 @@ class History(Result):
                             raise Exception(obj_str + "Time beyond range of model" +
                                             "history--check staged execution " +
                                             "and simulation time settings" +
-                                            " (end condition, mdl.sp.times)") from e
+                                            " (end condition, mdl.sp.end_time)") from e
                         elif not np.can_cast(type(val), type(hist[t_ind])):
                             raise Exception(obj_str + str(att)+" changed type: " +
                                             str(type(hist[t_ind])) + " to " +

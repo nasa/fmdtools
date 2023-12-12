@@ -7,18 +7,121 @@ Description: A module to define blocks.
 """
 import itertools
 import copy
-import inspect
 import warnings
-from recordclass import dataobject, astuple
+import numpy as np
 
 from fmdtools.define.base import set_var, get_var
 from fmdtools.define.object.base import BaseObject
-from fmdtools.define.container.parameter import SimParam
+from fmdtools.define.container.parameter import Parameter
 from fmdtools.define.container.time import Time
-from fmdtools.define.flow.base import Flow
 from fmdtools.analyze.result import Result
 from fmdtools.analyze.common import get_sub_include
-from fmdtools.analyze.history import History, init_indicator_hist
+from fmdtools.analyze.history import History
+
+
+class SimParam(Parameter, readonly=True):
+    """
+    Class defining Simulation parameters.
+
+    Has fields:
+        phases : tuple
+            phases (('name', start, end)...) that the simulation progresses through
+        times : tuple
+            tuple of times to sample (if desired)
+            (starttime, sampletime1, sampletime2,... endtime)
+        track_times : tuple
+            Defines what times to include in the history.
+            Options are:
+            - ('all',)--all simulated times
+            - ('interval', n)--includes every nth time in the history
+            - ('times', [t1, ... tn])--only includes times defined in the
+              vector [t1 ... tn]
+        dt : float
+            timestep used in the simulation. default is 1.0
+        units : str
+            time-units. default is hours`
+        end_condition : str
+            Name of indicator method to use to end the simulation. If not provided (''),
+            the simulation ends at the final time. Default is ''
+        use_local : bool
+            Whether to use locally-defined timesteps in functions (if any).
+            Default is True.
+    """
+
+    rolename = "sp"
+    phases: tuple = (('na', 0, 100),)
+    start_time: float = 0.0
+    end_time: float = 100.0
+    track_times: tuple = ('all',)
+    dt: float = 1.0
+    units: str = "hr"
+    units_set = ('sec', 'min', 'hr', 'day', 'wk', 'month', 'year')
+    end_condition: str = ''
+    use_local: bool = True
+
+    def __init__(self, *args, **kwargs):
+        if 'phases' not in kwargs:
+            p = (('na', kwargs.get('start_time', 0.0),
+                  kwargs.get('end_time', SimParam.__defaults__['end_time'])), )
+            kwargs['phases'] = p
+        super().__init__(*args, **kwargs)
+        self.find_any_phase_overlap()
+
+    def find_any_phase_overlap(self):
+        """Check that simparam phases don't overlap."""
+        phase_dict = {v[0]: [v[1], v[2]] for v in self.phases}
+        intervals = [*phase_dict.values()]
+        int_low = np.sort([i[0] for i in intervals])
+        int_high = np.sort([i[1] if len(i) == 2 else i[0] for i in intervals])
+        for i, il in enumerate(int_low):
+            if i+1 == len(int_low):
+                break
+            if int_low[i+1] <= int_high[i]:
+                raise Exception("Global phases overlap in " + self.__class__.__name__ +
+                                ": " + str(self.phases) +
+                                " Ensure max of each phase < min of each other phase")
+
+    def get_timerange(self, start_time=None, end_time=None):
+        """Generate the timerange to simulate over."""
+        if start_time is None:
+            start_time = self.start_time
+        if end_time is None:
+            end_time = self.end_time
+        return np.arange(start_time, end_time + self.dt, self.dt)
+
+    def get_histrange(self, start_time=None, end_time=None):
+        """Get the history range associated with the SimParam."""
+        timerange = self.get_timerange(start_time, end_time)
+        if self.track_times[0] == "all":
+            histrange = timerange
+        elif self.track_times[0] == 'interval':
+            histrange = timerange[0:len(timerange):self.track_times[1]]
+        elif self.track_times[0] == 'times':
+            histrange = self.track_times[1]
+        return histrange
+
+    def get_shift(self):
+        """Get the shift between the sim timerange in the history."""
+        prevrange = self.get_timerange(start_time=0.0, end_time=self.start_time)[:-1]
+        if self.track_times[0] == "all":
+            shift = len(prevrange)
+        elif self.track_times[0] == 'interval':
+            shift = len(prevrange[0:len(prevrange):self.track_times[1]])
+        elif self.track_times[0] == 'times':
+            shift = 0
+        return shift
+
+    def get_hist_ind(self, t_ind, t, shift):
+        """Get the index of the history given the simulation time/index and shift."""
+        if self.track_times[0] == 'all':
+            t_ind_rec = t_ind + shift
+        elif self.track_times[0] == 'interval':
+            t_ind_rec = t_ind//self.track_times[1] + shift
+        elif self.track_times[0] == 'times':
+            t_ind_rec = self.track_times[1].index(t)
+        else:
+            raise Exception("Invalid argument, track_times=" + str(self.track_times))
+        return t_ind_rec
 
 
 class Simulable(BaseObject):
@@ -30,8 +133,8 @@ class Simulable(BaseObject):
 
     __slots__ = ('p', 'sp', 'r', 't', 'h', 'track', 'flows', 'is_copy')
     container_t = Time
-    default_sp = {}
     default_track = ["all"]
+    default_sp = {}
     container_sp = SimParam
 
     def __init__(self, name='', roletypes=[], track={}, **kwargs):
@@ -59,6 +162,7 @@ class Simulable(BaseObject):
         else:
             sp = {**self.default_sp}
         loc_kwargs = {**kwargs, 'sp': sp}
+
         BaseObject.__init__(self, name=name, roletypes=roletypes, **loc_kwargs)
 
     def add_flow_hist(self, hist, timerange, track):
@@ -239,7 +343,7 @@ class Simulable(BaseObject):
         if not fm:
             raise Exception("faultmode "+faultmode+" not in "+str(fxn.m.__class__))
         else:
-            sim_time = self.sp.times[-1] - self.sp.times[0] + self.sp.dt
+            sim_time = self.sp.start_time - self.sp.end_time + self.sp.dt
             rate = fm.calc_rate(time, phasemap=phasemap, sim_time=sim_time,
                                 sim_units=self.sp.units, weight=weight)
         return rate
@@ -504,7 +608,7 @@ class Block(Simulable):
             track = self.get_track(track, all_track)
             if track:
                 hist = History()
-                init_indicator_hist(self, hist, timerange, track)
+                self.init_indicator_hist(hist, timerange, track)
                 self.add_flow_hist(hist, timerange, track)
                 other_tracks = [t for t in track if t not in ('i', 'flows')]
                 for at in other_tracks:

@@ -10,8 +10,7 @@ import networkx as nx
 import copy
 from fmdtools.define.flow.base import Flow, init_flow
 from fmdtools.analyze.common import get_sub_include
-from fmdtools.analyze.history import History, init_indicator_hist
-from recordclass import asdict
+from fmdtools.analyze.history import History
 
 
 class ActionArchitecture(object):
@@ -299,7 +298,7 @@ class ActionArchitecture(object):
             track = self.default_track
         h = History()
         if 'i' in track or track == 'all':
-            init_indicator_hist(self, h, timerange, track)
+            self.init_indicator_hist(h, timerange, track)
         actions_track = get_sub_include('actions', track)
         if actions_track:
             ha = History()

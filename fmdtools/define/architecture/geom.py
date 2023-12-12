@@ -10,7 +10,7 @@ Classes
 from fmdtools.define.object.base import BaseObject
 from fmdtools.define.container.parameter import Parameter
 from fmdtools.analyze.common import get_sub_include
-from fmdtools.analyze.history import History, init_indicator_hist
+from fmdtools.analyze.history import History
 from fmdtools.analyze.common import setup_plot
 from fmdtools.define.object.geom import Geom, GeomPoint, GeomLine, GeomPoly
 from fmdtools.define.object.geom import ExPoint, ExLine, ExPoly
@@ -145,7 +145,7 @@ class GeomArchitecture(BaseObject):
         """
         track = self.get_track(track, all_possible=self.all_possible)
         hist = History()
-        init_indicator_hist(self, hist, timerange, track)
+        self.init_indicator_hist(hist, timerange, track)
         geoms_track = get_sub_include('geoms', track)
         if geoms_track:
             hist['geoms'] = History()

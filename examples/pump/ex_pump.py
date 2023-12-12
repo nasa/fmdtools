@@ -479,7 +479,7 @@ class Pump(FunctionArchitecture):
         a dummy method is provided to demonstrate, in practice this would depend on
         the intended end-states of the model.
         """
-        if time > self.sp.times[-1]:
+        if time > self.sp.end_time:
             return True
         else:
             return False

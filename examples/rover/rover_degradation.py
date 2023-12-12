@@ -121,7 +121,7 @@ class PSFDegradationLong(Function):
 
     def dynamic_behavior(self, time):
         # normalize time between -1 and 1 to enable sigmoid usage
-        norm_time = ((self.t.time - 0) * 2) / (self.sp.times[1] - self.sp.times[0]) - 1
+        norm_time = ((self.t.time - 0) * 2) / (self.sp.end_time - self.sp.start_time) - 1
         norm_experience_param = (
             self.p.experience_scale_max - self.p.experience_param
         ) / self.p.experience_scale_max

@@ -9,7 +9,7 @@ Classes
 from typing import ClassVar
 from recordclass import dataobject, asdict
 from fmdtools.analyze.common import get_sub_include
-from fmdtools.analyze.history import History, init_indicator_hist
+from fmdtools.analyze.history import History
 
 
 class ComponentArchitecture(dataobject, mapping=True):
@@ -99,7 +99,7 @@ class ComponentArchitecture(dataobject, mapping=True):
         h = History()
         if track == 'default':
             track = self.default_track
-        init_indicator_hist(self, h, timerange, track)
+        self.init_indicator_hist(h, timerange, track)
 
         components_track = get_sub_include('components', track)
         if components_track:

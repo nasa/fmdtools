@@ -14,7 +14,7 @@ from fmdtools.define.container.parameter import Parameter
 from fmdtools.define.container.state import State
 from fmdtools.define.object.base import BaseObject
 from fmdtools.analyze.common import get_sub_include
-from fmdtools.analyze.history import History, init_indicator_hist
+from fmdtools.analyze.history import History
 
 
 class Flow(BaseObject):
@@ -82,7 +82,7 @@ class Flow(BaseObject):
                 sh = self.s.create_hist(timerange, get_sub_include('s', track))
                 if sh:
                     h['s'] = sh
-                init_indicator_hist(self, h, timerange, track)
+                self.init_indicator_hist(h, timerange, track)
                 self.h = h
                 return h
             else:
