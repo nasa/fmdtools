@@ -32,6 +32,10 @@ class Flow(BaseObject):
         else:
             return "Uninitialized Flow"
 
+    def check_role(self, rolename):
+        """Flows may be given any role name."""
+        a = 1
+
     def reset(self):
         """Reset the flow to the initial state."""
         self.s = self.container_s(**self._args_s)

@@ -21,7 +21,6 @@ import dill
 import pickle
 import time
 import sys
-from recordclass import asdict
 
 
 def check_pickleability(obj, verbose=True, try_pick=False, pause=0.2):
@@ -126,13 +125,11 @@ class BaseObject(object):
         # initialize roles and add as attributes to the object
         for rolename in roles:
             container_initializer = getattr(self, roletype+'_'+rolename)
-            if rolename in kwargs:
-                container_args = kwargs[rolename]
-                if type(container_args) != dict:
-                    container_args = asdict(container_args)
+            container_args = kwargs.get(rolename, {})
+            if isinstance(container_args, container_initializer):
+                container = container_args
             else:
-                container_args = {}
-            container = container_initializer(**container_args)
+                container = container_initializer(**container_args)
             container.check_role(rolename)
             setattr(self, rolename, container)
 
@@ -237,12 +234,14 @@ class BaseObject(object):
         mem : float
             Approximate memory taken by the object.
         """
+        mem_profile = {}
         mem = 0
         for roletype in self.roletypes:
             for rolename in getattr(self, roletype+'s'):
                 role = getattr(self, rolename)
                 if hasattr(role, 'get_memory'):
-                    mem += role.get_memory()
+                    mem_profile[rolename], _ = role.get_memory()
                 else:
-                    mem += sys.getsizeof(role)
-        return mem
+                    mem_profile[rolename] = sys.getsizeof(role)
+                mem += mem_profile[rolename]
+        return mem, mem_profile

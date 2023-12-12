@@ -344,14 +344,17 @@ class BaseContainer(dataobject, mapping=True, iterable=True, copy_default=True):
 
     def get_memory(self):
         """Get approximate memory impact of dataobject and its fields."""
+        mem_profile = dict()
         mem = sys.getsizeof(self)
+        mem_profile['container'] = mem
         for fieldname in self.__fields__:
             field = getattr(self, fieldname)
             if hasattr(field, 'get_memory'):
-                mem += field.get_memory()
+                mem_profile['container'], _ = field.get_memory()
             else:
-                mem += sys.getsizeof(field)
-        return mem
+                mem_profile['container'] = sys.getsizeof(field)
+            mem += mem_profile['container']
+        return mem, mem_profile
 
     def return_mutables(self):
         return astuple(self)

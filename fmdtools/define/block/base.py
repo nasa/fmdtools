@@ -48,7 +48,6 @@ class Simulable(BaseObject):
             tracking dictionary
         """
         self.is_copy = False
-        self.flows = dict()
 
         if not track:
             self.track = self.default_track
@@ -195,13 +194,13 @@ class Simulable(BaseObject):
                 f = self.get_fxns()[var[1]]
                 var = var[2:]
             elif var[0] == 'flows':
-                f = self.flows[var[1]]
+                f = self.get_flows()[var[1]]
                 var = var[2:]
             elif var[0] in self.get_fxns():
                 f = self.get_fxns()[var[0]]
                 var = var[1:]
-            elif var[0] in self.flows:
-                f = self.flows[var[0]]
+            elif var[0] in self.get_flows():
+                f = self.get_flows()[var[0]]
                 var = var[1:]
             else:
                 f = self
@@ -274,6 +273,7 @@ class Block(Simulable):
 
     __slots__ = ['s', 'm']
     default_track = ['s', 'm', 'r', 't', 'i']
+    roletypes = ['container', 'flow']
 
     def __init__(self, name='', flows={}, **kwargs):
         """
@@ -288,11 +288,11 @@ class Block(Simulable):
         kwargs : kwargs
             Roles and tracking to override the defaults. See Simulable.__init__
         """
-        Simulable.__init__(self, name=name, **kwargs)
-        self.assoc_flows(flows=flows)
+        Simulable.__init__(self, name=name, roletypes=['container'], **kwargs)
+        self.init_flows(flows=flows)
         self.update_seed()
 
-    def assoc_flows(self, flows={}):
+    def init_flows(self, flows={}):
         """
         Associate flows with the given Simulable.
 
@@ -306,25 +306,21 @@ class Block(Simulable):
             function's flowname, it will be used instead (so that it can act as a
             connection to the rest of the model)
         """
+        # use aliases for flows
         if hasattr(self, 'flownames'):
             flows = {self.flownames.get(fn, fn): flow for fn, flow in flows.items()}
+        # add to block
         flows = flows.copy()
-        for init_att in dir(self):
-            if init_att.startswith("flow_"):
-                att = getattr(self, init_att)
-                attname = init_att[5:]
-                if (inspect.isclass(att) and
-                        issubclass(att, Flow) and
-                        not (attname in self.flows)):
-                    if attname in flows:
-                        self.flows[attname] = flows.pop(attname)
-                    else:
-                        self.flows[attname] = att(attname)
-                    if not isinstance(self, dataobject):
-                        setattr(self, attname, self.flows[attname])
-        if flows:
-            warnings.warn("these flows sent from model "+str([*flows.keys()])
+        self.init_roles('flow', **flows)
+        # check if any sent but not attached
+        unattached_flows = [f for f in flows if not hasattr(self, f)]
+        if unattached_flows:
+            warnings.warn("these flows sent from model "+str(unattached_flows)
                           + " not added to class "+str(self.__class__))
+
+    def get_flows(self):
+        """Return a dictionary of the Block's flows."""
+        return {f: getattr(self, f) for f in self.flows}
 
     def get_typename(self):
         """
@@ -425,7 +421,7 @@ class Block(Simulable):
         flowtypes : set
             Set of flow type names in the model.
         """
-        return {obj.__class__.__name__ for name, obj in self.flows.items()}
+        return {obj.__class__.__name__ for name, obj in self.get_flows()}
 
     def copy(self, *args, **kwargs):
         """
@@ -560,7 +556,7 @@ class Block(Simulable):
         # Step 2: Run Static Propagation Methods
         active = True
         oldmutables = self.return_mutables()
-        flows_mutables = {f: fl.return_mutables() for f, fl in self.flows.items()}
+        flows_mutables = {f: fl.return_mutables() for f, fl in self.get_flows().items()}
         while active:
             if self.is_static():
                 self("static", time=time, faults=faults, run_stochastic=run_stochastic)
@@ -574,7 +570,7 @@ class Block(Simulable):
             if oldmutables != newmutables:
                 active = True
                 oldmutables = newmutables
-            for flowname, fl in self.flows.items():
+            for flowname, fl in self.get_flows().items():
                 newflowmutables = fl.return_mutables()
                 if flows_mutables[flowname] != newflowmutables:
                     active = True

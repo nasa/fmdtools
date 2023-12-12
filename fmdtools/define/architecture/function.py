@@ -53,6 +53,7 @@ class FunctionArchitecture(Simulable):
         Simulable.__init__(self, name=name, p=p, sp=sp, r=r, track=track)
 
         self.fxns = dict()
+        self.flows = dict()
         # set is ordered and executed in the order specified in the model
         self.functionorder = OrderedSet()
         self._fxnflows = []
@@ -311,9 +312,9 @@ class FunctionArchitecture(Simulable):
         mem_profile['params'] += sys.getsizeof(self.sp)
         mem_profile['params'] += sys.getsizeof(self.track)
         for fxnname, fxn in self.fxns.items():
-            mem_profile[fxnname] = fxn.get_memory()
+            mem_profile[fxnname], _ = fxn.get_memory()
         for flowname, flow in self.flows.items():
-            mem_profile[flowname] = flow.get_memory()
+            mem_profile[flowname], _ = flow.get_memory()
         mem = np.sum([i for i in mem_profile.values()])
         return mem, mem_profile
 
