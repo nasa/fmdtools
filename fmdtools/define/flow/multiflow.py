@@ -158,7 +158,7 @@ class MultiFlow(Flow):
             getattr(self, local).reset()
 
     def copy(self, glob=[], p={}, s={}):
-        if not s: 
+        if not s:
             s = asdict(self.s)
         cop = self.__class__(self.name, glob=glob, p=p, s=s)
         for loc in self.locals:

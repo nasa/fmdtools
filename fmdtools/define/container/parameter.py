@@ -41,6 +41,9 @@ class Parameter(BaseContainer, readonly=True):
     1.0
     >>> p.y
     2.0
+
+    >>> p.copy()
+    ExampleParameter(x=1.0, y=2.0, z=0.0)
     """
     rolename = "p"
 
@@ -182,6 +185,10 @@ class Parameter(BaseContainer, readonly=True):
         if var_set:
             return set(var_set)
         return ()
+
+    def copy(self):
+        field_dict = self.get_field_dict(self)
+        return self.__class__(**field_dict)
 
 
 class ExampleParameter(Parameter, readonly=True):

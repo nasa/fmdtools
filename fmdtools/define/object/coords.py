@@ -160,10 +160,10 @@ class Coords(BaseObject):
                              for i in range(0, self.p.x_size)]) * self.p.blocksize
         self.pts = self.grid.reshape(int(self.grid.size/2), 2)
 
-        self.init_dict("point", set_attr=True)
-        self.init_dict("collect", "ions")
-        self.init_dict("feature")
-        self.init_dict("state")
+        self.init_role_dict("point", set_attr=True)
+        self.init_role_dict("collect", "ions")
+        self.init_role_dict("feature")
+        self.init_role_dict("state")
         self.properties = {**self.features, **self.states}
         for propname, prop in self.properties.items():
             prop_type, prop_default = prop

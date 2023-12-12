@@ -459,10 +459,10 @@ class Block(Simulable):
             cop.__init__(self.name, *args, p=p, sp=sp, r=r, track=track)
         except TypeError as e:
             raise Exception("Poor specification of "+str(self.__class__)) from e
-        cop.m.mirror(self.m)
+        cop.m = self.m.copy()
         cop.t = self.t.copy()
-        cop.s.assign(self.s)
-        cop.r.assign(self.r)
+        cop.s = self.s.copy()
+        cop.r = self.r.copy()
         if hasattr(self, 'h'):
             cop.h = self.h.copy()
         return cop

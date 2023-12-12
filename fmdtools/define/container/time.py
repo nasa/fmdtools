@@ -107,41 +107,17 @@ class Time(BaseContainer):
         for timer in self.timers.values():
             timer.reset()
 
-    def copy(self, *args, **t_args):
-        """Copy the timer."""
-        cop = self.__class__(*args, **t_args)
-        for timer in self.timers:
-            cop.timers[timer] = self.timers[timer].copy()
-        cop.run_times = self.run_times
-        cop.time = self.time
-        cop.t_ind = self.t_ind
-        cop.t_loc = self.t_loc
-        cop.dt = self.dt
-        return cop
-
-    def create_hist(self, timerange, track):
-        """
-        Create a History corresponding to Time.
-
-        Parameters
-        ----------
-        timerange : iterable, optional
-            Time-range to initialize the history over. The default is None.
-        track : list/str/dict, optional
-            argument specifying attributes for :func:`get_sub_include'.
-            The default is None.
-
-        Returns
-        -------
-        hist : History
-            History of time/timer attribues specified in track.
-        """
-        hist = History()
-        track = self.get_track(track)
-        hist.init_att('time', self.time, timerange=timerange, track=track, dtype=float)
-        if 'timers' in track:
+    def init_hist_att(self, hist, att, timerange, track, str_size='<U20'):
+        """Add field 'att' to history. Accommodates time and timer tracking."""
+        if att == 'timers':
             track_timers = get_sub_include('timers', track)
             for tname, timer in self.timers.items():
                 sub_track = get_sub_include(tname, track_timers)
                 hist[tname] = timer.create_hist(timerange, sub_track)
-        return hist
+        else:
+            BaseContainer.init_hist_att(self, hist, att, timerange, track, str_size)
+
+
+if __name__ == "__main__":
+    import doctest
+    doctest.testmod(verbose=True)

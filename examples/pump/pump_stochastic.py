@@ -42,9 +42,10 @@ class ImportEE(DetImportEE):
             self.r.s.effstate = 100.0  # a voltage spike means voltage is much higher
         else:
             if time > self.t.time:
-                self.r.set_rand('effstate', 'triangular', 0.9, 1, 1.1)
+                self.r.set_rand_state('effstate', 'triangular', 0.9, 1, 1.1)
         if time > self.t.time:
-            self.r.set_rand('grid_noise', 'normal', 1, 0.05*(2+np.sin(np.pi/2*time)))
+            self.r.set_rand_state('grid_noise', 'normal',
+                                  1, 0.05*(2+np.sin(np.pi/2*time)))
         self.ee_out.s.voltage = self.r.s.grid_noise*self.r.s.effstate * 500
 
 
@@ -69,14 +70,14 @@ class ImportSig(DetImportSig):
         else:
             if time < 5:
                 self.sig_out.power = 0.0
-                self.r.to_default('sig_noise')
+                self.r.s.to_default('sig_noise')
             elif time < 50:
                 if not time % 5:
-                    self.r.set_rand('sig_noise', 'choice', [1.0, 0.9, 1.1])
+                    self.r.set_rand_state('sig_noise', 'choice', [1.0, 0.9, 1.1])
                 self.sig_out.power = 1.0*self.r.s.sig_noise
             else:
                 self.sig_out.power = 0.0
-                self.r.to_default()
+                self.r.s.to_default()
 
 
 class MoveWatStates(State):

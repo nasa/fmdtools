@@ -466,7 +466,7 @@ class Mode(BaseContainer, readonly=False):
         fault : str
             name of the fault to check.
         """
-        return not(any(self.faults.intersection(set([fault]))))
+        return not (any(self.faults.intersection(set([fault]))))
 
     def any_faults(self):
         """Check if the block has any fault modes."""
@@ -566,26 +566,24 @@ class Mode(BaseContainer, readonly=False):
         if warnmessage:
             self.warn(warnmessage, "All faults removed.")
 
-    def mirror(self, mode_to_mirror):
-        if 'mode' in self.__fields__:
-            self.mode = mode_to_mirror.mode
-        self.faults.clear()
-        self.faults.update(mode_to_mirror.faults)
+    def set_field(self, fieldname, value, as_copy=True):
+        """Extend BaseContainer.assign to not set faultmodes (always the same)."""
+        if fieldname != 'faultmodes':
+            BaseContainer.set_field(self, fieldname, value, as_copy=as_copy)
 
-    def create_hist(self, timerange, track):
-        h = History()
-        track = self.get_track(track)
-        if 'faults' in track:
+    def init_hist_att(self, hist, att, timerange, track, str_size='<U20'):
+        """Add field 'att' to history. Accommodates faults and mode tracking."""
+        if att == 'faults':
             fh = History()
             for faultmode in self.faultmodes:
                 fh.init_att(faultmode, False, timerange, track='all', dtype=bool)
-            h['faults'] = fh
-        fm_lens = [len(fm) for fm in self.faultmodes]
-        om_lens = [len(m) for m in self.opermodes]
-        modelength = max(fm_lens+om_lens)
-        str_size = '<U'+str(modelength)
-        h.init_att('mode', self.mode, timerange, track, str_size=str_size)
-        return h
+            hist['faults'] = fh
+        elif att == 'mode':
+            fm_lens = [len(fm) for fm in self.faultmodes]
+            om_lens = [len(m) for m in self.opermodes]
+            modelength = max(fm_lens+om_lens)
+            str_size = '<U'+str(modelength)
+            BaseContainer.init_hist_att(self, hist, att, timerange, track, str_size)
 
     def _assign_mode(self, mode):
         if 'mode' in self.__fields__:

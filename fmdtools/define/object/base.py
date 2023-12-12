@@ -61,6 +61,13 @@ def check_pickleability(obj, verbose=True, try_pick=False, pause=0.2):
 
 
 class BaseObject(object):
+    """
+    Base object for Blocks, Flows, and Architectures.
+
+    Enables the instantiation of roles via class variables and object parameters, as
+    well as representation of indictators and tracking.
+    """
+
     __slots__ = ('name', 'containers', 'indicators')
 
     def __init__(self, name='', **kwargs):
@@ -73,11 +80,12 @@ class BaseObject(object):
 
     def init_roles(self, roletype, **kwargs):
         """
-        Initialize the roles for a given object.
+        Initialize the role 'roletype' for a given object.
 
-        Roles defined using container_x in its class variables for the attribute x.
+        Roles defined using roletype_x in its class variables for the attribute x.
 
-        Object is instantiated with the attribute x corresponding to output of container_x.
+        Object is instantiated with the attribute x, y, z corresponding to output of the
+        class variable roletype_x, roletype_y, roletype_z, etc.
 
         Parameters
         ----------
@@ -106,7 +114,7 @@ class BaseObject(object):
             container.check_role(rolename)
             setattr(self, rolename, container)
 
-    def init_dict(self, spec, name_end="s", set_attr=False):
+    def init_role_dict(self, spec, name_end="s", set_attr=False):
         """
         Create a collection dict for the attribute 'spec'.
 
@@ -134,12 +142,13 @@ class BaseObject(object):
                 setattr(self, s_name, specs[s_name])
 
     def init_indicators(self):
+        """Initialize indicator tuple."""
         self.indicators = tuple([at[9:] for at in dir(self)
                                  if at.startswith('indicate_')])
 
     def get_indicators(self):
         """
-        Gets the names of the indicators
+        Get the names of the indicators.
 
         Returns
         -------
