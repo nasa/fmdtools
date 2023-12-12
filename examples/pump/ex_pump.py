@@ -540,7 +540,7 @@ if __name__ == "__main__":
 
     mdl = Pump()
     endclass, mdlhist = propagate.nominal(mdl, track='all')
-    fig, ax = mdlhist.plot_line('flows.wat_1.s', 'i.on')
+    fig, ax = mdlhist.plot_line('flows.wat_1.s.flowrate', 'i.on')
 
     mdl = Pump()
     newhist2 = mdl.create_hist(range(10), 'default')

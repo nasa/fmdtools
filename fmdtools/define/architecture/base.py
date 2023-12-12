@@ -12,10 +12,16 @@ import time
 
 
 class Architecture(Simulable):
+    def __init__(self, *args, **kwargs):
+        self.flows = dict()
+        Simulable.__init__(self, *args, **kwargs)
 
     def init_architecture(self, *args, **kwargs):
         """Use to initialize architecture."""
         return 0
+
+    def get_flows(self):
+        return self.flows
 
 def inject_faults_internal(obj, faults, compdict):
     """
