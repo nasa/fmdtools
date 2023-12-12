@@ -21,6 +21,8 @@ import dill
 import pickle
 import time
 import sys
+from fmdtools.analyze.common import get_sub_include
+from fmdtools.analyze.history import History
 
 
 def check_pickleability(obj, verbose=True, try_pick=False, pause=0.2):
@@ -198,6 +200,33 @@ class BaseObject(object):
         """
         return [f for f, ind in self.get_indicators().items() if ind(time)]
 
+    def init_indicator_hist(self, h, timerange, track):
+        """
+        Create a history for an object with indicator methods (e.g., obj.indicate_XX).
+
+        Parameters
+        ----------
+        h : History
+            History of Function/Flow/Model object with indicators appended in h['i']
+        timerange : iterable, optional
+            Time-range to initialize the history over. The default is None.
+        track : list/str/dict, optional
+            argument specifying attributes for :func:`get_sub_include'.
+            The default is None.
+
+        Returns
+        -------
+        h : History
+            History of states with structure {'XX':log} for indicator `obj.indicate_XX`
+        """
+        sub_track = get_sub_include('i', track)
+        if sub_track:
+            indicators = self.get_indicators()
+            if indicators:
+                h['i'] = History()
+                for i, val in indicators.items():
+                    h['i'].init_att(i, val, timerange, sub_track, dtype=bool)
+
     def get_track(obj, track, all_possible=()):
         """
         Get tracking params for a given object (block, model, etc).
@@ -245,3 +274,8 @@ class BaseObject(object):
                     mem_profile[rolename] = sys.getsizeof(role)
                 mem += mem_profile[rolename]
         return mem, mem_profile
+
+    def create_hist(self):
+        for roletype in self.roletypes:
+            for rolename in getattr(self, roletype+'s'):
+                role = getattr(self, rolename)

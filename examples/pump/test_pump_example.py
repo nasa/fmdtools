@@ -94,7 +94,7 @@ class Integration_Tests(unittest.TestCase):
         endresult, mdlhist=propagate.nominal(self.mdl, protect=False, track='all')
         modes, modeprops = self.mdl.return_faultmodes()
         self.assertFalse(modes) # does it have any fault modes in the nominal scenario?
-        for t in range(1,self.mdl.sp.times[-1]): # are the values of the function/flow states what we wanted?
+        for t in range(1,self.mdl.sp.end_time): # are the values of the function/flow states what we wanted?
             if t<5 or t>=50:
                 self.assertEqual(mdlhist.flows.sig_1.s.power[t], 0.0)
                 self.assertEqual(mdlhist.flows.ee_1.s.current[t], 0.0)
@@ -112,7 +112,7 @@ class Integration_Tests(unittest.TestCase):
         endfaults, mdlhist=propagate.one_fault(self.mdl, 'export_water','block', time=10, desired_result='endfaults', track='all')
         self.assertIn('move_water', endfaults['endfaults'])
         self.assertIn('export_water', endfaults['endfaults'])
-        for t in range(1,self.mdl.sp.times[-1]): # are the values of the function/flow states what we wanted?
+        for t in range(1,self.mdl.sp.end_time): # are the values of the function/flow states what we wanted?
             if t<5 or t>=50:
                 self.assertEqual(mdlhist.faulty.flows.sig_1.s.power[t], 0.0)
                 self.assertEqual(mdlhist.faulty.flows.ee_1.s.current[t], 0.0)

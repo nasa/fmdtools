@@ -17,7 +17,7 @@ from fmdtools.define.base import set_var
 from fmdtools.define.block.base import Simulable
 from fmdtools.define.container.rand import Rand
 from fmdtools.analyze.common import get_sub_include
-from fmdtools.analyze.history import History, init_indicator_hist
+from fmdtools.analyze.history import History
 
 
 class FunctionArchitecture(Simulable):
@@ -443,7 +443,7 @@ class FunctionArchitecture(Simulable):
             hist = History()
             track = self.get_track(track,
                                    all_possible=FunctionArchitecture.default_track)
-            init_indicator_hist(self, hist, timerange, track)
+            self.init_indicator_hist(hist, timerange, track)
             fxn_track = get_sub_include('fxns', track)
             if fxn_track:
                 hist['fxns'] = History()

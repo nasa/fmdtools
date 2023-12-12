@@ -546,7 +546,7 @@ class BaseSimProblem(BaseProblem):
         end_time : float
             Simulation time to simulate to.
         """
-        last_time = self.mdl.sp.times[-1]
+        last_time = self.mdl.sp.end_time
         all_times = [a.time if a.time else last_time
                      for a in {**self.objectives, **self.constraints}.values()]
         end_time = max(all_times)
@@ -1614,7 +1614,7 @@ class DynamicInterface():
         self.t = 0.0
         self.t_ind = 0
         if not t_max:
-            self.t_max = mdl.sp.times[-1]
+            self.t_max = mdl.sp.end_time
         else:
             self.t_max = t_max
         if type(desired_result) == str:

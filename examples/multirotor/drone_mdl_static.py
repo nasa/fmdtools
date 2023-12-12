@@ -1,6 +1,6 @@
 import numpy as np
 
-from fmdtools.define.container.parameter import Parameter, SimParam
+from fmdtools.define.container.parameter import Parameter
 from fmdtools.define.container.state import State
 from fmdtools.define.block.function import Function
 from fmdtools.define.container.mode import Mode

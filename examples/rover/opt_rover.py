@@ -7,7 +7,7 @@ Created on Tue Sep 26 15:05:01 2023
 from pymoo.optimize import minimize
 from fmdtools.sim import search
 from fmdtools.sim.sample import SampleApproach
-from fmdtools.define.container.parameter import SimParam
+from fmdtools.define.block.base import SimParam
 from examples.rover.rover_model import Rover
 
 from pymoo.algorithms.soo.nonconvex.pattern import PatternSearch

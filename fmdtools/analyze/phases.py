@@ -531,7 +531,7 @@ def samplemetric(faultsamp, endclasses, metric='cost', rad='rate', rad_scale=0.0
     timesort = np.argsort(times)
     times = times[timesort]
     costs = costs[timesort]
-    
+
     if line == 'line':
         axes[0].plot(times, costs, label=metric)
     elif line == 'stem':
@@ -548,7 +548,8 @@ def samplemetric(faultsamp, endclasses, metric='cost', rad='rate', rad_scale=0.0
             for i, t in enumerate(times):
                 axes[0].text(times[i], costs[i], s=label_rad.format(sizes[i]))
 
-    ts = faultsamp.faultdomain.mdl.sp.times
+    ts = (faultsamp.faultdomain.mdl.sp.start_time,
+          faultsamp.faultdomain.mdl.sp.end_time)
     axes[0].set_xlim(ts[0], ts[-1])
     if ylims:
         axes[0].set_ylim(*ylims)
