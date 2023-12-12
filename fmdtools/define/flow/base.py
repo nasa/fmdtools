@@ -52,7 +52,7 @@ class Flow(BaseObject):
 
     def copy(self):
         """Return a copy of the flow object (used when copying the model)."""
-        cop = self.__class__(self.name, p=asdict(self.p), s=asdict(self.s))
+        cop = self.__class__(self.name, p=self.p.copy(), s=self.s.copy())
         if hasattr(self, 'h'):
             cop.h = self.h.copy()
         return cop

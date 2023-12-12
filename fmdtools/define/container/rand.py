@@ -21,7 +21,6 @@ from recordclass import asdict, astuple
 import numpy as np
 import math
 from fmdtools.define.container.base import BaseContainer
-import copy
 
 from fmdtools.analyze.history import History, init_hist_iter
 
@@ -47,7 +46,7 @@ class Rand(BaseContainer):
         s = RandState()
         run_stochastic: bool = True
 
-    Which enables the use of set_rand, update_stochastic_states, etc for updating
+    Which enables the use of set_rand_state, update_stochastic_states, etc for updating
     these states with methods called from the rng.
     """
 
@@ -64,7 +63,7 @@ class Rand(BaseContainer):
                                     seed=seed,
                                     run_stochastic=run_stochastic,
                                     probs=probs,
-                                    rng=np.random.default_rng(self.seed))
+                                    rng=np.random.default_rng(seed))
         super().__init__(*args)
         if 's' in self.__fields__:
             self.s = self.s.__class__()
@@ -73,21 +72,29 @@ class Rand(BaseContainer):
             raise Exception("Invalid seed: None")
 
     def get_rand_states(self, auto_update_only=False):
+        """
+        Get the randomly-assigned states associated with the Rand at self.s.
+
+        Parameters
+        ----------
+        auto_update_only : bool, optional
+            Whether to only get auto-updated states. The default is False.
+
+        Returns
+        -------
+        rand_states : dict
+            States in self.s
+        """
         rand_states = asdict(self.s)
         if auto_update_only:
             rand_states = {state: vals for state,
                            vals in rand_states if hasattr(self.s, state+"_update")}
         return rand_states
 
-    def return_mutables(self):
-        if 's' in self.__fields__:
-            return astuple(self.s)
-        else:
-            return ()
-
-    def set_rand(self, statename, methodname, *args):
+    def set_rand_state(self, statename, methodname, *args):
         """
         Update the given random state with a given method and arguments.
+
         (if in run_stochastic mode)
 
         Parameters
@@ -112,6 +119,12 @@ class Rand(BaseContainer):
                 value_pds = get_pdf_for_rand(newvalue, methodname, args)
                 self.probs.append(value_pds)
 
+    def return_mutables(self):
+        if 's' in self.__fields__:
+            return astuple(self.s)
+        else:
+            return ()
+
     def return_probdens(self):
         if self.probs:
             state_pd = np.prod(self.probs)
@@ -126,8 +139,8 @@ class Rand(BaseContainer):
                 self.probs.clear()
             for state in self.s.__fields__:
                 if hasattr(self.s, state+"_update"):
-                    self.set_rand(state, getattr(self.s, state+'_update')[0],
-                                  *getattr(self.s, state+'_update')[1])
+                    self.set_rand_state(state, getattr(self.s, state+'_update')[0],
+                                        *getattr(self.s, state+'_update')[1])
 
     def reset(self):
         """Reset Rand to the initial state."""
@@ -142,52 +155,25 @@ class Rand(BaseContainer):
         BitGen = type(self.rng.bit_generator)
         self.rng.bit_generator.state = BitGen(seed).state
 
-    def assign(self, other_rand):
-        if hasattr(self, 's'):
-            self.s.assign(other_rand.s)
-        self.seed = other_rand.seed
+    def set_rng(self, other_rng):
+        """Set the state of the rng in the Rand to the same state as other_rng."""
         self.rng = np.random.default_rng(self.seed)
-        self.rng.__setstate__(other_rand.rng.__getstate__())
-        self.probs = copy.copy(other_rand.probs)
-        self.run_stochastic = other_rand.run_stochastic
+        self.rng.__setstate__(other_rng.__getstate__())
 
-    def to_default(self, *statenames):
-        """Reset given random states to their default values."""
-        for statename in statenames:
-            default = self.s.__default_vals__[self.s.__fields__.index(statename)]
-            self.s[statename] = default
+    def set_field(self, fieldname, value, as_copy=True):
+        """Extend BaseContainer.assign to accomodate the rng."""
+        if fieldname == 'rng':
+            self.set_rng(value)
+        else:
+            BaseContainer.set_field(self, fieldname, value, as_copy=as_copy)
 
-    def create_hist(self, timerange, track):
-        """
-        Create a History corresponding to Rand.
-
-        Parameters
-        ----------
-        timerange : iterable, optional
-            Time-range to initialize the history over. The default is None.
-        track : list/str/dict, optional
-            argument specifying attributes for :func:`get_sub_include'.
-                The default is None.
-
-        Returns
-        -------
-        hist : History
-            History of fields specified in track.
-        """
-        h = History()
-        track = self.get_track(track)
-        if self.run_stochastic == 'track_pdf' and 'track_pdf' in track:
-            h.init_att('probdens', self.return_probdens(),
-                       timerange=timerange, track='all')
-        if 's' in track and hasattr(self, 's'):
-            h['s'] = init_hist_iter('s', self.s, timerange=timerange, track=track)
-        return h
-
-    def copy(self):
-        """Copy the rand."""
-        cop = self.__class__().__init__()
-        cop.assign(self)
-        return cop
+    def init_hist_att(self, hist, att, timerange, track, str_size='<U20'):
+        """Add field 'att' to history. Accommodates track_pdf option."""
+        if self.run_stochastic == 'track_pdf' and att == 'track_pdf':
+            hist.init_att('probdens', self.return_probdens(),
+                          timerange=timerange, track='all')
+        else:
+            BaseContainer.init_hist_att(self, hist, att, timerange, track, str_size)
 
 
 def get_pdf_for_rand(x, randname, args):
@@ -359,3 +345,12 @@ def get_pdf_for_dist(x, randname, args):
     else:
         raise Exception("Invalid randname distribution: " + randname +
                         ". Ensure that it is a part of numpy.random/scipy.stats")
+
+
+ex_rand = Rand(seed=22)
+ex_rand2 = Rand(seed=32)
+
+
+if __name__ == "__main__":
+    import doctest
+    doctest.testmod(verbose=True)

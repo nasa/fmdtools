@@ -8,11 +8,14 @@ in a block.
 from recordclass import dataobject
 import copy
 from fmdtools.define.base import set_arg_as_type
+from fmdtools.analyze.history import History
+import numpy as np
 
 
 class BaseContainer(dataobject, mapping=True, iterable=True, copy_default=True):
     """Base container class."""
 
+    default_track = 'all'
     rolename = 'x'
 
     def check_role(self, rolename):
@@ -130,3 +133,234 @@ class BaseContainer(dataobject, mapping=True, iterable=True, copy_default=True):
                 except UnboundLocalError as e1:
                     raise e
         return tuple(new_args), new_kwargs
+
+    def get_field_dict(self, obj, *fields, **fielddict):
+        """
+        Get dict of values from object corresponding to Container fields.
+
+        Parameters
+        ----------
+        obj : dataobject, list, tuple, or ndarray
+            Object to get field dictionary from.
+        *fields : str
+            Names of corresponding fields (in self.__fields__)
+        **fielddict
+            Mapping of fields in obj corresponding to fields in self.
+
+        Returns
+        -------
+        field_dict : dict
+            Dictionary of fields and their values.
+
+        Examples
+        --------
+        >>> ex = ExContainer(1.0, 2.0)
+        >>> ex.get_field_dict([5.0])
+        {'x': 5.0}
+
+        >>> ex2 = ExContainer(3.0, 4.0)
+        >>> ex.get_field_dict(ex2)
+        {'x': 3.0, 'y': 4.0}
+
+        >>> ex.get_field_dict({'x': 3.0, 'z': 40.0}, x='x', y='z')
+        {'x': 3.0, 'y': 40.0}
+        """
+        if fielddict and fields:
+            raise Exception("Provide positional states or keyword states, not both")
+        if len(fields) == 0 and not fielddict:
+            # if no states provided, assign all states
+            fields = self.__fields__
+
+        if type(obj) in [list, tuple] or isinstance(obj, np.ndarray):
+            if fielddict:
+                raise Exception("Only provided *args for lists/tuples, not **kwargs")
+            fielddict = {state: obj[i]
+                         for i, state in enumerate(fields) if i < len(obj)}
+        elif isinstance(obj, dataobject):
+            if not fielddict:
+                # if states provided, only assign those states
+                fielddict = {s: getattr(obj, s) for s in fields}
+            else:
+                # if kwarg states provided, assign keys to values
+                fielddict = {k: getattr(obj, v) for k, v in fielddict.items()}
+        elif isinstance(obj, dict):
+            if not fielddict:
+                fielddict = {s: obj[s] for s in fields if s in obj}
+            else:
+                fielddict = {k: obj[v] for k, v in fielddict.items() if v in obj}
+        else:
+            raise Exception("Invalid type to assign from: "+obj.__class__)
+        return fielddict
+
+    def assign(self, obj, *fields, as_copy=True, **fielddict):
+        """
+        Set the same-named values of the current object to those of another.
+
+        Further arguments specify which values.e.g.,
+
+        >>> p1 = ExContainer(x=0.0, y=0.0)
+        >>> p2 = ExContainer(x=10.0, y=20.0)
+        >>> p1.assign(p2, 'x', 'y')
+        >>> p1.x
+        10.0
+        >>> p1.y
+        20.0
+
+        Can also be used to assign list values to a variable, e.g.:
+
+        >>> p1.assign([3.0,4.0], 'x', 'y')
+        >>> p1.x
+        3.0
+        >>> p1.y
+        4.0
+
+        Can also provide kwargs in case value names don't match, e.g.:
+
+        >>> p1.assign(p2, x='y', y='x')
+        >>> p1.x
+        20.0
+        >>> p1.y
+        10.0
+
+        as_copy: bool,
+            set to True for dicts/sets to be copied rather than referenced
+        """
+        fielddict = self.get_field_dict(obj, *fields, **fielddict)
+        for field, value in fielddict.items():
+            self.set_field(field, value, as_copy=as_copy)
+
+    def set_field(self, fieldname, value, as_copy=True):
+        """
+        Set the field of the container to the given value.
+
+        Parameters
+        ----------
+        fieldname : str
+            Name of the field.
+        value : value
+            Value to set the field to.
+        as_copy : bool, optional
+            Whether to copy value. The default is True.
+
+        Examples
+        --------
+        >>> ex_nest = ExNestContainer()
+        >>> ex_inside = ExContainer(3.0, 4.0)
+        >>> ex_nest.set_field('e1', ex_inside)
+        >>> ex_nest
+        ExNestContainer(e1=ExContainer(x=3.0, y=4.0), z=20.0)
+        """
+        if fieldname not in self.__fields__:
+            raise Exception(fieldname+" not a property of "+self.name)
+        if as_copy:
+            value = copy.copy(value)
+        field = getattr(self, fieldname)
+        if isinstance(field, BaseContainer):
+            field.assign(value, as_copy=as_copy)
+        else:
+            setattr(self, fieldname, value)
+
+    def reset(self):
+        # TODO: major issue here is that multiple states initialized to different
+        # defaults are not accomodated--there is only one "default"
+        for field, default in self.__defaults__.items():
+            self[field] = copy.copy(default)
+
+    def to_default(self, *fieldnames):
+        """
+        Reset given fields to their default values.
+
+        Examples
+        --------
+        >>> ex = ExContainer(3.0, 4.0)
+        >>> ex.to_default()
+        >>> ex
+        ExContainer(x=1.0, y=2.0)
+
+        >>> ex = ExContainer(4.0, 5.0)
+        >>> ex.to_default('x')
+        >>> ex
+        ExContainer(x=1.0, y=5.0)
+        """
+        if not fieldnames:
+            fieldnames = tuple(self.__defaults__)
+        self.assign(self.__default_vals__, *fieldnames, as_copy=True)
+
+    def copy(self):
+        """
+        Create an independent copy of the container with the same attributes.
+
+        Returns
+        -------
+        cop : BaseContainer
+            Copy of the container with the same attributes as self.
+
+        Examples
+        --------
+        >>> ex = ExContainer(4.0, 5.0)
+        >>> ex2 = ex.copy()
+        >>> ex2
+        ExContainer(x=4.0, y=5.0)
+
+        >>> ex_nest = ExNestContainer(ex2, 40.0)
+        >>> ex_nest.copy()
+        ExNestContainer(e1=ExContainer(x=4.0, y=5.0), z=40.0)
+        """
+        cop = self.__class__()
+        cop.assign(self, as_copy=True)
+        return cop
+
+    def init_hist_att(self, hist, att, timerange, track, str_size='<U20'):
+        """Initialize a field in the history."""
+        if att in self.__fields__:
+            val = getattr(self, att)
+            dtype = self.__annotations__[att]
+            # add history attribute
+            hist.init_att(att, val, timerange, track, dtype=dtype, str_size=str_size)
+
+    def create_hist(self, timerange=None, track=None, default_str_size='<U20'):
+        """
+        Create a History corresponding to the State.
+
+        Parameters
+        ----------
+        timerange : iterable, optional
+            Time-range to initialize the history over. The default is None.
+        track : list/str/dict, optional
+            argument specifying attributes for :func:`get_sub_include'.
+            The default is None.
+
+        Returns
+        -------
+        hist : History
+            History of fields specified in track.
+        """
+        track = self.get_track(track)
+        hist = History()
+        for att in track:
+            self.init_hist_att(hist, att, timerange, track, str_size=default_str_size)
+        return hist
+
+
+class ExContainer(BaseContainer):
+    x: float = 1.0
+    y: float = 2.0
+
+class ExNestContainer(BaseContainer):
+    e1: ExContainer = ExContainer()
+    z: float = 20.0
+
+# TODO: it seems possible to use the below property to reset containers.
+# Need to look at bug report for this.
+es = ExContainer(3.0, 4.0)
+es.__defaults__['x'] = 2
+
+# interestingly enough, __defaults__ does not change __default_vals__
+es.__default_vals__
+
+es1 = ExContainer()
+
+
+if __name__ == "__main__":
+    import doctest
+    doctest.testmod(verbose=True)

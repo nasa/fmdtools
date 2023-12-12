@@ -45,7 +45,7 @@ class Geom(BaseObject):
     def __init__(self, *args, s={}, p={}, **kwargs):
         super().__init__(*args, s=s, p=p)
         self.shape = self.shapely_class(*self.p.as_args())
-        self.init_dict("buffer")
+        self.init_role_dict("buffer")
         for b, dist in self.buffers.items():
             setattr(self, b, self.shape.buffer(dist))
 

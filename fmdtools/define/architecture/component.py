@@ -53,8 +53,8 @@ class ComponentArchitecture(dataobject, mapping=True):
         # TODO: needs to cover all attributes, copy should a part of Block
         for compname, component in self.components.items():
             cop_comp = cop.components[compname]
-            cop_comp.s = cop_comp.container_s(**asdict(component.s))
-            cop_comp.m.mirror(component.m)
+            cop_comp.s = cop_comp.s.copy()
+            cop_comp.m = component.m.copy()
             cop_comp.t = component.t.copy()
             if hasattr(component, 'h'):
                 cop_comp.h = component.h.copy()

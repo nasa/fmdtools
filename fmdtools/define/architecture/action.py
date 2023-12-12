@@ -264,8 +264,8 @@ class ActionArchitecture(object):
         for actname, action in self.actions.items():
             cop_act = cop.actions[actname]
             cop_act.duration = action.duration
-            cop_act.s = action.container_s(**asdict(action.s))
-            cop_act.m.mirror(action.m)
+            cop_act.s = action.s.copy()
+            cop_act.m = action.m.copy()
             cop_act.t = action.t.copy()
             if hasattr(action, 'h'):
                 cop_act.h = action.h.copy()

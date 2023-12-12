@@ -330,7 +330,7 @@ class FunctionArchitecture(Simulable):
                      sp=getattr(self, 'sp', {}),
                      track=getattr(self, 'track', {}),
                      r={'seed': self.r.seed})
-        cop.r.assign(self.r)
+        cop.r = self.r.copy()
 
         for flowname, flow in self.flows.items():
             cop.flows[flowname] = flow.copy()
