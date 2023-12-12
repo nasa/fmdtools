@@ -318,7 +318,7 @@ class MoveWatStates(State):
 
 
 class MoveWatParams(Parameter, readonly=True):
-    """Delay parameter affecting how long it takes for the pumpt to break."""
+    """Delay parameter affecting how long it takes for the pump to break."""
 
     delay: int = 1
 

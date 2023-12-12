@@ -20,6 +20,7 @@ not.
 import dill
 import pickle
 import time
+import sys
 from recordclass import asdict
 
 
@@ -69,14 +70,35 @@ class BaseObject(object):
     """
 
     __slots__ = ('name', 'containers', 'indicators')
+    roletypes = ['container']
 
-    def __init__(self, name='', **kwargs):
+    def __init__(self, name='', roletypes=[], **kwargs):
         if not name:
             self.name = self.__class__.__name__.lower()
         else:
             self.name = name
         self.init_indicators()
-        self.init_roles('container', **kwargs)
+        self.init_roletypes(*roletypes, **kwargs)
+
+    def init_roletypes(self, *roletypes, **kwargs):
+        """
+        Initialize roletpes with given kwargs.
+
+        Parameters
+        ----------
+        *roletypes : str
+            Names of roles (e.g., container, flow, etc)
+        **kwargs : dict
+            Dictionary arguments (or already instantiated objects) to use for the
+            attributes.
+        """
+        if not roletypes:
+            roletypes = self.roletypes
+        for roletype in roletypes:
+            if roletype not in self.roletypes:
+                raise Exception("Roletype: " + roletype + "not in class varaiable" +
+                                " self.roletypes: " + str(self.roletypes))
+            self.init_roles(roletype, **kwargs)
 
     def init_roles(self, roletype, **kwargs):
         """
@@ -113,6 +135,11 @@ class BaseObject(object):
             container = container_initializer(**container_args)
             container.check_role(rolename)
             setattr(self, rolename, container)
+
+    def assign_roles(self, roletype, other_obj):
+        roles = getattr(self, roletype+'s')
+        for role in roles:
+            setattr(self, role, getattr(other_obj, role))
 
     def init_role_dict(self, spec, name_end="s", set_attr=False):
         """
@@ -200,3 +227,22 @@ class BaseObject(object):
         elif type(track) == str:
             track = (track,)
         return track
+
+    def get_memory(self):
+        """
+        Get the memory taken up by the object and its containing roles.
+
+        Returns
+        -------
+        mem : float
+            Approximate memory taken by the object.
+        """
+        mem = 0
+        for roletype in self.roletypes:
+            for rolename in getattr(self, roletype+'s'):
+                role = getattr(self, rolename)
+                if hasattr(role, 'get_memory'):
+                    mem += role.get_memory()
+                else:
+                    mem += sys.getsizeof(role)
+        return mem

@@ -5,11 +5,12 @@ Module providing the `BaseContainer` class which other containers inherit from.
 A container is a dataobject (from the recordclass library) that fulfills a specific role
 in a block.
 """
-from recordclass import dataobject
+from recordclass import dataobject, astuple
 import copy
 from fmdtools.define.base import set_arg_as_type
 from fmdtools.analyze.history import History
 import numpy as np
+import sys
 
 
 class BaseContainer(dataobject, mapping=True, iterable=True, copy_default=True):
@@ -340,6 +341,20 @@ class BaseContainer(dataobject, mapping=True, iterable=True, copy_default=True):
         for att in track:
             self.init_hist_att(hist, att, timerange, track, str_size=default_str_size)
         return hist
+
+    def get_memory(self):
+        """Get approximate memory impact of dataobject and its fields."""
+        mem = sys.getsizeof(self)
+        for fieldname in self.__fields__:
+            field = getattr(self, fieldname)
+            if hasattr(field, 'get_memory'):
+                mem += field.get_memory()
+            else:
+                mem += sys.getsizeof(field)
+        return mem
+
+    def return_mutables(self):
+        return astuple(self)
 
 
 class ExContainer(BaseContainer):

@@ -15,6 +15,7 @@ import copy
 from fmdtools.define.flow.base import Flow, init_flow
 from fmdtools.define.base import set_var
 from fmdtools.define.block.base import Simulable
+from fmdtools.define.container.rand import Rand
 from fmdtools.analyze.common import get_sub_include
 from fmdtools.analyze.history import History, init_indicator_hist
 
@@ -46,9 +47,10 @@ class FunctionArchitecture(Simulable):
                  'graph', 'staticfxns', 'dynamicfxns', 'staticflows']
     default_track = ('fxns', 'flows', 'i')
     default_name = 'model'
+    container_r = Rand
 
     def __init__(self, name='', p={}, sp={}, r={}, track='', **kwargs):
-        super().__init__(name=name, p=p, sp=sp, r=r, track=track)
+        Simulable.__init__(self, name=name, p=p, sp=sp, r=r, track=track)
 
         self.fxns = dict()
         # set is ordered and executed in the order specified in the model
@@ -304,7 +306,8 @@ class FunctionArchitecture(Simulable):
         """
         mem_profile = {}
         mem = 0
-        mem_profile['params'] = sys.getsizeof(self.p)
+        if hasattr(self, 'p'):
+            mem_profile['params'] = sys.getsizeof(self.p)
         mem_profile['params'] += sys.getsizeof(self.sp)
         mem_profile['params'] += sys.getsizeof(self.track)
         for fxnname, fxn in self.fxns.items():

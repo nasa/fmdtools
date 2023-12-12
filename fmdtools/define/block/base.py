@@ -5,20 +5,16 @@ Description: A module to define blocks.
 - :class:`Simulable`: Superclass for architectures and blocks.
 - :class:`Block`: Superclass for Functions, Components, Actions, etc.
 """
-import sys
 import itertools
 import copy
 import inspect
 import warnings
-from recordclass import dataobject, asdict, astuple
+from recordclass import dataobject, astuple
 
 from fmdtools.define.base import set_var, get_var
 from fmdtools.define.object.base import BaseObject
-from fmdtools.define.container.state import State
-from fmdtools.define.container.parameter import Parameter, SimParam
-from fmdtools.define.container.rand import Rand
+from fmdtools.define.container.parameter import SimParam
 from fmdtools.define.container.time import Time
-from fmdtools.define.container.mode import Mode
 from fmdtools.define.flow.base import Flow
 from fmdtools.analyze.result import Result
 from fmdtools.analyze.common import get_sub_include
@@ -32,40 +28,39 @@ class Simulable(BaseObject):
     Note that classes solely based on Simulable may not be able to be simulated.
     """
 
-    __slots__ = ('p', 'sp', 'r', 'h', 'track', 'flows', 'is_copy')
+    __slots__ = ('p', 'sp', 'r', 't', 'h', 'track', 'flows', 'is_copy')
+    container_t = Time
     default_sp = {}
     default_track = ["all"]
-    container_p = Parameter
-    container_r = Rand
     container_sp = SimParam
 
-    def __init__(self, name='', track={}, **kwargs):
+    def __init__(self, name='', roletypes=[], track={}, **kwargs):
         """
         Instantiate internal Simulable attributes.
 
         Parameters
         ----------
-        p : dict =
-            Parameter values to set
-        sp : dict
-            Simulation parameter values to set
-        r : dict
-            Rand parameter values to set.
-        track dict
+        name: str
+            Name for the Simulable
+        roletypes : list
+            Names of roles (e.g., ['container'] etc)
+        track: dict
             tracking dictionary
         """
         self.is_copy = False
         self.flows = dict()
+
         if not track:
             self.track = self.default_track
         else:
             self.track = track
 
         if 'sp' in kwargs:
-            sp = {**self.default_sp, **kwargs.pop('sp')}
+            sp = {**self.default_sp, **kwargs['sp']}
         else:
-            sp = self.default_sp
-        BaseObject.__init__(self, sp=sp, **kwargs)
+            sp = {**self.default_sp}
+        loc_kwargs = {**kwargs, 'sp': sp}
+        BaseObject.__init__(self, name=name, roletypes=roletypes, **loc_kwargs)
 
     def add_flow_hist(self, hist, timerange, track):
         """
@@ -100,7 +95,7 @@ class Simulable(BaseObject):
         seed : int, optional
             Random seed. The default is [].
         """
-        if seed:
+        if seed and hasattr(self, 'r'):
             self.r.update_seed(seed)
 
     def find_classification(self, scen, mdlhists):
@@ -123,7 +118,7 @@ class Simulable(BaseObject):
 
     def new_params(self, p={}, sp={}, r={}, track={}, **kwargs):
         """
-        Create a copy of the defining parameters for use in a new Simulable.
+        Create a copy of the defining immutable parameters for use in a new Simulable.
 
         Parameters
         ----------
@@ -138,22 +133,19 @@ class Simulable(BaseObject):
 
         Returns
         -------
-        p     : Param
-            New Parameter
-        sp    : SimParam
-            New SimParam
-        r     : dict
-            Rand args
-        track : dict
-            track args
+        param_dict: dict
+            Dict with immutable parameters/options. (e.g., 'p', 'sp', 'track')
         """
-        p = self.p.copy_with_vals(**p)
-        sp = self.sp.copy_with_vals(**sp)
-        if not r:
-            r = {'seed': self.r.seed}
+        param_dict = {}
+        if hasattr(self, 'p'):
+            param_dict['p'] = self.p.copy_with_vals(**p)
+        if hasattr(self, 'sp'):
+            param_dict['sp'] = self.sp.copy_with_vals(**sp)
+        if not r and hasattr(self, 'r'):
+            param_dict['r'] = {'seed': self.r.seed}
         if not track:
-            track = copy.deepcopy(self.track)
-        return p, sp, r, track
+            param_dict['track'] = copy.deepcopy(self.track)
+        return param_dict
 
     def new(self, **kwargs):
         """
@@ -161,8 +153,7 @@ class Simulable(BaseObject):
 
         Can initiate with with changes to mutable parameters (p, sp, track, rand etc.).
         """
-        p, sp, r, track = self.new_params(**kwargs)
-        return self.__class__(p=p, sp=sp, r=r, track=track)
+        return self.__class__(**self.new_params(**kwargs))
 
     def get_fxns(self):
         """
@@ -281,11 +272,8 @@ class Block(Simulable):
         Marker for whether the object is a copy.
     """
 
-    __slots__ = ['s', 'm', 't']
+    __slots__ = ['s', 'm']
     default_track = ['s', 'm', 'r', 't', 'i']
-    container_s = State
-    container_m = Mode
-    container_t = Time
 
     def __init__(self, name='', flows={}, **kwargs):
         """
@@ -372,7 +360,9 @@ class Block(Simulable):
         if hasattr(self, 'name'):
             fxnstr = getattr(self, 'name', '')+' '+self.__class__.__name__+'\n'
             for at in ['s', 'm']:
-                fxnstr = fxnstr+"- "+getattr(self, at).__repr__()+'\n'
+                at_container = getattr(self, at, False)
+                if at_container:
+                    fxnstr = fxnstr+"- "+at_container.__repr__()+'\n'
             return fxnstr
         else:
             return 'New uninitialized '+self.__class__.__name__
@@ -390,7 +380,8 @@ class Block(Simulable):
         rand_states : dict
             Random states from the block and associated actions/components.
         """
-        rand_states = self.r.get_rand_states(auto_update_only)
+        if hasattr(self, 'r'):
+            rand_states = self.r.get_rand_states(auto_update_only)
         if hasattr(self, 'ca'):
             rand_states.update(self.ca.get_rand_states(auto_update_only=auto_update_only))
         if hasattr(self, 'aa'):
@@ -415,7 +406,7 @@ class Block(Simulable):
             Number of combinations of faults to elaborate and select from.
             The default is 1, which just chooses single fault modes.
         """
-        if getattr(self.r, 'run_stochastic', True):
+        if hasattr(self, 'r') and getattr(self.r, 'run_stochastic', True):
             faults = [list(x) for x in itertools.combinations(faults, combinations)]
             self.m.add_fault(*self.r.rng.choice(faults))
         elif default == 'first':
@@ -455,52 +446,14 @@ class Block(Simulable):
         cop = self.__new__(self.__class__)
         cop.is_copy = True
         try:
-            p, sp, r, track = self.new_params(**kwargs)
-            cop.__init__(self.name, *args, p=p, sp=sp, r=r, track=track)
+            paramdict = self.new_params(**kwargs)
+            cop.__init__(self.name, *args, **paramdict)
+            cop.assign_roles('container', self)
         except TypeError as e:
             raise Exception("Poor specification of "+str(self.__class__)) from e
-        cop.m = self.m.copy()
-        cop.t = self.t.copy()
-        cop.s = self.s.copy()
-        cop.r = self.r.copy()
         if hasattr(self, 'h'):
             cop.h = self.h.copy()
         return cop
-
-    def get_memory(self):
-        """
-        Get the approximate memory usage of the block in bytes (not complete).
-
-        Returns
-        -------
-        mem : Float
-            Approximate impact of the block.
-        """
-        mem = 0
-        mem += sys.getsizeof(self.m.opermodes)
-        if hasattr(self, 'r'):
-            mem += sys.getsizeof(self.r)
-        if hasattr(self, 'm'):
-            for fm in self.m.faultmodes.values():
-                mem += sys.getsizeof(fm)
-        if hasattr(self, 'mode_state_dict'):
-            mem += sys.getsizeof(self.mode_state_dict)
-        if hasattr(self, 'timers'):
-            for timer in self.timers:
-                mem += sys.getsizeof(timer)
-        if hasattr(self, 'internal_flows'):
-            for flowname, flow in self.internal_flows.items():
-                mem += flow.get_memory()
-        if hasattr(self, 'ca'):
-            for name, comp in self.ca.components.items():
-                mem += comp.get_memory()
-        if hasattr(self, 'aa'):
-            for name, comp in self.aa.actions.items():
-                mem += comp.get_memory()
-        for state in asdict(self.s):
-            # (*2 because both the initstate and the actual state should be counted)
-            mem += 2*sys.getsizeof(state)
-        return mem
 
     def return_mutables(self):
         """
@@ -513,10 +466,9 @@ class Block(Simulable):
         states : tuple
             tuple of all states in the block
         """
-        return (*astuple(self.s),
-                *self.m.return_mutables(),
-                *self.r.return_mutables(),
-                *self.t.return_mutables())
+        mutes = [getattr(self, mut).return_mutables() for mut in self.containers
+                 if mut not in ['p', 'sp']]
+        return tuple(mutes)
 
     def return_probdens(self):
         """Get the probability density associated with Block and things it contains."""
