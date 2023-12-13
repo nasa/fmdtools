@@ -1,65 +1,24 @@
 # -*- coding: utf-8 -*-
 """
-Description: A module for methods used commonly in model definition constructs.
+Description: A module defining BaseObjects.
+
+Classes in this module:
+
+- :class:`BaseObject`: Base object class used throughout.
+-:class:`ExampleObject`: Example base object for testing.
 
 Functions contained in this module:
 
-- :func:`get_var`:Gets the variable value of the object
-- :func:`set_var`:Sets variable of the object to a given value
-- :func:`is_iter`: Checks whether a data type should be interpreted as an iterable or
-not.
 - :func:`check_pickleability`:Checks to see which attributes of an object will pickle
   (and thus parallelize)"
-- :func:`init_obj_attr`:Initializes attributes to a given object
-- :func:`init_obj_dict`: Create a dict in an object for the attribute 'spec'.
-- :func:`get_obj_track`:Gets tracking params for a given object (block, model, etc)
-- :func:`t_key`:Used to generate keys for a given (float) time that is queryable as
-  an attribute of an object/dict
-
 """
 import dill
 import pickle
 import time
 import sys
+import inspect
 from fmdtools.analyze.common import get_sub_include
 from fmdtools.analyze.history import History
-
-
-def check_pickleability(obj, verbose=True, try_pick=False, pause=0.2):
-    """Check to see which attributes of an object will pickle (and parallelize)."""
-    from pickle import PicklingError
-    unpickleable = []
-    try:
-        itera = vars(obj)
-    except:
-        itera = {a: getattr(obj, a) for a in obj.__slots__}
-    for name, attribute in itera.items():
-        print(name)
-        time.sleep(pause)
-        try:
-            if not dill.pickles(attribute):
-                unpickleable = unpickleable + [name]
-        except ValueError as e:
-            raise ValueError("Problem in " + name +
-                             " with attribute " + str(attribute)) from e
-        if try_pick:
-            try:
-                a = pickle.dumps(attribute)
-                b = pickle.loads(a)
-            except:
-                raise Exception(obj.name + " will not pickle")
-    if try_pick:
-        try:
-            a = pickle.dumps(obj)
-            b = pickle.loads(a)
-        except PicklingError as e:
-            raise Exception(obj.name + " will not pickle") from e
-    if verbose:
-        if unpickleable:
-            print("The following attributes will not pickle: " + str(unpickleable))
-        else:
-            print("The object is pickleable")
-    return unpickleable
 
 
 class BaseObject(object):
@@ -68,12 +27,85 @@ class BaseObject(object):
 
     Enables the instantiation of roles via class variables and object parameters, as
     well as representation of indictators and tracking.
+
+    Examples
+    --------
+    The roletypes class variable lets one add specific types of roles to the class.
+    By default, 'container' is included in roletypes, enabling:
+    >>> from fmdtools.define.container.state import ExampleState
+    >>> class ExampleObject(BaseObject):
+    ...    container_s = ExampleState
+    ...    def indicate_high_x(self):
+    ...        return self.s.x > 1.0
+    ...    def indicate_y_over_t(self, t):
+    ...        return self.s.y > t
+
+
+    >>> ex = ExampleObject()
+    >>> ex.roletypes
+    ['container']
+    >>> ex.containers
+    ('s',)
+    >>> ex.s
+    ExampleState(x=1.0, y=1.0)
+
+    If an already-instanced role is passed, the BaseObject will take this
+    copy instead of instancing its own:
+    >>> ex2 = ExampleObject(s=ExampleState(2.0, 4.0))
+    >>> ex2.s
+    ExampleState(x=2.0, y=4.0)
+
+    The method `indicate_high_x` is called an indicator. Indicators show up in the
+    indicators property:
+    >>> ex.indicators
+    ('high_x', 'y_over_t')
+
+    And are used to evaluate conditions, e.g.:
+    >>> ex.indicate_high_x()
+    False
+    >>> ex2.indicate_high_x()
+    True
+
+    Time may be used as an optional argument to indicators:
+    >>> ex.indicate_y_over_t(0.0)
+    True
+    >>> ex2.return_true_indicators(0.0)
+    ['high_x', 'y_over_t']
+
+    A history may be created using create_hist:
+    >>> ex.create_hist([0.0, 1.0], 'default')
+    i.high_x:                       array(2)
+    i.y_over_t:                     array(2)
+
+    Note that adding roles to the class often means modifying default_track.
+    Initializing all possible using the 'all' option:
+    >>> ex.create_hist([0.0, 1.0], 'all')
+    i.high_x:                       array(2)
+    i.y_over_t:                     array(2)
+    s.x:                            array(2)
+    s.y:                            array(2)
     """
 
     __slots__ = ('name', 'containers', 'indicators')
     roletypes = ['container']
+    default_track = ['i']
 
     def __init__(self, name='', roletypes=[], **kwargs):
+        """
+        Initialize the baseobject.
+
+        Parameters
+        ----------
+        name : str, optional
+            Name to give the object. The default is '', which defaults to the class name
+        roletypes : list, optional
+            Role types to instance in this method using init_roletypes.
+            The default is [], which initializes all of them.
+        **kwargs : dict, object
+            Keywork arguments for the roles.
+            May be a dict of non-default arguments (e.g. s={'x': 1.0}) or
+            a fully instantiated object (e.g., s=ExampleState()),
+        """
         if not name:
             self.name = self.__class__.__name__.lower()
         else:
@@ -83,7 +115,7 @@ class BaseObject(object):
 
     def init_roletypes(self, *roletypes, **kwargs):
         """
-        Initialize roletpes with given kwargs.
+        Initialize roletypes with given kwargs.
 
         Parameters
         ----------
@@ -97,7 +129,7 @@ class BaseObject(object):
             roletypes = self.roletypes
         for roletype in roletypes:
             if roletype not in self.roletypes:
-                raise Exception("Roletype: " + roletype + "not in class varaiable" +
+                raise Exception("Roletype: " + roletype + "not in class variable" +
                                 " self.roletypes: " + str(self.roletypes))
             self.init_roles(roletype, **kwargs)
 
@@ -136,9 +168,39 @@ class BaseObject(object):
             setattr(self, rolename, container)
 
     def assign_roles(self, roletype, other_obj):
+        """
+        Assign copies of the roles of another BaseObject to the current object.
+
+        Used in object copying to ensure copies have the same attributes as the current.
+
+        Parameters
+        ----------
+        roletype : str
+            Roletype to assign.
+        other_obj : BaseObject
+            Object to assign from
+
+        Examples
+        --------
+        >>> from fmdtools.define.container.state import ExampleState
+        >>> class ExampleObject(BaseObject):
+        ...    container_s = ExampleState
+        >>> ex = ExampleObject(s={'x': 1.0, 'y': 2.0})
+        >>> ex2 = ExampleObject(s={'x': 3.0, 'y': 4.0})
+        >>> ex.assign_roles('container', ex2)
+        >>> ex.s
+        ExampleState(x=3.0, y=4.0)
+
+        Note that these these roles should be independent after assignment:
+        >>> ex.s.x = 4.0
+        >>> ex.s
+        ExampleState(x=4.0, y=4.0)
+        >>> ex2.s
+        ExampleState(x=3.0, y=4.0)
+        """
         roles = getattr(self, roletype+'s')
         for role in roles:
-            setattr(self, role, getattr(other_obj, role))
+            setattr(self, role, getattr(other_obj, role).copy())
 
     def init_role_dict(self, spec, name_end="s", set_attr=False):
         """
@@ -168,7 +230,7 @@ class BaseObject(object):
                 setattr(self, s_name, specs[s_name])
 
     def init_indicators(self):
-        """Initialize indicator tuple."""
+        """Find all indicator methods and initialize in .indicator tuple."""
         self.indicators = tuple([at[9:] for at in dir(self)
                                  if at.startswith('indicate_')])
 
@@ -183,7 +245,7 @@ class BaseObject(object):
         """
         return {i: getattr(self, 'indicate_'+i) for i in self.indicators}
 
-    def return_true_indicators(self, time):
+    def return_true_indicators(self, time=0.0):
         """
         Get list of indicators.
 
@@ -196,9 +258,10 @@ class BaseObject(object):
         -------
         list
             List of inticators that return true at time
-
         """
-        return [f for f, ind in self.get_indicators().items() if ind(time)]
+        return [f for f, ind in self.get_indicators().items()
+                if (bool(inspect.signature(ind).parameters) and ind(time))
+                or (not bool(inspect.signature(ind).parameters) and ind())]
 
     def init_indicator_hist(self, h, timerange, track):
         """
@@ -257,7 +320,8 @@ class BaseObject(object):
 
     def get_all_possible_track(self):
         """Get all possible tracking options."""
-        rs = [role for roletype in self.roletypes for role in getattr(self, roletype)]
+        rs = [role for roletype in self.roletypes
+              for role in getattr(self, roletype+'s')]
         return rs + ['i']
 
     def get_memory(self):
@@ -269,8 +333,8 @@ class BaseObject(object):
         mem : float
             Approximate memory taken by the object.
         """
-        mem_profile = {}
-        mem = 0
+        mem = sys.getsizeof(self)
+        mem_profile = {'base': mem}
         for roletype in self.roletypes:
             for rolename in getattr(self, roletype+'s'):
                 role = getattr(self, rolename)
@@ -315,3 +379,45 @@ class BaseObject(object):
                         if at_h:
                             hist[at] = at_h
             return hist.flatten()
+
+
+def check_pickleability(obj, verbose=True, try_pick=False, pause=0.2):
+    """Check to see which attributes of an object will pickle (and parallelize)."""
+    from pickle import PicklingError
+    unpickleable = []
+    try:
+        itera = vars(obj)
+    except:
+        itera = {a: getattr(obj, a) for a in obj.__slots__}
+    for name, attribute in itera.items():
+        print(name)
+        time.sleep(pause)
+        try:
+            if not dill.pickles(attribute):
+                unpickleable = unpickleable + [name]
+        except ValueError as e:
+            raise ValueError("Problem in " + name +
+                             " with attribute " + str(attribute)) from e
+        if try_pick:
+            try:
+                a = pickle.dumps(attribute)
+                b = pickle.loads(a)
+            except:
+                raise Exception(obj.name + " will not pickle")
+    if try_pick:
+        try:
+            a = pickle.dumps(obj)
+            b = pickle.loads(a)
+        except PicklingError as e:
+            raise Exception(obj.name + " will not pickle") from e
+    if verbose:
+        if unpickleable:
+            print("The following attributes will not pickle: " + str(unpickleable))
+        else:
+            print("The object is pickleable")
+    return unpickleable
+
+
+if __name__ == "__main__":
+    import doctest
+    doctest.testmod(verbose=True)

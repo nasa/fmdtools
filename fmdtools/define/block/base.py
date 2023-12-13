@@ -26,9 +26,10 @@ class SimParam(Parameter, readonly=True):
     Has fields:
         phases : tuple
             phases (('name', start, end)...) that the simulation progresses through
-        times : tuple
-            tuple of times to sample (if desired)
-            (starttime, sampletime1, sampletime2,... endtime)
+        start_time : float
+            Start time of the simulation.
+        end_time : float
+            End time of the simulation.
         track_times : tuple
             Defines what times to include in the history.
             Options are:
@@ -82,7 +83,14 @@ class SimParam(Parameter, readonly=True):
                                 " Ensure max of each phase < min of each other phase")
 
     def get_timerange(self, start_time=None, end_time=None):
-        """Generate the timerange to simulate over."""
+        """
+        Generate the timerange to simulate over.
+
+        Examples
+        --------
+        >>> SimParam(end_time=5.0).get_timerange()
+        array([0., 1., 2., 3., 4., 5.])
+        """
         if start_time is None:
             start_time = self.start_time
         if end_time is None:
@@ -101,7 +109,16 @@ class SimParam(Parameter, readonly=True):
         return histrange
 
     def get_shift(self, old_start_time=0.0):
-        """Get the shift between the sim timerange in the history."""
+        """
+        Get the shift between the sim timerange in the history.
+
+        Examples
+        --------
+        >>> SimParam().get_shift(6.0)
+        6
+        >>> SimParam(track_times=('interval', 2)).get_shift(2)
+        1
+        """
         prevrange = self.get_timerange(start_time=0.0, end_time=old_start_time)[:-1]
         if self.track_times[0] == "all":
             shift = len(prevrange)
@@ -112,7 +129,16 @@ class SimParam(Parameter, readonly=True):
         return shift
 
     def get_hist_ind(self, t_ind, t, shift):
-        """Get the index of the history given the simulation time/index and shift."""
+        """
+        Get the index of the history given the simulation time/index and shift.
+
+        Examples
+        --------
+        >>> SimParam().get_hist_ind(2, 2.0, 1)
+        3
+        >>> SimParam(track_times=('interval', 2)).get_hist_ind(4, 4.0, 0)
+        2
+        """
         if self.track_times[0] == 'all':
             t_ind_rec = t_ind + shift
         elif self.track_times[0] == 'interval':
@@ -679,3 +705,7 @@ class Block(Simulable):
                     active = True
                     flows_mutables[flowname] = newflowmutables
 
+
+if __name__ == "__main__":
+    import doctest
+    doctest.testmod(verbose=True)

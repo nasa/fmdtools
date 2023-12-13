@@ -2,12 +2,9 @@
 """
 Description: A module to define flows used to conect functions in a model. Contains:
 
-- :class:`Flow`:        Superclass for flows to be instantiated in a model.
-- :class:`MultiFlow`:   Class for flows which enable multiple copies to be instantiated within itself (e.g., for perception)
-- :class:`CommsFlow`:   Class for flows which enable communications (e.g., sending/recieving messages) between functions
-- :func:`init_flow`:    Flow constructor/factory method.
+- :class:`Flow`: Superclass for flows to be instantiated in a model.
+- :func:`init_flow`: Flow constructor/factory method.
 """
-import sys
 from recordclass import asdict, astuple
 
 from fmdtools.define.container.parameter import Parameter
@@ -87,6 +84,7 @@ class Flow(BaseObject):
                 return h
             else:
                 return False
+
 
 def init_flow(flowname, fclass=Flow, p={}, s={}, **kwargs):
     """
