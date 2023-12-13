@@ -54,37 +54,6 @@ class Flow(BaseObject):
     def get_typename(self):
         return "Flow"
 
-    def create_hist(self, timerange, track):
-        """
-        Create the history for the flow.
-
-        Parameters
-        ----------
-        timerange : np.array
-            Time-range to initialize the array over
-        track : dict
-            States to track
-
-        Returns
-        -------
-        h : History
-            History to initialize.
-        """
-        if hasattr(self, 'h'):
-            return self.h
-        else:
-            track = self.get_track(track, all_possible=Flow.default_track)
-            if track:
-                h = History()
-                sh = self.s.create_hist(timerange, get_sub_include('s', track))
-                if sh:
-                    h['s'] = sh
-                self.init_indicator_hist(h, timerange, track)
-                self.h = h
-                return h
-            else:
-                return False
-
 
 def init_flow(flowname, fclass=Flow, p={}, s={}, **kwargs):
     """
@@ -111,3 +80,8 @@ def init_flow(flowname, fclass=Flow, p={}, s={}, **kwargs):
     else:
         fl = fclass(flowname, p=p, s=s, **kwargs)
     return fl
+
+
+if __name__ == "__main__":
+    import doctest
+    doctest.testmod(verbose=True)

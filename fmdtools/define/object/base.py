@@ -17,6 +17,7 @@ import pickle
 import time
 import sys
 import inspect
+import numpy as np
 from fmdtools.analyze.common import get_sub_include
 from fmdtools.analyze.history import History
 
@@ -88,6 +89,9 @@ class BaseObject(object):
 
     __slots__ = ('name', 'containers', 'indicators')
     roletypes = ['container']
+    roledicts = []
+    rolevars = []
+    immutable_roles = ['p']
     default_track = ['i']
 
     def __init__(self, name='', roletypes=[], **kwargs):
@@ -209,6 +213,9 @@ class BaseObject(object):
         Works by finding all attributes from the obj's parameter with the name 'spec' in
         them and adding them to the dict. Adds the dict to the object.
 
+        Used in more flexible classes like Coords and Geom to enable properties to be
+        set via parameters.
+
         Parameters
         ----------
         obj : object
@@ -312,6 +319,8 @@ class BaseObject(object):
         if track == 'all':
             if not all_possible:
                 track = self.get_all_possible_track()
+            else:
+                track = all_possible
         elif track in ['none', False]:
             track = ()
         elif type(track) == str:
@@ -320,9 +329,34 @@ class BaseObject(object):
 
     def get_all_possible_track(self):
         """Get all possible tracking options."""
-        rs = [role for roletype in self.roletypes
-              for role in getattr(self, roletype+'s')]
-        return rs + ['i']
+        rs = [role for role in self.get_all_roles()
+              if role not in self.immutable_roles]
+        return rs + ['i'] + self.rolevars
+
+    def get_role_memory(self, rolename):
+        """Get memory from a particular role."""
+        role = getattr(self, rolename)
+        if hasattr(role, 'get_memory'):
+            mem, _ = role.get_memory()
+        else:
+            mem = sys.getsizeof(role)
+        return mem
+
+    def get_roles(self, *roletypes):
+        """Get all roles."""
+        if not roletypes:
+            roletypes = self.roletypes
+        return [role for roletype in roletypes for role in getattr(self, roletype+'s')]
+
+    def get_roledicts(self, *roledicts):
+        """Get all roles in roledicts."""
+        if not roledicts:
+            roledicts = self.roledicts
+        return [role for roledict in roledicts for role in getattr(self, roledict)]
+
+    def get_all_roles(self):
+        """Get all roles in the object."""
+        return self.get_roles() + self.get_roledicts() + self.rolevars
 
     def get_memory(self):
         """
@@ -335,14 +369,10 @@ class BaseObject(object):
         """
         mem = sys.getsizeof(self)
         mem_profile = {'base': mem}
-        for roletype in self.roletypes:
-            for rolename in getattr(self, roletype+'s'):
-                role = getattr(self, rolename)
-                if hasattr(role, 'get_memory'):
-                    mem_profile[rolename], _ = role.get_memory()
-                else:
-                    mem_profile[rolename] = sys.getsizeof(role)
-                mem += mem_profile[rolename]
+        roles_to_check = self.get_all_roles()
+        for rolename in roles_to_check:
+            mem_profile[rolename] = self.get_role_memory(rolename)
+            mem += mem_profile[rolename]
         return mem, mem_profile
 
     def create_hist(self, timerange, track):
@@ -374,10 +404,16 @@ class BaseObject(object):
                 for at in other_tracks:
                     at_track = get_sub_include(at, track)
                     attr = getattr(self, at, False)
-                    if attr:
-                        at_h = attr.create_hist(timerange, at_track)
-                        if at_h:
-                            hist[at] = at_h
+                    if hasattr(self, at):
+                        if hasattr(attr, 'create_hist'):
+                            at_h = attr.create_hist(timerange, at_track)
+                            if at_h:
+                                hist[at] = at_h
+                        elif isinstance(attr, np.ndarray):
+                            hist.init_att(at, attr, timerange, at_track,
+                                          dtype=np.ndarray)
+                        else:
+                            hist.init_att(at, attr, timerange, at_track)
             return hist.flatten()
 
 
