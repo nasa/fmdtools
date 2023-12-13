@@ -432,8 +432,8 @@ class Pump(FunctionArchitecture):
 
     __slots__ = ()
     container_p = PumpParam
-    default_sp = dict(phases=(('start', 0, 4), ('on', 5, 49),
-                      ('end', 50, 55)), times=(0, 20, 55), dt=1.0, units='hr')
+    default_sp = dict(phases=(('start', 0, 4), ('on', 5, 49), ('end', 50, 55)),
+                      end_time=55.0, dt=1.0, units='hr')
     default_track = {'flows': {'wat_2': {'s': 'flowrate'},
                                'ee_1': {'s': {'current'}}}, 'i': 'all'}
 
@@ -539,8 +539,13 @@ if __name__ == "__main__":
     from fmdtools.sim.sample import SampleApproach, ParameterSample, ParameterDomain
 
     mdl = Pump()
-    endclass, mdlhist = propagate.nominal(mdl, track='all')
-    fig, ax = mdlhist.plot_line('flows.wat_1.s.flowrate', 'i.on')
+    endclass, mdlhist = propagate.one_fault(mdl, 'export_water', 'block', time=29,
+                                            staged=True)
+
+    endclass, mdlhist = propagate.one_fault(
+        mdl, 'import_water', 'no_wat', time=29, staged=True)
+    endclass, mdlhist = propagate.nominal(mdl, mdl_kwargs=dict(track='all'))
+    fig, ax = mdlhist.plot_line('flows.wat_2.s.flowrate', 'i.on')
 
     mdl = Pump()
     newhist2 = mdl.create_hist(range(10), 'default')
@@ -582,13 +587,13 @@ if __name__ == "__main__":
     newhist3 = mdl.create_hist(range(10), "all")
     mdl.flows['ee_1'].s
 
-    mdl = Pump()
+    mdl = Pump(track='all')
     newhist4 = mdl.create_hist(range(10), {'fxns': {'move_water': ['s', 't']}})
     mdl.flows['ee_1'].s
 
     # an.graph.exec_order(mdl)
     endclass, mdlhist = propagate.one_fault(
-        mdl, 'import_water', 'no_wat', time=29,  staged=True)
+        mdl, 'import_water', 'no_wat', time=29, staged=True)
 
     # mdlhist.get_faulty_hist(*mdl.fxns)
     endclass, mdlhist = propagate.one_fault(

@@ -49,8 +49,8 @@ class FunctionArchitecture(Simulable):
     default_name = 'model'
     container_r = Rand
 
-    def __init__(self, name='', p={}, sp={}, r={}, track='', **kwargs):
-        Simulable.__init__(self, name=name, p=p, sp=sp, r=r, track=track)
+    def __init__(self, name='', p={}, sp={}, r={}, track='', h={}, **kwargs):
+        Simulable.__init__(self, name=name, p=p, sp=sp, r=r, track=track, h=h)
 
         self.fxns = dict()
         self.flows = dict()
@@ -61,6 +61,12 @@ class FunctionArchitecture(Simulable):
         self._flowstates = {}
         self.init_architecture(name=name, p=p, sp=sp, r=r, track=track, **kwargs)
         self.build()
+        if not h:
+            self.init_hist(h=h)
+            timerange = self.sp.get_histrange()
+            self.add_flow_hist(self.h, timerange, self.track)
+            self.add_fxn_hist(self.h, timerange, self.track)
+            self.h = self.h.flatten()
 
     def __repr__(self):
         fxnlist = [fxn.__repr__() for fxn in self.fxns.values()]
@@ -156,9 +162,10 @@ class FunctionArchitecture(Simulable):
             Parameters to send to __init__ method of the Function superclass
         """
         if not getattr(self, 'is_copy', False):
-            flows = self.get_flows(flownames)
+            flows = self.get_flows(*flownames)
             fkwargs = {**{'r': {"seed": self.r.seed}},
                        **{'t': {'dt': self.sp.dt}},
+                       **{'sp': {'end_time': self.sp.end_time}},
                        **fkwargs}
             try:
                 self.fxns[name] = fclass(name, flows=flows, args_f=args_f, **fkwargs)
@@ -185,8 +192,10 @@ class FunctionArchitecture(Simulable):
             raise Exception("Invalid list: "+str(functionorder) +
                             " should have elements: "+str(self.functionorder))
 
-    def get_flows(self, flownames):
+    def get_flows(self, *flownames):
         """Return a list of the model flow objects."""
+        if not flownames:
+            flownames = self.flows
         return {flowname: self.flows[flowname] for flowname in flownames}
 
     def fxns_of_class(self, ftype):
@@ -333,7 +342,8 @@ class FunctionArchitecture(Simulable):
         cop.__init__(p=getattr(self, 'p', {}),
                      sp=getattr(self, 'sp', {}),
                      track=getattr(self, 'track', {}),
-                     r={'seed': self.r.seed})
+                     r={'seed': self.r.seed},
+                     h=self.h.copy())
         cop.r = self.r.copy()
 
         for flowname, flow in self.flows.items():
@@ -343,7 +353,7 @@ class FunctionArchitecture(Simulable):
             flownames = copy.deepcopy(self._fxninput[fxnname]['flows'])
             args_f = copy.deepcopy(self._fxninput[fxnname]['args_f'])
             kwargs = copy.deepcopy(self._fxninput[fxnname]['kwargs'])
-            flows = cop.get_flows(flownames)
+            flows = cop.get_flows(*flownames)
             if args_f == 'None':
                 cop.fxns[fxnname] = fxn.copy(flows, **kwargs)
             else:
@@ -356,17 +366,14 @@ class FunctionArchitecture(Simulable):
         cop.is_copy = False
         cop.build(functionorder=copy.deepcopy(self.functionorder), update_seed=False)
         cop.is_copy = True
-        if hasattr(self, 'h'):
-            hist = History()
-            for k in self.h:
-                for att in ['fxns', 'flows']:
-                    if k.startswith(att):
-                        fname = k.split('.')[1]
-                        copy_f = getattr(cop, att)[fname]
-                        hist[att+'.'+fname] = copy_f.h
-                if k == 'time' or k.startswith('i.'):
-                    hist[k] = self.h[k].copy()
-            cop.h = hist.flatten()
+        cop.init_hist(h=self.h.copy())
+
+        timerange = self.sp.get_histrange()
+        cop.add_flow_hist(cop.h, timerange, self.track)
+        cop.add_fxn_hist(cop.h, timerange, self.track)
+        if 'time' in self.h:
+            cop.h['time'] = np.copy(self.h.time)
+        cop.h = cop.h.flatten()
         return cop
 
     def reset(self):
@@ -444,16 +451,17 @@ class FunctionArchitecture(Simulable):
             track = self.get_track(track,
                                    all_possible=FunctionArchitecture.default_track)
             self.init_indicator_hist(hist, timerange, track)
-            fxn_track = get_sub_include('fxns', track)
-            if fxn_track:
-                hist['fxns'] = History()
-                for fxnname, fxn in self.fxns.items():
-                    fh = fxn.create_hist(timerange, get_sub_include(fxnname, fxn_track))
-                    if fh:
-                        hist.fxns[fxnname] = fh
-            self.add_flow_hist(hist, timerange, track)
             self.h = hist.flatten()
         return self.h
+
+    def add_fxn_hist(self, hist, timerange, track):
+        fxn_track = get_sub_include('fxns', track)
+        if fxn_track:
+            hist['fxns'] = History()
+            for fxnname, fxn in self.fxns.items():
+                fh = fxn.create_hist(timerange, get_sub_include(fxnname, fxn_track))
+                if fh:
+                    hist.fxns[fxnname] = fh
 
     def propagate(self, time, fxnfaults={}, disturbances={}, run_stochastic=False):
         """

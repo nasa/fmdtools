@@ -227,7 +227,7 @@ class BaseObject(object):
                 for i, val in indicators.items():
                     h['i'].init_att(i, val, timerange, sub_track, dtype=bool)
 
-    def get_track(obj, track, all_possible=()):
+    def get_track(self, track, all_possible=()):
         """
         Get tracking params for a given object (block, model, etc).
 
@@ -245,14 +245,20 @@ class BaseObject(object):
             fields to track
         """
         if track == 'default':
-            track = obj.default_track
+            track = self.default_track
         if track == 'all':
-            track = all_possible
+            if not all_possible:
+                track = self.get_all_possible_track()
         elif track in ['none', False]:
             track = ()
         elif type(track) == str:
             track = (track,)
         return track
+
+    def get_all_possible_track(self):
+        """Get all possible tracking options."""
+        rs = [role for roletype in self.roletypes for role in getattr(self, roletype)]
+        return rs + ['i']
 
     def get_memory(self):
         """
@@ -275,7 +281,37 @@ class BaseObject(object):
                 mem += mem_profile[rolename]
         return mem, mem_profile
 
-    def create_hist(self):
-        for roletype in self.roletypes:
-            for rolename in getattr(self, roletype+'s'):
-                role = getattr(self, rolename)
+    def create_hist(self, timerange, track):
+        """
+        Create state history of the object over the timerange.
+
+        Parameters
+        ----------
+        timerange : array
+            Numpy array of times to initialize in the dictionary.
+        track : 'all' or dict, 'none', optional
+            Which model states to track over time, which can be given as 'all' or a
+            dict of form {'functions':{'fxn1':'att1'}, 'flows':{'flow1':'att1'}}
+            The default is 'all'.
+
+        Returns
+        -------
+        hist : History
+            A history of each recorded block property over the given timerange.
+        """
+        if hasattr(self, 'h'):
+            return self.h
+        else:
+            track = self.get_track(track)
+            hist = History()
+            if track:
+                self.init_indicator_hist(hist, timerange, track)
+                other_tracks = [t for t in track if t not in ('i', 'flows')]
+                for at in other_tracks:
+                    at_track = get_sub_include(at, track)
+                    attr = getattr(self, at, False)
+                    if attr:
+                        at_h = attr.create_hist(timerange, at_track)
+                        if at_h:
+                            hist[at] = at_h
+            return hist.flatten()

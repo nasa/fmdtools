@@ -65,8 +65,8 @@ from fmdtools.analyze.phases import from_hist
 
 # DEFAULT ARGUMENTS
 sim_kwargs = {'desired_result': 'endclass',
-              'track': 'default',
               'staged': False,
+              'cut_hist': True,
               'run_stochastic': False,
               'use_end_condition': True,
               'warn_faults': True}
@@ -91,18 +91,6 @@ desired_result : dict/str/list
     - a dict of lists (for multiple over time), e.g. ::
 
         {time:[varnames,... 'endclass']}
-
-track : str, optional
-    Which model states to track over time (overwrites mdl.default_track).
-    Default is 'default'
-    Options:
-
-    - 'default'
-    - 'all'
-    - 'none'
-    - or a dict of form ::
-
-        {'functions':{'fxn1':'att1'}, 'flows':{'flow1':'att1'}}
 
     The default is 'all'.
 
@@ -504,7 +492,7 @@ def sequence(mdl, seq={}, faultseq={}, disturbances={}, scen={}, rate=np.NaN,
 def nom_helper(mdl, ctimes, protect=True, save_args={}, mdl_kwargs={}, scen={},
                warn_faults=True, **kwargs):
     """
-    Helper function for initial run of nominal scenario.
+    Run initial run of nominal scenario.
 
     Parameters
     ----------
@@ -780,35 +768,12 @@ def scenlist_helper(mdl, scenlist, c_mdl, **kwargs):
                                            desc="SCENARIOS COMPLETE")):
             name = scen.name
             if staged:
-                mdl_i = copy_staged(c_mdl[scen.time])
+                mdl_i = c_mdl[scen.time].copy()
             else:
                 mdl_i = c_mdl[0].new()
             ec, mh, t_end = exec_scen(mdl_i, scen, indiv_id=str(i), **kwargs)
             results[name], mdlhists[name] = ec, mh
     return results, mdlhists
-
-
-def copy_staged(mdl):
-    """
-    Copies the model when used in staged execution.
-
-    Parameters
-    ----------
-    mdl : Simulable
-        Model to copy.
-
-    Returns
-    -------
-    mdl : Simulable
-        Copy of the model with corresponding history
-    """
-    if 'time' in mdl.h:
-        ctime = np.copy(mdl.h.time)
-        mdl = mdl.copy()
-        mdl.h.time = ctime
-    else:
-        mdl = mdl.copy()
-    return mdl
 
 
 def close_pool(kwargs):
@@ -822,7 +787,7 @@ def exec_scen_par(args):
     """Helper function for executing the scenario in parallel"""
     mdl_in = args[0]
     if args[2].get('staged', False):
-        mdl_out = copy_staged(mdl_in)
+        mdl_out = mdl_in.copy()
     else:
         mdl_out = mdl_in.copy()
     return exec_scen(mdl_out, args[1], **args[2], indiv_id=args[3])
@@ -1023,48 +988,6 @@ def list_init_faults(mdl):
     return faultlist
 
 
-def init_histrange(mdl, start_time, track):
-    """
-    Determines the timerange the model will be simulated over and initializes
-    the history
-
-    Parameters
-    ----------
-    mdl : Simulable
-        Model (with times)
-    start_time : float
-        Time to start the history over
-    staged : bool
-        Whether the simulation will be staged.
-    track : dict
-        Tracking dictionary.
-
-    Returns
-    -------
-    mdlhist : History
-        initialized model history
-    histrange : array
-        times to record history over
-    timerange : array
-        times to simulate the model over (which may be a subset of histrange)
-    shift : int
-        Time index to shift the history by.
-    """
-    timerange = mdl.sp.get_timerange(start_time)
-    histrange = mdl.sp.get_histrange(start_time)
-    shift = mdl.sp.get_shift()
-
-    mdlhist = mdl.create_hist(histrange, track)
-    if 'time' not in mdlhist:
-        mdlhist.init_att('time',
-                         timerange[0],
-                         timerange=timerange,
-                         track='all',
-                         dtype=float)
-
-    return mdlhist, histrange, timerange, shift
-
-
 def check_end_condition(mdl, use_end_condition, t):
     """
     Checks if the end condition of the simulate has been met.
@@ -1093,8 +1016,7 @@ def check_end_condition(mdl, use_end_condition, t):
         return False
 
 
-def prop_one_scen(mdl, scen, ctimes=[], nomhist={}, nomresult={}, cut_hist=True,
-                  **kwargs):
+def prop_one_scen(mdl, scen, ctimes=[], nomhist={}, nomresult={}, **kwargs):
     """
     Runs a fault scenario in the model over time
 
@@ -1116,8 +1038,6 @@ def prop_one_scen(mdl, scen, ctimes=[], nomhist={}, nomresult={}, cut_hist=True,
         option. The default is {}.
     nomresult : dict, optional
         Nominal result dictionary (to compare with current if desired)
-    cut_hist : bool
-        Whether to cut the model history to a given size. The default is True
     **kwargs : kwargs
         simulation options, see :data:`sim_kwargs`
     Returns
@@ -1131,16 +1051,16 @@ def prop_one_scen(mdl, scen, ctimes=[], nomhist={}, nomresult={}, cut_hist=True,
     t_end: float
         Last sim time
     """
-    desired_result, track, staged, run_stochastic, use_end_condition, warn_faults = unpack_sim_kwargs(**kwargs)
+    desired_result, staged, cut_hist, run_stochastic, use_end_condition, warn_faults = unpack_sim_kwargs(**kwargs)
     # if staged, we want it to start a new run from the starting time of the scenario,
     # using a copy of the input model (which is the nominal run) at this time
     if staged:
         start_time = scen.time
     else:
         start_time = 0
-    mdlhist, histrange, timerange, shift = init_histrange(mdl,
-                                                          start_time,
-                                                          track)
+    timerange = mdl.sp.get_timerange(start_time)
+    shift = mdl.sp.get_shift(start_time)
+    mdl.init_time_hist()
     # run model through the time range defined in the object
     c_mdl = dict.fromkeys(ctimes)
     result = Result()
@@ -1149,8 +1069,6 @@ def prop_one_scen(mdl, scen, ctimes=[], nomhist={}, nomresult={}, cut_hist=True,
         try:
             if t in ctimes:
                 c_mdl[t] = mdl.copy()
-                if 'time' in mdl.h:
-                    c_mdl[t].h['time'] = np.copy(mdl.h.time)
             if t in scen['sequence']:
                 fxnfaults = scen['sequence'][t].get('faults', {})
                 disturbances = scen['sequence'][t].get('disturbances', {})
@@ -1162,9 +1080,7 @@ def prop_one_scen(mdl, scen, ctimes=[], nomhist={}, nomresult={}, cut_hist=True,
             except Exception as e:
                 raise Exception("Error in scenario " + str(scen)) from e
 
-            if mdl.sp.track_times:
-                t_ind_rec = mdl.sp.get_hist_ind(t_ind, t, shift)
-                mdlhist.log(mdl, t_ind_rec, time=t)
+            mdl.log_hist(t_ind, t, shift)
 
             if type(desired_result) == dict:
                 if "all" in desired_result:
@@ -1176,13 +1092,7 @@ def prop_one_scen(mdl, scen, ctimes=[], nomhist={}, nomresult={}, cut_hist=True,
                 else:
                     des_res = False
                 if des_res:
-                    result[t] = get_result(scen,
-                                           mdl,
-                                           des_res,
-                                           mdlhist,
-                                           nomhist,
-                                           nom_res,
-                                           time=t)
+                    result[t] = get_result(scen, mdl, des_res, nomhist, nom_res, time=t)
             if check_end_condition(mdl, use_end_condition, t):
                 break
         except:
@@ -1190,31 +1100,22 @@ def prop_one_scen(mdl, scen, ctimes=[], nomhist={}, nomresult={}, cut_hist=True,
             raise
             break
     if cut_hist:
-        mdlhist.cut(t_ind + shift)
+        mdl.h.cut(t_ind + shift)
     if type(desired_result) == dict and 'end' in desired_result:
-        result['end'] = get_result(scen,
-                                   mdl,
-                                   desired_result['end'],
-                                   mdlhist, nomhist,
-                                   nomresult,
+        result['end'] = get_result(scen, mdl, desired_result['end'], nomhist, nomresult,
                                    time=t)
     else:
-        result.update(get_result(scen,
-                                 mdl,
-                                 desired_result,
-                                 mdlhist,
-                                 nomhist,
-                                 nomresult,
-                                 time=t))
-    # if len(result)==1: result = [*result.values()][0]
+        result.update(get_result(scen, mdl, desired_result, nomhist, nomresult, time=t))
+
     if None in c_mdl.values():
         raise Exception("Sample times" + str(ctimes)
                         + " go beyond simulation time " + str(t))
-    return result, mdlhist, c_mdl, t_ind + shift
+    return result, mdl.h, c_mdl, t_ind + shift
 
 
-def get_result(scen, mdl, desired_result, mdlhist={}, nomhist={}, nomresult={},
-               time=0.0):
+def get_result(scen, mdl, desired_result, nomhist={}, nomresult={}, time=0.0):
+    """Get the desired_result specified from the model."""
+    mdlhist = mdl.h
     desired_result = copy.deepcopy(desired_result)
     if type(desired_result) == str:
         desired_result = {desired_result: None}
@@ -1284,8 +1185,9 @@ def get_result(scen, mdl, desired_result, mdlhist={}, nomhist={}, nomresult={},
 
 def get_endclass_vars(mdl, desired_result, result):
     """
-    Gets variables in the model corresponding to the provided desired_result dictionary
-    argument and appends them to result.
+    Get variables in the model corresponding to the provided desired_result dictionary.
+
+    Appends them to provided result.
 
     Parameters
     ----------
