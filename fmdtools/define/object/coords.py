@@ -60,7 +60,7 @@ class CoordsParam(Parameter):
     >>> class ExampleCoordsParam(CoordsParam):
     ...     feature_a: tuple = (bool, False)
     ...     feature_v: tuple = (float, 1.0)
-    ...     state_h: tuple = (float, 0.0)
+    ...     state_st: tuple = (float, 0.0)
     ...     point_start: tuple = (0.0, 0.0)
     ...     collect_high_v: tuple = ("v", 5.0, np.greater)
     >>> ex = ExampleCoordsParam()
@@ -98,7 +98,7 @@ class Coords(BaseObject):
 
     Instantiating this class a class with (see ExampleCoordsParam):
     - immutable arrays a and v,
-    - mutable array h,
+    - mutable array st,
     - point start at (0.0), and
     - collection high made up of all points where v > 10.0
 
@@ -116,8 +116,8 @@ class Coords(BaseObject):
 
     The main difference with states is that they can be set, e.g.:
 
-    >>> ex.h[0, 0] = 100.0
-    >>> ex.h[0, 0]
+    >>> ex.st[0, 0] = 100.0
+    >>> ex.st[0, 0]
     100.0
 
     Collections are lists of points that map to immutable properties. In ExampleCoords,
@@ -131,31 +131,51 @@ class Coords(BaseObject):
 
     >>> ex.start
     (0.0, 0.0)
+
+    Note that these histories are tracked:
+    >>> h = ex.create_hist([0, 1, 2], "all")
+    >>> h.keys()
+    dict_keys(['r.probdens', 'st'])
+    >>> h.st[0]
+    array([[100.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.],
+           [  0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.],
+           [  0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.],
+           [  0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.],
+           [  0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.],
+           [  0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.],
+           [  0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.],
+           [  0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.],
+           [  0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.],
+           [  0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.]])
     """
 
     __slots__ = ("p", "r", "grid", "pts", "points", "collections", "features", "states",
                  "properties", "_args", "_kwargs", "default_track", )
     container_p = CoordsParam
     container_r = Rand
+    roledicts = ['points', 'collections', 'features', 'states']
 
     def __init__(self, *args, **kwargs):
         """Initialize class with properties in init_properties."""
         self._args = args
         self._kwargs = kwargs
+        super().__init__(*args, **kwargs)
         self.init_grids(*args, **kwargs)
         self.init_properties(*args, **kwargs)
         self.build()
         if not hasattr(self, 'default_track'):
-            self.default_track = self.states
+            self.default_track = ['r', *self.states]
+        self.immutable_roles = ([*BaseObject.immutable_roles] +
+                                [s for s in self.get_roledicts()
+                                 if s not in self.states])
 
     def check_role(self, rolename):
+        """Check that the rolename for coords is 'c'."""
         if rolename != 'c':
             raise Exception("Invalid container name for Coords: "+rolename)
 
     def init_grids(self, *args, **kwargs):
         """Prepare class with defined features."""
-        self.p = self.container_p(**kwargs.get('p', {}))
-        self.r = self.container_r(**kwargs.get('r', {}))
         self.grid = np.array([[(i, j) for j in range(0, self.p.y_size)]
                              for i in range(0, self.p.x_size)]) * self.p.blocksize
         self.pts = self.grid.reshape(int(self.grid.size/2), 2)
@@ -287,7 +307,7 @@ class Coords(BaseObject):
         --------
         >>> ex = ExampleCoords()
         >>> ex.get_properties(0, 0)
-        {'a': False, 'v': 10.0, 'h': 0.0}
+        {'a': False, 'v': 10.0, 'st': 0.0}
         """
         properties = {}
         for prop in self.properties:
@@ -351,8 +371,8 @@ class Coords(BaseObject):
         Examples
         --------
         >>> ex = ExampleCoords()
-        >>> ex.set(15.0, 12.0, "h", 100.0)
-        >>> ex.get(15.0, 12.0, "h")
+        >>> ex.set(15.0, 12.0, "st", 100.0)
+        >>> ex.get(15.0, 12.0, "st")
         100.0
         """
         proparray = getattr(self, prop)
@@ -384,8 +404,8 @@ class Coords(BaseObject):
         Examples
         --------
         >>> ex = ExampleCoords()
-        >>> ex.set_range("h", 100.0, 20, 40, 20, 40)
-        >>> ex.h
+        >>> ex.set_range("st", 100.0, 20, 40, 20, 40)
+        >>> ex.st
         array([[  0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.],
                [  0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.],
                [  0.,   0., 100., 100., 100.,   0.,   0.,   0.,   0.,   0.],
@@ -396,8 +416,8 @@ class Coords(BaseObject):
                [  0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.],
                [  0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.],
                [  0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.]])
-        >>> ex.set_range("h", 0.0)
-        >>> ex.h
+        >>> ex.set_range("st", 0.0)
+        >>> ex.st
         array([[0., 0., 0., 0., 0., 0., 0., 0., 0., 0.],
                [0., 0., 0., 0., 0., 0., 0., 0., 0., 0.],
                [0., 0., 0., 0., 0., 0., 0., 0., 0., 0.],
@@ -408,8 +428,8 @@ class Coords(BaseObject):
                [0., 0., 0., 0., 0., 0., 0., 0., 0., 0.],
                [0., 0., 0., 0., 0., 0., 0., 0., 0., 0.],
                [0., 0., 0., 0., 0., 0., 0., 0., 0., 0.]])
-        >>> ex.set_range("h", 20.0, 20, 40, 20, 40, inclusive=False)
-        >>> ex.h
+        >>> ex.set_range("st", 20.0, 20, 40, 20, 40, inclusive=False)
+        >>> ex.st
         array([[ 0.,  0.,  0.,  0.,  0.,  0.,  0.,  0.,  0.,  0.],
                [ 0.,  0.,  0.,  0.,  0.,  0.,  0.,  0.,  0.,  0.],
                [ 0.,  0., 20., 20.,  0.,  0.,  0.,  0.,  0.,  0.],
@@ -453,18 +473,18 @@ class Coords(BaseObject):
         Examples
         --------
         >>> ex = ExampleCoords()
-        >>> ex.set_pts([(50,50), [80,80]], "h", -20.0)
-        >>> ex.get(50, 50, "h")
+        >>> ex.set_pts([(50,50), [80,80]], "st", -20.0)
+        >>> ex.get(50, 50, "st")
         -20.0
-        >>> ex.get(80, 80, "h")
+        >>> ex.get(80, 80, "st")
         -20.0
 
         or,:
 
-        >>> ex.set_pts([(50,50), [80,80]], "h", [-10.0, -5.0])
-        >>> ex.get(50, 50, "h")
+        >>> ex.set_pts([(50,50), [80,80]], "st", [-10.0, -5.0])
+        >>> ex.get(50, 50, "st")
         -10.0
-        >>> ex.get(80, 80, "h")
+        >>> ex.get(80, 80, "st")
         -5.0
         """
         if is_iter(value):
@@ -515,8 +535,8 @@ class Coords(BaseObject):
         Alternatively can be used to search for the closest with a given property value,
         e.g.,:
 
-        >>> ex.set(0, 0, "h", 1.0)
-        >>> ex.find_closest(20, 0, "h", value=1.0, comparator=np.equal)
+        >>> ex.set(0, 0, "st", 1.0)
+        >>> ex.find_closest(20, 0, "st", value=1.0, comparator=np.equal)
         array([0., 0.])
         """
         if prop in self.properties:
@@ -567,7 +587,7 @@ class Coords(BaseObject):
             x-position to check from.
         y : number
             y-position to check from.
-       coll: str
+        coll: str
             Property or collection of the grid to check.
 
         Returns
@@ -616,8 +636,8 @@ class Coords(BaseObject):
         Examples
         --------
         >>> ex = ExampleCoords()
-        >>> ex.set_rand_pts("h", 40, 5)
-        >>> len(ex.find_all("h", 40))
+        >>> ex.set_rand_pts("st", 40, 5)
+        >>> len(ex.find_all("st", 40))
         5
         """
         if pts is None:
@@ -650,7 +670,8 @@ class Coords(BaseObject):
 
     def return_mutables(self):
         """Check if grid properties have changed (used in propagation)."""
-        return tuple([*(tuple(map(tuple, getattr(self, state))) for state in self.states)])
+        return tuple([*(tuple(map(tuple, getattr(self, state)))
+                        for state in self.states)])
 
     def copy(self):
         """
@@ -659,13 +680,13 @@ class Coords(BaseObject):
         Examples
         --------
         >>> ex = ExampleCoords()
-        >>> ex.set(0, 0, "h", 25.0)
+        >>> ex.set(0, 0, "st", 25.0)
         >>> cop = ex.copy()
-        >>> cop.get(0, 0, "h")
+        >>> cop.get(0, 0, "st")
         25.0
-        >>> np.all(ex.h == cop.h)
+        >>> np.all(ex.st == cop.st)
         True
-        >>> id(ex.h) == id(cop.h)
+        >>> id(ex.st) == id(cop.st)
         False
         """
         cop = self.__class__(*self._args, **self._kwargs)
@@ -673,47 +694,9 @@ class Coords(BaseObject):
             setattr(cop, state, np.copy(getattr(self, state)))
         return cop
 
-    def create_hist(self, timerange, track):
-        """
-        Create a history of states for the Coords object.
-
-        Parameters
-        ----------
-        timerange : iterable, optional
-            Time-range to initialize the history over. The default is None.
-        track : list/str/dict, optional
-            argument specifying attributes for :func:`get_sub_include'.
-            The default is None.
-
-        Returns
-        -------
-        hist : History
-            History of fields specified in track.
-
-        Examples
-        --------
-        >>> ex = ExampleCoords()
-        >>> h = ex.create_hist([0, 1, 2], "all")
-        >>> h.keys()
-        dict_keys(['h'])
-        >>> h.h[0]
-        array([[0., 0., 0., 0., 0., 0., 0., 0., 0., 0.],
-               [0., 0., 0., 0., 0., 0., 0., 0., 0., 0.],
-               [0., 0., 0., 0., 0., 0., 0., 0., 0., 0.],
-               [0., 0., 0., 0., 0., 0., 0., 0., 0., 0.],
-               [0., 0., 0., 0., 0., 0., 0., 0., 0., 0.],
-               [0., 0., 0., 0., 0., 0., 0., 0., 0., 0.],
-               [0., 0., 0., 0., 0., 0., 0., 0., 0., 0.],
-               [0., 0., 0., 0., 0., 0., 0., 0., 0., 0.],
-               [0., 0., 0., 0., 0., 0., 0., 0., 0., 0.],
-               [0., 0., 0., 0., 0., 0., 0., 0., 0., 0.]])
-        """
-        track = self.get_track(track, all_possible=self.states)
-        h = History()
-        for att in track:
-            val = getattr(self, att)
-            h.init_att(att, val, timerange, track, dtype=np.ndarray)
-        return h
+    def get_all_possible_track(self):
+        """Extend BaseObject to include states in tracking."""
+        return BaseObject.get_all_possible_track(self) + [*self.states]
 
     def get_collection(self, prop):
         """
@@ -1043,13 +1026,12 @@ class Coords(BaseObject):
         return fig, ax
 
 
-
 class ExampleCoordsParam(CoordsParam):
     """Example of a Coords param for use in documentation/testing."""
 
     feature_a: tuple = (bool, False)
     feature_v: tuple = (float, 1.0)
-    state_h: tuple = (float, 0.0)
+    state_st: tuple = (float, 0.0)
     point_start: tuple = (0.0, 0.0)
     collect_high_v: tuple = ("v", 5.0, np.greater)
 
@@ -1072,16 +1054,16 @@ if __name__ == "__main__":
     ex = ExampleCoords()
     ex.show_property("v", cmap="Greys")
     ex.show_collection("high_v")
-    ex.show("h", collections={"high_v": {"alpha": 0.5, "color": "red"}})
-    ex.show_property_z("h", z="v",
+    ex.show("st", collections={"high_v": {"alpha": 0.5, "color": "red"}})
+    ex.show_property_z("st", z="v",
                        collections={"high_v": {"alpha": 0.5, "color": "red"}})
 
     ex.show_property("v", cmap="Greys")
     ex.show_property_z("v")
-    ex.show_property_z("h", z="v")
+    ex.show_property_z("st", z="v")
     ex.show_collection("high_v")
     ex.show_collection("high_v", z="v")
-    ex.show_z("h", z="v",
+    ex.show_z("st", z="v",
             collections={"pts": {"color": "blue"},
                          "high_v": {"alpha": 0.5, "color": "red"}},
             legend_args=True)

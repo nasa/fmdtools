@@ -41,13 +41,16 @@ class Geom(BaseObject):
     container_p = Parameter
     default_track = ['s']
     all_possible = ['s']
+    roledicts = ["buffers"]
 
     def __init__(self, *args, s={}, p={}, **kwargs):
         super().__init__(*args, s=s, p=p)
+        self.immutable_roles = [*BaseObject.immutable_roles]
         self.shape = self.shapely_class(*self.p.as_args())
         self.init_role_dict("buffer")
         for b, dist in self.buffers.items():
             setattr(self, b, self.shape.buffer(dist))
+            self.immutable_roles.append(b)
 
     def at(self, pt, buffername='shape'):
         """
@@ -111,15 +114,6 @@ class Geom(BaseObject):
 
     def return_mutables(self):
         return astuple(self.s)
-
-    def create_hist(self, timerange, track):
-        track = self.get_track(track, all_possible=self.all_possible)
-        h = History()
-        for att in track:
-            att_track = get_sub_include(att, track)
-            val = getattr(self, att)
-            h[att] = val.create_hist(timerange, att_track)
-        return h
 
     def vect_to_shape(self, pt, buffername='shape'):
         """

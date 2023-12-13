@@ -26,8 +26,10 @@ class Timer(BaseObject):
     """
 
     default_track = ('time', 'mode')
+    roletypes = []
+    rolevars = ['time', 'mode']
 
-    def __init__(self, name):
+    def __init__(self, name=''):
         """
         Initializes the Tymer
 
@@ -36,20 +38,22 @@ class Timer(BaseObject):
         name : str
             Name for the timer
         """
+        BaseObject.__init__(self, name=name)
         self.name = str(name)
         self.time = 0.0
         self.tstep = -1.0
         self.mode = 'standby'
 
     def __repr__(self):
-        return 'Timer ' + self.name + ': mode= ' + self.mode + ', time= ' + str(self.time)
+        return ('Timer ' + self.name + ': mode= '
+                + self.mode + ', time= ' + str(self.time))
 
     def t(self):
-        """ Returns the time elapsed """
+        """Return the time elapsed."""
         return self.time
 
     def inc(self, tstep=[]):
-        """ Increments the time elapsed by tstep"""
+        """Increment the time elapsed by tstep."""
         if self.time >= 0.0:
             if tstep:
                 self.time += tstep
@@ -61,12 +65,13 @@ class Timer(BaseObject):
             self.mode = 'complete'
 
     def reset(self):
-        """ Resets the time to zero"""
+        """Reset the time to zero."""
         self.time = 0.0
         self.mode = 'standby'
 
     def set_timer(self, time, tstep=-1.0, overwrite='always'):
-        """ Sets timer to a given time
+        """
+        Set timer to a given time.
 
         Parameters
         ----------
@@ -95,32 +100,32 @@ class Timer(BaseObject):
         self.tstep = tstep
         self.mode = 'set'
 
-    def in_standby(self):
+    def indicate_standby(self):
         """Whether the timer is in standby (time has not been set)"""
         return self.mode == 'standby'
 
-    def is_ticking(self):
+    def indicate_ticking(self):
         """Whether the timer is ticking (time is incrementing)"""
         return self.mode == 'ticking'
 
-    def is_complete(self):
+    def indicate_complete(self):
         """Whether the timer is complete (after time is done incrementing)"""
         return self.mode == 'complete'
 
-    def is_set(self):
+    def indicate_set(self):
         """Whether the timer is set (before time increments)"""
         return self.mode == 'set'
 
     def copy(self):
+        """Copy the Timer."""
         cop = self.__class__(self.name)
         cop.time = self.time
         cop.mode = self.mode
         cop.dt = self.dt
         return cop
 
-    def create_hist(self, timerange, track):
-        h = History()
-        track = self.get_track(track, all_possible=('time', 'mode'))
-        h.init_att('time', self.time, timerange=timerange, track=track, dtype=float)
-        h.init_att('mode', self.mode, timerange=timerange, track=track, str_size='<U8')
-        return h
+if __name__ == "__main__":
+    import doctest
+    doctest.testmod(verbose=True)
+
+
