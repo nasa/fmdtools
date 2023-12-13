@@ -269,7 +269,10 @@ class History(Result):
                     i_ind = split_att.index('i')
                     new_split_att = split_att[:i_ind] + ['indicate_'+split_att[-1]]
                     methname = '.'.join(new_split_att)
-                    val = get_var(obj, methname)(time)
+                    try:
+                        val = get_var(obj, methname)(time)
+                    except TypeError:
+                        val = get_var(obj, methname)()
                 elif 'faults' in att:
                     split_att = att.split('.')
                     faultind = split_att.index('faults')
