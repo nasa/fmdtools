@@ -89,7 +89,7 @@ class SimParam(Parameter, readonly=True):
             end_time = self.end_time
         return np.arange(start_time, end_time + self.dt, self.dt)
 
-    def get_histrange(self, start_time=None, end_time=None):
+    def get_histrange(self, start_time=0.0, end_time=None):
         """Get the history range associated with the SimParam."""
         timerange = self.get_timerange(start_time, end_time)
         if self.track_times[0] == "all":
@@ -100,9 +100,9 @@ class SimParam(Parameter, readonly=True):
             histrange = self.track_times[1]
         return histrange
 
-    def get_shift(self):
+    def get_shift(self, old_start_time=0.0):
         """Get the shift between the sim timerange in the history."""
-        prevrange = self.get_timerange(start_time=0.0, end_time=self.start_time)[:-1]
+        prevrange = self.get_timerange(start_time=0.0, end_time=old_start_time)[:-1]
         if self.track_times[0] == "all":
             shift = len(prevrange)
         elif self.track_times[0] == 'interval':
@@ -129,6 +129,20 @@ class Simulable(BaseObject):
     Base class for object which simulate (blocks and architectures).
 
     Note that classes solely based on Simulable may not be able to be simulated.
+
+    Parameters
+    ----------
+    track : str
+        Which model states to track over time (overwrites mdl.default_track).
+        Default is 'default'
+        Options:
+
+        - 'default'
+        - 'all'
+        - 'none'
+        - or a dict of form ::
+
+            {'functions':{'fxn1':'att1'}, 'flows':{'flow1':'att1'}}
     """
 
     __slots__ = ('p', 'sp', 'r', 't', 'h', 'track', 'flows', 'is_copy')
@@ -165,6 +179,27 @@ class Simulable(BaseObject):
 
         BaseObject.__init__(self, name=name, roletypes=roletypes, **loc_kwargs)
 
+    def init_hist(self, h={}):
+        """Initialize the history of the sim using SimParam parameters and track."""
+        if not h:
+            timerange = self.sp.get_histrange()
+            self.h = self.create_hist(timerange, self.track)
+        else:
+            self.h = h
+
+    def init_time_hist(self):
+        """Add time history to the model (only done at top level)."""
+        if 'time' not in self.h:
+            timerange = self.sp.get_histrange()
+            self.h.init_att('time', timerange[0], timerange=timerange, track='all',
+                            dtype=float)
+
+    def log_hist(self, t_ind, t, shift):
+        """Log the history over time."""
+        if self.sp.track_times:
+            t_ind_rec = self.sp.get_hist_ind(t_ind, t, shift)
+            self.h.log(self, t_ind_rec, time=t)
+
     def add_flow_hist(self, hist, timerange, track):
         """
         Create a history of flows for the Simulable and appends it to the History hist.
@@ -182,7 +217,7 @@ class Simulable(BaseObject):
         flow_track = get_sub_include('flows', track)
         if flow_track:
             hist['flows'] = History()
-            for flowname, flow in self.flows.items():
+            for flowname, flow in self.get_flows().items():
                 fh = flow.create_hist(timerange, get_sub_include(flowname, flow_track))
                 if fh:
                     hist.flows[flowname] = fh
@@ -379,7 +414,7 @@ class Block(Simulable):
     default_track = ['s', 'm', 'r', 't', 'i']
     roletypes = ['container', 'flow']
 
-    def __init__(self, name='', flows={}, **kwargs):
+    def __init__(self, name='', flows={}, h={}, **kwargs):
         """
         Instance superclass. Called by Function and Component classes.
 
@@ -395,6 +430,11 @@ class Block(Simulable):
         Simulable.__init__(self, name=name, roletypes=['container'], **kwargs)
         self.init_flows(flows=flows)
         self.update_seed()
+        self.init_hist(h=h)
+        # if flows not from model, add history for them also:
+        if not flows and not h:
+            timerange = self.sp.get_histrange()
+            self.add_flow_hist(self.h, timerange, self.track)
 
     def init_flows(self, flows={}):
         """
@@ -553,6 +593,8 @@ class Block(Simulable):
             raise Exception("Poor specification of "+str(self.__class__)) from e
         if hasattr(self, 'h'):
             cop.h = self.h.copy()
+            if 'time' in self.h:
+                cop.h['time'] = np.copy(self.h.time)
         return cop
 
     def return_mutables(self):
@@ -580,49 +622,6 @@ class Block(Simulable):
             for actionname, action in self.aa.actions:
                 state_pd *= action.return_probdens()
         return state_pd
-
-    def create_hist(self, timerange, track='default'):
-        """
-        Initialize state history of the model mdl over the timerange.
-
-        A pointer to the history is then stored at self.h.
-
-        Parameters
-        ----------
-        timerange : array
-            Numpy array of times to initialize in the dictionary.
-        track : 'all' or dict, 'none', optional
-            Which model states to track over time, which can be given as 'all' or a
-            dict of form {'functions':{'fxn1':'att1'}, 'flows':{'flow1':'att1'}}
-            The default is 'all'.
-
-        Returns
-        -------
-        fxnhist : dict
-            A dictionary history of each recorded block property over the given timehist
-        """
-        if hasattr(self, 'h'):
-            return self.h
-        else:
-            all_track = self.default_track+['flows']
-            track = self.get_track(track, all_track)
-            if track:
-                hist = History()
-                self.init_indicator_hist(hist, timerange, track)
-                self.add_flow_hist(hist, timerange, track)
-                other_tracks = [t for t in track if t not in ('i', 'flows')]
-                for at in other_tracks:
-                    at_track = get_sub_include(at, track)
-                    attr = getattr(self, at, False)
-                    if attr:
-                        at_h = attr.create_hist(timerange, at_track)
-                        if at_h:
-                            hist[at] = at_h
-
-                self.h = hist.flatten()
-                return self.h
-            else:
-                return History()
 
     def propagate(self, time, faults={}, disturbances={}, run_stochastic=False):
         """
@@ -679,3 +678,4 @@ class Block(Simulable):
                 if flows_mutables[flowname] != newflowmutables:
                     active = True
                     flows_mutables[flowname] = newflowmutables
+

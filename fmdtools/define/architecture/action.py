@@ -63,6 +63,7 @@ class ActionArchitecture(object):
         self.faultmodes = {}
         self.is_copy = is_copy
         self.active_actions = set()
+        self.init_hist()
 
     def build(self):
         if self.initial_action == 'auto':

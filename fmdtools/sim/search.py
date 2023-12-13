@@ -745,7 +745,7 @@ class ScenarioProblem(BaseSimProblem):
 
         scen = self.gen_scenario(*x)
 
-        mdl = propagate.copy_staged([*self.prepped_sims['mdls'].values()][0])
+        mdl = [*self.prepped_sims['mdls'].values()][0].copy()
         nomhist = self.prepped_sims['hist'].copy()
         nomresult = self.prepped_sims['result'].copy()
         desired_result = self.obj_con_des_res()
