@@ -101,19 +101,19 @@ class Timer(BaseObject):
         self.mode = 'set'
 
     def indicate_standby(self):
-        """Whether the timer is in standby (time has not been set)"""
+        """Indicate if the timer is in standby (time not set)."""
         return self.mode == 'standby'
 
     def indicate_ticking(self):
-        """Whether the timer is ticking (time is incrementing)"""
+        """Indictate if the timer is ticking (time is incrementing)."""
         return self.mode == 'ticking'
 
     def indicate_complete(self):
-        """Whether the timer is complete (after time is done incrementing)"""
+        """Indicate if the timer is complete (after time is done incrementing)."""
         return self.mode == 'complete'
 
     def indicate_set(self):
-        """Whether the timer is set (before time increments)"""
+        """Indicate if the timer is set (before time increments)."""
         return self.mode == 'set'
 
     def copy(self):

@@ -548,7 +548,7 @@ if __name__ == "__main__":
     fig, ax = mdlhist.plot_line('flows.wat_2.s.flowrate', 'i.on')
 
     mdl = Pump()
-    newhist2 = mdl.create_hist(range(10), 'default')
+    newhist2 = mdl.create_hist(range(10))
 
     newhist2.flows.wat_2.s.flowrate
 
@@ -580,17 +580,17 @@ if __name__ == "__main__":
     # c = pickle.dumps(mdl)
     # d = pickle.loads(c)
 
-    mdl = Pump()
-    newhist2 = mdl.create_hist(
-        range(10), {'flows': {'ee_1': 'all', "wat_1": {'s': ('flowrate',)}}})
-    mdl = Pump()
-    newhist3 = mdl.create_hist(range(10), "all")
+    mdl = Pump(track={'flows': {'ee_1': 'all', "wat_1": {'s': ('flowrate',)}}})
+    newhist2 = mdl.create_hist(range(10))
+    mdl = Pump(track="all")
+    newhist3 = mdl.create_hist(range(10))
+    mdl.flows['ee_1'].s
+
+    mdl = Pump(track={'fxns': {'move_water': ['s', 't']}})
+    newhist4 = mdl.create_hist(range(10))
     mdl.flows['ee_1'].s
 
     mdl = Pump(track='all')
-    newhist4 = mdl.create_hist(range(10), {'fxns': {'move_water': ['s', 't']}})
-    mdl.flows['ee_1'].s
-
     # an.graph.exec_order(mdl)
     endclass, mdlhist = propagate.one_fault(
         mdl, 'import_water', 'no_wat', time=29, staged=True)

@@ -28,9 +28,9 @@ class CommsFlow(MultiFlow):
     """
     slots = ['__dict__']
 
-    def __init__(self, name, glob=[], p={}, s={}):
+    def __init__(self, name='', glob=[], p={}, s={}, track={}):
         self.fxns = {}
-        super().__init__(name, glob=glob, p=p, s=s)
+        super().__init__(name='', glob=glob, p=p, s=s, track=track)
 
     def __repr__(self):
         rep_str = Flow.__repr__(self)
@@ -160,13 +160,21 @@ class CommsFlow(MultiFlow):
         """
         fxn_to = self.get_local_name(fxn_to)
 
-        if fxn_from=="all":         fxn_from = self.glob.fxns[fxn_to]["in"]
-        elif fxn_from=="ports":     fxn_from=[f for f in fxn_to.locals]
-        elif type(fxn_from)==str:   fxn_from = {fxn_from:self.glob.fxns[fxn_to]["in"][fxn_from] for i in range(1) if fxn_from in self.glob.fxns[fxn_to]["in"]}
-        elif type(fxn_from)==list:  fxn_from = {f:self.glob.fxns[fxn_to]["in"][f] for f in fxn_from if f in self.glob.fxns[fxn_to]["in"]}
+        if fxn_from == "all":
+            fxn_from = self.glob.fxns[fxn_to]["in"]
+        elif fxn_from == "ports":
+            fxn_from = [f for f in fxn_to.locals]
+        elif type(fxn_from) == str:
+            fxn_from = {fxn_from: self.glob.fxns[fxn_to]["in"][fxn_from]
+                        for i in range(1) if fxn_from in self.glob.fxns[fxn_to]["in"]}
+        elif type(fxn_from) == list:
+            fxn_from = {f: self.glob.fxns[fxn_to]["in"][f]
+                        for f in fxn_from if f in self.glob.fxns[fxn_to]["in"]}
         for f_from in list(fxn_from):
-            if remove_from_in:  args = self.glob.fxns[fxn_to]["in"].pop(f_from)
-            else:               args = self.glob.fxns[fxn_to]["in"][f_from]
+            if remove_from_in:
+                args = self.glob.fxns[fxn_to]["in"].pop(f_from)
+            else:
+                args = self.glob.fxns[fxn_to]["in"][f_from]
             port_from = self.get_port(f_from, fxn_to, "out")
             port_to = self.get_port(fxn_to, f_from, "internal")
             port_to.s.assign(port_from.s,  *args, as_copy=True)

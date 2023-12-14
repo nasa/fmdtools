@@ -10,8 +10,6 @@ from recordclass import asdict, astuple
 from fmdtools.define.container.parameter import Parameter
 from fmdtools.define.container.state import State
 from fmdtools.define.object.base import BaseObject
-from fmdtools.analyze.common import get_sub_include
-from fmdtools.analyze.history import History
 
 
 class Flow(BaseObject):
@@ -55,7 +53,7 @@ class Flow(BaseObject):
         return "Flow"
 
 
-def init_flow(flowname, fclass=Flow, p={}, s={}, **kwargs):
+def init_flow(flowname, fclass=Flow, track='default', **kwargs):
     """
     Initialize a flow (factory method).
 
@@ -68,17 +66,14 @@ def init_flow(flowname, fclass=Flow, p={}, s={}, **kwargs):
         Name to give the flow object
     fclass : Flow/MultiFlow/Comms/CustomFlow
         Flow class to instantiate OR already-instanced object to pass
-    p : dict
-        Parameter values to override from defaults.
-    s : dict
-        State values to override from defaults.
     **kwargs :dict
         Other specialized roles to overrride
     """
     if not callable(fclass):
         fl = fclass
+        fl.init_track(track)
     else:
-        fl = fclass(flowname, p=p, s=s, **kwargs)
+        fl = fclass(flowname, track=track, **kwargs)
     return fl
 
 

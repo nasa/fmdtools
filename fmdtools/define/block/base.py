@@ -158,58 +158,36 @@ class Simulable(BaseObject):
 
     Parameters
     ----------
-    track : str
-        Which model states to track over time (overwrites mdl.default_track).
-        Default is 'default'
-        Options:
 
-        - 'default'
-        - 'all'
-        - 'none'
-        - or a dict of form ::
-
-            {'functions':{'fxn1':'att1'}, 'flows':{'flow1':'att1'}}
     """
 
     __slots__ = ('p', 'sp', 'r', 't', 'h', 'track', 'flows', 'is_copy')
     container_t = Time
     default_track = ["all"]
+    immutable_roles = BaseObject.immutable_roles + ['sp']
     default_sp = {}
     container_sp = SimParam
 
-    def __init__(self, name='', roletypes=[], track={}, **kwargs):
+    def __init__(self, sp={}, **kwargs):
         """
         Instantiate internal Simulable attributes.
 
         Parameters
         ----------
-        name: str
-            Name for the Simulable
-        roletypes : list
-            Names of roles (e.g., ['container'] etc)
-        track: dict
-            tracking dictionary
+        sp : dict
+            SimParam arguments
+        **kwargs : kwargs
+            Keyword arguments to BaseObject
         """
         self.is_copy = False
-
-        if not track:
-            self.track = self.default_track
-        else:
-            self.track = track
-
-        if 'sp' in kwargs:
-            sp = {**self.default_sp, **kwargs['sp']}
-        else:
-            sp = {**self.default_sp}
-        loc_kwargs = {**kwargs, 'sp': sp}
-
-        BaseObject.__init__(self, name=name, roletypes=roletypes, **loc_kwargs)
+        loc_kwargs = {**kwargs, 'sp': {**self.default_sp, **sp}}
+        BaseObject.__init__(self, **loc_kwargs)
 
     def init_hist(self, h={}):
         """Initialize the history of the sim using SimParam parameters and track."""
         if not h:
             timerange = self.sp.get_histrange()
-            self.h = self.create_hist(timerange, self.track)
+            self.h = self.create_hist(timerange)
         else:
             self.h = h
 
@@ -244,7 +222,7 @@ class Simulable(BaseObject):
         if flow_track:
             hist['flows'] = History()
             for flowname, flow in self.get_flows().items():
-                fh = flow.create_hist(timerange, get_sub_include(flowname, flow_track))
+                fh = flow.create_hist(timerange)
                 if fh:
                     hist.flows[flowname] = fh
 

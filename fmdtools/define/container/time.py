@@ -113,7 +113,8 @@ class Time(BaseContainer):
             track_timers = get_sub_include('timers', track)
             for tname, timer in self.timers.items():
                 sub_track = get_sub_include(tname, track_timers)
-                hist[tname] = timer.create_hist(timerange, sub_track)
+                if tname in sub_track or sub_track == 'default':
+                    hist[tname] = timer.create_hist(timerange)
         else:
             BaseContainer.init_hist_att(self, hist, att, timerange, track, str_size)
 

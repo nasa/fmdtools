@@ -74,27 +74,28 @@ class BaseObject(object):
     ['high_x', 'y_over_t']
 
     A history may be created using create_hist:
-    >>> ex.create_hist([0.0, 1.0], 'default')
+    >>> ex.create_hist([0.0, 1.0])
     i.high_x:                       array(2)
     i.y_over_t:                     array(2)
 
     Note that adding roles to the class often means modifying default_track.
     Initializing all possible using the 'all' option:
-    >>> ex.create_hist([0.0, 1.0], 'all')
+    >>> ex = ExampleObject(track='all')
+    >>> ex.create_hist([0.0, 1.0])
     i.high_x:                       array(2)
     i.y_over_t:                     array(2)
     s.x:                            array(2)
     s.y:                            array(2)
     """
 
-    __slots__ = ('name', 'containers', 'indicators')
+    __slots__ = ('name', 'containers', 'indicators', 'track')
     roletypes = ['container']
     roledicts = []
     rolevars = []
     immutable_roles = ['p']
     default_track = ['i']
 
-    def __init__(self, name='', roletypes=[], **kwargs):
+    def __init__(self, name='', roletypes=[], track='default', **kwargs):
         """
         Initialize the baseobject.
 
@@ -105,6 +106,17 @@ class BaseObject(object):
         roletypes : list, optional
             Role types to instance in this method using init_roletypes.
             The default is [], which initializes all of them.
+        track : str/dict
+            Which model states to track over time (overwrites mdl.default_track).
+            Default is 'default'
+            Options:
+
+            - 'default'
+            - 'all'
+            - 'none'
+            - or a dict of form ::
+
+                {'functions':{'fxn1':'att1'}, 'flows':{'flow1':'att1'}}
         **kwargs : dict, object
             Keywork arguments for the roles.
             May be a dict of non-default arguments (e.g. s={'x': 1.0}) or
@@ -114,8 +126,18 @@ class BaseObject(object):
             self.name = self.__class__.__name__.lower()
         else:
             self.name = name
+        self.init_track(track)
         self.init_indicators()
         self.init_roletypes(*roletypes, **kwargs)
+
+    def init_track(self, track):
+        """Add .track attribute."""
+        if not track:
+            self.track = []
+        elif track == 'default':
+            self.track = self.default_track
+        else:
+            self.track = track
 
     def init_roletypes(self, *roletypes, **kwargs):
         """
@@ -133,7 +155,7 @@ class BaseObject(object):
             roletypes = self.roletypes
         for roletype in roletypes:
             if roletype not in self.roletypes:
-                raise Exception("Roletype: " + roletype + "not in class variable" +
+                raise Exception("Roletype: " + roletype + " not in class variable" +
                                 " self.roletypes: " + str(self.roletypes))
             self.init_roles(roletype, **kwargs)
 
@@ -375,7 +397,7 @@ class BaseObject(object):
             mem += mem_profile[rolename]
         return mem, mem_profile
 
-    def create_hist(self, timerange, track):
+    def create_hist(self, timerange):
         """
         Create state history of the object over the timerange.
 
@@ -383,10 +405,6 @@ class BaseObject(object):
         ----------
         timerange : array
             Numpy array of times to initialize in the dictionary.
-        track : 'all' or dict, 'none', optional
-            Which model states to track over time, which can be given as 'all' or a
-            dict of form {'functions':{'fxn1':'att1'}, 'flows':{'flow1':'att1'}}
-            The default is 'all'.
 
         Returns
         -------
@@ -396,7 +414,7 @@ class BaseObject(object):
         if hasattr(self, 'h'):
             return self.h
         else:
-            track = self.get_track(track)
+            track = self.get_track(self.track)
             hist = History()
             if track:
                 self.init_indicator_hist(hist, timerange, track)
@@ -406,7 +424,10 @@ class BaseObject(object):
                     attr = getattr(self, at, False)
                     if hasattr(self, at):
                         if hasattr(attr, 'create_hist'):
-                            at_h = attr.create_hist(timerange, at_track)
+                            if 'track' in inspect.signature(attr.create_hist).parameters:
+                                at_h = attr.create_hist(timerange, at_track)
+                            else:
+                                at_h = attr.create_hist(timerange)
                             if at_h:
                                 hist[at] = at_h
                         elif isinstance(attr, np.ndarray):
