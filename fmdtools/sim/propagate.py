@@ -740,7 +740,6 @@ def single_faults(mdl, include_nominal=True, **kwargs):
 
 
 def scenlist_helper(mdl, scenlist, c_mdl, **kwargs):
-    # nomhist, track, track_times, desired_result, run_stochastic, save_args
     max_mem, showprogress, pool, close_p = unpack_mult_kwargs(kwargs)
     staged = kwargs.get('staged', False)
     mem, mem_profile = kwargs['nomhist'].get_memory()

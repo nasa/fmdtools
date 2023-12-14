@@ -119,7 +119,7 @@ class Environment(CommsFlow):
     def return_probdens(self):
         return self.r.return_probdens() * self.c.r.return_probdens()
 
-    def create_hist(self, timerange, track):
+    def create_hist(self, timerange):
         """
         Creates/returns history of states at self.h.
 
@@ -132,7 +132,7 @@ class Environment(CommsFlow):
         ga.geoms.ex_line.s.occupied:    array(1)
         ga.geoms.ex_poly.s.occupied:    array(1)
         """
-        self.h = CommsFlow.create_hist(self, timerange, track)
+        self.h = CommsFlow.create_hist(self, timerange)
         track = self.get_track(track, all_possible=self.all_possible)
         track = [t for t in track if t not in ('s', 'i')]
         for att in track:

@@ -49,7 +49,7 @@ class FunctionArchitecture(Simulable):
     default_name = 'model'
     container_r = Rand
 
-    def __init__(self, name='', p={}, sp={}, r={}, track='', h={}, **kwargs):
+    def __init__(self, name='', p={}, sp={}, r={}, track='default', h={}, **kwargs):
         Simulable.__init__(self, name=name, p=p, sp=sp, r=r, track=track, h=h)
 
         self.fxns = dict()
@@ -125,13 +125,13 @@ class FunctionArchitecture(Simulable):
         for flowname in flownames:
             self.add_flow(flowname, fclass, **kwargs)
 
-    def add_flow(self, flowname, fclass=Flow, **kwargs):
+    def add_flow(self, name, fclass=Flow, **kwargs):
         """
         Add a flow with given attributes to the model.
 
         Parameters
         ----------
-        flowname : str
+        name : str
             Unique flow name to give the flow in the model
         fclass : Class, optional
             Class to instantiate (e.g. CommsFlow, MultiFlow). Default is Flow.
@@ -141,7 +141,8 @@ class FunctionArchitecture(Simulable):
             Dicts for non-default values to p, s, etc
         """
         if not getattr(self, 'is_copy', False):
-            self.flows[flowname] = init_flow(flowname, fclass, **kwargs)
+            track = get_sub_include(name, get_sub_include('flows', self.track))
+            self.flows[name] = init_flow(name, fclass, track=track, **kwargs)
 
     def add_fxn(self, name, fclass, *flownames, args_f='None', **fkwargs):
         """
@@ -163,9 +164,11 @@ class FunctionArchitecture(Simulable):
         """
         if not getattr(self, 'is_copy', False):
             flows = self.get_flows(*flownames)
+            track = get_sub_include(name, get_sub_include('fxns', self.track))
             fkwargs = {**{'r': {"seed": self.r.seed}},
                        **{'t': {'dt': self.sp.dt}},
                        **{'sp': {'end_time': self.sp.end_time}},
+                       **{'track': track},
                        **fkwargs}
             try:
                 self.fxns[name] = fclass(name, flows=flows, args_f=args_f, **fkwargs)
@@ -445,21 +448,12 @@ class FunctionArchitecture(Simulable):
                     raise Exception(var[0] + " not a function, flow, or seed")
                 set_var(f, var, varvalues[i])
 
-    def create_hist(self, timerange, track):
-        if not hasattr(self, 'h'):
-            hist = History()
-            track = self.get_track(track,
-                                   all_possible=FunctionArchitecture.default_track)
-            self.init_indicator_hist(hist, timerange, track)
-            self.h = hist.flatten()
-        return self.h
-
     def add_fxn_hist(self, hist, timerange, track):
         fxn_track = get_sub_include('fxns', track)
         if fxn_track:
             hist['fxns'] = History()
             for fxnname, fxn in self.fxns.items():
-                fh = fxn.create_hist(timerange, get_sub_include(fxnname, fxn_track))
+                fh = fxn.create_hist(timerange)
                 if fh:
                     hist.fxns[fxnname] = fh
 

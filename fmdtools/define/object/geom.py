@@ -44,7 +44,7 @@ class Geom(BaseObject):
     roledicts = ["buffers"]
 
     def __init__(self, *args, s={}, p={}, **kwargs):
-        super().__init__(*args, s=s, p=p)
+        super().__init__(s=s, p=p, **kwargs)
         self.immutable_roles = [*BaseObject.immutable_roles]
         self.shape = self.shapely_class(*self.p.as_args())
         self.init_role_dict("buffer")

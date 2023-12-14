@@ -6,8 +6,6 @@ Contains:
 - :class:`MultiFlow`: Class for flows which enable multiple copies to be instantiated
 within itself (e.g., for perception)
 """
-
-from fmdtools.analyze.common import get_sub_include
 from fmdtools.define.flow.base import Flow
 from recordclass import asdict
 
@@ -31,9 +29,9 @@ class MultiFlow(Flow):
 
     slots = ['__dict__']
 
-    def __init__(self, name, glob=[], s={}, p={}):
+    def __init__(self, name='', glob=[], s={}, p={}, track={}):
         self.locals = []
-        super().__init__(name,  s=s, p=p)
+        super().__init__(name='',  s=s, p=p, track=track)
         if not glob:
             self.glob = self
         else:
@@ -166,12 +164,11 @@ class MultiFlow(Flow):
             cop.create_local(local.name, s=asdict(local.s), p=local.p)
         return cop
 
-    def create_hist(self, timerange, track):
-        super().create_hist(timerange, track)
+    def create_hist(self, timerange):
+        super().create_hist(timerange)
         for localname in self.locals:
             local_flow = getattr(self, localname)
-            local_track = get_sub_include(localname, track)
-            self.h[localname] = local_flow.create_hist(timerange, local_track)
+            self.h[localname] = local_flow.create_hist(timerange)
         return self.h
 
     def get_typename(self):
