@@ -9,67 +9,36 @@ from fmdtools.define.block.base import Block
 from fmdtools.define.container.state import ExampleState
 from fmdtools.define.container.parameter import ExampleParameter
 from fmdtools.define.container.mode import ExampleMode
-from fmdtools.define.architecture.base import inject_faults_internal
 
 
 class Function(Block):
     """
     Superclass for representing system functions.
 
-    Additional roles
+    Additional role types
     ----------
-    ca : ComponentArchitecture
-        Component Architecture fulfilling function.
-    aa : ActionArchitecture
-        Action Architecture performed by function.
+    arch : Architecture
+        component, action, function architectures at ca, aa, fa, etc.
     """
 
-    __slots__ = ["ca", "aa", "args_f"]
-    default_track = ["ca", "aa"]+Block.default_track
+    __slots__ = ["ca", "aa", "fa", "args_f", "archs"]
+    default_track = ["ca", "aa", "fa"]+Block.default_track
+    roletypes = ['container', 'flow', 'arch']
 
-    def __init__(self, name='', flows={}, ca=dict(), aa=dict(), local=dict(),
-                 args_f=dict(), **kwargs):
+    def __init__(self, args_f=dict(), **kwargs):
         """
         Instantiate the function superclass with the relevant parameters.
 
         Parameters
         ----------
-        flows :dict
-            Flow objects passed to use instead of instantiating locally.
-        ca : dict, optional
-            Internal ComponentArchitecture fields/arguments. The default is {}.
-        aa : dict, optional
-            Internal ASG fields/arguments. The default is {}.
         args_f : dict, optional
             arguments to pass to custom __init__ function.
         """
-        super().__init__(name=name, flows=flows.copy(), **kwargs)
+        super().__init__(**kwargs)
         self.args_f = args_f
+        self.update_contained_modes()
 
-        for at in ['ca', 'aa']:  # NOTE: similar to init_obj_attr()
-            at_arg = eval(at)
-            at_init = getattr(self, 'arch_'+at, False)
-            if at_init:
-                try:
-                    if at == "aa":
-                        setattr(self, at, at_init(flows=self.flows.copy(), **at_arg))
-                    elif at == "ca":
-                        setattr(self, at, at_init(**at_arg))
-                except TypeError as e:
-                    invalid_args = [a for a in at_arg if a not in at_init.__fields__]
-                    if invalid_args:
-                        argstr = ", Invalid args: "+', '.join(invalid_args)
-                    else:
-                        argstr = ''
-                    raise TypeError("Poor specification for : " + str(at_init) +
-                                    " with kwargs: " + str(at_arg) + argstr) from e
-                self.update_contained_modes(at)
-            elif at_arg:
-                raise Exception(at + " argument provided: " + str(at_arg) +
-                                "without associating an archiecture to arch_" + at)
-        self.update_seed()
-
-    def update_contained_modes(self, at):
+    def update_contained_modes(self):
         """
         Add contained faultmodes for the container at to the Function model.
 
@@ -78,13 +47,9 @@ class Function(Block):
         at : str ('ca' or 'aa')
             Role to update (for ComponentArchitecture or ActionArchitecture roles)
         """
-        if at == 'ca':
-            compacts = self.ca.components
-        elif at == 'aa':
-            compacts = self.aa.actions
-        for ca in compacts.values():
-            self.m.faultmodes.update({ca.name + "_" + f: vals
-                                      for f, vals in ca.m.faultmodes.items()})
+        for at in self.get_roles('arch'):
+            arch = getattr(self, at)
+            self.m.faultmodes.update(arch.faultmodes)
 
     def get_typename(self):
         return "Function"
@@ -121,58 +86,29 @@ class Function(Block):
             Random seed. The default is [].
         """
         super().update_seed(seed)
+        for at in self.get_roles('arch'):
+            arch = getattr(self, at)
+            arch.update_seed(self.r.seed)
 
-        if hasattr(self, 'ca'):
-            self.ca.update_seed(self.r.seed)
-        if hasattr(self, 'aa'):
-            self.aa.update_seed(self.r.seed)
+    def prop_arch_behaviors(self, proptype, faults, time, run_stochastic):
+        """Propagate behaviors into contained architectures."""
+        for at, obj in self.get_roles('arch'):
+            try:
+                obj.inject_faults(faults)
+                # TODO: this should be more general
+                if at == 'aa':
+                    obj(proptype, time, run_stochastic, self.t.dt)
+                elif at == 'fa':
+                    obj.propagate(proptype, time=time, run_stochastic=run_stochastic)
+            except TypeError as e:
+                raise Exception("Poorly specified Architecture: "
+                                + str(self.at.__class__)) from e
 
-    def copy(self, *args, **kwargs):
-        """
-        Create a copy of the function object.
-
-        Adds newflows and arbitrary parameters to be associated with the copy. Used when
-        copying the model.
-
-        Returns
-        -------
-        copy : Function
-            Copy of the given function with new flows
-        """
-        cop = super().copy(*args, **kwargs)
-        if hasattr(self, 'ca'):
-            cop.ca = self.ca.copy()
-            cop.update_contained_modes('ca')
-        if hasattr(self, 'aa'):
-            cop.aa = self.aa.copy(flows=cop.flows.copy())
-            cop.update_contained_modes('aa')
-        if hasattr(self, 'h'):
-            if hasattr(self, 'ca'):
-                for compname, comp in cop.ca.components.items():
-                    ex_hist = cop.h.get("ca.components." + compname)
-                    if ex_hist:
-                        comp.h = ex_hist.copy()
-                        for k, v in comp.h.items():
-                            cop.h["ca.components." + compname + "." + k] = v
-            if hasattr(self, 'aa'):
-                # if "a.active_actions" in self.h.keys():
-                #     cop.h["a.active_actions"] = self.h['a.active_actions'].copy()
-                for actname, act in cop.aa.actions.items():
-                    ex_hist = cop.h.get("aa.actions." + actname)
-                    if ex_hist:
-                        act.h = ex_hist.copy()
-                        for k, v in act.h.items():
-                            cop.h["aa.actions." + actname + "." + k] = v
-        return cop
-
-    def return_mutables(self):
-        bm = super().return_mutables()
-        cm, am = (), ()
-        if hasattr(self, 'ca'):
-            cm = self.ca.return_mutables()
-        if hasattr(self, 'aa'):
-            am = self.aa.return_mutables()
-        return *bm, *cm, *am
+    def prop_arch_faults_up(self):
+        """Get faults from contained components and add to .m."""
+        for at, obj in self.get_roles('arch'):
+            self.m.faults.difference_update(obj.faultmodes)
+            self.m.faults.update(obj.get_faults())
 
     def __call__(self, proptype, faults=[], time=0, run_stochastic=False):
         """
@@ -201,15 +137,7 @@ class Function(Block):
         if time > self.t.time:
             if hasattr(self, 'r'):
                 self.r.update_stochastic_states()
-        if hasattr(self, 'ca'):
-            inject_faults_internal(self.ca, faults, self.ca.components)
-        if hasattr(self, 'aa'):
-            inject_faults_internal(self.aa, faults, self.aa.actions)
-            try:
-                self.aa(time, run_stochastic, proptype, self.t.dt)
-            except TypeError as e:
-                raise Exception("Poorly specified ActionArchitecture: "
-                                + str(self.a.__class__)) from e
+        self.prop_arch_behaviors(proptype, faults, time, run_stochastic)
 
         if proptype == 'static' and hasattr(self, 'behavior'):
             self.behavior(time)     # generic behavioral methods are run at all steps
@@ -222,14 +150,8 @@ class Function(Block):
             elif not Decimal(str(time)) % Decimal(str(self.t.dt)):
                 self.dynamic_behavior(time)
 
-        # propagate faults from action/component level to function level
-        if hasattr(self, 'aa') and self.aa.actions:
-            self.m.faults.difference_update(self.aa.faultmodes)
-            self.m.faults.update(self.aa.get_faults())
-        comps = getattr(self, 'ca', {'components': {}})['components']
-        if comps:
-            self.m.faults.difference_update(self.ca.faultmodes)
-            self.m.faults.update(self.ca.get_faults())
+        self.prop_arch_faults_up()
+
         self.t.time = time
         if run_stochastic == 'track_pdf':
             if hasattr(self, 'r'):
@@ -240,13 +162,6 @@ class Function(Block):
                             "\n faults: " + str(self.m.faults) +
                             "\n Is the mode representation nonexclusive?")
         return
-
-    def reset(self):
-        super().reset()
-        if hasattr(self, 'ca'):
-            self.ca.reset()
-        if hasattr(self, 'aa'):
-            self.aa.reset()
 
 
 class ExampleFunction(Function):

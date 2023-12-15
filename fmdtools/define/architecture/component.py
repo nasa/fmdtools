@@ -6,113 +6,57 @@ Classes
 -------
 :class:`ComponentArchitecture`: Architecture defining agglomeration of Components.
 """
-from typing import ClassVar
-from recordclass import dataobject, asdict
-from fmdtools.analyze.common import get_sub_include
-from fmdtools.analyze.history import History
+from fmdtools.define.architecture.base import Architecture
 
 
-class ComponentArchitecture(dataobject, mapping=True):
+class ComponentArchitecture(Architecture):
     """Class defining Component Architectures."""
 
-    archtype: ClassVar[str] = 'default'
-    components: dict = dict()
-    faultmodes: dict = dict()
-    default_track = ('i', 'components')
+    __slots__ = ['comps', 'faultmodes']
+    flexible_roles = ['flows', 'comps']
 
-    def make_components(self, CompClass, *args, **kwargs): # noqa
+    def __init__(self, **kwargs):
+        self.faultmodes = {}
+        Architecture.__init__(self, **kwargs)
+
+    def add_comp(self, name, compclass, *flownames, **kwargs):
         """
-        Add components to the component architecture.
+        Associate an Action with the architecture. Called after add_flow.
 
         Parameters
         ----------
-        CompClass : Component
-            Component to add
-        *args : strs
-            Names for the components to instantiate in the architecture
-        **kwargs : kwargs
-            keyword arguments to send CompClass, of form {'name':kwarg}.
-            unless all have the same kwargs
+        name : str
+            Internal Name for the Action
+        compclass : Component
+            Component class to instantiate
+        *flownames : flow
+            Flows (optional) which connect the actions
+        duration:
+            Duration of the action. Default is 0.0
+        **kwargs : any
+            kwargs to instantiate the Action with.
         """
-        if not self.components:
-            self.components = dict()
-        if not self.faultmodes:
-            self.faultmodes = dict()
+        # same as fxns:
+        flows = {fl: self.flows[fl] for fl in flownames}
+        fkwargs = {**{'r': {"seed": self.r.seed}},
+                   **{'t': {'dt': self.sp.dt}},
+                   **{'sp': {'end_time': self.sp.end_time}},
+                   **kwargs}
+        self.add_flex_role_obj('comps', name, obclass=compclass, flows=flows, **fkwargs)
+        self.add_obj_modes(self.comps[name])
 
-        for arg in args:
-            if arg in kwargs:
-                kwargs_comp = kwargs[arg]
-            else:
-                kwargs_comp = kwargs
-            self.components[arg] = CompClass(arg, **kwargs_comp)
-            self.faultmodes.update({self.components[arg].name + '_' + modename: arg
-                                    for modename in self.components[arg].m.faultmodes})
-
-    def copy_with_arg(self, **kwargs):
-        cop = self.__class__(**kwargs)
-        # TODO: needs to cover all attributes, copy should a part of Block
-        for compname, component in self.components.items():
-            cop_comp = cop.components[compname]
-            cop_comp.s = cop_comp.s.copy()
-            cop_comp.m = component.m.copy()
-            cop_comp.t = component.t.copy()
-            if hasattr(component, 'h'):
-                cop_comp.h = component.h.copy()
+    def copy(self, flows={}, **kwargs):
+        # TODO: need to make sure flows from block level override self.flows during
+        # copy.
+        cop = self.__class__(p=getattr(self, 'p', {}),
+                             sp=getattr(self, 'sp', {}),
+                             track=getattr(self, 'track', {}),
+                             r=self.r.copy(),
+                             h=self.h.copy(),
+                             flows=self.flows,
+                             comps=self.comps,
+                             as_copy=True)
         return cop
 
-    def update_seed(self, seed):
-        for comp in self.components.values():
-            comp.update_seed(seed)
-
-    def get_rand_states(self, auto_update_only=False):
-        rand_states = {}
-        for compname, comp in self.components.items():
-            if comp.get_rand_states(auto_update_only=auto_update_only):
-                rand_states[compname] = comp.get_rand_states(auto_update_only=auto_update_only)
-        return rand_states
-
-    def get_faults(self):
-        return {comp.name+'_'+f for comp in self.components.values()
-                for f in comp.m.faults}
-
-    def reset(self):
-        for name, component in self.components.items():
-            component.reset()
-
-    def create_hist(self, timerange, track):
-        """
-        Create a history corresponding to ComponentArchitecture attributes.
-
-        Parameters
-        ----------
-        timerange : iterable, optional
-            Time-range to initialize the history over. The default is None.
-        track : list/str/dict, optional
-            argument specifying attributes for :func:`get_sub_include'.
-            The default is None.
-
-        Returns
-        -------
-        h : History
-            History corresponding to the ComponentArchitecture
-        """
-        h = History()
-        if track == 'default':
-            track = self.default_track
-        self.init_indicator_hist(h, timerange, track)
-
-        components_track = get_sub_include('components', track)
-        if components_track:
-            hc = History()
-            for c, comp in self.components.items():
-                comp_track = get_sub_include(c, components_track)
-                if comp_track:
-                    hc[c] = comp.create_hist(timerange, comp_track)
-            h['components'] = hc
-        return h
-
-    def return_mutables(self):
-        cm = []
-        for c in self.components.values():
-            cm.extend(c.return_mutables())
-        return cm
+    def inject_faults(self, faults):
+        Architecture.inject_faults(self, 'comps', faults)
