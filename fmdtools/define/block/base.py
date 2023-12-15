@@ -158,10 +158,13 @@ class Simulable(BaseObject):
 
     Parameters
     ----------
-
+    t : Time
+        Time tracker and options.
+    sp : SimParam
+        Parameters defining the simulation.
     """
 
-    __slots__ = ('p', 'sp', 'r', 't', 'h', 'track', 'flows', 'is_copy')
+    __slots__ = ('p', 'sp', 'r', 't', 'h', 'track', 'flows')
     container_t = Time
     default_track = ["all"]
     immutable_roles = BaseObject.immutable_roles + ['sp']
@@ -179,7 +182,6 @@ class Simulable(BaseObject):
         **kwargs : kwargs
             Keyword arguments to BaseObject
         """
-        self.is_copy = False
         loc_kwargs = {**kwargs, 'sp': {**self.default_sp, **sp}}
         BaseObject.__init__(self, **loc_kwargs)
 
@@ -410,8 +412,6 @@ class Block(Simulable):
         Block name
     flows : dict
         Dictionary of flows included in the Block (if any are added via flow_flowname)
-    is_copy : bool
-        Marker for whether the object is a copy.
     """
 
     __slots__ = ['s', 'm']
@@ -431,8 +431,13 @@ class Block(Simulable):
         kwargs : kwargs
             Roles and tracking to override the defaults. See Simulable.__init__
         """
-        Simulable.__init__(self, name=name, roletypes=['container'], **kwargs)
-        self.init_flows(flows=flows)
+        # use aliases for flows
+        if hasattr(self, 'flownames'):
+            flows = {self.flownames.get(fn, fn): flow for fn, flow in flows.items()}
+        flows = flows.copy()
+
+        Simulable.__init__(self, name=name, flows=flows, **kwargs)
+        self.check_flows(flows=flows)
         self.update_seed()
         self.init_hist(h=h)
         # if flows not from model, add history for them also:
@@ -440,7 +445,7 @@ class Block(Simulable):
             timerange = self.sp.get_histrange()
             self.add_flow_hist(self.h, timerange, self.track)
 
-    def init_flows(self, flows={}):
+    def check_flows(self, flows={}):
         """
         Associate flows with the given Simulable.
 
@@ -454,12 +459,6 @@ class Block(Simulable):
             function's flowname, it will be used instead (so that it can act as a
             connection to the rest of the model)
         """
-        # use aliases for flows
-        if hasattr(self, 'flownames'):
-            flows = {self.flownames.get(fn, fn): flow for fn, flow in flows.items()}
-        # add to block
-        flows = flows.copy()
-        self.init_roles('flow', **flows)
         # check if any sent but not attached
         unattached_flows = [f for f in flows if not hasattr(self, f)]
         if unattached_flows:
@@ -587,11 +586,9 @@ class Block(Simulable):
         cop : Block
             copy of the exising block
         """
-        cop = self.__new__(self.__class__)
-        cop.is_copy = True
         try:
             paramdict = self.new_params(**kwargs)
-            cop.__init__(self.name, *args, **paramdict)
+            cop = self.__class__(self.name, *args, **paramdict)
             cop.assign_roles('container', self)
         except TypeError as e:
             raise Exception("Poor specification of "+str(self.__class__)) from e

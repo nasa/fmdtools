@@ -7,13 +7,10 @@ Classes
 :class:`ActionArchitecture`: Architecture of multiple Actions.
 """
 import networkx as nx
-import copy
-from fmdtools.define.flow.base import Flow, init_flow
-from fmdtools.analyze.common import get_sub_include
-from fmdtools.analyze.history import History
+from fmdtools.define.architecture.base import Architecture
 
 
-class ActionArchitecture(object):
+class ActionArchitecture(Architecture):
     """
     Construct the Action Sequence Graph with the given parameters.
 
@@ -45,25 +42,21 @@ class ActionArchitecture(object):
         Defines whether the action sequence graph is reset to the initial state each
         time-step (True) or stays in the current action (False). Default is False.
     """
-
+    __slots__ = ['acts', 'action_graph', 'flow_graph', 'faultmodes', 'active_actions']
     initial_action = "auto"
     state_rep = "finite-state"
     max_action_prop = "until_false"
     proptype = 'dynamic'
     per_timestep = False
     default_track = ('actions', 'active_actions', 'i')
+    flexible_roles = ['flows', 'acts', 'conds']
 
-    def __init__(self, flows={}, is_copy=False):
-        self.actions = {}
-        self.flows = flows
-        self.conditions = {}
+    def __init__(self, **kwargs):
         self.action_graph = nx.DiGraph()
         self.flow_graph = nx.DiGraph()
-        self.conditions = {}
         self.faultmodes = {}
-        self.is_copy = is_copy
         self.active_actions = set()
-        self.init_hist()
+        Architecture.__init__(self, **kwargs)
 
     def build(self):
         if self.initial_action == 'auto':
@@ -78,29 +71,7 @@ class ActionArchitecture(object):
             raise Exception("Cannot have more than one initial action with" +
                             " finite-state representation")
 
-    def add_flow(self, flowname, fclass=Flow, p={}, s={}):
-        """
-        Add a flow with given attributes to ASG.
-
-        Used to enable a flexible internal flow architecture in the ASG.
-
-        Parameters
-        ----------
-        flowname : str
-            Unique flow name to give the flow in the model
-        fclass : Class, optional
-            Class to instantiate (e.g. CommsFlow, MultiFlow). Default is Flow.
-            Class must take flowname, flowdict, flowtype as input to __init__()
-            May alternatively provide already-instanced object.
-        p : dict, optional
-            Parameter dictionary to instantiate the flow with
-        s : dict, optional
-            State dictionary to overwrite Flow default state values with
-        """
-        if flowname not in self.flows:
-            self.flows[flowname] = init_flow(flowname, fclass, p=p, s=s)
-
-    def add_act(self, name, actclass, *flownames, duration=0.0, **params):
+    def add_act(self, name, actclass, *flownames, **params):
         """
         Associate an Action with the architecture. Called after add_flow.
 
@@ -114,30 +85,25 @@ class ActionArchitecture(object):
             Flows (optional) which connect the actions
         duration:
             Duration of the action. Default is 0.0
-        **params : any
-            parameters to instantiate the Action with.
+        **kwargs : any
+            kwargs to instantiate the Action with.
         """
+        # same as fxns:
         flows = {fl: self.flows[fl] for fl in flownames}
-        action = actclass(name=name, flows={**flows}, **params)
+        fkwargs = {**{'r': {"seed": self.r.seed}},
+                   **{'t': {'dt': self.sp.dt}},
+                   **{'sp': {'end_time': self.sp.end_time}},
+                   **params}
+        self.add_flex_role_obj('acts', name, obclass=actclass, flows=flows, **fkwargs)
 
-        self.actions[name] = action
-        self.actions[name].duration = duration
-
+        # TODO: maybe functions should work like this also?
         self.action_graph.add_node(name)
         self.flow_graph.add_node(name, bipartite=0)
         for flow in flows:
             self.flow_graph.add_node(flow, bipartite=1)
             self.flow_graph.add_edge(name, flow)
 
-        modes_to_add = {action.name+'_'+f: val
-                        for f, val in action.m.faultmodes.items()}
-        fmode_intersect = set(modes_to_add).intersection(self.faultmodes)
-        if any(fmode_intersect):
-            raise Exception("Action "+name +
-                            " overwrites existing fault modes: "+str(fmode_intersect) +
-                            ". Rename the faults")
-        self.faultmodes.update({action.name+'_'+modename: name
-                                for modename in action.m.faultmodes})
+        self.add_obj_modes(self.acts[name])
 
     def cond_pass(self): # noqa
         return True
@@ -162,10 +128,10 @@ class ActionArchitecture(object):
             Defaults to self.condition_pass if none are provided.
         """
         if name == 'auto':
-            name = str(len(self.conditions)+1)
+            name = str(len(self.conds)+1)
         if condition == 'pass':
             condition = self.cond_pass
-        self.conditions[name] = condition
+        self.conds[name] = condition
         self.action_graph.add_edge(start_action,
                                    end_action,
                                    **{'name': name, name: 'name', 'arrow': True})
@@ -173,20 +139,23 @@ class ActionArchitecture(object):
     def set_active_actions(self, actions):
         """Set given action(s) as active."""
         if type(actions) == str:
-            if actions in self.actions:
+            if actions in self.acts:
                 actions = [actions]
             else:
                 raise Exception("initial_action=" + actions +
-                                " not in self.actions: "+str(self.actions))
+                                " not in self.acts: "+str(self.acts))
         if type(actions) == list:
             self.active_actions = set(actions)
-            if any(self.active_actions.difference(self.actions)):
+            if any(self.active_actions.difference(self.acts)):
                 raise Exception("Initial actions not associated with model: " +
-                                str(self.active_actions.difference(self.actions)))
+                                str(self.active_actions.difference(self.acts)))
         else:
             raise Exception("Invalid option for initial_action.")
 
-    def __call__(self, time, run_stochastic, proptype, dt):
+    def inject_faults(self, faults):
+        Architecture.inject_faults(self, 'acts', faults)
+
+    def __call__(self, proptype, time, run_stochastic, dt):
         """
         Propagates behaviors through the ActionArchitecture.
 
@@ -205,7 +174,7 @@ class ActionArchitecture(object):
         if self.per_timestep:
             self.set_active_actions(self.initial_action)
             for action in self.active_actions:
-                self.actions[action].t.t_loc = 0.0
+                self.acts[action].t.t_loc = 0.0
 
         if proptype == self.proptype:
             active_actions = self.active_actions
@@ -213,16 +182,16 @@ class ActionArchitecture(object):
             while active_actions:
                 new_active_actions = set(active_actions)
                 for action in active_actions:
-                    self.actions[action](time, run_stochastic, proptype=proptype, dt=dt)
+                    self.acts[action](time, run_stochastic, proptype=proptype, dt=dt)
                     action_cond_edges = self.action_graph.out_edges(action, data=True)
                     for act_in, act_out, atts in action_cond_edges:
                         try:
-                            cond = self.conditions[atts['name']]()
+                            cond = self.conds[atts['name']]()
                         except TypeError as e:
                             raise TypeError("Poorly specified condition " +
                                             str(atts['name'])+": ") from e
-                        if cond and getattr(self.actions[action], 'duration', 0.0)+dt <= self.actions[action].t.t_loc:
-                            self.actions[action].t.t_loc = 0.0
+                        if cond and getattr(self.acts[action], 'duration', 0.0)+dt <= self.acts[action].t.t_loc:
+                            self.acts[action].t.t_loc = 0.0
                             new_active_actions.add(act_out)
                             new_active_actions.discard(act_in)
                 if len(new_active_actions) > 1 and self.state_rep == 'finite-state':
@@ -239,84 +208,16 @@ class ActionArchitecture(object):
                     raise Exception("Undesired looping in Function ASG for: "+self.name)
             self.active_actions = active_actions
 
-    def get_faults(self):
-        return {act.name+"_"+f for act in self.actions.values() for f in act.m.faults}
-
-    def update_seed(self, seed=[]):
-        if seed:
-            for act in self.actions.values():
-                act.update_seed(seed)
-
     def copy(self, flows={}, **kwargs):
-        newflows = {}
-        for flowname, flow in self.flows.items():
-            if flowname in flows:
-                newflows[flowname] = flows[flowname]
-            else:
-                newflows[flowname] = self.flows[flowname].copy()
-
-        cop = self.__class__(flows=newflows, is_copy=True, **kwargs)
-        for flowname, flow in newflows.items():
-            if flow.__hash__() != cop.flows[flowname].__hash__():
-                raise Exception("Flow not associated w- lower level of ASG: " +
-                                flowname)
-
-        for actname, action in self.actions.items():
-            cop_act = cop.actions[actname]
-            cop_act.duration = action.duration
-            cop_act.s = action.s.copy()
-            cop_act.m = action.m.copy()
-            cop_act.t = action.t.copy()
-            if hasattr(action, 'h'):
-                cop_act.h = action.h.copy()
-
-        cop.active_actions = copy.deepcopy(self.active_actions)
+        cop = self.__class__(p=getattr(self, 'p', {}),
+                             sp=getattr(self, 'sp', {}),
+                             track=getattr(self, 'track', {}),
+                             r=self.r.copy(),
+                             h=self.h.copy(),
+                             flows=self.flows,
+                             acts=self.acts,
+                             conds=self.conds,
+                             as_copy=True)
         return cop
 
-    def reset(self):
-        for name, action in self.actions.items():
-            action.reset()
-        self.build()
 
-    def create_hist(self, timerange, track):
-        """
-        Create a history corresponding to ASG attributes.
-
-        Parameters
-        ----------
-        timerange : iterable, optional
-            Time-range to initialize the history over. The default is None.
-        track : list/str/dict, optional
-            argument specifying attributes for :func:`get_sub_include'.
-            The default is None.
-
-        Returns
-        -------
-        h : History
-            History corresponding to the ASG.
-        """
-        if track == 'default':
-            track = self.default_track
-        h = History()
-        if 'i' in track or track == 'all':
-            self.init_indicator_hist(h, timerange, track)
-        actions_track = get_sub_include('actions', track)
-        if actions_track:
-            ha = History()
-            for a, act in self.actions.items():
-                act_track = get_sub_include(a, actions_track)
-                if act_track:
-                    ha[a] = act.create_hist(timerange, act_track)
-            h['actions'] = ha
-        h.init_att('active_actions', self.active_actions,
-                   timerange=timerange, track=track)
-        return h
-
-    def return_mutables(self):
-        am = []
-        for a in self.actions.values():
-            am.extend(a.return_mutables())
-        for f in self.flows.values():
-            am.extend(f.return_mutables())
-        am.append(copy.copy(self.active_actions))
-        return am

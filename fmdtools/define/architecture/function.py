@@ -10,17 +10,15 @@ import numpy as np
 from ordered_set import OrderedSet
 import networkx as nx
 import sys
-import copy
 
-from fmdtools.define.flow.base import Flow, init_flow
+from fmdtools.define.block.function import Function
 from fmdtools.define.base import set_var
-from fmdtools.define.block.base import Simulable
-from fmdtools.define.container.rand import Rand
+from fmdtools.define.architecture.base import Architecture
 from fmdtools.analyze.common import get_sub_include
 from fmdtools.analyze.history import History
 
 
-class FunctionArchitecture(Simulable):
+class FunctionArchitecture(Architecture):
     """
     Class representing a functional architecture.
 
@@ -43,30 +41,17 @@ class FunctionArchitecture(Simulable):
         multigraph view of functions and flows
     """
 
-    __slots__ = ['fxns', 'functionorder', '_fxnflows', '_fxninput', '_flowstates',
+    __slots__ = ['fxns', 'functionorder', '_fxnflows', '_flowstates',
                  'graph', 'staticfxns', 'dynamicfxns', 'staticflows']
     default_track = ('fxns', 'flows', 'i')
     default_name = 'model'
-    container_r = Rand
+    flexible_roles = ['flows', 'fxns']
 
-    def __init__(self, name='', p={}, sp={}, r={}, track='default', h={}, **kwargs):
-        Simulable.__init__(self, name=name, p=p, sp=sp, r=r, track=track, h=h)
-
-        self.fxns = dict()
-        self.flows = dict()
-        # set is ordered and executed in the order specified in the model
+    def __init__(self, h={}, **kwargs):
         self.functionorder = OrderedSet()
         self._fxnflows = []
-        self._fxninput = {}
         self._flowstates = {}
-        self.init_architecture(name=name, p=p, sp=sp, r=r, track=track, **kwargs)
-        self.build()
-        if not h:
-            self.init_hist(h=h)
-            timerange = self.sp.get_histrange()
-            self.add_flow_hist(self.h, timerange, self.track)
-            self.add_fxn_hist(self.h, timerange, self.track)
-            self.h = self.h.flatten()
+        Architecture.__init__(self, h=h, **kwargs)
 
     def __repr__(self):
         fxnlist = [fxn.__repr__() for fxn in self.fxns.values()]
@@ -86,63 +71,8 @@ class FunctionArchitecture(Simulable):
     def get_typename(self):
         return "Model"
 
-    def update_seed(self, seed=[]):
-        """
-        Update model seed and the seed in all functions.
-
-        Parameters
-        ----------
-        seed : int, optional
-            Seed to use. The default is [].
-        """
-        super().update_seed(seed)
-        for fxn in self.fxns:
-            self.fxns[fxn].update_seed(self.r.seed)
-
-    def get_rand_states(self, auto_update_only=False):
-        """Get dictionary of random states throughout the model functions."""
-        rand_states = {}
-        for fxnname, fxn in self.fxns.items():
-            if fxn.get_rand_states(auto_update_only=auto_update_only):
-                rand_states[fxnname] = fxn.get_rand_states(auto_update_only=auto_update_only)
-        return rand_states
-
-    def add_flows(self, flownames, fclass=Flow, **kwargs):
-        """
-        Add a set of flows with the same type and initial parameters.
-
-        Parameters
-        ----------
-        flownames : list
-            Unique flow names to give the flows in the model
-        fclass : Class, optional
-            Class to instantiate (e.g. CommsFlow, MultiFlow). Default is Flow.
-            Class must take flowname, p, s as input to __init__()
-            May alternatively provide already-instanced object.
-        kwargs: kwargs
-            Dicts for non-default values to p, s, etc
-        """
-        for flowname in flownames:
-            self.add_flow(flowname, fclass, **kwargs)
-
-    def add_flow(self, name, fclass=Flow, **kwargs):
-        """
-        Add a flow with given attributes to the model.
-
-        Parameters
-        ----------
-        name : str
-            Unique flow name to give the flow in the model
-        fclass : Class, optional
-            Class to instantiate (e.g. CommsFlow, MultiFlow). Default is Flow.
-            Class must take flowname, p, s as input to __init__()
-            May alternatively provide already-instanced object.
-        kwargs: kwargs
-            Dicts for non-default values to p, s, etc
-        """
-        if not getattr(self, 'is_copy', False):
-            track = get_sub_include(name, get_sub_include('flows', self.track))
-            self.flows[name] = init_flow(name, fclass, track=track, **kwargs)
+    def inject_faults(self, faults):
+        Architecture.inject_faults(self, 'fxns', faults)
 
     def add_fxn(self, name, fclass, *flownames, args_f='None', **fkwargs):
         """
@@ -162,30 +92,19 @@ class FunctionArchitecture(Simulable):
         fkwargs : dict
             Parameters to send to __init__ method of the Function superclass
         """
-        if not getattr(self, 'is_copy', False):
-            flows = self.get_flows(*flownames)
-            track = get_sub_include(name, get_sub_include('fxns', self.track))
-            fkwargs = {**{'r': {"seed": self.r.seed}},
-                       **{'t': {'dt': self.sp.dt}},
-                       **{'sp': {'end_time': self.sp.end_time}},
-                       **{'track': track},
-                       **fkwargs}
-            try:
-                self.fxns[name] = fclass(name, flows=flows, args_f=args_f, **fkwargs)
-            except TypeError as e:
-                raise TypeError("Poorly specified class "+str(fclass) +
-                                " (or poor arguments) ") from e
-            self._fxninput[name] = {'name': name,
-                                    'flows': flownames,
-                                    'args_f': args_f,
-                                    'kwargs': fkwargs}
-            for flowname in flownames:
-                self._fxnflows.append((name, flowname))
-            self.functionorder.update([name])
+        flows = self.get_flows(*flownames)
+        fkwargs = {**{'r': {"seed": self.r.seed}},
+                   **{'t': {'dt': self.sp.dt}},
+                   **{'sp': {'end_time': self.sp.end_time}},
+                   **fkwargs}
+        self.add_flex_role_obj('fxns', name, objclass=fclass, flows=flows, **fkwargs)
+        for flowname in flownames:
+            self._fxnflows.append((name, flowname))
+        self.functionorder.update([name])
 
     def set_functionorder(self, functionorder):
         """
-        Manually sets the order of functions to be executed.
+        Manually set the order of functions to be executed.
 
         (otherwise it will be executed based on the sequence of add_fxn calls)
         """
@@ -195,12 +114,6 @@ class FunctionArchitecture(Simulable):
             raise Exception("Invalid list: "+str(functionorder) +
                             " should have elements: "+str(self.functionorder))
 
-    def get_flows(self, *flownames):
-        """Return a list of the model flow objects."""
-        if not flownames:
-            flownames = self.flows
-        return {flowname: self.flows[flowname] for flowname in flownames}
-
     def fxns_of_class(self, ftype):
         """Return dict of funcitons corresponding to the given class name ftype."""
         return {fxn: obj for fxn, obj in self.fxns.items()
@@ -209,15 +122,6 @@ class FunctionArchitecture(Simulable):
     def fxnclasses(self):
         """Return the set of class names used in the model."""
         return {obj.__class__.__name__ for fxn, obj in self.fxns.items()}
-
-    def flowtypes(self):
-        """Return the set of flow types used in the model."""
-        return {obj.__class__.__name__ for f, obj in self.flows.items()}
-
-    def flows_of_type(self, ftype):
-        """Return the set of flows for each flow type."""
-        return {flow for flow, obj in self.flows.items()
-                if obj.__class__.__name__ == ftype}
 
     def flowtypes_for_fxnclasses(self):
         """Return the flows required by each function class in the model (as a dict)."""
@@ -238,19 +142,16 @@ class FunctionArchitecture(Simulable):
         functionorder : list, optional
             The order for the functions to be executed in. The default is [].
         """
-        if not getattr(self, 'is_copy', False):
-            if update_seed:
-                self.update_seed()
-            if functionorder:
-                self.set_functionorder(functionorder)
-            self.staticfxns = OrderedSet([fxnname for fxnname, fxn in self.fxns.items()
-                                          if fxn.is_static()])
-            self.dynamicfxns = OrderedSet([fxnname for fxnname, fxn in self.fxns.items()
-                                           if fxn.is_dynamic()])
-            self.construct_graph(require_connections=require_connections)
-            self.staticflows = [flow for flow in self.flows
-                                if any([n in self.staticfxns
-                                        for n in self.graph.neighbors(flow)])]
+        if update_seed:
+            self.update_seed()
+        self.staticfxns = OrderedSet([fxnname for fxnname, fxn in self.fxns.items()
+                                      if fxn.is_static()])
+        self.dynamicfxns = OrderedSet([fxnname for fxnname, fxn in self.fxns.items()
+                                       if fxn.is_dynamic()])
+        self.construct_graph(require_connections=require_connections)
+        self.staticflows = [flow for flow in self.flows
+                            if any([n in self.staticfxns
+                                    for n in self.graph.neighbors(flow)])]
 
     def construct_graph(self, require_connections=True):
         """Create .graph nx.graph representation of the model."""
@@ -340,43 +241,15 @@ class FunctionArchitecture(Simulable):
             Copy of the curent model.
         """
         # Is this adequate? Wouldn't this give it new components?
-        cop = self.__new__(self.__class__)
-        cop.is_copy = True
-        cop.__init__(p=getattr(self, 'p', {}),
-                     sp=getattr(self, 'sp', {}),
-                     track=getattr(self, 'track', {}),
-                     r={'seed': self.r.seed},
-                     h=self.h.copy())
-        cop.r = self.r.copy()
-
-        for flowname, flow in self.flows.items():
-            cop.flows[flowname] = flow.copy()
-
-        for fxnname, fxn in self.fxns.items():
-            flownames = copy.deepcopy(self._fxninput[fxnname]['flows'])
-            args_f = copy.deepcopy(self._fxninput[fxnname]['args_f'])
-            kwargs = copy.deepcopy(self._fxninput[fxnname]['kwargs'])
-            flows = cop.get_flows(*flownames)
-            if args_f == 'None':
-                cop.fxns[fxnname] = fxn.copy(flows, **kwargs)
-            else:
-                cop.fxns[fxnname] = fxn.copy(flows, args_f, **kwargs)
-
-        cop._fxninput = copy.deepcopy(self._fxninput)
-        cop._fxnflows = copy.deepcopy(self._fxnflows)
-        cop._flowstates = copy.deepcopy(self._flowstates)
-
-        cop.is_copy = False
-        cop.build(functionorder=copy.deepcopy(self.functionorder), update_seed=False)
-        cop.is_copy = True
-        cop.init_hist(h=self.h.copy())
-
-        timerange = self.sp.get_histrange()
-        cop.add_flow_hist(cop.h, timerange, self.track)
-        cop.add_fxn_hist(cop.h, timerange, self.track)
-        if 'time' in self.h:
-            cop.h['time'] = np.copy(self.h.time)
-        cop.h = cop.h.flatten()
+        # TODO: need to make this for overall arch
+        cop = self.__class__(p=getattr(self, 'p', {}),
+                             sp=getattr(self, 'sp', {}),
+                             track=getattr(self, 'track', {}),
+                             r=self.r.copy(),
+                             h=self.h.copy(),
+                             flows=self.flows,
+                             fxns=self.fxns,
+                             as_copy=True)
         return cop
 
     def reset(self):

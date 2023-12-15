@@ -475,6 +475,37 @@ def check_pickleability(obj, verbose=True, try_pick=False, pause=0.2):
     return unpickleable
 
 
+def init_obj(name, objclass=BaseObject, track='default', as_copy=False, **kwargs):
+    """
+    Initialize an object.
+
+    Enables one to instantiate different types of objects with given
+    states/parameters or pass an already-constructured object.
+
+    Parameters
+    ----------
+    name : str
+        Name to give the flow object
+    fclass : Flow/MultiFlow/Comms/CustomFlow
+        Flow class to instantiate OR already-instanced object to pass
+    **kwargs :dict
+        Other specialized roles to overrride
+    """
+    if not inspect.isclass(objclass):
+        if not as_copy:
+            fl = objclass
+            fl.init_track(track)
+        else:
+            fl = objclass.copy(name=name, track=track, **kwargs)
+    else:
+        try:
+            fl = objclass(name, track=track, **kwargs)
+        except TypeError as e:
+            raise TypeError("Poorly specified class "+str(objclass) +
+                            " (or poor arguments) "+str(kwargs)) from e
+    return fl
+
+
 if __name__ == "__main__":
     import doctest
     doctest.testmod(verbose=True)
