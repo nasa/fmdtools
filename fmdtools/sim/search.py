@@ -1624,9 +1624,7 @@ class DynamicInterface():
         self.mdl = mdl.new_with_params(**mdl_kwargs, track=track)
         timerange = np.arange(self.t, self.t_max+2*mdl.sp.dt, mdl.sp.dt)
         self.hist = mdl.create_hist(timerange)
-        if 'time' not in self.hist:
-            self.hist.init_att('time', timerange[0], timerange=timerange, track='all',
-                               dtype=float)
+        mdl.init_time_hist()
         self.run_stochastic = run_stochastic
         self.use_end_condition = use_end_condition
 

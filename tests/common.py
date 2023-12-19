@@ -180,15 +180,19 @@ class CommonTests():
         for flname, fl in mdl.flows.items():
             try:
                 self.assertEqual(fl.return_mutables(),
-                                 mdl2.flows[flname].return_mutables())
+                                 mdl2.flows[flname].return_mutables(),
+                                 msg=str(fl.find_mutables()))
             except AssertionError as e:
-                raise AssertionError("Problem in flow " + flname) from e
+                raise AssertionError("Problem in flow " + flname + "with mutables " +
+                                     str(fl.find_mutables())) from e
         for fxnname, fxn in mdl.fxns.items():
             try:
                 self.assertEqual(fxn.return_mutables(),
-                                 mdl2.fxns[fxnname].return_mutables())
+                                 mdl2.fxns[fxnname].return_mutables(),
+                                 msg=str(fxn.find_mutables()))
             except AssertionError as e:
-                raise AssertionError("Problem in fxn " + fxnname) from e
+                raise AssertionError("Problem in fxn " + fxnname + "with mutables " +
+                                     str(fxn.find_mutables())) from e
 
     def check_diff_model(self, mdl, mdl2):
         """Check if models mdl and mdl2 have different attributes."""

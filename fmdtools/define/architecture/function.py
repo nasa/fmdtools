@@ -11,7 +11,6 @@ from ordered_set import OrderedSet
 import networkx as nx
 import sys
 
-from fmdtools.define.block.function import Function
 from fmdtools.define.base import set_var
 from fmdtools.define.architecture.base import Architecture
 from fmdtools.analyze.common import get_sub_include
@@ -22,23 +21,88 @@ class FunctionArchitecture(Architecture):
     """
     Class representing a functional architecture.
 
-    Attributes
-    ----------
+    Functional architectures enable the execution of multiple Function objects
+    interacting with each other over time.
+
+    Flexible Roles
+    --------------
     flows : dict
         dictionary of flows objects in the model indexed by name
     fxns : dict
         dictionary of functions in the model indexed by name
-    params : dict
-        dictionaries of (optional) parameters for a given instantiation of a model
-    sp : ModelParam
-        Simulation Parameters.
-    track : dict
-        dictionary of parameters for defining what simulation constructs
-        to record for find_classification.
-    graph : networkx graph
-        fxnflowgraph graph view of the functions and flows (fxnflowgraph)
+
+    Special Attributes
+    ------------------
+    functionorder : OrderedSet
+        Keeps track of function dynamic execution order.
+    staticfxns : OrderedSet
+        Keeps track of which functions run in static execution step.
+    dynamicfxns : Orderedset
+        Keeps track of which functions run in dynamic execution step.
+    staticflows : list
+        Flows to keep track of in static execution step.
     graph : networkx graph
         multigraph view of functions and flows
+
+    Examples
+    --------
+    >>> from fmdtools.define.block.function import ExampleFunction
+    >>> from fmdtools.define.flow.base import ExampleFlow
+    >>> from fmdtools.define.container.parameter import ExampleParameter
+    >>> class ExFxnArch(FunctionArchitecture):
+    ...     container_p = ExampleParameter
+    ...     def init_architecture(self, **kwargs):
+    ...         self.add_flow("exf", ExampleFlow, s={'x': 0.0, 'y': 0.0})
+    ...         self.add_fxn("ex_fxn", ExampleFunction, "exf", p=self.p)
+    ...         self.add_fxn("ex_fxn2", ExampleFunction, "exf", p=self.p)
+
+    >>> exfa = ExFxnArch(name="exfa")
+    >>> exfa
+    exfa ExFxnArch
+    FUNCTIONS:
+    ex_fxn ExampleFunction
+    - ExampleState(x=1.0, y=1.0)
+    - ExampleMode(mode=standby, faults=set())
+    ex_fxn2 ExampleFunction
+    - ExampleState(x=1.0, y=1.0)
+    - ExampleMode(mode=standby, faults=set())
+    FLOWS:
+    exf ExampleFlow flow: ExampleState(x=0.0, y=0.0)
+
+    This type of functional architecture only has dynamic functions:
+    >>> exfa.dynamicfxns
+    OrderedSet(['ex_fxn', 'ex_fxn2'])
+    >>> exfa.staticfxns
+    OrderedSet()
+
+    This can in turn be simulated using FunctionArchitecture's built-in .propagate
+    method. Note how the flow exf accumulates both ex_fxn and ex_fxn2 as reflected in
+    their behavior methods:
+    >>> exfa.propagate(1.0)
+    >>> exfa
+    exfa ExFxnArch
+    FUNCTIONS:
+    ex_fxn ExampleFunction
+    - ExampleState(x=2.0, y=1.0)
+    - ExampleMode(mode=standby, faults=set())
+    ex_fxn2 ExampleFunction
+    - ExampleState(x=2.0, y=1.0)
+    - ExampleMode(mode=standby, faults=set())
+    FLOWS:
+    exf ExampleFlow flow: ExampleState(x=4.0, y=0.0)
+
+    >>> exfa.propagate(2.0)
+    >>> exfa
+    exfa ExFxnArch
+    FUNCTIONS:
+    ex_fxn ExampleFunction
+    - ExampleState(x=3.0, y=1.0)
+    - ExampleMode(mode=standby, faults=set())
+    ex_fxn2 ExampleFunction
+    - ExampleState(x=3.0, y=1.0)
+    - ExampleMode(mode=standby, faults=set())
+    FLOWS:
+    exf ExampleFlow flow: ExampleState(x=10.0, y=0.0)
     """
 
     __slots__ = ['fxns', 'functionorder', '_fxnflows', '_flowstates',
@@ -46,6 +110,7 @@ class FunctionArchitecture(Architecture):
     default_track = ('fxns', 'flows', 'i')
     default_name = 'model'
     flexible_roles = ['flows', 'fxns']
+    rolename = 'fa'
 
     def __init__(self, h={}, **kwargs):
         self.functionorder = OrderedSet()
@@ -54,18 +119,18 @@ class FunctionArchitecture(Architecture):
         Architecture.__init__(self, h=h, **kwargs)
 
     def __repr__(self):
-        fxnlist = [fxn.__repr__() for fxn in self.fxns.values()]
+        fxnlist = ['\n' + fxn.__repr__() for fxn in self.fxns.values()]
         fxnlist = [fstr[:115] + '...' if len(fstr) > 120 else fstr for fstr in fxnlist]
         if len(fxnlist) > 15:
-            fxnlist = fxnlist[:15]+["...("+str(len(fxnlist))+' total) \n']
+            fxnlist = fxnlist[:15]+["...("+str(len(fxnlist))+' total)\n']
         fxnstr = ''.join(fxnlist)
-        flowlist = [flow.__repr__()+'\n' for flow in self.flows.values()]
+        flowlist = ['\n' + flow.__repr__() for flow in self.flows.values()]
         flowlist = [fstr[:115]+'...\n'if len(fstr) > 120 else fstr for fstr in flowlist]
         if len(flowlist) > 15:
-            flowlist = flowlist[:15]+["...("+str(len(flowlist))+' total) \n']
+            flowlist = flowlist[:15]+["...("+str(len(flowlist))+' total)\n']
         flowstr = ''.join(flowlist)
-        repstr = (self.__class__.__name__ + ' model at ' + hex(id(self)) +
-                  ' \n' + 'FUNCTIONS: \n' + fxnstr + 'FLOWS: \n' + flowstr)
+        repstr = (self.name + " " + self.__class__.__name__ +
+                  '\n' + 'FUNCTIONS:' + fxnstr + '\nFLOWS:' + flowstr)
         return repstr
 
     def get_typename(self):
@@ -133,7 +198,7 @@ class FunctionArchitecture(Architecture):
                 class_relationship[obj.__class__.__name__] = set(obj.get_flowtypes())
         return class_relationship
 
-    def build(self, functionorder=[], require_connections=True, update_seed=True):
+    def build(self, require_connections=True, update_seed=True):
         """
         Build the model graph after the functions have been added.
 
@@ -142,8 +207,7 @@ class FunctionArchitecture(Architecture):
         functionorder : list, optional
             The order for the functions to be executed in. The default is [].
         """
-        if update_seed:
-            self.update_seed()
+        super().build()
         self.staticfxns = OrderedSet([fxnname for fxnname, fxn in self.fxns.items()
                                       if fxn.is_static()])
         self.dynamicfxns = OrderedSet([fxnname for fxnname, fxn in self.fxns.items()
@@ -321,15 +385,6 @@ class FunctionArchitecture(Architecture):
                     raise Exception(var[0] + " not a function, flow, or seed")
                 set_var(f, var, varvalues[i])
 
-    def add_fxn_hist(self, hist, timerange, track):
-        fxn_track = get_sub_include('fxns', track)
-        if fxn_track:
-            hist['fxns'] = History()
-            for fxnname, fxn in self.fxns.items():
-                fh = fxn.create_hist(timerange)
-                if fh:
-                    hist.fxns[fxnname] = fh
-
     def propagate(self, time, fxnfaults={}, disturbances={}, run_stochastic=False):
         """
         Inject and propagates faults through the graph at one time-step.
@@ -495,3 +550,7 @@ class FunctionArchitecture(Architecture):
                 fig.suptitle(title, fontweight='bold')
         return fig, ax
 
+
+if __name__ == "__main__":
+    import doctest
+    doctest.testmod(verbose=True)

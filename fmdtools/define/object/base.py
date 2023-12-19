@@ -190,7 +190,7 @@ class BaseObject(object):
                 container = container_args
             else:
                 container = container_initializer(**container_args)
-            container.check_role(rolename)
+            container.check_role(roletype, rolename)
             setattr(self, rolename, container)
 
     def assign_roles(self, roletype, other_obj):

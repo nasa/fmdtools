@@ -682,7 +682,7 @@ def process_nominal(mdlhists, nomhist, results, nomresult, t_end_nom, **kwargs):
                 result_id='nominal')
 
 
-def single_faults(mdl, include_nominal=True, **kwargs):
+def single_faults(mdl, times=[1.0], include_nominal=True, **kwargs):
     """
     Create and propagates a list of failure scenarios in a model.
 
@@ -699,6 +699,8 @@ def single_faults(mdl, include_nominal=True, **kwargs):
     ----------
     mdl : Simulable
         The model to inject faults in
+    times : list
+        List of times to inject the single faults in. Default is [1.0]
     include_nominal : bool, optional
         Whether to return nominal hists/results back. Default is True.
     **kwargs : kwargs
@@ -721,11 +723,11 @@ def single_faults(mdl, include_nominal=True, **kwargs):
     """
     kwargs.update(pack_run_kwargs(**kwargs))
     n_outs = nom_helper(mdl,
-                        mdl.sp.times,
+                        times,
                         **{**kwargs, 'use_end_condition': False})
     nomresult, nomhist, nomscen, c_mdl, t_end_nom = n_outs
 
-    scenlist = list_init_faults(mdl)
+    scenlist = list_init_faults(mdl, times)
     results, mdlhists = scenlist_helper(mdl,
                                         scenlist,
                                         c_mdl,
@@ -953,15 +955,16 @@ def gen_sampleapproach(mdl, faultdomains={}, faultsamples={},
     return app
 
 
-def list_init_faults(mdl):
+def list_init_faults(mdl, times):
     """
-    Creates a list of single-fault scenarios for the Model, given the modes set up
-    in the fault model.
+    Create list of single-fault scenarios for the given Model mode information.
 
     Parameters
     ----------
     mdl : Simulable/Function
-        Simulable with list of times in mdl.sp.times
+        Simulable
+    times
+        list with list of times in (start_time, end_time)
 
     Returns
     -------
@@ -969,9 +972,8 @@ def list_init_faults(mdl):
         A list of SingleFaultScenario
     """
     faultlist = []
-    trange = mdl.sp.times[-1]-mdl.sp.times[0] + 1.0
     fxns = mdl.get_fxns()
-    for time in mdl.sp.times:
+    for time in times:
         for fxnname, fxn in fxns.items():
             fm = fxn.m
             for mode in fm.faultmodes:

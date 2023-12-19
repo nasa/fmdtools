@@ -10,9 +10,33 @@ from fmdtools.define.container.parameter import Parameter
 from fmdtools.define.container.state import State
 from fmdtools.define.object.base import BaseObject
 
+from fmdtools.define.container.state import ExampleState
+
 
 class Flow(BaseObject):
-    """Superclass for flows."""
+    """
+    Superclass for flows.
+
+    Flows are used to connect simulable parts of a model (e.g., functions)
+    and respresent shared variables or states.
+
+    Examples
+    --------
+    >>> class ExampleFlow(Flow):
+    ...     container_s = ExampleState
+
+    >>> exf = ExampleFlow('exf', s={'x': 0.0})
+    >>> exf
+    exf ExampleFlow flow: ExampleState(x=0.0, y=1.0)
+
+    Note that copying creates independent copies of states:
+    >>> exf2 = exf.copy()
+    >>> exf2
+    exf ExampleFlow flow: ExampleState(x=0.0, y=1.0)
+    >>> exf2.s.x = 2.0
+    >>> exf2.s == exf.s
+    False
+    """
 
     __slots__ = ['p', 's', 'h']
     container_p = Parameter
@@ -26,15 +50,20 @@ class Flow(BaseObject):
         else:
             return "Uninitialized Flow"
 
-    def check_role(self, rolename):
+    def check_role(self, roletype, rolename):
         """Flows may be given any role name."""
-        a = 1
+        if roletype != 'flow':
+            raise Exception("Invalid roletype for flow: " + roletype)
 
     def reset(self):
         """Reset the flow to the initial state."""
-        self.s = self.container_s(**self._args_s)
+        self.s.reset()
+
+    def find_mutables(self):
+        return ['s']
 
     def return_mutables(self):
+        """Return mutable properties of the flow."""
         return astuple(self.s)
 
     def status(self):
@@ -51,6 +80,16 @@ class Flow(BaseObject):
 
     def get_typename(self):
         return "Flow"
+
+    def create_hist(self, timerange):
+        self.h = BaseObject.create_hist(self, timerange)
+        return self.h
+
+
+class ExampleFlow(Flow):
+    """Example flow for testing."""
+
+    container_s = ExampleState
 
 
 if __name__ == "__main__":
