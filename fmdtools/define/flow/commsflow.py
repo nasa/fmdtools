@@ -11,6 +11,7 @@ import copy
 from fmdtools.define.flow.base import Flow
 from fmdtools.define.flow.multiflow import MultiFlow
 
+
 class CommsFlow(MultiFlow):
     """
     A CommsFlow further extends the MultiFlow class to represent communications.
@@ -26,11 +27,12 @@ class CommsFlow(MultiFlow):
         - inbox, for seeing what messages may be received
         - clear_inbox, for clearing the inbox to enable more messages to be received
     """
+
     slots = ['__dict__']
 
-    def __init__(self, name='', glob=[], p={}, s={}, track={}):
+    def __init__(self, name='', glob=[], p={}, s={}, track=['s']):
         self.fxns = {}
-        super().__init__(name='', glob=glob, p=p, s=s, track=track)
+        super().__init__(name=name, glob=glob, p=p, s=s, track=track)
 
     def __repr__(self):
         rep_str = Flow.__repr__(self)
@@ -199,12 +201,14 @@ class CommsFlow(MultiFlow):
             self.fxns[fxn]["in"] = {}
             self.fxns[fxn]["received"] = {}
 
-    def copy(self, glob=[], p={}, s={}):
-        cop = super().copy(glob=glob, p=p, s=s)
+    def copy(self, name='', glob=[], p={}, s={}, track=['s']):
+        cop = super().copy(name=name, glob=glob, p=p, s=s, track=track)
         for fxn in self.fxns:
-            cop.create_comms(fxn, attrs=self.fxns[fxn]['internal'].status(), out_attrs=self.fxns[fxn]['out'].status(),
-                             prev_in=copy.deepcopy(self.fxns[fxn]["in"]), received=copy.deepcopy(self.fxns[fxn]["received"]),
-                             ports = getattr(self.fxns[fxn], "locals", []))
+            cop.create_comms(fxn, attrs=self.fxns[fxn]['internal'].status(),
+                             out_attrs=self.fxns[fxn]['out'].status(),
+                             prev_in=copy.deepcopy(self.fxns[fxn]["in"]),
+                             received=copy.deepcopy(self.fxns[fxn]["received"]),
+                             ports=getattr(self.fxns[fxn], "locals", []))
         return cop
 
     def get_typename(self):

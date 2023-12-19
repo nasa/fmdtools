@@ -574,7 +574,7 @@ class Block(Simulable):
         flowtypes : set
             Set of flow type names in the model.
         """
-        return {obj.__class__.__name__ for name, obj in self.get_flows()}
+        return {obj.__class__.__name__ for name, obj in self.get_flows().items()}
 
     def copy(self, *args, flows={}, **kwargs):
         """
