@@ -12,7 +12,6 @@ from fmdtools.define.block.base import Simulable
 from fmdtools.define.container.rand import Rand
 from fmdtools.define.object.base import init_obj
 from fmdtools.analyze.common import get_sub_include
-from fmdtools.analyze.history import History
 import time
 
 
@@ -31,14 +30,24 @@ class Architecture(Simulable):
     __slots__ = ['flows', 'as_copy', 'h']
     flexible_roles = ['flows']
     container_r = Rand
+    roletype = 'arch'
 
-    def __init__(self, *args, as_copy=False, **kwargs):
+    def __init__(self, *args, as_copy=False, h={}, **kwargs):
         self.as_copy = as_copy
-        Simulable.__init__(self, *args, **kwargs)
-        self.init_hist(h=kwargs.get('h', {}))
+        Simulable.__init__(self, *args, h=h, **kwargs)
+        self.init_hist(h=h)
         self.init_flexible_roles(**kwargs)
         self.init_architecture(**kwargs)
         self.build()
+
+    def check_role(self, roletype, rolename):
+        """Check that 'arch_xa' role is used for the arch."""
+        if roletype != self.roletype:
+            raise Exception("Invalid roletype for Architecture: " + roletype +
+                            ", should be: " + self.roletype)
+        if rolename != self.rolename:
+            raise Exception("invalid roletype for " + str(self.__class__) +
+                            ", should be: " + self.rolename)
 
     def init_flexible_roles(self, **kwargs):
         """
@@ -53,7 +62,7 @@ class Architecture(Simulable):
         """
         for role in self.flexible_roles:
             if self.as_copy and role in kwargs:
-                setattr(self, role, kwargs[role])
+                setattr(self, role, {**kwargs[role]})
             elif self.as_copy:
                 raise Exception("No role argument "+role+" to copy.")
             elif role in kwargs:
@@ -88,17 +97,16 @@ class Architecture(Simulable):
         track = get_sub_include(name, get_sub_include(flex_role, self.track))
         obj = init_obj(name=name, objclass=objclass, track=track,
                        as_copy=self.as_copy, **kwargs)
+
         if hasattr(obj, 'h') and obj.h:
             hist = obj.h
-        elif isinstance(obj, Flow):
+        elif isinstance(obj, BaseObject):
             timerange = self.sp.get_histrange()
             hist = obj.create_hist(timerange)
         else:
             hist = False
         if hist:
-            if flex_role not in self.h:
-                self.h[flex_role] = History()
-            self.h[flex_role][name] = hist
+            self.h[flex_role + '.' + name] = hist
         roledict[name] = obj
 
     def add_flow(self, name, fclass=Flow, **kwargs):
@@ -140,9 +148,23 @@ class Architecture(Simulable):
         """Use to initialize architecture."""
         return 0
 
-    def build(self):
-        """Use in subclasses to build the model after init_architecture is called."""
-        return 0
+    def build(self, update_seed=True):
+        """
+        Construct the overall model structure.
+
+        Use in subclasses to build the model after init_architecture is called.
+
+        Parameters
+        ----------
+        update_seed : bool
+            Whether to update the seed 
+        """
+        if update_seed:
+            self.update_seed()
+        if hasattr(self, 'h'):
+            if self.as_copy:
+                a=1
+            self.h = self.h.flatten()
 
     def get_flows(self, *flownames):
         """Return a list of the model flow objects."""
@@ -206,6 +228,7 @@ class Architecture(Simulable):
                 if hasattr(obj, 'm') for f in obj.m.faults}
 
     def reset(self):
+        """Reset the architecture and its contained objects."""
         Simulable.reset(self)
         for obj in self.get_flex_role_objs.values():
             obj.reset()
@@ -216,7 +239,7 @@ class Architecture(Simulable):
                         for f, val in obj.m.faultmodes.items()}
         fmode_intersect = set(modes_to_add).intersection(self.faultmodes)
         if any(fmode_intersect):
-            raise Exception("Action "+obj.name+
+            raise Exception("Action " + obj.name +
                             " overwrites existing fault modes: "+str(fmode_intersect) +
                             ". Rename the faults")
         self.faultmodes.update({obj.name+'_'+modename: obj.name

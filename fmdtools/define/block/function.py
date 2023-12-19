@@ -9,23 +9,50 @@ from fmdtools.define.block.base import Block
 from fmdtools.define.container.state import ExampleState
 from fmdtools.define.container.parameter import ExampleParameter
 from fmdtools.define.container.mode import ExampleMode
+from fmdtools.define.flow.base import ExampleFlow
 
 
 class Function(Block):
     """
     Superclass for representing system functions.
 
+    Functions are distinguished from other blocks in their ability to contain
+    architectures, which may be used to hold multiple components or an action sequence
+    graph within the function.
+
     Additional role types
-    ----------
+    ---------------------
     arch : Architecture
         component, action, function architectures at ca, aa, fa, etc.
+
+    Examples
+    --------
+    >>> exf = ExampleFunction("exf")
+    >>> exf
+    exf ExampleFunction
+    - ExampleState(x=1.0, y=1.0)
+    - ExampleMode(mode=standby, faults=set())
+
+    Behavior can be called using __call__ or the user-defined behavior method:
+    >>> exf("dynamic", time=1.0)
+    >>> exf
+    exf ExampleFunction
+    - ExampleState(x=2.0, y=1.0)
+    - ExampleMode(mode=standby, faults=set())
+
+    Which can also be used to inject faults
+    >>> exf("dynamic", time=2.0, faults=['no_charge'])
+    >>> exf
+    exf ExampleFunction
+    - ExampleState(x=2.0, y=4.0)
+    - ExampleMode(mode=no_charge, faults={'no_charge'})
     """
 
     __slots__ = ["ca", "aa", "fa", "args_f", "archs"]
     default_track = ["ca", "aa", "fa"]+Block.default_track
     roletypes = ['container', 'flow', 'arch']
 
-    def __init__(self, args_f=dict(), **kwargs):
+    def __init__(self, name=None, args_f=dict(), **kwargs):
         """
         Instantiate the function superclass with the relevant parameters.
 
@@ -34,7 +61,7 @@ class Function(Block):
         args_f : dict, optional
             arguments to pass to custom __init__ function.
         """
-        super().__init__(**kwargs)
+        super().__init__(name=name, **kwargs)
         self.args_f = args_f
         self.update_contained_modes()
 
@@ -163,6 +190,13 @@ class Function(Block):
                             "\n Is the mode representation nonexclusive?")
         return
 
+    def return_probdens(self):
+        """Get the probability density associated with FxnBlock and its archs."""
+        pd = super().return_probdens()
+        for arch in self.archs:
+            pd *= getattr(self, arch).return_probdens()
+        return pd
+
 
 class ExampleFunction(Function):
     """Example Function block for testing."""
@@ -170,6 +204,7 @@ class ExampleFunction(Function):
     container_p = ExampleParameter
     container_s = ExampleState
     container_m = ExampleMode
+    flow_exf = ExampleFlow
 
     def dynamic_behavior(self, time):
         """Increment x if nominal, else increment y."""
@@ -179,6 +214,7 @@ class ExampleFunction(Function):
             self.s.y += self.p.y
         if time < 1.0:
             self.s.put(x=0.0, y=0.0)
+        self.exf.s.inc(x=self.s.x)
 
     def find_classification(self, scen, hist):
         """Classify via metric xy = s.x + s.y."""
@@ -195,3 +231,9 @@ class GenericFxn(Function):
 
     def __init__(self, name='', flows={}, args_f={}, **kwargs):
         super().__init__(name=name, flows=flows, **kwargs)
+
+
+if __name__ == "__main__":
+    import doctest
+    doctest.testmod(verbose=True)
+    exf = ExampleFunction("exf")

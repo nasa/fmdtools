@@ -19,7 +19,7 @@ class BaseContainer(dataobject, mapping=True, iterable=True, copy_default=True):
     default_track = 'all'
     rolename = 'x'
 
-    def check_role(self, rolename):
+    def check_role(self, roletype, rolename):
         """
         Check that the container will be given the correct name for its class.
 
@@ -30,6 +30,8 @@ class BaseContainer(dataobject, mapping=True, iterable=True, copy_default=True):
             Parameter : p
             SimParam : sp
         """
+        if roletype != 'container':
+            raise Exception("Invalid roletype for container: " + roletype)
         if rolename != self.rolename:
             raise Exception("Invalid rolename "+rolename+" for "
                             + self.__class__.__name__ + ": "

@@ -9,7 +9,7 @@ import unittest
 from examples.pump.ex_pump import Pump
 from fmdtools.sim import propagate as prop
 import fmdtools.analyze as an
-from fmdtools.define.base import check_pickleability
+from fmdtools.define.object.base import check_pickleability
 from fmdtools.sim.sample import FaultDomain, FaultSample, ParameterSample
 from tests.common import CommonTests
 import numpy as np
@@ -56,9 +56,8 @@ class PumpTests(unittest.TestCase, CommonTests):
         """Test that the delayed fault behavior occurs at the time specified"""
         delays = [0, 1, 5, 10]
         for delay in delays:
-            mdl = Pump(p={'cost': ('water',), 'delay': delay})
-            res, hist = prop.one_fault(mdl, 'export_water', 'block',
-                                       time=25, track="all")
+            mdl = Pump(p={'cost': ('water',), 'delay': delay}, track='all')
+            res, hist = prop.one_fault(mdl, 'export_water', 'block', time=25)
             fault_at_time = hist.faulty.fxns.move_water.m.faults.mech_break[25+delay]
             self.assertEqual(fault_at_time, 1)
             fault_bef_time = hist.faulty.fxns.move_water.m.faults.mech_break[25+delay-1]
@@ -259,14 +258,12 @@ def exp_cost_quant(fs, mdl):
     return util
 
 if __name__ == '__main__':
-    unittest.main()
-    
-    #suite = unittest.TestSuite()
-    #suite.addTest(PumpTests("test_approach_cost_calc"))
-    #suite.addTest(PumpTests("test_value_setting_dict"))
-    #suite.addTest(PumpTests("test_one_run_csv"))
-    #runner = unittest.TextTestRunner()
-    #runner.run(suite)
+    # unittest.main()
 
-    
-    
+    suite = unittest.TestSuite()
+    suite.addTest(PumpTests("test_approach_parallelism"))
+    # suite.addTest(PumpTests("test_model_copy_same"))
+    # suite.addTest(PumpTests("test_value_setting_dict"))
+    # suite.addTest(PumpTests("test_one_run_csv"))
+    runner = unittest.TextTestRunner()
+    runner.run(suite)

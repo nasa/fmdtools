@@ -7,17 +7,15 @@ Classes
 :class:`GeomArchitecture`: Architecture of multiple geometries.
 :class:`ExGeomArch`: Example GeomArchitecture.
 """
-from fmdtools.define.object.base import BaseObject
+from fmdtools.define.architecture.base import Architecture
 from fmdtools.define.container.parameter import Parameter
-from fmdtools.analyze.common import get_sub_include
-from fmdtools.analyze.history import History
 from fmdtools.analyze.common import setup_plot
-from fmdtools.define.object.geom import Geom, GeomPoint, GeomLine, GeomPoly
+from fmdtools.define.object.geom import GeomPoint, GeomLine, GeomPoly
 from fmdtools.define.object.geom import ExPoint, ExLine, ExPoly
 from recordclass import asdict
 
 
-class GeomArchitecture(BaseObject):
+class GeomArchitecture(Architecture):
     """
     Agglomeration of multiple geoms/shapes.
 
@@ -28,43 +26,41 @@ class GeomArchitecture(BaseObject):
     for an architecture with the geoms already defined:
     >>> class ExGeomArch(GeomArchitecture):
     ...    def init_architecture(self):
-    ...        self.add_geom("ex_point", ExPoint)
-    ...        self.add_geom("ex_line", ExLine)
-    ...        self.add_geom("ex_poly", ExPoly)
+    ...        self.add_point("ex_point", ExPoint)
+    ...        self.add_line("ex_line", ExLine)
+    ...        self.add_poly("ex_poly", ExPoly)
 
     This can then be used in containing classes (e.g., environments) that need multiple
     geoms. We can then access the individual geoms in the geoms dict, e.g.:
 
     >>> ega = ExGeomArch()
-    >>> ega.geoms['ex_point'].s
+    >>> ega.geoms()['ex_point'].s
     ExGeomState(occupied=False)
+    >>> ega.h
+    points.ex_point.s.occupied:   array(101)
+    lines.ex_line.s.occupied:     array(101)
+    polys.ex_poly.s.occupied:     array(101)
+    >>> ega.return_mutables()
+    ((), (-0.1, 0, 0.0, 1), False, False, False)
     """
 
     container_p = Parameter
-    default_track = ['geoms']
-    all_possible = ['geoms']
-
-    def __init__(self, *args, p={}, **kwargs):
-        self._args = args
-        self._kwargs = kwargs
-        self.points = []
-        self.lines = []
-        self.polys = []
-        self.geoms = {}
-        super().__init__(p=p)
-        self.init_architecture(**kwargs)
-
-    def check_role(self, rolename):
-        if rolename != 'ga':
-            raise Exception("Invalid rolename for GeomArchitecture: "+rolename)
+    default_track = ['points', 'lines', 'polys']
+    all_possible = ['points', 'lines', 'polys']
+    flexible_roles = ['points', 'lines', 'polys']
+    rolename = 'ga'
 
     def init_architecture(self, **kwargs):
         """Use this placeholder method to define custom architectures."""
         a = 1
 
-    def add_geom(self, name, gclass, *args, **kwargs):
+    def geoms(self):
+        """Return a dict of all points, lines, and polygons."""
+        return {**self.points, **self.lines, **self.polys}
+
+    def add_point(self, name, pclass=GeomPoint, **kwargs):
         """
-        Add/instantiate an individual geom to the overall architecture.
+        Add/instantiate an individual point to the overall architecture.
 
         Parameters
         ----------
@@ -72,32 +68,60 @@ class GeomArchitecture(BaseObject):
             Name of the geom object to instantiate.
         gclass : Geom
             Class defining the geom.
-        *args : args
-            args defining the object for gclass.
         **kwargs : kwargs
             kwargs defining the object for gclass.
         """
-        setattr(self, name, gclass(*args, **kwargs))
-        if issubclass(gclass, GeomPoint):
-            self.points.append(name)
-        elif issubclass(gclass, GeomLine):
-            self.lines.append(name)
-        elif issubclass(gclass, GeomPoly):
-            self.polys.append(name)
-        elif not issubclass(gclass, Geom):
-            raise Exception(name + " gclass " + str(gclass) + " not a Geom")
-        self.geoms[name] = getattr(self, name)
+        if not issubclass(pclass, GeomPoint):
+            raise Exception("pclass "+pclass+" not a GeomPoint")
+        self.add_flex_role_obj('points', name, objclass=pclass, **kwargs)
+
+    def add_line(self, name, lclass=GeomLine, **kwargs):
+        """
+        Add/instantiate an individual line to the overall architecture.
+
+        Parameters
+        ----------
+        name : str
+            Name of the geom object to instantiate.
+        gclass : Geom
+            Class defining the geom.
+        **kwargs : kwargs
+            kwargs defining the object for gclass.
+        """
+        if not issubclass(lclass, GeomLine):
+            raise Exception("lclass "+lclass+" not a GeomPoint")
+        self.add_flex_role_obj('lines', name, objclass=lclass, **kwargs)
+
+    def add_poly(self, name, pclass=GeomPoly, **kwargs):
+        """
+        Add/instantiate an individual polygon to the overall architecture.
+
+        Parameters
+        ----------
+        name : str
+            Name of the geom object to instantiate.
+        gclass : Geom
+            Class defining the geom.
+        **kwargs : kwargs
+            kwargs defining the object for gclass.
+        """
+        if not issubclass(pclass, GeomPoly):
+            raise Exception("pclass "+pclass+" not a GeomPoint")
+        self.add_flex_role_obj('polys', name, objclass=pclass, **kwargs)
 
     def copy(self):
         """Copy geoms in the architecture (mirrors current states)."""
-        cop = self.__class__()
-        for geom in self.geoms:
-            cop.geoms[geom].s.assign(self.geoms[geom].s)
+        cop = self.__class__(p=getattr(self, 'p', {}),
+                             sp=getattr(self, 'sp', {}),
+                             track=getattr(self, 'track', {}),
+                             r=self.r.copy(),
+                             h=self.h.copy(),
+                             flows=self.flows,
+                             points=self.points,
+                             lines=self.lines,
+                             polys=self.polys,
+                             as_copy=True)
         return cop
-
-    def reset(self):
-        for geom in self.geoms:
-            self.geoms[geom].reset()
 
     def all_at(self, *pt):
         """
@@ -124,58 +148,18 @@ class GeomArchitecture(BaseObject):
         {'ex_point': ['on'], 'ex_line': ['on']}
         """
         all_at = {}
-        for geomname, geom in self.geoms.items():
+        for geomname, geom in self.geoms().items():
             at_geom = geom.all_at(*pt)
             if at_geom:
                 all_at[geomname] = at_geom
         return all_at
 
-    def create_hist(self, timerange, track):
-        """
-        Create history for the architecture.
-
-        Examples
-        --------
-        >>> ega = ExGeomArch()
-        >>> h = ega.create_hist([0.0], 'default')
-        >>> h.flatten()
-        geoms.ex_point.s.occupied:      array(1)
-        geoms.ex_line.s.occupied:       array(1)
-        geoms.ex_poly.s.occupied:       array(1)
-        """
-        track = self.get_track(track, all_possible=self.all_possible)
-        hist = History()
-        self.init_indicator_hist(hist, timerange, track)
-        geoms_track = get_sub_include('geoms', track)
-        if geoms_track:
-            hist['geoms'] = History()
-            for geomname, geom in self.geoms.items():
-                sh = geom.create_hist(timerange,
-                                      get_sub_include(geomname, geoms_track))
-                if sh:
-                    hist.geoms[geomname] = sh
-        return hist
-
     def return_states(self):
+        """Return a dict of states for each geom."""
         states = {}
-        for geomname, geom in self.geoms.items():
+        for geomname, geom in self.geoms().items():
             states[geomname] = asdict(geom.s)
         return states
-
-    def return_mutables(self):
-        """
-        Return all mutables (geom states).
-
-        Examples
-        --------
-        >>> ega = ExGeomArch()
-        >>> ega.return_mutables()
-        (False, False, False)
-        """
-        mutes = []
-        for geom in self.geoms.values():
-            mutes.extend(geom.return_mutables())
-        return tuple(mutes)
 
     def show(self, geoms={'all': {}}, fig=None, ax=None, figsize=(4, 4), z=False,
              **kwargs):
@@ -209,11 +193,11 @@ class GeomArchitecture(BaseObject):
         if not ax:
             fig, ax = setup_plot(z=z, figsize=figsize)
         if 'all' in geoms:
-            geoms = {g: {'shapes': 'all'} for g in self.geoms}
+            geoms = {g: {'shapes': 'all'} for g in self.geoms()}
 
         for geomname, geom_kwargs in geoms.items():
             local_kwargs = {**kwargs, 'geomlabel': geomname, **geom_kwargs}
-            fig, ax = self.geoms[geomname].show(ax=ax, fig=fig, z=z, **local_kwargs)
+            fig, ax = self.geoms()[geomname].show(ax=ax, fig=fig, z=z, **local_kwargs)
         return fig, ax
 
 
@@ -222,9 +206,9 @@ class ExGeomArch(GeomArchitecture):
 
     def init_architecture(self):
         """Initialize example geoms."""
-        self.add_geom("ex_point", ExPoint)
-        self.add_geom("ex_line", ExLine)
-        self.add_geom("ex_poly", ExPoly)
+        self.add_point("ex_point", ExPoint)
+        self.add_line("ex_line", ExLine)
+        self.add_poly("ex_poly", ExPoly)
 
 
 if __name__ == "__main__":

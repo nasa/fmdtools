@@ -171,8 +171,10 @@ class Coords(BaseObject):
                                 [s for s in self.get_roledicts()
                                  if s not in self.states])
 
-    def check_role(self, rolename):
+    def check_role(self, roletype, rolename):
         """Check that the rolename for coords is 'c'."""
+        if roletype != 'coords':
+            raise Exception("Invalid roletype for coords: " + roletype)
         if rolename != 'c':
             raise Exception("Invalid container name for Coords: "+rolename)
 

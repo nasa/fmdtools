@@ -191,7 +191,7 @@ class Simulable(BaseObject):
             timerange = self.sp.get_histrange()
             self.h = self.create_hist(timerange)
         else:
-            self.h = h
+            self.h = h.copy()
 
     def init_time_hist(self):
         """Add time history to the model (only done at top level)."""
@@ -206,7 +206,7 @@ class Simulable(BaseObject):
             t_ind_rec = self.sp.get_hist_ind(t_ind, t, shift)
             self.h.log(self, t_ind_rec, time=t)
 
-    def add_flow_hist(self, hist, timerange, track):
+    def add_flow_hist(self, hist, timerange):
         """
         Create a history of flows for the Simulable and appends it to the History hist.
 
@@ -220,7 +220,7 @@ class Simulable(BaseObject):
             argument specifying attributes for :func:`get_sub_include'.
             The default is None.
         """
-        flow_track = get_sub_include('flows', track)
+        flow_track = get_sub_include('flows', self.track)
         if flow_track:
             hist['flows'] = History()
             for flowname, flow in self.get_flows().items():
@@ -389,6 +389,30 @@ class Simulable(BaseObject):
                                 sim_units=self.sp.units, weight=weight)
         return rate
 
+    def find_mutables(self):
+        """Return list of mutable roles."""
+        return [getattr(self, mut) for mut in self.get_all_roles()
+                if mut not in ['p', 'sp']]
+
+    def return_mutables(self):
+        """
+        Return all mutable values in the block.
+
+        Used in static propagation steps to check if the block has changed.
+
+        Returns
+        -------
+        states : tuple
+            tuple of all states in the block
+        """
+        return tuple([mut.return_mutables() for mut in self.find_mutables()])
+
+    def return_probdens(self):
+        """Get the probability density associated with Block and things it contains."""
+        if hasattr(self, 'r'):
+            state_pd = self.r.return_probdens()
+        return state_pd
+
 
 class Block(Simulable):
     """
@@ -434,16 +458,16 @@ class Block(Simulable):
         # use aliases for flows
         if hasattr(self, 'flownames'):
             flows = {self.flownames.get(fn, fn): flow for fn, flow in flows.items()}
-        flows = flows.copy()
+        flows = {**flows}
 
-        Simulable.__init__(self, name=name, flows=flows, **kwargs)
+        Simulable.__init__(self, name=name, **flows, **kwargs)
         self.check_flows(flows=flows)
         self.update_seed()
         self.init_hist(h=h)
         # if flows not from model, add history for them also:
         if not flows and not h:
             timerange = self.sp.get_histrange()
-            self.add_flow_hist(self.h, timerange, self.track)
+            self.add_flow_hist(self.h, timerange)
 
     def check_flows(self, flows={}):
         """
@@ -464,6 +488,12 @@ class Block(Simulable):
         if unattached_flows:
             warnings.warn("these flows sent from model "+str(unattached_flows)
                           + " not added to class "+str(self.__class__))
+        # check that hashes match
+        unhashed_flows = [f for f, obj in flows.items()
+                          if getattr(self, f).__hash__() != obj.__hash__()]
+        if unhashed_flows:
+            raise Exception("Flows in " + str(self.__class__) +
+                            "copied instead of added: " + str(unhashed_flows))
 
     def get_flows(self):
         """Return a dictionary of the Block's flows."""
@@ -501,11 +531,11 @@ class Block(Simulable):
             console string
         """
         if hasattr(self, 'name'):
-            fxnstr = getattr(self, 'name', '')+' '+self.__class__.__name__+'\n'
+            fxnstr = getattr(self, 'name', '')+' '+self.__class__.__name__
             for at in ['s', 'm']:
                 at_container = getattr(self, at, False)
                 if at_container:
-                    fxnstr = fxnstr+"- "+at_container.__repr__()+'\n'
+                    fxnstr = fxnstr+'\n'+"- "+at_container.__repr__()
             return fxnstr
         else:
             return 'New uninitialized '+self.__class__.__name__
@@ -570,7 +600,7 @@ class Block(Simulable):
         """
         return {obj.__class__.__name__ for name, obj in self.get_flows()}
 
-    def copy(self, *args, **kwargs):
+    def copy(self, *args, flows={}, **kwargs):
         """
         Copy the block with its current attributes.
 
@@ -588,41 +618,13 @@ class Block(Simulable):
         """
         try:
             paramdict = self.new_params(**kwargs)
-            cop = self.__class__(self.name, *args, **paramdict)
+            cop = self.__class__(self.name, *args, flows=flows, **paramdict)
             cop.assign_roles('container', self)
         except TypeError as e:
             raise Exception("Poor specification of "+str(self.__class__)) from e
         if hasattr(self, 'h'):
             cop.h = self.h.copy()
-            if 'time' in self.h:
-                cop.h['time'] = np.copy(self.h.time)
         return cop
-
-    def return_mutables(self):
-        """
-        Return all mutable values in the block.
-
-        Used in static propagation steps to check if the block has changed.
-
-        Returns
-        -------
-        states : tuple
-            tuple of all states in the block
-        """
-        mutes = [getattr(self, mut).return_mutables() for mut in self.containers
-                 if mut not in ['p', 'sp']]
-        return tuple(mutes)
-
-    def return_probdens(self):
-        """Get the probability density associated with Block and things it contains."""
-        state_pd = self.r.return_probdens()
-        if hasattr(self, 'ca'):
-            for compname, comp in self.ca.components:
-                state_pd *= comp.return_probdens()
-        if hasattr(self, 'aa'):
-            for actionname, action in self.aa.actions:
-                state_pd *= action.return_probdens()
-        return state_pd
 
     def propagate(self, time, faults={}, disturbances={}, run_stochastic=False):
         """

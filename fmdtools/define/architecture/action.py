@@ -50,6 +50,7 @@ class ActionArchitecture(Architecture):
     per_timestep = False
     default_track = ('actions', 'active_actions', 'i')
     flexible_roles = ['flows', 'acts', 'conds']
+    rolename = 'aa'
 
     def __init__(self, **kwargs):
         self.action_graph = nx.DiGraph()
@@ -58,7 +59,8 @@ class ActionArchitecture(Architecture):
         self.active_actions = set()
         Architecture.__init__(self, **kwargs)
 
-    def build(self):
+    def build(self, update_seed=True):
+        super().build(update_seed=update_seed)
         if self.initial_action == 'auto':
             initial_action = [act for act, in_degree in self.action_graph.in_degree
                               if in_degree == 0]
