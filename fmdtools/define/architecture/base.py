@@ -162,8 +162,6 @@ class Architecture(Simulable):
         if update_seed:
             self.update_seed()
         if hasattr(self, 'h'):
-            if self.as_copy:
-                a=1
             self.h = self.h.flatten()
 
     def get_flows(self, *flownames):

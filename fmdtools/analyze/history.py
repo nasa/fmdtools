@@ -404,7 +404,7 @@ class History(Result):
             nomhist = nomhist.flatten()
         return nomhist, self._prep_faulty()
 
-    def get_degraded_hist(self, *attrs, nomhist={}, operator=np.prod, difftype='bool',
+    def get_degraded_hist(self, *attrs, nomhist={}, operator=np.any, difftype='bool',
                           withtime=True, withtotal=True):
         """
         Get history of times when the attributes *attrs deviate from nominal values.

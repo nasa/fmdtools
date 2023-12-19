@@ -450,6 +450,7 @@ class FaultDomain(object):
          -('ctl_dof', 'degctl')
         """
         faults = [(fxnname, mode) for fxnname, fxn in self.fxns.items()
+                  if hasattr(fxn, 'm')
                   for mode in fxn.m.faultmodes]
         self.add_faults(*faults)
 
@@ -467,6 +468,7 @@ class FaultDomain(object):
         for modename in modenames:
             faults = [(fxnname, mode) for fxnname, fxn in self.fxns.items()
                       for mode in fxn.m.faultmodes
+                      if hasattr(fxn, 'm')
                       if same_mode(modename, mode, exact=exact)]
             self.add_faults(*faults)
 
@@ -498,7 +500,7 @@ class FaultDomain(object):
         for fxnclass in fxnclasses:
             faults = [(fxnname, mode)
                       for fxnname, fxn in self.mdl.fxns_of_class(fxnclass).items()
-                      for mode in fxn.m.faultmodes]
+                      for mode in fxn.m.faultmodes if hasattr(fxn, 'm')]
             self.add_faults(*faults)
 
     def add_all_fxn_modes(self, *fxnnames):
@@ -521,7 +523,8 @@ class FaultDomain(object):
          -('hold_payload', 'deform')
         """
         for fxnname in fxnnames:
-            faults = [(fxnname, mode) for mode in self.fxns[fxnname].m.faultmodes]
+            faults = [(fxnname, mode) for mode in self.fxns[fxnname].m.faultmodes
+                      if hasattr(self.fxns[fxnname], 'm')]
             self.add_faults(*faults)
 
     def add_singlecomp_modes(self, *fxns):

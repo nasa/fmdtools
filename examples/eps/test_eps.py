@@ -8,7 +8,7 @@ import unittest
 from examples.eps.eps import EPS
 from fmdtools.sim import propagate as prop
 from fmdtools.sim.sample import FaultDomain, FaultSample
-from fmdtools.define.base import check_pickleability
+from fmdtools.define.object.base import check_pickleability
 import numpy as np
 import math
 from tests.common import CommonTests
@@ -43,15 +43,17 @@ class epsTests(unittest.TestCase, CommonTests):
         than repairs"""
         mdl = self.mdl
         res, hist = prop.single_faults(mdl, showprogress=False)
-        actual_num_faults = np.sum([len(f.m.faultmodes) for f in mdl.fxns.values()])
+        actual_num_faults = np.sum([len(f.m.faultmodes) for f in mdl.fxns.values()
+                                    if hasattr(f, 'm')])
         self.assertEqual(len(res.nest(1)), actual_num_faults + 1)
         hist_len_is_1 = all([len(v) == 1 for v in hist.values()])
         self.assertTrue(hist_len_is_1)  # all histories have length 1
         all_have_costs = all(v > 0 for k, v in res.get_values('.cost').items()
                              if 'nominal' not in k)
-        self.assertTrue(all_have_costs)  # all endresults have positive costs
+        # all endresults have positive costs
+        self.assertTrue(all_have_costs)
         repcosts = np.sum([np.sum([m["cost"] for m in f.m.faultmodes.values()])
-                           for f in mdl.fxns.values()])
+                           for f in mdl.fxns.values() if hasattr(f, 'm')])
         # fault costs higher than if it was just repairs
         total_simcosts = sum([v for v in res.get_values('.cost').values()])
         self.assertGreater(total_simcosts, repcosts)
@@ -59,7 +61,8 @@ class epsTests(unittest.TestCase, CommonTests):
     def test_fault_app(self):
         """Tests that the expected number of scenarios are generated for a given
         approach"""
-        tot_faults = [len(f.m.faultmodes) for f in self.mdl.fxns.values()]
+        tot_faults = [len(f.m.faultmodes) for f in self.mdl.fxns.values()
+                      if hasattr(f, 'm')]
         actual_num_faults = int(np.sum(tot_faults))
         for n_joint in [2, 3, actual_num_faults]:
             fs = FaultSample(self.fd)

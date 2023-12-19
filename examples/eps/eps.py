@@ -1,14 +1,16 @@
 # -*- coding: utf-8 -*-
 """
-EPS Model 
-This electrical power system model showcases how fmdtools can be used for purely static 
+EPS Model.
+
+This electrical power system model showcases how fmdtools can be used for purely static
 propogation models (where the dynamic states are not a concern). This EPS system was
-previously provided in the IBFM fault modelling toolkit (see: https://github.com/DesignEngrLab/IBFM ) 
-and other references--this implementation follows the simple_eps model in IBFM.
-    
-The main purpose of this system is to supply power to optical, mechanical, and heat loads.
-In this model, we represent the failure behavior of the system at a high level
-using solely the functions of the system.
+previously provided in the IBFM fault modelling toolkit
+(see: https://github.com/DesignEngrLab/IBFM ) and other references--this implementation
+follows the simple_eps model in IBFM.
+
+The main purpose of this system is to supply electrical power to optical, mechanical,
+and heat loads. In this model, we represent the failure behavior of the system at a high
+level using solely the functions of the system.
 
 Further information about this system (data, more detailed models) is presented
 at: https://c3.nasa.gov/dashlink/projects/3/
@@ -171,7 +173,7 @@ class DistEEModes(Mode):
 class DistEE(Function):
     __slots__ = ("sig_in", "ee_in", "ee_m", "ee_h", "ee_o")
     container_m = DistEEModes
-    flow_sig_in = GenericFlow
+    flow_sig_in = Signal
     flow_ee_in = GenericFlow
     flow_ee_m = GenericFlow
     flow_ee_h = GenericFlow
@@ -368,7 +370,7 @@ class EEtoOE(Function):
 class EPS(FunctionArchitecture):
     __slots__ = ()
     default_track = {"flows": ["he", "me", "oe"]}
-    default_sp = {'times': (0, 0)}
+    default_sp = {'end_time': 0}
 
     def init_architecture(self, **kwargs):
         """
@@ -449,11 +451,11 @@ if __name__ == "__main__":
     from fmdtools.analyze.graph import FunctionArchitectureGraph
     import numpy as np
 
-    mdl = EPS()
+    mdl = EPS(track=['fxns', 'flows', 'i'])
+    result, mdlhists = propagate.one_fault(mdl, "distribute_ee", "short")
 
-    result, mdlhists = propagate.one_fault(
-        mdl, "distribute_ee", "short", desired_result="graph", track="all"
-    )
+    result, mdlhists = propagate.one_fault(mdl, "distribute_ee", "short",
+                                           desired_result="graph")
 
     result.graph.draw()
     # endclasses, mdlhists = propagate.single_faults(mdl)
