@@ -21,8 +21,7 @@ from recordclass import asdict, astuple
 import numpy as np
 import math
 from fmdtools.define.container.base import BaseContainer
-
-from fmdtools.analyze.history import History, init_hist_iter
+from fmdtools.define.container.state import State
 
 
 class Rand(BaseContainer):
@@ -38,16 +37,31 @@ class Rand(BaseContainer):
     seed : int
         state for the random number generator
 
+    Examples
+    --------
     Rand is meant to be extended in model definition with random states, e.g.:
 
-    class RandState(State):
-        noise: float=1.0
-    class ExampleRand(Rand):
-        s = RandState()
-        run_stochastic: bool = True
+    >>> class RandState(State):
+    ...     noise: float=1.0
+    >>> class ExampleRand(Rand):
+    ...     s: RandState = RandState()
 
     Which enables the use of set_rand_state, update_stochastic_states, etc for updating
-    these states with methods called from the rng.
+    these states with methods called from the rng when run_stochastic=True.
+
+    >>> exr = ExampleRand(run_stochastic=True)
+    >>> exr.set_rand_state('noise', 'normal', 1.0, 1.0)
+    >>> exr.s
+    RandState(noise=1.3047170797544314)
+
+    Checking copy:
+    >>> exr2 = exr.copy()
+    >>> exr2.s
+    RandState(noise=1.3047170797544314)
+    >>> exr2.run_stochastic
+    True
+    >>> exr2.rng.__getstate__()['state'] == exr.rng.__getstate__()['state']
+    True
     """
 
     rolename = "r"
@@ -347,10 +361,19 @@ def get_pdf_for_dist(x, randname, args):
                         ". Ensure that it is a part of numpy.random/scipy.stats")
 
 
-ex_rand = Rand(seed=22)
-ex_rand2 = Rand(seed=32)
+class RandState(State):
+    """Example random state for testing and docs."""
+
+    noise: float = 1.0
+
+
+class ExampleRand(Rand):
+    """Example Rand for testing and docs."""
+
+    s: RandState = RandState()
 
 
 if __name__ == "__main__":
+    exr = ExampleRand()
     import doctest
     doctest.testmod(verbose=True)

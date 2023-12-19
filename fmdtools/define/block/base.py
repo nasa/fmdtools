@@ -206,28 +206,6 @@ class Simulable(BaseObject):
             t_ind_rec = self.sp.get_hist_ind(t_ind, t, shift)
             self.h.log(self, t_ind_rec, time=t)
 
-    def add_flow_hist(self, hist, timerange):
-        """
-        Create a history of flows for the Simulable and appends it to the History hist.
-
-        Parameters
-        ----------
-        h : History
-            History to append flow history to
-        timerange : iterable, optional
-            Time-range to initialize the history over. The default is None.
-        track : list/str/dict, optional
-            argument specifying attributes for :func:`get_sub_include'.
-            The default is None.
-        """
-        flow_track = get_sub_include('flows', self.track)
-        if flow_track:
-            hist['flows'] = History()
-            for flowname, flow in self.get_flows().items():
-                fh = flow.create_hist(timerange)
-                if fh:
-                    hist.flows[flowname] = fh
-
     def update_seed(self, seed=[]):
         """
         Update seed and propogates update to contained actions/components.
@@ -411,6 +389,8 @@ class Simulable(BaseObject):
         """Get the probability density associated with Block and things it contains."""
         if hasattr(self, 'r'):
             state_pd = self.r.return_probdens()
+        else:
+            state_pd = 1.0
         return state_pd
 
 
@@ -464,10 +444,6 @@ class Block(Simulable):
         self.check_flows(flows=flows)
         self.update_seed()
         self.init_hist(h=h)
-        # if flows not from model, add history for them also:
-        if not flows and not h:
-            timerange = self.sp.get_histrange()
-            self.add_flow_hist(self.h, timerange)
 
     def check_flows(self, flows={}):
         """

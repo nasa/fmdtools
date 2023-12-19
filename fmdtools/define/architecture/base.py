@@ -159,7 +159,7 @@ class Architecture(Simulable):
         update_seed : bool
             Whether to update the seed 
         """
-        if update_seed:
+        if update_seed and not self.as_copy:
             self.update_seed()
         if hasattr(self, 'h'):
             self.h = self.h.flatten()

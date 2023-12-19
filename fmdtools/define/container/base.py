@@ -8,6 +8,7 @@ in a block.
 from recordclass import dataobject, astuple
 import copy
 from fmdtools.define.base import set_arg_as_type
+from fmdtools.analyze.common import get_sub_include
 from fmdtools.analyze.history import History
 import numpy as np
 import sys
@@ -319,7 +320,12 @@ class BaseContainer(dataobject, mapping=True, iterable=True, copy_default=True):
             val = getattr(self, att)
             dtype = self.__annotations__[att]
             # add history attribute
-            hist.init_att(att, val, timerange, track, dtype=dtype, str_size=str_size)
+            if hasattr(val, 'create_hist'):
+                subtrack = get_sub_include(att, track)
+                hist[att] = val.create_hist(timerange=timerange, track=subtrack)
+            else:
+                hist.init_att(att, val, timerange, track,
+                              dtype=dtype,str_size=str_size)
 
     def create_hist(self, timerange=None, track=None, default_str_size='<U20'):
         """
@@ -337,6 +343,17 @@ class BaseContainer(dataobject, mapping=True, iterable=True, copy_default=True):
         -------
         hist : History
             History of fields specified in track.
+
+        Examples
+        --------
+        >>> nest_hist = ExNestContainer().create_hist()
+        >>> nest_hist
+        e1: 
+        --x:                            array(1)
+        --y:                            array(1)
+        z:                              array(1)
+        >>> nest_hist.e1.x
+        [1.0]
         """
         track = self.get_track(track)
         hist = History()

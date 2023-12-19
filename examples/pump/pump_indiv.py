@@ -8,7 +8,6 @@ Created on Fri May 12 09:59:41 2023
 from examples.pump.ex_pump import MoveWat
 import fmdtools.sim.propagate as prop
 from fmdtools.sim.sample import FaultSample, FaultDomain, ParameterSample
-from fmdtools.analyze import plot
 
 
 class MoveWatDynamic(MoveWat):
@@ -30,7 +29,7 @@ class MoveWatDynamic(MoveWat):
         self.wat_out.s.area = 1.0
 
 
-a = MoveWatDynamic()
+a = MoveWatDynamic(track='all')
 
 result, mdlhist = prop.nominal(a, track='all',
                                disturbances={10: {"wat_in.s.level": 0.0}})
