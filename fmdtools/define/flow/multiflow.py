@@ -29,9 +29,9 @@ class MultiFlow(Flow):
 
     slots = ['__dict__']
 
-    def __init__(self, name='', glob=[], s={}, p={}, track={}):
+    def __init__(self, name='', glob=[], s={}, p={}, track=['s']):
         self.locals = []
-        super().__init__(name='',  s=s, p=p, track=track)
+        super().__init__(name=name,  s=s, p=p, track=track)
         if not glob:
             self.glob = self
         else:
@@ -43,7 +43,7 @@ class MultiFlow(Flow):
             rep_str = rep_str+"\n   "+self.get_view(loc).__repr__()
         return rep_str
 
-    def create_local(self, name, attrs="all", p='global', s='global'):
+    def create_local(self, name, attrs="all", p='global', s='global', track=['s']):
         """
         Create a local view of the Flow.
 
@@ -77,13 +77,19 @@ class MultiFlow(Flow):
                 p = self.p
             if s == 'global':
                 s = asdict(self.s)
-            newflow = self.__class__(name, glob=self, p=p, s=s)
+            newflow = self.__class__(name=name, glob=self, p=p, s=s, track=track)
         setattr(self, name, newflow)
         self.locals.append(name)
+        if hasattr(self, 'h') and self.h:
+            self.create_hist([*self.h.values()][0])
         return newflow
 
     def get_local_name(self, name):
-        """Get the name of the view corresponding to the given name (enables "local" or "global" options)"""
+        """
+        Get the name of the view corresponding to the given name.
+
+        Enables "local" or "global" options.
+        """
         if name == "local":
             return self.name
         elif name == "global":
@@ -95,9 +101,9 @@ class MultiFlow(Flow):
         """Get the view of the MultiFlow corresponding to the given name."""
         if name == "":
             raise Exception("Must provide view")
-        elif name == "local": 
+        elif name == "local":
             view = self
-        elif name == "global": 
+        elif name == "global":
             view = self.glob
         elif name == "out":
             view = getattr(self.glob, self.name + "_out")
@@ -155,10 +161,10 @@ class MultiFlow(Flow):
         for local in self.locals:
             getattr(self, local).reset()
 
-    def copy(self, glob=[], p={}, s={}):
+    def copy(self, name='', glob=[], p={}, s={}, track=['s']):
         if not s:
             s = asdict(self.s)
-        cop = self.__class__(self.name, glob=glob, p=p, s=s)
+        cop = self.__class__(self.name, glob=glob, p=p, s=s, track=track)
         for loc in self.locals:
             local = getattr(self, loc)
             cop.create_local(local.name, s=asdict(local.s), p=local.p)
