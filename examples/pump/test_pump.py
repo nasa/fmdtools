@@ -64,7 +64,7 @@ class PumpTests(unittest.TestCase, CommonTests):
             self.assertEqual(fault_bef_time, 0)
 
     def test_app_prop_values(self):
-        """Test that the delayed fault behavior occurs at the time specified (with approach)"""
+        """Test that delayed fault behavior occurs at the time specified by sample."""
         fd = FaultDomain(self.mdl)
         fd.add_fault('move_water', 'mech_break')
         fs = FaultSample(fd)
@@ -166,7 +166,7 @@ class PumpTests(unittest.TestCase, CommonTests):
                                    staged=False, run_stochastic=True, sp={'seed': 10})
         hist.save("single_fault.json")
         hist_saved = load("single_fault.json", Rclass=History)
-        
+
         self.assertCountEqual([*hist.keys()], [*hist_saved.keys()])
         # test to see that all values of the arrays in the hist are the same
         for hist_key in hist:
@@ -203,7 +203,7 @@ class PumpTests(unittest.TestCase, CommonTests):
     def test_param_sample_save(self):
         self.check_ps_save(self.mdl, self.ps, "pump_res.pkl", "pump_hist.pkl")
         self.check_ps_save(self.mdl, self.ps, "pump_res.csv", "pump_hist.csv")
-        self.check_ps_save(self.mdl, self.ps,"pump_res.json", "pump_hist.json")
+        self.check_ps_save(self.mdl, self.ps, "pump_res.json", "pump_hist.json")
 
     def test_param_sample_isave(self):
         self.check_ps_isave(self.mdl, self.ps, *self.filenames, "pkl")
@@ -258,12 +258,12 @@ def exp_cost_quant(fs, mdl):
     return util
 
 if __name__ == '__main__':
-    # unittest.main()
+    unittest.main()
 
-    suite = unittest.TestSuite()
-    suite.addTest(PumpTests("test_approach_parallelism"))
+    # suite = unittest.TestSuite()
+    # suite.addTest(PumpTests("test_approach_parallelism"))
     # suite.addTest(PumpTests("test_model_copy_same"))
     # suite.addTest(PumpTests("test_value_setting_dict"))
     # suite.addTest(PumpTests("test_one_run_csv"))
-    runner = unittest.TextTestRunner()
-    runner.run(suite)
+    # runner = unittest.TextTestRunner()
+    # runner.run(suite)

@@ -1563,7 +1563,7 @@ class FunctionArchitectureGraph(Graph):
             if hasattr(mdl.fxns[fxnname], 'm'):
                 fxnfaults[fxnname] = [*mdl.fxns[fxnname].m.faults]
             else:
-                fxnfaults[fxnname] = {}
+                fxnfaults[fxnname] = []
             indicators[fxnname] = fxn.return_true_indicators(self.time)
         nx.set_node_attributes(self.g, fxnstates, 'states')
         nx.set_node_attributes(self.g, fxnfaults, 'faults')

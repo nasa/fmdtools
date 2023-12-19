@@ -7,7 +7,6 @@ Has Classes:
 """
 from decimal import Decimal
 from fmdtools.analyze.common import get_sub_include
-from fmdtools.analyze.history import History
 from fmdtools.define.container.base import BaseContainer
 from fmdtools.define.object.timer import Timer
 
@@ -35,6 +34,30 @@ class Time(BaseContainer):
         Whether to use the local timetep (vs global timestep)
     timernames: tuple
         Names of timers to instantiate.
+
+    Examples
+    --------
+    Extending the time class gives one access to a dict of timers:
+    >>> class ExtendedTime(Time):
+    ...     timernames = ('t1', 't2')
+
+    >>> t = ExtendedTime()
+    >>> t.timers['t1']
+    Timer t1: mode= standby, time= 0.0
+
+    These timers can then be used:
+    >>> t.timers['t1'].inc(1.0)
+    >>> t.timers['t1']
+    Timer t1: mode= ticking, time= 1.0
+
+    Checking copy:
+    >>> t2 = t.copy()
+    >>> t2.timers
+    {'t1': Timer t1: mode= ticking, time= 1.0, 't2': Timer t2: mode= standby, time= 0.0}
+
+    Check that copied timers are independent:
+    >>> t2.timers['t1'].__hash__() == t.timers['t1'].__hash__()
+    False
     """
 
     rolename = "t"
@@ -117,6 +140,15 @@ class Time(BaseContainer):
                     hist[tname] = timer.create_hist(timerange)
         else:
             BaseContainer.init_hist_att(self, hist, att, timerange, track, str_size)
+
+
+class ExtendedTime(Time):
+    """Example extended time class for testing, etc."""
+
+    timernames = ('t1', 't2')
+
+t = ExtendedTime()
+t.timers['t1']
 
 
 if __name__ == "__main__":

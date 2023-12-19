@@ -190,6 +190,9 @@ class Parameter(BaseContainer, readonly=True):
         field_dict = self.get_field_dict(self)
         return self.__class__(**field_dict)
 
+    def reset(self):
+        """Do nothing since the parameter is immutable."""
+
     def return_mutables(self):
         return ()
 

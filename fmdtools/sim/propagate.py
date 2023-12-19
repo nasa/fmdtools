@@ -682,7 +682,7 @@ def process_nominal(mdlhists, nomhist, results, nomresult, t_end_nom, **kwargs):
                 result_id='nominal')
 
 
-def single_faults(mdl, times=[1.0], include_nominal=True, **kwargs):
+def single_faults(mdl, times=[0.0], include_nominal=True, **kwargs):
     """
     Create and propagates a list of failure scenarios in a model.
 
@@ -975,8 +975,11 @@ def list_init_faults(mdl, times):
     fxns = mdl.get_fxns()
     for time in times:
         for fxnname, fxn in fxns.items():
-            fm = fxn.m
-            for mode in fm.faultmodes:
+            if hasattr(fxn, 'm'):
+                faultmodes = fxn.m.faultmodes
+            else:
+                faultmodes = {}
+            for mode in faultmodes:
                 rate = mdl.get_scen_rate(fxnname, mode, time)
                 newscen = SingleFaultScenario(sequence={time:
                                                         {'faults': {fxnname: mode}}},

@@ -626,6 +626,10 @@ class Block(Simulable):
             cop.h = self.h.copy()
         return cop
 
+    def reset(self):
+        for role in self.get_all_roles():
+            getattr(self, role).reset()
+
     def propagate(self, time, faults={}, disturbances={}, run_stochastic=False):
         """
         Inject and propagates faults through the graph at one time-step.

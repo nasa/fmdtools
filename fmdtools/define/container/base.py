@@ -256,7 +256,7 @@ class BaseContainer(dataobject, mapping=True, iterable=True, copy_default=True):
         if fieldname not in self.__fields__:
             raise Exception(fieldname+" not a property of "+self.name)
         if as_copy:
-            value = copy.copy(value)
+            value = copy.deepcopy(value)
         field = getattr(self, fieldname)
         if isinstance(field, BaseContainer):
             field.assign(value, as_copy=as_copy)

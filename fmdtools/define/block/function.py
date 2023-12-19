@@ -92,13 +92,17 @@ class Function(Block):
         modeprops : dict
             Dict of corresponding fault mode properties.
         """
-        ms = [m for m in self.m.faults.copy() if m != 'nom']
-        modeprops = dict.fromkeys(ms)
-        for mode in ms:
-            modeprops[mode] = self.m.faultmodes.get(mode)
-            if mode not in self.m.faultmodes:
-                raise Exception("Mode " + mode + " not in m.faultmodes for fxn " +
-                                self.__class__.__name__+" and may not be tracked.")
+        if hasattr(self, 'm'):
+            ms = [m for m in self.m.faults.copy() if m != 'nom']
+            modeprops = dict.fromkeys(ms)
+            for mode in ms:
+                modeprops[mode] = self.m.faultmodes.get(mode)
+                if mode not in self.m.faultmodes:
+                    raise Exception("Mode " + mode + " not in m.faultmodes for fxn " +
+                                    self.__class__.__name__+" and may not be tracked.")
+        else:
+            ms = []
+            modeprops = {}
         return ms, modeprops
 
     def update_seed(self, seed=[]):
@@ -155,19 +159,22 @@ class Function(Block):
         """
         if hasattr(self, 'r'):
             self.r.run_stochastic = run_stochastic
+        # if there is a fault, it is instantiated
         if faults:
-            self.m.add_fault(*faults)  # if there is a fault, it is instantiated
+            self.m.add_fault(*faults)
         if hasattr(self, 'mode_state_dict') and any(faults):
             self.update_modestates()
+        # conditional faults and behavior are then run
         if hasattr(self, 'condfaults'):
-            self.condfaults(time)    # conditional faults and behavior are then run
+            self.condfaults(time)
         if time > self.t.time:
             if hasattr(self, 'r'):
                 self.r.update_stochastic_states()
         self.prop_arch_behaviors(proptype, faults, time, run_stochastic)
 
         if proptype == 'static' and hasattr(self, 'behavior'):
-            self.behavior(time)     # generic behavioral methods are run at all steps
+            # generic behavioral methods are run at all steps
+            self.behavior(time)
         if proptype == 'static' and hasattr(self, 'static_behavior'):
             self.static_behavior(time)
         elif proptype == 'dynamic' and hasattr(self, 'dynamic_behavior') and time > self.t.time:
@@ -183,7 +190,7 @@ class Function(Block):
         if run_stochastic == 'track_pdf':
             if hasattr(self, 'r'):
                 self.r.probdens = self.r.return_probdens()
-        if self.m.exclusive is True and len(self.m.faults) > 1:
+        if hasattr(self, 'm') and self.m.exclusive is True and len(self.m.faults) > 1:
             raise Exception("More than one fault present in " + self.name +
                             "\n at t= " + str(time) +
                             "\n faults: " + str(self.m.faults) +
