@@ -35,12 +35,9 @@ class TankTests(unittest.TestCase, CommonTests):
         mdl_cop = self.mdl.copy()
         mdl_cop_2 = mdl_cop.copy()
 
-        assert self.mdl.fxns['human']._args_aa == mdl_cop.fxns['human']._args_aa
-        assert self.mdl.fxns['human']._args_aa == mdl_cop_2.fxns['human']._args_aa
-
-        self.assertEqual(self.mdl.fxns['human'].aa.actions['detect'].duration, 2)
-        self.assertEqual(mdl_cop.fxns['human'].aa.actions['detect'].duration, 2)
-        self.assertEqual(mdl_cop_2.fxns['human'].aa.actions['detect'].duration, 2)
+        self.assertEqual(self.mdl.fxns['human'].aa.acts['detect'].duration, 2)
+        self.assertEqual(mdl_cop.fxns['human'].aa.acts['detect'].duration, 2)
+        self.assertEqual(mdl_cop_2.fxns['human'].aa.acts['detect'].duration, 2)
 
     def test_approach(self):
         res, hists = prop.fault_sample(self.mdl, self.fs,
@@ -74,28 +71,28 @@ class TankTests(unittest.TestCase, CommonTests):
         """ Tests that action modes injected in functions end up in their respective
         actions."""
         mdl = Tank()
-        amodes = [aname+"_"+mode for aname, a in mdl.fxns['human'].aa.actions.items()
+        amodes = [aname+"_"+mode for aname, a in mdl.fxns['human'].aa.acts.items()
                   for mode in a.m.faultmodes]
         fmodes = [*mdl.fxns['human'].m.faultmodes.keys()]
         self.assertListEqual(amodes, fmodes)
 
-        anames = {mode: aname for aname, a in mdl.fxns['human'].aa.actions.items()
+        anames = {mode: aname for aname, a in mdl.fxns['human'].aa.acts.items()
                   for mode in a.m.faultmodes}
         for amode, aname in anames.items():
             mdl = Tank()
             scen = {'human': aname+"_"+amode}
             mdl.propagate(1, fxnfaults=scen)
             self.assertIn(aname+"_"+amode, mdl.fxns['human'].m.faults)
-            self.assertIn(amode, mdl.fxns['human'].aa.actions[aname].m.faults)
+            self.assertIn(amode, mdl.fxns['human'].aa.acts[aname].m.faults)
 
     def test_different_components(self):
         """ Tests that model copies have different components"""
         mdl = Tank()
         mdl_copy = mdl.copy()
-        for aname, act, in mdl.fxns['human'].aa.actions.items():
-            self.assertNotEqual(mdl_copy.fxns['human'].aa.actions[aname], act)
+        for aname, act, in mdl.fxns['human'].aa.acts.items():
+            self.assertNotEqual(mdl_copy.fxns['human'].aa.acts[aname], act)
             self.assertNotEqual(
-                mdl_copy.fxns['human'].aa.actions[aname].__hash__(), act.__hash__())
+                mdl_copy.fxns['human'].aa.acts[aname].__hash__(), act.__hash__())
 
     def test_local_tstep(self):
         """ Tests running the model with a different local timestep in the
@@ -125,7 +122,7 @@ class TankTests(unittest.TestCase, CommonTests):
         """Spot check of epc math work in human error calculation"""
         mdl = Tank()
         ratecalc = 0.02 * ((4-1)*0.1+1) * ((4-1)*0.6+1) * ((1.1-1)*0.9+1)
-        self.assertEqual(mdl.fxns['human'].aa.actions['look'].m.failrate, ratecalc)
+        self.assertEqual(mdl.fxns['human'].aa.acts['look'].m.failrate, ratecalc)
 
     def test_save_load_nominal(self):
         for extension in [".pkl", ".csv", ".json"]:

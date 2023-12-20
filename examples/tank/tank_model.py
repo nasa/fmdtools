@@ -1,14 +1,15 @@
 # -*- coding: utf-8 -*-
 """
-Dynamical implementation of a human-operated tank system to show how fmdtools
-can be used to model human errors.
+Dynamical implementation of a human-operated tank system.
+
+This tanks system is helpful for showing how fmdtools can be used to model human errors.
 
 The functions of the system are:
     - ImportLiquid (Inlet Valve)
     - GuideLiquid (Inlet Pipe)
     - StoreLiquid (Tank)
     - GuideLiquid (Outlet Pipe)
-    - Export Liquid (Outlet Valve)
+    - ExportLiquid (Outlet Valve)
 The Tank stores a set amount of water, the level of which is controlled by
 inlet and outlet valves. In this model we (will) use an action sequence graph
 to model the human interactions with the system.
@@ -182,36 +183,35 @@ class HumanParam(Parameter):
 
 class HumanASG(ActionArchitecture):
     initial_action = "look"
+    container_p = HumanParam
 
-    def __init__(self, *args, reacttime=0, **kwargs):
-        super().__init__(*args, **kwargs)
-
+    def init_architecture(self, **kwargs):
         self.add_flow("tank_sig", Signal)
         self.add_flow("valve1_sig", Signal)
         self.add_flow("valve2_sig", Signal)
         self.add_flow("detect_sig", Signal)
 
         self.add_act('look', Look)
-        self.add_act('detect', Detect, 'detect_sig', 'tank_sig', duration=reacttime)
+        self.add_act('detect', Detect, 'detect_sig', 'tank_sig',
+                     duration=self.p.reacttime)
         self.add_act('reach', Reach)
         self.add_act('grasp', Grasp)
         self.add_act('turn', Turn, 'detect_sig',
                      'valve1_sig', 'valve2_sig', duration=1.0)
 
-        self.add_cond('look', 'detect', 'looked', condition=self.actions['look'].looked)
+        self.add_cond('look', 'detect', 'looked', condition=self.acts['look'].looked)
         self.add_cond('detect', 'reach', 'detected',
-                      condition=self.actions['detect'].detected)
+                      condition=self.acts['detect'].detected)
         self.add_cond('reach', 'grasp', 'reached',
-                      condition=self.actions['reach'].reached)
+                      condition=self.acts['reach'].reached)
         self.add_cond('grasp', 'turn', 'grasped',
-                      condition=self.actions['grasp'].grasped)
-        self.add_cond('turn', 'look', 'done', condition=self.actions['turn'].turned)
-
-        self.build()
+                      condition=self.acts['grasp'].grasped)
+        self.add_cond('turn', 'look', 'done', condition=self.acts['turn'].turned)
 
 
 class HumanActions(Function):
     container_p = HumanParam
+    container_m = Mode
     arch_aa = HumanASG
     flow_valve1_sig = Signal
     flow_tank_sig = Signal
@@ -222,23 +222,23 @@ class HumanActions(Function):
         Some testing code for ASG behavior and copying, etc. Raises exceptions when
         flows aren't copied correctly
         """
-        if self.aa.actions['look'].looked.__self__.__hash__() != self.aa.conditions['looked'].__self__.__hash__():
+        if self.aa.acts['look'].looked.__self__.__hash__() != self.aa.conds['looked'].__self__.__hash__():
             raise Exception("Condition not passed")
         if self.aa.flows['valve1_sig'].__hash__() != self.valve1_sig.__hash__():
             raise Exception("Invalid connection hash in asg.flows")
-        if self.aa.actions['detect'].tank_sig.__hash__() != self.tank_sig.__hash__():
+        if self.aa.acts['detect'].tank_sig.__hash__() != self.tank_sig.__hash__():
             raise Exception("Invalid connection hash in asg.flows")
-        if self.aa.flows['detect_sig'].__hash__() != self.aa.actions['detect'].detect_sig.__hash__():
+        if self.aa.flows['detect_sig'].__hash__() != self.aa.acts['detect'].detect_sig.__hash__():
             raise Exception("Invalid connection hash in asg.flows")
         if self.aa.flows['valve2_sig'].__hash__() != self.valve2_sig.__hash__():
             raise Exception("Invalid connection hash in asg.flows")
-        if self.aa.actions['turn'].valve2_sig.__hash__() != self.valve2_sig.__hash__():
+        if self.aa.acts['turn'].valve2_sig.__hash__() != self.valve2_sig.__hash__():
             raise Exception("Invalid connection hash")
 
-        if not self.aa.actions['turn'].valve2_sig.s.action == self.valve2_sig.s.action:
+        if not self.aa.acts['turn'].valve2_sig.s.action == self.valve2_sig.s.action:
             raise Exception("invalid connection: valve2_sig")
 
-        if not self.aa.actions['turn'].valve1_sig.s.action == self.valve1_sig.s.action:
+        if not self.aa.acts['turn'].valve1_sig.s.action == self.valve1_sig.s.action:
             raise Exception("invalid connection: valve1_sig")
 
 
