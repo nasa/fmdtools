@@ -59,8 +59,16 @@ class ActionArchitecture(Architecture):
         self.active_actions = set()
         Architecture.__init__(self, **kwargs)
 
-    def build(self, **kwargs):
-        super().build(**kwargs)
+    def copy(self, **kwargs):
+        cop = super().copy(**kwargs)
+        cop.active_actions = {*self.active_actions}
+        return cop
+
+    def reset(self):
+        super().reset()
+        self.set_initial_active_action()
+
+    def set_initial_active_action(self):
         if self.initial_action == 'auto':
             initial_action = [act for act, in_degree in self.action_graph.in_degree
                               if in_degree == 0]
@@ -69,6 +77,10 @@ class ActionArchitecture(Architecture):
         elif type(self.initial_action) == str:
             initial_action = [self.initial_action]
         self.set_active_actions(initial_action)
+
+    def build(self, **kwargs):
+        super().build(**kwargs)
+        self.set_initial_active_action()
         if self.state_rep == 'finite-state' and len(self.active_actions) > 1:
             raise Exception("Cannot have more than one initial action with" +
                             " finite-state representation")
@@ -95,6 +107,7 @@ class ActionArchitecture(Architecture):
         fkwargs = {**{'t': {'dt': self.sp.dt}},
                    **{'sp': {'end_time': self.sp.end_time}},
                    **fkwargs}
+
         self.add_flex_role_obj('acts', name, objclass=actclass, flows=flows, **fkwargs)
 
         # TODO: maybe functions should work like this also?
@@ -209,17 +222,5 @@ class ActionArchitecture(Architecture):
                 if num_prop > 10000:
                     raise Exception("Undesired looping in Function ASG for: "+self.name)
             self.active_actions = active_actions
-
-    def copy(self, flows={}, **kwargs):
-        cop = self.__class__(p=getattr(self, 'p', {}),
-                             sp=getattr(self, 'sp', {}),
-                             track=getattr(self, 'track', {}),
-                             r=self.r.copy(),
-                             h=self.h.copy(),
-                             flows=self.flows,
-                             acts=self.acts,
-                             conds=self.conds,
-                             as_copy=True)
-        return cop
 
 

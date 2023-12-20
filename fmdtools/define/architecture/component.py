@@ -46,18 +46,5 @@ class ComponentArchitecture(Architecture):
         self.add_flex_role_obj('comps', name, obclass=compclass, flows=flows, **fkwargs)
         self.add_obj_modes(self.comps[name])
 
-    def copy(self, flows={}, **kwargs):
-        # TODO: need to make sure flows from block level override self.flows during
-        # copy.
-        cop = self.__class__(p=getattr(self, 'p', {}),
-                             sp=getattr(self, 'sp', {}),
-                             track=getattr(self, 'track', {}),
-                             r=self.r.copy(),
-                             h=self.h.copy(),
-                             flows=self.flows,
-                             comps=self.comps,
-                             as_copy=True)
-        return cop
-
     def inject_faults(self, faults):
         Architecture.inject_faults(self, 'comps', faults)

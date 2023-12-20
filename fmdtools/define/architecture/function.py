@@ -163,6 +163,7 @@ class FunctionArchitecture(Architecture):
                    **fkwargs}
         if hasattr(self, 'r'):
             fkwargs = {**{'r': {"seed": self.r.seed}}, **fkwargs}
+
         self.add_flex_role_obj('fxns', name, objclass=fclass, flows=flows, **fkwargs)
         for flowname in flownames:
             self._fxnflows.append((name, flowname))
@@ -288,30 +289,6 @@ class FunctionArchitecture(Architecture):
             mem_profile[flowname], _ = flow.get_memory()
         mem = np.sum([i for i in mem_profile.values()])
         return mem, mem_profile
-
-    def copy(self):
-        """
-        Copy the model at the current state.
-
-        Returns
-        -------
-        copy : Model
-            Copy of the curent model.
-        """
-        # Is this adequate? Wouldn't this give it new components?
-        # TODO: need to make this for overall arch
-        cargs = dict(p=getattr(self, 'p', {}),
-                     sp=getattr(self, 'sp', {}),
-                     track=getattr(self, 'track', {}),
-                     h=self.h.copy(),
-                     flows=self.flows,
-                     fxns=self.fxns,
-                     as_copy=True)
-        if hasattr(self, 'r'):
-            cargs['r'] = self.r.copy()
-
-        cop = self.__class__(**cargs)
-        return cop
 
     def reset(self):
         """Reset the model to the initial state (with no faults, etc)."""

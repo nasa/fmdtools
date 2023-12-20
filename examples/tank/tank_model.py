@@ -178,7 +178,7 @@ class StoreLiquid(Function):
 
 
 class HumanParam(Parameter):
-    reacttime: int = 1
+    reacttime: int = 2
 
 
 class HumanASG(ActionArchitecture):
@@ -394,12 +394,12 @@ class Tank(FunctionArchitecture):
 
 if __name__ == '__main__':
     import fmdtools.sim.propagate as propagate
-    import fmdtools.analyze as an
     from fmdtools.sim.sample import FaultDomain, FaultSample
 
     mdl = Tank()
 
-    endclass, mdlhist = propagate.one_fault(mdl, 'human', 'look_not_visible', time=2)
+    endclass, mdlhist = propagate.one_fault(mdl, 'human', 'look_not_visible', time=2,
+                                            staged=True)
 
     # nominal run
     endresults, mdlhist = propagate.nominal(mdl, desired_result=['endclass', 'graph'])
