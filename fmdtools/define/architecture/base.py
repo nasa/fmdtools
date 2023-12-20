@@ -69,7 +69,8 @@ class Architecture(Simulable):
             else:
                 setattr(self, role, dict())
 
-    def add_flex_role_obj(self, flex_role, name, objclass=BaseObject, **kwargs):
+    def add_flex_role_obj(self, flex_role, name, objclass=BaseObject, use_copy=False,
+                          **kwargs):
         """
         Add a flexible role object to the architecture.
 
@@ -85,6 +86,8 @@ class Architecture(Simulable):
             Name of the object
         objclass : class, optional
             Class to instantiate in the dict. The default is BaseObject.
+        as_copy : bool
+            Whether to instantiate obj as a copy. The default is fault.
         **kwargs : kwargs
             Non-default kwargs to send to the object class.
         """
@@ -92,9 +95,14 @@ class Architecture(Simulable):
         if name in roledict:
             objclass = roledict[name]
 
+        if use_copy:
+            as_copy = False
+        else:
+            as_copy = self.as_copy
+
         track = get_sub_include(name, get_sub_include(flex_role, self.track))
         obj = init_obj(name=name, objclass=objclass, track=track,
-                       as_copy=self.as_copy, **kwargs)
+                       as_copy=as_copy, **kwargs)
 
         if hasattr(obj, 'h') and obj.h:
             hist = obj.h
@@ -123,7 +131,12 @@ class Architecture(Simulable):
         kwargs: kwargs
             Dicts for non-default values to p, s, etc
         """
-        self.add_flex_role_obj('flows', name, objclass=fclass, **kwargs)
+        if name in self.flows:
+            use_copy = True
+        else:
+            use_copy = False
+        self.add_flex_role_obj('flows', name, objclass=fclass, use_copy=use_copy,
+                               **kwargs)
 
     def add_flows(self, *names, fclass=Flow, **kwargs):
         """
@@ -237,8 +250,9 @@ class Architecture(Simulable):
     def reset(self):
         """Reset the architecture and its contained objects."""
         super().reset()
-        for obj in self.get_flex_role_objs.values():
-            obj.reset()
+        for obj in self.get_flex_role_objs().values():
+            if hasattr(obj, 'reset'):
+                obj.reset()
 
     def add_obj_modes(self, obj):
         """Add modes from an object to .faultmodes."""
@@ -268,6 +282,38 @@ class Architecture(Simulable):
                 compdict = getattr(self, flexible_role)
                 comp = compdict[self.faultmodes[fault]]
                 comp.m.add_fault(fault[len(comp.name)+1:])
+
+    def copy(self, flows={}):
+        """
+        Copy the architecture at the current state.
+
+        Parameters
+        ----------
+        flows : dict
+            Dict of flows to use in the copy.
+
+        Returns
+        -------
+        copy : Architecture
+            Copy of the curent architecture.
+        """
+        cargs = dict(p=getattr(self, 'p', {}),
+                     sp=getattr(self, 'sp', {}),
+                     track=getattr(self, 'track', {}),
+                     h=self.h.copy(),
+                     as_copy=True)
+        # send role dicts in to be copied via as_copy param.
+        for flex_role in self.flexible_roles:
+            cargs[flex_role] = getattr(self, flex_role)
+        # if flows provided from above, use those flows. Otherwise copy own.
+        cargs['flows'] = {f: flows[f] if f in flows else obj.copy()
+                          for f, obj in self.flows.items()}
+
+        if hasattr(self, 'r'):
+            cargs['r'] = self.r.copy()
+        cop = self.__class__(**cargs)
+        cop.assign_roles('container', self)
+        return cop
 
 
 def check_model_pickleability(model, try_pick=False):

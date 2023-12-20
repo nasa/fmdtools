@@ -442,15 +442,24 @@ class Block(Simulable):
                            **flows, **kwargs)
         # send flows from block level to arch level
         if 'arch' in self.roletypes:
-            archs = self.find_roletype_initiators("arch")
-            b_flows = {f: getattr(self, f) for f in self.flows}
-            arch_kwargs = {k: {**kwargs[k], **{'flows': b_flows}}
-                           if k in kwargs else {'flows': b_flows}
-                           for k in archs}
-            self.init_roletypes('arch', flows=b_flows, **arch_kwargs)
+            self.init_roletypes('arch', **self.create_arch_kwargs(**kwargs))
         self.check_flows(flows=flows)
         self.update_seed()
         self.init_hist(h=h)
+
+    def create_arch_kwargs(self, **kwargs):
+        archs = self.find_roletype_initiators("arch")
+        b_flows = {f: getattr(self, f) for f in self.flows}
+        arch_kwargs = {}
+        for k in archs:
+            if k in kwargs and isinstance(kwargs[k], dict):
+                arch_kwargs[k] = {**kwargs[k], **{'flows': b_flows}}
+            elif k in kwargs and isinstance(kwargs[k], BaseObject):
+                arch_kwargs[k] = kwargs[k].copy(flows=b_flows)
+            else:
+                arch_kwargs[k] = {'flows': b_flows}
+
+        return {'flows': b_flows, **arch_kwargs}
 
     def check_flows(self, flows={}):
         """
@@ -601,6 +610,10 @@ class Block(Simulable):
         """
         try:
             paramdict = self.new_params(**kwargs)
+            if 'arch' in self.roletypes:
+                arch_dict = {role: getattr(self, role)
+                             for role in self.get_roles('arch')}
+                paramdict = {**paramdict, **arch_dict}
             cop = self.__class__(self.name, *args, flows=flows, **paramdict)
             cop.assign_roles('container', self)
         except TypeError as e:

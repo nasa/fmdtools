@@ -196,7 +196,7 @@ class BaseObject(object):
             container.check_role(roletype, rolename)
             setattr(self, rolename, container)
 
-    def assign_roles(self, roletype, other_obj):
+    def assign_roles(self, roletype, other_obj, **kwargs):
         """
         Assign copies of the roles of another BaseObject to the current object.
 
@@ -208,6 +208,8 @@ class BaseObject(object):
             Roletype to assign.
         other_obj : BaseObject
             Object to assign from
+        **kwargs : kwargs
+            Any keyword arguments to the role copy method.
 
         Examples
         --------
@@ -229,7 +231,12 @@ class BaseObject(object):
         """
         roles = getattr(self, roletype+'s')
         for role in roles:
-            setattr(self, role, getattr(other_obj, role).copy())
+            other_role = getattr(other_obj, role)
+            if bool(inspect.signature(other_role.copy).parameters):
+                other_role_copy = other_role.copy(**kwargs)
+            else:
+                other_role_copy = other_role.copy()
+            setattr(self, role, other_role_copy)
 
     def reset(self):
         for role in self.get_all_roles():

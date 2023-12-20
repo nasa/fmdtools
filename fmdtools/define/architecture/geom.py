@@ -109,20 +109,6 @@ class GeomArchitecture(Architecture):
             raise Exception("pclass "+pclass+" not a GeomPoint")
         self.add_flex_role_obj('polys', name, objclass=pclass, **kwargs)
 
-    def copy(self):
-        """Copy geoms in the architecture (mirrors current states)."""
-        cop = self.__class__(p=getattr(self, 'p', {}),
-                             sp=getattr(self, 'sp', {}),
-                             track=getattr(self, 'track', {}),
-                             r=self.r.copy(),
-                             h=self.h.copy(),
-                             flows=self.flows,
-                             points=self.points,
-                             lines=self.lines,
-                             polys=self.polys,
-                             as_copy=True)
-        return cop
-
     def all_at(self, *pt):
         """
         Find all geoms (and buffers) a given is at.

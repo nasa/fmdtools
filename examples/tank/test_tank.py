@@ -56,12 +56,12 @@ class TankTests(unittest.TestCase, CommonTests):
 
     def test_approach_parallelism_notrack(self):
         """Test whether the pump simulates the same when simulated using parallel or
-        staged options"""
+        staged options."""
         self.check_fs_parallel(self.mdl, self.fs, track="default")
 
     def test_approach_parallelism_0(self):
         """Test whether the pump simulates the same when simulated using parallel or
-        staged options"""
+        staged options."""
         self.check_fs_parallel(self.mdl, self.fs)
 
     def test_approach_parallelism_1(self):
@@ -86,7 +86,7 @@ class TankTests(unittest.TestCase, CommonTests):
             self.assertIn(amode, mdl.fxns['human'].aa.acts[aname].m.faults)
 
     def test_different_components(self):
-        """ Tests that model copies have different components"""
+        """Tests that model copies have different components."""
         mdl = Tank()
         mdl_copy = mdl.copy()
         for aname, act, in mdl.fxns['human'].aa.acts.items():
@@ -95,8 +95,8 @@ class TankTests(unittest.TestCase, CommonTests):
                 mdl_copy.fxns['human'].aa.acts[aname].__hash__(), act.__hash__())
 
     def test_local_tstep(self):
-        """ Tests running the model with a different local timestep in the
-        Store_Liquid function"""
+        """Tests running the model with a different local timestep in the
+        Store_Liquid function."""
         mdl_global = Tank(sp={'phases': (('na', 0, 0),
                                          ('operation', 1, 20)),
                               'times': (0, 5, 10, 15, 20), 'dt': 1.0,
@@ -193,7 +193,7 @@ class TankTests(unittest.TestCase, CommonTests):
 
 
 def check_parallel():
-    """Informal test setup for checking that parallel execution is working/consistent"""
+    """Informal test setup for checking that parallel execution is consistent."""
     mdl = Tank()
     fd = FaultDomain(mdl)
     fd.add_all()
@@ -230,11 +230,12 @@ def check_parallel():
 
 
 if __name__ == '__main__':
+    # NOTE: reset expected not to work since args are no longer being saved
 
-    #suite = unittest.TestSuite()
-    #suite.addTest(TankTests("test_local_tstep"))
-    #runner = unittest.TextTestRunner()
-    #runner.run(suite)
+    # suite = unittest.TestSuite()
+    # suite.addTest(TankTests("test_model_reset"))
+    # runner = unittest.TextTestRunner()
+    # runner.run(suite)
 
     #suite = unittest.TestSuite()
     #suite.addTest(TankTests("test_save_load_approach"))
