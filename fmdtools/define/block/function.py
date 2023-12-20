@@ -61,6 +61,8 @@ class Function(Block):
         args_f : dict, optional
             arguments to pass to custom __init__ function.
         """
+        archs = self.find_roletype_initiators("arch")
+        arch_kwargs = {k: v for k, v in kwargs.items() if k in archs}
         super().__init__(name=name, **kwargs)
         self.args_f = args_f
         self.update_contained_modes()
@@ -76,7 +78,17 @@ class Function(Block):
         """
         for at in self.get_roles('arch'):
             arch = getattr(self, at)
-            self.m.faultmodes.update(arch.faultmodes)
+            try:
+                for flex_role in arch.flexible_roles:
+                    role = getattr(arch, flex_role)
+                    for block in role.values():
+                        if hasattr(block, 'm'):
+                            fms = {block.name + '_' + fname: vals
+                                   for fname, vals in block.m.faultmodes.items()}
+                            self.m.faultmodes.update(fms)
+            except AttributeError as e:
+                raise Exception("Class " + self.__class__.__name__ + " missing mode" +
+                                "containter despite containing arch" + arch.name) from e
 
     def get_typename(self):
         return "Function"
@@ -119,17 +131,19 @@ class Function(Block):
         super().update_seed(seed)
         for at in self.get_roles('arch'):
             arch = getattr(self, at)
-            arch.update_seed(self.r.seed)
+            if hasattr(arch, 'r'):
+                arch.update_seed(self.r.seed)
 
     def prop_arch_behaviors(self, proptype, faults, time, run_stochastic):
         """Propagate behaviors into contained architectures."""
-        for at, obj in self.get_roles('arch'):
+        for objname in self.get_roles('arch'):
             try:
+                obj = getattr(self, objname)
                 obj.inject_faults(faults)
                 # TODO: this should be more general
-                if at == 'aa':
+                if objname == 'aa':
                     obj(proptype, time, run_stochastic, self.t.dt)
-                elif at == 'fa':
+                elif objname == 'fa':
                     obj.propagate(proptype, time=time, run_stochastic=run_stochastic)
             except TypeError as e:
                 raise Exception("Poorly specified Architecture: "
@@ -137,7 +151,8 @@ class Function(Block):
 
     def prop_arch_faults_up(self):
         """Get faults from contained components and add to .m."""
-        for at, obj in self.get_roles('arch'):
+        for objname in self.get_roles('arch'):
+            obj = getattr(self, objname)
             self.m.faults.difference_update(obj.faultmodes)
             self.m.faults.update(obj.get_faults())
 

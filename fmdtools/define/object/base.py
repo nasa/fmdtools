@@ -159,6 +159,10 @@ class BaseObject(object):
                                 " self.roletypes: " + str(self.roletypes))
             self.init_roles(roletype, **kwargs)
 
+    def find_roletype_initiators(self, roletype):
+        return tuple([at[len(roletype)+1:]
+                     for at in dir(self) if at.startswith(roletype+'_')])
+
     def init_roles(self, roletype, **kwargs):
         """
         Initialize the role 'roletype' for a given object.
@@ -178,8 +182,7 @@ class BaseObject(object):
         """
         # creates tuple of roles at .roletypes
         container_collection = roletype + 's'
-        roles = tuple([at[len(roletype)+1:]
-                       for at in dir(self) if at.startswith(roletype+'_')])
+        roles = self.find_roletype_initiators(roletype)
         setattr(self, container_collection, roles)
 
         # initialize roles and add as attributes to the object
@@ -227,6 +230,10 @@ class BaseObject(object):
         roles = getattr(self, roletype+'s')
         for role in roles:
             setattr(self, role, getattr(other_obj, role).copy())
+
+    def reset(self):
+        for role in self.get_all_roles():
+            getattr(self, role).reset()
 
     def init_role_dict(self, spec, name_end="s", set_attr=False):
         """

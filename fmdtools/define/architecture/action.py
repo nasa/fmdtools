@@ -59,8 +59,8 @@ class ActionArchitecture(Architecture):
         self.active_actions = set()
         Architecture.__init__(self, **kwargs)
 
-    def build(self, update_seed=True):
-        super().build(update_seed=update_seed)
+    def build(self, **kwargs):
+        super().build(**kwargs)
         if self.initial_action == 'auto':
             initial_action = [act for act, in_degree in self.action_graph.in_degree
                               if in_degree == 0]
@@ -73,7 +73,7 @@ class ActionArchitecture(Architecture):
             raise Exception("Cannot have more than one initial action with" +
                             " finite-state representation")
 
-    def add_act(self, name, actclass, *flownames, **params):
+    def add_act(self, name, actclass, *flownames, **fkwargs):
         """
         Associate an Action with the architecture. Called after add_flow.
 
@@ -92,11 +92,10 @@ class ActionArchitecture(Architecture):
         """
         # same as fxns:
         flows = {fl: self.flows[fl] for fl in flownames}
-        fkwargs = {**{'r': {"seed": self.r.seed}},
-                   **{'t': {'dt': self.sp.dt}},
+        fkwargs = {**{'t': {'dt': self.sp.dt}},
                    **{'sp': {'end_time': self.sp.end_time}},
-                   **params}
-        self.add_flex_role_obj('acts', name, obclass=actclass, flows=flows, **fkwargs)
+                   **fkwargs}
+        self.add_flex_role_obj('acts', name, objclass=actclass, flows=flows, **fkwargs)
 
         # TODO: maybe functions should work like this also?
         self.action_graph.add_node(name)
@@ -105,7 +104,8 @@ class ActionArchitecture(Architecture):
             self.flow_graph.add_node(flow, bipartite=1)
             self.flow_graph.add_edge(name, flow)
 
-        self.add_obj_modes(self.acts[name])
+        if hasattr(self.acts[name], 'm'):
+            self.add_obj_modes(self.acts[name])
 
     def cond_pass(self): # noqa
         return True

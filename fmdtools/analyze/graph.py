@@ -1235,6 +1235,18 @@ class Graph(object):
         plt.show()
         return fig
 
+    def get_obj_state(self, obj):
+        if hasattr(obj, 's'):
+            return asdict(obj.s)
+        else:
+            return {}
+
+    def get_obj_mode(self, obj):
+        if hasattr(obj, 'm'):
+            return [*obj.m.faults]
+        else:
+            return []
+
 
 def sff_one_trial(start_node_selected, g, endtime=5, pi=.1, pr=.1):
     """
@@ -1539,18 +1551,6 @@ class FunctionArchitectureGraph(Graph):
         self.set_flow_nodestates(mdl)
         self.set_fxn_nodestates(mdl)
 
-    def get_obj_state(self, obj):
-        if hasattr(obj, 's'):
-            return asdict(obj.s)
-        else:
-            return {}
-
-    def get_obj_mode(self, obj):
-        if hasattr(obj, 'm'):
-            return [*obj.m.faults]
-        else:
-            return []
-
     def set_fxn_nodestates(self, mdl):
         """
         Attaches state attributes to Graph corresponding to the states of the model
@@ -1740,11 +1740,11 @@ class FunctionArchitectureCompGraph(FunctionArchitectureGraph):
     def nx_from_obj(self, mdl):
         graph = super().nx_from_obj(mdl)
         for fxnname, fxn in mdl.fxns.items():
-            if {**fxn.components, **fxn.actions}:
-                graph.add_nodes_from({**fxn.components, **fxn.actions},
+            if {**fxn.comps, **fxn.acts}:
+                graph.add_nodes_from({**fxn.comps, **fxn.acts},
                                      bipartite=1, label="Block")
                 graph.add_edges_from([(fxnname, comp)
-                                      for comp in {**fxn.components, **fxn.actions}])
+                                      for comp in {**fxn.comps, **fxn.acts}])
         return graph
 
     def set_nx_states(self, mdl):
@@ -1759,7 +1759,7 @@ class FunctionArchitectureCompGraph(FunctionArchitectureGraph):
             fxnfaults[fxnname] = self.get_obj_mode(mdl.fxns[fxnname])
             indicators[fxnname] = fxn.return_true_indicators(self.time)
             for mode in fxnfaults[fxnname].copy():
-                for compname, comp in {**fxn.actions, **fxn.components}.items():
+                for compname, comp in {**fxn.acts, **fxn.comps}.items():
                     compstates[compname] = {}
                     comptypes[compname] = True
                     indicators[compname] = comp.return_true_indicators(self.time)
@@ -2211,7 +2211,7 @@ class ActionArchitectureGraph(Graph):
         states = {}
         faults = {}
         indicators = {}
-        for aname, action in aa.actions.items():
+        for aname, action in aa.acts.items():
             states[aname] = self.get_obj_state(action)
             faults[aname] = self.get_obj_mode(action)
             indicators[aname] = action.return_true_indicators(self.time)

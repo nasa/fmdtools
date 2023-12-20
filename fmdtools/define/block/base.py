@@ -15,8 +15,6 @@ from fmdtools.define.object.base import BaseObject
 from fmdtools.define.container.parameter import Parameter
 from fmdtools.define.container.time import Time
 from fmdtools.analyze.result import Result
-from fmdtools.analyze.common import get_sub_include
-from fmdtools.analyze.history import History
 
 
 class SimParam(Parameter, readonly=True):
@@ -440,7 +438,16 @@ class Block(Simulable):
             flows = {self.flownames.get(fn, fn): flow for fn, flow in flows.items()}
         flows = {**flows}
 
-        Simulable.__init__(self, name=name, **flows, **kwargs)
+        Simulable.__init__(self, name=name, roletypes=['container', 'flow'],
+                           **flows, **kwargs)
+        # send flows from block level to arch level
+        if 'arch' in self.roletypes:
+            archs = self.find_roletype_initiators("arch")
+            b_flows = {f: getattr(self, f) for f in self.flows}
+            arch_kwargs = {k: {**kwargs[k], **{'flows': b_flows}}
+                           if k in kwargs else {'flows': b_flows}
+                           for k in archs}
+            self.init_roletypes('arch', flows=b_flows, **arch_kwargs)
         self.check_flows(flows=flows)
         self.update_seed()
         self.init_hist(h=h)
@@ -601,10 +608,6 @@ class Block(Simulable):
         if hasattr(self, 'h'):
             cop.h = self.h.copy()
         return cop
-
-    def reset(self):
-        for role in self.get_all_roles():
-            getattr(self, role).reset()
 
     def propagate(self, time, faults={}, disturbances={}, run_stochastic=False):
         """

@@ -34,7 +34,8 @@ class Action(Block):
             Whether to run the simulation using stochastic or deterministic behavior
         """
         if time > self.t.time:
-            self.r.update_stochastic_states()
+            if hasattr(self, 'r'):
+                self.r.update_stochastic_states()
         if proptype == 'dynamic':
             if self.t.time < time:
                 self.behavior(time)

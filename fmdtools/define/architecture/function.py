@@ -158,10 +158,11 @@ class FunctionArchitecture(Architecture):
             Parameters to send to __init__ method of the Function superclass
         """
         flows = self.get_flows(*flownames)
-        fkwargs = {**{'r': {"seed": self.r.seed}},
-                   **{'t': {'dt': self.sp.dt}},
+        fkwargs = {**{'t': {'dt': self.sp.dt}},
                    **{'sp': {'end_time': self.sp.end_time}},
                    **fkwargs}
+        if hasattr(self, 'r'):
+            fkwargs = {**{'r': {"seed": self.r.seed}}, **fkwargs}
         self.add_flex_role_obj('fxns', name, objclass=fclass, flows=flows, **fkwargs)
         for flowname in flownames:
             self._fxnflows.append((name, flowname))
@@ -198,16 +199,9 @@ class FunctionArchitecture(Architecture):
                 class_relationship[obj.__class__.__name__] = set(obj.get_flowtypes())
         return class_relationship
 
-    def build(self, require_connections=True, update_seed=True):
-        """
-        Build the model graph after the functions have been added.
-
-        Parameters
-        ----------
-        functionorder : list, optional
-            The order for the functions to be executed in. The default is [].
-        """
-        super().build()
+    def build(self, require_connections=True, **kwargs):
+        """Build the model graph after the functions have been added."""
+        super().build(**kwargs)
         self.staticfxns = OrderedSet([fxnname for fxnname, fxn in self.fxns.items()
                                       if fxn.is_static()])
         self.dynamicfxns = OrderedSet([fxnname for fxnname, fxn in self.fxns.items()
@@ -306,14 +300,17 @@ class FunctionArchitecture(Architecture):
         """
         # Is this adequate? Wouldn't this give it new components?
         # TODO: need to make this for overall arch
-        cop = self.__class__(p=getattr(self, 'p', {}),
-                             sp=getattr(self, 'sp', {}),
-                             track=getattr(self, 'track', {}),
-                             r=self.r.copy(),
-                             h=self.h.copy(),
-                             flows=self.flows,
-                             fxns=self.fxns,
-                             as_copy=True)
+        cargs = dict(p=getattr(self, 'p', {}),
+                     sp=getattr(self, 'sp', {}),
+                     track=getattr(self, 'track', {}),
+                     h=self.h.copy(),
+                     flows=self.flows,
+                     fxns=self.fxns,
+                     as_copy=True)
+        if hasattr(self, 'r'):
+            cargs['r'] = self.r.copy()
+
+        cop = self.__class__(**cargs)
         return cop
 
     def reset(self):
@@ -322,7 +319,7 @@ class FunctionArchitecture(Architecture):
             flow.reset()
         for fxnname, fxn in self.fxns.items():
             fxn.reset()
-        self.r.reset()
+        super().reset()
 
     def return_probdens(self):
         """Return the probability density of the model distributions."""
