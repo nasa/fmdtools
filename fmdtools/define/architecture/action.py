@@ -48,7 +48,7 @@ class ActionArchitecture(Architecture):
     max_action_prop = "until_false"
     proptype = 'dynamic'
     per_timestep = False
-    default_track = ('actions', 'active_actions', 'i')
+    default_track = ('acts', 'flows', 'active_actions', 'i')
     flexible_roles = ['flows', 'acts', 'conds']
     rolename = 'aa'
 
