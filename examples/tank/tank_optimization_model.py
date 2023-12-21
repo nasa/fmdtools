@@ -186,7 +186,7 @@ class Tank(FunctionArchitecture):
     container_p = TankParam
     default_sp = dict(phases=(('na', 0, 0),
                               ('operation', 1, 20)),
-                      times=(0, 5, 10, 15, 20),
+                      end_time=20,
                       units='min')
 
     def init_architecture(self, **kwargs):

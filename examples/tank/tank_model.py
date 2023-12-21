@@ -359,7 +359,7 @@ class Tank(FunctionArchitecture):
     __slots__ = ()
     container_p = TankParam
     default_sp = dict(phases=(('na', 0, 0), ('operation', 1, 20)),
-                      times=(0, 5, 10, 15, 20), units='min')
+                      end_time=20, units='min')
     default_track = {'fxns': {'store_water': {'s': 'level'}}}
 
     def init_architecture(self, **kwargs):

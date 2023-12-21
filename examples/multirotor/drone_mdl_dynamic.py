@@ -12,7 +12,7 @@ from fmdtools.define.container.time import Time
 from fmdtools.define.container.mode import Mode
 from fmdtools.define.block.function import Function
 from fmdtools.define.architecture.function import FunctionArchitecture
-from fmdtools.define.flow.environment import Environment
+from fmdtools.define.environment import Environment
 from fmdtools.define.object.coords import Coords, CoordsParam
 
 import fmdtools.sim as fs
@@ -376,7 +376,7 @@ class Drone(FunctionArchitecture):
                               ('forward', 2, 14),
                               ('descend', 15, 18),
                               ('taxi', 19, 20)),
-                      times=(0, 20),
+                      end_time=20,
                       units='sec')
 
     def init_architecture(self, **kwargs):

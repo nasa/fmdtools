@@ -307,7 +307,7 @@ class Drone(DroneRural):
     default_sp = dict(phases=(('ascend', 0, 0),
                               ('forward', 1, 11),
                               ('taxi', 12, 20)),
-                      times=(0, 30),
+                      end_time=30,
                       units='min',
                       dt=0.1)
 

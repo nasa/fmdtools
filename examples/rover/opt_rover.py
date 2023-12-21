@@ -15,7 +15,7 @@ import numpy as np
 import multiprocess as mp
 
 if __name__ == "__main__":
-    mdl = Rover(sp=SimParam(times=(0, 100), phases=(("start", 0, 30), ("end", 31, 60))))
+    mdl = Rover(sp=SimParam(end_time=100, phases=(("start", 0, 30), ("end", 31, 60))))
     track = {"functions": {"Environment": "in_bound"}, "flows": {"ground": "all"}}
     rover_prob = search.ProblemInterface(
         "rover_problem", mdl, pool=mp.Pool(5), staged=True, track=track
@@ -37,8 +37,7 @@ if __name__ == "__main__":
     rover_prob.add_objectives(
         "drive_faults", end_dist="end_dist", tot_deviation="tot_deviation"
     )
-    
-    
+
     pymoo_prob = rover_prob.to_pymoo_problem(objectives="end_dist")
     algorithm = PatternSearch(x0=np.array([0.0, 0.0, 0.0]))
     # res = minimize(pymoo_prob, algorithm, verbose=True)
