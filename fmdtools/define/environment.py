@@ -32,6 +32,12 @@ class Environment(CommsFlow):
     ...    coords_c = ExampleCoords
     ...    arch_ga = ExGeomArch
     >>> env = ExampleEnvironment('env')
+    >>> env.create_hist([1.0])
+    c.r.probdens:                   array(1)
+    c.st:                           array(1)
+    ga.points.ex_point:             array(1)
+    ga.lines.ex_line:               array(1)
+    ga.polys.ex_poly:               array(1)
     """
 
     slots = ["c", "r", "ga"]
@@ -41,12 +47,12 @@ class Environment(CommsFlow):
     default_track = ('s', 'i', 'c', 'ga')
     all_possible = ('s', 'i', 'c', 'r', 'ga')
 
-    def __init__(self, name, glob=[], p={}, s={}, r={}, c={}, ga={}):
+    def __init__(self, name, glob=[], p={}, s={}, r={}, c={}, ga={}, track='default'):
         if 'p' not in c and self.coords_c.container_p == self.container_p:
             c = {**c, 'p': p}
         if 'p' not in ga and self.arch_ga.container_p == self.container_p:
             ga = {**ga, 'p': p}
-        super().__init__(name, glob=glob, p=p, s=s)
+        super().__init__(name, glob=glob, p=p, s=s, track=track)
         self.init_roles('container', r=r)
         self.init_roles('coords', c=c)
         self.init_roles('arch', ga=ga)
@@ -71,24 +77,24 @@ class Environment(CommsFlow):
         Copies should be identical but independent after copying, e.g.:
 
         >>> e = ExampleEnvironment("env")
-        >>> e.ga.geoms['ex_point'].s.occupied = True
-        >>> e.c.h[0, 0] = 1
+        >>> e.ga.points['ex_point'].s.occupied = True
+        >>> e.c.st[0, 0] = 1
 
         Given these changes, the copy should have the same states (and not default):
 
         >>> d = e.copy()
-        >>> d.ga.geoms['ex_point'].s.occupied
+        >>> d.ga.points['ex_point'].s.occupied
         True
-        >>> d.c.h[0, 0]
+        >>> d.c.st[0, 0]
         1.0
 
         It should also be independent, meaning changes don't effect the original:
 
-        >>> d.c.h[0, 1] = 1.0
-        >>> e.c.h[0, 1]
+        >>> d.c.st[0, 1] = 1.0
+        >>> e.c.st[0, 1]
         0.0
-        >>> d.ga.geoms['ex_line'].s.occupied = True
-        >>> e.ga.geoms['ex_line'].s.occupied
+        >>> d.ga.lines['ex_line'].s.occupied = True
+        >>> e.ga.lines['ex_line'].s.occupied
         False
         """
         cop = super().copy(glob=glob, p=p, s=s)
@@ -118,29 +124,6 @@ class Environment(CommsFlow):
 
     def return_probdens(self):
         return self.r.return_probdens() * self.c.r.return_probdens()
-
-    def create_hist(self, timerange):
-        """
-        Creates/returns history of states at self.h.
-
-        Examples
-        --------
-        >>> e = ExampleEnvironment("env")
-        >>> e.create_hist([1.0], 'default').flatten()
-        c.h:                            array(1)
-        ga.geoms.ex_point.s.occupied:   array(1)
-        ga.geoms.ex_line.s.occupied:    array(1)
-        ga.geoms.ex_poly.s.occupied:    array(1)
-        """
-        self.h = CommsFlow.create_hist(self, timerange)
-        track = self.get_track(track, all_possible=self.all_possible)
-        track = [t for t in track if t not in ('s', 'i')]
-        for att in track:
-            val = getattr(self, att)
-            val_h = val.create_hist(timerange, get_sub_include(att, track))
-            if val_h:
-                self.h[att] = val_h
-        return self.h
 
 
 class ExampleEnvironment(Environment):
