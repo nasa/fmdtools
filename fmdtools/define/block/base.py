@@ -443,11 +443,17 @@ class Block(Simulable):
         # send flows from block level to arch level
         if 'arch' in self.roletypes:
             self.init_roletypes('arch', **self.create_arch_kwargs(**kwargs))
+            self.update_contained_modes()
         self.check_flows(flows=flows)
         self.update_seed()
         self.init_hist(h=h)
 
     def create_arch_kwargs(self, **kwargs):
+        """
+        Create keyword arguments for contained architectures.
+
+        Enables the passing of flows from block to contained architecture level.
+        """
         archs = self.find_roletype_initiators("arch")
         b_flows = {f: getattr(self, f) for f in self.flows}
         arch_kwargs = {}
@@ -460,6 +466,29 @@ class Block(Simulable):
                 arch_kwargs[k] = {'flows': b_flows}
 
         return {'flows': b_flows, **arch_kwargs}
+
+    def update_contained_modes(self):
+        """
+        Add contained faultmodes for the container at to the Function model.
+
+        Parameters
+        ----------
+        at : str ('ca' or 'aa')
+            Role to update (for ComponentArchitecture or ActionArchitecture roles)
+        """
+        for at in self.get_roles('arch'):
+            arch = getattr(self, at)
+            try:
+                for flex_role in arch.flexible_roles:
+                    role = getattr(arch, flex_role)
+                    for block in role.values():
+                        if hasattr(block, 'm'):
+                            fms = {block.name + '_' + fname: vals
+                                   for fname, vals in block.m.faultmodes.items()}
+                            self.m.faultmodes.update(fms)
+            except AttributeError as e:
+                raise Exception("Class " + self.__class__.__name__ + " missing mode" +
+                                "containter despite containing arch" + arch.name) from e
 
     def check_flows(self, flows={}):
         """

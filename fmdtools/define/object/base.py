@@ -425,6 +425,8 @@ class BaseObject(object):
         hist : History
             A history of each recorded block property over the given timerange.
         """
+        if self.name == "detect_hazard":
+            a = 1
         if hasattr(self, 'h'):
             return self.h
         else:

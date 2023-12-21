@@ -65,30 +65,6 @@ class Function(Block):
         arch_kwargs = {k: v for k, v in kwargs.items() if k in archs}
         super().__init__(name=name, **kwargs)
         self.args_f = args_f
-        self.update_contained_modes()
-
-    def update_contained_modes(self):
-        """
-        Add contained faultmodes for the container at to the Function model.
-
-        Parameters
-        ----------
-        at : str ('ca' or 'aa')
-            Role to update (for ComponentArchitecture or ActionArchitecture roles)
-        """
-        for at in self.get_roles('arch'):
-            arch = getattr(self, at)
-            try:
-                for flex_role in arch.flexible_roles:
-                    role = getattr(arch, flex_role)
-                    for block in role.values():
-                        if hasattr(block, 'm'):
-                            fms = {block.name + '_' + fname: vals
-                                   for fname, vals in block.m.faultmodes.items()}
-                            self.m.faultmodes.update(fms)
-            except AttributeError as e:
-                raise Exception("Class " + self.__class__.__name__ + " missing mode" +
-                                "containter despite containing arch" + arch.name) from e
 
     def get_typename(self):
         return "Function"
