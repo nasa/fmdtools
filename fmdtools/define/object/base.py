@@ -126,18 +126,29 @@ class BaseObject(object):
             self.name = self.__class__.__name__.lower()
         else:
             self.name = name
-        self.init_track(track)
         self.init_indicators()
         self.init_roletypes(*roletypes, **kwargs)
+        self.init_track(track)
 
     def init_track(self, track):
-        """Add .track attribute."""
+        """Add .track attribute based on default and input."""
         if not track:
-            self.track = []
+            track = []
         elif track == 'default':
-            self.track = self.default_track
+            track = self.default_track
+        elif track == 'all':
+            track = self.get_all_possible_track()
+        elif track == 'none':
+            track = []
         else:
-            self.track = track
+            track = track
+        # make sure role dict attributes are also tracked.
+        self.track = []
+        for t in track:
+            if t in self.roledicts:
+                self.track.extend(getattr(self, t))
+            else:
+                self.track.append(t)
 
     def init_roletypes(self, *roletypes, **kwargs):
         """
@@ -365,8 +376,7 @@ class BaseObject(object):
 
     def get_all_possible_track(self):
         """Get all possible tracking options."""
-        rs = [role for role in self.get_all_roles()
-              if role not in self.immutable_roles]
+        rs = self.get_all_roles(with_immutable=False)
         return rs + ['i'] + self.rolevars
 
     def get_role_memory(self, rolename):
@@ -378,21 +388,27 @@ class BaseObject(object):
             mem = sys.getsizeof(role)
         return mem
 
-    def get_roles(self, *roletypes):
+    def get_roles(self, *roletypes, with_immutable=True):
         """Get all roles."""
         if not roletypes:
             roletypes = self.roletypes
-        return [role for roletype in roletypes for role in getattr(self, roletype+'s')]
+        return [role for roletype in roletypes for role in getattr(self, roletype+'s')
+                if with_immutable or role not in self.immutable_roles]
 
-    def get_roledicts(self, *roledicts):
+    def get_roledicts(self, *roledicts, with_immutable=True):
         """Get all roles in roledicts."""
         if not roledicts:
             roledicts = self.roledicts
-        return [role for roledict in roledicts for role in getattr(self, roledict)]
+        return [role for roledict in roledicts for role in getattr(self, roledict)
+                if with_immutable or roledict not in self.immutable_roles]
 
-    def get_all_roles(self):
+    def get_all_roles(self, with_immutable=True):
         """Get all roles in the object."""
-        return self.get_roles() + self.get_roledicts() + self.rolevars
+        roles = self.get_roles(with_immutable=with_immutable)
+        roledict_roles = self.get_roledicts(with_immutable=with_immutable)
+        rolevars = [role for role in self.rolevars
+                    if with_immutable or role not in self.immutable_roles]
+        return roles + roledict_roles + rolevars
 
     def get_memory(self):
         """

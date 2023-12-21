@@ -11,8 +11,6 @@ Future:
 from fmdtools.define.object.base import BaseObject
 from fmdtools.define.container.parameter import Parameter
 from fmdtools.define.container.state import State
-from fmdtools.analyze.common import get_sub_include
-from fmdtools.analyze.history import History
 from fmdtools.analyze.common import setup_plot, consolidate_legend
 
 from shapely import LineString, Point, Polygon
@@ -42,15 +40,16 @@ class Geom(BaseObject):
     default_track = ['s']
     all_possible = ['s']
     roledicts = ["buffers"]
+    immutable_roles = BaseObject.immutable_roles + ['buffer']
 
-    def __init__(self, *args, s={}, p={}, **kwargs):
-        super().__init__(s=s, p=p, **kwargs)
-        self.immutable_roles = [*BaseObject.immutable_roles]
+    def __init__(self, *args, s={}, p={}, track='default', **kwargs):
+        super().__init__(s=s, p=p, track=[], **kwargs)
         self.shape = self.shapely_class(*self.p.as_args())
+        # set buffer shapes
         self.init_role_dict("buffer")
-        for b, dist in self.buffers.items():
-            setattr(self, b, self.shape.buffer(dist))
-            self.immutable_roles.append(b)
+        for buffer, rad in self.buffers.items():
+            setattr(self, buffer, self.shape.buffer(rad))
+        self.init_track(track=track)
 
     def at(self, pt, buffername='shape'):
         """
