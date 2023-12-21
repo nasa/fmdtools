@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 """Module for creating environments."""
 from fmdtools.define.container.rand import Rand
-from fmdtools.analyze.common import get_sub_include
 from fmdtools.define.flow.commsflow import CommsFlow
 from fmdtools.define.object.coords import Coords, ExampleCoords
 from fmdtools.define.architecture.geom import GeomArchitecture, ExGeomArch
@@ -47,12 +46,13 @@ class Environment(CommsFlow):
     default_track = ('s', 'i', 'c', 'ga')
     all_possible = ('s', 'i', 'c', 'r', 'ga')
 
-    def __init__(self, name, glob=[], p={}, s={}, r={}, c={}, ga={}, track='default'):
+    def __init__(self, name='', glob=[], p={}, s={}, r={}, c={}, ga={},
+                 track='default'):
         if 'p' not in c and self.coords_c.container_p == self.container_p:
             c = {**c, 'p': p}
         if 'p' not in ga and self.arch_ga.container_p == self.container_p:
             ga = {**ga, 'p': p}
-        super().__init__(name, glob=glob, p=p, s=s, track=track)
+        super().__init__(name=name, glob=glob, p=p, s=s, track=track)
         self.init_roles('container', r=r)
         self.init_roles('coords', c=c)
         self.init_roles('arch', ga=ga)

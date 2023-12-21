@@ -154,22 +154,18 @@ class Coords(BaseObject):
     container_p = CoordsParam
     container_r = Rand
     roledicts = ['points', 'collections', 'features', 'states']
-    default_track = []
+    immutable_roles = BaseObject.immutable_roles + ['points', 'collections', 'features']
+    default_track = ["r", "states"]
 
     def __init__(self, *args, track='default', **kwargs):
         """Initialize class with properties in init_properties."""
         self._args = args
         self._kwargs = kwargs
-        super().__init__(*args, **kwargs)
+        super().__init__(*args, track=[], **kwargs)
         self.init_grids(*args, **kwargs)
         self.init_properties(*args, **kwargs)
         self.build()
-        if not self.default_track:
-            self.default_track = ['r', *self.states]
         self.init_track(track)
-        self.immutable_roles = ([*BaseObject.immutable_roles] +
-                                [s for s in self.get_roledicts()
-                                 if s not in self.states])
 
     def check_role(self, roletype, rolename):
         """Check that the rolename for coords is 'c'."""

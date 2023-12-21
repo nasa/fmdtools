@@ -220,9 +220,9 @@ class GroundGeomArch(GeomArchitecture):
     def init_architecture(self, **kwargs):
         """Initialize geometry with line and start/end points."""
         ls = self.p.gen_ls()
-        self.add_geom('line', PathLine, p={'xys': ls})
-        self.add_geom('start', Dest, p={'x': ls[0][0], 'y': ls[0][1]})
-        self.add_geom('end', Dest, p={'x': ls[-1][0], 'y': ls[-1][1]})
+        self.add_line('line', PathLine, p={'xys': ls})
+        self.add_point('start', Dest, p={'x': ls[0][0], 'y': ls[0][1]})
+        self.add_point('end', Dest, p={'x': ls[-1][0], 'y': ls[-1][1]})
 
 
 class GroundState(State):
@@ -238,15 +238,15 @@ class Ground(Environment):
 
     def on_course(self, pos_state):
         """Check if the rover is on_course (i.e., within the 'on' buffer)."""
-        return self.ga.geoms['line'].at(pos_state.get('x', 'y'), 'on')
+        return self.ga.lines['line'].at(pos_state.get('x', 'y'), 'on')
 
     def at_end(self, pos_state):
         """Check if the rover is at the end point, accounting for the 'on' buffer)."""
-        return self.ga.geoms['end'].at(pos_state.get("x", "y"), 'on')
+        return self.ga.points['end'].at(pos_state.get("x", "y"), 'on')
 
     def end_dist(self, pos_state):
         """Calculate minimum distance between the end point and the rover."""
-        return self.ga.geoms['end'].on.distance(Point(pos_state.get("x", "y")))
+        return self.ga.points['end'].on.distance(Point(pos_state.get("x", "y")))
 
     def max_line_dist(self, pos_hist):
         """Calculate the maximum distance the rover has deviated from its path."""
@@ -254,7 +254,7 @@ class Ground(Environment):
         yhist = pos_hist.y
         max_dist = 0.0
         for i, x in enumerate(xhist):
-            dist = self.ga.geoms['line'].shape.distance(Point(x, yhist[i]))
+            dist = self.ga.lines['line'].shape.distance(Point(x, yhist[i]))
             if dist > max_dist:
                 max_dist = dist
         return max_dist
@@ -722,10 +722,10 @@ class Perception(Function):
         xy = self.pos.s.get('x', 'y')
         # calculate the unit vector to determine the direction of the line at
         # the nearest point in the line from the current location
-        ux, uy = self.ground.ga.geoms['line'].vect_at_shape(xy)
+        ux, uy = self.ground.ga.lines['line'].vect_at_shape(xy)
         # calculates the direction the rover needs to travel to reach the
         # nearest point in the line
-        dx, dy = self.ground.ga.geoms['line'].vect_to_shape(xy)
+        dx, dy = self.ground.ga.lines['line'].vect_to_shape(xy)
         self.video.s.put(lin_ux=ux[0], lin_uy=uy[0],
                          lin_dx=dx[0], lin_dy=dy[0], quality=1.0)
 
@@ -1101,7 +1101,7 @@ if __name__ == "__main__":
                                      time_groups=['nominal'])
     mdl.flows['ground'].ga.show(fig=fig, ax=ax)
     fig, ax = hist.plot_trajectories('flows.pos.s.x', 'flows.pos.s.y')
-    
+
     mdl = Rover(p={'ground': GroundParam(linetype='turn')})
     ec, hist = prop.nominal(mdl)
 
