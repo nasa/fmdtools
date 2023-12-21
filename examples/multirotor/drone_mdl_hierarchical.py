@@ -42,7 +42,7 @@ class OverallAffectDOFState(State):
     amp_factor: float = 1.0
 
 
-class AffectDOFArch(ComponentArchitecture):
+class LineArchParam(Parameter):
     """
     Line Architecture defined by parameter 'archtype'.
 
@@ -65,7 +65,6 @@ class AffectDOFArch(ComponentArchitecture):
     opposite:
         Component on the opposite side of a given component. Used for reconfiguration.
     """
-
     archtype: str = 'quad'
     forward: dict = dict()
     upward: dict = dict()
@@ -74,22 +73,17 @@ class AffectDOFArch(ComponentArchitecture):
     opposite: dict = dict()
 
     def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
         if self.archtype == "quad":
-            self.make_components(Line, 'lf', 'lr', 'rf', 'rr')
             self.forward.update({'rf': 0.5, 'lf': 0.5, 'lr': -0.5, 'rr': -0.5})
             self.lr_dict.update({'l': {'lf', 'lr'}, 'r': {'rf', 'rr'}})
             self.fr_dict.update({'f': {'lf', 'rf'}, 'r': {'lr', 'rr'}})
         elif self.archtype == "hex":
-            self.make_components(Line, 'rf', 'lf', 'lr', 'rr', 'r', 'f')
             self.forward.update({'rf': 0.5, 'lf': 0.5, 'lr': -0.5,
                                 'rr': -0.5, 'r': -0.75, 'f': 0.75})
             self.lr_dict.update({'l': {'lf', 'lr'}, 'r': {'rf', 'rr'}})
             self.fr_dict.update({'f': {'lf', 'rf', 'f'}, 'r': {'lr', 'rr', 'r'}})
             self.opposite.update({'f': 'r', 'rf': 'lr', 'rr': 'lf'})
         elif self.archtype == "oct":
-            self.make_components(Line, 'lf', 'rf', 'lf2', 'rf2',
-                                 'lr', 'rr', 'lr2', 'rr2')
             self.forward.update({'rf': 0.5, 'lf': 0.5, 'lr': -0.5, 'rr': -
                                 0.5, 'rf2': 0.5, 'lf2': 0.5, 'lr2': -0.5, 'rr2': -0.5})
             self.lr_dict.update({'l': {'lf', 'lr', 'lf2', 'lr2'},
@@ -97,8 +91,16 @@ class AffectDOFArch(ComponentArchitecture):
             self.fr_dict.update({'f': {'lf', 'rf', 'lf2', 'rf2'},
                                 'r': {'lr', 'rr', 'lr2', 'rr2'}})
             self.opposite.update({"lf": "rr", "rf": "lr", "rf2": "lr2", "rr2": "lf2"})
-        self.upward = {c: 1.0 for c in self.components}
+        self.upward = {c: 1.0 for c in self.forward}
         self.opposite.update({v: k for k, v in self.opposite.items()})
+
+
+class AffectDOFArch(ComponentArchitecture):
+    container_p = LineArchParam
+
+    def init_architecture(self, **kwargs):
+        for compname in self.p.forward:
+            self.add_comp(compname, Line)
 
 
 class AffectDOF(AffectDOFDynamic):
@@ -219,7 +221,6 @@ class Drone(DynDrone):
     container_p = DroneParam
 
     def init_architecture(self, **kwargs):
-        FunctionArchitecture().__init__(self, **kwargs)
         # add flows to the model
         self.add_flow('force_st', Force)
         self.add_flow('force_lin', Force)
@@ -264,7 +265,7 @@ if __name__ == "__main__":
     rr2_samp = FaultSample(rr2_faults, phasemap=PhaseMap(mdl.sp.phases))
     rr2_samp.add_fault_phases()
 
-    ec, hist = fs.propagate.fault_sample(mdl, rr2_samp, staged=True, pool=mp.Pool(4))
+    ec, hist = fs.propagate.fault_sample(mdl, rr2_samp , staged=True, pool=mp.Pool(4))
 
     # plot a single scen (at t=8)
     fault_kwargs = {'alpha': 0.2, 'color': 'red'}

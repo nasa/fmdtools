@@ -654,7 +654,7 @@ class Drone(FunctionArchitecture):
     default_sp = dict(phases=(('taxi', 0, 0),
                               ('move', 1, 11),
                               ('land', 12, 20)),
-                      times=(0, 30), units='min')
+                      end_time=30, units='min')
 
     def init_architecture(self, **kwargs):
         # add flows to the model

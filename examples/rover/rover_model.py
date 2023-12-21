@@ -957,7 +957,7 @@ class Rover(FunctionArchitecture):
 
     __slots__ = ()
     container_p = RoverParam
-    default_sp = dict(times=(0, 150),
+    default_sp = dict(end_time=150,
                       phases=(("start", 0, 30), ("end", 31, 150)),
                       end_condition="indicate_finished")
 

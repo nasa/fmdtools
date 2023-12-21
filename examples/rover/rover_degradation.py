@@ -42,7 +42,7 @@ class DriveRand(Rand):
 class DriveDegradation(Function):
     container_s = DriveDegradationStates
     container_r = DriveRand
-    default_sp = dict(times=(0, 100))
+    default_sp = dict(end_time=100)
 
     def __init__(self, name, **kwargs):
         super().__init__(name, **kwargs)
@@ -82,7 +82,7 @@ class PSFDegradationShort(Function):
     container_s = PSFDegradationShortStates
     container_r = PSFDegShortRand
     container_p = PSFShortParams
-    default_sp = dict(times=(0, 100))
+    default_sp = dict(end_time=100)
 
     def __init__(self, name, **kwargs):
         super().__init__(name, **kwargs)
@@ -113,7 +113,7 @@ class PSFDegradationLongStates(State):
 class PSFDegradationLong(Function):
     container_s = PSFDegradationLongStates
     container_p = LongParams
-    default_sp = dict(times=(0, 100))
+    default_sp = dict(end_time=100)
 
     def __init__(self, name, **kwargs):
         super().__init__(name, **kwargs)

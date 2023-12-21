@@ -277,16 +277,16 @@ class DistEE(Function):
         >>> d.ee_in.s.effort = 2.0
         >>> d.behavior(1.0)
         >>> d.ee_mot
-        ee_mot EE flow: EEState(rate=1.0, effort=2.0)
+        ee EE flow: EEState(rate=1.0, effort=2.0)
 
         while fault modes modify this relationship::
         >>> d = DistEE()
         >>> d.m.add_fault("short")
         >>> d.behavior(1.0)
         >>> d.ee_mot
-        ee_mot EE flow: EEState(rate=1.0, effort=0.0)
+        ee EE flow: EEState(rate=1.0, effort=0.0)
         >>> d.ee_in
-        ee_in EE flow: EEState(rate=10.0, effort=1.0)
+        ee EE flow: EEState(rate=10.0, effort=1.0)
         """
         if self.m.has_fault("short"):
             self.s.put(ee_tr=10.0, ee_te=0.0)
@@ -739,7 +739,7 @@ class Drone(FunctionArchitecture):
     """Static multirotor drone model (executes in a single timestep)."""
 
     __slots__ = ()
-    default_sp = {'times': (0, )}
+    default_sp = {'end_time': 0}
 
     def init_architecture(self, **kwargs):
         # add flows to the model
