@@ -41,7 +41,7 @@ class GeomArchitecture(Architecture):
     lines.ex_line.s.occupied:     array(101)
     polys.ex_poly.s.occupied:     array(101)
     >>> ega.return_mutables()
-    ((), (-0.1, 0, 0.0, 1), False, False, False)
+    ((-0.1, 0, 0.0, 1), False, False, False)
     """
 
     container_p = Parameter
@@ -190,7 +190,7 @@ class GeomArchitecture(Architecture):
 class ExGeomArch(GeomArchitecture):
     """Example Geometric Architecture for testing etc."""
 
-    def init_architecture(self):
+    def init_architecture(self, **kwargs):
         """Initialize example geoms."""
         self.add_point("ex_point", ExPoint)
         self.add_line("ex_line", ExLine)

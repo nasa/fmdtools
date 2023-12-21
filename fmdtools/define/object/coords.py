@@ -150,13 +150,13 @@ class Coords(BaseObject):
     """
 
     __slots__ = ("p", "r", "grid", "pts", "points", "collections", "features", "states",
-                 "properties", "_args", "_kwargs" )
+                 "properties", "_args", "_kwargs")
     container_p = CoordsParam
     container_r = Rand
     roledicts = ['points', 'collections', 'features', 'states']
     default_track = []
 
-    def __init__(self, *args, track={}, **kwargs):
+    def __init__(self, *args, track='default', **kwargs):
         """Initialize class with properties in init_properties."""
         self._args = args
         self._kwargs = kwargs

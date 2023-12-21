@@ -18,7 +18,7 @@ from rover_model import Rover, DegParam
 
 
 
-    
+
 class DriveDegradationStates(State):
     wear: float = 0.0
     corrosion: float = 0.0
