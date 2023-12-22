@@ -102,17 +102,12 @@ class ActionArchitecture(Architecture):
         **kwargs : any
             kwargs to instantiate the Action with.
         """
-        # same as fxns:
-        flows = {fl: self.flows[fl] for fl in flownames}
-        fkwargs = {**{'t': {'dt': self.sp.dt}},
-                   **{'sp': {'end_time': self.sp.end_time}},
-                   **fkwargs}
-
-        self.add_flex_role_obj('acts', name, objclass=actclass, flows=flows, **fkwargs)
+        self.add_sim('acts', name, actclass, *flownames, **fkwargs)
 
         # TODO: maybe functions should work like this also?
         self.action_graph.add_node(name)
         self.flow_graph.add_node(name, bipartite=0)
+        flows = {fl: self.flows[fl] for fl in flownames}
         for flow in flows:
             self.flow_graph.add_node(flow, bipartite=1)
             self.flow_graph.add_edge(name, flow)

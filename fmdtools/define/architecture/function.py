@@ -139,7 +139,7 @@ class FunctionArchitecture(Architecture):
     def inject_faults(self, faults):
         Architecture.inject_faults(self, 'fxns', faults)
 
-    def add_fxn(self, name, fclass, *flownames, args_f='None', **fkwargs):
+    def add_fxn(self, name, fclass, *flownames, **fkwargs):
         """
         Instantiate a given function in the model.
 
@@ -157,14 +157,7 @@ class FunctionArchitecture(Architecture):
         fkwargs : dict
             Parameters to send to __init__ method of the Function superclass
         """
-        flows = self.get_flows(*flownames)
-        fkwargs = {**{'t': {'dt': self.sp.dt}},
-                   **{'sp': {'end_time': self.sp.end_time}},
-                   **fkwargs}
-        if hasattr(self, 'r'):
-            fkwargs = {**{'r': {"seed": self.r.seed}}, **fkwargs}
-
-        self.add_flex_role_obj('fxns', name, objclass=fclass, flows=flows, **fkwargs)
+        self.add_sim('fxns', name, fclass, *flownames, **fkwargs)
         for flowname in flownames:
             self._fxnflows.append((name, flowname))
         self.functionorder.update([name])

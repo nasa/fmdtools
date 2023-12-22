@@ -37,15 +37,7 @@ class ComponentArchitecture(Architecture):
         **kwargs : any
             kwargs to instantiate the Action with.
         """
-        # same as fxns:
-        flows = {fl: self.flows[fl] for fl in flownames}
-        fkwargs = {**{'t': {'dt': self.sp.dt}},
-                   **{'sp': {'end_time': self.sp.end_time}},
-                   **kwargs}
-        if hasattr(self, 'r'):
-            fkwargs = {**{'r': {"seed": self.r.seed}}, **fkwargs}
-        self.add_flex_role_obj('comps', name, objclass=compclass,
-                               flows=flows, **fkwargs)
+        self.add_sim('comps', name, compclass, *flownames, **kwargs)
 
         if hasattr(self.comps[name], 'm'):
             self.add_obj_modes(self.comps[name])

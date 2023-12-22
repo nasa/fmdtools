@@ -11,6 +11,7 @@ from fmdtools.define.flow.base import Flow
 from fmdtools.define.block.base import Simulable
 from fmdtools.define.object.base import init_obj
 from fmdtools.analyze.common import get_sub_include
+from recordclass import asdict
 import time
 
 
@@ -156,6 +157,32 @@ class Architecture(Simulable):
         for name in names:
             self.add_flow(name, fclass=fclass, **kwargs)
 
+    def add_sim(self, flex_role, name, simclass, *flownames, **kwargs):
+        """
+        Add a Simulable to the given flex_role.
+
+        Parameters
+        ----------
+        flex_role : str
+            Name of the flexible role to add to.
+        name : str
+            Name to give the Simulable.
+        simclass: Simulable
+            Simulable to instantiate.
+        flownames : list
+            List of flows to associate with the function.
+        **kwargs : kwargs
+            Flows, dicts for non-default values to p, s, etc.
+        """
+        flows = self.get_flows(*flownames, all_if_empty=False)
+        fkwargs = {**{'sp': asdict(self.sp)}, **kwargs}
+        if hasattr(self, 'r'):
+            fkwargs = {**{'r': {"seed": self.r.seed}}, **fkwargs}
+        if not self.sp.use_local:
+            fkwargs = {**{'t': {'dt': self.sp.dt}}, **fkwargs}
+
+        self.add_flex_role_obj(flex_role, name, objclass=simclass, flows=flows, **fkwargs)
+
     def init_architecture(self, *args, **kwargs):
         """Use to initialize architecture."""
         return 0
@@ -182,9 +209,9 @@ class Architecture(Simulable):
         if hasattr(self, 'h'):
             self.h = self.h.flatten()
 
-    def get_flows(self, *flownames):
+    def get_flows(self, *flownames, all_if_empty=True):
         """Return a list of the model flow objects."""
-        if not flownames:
+        if all_if_empty and not flownames:
             flownames = self.flows
         return {flowname: self.flows[flowname] for flowname in flownames}
 

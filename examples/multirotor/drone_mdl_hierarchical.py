@@ -54,53 +54,91 @@ class LineArchParam(Parameter):
 
     Fields
     -------
-    forward : dict
-        Correction factors for moving forward (based on which rotors are in front).
-    upward: dict
-        Correction factors for moving upward (1.0 unless in a recovery mode).
+    components: tuple
+        Set of component names for the lines named using the convention for the str:
+        0: l/r - left or right
+        1: f/r - front or rear
+        3: /2: - if 2, this is a secondary rotor in a similar location.
     lr_dict: dict
         Left/right dictionary. Has structure {"l": {<left components>}, ...}
     fr_dict: dict
         Front/rear dictionary. Has structure {'f':{<front components>}, ...}
     opposite:
         Component on the opposite side of a given component. Used for reconfiguration.
+
+    Examples
+    --------
+    >>> LineArchParam()
+    LineArchParam(archtype='quad', components=('lf', 'lr', 'rf', 'rr'), lr_dict={'l': ('lf', 'lr'), 'r': ('rf', 'rr')}, fr_dict={'f': ('lf', 'rf'), 'r': ('lr', 'rr')}, opposite={'rf': 'lr', 'rr': 'lf', 'lr': 'rf', 'lf': 'rr'})
+    >>> LineArchParam(archtype='hex')
+    LineArchParam(archtype='hex', components=('lf', 'lr', 'rf', 'rr', 'f', 'r'), lr_dict={'l': ('lf', 'lr'), 'r': ('rf', 'rr')}, fr_dict={'f': ('lf', 'rf', 'f'), 'r': ('lr', 'rr', 'r')}, opposite={'rf': 'lr', 'rr': 'lf', 'f': 'r', 'lr': 'rf', 'lf': 'rr', 'r': 'f'})
+    >>> LineArchParam(archtype='oct')
+    LineArchParam(archtype='oct', components=('lf', 'lr', 'rf', 'rr', 'lf2', 'lr2', 'rf2', 'rr2'), lr_dict={'l': ('lf', 'lr', 'lf2', 'lr2'), 'r': ('rf', 'rr', 'rf2', 'rr2')}, fr_dict={'f': ('lf', 'rf', 'lf2', 'rf2'), 'r': ('lr', 'rr', 'lr2', 'rr2')}, opposite={'rf': 'lr', 'rr': 'lf', 'rf2': 'lr2', 'rr2': 'lf2', 'lr': 'rf', 'lf': 'rr', 'lr2': 'rf2', 'lf2': 'rr2'})
     """
+
     archtype: str = 'quad'
-    forward: dict = dict()
-    upward: dict = dict()
+    components: tuple = ()
     lr_dict: dict = dict()
     fr_dict: dict = dict()
     opposite: dict = dict()
 
     def __init__(self, *args, **kwargs):
-        if self.archtype == "quad":
-            self.forward.update({'rf': 0.5, 'lf': 0.5, 'lr': -0.5, 'rr': -0.5})
-            self.lr_dict.update({'l': {'lf', 'lr'}, 'r': {'rf', 'rr'}})
-            self.fr_dict.update({'f': {'lf', 'rf'}, 'r': {'lr', 'rr'}})
-        elif self.archtype == "hex":
-            self.forward.update({'rf': 0.5, 'lf': 0.5, 'lr': -0.5,
-                                'rr': -0.5, 'r': -0.75, 'f': 0.75})
-            self.lr_dict.update({'l': {'lf', 'lr'}, 'r': {'rf', 'rr'}})
-            self.fr_dict.update({'f': {'lf', 'rf', 'f'}, 'r': {'lr', 'rr', 'r'}})
-            self.opposite.update({'f': 'r', 'rf': 'lr', 'rr': 'lf'})
-        elif self.archtype == "oct":
-            self.forward.update({'rf': 0.5, 'lf': 0.5, 'lr': -0.5, 'rr': -
-                                0.5, 'rf2': 0.5, 'lf2': 0.5, 'lr2': -0.5, 'rr2': -0.5})
-            self.lr_dict.update({'l': {'lf', 'lr', 'lf2', 'lr2'},
-                                'r': {'rf', 'rr', 'rf2', 'rr2'}})
-            self.fr_dict.update({'f': {'lf', 'rf', 'lf2', 'rf2'},
-                                'r': {'lr', 'rr', 'lr2', 'rr2'}})
-            self.opposite.update({"lf": "rr", "rf": "lr", "rf2": "lr2", "rr2": "lf2"})
-        self.upward = {c: 1.0 for c in self.forward}
-        self.opposite.update({v: k for k, v in self.opposite.items()})
+        archtype = self.get_true_field('archtype', *args, **kwargs)
+        if archtype == 'quad':
+            components = ('lf', 'lr', 'rf', 'rr')
+            lr_dict = {'l': ('lf', 'lr'), 'r': ('rf', 'rr')}
+            fr_dict = {'f': ('lf', 'rf'), 'r': ('lr', 'rr')}
+            opposite = {'rf': 'lr', 'rr': 'lf'}
+        elif archtype == 'hex':
+            components = ('lf', 'lr', 'rf', 'rr', 'f', 'r')
+            lr_dict = {'l': ('lf', 'lr'), 'r': ('rf', 'rr')}
+            fr_dict = {'f': ('lf', 'rf', 'f'), 'r': ('lr', 'rr', 'r')}
+            opposite = {'rf': 'lr', 'rr': 'lf', 'f': 'r'}
+        elif archtype == 'oct':
+            components = ('lf', 'lr', 'rf', 'rr', 'lf2', 'lr2', 'rf2', 'rr2')
+            lr_dict = {'l': ('lf', 'lr', 'lf2', 'lr2'), 'r': ('rf', 'rr', 'rf2', 'rr2')}
+            fr_dict = {'f': ('lf', 'rf', 'lf2', 'rf2'), 'r': ('lr', 'rr', 'lr2', 'rr2')}
+            opposite = {'rf': 'lr', 'rr': 'lf', 'rf2': 'lr2', 'rr2': 'lf2'}
+        else:
+            raise Exception("Invalid arch type")
+        opposite.update({v: k for k, v in opposite.items()})
+        args = self.get_true_fields(*args, archtype=archtype, components=components,
+                                    lr_dict=lr_dict, fr_dict=fr_dict, opposite=opposite)
+        super().__init__(*args, strict_immutability=False)
+
+class LineArchState(State):
+    """
+    States of the line architecture.
+
+    Fields
+    ------
+    forward : dict
+        Correction factors for moving forward (based on which rotors are in front).
+    upward: dict
+        Correction factors for moving upward (1.0 unless in a recovery mode).
+    """
+    forward: dict = dict()
+    upward: dict = dict()
 
 
 class AffectDOFArch(ComponentArchitecture):
     container_p = LineArchParam
+    container_s = LineArchState
 
     def init_architecture(self, **kwargs):
-        for compname in self.p.forward:
+        # add lines
+        for compname in self.p.components:
             self.add_comp(compname, Line)
+        # add state configuration - relative throttle for each line
+        if self.p.archtype == 'quad':
+            self.s.forward.update({'rf': 0.5, 'lf': 0.5, 'lr': -0.5, 'rr': -0.5})
+        elif self.p.archtype == 'hex':
+            self.s.forward.update({'rf': 0.5, 'lf': 0.5, 'lr': -0.5,
+                                   'rr': -0.5, 'r': -0.75, 'f': 0.75})
+        elif self.p.archtype == 'oct':
+            self.s.forward.update({'rf': 0.5, 'lf': 0.5, 'lr': -0.5, 'rr': -0.5,
+                                   'rf2': 0.5, 'lf2': 0.5, 'lr2': -0.5, 'rr2': -0.5})
+        self.s.upward = {c: 1.0 for c in self.p.components}
 
 
 class AffectDOF(AffectDOFDynamic):
@@ -111,7 +149,7 @@ class AffectDOF(AffectDOFDynamic):
 
     def behavior(self, time):
         """Rotor dynamic behavior with architecture-base recovery."""
-        if self.ca.opposite:
+        if self.ca.p.opposite:
             self.reconfig_faults()
         self.calc_pwr()
 
@@ -121,15 +159,15 @@ class AffectDOF(AffectDOFDynamic):
         for fault in self.m.faults:
             if fault in self.ca.faultmodes:
                 comp = self.ca.faultmodes[fault]
-                opp = self.ca.opposite[comp]
-                if self.ca.forward[comp] != 0.0:
-                    self.ca.forward[comp] = 0.0
-                    self.ca.upward[comp] = 0.0
-                if self.ca.forward[opp] != 0.0:
-                    self.ca.forward[opp] = 0.0
-                    self.ca.upward[opp] = 0.0
-        tot_comps = len(self.ca.components)
-        empty_comps = len([c for c in self.ca.forward if self.ca.forward[c] == 0.0])
+                opp = self.ca.p.opposite[comp]
+                if self.ca.s.forward[comp] != 0.0:
+                    self.ca.s.forward[comp] = 0.0
+                    self.ca.s.upward[comp] = 0.0
+                if self.ca.s.forward[opp] != 0.0:
+                    self.ca.s.forward[opp] = 0.0
+                    self.ca.s.upward[opp] = 0.0
+        tot_comps = len(self.ca.comps)
+        empty_comps = len([c for c in self.ca.s.forward if self.ca.s.forward[c] == 0.0])
         try:
             self.s.amp_factor = tot_comps / (tot_comps - empty_comps)
         except ZeroDivisionError:
@@ -153,11 +191,11 @@ class AffectDOF(AffectDOFDynamic):
         """
         air, ee_in = {}, {}
         # injects faults into lines
-        for linname, lin in self.ca.components.items():
+        for linname, lin in self.ca.comps.items():
             a, ee = lin.behavior(self.ee_in.s.effort,
                                  self.ctl_in,
-                                 self.ca.upward[linname] * self.s.amp_factor,
-                                 self.ca.forward[linname] * self.s.amp_factor,
+                                 self.ca.s.upward[linname] * self.s.amp_factor,
+                                 self.ca.s.forward[linname] * self.s.amp_factor,
                                  self.force.s.support)
             air[lin.name] = a
             ee_in[lin.name] = ee
@@ -170,10 +208,10 @@ class AffectDOF(AffectDOFDynamic):
         else:
             self.ee_in.s.rate = 0.0
 
-        self.s.lrstab = (sum([air[comp] for comp in self.ca.lr_dict['l']]) -
-                         sum([air[comp] for comp in self.ca.lr_dict['r']]))/len(air)
-        self.s.frstab = (sum([air[comp] for comp in self.ca.fr_dict['r']]) -
-                         sum([air[comp] for comp in self.ca.fr_dict['f']]))/len(air)
+        self.s.lrstab = (sum([air[comp] for comp in self.ca.p.lr_dict['l']]) -
+                         sum([air[comp] for comp in self.ca.p.lr_dict['r']]))/len(air)
+        self.s.frstab = (sum([air[comp] for comp in self.ca.p.fr_dict['r']]) -
+                         sum([air[comp] for comp in self.ca.p.fr_dict['f']]))/len(air)
         if abs(self.s.lrstab) >= 0.4 or abs(self.s.frstab) >= 0.75:
             self.dofs.s.put(uppwr=0.0, planpwr=0.0)
         else:
@@ -224,9 +262,9 @@ class Drone(DynDrone):
         # add flows to the model
         self.add_flow('force_st', Force)
         self.add_flow('force_lin', Force)
-        self.add_flow('ee_1', EE)
-        self.add_flow('ee_mot', EE)
-        self.add_flow('ee_ctl', EE)
+        self.add_flow('ee_1', EE, s={'rate': 0.0})
+        self.add_flow('ee_mot', EE, s={'rate': 0.0})
+        self.add_flow('ee_ctl', EE, s={'rate': 0.0})
         self.add_flow('ctl', Control)
         self.add_flow('dofs', DOFs)
         self.add_flow('des_traj', DesTraj)
@@ -235,7 +273,7 @@ class Drone(DynDrone):
         self.add_fxn('store_ee', StoreEE, 'ee_1', 'force_st')
         self.add_fxn('dist_ee', DistEE, 'ee_1', 'ee_mot', 'ee_ctl', 'force_st')
         self.add_fxn('affect_dof', AffectDOF, 'ee_mot', 'ctl', 'des_traj',
-                     'dofs', 'force_lin', ca={'archtype': self.p.arch})
+                     'dofs', 'force_lin', ca={'p': {'archtype': self.p.arch}})
         self.add_fxn('ctl_dof', CtlDOF, 'ee_ctl', 'des_traj', 'ctl', 'dofs', 'force_st')
         self.add_fxn('plan_path', PlanPath, 'ee_ctl', 'des_traj', 'force_st', 'dofs')
         self.add_fxn('hold_payload', HoldPayload, 'force_lin', 'force_st', 'dofs')
@@ -243,6 +281,9 @@ class Drone(DynDrone):
 
 
 if __name__ == "__main__":
+    lap = LineArchParam()
+    lap = LineArchParam(archtype='quad')
+
     import doctest
     doctest.testmod(verbose=True)
     import multiprocessing as mp
