@@ -132,16 +132,18 @@ class BaseObject(object):
 
     def init_track(self, track):
         """Add .track attribute based on default and input."""
-        if not track:
-            track = []
-        elif track == 'default':
+        if track == 'default':
             track = self.default_track
-        elif track == 'all':
+        if track == 'all':
             track = self.get_all_possible_track()
         elif track == 'none':
             track = []
-        else:
-            track = track
+        elif type(track) == str:
+            track = (track,)
+
+        if not track:
+            track = []
+
         if isinstance(track, dict):
             self.track = track
         else:
@@ -358,36 +360,6 @@ class BaseObject(object):
                 for i, val in indicators.items():
                     h['i'].init_att(i, val, timerange, sub_track, dtype=bool)
 
-    def get_track(self, track, all_possible=()):
-        """
-        Get tracking params for a given object (block, model, etc).
-
-        Parameters
-        ----------
-        track : track
-            str/tuple. Attributes to track.
-            'all' tracks all fields
-            'default' tracks fields defined in default_track for the dataobject
-            'none' tracks none of the fields
-
-        Returns
-        -------
-        track : tuple
-            fields to track
-        """
-        if track == 'default':
-            track = self.default_track
-        if track == 'all':
-            if not all_possible:
-                track = self.get_all_possible_track()
-            else:
-                track = all_possible
-        elif track in ['none', False]:
-            track = ()
-        elif type(track) == str:
-            track = (track,)
-        return track
-
     def get_all_possible_track(self):
         """Get all possible tracking options."""
         rs = self.get_all_roles(with_immutable=False)
@@ -455,10 +427,10 @@ class BaseObject(object):
         hist : History
             A history of each recorded block property over the given timerange.
         """
-        if hasattr(self, 'h') and self.h and len([*self.h.values()]) == len(timerange):
+        if hasattr(self, 'h') and self.h and len([*self.h.values()][0]) == len(timerange):
             return self.h
         else:
-            track = self.get_track(self.track)
+            track = self.track
             hist = History()
             if track:
                 self.init_indicator_hist(hist, timerange, track)

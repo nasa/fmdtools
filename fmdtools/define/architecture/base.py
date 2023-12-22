@@ -343,6 +343,9 @@ class Architecture(Simulable):
         cop.assign_roles('container', self)
         return cop
 
+    def get_all_possible_track(self):
+        return super().get_all_possible_track() + self.flexible_roles
+
 
 def check_model_pickleability(model, try_pick=False):
     """
