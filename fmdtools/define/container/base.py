@@ -88,11 +88,11 @@ class BaseContainer(dataobject, mapping=True, iterable=True, copy_default=True):
         """Get the value that will be set to fieldname given *args and **kwargs."""
         if fieldname in kwargs:
             return kwargs[fieldname]
-        field_ind = dataobject.__fields__.index(fieldname)
+        field_ind = self.__fields__.index(fieldname)
         if args and len(args) > field_ind:
             return args[field_ind]
         else:
-            return copy.copy(self.__defaults__[field_ind])
+            return copy.copy(self.__default_vals__[field_ind])
 
     def set_arg_type(self, *args, **kwargs):
         """
@@ -168,6 +168,9 @@ class BaseContainer(dataobject, mapping=True, iterable=True, copy_default=True):
 
         >>> ex.get_field_dict({'x': 3.0, 'z': 40.0}, x='x', y='z')
         {'x': 3.0, 'y': 40.0}
+
+        >>> ex.get_field_dict(ex)
+        {'x': 1.0, 'y': 2.0}
         """
         if fielddict and fields:
             raise Exception("Provide positional states or keyword states, not both")

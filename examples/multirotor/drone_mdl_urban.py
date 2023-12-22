@@ -2,22 +2,22 @@
 """
 Variant of drone model for modelling computer vision in urban settings.
 """
-from drone_mdl_static import EE, Force, Control
-from drone_mdl_static import DistEE
-from drone_mdl_rural import DesTraj, DOFs, HSig, RSig
-from drone_mdl_rural import ManageHealth, StoreEE, CtlDOF
-from drone_mdl_rural import PlanPath as PlanPathRural
-from drone_mdl_rural import DronePhysicalParameters, ResPolicy
-from drone_mdl_rural import HoldPayload as HoldPayloadRural
-from drone_mdl_rural import AffectDOF as AffectDOFRural
-from drone_mdl_rural import Drone as DroneRural
+from examples.multirotor.drone_mdl_static import EE, Force, Control
+from examples.multirotor.drone_mdl_static import DistEE
+from examples.multirotor.drone_mdl_rural import DesTraj, DOFs, HSig, RSig
+from examples.multirotor.drone_mdl_rural import ManageHealth, StoreEE, CtlDOF
+from examples.multirotor.drone_mdl_rural import PlanPath as PlanPathRural
+from examples.multirotor.drone_mdl_rural import DronePhysicalParameters, ResPolicy
+from examples.multirotor.drone_mdl_rural import HoldPayload as HoldPayloadRural
+from examples.multirotor.drone_mdl_rural import AffectDOF as AffectDOFRural
+from examples.multirotor.drone_mdl_rural import Drone as DroneRural
 
 from fmdtools.define.block.component import Component
 from fmdtools.define.container.mode import Mode
 from fmdtools.define.container.state import State
 from fmdtools.define.container.parameter import Parameter
 from fmdtools.define.architecture.component import ComponentArchitecture
-from fmdtools.define.flow.environment import Environment
+from fmdtools.define.environment import Environment
 from fmdtools.define.object.coords import Coords, CoordsParam
 
 import numpy as np
@@ -200,9 +200,8 @@ class ComputerVision(Component):
 class VisionArch(ComponentArchitecture):
     """Computer vision architecture (one camera)."""
 
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        self.make_components(ComputerVision, 'vision')
+    def init_architecture(self, **kwargs):
+        self.add_comp('vision', ComputerVision)
 
 
 class PlanPathParam(Parameter):
@@ -218,7 +217,7 @@ class PlanPath(PlanPathRural):
     arch_ca = VisionArch
     container_p = PlanPathParam
 
-    def init_goals(self):
+    def init_block(self, **kwargs):
         """Initialize goals from start to end point."""
         self.make_goals([*self.environment.c.start, 0], [*self.environment.c.end, 0])
 
@@ -238,7 +237,7 @@ class PlanPath(PlanPathRural):
 
     def update_goal(self):
         """Update the goal (includes checking if landing spot is occupied). """
-        vis = self.ca.components['vision']
+        vis = self.ca.comps['vision']
         land_occupied = vis.check_if_occupied(self.environment, self.dofs)
         # reconfigure path based on mode
         if (self.m.in_mode('emland') and land_occupied):
@@ -332,7 +331,8 @@ class Drone(DroneRural):
         store_ee_p = {'archtype': self.p.phys_param.bat,
                       'weight': self.p.phys_param.batweight+self.p.phys_param.archweight,
                       'drag': self.p.phys_param.archdrag}
-        self.add_fxn('store_ee', StoreEE, 'ee_1', 'force_st', 'hsig_bat', ca=store_ee_p)
+        self.add_fxn('store_ee', StoreEE, 'ee_1', 'force_st', 'hsig_bat',
+                     ca={'p': store_ee_p})
         self.add_fxn('dist_ee', DistEE, 'ee_1', 'ee_mot', 'ee_ctl', 'force_st')
         self.add_fxn('affect_dof', AffectDOF, 'ee_mot', 'ctl', 'dofs', 'des_traj',
                      'force_lin', 'hsig_dofs', 'environment',

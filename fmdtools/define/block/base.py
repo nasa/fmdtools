@@ -446,7 +446,13 @@ class Block(Simulable):
             self.update_contained_modes()
         self.check_flows(flows=flows)
         self.update_seed()
+        # finally, allow for user-defined role/state changing
+        self.init_block(**kwargs)
         self.init_hist(h=h)
+
+    def init_block(self, **kwargs):
+        """Placeholder initialization method to set initial states etc."""
+        return
 
     def create_arch_kwargs(self, **kwargs):
         """
@@ -647,6 +653,8 @@ class Block(Simulable):
             cop.assign_roles('container', self)
         except TypeError as e:
             raise Exception("Poor specification of "+str(self.__class__)) from e
+        if 'arch' in self.roletypes:
+            cop.update_contained_modes()
         if hasattr(self, 'h'):
             cop.h = self.h.copy()
         return cop

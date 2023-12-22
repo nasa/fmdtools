@@ -142,13 +142,16 @@ class BaseObject(object):
             track = []
         else:
             track = track
-        # make sure role dict attributes are also tracked.
-        self.track = []
-        for t in track:
-            if t in self.roledicts:
-                self.track.extend(getattr(self, t))
-            else:
-                self.track.append(t)
+        if isinstance(track, dict):
+            self.track = track
+        else:
+            # make sure role dict attributes are also tracked.
+            self.track = []
+            for t in track:
+                if t in self.roledicts:
+                    self.track.extend(getattr(self, t))
+                else:
+                    self.track.append(t)
 
     def init_roletypes(self, *roletypes, **kwargs):
         """
@@ -202,8 +205,19 @@ class BaseObject(object):
             container_args = kwargs.get(rolename, {})
             if isinstance(container_args, container_initializer):
                 container = container_args
+            elif isinstance(container_args, dict):
+                try:
+                    container = container_initializer(**container_args)
+                except AttributeError as ae:
+                    raise Exception("Problem initializing " + roletype + "_" + rolename
+                                    + ": " + str(container_initializer)) from ae
+            elif isinstance(container_args, BaseObject):
+                raise Exception(str(container_args.__class__) + " not a recognized" +
+                                " instance of " + str(container_initializer) +
+                                " (did you use relative instead of absolute imports?)")
             else:
-                container = container_initializer(**container_args)
+                raise Exception(str(container_args) + "not a dict or not a recognized" +
+                                "instance of " + str(container_initializer))
             container.check_role(roletype, rolename)
             setattr(self, rolename, container)
 
@@ -529,7 +543,7 @@ def init_obj(name, objclass=BaseObject, track='default', as_copy=False, **kwargs
             fl = objclass.copy(name=name, track=track, **kwargs)
     else:
         try:
-            fl = objclass(name, track=track, **kwargs)
+            fl = objclass(name=name, track=track, **kwargs)
         except TypeError as e:
             raise TypeError("Poorly specified class "+str(objclass) +
                             " (or poor arguments) "+str(kwargs)) from e

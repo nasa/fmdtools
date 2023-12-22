@@ -61,8 +61,6 @@ class Function(Block):
         args_f : dict, optional
             arguments to pass to custom __init__ function.
         """
-        archs = self.find_roletype_initiators("arch")
-        arch_kwargs = {k: v for k, v in kwargs.items() if k in archs}
         super().__init__(name=name, **kwargs)
         self.args_f = args_f
 

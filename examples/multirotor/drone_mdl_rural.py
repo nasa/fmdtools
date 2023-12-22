@@ -268,9 +268,9 @@ class Battery(Component):
         return self.s.e_t, self.s.soc, er_res
 
 
-class BatArch(ComponentArchitecture):
+class BatArchParam(Parameter):
     """
-    Battery architecture.
+    Battery architecture parameters.
 
     Defined by archtype parameter with options:
         - 'monolythic':
@@ -281,42 +281,53 @@ class BatArch(ComponentArchitecture):
             two batteries put in parallel
         - 'split-both':
             four batteries arranged in a series-parallel configuration
+
+    As well as inputs for the weight and drag of the entire drone.
     """
 
     archtype: str = 'monolithic'
-    batparams: dict = {}  # weight, cap, voltage, drag_factor
+    components: tuple = ()
     weight: float = 0.0
     drag: float = 0.0
     series: int = 1
     parallel: int = 1
     voltage: float = 12.0
-    drag: float = 0.0
 
     def __init__(self, *args, **kwargs):
         archtype = self.get_true_field('archtype', *args, **kwargs)
-        weight = self.get_true_field('weight', *args, **kwargs)
-        drag = self.get_true_field('drag', *args, **kwargs)
         if archtype == 'monolithic':
-            batparams = {"series": 1, "parallel": 1,
-                         "voltage": 12.0, "weight": weight, "drag": drag}
-            compnames = ['s1p1']
+            series = 1
+            parallel = 1
+            components = ('s1p1', )
         elif archtype == 'series-split':
-            batparams = {'series': 2, 'parallel': 1,
-                         'voltage': 12.0, "weight": weight, "drag": drag}
-            compnames = ['s1p1', 's2p1']
+            series = 2
+            parallel = 1
+            components = ('s1p1', 's2p1')
         elif archtype == 'parallel-split':
-            batparams = {'series': 1, 'parallel': 2,
-                         'voltage': 12.0, "weight": weight, "drag": drag}
-            compnames = ['s1p1', 's1p2']
+            series = 1
+            parallel = 2
+            components = ('s1p1', 's1p2')
         elif archtype == 'split-both':
-            batparams = {'series': 2, 'parallel': 2,
-                         'voltage': 12.0, "weight": weight, "drag": drag}
-            compnames = ['s1p1', 's1p2', 's2p1', 's2p2']
+            series = 2
+            parallel = 2
+            components = ('s1p1', 's1p2', 's2p1', 's2p2')
         else:
             raise Exception("Invalid battery architecture")
-        kwargs.update(batparams)
-        super().__init__(*args, **kwargs)
-        self.make_components(Battery, *compnames, p=batparams)
+        kwar = {**kwargs, 'archtype': archtype, 'series': series, 'parallel': parallel,
+                'components': components}
+        args = self.get_true_fields(*args, **kwar)
+        super().__init__(*args)
+
+class BatArch(ComponentArchitecture):
+    """Overall Battery Architecture used to store energy."""
+
+    container_p = BatArchParam
+
+    def init_architecture(self, **kwargs):
+        for comp in self.p.components:
+            batparams = self.p.get_field_dict(self.p, 'series', 'parallel', 'voltage',
+                                              'weight', 'drag')
+            self.add_comp(comp, Battery, p=batparams)
 
 
 class StoreEEMode(Mode):
@@ -347,28 +358,28 @@ class StoreEE(Function):
         if self.s.soc < 1:
             self.m.replace_fault('lowcharge', 'nocharge')
         if self.m.has_fault('lowcharge'):
-            for batname, bat in self.ca.components.items():
+            for batname, bat in self.ca.comps.items():
                 bat.s.limit(soc=(0, 19))
         elif self.m.has_fault('nocharge'):
-            for batname, bat in self.ca.components.items():
+            for batname, bat in self.ca.comps.items():
                 bat.s.soc = 0
 
     def behavior(self, time):
         """Calculate overall behavior for StoreEE architecture."""
         ee, soc = {}, {}
         rate_res = 0
-        for batname, bat in self.ca.components.items():
+        for batname, bat in self.ca.comps.items():
             ee[bat.name], soc[bat.name], rate_res = \
                 bat.behavior(self.force_st.s.support, self.ee_1.s.rate /
-                             (self.ca.series*self.ca.parallel)+rate_res, time)
+                             (self.ca.p.series*self.ca.p.parallel)+rate_res, time)
         # need to incorporate max current draw somehow + draw when reconfigured
-        if self.ca.archtype == 'monolithic':
+        if self.ca.p.archtype == 'monolithic':
             self.ee_1.s.effort = ee['s1p1']
-        elif self.ca.archtype == 'series-split':
+        elif self.ca.p.archtype == 'series-split':
             self.ee_1.s.effort = np.max(list(ee.values()))
-        elif self.ca.archtype == 'parallel-split':
+        elif self.ca.p.archtype == 'parallel-split':
             self.ee_1.s.effort = np.sum(list(ee.values()))
-        elif self.ca.archtype == 'split-both':
+        elif self.ca.p.archtype == 'split-both':
             e = list(ee.values())
             e.sort()
             self.ee_1.effort = e[-1]+e[-2]
@@ -554,11 +565,7 @@ class PlanPath(PlanPathDyn):
     flow_rsig_traj = RSig
     default_track = {'s': ['ground_height', 'pt', 'goal'], 'm': 'all'}
 
-    def __init__(self, name, flows, **kwargs):
-        Function.__init__(self, name, flows, **kwargs)
-        self.init_goals()
-
-    def init_goals(self):
+    def init_block(self, **kwargs):
         """Initialize path planning goals based on initial flightplan."""
         self.s.goals = {i: list(vals) for i, vals in enumerate(self.p.flightplan)}
 
@@ -678,11 +685,12 @@ class Drone(FunctionArchitecture):
         store_ee_p = {'archtype': self.p.phys_param.bat,
                       'weight': self.p.phys_param.batweight+self.p.phys_param.archweight,
                       'drag': self.p.phys_param.archdrag}
-        self.add_fxn('store_ee', StoreEE, 'ee_1', 'force_st', 'hsig_bat', ca=store_ee_p)
+        self.add_fxn('store_ee', StoreEE, 'ee_1', 'force_st', 'hsig_bat',
+                     ca={'p': store_ee_p})
         self.add_fxn('dist_ee', DistEE, 'ee_1', 'ee_mot', 'ee_ctl', 'force_st')
         self.add_fxn('affect_dof', AffectDOF, 'ee_mot', 'ctl', 'dofs', 'des_traj',
                      'force_lin', 'hsig_dofs',
-                     ca={'archtype': self.p.phys_param.linearch})
+                     ca={'p': {'archtype': self.p.phys_param.linearch}})
         self.add_fxn('ctl_dof', CtlDOF, 'ee_ctl', 'des_traj', 'ctl', 'dofs', 'force_st')
         self.add_fxn('plan_path', PlanPath, 'ee_ctl', 'dofs', 'des_traj', 'force_st',
                      'rsig_traj', p=asdict(self.p))
