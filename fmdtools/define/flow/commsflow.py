@@ -192,7 +192,7 @@ class CommsFlow(MultiFlow):
     def return_states(self):
         states= super().return_states()
         for f in self.fxns:
-            states.update({f+"_in"+fo:args for fo, args in self.fxns[f]["in"].items()})
+            states.update({f+"_in"+fo: args for fo, args in self.fxns[f]["in"].items()})
         return states
 
     def reset(self):
@@ -208,7 +208,7 @@ class CommsFlow(MultiFlow):
                              out_attrs=self.fxns[fxn]['out'].status(),
                              prev_in=copy.deepcopy(self.fxns[fxn]["in"]),
                              received=copy.deepcopy(self.fxns[fxn]["received"]),
-                             ports=getattr(self.fxns[fxn], "locals", []))
+                             ports=getattr(self.fxns[fxn]['internal'], "locals", []))
         return cop
 
     def get_typename(self):

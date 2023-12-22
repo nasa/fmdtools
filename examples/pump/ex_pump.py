@@ -548,7 +548,7 @@ if __name__ == "__main__":
     fig, ax = mdlhist.plot_line('flows.wat_2.s.flowrate', 'i.on')
 
     mdl = Pump()
-    newhist2 = mdl.create_hist(range(10))
+    newhist2 = mdl.h
 
     newhist2.flows.wat_2.s.flowrate
 
@@ -581,13 +581,13 @@ if __name__ == "__main__":
     # d = pickle.loads(c)
 
     mdl = Pump(track={'flows': {'ee_1': 'all', "wat_1": {'s': ('flowrate',)}}})
-    newhist2 = mdl.create_hist(range(10))
+    newhist2 = mdl.h
     mdl = Pump(track="all")
-    newhist3 = mdl.create_hist(range(10))
+    newhist3 = mdl.h
     mdl.flows['ee_1'].s
 
     mdl = Pump(track={'fxns': {'move_water': ['s', 't']}})
-    newhist4 = mdl.create_hist(range(10))
+    newhist4 = mdl.h
     mdl.flows['ee_1'].s
 
     mdl = Pump(track='all')
