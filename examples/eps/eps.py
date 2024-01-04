@@ -1,23 +1,25 @@
 # -*- coding: utf-8 -*-
 """
-EPS Model 
-This electrical power system model showcases how fmdtools can be used for purely static 
+EPS Model.
+
+This electrical power system model showcases how fmdtools can be used for purely static
 propogation models (where the dynamic states are not a concern). This EPS system was
-previously provided in the IBFM fault modelling toolkit (see: https://github.com/DesignEngrLab/IBFM ) 
-and other references--this implementation follows the simple_eps model in IBFM.
-    
-The main purpose of this system is to supply power to optical, mechanical, and heat loads.
-In this model, we represent the failure behavior of the system at a high level
-using solely the functions of the system.
+previously provided in the IBFM fault modelling toolkit
+(see: https://github.com/DesignEngrLab/IBFM ) and other references--this implementation
+follows the simple_eps model in IBFM.
+
+The main purpose of this system is to supply electrical power to optical, mechanical,
+and heat loads. In this model, we represent the failure behavior of the system at a high
+level using solely the functions of the system.
 
 Further information about this system (data, more detailed models) is presented
 at: https://c3.nasa.gov/dashlink/projects/3/
 """
-from fmdtools.define.block import FxnBlock, Mode
-from fmdtools.define.model import Model
-from fmdtools.define.parameter import Parameter, SimParam
-from fmdtools.define.state import State
-from fmdtools.define.flow import Flow
+from fmdtools.define.block.function import Function
+from fmdtools.define.container.mode import Mode
+from fmdtools.define.architecture.function import FunctionArchitecture
+from fmdtools.define.container.state import State
+from fmdtools.define.flow.base import Flow
 
 
 class GenericState(State):
@@ -26,7 +28,7 @@ class GenericState(State):
 
 
 class GenericFlow(Flow):
-    _init_s = GenericState
+    container_s = GenericState
 
 
 class SigState(State):
@@ -34,7 +36,7 @@ class SigState(State):
 
 
 class Signal(Flow):
-    _init_s = SigState
+    container_s = SigState
 
 
 class ImportEEModes(Mode):
@@ -43,10 +45,10 @@ class ImportEEModes(Mode):
                "no_v": (1e-5, 300)}
 
 
-class ImportEE(FxnBlock):
+class ImportEE(Function):
     __slots__ = ("ee_out",)
-    _init_m = ImportEEModes
-    _init_ee_out = GenericFlow
+    container_m = ImportEEModes
+    flow_ee_out = GenericFlow
     flownames = {"ee_1": "ee_out"}
     """ Static model representation is the same as the dynamic model respresentation, except in this case 
     there is no opportunity vector. Thus the self.assoc_modes function takes a dictionary of modes with 
@@ -74,10 +76,10 @@ class ImportSigModes(Mode):
                "no_signal": (1e-6, 750)}
 
 
-class ImportSig(FxnBlock):
+class ImportSig(Function):
     __slots__ = ("sig_out",)
-    _init_m = ImportSigModes
-    _init_sig_out = Signal
+    container_m = ImportSigModes
+    flow_sig_out = Signal
     flownames = {"sig_in": "sig_out"}
 
     def behavior(self, time):
@@ -94,11 +96,11 @@ class StoreEEModes(Mode):
                "no_storage": (5e-6, 2000)}
 
 
-class StoreEE(FxnBlock):
+class StoreEE(Function):
     __slots__ = ("ee_in", "ee_out")
-    _init_m = StoreEEModes
-    _init_ee_in = GenericFlow
-    _init_ee_out = GenericFlow
+    container_m = StoreEEModes
+    flow_ee_in = GenericFlow
+    flow_ee_out = GenericFlow
     flownames = {"ee_2": "ee_in", "ee_3": "ee_out"}
 
     def condfaults(self, time):
@@ -127,12 +129,12 @@ class SupplyEEModes(Mode):
                "open_circuit": (5e-8, 200)}
 
 
-class SupplyEE(FxnBlock):
+class SupplyEE(Function):
     __slots__ = ("ee_in", "ee_out", "heat_out")
-    _init_m = SupplyEEModes
-    _init_ee_in = GenericFlow
-    _init_ee_out = GenericFlow
-    _init_heat_out = GenericFlow
+    container_m = SupplyEEModes
+    flow_ee_in = GenericFlow
+    flow_ee_out = GenericFlow
+    flow_heat_out = GenericFlow
     flownames = {"ee_1": "ee_in", "ee_2": "ee_out", "waste_he_1": "heat_out"}
 
     def condfaults(self, time):
@@ -168,14 +170,14 @@ class DistEEModes(Mode):
                "open_circuit": (3e-5, 1500)}
 
 
-class DistEE(FxnBlock):
+class DistEE(Function):
     __slots__ = ("sig_in", "ee_in", "ee_m", "ee_h", "ee_o")
-    _init_m = DistEEModes
-    _init_sig_in = GenericFlow
-    _init_ee_in = GenericFlow
-    _init_ee_m = GenericFlow
-    _init_ee_h = GenericFlow
-    _init_ee_o = GenericFlow
+    container_m = DistEEModes
+    flow_sig_in = Signal
+    flow_ee_in = GenericFlow
+    flow_ee_m = GenericFlow
+    flow_ee_h = GenericFlow
+    flow_ee_o = GenericFlow
     flownames = {"ee_3": "ee_in"}
 
     def condfaults(self, time):
@@ -218,10 +220,10 @@ class ExportHEModes(Mode):
                "ineffective_sink": (0.5e-5, 1000)}
 
 
-class ExportHE(FxnBlock):
+class ExportHE(Function):
     __slots__ = ("he",)
-    _init_m = ExportHEModes
-    _init_he = GenericFlow
+    container_m = ExportHEModes
+    flow_he = GenericFlow
     flownames = {"waste_he_1": "he", "waste_he_o": "he", "waste_he_m": "he"}
 
     def behavior(self, time):
@@ -233,17 +235,17 @@ class ExportHE(FxnBlock):
             self.he.s.rate = 1.0
 
 
-class ExportME(FxnBlock):
+class ExportME(Function):
     __slots__ = ("me",)
-    _init_me = GenericFlow
+    flow_me = GenericFlow
 
     def behavior(self, time):
         self.me.s.rate = self.me.s.effort
 
 
-class ExportOE(FxnBlock):
+class ExportOE(Function):
     __slots__ = ("oe",)
-    _init_oe = GenericFlow
+    flow_oe = GenericFlow
 
     def behavior(self, time):
         self.oe.s.rate = self.oe.s.effort
@@ -257,12 +259,12 @@ class EEtoMEModes(Mode):
                "short": (5e-5, 200)}
 
 
-class EEtoME(FxnBlock):
+class EEtoME(Function):
     __slots__ = ("ee_in", "me", "he_out")
-    _init_m = EEtoMEModes
-    _init_ee_in = GenericFlow
-    _init_me = GenericFlow
-    _init_he_out = GenericFlow
+    container_m = EEtoMEModes
+    flow_ee_in = GenericFlow
+    flow_me = GenericFlow
+    flow_he_out = GenericFlow
     flownames = {"ee_m": "ee_in", "waste_he_m": "he_out"}
 
     def behavior(self, time):
@@ -302,11 +304,11 @@ class EEtoHEModes(Mode):
                "open_circuit": (1e-7, 200)}
 
 
-class EEtoHE(FxnBlock):
+class EEtoHE(Function):
     __slots__ = ("ee_in", "he")
-    _init_m = EEtoHEModes
-    _init_ee_in = GenericFlow
-    _init_he = GenericFlow
+    container_m = EEtoHEModes
+    flow_ee_in = GenericFlow
+    flow_he = GenericFlow
     flownames = {"ee_h": "ee_in"}
 
     def cond_faults(self, time):
@@ -338,12 +340,12 @@ class EEtoOEModes(Mode):
                "burnt_out": (2e-6, 100)}
 
 
-class EEtoOE(FxnBlock):
+class EEtoOE(Function):
     __slots__ = ("ee_in", "oe", "he_out")
-    _init_m = EEtoOEModes
-    _init_ee_in = GenericFlow
-    _init_oe = GenericFlow
-    _init_he_out = GenericFlow
+    container_m = EEtoOEModes
+    flow_ee_in = GenericFlow
+    flow_oe = GenericFlow
+    flow_he_out = GenericFlow
     flownames = {"waste_he_o": "he_out", "ee_o": "ee_in"}
 
     def cond_faults(self, time):
@@ -365,17 +367,16 @@ class EEtoOE(FxnBlock):
             self.oe.s.effort = self.ee_in.s.effort
 
 
-class EPS(Model):
+class EPS(FunctionArchitecture):
     __slots__ = ()
     default_track = {"flows": ["he", "me", "oe"]}
+    default_sp = {'end_time': 0}
 
-    def __init__(self, sp=SimParam(times=(0, 0)), **kwargs):
+    def init_architecture(self, **kwargs):
         """
         The Model superclass uses a static model representation by default if
         there are no parameters for times, phases, etc.
         """
-        super().__init__(sp=sp, **kwargs)
-
         self.add_flow("ee_1", GenericFlow)
         self.add_flow("ee_2", GenericFlow)
         self.add_flow("ee_3", GenericFlow)
@@ -404,8 +405,6 @@ class EPS(Model):
         self.add_fxn("export_waste_h1", ExportHE, "waste_he_1")
         self.add_fxn("export_waste_ho", ExportHE, "waste_he_o")
         self.add_fxn("export_waste_hm", ExportHE, "waste_he_m")
-
-        self.build()
 
     def find_classification(self, scen, mdlhists):
         outflows = ["he", "me", "oe"]
@@ -449,14 +448,14 @@ def discrep(value):
 
 if __name__ == "__main__":
     import fmdtools.sim.propagate as propagate
-    from fmdtools.analyze.graph import ModelGraph
+    from fmdtools.analyze.graph import FunctionArchitectureGraph
     import numpy as np
 
-    mdl = EPS()
+    mdl = EPS(track=['fxns', 'flows', 'i'])
+    result, mdlhists = propagate.one_fault(mdl, "distribute_ee", "short")
 
-    result, mdlhists = propagate.one_fault(
-        mdl, "distribute_ee", "short", desired_result="graph", track="all"
-    )
+    result, mdlhists = propagate.one_fault(mdl, "distribute_ee", "short",
+                                           desired_result="graph")
 
     result.graph.draw()
     # endclasses, mdlhists = propagate.single_faults(mdl)
@@ -470,7 +469,7 @@ if __name__ == "__main__":
 
     degtimemap = degradation.get_summary(operator=np.sum)
 
-    mg = ModelGraph(mdl)
+    mg = FunctionArchitectureGraph(mdl)
     mg.set_heatmap(degtimemap)
     mg.draw()
 

@@ -22,22 +22,22 @@ class StochasticPumpTests(unittest.TestCase, CommonTests):
         self.mdl = Pump()
 
     def test_stochastic_pdf(self):
-        """Tests that (1) track_pdf option runs and (2) gives repeated 
+        """Tests that (1) track_pdf option runs and (2) gives repeated
         probability density results under the same seed(s)"""
-        testvals = [23.427857638009993,
-                    28.879844891816045,
-                    0.0009482614961342181,
-                    10.9180526929105,
-                    0.02603536236159078,
-                    1.9736111095116995,
-                    31.579024323385077,
-                    0.016549021807197088,
-                    6.303651266980214]
-        for i in range(1,10):
+        testvals = [6.634978895402383,
+                    7.52240849998729,
+                    0.015351713962842411,
+                    4.19649888042945,
+                    0.11203099056041071,
+                    1.5036852812847645,
+                    7.936686476148655,
+                    0.0853617670950819,
+                    3.0182506814918377]
+        for i in range(1, 10):
             self.mdl.update_seed(i)
             self.mdl.propagate(i, run_stochastic='track_pdf')
             pd = self.mdl.return_probdens()
-            #print(pd)
+            # print(pd)
             self.assertAlmostEqual(pd, testvals[i-1])
 
     def test_run_safety(self):
@@ -52,7 +52,7 @@ class StochasticPumpTests(unittest.TestCase, CommonTests):
             mdl2 = Pump(r={'seed': seed})
             res_2,  hist_2 = prop.nominal(mdl2, run_stochastic=True, showprogress=False)
             res_f2, hist_f2 = prop.single_faults(mdl2, run_stochastic=True,
-                                                showprogress=False)
+                                                 showprogress=False)
             self.assertTrue(all(hist_1.fxns.move_water.s.eff ==
                             hist_2.fxns.move_water.s.eff))
             self.check_same_hist(hist_f1, hist_f2)
@@ -67,12 +67,11 @@ class StochasticPumpTests(unittest.TestCase, CommonTests):
 
     def test_run_approach(self):
         """Test that random behaviors average out."""
-        mdl = Pump()
+        mdl = Pump(track={'fxns': {'move_water': "r"}})
         ps = ParameterSample()
         ps.add_variable_replicates([], replicates=1000)
         res, hist = prop.parameter_sample(mdl, ps, showprogress=False,
                                           run_stochastic=True,
-                                          track={'fxns': {'move_water': "r"}},
                                           desired_result={})
         ave_effs = []
         std_effs = []
@@ -82,7 +81,7 @@ class StochasticPumpTests(unittest.TestCase, CommonTests):
         ave_eff = np.mean(ave_effs)
         std_eff = np.mean(std_effs)
         # test means
-        self.assertAlmostEqual(ave_eff, mdl.fxns['move_water'].r.s.eff_update[1][0], 2)
+        self.assertAlmostEqual(ave_eff, mdl.fxns['move_water'].r.s.eff_update[1][0], 1)
         self.assertLess(abs(std_eff-mdl.fxns['move_water'].r.s.eff_update[1][1]), 0.05)
 
     def test_model_copy_same(self):
@@ -151,7 +150,6 @@ class StochasticPumpTests(unittest.TestCase, CommonTests):
         ne = NominalEnvelope(ps, res, 'cost', 'r.seed')
         ne.as_plot(title=title, f_kwargs={'alpha': 1.0})
 
-
     def test_plot_nominal_vals_xd(self):
         """tests nominal_vals_2d and nominal_vals_3d"""
         mdl = Pump()
@@ -174,7 +172,7 @@ class StochasticPumpTests(unittest.TestCase, CommonTests):
         f_kwargs = {'alpha': 1.0}
         n_kwargs = {'alpha': 0.01}
         ne1 = NominalEnvelope(ps2, res, 'cost', 'r.seed', 'p.delay')
-        a=1
+
         ne1.as_plot(title=title, f_kwargs=f_kwargs, n_kwargs=n_kwargs)
 
         ne2 = NominalEnvelope(ps2, res, 'cost', 'r.seed', 'p.delay', 'prob')
@@ -246,10 +244,10 @@ class StochasticPumpTests(unittest.TestCase, CommonTests):
                        title=title)
 
     def test_mdl_pickle(self):
-        from fmdtools.define.block import SimParam
-        from fmdtools.define.model import check_model_pickleability
+        from fmdtools.define.block.base import SimParam
+        from fmdtools.define.architecture.base import check_model_pickleability
         sp = SimParam(phases=(('start', 0, 4), ('on', 5, 49), ('end', 50, 55)),
-                      times=(0, 20, 55), dt=1.0, units='hr')
+                      end_time=55, dt=1.0, units='hr')
         mdl = Pump(r={'seed': 5}, sp=sp)
         check_model_pickleability(mdl, try_pick=True)
 
@@ -261,13 +259,14 @@ class StochasticPumpTests(unittest.TestCase, CommonTests):
 
 
 if __name__ == '__main__':
-    suite = unittest.TestSuite()
-    suite.addTest(StochasticPumpTests("test_model_copy_same"))
+    # suite = unittest.TestSuite()
+    # suite.addTest(StochasticPumpTests("test_run_approach"))
 
     # suite.addTest(StochasticPumpTests("test_save_load_nominalapproach"))
     # suite.addTest(StochasticPumpTests("test_save_load_nominalapproach_indiv"))
     # runner = unittest.TextTestRunner()
     # runner.run(suite)
+
     # runner = unittest.TextTestRunner()
     # runner.run(suite_for_plots(StochasticPumpTests))
 

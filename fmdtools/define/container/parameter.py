@@ -8,14 +8,13 @@ system attributes that do not change.
 """
 
 import inspect
-from recordclass import dataobject, asdict, astuple
+from recordclass import asdict, astuple
 import warnings
 import numpy as np
 
-from fmdtools.define.common import get_true_fields, get_true_field, set_obj_arg_type
+from fmdtools.define.container.base import BaseContainer
 
-
-class Parameter(dataobject, readonly=True, mapping=True, iterable=True, copy_default=True):
+class Parameter(BaseContainer, readonly=True):
     """
     The Parameter class defines model/function/flow values which are immutable,
     that is, the same from model instantiation through a simulation. Parameters
@@ -42,7 +41,11 @@ class Parameter(dataobject, readonly=True, mapping=True, iterable=True, copy_def
     1.0
     >>> p.y
     2.0
+
+    >>> p.copy()
+    ExampleParameter(x=1.0, y=2.0, z=0.0)
     """
+    rolename = "p"
 
     def __init__(self, *args, strict_immutability=True, check_type=True,
                  check_pickle=True, set_type=True, check_lim=True, **kwargs):
@@ -69,7 +72,7 @@ class Parameter(dataobject, readonly=True, mapping=True, iterable=True, copy_def
                 elif k in kwargs:
                     self.check_lim(k, kwargs[k])
         if set_type:
-            args, kwargs = set_obj_arg_type(self, *args, **kwargs)
+            args, kwargs = self.set_arg_type(*args, **kwargs)
         try:
             super().__init__(*args, **kwargs)
         except TypeError as e:
@@ -164,12 +167,6 @@ class Parameter(dataobject, readonly=True, mapping=True, iterable=True, copy_def
         if not ('*args' in signature) and ('**kwargs' in signature):
             raise Exception("*args and **kwargs not in __init__()--will not pickle.")
 
-    def get_true_field(self, fieldname, *args, **kwargs):
-        return get_true_field(self, fieldname, *args, **kwargs)
-
-    def get_true_fields(self, *args, **kwargs):
-        return get_true_fields(self, *args, **kwargs)
-
     @classmethod
     def get_set_const(cls, field):
         if "." in field:
@@ -189,6 +186,16 @@ class Parameter(dataobject, readonly=True, mapping=True, iterable=True, copy_def
             return set(var_set)
         return ()
 
+    def copy(self):
+        field_dict = self.get_field_dict(self)
+        return self.__class__(**field_dict)
+
+    def reset(self):
+        """Do nothing since the parameter is immutable."""
+
+    def return_mutables(self):
+        return ()
+
 
 class ExampleParameter(Parameter, readonly=True):
     """Example parameter for testing and documentation."""
@@ -198,55 +205,6 @@ class ExampleParameter(Parameter, readonly=True):
     z: float = 0.0
     x_lim = (0, 10)
     y_set = (1.0, 2.0, 3.0, 4.0)
-
-
-class SimParam(Parameter, readonly=True):
-    """
-    Class defining Simulation parameters.
-
-    Has fields:
-        phases : tuple
-            phases (('name', start, end)...) that the simulation progresses through
-        times : tuple
-            tuple of times to sample (if desired)
-            (starttime, sampletime1, sampletime2,... endtime)
-        dt : float
-            timestep used in the simulation. default is 1.0
-        units : str
-            time-units. default is hours`
-        end_condition : str
-            Name of indicator method to use to end the simulation. If not provided (''),
-            the simulation ends at the final time. Default is ''
-        use_local : bool
-            Whether to use locally-defined timesteps in functions (if any).
-            Default is True.
-    """
-    phases:            tuple = (('na', 0, 100),)
-    times:             tuple = (0, 100)
-    dt:                float = 1.0
-    units:             str = "hr"
-    units_set = ('sec', 'min', 'hr', 'day', 'wk', 'month', 'year')
-    end_condition:     str = ''
-    use_local:         bool = True
-
-    def __init__(self, *args, **kwargs):
-        if ('times' in kwargs) and not ('phases' in kwargs):
-            kwargs['phases'] = (("na", 0, kwargs['times'][-1]),)
-        super().__init__(*args, **kwargs)
-        self.find_any_phase_overlap()
-
-    def find_any_phase_overlap(self):
-        phase_dict = {v[0]: [v[1], v[2]] for v in self.phases}
-        intervals = [*phase_dict.values()]
-        int_low = np.sort([i[0] for i in intervals])
-        int_high = np.sort([i[1] if len(i) == 2 else i[0] for i in intervals])
-        for i, il in enumerate(int_low):
-            if i+1 == len(int_low):
-                break
-            if int_low[i+1] <= int_high[i]:
-                raise Exception("Global phases overlap in " + self.__class__.__name__ +
-                                ": " + str(self.phases) +
-                                " Ensure max of each phase < min of each other phase")
 
 
 if __name__ == "__main__":

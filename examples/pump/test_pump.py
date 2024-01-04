@@ -9,7 +9,7 @@ import unittest
 from examples.pump.ex_pump import Pump
 from fmdtools.sim import propagate as prop
 import fmdtools.analyze as an
-from fmdtools.define.common import check_pickleability
+from fmdtools.define.object.base import check_pickleability
 from fmdtools.sim.sample import FaultDomain, FaultSample, ParameterSample
 from tests.common import CommonTests
 import numpy as np
@@ -56,16 +56,15 @@ class PumpTests(unittest.TestCase, CommonTests):
         """Test that the delayed fault behavior occurs at the time specified"""
         delays = [0, 1, 5, 10]
         for delay in delays:
-            mdl = Pump(p={'cost': ('water',), 'delay': delay})
-            res, hist = prop.one_fault(mdl, 'export_water', 'block',
-                                       time=25, track="all")
+            mdl = Pump(p={'cost': ('water',), 'delay': delay}, track='all')
+            res, hist = prop.one_fault(mdl, 'export_water', 'block', time=25)
             fault_at_time = hist.faulty.fxns.move_water.m.faults.mech_break[25+delay]
             self.assertEqual(fault_at_time, 1)
             fault_bef_time = hist.faulty.fxns.move_water.m.faults.mech_break[25+delay-1]
             self.assertEqual(fault_bef_time, 0)
 
     def test_app_prop_values(self):
-        """Test that the delayed fault behavior occurs at the time specified (with approach)"""
+        """Test that delayed fault behavior occurs at the time specified by sample."""
         fd = FaultDomain(self.mdl)
         fd.add_fault('move_water', 'mech_break')
         fs = FaultSample(fd)
@@ -167,7 +166,7 @@ class PumpTests(unittest.TestCase, CommonTests):
                                    staged=False, run_stochastic=True, sp={'seed': 10})
         hist.save("single_fault.json")
         hist_saved = load("single_fault.json", Rclass=History)
-        
+
         self.assertCountEqual([*hist.keys()], [*hist_saved.keys()])
         # test to see that all values of the arrays in the hist are the same
         for hist_key in hist:
@@ -204,7 +203,7 @@ class PumpTests(unittest.TestCase, CommonTests):
     def test_param_sample_save(self):
         self.check_ps_save(self.mdl, self.ps, "pump_res.pkl", "pump_hist.pkl")
         self.check_ps_save(self.mdl, self.ps, "pump_res.csv", "pump_hist.csv")
-        self.check_ps_save(self.mdl, self.ps,"pump_res.json", "pump_hist.json")
+        self.check_ps_save(self.mdl, self.ps, "pump_res.json", "pump_hist.json")
 
     def test_param_sample_isave(self):
         self.check_ps_isave(self.mdl, self.ps, *self.filenames, "pkl")
@@ -260,13 +259,11 @@ def exp_cost_quant(fs, mdl):
 
 if __name__ == '__main__':
     unittest.main()
-    
-    #suite = unittest.TestSuite()
-    #suite.addTest(PumpTests("test_approach_cost_calc"))
-    #suite.addTest(PumpTests("test_value_setting_dict"))
-    #suite.addTest(PumpTests("test_one_run_csv"))
-    #runner = unittest.TextTestRunner()
-    #runner.run(suite)
 
-    
-    
+    # suite = unittest.TestSuite()
+    # suite.addTest(PumpTests("test_approach_parallelism"))
+    # suite.addTest(PumpTests("test_model_copy_same"))
+    # suite.addTest(PumpTests("test_value_setting_dict"))
+    # suite.addTest(PumpTests("test_one_run_csv"))
+    # runner = unittest.TextTestRunner()
+    # runner.run(suite)

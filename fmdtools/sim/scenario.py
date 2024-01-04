@@ -21,7 +21,7 @@ faults and disturbances.
 from recordclass import dataobject, asdict
 from collections import UserDict
 from typing import ClassVar
-from fmdtools.define.common import t_key
+from fmdtools.define.base import t_key
 import numpy as np
 
 

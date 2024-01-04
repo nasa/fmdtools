@@ -17,16 +17,14 @@ probability
 for outcome x for probability distributions with name 'randname' in numpy.
 """
 from scipy import stats
-from recordclass import dataobject, asdict, astuple
+from recordclass import asdict, astuple
 import numpy as np
 import math
-from .common import get_true_fields, get_true_field, get_dataobj_track
-import copy
-
-from fmdtools.analyze.history import History, init_hist_iter
+from fmdtools.define.container.base import BaseContainer
+from fmdtools.define.container.state import State
 
 
-class Rand(dataobject, mapping=True, copy_default=True):
+class Rand(BaseContainer):
     """
     Class for defining and interacting with random states of the model.
 
@@ -39,18 +37,34 @@ class Rand(dataobject, mapping=True, copy_default=True):
     seed : int
         state for the random number generator
 
+    Examples
+    --------
     Rand is meant to be extended in model definition with random states, e.g.:
 
-    class RandState(State):
-        noise: float=1.0
-    class ExampleRand(Rand):
-        s = RandState()
-        run_stochastic: bool = True
+    >>> class RandState(State):
+    ...     noise: float=1.0
+    >>> class ExampleRand(Rand):
+    ...     s: RandState = RandState()
 
-    Which enables the use of set_rand, update_stochastic_states, etc for updating
-    these states with methods called from the rng.
+    Which enables the use of set_rand_state, update_stochastic_states, etc for updating
+    these states with methods called from the rng when run_stochastic=True.
+
+    >>> exr = ExampleRand(run_stochastic=True)
+    >>> exr.set_rand_state('noise', 'normal', 1.0, 1.0)
+    >>> exr.s
+    RandState(noise=1.3047170797544314)
+
+    Checking copy:
+    >>> exr2 = exr.copy()
+    >>> exr2.s
+    RandState(noise=1.3047170797544314)
+    >>> exr2.run_stochastic
+    True
+    >>> exr2.rng.__getstate__()['state'] == exr.rng.__getstate__()['state']
+    True
     """
 
+    rolename = "r"
     rng: np.random._generator.Generator = np.random.default_rng()
     probs: list = list()
     probdens: float = 1.0
@@ -59,34 +73,42 @@ class Rand(dataobject, mapping=True, copy_default=True):
     default_track = ('s', 'probdens')
 
     def __init__(self, *args, seed=42, run_stochastic=False, probs=list(), s_kwargs={}):
-        args = get_true_fields(self, *args,
-                               seed=seed,
-                               run_stochastic=run_stochastic,
-                               probs=probs,
-                               rng=np.random.default_rng(self.seed))
+        args = self.get_true_fields(*args,
+                                    seed=seed,
+                                    run_stochastic=run_stochastic,
+                                    probs=probs,
+                                    rng=np.random.default_rng(seed))
         super().__init__(*args)
         if 's' in self.__fields__:
             self.s = self.s.__class__()
             self.s.set_atts(**s_kwargs)
-        if self.seed == None:
+        if self.seed is None:
             raise Exception("Invalid seed: None")
 
     def get_rand_states(self, auto_update_only=False):
+        """
+        Get the randomly-assigned states associated with the Rand at self.s.
+
+        Parameters
+        ----------
+        auto_update_only : bool, optional
+            Whether to only get auto-updated states. The default is False.
+
+        Returns
+        -------
+        rand_states : dict
+            States in self.s
+        """
         rand_states = asdict(self.s)
         if auto_update_only:
             rand_states = {state: vals for state,
                            vals in rand_states if hasattr(self.s, state+"_update")}
         return rand_states
 
-    def return_mutables(self):
-        if 's' in self.__fields__:
-            return astuple(self.s)
-        else:
-            return ()
-
-    def set_rand(self, statename, methodname, *args):
+    def set_rand_state(self, statename, methodname, *args):
         """
-        Update the given random state with a given method and arguments
+        Update the given random state with a given method and arguments.
+
         (if in run_stochastic mode)
 
         Parameters
@@ -111,6 +133,12 @@ class Rand(dataobject, mapping=True, copy_default=True):
                 value_pds = get_pdf_for_rand(newvalue, methodname, args)
                 self.probs.append(value_pds)
 
+    def return_mutables(self):
+        if 's' in self.__fields__:
+            return astuple(self.s)
+        else:
+            return ()
+
     def return_probdens(self):
         if self.probs:
             state_pd = np.prod(self.probs)
@@ -119,80 +147,54 @@ class Rand(dataobject, mapping=True, copy_default=True):
         return state_pd
 
     def update_stochastic_states(self):
-        """Updates the defined stochastic states defined to auto-update."""
+        """Update the defined stochastic states defined to auto-update."""
         if hasattr(self, 's'):
             if self.run_stochastic == 'track_pdf':
                 self.probs.clear()
             for state in self.s.__fields__:
                 if hasattr(self.s, state+"_update"):
-                    self.set_rand(state, getattr(self.s, state+'_update')[0],
-                                  *getattr(self.s, state+'_update')[1])
+                    self.set_rand_state(state, getattr(self.s, state+'_update')[0],
+                                        *getattr(self.s, state+'_update')[1])
 
     def reset(self):
-        """Resets Rand to the initial state."""
+        """Reset Rand to the initial state."""
         self.probs.clear()
         if 's' in self.__fields__:
             self.s.reset()
         self.rng = np.random.default_rng(self.seed)
 
     def update_seed(self, seed):
-        """Updates the random seed to the given value"""
+        """Update the random seed to the given value."""
         self.seed = seed
         BitGen = type(self.rng.bit_generator)
         self.rng.bit_generator.state = BitGen(seed).state
 
-    def assign(self, other_rand):
-        if hasattr(self, 's'):
-            self.s.assign(other_rand.s)
-        self.seed = other_rand.seed
+    def set_rng(self, other_rng):
+        """Set the state of the rng in the Rand to the same state as other_rng."""
         self.rng = np.random.default_rng(self.seed)
-        self.rng.__setstate__(other_rand.rng.__getstate__())
-        self.probs = copy.copy(other_rand.probs)
-        self.run_stochastic = other_rand.run_stochastic
+        self.rng.__setstate__(other_rng.__getstate__())
 
-    def get_true_field(self, fieldname, *args, **kwargs):
-        return get_true_field(self, fieldname, *args, **kwargs)
+    def set_field(self, fieldname, value, as_copy=True):
+        """Extend BaseContainer.assign to accomodate the rng."""
+        if fieldname == 'rng':
+            self.set_rng(value)
+        else:
+            BaseContainer.set_field(self, fieldname, value, as_copy=as_copy)
 
-    def get_true_fields(self, *args, **kwargs):
-        return get_true_fields(self, *args, **kwargs)
-
-    def to_default(self, *statenames):
-        """Resets given random states to their default values"""
-        for statename in statenames:
-            default = self.s.__default_vals__[self.s.__fields__.index(statename)]
-            self.s[statename] = default
-
-    def create_hist(self, timerange, track):
-        """
-        Creates a History corresponding to Rand
-
-        Parameters
-        ----------
-        timerange : iterable, optional
-            Time-range to initialize the history over. The default is None.
-        track : list/str/dict, optional
-            argument specifying attributes for :func:`get_sub_include'.
-                The default is None.
-
-        Returns
-        -------
-        hist : History
-            History of fields specified in track.
-        """
-        h = History()
-        track = get_dataobj_track(self, track)
-        if self.run_stochastic == 'track_pdf' and 'track_pdf' in track:
-            h.init_att('probdens', self.return_probdens(),
-                       timerange=timerange, track='all')
-        if 's' in track and hasattr(self, 's'):
-            h['s'] = init_hist_iter('s', self.s, timerange=timerange, track=track)
-        return h
+    def init_hist_att(self, hist, att, timerange, track, str_size='<U20'):
+        """Add field 'att' to history. Accommodates track_pdf option."""
+        if self.run_stochastic == 'track_pdf' and att == 'track_pdf':
+            hist.init_att('probdens', self.return_probdens(),
+                          timerange=timerange, track='all')
+        else:
+            BaseContainer.init_hist_att(self, hist, att, timerange, track, str_size)
 
 
 def get_pdf_for_rand(x, randname, args):
     """
-    Gets the corresponding probability mass/density for
-    for random sample x from 'randname' function in numpy.
+    Get the probability density/mass function for random sample x.
+
+    Pulled from 'randname' function in numpy.
 
     Parameters
     ----------
@@ -246,8 +248,9 @@ def get_pdf_for_rand(x, randname, args):
 
 def get_scipy_pdf_helper(x, randname, args, pmf=False):
     """
-    Gets probability mass/density for the outcome x from the distribution "randname"
-    with arguments "args".
+    Get probability mass/density for the outcome x.
+
+    Pulled from the distribution "randname" in scipy with arguments "args".
 
     Used as a helper function in determining stochastic model state probability
 
@@ -356,3 +359,21 @@ def get_pdf_for_dist(x, randname, args):
     else:
         raise Exception("Invalid randname distribution: " + randname +
                         ". Ensure that it is a part of numpy.random/scipy.stats")
+
+
+class RandState(State):
+    """Example random state for testing and docs."""
+
+    noise: float = 1.0
+
+
+class ExampleRand(Rand):
+    """Example Rand for testing and docs."""
+
+    s: RandState = RandState()
+
+
+if __name__ == "__main__":
+    exr = ExampleRand()
+    import doctest
+    doctest.testmod(verbose=True)

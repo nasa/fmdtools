@@ -128,7 +128,7 @@ def instantiate_pools(cores):
 
 
 if __name__=='__main__':
-    mdl=Pump(sp = dict(phases=(('start',0,4),('on',5, 49),('end',50,500)),times=(0,20, 500)))
+    mdl=Pump(sp = dict(phases=(('start',0,4),('on',5, 49),('end',50,500)), end_time=500))
     from fmdtools.sim.sample import FaultDomain, FaultSample
     fd = FaultDomain(mdl)
     fd.add_all()

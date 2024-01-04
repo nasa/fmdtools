@@ -5,8 +5,8 @@ Testing some different graph plotting methods.
 import unittest
 from examples.pump.ex_pump import Pump
 from examples.rover.rover_model import Rover
-from fmdtools.analyze.graph import ModelGraph, ModelFxnGraph, ModelFlowGraph
-from fmdtools.analyze.graph import ModelTypeGraph
+from fmdtools.analyze.graph import FunctionArchitectureGraph, ModelFxnGraph, ModelFlowGraph
+from fmdtools.analyze.graph import FunctionArchitectureTypeGraph
 from fmdtools.analyze.common import suite_for_plots
 from fmdtools.sim import propagate
 

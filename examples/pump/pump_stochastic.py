@@ -8,8 +8,8 @@ Description: A simple model for explaining stochastic behavior modelling
 This model is an extension of ex_pump.py that includes stochastic behaviors
 """
 from examples.pump.ex_pump  import MoveWat as DetMoveWat
-from fmdtools.define.rand import Rand
-from fmdtools.define.state import State
+from fmdtools.define.container.rand import Rand
+from fmdtools.define.container.state import State
 import fmdtools.sim.propagate as propagate
 import numpy as np
 
@@ -29,7 +29,7 @@ class ImportEERand(Rand, copy_default=True):
 
 class ImportEE(DetImportEE):
     __slots__ = ()
-    _init_r = ImportEERand
+    container_r = ImportEERand
 
     def condfaults(self, time):
         if self.ee_out.s.current > 20.0:
@@ -42,9 +42,10 @@ class ImportEE(DetImportEE):
             self.r.s.effstate = 100.0  # a voltage spike means voltage is much higher
         else:
             if time > self.t.time:
-                self.r.set_rand('effstate', 'triangular', 0.9, 1, 1.1)
+                self.r.set_rand_state('effstate', 'triangular', 0.9, 1, 1.1)
         if time > self.t.time:
-            self.r.set_rand('grid_noise', 'normal', 1, 0.05*(2+np.sin(np.pi/2*time)))
+            self.r.set_rand_state('grid_noise', 'normal',
+                                  1, 0.05*(2+np.sin(np.pi/2*time)))
         self.ee_out.s.voltage = self.r.s.grid_noise*self.r.s.effstate * 500
 
 
@@ -61,7 +62,7 @@ class ImportSigRand(Rand):
 
 class ImportSig(DetImportSig):
     __slots__ = ()
-    _init_r = ImportSigRand
+    container_r = ImportSigRand
 
     def behavior(self, time):
         if self.m.has_fault('no_sig'):
@@ -69,14 +70,14 @@ class ImportSig(DetImportSig):
         else:
             if time < 5:
                 self.sig_out.power = 0.0
-                self.r.to_default('sig_noise')
+                self.r.s.to_default('sig_noise')
             elif time < 50:
                 if not time % 5:
-                    self.r.set_rand('sig_noise', 'choice', [1.0, 0.9, 1.1])
+                    self.r.set_rand_state('sig_noise', 'choice', [1.0, 0.9, 1.1])
                 self.sig_out.power = 1.0*self.r.s.sig_noise
             else:
                 self.sig_out.power = 0.0
-                self.r.to_default()
+                self.r.s.to_default()
 
 
 class MoveWatStates(State):
@@ -95,8 +96,8 @@ class MoveWatRand(Rand):
 
 class MoveWat(DetMoveWat):
     __slots__ = ()
-    _init_s = MoveWatStates
-    _init_r = MoveWatRand
+    container_s = MoveWatStates
+    container_r = MoveWatRand
 
     def behavior(self, time):
         self.s.eff = self.r.s.eff
@@ -113,9 +114,7 @@ class Pump(DetPump):
     __slots__ = ()
     default_track = 'all'
 
-    def __init__(self, **kwargs):
-        super().__init__(**kwargs)
-
+    def init_architecture(self, **kwargs):
         self.add_flow('ee_1', Electricity)
         self.add_flow('sig_1', Signal)
         self.add_flow('wat_1', Water('Wat_1'))
@@ -127,8 +126,6 @@ class Pump(DetPump):
         self.add_fxn('move_water', MoveWat, 'ee_1', 'sig_1', 'wat_1', 'wat_2',
                      p={'delay': self.p.delay})
         self.add_fxn('export_water', ExportWater, 'wat_2')
-
-        self.build()
 
 
 if __name__ == "__main__":

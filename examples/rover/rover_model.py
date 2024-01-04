@@ -27,13 +27,14 @@ Flows:
     - Switch Signals
 """
 
-from fmdtools.define.parameter import Parameter
-from fmdtools.define.state import State
-from fmdtools.define.mode import Mode
-from fmdtools.define.block import FxnBlock
-from fmdtools.define.model import Model
-from fmdtools.define.flow import Flow
-from fmdtools.define.geom import PointParam, GeomPoint, LineParam, GeomLine, GeomArch
+from fmdtools.define.container.parameter import Parameter
+from fmdtools.define.container.state import State
+from fmdtools.define.container.mode import Mode
+from fmdtools.define.block.function import Function
+from fmdtools.define.architecture.function import FunctionArchitecture
+from fmdtools.define.flow.base import Flow
+from fmdtools.define.object.geom import PointParam, GeomPoint, LineParam, GeomLine
+from fmdtools.define.architecture.geom import GeomArchitecture
 from fmdtools.define.environment import Environment
 import fmdtools.sim.propagate as prop
 import itertools
@@ -52,7 +53,7 @@ class DegParam(Parameter, readonly=True):
 class GroundParam(Parameter):
     """
     Parameter defining line for rover to follow.
-    
+
     Fields
     ------
     linetype: str
@@ -93,7 +94,7 @@ class GroundParam(Parameter):
         return ls
 
     def gen_ls_turn(self):
-        """Generate line coordinates in turn environment"""
+        """Generate line coordinates in turn environment."""
         ls = [[x, turn_func(x, self.radius, self.x_start)]
               for x in np.arange(self.x_min, self.radius+self.x_start, self.x_res)]
         return tuple(ls)
@@ -158,7 +159,7 @@ class RoverParam(Parameter):
 
 
 def sin_func(x, amp, period):
-    """Sine line function generator"""
+    """Sine line function generator."""
     return amp * np.sin(x * 2 * np.pi / period)
 
 
@@ -198,8 +199,8 @@ class DestState(State):
 class Dest(GeomPoint):
     """Start/end/point."""
 
-    _init_p = DestParam
-    _init_s = DestState
+    container_p = DestParam
+    container_s = DestState
 
 
 class PathParam(LineParam):
@@ -211,17 +212,17 @@ class PathParam(LineParam):
     buffer_near: float = 0.4
 
 
-class GroundGeomArch(GeomArch):
+class GroundGeomArch(GeomArchitecture):
     """Geometry of rover environment--start, end, and line."""
 
-    _init_p = GroundParam
+    container_p = GroundParam
 
-    def init_geoms(self, **kwargs):
+    def init_architecture(self, **kwargs):
         """Initialize geometry with line and start/end points."""
         ls = self.p.gen_ls()
-        self.add_geom('line', PathLine, p={'xys': ls})
-        self.add_geom('start', Dest, p={'x': ls[0][0], 'y': ls[0][1]})
-        self.add_geom('end', Dest, p={'x': ls[-1][0], 'y': ls[-1][1]})
+        self.add_line('line', PathLine, p={'xys': ls})
+        self.add_point('start', Dest, p={'x': ls[0][0], 'y': ls[0][1]})
+        self.add_point('end', Dest, p={'x': ls[-1][0], 'y': ls[-1][1]})
 
 
 class GroundState(State):
@@ -231,31 +232,29 @@ class GroundState(State):
 class Ground(Environment):
     """Ground environment of the rover."""
 
-    _init_ga = GroundGeomArch
-    _init_p = GroundParam
-    _init_s = GroundState
+    arch_ga = GroundGeomArch
+    container_p = GroundParam
+    container_s = GroundState
 
     def on_course(self, pos_state):
-        """check if the rover is on_course (i.e., within the 'on' buffer)"""
-        return self.ga.geoms['line'].at(pos_state.get('x', 'y'), 'on')
+        """Check if the rover is on_course (i.e., within the 'on' buffer)."""
+        return self.ga.lines['line'].at(pos_state.get('x', 'y'), 'on')
 
     def at_end(self, pos_state):
-        """check if the rover is at the end point, 
-        accouting for the 'on' buffer)"""
-        return self.ga.geoms['end'].at(pos_state.get("x", "y"), 'on')
+        """Check if the rover is at the end point, accounting for the 'on' buffer)."""
+        return self.ga.points['end'].at(pos_state.get("x", "y"), 'on')
 
     def end_dist(self, pos_state):
-        """"calculate minimum distance between the end point and the rover"""
-        return self.ga.geoms['end'].on.distance(Point(pos_state.get("x", "y")))
+        """Calculate minimum distance between the end point and the rover."""
+        return self.ga.points['end'].on.distance(Point(pos_state.get("x", "y")))
 
-    def max_line_dist(self, pos_hist): 
-        """calculate the maximum distance the rover has deviated from 
-        its path"""
+    def max_line_dist(self, pos_hist):
+        """Calculate the maximum distance the rover has deviated from its path."""
         xhist = pos_hist.x
         yhist = pos_hist.y
         max_dist = 0.0
         for i, x in enumerate(xhist):
-            dist = self.ga.geoms['line'].shape.distance(Point(x, yhist[i]))
+            dist = self.ga.lines['line'].shape.distance(Point(x, yhist[i]))
             if dist > max_dist:
                 max_dist = dist
         return max_dist
@@ -264,7 +263,7 @@ class Ground(Environment):
 class PathLine(GeomLine):
     """Rover Line."""
 
-    _init_p = PathParam
+    container_p = PathParam
 
 
 class PosState(State):
@@ -295,13 +294,13 @@ class PosState(State):
 class Pos(Flow):
     """Rover position/velocity flow."""
 
-    _init_s = PosState
+    container_s = PosState
 
 
 class Pos_Signal(Flow):
     """Rover position signal flow."""
 
-    _init_s = PosState
+    container_s = PosState
 
 
 class EEState(State):
@@ -314,7 +313,7 @@ class EEState(State):
 class EE(Flow):
     """Electricity flow."""
 
-    _init_s = EEState
+    container_s = EEState
 
 
 class VideoState(State):
@@ -324,9 +323,9 @@ class VideoState(State):
     Fields
     ------
     lin_ux: float
-        unit vector indicating the x direction of the line    
+        unit vector indicating the x direction of the line
     lin_uy: float
-        unit vector indicatinf the y direction of the line        
+        unit vector indicatinf the y direction of the line
     lin_dx: float
         distance to the line in the x
     lin_dy: float
@@ -345,7 +344,7 @@ class VideoState(State):
 class Video(Flow):
     """Video flow."""
 
-    _init_s = VideoState
+    container_s = VideoState
 
 
 class ControlState(State):
@@ -367,7 +366,7 @@ class ControlState(State):
 class Control(Flow):
     """Control flow."""
 
-    _init_s = ControlState
+    container_s = ControlState
 
 
 class SwitchState(State):
@@ -379,13 +378,13 @@ class SwitchState(State):
 class Switch(Flow):
     """Power switch."""
 
-    _init_s = SwitchState
+    container_s = SwitchState
 
 
 class Comms(Flow):
     """External communications flow."""
 
-    _init_s = PosState
+    container_s = PosState
 
 
 class OverrideState(ControlState):
@@ -397,7 +396,7 @@ class OverrideState(ControlState):
 class OverrideComms(Flow):
     """Override communications flow."""
 
-    _init_s = OverrideState
+    container_s = OverrideState
 
 
 class FaultStates(State):
@@ -411,7 +410,7 @@ class FaultStates(State):
 class FaultSig(Flow):
     """Rover fault signal."""
 
-    _init_s = FaultStates
+    container_s = FaultStates
 
 
 # MODEL FUNCTIONS
@@ -438,33 +437,33 @@ class PlanPathMode(Mode):
     fm_args = {"no_con": (1e-4, 200), "crash": (1e-4, 200)}
     opermodes = ("drive", "standby", "em_off", "finished")
     mode: str = "standby"
-    
 
-class PlanPath(FxnBlock):
-    "Plans the next drive move based on the current state of the rover"
-    
+
+class PlanPath(Function):
+    """Plan the next drive move based on the current state of the rover."""
+
     __slots__ = ("video", "pos_signal", "ground", "control", "fault_sig", 'pos')
-    _init_m = PlanPathMode
-    _init_p = ResCorrection
-    _init_video = Video
-    _init_pos_signal = Pos_Signal
-    _init_pos = Pos
-    _init_ground = Ground
-    _init_control = Control
-    _init_fault_sig = FaultSig
+    container_m = PlanPathMode
+    container_p = ResCorrection
+    flow_video = Video
+    flow_pos_signal = Pos_Signal
+    flow_pos = Pos
+    flow_ground = Ground
+    flow_control = Control
+    flow_fault_sig = FaultSig
     flownames = {"auto_control": "control"}
 
     def dynamic_behavior(self, time):
         """
-        Dynamic Behavior of Planning Module
-        
+        Dynamic Behavior of Planning Module.
+
         Step 1: Assign Operational Mode.
         Step 2A: If Operational Mode is Drive determine if the rover has reached
-        the end point or emergency shut off is required and assign those modes.
-        Step 2B: if none of the situations in step 2 applies, determines the 
+        the end point or emergency shut off is required and assign those modes
+        Step 2B: if none of the situations in step 2 applies, determines the
         control signal for left and right motor power, based on percieced line
         and current location.
-        Step 4: if mode is "finished" or "em_off"" sets the left power and 
+        Step 4: if mode is "finished" or "em_off"" sets the left power and
         right power control signal to 0.
         """
         if not self.m.in_mode("no_con"):
@@ -492,13 +491,14 @@ class PlanPath(FxnBlock):
         u_self = self.pos_signal.s.get('ux', 'uy')
         u_lin = self.video.s.get('lin_ux', 'lin_uy')
         rdiff_track = rdiff_from_vects(u_self, u_lin)
-        
+
         u_lin_dev = self.video.s.get('lin_dx', 'lin_dy')
         rdiff_err = rdiff_from_vects(u_self, u_lin_dev) * np.linalg.norm(u_lin_dev)
-        
-        rdiff = rdiff_track + 0.15 * rdiff_err 
-        
-        # turn_fault_correction = self.p.cor_d * self.fault_sig.s.drift a factor that must multiply with rdiff. test ranges and make sure it is reasonable.
+
+        rdiff = rdiff_track + 0.15 * rdiff_err
+        # turn_fault_correction = self.p.cor_d * self.fault_sig.s.drift
+        # a factor that must multiply with rdiff.
+        # test ranges and make sure it is reasonable.
         vel_fault_correction = (self.p.cor_f * (self.fault_sig.s.friction)
                                 + self.p.cor_t * (self.fault_sig.s.transfer - 1))
         vel_adj = max(0.2, 1 - 0.9 * abs(rdiff_err * 50)) * vel_fault_correction
@@ -514,27 +514,27 @@ class PlanPath(FxnBlock):
 
 
 def rdiff_from_vects(u_self, u_lin):
-    """determine the needed correction to reach from point 1 to point 2"""
+    """Determine the needed correction to reach from point 1 to point 2."""
     d = np.dot(u_self, u_lin)
     dr = np.sign(np.cross(u_self, u_lin))
     rdiff = dr * np.arccos(d/(np.linalg.norm(u_self)*np.linalg.norm(u_lin)+0.00001))
     return rdiff
-    
 
 
 class DriveMode(Mode):
-    '''
-    Instantiates Modes for the Drive Function. 
-    key_phases_by = 'plan_path' defines that the modes may be intantiated for 
+    """
+    Instantiate Modes for the Drive Function.
+
+    key_phases_by = 'plan_path' defines that the modes may be intantiated for
     certain phases of PlanPath. The phases are defined by opptvect.
-    mode_args: determines if the how the modes in Drivemodes should be 
+    mode_args: determines if the how the modes in Drivemodes should be
     formulated (e.g., as a parameter, manually, as set of modes, etc. )
-    '''
+    """
+
     s: FaultStates = FaultStates()
     mode_args: tuple = tuple()
     deg_params: dict = dict
     fm_args = dict()
-
 
     def __init__(self, *args, mode_args=tuple(), deg_params=dict(), **kwargs):
         super().__init__(*args, **kwargs)
@@ -565,10 +565,10 @@ class DriveMode(Mode):
             self.init_faultstate_modes(manual_modes=self.mode_args, phases=ph)
         else:
             if "manual" in self.mode_args:
-                manual_modes={"elec_open": {"transfer": 0.0},
-                              "stuck": {"friction": 10.0},
-                              "stuck_right": {"friction": 3.0, "drift": 0.2},
-                              "stuck_left": {"friction": 3.0, "drift": -0.2}}
+                manual_modes = {"elec_open": {"transfer": 0.0},
+                                "stuck": {"friction": 10.0},
+                                "stuck_right": {"friction": 3.0, "drift": 0.2},
+                                "stuck_left": {"friction": 3.0, "drift": -0.2}}
                 self.init_faultstate_modes(manual_modes, phases=ph)
             if "set" in self.mode_args:
                 franges = {"friction": {1.5, 3.0, 10.0},
@@ -585,21 +585,21 @@ class DriveMode(Mode):
                     self.init_n_faultstates(franges, phases=ph, n=1)
 
 
-class Drive(FxnBlock):
-    '''The drive function determines the rover drive functionality'''
+class Drive(Function):
+    """The drive function determines the rover drive functionality."""
+
     __slots__ = ("ground", "motor_control", "ee_in", 'fault_sig', 'pos')
-    _init_m = DriveMode
-    _init_fault_sig = FaultSig
-    _init_ground = Ground
-    _init_pos = Pos
-    _init_motor_control = Control
-    _init_ee_in = EE
+    container_m = DriveMode
+    flow_fault_sig = FaultSig
+    flow_ground = Ground
+    flow_pos = Pos
+    flow_motor_control = Control
+    flow_ee_in = EE
     flownames = {"ee_15": "ee_in"}
 
     def dynamic_behavior(self, time):
-        '''Defines the drive behavior for a given time step'''
-        
-        '''calculate left and right motor power'''
+        """Define the drive behavior for a given time step."""
+        # calculate left and right motor power
         self.fault_sig.s.assign(self.m.s, "friction", "transfer", "drift")
         rpower = (self.m.s.transfer * self.ee_in.s.v * self.motor_control.s.rpower / 15
                   + self.m.s.drift)
@@ -607,16 +607,16 @@ class Drive(FxnBlock):
                   - self.m.s.drift)
 
         if self.m.has_fault("elec_open"):
-            '''Determine EE input based on elec_open if  fault is present'''
+            # Determine EE input based on elec_open if  fault is present
             self.ee_in.s.a = 0
         else:
             self.ee_in.s.a = (1.0 + self.m.s.friction) * (lpower + rpower) / 12
-            
+
         if (lpower + rpower) > 100:
-            '''Set faulty behavior if motor power is beyond a threshold'''
+            # Set faulty behavior if motor power is beyond a threshold
             self.add_fault("elec_open")
         else:
-            '''determine new rover drive paramenters during nominal behaviors'''
+            # determine new rover drive paramenters during nominal behaviors
             self.drive_nominal(rpower, lpower)
         self.ground.s.in_bound = self.ground.on_course(self.pos.s)
 
@@ -661,7 +661,7 @@ class Drive(FxnBlock):
 
 class PerceptionMode(Mode):
     """
-    Possible modes for Perception function
+    Possible modes for Perception function.
 
     Modes
     -------
@@ -683,23 +683,20 @@ class PerceptionMode(Mode):
     exclusive = True
 
 
-class Perception(FxnBlock):
-    ''' 
-    Rover function that percieves the environment and creates
-    the video feed.
-    '''
+class Perception(Function):
+    """Rover function that percieves the environment and creates the video feed."""
+
     __slots__ = ("ground", "ee", "video", 'pos')
     rad = 1         # not used. Is it needeD?
-    _init_m = PerceptionMode
-    _init_pos = Pos
-    _init_ground = Ground
-    _init_ee = EE
-    _init_video = Video
+    container_m = PerceptionMode
+    flow_pos = Pos
+    flow_ground = Ground
+    flow_ee = EE
+    flow_video = Video
     flownames = {"ee_12": "ee"}
 
     def dynamic_behavior(self, time):
-        ''' sets the video feed based on the behavior mode at each timestep'''
-        
+        """Set the video feed based on the behavior mode at each timestep."""
         # Nominal Behavior
         if self.m.in_mode("off"):
             self.ee.s.a = 0
@@ -712,25 +709,23 @@ class Perception(FxnBlock):
                 if self.ground.on_course(self.pos.s):
                     self.get_line_ang()
                 else:
-                    # video quality drops of if rover is off course
+                    # Video quality drops off if rover is off course
                     self.video.s.quality = 0.0
             elif self.ee.s.v == 0:
                 self.m.set_mode("off")
-        #Faulty Behavior
+        # Faulty Behavior
         elif self.m.has_fault("bad_feed"):
             self.video.quality = 0.5
 
     def get_line_ang(self):
-        '''determines the vidoe feed states'''
+        """Determine the video feed states."""
         xy = self.pos.s.get('x', 'y')
-        '''calculate the unit vector to determine the direction of the line at 
-        the nearest point in the line from the current location'''
-        
-        ux, uy = self.ground.ga.geoms['line'].vect_at_shape(xy) 
-        '''calculates the direction the rover needs to travel to reach the 
-        nearest point in the line'''
-        
-        dx, dy = self.ground.ga.geoms['line'].vect_to_shape(xy)
+        # calculate the unit vector to determine the direction of the line at
+        # the nearest point in the line from the current location
+        ux, uy = self.ground.ga.lines['line'].vect_at_shape(xy)
+        # calculates the direction the rover needs to travel to reach the
+        # nearest point in the line
+        dx, dy = self.ground.ga.lines['line'].vect_to_shape(xy)
         self.video.s.put(lin_ux=ux[0], lin_uy=uy[0],
                          lin_dx=dx[0], lin_dy=dy[0], quality=1.0)
 
@@ -753,14 +748,14 @@ class PowerState(State):
 
 class PowerMode(Mode):
     """
-    Possible modes for Power function
+    Possible modes for Power function.
 
     Modes
     -------
     no_charge : Fault
         Battery is out of charge.
     short: Fault
-        There is a short. 
+        There is a short.
     supply: Mode
         supply power
     charge: Mode
@@ -770,7 +765,7 @@ class PowerMode(Mode):
     off: Mode
         power supply is off
     """
-    
+
     fm_args = {"no_charge": (1e-5, 100, {"off": 1.0}),
                "short": (1e-5, 100, {"supply": 1.0})}
     opermodes = ("supply", "charge", "off")
@@ -778,19 +773,19 @@ class PowerMode(Mode):
     exclusive = True
 
 
-class Power(FxnBlock):
+class Power(Function):
     """Rover power supply."""
 
     __slots__ = ("ee_15", "ee_5", "ee_12", "switch")
-    _init_s = PowerState
-    _init_m = PowerMode
-    _init_ee_15 = EE
-    _init_ee_5 = EE
-    _init_ee_12 = EE
-    _init_switch = Switch
+    container_s = PowerState
+    container_m = PowerMode
+    flow_ee_15 = EE
+    flow_ee_5 = EE
+    flow_ee_12 = EE
+    flow_switch = Switch
 
     def static_behavior(self, time):
-        """Determining power use based on mode."""
+        """Determine power use based on mode."""
         if self.m.in_mode("off"):
             self.off_power()
         elif self.m.in_mode("supply"):
@@ -813,19 +808,19 @@ class Power(FxnBlock):
         self.s.limit(charge=(0, 100))
 
     def short_power(self):
-        """there is a short"""
+        """Power in case of a short has normal voltage."""
         self.ee_5.s.v = 5
         self.ee_12.s.v = 12
         self.ee_15.s.v = 15
 
     def no_charge_power(self):
-        """ batter is out of charge"""
+        """Battery is out of charge."""
         self.ee_5.s.v = 0
         self.ee_12.s.v = 0
         self.ee_15.s.v = 0
 
     def off_power(self):
-        """power supply is shut off"""
+        """Power supply is shut off."""
         self.ee_5.s.put(v=0, a=0)
         self.ee_12.s.put(v=0, a=0)
         self.ee_15.s.put(v=0, a=0)
@@ -833,7 +828,7 @@ class Power(FxnBlock):
             self.m.set_mode("supply")
 
     def supply_power(self):
-        """supply power"""
+        """Power supply is in supply mode."""
         if self.s.charge > 0:
             self.ee_5.s.v = 5
             self.ee_12.s.v = 12
@@ -844,18 +839,18 @@ class Power(FxnBlock):
             self.m.set_mode("off")
 
     def power_usage(self):
-        '''calculates the power usage in general'''
+        """Calculate the power usage in general."""
         self.s.power = (1.0 + self.ee_12.s.mul("v", "a") +
                         self.ee_5.s.mul("v", "a") + self.ee_15.s.mul("v", "a"))
 
     def charge_power_usage(self):
-        '''power usage during the battery is charging'''
+        """Calculate the power usage when the battery charges."""
         self.s.power = -1
         if self.s.charge == 100:
             self.m.set_mode("off")
 
     def short_power_usage(self):
-        '''power usage is doubled when there is a short'''
+        """Calculate power usage when there is a short (calculated as double)."""
         self.s.power = self.s.power * 2
         if self.s.charge == 0:
             self.m.set_mode("no_charge")
@@ -863,10 +858,9 @@ class Power(FxnBlock):
             self.m.set_mode("off")
 
 
-
 class OverrideMode(Mode):
     """
-    Possible modes for Override function
+    Possible modes for Override function.
 
     Modes
     -------
@@ -877,17 +871,18 @@ class OverrideMode(Mode):
     off: Mode
         override is off
     """
+
     opermodes = ("off", "standby", "override")
     mode: str = "off"
 
 
-class Override(FxnBlock):
+class Override(Function):
     __slots__ = ("override_comms", "ee", "motor_control", "auto_control")
-    _init_m = OverrideMode
-    _init_override_comms = OverrideComms
-    _init_ee = EE
-    _init_motor_control = Control
-    _init_auto_control = Control
+    container_m = OverrideMode
+    flow_override_comms = OverrideComms
+    flow_ee = EE
+    flow_motor_control = Control
+    flow_auto_control = Control
     flownames = {"ee_5": "ee"}
 
     def dynamic_behavior(self, time):
@@ -903,15 +898,16 @@ class Override(FxnBlock):
             self.motor_control.s.assign(self.override_comms.s, "rpower", "lpower")
 
 
-class Communications(FxnBlock):
-    ''' The communcation hub'''
+class Communications(Function):
+    """Rover communications to the user."""
+
     __slots__ = ("ee_12", "comms", "pos_signal")
-    _init_ee_12 = EE
-    _init_comms = Comms
-    _init_pos_signal = Pos_Signal
+    flow_ee_12 = EE
+    flow_comms = Comms
+    flow_pos_signal = Pos_Signal
 
     def dynamic_behavior(self, time):
-        '''when active, converts position signals to communication signals'''
+        """When active, convert position signals to communication signals."""
         if self.ee_12.s.v == 12:
             self.ee_12.s.a = 1
             self.comms.s.assign(self.pos_signal.s, "x", "y", "vel", "ux", "uy")
@@ -919,10 +915,11 @@ class Communications(FxnBlock):
             self.comms.s.put(x=0, y=0, vel=0, ux=0, uy=0)
 
 
-class Operator(FxnBlock):
-    '''Operator turns on or off the rover'''
+class Operator(Function):
+    """Operator turns on or off the rover."""
+
     __slots__ = ("switch",)
-    _init_switch = Switch
+    flow_switch = Switch
 
     def dynamic_behavior(self, t):
         if t == 1:
@@ -932,38 +929,40 @@ class Operator(FxnBlock):
 
 
 def gen_model_params(x, scen):
-    ''' genrates model parameters for scenarios'''
+    """Generate model parameters for the scenario."""
     params = {"drive_modes": {"custom_fault": {"friction": x[scen][0][0],
                                                "drift": x[scen][0][1],
                                                "transfer": x[scen][0][2]}}}
     return params
 
 
-class Rover(Model):
-    ''' 
+class Rover(FunctionArchitecture):
+    """
+    Overall rover functional architecture.
+
     The functions override, communications, and operator are place holders
     in this model and do not affect the Rover Behavior. The remaining functions
     are setup to mimic a rover that percieved its environment through a video
     and follows a predefined path automatically.
-    
-    To study how the rover behaves when when faults occur, the simulation 
-    can be run with individual faults or cominations of faults that can be 
+
+    To study how the rover behaves when when faults occur, the simulation
+    can be run with individual faults or combinations of faults that can be
     instantiated at different timesteps (or phases of operation).
-    
-    To study how the rover behaviors when environmental disturbances and 
+
+    To study how the rover behaviors when environmental disturbances and
     external factors are affecting it, the model may be simulated with
-    varying parameters. (e.g., friction can be increased if a frintion on the 
+    varying parameters. (e.g., friction can be increased if a friction on the
                          ground is expected to be high).
-    '''
+    """
+
     __slots__ = ()
-    _init_p = RoverParam
-    default_sp = dict(times=(0, 150),
+    container_p = RoverParam
+    default_sp = dict(end_time=150,
                       phases=(("start", 0, 30), ("end", 31, 150)),
                       end_condition="indicate_finished")
 
-    def __init__(self, **kwargs):
-        super().__init__(**kwargs)
-
+    def init_architecture(self, **kwargs):
+        """Initialize the functional architecture."""
         self.add_flow("ground", Ground, p=self.p.ground)
         self.add_flow("pos_signal", Pos_Signal)
         self.add_flow('pos', Pos)
@@ -977,7 +976,6 @@ class Rover(Model):
         self.add_flow("comms", Comms)
         self.add_flow("override_comms", OverrideComms)
         self.add_flow("fault_sig", FaultSig)
-        # self.add_flow('Example_Disconnect')
 
         self.add_fxn("power", Power, "ee_15", "ee_5", "ee_12", "switch")
         self.add_fxn("operator", Operator, "switch")
@@ -991,13 +989,8 @@ class Rover(Model):
         self.add_fxn("drive", Drive, "ground", 'pos', "ee_15", "motor_control",
                      "fault_sig", m=drive_m)
 
-        self.build()
-
     def indicate_finished(self, time):
-        ''' 
-        determines if the rover has completed its mission regardless of it
-        being successful or not.
-        '''
+        """Determine if the rover has completed its mission (successful or not)."""
         if  (self.flows['ground'].at_end(self.flows['pos'].s)
              or (time > 5 and self.fxns["plan_path"].m.in_mode("standby"))
              or self.fxns["plan_path"].m.in_mode("em_off", "finished")):
@@ -1006,41 +999,54 @@ class Rover(Model):
             return False
 
     def find_classification(self, scen, mdlhist):
-        ''' 
+        """
         calculates metrics that need to be tracked for the simulation
-        
+
         Returns
         ----------
-        
-            "rate": failure rate of the scenario
-            "cost": cost of the resulting failure
-            "prob": scenario probability
-            "expected_cost": expected cost of the failure
-            "in_bound": is true if the rover is within the path bounds
-            "at_finish": is true if the rover has reached the end point
-            "line_dist": line distance
-            "num_modes": numbers of faut modes present
-            "end_dist": minimum distance between rover and end point,
-            "tot_deviation": total deviation from the path through the mission
-            "faults": fault modes present
-            "classification": mission status (nominal, faulty, or incomplete)
-            "endpt": rovers last position (or end point),
-        
-        '''
+        endclass : dict
+            Dictionary with keys/values:
+            "rate": float
+                failure rate of the scenario
+            "cost": float
+                cost of the resulting failure
+            "prob": float
+                scenario probability
+            "expected_cost": float
+                expected cost of the failure
+            "in_bound": bool
+                is true if the rover is within the path bounds
+            "at_finish": bool
+                is true if the rover has reached the end point
+            "line_dist": float
+                line distance
+            "num_modes": int
+                numbers of faut modes present
+            "end_dist": float
+                minimum distance between rover and end point,
+            "tot_deviation": float
+                total deviation from the path through the mission
+            "faults": list
+                fault modes present
+            "classification": str
+                mission status (nominal, faulty, or incomplete)
+            "endpt": list
+                rovers last position (or end point),
+        """
         modes, modeproperties = self.return_faultmodes()
         classification = str()
         at_finish = True
-        
-        ''' mission is incomplete if the rovr is not at the end point'''
+
+        # mission is incomplete if the rovr is not at the end point
         if not self.flows['ground'].at_end(self.flows['pos'].s):
             classification = "incomplete mission"
             at_finish = False
-            
-        '''mission is fault if any fault modes are present'''
+
+        # mission is fault if any fault modes are present
         if any(modes):
             classification = classification + " faulty"
-            
-        '''missing is nominal in no fault modes are present'''
+
+        # missing is nominal in no fault modes are present
         if not classification:
             classification = "nominal mission"
         num_modes = len(modes)
@@ -1053,26 +1059,23 @@ class Rover(Model):
         line_dist = 1  # looks like this is not used. Is this needed? TODO: reimplement
         hist_xy = mdlhist.faulty.flows.pos.s.get('x', 'y')
         tot_deviation = self.flows['ground'].max_line_dist(hist_xy)
-        return {
-            "rate": scen.rate,
-            "cost": 0,
-            "prob": scen.prob,
-            "expected_cost": 0,
-            "in_bound": in_bound,
-            "at_finish": at_finish,
-            "line_dist": line_dist,
-            "num_modes": num_modes,
-            "end_dist": end_dist,
-            "tot_deviation": tot_deviation,
-            "faults": modes,
-            "classification": classification,
-            "endpt": endpt,
-        }
+        return {"rate": scen.rate,
+                "cost": 0,
+                "prob": scen.prob,
+                "expected_cost": 0,
+                "in_bound": in_bound,
+                "at_finish": at_finish,
+                "line_dist": line_dist,
+                "num_modes": num_modes,
+                "end_dist": end_dist,
+                "tot_deviation": tot_deviation,
+                "faults": modes,
+                "classification": classification,
+                "endpt": endpt}
 
 
 def gen_param_space():
-    '''generate the parameter space when a range of parameters needs to be 
-    simulated'''
+    """Generate parameter space when a range of parameters needs to be simulated."""
     paramspace = []
     ranges = [x for x in itertools.product(np.arange(0, 10, 0.2), range(10, 50, 10))]
     for r in ranges:
@@ -1094,51 +1097,52 @@ if __name__ == "__main__":
 
     mdl = Rover()
     ec, hist = prop.nominal(mdl)
-    fig, ax = hist.plot_trajectories('flows.pos.s.x','flows.pos.s.y',
-                                     time_groups = ['nominal'])
+    fig, ax = hist.plot_trajectories('flows.pos.s.x', 'flows.pos.s.y',
+                                     time_groups=['nominal'])
     mdl.flows['ground'].ga.show(fig=fig, ax=ax)
-    fig, ax = hist.plot_trajectories('flows.pos.s.x','flows.pos.s.y')
-    
+    fig, ax = hist.plot_trajectories('flows.pos.s.x', 'flows.pos.s.y')
+
     mdl = Rover(p={'ground': GroundParam(linetype='turn')})
     ec, hist = prop.nominal(mdl)
 
     geoms = {'line': {'shapes': {'on': {}, 'shape': {}}}, 'start': {}, 'end': {}}
-    fig, ax = mdl.flows['ground'].ga.show(geoms = geoms)
+    fig, ax = mdl.flows['ground'].ga.show(geoms=geoms)
 
-    fig, ax = hist.plot_trajectories('flows.pos.s.x','flows.pos.s.y',
-                                     time_groups = ['nominal'], fig=fig, ax=ax)
-    #ax.set_xlim(0, 5.0)
-    #ax.set_ylim(-2.5, 2.5)
+    fig, ax = hist.plot_trajectories('flows.pos.s.x', 'flows.pos.s.y',
+                                     time_groups=['nominal'], fig=fig, ax=ax)
+    # ax.set_xlim(0, 5.0)
+    # ax.set_ylim(-2.5, 2.5)
     hist.flows.pos.s.x
-    fig, ax = hist.plot_trajectories('flows.pos.s.x','flows.pos.s.y')
-
+    fig, ax = hist.plot_trajectories('flows.pos.s.x', 'flows.pos.s.y')
 
     from fmdtools.sim.sample import ParameterSample, ParameterDomain
     pd_sine = ParameterDomain(RoverParam)
     pd_sine.add_constant("ground.linetype", "sine")
-    pd_sine.add_variables("ground.amp", "ground.period", lims={"ground.amp":(0, 8), "ground.period": (10, 50)})
+    pd_sine.add_variables("ground.amp", "ground.period",
+                          lims={"ground.amp": (0, 8), "ground.period": (10, 50)})
 
     ps_sine = ParameterSample(pd_sine)
-    ps_sine.add_variable_ranges(comb_kwargs={'resolutions':{'ground.amp': 2, "ground.period": 20}})
+    comb_kwargs = {'resolutions': {'ground.amp': 2, "ground.period": 20}}
+    ps_sine.add_variable_ranges(comb_kwargs=comb_kwargs)
 
     res, hist = prop.parameter_sample(mdl, ps_sine)
     comp = tabulate.Comparison(res, ps_sine,
-                              metrics=['end_dist'],
-                              factors=['p.ground.amp', 'p.ground.period'])
-    #comp.sort_by_factor('p.ground.amp')
+                               metrics=['end_dist'],
+                               factors=['p.ground.amp', 'p.ground.period'])
+    # comp.sort_by_factor('p.ground.amp')
     comp.as_table()
     comp.as_plot("end_dist")
 
     comp1 = tabulate.Comparison(res, ps_sine,
-                              metrics=['end_dist', "rate"],
-                              factors=['p.ground.amp', 'p.ground.period'])
-    #comp.sort_by_factor('p.ground.amp')
+                                metrics=['end_dist', "rate"],
+                                factors=['p.ground.amp', 'p.ground.period'])
+    # comp.sort_by_factor('p.ground.amp')
     comp1.as_table()
-    #comp1.sort_by_factor('p.ground.period')
-    #comp1.sort_by_factor('p.ground.amp')
+    # comp1.sort_by_factor('p.ground.period')
+    # comp1.sort_by_factor('p.ground.amp')
     comp1.sort_by_factors()
     comp1.as_plot("end_dist")
-    comp1.as_plot("end_dist", color_factor = "p.ground.period")
-    comp1.as_plot("end_dist", color_factor = "p.ground.amp")
-    comp1.as_plots("end_dist", "rate", color_factor = "p.ground.amp")
-    comp1.as_plots("end_dist", "rate", color_factor = "p.ground.amp", title="hi", v_padding=0.4)
+    comp1.as_plot("end_dist", color_factor="p.ground.period")
+    comp1.as_plot("end_dist", color_factor="p.ground.amp")
+    comp1.as_plots("end_dist", "rate", color_factor="p.ground.amp")
+    comp1.as_plots("end_dist", "rate", color_factor="p.ground.amp", title="hi", v_padding=0.4)

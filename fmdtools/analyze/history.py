@@ -11,15 +11,13 @@ And functions/methods:
 - :func:`bootstrap_confidence_interval`: Convenience wrapper for scipy.bootstrap
 - :func:`diff`: Helper function for finding inconsistent states between val1, val2, with
   the difftype option
-- :func:`init_indicator_hist`: Creates a history for an object with indicator methods
-  (e.g., obj.indicate_XX)
 - :func:`init_hist_iter`: Initializes the history for a given attribute att with value
   val. Enables the recursive definition of a history as a nested structure.
 - :func:`init_dicthist`: Initializes histories for dictionary attributes (if any)
 """
 from fmdtools.analyze.result import Result, load_folder, load, fromdict
 from fmdtools.analyze.common import bootstrap_confidence_interval, get_sub_include
-from fmdtools.define.common import get_var, get_obj_indicators
+from fmdtools.define.base import get_var
 from fmdtools.analyze.common import unpack_plot_values, phase_overlay
 from fmdtools.analyze.common import multiplot_legend_title, multiplot_helper
 from fmdtools.analyze.common import plot_err_hist, setup_plot
@@ -36,35 +34,6 @@ def is_known_immutable(val):
 def is_known_mutable(val):
     """Check if value is a known mutable."""
     return type(val) in [dict, set]
-
-
-def init_indicator_hist(obj, h, timerange, track):
-    """
-    Create a history for an object with indicator methods (e.g., obj.indicate_XX).
-
-    Parameters
-    ----------
-    obj : object
-        Function/Flow/Model object with indicators
-    h : History
-        History of Function/Flow/Model object with indicators appended in h['i']
-    timerange : iterable, optional
-        Time-range to initialize the history over. The default is None.
-    track : list/str/dict, optional
-        argument specifying attributes for :func:`get_sub_include'. The default is None.
-
-    Returns
-    -------
-    h : History
-        History of states with structure {'XX':log} for indicator `obj.indicate_XX`
-    """
-    sub_track = get_sub_include('i', track)
-    if sub_track:
-        indicators = get_obj_indicators(obj)
-        if indicators:
-            h['i'] = History()
-            for i, val in indicators.items():
-                h['i'].init_att(i, val, timerange, sub_track, dtype=bool)
 
 
 def init_hist_iter(att, val, timerange=None, track=None, dtype=None, str_size='<U20'):
@@ -300,7 +269,10 @@ class History(Result):
                     i_ind = split_att.index('i')
                     new_split_att = split_att[:i_ind] + ['indicate_'+split_att[-1]]
                     methname = '.'.join(new_split_att)
-                    val = get_var(obj, methname)(time)
+                    try:
+                        val = get_var(obj, methname)(time)
+                    except TypeError:
+                        val = get_var(obj, methname)()
                 elif 'faults' in att:
                     split_att = att.split('.')
                     faultind = split_att.index('faults')
@@ -329,7 +301,7 @@ class History(Result):
                             raise Exception(obj_str + "Time beyond range of model" +
                                             "history--check staged execution " +
                                             "and simulation time settings" +
-                                            " (end condition, mdl.sp.times)") from e
+                                            " (end condition, mdl.sp.end_time)") from e
                         elif not np.can_cast(type(val), type(hist[t_ind])):
                             raise Exception(obj_str + str(att)+" changed type: " +
                                             str(type(hist[t_ind])) + " to " +
@@ -432,7 +404,7 @@ class History(Result):
             nomhist = nomhist.flatten()
         return nomhist, self._prep_faulty()
 
-    def get_degraded_hist(self, *attrs, nomhist={}, operator=np.prod, difftype='bool',
+    def get_degraded_hist(self, *attrs, nomhist={}, operator=np.any, difftype='bool',
                           withtime=True, withtotal=True):
         """
         Get history of times when the attributes *attrs deviate from nominal values.

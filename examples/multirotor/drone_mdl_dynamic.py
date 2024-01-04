@@ -6,14 +6,14 @@ Created: June 2019
 Description: A fault model of a multi-rotor drone.
 """
 import numpy as np
-from fmdtools.define.parameter import Parameter
-from fmdtools.define.state import State
-from fmdtools.define.time import Time
-from fmdtools.define.mode import Mode
-from fmdtools.define.block import FxnBlock
-from fmdtools.define.model import Model
+from fmdtools.define.container.parameter import Parameter
+from fmdtools.define.container.state import State
+from fmdtools.define.container.time import Time
+from fmdtools.define.container.mode import Mode
+from fmdtools.define.block.function import Function
+from fmdtools.define.architecture.function import FunctionArchitecture
 from fmdtools.define.environment import Environment
-from fmdtools.define.coords import Coords, CoordsParam
+from fmdtools.define.object.coords import Coords, CoordsParam
 
 import fmdtools.sim as fs
 
@@ -65,7 +65,7 @@ class SightGrid(Coords):
     Used to calculate environmental risk and number of points viewed.
     """
 
-    _init_p = DroneEnvironmentGridParam
+    container_p = DroneEnvironmentGridParam
 
     def init_properties(self, *args, **kwargs):
         """Set target true between 0 and 150 in the x and 10 and 160 in the y."""
@@ -75,8 +75,8 @@ class SightGrid(Coords):
 class DroneEnvironment(Environment):
     """Drone environment flow (contains grid)."""
 
-    _init_c = SightGrid
-    _init_p = DroneEnvironmentGridParam
+    coords_c = SightGrid
+    container_p = DroneEnvironmentGridParam
 
 
 class StoreEE(StaticstoreEE):
@@ -180,18 +180,18 @@ class PlanPathTime(Time):
     timernames = ('pause',)
 
 
-class PlanPath(FxnBlock):
+class PlanPath(Function):
     """Path planning for the drone."""
 
     __slots__ = ('ee_ctl', 'dofs', 'des_traj', 'fs', 'dofs')
-    _init_t = PlanPathTime
-    _init_m = PlanPathMode
-    _init_s = PlanPathState
-    _init_p = PlanPathParams
-    _init_ee_ctl = EE
-    _init_dofs = DOFs
-    _init_des_traj = DesTraj
-    _init_fs = Force
+    container_t = PlanPathTime
+    container_m = PlanPathMode
+    container_s = PlanPathState
+    container_p = PlanPathParams
+    flow_ee_ctl = EE
+    flow_dofs = DOFs
+    flow_des_traj = DesTraj
+    flow_fs = Force
     flownames = {'force_st': 'fs'}
 
     def condfaults(self, time):
@@ -283,7 +283,7 @@ class PlanPath(FxnBlock):
 class AffectDOF(AffectDOFStatic):
     """Dynamic extension of drone locomotion."""
 
-    _init_des_traj = DesTraj
+    flow_des_traj = DesTraj
 
     def behavior(self, time):
         """Behavior in-time (fault effects on states and instantaneous power/force)."""
@@ -351,11 +351,11 @@ class AffectDOF(AffectDOFStatic):
         self.dofs.s.roundto(x=0.01, y=0.01, z=0.01)
 
 
-class ViewEnvironment(FxnBlock):
+class ViewEnvironment(Function):
     """Camera for the drone. Determines which aspects of the environment are viewed."""
 
-    _init_dofs = DOFs
-    _init_environment = DroneEnvironment
+    flow_dofs = DOFs
+    flow_environment = DroneEnvironment
 
     def behavior(self, time):
         """Set points in grid as viewed if in range of view."""
@@ -368,7 +368,7 @@ class ViewEnvironment(FxnBlock):
                                      self.dofs.s.y + height/2)
 
 
-class Drone(Model):
+class Drone(FunctionArchitecture):
     """Dynamic drone model."""
 
     __slots__ = ()
@@ -376,11 +376,10 @@ class Drone(Model):
                               ('forward', 2, 14),
                               ('descend', 15, 18),
                               ('taxi', 19, 20)),
-                      times=(0, 20),
+                      end_time=20,
                       units='sec')
 
-    def __init__(self, **kwargs):
-        super().__init__(**kwargs)
+    def init_architecture(self, **kwargs):
         # add flows to the model
         self.add_flow('force_st', Force)
         self.add_flow('force_lin', Force)
@@ -400,8 +399,6 @@ class Drone(Model):
         self.add_fxn('plan_path', PlanPath, 'ee_ctl', 'des_traj', 'force_st', 'dofs')
         self.add_fxn('hold_payload', HoldPayload, 'force_lin', 'force_st', 'dofs')
         self.add_fxn('view_env', ViewEnvironment, 'dofs', 'environment')
-
-        self.build()
 
     def find_classification(self, scen, mdlhists):
         """
