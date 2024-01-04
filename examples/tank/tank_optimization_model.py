@@ -9,11 +9,11 @@ The functions of the system are:
 The Tank stores a set amount of water, the level of which is controlled by 
 inlet and outlet valves. 
 """
-from fmdtools.define.parameter import Parameter
-from fmdtools.define.state import State
-from fmdtools.define.mode import Mode
-from fmdtools.define.model import Model
-from fmdtools.define.block import FxnBlock
+from fmdtools.define.container.parameter import Parameter
+from fmdtools.define.container.state import State
+from fmdtools.define.container.mode import Mode
+from fmdtools.define.architecture.function import FunctionArchitecture
+from fmdtools.define.block.function import Function
 import numpy as np
 
 from examples.tank.tank_model import TransportLiquidState, Signal, Liquid
@@ -66,13 +66,13 @@ class TransportLiquidMode(Mode):
     units = 'hr'
 
 
-class ImportLiquid(FxnBlock):
+class ImportLiquid(Function):
     __slots__ = ('sig', 'wat_out')
-    _init_p = TankParam
-    _init_s = TransportLiquidState
-    _init_m = TransportLiquidMode
-    _init_sig = Signal
-    _init_wat_out = Liquid
+    container_p = TankParam
+    container_s = TransportLiquidState
+    container_m = TransportLiquidMode
+    flow_sig = Signal
+    flow_wat_out = Liquid
     flownames = {'coolant_in': 'wat_out', 'input_sig': 'sig'}
 
     def behavior(self, time):
@@ -94,13 +94,13 @@ class ImportLiquid(FxnBlock):
             self.sig.s.indicator = 0
 
 
-class ExportLiquid(FxnBlock):
+class ExportLiquid(Function):
     __slots__ = ('sig', 'wat_in')
-    _init_p = TankParam
-    _init_s = TransportLiquidState
-    _init_m = TransportLiquidMode
-    _init_sig = Signal
-    _init_wat_in = Liquid
+    container_p = TankParam
+    container_s = TransportLiquidState
+    container_m = TransportLiquidMode
+    flow_sig = Signal
+    flow_wat_in = Liquid
     flownames = {'coolant_out': 'wat_in', 'output_sig': 'sig'}
 
     def behavior(self, time):
@@ -128,14 +128,14 @@ class StoreLiquidState(State):
     coolingbuffer: float = 10.0
 
 
-class StoreLiquid(FxnBlock):
+class StoreLiquid(Function):
     __slots__ = ('wat_in', 'wat_out', 'sig')
-    _init_s = StoreLiquidState
-    _init_m = StoreLiquidMode
-    _init_p = TankParam
-    _init_wat_in = Liquid
-    _init_wat_out = Liquid
-    _init_sig = Signal
+    container_s = StoreLiquidState
+    container_m = StoreLiquidMode
+    container_p = TankParam
+    flow_wat_in = Liquid
+    flow_wat_out = Liquid
+    flow_sig = Signal
     flownames = {'coolant_in': 'wat_in', 'coolant_out': 'wat_out', 'tank_sig': 'sig'}
 
     def behavior(self, time):
@@ -166,11 +166,11 @@ class StoreLiquid(FxnBlock):
         self.s.coolingbuffer = max(self.s.coolingbuffer - 1.0 + self.wat_in.s.rate, 0)
 
 
-class ContingencyActions(FxnBlock):
-    _init_p = TankParam
-    _init_input_sig = Signal
-    _init_output_sig = Signal
-    _init_tank_sig = Signal
+class ContingencyActions(Function):
+    container_p = TankParam
+    flow_input_sig = Signal
+    flow_output_sig = Signal
+    flow_tank_sig = Signal
 
     def dynamic_behavior(self, time):
         self.input_sig.s.action = self.p.policymap[self.input_sig.s.indicator,
@@ -181,17 +181,15 @@ class ContingencyActions(FxnBlock):
                                                     self.output_sig.s.indicator][1]
 
 
-class Tank(Model):
+class Tank(FunctionArchitecture):
     __slots__ = ()
-    _init_p = TankParam
+    container_p = TankParam
     default_sp = dict(phases=(('na', 0, 0),
                               ('operation', 1, 20)),
-                      times=(0, 5, 10, 15, 20),
+                      end_time=20,
                       units='min')
 
-    def __init__(self, **kwargs):
-        super().__init__(**kwargs)
-
+    def init_architecture(self, **kwargs):
         self.add_flow('coolant_in', Liquid)
         self.add_flow('coolant_out', Liquid)
         self.add_flow('input_sig', Signal)
@@ -210,8 +208,6 @@ class Tank(Model):
                      p=self.p)
         self.add_fxn('contingency', ContingencyActions,
                      'input_sig', 'tank_sig', 'output_sig', p=self.p)
-
-        self.build()
 
     def find_classification(self, scen, mdlhists):
         # here we define failure in terms of the water level getting too low or too high

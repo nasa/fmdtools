@@ -2,23 +2,23 @@
 """
 Variant of drone model for modelling computer vision in urban settings.
 """
-from drone_mdl_static import EE, Force, Control
-from drone_mdl_static import DistEE
-from drone_mdl_rural import DesTraj, DOFs, HSig, RSig
-from drone_mdl_rural import ManageHealth, StoreEE, CtlDOF
-from drone_mdl_rural import PlanPath as PlanPathRural
-from drone_mdl_rural import DronePhysicalParameters, ResPolicy
-from drone_mdl_rural import HoldPayload as HoldPayloadRural
-from drone_mdl_rural import AffectDOF as AffectDOFRural
-from drone_mdl_rural import Drone as DroneRural
+from examples.multirotor.drone_mdl_static import EE, Force, Control
+from examples.multirotor.drone_mdl_static import DistEE
+from examples.multirotor.drone_mdl_rural import DesTraj, DOFs, HSig, RSig
+from examples.multirotor.drone_mdl_rural import ManageHealth, StoreEE, CtlDOF
+from examples.multirotor.drone_mdl_rural import PlanPath as PlanPathRural
+from examples.multirotor.drone_mdl_rural import DronePhysicalParameters, ResPolicy
+from examples.multirotor.drone_mdl_rural import HoldPayload as HoldPayloadRural
+from examples.multirotor.drone_mdl_rural import AffectDOF as AffectDOFRural
+from examples.multirotor.drone_mdl_rural import Drone as DroneRural
 
-from fmdtools.define.block import CompArch, Component
-from fmdtools.define.mode import Mode
-from fmdtools.define.state import State
-from fmdtools.define.parameter import Parameter
-from fmdtools.define.model import Model
+from fmdtools.define.block.component import Component
+from fmdtools.define.container.mode import Mode
+from fmdtools.define.container.state import State
+from fmdtools.define.container.parameter import Parameter
+from fmdtools.define.architecture.component import ComponentArchitecture
 from fmdtools.define.environment import Environment
-from fmdtools.define.coords import Coords, CoordsParam
+from fmdtools.define.object.coords import Coords, CoordsParam
 
 import numpy as np
 from recordclass import asdict
@@ -93,7 +93,7 @@ class UrbanGridParam(CoordsParam):
 class StreetGrid(Coords):
     """Define the urban environment (buildings, streets, etc)."""
 
-    _init_p = UrbanGridParam
+    container_p = UrbanGridParam
 
     def init_properties(self, *args, **kwargs):
         """Randomly allocate the allowed/occupied points, and the building heights."""
@@ -114,9 +114,9 @@ class StreetGrid(Coords):
 class UrbanDroneEnvironment(Environment):
     """ Drone environment for an urban area with buildings."""
 
-    _init_p = UrbanGridParam
-    _init_c = StreetGrid
-    _init_s = EnvironmentState
+    container_p = UrbanGridParam
+    coords_c = StreetGrid
+    container_s = EnvironmentState
 
     def ground_height(self, dofs):
         """Get the distance of the height z above the ground at point x,y."""
@@ -140,7 +140,7 @@ class UrbanDroneEnvironment(Environment):
 class AffectDOF(AffectDOFRural):
     """Adaptation of AffectDOF for urban environment."""
 
-    _init_environment = UrbanDroneEnvironment
+    flow_environment = UrbanDroneEnvironment
 
     def get_fall_dist(self):
         """Get fall distance based on height above buildings."""
@@ -171,7 +171,7 @@ class ComputerVisionMode(Mode):
 class ComputerVision(Component):
     """Component for percieving if a landing location is occupied."""
 
-    _init_m = ComputerVisionMode
+    container_m = ComputerVisionMode
 
     def check_if_occupied(self, environment, dofs):
         """Check if the grid area below is occupied (before landing)."""
@@ -197,12 +197,11 @@ class ComputerVision(Component):
                                               include_pt=include_pt)
 
 
-class VisionArch(CompArch):
+class VisionArch(ComponentArchitecture):
     """Computer vision architecture (one camera)."""
 
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        self.make_components(ComputerVision, 'vision')
+    def init_architecture(self, **kwargs):
+        self.add_comp('vision', ComputerVision)
 
 
 class PlanPathParam(Parameter):
@@ -214,11 +213,11 @@ class PlanPathParam(Parameter):
 class PlanPath(PlanPathRural):
     """Path planning adaptation for urban environment."""
 
-    _init_environment = UrbanDroneEnvironment
-    _init_ca = VisionArch
-    _init_p = PlanPathParam
+    flow_environment = UrbanDroneEnvironment
+    arch_ca = VisionArch
+    container_p = PlanPathParam
 
-    def init_goals(self):
+    def init_block(self, **kwargs):
         """Initialize goals from start to end point."""
         self.make_goals([*self.environment.c.start, 0], [*self.environment.c.end, 0])
 
@@ -238,7 +237,7 @@ class PlanPath(PlanPathRural):
 
     def update_goal(self):
         """Update the goal (includes checking if landing spot is occupied). """
-        vis = self.ca.components['vision']
+        vis = self.ca.comps['vision']
         land_occupied = vis.check_if_occupied(self.environment, self.dofs)
         # reconfigure path based on mode
         if (self.m.in_mode('emland') and land_occupied):
@@ -273,7 +272,7 @@ class PlanPath(PlanPathRural):
 class HoldPayload(HoldPayloadRural):
     """Adaptation of HoldPayload given a changing ground height."""
 
-    _init_environment = UrbanDroneEnvironment
+    flow_environment = UrbanDroneEnvironment
 
     def at_ground(self):
         """Check if at ground (at changing ground height)."""
@@ -303,17 +302,15 @@ class DroneParam(Parameter):
 class Drone(DroneRural):
     """Overall rural drone model."""
 
-    _init_p = DroneParam
+    container_p = DroneParam
     default_sp = dict(phases=(('ascend', 0, 0),
                               ('forward', 1, 11),
                               ('taxi', 12, 20)),
-                      times=(0, 30),
+                      end_time=30,
                       units='min',
                       dt=0.1)
 
-    def __init__(self, name='drone', **kwargs):
-        Model.__init__(self, name=name, **kwargs)
-
+    def init_architecture(self, **kwargs):
         self.add_flow('force_st', Force)
         self.add_flow('force_lin', Force)
         self.add_flow('hsig_dofs', HSig)
@@ -334,7 +331,8 @@ class Drone(DroneRural):
         store_ee_p = {'archtype': self.p.phys_param.bat,
                       'weight': self.p.phys_param.batweight+self.p.phys_param.archweight,
                       'drag': self.p.phys_param.archdrag}
-        self.add_fxn('store_ee', StoreEE, 'ee_1', 'force_st', 'hsig_bat', ca=store_ee_p)
+        self.add_fxn('store_ee', StoreEE, 'ee_1', 'force_st', 'hsig_bat',
+                     ca={'p': store_ee_p})
         self.add_fxn('dist_ee', DistEE, 'ee_1', 'ee_mot', 'ee_ctl', 'force_st')
         self.add_fxn('affect_dof', AffectDOF, 'ee_mot', 'ctl', 'dofs', 'des_traj',
                      'force_lin', 'hsig_dofs', 'environment',
@@ -344,8 +342,6 @@ class Drone(DroneRural):
                      'rsig_traj', 'environment', p=self.p.plan_param)
         self.add_fxn('hold_payload', HoldPayload, 'dofs', 'force_lin', 'force_st',
                      'environment')
-
-        self.build()
 
     def indicate_landed(self, time):
         """Return true if the drone has entered the "landed" state."""
@@ -512,7 +508,7 @@ if __name__ == "__main__":
     app.add_faultsample("move_scens", "fault_phases", "drone_faults", "move",
                         phasemap="plan_path", method='quad',
                         args=(move_quad['quad']['nodes'], move_quad['quad']['weights']))
-    
+
     app.faultsamples['move_scens'].get_scen_groups('phase')
 
     endresults, hists = propagate.fault_sample(mdl, app, staged=False,

@@ -1,11 +1,11 @@
 import numpy as np
 
-from fmdtools.define.parameter import Parameter, SimParam
-from fmdtools.define.state import State
-from fmdtools.define.block import FxnBlock
-from fmdtools.define.mode import Mode
-from fmdtools.define.model import Model
-from fmdtools.define.flow import Flow
+from fmdtools.define.container.parameter import Parameter
+from fmdtools.define.container.state import State
+from fmdtools.define.block.function import Function
+from fmdtools.define.container.mode import Mode
+from fmdtools.define.architecture.function import FunctionArchitecture
+from fmdtools.define.flow.base import Flow
 
 
 # MODEL FLOWS
@@ -29,7 +29,7 @@ class EEState(State):
 class EE(Flow):
     """Electrical Energy Flow."""
 
-    _init_s = EEState
+    container_s = EEState
 
 
 class ForceState(State):
@@ -41,7 +41,7 @@ class ForceState(State):
 class Force(Flow):
     """Force flow."""
 
-    _init_s = ForceState
+    container_s = ForceState
 
 
 class ControlState(State):
@@ -63,7 +63,7 @@ class ControlState(State):
 class Control(Flow):
     """Control Flow."""
 
-    _init_s = ControlState
+    container_s = ControlState
 
 
 class DOFstate(State):
@@ -106,8 +106,8 @@ class DOFParam(Parameter):
 class DOFs(Flow):
     """Flow defining the Drone degrees of freedom."""
 
-    _init_s = DOFstate
-    _init_p = DOFParam
+    container_s = DOFstate
+    container_p = DOFParam
 
 
 class DesTrajState(State):
@@ -171,7 +171,7 @@ class DesTrajState(State):
 class DesTraj(Flow):
     """Desired trajectory flow."""
 
-    _init_s = DesTrajState
+    container_s = DesTrajState
 
 
 # MODEL FUNCTIONS
@@ -189,14 +189,14 @@ class StoreEEState(State):
     soc: float = 100.0
 
 
-class StoreEE(FxnBlock):
+class StoreEE(Function):
     """Class for the battery architecture/energy storage."""
 
     __slots__ = ("ee_out", "fs")
-    _init_s = StoreEEState
-    _init_m = StoreEEMode
-    _init_ee_out = EE
-    _init_fs = Force
+    container_s = StoreEEState
+    container_m = StoreEEMode
+    flow_ee_out = EE
+    flow_fs = Force
     flownames = {"ee_1": "ee_out", "force_st": "fs"}
 
     def behavior(self, time):
@@ -243,7 +243,7 @@ class DistEEState(State):
     ee_te: float = 1.0
 
 
-class DistEE(FxnBlock):
+class DistEE(Function):
     """
     Power distribution for the drone.
 
@@ -252,12 +252,12 @@ class DistEE(FxnBlock):
     """
 
     __slots__ = ("ee_in", "ee_mot", "ee_ctl", "st")
-    _init_s = DistEEState
-    _init_m = DistEEMode
-    _init_ee_in = EE
-    _init_ee_mot = EE
-    _init_ee_ctl = EE
-    _init_st = Force
+    container_s = DistEEState
+    container_m = DistEEMode
+    flow_ee_in = EE
+    flow_ee_mot = EE
+    flow_ee_ctl = EE
+    flow_st = Force
     flownames = {"ee_1": "ee_in", "force_st": "st"}
 
     def condfaults(self, time):
@@ -277,16 +277,16 @@ class DistEE(FxnBlock):
         >>> d.ee_in.s.effort = 2.0
         >>> d.behavior(1.0)
         >>> d.ee_mot
-        ee_mot EE flow: EEState(rate=1.0, effort=2.0)
+        ee EE flow: EEState(rate=1.0, effort=2.0)
 
         while fault modes modify this relationship::
         >>> d = DistEE()
         >>> d.m.add_fault("short")
         >>> d.behavior(1.0)
         >>> d.ee_mot
-        ee_mot EE flow: EEState(rate=1.0, effort=0.0)
+        ee EE flow: EEState(rate=1.0, effort=0.0)
         >>> d.ee_in
-        ee_in EE flow: EEState(rate=10.0, effort=1.0)
+        ee EE flow: EEState(rate=10.0, effort=1.0)
         """
         if self.m.has_fault("short"):
             self.s.put(ee_tr=10.0, ee_te=0.0)
@@ -330,15 +330,15 @@ class HoldPayloadState(State):
     force_gr:   float = 1.0
 
 
-class HoldPayload(FxnBlock):
+class HoldPayload(Function):
     """Drone landing gear."""
 
     __slots__ = ('dofs', 'force_st', 'force_lin')
-    _init_m = HoldPayloadMode
-    _init_s = HoldPayloadState
-    _init_dofs = DOFs
-    _init_force_st = Force
-    _init_force_lin = Force
+    container_m = HoldPayloadMode
+    container_s = HoldPayloadState
+    flow_dofs = DOFs
+    flow_force_st = Force
+    flow_force_lin = Force
 
     def at_ground(self):
         """Call to check if the drone is at ground level (modified in subclasses)."""
@@ -486,16 +486,16 @@ class BaseLine(object):
             self.s.pt = 0.5
 
 
-class AffectDOF(FxnBlock, BaseLine):
+class AffectDOF(Function, BaseLine):
     """Drone rotors that the drone through the air."""
 
     __slots__ = ("ee_in", "ctl_in", "dofs", "force")
-    _init_s = AffectDOFState
-    _init_m = AffectDOFMode
-    _init_ee_in = EE
-    _init_ctl_in = Control
-    _init_dofs = DOFs
-    _init_force = Force
+    container_s = AffectDOFState
+    container_m = AffectDOFMode
+    flow_ee_in = EE
+    flow_ctl_in = Control
+    flow_dofs = DOFs
+    flow_force = Force
     flownames = {"ee_mot": "ee_in",
                  "ctl": "ctl_in",
                  "force_lin": "force"}
@@ -574,17 +574,17 @@ class CtlDOFMode(Mode):
                "degctl": (0.8, 10000)}
 
 
-class CtlDOF(FxnBlock):
+class CtlDOF(Function):
     """Drone rotor control."""
 
     __slots__ = ("ee_in", "des_traj", "ctl", "dofs", "fs")
-    _init_s = CtlDOFstate
-    _init_m = CtlDOFMode
-    _init_ee_in = EE
-    _init_des_traj = DesTraj
-    _init_ctl = Control
-    _init_dofs = DOFs
-    _init_fs = Force
+    container_s = CtlDOFstate
+    container_m = CtlDOFMode
+    flow_ee_in = EE
+    flow_des_traj = DesTraj
+    flow_ctl = Control
+    flow_dofs = DOFs
+    flow_fs = Force
     flownames = {"ee_ctl": "ee_in", "force_st": "fs"}
 
     def condfaults(self, time):
@@ -646,15 +646,15 @@ class PlanPathMode(Mode):
     fm_args = {"noloc": (0.2, 10000), "degloc": (0.8, 10000)}
 
 
-class PlanPath(FxnBlock):
+class PlanPath(Function):
     """Drone path planning function."""
 
     __slots__ = ("ee_in", "dofs", "des_traj", "fs")
-    _init_m = PlanPathMode
-    _init_ee_in = EE
-    _init_dofs = DOFs
-    _init_des_traj = DesTraj
-    _init_fs = Force
+    container_m = PlanPathMode
+    flow_ee_in = EE
+    flow_dofs = DOFs
+    flow_des_traj = DesTraj
+    flow_fs = Force
     flownames = {"ee_ctl": "ee_in", "force_st": "fs"}
 
     def condfaults(self, time):
@@ -728,20 +728,20 @@ class ViewModes(Mode):
     fm_args = {"poorview": (0.2, 10000)}
 
 
-class ViewEnvironment(FxnBlock):
+class ViewEnvironment(Function):
     """Drone camera placeholder."""
 
-    _init_m = ViewModes
-    _init_dofs = DOFs
+    container_m = ViewModes
+    flow_dofs = DOFs
 
 
-class Drone(Model):
+class Drone(FunctionArchitecture):
     """Static multirotor drone model (executes in a single timestep)."""
 
     __slots__ = ()
+    default_sp = {'end_time': 0}
 
-    def __init__(self, sp=SimParam(times=(0,)), **kwargs):
-        super().__init__(sp=sp, **kwargs)
+    def init_architecture(self, **kwargs):
         # add flows to the model
         self.add_flow("force_st", Force)
         self.add_flow("force_lin", Force)
@@ -759,8 +759,6 @@ class Drone(Model):
         self.add_fxn("plan_path", PlanPath, "ee_ctl", "des_traj", "force_st", "dofs")
         self.add_fxn("hold_payload", HoldPayload, "dofs", "force_lin", "force_st")
         self.add_fxn("view_env", ViewEnvironment, "dofs")
-
-        self.build()
 
     def find_classification(self, scen, mdlhist):
         """Calculate rate, cost, expected cost based on cost of repair information."""

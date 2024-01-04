@@ -5,15 +5,14 @@ attributes that change over time.
 
 - :class:`State`: Superclass for Model States.
 """
-from recordclass import dataobject
 import numpy as np
-from .common import is_iter, get_dataobj_track
-import copy
 import warnings
-from fmdtools.analyze.history import History
+
+from fmdtools.define.base import is_iter
+from fmdtools.define.container.base import BaseContainer
 
 
-class State(dataobject, mapping=True, copy_default=True):
+class State(BaseContainer):
     """
     Class for working with model states, which are variables in the model which
     change over time. This class inherits from dataobject for low memory footprint
@@ -41,7 +40,7 @@ class State(dataobject, mapping=True, copy_default=True):
     >>> p.x
     10.0
     """
-    default_track = 'all'
+    rolename = 's'
 
     def set_atts(self, **kwargs):
         """Sets the given arguments to a given value. Mainly useful for
@@ -60,85 +59,36 @@ class State(dataobject, mapping=True, copy_default=True):
             setattr(self, name, value)
 
     def put(self, as_copy=True, **kwargs):
-        """Sets the given arguments to a given value. Mainly useful for
-        reducing length/adding clarity to assignment statements. e.g.,
+        """
+        Set the given fields to a given value.
 
+        Mainly useful for reducing length/adding clarity to assignment statements.
+
+        Parameters
+        ----------
+        as_copy: bool
+            set to True for dicts/sets to be copied rather than referenced
+        **kwargs : values
+            fields and values to set.
+
+        Examples
+        --------
         >>> p = ExampleState()
         >>> p.put(x=2.0, y=2.0)
         >>> p.x
         2.0
         >>> p.y
         2.0
-
-        as_copy: bool, set to True for dicts/sets to be copied rather than referenced
         """
         for name, value in kwargs.items():
-            if name not in self.__fields__:
-                raise Exception(name+" not a property of "+str(self.__class__))
-            if as_copy:
-                value = copy.copy(value)
-            setattr(self, name, value)
-
-    def assign(self, obj, *states, as_copy=True, **statedict):
-        """ Sets the same-named values of the current flow/function object to those of a
-        given flow.
-
-        Further arguments specify which values.e.g.,
-
-        >>> p1 = ExampleState(x=0.0, y=0.0)
-        >>> p2 = ExampleState(x=10.0, y=20.0)
-        >>> p1.assign(p2, 'x', 'y')
-        >>> p1.x
-        10.0
-        >>> p1.y
-        20.0
-
-        Can also be used to assign list values to a variable, e.g.:
-
-        >>> p1.assign([3.0,4.0], 'x', 'y')
-        >>> p1.x
-        3.0
-        >>> p1.y
-        4.0
-
-        Can also provide kwargs in case value names don't match, e.g.:
-
-        >>> p1.assign(p2, x='y', y='x')
-        >>> p1.x
-        20.0
-        >>> p1.y
-        10.0
-
-        as_copy: bool,
-            set to True for dicts/sets to be copied rather than referenced
-        """
-        if type(obj) in [list, tuple] or isinstance(obj, np.ndarray):
-            for i, state in enumerate(states):
-                if as_copy:
-                    val = copy.copy(obj[i])
-                else:
-                    val = obj[i]
-                setattr(self, state, val)
-        else:
-            if not statedict:
-                if len(states) == 0:
-                    statedict = {s: s for s in obj.__fields__}
-                else:
-                    statedict = {s: s for s in states}
-            elif len(states) > 0:
-                raise Exception(
-                    "Can only provide positional states or keyword states, not both")
-            for set_state, get_state in statedict.items():
-                if set_state not in self.__fields__:
-                    raise Exception(set_state+" not a property of "+self.name)
-                val = getattr(obj, get_state)
-                if as_copy:
-                    val = copy.copy(val)
-                setattr(self, set_state, val)
+            self.set_field(name, value, as_copy=as_copy)
 
     def get(self, *attnames, **kwargs):
-        """Return the given attribute names (strings) as a numpy array. Mainly useful
-        for reducing length of lines/adding clarity to assignment statements. e.g.,:
+        """
+        Return the given attribute names (strings) as a numpy array.
+
+        Mainly useful for reducing length of lines/adding clarity to assignment
+        statements. e.g.,:
 
         >>> p = ExampleState(x=1.0, y=2.0)
         >>> p_arr = p.get("x", "y")
@@ -162,10 +112,13 @@ class State(dataobject, mapping=True, copy_default=True):
         return self.gett(*self.__fields__)
 
     def gett(self, *attnames):
-        """Alternative to self.get that returns the given constructs as a tuple instead
-        of as an array. Useful when a numpy array would translate the underlying data
+        """
+        Alternative to self.get that returns a tuple, not an array.
+
+        Useful when a numpy array would translate the underlying data
         types poorly (e.g., np.array([1,'b'] would make 1 a string--using a tuple
-        instead preserves the data type)"""
+        instead preserves the data type)).
+        """
         states = self.get(*attnames, as_array=False)
         if not is_iter(states):
             return states
@@ -175,8 +128,10 @@ class State(dataobject, mapping=True, copy_default=True):
             return tuple(states)
 
     def inc(self, **kwargs):
-        """Increments the given arguments by a given value. Mainly useful for
-        reducing length/adding clarity to increment statements, e.g.:
+        """
+        Increment the given arguments by a given value.
+
+        Mainly useful for reducing length/adding clarity to increment statements, e.g.:
 
         >>> p = ExampleState(x=1.0, y=1.0)
         >>> p.inc(x=1, y=2)
@@ -211,8 +166,9 @@ class State(dataobject, mapping=True, copy_default=True):
 
     def roundto(self, **kwargs):
         """
-        Rounds the given arguments to a given resolution. e.g.:
+        Round the given arguments to a given resolution.
 
+        e.g.:
         >>> p = ExampleState(x=1.75850)
         >>> p.roundto(x=0.1)
         >>> p.x
@@ -224,8 +180,10 @@ class State(dataobject, mapping=True, copy_default=True):
             setattr(self, name, np.round(round(current/value)*value, 7))
 
     def limit(self, **kwargs):
-        """Enforces limits on the value of a given property. Mainly useful for
-        reducing length/adding clarity to increment statements. e.g.,:
+        """
+        Enforce limits on the value of a given property.
+
+        Mainly useful for reducing length/adding clarity to increment statements. e.g.,:
 
         >>> p = ExampleState(x=200.0, y=-200.0)
         >>> p.limit(x=(0.0,100.0), y=(0.0, 100.0))
@@ -244,8 +202,10 @@ class State(dataobject, mapping=True, copy_default=True):
                                 ": "+str(getattr(self, name))) from e
 
     def mul(self, *states):
-        """Return the multiplication of given attributes of the State. e.g.:
+        """
+        Return the multiplication of given attributes of the State.
 
+        e.g.:
         >>> p = ExampleState(x=2.0, y=3.0)
         >>> p.mul("x","y")
         6.0
@@ -256,8 +216,10 @@ class State(dataobject, mapping=True, copy_default=True):
         return a
 
     def div(self, *states):
-        """Return the division of given attributes of the State, e.g.:
+        """
+        Return the division of given attributes of the State.
 
+        e.g.:
         >>> p = ExampleState(x=1.0, y=2.0)
         >>> p.div('x','y')
         0.5
@@ -268,8 +230,10 @@ class State(dataobject, mapping=True, copy_default=True):
         return a
 
     def add(self, *states):
-        """Return the addition of given attributes of the State, e.g.:
+        """
+        Return the addition of given attributes of the State.
 
+        e.g.:
         >>> p = ExampleState(x=1.0, y=2.0)
         >>> p.add('x','y')
         3.0
@@ -280,8 +244,10 @@ class State(dataobject, mapping=True, copy_default=True):
         return a
 
     def sub(self, *states):
-        """Return the subtraction of given attributes of the State, e.g.:
+        """
+        Return the subtraction of given attributes of the State.
 
+        e.g.:
         >>> p = ExampleState(x=1.0, y=2.0)
         >>> p.sub('x','y')
         -1.0
@@ -292,9 +258,11 @@ class State(dataobject, mapping=True, copy_default=True):
         return a
 
     def same(self, values, *states):
-        """Tests whether a given iterable values has the same value as each
-        give state in the State, e.g.:
+        """
+        Test whether a given iterable values has the same value as each in the state.
 
+        Examples
+        --------
         >>> p = ExampleState(x=1.0, y=2.0)
         >>> p.same([1.0, 2.0], "x", "y")
         True
@@ -309,7 +277,7 @@ class State(dataobject, mapping=True, copy_default=True):
 
     def warn(self, *messages, stacklevel=2):
         """
-        Prints warning message(s) when called.
+        Print warning message(s) when called.
 
         Parameters
         ----------
@@ -321,39 +289,26 @@ class State(dataobject, mapping=True, copy_default=True):
         """
         warnings.warn(' '.join(messages), stacklevel=stacklevel)
 
-    def create_hist(self, timerange=None, track=None, default_str_size='<U20'):
-        """
-        Creates a History corresponding to the State.
+    def init_hist_att(self, hist, att, timerange, track, str_size='<U20'):
+        """Extend init_hist_attr to use _set to get history size."""
+        if self.__annotations__[att] == str:
+            set_con = getattr(self, att+"_set", [])
+            if set_con:
+                strlen = max([len(i) for i in set_con])
+                str_size = "<U"+str(max(strlen))
 
-        Parameters
-        ----------
-        timerange : iterable, optional
-            Time-range to initialize the history over. The default is None.
-        track : list/str/dict, optional
-            argument specifying attributes for :func:`get_sub_include'.
-            The default is None.
+        BaseContainer.init_hist_att(self, hist, att, timerange, track, str_size)
 
-        Returns
-        -------
-        hist : History
-            History of fields specified in track.
-        """
-        track = get_dataobj_track(self, track)
-        hist = History()
-        for att in track:
-            val = getattr(self, att)
-            dtype = self.__annotations__[att]
-            str_size = default_str_size
-            if dtype == str:
-                set_con = getattr(self, att+"_set", [])
-                if set_con:
-                    strlen = max([len(i) for i in set_con])
-                    str_size = "<U"+str(max(strlen))
-            hist.init_att(att, val, timerange, track, dtype=dtype, str_size=str_size)
-        return hist
+
 
 
 class ExampleState(State):
-    """Example State class used for docstring tests"""
+    """Example State class used for docstring tests."""
+
     x: float = 1.0
     y: float = 1.0
+
+
+if __name__ == "__main__":
+    import doctest
+    doctest.testmod(verbose=True)

@@ -35,7 +35,7 @@ import pandas as pd
 import sys
 import os
 from collections import UserDict
-from fmdtools.define.common import t_key, nest_dict
+from fmdtools.define.base import t_key, nest_dict
 from fmdtools.analyze.common import to_include_keys, is_numeric, nan_to_x, is_bool
 from fmdtools.analyze.common import bootstrap_confidence_interval, join_key
 from fmdtools.analyze.common import get_sub_include, unpack_plot_values

@@ -4,11 +4,11 @@ Created on Tue Feb 28 11:53:00 2023
 
 @author: dhulse
 """
-from fmdtools.define.parameter import Parameter
-from fmdtools.define.state import State
-from fmdtools.define.rand import Rand
-from fmdtools.define.block import FxnBlock
-from fmdtools.define.model import Model
+from fmdtools.define.container.parameter import Parameter
+from fmdtools.define.container.state import State
+from fmdtools.define.container.rand import Rand
+from fmdtools.define.block.function import Function
+from fmdtools.define.architecture.function import FunctionArchitecture
 from fmdtools.sim.sample import ParameterApproach
 import numpy as np
 from fmdtools.sim import propagate as prop
@@ -18,7 +18,7 @@ from rover_model import Rover, DegParam
 
 
 
-    
+
 class DriveDegradationStates(State):
     wear: float = 0.0
     corrosion: float = 0.0
@@ -39,10 +39,10 @@ class DriveRand(Rand):
     s: DriveRandStates = DriveRandStates()
 
 
-class DriveDegradation(FxnBlock):
-    _init_s = DriveDegradationStates
-    _init_r = DriveRand
-    default_sp = dict(times=(0, 100))
+class DriveDegradation(Function):
+    container_s = DriveDegradationStates
+    container_r = DriveRand
+    default_sp = dict(end_time=100)
 
     def __init__(self, name, **kwargs):
         super().__init__(name, **kwargs)
@@ -78,11 +78,11 @@ class PSFShortParams(Parameter, readonly=True):
     stoch_fatigue: bool = False
 
 
-class PSFDegradationShort(FxnBlock):
-    _init_s = PSFDegradationShortStates
-    _init_r = PSFDegShortRand
-    _init_p = PSFShortParams
-    default_sp = dict(times=(0, 100))
+class PSFDegradationShort(Function):
+    container_s = PSFDegradationShortStates
+    container_r = PSFDegShortRand
+    container_p = PSFShortParams
+    default_sp = dict(end_time=100)
 
     def __init__(self, name, **kwargs):
         super().__init__(name, **kwargs)
@@ -110,10 +110,10 @@ class PSFDegradationLongStates(State):
     experience: float = 0.0
 
 
-class PSFDegradationLong(FxnBlock):
-    _init_s = PSFDegradationLongStates
-    _init_p = LongParams
-    default_sp = dict(times=(0, 100))
+class PSFDegradationLong(Function):
+    container_s = PSFDegradationLongStates
+    container_p = LongParams
+    default_sp = dict(end_time=100)
 
     def __init__(self, name, **kwargs):
         super().__init__(name, **kwargs)
@@ -121,7 +121,7 @@ class PSFDegradationLong(FxnBlock):
 
     def dynamic_behavior(self, time):
         # normalize time between -1 and 1 to enable sigmoid usage
-        norm_time = ((self.t.time - 0) * 2) / (self.sp.times[1] - self.sp.times[0]) - 1
+        norm_time = ((self.t.time - 0) * 2) / (self.sp.end_time - self.sp.start_time) - 1
         norm_experience_param = (
             self.p.experience_scale_max - self.p.experience_param
         ) / self.p.experience_scale_max

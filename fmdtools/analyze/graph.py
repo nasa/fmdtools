@@ -3,19 +3,19 @@ Description: Gives graph-level visualizations of the model using installed rende
 
 
 Main user-facing individual graphing classes:
-    - :class:`ModelGraph`: Graphs Model of functions and flow for display,
+    - :class:`FunctionArchitectureGraph`: Graphs Model of functions and flow for display
     where both functions and flows are nodes.
 
-    - :class:`ModelFlowGraph`: Graphs Model of flows for display, where flows are set as
+    - :class:`FunctionArchitectureFlowgraph`: Graphs Model of flows for display, where flows are set as
     nodes and connections (via functions) are edges.
 
-    - :class:`ModelCompGraph`: Graphs Model of functions, and flows, with component
+    - :class:`FunctionArchitectureCompGraph`: Graphs Model of functions, and flows, with component
     containment relationships shown for functions.
 
-    - :class:`ModelFxnGraph`: Graphs representation of the functions of the model, where
+    - :class:`FunctionArchitectureFxnGraph`: Graphs representation of the functions of the model, where
     functions are nodes and flows are edges
 
-    - :class:`ModelTypeGraph`: Graph representation of model Classes, showing the
+    - :class:`FunctionArchitectureTypeGraph`: Graph representation of model Classes, showing the
     containment relationship between function classes and flow classes in the model.
 
     - :class:`MultiFlowGraph`: Creates a networkx graph corresponding to the MultiFlow.
@@ -23,14 +23,14 @@ Main user-facing individual graphing classes:
     - :class:`CommsFlowGraph`: Creates a graph representation of the CommsFlow
     (assuming no additional locals).
 
-    - :class:`ActArchGraph`: Shows a visualization of the internal Action Sequence Graph of
+    - :class:`ActionArchitectureGraph`: Shows a visualization of the internal Action Sequence Graph of
     the Function Block, with Sequences as edges, with Flows (circular) and Actions
     (square) as nodes.
 
-    - :class:`ActArchActGraph`: Variant of ActArchGraph where only the sequence between
+    - :class:`ActionArchitectureActGraph`: Variant of ActionArchitectureGraph where only the sequence between
     actions is shown.
 
-    - :class:`ActArchFlowGraph`: Variant of ActArchGraph where only the flow relationships
+    - :class:`ActionArchitectureFlowGraph`: Variant of ActionArchitectureGraph where only the flow relationships
     between actions is shown.
 
 Shared Method Parameters:
@@ -83,7 +83,6 @@ from matplotlib.widgets import Button
 from matplotlib import get_backend
 from matplotlib.colors import Colormap
 from recordclass import dataobject, asdict
-from fmdtools.define.common import return_true_indicators
 from fmdtools.analyze.result import Result
 from fmdtools.analyze.history import History
 from fmdtools.analyze.common import consolidate_legend
@@ -154,7 +153,7 @@ class EdgeStyle(dataobject, copy_default=True):
 
 default_node_kwargs = {'Model': dict(node_shape='^'),
                        'Block': dict(node_shape='s', linewidths=2),
-                       'FxnBlock': dict(node_shape='s', linewidths=2),
+                       'Function': dict(node_shape='s', linewidths=2),
                        'Action': dict(node_shape='s', linewidths=2),
                        'Flow': dict(node_shape='o'),
                        'MultiFlow': dict(node_shape='h'),
@@ -932,7 +931,7 @@ class Graph(object):
         from pyvis.network import Network
         width = str(width)+"px"
 
-        if isinstance(self, ModelTypeGraph):
+        if isinstance(self, FunctionArchitectureTypeGraph):
             n = Network(directed=True, layout='hierarchical', width=width,
                         notebook=notebook)
         else:
@@ -1236,6 +1235,18 @@ class Graph(object):
         plt.show()
         return fig
 
+    def get_obj_state(self, obj):
+        if hasattr(obj, 's'):
+            return asdict(obj.s)
+        else:
+            return {}
+
+    def get_obj_mode(self, obj):
+        if hasattr(obj, 'm'):
+            return [*obj.m.faults]
+        else:
+            return []
+
 
 def sff_one_trial(start_node_selected, g, endtime=5, pi=.1, pr=.1):
     """
@@ -1476,7 +1487,7 @@ class GraphInteractor:
 
 # INDIVIDUAL GRAPH VARIANTS
 # MODELS
-class ModelGraph(Graph):
+class FunctionArchitectureGraph(Graph):
     """
     Creates a Graph of Model functions and flow for display, where both functions
     and flows are nodes.
@@ -1487,7 +1498,7 @@ class ModelGraph(Graph):
 
     def __init__(self, mdl, get_states=True, time=0.0, **kwargs):
         """
-        Generate the ModelGraph corresponding to a given Model.
+        Generate the FunctionArchitectureGraph corresponding to a given Model.
 
         Parameters
         ----------
@@ -1557,9 +1568,9 @@ class ModelGraph(Graph):
         """
         fxnfaults, fxnstates, indicators = {}, {}, {}
         for fxnname, fxn in mdl.fxns.items():
-            fxnstates[fxnname] = asdict(mdl.fxns[fxnname].s)
-            fxnfaults[fxnname] = [*mdl.fxns[fxnname].m.faults]
-            indicators[fxnname] = return_true_indicators(fxn, self.time)
+            fxnstates[fxnname] = self.get_obj_state(mdl.fxns[fxnname])
+            fxnfaults[fxnname] = self.get_obj_mode(mdl.fxns[fxnname])
+            indicators[fxnname] = fxn.return_true_indicators(self.time)
         nx.set_node_attributes(self.g, fxnstates, 'states')
         nx.set_node_attributes(self.g, fxnfaults, 'faults')
         nx.set_node_attributes(self.g, indicators, 'indicators')
@@ -1580,8 +1591,8 @@ class ModelGraph(Graph):
         """
         flowstates, indicators = {}, {}
         for flowname, flow in mdl.flows.items():
-            flowstates[flowname] = asdict(flow.s)
-            indicators[flowname] = return_true_indicators(flow, self.time)
+            flowstates[flowname] = self.get_obj_state(flow)
+            indicators[flowname] = flow.return_true_indicators(self.time)
         nx.set_node_attributes(self.g, flowstates, 'states')
         nx.set_node_attributes(self.g, indicators, 'indicators')
 
@@ -1630,7 +1641,7 @@ class ModelGraph(Graph):
     def set_exec_order(self, mdl, static={}, dynamic={}, next_edges={},
                        label_order=True, label_tstep=True):
         """
-        Overlay ModelGraph execution order data on graph structure.
+        Overlay FunctionArchitectureGraph execution order data on graph structure.
 
         Parameters
         ----------
@@ -1695,7 +1706,7 @@ class ModelGraph(Graph):
         return super().draw_graphviz(layout=layout, overlap=overlap, **kwargs)
 
 
-class ModelFlowGraph(ModelGraph):
+class FunctionArchitectureFlowgraph(FunctionArchitectureGraph):
     """
     Creates a Graph of model flows for display, where flows are
     set as nodes and connections (via functions) are edges
@@ -1720,7 +1731,7 @@ class ModelFlowGraph(ModelGraph):
                                 **edge_label_styles)
 
 
-class ModelCompGraph(ModelGraph):
+class FunctionArchitectureCompGraph(FunctionArchitectureGraph):
     """
     Creates a graph of model functions, and flows, with component containment
     relationships shown for functions.
@@ -1729,11 +1740,11 @@ class ModelCompGraph(ModelGraph):
     def nx_from_obj(self, mdl):
         graph = super().nx_from_obj(mdl)
         for fxnname, fxn in mdl.fxns.items():
-            if {**fxn.components, **fxn.actions}:
-                graph.add_nodes_from({**fxn.components, **fxn.actions},
+            if {**fxn.comps, **fxn.acts}:
+                graph.add_nodes_from({**fxn.comps, **fxn.acts},
                                      bipartite=1, label="Block")
                 graph.add_edges_from([(fxnname, comp)
-                                      for comp in {**fxn.components, **fxn.actions}])
+                                      for comp in {**fxn.comps, **fxn.acts}])
         return graph
 
     def set_nx_states(self, mdl):
@@ -1744,14 +1755,14 @@ class ModelCompGraph(ModelGraph):
         compfaults, compstates, comptypes = {}, {}, {}
         fxnstates, fxnfaults, indicators = {}, {}, {}
         for fxnname, fxn in mdl.fxns.items():
-            fxnstates[fxnname] = asdict(mdl.fxns[fxnname].s)
-            fxnfaults[fxnname] = copy.copy(mdl.fxns[fxnname].m.faults)
-            indicators[fxnname] = return_true_indicators(fxn, self.time)
+            fxnstates[fxnname] = self.get_obj_state(mdl.fxns[fxnname])
+            fxnfaults[fxnname] = self.get_obj_mode(mdl.fxns[fxnname])
+            indicators[fxnname] = fxn.return_true_indicators(self.time)
             for mode in fxnfaults[fxnname].copy():
-                for compname, comp in {**fxn.actions, **fxn.components}.items():
+                for compname, comp in {**fxn.acts, **fxn.comps}.items():
                     compstates[compname] = {}
                     comptypes[compname] = True
-                    indicators[compname] = return_true_indicators(comp, self.time)
+                    indicators[compname] = comp.return_true_indicators(self.time)
                     if mode in comp.faultfaults:
                         compfaults[compname] = compfaults.get(compname, set())
                         compfaults[compname].update([mode])
@@ -1765,7 +1776,7 @@ class ModelCompGraph(ModelGraph):
         nx.set_node_attributes(self.g, indicators, 'indicators')
 
 
-class ModelFxnGraph(ModelGraph):
+class FunctionArchitectureFxnGraph(FunctionArchitectureGraph):
     """ Returns a graph representation of the functions of the model, where
     functions are nodes and flows are edges"""
 
@@ -1789,7 +1800,7 @@ class ModelFxnGraph(ModelGraph):
         for edge, flows in flows.items():
             flowdict = {}
             for flow in flows:
-                flowdict[flow] = asdict(mdl.flows[flow].s)
+                flowdict[flow] = self.get_obj_State(mdl.flows[flow].s)
             edgevals[edge] = flowdict
         nx.set_edge_attributes(self.g, edgevals)
 
@@ -1810,7 +1821,7 @@ class ModelFxnGraph(ModelGraph):
                                 **edge_label_styles)
 
 
-class ModelTypeGraph(ModelGraph):
+class FunctionArchitectureTypeGraph(FunctionArchitectureGraph):
     """
     Creates a graph representation of model Classes, showing the containment
     relationship between function classes and flow classes in the model.
@@ -1837,7 +1848,7 @@ class ModelTypeGraph(ModelGraph):
         g = nx.DiGraph()
         modelname = type(mdl).__name__
         g.add_node(modelname, level=1, label="Model")
-        g.add_nodes_from(mdl.fxnclasses(), level=2, label="FxnBlock")
+        g.add_nodes_from(mdl.fxnclasses(), level=2, label="Function")
         function_connections = [(modelname, fname) for fname in mdl.fxnclasses()]
         g.add_edges_from(function_connections, label="contains")
         if withflows:
@@ -1856,8 +1867,8 @@ class ModelTypeGraph(ModelGraph):
             flowstates[flowtype] = {}
             indicators[flowtype] = {}
             for flow in mdl.flows_of_type(flowtype):
-                flowstates[flowtype][flow] = asdict(mdl.flows[flow].s)
-                indicators[flowtype][flow] = return_true_indicators(flow, self.time)
+                flowstates[flowtype][flow] = self.get_obj_state(mdl.flows[flow])
+                indicators[flowtype][flow] = mdl.flows[flow].return_true_indicators(self.time)
         nx.set_node_attributes(graph, flowstates, 'states')
 
         fxnstates = {}
@@ -1867,9 +1878,9 @@ class ModelTypeGraph(ModelGraph):
             fxnfaults[fxnclass] = {}
             indicators[fxnclass] = {}
             for fxn in mdl.fxns_of_class(fxnclass):
-                fxnstates[fxnclass][fxn] = asdict(mdl.fxns[fxn].s)
-                fxnfaults[fxnclass][fxn] = copy.copy(mdl.fxns[fxn].m.faults)
-                indicators[fxnclass][fxn] = return_true_indicators(fxn, self.time)
+                fxnstates[fxnclass][fxn] = self.get_obj_state(mdl.fxns[fxn])
+                fxnfaults[fxnclass][fxn] = self.get_obj_mode(mdl.fxns[fxn])
+                indicators[fxnclass][fxn] = mdl.fxns[fxn].return_true_indicators(self.time)
 
         nx.set_node_attributes(graph, fxnstates, 'states')
         nx.set_node_attributes(graph, fxnfaults, 'faults')
@@ -1898,7 +1909,7 @@ class ModelTypeGraph(ModelGraph):
         return super().draw_graphviz(layout=layout, ranksep=ranksep, **kwargs)
 
     def set_exec_order(self, *args, **kwargs):
-        raise Exception("Cannot specify exec_order for ModelTypeGraph")
+        raise Exception("Cannot specify exec_order for FunctionArchitectureTypeGraph")
 
 
 # FLOW/MULTIFLOW/COMMSFLOW
@@ -2140,12 +2151,12 @@ def get_node_info(flow, get_states, get_indicators, time):
     if get_states:
         kwargs.update({"states": flow.return_states()})
     if get_indicators:
-        kwargs.update({"indicators": return_true_indicators(flow, time)})
+        kwargs.update({"indicators": flow.return_true_indicators(time)})
     return kwargs
 
 
-# ActArch
-class ActArchGraph(Graph):
+# ActionArchitecture
+class ActionArchitectureGraph(Graph):
     """
     Create a visual representation of an Action Architecture.
 
@@ -2165,10 +2176,10 @@ class ActArchGraph(Graph):
     def set_nx_labels(self, aa):
         """
         Labels the underlying networkx graph structure with type attributes
-        corresponding to the ActArch.
+        corresponding to the ActionArchitecture.
         Parameters
         ----------
-        aa : ActArch
+        aa : ActionArchitecture
             Action Sequence Graph object to represent
 
         Returns
@@ -2192,7 +2203,7 @@ class ActArchGraph(Graph):
 
         Parameters
         ----------
-        aa : ActArch
+        aa : ActionArchitecture
             Underlying action sequence graph object to get states from
         """
         for g in self.g.nodes():
@@ -2200,13 +2211,13 @@ class ActArchGraph(Graph):
         states = {}
         faults = {}
         indicators = {}
-        for aname, action in aa.actions.items():
-            states[aname] = asdict(action.s)
-            faults[aname] = [*action.m.faults]
-            indicators[aname] = return_true_indicators(action, self.time)
+        for aname, action in aa.acts.items():
+            states[aname] = self.get_obj_state(action)
+            faults[aname] = self.get_obj_mode(action)
+            indicators[aname] = action.return_true_indicators(self.time)
         for fname, flow in aa.flows.items():
-            states[fname] = asdict(flow.s)
-            indicators[fname] = return_true_indicators(flow, self.time)
+            states[fname] = self.get_obj_state(flow)
+            indicators[fname] = flow.return_true_indicators(self.time)
         nx.set_node_attributes(self.g, states, 'states')
         nx.set_node_attributes(self.g, faults, 'faults')
         nx.set_node_attributes(self.g, indicators, 'indicators')
@@ -2261,8 +2272,8 @@ class ActArchGraph(Graph):
         return super().draw_from(time, history=history, **kwargs)
 
 
-class ActArchActGraph(ActArchGraph):
-    """Variant of ActArchGraph where only the sequence between actions is shown."""
+class ActionArchitectureActGraph(ActionArchitectureGraph):
+    """Variant of ActionArchitectureGraph where only the sequence between actions is shown."""
 
     def __init__(self, aa, get_states=True):
         self.g = aa.action_graph.copy()
@@ -2271,8 +2282,8 @@ class ActArchActGraph(ActArchGraph):
             self.set_nx_states(aa)
 
 
-class ActArchFlowGraph(ActArchGraph):
-    """Variant of ActArchGraph where only showing flow relationships between actions."""
+class ActionArchitectureFlowGraph(ActionArchitectureGraph):
+    """Variant of ActionArchitectureGraph where only showing flow relationships between actions."""
 
     def __init__(self, aa, get_states=True):
         self.g = aa.flow_graph.copy()
@@ -2297,17 +2308,18 @@ def graph_factory(obj, **kwargs):
     graph : Graph
         Graph of the appropriate (default) class
     """
-    from fmdtools.define.model import Model
-    from fmdtools.define.flow import CommsFlow, MultiFlow
-    from fmdtools.define.block import ActArch
+    from fmdtools.define.architecture.function import FunctionArchitecture
+    from fmdtools.define.flow.multiflow import MultiFlow
+    from fmdtools.define.flow.commsflow import CommsFlow
+    from fmdtools.define.architecture.action import ActionArchitecture
 
-    if isinstance(obj, Model):
-        return ModelGraph(obj, **kwargs)
+    if isinstance(obj, FunctionArchitecture):
+        return FunctionArchitectureGraph(obj, **kwargs)
     elif isinstance(obj, CommsFlow):
         return CommsFlowGraph(obj, **kwargs)
     elif isinstance(obj, MultiFlow):
         return MultiFlowGraph(obj, **kwargs)
-    elif isinstance(obj, ActArch):
-        return ActArchGraph(obj, **kwargs)
+    elif isinstance(obj, ActionArchitecture):
+        return ActionArchitectureGraph(obj, **kwargs)
     else:
         raise Exception("No default graph for class "+obj.__class__.__name__)

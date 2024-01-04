@@ -8,16 +8,16 @@ Has classes:
 - :class:`Mode`: Class for defining the mode property (and associated probability model)
   held in Blocks.
 """
-from recordclass import dataobject
 from typing import ClassVar
 import numpy as np
 import itertools
 import copy
-from fmdtools.define.common import get_true_fields, get_true_field, get_dataobj_track, eq_units
+from fmdtools.define.base import eq_units
+from fmdtools.define.container.base import BaseContainer
 from fmdtools.analyze.history import History
 
 
-class Fault(dataobject, readonly=True, mapping=True):
+class Fault(BaseContainer, readonly=True):
     """
     Stores Default Attributes for for modes to use in Mode.faultmodes.
 
@@ -106,7 +106,7 @@ class Fault(dataobject, readonly=True, mapping=True):
             return baserate * opp_factor * t_factor * weight
 
 
-class Mode(dataobject, readonly=False):
+class Mode(BaseContainer, readonly=False):
     """
     Class for defining the mode property (and probability model) held in Blocks.
 
@@ -190,6 +190,7 @@ class Mode(dataobject, readonly=False):
     {'no_charge': Fault(prob=1e-05, cost=100, phases={'standby': 1.0}, units='sim'), 'short': Fault(prob=1e-05, cost=100, phases={'supply': 1.0}, units='sim')}
     """
 
+    rolename = "m"
     mode: ClassVar[str] = 'nominal'
     failrate: ClassVar[float] = 1.0
     faults: set = set()
@@ -214,7 +215,7 @@ class Mode(dataobject, readonly=False):
                 raise Exception("failrate must be added to " + self.__class__.__name__ +
                                 " Mode definition to calculate failrate from he_args")
             kwargs['failrate'] = self.add_he_rate(*self.he_args)
-        args = get_true_fields(self, *args, **kwargs)
+        args = self.get_true_fields(*args, **kwargs)
         super().__init__(*args)
         if not self.mode:
             self.mode = 'nominal'
@@ -302,7 +303,7 @@ class Mode(dataobject, readonly=False):
                 raise Exception("Invalid mode definition in " +
                                 str(self.__class__) + ", " + mode +
                                 " modeparams values should be dict or tuple")
-            args = get_true_fields(Fault, *args, **kwargs)
+            args = Fault().get_true_fields(*args, **kwargs)
             args[0] *= self.failrate
             if type(args[2]) in [tuple, list, set]:
                 args[2] = {ph: 1.0 for ph in args[1] for ph in args[1]}
@@ -465,7 +466,7 @@ class Mode(dataobject, readonly=False):
         fault : str
             name of the fault to check.
         """
-        return not(any(self.faults.intersection(set([fault]))))
+        return not (any(self.faults.intersection(set([fault]))))
 
     def any_faults(self):
         """Check if the block has any fault modes."""
@@ -565,32 +566,24 @@ class Mode(dataobject, readonly=False):
         if warnmessage:
             self.warn(warnmessage, "All faults removed.")
 
-    def mirror(self, mode_to_mirror):
-        if 'mode' in self.__fields__:
-            self.mode = mode_to_mirror.mode
-        self.faults.clear()
-        self.faults.update(mode_to_mirror.faults)
+    def set_field(self, fieldname, value, as_copy=True):
+        """Extend BaseContainer.assign to not set faultmodes (always the same)."""
+        if fieldname != 'faultmodes':
+            BaseContainer.set_field(self, fieldname, value, as_copy=as_copy)
 
-    def get_true_field(self, fieldname, *args, **kwargs):
-        return get_true_field(self, fieldname, *args, **kwargs)
-
-    def get_true_fields(self, *args, **kwargs):
-        return get_true_fields(self, *args, **kwargs)
-
-    def create_hist(self, timerange, track):
-        h = History()
-        track = get_dataobj_track(self, track)
-        if 'faults' in track:
+    def init_hist_att(self, hist, att, timerange, track, str_size='<U20'):
+        """Add field 'att' to history. Accommodates faults and mode tracking."""
+        if att == 'faults':
             fh = History()
             for faultmode in self.faultmodes:
                 fh.init_att(faultmode, False, timerange, track='all', dtype=bool)
-            h['faults'] = fh
-        fm_lens = [len(fm) for fm in self.faultmodes]
-        om_lens = [len(m) for m in self.opermodes]
-        modelength = max(fm_lens+om_lens)
-        str_size = '<U'+str(modelength)
-        h.init_att('mode', self.mode, timerange, track, str_size=str_size)
-        return h
+            hist['faults'] = fh
+        elif att == 'mode':
+            fm_lens = [len(fm) for fm in self.faultmodes]
+            om_lens = [len(m) for m in self.opermodes]
+            modelength = max(fm_lens+om_lens)
+            str_size = '<U'+str(modelength)
+            BaseContainer.init_hist_att(self, hist, att, timerange, track, str_size)
 
     def _assign_mode(self, mode):
         if 'mode' in self.__fields__:

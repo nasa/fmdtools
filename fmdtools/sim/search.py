@@ -12,8 +12,9 @@ import time
 from collections.abc import Iterable
 from recordclass import dataobject
 import fmdtools.sim.propagate as propagate
-from fmdtools.define.common import t_key
-from fmdtools.define.block import Simulable, ExampleFxnBlock
+from fmdtools.define.base import t_key
+from fmdtools.define.block.base import Simulable
+from fmdtools.define.block.function import ExampleFunction
 from fmdtools.sim.scenario import Sequence, SingleFaultScenario, Scenario
 from fmdtools.sim.sample import FaultDomain
 from fmdtools.analyze.common import setup_plot
@@ -545,7 +546,7 @@ class BaseSimProblem(BaseProblem):
         end_time : float
             Simulation time to simulate to.
         """
-        last_time = self.mdl.sp.times[-1]
+        last_time = self.mdl.sp.end_time
         all_times = [a.time if a.time else last_time
                      for a in {**self.objectives, **self.constraints}.values()]
         end_time = max(all_times)
@@ -591,11 +592,11 @@ class ParameterSimProblem(BaseSimProblem):
     Examples
     --------
     >>> from fmdtools.sim.sample import expd
-    >>> from fmdtools.define.block import ExampleFxnBlock
+    >>> from fmdtools.define.block import ExampleFunction
 
     # below, we show basic setup of a parameter problem where objectives get values
     # from the sim at particular times.
-    >>> exprob = ParameterSimProblem(ExampleFxnBlock(), expd, "nominal")
+    >>> exprob = ParameterSimProblem(ExampleFunction(), expd, "nominal")
     >>> exprob.add_result_objective("f1", "s.x", time=5)
     >>> exprob.add_result_objective("f2", "s.y", time=5)
     >>> exprob.add_result_constraint("g1", "s.x", time=10, threshold=10, comparator='greater')
@@ -623,7 +624,7 @@ class ParameterSimProblem(BaseSimProblem):
     -10.0
 
     # below, we use the endclass as an objective instead of the variable:
-    >>> exprob = ParameterSimProblem(ExampleFxnBlock(), expd, "nominal")
+    >>> exprob = ParameterSimProblem(ExampleFunction(), expd, "nominal")
     >>> exprob.add_result_objective("f1", "endclass.xy")
     >>> exprob.f1(1, 1)
     100.0
@@ -631,7 +632,7 @@ class ParameterSimProblem(BaseSimProblem):
     200.0
 
     # finally, note that this class can work with a variety of methods:
-    >>> exprob = ParameterSimProblem(ExampleFxnBlock("ex"), expd, "one_fault", "ex", "short", 2)
+    >>> exprob = ParameterSimProblem(ExampleFunction("ex"), expd, "one_fault", "ex", "short", 2)
     >>> exprob.add_result_objective("f1", "s.y", time=3)
     >>> exprob.add_result_objective("f2", "s.y", time=5)
     >>> exprob.f1(1, 1)
@@ -744,7 +745,7 @@ class ScenarioProblem(BaseSimProblem):
 
         scen = self.gen_scenario(*x)
 
-        mdl = propagate.copy_staged([*self.prepped_sims['mdls'].values()][0])
+        mdl = [*self.prepped_sims['mdls'].values()][0].copy()
         nomhist = self.prepped_sims['hist'].copy()
         nomresult = self.prepped_sims['result'].copy()
         desired_result = self.obj_con_des_res()
@@ -775,7 +776,7 @@ class SingleFaultScenarioProblem(ScenarioProblem):
 
     Examples
     --------
-    >>> ex_scenprob = SingleFaultScenarioProblem(ExampleFxnBlock(), ("examplefxnblock", "short"))
+    >>> ex_scenprob = SingleFaultScenarioProblem(ExampleFunction(), ("examplefxnblock", "short"))
     >>> ex_scenprob.add_result_objective("f1", "s.y", time=5)
 
     # objective value should be 1.0 (init value) + 3 * time_with_fault
@@ -845,7 +846,7 @@ class SingleFaultScenarioProblem(ScenarioProblem):
         return scen
 
 
-ex_scenprob = SingleFaultScenarioProblem(ExampleFxnBlock(), ("examplefxnblock", "short"))
+ex_scenprob = SingleFaultScenarioProblem(ExampleFunction(), ("examplefunction", "short"))
 ex_scenprob.add_result_objective("f1", "s.y", time=5)
 ex_scenprob.f1(5.0)
 
@@ -870,7 +871,7 @@ class DisturbanceProblem(ScenarioProblem):
 
         Examples
         --------
-        >>> ex_dp = DisturbanceProblem(ExampleFxnBlock(), 3, "s.y")
+        >>> ex_dp = DisturbanceProblem(ExampleFunction(), 3, "s.y")
         >>> ex_dp.add_result_objective("f1", "s.y", time=5)
 
         # objective value should the same as the input value
@@ -915,7 +916,7 @@ class DisturbanceProblem(ScenarioProblem):
         return scen
 
 
-ex_dp = DisturbanceProblem(ExampleFxnBlock(), 3, "s.y")
+ex_dp = DisturbanceProblem(ExampleFunction(), 3, "s.y")
 ex_dp.add_result_objective("f1", "s.y", time=5)
 
 
@@ -1613,19 +1614,17 @@ class DynamicInterface():
         self.t = 0.0
         self.t_ind = 0
         if not t_max:
-            self.t_max = mdl.sp.times[-1]
+            self.t_max = mdl.sp.end_time
         else:
             self.t_max = t_max
         if type(desired_result) == str:
             self.desired_result = [desired_result]
         else:
             self.desired_result = desired_result
-        self.mdl = mdl.new_with_params(**mdl_kwargs)
+        self.mdl = mdl.new_with_params(**mdl_kwargs, track=track)
         timerange = np.arange(self.t, self.t_max+2*mdl.sp.dt, mdl.sp.dt)
-        self.hist = mdl.create_hist(timerange, track)
-        if 'time' not in self.hist:
-            self.hist.init_att('time', timerange[0], timerange=timerange, track='all',
-                               dtype=float)
+        self.hist = mdl.create_hist(timerange)
+        mdl.init_time_hist()
         self.run_stochastic = run_stochastic
         self.use_end_condition = use_end_condition
 

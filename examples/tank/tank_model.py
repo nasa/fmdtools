@@ -1,14 +1,15 @@
 # -*- coding: utf-8 -*-
 """
-Dynamical implementation of a human-operated tank system to show how fmdtools
-can be used to model human errors.
+Dynamical implementation of a human-operated tank system.
+
+This tanks system is helpful for showing how fmdtools can be used to model human errors.
 
 The functions of the system are:
     - ImportLiquid (Inlet Valve)
     - GuideLiquid (Inlet Pipe)
     - StoreLiquid (Tank)
     - GuideLiquid (Outlet Pipe)
-    - Export Liquid (Outlet Valve)
+    - ExportLiquid (Outlet Valve)
 The Tank stores a set amount of water, the level of which is controlled by
 inlet and outlet valves. In this model we (will) use an action sequence graph
 to model the human interactions with the system.
@@ -21,12 +22,14 @@ human errors during early design stage functional failure analysis. In ASME
 Information in Engineering Conference. American Society of Mechanical Engineers
 Digital Collection.
 """
-from fmdtools.define.parameter import Parameter
-from fmdtools.define.state import State
-from fmdtools.define.mode import Mode
-from fmdtools.define.flow import Flow
-from fmdtools.define.model import Model
-from fmdtools.define.block import FxnBlock, Action, ActArch
+from fmdtools.define.container.parameter import Parameter
+from fmdtools.define.container.state import State
+from fmdtools.define.container.mode import Mode
+from fmdtools.define.flow.base import Flow
+from fmdtools.define.block.function import Function
+from fmdtools.define.architecture.function import FunctionArchitecture
+from fmdtools.define.block.action import Action
+from fmdtools.define.architecture.action import ActionArchitecture
 
 
 class WatState(State):
@@ -35,7 +38,7 @@ class WatState(State):
 
 
 class Liquid(Flow):
-    _init_s = WatState
+    container_s = WatState
 
 
 class SigState(State):
@@ -44,7 +47,7 @@ class SigState(State):
 
 
 class Signal(Flow):
-    _init_s = SigState
+    container_s = SigState
 
 
 class TransportLiquidState(State):
@@ -57,12 +60,12 @@ class TransportLiquidMode(Mode):
     units = 'hr'
 
 
-class ImportLiquid(FxnBlock):
+class ImportLiquid(Function):
     __slots__ = ('sig', 'watout')
-    _init_s = TransportLiquidState
-    _init_m = TransportLiquidMode
-    _init_sig = Signal
-    _init_watout = Liquid
+    container_s = TransportLiquidState
+    container_m = TransportLiquidMode
+    flow_sig = Signal
+    flow_watout = Liquid
     flownames = {'wat_in_1': 'watout', 'valve1_sig': 'sig'}
 
     def static_behavior(self, time):
@@ -77,12 +80,12 @@ class ImportLiquid(FxnBlock):
         self.sig.s.indicator = self.s.amt_open
 
 
-class ExportLiquid(FxnBlock):
+class ExportLiquid(Function):
     __slots__ = ('sig', 'watin')
-    _init_s = TransportLiquidState
-    _init_m = TransportLiquidMode
-    _init_sig = Signal
-    _init_watin = Liquid
+    container_s = TransportLiquidState
+    container_m = TransportLiquidMode
+    flow_sig = Signal
+    flow_watin = Liquid
     flownames = {'wat_out_2': 'watin', 'valve2_sig': 'sig'}
 
     def static_behavior(self, time):
@@ -100,11 +103,11 @@ class GuideLiquidMode(Mode):
     phases = {'na': 1.0}
 
 
-class GuideLiquid(FxnBlock):
+class GuideLiquid(Function):
     __slots__ = ('watin', 'watout')
-    _init_watin = Liquid
-    _init_watout = Liquid
-    _init_m = GuideLiquidMode
+    flow_watin = Liquid
+    flow_watout = Liquid
+    container_m = GuideLiquidMode
 
     def static_behavior(self, time):
         if self.m.has_fault('clogged'):
@@ -137,13 +140,13 @@ class StoreLiquidMode(Mode):
     fm_args = {'leak': (1e-5, 0, {'na': 1.0})}
 
 
-class StoreLiquid(FxnBlock):
+class StoreLiquid(Function):
     __slots__ = ('watin', 'watout', 'sig')
-    _init_s = StoreLiquidState
-    _init_m = StoreLiquidMode
-    _init_watin = Liquid
-    _init_watout = Liquid
-    _init_sig = Signal
+    container_s = StoreLiquidState
+    container_m = StoreLiquidMode
+    flow_watin = Liquid
+    flow_watout = Liquid
+    flow_sig = Signal
     flownames = {'wat_in_2': 'watin', 'wat_out_1': 'watout', 'tank_sig': 'sig'}
 
     def static_behavior(self, time):
@@ -175,68 +178,67 @@ class StoreLiquid(FxnBlock):
 
 
 class HumanParam(Parameter):
-    reacttime: int = 1
+    reacttime: int = 2
 
 
-class HumanASG(ActArch):
+class HumanASG(ActionArchitecture):
     initial_action = "look"
+    container_p = HumanParam
 
-    def __init__(self, *args, reacttime=0, **kwargs):
-        super().__init__(*args, **kwargs)
-
+    def init_architecture(self, **kwargs):
         self.add_flow("tank_sig", Signal)
         self.add_flow("valve1_sig", Signal)
         self.add_flow("valve2_sig", Signal)
         self.add_flow("detect_sig", Signal)
 
         self.add_act('look', Look)
-        self.add_act('detect', Detect, 'detect_sig', 'tank_sig', duration=reacttime)
+        self.add_act('detect', Detect, 'detect_sig', 'tank_sig',
+                     duration=self.p.reacttime)
         self.add_act('reach', Reach)
         self.add_act('grasp', Grasp)
         self.add_act('turn', Turn, 'detect_sig',
                      'valve1_sig', 'valve2_sig', duration=1.0)
 
-        self.add_cond('look', 'detect', 'looked', condition=self.actions['look'].looked)
+        self.add_cond('look', 'detect', 'looked', condition=self.acts['look'].looked)
         self.add_cond('detect', 'reach', 'detected',
-                      condition=self.actions['detect'].detected)
+                      condition=self.acts['detect'].detected)
         self.add_cond('reach', 'grasp', 'reached',
-                      condition=self.actions['reach'].reached)
+                      condition=self.acts['reach'].reached)
         self.add_cond('grasp', 'turn', 'grasped',
-                      condition=self.actions['grasp'].grasped)
-        self.add_cond('turn', 'look', 'done', condition=self.actions['turn'].turned)
-
-        self.build()
+                      condition=self.acts['grasp'].grasped)
+        self.add_cond('turn', 'look', 'done', condition=self.acts['turn'].turned)
 
 
-class HumanActions(FxnBlock):
-    _init_p = HumanParam
-    _init_aa = HumanASG
-    _init_valve1_sig = Signal
-    _init_tank_sig = Signal
-    _init_valve2_sig = Signal
+class HumanActions(Function):
+    container_p = HumanParam
+    container_m = Mode
+    arch_aa = HumanASG
+    flow_valve1_sig = Signal
+    flow_tank_sig = Signal
+    flow_valve2_sig = Signal
 
     def dynamic_behavior(self, time):
         """
         Some testing code for ASG behavior and copying, etc. Raises exceptions when
         flows aren't copied correctly
         """
-        if self.aa.actions['look'].looked.__self__.__hash__() != self.aa.conditions['looked'].__self__.__hash__():
+        if self.aa.acts['look'].looked.__self__.__hash__() != self.aa.conds['looked'].__self__.__hash__():
             raise Exception("Condition not passed")
         if self.aa.flows['valve1_sig'].__hash__() != self.valve1_sig.__hash__():
             raise Exception("Invalid connection hash in asg.flows")
-        if self.aa.actions['detect'].tank_sig.__hash__() != self.tank_sig.__hash__():
+        if self.aa.acts['detect'].tank_sig.__hash__() != self.tank_sig.__hash__():
             raise Exception("Invalid connection hash in asg.flows")
-        if self.aa.flows['detect_sig'].__hash__() != self.aa.actions['detect'].detect_sig.__hash__():
+        if self.aa.flows['detect_sig'].__hash__() != self.aa.acts['detect'].detect_sig.__hash__():
             raise Exception("Invalid connection hash in asg.flows")
         if self.aa.flows['valve2_sig'].__hash__() != self.valve2_sig.__hash__():
             raise Exception("Invalid connection hash in asg.flows")
-        if self.aa.actions['turn'].valve2_sig.__hash__() != self.valve2_sig.__hash__():
+        if self.aa.acts['turn'].valve2_sig.__hash__() != self.valve2_sig.__hash__():
             raise Exception("Invalid connection hash")
 
-        if not self.aa.actions['turn'].valve2_sig.s.action == self.valve2_sig.s.action:
+        if not self.aa.acts['turn'].valve2_sig.s.action == self.valve2_sig.s.action:
             raise Exception("invalid connection: valve2_sig")
 
-        if not self.aa.actions['turn'].valve1_sig.s.action == self.valve1_sig.s.action:
+        if not self.aa.acts['turn'].valve1_sig.s.action == self.valve1_sig.s.action:
             raise Exception("invalid connection: valve1_sig")
 
 
@@ -249,7 +251,7 @@ class LookMode(Mode):
 
 
 class Look(Action):
-    _init_m = LookMode
+    container_m = LookMode
 
     def looked(self):
         return not self.m.has_fault('not_visible')
@@ -264,9 +266,9 @@ class DetectMode(Mode):
 
 
 class Detect(Action):
-    _init_m = DetectMode
-    _init_detect_sig = Signal
-    _init_tank_sig = Signal
+    container_m = DetectMode
+    flow_detect_sig = Signal
+    flow_tank_sig = Signal
 
     def behavior(self, time):
         if self.m.has_fault('not_detected'):
@@ -298,7 +300,7 @@ class ReachMode(Mode):
 
 
 class Reach(Action):
-    _init_m = ReachMode
+    container_m = ReachMode
 
     def reached(self):
         return not self.m.has_fault('unable')
@@ -312,7 +314,7 @@ class GraspMode(Mode):
 
 
 class Grasp(Action):
-    _init_m = GraspMode
+    container_m = GraspMode
 
     def grasped(self):
         return not self.m.has_fault('cannot')
@@ -329,10 +331,10 @@ class TurnMode(Mode):
 
 
 class Turn(Action):
-    _init_m = TurnMode
-    _init_detect_sig = Signal
-    _init_valve1_sig = Signal
-    _init_valve2_sig = Signal
+    container_m = TurnMode
+    flow_detect_sig = Signal
+    flow_valve1_sig = Signal
+    flow_valve2_sig = Signal
 
     def behavior(self, time):
         if self.m.has_fault('cannot'):
@@ -353,16 +355,14 @@ class TankParam(Parameter, readonly=True):
     store_tstep: float = 1.0
 
 
-class Tank(Model):
+class Tank(FunctionArchitecture):
     __slots__ = ()
-    _init_p = TankParam
+    container_p = TankParam
     default_sp = dict(phases=(('na', 0, 0), ('operation', 1, 20)),
-                      times=(0, 5, 10, 15, 20), units='min')
+                      end_time=20, units='min')
     default_track = {'fxns': {'store_water': {'s': 'level'}}}
 
-    def __init__(self, **kwargs):
-        super().__init__(**kwargs)
-
+    def init_architecture(self, **kwargs):
         self.add_flow('wat_in_1', Liquid)
         self.add_flow('wat_in_2', Liquid)
         self.add_flow('wat_out_1', Liquid)
@@ -379,8 +379,6 @@ class Tank(Model):
         self.add_fxn('human', HumanActions, 'valve1_sig', 'tank_sig',
                      'valve2_sig', aa={'reacttime': self.p.reacttime})
 
-        self.build()
-
     def find_classification(self, scen, hist):
         # here we define failure in terms of the water level getting too low or too high
         if any(self.h.fxns.store_water.s.level >= 20):
@@ -396,12 +394,12 @@ class Tank(Model):
 
 if __name__ == '__main__':
     import fmdtools.sim.propagate as propagate
-    import fmdtools.analyze as an
     from fmdtools.sim.sample import FaultDomain, FaultSample
 
     mdl = Tank()
 
-    endclass, mdlhist = propagate.one_fault(mdl, 'human', 'look_not_visible', time=2)
+    endclass, mdlhist = propagate.one_fault(mdl, 'human', 'look_not_visible', time=2,
+                                            staged=True)
 
     # nominal run
     endresults, mdlhist = propagate.nominal(mdl, desired_result=['endclass', 'graph'])
@@ -445,12 +443,12 @@ if __name__ == '__main__':
     fs.add_fault_times((0, 5, 10, 15, 20))
     endclasses, hist = propagate.fault_sample(mdl, fs)
 
-    from fmdtools.analyze.graph import ModelGraph
+    from fmdtools.analyze.graph import FunctionArchitectureGraph
     mdl.fxns['human'].t.dt = 2.0
-    mg = ModelGraph(mdl)
+    mg = FunctionArchitectureGraph(mdl)
     mg.set_exec_order(mdl)
     mg.draw()
 
-    from fmdtools.analyze.graph import ActArchGraph
-    ag = ActArchGraph(mdl.fxns['human'].aa)
+    from fmdtools.analyze.graph import ActionArchitectureGraph
+    ag = ActionArchitectureGraph(mdl.fxns['human'].aa)
     ag.draw()

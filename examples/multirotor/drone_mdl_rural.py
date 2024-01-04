@@ -6,12 +6,14 @@ Created: June 2019, revised Nov 2022
 Description: A fault model of a multi-rotor drone.
 """
 import numpy as np
-from fmdtools.define.parameter import Parameter
-from fmdtools.define.state import State
-from fmdtools.define.mode import Mode
-from fmdtools.define.block import FxnBlock, Component, CompArch
-from fmdtools.define.flow import Flow
-from fmdtools.define.model import Model
+from fmdtools.define.container.parameter import Parameter
+from fmdtools.define.container.state import State
+from fmdtools.define.container.mode import Mode
+from fmdtools.define.block.function import Function
+from fmdtools.define.block.component import Component
+from fmdtools.define.architecture.component import ComponentArchitecture
+from fmdtools.define.flow.base import Flow
+from fmdtools.define.architecture.function import FunctionArchitecture
 from fmdtools.analyze.history import History
 
 from examples.multirotor.drone_mdl_static import EE, Force, Control, DesTraj, DOFs
@@ -121,7 +123,7 @@ class HSigState(State):
 class HSig(Flow):
     """Health signal flow."""
 
-    _init_s = HSigState
+    container_s = HSigState
 
 
 class RSigState(State):
@@ -133,7 +135,7 @@ class RSigState(State):
 class RSig(Flow):
     """Recovery signal flow."""
 
-    _init_s = RSigState
+    container_s = RSigState
 
 # DEFINE FUNCTIONS
 
@@ -228,9 +230,9 @@ class BatParam(Parameter):
 class Battery(Component):
     """Battery component used to hold energy in distributed architecture."""
 
-    _init_s = BatState
-    _init_m = BatMode
-    _init_p = BatParam
+    container_s = BatState
+    container_m = BatMode
+    container_p = BatParam
 
     def behavior(self, fs, ee_outr, time):
         """Battery behavior returning electrical transference, soc, and fault state."""
@@ -266,9 +268,9 @@ class Battery(Component):
         return self.s.e_t, self.s.soc, er_res
 
 
-class BatArch(CompArch):
+class BatArchParam(Parameter):
     """
-    Battery architecture.
+    Battery architecture parameters.
 
     Defined by archtype parameter with options:
         - 'monolythic':
@@ -279,42 +281,53 @@ class BatArch(CompArch):
             two batteries put in parallel
         - 'split-both':
             four batteries arranged in a series-parallel configuration
+
+    As well as inputs for the weight and drag of the entire drone.
     """
 
     archtype: str = 'monolithic'
-    batparams: dict = {}  # weight, cap, voltage, drag_factor
+    components: tuple = ()
     weight: float = 0.0
     drag: float = 0.0
     series: int = 1
     parallel: int = 1
     voltage: float = 12.0
-    drag: float = 0.0
 
     def __init__(self, *args, **kwargs):
         archtype = self.get_true_field('archtype', *args, **kwargs)
-        weight = self.get_true_field('weight', *args, **kwargs)
-        drag = self.get_true_field('drag', *args, **kwargs)
         if archtype == 'monolithic':
-            batparams = {"series": 1, "parallel": 1,
-                         "voltage": 12.0, "weight": weight, "drag": drag}
-            compnames = ['s1p1']
+            series = 1
+            parallel = 1
+            components = ('s1p1', )
         elif archtype == 'series-split':
-            batparams = {'series': 2, 'parallel': 1,
-                         'voltage': 12.0, "weight": weight, "drag": drag}
-            compnames = ['s1p1', 's2p1']
+            series = 2
+            parallel = 1
+            components = ('s1p1', 's2p1')
         elif archtype == 'parallel-split':
-            batparams = {'series': 1, 'parallel': 2,
-                         'voltage': 12.0, "weight": weight, "drag": drag}
-            compnames = ['s1p1', 's1p2']
+            series = 1
+            parallel = 2
+            components = ('s1p1', 's1p2')
         elif archtype == 'split-both':
-            batparams = {'series': 2, 'parallel': 2,
-                         'voltage': 12.0, "weight": weight, "drag": drag}
-            compnames = ['s1p1', 's1p2', 's2p1', 's2p2']
+            series = 2
+            parallel = 2
+            components = ('s1p1', 's1p2', 's2p1', 's2p2')
         else:
             raise Exception("Invalid battery architecture")
-        kwargs.update(batparams)
-        super().__init__(*args, **kwargs)
-        self.make_components(Battery, *compnames, p=batparams)
+        kwar = {**kwargs, 'archtype': archtype, 'series': series, 'parallel': parallel,
+                'components': components}
+        args = self.get_true_fields(*args, **kwar)
+        super().__init__(*args)
+
+class BatArch(ComponentArchitecture):
+    """Overall Battery Architecture used to store energy."""
+
+    container_p = BatArchParam
+
+    def init_architecture(self, **kwargs):
+        for comp in self.p.components:
+            batparams = self.p.get_field_dict(self.p, 'series', 'parallel', 'voltage',
+                                              'weight', 'drag')
+            self.add_comp(comp, Battery, p=batparams)
 
 
 class StoreEEMode(Mode):
@@ -327,16 +340,16 @@ class StoreEEMode(Mode):
 
 
 
-class StoreEE(FxnBlock):
+class StoreEE(Function):
     """Class defining energy storage function with battery architecture."""
 
     __slots__ = ('hsig_bat', 'ee_1', 'force_st')
-    _init_s = StoreEEState
-    _init_m = StoreEEMode
-    _init_ca = BatArch
-    _init_hsig_bat = HSig
-    _init_ee_1 = EE
-    _init_force_st = Force
+    container_s = StoreEEState
+    container_m = StoreEEMode
+    arch_ca = BatArch
+    flow_hsig_bat = HSig
+    flow_ee_1 = EE
+    flow_force_st = Force
 
     def condfaults(self, time):
         """Calculate overall conditional faults for StoreEE architecture."""
@@ -345,28 +358,28 @@ class StoreEE(FxnBlock):
         if self.s.soc < 1:
             self.m.replace_fault('lowcharge', 'nocharge')
         if self.m.has_fault('lowcharge'):
-            for batname, bat in self.ca.components.items():
+            for batname, bat in self.ca.comps.items():
                 bat.s.limit(soc=(0, 19))
         elif self.m.has_fault('nocharge'):
-            for batname, bat in self.ca.components.items():
+            for batname, bat in self.ca.comps.items():
                 bat.s.soc = 0
 
     def behavior(self, time):
         """Calculate overall behavior for StoreEE architecture."""
         ee, soc = {}, {}
         rate_res = 0
-        for batname, bat in self.ca.components.items():
+        for batname, bat in self.ca.comps.items():
             ee[bat.name], soc[bat.name], rate_res = \
                 bat.behavior(self.force_st.s.support, self.ee_1.s.rate /
-                             (self.ca.series*self.ca.parallel)+rate_res, time)
+                             (self.ca.p.series*self.ca.p.parallel)+rate_res, time)
         # need to incorporate max current draw somehow + draw when reconfigured
-        if self.ca.archtype == 'monolithic':
+        if self.ca.p.archtype == 'monolithic':
             self.ee_1.s.effort = ee['s1p1']
-        elif self.ca.archtype == 'series-split':
+        elif self.ca.p.archtype == 'series-split':
             self.ee_1.s.effort = np.max(list(ee.values()))
-        elif self.ca.archtype == 'parallel-split':
+        elif self.ca.p.archtype == 'parallel-split':
             self.ee_1.s.effort = np.sum(list(ee.values()))
-        elif self.ca.archtype == 'split-both':
+        elif self.ca.p.archtype == 'split-both':
             e = list(ee.values())
             e.sort()
             self.ee_1.effort = e[-1]+e[-2]
@@ -398,7 +411,7 @@ class HoldPayloadMode(Mode):
 class HoldPayload(HoldPayloadDyn):
     """Adaptation of HoldPayload with new mode information."""
 
-    _init_m = HoldPayloadMode
+    container_m = HoldPayloadMode
 
 
 class ManageHealthMode(Mode):
@@ -416,17 +429,17 @@ class ManageHealthMode(Mode):
     units = 'hr'
 
 
-class ManageHealth(FxnBlock):
+class ManageHealth(Function):
     """Health management function for rotor and battery."""
 
     __slots__ = ('force_st', 'ee_ctl', 'hsig_dofs', 'hsig_bat', 'rsig_traj')
-    _init_m = ManageHealthMode
-    _init_p = ResPolicy
-    _init_force_st = Force
-    _init_ee_ctl = EE
-    _init_hsig_dofs = HSig
-    _init_hsig_bat = HSig
-    _init_rsig_traj = RSig
+    container_m = ManageHealthMode
+    container_p = ResPolicy
+    flow_force_st = Force
+    flow_ee_ctl = EE
+    flow_hsig_dofs = HSig
+    flow_hsig_bat = HSig
+    flow_rsig_traj = RSig
 
     def condfaults(self, time):
         """If no support (e.g., in a crash), unit breaks."""
@@ -455,8 +468,8 @@ class AffectDOF(AffectDOFHierarchical):
     """Adaptation of hierarchical AffecDOF function which returns fault signals."""
 
     __slots__ = ('hsig_dofs',)
-    _init_m = AffectMode
-    _init_hsig_dofs = HSig
+    container_m = AffectMode
+    flow_hsig_dofs = HSig
 
     def reconfig_faults(self):
         """Send a faulty health state when in a fault mode."""
@@ -489,7 +502,7 @@ class CtlDOFMode(Mode):
 class CtlDOF(CtlDOFStat):
     """Adaptation of CtlDOFMode with more mode information."""
 
-    _init_m = CtlDOFMode
+    container_m = CtlDOFMode
 
 
 class PlanPathMode(Mode):
@@ -546,17 +559,13 @@ class PlanPath(PlanPathDyn):
     """Path planning function of the drone. Follows a sequence defined in flightplan."""
 
     __slots__ = ('rsig_traj', )
-    _init_s = PlanPathState
-    _init_m = PlanPathMode
-    _init_p = DroneParam
-    _init_rsig_traj = RSig
+    container_s = PlanPathState
+    container_m = PlanPathMode
+    container_p = DroneParam
+    flow_rsig_traj = RSig
     default_track = {'s': ['ground_height', 'pt', 'goal'], 'm': 'all'}
 
-    def __init__(self, name, flows, **kwargs):
-        FxnBlock.__init__(self, name, flows, **kwargs)
-        self.init_goals()
-
-    def init_goals(self):
+    def init_block(self, **kwargs):
         """Initialize path planning goals based on initial flightplan."""
         self.s.goals = {i: list(vals) for i, vals in enumerate(self.p.flightplan)}
 
@@ -644,19 +653,17 @@ class PlanPath(PlanPathDyn):
             self.s.pt += 1
 
 
-class Drone(Model):
+class Drone(FunctionArchitecture):
     """Rural surveillance Drone model."""
 
     __slots__ = ('start_area', 'safe_area', 'target_area')
-    _init_p = DroneParam
+    container_p = DroneParam
     default_sp = dict(phases=(('taxi', 0, 0),
                               ('move', 1, 11),
                               ('land', 12, 20)),
-                      times=(0, 30), units='min')
+                      end_time=30, units='min')
 
-    def __init__(self, **kwargs):
-        super().__init__(**kwargs)
-
+    def init_architecture(self, **kwargs):
         # add flows to the model
         self.add_flow('force_st', Force)
         self.add_flow('force_lin', Force)
@@ -678,18 +685,17 @@ class Drone(Model):
         store_ee_p = {'archtype': self.p.phys_param.bat,
                       'weight': self.p.phys_param.batweight+self.p.phys_param.archweight,
                       'drag': self.p.phys_param.archdrag}
-        self.add_fxn('store_ee', StoreEE, 'ee_1', 'force_st', 'hsig_bat', ca=store_ee_p)
+        self.add_fxn('store_ee', StoreEE, 'ee_1', 'force_st', 'hsig_bat',
+                     ca={'p': store_ee_p})
         self.add_fxn('dist_ee', DistEE, 'ee_1', 'ee_mot', 'ee_ctl', 'force_st')
         self.add_fxn('affect_dof', AffectDOF, 'ee_mot', 'ctl', 'dofs', 'des_traj',
                      'force_lin', 'hsig_dofs',
-                     ca={'archtype': self.p.phys_param.linearch})
+                     ca={'p': {'archtype': self.p.phys_param.linearch}})
         self.add_fxn('ctl_dof', CtlDOF, 'ee_ctl', 'des_traj', 'ctl', 'dofs', 'force_st')
         self.add_fxn('plan_path', PlanPath, 'ee_ctl', 'dofs', 'des_traj', 'force_st',
                      'rsig_traj', p=asdict(self.p))
         self.add_fxn('hold_payload', HoldPayload, 'dofs', 'force_lin', 'force_st')
         self.add_fxn('view_environment', ViewEnvironment, 'dofs', 'environment')
-
-        self.build()
 
     def at_start(self, dofs):
         """Check if drone is at start location."""
