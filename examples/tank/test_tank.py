@@ -99,7 +99,7 @@ class TankTests(unittest.TestCase, CommonTests):
         Store_Liquid function."""
         mdl_global = Tank(sp={'phases': (('na', 0, 0),
                                          ('operation', 1, 20)),
-                              'times': (0, 5, 10, 15, 20), 'dt': 1.0,
+                              'end_time': 20.0, 'dt': 1.0,
                               'units': 'min', 'use_local': False})
         _, hist_global = prop.one_fault(mdl_global, 'store_water', 'leak', time=2)
         hist_global = hist_global.flatten()

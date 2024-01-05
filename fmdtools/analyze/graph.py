@@ -1706,7 +1706,7 @@ class FunctionArchitectureGraph(Graph):
         return super().draw_graphviz(layout=layout, overlap=overlap, **kwargs)
 
 
-class FunctionArchitectureFlowgraph(FunctionArchitectureGraph):
+class FunctionArchitectureFlowGraph(FunctionArchitectureGraph):
     """
     Creates a Graph of model flows for display, where flows are
     set as nodes and connections (via functions) are edges
@@ -1800,7 +1800,7 @@ class FunctionArchitectureFxnGraph(FunctionArchitectureGraph):
         for edge, flows in flows.items():
             flowdict = {}
             for flow in flows:
-                flowdict[flow] = self.get_obj_State(mdl.flows[flow].s)
+                flowdict[flow] = self.get_obj_state(mdl.flows[flow].s)
             edgevals[edge] = flowdict
         nx.set_edge_attributes(self.g, edgevals)
 

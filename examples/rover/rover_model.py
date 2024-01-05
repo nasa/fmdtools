@@ -1071,6 +1071,8 @@ class Rover(FunctionArchitecture):
                 "tot_deviation": tot_deviation,
                 "faults": modes,
                 "classification": classification,
+                "end_x": endpt[0],
+                "end_y": endpt[1],
                 "endpt": endpt}
 
 

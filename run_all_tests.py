@@ -33,7 +33,7 @@ if __name__=="__main__":
                        "examples/multirotor/drone_mdl_dynamic.py",
                        "examples/multirotor/drone_mdl_hierarchical.py"]
 
-    retcode = pytest.main(["--doctest-modules", *doctest_modules])
+    # retcode = pytest.main(["--doctest-modules", *doctest_modules])
 
     # retcode = pytest.main(["--html=./reports/junit/report.html",
     #                        "--self-contained-html",
@@ -70,10 +70,10 @@ if __name__=="__main__":
                       "examples/tank/Tank_Optimization.ipynb"]
 
     # for testing longer-running notebooks
-    # retcode = pytest.main(["--nbmake", *slow_notebooks])
+    retcode = pytest.main(["--nbmake", *slow_notebooks])
 
     # for testing all unittests
-    retcode = pytest.main(["--continue-on-collection-errors"])
+    # retcode = pytest.main(["--continue-on-collection-errors"])
 
     # for creating comprehensive test report:
 
