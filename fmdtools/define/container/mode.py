@@ -568,7 +568,7 @@ class Mode(BaseContainer, readonly=False):
 
     def set_field(self, fieldname, value, as_copy=True):
         """Extend BaseContainer.assign to not set faultmodes (always the same)."""
-        if fieldname != 'faultmodes':
+        if fieldname != 'faultmodes' or self.faultmodes != value:
             BaseContainer.set_field(self, fieldname, value, as_copy=as_copy)
 
     def init_hist_att(self, hist, att, timerange, track, str_size='<U20'):
