@@ -33,7 +33,7 @@ if __name__=="__main__":
                        "examples/multirotor/drone_mdl_dynamic.py",
                        "examples/multirotor/drone_mdl_hierarchical.py"]
 
-    # retcode = pytest.main(["--doctest-modules", *doctest_modules])
+    retcode = pytest.main(["--doctest-modules", *doctest_modules])
 
     # retcode = pytest.main(["--html=./reports/junit/report.html",
     #                        "--self-contained-html",
@@ -77,12 +77,12 @@ if __name__=="__main__":
 
     # for creating comprehensive test report:
 
-    retcode = pytest.main(["--html=./reports/junit/report.html",
-                           "--junitxml=./reports/junit/junit.xml",
-                           "--overwrite",
-                           "--doctest-modules",
-                           "--nbmake",
-                           "--continue-on-collection-errors"])
+    # retcode = pytest.main(["--html=./reports/junit/report.html",
+    #                        "--junitxml=./reports/junit/junit.xml",
+    #                        "--overwrite",
+    #                        "--doctest-modules",
+    #                        "--nbmake",
+    #                        "--continue-on-collection-errors"])
 
     # after creating test report, update the badge using this in powershell:
     # !Powershell.exe -Command "genbadge tests"

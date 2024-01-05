@@ -99,7 +99,7 @@ class DroneScenarioTest(unittest.TestCase):
         x_nominal = self.hist.flows.dofs.s.x[self.time]
         x_failure = sp.f2(self.time)
         self.assertEqual(x_nominal, x_failure)
-        # tiem objective should be at 15
+        # time objective should be at 15
         f_time = sp.f1(self.time)
         self.assertEqual(f_time, 15.0)
 

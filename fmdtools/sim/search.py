@@ -1621,7 +1621,7 @@ class DynamicInterface():
             self.desired_result = [desired_result]
         else:
             self.desired_result = desired_result
-        self.mdl = mdl.new_with_params(**mdl_kwargs, track=track)
+        self.mdl = mdl.new(**mdl_kwargs, track=track)
         timerange = np.arange(self.t, self.t_max+2*mdl.sp.dt, mdl.sp.dt)
         self.hist = mdl.create_hist(timerange)
         mdl.init_time_hist()
