@@ -31,7 +31,7 @@ expd1.add_variable("phys_param.bat", var_map=bat_var_map, var_lim=(0, 3))
 expd1.add_variable("phys_param.linearch", var_map=line_arch_map, var_lim=(0, 2))
 
 
-ex_soc_opt = ParameterSimProblem(Drone(), expd1, 'nominal', track=None)
+ex_soc_opt = ParameterSimProblem(Drone(track=None), expd1, 'nominal')
 ex_soc_opt.add_result_objective("f1", "store_ee.s.soc", time=16)
 ex_soc_opt.add_result_constraint("g1", "store_ee.s.soc", time=16)
 
@@ -112,7 +112,7 @@ class DroneScenarioTest3(DroneScenarioTest):
     time = 6
 
 
-sp2 = DisturbanceProblem(mdl, 5.0, "store_ee.ca.components.s1p1.s.soc", track=None)
+sp2 = DisturbanceProblem(mdl, 5.0, "store_ee.ca.comps.s1p1.s.soc", track=None)
 sp2.add_result_objective("f1", "store_ee.s.soc", time=10)
 sp2.add_result_objective("f2", "store_ee.s.soc", time=5)
 
@@ -123,7 +123,7 @@ class DroneDisturbanceTest(unittest.TestCase):
         """Test that disturbance objectives set and call properly."""
         # make sure the disturbance is set (note that we correct by amt b/c of use)
         soc_set = 10.0
-        amt = mdl.fxns['store_ee'].ca.components['s1p1'].p.amt
+        amt = mdl.fxns['store_ee'].ca.comps['s1p1'].p.amt
         soc_expected = soc_set - 100/amt
         soc_res = sp2.f2(soc_set)
         self.assertEqual(soc_expected, soc_res)

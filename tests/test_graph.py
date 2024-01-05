@@ -5,7 +5,9 @@ Testing some different graph plotting methods.
 import unittest
 from examples.pump.ex_pump import Pump
 from examples.rover.rover_model import Rover
-from fmdtools.analyze.graph import FunctionArchitectureGraph, ModelFxnGraph, ModelFlowGraph
+from fmdtools.analyze.graph import FunctionArchitectureGraph
+from fmdtools.analyze.graph import FunctionArchitectureFxnGraph
+from fmdtools.analyze.graph import FunctionArchitectureFlowgraph
 from fmdtools.analyze.graph import FunctionArchitectureTypeGraph
 from fmdtools.analyze.common import suite_for_plots
 from fmdtools.sim import propagate
@@ -17,40 +19,40 @@ class ModelGraphTests(unittest.TestCase):
         self.rvr = Rover()
 
     def test_modelgraph_plot(self):
-        a = ModelGraph(self.mdl)
+        a = FunctionArchitectureGraph(self.mdl)
         a.draw()
         a.set_exec_order(self.mdl)
         a.draw()
 
-        b = ModelGraph(self.rvr)
+        b = FunctionArchitectureGraph(self.rvr)
         b.set_exec_order(self.rvr, next_edges={"edge_color": "red"})
         b.draw(title="Should show Order, timestep, and dynamic properties of"
-               + " ModelGraph with red arrows for next")
+               + " FunctionArchitectureGraph with red arrows for next")
 
     def test_fxngraph_plot(self):
-        a = ModelFxnGraph(self.mdl)
+        a = FunctionArchitectureFxnGraph(self.mdl)
         # a.set_edge_labels(title='label', subtext='flows')
         a.draw()
         a.set_exec_order(self.mdl)
         a.draw()
 
-        b = ModelFxnGraph(self.rvr)
+        b = FunctionArchitectureFxnGraph(self.rvr)
         b.set_exec_order(self.rvr)
         b.draw()
 
     def test_flowgraph_plot(self):
-        a = ModelFlowGraph(self.mdl)
+        a = FunctionArchitectureFlowgraph(self.mdl)
         # a.set_edge_labels(title='label', subtext='functions')
         a.draw()
         a.set_exec_order(self.mdl)
         a.draw()
 
-        b = ModelFlowGraph(self.rvr)
+        b = FunctionArchitectureFlowgraph(self.rvr)
         b.set_exec_order(self.rvr)
         b.draw(title="Should show Order, timestep, and dynamic properties of FlowGraph")
 
     def test_typegraph_plot(self):
-        a = ModelTypeGraph(self.mdl)
+        a = FunctionArchitectureTypeGraph(self.mdl)
         a.draw(title="Should show the Pump model Containing functions, which in turn"
                + " contain Signal, Water, Electricity Flows")
 
@@ -70,7 +72,7 @@ class ModelGraphTests(unittest.TestCase):
         des_res = ['graph', 'endclass', 'endfaults']
         er, hist = propagate.one_fault(self.mdl, 'move_water', 'short',
                                        time=10, track='all', desired_result=des_res)
-        mg = ModelGraph(self.mdl)
+        mg = FunctionArchitectureGraph(self.mdl)
         mg.draw_from(11, hist)
 
 # def test_move_nodes(self):
@@ -93,8 +95,8 @@ if __name__ == '__main__':
     # endresults.graph.set_node_labels(title='id', subtext='faults')
     # endresults.graph.draw()
     
-    a = ModelTypeGraph(mdl)
-    a.draw_pyvis()
+    a = FunctionArchitectureTypeGraph(mdl)
+    # a.draw_pyvis()
     # a.draw_from(10, mdlhist)
     # a.draw_from(50, mdlhist)
     

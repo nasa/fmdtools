@@ -56,7 +56,7 @@ def line_dist_faster(ind, show_plot=False, print_time=False):
     starttime = time.time()
     dist = mode_search_prob.line_dist(*ind)
     end_dist = mode_search_prob.end_dist(*ind)
-    endpt = [mode_search_prob.endx(*ind), mode_search_prob.endy(*ind)]
+    endpt = [mode_search_prob.end_x(*ind), mode_search_prob.end_y(*ind)]
 
     if print_time:
         print(str(print_time)+" Interface Exec Time: "+str(time.time()-starttime))
@@ -765,18 +765,17 @@ mdl = mdl.new(sp={'end_time': end_time},
 # defining optimization problem interface (for line_dist_faster)
 mode_search_prob = DisturbanceProblem(mdl,
                                       fault_time,
-                                      "drive.m.s.friction",
-                                      "drive.m.s.transfer",
-                                      "drive.m.s.drift",
+                                      "fxns.drive.m.s.friction",
+                                      "fxns.drive.m.s.transfer",
+                                      "fxns.drive.m.s.drift",
                                       track={"flows": {"ground": "all"},
-                                             "fxns": {"environment": "all"}})
+                                             "fxns": {"environment": "all",
+                                                      "drive": {"m": "s"}}})
 
-mode_search_prob.add_result_objective('line_dist', 'line_dist')
-mode_search_prob.add_result_objective('end_dist', 'end_dist')
-mode_search_prob.add_result_objective('endpt', 'endpt')
-mode_search_prob.add_result_objective('endx', "ground.s.x")
-mode_search_prob.add_result_objective('endy', "ground.s.y")
-
+mode_search_prob.add_result_objective('line_dist', 'endclass.line_dist')
+mode_search_prob.add_result_objective('end_dist', 'endclass.end_dist')
+mode_search_prob.add_result_objective('end_x', 'endclass.end_x')
+mode_search_prob.add_result_objective('end_y', 'endclass.end_y')
 
 # a=time.time(); line_dist([1,1.1,1]); print(time.time()-a)
 # mode_search_prob.plot_obj_const("custom_fault")
@@ -790,18 +789,18 @@ if __name__=="__main__":
 
     weights = [0.0, 0.25, 0.5, 0.75, 1.0]
 
-    weight_sols = {}; weight_results = {}
-    for i, w in enumerate(weights):
-        results = pd.read_csv("results/result2_weight_"+str(i)+".csv")
-        weight_sols["w="+str(w)] = eval(results["Best_Sol"].iloc[-1])
-    fig = plot_trajs(weight_sols, v_padding=0.35)
+    # weight_sols = {}; weight_results = {}
+    # for i, w in enumerate(weights):
+    #     results = pd.read_csv("results/result2_weight_"+str(i)+".csv")
+    #     weight_sols["w="+str(w)] = eval(results["Best_Sol"].iloc[-1])
+    # fig = plot_trajs(weight_sols, v_padding=0.35)
 
-    axs=fig.get_axes()
-    for i, w in enumerate(weights):
-        endpts = [line_dist_faster(i)[2] for i in weight_sols["w="+str(w)]]
-        endptx = [e[0] for e in endpts]
-        endpty = [e[1] for e in endpts]
-        axs[i].scatter(endptx, endpty)
+    # axs = fig.get_axes()
+    # for i, w in enumerate(weights):
+    #     endpts = [line_dist_faster(i)[2] for i in weight_sols["w="+str(w)]]
+    #     endptx = [e[0] for e in endpts]
+    #     endpty = [e[1] for e in endpts]
+    #     axs[i].scatter(endptx, endpty)
 
     # result_mc, sol_mc= montecarlo(ngen=10, weight=0.5, filename="")
     # result_ea, sol_ea= ea(ngen=10, weight=0.5, filename="")

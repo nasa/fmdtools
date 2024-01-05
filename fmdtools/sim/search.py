@@ -680,7 +680,7 @@ class ParameterSimProblem(BaseSimProblem):
         """
         p = self.parameterdomain(*x)
         end_time = self.get_end_time()
-        mdl_kwargs = {'p': p, 'sp': {'times': (0.0, end_time)}}
+        mdl_kwargs = {'p': p, 'sp': {'end_time': end_time}}
         desired_result = self.obj_con_des_res()
         all_res = self.prop_method(self.mdl, *self.args,
                                    mdl_kwargs=mdl_kwargs,
@@ -708,7 +708,7 @@ class ScenarioProblem(BaseSimProblem):
     def prep_sim(self):
         """Prepare simulation by simulating it until the start of the scenario."""
         end_time = self.get_end_time()
-        mdl_kwargs = {'sp': {'times': (0.0, end_time)}}
+        mdl_kwargs = {'sp': {'end_time': end_time}}
         run_kwarg = propagate.pack_run_kwargs(**self.kwargs, mdl_kwargs=mdl_kwargs)
         desired_result = self.obj_con_des_res()
         sim_kwarg = propagate.pack_sim_kwargs(**self.kwargs,

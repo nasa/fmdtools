@@ -113,6 +113,7 @@ from examples.pump.ex_pump import Pump as DetPump
 class Pump(DetPump):
     __slots__ = ()
     default_track = 'all'
+    container_r = Rand
 
     def init_architecture(self, **kwargs):
         self.add_flow('ee_1', Electricity)

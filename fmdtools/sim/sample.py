@@ -467,8 +467,8 @@ class FaultDomain(object):
         """
         for modename in modenames:
             faults = [(fxnname, mode) for fxnname, fxn in self.fxns.items()
-                      for mode in fxn.m.faultmodes
                       if hasattr(fxn, 'm')
+                      for mode in fxn.m.faultmodes
                       if same_mode(modename, mode, exact=exact)]
             self.add_faults(*faults)
 
@@ -558,7 +558,7 @@ class FaultDomain(object):
             fxns = tuple(self.fxns)
         for fxn in fxns:
             if hasattr(self.fxns[fxn], 'ca'):
-                firstcomp = list(self.fxns[fxn].ca.components)[0]
+                firstcomp = list(self.fxns[fxn].ca.comps)[0]
                 compfaults = [(fxn, fmode)
                               for fmode, comp in self.fxns[fxn].ca.faultmodes.items()
                               if firstcomp == comp]
