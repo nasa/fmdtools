@@ -12,14 +12,15 @@ import pytest
 # make sure all tests pass show_progress=False to propagate
 
 if __name__=="__main__":
-    # requires pytest, nbmake, pytest-html
+    # requires pytest, nbmake, pytest-html, pytest-cov
     
     # for testing modules with doctests
-    doctest_modules = ["fmdtools.define.container.state.py",
-                       "fmdtools.define.container.parameter.py",
-                       "fmdtools.define.container.mode.py",
-                       "fmdtools.define.container.geom.py",
-                       "fmdtools.define.container.coords.py",
+    doctest_modules = ["fmdtools/define/container/state.py",
+                       "fmdtools/define/container/parameter.py",
+                       "fmdtools/define/container/mode.py",
+                       "fmdtools/define/object/geom.py",
+                       "fmdtools/define/object/coords.py",
+                       "fmdtools/define/flow/base.py",
                        "fmdtools/define/environment.py",
                        "fmdtools/sim/scenario.py",
                        "fmdtools/sim/sample.py",
@@ -33,7 +34,7 @@ if __name__=="__main__":
                        "examples/multirotor/drone_mdl_dynamic.py",
                        "examples/multirotor/drone_mdl_hierarchical.py"]
 
-    # retcode = pytest.main(["--doctest-modules", *doctest_modules])
+    retcode = pytest.main(["--doctest-modules", "--continue-on-collection-errors"])
 
     # retcode = pytest.main(["--html=./reports/junit/report.html",
     #                        "--self-contained-html",
@@ -70,7 +71,7 @@ if __name__=="__main__":
                       "examples/tank/Tank_Optimization.ipynb"]
 
     # for testing longer-running notebooks
-    retcode = pytest.main(["--nbmake", *slow_notebooks])
+    # retcode = pytest.main(["--nbmake", *slow_notebooks])
 
     # for testing all unittests
     # retcode = pytest.main(["--continue-on-collection-errors"])

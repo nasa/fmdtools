@@ -253,10 +253,10 @@ function filterTable(elem) { // eslint-disable-line no-unused-vars
 }
 </script>
     <h1>report.html</h1>
-    <p>Report generated on 22-Nov-2023 at 03:02:53 by <a href="https://pypi.python.org/pypi/pytest-html">pytest-html</a> v3.2.0</p>
+    <p>Report generated on 05-Jan-2024 at 15:55:19 by <a href="https://pypi.python.org/pypi/pytest-html">pytest-html</a> v3.2.0</p>
     <h2>Summary</h2>
-    <p>236 tests ran in 902.90 seconds. </p>
-    <p class="filter" hidden="true">(Un)check the boxes to filter the results.</p><input checked="true" class="filter" data-test-result="passed" hidden="true" name="filter_checkbox" onChange="filterTable(this)" type="checkbox"/><span class="passed">226 passed</span>, <input checked="true" class="filter" data-test-result="skipped" disabled="true" hidden="true" name="filter_checkbox" onChange="filterTable(this)" type="checkbox"/><span class="skipped">0 skipped</span>, <input checked="true" class="filter" data-test-result="failed" hidden="true" name="filter_checkbox" onChange="filterTable(this)" type="checkbox"/><span class="failed">10 failed</span>, <input checked="true" class="filter" data-test-result="error" hidden="true" name="filter_checkbox" onChange="filterTable(this)" type="checkbox"/><span class="error">15 errors</span>, <input checked="true" class="filter" data-test-result="xfailed" disabled="true" hidden="true" name="filter_checkbox" onChange="filterTable(this)" type="checkbox"/><span class="xfailed">0 expected failures</span>, <input checked="true" class="filter" data-test-result="xpassed" disabled="true" hidden="true" name="filter_checkbox" onChange="filterTable(this)" type="checkbox"/><span class="xpassed">0 unexpected passes</span>
+    <p>42 tests ran in 154.41 seconds. </p>
+    <p class="filter" hidden="true">(Un)check the boxes to filter the results.</p><input checked="true" class="filter" data-test-result="passed" hidden="true" name="filter_checkbox" onChange="filterTable(this)" type="checkbox"/><span class="passed">41 passed</span>, <input checked="true" class="filter" data-test-result="skipped" disabled="true" hidden="true" name="filter_checkbox" onChange="filterTable(this)" type="checkbox"/><span class="skipped">0 skipped</span>, <input checked="true" class="filter" data-test-result="failed" hidden="true" name="filter_checkbox" onChange="filterTable(this)" type="checkbox"/><span class="failed">1 failed</span>, <input checked="true" class="filter" data-test-result="error" hidden="true" name="filter_checkbox" onChange="filterTable(this)" type="checkbox"/><span class="error">13 errors</span>, <input checked="true" class="filter" data-test-result="xfailed" disabled="true" hidden="true" name="filter_checkbox" onChange="filterTable(this)" type="checkbox"/><span class="xfailed">0 expected failures</span>, <input checked="true" class="filter" data-test-result="xpassed" disabled="true" hidden="true" name="filter_checkbox" onChange="filterTable(this)" type="checkbox"/><span class="xpassed">0 unexpected passes</span>
     <h2>Results</h2>
     <table id="results-table">
       <thead id="results-table-head">
@@ -267,15 +267,6 @@ function filterTable(elem) { // eslint-disable-line no-unused-vars
           <th class="sortable links" col="links">Links</th></tr>
         <tr hidden="true" id="not-found-message">
           <th colspan="4">No results found. Try to check the filters</th></tr></thead>
-      <tbody class="error results-table-row">
-        <tr>
-          <td class="col-result">Error</td>
-          <td class="col-name">examples/multirotor/drone_mdl_urban.py::collect</td>
-          <td class="col-duration"></td>
-          <td class="col-links"></td></tr>
-        <tr>
-          <td class="extra" colspan="4">
-            <div class="log">examples\multirotor\drone_mdl_urban.py:5: in &lt;module&gt;<br/>    from drone_mdl_static import EE, Force, Control<br/><span class="error">E   ModuleNotFoundError: No module named &#x27;drone_mdl_static&#x27;</span><br/></div></td></tr></tbody>
       <tbody class="error results-table-row">
         <tr>
           <td class="col-result">Error</td>
@@ -311,7 +302,7 @@ function filterTable(elem) { // eslint-disable-line no-unused-vars
           <td class="col-links"></td></tr>
         <tr>
           <td class="extra" colspan="4">
-            <div class="log">examples\pump\pump_indiv.py:11: in &lt;module&gt;<br/>    from fmdtools.analyze import plot<br/><span class="error">E   ImportError: cannot import name &#x27;plot&#x27; from &#x27;fmdtools.analyze&#x27; (C:\Users\dhulse\Documents\GitHub\fmdtools\fmdtools\analyze\__init__.py)</span><br/></div></td></tr></tbody>
+            <div class="log">examples\pump\pump_indiv.py:32: in &lt;module&gt;<br/>    a = MoveWatDynamic(track=&#x27;all&#x27;)<br/>fmdtools\define\block\function.py:64: in __init__<br/>    super().__init__(name=name, **kwargs)<br/>fmdtools\define\block\base.py:441: in __init__<br/>    Simulable.__init__(self, name=name, roletypes=[&#x27;container&#x27;, &#x27;flow&#x27;],<br/>fmdtools\define\block\base.py:184: in __init__<br/>    BaseObject.__init__(self, **loc_kwargs)<br/>fmdtools\define\object\base.py:131: in __init__<br/>    self.init_track(track)<br/>fmdtools\define\object\base.py:138: in init_track<br/>    track = self.get_all_possible_track()<br/>fmdtools\define\object\base.py:365: in get_all_possible_track<br/>    rs = self.get_all_roles(with_immutable=False)<br/>fmdtools\define\object\base.py:393: in get_all_roles<br/>    roles = self.get_roles(with_immutable=with_immutable)<br/>fmdtools\define\object\base.py:381: in get_roles<br/>    return [role for roletype in roletypes for role in getattr(self, roletype+&#x27;s&#x27;)<br/>fmdtools\define\object\base.py:381: in &lt;listcomp&gt;<br/>    return [role for roletype in roletypes for role in getattr(self, roletype+&#x27;s&#x27;)<br/><span class="error">E   AttributeError: &#x27;MoveWatDynamic&#x27; object has no attribute &#x27;archs&#x27;</span><br/></div></td></tr></tbody>
       <tbody class="error results-table-row">
         <tr>
           <td class="col-result">Error</td>
@@ -351,24 +342,6 @@ function filterTable(elem) { // eslint-disable-line no-unused-vars
       <tbody class="error results-table-row">
         <tr>
           <td class="col-result">Error</td>
-          <td class="col-name">examples/rover/test_rover.py::collect</td>
-          <td class="col-duration"></td>
-          <td class="col-links"></td></tr>
-        <tr>
-          <td class="extra" colspan="4">
-            <div class="log">examples\rover\test_rover.py:8: in &lt;module&gt;<br/>    from examples.rover.optimization.search_rover import line_dist, line_dist_faster<br/>examples\rover\optimization\search_rover.py:10: in &lt;module&gt;<br/>    from fmdtools.sim.approach import SampleApproach<br/><span class="error">E   ModuleNotFoundError: No module named &#x27;fmdtools.sim.approach&#x27;</span><br/></div></td></tr></tbody>
-      <tbody class="error results-table-row">
-        <tr>
-          <td class="col-result">Error</td>
-          <td class="col-name">examples/rover/test_rover.py::collect</td>
-          <td class="col-duration"></td>
-          <td class="col-links"></td></tr>
-        <tr>
-          <td class="extra" colspan="4">
-            <div class="log">ImportError while importing test module &#x27;C:\Users\dhulse\Documents\GitHub\fmdtools\examples\rover\test_rover.py&#x27;.<br/>Hint: make sure your test modules/packages have valid Python names.<br/>Traceback:<br/>[1m[31m..\..\..\AppData\Local\anaconda3\lib\importlib\__init__.py[0m:126: in import_module<br/>    [94mreturn[39;49;00m _bootstrap._gcd_import(name[level:], package, level)[90m[39;49;00m<br/>[1m[31mexamples\rover\test_rover.py[0m:8: in &lt;module&gt;<br/>    [94mfrom[39;49;00m [04m[96mexamples[39;49;00m[04m[96m.[39;49;00m[04m[96mrover[39;49;00m[04m[96m.[39;49;00m[04m[96moptimization[39;49;00m[04m[96m.[39;49;00m[04m[96msearch_rover[39;49;00m [94mimport[39;49;00m line_dist, line_dist_faster[90m[39;49;00m<br/>[1m[31mexamples\rover\optimization\search_rover.py[0m:10: in &lt;module&gt;<br/>    [94mfrom[39;49;00m [04m[96mfmdtools[39;49;00m[04m[96m.[39;49;00m[04m[96msim[39;49;00m[04m[96m.[39;49;00m[04m[96mapproach[39;49;00m [94mimport[39;49;00m SampleApproach[90m[39;49;00m<br/>[1m[31mE   ModuleNotFoundError: No module named &#x27;fmdtools.sim.approach&#x27;[0m<br/></div></td></tr></tbody>
-      <tbody class="error results-table-row">
-        <tr>
-          <td class="col-result">Error</td>
           <td class="col-name">examples/rover/optimization/animation.py::collect</td>
           <td class="col-duration"></td>
           <td class="col-links"></td></tr>
@@ -387,151 +360,60 @@ function filterTable(elem) { // eslint-disable-line no-unused-vars
       <tbody class="error results-table-row">
         <tr>
           <td class="col-result">Error</td>
-          <td class="col-name">examples/rover/optimization/search_rover.py::collect</td>
-          <td class="col-duration"></td>
-          <td class="col-links"></td></tr>
-        <tr>
-          <td class="extra" colspan="4">
-            <div class="log">examples\rover\optimization\search_rover.py:10: in &lt;module&gt;<br/>    from fmdtools.sim.approach import SampleApproach<br/><span class="error">E   ModuleNotFoundError: No module named &#x27;fmdtools.sim.approach&#x27;</span><br/></div></td></tr></tbody>
-      <tbody class="error results-table-row">
-        <tr>
-          <td class="col-result">Error</td>
           <td class="col-name">examples/tank/tank_script.py::collect</td>
           <td class="col-duration"></td>
           <td class="col-links"></td></tr>
         <tr>
           <td class="extra" colspan="4">
             <div class="log">examples\tank\tank_script.py:13: in &lt;module&gt;<br/>    from tank_model import Tank<br/><span class="error">E   ModuleNotFoundError: No module named &#x27;tank_model&#x27;</span><br/></div></td></tr></tbody>
-      <tbody class="failed results-table-row">
+      <tbody class="error results-table-row">
         <tr>
-          <td class="col-result">Failed</td>
-          <td class="col-name">examples/multirotor/Demonstration.ipynb::</td>
-          <td class="col-duration">9.61</td>
+          <td class="col-result">Error</td>
+          <td class="col-name">tests/test_graph.py::collect</td>
+          <td class="col-duration"></td>
           <td class="col-links"></td></tr>
         <tr>
           <td class="extra" colspan="4">
-            <div class="log">---------------------------------------------------------------------------<br/>print(static_fmea.sort_values(&#x27;expected cost&#x27;, ascending=False).to_latex())<br/>[1;31m---------------------------------------------------------------------------[0m<br/>[1;31mKeyError[0m                                  Traceback (most recent call last)<br/>Cell [1;32mIn[21], line 1[0m<br/>[1;32m----&gt; 1[0m [38;5;28mprint[39m([43mstatic_fmea[49m[38;5;241;43m.[39;49m[43msort_values[49m[43m([49m[38;5;124;43m&#x27;[39;49m[38;5;124;43mexpected cost[39;49m[38;5;124;43m&#x27;[39;49m[43m,[49m[43m [49m[43mascending[49m[38;5;241;43m=[39;49m[38;5;28;43;01mFalse[39;49;00m[43m)[49m[38;5;241m.[39mto_latex())<br/><br/>File [1;32m~\AppData\Roaming\Python\Python310\site-packages\pandas\core\frame.py:6758[0m, in [0;36mDataFrame.sort_values[1;34m(self, by, axis, ascending, inplace, kind, na_position, ignore_index, key)[0m<br/>[0;32m   6754[0m [38;5;28;01melif[39;00m [38;5;28mlen[39m(by):<br/>[0;32m   6755[0m     [38;5;66;03m# len(by) == 1[39;00m<br/>[0;32m   6757[0m     by [38;5;241m=[39m by[[38;5;241m0[39m]<br/>[1;32m-&gt; 6758[0m     k [38;5;241m=[39m [38;5;28;43mself[39;49m[38;5;241;43m.[39;49m[43m_get_label_or_level_values[49m[43m([49m[43mby[49m[43m,[49m[43m [49m[43maxis[49m[38;5;241;43m=[39;49m[43maxis[49m[43m)[49m<br/>[0;32m   6760[0m     [38;5;66;03m# need to rewrap column in Series to apply key function[39;00m<br/>[0;32m   6761[0m     [38;5;28;01mif[39;00m key [38;5;129;01mis[39;00m [38;5;129;01mnot[39;00m [38;5;28;01mNone[39;00m:<br/>[0;32m   6762[0m         [38;5;66;03m# error: Incompatible types in assignment (expression has type[39;00m<br/>[0;32m   6763[0m         [38;5;66;03m# &quot;Series&quot;, variable has type &quot;ndarray&quot;)[39;00m<br/><br/>File [1;32m~\AppData\Roaming\Python\Python310\site-packages\pandas\core\generic.py:1778[0m, in [0;36mNDFrame._get_label_or_level_values[1;34m(self, key, axis)[0m<br/>[0;32m   1776[0m     values [38;5;241m=[39m [38;5;28mself[39m[38;5;241m.[39maxes[axis][38;5;241m.[39mget_level_values(key)[38;5;241m.[39m_values<br/>[0;32m   1777[0m [38;5;28;01melse[39;00m:<br/>[1;32m-&gt; 1778[0m     [38;5;28;01mraise[39;00m [38;5;167;01mKeyError[39;00m(key)<br/>[0;32m   1780[0m [38;5;66;03m# Check for duplicates[39;00m<br/>[0;32m   1781[0m [38;5;28;01mif[39;00m values[38;5;241m.[39mndim [38;5;241m&gt;[39m [38;5;241m1[39m:<br/><br/>[1;31mKeyError[0m: &#x27;expected cost&#x27;<br/></div></td></tr></tbody>
+            <div class="log">tests\test_graph.py:10: in &lt;module&gt;<br/>    from fmdtools.analyze.graph import FunctionArchitectureFlowgraph<br/><span class="error">E   ImportError: cannot import name &#x27;FunctionArchitectureFlowgraph&#x27; from &#x27;fmdtools.analyze.graph&#x27; (C:\Users\dhulse\Documents\GitHub\fmdtools\fmdtools\analyze\graph.py)</span><br/></div></td></tr></tbody>
+      <tbody class="error results-table-row">
+        <tr>
+          <td class="col-result">Error</td>
+          <td class="col-name">tests/test_graph.py::collect</td>
+          <td class="col-duration"></td>
+          <td class="col-links"></td></tr>
+        <tr>
+          <td class="extra" colspan="4">
+            <div class="log">ImportError while importing test module &#x27;C:\Users\dhulse\Documents\GitHub\fmdtools\tests\test_graph.py&#x27;.<br/>Hint: make sure your test modules/packages have valid Python names.<br/>Traceback:<br/>[1m[31m..\..\..\AppData\Local\anaconda3\lib\importlib\__init__.py[0m:126: in import_module<br/>    [94mreturn[39;49;00m _bootstrap._gcd_import(name[level:], package, level)[90m[39;49;00m<br/>[1m[31mtests\test_graph.py[0m:10: in &lt;module&gt;<br/>    [94mfrom[39;49;00m [04m[96mfmdtools[39;49;00m[04m[96m.[39;49;00m[04m[96manalyze[39;49;00m[04m[96m.[39;49;00m[04m[96mgraph[39;49;00m [94mimport[39;49;00m FunctionArchitectureFlowgraph[90m[39;49;00m<br/>[1m[31mE   ImportError: cannot import name &#x27;FunctionArchitectureFlowgraph&#x27; from &#x27;fmdtools.analyze.graph&#x27; (C:\Users\dhulse\Documents\GitHub\fmdtools\fmdtools\analyze\graph.py)[0m<br/></div></td></tr></tbody>
       <tbody class="failed results-table-row">
         <tr>
           <td class="col-result">Failed</td>
           <td class="col-name">examples/pump/AST_Sampling.ipynb::</td>
-          <td class="col-duration">0.04</td>
+          <td class="col-duration">0.01</td>
           <td class="col-links"></td></tr>
         <tr>
           <td class="extra" colspan="4">
-            <div class="log">Error - No such kernel: &#x27;julia-1.8&#x27;<br/> ------------------------------Captured stderr call------------------------------ <br/>[SpyderKernelApp] WARNING | Kernelspec name julia-1.8 cannot be found!
-
-[SpyderKernelApp] ERROR | No such kernel named julia-1.8
-
-Traceback (most recent call last):
-
-  File &quot;C:\Users\dhulse\AppData\Local\anaconda3\lib\site-packages\jupyter_client\manager.py&quot;, line 82, in wrapper
-
-    out = await method(self, *args, **kwargs)
-
-  File &quot;C:\Users\dhulse\AppData\Local\anaconda3\lib\site-packages\jupyter_client\manager.py&quot;, line 391, in _async_start_kernel
-
-    kernel_cmd, kw = await ensure_async(self.pre_start_kernel(**kw))
-
-  File &quot;C:\Users\dhulse\AppData\Local\anaconda3\lib\site-packages\jupyter_client\utils.py&quot;, line 38, in ensure_async
-
-    return await obj
-
-  File &quot;C:\Users\dhulse\AppData\Local\anaconda3\lib\site-packages\jupyter_client\manager.py&quot;, line 353, in _async_pre_start_kernel
-
-    self.kernel_spec,
-
-  File &quot;C:\Users\dhulse\AppData\Local\anaconda3\lib\site-packages\jupyter_client\manager.py&quot;, line 178, in kernel_spec
-
-    self._kernel_spec = self.kernel_spec_manager.get_kernel_spec(self.kernel_name)
-
-  File &quot;C:\Users\dhulse\AppData\Local\anaconda3\lib\site-packages\jupyter_client\kernelspec.py&quot;, line 294, in get_kernel_spec
-
-    raise NoSuchKernel(kernel_name)
-
-jupyter_client.kernelspec.NoSuchKernel: No such kernel named julia-1.8
-
-<br/></div></td></tr></tbody>
-      <tbody class="failed results-table-row">
-        <tr>
-          <td class="col-result">Failed</td>
-          <td class="col-name">examples/pump/Tutorial_unfilled.ipynb::</td>
-          <td class="col-duration">4.22</td>
-          <td class="col-links"></td></tr>
-        <tr>
-          <td class="extra" colspan="4">
-            <div class="log">---------------------------------------------------------------------------<br/>mdl.fxns<br/>[1;31m---------------------------------------------------------------------------[0m<br/>[1;31mNameError[0m                                 Traceback (most recent call last)<br/>Cell [1;32mIn[4], line 1[0m<br/>[1;32m----&gt; 1[0m [43mmdl[49m[38;5;241m.[39mfxns<br/><br/>[1;31mNameError[0m: name &#x27;mdl&#x27; is not defined<br/></div></td></tr></tbody>
-      <tbody class="failed results-table-row">
-        <tr>
-          <td class="col-result">Failed</td>
-          <td class="col-name">examples/rover/HFAC_Analyses/HFAC_Analyses.ipynb::</td>
-          <td class="col-duration">7.11</td>
-          <td class="col-links"></td></tr>
-        <tr>
-          <td class="extra" colspan="4">
-            <div class="log">---------------------------------------------------------------------------<br/>from fmdtools.sim.approach import SampleApproach, NominalApproach<br/>import fmdtools.analyze as an<br/>import fmdtools.sim.propagate as prop<br/>import numpy as np<br/>import matplotlib.pyplot as plt<br/>plt.rcParams[&#x27;pdf.fonttype&#x27;] = 42<br/>import multiprocessing as mp<br/>import scipy.stats as stats<br/><br/><br/>import multiprocessing as mp<br/>[1;31m---------------------------------------------------------------------------[0m<br/>[1;31mModuleNotFoundError[0m                       Traceback (most recent call last)<br/>Cell [1;32mIn[1], line 1[0m<br/>[1;32m----&gt; 1[0m [38;5;28;01mfrom[39;00m [38;5;21;01mfmdtools[39;00m[38;5;21;01m.[39;00m[38;5;21;01msim[39;00m[38;5;21;01m.[39;00m[38;5;21;01mapproach[39;00m [38;5;28;01mimport[39;00m SampleApproach, NominalApproach<br/>[0;32m      2[0m [38;5;28;01mimport[39;00m [38;5;21;01mfmdtools[39;00m[38;5;21;01m.[39;00m[38;5;21;01manalyze[39;00m [38;5;28;01mas[39;00m [38;5;21;01man[39;00m<br/>[0;32m      3[0m [38;5;28;01mimport[39;00m [38;5;21;01mfmdtools[39;00m[38;5;21;01m.[39;00m[38;5;21;01msim[39;00m[38;5;21;01m.[39;00m[38;5;21;01mpropagate[39;00m [38;5;28;01mas[39;00m [38;5;21;01mprop[39;00m<br/><br/>[1;31mModuleNotFoundError[0m: No module named &#x27;fmdtools.sim.approach&#x27;<br/> ------------------------------Captured stderr call------------------------------ <br/>Assertion failed: pfd.revents &amp; POLLIN (C:\ci\zeromq_1616055400030\work\src\signaler.cpp:265)
-<br/></div></td></tr></tbody>
-      <tbody class="failed results-table-row">
-        <tr>
-          <td class="col-result">Failed</td>
-          <td class="col-name">examples/rover/HFAC_Analyses/IDETC_Human_Paper_Analysis.ipynb::</td>
-          <td class="col-duration">2.67</td>
-          <td class="col-links"></td></tr>
-        <tr>
-          <td class="extra" colspan="4">
-            <div class="log">---------------------------------------------------------------------------<br/>from rover_model_human import Rover, gen_params<br/>from rover_model import plot_map, plot_trajectories<br/>import fmdtools.analyze as an<br/>import fmdtools.sim.propagate as prop<br/>from fmdtools.sim.approach import SampleApproach, NominalApproach<br/><br/>import numpy as np<br/>import matplotlib.pyplot as plt<br/>[1;31m---------------------------------------------------------------------------[0m<br/>[1;31mModuleNotFoundError[0m                       Traceback (most recent call last)<br/>Cell [1;32mIn[1], line 1[0m<br/>[1;32m----&gt; 1[0m [38;5;28;01mfrom[39;00m [38;5;21;01mrover_model_human[39;00m [38;5;28;01mimport[39;00m Rover, gen_params<br/>[0;32m      2[0m [38;5;28;01mfrom[39;00m [38;5;21;01mrover_model[39;00m [38;5;28;01mimport[39;00m plot_map, plot_trajectories<br/>[0;32m      3[0m [38;5;28;01mimport[39;00m [38;5;21;01mfmdtools[39;00m[38;5;21;01m.[39;00m[38;5;21;01manalyze[39;00m [38;5;28;01mas[39;00m [38;5;21;01man[39;00m<br/><br/>[1;31mModuleNotFoundError[0m: No module named &#x27;rover_model_human&#x27;<br/></div></td></tr></tbody>
-      <tbody class="failed results-table-row">
-        <tr>
-          <td class="col-result">Failed</td>
-          <td class="col-name">examples/rover/degradation_modelling/Degradation_Modelling_Notebook.ipynb::</td>
-          <td class="col-duration">4.30</td>
-          <td class="col-links"></td></tr>
-        <tr>
-          <td class="extra" colspan="4">
-            <div class="log">---------------------------------------------------------------------------<br/>from fmdtools.sim.approach import SampleApproach, NominalApproach<br/>import fmdtools.analyze as an<br/>import fmdtools.sim.propagate as prop<br/>import numpy as np<br/>import matplotlib.pyplot as plt<br/>import multiprocessing as mp<br/>import scipy.stats as stats<br/><br/><br/>import multiprocessing as mp<br/>[1;31m---------------------------------------------------------------------------[0m<br/>[1;31mModuleNotFoundError[0m                       Traceback (most recent call last)<br/>Cell [1;32mIn[1], line 1[0m<br/>[1;32m----&gt; 1[0m [38;5;28;01mfrom[39;00m [38;5;21;01mfmdtools[39;00m[38;5;21;01m.[39;00m[38;5;21;01msim[39;00m[38;5;21;01m.[39;00m[38;5;21;01mapproach[39;00m [38;5;28;01mimport[39;00m SampleApproach, NominalApproach<br/>[0;32m      2[0m [38;5;28;01mimport[39;00m [38;5;21;01mfmdtools[39;00m[38;5;21;01m.[39;00m[38;5;21;01manalyze[39;00m [38;5;28;01mas[39;00m [38;5;21;01man[39;00m<br/>[0;32m      3[0m [38;5;28;01mimport[39;00m [38;5;21;01mfmdtools[39;00m[38;5;21;01m.[39;00m[38;5;21;01msim[39;00m[38;5;21;01m.[39;00m[38;5;21;01mpropagate[39;00m [38;5;28;01mas[39;00m [38;5;21;01mprop[39;00m<br/><br/>[1;31mModuleNotFoundError[0m: No module named &#x27;fmdtools.sim.approach&#x27;<br/></div></td></tr></tbody>
-      <tbody class="failed results-table-row">
-        <tr>
-          <td class="col-result">Failed</td>
-          <td class="col-name">examples/rover/fault_sampling/Rover_Mode_Notebook.ipynb::</td>
-          <td class="col-duration">4.33</td>
-          <td class="col-links"></td></tr>
-        <tr>
-          <td class="extra" colspan="4">
-            <div class="log">---------------------------------------------------------------------------<br/>from fmdtools.sim.approach import SampleApproach<br/>import fmdtools.analyze as an<br/>import fmdtools.sim.propagate as prop<br/>import matplotlib.pyplot as plt<br/>plt.rcParams[&#x27;pdf.fonttype&#x27;] = 42<br/>import multiprocessing as mp<br/>import pandas as pd<br/>import time<br/>[1;31m---------------------------------------------------------------------------[0m<br/>[1;31mModuleNotFoundError[0m                       Traceback (most recent call last)<br/>Cell [1;32mIn[1], line 1[0m<br/>[1;32m----&gt; 1[0m [38;5;28;01mfrom[39;00m [38;5;21;01mfmdtools[39;00m[38;5;21;01m.[39;00m[38;5;21;01msim[39;00m[38;5;21;01m.[39;00m[38;5;21;01mapproach[39;00m [38;5;28;01mimport[39;00m SampleApproach<br/>[0;32m      2[0m [38;5;28;01mimport[39;00m [38;5;21;01mfmdtools[39;00m[38;5;21;01m.[39;00m[38;5;21;01manalyze[39;00m [38;5;28;01mas[39;00m [38;5;21;01man[39;00m<br/>[0;32m      3[0m [38;5;28;01mimport[39;00m [38;5;21;01mfmdtools[39;00m[38;5;21;01m.[39;00m[38;5;21;01msim[39;00m[38;5;21;01m.[39;00m[38;5;21;01mpropagate[39;00m [38;5;28;01mas[39;00m [38;5;21;01mprop[39;00m<br/><br/>[1;31mModuleNotFoundError[0m: No module named &#x27;fmdtools.sim.approach&#x27;<br/></div></td></tr></tbody>
-      <tbody class="failed results-table-row">
-        <tr>
-          <td class="col-result">Failed</td>
-          <td class="col-name">examples/rover/optimization/Rover_Response_Optimization.ipynb::</td>
-          <td class="col-duration">4.23</td>
-          <td class="col-links"></td></tr>
-        <tr>
-          <td class="extra" colspan="4">
-            <div class="log">---------------------------------------------------------------------------<br/>from fmdtools.sim.approach import SampleApproach<br/>import fmdtools.analyze as an<br/>import fmdtools.sim.propagate as prop<br/>import fmdtools.sim.search as search<br/>import matplotlib.pyplot as plt<br/>import multiprocessing as mp<br/>import time<br/>[1;31m---------------------------------------------------------------------------[0m<br/>[1;31mModuleNotFoundError[0m                       Traceback (most recent call last)<br/>Cell [1;32mIn[1], line 1[0m<br/>[1;32m----&gt; 1[0m [38;5;28;01mfrom[39;00m [38;5;21;01mfmdtools[39;00m[38;5;21;01m.[39;00m[38;5;21;01msim[39;00m[38;5;21;01m.[39;00m[38;5;21;01mapproach[39;00m [38;5;28;01mimport[39;00m SampleApproach<br/>[0;32m      2[0m [38;5;28;01mimport[39;00m [38;5;21;01mfmdtools[39;00m[38;5;21;01m.[39;00m[38;5;21;01manalyze[39;00m [38;5;28;01mas[39;00m [38;5;21;01man[39;00m<br/>[0;32m      3[0m [38;5;28;01mimport[39;00m [38;5;21;01mfmdtools[39;00m[38;5;21;01m.[39;00m[38;5;21;01msim[39;00m[38;5;21;01m.[39;00m[38;5;21;01mpropagate[39;00m [38;5;28;01mas[39;00m [38;5;21;01mprop[39;00m<br/><br/>[1;31mModuleNotFoundError[0m: No module named &#x27;fmdtools.sim.approach&#x27;<br/></div></td></tr></tbody>
-      <tbody class="failed results-table-row">
-        <tr>
-          <td class="col-result">Failed</td>
-          <td class="col-name">examples/rover/optimization/Search_Comparison.ipynb::</td>
-          <td class="col-duration">4.47</td>
-          <td class="col-links"></td></tr>
-        <tr>
-          <td class="extra" colspan="4">
-            <div class="log">---------------------------------------------------------------------------<br/>from search_rover import *<br/>import pandas as pd<br/>[1;31m---------------------------------------------------------------------------[0m<br/>[1;31mModuleNotFoundError[0m                       Traceback (most recent call last)<br/>Cell [1;32mIn[1], line 1[0m<br/>[1;32m----&gt; 1[0m [38;5;28;01mfrom[39;00m [38;5;21;01msearch_rover[39;00m [38;5;28;01mimport[39;00m [38;5;241m*[39m<br/>[0;32m      2[0m [38;5;28;01mimport[39;00m [38;5;21;01mpandas[39;00m [38;5;28;01mas[39;00m [38;5;21;01mpd[39;00m<br/><br/>File [1;32m~\Documents\GitHub\fmdtools\examples\rover\optimization\search_rover.py:10[0m<br/>[0;32m      8[0m [38;5;28;01mimport[39;00m [38;5;21;01mfmdtools[39;00m[38;5;21;01m.[39;00m[38;5;21;01msim[39;00m[38;5;21;01m.[39;00m[38;5;21;01mpropagate[39;00m [38;5;28;01mas[39;00m [38;5;21;01mprop[39;00m<br/>[0;32m      9[0m [38;5;28;01mimport[39;00m [38;5;21;01mfmdtools[39;00m[38;5;21;01m.[39;00m[38;5;21;01manalyze[39;00m [38;5;28;01mas[39;00m [38;5;21;01man[39;00m<br/>[1;32m---&gt; 10[0m [38;5;28;01mfrom[39;00m [38;5;21;01mfmdtools[39;00m[38;5;21;01m.[39;00m[38;5;21;01msim[39;00m[38;5;21;01m.[39;00m[38;5;21;01mapproach[39;00m [38;5;28;01mimport[39;00m SampleApproach<br/>[0;32m     11[0m [38;5;28;01mfrom[39;00m [38;5;21;01mfmdtools[39;00m[38;5;21;01m.[39;00m[38;5;21;01msim[39;00m[38;5;21;01m.[39;00m[38;5;21;01msearch[39;00m [38;5;28;01mimport[39;00m ProblemInterface<br/>[0;32m     12[0m [38;5;28;01mimport[39;00m [38;5;21;01mexamples[39;00m[38;5;21;01m.[39;00m[38;5;21;01mrover[39;00m[38;5;21;01m.[39;00m[38;5;21;01mrover_model[39;00m [38;5;28;01mas[39;00m [38;5;21;01mrvr[39;00m<br/><br/>[1;31mModuleNotFoundError[0m: No module named &#x27;fmdtools.sim.approach&#x27;<br/></div></td></tr></tbody>
-      <tbody class="failed results-table-row">
-        <tr>
-          <td class="col-result">Failed</td>
-          <td class="col-name">examples/tank/Tank_Optimization.ipynb::</td>
-          <td class="col-duration">33.56</td>
-          <td class="col-links"></td></tr>
-        <tr>
-          <td class="extra" colspan="4">
-            <div class="log">A cell timed out while it was being executed, after 20 seconds.<br/>The message was: Cell execution timed out.<br/>Here is a preview of the cell contents:<br/>-------------------<br/>result, args, fhist, thist, xdhist = alternating_opt(pa.tot_tot_cost_full, pa.des_cd, pa.res_cr, max_alts=1)<br/>-------------------<br/> ------------------------------Captured stderr call------------------------------ <br/>[SpyderKernelApp] ERROR | Timeout waiting for execute reply (20s).
-
+            <div class="log">Error - No such kernel: &#x27;julia-1.8&#x27;<br/> ------------------------------Captured stderr call------------------------------ <br/>[SpyderKernelApp] WARNING | Kernelspec name julia-1.8 cannot be found!
+[SpyderKernelApp] ERROR | No such kernel named julia-1.8
+Traceback (most recent call last):
+  File &quot;C:\Users\dhulse\AppData\Local\anaconda3\lib\site-packages\jupyter_client\manager.py&quot;, line 82, in wrapper
+    out = await method(self, *args, **kwargs)
+  File &quot;C:\Users\dhulse\AppData\Local\anaconda3\lib\site-packages\jupyter_client\manager.py&quot;, line 391, in _async_start_kernel
+    kernel_cmd, kw = await ensure_async(self.pre_start_kernel(**kw))
+  File &quot;C:\Users\dhulse\AppData\Local\anaconda3\lib\site-packages\jupyter_client\utils.py&quot;, line 38, in ensure_async
+    return await obj
+  File &quot;C:\Users\dhulse\AppData\Local\anaconda3\lib\site-packages\jupyter_client\manager.py&quot;, line 353, in _async_pre_start_kernel
+    self.kernel_spec,
+  File &quot;C:\Users\dhulse\AppData\Local\anaconda3\lib\site-packages\jupyter_client\manager.py&quot;, line 178, in kernel_spec
+    self._kernel_spec = self.kernel_spec_manager.get_kernel_spec(self.kernel_name)
+  File &quot;C:\Users\dhulse\AppData\Local\anaconda3\lib\site-packages\jupyter_client\kernelspec.py&quot;, line 294, in get_kernel_spec
+    raise NoSuchKernel(kernel_name)
+jupyter_client.kernelspec.NoSuchKernel: No such kernel named julia-1.8
 <br/></div></td></tr></tbody>
       <tbody class="passed results-table-row">
         <tr>
           <td class="col-result">Passed</td>
           <td class="col-name">examples/asg_demo/Action_Sequence_Graph.ipynb::</td>
-          <td class="col-duration">8.71</td>
+          <td class="col-duration">6.80</td>
           <td class="col-links"></td></tr>
         <tr>
           <td class="extra" colspan="4">
@@ -540,7 +422,7 @@ jupyter_client.kernelspec.NoSuchKernel: No such kernel named julia-1.8
         <tr>
           <td class="col-result">Passed</td>
           <td class="col-name">examples/eps/EPS_Example_Notebook.ipynb::</td>
-          <td class="col-duration">6.03</td>
+          <td class="col-duration">4.16</td>
           <td class="col-links"></td></tr>
         <tr>
           <td class="extra" colspan="4">
@@ -549,7 +431,7 @@ jupyter_client.kernelspec.NoSuchKernel: No such kernel named julia-1.8
         <tr>
           <td class="col-result">Passed</td>
           <td class="col-name">examples/eps/test_eps.py::epsTests::test_all_faults</td>
-          <td class="col-duration">0.44</td>
+          <td class="col-duration">0.22</td>
           <td class="col-links"></td></tr>
         <tr>
           <td class="extra" colspan="4">
@@ -576,7 +458,7 @@ jupyter_client.kernelspec.NoSuchKernel: No such kernel named julia-1.8
         <tr>
           <td class="col-result">Passed</td>
           <td class="col-name">examples/eps/test_eps.py::epsTests::test_fault_app</td>
-          <td class="col-duration">43.33</td>
+          <td class="col-duration">40.15</td>
           <td class="col-links"></td></tr>
         <tr>
           <td class="extra" colspan="4">
@@ -585,7 +467,7 @@ jupyter_client.kernelspec.NoSuchKernel: No such kernel named julia-1.8
         <tr>
           <td class="col-result">Passed</td>
           <td class="col-name">examples/eps/test_eps.py::epsTests::test_multfault_saving</td>
-          <td class="col-duration">0.07</td>
+          <td class="col-duration">0.05</td>
           <td class="col-links"></td></tr>
         <tr>
           <td class="extra" colspan="4">
@@ -612,7 +494,7 @@ jupyter_client.kernelspec.NoSuchKernel: No such kernel named julia-1.8
         <tr>
           <td class="col-result">Passed</td>
           <td class="col-name">examples/eps/test_eps.py::epsTests::test_save_load_onefault</td>
-          <td class="col-duration">0.06</td>
+          <td class="col-duration">0.05</td>
           <td class="col-links"></td></tr>
         <tr>
           <td class="extra" colspan="4">
@@ -621,7 +503,7 @@ jupyter_client.kernelspec.NoSuchKernel: No such kernel named julia-1.8
         <tr>
           <td class="col-result">Passed</td>
           <td class="col-name">examples/eps/test_eps.py::epsTests::test_save_load_singlefaults</td>
-          <td class="col-duration">1.40</td>
+          <td class="col-duration">0.69</td>
           <td class="col-links"></td></tr>
         <tr>
           <td class="extra" colspan="4">
@@ -630,7 +512,7 @@ jupyter_client.kernelspec.NoSuchKernel: No such kernel named julia-1.8
         <tr>
           <td class="col-result">Passed</td>
           <td class="col-name">examples/multiflow_demo/Multiflow_and_Commsflow_Demonstration.ipynb::</td>
-          <td class="col-duration">4.28</td>
+          <td class="col-duration">3.37</td>
           <td class="col-links"></td></tr>
         <tr>
           <td class="extra" colspan="4">
@@ -638,7 +520,7 @@ jupyter_client.kernelspec.NoSuchKernel: No such kernel named julia-1.8
       <tbody class="passed results-table-row">
         <tr>
           <td class="col-result">Passed</td>
-          <td class="col-name">examples/multiflow_demo/test_multiflow.py::define_Tests::test_multiflows</td>
+          <td class="col-name">examples/multiflow_demo/test_multiflow.py::define_Tests::test_multiflow_combination</td>
           <td class="col-duration">0.02</td>
           <td class="col-links"></td></tr>
         <tr>
@@ -647,8 +529,35 @@ jupyter_client.kernelspec.NoSuchKernel: No such kernel named julia-1.8
       <tbody class="passed results-table-row">
         <tr>
           <td class="col-result">Passed</td>
+          <td class="col-name">examples/multiflow_demo/test_multiflow.py::define_Tests::test_multiflow_passing</td>
+          <td class="col-duration">0.01</td>
+          <td class="col-links"></td></tr>
+        <tr>
+          <td class="extra" colspan="4">
+            <div class="empty log">No log output captured.</div></td></tr></tbody>
+      <tbody class="passed results-table-row">
+        <tr>
+          <td class="col-result">Passed</td>
+          <td class="col-name">examples/multiflow_demo/test_multiflow.py::define_Tests::test_mutliflow_copying</td>
+          <td class="col-duration">0.02</td>
+          <td class="col-links"></td></tr>
+        <tr>
+          <td class="extra" colspan="4">
+            <div class="empty log">No log output captured.</div></td></tr></tbody>
+      <tbody class="passed results-table-row">
+        <tr>
+          <td class="col-result">Passed</td>
+          <td class="col-name">examples/multirotor/Demonstration.ipynb::</td>
+          <td class="col-duration">14.50</td>
+          <td class="col-links"></td></tr>
+        <tr>
+          <td class="extra" colspan="4">
+            <div class="empty log">No log output captured.</div></td></tr></tbody>
+      <tbody class="passed results-table-row">
+        <tr>
+          <td class="col-result">Passed</td>
           <td class="col-name">examples/multirotor/Multirotor_Optimization.ipynb::</td>
-          <td class="col-duration">26.49</td>
+          <td class="col-duration">21.15</td>
           <td class="col-links"></td></tr>
         <tr>
           <td class="extra" colspan="4">
@@ -657,7 +566,7 @@ jupyter_client.kernelspec.NoSuchKernel: No such kernel named julia-1.8
         <tr>
           <td class="col-result">Passed</td>
           <td class="col-name">examples/multirotor/Urban_Drone_Demo.ipynb::</td>
-          <td class="col-duration">66.44</td>
+          <td class="col-duration">54.19</td>
           <td class="col-links"></td></tr>
         <tr>
           <td class="extra" colspan="4">
@@ -693,6 +602,15 @@ jupyter_client.kernelspec.NoSuchKernel: No such kernel named julia-1.8
         <tr>
           <td class="col-result">Passed</td>
           <td class="col-name">examples/multirotor/drone_mdl_hierarchical.py::examples.multirotor.drone_mdl_hierarchical.AffectDOF.calc_pwr</td>
+          <td class="col-duration">0.00</td>
+          <td class="col-links"></td></tr>
+        <tr>
+          <td class="extra" colspan="4">
+            <div class="empty log">No log output captured.</div></td></tr></tbody>
+      <tbody class="passed results-table-row">
+        <tr>
+          <td class="col-result">Passed</td>
+          <td class="col-name">examples/multirotor/drone_mdl_hierarchical.py::examples.multirotor.drone_mdl_hierarchical.LineArchParam</td>
           <td class="col-duration">0.00</td>
           <td class="col-links"></td></tr>
         <tr>
@@ -765,7 +683,7 @@ jupyter_client.kernelspec.NoSuchKernel: No such kernel named julia-1.8
         <tr>
           <td class="col-result">Passed</td>
           <td class="col-name">examples/multirotor/test_multirotor.py::DroneParameterTests::test_objectives</td>
-          <td class="col-duration">0.06</td>
+          <td class="col-duration">0.09</td>
           <td class="col-links"></td></tr>
         <tr>
           <td class="extra" colspan="4">
@@ -810,7 +728,7 @@ jupyter_client.kernelspec.NoSuchKernel: No such kernel named julia-1.8
         <tr>
           <td class="col-result">Passed</td>
           <td class="col-name">examples/multirotor/test_multirotor.py::DroneParameterTests::test_sim_mdl</td>
-          <td class="col-duration">0.04</td>
+          <td class="col-duration">0.05</td>
           <td class="col-links"></td></tr>
         <tr>
           <td class="extra" colspan="4">
@@ -819,7 +737,7 @@ jupyter_client.kernelspec.NoSuchKernel: No such kernel named julia-1.8
         <tr>
           <td class="col-result">Passed</td>
           <td class="col-name">examples/multirotor/test_multirotor.py::DroneScenarioTest::test_scenprob_results</td>
-          <td class="col-duration">0.15</td>
+          <td class="col-duration">0.16</td>
           <td class="col-links"></td></tr>
         <tr>
           <td class="extra" colspan="4">
@@ -828,7 +746,7 @@ jupyter_client.kernelspec.NoSuchKernel: No such kernel named julia-1.8
         <tr>
           <td class="col-result">Passed</td>
           <td class="col-name">examples/multirotor/test_multirotor.py::DroneScenarioTest2::test_scenprob_results</td>
-          <td class="col-duration">0.11</td>
+          <td class="col-duration">0.09</td>
           <td class="col-links"></td></tr>
         <tr>
           <td class="extra" colspan="4">
@@ -837,7 +755,7 @@ jupyter_client.kernelspec.NoSuchKernel: No such kernel named julia-1.8
         <tr>
           <td class="col-result">Passed</td>
           <td class="col-name">examples/multirotor/test_multirotor.py::DroneScenarioTest3::test_scenprob_results</td>
-          <td class="col-duration">0.10</td>
+          <td class="col-duration">0.11</td>
           <td class="col-links"></td></tr>
         <tr>
           <td class="extra" colspan="4">
@@ -855,1731 +773,6 @@ jupyter_client.kernelspec.NoSuchKernel: No such kernel named julia-1.8
         <tr>
           <td class="col-result">Passed</td>
           <td class="col-name">examples/pump/Optimization.ipynb::</td>
-          <td class="col-duration">26.01</td>
-          <td class="col-links"></td></tr>
-        <tr>
-          <td class="extra" colspan="4">
-            <div class="empty log">No log output captured.</div></td></tr></tbody>
-      <tbody class="passed results-table-row">
-        <tr>
-          <td class="col-result">Passed</td>
-          <td class="col-name">examples/pump/Parallelism_Tutorial.ipynb::</td>
-          <td class="col-duration">165.13</td>
-          <td class="col-links"></td></tr>
-        <tr>
-          <td class="extra" colspan="4">
-            <div class="empty log">No log output captured.</div></td></tr></tbody>
-      <tbody class="passed results-table-row">
-        <tr>
-          <td class="col-result">Passed</td>
-          <td class="col-name">examples/pump/Pump_Example_Notebook.ipynb::</td>
-          <td class="col-duration">17.62</td>
-          <td class="col-links"></td></tr>
-        <tr>
-          <td class="extra" colspan="4">
-            <div class="empty log">No log output captured.</div></td></tr></tbody>
-      <tbody class="passed results-table-row">
-        <tr>
-          <td class="col-result">Passed</td>
-          <td class="col-name">examples/pump/Stochastic_Modelling.ipynb::</td>
-          <td class="col-duration">52.82</td>
-          <td class="col-links"></td></tr>
-        <tr>
-          <td class="extra" colspan="4">
-            <div class="empty log">No log output captured.</div></td></tr></tbody>
-      <tbody class="passed results-table-row">
-        <tr>
-          <td class="col-result">Passed</td>
-          <td class="col-name">examples/pump/Tutorial_complete.ipynb::</td>
-          <td class="col-duration">7.06</td>
-          <td class="col-links"></td></tr>
-        <tr>
-          <td class="extra" colspan="4">
-            <div class="empty log">No log output captured.</div></td></tr></tbody>
-      <tbody class="passed results-table-row">
-        <tr>
-          <td class="col-result">Passed</td>
-          <td class="col-name">examples/pump/test_pump.py::PumpTests::test_app_prop_values</td>
-          <td class="col-duration">0.08</td>
-          <td class="col-links"></td></tr>
-        <tr>
-          <td class="extra" colspan="4">
-            <div class="empty log">No log output captured.</div></td></tr></tbody>
-      <tbody class="passed results-table-row">
-        <tr>
-          <td class="col-result">Passed</td>
-          <td class="col-name">examples/pump/test_pump.py::PumpTests::test_approach_cost_calc</td>
-          <td class="col-duration">7.76</td>
-          <td class="col-links"></td></tr>
-        <tr>
-          <td class="extra" colspan="4">
-            <div class="empty log">No log output captured.</div></td></tr></tbody>
-      <tbody class="passed results-table-row">
-        <tr>
-          <td class="col-result">Passed</td>
-          <td class="col-name">examples/pump/test_pump.py::PumpTests::test_approach_parallelism</td>
-          <td class="col-duration">13.28</td>
-          <td class="col-links"></td></tr>
-        <tr>
-          <td class="extra" colspan="4">
-            <div class="empty log">No log output captured.</div></td></tr></tbody>
-      <tbody class="passed results-table-row">
-        <tr>
-          <td class="col-result">Passed</td>
-          <td class="col-name">examples/pump/test_pump.py::PumpTests::test_dynamic_prop_values</td>
-          <td class="col-duration">0.07</td>
-          <td class="col-links"></td></tr>
-        <tr>
-          <td class="extra" colspan="4">
-            <div class="empty log">No log output captured.</div></td></tr></tbody>
-      <tbody class="passed results-table-row">
-        <tr>
-          <td class="col-result">Passed</td>
-          <td class="col-name">examples/pump/test_pump.py::PumpTests::test_dynamic_prop_values_2</td>
-          <td class="col-duration">0.16</td>
-          <td class="col-links"></td></tr>
-        <tr>
-          <td class="extra" colspan="4">
-            <div class="empty log">No log output captured.</div></td></tr></tbody>
-      <tbody class="passed results-table-row">
-        <tr>
-          <td class="col-result">Passed</td>
-          <td class="col-name">examples/pump/test_pump.py::PumpTests::test_fault_sample_isave</td>
-          <td class="col-duration">1.35</td>
-          <td class="col-links"></td></tr>
-        <tr>
-          <td class="extra" colspan="4">
-            <div class="empty log">No log output captured.</div></td></tr></tbody>
-      <tbody class="passed results-table-row">
-        <tr>
-          <td class="col-result">Passed</td>
-          <td class="col-name">examples/pump/test_pump.py::PumpTests::test_fault_sample_save</td>
-          <td class="col-duration">0.96</td>
-          <td class="col-links"></td></tr>
-        <tr>
-          <td class="extra" colspan="4">
-            <div class="empty log">No log output captured.</div></td></tr></tbody>
-      <tbody class="passed results-table-row">
-        <tr>
-          <td class="col-result">Passed</td>
-          <td class="col-name">examples/pump/test_pump.py::PumpTests::test_fmea_options</td>
-          <td class="col-duration">0.13</td>
-          <td class="col-links"></td></tr>
-        <tr>
-          <td class="extra" colspan="4">
-            <div class="empty log">No log output captured.</div></td></tr></tbody>
-      <tbody class="passed results-table-row">
-        <tr>
-          <td class="col-result">Passed</td>
-          <td class="col-name">examples/pump/test_pump.py::PumpTests::test_model_copy_different</td>
-          <td class="col-duration">0.34</td>
-          <td class="col-links"></td></tr>
-        <tr>
-          <td class="extra" colspan="4">
-            <div class="empty log">No log output captured.</div></td></tr></tbody>
-      <tbody class="passed results-table-row">
-        <tr>
-          <td class="col-result">Passed</td>
-          <td class="col-name">examples/pump/test_pump.py::PumpTests::test_model_copy_same</td>
-          <td class="col-duration">0.55</td>
-          <td class="col-links"></td></tr>
-        <tr>
-          <td class="extra" colspan="4">
-            <div class="empty log">No log output captured.</div></td></tr></tbody>
-      <tbody class="passed results-table-row">
-        <tr>
-          <td class="col-result">Passed</td>
-          <td class="col-name">examples/pump/test_pump.py::PumpTests::test_model_reset</td>
-          <td class="col-duration">0.60</td>
-          <td class="col-links"></td></tr>
-        <tr>
-          <td class="extra" colspan="4">
-            <div class="empty log">No log output captured.</div></td></tr></tbody>
-      <tbody class="passed results-table-row">
-        <tr>
-          <td class="col-result">Passed</td>
-          <td class="col-name">examples/pump/test_pump.py::PumpTests::test_nested_sample_isave</td>
-          <td class="col-duration">9.95</td>
-          <td class="col-links"></td></tr>
-        <tr>
-          <td class="extra" colspan="4">
-            <div class="empty log">No log output captured.</div></td></tr></tbody>
-      <tbody class="passed results-table-row">
-        <tr>
-          <td class="col-result">Passed</td>
-          <td class="col-name">examples/pump/test_pump.py::PumpTests::test_nested_sample_save</td>
-          <td class="col-duration">9.70</td>
-          <td class="col-links"></td></tr>
-        <tr>
-          <td class="extra" colspan="4">
-            <div class="empty log">No log output captured.</div></td></tr></tbody>
-      <tbody class="passed results-table-row">
-        <tr>
-          <td class="col-result">Passed</td>
-          <td class="col-name">examples/pump/test_pump.py::PumpTests::test_nominal_save</td>
-          <td class="col-duration">0.06</td>
-          <td class="col-links"></td></tr>
-        <tr>
-          <td class="extra" colspan="4">
-            <div class="empty log">No log output captured.</div></td></tr></tbody>
-      <tbody class="passed results-table-row">
-        <tr>
-          <td class="col-result">Passed</td>
-          <td class="col-name">examples/pump/test_pump.py::PumpTests::test_one_run_csv</td>
-          <td class="col-duration">0.03</td>
-          <td class="col-links"></td></tr>
-        <tr>
-          <td class="extra" colspan="4">
-            <div class="empty log">No log output captured.</div></td></tr></tbody>
-      <tbody class="passed results-table-row">
-        <tr>
-          <td class="col-result">Passed</td>
-          <td class="col-name">examples/pump/test_pump.py::PumpTests::test_one_run_json</td>
-          <td class="col-duration">0.03</td>
-          <td class="col-links"></td></tr>
-        <tr>
-          <td class="extra" colspan="4">
-            <div class="empty log">No log output captured.</div></td></tr></tbody>
-      <tbody class="passed results-table-row">
-        <tr>
-          <td class="col-result">Passed</td>
-          <td class="col-name">examples/pump/test_pump.py::PumpTests::test_one_run_pickle</td>
-          <td class="col-duration">0.03</td>
-          <td class="col-links"></td></tr>
-        <tr>
-          <td class="extra" colspan="4">
-            <div class="empty log">No log output captured.</div></td></tr></tbody>
-      <tbody class="passed results-table-row">
-        <tr>
-          <td class="col-result">Passed</td>
-          <td class="col-name">examples/pump/test_pump.py::PumpTests::test_onefault_save</td>
-          <td class="col-duration">0.09</td>
-          <td class="col-links"></td></tr>
-        <tr>
-          <td class="extra" colspan="4">
-            <div class="empty log">No log output captured.</div></td></tr></tbody>
-      <tbody class="passed results-table-row">
-        <tr>
-          <td class="col-result">Passed</td>
-          <td class="col-name">examples/pump/test_pump.py::PumpTests::test_param_sample_isave</td>
-          <td class="col-duration">0.56</td>
-          <td class="col-links"></td></tr>
-        <tr>
-          <td class="extra" colspan="4">
-            <div class="empty log">No log output captured.</div></td></tr></tbody>
-      <tbody class="passed results-table-row">
-        <tr>
-          <td class="col-result">Passed</td>
-          <td class="col-name">examples/pump/test_pump.py::PumpTests::test_param_sample_save</td>
-          <td class="col-duration">0.40</td>
-          <td class="col-links"></td></tr>
-        <tr>
-          <td class="extra" colspan="4">
-            <div class="empty log">No log output captured.</div></td></tr></tbody>
-      <tbody class="passed results-table-row">
-        <tr>
-          <td class="col-result">Passed</td>
-          <td class="col-name">examples/pump/test_pump.py::PumpTests::test_pickleability</td>
-          <td class="col-duration">0.01</td>
-          <td class="col-links"></td></tr>
-        <tr>
-          <td class="extra" colspan="4">
-            <div class="empty log">No log output captured.</div></td></tr></tbody>
-      <tbody class="passed results-table-row">
-        <tr>
-          <td class="col-result">Passed</td>
-          <td class="col-name">examples/pump/test_pump.py::PumpTests::test_save_load_multfault</td>
-          <td class="col-duration">0.10</td>
-          <td class="col-links"></td></tr>
-        <tr>
-          <td class="extra" colspan="4">
-            <div class="empty log">No log output captured.</div></td></tr></tbody>
-      <tbody class="passed results-table-row">
-        <tr>
-          <td class="col-result">Passed</td>
-          <td class="col-name">examples/pump/test_pump.py::PumpTests::test_single_faults_isave</td>
-          <td class="col-duration">1.33</td>
-          <td class="col-links"></td></tr>
-        <tr>
-          <td class="extra" colspan="4">
-            <div class="empty log">No log output captured.</div></td></tr></tbody>
-      <tbody class="passed results-table-row">
-        <tr>
-          <td class="col-result">Passed</td>
-          <td class="col-name">examples/pump/test_pump.py::PumpTests::test_single_faults_save</td>
-          <td class="col-duration">0.95</td>
-          <td class="col-links"></td></tr>
-        <tr>
-          <td class="extra" colspan="4">
-            <div class="empty log">No log output captured.</div></td></tr></tbody>
-      <tbody class="passed results-table-row">
-        <tr>
-          <td class="col-result">Passed</td>
-          <td class="col-name">examples/pump/test_pump.py::PumpTests::test_value_setting</td>
-          <td class="col-duration">0.01</td>
-          <td class="col-links"></td></tr>
-        <tr>
-          <td class="extra" colspan="4">
-            <div class="empty log">No log output captured.</div></td></tr></tbody>
-      <tbody class="passed results-table-row">
-        <tr>
-          <td class="col-result">Passed</td>
-          <td class="col-name">examples/pump/test_pump.py::PumpTests::test_value_setting_dict</td>
-          <td class="col-duration">0.00</td>
-          <td class="col-links"></td></tr>
-        <tr>
-          <td class="extra" colspan="4">
-            <div class="empty log">No log output captured.</div></td></tr></tbody>
-      <tbody class="passed results-table-row">
-        <tr>
-          <td class="col-result">Passed</td>
-          <td class="col-name">examples/pump/test_pump_example.py::ImportEE_Tests::test_behave_inf_v</td>
-          <td class="col-duration">0.00</td>
-          <td class="col-links"></td></tr>
-        <tr>
-          <td class="extra" colspan="4">
-            <div class="empty log">No log output captured.</div></td></tr></tbody>
-      <tbody class="passed results-table-row">
-        <tr>
-          <td class="col-result">Passed</td>
-          <td class="col-name">examples/pump/test_pump_example.py::ImportEE_Tests::test_behave_no_v</td>
-          <td class="col-duration">0.00</td>
-          <td class="col-links"></td></tr>
-        <tr>
-          <td class="extra" colspan="4">
-            <div class="empty log">No log output captured.</div></td></tr></tbody>
-      <tbody class="passed results-table-row">
-        <tr>
-          <td class="col-result">Passed</td>
-          <td class="col-name">examples/pump/test_pump_example.py::ImportEE_Tests::test_behave_nom</td>
-          <td class="col-duration">0.00</td>
-          <td class="col-links"></td></tr>
-        <tr>
-          <td class="extra" colspan="4">
-            <div class="empty log">No log output captured.</div></td></tr></tbody>
-      <tbody class="passed results-table-row">
-        <tr>
-          <td class="col-result">Passed</td>
-          <td class="col-name">examples/pump/test_pump_example.py::ImportEE_Tests::test_condfaults_hi</td>
-          <td class="col-duration">0.00</td>
-          <td class="col-links"></td></tr>
-        <tr>
-          <td class="extra" colspan="4">
-            <div class="empty log">No log output captured.</div></td></tr></tbody>
-      <tbody class="passed results-table-row">
-        <tr>
-          <td class="col-result">Passed</td>
-          <td class="col-name">examples/pump/test_pump_example.py::ImportEE_Tests::test_condfaults_nom</td>
-          <td class="col-duration">0.00</td>
-          <td class="col-links"></td></tr>
-        <tr>
-          <td class="extra" colspan="4">
-            <div class="empty log">No log output captured.</div></td></tr></tbody>
-      <tbody class="passed results-table-row">
-        <tr>
-          <td class="col-result">Passed</td>
-          <td class="col-name">examples/pump/test_pump_example.py::ImportEE_Tests::test_initialization</td>
-          <td class="col-duration">0.00</td>
-          <td class="col-links"></td></tr>
-        <tr>
-          <td class="extra" colspan="4">
-            <div class="empty log">No log output captured.</div></td></tr></tbody>
-      <tbody class="passed results-table-row">
-        <tr>
-          <td class="col-result">Passed</td>
-          <td class="col-name">examples/pump/test_pump_example.py::MoveWat_Tests::test_condfaults_dynamic</td>
-          <td class="col-duration">0.00</td>
-          <td class="col-links"></td></tr>
-        <tr>
-          <td class="extra" colspan="4">
-            <div class="empty log">No log output captured.</div></td></tr></tbody>
-      <tbody class="passed results-table-row">
-        <tr>
-          <td class="col-result">Passed</td>
-          <td class="col-name">examples/pump/test_pump_example.py::MoveWat_Tests::test_initialization</td>
-          <td class="col-duration">0.00</td>
-          <td class="col-links"></td></tr>
-        <tr>
-          <td class="extra" colspan="4">
-            <div class="empty log">No log output captured.</div></td></tr></tbody>
-      <tbody class="passed results-table-row">
-        <tr>
-          <td class="col-result">Passed</td>
-          <td class="col-name">examples/pump/test_pump_example.py::MoveWat_Tests::test_nom</td>
-          <td class="col-duration">0.00</td>
-          <td class="col-links"></td></tr>
-        <tr>
-          <td class="extra" colspan="4">
-            <div class="empty log">No log output captured.</div></td></tr></tbody>
-      <tbody class="passed results-table-row">
-        <tr>
-          <td class="col-result">Passed</td>
-          <td class="col-name">examples/pump/test_pump_example.py::Integration_Tests::test_blockage_results</td>
-          <td class="col-duration">0.05</td>
-          <td class="col-links"></td></tr>
-        <tr>
-          <td class="extra" colspan="4">
-            <div class="empty log">No log output captured.</div></td></tr></tbody>
-      <tbody class="passed results-table-row">
-        <tr>
-          <td class="col-result">Passed</td>
-          <td class="col-name">examples/pump/test_pump_example.py::Integration_Tests::test_blockage_static</td>
-          <td class="col-duration">0.00</td>
-          <td class="col-links"></td></tr>
-        <tr>
-          <td class="extra" colspan="4">
-            <div class="empty log">No log output captured.</div></td></tr></tbody>
-      <tbody class="passed results-table-row">
-        <tr>
-          <td class="col-result">Passed</td>
-          <td class="col-name">examples/pump/test_pump_example.py::Integration_Tests::test_nominal_results</td>
-          <td class="col-duration">0.03</td>
-          <td class="col-links"></td></tr>
-        <tr>
-          <td class="extra" colspan="4">
-            <div class="empty log">No log output captured.</div></td></tr></tbody>
-      <tbody class="passed results-table-row">
-        <tr>
-          <td class="col-result">Passed</td>
-          <td class="col-name">examples/pump/test_pump_stochastic.py::StochasticPumpTests::test_mdl_pickle</td>
-          <td class="col-duration">0.64</td>
-          <td class="col-links"></td></tr>
-        <tr>
-          <td class="extra" colspan="4">
-            <div class="log"> ------------------------------Captured stdout call------------------------------ <br/>FLOWS 
-ee_1
-The object is pickleable
-sig_1
-The object is pickleable
-wat_1
-The object is pickleable
-wat_2
-The object is pickleable
-FUNCTIONS 
-import_ee
-The object is pickleable
-import_water
-wat_out
-The object is pickleable
-import_signal
-The object is pickleable
-move_water
-The object is pickleable
-export_water
-wat_in
-The object is pickleable
-MODEL
-The object is pickleable
-<br/></div></td></tr></tbody>
-      <tbody class="passed results-table-row">
-        <tr>
-          <td class="col-result">Passed</td>
-          <td class="col-name">examples/pump/test_pump_stochastic.py::StochasticPumpTests::test_model_copy_different</td>
-          <td class="col-duration">0.39</td>
-          <td class="col-links"></td></tr>
-        <tr>
-          <td class="extra" colspan="4">
-            <div class="empty log">No log output captured.</div></td></tr></tbody>
-      <tbody class="passed results-table-row">
-        <tr>
-          <td class="col-result">Passed</td>
-          <td class="col-name">examples/pump/test_pump_stochastic.py::StochasticPumpTests::test_model_copy_same</td>
-          <td class="col-duration">0.49</td>
-          <td class="col-links"></td></tr>
-        <tr>
-          <td class="extra" colspan="4">
-            <div class="empty log">No log output captured.</div></td></tr></tbody>
-      <tbody class="passed results-table-row">
-        <tr>
-          <td class="col-result">Passed</td>
-          <td class="col-name">examples/pump/test_pump_stochastic.py::StochasticPumpTests::test_model_reset</td>
-          <td class="col-duration">0.65</td>
-          <td class="col-links"></td></tr>
-        <tr>
-          <td class="extra" colspan="4">
-            <div class="empty log">No log output captured.</div></td></tr></tbody>
-      <tbody class="passed results-table-row">
-        <tr>
-          <td class="col-result">Passed</td>
-          <td class="col-name">examples/pump/test_pump_stochastic.py::StochasticPumpTests::test_model_set_vars</td>
-          <td class="col-duration">0.00</td>
-          <td class="col-links"></td></tr>
-        <tr>
-          <td class="extra" colspan="4">
-            <div class="empty log">No log output captured.</div></td></tr></tbody>
-      <tbody class="passed results-table-row">
-        <tr>
-          <td class="col-result">Passed</td>
-          <td class="col-name">examples/pump/test_pump_stochastic.py::StochasticPumpTests::test_nested_sample_isave</td>
-          <td class="col-duration">24.10</td>
-          <td class="col-links"></td></tr>
-        <tr>
-          <td class="extra" colspan="4">
-            <div class="empty log">No log output captured.</div></td></tr></tbody>
-      <tbody class="passed results-table-row">
-        <tr>
-          <td class="col-result">Passed</td>
-          <td class="col-name">examples/pump/test_pump_stochastic.py::StochasticPumpTests::test_nested_sample_save</td>
-          <td class="col-duration">24.77</td>
-          <td class="col-links"></td></tr>
-        <tr>
-          <td class="extra" colspan="4">
-            <div class="empty log">No log output captured.</div></td></tr></tbody>
-      <tbody class="passed results-table-row">
-        <tr>
-          <td class="col-result">Passed</td>
-          <td class="col-name">examples/pump/test_pump_stochastic.py::StochasticPumpTests::test_param_sample_isave</td>
-          <td class="col-duration">5.92</td>
-          <td class="col-links"></td></tr>
-        <tr>
-          <td class="extra" colspan="4">
-            <div class="empty log">No log output captured.</div></td></tr></tbody>
-      <tbody class="passed results-table-row">
-        <tr>
-          <td class="col-result">Passed</td>
-          <td class="col-name">examples/pump/test_pump_stochastic.py::StochasticPumpTests::test_param_sample_save</td>
-          <td class="col-duration">6.06</td>
-          <td class="col-links"></td></tr>
-        <tr>
-          <td class="extra" colspan="4">
-            <div class="empty log">No log output captured.</div></td></tr></tbody>
-      <tbody class="passed results-table-row">
-        <tr>
-          <td class="col-result">Passed</td>
-          <td class="col-name">examples/pump/test_pump_stochastic.py::StochasticPumpTests::test_plot_nested_hists</td>
-          <td class="col-duration">6.58</td>
-          <td class="col-links"></td></tr>
-        <tr>
-          <td class="extra" colspan="4">
-            <div class="empty log">No log output captured.</div></td></tr></tbody>
-      <tbody class="passed results-table-row">
-        <tr>
-          <td class="col-result">Passed</td>
-          <td class="col-name">examples/pump/test_pump_stochastic.py::StochasticPumpTests::test_plot_nominal_vals</td>
-          <td class="col-duration">0.84</td>
-          <td class="col-links"></td></tr>
-        <tr>
-          <td class="extra" colspan="4">
-            <div class="empty log">No log output captured.</div></td></tr></tbody>
-      <tbody class="passed results-table-row">
-        <tr>
-          <td class="col-result">Passed</td>
-          <td class="col-name">examples/pump/test_pump_stochastic.py::StochasticPumpTests::test_plot_nominal_vals_xd</td>
-          <td class="col-duration">37.19</td>
-          <td class="col-links"></td></tr>
-        <tr>
-          <td class="extra" colspan="4">
-            <div class="empty log">No log output captured.</div></td></tr></tbody>
-      <tbody class="passed results-table-row">
-        <tr>
-          <td class="col-result">Passed</td>
-          <td class="col-name">examples/pump/test_pump_stochastic.py::StochasticPumpTests::test_rand_paramsample_plot</td>
-          <td class="col-duration">4.91</td>
-          <td class="col-links"></td></tr>
-        <tr>
-          <td class="extra" colspan="4">
-            <div class="empty log">No log output captured.</div></td></tr></tbody>
-      <tbody class="passed results-table-row">
-        <tr>
-          <td class="col-result">Passed</td>
-          <td class="col-name">examples/pump/test_pump_stochastic.py::StochasticPumpTests::test_run_approach</td>
-          <td class="col-duration">32.44</td>
-          <td class="col-links"></td></tr>
-        <tr>
-          <td class="extra" colspan="4">
-            <div class="empty log">No log output captured.</div></td></tr></tbody>
-      <tbody class="passed results-table-row">
-        <tr>
-          <td class="col-result">Passed</td>
-          <td class="col-name">examples/pump/test_pump_stochastic.py::StochasticPumpTests::test_run_safety</td>
-          <td class="col-duration">4.47</td>
-          <td class="col-links"></td></tr>
-        <tr>
-          <td class="extra" colspan="4">
-            <div class="empty log">No log output captured.</div></td></tr></tbody>
-      <tbody class="passed results-table-row">
-        <tr>
-          <td class="col-result">Passed</td>
-          <td class="col-name">examples/pump/test_pump_stochastic.py::StochasticPumpTests::test_set_seeds</td>
-          <td class="col-duration">0.03</td>
-          <td class="col-links"></td></tr>
-        <tr>
-          <td class="extra" colspan="4">
-            <div class="empty log">No log output captured.</div></td></tr></tbody>
-      <tbody class="passed results-table-row">
-        <tr>
-          <td class="col-result">Passed</td>
-          <td class="col-name">examples/pump/test_pump_stochastic.py::StochasticPumpTests::test_stochastic_pdf</td>
-          <td class="col-duration">0.01</td>
-          <td class="col-links"></td></tr>
-        <tr>
-          <td class="extra" colspan="4">
-            <div class="empty log">No log output captured.</div></td></tr></tbody>
-      <tbody class="passed results-table-row">
-        <tr>
-          <td class="col-result">Passed</td>
-          <td class="col-name">examples/rover/FaultSample_Use-Cases.ipynb::</td>
-          <td class="col-duration">8.75</td>
-          <td class="col-links"></td></tr>
-        <tr>
-          <td class="extra" colspan="4">
-            <div class="empty log">No log output captured.</div></td></tr></tbody>
-      <tbody class="passed results-table-row">
-        <tr>
-          <td class="col-result">Passed</td>
-          <td class="col-name">examples/rover/Model_Structure_Visualization_Tutorial.ipynb::</td>
-          <td class="col-duration">21.73</td>
-          <td class="col-links"></td></tr>
-        <tr>
-          <td class="extra" colspan="4">
-            <div class="empty log">No log output captured.</div></td></tr></tbody>
-      <tbody class="passed results-table-row">
-        <tr>
-          <td class="col-result">Passed</td>
-          <td class="col-name">examples/rover/ParameterSample_Use-Cases.ipynb::</td>
-          <td class="col-duration">74.97</td>
-          <td class="col-links"></td></tr>
-        <tr>
-          <td class="extra" colspan="4">
-            <div class="empty log">No log output captured.</div></td></tr></tbody>
-      <tbody class="passed results-table-row">
-        <tr>
-          <td class="col-result">Passed</td>
-          <td class="col-name">examples/rover/Rover_Setup_Notebook.ipynb::</td>
-          <td class="col-duration">22.33</td>
-          <td class="col-links"></td></tr>
-        <tr>
-          <td class="extra" colspan="4">
-            <div class="empty log">No log output captured.</div></td></tr></tbody>
-      <tbody class="passed results-table-row">
-        <tr>
-          <td class="col-result">Passed</td>
-          <td class="col-name">examples/rover/rover_model.py::examples.rover.rover_model.Drive.drive_nominal</td>
-          <td class="col-duration">0.01</td>
-          <td class="col-links"></td></tr>
-        <tr>
-          <td class="extra" colspan="4">
-            <div class="empty log">No log output captured.</div></td></tr></tbody>
-      <tbody class="passed results-table-row">
-        <tr>
-          <td class="col-result">Passed</td>
-          <td class="col-name">examples/tank/Tank_Analysis.ipynb::</td>
-          <td class="col-duration">12.92</td>
-          <td class="col-links"></td></tr>
-        <tr>
-          <td class="extra" colspan="4">
-            <div class="empty log">No log output captured.</div></td></tr></tbody>
-      <tbody class="passed results-table-row">
-        <tr>
-          <td class="col-result">Passed</td>
-          <td class="col-name">examples/tank/test_tank.py::TankTests::test_approach</td>
-          <td class="col-duration">0.97</td>
-          <td class="col-links"></td></tr>
-        <tr>
-          <td class="extra" colspan="4">
-            <div class="empty log">No log output captured.</div></td></tr></tbody>
-      <tbody class="passed results-table-row">
-        <tr>
-          <td class="col-result">Passed</td>
-          <td class="col-name">examples/tank/test_tank.py::TankTests::test_approach_parallelism_0</td>
-          <td class="col-duration">5.14</td>
-          <td class="col-links"></td></tr>
-        <tr>
-          <td class="extra" colspan="4">
-            <div class="empty log">No log output captured.</div></td></tr></tbody>
-      <tbody class="passed results-table-row">
-        <tr>
-          <td class="col-result">Passed</td>
-          <td class="col-name">examples/tank/test_tank.py::TankTests::test_approach_parallelism_1</td>
-          <td class="col-duration">7.85</td>
-          <td class="col-links"></td></tr>
-        <tr>
-          <td class="extra" colspan="4">
-            <div class="empty log">No log output captured.</div></td></tr></tbody>
-      <tbody class="passed results-table-row">
-        <tr>
-          <td class="col-result">Passed</td>
-          <td class="col-name">examples/tank/test_tank.py::TankTests::test_approach_parallelism_notrack</td>
-          <td class="col-duration">4.70</td>
-          <td class="col-links"></td></tr>
-        <tr>
-          <td class="extra" colspan="4">
-            <div class="empty log">No log output captured.</div></td></tr></tbody>
-      <tbody class="passed results-table-row">
-        <tr>
-          <td class="col-result">Passed</td>
-          <td class="col-name">examples/tank/test_tank.py::TankTests::test_comp_mode_inj</td>
-          <td class="col-duration">0.04</td>
-          <td class="col-links"></td></tr>
-        <tr>
-          <td class="extra" colspan="4">
-            <div class="empty log">No log output captured.</div></td></tr></tbody>
-      <tbody class="passed results-table-row">
-        <tr>
-          <td class="col-result">Passed</td>
-          <td class="col-name">examples/tank/test_tank.py::TankTests::test_different_components</td>
-          <td class="col-duration">0.02</td>
-          <td class="col-links"></td></tr>
-        <tr>
-          <td class="extra" colspan="4">
-            <div class="empty log">No log output captured.</div></td></tr></tbody>
-      <tbody class="passed results-table-row">
-        <tr>
-          <td class="col-result">Passed</td>
-          <td class="col-name">examples/tank/test_tank.py::TankTests::test_epc_math</td>
-          <td class="col-duration">0.01</td>
-          <td class="col-links"></td></tr>
-        <tr>
-          <td class="extra" colspan="4">
-            <div class="empty log">No log output captured.</div></td></tr></tbody>
-      <tbody class="passed results-table-row">
-        <tr>
-          <td class="col-result">Passed</td>
-          <td class="col-name">examples/tank/test_tank.py::TankTests::test_fault_sample_isave</td>
-          <td class="col-duration">1.32</td>
-          <td class="col-links"></td></tr>
-        <tr>
-          <td class="extra" colspan="4">
-            <div class="empty log">No log output captured.</div></td></tr></tbody>
-      <tbody class="passed results-table-row">
-        <tr>
-          <td class="col-result">Passed</td>
-          <td class="col-name">examples/tank/test_tank.py::TankTests::test_fault_sample_save</td>
-          <td class="col-duration">0.86</td>
-          <td class="col-links"></td></tr>
-        <tr>
-          <td class="extra" colspan="4">
-            <div class="empty log">No log output captured.</div></td></tr></tbody>
-      <tbody class="passed results-table-row">
-        <tr>
-          <td class="col-result">Passed</td>
-          <td class="col-name">examples/tank/test_tank.py::TankTests::test_local_tstep</td>
-          <td class="col-duration">0.07</td>
-          <td class="col-links"></td></tr>
-        <tr>
-          <td class="extra" colspan="4">
-            <div class="empty log">No log output captured.</div></td></tr></tbody>
-      <tbody class="passed results-table-row">
-        <tr>
-          <td class="col-result">Passed</td>
-          <td class="col-name">examples/tank/test_tank.py::TankTests::test_model_copy_different</td>
-          <td class="col-duration">0.32</td>
-          <td class="col-links"></td></tr>
-        <tr>
-          <td class="extra" colspan="4">
-            <div class="empty log">No log output captured.</div></td></tr></tbody>
-      <tbody class="passed results-table-row">
-        <tr>
-          <td class="col-result">Passed</td>
-          <td class="col-name">examples/tank/test_tank.py::TankTests::test_model_copy_same</td>
-          <td class="col-duration">0.45</td>
-          <td class="col-links"></td></tr>
-        <tr>
-          <td class="extra" colspan="4">
-            <div class="empty log">No log output captured.</div></td></tr></tbody>
-      <tbody class="passed results-table-row">
-        <tr>
-          <td class="col-result">Passed</td>
-          <td class="col-name">examples/tank/test_tank.py::TankTests::test_model_reset</td>
-          <td class="col-duration">0.58</td>
-          <td class="col-links"></td></tr>
-        <tr>
-          <td class="extra" colspan="4">
-            <div class="empty log">No log output captured.</div></td></tr></tbody>
-      <tbody class="passed results-table-row">
-        <tr>
-          <td class="col-result">Passed</td>
-          <td class="col-name">examples/tank/test_tank.py::TankTests::test_nested_sample_isave</td>
-          <td class="col-duration">15.82</td>
-          <td class="col-links"></td></tr>
-        <tr>
-          <td class="extra" colspan="4">
-            <div class="empty log">No log output captured.</div></td></tr></tbody>
-      <tbody class="passed results-table-row">
-        <tr>
-          <td class="col-result">Passed</td>
-          <td class="col-name">examples/tank/test_tank.py::TankTests::test_nested_sample_save</td>
-          <td class="col-duration">13.74</td>
-          <td class="col-links"></td></tr>
-        <tr>
-          <td class="extra" colspan="4">
-            <div class="empty log">No log output captured.</div></td></tr></tbody>
-      <tbody class="passed results-table-row">
-        <tr>
-          <td class="col-result">Passed</td>
-          <td class="col-name">examples/tank/test_tank.py::TankTests::test_param_sample_save</td>
-          <td class="col-duration">0.45</td>
-          <td class="col-links"></td></tr>
-        <tr>
-          <td class="extra" colspan="4">
-            <div class="empty log">No log output captured.</div></td></tr></tbody>
-      <tbody class="passed results-table-row">
-        <tr>
-          <td class="col-result">Passed</td>
-          <td class="col-name">examples/tank/test_tank.py::TankTests::test_save_load_multfault</td>
-          <td class="col-duration">0.07</td>
-          <td class="col-links"></td></tr>
-        <tr>
-          <td class="extra" colspan="4">
-            <div class="empty log">No log output captured.</div></td></tr></tbody>
-      <tbody class="passed results-table-row">
-        <tr>
-          <td class="col-result">Passed</td>
-          <td class="col-name">examples/tank/test_tank.py::TankTests::test_save_load_nominal</td>
-          <td class="col-duration">0.06</td>
-          <td class="col-links"></td></tr>
-        <tr>
-          <td class="extra" colspan="4">
-            <div class="empty log">No log output captured.</div></td></tr></tbody>
-      <tbody class="passed results-table-row">
-        <tr>
-          <td class="col-result">Passed</td>
-          <td class="col-name">examples/tank/test_tank.py::TankTests::test_save_load_onefault</td>
-          <td class="col-duration">0.07</td>
-          <td class="col-links"></td></tr>
-        <tr>
-          <td class="extra" colspan="4">
-            <div class="empty log">No log output captured.</div></td></tr></tbody>
-      <tbody class="passed results-table-row">
-        <tr>
-          <td class="col-result">Passed</td>
-          <td class="col-name">examples/tank/test_tank.py::TankTests::test_save_load_singlefaults</td>
-          <td class="col-duration">1.98</td>
-          <td class="col-links"></td></tr>
-        <tr>
-          <td class="extra" colspan="4">
-            <div class="empty log">No log output captured.</div></td></tr></tbody>
-      <tbody class="passed results-table-row">
-        <tr>
-          <td class="col-result">Passed</td>
-          <td class="col-name">examples/tank/test_tank.py::TankTests::test_singlefaults_isave</td>
-          <td class="col-duration">3.14</td>
-          <td class="col-links"></td></tr>
-        <tr>
-          <td class="extra" colspan="4">
-            <div class="empty log">No log output captured.</div></td></tr></tbody>
-      <tbody class="passed results-table-row">
-        <tr>
-          <td class="col-result">Passed</td>
-          <td class="col-name">examples/tank/test_tank.py::TankTests::test_tank_copy_args</td>
-          <td class="col-duration">0.02</td>
-          <td class="col-links"></td></tr>
-        <tr>
-          <td class="extra" colspan="4">
-            <div class="empty log">No log output captured.</div></td></tr></tbody>
-      <tbody class="passed results-table-row">
-        <tr>
-          <td class="col-result">Passed</td>
-          <td class="col-name">fmdtools/analyze/history.py::fmdtools.analyze.history.History</td>
-          <td class="col-duration">0.00</td>
-          <td class="col-links"></td></tr>
-        <tr>
-          <td class="extra" colspan="4">
-            <div class="empty log">No log output captured.</div></td></tr></tbody>
-      <tbody class="passed results-table-row">
-        <tr>
-          <td class="col-result">Passed</td>
-          <td class="col-name">fmdtools/analyze/history.py::fmdtools.analyze.history.History.cut</td>
-          <td class="col-duration">0.00</td>
-          <td class="col-links"></td></tr>
-        <tr>
-          <td class="extra" colspan="4">
-            <div class="empty log">No log output captured.</div></td></tr></tbody>
-      <tbody class="passed results-table-row">
-        <tr>
-          <td class="col-result">Passed</td>
-          <td class="col-name">fmdtools/analyze/history.py::fmdtools.analyze.history.History.get_mean_bound_errhist</td>
-          <td class="col-duration">0.00</td>
-          <td class="col-links"></td></tr>
-        <tr>
-          <td class="extra" colspan="4">
-            <div class="empty log">No log output captured.</div></td></tr></tbody>
-      <tbody class="passed results-table-row">
-        <tr>
-          <td class="col-result">Passed</td>
-          <td class="col-name">fmdtools/analyze/phases.py::fmdtools.analyze.phases.PhaseMap.calc_modephase_time</td>
-          <td class="col-duration">0.00</td>
-          <td class="col-links"></td></tr>
-        <tr>
-          <td class="extra" colspan="4">
-            <div class="empty log">No log output captured.</div></td></tr></tbody>
-      <tbody class="passed results-table-row">
-        <tr>
-          <td class="col-result">Passed</td>
-          <td class="col-name">fmdtools/analyze/phases.py::fmdtools.analyze.phases.PhaseMap.calc_phase_time</td>
-          <td class="col-duration">0.00</td>
-          <td class="col-links"></td></tr>
-        <tr>
-          <td class="extra" colspan="4">
-            <div class="empty log">No log output captured.</div></td></tr></tbody>
-      <tbody class="passed results-table-row">
-        <tr>
-          <td class="col-result">Passed</td>
-          <td class="col-name">fmdtools/analyze/phases.py::fmdtools.analyze.phases.PhaseMap.calc_samples_in_phases</td>
-          <td class="col-duration">0.00</td>
-          <td class="col-links"></td></tr>
-        <tr>
-          <td class="extra" colspan="4">
-            <div class="empty log">No log output captured.</div></td></tr></tbody>
-      <tbody class="passed results-table-row">
-        <tr>
-          <td class="col-result">Passed</td>
-          <td class="col-name">fmdtools/analyze/phases.py::fmdtools.analyze.phases.PhaseMap.find_modephase</td>
-          <td class="col-duration">0.00</td>
-          <td class="col-links"></td></tr>
-        <tr>
-          <td class="extra" colspan="4">
-            <div class="empty log">No log output captured.</div></td></tr></tbody>
-      <tbody class="passed results-table-row">
-        <tr>
-          <td class="col-result">Passed</td>
-          <td class="col-name">fmdtools/analyze/phases.py::fmdtools.analyze.phases.PhaseMap.get_phase_times</td>
-          <td class="col-duration">0.00</td>
-          <td class="col-links"></td></tr>
-        <tr>
-          <td class="extra" colspan="4">
-            <div class="empty log">No log output captured.</div></td></tr></tbody>
-      <tbody class="passed results-table-row">
-        <tr>
-          <td class="col-result">Passed</td>
-          <td class="col-name">fmdtools/analyze/phases.py::fmdtools.analyze.phases.PhaseMap.get_sample_times</td>
-          <td class="col-duration">0.00</td>
-          <td class="col-links"></td></tr>
-        <tr>
-          <td class="extra" colspan="4">
-            <div class="empty log">No log output captured.</div></td></tr></tbody>
-      <tbody class="passed results-table-row">
-        <tr>
-          <td class="col-result">Passed</td>
-          <td class="col-name">fmdtools/analyze/phases.py::fmdtools.analyze.phases.find_interval_overlap</td>
-          <td class="col-duration">0.00</td>
-          <td class="col-links"></td></tr>
-        <tr>
-          <td class="extra" colspan="4">
-            <div class="empty log">No log output captured.</div></td></tr></tbody>
-      <tbody class="passed results-table-row">
-        <tr>
-          <td class="col-result">Passed</td>
-          <td class="col-name">fmdtools/analyze/phases.py::fmdtools.analyze.phases.join_phasemaps</td>
-          <td class="col-duration">0.00</td>
-          <td class="col-links"></td></tr>
-        <tr>
-          <td class="extra" colspan="4">
-            <div class="empty log">No log output captured.</div></td></tr></tbody>
-      <tbody class="passed results-table-row">
-        <tr>
-          <td class="col-result">Passed</td>
-          <td class="col-name">fmdtools/analyze/result.py::fmdtools.analyze.result.Result</td>
-          <td class="col-duration">0.00</td>
-          <td class="col-links"></td></tr>
-        <tr>
-          <td class="extra" colspan="4">
-            <div class="empty log">No log output captured.</div></td></tr></tbody>
-      <tbody class="passed results-table-row">
-        <tr>
-          <td class="col-result">Passed</td>
-          <td class="col-name">fmdtools/analyze/tabulate.py::fmdtools.analyze.tabulate.Comparison.__init__</td>
-          <td class="col-duration">0.49</td>
-          <td class="col-links"></td></tr>
-        <tr>
-          <td class="extra" colspan="4">
-            <div class="empty log">No log output captured.</div></td></tr></tbody>
-      <tbody class="passed results-table-row">
-        <tr>
-          <td class="col-result">Passed</td>
-          <td class="col-name">fmdtools.define.container.coords.py::fmdtools.define.container.coords.Coords</td>
-          <td class="col-duration">0.00</td>
-          <td class="col-links"></td></tr>
-        <tr>
-          <td class="extra" colspan="4">
-            <div class="empty log">No log output captured.</div></td></tr></tbody>
-      <tbody class="passed results-table-row">
-        <tr>
-          <td class="col-result">Passed</td>
-          <td class="col-name">fmdtools.define.container.coords.py::fmdtools.define.container.coords.Coords.copy</td>
-          <td class="col-duration">0.00</td>
-          <td class="col-links"></td></tr>
-        <tr>
-          <td class="extra" colspan="4">
-            <div class="empty log">No log output captured.</div></td></tr></tbody>
-      <tbody class="passed results-table-row">
-        <tr>
-          <td class="col-result">Passed</td>
-          <td class="col-name">fmdtools.define.container.coords.py::fmdtools.define.container.coords.Coords.create_hist</td>
-          <td class="col-duration">0.00</td>
-          <td class="col-links"></td></tr>
-        <tr>
-          <td class="extra" colspan="4">
-            <div class="empty log">No log output captured.</div></td></tr></tbody>
-      <tbody class="passed results-table-row">
-        <tr>
-          <td class="col-result">Passed</td>
-          <td class="col-name">fmdtools.define.container.coords.py::fmdtools.define.container.coords.Coords.find_all</td>
-          <td class="col-duration">0.00</td>
-          <td class="col-links"></td></tr>
-        <tr>
-          <td class="extra" colspan="4">
-            <div class="empty log">No log output captured.</div></td></tr></tbody>
-      <tbody class="passed results-table-row">
-        <tr>
-          <td class="col-result">Passed</td>
-          <td class="col-name">fmdtools.define.container.coords.py::fmdtools.define.container.coords.Coords.find_closest</td>
-          <td class="col-duration">0.00</td>
-          <td class="col-links"></td></tr>
-        <tr>
-          <td class="extra" colspan="4">
-            <div class="empty log">No log output captured.</div></td></tr></tbody>
-      <tbody class="passed results-table-row">
-        <tr>
-          <td class="col-result">Passed</td>
-          <td class="col-name">fmdtools.define.container.coords.py::fmdtools.define.container.coords.Coords.get</td>
-          <td class="col-duration">0.00</td>
-          <td class="col-links"></td></tr>
-        <tr>
-          <td class="extra" colspan="4">
-            <div class="empty log">No log output captured.</div></td></tr></tbody>
-      <tbody class="passed results-table-row">
-        <tr>
-          <td class="col-result">Passed</td>
-          <td class="col-name">fmdtools.define.container.coords.py::fmdtools.define.container.coords.Coords.get_properties</td>
-          <td class="col-duration">0.00</td>
-          <td class="col-links"></td></tr>
-        <tr>
-          <td class="extra" colspan="4">
-            <div class="empty log">No log output captured.</div></td></tr></tbody>
-      <tbody class="passed results-table-row">
-        <tr>
-          <td class="col-result">Passed</td>
-          <td class="col-name">fmdtools.define.container.coords.py::fmdtools.define.container.coords.Coords.in_area</td>
-          <td class="col-duration">0.00</td>
-          <td class="col-links"></td></tr>
-        <tr>
-          <td class="extra" colspan="4">
-            <div class="empty log">No log output captured.</div></td></tr></tbody>
-      <tbody class="passed results-table-row">
-        <tr>
-          <td class="col-result">Passed</td>
-          <td class="col-name">fmdtools.define.container.coords.py::fmdtools.define.container.coords.Coords.set</td>
-          <td class="col-duration">0.00</td>
-          <td class="col-links"></td></tr>
-        <tr>
-          <td class="extra" colspan="4">
-            <div class="empty log">No log output captured.</div></td></tr></tbody>
-      <tbody class="passed results-table-row">
-        <tr>
-          <td class="col-result">Passed</td>
-          <td class="col-name">fmdtools.define.container.coords.py::fmdtools.define.container.coords.Coords.set_pts</td>
-          <td class="col-duration">0.00</td>
-          <td class="col-links"></td></tr>
-        <tr>
-          <td class="extra" colspan="4">
-            <div class="empty log">No log output captured.</div></td></tr></tbody>
-      <tbody class="passed results-table-row">
-        <tr>
-          <td class="col-result">Passed</td>
-          <td class="col-name">fmdtools.define.container.coords.py::fmdtools.define.container.coords.Coords.set_rand_pts</td>
-          <td class="col-duration">0.00</td>
-          <td class="col-links"></td></tr>
-        <tr>
-          <td class="extra" colspan="4">
-            <div class="empty log">No log output captured.</div></td></tr></tbody>
-      <tbody class="passed results-table-row">
-        <tr>
-          <td class="col-result">Passed</td>
-          <td class="col-name">fmdtools.define.container.coords.py::fmdtools.define.container.coords.Coords.set_range</td>
-          <td class="col-duration">0.00</td>
-          <td class="col-links"></td></tr>
-        <tr>
-          <td class="extra" colspan="4">
-            <div class="empty log">No log output captured.</div></td></tr></tbody>
-      <tbody class="passed results-table-row">
-        <tr>
-          <td class="col-result">Passed</td>
-          <td class="col-name">fmdtools.define.container.coords.py::fmdtools.define.container.coords.Coords.to_gridpoint</td>
-          <td class="col-duration">0.00</td>
-          <td class="col-links"></td></tr>
-        <tr>
-          <td class="extra" colspan="4">
-            <div class="empty log">No log output captured.</div></td></tr></tbody>
-      <tbody class="passed results-table-row">
-        <tr>
-          <td class="col-result">Passed</td>
-          <td class="col-name">fmdtools.define.container.coords.py::fmdtools.define.container.coords.Coords.to_index</td>
-          <td class="col-duration">0.00</td>
-          <td class="col-links"></td></tr>
-        <tr>
-          <td class="extra" colspan="4">
-            <div class="empty log">No log output captured.</div></td></tr></tbody>
-      <tbody class="passed results-table-row">
-        <tr>
-          <td class="col-result">Passed</td>
-          <td class="col-name">fmdtools.define.container.coords.py::fmdtools.define.container.coords.CoordsParam</td>
-          <td class="col-duration">0.00</td>
-          <td class="col-links"></td></tr>
-        <tr>
-          <td class="extra" colspan="4">
-            <div class="empty log">No log output captured.</div></td></tr></tbody>
-      <tbody class="passed results-table-row">
-        <tr>
-          <td class="col-result">Passed</td>
-          <td class="col-name">fmdtools/define/environment.py::fmdtools.define.environment.Environment</td>
-          <td class="col-duration">0.00</td>
-          <td class="col-links"></td></tr>
-        <tr>
-          <td class="extra" colspan="4">
-            <div class="empty log">No log output captured.</div></td></tr></tbody>
-      <tbody class="passed results-table-row">
-        <tr>
-          <td class="col-result">Passed</td>
-          <td class="col-name">fmdtools/define/environment.py::fmdtools.define.environment.Environment.copy</td>
-          <td class="col-duration">0.00</td>
-          <td class="col-links"></td></tr>
-        <tr>
-          <td class="extra" colspan="4">
-            <div class="empty log">No log output captured.</div></td></tr></tbody>
-      <tbody class="passed results-table-row">
-        <tr>
-          <td class="col-result">Passed</td>
-          <td class="col-name">fmdtools/define/environment.py::fmdtools.define.environment.Environment.create_hist</td>
-          <td class="col-duration">0.00</td>
-          <td class="col-links"></td></tr>
-        <tr>
-          <td class="extra" colspan="4">
-            <div class="empty log">No log output captured.</div></td></tr></tbody>
-      <tbody class="passed results-table-row">
-        <tr>
-          <td class="col-result">Passed</td>
-          <td class="col-name">fmdtools.define.container.geom.py::fmdtools.define.container.geom.Geom.all_at</td>
-          <td class="col-duration">0.00</td>
-          <td class="col-links"></td></tr>
-        <tr>
-          <td class="extra" colspan="4">
-            <div class="empty log">No log output captured.</div></td></tr></tbody>
-      <tbody class="passed results-table-row">
-        <tr>
-          <td class="col-result">Passed</td>
-          <td class="col-name">fmdtools.define.container.geom.py::fmdtools.define.container.geom.Geom.vect_at_shape</td>
-          <td class="col-duration">0.00</td>
-          <td class="col-links"></td></tr>
-        <tr>
-          <td class="extra" colspan="4">
-            <div class="empty log">No log output captured.</div></td></tr></tbody>
-      <tbody class="passed results-table-row">
-        <tr>
-          <td class="col-result">Passed</td>
-          <td class="col-name">fmdtools.define.container.geom.py::fmdtools.define.container.geom.Geom.vect_to_shape</td>
-          <td class="col-duration">0.00</td>
-          <td class="col-links"></td></tr>
-        <tr>
-          <td class="extra" colspan="4">
-            <div class="empty log">No log output captured.</div></td></tr></tbody>
-      <tbody class="passed results-table-row">
-        <tr>
-          <td class="col-result">Passed</td>
-          <td class="col-name">fmdtools.define.container.geom.py::fmdtools.define.container.geom.GeomArch</td>
-          <td class="col-duration">0.00</td>
-          <td class="col-links"></td></tr>
-        <tr>
-          <td class="extra" colspan="4">
-            <div class="empty log">No log output captured.</div></td></tr></tbody>
-      <tbody class="passed results-table-row">
-        <tr>
-          <td class="col-result">Passed</td>
-          <td class="col-name">fmdtools.define.container.geom.py::fmdtools.define.container.geom.GeomArch.all_at</td>
-          <td class="col-duration">0.00</td>
-          <td class="col-links"></td></tr>
-        <tr>
-          <td class="extra" colspan="4">
-            <div class="empty log">No log output captured.</div></td></tr></tbody>
-      <tbody class="passed results-table-row">
-        <tr>
-          <td class="col-result">Passed</td>
-          <td class="col-name">fmdtools.define.container.geom.py::fmdtools.define.container.geom.GeomArch.create_hist</td>
-          <td class="col-duration">0.00</td>
-          <td class="col-links"></td></tr>
-        <tr>
-          <td class="extra" colspan="4">
-            <div class="empty log">No log output captured.</div></td></tr></tbody>
-      <tbody class="passed results-table-row">
-        <tr>
-          <td class="col-result">Passed</td>
-          <td class="col-name">fmdtools.define.container.geom.py::fmdtools.define.container.geom.GeomArch.return_mutables</td>
-          <td class="col-duration">0.00</td>
-          <td class="col-links"></td></tr>
-        <tr>
-          <td class="extra" colspan="4">
-            <div class="empty log">No log output captured.</div></td></tr></tbody>
-      <tbody class="passed results-table-row">
-        <tr>
-          <td class="col-result">Passed</td>
-          <td class="col-name">fmdtools.define.container.geom.py::fmdtools.define.container.geom.GeomLine</td>
-          <td class="col-duration">0.00</td>
-          <td class="col-links"></td></tr>
-        <tr>
-          <td class="extra" colspan="4">
-            <div class="empty log">No log output captured.</div></td></tr></tbody>
-      <tbody class="passed results-table-row">
-        <tr>
-          <td class="col-result">Passed</td>
-          <td class="col-name">fmdtools.define.container.geom.py::fmdtools.define.container.geom.GeomPoint</td>
-          <td class="col-duration">0.00</td>
-          <td class="col-links"></td></tr>
-        <tr>
-          <td class="extra" colspan="4">
-            <div class="empty log">No log output captured.</div></td></tr></tbody>
-      <tbody class="passed results-table-row">
-        <tr>
-          <td class="col-result">Passed</td>
-          <td class="col-name">fmdtools.define.container.geom.py::fmdtools.define.container.geom.GeomPoly</td>
-          <td class="col-duration">0.00</td>
-          <td class="col-links"></td></tr>
-        <tr>
-          <td class="extra" colspan="4">
-            <div class="empty log">No log output captured.</div></td></tr></tbody>
-      <tbody class="passed results-table-row">
-        <tr>
-          <td class="col-result">Passed</td>
-          <td class="col-name">fmdtools.define.container.geom.py::fmdtools.define.container.geom.LineParam</td>
-          <td class="col-duration">0.00</td>
-          <td class="col-links"></td></tr>
-        <tr>
-          <td class="extra" colspan="4">
-            <div class="empty log">No log output captured.</div></td></tr></tbody>
-      <tbody class="passed results-table-row">
-        <tr>
-          <td class="col-result">Passed</td>
-          <td class="col-name">fmdtools.define.container.geom.py::fmdtools.define.container.geom.PointParam</td>
-          <td class="col-duratifmdtools.define.container.modefmdtools.define.container.mode
-          <td class="col-links"></td></tr>
-        <tr>
-          <td class="extra" colspan="4">
-            <div class="empty log">No log output captured.</div></td></tr></tbody>
-      <tbody class="passed results-table-row">
-        <tr>
-          <td class="col-result">Passed</td>
-          <td class="col-name">fmdtools.define.container.geom.py::fmdtools.define.container.geom.PolyParam</td>
-          <td class="col-duratifmdtools.define.container.modefmdtools.define.container.mode
-          <td class="col-links"></td></tr>
-        <tr>
-          <td class="extra" colspan="4">
-            <div class="empty log">No log output captured.</div></td></tr></tbody>
-      <tbody class="passed results-table-row">
-        <tr>
-          <td class="col-result">Passed</td>
-          <td class="col-name">fmdtools/define/mode.py::fmdtools.define.mode.Fault.calc_rate</td>
-          <td class="col-duration">0.00</td>
-          <td class="col-links"></td></tr>
-        <tr>
-          <td class="extra" colspan="4">
-            <div class="empty log">No log output captured.</div></td></tr></tbody>
-      <tbody class="passed results-table-row">
-        <tr>
-          <td class="col-result">Passed</td>
-          <td class="col-name">fmdtools/define/mode.py::fmdtools.define.mode.Mode</td>
-          <td class="col-duration">0.00</td>
-          <td class="col-links"></td></tr>
-        <tr>
-          <td class="extra" colspan="4">
-            <div class="empty log">No log output captured.</div></td></tr></tbody>
-      <tbody class="passed results-table-row">
-        <tr>
-          <td class="col-result">Passed</td>
-          <td class="col-name">fmdtools.define.container.parameter.py::fmdtools.define.container.parameter.Parameter</td>
-          <td class="col-duration">0.00</td>
-          <td class="col-links"></td></tr>
-        <tr>
-          <td class="extra" colspan="4">
-            <div class="empty log">No log output captured.</div></td></tr></tbody>
-      <tbody class="passed results-table-row">
-        <tr>
-          <td class="col-result">Passed</td>
-          <td class="col-name">fmdtools.define.container.state.py::fmdtools.define.container.state.State</td>
-          <td class="col-duration">0.00</td>
-          <td class="col-links"></td></tr>
-        <tr>
-          <td class="extra" colspan="4">
-            <div class="empty log">No log output captured.</div></td></tr></tbody>
-      <tbody class="passed results-table-row">
-        <tr>
-          <td class="col-result">Passed</td>
-          <td class="col-name">fmdtools.define.container.state.py::fmdtools.define.container.state.State.add</td>
-          <td class="col-duration">0.00</td>
-          <td class="col-links"></td></tr>
-        <tr>
-          <td class="extra" colspan="4">
-            <div class="empty log">No log output captured.</div></td></tr></tbody>
-      <tbody class="passed results-table-row">
-        <tr>
-          <td class="col-result">Passed</td>
-          <td class="col-name">fmdtools.define.container.state.py::fmdtools.define.container.state.State.assign</td>
-          <td class="col-duration">0.00</td>
-          <td class="col-links"></td></tr>
-        <tr>
-          <td class="extra" colspan="4">
-            <div class="empty log">No log output captured.</div></td></tr></tbody>
-      <tbody class="passed results-table-row">
-        <tr>
-          <td class="col-result">Passed</td>
-          <td class="col-name">fmdtools.define.container.state.py::fmdtools.define.container.state.State.div</td>
-          <td class="col-duration">0.00</td>
-          <td class="col-links"></td></tr>
-        <tr>
-          <td class="extra" colspan="4">
-            <div class="empty log">No log output captured.</div></td></tr></tbody>
-      <tbody class="passed results-table-row">
-        <tr>
-          <td class="col-result">Passed</td>
-          <td class="col-name">fmdtools.define.container.state.py::fmdtools.define.container.state.State.get</td>
-          <td class="col-duration">0.00</td>
-          <td class="col-links"></td></tr>
-        <tr>
-          <td class="extra" colspan="4">
-            <div class="empty log">No log output captured.</div></td></tr></tbody>
-      <tbody class="passed results-table-row">
-        <tr>
-          <td class="col-result">Passed</td>
-          <td class="col-name">fmdtools.define.container.state.py::fmdtools.define.container.state.State.inc</td>
-          <td class="col-duration">0.00</td>
-          <td class="col-links"></td></tr>
-        <tr>
-          <td class="extra" colspan="4">
-            <div class="empty log">No log output captured.</div></td></tr></tbody>
-      <tbody class="passed results-table-row">
-        <tr>
-          <td class="col-result">Passed</td>
-          <td class="col-name">fmdtools.define.container.state.py::fmdtools.define.container.state.State.limit</td>
-          <td class="col-duration">0.00</td>
-          <td class="col-links"></td></tr>
-        <tr>
-          <td class="extra" colspan="4">
-            <div class="empty log">No log output captured.</div></td></tr></tbody>
-      <tbody class="passed results-table-row">
-        <tr>
-          <td class="col-result">Passed</td>
-          <td class="col-name">fmdtools.define.container.state.py::fmdtools.define.container.state.State.mul</td>
-          <td class="col-duration">0.00</td>
-          <td class="col-links"></td></tr>
-        <tr>
-          <td class="extra" colspan="4">
-            <div class="empty log">No log output captured.</div></td></tr></tbody>
-      <tbody class="passed results-table-row">
-        <tr>
-          <td class="col-result">Passed</td>
-          <td class="col-name">fmdtools.define.container.state.py::fmdtools.define.container.state.State.put</td>
-          <td class="col-duration">0.00</td>
-          <td class="col-links"></td></tr>
-        <tr>
-          <td class="extra" colspan="4">
-            <div class="empty log">No log output captured.</div></td></tr></tbody>
-      <tbody class="passed results-table-row">
-        <tr>
-          <td class="col-result">Passed</td>
-          <td class="col-name">fmdtools.define.container.state.py::fmdtools.define.container.state.State.roundto</td>
-          <td class="col-duration">0.00</td>
-          <td class="col-links"></td></tr>
-        <tr>
-          <td class="extra" colspan="4">
-            <div class="empty log">No log output captured.</div></td></tr></tbody>
-      <tbody class="passed results-table-row">
-        <tr>
-          <td class="col-result">Passed</td>
-          <td class="col-name">fmdtools.define.container.state.py::fmdtools.define.container.state.State.same</td>
-          <td class="col-duration">0.00</td>
-          <td class="col-links"></td></tr>
-        <tr>
-          <td class="extra" colspan="4">
-            <div class="empty log">No log output captured.</div></td></tr></tbody>
-      <tbody class="passed results-table-row">
-        <tr>
-          <td class="col-result">Passed</td>
-          <td class="col-name">fmdtools.define.container.state.py::fmdtools.define.container.state.State.set_atts</td>
-          <td class="col-duration">0.00</td>
-          <td class="col-links"></td></tr>
-        <tr>
-          <td class="extra" colspan="4">
-            <div class="empty log">No log output captured.</div></td></tr></tbody>
-      <tbody class="passed results-table-row">
-        <tr>
-          <td class="col-result">Passed</td>
-          <td class="col-name">fmdtools.define.container.state.py::fmdtools.define.container.state.State.sub</td>
-          <td class="col-duration">0.00</td>
-          <td class="col-links"></td></tr>
-        <tr>
-          <td class="extra" colspan="4">
-            <div class="empty log">No log output captured.</div></td></tr></tbody>
-      <tbody class="passed results-table-row">
-        <tr>
-          <td class="col-result">Passed</td>
-          <td class="col-name">fmdtools/sim/sample.py::fmdtools.sim.sample.FaultDomain.add_all</td>
-          <td class="col-duration">0.01</td>
-          <td class="col-links"></td></tr>
-        <tr>
-          <td class="extra" colspan="4">
-            <div class="empty log">No log output captured.</div></td></tr></tbody>
-      <tbody class="passed results-table-row">
-        <tr>
-          <td class="col-result">Passed</td>
-          <td class="col-name">fmdtools/sim/sample.py::fmdtools.sim.sample.FaultDomain.add_all_fxn_modes</td>
-          <td class="col-duration">0.01</td>
-          <td class="col-links"></td></tr>
-        <tr>
-          <td class="extra" colspan="4">
-            <div class="empty log">No log output captured.</div></td></tr></tbody>
-      <tbody class="passed results-table-row">
-        <tr>
-          <td class="col-result">Passed</td>
-          <td class="col-name">fmdtools/sim/sample.py::fmdtools.sim.sample.FaultDomain.add_all_fxnclass_modes</td>
-          <td class="col-duration">0.01</td>
-          <td class="col-links"></td></tr>
-        <tr>
-          <td class="extra" colspan="4">
-            <div class="empty log">No log output captured.</div></td></tr></tbody>
-      <tbody class="passed results-table-row">
-        <tr>
-          <td class="col-result">Passed</td>
-          <td class="col-name">fmdtools/sim/sample.py::fmdtools.sim.sample.FaultDomain.add_faults</td>
-          <td class="col-duration">0.01</td>
-          <td class="col-links"></td></tr>
-        <tr>
-          <td class="extra" colspan="4">
-            <div class="empty log">No log output captured.</div></td></tr></tbody>
-      <tbody class="passed results-table-row">
-        <tr>
-          <td class="col-result">Passed</td>
-          <td class="col-name">fmdtools/sim/sample.py::fmdtools.sim.sample.FaultDomain.add_singlecomp_modes</td>
-          <td class="col-duration">0.01</td>
-          <td class="col-links"></td></tr>
-        <tr>
-          <td class="extra" colspan="4">
-            <div class="empty log">No log output captured.</div></td></tr></tbody>
-      <tbody class="passed results-table-row">
-        <tr>
-          <td class="col-result">Passed</td>
-          <td class="col-name">fmdtools/sim/sample.py::fmdtools.sim.sample.FaultSample.add_fault_phases</td>
-          <td class="col-duration">0.01</td>
-          <td class="col-links"></td></tr>
-        <tr>
-          <td class="extra" colspan="4">
-            <div class="empty log">No log output captured.</div></td></tr></tbody>
-      <tbody class="passed results-table-row">
-        <tr>
-          <td class="col-result">Passed</td>
-          <td class="col-name">fmdtools/sim/sample.py::fmdtools.sim.sample.FaultSample.add_fault_times</td>
-          <td class="col-duration">0.01</td>
-          <td class="col-links"></td></tr>
-        <tr>
-          <td class="extra" colspan="4">
-            <div class="empty log">No log output captured.</div></td></tr></tbody>
-      <tbody class="passed results-table-row">
-        <tr>
-          <td class="col-result">Passed</td>
-          <td class="col-name">fmdtools/sim/sample.py::fmdtools.sim.sample.FaultSample.add_joint_fault_scenario</td>
-          <td class="col-duration">0.01</td>
-          <td class="col-links"></td></tr>
-        <tr>
-          <td class="extra" colspan="4">
-            <div class="empty log">No log output captured.</div></td></tr></tbody>
-      <tbody class="passed results-table-row">
-        <tr>
-          <td class="col-result">Passed</td>
-          <td class="col-name">fmdtools/sim/sample.py::fmdtools.sim.sample.FaultSample.add_single_fault_scenario</td>
-          <td class="col-duration">0.01</td>
-          <td class="col-links"></td></tr>
-        <tr>
-          <td class="extra" colspan="4">
-            <div class="empty log">No log output captured.</div></td></tr></tbody>
-      <tbody class="passed results-table-row">
-        <tr>
-          <td class="col-result">Passed</td>
-          <td class="col-name">fmdtools/sim/sample.py::fmdtools.sim.sample.ParameterDomain</td>
-          <td class="col-duration">0.00</td>
-          <td class="col-links"></td></tr>
-        <tr>
-          <td class="extra" colspan="4">
-            <div class="empty log">No log output captured.</div></td></tr></tbody>
-      <tbody class="passed results-table-row">
-        <tr>
-          <td class="col-result">Passed</td>
-          <td class="col-name">fmdtools/sim/sample.py::fmdtools.sim.sample.ParameterDomain.get_var_iters</td>
-          <td class="col-duration">0.00</td>
-          <td class="col-links"></td></tr>
-        <tr>
-          <td class="extra" colspan="4">
-            <div class="empty log">No log output captured.</div></td></tr></tbody>
-      <tbody class="passed results-table-row">
-        <tr>
-          <td class="col-result">Passed</td>
-          <td class="col-name">fmdtools/sim/sample.py::fmdtools.sim.sample.ParameterSample.add_variable_ranges</td>
-          <td class="col-duration">0.00</td>
-          <td class="col-links"></td></tr>
-        <tr>
-          <td class="extra" colspan="4">
-            <div class="empty log">No log output captured.</div></td></tr></tbody>
-      <tbody class="passed results-table-row">
-        <tr>
-          <td class="col-result">Passed</td>
-          <td class="col-name">fmdtools/sim/sample.py::fmdtools.sim.sample.ParameterSample.add_variable_replicates</td>
-          <td class="col-duration">0.00</td>
-          <td class="col-links"></td></tr>
-        <tr>
-          <td class="extra" colspan="4">
-            <div class="empty log">No log output captured.</div></td></tr></tbody>
-      <tbody class="passed results-table-row">
-        <tr>
-          <td class="col-result">Passed</td>
-          <td class="col-name">fmdtools/sim/sample.py::fmdtools.sim.sample.ParameterSample.add_variable_scenario</td>
-          <td class="col-duration">0.00</td>
-          <td class="col-links"></td></tr>
-        <tr>
-          <td class="extra" colspan="4">
-            <div class="empty log">No log output captured.</div></td></tr></tbody>
-      <tbody class="passed results-table-row">
-        <tr>
-          <td class="col-result">Passed</td>
-          <td class="col-name">fmdtools/sim/sample.py::fmdtools.sim.sample.ParameterSample.combine_orthogonal</td>
-          <td class="col-duration">0.00</td>
-          <td class="col-links"></td></tr>
-        <tr>
-          <td class="extra" colspan="4">
-            <div class="empty log">No log output captured.</div></td></tr></tbody>
-      <tbody class="passed results-table-row">
-        <tr>
-          <td class="col-result">Passed</td>
-          <td class="col-name">fmdtools/sim/sample.py::fmdtools.sim.sample.ParameterSample.combine_product</td>
-          <td class="col-duration">0.00</td>
-          <td class="col-links"></td></tr>
-        <tr>
-          <td class="extra" colspan="4">
-            <div class="empty log">No log output captured.</div></td></tr></tbody>
-      <tbody class="passed results-table-row">
-        <tr>
-          <td class="col-result">Passed</td>
-          <td class="col-name">fmdtools/sim/sample.py::fmdtools.sim.sample.ParameterSample.combine_random</td>
-          <td class="col-duration">0.00</td>
-          <td class="col-links"></td></tr>
-        <tr>
-          <td class="extra" colspan="4">
-            <div class="empty log">No log output captured.</div></td></tr></tbody>
-      <tbody class="passed results-table-row">
-        <tr>
-          <td class="col-result">Passed</td>
-          <td class="col-name">fmdtools/sim/sample.py::fmdtools.sim.sample.SampleApproach.add_faultdomain</td>
-          <td class="col-duration">0.01</td>
-          <td class="col-links"></td></tr>
-        <tr>
-          <td class="extra" colspan="4">
-            <div class="empty log">No log output captured.</div></td></tr></tbody>
-      <tbody class="passed results-table-row">
-        <tr>
-          <td class="col-result">Passed</td>
-          <td class="col-name">fmdtools/sim/sample.py::fmdtools.sim.sample.SampleApproach.add_faultsample</td>
-          <td class="col-duration">0.01</td>
-          <td class="col-links"></td></tr>
-        <tr>
-          <td class="extra" colspan="4">
-            <div class="empty log">No log output captured.</div></td></tr></tbody>
-      <tbody class="passed results-table-row">
-        <tr>
-          <td class="col-result">Passed</td>
-          <td class="col-name">fmdtools/sim/sample.py::fmdtools.sim.sample.combine_orthogonal</td>
-          <td class="col-duration">0.00</td>
-          <td class="col-links"></td></tr>
-        <tr>
-          <td class="extra" colspan="4">
-            <div class="empty log">No log output captured.</div></td></tr></tbody>
-      <tbody class="passed results-table-row">
-        <tr>
-          <td class="col-result">Passed</td>
-          <td class="col-name">fmdtools/sim/sample.py::fmdtools.sim.sample.combine_random</td>
-          <td class="col-duration">0.00</td>
-          <td class="col-links"></td></tr>
-        <tr>
-          <td class="extra" colspan="4">
-            <div class="empty log">No log output captured.</div></td></tr></tbody>
-      <tbody class="passed results-table-row">
-        <tr>
-          <td class="col-result">Passed</td>
-          <td class="col-name">fmdtools/sim/sample.py::fmdtools.sim.sample.sample_times_even</td>
-          <td class="col-duration">0.00</td>
-          <td class="col-links"></td></tr>
-        <tr>
-          <td class="extra" colspan="4">
-            <div class="empty log">No log output captured.</div></td></tr></tbody>
-      <tbody class="passed results-table-row">
-        <tr>
-          <td class="col-result">Passed</td>
-          <td class="col-name">fmdtools/sim/sample.py::fmdtools.sim.sample.sample_times_quad</td>
-          <td class="col-duration">0.00</td>
-          <td class="col-links"></td></tr>
-        <tr>
-          <td class="extra" colspan="4">
-            <div class="empty log">No log output captured.</div></td></tr></tbody>
-      <tbody class="passed results-table-row">
-        <tr>
-          <td class="col-result">Passed</td>
-          <td class="col-name">fmdtools/sim/scenario.py::fmdtools.sim.scenario.Sequence</td>
-          <td class="col-duration">0.00</td>
-          <td class="col-links"></td></tr>
-        <tr>
-          <td class="extra" colspan="4">
-            <div class="empty log">No log output captured.</div></td></tr></tbody>
-      <tbody class="passed results-table-row">
-        <tr>
-          <td class="col-result">Passed</td>
-          <td class="col-name">fmdtools/sim/scenario.py::fmdtools.sim.scenario.Sequence.update_sequence</td>
-          <td class="col-duration">0.00</td>
-          <td class="col-links"></td></tr>
-        <tr>
-          <td class="extra" colspan="4">
-            <div class="empty log">No log output captured.</div></td></tr></tbody>
-      <tbody class="passed results-table-row">
-        <tr>
-          <td class="col-result">Passed</td>
-          <td class="col-name">fmdtools/sim/search.py::fmdtools.sim.search.DisturbanceProblem.__init__</td>
-          <td class="col-duration">0.00</td>
-          <td class="col-links"></td></tr>
-        <tr>
-          <td class="extra" colspan="4">
-            <div class="empty log">No log output captured.</div></td></tr></tbody>
-      <tbody class="passed results-table-row">
-        <tr>
-          <td class="col-result">Passed</td>
-          <td class="col-name">fmdtools/sim/search.py::fmdtools.sim.search.HistoryObjective</td>
-          <td class="col-duration">0.00</td>
-          <td class="col-links"></td></tr>
-        <tr>
-          <td class="extra" colspan="4">
-            <div class="empty log">No log output captured.</div></td></tr></tbody>
-      <tbody class="passed results-table-row">
-        <tr>
-          <td class="col-result">Passed</td>
-          <td class="col-name">fmdtools/sim/search.py::fmdtools.sim.search.ParameterSimProblem</td>
-          <td class="col-duration">0.02</td>
-          <td class="col-links"></td></tr>
-        <tr>
-          <td class="extra" colspan="4">
-            <div class="empty log">No log output captured.</div></td></tr></tbody>
-      <tbody class="passed results-table-row">
-        <tr>
-          <td class="col-result">Passed</td>
-          <td class="col-name">fmdtools/sim/search.py::fmdtools.sim.search.ProblemArchitecture</td>
-          <td class="col-duration">0.01</td>
-          <td class="col-links"></td></tr>
-        <tr>
-          <td class="extra" colspan="4">
-            <div class="empty log">No log output captured.</div></td></tr></tbody>
-      <tbody class="passed results-table-row">
-        <tr>
-          <td class="col-result">Passed</td>
-          <td class="col-name">fmdtools/sim/search.py::fmdtools.sim.search.ProblemArchitecture.update_full_problem</td>
-          <td class="col-duration">0.00</td>
-          <td class="col-links"></td></tr>
-        <tr>
-          <td class="extra" colspan="4">
-            <div class="empty log">No log output captured.</div></td></tr></tbody>
-      <tbody class="passed results-table-row">
-        <tr>
-          <td class="col-result">Passed</td>
-          <td class="col-name">fmdtools/sim/search.py::fmdtools.sim.search.ProblemArchitecture.update_problem</td>
-          <td class="col-duration">0.00</td>
-          <td class="col-links"></td></tr>
-        <tr>
-          <td class="extra" colspan="4">
-            <div class="empty log">No log output captured.</div></td></tr></tbody>
-      <tbody class="passed results-table-row">
-        <tr>
-          <td class="col-result">Passed</td>
-          <td class="col-name">fmdtools/sim/search.py::fmdtools.sim.search.ResultConstraint.con_from_value</td>
-          <td class="col-duration">0.00</td>
-          <td class="col-links"></td></tr>
-        <tr>
-          <td class="extra" colspan="4">
-            <div class="empty log">No log output captured.</div></td></tr></tbody>
-      <tbody class="passed results-table-row">
-        <tr>
-          <td class="col-result">Passed</td>
-          <td class="col-name">fmdtools/sim/search.py::fmdtools.sim.search.ResultObjective.get_result_value</td>
-          <td class="col-duration">0.00</td>
-          <td class="col-links"></td></tr>
-        <tr>
-          <td class="extra" colspan="4">
-            <div class="empty log">No log output captured.</div></td></tr></tbody>
-      <tbody class="passed results-table-row">
-        <tr>
-          <td class="col-result">Passed</td>
-          <td class="col-name">fmdtools/sim/search.py::fmdtools.sim.search.SimpleProblem</td>
-          <td class="col-duration">0.00</td>
-          <td class="col-links"></td></tr>
-        <tr>
-          <td class="extra" colspan="4">
-            <div class="empty log">No log output captured.</div></td></tr></tbody>
-      <tbody class="passed results-table-row">
-        <tr>
-          <td class="col-result">Passed</td>
-          <td class="col-name">fmdtools/sim/search.py::fmdtools.sim.search.SingleFaultScenarioProblem</td>
-          <td class="col-duration">0.00</td>
-          <td class="col-links"></td></tr>
-        <tr>
-          <td class="extra" colspan="4">
-            <div class="empty log">No log output captured.</div></td></tr></tbody>
-      <tbody class="passed results-table-row">
-        <tr>
-          <td class="col-result">Passed</td>
-          <td class="col-name">tests/test_graph.py::ModelGraphTests::test_fault_plot</td>
-          <td class="col-duration">0.11</td>
-          <td class="col-links"></td></tr>
-        <tr>
-          <td class="extra" colspan="4">
-            <div class="empty log">No log output captured.</div></td></tr></tbody>
-      <tbody class="passed results-table-row">
-        <tr>
-          <td class="col-result">Passed</td>
-          <td class="col-name">tests/test_graph.py::ModelGraphTests::test_flowgraph_plot</td>
-          <td class="col-duration">0.21</td>
-          <td class="col-links"></td></tr>
-        <tr>
-          <td class="extra" colspan="4">
-            <div class="empty log">No log output captured.</div></td></tr></tbody>
-      <tbody class="passed results-table-row">
-        <tr>
-          <td class="col-result">Passed</td>
-          <td class="col-name">tests/test_graph.py::ModelGraphTests::test_fxngraph_plot</td>
-          <td class="col-duration">0.09</td>
-          <td class="col-links"></td></tr>
-        <tr>
-          <td class="extra" colspan="4">
-            <div class="empty log">No log output captured.</div></td></tr></tbody>
-      <tbody class="passed results-table-row">
-        <tr>
-          <td class="col-result">Passed</td>
-          <td class="col-name">tests/test_graph.py::ModelGraphTests::test_modelgraph_plot</td>
-          <td class="col-duration">0.17</td>
-          <td class="col-links"></td></tr>
-        <tr>
-          <td class="extra" colspan="4">
-            <div class="empty log">No log output captured.</div></td></tr></tbody>
-      <tbody class="passed results-table-row">
-        <tr>
-          <td class="col-result">Passed</td>
-          <td class="col-name">tests/test_graph.py::ModelGraphTests::test_result_from_plot</td>
-          <td class="col-duration">0.08</td>
-          <td class="col-links"></td></tr>
-        <tr>
-          <td class="extra" colspan="4">
-            <div class="empty log">No log output captured.</div></td></tr></tbody>
-      <tbody class="passed results-table-row">
-        <tr>
-          <td class="col-result">Passed</td>
-          <td class="col-name">tests/test_graph.py::ModelGraphTests::test_typegraph_plot</td>
-          <td class="col-duration">0.05</td>
-          <td class="col-links"></td></tr>
-        <tr>
-          <td class="extra" colspan="4">
-            <div class="empty log">No log output captured.</div></td></tr></tbody>
-      <tbody class="passed results-table-row">
-        <tr>
-          <td class="col-result">Passed</td>
-          <td class="col-name">tests/test_packages.py::define_Tests::test_pdf_translation_options</td>
           <td class="col-duration">0.00</td>
           <td class="col-links"></td></tr>
         <tr>

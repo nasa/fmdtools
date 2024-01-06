@@ -226,7 +226,7 @@ class GenericFxn(Function):
     """
 
     def __init__(self, name='', flows={}, args_f={}, **kwargs):
-        super().__init__(name=name, flows=flows, **kwargs)
+        super().__init__(name=name, flows={}, **kwargs)
 
 
 if __name__ == "__main__":

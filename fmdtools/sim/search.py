@@ -592,7 +592,7 @@ class ParameterSimProblem(BaseSimProblem):
     Examples
     --------
     >>> from fmdtools.sim.sample import expd
-    >>> from fmdtools.define.block import ExampleFunction
+    >>> from fmdtools.define.block.function import ExampleFunction
 
     # below, we show basic setup of a parameter problem where objectives get values
     # from the sim at particular times.
@@ -682,7 +682,8 @@ class ParameterSimProblem(BaseSimProblem):
         end_time = self.get_end_time()
         mdl_kwargs = {'p': p, 'sp': {'end_time': end_time}}
         desired_result = self.obj_con_des_res()
-        all_res = self.prop_method(self.mdl, *self.args,
+        all_res = self.prop_method(self.mdl.new(),
+                                   *self.args,
                                    mdl_kwargs=mdl_kwargs,
                                    desired_result=desired_result,
                                    showprogress=False,
@@ -776,7 +777,8 @@ class SingleFaultScenarioProblem(ScenarioProblem):
 
     Examples
     --------
-    >>> ex_scenprob = SingleFaultScenarioProblem(ExampleFunction(), ("examplefxnblock", "short"))
+    >>> from fmdtools.define.block.function import ExampleFunction
+    >>> ex_scenprob = SingleFaultScenarioProblem(ExampleFunction(), ("examplefunction", "short"))
     >>> ex_scenprob.add_result_objective("f1", "s.y", time=5)
 
     # objective value should be 1.0 (init value) + 3 * time_with_fault
@@ -871,6 +873,7 @@ class DisturbanceProblem(ScenarioProblem):
 
         Examples
         --------
+        >>> from fmdtools.define.block.function import ExampleFunction
         >>> ex_dp = DisturbanceProblem(ExampleFunction(), 3, "s.y")
         >>> ex_dp.add_result_objective("f1", "s.y", time=5)
 
@@ -1412,7 +1415,7 @@ class ProblemArchitecture(BaseProblem):
         Which should then propagate to downstream sims:
         >>> ex_pa.update_problem("ex_scenprob")
         >>> ex_pa.problems["ex_scenprob"]
-        SingleScenarioProblem(examplefxnblock, short) with:
+        SingleScenarioProblem(examplefunction, short) with:
         VARIABLES
          -time                                                       1.0000
         OBJECTIVES
@@ -1692,6 +1695,23 @@ class DynamicInterface():
 
 
 if __name__ == "__main__":
+    
+    from fmdtools.sim.sample import expd
+    from fmdtools.define.block.function import ExampleFunction
+    exprob = ParameterSimProblem(ExampleFunction("ex"), expd, "one_fault", "ex", "short", 2)
+    exprob.add_result_objective("f1", "s.y", time=3)
+    exprob.add_result_objective("f2", "s.y", time=5)
+    exprob.f1(1, 1)
+
+    exprob.f2(1, 1)
+    exf = ExampleFunction()
+    res, hist = propagate.one_fault(exf, 'examplefunction', 'short', 2,
+                                    desired_result = {3: ['s.y'], 5: ['s.y']},
+                                    mdl_kwargs={'p': expd(1, 0)})
+    res, hist = propagate.one_fault(exf, 'examplefunction', 'short', 2,
+                                    desired_result = {3: ['s.y'], 5: ['s.y']},
+                                    mdl_kwargs={'p': expd(1, 1), 'sp': {'end_time': 5}},
+                                    staged=True)
     import doctest
     doctest.testmod(verbose=True)
     ex_pa.show_sequence()
