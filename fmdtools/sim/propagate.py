@@ -475,9 +475,9 @@ def sequence(mdl, seq={}, faultseq={}, disturbances={}, scen={}, rate=np.NaN,
                         **run_kwarg)
     nomresult, nomhist, nomscen, mdls, t_end_nom = n_outs
 
-    mdl = [*mdls.values()][0]
+    mdl_f = [*mdls.values()][0]
 
-    result, faulthist, _, t_end = prop_one_scen(mdl,
+    result, faulthist, _, t_end = prop_one_scen(mdl_f,
                                                 scen,
                                                 **sim_kwarg,
                                                 nomhist=nomhist,

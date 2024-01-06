@@ -236,7 +236,7 @@ class Simulable(BaseObject):
         """
         return Result({'rate': scen.rate, 'cost': 1, 'expected_cost': scen.rate})
 
-    def new_params(self, p={}, sp={}, r={}, track={}, **kwargs):
+    def new_params(self, name='', p={}, sp={}, r={}, track={}, **kwargs):
         """
         Create a copy of the defining immutable parameters for use in a new Simulable.
 
@@ -257,6 +257,7 @@ class Simulable(BaseObject):
             Dict with immutable parameters/options. (e.g., 'p', 'sp', 'track')
         """
         param_dict = {}
+
         if hasattr(self, 'p'):
             param_dict['p'] = self.p.copy_with_vals(**p)
         if hasattr(self, 'sp'):
@@ -273,7 +274,7 @@ class Simulable(BaseObject):
 
         Can initiate with with changes to mutable parameters (p, sp, track, rand etc.).
         """
-        return self.__class__(**self.new_params(**kwargs))
+        return self.__class__(name=self.name, **self.new_params(**kwargs))
 
     def get_fxns(self):
         """

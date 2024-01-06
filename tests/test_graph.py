@@ -7,7 +7,7 @@ from examples.pump.ex_pump import Pump
 from examples.rover.rover_model import Rover
 from fmdtools.analyze.graph import FunctionArchitectureGraph
 from fmdtools.analyze.graph import FunctionArchitectureFxnGraph
-from fmdtools.analyze.graph import FunctionArchitectureFlowgraph
+from fmdtools.analyze.graph import FunctionArchitectureFlowGraph
 from fmdtools.analyze.graph import FunctionArchitectureTypeGraph
 from fmdtools.analyze.common import suite_for_plots
 from fmdtools.sim import propagate
@@ -41,13 +41,13 @@ class ModelGraphTests(unittest.TestCase):
         b.draw()
 
     def test_flowgraph_plot(self):
-        a = FunctionArchitectureFlowgraph(self.mdl)
+        a = FunctionArchitectureFlowGraph(self.mdl)
         # a.set_edge_labels(title='label', subtext='functions')
         a.draw()
         a.set_exec_order(self.mdl)
         a.draw()
 
-        b = FunctionArchitectureFlowgraph(self.rvr)
+        b = FunctionArchitectureFlowGraph(self.rvr)
         b.set_exec_order(self.rvr)
         b.draw(title="Should show Order, timestep, and dynamic properties of FlowGraph")
 
