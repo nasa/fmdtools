@@ -164,7 +164,7 @@ class Result(UserDict):
     >>> r
     x:                                    10
 
-    It also can return a flattened version of its nested sturcture via Result.flatten(),
+    It also can return a flattened version of its nested structure via Result.flatten(),
     e.g.:
 
     >>> r = Result(y=Result(z=1))

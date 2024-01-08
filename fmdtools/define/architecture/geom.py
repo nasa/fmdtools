@@ -24,6 +24,7 @@ class GeomArchitecture(Architecture):
     Examples
     --------
     for an architecture with the geoms already defined:
+
     >>> class ExGeomArch(GeomArchitecture):
     ...    def init_architecture(self):
     ...        self.add_point("ex_point", ExPoint)
