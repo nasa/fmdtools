@@ -4,16 +4,16 @@ Glossary
 .. glossary::
 
 	Function
-		A piece of functionality in a system which has its own defined behavior, modes, and flow connections, and may be further instantiated by a :term:`component architecture` or :term:`action sequence graph`. In general, functions are the main major building block of a model defining how the different pieces of the system behave. Functions in fmdtools are specified by extending the :class:`fmdtools.define.blockFunction` class.
+		A piece of functionality in a system which has its own defined behavior, modes, and flow connections, and may be further instantiated by a :term:`component architecture` or :term:`action sequence graph`. In general, functions are the main major building block of a model defining how the different pieces of the system behave. Functions in fmdtools are specified by extending the :class:`fmdtools.define.block.function.Function` class.
 		
 	Flow
-		A data structure which connects functions--traditionally energy, material, or signal. Defined using the :class:`fmdtools.define.flow.Flow` class.
+		A data structure which connects functions--traditionally energy, material, or signal. Defined using the :class:`fmdtools.define.flow.base.Flow` class.
 	
 	Role
 		A defined attribute of an fmdtools class which refers to a user-defined (or default) subclass of a corresponding fmdtools data structure. For example, Blocks have the container `Block.s` (for state) which may be filled by a subclass of :class:`fmdtools.define.container.state.State`.
 
 	Internal Flow
-		A flow object that is internal to a :class:`fmdtools.define.block.Function` which is not present in the overall model definition.
+		A flow object that is internal to a :class:`fmdtools.define.block.function.Function` which is not present in the overall model definition.
 	
 	Model
 		A simulation that defines system behavior. Models contain functions and flows, their graph connections, parameters related to the simulation configuration, as well as methods for classifying simulations. Models are specified using the :class:`fmdtools.define.architecture.function.Model`: class.
@@ -25,10 +25,10 @@ Glossary
 		A view of simulation construct connections and/or relationships embodied by the :class:`fmdtools.analyze.graph.Graph` class and sub-classes (which uses networkx to represent the structure itself).
 	
 	Component
-		A physical that embodies specific behavior for a :term:`function`. May have :term:`mode` s and :term:`behavior` s of its own. Specified by extending the :class:`fmdtools.define.block.Component` class.
+		A physical that embodies specific behavior for a :term:`function`. May have :term:`mode` s and :term:`behavior` s of its own. Specified by extending the :class:`fmdtools.define.block.component.Component` class.
 		
 	Component Architecture
-		The physical embodiment of a :term:`function` that encompasses multiple :term:`Component` s. Represented via the :class:`fmdtools.define.block.ComponentArchitecture` class. 
+		The physical embodiment of a :term:`function` that encompasses multiple :term:`Component` s. Represented via the :class:`fmdtools.define.architecture.component.ComponentArchitecture` class. 
 	
 	Mode
 		Discrete modifications of a :term:`behavior` specified as entries in the :meth:`fmdtools.define.container.mode.Mode` class. Often used to control if/else statements in a :meth:`fmdtools.define.Block.behavior` method.
@@ -40,7 +40,7 @@ Glossary
 		Defined :term:`mode` that the system progresses through as a part of its desired functioning. For example, a light switch may be in "on" and "off" modes.
 
 	Action Sequence Graph
-		An instance of the :class:`fmdtools.define.block.ASG` which embodies a (human or autonomous) :term:`agent` 's sequence of tasks which it performs to accomplish a certain function. 
+		An instance of the :class:`fmdtools.define.architecture.ActionArchitecture` which embodies a (human or autonomous) :term:`agent` 's sequence of tasks which it performs to accomplish a certain function. 
 	
 	Agent
 		An actor which controls behaviors in a system. May be modelled as a :term:`function`.
@@ -49,7 +49,7 @@ Glossary
 		The uncontrolled aspect of a system which may effect system inputs and behaviors. May be modelled as a :term:`function`.
 	
 	Action
-		A specific task to be performed by an :term:`agent` used to represent human/autonomous operations. May be specified by extending the :class:`fmdtools.define.block.Action` class and added to a :class:`fmdtools.define.block.Function` as a part of an Action Sequence Graph :class:`fmdtools.define.block.ASG`
+		A specific task to be performed by an :term:`agent` used to represent human/autonomous operations. May be specified by extending the :class:`fmdtools.define.block.action.Action` class and added to a :class:`fmdtools.define.block.function.Function` as a part of an Action Sequence Graph :class:`fmdtools.define.architecture.action.ActionArchitecture`
 	
 	Rate
 		The expected occurence (frequency) of a given :term:`mode`, which may be specified in a number of ways using :meth:`fmdtools.define.container.mode.Mode.faultmodes`.
@@ -64,7 +64,7 @@ Glossary
 		The end-state classification given from :meth:`fmdtools.define.block.Simulable.find_classification`.
 	
 	Scenario
-		A specific set of inputs to a simulation, including :class:`fmdtools.define.architecture.function.Model` parameters, :term:`Fault Mode` s, and :term:`Disturbances`. Defined in :class:`fmdtools.sim.scenario.Scenario`.
+		A specific set of inputs to a simulation, including :class:`fmdtools.define.architecture.function.FunctionArchitecture` parameters, :term:`Fault Mode` s, and :term:`Disturbances`. Defined in :class:`fmdtools.sim.scenario.Scenario`.
 		
 	Disturbances
 		A specific sequence of variable values over time which may modify system behavior.
@@ -82,7 +82,7 @@ Glossary
 		The progression of model states over time. Defined for each function using :meth:`fmdtools.define.block.Function.dynamic_behavior`, which runs once per timestep.
 	
 	Propagation
-		The simulation of :class:`fmdtools.define.architecture.function.Model` :term:`behavior` s, including the passing of :term:`flow` s between :term:`function` s and the progression of model states over time.
+		The simulation of :class:`fmdtools.define.architecture.function.FunctionArchitecture` :term:`behavior` s, including the passing of :term:`flow` s between :term:`function` s and the progression of model states over time.
 	
 	Resilience
 		The expectation of defined performance metrics over time over a set of hazardous :term:`scenario` s, often defined in terms of the deviation from their nominal values.

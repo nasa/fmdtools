@@ -1,4 +1,4 @@
-fmdtools.analyze package
+fmdtools.analyze
 ===========================
 
 .. image:: figures/analyze_module_structure.png
