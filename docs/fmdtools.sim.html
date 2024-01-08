@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>fmdtools.sim &mdash; fmdtools 2.0-beta-3 documentation</title>
+  <title>fmdtools.sim &mdash; fmdtools 2.0-rc-1 documentation</title>
       <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
     <link rel="shortcut icon" href="../_static/fmdtools_ico.ico"/>
@@ -21,8 +21,8 @@
     <script src="../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="fmdtools.analyze package" href="fmdtools.analyze.html" />
-    <link rel="prev" title="fmdtools.define package" href="fmdtools.define.html" /> 
+    <link rel="next" title="fmdtools.analyze" href="fmdtools.analyze.html" />
+    <link rel="prev" title="fmdtools.define.object" href="fmdtools.define.object.html" /> 
 </head>
 
 <body class="wy-body-for-nav"> 
@@ -70,7 +70,7 @@
 <li class="toctree-l2"><a class="reference internal" href="Development%20Guide.html#intro-to-fmdtools">Intro to fmdtools</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="Intro_to_fmdtools.html">Intro to resilience modelling, simulation, and visualization in Python with fmdtools.</a><ul>
 <li class="toctree-l4"><a class="reference internal" href="Intro_to_fmdtools.html#author-daniel-hulse">Author: Daniel Hulse</a></li>
-<li class="toctree-l4"><a class="reference internal" href="Intro_to_fmdtools.html#version-2-0-beta-3">Version: 2.0-beta-3</a></li>
+<li class="toctree-l4"><a class="reference internal" href="Intro_to_fmdtools.html#version-2-0-rc-1">Version: 2.0-rc-1</a></li>
 </ul>
 </li>
 <li class="toctree-l3"><a class="reference internal" href="Intro_to_fmdtools.html#overview">Overview</a></li>
@@ -282,26 +282,58 @@
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="../examples/Examples.html#multiflow-demo">Multiflow Demo</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="../examples/multiflow_demo/Multiflow_and_Commsflow_Demonstration.html">Demonstration on Using MultiFlow and CommsFlow</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../examples/multiflow_demo/Multiflow_and_Commsflow_Demonstration.html">Demonstration on Using MultiFlow and CommsFlow</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../examples/multiflow_demo/Multiflow_and_Commsflow_Demonstration.html#Bulding-Flows">Bulding Flows</a></li>
+</ul>
+</li>
 </ul>
 </li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="Glossary.html">Glossary</a></li>
 <li class="toctree-l1 current"><a class="reference internal" href="fmdtools.html">Module Reference</a><ul class="current">
-<li class="toctree-l2"><a class="reference internal" href="fmdtools.define.html">fmdtools.define package</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="fmdtools.define.html#fmdtools-define-block">fmdtools.define.block</a></li>
-<li class="toctree-l3"><a class="reference internal" href="fmdtools.define.html#module-fmdtools.define.common">fmdtools.define.common</a></li>
-<li class="toctree-l3"><a class="reference internal" href="fmdtools.define.html#module-fmdtools.define.flow">fmdtools.define.flow</a></li>
-<li class="toctree-l3"><a class="reference internal" href="fmdtools.define.html#module-fmdtools.define.mode">fmdtools.define.mode</a></li>
-<li class="toctree-l3"><a class="reference internal" href="fmdtools.define.html#fmdtools-define-model">fmdtools.define.model</a></li>
-<li class="toctree-l3"><a class="reference internal" href="fmdtools.define.html#module-fmdtools.define.parameter">fmdtools.define.parameter</a></li>
-<li class="toctree-l3"><a class="reference internal" href="fmdtools.define.html#module-fmdtools.define.rand">fmdtools.define.rand</a></li>
-<li class="toctree-l3"><a class="reference internal" href="fmdtools.define.html#module-fmdtools.define.state">fmdtools.define.state</a></li>
-<li class="toctree-l3"><a class="reference internal" href="fmdtools.define.html#module-fmdtools.define.time">fmdtools.define.time</a></li>
-<li class="toctree-l3"><a class="reference internal" href="fmdtools.define.html#module-fmdtools.define.geom">fmdtools.define.geom</a></li>
+<li class="toctree-l2"><a class="reference internal" href="fmdtools.define.html">fmdtools.define</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="fmdtools.define.architecture.html">fmdtools.define.architecture</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="fmdtools.define.architecture.html#fmdtools-define-architecture-base">fmdtools.define.architecture.base</a></li>
+<li class="toctree-l4"><a class="reference internal" href="fmdtools.define.architecture.html#fmdtools-define-architecture-action">fmdtools.define.architecture.action</a></li>
+<li class="toctree-l4"><a class="reference internal" href="fmdtools.define.architecture.html#fmdtools-define-architecture-component">fmdtools.define.architecture.component</a></li>
+<li class="toctree-l4"><a class="reference internal" href="fmdtools.define.architecture.html#fmdtools-define-architecture-function">fmdtools.define.architecture.function</a></li>
+<li class="toctree-l4"><a class="reference internal" href="fmdtools.define.architecture.html#fmdtools-define-architecture-geom">fmdtools.define.architecture.geom</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="fmdtools.define.block.html">fmdtools.define.block</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="fmdtools.define.block.html#module-fmdtools.define.block.base">fmdtools.define.block.base</a></li>
+<li class="toctree-l4"><a class="reference internal" href="fmdtools.define.block.html#module-fmdtools.define.block.action">fmdtools.define.block.action</a></li>
+<li class="toctree-l4"><a class="reference internal" href="fmdtools.define.block.html#module-fmdtools.define.block.component">fmdtools.define.block.component</a></li>
+<li class="toctree-l4"><a class="reference internal" href="fmdtools.define.block.html#fmdtools-define-block-function">fmdtools.define.block.function</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="fmdtools.define.container.html">fmdtools.define.container</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="fmdtools.define.container.html#fmdtools-define-container-base">fmdtools.define.container.base</a></li>
+<li class="toctree-l4"><a class="reference internal" href="fmdtools.define.container.html#module-0">fmdtools.define.container.mode</a></li>
+<li class="toctree-l4"><a class="reference internal" href="fmdtools.define.container.html#module-fmdtools.define.container.state">fmdtools.define.container.state</a></li>
+<li class="toctree-l4"><a class="reference internal" href="fmdtools.define.container.html#fmdtools-define-container-parameter">fmdtools.define.container.parameter</a></li>
+<li class="toctree-l4"><a class="reference internal" href="fmdtools.define.container.html#module-fmdtools.define.container.rand">fmdtools.define.container.rand</a></li>
+<li class="toctree-l4"><a class="reference internal" href="fmdtools.define.container.html#module-fmdtools.define.container.time">fmdtools.define.container.time</a></li>
+<li class="toctree-l4"><a class="reference internal" href="fmdtools.define.container.html#fmdtools-define-container-geom">fmdtools.define.container.geom</a></li>
+<li class="toctree-l4"><a class="reference internal" href="fmdtools.define.container.html#fmdtools-define-container-coords">fmdtools.define.container.coords</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="fmdtools.define.flow.html">fmdtools.define.flow</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="fmdtools.define.flow.html#module-fmdtools.define.flow.base">fmdtools.define.flow.base</a></li>
+<li class="toctree-l4"><a class="reference internal" href="fmdtools.define.flow.html#module-fmdtools.define.flow.multiflow">fmdtools.define.flow.multiflow</a></li>
+<li class="toctree-l4"><a class="reference internal" href="fmdtools.define.flow.html#module-fmdtools.define.flow.commsflow">fmdtools.define.flow.commsflow</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="fmdtools.define.object.html">fmdtools.define.object</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="fmdtools.define.object.html#module-fmdtools.define.object.base">fmdtools.define.object.base</a></li>
+<li class="toctree-l4"><a class="reference internal" href="fmdtools.define.object.html#module-fmdtools.define.object.timer">fmdtools.define.object.timer</a></li>
+<li class="toctree-l4"><a class="reference internal" href="fmdtools.define.object.html#module-fmdtools.define.object.geom">fmdtools.define.object.geom</a></li>
+<li class="toctree-l4"><a class="reference internal" href="fmdtools.define.object.html#module-fmdtools.define.object.coords">fmdtools.define.object.coords</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="fmdtools.define.html#fmdtools-define-base">fmdtools.define.base</a></li>
 <li class="toctree-l3"><a class="reference internal" href="fmdtools.define.html#module-fmdtools.define.environment">fmdtools.define.environment</a></li>
-<li class="toctree-l3"><a class="reference internal" href="fmdtools.define.html#module-fmdtools.define.coords">fmdtools.define.coords</a></li>
 </ul>
 </li>
 <li class="toctree-l2 current"><a class="current reference internal" href="#">fmdtools.sim</a><ul>
@@ -311,7 +343,7 @@
 <li class="toctree-l3"><a class="reference internal" href="#module-fmdtools.sim.search">fmdtools.sim.search</a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="fmdtools.analyze.html">fmdtools.analyze package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="fmdtools.analyze.html">fmdtools.analyze</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="fmdtools.analyze.html#module-fmdtools.analyze.common">fmdtools.analyze.common</a></li>
 <li class="toctree-l3"><a class="reference internal" href="fmdtools.analyze.html#module-fmdtools.analyze.result">fmdtools.analyze.result</a></li>
 <li class="toctree-l3"><a class="reference internal" href="fmdtools.analyze.html#module-fmdtools.analyze.history">fmdtools.analyze.history</a></li>
@@ -363,7 +395,7 @@
 <section id="fmdtools-sim-propagate">
 <h2>fmdtools.sim.propagate<a class="headerlink" href="#fmdtools-sim-propagate" title="Permalink to this heading"></a></h2>
 <a class="reference internal image-reference" href="../_images/simulation_types.png"><img alt="../_images/simulation_types.png" src="../_images/simulation_types.png" style="width: 800px;" /></a>
-<p>The <a class="reference internal" href="#module-fmdtools.sim.propagate" title="fmdtools.sim.propagate"><code class="xref py py-mod docutils literal notranslate"><span class="pre">fmdtools.sim.propagate</span></code></a> module is used to simulate the behaviors of a <a class="reference internal" href="fmdtools.define.html#fmdtools.define.block.Simulable" title="fmdtools.define.block.Simulable"><code class="xref py py-class docutils literal notranslate"><span class="pre">fmdtools.define.block.Simulable</span></code></a> (<cite>Model</cite> or <cite>Block</cite>) with and without faults. As shown above, each of the methods (described below) fit a given simulation use-case for resilience assessment–single/multiple scenarios, in nominal/faulty scenarios, and at a single set or multiple sets of parameters.</p>
+<p>The <a class="reference internal" href="#module-fmdtools.sim.propagate" title="fmdtools.sim.propagate"><code class="xref py py-mod docutils literal notranslate"><span class="pre">fmdtools.sim.propagate</span></code></a> module is used to simulate the behaviors of a <code class="xref py py-class docutils literal notranslate"><span class="pre">fmdtools.define.block.Simulable</span></code> (<cite>Model</cite> or <cite>Block</cite>) with and without faults. As shown above, each of the methods (described below) fit a given simulation use-case for resilience assessment–single/multiple scenarios, in nominal/faulty scenarios, and at a single set or multiple sets of parameters.</p>
 <span class="target" id="module-fmdtools.sim.propagate"></span><p>Description: functions to propagate faults through a user-defined fault model.</p>
 <p>Main Methods:</p>
 <ul class="simple">
@@ -416,7 +448,7 @@ timestep.</p></li>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>mdl</strong> (<a class="reference internal" href="fmdtools.define.html#fmdtools.define.block.Simulable" title="fmdtools.define.block.Simulable"><em>Simulable</em></a>) – Model with or without a given end condition and simparam</p></li>
+<li><p><strong>mdl</strong> (<a class="reference internal" href="fmdtools.define.block.html#fmdtools.define.block.base.Simulable" title="fmdtools.define.block.base.Simulable"><em>Simulable</em></a>) – Model with or without a given end condition and simparam</p></li>
 <li><p><strong>use_end_condition</strong> (<em>bool</em>) – Whether to use the end condition</p></li>
 <li><p><strong>t</strong> (<em>float</em>) – time.</p></li>
 </ul>
@@ -454,23 +486,6 @@ of scenarios</p>
 </dd></dl>
 
 <dl class="py function">
-<dt class="sig sig-object py" id="fmdtools.sim.propagate.copy_staged">
-<span class="sig-prename descclassname"><span class="pre">fmdtools.sim.propagate.</span></span><span class="sig-name descname"><span class="pre">copy_staged</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mdl</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.sim.propagate.copy_staged" title="Permalink to this definition"></a></dt>
-<dd><p>Copies the model when used in staged execution.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>mdl</strong> (<a class="reference internal" href="fmdtools.define.html#fmdtools.define.block.Simulable" title="fmdtools.define.block.Simulable"><em>Simulable</em></a>) – Model to copy.</p>
-</dd>
-<dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p><strong>mdl</strong> – Copy of the model with corresponding history</p>
-</dd>
-<dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p><a class="reference internal" href="fmdtools.define.html#fmdtools.define.block.Simulable" title="fmdtools.define.block.Simulable">Simulable</a></p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py function">
 <dt class="sig sig-object py" id="fmdtools.sim.propagate.exec_nom_helper">
 <span class="sig-prename descclassname"><span class="pre">fmdtools.sim.propagate.</span></span><span class="sig-name descname"><span class="pre">exec_nom_helper</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mdl</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">scen</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">name</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.sim.propagate.exec_nom_helper" title="Permalink to this definition"></a></dt>
 <dd><p>Helper function for executing nominal scenarios</p>
@@ -489,7 +504,7 @@ nominal model history.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>mdl</strong> (<a class="reference internal" href="fmdtools.define.html#fmdtools.define.block.Simulable" title="fmdtools.define.block.Simulable"><em>Simulable</em></a>) – The model to inject faults in.</p></li>
+<li><p><strong>mdl</strong> (<a class="reference internal" href="fmdtools.define.block.html#fmdtools.define.block.base.Simulable" title="fmdtools.define.block.base.Simulable"><em>Simulable</em></a>) – The model to inject faults in.</p></li>
 <li><p><strong>scen</strong> (<em>scenario</em>) – scenario used to define time and faults where the fault is to be injected</p></li>
 <li><p><strong>nomhist</strong> (<a class="reference internal" href="fmdtools.analyze.html#fmdtools.analyze.history.History" title="fmdtools.analyze.history.History"><em>History</em></a>) – history of results in the nominal model run</p></li>
 <li><p><strong>save_args</strong> (<em>dict</em>) – Save dictionary to use in save_helper defining when/how to save the dictionary</p></li>
@@ -521,7 +536,7 @@ See multiprocessing documentation.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>mdl</strong> (<a class="reference internal" href="fmdtools.define.html#fmdtools.define.block.Simulable" title="fmdtools.define.block.Simulable"><em>Simulable</em></a>) – The model to inject faults in.</p></li>
+<li><p><strong>mdl</strong> (<a class="reference internal" href="fmdtools.define.block.html#fmdtools.define.block.base.Simulable" title="fmdtools.define.block.base.Simulable"><em>Simulable</em></a>) – The model to inject faults in.</p></li>
 <li><p><strong>fs</strong> (<em>FaultSample/SampleApproach</em>) – FaultSample used to define the list of faults and sample time for the model.</p></li>
 <li><p><strong>include_nominal</strong> (<em>bool</em><em>, </em><em>optional</em>) – Whether to return nominal hists/results back. Default is True.</p></li>
 <li><p><strong>get_phasemap</strong> (<em>bool</em><em>, </em><em>optional</em>) – Whether to regenerate the FaultSample using new phase information.</p></li>
@@ -565,7 +580,7 @@ desired_result over the set of scenarios.</p></li>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>mdl</strong> (<a class="reference internal" href="fmdtools.define.html#fmdtools.define.block.Simulable" title="fmdtools.define.block.Simulable"><em>Simulable</em></a>) – Model to simulate</p></li>
+<li><p><strong>mdl</strong> (<a class="reference internal" href="fmdtools.define.block.html#fmdtools.define.block.base.Simulable" title="fmdtools.define.block.base.Simulable"><em>Simulable</em></a>) – Model to simulate</p></li>
 <li><p><strong>get_phasemap</strong> (<em>bool</em><em>, </em><em>optional</em>) – Whether to use nominal simulation phasemap to set up the SampleApproach.</p></li>
 <li><p><strong>faultdomains</strong> (<em>dict</em>) – Dict of arguments to SampleApproach.add_faultdomains</p></li>
 <li><p><strong>faultsamples</strong> (<em>dict</em>) – Dict of arguments to SampleApproach.add_faultsamples
@@ -598,12 +613,12 @@ desired_result over the set of scenarios.</p></li>
 <dl class="py function">
 <dt class="sig sig-object py" id="fmdtools.sim.propagate.get_endclass_vars">
 <span class="sig-prename descclassname"><span class="pre">fmdtools.sim.propagate.</span></span><span class="sig-name descname"><span class="pre">get_endclass_vars</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mdl</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">desired_result</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">result</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.sim.propagate.get_endclass_vars" title="Permalink to this definition"></a></dt>
-<dd><p>Gets variables in the model corresponding to the provided desired_result dictionary
-argument and appends them to result.</p>
+<dd><p>Get variables in the model corresponding to the provided desired_result dictionary.</p>
+<p>Appends them to provided result.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>mdl</strong> (<a class="reference internal" href="fmdtools.define.html#fmdtools.define.block.Simulable" title="fmdtools.define.block.Simulable"><em>Simulable</em></a>) – fmdtools Simulation (e.g., Model)</p></li>
+<li><p><strong>mdl</strong> (<a class="reference internal" href="fmdtools.define.block.html#fmdtools.define.block.base.Simulable" title="fmdtools.define.block.base.Simulable"><em>Simulable</em></a>) – fmdtools Simulation (e.g., Model)</p></li>
 <li><p><strong>desired_result</strong> (<em>dict</em>) – dictionary arguments for desired_result</p></li>
 <li><p><strong>result</strong> (<a class="reference internal" href="fmdtools.analyze.html#fmdtools.analyze.result.Result" title="fmdtools.analyze.result.Result"><em>Result</em></a>) – Result to append results to.</p></li>
 </ul>
@@ -613,44 +628,20 @@ argument and appends them to result.</p>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="fmdtools.sim.propagate.get_result">
-<span class="sig-prename descclassname"><span class="pre">fmdtools.sim.propagate.</span></span><span class="sig-name descname"><span class="pre">get_result</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">scen</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mdl</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">desired_result</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mdlhist</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">{}</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nomhist</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">{}</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nomresult</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">{}</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">time</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.0</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.sim.propagate.get_result" title="Permalink to this definition"></a></dt>
-<dd></dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="fmdtools.sim.propagate.init_histrange">
-<span class="sig-prename descclassname"><span class="pre">fmdtools.sim.propagate.</span></span><span class="sig-name descname"><span class="pre">init_histrange</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mdl</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">start_time</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">staged</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">track</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">track_times</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.sim.propagate.init_histrange" title="Permalink to this definition"></a></dt>
-<dd><p>Determines the timerange the model will be simulated over and initializes
-the history</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>mdl</strong> (<a class="reference internal" href="fmdtools.define.html#fmdtools.define.block.Simulable" title="fmdtools.define.block.Simulable"><em>Simulable</em></a>) – Model (with times)</p></li>
-<li><p><strong>start_time</strong> (<em>float</em>) – Time to start the history over</p></li>
-<li><p><strong>staged</strong> (<em>bool</em>) – Whether the simulation will be staged.</p></li>
-<li><p><strong>track</strong> (<em>dict</em>) – Tracking dictionary.</p></li>
-<li><p><strong>track_times</strong> (<em>dict/list</em>) – Specific tracking times to include in the history</p></li>
-</ul>
-</dd>
-<dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p><ul class="simple">
-<li><p><strong>mdlhist</strong> (<em>History</em>) – initialized model history</p></li>
-<li><p><strong>histrange</strong> (<em>array</em>) – times to record history over</p></li>
-<li><p><strong>timerange</strong> (<em>array</em>) – times to simulate the model over (which may be a subset of histrange)</p></li>
-<li><p><strong>shift</strong> (<em>int</em>) – Time index to shift the history by.</p></li>
-</ul>
-</p>
-</dd>
-</dl>
+<span class="sig-prename descclassname"><span class="pre">fmdtools.sim.propagate.</span></span><span class="sig-name descname"><span class="pre">get_result</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">scen</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mdl</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">desired_result</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nomhist</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">{}</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nomresult</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">{}</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">time</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.0</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.sim.propagate.get_result" title="Permalink to this definition"></a></dt>
+<dd><p>Get the desired_result specified from the model.</p>
 </dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="fmdtools.sim.propagate.list_init_faults">
-<span class="sig-prename descclassname"><span class="pre">fmdtools.sim.propagate.</span></span><span class="sig-name descname"><span class="pre">list_init_faults</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mdl</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.sim.propagate.list_init_faults" title="Permalink to this definition"></a></dt>
-<dd><p>Creates a list of single-fault scenarios for the Model, given the modes set up
-in the fault model.</p>
+<span class="sig-prename descclassname"><span class="pre">fmdtools.sim.propagate.</span></span><span class="sig-name descname"><span class="pre">list_init_faults</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mdl</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">times</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.sim.propagate.list_init_faults" title="Permalink to this definition"></a></dt>
+<dd><p>Create list of single-fault scenarios for the given Model mode information.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>mdl</strong> (<em>Simulable/FxnBlock</em>) – Simulable with list of times in mdl.sp.times</p>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>mdl</strong> (<em>Simulable/Function</em>) – Simulable</p></li>
+<li><p><strong>times</strong> – list with list of times in (start_time, end_time)</p></li>
+</ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p><strong>faultlist</strong> – A list of SingleFaultScenario</p>
@@ -694,7 +685,7 @@ See multiprocessing documentation.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>mdl</strong> (<a class="reference internal" href="fmdtools.define.html#fmdtools.define.block.Simulable" title="fmdtools.define.block.Simulable"><em>Simulable</em></a>) – Model Object to use in the simulation.</p></li>
+<li><p><strong>mdl</strong> (<a class="reference internal" href="fmdtools.define.block.html#fmdtools.define.block.base.Simulable" title="fmdtools.define.block.base.Simulable"><em>Simulable</em></a>) – Model Object to use in the simulation.</p></li>
 <li><p><strong>ps</strong> (<a class="reference internal" href="#fmdtools.sim.sample.ParameterSample" title="fmdtools.sim.sample.ParameterSample"><em>ParameterSample</em></a>) – Parameter Scenario defining the parameters the model will be run over</p></li>
 <li><p><strong>get_phasemap</strong> (<em>Bool/List/Dict</em><em>, </em><em>optional</em>) – Whether to use nominal simulation phasemap to set up the SampleApproach.</p></li>
 <li><p><strong>faultdomains</strong> (<em>dict</em>) – Dict of arguments to SampleApproach.add_faultdomains</p></li>
@@ -745,11 +736,11 @@ scenario with structure {‘nomscen1’: app1}</p></li>
 <dl class="py function">
 <dt class="sig sig-object py" id="fmdtools.sim.propagate.nom_helper">
 <span class="sig-prename descclassname"><span class="pre">fmdtools.sim.propagate.</span></span><span class="sig-name descname"><span class="pre">nom_helper</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mdl</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ctimes</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">protect</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">save_args</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">{}</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mdl_kwargs</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">{}</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">scen</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">{}</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">warn_faults</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.sim.propagate.nom_helper" title="Permalink to this definition"></a></dt>
-<dd><p>Helper function for initial run of nominal scenario.</p>
+<dd><p>Run initial run of nominal scenario.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>mdl</strong> (<a class="reference internal" href="fmdtools.define.html#fmdtools.define.block.Simulable" title="fmdtools.define.block.Simulable"><em>Simulable</em></a><em> (</em><em>object</em><em> or </em><em>class</em><em>)</em>) – Model of the system</p></li>
+<li><p><strong>mdl</strong> (<a class="reference internal" href="fmdtools.define.block.html#fmdtools.define.block.base.Simulable" title="fmdtools.define.block.base.Simulable"><em>Simulable</em></a><em> (</em><em>object</em><em> or </em><em>class</em><em>)</em>) – Model of the system</p></li>
 <li><p><strong>time</strong> (<em>float/list</em>) – Times to copy the nominal model from</p></li>
 <li><p><strong>**kwargs</strong> (<em>kwargs</em>) – <a class="reference internal" href="#fmdtools.sim.propagate.sim_kwargs" title="fmdtools.sim.propagate.sim_kwargs"><code class="xref py py-data docutils literal notranslate"><span class="pre">sim_kwargs</span></code></a> simulation options for <a class="reference internal" href="#fmdtools.sim.propagate.prop_one_scen" title="fmdtools.sim.propagate.prop_one_scen"><code class="xref py py-func docutils literal notranslate"><span class="pre">prop_one_scen()</span></code></a></p></li>
 </ul>
@@ -774,7 +765,7 @@ scenario with structure {‘nomscen1’: app1}</p></li>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>mdl</strong> (<a class="reference internal" href="fmdtools.define.html#fmdtools.define.block.Simulable" title="fmdtools.define.block.Simulable"><em>Simulable</em></a>) – Model of the system</p></li>
+<li><p><strong>mdl</strong> (<a class="reference internal" href="fmdtools.define.block.html#fmdtools.define.block.base.Simulable" title="fmdtools.define.block.base.Simulable"><em>Simulable</em></a>) – Model of the system</p></li>
 <li><p><strong>**kwargs</strong> (<em>kwargs</em>) – <p>Additional keyword arguments, may include:</p>
 <ul>
 <li><dl class="simple">
@@ -816,10 +807,10 @@ scenario with structure {‘nomscen1’: app1}</p></li>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>mdl</strong> (<a class="reference internal" href="fmdtools.define.html#fmdtools.define.block.Simulable" title="fmdtools.define.block.Simulable"><em>Simulable</em></a>) – The model to inject the fault in.</p></li>
+<li><p><strong>mdl</strong> (<a class="reference internal" href="fmdtools.define.block.html#fmdtools.define.block.base.Simulable" title="fmdtools.define.block.base.Simulable"><em>Simulable</em></a>) – The model to inject the fault in.</p></li>
 <li><p><strong>*fxnfault</strong> (<em>str</em>) – Has options:
 - ‘fxnname’, ‘faultmode’ when a Model is provided, or
-- ‘faultmode’ when a Block/FxnBlock is provided</p></li>
+- ‘faultmode’ when a Block/Function is provided</p></li>
 <li><p><strong>time</strong> (<em>float</em><em>, </em><em>optional</em>) – Time to inject fault. Must be in the range of model times
 (i.e. in range(0, end, mdl.sp.dt)). The default is 0.</p></li>
 <li><p><strong>**kwargs</strong> (<em>kwargs</em>) – <p>Additional keyword arguments, may include:</p>
@@ -881,7 +872,7 @@ nominally and/or fail.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>mdl</strong> (<a class="reference internal" href="fmdtools.define.html#fmdtools.define.block.Simulable" title="fmdtools.define.block.Simulable"><em>Simulable</em></a>) – Model to simulate</p></li>
+<li><p><strong>mdl</strong> (<a class="reference internal" href="fmdtools.define.block.html#fmdtools.define.block.base.Simulable" title="fmdtools.define.block.base.Simulable"><em>Simulable</em></a>) – Model to simulate</p></li>
 <li><p><strong>ps</strong> (<a class="reference internal" href="#fmdtools.sim.sample.ParameterSample" title="fmdtools.sim.sample.ParameterSample"><em>ParameterSample</em></a>) – Parameter Sample defining the nominal scenarios to run the system over.</p></li>
 <li><p><strong>get_endclass</strong> (<em>bool</em>) – Whether to return endclasses from mdl.find_classification. Default is True.</p></li>
 <li><p><strong>**kwargs</strong> (<em>kwargs</em>) – <p>Additional keyword arguments, may include:</p>
@@ -923,12 +914,12 @@ nominally and/or fail.</p>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="fmdtools.sim.propagate.prop_one_scen">
-<span class="sig-prename descclassname"><span class="pre">fmdtools.sim.propagate.</span></span><span class="sig-name descname"><span class="pre">prop_one_scen</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mdl</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">scen</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ctimes</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[]</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nomhist</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">{}</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nomresult</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">{}</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cut_hist</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.sim.propagate.prop_one_scen" title="Permalink to this definition"></a></dt>
+<span class="sig-prename descclassname"><span class="pre">fmdtools.sim.propagate.</span></span><span class="sig-name descname"><span class="pre">prop_one_scen</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mdl</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">scen</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ctimes</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[]</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nomhist</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">{}</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nomresult</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">{}</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.sim.propagate.prop_one_scen" title="Permalink to this definition"></a></dt>
 <dd><p>Runs a fault scenario in the model over time</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>mdl</strong> (<a class="reference internal" href="fmdtools.define.html#fmdtools.define.block.Simulable" title="fmdtools.define.block.Simulable"><em>Simulable</em></a>) – The model to inject faults in.</p></li>
+<li><p><strong>mdl</strong> (<a class="reference internal" href="fmdtools.define.block.html#fmdtools.define.block.base.Simulable" title="fmdtools.define.block.base.Simulable"><em>Simulable</em></a>) – The model to inject faults in.</p></li>
 <li><p><strong>scen</strong> (<a class="reference internal" href="#fmdtools.sim.scenario.Scenario" title="fmdtools.sim.scenario.Scenario"><em>Scenario</em></a>) – The Scenario to run.</p></li>
 <li><p><strong>ctimes</strong> (<em>list</em><em>, </em><em>optional</em>) – List of times to copy the model (for use in staged execution).
 The default is [].</p></li>
@@ -938,7 +929,6 @@ mdlhist.</p></li>
 Model.find_classification and for initializing model history in staged execution
 option. The default is {}.</p></li>
 <li><p><strong>nomresult</strong> (<em>dict</em><em>, </em><em>optional</em>) – Nominal result dictionary (to compare with current if desired)</p></li>
-<li><p><strong>cut_hist</strong> (<em>bool</em>) – Whether to cut the model history to a given size. The default is True</p></li>
 <li><p><strong>**kwargs</strong> (<em>kwargs</em>) – simulation options, see <a class="reference internal" href="#fmdtools.sim.propagate.sim_kwargs" title="fmdtools.sim.propagate.sim_kwargs"><code class="xref py py-data docutils literal notranslate"><span class="pre">sim_kwargs</span></code></a></p></li>
 </ul>
 </dd>
@@ -1033,7 +1023,7 @@ and individual_saving is a bool (True/False)</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>mdl</strong> (<a class="reference internal" href="fmdtools.define.html#fmdtools.define.block.Simulable" title="fmdtools.define.block.Simulable"><em>Simulable</em></a>) – The model to inject the fault in.</p></li>
+<li><p><strong>mdl</strong> (<a class="reference internal" href="fmdtools.define.block.html#fmdtools.define.block.base.Simulable" title="fmdtools.define.block.base.Simulable"><em>Simulable</em></a>) – The model to inject the fault in.</p></li>
 <li><p><strong>seq</strong> (<em>dict</em>) – Scenario dict defining the scenario
 {time:{<cite>faults</cite>:faults, <cite>disturbances</cite>:disturbances}}</p></li>
 <li><p><strong>faultseq</strong> (<em>dict</em>) – Dict of times and modes defining the fault scenario {time:{fxns: [modes]},}</p></li>
@@ -1079,7 +1069,7 @@ structure: {‘nominal’: nomhist, ‘faulty’: faulthist}</p></li>
 
 <dl class="py data">
 <dt class="sig sig-object py" id="fmdtools.sim.propagate.sim_kwargs">
-<span class="sig-prename descclassname"><span class="pre">fmdtools.sim.propagate.</span></span><span class="sig-name descname"><span class="pre">sim_kwargs</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">{'desired_result':</span> <span class="pre">'endclass',</span> <span class="pre">'run_stochastic':</span> <span class="pre">False,</span> <span class="pre">'staged':</span> <span class="pre">False,</span> <span class="pre">'track':</span> <span class="pre">'default',</span> <span class="pre">'track_times':</span> <span class="pre">'all',</span> <span class="pre">'use_end_condition':</span> <span class="pre">True,</span> <span class="pre">'warn_faults':</span> <span class="pre">True}</span></em><a class="headerlink" href="#fmdtools.sim.propagate.sim_kwargs" title="Permalink to this definition"></a></dt>
+<span class="sig-prename descclassname"><span class="pre">fmdtools.sim.propagate.</span></span><span class="sig-name descname"><span class="pre">sim_kwargs</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">{'cut_hist':</span> <span class="pre">True,</span> <span class="pre">'desired_result':</span> <span class="pre">'endclass',</span> <span class="pre">'run_stochastic':</span> <span class="pre">False,</span> <span class="pre">'staged':</span> <span class="pre">False,</span> <span class="pre">'use_end_condition':</span> <span class="pre">True,</span> <span class="pre">'warn_faults':</span> <span class="pre">True}</span></em><a class="headerlink" href="#fmdtools.sim.propagate.sim_kwargs" title="Permalink to this definition"></a></dt>
 <dd><p>Simulation keyword arguments.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -1103,30 +1093,7 @@ superimposed</p></li>
 </div>
 </li>
 </ul>
-</p></li>
-<li><p><strong>track</strong> (<em>str</em><em>, </em><em>optional</em>) – <p>Which model states to track over time (overwrites mdl.default_track).
-Default is ‘default’
-Options:</p>
-<ul>
-<li><p>’default’</p></li>
-<li><p>’all’</p></li>
-<li><p>’none’</p></li>
-<li><p>or a dict of form</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">{</span><span class="s1">&#39;functions&#39;</span><span class="p">:{</span><span class="s1">&#39;fxn1&#39;</span><span class="p">:</span><span class="s1">&#39;att1&#39;</span><span class="p">},</span> <span class="s1">&#39;flows&#39;</span><span class="p">:{</span><span class="s1">&#39;flow1&#39;</span><span class="p">:</span><span class="s1">&#39;att1&#39;</span><span class="p">}}</span>
-</pre></div>
-</div>
-</li>
-</ul>
 <p>The default is ‘all’.</p>
-</p></li>
-<li><p><strong>track_times</strong> (<em>str/tuple</em>) – <p>Defines what times to include in the history.
-Options are:</p>
-<ul>
-<li><p>’all’–all simulated times</p></li>
-<li><p>(‘interval’, n)–includes every nth time in the history</p></li>
-<li><p>(‘times’, [t1, … tn])–only includes times defined in the
-vector [t1 … tn]</p></li>
-</ul>
 </p></li>
 <li><p><strong>run_stochastic</strong> (<em>bool</em>) – Whether to run stochastic behaviors or use default values. Default is False.
 Can set as ‘track_pdf’ to calculate/track the probability densities of random
@@ -1142,7 +1109,7 @@ roughly halves execution time. The default is False.</p></li>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="fmdtools.sim.propagate.single_faults">
-<span class="sig-prename descclassname"><span class="pre">fmdtools.sim.propagate.</span></span><span class="sig-name descname"><span class="pre">single_faults</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mdl</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">include_nominal</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.sim.propagate.single_faults" title="Permalink to this definition"></a></dt>
+<span class="sig-prename descclassname"><span class="pre">fmdtools.sim.propagate.</span></span><span class="sig-name descname"><span class="pre">single_faults</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mdl</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">times</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[0.0]</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">include_nominal</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.sim.propagate.single_faults" title="Permalink to this definition"></a></dt>
 <dd><p>Create and propagates a list of failure scenarios in a model.</p>
 <p>NOTE: When calling in a script/module using parallel=True, execute using the
 protection statement</p>
@@ -1155,7 +1122,8 @@ See multiprocessing documentation.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>mdl</strong> (<a class="reference internal" href="fmdtools.define.html#fmdtools.define.block.Simulable" title="fmdtools.define.block.Simulable"><em>Simulable</em></a>) – The model to inject faults in</p></li>
+<li><p><strong>mdl</strong> (<a class="reference internal" href="fmdtools.define.block.html#fmdtools.define.block.base.Simulable" title="fmdtools.define.block.base.Simulable"><em>Simulable</em></a>) – The model to inject faults in</p></li>
+<li><p><strong>times</strong> (<em>list</em>) – List of times to inject the single faults in. Default is [1.0]</p></li>
 <li><p><strong>include_nominal</strong> (<em>bool</em><em>, </em><em>optional</em>) – Whether to return nominal hists/results back. Default is True.</p></li>
 <li><p><strong>**kwargs</strong> (<em>kwargs</em>) – <p>Additional keyword arguments, may include:</p>
 <ul>
@@ -1833,11 +1801,11 @@ set of scenarios for the given factor level.</p>
 <dl class="py class">
 <dt class="sig sig-object py" id="fmdtools.sim.sample.ExNestedParam">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">fmdtools.sim.sample.</span></span><span class="sig-name descname"><span class="pre">ExNestedParam</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">strict_immutability</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">check_type</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">check_pickle</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">set_type</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">check_lim</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.sim.sample.ExNestedParam" title="Permalink to this definition"></a></dt>
-<dd><p>Bases: <a class="reference internal" href="fmdtools.define.html#fmdtools.define.parameter.Parameter" title="fmdtools.define.parameter.Parameter"><code class="xref py py-class docutils literal notranslate"><span class="pre">Parameter</span></code></a></p>
+<dd><p>Bases: <a class="reference internal" href="fmdtools.define.container.html#fmdtools.define.container.parameter.Parameter" title="fmdtools.define.container.parameter.Parameter"><code class="xref py py-class docutils literal notranslate"><span class="pre">Parameter</span></code></a></p>
 <p>Example nested parameter for testing ParamDomain.</p>
 <dl class="py attribute">
 <dt class="sig sig-object py" id="fmdtools.sim.sample.ExNestedParam.ex_param">
-<span class="sig-name descname"><span class="pre">ex_param</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="fmdtools.define.html#fmdtools.define.parameter.ExampleParameter" title="fmdtools.define.parameter.ExampleParameter"><span class="pre">ExampleParameter</span></a></em><a class="headerlink" href="#fmdtools.sim.sample.ExNestedParam.ex_param" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">ex_param</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="fmdtools.define.container.html#fmdtools.define.container.parameter.ExampleParameter" title="fmdtools.define.container.parameter.ExampleParameter"><span class="pre">ExampleParameter</span></a></em><a class="headerlink" href="#fmdtools.sim.sample.ExNestedParam.ex_param" title="Permalink to this definition"></a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
@@ -2707,7 +2675,7 @@ samples). The default is 1.0.</p></li>
 <dd><p>Model</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type<span class="colon">:</span></dt>
-<dd class="field-odd"><p><a class="reference internal" href="fmdtools.define.html#fmdtools.define.block.Simulable" title="fmdtools.define.block.Simulable">Simulable</a></p>
+<dd class="field-odd"><p><a class="reference internal" href="fmdtools.define.block.html#fmdtools.define.block.base.Simulable" title="fmdtools.define.block.base.Simulable">Simulable</a></p>
 </dd>
 </dl>
 </dd></dl>
@@ -3710,12 +3678,12 @@ The default is {}.</p></li>
 <p>Optimization problem defining the optimization of model parameters over simulations.</p>
 <p class="rubric">Examples</p>
 <div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">fmdtools.sim.sample</span> <span class="kn">import</span> <span class="n">expd</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">fmdtools.define.block</span> <span class="kn">import</span> <span class="n">ExampleFxnBlock</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">fmdtools.define.block.function</span> <span class="kn">import</span> <span class="n">ExampleFunction</span>
 </pre></div>
 </div>
 <p># below, we show basic setup of a parameter problem where objectives get values
 # from the sim at particular times.
-&gt;&gt;&gt; exprob = ParameterSimProblem(ExampleFxnBlock(), expd, “nominal”)
+&gt;&gt;&gt; exprob = ParameterSimProblem(ExampleFunction(), expd, “nominal”)
 &gt;&gt;&gt; exprob.add_result_objective(“f1”, “s.x”, time=5)
 &gt;&gt;&gt; exprob.add_result_objective(“f2”, “s.y”, time=5)
 &gt;&gt;&gt; exprob.add_result_constraint(“g1”, “s.x”, time=10, threshold=10, comparator=’greater’)
@@ -3751,14 +3719,14 @@ VARIABLES</p>
 &gt;&gt;&gt; exprob.g1(1, 2)
 -10.0</p>
 <p># below, we use the endclass as an objective instead of the variable:
-&gt;&gt;&gt; exprob = ParameterSimProblem(ExampleFxnBlock(), expd, “nominal”)
+&gt;&gt;&gt; exprob = ParameterSimProblem(ExampleFunction(), expd, “nominal”)
 &gt;&gt;&gt; exprob.add_result_objective(“f1”, “endclass.xy”)
 &gt;&gt;&gt; exprob.f1(1, 1)
 100.0
 &gt;&gt;&gt; exprob.f1(1, 2)
 200.0</p>
 <p># finally, note that this class can work with a variety of methods:
-&gt;&gt;&gt; exprob = ParameterSimProblem(ExampleFxnBlock(“ex”), expd, “one_fault”, “ex”, “short”, 2)
+&gt;&gt;&gt; exprob = ParameterSimProblem(ExampleFunction(“ex”), expd, “one_fault”, “ex”, “short”, 2)
 &gt;&gt;&gt; exprob.add_result_objective(“f1”, “s.y”, time=3)
 &gt;&gt;&gt; exprob.add_result_objective(“f2”, “s.y”, time=5)
 &gt;&gt;&gt; exprob.f1(1, 1)
@@ -4242,7 +4210,7 @@ The default is ‘’.</p></li>
 <p>Which should then propagate to downstream sims:
 &gt;&gt;&gt; ex_pa.update_problem(“ex_scenprob”)
 &gt;&gt;&gt; ex_pa.problems[“ex_scenprob”]
-SingleScenarioProblem(examplefxnblock, short) with:
+SingleScenarioProblem(examplefunction, short) with:
 VARIABLES</p>
 <blockquote>
 <div><dl class="option-list">
@@ -4579,7 +4547,8 @@ Default is 0.0.</p>
 </dd></dl>
 
 <p class="rubric">Examples</p>
-<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">ex_scenprob</span> <span class="o">=</span> <span class="n">SingleFaultScenarioProblem</span><span class="p">(</span><span class="n">ExampleFxnBlock</span><span class="p">(),</span> <span class="p">(</span><span class="s2">&quot;examplefxnblock&quot;</span><span class="p">,</span> <span class="s2">&quot;short&quot;</span><span class="p">))</span>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">fmdtools.define.block.function</span> <span class="kn">import</span> <span class="n">ExampleFunction</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ex_scenprob</span> <span class="o">=</span> <span class="n">SingleFaultScenarioProblem</span><span class="p">(</span><span class="n">ExampleFunction</span><span class="p">(),</span> <span class="p">(</span><span class="s2">&quot;examplefunction&quot;</span><span class="p">,</span> <span class="s2">&quot;short&quot;</span><span class="p">))</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">ex_scenprob</span><span class="o">.</span><span class="n">add_result_objective</span><span class="p">(</span><span class="s2">&quot;f1&quot;</span><span class="p">,</span> <span class="s2">&quot;s.y&quot;</span><span class="p">,</span> <span class="n">time</span><span class="o">=</span><span class="mi">5</span><span class="p">)</span>
 </pre></div>
 </div>
@@ -4713,8 +4682,8 @@ Default is 0.0.</p>
            </div>
           </div>
           <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
-        <a href="fmdtools.define.html" class="btn btn-neutral float-left" title="fmdtools.define package" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
-        <a href="fmdtools.analyze.html" class="btn btn-neutral float-right" title="fmdtools.analyze package" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="fmdtools.define.object.html" class="btn btn-neutral float-left" title="fmdtools.define.object" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="fmdtools.analyze.html" class="btn btn-neutral float-right" title="fmdtools.analyze" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 
   <hr/>

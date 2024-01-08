@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Cooling Tank Model Optimization &mdash; fmdtools 2.0-beta-3 documentation</title>
+  <title>Cooling Tank Model Optimization &mdash; fmdtools 2.0-rc-1 documentation</title>
       <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
       <link rel="stylesheet" href="../../_static/nbsphinx-code-cells.css" type="text/css" />
@@ -73,7 +73,7 @@
 <li class="toctree-l2"><a class="reference internal" href="../../docs/Development%20Guide.html#intro-to-fmdtools">Intro to fmdtools</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="../../docs/Intro_to_fmdtools.html">Intro to resilience modelling, simulation, and visualization in Python with fmdtools.</a><ul>
 <li class="toctree-l4"><a class="reference internal" href="../../docs/Intro_to_fmdtools.html#author-daniel-hulse">Author: Daniel Hulse</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/Intro_to_fmdtools.html#version-2-0-beta-3">Version: 2.0-beta-3</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../docs/Intro_to_fmdtools.html#version-2-0-rc-1">Version: 2.0-rc-1</a></li>
 </ul>
 </li>
 <li class="toctree-l3"><a class="reference internal" href="../../docs/Intro_to_fmdtools.html#overview">Overview</a></li>
@@ -285,26 +285,58 @@
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="../Examples.html#multiflow-demo">Multiflow Demo</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="../multiflow_demo/Multiflow_and_Commsflow_Demonstration.html">Demonstration on Using MultiFlow and CommsFlow</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../multiflow_demo/Multiflow_and_Commsflow_Demonstration.html">Demonstration on Using MultiFlow and CommsFlow</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../multiflow_demo/Multiflow_and_Commsflow_Demonstration.html#Bulding-Flows">Bulding Flows</a></li>
+</ul>
+</li>
 </ul>
 </li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../../docs/Glossary.html">Glossary</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../docs/fmdtools.html">Module Reference</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="../../docs/fmdtools.define.html">fmdtools.define package</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="../../docs/fmdtools.define.html#fmdtools-define-block">fmdtools.define.block</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../../docs/fmdtools.define.html#module-fmdtools.define.common">fmdtools.define.common</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../../docs/fmdtools.define.html#module-fmdtools.define.flow">fmdtools.define.flow</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../../docs/fmdtools.define.html#module-fmdtools.define.mode">fmdtools.define.mode</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../../docs/fmdtools.define.html#fmdtools-define-model">fmdtools.define.model</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../../docs/fmdtools.define.html#module-fmdtools.define.parameter">fmdtools.define.parameter</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../../docs/fmdtools.define.html#module-fmdtools.define.rand">fmdtools.define.rand</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../../docs/fmdtools.define.html#module-fmdtools.define.state">fmdtools.define.state</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../../docs/fmdtools.define.html#module-fmdtools.define.time">fmdtools.define.time</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../../docs/fmdtools.define.html#module-fmdtools.define.geom">fmdtools.define.geom</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../docs/fmdtools.define.html">fmdtools.define</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../docs/fmdtools.define.architecture.html">fmdtools.define.architecture</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.define.architecture.html#fmdtools-define-architecture-base">fmdtools.define.architecture.base</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.define.architecture.html#fmdtools-define-architecture-action">fmdtools.define.architecture.action</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.define.architecture.html#fmdtools-define-architecture-component">fmdtools.define.architecture.component</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.define.architecture.html#fmdtools-define-architecture-function">fmdtools.define.architecture.function</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.define.architecture.html#fmdtools-define-architecture-geom">fmdtools.define.architecture.geom</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../../docs/fmdtools.define.block.html">fmdtools.define.block</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.define.block.html#module-fmdtools.define.block.base">fmdtools.define.block.base</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.define.block.html#module-fmdtools.define.block.action">fmdtools.define.block.action</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.define.block.html#module-fmdtools.define.block.component">fmdtools.define.block.component</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.define.block.html#fmdtools-define-block-function">fmdtools.define.block.function</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../../docs/fmdtools.define.container.html">fmdtools.define.container</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.define.container.html#fmdtools-define-container-base">fmdtools.define.container.base</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.define.container.html#module-0">fmdtools.define.container.mode</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.define.container.html#module-fmdtools.define.container.state">fmdtools.define.container.state</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.define.container.html#fmdtools-define-container-parameter">fmdtools.define.container.parameter</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.define.container.html#module-fmdtools.define.container.rand">fmdtools.define.container.rand</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.define.container.html#module-fmdtools.define.container.time">fmdtools.define.container.time</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.define.container.html#fmdtools-define-container-geom">fmdtools.define.container.geom</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.define.container.html#fmdtools-define-container-coords">fmdtools.define.container.coords</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../../docs/fmdtools.define.flow.html">fmdtools.define.flow</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.define.flow.html#module-fmdtools.define.flow.base">fmdtools.define.flow.base</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.define.flow.html#module-fmdtools.define.flow.multiflow">fmdtools.define.flow.multiflow</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.define.flow.html#module-fmdtools.define.flow.commsflow">fmdtools.define.flow.commsflow</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../../docs/fmdtools.define.object.html">fmdtools.define.object</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.define.object.html#module-fmdtools.define.object.base">fmdtools.define.object.base</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.define.object.html#module-fmdtools.define.object.timer">fmdtools.define.object.timer</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.define.object.html#module-fmdtools.define.object.geom">fmdtools.define.object.geom</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.define.object.html#module-fmdtools.define.object.coords">fmdtools.define.object.coords</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../../docs/fmdtools.define.html#fmdtools-define-base">fmdtools.define.base</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../docs/fmdtools.define.html#module-fmdtools.define.environment">fmdtools.define.environment</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../../docs/fmdtools.define.html#module-fmdtools.define.coords">fmdtools.define.coords</a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="../../docs/fmdtools.sim.html">fmdtools.sim</a><ul>
@@ -314,7 +346,7 @@
 <li class="toctree-l3"><a class="reference internal" href="../../docs/fmdtools.sim.html#module-fmdtools.sim.search">fmdtools.sim.search</a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="../../docs/fmdtools.analyze.html">fmdtools.analyze package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../docs/fmdtools.analyze.html">fmdtools.analyze</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="../../docs/fmdtools.analyze.html#module-fmdtools.analyze.common">fmdtools.analyze.common</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../docs/fmdtools.analyze.html#module-fmdtools.analyze.result">fmdtools.analyze.result</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../docs/fmdtools.analyze.html#module-fmdtools.analyze.history">fmdtools.analyze.history</a></li>
@@ -361,7 +393,7 @@
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">tank_optimization_model</span> <span class="kn">import</span> <span class="n">Tank</span>
-<span class="kn">from</span> <span class="nn">fmdtools.analyze.graph</span> <span class="kn">import</span> <span class="n">ModelGraph</span>
+<span class="kn">from</span> <span class="nn">fmdtools.analyze.graph</span> <span class="kn">import</span> <span class="n">FunctionArchitectureGraph</span>
 <span class="kn">from</span> <span class="nn">fmdtools.sim</span> <span class="kn">import</span> <span class="n">propagate</span> <span class="k">as</span> <span class="n">prop</span>
 <br/></pre></div>
 </div>
@@ -372,7 +404,7 @@
 <section id="Verifying-the-nominal-state:">
 <h2>Verifying the nominal state:<a class="headerlink" href="#Verifying-the-nominal-state:" title="Permalink to this heading"></a></h2>
 <p>In the nominal state, no change in system state should occurs. Flows will be constant and no signal is on.</p>
-<div class="nbinput nblast docutils container">
+<div class="nbinput docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[2]:
 </pre></div>
 </div>
@@ -380,6 +412,20 @@
 <span class="n">result</span><span class="p">,</span> <span class="n">mdlhist</span> <span class="o">=</span> <span class="n">prop</span><span class="o">.</span><span class="n">nominal</span><span class="p">(</span><span class="n">mdl</span><span class="p">,</span> <span class="n">track</span><span class="o">=</span><span class="s1">&#39;all&#39;</span><span class="p">,</span> <span class="n">desired_result</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;graph&#39;</span><span class="p">:</span> <span class="n">ModelGraph</span><span class="p">})</span>
 </pre></div>
 </div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+<span class="ansi-red-intense-fg ansi-bold">---------------------------------------------------------------------------</span>
+<span class="ansi-red-intense-fg ansi-bold">NameError</span>                                 Traceback (most recent call last)
+Cell <span class="ansi-green-intense-fg ansi-bold">In[2], line 2</span>
+<span class="ansi-green-fg">      1</span> mdl <span style="color: rgb(98,98,98)">=</span> Tank()
+<span class="ansi-green-intense-fg ansi-bold">----&gt; 2</span> result, mdlhist <span style="color: rgb(98,98,98)">=</span> prop<span style="color: rgb(98,98,98)">.</span>nominal(mdl, track<span style="color: rgb(98,98,98)">=</span><span style="color: rgb(175,0,0)">&#39;</span><span style="color: rgb(175,0,0)">all</span><span style="color: rgb(175,0,0)">&#39;</span>, desired_result<span style="color: rgb(98,98,98)">=</span>{<span style="color: rgb(175,0,0)">&#39;</span><span style="color: rgb(175,0,0)">graph</span><span style="color: rgb(175,0,0)">&#39;</span>: <span class="ansi-yellow-bg">ModelGraph</span>})
+
+<span class="ansi-red-intense-fg ansi-bold">NameError</span>: name &#39;ModelGraph&#39; is not defined
+</pre></div></div>
 </div>
 <div class="nbinput docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[3]:
@@ -393,8 +439,14 @@
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area docutils container">
-<img alt="../../_images/examples_tank_Tank_Optimization_4_0.png" src="../../_images/examples_tank_Tank_Optimization_4_0.png" />
-</div>
+<div class="highlight"><pre>
+<span class="ansi-red-intense-fg ansi-bold">---------------------------------------------------------------------------</span>
+<span class="ansi-red-intense-fg ansi-bold">NameError</span>                                 Traceback (most recent call last)
+Cell <span class="ansi-green-intense-fg ansi-bold">In[3], line 1</span>
+<span class="ansi-green-intense-fg ansi-bold">----&gt; 1</span> fig <span style="color: rgb(98,98,98)">=</span> <span class="ansi-yellow-bg">result</span><span style="color: rgb(98,98,98)">.</span>graph<span style="color: rgb(98,98,98)">.</span>draw(figsize<span style="color: rgb(98,98,98)">=</span>(<span style="color: rgb(98,98,98)">8</span>,<span style="color: rgb(98,98,98)">6</span>))
+
+<span class="ansi-red-intense-fg ansi-bold">NameError</span>: name &#39;result&#39; is not defined
+</pre></div></div>
 </div>
 <div class="nbinput docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[4]:
@@ -405,36 +457,16 @@
 </div>
 </div>
 <div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[4]:
-</pre></div>
+<div class="prompt empty docutils container">
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-fxns.import_coolant.s.amt_open: array(21)
-fxns.import_coolant.m.faults.stuck: array(21)
-fxns.import_coolant.m.faults.blockage: array(21)
-fxns.import_coolant.m.mode:    array(21)
-fxns.store_coolant.s.level:    array(21)
-fxns.store_coolant.s.net_flow: array(21)
-fxns.store_coolant.s.coolingbuffer: array(21)
-fxns.store_coolant.m.faults.leak: array(21)
-fxns.store_coolant.m.mode:     array(21)
-fxns.export_coolant.s.amt_open: array(21)
-fxns.export_coolant.m.faults.stuck: array(21)
-fxns.export_coolant.m.faults.blockage: array(21)
-fxns.export_coolant.m.mode:    array(21)
-fxns.contingency.m.mode:       array(21)
-flows.coolant_in.s.effort:     array(21)
-flows.coolant_in.s.rate:       array(21)
-flows.coolant_out.s.effort:    array(21)
-flows.coolant_out.s.rate:      array(21)
-flows.input_sig.s.indicator:   array(21)
-flows.input_sig.s.action:      array(21)
-flows.tank_sig.s.indicator:    array(21)
-flows.tank_sig.s.action:       array(21)
-flows.output_sig.s.indicator:  array(21)
-flows.output_sig.s.action:     array(21)
-time:                          array(21)
+<span class="ansi-red-intense-fg ansi-bold">---------------------------------------------------------------------------</span>
+<span class="ansi-red-intense-fg ansi-bold">NameError</span>                                 Traceback (most recent call last)
+Cell <span class="ansi-green-intense-fg ansi-bold">In[4], line 1</span>
+<span class="ansi-green-intense-fg ansi-bold">----&gt; 1</span> <span class="ansi-yellow-bg">mdlhist</span>
+
+<span class="ansi-red-intense-fg ansi-bold">NameError</span>: name &#39;mdlhist&#39; is not defined
 </pre></div></div>
 </div>
 <div class="nbinput docutils container">
@@ -449,8 +481,14 @@ time:                          array(21)
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area docutils container">
-<img alt="../../_images/examples_tank_Tank_Optimization_6_0.png" src="../../_images/examples_tank_Tank_Optimization_6_0.png" />
-</div>
+<div class="highlight"><pre>
+<span class="ansi-red-intense-fg ansi-bold">---------------------------------------------------------------------------</span>
+<span class="ansi-red-intense-fg ansi-bold">NameError</span>                                 Traceback (most recent call last)
+Cell <span class="ansi-green-intense-fg ansi-bold">In[5], line 1</span>
+<span class="ansi-green-intense-fg ansi-bold">----&gt; 1</span> fig, ax <span style="color: rgb(98,98,98)">=</span> <span class="ansi-yellow-bg">mdlhist</span><span style="color: rgb(98,98,98)">.</span>plot_line(<span style="color: rgb(175,0,0)">&#39;</span><span style="color: rgb(175,0,0)">flows.coolant_in.s.rate</span><span style="color: rgb(175,0,0)">&#39;</span>, <span style="color: rgb(175,0,0)">&#39;</span><span style="color: rgb(175,0,0)">flows.coolant_out.s.rate</span><span style="color: rgb(175,0,0)">&#39;</span>, <span style="color: rgb(175,0,0)">&#39;</span><span style="color: rgb(175,0,0)">fxns.store_coolant.s.level</span><span style="color: rgb(175,0,0)">&#39;</span>, <span style="color: rgb(175,0,0)">&#39;</span><span style="color: rgb(175,0,0)">flows.tank_sig.s.indicator</span><span style="color: rgb(175,0,0)">&#39;</span>)
+
+<span class="ansi-red-intense-fg ansi-bold">NameError</span>: name &#39;mdlhist&#39; is not defined
+</pre></div></div>
 </div>
 </section>
 <section id="What-happens-under-component-faults?">
@@ -486,8 +524,15 @@ time:                          array(21)
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area docutils container">
-<img alt="../../_images/examples_tank_Tank_Optimization_9_0.png" src="../../_images/examples_tank_Tank_Optimization_9_0.png" />
-</div>
+<div class="highlight"><pre>
+<span class="ansi-red-intense-fg ansi-bold">---------------------------------------------------------------------------</span>
+<span class="ansi-red-intense-fg ansi-bold">NameError</span>                                 Traceback (most recent call last)
+Cell <span class="ansi-green-intense-fg ansi-bold">In[7], line 1</span>
+<span class="ansi-green-intense-fg ansi-bold">----&gt; 1</span> mg <span style="color: rgb(98,98,98)">=</span> <span class="ansi-yellow-bg">ModelGraph</span>(mdl)
+<span class="ansi-green-fg">      2</span> fig, ax <span style="color: rgb(98,98,98)">=</span> mg<span style="color: rgb(98,98,98)">.</span>draw_from(<span style="color: rgb(98,98,98)">10</span>,mdlhist)
+
+<span class="ansi-red-intense-fg ansi-bold">NameError</span>: name &#39;ModelGraph&#39; is not defined
+</pre></div></div>
 </div>
 </section>
 <section id="Full-set-of-modes">
@@ -556,7 +601,7 @@ FaultSample of scenarios:
 </div>
 <div class="output_area stderr docutils container">
 <div class="highlight"><pre>
-SCENARIOS COMPLETE: 100%|██████████| 5/5 [00:00&lt;00:00, 155.74it/s]
+SCENARIOS COMPLETE: 100%|██████████| 5/5 [00:00&lt;00:00, 100.37it/s]
 </pre></div></div>
 </div>
 <div class="nbinput docutils container">
@@ -617,20 +662,20 @@ SCENARIOS COMPLETE: 100%|██████████| 5/5 [00:00&lt;00:00, 15
       <td>0.0</td>
     </tr>
     <tr>
-      <th>store_coolant_leak_t0p0</th>
-      <td>[]</td>
-      <td>[]</td>
-      <td>0.00001</td>
-      <td>1000000.0</td>
-      <td>1000000.0</td>
-    </tr>
-    <tr>
       <th>import_coolant_blockage_t0p0</th>
       <td>[]</td>
       <td>[]</td>
       <td>0.0</td>
       <td>2100000.0</td>
       <td>35000.0</td>
+    </tr>
+    <tr>
+      <th>nominal</th>
+      <td>[]</td>
+      <td>[]</td>
+      <td>1.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
     </tr>
     <tr>
       <th>export_coolant_blockage_t0p0</th>
@@ -641,12 +686,12 @@ SCENARIOS COMPLETE: 100%|██████████| 5/5 [00:00&lt;00:00, 15
       <td>1666.666667</td>
     </tr>
     <tr>
-      <th>nominal</th>
+      <th>store_coolant_leak_t0p0</th>
       <td>[]</td>
       <td>[]</td>
-      <td>1.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
+      <td>0.00001</td>
+      <td>1000000.0</td>
+      <td>1000000.0</td>
     </tr>
   </tbody>
 </table>
@@ -783,7 +828,7 @@ OBJECTIVES
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-TankParam(capacity=1.0, turnup=1.0, faultpolicy=((1, 1, 0, &#39;l&#39;, 1), (1, 1, 0, &#39;u&#39;, 1), (-1, 0, 1, &#39;l&#39;, 1), (1, 0, 0, &#39;l&#39;, 1), (0, 0, 0, &#39;u&#39;, 1), (0, -1, 1, &#39;u&#39;, 1), (1, 0, -1, &#39;u&#39;, 1), (-1, 0, 0, &#39;l&#39;, 1), (-1, -1, 0, &#39;u&#39;, 1), (-1, 1, -1, &#39;l&#39;, 1), (-1, 0, -1, &#39;l&#39;, 1), (0, -1, 0, &#39;u&#39;, 1), (0, 1, 0, &#39;u&#39;, 1), (1, 1, 1, &#39;u&#39;, 1), (-1, 1, 1, &#39;l&#39;, 1), (0, 0, 1, &#39;u&#39;, 1), (1, -1, -1, &#39;u&#39;, 1), (1, -1, 1, &#39;u&#39;, 1), (1, -1, -1, &#39;l&#39;, 1), (-1, 0, 1, &#39;u&#39;, 1), (-1, -1, 1, &#39;u&#39;, 1), (0, 1, 1, &#39;l&#39;, 1), (1, -1, 1, &#39;l&#39;, 1), (-1, 0, -1, &#39;u&#39;, 1), (0, -1, -1, &#39;u&#39;, 1), (-1, 1, -1, &#39;u&#39;, 1), (0, 0, 1, &#39;l&#39;, 1), (0, 0, 0, &#39;l&#39;, 1), (-1, 1, 0, &#39;u&#39;, 1), (1, 1, -1, &#39;u&#39;, 1), (0, 1, -1, &#39;u&#39;, 1), (1, 0, 1, &#39;u&#39;, 1), (0, -1, 1, &#39;l&#39;, 1), (-1, 1, 1, &#39;u&#39;, 1), (1, 0, -1, &#39;l&#39;, 1), (1, 0, 0, &#39;u&#39;, 1), (1, 0, 1, &#39;l&#39;, 1), (1, -1, 0, &#39;l&#39;, 1), (0, 0, -1, &#39;u&#39;, 1), (1, -1, 0, &#39;u&#39;, 1), (0, 1, 1, &#39;u&#39;, 1), (0, -1, 0, &#39;l&#39;, 1), (0, 1, 0, &#39;l&#39;, 1), (-1, -1, 0, &#39;l&#39;, 1), (0, -1, -1, &#39;l&#39;, 1), (0, 1, -1, &#39;l&#39;, 1), (1, 1, -1, &#39;l&#39;, 1), (-1, -1, -1, &#39;l&#39;, 1), (-1, -1, 1, &#39;l&#39;, 1), (-1, 0, 0, &#39;u&#39;, 1), (-1, 1, 0, &#39;l&#39;, 1), (-1, -1, -1, &#39;u&#39;, 1), (1, 1, 1, &#39;l&#39;, 1), (0, 0, -1, &#39;l&#39;, 1)), policymap={(-1, -1, -1): (1, 1), (-1, -1, 0): (1, 1), (-1, -1, 1): (1, 1), (-1, 0, -1): (1, 1), (-1, 0, 0): (1, 1), (-1, 0, 1): (1, 1), (-1, 1, -1): (1, 1), (-1, 1, 0): (1, 1), (-1, 1, 1): (1, 1), (0, -1, -1): (1, 1), (0, -1, 0): (1, 1), (0, -1, 1): (1, 1), (0, 0, -1): (1, 1), (0, 0, 0): (1, 1), (0, 0, 1): (1, 1), (0, 1, -1): (1, 1), (0, 1, 0): (1, 1), (0, 1, 1): (1, 1), (1, -1, -1): (1, 1), (1, -1, 0): (1, 1), (1, -1, 1): (1, 1), (1, 0, -1): (1, 1), (1, 0, 0): (1, 1), (1, 0, 1): (1, 1), (1, 1, -1): (1, 1), (1, 1, 0): (1, 1), (1, 1, 1): (1, 1)})
+TankParam(capacity=1.0, turnup=1.0, faultpolicy=((-1, 1, 1, &#39;l&#39;, 1), (0, 1, -1, &#39;l&#39;, 1), (0, -1, -1, &#39;u&#39;, 1), (-1, 1, 0, &#39;u&#39;, 1), (-1, 0, 0, &#39;u&#39;, 1), (1, -1, 0, &#39;u&#39;, 1), (0, -1, -1, &#39;l&#39;, 1), (-1, -1, 1, &#39;u&#39;, 1), (0, 1, 0, &#39;l&#39;, 1), (-1, -1, -1, &#39;u&#39;, 1), (-1, -1, 0, &#39;u&#39;, 1), (0, 0, 0, &#39;l&#39;, 1), (1, 1, -1, &#39;l&#39;, 1), (0, -1, 0, &#39;u&#39;, 1), (1, 0, -1, &#39;l&#39;, 1), (0, -1, 1, &#39;u&#39;, 1), (1, 1, 0, &#39;u&#39;, 1), (1, 0, 0, &#39;u&#39;, 1), (1, -1, 1, &#39;l&#39;, 1), (-1, 0, 0, &#39;l&#39;, 1), (1, 0, 0, &#39;l&#39;, 1), (1, 1, -1, &#39;u&#39;, 1), (-1, 1, 1, &#39;u&#39;, 1), (0, -1, 0, &#39;l&#39;, 1), (-1, 0, -1, &#39;u&#39;, 1), (0, 0, -1, &#39;u&#39;, 1), (0, 1, 0, &#39;u&#39;, 1), (1, 0, -1, &#39;u&#39;, 1), (0, 1, -1, &#39;u&#39;, 1), (0, -1, 1, &#39;l&#39;, 1), (-1, 1, -1, &#39;l&#39;, 1), (0, 0, -1, &#39;l&#39;, 1), (1, 1, 0, &#39;l&#39;, 1), (-1, -1, 0, &#39;l&#39;, 1), (1, 0, 1, &#39;l&#39;, 1), (0, 0, 0, &#39;u&#39;, 1), (-1, 1, -1, &#39;u&#39;, 1), (0, 0, 1, &#39;l&#39;, 1), (1, -1, -1, &#39;l&#39;, 1), (1, -1, 0, &#39;l&#39;, 1), (1, -1, -1, &#39;u&#39;, 1), (-1, -1, 1, &#39;l&#39;, 1), (1, 1, 1, &#39;l&#39;, 1), (0, 1, 1, &#39;l&#39;, 1), (0, 0, 1, &#39;u&#39;, 1), (1, 1, 1, &#39;u&#39;, 1), (-1, -1, -1, &#39;l&#39;, 1), (-1, 0, 1, &#39;l&#39;, 1), (-1, 1, 0, &#39;l&#39;, 1), (-1, 0, -1, &#39;l&#39;, 1), (-1, 0, 1, &#39;u&#39;, 1), (1, -1, 1, &#39;u&#39;, 1), (1, 0, 1, &#39;u&#39;, 1), (0, 1, 1, &#39;u&#39;, 1)), policymap={(-1, -1, -1): (1, 1), (-1, -1, 0): (1, 1), (-1, -1, 1): (1, 1), (-1, 0, -1): (1, 1), (-1, 0, 0): (1, 1), (-1, 0, 1): (1, 1), (-1, 1, -1): (1, 1), (-1, 1, 0): (1, 1), (-1, 1, 1): (1, 1), (0, -1, -1): (1, 1), (0, -1, 0): (1, 1), (0, -1, 1): (1, 1), (0, 0, -1): (1, 1), (0, 0, 0): (1, 1), (0, 0, 1): (1, 1), (0, 1, -1): (1, 1), (0, 1, 0): (1, 1), (0, 1, 1): (1, 1), (1, -1, -1): (1, 1), (1, -1, 0): (1, 1), (1, -1, 1): (1, 1), (1, 0, -1): (1, 1), (1, 0, 0): (1, 1), (1, 0, 1): (1, 1), (1, 1, -1): (1, 1), (1, 1, 0): (1, 1), (1, 1, 1): (1, 1)})
 </pre></div></div>
 </div>
 <div class="nbinput docutils container">
@@ -1435,26 +1480,48 @@ Optimization terminated successfully.
          Current function value: 1057666.666717
          Iterations: 86
          Function evaluations: 167
-[&#39;iter 0: &#39;, 1051666.6666666667]
-[&#39;iter 1: &#39;, 1051666.6666666667]
-[&#39;iter 2: &#39;, 1051666.6666666667]
-[&#39;iter 3: &#39;, 1051666.6666666667]
-[&#39;iter 4: &#39;, 1051666.6666666667]
-[&#39;iter 5: &#39;, 1051666.6666666667]
-[&#39;iter 6: &#39;, 1035333.3333333333]
-[&#39;iter 7: &#39;, 1035333.3333333333]
-[&#39;iter 8: &#39;, 1035333.3333333333]
-[&#39;iter 9: &#39;, 1035333.3333333333]
-[&#39;iter 10: &#39;, 1035333.3333333333]
-[&#39;iter 11: &#39;, 1035333.3333333333]
-[&#39;iter 12: &#39;, 1035333.3333333333]
-[&#39;iter 13: &#39;, 1035333.3333333333]
-[&#39;iter 14: &#39;, 1035333.3333333333]
-[&#39;iter 15: &#39;, 1035333.3333333333]
-[&#39;iter 16: &#39;, 1035333.3333333333]
-[&#39;iter 17: &#39;, 1035333.3333333333]
-[&#39;iter 18: &#39;, 1035333.3333333333]
-[&#39;iter 19: &#39;, 1035333.3333333333]
+[&#39;iter 0: &#39;, 1046333.3333333334]
+[&#39;iter 1: &#39;, 1046333.3333333334]
+[&#39;iter 2: &#39;, 1046000.0]
+[&#39;iter 3: &#39;, 1036333.3333333334]
+[&#39;iter 4: &#39;, 1036000.0]
+[&#39;iter 5: &#39;, 1035766.6666666666]
+[&#39;iter 6: &#39;, 1035766.6666666666]
+[&#39;iter 7: &#39;, 1035766.6666666666]
+</pre></div></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area stderr docutils container">
+<div class="highlight"><pre>
+Exception in thread Thread-6 (_handle_workers):
+Traceback (most recent call last):
+  File &#34;C:\Users\dhulse\AppData\Local\anaconda3\lib\threading.py&#34;, line 1016, in _bootstrap_inner
+    self.run()
+  File &#34;C:\Users\dhulse\AppData\Local\anaconda3\lib\threading.py&#34;, line 953, in run
+    self._target(*self._args, **self._kwargs)
+  File &#34;C:\Users\dhulse\AppData\Local\anaconda3\lib\multiprocessing\pool.py&#34;, line 516, in _handle_workers
+    cls._maintain_pool(ctx, Process, processes, pool, inqueue,
+  File &#34;C:\Users\dhulse\AppData\Local\anaconda3\lib\multiprocessing\pool.py&#34;, line 340, in _maintain_pool
+    Pool._repopulate_pool_static(ctx, Process, processes, pool,
+  File &#34;C:\Users\dhulse\AppData\Local\anaconda3\lib\multiprocessing\pool.py&#34;, line 329, in _repopulate_pool_static
+    w.start()
+  File &#34;C:\Users\dhulse\AppData\Local\anaconda3\lib\multiprocessing\process.py&#34;, line 121, in start
+    self._popen = self._Popen(self)
+  File &#34;C:\Users\dhulse\AppData\Local\anaconda3\lib\multiprocessing\context.py&#34;, line 336, in _Popen
+    return Popen(process_obj)
+  File &#34;C:\Users\dhulse\AppData\Local\anaconda3\lib\multiprocessing\popen_spawn_win32.py&#34;, line 93, in __init__
+    reduction.dump(process_obj, to_child)
+  File &#34;C:\Users\dhulse\AppData\Local\anaconda3\lib\multiprocessing\reduction.py&#34;, line 60, in dump
+    ForkingPickler(file, protocol).dump(obj)
+  File &#34;C:\Users\dhulse\AppData\Local\anaconda3\lib\multiprocessing\synchronize.py&#34;, line 104, in __getstate__
+    h = context.get_spawning_popen().duplicate_for_child(sl.handle)
+  File &#34;C:\Users\dhulse\AppData\Local\anaconda3\lib\multiprocessing\popen_spawn_win32.py&#34;, line 99, in duplicate_for_child
+    return reduction.duplicate(handle, self.sentinel)
+  File &#34;C:\Users\dhulse\AppData\Local\anaconda3\lib\multiprocessing\reduction.py&#34;, line 79, in duplicate
+    return _winapi.DuplicateHandle(
+PermissionError: [WinError 5] Access is denied
 </pre></div></div>
 </div>
 <div class="nboutput nblast docutils container">
@@ -1491,171 +1558,185 @@ Cell <span class="ansi-green-intense-fg ansi-bold">In[38], line 22</span>, in <s
 <span class="ansi-green-fg">     24</span>     (goodpop, newpop)), np<span style="color: rgb(98,98,98)">.</span>concatenate((goodvals, newvals))
 <span class="ansi-green-fg">     25</span> <span class="ansi-bold" style="color: rgb(0,135,0)">if</span> verbose <span style="color: rgb(98,98,98)">==</span> <span style="color: rgb(175,0,0)">&#34;</span><span style="color: rgb(175,0,0)">iters</span><span style="color: rgb(175,0,0)">&#34;</span>:
 
-File <span class="ansi-green-intense-fg ansi-bold">c:\users\dhulse\documents\github\fmdtools\fmdtools\sim\search.py:1248</span>, in <span class="ansi-cyan-fg">ProblemArchitecture.add_objective_callable.&lt;locals&gt;.newobj</span><span class="ansi-blue-intense-fg ansi-bold">(*x)</span>
-<span class="ansi-green-fg">   1247</span> <span class="ansi-bold" style="color: rgb(0,135,0)">def</span> <span style="color: rgb(0,0,255)">newobj</span>(<span style="color: rgb(98,98,98)">*</span>x):
-<span class="ansi-green-intense-fg ansi-bold">-&gt; 1248</span>     <span class="ansi-bold" style="color: rgb(0,135,0)">return</span> <span class="ansi-yellow-bg" style="color: rgb(0,135,0)">self</span><span class="ansi-yellow-bg" style="color: rgb(98,98,98)">.</span><span class="ansi-yellow-bg">call_objective</span><span class="ansi-yellow-bg">(</span><span class="ansi-yellow-bg">probname</span><span class="ansi-yellow-bg">,</span><span class="ansi-yellow-bg"> </span><span class="ansi-yellow-bg">objname</span><span class="ansi-yellow-bg">,</span><span class="ansi-yellow-bg"> </span><span class="ansi-yellow-bg" style="color: rgb(98,98,98)">*</span><span class="ansi-yellow-bg">x</span><span class="ansi-yellow-bg">)</span>
+File <span class="ansi-green-intense-fg ansi-bold">c:\users\dhulse\documents\github\fmdtools\fmdtools\sim\search.py:1252</span>, in <span class="ansi-cyan-fg">ProblemArchitecture.add_objective_callable.&lt;locals&gt;.newobj</span><span class="ansi-blue-intense-fg ansi-bold">(*x)</span>
+<span class="ansi-green-fg">   1251</span> <span class="ansi-bold" style="color: rgb(0,135,0)">def</span> <span style="color: rgb(0,0,255)">newobj</span>(<span style="color: rgb(98,98,98)">*</span>x):
+<span class="ansi-green-intense-fg ansi-bold">-&gt; 1252</span>     <span class="ansi-bold" style="color: rgb(0,135,0)">return</span> <span class="ansi-yellow-bg" style="color: rgb(0,135,0)">self</span><span class="ansi-yellow-bg" style="color: rgb(98,98,98)">.</span><span class="ansi-yellow-bg">call_objective</span><span class="ansi-yellow-bg">(</span><span class="ansi-yellow-bg">probname</span><span class="ansi-yellow-bg">,</span><span class="ansi-yellow-bg"> </span><span class="ansi-yellow-bg">objname</span><span class="ansi-yellow-bg">,</span><span class="ansi-yellow-bg"> </span><span class="ansi-yellow-bg" style="color: rgb(98,98,98)">*</span><span class="ansi-yellow-bg">x</span><span class="ansi-yellow-bg">)</span>
 
-File <span class="ansi-green-intense-fg ansi-bold">c:\users\dhulse\documents\github\fmdtools\fmdtools\sim\search.py:1313</span>, in <span class="ansi-cyan-fg">ProblemArchitecture.call_objective</span><span class="ansi-blue-intense-fg ansi-bold">(self, probname, objname, *x_loc)</span>
-<span class="ansi-green-fg">   1311</span> <span class="ansi-bold" style="color: rgb(0,135,0)">def</span> <span style="color: rgb(0,0,255)">call_objective</span>(<span style="color: rgb(0,135,0)">self</span>, probname, objname, <span style="color: rgb(98,98,98)">*</span>x_loc):
-<span class="ansi-green-fg">   1312</span> <span style="color: rgb(188,188,188)">    </span><span style="color: rgb(175,0,0)">&#34;&#34;&#34;Call objective of a problem over partial its local variables *x_loc.&#34;&#34;&#34;</span>
-<span class="ansi-green-intense-fg ansi-bold">-&gt; 1313</span>     <span class="ansi-yellow-bg" style="color: rgb(0,135,0)">self</span><span class="ansi-yellow-bg" style="color: rgb(98,98,98)">.</span><span class="ansi-yellow-bg">update_problem</span><span class="ansi-yellow-bg">(</span><span class="ansi-yellow-bg">probname</span><span class="ansi-yellow-bg">,</span><span class="ansi-yellow-bg"> </span><span class="ansi-yellow-bg" style="color: rgb(98,98,98)">*</span><span class="ansi-yellow-bg">x_loc</span><span class="ansi-yellow-bg">)</span>
-<span class="ansi-green-fg">   1314</span>     <span class="ansi-bold" style="color: rgb(0,135,0)">return</span> <span style="color: rgb(0,135,0)">self</span><span style="color: rgb(98,98,98)">.</span>problems[probname]<span style="color: rgb(98,98,98)">.</span>objectives[objname]<span style="color: rgb(98,98,98)">.</span>value
+File <span class="ansi-green-intense-fg ansi-bold">c:\users\dhulse\documents\github\fmdtools\fmdtools\sim\search.py:1317</span>, in <span class="ansi-cyan-fg">ProblemArchitecture.call_objective</span><span class="ansi-blue-intense-fg ansi-bold">(self, probname, objname, *x_loc)</span>
+<span class="ansi-green-fg">   1315</span> <span class="ansi-bold" style="color: rgb(0,135,0)">def</span> <span style="color: rgb(0,0,255)">call_objective</span>(<span style="color: rgb(0,135,0)">self</span>, probname, objname, <span style="color: rgb(98,98,98)">*</span>x_loc):
+<span class="ansi-green-fg">   1316</span> <span style="color: rgb(188,188,188)">    </span><span style="color: rgb(175,0,0)">&#34;&#34;&#34;Call objective of a problem over partial its local variables *x_loc.&#34;&#34;&#34;</span>
+<span class="ansi-green-intense-fg ansi-bold">-&gt; 1317</span>     <span class="ansi-yellow-bg" style="color: rgb(0,135,0)">self</span><span class="ansi-yellow-bg" style="color: rgb(98,98,98)">.</span><span class="ansi-yellow-bg">update_problem</span><span class="ansi-yellow-bg">(</span><span class="ansi-yellow-bg">probname</span><span class="ansi-yellow-bg">,</span><span class="ansi-yellow-bg"> </span><span class="ansi-yellow-bg" style="color: rgb(98,98,98)">*</span><span class="ansi-yellow-bg">x_loc</span><span class="ansi-yellow-bg">)</span>
+<span class="ansi-green-fg">   1318</span>     <span class="ansi-bold" style="color: rgb(0,135,0)">return</span> <span style="color: rgb(0,135,0)">self</span><span style="color: rgb(98,98,98)">.</span>problems[probname]<span style="color: rgb(98,98,98)">.</span>objectives[objname]<span style="color: rgb(98,98,98)">.</span>value
 
-File <span class="ansi-green-intense-fg ansi-bold">c:\users\dhulse\documents\github\fmdtools\fmdtools\sim\search.py:1424</span>, in <span class="ansi-cyan-fg">ProblemArchitecture.update_problem</span><span class="ansi-blue-intense-fg ansi-bold">(self, probname, force_update, *x)</span>
-<span class="ansi-green-fg">   1422</span>     <span style="color: rgb(0,135,0)">self</span><span style="color: rgb(98,98,98)">.</span>update_problem(upstream_prob, force_update<span style="color: rgb(98,98,98)">=</span>force_update)
-<span class="ansi-green-fg">   1423</span> x_inputs <span style="color: rgb(98,98,98)">=</span> <span style="color: rgb(0,135,0)">self</span><span style="color: rgb(98,98,98)">.</span>get_inputs_as_x(probname, <span style="color: rgb(98,98,98)">*</span>x)
-<span class="ansi-green-intense-fg ansi-bold">-&gt; 1424</span> <span class="ansi-yellow-bg" style="color: rgb(0,135,0)">self</span><span class="ansi-yellow-bg" style="color: rgb(98,98,98)">.</span><span class="ansi-yellow-bg">problems</span><span class="ansi-yellow-bg">[</span><span class="ansi-yellow-bg">probname</span><span class="ansi-yellow-bg">]</span><span class="ansi-yellow-bg" style="color: rgb(98,98,98)">.</span><span class="ansi-yellow-bg">call_outputs</span><span class="ansi-yellow-bg">(</span><span class="ansi-yellow-bg" style="color: rgb(98,98,98)">*</span><span class="ansi-yellow-bg">x_inputs</span><span class="ansi-yellow-bg">,</span><span class="ansi-yellow-bg"> </span><span class="ansi-yellow-bg">force_update</span><span class="ansi-yellow-bg" style="color: rgb(98,98,98)">=</span><span class="ansi-yellow-bg">force_update</span><span class="ansi-yellow-bg">)</span>
-<span class="ansi-green-fg">   1425</span> <span style="color: rgb(0,135,0)">self</span><span style="color: rgb(98,98,98)">.</span>problems[probname]<span style="color: rgb(98,98,98)">.</span>consistent <span style="color: rgb(98,98,98)">=</span> <span class="ansi-bold" style="color: rgb(0,135,0)">True</span>
-<span class="ansi-green-fg">   1426</span> <span style="color: rgb(0,135,0)">self</span><span style="color: rgb(98,98,98)">.</span>update_problem_objectives(probname)
+File <span class="ansi-green-intense-fg ansi-bold">c:\users\dhulse\documents\github\fmdtools\fmdtools\sim\search.py:1428</span>, in <span class="ansi-cyan-fg">ProblemArchitecture.update_problem</span><span class="ansi-blue-intense-fg ansi-bold">(self, probname, force_update, *x)</span>
+<span class="ansi-green-fg">   1426</span>     <span style="color: rgb(0,135,0)">self</span><span style="color: rgb(98,98,98)">.</span>update_problem(upstream_prob, force_update<span style="color: rgb(98,98,98)">=</span>force_update)
+<span class="ansi-green-fg">   1427</span> x_inputs <span style="color: rgb(98,98,98)">=</span> <span style="color: rgb(0,135,0)">self</span><span style="color: rgb(98,98,98)">.</span>get_inputs_as_x(probname, <span style="color: rgb(98,98,98)">*</span>x)
+<span class="ansi-green-intense-fg ansi-bold">-&gt; 1428</span> <span class="ansi-yellow-bg" style="color: rgb(0,135,0)">self</span><span class="ansi-yellow-bg" style="color: rgb(98,98,98)">.</span><span class="ansi-yellow-bg">problems</span><span class="ansi-yellow-bg">[</span><span class="ansi-yellow-bg">probname</span><span class="ansi-yellow-bg">]</span><span class="ansi-yellow-bg" style="color: rgb(98,98,98)">.</span><span class="ansi-yellow-bg">call_outputs</span><span class="ansi-yellow-bg">(</span><span class="ansi-yellow-bg" style="color: rgb(98,98,98)">*</span><span class="ansi-yellow-bg">x_inputs</span><span class="ansi-yellow-bg">,</span><span class="ansi-yellow-bg"> </span><span class="ansi-yellow-bg">force_update</span><span class="ansi-yellow-bg" style="color: rgb(98,98,98)">=</span><span class="ansi-yellow-bg">force_update</span><span class="ansi-yellow-bg">)</span>
+<span class="ansi-green-fg">   1429</span> <span style="color: rgb(0,135,0)">self</span><span style="color: rgb(98,98,98)">.</span>problems[probname]<span style="color: rgb(98,98,98)">.</span>consistent <span style="color: rgb(98,98,98)">=</span> <span class="ansi-bold" style="color: rgb(0,135,0)">True</span>
+<span class="ansi-green-fg">   1430</span> <span style="color: rgb(0,135,0)">self</span><span style="color: rgb(98,98,98)">.</span>update_problem_objectives(probname)
 
-File <span class="ansi-green-intense-fg ansi-bold">c:\users\dhulse\documents\github\fmdtools\fmdtools\sim\search.py:222</span>, in <span class="ansi-cyan-fg">BaseProblem.call_outputs</span><span class="ansi-blue-intense-fg ansi-bold">(self, force_update, *x)</span>
-<span class="ansi-green-fg">    206</span> <span style="color: rgb(175,0,0)">&#34;&#34;&#34;</span>
-<span class="ansi-green-fg">    207</span> <span style="color: rgb(175,0,0)">Get all outputs at the given value of x.</span>
-<span class="ansi-green-fg">    208</span>
+File <span class="ansi-green-intense-fg ansi-bold">c:\users\dhulse\documents\github\fmdtools\fmdtools\sim\search.py:223</span>, in <span class="ansi-cyan-fg">BaseProblem.call_outputs</span><span class="ansi-blue-intense-fg ansi-bold">(self, force_update, *x)</span>
+<span class="ansi-green-fg">    207</span> <span style="color: rgb(175,0,0)">&#34;&#34;&#34;</span>
+<span class="ansi-green-fg">    208</span> <span style="color: rgb(175,0,0)">Get all outputs at the given value of x.</span>
+<span class="ansi-green-fg">    209</span>
 <span class="ansi-green-intense-fg ansi-bold">   (...)</span>
-<span class="ansi-green-fg">    219</span> <span style="color: rgb(175,0,0)">    values of the constraints</span>
-<span class="ansi-green-fg">    220</span> <span style="color: rgb(175,0,0)">&#34;&#34;&#34;</span>
-<span class="ansi-green-fg">    221</span> <span class="ansi-bold" style="color: rgb(0,135,0)">if</span> <span style="color: rgb(0,135,0)">self</span><span style="color: rgb(98,98,98)">.</span>new_x(<span style="color: rgb(98,98,98)">*</span>x) <span class="ansi-bold" style="color: rgb(175,0,255)">or</span> force_update:
-<span class="ansi-green-intense-fg ansi-bold">--&gt; 222</span>     <span class="ansi-yellow-bg" style="color: rgb(0,135,0)">self</span><span class="ansi-yellow-bg" style="color: rgb(98,98,98)">.</span><span class="ansi-yellow-bg">update_objectives</span><span class="ansi-yellow-bg">(</span><span class="ansi-yellow-bg" style="color: rgb(98,98,98)">*</span><span class="ansi-yellow-bg">x</span><span class="ansi-yellow-bg">)</span>
-<span class="ansi-green-fg">    223</span> <span class="ansi-bold" style="color: rgb(0,135,0)">return</span> <span style="color: rgb(0,135,0)">self</span><span style="color: rgb(98,98,98)">.</span>get_objectives(), <span style="color: rgb(0,135,0)">self</span><span style="color: rgb(98,98,98)">.</span>get_constraints()
+<span class="ansi-green-fg">    220</span> <span style="color: rgb(175,0,0)">    values of the constraints</span>
+<span class="ansi-green-fg">    221</span> <span style="color: rgb(175,0,0)">&#34;&#34;&#34;</span>
+<span class="ansi-green-fg">    222</span> <span class="ansi-bold" style="color: rgb(0,135,0)">if</span> <span style="color: rgb(0,135,0)">self</span><span style="color: rgb(98,98,98)">.</span>new_x(<span style="color: rgb(98,98,98)">*</span>x) <span class="ansi-bold" style="color: rgb(175,0,255)">or</span> force_update:
+<span class="ansi-green-intense-fg ansi-bold">--&gt; 223</span>     <span class="ansi-yellow-bg" style="color: rgb(0,135,0)">self</span><span class="ansi-yellow-bg" style="color: rgb(98,98,98)">.</span><span class="ansi-yellow-bg">update_objectives</span><span class="ansi-yellow-bg">(</span><span class="ansi-yellow-bg" style="color: rgb(98,98,98)">*</span><span class="ansi-yellow-bg">x</span><span class="ansi-yellow-bg">)</span>
+<span class="ansi-green-fg">    224</span> <span class="ansi-bold" style="color: rgb(0,135,0)">return</span> <span style="color: rgb(0,135,0)">self</span><span style="color: rgb(98,98,98)">.</span>get_objectives(), <span style="color: rgb(0,135,0)">self</span><span style="color: rgb(98,98,98)">.</span>get_constraints()
 
-File <span class="ansi-green-intense-fg ansi-bold">c:\users\dhulse\documents\github\fmdtools\fmdtools\sim\search.py:578</span>, in <span class="ansi-cyan-fg">BaseSimProblem.update_objectives</span><span class="ansi-blue-intense-fg ansi-bold">(self, *x)</span>
-<span class="ansi-green-fg">    576</span> <span style="color: rgb(175,0,0)">&#34;&#34;&#34;Update objectives/constraints by simulating the model at x.&#34;&#34;&#34;</span>
-<span class="ansi-green-fg">    577</span> <span style="color: rgb(0,135,0)">self</span><span style="color: rgb(98,98,98)">.</span>update_variables(<span style="color: rgb(98,98,98)">*</span>x)
-<span class="ansi-green-intense-fg ansi-bold">--&gt; 578</span> <span style="color: rgb(0,135,0)">self</span><span style="color: rgb(98,98,98)">.</span>res, <span style="color: rgb(0,135,0)">self</span><span style="color: rgb(98,98,98)">.</span>hist <span style="color: rgb(98,98,98)">=</span> <span class="ansi-yellow-bg" style="color: rgb(0,135,0)">self</span><span class="ansi-yellow-bg" style="color: rgb(98,98,98)">.</span><span class="ansi-yellow-bg">sim_mdl</span><span class="ansi-yellow-bg">(</span><span class="ansi-yellow-bg" style="color: rgb(98,98,98)">*</span><span class="ansi-yellow-bg">x</span><span class="ansi-yellow-bg">)</span>
-<span class="ansi-green-fg">    579</span> <span class="ansi-bold" style="color: rgb(0,135,0)">for</span> obj <span class="ansi-bold" style="color: rgb(175,0,255)">in</span> {<span style="color: rgb(98,98,98)">*</span><span style="color: rgb(98,98,98)">*</span><span style="color: rgb(0,135,0)">self</span><span style="color: rgb(98,98,98)">.</span>objectives, <span style="color: rgb(98,98,98)">*</span><span style="color: rgb(98,98,98)">*</span><span style="color: rgb(0,135,0)">self</span><span style="color: rgb(98,98,98)">.</span>constraints}<span style="color: rgb(98,98,98)">.</span>values():
-<span class="ansi-green-fg">    580</span>     <span class="ansi-bold" style="color: rgb(0,135,0)">if</span> <span style="color: rgb(0,135,0)">isinstance</span>(obj, HistoryObjective) <span class="ansi-bold" style="color: rgb(175,0,255)">or</span> <span style="color: rgb(0,135,0)">isinstance</span>(obj, HistoryConstraint):
+File <span class="ansi-green-intense-fg ansi-bold">c:\users\dhulse\documents\github\fmdtools\fmdtools\sim\search.py:579</span>, in <span class="ansi-cyan-fg">BaseSimProblem.update_objectives</span><span class="ansi-blue-intense-fg ansi-bold">(self, *x)</span>
+<span class="ansi-green-fg">    577</span> <span style="color: rgb(175,0,0)">&#34;&#34;&#34;Update objectives/constraints by simulating the model at x.&#34;&#34;&#34;</span>
+<span class="ansi-green-fg">    578</span> <span style="color: rgb(0,135,0)">self</span><span style="color: rgb(98,98,98)">.</span>update_variables(<span style="color: rgb(98,98,98)">*</span>x)
+<span class="ansi-green-intense-fg ansi-bold">--&gt; 579</span> <span style="color: rgb(0,135,0)">self</span><span style="color: rgb(98,98,98)">.</span>res, <span style="color: rgb(0,135,0)">self</span><span style="color: rgb(98,98,98)">.</span>hist <span style="color: rgb(98,98,98)">=</span> <span class="ansi-yellow-bg" style="color: rgb(0,135,0)">self</span><span class="ansi-yellow-bg" style="color: rgb(98,98,98)">.</span><span class="ansi-yellow-bg">sim_mdl</span><span class="ansi-yellow-bg">(</span><span class="ansi-yellow-bg" style="color: rgb(98,98,98)">*</span><span class="ansi-yellow-bg">x</span><span class="ansi-yellow-bg">)</span>
+<span class="ansi-green-fg">    580</span> <span class="ansi-bold" style="color: rgb(0,135,0)">for</span> obj <span class="ansi-bold" style="color: rgb(175,0,255)">in</span> {<span style="color: rgb(98,98,98)">*</span><span style="color: rgb(98,98,98)">*</span><span style="color: rgb(0,135,0)">self</span><span style="color: rgb(98,98,98)">.</span>objectives, <span style="color: rgb(98,98,98)">*</span><span style="color: rgb(98,98,98)">*</span><span style="color: rgb(0,135,0)">self</span><span style="color: rgb(98,98,98)">.</span>constraints}<span style="color: rgb(98,98,98)">.</span>values():
+<span class="ansi-green-fg">    581</span>     <span class="ansi-bold" style="color: rgb(0,135,0)">if</span> <span style="color: rgb(0,135,0)">isinstance</span>(obj, HistoryObjective) <span class="ansi-bold" style="color: rgb(175,0,255)">or</span> <span style="color: rgb(0,135,0)">isinstance</span>(obj, HistoryConstraint):
 
-File <span class="ansi-green-intense-fg ansi-bold">c:\users\dhulse\documents\github\fmdtools\fmdtools\sim\search.py:684</span>, in <span class="ansi-cyan-fg">ParameterSimProblem.sim_mdl</span><span class="ansi-blue-intense-fg ansi-bold">(self, *x)</span>
-<span class="ansi-green-fg">    682</span> mdl_kwargs <span style="color: rgb(98,98,98)">=</span> {<span style="color: rgb(175,0,0)">&#39;</span><span style="color: rgb(175,0,0)">p</span><span style="color: rgb(175,0,0)">&#39;</span>: p, <span style="color: rgb(175,0,0)">&#39;</span><span style="color: rgb(175,0,0)">sp</span><span style="color: rgb(175,0,0)">&#39;</span>: {<span style="color: rgb(175,0,0)">&#39;</span><span style="color: rgb(175,0,0)">times</span><span style="color: rgb(175,0,0)">&#39;</span>: (<span style="color: rgb(98,98,98)">0.0</span>, end_time)}}
-<span class="ansi-green-fg">    683</span> desired_result <span style="color: rgb(98,98,98)">=</span> <span style="color: rgb(0,135,0)">self</span><span style="color: rgb(98,98,98)">.</span>obj_con_des_res()
-<span class="ansi-green-intense-fg ansi-bold">--&gt; 684</span> all_res <span style="color: rgb(98,98,98)">=</span> <span style="color: rgb(0,135,0)">self</span><span style="color: rgb(98,98,98)">.</span>prop_method(<span style="color: rgb(0,135,0)">self</span><span style="color: rgb(98,98,98)">.</span>mdl, <span style="color: rgb(98,98,98)">*</span><span style="color: rgb(0,135,0)">self</span><span style="color: rgb(98,98,98)">.</span>args,
-<span class="ansi-green-fg">    685</span>                            mdl_kwargs<span style="color: rgb(98,98,98)">=</span>mdl_kwargs,
-<span class="ansi-green-fg">    686</span>                            desired_result<span style="color: rgb(98,98,98)">=</span>desired_result,
-<span class="ansi-green-fg">    687</span>                            showprogress<span style="color: rgb(98,98,98)">=</span><span class="ansi-bold" style="color: rgb(0,135,0)">False</span>,
-<span class="ansi-green-fg">    688</span>                            <span style="color: rgb(98,98,98)">*</span><span style="color: rgb(98,98,98)">*</span><span style="color: rgb(0,135,0)">self</span><span style="color: rgb(98,98,98)">.</span>kwargs)
-<span class="ansi-green-fg">    689</span> <span class="ansi-bold" style="color: rgb(0,135,0)">return</span> all_res[<span style="color: rgb(98,98,98)">0</span>]<span style="color: rgb(98,98,98)">.</span>flatten(), all_res[<span style="color: rgb(98,98,98)">1</span>]<span style="color: rgb(98,98,98)">.</span>flatten()
+File <span class="ansi-green-intense-fg ansi-bold">c:\users\dhulse\documents\github\fmdtools\fmdtools\sim\search.py:685</span>, in <span class="ansi-cyan-fg">ParameterSimProblem.sim_mdl</span><span class="ansi-blue-intense-fg ansi-bold">(self, *x)</span>
+<span class="ansi-green-fg">    683</span> mdl_kwargs <span style="color: rgb(98,98,98)">=</span> {<span style="color: rgb(175,0,0)">&#39;</span><span style="color: rgb(175,0,0)">p</span><span style="color: rgb(175,0,0)">&#39;</span>: p, <span style="color: rgb(175,0,0)">&#39;</span><span style="color: rgb(175,0,0)">sp</span><span style="color: rgb(175,0,0)">&#39;</span>: {<span style="color: rgb(175,0,0)">&#39;</span><span style="color: rgb(175,0,0)">end_time</span><span style="color: rgb(175,0,0)">&#39;</span>: end_time}}
+<span class="ansi-green-fg">    684</span> desired_result <span style="color: rgb(98,98,98)">=</span> <span style="color: rgb(0,135,0)">self</span><span style="color: rgb(98,98,98)">.</span>obj_con_des_res()
+<span class="ansi-green-intense-fg ansi-bold">--&gt; 685</span> all_res <span style="color: rgb(98,98,98)">=</span> <span style="color: rgb(0,135,0)">self</span><span style="color: rgb(98,98,98)">.</span>prop_method(<span class="ansi-yellow-bg" style="color: rgb(0,135,0)">self</span><span class="ansi-yellow-bg" style="color: rgb(98,98,98)">.</span><span class="ansi-yellow-bg">mdl</span><span class="ansi-yellow-bg" style="color: rgb(98,98,98)">.</span><span class="ansi-yellow-bg">new</span><span class="ansi-yellow-bg">(</span><span class="ansi-yellow-bg">)</span>,
+<span class="ansi-green-fg">    686</span>                            <span style="color: rgb(98,98,98)">*</span><span style="color: rgb(0,135,0)">self</span><span style="color: rgb(98,98,98)">.</span>args,
+<span class="ansi-green-fg">    687</span>                            mdl_kwargs<span style="color: rgb(98,98,98)">=</span>mdl_kwargs,
+<span class="ansi-green-fg">    688</span>                            desired_result<span style="color: rgb(98,98,98)">=</span>desired_result,
+<span class="ansi-green-fg">    689</span>                            showprogress<span style="color: rgb(98,98,98)">=</span><span class="ansi-bold" style="color: rgb(0,135,0)">False</span>,
+<span class="ansi-green-fg">    690</span>                            <span style="color: rgb(98,98,98)">*</span><span style="color: rgb(98,98,98)">*</span><span style="color: rgb(0,135,0)">self</span><span style="color: rgb(98,98,98)">.</span>kwargs)
+<span class="ansi-green-fg">    691</span> <span class="ansi-bold" style="color: rgb(0,135,0)">return</span> all_res[<span style="color: rgb(98,98,98)">0</span>]<span style="color: rgb(98,98,98)">.</span>flatten(), all_res[<span style="color: rgb(98,98,98)">1</span>]<span style="color: rgb(98,98,98)">.</span>flatten()
 
-File <span class="ansi-green-intense-fg ansi-bold">c:\users\dhulse\documents\github\fmdtools\fmdtools\sim\propagate.py:624</span>, in <span class="ansi-cyan-fg">fault_sample</span><span class="ansi-blue-intense-fg ansi-bold">(mdl, fs, include_nominal, get_phasemap, **kwargs)</span>
-<span class="ansi-green-fg">    583</span> <span style="color: rgb(175,0,0)">&#34;&#34;&#34;</span>
-<span class="ansi-green-fg">    584</span> <span style="color: rgb(175,0,0)">Injects and propagates faults in the model defined by a FaultSample/SampleApproach.</span>
-<span class="ansi-green-fg">    585</span>
+File <span class="ansi-green-intense-fg ansi-bold">c:\users\dhulse\documents\github\fmdtools\fmdtools\define\block\base.py:277</span>, in <span class="ansi-cyan-fg">Simulable.new</span><span class="ansi-blue-intense-fg ansi-bold">(self, **kwargs)</span>
+<span class="ansi-green-fg">    271</span> <span class="ansi-bold" style="color: rgb(0,135,0)">def</span> <span style="color: rgb(0,0,255)">new</span>(<span style="color: rgb(0,135,0)">self</span>, <span style="color: rgb(98,98,98)">*</span><span style="color: rgb(98,98,98)">*</span>kwargs):
+<span class="ansi-green-fg">    272</span> <span style="color: rgb(188,188,188)">    </span><span style="color: rgb(175,0,0)">&#34;&#34;&#34;</span>
+<span class="ansi-green-fg">    273</span> <span style="color: rgb(175,0,0)">    Create a new Model with the same parameters as the current model.</span>
+<span class="ansi-green-fg">    274</span>
+<span class="ansi-green-fg">    275</span> <span style="color: rgb(175,0,0)">    Can initiate with with changes to mutable parameters (p, sp, track, rand etc.).</span>
+<span class="ansi-green-fg">    276</span> <span style="color: rgb(175,0,0)">    &#34;&#34;&#34;</span>
+<span class="ansi-green-intense-fg ansi-bold">--&gt; 277</span>     <span class="ansi-bold" style="color: rgb(0,135,0)">return</span> <span style="color: rgb(0,135,0)">self</span><span style="color: rgb(98,98,98)">.</span><span style="color: rgb(0,0,135)">__class__</span>(name<span style="color: rgb(98,98,98)">=</span><span style="color: rgb(0,135,0)">self</span><span style="color: rgb(98,98,98)">.</span>name, <span style="color: rgb(98,98,98)">*</span><span style="color: rgb(98,98,98)">*</span><span style="color: rgb(0,135,0)">self</span><span style="color: rgb(98,98,98)">.</span>new_params(<span style="color: rgb(98,98,98)">*</span><span style="color: rgb(98,98,98)">*</span>kwargs))
+
+File <span class="ansi-green-intense-fg ansi-bold">c:\users\dhulse\documents\github\fmdtools\fmdtools\define\architecture\function.py:121</span>, in <span class="ansi-cyan-fg">FunctionArchitecture.__init__</span><span class="ansi-blue-intense-fg ansi-bold">(self, h, **kwargs)</span>
+<span class="ansi-green-fg">    119</span> <span style="color: rgb(0,135,0)">self</span><span style="color: rgb(98,98,98)">.</span>_fxnflows <span style="color: rgb(98,98,98)">=</span> []
+<span class="ansi-green-fg">    120</span> <span style="color: rgb(0,135,0)">self</span><span style="color: rgb(98,98,98)">.</span>_flowstates <span style="color: rgb(98,98,98)">=</span> {}
+<span class="ansi-green-intense-fg ansi-bold">--&gt; 121</span> Architecture<span style="color: rgb(98,98,98)">.</span><span style="color: rgb(0,0,255)">__init__</span>(<span style="color: rgb(0,135,0)">self</span>, h<span style="color: rgb(98,98,98)">=</span>h, <span style="color: rgb(98,98,98)">*</span><span style="color: rgb(98,98,98)">*</span>kwargs)
+
+File <span class="ansi-green-intense-fg ansi-bold">c:\users\dhulse\documents\github\fmdtools\fmdtools\define\architecture\base.py:40</span>, in <span class="ansi-cyan-fg">Architecture.__init__</span><span class="ansi-blue-intense-fg ansi-bold">(self, as_copy, h, *args, **kwargs)</span>
+<span class="ansi-green-fg">     38</span> <span style="color: rgb(0,135,0)">self</span><span style="color: rgb(98,98,98)">.</span>_init_flexroles <span style="color: rgb(98,98,98)">=</span> []
+<span class="ansi-green-fg">     39</span> <span style="color: rgb(0,135,0)">self</span><span style="color: rgb(98,98,98)">.</span>init_flexible_roles(<span style="color: rgb(98,98,98)">*</span><span style="color: rgb(98,98,98)">*</span>kwargs)
+<span class="ansi-green-intense-fg ansi-bold">---&gt; 40</span> <span style="color: rgb(0,135,0)">self</span><span style="color: rgb(98,98,98)">.</span>init_architecture(<span style="color: rgb(98,98,98)">*</span><span style="color: rgb(98,98,98)">*</span>kwargs)
+<span class="ansi-green-fg">     41</span> <span style="color: rgb(0,135,0)">self</span><span style="color: rgb(98,98,98)">.</span>build(<span style="color: rgb(98,98,98)">*</span><span style="color: rgb(98,98,98)">*</span>kwargs)
+
+File <span class="ansi-green-intense-fg ansi-bold">~\Documents\GitHub\fmdtools\examples\tank\tank_optimization_model.py:201</span>, in <span class="ansi-cyan-fg">Tank.init_architecture</span><span class="ansi-blue-intense-fg ansi-bold">(self, **kwargs)</span>
+<span class="ansi-green-fg">    197</span> <span style="color: rgb(0,135,0)">self</span><span style="color: rgb(98,98,98)">.</span>add_flow(<span style="color: rgb(175,0,0)">&#39;</span><span style="color: rgb(175,0,0)">output_sig</span><span style="color: rgb(175,0,0)">&#39;</span>, Signal)
+<span class="ansi-green-fg">    199</span> <span style="color: rgb(0,135,0)">self</span><span style="color: rgb(98,98,98)">.</span>add_fxn(<span style="color: rgb(175,0,0)">&#39;</span><span style="color: rgb(175,0,0)">import_coolant</span><span style="color: rgb(175,0,0)">&#39;</span>, ImportLiquid,
+<span class="ansi-green-fg">    200</span>              <span style="color: rgb(175,0,0)">&#39;</span><span style="color: rgb(175,0,0)">coolant_in</span><span style="color: rgb(175,0,0)">&#39;</span>, <span style="color: rgb(175,0,0)">&#39;</span><span style="color: rgb(175,0,0)">input_sig</span><span style="color: rgb(175,0,0)">&#39;</span>, p<span style="color: rgb(98,98,98)">=</span><span style="color: rgb(0,135,0)">self</span><span style="color: rgb(98,98,98)">.</span>p)
+<span class="ansi-green-intense-fg ansi-bold">--&gt; 201</span> <span class="ansi-yellow-bg" style="color: rgb(0,135,0)">self</span><span class="ansi-yellow-bg" style="color: rgb(98,98,98)">.</span><span class="ansi-yellow-bg">add_fxn</span><span class="ansi-yellow-bg">(</span><span class="ansi-yellow-bg" style="color: rgb(175,0,0)">&#39;</span><span class="ansi-yellow-bg" style="color: rgb(175,0,0)">store_coolant</span><span class="ansi-yellow-bg" style="color: rgb(175,0,0)">&#39;</span><span class="ansi-yellow-bg">,</span><span class="ansi-yellow-bg"> </span><span class="ansi-yellow-bg">StoreLiquid</span><span class="ansi-yellow-bg">,</span>
+<span class="ansi-green-fg">    202</span> <span class="ansi-yellow-bg">             </span><span class="ansi-yellow-bg" style="color: rgb(175,0,0)">&#39;</span><span class="ansi-yellow-bg" style="color: rgb(175,0,0)">coolant_in</span><span class="ansi-yellow-bg" style="color: rgb(175,0,0)">&#39;</span><span class="ansi-yellow-bg">,</span><span class="ansi-yellow-bg"> </span><span class="ansi-yellow-bg" style="color: rgb(175,0,0)">&#39;</span><span class="ansi-yellow-bg" style="color: rgb(175,0,0)">coolant_out</span><span class="ansi-yellow-bg" style="color: rgb(175,0,0)">&#39;</span><span class="ansi-yellow-bg">,</span><span class="ansi-yellow-bg"> </span><span class="ansi-yellow-bg" style="color: rgb(175,0,0)">&#39;</span><span class="ansi-yellow-bg" style="color: rgb(175,0,0)">tank_sig</span><span class="ansi-yellow-bg" style="color: rgb(175,0,0)">&#39;</span><span class="ansi-yellow-bg">,</span>
+<span class="ansi-green-fg">    203</span> <span class="ansi-yellow-bg">             </span><span class="ansi-yellow-bg">p</span><span class="ansi-yellow-bg" style="color: rgb(98,98,98)">=</span><span class="ansi-yellow-bg" style="color: rgb(0,135,0)">self</span><span class="ansi-yellow-bg" style="color: rgb(98,98,98)">.</span><span class="ansi-yellow-bg">p</span><span class="ansi-yellow-bg">,</span>
+<span class="ansi-green-fg">    204</span> <span class="ansi-yellow-bg">             </span><span class="ansi-yellow-bg">s</span><span class="ansi-yellow-bg" style="color: rgb(98,98,98)">=</span><span class="ansi-yellow-bg">{</span><span class="ansi-yellow-bg" style="color: rgb(175,0,0)">&#39;</span><span class="ansi-yellow-bg" style="color: rgb(175,0,0)">level</span><span class="ansi-yellow-bg" style="color: rgb(175,0,0)">&#39;</span><span class="ansi-yellow-bg">:</span><span class="ansi-yellow-bg"> </span><span class="ansi-yellow-bg" style="color: rgb(0,135,0)">self</span><span class="ansi-yellow-bg" style="color: rgb(98,98,98)">.</span><span class="ansi-yellow-bg">p</span><span class="ansi-yellow-bg" style="color: rgb(98,98,98)">.</span><span class="ansi-yellow-bg">capacity</span><span class="ansi-yellow-bg" style="color: rgb(98,98,98)">/</span><span class="ansi-yellow-bg" style="color: rgb(98,98,98)">2</span><span class="ansi-yellow-bg">,</span><span class="ansi-yellow-bg"> </span><span class="ansi-yellow-bg" style="color: rgb(175,0,0)">&#39;</span><span class="ansi-yellow-bg" style="color: rgb(175,0,0)">coolingbuffer</span><span class="ansi-yellow-bg" style="color: rgb(175,0,0)">&#39;</span><span class="ansi-yellow-bg">:</span><span class="ansi-yellow-bg"> </span><span class="ansi-yellow-bg" style="color: rgb(0,135,0)">self</span><span class="ansi-yellow-bg" style="color: rgb(98,98,98)">.</span><span class="ansi-yellow-bg">p</span><span class="ansi-yellow-bg" style="color: rgb(98,98,98)">.</span><span class="ansi-yellow-bg">capacity</span><span class="ansi-yellow-bg" style="color: rgb(98,98,98)">/</span><span class="ansi-yellow-bg" style="color: rgb(98,98,98)">2</span><span class="ansi-yellow-bg">}</span><span class="ansi-yellow-bg">)</span>
+<span class="ansi-green-fg">    206</span> <span style="color: rgb(0,135,0)">self</span><span style="color: rgb(98,98,98)">.</span>add_fxn(<span style="color: rgb(175,0,0)">&#39;</span><span style="color: rgb(175,0,0)">export_coolant</span><span style="color: rgb(175,0,0)">&#39;</span>, ExportLiquid,
+<span class="ansi-green-fg">    207</span>              <span style="color: rgb(175,0,0)">&#39;</span><span style="color: rgb(175,0,0)">coolant_out</span><span style="color: rgb(175,0,0)">&#39;</span>, <span style="color: rgb(175,0,0)">&#39;</span><span style="color: rgb(175,0,0)">output_sig</span><span style="color: rgb(175,0,0)">&#39;</span>,
+<span class="ansi-green-fg">    208</span>              p<span style="color: rgb(98,98,98)">=</span><span style="color: rgb(0,135,0)">self</span><span style="color: rgb(98,98,98)">.</span>p)
+<span class="ansi-green-fg">    209</span> <span style="color: rgb(0,135,0)">self</span><span style="color: rgb(98,98,98)">.</span>add_fxn(<span style="color: rgb(175,0,0)">&#39;</span><span style="color: rgb(175,0,0)">contingency</span><span style="color: rgb(175,0,0)">&#39;</span>, ContingencyActions,
+<span class="ansi-green-fg">    210</span>              <span style="color: rgb(175,0,0)">&#39;</span><span style="color: rgb(175,0,0)">input_sig</span><span style="color: rgb(175,0,0)">&#39;</span>, <span style="color: rgb(175,0,0)">&#39;</span><span style="color: rgb(175,0,0)">tank_sig</span><span style="color: rgb(175,0,0)">&#39;</span>, <span style="color: rgb(175,0,0)">&#39;</span><span style="color: rgb(175,0,0)">output_sig</span><span style="color: rgb(175,0,0)">&#39;</span>, p<span style="color: rgb(98,98,98)">=</span><span style="color: rgb(0,135,0)">self</span><span style="color: rgb(98,98,98)">.</span>p)
+
+File <span class="ansi-green-intense-fg ansi-bold">c:\users\dhulse\documents\github\fmdtools\fmdtools\define\architecture\function.py:162</span>, in <span class="ansi-cyan-fg">FunctionArchitecture.add_fxn</span><span class="ansi-blue-intense-fg ansi-bold">(self, name, fclass, *flownames, **fkwargs)</span>
+<span class="ansi-green-fg">    144</span> <span class="ansi-bold" style="color: rgb(0,135,0)">def</span> <span style="color: rgb(0,0,255)">add_fxn</span>(<span style="color: rgb(0,135,0)">self</span>, name, fclass, <span style="color: rgb(98,98,98)">*</span>flownames, <span style="color: rgb(98,98,98)">*</span><span style="color: rgb(98,98,98)">*</span>fkwargs):
+<span class="ansi-green-fg">    145</span> <span style="color: rgb(188,188,188)">    </span><span style="color: rgb(175,0,0)">&#34;&#34;&#34;</span>
+<span class="ansi-green-fg">    146</span> <span style="color: rgb(175,0,0)">    Instantiate a given function in the model.</span>
+<span class="ansi-green-fg">    147</span>
 <span class="ansi-green-intense-fg ansi-bold">   (...)</span>
-<span class="ansi-green-fg">    621</span> <span style="color: rgb(175,0,0)">    A History dictionary with the tracked scenario (including the nominal)</span>
-<span class="ansi-green-fg">    622</span> <span style="color: rgb(175,0,0)">&#34;&#34;&#34;</span>
-<span class="ansi-green-fg">    623</span> kwargs<span style="color: rgb(98,98,98)">.</span>update(pack_run_kwargs(<span style="color: rgb(98,98,98)">*</span><span style="color: rgb(98,98,98)">*</span>kwargs))
-<span class="ansi-green-intense-fg ansi-bold">--&gt; 624</span> n_outs <span style="color: rgb(98,98,98)">=</span> nom_helper(mdl,
-<span class="ansi-green-fg">    625</span>                     fs<span style="color: rgb(98,98,98)">.</span>times(),
-<span class="ansi-green-fg">    626</span>                     <span style="color: rgb(98,98,98)">*</span><span style="color: rgb(98,98,98)">*</span>{<span style="color: rgb(98,98,98)">*</span><span style="color: rgb(98,98,98)">*</span>kwargs, <span style="color: rgb(175,0,0)">&#39;</span><span style="color: rgb(175,0,0)">use_end_condition</span><span style="color: rgb(175,0,0)">&#39;</span>: <span class="ansi-bold" style="color: rgb(0,135,0)">False</span>})
-<span class="ansi-green-fg">    627</span> nomresult, nomhist, nomscen, c_mdl, t_end_nom <span style="color: rgb(98,98,98)">=</span> n_outs
-<span class="ansi-green-fg">    628</span> scenlist <span style="color: rgb(98,98,98)">=</span> fs<span style="color: rgb(98,98,98)">.</span>scenarios()
+<span class="ansi-green-fg">    160</span> <span style="color: rgb(175,0,0)">        Parameters to send to __init__ method of the Function superclass</span>
+<span class="ansi-green-fg">    161</span> <span style="color: rgb(175,0,0)">    &#34;&#34;&#34;</span>
+<span class="ansi-green-intense-fg ansi-bold">--&gt; 162</span>     <span style="color: rgb(0,135,0)">self</span><span style="color: rgb(98,98,98)">.</span>add_sim(<span style="color: rgb(175,0,0)">&#39;</span><span style="color: rgb(175,0,0)">fxns</span><span style="color: rgb(175,0,0)">&#39;</span>, name, fclass, <span style="color: rgb(98,98,98)">*</span>flownames, <span style="color: rgb(98,98,98)">*</span><span style="color: rgb(98,98,98)">*</span>fkwargs)
+<span class="ansi-green-fg">    163</span>     <span class="ansi-bold" style="color: rgb(0,135,0)">for</span> flowname <span class="ansi-bold" style="color: rgb(175,0,255)">in</span> flownames:
+<span class="ansi-green-fg">    164</span>         <span style="color: rgb(0,135,0)">self</span><span style="color: rgb(98,98,98)">.</span>_fxnflows<span style="color: rgb(98,98,98)">.</span>append((name, flowname))
 
-File <span class="ansi-green-intense-fg ansi-bold">c:\users\dhulse\documents\github\fmdtools\fmdtools\sim\propagate.py:577</span>, in <span class="ansi-cyan-fg">nom_helper</span><span class="ansi-blue-intense-fg ansi-bold">(mdl, ctimes, protect, save_args, mdl_kwargs, scen, warn_faults, **kwargs)</span>
-<span class="ansi-green-fg">    575</span> <span style="color: rgb(95,135,135)"># mdl.reset()</span>
-<span class="ansi-green-fg">    576</span> <span class="ansi-bold" style="color: rgb(0,135,0)">if</span> <span class="ansi-bold" style="color: rgb(175,0,255)">not</span> staged:
-<span class="ansi-green-intense-fg ansi-bold">--&gt; 577</span>     mdls <span style="color: rgb(98,98,98)">=</span> {<span style="color: rgb(98,98,98)">0</span>: mdl<span style="color: rgb(98,98,98)">.</span>new_with_params(<span style="color: rgb(98,98,98)">*</span><span style="color: rgb(98,98,98)">*</span>mdl_kwargs)}
-<span class="ansi-green-fg">    579</span> <span class="ansi-bold" style="color: rgb(0,135,0)">return</span> result, nommdlhist, nomscen, mdls, t_end_nom
+File <span class="ansi-green-intense-fg ansi-bold">c:\users\dhulse\documents\github\fmdtools\fmdtools\define\architecture\base.py:184</span>, in <span class="ansi-cyan-fg">Architecture.add_sim</span><span class="ansi-blue-intense-fg ansi-bold">(self, flex_role, name, simclass, *flownames, **kwargs)</span>
+<span class="ansi-green-fg">    181</span> <span class="ansi-bold" style="color: rgb(0,135,0)">if</span> <span class="ansi-bold" style="color: rgb(175,0,255)">not</span> <span style="color: rgb(0,135,0)">self</span><span style="color: rgb(98,98,98)">.</span>sp<span style="color: rgb(98,98,98)">.</span>use_local:
+<span class="ansi-green-fg">    182</span>     fkwargs <span style="color: rgb(98,98,98)">=</span> {<span style="color: rgb(98,98,98)">*</span><span style="color: rgb(98,98,98)">*</span>{<span style="color: rgb(175,0,0)">&#39;</span><span style="color: rgb(175,0,0)">t</span><span style="color: rgb(175,0,0)">&#39;</span>: {<span style="color: rgb(175,0,0)">&#39;</span><span style="color: rgb(175,0,0)">dt</span><span style="color: rgb(175,0,0)">&#39;</span>: <span style="color: rgb(0,135,0)">self</span><span style="color: rgb(98,98,98)">.</span>sp<span style="color: rgb(98,98,98)">.</span>dt}}, <span style="color: rgb(98,98,98)">*</span><span style="color: rgb(98,98,98)">*</span>fkwargs}
+<span class="ansi-green-intense-fg ansi-bold">--&gt; 184</span> <span style="color: rgb(0,135,0)">self</span><span style="color: rgb(98,98,98)">.</span>add_flex_role_obj(flex_role, name, objclass<span style="color: rgb(98,98,98)">=</span>simclass, flows<span style="color: rgb(98,98,98)">=</span>flows, <span style="color: rgb(98,98,98)">*</span><span style="color: rgb(98,98,98)">*</span>fkwargs)
 
-File <span class="ansi-green-intense-fg ansi-bold">c:\users\dhulse\documents\github\fmdtools\fmdtools\define\model.py:275</span>, in <span class="ansi-cyan-fg">Model.new_with_params</span><span class="ansi-blue-intense-fg ansi-bold">(self, **kwargs)</span>
-<span class="ansi-green-fg">    270</span> <span style="color: rgb(175,0,0)">&#34;&#34;&#34;</span>
-<span class="ansi-green-fg">    271</span> <span style="color: rgb(175,0,0)">Creates a new Model with the same parameters as the current model but</span>
-<span class="ansi-green-fg">    272</span> <span style="color: rgb(175,0,0)">with changes to params (p, sp, track, rand etc.)</span>
-<span class="ansi-green-fg">    273</span> <span style="color: rgb(175,0,0)">&#34;&#34;&#34;</span>
-<span class="ansi-green-fg">    274</span> p, sp, r, track <span style="color: rgb(98,98,98)">=</span> <span style="color: rgb(0,135,0)">super</span>()<span style="color: rgb(98,98,98)">.</span>new_params(<span style="color: rgb(98,98,98)">*</span><span style="color: rgb(98,98,98)">*</span>kwargs)
-<span class="ansi-green-intense-fg ansi-bold">--&gt; 275</span> <span class="ansi-bold" style="color: rgb(0,135,0)">return</span> <span class="ansi-yellow-bg" style="color: rgb(0,135,0)">self</span><span class="ansi-yellow-bg" style="color: rgb(98,98,98)">.</span><span class="ansi-yellow-bg" style="color: rgb(0,0,135)">__class__</span><span class="ansi-yellow-bg">(</span><span class="ansi-yellow-bg">p</span><span class="ansi-yellow-bg" style="color: rgb(98,98,98)">=</span><span class="ansi-yellow-bg">p</span><span class="ansi-yellow-bg">,</span><span class="ansi-yellow-bg"> </span><span class="ansi-yellow-bg">sp</span><span class="ansi-yellow-bg" style="color: rgb(98,98,98)">=</span><span class="ansi-yellow-bg">sp</span><span class="ansi-yellow-bg">,</span><span class="ansi-yellow-bg"> </span><span class="ansi-yellow-bg">r</span><span class="ansi-yellow-bg" style="color: rgb(98,98,98)">=</span><span class="ansi-yellow-bg">r</span><span class="ansi-yellow-bg">,</span><span class="ansi-yellow-bg"> </span><span class="ansi-yellow-bg">track</span><span class="ansi-yellow-bg" style="color: rgb(98,98,98)">=</span><span class="ansi-yellow-bg">track</span><span class="ansi-yellow-bg">)</span>
+File <span class="ansi-green-intense-fg ansi-bold">c:\users\dhulse\documents\github\fmdtools\fmdtools\define\architecture\base.py:105</span>, in <span class="ansi-cyan-fg">Architecture.add_flex_role_obj</span><span class="ansi-blue-intense-fg ansi-bold">(self, flex_role, name, objclass, use_copy, **kwargs)</span>
+<span class="ansi-green-fg">    102</span>     as_copy <span style="color: rgb(98,98,98)">=</span> <span style="color: rgb(0,135,0)">self</span><span style="color: rgb(98,98,98)">.</span>as_copy
+<span class="ansi-green-fg">    104</span> track <span style="color: rgb(98,98,98)">=</span> get_sub_include(name, get_sub_include(flex_role, <span style="color: rgb(0,135,0)">self</span><span style="color: rgb(98,98,98)">.</span>track))
+<span class="ansi-green-intense-fg ansi-bold">--&gt; 105</span> obj <span style="color: rgb(98,98,98)">=</span> init_obj(name<span style="color: rgb(98,98,98)">=</span>name, objclass<span style="color: rgb(98,98,98)">=</span>objclass, track<span style="color: rgb(98,98,98)">=</span>track,
+<span class="ansi-green-fg">    106</span>                as_copy<span style="color: rgb(98,98,98)">=</span>as_copy, <span style="color: rgb(98,98,98)">*</span><span style="color: rgb(98,98,98)">*</span>kwargs)
+<span class="ansi-green-fg">    108</span> <span class="ansi-bold" style="color: rgb(0,135,0)">if</span> <span style="color: rgb(0,135,0)">hasattr</span>(obj, <span style="color: rgb(175,0,0)">&#39;</span><span style="color: rgb(175,0,0)">h</span><span style="color: rgb(175,0,0)">&#39;</span>) <span class="ansi-bold" style="color: rgb(175,0,255)">and</span> obj<span style="color: rgb(98,98,98)">.</span>h:
+<span class="ansi-green-fg">    109</span>     hist <span style="color: rgb(98,98,98)">=</span> obj<span style="color: rgb(98,98,98)">.</span>h
 
-File <span class="ansi-green-intense-fg ansi-bold">~\Documents\GitHub\fmdtools\examples\tank\tank_optimization_model.py:193</span>, in <span class="ansi-cyan-fg">Tank.__init__</span><span class="ansi-blue-intense-fg ansi-bold">(self, **kwargs)</span>
-<span class="ansi-green-fg">    192</span> <span class="ansi-bold" style="color: rgb(0,135,0)">def</span> <span style="color: rgb(0,0,255)">__init__</span>(<span style="color: rgb(0,135,0)">self</span>, <span style="color: rgb(98,98,98)">*</span><span style="color: rgb(98,98,98)">*</span>kwargs):
-<span class="ansi-green-intense-fg ansi-bold">--&gt; 193</span>     <span style="color: rgb(0,135,0)">super</span>()<span style="color: rgb(98,98,98)">.</span><span style="color: rgb(0,0,255)">__init__</span>(<span style="color: rgb(98,98,98)">*</span><span style="color: rgb(98,98,98)">*</span>kwargs)
-<span class="ansi-green-fg">    195</span>     <span style="color: rgb(0,135,0)">self</span><span style="color: rgb(98,98,98)">.</span>add_flow(<span style="color: rgb(175,0,0)">&#39;</span><span style="color: rgb(175,0,0)">coolant_in</span><span style="color: rgb(175,0,0)">&#39;</span>, Liquid)
-<span class="ansi-green-fg">    196</span>     <span style="color: rgb(0,135,0)">self</span><span style="color: rgb(98,98,98)">.</span>add_flow(<span style="color: rgb(175,0,0)">&#39;</span><span style="color: rgb(175,0,0)">coolant_out</span><span style="color: rgb(175,0,0)">&#39;</span>, Liquid)
+File <span class="ansi-green-intense-fg ansi-bold">c:\users\dhulse\documents\github\fmdtools\fmdtools\define\object\base.py:518</span>, in <span class="ansi-cyan-fg">init_obj</span><span class="ansi-blue-intense-fg ansi-bold">(name, objclass, track, as_copy, **kwargs)</span>
+<span class="ansi-green-fg">    516</span> <span class="ansi-bold" style="color: rgb(0,135,0)">else</span>:
+<span class="ansi-green-fg">    517</span>     <span class="ansi-bold" style="color: rgb(0,135,0)">try</span>:
+<span class="ansi-green-intense-fg ansi-bold">--&gt; 518</span>         fl <span style="color: rgb(98,98,98)">=</span> objclass(name<span style="color: rgb(98,98,98)">=</span>name, track<span style="color: rgb(98,98,98)">=</span>track, <span style="color: rgb(98,98,98)">*</span><span style="color: rgb(98,98,98)">*</span>kwargs)
+<span class="ansi-green-fg">    519</span>     <span class="ansi-bold" style="color: rgb(0,135,0)">except</span> <span class="ansi-bold" style="color: rgb(215,95,95)">TypeError</span> <span class="ansi-bold" style="color: rgb(0,135,0)">as</span> e:
+<span class="ansi-green-fg">    520</span>         <span class="ansi-bold" style="color: rgb(0,135,0)">raise</span> <span class="ansi-bold" style="color: rgb(215,95,95)">TypeError</span>(<span style="color: rgb(175,0,0)">&#34;</span><span style="color: rgb(175,0,0)">Poorly specified class </span><span style="color: rgb(175,0,0)">&#34;</span><span style="color: rgb(98,98,98)">+</span><span style="color: rgb(0,135,0)">str</span>(objclass) <span style="color: rgb(98,98,98)">+</span>
+<span class="ansi-green-fg">    521</span>                         <span style="color: rgb(175,0,0)">&#34;</span><span style="color: rgb(175,0,0)"> (or poor arguments) </span><span style="color: rgb(175,0,0)">&#34;</span><span style="color: rgb(98,98,98)">+</span><span style="color: rgb(0,135,0)">str</span>(kwargs)) <span class="ansi-bold" style="color: rgb(0,135,0)">from</span> <span class="ansi-bold" style="color: rgb(0,0,255)">e</span>
 
-File <span class="ansi-green-intense-fg ansi-bold">c:\users\dhulse\documents\github\fmdtools\fmdtools\define\model.py:49</span>, in <span class="ansi-cyan-fg">Model.__init__</span><span class="ansi-blue-intense-fg ansi-bold">(self, name, p, sp, r, track)</span>
-<span class="ansi-green-fg">     48</span> <span class="ansi-bold" style="color: rgb(0,135,0)">def</span> <span style="color: rgb(0,0,255)">__init__</span>(<span style="color: rgb(0,135,0)">self</span>, name<span style="color: rgb(98,98,98)">=</span><span style="color: rgb(175,0,0)">&#39;</span><span style="color: rgb(175,0,0)">&#39;</span>, p<span style="color: rgb(98,98,98)">=</span>{}, sp<span style="color: rgb(98,98,98)">=</span>{}, r<span style="color: rgb(98,98,98)">=</span>{}, track<span style="color: rgb(98,98,98)">=</span><span style="color: rgb(175,0,0)">&#39;</span><span style="color: rgb(175,0,0)">&#39;</span>):
-<span class="ansi-green-intense-fg ansi-bold">---&gt; 49</span>     <span class="ansi-yellow-bg" style="color: rgb(0,135,0)">super</span><span class="ansi-yellow-bg">(</span><span class="ansi-yellow-bg">)</span><span class="ansi-yellow-bg" style="color: rgb(98,98,98)">.</span><span class="ansi-yellow-bg" style="color: rgb(0,0,255)">__init__</span><span class="ansi-yellow-bg">(</span><span class="ansi-yellow-bg">name</span><span class="ansi-yellow-bg" style="color: rgb(98,98,98)">=</span><span class="ansi-yellow-bg">name</span><span class="ansi-yellow-bg">,</span><span class="ansi-yellow-bg"> </span><span class="ansi-yellow-bg">p</span><span class="ansi-yellow-bg" style="color: rgb(98,98,98)">=</span><span class="ansi-yellow-bg">p</span><span class="ansi-yellow-bg">,</span><span class="ansi-yellow-bg"> </span><span class="ansi-yellow-bg">sp</span><span class="ansi-yellow-bg" style="color: rgb(98,98,98)">=</span><span class="ansi-yellow-bg">sp</span><span class="ansi-yellow-bg">,</span><span class="ansi-yellow-bg"> </span><span class="ansi-yellow-bg">r</span><span class="ansi-yellow-bg" style="color: rgb(98,98,98)">=</span><span class="ansi-yellow-bg">r</span><span class="ansi-yellow-bg">,</span><span class="ansi-yellow-bg"> </span><span class="ansi-yellow-bg">track</span><span class="ansi-yellow-bg" style="color: rgb(98,98,98)">=</span><span class="ansi-yellow-bg">track</span><span class="ansi-yellow-bg">)</span>
-<span class="ansi-green-fg">     51</span>     <span style="color: rgb(0,135,0)">self</span><span style="color: rgb(98,98,98)">.</span>fxns<span style="color: rgb(98,98,98)">=</span><span style="color: rgb(0,135,0)">dict</span>()
-<span class="ansi-green-fg">     52</span>     <span style="color: rgb(0,135,0)">self</span><span style="color: rgb(98,98,98)">.</span>functionorder<span style="color: rgb(98,98,98)">=</span>OrderedSet() <span style="color: rgb(95,135,135)">#set is ordered and executed in the order specified in the model</span>
-
-File <span class="ansi-green-intense-fg ansi-bold">c:\users\dhulse\documents\github\fmdtools\fmdtools\define\block.py:137</span>, in <span class="ansi-cyan-fg">Simulable.__init__</span><span class="ansi-blue-intense-fg ansi-bold">(self, name, p, sp, r, track)</span>
-<span class="ansi-green-fg">    135</span> <span class="ansi-bold" style="color: rgb(0,135,0)">if</span> <span class="ansi-bold" style="color: rgb(175,0,255)">not</span> sp:
-<span class="ansi-green-fg">    136</span>     sp <span style="color: rgb(98,98,98)">=</span> <span style="color: rgb(0,135,0)">self</span><span style="color: rgb(98,98,98)">.</span>default_sp
-<span class="ansi-green-intense-fg ansi-bold">--&gt; 137</span> <span class="ansi-yellow-bg">init_obj_attr</span><span class="ansi-yellow-bg">(</span><span class="ansi-yellow-bg" style="color: rgb(0,135,0)">self</span><span class="ansi-yellow-bg">,</span><span class="ansi-yellow-bg"> </span><span class="ansi-yellow-bg">p</span><span class="ansi-yellow-bg" style="color: rgb(98,98,98)">=</span><span class="ansi-yellow-bg">p</span><span class="ansi-yellow-bg">,</span><span class="ansi-yellow-bg"> </span><span class="ansi-yellow-bg">sp</span><span class="ansi-yellow-bg" style="color: rgb(98,98,98)">=</span><span class="ansi-yellow-bg">sp</span><span class="ansi-yellow-bg">,</span><span class="ansi-yellow-bg"> </span><span class="ansi-yellow-bg">r</span><span class="ansi-yellow-bg" style="color: rgb(98,98,98)">=</span><span class="ansi-yellow-bg">r</span><span class="ansi-yellow-bg">)</span>
-
-File <span class="ansi-green-intense-fg ansi-bold">c:\users\dhulse\documents\github\fmdtools\fmdtools\define\common.py:324</span>, in <span class="ansi-cyan-fg">init_obj_attr</span><span class="ansi-blue-intense-fg ansi-bold">(obj, **attrs)</span>
-<span class="ansi-green-fg">    322</span> <span style="color: rgb(0,135,0)">setattr</span>(obj, <span style="color: rgb(175,0,0)">&#39;</span><span style="color: rgb(175,0,0)">_args_</span><span style="color: rgb(175,0,0)">&#39;</span><span style="color: rgb(98,98,98)">+</span>at, at_arg)
-<span class="ansi-green-fg">    323</span> init_at <span style="color: rgb(98,98,98)">=</span> <span style="color: rgb(0,135,0)">getattr</span>(obj, <span style="color: rgb(175,0,0)">&#39;</span><span style="color: rgb(175,0,0)">_init_</span><span style="color: rgb(175,0,0)">&#39;</span><span style="color: rgb(98,98,98)">+</span>at)
-<span class="ansi-green-intense-fg ansi-bold">--&gt; 324</span> <span style="color: rgb(0,135,0)">setattr</span>(obj, at, init_at(<span style="color: rgb(98,98,98)">*</span><span style="color: rgb(98,98,98)">*</span>at_arg))
-
-File <span class="ansi-green-intense-fg ansi-bold">c:\users\dhulse\documents\github\fmdtools\fmdtools\define\rand.py:62</span>, in <span class="ansi-cyan-fg">Rand.__init__</span><span class="ansi-blue-intense-fg ansi-bold">(self, seed, run_stochastic, probs, s_kwargs, *args)</span>
-<span class="ansi-green-fg">     61</span> <span class="ansi-bold" style="color: rgb(0,135,0)">def</span> <span style="color: rgb(0,0,255)">__init__</span>(<span style="color: rgb(0,135,0)">self</span>, <span style="color: rgb(98,98,98)">*</span>args, seed<span style="color: rgb(98,98,98)">=</span><span style="color: rgb(98,98,98)">42</span>, run_stochastic<span style="color: rgb(98,98,98)">=</span><span class="ansi-bold" style="color: rgb(0,135,0)">False</span>, probs<span style="color: rgb(98,98,98)">=</span><span style="color: rgb(0,135,0)">list</span>(), s_kwargs<span style="color: rgb(98,98,98)">=</span>{}):
-<span class="ansi-green-intense-fg ansi-bold">---&gt; 62</span>     args <span style="color: rgb(98,98,98)">=</span> <span class="ansi-yellow-bg">get_true_fields</span><span class="ansi-yellow-bg">(</span><span class="ansi-yellow-bg" style="color: rgb(0,135,0)">self</span><span class="ansi-yellow-bg">,</span><span class="ansi-yellow-bg"> </span><span class="ansi-yellow-bg" style="color: rgb(98,98,98)">*</span><span class="ansi-yellow-bg">args</span><span class="ansi-yellow-bg">,</span>
-<span class="ansi-green-fg">     63</span> <span class="ansi-yellow-bg">                           </span><span class="ansi-yellow-bg">seed</span><span class="ansi-yellow-bg" style="color: rgb(98,98,98)">=</span><span class="ansi-yellow-bg">seed</span><span class="ansi-yellow-bg">,</span>
-<span class="ansi-green-fg">     64</span> <span class="ansi-yellow-bg">                           </span><span class="ansi-yellow-bg">run_stochastic</span><span class="ansi-yellow-bg" style="color: rgb(98,98,98)">=</span><span class="ansi-yellow-bg">run_stochastic</span><span class="ansi-yellow-bg">,</span>
-<span class="ansi-green-fg">     65</span> <span class="ansi-yellow-bg">                           </span><span class="ansi-yellow-bg">probs</span><span class="ansi-yellow-bg" style="color: rgb(98,98,98)">=</span><span class="ansi-yellow-bg">probs</span><span class="ansi-yellow-bg">,</span>
-<span class="ansi-green-fg">     66</span> <span class="ansi-yellow-bg">                           </span><span class="ansi-yellow-bg">rng</span><span class="ansi-yellow-bg" style="color: rgb(98,98,98)">=</span><span class="ansi-yellow-bg">np</span><span class="ansi-yellow-bg" style="color: rgb(98,98,98)">.</span><span class="ansi-yellow-bg">random</span><span class="ansi-yellow-bg" style="color: rgb(98,98,98)">.</span><span class="ansi-yellow-bg">default_rng</span><span class="ansi-yellow-bg">(</span><span class="ansi-yellow-bg" style="color: rgb(0,135,0)">self</span><span class="ansi-yellow-bg" style="color: rgb(98,98,98)">.</span><span class="ansi-yellow-bg">seed</span><span class="ansi-yellow-bg">)</span><span class="ansi-yellow-bg">)</span>
-<span class="ansi-green-fg">     67</span>     <span style="color: rgb(0,135,0)">super</span>()<span style="color: rgb(98,98,98)">.</span><span style="color: rgb(0,0,255)">__init__</span>(<span style="color: rgb(98,98,98)">*</span>args)
-<span class="ansi-green-fg">     68</span>     <span class="ansi-bold" style="color: rgb(0,135,0)">if</span> <span style="color: rgb(175,0,0)">&#39;</span><span style="color: rgb(175,0,0)">s</span><span style="color: rgb(175,0,0)">&#39;</span> <span class="ansi-bold" style="color: rgb(175,0,255)">in</span> <span style="color: rgb(0,135,0)">self</span><span style="color: rgb(98,98,98)">.</span>__fields__:
-
-File <span class="ansi-green-intense-fg ansi-bold">c:\users\dhulse\documents\github\fmdtools\fmdtools\define\common.py:232</span>, in <span class="ansi-cyan-fg">get_true_fields</span><span class="ansi-blue-intense-fg ansi-bold">(dataobject, force_kwargs, *args, **kwargs)</span>
-<span class="ansi-green-fg">    225</span> <span class="ansi-bold" style="color: rgb(0,135,0)">def</span> <span style="color: rgb(0,0,255)">get_true_fields</span>(dataobject, <span style="color: rgb(98,98,98)">*</span>args, force_kwargs<span style="color: rgb(98,98,98)">=</span><span class="ansi-bold" style="color: rgb(0,135,0)">False</span>, <span style="color: rgb(98,98,98)">*</span><span style="color: rgb(98,98,98)">*</span>kwargs):
-<span class="ansi-green-fg">    226</span> <span style="color: rgb(188,188,188)">    </span><span style="color: rgb(175,0,0)">&#34;&#34;&#34;</span>
-<span class="ansi-green-fg">    227</span> <span style="color: rgb(175,0,0)">    Resolve the args to pass to a dataobject given certain defaults, *args and **kwargs.</span>
-<span class="ansi-green-fg">    228</span>
-<span class="ansi-green-fg">    229</span> <span style="color: rgb(175,0,0)">    NOTE: must be used for pickling, since pickle passes arguments as *args and not</span>
-<span class="ansi-green-fg">    230</span> <span style="color: rgb(175,0,0)">    **kwargs.</span>
-<span class="ansi-green-fg">    231</span> <span style="color: rgb(175,0,0)">    &#34;&#34;&#34;</span>
-<span class="ansi-green-intense-fg ansi-bold">--&gt; 232</span>     true_args <span style="color: rgb(98,98,98)">=</span> <span style="color: rgb(0,135,0)">list</span>([copy<span style="color: rgb(98,98,98)">.</span>copy(i) <span class="ansi-bold" style="color: rgb(0,135,0)">for</span> i <span class="ansi-bold" style="color: rgb(175,0,255)">in</span> dataobject<span style="color: rgb(98,98,98)">.</span>__default_vals__])
-<span class="ansi-green-fg">    233</span>     <span class="ansi-bold" style="color: rgb(0,135,0)">for</span> i, n <span class="ansi-bold" style="color: rgb(175,0,255)">in</span> <span style="color: rgb(0,135,0)">enumerate</span>(dataobject<span style="color: rgb(98,98,98)">.</span>__fields__):
-<span class="ansi-green-fg">    234</span>         <span class="ansi-bold" style="color: rgb(0,135,0)">if</span> force_kwargs:
-
-File <span class="ansi-green-intense-fg ansi-bold">c:\users\dhulse\documents\github\fmdtools\fmdtools\define\common.py:232</span>, in <span class="ansi-cyan-fg">&lt;listcomp&gt;</span><span class="ansi-blue-intense-fg ansi-bold">(.0)</span>
-<span class="ansi-green-fg">    225</span> <span class="ansi-bold" style="color: rgb(0,135,0)">def</span> <span style="color: rgb(0,0,255)">get_true_fields</span>(dataobject, <span style="color: rgb(98,98,98)">*</span>args, force_kwargs<span style="color: rgb(98,98,98)">=</span><span class="ansi-bold" style="color: rgb(0,135,0)">False</span>, <span style="color: rgb(98,98,98)">*</span><span style="color: rgb(98,98,98)">*</span>kwargs):
-<span class="ansi-green-fg">    226</span> <span style="color: rgb(188,188,188)">    </span><span style="color: rgb(175,0,0)">&#34;&#34;&#34;</span>
-<span class="ansi-green-fg">    227</span> <span style="color: rgb(175,0,0)">    Resolve the args to pass to a dataobject given certain defaults, *args and **kwargs.</span>
-<span class="ansi-green-fg">    228</span>
-<span class="ansi-green-fg">    229</span> <span style="color: rgb(175,0,0)">    NOTE: must be used for pickling, since pickle passes arguments as *args and not</span>
-<span class="ansi-green-fg">    230</span> <span style="color: rgb(175,0,0)">    **kwargs.</span>
-<span class="ansi-green-fg">    231</span> <span style="color: rgb(175,0,0)">    &#34;&#34;&#34;</span>
-<span class="ansi-green-intense-fg ansi-bold">--&gt; 232</span>     true_args <span style="color: rgb(98,98,98)">=</span> <span style="color: rgb(0,135,0)">list</span>([<span class="ansi-yellow-bg">copy</span><span class="ansi-yellow-bg" style="color: rgb(98,98,98)">.</span><span class="ansi-yellow-bg">copy</span><span class="ansi-yellow-bg">(</span><span class="ansi-yellow-bg">i</span><span class="ansi-yellow-bg">)</span> <span class="ansi-bold" style="color: rgb(0,135,0)">for</span> i <span class="ansi-bold" style="color: rgb(175,0,255)">in</span> dataobject<span style="color: rgb(98,98,98)">.</span>__default_vals__])
-<span class="ansi-green-fg">    233</span>     <span class="ansi-bold" style="color: rgb(0,135,0)">for</span> i, n <span class="ansi-bold" style="color: rgb(175,0,255)">in</span> <span style="color: rgb(0,135,0)">enumerate</span>(dataobject<span style="color: rgb(98,98,98)">.</span>__fields__):
-<span class="ansi-green-fg">    234</span>         <span class="ansi-bold" style="color: rgb(0,135,0)">if</span> force_kwargs:
-
-File <span class="ansi-green-intense-fg ansi-bold">~\AppData\Local\anaconda3\lib\copy.py:102</span>, in <span class="ansi-cyan-fg">copy</span><span class="ansi-blue-intense-fg ansi-bold">(x)</span>
-<span class="ansi-green-fg">    100</span> <span class="ansi-bold" style="color: rgb(0,135,0)">if</span> <span style="color: rgb(0,135,0)">isinstance</span>(rv, <span style="color: rgb(0,135,0)">str</span>):
-<span class="ansi-green-fg">    101</span>     <span class="ansi-bold" style="color: rgb(0,135,0)">return</span> x
-<span class="ansi-green-intense-fg ansi-bold">--&gt; 102</span> <span class="ansi-bold" style="color: rgb(0,135,0)">return</span> <span class="ansi-yellow-bg">_reconstruct</span><span class="ansi-yellow-bg">(</span><span class="ansi-yellow-bg">x</span><span class="ansi-yellow-bg">,</span><span class="ansi-yellow-bg"> </span><span class="ansi-yellow-bg ansi-bold" style="color: rgb(0,135,0)">None</span><span class="ansi-yellow-bg">,</span><span class="ansi-yellow-bg"> </span><span class="ansi-yellow-bg" style="color: rgb(98,98,98)">*</span><span class="ansi-yellow-bg">rv</span><span class="ansi-yellow-bg">)</span>
-
-File <span class="ansi-green-intense-fg ansi-bold">~\AppData\Local\anaconda3\lib\copy.py:265</span>, in <span class="ansi-cyan-fg">_reconstruct</span><span class="ansi-blue-intense-fg ansi-bold">(x, memo, func, args, state, listiter, dictiter, deepcopy)</span>
-<span class="ansi-green-fg">    263</span> <span class="ansi-bold" style="color: rgb(0,135,0)">if</span> deep <span class="ansi-bold" style="color: rgb(175,0,255)">and</span> args:
-<span class="ansi-green-fg">    264</span>     args <span style="color: rgb(98,98,98)">=</span> (deepcopy(arg, memo) <span class="ansi-bold" style="color: rgb(0,135,0)">for</span> arg <span class="ansi-bold" style="color: rgb(175,0,255)">in</span> args)
-<span class="ansi-green-intense-fg ansi-bold">--&gt; 265</span> y <span style="color: rgb(98,98,98)">=</span> <span class="ansi-yellow-bg">func</span><span class="ansi-yellow-bg">(</span><span class="ansi-yellow-bg" style="color: rgb(98,98,98)">*</span><span class="ansi-yellow-bg">args</span><span class="ansi-yellow-bg">)</span>
-<span class="ansi-green-fg">    266</span> <span class="ansi-bold" style="color: rgb(0,135,0)">if</span> deep:
-<span class="ansi-green-fg">    267</span>     memo[<span style="color: rgb(0,135,0)">id</span>(x)] <span style="color: rgb(98,98,98)">=</span> y
-
-File <span class="ansi-green-intense-fg ansi-bold">~\AppData\Roaming\Python\Python310\site-packages\numpy\random\_pickle.py:58</span>, in <span class="ansi-cyan-fg">__generator_ctor</span><span class="ansi-blue-intense-fg ansi-bold">(bit_generator_name, bit_generator_ctor)</span>
-<span class="ansi-green-fg">     40</span> <span class="ansi-bold" style="color: rgb(0,135,0)">def</span> <span style="color: rgb(0,0,255)">__generator_ctor</span>(bit_generator_name<span style="color: rgb(98,98,98)">=</span><span style="color: rgb(175,0,0)">&#34;</span><span style="color: rgb(175,0,0)">MT19937</span><span style="color: rgb(175,0,0)">&#34;</span>,
-<span class="ansi-green-fg">     41</span>                      bit_generator_ctor<span style="color: rgb(98,98,98)">=</span>__bit_generator_ctor):
-<span class="ansi-green-fg">     42</span> <span style="color: rgb(188,188,188)">    </span><span style="color: rgb(175,0,0)">&#34;&#34;&#34;</span>
-<span class="ansi-green-fg">     43</span> <span style="color: rgb(175,0,0)">    Pickling helper function that returns a Generator object</span>
-<span class="ansi-green-fg">     44</span>
+File <span class="ansi-green-intense-fg ansi-bold">c:\users\dhulse\documents\github\fmdtools\fmdtools\define\block\function.py:66</span>, in <span class="ansi-cyan-fg">Function.__init__</span><span class="ansi-blue-intense-fg ansi-bold">(self, name, args_f, **kwargs)</span>
+<span class="ansi-green-fg">     57</span> <span class="ansi-bold" style="color: rgb(0,135,0)">def</span> <span style="color: rgb(0,0,255)">__init__</span>(<span style="color: rgb(0,135,0)">self</span>, name<span style="color: rgb(98,98,98)">=</span><span class="ansi-bold" style="color: rgb(0,135,0)">None</span>, args_f<span style="color: rgb(98,98,98)">=</span><span style="color: rgb(0,135,0)">dict</span>(), <span style="color: rgb(98,98,98)">*</span><span style="color: rgb(98,98,98)">*</span>kwargs):
+<span class="ansi-green-fg">     58</span> <span style="color: rgb(188,188,188)">    </span><span style="color: rgb(175,0,0)">&#34;&#34;&#34;</span>
+<span class="ansi-green-fg">     59</span> <span style="color: rgb(175,0,0)">    Instantiate the function superclass with the relevant parameters.</span>
+<span class="ansi-green-fg">     60</span>
 <span class="ansi-green-intense-fg ansi-bold">   (...)</span>
-<span class="ansi-green-fg">     56</span> <span style="color: rgb(175,0,0)">        Generator using the named core BitGenerator</span>
-<span class="ansi-green-fg">     57</span> <span style="color: rgb(175,0,0)">    &#34;&#34;&#34;</span>
-<span class="ansi-green-intense-fg ansi-bold">---&gt; 58</span>     <span class="ansi-bold" style="color: rgb(0,135,0)">return</span> Generator(<span class="ansi-yellow-bg">bit_generator_ctor</span><span class="ansi-yellow-bg">(</span><span class="ansi-yellow-bg">bit_generator_name</span><span class="ansi-yellow-bg">)</span>)
+<span class="ansi-green-fg">     64</span> <span style="color: rgb(175,0,0)">        arguments to pass to custom __init__ function.</span>
+<span class="ansi-green-fg">     65</span> <span style="color: rgb(175,0,0)">    &#34;&#34;&#34;</span>
+<span class="ansi-green-intense-fg ansi-bold">---&gt; 66</span>     <span style="color: rgb(0,135,0)">super</span>()<span style="color: rgb(98,98,98)">.</span><span style="color: rgb(0,0,255)">__init__</span>(name<span style="color: rgb(98,98,98)">=</span>name, <span style="color: rgb(98,98,98)">*</span><span style="color: rgb(98,98,98)">*</span>kwargs)
+<span class="ansi-green-fg">     67</span>     <span style="color: rgb(0,135,0)">self</span><span style="color: rgb(98,98,98)">.</span>args_f <span style="color: rgb(98,98,98)">=</span> args_f
 
-File <span class="ansi-green-intense-fg ansi-bold">~\AppData\Roaming\Python\Python310\site-packages\numpy\random\_pickle.py:37</span>, in <span class="ansi-cyan-fg">__bit_generator_ctor</span><span class="ansi-blue-intense-fg ansi-bold">(bit_generator_name)</span>
-<span class="ansi-green-fg">     33</span> <span class="ansi-bold" style="color: rgb(0,135,0)">else</span>:
-<span class="ansi-green-fg">     34</span>     <span class="ansi-bold" style="color: rgb(0,135,0)">raise</span> <span class="ansi-bold" style="color: rgb(215,95,95)">ValueError</span>(<span style="color: rgb(0,135,0)">str</span>(bit_generator_name) <span style="color: rgb(98,98,98)">+</span> <span style="color: rgb(175,0,0)">&#39;</span><span style="color: rgb(175,0,0)"> is not a known </span><span style="color: rgb(175,0,0)">&#39;</span>
-<span class="ansi-green-fg">     35</span>                                                <span style="color: rgb(175,0,0)">&#39;</span><span style="color: rgb(175,0,0)">BitGenerator module.</span><span style="color: rgb(175,0,0)">&#39;</span>)
-<span class="ansi-green-intense-fg ansi-bold">---&gt; 37</span> <span class="ansi-bold" style="color: rgb(0,135,0)">return</span> <span class="ansi-yellow-bg">bit_generator</span><span class="ansi-yellow-bg">(</span><span class="ansi-yellow-bg">)</span>
+File <span class="ansi-green-intense-fg ansi-bold">c:\users\dhulse\documents\github\fmdtools\fmdtools\define\block\base.py:442</span>, in <span class="ansi-cyan-fg">Block.__init__</span><span class="ansi-blue-intense-fg ansi-bold">(self, name, flows, h, **kwargs)</span>
+<span class="ansi-green-fg">    439</span>     flows <span style="color: rgb(98,98,98)">=</span> {<span style="color: rgb(0,135,0)">self</span><span style="color: rgb(98,98,98)">.</span>flownames<span style="color: rgb(98,98,98)">.</span>get(fn, fn): flow <span class="ansi-bold" style="color: rgb(0,135,0)">for</span> fn, flow <span class="ansi-bold" style="color: rgb(175,0,255)">in</span> flows<span style="color: rgb(98,98,98)">.</span>items()}
+<span class="ansi-green-fg">    440</span> flows <span style="color: rgb(98,98,98)">=</span> {<span style="color: rgb(98,98,98)">*</span><span style="color: rgb(98,98,98)">*</span>flows}
+<span class="ansi-green-intense-fg ansi-bold">--&gt; 442</span> Simulable<span style="color: rgb(98,98,98)">.</span><span style="color: rgb(0,0,255)">__init__</span>(<span style="color: rgb(0,135,0)">self</span>, name<span style="color: rgb(98,98,98)">=</span>name, roletypes<span style="color: rgb(98,98,98)">=</span>[<span style="color: rgb(175,0,0)">&#39;</span><span style="color: rgb(175,0,0)">container</span><span style="color: rgb(175,0,0)">&#39;</span>, <span style="color: rgb(175,0,0)">&#39;</span><span style="color: rgb(175,0,0)">flow</span><span style="color: rgb(175,0,0)">&#39;</span>],
+<span class="ansi-green-fg">    443</span>                    <span style="color: rgb(98,98,98)">*</span><span style="color: rgb(98,98,98)">*</span>flows, <span style="color: rgb(98,98,98)">*</span><span style="color: rgb(98,98,98)">*</span>kwargs)
+<span class="ansi-green-fg">    444</span> <span style="color: rgb(95,135,135)"># send flows from block level to arch level</span>
+<span class="ansi-green-fg">    445</span> <span class="ansi-bold" style="color: rgb(0,135,0)">if</span> <span style="color: rgb(175,0,0)">&#39;</span><span style="color: rgb(175,0,0)">arch</span><span style="color: rgb(175,0,0)">&#39;</span> <span class="ansi-bold" style="color: rgb(175,0,255)">in</span> <span style="color: rgb(0,135,0)">self</span><span style="color: rgb(98,98,98)">.</span>roletypes:
 
-File <span class="ansi-green-intense-fg ansi-bold">_pcg64.pyx:130</span>, in <span class="ansi-cyan-fg">numpy.random._pcg64.PCG64.__init__</span><span class="ansi-blue-intense-fg ansi-bold">()</span>
+File <span class="ansi-green-intense-fg ansi-bold">c:\users\dhulse\documents\github\fmdtools\fmdtools\define\block\base.py:184</span>, in <span class="ansi-cyan-fg">Simulable.__init__</span><span class="ansi-blue-intense-fg ansi-bold">(self, sp, **kwargs)</span>
+<span class="ansi-green-fg">    173</span> <span style="color: rgb(175,0,0)">&#34;&#34;&#34;</span>
+<span class="ansi-green-fg">    174</span> <span style="color: rgb(175,0,0)">Instantiate internal Simulable attributes.</span>
+<span class="ansi-green-fg">    175</span>
+<span class="ansi-green-intense-fg ansi-bold">   (...)</span>
+<span class="ansi-green-fg">    181</span> <span style="color: rgb(175,0,0)">    Keyword arguments to BaseObject</span>
+<span class="ansi-green-fg">    182</span> <span style="color: rgb(175,0,0)">&#34;&#34;&#34;</span>
+<span class="ansi-green-fg">    183</span> loc_kwargs <span style="color: rgb(98,98,98)">=</span> {<span style="color: rgb(98,98,98)">*</span><span style="color: rgb(98,98,98)">*</span>kwargs, <span style="color: rgb(175,0,0)">&#39;</span><span style="color: rgb(175,0,0)">sp</span><span style="color: rgb(175,0,0)">&#39;</span>: {<span style="color: rgb(98,98,98)">*</span><span style="color: rgb(98,98,98)">*</span><span style="color: rgb(0,135,0)">self</span><span style="color: rgb(98,98,98)">.</span>default_sp, <span style="color: rgb(98,98,98)">*</span><span style="color: rgb(98,98,98)">*</span>sp}}
+<span class="ansi-green-intense-fg ansi-bold">--&gt; 184</span> BaseObject<span style="color: rgb(98,98,98)">.</span><span style="color: rgb(0,0,255)">__init__</span>(<span style="color: rgb(0,135,0)">self</span>, <span style="color: rgb(98,98,98)">*</span><span style="color: rgb(98,98,98)">*</span>loc_kwargs)
 
-File <span class="ansi-green-intense-fg ansi-bold">~\AppData\Local\anaconda3\lib\contextlib.py:79</span>, in <span class="ansi-cyan-fg">ContextDecorator.__call__.&lt;locals&gt;.inner</span><span class="ansi-blue-intense-fg ansi-bold">(*args, **kwds)</span>
-<span class="ansi-green-fg">     76</span> <span style="color: rgb(175,0,255)">@wraps</span>(func)
-<span class="ansi-green-fg">     77</span> <span class="ansi-bold" style="color: rgb(0,135,0)">def</span> <span style="color: rgb(0,0,255)">inner</span>(<span style="color: rgb(98,98,98)">*</span>args, <span style="color: rgb(98,98,98)">*</span><span style="color: rgb(98,98,98)">*</span>kwds):
-<span class="ansi-green-fg">     78</span>     <span class="ansi-bold" style="color: rgb(0,135,0)">with</span> <span style="color: rgb(0,135,0)">self</span><span style="color: rgb(98,98,98)">.</span>_recreate_cm():
-<span class="ansi-green-intense-fg ansi-bold">---&gt; 79</span>         <span class="ansi-bold" style="color: rgb(0,135,0)">return</span> func(<span style="color: rgb(98,98,98)">*</span>args, <span style="color: rgb(98,98,98)">*</span><span style="color: rgb(98,98,98)">*</span>kwds)
+File <span class="ansi-green-intense-fg ansi-bold">c:\users\dhulse\documents\github\fmdtools\fmdtools\define\object\base.py:130</span>, in <span class="ansi-cyan-fg">BaseObject.__init__</span><span class="ansi-blue-intense-fg ansi-bold">(self, name, roletypes, track, **kwargs)</span>
+<span class="ansi-green-fg">    128</span>     <span style="color: rgb(0,135,0)">self</span><span style="color: rgb(98,98,98)">.</span>name <span style="color: rgb(98,98,98)">=</span> name
+<span class="ansi-green-fg">    129</span> <span style="color: rgb(0,135,0)">self</span><span style="color: rgb(98,98,98)">.</span>init_indicators()
+<span class="ansi-green-intense-fg ansi-bold">--&gt; 130</span> <span style="color: rgb(0,135,0)">self</span><span style="color: rgb(98,98,98)">.</span>init_roletypes(<span style="color: rgb(98,98,98)">*</span>roletypes, <span style="color: rgb(98,98,98)">*</span><span style="color: rgb(98,98,98)">*</span>kwargs)
+<span class="ansi-green-fg">    131</span> <span style="color: rgb(0,135,0)">self</span><span style="color: rgb(98,98,98)">.</span>init_track(track)
+
+File <span class="ansi-green-intense-fg ansi-bold">c:\users\dhulse\documents\github\fmdtools\fmdtools\define\object\base.py:176</span>, in <span class="ansi-cyan-fg">BaseObject.init_roletypes</span><span class="ansi-blue-intense-fg ansi-bold">(self, *roletypes, **kwargs)</span>
+<span class="ansi-green-fg">    173</span> <span class="ansi-bold" style="color: rgb(0,135,0)">if</span> roletype <span class="ansi-bold" style="color: rgb(175,0,255)">not</span> <span class="ansi-bold" style="color: rgb(175,0,255)">in</span> <span style="color: rgb(0,135,0)">self</span><span style="color: rgb(98,98,98)">.</span>roletypes:
+<span class="ansi-green-fg">    174</span>     <span class="ansi-bold" style="color: rgb(0,135,0)">raise</span> <span class="ansi-bold" style="color: rgb(215,95,95)">Exception</span>(<span style="color: rgb(175,0,0)">&#34;</span><span style="color: rgb(175,0,0)">Roletype: </span><span style="color: rgb(175,0,0)">&#34;</span> <span style="color: rgb(98,98,98)">+</span> roletype <span style="color: rgb(98,98,98)">+</span> <span style="color: rgb(175,0,0)">&#34;</span><span style="color: rgb(175,0,0)"> not in class variable</span><span style="color: rgb(175,0,0)">&#34;</span> <span style="color: rgb(98,98,98)">+</span>
+<span class="ansi-green-fg">    175</span>                     <span style="color: rgb(175,0,0)">&#34;</span><span style="color: rgb(175,0,0)"> self.roletypes: </span><span style="color: rgb(175,0,0)">&#34;</span> <span style="color: rgb(98,98,98)">+</span> <span style="color: rgb(0,135,0)">str</span>(<span style="color: rgb(0,135,0)">self</span><span style="color: rgb(98,98,98)">.</span>roletypes))
+<span class="ansi-green-intense-fg ansi-bold">--&gt; 176</span> <span style="color: rgb(0,135,0)">self</span><span style="color: rgb(98,98,98)">.</span>init_roles(roletype, <span style="color: rgb(98,98,98)">*</span><span style="color: rgb(98,98,98)">*</span>kwargs)
+
+File <span class="ansi-green-intense-fg ansi-bold">c:\users\dhulse\documents\github\fmdtools\fmdtools\define\object\base.py:212</span>, in <span class="ansi-cyan-fg">BaseObject.init_roles</span><span class="ansi-blue-intense-fg ansi-bold">(self, roletype, **kwargs)</span>
+<span class="ansi-green-fg">    210</span> <span class="ansi-bold" style="color: rgb(0,135,0)">elif</span> <span style="color: rgb(0,135,0)">isinstance</span>(container_args, <span style="color: rgb(0,135,0)">dict</span>):
+<span class="ansi-green-fg">    211</span>     <span class="ansi-bold" style="color: rgb(0,135,0)">try</span>:
+<span class="ansi-green-intense-fg ansi-bold">--&gt; 212</span>         container <span style="color: rgb(98,98,98)">=</span> container_initializer(<span style="color: rgb(98,98,98)">*</span><span style="color: rgb(98,98,98)">*</span>container_args)
+<span class="ansi-green-fg">    213</span>     <span class="ansi-bold" style="color: rgb(0,135,0)">except</span> <span class="ansi-bold" style="color: rgb(215,95,95)">AttributeError</span> <span class="ansi-bold" style="color: rgb(0,135,0)">as</span> ae:
+<span class="ansi-green-fg">    214</span>         <span class="ansi-bold" style="color: rgb(0,135,0)">raise</span> <span class="ansi-bold" style="color: rgb(215,95,95)">Exception</span>(<span style="color: rgb(175,0,0)">&#34;</span><span style="color: rgb(175,0,0)">Problem initializing </span><span style="color: rgb(175,0,0)">&#34;</span> <span style="color: rgb(98,98,98)">+</span> roletype <span style="color: rgb(98,98,98)">+</span> <span style="color: rgb(175,0,0)">&#34;</span><span style="color: rgb(175,0,0)">_</span><span style="color: rgb(175,0,0)">&#34;</span> <span style="color: rgb(98,98,98)">+</span> rolename
+<span class="ansi-green-fg">    215</span>                         <span style="color: rgb(98,98,98)">+</span> <span style="color: rgb(175,0,0)">&#34;</span><span style="color: rgb(175,0,0)">: </span><span style="color: rgb(175,0,0)">&#34;</span> <span style="color: rgb(98,98,98)">+</span> <span style="color: rgb(0,135,0)">str</span>(container_initializer)) <span class="ansi-bold" style="color: rgb(0,135,0)">from</span> <span class="ansi-bold" style="color: rgb(0,0,255)">ae</span>
+
+File <span class="ansi-green-intense-fg ansi-bold">c:\users\dhulse\documents\github\fmdtools\fmdtools\define\block\base.py:67</span>, in <span class="ansi-cyan-fg">SimParam.__init__</span><span class="ansi-blue-intense-fg ansi-bold">(self, *args, **kwargs)</span>
+<span class="ansi-green-fg">     65</span>     kwargs[<span style="color: rgb(175,0,0)">&#39;</span><span style="color: rgb(175,0,0)">phases</span><span style="color: rgb(175,0,0)">&#39;</span>] <span style="color: rgb(98,98,98)">=</span> p
+<span class="ansi-green-fg">     66</span> <span style="color: rgb(0,135,0)">super</span>()<span style="color: rgb(98,98,98)">.</span><span style="color: rgb(0,0,255)">__init__</span>(<span style="color: rgb(98,98,98)">*</span>args, <span style="color: rgb(98,98,98)">*</span><span style="color: rgb(98,98,98)">*</span>kwargs)
+<span class="ansi-green-intense-fg ansi-bold">---&gt; 67</span> <span class="ansi-yellow-bg" style="color: rgb(0,135,0)">self</span><span class="ansi-yellow-bg" style="color: rgb(98,98,98)">.</span><span class="ansi-yellow-bg">find_any_phase_overlap</span><span class="ansi-yellow-bg">(</span><span class="ansi-yellow-bg">)</span>
+
+File <span class="ansi-green-intense-fg ansi-bold">c:\users\dhulse\documents\github\fmdtools\fmdtools\define\block\base.py:73</span>, in <span class="ansi-cyan-fg">SimParam.find_any_phase_overlap</span><span class="ansi-blue-intense-fg ansi-bold">(self)</span>
+<span class="ansi-green-fg">     71</span> phase_dict <span style="color: rgb(98,98,98)">=</span> {v[<span style="color: rgb(98,98,98)">0</span>]: [v[<span style="color: rgb(98,98,98)">1</span>], v[<span style="color: rgb(98,98,98)">2</span>]] <span class="ansi-bold" style="color: rgb(0,135,0)">for</span> v <span class="ansi-bold" style="color: rgb(175,0,255)">in</span> <span style="color: rgb(0,135,0)">self</span><span style="color: rgb(98,98,98)">.</span>phases}
+<span class="ansi-green-fg">     72</span> intervals <span style="color: rgb(98,98,98)">=</span> [<span style="color: rgb(98,98,98)">*</span>phase_dict<span style="color: rgb(98,98,98)">.</span>values()]
+<span class="ansi-green-intense-fg ansi-bold">---&gt; 73</span> int_low <span style="color: rgb(98,98,98)">=</span> <span class="ansi-yellow-bg">np</span><span class="ansi-yellow-bg" style="color: rgb(98,98,98)">.</span><span class="ansi-yellow-bg">sort</span><span class="ansi-yellow-bg">(</span><span class="ansi-yellow-bg">[</span><span class="ansi-yellow-bg">i</span><span class="ansi-yellow-bg">[</span><span class="ansi-yellow-bg" style="color: rgb(98,98,98)">0</span><span class="ansi-yellow-bg">]</span><span class="ansi-yellow-bg"> </span><span class="ansi-yellow-bg ansi-bold" style="color: rgb(0,135,0)">for</span><span class="ansi-yellow-bg"> </span><span class="ansi-yellow-bg">i</span><span class="ansi-yellow-bg"> </span><span class="ansi-yellow-bg ansi-bold" style="color: rgb(175,0,255)">in</span><span class="ansi-yellow-bg"> </span><span class="ansi-yellow-bg">intervals</span><span class="ansi-yellow-bg">]</span><span class="ansi-yellow-bg">)</span>
+<span class="ansi-green-fg">     74</span> int_high <span style="color: rgb(98,98,98)">=</span> np<span style="color: rgb(98,98,98)">.</span>sort([i[<span style="color: rgb(98,98,98)">1</span>] <span class="ansi-bold" style="color: rgb(0,135,0)">if</span> <span style="color: rgb(0,135,0)">len</span>(i) <span style="color: rgb(98,98,98)">==</span> <span style="color: rgb(98,98,98)">2</span> <span class="ansi-bold" style="color: rgb(0,135,0)">else</span> i[<span style="color: rgb(98,98,98)">0</span>] <span class="ansi-bold" style="color: rgb(0,135,0)">for</span> i <span class="ansi-bold" style="color: rgb(175,0,255)">in</span> intervals])
+<span class="ansi-green-fg">     75</span> <span class="ansi-bold" style="color: rgb(0,135,0)">for</span> i, il <span class="ansi-bold" style="color: rgb(175,0,255)">in</span> <span style="color: rgb(0,135,0)">enumerate</span>(int_low):
+
+File <span class="ansi-green-intense-fg ansi-bold">~\AppData\Roaming\Python\Python310\site-packages\numpy\core\fromnumeric.py:1017</span>, in <span class="ansi-cyan-fg">sort</span><span class="ansi-blue-intense-fg ansi-bold">(a, axis, kind, order)</span>
+<span class="ansi-green-fg">   1015</span> <span class="ansi-bold" style="color: rgb(0,135,0)">else</span>:
+<span class="ansi-green-fg">   1016</span>     a <span style="color: rgb(98,98,98)">=</span> asanyarray(a)<span style="color: rgb(98,98,98)">.</span>copy(order<span style="color: rgb(98,98,98)">=</span><span style="color: rgb(175,0,0)">&#34;</span><span style="color: rgb(175,0,0)">K</span><span style="color: rgb(175,0,0)">&#34;</span>)
+<span class="ansi-green-intense-fg ansi-bold">-&gt; 1017</span> <span class="ansi-yellow-bg">a</span><span class="ansi-yellow-bg" style="color: rgb(98,98,98)">.</span><span class="ansi-yellow-bg">sort</span><span class="ansi-yellow-bg">(</span><span class="ansi-yellow-bg">axis</span><span class="ansi-yellow-bg" style="color: rgb(98,98,98)">=</span><span class="ansi-yellow-bg">axis</span><span class="ansi-yellow-bg">,</span><span class="ansi-yellow-bg"> </span><span class="ansi-yellow-bg">kind</span><span class="ansi-yellow-bg" style="color: rgb(98,98,98)">=</span><span class="ansi-yellow-bg">kind</span><span class="ansi-yellow-bg">,</span><span class="ansi-yellow-bg"> </span><span class="ansi-yellow-bg">order</span><span class="ansi-yellow-bg" style="color: rgb(98,98,98)">=</span><span class="ansi-yellow-bg">order</span><span class="ansi-yellow-bg">)</span>
+<span class="ansi-green-fg">   1018</span> <span class="ansi-bold" style="color: rgb(0,135,0)">return</span> a
 
 <span class="ansi-red-intense-fg ansi-bold">KeyboardInterrupt</span>:
 </pre></div></div>

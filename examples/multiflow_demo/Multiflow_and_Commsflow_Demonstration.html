@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Demonstration on Using MultiFlow and CommsFlow &mdash; fmdtools 2.0-beta-3 documentation</title>
+  <title>Demonstration on Using MultiFlow and CommsFlow &mdash; fmdtools 2.0-rc-1 documentation</title>
       <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
       <link rel="stylesheet" href="../../_static/nbsphinx-code-cells.css" type="text/css" />
@@ -73,7 +73,7 @@
 <li class="toctree-l2"><a class="reference internal" href="../../docs/Development%20Guide.html#intro-to-fmdtools">Intro to fmdtools</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="../../docs/Intro_to_fmdtools.html">Intro to resilience modelling, simulation, and visualization in Python with fmdtools.</a><ul>
 <li class="toctree-l4"><a class="reference internal" href="../../docs/Intro_to_fmdtools.html#author-daniel-hulse">Author: Daniel Hulse</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/Intro_to_fmdtools.html#version-2-0-beta-3">Version: 2.0-beta-3</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../docs/Intro_to_fmdtools.html#version-2-0-rc-1">Version: 2.0-rc-1</a></li>
 </ul>
 </li>
 <li class="toctree-l3"><a class="reference internal" href="../../docs/Intro_to_fmdtools.html#overview">Overview</a></li>
@@ -285,26 +285,58 @@
 </ul>
 </li>
 <li class="toctree-l2 current"><a class="reference internal" href="../Examples.html#multiflow-demo">Multiflow Demo</a><ul class="current">
-<li class="toctree-l3 current"><a class="current reference internal" href="#">Demonstration on Using MultiFlow and CommsFlow</a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">Demonstration on Using MultiFlow and CommsFlow</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#Bulding-Flows">Bulding Flows</a></li>
+</ul>
+</li>
 </ul>
 </li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../../docs/Glossary.html">Glossary</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../docs/fmdtools.html">Module Reference</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="../../docs/fmdtools.define.html">fmdtools.define package</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="../../docs/fmdtools.define.html#fmdtools-define-block">fmdtools.define.block</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../../docs/fmdtools.define.html#module-fmdtools.define.common">fmdtools.define.common</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../../docs/fmdtools.define.html#module-fmdtools.define.flow">fmdtools.define.flow</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../../docs/fmdtools.define.html#module-fmdtools.define.mode">fmdtools.define.mode</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../../docs/fmdtools.define.html#fmdtools-define-model">fmdtools.define.model</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../../docs/fmdtools.define.html#module-fmdtools.define.parameter">fmdtools.define.parameter</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../../docs/fmdtools.define.html#module-fmdtools.define.rand">fmdtools.define.rand</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../../docs/fmdtools.define.html#module-fmdtools.define.state">fmdtools.define.state</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../../docs/fmdtools.define.html#module-fmdtools.define.time">fmdtools.define.time</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../../docs/fmdtools.define.html#module-fmdtools.define.geom">fmdtools.define.geom</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../docs/fmdtools.define.html">fmdtools.define</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../docs/fmdtools.define.architecture.html">fmdtools.define.architecture</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.define.architecture.html#fmdtools-define-architecture-base">fmdtools.define.architecture.base</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.define.architecture.html#fmdtools-define-architecture-action">fmdtools.define.architecture.action</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.define.architecture.html#fmdtools-define-architecture-component">fmdtools.define.architecture.component</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.define.architecture.html#fmdtools-define-architecture-function">fmdtools.define.architecture.function</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.define.architecture.html#fmdtools-define-architecture-geom">fmdtools.define.architecture.geom</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../../docs/fmdtools.define.block.html">fmdtools.define.block</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.define.block.html#module-fmdtools.define.block.base">fmdtools.define.block.base</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.define.block.html#module-fmdtools.define.block.action">fmdtools.define.block.action</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.define.block.html#module-fmdtools.define.block.component">fmdtools.define.block.component</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.define.block.html#fmdtools-define-block-function">fmdtools.define.block.function</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../../docs/fmdtools.define.container.html">fmdtools.define.container</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.define.container.html#fmdtools-define-container-base">fmdtools.define.container.base</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.define.container.html#module-0">fmdtools.define.container.mode</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.define.container.html#module-fmdtools.define.container.state">fmdtools.define.container.state</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.define.container.html#fmdtools-define-container-parameter">fmdtools.define.container.parameter</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.define.container.html#module-fmdtools.define.container.rand">fmdtools.define.container.rand</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.define.container.html#module-fmdtools.define.container.time">fmdtools.define.container.time</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.define.container.html#fmdtools-define-container-geom">fmdtools.define.container.geom</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.define.container.html#fmdtools-define-container-coords">fmdtools.define.container.coords</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../../docs/fmdtools.define.flow.html">fmdtools.define.flow</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.define.flow.html#module-fmdtools.define.flow.base">fmdtools.define.flow.base</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.define.flow.html#module-fmdtools.define.flow.multiflow">fmdtools.define.flow.multiflow</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.define.flow.html#module-fmdtools.define.flow.commsflow">fmdtools.define.flow.commsflow</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../../docs/fmdtools.define.object.html">fmdtools.define.object</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.define.object.html#module-fmdtools.define.object.base">fmdtools.define.object.base</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.define.object.html#module-fmdtools.define.object.timer">fmdtools.define.object.timer</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.define.object.html#module-fmdtools.define.object.geom">fmdtools.define.object.geom</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.define.object.html#module-fmdtools.define.object.coords">fmdtools.define.object.coords</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../../docs/fmdtools.define.html#fmdtools-define-base">fmdtools.define.base</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../docs/fmdtools.define.html#module-fmdtools.define.environment">fmdtools.define.environment</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../../docs/fmdtools.define.html#module-fmdtools.define.coords">fmdtools.define.coords</a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="../../docs/fmdtools.sim.html">fmdtools.sim</a><ul>
@@ -314,7 +346,7 @@
 <li class="toctree-l3"><a class="reference internal" href="../../docs/fmdtools.sim.html#module-fmdtools.sim.search">fmdtools.sim.search</a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="../../docs/fmdtools.analyze.html">fmdtools.analyze package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../docs/fmdtools.analyze.html">fmdtools.analyze</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="../../docs/fmdtools.analyze.html#module-fmdtools.analyze.common">fmdtools.analyze.common</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../docs/fmdtools.analyze.html#module-fmdtools.analyze.result">fmdtools.analyze.result</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../docs/fmdtools.analyze.html#module-fmdtools.analyze.history">fmdtools.analyze.history</a></li>
@@ -363,133 +395,171 @@ documentation</a></p>
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[1]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1">#start by importing the necessary components for building and simulation the model</span>
-
-<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
-
-<span class="c1">#tools necessary for building the model</span>
-<span class="kn">from</span> <span class="nn">fmdtools.define.state</span> <span class="kn">import</span> <span class="n">State</span>
-<span class="kn">from</span> <span class="nn">fmdtools.define.flow</span> <span class="kn">import</span> <span class="n">CommsFlow</span><span class="p">,</span> <span class="n">MultiFlow</span>
-<span class="kn">from</span> <span class="nn">fmdtools.define.parameter</span> <span class="kn">import</span> <span class="n">Parameter</span>
-<span class="kn">from</span> <span class="nn">fmdtools.define.block</span> <span class="kn">import</span> <span class="n">FxnBlock</span>
-<span class="kn">from</span> <span class="nn">fmdtools.define.model</span> <span class="kn">import</span> <span class="n">Model</span>
-
-<span class="c1">#tools necessary for simulating the model</span>
-<span class="kn">from</span> <span class="nn">fmdtools.define.parameter</span> <span class="kn">import</span> <span class="n">Parameter</span><span class="p">,</span> <span class="n">SimParam</span>
-<span class="kn">from</span> <span class="nn">fmdtools.define.mode</span> <span class="kn">import</span> <span class="n">Mode</span>
-<span class="kn">from</span> <span class="nn">fmdtools.sim</span> <span class="kn">import</span> <span class="n">propagate</span>
-
-<span class="c1">#tools necessary for graphing the model and results</span>
-<span class="kn">from</span> <span class="nn">fmdtools.analyze.graph</span> <span class="kn">import</span> <span class="n">ModelGraph</span><span class="p">,</span> <span class="n">ModelTypeGraph</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">inspect</span>
 </pre></div>
 </div>
 </div>
+<section id="Bulding-Flows">
+<h2>Bulding Flows<a class="headerlink" href="#Bulding-Flows" title="Permalink to this heading"></a></h2>
 <p>The first step is creating the flows and states that connect the model. This includes using a <code class="docutils literal notranslate"><span class="pre">LocationState</span></code> as the default starting location. This is given to the Communications channel which uses <code class="docutils literal notranslate"><span class="pre">CommsFlow</span></code> to allow for communications agent, and the locaiton <code class="docutils literal notranslate"><span class="pre">MultiFlow</span></code> to represent an “environment”. Finally there is a parameter setup for the <code class="docutils literal notranslate"><span class="pre">Mover</span></code> agent, the purpose of which is elaborated on below.</p>
-<div class="nbinput nblast docutils container">
+<div class="nbinput docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[2]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">LocationState</span><span class="p">(</span><span class="n">State</span><span class="p">):</span>
-    <span class="n">x</span><span class="p">:</span> <span class="nb">float</span><span class="o">=</span><span class="mf">0.0</span>
-    <span class="n">y</span><span class="p">:</span> <span class="nb">float</span><span class="o">=</span><span class="mf">0.0</span>
-
-<span class="k">class</span> <span class="nc">Communications</span><span class="p">(</span><span class="n">CommsFlow</span><span class="p">):</span>
-    <span class="n">_init_s</span> <span class="o">=</span> <span class="n">LocationState</span>
-
-<span class="k">class</span> <span class="nc">Location</span><span class="p">(</span><span class="n">MultiFlow</span><span class="p">):</span>
-    <span class="n">_init_s</span> <span class="o">=</span> <span class="n">LocationState</span>
-
-<span class="k">class</span> <span class="nc">MoveParam</span><span class="p">(</span><span class="n">Parameter</span><span class="p">):</span>
-    <span class="n">x_up</span><span class="p">:</span> <span class="nb">float</span><span class="o">=</span><span class="mf">0.0</span>
-    <span class="n">y_up</span><span class="p">:</span> <span class="nb">float</span><span class="o">=</span><span class="mf">0.0</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">multiflow_demo</span> <span class="kn">import</span> <span class="n">LocationState</span><span class="p">,</span> <span class="n">Communications</span><span class="p">,</span> <span class="n">Location</span><span class="p">,</span> <span class="n">MoveParam</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">inspect</span><span class="o">.</span><span class="n">getsource</span><span class="p">(</span><span class="n">LocationState</span><span class="p">))</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">inspect</span><span class="o">.</span><span class="n">getsource</span><span class="p">(</span><span class="n">Location</span><span class="p">))</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">inspect</span><span class="o">.</span><span class="n">getsource</span><span class="p">(</span><span class="n">Communications</span><span class="p">))</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">inspect</span><span class="o">.</span><span class="n">getsource</span><span class="p">(</span><span class="n">MoveParam</span><span class="p">))</span>
 </pre></div>
 </div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+class LocationState(State):
+    x: float = 0.0
+    y: float = 0.0
+
+class Location(MultiFlow):
+    container_s = LocationState
+
+class Communications(CommsFlow):
+    container_s = LocationState
+
+class MoveParam(Parameter):
+    x_up: float = 0.0
+    y_up: float = 0.0
+
+</pre></div></div>
 </div>
 <p>Next is the development of the <code class="docutils literal notranslate"><span class="pre">Mover</span></code> agents. When the model is constructed, there will be two Movers. The first moves in the x direction and the second in the y. That is the purpose of the <code class="docutils literal notranslate"><span class="pre">MoverParam</span></code> and the if statement in the behavior function. When the model is initilized later, the two movers are sent parameters to turn on the x_up and y_up which determines how they move.</p>
 <p>Other parts necessary in the model are the initiation, which requires making a communications channel and a local copy of the location to track the state. The dynamic behavior function uses the increment (<code class="docutils literal notranslate"><span class="pre">inc</span></code>) function to move the device in the direction needed on each step. With that same update, it makes sure that it updates it’s internal info from it’s location to ensure that it can send out the correct information to the <code class="docutils literal notranslate"><span class="pre">coordinator</span></code> agent.</p>
-<div class="nbinput nblast docutils container">
+<div class="nbinput docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[3]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">Mover</span><span class="p">(</span><span class="n">FxnBlock</span><span class="p">):</span>
-    <span class="n">_init_p</span> <span class="o">=</span> <span class="n">MoveParam</span>
-    <span class="n">_init_communications</span> <span class="o">=</span> <span class="n">Communications</span>
-    <span class="n">_init_location</span> <span class="o">=</span> <span class="n">Location</span>
-
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s1">&#39;mover&#39;</span><span class="p">,</span> <span class="n">flows</span><span class="o">=</span><span class="p">{},</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
-        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="n">name</span><span class="p">,</span> <span class="n">flows</span><span class="o">=</span><span class="n">flows</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">internal_info</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">communications</span><span class="o">.</span><span class="n">create_comms</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">loc</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">location</span><span class="o">.</span><span class="n">create_local</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
-
-    <span class="k">def</span> <span class="nf">dynamic_behavior</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">time</span><span class="p">):</span>
-        <span class="c1">#move</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">loc</span><span class="o">.</span><span class="n">s</span><span class="o">.</span><span class="n">inc</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">p</span><span class="o">.</span><span class="n">x_up</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">p</span><span class="o">.</span><span class="n">y_up</span><span class="p">)</span>
-        <span class="c1"># the inbox should be cleared each timestep to allow new messages</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">internal_info</span><span class="o">.</span><span class="n">clear_inbox</span><span class="p">()</span>
-
-    <span class="k">def</span> <span class="nf">behavior</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">time</span><span class="p">):</span>
-        <span class="c1">#recieve messages</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">internal_info</span><span class="o">.</span><span class="n">receive</span><span class="p">()</span>
-        <span class="c1">#communicate</span>
-        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">p</span><span class="o">.</span><span class="n">x_up</span><span class="o">!=</span><span class="mf">0.0</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">internal_info</span><span class="o">.</span><span class="n">s</span><span class="o">.</span><span class="n">x</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">loc</span><span class="o">.</span><span class="n">s</span><span class="o">.</span><span class="n">x</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">internal_info</span><span class="o">.</span><span class="n">send</span><span class="p">(</span><span class="s2">&quot;all&quot;</span><span class="p">,</span> <span class="s2">&quot;local&quot;</span><span class="p">,</span> <span class="s2">&quot;x&quot;</span><span class="p">)</span>
-        <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">p</span><span class="o">.</span><span class="n">y_up</span><span class="o">!=</span><span class="mf">0.0</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">internal_info</span><span class="o">.</span><span class="n">s</span><span class="o">.</span><span class="n">y</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">loc</span><span class="o">.</span><span class="n">s</span><span class="o">.</span><span class="n">y</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">internal_info</span><span class="o">.</span><span class="n">send</span><span class="p">(</span><span class="s2">&quot;all&quot;</span><span class="p">,</span> <span class="s2">&quot;local&quot;</span><span class="p">,</span> <span class="s2">&quot;y&quot;</span><span class="p">)</span>
-    <span class="k">def</span> <span class="nf">find_classification</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">scen</span><span class="p">,</span> <span class="n">fxnhist</span><span class="p">):</span>
-        <span class="k">return</span> <span class="p">{</span><span class="s2">&quot;last_x&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">loc</span><span class="o">.</span><span class="n">s</span><span class="o">.</span><span class="n">x</span><span class="p">,</span> <span class="s2">&quot;min_x&quot;</span><span class="p">:</span> <span class="n">fxnhist</span><span class="o">.</span><span class="n">faulty</span><span class="o">.</span><span class="n">location</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">)</span><span class="o">.</span><span class="n">x</span><span class="p">}</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">multiflow_demo</span> <span class="kn">import</span> <span class="n">Mover</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">inspect</span><span class="o">.</span><span class="n">getsource</span><span class="p">(</span><span class="n">Mover</span><span class="p">))</span>
 </pre></div>
 </div>
 </div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+class Mover(Function):
+    container_p = MoveParam
+    flow_communications = Communications
+    flow_location = Location
+
+    def __init__(self, name=&#39;mover&#39;, flows={}, **kwargs):
+        super().__init__(name=name, flows=flows, **kwargs)
+        self.internal_info = self.communications.create_comms(name)
+        self.loc = self.location.create_local(name)
+
+    def dynamic_behavior(self, time):
+        # move
+        self.loc.s.inc(x=self.p.x_up, y=self.p.y_up)
+        # the inbox should be cleared each timestep to allow new messages
+        self.internal_info.clear_inbox()
+
+    def behavior(self, time):
+        # recieve messages
+        self.internal_info.receive()
+        # communicate
+        if self.p.x_up != 0.0:
+            self.internal_info.s.x = self.loc.s.x
+            self.internal_info.send(&#34;all&#34;, &#34;local&#34;, &#34;x&#34;)
+        elif self.p.y_up != 0.0:
+            self.internal_info.s.y = self.loc.s.y
+            self.internal_info.send(&#34;all&#34;, &#34;local&#34;, &#34;y&#34;)
+
+    def find_classification(self, scen, fxnhist):
+        return {&#34;last_x&#34;: self.loc.s.x, &#34;min_x&#34;: fxnhist.faulty.location.get(self.name).x}
+
+</pre></div></div>
+</div>
 <p>Finally, there is the creation of the <code class="docutils literal notranslate"><span class="pre">Coordinator</span></code> agent. It’s main goal to allow for the transfer of information between the agents by receiving and transmiting information to the agents.</p>
-<div class="nbinput nblast docutils container">
+<div class="nbinput docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[4]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">Coordinator</span><span class="p">(</span><span class="n">FxnBlock</span><span class="p">):</span>
-    <span class="n">_init_communications</span> <span class="o">=</span> <span class="n">Communications</span>
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s1">&#39;coordinator&#39;</span><span class="p">,</span> <span class="n">flows</span><span class="o">=</span><span class="p">{},</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
-        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="n">name</span><span class="p">,</span> <span class="n">flows</span><span class="o">=</span><span class="n">flows</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">coord_view</span><span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">communications</span><span class="o">.</span><span class="n">create_comms</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">ports</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;mover_1&quot;</span><span class="p">,</span> <span class="s2">&quot;mover_2&quot;</span><span class="p">])</span>
-    <span class="k">def</span> <span class="nf">dynamic_behavior</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">time</span><span class="p">):</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">coord_view</span><span class="o">.</span><span class="n">clear_inbox</span><span class="p">()</span>
-    <span class="k">def</span> <span class="nf">behavior</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">time</span><span class="p">):</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">coord_view</span><span class="o">.</span><span class="n">receive</span><span class="p">()</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">coord_view</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="s2">&quot;local&quot;</span><span class="p">,</span> <span class="s2">&quot;mover_1&quot;</span><span class="p">,</span> <span class="s2">&quot;y&quot;</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">coord_view</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="s2">&quot;local&quot;</span><span class="p">,</span> <span class="s2">&quot;mover_2&quot;</span><span class="p">,</span> <span class="s2">&quot;x&quot;</span><span class="p">)</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">multiflow_demo</span> <span class="kn">import</span> <span class="n">Coordinator</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">inspect</span><span class="o">.</span><span class="n">getsource</span><span class="p">(</span><span class="n">Coordinator</span><span class="p">))</span>
 </pre></div>
 </div>
 </div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+class Coordinator(Function):
+    flow_communications = Communications
+
+    def __init__(self, name=&#39;coordinator&#39;, flows={}, **kwargs):
+        super().__init__(name=name, flows=flows, **kwargs)
+        self.coord_view = self.communications.create_comms(
+            name, ports=[&#34;mover_1&#34;, &#34;mover_2&#34;])
+
+    def dynamic_behavior(self, time):
+        self.coord_view.clear_inbox()
+
+    def behavior(self, time):
+        self.coord_view.receive()
+        self.coord_view.update(&#34;local&#34;, &#34;mover_1&#34;, &#34;y&#34;)
+        self.coord_view.update(&#34;local&#34;, &#34;mover_2&#34;, &#34;x&#34;)
+
+</pre></div></div>
+</div>
 <p>After building all the functions and flow, the entire model is put together and initialized with the correct parameters. Each flow and then function is added. Not the “p = {“x_up”:1.0}” and “p = {“y_up”:1.0} when creating the two movers. This refers back to the behavior function when making the <code class="docutils literal notranslate"><span class="pre">Mover</span></code> agent before, allowing for each one to behave in its own way.</p>
-<div class="nbinput nblast docutils container">
+<div class="nbinput docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[5]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">TestModel</span><span class="p">(</span><span class="n">Model</span><span class="p">):</span>
-    <span class="n">default_sp</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="n">times</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">10</span><span class="p">))</span>
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
-        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
-
-        <span class="bp">self</span><span class="o">.</span><span class="n">add_flow</span><span class="p">(</span><span class="s2">&quot;communications&quot;</span><span class="p">,</span> <span class="n">Communications</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">add_flow</span><span class="p">(</span><span class="s2">&quot;location&quot;</span><span class="p">,</span>       <span class="n">Location</span><span class="p">)</span>
-
-        <span class="bp">self</span><span class="o">.</span><span class="n">add_fxn</span><span class="p">(</span><span class="s2">&quot;mover_1&quot;</span><span class="p">,</span>     <span class="n">Mover</span><span class="p">,</span> <span class="s2">&quot;communications&quot;</span><span class="p">,</span> <span class="s2">&quot;location&quot;</span><span class="p">,</span> <span class="n">p</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;x_up&quot;</span><span class="p">:</span><span class="mf">1.0</span><span class="p">})</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">add_fxn</span><span class="p">(</span><span class="s2">&quot;mover_2&quot;</span><span class="p">,</span>     <span class="n">Mover</span><span class="p">,</span> <span class="s2">&quot;communications&quot;</span><span class="p">,</span> <span class="s2">&quot;location&quot;</span><span class="p">,</span> <span class="n">p</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;y_up&quot;</span><span class="p">:</span><span class="mf">1.0</span><span class="p">})</span>
-
-        <span class="bp">self</span><span class="o">.</span><span class="n">add_fxn</span><span class="p">(</span><span class="s2">&quot;coordinator&quot;</span><span class="p">,</span> <span class="n">Coordinator</span><span class="p">,</span> <span class="s2">&quot;communications&quot;</span><span class="p">)</span>
-
-        <span class="bp">self</span><span class="o">.</span><span class="n">build</span><span class="p">()</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">multiflow_demo</span> <span class="kn">import</span> <span class="n">TestModel</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">inspect</span><span class="o">.</span><span class="n">getsource</span><span class="p">(</span><span class="n">TestModel</span><span class="p">))</span>
 </pre></div>
 </div>
 </div>
-<p>Before running the model, we start with loading up the model and using the <code class="docutils literal notranslate"><span class="pre">ModelGraph</span></code> function to view the components and their relations to eachother. The <code class="docutils literal notranslate"><span class="pre">CommsFlow</span></code> and <code class="docutils literal notranslate"><span class="pre">MultiFlow</span></code> nodes are represented by octogons and hexagons, respectively. This is different than the circle nodes in regular flows. See <code class="docutils literal notranslate"><span class="pre">default_node_kwargs</span></code> in <code class="docutils literal notranslate"><span class="pre">fmdtools.analyze.graph</span></code> for the different node shapes and colors.</p>
-<div class="nbinput docutils container">
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+class TestModel(FunctionArchitecture):
+    default_sp = dict(end_time=10)
+
+    def init_architecture(self, **kwargs):
+
+        self.add_flow(&#34;communications&#34;, Communications)
+        self.add_flow(&#34;location&#34;,  Location)
+        self.add_fxn(&#34;mover_1&#34;, Mover, &#34;communications&#34;, &#34;location&#34;, p={&#34;x_up&#34;: 1.0})
+        self.add_fxn(&#34;mover_2&#34;, Mover, &#34;communications&#34;, &#34;location&#34;, p={&#34;y_up&#34;: 1.0})
+
+        self.add_fxn(&#34;coordinator&#34;, Coordinator, &#34;communications&#34;)
+
+</pre></div></div>
+</div>
+<p>Before running the model, we start with loading up the model and using the <code class="docutils literal notranslate"><span class="pre">FunctionArchitectureGraph</span></code> function to view the components and their relations to eachother. The <code class="docutils literal notranslate"><span class="pre">CommsFlow</span></code> and <code class="docutils literal notranslate"><span class="pre">MultiFlow</span></code> nodes are represented by octogons and hexagons, respectively. This is different than the circle nodes in regular flows. See <code class="docutils literal notranslate"><span class="pre">default_node_kwargs</span></code> in <code class="docutils literal notranslate"><span class="pre">fmdtools.analyze.graph</span></code> for the different node shapes and colors.</p>
+<div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[6]:
 </pre></div>
 </div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">fmdtools.analyze.graph</span> <span class="kn">import</span> <span class="n">FunctionArchitectureGraph</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[7]:
+</pre></div>
+</div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">mdl</span> <span class="o">=</span> <span class="n">TestModel</span><span class="p">()</span>
-<span class="n">mg</span> <span class="o">=</span> <span class="n">ModelGraph</span><span class="p">(</span><span class="n">mdl</span><span class="p">)</span>
+<span class="n">mg</span> <span class="o">=</span> <span class="n">FunctionArchitectureGraph</span><span class="p">(</span><span class="n">mdl</span><span class="p">)</span>
 <span class="n">mg</span><span class="o">.</span><span class="n">set_edge_labels</span><span class="p">(</span><span class="n">title</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">)</span>
 <span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">mg</span><span class="o">.</span><span class="n">draw</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">8</span><span class="p">,</span><span class="mi">4</span><span class="p">))</span>
 </pre></div>
@@ -499,15 +569,23 @@ documentation</a></p>
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area docutils container">
-<img alt="../../_images/examples_multiflow_demo_Multiflow_and_Commsflow_Demonstration_11_0.png" src="../../_images/examples_multiflow_demo_Multiflow_and_Commsflow_Demonstration_11_0.png" />
+<img alt="../../_images/examples_multiflow_demo_Multiflow_and_Commsflow_Demonstration_12_0.png" src="../../_images/examples_multiflow_demo_Multiflow_and_Commsflow_Demonstration_12_0.png" />
 </div>
 </div>
-<p>Besides the model itself, we can use <code class="docutils literal notranslate"><span class="pre">ModelTypeGraph</span></code> to create a graph representation of hte model classes, showing the containment relationship between function classes and flow classes in the model.</p>
-<div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[7]:
+<p>Besides the model itself, we can use <code class="docutils literal notranslate"><span class="pre">FunctionArchitectureTypeGraph</span></code> to create a graph representation of hte model classes, showing the containment relationship between function classes and flow classes in the model.</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[8]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">tg</span> <span class="o">=</span> <span class="n">ModelTypeGraph</span><span class="p">(</span><span class="n">mdl</span><span class="p">)</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">fmdtools.analyze.graph</span> <span class="kn">import</span> <span class="n">FunctionArchitectureTypeGraph</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[9]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">tg</span> <span class="o">=</span> <span class="n">FunctionArchitectureTypeGraph</span><span class="p">(</span><span class="n">mdl</span><span class="p">)</span>
 <span class="n">tg</span><span class="o">.</span><span class="n">set_edge_labels</span><span class="p">(</span><span class="n">title</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">)</span>
 <span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">tg</span><span class="o">.</span><span class="n">draw</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">8</span><span class="p">,</span><span class="mi">6</span><span class="p">))</span>
 </pre></div>
@@ -517,33 +595,30 @@ documentation</a></p>
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area docutils container">
-<img alt="../../_images/examples_multiflow_demo_Multiflow_and_Commsflow_Demonstration_13_0.png" src="../../_images/examples_multiflow_demo_Multiflow_and_Commsflow_Demonstration_13_0.png" />
+<img alt="../../_images/examples_multiflow_demo_Multiflow_and_Commsflow_Demonstration_15_0.png" src="../../_images/examples_multiflow_demo_Multiflow_and_Commsflow_Demonstration_15_0.png" />
 </div>
 </div>
 <p>Finally, we can run the model and view it’s history via <code class="docutils literal notranslate"><span class="pre">fmdtools.sim.propagate</span></code>. The communication is setup such that mover_1 is supposed to go 25 and transmit that information to allow for mover_2 to do the same.</p>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[8]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[10]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">mdl</span><span class="o">.</span><span class="n">flows</span><span class="p">[</span><span class="s2">&quot;communications&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">mover_1</span><span class="o">.</span><span class="n">s</span><span class="o">.</span><span class="n">x</span><span class="o">=</span><span class="mi">25</span>
 <span class="n">mdl</span><span class="o">.</span><span class="n">flows</span><span class="p">[</span><span class="s2">&quot;communications&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">mover_1</span><span class="o">.</span><span class="n">send</span><span class="p">(</span><span class="s2">&quot;mover_2&quot;</span><span class="p">)</span>
 <span class="kn">from</span> <span class="nn">fmdtools.sim</span> <span class="kn">import</span> <span class="n">propagate</span>
 
-<span class="n">result</span><span class="p">,</span> <span class="n">mdlhist</span> <span class="o">=</span> <span class="n">propagate</span><span class="o">.</span><span class="n">nominal</span><span class="p">(</span><span class="n">mdl</span><span class="p">,</span><span class="n">track</span><span class="o">=</span><span class="s1">&#39;all&#39;</span><span class="p">,</span> <span class="n">desired_result</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;graph&#39;</span><span class="p">:</span><span class="n">ModelGraph</span><span class="p">})</span>
+<span class="n">result</span><span class="p">,</span> <span class="n">mdlhist</span> <span class="o">=</span> <span class="n">propagate</span><span class="o">.</span><span class="n">nominal</span><span class="p">(</span><span class="n">mdl</span><span class="p">,</span><span class="n">track</span><span class="o">=</span><span class="s1">&#39;all&#39;</span><span class="p">,</span> <span class="n">desired_result</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;graph&#39;</span><span class="p">:</span> <span class="n">FunctionArchitectureGraph</span><span class="p">})</span>
 <span class="c1">#fig = result.graph.draw(figsize=(8,6)) #graph can be drawn, but it&#39;s the same as before since it&#39;s nominal</span>
 <span class="n">mdlhist</span>
 </pre></div>
 </div>
 </div>
 <div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[8]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[10]:
 </pre></div>
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-fxns.mover_1.m.mode:           array(11)
-fxns.mover_2.m.mode:           array(11)
-fxns.coordinator.m.mode:       array(11)
 flows.communications.s.x:      array(11)
 flows.communications.s.y:      array(11)
 flows.communications.mover_1.s.x: array(11)
@@ -576,7 +651,7 @@ time:                          array(11)
 </pre></div></div>
 </div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[9]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[11]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">mdlhist</span><span class="o">.</span><span class="n">plot_line</span><span class="p">(</span><span class="s1">&#39;flows.location.mover_1.s.x&#39;</span><span class="p">,</span> <span class="s1">&#39;flows.location.mover_1.s.y&#39;</span><span class="p">,</span>
@@ -588,9 +663,10 @@ time:                          array(11)
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area docutils container">
-<img alt="../../_images/examples_multiflow_demo_Multiflow_and_Commsflow_Demonstration_16_0.png" src="../../_images/examples_multiflow_demo_Multiflow_and_Commsflow_Demonstration_16_0.png" />
+<img alt="../../_images/examples_multiflow_demo_Multiflow_and_Commsflow_Demonstration_18_0.png" src="../../_images/examples_multiflow_demo_Multiflow_and_Commsflow_Demonstration_18_0.png" />
 </div>
 </div>
+</section>
 </section>
 
 
