@@ -1,14 +1,10 @@
-<?xml version="1.0" encoding="utf-8"?><testsuites><testsuite name="pytest" errors="13" failures="1" skipped="0" tests="54" time="154.366" timestamp="2024-01-05T15:52:45.133845" hostname="starlight"><testcase classname="" name="examples.multirotor.opt_drone_rural" time="0.000"><error message="collection failure">#x1B[1m#x1B[31mexamples\multirotor\opt_drone_rural.py#x1B[0m:8: in &lt;module&gt;
+<?xml version="1.0" encoding="utf-8"?><testsuites><testsuite name="pytest" errors="9" failures="11" skipped="0" tests="260" time="961.507" timestamp="2024-01-08T14:02:35.571001" hostname="starlight"><testcase classname="" name="examples.multirotor.opt_drone_rural" time="0.000"><error message="collection failure">#x1B[1m#x1B[31mexamples\multirotor\opt_drone_rural.py#x1B[0m:8: in &lt;module&gt;
     #x1B[94mfrom#x1B[39;49;00m #x1B[04m#x1B[96mdrone_mdl_rural#x1B[39;49;00m #x1B[94mimport#x1B[39;49;00m Drone, DroneParam, ResPolicy, DronePhysicalParameters#x1B[90m#x1B[39;49;00m
-#x1B[1m#x1B[31mE   ModuleNotFoundError: No module named 'drone_mdl_rural'#x1B[0m</error></testcase><testcase classname="" name="examples.pump.jointfaults_ex" time="0.000"><error message="collection failure">#x1B[1m#x1B[31mexamples\pump\jointfaults_ex.py#x1B[0m:14: in &lt;module&gt;
-    #x1B[94mfrom#x1B[39;49;00m #x1B[04m#x1B[96mex_pump#x1B[39;49;00m #x1B[94mimport#x1B[39;49;00m Pump  #x1B[90m# required to import entire module#x1B[39;49;00m#x1B[90m#x1B[39;49;00m
-#x1B[1m#x1B[31mE   ModuleNotFoundError: No module named 'ex_pump'#x1B[0m</error></testcase><testcase classname="" name="examples.pump.parallelism_methods" time="0.000"><error message="collection failure">#x1B[1m#x1B[31mexamples\pump\parallelism_methods.py#x1B[0m:8: in &lt;module&gt;
-    #x1B[94mfrom#x1B[39;49;00m #x1B[04m#x1B[96mex_pump#x1B[39;49;00m #x1B[94mimport#x1B[39;49;00m Pump, PumpParam#x1B[90m#x1B[39;49;00m
-#x1B[1m#x1B[31mE   ModuleNotFoundError: No module named 'ex_pump'#x1B[0m</error></testcase><testcase classname="" name="examples.pump.pump_indiv" time="0.000"><error message="collection failure">#x1B[1m#x1B[31mexamples\pump\pump_indiv.py#x1B[0m:32: in &lt;module&gt;
+#x1B[1m#x1B[31mE   ModuleNotFoundError: No module named 'drone_mdl_rural'#x1B[0m</error></testcase><testcase classname="" name="examples.pump.pump_indiv" time="0.000"><error message="collection failure">#x1B[1m#x1B[31mexamples\pump\pump_indiv.py#x1B[0m:32: in &lt;module&gt;
     a = MoveWatDynamic(track=#x1B[33m'#x1B[39;49;00m#x1B[33mall#x1B[39;49;00m#x1B[33m'#x1B[39;49;00m)#x1B[90m#x1B[39;49;00m
-#x1B[1m#x1B[31mfmdtools\define\block\function.py#x1B[0m:64: in __init__
+#x1B[1m#x1B[31mfmdtools\define\block\function.py#x1B[0m:66: in __init__
     #x1B[96msuper#x1B[39;49;00m().#x1B[92m__init__#x1B[39;49;00m(name=name, **kwargs)#x1B[90m#x1B[39;49;00m
-#x1B[1m#x1B[31mfmdtools\define\block\base.py#x1B[0m:441: in __init__
+#x1B[1m#x1B[31mfmdtools\define\block\base.py#x1B[0m:442: in __init__
     Simulable.#x1B[92m__init__#x1B[39;49;00m(#x1B[96mself#x1B[39;49;00m, name=name, roletypes=[#x1B[33m'#x1B[39;49;00m#x1B[33mcontainer#x1B[39;49;00m#x1B[33m'#x1B[39;49;00m, #x1B[33m'#x1B[39;49;00m#x1B[33mflow#x1B[39;49;00m#x1B[33m'#x1B[39;49;00m],#x1B[90m#x1B[39;49;00m
 #x1B[1m#x1B[31mfmdtools\define\block\base.py#x1B[0m:184: in __init__
     BaseObject.#x1B[92m__init__#x1B[39;49;00m(#x1B[96mself#x1B[39;49;00m, **loc_kwargs)#x1B[90m#x1B[39;49;00m
@@ -58,13 +54,516 @@
     handle = #x1B[96mopen#x1B[39;49;00m(#x1B[90m#x1B[39;49;00m
 #x1B[1m#x1B[31mE   FileNotFoundError: [Errno 2] No such file or directory: 'rslt_ea.csv'#x1B[0m</error></testcase><testcase classname="" name="examples.tank.tank_script" time="0.000"><error message="collection failure">#x1B[1m#x1B[31mexamples\tank\tank_script.py#x1B[0m:13: in &lt;module&gt;
     #x1B[94mfrom#x1B[39;49;00m #x1B[04m#x1B[96mtank_model#x1B[39;49;00m #x1B[94mimport#x1B[39;49;00m Tank#x1B[90m#x1B[39;49;00m
-#x1B[1m#x1B[31mE   ModuleNotFoundError: No module named 'tank_model'#x1B[0m</error></testcase><testcase classname="" name="tests.test_graph" time="0.000"><error message="collection failure">#x1B[1m#x1B[31mtests\test_graph.py#x1B[0m:10: in &lt;module&gt;
-    #x1B[94mfrom#x1B[39;49;00m #x1B[04m#x1B[96mfmdtools#x1B[39;49;00m#x1B[04m#x1B[96m.#x1B[39;49;00m#x1B[04m#x1B[96manalyze#x1B[39;49;00m#x1B[04m#x1B[96m.#x1B[39;49;00m#x1B[04m#x1B[96mgraph#x1B[39;49;00m #x1B[94mimport#x1B[39;49;00m FunctionArchitectureFlowgraph#x1B[90m#x1B[39;49;00m
-#x1B[1m#x1B[31mE   ImportError: cannot import name 'FunctionArchitectureFlowgraph' from 'fmdtools.analyze.graph' (C:\Users\dhulse\Documents\GitHub\fmdtools\fmdtools\analyze\graph.py)#x1B[0m</error><error message="collection failure">#x1B[31mImportError while importing test module 'C:\Users\dhulse\Documents\GitHub\fmdtools\tests\test_graph.py'.
-Hint: make sure your test modules/packages have valid Python names.
-Traceback:
-#x1B[1m#x1B[31m..\..\..\AppData\Local\anaconda3\lib\importlib\__init__.py#x1B[0m:126: in import_module
-    #x1B[94mreturn#x1B[39;49;00m _bootstrap._gcd_import(name[level:], package, level)#x1B[90m#x1B[39;49;00m
-#x1B[1m#x1B[31mtests\test_graph.py#x1B[0m:10: in &lt;module&gt;
-    #x1B[94mfrom#x1B[39;49;00m #x1B[04m#x1B[96mfmdtools#x1B[39;49;00m#x1B[04m#x1B[96m.#x1B[39;49;00m#x1B[04m#x1B[96manalyze#x1B[39;49;00m#x1B[04m#x1B[96m.#x1B[39;49;00m#x1B[04m#x1B[96mgraph#x1B[39;49;00m #x1B[94mimport#x1B[39;49;00m FunctionArchitectureFlowgraph#x1B[90m#x1B[39;49;00m
-#x1B[1m#x1B[31mE   ImportError: cannot import name 'FunctionArchitectureFlowgraph' from 'fmdtools.analyze.graph' (C:\Users\dhulse\Documents\GitHub\fmdtools\fmdtools\analyze\graph.py)#x1B[0m#x1B[0m</error></testcase><testcase classname="examples.asg_demo.Action_Sequence_Graph.ipynb" name="" time="6.801" /><testcase classname="examples.eps.EPS_Example_Notebook.ipynb" name="" time="4.165" /><testcase classname="examples.eps.test_eps.epsTests" name="test_all_faults" time="0.229" /><testcase classname="examples.eps.test_eps.epsTests" name="test_backward_fault_prop_1" time="0.017" /><testcase classname="examples.eps.test_eps.epsTests" name="test_backward_fault_prop_2" time="0.016" /><testcase classname="examples.eps.test_eps.epsTests" name="test_fault_app" time="40.151" /><testcase classname="examples.eps.test_eps.epsTests" name="test_multfault_saving" time="0.057" /><testcase classname="examples.eps.test_eps.epsTests" name="test_nominal_saving" time="0.052" /><testcase classname="examples.eps.test_eps.epsTests" name="test_pickleability" time="0.006" /><testcase classname="examples.eps.test_eps.epsTests" name="test_save_load_onefault" time="0.055" /><testcase classname="examples.eps.test_eps.epsTests" name="test_save_load_singlefaults" time="0.700" /><testcase classname="examples.multiflow_demo.Multiflow_and_Commsflow_Demonstration.ipynb" name="" time="3.372" /><testcase classname="examples.multiflow_demo.test_multiflow.define_Tests" name="test_multiflow_combination" time="0.025" /><testcase classname="examples.multiflow_demo.test_multiflow.define_Tests" name="test_multiflow_passing" time="0.018" /><testcase classname="examples.multiflow_demo.test_multiflow.define_Tests" name="test_mutliflow_copying" time="0.021" /><testcase classname="examples.multirotor.Demonstration.ipynb" name="" time="14.507" /><testcase classname="examples.multirotor.Multirotor_Optimization.ipynb" name="" time="21.160" /><testcase classname="examples.multirotor.Urban_Drone_Demo.ipynb" name="" time="54.190" /><testcase classname="examples.multirotor.drone_mdl_dynamic" name="examples.multirotor.drone_mdl_dynamic.AffectDOF.inc_pos" time="0.007" /><testcase classname="examples.multirotor.drone_mdl_dynamic" name="examples.multirotor.drone_mdl_dynamic.PlanPath.assign_vectdist_to_goal" time="0.005" /><testcase classname="examples.multirotor.drone_mdl_dynamic" name="examples.multirotor.drone_mdl_dynamic.PlanPath.calc_dist_to_goal" time="0.007" /><testcase classname="examples.multirotor.drone_mdl_hierarchical" name="examples.multirotor.drone_mdl_hierarchical.AffectDOF.calc_pwr" time="0.007" /><testcase classname="examples.multirotor.drone_mdl_hierarchical" name="examples.multirotor.drone_mdl_hierarchical.LineArchParam" time="0.007" /><testcase classname="examples.multirotor.drone_mdl_static" name="examples.multirotor.drone_mdl_static.AffectDOF.behavior" time="0.005" /><testcase classname="examples.multirotor.drone_mdl_static" name="examples.multirotor.drone_mdl_static.CtlDOF.behavior" time="0.005" /><testcase classname="examples.multirotor.drone_mdl_static" name="examples.multirotor.drone_mdl_static.DesTrajState.dist2d" time="0.004" /><testcase classname="examples.multirotor.drone_mdl_static" name="examples.multirotor.drone_mdl_static.DesTrajState.unit_vect2d" time="0.004" /><testcase classname="examples.multirotor.drone_mdl_static" name="examples.multirotor.drone_mdl_static.DistEE.behavior" time="0.005" /><testcase classname="examples.multirotor.drone_mdl_static" name="examples.multirotor.drone_mdl_static.HoldPayload.behavior" time="0.005" /><testcase classname="examples.multirotor.drone_mdl_static" name="examples.multirotor.drone_mdl_static.PlanPath.behavior" time="0.006" /><testcase classname="examples.multirotor.test_multirotor.DroneParameterTests" name="test_objectives" time="0.095" /><testcase classname="examples.multirotor.test_multirotor.DroneParameterTests" name="test_param_domain_1" time="0.001" /><testcase classname="examples.multirotor.test_multirotor.DroneParameterTests" name="test_param_domain_2" time="0.001" /><testcase classname="examples.multirotor.test_multirotor.DroneParameterTests" name="test_set_constraints_1" time="0.001" /><testcase classname="examples.multirotor.test_multirotor.DroneParameterTests" name="test_set_constraints_2" time="0.001" /><testcase classname="examples.multirotor.test_multirotor.DroneParameterTests" name="test_sim_mdl" time="0.054" /><testcase classname="examples.multirotor.test_multirotor.DroneScenarioTest" name="test_scenprob_results" time="0.163" /><testcase classname="examples.multirotor.test_multirotor.DroneScenarioTest2" name="test_scenprob_results" time="0.099" /><testcase classname="examples.multirotor.test_multirotor.DroneScenarioTest3" name="test_scenprob_results" time="0.116" /><testcase classname="examples.multirotor.test_multirotor.DroneDisturbanceTest" name="test_disturbance_set" time="0.076" /><testcase classname="examples.pump.AST_Sampling.ipynb" name="" time="0.019"><failure message="Error - No such kernel: 'julia-1.8'">Error - No such kernel: 'julia-1.8'</failure></testcase><testcase time="0.000" /></testsuite></testsuites>
+#x1B[1m#x1B[31mE   ModuleNotFoundError: No module named 'tank_model'#x1B[0m</error></testcase><testcase classname="examples.asg_demo.Action_Sequence_Graph.ipynb" name="" time="8.367" /><testcase classname="examples.eps.EPS_Example_Notebook.ipynb" name="" time="5.583" /><testcase classname="examples.eps.test_eps.epsTests" name="test_all_faults" time="0.327" /><testcase classname="examples.eps.test_eps.epsTests" name="test_backward_fault_prop_1" time="0.024" /><testcase classname="examples.eps.test_eps.epsTests" name="test_backward_fault_prop_2" time="0.024" /><testcase classname="examples.eps.test_eps.epsTests" name="test_fault_app" time="62.321" /><testcase classname="examples.eps.test_eps.epsTests" name="test_multfault_saving" time="0.087" /><testcase classname="examples.eps.test_eps.epsTests" name="test_nominal_saving" time="0.075" /><testcase classname="examples.eps.test_eps.epsTests" name="test_pickleability" time="0.008" /><testcase classname="examples.eps.test_eps.epsTests" name="test_save_load_onefault" time="0.081" /><testcase classname="examples.eps.test_eps.epsTests" name="test_save_load_singlefaults" time="1.098" /><testcase classname="examples.multiflow_demo.Multiflow_and_Commsflow_Demonstration.ipynb" name="" time="4.421" /><testcase classname="examples.multiflow_demo.test_multiflow.define_Tests" name="test_multiflow_combination" time="0.031" /><testcase classname="examples.multiflow_demo.test_multiflow.define_Tests" name="test_multiflow_passing" time="0.028" /><testcase classname="examples.multiflow_demo.test_multiflow.define_Tests" name="test_mutliflow_copying" time="0.034" /><testcase classname="examples.multirotor.Demonstration.ipynb" name="" time="21.587" /><testcase classname="examples.multirotor.Multirotor_Optimization.ipynb" name="" time="34.419" /><testcase classname="examples.multirotor.Urban_Drone_Demo.ipynb" name="" time="97.157" /><testcase classname="examples.multirotor.drone_mdl_dynamic" name="examples.multirotor.drone_mdl_dynamic.AffectDOF.inc_pos" time="0.009" /><testcase classname="examples.multirotor.drone_mdl_dynamic" name="examples.multirotor.drone_mdl_dynamic.PlanPath.assign_vectdist_to_goal" time="0.008" /><testcase classname="examples.multirotor.drone_mdl_dynamic" name="examples.multirotor.drone_mdl_dynamic.PlanPath.calc_dist_to_goal" time="0.008" /><testcase classname="examples.multirotor.drone_mdl_hierarchical" name="examples.multirotor.drone_mdl_hierarchical.AffectDOF.calc_pwr" time="0.008" /><testcase classname="examples.multirotor.drone_mdl_hierarchical" name="examples.multirotor.drone_mdl_hierarchical.LineArchParam" time="0.006" /><testcase classname="examples.multirotor.drone_mdl_static" name="examples.multirotor.drone_mdl_static.AffectDOF.behavior" time="0.006" /><testcase classname="examples.multirotor.drone_mdl_static" name="examples.multirotor.drone_mdl_static.CtlDOF.behavior" time="0.010" /><testcase classname="examples.multirotor.drone_mdl_static" name="examples.multirotor.drone_mdl_static.DesTrajState.dist2d" time="0.005" /><testcase classname="examples.multirotor.drone_mdl_static" name="examples.multirotor.drone_mdl_static.DesTrajState.unit_vect2d" time="0.005" /><testcase classname="examples.multirotor.drone_mdl_static" name="examples.multirotor.drone_mdl_static.DistEE.behavior" time="0.010" /><testcase classname="examples.multirotor.drone_mdl_static" name="examples.multirotor.drone_mdl_static.HoldPayload.behavior" time="0.007" /><testcase classname="examples.multirotor.drone_mdl_static" name="examples.multirotor.drone_mdl_static.PlanPath.behavior" time="0.006" /><testcase classname="examples.multirotor.test_multirotor.DroneParameterTests" name="test_objectives" time="0.155" /><testcase classname="examples.multirotor.test_multirotor.DroneParameterTests" name="test_param_domain_1" time="0.001" /><testcase classname="examples.multirotor.test_multirotor.DroneParameterTests" name="test_param_domain_2" time="0.001" /><testcase classname="examples.multirotor.test_multirotor.DroneParameterTests" name="test_set_constraints_1" time="0.001" /><testcase classname="examples.multirotor.test_multirotor.DroneParameterTests" name="test_set_constraints_2" time="0.001" /><testcase classname="examples.multirotor.test_multirotor.DroneParameterTests" name="test_sim_mdl" time="0.090" /><testcase classname="examples.multirotor.test_multirotor.DroneScenarioTest" name="test_scenprob_results" time="0.271" /><testcase classname="examples.multirotor.test_multirotor.DroneScenarioTest2" name="test_scenprob_results" time="0.174" /><testcase classname="examples.multirotor.test_multirotor.DroneScenarioTest3" name="test_scenprob_results" time="0.180" /><testcase classname="examples.multirotor.test_multirotor.DroneDisturbanceTest" name="test_disturbance_set" time="0.124" /><testcase classname="examples.pump.AST_Sampling.ipynb" name="" time="0.016"><failure message="Error - No such kernel: 'julia-1.8'">Error - No such kernel: 'julia-1.8'</failure></testcase><testcase classname="examples.pump.Optimization.ipynb" name="" time="38.876" /><testcase classname="examples.pump.Parallelism_Tutorial.ipynb" name="" time="67.878" /><testcase classname="examples.pump.Pump_Example_Notebook.ipynb" name="" time="17.232" /><testcase classname="examples.pump.Stochastic_Modelling.ipynb" name="" time="69.525" /><testcase classname="examples.pump.Tutorial_complete.ipynb" name="" time="7.292" /><testcase classname="examples.pump.Tutorial_unfilled.ipynb" name="" time="4.276"><failure message="#x1B[1;31mNameError#x1B[0m: name 'mdl' is not defined">---------------------------------------------------------------------------
+mdl.fxns
+#x1B[1;31m---------------------------------------------------------------------------#x1B[0m
+#x1B[1;31mNameError#x1B[0m                                 Traceback (most recent call last)
+Cell #x1B[1;32mIn[4], line 1#x1B[0m
+#x1B[1;32m----&gt; 1#x1B[0m #x1B[43mmdl#x1B[49m#x1B[38;5;241m.#x1B[39mfxns
+
+#x1B[1;31mNameError#x1B[0m: name 'mdl' is not defined</failure></testcase><testcase classname="examples.pump.test_pump.PumpTests" name="test_app_prop_values" time="0.155" /><testcase classname="examples.pump.test_pump.PumpTests" name="test_approach_cost_calc" time="15.376" /><testcase classname="examples.pump.test_pump.PumpTests" name="test_approach_parallelism" time="15.001" /><testcase classname="examples.pump.test_pump.PumpTests" name="test_dynamic_prop_values" time="0.159" /><testcase classname="examples.pump.test_pump.PumpTests" name="test_dynamic_prop_values_2" time="0.299" /><testcase classname="examples.pump.test_pump.PumpTests" name="test_fault_sample_isave" time="2.245" /><testcase classname="examples.pump.test_pump.PumpTests" name="test_fault_sample_save" time="1.870" /><testcase classname="examples.pump.test_pump.PumpTests" name="test_fmea_options" time="0.269" /><testcase classname="examples.pump.test_pump.PumpTests" name="test_model_copy_different" time="0.722" /><testcase classname="examples.pump.test_pump.PumpTests" name="test_model_copy_same" time="1.330" /><testcase classname="examples.pump.test_pump.PumpTests" name="test_model_reset" time="1.410" /><testcase classname="examples.pump.test_pump.PumpTests" name="test_nested_sample_isave" time="19.083" /><testcase classname="examples.pump.test_pump.PumpTests" name="test_nested_sample_save" time="18.997" /><testcase classname="examples.pump.test_pump.PumpTests" name="test_nominal_save" time="0.110" /><testcase classname="examples.pump.test_pump.PumpTests" name="test_one_run_csv" time="0.062" /><testcase classname="examples.pump.test_pump.PumpTests" name="test_one_run_json" time="0.061" /><testcase classname="examples.pump.test_pump.PumpTests" name="test_one_run_pickle" time="0.062" /><testcase classname="examples.pump.test_pump.PumpTests" name="test_onefault_save" time="0.199" /><testcase classname="examples.pump.test_pump.PumpTests" name="test_param_sample_isave" time="0.895" /><testcase classname="examples.pump.test_pump.PumpTests" name="test_param_sample_save" time="0.752" /><testcase classname="examples.pump.test_pump.PumpTests" name="test_pickleability" time="0.014" /><testcase classname="examples.pump.test_pump.PumpTests" name="test_save_load_multfault" time="0.169" /><testcase classname="examples.pump.test_pump.PumpTests" name="test_single_faults_isave" time="0.803" /><testcase classname="examples.pump.test_pump.PumpTests" name="test_single_faults_save" time="0.705" /><testcase classname="examples.pump.test_pump.PumpTests" name="test_value_setting" time="0.012" /><testcase classname="examples.pump.test_pump.PumpTests" name="test_value_setting_dict" time="0.014" /><testcase classname="examples.pump.test_pump_example.ImportEE_Tests" name="test_behave_inf_v" time="0.002" /><testcase classname="examples.pump.test_pump_example.ImportEE_Tests" name="test_behave_no_v" time="0.002" /><testcase classname="examples.pump.test_pump_example.ImportEE_Tests" name="test_behave_nom" time="0.002" /><testcase classname="examples.pump.test_pump_example.ImportEE_Tests" name="test_condfaults_hi" time="0.002" /><testcase classname="examples.pump.test_pump_example.ImportEE_Tests" name="test_condfaults_nom" time="0.002" /><testcase classname="examples.pump.test_pump_example.ImportEE_Tests" name="test_initialization" time="0.002" /><testcase classname="examples.pump.test_pump_example.MoveWat_Tests" name="test_condfaults_dynamic" time="0.003" /><testcase classname="examples.pump.test_pump_example.MoveWat_Tests" name="test_initialization" time="0.002" /><testcase classname="examples.pump.test_pump_example.MoveWat_Tests" name="test_nom" time="0.002" /><testcase classname="examples.pump.test_pump_example.Integration_Tests" name="test_blockage_results" time="0.100" /><testcase classname="examples.pump.test_pump_example.Integration_Tests" name="test_blockage_static" time="0.010" /><testcase classname="examples.pump.test_pump_example.Integration_Tests" name="test_nominal_results" time="0.050" /><testcase classname="examples.pump.test_pump_stochastic.StochasticPumpTests" name="test_mdl_pickle" time="0.655" /><testcase classname="examples.pump.test_pump_stochastic.StochasticPumpTests" name="test_model_copy_different" time="0.766" /><testcase classname="examples.pump.test_pump_stochastic.StochasticPumpTests" name="test_model_copy_same" time="1.236" /><testcase classname="examples.pump.test_pump_stochastic.StochasticPumpTests" name="test_model_reset" time="1.471" /><testcase classname="examples.pump.test_pump_stochastic.StochasticPumpTests" name="test_model_set_vars" time="0.011" /><testcase classname="examples.pump.test_pump_stochastic.StochasticPumpTests" name="test_nested_sample_isave" time="38.820" /><testcase classname="examples.pump.test_pump_stochastic.StochasticPumpTests" name="test_nested_sample_save" time="37.370" /><testcase classname="examples.pump.test_pump_stochastic.StochasticPumpTests" name="test_param_sample_isave" time="6.312" /><testcase classname="examples.pump.test_pump_stochastic.StochasticPumpTests" name="test_param_sample_save" time="6.409" /><testcase classname="examples.pump.test_pump_stochastic.StochasticPumpTests" name="test_plot_nested_hists" time="5.025" /><testcase classname="examples.pump.test_pump_stochastic.StochasticPumpTests" name="test_plot_nominal_vals" time="0.513" /><testcase classname="examples.pump.test_pump_stochastic.StochasticPumpTests" name="test_plot_nominal_vals_xd" time="27.232" /><testcase classname="examples.pump.test_pump_stochastic.StochasticPumpTests" name="test_rand_paramsample_plot" time="1.472" /><testcase classname="examples.pump.test_pump_stochastic.StochasticPumpTests" name="test_run_approach" time="32.461" /><testcase classname="examples.pump.test_pump_stochastic.StochasticPumpTests" name="test_run_safety" time="2.463" /><testcase classname="examples.pump.test_pump_stochastic.StochasticPumpTests" name="test_set_seeds" time="0.036" /><testcase classname="examples.pump.test_pump_stochastic.StochasticPumpTests" name="test_stochastic_pdf" time="0.018" /><testcase classname="examples.rover.FaultSample_Use-Cases.ipynb" name="" time="6.968" /><testcase classname="examples.rover.Model_Structure_Visualization_Tutorial.ipynb" name="" time="23.533" /><testcase classname="examples.rover.ParameterSample_Use-Cases.ipynb" name="" time="70.191" /><testcase classname="examples.rover.Rover_Setup_Notebook.ipynb" name="" time="27.165" /><testcase classname="examples.rover.rover_model" name="examples.rover.rover_model.Drive.drive_nominal" time="0.020" /><testcase classname="examples.rover.test_rover.RoverTests" name="test_obj_values" time="0.488"><failure message="AssertionError: 0.0 != 9.692725385061047">self = &lt;examples.rover.test_rover.RoverTests testMethod=test_obj_values&gt;
+
+    #x1B[94mdef#x1B[39;49;00m #x1B[92mtest_obj_values#x1B[39;49;00m(#x1B[96mself#x1B[39;49;00m):#x1B[90m#x1B[39;49;00m
+    #x1B[90m#x1B[39;49;00m
+        testvalues = [[#x1B[94m1.0#x1B[39;49;00m, #x1B[94m0.5#x1B[39;49;00m, #x1B[94m0.0#x1B[39;49;00m], [#x1B[94m0.0#x1B[39;49;00m, #x1B[94m0.0#x1B[39;49;00m, #x1B[94m0.0#x1B[39;49;00m],#x1B[90m#x1B[39;49;00m
+                      [#x1B[94m1.0#x1B[39;49;00m, #x1B[94m1.0#x1B[39;49;00m, #x1B[94m1.0#x1B[39;49;00m], [#x1B[94m0.5#x1B[39;49;00m, #x1B[94m0.5#x1B[39;49;00m, #x1B[94m0.5#x1B[39;49;00m]]#x1B[90m#x1B[39;49;00m
+        #x1B[94mfor#x1B[39;49;00m testvalue #x1B[95min#x1B[39;49;00m testvalues:#x1B[90m#x1B[39;49;00m
+            dist_int, enddist_int, endpt_int = line_dist_faster(testvalue)#x1B[90m#x1B[39;49;00m
+            dist, enddist, endpt = line_dist(testvalue)#x1B[90m#x1B[39;49;00m
+    #x1B[90m#x1B[39;49;00m
+            #x1B[96mself#x1B[39;49;00m.assertEqual(dist, dist_int)#x1B[90m#x1B[39;49;00m
+&gt;           #x1B[96mself#x1B[39;49;00m.assertEqual(enddist, enddist_int)#x1B[90m#x1B[39;49;00m
+#x1B[1m#x1B[31mE           AssertionError: 0.0 != 9.692725385061047#x1B[0m
+
+#x1B[1m#x1B[31mexamples\rover\test_rover.py#x1B[0m:22: AssertionError</failure></testcase><testcase classname="examples.rover.HFAC_Analyses.HFAC_Analyses.ipynb" name="" time="4.225"><failure message="#x1B[1;31mModuleNotFoundError#x1B[0m: No module named 'fmdtools.sim.approach'">---------------------------------------------------------------------------
+from fmdtools.sim.approach import SampleApproach, NominalApproach
+import fmdtools.analyze as an
+import fmdtools.sim.propagate as prop
+import numpy as np
+import matplotlib.pyplot as plt
+plt.rcParams['pdf.fonttype'] = 42
+import multiprocessing as mp
+import scipy.stats as stats
+
+
+import multiprocessing as mp
+#x1B[1;31m---------------------------------------------------------------------------#x1B[0m
+#x1B[1;31mModuleNotFoundError#x1B[0m                       Traceback (most recent call last)
+Cell #x1B[1;32mIn[1], line 1#x1B[0m
+#x1B[1;32m----&gt; 1#x1B[0m #x1B[38;5;28;01mfrom#x1B[39;00m #x1B[38;5;21;01mfmdtools#x1B[39;00m#x1B[38;5;21;01m.#x1B[39;00m#x1B[38;5;21;01msim#x1B[39;00m#x1B[38;5;21;01m.#x1B[39;00m#x1B[38;5;21;01mapproach#x1B[39;00m #x1B[38;5;28;01mimport#x1B[39;00m SampleApproach, NominalApproach
+#x1B[0;32m      2#x1B[0m #x1B[38;5;28;01mimport#x1B[39;00m #x1B[38;5;21;01mfmdtools#x1B[39;00m#x1B[38;5;21;01m.#x1B[39;00m#x1B[38;5;21;01manalyze#x1B[39;00m #x1B[38;5;28;01mas#x1B[39;00m #x1B[38;5;21;01man#x1B[39;00m
+#x1B[0;32m      3#x1B[0m #x1B[38;5;28;01mimport#x1B[39;00m #x1B[38;5;21;01mfmdtools#x1B[39;00m#x1B[38;5;21;01m.#x1B[39;00m#x1B[38;5;21;01msim#x1B[39;00m#x1B[38;5;21;01m.#x1B[39;00m#x1B[38;5;21;01mpropagate#x1B[39;00m #x1B[38;5;28;01mas#x1B[39;00m #x1B[38;5;21;01mprop#x1B[39;00m
+
+#x1B[1;31mModuleNotFoundError#x1B[0m: No module named 'fmdtools.sim.approach'</failure></testcase><testcase classname="examples.rover.HFAC_Analyses.IDETC_Human_Paper_Analysis.ipynb" name="" time="2.683"><failure message="#x1B[1;31mModuleNotFoundError#x1B[0m: No module named 'rover_model_human'">---------------------------------------------------------------------------
+from rover_model_human import Rover, gen_params
+from rover_model import plot_map, plot_trajectories
+import fmdtools.analyze as an
+import fmdtools.sim.propagate as prop
+from fmdtools.sim.approach import SampleApproach, NominalApproach
+
+import numpy as np
+import matplotlib.pyplot as plt
+#x1B[1;31m---------------------------------------------------------------------------#x1B[0m
+#x1B[1;31mModuleNotFoundError#x1B[0m                       Traceback (most recent call last)
+Cell #x1B[1;32mIn[1], line 1#x1B[0m
+#x1B[1;32m----&gt; 1#x1B[0m #x1B[38;5;28;01mfrom#x1B[39;00m #x1B[38;5;21;01mrover_model_human#x1B[39;00m #x1B[38;5;28;01mimport#x1B[39;00m Rover, gen_params
+#x1B[0;32m      2#x1B[0m #x1B[38;5;28;01mfrom#x1B[39;00m #x1B[38;5;21;01mrover_model#x1B[39;00m #x1B[38;5;28;01mimport#x1B[39;00m plot_map, plot_trajectories
+#x1B[0;32m      3#x1B[0m #x1B[38;5;28;01mimport#x1B[39;00m #x1B[38;5;21;01mfmdtools#x1B[39;00m#x1B[38;5;21;01m.#x1B[39;00m#x1B[38;5;21;01manalyze#x1B[39;00m #x1B[38;5;28;01mas#x1B[39;00m #x1B[38;5;21;01man#x1B[39;00m
+
+#x1B[1;31mModuleNotFoundError#x1B[0m: No module named 'rover_model_human'</failure></testcase><testcase classname="examples.rover.degradation_modelling.Degradation_Modelling_Notebook.ipynb" name="" time="4.208"><failure message="#x1B[1;31mModuleNotFoundError#x1B[0m: No module named 'fmdtools.sim.approach'">---------------------------------------------------------------------------
+from fmdtools.sim.approach import SampleApproach, NominalApproach
+import fmdtools.analyze as an
+import fmdtools.sim.propagate as prop
+import numpy as np
+import matplotlib.pyplot as plt
+import multiprocessing as mp
+import scipy.stats as stats
+
+
+import multiprocessing as mp
+#x1B[1;31m---------------------------------------------------------------------------#x1B[0m
+#x1B[1;31mModuleNotFoundError#x1B[0m                       Traceback (most recent call last)
+Cell #x1B[1;32mIn[1], line 1#x1B[0m
+#x1B[1;32m----&gt; 1#x1B[0m #x1B[38;5;28;01mfrom#x1B[39;00m #x1B[38;5;21;01mfmdtools#x1B[39;00m#x1B[38;5;21;01m.#x1B[39;00m#x1B[38;5;21;01msim#x1B[39;00m#x1B[38;5;21;01m.#x1B[39;00m#x1B[38;5;21;01mapproach#x1B[39;00m #x1B[38;5;28;01mimport#x1B[39;00m SampleApproach, NominalApproach
+#x1B[0;32m      2#x1B[0m #x1B[38;5;28;01mimport#x1B[39;00m #x1B[38;5;21;01mfmdtools#x1B[39;00m#x1B[38;5;21;01m.#x1B[39;00m#x1B[38;5;21;01manalyze#x1B[39;00m #x1B[38;5;28;01mas#x1B[39;00m #x1B[38;5;21;01man#x1B[39;00m
+#x1B[0;32m      3#x1B[0m #x1B[38;5;28;01mimport#x1B[39;00m #x1B[38;5;21;01mfmdtools#x1B[39;00m#x1B[38;5;21;01m.#x1B[39;00m#x1B[38;5;21;01msim#x1B[39;00m#x1B[38;5;21;01m.#x1B[39;00m#x1B[38;5;21;01mpropagate#x1B[39;00m #x1B[38;5;28;01mas#x1B[39;00m #x1B[38;5;21;01mprop#x1B[39;00m
+
+#x1B[1;31mModuleNotFoundError#x1B[0m: No module named 'fmdtools.sim.approach'</failure></testcase><testcase classname="examples.rover.fault_sampling.Rover_Mode_Notebook.ipynb" name="" time="4.186"><failure message="#x1B[1;31mModuleNotFoundError#x1B[0m: No module named 'fmdtools.sim.approach'">---------------------------------------------------------------------------
+from fmdtools.sim.approach import SampleApproach
+import fmdtools.analyze as an
+import fmdtools.sim.propagate as prop
+import matplotlib.pyplot as plt
+plt.rcParams['pdf.fonttype'] = 42
+import multiprocessing as mp
+import pandas as pd
+import time
+#x1B[1;31m---------------------------------------------------------------------------#x1B[0m
+#x1B[1;31mModuleNotFoundError#x1B[0m                       Traceback (most recent call last)
+Cell #x1B[1;32mIn[1], line 1#x1B[0m
+#x1B[1;32m----&gt; 1#x1B[0m #x1B[38;5;28;01mfrom#x1B[39;00m #x1B[38;5;21;01mfmdtools#x1B[39;00m#x1B[38;5;21;01m.#x1B[39;00m#x1B[38;5;21;01msim#x1B[39;00m#x1B[38;5;21;01m.#x1B[39;00m#x1B[38;5;21;01mapproach#x1B[39;00m #x1B[38;5;28;01mimport#x1B[39;00m SampleApproach
+#x1B[0;32m      2#x1B[0m #x1B[38;5;28;01mimport#x1B[39;00m #x1B[38;5;21;01mfmdtools#x1B[39;00m#x1B[38;5;21;01m.#x1B[39;00m#x1B[38;5;21;01manalyze#x1B[39;00m #x1B[38;5;28;01mas#x1B[39;00m #x1B[38;5;21;01man#x1B[39;00m
+#x1B[0;32m      3#x1B[0m #x1B[38;5;28;01mimport#x1B[39;00m #x1B[38;5;21;01mfmdtools#x1B[39;00m#x1B[38;5;21;01m.#x1B[39;00m#x1B[38;5;21;01msim#x1B[39;00m#x1B[38;5;21;01m.#x1B[39;00m#x1B[38;5;21;01mpropagate#x1B[39;00m #x1B[38;5;28;01mas#x1B[39;00m #x1B[38;5;21;01mprop#x1B[39;00m
+
+#x1B[1;31mModuleNotFoundError#x1B[0m: No module named 'fmdtools.sim.approach'</failure></testcase><testcase classname="examples.rover.optimization.Rover_Response_Optimization.ipynb" name="" time="4.216"><failure message="#x1B[1;31mModuleNotFoundError#x1B[0m: No module named 'fmdtools.sim.approach'">---------------------------------------------------------------------------
+from fmdtools.sim.approach import SampleApproach
+import fmdtools.analyze as an
+import fmdtools.sim.propagate as prop
+import fmdtools.sim.search as search
+import matplotlib.pyplot as plt
+import multiprocessing as mp
+import time
+#x1B[1;31m---------------------------------------------------------------------------#x1B[0m
+#x1B[1;31mModuleNotFoundError#x1B[0m                       Traceback (most recent call last)
+Cell #x1B[1;32mIn[1], line 1#x1B[0m
+#x1B[1;32m----&gt; 1#x1B[0m #x1B[38;5;28;01mfrom#x1B[39;00m #x1B[38;5;21;01mfmdtools#x1B[39;00m#x1B[38;5;21;01m.#x1B[39;00m#x1B[38;5;21;01msim#x1B[39;00m#x1B[38;5;21;01m.#x1B[39;00m#x1B[38;5;21;01mapproach#x1B[39;00m #x1B[38;5;28;01mimport#x1B[39;00m SampleApproach
+#x1B[0;32m      2#x1B[0m #x1B[38;5;28;01mimport#x1B[39;00m #x1B[38;5;21;01mfmdtools#x1B[39;00m#x1B[38;5;21;01m.#x1B[39;00m#x1B[38;5;21;01manalyze#x1B[39;00m #x1B[38;5;28;01mas#x1B[39;00m #x1B[38;5;21;01man#x1B[39;00m
+#x1B[0;32m      3#x1B[0m #x1B[38;5;28;01mimport#x1B[39;00m #x1B[38;5;21;01mfmdtools#x1B[39;00m#x1B[38;5;21;01m.#x1B[39;00m#x1B[38;5;21;01msim#x1B[39;00m#x1B[38;5;21;01m.#x1B[39;00m#x1B[38;5;21;01mpropagate#x1B[39;00m #x1B[38;5;28;01mas#x1B[39;00m #x1B[38;5;21;01mprop#x1B[39;00m
+
+#x1B[1;31mModuleNotFoundError#x1B[0m: No module named 'fmdtools.sim.approach'</failure></testcase><testcase classname="examples.rover.optimization.Search_Comparison.ipynb" name="" time="4.653"><failure message="#x1B[1;31mModuleNotFoundError#x1B[0m: No module named 'deap'">---------------------------------------------------------------------------
+result_mc, sol_mc= montecarlo(ngen=50, weight=0.5, filename='results/rslt_random.csv')
+result_ea, sol_ea= ea(ngen=50, weight=0.5, filename='results/rslt_ea.csv')
+result_ccea, sol_ccea, pop= ccea(ngen=50, weight=0.5, filename="results/rslt_ccea.csv")
+#x1B[1;31m---------------------------------------------------------------------------#x1B[0m
+#x1B[1;31mModuleNotFoundError#x1B[0m                       Traceback (most recent call last)
+Cell #x1B[1;32mIn[2], line 1#x1B[0m
+#x1B[1;32m----&gt; 1#x1B[0m result_mc, sol_mc#x1B[38;5;241m=#x1B[39m #x1B[43mmontecarlo#x1B[49m#x1B[43m(#x1B[49m#x1B[43mngen#x1B[49m#x1B[38;5;241;43m=#x1B[39;49m#x1B[38;5;241;43m50#x1B[39;49m#x1B[43m,#x1B[49m#x1B[43m #x1B[49m#x1B[43mweight#x1B[49m#x1B[38;5;241;43m=#x1B[39;49m#x1B[38;5;241;43m0.5#x1B[39;49m#x1B[43m,#x1B[49m#x1B[43m #x1B[49m#x1B[43mfilename#x1B[49m#x1B[38;5;241;43m=#x1B[39;49m#x1B[38;5;124;43m'#x1B[39;49m#x1B[38;5;124;43mresults/rslt_random.csv#x1B[39;49m#x1B[38;5;124;43m'#x1B[39;49m#x1B[43m)#x1B[49m
+#x1B[0;32m      2#x1B[0m result_ea, sol_ea#x1B[38;5;241m=#x1B[39m ea(ngen#x1B[38;5;241m=#x1B[39m#x1B[38;5;241m50#x1B[39m, weight#x1B[38;5;241m=#x1B[39m#x1B[38;5;241m0.5#x1B[39m, filename#x1B[38;5;241m=#x1B[39m#x1B[38;5;124m'#x1B[39m#x1B[38;5;124mresults/rslt_ea.csv#x1B[39m#x1B[38;5;124m'#x1B[39m)
+#x1B[0;32m      3#x1B[0m result_ccea, sol_ccea, pop#x1B[38;5;241m=#x1B[39m ccea(ngen#x1B[38;5;241m=#x1B[39m#x1B[38;5;241m50#x1B[39m, weight#x1B[38;5;241m=#x1B[39m#x1B[38;5;241m0.5#x1B[39m, filename#x1B[38;5;241m=#x1B[39m#x1B[38;5;124m"#x1B[39m#x1B[38;5;124mresults/rslt_ccea.csv#x1B[39m#x1B[38;5;124m"#x1B[39m)
+
+File #x1B[1;32m~\Documents\GitHub\fmdtools\examples\rover\optimization\search_rover.py:373#x1B[0m, in #x1B[0;36mmontecarlo#x1B[1;34m(verbose, ngen, show_sol, weight, filename, formulation)#x1B[0m
+#x1B[0;32m    371#x1B[0m #x1B[38;5;250m#x1B[39m#x1B[38;5;124;03m"""Monte carlo optimization of fitness for reference/comparison."""#x1B[39;00m
+#x1B[0;32m    372#x1B[0m start #x1B[38;5;241m=#x1B[39m time#x1B[38;5;241m.#x1B[39mtime()
+#x1B[1;32m--&gt; 373#x1B[0m toolbox #x1B[38;5;241m=#x1B[39m #x1B[43msetup_opt#x1B[49m#x1B[43m(#x1B[49m#x1B[43mmc#x1B[49m#x1B[38;5;241;43m=#x1B[39;49m#x1B[38;5;28;43;01mTrue#x1B[39;49;00m#x1B[43m,#x1B[49m#x1B[43m #x1B[49m#x1B[43mformulation#x1B[49m#x1B[38;5;241;43m=#x1B[39;49m#x1B[43mformulation#x1B[49m#x1B[43m)#x1B[49m
+#x1B[0;32m    374#x1B[0m g #x1B[38;5;241m=#x1B[39m #x1B[38;5;241m0#x1B[39m
+#x1B[0;32m    375#x1B[0m gens #x1B[38;5;241m=#x1B[39m []
+
+File #x1B[1;32m~\Documents\GitHub\fmdtools\examples\rover\optimization\search_rover.py:585#x1B[0m, in #x1B[0;36msetup_opt#x1B[1;34m(ccea, mc, formulation)#x1B[0m
+#x1B[0;32m    584#x1B[0m #x1B[38;5;28;01mdef#x1B[39;00m #x1B[38;5;21msetup_opt#x1B[39m(ccea#x1B[38;5;241m=#x1B[39m#x1B[38;5;28;01mFalse#x1B[39;00m, mc#x1B[38;5;241m=#x1B[39m#x1B[38;5;28;01mFalse#x1B[39;00m, formulation#x1B[38;5;241m=#x1B[39m#x1B[38;5;241m1#x1B[39m):
+#x1B[1;32m--&gt; 585#x1B[0m     #x1B[38;5;28;01mfrom#x1B[39;00m #x1B[38;5;21;01mdeap#x1B[39;00m #x1B[38;5;28;01mimport#x1B[39;00m base, creator, tools
+#x1B[0;32m    587#x1B[0m     #x1B[38;5;28;01mif#x1B[39;00m #x1B[38;5;28mhasattr#x1B[39m(creator, #x1B[38;5;124m"#x1B[39m#x1B[38;5;124mFitnessMax#x1B[39m#x1B[38;5;124m"#x1B[39m):
+#x1B[0;32m    588#x1B[0m         #x1B[38;5;28;01mdel#x1B[39;00m creator#x1B[38;5;241m.#x1B[39mFitnessMax
+
+#x1B[1;31mModuleNotFoundError#x1B[0m: No module named 'deap'</failure></testcase><testcase classname="examples.tank.Tank_Analysis.ipynb" name="" time="14.400" /><testcase classname="examples.tank.Tank_Optimization.ipynb" name="" time="35.567"><failure message="A cell timed out while it was being executed, after 20 seconds.">A cell timed out while it was being executed, after 20 seconds.
+The message was: Cell execution timed out.
+Here is a preview of the cell contents:
+-------------------
+result, args, fhist, thist, xdhist = alternating_opt(pa.tot_tot_cost_full, pa.des_cd, pa.res_cr, max_alts=1)
+-------------------</failure></testcase><testcase classname="examples.tank.test_tank.TankTests" name="test_approach" time="1.385" /><testcase classname="examples.tank.test_tank.TankTests" name="test_approach_parallelism_0" time="5.455" /><testcase classname="examples.tank.test_tank.TankTests" name="test_approach_parallelism_1" time="8.355" /><testcase classname="examples.tank.test_tank.TankTests" name="test_approach_parallelism_notrack" time="5.809" /><testcase classname="examples.tank.test_tank.TankTests" name="test_comp_mode_inj" time="0.069" /><testcase classname="examples.tank.test_tank.TankTests" name="test_different_components" time="0.027" /><testcase classname="examples.tank.test_tank.TankTests" name="test_epc_math" time="0.016" /><testcase classname="examples.tank.test_tank.TankTests" name="test_fault_sample_isave" time="2.045" /><testcase classname="examples.tank.test_tank.TankTests" name="test_fault_sample_save" time="1.709" /><testcase classname="examples.tank.test_tank.TankTests" name="test_local_tstep" time="0.127" /><testcase classname="examples.tank.test_tank.TankTests" name="test_model_copy_different" time="0.475" /><testcase classname="examples.tank.test_tank.TankTests" name="test_model_copy_same" time="0.917" /><testcase classname="examples.tank.test_tank.TankTests" name="test_model_reset" time="0.266"><failure message="AssertionError: Problem at time: 0 and faultscen: {'import_water': 'stuck'} injected at t=5">self = &lt;examples.tank.test_tank.TankTests testMethod=test_model_reset&gt;
+mdl = tank Tank
+FUNCTIONS:
+import_water ImportLiquid
+- TransportLiquidState(amt_open=1)
+- TransportLiquidMode(mode=nominal, ...action=0)
+tank_sig Signal flow: SigState(indicator=0, action=0)
+valve2_sig Signal flow: SigState(indicator=1, action=0)
+mdl2 = tank Tank
+FUNCTIONS:
+import_water ImportLiquid
+- TransportLiquidState(amt_open=1)
+- TransportLiquidMode(mode=nominal, ...action=0)
+tank_sig Signal flow: SigState(indicator=0, action=0)
+valve2_sig Signal flow: SigState(indicator=1, action=0)
+
+    #x1B[94mdef#x1B[39;49;00m #x1B[92mcheck_same_model#x1B[39;49;00m(#x1B[96mself#x1B[39;49;00m, mdl, mdl2):#x1B[90m#x1B[39;49;00m
+    #x1B[90m    #x1B[39;49;00m#x1B[33m"""Check if models mdl and mdl2 have the same attributes."""#x1B[39;49;00m#x1B[90m#x1B[39;49;00m
+        #x1B[94mfor#x1B[39;49;00m flname, fl #x1B[95min#x1B[39;49;00m mdl.flows.items():#x1B[90m#x1B[39;49;00m
+            #x1B[94mtry#x1B[39;49;00m:#x1B[90m#x1B[39;49;00m
+                #x1B[96mself#x1B[39;49;00m.assertEqual(fl.return_mutables(),#x1B[90m#x1B[39;49;00m
+                                 mdl2.flows[flname].return_mutables(),#x1B[90m#x1B[39;49;00m
+                                 msg=#x1B[96mstr#x1B[39;49;00m(fl.find_mutables()))#x1B[90m#x1B[39;49;00m
+            #x1B[94mexcept#x1B[39;49;00m #x1B[96mAssertionError#x1B[39;49;00m #x1B[94mas#x1B[39;49;00m e:#x1B[90m#x1B[39;49;00m
+                #x1B[94mraise#x1B[39;49;00m #x1B[96mAssertionError#x1B[39;49;00m(#x1B[33m"#x1B[39;49;00m#x1B[33mProblem in flow #x1B[39;49;00m#x1B[33m"#x1B[39;49;00m + flname + #x1B[33m"#x1B[39;49;00m#x1B[33mwith mutables #x1B[39;49;00m#x1B[33m"#x1B[39;49;00m +#x1B[90m#x1B[39;49;00m
+                                     #x1B[96mstr#x1B[39;49;00m(fl.find_mutables())) #x1B[94mfrom#x1B[39;49;00m #x1B[04m#x1B[96me#x1B[39;49;00m#x1B[90m#x1B[39;49;00m
+        #x1B[94mfor#x1B[39;49;00m fxnname, fxn #x1B[95min#x1B[39;49;00m mdl.fxns.items():#x1B[90m#x1B[39;49;00m
+            #x1B[94mtry#x1B[39;49;00m:#x1B[90m#x1B[39;49;00m
+&gt;               #x1B[96mself#x1B[39;49;00m.assertEqual(fxn.return_mutables(),#x1B[90m#x1B[39;49;00m
+                                 mdl2.fxns[fxnname].return_mutables(),#x1B[90m#x1B[39;49;00m
+                                 msg=#x1B[96mstr#x1B[39;49;00m(fxn.find_mutables()))#x1B[90m#x1B[39;49;00m
+
+#x1B[1m#x1B[31mtests\common.py#x1B[0m:190: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = &lt;examples.tank.test_tank.TankTests testMethod=test_model_reset&gt;
+first = (('nominal', set()), (0, 0, 0.0, 1), (0, 0), (1, 0), (1, 0), ((-0.1, 0, 0.0, 1), 0, 0, 1, 0, 1, ...))
+second = (('nominal', set()), (0, 0, 0.0, 1), (0, 0), (1, 0), (1, 0), ((-0.1, 0, 0.0, 1), 0, 0, 1, 0, 1, ...))
+msg = '[Mode(mode=nominal, faults=set()), Time(time=0, t_ind=0, t_loc=0.0, timers={}, use_local=True, dt=1.0, run_times=1), ...e2_sig Signal flow: SigState(indicator=1, action=0), &lt;examples.tank.tank_model.HumanASG object at 0x0000017ADAA11220&gt;]'
+
+    #x1B[94mdef#x1B[39;49;00m #x1B[92massertEqual#x1B[39;49;00m(#x1B[96mself#x1B[39;49;00m, first, second, msg=#x1B[94mNone#x1B[39;49;00m):#x1B[90m#x1B[39;49;00m
+    #x1B[90m    #x1B[39;49;00m#x1B[33m"""Fail if the two objects are unequal as determined by the '=='#x1B[39;49;00m
+    #x1B[33m       operator.#x1B[39;49;00m
+    #x1B[33m    """#x1B[39;49;00m#x1B[90m#x1B[39;49;00m
+        assertion_func = #x1B[96mself#x1B[39;49;00m._getAssertEqualityFunc(first, second)#x1B[90m#x1B[39;49;00m
+&gt;       assertion_func(first, second, msg=msg)#x1B[90m#x1B[39;49;00m
+
+#x1B[1m#x1B[31m..\..\..\AppData\Local\anaconda3\lib\unittest\case.py#x1B[0m:845: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = &lt;examples.tank.test_tank.TankTests testMethod=test_model_reset&gt;
+tuple1 = (('nominal', set()), (0, 0, 0.0, 1), (0, 0), (1, 0), (1, 0), ((-0.1, 0, 0.0, 1), 0, 0, 1, 0, 1, ...))
+tuple2 = (('nominal', set()), (0, 0, 0.0, 1), (0, 0), (1, 0), (1, 0), ((-0.1, 0, 0.0, 1), 0, 0, 1, 0, 1, ...))
+msg = '[Mode(mode=nominal, faults=set()), Time(time=0, t_ind=0, t_loc=0.0, timers={}, use_local=True, dt=1.0, run_times=1), ...e2_sig Signal flow: SigState(indicator=1, action=0), &lt;examples.tank.tank_model.HumanASG object at 0x0000017ADAA11220&gt;]'
+
+    #x1B[94mdef#x1B[39;49;00m #x1B[92massertTupleEqual#x1B[39;49;00m(#x1B[96mself#x1B[39;49;00m, tuple1, tuple2, msg=#x1B[94mNone#x1B[39;49;00m):#x1B[90m#x1B[39;49;00m
+    #x1B[90m    #x1B[39;49;00m#x1B[33m"""A tuple-specific equality assertion.#x1B[39;49;00m
+    #x1B[33m#x1B[39;49;00m
+    #x1B[33m    Args:#x1B[39;49;00m
+    #x1B[33m        tuple1: The first tuple to compare.#x1B[39;49;00m
+    #x1B[33m        tuple2: The second tuple to compare.#x1B[39;49;00m
+    #x1B[33m        msg: Optional message to use on failure instead of a list of#x1B[39;49;00m
+    #x1B[33m                differences.#x1B[39;49;00m
+    #x1B[33m    """#x1B[39;49;00m#x1B[90m#x1B[39;49;00m
+&gt;       #x1B[96mself#x1B[39;49;00m.assertSequenceEqual(tuple1, tuple2, msg, seq_type=#x1B[96mtuple#x1B[39;49;00m)#x1B[90m#x1B[39;49;00m
+
+#x1B[1m#x1B[31m..\..\..\AppData\Local\anaconda3\lib\unittest\case.py#x1B[0m:1062: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = &lt;examples.tank.test_tank.TankTests testMethod=test_model_reset&gt;
+seq1 = (('nominal', set()), (0, 0, 0.0, 1), (0, 0), (1, 0), (1, 0), ((-0.1, 0, 0.0, 1), 0, 0, 1, 0, 1, ...))
+seq2 = (('nominal', set()), (0, 0, 0.0, 1), (0, 0), (1, 0), (1, 0), ((-0.1, 0, 0.0, 1), 0, 0, 1, 0, 1, ...))
+msg = "Tuples differ: (('no[89 chars], 0, 0, 1, ('nominal', set()), (0, 0, 0.0, 1),[189 chars] 0))) != (('no[89 chars], 0, 1...e2_sig Signal flow: SigState(indicator=1, action=0), &lt;examples.tank.tank_model.HumanASG object at 0x0000017ADAA11220&gt;]"
+seq_type = &lt;class 'tuple'&gt;
+
+    #x1B[94mdef#x1B[39;49;00m #x1B[92massertSequenceEqual#x1B[39;49;00m(#x1B[96mself#x1B[39;49;00m, seq1, seq2, msg=#x1B[94mNone#x1B[39;49;00m, seq_type=#x1B[94mNone#x1B[39;49;00m):#x1B[90m#x1B[39;49;00m
+    #x1B[90m    #x1B[39;49;00m#x1B[33m"""An equality assertion for ordered sequences (like lists and tuples).#x1B[39;49;00m
+    #x1B[33m#x1B[39;49;00m
+    #x1B[33m    For the purposes of this function, a valid ordered sequence type is one#x1B[39;49;00m
+    #x1B[33m    which can be indexed, has a length, and has an equality operator.#x1B[39;49;00m
+    #x1B[33m#x1B[39;49;00m
+    #x1B[33m    Args:#x1B[39;49;00m
+    #x1B[33m        seq1: The first sequence to compare.#x1B[39;49;00m
+    #x1B[33m        seq2: The second sequence to compare.#x1B[39;49;00m
+    #x1B[33m        seq_type: The expected datatype of the sequences, or None if no#x1B[39;49;00m
+    #x1B[33m                datatype should be enforced.#x1B[39;49;00m
+    #x1B[33m        msg: Optional message to use on failure instead of a list of#x1B[39;49;00m
+    #x1B[33m                differences.#x1B[39;49;00m
+    #x1B[33m    """#x1B[39;49;00m#x1B[90m#x1B[39;49;00m
+        #x1B[94mif#x1B[39;49;00m seq_type #x1B[95mis#x1B[39;49;00m #x1B[95mnot#x1B[39;49;00m #x1B[94mNone#x1B[39;49;00m:#x1B[90m#x1B[39;49;00m
+            seq_type_name = seq_type.#x1B[91m__name__#x1B[39;49;00m#x1B[90m#x1B[39;49;00m
+            #x1B[94mif#x1B[39;49;00m #x1B[95mnot#x1B[39;49;00m #x1B[96misinstance#x1B[39;49;00m(seq1, seq_type):#x1B[90m#x1B[39;49;00m
+                #x1B[94mraise#x1B[39;49;00m #x1B[96mself#x1B[39;49;00m.failureException(#x1B[33m'#x1B[39;49;00m#x1B[33mFirst sequence is not a #x1B[39;49;00m#x1B[33m%s#x1B[39;49;00m#x1B[33m: #x1B[39;49;00m#x1B[33m%s#x1B[39;49;00m#x1B[33m'#x1B[39;49;00m#x1B[90m#x1B[39;49;00m
+                                        % (seq_type_name, safe_repr(seq1)))#x1B[90m#x1B[39;49;00m
+            #x1B[94mif#x1B[39;49;00m #x1B[95mnot#x1B[39;49;00m #x1B[96misinstance#x1B[39;49;00m(seq2, seq_type):#x1B[90m#x1B[39;49;00m
+                #x1B[94mraise#x1B[39;49;00m #x1B[96mself#x1B[39;49;00m.failureException(#x1B[33m'#x1B[39;49;00m#x1B[33mSecond sequence is not a #x1B[39;49;00m#x1B[33m%s#x1B[39;49;00m#x1B[33m: #x1B[39;49;00m#x1B[33m%s#x1B[39;49;00m#x1B[33m'#x1B[39;49;00m#x1B[90m#x1B[39;49;00m
+                                        % (seq_type_name, safe_repr(seq2)))#x1B[90m#x1B[39;49;00m
+        #x1B[94melse#x1B[39;49;00m:#x1B[90m#x1B[39;49;00m
+            seq_type_name = #x1B[33m"#x1B[39;49;00m#x1B[33msequence#x1B[39;49;00m#x1B[33m"#x1B[39;49;00m#x1B[90m#x1B[39;49;00m
+    #x1B[90m#x1B[39;49;00m
+        differing = #x1B[94mNone#x1B[39;49;00m#x1B[90m#x1B[39;49;00m
+        #x1B[94mtry#x1B[39;49;00m:#x1B[90m#x1B[39;49;00m
+            len1 = #x1B[96mlen#x1B[39;49;00m(seq1)#x1B[90m#x1B[39;49;00m
+        #x1B[94mexcept#x1B[39;49;00m (#x1B[96mTypeError#x1B[39;49;00m, #x1B[96mNotImplementedError#x1B[39;49;00m):#x1B[90m#x1B[39;49;00m
+            differing = #x1B[33m'#x1B[39;49;00m#x1B[33mFirst #x1B[39;49;00m#x1B[33m%s#x1B[39;49;00m#x1B[33m has no length.    Non-sequence?#x1B[39;49;00m#x1B[33m'#x1B[39;49;00m % (#x1B[90m#x1B[39;49;00m
+                    seq_type_name)#x1B[90m#x1B[39;49;00m
+    #x1B[90m#x1B[39;49;00m
+        #x1B[94mif#x1B[39;49;00m differing #x1B[95mis#x1B[39;49;00m #x1B[94mNone#x1B[39;49;00m:#x1B[90m#x1B[39;49;00m
+            #x1B[94mtry#x1B[39;49;00m:#x1B[90m#x1B[39;49;00m
+                len2 = #x1B[96mlen#x1B[39;49;00m(seq2)#x1B[90m#x1B[39;49;00m
+            #x1B[94mexcept#x1B[39;49;00m (#x1B[96mTypeError#x1B[39;49;00m, #x1B[96mNotImplementedError#x1B[39;49;00m):#x1B[90m#x1B[39;49;00m
+                differing = #x1B[33m'#x1B[39;49;00m#x1B[33mSecond #x1B[39;49;00m#x1B[33m%s#x1B[39;49;00m#x1B[33m has no length.    Non-sequence?#x1B[39;49;00m#x1B[33m'#x1B[39;49;00m % (#x1B[90m#x1B[39;49;00m
+                        seq_type_name)#x1B[90m#x1B[39;49;00m
+    #x1B[90m#x1B[39;49;00m
+        #x1B[94mif#x1B[39;49;00m differing #x1B[95mis#x1B[39;49;00m #x1B[94mNone#x1B[39;49;00m:#x1B[90m#x1B[39;49;00m
+            #x1B[94mif#x1B[39;49;00m seq1 == seq2:#x1B[90m#x1B[39;49;00m
+                #x1B[94mreturn#x1B[39;49;00m#x1B[90m#x1B[39;49;00m
+    #x1B[90m#x1B[39;49;00m
+            differing = #x1B[33m'#x1B[39;49;00m#x1B[33m%s#x1B[39;49;00m#x1B[33ms differ: #x1B[39;49;00m#x1B[33m%s#x1B[39;49;00m#x1B[33m != #x1B[39;49;00m#x1B[33m%s#x1B[39;49;00m#x1B[33m\n#x1B[39;49;00m#x1B[33m'#x1B[39;49;00m % (#x1B[90m#x1B[39;49;00m
+                    (seq_type_name.capitalize(),) +#x1B[90m#x1B[39;49;00m
+                    _common_shorten_repr(seq1, seq2))#x1B[90m#x1B[39;49;00m
+    #x1B[90m#x1B[39;49;00m
+            #x1B[94mfor#x1B[39;49;00m i #x1B[95min#x1B[39;49;00m #x1B[96mrange#x1B[39;49;00m(#x1B[96mmin#x1B[39;49;00m(len1, len2)):#x1B[90m#x1B[39;49;00m
+                #x1B[94mtry#x1B[39;49;00m:#x1B[90m#x1B[39;49;00m
+                    item1 = seq1[i]#x1B[90m#x1B[39;49;00m
+                #x1B[94mexcept#x1B[39;49;00m (#x1B[96mTypeError#x1B[39;49;00m, #x1B[96mIndexError#x1B[39;49;00m, #x1B[96mNotImplementedError#x1B[39;49;00m):#x1B[90m#x1B[39;49;00m
+                    differing += (#x1B[33m'#x1B[39;49;00m#x1B[33m\n#x1B[39;49;00m#x1B[33mUnable to index element #x1B[39;49;00m#x1B[33m%d#x1B[39;49;00m#x1B[33m of first #x1B[39;49;00m#x1B[33m%s#x1B[39;49;00m#x1B[33m\n#x1B[39;49;00m#x1B[33m'#x1B[39;49;00m %#x1B[90m#x1B[39;49;00m
+                                 (i, seq_type_name))#x1B[90m#x1B[39;49;00m
+                    #x1B[94mbreak#x1B[39;49;00m#x1B[90m#x1B[39;49;00m
+    #x1B[90m#x1B[39;49;00m
+                #x1B[94mtry#x1B[39;49;00m:#x1B[90m#x1B[39;49;00m
+                    item2 = seq2[i]#x1B[90m#x1B[39;49;00m
+                #x1B[94mexcept#x1B[39;49;00m (#x1B[96mTypeError#x1B[39;49;00m, #x1B[96mIndexError#x1B[39;49;00m, #x1B[96mNotImplementedError#x1B[39;49;00m):#x1B[90m#x1B[39;49;00m
+                    differing += (#x1B[33m'#x1B[39;49;00m#x1B[33m\n#x1B[39;49;00m#x1B[33mUnable to index element #x1B[39;49;00m#x1B[33m%d#x1B[39;49;00m#x1B[33m of second #x1B[39;49;00m#x1B[33m%s#x1B[39;49;00m#x1B[33m\n#x1B[39;49;00m#x1B[33m'#x1B[39;49;00m %#x1B[90m#x1B[39;49;00m
+                                 (i, seq_type_name))#x1B[90m#x1B[39;49;00m
+                    #x1B[94mbreak#x1B[39;49;00m#x1B[90m#x1B[39;49;00m
+    #x1B[90m#x1B[39;49;00m
+                #x1B[94mif#x1B[39;49;00m item1 != item2:#x1B[90m#x1B[39;49;00m
+                    differing += (#x1B[33m'#x1B[39;49;00m#x1B[33m\n#x1B[39;49;00m#x1B[33mFirst differing element #x1B[39;49;00m#x1B[33m%d#x1B[39;49;00m#x1B[33m:#x1B[39;49;00m#x1B[33m\n#x1B[39;49;00m#x1B[33m%s#x1B[39;49;00m#x1B[33m\n#x1B[39;49;00m#x1B[33m%s#x1B[39;49;00m#x1B[33m\n#x1B[39;49;00m#x1B[33m'#x1B[39;49;00m %#x1B[90m#x1B[39;49;00m
+                                 ((i,) + _common_shorten_repr(item1, item2)))#x1B[90m#x1B[39;49;00m
+                    #x1B[94mbreak#x1B[39;49;00m#x1B[90m#x1B[39;49;00m
+            #x1B[94melse#x1B[39;49;00m:#x1B[90m#x1B[39;49;00m
+                #x1B[94mif#x1B[39;49;00m (len1 == len2 #x1B[95mand#x1B[39;49;00m seq_type #x1B[95mis#x1B[39;49;00m #x1B[94mNone#x1B[39;49;00m #x1B[95mand#x1B[39;49;00m#x1B[90m#x1B[39;49;00m
+                    #x1B[96mtype#x1B[39;49;00m(seq1) != #x1B[96mtype#x1B[39;49;00m(seq2)):#x1B[90m#x1B[39;49;00m
+                    #x1B[90m# The sequences are the same, but have differing types.#x1B[39;49;00m#x1B[90m#x1B[39;49;00m
+                    #x1B[94mreturn#x1B[39;49;00m#x1B[90m#x1B[39;49;00m
+    #x1B[90m#x1B[39;49;00m
+            #x1B[94mif#x1B[39;49;00m len1 &gt; len2:#x1B[90m#x1B[39;49;00m
+                differing += (#x1B[33m'#x1B[39;49;00m#x1B[33m\n#x1B[39;49;00m#x1B[33mFirst #x1B[39;49;00m#x1B[33m%s#x1B[39;49;00m#x1B[33m contains #x1B[39;49;00m#x1B[33m%d#x1B[39;49;00m#x1B[33m additional #x1B[39;49;00m#x1B[33m'#x1B[39;49;00m#x1B[90m#x1B[39;49;00m
+                             #x1B[33m'#x1B[39;49;00m#x1B[33melements.#x1B[39;49;00m#x1B[33m\n#x1B[39;49;00m#x1B[33m'#x1B[39;49;00m % (seq_type_name, len1 - len2))#x1B[90m#x1B[39;49;00m
+                #x1B[94mtry#x1B[39;49;00m:#x1B[90m#x1B[39;49;00m
+                    differing += (#x1B[33m'#x1B[39;49;00m#x1B[33mFirst extra element #x1B[39;49;00m#x1B[33m%d#x1B[39;49;00m#x1B[33m:#x1B[39;49;00m#x1B[33m\n#x1B[39;49;00m#x1B[33m%s#x1B[39;49;00m#x1B[33m\n#x1B[39;49;00m#x1B[33m'#x1B[39;49;00m %#x1B[90m#x1B[39;49;00m
+                                  (len2, safe_repr(seq1[len2])))#x1B[90m#x1B[39;49;00m
+                #x1B[94mexcept#x1B[39;49;00m (#x1B[96mTypeError#x1B[39;49;00m, #x1B[96mIndexError#x1B[39;49;00m, #x1B[96mNotImplementedError#x1B[39;49;00m):#x1B[90m#x1B[39;49;00m
+                    differing += (#x1B[33m'#x1B[39;49;00m#x1B[33mUnable to index element #x1B[39;49;00m#x1B[33m%d#x1B[39;49;00m#x1B[33m #x1B[39;49;00m#x1B[33m'#x1B[39;49;00m#x1B[90m#x1B[39;49;00m
+                                  #x1B[33m'#x1B[39;49;00m#x1B[33mof first #x1B[39;49;00m#x1B[33m%s#x1B[39;49;00m#x1B[33m\n#x1B[39;49;00m#x1B[33m'#x1B[39;49;00m % (len2, seq_type_name))#x1B[90m#x1B[39;49;00m
+            #x1B[94melif#x1B[39;49;00m len1 &lt; len2:#x1B[90m#x1B[39;49;00m
+                differing += (#x1B[33m'#x1B[39;49;00m#x1B[33m\n#x1B[39;49;00m#x1B[33mSecond #x1B[39;49;00m#x1B[33m%s#x1B[39;49;00m#x1B[33m contains #x1B[39;49;00m#x1B[33m%d#x1B[39;49;00m#x1B[33m additional #x1B[39;49;00m#x1B[33m'#x1B[39;49;00m#x1B[90m#x1B[39;49;00m
+                             #x1B[33m'#x1B[39;49;00m#x1B[33melements.#x1B[39;49;00m#x1B[33m\n#x1B[39;49;00m#x1B[33m'#x1B[39;49;00m % (seq_type_name, len2 - len1))#x1B[90m#x1B[39;49;00m
+                #x1B[94mtry#x1B[39;49;00m:#x1B[90m#x1B[39;49;00m
+                    differing += (#x1B[33m'#x1B[39;49;00m#x1B[33mFirst extra element #x1B[39;49;00m#x1B[33m%d#x1B[39;49;00m#x1B[33m:#x1B[39;49;00m#x1B[33m\n#x1B[39;49;00m#x1B[33m%s#x1B[39;49;00m#x1B[33m\n#x1B[39;49;00m#x1B[33m'#x1B[39;49;00m %#x1B[90m#x1B[39;49;00m
+                                  (len1, safe_repr(seq2[len1])))#x1B[90m#x1B[39;49;00m
+                #x1B[94mexcept#x1B[39;49;00m (#x1B[96mTypeError#x1B[39;49;00m, #x1B[96mIndexError#x1B[39;49;00m, #x1B[96mNotImplementedError#x1B[39;49;00m):#x1B[90m#x1B[39;49;00m
+                    differing += (#x1B[33m'#x1B[39;49;00m#x1B[33mUnable to index element #x1B[39;49;00m#x1B[33m%d#x1B[39;49;00m#x1B[33m #x1B[39;49;00m#x1B[33m'#x1B[39;49;00m#x1B[90m#x1B[39;49;00m
+                                  #x1B[33m'#x1B[39;49;00m#x1B[33mof second #x1B[39;49;00m#x1B[33m%s#x1B[39;49;00m#x1B[33m\n#x1B[39;49;00m#x1B[33m'#x1B[39;49;00m % (len1, seq_type_name))#x1B[90m#x1B[39;49;00m
+        standardMsg = differing#x1B[90m#x1B[39;49;00m
+        diffMsg = #x1B[33m'#x1B[39;49;00m#x1B[33m\n#x1B[39;49;00m#x1B[33m'#x1B[39;49;00m + #x1B[33m'#x1B[39;49;00m#x1B[33m\n#x1B[39;49;00m#x1B[33m'#x1B[39;49;00m.join(#x1B[90m#x1B[39;49;00m
+            difflib.ndiff(pprint.pformat(seq1).splitlines(),#x1B[90m#x1B[39;49;00m
+                          pprint.pformat(seq2).splitlines()))#x1B[90m#x1B[39;49;00m
+    #x1B[90m#x1B[39;49;00m
+        standardMsg = #x1B[96mself#x1B[39;49;00m._truncateMessage(standardMsg, diffMsg)#x1B[90m#x1B[39;49;00m
+        msg = #x1B[96mself#x1B[39;49;00m._formatMessage(msg, standardMsg)#x1B[90m#x1B[39;49;00m
+&gt;       #x1B[96mself#x1B[39;49;00m.fail(msg)#x1B[90m#x1B[39;49;00m
+
+#x1B[1m#x1B[31m..\..\..\AppData\Local\anaconda3\lib\unittest\case.py#x1B[0m:1033: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = &lt;examples.tank.test_tank.TankTests testMethod=test_model_reset&gt;
+msg = "Tuples differ: (('no[89 chars], 0, 0, 1, ('nominal', set()), (0, 0, 0.0, 1),[189 chars] 0))) != (('no[89 chars], 0, 1...e2_sig Signal flow: SigState(indicator=1, action=0), &lt;examples.tank.tank_model.HumanASG object at 0x0000017ADAA11220&gt;]"
+
+    #x1B[94mdef#x1B[39;49;00m #x1B[92mfail#x1B[39;49;00m(#x1B[96mself#x1B[39;49;00m, msg=#x1B[94mNone#x1B[39;49;00m):#x1B[90m#x1B[39;49;00m
+    #x1B[90m    #x1B[39;49;00m#x1B[33m"""Fail immediately, with the given message."""#x1B[39;49;00m#x1B[90m#x1B[39;49;00m
+&gt;       #x1B[94mraise#x1B[39;49;00m #x1B[96mself#x1B[39;49;00m.failureException(msg)#x1B[90m#x1B[39;49;00m
+#x1B[1m#x1B[31mE       AssertionError: Tuples differ: (('no[89 chars], 0, 0, 1, ('nominal', set()), (0, 0, 0.0, 1),[189 chars] 0))) != (('no[89 chars], 0, 1, 2, ('nominal', set()), (0, 0, 0.0, 1),[189 chars] 0)))#x1B[0m
+#x1B[1m#x1B[31mE       #x1B[0m
+#x1B[1m#x1B[31mE       First differing element 5:#x1B[0m
+#x1B[1m#x1B[31mE       ((-0.[28 chars], 0, 0, 1, ('nominal', set()), (0, 0, 0.0, 1),[188 chars], 0))#x1B[0m
+#x1B[1m#x1B[31mE       ((-0.[28 chars], 0, 1, 2, ('nominal', set()), (0, 0, 0.0, 1),[188 chars], 0))#x1B[0m
+#x1B[1m#x1B[31mE       #x1B[0m
+#x1B[1m#x1B[31mE         (('nominal', set()),#x1B[0m
+#x1B[1m#x1B[31mE          (0, 0, 0.0, 1),#x1B[0m
+#x1B[1m#x1B[31mE          (0, 0),#x1B[0m
+#x1B[1m#x1B[31mE          (1, 0),#x1B[0m
+#x1B[1m#x1B[31mE          (1, 0),#x1B[0m
+#x1B[1m#x1B[31mE          ((-0.1, 0, 0.0, 1),#x1B[0m
+#x1B[1m#x1B[31mE           0,#x1B[0m
+#x1B[1m#x1B[31mE           0,#x1B[0m
+#x1B[1m#x1B[31mE           1,#x1B[0m
+#x1B[1m#x1B[31mE           0,#x1B[0m
+#x1B[1m#x1B[31mE           1,#x1B[0m
+#x1B[1m#x1B[31mE           0,#x1B[0m
+#x1B[1m#x1B[31mE       -   0,#x1B[0m
+#x1B[1m#x1B[31mE           1,#x1B[0m
+#x1B[1m#x1B[31mE       +   2,#x1B[0m
+#x1B[1m#x1B[31mE           ('nominal', set()),#x1B[0m
+#x1B[1m#x1B[31mE           (0, 0, 0.0, 1),#x1B[0m
+#x1B[1m#x1B[31mE           ('nominal', set()),#x1B[0m
+#x1B[1m#x1B[31mE           (0, 0, 1.0, 1),#x1B[0m
+#x1B[1m#x1B[31mE       -   (0, 1),#x1B[0m
+#x1B[1m#x1B[31mE       ?    ^  ^#x1B[0m
+#x1B[1m#x1B[31mE       #x1B[0m
+#x1B[1m#x1B[31mE       +   (1, 2),#x1B[0m
+#x1B[1m#x1B[31mE       ?    ^  ^#x1B[0m
+#x1B[1m#x1B[31mE       #x1B[0m
+#x1B[1m#x1B[31mE           (0, 0),#x1B[0m
+#x1B[1m#x1B[31mE           ('nominal', set()),#x1B[0m
+#x1B[1m#x1B[31mE           (-0.1, 0, 0.0, 1),#x1B[0m
+#x1B[1m#x1B[31mE           ('nominal', set()),#x1B[0m
+#x1B[1m#x1B[31mE           (-0.1, 0, 0.0, 1),#x1B[0m
+#x1B[1m#x1B[31mE           ('nominal', set()),#x1B[0m
+#x1B[1m#x1B[31mE           (-0.1, 0, 0.0, 1),#x1B[0m
+#x1B[1m#x1B[31mE       -   (0, 1),#x1B[0m
+#x1B[1m#x1B[31mE       ?    ^  ^#x1B[0m
+#x1B[1m#x1B[31mE       #x1B[0m
+#x1B[1m#x1B[31mE       +   (1, 2),#x1B[0m
+#x1B[1m#x1B[31mE       ?    ^  ^#x1B[0m
+#x1B[1m#x1B[31mE       #x1B[0m
+#x1B[1m#x1B[31mE           (1, 0),#x1B[0m
+#x1B[1m#x1B[31mE           (1, 0))) : [Mode(mode=nominal, faults=set()), Time(time=0, t_ind=0, t_loc=0.0, timers={}, use_local=True, dt=1.0, run_times=1), tank_sig Signal flow: SigState(indicator=0, action=0), valve1_sig Signal flow: SigState(indicator=1, action=0), valve2_sig Signal flow: SigState(indicator=1, action=0), &lt;examples.tank.tank_model.HumanASG object at 0x0000017ADAA11220&gt;]#x1B[0m
+
+#x1B[1m#x1B[31m..\..\..\AppData\Local\anaconda3\lib\unittest\case.py#x1B[0m:675: AssertionError
+
+#x1B[33mThe above exception was the direct cause of the following exception:#x1B[0m
+
+self = &lt;examples.tank.test_tank.TankTests testMethod=test_model_reset&gt;
+mdl = tank Tank
+FUNCTIONS:
+import_water ImportLiquid
+- TransportLiquidState(amt_open=1)
+- TransportLiquidMode(mode=nominal, ...action=0)
+tank_sig Signal flow: SigState(indicator=0, action=0)
+valve2_sig Signal flow: SigState(indicator=1, action=0)
+mdl_reset = tank Tank
+FUNCTIONS:
+import_water ImportLiquid
+- TransportLiquidState(amt_open=1)
+- TransportLiquidMode(mode=nominal, ...action=0)
+tank_sig Signal flow: SigState(indicator=0, action=0)
+valve2_sig Signal flow: SigState(indicator=1, action=0)
+res_times = [5, 10, 15], max_time = 20, run_stochastic = False
+
+    #x1B[94mdef#x1B[39;49;00m #x1B[92mcheck_model_reset#x1B[39;49;00m(#x1B[96mself#x1B[39;49;00m, mdl, mdl_reset, res_times, max_time=#x1B[94m55#x1B[39;49;00m,#x1B[90m#x1B[39;49;00m
+                          run_stochastic=#x1B[94mFalse#x1B[39;49;00m):#x1B[90m#x1B[39;49;00m
+    #x1B[90m    #x1B[39;49;00m#x1B[33m"""#x1B[39;49;00m
+    #x1B[33m    Check if model attributes reset with the reset() method.#x1B[39;49;00m
+    #x1B[33m#x1B[39;49;00m
+    #x1B[33m    Reset models should simulate the same as newly-created models.#x1B[39;49;00m
+    #x1B[33m    """#x1B[39;49;00m#x1B[90m#x1B[39;49;00m
+        faultscens = [{fname: [*f.m.faultmodes][#x1B[94m0#x1B[39;49;00m]} #x1B[94mfor#x1B[39;49;00m fname, f #x1B[95min#x1B[39;49;00m mdl.fxns.items()]#x1B[90m#x1B[39;49;00m
+        mdls = [mdl.copy() #x1B[94mfor#x1B[39;49;00m i #x1B[95min#x1B[39;49;00m #x1B[96mrange#x1B[39;49;00m(#x1B[96mlen#x1B[39;49;00m(faultscens)*#x1B[96mlen#x1B[39;49;00m(res_times))]#x1B[90m#x1B[39;49;00m
+        #x1B[94mfor#x1B[39;49;00m faultscen #x1B[95min#x1B[39;49;00m faultscens:#x1B[90m#x1B[39;49;00m
+            #x1B[94mfor#x1B[39;49;00m inj_time #x1B[95min#x1B[39;49;00m res_times:#x1B[90m#x1B[39;49;00m
+                #x1B[94mfor#x1B[39;49;00m t #x1B[95min#x1B[39;49;00m #x1B[96mrange#x1B[39;49;00m(max_time):#x1B[90m#x1B[39;49;00m
+                    #x1B[94mif#x1B[39;49;00m t == inj_time:#x1B[90m#x1B[39;49;00m
+                        scen = faultscen#x1B[90m#x1B[39;49;00m
+                    #x1B[94melse#x1B[39;49;00m:#x1B[90m#x1B[39;49;00m
+                        scen = {}#x1B[90m#x1B[39;49;00m
+                    mdl_reset.propagate(t, run_stochastic=run_stochastic,#x1B[90m#x1B[39;49;00m
+                                        fxnfaults=scen)#x1B[90m#x1B[39;49;00m
+                mdl_reset.reset()#x1B[90m#x1B[39;49;00m
+                mdl = mdls.pop()#x1B[90m#x1B[39;49;00m
+                #x1B[94mfor#x1B[39;49;00m t #x1B[95min#x1B[39;49;00m #x1B[96mrange#x1B[39;49;00m(max_time):#x1B[90m#x1B[39;49;00m
+                    mdl_reset.propagate(t, run_stochastic=run_stochastic)#x1B[90m#x1B[39;49;00m
+                    mdl.propagate(t, run_stochastic=run_stochastic)#x1B[90m#x1B[39;49;00m
+                    #x1B[94mtry#x1B[39;49;00m:#x1B[90m#x1B[39;49;00m
+&gt;                       #x1B[96mself#x1B[39;49;00m.check_same_model(mdl, mdl_reset)#x1B[90m#x1B[39;49;00m
+
+#x1B[1m#x1B[31mtests\common.py#x1B[0m:154: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = &lt;examples.tank.test_tank.TankTests testMethod=test_model_reset&gt;
+mdl = tank Tank
+FUNCTIONS:
+import_water ImportLiquid
+- TransportLiquidState(amt_open=1)
+- TransportLiquidMode(mode=nominal, ...action=0)
+tank_sig Signal flow: SigState(indicator=0, action=0)
+valve2_sig Signal flow: SigState(indicator=1, action=0)
+mdl2 = tank Tank
+FUNCTIONS:
+import_water ImportLiquid
+- TransportLiquidState(amt_open=1)
+- TransportLiquidMode(mode=nominal, ...action=0)
+tank_sig Signal flow: SigState(indicator=0, action=0)
+valve2_sig Signal flow: SigState(indicator=1, action=0)
+
+    #x1B[94mdef#x1B[39;49;00m #x1B[92mcheck_same_model#x1B[39;49;00m(#x1B[96mself#x1B[39;49;00m, mdl, mdl2):#x1B[90m#x1B[39;49;00m
+    #x1B[90m    #x1B[39;49;00m#x1B[33m"""Check if models mdl and mdl2 have the same attributes."""#x1B[39;49;00m#x1B[90m#x1B[39;49;00m
+        #x1B[94mfor#x1B[39;49;00m flname, fl #x1B[95min#x1B[39;49;00m mdl.flows.items():#x1B[90m#x1B[39;49;00m
+            #x1B[94mtry#x1B[39;49;00m:#x1B[90m#x1B[39;49;00m
+                #x1B[96mself#x1B[39;49;00m.assertEqual(fl.return_mutables(),#x1B[90m#x1B[39;49;00m
+                                 mdl2.flows[flname].return_mutables(),#x1B[90m#x1B[39;49;00m
+                                 msg=#x1B[96mstr#x1B[39;49;00m(fl.find_mutables()))#x1B[90m#x1B[39;49;00m
+            #x1B[94mexcept#x1B[39;49;00m #x1B[96mAssertionError#x1B[39;49;00m #x1B[94mas#x1B[39;49;00m e:#x1B[90m#x1B[39;49;00m
+                #x1B[94mraise#x1B[39;49;00m #x1B[96mAssertionError#x1B[39;49;00m(#x1B[33m"#x1B[39;49;00m#x1B[33mProblem in flow #x1B[39;49;00m#x1B[33m"#x1B[39;49;00m + flname + #x1B[33m"#x1B[39;49;00m#x1B[33mwith mutables #x1B[39;49;00m#x1B[33m"#x1B[39;49;00m +#x1B[90m#x1B[39;49;00m
+                                     #x1B[96mstr#x1B[39;49;00m(fl.find_mutables())) #x1B[94mfrom#x1B[39;49;00m #x1B[04m#x1B[96me#x1B[39;49;00m#x1B[90m#x1B[39;49;00m
+        #x1B[94mfor#x1B[39;49;00m fxnname, fxn #x1B[95min#x1B[39;49;00m mdl.fxns.items():#x1B[90m#x1B[39;49;00m
+            #x1B[94mtry#x1B[39;49;00m:#x1B[90m#x1B[39;49;00m
+                #x1B[96mself#x1B[39;49;00m.assertEqual(fxn.return_mutables(),#x1B[90m#x1B[39;49;00m
+                                 mdl2.fxns[fxnname].return_mutables(),#x1B[90m#x1B[39;49;00m
+                                 msg=#x1B[96mstr#x1B[39;49;00m(fxn.find_mutables()))#x1B[90m#x1B[39;49;00m
+            #x1B[94mexcept#x1B[39;49;00m #x1B[96mAssertionError#x1B[39;49;00m #x1B[94mas#x1B[39;49;00m e:#x1B[90m#x1B[39;49;00m
+&gt;               #x1B[94mraise#x1B[39;49;00m #x1B[96mAssertionError#x1B[39;49;00m(#x1B[33m"#x1B[39;49;00m#x1B[33mProblem in fxn #x1B[39;49;00m#x1B[33m"#x1B[39;49;00m + fxnname + #x1B[33m"#x1B[39;49;00m#x1B[33mwith mutables #x1B[39;49;00m#x1B[33m"#x1B[39;49;00m +#x1B[90m#x1B[39;49;00m
+                                     #x1B[96mstr#x1B[39;49;00m(fxn.find_mutables())) #x1B[94mfrom#x1B[39;49;00m #x1B[04m#x1B[96me#x1B[39;49;00m#x1B[90m#x1B[39;49;00m
+#x1B[1m#x1B[31mE               AssertionError: Problem in fxn humanwith mutables [Mode(mode=nominal, faults=set()), Time(time=0, t_ind=0, t_loc=0.0, timers={}, use_local=True, dt=1.0, run_times=1), tank_sig Signal flow: SigState(indicator=0, action=0), valve1_sig Signal flow: SigState(indicator=1, action=0), valve2_sig Signal flow: SigState(indicator=1, action=0), &lt;examples.tank.tank_model.HumanASG object at 0x0000017ADAA11220&gt;]#x1B[0m
+
+#x1B[1m#x1B[31mtests\common.py#x1B[0m:194: AssertionError
+
+#x1B[33mThe above exception was the direct cause of the following exception:#x1B[0m
+
+self = &lt;examples.tank.test_tank.TankTests testMethod=test_model_reset&gt;
+
+    #x1B[94mdef#x1B[39;49;00m #x1B[92mtest_model_reset#x1B[39;49;00m(#x1B[96mself#x1B[39;49;00m):#x1B[90m#x1B[39;49;00m
+        mdl = Tank()#x1B[90m#x1B[39;49;00m
+        mdl2 = Tank()#x1B[90m#x1B[39;49;00m
+&gt;       #x1B[96mself#x1B[39;49;00m.check_model_reset(mdl, mdl2, [#x1B[94m5#x1B[39;49;00m, #x1B[94m10#x1B[39;49;00m, #x1B[94m15#x1B[39;49;00m], max_time=#x1B[94m20#x1B[39;49;00m)#x1B[90m#x1B[39;49;00m
+
+#x1B[1m#x1B[31mexamples\tank\test_tank.py#x1B[0m:55: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = &lt;examples.tank.test_tank.TankTests testMethod=test_model_reset&gt;
+mdl = tank Tank
+FUNCTIONS:
+import_water ImportLiquid
+- TransportLiquidState(amt_open=1)
+- TransportLiquidMode(mode=nominal, ...action=0)
+tank_sig Signal flow: SigState(indicator=0, action=0)
+valve2_sig Signal flow: SigState(indicator=1, action=0)
+mdl_reset = tank Tank
+FUNCTIONS:
+import_water ImportLiquid
+- TransportLiquidState(amt_open=1)
+- TransportLiquidMode(mode=nominal, ...action=0)
+tank_sig Signal flow: SigState(indicator=0, action=0)
+valve2_sig Signal flow: SigState(indicator=1, action=0)
+res_times = [5, 10, 15], max_time = 20, run_stochastic = False
+
+    #x1B[94mdef#x1B[39;49;00m #x1B[92mcheck_model_reset#x1B[39;49;00m(#x1B[96mself#x1B[39;49;00m, mdl, mdl_reset, res_times, max_time=#x1B[94m55#x1B[39;49;00m,#x1B[90m#x1B[39;49;00m
+                          run_stochastic=#x1B[94mFalse#x1B[39;49;00m):#x1B[90m#x1B[39;49;00m
+    #x1B[90m    #x1B[39;49;00m#x1B[33m"""#x1B[39;49;00m
+    #x1B[33m    Check if model attributes reset with the reset() method.#x1B[39;49;00m
+    #x1B[33m#x1B[39;49;00m
+    #x1B[33m    Reset models should simulate the same as newly-created models.#x1B[39;49;00m
+    #x1B[33m    """#x1B[39;49;00m#x1B[90m#x1B[39;49;00m
+        faultscens = [{fname: [*f.m.faultmodes][#x1B[94m0#x1B[39;49;00m]} #x1B[94mfor#x1B[39;49;00m fname, f #x1B[95min#x1B[39;49;00m mdl.fxns.items()]#x1B[90m#x1B[39;49;00m
+        mdls = [mdl.copy() #x1B[94mfor#x1B[39;49;00m i #x1B[95min#x1B[39;49;00m #x1B[96mrange#x1B[39;49;00m(#x1B[96mlen#x1B[39;49;00m(faultscens)*#x1B[96mlen#x1B[39;49;00m(res_times))]#x1B[90m#x1B[39;49;00m
+        #x1B[94mfor#x1B[39;49;00m faultscen #x1B[95min#x1B[39;49;00m faultscens:#x1B[90m#x1B[39;49;00m
+            #x1B[94mfor#x1B[39;49;00m inj_time #x1B[95min#x1B[39;49;00m res_times:#x1B[90m#x1B[39;49;00m
+                #x1B[94mfor#x1B[39;49;00m t #x1B[95min#x1B[39;49;00m #x1B[96mrange#x1B[39;49;00m(max_time):#x1B[90m#x1B[39;49;00m
+                    #x1B[94mif#x1B[39;49;00m t == inj_time:#x1B[90m#x1B[39;49;00m
+                        scen = faultscen#x1B[90m#x1B[39;49;00m
+                    #x1B[94melse#x1B[39;49;00m:#x1B[90m#x1B[39;49;00m
+                        scen = {}#x1B[90m#x1B[39;49;00m
+                    mdl_reset.propagate(t, run_stochastic=run_stochastic,#x1B[90m#x1B[39;49;00m
+                                        fxnfaults=scen)#x1B[90m#x1B[39;49;00m
+                mdl_reset.reset()#x1B[90m#x1B[39;49;00m
+                mdl = mdls.pop()#x1B[90m#x1B[39;49;00m
+                #x1B[94mfor#x1B[39;49;00m t #x1B[95min#x1B[39;49;00m #x1B[96mrange#x1B[39;49;00m(max_time):#x1B[90m#x1B[39;49;00m
+                    mdl_reset.propagate(t, run_stochastic=run_stochastic)#x1B[90m#x1B[39;49;00m
+                    mdl.propagate(t, run_stochastic=run_stochastic)#x1B[90m#x1B[39;49;00m
+                    #x1B[94mtry#x1B[39;49;00m:#x1B[90m#x1B[39;49;00m
+                        #x1B[96mself#x1B[39;49;00m.check_same_model(mdl, mdl_reset)#x1B[90m#x1B[39;49;00m
+                    #x1B[94mexcept#x1B[39;49;00m #x1B[96mAssertionError#x1B[39;49;00m #x1B[94mas#x1B[39;49;00m e:#x1B[90m#x1B[39;49;00m
+&gt;                       #x1B[94mraise#x1B[39;49;00m #x1B[96mAssertionError#x1B[39;49;00m(#x1B[33m"#x1B[39;49;00m#x1B[33mProblem at time: #x1B[39;49;00m#x1B[33m"#x1B[39;49;00m + #x1B[96mstr#x1B[39;49;00m(t) +#x1B[90m#x1B[39;49;00m
+                                             #x1B[33m"#x1B[39;49;00m#x1B[33m and faultscen: #x1B[39;49;00m#x1B[33m"#x1B[39;49;00m + #x1B[96mstr#x1B[39;49;00m(faultscen) +#x1B[90m#x1B[39;49;00m
+                                             #x1B[33m"#x1B[39;49;00m#x1B[33m injected at t=#x1B[39;49;00m#x1B[33m"#x1B[39;49;00m + #x1B[96mstr#x1B[39;49;00m(inj_time)) #x1B[94mfrom#x1B[39;49;00m #x1B[04m#x1B[96me#x1B[39;49;00m#x1B[90m#x1B[39;49;00m
+#x1B[1m#x1B[31mE                       AssertionError: Problem at time: 0 and faultscen: {'import_water': 'stuck'} injected at t=5#x1B[0m
+
+#x1B[1m#x1B[31mtests\common.py#x1B[0m:156: AssertionError</failure></testcase><testcase classname="examples.tank.test_tank.TankTests" name="test_nested_sample_isave" time="15.026" /><testcase classname="examples.tank.test_tank.TankTests" name="test_nested_sample_save" time="14.662" /><testcase classname="examples.tank.test_tank.TankTests" name="test_param_sample_save" time="0.612" /><testcase classname="examples.tank.test_tank.TankTests" name="test_save_load_multfault" time="0.119" /><testcase classname="examples.tank.test_tank.TankTests" name="test_save_load_nominal" time="0.096" /><testcase classname="examples.tank.test_tank.TankTests" name="test_save_load_onefault" time="0.130" /><testcase classname="examples.tank.test_tank.TankTests" name="test_save_load_singlefaults" time="0.831" /><testcase classname="examples.tank.test_tank.TankTests" name="test_singlefaults_isave" time="0.993" /><testcase classname="examples.tank.test_tank.TankTests" name="test_tank_copy_args" time="0.033" /><testcase classname="fmdtools.analyze.history" name="fmdtools.analyze.history.History" time="0.010" /><testcase classname="fmdtools.analyze.history" name="fmdtools.analyze.history.History.cut" time="0.005" /><testcase classname="fmdtools.analyze.history" name="fmdtools.analyze.history.History.get_mean_bound_errhist" time="0.005" /><testcase classname="fmdtools.analyze.phases" name="fmdtools.analyze.phases.PhaseMap.calc_modephase_time" time="0.005" /><testcase classname="fmdtools.analyze.phases" name="fmdtools.analyze.phases.PhaseMap.calc_phase_time" time="0.005" /><testcase classname="fmdtools.analyze.phases" name="fmdtools.analyze.phases.PhaseMap.calc_samples_in_phases" time="0.005" /><testcase classname="fmdtools.analyze.phases" name="fmdtools.analyze.phases.PhaseMap.find_modephase" time="0.005" /><testcase classname="fmdtools.analyze.phases" name="fmdtools.analyze.phases.PhaseMap.get_phase_times" time="0.005" /><testcase classname="fmdtools.analyze.phases" name="fmdtools.analyze.phases.PhaseMap.get_sample_times" time="0.005" /><testcase classname="fmdtools.analyze.phases" name="fmdtools.analyze.phases.find_interval_overlap" time="0.005" /><testcase classname="fmdtools.analyze.phases" name="fmdtools.analyze.phases.join_phasemaps" time="0.005" /><testcase classname="fmdtools.analyze.result" name="fmdtools.analyze.result.Result" time="0.005" /><testcase classname="fmdtools.analyze.tabulate" name="fmdtools.analyze.tabulate.Comparison.__init__" time="0.812" /><testcase classname="fmdtools.define.environment" name="fmdtools.define.environment.Environment" time="0.009" /><testcase classname="fmdtools.define.environment" name="fmdtools.define.environment.Environment.copy" time="0.011" /><testcase classname="fmdtools.define.architecture.function" name="fmdtools.define.architecture.function.FunctionArchitecture" time="0.008" /><testcase classname="fmdtools.define.architecture.geom" name="fmdtools.define.architecture.geom.GeomArchitecture" time="0.006" /><testcase classname="fmdtools.define.architecture.geom" name="fmdtools.define.architecture.geom.GeomArchitecture.all_at" time="0.006" /><testcase classname="fmdtools.define.block.base" name="fmdtools.define.block.base.SimParam.get_hist_ind" time="0.005" /><testcase classname="fmdtools.define.block.base" name="fmdtools.define.block.base.SimParam.get_shift" time="0.006" /><testcase classname="fmdtools.define.block.base" name="fmdtools.define.block.base.SimParam.get_timerange" time="0.006" /><testcase classname="fmdtools.define.block.function" name="fmdtools.define.block.function.Function" time="0.007" /><testcase classname="fmdtools.define.container.base" name="fmdtools.define.container.base.BaseContainer.assign" time="0.006" /><testcase classname="fmdtools.define.container.base" name="fmdtools.define.container.base.BaseContainer.copy" time="0.005" /><testcase classname="fmdtools.define.container.base" name="fmdtools.define.container.base.BaseContainer.create_hist" time="0.005" /><testcase classname="fmdtools.define.container.base" name="fmdtools.define.container.base.BaseContainer.get_field_dict" time="0.005" /><testcase classname="fmdtools.define.container.base" name="fmdtools.define.container.base.BaseContainer.set_field" time="0.005" /><testcase classname="fmdtools.define.container.base" name="fmdtools.define.container.base.BaseContainer.to_default" time="0.005" /><testcase classname="fmdtools.define.container.mode" name="fmdtools.define.container.mode.Fault.calc_rate" time="0.006" /><testcase classname="fmdtools.define.container.mode" name="fmdtools.define.container.mode.Mode" time="0.005" /><testcase classname="fmdtools.define.container.parameter" name="fmdtools.define.container.parameter.Parameter" time="0.006" /><testcase classname="fmdtools.define.container.rand" name="fmdtools.define.container.rand.Rand" time="0.006" /><testcase classname="fmdtools.define.container.state" name="fmdtools.define.container.state.State" time="0.005" /><testcase classname="fmdtools.define.container.state" name="fmdtools.define.container.state.State.add" time="0.005" /><testcase classname="fmdtools.define.container.state" name="fmdtools.define.container.state.State.div" time="0.005" /><testcase classname="fmdtools.define.container.state" name="fmdtools.define.container.state.State.get" time="0.005" /><testcase classname="fmdtools.define.container.state" name="fmdtools.define.container.state.State.inc" time="0.005" /><testcase classname="fmdtools.define.container.state" name="fmdtools.define.container.state.State.limit" time="0.005" /><testcase classname="fmdtools.define.container.state" name="fmdtools.define.container.state.State.mul" time="0.005" /><testcase classname="fmdtools.define.container.state" name="fmdtools.define.container.state.State.put" time="0.005" /><testcase classname="fmdtools.define.container.state" name="fmdtools.define.container.state.State.roundto" time="0.005" /><testcase classname="fmdtools.define.container.state" name="fmdtools.define.container.state.State.same" time="0.005" /><testcase classname="fmdtools.define.container.state" name="fmdtools.define.container.state.State.set_atts" time="0.005" /><testcase classname="fmdtools.define.container.state" name="fmdtools.define.container.state.State.sub" time="0.005" /><testcase classname="fmdtools.define.container.time" name="fmdtools.define.container.time.Time" time="0.005" /><testcase classname="fmdtools.define.flow.base" name="fmdtools.define.flow.base.Flow" time="0.006" /><testcase classname="fmdtools.define.object.base" name="fmdtools.define.object.base.BaseObject" time="0.006" /><testcase classname="fmdtools.define.object.base" name="fmdtools.define.object.base.BaseObject.assign_roles" time="0.005" /><testcase classname="fmdtools.define.object.coords" name="fmdtools.define.object.coords.Coords" time="0.007" /><testcase classname="fmdtools.define.object.coords" name="fmdtools.define.object.coords.Coords.copy" time="0.006" /><testcase classname="fmdtools.define.object.coords" name="fmdtools.define.object.coords.Coords.find_all" time="0.006" /><testcase classname="fmdtools.define.object.coords" name="fmdtools.define.object.coords.Coords.find_closest" time="0.006" /><testcase classname="fmdtools.define.object.coords" name="fmdtools.define.object.coords.Coords.get" time="0.006" /><testcase classname="fmdtools.define.object.coords" name="fmdtools.define.object.coords.Coords.get_properties" time="0.006" /><testcase classname="fmdtools.define.object.coords" name="fmdtools.define.object.coords.Coords.in_area" time="0.005" /><testcase classname="fmdtools.define.object.coords" name="fmdtools.define.object.coords.Coords.set" time="0.006" /><testcase classname="fmdtools.define.object.coords" name="fmdtools.define.object.coords.Coords.set_pts" time="0.005" /><testcase classname="fmdtools.define.object.coords" name="fmdtools.define.object.coords.Coords.set_rand_pts" time="0.006" /><testcase classname="fmdtools.define.object.coords" name="fmdtools.define.object.coords.Coords.set_range" time="0.007" /><testcase classname="fmdtools.define.object.coords" name="fmdtools.define.object.coords.Coords.to_gridpoint" time="0.006" /><testcase classname="fmdtools.define.object.coords" name="fmdtools.define.object.coords.Coords.to_index" time="0.006" /><testcase classname="fmdtools.define.object.coords" name="fmdtools.define.object.coords.CoordsParam" time="0.005" /><testcase classname="fmdtools.define.object.geom" name="fmdtools.define.object.geom.Geom.all_at" time="0.007" /><testcase classname="fmdtools.define.object.geom" name="fmdtools.define.object.geom.Geom.vect_at_shape" time="0.006" /><testcase classname="fmdtools.define.object.geom" name="fmdtools.define.object.geom.Geom.vect_to_shape" time="0.006" /><testcase classname="fmdtools.define.object.geom" name="fmdtools.define.object.geom.GeomLine" time="0.006" /><testcase classname="fmdtools.define.object.geom" name="fmdtools.define.object.geom.GeomPoint" time="0.006" /><testcase classname="fmdtools.define.object.geom" name="fmdtools.define.object.geom.GeomPoly" time="0.005" /><testcase classname="fmdtools.define.object.geom" name="fmdtools.define.object.geom.LineParam" time="0.006" /><testcase classname="fmdtools.define.object.geom" name="fmdtools.define.object.geom.PointParam" time="0.005" /><testcase classname="fmdtools.define.object.geom" name="fmdtools.define.object.geom.PolyParam" time="0.005" /><testcase classname="fmdtools.sim.sample" name="fmdtools.sim.sample.FaultDomain.add_all" time="0.018" /><testcase classname="fmdtools.sim.sample" name="fmdtools.sim.sample.FaultDomain.add_all_fxn_modes" time="0.017" /><testcase classname="fmdtools.sim.sample" name="fmdtools.sim.sample.FaultDomain.add_all_fxnclass_modes" time="0.013" /><testcase classname="fmdtools.sim.sample" name="fmdtools.sim.sample.FaultDomain.add_faults" time="0.018" /><testcase classname="fmdtools.sim.sample" name="fmdtools.sim.sample.FaultDomain.add_singlecomp_modes" time="0.017" /><testcase classname="fmdtools.sim.sample" name="fmdtools.sim.sample.FaultSample.add_fault_phases" time="0.017" /><testcase classname="fmdtools.sim.sample" name="fmdtools.sim.sample.FaultSample.add_fault_times" time="0.017" /><testcase classname="fmdtools.sim.sample" name="fmdtools.sim.sample.FaultSample.add_joint_fault_scenario" time="0.017" /><testcase classname="fmdtools.sim.sample" name="fmdtools.sim.sample.FaultSample.add_single_fault_scenario" time="0.017" /><testcase classname="fmdtools.sim.sample" name="fmdtools.sim.sample.ParameterDomain" time="0.006" /><testcase classname="fmdtools.sim.sample" name="fmdtools.sim.sample.ParameterDomain.get_var_iters" time="0.005" /><testcase classname="fmdtools.sim.sample" name="fmdtools.sim.sample.ParameterSample.add_variable_ranges" time="0.005" /><testcase classname="fmdtools.sim.sample" name="fmdtools.sim.sample.ParameterSample.add_variable_replicates" time="0.005" /><testcase classname="fmdtools.sim.sample" name="fmdtools.sim.sample.ParameterSample.add_variable_scenario" time="0.005" /><testcase classname="fmdtools.sim.sample" name="fmdtools.sim.sample.ParameterSample.combine_orthogonal" time="0.005" /><testcase classname="fmdtools.sim.sample" name="fmdtools.sim.sample.ParameterSample.combine_product" time="0.005" /><testcase classname="fmdtools.sim.sample" name="fmdtools.sim.sample.ParameterSample.combine_random" time="0.005" /><testcase classname="fmdtools.sim.sample" name="fmdtools.sim.sample.SampleApproach.add_faultdomain" time="0.017" /><testcase classname="fmdtools.sim.sample" name="fmdtools.sim.sample.SampleApproach.add_faultsample" time="0.020" /><testcase classname="fmdtools.sim.sample" name="fmdtools.sim.sample.combine_orthogonal" time="0.005" /><testcase classname="fmdtools.sim.sample" name="fmdtools.sim.sample.combine_random" time="0.005" /><testcase classname="fmdtools.sim.sample" name="fmdtools.sim.sample.sample_times_even" time="0.006" /><testcase classname="fmdtools.sim.sample" name="fmdtools.sim.sample.sample_times_quad" time="0.005" /><testcase classname="fmdtools.sim.scenario" name="fmdtools.sim.scenario.Sequence" time="0.005" /><testcase classname="fmdtools.sim.scenario" name="fmdtools.sim.scenario.Sequence.update_sequence" time="0.005" /><testcase classname="fmdtools.sim.search" name="fmdtools.sim.search.DisturbanceProblem.__init__" time="0.013" /><testcase classname="fmdtools.sim.search" name="fmdtools.sim.search.HistoryObjective" time="0.005" /><testcase classname="fmdtools.sim.search" name="fmdtools.sim.search.ParameterSimProblem" time="0.040" /><testcase classname="fmdtools.sim.search" name="fmdtools.sim.search.ProblemArchitecture" time="0.019" /><testcase classname="fmdtools.sim.search" name="fmdtools.sim.search.ProblemArchitecture.update_full_problem" time="0.009" /><testcase classname="fmdtools.sim.search" name="fmdtools.sim.search.ProblemArchitecture.update_problem" time="0.005" /><testcase classname="fmdtools.sim.search" name="fmdtools.sim.search.ResultConstraint.con_from_value" time="0.005" /><testcase classname="fmdtools.sim.search" name="fmdtools.sim.search.ResultObjective.get_result_value" time="0.005" /><testcase classname="fmdtools.sim.search" name="fmdtools.sim.search.SimpleProblem" time="0.005" /><testcase classname="fmdtools.sim.search" name="fmdtools.sim.search.SingleFaultScenarioProblem" time="0.013" /><testcase classname="tests.test_graph.ModelGraphTests" name="test_fault_plot" time="0.147" /><testcase classname="tests.test_graph.ModelGraphTests" name="test_flowgraph_plot" time="0.126" /><testcase classname="tests.test_graph.ModelGraphTests" name="test_fxngraph_plot" time="0.104" /><testcase classname="tests.test_graph.ModelGraphTests" name="test_modelgraph_plot" time="0.177" /><testcase classname="tests.test_graph.ModelGraphTests" name="test_result_from_plot" time="0.099" /><testcase classname="tests.test_graph.ModelGraphTests" name="test_typegraph_plot" time="0.057" /><testcase classname="tests.test_packages.define_Tests" name="test_pdf_translation_options" time="0.004" /></testsuite></testsuites>
