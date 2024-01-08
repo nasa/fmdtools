@@ -70,6 +70,7 @@ class FunctionArchitecture(Architecture):
     exf ExampleFlow flow: ExampleState(x=0.0, y=0.0)
 
     This type of functional architecture only has dynamic functions:
+
     >>> exfa.dynamicfxns
     OrderedSet(['ex_fxn', 'ex_fxn2'])
     >>> exfa.staticfxns
@@ -78,6 +79,7 @@ class FunctionArchitecture(Architecture):
     This can in turn be simulated using FunctionArchitecture's built-in .propagate
     method. Note how the flow exf accumulates both ex_fxn and ex_fxn2 as reflected in
     their behavior methods:
+
     >>> exfa.propagate(1.0)
     >>> exfa
     exfa ExFxnArch

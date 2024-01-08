@@ -34,13 +34,15 @@ class Function(Block):
     - ExampleMode(mode=standby, faults=set())
 
     Behavior can be called using __call__ or the user-defined behavior method:
+
     >>> exf("dynamic", time=1.0)
     >>> exf
     exf ExampleFunction
     - ExampleState(x=2.0, y=1.0)
     - ExampleMode(mode=standby, faults=set())
 
-    Which can also be used to inject faults
+    Which can also be used to inject faults:
+
     >>> exf("dynamic", time=2.0, faults=['no_charge'])
     >>> exf
     exf ExampleFunction
