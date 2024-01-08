@@ -15,12 +15,21 @@ if __name__=="__main__":
     # requires pytest, nbmake, pytest-html, pytest-cov
     
     # for testing modules with doctests
-    doctest_modules = ["fmdtools/define/container/state.py",
+    doctest_modules = ["fmdtools/define/container/base.py",
+                       "fmdtools/define/container/state.py",
                        "fmdtools/define/container/parameter.py",
                        "fmdtools/define/container/mode.py",
+                       "fmdtools/define/container/rand.py",
+                       "fmdtools/define/container/time.py",
+                       "fmdtools/define/object/base.py",
+                       "fmdtools/define/object/timer.py",
                        "fmdtools/define/object/geom.py",
                        "fmdtools/define/object/coords.py",
                        "fmdtools/define/flow/base.py",
+                       "fmdtools/define/architecture/function.py",
+                       "fmdtools/define/architecture/geom.py",
+                       "fmdtools/define/block/base.py",
+                       "fmdtools/define/block/function.py",
                        "fmdtools/define/environment.py",
                        "fmdtools/sim/scenario.py",
                        "fmdtools/sim/sample.py",
@@ -34,7 +43,7 @@ if __name__=="__main__":
                        "examples/multirotor/drone_mdl_dynamic.py",
                        "examples/multirotor/drone_mdl_hierarchical.py"]
 
-    retcode = pytest.main(["--doctest-modules", "--continue-on-collection-errors"])
+    retcode = pytest.main(["--doctest-modules", *doctest_modules])
 
     # retcode = pytest.main(["--html=./reports/junit/report.html",
     #                        "--self-contained-html",
@@ -78,7 +87,12 @@ if __name__=="__main__":
 
     # for creating comprehensive test report:
 
-    # retcode = pytest.main(["--html=./reports/junit/report.html",
+    # retcode = pytest.main(["--cov-report",
+    #                        "html:reports/coverage",
+    #                        "--cov-report",
+    #                        "xml:reports/coverage/coverage.xml",
+    #                        "--cov",
+    #                        "--html=./reports/junit/report.html",
     #                        "--junitxml=./reports/junit/junit.xml",
     #                        "--overwrite",
     #                        "--doctest-modules",

@@ -21,9 +21,9 @@ class CommsFlow(MultiFlow):
     and "received" (a set of messages received).
 
     To enable the sending/receiving of messages between functions, it further adds:
-        -create_comms, for instantiating local copies in functions
-        -send, for sending messages from one function to another
-        -receive, for receiving messages from other functions
+        - create_comms, for instantiating local copies in functions
+        - send, for sending messages from one function to another
+        - receive, for receiving messages from other functions
         - inbox, for seeing what messages may be received
         - clear_inbox, for clearing the inbox to enable more messages to be received
     """

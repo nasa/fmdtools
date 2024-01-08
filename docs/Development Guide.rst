@@ -397,12 +397,12 @@ Use model constructs to simplify your code
 --------------------------------
 The fmdtools codebase is quite large, and, as a result, it can be tempting to dive into modelling before learning about all of its capabilities. The problem with this is that many of these capabilities and interfaces are there to make your life easier, provided you understand and use them correctly. Below are some commonly-misunderstood constructs to integrate into your code:
 
-* :class:`fmdtools.define.Common` has a number of very basic operations which can be used in all model structures to reduce the length of lines dedicated solely to assignment and passing variables between constructs. Using these methods can furthermore enable one to more simply perform vector operations with reduced syntax.
-* :class:`fmdtools.define.Timer` can be used very simply using to represent timed behavior and state-transitions 
+* :class:`fmdtools.define.container.base.Container` has a number of very basic operations which can be used in all containers to reduce the length of lines dedicated solely to assignment and passing variables between constructs. Using these methods can furthermore enable one to more simply perform vector operations with reduced syntax.
+* :class:`fmdtools.define.object.timer.Timer` can be used very simply using to represent timed behavior and state-transitions 
 * While modes can be used to describe fault modes in a very general way, faulty behavior that can also be queried from the model using the concept of a *disturbance*, which is merely a change in a given variable value. While disturbances are less general, they requie much less to be implemented in the model.
-* parameters and parameter-generating functions are helpful for understanding the model operating envelope. In general, try to avoid having parameters that duplicate each other in some way.
-* Randomness can be used throughout, but use the specified interfaces (`seed`, :meth:`fmdtools.define.Block.assoc_rand_states`, etc.) so that a single seed is used to generate all of the rngs in the model. Not using these interfaces can get you in trouble.
-* A variety of custom attributes can be added to :class:`fmdtools.define.Function` and :class:`fmdtools.define.Flow`, but not every custom attribute is going to work with staged execution and parallelism options. In general, all function constructs that change should be `states`, while parameters may be attributes. If you want to do something fancy with data structures, you may need to re-implement :class:`fmdtools.define.Function` methods for copying and returning states to `propagate`.
+* Parameters and parameter-generating functions are helpful for understanding the model operating envelope. In general, try to avoid having parameters that duplicate each other in some way.
+* Randomness can be used throughout, but use the specified interfaces (:class:`fmdtools.define.container.rand.Rand`, etc.) so that a single seed is used to generate all of the rngs in the model. Not using these interfaces can get you in trouble.
+* A variety of custom attributes can be added to :class:`fmdtools.define.block.function.Function` and :class:`fmdtools.define.flow.base.Flow`, but not every custom attribute is going to work with staged execution and parallelism options. In general, use containers to represent things that change and parameters to represent things that don't change. If you want to do something fancy with data structures, you may need to re-implement :class:`fmdtools.define.block.base` methods for copying and returning states to `propagate`.
 * If there's something that you'd like to do in an fmdtools model that is difficult with existing model structures, consider filing a bug report before implementing you own ad-hoc solution. Alternatively, try devoping your solution as a *feature* rather than a hack to solve a single use-case. If the features is in our scope and well-developed, we may try to incorporate it in our next release.
 
 Style advice
@@ -410,8 +410,8 @@ Style advice
 
 Development of fmdtools models should follow the `PEP 8 Style Guide <https://peps.python.org/pep-0008/#introduction>`_ as much as possible. While this won't be entirely re-iterated here, the following applies:
 
-* Use CamelCase for classes like :class:`fmdtools.define.Model`, :class:`fmdtools.define.Function`, :class:`fmdtools.define.Flow`, :class:`fmdtools.define.Component`, etc. Use lowercase for object instantiations of these classes, and lower_case_with_underscores (e.g. do_this()) for methods/functions.
-	* if a model class is named Model (e.g., Drone), the instance should be named model_X, where X is an identifying string for the model being used (e.g. drone_test). 
+* Use CamelCase for classes like :class:`fmdtools.define.architecture.function.FunctionArchitecture`, :class:`fmdtools.define.block.function.Function`, :class:`fmdtools.define.flow.base.Flow`, etc. Use lowercase for object instantiations of these classes, and lower_case_with_underscores (e.g. do_this()) for methods/functions.
+	* if a model class is named Model (e.g., Drone), the instance can be named model_X, where X is an identifying string for the model being used (e.g. drone_test). 
 * Names should be descriptive, but keep the length down. Use abbreviations if needed.
 * Try to use the code formatting structure to show what your code is doing as much as possible. Single-line if statements can be good for this, as long as they don't go too long.
 * Python one-liners can be fun, but try to keep them short enough to be able to read. 

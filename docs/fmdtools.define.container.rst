@@ -1,17 +1,27 @@
-fmdtools.define.container subpackage
+fmdtools.define.container
 ===========================
 
-The roles subpackage provides the building blocks for developing simulations like blocks and architectures.
+The containers subpackage provides the elemental building blocks (i.e., containers for holding states, modes, etc.) for developing simulations.
 
-These sub-attributes are provided in the follwoing modules:
+These sub-attributes are provided in the following modules:
 
+* :mod:`base`: for :class:`BaseContainer`, which all the other containers inherit from.
 * :mod:`mode`: for :class:`Mode`, which represents discrete modes (nominal and faulty) which the system may progress through over time,
 * :mod:`state`: for :class:`State`, which represents values of the simulation which change over time,
 * :mod:`parameter`: for :class:`Parameter`, which represents variables which do not change over time,
 * :mod:`rand`: for :class:`Rand`, which represents random states and behavior, and
 * :mod:`time`: for :class:`Time`, which represents the internal time and timers of the block.
-* :mod:`geom`: for :class:`Geom`, class and subclasses which represent geometric attributes.
-* :mod:`coords`: for :class:`Coords`, which is used to define coordinate systems.
+
+fmdtools.define.container.base
+--------------------------------
+
+	Base class/module for containers.
+
+.. automodule:: fmdtools.define.container.mode
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
 
 fmdtools.define.container.mode
 --------------------------------
