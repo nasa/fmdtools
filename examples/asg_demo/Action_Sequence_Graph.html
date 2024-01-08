@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Action Sequence Graph Tutorial &mdash; fmdtools 2.0-beta-3 documentation</title>
+  <title>Action Sequence Graph Tutorial &mdash; fmdtools 2.0-rc-1 documentation</title>
       <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
       <link rel="stylesheet" href="../../_static/nbsphinx-code-cells.css" type="text/css" />
@@ -73,7 +73,7 @@
 <li class="toctree-l2"><a class="reference internal" href="../../docs/Development%20Guide.html#intro-to-fmdtools">Intro to fmdtools</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="../../docs/Intro_to_fmdtools.html">Intro to resilience modelling, simulation, and visualization in Python with fmdtools.</a><ul>
 <li class="toctree-l4"><a class="reference internal" href="../../docs/Intro_to_fmdtools.html#author-daniel-hulse">Author: Daniel Hulse</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/Intro_to_fmdtools.html#version-2-0-beta-3">Version: 2.0-beta-3</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../docs/Intro_to_fmdtools.html#version-2-0-rc-1">Version: 2.0-rc-1</a></li>
 </ul>
 </li>
 <li class="toctree-l3"><a class="reference internal" href="../../docs/Intro_to_fmdtools.html#overview">Overview</a></li>
@@ -285,26 +285,58 @@
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="../Examples.html#multiflow-demo">Multiflow Demo</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="../multiflow_demo/Multiflow_and_Commsflow_Demonstration.html">Demonstration on Using MultiFlow and CommsFlow</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../multiflow_demo/Multiflow_and_Commsflow_Demonstration.html">Demonstration on Using MultiFlow and CommsFlow</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../multiflow_demo/Multiflow_and_Commsflow_Demonstration.html#Bulding-Flows">Bulding Flows</a></li>
+</ul>
+</li>
 </ul>
 </li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../../docs/Glossary.html">Glossary</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../docs/fmdtools.html">Module Reference</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="../../docs/fmdtools.define.html">fmdtools.define package</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="../../docs/fmdtools.define.html#fmdtools-define-block">fmdtools.define.block</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../../docs/fmdtools.define.html#module-fmdtools.define.common">fmdtools.define.common</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../../docs/fmdtools.define.html#module-fmdtools.define.flow">fmdtools.define.flow</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../../docs/fmdtools.define.html#module-fmdtools.define.mode">fmdtools.define.mode</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../../docs/fmdtools.define.html#fmdtools-define-model">fmdtools.define.model</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../../docs/fmdtools.define.html#module-fmdtools.define.parameter">fmdtools.define.parameter</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../../docs/fmdtools.define.html#module-fmdtools.define.rand">fmdtools.define.rand</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../../docs/fmdtools.define.html#module-fmdtools.define.state">fmdtools.define.state</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../../docs/fmdtools.define.html#module-fmdtools.define.time">fmdtools.define.time</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../../docs/fmdtools.define.html#module-fmdtools.define.geom">fmdtools.define.geom</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../docs/fmdtools.define.html">fmdtools.define</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../docs/fmdtools.define.architecture.html">fmdtools.define.architecture</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.define.architecture.html#fmdtools-define-architecture-base">fmdtools.define.architecture.base</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.define.architecture.html#fmdtools-define-architecture-action">fmdtools.define.architecture.action</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.define.architecture.html#fmdtools-define-architecture-component">fmdtools.define.architecture.component</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.define.architecture.html#fmdtools-define-architecture-function">fmdtools.define.architecture.function</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.define.architecture.html#fmdtools-define-architecture-geom">fmdtools.define.architecture.geom</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../../docs/fmdtools.define.block.html">fmdtools.define.block</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.define.block.html#module-fmdtools.define.block.base">fmdtools.define.block.base</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.define.block.html#module-fmdtools.define.block.action">fmdtools.define.block.action</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.define.block.html#module-fmdtools.define.block.component">fmdtools.define.block.component</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.define.block.html#fmdtools-define-block-function">fmdtools.define.block.function</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../../docs/fmdtools.define.container.html">fmdtools.define.container</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.define.container.html#fmdtools-define-container-base">fmdtools.define.container.base</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.define.container.html#module-0">fmdtools.define.container.mode</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.define.container.html#module-fmdtools.define.container.state">fmdtools.define.container.state</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.define.container.html#fmdtools-define-container-parameter">fmdtools.define.container.parameter</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.define.container.html#module-fmdtools.define.container.rand">fmdtools.define.container.rand</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.define.container.html#module-fmdtools.define.container.time">fmdtools.define.container.time</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.define.container.html#fmdtools-define-container-geom">fmdtools.define.container.geom</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.define.container.html#fmdtools-define-container-coords">fmdtools.define.container.coords</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../../docs/fmdtools.define.flow.html">fmdtools.define.flow</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.define.flow.html#module-fmdtools.define.flow.base">fmdtools.define.flow.base</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.define.flow.html#module-fmdtools.define.flow.multiflow">fmdtools.define.flow.multiflow</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.define.flow.html#module-fmdtools.define.flow.commsflow">fmdtools.define.flow.commsflow</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../../docs/fmdtools.define.object.html">fmdtools.define.object</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.define.object.html#module-fmdtools.define.object.base">fmdtools.define.object.base</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.define.object.html#module-fmdtools.define.object.timer">fmdtools.define.object.timer</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.define.object.html#module-fmdtools.define.object.geom">fmdtools.define.object.geom</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.define.object.html#module-fmdtools.define.object.coords">fmdtools.define.object.coords</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../../docs/fmdtools.define.html#fmdtools-define-base">fmdtools.define.base</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../docs/fmdtools.define.html#module-fmdtools.define.environment">fmdtools.define.environment</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../../docs/fmdtools.define.html#module-fmdtools.define.coords">fmdtools.define.coords</a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="../../docs/fmdtools.sim.html">fmdtools.sim</a><ul>
@@ -314,7 +346,7 @@
 <li class="toctree-l3"><a class="reference internal" href="../../docs/fmdtools.sim.html#module-fmdtools.sim.search">fmdtools.sim.search</a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="../../docs/fmdtools.analyze.html">fmdtools.analyze package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../docs/fmdtools.analyze.html">fmdtools.analyze</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="../../docs/fmdtools.analyze.html#module-fmdtools.analyze.common">fmdtools.analyze.common</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../docs/fmdtools.analyze.html#module-fmdtools.analyze.result">fmdtools.analyze.result</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../docs/fmdtools.analyze.html#module-fmdtools.analyze.history">fmdtools.analyze.history</a></li>
@@ -354,124 +386,29 @@
              
   <section id="Action-Sequence-Graph-Tutorial">
 <h1>Action Sequence Graph Tutorial<a class="headerlink" href="#Action-Sequence-Graph-Tutorial" title="Permalink to this heading"></a></h1>
-<p>This tutorial covers use of the ActArch in the FxnBlock class, which is useful for representing a Function’s progress through an action sequence graph, the different actions/tasks to be performed by a function (e.g., modes of operation, etc)..</p>
+<p>This tutorial covers use of the ActionArchitecture in the Function class, which is useful for representing a Function’s progress through an action sequence graph, the different actions/tasks to be performed by a function (e.g., modes of operation, etc)..</p>
 <div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[1]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">fmdtools.define.mode</span> <span class="kn">import</span> <span class="n">Mode</span>
-<span class="kn">from</span> <span class="nn">fmdtools.define.block</span> <span class="kn">import</span> <span class="n">FxnBlock</span><span class="p">,</span> <span class="n">Action</span><span class="p">,</span> <span class="n">ActArch</span>
-<span class="kn">from</span> <span class="nn">fmdtools.define.model</span> <span class="kn">import</span> <span class="n">Model</span>
-
-<span class="kn">import</span> <span class="nn">fmdtools.sim.propagate</span> <span class="k">as</span> <span class="nn">prop</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><br/><br/><span></span><span class="kn">import</span> <span class="nn">fmdtools.sim.propagate</span> <span class="k">as</span> <span class="nn">prop</span>
+<span class="kn">import</span> <span class="nn">inspect</span>
 </pre></div>
 </div>
 </div>
-<p>Action architectures are used within a function block to represent Action Sequence Graphs - actions that the function performs and their sequence. Actions in an ActArch are respresented by <code class="docutils literal notranslate"><span class="pre">Action</span></code> blocks, which are similar to function and component blocks in that they have: - flow connections - modes, and - behaviors</p>
+<p>Action architectures are used within a function block to represent Action Sequence Graphs - actions that the function performs and their sequence. Actions in an ActionArchitecture are respresented by <code class="docutils literal notranslate"><span class="pre">Action</span></code> blocks, which are similar to function and component blocks in that they have: - flow connections - modes, and - behaviors</p>
 <p>Flow connections are routed to the action in the function block definition and represent the <em>shared variables</em> between the actions.</p>
 <p>Modes are similar to function modes and are instantiated (as they are in components) at both the Function and Action level. Using the <code class="docutils literal notranslate"><span class="pre">name=</span></code> option enables one to tag these modes as action modes at the function level while using the same local name</p>
 <p>Below we define the states to performed by the ASG: - Outcome, which tracks the number of actions and perceptions performed by the ASG - HazardState, which specifies whether a hazard is present, percieved, or mitigated</p>
-<div class="nbinput nblast docutils container">
+<div class="nbinput docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[2]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">fmdtools.define.state</span> <span class="kn">import</span> <span class="n">State</span>
-<span class="kn">from</span> <span class="nn">fmdtools.define.flow</span> <span class="kn">import</span> <span class="n">Flow</span>
-
-<span class="k">class</span> <span class="nc">OutcomeStates</span><span class="p">(</span><span class="n">State</span><span class="p">):</span>
-    <span class="n">num_perceptions</span><span class="p">:</span> <span class="nb">int</span><span class="o">=</span><span class="mi">0</span>
-    <span class="n">num_actions</span><span class="p">:</span>     <span class="nb">int</span><span class="o">=</span><span class="mi">0</span>
-<span class="k">class</span> <span class="nc">Outcome</span><span class="p">(</span><span class="n">Flow</span><span class="p">):</span>
-    <span class="n">_init_s</span> <span class="o">=</span> <span class="n">OutcomeStates</span>
-
-<span class="k">class</span> <span class="nc">HazardState</span><span class="p">(</span><span class="n">State</span><span class="p">):</span>
-    <span class="n">present</span><span class="p">:</span>    <span class="nb">bool</span><span class="o">=</span><span class="kc">False</span>
-    <span class="n">percieved</span><span class="p">:</span>  <span class="nb">bool</span><span class="o">=</span><span class="kc">False</span>
-    <span class="n">mitigated</span><span class="p">:</span>  <span class="nb">bool</span><span class="o">=</span><span class="kc">False</span>
-<span class="k">class</span> <span class="nc">Hazard</span><span class="p">(</span><span class="n">Flow</span><span class="p">):</span>
-    <span class="n">_init_s</span> <span class="o">=</span> <span class="n">HazardState</span>
-</pre></div>
-</div>
-</div>
-<p>Below we define three actions for use in a given model: - Perceive, a user’s perception abilities/behaviors. In this function the user percieves a hazard (unless their perception fails) - Act, the user’s action which they perform to mitigate the hazard. - Done, the user’s state when they are done performing the action.</p>
-<div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[3]:
-</pre></div>
-</div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">ActionMode</span><span class="p">(</span><span class="n">Mode</span><span class="p">):</span>
-    <span class="n">fm_args</span><span class="o">=</span><span class="p">(</span><span class="s1">&#39;failed&#39;</span><span class="p">,</span><span class="s1">&#39;unable&#39;</span><span class="p">)</span>
-    <span class="n">exclusive</span><span class="o">=</span><span class="kc">True</span>
-<span class="k">class</span> <span class="nc">Perceive</span><span class="p">(</span><span class="n">Action</span><span class="p">):</span>
-    <span class="vm">__slots__</span><span class="o">=</span><span class="p">(</span><span class="s1">&#39;hazard&#39;</span><span class="p">,</span> <span class="s1">&#39;outcome&#39;</span><span class="p">)</span>
-    <span class="n">_init_m</span> <span class="o">=</span> <span class="n">ActionMode</span>
-    <span class="n">_init_hazard</span> <span class="o">=</span> <span class="n">Hazard</span>
-    <span class="n">_init_outcome</span> <span class="o">=</span> <span class="n">Outcome</span>
-    <span class="k">def</span> <span class="nf">behavior</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">time</span><span class="p">):</span>
-        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">m</span><span class="o">.</span><span class="n">in_mode</span><span class="p">(</span><span class="s1">&#39;failed&#39;</span><span class="p">,</span> <span class="s1">&#39;unable&#39;</span><span class="p">):</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">hazard</span><span class="o">.</span><span class="n">s</span><span class="o">.</span><span class="n">percieved</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">hazard</span><span class="o">.</span><span class="n">s</span><span class="o">.</span><span class="n">present</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">outcome</span><span class="o">.</span><span class="n">s</span><span class="o">.</span><span class="n">num_perceptions</span><span class="o">+=</span><span class="bp">self</span><span class="o">.</span><span class="n">hazard</span><span class="o">.</span><span class="n">s</span><span class="o">.</span><span class="n">percieved</span>
-        <span class="k">else</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">hazard</span><span class="o">.</span><span class="n">s</span><span class="o">.</span><span class="n">percieved</span> <span class="o">=</span> <span class="kc">False</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">m</span><span class="o">.</span><span class="n">remove_fault</span><span class="p">(</span><span class="s1">&#39;failed&#39;</span><span class="p">,</span> <span class="s1">&#39;nom&#39;</span><span class="p">)</span>
-    <span class="k">def</span> <span class="nf">percieved</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">hazard</span><span class="o">.</span><span class="n">s</span><span class="o">.</span><span class="n">percieved</span>
-<span class="k">class</span> <span class="nc">Act</span><span class="p">(</span><span class="n">Action</span><span class="p">):</span>
-    <span class="vm">__slots__</span><span class="o">=</span><span class="p">(</span><span class="s1">&#39;hazard&#39;</span><span class="p">,</span> <span class="s1">&#39;outcome&#39;</span><span class="p">)</span>
-    <span class="n">_init_m</span> <span class="o">=</span> <span class="n">ActionMode</span>
-    <span class="n">_init_hazard</span> <span class="o">=</span> <span class="n">Hazard</span>
-    <span class="n">_init_outcome</span> <span class="o">=</span> <span class="n">Outcome</span>
-    <span class="k">def</span> <span class="nf">behavior</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">time</span><span class="p">):</span>
-        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">m</span><span class="o">.</span><span class="n">in_mode</span><span class="p">(</span><span class="s1">&#39;failed&#39;</span><span class="p">,</span> <span class="s1">&#39;unable&#39;</span><span class="p">):</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">outcome</span><span class="o">.</span><span class="n">s</span><span class="o">.</span><span class="n">num_actions</span><span class="o">+=</span><span class="mi">1</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">hazard</span><span class="o">.</span><span class="n">s</span><span class="o">.</span><span class="n">mitigated</span><span class="o">=</span><span class="kc">True</span>
-        <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">m</span><span class="o">.</span><span class="n">in_mode</span><span class="p">(</span><span class="s1">&#39;failed&#39;</span><span class="p">):</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">hazard</span><span class="o">.</span><span class="n">s</span><span class="o">.</span><span class="n">mitigated</span><span class="o">=</span><span class="kc">False</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">m</span><span class="o">.</span><span class="n">remove_fault</span><span class="p">(</span><span class="s1">&#39;failed&#39;</span><span class="p">,</span> <span class="s1">&#39;nom&#39;</span><span class="p">)</span>
-        <span class="k">else</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">hazard</span><span class="o">.</span><span class="n">s</span><span class="o">.</span><span class="n">mitigated</span><span class="o">=</span><span class="kc">False</span>
-    <span class="k">def</span> <span class="nf">acted</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">return</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">m</span><span class="o">.</span><span class="n">in_mode</span><span class="p">(</span><span class="s1">&#39;failed&#39;</span><span class="p">)</span>
-<span class="k">class</span> <span class="nc">Done</span><span class="p">(</span><span class="n">Action</span><span class="p">):</span>
-    <span class="vm">__slots__</span><span class="o">=</span><span class="p">(</span><span class="s1">&#39;hazard&#39;</span><span class="p">)</span>
-    <span class="n">_init_hazard</span> <span class="o">=</span> <span class="n">Hazard</span>
-    <span class="k">def</span> <span class="nf">behavior</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">time</span><span class="p">):</span>
-        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">hazard</span><span class="o">.</span><span class="n">s</span><span class="o">.</span><span class="n">present</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">hazard</span><span class="o">.</span><span class="n">s</span><span class="o">.</span><span class="n">mitigated</span><span class="o">=</span><span class="kc">False</span>
-    <span class="k">def</span> <span class="nf">ready</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">return</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">hazard</span><span class="o">.</span><span class="n">s</span><span class="o">.</span><span class="n">present</span>
-</pre></div>
-</div>
-</div>
-<p>To proceed through the sequence of actions, <em>conditions</em> must be met between each action. In these actions, we have defined the following conditions: - Percieve.percieved: perception is done if the hazard is percieved - Act.acted: the action is complete if the action was performed - Done.complete: the hazard mitigation is over (and mitigated state is reset to False)</p>
-<p>To create the overall ASG structure, the following adds the flows, actions, and conditions to the ActArch class</p>
-<div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[4]:
-</pre></div>
-</div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">Human</span><span class="p">(</span><span class="n">ActArch</span><span class="p">):</span>
-    <span class="n">initial_action</span><span class="o">=</span><span class="s2">&quot;perceive&quot;</span>
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
-        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">add_flow</span><span class="p">(</span><span class="s2">&quot;hazard&quot;</span><span class="p">,</span> <span class="n">Hazard</span><span class="p">)</span> <span class="c1"># flows from external fxn/model can be defined here,</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">add_flow</span><span class="p">(</span><span class="s2">&quot;outcome&quot;</span><span class="p">,</span> <span class="n">fclass</span><span class="o">=</span><span class="n">Outcome</span><span class="p">)</span> <span class="c1"># along with flows internal to the ASG class</span>
-
-        <span class="bp">self</span><span class="o">.</span><span class="n">add_act</span><span class="p">(</span><span class="s2">&quot;perceive&quot;</span><span class="p">,</span> <span class="n">Perceive</span><span class="p">,</span> <span class="s2">&quot;outcome&quot;</span><span class="p">,</span> <span class="s2">&quot;hazard&quot;</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">add_act</span><span class="p">(</span><span class="s2">&quot;act&quot;</span><span class="p">,</span> <span class="n">Act</span><span class="p">,</span> <span class="s2">&quot;outcome&quot;</span><span class="p">,</span> <span class="s2">&quot;hazard&quot;</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">add_act</span><span class="p">(</span><span class="s2">&quot;done&quot;</span><span class="p">,</span> <span class="n">Done</span><span class="p">,</span> <span class="s2">&quot;hazard&quot;</span><span class="p">)</span>
-
-        <span class="bp">self</span><span class="o">.</span><span class="n">add_cond</span><span class="p">(</span><span class="s2">&quot;perceive&quot;</span><span class="p">,</span> <span class="s2">&quot;act&quot;</span><span class="p">,</span> <span class="s2">&quot;percieved&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">actions</span><span class="p">[</span><span class="s1">&#39;perceive&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">percieved</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">add_cond</span><span class="p">(</span><span class="s2">&quot;act&quot;</span><span class="p">,</span> <span class="s2">&quot;done&quot;</span><span class="p">,</span> <span class="s2">&quot;acted&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">actions</span><span class="p">[</span><span class="s1">&#39;act&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">acted</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">add_cond</span><span class="p">(</span><span class="s2">&quot;done&quot;</span><span class="p">,</span><span class="s2">&quot;perceive&quot;</span><span class="p">,</span> <span class="s2">&quot;ready&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">actions</span><span class="p">[</span><span class="s1">&#39;done&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">ready</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">build</span><span class="p">()</span>
-</pre></div>
-</div>
-</div>
-<p>Note the use of the following methods: - add_flow adds a flow so it can pass variables between actions. Here <em>Outcome</em> is an internal flow, while <em>Hazard</em> is an external flow.</p>
-<div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[5]:
-</pre></div>
-</div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">help</span><span class="p">(</span><span class="n">ActArch</span><span class="o">.</span><span class="n">add_flow</span><span class="p">)</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">demo_model</span> <span class="kn">import</span> <span class="n">OutcomeStates</span><span class="p">,</span> <span class="n">Outcome</span><span class="p">,</span> <span class="n">HazardState</span><span class="p">,</span> <span class="n">Hazard</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">inspect</span><span class="o">.</span><span class="n">getsource</span><span class="p">(</span><span class="n">OutcomeStates</span><span class="p">))</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">inspect</span><span class="o">.</span><span class="n">getsource</span><span class="p">(</span><span class="n">Outcome</span><span class="p">))</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">inspect</span><span class="o">.</span><span class="n">getsource</span><span class="p">(</span><span class="n">HazardState</span><span class="p">))</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">inspect</span><span class="o">.</span><span class="n">getsource</span><span class="p">(</span><span class="n">Hazard</span><span class="p">))</span>
 </pre></div>
 </div>
 </div>
@@ -480,24 +417,164 @@
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-Help on function add_flow in module fmdtools.define.block:
+class OutcomeStates(State):
+    &#34;&#34;&#34;State tracking the number of actions and perceptions performed.&#34;&#34;&#34;
 
-add_flow(self, flowname, fclass=&lt;class &#39;fmdtools.define.flow.Flow&#39;&gt;, p={}, s={})
-    Adds a flow with given attributes to ASG. Used to enable a flexible
-    internal flow architecture in the ASG.
+    num_perceptions: int = 0
+    num_actions: int = 0
+
+class Outcome(Flow):
+    container_s = OutcomeStates
+
+class HazardState(State):
+    &#34;&#34;&#34;Whether a hazard is present, percieved, or mitigated by the human.&#34;&#34;&#34;
+
+    present: bool = False
+    percieved: bool = False
+    mitigated: bool = False
+
+class Hazard(Flow):
+    container_s = HazardState
+
+</pre></div></div>
+</div>
+<p>Below we define three actions for use in a given model: - Perceive, a user’s perception abilities/behaviors. In this function the user percieves a hazard (unless their perception fails) - Act, the user’s action which they perform to mitigate the hazard. - Done, the user’s state when they are done performing the action.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[3]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">demo_model</span> <span class="kn">import</span> <span class="n">Perceive</span><span class="p">,</span> <span class="n">Act</span><span class="p">,</span> <span class="n">Done</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">inspect</span><span class="o">.</span><span class="n">getsource</span><span class="p">(</span><span class="n">Perceive</span><span class="p">))</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">inspect</span><span class="o">.</span><span class="n">getsource</span><span class="p">(</span><span class="n">Act</span><span class="p">))</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">inspect</span><span class="o">.</span><span class="n">getsource</span><span class="p">(</span><span class="n">Done</span><span class="p">))</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+class Perceive(Action):
+    &#34;&#34;&#34;A user&#39;s perception abilities/behaviors for percieving the hazard.&#34;&#34;&#34;
+
+    __slots__ = (&#39;hazard&#39;, &#39;outcome&#39;)
+    container_m = ActionMode
+    flow_hazard = Hazard
+    flow_outcome = Outcome
+
+    def behavior(self, time):
+        if not self.m.in_mode(&#39;failed&#39;, &#39;unable&#39;):
+            self.hazard.s.percieved = self.hazard.s.present
+            self.outcome.s.num_perceptions += self.hazard.s.percieved
+        else:
+            self.hazard.s.percieved = False
+            self.m.remove_fault(&#39;failed&#39;, &#39;nom&#39;)
+
+    def percieved(self):
+        return self.hazard.s.percieved
+
+class Act(Action):
+    &#34;&#34;&#34;User actions to mitigate the hazard.&#34;&#34;&#34;
+
+    __slots__ = (&#39;hazard&#39;, &#39;outcome&#39;)
+    container_m = ActionMode
+    flow_hazard = Hazard
+    flow_outcome = Outcome
+
+    def behavior(self, time):
+        if not self.m.in_mode(&#39;failed&#39;, &#39;unable&#39;):
+            self.outcome.s.num_actions += 1
+            self.hazard.s.mitigated = True
+        elif self.m.in_mode(&#39;failed&#39;):
+            self.hazard.s.mitigated = False
+            self.m.remove_fault(&#39;failed&#39;, &#39;nom&#39;)
+        else:
+            self.hazard.s.mitigated = False
+
+    def acted(self):
+        return not self.m.in_mode(&#39;failed&#39;)
+
+class Done(Action):
+    &#34;&#34;&#34;User state after performing the action.&#34;&#34;&#34;
+    __slots__ = (&#39;hazard&#39;)
+    flow_hazard = Hazard
+
+    def behavior(self, time):
+        if not self.hazard.s.present:
+            self.hazard.s.mitigated = False
+
+    def ready(self):
+        return not self.hazard.s.present
+
+</pre></div></div>
+</div>
+<p>To proceed through the sequence of actions, <em>conditions</em> must be met between each action. In these actions, we have defined the following conditions: - Percieve.percieved: perception is done if the hazard is percieved - Act.acted: the action is complete if the action was performed - Done.complete: the hazard mitigation is over (and mitigated state is reset to False)</p>
+<p>To create the overall ASG structure, the following adds the flows, actions, and conditions to the ActionArchitecture class</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[4]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">demo_model</span> <span class="kn">import</span> <span class="n">Human</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">inspect</span><span class="o">.</span><span class="n">getsource</span><span class="p">(</span><span class="n">Human</span><span class="p">))</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+class Human(ActionArchitecture):
+    &#34;&#34;&#34;Overall human action sequence graph specifying what the user will do when.&#34;&#34;&#34;
+    initial_action = &#34;perceive&#34;
+
+    def init_architecture(self, *args, **kwargs):
+        # flows from external fxn/model can be defined here,
+        self.add_flow(&#34;hazard&#34;, Hazard)
+        # along with flows internal to the ASG class
+        self.add_flow(&#34;outcome&#34;, fclass=Outcome)
+
+        self.add_act(&#34;perceive&#34;, Perceive, &#34;outcome&#34;, &#34;hazard&#34;)
+        self.add_act(&#34;act&#34;, Act, &#34;outcome&#34;, &#34;hazard&#34;)
+        self.add_act(&#34;done&#34;, Done, &#34;hazard&#34;)
+
+        self.add_cond(&#34;perceive&#34;, &#34;act&#34;, &#34;percieved&#34;, self.acts[&#39;perceive&#39;].percieved)
+        self.add_cond(&#34;act&#34;, &#34;done&#34;, &#34;acted&#34;, self.acts[&#39;act&#39;].acted)
+        self.add_cond(&#34;done&#34;, &#34;perceive&#34;, &#34;ready&#34;, self.acts[&#39;done&#39;].ready)
+
+</pre></div></div>
+</div>
+<p>Note the use of the following methods: - add_flow adds a flow so it can pass variables between actions. Here <em>Outcome</em> is an internal flow, while <em>Hazard</em> is an external flow.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[5]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">fmdtools.define.architecture.action</span> <span class="kn">import</span> <span class="n">ActionArchitecture</span>
+<span class="n">help</span><span class="p">(</span><span class="n">ActionArchitecture</span><span class="o">.</span><span class="n">add_flow</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+Help on function add_flow in module fmdtools.define.architecture.base:
+
+add_flow(self, name, fclass=&lt;class &#39;fmdtools.define.flow.base.Flow&#39;&gt;, **kwargs)
+    Add a flow with given attributes to the model.
 
     Parameters
     ----------
-    flowname : str
+    name : str
         Unique flow name to give the flow in the model
     fclass : Class, optional
         Class to instantiate (e.g. CommsFlow, MultiFlow). Default is Flow.
-        Class must take flowname, flowdict, flowtype as input to __init__()
+        Class must take flowname, p, s as input to __init__()
         May alternatively provide already-instanced object.
-    p : dict, optional
-        Parameter dictionary to instantiate the flow with
-    s : dict, optional
-        State dictionary to overwrite Flow default state values with
+    kwargs: kwargs
+        Dicts for non-default values to p, s, etc
 
 </pre></div></div>
 </div>
@@ -508,7 +585,7 @@ add_flow(self, flowname, fclass=&lt;class &#39;fmdtools.define.flow.Flow&#39;&gt
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[6]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">help</span><span class="p">(</span><span class="n">ActArch</span><span class="o">.</span><span class="n">add_act</span><span class="p">)</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">help</span><span class="p">(</span><span class="n">ActionArchitecture</span><span class="o">.</span><span class="n">add_act</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -517,10 +594,10 @@ add_flow(self, flowname, fclass=&lt;class &#39;fmdtools.define.flow.Flow&#39;&gt
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-Help on function add_act in module fmdtools.define.block:
+Help on function add_act in module fmdtools.define.architecture.action:
 
-add_act(self, name, actclass, *flownames, duration=0.0, **params)
-    Associate an Action with the Function Block for use in the Action Sequence Graph
+add_act(self, name, actclass, *flownames, **fkwargs)
+    Associate an Action with the architecture. Called after add_flow.
 
     Parameters
     ----------
@@ -532,8 +609,8 @@ add_act(self, name, actclass, *flownames, duration=0.0, **params)
         Flows (optional) which connect the actions
     duration:
         Duration of the action. Default is 0.0
-    **params : any
-        parameters to instantiate the Action with.
+    **kwargs : any
+        kwargs to instantiate the Action with.
 
 </pre></div></div>
 </div>
@@ -544,7 +621,7 @@ add_act(self, name, actclass, *flownames, duration=0.0, **params)
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[7]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">help</span><span class="p">(</span><span class="n">ActArch</span><span class="o">.</span><span class="n">add_cond</span><span class="p">)</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">help</span><span class="p">(</span><span class="n">ActionArchitecture</span><span class="o">.</span><span class="n">add_cond</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -553,10 +630,12 @@ add_act(self, name, actclass, *flownames, duration=0.0, **params)
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-Help on function add_cond in module fmdtools.define.block:
+Help on function add_cond in module fmdtools.define.architecture.action:
 
 add_cond(self, start_action, end_action, name=&#39;auto&#39;, condition=&#39;pass&#39;)
-    Associates a Condition with the Function Block for use in the Action Sequence Graph
+    Associate a Condition with the ActionArchitecture.
+
+    Conditions specify when to precede from one action to the next.
 
     Parameters
     ----------
@@ -565,9 +644,11 @@ add_cond(self, start_action, end_action, name=&#39;auto&#39;, condition=&#39;pas
     end_action : str
         Action that the condition leads to.
     name : str
-        Name for the condition. Defaults to numbered conditions if none are provided.
+        Name for the condition.
+        Defaults to numbered conditions if none are provided.
     condition : method
-        Method in the class to use as a condition. Defaults to self.condition_pass if none are provided
+        Method in the class to use as a condition.
+        Defaults to self.condition_pass if none are provided.
 
 </pre></div></div>
 </div>
@@ -578,7 +659,7 @@ add_cond(self, start_action, end_action, name=&#39;auto&#39;, condition=&#39;pas
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[8]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">help</span><span class="p">(</span><span class="n">ActArch</span><span class="o">.</span><span class="n">build</span><span class="p">)</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">help</span><span class="p">(</span><span class="n">ActionArchitecture</span><span class="o">.</span><span class="n">build</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -587,9 +668,17 @@ add_cond(self, start_action, end_action, name=&#39;auto&#39;, condition=&#39;pas
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-Help on function build in module fmdtools.define.block:
+Help on function build in module fmdtools.define.architecture.action:
 
-build(self)
+build(self, **kwargs)
+    Construct the overall model structure.
+
+    Use in subclasses to build the model after init_architecture is called.
+
+    Parameters
+    ----------
+    update_seed : bool
+        Whether to update the seed
 
 </pre></div></div>
 </div>
@@ -609,15 +698,15 @@ build(self)
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-&lt;__main__.Human at 0x27ffa3f61d0&gt;
+&lt;demo_model.Human at 0x1d1a0d40ee0&gt;
 </pre></div></div>
 </div>
-<p><code class="docutils literal notranslate"><span class="pre">ActArchGraph</span></code> can also be used to visualize the flow of actions (e.g., which are active, flows vs conditions, etc.).</p>
+<p><code class="docutils literal notranslate"><span class="pre">ActionArchitectureGraph</span></code> can also be used to visualize the flow of actions (e.g., which are active, flows vs conditions, etc.).</p>
 <div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[10]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">fmdtools.analyze.graph</span> <span class="kn">import</span> <span class="n">ActArchGraph</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">fmdtools.analyze.graph</span> <span class="kn">import</span> <span class="n">ActionArchitectureGraph</span>
 </pre></div>
 </div>
 </div>
@@ -625,7 +714,7 @@ build(self)
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[11]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">ag</span> <span class="o">=</span> <span class="n">ActArchGraph</span><span class="p">(</span><span class="n">h</span><span class="p">)</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">ag</span> <span class="o">=</span> <span class="n">ActionArchitectureGraph</span><span class="p">(</span><span class="n">h</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -670,16 +759,29 @@ build(self)
 </div>
 <section id="Function-level-Simulation">
 <h2>Function-level Simulation<a class="headerlink" href="#Function-level-Simulation" title="Permalink to this heading"></a></h2>
-<p><code class="docutils literal notranslate"><span class="pre">ActArch</span></code>s must be instantiated within a <code class="docutils literal notranslate"><span class="pre">FxnBlock</span></code> in order to be simulable with methods in <code class="docutils literal notranslate"><span class="pre">propagate</span></code>. Below we instantiate a <code class="docutils literal notranslate"><span class="pre">FxnBlock</span></code> and show how an <code class="docutils literal notranslate"><span class="pre">ActArch</span></code> can be simulated independent of other Model attributes.</p>
-<div class="nbinput nblast docutils container">
+<p><code class="docutils literal notranslate"><span class="pre">ActionArchitecture</span></code>s must be instantiated within a <code class="docutils literal notranslate"><span class="pre">Function</span></code> in order to be simulable with methods in <code class="docutils literal notranslate"><span class="pre">propagate</span></code>. Below we instantiate a <code class="docutils literal notranslate"><span class="pre">Function</span></code> and show how an <code class="docutils literal notranslate"><span class="pre">ActionArchitecture</span></code> can be simulated independent of other Model attributes.</p>
+<div class="nbinput docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[14]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">DetectHazard</span><span class="p">(</span><span class="n">FxnBlock</span><span class="p">):</span>
-    <span class="n">_init_aa</span> <span class="o">=</span> <span class="n">Human</span>
-    <span class="n">_init_hazard</span><span class="o">=</span> <span class="n">Hazard</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">demo_model</span> <span class="kn">import</span> <span class="n">DetectHazard</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">inspect</span><span class="o">.</span><span class="n">getsource</span><span class="p">(</span><span class="n">DetectHazard</span><span class="p">))</span>
 </pre></div>
 </div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+class DetectHazard(Function):
+    &#34;&#34;&#34;Function containing the human.&#34;&#34;&#34;
+
+    container_m = Mode
+    arch_aa = Human
+    flow_hazard = Hazard
+
+</pre></div></div>
 </div>
 <p>If we update the action, we can see the ASG progress between states:</p>
 <div class="nbinput docutils container">
@@ -715,7 +817,7 @@ hazard Hazard flow: HazardState(present=False, percieved=False, mitigated=False)
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[17]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">ag</span> <span class="o">=</span> <span class="n">ActArchGraph</span><span class="p">(</span><span class="n">ex_fxn</span><span class="o">.</span><span class="n">aa</span><span class="p">)</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">ag</span> <span class="o">=</span> <span class="n">ActionArchitectureGraph</span><span class="p">(</span><span class="n">ex_fxn</span><span class="o">.</span><span class="n">aa</span><span class="p">)</span>
 <span class="n">ag</span><span class="o">.</span><span class="n">draw</span><span class="p">()</span>
 </pre></div>
 </div>
@@ -801,7 +903,7 @@ outcome Outcome flow: OutcomeStates(num_perceptions=1, num_actions=1)
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[23]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">ag</span> <span class="o">=</span> <span class="n">ActArchGraph</span><span class="p">(</span><span class="n">ex_fxn</span><span class="o">.</span><span class="n">aa</span><span class="p">)</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">ag</span> <span class="o">=</span> <span class="n">ActionArchitectureGraph</span><span class="p">(</span><span class="n">ex_fxn</span><span class="o">.</span><span class="n">aa</span><span class="p">)</span>
 <span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">ag</span><span class="o">.</span><span class="n">draw</span><span class="p">()</span>
 </pre></div>
 </div>
@@ -875,12 +977,12 @@ hazard Hazard flow: HazardState(present=False, percieved=False, mitigated=False)
 </pre></div>
 </div>
 </div>
-<p>This is essentially what a step-though of a simulation looks like. In practice, we simulate these behaviors using <code class="docutils literal notranslate"><span class="pre">propagate</span></code> as long as the <code class="docutils literal notranslate"><span class="pre">ActArch</span></code> is contained in a <code class="docutils literal notranslate"><span class="pre">FxnBlock</span></code>. Here we use the <code class="docutils literal notranslate"><span class="pre">disturbances</span></code> argument to simulate an external hazard occuring at <code class="docutils literal notranslate"><span class="pre">t=5</span></code>:</p>
+<p>This is essentially what a step-though of a simulation looks like. In practice, we simulate these behaviors using <code class="docutils literal notranslate"><span class="pre">propagate</span></code> as long as the <code class="docutils literal notranslate"><span class="pre">ActionArchitecture</span></code> is contained in a <code class="docutils literal notranslate"><span class="pre">Function</span></code>. Here we use the <code class="docutils literal notranslate"><span class="pre">disturbances</span></code> argument to simulate an external hazard occuring at <code class="docutils literal notranslate"><span class="pre">t=5</span></code>:</p>
 <div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[28]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">result_indiv</span><span class="p">,</span> <span class="n">hist_indiv</span> <span class="o">=</span> <span class="n">prop</span><span class="o">.</span><span class="n">nominal</span><span class="p">(</span><span class="n">ex_fxn</span><span class="p">,</span> <span class="n">track</span><span class="o">=</span><span class="s2">&quot;all&quot;</span><span class="p">,</span> <span class="n">disturbances</span><span class="o">=</span><span class="p">{</span><span class="mi">5</span><span class="p">:{</span><span class="s1">&#39;aa.flows.hazard.s.present&#39;</span><span class="p">:</span><span class="kc">True</span><span class="p">}})</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">result_indiv</span><span class="p">,</span> <span class="n">hist_indiv</span> <span class="o">=</span> <span class="n">prop</span><span class="o">.</span><span class="n">nominal</span><span class="p">(</span><span class="n">ex_fxn</span><span class="p">,</span> <span class="n">disturbances</span><span class="o">=</span><span class="p">{</span><span class="mi">5</span><span class="p">:{</span><span class="s1">&#39;aa.flows.hazard.s.present&#39;</span><span class="p">:</span><span class="kc">True</span><span class="p">}})</span>
 </pre></div>
 </div>
 </div>
@@ -939,7 +1041,7 @@ array([{&#39;perceive&#39;}, {&#39;perceive&#39;}, {&#39;perceive&#39;}, {&#39;p
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[31]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">assert</span> <span class="n">hist_indiv</span><span class="o">.</span><span class="n">flows</span><span class="o">.</span><span class="n">hazard</span><span class="o">.</span><span class="n">s</span><span class="o">.</span><span class="n">mitigated</span><span class="p">[</span><span class="mi">5</span><span class="p">]</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">assert</span> <span class="n">hist_indiv</span><span class="o">.</span><span class="n">aa</span><span class="o">.</span><span class="n">flows</span><span class="o">.</span><span class="n">hazard</span><span class="o">.</span><span class="n">s</span><span class="o">.</span><span class="n">mitigated</span><span class="p">[</span><span class="mi">5</span><span class="p">]</span>
 <span class="k">assert</span> <span class="n">hist_indiv</span><span class="o">.</span><span class="n">aa</span><span class="o">.</span><span class="n">active_actions</span><span class="p">[</span><span class="mi">5</span><span class="p">]</span><span class="o">==</span><span class="p">{</span><span class="s1">&#39;done&#39;</span><span class="p">}</span>
 </pre></div>
 </div>
@@ -947,46 +1049,68 @@ array([{&#39;perceive&#39;}, {&#39;perceive&#39;}, {&#39;perceive&#39;}, {&#39;p
 </section>
 <section id="Model-Simulation">
 <h2>Model Simulation<a class="headerlink" href="#Model-Simulation" title="Permalink to this heading"></a></h2>
-<p>Below, this function is placed in the context of a model so we can see how it behaves in the context of a simulation</p>
-<div class="nbinput nblast docutils container">
+<p>Below, this function is placed in the context of a FunctionalArchitecture model so we can see how it behaves in the context of its interactions.</p>
+<div class="nbinput docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[32]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">ProduceHazard</span><span class="p">(</span><span class="n">FxnBlock</span><span class="p">):</span>
-    <span class="vm">__slots__</span><span class="o">=</span><span class="p">(</span><span class="s1">&#39;hazard&#39;</span><span class="p">,)</span>
-    <span class="n">_init_hazard</span> <span class="o">=</span> <span class="n">Hazard</span>
-    <span class="k">def</span> <span class="nf">dynamic_behavior</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">time</span><span class="p">):</span>
-        <span class="k">if</span> <span class="ow">not</span> <span class="n">time</span><span class="o">%</span><span class="k">4</span>:
-            <span class="bp">self</span><span class="o">.</span><span class="n">hazard</span><span class="o">.</span><span class="n">s</span><span class="o">.</span><span class="n">present</span><span class="o">=</span><span class="kc">True</span>
-        <span class="k">else</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">hazard</span><span class="o">.</span><span class="n">s</span><span class="o">.</span><span class="n">present</span><span class="o">=</span><span class="kc">False</span>
-<span class="k">class</span> <span class="nc">PassStates</span><span class="p">(</span><span class="n">State</span><span class="p">):</span>
-    <span class="n">hazards_mitigated</span><span class="p">:</span>  <span class="nb">int</span><span class="o">=</span><span class="mi">0</span>
-    <span class="n">hazards_propagated</span><span class="p">:</span> <span class="nb">int</span><span class="o">=</span><span class="mi">0</span>
-<span class="k">class</span> <span class="nc">PassHazard</span><span class="p">(</span><span class="n">FxnBlock</span><span class="p">):</span>
-    <span class="vm">__slots__</span><span class="o">=</span><span class="p">(</span><span class="s1">&#39;hazard&#39;</span><span class="p">,)</span>
-    <span class="n">_init_s</span> <span class="o">=</span> <span class="n">PassStates</span>
-    <span class="n">_init_hazard</span> <span class="o">=</span> <span class="n">Hazard</span>
-    <span class="k">def</span> <span class="nf">dynamic_behavior</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">time</span><span class="p">):</span>
-        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">hazard</span><span class="o">.</span><span class="n">s</span><span class="o">.</span><span class="n">present</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">hazard</span><span class="o">.</span><span class="n">s</span><span class="o">.</span><span class="n">mitigated</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">s</span><span class="o">.</span><span class="n">hazards_mitigated</span><span class="o">+=</span><span class="mi">1</span>
-        <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">hazard</span><span class="o">.</span><span class="n">s</span><span class="o">.</span><span class="n">present</span> <span class="ow">and</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">hazard</span><span class="o">.</span><span class="n">s</span><span class="o">.</span><span class="n">mitigated</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">s</span><span class="o">.</span><span class="n">hazards_propagated</span><span class="o">+=</span><span class="mi">1</span>
-
-<span class="kn">from</span> <span class="nn">fmdtools.define.parameter</span> <span class="kn">import</span> <span class="n">Parameter</span>
-<span class="k">class</span> <span class="nc">HazardModel</span><span class="p">(</span><span class="n">Model</span><span class="p">):</span>
-    <span class="vm">__slots__</span><span class="o">=</span><span class="p">()</span>
-    <span class="n">default_sp</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="n">times</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">60</span><span class="p">),</span> <span class="n">dt</span><span class="o">=</span><span class="mf">1.0</span><span class="p">)</span>
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
-        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">add_flow</span><span class="p">(</span><span class="s2">&quot;hazard&quot;</span><span class="p">,</span> <span class="n">Hazard</span><span class="p">)</span>
-
-        <span class="bp">self</span><span class="o">.</span><span class="n">add_fxn</span><span class="p">(</span><span class="s2">&quot;produce_hazard&quot;</span><span class="p">,</span> <span class="n">ProduceHazard</span><span class="p">,</span> <span class="s1">&#39;hazard&#39;</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">add_fxn</span><span class="p">(</span><span class="s2">&quot;detect_hazard&quot;</span><span class="p">,</span> <span class="n">DetectHazard</span><span class="p">,</span> <span class="s1">&#39;hazard&#39;</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">add_fxn</span><span class="p">(</span><span class="s2">&quot;pass_hazard&quot;</span><span class="p">,</span>  <span class="n">PassHazard</span><span class="p">,</span> <span class="s1">&#39;hazard&#39;</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">build</span><span class="p">()</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">demo_model</span> <span class="kn">import</span> <span class="n">ProduceHazard</span><span class="p">,</span> <span class="n">PassStates</span><span class="p">,</span> <span class="n">PassHazard</span><span class="p">,</span> <span class="n">HazardModel</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">inspect</span><span class="o">.</span><span class="n">getsource</span><span class="p">(</span><span class="n">ProduceHazard</span><span class="p">))</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">inspect</span><span class="o">.</span><span class="n">getsource</span><span class="p">(</span><span class="n">PassStates</span><span class="p">))</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">inspect</span><span class="o">.</span><span class="n">getsource</span><span class="p">(</span><span class="n">PassHazard</span><span class="p">))</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">inspect</span><span class="o">.</span><span class="n">getsource</span><span class="p">(</span><span class="n">HazardModel</span><span class="p">))</span>
 </pre></div>
 </div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+class ProduceHazard(Function):
+    &#34;&#34;&#34;Function producing Hazards.&#34;&#34;&#34;
+
+    __slots__ = (&#39;hazard&#39;,)
+    flow_hazard = Hazard
+
+    def dynamic_behavior(self, time):
+        if not time % 4:
+            self.hazard.s.present = True
+        else:
+            self.hazard.s.present = False
+
+class PassStates(State):
+    &#34;&#34;&#34;Whether or not the hazard is ultimately passed or mitigated.&#34;&#34;&#34;
+
+    hazards_mitigated:  int = 0
+    hazards_propagated: int = 0
+
+class PassHazard(Function):
+    &#34;&#34;&#34;Accumulates total hazards/mitigations.&#34;&#34;&#34;
+
+    __slots__ = (&#39;hazard&#39;,)
+    container_s = PassStates
+    flow_hazard = Hazard
+
+    def dynamic_behavior(self, time):
+        if self.hazard.s.present and self.hazard.s.mitigated:
+            self.s.hazards_mitigated += 1
+        elif self.hazard.s.present and not self.hazard.s.mitigated:
+            self.s.hazards_propagated += 1
+
+class HazardModel(FunctionArchitecture):
+    &#34;&#34;&#34;Overall model of the human in context.&#34;&#34;&#34;
+
+    __slots__ = ()
+    default_sp = dict(end_time=60, dt=1.0)
+
+    def init_architecture(self, **kwargs):
+        self.add_flow(&#34;hazard&#34;, Hazard)
+        self.add_fxn(&#34;produce_hazard&#34;, ProduceHazard, &#39;hazard&#39;)
+        self.add_fxn(&#34;detect_hazard&#34;, DetectHazard, &#39;hazard&#39;)
+        self.add_fxn(&#34;pass_hazard&#34;,  PassHazard, &#39;hazard&#39;)
+
+</pre></div></div>
 </div>
 <p>As shown, this model connects the <code class="docutils literal notranslate"><span class="pre">detect_hazard</span></code> with a <code class="docutils literal notranslate"><span class="pre">detect_hazard</span></code> function, which are used (1) to load the system and then to (2) tabulate the number of mitigations.</p>
 <p>Below we show how this translates into simulation results:</p>
@@ -1014,26 +1138,19 @@ array([{&#39;perceive&#39;}, {&#39;perceive&#39;}, {&#39;perceive&#39;}, {&#39;p
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-fxns.produce_hazard.m.mode:    array(61)
-fxns.detect_hazard.a           array(61)
-fxns.detect_hazard.a           array(61)
-fxns.detect_hazard.a           array(61)
-fxns.detect_hazard.a           array(61)
-fxns.detect_hazard.a           array(61)
-fxns.detect_hazard.a           array(61)
-fxns.detect_hazard.a           array(61)
+flows.hazard.s.present:        array(61)
+flows.hazard.s.percieved:      array(61)
+flows.hazard.s.mitigated:      array(61)
+fxns.detect_hazard.aa.acts.perceive: array(61)
+fxns.detect_hazard.aa.acts.act: array(61)
+fxns.detect_hazard.aa.acts.done: array(61)
 fxns.detect_hazard.aa.active_actions: array(61)
 fxns.detect_hazard.m           array(61)
 fxns.detect_hazard.m           array(61)
 fxns.detect_hazard.m.faults.act_failed: array(61)
 fxns.detect_hazard.m.faults.act_unable: array(61)
-fxns.detect_hazard.m.mode:     array(61)
 fxns.pass_hazard.s.hazards_mitigated: array(61)
 fxns.pass_hazard.s.hazards_propagated: array(61)
-fxns.pass_hazard.m.mode:       array(61)
-flows.hazard.s.present:        array(61)
-flows.hazard.s.percieved:      array(61)
-flows.hazard.s.mitigated:      array(61)
 time:                          array(61)
 </pre></div></div>
 </div>
@@ -1203,7 +1320,7 @@ time:                          array(61)
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[39]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">mdlhist_fault</span><span class="o">.</span><span class="n">faulty</span><span class="o">.</span><span class="n">fxns</span><span class="o">.</span><span class="n">detect_hazard</span><span class="o">.</span><span class="n">aa</span><span class="o">.</span><span class="n">actions</span><span class="o">.</span><span class="n">act</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">mdlhist_fault</span><span class="o">.</span><span class="n">faulty</span><span class="o">.</span><span class="n">fxns</span><span class="o">.</span><span class="n">detect_hazard</span><span class="o">.</span><span class="n">aa</span><span class="o">.</span><span class="n">acts</span><span class="o">.</span><span class="n">act</span>
 </pre></div>
 </div>
 </div>
@@ -1213,9 +1330,128 @@ time:                          array(61)
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-m.faults.failed:               array(61)
-m.faults.unable:               array(61)
-m.mode:                        array(61)
+array([act Act
+       - ActionMode(mode=nominal, faults=set()),
+       act Act
+       - ActionMode(mode=nominal, faults=set()),
+       act Act
+       - ActionMode(mode=nominal, faults=set()),
+       act Act
+       - ActionMode(mode=nominal, faults=set()),
+       act Act
+       - ActionMode(mode=nominal, faults=set()),
+       act Act
+       - ActionMode(mode=nominal, faults=set()),
+       act Act
+       - ActionMode(mode=nominal, faults=set()),
+       act Act
+       - ActionMode(mode=nominal, faults=set()),
+       act Act
+       - ActionMode(mode=nominal, faults=set()),
+       act Act
+       - ActionMode(mode=nominal, faults=set()),
+       act Act
+       - ActionMode(mode=nominal, faults=set()),
+       act Act
+       - ActionMode(mode=nominal, faults=set()),
+       act Act
+       - ActionMode(mode=nominal, faults=set()),
+       act Act
+       - ActionMode(mode=nominal, faults=set()),
+       act Act
+       - ActionMode(mode=nominal, faults=set()),
+       act Act
+       - ActionMode(mode=nominal, faults=set()),
+       act Act
+       - ActionMode(mode=nominal, faults=set()),
+       act Act
+       - ActionMode(mode=nominal, faults=set()),
+       act Act
+       - ActionMode(mode=nominal, faults=set()),
+       act Act
+       - ActionMode(mode=nominal, faults=set()),
+       act Act
+       - ActionMode(mode=nominal, faults=set()),
+       act Act
+       - ActionMode(mode=nominal, faults=set()),
+       act Act
+       - ActionMode(mode=nominal, faults=set()),
+       act Act
+       - ActionMode(mode=nominal, faults=set()),
+       act Act
+       - ActionMode(mode=nominal, faults=set()),
+       act Act
+       - ActionMode(mode=nominal, faults=set()),
+       act Act
+       - ActionMode(mode=nominal, faults=set()),
+       act Act
+       - ActionMode(mode=nominal, faults=set()),
+       act Act
+       - ActionMode(mode=nominal, faults=set()),
+       act Act
+       - ActionMode(mode=nominal, faults=set()),
+       act Act
+       - ActionMode(mode=nominal, faults=set()),
+       act Act
+       - ActionMode(mode=nominal, faults=set()),
+       act Act
+       - ActionMode(mode=nominal, faults=set()),
+       act Act
+       - ActionMode(mode=nominal, faults=set()),
+       act Act
+       - ActionMode(mode=nominal, faults=set()),
+       act Act
+       - ActionMode(mode=nominal, faults=set()),
+       act Act
+       - ActionMode(mode=nominal, faults=set()),
+       act Act
+       - ActionMode(mode=nominal, faults=set()),
+       act Act
+       - ActionMode(mode=nominal, faults=set()),
+       act Act
+       - ActionMode(mode=nominal, faults=set()),
+       act Act
+       - ActionMode(mode=nominal, faults=set()),
+       act Act
+       - ActionMode(mode=nominal, faults=set()),
+       act Act
+       - ActionMode(mode=nominal, faults=set()),
+       act Act
+       - ActionMode(mode=nominal, faults=set()),
+       act Act
+       - ActionMode(mode=nominal, faults=set()),
+       act Act
+       - ActionMode(mode=nominal, faults=set()),
+       act Act
+       - ActionMode(mode=nominal, faults=set()),
+       act Act
+       - ActionMode(mode=nominal, faults=set()),
+       act Act
+       - ActionMode(mode=nominal, faults=set()),
+       act Act
+       - ActionMode(mode=nominal, faults=set()),
+       act Act
+       - ActionMode(mode=nominal, faults=set()),
+       act Act
+       - ActionMode(mode=nominal, faults=set()),
+       act Act
+       - ActionMode(mode=nominal, faults=set()),
+       act Act
+       - ActionMode(mode=nominal, faults=set()),
+       act Act
+       - ActionMode(mode=nominal, faults=set()),
+       act Act
+       - ActionMode(mode=nominal, faults=set()),
+       act Act
+       - ActionMode(mode=nominal, faults=set()),
+       act Act
+       - ActionMode(mode=nominal, faults=set()),
+       act Act
+       - ActionMode(mode=nominal, faults=set()),
+       act Act
+       - ActionMode(mode=nominal, faults=set()),
+       act Act
+       - ActionMode(mode=nominal, faults=set())], dtype=object)
 </pre></div></div>
 </div>
 <p>As shown, this fault results in the hazard not being perceived (and thus the hazard propagating)</p>
@@ -1296,7 +1532,6 @@ m.mode:                        array(61)
   <thead>
     <tr style="text-align: right;">
       <th></th>
-      <th>produce_hazard</th>
       <th>detect_hazard</th>
       <th>pass_hazard</th>
       <th>hazard</th>
@@ -1307,47 +1542,42 @@ m.mode:                        array(61)
   <tbody>
     <tr>
       <th>0</th>
+      <td>True</td>
+      <td>False</td>
+      <td>True</td>
       <td>1</td>
-      <td>1</td>
-      <td>1</td>
-      <td>1</td>
-      <td>0</td>
       <td>0.0</td>
     </tr>
     <tr>
       <th>1</th>
+      <td>True</td>
+      <td>False</td>
+      <td>True</td>
       <td>1</td>
-      <td>1</td>
-      <td>1</td>
-      <td>1</td>
-      <td>0</td>
       <td>1.0</td>
     </tr>
     <tr>
       <th>2</th>
+      <td>True</td>
+      <td>False</td>
+      <td>True</td>
       <td>1</td>
-      <td>1</td>
-      <td>1</td>
-      <td>1</td>
-      <td>0</td>
       <td>2.0</td>
     </tr>
     <tr>
       <th>3</th>
+      <td>True</td>
+      <td>False</td>
+      <td>True</td>
       <td>1</td>
-      <td>1</td>
-      <td>1</td>
-      <td>1</td>
-      <td>0</td>
       <td>3.0</td>
     </tr>
     <tr>
       <th>4</th>
+      <td>True</td>
+      <td>False</td>
+      <td>True</td>
       <td>1</td>
-      <td>0</td>
-      <td>1</td>
-      <td>0</td>
-      <td>2</td>
       <td>4.0</td>
     </tr>
     <tr>
@@ -1357,56 +1587,50 @@ m.mode:                        array(61)
       <td>...</td>
       <td>...</td>
       <td>...</td>
-      <td>...</td>
     </tr>
     <tr>
       <th>56</th>
+      <td>True</td>
+      <td>False</td>
+      <td>True</td>
       <td>1</td>
-      <td>0</td>
-      <td>1</td>
-      <td>0</td>
-      <td>2</td>
       <td>56.0</td>
     </tr>
     <tr>
       <th>57</th>
+      <td>True</td>
+      <td>False</td>
+      <td>True</td>
       <td>1</td>
-      <td>0</td>
-      <td>1</td>
-      <td>0</td>
-      <td>2</td>
       <td>57.0</td>
     </tr>
     <tr>
       <th>58</th>
+      <td>True</td>
+      <td>False</td>
+      <td>True</td>
       <td>1</td>
-      <td>0</td>
-      <td>1</td>
-      <td>0</td>
-      <td>2</td>
       <td>58.0</td>
     </tr>
     <tr>
       <th>59</th>
+      <td>True</td>
+      <td>False</td>
+      <td>True</td>
       <td>1</td>
-      <td>0</td>
-      <td>1</td>
-      <td>0</td>
-      <td>2</td>
       <td>59.0</td>
     </tr>
     <tr>
       <th>60</th>
+      <td>True</td>
+      <td>False</td>
+      <td>True</td>
       <td>1</td>
-      <td>0</td>
-      <td>1</td>
-      <td>0</td>
-      <td>2</td>
       <td>60.0</td>
     </tr>
   </tbody>
 </table>
-<p>61 rows × 6 columns</p>
+<p>61 rows × 5 columns</p>
 </div></div>
 </div>
 <div class="nbinput docutils container">
@@ -1518,9 +1742,57 @@ m.mode:                        array(61)
 <p>61 rows × 3 columns</p>
 </div></div>
 </div>
-<p>We can further use <code class="docutils literal notranslate"><span class="pre">draw_from</span></code> to view the state of the ASG. See below:</p>
 <div class="nbinput docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[44]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">mdlhist_fault</span><span class="o">.</span><span class="n">faulty</span><span class="o">.</span><span class="n">fxns</span><span class="o">.</span><span class="n">detect_hazard</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[44]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+aa.acts.perceive:              array(61)
+aa.acts.act:                   array(61)
+aa.acts.done:                  array(61)
+aa.active_actions:             array(61)
+m.faults.perceive_failed:      array(61)
+m.faults.perceive_unable:      array(61)
+m.faults.act_failed:           array(61)
+m.faults.act_unable:           array(61)
+</pre></div></div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[45]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">mdl</span><span class="o">.</span><span class="n">fxns</span><span class="p">[</span><span class="s1">&#39;detect_hazard&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">h</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[45]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+aa.acts.perceive:              array(61)
+aa.acts.act:                   array(61)
+aa.acts.done:                  array(61)
+aa.active_actions:             array(61)
+m.faults.perceive_failed:      array(61)
+m.faults.perceive_unable:      array(61)
+m.faults.act_failed:           array(61)
+m.faults.act_unable:           array(61)
+</pre></div></div>
+</div>
+<p>We can further use <code class="docutils literal notranslate"><span class="pre">draw_from</span></code> to view the state of the ASG. See below:</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[46]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">result_fault</span><span class="o">.</span><span class="n">graph</span><span class="o">.</span><span class="n">draw_from</span><span class="p">(</span><span class="mi">4</span><span class="p">,</span> <span class="n">mdlhist_fault</span><span class="p">)</span>
@@ -1528,7 +1800,7 @@ m.mode:                        array(61)
 </div>
 </div>
 <div class="nboutput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[44]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[46]:
 </pre></div>
 </div>
 <div class="output_area docutils container">
@@ -1540,13 +1812,13 @@ m.mode:                        array(61)
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area docutils container">
-<img alt="../../_images/examples_asg_demo_Action_Sequence_Graph_70_1.png" src="../../_images/examples_asg_demo_Action_Sequence_Graph_70_1.png" />
+<img alt="../../_images/examples_asg_demo_Action_Sequence_Graph_72_1.png" src="../../_images/examples_asg_demo_Action_Sequence_Graph_72_1.png" />
 </div>
 </div>
 <p>Note the lack of a fault at this time-step, despite it being instantiated here. This is because the fault was removed at the end of the same time-step it was added in.</p>
 <p>The ‘unable’ fault, on the other hand, stays throughout the simulation and thus shows up:</p>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[45]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[47]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">endstate_unable</span><span class="p">,</span> <span class="n">mdlhist_unable</span> <span class="o">=</span> <span class="n">prop</span><span class="o">.</span><span class="n">one_fault</span><span class="p">(</span><span class="n">mdl</span><span class="p">,</span> <span class="s1">&#39;detect_hazard&#39;</span><span class="p">,</span><span class="s1">&#39;act_unable&#39;</span><span class="p">,</span> <span class="n">time</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span>
@@ -1557,46 +1829,7 @@ m.mode:                        array(61)
                                 <span class="s1">&#39;flows.hazard.s.present&#39;</span><span class="p">,</span>
                                 <span class="s1">&#39;flows.hazard.s.percieved&#39;</span><span class="p">,</span>
                                 <span class="s1">&#39;flows.hazard.s.mitigated&#39;</span><span class="p">,</span>
-                            <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span><span class="mi">5</span><span class="p">),</span> <span class="n">time_slice</span><span class="o">=</span><span class="p">[</span><span class="mi">4</span><span class="p">])</span>
-</pre></div>
-</div>
-</div>
-<div class="nboutput nblast docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area docutils container">
-<img alt="../../_images/examples_asg_demo_Action_Sequence_Graph_72_0.png" src="../../_images/examples_asg_demo_Action_Sequence_Graph_72_0.png" />
-</div>
-</div>
-<div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[46]:
-</pre></div>
-</div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">endstate_unable</span><span class="o">.</span><span class="n">graph</span><span class="o">.</span><span class="n">draw_from</span><span class="p">(</span><span class="mi">4</span><span class="p">,</span> <span class="n">mdlhist_unable</span><span class="p">)</span>
-</pre></div>
-</div>
-</div>
-<div class="nboutput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[46]:
-</pre></div>
-</div>
-<div class="output_area docutils container">
-<div class="highlight"><pre>
-(&lt;Figure size 1200x1000 with 1 Axes&gt;, &lt;Axes: title={&#39;center&#39;: &#39; t=4&#39;}&gt;)
-</pre></div></div>
-</div>
-<div class="nboutput nblast docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area docutils container">
-<img alt="../../_images/examples_asg_demo_Action_Sequence_Graph_73_1.png" src="../../_images/examples_asg_demo_Action_Sequence_Graph_73_1.png" />
-</div>
-</div>
-<div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[47]:
-</pre></div>
-</div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">endstate_unable</span><span class="p">[</span><span class="s1">&#39;graph.fxns.detect_hazard.aa&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">draw_from</span><span class="p">(</span><span class="mi">4</span><span class="p">,</span> <span class="n">mdlhist_unable</span><span class="p">)</span>
+                            <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">5</span><span class="p">),</span> <span class="n">time_slice</span><span class="o">=</span><span class="p">[</span><span class="mi">4</span><span class="p">])</span>
 </pre></div>
 </div>
 </div>
@@ -1611,6 +1844,45 @@ m.mode:                        array(61)
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[48]:
 </pre></div>
 </div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">endstate_unable</span><span class="o">.</span><span class="n">graph</span><span class="o">.</span><span class="n">draw_from</span><span class="p">(</span><span class="mi">4</span><span class="p">,</span> <span class="n">mdlhist_unable</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[48]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+(&lt;Figure size 1200x1000 with 1 Axes&gt;, &lt;Axes: title={&#39;center&#39;: &#39; t=4&#39;}&gt;)
+</pre></div></div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../../_images/examples_asg_demo_Action_Sequence_Graph_75_1.png" src="../../_images/examples_asg_demo_Action_Sequence_Graph_75_1.png" />
+</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[49]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">endstate_unable</span><span class="p">[</span><span class="s1">&#39;graph.fxns.detect_hazard.aa&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">draw_from</span><span class="p">(</span><span class="mi">4</span><span class="p">,</span> <span class="n">mdlhist_unable</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../../_images/examples_asg_demo_Action_Sequence_Graph_76_0.png" src="../../_images/examples_asg_demo_Action_Sequence_Graph_76_0.png" />
+</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[50]:
+</pre></div>
+</div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">endstate_unable</span><span class="p">[</span><span class="s1">&#39;graph.fxns.detect_hazard.aa&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">draw_from</span><span class="p">(</span><span class="mi">5</span><span class="p">,</span> <span class="n">mdlhist_unable</span><span class="p">)</span>
 </pre></div>
 </div>
@@ -1619,7 +1891,7 @@ m.mode:                        array(61)
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area docutils container">
-<img alt="../../_images/examples_asg_demo_Action_Sequence_Graph_75_0.png" src="../../_images/examples_asg_demo_Action_Sequence_Graph_75_0.png" />
+<img alt="../../_images/examples_asg_demo_Action_Sequence_Graph_77_0.png" src="../../_images/examples_asg_demo_Action_Sequence_Graph_77_0.png" />
 </div>
 </div>
 <div class="nbinput nblast docutils container">

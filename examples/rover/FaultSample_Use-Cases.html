@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Defining Fault Sampling Approaches in fmdtools &mdash; fmdtools 2.0-beta-3 documentation</title>
+  <title>Defining Fault Sampling Approaches in fmdtools &mdash; fmdtools 2.0-rc-1 documentation</title>
       <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
       <link rel="stylesheet" href="../../_static/nbsphinx-code-cells.css" type="text/css" />
@@ -71,7 +71,7 @@
 <li class="toctree-l2"><a class="reference internal" href="../../docs/Development%20Guide.html#intro-to-fmdtools">Intro to fmdtools</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="../../docs/Intro_to_fmdtools.html">Intro to resilience modelling, simulation, and visualization in Python with fmdtools.</a><ul>
 <li class="toctree-l4"><a class="reference internal" href="../../docs/Intro_to_fmdtools.html#author-daniel-hulse">Author: Daniel Hulse</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/Intro_to_fmdtools.html#version-2-0-beta-3">Version: 2.0-beta-3</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../docs/Intro_to_fmdtools.html#version-2-0-rc-1">Version: 2.0-rc-1</a></li>
 </ul>
 </li>
 <li class="toctree-l3"><a class="reference internal" href="../../docs/Intro_to_fmdtools.html#overview">Overview</a></li>
@@ -283,26 +283,58 @@
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="../Examples.html#multiflow-demo">Multiflow Demo</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="../multiflow_demo/Multiflow_and_Commsflow_Demonstration.html">Demonstration on Using MultiFlow and CommsFlow</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../multiflow_demo/Multiflow_and_Commsflow_Demonstration.html">Demonstration on Using MultiFlow and CommsFlow</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../multiflow_demo/Multiflow_and_Commsflow_Demonstration.html#Bulding-Flows">Bulding Flows</a></li>
+</ul>
+</li>
 </ul>
 </li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../../docs/Glossary.html">Glossary</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../docs/fmdtools.html">Module Reference</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="../../docs/fmdtools.define.html">fmdtools.define package</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="../../docs/fmdtools.define.html#fmdtools-define-block">fmdtools.define.block</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../../docs/fmdtools.define.html#module-fmdtools.define.common">fmdtools.define.common</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../../docs/fmdtools.define.html#module-fmdtools.define.flow">fmdtools.define.flow</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../../docs/fmdtools.define.html#module-fmdtools.define.mode">fmdtools.define.mode</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../../docs/fmdtools.define.html#fmdtools-define-model">fmdtools.define.model</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../../docs/fmdtools.define.html#module-fmdtools.define.parameter">fmdtools.define.parameter</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../../docs/fmdtools.define.html#module-fmdtools.define.rand">fmdtools.define.rand</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../../docs/fmdtools.define.html#module-fmdtools.define.state">fmdtools.define.state</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../../docs/fmdtools.define.html#module-fmdtools.define.time">fmdtools.define.time</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../../docs/fmdtools.define.html#module-fmdtools.define.geom">fmdtools.define.geom</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../docs/fmdtools.define.html">fmdtools.define</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../docs/fmdtools.define.architecture.html">fmdtools.define.architecture</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.define.architecture.html#fmdtools-define-architecture-base">fmdtools.define.architecture.base</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.define.architecture.html#fmdtools-define-architecture-action">fmdtools.define.architecture.action</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.define.architecture.html#fmdtools-define-architecture-component">fmdtools.define.architecture.component</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.define.architecture.html#fmdtools-define-architecture-function">fmdtools.define.architecture.function</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.define.architecture.html#fmdtools-define-architecture-geom">fmdtools.define.architecture.geom</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../../docs/fmdtools.define.block.html">fmdtools.define.block</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.define.block.html#module-fmdtools.define.block.base">fmdtools.define.block.base</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.define.block.html#module-fmdtools.define.block.action">fmdtools.define.block.action</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.define.block.html#module-fmdtools.define.block.component">fmdtools.define.block.component</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.define.block.html#fmdtools-define-block-function">fmdtools.define.block.function</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../../docs/fmdtools.define.container.html">fmdtools.define.container</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.define.container.html#fmdtools-define-container-base">fmdtools.define.container.base</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.define.container.html#module-0">fmdtools.define.container.mode</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.define.container.html#module-fmdtools.define.container.state">fmdtools.define.container.state</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.define.container.html#fmdtools-define-container-parameter">fmdtools.define.container.parameter</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.define.container.html#module-fmdtools.define.container.rand">fmdtools.define.container.rand</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.define.container.html#module-fmdtools.define.container.time">fmdtools.define.container.time</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.define.container.html#fmdtools-define-container-geom">fmdtools.define.container.geom</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.define.container.html#fmdtools-define-container-coords">fmdtools.define.container.coords</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../../docs/fmdtools.define.flow.html">fmdtools.define.flow</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.define.flow.html#module-fmdtools.define.flow.base">fmdtools.define.flow.base</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.define.flow.html#module-fmdtools.define.flow.multiflow">fmdtools.define.flow.multiflow</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.define.flow.html#module-fmdtools.define.flow.commsflow">fmdtools.define.flow.commsflow</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../../docs/fmdtools.define.object.html">fmdtools.define.object</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.define.object.html#module-fmdtools.define.object.base">fmdtools.define.object.base</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.define.object.html#module-fmdtools.define.object.timer">fmdtools.define.object.timer</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.define.object.html#module-fmdtools.define.object.geom">fmdtools.define.object.geom</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.define.object.html#module-fmdtools.define.object.coords">fmdtools.define.object.coords</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../../docs/fmdtools.define.html#fmdtools-define-base">fmdtools.define.base</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../docs/fmdtools.define.html#module-fmdtools.define.environment">fmdtools.define.environment</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../../docs/fmdtools.define.html#module-fmdtools.define.coords">fmdtools.define.coords</a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="../../docs/fmdtools.sim.html">fmdtools.sim</a><ul>
@@ -312,7 +344,7 @@
 <li class="toctree-l3"><a class="reference internal" href="../../docs/fmdtools.sim.html#module-fmdtools.sim.search">fmdtools.sim.search</a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="../../docs/fmdtools.analyze.html">fmdtools.analyze package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../docs/fmdtools.analyze.html">fmdtools.analyze</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="../../docs/fmdtools.analyze.html#module-fmdtools.analyze.common">fmdtools.analyze.common</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../docs/fmdtools.analyze.html#module-fmdtools.analyze.result">fmdtools.analyze.result</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../docs/fmdtools.analyze.html#module-fmdtools.analyze.history">fmdtools.analyze.history</a></li>
@@ -394,19 +426,19 @@
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-class Power(FxnBlock):
+class Power(Function):
     &#34;&#34;&#34;Rover power supply.&#34;&#34;&#34;
 
     __slots__ = (&#34;ee_15&#34;, &#34;ee_5&#34;, &#34;ee_12&#34;, &#34;switch&#34;)
-    _init_s = PowerState
-    _init_m = PowerMode
-    _init_ee_15 = EE
-    _init_ee_5 = EE
-    _init_ee_12 = EE
-    _init_switch = Switch
+    container_s = PowerState
+    container_m = PowerMode
+    flow_ee_15 = EE
+    flow_ee_5 = EE
+    flow_ee_12 = EE
+    flow_switch = Switch
 
     def static_behavior(self, time):
-        &#34;&#34;&#34;Determining power use based on mode.&#34;&#34;&#34;
+        &#34;&#34;&#34;Determine power use based on mode.&#34;&#34;&#34;
         if self.m.in_mode(&#34;off&#34;):
             self.off_power()
         elif self.m.in_mode(&#34;supply&#34;):
@@ -429,19 +461,19 @@ class Power(FxnBlock):
         self.s.limit(charge=(0, 100))
 
     def short_power(self):
-        &#34;&#34;&#34;there is a short&#34;&#34;&#34;
+        &#34;&#34;&#34;Power in case of a short has normal voltage.&#34;&#34;&#34;
         self.ee_5.s.v = 5
         self.ee_12.s.v = 12
         self.ee_15.s.v = 15
 
     def no_charge_power(self):
-        &#34;&#34;&#34; batter is out of charge&#34;&#34;&#34;
+        &#34;&#34;&#34;Battery is out of charge.&#34;&#34;&#34;
         self.ee_5.s.v = 0
         self.ee_12.s.v = 0
         self.ee_15.s.v = 0
 
     def off_power(self):
-        &#34;&#34;&#34;power supply is shut off&#34;&#34;&#34;
+        &#34;&#34;&#34;Power supply is shut off.&#34;&#34;&#34;
         self.ee_5.s.put(v=0, a=0)
         self.ee_12.s.put(v=0, a=0)
         self.ee_15.s.put(v=0, a=0)
@@ -449,7 +481,7 @@ class Power(FxnBlock):
             self.m.set_mode(&#34;supply&#34;)
 
     def supply_power(self):
-        &#34;&#34;&#34;supply power&#34;&#34;&#34;
+        &#34;&#34;&#34;Power supply is in supply mode.&#34;&#34;&#34;
         if self.s.charge &gt; 0:
             self.ee_5.s.v = 5
             self.ee_12.s.v = 12
@@ -460,18 +492,18 @@ class Power(FxnBlock):
             self.m.set_mode(&#34;off&#34;)
 
     def power_usage(self):
-        &#39;&#39;&#39;calculates the power usage in general&#39;&#39;&#39;
+        &#34;&#34;&#34;Calculate the power usage in general.&#34;&#34;&#34;
         self.s.power = (1.0 + self.ee_12.s.mul(&#34;v&#34;, &#34;a&#34;) +
                         self.ee_5.s.mul(&#34;v&#34;, &#34;a&#34;) + self.ee_15.s.mul(&#34;v&#34;, &#34;a&#34;))
 
     def charge_power_usage(self):
-        &#39;&#39;&#39;power usage during the battery is charging&#39;&#39;&#39;
+        &#34;&#34;&#34;Calculate the power usage when the battery charges.&#34;&#34;&#34;
         self.s.power = -1
         if self.s.charge == 100:
             self.m.set_mode(&#34;off&#34;)
 
     def short_power_usage(self):
-        &#39;&#39;&#39;power usage is doubled when there is a short&#39;&#39;&#39;
+        &#34;&#34;&#34;Calculate power usage when there is a short (calculated as double).&#34;&#34;&#34;
         self.s.power = self.s.power * 2
         if self.s.charge == 0:
             self.m.set_mode(&#34;no_charge&#34;)
@@ -496,7 +528,7 @@ class Power(FxnBlock):
 <div class="highlight"><pre>
 class PowerMode(Mode):
     &#34;&#34;&#34;
-    Possible modes for Power function
+    Possible modes for Power function.
 
     Modes
     -------
@@ -712,12 +744,9 @@ FaultSample of scenarios:
 <div class="output_area docutils container">
 <div class="highlight"><pre>
 {&#39;power&#39;: PhaseMap({&#39;off&#39;: [0.0, 0.0], &#39;supply&#39;: [1.0, 149.0]}, {&#39;off&#39;: {&#39;off&#39;}, &#39;supply&#39;: {&#39;supply&#39;}}),
- &#39;operator&#39;: PhaseMap({&#39;nominal&#39;: [0.0, 149.0]}, {&#39;nominal&#39;: {&#39;nominal&#39;}}),
- &#39;communications&#39;: PhaseMap({&#39;nominal&#39;: [0.0, 149.0]}, {&#39;nominal&#39;: {&#39;nominal&#39;}}),
  &#39;perception&#39;: PhaseMap({&#39;off&#39;: [0.0, 1.0], &#39;feed&#39;: [2.0, 149.0]}, {&#39;off&#39;: {&#39;off&#39;}, &#39;feed&#39;: {&#39;feed&#39;}}),
- &#39;plan_path&#39;: PhaseMap({&#39;standby&#39;: [0.0, 4.0], &#39;drive&#39;: [5.0, 148.0], &#39;standby1&#39;: [149.0, 149.0]}, {&#39;standby&#39;: {&#39;standby1&#39;, &#39;standby&#39;}, &#39;drive&#39;: {&#39;drive&#39;}}),
- &#39;override&#39;: PhaseMap({&#39;off&#39;: [0.0, 1.0], &#39;standby&#39;: [2.0, 149.0]}, {&#39;off&#39;: {&#39;off&#39;}, &#39;standby&#39;: {&#39;standby&#39;}}),
- &#39;drive&#39;: PhaseMap({&#39;nominal&#39;: [0.0, 149.0]}, {&#39;nominal&#39;: {&#39;nominal&#39;}})}
+ &#39;plan_path&#39;: PhaseMap({&#39;standby&#39;: [0.0, 4.0], &#39;drive&#39;: [5.0, 148.0], &#39;standby1&#39;: [149.0, 149.0]}, {&#39;standby&#39;: {&#39;standby&#39;, &#39;standby1&#39;}, &#39;drive&#39;: {&#39;drive&#39;}}),
+ &#39;override&#39;: PhaseMap({&#39;off&#39;: [0.0, 1.0], &#39;standby&#39;: [2.0, 149.0]}, {&#39;off&#39;: {&#39;off&#39;}, &#39;standby&#39;: {&#39;standby&#39;}})}
 </pre></div></div>
 </div>
 <p>Which can be visualized using:</p>
@@ -849,8 +878,28 @@ FaultSample of scenarios:
 </div>
 </div>
 <p>To enable multiple samples to be generated for different faultdomains accross the model, we can use <code class="docutils literal notranslate"><span class="pre">SampleApproach</span></code>, e.g.:</p>
-<div class="nbinput nblast docutils container">
+<div class="nbinput docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[21]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">phases</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[21]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+{&#39;power&#39;: PhaseMap({&#39;off&#39;: [0.0, 0.0], &#39;supply&#39;: [1.0, 149.0]}, {&#39;off&#39;: {&#39;off&#39;}, &#39;supply&#39;: {&#39;supply&#39;}}),
+ &#39;perception&#39;: PhaseMap({&#39;off&#39;: [0.0, 1.0], &#39;feed&#39;: [2.0, 149.0]}, {&#39;off&#39;: {&#39;off&#39;}, &#39;feed&#39;: {&#39;feed&#39;}}),
+ &#39;plan_path&#39;: PhaseMap({&#39;standby&#39;: [0.0, 4.0], &#39;drive&#39;: [5.0, 148.0], &#39;standby1&#39;: [149.0, 149.0]}, {&#39;standby&#39;: {&#39;standby&#39;, &#39;standby1&#39;}, &#39;drive&#39;: {&#39;drive&#39;}}),
+ &#39;override&#39;: PhaseMap({&#39;off&#39;: [0.0, 1.0], &#39;standby&#39;: [2.0, 149.0]}, {&#39;off&#39;: {&#39;off&#39;}, &#39;standby&#39;: {&#39;standby&#39;}})}
+</pre></div></div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[22]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">sa</span> <span class="o">=</span> <span class="n">SampleApproach</span><span class="p">(</span><span class="n">Rover</span><span class="p">(),</span> <span class="n">phasemaps</span><span class="o">=</span><span class="n">phases</span><span class="p">)</span>
@@ -858,7 +907,7 @@ FaultSample of scenarios:
 <span class="n">sa</span><span class="o">.</span><span class="n">add_faultdomain</span><span class="p">(</span><span class="s2">&quot;drive&quot;</span><span class="p">,</span> <span class="s2">&quot;fault&quot;</span><span class="p">,</span> <span class="s2">&quot;drive&quot;</span><span class="p">,</span> <span class="s2">&quot;hmode_1&quot;</span><span class="p">)</span>
 <span class="n">sa</span><span class="o">.</span><span class="n">add_faultdomain</span><span class="p">(</span><span class="s2">&quot;plan_path&quot;</span><span class="p">,</span> <span class="s2">&quot;all_fxn_modes&quot;</span><span class="p">,</span> <span class="s2">&quot;plan_path&quot;</span><span class="p">)</span>
 <span class="n">sa</span><span class="o">.</span><span class="n">add_faultdomain</span><span class="p">(</span><span class="s2">&quot;power&quot;</span><span class="p">,</span> <span class="s2">&quot;all_fxn_modes&quot;</span><span class="p">,</span> <span class="s2">&quot;power&quot;</span><span class="p">)</span>
-<span class="n">sa</span><span class="o">.</span><span class="n">add_faultsample</span><span class="p">(</span><span class="s2">&quot;drive&quot;</span><span class="p">,</span> <span class="s2">&quot;fault_phases&quot;</span><span class="p">,</span> <span class="s2">&quot;drive&quot;</span><span class="p">,</span> <span class="n">phasemap</span><span class="o">=</span><span class="s2">&quot;drive&quot;</span><span class="p">)</span>
+<span class="n">sa</span><span class="o">.</span><span class="n">add_faultsample</span><span class="p">(</span><span class="s2">&quot;drive&quot;</span><span class="p">,</span> <span class="s2">&quot;fault_phases&quot;</span><span class="p">,</span> <span class="s2">&quot;drive&quot;</span><span class="p">,</span> <span class="n">phasemap</span><span class="o">=</span><span class="s2">&quot;plan_path&quot;</span><span class="p">)</span>
 <span class="n">sa</span><span class="o">.</span><span class="n">add_faultsample</span><span class="p">(</span><span class="s2">&quot;plan_path&quot;</span><span class="p">,</span> <span class="s2">&quot;fault_phases&quot;</span><span class="p">,</span> <span class="s2">&quot;plan_path&quot;</span><span class="p">,</span> <span class="n">phasemap</span><span class="o">=</span><span class="s2">&quot;plan_path&quot;</span><span class="p">)</span>
 <span class="n">sa</span><span class="o">.</span><span class="n">add_faultsample</span><span class="p">(</span><span class="s2">&quot;power&quot;</span><span class="p">,</span> <span class="s2">&quot;fault_phases&quot;</span><span class="p">,</span> <span class="s2">&quot;power&quot;</span><span class="p">,</span> <span class="n">phasemap</span><span class="o">=</span><span class="s2">&quot;power&quot;</span><span class="p">)</span>
 <span class="n">sa</span><span class="o">.</span><span class="n">prune_scenarios</span><span class="p">()</span>
@@ -866,7 +915,7 @@ FaultSample of scenarios:
 </div>
 </div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[22]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[23]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">sa</span>
@@ -874,7 +923,7 @@ FaultSample of scenarios:
 </div>
 </div>
 <div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[22]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[23]:
 </pre></div>
 </div>
 <div class="output_area docutils container">
@@ -885,7 +934,7 @@ SampleApproach for rover with:
 </pre></div></div>
 </div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[23]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[24]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">sa</span><span class="o">.</span><span class="n">scenarios</span><span class="p">()</span>
@@ -893,12 +942,13 @@ SampleApproach for rover with:
 </div>
 </div>
 <div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[23]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[24]:
 </pre></div>
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-[SingleFaultScenario(sequence={2.0: Injection(faults={&#39;plan_path&#39;: [&#39;no_con&#39;]}, disturbances={})}, times=(2.0,), function=&#39;plan_path&#39;, fault=&#39;no_con&#39;, rate=0.0001, name=&#39;plan_path_no_con_t2p0&#39;, time=2.0, phase=&#39;standby&#39;),
+[SingleFaultScenario(sequence={76.0: Injection(faults={&#39;drive&#39;: [&#39;hmode_1&#39;]}, disturbances={})}, times=(76.0,), function=&#39;drive&#39;, fault=&#39;hmode_1&#39;, rate=0.02857142857142857, name=&#39;drive_hmode_1_t76p0&#39;, time=76.0, phase=&#39;drive&#39;),
+ SingleFaultScenario(sequence={2.0: Injection(faults={&#39;plan_path&#39;: [&#39;no_con&#39;]}, disturbances={})}, times=(2.0,), function=&#39;plan_path&#39;, fault=&#39;no_con&#39;, rate=0.0001, name=&#39;plan_path_no_con_t2p0&#39;, time=2.0, phase=&#39;standby&#39;),
  SingleFaultScenario(sequence={2.0: Injection(faults={&#39;plan_path&#39;: [&#39;crash&#39;]}, disturbances={})}, times=(2.0,), function=&#39;plan_path&#39;, fault=&#39;crash&#39;, rate=0.0001, name=&#39;plan_path_crash_t2p0&#39;, time=2.0, phase=&#39;standby&#39;),
  SingleFaultScenario(sequence={76.0: Injection(faults={&#39;plan_path&#39;: [&#39;no_con&#39;]}, disturbances={})}, times=(76.0,), function=&#39;plan_path&#39;, fault=&#39;no_con&#39;, rate=0.0001, name=&#39;plan_path_no_con_t76p0&#39;, time=76.0, phase=&#39;drive&#39;),
  SingleFaultScenario(sequence={76.0: Injection(faults={&#39;plan_path&#39;: [&#39;crash&#39;]}, disturbances={})}, times=(76.0,), function=&#39;plan_path&#39;, fault=&#39;crash&#39;, rate=0.0001, name=&#39;plan_path_crash_t76p0&#39;, time=76.0, phase=&#39;drive&#39;),
@@ -912,7 +962,7 @@ SampleApproach for rover with:
 <h2>Propagating Faults<a class="headerlink" href="#Propagating-Faults" title="Permalink to this heading"></a></h2>
 <p>Given the <code class="docutils literal notranslate"><span class="pre">FaultSample</span></code> approach, faults can then be propagated through the model to get results. Note that these faults can be sampled in parallel if desired using a user-provided pool (see the parallel pool tutorial in the <code class="docutils literal notranslate"><span class="pre">\pump</span> <span class="pre">example</span></code> folder).</p>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[24]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[25]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">res</span><span class="p">,</span> <span class="n">hist</span> <span class="o">=</span> <span class="n">prop</span><span class="o">.</span><span class="n">fault_sample</span><span class="p">(</span><span class="n">Rover</span><span class="p">(),</span> <span class="n">fs_pwr</span><span class="p">)</span>
@@ -924,11 +974,11 @@ SampleApproach for rover with:
 </div>
 <div class="output_area stderr docutils container">
 <div class="highlight"><pre>
-SCENARIOS COMPLETE: 100%|██████████| 2/2 [00:00&lt;00:00, 10.26it/s]
+SCENARIOS COMPLETE: 100%|██████████| 2/2 [00:00&lt;00:00, 10.00it/s]
 </pre></div></div>
 </div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[25]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[26]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">res</span>
@@ -936,7 +986,7 @@ SCENARIOS COMPLETE: 100%|██████████| 2/2 [00:00&lt;00:00, 10
 </div>
 </div>
 <div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[25]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[26]:
 </pre></div>
 </div>
 <div class="output_area docutils container">
@@ -953,6 +1003,8 @@ power_no_charge_t0p0.endclass.end_dist: 28.91724385770989
 power_no_charge_t0p0                 0.0
 power_no_charge_t0p0.endclass.faults: {&#39;power&#39;: [&#39;no_charge&#39;]}
 power_no_charge_t0p0incomplete mission faulty
+power_no_charge_t0p0.endclass.end_x: 0.0
+power_no_charge_t0p0.endclass.end_y: 0.0
 power_no_charge_t0p0.endclass.endpt: array(2)
 power_short_t75p0.endclass.rate:   1e-05
 power_short_t75p0.endclass.cost:       0
@@ -966,6 +1018,8 @@ power_short_t75p0.endclass.end_dist: 2.0873256513551914
 power_short_t75p0.en 0.14980808415676147
 power_short_t75p0.endclass.faults: {&#39;power&#39;: [&#39;short&#39;]}
 power_short_t75p0.enincomplete mission faulty
+power_short_t75p0.endclass.end_x: 27.46715394950123
+power_short_t75p0.endclass.end_y: 0.9015499296277614
 power_short_t75p0.endclass.endpt: array(2)
 nominal.endclass.rate:               1.0
 nominal.endclass.cost:                 0
@@ -979,12 +1033,14 @@ nominal.endclass.end_dist: 2.0873256513551914
 nominal.endclass.tot_deviation: 0.14980808415676147
 nominal.endclass.faults:              {}
 nominal.endclass.classification: incomplete mission
+nominal.endclass.end_x: 27.46715394950123
+nominal.endclass.end_y: 0.9015499296277614
 nominal.endclass.endpt:         array(2)
 </pre></div></div>
 </div>
 <p>These responses can be visualized over the given faults:</p>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[26]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[27]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">fmea</span> <span class="o">=</span> <span class="n">FMEA</span><span class="p">(</span><span class="n">res</span><span class="p">,</span> <span class="n">fs_pwr</span><span class="p">,</span> <span class="n">metrics</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;end_dist&quot;</span><span class="p">,</span> <span class="s2">&quot;line_dist&quot;</span><span class="p">,</span> <span class="s2">&quot;tot_deviation&quot;</span><span class="p">])</span>
@@ -993,7 +1049,7 @@ nominal.endclass.endpt:         array(2)
 </div>
 </div>
 <div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[26]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[27]:
 </pre></div>
 </div>
 <div class="output_area rendered_html docutils container">
@@ -1040,7 +1096,7 @@ nominal.endclass.endpt:         array(2)
 </div></div>
 </div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[27]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[28]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">fmea</span><span class="o">.</span><span class="n">as_plots</span><span class="p">(</span><span class="n">cols</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
@@ -1048,7 +1104,7 @@ nominal.endclass.endpt:         array(2)
 </div>
 </div>
 <div class="nboutput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[27]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[28]:
 </pre></div>
 </div>
 <div class="output_area docutils container">
@@ -1064,12 +1120,12 @@ nominal.endclass.endpt:         array(2)
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area docutils container">
-<img alt="../../_images/examples_rover_FaultSample_Use-Cases_52_1.png" src="../../_images/examples_rover_FaultSample_Use-Cases_52_1.png" />
+<img alt="../../_images/examples_rover_FaultSample_Use-Cases_53_1.png" src="../../_images/examples_rover_FaultSample_Use-Cases_53_1.png" />
 </div>
 </div>
 <p>Or over time/any other variable:</p>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[28]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[29]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">comp</span> <span class="o">=</span> <span class="n">Comparison</span><span class="p">(</span><span class="n">res</span><span class="p">,</span> <span class="n">fs_pwr</span><span class="p">,</span> <span class="n">metrics</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;end_dist&quot;</span><span class="p">,</span> <span class="s2">&quot;line_dist&quot;</span><span class="p">,</span> <span class="s2">&quot;tot_deviation&quot;</span><span class="p">],</span> <span class="n">factors</span> <span class="o">=</span><span class="p">[</span><span class="s1">&#39;time&#39;</span><span class="p">])</span>
@@ -1078,7 +1134,7 @@ nominal.endclass.endpt:         array(2)
 </div>
 </div>
 <div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[28]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[29]:
 </pre></div>
 </div>
 <div class="output_area rendered_html docutils container">
@@ -1123,7 +1179,7 @@ nominal.endclass.endpt:         array(2)
 </div></div>
 </div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[29]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[30]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">comp</span><span class="o">.</span><span class="n">as_plots</span><span class="p">(</span><span class="n">cols</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
@@ -1131,7 +1187,7 @@ nominal.endclass.endpt:         array(2)
 </div>
 </div>
 <div class="nboutput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[29]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[30]:
 </pre></div>
 </div>
 <div class="output_area docutils container">
@@ -1147,7 +1203,7 @@ nominal.endclass.endpt:         array(2)
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area docutils container">
-<img alt="../../_images/examples_rover_FaultSample_Use-Cases_55_1.png" src="../../_images/examples_rover_FaultSample_Use-Cases_55_1.png" />
+<img alt="../../_images/examples_rover_FaultSample_Use-Cases_56_1.png" src="../../_images/examples_rover_FaultSample_Use-Cases_56_1.png" />
 </div>
 </div>
 </section>
