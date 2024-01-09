@@ -101,4 +101,5 @@ if __name__=="__main__":
 
     # after creating test report, update the badge using this in powershell:
     # !Powershell.exe -Command "genbadge tests"
+    # for coverage report, remove .gitignore from /reports/coverage
     # !Powershell.exe -Command "genbadge coverage"
