@@ -21,7 +21,7 @@ The latest public version of fmdtools can be downloaded from the [fmdtools githu
    git clone https://github.com/nasa/fmdtools.git
 ```
    
-For development and use of this version (e.g., for tutorials and models), we recommended then installing this package using `pip`:
+For development and use of this version (e.g., for tutorials and models), we recommended installing this package using `pip`:
 
 ```
    pip install -e "/path/to/fmdtools" 
@@ -78,36 +78,36 @@ ffmpeg
 # license: (LGPL version) https://www.ffmpeg.org/legal.html
 ```
 
-These must be installed within the system environment (e.g. using ``conda install packagename``) them to enable the specific features/uses in the repository. 
+These must be installed within the system environment (e.g. using ``conda install packagename``) to enable their specific features/uses in the repository. 
 
 Additionally, the following python packages are not included but are necessary for development/testing of the code:
 ```
 deap
-# used for: optimization of rover faults
+# used for optimization of rover faults
 # license: (LGPL-3.0) https://github.com/DEAP/deap/blob/master/LICENSE.txt
 pymoo
-# used for: optimization of tank example
+# used for optimization of tank example
 # license: (Apache 2.0) https://github.com/anyoptimization/pymoo/blob/main/LICENSE
 nbmake
-# used for: for notebook tests
+# used for notebook tests
 # license: (Apache 2.0) https://github.com/treebeardtech/nbmake/blob/main/LICENSE
 pytest-html  
-# used for: development test report generation
+# used for development test report generation
 # license: (MPL-3) https://github.com/pytest-dev/pytest-html/blob/master/LICENSE
 coverage
-# used for: measuring test coverage
+# used for measuring test coverage
 # license: (Apache 2.0) https://github.com/nedbat/coveragepy/blob/master/NOTICE.txt
 pytest-cov
-# used for: measuring test coverage
+# used for measuring test coverage
 # license: (MIT) https://github.com/pytest-dev/pytest-cov/blob/master/LICENSE
 genbadge
-# used for: generating test badges for the README
+# used for generating test badges for the README
 # license: (BSD 3-Clause) https://github.com/smarie/python-genbadge/blob/main/LICENSE
 multiprocess
-# used for: parallism tutorial profiling
+# used for parallism tutorial profiling
 # license: (BSD-3 Clause) https://github.com/uqfoundation/multiprocess/blob/master/LICENSE      
 pathos          
-# used for: parallelism tutorial profiling
+# used for parallelism tutorial profiling
 # license: (BSD-3 Clause) https://github.com/uqfoundation/pathos/blob/master/LICENSE
 ```
 They can be installed using ``pip install packagename``.
