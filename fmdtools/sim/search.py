@@ -1573,6 +1573,7 @@ ex_pa.add_problem("ex_scenprob", ex_scenprob, inputs={"x0": ["time"]})
 ex_pa.add_problem("ex_dp", ex_dp, inputs={"x1": ["s.y"]})
 # ex_pa.ex_dp_f1_full(3, 3)
 
+
 class DynamicInterface():
     """
     Interface for dynamic search of model states (e.g., AST).
@@ -1624,10 +1625,9 @@ class DynamicInterface():
             self.desired_result = [desired_result]
         else:
             self.desired_result = desired_result
-        self.mdl = mdl.new(**mdl_kwargs, track=track)
-        timerange = np.arange(self.t, self.t_max+2*mdl.sp.dt, mdl.sp.dt)
-        self.hist = mdl.create_hist(timerange)
-        mdl.init_time_hist()
+        self.mdl = mdl.new(**mdl_kwargs, track=track, sp={'end_time': self.t_max})
+        self.mdl.init_time_hist()
+        self.hist = self.mdl.h
         self.run_stochastic = run_stochastic
         self.use_end_condition = use_end_condition
 
@@ -1655,7 +1655,7 @@ class DynamicInterface():
             self.mdl.update_seed(seed)
         self.mdl.propagate(self.t, fxnfaults=faults, disturbances=disturbances,
                            run_stochastic=self.run_stochastic)
-        self.hist.log(self.mdl, self.t_ind, time=self.t)
+        self.mdl.log_hist(self.t_ind, self.t, 0)
 
         returns = {}
         for result in self.desired_result:
@@ -1690,7 +1690,8 @@ class DynamicInterface():
             end = propagate.check_end_condition(self.mdl,
                                                 self.use_end_condition, self.t)
         if end:
-            propagate.cut_mdlhist(self.log, self.t_ind)
+            self.hist.cut(self.t_ind)
+            self.mdl.h.cut(self.t_ind)
         return end
 
 

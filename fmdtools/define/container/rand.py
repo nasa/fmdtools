@@ -102,7 +102,8 @@ class Rand(BaseContainer):
         rand_states = asdict(self.s)
         if auto_update_only:
             rand_states = {state: vals for state,
-                           vals in rand_states if hasattr(self.s, state+"_update")}
+                           vals in rand_states.items()
+                           if hasattr(self.s, state+"_update")}
         return rand_states
 
     def set_rand_state(self, statename, methodname, *args):

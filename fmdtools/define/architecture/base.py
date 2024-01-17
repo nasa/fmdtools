@@ -262,7 +262,7 @@ class Architecture(Simulable):
         """Get dictionary of random states throughout the model objs."""
         rand_states = {}
         role_objs = self.get_flex_role_objs()
-        for objname, obj in role_objs.values():
+        for objname, obj in role_objs.items():
             if hasattr(obj, 'get_rand_states'):
                 rand_state = obj.get_rand_states(auto_update_only=auto_update_only)
                 if rand_state:
