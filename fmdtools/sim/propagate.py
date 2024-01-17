@@ -53,7 +53,6 @@ Private Methods:
 import numpy as np
 import copy
 import tqdm
-import dill
 import os
 from fmdtools.define.base import get_var, t_key
 from fmdtools.sim.sample import SampleApproach
@@ -142,7 +141,7 @@ save_args : dict (optional)
 
     where mdlhistargs and endclassargs are dictionaries of save arguments, e.g.::
 
-    {'filename':'filename.pkl', 'filetype':'pickle', 'overwrite':True}
+    {'filename':'filename.npz', 'filetype':'npz', 'overwrite':True}
 
     and indiv is an (optional) bool specifying whether to save results individually
     (in a folder) or as a monolythic file.
@@ -915,7 +914,6 @@ def nested_sample(mdl, ps, get_phasemap=False, faultdomains={}, faultsamples={},
     """
     save_args = kwargs.get('save_args', {})
     check_overwrite(save_args)
-    save_app = save_args.pop("apps", False)
     max_mem, showprogress, pool, close_p = unpack_mult_kwargs(kwargs)
     sim_kwarg = pack_sim_kwargs(**kwargs)
     run_kwargs_nest = pack_run_kwargs(**kwargs)
@@ -935,9 +933,6 @@ def nested_sample(mdl, ps, get_phasemap=False, faultdomains={}, faultsamples={},
         nest_hist[scenname] = hist
         apps[scenname] = app
     save_helper(save_args, nest_res, nest_hist)
-    if save_app:
-        with open(save_app['filename'], 'wb') as file_handle:
-            dill.dump(apps, file_handle)
     close_pool(kwargs)
     return nest_res.flatten(), nest_hist.flatten(), apps
 
