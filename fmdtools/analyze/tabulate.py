@@ -21,6 +21,7 @@ import pandas as pd
 import numpy as np
 from fmdtools.analyze.result import Result
 from fmdtools.analyze.common import multiplot_helper, consolidate_legend
+from fmdtools.analyze.common import set_empty_multiplots
 from fmdtools.analyze.common import multiplot_legend_title, is_numeric, setup_plot
 from matplotlib import colors as mcolors
 from matplotlib import pyplot as plt
@@ -245,8 +246,8 @@ class BaseTab(UserDict):
         # add figure
         if not ax:
             fig, ax = plt.subplots(figsize=figsize)
+        # get values
         met_dict = self[metric]
-
         # sort into color vs tick bars
         all_factors = [*met_dict.keys()]
         if color_factor:
@@ -354,6 +355,8 @@ class BaseTab(UserDict):
                                    ax=axs[i], fig=fig, suppress_legend=True,
                                    **kwargs)
 
+        set_empty_multiplots(axs, len(metrics), cols,
+                             xlab_ang=kwargs.get('xlab_ang', -90))
         color_factor = kwargs.get('color_factor', '')
         if not color_factor:
             legend_loc = False

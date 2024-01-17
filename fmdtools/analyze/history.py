@@ -20,7 +20,7 @@ from fmdtools.analyze.common import bootstrap_confidence_interval, get_sub_inclu
 from fmdtools.define.base import get_var
 from fmdtools.analyze.common import unpack_plot_values, phase_overlay
 from fmdtools.analyze.common import multiplot_legend_title, multiplot_helper
-from fmdtools.analyze.common import plot_err_hist, setup_plot
+from fmdtools.analyze.common import plot_err_hist, setup_plot, set_empty_multiplots
 from fmdtools.analyze.common import mark_times, consolidate_legend
 import numpy as np
 import copy
@@ -682,6 +682,7 @@ class History(Result):
             else:
                 for ts in time_slice:
                     ax.axvline(x=ts, color='k', label=time_slice_label)
+        set_empty_multiplots(axs, len(plot_values), cols, xlab_ang=0.0, grid=True)
         multiplot_legend_title(grouphists, axs, ax, legend_loc, title,
                                v_padding, h_padding, title_padding, legend_title)
         return fig, axs
@@ -702,6 +703,7 @@ class History(Result):
             ax.set_ylabel(ylabel)
         if title:
             ax.set_title(title)
+        ax.set_xlim(times[0], times[-1])
         return fig, ax
 
     def get_mean_std_errhist(self, value):

@@ -657,16 +657,24 @@ if __name__ == "__main__":
     mg.draw()
 
     c = an.tabulate.Comparison(endclasses, faultapp, default_stat=np.mean,
-                               metrics=['cost', 'rate'],
+                               metrics=['cost', 'rate', 'expected_cost'],
                                ci_metrics=['cost'])
     c.as_table()
     c.sort_by_factor("time")
     c.as_plot("cost")
-    c.as_plots("cost", "rate")
+    c.as_plots("cost", "rate", "expected_cost", cols=2)
 
     fmea = an.tabulate.FMEA(endclasses, faultapp)
     fmea.as_table()
     fmea.sort_by_metric("cost")
     fmea.as_plot("cost", color_factor="function")
+
+    # test cases for multiplot legend/axis sharing
+    mdlhists.plot_line("flows.ee_1.s.current", "flows.sig_1.s.power",
+                       "move_water.s.eff")
+    mdlhists.plot_line("flows.ee_1.s.current", "flows.sig_1.s.power",
+                       "move_water.s.eff", "wat_1.s.flowrate", cols=3)
+
+    endclasses.plot_metric_dist("rate", "cost", "expected_cost")
     #t = an.tabulate.factor_metrics(endclasses, faultapp, ci_metrics=['cost'], default_stat=np.mean)
     #an.plot.factor_metrics(t)
