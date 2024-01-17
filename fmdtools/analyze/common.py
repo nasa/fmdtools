@@ -202,6 +202,7 @@ def plot_err_hist(err_hist, ax=None, fig=None, figsize=(6, 4), boundtype='fill',
         ax.set_ylabel(ylabel)
     if title:
         ax.set_title(title)
+    ax.set_xlim(err_hist['time'][0], err_hist['time'][-1])
     return fig, ax
 
 
@@ -258,10 +259,34 @@ def multiplot_helper(cols, *plot_values, figsize='default', titles={}, sharex=Tr
     return fig, axs, cols, rows, subplot_titles
 
 
+def set_empty_multiplots(axs, num_plots, cols, xlab_ang=-90, grid=False,
+                         set_above=True):
+    """Align empty axes with the rest of the multiplot."""
+    num_empty = len(axs) - num_plots
+    starting_ax = len(axs) - num_empty
+    for i, ax in enumerate(axs):
+        if i >= starting_ax:
+            # clear empty box
+            ax.set_frame_on(False)
+            ax.get_xaxis().set_visible(False)
+            ax.get_yaxis().set_visible(False)
+            # set x tick labels for axis above
+            if set_above:
+                ax_above = axs[i-cols]
+                ax_set = axs[num_plots-1]
+                ax_above.tick_params(axis='x', rotation=xlab_ang, reset=True)
+                ax_above.set_xlabel(ax_set.get_xlabel())
+                labels = [t.get_text() for t in ax_set.get_xticklabels()]
+                ax_above.set_xticks(ax_set.get_xticks(), labels=labels)
+                # turn back on the reset grid
+                if grid:
+                    ax_above.grid(axis='x')
+
+
 def multiplot_legend_title(groupmetrics, axs, ax,
                            legend_loc=False, title='', v_padding=None, h_padding=None,
                            title_padding=0.0, legend_title=None):
-    """ Helper function for multiplot legends and titles"""
+    """Helper function for multiplot legends and titles."""
     if len(groupmetrics) > 1 and legend_loc != False:
         ax.legend()
         handles, labels = ax.get_legend_handles_labels()
@@ -269,9 +294,6 @@ def multiplot_legend_title(groupmetrics, axs, ax,
         ax_l = axs[legend_loc]
         by_label = dict(zip(labels, handles))
         if ax_l != ax and legend_loc in [-1, len(axs)]:
-            ax_l.set_frame_on(False)
-            ax_l.get_xaxis().set_visible(False)
-            ax_l.get_yaxis().set_visible(False)
             ax_l.legend(by_label.values(), by_label.keys(),
                         prop={'size': 8}, loc='center', title=legend_title)
         else:

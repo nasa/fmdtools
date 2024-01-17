@@ -40,6 +40,7 @@ from fmdtools.analyze.common import to_include_keys, is_numeric, nan_to_x, is_bo
 from fmdtools.analyze.common import bootstrap_confidence_interval, join_key
 from fmdtools.analyze.common import get_sub_include, unpack_plot_values
 from fmdtools.analyze.common import multiplot_legend_title, multiplot_helper
+from fmdtools.analyze.common import set_empty_multiplots
 
 
 def file_check(filename, overwrite):
@@ -982,6 +983,7 @@ class Result(UserDict):
                 x = [*endclasses.get_values(plot_value).values()]
                 ax.hist(x, bins, label=group, **local_kwargs)
 
+        set_empty_multiplots(axs, len(plot_values), cols, xlab_ang=0, set_above=False)
         multiplot_legend_title(groupmetrics, axs, ax, legend_loc, title,
                                v_padding, h_padding, title_padding, legend_title)
         return fig, axs
