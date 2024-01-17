@@ -125,24 +125,24 @@ class TankTests(unittest.TestCase, CommonTests):
         self.assertEqual(mdl.fxns['human'].aa.acts['look'].m.failrate, ratecalc)
 
     def test_save_load_nominal(self):
-        for extension in [".pkl", ".csv", ".json"]:
+        for extension in [".npz", ".csv", ".json"]:
             fname = "tank_hist"+extension, "tank_res"+extension
             self.check_onerun_save(self.mdl, 'nominal', *fname)
 
     def test_save_load_onefault(self):
-        for extension in [".pkl", ".csv", ".json"]:
+        for extension in [".npz", ".csv", ".json"]:
             faultscen=('import_water', 'stuck', 5)
             fname = "tank_hist"+extension, "tank_res"+extension
             self.check_onerun_save(self.mdl, 'one_fault', *fname, faultscen=faultscen)
 
     def test_save_load_multfault(self):
-        for extension in [".pkl", ".csv", ".json"]:
+        for extension in [".npz", ".csv", ".json"]:
             faultscen = {5: {"import_water": ['stuck']}, 10: {"store_water": ["leak"]}}
             fname = "tank_hist"+extension, "tank_res"+extension
             self.check_onerun_save(self.mdl, 'sequence', *fname, faultscen=faultscen)
 
     def test_save_load_singlefaults(self):
-        self.check_sf_save(self.mdl, "tank_res.pkl", "tank_hists.pkl")
+        self.check_sf_save(self.mdl, "tank_res.npz", "tank_hists.npz")
         self.check_sf_save(self.mdl, "tank_res.csv", "tank_hists.csv")
         self.check_sf_save(self.mdl, "tank_res.json", "tank_hists.json")
 
@@ -153,7 +153,7 @@ class TankTests(unittest.TestCase, CommonTests):
         self.check_sf_isave(self.mdl, *indiv_names, "json")
 
     def test_param_sample_save(self):
-        self.check_ps_save(self.mdl, self.ps, "tank_res.pkl", "tank_hists.pkl")
+        self.check_ps_save(self.mdl, self.ps, "tank_res.npz", "tank_hists.npz")
         self.check_ps_save(self.mdl, self.ps, "tank_res.csv", "tank_hists.csv")
         self.check_ps_save(self.mdl, self.ps, "tank_res.json", "tank_hists.json")
 
@@ -165,7 +165,7 @@ class TankTests(unittest.TestCase, CommonTests):
 
     def test_nested_sample_save(self):
         self.check_ns_save(self.mdl, self.ps, self.faultdomains, self.faultsamples,
-                           "tank_res.pkl", "tank_hists.pkl")
+                           "tank_res.npz", "tank_hists.npz")
         self.check_ns_save(self.mdl, self.ps, self.faultdomains, self.faultsamples,
                            "tank_res.csv", "tank_hists.csv")
         self.check_ns_save(self.mdl, self.ps, self.faultdomains, self.faultsamples,
@@ -181,7 +181,7 @@ class TankTests(unittest.TestCase, CommonTests):
                             *indiv_names, "json")
 
     def test_fault_sample_save(self):
-        self.check_fs_save(self.mdl, self.fs, "tank_res.pkl", "tank_hists.pkl")
+        self.check_fs_save(self.mdl, self.fs, "tank_res.npz", "tank_hists.npz")
         self.check_fs_save(self.mdl, self.fs, "tank_res.csv", "tank_hists.csv")
         self.check_fs_save(self.mdl, self.fs, "tank_res.json", "tank_hists.json")
 

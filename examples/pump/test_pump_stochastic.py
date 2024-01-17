@@ -102,7 +102,7 @@ class StochasticPumpTests(unittest.TestCase, CommonTests):
     def test_param_sample_save(self):
         ps = ParameterSample()
         ps.add_variable_replicates([], replicates=10)
-        self.check_ps_save(self.mdl, ps, "stochpump_res.pkl", "spump_hist.pkl",
+        self.check_ps_save(self.mdl, ps, "stochpump_res.npz", "spump_hist.npz",
                            run_stochastic=True, pool=mp.Pool(4))
         self.check_ps_save(self.mdl, ps, "stochpump_res.csv", "spump_hist.csv",
                            run_stochastic=True, pool=mp.Pool(4))
@@ -122,7 +122,7 @@ class StochasticPumpTests(unittest.TestCase, CommonTests):
         ps.add_variable_replicates([], replicates=10)
         faultdomains = {'fd': (('all', ), {})}
         faultsamples = {'fs': (('fault_phases', 'fd'), {})}
-        self.check_ns_save(self.mdl, ps, faultdomains, faultsamples, "spump_res.pkl", "spump_hist.pkl", run_stochastic=True, pool=mp.Pool(4))
+        self.check_ns_save(self.mdl, ps, faultdomains, faultsamples, "spump_res.npz", "spump_hist.npz", run_stochastic=True, pool=mp.Pool(4))
         self.check_ns_save(self.mdl, ps, faultdomains, faultsamples, "spump_res.csv", "spump_hist.csv", run_stochastic=True, pool=mp.Pool(4))
         self.check_ns_save(self.mdl, ps, faultdomains, faultsamples, "spump_res.json", "spump_hist.json", run_stochastic=True, pool=mp.Pool(4))
 

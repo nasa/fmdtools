@@ -14,7 +14,7 @@ Private Methods:
 
 - :func:`file_check`: Check if files exists and whether to overwrite the file
 - :func:`auto_filetype`: Helper function that automatically determines the filetype
-  (pickle, csv, or json) of a given filename
+  (npz, csv, or json) of a given filename
 - :func:`create_indiv_filename`: Helper function that creates an individualized name for
   a file given the general filename and an individual id
 - :func:`clean_resultdict_keys`: Helper function for recreating results dictionary keys
@@ -64,15 +64,15 @@ def auto_filetype(filename, filetype=""):
     if not filetype:
         if '.' not in filename:
             raise Exception("No file extension in: " + filename)
-        if filename[-4:] == '.pkl':
-            filetype = "pickle"
+        if filename[-4:] == '.npz':
+            filetype = "npz"
         elif filename[-4:] == '.csv':
             filetype = "csv"
         elif filename[-5:] == '.json':
             filetype = "json"
         else:
             raise Exception("Invalid File Type in: " + filename +
-                            ", ensure extension is pkl, csv, or json ")
+                            ", ensure extension is npz, csv, or json ")
     return filetype
 
 
@@ -196,7 +196,11 @@ class Result(UserDict):
                 if len(val_rep) > 40:
                     val_rep = val_rep[:20]
                 form = '{:>'+str(40-len(val_rep))+'}'
-                vv = form.format("array("+str(len(val))+")")
+                try:
+                    lenstr = str(len(val))
+                except TypeError:
+                    lenstr = str(1)
+                vv = form.format("array("+lenstr+")")
                 str_rep = str_rep+val_rep+vv+'\n'
             elif isinstance(val, Result):
                 res = val.__repr__(ind+1)
@@ -545,8 +549,9 @@ class Result(UserDict):
 
     def save(self, filename, filetype="", overwrite=False, result_id=''):
         """
-        Saves a given result variable (endclasses or mdlhists) to a file filename.
-        Files can be saved as pkl, csv, or json.
+        Save a given result variable (endclasses or mdlhists) to a file filename.
+
+        Files can be saved as npz, csv, or json.
 
         Parameters
         ----------
@@ -562,18 +567,20 @@ class Result(UserDict):
             For individual results saving. Places an identifier for the result in the
             file. The default is ''.
         """
-        import dill
         import json
         import csv
         file_check(filename, overwrite)
 
         variable = self
         filetype = auto_filetype(filename, filetype)
-        if filetype == 'pickle':
+        if filetype == 'npz':
             with open(filename, 'wb') as file_handle:
                 if result_id:
-                    variable = {result_id: variable}
-                dill.dump(variable, file_handle)
+                    res_to_save = Result({result_id: self})
+                else:
+                    res_to_save = self
+                res_to_save = res_to_save.flatten()
+                np.savez(filename, **res_to_save)
         elif filename[-4:] == '.csv':
             # add support for nested dict mdlhist using flatten_hist?
             variable = variable.flatten()
@@ -991,8 +998,8 @@ class Result(UserDict):
 
 def load(filename, filetype="", renest_dict=True, indiv=False, Rclass=Result):
     """
-    Loads a given (endclasses or mdlhists) results dictionary from a (pickle/csv/json)
-    file.
+    Load a given (endclasses or mdlhists) results dictionary from a (npz/csv/json) file.
+
     e.g. a file saved using process.save_result or save_args in propagate functions.
 
     Parameters
@@ -1016,16 +1023,14 @@ def load(filename, filetype="", renest_dict=True, indiv=False, Rclass=Result):
     result : Result/History
         Corresponding result/hist object with data loaded from the file.
     """
-    import dill
     import json
     import pandas
     if not os.path.exists(filename):
         raise Exception("File does not exist: "+filename)
     filetype = auto_filetype(filename, filetype)
-    if filetype == 'pickle':
-        with open(filename, 'rb') as file_handle:
-            resultdict = dill.load(file_handle)
-        file_handle.close()
+    if filetype == 'npz':
+        loaded = np.load(filename)
+        resultdict = {k: v[()] for k, v in loaded.items()}
     elif filetype == 'csv':  # add support for nested dict mdlhist using flatten_hist?
         if indiv:
             resulttab = pandas.read_csv(filename, skiprows=1)
