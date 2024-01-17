@@ -81,23 +81,24 @@ if __name__=="__main__":
 
     # for testing longer-running notebooks
     # retcode = pytest.main(["--nbmake", *slow_notebooks])
+    # retcode = pytest.main(["--nbmake", "examples/pump/AST_Sampling.ipynb"])
 
     # for testing all unittests
     # retcode = pytest.main(["--continue-on-collection-errors"])
 
     # for creating comprehensive test report:
 
-    retcode = pytest.main(["--cov-report",
-                           "html:reports/coverage",
-                           "--cov-report",
-                           "xml:reports/coverage/coverage.xml",
-                           "--cov",
-                           "--html=./reports/junit/report.html",
-                           "--junitxml=./reports/junit/junit.xml",
-                           "--overwrite",
-                           "--doctest-modules",
-                           "--nbmake",
-                           "--continue-on-collection-errors"])
+    # retcode = pytest.main(["--cov-report",
+    #                        "html:reports/coverage",
+    #                        "--cov-report",
+    #                        "xml:reports/coverage/coverage.xml",
+    #                        "--cov",
+    #                        "--html=./reports/junit/report.html",
+    #                        "--junitxml=./reports/junit/junit.xml",
+    #                        "--overwrite",
+    #                        "--doctest-modules",
+    #                        "--nbmake",
+    #                        "--continue-on-collection-errors"])
 
     # after creating test report, update the badge using this in powershell:
     # !Powershell.exe -Command "genbadge tests"
