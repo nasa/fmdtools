@@ -38,6 +38,7 @@ class WatState(State):
 
 
 class Liquid(Flow):
+    __slots__ = ()
     container_s = WatState
 
 
@@ -47,6 +48,7 @@ class SigState(State):
 
 
 class Signal(Flow):
+    __slots__ = ()
     container_s = SigState
 
 
@@ -61,6 +63,7 @@ class TransportLiquidMode(Mode):
 
 
 class ImportLiquid(Function):
+
     __slots__ = ('sig', 'watout')
     container_s = TransportLiquidState
     container_m = TransportLiquidMode
@@ -210,6 +213,7 @@ class HumanASG(ActionArchitecture):
 
 
 class HumanActions(Function):
+    __slots__ = ('valve1_sig', 'tank_sig', 'valve2_sig')
     container_p = HumanParam
     container_m = Mode
     arch_aa = HumanASG
@@ -251,6 +255,7 @@ class LookMode(Mode):
 
 
 class Look(Action):
+    __slots__ = ()
     container_m = LookMode
 
     def looked(self):
@@ -266,6 +271,7 @@ class DetectMode(Mode):
 
 
 class Detect(Action):
+    __slots__ = ('tank_sig', 'detect_sig')
     container_m = DetectMode
     flow_detect_sig = Signal
     flow_tank_sig = Signal
@@ -300,6 +306,7 @@ class ReachMode(Mode):
 
 
 class Reach(Action):
+    __slots__ = ()
     container_m = ReachMode
 
     def reached(self):
@@ -314,6 +321,7 @@ class GraspMode(Mode):
 
 
 class Grasp(Action):
+    __slots__ = ()
     container_m = GraspMode
 
     def grasped(self):
@@ -331,6 +339,7 @@ class TurnMode(Mode):
 
 
 class Turn(Action):
+    __slots__ = ('detect_sig', 'valve1_sig', 'valve2_sig')
     container_m = TurnMode
     flow_detect_sig = Signal
     flow_valve1_sig = Signal

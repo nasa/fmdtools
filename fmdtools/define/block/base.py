@@ -419,6 +419,7 @@ class Block(Simulable):
     __slots__ = ['s', 'm']
     default_track = ['s', 'm', 'r', 't', 'i']
     roletypes = ['container', 'flow']
+    check_dict_creation = True
 
     def __init__(self, name='', flows={}, h={}, **kwargs):
         """
@@ -449,6 +450,7 @@ class Block(Simulable):
         # finally, allow for user-defined role/state changing
         self.init_block(**kwargs)
         self.init_hist(h=h)
+        self.check_slots()
 
     def init_block(self, **kwargs):
         """Placeholder initialization method to set initial states etc."""

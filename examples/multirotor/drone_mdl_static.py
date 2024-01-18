@@ -29,6 +29,7 @@ class EEState(State):
 class EE(Flow):
     """Electrical Energy Flow."""
 
+    __slots__ = ()
     container_s = EEState
 
 
@@ -41,6 +42,7 @@ class ForceState(State):
 class Force(Flow):
     """Force flow."""
 
+    __slots__ = ()
     container_s = ForceState
 
 
@@ -63,6 +65,7 @@ class ControlState(State):
 class Control(Flow):
     """Control Flow."""
 
+    __slots__ = ()
     container_s = ControlState
 
 
@@ -106,6 +109,7 @@ class DOFParam(Parameter):
 class DOFs(Flow):
     """Flow defining the Drone degrees of freedom."""
 
+    __slots__ = ()
     container_s = DOFstate
     container_p = DOFParam
 
@@ -171,6 +175,7 @@ class DesTrajState(State):
 class DesTraj(Flow):
     """Desired trajectory flow."""
 
+    __slots__ = ()
     container_s = DesTrajState
 
 
@@ -461,6 +466,8 @@ class AffectDOFMode(Mode):
 class BaseLine(object):
     """Base class for Lines that includes fault logic affecting states."""
 
+    __slots__ = ()
+
     def calc_faults(self):
         """Modify AffectDOF states based on faults."""
         self.s.put(e_ti=1.0, e_to=1.0)
@@ -731,6 +738,7 @@ class ViewModes(Mode):
 class ViewEnvironment(Function):
     """Drone camera placeholder."""
 
+    __slots__ = ('dofs',)
     container_m = ViewModes
     flow_dofs = DOFs
 

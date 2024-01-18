@@ -144,6 +144,7 @@ class AffectDOFArch(ComponentArchitecture):
 class AffectDOF(AffectDOFDynamic):
     """Rotor locomotion (multi-component extension)."""
 
+    __slots__ = ()
     container_s = OverallAffectDOFState
     arch_ca = AffectDOFArch
 
@@ -223,6 +224,7 @@ class AffectDOF(AffectDOFDynamic):
 class Line(Component, BaseLine):
     """Individual version of a line (extends BaseLine in static model)."""
 
+    __slots__ = ()
     container_s = AffectDOFState
     container_m = AffectDOFMode
 

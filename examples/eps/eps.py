@@ -28,6 +28,8 @@ class GenericState(State):
 
 
 class GenericFlow(Flow):
+
+    __slots__ = ()
     container_s = GenericState
 
 
@@ -36,6 +38,7 @@ class SigState(State):
 
 
 class Signal(Flow):
+    __slots__ = ()
     container_s = SigState
 
 
@@ -46,17 +49,23 @@ class ImportEEModes(Mode):
 
 
 class ImportEE(Function):
+
     __slots__ = ("ee_out",)
     container_m = ImportEEModes
     flow_ee_out = GenericFlow
     flownames = {"ee_1": "ee_out"}
-    """ Static model representation is the same as the dynamic model respresentation, except in this case 
-    there is no opportunity vector. Thus the self.assoc_modes function takes a dictionary of modes with 
-    just the vector of failure distribution and results cost. e.g. {'modename':[rate, cost]}.
-    
-    Also note that this model sets up the probability model differently--instead of specifying an overall failure rate
-    for the function, one instead specifies an individual rate for eaach mode.
-    
+    """
+    ImportEE in static modelling case.
+
+    Static model representation is the same as the dynamic model respresentation, except
+    in this case there is no opportunity vector. Thus the self.assoc_modes function
+    takes a dictionary of modes with just the vector of failure distribution and results
+    cost. e.g. {'modename':[rate, cost]}.
+
+    Also note that this model sets up the probability model differently--instead of
+    specifying an overall failure rate for the function, one instead specifies an
+    individual rate for eaach mode.
+
     Both representations can be used--this just shows this representation.
     """
 
@@ -77,6 +86,7 @@ class ImportSigModes(Mode):
 
 
 class ImportSig(Function):
+
     __slots__ = ("sig_out",)
     container_m = ImportSigModes
     flow_sig_out = Signal
@@ -97,6 +107,7 @@ class StoreEEModes(Mode):
 
 
 class StoreEE(Function):
+
     __slots__ = ("ee_in", "ee_out")
     container_m = StoreEEModes
     flow_ee_in = GenericFlow
@@ -130,6 +141,7 @@ class SupplyEEModes(Mode):
 
 
 class SupplyEE(Function):
+
     __slots__ = ("ee_in", "ee_out", "heat_out")
     container_m = SupplyEEModes
     flow_ee_in = GenericFlow
@@ -171,6 +183,7 @@ class DistEEModes(Mode):
 
 
 class DistEE(Function):
+
     __slots__ = ("sig_in", "ee_in", "ee_m", "ee_h", "ee_o")
     container_m = DistEEModes
     flow_sig_in = Signal
@@ -221,6 +234,7 @@ class ExportHEModes(Mode):
 
 
 class ExportHE(Function):
+
     __slots__ = ("he",)
     container_m = ExportHEModes
     flow_he = GenericFlow
@@ -236,6 +250,7 @@ class ExportHE(Function):
 
 
 class ExportME(Function):
+
     __slots__ = ("me",)
     flow_me = GenericFlow
 
@@ -244,6 +259,7 @@ class ExportME(Function):
 
 
 class ExportOE(Function):
+
     __slots__ = ("oe",)
     flow_oe = GenericFlow
 
@@ -260,6 +276,7 @@ class EEtoMEModes(Mode):
 
 
 class EEtoME(Function):
+
     __slots__ = ("ee_in", "me", "he_out")
     container_m = EEtoMEModes
     flow_ee_in = GenericFlow
@@ -305,6 +322,7 @@ class EEtoHEModes(Mode):
 
 
 class EEtoHE(Function):
+
     __slots__ = ("ee_in", "he")
     container_m = EEtoHEModes
     flow_ee_in = GenericFlow
@@ -341,6 +359,7 @@ class EEtoOEModes(Mode):
 
 
 class EEtoOE(Function):
+
     __slots__ = ("ee_in", "oe", "he_out")
     container_m = EEtoOEModes
     flow_ee_in = GenericFlow
@@ -368,6 +387,7 @@ class EEtoOE(Function):
 
 
 class EPS(FunctionArchitecture):
+
     __slots__ = ()
     default_track = {"flows": ["he", "me", "oe"]}
     default_sp = {'end_time': 0}

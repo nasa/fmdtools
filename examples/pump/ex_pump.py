@@ -52,6 +52,7 @@ class WaterStates(State):
 class Water(Flow):
     """Flow connecting water from input to pump."""
 
+    __slots__ = ()
     container_s = WaterStates
 
 
@@ -65,6 +66,7 @@ class EEStates(State):
 class Electricity(Flow):
     """Flow connecting electricity from input to pump."""
 
+    __slots__ = ()
     container_s = EEStates
 
 
@@ -77,6 +79,7 @@ class SignalStates(State):
 class Signal(Flow):
     """Flow connecting signal from input to pump."""
 
+    __slots__ = ()
     container_s = SignalStates
 
 
@@ -294,7 +297,7 @@ class ImportSig(Function):
         In this case, the power turns on at t=5 and turns back off at t=50.
         """
         if self.m.has_fault('no_sig'):
-            self.sig_out.power = 0.0
+            self.sig_out.s.power = 0.0
             # an open circuit means no voltage is exported
         else:
             if time < 5:

@@ -29,6 +29,7 @@ class MultiFlow(Flow):
     """
 
     slots = ['__dict__']
+    check_dict_creation = False
 
     def __init__(self, name='', glob=[], s={}, p={}, track=['s']):
         self.locals = []

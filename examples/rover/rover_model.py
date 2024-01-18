@@ -294,12 +294,14 @@ class PosState(State):
 class Pos(Flow):
     """Rover position/velocity flow."""
 
+    __slots__ = ()
     container_s = PosState
 
 
 class Pos_Signal(Flow):
     """Rover position signal flow."""
 
+    __slots__ = ()
     container_s = PosState
 
 
@@ -313,6 +315,7 @@ class EEState(State):
 class EE(Flow):
     """Electricity flow."""
 
+    __slots__ = ()
     container_s = EEState
 
 
@@ -344,6 +347,7 @@ class VideoState(State):
 class Video(Flow):
     """Video flow."""
 
+    __slots__ = ()
     container_s = VideoState
 
 
@@ -366,6 +370,7 @@ class ControlState(State):
 class Control(Flow):
     """Control flow."""
 
+    __slots__ = ()
     container_s = ControlState
 
 
@@ -378,12 +383,14 @@ class SwitchState(State):
 class Switch(Flow):
     """Power switch."""
 
+    __slots__ = ()
     container_s = SwitchState
 
 
 class Comms(Flow):
     """External communications flow."""
 
+    __slots__ = ()
     container_s = PosState
 
 
@@ -396,6 +403,7 @@ class OverrideState(ControlState):
 class OverrideComms(Flow):
     """Override communications flow."""
 
+    __slots__ = ()
     container_s = OverrideState
 
 
@@ -410,6 +418,7 @@ class FaultStates(State):
 class FaultSig(Flow):
     """Rover fault signal."""
 
+    __slots__ = ()
     container_s = FaultStates
 
 
