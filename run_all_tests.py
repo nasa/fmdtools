@@ -59,7 +59,8 @@ if __name__=="__main__":
                       "examples/rover/Model_Structure_Visualization_Tutorial.ipynb",
                       "examples/rover/FaultSample_Use-Cases.ipynb",
                       "examples/rover/Rover_Setup_Notebook.ipynb",
-                      "examples/tank/Tank_Analysis.ipynb"
+                      "examples/tank/Tank_Analysis.ipynb",
+                      "examples/taxiway/Paper_Notebook.ipynb"
                       ]
 
     # for testing notebooks during development:

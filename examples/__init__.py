@@ -1,1 +1,1 @@
-__all__ = ['asg_demo', 'eps', 'multirotor', 'pump', 'rover', 'tank']
+__all__ = ['asg_demo', 'eps', 'multirotor', 'pump', 'rover', 'tank', 'taxiway']

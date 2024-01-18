@@ -198,9 +198,31 @@ The Rover model showcases more advanced methodologies that can be used in fmdtoo
 Multiflow Demo
 +++++++++++++++++++++++++++++++++++++++++++++
 
-The multiflows example is limited to the model in the file `multiflow_demo.py`, which shows basic usage of the :class:`fmdtools.define.flow.MultiFlow` and :class:`fmdtools.define.flow.CommsFlow` flow structures. `Multiflow and Commsflow Demonstration <..examples/multiflow_demo/MultiFlow_and_Commsflow_Demonstation.ipynb>`_ is a tutorialized version of that file discussing the step by step creation and use of `fmdtools.analyze.graph.ModelTypeGraph` to view model types.
+The multiflow demo example is limited to the model in the file `multiflow_demo.py`, which shows basic usage of the :class:`fmdtools.define.flow.MultiFlow` and :class:`fmdtools.define.flow.CommsFlow` flow structures. `Multiflow and Commsflow Demonstration <..examples/multiflow_demo/MultiFlow_and_Commsflow_Demonstation.ipynb>`_ is a tutorialized version of that file discussing the step by step creation and use of `fmdtools.analyze.graph.ModelTypeGraph` to view model types.
 
 .. toctree::
   :hidden:
 
   ../examples/multiflow_demo/Multiflow_and_Commsflow_Demonstration.ipynb
+
+Taxiway
++++++++++++++++++++++++++++++++++++++++++++++
+
+The taxiway modelling example shows how to create a multiagent, systems-of-systems model in fmdtools using the case study of (piloted and unpiloted) aircraft taxiing on a taxiway. Specifically, this example shows how to model, test, and simulate different agents individually and then compose them in a combined functional architecture.
+
+A demo is provided in `Paper Notebook <../examples/taxiway/Paper_Notebook.ipynb>`_, which shows basic analysis of this model in two scenarios.
+
+The major support files are:
+
+- `common.py`, which provides the base methods/classes for the models,
+
+- `asset.py` and `test_asset.py`, which models and tests the individual assets (aircraft etc), respectively,
+
+- `ATC.py`, which models the air traffic control,
+
+- `model.py` and `test_model.py`, which models and tests, respectively, the assets and ATC in a combined architecture.
+
+.. toctree::
+   :hidden:
+
+   ../examples/taxiway/Paper_Notebook.ipynb
