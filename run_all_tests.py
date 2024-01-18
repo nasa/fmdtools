@@ -43,7 +43,7 @@ if __name__=="__main__":
                        "examples/multirotor/drone_mdl_dynamic.py",
                        "examples/multirotor/drone_mdl_hierarchical.py"]
 
-    # retcode = pytest.main(["--doctest-modules", *doctest_modules])
+    retcode = pytest.main(["--doctest-modules", *doctest_modules])
 
     # retcode = pytest.main(["--html=./reports/junit/report.html",
     #                        "--self-contained-html",

@@ -6,6 +6,8 @@ from fmdtools.define.block.base import Block
 class Component(Block):
     """Superclass for components (most attributes inherited from Block superclass)."""
 
+    __slots__ = ()
+
     def behavior(self, time):
         """
         Simulate behavior provided (placeholder).

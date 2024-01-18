@@ -11,6 +11,8 @@ from fmdtools.sim.sample import FaultSample, FaultDomain, ParameterSample
 
 
 class MoveWatDynamic(MoveWat):
+
+    __slots__ = ()
     default_sp = {'end_time': 50}
 
     def static_loading(self, time):

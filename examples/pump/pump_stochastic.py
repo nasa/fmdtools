@@ -28,6 +28,7 @@ class ImportEERand(Rand, copy_default=True):
 
 
 class ImportEE(DetImportEE):
+
     __slots__ = ()
     container_r = ImportEERand
 
@@ -61,22 +62,23 @@ class ImportSigRand(Rand):
 
 
 class ImportSig(DetImportSig):
+
     __slots__ = ()
     container_r = ImportSigRand
 
     def behavior(self, time):
         if self.m.has_fault('no_sig'):
-            self.sig_out.power = 0.0  # an open circuit means no voltage is exported
+            self.sig_out.s.power = 0.0  # an open circuit means no voltage is exported
         else:
             if time < 5:
-                self.sig_out.power = 0.0
+                self.sig_out.s.power = 0.0
                 self.r.s.to_default('sig_noise')
             elif time < 50:
                 if not time % 5:
                     self.r.set_rand_state('sig_noise', 'choice', [1.0, 0.9, 1.1])
-                self.sig_out.power = 1.0*self.r.s.sig_noise
+                self.sig_out.s.power = 1.0*self.r.s.sig_noise
             else:
-                self.sig_out.power = 0.0
+                self.sig_out.s.power = 0.0
                 self.r.s.to_default()
 
 
@@ -95,6 +97,7 @@ class MoveWatRand(Rand):
 
 
 class MoveWat(DetMoveWat):
+
     __slots__ = ()
     container_s = MoveWatStates
     container_r = MoveWatRand
@@ -111,6 +114,7 @@ from examples.pump.ex_pump import Pump as DetPump
 
 
 class Pump(DetPump):
+
     __slots__ = ()
     default_track = 'all'
     container_r = Rand

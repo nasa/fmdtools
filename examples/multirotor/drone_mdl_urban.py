@@ -140,6 +140,7 @@ class UrbanDroneEnvironment(Environment):
 class AffectDOF(AffectDOFRural):
     """Adaptation of AffectDOF for urban environment."""
 
+    __slots__ = ('environment',)
     flow_environment = UrbanDroneEnvironment
 
     def get_fall_dist(self):
@@ -171,6 +172,7 @@ class ComputerVisionMode(Mode):
 class ComputerVision(Component):
     """Component for percieving if a landing location is occupied."""
 
+    __slots__ = ()
     container_m = ComputerVisionMode
 
     def check_if_occupied(self, environment, dofs):
@@ -213,6 +215,7 @@ class PlanPathParam(Parameter):
 class PlanPath(PlanPathRural):
     """Path planning adaptation for urban environment."""
 
+    __slots__ = ('environment',)
     flow_environment = UrbanDroneEnvironment
     arch_ca = VisionArch
     container_p = PlanPathParam
@@ -272,6 +275,7 @@ class PlanPath(PlanPathRural):
 class HoldPayload(HoldPayloadRural):
     """Adaptation of HoldPayload given a changing ground height."""
 
+    __slots__ = ('environment',)
     flow_environment = UrbanDroneEnvironment
 
     def at_ground(self):

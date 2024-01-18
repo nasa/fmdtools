@@ -19,6 +19,8 @@ class OutcomeStates(State):
 
 
 class Outcome(Flow):
+
+    __slots__ = ()
     container_s = OutcomeStates
 
 
@@ -31,6 +33,8 @@ class HazardState(State):
 
 
 class Hazard(Flow):
+
+    __slots__ = ()
     container_s = HazardState
 
 
@@ -83,6 +87,7 @@ class Act(Action):
 
 class Done(Action):
     """User state after performing the action."""
+
     __slots__ = ('hazard')
     flow_hazard = Hazard
 
@@ -116,6 +121,7 @@ class Human(ActionArchitecture):
 class DetectHazard(Function):
     """Function containing the human."""
 
+    __slots__ = ('hazard')
     container_m = Mode
     arch_aa = Human
     flow_hazard = Hazard
