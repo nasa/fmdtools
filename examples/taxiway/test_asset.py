@@ -24,6 +24,8 @@ import unittest
 
 # test_setup
 class LoadingForAircraft(Function):
+
+    __slots__ = ('requests', 'ground', 'perc_requests')
     flow_requests = Requests
     flow_ground = Environment
     container_p = AssetParams
@@ -80,6 +82,7 @@ class test_aircraft_model(FunctionArchitecture):
 
 
 class LoadingForHeli(Function):
+    __slots__ = ('requests', 'ground', 'perc_requests')
     flow_requests = Requests
     flow_ground = Environment
 

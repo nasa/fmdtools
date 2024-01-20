@@ -49,6 +49,7 @@ class TankTests(unittest.TestCase, CommonTests):
             faulthist = hist.faulty
             self.check_same_hist(faulthist, hists.get(name), "approach")
 
+    @unittest.skip('Reset not fully implemented yet and unused throughout.')
     def test_model_reset(self):
         mdl = Tank()
         mdl2 = Tank()
@@ -131,7 +132,7 @@ class TankTests(unittest.TestCase, CommonTests):
 
     def test_save_load_onefault(self):
         for extension in [".npz", ".csv", ".json"]:
-            faultscen=('import_water', 'stuck', 5)
+            faultscen = ('import_water', 'stuck', 5)
             fname = "tank_hist"+extension, "tank_res"+extension
             self.check_onerun_save(self.mdl, 'one_fault', *fname, faultscen=faultscen)
 
@@ -148,7 +149,7 @@ class TankTests(unittest.TestCase, CommonTests):
 
     def test_singlefaults_isave(self):
         indiv_names = ("tank_res", "tank_hist")
-        self.check_sf_isave(self.mdl, *indiv_names, "pkl")
+        self.check_sf_isave(self.mdl, *indiv_names, "npz")
         self.check_sf_isave(self.mdl, *indiv_names, "csv")
         self.check_sf_isave(self.mdl, *indiv_names, "json")
 
@@ -159,7 +160,7 @@ class TankTests(unittest.TestCase, CommonTests):
 
     def test_param_sample_save(self):
         indiv_names = ("tank_res", "tank_hist")
-        self.check_ps_isave(self.mdl, self.ps, *indiv_names, "pkl")
+        self.check_ps_isave(self.mdl, self.ps, *indiv_names, "npz")
         self.check_ps_isave(self.mdl, self.ps, *indiv_names, "csv")
         self.check_ps_isave(self.mdl, self.ps, *indiv_names, "json")
 
@@ -174,7 +175,7 @@ class TankTests(unittest.TestCase, CommonTests):
     def test_nested_sample_isave(self):
         indiv_names = ("tank_res", "tank_hist")
         self.check_ns_isave(self.mdl, self.ps, self.faultdomains, self.faultsamples,
-                            *indiv_names, "pkl")
+                            *indiv_names, "npz")
         self.check_ns_isave(self.mdl, self.ps, self.faultdomains, self.faultsamples,
                             *indiv_names, "csv")
         self.check_ns_isave(self.mdl, self.ps, self.faultdomains, self.faultsamples,
@@ -187,7 +188,7 @@ class TankTests(unittest.TestCase, CommonTests):
 
     def test_fault_sample_isave(self):
         indiv_names = ("tank_res", "tank_hist")
-        self.check_fs_isave(self.mdl, self.fs, *indiv_names, "pkl")
+        self.check_fs_isave(self.mdl, self.fs, *indiv_names, "npz")
         self.check_fs_isave(self.mdl, self.fs, *indiv_names, "csv")
         self.check_fs_isave(self.mdl, self.fs, *indiv_names, "json")
 

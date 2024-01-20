@@ -29,6 +29,8 @@ class AssetTime(Time):
 class Asset(Function):
     """Superclass for Helicopters and Aircraft (uas and mas)."""
 
+    __slots__ = ('location', 'requests', 'ground', 'perc_requests', 'perc_location',
+                 'closest_location')
     container_p = AssetParams
     container_t = AssetTime
     flow_location = Location
@@ -348,6 +350,8 @@ class AircraftMode(Mode):
 
 
 class Aircraft(Asset):
+
+    __slots__ = ()
     container_s = AircraftState
     container_m = AircraftMode
 
@@ -546,6 +550,8 @@ class HelicopterMode(Mode):
 
 
 class Helicopter(Asset):
+
+    __slots__ = ()
     container_s = HelicopterState
     container_m = HelicopterMode
 
