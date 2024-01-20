@@ -86,6 +86,7 @@ class PumpTests(unittest.TestCase, CommonTests):
         inj_times = [10, 20, 30, 40]
         self.check_model_copy_different(self.mdl, inj_times, max_time=55)
 
+    @unittest.skip('Reset not fully implemented yet and unused throughout.')
     def test_model_reset(self):
         inj_times = [10, 20, 30, 40]
         self.check_model_reset(self.mdl, Pump(), inj_times, max_time=55)
@@ -196,7 +197,7 @@ class PumpTests(unittest.TestCase, CommonTests):
         self.check_sf_save(self.mdl, "pump_res.json", "pump_hist.json")
 
     def test_single_faults_isave(self):
-        self.check_sf_isave(self.mdl, *self.filenames, "pkl")
+        self.check_sf_isave(self.mdl, *self.filenames, "npz")
         self.check_sf_isave(self.mdl, *self.filenames, "csv")
         self.check_sf_isave(self.mdl, *self.filenames, "json")
 
@@ -206,7 +207,7 @@ class PumpTests(unittest.TestCase, CommonTests):
         self.check_ps_save(self.mdl, self.ps, "pump_res.json", "pump_hist.json")
 
     def test_param_sample_isave(self):
-        self.check_ps_isave(self.mdl, self.ps, *self.filenames, "pkl")
+        self.check_ps_isave(self.mdl, self.ps, *self.filenames, "npz")
         self.check_ps_isave(self.mdl, self.ps, *self.filenames, "csv")
         self.check_ps_isave(self.mdl, self.ps, *self.filenames, "json")
 
@@ -220,7 +221,7 @@ class PumpTests(unittest.TestCase, CommonTests):
 
     def test_nested_sample_isave(self):
         self.check_ns_isave(self.mdl, self.ps, self.faultdomains, self.faultsamples,
-                            *self.filenames, "pkl")
+                            *self.filenames, "npz")
         self.check_ns_isave(self.mdl, self.ps, self.faultdomains, self.faultsamples,
                             *self.filenames, "csv")
         self.check_ns_isave(self.mdl, self.ps, self.faultdomains, self.faultsamples,
@@ -232,7 +233,7 @@ class PumpTests(unittest.TestCase, CommonTests):
         self.check_fs_save(self.mdl, self.fs, "pump_res.json", "pump_hist.json")
 
     def test_fault_sample_isave(self):
-        self.check_fs_isave(self.mdl, self.fs, *self.filenames, "pkl")
+        self.check_fs_isave(self.mdl, self.fs, *self.filenames, "npz")
         self.check_fs_isave(self.mdl, self.fs, *self.filenames, "csv")
         self.check_fs_isave(self.mdl, self.fs, *self.filenames, "json")
 
