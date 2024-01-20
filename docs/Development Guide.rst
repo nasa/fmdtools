@@ -193,7 +193,7 @@ Documentation is generated using Sphinx, which generates html from rst files. Th
 	./make clean
 	./make html
 
-Note that sphinx requires the following requirements, which should be installed bepforehand::
+Note that sphinx requires the following requirements, which should be installed beforehand::
 
 	nbsphinx
 	myst_parser
@@ -265,7 +265,7 @@ The advantages of inheritance are:
 
 In fmdtools, these patterns can be helpful:
 
-* Instead of creating two very similar :class:`fmdtools.define.Function` classes (e.g. Drone and PilotedAircraft) and copying code between each, create a single class (e.g. Aircraft) with common methods/structures (e.g., Fly, Taxi, Park, etc.) and then use sub-classes to extend and/or replace methods/structures in the common class as needed (e.g., Autonomous Navigation in the Drone vs. Piloted Navigation in the normal aircraft).
+* Instead of creating two very similar :class:`fmdtools.define.block.function.Function` classes (e.g. Drone and PilotedAircraft) and copying code between each, create a single class (e.g. Aircraft) with common methods/structures (e.g., Fly, Taxi, Park, etc.) and then use sub-classes to extend and/or replace methods/structures in the common class as needed (e.g., Autonomous Navigation in the Drone vs. Piloted Navigation in the normal aircraft).
 * Instead copying code for the same operations to several different places in a model, write a single function instead. This method can then be documented/tested and extended to a variety of different use-cases which require the same basic operation to be done. 
 
 This is an incomplete list. In general, it can be a helpful limitation to *try to avoid using copy-and-paste as much as possible.* Instead if a piece of code needs to be run more than once in more than once place, write a function or method which will be used everywhere. The idea should be to *write the code once, and run it everywhere.*
@@ -285,10 +285,10 @@ For fmdtools models, documentation should at the very least take the following f
 
 * A README (in markdown or rst) that explains how to set up the model environment (e.g., requirements/dependencies), as well as explains the structure of the folder/repo (model file, tests, analyses, etc.)
 * Documented examples of using the code. Usually you can use a jupyter notebook for this to show the different analyses you can run with your model.
-* Docstrings which document the classes and functions which make up your model. These are most important for development and should include:
+* Docstrings document the classes and functions which make up your model. These are most important for development and should include:
 	* An overall module description (top of file)
 	* Docstrings for flows: What does the state represent? What are the states? What values may these take?
-	* Docstrings for :class:`fmdtools.define.Function`: What are the states, parameters, behaviors, and modes?
+	* Docstrings for :class:`fmdtools.define.block.function.Function`: What are the states, parameters, behaviors, and modes?
 	* For any method/function, try to follow existing docstring conventions, with a summary of the purpose/behavior of the method, and a description of all input/output data types.
 
 Documentation can best be thought of as a *contract that your code should fulfill*. As such, it can be very helpful to think of the documentation first, as a way of specifying your work. Tests (formal and informal) can then be defined based on the stated behavior of the function. It is thus recommended to *document your code as you write it*, instead of waiting until the end of the development process, to avoid technical debt. 
@@ -353,7 +353,7 @@ These functions and flows are connected via containment relationships in an undi
 
 **Small Models**
 
-Small models have a few functions with simple behaviors that are being loaded in simple ways. A good example of this is the `Pump Example <../examples/pump/Pump_Example_Notebook.ipynb>`_ and `EPS Example <../examples/eps/EPS_Example_Notebook.ipynb>`_ , where the model is a simple translation of inputs (defined in input functions) to outputs (defined in output functions). These models have the most ability to follow the Functional Basis modeling ontology (with `import_x` loadings and `output_x` outputs), as well as use static_behavior methods. It is also possible to model many different modes with full behavioral detail, since the system itself is not too complicated. Technical debt and development process is less of a consideration in these models, but should still not be ignored. A typical structure for a model would be:
+Small models have a few functions with simple behaviors that are being loaded in simple ways. A good example of this is the `Pump Example <../examples/pump/Pump_Example_Notebook.ipynb>`_ and `EPS Example <../examples/eps/EPS_Example_Notebook.ipynb>`_ , where the model is a simple translation of inputs (defined in input functions) to outputs (defined in output functions). These models have the most ability to follow the `Functional Basis modeling ontology <https://link.springer.com/article/10.1007/s00163-001-0008-3>_` (with `import_x` being inputs and `output_x` being outputs of the system), as well as use static_behavior methods. It is also possible to model many different modes with full behavioral detail, since the system itself is not too complicated. Technical debt and development process is less of a consideration in these models, but should still not be ignored. A typical structure for a model would be:
 
 * Architecture
 	* flows
@@ -400,9 +400,9 @@ Use model constructs to simplify your code
 --------------------------------
 The fmdtools codebase is quite large, and, as a result, it can be tempting to dive into modeling before learning about all of its capabilities. The problem with this is that many of these capabilities and interfaces are there to make your life easier, provided you understand and use them correctly. Below are some commonly-misunderstood constructs to integrate into your code:
 
-* :class:`fmdtools.define.container.base.Container` has a number of very basic operations which can be used in all containers to reduce the length of lines dedicated solely to assignment and passing variables between constructs. Using these methods can furthermore enable one to more simply perform vector operations with reduced syntax.
+* :class:`fmdtools.define.container.base.BaseContainer` has a number of very basic operations which can be used in all containers to reduce the length of lines dedicated solely to assignment and passing variables between constructs. Using these methods can furthermore enable one to more simply perform vector operations with reduced syntax.
 * :class:`fmdtools.define.object.timer.Timer` can be used very simply to represent timed behavior and state-transitions. 
-* While modes can be used to describe fault modes in a very general way, faulty behavior that can also be queried from the model using the concept of a *disturbance*, which is merely a change in a given variable value. While disturbances are less general, they require much less to be implemented in the model.
+* While modes can be used to describe fault modes in a very general way, faulty behavior that can also be queried from the model using the concept of a *disturbance*, which is merely a change in a given variable value. While disturbances are less general, they require much less to be implemented in the model. Disturbances can be passed as an argument (as a dict or as a part of a Sequence class) to :meth:`fmdtools.sim.propagate.sequence()`
 * :class:`fmdtools.define.container.parameter.Parameter` and parameter-generating functions are helpful for understanding the model operating envelope. In general, try to avoid having parameters that duplicate each other in some way.
 * Randomness can be used throughout, but use the specified interfaces (:class:`fmdtools.define.container.rand.Rand`, etc.) so that a single seed is used to generate all of the rngs in the model. Not using these interfaces can lead to not being able to replicate results consistently.
 * A variety of custom attributes can be added to :class:`fmdtools.define.block.function.Function` and :class:`fmdtools.define.flow.base.Flow`, but not every custom attribute is going to work with staged execution and parallelism options. In general, use containers to represent things that change and parameters to represent things that don't change. If you want to do something fancy with data structures, you may need to re-implement :class:`fmdtools.define.block.base` methods for copying and returning states to `propagate`.
