@@ -94,7 +94,7 @@ The multirotor example model has several models of drones modeled at differing l
 Tank
 +++++++++++++++++++++++++++++++++++++++++++++
 
-The tank example is a fairly simple model of a tank, inlet valve, and outlet valve. This example is shown in the notebook
+The tank example is a fairly simple model of a tank, inlet valve, and outlet valve. This example is shown in the following notebooks.
 
 - `Hold-up Tank Model <../examples/tank/Tank_Analysis.ipynb>`_ uses the :class:`fmdtools.sim.sample.SampleApproach` class to model human interactions with the modeled system (in `tank_model.py`).
 
@@ -157,7 +157,7 @@ The Rover model showcases more advanced methodologies that can be used in fmdtoo
   
 - `Defining Fault Sampling Approaches in fmdtools <../examples/rover/Approach_Use-Cases.ipynb>`_ covers how to set up a fault sampling approach and use it to simulate a large number of hazardous scenarios in a model. This includes:
 
-  - Adding fault and operational modes to Model functions using the class :class:`fmdtools.define.container.mode.Mode` and explanation of the `key_phases_by` and `exclusive` options.
+  - Adding fault and operational modes to Model functions using the class :class:`fmdtools.define.container.mode.Mode` and explanation of the `phases` and `exclusive` options.
   
   - Using :func:`fmdtools.analyze.phases.from_hist` to setting a :class:`fmdtools.sim.sample.SampleApproach` up which samples individual faults based on the phases of the model and/or function defined by their operational modes.
 

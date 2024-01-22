@@ -5,7 +5,7 @@ Description: A module defining BaseObjects.
 Classes in this module:
 
 - :class:`BaseObject`: Base object class used throughout.
--:class:`ExampleObject`: Example base object for testing.
+- :class:`ExampleObject`: Example base object for testing.
 
 Functions contained in this module:
 
@@ -33,6 +33,7 @@ class BaseObject(object):
     --------
     The roletypes class variable lets one add specific types of roles to the class.
     By default, 'container' is included in roletypes, enabling:
+
     >>> from fmdtools.define.container.state import ExampleState
     >>> class ExampleObject(BaseObject):
     ...    container_s = ExampleState
@@ -52,34 +53,40 @@ class BaseObject(object):
 
     If an already-instanced role is passed, the BaseObject will take this
     copy instead of instancing its own:
+
     >>> ex2 = ExampleObject(s=ExampleState(2.0, 4.0))
     >>> ex2.s
     ExampleState(x=2.0, y=4.0)
 
     The method `indicate_high_x` is called an indicator. Indicators show up in the
     indicators property:
+
     >>> ex.indicators
     ('high_x', 'y_over_t')
 
     And are used to evaluate conditions, e.g.:
+
     >>> ex.indicate_high_x()
     False
     >>> ex2.indicate_high_x()
     True
 
     Time may be used as an optional argument to indicators:
+
     >>> ex.indicate_y_over_t(0.0)
     True
     >>> ex2.return_true_indicators(0.0)
     ['high_x', 'y_over_t']
 
     A history may be created using create_hist:
+
     >>> ex.create_hist([0.0, 1.0])
     i.high_x:                       array(2)
     i.y_over_t:                     array(2)
 
     Note that adding roles to the class often means modifying default_track.
     Initializing all possible using the 'all' option:
+
     >>> ex = ExampleObject(track='all')
     >>> ex.create_hist([0.0, 1.0])
     i.high_x:                       array(2)
@@ -250,6 +257,7 @@ class BaseObject(object):
         ExampleState(x=3.0, y=4.0)
 
         Note that these these roles should be independent after assignment:
+
         >>> ex.s.x = 4.0
         >>> ex.s
         ExampleState(x=4.0, y=4.0)
@@ -281,15 +289,12 @@ class BaseObject(object):
 
         Parameters
         ----------
-        obj : object
-            Object with _spec_ attributes
         spec : str
             Name of the attributes to initialize
+        name_end: str
+            End letter of the attribute name??. default is 's'.
         set_attr : bool
             Whether to also add the individual attributes attr to the obj
-        sub_obj : str
-            Sub-object to form the object from (e.g., 'p' if defined in a parameter).
-            Default is '', which gets from obj.
         """
         spec_len = len(spec) + 1
         specs = {p[spec_len:]: self.p[p] for p in self.p.__fields__ if spec in p}
@@ -502,8 +507,12 @@ def init_obj(name, objclass=BaseObject, track='default', as_copy=False, **kwargs
     ----------
     name : str
         Name to give the flow object
-    fclass : Flow/MultiFlow/Comms/CustomFlow
-        Flow class to instantiate OR already-instanced object to pass
+    objclass: ??
+        ?? Default is BaseObject.
+    track: str
+        ?? Default is 'default'
+    as_copy: bool
+        ?? Default is False.
     **kwargs :dict
         Other specialized roles to overrride
     """
