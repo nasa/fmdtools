@@ -9,7 +9,7 @@ The define package provides the building blocks to develop a simulation. Simulat
    
    Structure of simulable fmdtools subclasses used for developing simulations. 
  
-Aside from their internal methods defining behavior, events/indicators, and results, Simulations are additionally composed of internal :term:`container` s, or sub-attributes of the class which are defined in their own class. 
+Aside from their internal methods defining behavior, events/indicators, and results, Simulations are additionally composed of internal containers (or sub-attributes) of the class which are defined in their own class. 
 
 **Submodule Links**
 

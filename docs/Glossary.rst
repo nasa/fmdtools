@@ -76,10 +76,11 @@ Glossary
 		The result of simulating a fault sampling :term:`Approach` (:class:`fmdtools.sim.sample.SampleApproach`) within a nominal :term:`Approach` (:class:`fmdtools.sim.sample.ParameterSample`). Created in :func:`fmdtools.sim.propagate.nested_sample()`.
 	
 	Static Propagation
-		The undirected propagation of model behaviors within a timestep. Defined for each function using :meth:`fmdtools.define.block.Function.static_behavior`, which may run multiple times in a timestep until behavior has converged.
+		The undirected propagation of model behaviors within a timestep. Defined for each function using :meth:`fmdtools.define.block.Function.static_behavior`, which may run multiple times in a timestep until behavior has converged. The static :term:`behavior`s are propagated through the graph using the method :meth:`fmdtools.define.architecture.function.FunctionArchitecture.prop_static()`.
+	
 	
 	Dynamic Propagation
-		The progression of model states over time. Defined for each function using :meth:`fmdtools.define.block.Function.dynamic_behavior`, which runs once per timestep.
+		The progression of model states over time. Defined for each function using :meth:`fmdtools.define.block.Function.dynamic_behavior`, which runs once per timestep. The dynamic :term:`behavior`s are propagated using the method :meth:`fmdtools.define.block.Function.static_behavior`, which may run multiple times in a timestep until behavior has converged. The static :term:`behavior`s are propagated through the graph using the method :meth:`fmdtools.define.architecture.function.FunctionArchitecture.propagate()`.
 	
 	Propagation
 		The simulation of :class:`fmdtools.define.architecture.function.FunctionArchitecture` :term:`behavior`s, including the passing of :term:`flow`s between :term:`function`s and the progression of model states over time.

@@ -27,6 +27,8 @@ class Geom(BaseObject):
     Geometry objects are essentially wrappers around various shapely classes used to
     convey the spacial properties of a model.
 
+    ...
+
     Roles
     -----
     s : State
@@ -156,7 +158,7 @@ class Geom(BaseObject):
             Name of shape/buffer. Default is 'shape'.
         dist_forward : float
             Distance forward along line segment to project. Give a negative number to
-            reverse directions
+            reverse directions.
 
         Examples
         --------
@@ -183,8 +185,6 @@ class Geom(BaseObject):
 
         Parameters
         ----------
-        geom : Geom
-            Geom object.
         shapes : dict, optional
             Aspects of the Geom to plot and their corresponding plot kwargs.
             The default is {'all': {}}.
@@ -338,6 +338,8 @@ class LineParam(Parameter):
     """
     Parameter defining lines. May be extended with buffers.
 
+    ...
+
     Fields
     ------
     xys : tuple
@@ -389,12 +391,12 @@ class GeomLine(Geom):
     >>> exp.at((2.0, 2.0), "on")
     False
 
-    Additionally, note the underlying shapely attribute at .shape ::
+    Additionally, note the underlying shapely attribute at .shape:
 
     >>> type(exp.shape)
     <class 'shapely.geometry.linestring.LineString'>
 
-    As well as the buffer (on)::
+    As well as the buffer (on):
 
     >>> type(exp.on)
     <class 'shapely.geometry.polygon.Polygon'>
@@ -415,6 +417,8 @@ class PolyParam(Parameter):
     """
     Parameter defining polygons. May be extended with buffers.
 
+    ...
+    
     Fields
     ------
     shell : tuple

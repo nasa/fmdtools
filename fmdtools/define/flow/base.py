@@ -30,6 +30,7 @@ class Flow(BaseObject):
     exf ExampleFlow flow: ExampleState(x=0.0, y=1.0)
 
     Note that copying creates independent copies of states:
+    
     >>> exf2 = exf.copy()
     >>> exf2
     exf ExampleFlow flow: ExampleState(x=0.0, y=1.0)

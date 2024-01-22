@@ -19,7 +19,9 @@ from fmdtools.analyze.history import History
 
 class Fault(BaseContainer, readonly=True):
     """
-    Stores Default Attributes for for modes to use in Mode.faultmodes.
+    Stores Default Attributes for modes to use in Mode.faultmodes.
+
+    ...
 
     Fields
     ------
@@ -43,7 +45,7 @@ class Fault(BaseContainer, readonly=True):
     def calc_rate(self, time, phasemap={}, sim_time=1.0, sim_units='hr', weight=1.0):
         """
         Calculate the rate of a given fault mode.
-
+        
         Parameters
         ----------
         time : float
@@ -121,7 +123,9 @@ class Mode(BaseContainer, readonly=False):
     fault modes 'high_heat' and 'low_heat'.
 
     Mode has the following class variables  which can be modified to define the
-    representation and probability model:
+    representation and probability model.
+
+    ...
 
     Class Variables
     ---------------
@@ -130,13 +134,13 @@ class Mode(BaseContainer, readonly=False):
     failrate : float
         Overall failure rate for the block. The default is 1.0. Note that if a failrate
         is provided, the prob argument in faultparams is a conditional probability
-        (e.g. Fault.prob = Mode.failrate * Mode.faultparams['mode']['prob'])
+        (e.g. Fault.prob = Mode.failrate * Mode.faultparams['mode']['prob']).
     probtype : str, optional
         Type of probability in the probability model, a per-time 'rate' or
-        per-run 'prob'.The default is 'rate'
+        per-run 'prob'. The default is 'rate'.
     units : str, optional
         Type of units ('sec'/'min'/'hr'/'day') used for the rates.
-        Default is 'sim', which is unitless (prob/simulation)
+        Default is 'sim', which is unitless (prob/simulation).
     phases : dict
         Phases to inject faults in.
     exclusive : True/False
@@ -145,22 +149,24 @@ class Mode(BaseContainer, readonly=False):
     longnames : dict
         Longer names for the faults (if desired). {faultname: longname}
     faults : set
-        Set of faults present (or not) at any given time
+        Set of faults present (or not) at any given time.
     mode : str
-        Name of the current mode. the default is 'nominal'
+        Name of the current mode. the default is 'nominal'.
     fm_args : dict
-        Arguments to Mode.init_faultmodes()
+        Arguments to Mode.init_faultmodes().
     he_args : tuple
         Arguments for add_he_rate defining a human error probability model.
     sfs_args : tuple
-        Arguments for self.init_single_faultstates (franges, {kwargs})
+        Arguments for self.init_single_faultstates (franges, {kwargs}).
     nfs_args : tuple
-        Arguments for self.init_n_faultstates (*args, {kwargs})
+        Arguments for self.init_n_faultstates (*args, {kwargs}).
     fsm_args : tuple
-        Arguments for self.init_faultstates_modes (manual_modes, {kwargs})
+        Arguments for self.init_faultstates_modes (manual_modes, {kwargs}).
 
-    These fields are then used in simulation and elsewhere:
+    These fields are then used in simulation and elsewhere.
 
+    ...
+    
     Fields
     ------
     faults : set

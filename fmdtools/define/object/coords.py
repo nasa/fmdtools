@@ -27,6 +27,8 @@ class CoordsParam(Parameter):
     collections, points) to the coordinates. Additionally has class fields which may be
     overwritten.
 
+    ...
+
     Class Variables
     ---------------
     x_size : int
@@ -77,7 +79,9 @@ class Coords(BaseObject):
     Class for generating, accessing, and setting gridworld properties.
 
     Creates arrays, points, and lists of points which may correspond to desired
-    modelling properties.
+    modeling properties.
+
+    ...
 
     Class Variables/Modifiers
     ---------------
@@ -96,11 +100,12 @@ class Coords(BaseObject):
     ...    def init_properties(self, *args, **kwargs):
     ...        self.set_pts([[0.0, 0.0], [10.0, 0.0]], "v", 10.0)
 
-    Instantiating this class a class with (see ExampleCoordsParam):
+    Instantiating a class with (see ExampleCoordsParam):
+
     - immutable arrays a and v,
     - mutable array st,
     - point start at (0.0), and
-    - collection high made up of all points where v > 10.0
+    - collection high made up of all points where v > 10.0.
 
     As shown, features are normal numpy arrays set to readonly:
 
@@ -114,7 +119,7 @@ class Coords(BaseObject):
       ...
     ValueError: assignment destination is read-only
 
-    The main difference with states is that they can be set, e.g.:
+    The main difference with states is that they can be set, e.g.,:
 
     >>> ex.st[0, 0] = 100.0
     >>> ex.st[0, 0]
@@ -133,6 +138,7 @@ class Coords(BaseObject):
     (0.0, 0.0)
 
     Note that these histories are tracked:
+
     >>> h = ex.create_hist([0, 1, 2])
     >>> h.keys()
     dict_keys(['r.probdens', 'st'])
@@ -327,7 +333,7 @@ class Coords(BaseObject):
         prop : str
             Name of the property to get.
         outside : value
-            Value to provide if not in range. Default i 'error', which throws an error
+            Value to provide if not in range. Default is 'error', which throws an error
 
         Returns
         -------
@@ -464,7 +470,7 @@ class Coords(BaseObject):
         Parameters
         ----------
         pts : list
-            List of points (e.g. [(1.0, 2.0), (3.0, 4.0)]) to set.
+            List of points (e.g., [(1.0, 2.0), (3.0, 4.0)]) to set.
         prop : str
             Name of the property to set.
         value : int/bool/float or list...
@@ -479,7 +485,7 @@ class Coords(BaseObject):
         >>> ex.get(80, 80, "st")
         -20.0
 
-        or,:
+        or:
 
         >>> ex.set_pts([(50,50), [80,80]], "st", [-10.0, -5.0])
         >>> ex.get(50, 50, "st")
@@ -526,7 +532,7 @@ class Coords(BaseObject):
 
         Examples
         --------
-        Can be used with default options to check collections, e,g.:
+        Can be used with default options to check collections, e.g.,:
 
         >>> ex = ExampleCoords()
         >>> ex.find_closest(20, 0, "high_v")
@@ -796,6 +802,8 @@ class Coords(BaseObject):
             property as prop.
         z_res : int, optional
             Resolution to plot z at. The default is 10.
+        collections:  dict, optional
+            Collections to plot and their respective kwargs for show_collection. The default is {}.
         xlab : str, optional
             Label for x-axis. The default is "x".
         ylab : str, optional
@@ -812,6 +820,8 @@ class Coords(BaseObject):
             Existing Figure. The default is None.
         ax : matplotlib.axis, optional
             Existing axis. The default is None.
+        figsize : tuple, optional
+            Size for the figure. Default is (4,4)
         **kwargs : kwargs
             Kwargs to pass to Axes3D.voxels
 
@@ -968,6 +978,8 @@ class Coords(BaseObject):
         collections : dict, optional
             Collections to plot and their respective kwargs for show_collection.
             The default is {}.
+        legend_args : bool, optional
+            ?? Default is False.
         **kwargs : kwargs
             kwargs to show_property.
 

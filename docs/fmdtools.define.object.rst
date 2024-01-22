@@ -8,7 +8,7 @@ These different object classes are provided in the following modules:
 * :mod:`base`: for :class:`BaseObject`, which is used for the base object class used for both objects and blocks/architectures.
 * :mod:`geom`: for :class:`Geom`, class and subclasses which represent geometric attributes.
 * :mod:`coords`: for :class:`Coords`, which is used to define coordinate systems.
-* :mod:`timer`: for :class:`Timer`, which is used to define timers (used in `define.container.time.Time` containers).
+* :mod:`timer`: for :class:`Timer`, which is used to define timers (used in :class:`fmdtools.define.container.time.Time` containers).
 
 fmdtools.define.object.base
 --------------------------------
