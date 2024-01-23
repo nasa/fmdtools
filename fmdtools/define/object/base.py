@@ -507,12 +507,23 @@ def init_obj(name, objclass=BaseObject, track='default', as_copy=False, **kwargs
     ----------
     name : str
         Name to give the flow object
-    objclass: ??
-        ?? Default is BaseObject.
-    track: str
-        ?? Default is 'default'
+    objclass: class or object
+        Class inheriting from BaseObject, or already instantiated object. 
+        Default is BaseObject.
+    track: str/dict
+        Which model states to track over time (overwrites mdl.default_track).
+        Default is 'default'
+        Options:
+
+        - 'default'
+        - 'all'
+        - 'none'
+        - or a dict of form ::
+
+            {'functions':{'fxn1':'att1'}, 'flows':{'flow1':'att1'}}
     as_copy: bool
-        ?? Default is False.
+        If an object is provided for objclass, whether to copy that object (or just pass it). 
+        Default is False.
     **kwargs :dict
         Other specialized roles to overrride
     """

@@ -27,7 +27,7 @@ Private Methods:
   given the modes set up in the fault model
 - :func:`prop_one_scen()`: Runs a fault scenario in the model over time
 - :func:`save_helper()`: Helper function for inline results saving.
-- :func:`unpack _res_list`: Helper function for unpacking results
+- :func:`unpack _res_list()`: Helper function for unpacking results
 - :func:`exec_nom_par`: Helper function for executing nominal scenarios in parallel
 - :func:`exec_nom_helper`: Helper function for executing nominal scenarios
 - :func:`nom_helper`: Helper function for initial run of nominal scenario
@@ -39,7 +39,6 @@ Private Methods:
   the mdlhist and number of scenarios
 - :func:`check_mdl_memory`: Raises exception if model size is too large.
 - :func:`check_overwrite`: Checks if file can be overwritten
-- :func:`phases_from_hist`: Helper function for `nested_approach`
 - :func:`check_end_condition`: Helper function for `prop_one_scen` to end simulation
   earlier.
 - :func:`get_result`: Helper function for `prop_one_scen` to get result at specific
@@ -80,7 +79,7 @@ desired_result : dict/str/list
     Options are:
 
     - 'endclass': a dict returned by find_classification (default)
-    - 'endfaults': a dict of returned fault modes and their propagation, e.g. ::
+    - 'endfaults': a dict of returned fault modes and their propagation, e.g., ::
 
         {'endfaults':faultdict, 'faultprops':faultpropdict}
 
@@ -88,7 +87,7 @@ desired_result : dict/str/list
       superimposed
     - 'fxnname.varname': variable values to get
     - a list of the above arguments (for multiple at the end)
-    - a dict of lists (for multiple over time), e.g. ::
+    - a dict of lists (for multiple over time), e.g., ::
 
         {time:[varnames,... 'endclass']}
 
@@ -290,8 +289,6 @@ def parameter_sample(mdl, ps, **kwargs):
         Model to simulate
     ps: ParameterSample
         Parameter Sample defining the nominal scenarios to run the system over.
-    get_endclass : bool
-        Whether to return endclasses from mdl.find_classification. Default is True.
     **kwargs : kwargs
         Additional keyword arguments, may include:
 
@@ -498,8 +495,31 @@ def nom_helper(mdl, ctimes, protect=True, save_args={}, mdl_kwargs={}, scen={},
     ----------
     mdl : Simulable (object or class)
         Model of the system
-    time : float/list
+    ctimes : float/list
         Times to copy the nominal model from
+    protect : bool
+        Whether or not to protect the model object via copying.
+        Options:
+            - True (default): re-instances the model so that multiple simulations can
+            be run successively without causing problems
+            - False : Thus, the model object that is returned can be modified and
+            analyzed if needed
+    save_args : dict (optional)
+        Dictionary specifying if/how to save results. Default is {}, which doesn't
+        save anything.
+        Has structure ::
+
+            {'mdlhists':mdlhistargs, 'endclass':endclassargs, 'indiv':indiv}
+    mdl_kwargs : dict, optional
+        Model arameter dictionary.
+        Has structure ::
+
+            {"p": Parameter, "sp":SimParam, "track":track}
+    scen : scenario, optional
+        Scenario to use. The default is {}.
+    warn_faults : bool
+        choose whether to display a warning message if faults are identified during nominal runs.
+        Default is True.
     **kwargs : kwargs
         :data:`sim_kwargs` simulation options for :func:`prop_one_scen`
 
@@ -628,8 +648,6 @@ def fault_sample_from(mdl, faultdomains={}, faultsamples={}, get_phasemap=True,
     ----------
     mdl : Simulable
         Model to simulate
-    get_phasemap : Bool/List/Dict, optional
-        Whether to use nominal simulation phasemap to set up the SampleApproach.
     faultdomains : dict
         Dict of arguments to SampleApproach.add_faultdomains
     faultsamples : dict
@@ -641,6 +659,8 @@ def fault_sample_from(mdl, faultdomains={}, faultsamples={}, get_phasemap=True,
         Whether to generate the FaultSample from the phasemap. The default is True.
     scen : scenario, optional
         Scenario to use as nominal. The default is {}.
+    include_nominal : bool, optional
+        Whether to return nominal hists/results back. Default is False.
     **kwargs : kwargs
         kwargs to simulate over
 
@@ -802,17 +822,15 @@ def exec_scen(mdl, scen, save_args={}, indiv_id='', **kwargs):
     Parameters
     ----------
     mdl : Simulable
-        The model to inject faults in.
+        The model to inject faults in
     scen : scenario
         scenario used to define time and faults where the fault is to be injected
-    nomhist : History
-        history of results in the nominal model run
     save_args : dict
         Save dictionary to use in save_helper defining when/how to save the dictionary
     indiv_id : str
         ID str to insert into the file name (if saving individually)
     **kwargs : kwargs
-        :data:`sim_kwargs` for :func:`prop_one_scen`.
+        :data:`sim_kwargs` for :func:`prop_one_scen`
     """
     result, mdlhist, _, t_end,  = prop_one_scen(mdl, scen, **kwargs)
     save_helper(save_args, result, mdlhist, indiv_id=indiv_id, result_id=str(scen.name))
@@ -889,6 +907,8 @@ def nested_sample(mdl, ps, get_phasemap=False, faultdomains={}, faultsamples={},
         FaultSamples to add to othe SampleApproach and their arguments.
         Has structure: {'fs_name': (*args, **kwargs)}, where args and kwargs are
         arguments/kwargs to SampleApproach.add_faultsamples.
+    include_nominal : bool, optional
+        Whether to return nominal hists/results back. Default is False.
     **kwargs : kwargs
         Additional keyword arguments, may include:
 
@@ -1035,11 +1055,7 @@ def prop_one_scen(mdl, scen, ctimes=[], nomhist={}, nomresult={}, **kwargs):
         The default is [].
     nomhist : dict, optional
         Model history dictionary from previous runs, for use in creating the new
-        mdlhist.
-    nomhist : dict, optional
-        Model history dictionary from the nominal state, for use in
-        Model.find_classification and for initializing model history in staged execution
-        option. The default is {}.
+        mdlhist. The default is {}.
     nomresult : dict, optional
         Nominal result dictionary (to compare with current if desired)
     **kwargs : kwargs
