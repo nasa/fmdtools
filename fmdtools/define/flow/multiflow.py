@@ -45,7 +45,8 @@ class MultiFlow(Flow):
             rep_str = rep_str+"\n   "+self.get_view(loc).__repr__()
         return rep_str
 
-    def create_local(self, name, attrs="all", p='global', s='global', track=['s']):
+    def create_local(self, name, attrs="all", p='global', s='global', track=['s'],
+                     **kwargs):
         """
         Create a local view of the Flow.
 
@@ -79,7 +80,8 @@ class MultiFlow(Flow):
                 p = self.p
             if s == 'global':
                 s = asdict(self.s)
-            newflow = self.__class__(name=name, glob=self, p=p, s=s, track=track)
+            newflow = self.__class__(name=name, glob=self, p=p, s=s, track=track,
+                                     **kwargs)
         setattr(self, name, newflow)
         self.locals.append(name)
         if hasattr(self, 'h') and self.h:

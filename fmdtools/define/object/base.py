@@ -117,7 +117,7 @@ class BaseObject(object):
             - 'none'
             - or a dict of form ::
 
-                {'functions':{'fxn1':'att1'}, 'flows':{'flow1':'att1'}}
+                {'fxns':{'fxn1':'att1'}, 'flows':{'flow1':'att1'}}
         **kwargs : dict, object
             Keywork arguments for the roles.
             May be a dict of non-default arguments (e.g. s={'x': 1.0}) or
