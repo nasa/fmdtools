@@ -3,8 +3,11 @@
 Description: Functions and Classes to enable optimization and search of fault model states and parameters.
 
 Classes:
-    - :class:`ProblemArchitecture`:  Creates an interface for model simulations for optimization methods
+    - :class:`ProblemArchitecture`:  Enables the representation of combined joint optimization problems
     - :class:`DynamicInterface`:  Creates an interface for model simulations for dynamic optimization of a single sim
+    - :class:`SimpleProblem`: Creates an interface for simple optimazation problem without any model constructs
+    - :class:`DisturbanceProblem`: Enables optimizing disturbances that occur at a set time
+    - :class:`SingleFaultScenarioProblem`: Enables optimizing the time of a given fault scenario
 """
 import numpy as np
 import networkx as nx

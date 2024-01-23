@@ -6,7 +6,7 @@ Main user-facing individual graphing classes:
     - :class:`FunctionArchitectureGraph`: Graphs Model of functions and flow for display
     where both functions and flows are nodes.
 
-    - :class:`FunctionArchitectureFlowgraph`: Graphs Model of flows for display, where flows are set as
+    - :class:`FunctionArchitectureFlowGraph`: Graphs Model of flows for display, where flows are set as
     nodes and connections (via functions) are edges.
 
     - :class:`FunctionArchitectureCompGraph`: Graphs Model of functions, and flows, with component
@@ -20,18 +20,17 @@ Main user-facing individual graphing classes:
 
     - :class:`MultiFlowGraph`: Creates a networkx graph corresponding to the MultiFlow.
 
-    - :class:`CommsFlowGraph`: Creates a graph representation of the CommsFlow
-    (assuming no additional locals).
+    - :class:`CommsFlowGraph`: Creates a graph representation of the CommsFlow (assuming no additional locals).
 
     - :class:`ActionArchitectureGraph`: Shows a visualization of the internal Action Sequence Graph of
     the Function Block, with Sequences as edges, with Flows (circular) and Actions
     (square) as nodes.
 
-    - :class:`ActionArchitectureActGraph`: Variant of ActionArchitectureGraph where only the sequence between
-    actions is shown.
+    - :class:`ActionArchitectureActGraph`: Variant of ActionArchitectureGraph where only the 
+    sequence between actions is shown.
 
-    - :class:`ActionArchitectureFlowGraph`: Variant of ActionArchitectureGraph where only the flow relationships
-    between actions is shown.
+    - :class:`ActionArchitectureFlowGraph`: Variant of ActionArchitectureGraph where only the 
+    flow relationships between actions is shown.
 
 Shared Method Parameters:
     - :data:`default_edge_kwargs`: Default appearance for edges in model network graphs.
@@ -40,26 +39,20 @@ Shared Method Parameters:
 Private Methods:
     - :class:`EdgeStyle`: Holds kwargs for nx.draw_networkx_edges to be applied to edges
     - :class:`NodeStyle`: Holds kwargs for nx.draw_networkx_nodes to be applied to nodes
-    - :class:`LabelStyle`: Holds kwargs for nx.draw_networkx_labels to be applied to
-    labels
+    - :class:`LabelStyle`: Holds kwargs for nx.draw_networkx_labels to be applied to labels
     - :class:`EdgeLabelStyle`: Controls edge labels to ensure they do not rotate
     - :class:`Labels`: Defines a set of labels to be drawn using draw_networkx_labels.
-    - :class:`GraphInteractor`: Used to set nodes in set_pos when creating interactive
-    graph
+    - :class:`GraphInteractor`: Used to set nodes in set_pos when creating interactive graph
     - :func:`label_for_entry`: Gets the label from an nx.graph for a given entry.
     - :func:`get_style_kwargs`:  Gets the keywords for networkx plotting
-    - :func:`get_label_groups`: Creates groups of nodes/edges in terms of discrete
-    values for the given tags.
-    - :func:`to_legend_label`: Creates a legend label string for the group
-    corresponding to style_labels
+    - :func:`get_label_groups`: Creates groups of nodes/edges in terms of discrete values for the given tags.
+    - :func:`to_legend_label`: Creates a legend label string for the group corresponding to style_labels
     - :func:`sff_one_trial`: Calculates one trial of the sff model
-    - :func:`data_average `: Averages each column in data"
+    - :func:`data_average`: Averages each column in data
     - :func:`data_error`: Calculates error for each column in data
-    - :func:`gr_import_check`: Checks if graphviz is installed on the system before
-    plotting.
+    - :func:`gv_import_check`: Checks if graphviz is installed on the system before plotting.
     - :func:`node_is_tagged`: Returns if node is tagged
-    - :func:`add_g_nested`: Helper function for MultiFlow.create_multigraph to
-    construct the containment tree.
+    - :func:`add_g_nested`: Helper function for MultiFlow.create_multigraph to construct the containment tree.
     - :func:`graph_factory`: Creates the default Graph for a given object.
 
 """
@@ -321,7 +314,7 @@ class Labels(dataobject, mapping=True):
         iterator : nx.graph.nodes/edges
             Property to iterate over (e.g., nodes or edges)
         LabStyle : class
-            Class to use for label styles (e.g. LabelStyle or EdgeStyle)
+            Class to use for label styles (e.g., LabelStyle or EdgeStyle)
         title : str, optional
             entry for title text. (See :func:`label_for_entry` for options).
             The default is 'id'.
@@ -392,7 +385,7 @@ def get_style_kwargs(styles, label, default_kwargs={}, style_class=EdgeStyle):
         edge_styles/node_styles
     label : tuple
         tuple of tag values to create the keywords for
-    styletype : "node"/"edge", optional
+    style_class : "node"/"edge", optional
         Whether the kwargs are for a node or edge. The default is "edge".
 
     Returns
@@ -413,14 +406,14 @@ def get_label_groups(iterator, *tags):
     Parameters
     ----------
     iterator : iterable
-        e.g. nx.graph.nodes(), nx.graph.edges()
+        e.g., nx.graph.nodes(), nx.graph.edges()
     *tags : list
         Tags to find in the graph object (e.g., `label`, `status`, etc.)
 
     Returns
     -------
     label_groups : dict
-        Dict of groups of nodes/edges with given tag values. With structure:
+        Dict of groups of nodes/edges with given tag values. With structure::
         {(tagval1, tagval2...):[list_of_nodes]}
     """
     try:
@@ -467,20 +460,21 @@ def to_legend_label(group_label, style_labels):
 
 
 class Graph(object):
-    def __init__(self, obj, get_states=True, **kwargs):
-        """
-        Create a Graph.
+    """
+    Create a Graph.
 
-        Parameters
-        ----------
-        obj: object
-            must either be a networkx graph (or be a verion of Graph corresponding
-                                             to the object)
-        get_states: bool
-            whether to get states for the graph
-        **kwargs:
-            keyword arguments for self.nx_from_obj
-        """    
+    Parameters
+    ----------
+    obj: object
+        must either be a networkx graph (or be a verion of Graph corresponding
+                                            to the object)
+    get_states: bool
+        whether to get states for the graph
+    **kwargs:
+        keyword arguments for self.nx_from_obj
+    """    
+    def __init__(self, obj, get_states=True, **kwargs):
+      
         if isinstance(obj, nx.Graph):
             self.g = obj
         elif hasattr(self, 'nx_from_obj'):
@@ -560,8 +554,8 @@ class Graph(object):
         title2 : str, optional
             property to get for title text after the colon. The default is ''.
         subtext : str, optional
-            property to get for the subtext. The default is ''.
-        **node_label_styles : dict
+            property to get for the subtext. The default is 'states'.
+        **edge_label_styles : dict
             LabelStyle arguments to overwrite.
         """
         self.edge_labels = Labels.from_iterator(self.g, self.g.edges, EdgeLabelStyle,
@@ -574,10 +568,14 @@ class Graph(object):
 
         Parameters
         ----------
-        title
-        title2
-        subtext
-        node_label_styles
+        title : str, optional
+            Property to get for title text. The default is ‘id’.
+        title2 : str, optional
+            Property to get for title text after the colon. The default is ‘’.
+        subtext : str, optional
+            property to get for the subtext. The default is ‘’.
+        node_label_styles :  dict
+            LabelStyle arguments to overwrite.
         """
         self.node_labels = Labels.from_iterator(self.g, self.g.nodes, LabelStyle,
                                                 title=title, title2=title2,
@@ -590,8 +588,9 @@ class Graph(object):
         Parameters
         ----------
         **node_groups : iterable
+            nodes in groups. see example.
 
-        e.g.
+        e.g.,::
         graph.add_node_groups(group1=('node1', 'node2'), group2=('node3'))
         graph.set_node_styles(group={'group1':{'color':'green'},
                                      'group2':{'color':'red'}})
@@ -644,8 +643,10 @@ class Graph(object):
         """
         Set the association and plotting of a heatmap on a graph.
 
-        e.g. graph.set_heatmap({'node_1':1.0, 'node_2': 0.0, 'node_3':0.5})
+        e.g.,::
+        graph.set_heatmap({'node_1':1.0, 'node_2': 0.0, 'node_3':0.5})
         graph.draw()
+
         Should draw node_1 the bluest, node_2 the reddest, and node_3 in between.
 
         Parameters
@@ -684,18 +685,17 @@ class Graph(object):
         withlegend : bool, optional
             Whether to include a legend. The default is True.
         legend_bbox : tuple, optional
-            bbox to anchor the legend to. The default is (1,0.5) (places legend on the
-                                                                  right)
+            bbox to anchor the legend to. The default is (1,0.5) (places legend on the right).
         legend_loc : str, optional
-            loc argument for plt.legend. the default is "center left"
+            loc argument for plt.legend. The default is "center left".
         legend_labelspacing : float, optional
-            labelspacing argument for plt.legend. the default is "2
+            labelspacing argument for plt.legend. the default is 2.
         legend_borderpad : str, optional
-            borderpad argument for plt.legend. the default is 1
+            borderpad argument for plt.legend. the default is 1.
         **kwargs : kwargs
             Arguments for various supporting functions:
             (set_pos, set_edge_styles, set_edge_labels, set_node_styles,
-             set_node_labels, etc)
+            set_node_labels, etc)
 
         Returns
         -------
@@ -757,7 +757,7 @@ class Graph(object):
         Set the position of nodes for plots in analyze.graph using a graphical tool.
 
         Note: make sure matplotlib is set to plot in an external window
-        (e.g using '%matplotlib qt)
+        (e.g., using '%matplotlib qt)
 
         Parameters
         ----------
@@ -831,9 +831,9 @@ class Graph(object):
         history : History
             History with faulty and nominal states
         times : list, optional
-            List of times to animate over. The default is 'all'.
+            List of times to animate over. The default is 'all'
         figsize : tuple, optional
-            Size for the figure. The default is (6,4).
+            Size for the figure. The default is (6,4)
         **kwargs : kwargs
 
         Returns
@@ -866,7 +866,7 @@ class Graph(object):
         filetype : str, optional
             Type of file to safe. The default is 'png'.
         **kwargs : kwargs
-            kwargs to draw
+            kwargs to draw.
 
         Returns
         -------
@@ -1335,9 +1335,9 @@ def data_error(data, average):
     Returns
     -------
     lower_error : float
-    Lower bound of error
+        Lower bound of error
     upper_error : float
-    Upper bound of error
+        Upper bound of error
 
     """
     q1 = []
@@ -1397,10 +1397,6 @@ class GraphInteractor:
     def get_closest_point(self, event):
         """
         Find the closest node to the given click to see if it should be moved.
-
-        Parameters
-        ----------
-        event
         """
         pt_x = np.array([x[0] for x in self.g_obj.pos.values()])
         pt_y = np.array([x[1] for x in self.g_obj.pos.values()])
@@ -1415,12 +1411,8 @@ class GraphInteractor:
     def on_button_press(self, event):
         """
         Determine what to do when a button is pressed.
-
-        Parameters
-        ----------
-        event
         """
-        """"""
+
         if event.inaxes is None:
             return
         if event.inaxes == self.bax:
@@ -1433,10 +1425,6 @@ class GraphInteractor:
     def on_button_release(self, event):
         """
         Determine what to do when the mouse is released.
-
-        Parameters
-        ----------
-        event
         """
         if event.button != 1:
             return
@@ -1447,10 +1435,6 @@ class GraphInteractor:
     def on_mouse_move(self, event):
         """
         Change the node position when the user drags it.
-
-        Parameters
-        ----------
-        event
         """
         if not self.showverts:
             return
@@ -1524,7 +1508,7 @@ class FunctionArchitectureGraph(Graph):
         Parameters
         ----------
         mdl: Model
-            Model to create the graph representation of.
+            Model to create the graph representation of
 
         Returns
         -------
@@ -1555,15 +1539,14 @@ class FunctionArchitectureGraph(Graph):
         """
         Attaches state attributes to Graph corresponding to the states of the model
         that belong to functions
+
         Parameters
         ----------
         mdl: Model
-            Model to represent.
+            Model to represent
         time: float
             Time to execute indicators at. Default is 0.0
 
-        Returns
-        -------
 
         """
         fxnfaults, fxnstates, indicators = {}, {}, {}
@@ -1583,10 +1566,7 @@ class FunctionArchitectureGraph(Graph):
         Parameters
         ----------
         mdl: Model
-            Model to represent.
-
-        Returns
-        -------
+            Model to represent
 
         """
         flowstates, indicators = {}, {}
@@ -1603,10 +1583,10 @@ class FunctionArchitectureGraph(Graph):
         Parameters
         ----------
         mdl: Model
-            Model to represent.
+            Model to represent
         subedges : list
             nodes from the full graph which will become edges in the subgraph
-            (e.g. individual flows)
+            (e.g., individual flows)
 
         Returns
         -------
@@ -1838,7 +1818,7 @@ class FunctionArchitectureTypeGraph(FunctionArchitectureGraph):
             Model to represent
 
         withflows : bool, optional
-            Whether to include flows. The default is True.
+            Whether to include flows, default is True
 
         Returns
         -------
@@ -1993,10 +1973,8 @@ class MultiFlowGraph(Graph):
 
 
 class CommsFlowGraph(MultiFlowGraph):
-    def __init__(self, flow, include_glob=False, ports_only=False,
-                 get_states=True, get_indicators=True, time=0.0):
-        """
-        Create a graph representation of the CommsFlow (assuming no additional locals).
+       '''
+       Create a graph representation of the CommsFlow (assuming no additional locals).
 
         Parameters
         ----------
@@ -2016,7 +1994,10 @@ class CommsFlowGraph(MultiFlowGraph):
         -------
         g : networkx.DiGraph
             Graph of the commsflow connections.
-        """
+        '''
+    def __init__(self, flow, include_glob=False, ports_only=False,
+                 get_states=True, get_indicators=True, time=0.0):
+     
         send_connections = []
         for f in flow.fxns:
             int_flow = getattr(flow, f)
@@ -2177,13 +2158,11 @@ class ActionArchitectureGraph(Graph):
         """
         Labels the underlying networkx graph structure with type attributes
         corresponding to the ActionArchitecture.
+
         Parameters
         ----------
         aa : ActionArchitecture
             Action Sequence Graph object to represent
-
-        Returns
-        -------
 
         """
         for n in self.g.nodes():
@@ -2285,7 +2264,7 @@ class ActionArchitectureActGraph(ActionArchitectureGraph):
 class ActionArchitectureFlowGraph(ActionArchitectureGraph):
     """Variant of ActionArchitectureGraph where only showing flow relationships between actions."""
 
-    def __init__(self, aa, get_states=True):
+    def __init__(self, aa, get_states=True):L
         self.g = aa.flow_graph.copy()
         self.set_nx_labels(aa)
         if get_states:
