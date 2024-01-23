@@ -59,6 +59,15 @@ class GeomArchitecture(Architecture):
         """Return a dict of all points, lines, and polygons."""
         return {**self.points, **self.lines, **self.polys}
 
+    def check_geom_class(self, gclass, baseclass):
+        """Check that geom class/object inherits from given base class."""
+        try:
+            if not issubclass(gclass, baseclass):
+                raise Exception("gclass "+gclass+" not a "+baseclass.__name__)
+        except TypeError:
+            if not isinstance(gclass, baseclass):
+                raise Exception("gclass "+gclass+" not a "+baseclass.__name__)
+
     def add_point(self, name, pclass=GeomPoint, **kwargs):
         """
         Add/instantiate an individual point to the overall architecture.
@@ -72,8 +81,7 @@ class GeomArchitecture(Architecture):
         **kwargs : kwargs
             kwargs defining the object for gclass.
         """
-        if not issubclass(pclass, GeomPoint):
-            raise Exception("pclass "+pclass+" not a GeomPoint")
+        self.check_geom_class(pclass, GeomPoint)
         self.add_flex_role_obj('points', name, objclass=pclass, **kwargs)
 
     def add_line(self, name, lclass=GeomLine, **kwargs):
@@ -89,8 +97,7 @@ class GeomArchitecture(Architecture):
         **kwargs : kwargs
             kwargs defining the object for gclass.
         """
-        if not issubclass(lclass, GeomLine):
-            raise Exception("lclass "+lclass+" not a GeomPoint")
+        self.check_geom_class(lclass, GeomLine)
         self.add_flex_role_obj('lines', name, objclass=lclass, **kwargs)
 
     def add_poly(self, name, pclass=GeomPoly, **kwargs):
@@ -106,8 +113,7 @@ class GeomArchitecture(Architecture):
         **kwargs : kwargs
             kwargs defining the object for gclass.
         """
-        if not issubclass(pclass, GeomPoly):
-            raise Exception("pclass "+pclass+" not a GeomPoint")
+        self.check_geom_class(pclass, GeomPoly)
         self.add_flex_role_obj('polys', name, objclass=pclass, **kwargs)
 
     def all_at(self, *pt):

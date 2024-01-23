@@ -53,7 +53,9 @@ class Environment(CommsFlow):
         if 'p' not in ga and self.arch_ga.container_p == self.container_p:
             ga = {**ga, 'p': p}
         super().__init__(name=name, glob=glob, p=p, s=s, track=track)
-        self.init_roles('container', r=r)
+        # NOTE: p and s also init here because if not, they are overritten
+        # may need to change in the future
+        self.init_roles('container', r=r, p=p, s=s)
         self.init_roles('coords', c=c)
         self.init_roles('arch', ga=ga)
 
