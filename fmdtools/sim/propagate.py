@@ -136,10 +136,9 @@ save_args : dict (optional)
     Dictionary specifying if/how to save results. Default is {}, which doesn't
     save anything.
     Has structure ::
-
         {'mdlhists':mdlhistargs, 'endclass':endclassargs, 'indiv':indiv}
 
-    where mdlhistargs and endclassargs are dictionaries of save arguments, e.g.::
+    where mdlhistargs and endclassargs are dictionaries of save arguments, e.g.,::
 
     {'filename':'filename.pkl', 'filetype':'pickle', 'overwrite':True}
 
@@ -149,7 +148,6 @@ save_args : dict (optional)
 mdl_kwargs: dict (optional)
     Parameter dictionary to be instantiated in the model prior to simulation.
     Has structure ::
-
         {"p": Parameter, "sp":SimParam, "track":track}
 
     Parameter dictionaries do not need to be complete (if incomplete).
@@ -653,8 +651,9 @@ def fault_sample_from(mdl, faultdomains={}, faultsamples={}, get_phasemap=True,
     faultsamples : dict
         Dict of arguments to SampleApproach.add_faultsamples
         FaultSamples to add to othe SampleApproach and their arguments.
-        Has structure: {'fs_name': (*args, **kwargs)}, where args and kwargs are
-        arguments/kwargs to SampleApproach.add_faultsamples.
+        Has structure::
+        {'fs_name': (*args, **kwargs)}
+        where args and kwargs are arguments/kwargs to SampleApproach.add_faultsamples.
     get_phasemap : bool, optional
         Whether to generate the FaultSample from the phasemap. The default is True.
     scen : scenario, optional
@@ -905,8 +904,9 @@ def nested_sample(mdl, ps, get_phasemap=False, faultdomains={}, faultsamples={},
     faultsamples : dict
         Dict of arguments to SampleApproach.add_faultsamples
         FaultSamples to add to othe SampleApproach and their arguments.
-        Has structure: {'fs_name': (*args, **kwargs)}, where args and kwargs are
-        arguments/kwargs to SampleApproach.add_faultsamples.
+        Has structure::
+        {'fs_name': (*args, **kwargs)}
+        where args and kwargs are arguments/kwargs to SampleApproach.add_faultsamples.
     include_nominal : bool, optional
         Whether to return nominal hists/results back. Default is False.
     **kwargs : kwargs

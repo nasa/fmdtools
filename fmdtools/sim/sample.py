@@ -1156,8 +1156,9 @@ class SampleApproach(BaseSample):
         ----------
         **faultdomains : tuple
             FaultDomains to add to the SampleApproach and their arguments.
-            Has structure: {'fd_name': (*args, **kwargs)}, where args and kwargs are
-            arguments/kwargs to SampleApproach.add_faultdomain (after name).
+            Has structure::
+            {'fd_name': (*args, **kwargs)} 
+            where args and kwargs are arguments/kwargs to SampleApproach.add_faultdomain (after name).
         """
         for fd in faultdomains:
             self.add_faultdomain(fd, *faultdomains[fd][0], **faultdomains[fd][1])
@@ -1170,8 +1171,9 @@ class SampleApproach(BaseSample):
         ----------
         **faultsamples : tuple
             FaultSamples to add to othe SampleApproach and their arguments.
-            Has structure: fs_name = (*args, **kwargs)}, where args and kwargs are
-            arguments/kwargs to SampleApproach.add_faultsample (after name).
+            Has structure::
+            fs_name = (*args, **kwargs)}
+            where args and kwargs are arguments/kwargs to SampleApproach.add_faultsample (after name).
         """
         for fs in faultsamples:
             self.add_faultsample(fs, *faultsamples[fs][0], **faultsamples[fs][1])

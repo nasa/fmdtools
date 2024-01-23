@@ -76,14 +76,14 @@ class epsTests(unittest.TestCase, CommonTests):
         self.assertTrue(unpickleable == [])
 
     def test_nominal_saving(self):
-        for extension in [".pkl", ".csv", ".json"]:
+        for extension in [".npz", ".csv", ".json"]:
             resname = "eps_hist" + extension
             histname = "eps_res" + extension
             self.check_onerun_save(self.mdl, 'nominal', resname, histname)
 
     def test_save_load_onefault(self):
         faultscen = ("store_ee", "no_storage", 0)
-        for extension in [".pkl", ".csv", ".json"]:
+        for extension in [".npz", ".csv", ".json"]:
             resname = "eps_hist" + extension
             histname = "eps_res" + extension
             self.check_onerun_save(self.mdl, 'one_fault', resname, histname,
@@ -91,14 +91,14 @@ class epsTests(unittest.TestCase, CommonTests):
 
     def test_multfault_saving(self):
         faultscen = {0: {"store_ee": ["no_storage"], "distribute_ee": "short"}}
-        for extension in [".pkl", ".csv", ".json"]:
+        for extension in [".npz", ".csv", ".json"]:
             resname = "eps_hist" + extension
             histname = "eps_res" + extension
             self.check_onerun_save(self.mdl, "sequence", resname, histname,
                                    faultscen=faultscen)
 
     def test_save_load_singlefaults(self):
-        self.check_sf_save(self.mdl, "eps_res.pkl", "eps_hist.pkl")
+        self.check_sf_save(self.mdl, "eps_res.npz", "eps_hist.npz")
         self.check_sf_save(self.mdl, "eps_res.csv", "eps_hist.csv")
         self.check_sf_save(self.mdl, "eps_res.json", "eps_hist.json")
 
