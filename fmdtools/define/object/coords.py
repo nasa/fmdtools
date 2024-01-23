@@ -978,8 +978,8 @@ class Coords(BaseObject):
         collections : dict, optional
             Collections to plot and their respective kwargs for show_collection.
             The default is {}.
-        legend_args : bool, optional
-            ?? Default is False.
+        legend_args : bool/dict, optional
+            Specifies arguments to legend. Default is False, which shows no legend.
         **kwargs : kwargs
             kwargs to show_property.
 
