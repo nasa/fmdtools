@@ -292,7 +292,8 @@ class BaseObject(object):
         spec : str
             Name of the attributes to initialize
         name_end: str
-            End letter of the attribute name??. default is 's'.
+            Last letter or set of lettersof the attribute used to give the role name to where 
+            the dictionary will be placed. It may be "ions" with collections. Default is 's'.
         set_attr : bool
             Whether to also add the individual attributes attr to the obj
         """
