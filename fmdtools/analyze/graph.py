@@ -1974,28 +1974,28 @@ class MultiFlowGraph(Graph):
 
 
 class CommsFlowGraph(MultiFlowGraph):
-       '''
-       Create a graph representation of the CommsFlow (assuming no additional locals).
+    '''
+    Create a graph representation of the CommsFlow (assuming no additional locals).
 
-        Parameters
-        ----------
-        include_glob : bool, optional
-            Whether to include the base (root) node. The default is False.
-        ports_only : bool, optional
-            Whether to only include the explicit port connections betwen flows.
-            The default is False
-        with_internal: bool, optional
-            Whether to include the internal aspect of the commsflow in the commsflow.
-        get_indicators : bool, optional
-            Whether to attach indicators as attributs to the graph. The default is False
-        time : float
-            Time to run the indicator methods at.
+    Parameters
+    ----------
+    include_glob : bool, optional
+        Whether to include the base (root) node. The default is False.
+    ports_only : bool, optional
+        Whether to only include the explicit port connections betwen flows.
+        The default is False
+    with_internal: bool, optional
+        Whether to include the internal aspect of the commsflow in the commsflow.
+    get_indicators : bool, optional
+        Whether to attach indicators as attributs to the graph. The default is False
+    time : float
+        Time to run the indicator methods at.
 
-        Returns
-        -------
-        g : networkx.DiGraph
-            Graph of the commsflow connections.
-        '''
+    Returns
+    -------
+    g : networkx.DiGraph
+        Graph of the commsflow connections.
+    '''
     def __init__(self, flow, include_glob=False, ports_only=False,
                  get_states=True, get_indicators=True, time=0.0):
      
@@ -2265,7 +2265,7 @@ class ActionArchitectureActGraph(ActionArchitectureGraph):
 class ActionArchitectureFlowGraph(ActionArchitectureGraph):
     """Variant of ActionArchitectureGraph where only showing flow relationships between actions."""
 
-    def __init__(self, aa, get_states=True):L
+    def __init__(self, aa, get_states=True):
         self.g = aa.flow_graph.copy()
         self.set_nx_labels(aa)
         if get_states:

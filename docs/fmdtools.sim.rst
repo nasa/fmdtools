@@ -15,9 +15,6 @@ fmdtools.sim.propagate
 
 The :mod:`fmdtools.sim.propagate` module is used to simulate the behaviors of a :class:`fmdtools.define.block.base.Simulable` (`Model` or `Block`) with and without faults. As shown above, each of the methods (described below) fit a given simulation use-case for resilience assessment--single/multiple scenarios, in nominal/faulty scenarios, and at a single set or multiple sets of parameters.
 
-fmdtools.sim.propagate
-----------------------------------
-
 .. automodule:: fmdtools.sim.propagate
    :members:
    :undoc-members:
