@@ -615,7 +615,7 @@ class Comparison(BaseComparison):
 
 
 class NestedComparison(BaseComparison):
-     """
+    """
     Make a nested table of the statistic for samples taken in other samples.
 
     ...

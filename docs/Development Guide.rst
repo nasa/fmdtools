@@ -37,19 +37,14 @@ fmdtools was developed with a number of unique features that differentiate it fr
 
 - fmdtools can represent different system elements including human and AI components, and their interactions in both systems and system of systems. Additionally, fmdtools allows the modeling of the interactions between systems/system-of-systems and external factors such as the environment (e.g., weather, organizational factors). Specifically, fmdtools enables:
 
-  - Representing human actions and behaviors are through actions and action sequence graphs
+  - Representing the actions of autonomous systems and human operators and behaviors through functions/actions and action architectures
 
-  -	Representing performance shaping factors, the interactions between performance shaping factors, and their influence on performance
+  -	Representing performance shaping factors, the interactions between performance shaping factors, their short-term and long-term influence on overall system resilience
 
-  -	Modeling long-term performance degradation (including performance shaping factor degradations) and their effects on overall system resilience
-
-  -	Representing artificial intelligence components via function, components, or action sequence graphs
-
-  -	Modeling perception and communications (for both human and artificial intelligence components) to allow the study of situation awareness’s contribution to safety (both positive and negative)
+  -	Modeling perception and communications (for both human and artificial intelligence components) to allow the study of situation awareness’s contribution to safety (both positive and negative) in system of systems (and systems) by representing systems via functions and the interconnection between systems via flows
 
   -	Representing the influence of external factors on system behaviors through parameters and parameter sampling
   
-  -	Modeling systems of systems by representing systems via functions and the interconnection between systems via flows
 
 - fmdtools can represent the system at varying levels of fidelity through the design process so that one can start with a simple model and analysis, and make it more detailed as the design is elaborated. A typical process of representing the system (from less to more detail) would involve:
   
@@ -254,7 +249,7 @@ Model Development Best Practices
 Pay attention to and document the fmdtools version
 --------------------------------
 
-As a research-oriented tool, much of the fmdtools interfaces can be considered to be "in development." While we d to keep want to keep the repository stable, there have been many changes to syntax over the years to provide enhanced functionality and usages.
+As a research-oriented tool, much of the fmdtools interfaces can be considered to be "in development." While we want to keep the repository stable, there have been many changes to syntax over the years to provide enhanced functionality and usages.
 
 As such, it can be helpful to document what fmdtools version you are running in a README.md for your project, so you can always have a working model and replicate results, even if something has changed on the toolkit-level. 
 
