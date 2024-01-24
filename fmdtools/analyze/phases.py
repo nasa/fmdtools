@@ -138,7 +138,7 @@ class PhaseMap(object):
         Returns
         -------
         phase_times : dict
-            DESCRIPTION
+            the number of time-steps in each phase
 
         Examples
         --------

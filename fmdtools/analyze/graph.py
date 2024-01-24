@@ -1016,7 +1016,8 @@ class Graph(object):
         ----------
         title : str, optional
             Title for the plot. The default is 'bridging nodes'.
-        node_kwargs : TODO : need documentation update.
+        node_kwargs : dict, optional
+            Non-default fields for NodeStyle
         **kwargs : kwargs
             kwargs for Graph.draw
 
