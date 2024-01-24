@@ -305,7 +305,7 @@ def multiplot_legend_title(groupmetrics, axs, ax,
 
 
 def consolidate_legend(ax, loc='upper left', bbox_to_anchor=(1.05, 1),
-                       add_handles=[], **kwargs):
+                       add_handles=[], color='', **kwargs):
     """Create a single legend for a given multiplot where multiple groups are
     being compared"""
     ax.legend()
