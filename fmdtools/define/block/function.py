@@ -153,8 +153,7 @@ class Function(Block):
         # if there is a fault, it is instantiated
         if faults:
             self.m.add_fault(*faults)
-        if hasattr(self, 'mode_state_dict') and any(faults):
-            self.update_modestates()
+            self.m.update_modestates()
         # conditional faults and behavior are then run
         if hasattr(self, 'condfaults'):
             self.condfaults(time)
