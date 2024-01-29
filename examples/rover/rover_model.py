@@ -1153,6 +1153,7 @@ if __name__ == "__main__":
     comp = tabulate.Comparison(res, ps_sine,
                                metrics=['end_dist'],
                                factors=['p.ground.amp', 'p.ground.period'])
+    res.plot_metric_dist('tot_deviation')
     # comp.sort_by_factor('p.ground.amp')
     comp.as_table()
     comp.as_plot("end_dist")
