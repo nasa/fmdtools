@@ -725,11 +725,11 @@ class History(Result):
         hist['time'] = self.get_metric('time', axis=0)
         hist['stat'] = self.get_metric(value, np.mean, axis=0)
         std_dev = self.get_metric(value, np.std)
-        hist['high'] = hist['line']+std_dev/2
-        hist['low'] = hist['line']-std_dev/2
+        hist['high'] = hist['stat']+std_dev/2
+        hist['low'] = hist['stat']-std_dev/2
         return hist
 
-    def plot_mean_std_line(self, value, ax=None, fig=None, figsize=(6, 4), **kwargs):
+    def plot_mean_std_line(self, value, fig=None, ax=None, figsize=(6, 4), **kwargs):
         """Plot value in hist aggregated by mean and standard devation."""
         hist = self.get_mean_std_errhist(value)
         return plot_err_hist(hist, ax, fig, figsize, **kwargs)
