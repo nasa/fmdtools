@@ -6,7 +6,7 @@ Created on Thu Sep 28 15:30:00 2023
 """
 from rover_model import Rover, RoverParam
 import fmdtools.sim.propagate as prop
-from fmdtools.sim.approach import SampleApproach
+from fmdtools.sim.sample import SampleApproach
 
 
 mdl = Rover()

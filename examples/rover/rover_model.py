@@ -585,10 +585,10 @@ class DriveMode(Mode):
                            "drift": {-0.2, 0.2}}
                 self.init_n_faultstates(franges, phases=ph)
             if "range" in self.mode_args:
-                franges = {"friction": np.linspace(0.0, 20, 10),
-                           "transfer":  np.linspace(1.0, 0.0, 10),
-                           "drift": np.linspace(-0.5, 0.5, 10)}
-                if "all" in kwargs["drive_modes"]:
+                franges = {"friction": {*np.linspace(0.0, 20, 10)},
+                           "transfer":  {*np.linspace(1.0, 0.0, 10)},
+                           "drift": {*np.linspace(-0.5, 0.5, 10)}}
+                if "all" in self.mode_args:
                     self.init_n_faultstates(franges, phases=ph, n="all")
                 else:
                     self.init_n_faultstates(franges, phases=ph, n=1)
@@ -1102,9 +1102,22 @@ def gen_param_space():
 if __name__ == "__main__":
     import multiprocessing as mp
     from fmdtools.analyze import tabulate
+    from fmdtools.sim.sample import SampleApproach, FaultDomain, FaultSample
+    
+    import fmdtools.analyze.phases as ph
 
-    import doctest
-    doctest.testmod(verbose=True)
+
+    mdl_id = Rover(p={"drive_modes": {"mode_args": 'set-manual'}})
+    endresults, mdlhist = prop.nominal(mdl_id)
+    phasemap = ph.from_hist(mdlhist)
+    fault_domain_id = FaultDomain(mdl_id)
+    fault_domain_id.add_all_fxnclass_modes('Drive')
+    fault_sample_id = FaultSample(fault_domain_id, phasemap['plan_path'])
+    fault_sample_id.add_fault_phases('drive')
+    results_id, mdlhists_id = prop.fault_sample(mdl_id, fault_sample_id, staged=True)
+    print(results_id)
+    #import doctest
+    #doctest.testmod(verbose=True)
 
     mdl = Rover()
     ec, hist = prop.nominal(mdl)
