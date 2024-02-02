@@ -3,6 +3,7 @@
 Description: A module for defining time-based properties for use in blocks.
 
 Has Classes:
+
 - :class:`Time`: Class containing all time-related Block constructs (e.g., timers).
 """
 from decimal import Decimal
@@ -14,6 +15,8 @@ from fmdtools.define.object.timer import Timer
 class Time(BaseContainer):
     """
     Class for defining all time-based aspects of a Block (e.g., time, timestep, timers).
+
+    ...
 
     Attributes
     ----------
@@ -38,6 +41,7 @@ class Time(BaseContainer):
     Examples
     --------
     Extending the time class gives one access to a dict of timers:
+
     >>> class ExtendedTime(Time):
     ...     timernames = ('t1', 't2')
 
@@ -46,16 +50,19 @@ class Time(BaseContainer):
     Timer t1: mode= standby, time= 0.0
 
     These timers can then be used:
+
     >>> t.timers['t1'].inc(1.0)
     >>> t.timers['t1']
     Timer t1: mode= ticking, time= 1.0
 
     Checking copy:
+
     >>> t2 = t.copy()
     >>> t2.timers
     {'t1': Timer t1: mode= ticking, time= 1.0, 't2': Timer t2: mode= standby, time= 0.0}
 
     Check that copied timers are independent:
+    
     >>> t2.timers['t1'].__hash__() == t.timers['t1'].__hash__()
     False
     """

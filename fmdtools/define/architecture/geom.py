@@ -32,7 +32,7 @@ class GeomArchitecture(Architecture):
     ...        self.add_poly("ex_poly", ExPoly)
 
     This can then be used in containing classes (e.g., environments) that need multiple
-    geoms. We can then access the individual geoms in the geoms dict, e.g.:
+    geoms. We can then access the individual geoms in the geoms dict, e.g.,:
 
     >>> ega = ExGeomArch()
     >>> ega.geoms()['ex_point'].s

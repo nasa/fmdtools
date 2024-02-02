@@ -3,6 +3,7 @@
 Module for Fault Sampling. Takes the place of approach classes.
 
 Has classes:
+
 - :class:`ParameterDomain`: Defines domain for sampling from Parameters.
 - :class:`FaultDomain`: Defines domain for sampling from Faults.
 - :class:`FaultSample`: Defines a sample of fault scenarios.
@@ -25,6 +26,8 @@ class ParameterDomain(object):
     """
     Defines a domain to sample from a Parameter.
 
+    ...
+
     Attributes
     ----------
     parameter_init: Parameter/method
@@ -38,6 +41,7 @@ class ParameterDomain(object):
     Examples
     --------
     Given the parameter:
+
     >>> class ExampleParameter(Parameter):
     ...    x: float = 1.0
     ...    y: float = 10.0
@@ -46,26 +50,32 @@ class ParameterDomain(object):
     ...    y_set = (1.0, 2.0, 3.0, 4.0)
 
     We can then define the following domain, which by default gets set constraints:
+
     >>> expd = ParameterDomain(ExampleParameter)
     >>> expd.add_variables("y", "x")
     >>> expd.add_constants(z=20)
     >>> expd
+
     ParameterDomain with:
+
      - variables: {'y': {1.0, 2.0, 3.0, 4.0}, 'x': (0, 10)}
      - constants: {'z': 20}
      - parameter_initializer: ExampleParameter
 
     This ParameterDomain then becomes a callable with the given variables:
+
     >>> expd(1, 2)
     ExampleParameter(x=2.0, y=1.0, z=20.0)
 
     And we can separately check the set contraints for the variables:
+
     >>> expd.get_set_constraints(1, 2)
     (False, False)
     >>> expd.get_set_constraints(0, 20)
     (True, True)
 
     This can also work with nested parameters:
+
     >>> class ExNestedParam(Parameter):
     ...    ex_param: ExampleParameter = ExampleParameter()
     ...    k: float = 20.0
@@ -379,6 +389,8 @@ class FaultDomain(object):
     """
     Defines the faults which will be sampled from in an approach.
 
+    ...
+
     Attributes
     ----------
     fxns : dict
@@ -674,8 +686,6 @@ class BaseSample():
         ----------
         res : Result
             Result with the given metrics over a number of scenarios.
-        samp : BaseSample
-            Sample object used to generate the scenarios
         metrics : list
             metrics in res to tabulate over time. Default is ['cost'].
         factors : list
@@ -725,6 +735,8 @@ class FaultSample(BaseSample):
     """
     Defines a sample of a given faultdomain.
 
+    ...
+
     Parameters
     ----------
     faultdomain: FaultDomain
@@ -732,6 +744,7 @@ class FaultSample(BaseSample):
     phasemap: PhaseMap, (optional)
         Phases of operation to sample over.
 
+        
     Attributes
     ----------
     _scenarios : list
@@ -992,6 +1005,8 @@ class SampleApproach(BaseSample):
     """
     Class for defining an agglomeration of fault samples accross an entire model.
 
+    ...
+    
     Attributes
     ----------
     mdl : Simulable
@@ -1141,8 +1156,9 @@ class SampleApproach(BaseSample):
         ----------
         **faultdomains : tuple
             FaultDomains to add to the SampleApproach and their arguments.
-            Has structure: {'fd_name': (*args, **kwargs)}, where args and kwargs are
-            arguments/kwargs to SampleApproach.add_faultdomain (after name).
+            Has structure::
+            {'fd_name': (*args, **kwargs)} 
+            where args and kwargs are arguments/kwargs to SampleApproach.add_faultdomain (after name).
         """
         for fd in faultdomains:
             self.add_faultdomain(fd, *faultdomains[fd][0], **faultdomains[fd][1])
@@ -1155,8 +1171,9 @@ class SampleApproach(BaseSample):
         ----------
         **faultsamples : tuple
             FaultSamples to add to othe SampleApproach and their arguments.
-            Has structure: fs_name = (*args, **kwargs)}, where args and kwargs are
-            arguments/kwargs to SampleApproach.add_faultsample (after name).
+            Has structure::
+            fs_name = (*args, **kwargs)}
+            where args and kwargs are arguments/kwargs to SampleApproach.add_faultsample (after name).
         """
         for fs in faultsamples:
             self.add_faultsample(fs, *faultsamples[fs][0], **faultsamples[fs][1])
@@ -1191,6 +1208,8 @@ class SampleApproach(BaseSample):
 class ParameterSample(BaseSample):
     """
     Class for sampling parameters and other immutable model attributes.
+
+    ...
 
     Attributes
     ----------
@@ -1291,7 +1310,7 @@ class ParameterSample(BaseSample):
         name : str, optional
             Name prefix for the set of replicates. The default is 'var'.
         weight : float, optional
-            Total weight for the replicates (i.e.., total probability to divide between
+            Total weight for the replicates (i.e., total probability to divide between
             samples). The default is 1.0.
 
         Examples

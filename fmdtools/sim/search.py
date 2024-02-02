@@ -3,8 +3,11 @@
 Description: Functions and Classes to enable optimization and search of fault model states and parameters.
 
 Classes:
-    - :class:`ProblemInterface`:  Creates an interface for model simulations for optimization methods
+    - :class:`ProblemArchitecture`:  Enables the representation of combined joint optimization problems
     - :class:`DynamicInterface`:  Creates an interface for model simulations for dynamic optimization of a single sim
+    - :class:`SimpleProblem`: Creates an interface for simple optimazation problem without any model constructs
+    - :class:`DisturbanceProblem`: Enables optimizing disturbances that occur at a set time
+    - :class:`SingleFaultScenarioProblem`: Enables optimizing the time of a given fault scenario
 """
 import numpy as np
 import networkx as nx
@@ -25,6 +28,8 @@ class BaseObjCon(dataobject):
     """
     Base class for objectives and constraints.
 
+    ...
+
     Fields
     ------
     name : str
@@ -39,7 +44,8 @@ class BaseObjCon(dataobject):
 
 class Objective(BaseObjCon):
     """
-    
+    ...
+
     Fields
     ------
     negative : bool
@@ -64,6 +70,8 @@ class Objective(BaseObjCon):
 class Constraint(Objective):
     """
     Base class for constraints which derive from results.
+
+    ...
 
     Fields
     ------
@@ -119,6 +127,8 @@ class BaseProblem(object):
     """
     Base optimization problem.
 
+    ...
+
     Attributes
     ----------
     variables : dict
@@ -167,7 +177,7 @@ class BaseProblem(object):
         self.iter_hist["objectives"][name] = []
 
     def add_objective_callable(self, name):
-        """Add callable objective function with name name."""
+        """Add callable objective function with name."""
         def newobj(*x):
             return self.call_objective(*x, objective=name)
         setattr(self, name, newobj)
@@ -288,6 +298,8 @@ class SimpleProblem(BaseProblem):
     """
     Simple optimization problem (without any given model constructs).
 
+    ...
+
     Attributes
     ----------
     callables : dict
@@ -363,6 +375,8 @@ class ResultObjective(Objective):
     """
     Base class of objectives which derive from Results.
 
+    ...
+
     Fields
     ------
     time : float
@@ -419,6 +433,8 @@ class ResultConstraint(ResultObjective):
     """
     Base class for constraints which derive from results.
 
+    ...
+
     Fields
     ------
     threshold : float
@@ -472,6 +488,8 @@ class HistoryConstraint(ResultConstraint):
 class BaseSimProblem(BaseProblem):
     """
     Base optimization problem for optimizing over simulations.
+
+    ...
 
     Attributes
     ----------
@@ -596,8 +614,9 @@ class ParameterSimProblem(BaseSimProblem):
     >>> from fmdtools.sim.sample import expd
     >>> from fmdtools.define.block.function import ExampleFunction
 
-    # below, we show basic setup of a parameter problem where objectives get values
-    # from the sim at particular times.
+    below, we show basic setup of a parameter problem where objectives get values
+    from the sim at particular times.
+
     >>> exprob = ParameterSimProblem(ExampleFunction(), expd, "nominal")
     >>> exprob.add_result_objective("f1", "s.x", time=5)
     >>> exprob.add_result_objective("f2", "s.y", time=5)
@@ -613,7 +632,8 @@ class ParameterSimProblem(BaseSimProblem):
     CONSTRAINTS
      -g1                                                            nan
 
-    # once this is set up, you can use the objectives/constraints as callables, like so:
+    once this is set up, you can use the objectives/constraints as callables, like so:
+
     >>> exprob.f1(1, 0)
     0.0
     >>> exprob.f1(1, 1)
@@ -625,7 +645,8 @@ class ParameterSimProblem(BaseSimProblem):
     >>> exprob.g1(1, 2)
     -10.0
 
-    # below, we use the endclass as an objective instead of the variable:
+    below, we use the endclass as an objective instead of the variable:
+
     >>> exprob = ParameterSimProblem(ExampleFunction(), expd, "nominal")
     >>> exprob.add_result_objective("f1", "endclass.xy")
     >>> exprob.f1(1, 1)
@@ -633,7 +654,8 @@ class ParameterSimProblem(BaseSimProblem):
     >>> exprob.f1(1, 2)
     200.0
 
-    # finally, note that this class can work with a variety of methods:
+    finally, note that this class can work with a variety of methods:
+
     >>> exprob = ParameterSimProblem(ExampleFunction("ex"), expd, "one_fault", "ex", "short", 2)
     >>> exprob.add_result_objective("f1", "s.y", time=3)
     >>> exprob.add_result_objective("f2", "s.y", time=5)
@@ -696,6 +718,8 @@ class ParameterSimProblem(BaseSimProblem):
 class ScenarioProblem(BaseSimProblem):
     """
     Base class for optimizing scenario parameters.
+
+    ...
 
     Attributes
     ----------
@@ -767,6 +791,8 @@ class SingleFaultScenarioProblem(ScenarioProblem):
     """
     Class for optimizing the time of a given fault scenario.
 
+    ...
+
     Attributes
     ----------
     faultdomain : FaultDomain
@@ -783,7 +809,8 @@ class SingleFaultScenarioProblem(ScenarioProblem):
     >>> ex_scenprob = SingleFaultScenarioProblem(ExampleFunction(), ("examplefunction", "short"))
     >>> ex_scenprob.add_result_objective("f1", "s.y", time=5)
 
-    # objective value should be 1.0 (init value) + 3 * time_with_fault
+    objective value should be 1.0 (init value) + 3 * time_with_fault
+    
     >>> ex_scenprob.f1(5.0)
     4.0
     >>> ex_scenprob.f1(4.0)
@@ -932,6 +959,8 @@ class BaseConnector(dataobject):
     Connectectors are used in ProblemArchitectures to link the outputs of one problem
     as the inputs to another.
 
+    ...
+
     Fields
     ------
     name : name to give the Connector
@@ -1025,6 +1054,8 @@ class ProblemArchitecture(BaseProblem):
     well for nested problems, there are some limitations when workign with parallel
     problems which we hope to resolve in future work.
 
+    ...
+
     Attributes
     ----------
     connectors : dict
@@ -1041,6 +1072,7 @@ class ProblemArchitecture(BaseProblem):
     Below we connect three example problems in a single architecture, linking the vars
     x0 and x1 from ex_sp to be inputs to the scenario simulation (time) as well as the
     disturbance simulation variable (s.y).
+
     >>> ex_pa = ProblemArchitecture()
     >>> ex_pa.add_connector_variable("x0", "x0")
     >>> ex_pa.add_connector_variable("x1", "x1")
@@ -1048,6 +1080,7 @@ class ProblemArchitecture(BaseProblem):
     >>> ex_pa.add_problem("ex_scenprob", ex_scenprob, inputs={"x0": ["time"]})
     >>> ex_pa.add_problem("ex_dp", ex_dp, inputs={"x1": ["s.y"]})
     >>> ex_pa
+
     ProblemArchitecture with:
     CONNECTORS
      -x0                                                          [nan]
@@ -1067,6 +1100,7 @@ class ProblemArchitecture(BaseProblem):
 
     Setting up this problem gives us callables for each problem which we can use to
     call each objective in each problem in terms of its local variables:
+
     >>> ex_pa.ex_sp_f1(1, 1)
     2.0
     >>> ex_pa.ex_scenprob_f1()
@@ -1075,6 +1109,7 @@ class ProblemArchitecture(BaseProblem):
     1.0
 
     We can also call these in terms of the full set of variables:
+
     >>> ex_pa.ex_scenprob_f1_full(2, 2)
     13.0
     >>> ex_pa.ex_dp_f1_full(3, 3)
@@ -1261,7 +1296,7 @@ class ProblemArchitecture(BaseProblem):
         self.iter_hist.objectives[aname] = []
 
     def add_constraint_callables(self, probname):
-        """Add callable constraint function with name name."""
+        """Add callable constraint function from problem probname."""
         for conname in self.problems[probname].constraints:
             self.add_constraint_callable(probname, conname)
 
@@ -1411,10 +1446,12 @@ class ProblemArchitecture(BaseProblem):
          -g1                                                        -4.0000
 
         This update should further update connectors:
+
          >>> ex_pa.get_outputs("ex_sp")
          {'x0': VariableConnector(name='x0', keys=('x0',), values=array([1.])), 'x1': VariableConnector(name='x1', keys=('x1',), values=array([2.]))}
 
         Which should then propagate to downstream sims:
+
         >>> ex_pa.update_problem("ex_scenprob")
         >>> ex_pa.problems["ex_scenprob"]
         SingleScenarioProblem(examplefunction, short) with:
@@ -1579,6 +1616,8 @@ ex_pa.add_problem("ex_dp", ex_dp, inputs={"x1": ["s.y"]})
 class DynamicInterface():
     """
     Interface for dynamic search of model states (e.g., AST).
+
+    ...
 
     Attributes
     ----------
