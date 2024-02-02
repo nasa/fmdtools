@@ -20,6 +20,7 @@ from fmdtools.sim import propagate as prop
 from fmdtools.analyze.common import suite_for_plots
 
 import unittest
+from matplotlib import pyplot as plt
 
 
 # test_setup
