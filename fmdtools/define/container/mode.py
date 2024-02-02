@@ -115,18 +115,6 @@ class Mode(BaseContainer, readonly=False):
     Mode is meant to be inherited in order to define the specific faults related to a
     given Block.
 
-    e.g.,
-    class ExampleMode(Mode):
-        fm_args = {"high_heat", "low_heat"}
-        mode = "start"
-    Will create a Mode structure where m.mode = 'start' that can enter the given
-    fault modes 'high_heat' and 'low_heat'.
-
-    Mode has the following class variables  which can be modified to define the
-    representation and probability model.
-
-    ...
-
     Class Variables
     ---------------
     opermodes : tuple
@@ -165,8 +153,6 @@ class Mode(BaseContainer, readonly=False):
 
     These fields are then used in simulation and elsewhere.
 
-    ...
-    
     Fields
     ------
     faults : set
