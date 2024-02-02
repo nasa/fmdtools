@@ -2,13 +2,12 @@
 Description: Translates simulation outputs to pandas tables for display, export, etc.
 
 Uses methods:
-- :meth:`result_summary_fmea`: Make a table of endclass metrics, along with degraded
-functions/flows.
-- :meth:`result_summary:` Make a a table of a summary dictionary from a given model run.
-- :meth:`nominal_stats`: Makes a table of quantities of interest from endclasses from a
-nominal approach.
+
+- :func:`result_summary_fmea`: Make a table of endclass metrics, along with degraded functions/flows.
+- :func:`result_summary`: Make a a table of a summary dictionary from a given model run.
 
 and classes:
+
 - :class:`FMEA`: Class defining FMEA tables (with plotting/tabular export).
 - :class:`Comparison`: Class defining metric comparison (with plot/tab export).
 - :class:`NominalEnvelope`: Class defining performance envelope (with plot export).
@@ -99,7 +98,11 @@ class BaseTab(UserDict):
 
     Userdict has structure {metric: {comp_group: value}} which enables plots/tables.
 
-    Attributes
+    ...
+
+    Attributes:
+    -----------
+
     factors : list
         List of factors in the table
     """
@@ -111,8 +114,7 @@ class BaseTab(UserDict):
         Parameters
         ----------
         *factor : str/int
-            Name of factor(s) to sort by, in order of sorting. (non-included factors
-                                                                will be sorted last)
+            Name of factor(s) to sort by, in order of sorting. (non-included factors will be sorted last)
         """
         factors = list(factors)
         factors.reverse()
@@ -214,9 +216,9 @@ class BaseTab(UserDict):
         title : str, optional
             Title to use (if not default). The default is "".
         fig : figure
-            Matplotlib figure object
+            Matplotlib figure object.
         ax : axis
-            Corresponding matplotlib axis
+            Corresponding matplotlib axis.
         figsize : tuple, optional
             Figsize (if fig not provided). The default is (6, 4).
         xlab : str, optional
@@ -226,15 +228,15 @@ class BaseTab(UserDict):
         ylab : str, optional
             label for y-axis. The default is ''.
         color_factor : ''
-            Factor to label with a color (instead of the x-axis)
+            Factor to label with a color (instead of the x-axis).
         pallette : list
             list of colors to . Defaults to matplotlib.colors.TABLEAU_COLORS.
         suppress_legend : bool
-            Whether to suppress the generated legend (for multiplots)
+            Whether to suppress the generated legend (for multiplots).
         suppress_ticklabels : bool
             Whether to suppress tick labels.
         **kwargs : kwargs
-            Keyword arguments to ax.bar
+            Keyword arguments to ax.bar.
 
         Returns
         -------
@@ -321,8 +323,8 @@ class BaseTab(UserDict):
             Individual plot titles. The default is {}.
         legend_loc : str
             Plot to put the legend on. The default is -1 (the last plot).
-        title : str
-            Overall title for the plots. the default is '
+        titles : str
+            Overall title for the plots. the default is {}.
         v_padding : float
             Vertical padding between plots.
         h_padding : float
@@ -452,29 +454,30 @@ class FMEA(BaseTab):
 
 
 class BaseComparison(BaseTab):
+    """
+    Parameters
+    ----------
+    res : Result
+        Result with the given metrics over a number of scenarios.
+    scen_groups : dict
+        Grouped scenarios.
+    metrics : list
+        metrics in res to tabulate over time. Default is ['cost'].
+    default_stat : str
+        statistic to take for given metrics my default.
+        (e.g., 'average', 'percent'... see Result methods). Default is 'expected'.
+    stats : dict
+        Non-default statistics to take for each individual metric.
+        e.g. {'cost': 'average'}. Default is {}
+    ci_metrics : list
+        Metrics to calculate a confidence interval for (using bootstrap_ci).
+        Default is [].
+    ci_kwargs : dict
+        kwargs to bootstrap_ci
+    """
     def __init__(self, res, scen_groups, metrics=['cost'],
                  default_stat="expected", stats={}, ci_metrics=[], ci_kwargs={}):
-        """
-        Parameters
-        ----------
-        res : Result
-            Result with the given metrics over a number of scenarios.
-        scen_groups : dict
-            Grouped scenarios.
-        metrics : list
-            metrics in res to tabulate over time. Default is ['cost'].
-        default_stat : str
-            statistic to take for given metrics my default.
-            (e.g., 'average', 'percent'... see Result methods). Default is 'expected'.
-        stats : dict
-            Non-default statistics to take for each individual metric.
-            e.g. {'cost': 'average'}. Default is {}
-        ci_metrics : list
-            Metrics to calculate a confidence interval for (using bootstrap_ci).
-            Default is [].
-        ci_kwargs : dict
-            kwargs to bootstrap_ci
-        """
+        
         met_dict = {met: {} for met in metrics}
         met_dict.update({met+"_lb": {} for met in ci_metrics})
         met_dict.update({met+"_ub": {} for met in ci_metrics})
@@ -503,106 +506,111 @@ class BaseComparison(BaseTab):
 
 
 class Comparison(BaseComparison):
+    """
+    Make a table of the statistic for given metrics over given factors.
+
+    ...
+
+    Parameters
+    ----------
+    res : Result
+        Result with the given metrics over a number of scenarios.
+    samp : BaseSample
+        Sample object used to generate the scenarios
+    factors : list
+        Factors (Scenario properties e.g., 'name', 'time', 'var') in samp to take
+        statistic over. Default is ['time']
+    **kwargs : kwargs
+        keyword arguments to BaseComparison
+
+    Returns
+    -------
+    met_table : dataframe
+        pandas dataframe with the statistic of the metric over the corresponding
+        set of scenarios for the given factor level.
+
+    Examples
+    -------
+    >>> from fmdtools.sim.sample import exp_ps
+    >>> from fmdtools.analyze.result import Result
+    >>> res = Result({k.name: Result({'a': k.p['x']**2, "b": k.p['y']*k.p['x'], 'rate':k.rate}) for i, k in enumerate(exp_ps.scenarios())})
+    >>> res = res.flatten()
+
+    example 1: checking the x = x^2 accross variables
+
+    >>> comp = Comparison(res, exp_ps, metrics=['a'], factors=['p.x'], default_stat='average')
+    >>> comp.sort_by_factors("p.x")
+    >>> comp
+    {'a': {(0,): 0.0, (1,): 1.0, (2,): 4.0, (3,): 9.0, (4,): 16.0, (5,): 25.0, (6,): 36.0, (7,): 49.0, (8,): 64.0, (9,): 81.0, (10,): 100.0}}
+    >>> comp.as_table()
+            a
+    10  100.0
+    9    81.0
+    8    64.0
+    7    49.0
+    6    36.0
+    5    25.0
+    4    16.0
+    3     9.0
+    2     4.0
+    1     1.0
+    0     0.0
+    >>> fig, ax = comp.as_plot("a")
+
+    example 2: viewing interaction between x and y:
+
+    >>> comp = Comparison(res, exp_ps, metrics=['b'], factors=['p.x', 'p.y'], default_stat='average')
+    >>> comp.sort_by_factors("p.x", "p.y")
+    >>> comp.as_table(sort=False)
+                b
+    0  1.0   0.0
+        2.0   0.0
+        3.0   0.0
+        4.0   0.0
+    1  1.0   1.0
+        2.0   2.0
+        3.0   3.0
+        4.0   4.0
+    2  1.0   2.0
+        2.0   4.0
+        3.0   6.0
+        4.0   8.0
+    3  1.0   3.0
+        2.0   6.0
+        3.0   9.0
+        4.0  12.0
+    4  1.0   4.0
+        2.0   8.0
+        3.0  12.0
+        4.0  16.0
+    5  1.0   5.0
+        2.0  10.0
+        3.0  15.0
+        4.0  20.0
+    6  1.0   6.0
+        2.0  12.0
+        3.0  18.0
+        4.0  24.0
+    7  1.0   7.0
+        2.0  14.0
+        3.0  21.0
+        4.0  28.0
+    8  1.0   8.0
+        2.0  16.0
+        3.0  24.0
+        4.0  32.0
+    9  1.0   9.0
+        2.0  18.0
+        3.0  27.0
+        4.0  36.0
+    10 1.0  10.0
+        2.0  20.0
+        3.0  30.0
+        4.0  40.0
+    >>> fig, ax = comp.as_plot("b", color_factor="p.y", figsize=(10, 4))
+    """
     def __init__(self, res, samp, factors=['time'], **kwargs):
-        """
-        Make a table of the statistic for given metrics over given factors.
-
-        Parameters
-        ----------
-        res : Result
-            Result with the given metrics over a number of scenarios.
-        samp : BaseSample
-            Sample object used to generate the scenarios
-        factors : list
-            Factors (Scenario properties e.g., 'name', 'time', 'var') in samp to take
-            statistic over. Default is ['time']
-        **kwargs : kwargs
-            keyword arguments to BaseComparison
-
-        Returns
-        -------
-        met_table : dataframe
-            pandas dataframe with the statistic of the metric over the corresponding
-            set of scenarios for the given factor level.
-
-        Examples
-        -------
-        >>> from fmdtools.sim.sample import exp_ps
-        >>> from fmdtools.analyze.result import Result
-        >>> res = Result({k.name: Result({'a': k.p['x']**2, "b": k.p['y']*k.p['x'], 'rate':k.rate}) for i, k in enumerate(exp_ps.scenarios())})
-        >>> res = res.flatten()
-
-        # example 1: checking the x = x^2 accross variables
-        >>> comp = Comparison(res, exp_ps, metrics=['a'], factors=['p.x'], default_stat='average')
-        >>> comp.sort_by_factors("p.x")
-        >>> comp
-        {'a': {(0,): 0.0, (1,): 1.0, (2,): 4.0, (3,): 9.0, (4,): 16.0, (5,): 25.0, (6,): 36.0, (7,): 49.0, (8,): 64.0, (9,): 81.0, (10,): 100.0}}
-        >>> comp.as_table()
-                a
-        10  100.0
-        9    81.0
-        8    64.0
-        7    49.0
-        6    36.0
-        5    25.0
-        4    16.0
-        3     9.0
-        2     4.0
-        1     1.0
-        0     0.0
-        >>> fig, ax = comp.as_plot("a")
-
-        # example 2: viewing interaction between x and y:
-        >>> comp = Comparison(res, exp_ps, metrics=['b'], factors=['p.x', 'p.y'], default_stat='average')
-        >>> comp.sort_by_factors("p.x", "p.y")
-        >>> comp.as_table(sort=False)
-                   b
-        0  1.0   0.0
-           2.0   0.0
-           3.0   0.0
-           4.0   0.0
-        1  1.0   1.0
-           2.0   2.0
-           3.0   3.0
-           4.0   4.0
-        2  1.0   2.0
-           2.0   4.0
-           3.0   6.0
-           4.0   8.0
-        3  1.0   3.0
-           2.0   6.0
-           3.0   9.0
-           4.0  12.0
-        4  1.0   4.0
-           2.0   8.0
-           3.0  12.0
-           4.0  16.0
-        5  1.0   5.0
-           2.0  10.0
-           3.0  15.0
-           4.0  20.0
-        6  1.0   6.0
-           2.0  12.0
-           3.0  18.0
-           4.0  24.0
-        7  1.0   7.0
-           2.0  14.0
-           3.0  21.0
-           4.0  28.0
-        8  1.0   8.0
-           2.0  16.0
-           3.0  24.0
-           4.0  32.0
-        9  1.0   9.0
-           2.0  18.0
-           3.0  27.0
-           4.0  36.0
-        10 1.0  10.0
-           2.0  20.0
-           3.0  30.0
-           4.0  40.0
-        >>> fig, ax = comp.as_plot("b", color_factor="p.y", figsize=(10, 4))
-        """
+        
         self.factors = factors
         scen_groups = samp.get_scen_groups(*factors)
         super().__init__(res, scen_groups, **kwargs)
@@ -610,33 +618,35 @@ class Comparison(BaseComparison):
 
 
 class NestedComparison(BaseComparison):
+    """
+    Make a nested table of the statistic for samples taken in other samples.
+
+    ...
+    
+    Parameters
+    ----------
+    res : Result
+        Result with the given metrics over a number of scenarios.
+    samp : BaseSample
+        Sample object used to generate the scenarios
+    samp_factors : list
+        Factors (Scenario properties e.g., 'name', 'time', 'var') in samp to take
+        statistic over. Default is ['time']
+    samps : dict
+        Sample objects used to generate the scenarios. {'name': samp}
+    samps_factors : list
+        Factors (Scenario properties e.g., 'name', 'time', 'var') in samp to take
+        statistic over in the apps. Default is ['time']
+    **kwargs : kwargs
+        keyword arguments to BaseComparison
+
+    Returns
+    -------
+    met_table : dataframe
+        pandas dataframe with the statistic of the metric over the corresponding
+        set of scenarios for the given factor level.
+    """
     def __init__(self, res, samp, samp_factors, samps, samps_factors, **kwargs):
-        """
-        Make a nested table of the statistic for samples taken in other samples.
-
-        Parameters
-        ----------
-        res : Result
-            Result with the given metrics over a number of scenarios.
-        samp : BaseSample
-            Sample object used to generate the scenarios
-        samp_factors : list
-            Factors (Scenario properties e.g., 'name', 'time', 'var') in samp to take
-            statistic over. Default is ['time']
-        samps : dict
-            Sample objects used to generate the scenarios. {'name': samp}
-        samps_factors : list
-            Factors (Scenario properties e.g., 'name', 'time', 'var') in samp to take
-            statistic over in the apps. Default is ['time']
-        **kwargs : kwargs
-            keyword arguments to BaseComparison
-
-        Returns
-        -------
-        met_table : dataframe
-            pandas dataframe with the statistic of the metric over the corresponding
-            set of scenarios for the given factor level.
-        """
         overall_scen_groups = {}
         scen_groups = samp.get_scen_groups(*samp_factors)
         for n_samp in samps.values():
@@ -655,6 +665,8 @@ class NominalEnvelope(object):
     """
     Class defining nominal performance envelope.
 
+    ...
+    
     Attributes
     ----------
     params : tuple
@@ -663,6 +675,22 @@ class NominalEnvelope(object):
         Variable groups and their corresponding scenarios.
     group_values : dict
         Nominal/Faulty values for the scenarios/groups in variable groups.
+
+    Parameters
+    ----------
+    ps : ParameterSample
+        ParameterSample sample approach simulated in the model.
+    res : Result
+        Result dict for the set of simulations produced by running the model over ps
+    metric : str
+        Value to get from endclasses for the scenario(s). The default is 'cost'.
+    x_param : str
+        Parameter range desired to visualize in the operational envelope. Can be any
+        property that changes over the nomapp
+        (e.g., `r.seed`, `inputparam.x_in`, `p.x`...)
+    func : method, optional
+        Function to classify metric values as "nominal".
+        Default is lambda x: x == 0.0
     """
 
     def __init__(self, ps, res, metric, *params, func=lambda x: x == 0.0):

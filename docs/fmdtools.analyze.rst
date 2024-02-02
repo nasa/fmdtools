@@ -8,7 +8,7 @@ The analyze package is organized into the modules:
 
 - :mod:`fmdtools.analyze.common`, which is used for common analysis functions
 - :mod:`fmdtools.analyze.result`, which defines the :class:`fmdtools.analyze.result.Result` class for sim results
-- :mod:`fmdtools.analyze.history`, which defines the :class:`fmdtools.analyze.result.History` classe for tracking, saving, and processing simulation logs/histories. 
+- :mod:`fmdtools.analyze.history`, which defines the :class:`fmdtools.analyze.history.History` classe for tracking, saving, and processing simulation logs/histories. 
 - :mod:`fmdtools.analyze.graph`, which provides classes for creating and visualizing Graphs of simulation structures (and is a sort of convenience iterface for `networkx`/`graphviz` and other graphing libraries).
 - :mod:`fmdtools.analyze.tabulate`, which provides functions to generate tables and visualizations of metrics of interest using (e.g., FMEAs).
 - :mod:`fmdtools.analyze.phases`, which enables the analysis of phase information from model histories.

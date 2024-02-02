@@ -17,7 +17,7 @@ fmdtools.define.container.base
 
 	Base class/module for containers.
 
-.. automodule:: fmdtools.define.container.mode
+.. automodule:: fmdtools.define.container.base
    :members:
    :undoc-members:
    :show-inheritance:
@@ -62,17 +62,3 @@ fmdtools.define.container.time
    :undoc-members:
    :show-inheritance:
 
-fmdtools.define.container.geom
---------------------------------
-
-.. automodule:: fmdtools.define.container.geom
-   :members: Geom, GeomPoint, PointParam, GeomLine, LineParam, GeomPoly, PolyParam, GeomArch
-   :show-inheritance:
-
-
-fmdtools.define.container.coords
---------------------------------
-
-.. automodule:: fmdtools.define.container.coords
-   :members: Coords, CoordsParam
-   :show-inheritance:

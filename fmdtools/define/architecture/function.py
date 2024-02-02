@@ -24,23 +24,25 @@ class FunctionArchitecture(Architecture):
     Functional architectures enable the execution of multiple Function objects
     interacting with each other over time.
 
+    ...
+
     Flexible Roles
     --------------
     flows : dict
         dictionary of flows objects in the model indexed by name
     fxns : dict
         dictionary of functions in the model indexed by name
-
+    
     Special Attributes
     ------------------
     functionorder : OrderedSet
-        Keeps track of function dynamic execution order.
+        Keeps track of function dynamic execution order
     staticfxns : OrderedSet
-        Keeps track of which functions run in static execution step.
+        Keeps track of which functions run in static execution step
     dynamicfxns : Orderedset
-        Keeps track of which functions run in dynamic execution step.
+        Keeps track of which functions run in dynamic execution step
     staticflows : list
-        Flows to keep track of in static execution step.
+        Flows to keep track of in static execution step
     graph : networkx graph
         multigraph view of functions and flows
 
@@ -361,7 +363,7 @@ class FunctionArchitecture(Architecture):
         Parameters
         ----------
         time : float
-            The current timestep.
+            The current time-step.
         fxnfaults : dict
             Faults to inject during this propagation step.
             With structure {'function':['fault1', 'fault2'...]}
@@ -398,7 +400,7 @@ class FunctionArchitecture(Architecture):
         Parameters
         ----------
         time : float
-            Current time-step.
+            Current time-step
         run_stochastic : bool
             Whether to run stochastic behaviors or use default values. Default is False.
             Can set as 'track_pdf' to calculate/track the probability densities of

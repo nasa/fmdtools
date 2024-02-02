@@ -12,6 +12,8 @@ from fmdtools.define.object.base import BaseObject
 class Timer(BaseObject):
     """
     Class for model timers used in functions (e.g. for conditional faults).
+    
+    ...
 
     Attributes
     ----------
@@ -80,12 +82,12 @@ class Timer(BaseObject):
         tstep : float (default -1.0)
             time to increment the timer at each time-step
         overwrite : str
-            whether/how to overwrite the previous time
-            'always' (default) sets the time to the given time
-            'if_more' only overwrites the old time if the new time is greater
-            'if_less' only overwrites the old time if the new time is less
-            'never' doesn't overwrite an existing timer unless it has reached 0.0
-            'increment' increments the previous time by the new time
+            whether/how to overwrite the previous time.
+            'always' (default) sets the time to the given time.
+            'if_more' only overwrites the old time if the new time is greater.
+            'if_less' only overwrites the old time if the new time is less.
+            'never' doesn't overwrite an existing timer unless it has reached 0.0.
+            'increment' increments the previous time by the new time.
         """
         if overwrite == 'always':
             self.time = time

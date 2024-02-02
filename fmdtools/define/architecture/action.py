@@ -24,13 +24,11 @@ class ActionArchitecture(Architecture):
             (if multi-state rep is used)
     state_rep : 'finite-state'/'multi-state'
         How the states of the system are represented. Default is 'finite-state'
-            - 'finite-state' means only one action in the system can be active at once
-            (i.e., a finite state machine)
+            - 'finite-state' means only one action in the system can be active at once (i.e., a finite state machine)
             - 'multi-state' means multiple actions can be performed at once
     max_action_prop : 'until_false'/'manual'/int
         How actions progress. Default is 'until_false'
-            - 'until_false' means actions are simulated until all outgoing conditions
-            are false
+            - 'until_false' means actions are simulated until all outgoing conditions are false
             - providing an integer places a limit on the number of actions that can be
             performed per timestep
     proptype : 'static'/'dynamic'/'manual'
