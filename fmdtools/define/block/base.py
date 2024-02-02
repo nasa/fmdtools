@@ -197,8 +197,7 @@ class Simulable(BaseObject):
         """Add time history to the model (only done at top level)."""
         if 'time' not in self.h:
             timerange = self.sp.get_histrange()
-            self.h.init_att('time', timerange[0], timerange=timerange, track='all',
-                            dtype=float)
+            self.h['time'] = timerange
 
     def log_hist(self, t_ind, t, shift):
         """Log the history over time."""
@@ -424,6 +423,7 @@ class Block(Simulable):
     __slots__ = ['s', 'm']
     default_track = ['s', 'm', 'r', 't', 'i']
     roletypes = ['container', 'flow']
+    check_dict_creation = True
 
     def __init__(self, name='', flows={}, h={}, **kwargs):
         """
@@ -454,6 +454,7 @@ class Block(Simulable):
         # finally, allow for user-defined role/state changing
         self.init_block(**kwargs)
         self.init_hist(h=h)
+        self.check_slots()
 
     def init_block(self, **kwargs):
         """Placeholder initialization method to set initial states etc."""
@@ -587,6 +588,8 @@ class Block(Simulable):
         """
         if hasattr(self, 'r'):
             rand_states = self.r.get_rand_states(auto_update_only)
+        else:
+            rand_states = {}
         if hasattr(self, 'ca'):
             rand_states.update(self.ca.get_rand_states(auto_update_only=auto_update_only))
         if hasattr(self, 'aa'):

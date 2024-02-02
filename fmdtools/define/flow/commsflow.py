@@ -29,6 +29,7 @@ class CommsFlow(MultiFlow):
     """
 
     slots = ['__dict__']
+    check_dict_creation = False
 
     def __init__(self, name='', glob=[], p={}, s={}, track=['s']):
         self.fxns = {}

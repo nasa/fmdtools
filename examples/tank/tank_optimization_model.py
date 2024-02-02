@@ -167,6 +167,8 @@ class StoreLiquid(Function):
 
 
 class ContingencyActions(Function):
+
+    __slots__ = ('input_sig', 'output_sig', 'tank_sig')
     container_p = TankParam
     flow_input_sig = Signal
     flow_output_sig = Signal

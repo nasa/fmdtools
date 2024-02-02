@@ -123,6 +123,7 @@ class HSigState(State):
 class HSig(Flow):
     """Health signal flow."""
 
+    __slots__ = ()
     container_s = HSigState
 
 
@@ -135,6 +136,7 @@ class RSigState(State):
 class RSig(Flow):
     """Recovery signal flow."""
 
+    __slots__ = ()
     container_s = RSigState
 
 # DEFINE FUNCTIONS
@@ -230,6 +232,7 @@ class BatParam(Parameter):
 class Battery(Component):
     """Battery component used to hold energy in distributed architecture."""
 
+    __slots__ = ()
     container_s = BatState
     container_m = BatMode
     container_p = BatParam
@@ -411,6 +414,7 @@ class HoldPayloadMode(Mode):
 class HoldPayload(HoldPayloadDyn):
     """Adaptation of HoldPayload with new mode information."""
 
+    __slots__ = ()
     container_m = HoldPayloadMode
 
 
@@ -502,6 +506,7 @@ class CtlDOFMode(Mode):
 class CtlDOF(CtlDOFStat):
     """Adaptation of CtlDOFMode with more mode information."""
 
+    __slots__ = ()
     container_m = CtlDOFMode
 
 

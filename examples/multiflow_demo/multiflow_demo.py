@@ -26,14 +26,15 @@ class MoveParam(Parameter):
 
 
 class Mover(Function):
+
+    __slots__ = ('communications', 'location', 'internal_info', 'loc')
     container_p = MoveParam
     flow_communications = Communications
     flow_location = Location
 
-    def __init__(self, name='mover', flows={}, **kwargs):
-        super().__init__(name=name, flows=flows, **kwargs)
-        self.internal_info = self.communications.create_comms(name)
-        self.loc = self.location.create_local(name)
+    def init_block(self, **kwargs):
+        self.internal_info = self.communications.create_comms(self.name)
+        self.loc = self.location.create_local(self.name)
 
     def dynamic_behavior(self, time):
         # move
@@ -57,12 +58,13 @@ class Mover(Function):
 
 
 class Coordinator(Function):
+
+    __slots__ = ('communications', 'coord_view')
     flow_communications = Communications
 
-    def __init__(self, name='coordinator', flows={}, **kwargs):
-        super().__init__(name=name, flows=flows, **kwargs)
-        self.coord_view = self.communications.create_comms(
-            name, ports=["mover_1", "mover_2"])
+    def init_block(self, **kwargs):
+        self.coord_view = self.communications.create_comms(self.name,
+                                                           ports=["mover_1", "mover_2"])
 
     def dynamic_behavior(self, time):
         self.coord_view.clear_inbox()

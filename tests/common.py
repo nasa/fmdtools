@@ -404,8 +404,6 @@ class CommonTests():
 
     def end_indiv_save(self, res, hist, resfolder, histfolder, ext):
         """Remove existing folders for test."""
-        if ext == 'pkl':
-            ext = "pickle"
         self.check_same_files(hist, histfolder, ext)
         self.check_same_files(res, resfolder, ext)
         shutil.rmtree(resfolder)
@@ -423,7 +421,7 @@ class CommonTests():
         histfolder : str
             name of folder to save hist in
         ext : str
-            file extension ('pkl','csv','json')
+            file extension ('npz','csv','json')
         **kwargs : **kwargs
             kwargs to send to the propagate method (if any)
         """

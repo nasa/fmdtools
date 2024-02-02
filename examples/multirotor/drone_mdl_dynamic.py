@@ -82,6 +82,8 @@ class DroneEnvironment(Environment):
 class StoreEE(StaticstoreEE):
     """Dynamic StoreEE function (adds energy usage)."""
 
+    __slots__ = ()
+
     def condfaults(self, time):
         """When soc is 0, add 'nocharge' fault."""
         if self.s.soc < 1:
@@ -100,6 +102,8 @@ class StoreEE(StaticstoreEE):
 
 class HoldPayload(HoldPayloadStatic):
     """Holds payload (adapted with dynamic behaviors)."""
+
+    __slots__ = ()
 
     def calc_force_gr(self):
         """Calculate ground force (dynamic adaptation).
@@ -283,6 +287,7 @@ class PlanPath(Function):
 class AffectDOF(AffectDOFStatic):
     """Dynamic extension of drone locomotion."""
 
+    __slots__ = ('des_traj',)
     flow_des_traj = DesTraj
 
     def behavior(self, time):
@@ -354,6 +359,7 @@ class AffectDOF(AffectDOFStatic):
 class ViewEnvironment(Function):
     """Camera for the drone. Determines which aspects of the environment are viewed."""
 
+    __slots__ = ('dofs', 'environment')
     flow_dofs = DOFs
     flow_environment = DroneEnvironment
 

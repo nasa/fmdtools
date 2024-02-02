@@ -201,6 +201,7 @@ class Function(Block):
 class ExampleFunction(Function):
     """Example Function block for testing."""
 
+    __slots__ = ('exf',)
     container_p = ExampleParameter
     container_s = ExampleState
     container_m = ExampleMode
@@ -228,6 +229,7 @@ class GenericFxn(Function):
     For use when the user has not yet defined a class for the given (to be implemented)
     function block. Acts as a placeholder that enables simulation.
     """
+    __slots__ = ()
 
     def __init__(self, name='', flows={}, args_f={}, **kwargs):
         super().__init__(name=name, flows={}, **kwargs)
