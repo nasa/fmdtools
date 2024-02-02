@@ -22,20 +22,18 @@ class ComponentArchitecture(Architecture):
 
     def add_comp(self, name, compclass, *flownames, **kwargs):
         """
-        Associate an Action with the architecture. Called after add_flow.
+        Associate a Component with the architecture. Called after add_flow.
 
         Parameters
         ----------
         name : str
-            Internal Name for the Action
+            Internal Name for the Component
         compclass : Component
             Component class to instantiate
         *flownames : flow
-            Flows (optional) which connect the actions
-        duration:
-            Duration of the action. Default is 0.0
+            Flows (optional) which connect the components
         **kwargs : any
-            kwargs to instantiate the Action with.
+            kwargs to instantiate the Component with
         """
         self.add_sim('comps', name, compclass, *flownames, **kwargs)
 

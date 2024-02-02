@@ -36,14 +36,14 @@ class SimParam(Parameter, readonly=True):
             - ('times', [t1, ... tn])--only includes times defined in the
               vector [t1 ... tn]
         dt : float
-            timestep used in the simulation. default is 1.0
+            time-step used in the simulation. default is 1.0
         units : str
             time-units. default is hours`
         end_condition : str
             Name of indicator method to use to end the simulation. If not provided (''),
             the simulation ends at the final time. Default is ''
         use_local : bool
-            Whether to use locally-defined timesteps in functions (if any).
+            Whether to use locally-defined time-steps in functions (if any).
             Default is True.
     """
 
@@ -153,6 +153,8 @@ class Simulable(BaseObject):
     Base class for object which simulate (blocks and architectures).
 
     Note that classes solely based on Simulable may not be able to be simulated.
+
+    ...
 
     Parameters
     ----------
@@ -394,9 +396,11 @@ class Simulable(BaseObject):
 
 class Block(Simulable):
     """
-    Superclass for Function and Component subclasses.
+    Superclass for Function, Component, and Action subclasses.
 
-    Has functions for model setup, querying state, reseting the model
+    Has functions for model setup, querying state, and reseting the model.
+
+    ...
 
     Attributes
     ----------
@@ -670,7 +674,7 @@ class Block(Simulable):
         Parameters
         ----------
         time : float
-            The current timestep.
+            The current time-step.
         faults : dict
             Faults to inject during this propagation step.
             With structure {fname: ['fault1', 'fault2'...]}

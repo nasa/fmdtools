@@ -6,10 +6,8 @@ Functions contained in this module:
 
 - :func:`get_var`:Gets the variable value of the object
 - :func:`set_var`:Sets variable of the object to a given value
-- :func:`is_iter`: Checks whether a data type should be interpreted as an iterable or
-not.
-- :func:`t_key`:Used to generate keys for a given (float) time that is queryable as
-  an attribute of an object/dict
+- :func:`is_iter`: Checks whether a data type should be interpreted as an iterable or not.
+- :func:`t_key`:Used to generate keys for a given (float) time that is queryable as an attribute of an object/dict
 
 """
 from collections.abc import Iterable
@@ -176,7 +174,7 @@ def is_iter(data):
 
 def eq_units(rateunit, timeunit):
     """
-    Find conversion factor for from rateunit (str) to timeunit (str).
+    Find conversion factor from rateunit (str) to timeunit (str).
 
     Options for units are: 'sec', 'min', 'hr', 'day', 'wk', 'month', and 'year'.
     """

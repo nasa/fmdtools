@@ -9,12 +9,11 @@ And functions:
 
 - :func:`from_hist`: Creates dict of PhaseMaps based on mode progression in history.
 - :func:`phaseplot`: Plots the progression of phases over time.
-- :func:`samplemetric
 - :func:`samplemetric`: plots a metric for a single fault sampled by a SampleApproach
-  over time with rates
+  over time with rates/
 - :func:`samplemetrics`: plots a metric for a set of faults sampled by a SampleApproach
   over time with rates on separate plots
-- :func:`find_overlap_n`: Find overlap between given intervals.
+- :func:`find_interval_overlap`: Find overlap between given intervals.
 - :func:`gen_interval_times`: Creates times in a given interval.
 """
 
@@ -46,7 +45,10 @@ class PhaseMap(object):
         Modes that the phases occur in. Used to determine opportunity vector defined
         by the dict in fault.phases (if .phases maps to modes of occurence an not
         phases).
-        Has structure {'on': {'on1', 'on2', 'on3'}}. The default is {}.
+        Has structure::
+        {'on': {'on1', 'on2', 'on3'}}
+
+        The default is {}.
     dt: float
         Timestep defining phases.
     """
@@ -135,8 +137,8 @@ class PhaseMap(object):
 
         Returns
         -------
-        phase_times : TYPE
-            DESCRIPTION.
+        phase_times : dict
+            the number of time-steps in each phase
 
         Examples
         --------
@@ -193,14 +195,8 @@ class PhaseMap(object):
 
         Parameters
         ----------
-        modephase : str
-            Name of the mode to check.
-        phases : dict
-            Dict mapping phases to times.
         modephases : dict
             Dict mapping modes to phases
-        dt : float, optional
-            Timestep. The default is 1.0.
 
         Returns
         -------
@@ -285,7 +281,8 @@ class PhaseMap(object):
         Returns
         -------
         sampletimes : dict
-            dict of times to sample with structure {'phase1': [t0, t1, t2], ...}
+            dict of times to sample with structure::
+            {'phase1': [t0, t1, t2], ...}
 
         Examples
         --------
@@ -416,7 +413,7 @@ def phaseplot(phasemaps, modephases=[], mdl=[], dt=1.0, singleplot=True,
 
     Parameters
     ----------
-    mdlphases : dict or PhaseMap
+    phasemaps : dict or PhaseMap
         Dict of phasemaps that the functions of the model progresses through
         (e.g. from phases.from_hist).
     modephases : dict, optional
@@ -429,15 +426,18 @@ def phaseplot(phasemaps, modephases=[], mdl=[], dt=1.0, singleplot=True,
         Whether the functions' progressions through phases are plotted on the same plot
         or on different plots.
         The default is True.
-    phase_ticks : 'std'/'phases'/'both'
+    phase_ticks : 'std'/'phases'/'both', optional
         x-ticks to use (standard, at the edge of phases, or both). Default is 'both'
-    figsize : tuple (float,float)
+    figsize : tuple (float,float), optional
         x-y size for the figure. The default is 'default', which dymanically gives 2 for
         each row
-    v_padding : float
+    v_padding : float, optional
         vertical padding between subplots as a fraction of axis height
     title_padding : float
         padding for title as a fraction of figure height
+    title : str, optional
+        figure title. Default is "Progression of model through operational phases"
+
     Returns
     -------
     fig/figs : Figure or list of Figures
@@ -492,27 +492,28 @@ def samplemetric(faultsamp, endclasses, metric='cost', rad='rate', rad_scale=0.0
 
     Parameters
     ----------
-    app : FaultSamp
-        Fault sampledefining the underlying samples to take with phasemap
+    faultsamp : FaultSamp
+        Fault sample defining the underlying samples to take with phasemap
     endclasses : Result
         A Result with the end classification of each fault (metrics, etc)
-    metric : str
+    metric : str, optional
         Metric to plot. The default is 'cost'
-    rad : str
+    rad : str, optional
         Metric to plot as a radius at each sample. Default is 'rate'.
-    rad_scale : float
+    rad_scale : float, optional
         Scale factor for radius. Default is 0.01, which makes the max rad size 1/100 of
         the max metric value.
-    label_rad : str
+    label_rad : str, optional
         Format string for the radius (if any). Default is "{:.2e}".
-    line : str ('stem' or 'line')
+    line : str ('stem' or 'line'), optional
         Whether to plot metrics as a stem or line plot
-    title : str
+    title : str, optional
         Title for the plot
-    ylims : tuple
+    ylims : tuple, optional
         y-limits for plot
     **scen_kwargs : kwargs
         Arguments to FaultSample.get_scens (e.g., modes etc to sample).
+
     Returns
     -------
     fig : matplotlib figure
@@ -574,10 +575,9 @@ def samplemetrics(app, endclasses, **kwargs):
         The sample approach used to run the list of faults
     endclasses : Result
         Results over the scenarios defined in app.
-    title : str
-        Optional title.
     **kwargs : kwargs
         kwargs to samplemetric
+
     Returns
     -------
     figs : dict

@@ -8,12 +8,12 @@ processed. Has classes:
 
 And functions/methods:
 
-- :func:`bootstrap_confidence_interval`: Convenience wrapper for scipy.bootstrap
 - :func:`diff`: Helper function for finding inconsistent states between val1, val2, with
   the difftype option
 - :func:`init_hist_iter`: Initializes the history for a given attribute att with value
   val. Enables the recursive definition of a history as a nested structure.
 - :func:`init_dicthist`: Initializes histories for dictionary attributes (if any)
+- :func:`def prep_hists`: Prepare the history for plotting.
 """
 from fmdtools.analyze.result import Result, load_folder, load, fromdict
 from fmdtools.analyze.common import bootstrap_confidence_interval, get_sub_include
@@ -43,7 +43,7 @@ def init_hist_iter(att, val, timerange=None, track=None, dtype=None, str_size='<
     Enables the recursive definition of a history as a nested structure.
 
     If a timerange is given, the base fields are initializes as fixed-length numpy
-    arrays corresponding to the data type of the field. Otherwise, an emty list
+    arrays corresponding to the data type of the field. Otherwise, an empty list
     is initialized.
 
     Parameters
@@ -105,8 +105,7 @@ def diff(val1, val2, difftype='bool'):
     """
     Find inconsistent states between val1, val2.
 
-    The difftype option ('diff' (takes the difference), 'bool' (checks if the same),
-                         and float (checks if under the provided tolerance))
+    The difftype option ('diff' (takes the difference), 'bool' (checks if the same), and float (checks if under the provided tolerance))
     """
     if difftype == 'diff':
         return val1-val2
@@ -155,22 +154,26 @@ class History(Result):
     Examples
     --------
     # histories act the same as results, but with the values being arrays:
+
     >>> hist = History({"a": [1, 2, 3], "b": [4, 5, 6], "time": [0, 1, 2]})
     >>> hist
     a:                              array(3)
     b:                              array(3)
     time:                           array(3)
 
-    # history access is the same as a result:
+    history access is the same as a result:
+
     >>> hist.a
     [1, 2, 3]
 
-    # metrics can be gotten from histories over time:
+    metrics can be gotten from histories over time:
+
     >>> hist = History({"a.a": [1, 2, 3], "b.a": [4, 5, 6], "time": [0, 1, 2]})
     >>> hist.get_metric("a", axis=0)
     array([2.5, 3.5, 4.5])
 
-    # or over all times:
+    or over all times:
+
     >>> hist.get_metric("a")
     3.5
     """
@@ -315,6 +318,17 @@ class History(Result):
         """
         Cut the history to a given index.
 
+        Parameters
+        ----------
+        end_ind : int, optional
+            the index of the array that you want to cut the history upto. Default is None.
+        start_ind: int, optional
+            the index of the array that you want to start cutting the history from. 
+            The default is None, which starts from the 0th index.
+        newcopy: bool, optional
+            Tells whether to creat a new history variable with the information what was cut or
+            cut the original history variable. Default is False.
+
         Examples
         --------
         >>> hist = History({'a':[2,3,4,5], 'b':[5,4,3,2,1,0], 'time': [0,1,2,3,4,5]})
@@ -424,8 +438,6 @@ class History(Result):
                 - for 'bool', it is calculated as an equality nom == faulty
                 - for 'diff', it is calculated as a difference nom - faulty
                 - if a float, is provided, it is calculated as nom - fault > diff
-        threshold : 0.000001
-            Threshold for degradation
         withtime : bool
             Whether to include time in the dict. Default is True.
         withtotal : bool
@@ -569,11 +581,9 @@ class History(Result):
 
         Parameters
         ----------
-        simhists : History
-            Simulation history
         *plot_values : strs
             names of values to pul (e.g., 'fxns.move_water.s.flowrate').
-            Can also be specified as a dict (e.g. {'fxns': 'move_water'}) to get all
+            Can also be specified as a dict (e.g., {'fxns': 'move_water'}) to get all
             from a given fxn/flow/mode/etc.
         cols : int, optional
             columns to use in the figure. The default is 2.
@@ -608,7 +618,7 @@ class History(Result):
             comparison group comp (or scenario, if not aggregated) which overrides
             the global kwargs (or default behavior). If no comparison groups are given,
             use 'default' for a single history or 'nominal'/'faulty' for a fault history
-            e.g.::
+            e.g.,::
                 kwargs = {'nominal': {color: 'green'}}
 
             would make the nominal color green. Default is {}.
@@ -718,7 +728,7 @@ class History(Result):
         Returns
         -------
         err_hist : History
-            hist of line, low, high values. Has the form:
+            hist of line, low, high values. Has the form::
             {'time': times, 'stat': stat_values, 'low': low_values, 'high': high_values}
         """
         hist = History()
@@ -750,7 +760,7 @@ class History(Result):
         Returns
         -------
         err_hist : History
-            hist of line, low, high values. Has the form:
+            hist of line, low, high values. Has the form::
             {'time': times, 'stat': stat_values, 'low': low_values, 'high': high_values}
         """
         hist = History()
@@ -785,7 +795,7 @@ class History(Result):
         Returns
         -------
         err_hist : History
-            hist of line, low, high values. Has the form:
+            hist of line, low, high values. Has the form::
             {'time': times, 'stat': stat_values, 'low': low_values, 'high': high_values}
 
         Examples
@@ -825,7 +835,7 @@ class History(Result):
         Returns
         -------
         err_hist : History
-            hist of line, low, high values. Has the form:
+            hist of line, low, high values. Has the form::
             {'time': times, 'stat': stat_values, 'low': low_values, 'high': high_values}
         """
         hist = History()
@@ -858,7 +868,7 @@ class History(Result):
             If more than one time is provided, it takes the place of comp_groups.
         *plot_values : strs
             names of values to pull from the history (e.g., 'fxns.move_water.s.flow')
-            Can also be specified as a dict (e.g. {'fxns':'move_water'}) to get all keys
+            Can also be specified as a dict (e.g., {'fxns':'move_water'}) to get all keys
             from a given fxn/flow/mode/etc.
         **kwargs : kwargs
             keyword arguments to Result.plot_metric_dist
@@ -893,8 +903,6 @@ class History(Result):
 
         Parameters
         ----------
-        simhists : History
-            History to get trajectories from.
         *plot_values : str
             Plot values corresponding to the x/y/z values (e.g, 'position.s.x')
         comp_groups : dict, optional
@@ -915,7 +923,7 @@ class History(Result):
             comparison group comp (or scenario, if not aggregated) which overrides
             the global kwargs (or default behavior). If no comparison groups are given,
             use 'default' for a single history or 'nominal'/'faulty' for a fault history
-            e.g.::
+            e.g.,::
                 kwargs = {'nominal': {color: 'green'}}
 
             would make the nominal color green. Default is {}.
@@ -943,8 +951,8 @@ class History(Result):
             Existing Figure. The default is None.
         ax : matplotlib.axis, optional
             Existing axis. The default is None.
-        **kwargs : TYPE
-            DESCRIPTION.
+         **kwargs : kwargs
+            kwargs to ax.plot to use over all plots.
 
         Returns
         -------
@@ -994,8 +1002,8 @@ class History(Result):
         ----------
         ax : matplotlib axis
             Axis object to mark on
-        hists : History
-            History to get the values from
+        fig : figure
+            Matplotlib figure object
         xlab : str
             Name to use for the x-values.
         ylab : str
