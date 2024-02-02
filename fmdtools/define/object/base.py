@@ -101,6 +101,7 @@ class BaseObject(object):
     rolevars = []
     immutable_roles = ['p']
     default_track = ['i']
+    check_dict_creation = False
 
     def __init__(self, name='', roletypes=[], track='default', **kwargs):
         """
@@ -123,7 +124,7 @@ class BaseObject(object):
             - 'none'
             - or a dict of form ::
 
-                {'functions':{'fxn1':'att1'}, 'flows':{'flow1':'att1'}}
+                {'fxns':{'fxn1':'att1'}, 'flows':{'flow1':'att1'}}
         **kwargs : dict, object
             Keywork arguments for the roles.
             May be a dict of non-default arguments (e.g. s={'x': 1.0}) or
@@ -136,6 +137,13 @@ class BaseObject(object):
         self.init_indicators()
         self.init_roletypes(*roletypes, **kwargs)
         self.init_track(track)
+        self.check_slots()
+
+    def check_slots(self):
+        """Check if __slots__ were defined for the class to preemt __dict__ creation."""
+        if self.check_dict_creation and hasattr(self, '__dict__'):
+            raise Exception("__slots__ not defined for class: "
+                            + self.__class__.__name__)
 
     def init_track(self, track):
         """Add .track attribute based on default and input."""
@@ -384,7 +392,8 @@ class BaseObject(object):
         """Get all roles."""
         if not roletypes:
             roletypes = self.roletypes
-        return [role for roletype in roletypes for role in getattr(self, roletype+'s')
+        return [role for roletype in roletypes
+                for role in getattr(self, roletype+'s', [])
                 if with_immutable or role not in self.immutable_roles]
 
     def get_roledicts(self, *roledicts, with_immutable=True):

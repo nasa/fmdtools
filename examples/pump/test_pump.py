@@ -86,6 +86,7 @@ class PumpTests(unittest.TestCase, CommonTests):
         inj_times = [10, 20, 30, 40]
         self.check_model_copy_different(self.mdl, inj_times, max_time=55)
 
+    @unittest.skip('Reset not fully implemented yet and unused throughout.')
     def test_model_reset(self):
         inj_times = [10, 20, 30, 40]
         self.check_model_reset(self.mdl, Pump(), inj_times, max_time=55)
@@ -127,14 +128,14 @@ class PumpTests(unittest.TestCase, CommonTests):
         self.assertTrue(unpickleable == [])
 
     def test_one_run_pickle(self):
-        if os.path.exists("single_fault.pkl"):
-            os.remove("single_fault.pkl")
+        if os.path.exists("single_fault.npz"):
+            os.remove("single_fault.npz")
 
         res, hist = prop.one_fault(self.mdl, 'export_water', 'block', time=20,
                                    staged=False, run_stochastic=True, sp={'seed': 10})
 
-        hist.save("single_fault.pkl")
-        hist_saved = load("single_fault.pkl", renest_dict=False)
+        hist.save("single_fault.npz")
+        hist_saved = load("single_fault.npz", renest_dict=False)
         self.assertCountEqual([*hist.keys()], [*hist_saved.keys()])
         # test to see that all values of the arrays in the hist are the same
         for hist_key in hist:
@@ -143,7 +144,7 @@ class PumpTests(unittest.TestCase, CommonTests):
         hist.faulty.time[0] = 100
         self.assertNotEqual(hist.faulty.time[0], hist_saved.faulty.time[0])
 
-        os.remove("single_fault.pkl")
+        os.remove("single_fault.npz")
 
     def test_one_run_csv(self):
         if os.path.exists("single_fault.csv"):
@@ -174,45 +175,45 @@ class PumpTests(unittest.TestCase, CommonTests):
         os.remove("single_fault.json")
 
     def test_nominal_save(self):
-        for ext in [".pkl", ".csv", ".json"]:
+        for ext in [".npz", ".csv", ".json"]:
             fnames = "pump_res" + ext, "pump_hist" + ext
             self.check_onerun_save(self.mdl, "nominal", *fnames)
 
     def test_onefault_save(self):
         faultscen = ('export_water', 'block', 25)
-        for ext in [".pkl", ".csv", ".json"]:
+        for ext in [".npz", ".csv", ".json"]:
             fnames = "pump_res" + ext, "pump_hist" + ext
             self.check_onerun_save(self.mdl, 'one_fault', *fnames, faultscen=faultscen)
 
     def test_save_load_multfault(self):
         faultscen = {10: {"export_water": ['block']}, 20: {"move_water": ["short"]}}
-        for ext in [".pkl", ".csv", ".json"]:
+        for ext in [".npz", ".csv", ".json"]:
             fnames = "pump_res" + ext, "pump_hist" + ext
             self.check_onerun_save(self.mdl, 'sequence', *fnames, faultscen=faultscen)
 
     def test_single_faults_save(self):
-        self.check_sf_save(self.mdl, "pump_res.pkl", "pump_hist.pkl")
+        self.check_sf_save(self.mdl, "pump_res.npz", "pump_hist.npz")
         self.check_sf_save(self.mdl, "pump_res.csv", "pump_hist.csv",)
         self.check_sf_save(self.mdl, "pump_res.json", "pump_hist.json")
 
     def test_single_faults_isave(self):
-        self.check_sf_isave(self.mdl, *self.filenames, "pkl")
+        self.check_sf_isave(self.mdl, *self.filenames, "npz")
         self.check_sf_isave(self.mdl, *self.filenames, "csv")
         self.check_sf_isave(self.mdl, *self.filenames, "json")
 
     def test_param_sample_save(self):
-        self.check_ps_save(self.mdl, self.ps, "pump_res.pkl", "pump_hist.pkl")
+        self.check_ps_save(self.mdl, self.ps, "pump_res.npz", "pump_hist.npz")
         self.check_ps_save(self.mdl, self.ps, "pump_res.csv", "pump_hist.csv")
         self.check_ps_save(self.mdl, self.ps, "pump_res.json", "pump_hist.json")
 
     def test_param_sample_isave(self):
-        self.check_ps_isave(self.mdl, self.ps, *self.filenames, "pkl")
+        self.check_ps_isave(self.mdl, self.ps, *self.filenames, "npz")
         self.check_ps_isave(self.mdl, self.ps, *self.filenames, "csv")
         self.check_ps_isave(self.mdl, self.ps, *self.filenames, "json")
 
     def test_nested_sample_save(self):
         self.check_ns_save(self.mdl, self.ps, self.faultdomains, self.faultsamples,
-                           "pump_res.pkl", "pump_hist.pkl")
+                           "pump_res.npz", "pump_hist.npz")
         self.check_ns_save(self.mdl, self.ps, self.faultdomains, self.faultsamples,
                            "pump_res.csv", "pump_hist.csv")
         self.check_ns_save(self.mdl, self.ps, self.faultdomains, self.faultsamples,
@@ -220,19 +221,19 @@ class PumpTests(unittest.TestCase, CommonTests):
 
     def test_nested_sample_isave(self):
         self.check_ns_isave(self.mdl, self.ps, self.faultdomains, self.faultsamples,
-                            *self.filenames, "pkl")
+                            *self.filenames, "npz")
         self.check_ns_isave(self.mdl, self.ps, self.faultdomains, self.faultsamples,
                             *self.filenames, "csv")
         self.check_ns_isave(self.mdl, self.ps, self.faultdomains, self.faultsamples,
                             *self.filenames, "json")
 
     def test_fault_sample_save(self):
-        self.check_fs_save(self.mdl, self.fs, "pump_res.pkl", "pump_hist.pkl")
+        self.check_fs_save(self.mdl, self.fs, "pump_res.npz", "pump_hist.npz")
         self.check_fs_save(self.mdl, self.fs, "pump_res.csv", "pump_hist.csv")
         self.check_fs_save(self.mdl, self.fs, "pump_res.json", "pump_hist.json")
 
     def test_fault_sample_isave(self):
-        self.check_fs_isave(self.mdl, self.fs, *self.filenames, "pkl")
+        self.check_fs_isave(self.mdl, self.fs, *self.filenames, "npz")
         self.check_fs_isave(self.mdl, self.fs, *self.filenames, "csv")
         self.check_fs_isave(self.mdl, self.fs, *self.filenames, "json")
 

@@ -23,6 +23,7 @@ class Flow(BaseObject):
     Examples
     --------
     >>> class ExampleFlow(Flow):
+    ...     __slots__ = ()
     ...     container_s = ExampleState
 
     >>> exf = ExampleFlow('exf', s={'x': 0.0})
@@ -39,10 +40,11 @@ class Flow(BaseObject):
     False
     """
 
-    __slots__ = ['p', 's', 'h']
+    __slots__ = ('p', 's', 'h')
     container_p = Parameter
     container_s = State
     default_track = ('s', 'i')
+    check_dict_creation = True
 
     def __repr__(self):
         if hasattr(self, 'name'):
@@ -90,6 +92,7 @@ class Flow(BaseObject):
 class ExampleFlow(Flow):
     """Example flow for testing."""
 
+    __slots__ = ()
     container_s = ExampleState
 
 
