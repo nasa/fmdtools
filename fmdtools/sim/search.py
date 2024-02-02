@@ -1080,7 +1080,6 @@ class ProblemArchitecture(BaseProblem):
     >>> ex_pa.add_problem("ex_scenprob", ex_scenprob, inputs={"x0": ["time"]})
     >>> ex_pa.add_problem("ex_dp", ex_dp, inputs={"x1": ["s.y"]})
     >>> ex_pa
-
     ProblemArchitecture with:
     CONNECTORS
      -x0                                                          [nan]

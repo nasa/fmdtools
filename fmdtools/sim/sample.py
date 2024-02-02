@@ -55,9 +55,7 @@ class ParameterDomain(object):
     >>> expd.add_variables("y", "x")
     >>> expd.add_constants(z=20)
     >>> expd
-
     ParameterDomain with:
-
      - variables: {'y': {1.0, 2.0, 3.0, 4.0}, 'x': (0, 10)}
      - constants: {'z': 20}
      - parameter_initializer: ExampleParameter
