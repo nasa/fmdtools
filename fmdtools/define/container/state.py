@@ -131,7 +131,7 @@ class State(BaseContainer):
         """
         Increment the given arguments by a given value.
 
-        Mainly useful for reducing length/adding clarity to increment statements, e.g.:
+        Mainly useful for reducing length/adding clarity to increment statements, e.g.,:
 
         >>> p = ExampleState(x=1.0, y=1.0)
         >>> p.inc(x=1, y=2)
@@ -141,7 +141,8 @@ class State(BaseContainer):
         3.0
 
         Can additionally be provided with a second value denoting a limit on the
-        increments e.g.:
+        increments e.g.,:
+
         >>> p = ExampleState(x=1.0, y=1.0)
         >>> p.inc(x=(3, 5.0))
         >>> p.x
@@ -168,7 +169,8 @@ class State(BaseContainer):
         """
         Round the given arguments to a given resolution.
 
-        e.g.:
+        e.g.,:
+
         >>> p = ExampleState(x=1.75850)
         >>> p.roundto(x=0.1)
         >>> p.x
@@ -205,7 +207,8 @@ class State(BaseContainer):
         """
         Return the multiplication of given attributes of the State.
 
-        e.g.:
+        e.g.,:
+
         >>> p = ExampleState(x=2.0, y=3.0)
         >>> p.mul("x","y")
         6.0
@@ -219,7 +222,7 @@ class State(BaseContainer):
         """
         Return the division of given attributes of the State.
 
-        e.g.:
+        e.g.,:
         >>> p = ExampleState(x=1.0, y=2.0)
         >>> p.div('x','y')
         0.5
@@ -233,7 +236,7 @@ class State(BaseContainer):
         """
         Return the addition of given attributes of the State.
 
-        e.g.:
+        e.g.,:
         >>> p = ExampleState(x=1.0, y=2.0)
         >>> p.add('x','y')
         3.0
@@ -247,7 +250,8 @@ class State(BaseContainer):
         """
         Return the subtraction of given attributes of the State.
 
-        e.g.:
+        e.g.,:
+        
         >>> p = ExampleState(x=1.0, y=2.0)
         >>> p.sub('x','y')
         -1.0

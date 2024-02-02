@@ -10,12 +10,12 @@ Has methods:
 - :func:`is_numeric`: Helper function for Result Class, checks if a given value is
   numeric
 - :func:`join_key`: Helper function for Result Class
-- :func: `setup_plot` : initializes mpl figure.
-- :func:`plot_err_hist`: Plots a line with a given range of uncertainty around it.
-- :func:`plot_err_lines`: Plots error lines on the given plot.
-- :func:`multiplot_legend_title`: Helper function for multiplot legends and titles.
+- :func:`setup_plot`: initializes mpl figure
+- :func:`plot_err_hist`: Plots a line with a given range of uncertainty around it
+- :func:`plot_err_lines`: Plots error lines on the given plot
+- :func:`multiplot_legend_title`: Helper function for multiplot legends and titles
 - :func:`consolidate_legend`: Creates a single legend for a given multiplot where
-  multiple groups are being compared.
+  multiple groups are being compared
 """
 import numpy as np
 import matplotlib.pyplot as plt
@@ -155,7 +155,7 @@ def plot_err_hist(err_hist, ax=None, fig=None, figsize=(6, 4), boundtype='fill',
     Parameters
     ----------
     err_hist : History
-        hist of line, low, high values. Has the form:
+        hist of line, low, high values. Has the form ::
         {'time': times, 'stat': stat_values, 'low': low_values, 'high': high_values}
     ax : mpl axis (optional)
         axis to plot the line on

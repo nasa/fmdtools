@@ -282,7 +282,7 @@ class Architecture(Simulable):
                 obj.reset()
 
     def add_obj_modes(self, obj):
-        """Add modes from an object to .faultmodes."""
+        """Add modes from an object to faultmodes."""
         modes_to_add = {obj.name+'_'+f: val
                         for f, val in obj.m.faultmodes.items()}
         fmode_intersect = set(modes_to_add).intersection(self.faultmodes)

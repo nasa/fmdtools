@@ -203,7 +203,7 @@ class BaseContainer(dataobject, mapping=True, iterable=True, copy_default=True):
         """
         Set the same-named values of the current object to those of another.
 
-        Further arguments specify which values.e.g.,
+        Further arguments specify which values. e.g.,:
 
         >>> p1 = ExContainer(x=0.0, y=0.0)
         >>> p2 = ExContainer(x=10.0, y=20.0)
@@ -213,7 +213,7 @@ class BaseContainer(dataobject, mapping=True, iterable=True, copy_default=True):
         >>> p1.y
         20.0
 
-        Can also be used to assign list values to a variable, e.g.:
+        Can also be used to assign list values to a variable, e.g.,:
 
         >>> p1.assign([3.0,4.0], 'x', 'y')
         >>> p1.x
@@ -221,7 +221,7 @@ class BaseContainer(dataobject, mapping=True, iterable=True, copy_default=True):
         >>> p1.y
         4.0
 
-        Can also provide kwargs in case value names don't match, e.g.:
+        Can also provide kwargs in case value names don't match, e.g.,:
 
         >>> p1.assign(p2, x='y', y='x')
         >>> p1.x

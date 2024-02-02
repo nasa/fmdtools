@@ -1,11 +1,11 @@
 ---
 title: Intro to fmdtools
-description: Intro to resilience modelling, simulation, and visualization in Python with fmdtools.
+description: Intro to resilience modeling, simulation, and visualization in Python with fmdtools.
 marp: true
 ---
 ![fmdtools logo](/docs/figures/logo.png)
 
-# Intro to resilience modelling, simulation, and visualization in Python with fmdtools.
+# Intro to resilience modeling, simulation, and visualization in Python with fmdtools.
 ### Author: Daniel Hulse 
 ### Version: 2.0-rc-1
 
@@ -37,7 +37,7 @@ marp: true
     - [git-scm](https://git-scm.com/) (stand-alone CLI)
 
 -----------------
-# Motivation: Modelling System Resilience
+# Motivation: Modeling System Resilience
 
 Resilience means taking a **dynamic understanding of risk and safety**
 
@@ -60,7 +60,7 @@ Resilience means taking a **dynamic understanding of risk and safety**
 # Why fmdtools? Possible Competitors:
 
 - Uncertainty Quantification tools:  (e.g. OpenCossan)
-    - Doesn’t incorporate fault modelling/propagation/visualization aspects
+    - Does not incorporate fault modeling/propagation/visualization aspects
 - MATLAB/modelica/etc. Fault Simulation tools
     - Rely on pre-existing model/software stack--Useful, but often difficult to hack/extend (**not open-source**)
 - Safety Assessment tools: (e.g. Alyrica, Hip-Hops)
@@ -79,7 +79,7 @@ Resilience means taking a **dynamic understanding of risk and safety**
     - Written in/relies on the Python stack
     - Open source/free software
 - Enables design:
-    - Models can be parameterized an optimized!
+    - Models can be parameterized and optimized!
     - Plug-and-play analyses and visualizations
 
 -----------------
@@ -105,7 +105,7 @@ Resilience means taking a **dynamic understanding of risk and safety**
 # What is fmdtools? Repo Structure
 
 
-Repository (https://github.com/nasa/fmdtools/)
+[Repository] (https://github.com/nasa/fmdtools/)
 - `/fmdtools`: installable package
 - `/examples`: example models with demonstrative notebooks and tests
 - `/docs`: resources for [documentation](https://nasa.github.io/fmdtools/)
@@ -147,7 +147,7 @@ Repository (https://github.com/nasa/fmdtools/)
         - Is it controlled? Are there multiple agents?
 - What type of simulation do we want to run?
     - Single-timestep vs multi-timestep vs network 
-- What scenarioss do we want to study and how?
+- What scenarios do we want to study and how?
     - Failure modes and faulty behaviors
     - Disturbances and changes in parameters
     - What are the possible effects of hazards and how bad are they? 
@@ -188,7 +188,7 @@ Notice the definitions and structure:
 
 # More Resources for Model Definition
 
-- Note the docs for model definition in https://nasa.github.io/fmdtools/docs/fmdtools.define.html
+- Note the docs for model definition are in https://nasa.github.io/fmdtools/docs/fmdtools.define.html
 
 - Other examples also can be helpful: https://nasa.github.io/fmdtools/docs/Examples.html
 
@@ -229,7 +229,7 @@ In a single timestep:
 
 ![Dynamic Propagation](/docs/figures/simulation_types.png)
 
-For more info, (syntax/arguments), see documentation for [`fmdtools.sim.propagate`](https://nasa.github.io/fmdtools/docs/fmdtools.sim.html#fmdtools-sim-propagate)
+For more info on syntax/arguments, see documentation for [`fmdtools.sim.propagate`](https://nasa.github.io/fmdtools/docs/fmdtools.sim.html#fmdtools-sim-propagate).
 
 -----------------
 
@@ -295,7 +295,7 @@ See docs for: [`fmdtools.analyze`](https://nasa.github.io/fmdtools/docs/fmdtools
 - Show model graph
 - Show nominal performances
 - Show performances in a nominal scenario
-- Make a scenario-based fmea
+- Make a scenario-based FMEA
 
 **Explore:**
 - How can you show only the parameters you want? Or change the formatting?
@@ -311,7 +311,7 @@ See docs for: [`fmdtools.analyze`](https://nasa.github.io/fmdtools/docs/fmdtools
     - `/sim` is used to define simulations
     - `/analyze` is used to analyze and visualize simulation results
 - I hope you agree that it has some powerful features!
-    - Modelling expressiveness and clarity
+    - Modeling expressiveness and clarity
     - Types of simulations that can be run
     - Powerful but easy-to-leverage plug-and-play analyses
 
@@ -321,9 +321,9 @@ See docs for: [`fmdtools.analyze`](https://nasa.github.io/fmdtools/docs/fmdtools
 
 - More advanced topics ([see examples](https://nasa.github.io/fmdtools/docs/Examples.html)):
     - Search and optimization
-    - Human/AI Modelling
+    - Human/AI Modeling
     - Systems-of-Systems modeling
-    - Modelling Stochastic Behavior
+    - Modeling Stochastic Behavior
     - ... and more
 - [Model Development Guide](https://nasa.github.io/fmdtools/docs/Development%20Guide.html#model-development-best-practices): Has best practices for developing models in a strategic way (especially helpful for compelx models)
 - Overview Paper: 

@@ -3,7 +3,7 @@
 Description: A module defining how simulation results (histories) structured and
 processed. Has classes:
 
-- :class:`Result`: Class for defining simulation results.
+- :class:`Result`: Class for defining simulation results
 
 And functions:
 
@@ -24,8 +24,8 @@ Private Methods:
   des_class
 - :func:`fromdict`: Creates new history/result from given dictionary
 - :func:`check_include_errors`: Helper function for Result Class, Cycles through
-  `check_include_error`.
-- :func:`check_include_error`: Helper function to raise exceptions for errors.
+  `check_include_error`
+- :func:`check_include_error`: Helper function to raise exceptions for errors
 - :func:`get_sub_include`: Determines what attributes of att to include based on the
   provided dict/str/list/set to_include
 """
@@ -158,7 +158,7 @@ class Result(UserDict):
     and load results form a model/simulation.
 
     As a dictionary, it supports dict-based item assignement (e.g. r['x']=10) but
-    also enables convenient access via __getattr__, e.g.:
+    also enables convenient access via __getattr__, e.g.,:
 
     >>> r = Result()
     >>> r['x'] = 10
@@ -166,7 +166,7 @@ class Result(UserDict):
     x:                                    10
 
     It also can return a flattened version of its nested structure via Result.flatten(),
-    e.g.:
+    e.g.,:
 
     >>> r = Result(y=Result(z=1))
     >>> r
@@ -446,8 +446,7 @@ class Result(UserDict):
         Returns
         -------
         comp_groups : dict
-            Dict with structure {'nominal': [list of nominal scenarios],
-                                 'faulty': [list of faulty scenarios]}.
+            Dict with structure {'nominal': [list of nominal scenarios], 'faulty': [list of faulty scenarios]}.
             If no nominal or faulty, returns an empty dict {}.
         """
         nest = self.nest(1)
@@ -468,7 +467,7 @@ class Result(UserDict):
 
         Parameters
         ----------
-        newhist : Boolean, default = false
+        newhist : bool, default = False
         prevname : tuple, optional
             Current key of the flattened history (used when called recursively).
             The default is ().
@@ -618,7 +617,7 @@ class Result(UserDict):
         return pd.DataFrame.from_dict(newdict)
 
     def create_simple_fmea(self, *metrics):
-        """Makes a simple fmea-stype table of the metrics in the endclasses
+        """Makes a simple FMEA-stype table of the metrics in the endclasses
         of a list of fault scenarios run. If metrics not provided, returns all"""
         nested = {k: {**v.endclass} for k, v in self.nest(levels=1).items()}
         tab = pd.DataFrame.from_dict(nested).transpose()
@@ -705,19 +704,19 @@ class Result(UserDict):
         value : str
             Value of the history to calculate the statistic over
         metric : func, optional
-            Function to process the history (e.g. np.mean, np.min...).
-            The default is np.mean.
+            Function to process the history (e.g., np.mean, np.min...).
+            The default is np.mean
         **kwargs : kwargs
-            kwargs to bootstrap_confidence_interval.
+            kwargs to bootstrap_confidence_interval
 
         Returns
         -------
         statistic: number
-            nominal statistic for the given metric.
+            nominal statistic for the given metric
         lower bound : number
-            lower bound of the statistic in the ci.
+            lower bound of the statistic in the ci
         upper bound : number
-            upper bound of the statistic in the ci.
+            upper bound of the statistic in the ci
         """
         vals = self.get_values(value)
         ci = bootstrap_confidence_interval([*vals.values()], method=metric, **kwargs)
@@ -905,9 +904,7 @@ class Result(UserDict):
 
         Parameters
         ----------
-        result : Result
-            Result dictionary of metrics over set of scenarios
-        *plot_values : str
+        *values : str
             names of values to pull from the result (e.g., 'fxns.move_water.s.flowrate')
             Can also be specified as a dict (e.g. {'fxns':'move_water'}) to get all keys
             from a given fxn/flow/mode/etc.
@@ -1013,7 +1010,7 @@ def load(filename, filetype="", renest_dict=True, indiv=False, Rclass=Result):
         Whether to return . The default is True.
     indiv : bool, optional
         Whether the result is an individual file
-        (e.g. in a folder of results for a given simulation).
+        (e.g., in a folder of results for a given simulation).
         The default is False.
     Rclass : class
         Class to return (Result, History, or Dict)
