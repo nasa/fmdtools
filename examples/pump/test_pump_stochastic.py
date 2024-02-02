@@ -12,6 +12,7 @@ from tests.common import CommonTests
 from fmdtools.analyze.common import suite_for_plots
 from fmdtools.analyze.tabulate import NominalEnvelope
 import numpy as np
+from matplotlib import pyplot as plt
 import multiprocessing as mp
 
 
@@ -20,6 +21,9 @@ class StochasticPumpTests(unittest.TestCase, CommonTests):
 
     def setUp(self):
         self.mdl = Pump()
+
+    def tearDown(self):
+        plt.close('all')
 
     def test_stochastic_pdf(self):
         """Tests that (1) track_pdf option runs and (2) gives repeated
@@ -243,6 +247,7 @@ class StochasticPumpTests(unittest.TestCase, CommonTests):
                        'ee_1.s.voltage', 'sig_1.s.power',
                        color='blue', comp_groups={}, aggregation='mean_ci',
                        title=title)
+        plt.close('all')
 
     def test_mdl_pickle(self):
         from fmdtools.define.block.base import SimParam

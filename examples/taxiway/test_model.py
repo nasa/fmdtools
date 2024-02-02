@@ -10,6 +10,7 @@ from common import plot_course, plot_tstep
 from fmdtools.sim import propagate as prop
 import fmdtools.analyze as an
 import unittest
+from matplotlib import pyplot as plt
 from fmdtools.analyze.common import suite_for_plots
 
 
@@ -34,6 +35,7 @@ class ModelTests(unittest.TestCase):
         for fxn in self.mdl.fxns:
             if fxn != "atc":
                 fig, ax = plot_course(self.mdl, hist, fxn, title=fxn)
+                plt.close(fig)
         phasemaps = an.phases.from_hist(hist)
         an.phases.phaseplot(phasemaps)
 
