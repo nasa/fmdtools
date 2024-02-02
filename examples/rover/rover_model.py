@@ -86,6 +86,11 @@ class GroundParam(Parameter):
     x_min: float = 0.0
     x_max: float = 30.0
     x_res: float = 0.1
+    path_buffer_on: float = 0.2
+    path_buffer_poor: float = 0.3
+    path_buffer_near: float = 0.4
+    dest_buffer_on: float = 1.0
+    dest_buffer_near: float = 2.0
 
     def gen_ls_sine(self):
         """Generate coordinates in sine environment."""
@@ -128,9 +133,11 @@ class ResCorrection(Parameter):
     lb_d: float
         lower bound of drift
     cor_d: float
-        correction factor for drift (if out of bounds)
+        correction factor for drift 
+        (if drift is present, takes values between -1 and 1)
     cor_t: float
-        correction factor for transfer (if out of bounds)
+        correction factor for transfer 
+        (if transfer is low or hgih: takes values between -1 and 1)
     cor_f: float
         correction for friction (if out of bounds)
     """
@@ -138,14 +145,40 @@ class ResCorrection(Parameter):
     ub_f: float = 10.0
     lb_f: float = -1.0
     ub_t: float = 10.0
-    lb_t: float = -1.0
+    lb_t: float = 0.0
     ub_d: float = 2.0
     lb_d: float = -2.0
-    cor_d: float = 1.0
-    cor_t: float = 1.0
-    cor_f: float = 1.0
+    cor_d: float = 0.0
+    cor_t: float = 0.0
+    cor_f: float = 0.0
+
+class DestParam(PointParam):
+    """
+    Parameter defining start and end points.
+
+    Has a 1.0-m buffer for being 'on' the location and a 2.0-m buffer for being 'near'
+    the location.
+    """
+
+    x: float = 0.0
+    y: float = 0.0
+    buffer_on: float = 1.0
+    buffer_near: float = 2.0
 
 
+def sin_func(x, amp, period):
+    """Sine line function generator."""
+    return amp * np.sin(x * 2 * np.pi / period)
+    
+class PathParam(LineParam):
+    """Parameter defining the path."""
+
+    xys: tuple = tuple([[x, sin_func(x, 1, 1)] for x in np.arange(0, 100, 1)])
+    buffer_on: float = 0.2
+    buffer_poor: float = 0.3
+    buffer_near: float = 0.4
+    
+    
 class RoverParam(Parameter):
     """Parameters for rover."""
 
@@ -158,9 +191,6 @@ class RoverParam(Parameter):
         super().__init__(*args, strict_immutability=False, **kwargs)
 
 
-def sin_func(x, amp, period):
-    """Sine line function generator."""
-    return amp * np.sin(x * 2 * np.pi / period)
 
 
 def turn_func(x, radius, start):
@@ -175,18 +205,7 @@ def turn_func(x, radius, start):
         raise Exception("x="+str(x)+" <0.0")
 
 
-class DestParam(PointParam):
-    """
-    Parameter defining start and end points.
 
-    Has a 1.0-m buffer for being 'on' the location and a 2.0-m buffer for being 'near'
-    the location.
-    """
-
-    x: float = 0.0
-    y: float = 0.0
-    buffer_on: float = 1.0
-    buffer_near: float = 2.0
 
 
 class DestState(State):
@@ -203,13 +222,7 @@ class Dest(GeomPoint):
     container_s = DestState
 
 
-class PathParam(LineParam):
-    """Parameter defining the path."""
 
-    xys: tuple = tuple([[x, sin_func(x, 1, 1)] for x in np.arange(0, 100, 1)])
-    buffer_on: float = 0.2
-    buffer_poor: float = 0.3
-    buffer_near: float = 0.4
 
 
 class GroundGeomArch(GeomArchitecture):
@@ -220,9 +233,15 @@ class GroundGeomArch(GeomArchitecture):
     def init_architecture(self, **kwargs):
         """Initialize geometry with line and start/end points."""
         ls = self.p.gen_ls()
-        self.add_line('line', PathLine, p={'xys': ls})
-        self.add_point('start', Dest, p={'x': ls[0][0], 'y': ls[0][1]})
-        self.add_point('end', Dest, p={'x': ls[-1][0], 'y': ls[-1][1]})
+        self.add_line('line', PathLine, p={'xys': ls, 'buffer_on': self.p.path_buffer_on,
+                                           'buffer_poor': self.p.path_buffer_poor,
+                                           'buffer_near': self.p.path_buffer_near})
+        self.add_point('start', Dest, p={'x': ls[0][0], 'y': ls[0][1],
+                                         'buffer_on': self.p.dest_buffer_on,
+                                         'buffer_near': self.p.dest_buffer_near})
+        self.add_point('end', Dest, p={'x': ls[-1][0], 'y': ls[-1][1],
+                                         'buffer_on': self.p.dest_buffer_on,
+                                         'buffer_near': self.p.dest_buffer_near})
 
 
 class GroundState(State):
@@ -328,7 +347,7 @@ class VideoState(State):
     lin_ux: float
         unit vector indicating the x direction of the line
     lin_uy: float
-        unit vector indicatinf the y direction of the line
+        unit vector indicating the y direction of the line
     lin_dx: float
         distance to the line in the x
     lin_dy: float
@@ -411,7 +430,7 @@ class FaultStates(State):
     """Rover fault states (friction, transfer, and drift)."""
 
     transfer: float = 1.0
-    friction: float = 1.0
+    friction: float = 0.0
     drift: float = 0.0
 
 
@@ -505,12 +524,22 @@ class PlanPath(Function):
         rdiff_err = rdiff_from_vects(u_self, u_lin_dev) * np.linalg.norm(u_lin_dev)
 
         rdiff = rdiff_track + 0.15 * rdiff_err
-        # turn_fault_correction = self.p.cor_d * self.fault_sig.s.drift
-        # a factor that must multiply with rdiff.
-        # test ranges and make sure it is reasonable.
-        vel_fault_correction = (self.p.cor_f * (self.fault_sig.s.friction)
-                                + self.p.cor_t * (self.fault_sig.s.transfer - 1))
-        vel_adj = max(0.2, 1 - 0.9 * abs(rdiff_err * 50)) * vel_fault_correction
+        
+        #applying the correction factor if drift is present
+        turn_fault_correction = self.p.cor_d * self.fault_sig.s.drift
+        rdiff = rdiff + turn_fault_correction
+        
+        #applying a correction factor if friction or transfer is present
+        #goal is to increase power if friction is present 
+        friction_vel_correction = ((1 - self.p.cor_f) * self.fault_sig.s.friction / 
+                                   (1 + self.fault_sig.s.friction))
+        
+        # increase power is transfer is below 1 and decrease power if it is more than 1
+        transfer_vel_correction = ((1 + self.p.cor_t) * (self.fault_sig.s.transfer - 1) 
+                                   / (1 + self.fault_sig.s.transfer))
+        vel_adj = 1 + friction_vel_correction - transfer_vel_correction
+
+        #vel_adj = max(0.2, 1 - 0.9 * abs(rdiff_err * 50)) * vel_fault_correction
         self.control.s.put(rpower=vel_adj * (1 + (rdiff)),
                            lpower=vel_adj * (1 - (rdiff)))
         self.control.s.limit(rpower=(-1, 2), lpower=(-1, 2))
@@ -585,10 +614,10 @@ class DriveMode(Mode):
                            "drift": {-0.2, 0.2}}
                 self.init_n_faultstates(franges, phases=ph)
             if "range" in self.mode_args:
-                franges = {"friction": np.linspace(0.0, 20, 10),
-                           "transfer":  np.linspace(1.0, 0.0, 10),
-                           "drift": np.linspace(-0.5, 0.5, 10)}
-                if "all" in kwargs["drive_modes"]:
+                franges = {"friction": {*np.linspace(0.0, 20, 10)},
+                           "transfer":  {*np.linspace(1.0, 0.0, 10)},
+                           "drift": {*np.linspace(-0.5, 0.5, 10)}}
+                if "all" in self.mode_args:
                     self.init_n_faultstates(franges, phases=ph, n="all")
                 else:
                     self.init_n_faultstates(franges, phases=ph, n=1)
@@ -637,36 +666,37 @@ class Drive(Function):
             >>> d = Drive()
             >>> d.pos.s
             PosState(x=0.0, y=0.0, vel=0.0, ux=1.0, uy=0.0)
-            >>> d.drive_nominal(10, 10)
+            >>> d.drive_nominal(6, 6)
             >>> d.pos.s
-            PosState(x=10.0, y=0.0, vel=10.0, ux=1.0, uy=0.0)
+            PosState(x=2.0, y=0.0, vel=2.0, ux=1.0, uy=0.0)
 
             >>> d = Drive()
             >>> d.pos.s.uy = 1
             >>> d.pos.s.ux = 0
             >>> d.pos.s
             PosState(x=0.0, y=0.0, vel=0.0, ux=0, uy=1)
-            >>> d.drive_nominal(10, 10)
+            >>> d.drive_nominal(6, 6)
             >>> d.pos.s
-            PosState(x=0.0, y=10.0, vel=10.0, ux=0.0, uy=1.0)
+            PosState(x=0.0, y=2.0, vel=2.0, ux=0.0, uy=1.0)
 
             >>> d = Drive()
             >>> d.pos.s.uy = -1
             >>> d.pos.s.ux = 0
             >>> d.pos.s
             PosState(x=0.0, y=0.0, vel=0.0, ux=0, uy=-1)
-            >>> d.drive_nominal(10, 10)
+            >>> d.drive_nominal(6, 6)
             >>> d.pos.s
-            PosState(x=0.0, y=-10.0, vel=10.0, ux=0.0, uy=-1.0)
+            PosState(x=0.0, y=-2.0, vel=2.0, ux=0.0, uy=-1.0)
         """
-        self.pos.s.vel = (rpower + lpower) / (1.0 + self.m.s.friction)
+        
+        #the division by 6 slows down the rover, so it can manage the course
+        self.pos.s.vel = (rpower + lpower) / (5 + (1 + self.m.s.friction))
         ang_inc = np.arctan((rpower - lpower) / (rpower + lpower + 0.001))
         ux = np.cos(ang_inc) * self.pos.s.ux - np.sin(ang_inc) * self.pos.s.uy
         uy = np.sin(ang_inc) * self.pos.s.ux + np.cos(ang_inc) * self.pos.s.uy
-        mag_u = np.linalg.norm([ux, uy])
+        mag_u = np.linalg.norm([ux, uy])        
         self.pos.s.put(ux=ux/mag_u, uy=uy/mag_u)
         self.pos.s.inc(x=self.pos.s.ux*self.pos.s.vel, y=self.pos.s.uy*self.pos.s.vel)
-
 
 class PerceptionMode(Mode):
     """
@@ -1102,12 +1132,12 @@ def gen_param_space():
 if __name__ == "__main__":
     import multiprocessing as mp
     from fmdtools.analyze import tabulate
-
+    from fmdtools.sim.sample import SampleApproach, FaultDomain, FaultSample
+    
     import doctest
     doctest.testmod(verbose=True)
-
     mdl = Rover()
-    ec, hist = prop.nominal(mdl)
+    ec1, hist = prop.nominal(mdl)
     fig, ax = hist.plot_trajectories('flows.pos.s.x', 'flows.pos.s.y',
                                      time_groups=['nominal'])
     mdl.flows['ground'].ga.show(fig=fig, ax=ax)
@@ -1120,7 +1150,7 @@ if __name__ == "__main__":
     fig, ax = mdl.flows['ground'].ga.show(geoms=geoms)
 
     fig, ax = hist.plot_trajectories('flows.pos.s.x', 'flows.pos.s.y',
-                                     time_groups=['nominal'], fig=fig, ax=ax)
+                                      time_groups=['nominal'], fig=fig, ax=ax)
     # ax.set_xlim(0, 5.0)
     # ax.set_ylim(-2.5, 2.5)
     hist.flows.pos.s.x
@@ -1138,8 +1168,9 @@ if __name__ == "__main__":
 
     res, hist = prop.parameter_sample(mdl, ps_sine)
     comp = tabulate.Comparison(res, ps_sine,
-                               metrics=['end_dist'],
-                               factors=['p.ground.amp', 'p.ground.period'])
+                                metrics=['end_dist'],
+                                factors=['p.ground.amp', 'p.ground.period'])
+    res.plot_metric_dist('tot_deviation')
     # comp.sort_by_factor('p.ground.amp')
     comp.as_table()
     comp.as_plot("end_dist")

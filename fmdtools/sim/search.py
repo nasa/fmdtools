@@ -266,6 +266,8 @@ class BaseProblem(object):
     def get_default_x(self, *x):
         if not x:
             return tuple([*self.variables.values()])
+        else:
+            return x
 
     def time_execution(self, *x, reps=1):
         """
