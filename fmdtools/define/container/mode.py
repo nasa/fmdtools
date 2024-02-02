@@ -413,8 +413,7 @@ class Mode(BaseContainer, readonly=False):
         num_update = 0
         for fault in self.faults:
             if fault in self.mode_state_dict:
-                for state, value in self.mode_state_dict[fault].items():
-                    setattr(self, state, value)
+                self.s.put(**self.mode_state_dict[fault])
                 num_update += 1
                 if num_update > 1:
                     raise Exception("Exclusive fault mode scenarios" +

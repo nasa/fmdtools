@@ -9,7 +9,7 @@ from fmdtools.define.container.state import State
 from fmdtools.define.container.rand import Rand
 from fmdtools.define.block.function import Function
 from fmdtools.define.architecture.function import FunctionArchitecture
-from fmdtools.sim.sample import ParameterApproach
+from fmdtools.sim.sample import ParameterSample
 import numpy as np
 from fmdtools.sim import propagate as prop
 import fmdtools.analyze as an
@@ -272,20 +272,17 @@ if __name__ == "__main__":
     mdlhist.plot_line("s.friction")
 
     # stochastic over replicates
-    nomapp = NominalApproach()
+    nomapp = ParameterSample()
     histname = "test"
-    nomapp.add_seed_replicates(histname, 100)
-    endclasses, mdlhists = prop.nominal_approach(
-        deg_mdl, nomapp, run_stochastic=True, desired_result="endclass"
-    )
-    an.plot.hist(
-        mdlhists,
-        {"s": ["wear", "corrosion", "friction", "drift"]},
-        aggregation="mean_std",
-    )
+    nomapp.add_variable_replicates(histname, 100)
+    endclasses, mdlhists = prop.parameter_sample(deg_mdl, nomapp, 
+                                                 desired_result = 'endclass', 
+                                                 run_stochastic=True)
+    mdlhists.plot_line({"s": ["wear", "corrosion", "friction", "drift"]},
+        aggregation="mean_std")
 
     # individual slice
-    an.plot.metric_dist_from(mdlhists, [1, 10, 20],
+    mdlhists.plot_metric_dist([1, 10, 20],
                              {'s': ['wear', 'corrosion', 'friction', 'drift']})
 
     # question -- how do we sample this:
@@ -295,8 +292,8 @@ if __name__ == "__main__":
     #   - what if we get a complementary sample of times and etc?
     #   - if states in one replicate are the same as a different at the next, can we only sample one?
 
-    behave_nomapp = NominalApproach()
-    behave_nomapp.add_param_ranges(
+    behave_nomapp = ParameterSample()
+    behave_nomapp.add_variable_ranges(
         gen_sample_params,
         "behave_nomapp",
         mdlhists,

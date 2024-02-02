@@ -13,6 +13,7 @@ __pycache__/quad_mdl.cpython-36.pyc
 smart_stereo/
 rad_models/
 aerialdrm/
+boeing_perception_model/
 
 #ignore output tables
 #*.ecsv
