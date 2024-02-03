@@ -2,7 +2,7 @@
 <html>
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-    <title>Coverage for fmdtools\define\architecture\base.py: 90%</title>
+    <title>Coverage for fmdtools\define\architecture\base.py: 88%</title>
     <link rel="icon" sizes="32x32" href="favicon_32.png">
     <link rel="stylesheet" href="style.css" type="text/css">
     <script type="text/javascript" src="coverage_html.js" defer></script>
@@ -12,7 +12,7 @@
     <div class="content">
         <h1>
             <span class="text">Coverage for </span><b>fmdtools\define\architecture\base.py</b>:
-            <span class="pc_cov">90%</span>
+            <span class="pc_cov">88%</span>
         </h1>
         <aside id="help_panel_wrapper">
             <input id="help_panel_state" type="checkbox">
@@ -55,8 +55,8 @@
         </aside>
         <h2>
             <span class="text">161 statements &nbsp;</span>
-            <button type="button" class="run button_toggle_run" value="run" data-shortcut="r" title="Toggle lines run">145<span class="text"> run</span></button>
-            <button type="button" class="mis show_mis button_toggle_mis" value="mis" data-shortcut="m" title="Toggle lines missing">16<span class="text"> missing</span></button>
+            <button type="button" class="run button_toggle_run" value="run" data-shortcut="r" title="Toggle lines run">141<span class="text"> run</span></button>
+            <button type="button" class="mis show_mis button_toggle_mis" value="mis" data-shortcut="m" title="Toggle lines missing">20<span class="text"> missing</span></button>
             <button type="button" class="exc show_exc button_toggle_exc" value="exc" data-shortcut="x" title="Toggle lines excluded">0<span class="text"> excluded</span></button>
         </h2>
         <p class="text">
@@ -65,7 +65,7 @@
             <a id="nextFileLink" class="nav" href="d_3d99ab35d814b52d_component_py.html">&#xbb; next</a>
             &nbsp; &nbsp; &nbsp;
             <a class="nav" href="https://coverage.readthedocs.io/en/7.4.0">coverage.py v7.4.0</a>,
-            created at 2024-01-08 15:05 -0800
+            created at 2024-02-02 16:34 -0800
         </p>
         <aside class="hidden">
             <button type="button" class="button_next_chunk" data-shortcut="j"/>
@@ -344,7 +344,7 @@
     <p class="pln"><span class="n"><a id="t262" href="#t262">262</a></span><span class="t">        <span class="str">"""Get dictionary of random states throughout the model objs."""</span>&nbsp;</span><span class="r"></span></p>
     <p class="mis show_mis"><span class="n"><a id="t263" href="#t263">263</a></span><span class="t">        <span class="nam">rand_states</span> <span class="op">=</span> <span class="op">{</span><span class="op">}</span>&nbsp;</span><span class="r"></span></p>
     <p class="mis show_mis"><span class="n"><a id="t264" href="#t264">264</a></span><span class="t">        <span class="nam">role_objs</span> <span class="op">=</span> <span class="nam">self</span><span class="op">.</span><span class="nam">get_flex_role_objs</span><span class="op">(</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
-    <p class="mis show_mis"><span class="n"><a id="t265" href="#t265">265</a></span><span class="t">        <span class="key">for</span> <span class="nam">objname</span><span class="op">,</span> <span class="nam">obj</span> <span class="key">in</span> <span class="nam">role_objs</span><span class="op">.</span><span class="nam">values</span><span class="op">(</span><span class="op">)</span><span class="op">:</span>&nbsp;</span><span class="r"></span></p>
+    <p class="mis show_mis"><span class="n"><a id="t265" href="#t265">265</a></span><span class="t">        <span class="key">for</span> <span class="nam">objname</span><span class="op">,</span> <span class="nam">obj</span> <span class="key">in</span> <span class="nam">role_objs</span><span class="op">.</span><span class="nam">items</span><span class="op">(</span><span class="op">)</span><span class="op">:</span>&nbsp;</span><span class="r"></span></p>
     <p class="mis show_mis"><span class="n"><a id="t266" href="#t266">266</a></span><span class="t">            <span class="key">if</span> <span class="nam">hasattr</span><span class="op">(</span><span class="nam">obj</span><span class="op">,</span> <span class="str">'get_rand_states'</span><span class="op">)</span><span class="op">:</span>&nbsp;</span><span class="r"></span></p>
     <p class="mis show_mis"><span class="n"><a id="t267" href="#t267">267</a></span><span class="t">                <span class="nam">rand_state</span> <span class="op">=</span> <span class="nam">obj</span><span class="op">.</span><span class="nam">get_rand_states</span><span class="op">(</span><span class="nam">auto_update_only</span><span class="op">=</span><span class="nam">auto_update_only</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
     <p class="mis show_mis"><span class="n"><a id="t268" href="#t268">268</a></span><span class="t">                <span class="key">if</span> <span class="nam">rand_state</span><span class="op">:</span>&nbsp;</span><span class="r"></span></p>
@@ -358,13 +358,13 @@
     <p class="pln"><span class="n"><a id="t276" href="#t276">276</a></span><span class="t">&nbsp;</span><span class="r"></span></p>
     <p class="run"><span class="n"><a id="t277" href="#t277">277</a></span><span class="t">    <span class="key">def</span> <span class="nam">reset</span><span class="op">(</span><span class="nam">self</span><span class="op">)</span><span class="op">:</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t278" href="#t278">278</a></span><span class="t">        <span class="str">"""Reset the architecture and its contained objects."""</span>&nbsp;</span><span class="r"></span></p>
-    <p class="run"><span class="n"><a id="t279" href="#t279">279</a></span><span class="t">        <span class="nam">super</span><span class="op">(</span><span class="op">)</span><span class="op">.</span><span class="nam">reset</span><span class="op">(</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
-    <p class="run"><span class="n"><a id="t280" href="#t280">280</a></span><span class="t">        <span class="key">for</span> <span class="nam">obj</span> <span class="key">in</span> <span class="nam">self</span><span class="op">.</span><span class="nam">get_flex_role_objs</span><span class="op">(</span><span class="op">)</span><span class="op">.</span><span class="nam">values</span><span class="op">(</span><span class="op">)</span><span class="op">:</span>&nbsp;</span><span class="r"></span></p>
-    <p class="run"><span class="n"><a id="t281" href="#t281">281</a></span><span class="t">            <span class="key">if</span> <span class="nam">hasattr</span><span class="op">(</span><span class="nam">obj</span><span class="op">,</span> <span class="str">'reset'</span><span class="op">)</span><span class="op">:</span>&nbsp;</span><span class="r"></span></p>
-    <p class="run"><span class="n"><a id="t282" href="#t282">282</a></span><span class="t">                <span class="nam">obj</span><span class="op">.</span><span class="nam">reset</span><span class="op">(</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
+    <p class="mis show_mis"><span class="n"><a id="t279" href="#t279">279</a></span><span class="t">        <span class="nam">super</span><span class="op">(</span><span class="op">)</span><span class="op">.</span><span class="nam">reset</span><span class="op">(</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
+    <p class="mis show_mis"><span class="n"><a id="t280" href="#t280">280</a></span><span class="t">        <span class="key">for</span> <span class="nam">obj</span> <span class="key">in</span> <span class="nam">self</span><span class="op">.</span><span class="nam">get_flex_role_objs</span><span class="op">(</span><span class="op">)</span><span class="op">.</span><span class="nam">values</span><span class="op">(</span><span class="op">)</span><span class="op">:</span>&nbsp;</span><span class="r"></span></p>
+    <p class="mis show_mis"><span class="n"><a id="t281" href="#t281">281</a></span><span class="t">            <span class="key">if</span> <span class="nam">hasattr</span><span class="op">(</span><span class="nam">obj</span><span class="op">,</span> <span class="str">'reset'</span><span class="op">)</span><span class="op">:</span>&nbsp;</span><span class="r"></span></p>
+    <p class="mis show_mis"><span class="n"><a id="t282" href="#t282">282</a></span><span class="t">                <span class="nam">obj</span><span class="op">.</span><span class="nam">reset</span><span class="op">(</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t283" href="#t283">283</a></span><span class="t">&nbsp;</span><span class="r"></span></p>
     <p class="run"><span class="n"><a id="t284" href="#t284">284</a></span><span class="t">    <span class="key">def</span> <span class="nam">add_obj_modes</span><span class="op">(</span><span class="nam">self</span><span class="op">,</span> <span class="nam">obj</span><span class="op">)</span><span class="op">:</span>&nbsp;</span><span class="r"></span></p>
-    <p class="pln"><span class="n"><a id="t285" href="#t285">285</a></span><span class="t">        <span class="str">"""Add modes from an object to .faultmodes."""</span>&nbsp;</span><span class="r"></span></p>
+    <p class="pln"><span class="n"><a id="t285" href="#t285">285</a></span><span class="t">        <span class="str">"""Add modes from an object to faultmodes."""</span>&nbsp;</span><span class="r"></span></p>
     <p class="run"><span class="n"><a id="t286" href="#t286">286</a></span><span class="t">        <span class="nam">modes_to_add</span> <span class="op">=</span> <span class="op">{</span><span class="nam">obj</span><span class="op">.</span><span class="nam">name</span><span class="op">+</span><span class="str">'_'</span><span class="op">+</span><span class="nam">f</span><span class="op">:</span> <span class="nam">val</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t287" href="#t287">287</a></span><span class="t">                        <span class="key">for</span> <span class="nam">f</span><span class="op">,</span> <span class="nam">val</span> <span class="key">in</span> <span class="nam">obj</span><span class="op">.</span><span class="nam">m</span><span class="op">.</span><span class="nam">faultmodes</span><span class="op">.</span><span class="nam">items</span><span class="op">(</span><span class="op">)</span><span class="op">}</span>&nbsp;</span><span class="r"></span></p>
     <p class="run"><span class="n"><a id="t288" href="#t288">288</a></span><span class="t">        <span class="nam">fmode_intersect</span> <span class="op">=</span> <span class="nam">set</span><span class="op">(</span><span class="nam">modes_to_add</span><span class="op">)</span><span class="op">.</span><span class="nam">intersection</span><span class="op">(</span><span class="nam">self</span><span class="op">.</span><span class="nam">faultmodes</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
@@ -455,7 +455,7 @@
             <a id="nextFileLink" class="nav" href="d_3d99ab35d814b52d_component_py.html">&#xbb; next</a>
             &nbsp; &nbsp; &nbsp;
             <a class="nav" href="https://coverage.readthedocs.io/en/7.4.0">coverage.py v7.4.0</a>,
-            created at 2024-01-08 15:05 -0800
+            created at 2024-02-02 16:34 -0800
         </p>
     </div>
 </footer>

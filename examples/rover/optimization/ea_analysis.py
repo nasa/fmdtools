@@ -8,10 +8,10 @@ import pandas as pd
 import matplotlib.pyplot as plt
 import numpy as np
 
-dfea = pd.read_csv('rslt_ea.csv')
-dfrand = pd.read_csv('rslt_random.csv')
+dfea = pd.read_csv('results/rslt_ea.csv')
+dfrand = pd.read_csv('results/rslt_random.csv')
 #dfccea = pd.read_csv("ccea_pop.csv")
-dfccea = pd.read_csv("rslt_ccea.csv")
+dfccea = pd.read_csv("results/rslt_ccea.csv")
 
 print(dfea.head())
 print(dfrand.head())

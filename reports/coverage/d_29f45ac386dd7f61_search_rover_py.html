@@ -55,17 +55,17 @@
         </aside>
         <h2>
             <span class="text">444 statements &nbsp;</span>
-            <button type="button" class="run button_toggle_run" value="run" data-shortcut="r" title="Toggle lines run">95<span class="text"> run</span></button>
-            <button type="button" class="mis show_mis button_toggle_mis" value="mis" data-shortcut="m" title="Toggle lines missing">349<span class="text"> missing</span></button>
+            <button type="button" class="run button_toggle_run" value="run" data-shortcut="r" title="Toggle lines run">92<span class="text"> run</span></button>
+            <button type="button" class="mis show_mis button_toggle_mis" value="mis" data-shortcut="m" title="Toggle lines missing">352<span class="text"> missing</span></button>
             <button type="button" class="exc show_exc button_toggle_exc" value="exc" data-shortcut="x" title="Toggle lines excluded">0<span class="text"> excluded</span></button>
         </h2>
         <p class="text">
             <a id="prevFileLink" class="nav" href="d_29f45ac386dd7f61_ea_analysis_py.html">&#xab; prev</a> &nbsp; &nbsp;
             <a id="indexLink" class="nav" href="index.html">&Hat; index</a> &nbsp; &nbsp;
-            <a id="nextFileLink" class="nav" href="d_e83210bdfe1a6410_rover_degradation_py.html">&#xbb; next</a>
+            <a id="nextFileLink" class="nav" href="d_29f45ac386dd7f61_untitled2_py.html">&#xbb; next</a>
             &nbsp; &nbsp; &nbsp;
             <a class="nav" href="https://coverage.readthedocs.io/en/7.4.0">coverage.py v7.4.0</a>,
-            created at 2024-01-08 15:05 -0800
+            created at 2024-02-02 16:34 -0800
         </p>
         <aside class="hidden">
             <button type="button" class="button_next_chunk" data-shortcut="j"/>
@@ -451,8 +451,8 @@
     <p class="run"><span class="n"><a id="t369" href="#t369">369</a></span><span class="t"><span class="key">def</span> <span class="nam">montecarlo</span><span class="op">(</span><span class="nam">verbose</span><span class="op">=</span><span class="key">True</span><span class="op">,</span> <span class="nam">ngen</span><span class="op">=</span><span class="num">2</span><span class="op">,</span> <span class="nam">show_sol</span><span class="op">=</span><span class="key">True</span><span class="op">,</span> <span class="nam">weight</span><span class="op">=</span><span class="num">0.5</span><span class="op">,</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t370" href="#t370">370</a></span><span class="t">               <span class="nam">filename</span><span class="op">=</span><span class="str">'rslt_random.csv'</span><span class="op">,</span> <span class="nam">formulation</span><span class="op">=</span><span class="num">1</span><span class="op">)</span><span class="op">:</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t371" href="#t371">371</a></span><span class="t">    <span class="str">"""Monte carlo optimization of fitness for reference/comparison."""</span>&nbsp;</span><span class="r"></span></p>
-    <p class="run"><span class="n"><a id="t372" href="#t372">372</a></span><span class="t">    <span class="nam">start</span> <span class="op">=</span> <span class="nam">time</span><span class="op">.</span><span class="nam">time</span><span class="op">(</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
-    <p class="run"><span class="n"><a id="t373" href="#t373">373</a></span><span class="t">    <span class="nam">toolbox</span> <span class="op">=</span> <span class="nam">setup_opt</span><span class="op">(</span><span class="nam">mc</span><span class="op">=</span><span class="key">True</span><span class="op">,</span> <span class="nam">formulation</span><span class="op">=</span><span class="nam">formulation</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
+    <p class="mis show_mis"><span class="n"><a id="t372" href="#t372">372</a></span><span class="t">    <span class="nam">start</span> <span class="op">=</span> <span class="nam">time</span><span class="op">.</span><span class="nam">time</span><span class="op">(</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
+    <p class="mis show_mis"><span class="n"><a id="t373" href="#t373">373</a></span><span class="t">    <span class="nam">toolbox</span> <span class="op">=</span> <span class="nam">setup_opt</span><span class="op">(</span><span class="nam">mc</span><span class="op">=</span><span class="key">True</span><span class="op">,</span> <span class="nam">formulation</span><span class="op">=</span><span class="nam">formulation</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
     <p class="mis show_mis"><span class="n"><a id="t374" href="#t374">374</a></span><span class="t">    <span class="nam">g</span> <span class="op">=</span> <span class="num">0</span>&nbsp;</span><span class="r"></span></p>
     <p class="mis show_mis"><span class="n"><a id="t375" href="#t375">375</a></span><span class="t">    <span class="nam">gens</span> <span class="op">=</span> <span class="op">[</span><span class="op">]</span>&nbsp;</span><span class="r"></span></p>
     <p class="mis show_mis"><span class="n"><a id="t376" href="#t376">376</a></span><span class="t">    <span class="nam">sol_hist</span> <span class="op">=</span> <span class="op">[</span><span class="op">]</span>&nbsp;</span><span class="r"></span></p>
@@ -664,7 +664,7 @@
     <p class="pln"><span class="n"><a id="t582" href="#t582">582</a></span><span class="t">&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t583" href="#t583">583</a></span><span class="t">&nbsp;</span><span class="r"></span></p>
     <p class="run"><span class="n"><a id="t584" href="#t584">584</a></span><span class="t"><span class="key">def</span> <span class="nam">setup_opt</span><span class="op">(</span><span class="nam">ccea</span><span class="op">=</span><span class="key">False</span><span class="op">,</span> <span class="nam">mc</span><span class="op">=</span><span class="key">False</span><span class="op">,</span> <span class="nam">formulation</span><span class="op">=</span><span class="num">1</span><span class="op">)</span><span class="op">:</span>&nbsp;</span><span class="r"></span></p>
-    <p class="run"><span class="n"><a id="t585" href="#t585">585</a></span><span class="t">    <span class="key">from</span> <span class="nam">deap</span> <span class="key">import</span> <span class="nam">base</span><span class="op">,</span> <span class="nam">creator</span><span class="op">,</span> <span class="nam">tools</span>&nbsp;</span><span class="r"></span></p>
+    <p class="mis show_mis"><span class="n"><a id="t585" href="#t585">585</a></span><span class="t">    <span class="key">from</span> <span class="nam">deap</span> <span class="key">import</span> <span class="nam">base</span><span class="op">,</span> <span class="nam">creator</span><span class="op">,</span> <span class="nam">tools</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t586" href="#t586">586</a></span><span class="t">&nbsp;</span><span class="r"></span></p>
     <p class="mis show_mis"><span class="n"><a id="t587" href="#t587">587</a></span><span class="t">    <span class="key">if</span> <span class="nam">hasattr</span><span class="op">(</span><span class="nam">creator</span><span class="op">,</span> <span class="str">"FitnessMax"</span><span class="op">)</span><span class="op">:</span>&nbsp;</span><span class="r"></span></p>
     <p class="mis show_mis"><span class="n"><a id="t588" href="#t588">588</a></span><span class="t">        <span class="key">del</span> <span class="nam">creator</span><span class="op">.</span><span class="nam">FitnessMax</span>&nbsp;</span><span class="r"></span></p>
@@ -927,10 +927,10 @@
         <p>
             <a id="prevFileLink" class="nav" href="d_29f45ac386dd7f61_ea_analysis_py.html">&#xab; prev</a> &nbsp; &nbsp;
             <a id="indexLink" class="nav" href="index.html">&Hat; index</a> &nbsp; &nbsp;
-            <a id="nextFileLink" class="nav" href="d_e83210bdfe1a6410_rover_degradation_py.html">&#xbb; next</a>
+            <a id="nextFileLink" class="nav" href="d_29f45ac386dd7f61_untitled2_py.html">&#xbb; next</a>
             &nbsp; &nbsp; &nbsp;
             <a class="nav" href="https://coverage.readthedocs.io/en/7.4.0">coverage.py v7.4.0</a>,
-            created at 2024-01-08 15:05 -0800
+            created at 2024-02-02 16:34 -0800
         </p>
     </div>
 </footer>
