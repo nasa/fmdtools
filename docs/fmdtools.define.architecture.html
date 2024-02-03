@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>fmdtools.define.architecture &mdash; fmdtools 2.0-rc-1 documentation</title>
+  <title>fmdtools.define.architecture &mdash; fmdtools 2.0-rc-2 documentation</title>
       <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
     <link rel="shortcut icon" href="../_static/fmdtools_ico.ico"/>
@@ -68,14 +68,14 @@
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="Development%20Guide.html#intro-to-fmdtools">Intro to fmdtools</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="Intro_to_fmdtools.html">Intro to resilience modelling, simulation, and visualization in Python with fmdtools.</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="Intro_to_fmdtools.html">Intro to resilience modeling, simulation, and visualization in Python with fmdtools.</a><ul>
 <li class="toctree-l4"><a class="reference internal" href="Intro_to_fmdtools.html#author-daniel-hulse">Author: Daniel Hulse</a></li>
-<li class="toctree-l4"><a class="reference internal" href="Intro_to_fmdtools.html#version-2-0-rc-1">Version: 2.0-rc-1</a></li>
+<li class="toctree-l4"><a class="reference internal" href="Intro_to_fmdtools.html#version-2-0-rc-2">Version: 2.0-rc-2</a></li>
 </ul>
 </li>
 <li class="toctree-l3"><a class="reference internal" href="Intro_to_fmdtools.html#overview">Overview</a></li>
 <li class="toctree-l3"><a class="reference internal" href="Intro_to_fmdtools.html#prerequisites">Prerequisites</a></li>
-<li class="toctree-l3"><a class="reference internal" href="Intro_to_fmdtools.html#motivation-modelling-system-resilience">Motivation: Modelling System Resilience</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Intro_to_fmdtools.html#motivation-modeling-system-resilience">Motivation: Modeling System Resilience</a></li>
 <li class="toctree-l3"><a class="reference internal" href="Intro_to_fmdtools.html#why-is-resilience-important">Why is Resilience Important?</a></li>
 <li class="toctree-l3"><a class="reference internal" href="Intro_to_fmdtools.html#enabling-proactive-design-process">Enabling proactive design process</a></li>
 <li class="toctree-l3"><a class="reference internal" href="Intro_to_fmdtools.html#why-fmdtools-possible-competitors">Why fmdtools? Possible Competitors:</a></li>
@@ -288,6 +288,18 @@
 </li>
 </ul>
 </li>
+<li class="toctree-l2"><a class="reference internal" href="../examples/Examples.html#taxiway">Taxiway</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../examples/taxiway/Paper_Notebook.html">Taxiway Model Overview</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../examples/taxiway/Paper_Notebook.html#Model-Simulation">Model Simulation</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../examples/taxiway/Paper_Notebook.html#Fault-Simulation-and-Analysis">Fault Simulation and Analysis</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../examples/taxiway/Paper_Notebook.html#Perception-Fault---AC-Vision-Fault">Perception Fault - AC Vision Fault</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../examples/taxiway/Paper_Notebook.html#Communications-Fault---Poor-land-command-by-ATC">Communications Fault - Poor land command by ATC</a></li>
+</ul>
+</li>
+</ul>
+</li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="Glossary.html">Glossary</a></li>
@@ -310,13 +322,11 @@
 </li>
 <li class="toctree-l3"><a class="reference internal" href="fmdtools.define.container.html">fmdtools.define.container</a><ul>
 <li class="toctree-l4"><a class="reference internal" href="fmdtools.define.container.html#fmdtools-define-container-base">fmdtools.define.container.base</a></li>
-<li class="toctree-l4"><a class="reference internal" href="fmdtools.define.container.html#module-0">fmdtools.define.container.mode</a></li>
+<li class="toctree-l4"><a class="reference internal" href="fmdtools.define.container.html#module-fmdtools.define.container.mode">fmdtools.define.container.mode</a></li>
 <li class="toctree-l4"><a class="reference internal" href="fmdtools.define.container.html#module-fmdtools.define.container.state">fmdtools.define.container.state</a></li>
 <li class="toctree-l4"><a class="reference internal" href="fmdtools.define.container.html#fmdtools-define-container-parameter">fmdtools.define.container.parameter</a></li>
 <li class="toctree-l4"><a class="reference internal" href="fmdtools.define.container.html#module-fmdtools.define.container.rand">fmdtools.define.container.rand</a></li>
 <li class="toctree-l4"><a class="reference internal" href="fmdtools.define.container.html#module-fmdtools.define.container.time">fmdtools.define.container.time</a></li>
-<li class="toctree-l4"><a class="reference internal" href="fmdtools.define.container.html#fmdtools-define-container-geom">fmdtools.define.container.geom</a></li>
-<li class="toctree-l4"><a class="reference internal" href="fmdtools.define.container.html#fmdtools-define-container-coords">fmdtools.define.container.coords</a></li>
 </ul>
 </li>
 <li class="toctree-l3"><a class="reference internal" href="fmdtools.define.flow.html">fmdtools.define.flow</a><ul>
@@ -466,7 +476,7 @@ May alternatively provide already-instanced object.</p></li>
 <dl class="py method">
 <dt class="sig sig-object py" id="fmdtools.define.architecture.base.Architecture.add_obj_modes">
 <span class="sig-name descname"><span class="pre">add_obj_modes</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">obj</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.define.architecture.base.Architecture.add_obj_modes" title="Permalink to this definition"></a></dt>
-<dd><p>Add modes from an object to .faultmodes.</p>
+<dd><p>Add modes from an object to faultmodes.</p>
 </dd></dl>
 
 <dl class="py method">
@@ -687,22 +697,20 @@ May alternatively provide already-instanced object.</p></li>
 </dd>
 </dl>
 </p></li>
-<li><p><strong>state_rep</strong> (<em>'finite-state'/'multi-state'</em>) – <dl>
+<li><p><strong>state_rep</strong> (<em>'finite-state'/'multi-state'</em>) – <dl class="simple">
 <dt>How the states of the system are represented. Default is ‘finite-state’</dt><dd><ul>
-<li><p>’finite-state’ means only one action in the system can be active at once</p></li>
+<li><p>’finite-state’ means only one action in the system can be active at once (i.e., a finite state machine)</p></li>
+<li><p>’multi-state’ means multiple actions can be performed at once</p></li>
 </ul>
-<p>(i.e., a finite state machine)
-- ‘multi-state’ means multiple actions can be performed at once</p>
 </dd>
 </dl>
 </p></li>
 <li><p><strong>max_action_prop</strong> (<em>'until_false'/'manual'/int</em>) – <dl>
 <dt>How actions progress. Default is ‘until_false’</dt><dd><ul>
-<li><p>’until_false’ means actions are simulated until all outgoing conditions</p></li>
+<li><p>’until_false’ means actions are simulated until all outgoing conditions are false</p></li>
+<li><p>providing an integer places a limit on the number of actions that can be</p></li>
 </ul>
-<p>are false
-- providing an integer places a limit on the number of actions that can be
-performed per timestep</p>
+<p>performed per timestep</p>
 </dd>
 </dl>
 </p></li>
@@ -904,15 +912,14 @@ Defaults to self.condition_pass if none are provided.</p></li>
 <dl class="py method">
 <dt class="sig sig-object py" id="fmdtools.define.architecture.component.ComponentArchitecture.add_comp">
 <span class="sig-name descname"><span class="pre">add_comp</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">compclass</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">flownames</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.define.architecture.component.ComponentArchitecture.add_comp" title="Permalink to this definition"></a></dt>
-<dd><p>Associate an Action with the architecture. Called after add_flow.</p>
+<dd><p>Associate a Component with the architecture. Called after add_flow.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>name</strong> (<em>str</em>) – Internal Name for the Action</p></li>
+<li><p><strong>name</strong> (<em>str</em>) – Internal Name for the Component</p></li>
 <li><p><strong>compclass</strong> (<a class="reference internal" href="fmdtools.define.block.html#fmdtools.define.block.component.Component" title="fmdtools.define.block.component.Component"><em>Component</em></a>) – Component class to instantiate</p></li>
-<li><p><strong>*flownames</strong> (<em>flow</em>) – Flows (optional) which connect the actions</p></li>
-<li><p><strong>duration</strong> – Duration of the action. Default is 0.0</p></li>
-<li><p><strong>**kwargs</strong> (<em>any</em>) – kwargs to instantiate the Action with.</p></li>
+<li><p><strong>*flownames</strong> (<em>flow</em>) – Flows (optional) which connect the components</p></li>
+<li><p><strong>**kwargs</strong> (<em>any</em>) – kwargs to instantiate the Component with</p></li>
 </ul>
 </dd>
 </dl>
@@ -976,6 +983,7 @@ Defaults to self.condition_pass if none are provided.</p></li>
 <p>Class representing a functional architecture.</p>
 <p>Functional architectures enable the execution of multiple Function objects
 interacting with each other over time.</p>
+<p>…</p>
 <dl class="simple">
 <dt>flows<span class="classifier">dict</span></dt><dd><p>dictionary of flows objects in the model indexed by name</p>
 </dd>
@@ -983,13 +991,13 @@ interacting with each other over time.</p>
 </dd>
 </dl>
 <dl class="simple">
-<dt>functionorder<span class="classifier">OrderedSet</span></dt><dd><p>Keeps track of function dynamic execution order.</p>
+<dt>functionorder<span class="classifier">OrderedSet</span></dt><dd><p>Keeps track of function dynamic execution order</p>
 </dd>
-<dt>staticfxns<span class="classifier">OrderedSet</span></dt><dd><p>Keeps track of which functions run in static execution step.</p>
+<dt>staticfxns<span class="classifier">OrderedSet</span></dt><dd><p>Keeps track of which functions run in static execution step</p>
 </dd>
-<dt>dynamicfxns<span class="classifier">Orderedset</span></dt><dd><p>Keeps track of which functions run in dynamic execution step.</p>
+<dt>dynamicfxns<span class="classifier">Orderedset</span></dt><dd><p>Keeps track of which functions run in dynamic execution step</p>
 </dd>
-<dt>staticflows<span class="classifier">list</span></dt><dd><p>Flows to keep track of in static execution step.</p>
+<dt>staticflows<span class="classifier">list</span></dt><dd><p>Flows to keep track of in static execution step</p>
 </dd>
 <dt>graph<span class="classifier">networkx graph</span></dt><dd><p>multigraph view of functions and flows</p>
 </dd>
@@ -1220,7 +1228,7 @@ corresponding flows acted on by the given methods.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>time</strong> (<em>float</em>) – Current time-step.</p></li>
+<li><p><strong>time</strong> (<em>float</em>) – Current time-step</p></li>
 <li><p><strong>run_stochastic</strong> (<em>bool</em>) – Whether to run stochastic behaviors or use default values. Default is False.
 Can set as ‘track_pdf’ to calculate/track the probability densities of
 random states over time.</p></li>
@@ -1236,7 +1244,7 @@ random states over time.</p></li>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>time</strong> (<em>float</em>) – The current timestep.</p></li>
+<li><p><strong>time</strong> (<em>float</em>) – The current time-step.</p></li>
 <li><p><strong>fxnfaults</strong> (<em>dict</em>) – Faults to inject during this propagation step.
 With structure {‘function’:[‘fault1’, ‘fault2’…]}</p></li>
 <li><p><strong>disturbances</strong> (<em>dict</em>) – Variables to change during this propagation step.
@@ -1374,7 +1382,7 @@ mdl.set_vars(<a href="#id3"><span class="problematic" id="id4">**</span></a>{‘
 </pre></div>
 </div>
 <p>This can then be used in containing classes (e.g., environments) that need multiple
-geoms. We can then access the individual geoms in the geoms dict, e.g.:</p>
+geoms. We can then access the individual geoms in the geoms dict, e.g.,:</p>
 <div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">ega</span> <span class="o">=</span> <span class="n">ExGeomArch</span><span class="p">()</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">ega</span><span class="o">.</span><span class="n">geoms</span><span class="p">()[</span><span class="s1">&#39;ex_point&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">s</span>
 <span class="go">ExGeomState(occupied=False)</span>
@@ -1467,6 +1475,12 @@ geoms. We can then access the individual geoms in the geoms dict, e.g.:</p>
 <dt class="sig sig-object py" id="fmdtools.define.architecture.geom.GeomArchitecture.as_copy">
 <span class="sig-name descname"><span class="pre">as_copy</span></span><a class="headerlink" href="#fmdtools.define.architecture.geom.GeomArchitecture.as_copy" title="Permalink to this definition"></a></dt>
 <dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="fmdtools.define.architecture.geom.GeomArchitecture.check_geom_class">
+<span class="sig-name descname"><span class="pre">check_geom_class</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">gclass</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">baseclass</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.define.architecture.geom.GeomArchitecture.check_geom_class" title="Permalink to this definition"></a></dt>
+<dd><p>Check that geom class/object inherits from given base class.</p>
+</dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="fmdtools.define.architecture.geom.GeomArchitecture.container_p">

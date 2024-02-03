@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Optimization using the ProblemInterface class &mdash; fmdtools 2.0-rc-1 documentation</title>
+  <title>Optimization using the ProblemInterface class &mdash; fmdtools 2.0-rc-2 documentation</title>
       <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
       <link rel="stylesheet" href="../../_static/nbsphinx-code-cells.css" type="text/css" />
@@ -71,14 +71,14 @@
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="../../docs/Development%20Guide.html#intro-to-fmdtools">Intro to fmdtools</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="../../docs/Intro_to_fmdtools.html">Intro to resilience modelling, simulation, and visualization in Python with fmdtools.</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../docs/Intro_to_fmdtools.html">Intro to resilience modeling, simulation, and visualization in Python with fmdtools.</a><ul>
 <li class="toctree-l4"><a class="reference internal" href="../../docs/Intro_to_fmdtools.html#author-daniel-hulse">Author: Daniel Hulse</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/Intro_to_fmdtools.html#version-2-0-rc-1">Version: 2.0-rc-1</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../docs/Intro_to_fmdtools.html#version-2-0-rc-2">Version: 2.0-rc-2</a></li>
 </ul>
 </li>
 <li class="toctree-l3"><a class="reference internal" href="../../docs/Intro_to_fmdtools.html#overview">Overview</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../docs/Intro_to_fmdtools.html#prerequisites">Prerequisites</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../../docs/Intro_to_fmdtools.html#motivation-modelling-system-resilience">Motivation: Modelling System Resilience</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../docs/Intro_to_fmdtools.html#motivation-modeling-system-resilience">Motivation: Modeling System Resilience</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../docs/Intro_to_fmdtools.html#why-is-resilience-important">Why is Resilience Important?</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../docs/Intro_to_fmdtools.html#enabling-proactive-design-process">Enabling proactive design process</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../docs/Intro_to_fmdtools.html#why-fmdtools-possible-competitors">Why fmdtools? Possible Competitors:</a></li>
@@ -291,6 +291,18 @@
 </li>
 </ul>
 </li>
+<li class="toctree-l2"><a class="reference internal" href="../Examples.html#taxiway">Taxiway</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../taxiway/Paper_Notebook.html">Taxiway Model Overview</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../taxiway/Paper_Notebook.html#Model-Simulation">Model Simulation</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../taxiway/Paper_Notebook.html#Fault-Simulation-and-Analysis">Fault Simulation and Analysis</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../taxiway/Paper_Notebook.html#Perception-Fault---AC-Vision-Fault">Perception Fault - AC Vision Fault</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../taxiway/Paper_Notebook.html#Communications-Fault---Poor-land-command-by-ATC">Communications Fault - Poor land command by ATC</a></li>
+</ul>
+</li>
+</ul>
+</li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../../docs/Glossary.html">Glossary</a></li>
@@ -313,13 +325,11 @@
 </li>
 <li class="toctree-l3"><a class="reference internal" href="../../docs/fmdtools.define.container.html">fmdtools.define.container</a><ul>
 <li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.define.container.html#fmdtools-define-container-base">fmdtools.define.container.base</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.define.container.html#module-0">fmdtools.define.container.mode</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.define.container.html#module-fmdtools.define.container.mode">fmdtools.define.container.mode</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.define.container.html#module-fmdtools.define.container.state">fmdtools.define.container.state</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.define.container.html#fmdtools-define-container-parameter">fmdtools.define.container.parameter</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.define.container.html#module-fmdtools.define.container.rand">fmdtools.define.container.rand</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.define.container.html#module-fmdtools.define.container.time">fmdtools.define.container.time</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.define.container.html#fmdtools-define-container-geom">fmdtools.define.container.geom</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.define.container.html#fmdtools-define-container-coords">fmdtools.define.container.coords</a></li>
 </ul>
 </li>
 <li class="toctree-l3"><a class="reference internal" href="../../docs/fmdtools.define.flow.html">fmdtools.define.flow</a><ul>
@@ -476,7 +486,7 @@ CONSTRAINTS
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
--7.02
+-5.5200000000000005
 </pre></div></div>
 </div>
 <p>Note that despite being different callables, to reduce simulation costs, <code class="docutils literal notranslate"><span class="pre">obj_1</span></code> and <code class="docutils literal notranslate"><span class="pre">con_1</span></code> only <em>simulate the model</em> when a new variable value is entered into the problem. This can be seen by looking at the <code class="docutils literal notranslate"><span class="pre">current_iter</span></code> <strong>repr</strong>, which shows the values of the objectives/constraints a the current variable value.</p>
@@ -498,7 +508,7 @@ DisturbanceProblem with:
 VARIABLES
  -move_water.r.s.eff                                         0.3000
 OBJECTIVES
- -f1                                                        -7.0200
+ -f1                                                        -5.5200
 CONSTRAINTS
  -g1                                                        18.5000
 </pre></div></div>
@@ -584,7 +594,7 @@ CONSTRAINTS
  message: Optimization terminated successfully
  success: True
   status: 0
-     fun: -10.349999999999998
+     fun: -8.85
        x: [ 4.000e+00]
      nit: 3
      jac: [-9.000e-01]
@@ -611,7 +621,7 @@ DisturbanceProblem with:
 VARIABLES
  -move_water.r.s.eff                                         4.0000
 OBJECTIVES
- -f1                                                       -10.3500
+ -f1                                                        -8.8500
 CONSTRAINTS
  -g1                                                        -0.0000
 </pre></div></div>
@@ -756,7 +766,7 @@ PumpParam(cost=(&#39;repair&#39;, &#39;water&#39;), delay=4)
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-16491.25
+13894.0625
 </pre></div></div>
 </div>
 <div class="nbinput docutils container">
@@ -773,7 +783,7 @@ PumpParam(cost=(&#39;repair&#39;, &#39;water&#39;), delay=4)
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-16502.5
+15152.5
 </pre></div></div>
 </div>
 <div class="nbinput docutils container">
@@ -806,17 +816,17 @@ PumpParam(cost=(&#39;repair&#39;, &#39;water&#39;), delay=4)
 <div class="output_area docutils container">
 <div class="highlight"><pre>
 export_water_block_t14p0.endclass.rate: 2.5e-06
-export_water_block_t14p0.endclass.cost: 19427.500000000007
-export_water_block_t   4856.875000000002
+export_water_block_t14p0.endclass.cost: 18077.500000000004
+export_water_block_t   4519.375000000001
 export_water_block_t23p0.endclass.rate: 2.5e-06
-export_water_block_t23p0.endclass.cost: 17402.5
-export_water_block_t            4350.625
+export_water_block_t23p0.endclass.cost: 16052.5
+export_water_block_t            4013.125
 export_water_block_t31p0.endclass.rate: 2.5e-06
-export_water_block_t31p0.endclass.cost: 15602.499999999998
-export_water_block_t  3900.6249999999995
+export_water_block_t31p0.endclass.cost: 14252.5
+export_water_block_t            3563.125
 export_water_block_t40p0.endclass.rate: 2.5e-06
-export_water_block_t40p0.endclass.cost: 13577.5
-export_water_block_t            3394.375
+export_water_block_t40p0.endclass.cost: 12227.5
+export_water_block_t            3056.875
 nominal.endclass.rate:               1.0
 nominal.endclass.cost:               0.0
 nominal.endclass.expected_cost:      0.0
@@ -848,7 +858,7 @@ nominal.endclass.expected_cost:      0.0
  message: Optimization terminated successfully
  success: True
   status: 0
-     fun: 16513.75
+     fun: 15163.75
        x: [ 5.000e+00]
      nit: 1
      jac: [ 0.000e+00]
@@ -881,12 +891,12 @@ nominal.endclass.expected_cost:      0.0
        message: Optimization terminated successfully.
        success: True
         status: 0
-           fun: 16513.75
+           fun: 15163.75
              x: [ 5.000e+00]
            nit: 13
           nfev: 38
  final_simplex: (array([[ 5.000e+00],
-                       [ 5.000e+00]]), array([ 1.651e+04,  1.651e+04]))
+                       [ 5.000e+00]]), array([ 1.516e+04,  1.516e+04]))
 </pre></div></div>
 </div>
 <p>Interestingly enough, while the optimizer gives a “optimization terminated successfully,” it stays at the initial point. This may be because of a poor fit of oftimization method. See:</p>
@@ -914,7 +924,7 @@ nominal.endclass.expected_cost:      0.0
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-&lt;matplotlib.collections.PathCollection at 0x289d7b36410&gt;
+&lt;matplotlib.collections.PathCollection at 0x280f77e6770&gt;
 </pre></div></div>
 </div>
 <div class="nboutput nblast docutils container">
@@ -993,21 +1003,21 @@ nominal.endclass.expected_cost:      0.0
 =================================================
 n_gen  |  n_eval  |     f_avg     |     f_min
 =================================================
-     1 |        1 |  1.651375E+04 |  1.651375E+04
-     2 |        2 |  1.650812E+04 |  1.650250E+04
-     3 |        4 |  1.586738E+04 |  1.523225E+04
-     4 |        6 |  1.397297E+04 |  1.271369E+04
-     5 |        9 |  1.271228E+04 |  1.271088E+04
-     6 |       12 |  1.271088E+04 |  1.271088E+04
-     7 |       14 |  1.271088E+04 |  1.271088E+04
-     8 |       16 |  1.271088E+04 |  1.271088E+04
-     9 |       18 |  1.271088E+04 |  1.271088E+04
-    10 |       20 |  1.271088E+04 |  1.271088E+04
-    11 |       22 |  1.271088E+04 |  1.271088E+04
-    12 |       24 |  1.271088E+04 |  1.271088E+04
-    13 |       26 |  1.271088E+04 |  1.271088E+04
-    14 |       28 |  1.271088E+04 |  1.271088E+04
-    15 |       30 |  1.271088E+04 |  1.271088E+04
+     1 |        1 |  1.516375E+04 |  1.516375E+04
+     2 |        2 |  1.515812E+04 |  1.515250E+04
+     3 |        4 |  1.389434E+04 |  1.263619E+04
+     4 |        6 |  1.200500E+04 |  1.137381E+04
+     5 |        9 |  1.074853E+04 |  1.012325E+04
+     6 |       12 |  1.012325E+04 |  1.012325E+04
+     7 |       14 |  1.012325E+04 |  1.012325E+04
+     8 |       16 |  1.012325E+04 |  1.012325E+04
+     9 |       18 |  1.012325E+04 |  1.012325E+04
+    10 |       20 |  1.012325E+04 |  1.012325E+04
+    11 |       22 |  1.012325E+04 |  1.012325E+04
+    12 |       24 |  1.012325E+04 |  1.012325E+04
+    13 |       26 |  1.012325E+04 |  1.012325E+04
+    14 |       28 |  1.012325E+04 |  1.012325E+04
+    15 |       30 |  1.012325E+04 |  1.012325E+04
 </pre></div></div>
 </div>
 <div class="nbinput docutils container">
@@ -1041,7 +1051,7 @@ array([40.])
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-array([12710.875])
+array([10123.25])
 </pre></div></div>
 </div>
 <div class="nbinput docutils container">
@@ -1059,7 +1069,7 @@ array([12710.875])
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-&lt;matplotlib.collections.PathCollection at 0x289d7780730&gt;
+&lt;matplotlib.collections.PathCollection at 0x280f74a3f10&gt;
 </pre></div></div>
 </div>
 <div class="nboutput nblast docutils container">

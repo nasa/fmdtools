@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Intro to resilience modelling, simulation, and visualization in Python with fmdtools. &mdash; fmdtools 2.0-rc-1 documentation</title>
+  <title>Intro to resilience modeling, simulation, and visualization in Python with fmdtools. &mdash; fmdtools 2.0-rc-2 documentation</title>
       <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
     <link rel="shortcut icon" href="../_static/fmdtools_ico.ico"/>
@@ -68,14 +68,14 @@
 </ul>
 </li>
 <li class="toctree-l2 current"><a class="reference internal" href="Development%20Guide.html#intro-to-fmdtools">Intro to fmdtools</a><ul class="current">
-<li class="toctree-l3 current"><a class="current reference internal" href="#">Intro to resilience modelling, simulation, and visualization in Python with fmdtools.</a><ul>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">Intro to resilience modeling, simulation, and visualization in Python with fmdtools.</a><ul>
 <li class="toctree-l4"><a class="reference internal" href="#author-daniel-hulse">Author: Daniel Hulse</a></li>
-<li class="toctree-l4"><a class="reference internal" href="#version-2-0-rc-1">Version: 2.0-rc-1</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#version-2-0-rc-2">Version: 2.0-rc-2</a></li>
 </ul>
 </li>
 <li class="toctree-l3"><a class="reference internal" href="#overview">Overview</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#prerequisites">Prerequisites</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#motivation-modelling-system-resilience">Motivation: Modelling System Resilience</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#motivation-modeling-system-resilience">Motivation: Modeling System Resilience</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#why-is-resilience-important">Why is Resilience Important?</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#enabling-proactive-design-process">Enabling proactive design process</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#why-fmdtools-possible-competitors">Why fmdtools? Possible Competitors:</a></li>
@@ -288,6 +288,18 @@
 </li>
 </ul>
 </li>
+<li class="toctree-l2"><a class="reference internal" href="../examples/Examples.html#taxiway">Taxiway</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../examples/taxiway/Paper_Notebook.html">Taxiway Model Overview</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../examples/taxiway/Paper_Notebook.html#Model-Simulation">Model Simulation</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../examples/taxiway/Paper_Notebook.html#Fault-Simulation-and-Analysis">Fault Simulation and Analysis</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../examples/taxiway/Paper_Notebook.html#Perception-Fault---AC-Vision-Fault">Perception Fault - AC Vision Fault</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../examples/taxiway/Paper_Notebook.html#Communications-Fault---Poor-land-command-by-ATC">Communications Fault - Poor land command by ATC</a></li>
+</ul>
+</li>
+</ul>
+</li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="Glossary.html">Glossary</a></li>
@@ -310,13 +322,11 @@
 </li>
 <li class="toctree-l3"><a class="reference internal" href="fmdtools.define.container.html">fmdtools.define.container</a><ul>
 <li class="toctree-l4"><a class="reference internal" href="fmdtools.define.container.html#fmdtools-define-container-base">fmdtools.define.container.base</a></li>
-<li class="toctree-l4"><a class="reference internal" href="fmdtools.define.container.html#module-0">fmdtools.define.container.mode</a></li>
+<li class="toctree-l4"><a class="reference internal" href="fmdtools.define.container.html#module-fmdtools.define.container.mode">fmdtools.define.container.mode</a></li>
 <li class="toctree-l4"><a class="reference internal" href="fmdtools.define.container.html#module-fmdtools.define.container.state">fmdtools.define.container.state</a></li>
 <li class="toctree-l4"><a class="reference internal" href="fmdtools.define.container.html#fmdtools-define-container-parameter">fmdtools.define.container.parameter</a></li>
 <li class="toctree-l4"><a class="reference internal" href="fmdtools.define.container.html#module-fmdtools.define.container.rand">fmdtools.define.container.rand</a></li>
 <li class="toctree-l4"><a class="reference internal" href="fmdtools.define.container.html#module-fmdtools.define.container.time">fmdtools.define.container.time</a></li>
-<li class="toctree-l4"><a class="reference internal" href="fmdtools.define.container.html#fmdtools-define-container-geom">fmdtools.define.container.geom</a></li>
-<li class="toctree-l4"><a class="reference internal" href="fmdtools.define.container.html#fmdtools-define-container-coords">fmdtools.define.container.coords</a></li>
 </ul>
 </li>
 <li class="toctree-l3"><a class="reference internal" href="fmdtools.define.flow.html">fmdtools.define.flow</a><ul>
@@ -371,7 +381,7 @@
   <ul class="wy-breadcrumbs">
       <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
           <li class="breadcrumb-item"><a href="Development%20Guide.html">Development Guide</a></li>
-      <li class="breadcrumb-item active">Intro to resilience modelling, simulation, and visualization in Python with fmdtools.</li>
+      <li class="breadcrumb-item active">Intro to resilience modeling, simulation, and visualization in Python with fmdtools.</li>
       <li class="wy-breadcrumbs-aside">
             <a href="../_sources/docs/Intro_to_fmdtools.md.txt" rel="nofollow"> View page source</a>
       </li>
@@ -382,13 +392,13 @@
            <div itemprop="articleBody">
              
   <p><img alt="fmdtools logo" src="../_images/logo.png" /></p>
-<section id="intro-to-resilience-modelling-simulation-and-visualization-in-python-with-fmdtools">
-<h1>Intro to resilience modelling, simulation, and visualization in Python with fmdtools.<a class="headerlink" href="#intro-to-resilience-modelling-simulation-and-visualization-in-python-with-fmdtools" title="Permalink to this heading"></a></h1>
+<section id="intro-to-resilience-modeling-simulation-and-visualization-in-python-with-fmdtools">
+<h1>Intro to resilience modeling, simulation, and visualization in Python with fmdtools.<a class="headerlink" href="#intro-to-resilience-modeling-simulation-and-visualization-in-python-with-fmdtools" title="Permalink to this heading"></a></h1>
 <section id="author-daniel-hulse">
 <h2>Author: Daniel Hulse<a class="headerlink" href="#author-daniel-hulse" title="Permalink to this heading"></a></h2>
 </section>
-<section id="version-2-0-rc-1">
-<h2>Version: 2.0-rc-1<a class="headerlink" href="#version-2-0-rc-1" title="Permalink to this heading"></a></h2>
+<section id="version-2-0-rc-2">
+<h2>Version: 2.0-rc-2<a class="headerlink" href="#version-2-0-rc-2" title="Permalink to this heading"></a></h2>
 </section>
 </section>
 <hr class="docutils" />
@@ -437,8 +447,8 @@
 </ul>
 </section>
 <hr class="docutils" />
-<section id="motivation-modelling-system-resilience">
-<h1>Motivation: Modelling System Resilience<a class="headerlink" href="#motivation-modelling-system-resilience" title="Permalink to this heading"></a></h1>
+<section id="motivation-modeling-system-resilience">
+<h1>Motivation: Modeling System Resilience<a class="headerlink" href="#motivation-modeling-system-resilience" title="Permalink to this heading"></a></h1>
 <p>Resilience means taking a <strong>dynamic understanding of risk and safety</strong></p>
 <p><img alt="resilience idea" src="../_images/resilience_idea.png" /></p>
 </section>
@@ -461,7 +471,7 @@
 <ul class="simple">
 <li><p>Uncertainty Quantification tools:  (e.g. OpenCossan)</p>
 <ul>
-<li><p>Doesn’t incorporate fault modelling/propagation/visualization aspects</p></li>
+<li><p>Does not incorporate fault modeling/propagation/visualization aspects</p></li>
 </ul>
 </li>
 <li><p>MATLAB/modelica/etc. Fault Simulation tools</p>
@@ -496,7 +506,7 @@
 </li>
 <li><p>Enables design:</p>
 <ul>
-<li><p>Models can be parameterized an optimized!</p></li>
+<li><p>Models can be parameterized and optimized!</p></li>
 <li><p>Plug-and-play analyses and visualizations</p></li>
 </ul>
 </li>
@@ -528,7 +538,7 @@
 <hr class="docutils" />
 <section id="what-is-fmdtools-repo-structure">
 <h1>What is fmdtools? Repo Structure<a class="headerlink" href="#what-is-fmdtools-repo-structure" title="Permalink to this heading"></a></h1>
-<p>Repository (https://github.com/nasa/fmdtools/)</p>
+<p>[Repository] (https://github.com/nasa/fmdtools/)</p>
 <ul class="simple">
 <li><p><code class="docutils literal notranslate"><span class="pre">/fmdtools</span></code>: installable package</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">/examples</span></code>: example models with demonstrative notebooks and tests</p></li>
@@ -593,7 +603,7 @@
 <li><p>Single-timestep vs multi-timestep vs network</p></li>
 </ul>
 </li>
-<li><p>What scenarioss do we want to study and how?</p>
+<li><p>What scenarios do we want to study and how?</p>
 <ul>
 <li><p>Failure modes and faulty behaviors</p></li>
 <li><p>Disturbances and changes in parameters</p></li>
@@ -648,7 +658,7 @@
 <section id="more-resources-for-model-definition">
 <h1>More Resources for Model Definition<a class="headerlink" href="#more-resources-for-model-definition" title="Permalink to this heading"></a></h1>
 <ul class="simple">
-<li><p>Note the docs for model definition in https://nasa.github.io/fmdtools/docs/fmdtools.define.html</p></li>
+<li><p>Note the docs for model definition are in https://nasa.github.io/fmdtools/docs/fmdtools.define.html</p></li>
 <li><p>Other examples also can be helpful: https://nasa.github.io/fmdtools/docs/Examples.html</p></li>
 </ul>
 </section>
@@ -694,7 +704,7 @@ What does the model directory look like?</p></li>
 <section id="simulation-concepts-types-of-simulations">
 <h1>Simulation Concepts: Types of Simulations<a class="headerlink" href="#simulation-concepts-types-of-simulations" title="Permalink to this heading"></a></h1>
 <p><img alt="Dynamic Propagation" src="../_images/simulation_types.png" /></p>
-<p>For more info, (syntax/arguments), see documentation for <a class="reference external" href="https://nasa.github.io/fmdtools/docs/fmdtools.sim.html#fmdtools-sim-propagate"><code class="docutils literal notranslate"><span class="pre">fmdtools.sim.propagate</span></code></a></p>
+<p>For more info on syntax/arguments, see documentation for <a class="reference external" href="https://nasa.github.io/fmdtools/docs/fmdtools.sim.html#fmdtools-sim-propagate"><code class="docutils literal notranslate"><span class="pre">fmdtools.sim.propagate</span></code></a>.</p>
 </section>
 <hr class="docutils" />
 <section id="simulation-concepts-sampling-approaches">
@@ -768,7 +778,7 @@ What does the model directory look like?</p></li>
 <li><p>Show model graph</p></li>
 <li><p>Show nominal performances</p></li>
 <li><p>Show performances in a nominal scenario</p></li>
-<li><p>Make a scenario-based fmea</p></li>
+<li><p>Make a scenario-based FMEA</p></li>
 </ul>
 <p><strong>Explore:</strong></p>
 <ul class="simple">
@@ -790,7 +800,7 @@ What does the model directory look like?</p></li>
 </li>
 <li><p>I hope you agree that it has some powerful features!</p>
 <ul>
-<li><p>Modelling expressiveness and clarity</p></li>
+<li><p>Modeling expressiveness and clarity</p></li>
 <li><p>Types of simulations that can be run</p></li>
 <li><p>Powerful but easy-to-leverage plug-and-play analyses</p></li>
 </ul>
@@ -804,9 +814,9 @@ What does the model directory look like?</p></li>
 <li><p>More advanced topics (<a class="reference external" href="https://nasa.github.io/fmdtools/docs/Examples.html">see examples</a>):</p>
 <ul>
 <li><p>Search and optimization</p></li>
-<li><p>Human/AI Modelling</p></li>
+<li><p>Human/AI Modeling</p></li>
 <li><p>Systems-of-Systems modeling</p></li>
-<li><p>Modelling Stochastic Behavior</p></li>
+<li><p>Modeling Stochastic Behavior</p></li>
 <li><p>… and more</p></li>
 </ul>
 </li>

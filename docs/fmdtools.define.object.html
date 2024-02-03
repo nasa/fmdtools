@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>fmdtools.define.object &mdash; fmdtools 2.0-rc-1 documentation</title>
+  <title>fmdtools.define.object &mdash; fmdtools 2.0-rc-2 documentation</title>
       <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
     <link rel="shortcut icon" href="../_static/fmdtools_ico.ico"/>
@@ -68,14 +68,14 @@
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="Development%20Guide.html#intro-to-fmdtools">Intro to fmdtools</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="Intro_to_fmdtools.html">Intro to resilience modelling, simulation, and visualization in Python with fmdtools.</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="Intro_to_fmdtools.html">Intro to resilience modeling, simulation, and visualization in Python with fmdtools.</a><ul>
 <li class="toctree-l4"><a class="reference internal" href="Intro_to_fmdtools.html#author-daniel-hulse">Author: Daniel Hulse</a></li>
-<li class="toctree-l4"><a class="reference internal" href="Intro_to_fmdtools.html#version-2-0-rc-1">Version: 2.0-rc-1</a></li>
+<li class="toctree-l4"><a class="reference internal" href="Intro_to_fmdtools.html#version-2-0-rc-2">Version: 2.0-rc-2</a></li>
 </ul>
 </li>
 <li class="toctree-l3"><a class="reference internal" href="Intro_to_fmdtools.html#overview">Overview</a></li>
 <li class="toctree-l3"><a class="reference internal" href="Intro_to_fmdtools.html#prerequisites">Prerequisites</a></li>
-<li class="toctree-l3"><a class="reference internal" href="Intro_to_fmdtools.html#motivation-modelling-system-resilience">Motivation: Modelling System Resilience</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Intro_to_fmdtools.html#motivation-modeling-system-resilience">Motivation: Modeling System Resilience</a></li>
 <li class="toctree-l3"><a class="reference internal" href="Intro_to_fmdtools.html#why-is-resilience-important">Why is Resilience Important?</a></li>
 <li class="toctree-l3"><a class="reference internal" href="Intro_to_fmdtools.html#enabling-proactive-design-process">Enabling proactive design process</a></li>
 <li class="toctree-l3"><a class="reference internal" href="Intro_to_fmdtools.html#why-fmdtools-possible-competitors">Why fmdtools? Possible Competitors:</a></li>
@@ -288,6 +288,18 @@
 </li>
 </ul>
 </li>
+<li class="toctree-l2"><a class="reference internal" href="../examples/Examples.html#taxiway">Taxiway</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../examples/taxiway/Paper_Notebook.html">Taxiway Model Overview</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../examples/taxiway/Paper_Notebook.html#Model-Simulation">Model Simulation</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../examples/taxiway/Paper_Notebook.html#Fault-Simulation-and-Analysis">Fault Simulation and Analysis</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../examples/taxiway/Paper_Notebook.html#Perception-Fault---AC-Vision-Fault">Perception Fault - AC Vision Fault</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../examples/taxiway/Paper_Notebook.html#Communications-Fault---Poor-land-command-by-ATC">Communications Fault - Poor land command by ATC</a></li>
+</ul>
+</li>
+</ul>
+</li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="Glossary.html">Glossary</a></li>
@@ -310,13 +322,11 @@
 </li>
 <li class="toctree-l3"><a class="reference internal" href="fmdtools.define.container.html">fmdtools.define.container</a><ul>
 <li class="toctree-l4"><a class="reference internal" href="fmdtools.define.container.html#fmdtools-define-container-base">fmdtools.define.container.base</a></li>
-<li class="toctree-l4"><a class="reference internal" href="fmdtools.define.container.html#module-0">fmdtools.define.container.mode</a></li>
+<li class="toctree-l4"><a class="reference internal" href="fmdtools.define.container.html#module-fmdtools.define.container.mode">fmdtools.define.container.mode</a></li>
 <li class="toctree-l4"><a class="reference internal" href="fmdtools.define.container.html#module-fmdtools.define.container.state">fmdtools.define.container.state</a></li>
 <li class="toctree-l4"><a class="reference internal" href="fmdtools.define.container.html#fmdtools-define-container-parameter">fmdtools.define.container.parameter</a></li>
 <li class="toctree-l4"><a class="reference internal" href="fmdtools.define.container.html#module-fmdtools.define.container.rand">fmdtools.define.container.rand</a></li>
 <li class="toctree-l4"><a class="reference internal" href="fmdtools.define.container.html#module-fmdtools.define.container.time">fmdtools.define.container.time</a></li>
-<li class="toctree-l4"><a class="reference internal" href="fmdtools.define.container.html#fmdtools-define-container-geom">fmdtools.define.container.geom</a></li>
-<li class="toctree-l4"><a class="reference internal" href="fmdtools.define.container.html#fmdtools-define-container-coords">fmdtools.define.container.coords</a></li>
 </ul>
 </li>
 <li class="toctree-l3"><a class="reference internal" href="fmdtools.define.flow.html">fmdtools.define.flow</a><ul>
@@ -390,7 +400,7 @@
 <li><p><code class="xref py py-mod docutils literal notranslate"><span class="pre">base</span></code>: for <code class="xref py py-class docutils literal notranslate"><span class="pre">BaseObject</span></code>, which is used for the base object class used for both objects and blocks/architectures.</p></li>
 <li><p><code class="xref py py-mod docutils literal notranslate"><span class="pre">geom</span></code>: for <code class="xref py py-class docutils literal notranslate"><span class="pre">Geom</span></code>, class and subclasses which represent geometric attributes.</p></li>
 <li><p><code class="xref py py-mod docutils literal notranslate"><span class="pre">coords</span></code>: for <code class="xref py py-class docutils literal notranslate"><span class="pre">Coords</span></code>, which is used to define coordinate systems.</p></li>
-<li><p><code class="xref py py-mod docutils literal notranslate"><span class="pre">timer</span></code>: for <code class="xref py py-class docutils literal notranslate"><span class="pre">Timer</span></code>, which is used to define timers (used in <cite>define.container.time.Time</cite> containers).</p></li>
+<li><p><code class="xref py py-mod docutils literal notranslate"><span class="pre">timer</span></code>: for <code class="xref py py-class docutils literal notranslate"><span class="pre">Timer</span></code>, which is used to define timers (used in <a class="reference internal" href="fmdtools.define.container.html#fmdtools.define.container.time.Time" title="fmdtools.define.container.time.Time"><code class="xref py py-class docutils literal notranslate"><span class="pre">fmdtools.define.container.time.Time</span></code></a> containers).</p></li>
 </ul>
 <section id="module-fmdtools.define.object.base">
 <span id="fmdtools-define-object-base"></span><h2>fmdtools.define.object.base<a class="headerlink" href="#module-fmdtools.define.object.base" title="Permalink to this heading"></a></h2>
@@ -398,8 +408,8 @@
 <p>Classes in this module:</p>
 <ul class="simple">
 <li><p><a class="reference internal" href="#fmdtools.define.object.base.BaseObject" title="fmdtools.define.object.base.BaseObject"><code class="xref py py-class docutils literal notranslate"><span class="pre">BaseObject</span></code></a>: Base object class used throughout.</p></li>
+<li><p><code class="xref py py-class docutils literal notranslate"><span class="pre">ExampleObject</span></code>: Example base object for testing.</p></li>
 </ul>
-<p>-<code class="xref py py-class docutils literal notranslate"><span class="pre">ExampleObject</span></code>: Example base object for testing.</p>
 <p>Functions contained in this module:</p>
 <ul class="simple">
 <li><p><a class="reference internal" href="#fmdtools.define.object.base.check_pickleability" title="fmdtools.define.object.base.check_pickleability"><code class="xref py py-func docutils literal notranslate"><span class="pre">check_pickleability()</span></code></a>:Checks to see which attributes of an object will pickle
@@ -414,14 +424,16 @@
 well as representation of indictators and tracking.</p>
 <p class="rubric">Examples</p>
 <p>The roletypes class variable lets one add specific types of roles to the class.
-By default, ‘container’ is included in roletypes, enabling:
-&gt;&gt;&gt; from fmdtools.define.container.state import ExampleState
-&gt;&gt;&gt; class ExampleObject(BaseObject):
-…    container_s = ExampleState
-…    def indicate_high_x(self):
-…        return self.s.x &gt; 1.0
-…    def indicate_y_over_t(self, t):
-…        return self.s.y &gt; t</p>
+By default, ‘container’ is included in roletypes, enabling:</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">fmdtools.define.container.state</span> <span class="kn">import</span> <span class="n">ExampleState</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">class</span> <span class="nc">ExampleObject</span><span class="p">(</span><span class="n">BaseObject</span><span class="p">):</span>
+<span class="gp">... </span>   <span class="n">container_s</span> <span class="o">=</span> <span class="n">ExampleState</span>
+<span class="gp">... </span>   <span class="k">def</span> <span class="nf">indicate_high_x</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="gp">... </span>       <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">s</span><span class="o">.</span><span class="n">x</span> <span class="o">&gt;</span> <span class="mf">1.0</span>
+<span class="gp">... </span>   <span class="k">def</span> <span class="nf">indicate_y_over_t</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">t</span><span class="p">):</span>
+<span class="gp">... </span>       <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">s</span><span class="o">.</span><span class="n">y</span> <span class="o">&gt;</span> <span class="n">t</span>
+</pre></div>
+</div>
 <div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">ex</span> <span class="o">=</span> <span class="n">ExampleObject</span><span class="p">()</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">ex</span><span class="o">.</span><span class="n">roletypes</span>
 <span class="go">[&#39;container&#39;]</span>
@@ -432,36 +444,48 @@ By default, ‘container’ is included in roletypes, enabling:
 </pre></div>
 </div>
 <p>If an already-instanced role is passed, the BaseObject will take this
-copy instead of instancing its own:
-&gt;&gt;&gt; ex2 = ExampleObject(s=ExampleState(2.0, 4.0))
-&gt;&gt;&gt; ex2.s
-ExampleState(x=2.0, y=4.0)</p>
+copy instead of instancing its own:</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">ex2</span> <span class="o">=</span> <span class="n">ExampleObject</span><span class="p">(</span><span class="n">s</span><span class="o">=</span><span class="n">ExampleState</span><span class="p">(</span><span class="mf">2.0</span><span class="p">,</span> <span class="mf">4.0</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ex2</span><span class="o">.</span><span class="n">s</span>
+<span class="go">ExampleState(x=2.0, y=4.0)</span>
+</pre></div>
+</div>
 <p>The method <cite>indicate_high_x</cite> is called an indicator. Indicators show up in the
-indicators property:
-&gt;&gt;&gt; ex.indicators
-(‘high_x’, ‘y_over_t’)</p>
-<p>And are used to evaluate conditions, e.g.:
-&gt;&gt;&gt; ex.indicate_high_x()
-False
-&gt;&gt;&gt; ex2.indicate_high_x()
-True</p>
-<p>Time may be used as an optional argument to indicators:
-&gt;&gt;&gt; ex.indicate_y_over_t(0.0)
-True
-&gt;&gt;&gt; ex2.return_true_indicators(0.0)
-[‘high_x’, ‘y_over_t’]</p>
-<p>A history may be created using create_hist:
-&gt;&gt;&gt; ex.create_hist([0.0, 1.0])
-i.high_x:                       array(2)
-i.y_over_t:                     array(2)</p>
+indicators property:</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">ex</span><span class="o">.</span><span class="n">indicators</span>
+<span class="go">(&#39;high_x&#39;, &#39;y_over_t&#39;)</span>
+</pre></div>
+</div>
+<p>And are used to evaluate conditions, e.g.:</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">ex</span><span class="o">.</span><span class="n">indicate_high_x</span><span class="p">()</span>
+<span class="go">False</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ex2</span><span class="o">.</span><span class="n">indicate_high_x</span><span class="p">()</span>
+<span class="go">True</span>
+</pre></div>
+</div>
+<p>Time may be used as an optional argument to indicators:</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">ex</span><span class="o">.</span><span class="n">indicate_y_over_t</span><span class="p">(</span><span class="mf">0.0</span><span class="p">)</span>
+<span class="go">True</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ex2</span><span class="o">.</span><span class="n">return_true_indicators</span><span class="p">(</span><span class="mf">0.0</span><span class="p">)</span>
+<span class="go">[&#39;high_x&#39;, &#39;y_over_t&#39;]</span>
+</pre></div>
+</div>
+<p>A history may be created using create_hist:</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">ex</span><span class="o">.</span><span class="n">create_hist</span><span class="p">([</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">])</span>
+<span class="go">i.high_x:                       array(2)</span>
+<span class="go">i.y_over_t:                     array(2)</span>
+</pre></div>
+</div>
 <p>Note that adding roles to the class often means modifying default_track.
-Initializing all possible using the ‘all’ option:
-&gt;&gt;&gt; ex = ExampleObject(track=’all’)
-&gt;&gt;&gt; ex.create_hist([0.0, 1.0])
-i.high_x:                       array(2)
-i.y_over_t:                     array(2)
-s.x:                            array(2)
-s.y:                            array(2)</p>
+Initializing all possible using the ‘all’ option:</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">ex</span> <span class="o">=</span> <span class="n">ExampleObject</span><span class="p">(</span><span class="n">track</span><span class="o">=</span><span class="s1">&#39;all&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ex</span><span class="o">.</span><span class="n">create_hist</span><span class="p">([</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">])</span>
+<span class="go">i.high_x:                       array(2)</span>
+<span class="go">i.y_over_t:                     array(2)</span>
+<span class="go">s.x:                            array(2)</span>
+<span class="go">s.y:                            array(2)</span>
+</pre></div>
+</div>
 <dl class="py method">
 <dt class="sig sig-object py" id="fmdtools.define.object.base.BaseObject.assign_roles">
 <span class="sig-name descname"><span class="pre">assign_roles</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">roletype</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">other_obj</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.define.object.base.BaseObject.assign_roles" title="Permalink to this definition"></a></dt>
@@ -487,12 +511,25 @@ s.y:                            array(2)</p>
 <span class="go">ExampleState(x=3.0, y=4.0)</span>
 </pre></div>
 </div>
-<p>Note that these these roles should be independent after assignment:
-&gt;&gt;&gt; ex.s.x = 4.0
-&gt;&gt;&gt; ex.s
-ExampleState(x=4.0, y=4.0)
-&gt;&gt;&gt; ex2.s
-ExampleState(x=3.0, y=4.0)</p>
+<p>Note that these these roles should be independent after assignment:</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">ex</span><span class="o">.</span><span class="n">s</span><span class="o">.</span><span class="n">x</span> <span class="o">=</span> <span class="mf">4.0</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ex</span><span class="o">.</span><span class="n">s</span>
+<span class="go">ExampleState(x=4.0, y=4.0)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ex2</span><span class="o">.</span><span class="n">s</span>
+<span class="go">ExampleState(x=3.0, y=4.0)</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="fmdtools.define.object.base.BaseObject.check_dict_creation">
+<span class="sig-name descname"><span class="pre">check_dict_creation</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">False</span></em><a class="headerlink" href="#fmdtools.define.object.base.BaseObject.check_dict_creation" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="fmdtools.define.object.base.BaseObject.check_slots">
+<span class="sig-name descname"><span class="pre">check_slots</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.define.object.base.BaseObject.check_slots" title="Permalink to this definition"></a></dt>
+<dd><p>Check if __slots__ were defined for the class to preemt __dict__ creation.</p>
 </dd></dl>
 
 <dl class="py attribute">
@@ -634,11 +671,10 @@ set via parameters.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>obj</strong> (<em>object</em>) – Object with _spec_ attributes</p></li>
 <li><p><strong>spec</strong> (<em>str</em>) – Name of the attributes to initialize</p></li>
+<li><p><strong>name_end</strong> (<em>str</em>) – Last letter or set of lettersof the attribute used to give the role name to where
+the dictionary will be placed. It may be “ions” with collections. Default is ‘s’.</p></li>
 <li><p><strong>set_attr</strong> (<em>bool</em>) – Whether to also add the individual attributes attr to the obj</p></li>
-<li><p><strong>sub_obj</strong> (<em>str</em>) – Sub-object to form the object from (e.g., ‘p’ if defined in a parameter).
-Default is ‘’, which gets from obj.</p></li>
 </ul>
 </dd>
 </dl>
@@ -748,7 +784,24 @@ states/parameters or pass an already-constructured object.</p>
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>name</strong> (<em>str</em>) – Name to give the flow object</p></li>
-<li><p><strong>fclass</strong> (<em>Flow/MultiFlow/Comms/CustomFlow</em>) – Flow class to instantiate OR already-instanced object to pass</p></li>
+<li><p><strong>objclass</strong> (<em>class</em><em> or </em><em>object</em>) – Class inheriting from BaseObject, or already instantiated object.
+Default is BaseObject.</p></li>
+<li><p><strong>track</strong> (<em>str/dict</em>) – <p>Which model states to track over time (overwrites mdl.default_track).
+Default is ‘default’
+Options:</p>
+<ul>
+<li><p>’default’</p></li>
+<li><p>’all’</p></li>
+<li><p>’none’</p></li>
+<li><p>or a dict of form</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">{</span><span class="s1">&#39;functions&#39;</span><span class="p">:{</span><span class="s1">&#39;fxn1&#39;</span><span class="p">:</span><span class="s1">&#39;att1&#39;</span><span class="p">},</span> <span class="s1">&#39;flows&#39;</span><span class="p">:{</span><span class="s1">&#39;flow1&#39;</span><span class="p">:</span><span class="s1">&#39;att1&#39;</span><span class="p">}}</span>
+</pre></div>
+</div>
+</li>
+</ul>
+</p></li>
+<li><p><strong>as_copy</strong> (<em>bool</em>) – If an object is provided for objclass, whether to copy that object (or just pass it).
+Default is False.</p></li>
 <li><p><strong>**kwargs</strong> (<em>dict</em>) – Other specialized roles to overrride</p></li>
 </ul>
 </dd>
@@ -766,6 +819,7 @@ states/parameters or pass an already-constructured object.</p>
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">fmdtools.define.object.timer.</span></span><span class="sig-name descname"><span class="pre">Timer</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.define.object.timer.Timer" title="Permalink to this definition"></a></dt>
 <dd><p>Bases: <a class="reference internal" href="#fmdtools.define.object.base.BaseObject" title="fmdtools.define.object.base.BaseObject"><code class="xref py py-class docutils literal notranslate"><span class="pre">BaseObject</span></code></a></p>
 <p>Class for model timers used in functions (e.g. for conditional faults).</p>
+<p>…</p>
 <dl class="py attribute">
 <dt class="sig sig-object py" id="fmdtools.define.object.timer.Timer.name">
 <span class="sig-name descname"><span class="pre">name</span></span><a class="headerlink" href="#fmdtools.define.object.timer.Timer.name" title="Permalink to this definition"></a></dt>
@@ -891,12 +945,12 @@ states/parameters or pass an already-constructured object.</p>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>time</strong> (<em>float</em>) – set time to count down in the timer</p></li>
 <li><p><strong>tstep</strong> (<em>float</em><em> (</em><em>default -1.0</em><em>)</em>) – time to increment the timer at each time-step</p></li>
-<li><p><strong>overwrite</strong> (<em>str</em>) – whether/how to overwrite the previous time
-‘always’ (default) sets the time to the given time
-‘if_more’ only overwrites the old time if the new time is greater
-‘if_less’ only overwrites the old time if the new time is less
-‘never’ doesn’t overwrite an existing timer unless it has reached 0.0
-‘increment’ increments the previous time by the new time</p></li>
+<li><p><strong>overwrite</strong> (<em>str</em>) – whether/how to overwrite the previous time.
+‘always’ (default) sets the time to the given time.
+‘if_more’ only overwrites the old time if the new time is greater.
+‘if_less’ only overwrites the old time if the new time is less.
+‘never’ doesn’t overwrite an existing timer unless it has reached 0.0.
+‘increment’ increments the previous time by the new time.</p></li>
 </ul>
 </dd>
 </dl>
@@ -933,6 +987,7 @@ allocations.</p>
 <p>Base class for defining geometries.</p>
 <p>Geometry objects are essentially wrappers around various shapely classes used to
 convey the spacial properties of a model.</p>
+<p>…</p>
 <dl class="simple">
 <dt>s<span class="classifier">State</span></dt><dd><p>State defining mutable geom properties (e.g., allocation, color, etc)</p>
 </dd>
@@ -1017,7 +1072,6 @@ convey the spacial properties of a model.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>geom</strong> (<a class="reference internal" href="#fmdtools.define.object.geom.Geom" title="fmdtools.define.object.geom.Geom"><em>Geom</em></a>) – Geom object.</p></li>
 <li><p><strong>shapes</strong> (<em>dict</em><em>, </em><em>optional</em>) – Aspects of the Geom to plot and their corresponding plot kwargs.
 The default is {‘all’: {}}.</p></li>
 <li><p><strong>fig</strong> (<em>matplotlib.figure</em><em>, </em><em>optional</em>) – Existing Figure. The default is None.</p></li>
@@ -1049,7 +1103,7 @@ The default is False.</p></li>
 <li><p><strong>pt</strong> (<em>tuple/lost</em>) – Point closest to shape</p></li>
 <li><p><strong>buffername</strong> (<em>str</em>) – Name of shape/buffer. Default is ‘shape’.</p></li>
 <li><p><strong>dist_forward</strong> (<em>float</em>) – Distance forward along line segment to project. Give a negative number to
-reverse directions</p></li>
+reverse directions.</p></li>
 </ul>
 </dd>
 </dl>
@@ -1114,16 +1168,16 @@ of point).</p>
 <span class="go">False</span>
 </pre></div>
 </div>
-<p>Additionally, note the underlying shapely attribute at .shape</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="nb">type</span><span class="p">(</span><span class="n">exp</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
+<p>Additionally, note the underlying shapely attribute at .shape:</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="nb">type</span><span class="p">(</span><span class="n">exp</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
+<span class="go">&lt;class &#39;shapely.geometry.linestring.LineString&#39;&gt;</span>
 </pre></div>
 </div>
-<p>&lt;class ‘shapely.geometry.linestring.LineString’&gt;</p>
 <p>As well as the buffer (on):</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="nb">type</span><span class="p">(</span><span class="n">exp</span><span class="o">.</span><span class="n">on</span><span class="p">)</span>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="nb">type</span><span class="p">(</span><span class="n">exp</span><span class="o">.</span><span class="n">on</span><span class="p">)</span>
+<span class="go">&lt;class &#39;shapely.geometry.polygon.Polygon&#39;&gt;</span>
 </pre></div>
 </div>
-<p>&lt;class ‘shapely.geometry.polygon.Polygon’&gt;</p>
 <dl class="py attribute">
 <dt class="sig sig-object py" id="fmdtools.define.object.geom.GeomLine.container_p">
 <span class="sig-name descname"><span class="pre">container_p</span></span><a class="headerlink" href="#fmdtools.define.object.geom.GeomLine.container_p" title="Permalink to this definition"></a></dt>
@@ -1224,6 +1278,7 @@ contain a state for the given status (e.g., occupied, red/blue, etc.).</p>
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">fmdtools.define.object.geom.</span></span><span class="sig-name descname"><span class="pre">LineParam</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">strict_immutability</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">check_type</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">check_pickle</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">set_type</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">check_lim</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.define.object.geom.LineParam" title="Permalink to this definition"></a></dt>
 <dd><p>Bases: <a class="reference internal" href="fmdtools.define.container.html#fmdtools.define.container.parameter.Parameter" title="fmdtools.define.container.parameter.Parameter"><code class="xref py py-class docutils literal notranslate"><span class="pre">Parameter</span></code></a></p>
 <p>Parameter defining lines. May be extended with buffers.</p>
+<p>…</p>
 <dl class="simple">
 <dt>xys<span class="classifier">tuple</span></dt><dd><p>tuple of points ((x1, y1), …) defining shapely.LineString.</p>
 </dd>
@@ -1285,6 +1340,7 @@ is on the point would be defined by the parameter:</p>
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">fmdtools.define.object.geom.</span></span><span class="sig-name descname"><span class="pre">PolyParam</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">strict_immutability</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">check_type</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">check_pickle</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">set_type</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">check_lim</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.define.object.geom.PolyParam" title="Permalink to this definition"></a></dt>
 <dd><p>Bases: <a class="reference internal" href="fmdtools.define.container.html#fmdtools.define.container.parameter.Parameter" title="fmdtools.define.container.parameter.Parameter"><code class="xref py py-class docutils literal notranslate"><span class="pre">Parameter</span></code></a></p>
 <p>Parameter defining polygons. May be extended with buffers.</p>
+<p>…</p>
 <dl class="simple">
 <dt>shell<span class="classifier">tuple</span></dt><dd><p>tuple of points ((x1, y1), …) defining outer shell.</p>
 </dd>
@@ -1319,7 +1375,8 @@ is on the point would be defined by the parameter:</p>
 <dd><p>Bases: <a class="reference internal" href="#fmdtools.define.object.base.BaseObject" title="fmdtools.define.object.base.BaseObject"><code class="xref py py-class docutils literal notranslate"><span class="pre">BaseObject</span></code></a></p>
 <p>Class for generating, accessing, and setting gridworld properties.</p>
 <p>Creates arrays, points, and lists of points which may correspond to desired
-modelling properties.</p>
+modeling properties.</p>
+<p>…</p>
 <dl class="simple">
 <dt>init_p: CoordsParam</dt><dd><p>Parameter controlling default grid matrix (see CoordsParam), along with other
 properties of interest. Sets the .p container.</p>
@@ -1336,11 +1393,13 @@ properties of interest. Sets the .p container.</p>
 <span class="gp">... </span>       <span class="bp">self</span><span class="o">.</span><span class="n">set_pts</span><span class="p">([[</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">],</span> <span class="p">[</span><span class="mf">10.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">]],</span> <span class="s2">&quot;v&quot;</span><span class="p">,</span> <span class="mf">10.0</span><span class="p">)</span>
 </pre></div>
 </div>
-<p>Instantiating this class a class with (see ExampleCoordsParam):
-- immutable arrays a and v,
-- mutable array st,
-- point start at (0.0), and
-- collection high made up of all points where v &gt; 10.0</p>
+<p>Instantiating a class with (see ExampleCoordsParam):</p>
+<ul class="simple">
+<li><p>immutable arrays a and v,</p></li>
+<li><p>mutable array st,</p></li>
+<li><p>point start at (0.0), and</p></li>
+<li><p>collection high made up of all points where v &gt; 10.0.</p></li>
+</ul>
 <p>As shown, features are normal numpy arrays set to readonly:</p>
 <div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">ex</span> <span class="o">=</span> <span class="n">ExampleCoords</span><span class="p">()</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="nb">type</span><span class="p">(</span><span class="n">ex</span><span class="o">.</span><span class="n">a</span><span class="p">)</span>
@@ -1353,7 +1412,7 @@ properties of interest. Sets the .p container.</p>
 <span class="gr">ValueError</span>: <span class="n">assignment destination is read-only</span>
 </pre></div>
 </div>
-<p>The main difference with states is that they can be set, e.g.:</p>
+<p>The main difference with states is that they can be set, e.g.,:</p>
 <div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">ex</span><span class="o">.</span><span class="n">st</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="mf">100.0</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">ex</span><span class="o">.</span><span class="n">st</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span>
 <span class="go">100.0</span>
@@ -1371,23 +1430,23 @@ all points where v &gt; 5.0 should be a part of high_v, as shown:</p>
 <span class="go">(0.0, 0.0)</span>
 </pre></div>
 </div>
-<p>Note that these histories are tracked:
-&gt;&gt;&gt; h = ex.create_hist([0, 1, 2])
-&gt;&gt;&gt; h.keys()
-dict_keys([‘r.probdens’, ‘st’])
-&gt;&gt;&gt; h.st[0]
-array([[100.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.],</p>
-<blockquote>
-<div><p>[  0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.],
-[  0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.],
-[  0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.],
-[  0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.],
-[  0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.],
-[  0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.],
-[  0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.],
-[  0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.],
-[  0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.]])</p>
-</div></blockquote>
+<p>Note that these histories are tracked:</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">h</span> <span class="o">=</span> <span class="n">ex</span><span class="o">.</span><span class="n">create_hist</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">h</span><span class="o">.</span><span class="n">keys</span><span class="p">()</span>
+<span class="go">dict_keys([&#39;r.probdens&#39;, &#39;st&#39;])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">h</span><span class="o">.</span><span class="n">st</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+<span class="go">array([[100.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.],</span>
+<span class="go">       [  0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.],</span>
+<span class="go">       [  0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.],</span>
+<span class="go">       [  0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.],</span>
+<span class="go">       [  0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.],</span>
+<span class="go">       [  0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.],</span>
+<span class="go">       [  0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.],</span>
+<span class="go">       [  0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.],</span>
+<span class="go">       [  0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.],</span>
+<span class="go">       [  0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.]])</span>
+</pre></div>
+</div>
 <dl class="py method">
 <dt class="sig sig-object py" id="fmdtools.define.object.coords.Coords.build">
 <span class="sig-name descname"><span class="pre">build</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.define.object.coords.Coords.build" title="Permalink to this definition"></a></dt>
@@ -1484,7 +1543,7 @@ The default is np.equal.</p></li>
 </dd>
 </dl>
 <p class="rubric">Examples</p>
-<p>Can be used with default options to check collections, e,g.:</p>
+<p>Can be used with default options to check collections, e.g.,:</p>
 <div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">ex</span> <span class="o">=</span> <span class="n">ExampleCoords</span><span class="p">()</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">ex</span><span class="o">.</span><span class="n">find_closest</span><span class="p">(</span><span class="mi">20</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;high_v&quot;</span><span class="p">)</span>
 <span class="go">array([10.,  0.])</span>
@@ -1509,7 +1568,7 @@ e.g.,:</p>
 <li><p><strong>x</strong> (<em>number</em>) – Scalar x location</p></li>
 <li><p><strong>y</strong> (<em>number</em>) – Scalar y location</p></li>
 <li><p><strong>prop</strong> (<em>str</em>) – Name of the property to get.</p></li>
-<li><p><strong>outside</strong> (<em>value</em>) – Value to provide if not in range. Default i ‘error’, which throws an error</p></li>
+<li><p><strong>outside</strong> (<em>value</em>) – Value to provide if not in range. Default is ‘error’, which throws an error</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
@@ -1700,7 +1759,7 @@ e.g.,:</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>pts</strong> (<em>list</em>) – List of points (e.g. [(1.0, 2.0), (3.0, 4.0)]) to set.</p></li>
+<li><p><strong>pts</strong> (<em>list</em>) – List of points (e.g., [(1.0, 2.0), (3.0, 4.0)]) to set.</p></li>
 <li><p><strong>prop</strong> (<em>str</em>) – Name of the property to set.</p></li>
 <li><p><strong>value</strong> (<em>int/bool/float</em><em> or </em><em>list</em><em>...</em>) – Value to set the points to. Can also pass a list.</p></li>
 </ul>
@@ -1715,7 +1774,7 @@ e.g.,:</p>
 <span class="go">-20.0</span>
 </pre></div>
 </div>
-<p>or,:</p>
+<p>or:</p>
 <div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">ex</span><span class="o">.</span><span class="n">set_pts</span><span class="p">([(</span><span class="mi">50</span><span class="p">,</span><span class="mi">50</span><span class="p">),</span> <span class="p">[</span><span class="mi">80</span><span class="p">,</span><span class="mi">80</span><span class="p">]],</span> <span class="s2">&quot;st&quot;</span><span class="p">,</span> <span class="p">[</span><span class="o">-</span><span class="mf">10.0</span><span class="p">,</span> <span class="o">-</span><span class="mf">5.0</span><span class="p">])</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">ex</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="mi">50</span><span class="p">,</span> <span class="mi">50</span><span class="p">,</span> <span class="s2">&quot;st&quot;</span><span class="p">)</span>
 <span class="go">-10.0</span>
@@ -1819,6 +1878,7 @@ The default is None (which selects from all points).</p></li>
 <li><p><strong>prop</strong> (<em>str</em>) – Property to plot.</p></li>
 <li><p><strong>collections</strong> (<em>dict</em><em>, </em><em>optional</em>) – Collections to plot and their respective kwargs for show_collection.
 The default is {}.</p></li>
+<li><p><strong>legend_args</strong> (<em>bool/dict</em><em>, </em><em>optional</em>) – Specifies arguments to legend. Default is False, which shows no legend.</p></li>
 <li><p><strong>**kwargs</strong> (<em>kwargs</em>) – kwargs to show_property.</p></li>
 </ul>
 </dd>
@@ -1902,6 +1962,7 @@ property provided.</p></li>
 <li><p><strong>z</strong> (<em>str</em><em>, </em><em>optional</em>) – Name of the property to plot as z. The default is “prop”, which uses same
 property as prop.</p></li>
 <li><p><strong>z_res</strong> (<em>int</em><em>, </em><em>optional</em>) – Resolution to plot z at. The default is 10.</p></li>
+<li><p><strong>collections</strong> (<em>dict</em><em>, </em><em>optional</em>) – Collections to plot and their respective kwargs for show_collection. The default is {}.</p></li>
 <li><p><strong>xlab</strong> (<em>str</em><em>, </em><em>optional</em>) – Label for x-axis. The default is “x”.</p></li>
 <li><p><strong>ylab</strong> (<em>str</em><em>, </em><em>optional</em>) – Label for y-axis. The default is “y”.</p></li>
 <li><p><strong>zlab</strong> (<em>str</em><em>, </em><em>optional</em>) – Label for the z-axis. The default is “prop”, which uses the name of the
@@ -1911,6 +1972,7 @@ property provided.</p></li>
 <li><p><strong>cmap</strong> (<em>str</em><em>, </em><em>optional</em>) – Name of the matplotlib colormap to use for colors. The default is “Greens”.</p></li>
 <li><p><strong>fig</strong> (<em>matplotlib.figure</em><em>, </em><em>optional</em>) – Existing Figure. The default is None.</p></li>
 <li><p><strong>ax</strong> (<em>matplotlib.axis</em><em>, </em><em>optional</em>) – Existing axis. The default is None.</p></li>
+<li><p><strong>figsize</strong> (<em>tuple</em><em>, </em><em>optional</em>) – Size for the figure. Default is (4,4)</p></li>
 <li><p><strong>**kwargs</strong> (<em>kwargs</em>) – Kwargs to pass to Axes3D.voxels</p></li>
 </ul>
 </dd>
@@ -2010,6 +2072,7 @@ The default is {}.</p></li>
 <p>Modifiers may be added to add additional properties (e.g., features, states,
 collections, points) to the coordinates. Additionally has class fields which may be
 overwritten.</p>
+<p>…</p>
 <dl class="simple">
 <dt>x_size<span class="classifier">int</span></dt><dd><p>Number of rows in the x-dimension</p>
 </dd>

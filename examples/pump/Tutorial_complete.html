@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>fmdtools Tutorial &mdash; fmdtools 2.0-rc-1 documentation</title>
+  <title>fmdtools Tutorial &mdash; fmdtools 2.0-rc-2 documentation</title>
       <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
       <link rel="stylesheet" href="../../_static/nbsphinx-code-cells.css" type="text/css" />
@@ -71,14 +71,14 @@
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="../../docs/Development%20Guide.html#intro-to-fmdtools">Intro to fmdtools</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="../../docs/Intro_to_fmdtools.html">Intro to resilience modelling, simulation, and visualization in Python with fmdtools.</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../docs/Intro_to_fmdtools.html">Intro to resilience modeling, simulation, and visualization in Python with fmdtools.</a><ul>
 <li class="toctree-l4"><a class="reference internal" href="../../docs/Intro_to_fmdtools.html#author-daniel-hulse">Author: Daniel Hulse</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/Intro_to_fmdtools.html#version-2-0-rc-1">Version: 2.0-rc-1</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../docs/Intro_to_fmdtools.html#version-2-0-rc-2">Version: 2.0-rc-2</a></li>
 </ul>
 </li>
 <li class="toctree-l3"><a class="reference internal" href="../../docs/Intro_to_fmdtools.html#overview">Overview</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../docs/Intro_to_fmdtools.html#prerequisites">Prerequisites</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../../docs/Intro_to_fmdtools.html#motivation-modelling-system-resilience">Motivation: Modelling System Resilience</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../docs/Intro_to_fmdtools.html#motivation-modeling-system-resilience">Motivation: Modeling System Resilience</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../docs/Intro_to_fmdtools.html#why-is-resilience-important">Why is Resilience Important?</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../docs/Intro_to_fmdtools.html#enabling-proactive-design-process">Enabling proactive design process</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../docs/Intro_to_fmdtools.html#why-fmdtools-possible-competitors">Why fmdtools? Possible Competitors:</a></li>
@@ -291,6 +291,18 @@
 </li>
 </ul>
 </li>
+<li class="toctree-l2"><a class="reference internal" href="../Examples.html#taxiway">Taxiway</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../taxiway/Paper_Notebook.html">Taxiway Model Overview</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../taxiway/Paper_Notebook.html#Model-Simulation">Model Simulation</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../taxiway/Paper_Notebook.html#Fault-Simulation-and-Analysis">Fault Simulation and Analysis</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../taxiway/Paper_Notebook.html#Perception-Fault---AC-Vision-Fault">Perception Fault - AC Vision Fault</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../taxiway/Paper_Notebook.html#Communications-Fault---Poor-land-command-by-ATC">Communications Fault - Poor land command by ATC</a></li>
+</ul>
+</li>
+</ul>
+</li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../../docs/Glossary.html">Glossary</a></li>
@@ -313,13 +325,11 @@
 </li>
 <li class="toctree-l3"><a class="reference internal" href="../../docs/fmdtools.define.container.html">fmdtools.define.container</a><ul>
 <li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.define.container.html#fmdtools-define-container-base">fmdtools.define.container.base</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.define.container.html#module-0">fmdtools.define.container.mode</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.define.container.html#module-fmdtools.define.container.mode">fmdtools.define.container.mode</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.define.container.html#module-fmdtools.define.container.state">fmdtools.define.container.state</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.define.container.html#fmdtools-define-container-parameter">fmdtools.define.container.parameter</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.define.container.html#module-fmdtools.define.container.rand">fmdtools.define.container.rand</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.define.container.html#module-fmdtools.define.container.time">fmdtools.define.container.time</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.define.container.html#fmdtools-define-container-geom">fmdtools.define.container.geom</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.define.container.html#fmdtools-define-container-coords">fmdtools.define.container.coords</a></li>
 </ul>
 </li>
 <li class="toctree-l3"><a class="reference internal" href="../../docs/fmdtools.define.flow.html">fmdtools.define.flow</a><ul>
@@ -764,7 +774,7 @@ time:                          array(56)
 endclass.rate:                     1e-05
 endclass.cost:        29000.000000000007
 endclass.expected_cost: 29000.000000000007
-graph: &lt;fmdtools.analyze.graph.FunctionArchitectureGraph object at 0x000002522DD844C0&gt;
+graph: &lt;fmdtools.analyze.graph.FunctionArchitectureGraph object at 0x000001832B64A5C0&gt;
 </pre></div></div>
 </div>
 <div class="nbinput docutils container">
@@ -946,7 +956,7 @@ FaultSample of scenarios:
 </div>
 <div class="output_area stderr docutils container">
 <div class="highlight"><pre>
-SCENARIOS COMPLETE: 100%|██████████| 24/24 [00:00&lt;00:00, 42.88it/s]
+SCENARIOS COMPLETE: 100%|██████████| 24/24 [00:00&lt;00:00, 42.46it/s]
 </pre></div></div>
 </div>
 <p>It can be helpful to view what these results look like–a <code class="docutils literal notranslate"><span class="pre">Result</span></code> of faults injected at particular times with their correspnding <code class="docutils literal notranslate"><span class="pre">Result</span></code> dictionaries.</p>
@@ -1001,8 +1011,8 @@ import_water_less_wa               1e-05
 import_water_less_wa   2587.499999999999
 import_water_less_wa   2587.499999999999
 import_signal_no_sig               1e-06
-import_signal_no_sig              8650.0
-import_signal_no_sig   864.9999999999999
+import_signal_no_sig  15174.999999999998
+import_signal_no_sig  1517.4999999999998
 move_water_mech_brea             7.2e-06
 move_water_mech_brea  10174.999999999998
 move_water_mech_brea   7325.999999999998
@@ -1057,131 +1067,131 @@ nominal.endclass.expected_cost:      0.0
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-import_water_less_wat_t52p0:
---endclass:
-----rate:                          1e-05
-----expected_cost:                   0.0
-----cost:                            0.0
-move_water_short_t52p0:
---endclass:
-----rate:                          1e-05
-----expected_cost:               10000.0
-----cost:                        10000.0
-import_ee_no_v_t2p0:
---endclass:
-----rate:                            0.0
-----expected_cost:                   0.0
-----cost:             20125.000000000007
-import_signal_no_sig_t2p0:
---endclass:
-----rate:                        1.5e-06
-----expected_cost:     3018.750000000001
-----cost:             20125.000000000007
-import_water_no_wat_t52p0:
---endclass:
-----rate:                          1e-05
-----expected_cost:                1000.0
-----cost:                         1000.0
 import_ee_inf_v_t27p0:
 --endclass:
 ----rate:         2.0000000000000003e-06
-----expected_cost:     4035.000000000001
 ----cost:                        20175.0
-import_ee_inf_v_t2p0:
---endclass:
-----rate:                            0.0
-----expected_cost:                   0.0
-----cost:             25125.000000000007
-move_water_mech_break_t27p0:
---endclass:
-----rate:                        7.2e-06
-----expected_cost:     7325.999999999998
-----cost:             10174.999999999998
-import_water_no_wat_t27p0:
---endclass:
-----rate:                          1e-05
-----expected_cost:     6174.999999999998
-----cost:              6174.999999999998
-move_water_mech_break_t52p0:
---endclass:
-----rate:          6.000000000000001e-07
-----expected_cost:                 300.0
-----cost:                         5000.0
-move_water_short_t2p0:
---endclass:
-----rate:         1.5000000000000002e-05
-----expected_cost:    45187.500000000015
-----cost:             30125.000000000007
-move_water_short_t27p0:
---endclass:
-----rate:                          1e-05
-----expected_cost:               25175.0
-----cost:                        25175.0
-export_water_block_t2p0:
---endclass:
-----rate:         1.5000000000000002e-05
-----expected_cost:    30153.750000000015
-----cost:             20102.500000000007
-move_water_mech_break_t2p0:
---endclass:
-----rate:          6.000000000000001e-07
-----expected_cost:     907.5000000000005
-----cost:             15125.000000000007
-import_water_less_wat_t2p0:
---endclass:
-----rate:                          1e-05
-----expected_cost:     5062.500000000004
-----cost:              5062.500000000004
-import_signal_no_sig_t27p0:
---endclass:
-----rate:                          1e-06
-----expected_cost:     864.9999999999999
-----cost:                         8650.0
-import_ee_inf_v_t52p0:
---endclass:
-----rate:                            0.0
-----expected_cost:                   0.0
-----cost:                         5000.0
-import_water_less_wat_t27p0:
---endclass:
-----rate:                          1e-05
-----expected_cost:     2587.499999999999
-----cost:              2587.499999999999
-nominal:
---endclass:
-----rate:                            1.0
-----expected_cost:                   0.0
-----cost:                            0.0
+----expected_cost:     4035.000000000001
 export_water_block_t27p0:
 --endclass:
 ----rate:                          1e-05
-----expected_cost:               15152.5
 ----cost:                        15152.5
-import_ee_no_v_t27p0:
---endclass:
-----rate:          8.000000000000001e-06
-----expected_cost:               12140.0
-----cost:             15174.999999999998
+----expected_cost:               15152.5
 export_water_block_t52p0:
 --endclass:
 ----rate:                          1e-05
-----expected_cost:                5000.0
 ----cost:                         5000.0
-import_signal_no_sig_t52p0:
+----expected_cost:                5000.0
+import_signal_no_sig_t2p0:
 --endclass:
-----rate:                          1e-06
-----expected_cost:     999.9999999999999
-----cost:                        10000.0
+----rate:                        1.5e-06
+----cost:             20125.000000000007
+----expected_cost:     3018.750000000001
 import_ee_no_v_t52p0:
 --endclass:
 ----rate:                            0.0
-----expected_cost:                   0.0
 ----cost:                        10000.0
+----expected_cost:                   0.0
 import_water_no_wat_t2p0:
 --endclass:
 ----rate:                          1e-05
-----expected_cost:    11125.000000000007
 ----cost:             11125.000000000007
+----expected_cost:    11125.000000000007
+move_water_short_t27p0:
+--endclass:
+----rate:                          1e-05
+----cost:                        25175.0
+----expected_cost:               25175.0
+import_signal_no_sig_t27p0:
+--endclass:
+----rate:                          1e-06
+----cost:             15174.999999999998
+----expected_cost:    1517.4999999999998
+export_water_block_t2p0:
+--endclass:
+----rate:         1.5000000000000002e-05
+----cost:             20102.500000000007
+----expected_cost:    30153.750000000015
+import_ee_inf_v_t52p0:
+--endclass:
+----rate:                            0.0
+----cost:                         5000.0
+----expected_cost:                   0.0
+nominal:
+--endclass:
+----rate:                            1.0
+----cost:                            0.0
+----expected_cost:                   0.0
+move_water_mech_break_t27p0:
+--endclass:
+----rate:                        7.2e-06
+----cost:             10174.999999999998
+----expected_cost:     7325.999999999998
+import_water_less_wat_t27p0:
+--endclass:
+----rate:                          1e-05
+----cost:              2587.499999999999
+----expected_cost:     2587.499999999999
+import_ee_no_v_t27p0:
+--endclass:
+----rate:          8.000000000000001e-06
+----cost:             15174.999999999998
+----expected_cost:               12140.0
+import_water_less_wat_t52p0:
+--endclass:
+----rate:                          1e-05
+----cost:                            0.0
+----expected_cost:                   0.0
+import_signal_no_sig_t52p0:
+--endclass:
+----rate:                          1e-06
+----cost:                        10000.0
+----expected_cost:     999.9999999999999
+move_water_short_t2p0:
+--endclass:
+----rate:         1.5000000000000002e-05
+----cost:             30125.000000000007
+----expected_cost:    45187.500000000015
+move_water_mech_break_t2p0:
+--endclass:
+----rate:          6.000000000000001e-07
+----cost:             15125.000000000007
+----expected_cost:     907.5000000000005
+import_water_less_wat_t2p0:
+--endclass:
+----rate:                          1e-05
+----cost:              5062.500000000004
+----expected_cost:     5062.500000000004
+import_water_no_wat_t52p0:
+--endclass:
+----rate:                          1e-05
+----cost:                         1000.0
+----expected_cost:                1000.0
+move_water_mech_break_t52p0:
+--endclass:
+----rate:          6.000000000000001e-07
+----cost:                         5000.0
+----expected_cost:                 300.0
+import_water_no_wat_t27p0:
+--endclass:
+----rate:                          1e-05
+----cost:              6174.999999999998
+----expected_cost:     6174.999999999998
+move_water_short_t52p0:
+--endclass:
+----rate:                          1e-05
+----cost:                        10000.0
+----expected_cost:               10000.0
+import_ee_inf_v_t2p0:
+--endclass:
+----rate:                            0.0
+----cost:             25125.000000000007
+----expected_cost:                   0.0
+import_ee_no_v_t2p0:
+--endclass:
+----rate:                            0.0
+----cost:             20125.000000000007
+----expected_cost:                   0.0
 </pre></div></div>
 </div>
 <p>We often want to adjust the <code class="docutils literal notranslate"><span class="pre">FaultDomain</span></code> and <code class="docutils literal notranslate"><span class="pre">SampleApproach</span></code> to answer specific questions about the model (e.g. focussing on single faults, different numbers of sample points, etc). Both have different methods with options which can be changed to enable this, e.g.:</p>
@@ -1353,8 +1363,8 @@ FaultSample of scenarios:
       <th>import_signal</th>
       <th>no_sig</th>
       <td>0.000003</td>
-      <td>7276.458333</td>
-      <td>0.048838</td>
+      <td>8472.708333</td>
+      <td>0.055363</td>
     </tr>
     <tr>
       <th>import_ee</th>
@@ -1408,28 +1418,28 @@ FaultSample of scenarios:
   </thead>
   <tbody>
     <tr>
-      <th>import_water_less_wat_t52p0</th>
+      <th>import_ee_inf_v_t27p0</th>
+      <td>['ee_1', 'wat_2']</td>
+      <td>[]</td>
+      <td>0.000002</td>
+      <td>20175.0</td>
+      <td>4035.0</td>
+    </tr>
+    <tr>
+      <th>export_water_block_t27p0</th>
       <td>['ee_1', 'wat_2']</td>
       <td>[]</td>
       <td>0.00001</td>
-      <td>0.0</td>
-      <td>0.0</td>
+      <td>15152.5</td>
+      <td>15152.5</td>
     </tr>
     <tr>
-      <th>move_water_short_t52p0</th>
+      <th>export_water_block_t52p0</th>
       <td>['ee_1', 'wat_2']</td>
       <td>[]</td>
       <td>0.00001</td>
-      <td>10000.0</td>
-      <td>10000.0</td>
-    </tr>
-    <tr>
-      <th>import_ee_no_v_t2p0</th>
-      <td>['ee_1', 'wat_2']</td>
-      <td>[]</td>
-      <td>0.0</td>
-      <td>20125.0</td>
-      <td>0.0</td>
+      <td>5000.0</td>
+      <td>5000.0</td>
     </tr>
     <tr>
       <th>import_signal_no_sig_t2p0</th>
@@ -1440,27 +1450,59 @@ FaultSample of scenarios:
       <td>3018.75</td>
     </tr>
     <tr>
-      <th>import_water_no_wat_t52p0</th>
-      <td>['ee_1', 'wat_2']</td>
-      <td>[]</td>
-      <td>0.00001</td>
-      <td>1000.0</td>
-      <td>1000.0</td>
-    </tr>
-    <tr>
-      <th>import_ee_inf_v_t27p0</th>
-      <td>['ee_1', 'wat_2']</td>
-      <td>[]</td>
-      <td>0.000002</td>
-      <td>20175.0</td>
-      <td>4035.0</td>
-    </tr>
-    <tr>
-      <th>import_ee_inf_v_t2p0</th>
+      <th>import_ee_no_v_t52p0</th>
       <td>['ee_1', 'wat_2']</td>
       <td>[]</td>
       <td>0.0</td>
-      <td>25125.0</td>
+      <td>10000.0</td>
+      <td>0.0</td>
+    </tr>
+    <tr>
+      <th>import_water_no_wat_t2p0</th>
+      <td>['ee_1', 'wat_2']</td>
+      <td>[]</td>
+      <td>0.00001</td>
+      <td>11125.0</td>
+      <td>11125.0</td>
+    </tr>
+    <tr>
+      <th>move_water_short_t27p0</th>
+      <td>['ee_1', 'wat_2']</td>
+      <td>[]</td>
+      <td>0.00001</td>
+      <td>25175.0</td>
+      <td>25175.0</td>
+    </tr>
+    <tr>
+      <th>import_signal_no_sig_t27p0</th>
+      <td>['ee_1', 'wat_2']</td>
+      <td>[]</td>
+      <td>0.000001</td>
+      <td>15175.0</td>
+      <td>1517.5</td>
+    </tr>
+    <tr>
+      <th>export_water_block_t2p0</th>
+      <td>['ee_1', 'wat_2']</td>
+      <td>[]</td>
+      <td>0.000015</td>
+      <td>20102.5</td>
+      <td>30153.75</td>
+    </tr>
+    <tr>
+      <th>import_ee_inf_v_t52p0</th>
+      <td>['ee_1', 'wat_2']</td>
+      <td>[]</td>
+      <td>0.0</td>
+      <td>5000.0</td>
+      <td>0.0</td>
+    </tr>
+    <tr>
+      <th>nominal</th>
+      <td>['ee_1', 'wat_2']</td>
+      <td>[]</td>
+      <td>1.0</td>
+      <td>0.0</td>
       <td>0.0</td>
     </tr>
     <tr>
@@ -1472,20 +1514,36 @@ FaultSample of scenarios:
       <td>7326.0</td>
     </tr>
     <tr>
-      <th>import_water_no_wat_t27p0</th>
+      <th>import_water_less_wat_t27p0</th>
       <td>['ee_1', 'wat_2']</td>
       <td>[]</td>
       <td>0.00001</td>
-      <td>6175.0</td>
-      <td>6175.0</td>
+      <td>2587.5</td>
+      <td>2587.5</td>
     </tr>
     <tr>
-      <th>move_water_mech_break_t52p0</th>
+      <th>import_ee_no_v_t27p0</th>
+      <td>['ee_1', 'wat_2']</td>
+      <td>[]</td>
+      <td>0.000008</td>
+      <td>15175.0</td>
+      <td>12140.0</td>
+    </tr>
+    <tr>
+      <th>import_water_less_wat_t52p0</th>
+      <td>['ee_1', 'wat_2']</td>
+      <td>[]</td>
+      <td>0.00001</td>
+      <td>0.0</td>
+      <td>0.0</td>
+    </tr>
+    <tr>
+      <th>import_signal_no_sig_t52p0</th>
       <td>['ee_1', 'wat_2']</td>
       <td>[]</td>
       <td>0.000001</td>
-      <td>5000.0</td>
-      <td>300.0</td>
+      <td>10000.0</td>
+      <td>1000.0</td>
     </tr>
     <tr>
       <th>move_water_short_t2p0</th>
@@ -1494,22 +1552,6 @@ FaultSample of scenarios:
       <td>0.000015</td>
       <td>30125.0</td>
       <td>45187.5</td>
-    </tr>
-    <tr>
-      <th>move_water_short_t27p0</th>
-      <td>['ee_1', 'wat_2']</td>
-      <td>[]</td>
-      <td>0.00001</td>
-      <td>25175.0</td>
-      <td>25175.0</td>
-    </tr>
-    <tr>
-      <th>export_water_block_t2p0</th>
-      <td>['ee_1', 'wat_2']</td>
-      <td>[]</td>
-      <td>0.000015</td>
-      <td>20102.5</td>
-      <td>30153.75</td>
     </tr>
     <tr>
       <th>move_water_mech_break_t2p0</th>
@@ -1528,84 +1570,52 @@ FaultSample of scenarios:
       <td>5062.5</td>
     </tr>
     <tr>
-      <th>import_signal_no_sig_t27p0</th>
-      <td>['ee_1', 'wat_2']</td>
-      <td>[]</td>
-      <td>0.000001</td>
-      <td>8650.0</td>
-      <td>865.0</td>
-    </tr>
-    <tr>
-      <th>import_ee_inf_v_t52p0</th>
-      <td>['ee_1', 'wat_2']</td>
-      <td>[]</td>
-      <td>0.0</td>
-      <td>5000.0</td>
-      <td>0.0</td>
-    </tr>
-    <tr>
-      <th>import_water_less_wat_t27p0</th>
+      <th>import_water_no_wat_t52p0</th>
       <td>['ee_1', 'wat_2']</td>
       <td>[]</td>
       <td>0.00001</td>
-      <td>2587.5</td>
-      <td>2587.5</td>
-    </tr>
-    <tr>
-      <th>nominal</th>
-      <td>['ee_1', 'wat_2']</td>
-      <td>[]</td>
-      <td>1.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-    </tr>
-    <tr>
-      <th>export_water_block_t27p0</th>
-      <td>['ee_1', 'wat_2']</td>
-      <td>[]</td>
-      <td>0.00001</td>
-      <td>15152.5</td>
-      <td>15152.5</td>
-    </tr>
-    <tr>
-      <th>import_ee_no_v_t27p0</th>
-      <td>['ee_1', 'wat_2']</td>
-      <td>[]</td>
-      <td>0.000008</td>
-      <td>15175.0</td>
-      <td>12140.0</td>
-    </tr>
-    <tr>
-      <th>export_water_block_t52p0</th>
-      <td>['ee_1', 'wat_2']</td>
-      <td>[]</td>
-      <td>0.00001</td>
-      <td>5000.0</td>
-      <td>5000.0</td>
-    </tr>
-    <tr>
-      <th>import_signal_no_sig_t52p0</th>
-      <td>['ee_1', 'wat_2']</td>
-      <td>[]</td>
-      <td>0.000001</td>
-      <td>10000.0</td>
+      <td>1000.0</td>
       <td>1000.0</td>
     </tr>
     <tr>
-      <th>import_ee_no_v_t52p0</th>
+      <th>move_water_mech_break_t52p0</th>
       <td>['ee_1', 'wat_2']</td>
       <td>[]</td>
-      <td>0.0</td>
-      <td>10000.0</td>
-      <td>0.0</td>
+      <td>0.000001</td>
+      <td>5000.0</td>
+      <td>300.0</td>
     </tr>
     <tr>
-      <th>import_water_no_wat_t2p0</th>
+      <th>import_water_no_wat_t27p0</th>
       <td>['ee_1', 'wat_2']</td>
       <td>[]</td>
       <td>0.00001</td>
-      <td>11125.0</td>
-      <td>11125.0</td>
+      <td>6175.0</td>
+      <td>6175.0</td>
+    </tr>
+    <tr>
+      <th>move_water_short_t52p0</th>
+      <td>['ee_1', 'wat_2']</td>
+      <td>[]</td>
+      <td>0.00001</td>
+      <td>10000.0</td>
+      <td>10000.0</td>
+    </tr>
+    <tr>
+      <th>import_ee_inf_v_t2p0</th>
+      <td>['ee_1', 'wat_2']</td>
+      <td>[]</td>
+      <td>0.0</td>
+      <td>25125.0</td>
+      <td>0.0</td>
+    </tr>
+    <tr>
+      <th>import_ee_no_v_t2p0</th>
+      <td>['ee_1', 'wat_2']</td>
+      <td>[]</td>
+      <td>0.0</td>
+      <td>20125.0</td>
+      <td>0.0</td>
     </tr>
   </tbody>
 </table>
@@ -1627,7 +1637,7 @@ FaultSample of scenarios:
 </div>
 <div class="output_area stderr docutils container">
 <div class="highlight"><pre>
-SCENARIOS COMPLETE: 100%|██████████| 24/24 [00:00&lt;00:00, 44.36it/s]
+SCENARIOS COMPLETE: 100%|██████████| 24/24 [00:00&lt;00:00, 42.79it/s]
 </pre></div></div>
 </div>
 <div class="nboutput nblast docutils container">
@@ -1662,28 +1672,28 @@ SCENARIOS COMPLETE: 100%|██████████| 24/24 [00:00&lt;00:00, 
   </thead>
   <tbody>
     <tr>
-      <th>import_water_less_wat_t52p0</th>
+      <th>import_ee_inf_v_t27p0</th>
+      <td>['ee_1', 'wat_2']</td>
+      <td>[]</td>
+      <td>0.000002</td>
+      <td>20175.0</td>
+      <td>4035.0</td>
+    </tr>
+    <tr>
+      <th>export_water_block_t27p0</th>
       <td>['ee_1', 'wat_2']</td>
       <td>[]</td>
       <td>0.00001</td>
-      <td>0.0</td>
-      <td>0.0</td>
+      <td>15152.5</td>
+      <td>15152.5</td>
     </tr>
     <tr>
-      <th>move_water_short_t52p0</th>
+      <th>export_water_block_t52p0</th>
       <td>['ee_1', 'wat_2']</td>
       <td>[]</td>
       <td>0.00001</td>
-      <td>10000.0</td>
-      <td>10000.0</td>
-    </tr>
-    <tr>
-      <th>import_ee_no_v_t2p0</th>
-      <td>['ee_1', 'wat_2']</td>
-      <td>[]</td>
-      <td>0.0</td>
-      <td>20125.0</td>
-      <td>0.0</td>
+      <td>5000.0</td>
+      <td>5000.0</td>
     </tr>
     <tr>
       <th>import_signal_no_sig_t2p0</th>
@@ -1694,27 +1704,59 @@ SCENARIOS COMPLETE: 100%|██████████| 24/24 [00:00&lt;00:00, 
       <td>3018.75</td>
     </tr>
     <tr>
-      <th>import_water_no_wat_t52p0</th>
-      <td>['ee_1', 'wat_2']</td>
-      <td>[]</td>
-      <td>0.00001</td>
-      <td>1000.0</td>
-      <td>1000.0</td>
-    </tr>
-    <tr>
-      <th>import_ee_inf_v_t27p0</th>
-      <td>['ee_1', 'wat_2']</td>
-      <td>[]</td>
-      <td>0.000002</td>
-      <td>20175.0</td>
-      <td>4035.0</td>
-    </tr>
-    <tr>
-      <th>import_ee_inf_v_t2p0</th>
+      <th>import_ee_no_v_t52p0</th>
       <td>['ee_1', 'wat_2']</td>
       <td>[]</td>
       <td>0.0</td>
-      <td>25125.0</td>
+      <td>10000.0</td>
+      <td>0.0</td>
+    </tr>
+    <tr>
+      <th>import_water_no_wat_t2p0</th>
+      <td>['ee_1', 'wat_2']</td>
+      <td>[]</td>
+      <td>0.00001</td>
+      <td>11125.0</td>
+      <td>11125.0</td>
+    </tr>
+    <tr>
+      <th>move_water_short_t27p0</th>
+      <td>['ee_1', 'wat_2']</td>
+      <td>[]</td>
+      <td>0.00001</td>
+      <td>25175.0</td>
+      <td>25175.0</td>
+    </tr>
+    <tr>
+      <th>import_signal_no_sig_t27p0</th>
+      <td>['ee_1', 'wat_2']</td>
+      <td>[]</td>
+      <td>0.000001</td>
+      <td>15175.0</td>
+      <td>1517.5</td>
+    </tr>
+    <tr>
+      <th>export_water_block_t2p0</th>
+      <td>['ee_1', 'wat_2']</td>
+      <td>[]</td>
+      <td>0.000015</td>
+      <td>20102.5</td>
+      <td>30153.75</td>
+    </tr>
+    <tr>
+      <th>import_ee_inf_v_t52p0</th>
+      <td>['ee_1', 'wat_2']</td>
+      <td>[]</td>
+      <td>0.0</td>
+      <td>5000.0</td>
+      <td>0.0</td>
+    </tr>
+    <tr>
+      <th>nominal</th>
+      <td>['ee_1', 'wat_2']</td>
+      <td>[]</td>
+      <td>1.0</td>
+      <td>0.0</td>
       <td>0.0</td>
     </tr>
     <tr>
@@ -1726,20 +1768,36 @@ SCENARIOS COMPLETE: 100%|██████████| 24/24 [00:00&lt;00:00, 
       <td>7326.0</td>
     </tr>
     <tr>
-      <th>import_water_no_wat_t27p0</th>
+      <th>import_water_less_wat_t27p0</th>
       <td>['ee_1', 'wat_2']</td>
       <td>[]</td>
       <td>0.00001</td>
-      <td>6175.0</td>
-      <td>6175.0</td>
+      <td>2587.5</td>
+      <td>2587.5</td>
     </tr>
     <tr>
-      <th>move_water_mech_break_t52p0</th>
+      <th>import_ee_no_v_t27p0</th>
+      <td>['ee_1', 'wat_2']</td>
+      <td>[]</td>
+      <td>0.000008</td>
+      <td>15175.0</td>
+      <td>12140.0</td>
+    </tr>
+    <tr>
+      <th>import_water_less_wat_t52p0</th>
+      <td>['ee_1', 'wat_2']</td>
+      <td>[]</td>
+      <td>0.00001</td>
+      <td>0.0</td>
+      <td>0.0</td>
+    </tr>
+    <tr>
+      <th>import_signal_no_sig_t52p0</th>
       <td>['ee_1', 'wat_2']</td>
       <td>[]</td>
       <td>0.000001</td>
-      <td>5000.0</td>
-      <td>300.0</td>
+      <td>10000.0</td>
+      <td>1000.0</td>
     </tr>
     <tr>
       <th>move_water_short_t2p0</th>
@@ -1748,22 +1806,6 @@ SCENARIOS COMPLETE: 100%|██████████| 24/24 [00:00&lt;00:00, 
       <td>0.000015</td>
       <td>30125.0</td>
       <td>45187.5</td>
-    </tr>
-    <tr>
-      <th>move_water_short_t27p0</th>
-      <td>['ee_1', 'wat_2']</td>
-      <td>[]</td>
-      <td>0.00001</td>
-      <td>25175.0</td>
-      <td>25175.0</td>
-    </tr>
-    <tr>
-      <th>export_water_block_t2p0</th>
-      <td>['ee_1', 'wat_2']</td>
-      <td>[]</td>
-      <td>0.000015</td>
-      <td>20102.5</td>
-      <td>30153.75</td>
     </tr>
     <tr>
       <th>move_water_mech_break_t2p0</th>
@@ -1782,84 +1824,52 @@ SCENARIOS COMPLETE: 100%|██████████| 24/24 [00:00&lt;00:00, 
       <td>5062.5</td>
     </tr>
     <tr>
-      <th>import_signal_no_sig_t27p0</th>
-      <td>['ee_1', 'wat_2']</td>
-      <td>[]</td>
-      <td>0.000001</td>
-      <td>8650.0</td>
-      <td>865.0</td>
-    </tr>
-    <tr>
-      <th>import_ee_inf_v_t52p0</th>
-      <td>['ee_1', 'wat_2']</td>
-      <td>[]</td>
-      <td>0.0</td>
-      <td>5000.0</td>
-      <td>0.0</td>
-    </tr>
-    <tr>
-      <th>import_water_less_wat_t27p0</th>
+      <th>import_water_no_wat_t52p0</th>
       <td>['ee_1', 'wat_2']</td>
       <td>[]</td>
       <td>0.00001</td>
-      <td>2587.5</td>
-      <td>2587.5</td>
-    </tr>
-    <tr>
-      <th>nominal</th>
-      <td>['ee_1', 'wat_2']</td>
-      <td>[]</td>
-      <td>1.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-    </tr>
-    <tr>
-      <th>export_water_block_t27p0</th>
-      <td>['ee_1', 'wat_2']</td>
-      <td>[]</td>
-      <td>0.00001</td>
-      <td>15152.5</td>
-      <td>15152.5</td>
-    </tr>
-    <tr>
-      <th>import_ee_no_v_t27p0</th>
-      <td>['ee_1', 'wat_2']</td>
-      <td>[]</td>
-      <td>0.000008</td>
-      <td>15175.0</td>
-      <td>12140.0</td>
-    </tr>
-    <tr>
-      <th>export_water_block_t52p0</th>
-      <td>['ee_1', 'wat_2']</td>
-      <td>[]</td>
-      <td>0.00001</td>
-      <td>5000.0</td>
-      <td>5000.0</td>
-    </tr>
-    <tr>
-      <th>import_signal_no_sig_t52p0</th>
-      <td>['ee_1', 'wat_2']</td>
-      <td>[]</td>
-      <td>0.000001</td>
-      <td>10000.0</td>
+      <td>1000.0</td>
       <td>1000.0</td>
     </tr>
     <tr>
-      <th>import_ee_no_v_t52p0</th>
+      <th>move_water_mech_break_t52p0</th>
       <td>['ee_1', 'wat_2']</td>
       <td>[]</td>
-      <td>0.0</td>
-      <td>10000.0</td>
-      <td>0.0</td>
+      <td>0.000001</td>
+      <td>5000.0</td>
+      <td>300.0</td>
     </tr>
     <tr>
-      <th>import_water_no_wat_t2p0</th>
+      <th>import_water_no_wat_t27p0</th>
       <td>['ee_1', 'wat_2']</td>
       <td>[]</td>
       <td>0.00001</td>
-      <td>11125.0</td>
-      <td>11125.0</td>
+      <td>6175.0</td>
+      <td>6175.0</td>
+    </tr>
+    <tr>
+      <th>move_water_short_t52p0</th>
+      <td>['ee_1', 'wat_2']</td>
+      <td>[]</td>
+      <td>0.00001</td>
+      <td>10000.0</td>
+      <td>10000.0</td>
+    </tr>
+    <tr>
+      <th>import_ee_inf_v_t2p0</th>
+      <td>['ee_1', 'wat_2']</td>
+      <td>[]</td>
+      <td>0.0</td>
+      <td>25125.0</td>
+      <td>0.0</td>
+    </tr>
+    <tr>
+      <th>import_ee_no_v_t2p0</th>
+      <td>['ee_1', 'wat_2']</td>
+      <td>[]</td>
+      <td>0.0</td>
+      <td>20125.0</td>
+      <td>0.0</td>
     </tr>
   </tbody>
 </table>
@@ -1924,8 +1934,8 @@ import_water_less_wa               1e-05
 import_water_less_wa   2587.499999999999
 import_water_less_wa   2587.499999999999
 import_signal_no_sig               1e-06
-import_signal_no_sig              8650.0
-import_signal_no_sig   864.9999999999999
+import_signal_no_sig  15174.999999999998
+import_signal_no_sig  1517.4999999999998
 move_water_mech_brea             7.2e-06
 move_water_mech_brea  10174.999999999998
 move_water_mech_brea   7325.999999999998
@@ -2039,8 +2049,8 @@ import_water_less_wa               1e-05
 import_water_less_wa   2587.499999999999
 import_water_less_wa   2587.499999999999
 import_signal_no_sig               1e-06
-import_signal_no_sig              8650.0
-import_signal_no_sig   864.9999999999999
+import_signal_no_sig  15174.999999999998
+import_signal_no_sig  1517.4999999999998
 move_water_mech_brea             7.2e-06
 move_water_mech_brea  10174.999999999998
 move_water_mech_brea   7325.999999999998
