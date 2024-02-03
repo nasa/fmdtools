@@ -1,15 +1,14 @@
 # Overview
 
-![PyPI](https://img.shields.io/pypi/v/fmdtools)
-![GitHub release (latest by date)](https://img.shields.io/github/v/release/nasa/fmdtools?label=GitHub%20Release)
+[![PyPI](https://img.shields.io/pypi/v/fmdtools)](https://pypi.org/project/fmdtools/)
+[![GitHub release (latest by date)](https://img.shields.io/github/v/release/nasa/fmdtools?label=GitHub%20Release)](https://github.com/nasa/fmdtools/releases)
+[![GitHub Tag](https://img.shields.io/github/v/tag/nasa/fmdtools)](https://github.com/nasa/fmdtools/tags)
 [![CodeFactor](https://www.codefactor.io/repository/github/nasa/fmdtools/badge)](https://www.codefactor.io/repository/github/nasa/fmdtools)
 [![Tests Status](./tests-badge.svg)](https://htmlpreview.github.io/?https://github.com/nasa/fmdtools/blob/main/reports/junit/report.html)
 [![Tests Coverage](./coverage-badge.svg)](https://htmlpreview.github.io/?https://github.com/nasa/fmdtools/blob/main/reports/coverage/index.html)
 [![GitHub License](https://img.shields.io/badge/License-NOSA-green)](https://github.com/nasa/fmdtools/blob/main/NASA_Open_Source_Agreement_fmdtools.pdf)
 
 **fmdtools** (Fault Model Design tools) is a toolkit for modelling system resilience in the early design phase. With it, one can simulate the effects of faults in a system to build resilience into the system design at a high level.  To achieve this, fmdtools provides a Python-based *design environment* where one can represent the system in a model, simulate the resilience of the model to faults, and analyze the resulting model responses to iteratively improve the resilience of the design.
-
-Note: This version (**2.0-rc-1**) is currently in development, and thus not all interfaces may be fully stable and not all examples or documentation may be up-to-date. For stable versions, download packages releases without the -alpha or -beta tags.
 
 [Click here to view the the full documentation website.](https://nasa.github.io/fmdtools)
 
