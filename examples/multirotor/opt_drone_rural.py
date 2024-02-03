@@ -5,8 +5,9 @@ Functions/classes for optimizing the drone defined in drone_mdl_opt.py.
 Used/tested in opt_drone_rural to demonstrate fmdtools.sim.search.
 """
 
-from drone_mdl_rural import Drone, DroneParam, ResPolicy, DronePhysicalParameters
-from drone_mdl_dynamic import DroneEnvironmentGridParam
+from examples.multirotor.drone_mdl_rural import Drone, DroneParam, ResPolicy
+from examples.multirotor.drone_mdl_rural import DronePhysicalParameters
+from examples.multirotor.drone_mdl_dynamic import DroneEnvironmentGridParam
 from fmdtools.sim.sample import FaultDomain, FaultSample
 from fmdtools.sim import propagate as prop
 from fmdtools.analyze.phases import from_hist

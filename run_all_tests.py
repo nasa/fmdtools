@@ -73,16 +73,16 @@ if __name__=="__main__":
                       "examples/pump/Stochastic_Modelling.ipynb",
                       "examples/rover/ParameterSample_Use-Cases.ipynb",
                       "examples/pump/Optimization.ipynb",
-                      "examples/pump/Parallelism_Tutorial.ipynb",
-                      "examples/tank/Tank_Optimization.ipynb"]
+                      "examples/pump/Parallelism_Tutorial.ipynb"]
     # retcode = pytest.main(["--nbmake", *slow_notebooks])
 
     # for testing extremely slow notebooks that can't be run to completion :
     too_slow_notebooks = ["examples/rover/optimization/Rover_Response_Optimization.ipynb",  # extremely slow notebook
                         "examples/rover/fault_sampling/Rover_Mode_Notebook.ipynb",  # extremely slow notebook
                         "examples/rover/optimization/Search_Comparison.ipynb",  # not fully adapted
+                        "examples/tank/Tank_Optimization.ipynb"
                         ]
-    retcode = pytest.main(["--nbmake", "--nbmake-find-import-errors", "--nbmake-timeout=20", *too_slow_notebooks])
+    # retcode = pytest.main(["--nbmake", "--nbmake-find-import-errors", "--nbmake-timeout=20", *too_slow_notebooks])
 
     #  we ignore the following notebooks for various reasons:
     # while not included in the testing approach, they should be verified periodically
@@ -91,28 +91,27 @@ if __name__=="__main__":
                         "examples/rover/HFAC_Analyses/IDETC_Human_Paper_Analysis.ipynb",  # not yet adapted
                         "examples/rover/degradation_modelling/Degradation_Modelling_Notebook.ipynb",  # not yet adapted
                         "examples/pump/AST_Sampling.ipynb",  # requires special setup with julia kernel
-                        "examples/pump/Tutorial_unfilled"  # intended to be blank
+                        "examples/pump/Tutorial_unfilled.ipynb"  # intended to be blank
                         ]
 
     # retcode = pytest.main(["--nbmake", *["--ignore="+notebook for notebook in ignore_notebooks]])
     # retcode = pytest.main(["--nbmake", "examples/pump/AST_Sampling.ipynb"])
     # retcode = pytest.main(["--nbmake", "--nbmake-timeout=20", "examples/rover/optimization/Rover_Response_Optimization.ipynb"])
 
-
     # for creating comprehensive test report:
 
-    # retcode = pytest.main(["--cov-report",
-    #                        "html:reports/coverage",
-    #                        "--cov-report",
-    #                        "xml:reports/coverage/coverage.xml",
-    #                        "--cov",
-    #                        "--html=./reports/junit/report.html",
-    #                        "--junitxml=./reports/junit/junit.xml",
-    #                        "--overwrite",
-    #                        "--doctest-modules",
-    #                        "--nbmake",
-    #                        *["--ignore="+notebook for notebook in ignore_notebooks]
-    #                        "--continue-on-collection-errors"])
+    retcode = pytest.main(["--cov-report",
+                           "html:reports/coverage",
+                           "--cov-report",
+                           "xml:reports/coverage/coverage.xml",
+                           "--cov",
+                           "--html=./reports/junit/report.html",
+                           "--junitxml=./reports/junit/junit.xml",
+                           "--overwrite",
+                           "--doctest-modules",
+                           "--nbmake",
+                           *["--ignore="+notebook for notebook in ignore_notebooks],
+                           "--continue-on-collection-errors"])
 
     # after creating test report, update the badge using this in powershell:
     # !Powershell.exe -Command "genbadge tests"

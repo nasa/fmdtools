@@ -4,7 +4,7 @@ Created on Thu Sep 28 15:30:00 2023
 
 @author: dhulse
 """
-from rover_model import Rover, RoverParam
+from examples.rover.rover_model import Rover, RoverParam
 import fmdtools.sim.propagate as prop
 from fmdtools.sim.sample import SampleApproach
 

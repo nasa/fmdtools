@@ -14,7 +14,7 @@ import numpy as np
 from fmdtools.sim import propagate as prop
 import fmdtools.analyze as an
 import matplotlib.pyplot as plt
-from rover_model import Rover, DegParam
+from examples.rover.rover_model import Rover, DegParam
 
 
 
