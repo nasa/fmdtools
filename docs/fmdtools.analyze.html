@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>fmdtools.analyze &mdash; fmdtools 2.0-rc-1 documentation</title>
+  <title>fmdtools.analyze &mdash; fmdtools 2.0-rc-2 documentation</title>
       <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
     <link rel="shortcut icon" href="../_static/fmdtools_ico.ico"/>
@@ -67,14 +67,14 @@
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="Development%20Guide.html#intro-to-fmdtools">Intro to fmdtools</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="Intro_to_fmdtools.html">Intro to resilience modelling, simulation, and visualization in Python with fmdtools.</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="Intro_to_fmdtools.html">Intro to resilience modeling, simulation, and visualization in Python with fmdtools.</a><ul>
 <li class="toctree-l4"><a class="reference internal" href="Intro_to_fmdtools.html#author-daniel-hulse">Author: Daniel Hulse</a></li>
-<li class="toctree-l4"><a class="reference internal" href="Intro_to_fmdtools.html#version-2-0-rc-1">Version: 2.0-rc-1</a></li>
+<li class="toctree-l4"><a class="reference internal" href="Intro_to_fmdtools.html#version-2-0-rc-2">Version: 2.0-rc-2</a></li>
 </ul>
 </li>
 <li class="toctree-l3"><a class="reference internal" href="Intro_to_fmdtools.html#overview">Overview</a></li>
 <li class="toctree-l3"><a class="reference internal" href="Intro_to_fmdtools.html#prerequisites">Prerequisites</a></li>
-<li class="toctree-l3"><a class="reference internal" href="Intro_to_fmdtools.html#motivation-modelling-system-resilience">Motivation: Modelling System Resilience</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Intro_to_fmdtools.html#motivation-modeling-system-resilience">Motivation: Modeling System Resilience</a></li>
 <li class="toctree-l3"><a class="reference internal" href="Intro_to_fmdtools.html#why-is-resilience-important">Why is Resilience Important?</a></li>
 <li class="toctree-l3"><a class="reference internal" href="Intro_to_fmdtools.html#enabling-proactive-design-process">Enabling proactive design process</a></li>
 <li class="toctree-l3"><a class="reference internal" href="Intro_to_fmdtools.html#why-fmdtools-possible-competitors">Why fmdtools? Possible Competitors:</a></li>
@@ -287,6 +287,18 @@
 </li>
 </ul>
 </li>
+<li class="toctree-l2"><a class="reference internal" href="../examples/Examples.html#taxiway">Taxiway</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../examples/taxiway/Paper_Notebook.html">Taxiway Model Overview</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../examples/taxiway/Paper_Notebook.html#Model-Simulation">Model Simulation</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../examples/taxiway/Paper_Notebook.html#Fault-Simulation-and-Analysis">Fault Simulation and Analysis</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../examples/taxiway/Paper_Notebook.html#Perception-Fault---AC-Vision-Fault">Perception Fault - AC Vision Fault</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../examples/taxiway/Paper_Notebook.html#Communications-Fault---Poor-land-command-by-ATC">Communications Fault - Poor land command by ATC</a></li>
+</ul>
+</li>
+</ul>
+</li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="Glossary.html">Glossary</a></li>
@@ -309,13 +321,11 @@
 </li>
 <li class="toctree-l3"><a class="reference internal" href="fmdtools.define.container.html">fmdtools.define.container</a><ul>
 <li class="toctree-l4"><a class="reference internal" href="fmdtools.define.container.html#fmdtools-define-container-base">fmdtools.define.container.base</a></li>
-<li class="toctree-l4"><a class="reference internal" href="fmdtools.define.container.html#module-0">fmdtools.define.container.mode</a></li>
+<li class="toctree-l4"><a class="reference internal" href="fmdtools.define.container.html#module-fmdtools.define.container.mode">fmdtools.define.container.mode</a></li>
 <li class="toctree-l4"><a class="reference internal" href="fmdtools.define.container.html#module-fmdtools.define.container.state">fmdtools.define.container.state</a></li>
 <li class="toctree-l4"><a class="reference internal" href="fmdtools.define.container.html#fmdtools-define-container-parameter">fmdtools.define.container.parameter</a></li>
 <li class="toctree-l4"><a class="reference internal" href="fmdtools.define.container.html#module-fmdtools.define.container.rand">fmdtools.define.container.rand</a></li>
 <li class="toctree-l4"><a class="reference internal" href="fmdtools.define.container.html#module-fmdtools.define.container.time">fmdtools.define.container.time</a></li>
-<li class="toctree-l4"><a class="reference internal" href="fmdtools.define.container.html#fmdtools-define-container-geom">fmdtools.define.container.geom</a></li>
-<li class="toctree-l4"><a class="reference internal" href="fmdtools.define.container.html#fmdtools-define-container-coords">fmdtools.define.container.coords</a></li>
 </ul>
 </li>
 <li class="toctree-l3"><a class="reference internal" href="fmdtools.define.flow.html">fmdtools.define.flow</a><ul>
@@ -387,7 +397,7 @@
 <ul class="simple">
 <li><p><a class="reference internal" href="#module-fmdtools.analyze.common" title="fmdtools.analyze.common"><code class="xref py py-mod docutils literal notranslate"><span class="pre">fmdtools.analyze.common</span></code></a>, which is used for common analysis functions</p></li>
 <li><p><a class="reference internal" href="#module-fmdtools.analyze.result" title="fmdtools.analyze.result"><code class="xref py py-mod docutils literal notranslate"><span class="pre">fmdtools.analyze.result</span></code></a>, which defines the <a class="reference internal" href="#fmdtools.analyze.result.Result" title="fmdtools.analyze.result.Result"><code class="xref py py-class docutils literal notranslate"><span class="pre">fmdtools.analyze.result.Result</span></code></a> class for sim results</p></li>
-<li><p><a class="reference internal" href="#module-fmdtools.analyze.history" title="fmdtools.analyze.history"><code class="xref py py-mod docutils literal notranslate"><span class="pre">fmdtools.analyze.history</span></code></a>, which defines the <code class="xref py py-class docutils literal notranslate"><span class="pre">fmdtools.analyze.result.History</span></code> classe for tracking, saving, and processing simulation logs/histories.</p></li>
+<li><p><a class="reference internal" href="#module-fmdtools.analyze.history" title="fmdtools.analyze.history"><code class="xref py py-mod docutils literal notranslate"><span class="pre">fmdtools.analyze.history</span></code></a>, which defines the <a class="reference internal" href="#fmdtools.analyze.history.History" title="fmdtools.analyze.history.History"><code class="xref py py-class docutils literal notranslate"><span class="pre">fmdtools.analyze.history.History</span></code></a> classe for tracking, saving, and processing simulation logs/histories.</p></li>
 <li><p><a class="reference internal" href="#module-fmdtools.analyze.graph" title="fmdtools.analyze.graph"><code class="xref py py-mod docutils literal notranslate"><span class="pre">fmdtools.analyze.graph</span></code></a>, which provides classes for creating and visualizing Graphs of simulation structures (and is a sort of convenience iterface for <cite>networkx</cite>/<cite>graphviz</cite> and other graphing libraries).</p></li>
 <li><p><a class="reference internal" href="#module-fmdtools.analyze.tabulate" title="fmdtools.analyze.tabulate"><code class="xref py py-mod docutils literal notranslate"><span class="pre">fmdtools.analyze.tabulate</span></code></a>, which provides functions to generate tables and visualizations of metrics of interest using (e.g., FMEAs).</p></li>
 <li><p><a class="reference internal" href="#module-fmdtools.analyze.phases" title="fmdtools.analyze.phases"><code class="xref py py-mod docutils literal notranslate"><span class="pre">fmdtools.analyze.phases</span></code></a>, which enables the analysis of phase information from model histories.</p></li>
@@ -404,17 +414,12 @@ otherwise returns the number</p></li>
 <li><p><a class="reference internal" href="#fmdtools.analyze.common.is_numeric" title="fmdtools.analyze.common.is_numeric"><code class="xref py py-func docutils literal notranslate"><span class="pre">is_numeric()</span></code></a>: Helper function for Result Class, checks if a given value is
 numeric</p></li>
 <li><p><a class="reference internal" href="#fmdtools.analyze.common.join_key" title="fmdtools.analyze.common.join_key"><code class="xref py py-func docutils literal notranslate"><span class="pre">join_key()</span></code></a>: Helper function for Result Class</p></li>
-<li><dl class="field-list simple">
-<dt class="field-odd">func<span class="colon">:</span></dt>
-<dd class="field-odd"><p><cite>setup_plot</cite> : initializes mpl figure.</p>
-</dd>
-</dl>
-</li>
-<li><p><a class="reference internal" href="#fmdtools.analyze.common.plot_err_hist" title="fmdtools.analyze.common.plot_err_hist"><code class="xref py py-func docutils literal notranslate"><span class="pre">plot_err_hist()</span></code></a>: Plots a line with a given range of uncertainty around it.</p></li>
-<li><p><a class="reference internal" href="#fmdtools.analyze.common.plot_err_lines" title="fmdtools.analyze.common.plot_err_lines"><code class="xref py py-func docutils literal notranslate"><span class="pre">plot_err_lines()</span></code></a>: Plots error lines on the given plot.</p></li>
-<li><p><a class="reference internal" href="#fmdtools.analyze.common.multiplot_legend_title" title="fmdtools.analyze.common.multiplot_legend_title"><code class="xref py py-func docutils literal notranslate"><span class="pre">multiplot_legend_title()</span></code></a>: Helper function for multiplot legends and titles.</p></li>
+<li><p><a class="reference internal" href="#fmdtools.analyze.common.setup_plot" title="fmdtools.analyze.common.setup_plot"><code class="xref py py-func docutils literal notranslate"><span class="pre">setup_plot()</span></code></a>: initializes mpl figure</p></li>
+<li><p><a class="reference internal" href="#fmdtools.analyze.common.plot_err_hist" title="fmdtools.analyze.common.plot_err_hist"><code class="xref py py-func docutils literal notranslate"><span class="pre">plot_err_hist()</span></code></a>: Plots a line with a given range of uncertainty around it</p></li>
+<li><p><a class="reference internal" href="#fmdtools.analyze.common.plot_err_lines" title="fmdtools.analyze.common.plot_err_lines"><code class="xref py py-func docutils literal notranslate"><span class="pre">plot_err_lines()</span></code></a>: Plots error lines on the given plot</p></li>
+<li><p><a class="reference internal" href="#fmdtools.analyze.common.multiplot_legend_title" title="fmdtools.analyze.common.multiplot_legend_title"><code class="xref py py-func docutils literal notranslate"><span class="pre">multiplot_legend_title()</span></code></a>: Helper function for multiplot legends and titles</p></li>
 <li><p><a class="reference internal" href="#fmdtools.analyze.common.consolidate_legend" title="fmdtools.analyze.common.consolidate_legend"><code class="xref py py-func docutils literal notranslate"><span class="pre">consolidate_legend()</span></code></a>: Creates a single legend for a given multiplot where
-multiple groups are being compared.</p></li>
+multiple groups are being compared</p></li>
 </ul>
 <dl class="py function">
 <dt class="sig sig-object py" id="fmdtools.analyze.common.bootstrap_confidence_interval">
@@ -436,7 +441,7 @@ multiple groups are being compared.</p></li>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="fmdtools.analyze.common.consolidate_legend">
-<span class="sig-prename descclassname"><span class="pre">fmdtools.analyze.common.</span></span><span class="sig-name descname"><span class="pre">consolidate_legend</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ax</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">loc</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'upper</span> <span class="pre">left'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bbox_to_anchor</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">(1.05,</span> <span class="pre">1)</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">add_handles</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[]</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.analyze.common.consolidate_legend" title="Permalink to this definition"></a></dt>
+<span class="sig-prename descclassname"><span class="pre">fmdtools.analyze.common.</span></span><span class="sig-name descname"><span class="pre">consolidate_legend</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ax</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">loc</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'upper</span> <span class="pre">left'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bbox_to_anchor</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">(1.05,</span> <span class="pre">1)</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">add_handles</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[]</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">color</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.analyze.common.consolidate_legend" title="Permalink to this definition"></a></dt>
 <dd><p>Create a single legend for a given multiplot where multiple groups are
 being compared</p>
 </dd></dl>
@@ -490,7 +495,7 @@ dict/str/list/set to_include</p>
 <dl class="py function">
 <dt class="sig sig-object py" id="fmdtools.analyze.common.multiplot_legend_title">
 <span class="sig-prename descclassname"><span class="pre">fmdtools.analyze.common.</span></span><span class="sig-name descname"><span class="pre">multiplot_legend_title</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">groupmetrics</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">axs</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ax</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">legend_loc</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">title</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">v_padding</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">h_padding</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">title_padding</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">legend_title</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.analyze.common.multiplot_legend_title" title="Permalink to this definition"></a></dt>
-<dd><p>Helper function for multiplot legends and titles</p>
+<dd><p>Helper function for multiplot legends and titles.</p>
 </dd></dl>
 
 <dl class="py function">
@@ -512,8 +517,11 @@ dict/str/list/set to_include</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>err_hist</strong> (<a class="reference internal" href="#fmdtools.analyze.history.History" title="fmdtools.analyze.history.History"><em>History</em></a>) – hist of line, low, high values. Has the form:
-{‘time’: times, ‘stat’: stat_values, ‘low’: low_values, ‘high’: high_values}</p></li>
+<li><p><strong>err_hist</strong> (<a class="reference internal" href="#fmdtools.analyze.history.History" title="fmdtools.analyze.history.History"><em>History</em></a>) – <dl class="simple">
+<dt>hist of line, low, high values. Has the form ::</dt><dd><p>{‘time’: times, ‘stat’: stat_values, ‘low’: low_values, ‘high’: high_values}</p>
+</dd>
+</dl>
+</p></li>
 <li><p><strong>ax</strong> (<em>mpl axis</em><em> (</em><em>optional</em><em>)</em>) – axis to plot the line on</p></li>
 <li><p><strong>fig</strong> (<em>mpl figure</em><em> (</em><em>optional</em><em>)</em>) – figure to plot line on</p></li>
 <li><p><strong>figsize</strong> (<em>tuple</em>) – figure size (optional)</p></li>
@@ -549,6 +557,12 @@ dict/str/list/set to_include</p>
 </ul>
 </dd>
 </dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="fmdtools.analyze.common.set_empty_multiplots">
+<span class="sig-prename descclassname"><span class="pre">fmdtools.analyze.common.</span></span><span class="sig-name descname"><span class="pre">set_empty_multiplots</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">axs</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">num_plots</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cols</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">xlab_ang</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">-</span> <span class="pre">90</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">grid</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">set_above</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.analyze.common.set_empty_multiplots" title="Permalink to this definition"></a></dt>
+<dd><p>Align empty axes with the rest of the multiplot.</p>
 </dd></dl>
 
 <dl class="py function">
@@ -602,7 +616,7 @@ dictionary</p>
 <p>Description: A module defining how simulation results (histories) structured and
 processed. Has classes:</p>
 <ul class="simple">
-<li><p><a class="reference internal" href="#fmdtools.analyze.result.Result" title="fmdtools.analyze.result.Result"><code class="xref py py-class docutils literal notranslate"><span class="pre">Result</span></code></a>: Class for defining simulation results.</p></li>
+<li><p><a class="reference internal" href="#fmdtools.analyze.result.Result" title="fmdtools.analyze.result.Result"><code class="xref py py-class docutils literal notranslate"><span class="pre">Result</span></code></a>: Class for defining simulation results</p></li>
 </ul>
 <p>And functions:</p>
 <ul class="simple">
@@ -613,7 +627,7 @@ processed. Has classes:</p>
 <ul class="simple">
 <li><p><a class="reference internal" href="#fmdtools.analyze.result.file_check" title="fmdtools.analyze.result.file_check"><code class="xref py py-func docutils literal notranslate"><span class="pre">file_check()</span></code></a>: Check if files exists and whether to overwrite the file</p></li>
 <li><p><a class="reference internal" href="#fmdtools.analyze.result.auto_filetype" title="fmdtools.analyze.result.auto_filetype"><code class="xref py py-func docutils literal notranslate"><span class="pre">auto_filetype()</span></code></a>: Helper function that automatically determines the filetype
-(pickle, csv, or json) of a given filename</p></li>
+(npz, csv, or json) of a given filename</p></li>
 <li><p><a class="reference internal" href="#fmdtools.analyze.result.create_indiv_filename" title="fmdtools.analyze.result.create_indiv_filename"><code class="xref py py-func docutils literal notranslate"><span class="pre">create_indiv_filename()</span></code></a>: Helper function that creates an individualized name for
 a file given the general filename and an individual id</p></li>
 <li><p><a class="reference internal" href="#fmdtools.analyze.result.clean_resultdict_keys" title="fmdtools.analyze.result.clean_resultdict_keys"><code class="xref py py-func docutils literal notranslate"><span class="pre">clean_resultdict_keys()</span></code></a>: Helper function for recreating results dictionary keys
@@ -623,8 +637,8 @@ a file given the general filename and an individual id</p></li>
 des_class</p></li>
 <li><p><a class="reference internal" href="#fmdtools.analyze.result.fromdict" title="fmdtools.analyze.result.fromdict"><code class="xref py py-func docutils literal notranslate"><span class="pre">fromdict()</span></code></a>: Creates new history/result from given dictionary</p></li>
 <li><p><a class="reference internal" href="#fmdtools.analyze.result.check_include_errors" title="fmdtools.analyze.result.check_include_errors"><code class="xref py py-func docutils literal notranslate"><span class="pre">check_include_errors()</span></code></a>: Helper function for Result Class, Cycles through
-<cite>check_include_error</cite>.</p></li>
-<li><p><a class="reference internal" href="#fmdtools.analyze.result.check_include_error" title="fmdtools.analyze.result.check_include_error"><code class="xref py py-func docutils literal notranslate"><span class="pre">check_include_error()</span></code></a>: Helper function to raise exceptions for errors.</p></li>
+<cite>check_include_error</cite></p></li>
+<li><p><a class="reference internal" href="#fmdtools.analyze.result.check_include_error" title="fmdtools.analyze.result.check_include_error"><code class="xref py py-func docutils literal notranslate"><span class="pre">check_include_error()</span></code></a>: Helper function to raise exceptions for errors</p></li>
 <li><p><code class="xref py py-func docutils literal notranslate"><span class="pre">get_sub_include()</span></code>: Determines what attributes of att to include based on the
 provided dict/str/list/set to_include</p></li>
 </ul>
@@ -635,7 +649,7 @@ provided dict/str/list/set to_include</p></li>
 <p>Result is a special type of dictionary that makes it convenient to store, access,
 and load results form a model/simulation.</p>
 <p>As a dictionary, it supports dict-based item assignement (e.g. r[‘x’]=10) but
-also enables convenient access via __getattr__, e.g.:</p>
+also enables convenient access via __getattr__, e.g.,:</p>
 <div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">r</span> <span class="o">=</span> <span class="n">Result</span><span class="p">()</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">r</span><span class="p">[</span><span class="s1">&#39;x&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="mi">10</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">r</span>
@@ -643,7 +657,7 @@ also enables convenient access via __getattr__, e.g.:</p>
 </pre></div>
 </div>
 <p>It also can return a flattened version of its nested structure via Result.flatten(),
-e.g.:</p>
+e.g.,:</p>
 <div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">r</span> <span class="o">=</span> <span class="n">Result</span><span class="p">(</span><span class="n">y</span><span class="o">=</span><span class="n">Result</span><span class="p">(</span><span class="n">z</span><span class="o">=</span><span class="mi">1</span><span class="p">))</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">r</span>
 <span class="go">y:</span>
@@ -687,7 +701,7 @@ r.load_folder()</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="fmdtools.analyze.result.Result.create_simple_fmea">
 <span class="sig-name descname"><span class="pre">create_simple_fmea</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">metrics</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.analyze.result.Result.create_simple_fmea" title="Permalink to this definition"></a></dt>
-<dd><p>Makes a simple fmea-stype table of the metrics in the endclasses
+<dd><p>Makes a simple FMEA-stype table of the metrics in the endclasses
 of a list of fault scenarios run. If metrics not provided, returns all</p>
 </dd></dl>
 
@@ -730,7 +744,7 @@ variable in endclasses</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>newhist</strong> (<em>Boolean</em><em>, </em><em>default = false</em>) – </p></li>
+<li><p><strong>newhist</strong> (<em>bool</em><em>, </em><em>default = False</em>) – </p></li>
 <li><p><strong>prevname</strong> (<em>tuple</em><em>, </em><em>optional</em>) – Current key of the flattened history (used when called recursively).
 The default is ().</p></li>
 <li><p><strong>to_include</strong> (<em>str/list/dict</em><em>, </em><em>optional</em>) – <p>What attributes to include in the dict. The default is ‘all’. Can be of form
@@ -807,13 +821,8 @@ The default is ().</p></li>
 <dd><p>Gets a dict of nominal and faulty scenario keys from the Result</p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns<span class="colon">:</span></dt>
-<dd class="field-odd"><p><p><strong>comp_groups</strong> –</p>
-<dl class="simple">
-<dt>Dict with structure {‘nominal’: [list of nominal scenarios],</dt><dd><p>’faulty’: [list of faulty scenarios]}.</p>
-</dd>
-</dl>
-<p>If no nominal or faulty, returns an empty dict {}.</p>
-</p>
+<dd class="field-odd"><p><strong>comp_groups</strong> – Dict with structure {‘nominal’: [list of nominal scenarios], ‘faulty’: [list of faulty scenarios]}.
+If no nominal or faulty, returns an empty dict {}.</p>
 </dd>
 <dt class="field-even">Return type<span class="colon">:</span></dt>
 <dd class="field-even"><p>dict</p>
@@ -905,16 +914,16 @@ both (None). The default is None.</p></li>
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>value</strong> (<em>str</em>) – Value of the history to calculate the statistic over</p></li>
-<li><p><strong>metric</strong> (<em>func</em><em>, </em><em>optional</em>) – Function to process the history (e.g. np.mean, np.min…).
-The default is np.mean.</p></li>
-<li><p><strong>**kwargs</strong> (<em>kwargs</em>) – kwargs to bootstrap_confidence_interval.</p></li>
+<li><p><strong>metric</strong> (<em>func</em><em>, </em><em>optional</em>) – Function to process the history (e.g., np.mean, np.min…).
+The default is np.mean</p></li>
+<li><p><strong>**kwargs</strong> (<em>kwargs</em>) – kwargs to bootstrap_confidence_interval</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p><ul class="simple">
-<li><p><strong>statistic</strong> (<em>number</em>) – nominal statistic for the given metric.</p></li>
-<li><p><strong>lower bound</strong> (<em>number</em>) – lower bound of the statistic in the ci.</p></li>
-<li><p><strong>upper bound</strong> (<em>number</em>) – upper bound of the statistic in the ci.</p></li>
+<li><p><strong>statistic</strong> (<em>number</em>) – nominal statistic for the given metric</p></li>
+<li><p><strong>lower bound</strong> (<em>number</em>) – lower bound of the statistic in the ci</p></li>
+<li><p><strong>upper bound</strong> (<em>number</em>) – upper bound of the statistic in the ci</p></li>
 </ul>
 </p>
 </dd>
@@ -1026,8 +1035,7 @@ endclasses</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>result</strong> (<a class="reference internal" href="#fmdtools.analyze.result.Result" title="fmdtools.analyze.result.Result"><em>Result</em></a>) – Result dictionary of metrics over set of scenarios</p></li>
-<li><p><strong>*plot_values</strong> (<em>str</em>) – names of values to pull from the result (e.g., ‘fxns.move_water.s.flowrate’)
+<li><p><strong>*values</strong> (<em>str</em>) – names of values to pull from the result (e.g., ‘fxns.move_water.s.flowrate’)
 Can also be specified as a dict (e.g. {‘fxns’:’move_water’}) to get all keys
 from a given fxn/flow/mode/etc.</p></li>
 <li><p><strong>cols</strong> (<em>int</em><em>, </em><em>optional</em>) – columns to use in the figure. The default is 2.</p></li>
@@ -1090,8 +1098,8 @@ using the rate variable in endclasses</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="fmdtools.analyze.result.Result.save">
 <span class="sig-name descname"><span class="pre">save</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filename</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">filetype</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">overwrite</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">result_id</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.analyze.result.Result.save" title="Permalink to this definition"></a></dt>
-<dd><p>Saves a given result variable (endclasses or mdlhists) to a file filename.
-Files can be saved as pkl, csv, or json.</p>
+<dd><p>Save a given result variable (endclasses or mdlhists) to a file filename.</p>
+<p>Files can be saved as npz, csv, or json.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
@@ -1215,9 +1223,8 @@ filename and an individual id</p>
 <dl class="py function">
 <dt class="sig sig-object py" id="fmdtools.analyze.result.load">
 <span class="sig-prename descclassname"><span class="pre">fmdtools.analyze.result.</span></span><span class="sig-name descname"><span class="pre">load</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filename</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">filetype=''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">renest_dict=True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">indiv=False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Rclass=&lt;class</span> <span class="pre">'fmdtools.analyze.result.Result'&gt;</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.analyze.result.load" title="Permalink to this definition"></a></dt>
-<dd><p>Loads a given (endclasses or mdlhists) results dictionary from a (pickle/csv/json)
-file.
-e.g. a file saved using process.save_result or save_args in propagate functions.</p>
+<dd><p>Load a given (endclasses or mdlhists) results dictionary from a (npz/csv/json) file.</p>
+<p>e.g. a file saved using process.save_result or save_args in propagate functions.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
@@ -1226,7 +1233,7 @@ e.g. a file saved using process.save_result or save_args in propagate functions.
 The default is “”.</p></li>
 <li><p><strong>renest_dict</strong> (<em>bool</em><em>, </em><em>optional</em>) – Whether to return . The default is True.</p></li>
 <li><p><strong>indiv</strong> (<em>bool</em><em>, </em><em>optional</em>) – Whether the result is an individual file
-(e.g. in a folder of results for a given simulation).
+(e.g., in a folder of results for a given simulation).
 The default is False.</p></li>
 <li><p><strong>Rclass</strong> (<em>class</em>) – Class to return (Result, History, or Dict)</p></li>
 </ul>
@@ -1272,12 +1279,12 @@ processed. Has classes:</p>
 </ul>
 <p>And functions/methods:</p>
 <ul class="simple">
-<li><p><code class="xref py py-func docutils literal notranslate"><span class="pre">bootstrap_confidence_interval()</span></code>: Convenience wrapper for scipy.bootstrap</p></li>
 <li><p><a class="reference internal" href="#fmdtools.analyze.history.diff" title="fmdtools.analyze.history.diff"><code class="xref py py-func docutils literal notranslate"><span class="pre">diff()</span></code></a>: Helper function for finding inconsistent states between val1, val2, with
 the difftype option</p></li>
 <li><p><a class="reference internal" href="#fmdtools.analyze.history.init_hist_iter" title="fmdtools.analyze.history.init_hist_iter"><code class="xref py py-func docutils literal notranslate"><span class="pre">init_hist_iter()</span></code></a>: Initializes the history for a given attribute att with value
 val. Enables the recursive definition of a history as a nested structure.</p></li>
 <li><p><a class="reference internal" href="#fmdtools.analyze.history.init_dicthist" title="fmdtools.analyze.history.init_dicthist"><code class="xref py py-func docutils literal notranslate"><span class="pre">init_dicthist()</span></code></a>: Initializes histories for dictionary attributes (if any)</p></li>
+<li><p><code class="xref py py-func docutils literal notranslate"><span class="pre">def</span> <span class="pre">prep_hists()</span></code>: Prepare the history for plotting.</p></li>
 </ul>
 <dl class="py class">
 <dt class="sig sig-object py" id="fmdtools.analyze.history.History">
@@ -1288,22 +1295,30 @@ val. Enables the recursive definition of a history as a nested structure.</p></l
 <p>It can be updated over time t using h.log(obj, t), where obj is an object with
 (nested) attributes that match the keys of the (nested) dictionary.</p>
 <p class="rubric">Examples</p>
-<p># histories act the same as results, but with the values being arrays:
-&gt;&gt;&gt; hist = History({“a”: [1, 2, 3], “b”: [4, 5, 6], “time”: [0, 1, 2]})
-&gt;&gt;&gt; hist
-a:                              array(3)
-b:                              array(3)
-time:                           array(3)</p>
-<p># history access is the same as a result:
-&gt;&gt;&gt; hist.a
-[1, 2, 3]</p>
-<p># metrics can be gotten from histories over time:
-&gt;&gt;&gt; hist = History({“a.a”: [1, 2, 3], “b.a”: [4, 5, 6], “time”: [0, 1, 2]})
-&gt;&gt;&gt; hist.get_metric(“a”, axis=0)
-array([2.5, 3.5, 4.5])</p>
-<p># or over all times:
-&gt;&gt;&gt; hist.get_metric(“a”)
-3.5</p>
+<p># histories act the same as results, but with the values being arrays:</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">hist</span> <span class="o">=</span> <span class="n">History</span><span class="p">({</span><span class="s2">&quot;a&quot;</span><span class="p">:</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">],</span> <span class="s2">&quot;b&quot;</span><span class="p">:</span> <span class="p">[</span><span class="mi">4</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">6</span><span class="p">],</span> <span class="s2">&quot;time&quot;</span><span class="p">:</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">]})</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">hist</span>
+<span class="go">a:                              array(3)</span>
+<span class="go">b:                              array(3)</span>
+<span class="go">time:                           array(3)</span>
+</pre></div>
+</div>
+<p>history access is the same as a result:</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">hist</span><span class="o">.</span><span class="n">a</span>
+<span class="go">[1, 2, 3]</span>
+</pre></div>
+</div>
+<p>metrics can be gotten from histories over time:</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">hist</span> <span class="o">=</span> <span class="n">History</span><span class="p">({</span><span class="s2">&quot;a.a&quot;</span><span class="p">:</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">],</span> <span class="s2">&quot;b.a&quot;</span><span class="p">:</span> <span class="p">[</span><span class="mi">4</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">6</span><span class="p">],</span> <span class="s2">&quot;time&quot;</span><span class="p">:</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">]})</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">hist</span><span class="o">.</span><span class="n">get_metric</span><span class="p">(</span><span class="s2">&quot;a&quot;</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+<span class="go">array([2.5, 3.5, 4.5])</span>
+</pre></div>
+</div>
+<p>or over all times:</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">hist</span><span class="o">.</span><span class="n">get_metric</span><span class="p">(</span><span class="s2">&quot;a&quot;</span><span class="p">)</span>
+<span class="go">3.5</span>
+</pre></div>
+</div>
 <dl class="py method">
 <dt class="sig sig-object py" id="fmdtools.analyze.history.History.copy">
 <span class="sig-name descname"><span class="pre">copy</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.analyze.history.History.copy" title="Permalink to this definition"></a></dt>
@@ -1314,6 +1329,17 @@ array([2.5, 3.5, 4.5])</p>
 <dt class="sig sig-object py" id="fmdtools.analyze.history.History.cut">
 <span class="sig-name descname"><span class="pre">cut</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">end_ind</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">start_ind</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">newcopy</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.analyze.history.History.cut" title="Permalink to this definition"></a></dt>
 <dd><p>Cut the history to a given index.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>end_ind</strong> (<em>int</em><em>, </em><em>optional</em>) – the index of the array that you want to cut the history upto. Default is None.</p></li>
+<li><p><strong>start_ind</strong> (<em>int</em><em>, </em><em>optional</em>) – the index of the array that you want to start cutting the history from.
+The default is None, which starts from the 0th index.</p></li>
+<li><p><strong>newcopy</strong> (<em>bool</em><em>, </em><em>optional</em>) – Tells whether to creat a new history variable with the information what was cut or
+cut the original history variable. Default is False.</p></li>
+</ul>
+</dd>
+</dl>
 <p class="rubric">Examples</p>
 <div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">hist</span> <span class="o">=</span> <span class="n">History</span><span class="p">({</span><span class="s1">&#39;a&#39;</span><span class="p">:[</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">4</span><span class="p">,</span><span class="mi">5</span><span class="p">],</span> <span class="s1">&#39;b&#39;</span><span class="p">:[</span><span class="mi">5</span><span class="p">,</span><span class="mi">4</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">],</span> <span class="s1">&#39;time&#39;</span><span class="p">:</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">4</span><span class="p">,</span><span class="mi">5</span><span class="p">]})</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">cut_hist</span> <span class="o">=</span> <span class="n">hist</span><span class="o">.</span><span class="n">cut</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span>
@@ -1358,7 +1384,6 @@ array([2.5, 3.5, 4.5])</p>
 </ul>
 </div></blockquote>
 </p></li>
-<li><p><strong>threshold</strong> (<em>0.000001</em>) – Threshold for degradation</p></li>
 <li><p><strong>withtime</strong> (<em>bool</em>) – Whether to include time in the dict. Default is True.</p></li>
 <li><p><strong>withtotal</strong> (<em>bool</em>) – Whether to include a total in the dict. Default is True.</p></li>
 </ul>
@@ -1477,8 +1502,12 @@ The default is “earliest”.</p>
 <dd class="field-odd"><p><strong>value</strong> (<em>str</em>) – Value to get mean and bounds of.</p>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p><strong>err_hist</strong> – hist of line, low, high values. Has the form:
-{‘time’: times, ‘stat’: stat_values, ‘low’: low_values, ‘high’: high_values}</p>
+<dd class="field-even"><p><p><strong>err_hist</strong> –</p>
+<dl class="simple">
+<dt>hist of line, low, high values. Has the form::</dt><dd><p>{‘time’: times, ‘stat’: stat_values, ‘low’: low_values, ‘high’: high_values}</p>
+</dd>
+</dl>
+</p>
 </dd>
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
 <dd class="field-odd"><p><a class="reference internal" href="#fmdtools.analyze.history.History" title="fmdtools.analyze.history.History">History</a></p>
@@ -1510,8 +1539,12 @@ The default is “earliest”.</p>
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p><strong>err_hist</strong> – hist of line, low, high values. Has the form:
-{‘time’: times, ‘stat’: stat_values, ‘low’: low_values, ‘high’: high_values}</p>
+<dd class="field-even"><p><p><strong>err_hist</strong> –</p>
+<dl class="simple">
+<dt>hist of line, low, high values. Has the form::</dt><dd><p>{‘time’: times, ‘stat’: stat_values, ‘low’: low_values, ‘high’: high_values}</p>
+</dd>
+</dl>
+</p>
 </dd>
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
 <dd class="field-odd"><p><a class="reference internal" href="#fmdtools.analyze.history.History" title="fmdtools.analyze.history.History">History</a></p>
@@ -1528,8 +1561,12 @@ The default is “earliest”.</p>
 <dd class="field-odd"><p><strong>value</strong> (<em>str</em>) – Value to get mean and bounds of.</p>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p><strong>err_hist</strong> – hist of line, low, high values. Has the form:
-{‘time’: times, ‘stat’: stat_values, ‘low’: low_values, ‘high’: high_values}</p>
+<dd class="field-even"><p><p><strong>err_hist</strong> –</p>
+<dl class="simple">
+<dt>hist of line, low, high values. Has the form::</dt><dd><p>{‘time’: times, ‘stat’: stat_values, ‘low’: low_values, ‘high’: high_values}</p>
+</dd>
+</dl>
+</p>
 </dd>
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
 <dd class="field-odd"><p><a class="reference internal" href="#fmdtools.analyze.history.History" title="fmdtools.analyze.history.History">History</a></p>
@@ -1549,8 +1586,12 @@ The default is “earliest”.</p>
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p><strong>err_hist</strong> – hist of line, low, high values. Has the form:
-{‘time’: times, ‘stat’: stat_values, ‘low’: low_values, ‘high’: high_values}</p>
+<dd class="field-even"><p><p><strong>err_hist</strong> –</p>
+<dl class="simple">
+<dt>hist of line, low, high values. Has the form::</dt><dd><p>{‘time’: times, ‘stat’: stat_values, ‘low’: low_values, ‘high’: high_values}</p>
+</dd>
+</dl>
+</p>
 </dd>
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
 <dd class="field-odd"><p><a class="reference internal" href="#fmdtools.analyze.history.History" title="fmdtools.analyze.history.History">History</a></p>
@@ -1637,9 +1678,8 @@ history.</p></li>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>simhists</strong> (<a class="reference internal" href="#fmdtools.analyze.history.History" title="fmdtools.analyze.history.History"><em>History</em></a>) – Simulation history</p></li>
 <li><p><strong>*plot_values</strong> (<em>strs</em>) – names of values to pul (e.g., ‘fxns.move_water.s.flowrate’).
-Can also be specified as a dict (e.g. {‘fxns’: ‘move_water’}) to get all
+Can also be specified as a dict (e.g., {‘fxns’: ‘move_water’}) to get all
 from a given fxn/flow/mode/etc.</p></li>
 <li><p><strong>cols</strong> (<em>int</em><em>, </em><em>optional</em>) – columns to use in the figure. The default is 2.</p></li>
 <li><p><strong>aggregation</strong> (<em>str</em><em>, </em><em>optional</em>) – Way of aggregating the plot values (e.g., which plot_XX_line method to call)
@@ -1670,7 +1710,7 @@ Has structure:</p>
 comparison group comp (or scenario, if not aggregated) which overrides
 the global kwargs (or default behavior). If no comparison groups are given,
 use ‘default’ for a single history or ‘nominal’/’faulty’ for a fault history
-e.g.:</p>
+e.g.,:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">kwargs</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;nominal&#39;</span><span class="p">:</span> <span class="p">{</span><span class="n">color</span><span class="p">:</span> <span class="s1">&#39;green&#39;</span><span class="p">}}</span>
 </pre></div>
 </div>
@@ -1713,7 +1753,7 @@ ass multiplot_legend_title.</p></li>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="fmdtools.analyze.history.History.plot_mean_std_line">
-<span class="sig-name descname"><span class="pre">plot_mean_std_line</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">value</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ax</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fig</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">figsize</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">(6,</span> <span class="pre">4)</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.analyze.history.History.plot_mean_std_line" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">plot_mean_std_line</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">value</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fig</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ax</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">figsize</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">(6,</span> <span class="pre">4)</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.analyze.history.History.plot_mean_std_line" title="Permalink to this definition"></a></dt>
 <dd><p>Plot value in hist aggregated by mean and standard devation.</p>
 </dd></dl>
 
@@ -1727,7 +1767,7 @@ ass multiplot_legend_title.</p></li>
 <li><p><strong>times</strong> (<em>list/int</em>) – List of times (or single time) to key the model history from.
 If more than one time is provided, it takes the place of comp_groups.</p></li>
 <li><p><strong>*plot_values</strong> (<em>strs</em>) – names of values to pull from the history (e.g., ‘fxns.move_water.s.flow’)
-Can also be specified as a dict (e.g. {‘fxns’:’move_water’}) to get all keys
+Can also be specified as a dict (e.g., {‘fxns’:’move_water’}) to get all keys
 from a given fxn/flow/mode/etc.</p></li>
 <li><p><strong>**kwargs</strong> (<em>kwargs</em>) – keyword arguments to Result.plot_metric_dist</p></li>
 </ul>
@@ -1748,7 +1788,6 @@ from a given fxn/flow/mode/etc.</p></li>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>simhists</strong> (<a class="reference internal" href="#fmdtools.analyze.history.History" title="fmdtools.analyze.history.History"><em>History</em></a>) – History to get trajectories from.</p></li>
 <li><p><strong>*plot_values</strong> (<em>str</em>) – Plot values corresponding to the x/y/z values (e.g, ‘position.s.x’)</p></li>
 <li><p><strong>comp_groups</strong> (<em>dict</em><em>, </em><em>optional</em>) – <p>Dictionary for comparison groups (if more than one) with structure given by:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">{</span><span class="s1">&#39;group1&#39;</span><span class="p">:</span> <span class="p">(</span><span class="s1">&#39;scen1&#39;</span><span class="p">,</span> <span class="s1">&#39;scen2&#39;</span><span class="p">),</span>
@@ -1768,7 +1807,7 @@ Has structure:</p>
 comparison group comp (or scenario, if not aggregated) which overrides
 the global kwargs (or default behavior). If no comparison groups are given,
 use ‘default’ for a single history or ‘nominal’/’faulty’ for a fault history
-e.g.:</p>
+e.g.,:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">kwargs</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;nominal&#39;</span><span class="p">:</span> <span class="p">{</span><span class="n">color</span><span class="p">:</span> <span class="s1">&#39;green&#39;</span><span class="p">}}</span>
 </pre></div>
 </div>
@@ -1786,8 +1825,12 @@ at each point in the trajectory. The default is [].</p></li>
 <li><p><strong>legend</strong> (<em>bool</em><em>, </em><em>optional</em>) – Whether to show a legend. The default is True.</p></li>
 <li><p><strong>title</strong> (<em>str</em><em>, </em><em>optional</em>) – Title to add. Default is ‘’ (no title).</p></li>
 <li><p><strong>fig</strong> (<em>matplotlib.figure</em><em>, </em><em>optional</em>) – Existing Figure. The default is None.</p></li>
-<li><p><strong>ax</strong> (<em>matplotlib.axis</em><em>, </em><em>optional</em>) – Existing axis. The default is None.</p></li>
-<li><p><strong>**kwargs</strong> (<em>TYPE</em>) – DESCRIPTION.</p></li>
+<li><p><strong>ax</strong> (<em>matplotlib.axis</em><em>, </em><em>optional</em>) – <p>Existing axis. The default is None.
+<a href="#id27"><span class="problematic" id="id28">**</span></a>kwargs : kwargs</p>
+<blockquote>
+<div><p>kwargs to ax.plot to use over all plots.</p>
+</div></blockquote>
+</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
@@ -1808,7 +1851,7 @@ at each point in the trajectory. The default is [].</p></li>
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>ax</strong> (<em>matplotlib axis</em>) – Axis object to mark on</p></li>
-<li><p><strong>hists</strong> (<a class="reference internal" href="#fmdtools.analyze.history.History" title="fmdtools.analyze.history.History"><em>History</em></a>) – History to get the values from</p></li>
+<li><p><strong>fig</strong> (<em>figure</em>) – Matplotlib figure object</p></li>
 <li><p><strong>xlab</strong> (<em>str</em>) – Name to use for the x-values.</p></li>
 <li><p><strong>ylab</strong> (<em>str</em>) – Name to use for the y-values.</p></li>
 <li><p><strong>mark_time</strong> (<em>bool</em><em>, </em><em>optional</em>) – Whether to mark the time of the trajectory at given ticks. The default is False.</p></li>
@@ -1833,10 +1876,7 @@ at each point in the trajectory. The default is [].</p></li>
 <dt class="sig sig-object py" id="fmdtools.analyze.history.diff">
 <span class="sig-prename descclassname"><span class="pre">fmdtools.analyze.history.</span></span><span class="sig-name descname"><span class="pre">diff</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">val1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">val2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">difftype</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'bool'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.analyze.history.diff" title="Permalink to this definition"></a></dt>
 <dd><p>Find inconsistent states between val1, val2.</p>
-<dl class="simple">
-<dt>The difftype option (‘diff’ (takes the difference), ‘bool’ (checks if the same),</dt><dd><p>and float (checks if under the provided tolerance))</p>
-</dd>
-</dl>
+<p>The difftype option (‘diff’ (takes the difference), ‘bool’ (checks if the same), and float (checks if under the provided tolerance))</p>
 </dd></dl>
 
 <dl class="py function">
@@ -1866,7 +1906,7 @@ at each point in the trajectory. The default is [].</p></li>
 <dd><p>Initialize the history for a given attribute att with value val.</p>
 <p>Enables the recursive definition of a history as a nested structure.</p>
 <p>If a timerange is given, the base fields are initializes as fixed-length numpy
-arrays corresponding to the data type of the field. Otherwise, an emty list
+arrays corresponding to the data type of the field. Otherwise, an empty list
 is initialized.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -1875,7 +1915,7 @@ is initialized.</p>
 <li><p><strong>val</strong> (<em>dict/field</em>) – dict to be initialized as a History or field to be initialized as a list or
 numpy array</p></li>
 <li><p><strong>timerange</strong> (<em>iterable</em><em>, </em><em>optional</em>) – Time-range to initialize the history over. The default is None.</p></li>
-<li><p><strong>track</strong> (<em>list/str/dict</em><em>, </em><em>optional</em>) – argument specifying attributes for :func:<a href="#id27"><span class="problematic" id="id28">`</span></a>get_sub_include’. The default is None.</p></li>
+<li><p><strong>track</strong> (<em>list/str/dict</em><em>, </em><em>optional</em>) – argument specifying attributes for :func:<a href="#id29"><span class="problematic" id="id30">`</span></a>get_sub_include’. The default is None.</p></li>
 <li><p><strong>dtype</strong> (<em>str</em><em>, </em><em>optional</em>) – Datatype to initialze the array as (if given). The default is None.</p></li>
 <li><p><strong>str_size</strong> (<em>str</em><em>, </em><em>optional</em>) – Data type for strings. The default is ‘&lt;U20’.</p></li>
 </ul>
@@ -1917,7 +1957,7 @@ numpy array</p></li>
 </ul>
 <p>where both functions and flows are nodes.</p>
 <ul class="simple">
-<li><p><code class="xref py py-class docutils literal notranslate"><span class="pre">FunctionArchitectureFlowgraph</span></code>: Graphs Model of flows for display, where flows are set as</p></li>
+<li><p><a class="reference internal" href="#fmdtools.analyze.graph.FunctionArchitectureFlowGraph" title="fmdtools.analyze.graph.FunctionArchitectureFlowGraph"><code class="xref py py-class docutils literal notranslate"><span class="pre">FunctionArchitectureFlowGraph</span></code></a>: Graphs Model of flows for display, where flows are set as</p></li>
 </ul>
 <p>nodes and connections (via functions) are edges.</p>
 <ul class="simple">
@@ -1934,22 +1974,19 @@ numpy array</p></li>
 <p>containment relationship between function classes and flow classes in the model.</p>
 <ul class="simple">
 <li><p><a class="reference internal" href="#fmdtools.analyze.graph.MultiFlowGraph" title="fmdtools.analyze.graph.MultiFlowGraph"><code class="xref py py-class docutils literal notranslate"><span class="pre">MultiFlowGraph</span></code></a>: Creates a networkx graph corresponding to the MultiFlow.</p></li>
-<li><p><a class="reference internal" href="#fmdtools.analyze.graph.CommsFlowGraph" title="fmdtools.analyze.graph.CommsFlowGraph"><code class="xref py py-class docutils literal notranslate"><span class="pre">CommsFlowGraph</span></code></a>: Creates a graph representation of the CommsFlow</p></li>
-</ul>
-<p>(assuming no additional locals).</p>
-<ul class="simple">
+<li><p><a class="reference internal" href="#fmdtools.analyze.graph.CommsFlowGraph" title="fmdtools.analyze.graph.CommsFlowGraph"><code class="xref py py-class docutils literal notranslate"><span class="pre">CommsFlowGraph</span></code></a>: Creates a graph representation of the CommsFlow (assuming no additional locals).</p></li>
 <li><p><a class="reference internal" href="#fmdtools.analyze.graph.ActionArchitectureGraph" title="fmdtools.analyze.graph.ActionArchitectureGraph"><code class="xref py py-class docutils literal notranslate"><span class="pre">ActionArchitectureGraph</span></code></a>: Shows a visualization of the internal Action Sequence Graph of</p></li>
 </ul>
 <p>the Function Block, with Sequences as edges, with Flows (circular) and Actions
 (square) as nodes.</p>
 <ul class="simple">
-<li><p><a class="reference internal" href="#fmdtools.analyze.graph.ActionArchitectureActGraph" title="fmdtools.analyze.graph.ActionArchitectureActGraph"><code class="xref py py-class docutils literal notranslate"><span class="pre">ActionArchitectureActGraph</span></code></a>: Variant of ActionArchitectureGraph where only the sequence between</p></li>
+<li><p><a class="reference internal" href="#fmdtools.analyze.graph.ActionArchitectureActGraph" title="fmdtools.analyze.graph.ActionArchitectureActGraph"><code class="xref py py-class docutils literal notranslate"><span class="pre">ActionArchitectureActGraph</span></code></a>: Variant of ActionArchitectureGraph where only the</p></li>
 </ul>
-<p>actions is shown.</p>
+<p>sequence between actions is shown.</p>
 <ul class="simple">
-<li><p><a class="reference internal" href="#fmdtools.analyze.graph.ActionArchitectureFlowGraph" title="fmdtools.analyze.graph.ActionArchitectureFlowGraph"><code class="xref py py-class docutils literal notranslate"><span class="pre">ActionArchitectureFlowGraph</span></code></a>: Variant of ActionArchitectureGraph where only the flow relationships</p></li>
+<li><p><a class="reference internal" href="#fmdtools.analyze.graph.ActionArchitectureFlowGraph" title="fmdtools.analyze.graph.ActionArchitectureFlowGraph"><code class="xref py py-class docutils literal notranslate"><span class="pre">ActionArchitectureFlowGraph</span></code></a>: Variant of ActionArchitectureGraph where only the</p></li>
 </ul>
-<p>between actions is shown.</p>
+<p>flow relationships between actions is shown.</p>
 </dd>
 <dt>Shared Method Parameters:</dt><dd><ul class="simple">
 <li><p><code class="xref py py-data docutils literal notranslate"><span class="pre">default_edge_kwargs</span></code>: Default appearance for edges in model network graphs.</p></li>
@@ -1959,28 +1996,22 @@ numpy array</p></li>
 <dt>Private Methods:</dt><dd><ul class="simple">
 <li><p><a class="reference internal" href="#fmdtools.analyze.graph.EdgeStyle" title="fmdtools.analyze.graph.EdgeStyle"><code class="xref py py-class docutils literal notranslate"><span class="pre">EdgeStyle</span></code></a>: Holds kwargs for nx.draw_networkx_edges to be applied to edges</p></li>
 <li><p><a class="reference internal" href="#fmdtools.analyze.graph.NodeStyle" title="fmdtools.analyze.graph.NodeStyle"><code class="xref py py-class docutils literal notranslate"><span class="pre">NodeStyle</span></code></a>: Holds kwargs for nx.draw_networkx_nodes to be applied to nodes</p></li>
-<li><p><a class="reference internal" href="#fmdtools.analyze.graph.LabelStyle" title="fmdtools.analyze.graph.LabelStyle"><code class="xref py py-class docutils literal notranslate"><span class="pre">LabelStyle</span></code></a>: Holds kwargs for nx.draw_networkx_labels to be applied to</p></li>
+<li><p><a class="reference internal" href="#fmdtools.analyze.graph.LabelStyle" title="fmdtools.analyze.graph.LabelStyle"><code class="xref py py-class docutils literal notranslate"><span class="pre">LabelStyle</span></code></a>: Holds kwargs for nx.draw_networkx_labels to be applied to labels</p></li>
+<li><p><a class="reference internal" href="#fmdtools.analyze.graph.EdgeLabelStyle" title="fmdtools.analyze.graph.EdgeLabelStyle"><code class="xref py py-class docutils literal notranslate"><span class="pre">EdgeLabelStyle</span></code></a>: Controls edge labels to ensure they do not rotate</p></li>
+<li><p><a class="reference internal" href="#fmdtools.analyze.graph.Labels" title="fmdtools.analyze.graph.Labels"><code class="xref py py-class docutils literal notranslate"><span class="pre">Labels</span></code></a>: Defines a set of labels to be drawn using draw_networkx_labels.</p></li>
+<li><p><a class="reference internal" href="#fmdtools.analyze.graph.GraphInteractor" title="fmdtools.analyze.graph.GraphInteractor"><code class="xref py py-class docutils literal notranslate"><span class="pre">GraphInteractor</span></code></a>: Used to set nodes in set_pos when creating interactive graph</p></li>
+<li><p><a class="reference internal" href="#fmdtools.analyze.graph.label_for_entry" title="fmdtools.analyze.graph.label_for_entry"><code class="xref py py-func docutils literal notranslate"><span class="pre">label_for_entry()</span></code></a>: Gets the label from an nx.graph for a given entry.</p></li>
+<li><p><a class="reference internal" href="#fmdtools.analyze.graph.get_style_kwargs" title="fmdtools.analyze.graph.get_style_kwargs"><code class="xref py py-func docutils literal notranslate"><span class="pre">get_style_kwargs()</span></code></a>:  Gets the keywords for networkx plotting</p></li>
+<li><p><a class="reference internal" href="#fmdtools.analyze.graph.get_label_groups" title="fmdtools.analyze.graph.get_label_groups"><code class="xref py py-func docutils literal notranslate"><span class="pre">get_label_groups()</span></code></a>: Creates groups of nodes/edges in terms of discrete values for the given tags.</p></li>
+<li><p><a class="reference internal" href="#fmdtools.analyze.graph.to_legend_label" title="fmdtools.analyze.graph.to_legend_label"><code class="xref py py-func docutils literal notranslate"><span class="pre">to_legend_label()</span></code></a>: Creates a legend label string for the group corresponding to style_labels</p></li>
+<li><p><a class="reference internal" href="#fmdtools.analyze.graph.sff_one_trial" title="fmdtools.analyze.graph.sff_one_trial"><code class="xref py py-func docutils literal notranslate"><span class="pre">sff_one_trial()</span></code></a>: Calculates one trial of the sff model</p></li>
+<li><p><a class="reference internal" href="#fmdtools.analyze.graph.data_average" title="fmdtools.analyze.graph.data_average"><code class="xref py py-func docutils literal notranslate"><span class="pre">data_average()</span></code></a>: Averages each column in data</p></li>
+<li><p><a class="reference internal" href="#fmdtools.analyze.graph.data_error" title="fmdtools.analyze.graph.data_error"><code class="xref py py-func docutils literal notranslate"><span class="pre">data_error()</span></code></a>: Calculates error for each column in data</p></li>
+<li><p><a class="reference internal" href="#fmdtools.analyze.graph.gv_import_check" title="fmdtools.analyze.graph.gv_import_check"><code class="xref py py-func docutils literal notranslate"><span class="pre">gv_import_check()</span></code></a>: Checks if graphviz is installed on the system before plotting.</p></li>
+<li><p><a class="reference internal" href="#fmdtools.analyze.graph.node_is_tagged" title="fmdtools.analyze.graph.node_is_tagged"><code class="xref py py-func docutils literal notranslate"><span class="pre">node_is_tagged()</span></code></a>: Returns if node is tagged</p></li>
+<li><p><a class="reference internal" href="#fmdtools.analyze.graph.add_g_nested" title="fmdtools.analyze.graph.add_g_nested"><code class="xref py py-func docutils literal notranslate"><span class="pre">add_g_nested()</span></code></a>: Helper function for MultiFlow.create_multigraph to construct the containment tree.</p></li>
+<li><p><a class="reference internal" href="#fmdtools.analyze.graph.graph_factory" title="fmdtools.analyze.graph.graph_factory"><code class="xref py py-func docutils literal notranslate"><span class="pre">graph_factory()</span></code></a>: Creates the default Graph for a given object.</p></li>
 </ul>
-<p>labels
-- <a class="reference internal" href="#fmdtools.analyze.graph.EdgeLabelStyle" title="fmdtools.analyze.graph.EdgeLabelStyle"><code class="xref py py-class docutils literal notranslate"><span class="pre">EdgeLabelStyle</span></code></a>: Controls edge labels to ensure they do not rotate
-- <a class="reference internal" href="#fmdtools.analyze.graph.Labels" title="fmdtools.analyze.graph.Labels"><code class="xref py py-class docutils literal notranslate"><span class="pre">Labels</span></code></a>: Defines a set of labels to be drawn using draw_networkx_labels.
-- <a class="reference internal" href="#fmdtools.analyze.graph.GraphInteractor" title="fmdtools.analyze.graph.GraphInteractor"><code class="xref py py-class docutils literal notranslate"><span class="pre">GraphInteractor</span></code></a>: Used to set nodes in set_pos when creating interactive
-graph
-- <a class="reference internal" href="#fmdtools.analyze.graph.label_for_entry" title="fmdtools.analyze.graph.label_for_entry"><code class="xref py py-func docutils literal notranslate"><span class="pre">label_for_entry()</span></code></a>: Gets the label from an nx.graph for a given entry.
-- <a class="reference internal" href="#fmdtools.analyze.graph.get_style_kwargs" title="fmdtools.analyze.graph.get_style_kwargs"><code class="xref py py-func docutils literal notranslate"><span class="pre">get_style_kwargs()</span></code></a>:  Gets the keywords for networkx plotting
-- <a class="reference internal" href="#fmdtools.analyze.graph.get_label_groups" title="fmdtools.analyze.graph.get_label_groups"><code class="xref py py-func docutils literal notranslate"><span class="pre">get_label_groups()</span></code></a>: Creates groups of nodes/edges in terms of discrete
-values for the given tags.
-- <a class="reference internal" href="#fmdtools.analyze.graph.to_legend_label" title="fmdtools.analyze.graph.to_legend_label"><code class="xref py py-func docutils literal notranslate"><span class="pre">to_legend_label()</span></code></a>: Creates a legend label string for the group
-corresponding to style_labels
-- <a class="reference internal" href="#fmdtools.analyze.graph.sff_one_trial" title="fmdtools.analyze.graph.sff_one_trial"><code class="xref py py-func docutils literal notranslate"><span class="pre">sff_one_trial()</span></code></a>: Calculates one trial of the sff model
-- <code class="xref py py-func docutils literal notranslate"><span class="pre">data_average</span> <span class="pre">`:</span> <span class="pre">Averages</span> <span class="pre">each</span> <span class="pre">column</span> <span class="pre">in</span> <span class="pre">data&quot;</span>
-<span class="pre">-</span> <span class="pre">:func:`data_error()</span></code>: Calculates error for each column in data
-- <code class="xref py py-func docutils literal notranslate"><span class="pre">gr_import_check()</span></code>: Checks if graphviz is installed on the system before
-plotting.
-- <a class="reference internal" href="#fmdtools.analyze.graph.node_is_tagged" title="fmdtools.analyze.graph.node_is_tagged"><code class="xref py py-func docutils literal notranslate"><span class="pre">node_is_tagged()</span></code></a>: Returns if node is tagged
-- <a class="reference internal" href="#fmdtools.analyze.graph.add_g_nested" title="fmdtools.analyze.graph.add_g_nested"><code class="xref py py-func docutils literal notranslate"><span class="pre">add_g_nested()</span></code></a>: Helper function for MultiFlow.create_multigraph to
-construct the containment tree.
-- <a class="reference internal" href="#fmdtools.analyze.graph.graph_factory" title="fmdtools.analyze.graph.graph_factory"><code class="xref py py-func docutils literal notranslate"><span class="pre">graph_factory()</span></code></a>: Creates the default Graph for a given object.</p>
 </dd>
 </dl>
 <dl class="py class">
@@ -2019,7 +2050,7 @@ construct the containment tree.
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>time</strong> (<em>int</em>) – Time to draw the graph (in the history)</p></li>
 <li><p><strong>history</strong> (<a class="reference internal" href="#fmdtools.analyze.history.History" title="fmdtools.analyze.history.History"><em>History</em></a><em>, </em><em>optional</em>) – History with nominal and faulty history. The default is History().</p></li>
-<li><p><strong>**kwargs</strong> (<a href="#id29"><span class="problematic" id="id30">**</span></a>kwargs) – arguments for Graph.draw</p></li>
+<li><p><strong>**kwargs</strong> (<a href="#id31"><span class="problematic" id="id32">**</span></a>kwargs) – arguments for Graph.draw</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
@@ -2072,9 +2103,12 @@ to nx.draw_networkx_nodes. The default is {“label”:{}}.</p>
 <dt class="sig sig-object py" id="fmdtools.analyze.graph.ActionArchitectureGraph.set_nx_labels">
 <span class="sig-name descname"><span class="pre">set_nx_labels</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">aa</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.analyze.graph.ActionArchitectureGraph.set_nx_labels" title="Permalink to this definition"></a></dt>
 <dd><p>Labels the underlying networkx graph structure with type attributes
-corresponding to the ActionArchitecture.
-:param aa: Action Sequence Graph object to represent
-:type aa: ActionArchitecture</p>
+corresponding to the ActionArchitecture.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>aa</strong> (<a class="reference internal" href="fmdtools.define.architecture.html#fmdtools.define.architecture.action.ActionArchitecture" title="fmdtools.define.architecture.action.ActionArchitecture"><em>ActionArchitecture</em></a>) – Action Sequence Graph object to represent</p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="py method">
@@ -2094,6 +2128,25 @@ corresponding to the ActionArchitecture.
 <dt class="sig sig-object py" id="fmdtools.analyze.graph.CommsFlowGraph">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">fmdtools.analyze.graph.</span></span><span class="sig-name descname"><span class="pre">CommsFlowGraph</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">flow</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">include_glob</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ports_only</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">get_states</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">get_indicators</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">time</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.0</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.analyze.graph.CommsFlowGraph" title="Permalink to this definition"></a></dt>
 <dd><p>Bases: <a class="reference internal" href="#fmdtools.analyze.graph.MultiFlowGraph" title="fmdtools.analyze.graph.MultiFlowGraph"><code class="xref py py-class docutils literal notranslate"><span class="pre">MultiFlowGraph</span></code></a></p>
+<p>Create a graph representation of the CommsFlow (assuming no additional locals).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>include_glob</strong> (<em>bool</em><em>, </em><em>optional</em>) – Whether to include the base (root) node. The default is False.</p></li>
+<li><p><strong>ports_only</strong> (<em>bool</em><em>, </em><em>optional</em>) – Whether to only include the explicit port connections betwen flows.
+The default is False</p></li>
+<li><p><strong>with_internal</strong> (<em>bool</em><em>, </em><em>optional</em>) – Whether to include the internal aspect of the commsflow in the commsflow.</p></li>
+<li><p><strong>get_indicators</strong> (<em>bool</em><em>, </em><em>optional</em>) – Whether to attach indicators as attributs to the graph. The default is False</p></li>
+<li><p><strong>time</strong> (<em>float</em>) – Time to run the indicator methods at.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>g</strong> – Graph of the commsflow connections.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>networkx.DiGraph</p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="py class">
@@ -2231,7 +2284,7 @@ relationships shown for functions.</p>
 <dd><p>Generate the networkx.graph object corresponding to the model.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>mdl</strong> (<em>Model</em>) – Model to create the graph representation of.</p>
+<dd class="field-odd"><p><strong>mdl</strong> (<em>Model</em>) – Model to create the graph representation of</p>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p><strong>g</strong> – networkx.Graph representation of model functions and flows
@@ -2273,7 +2326,7 @@ set as nodes and connections (via functions) are edges</p>
 <dd><p>Generate the networkx.graph object corresponding to the model.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>mdl</strong> (<em>Model</em>) – Model to create the graph representation of.</p>
+<dd class="field-odd"><p><strong>mdl</strong> (<em>Model</em>) – Model to create the graph representation of</p>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p><strong>g</strong> – networkx.Graph representation of model functions and flows
@@ -2294,8 +2347,8 @@ set as nodes and connections (via functions) are edges</p>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>title</strong> (<em>str</em><em>, </em><em>optional</em>) – property to get for title text. The default is ‘id’.</p></li>
 <li><p><strong>title2</strong> (<em>str</em><em>, </em><em>optional</em>) – property to get for title text after the colon. The default is ‘’.</p></li>
-<li><p><strong>subtext</strong> (<em>str</em><em>, </em><em>optional</em>) – property to get for the subtext. The default is ‘’.</p></li>
-<li><p><strong>**node_label_styles</strong> (<em>dict</em>) – LabelStyle arguments to overwrite.</p></li>
+<li><p><strong>subtext</strong> (<em>str</em><em>, </em><em>optional</em>) – property to get for the subtext. The default is ‘states’.</p></li>
+<li><p><strong>**edge_label_styles</strong> (<em>dict</em>) – LabelStyle arguments to overwrite.</p></li>
 </ul>
 </dd>
 </dl>
@@ -2326,7 +2379,7 @@ functions are nodes and flows are edges</p>
 <dd><p>Generate the networkx.graph object corresponding to the model.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>mdl</strong> (<em>Model</em>) – Model to create the graph representation of.</p>
+<dd class="field-odd"><p><strong>mdl</strong> (<em>Model</em>) – Model to create the graph representation of</p>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p><strong>g</strong> – networkx.Graph representation of model functions and flows
@@ -2359,8 +2412,8 @@ functions are nodes and flows are edges</p>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>title</strong> (<em>str</em><em>, </em><em>optional</em>) – property to get for title text. The default is ‘id’.</p></li>
 <li><p><strong>title2</strong> (<em>str</em><em>, </em><em>optional</em>) – property to get for title text after the colon. The default is ‘’.</p></li>
-<li><p><strong>subtext</strong> (<em>str</em><em>, </em><em>optional</em>) – property to get for the subtext. The default is ‘’.</p></li>
-<li><p><strong>**node_label_styles</strong> (<em>dict</em>) – LabelStyle arguments to overwrite.</p></li>
+<li><p><strong>subtext</strong> (<em>str</em><em>, </em><em>optional</em>) – property to get for the subtext. The default is ‘states’.</p></li>
+<li><p><strong>**edge_label_styles</strong> (<em>dict</em>) – LabelStyle arguments to overwrite.</p></li>
 </ul>
 </dd>
 </dl>
@@ -2402,7 +2455,7 @@ with the edges/nodes which can then be used to visualize function/flow attribute
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>filename</strong> (<em>str</em><em>, </em><em>optional</em>) – Name to save the figure to (if saving the figure). The default is ‘’.</p></li>
 <li><p><strong>filetype</strong> (<em>str</em><em>, </em><em>optional</em>) – Type of file to safe. The default is ‘png’.</p></li>
-<li><p><strong>**kwargs</strong> (<em>kwargs</em>) – kwargs to draw</p></li>
+<li><p><strong>**kwargs</strong> (<em>kwargs</em>) – kwargs to draw.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
@@ -2427,9 +2480,9 @@ with the edges/nodes which can then be used to visualize function/flow attribute
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>mdl</strong> (<em>Model</em>) – Model to represent.</p></li>
+<li><p><strong>mdl</strong> (<em>Model</em>) – Model to represent</p></li>
 <li><p><strong>subedges</strong> (<em>list</em>) – nodes from the full graph which will become edges in the subgraph
-(e.g. individual flows)</p></li>
+(e.g., individual flows)</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
@@ -2454,7 +2507,7 @@ edge (e.g., flows)</p>
 <dd><p>Generate the networkx.graph object corresponding to the model.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>mdl</strong> (<em>Model</em>) – Model to create the graph representation of.</p>
+<dd class="field-odd"><p><strong>mdl</strong> (<em>Model</em>) – Model to create the graph representation of</p>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p><strong>g</strong> – networkx.Graph representation of model functions and flows
@@ -2498,7 +2551,7 @@ The default is True.</p></li>
 model that belong to flows.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>mdl</strong> (<em>Model</em>) – Model to represent.</p>
+<dd class="field-odd"><p><strong>mdl</strong> (<em>Model</em>) – Model to represent</p>
 </dd>
 </dl>
 </dd></dl>
@@ -2507,11 +2560,15 @@ model that belong to flows.</p>
 <dt class="sig sig-object py" id="fmdtools.analyze.graph.FunctionArchitectureGraph.set_fxn_nodestates">
 <span class="sig-name descname"><span class="pre">set_fxn_nodestates</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mdl</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.analyze.graph.FunctionArchitectureGraph.set_fxn_nodestates" title="Permalink to this definition"></a></dt>
 <dd><p>Attaches state attributes to Graph corresponding to the states of the model
-that belong to functions
-:param mdl: Model to represent.
-:type mdl: Model
-:param time: Time to execute indicators at. Default is 0.0
-:type time: float</p>
+that belong to functions</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>mdl</strong> (<em>Model</em>) – Model to represent</p></li>
+<li><p><strong>time</strong> (<em>float</em>) – Time to execute indicators at. Default is 0.0</p></li>
+</ul>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="py method">
@@ -2543,7 +2600,7 @@ relationship between function classes and flow classes in the model.</p>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>filename</strong> (<em>str</em><em>, </em><em>optional</em>) – Name to save the figure to (if saving the figure). The default is ‘’.</p></li>
 <li><p><strong>filetype</strong> (<em>str</em><em>, </em><em>optional</em>) – Type of file to safe. The default is ‘png’.</p></li>
-<li><p><strong>**kwargs</strong> (<em>kwargs</em>) – kwargs to draw</p></li>
+<li><p><strong>**kwargs</strong> (<em>kwargs</em>) – kwargs to draw.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
@@ -2564,7 +2621,7 @@ constructs.</p>
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>mdl</strong> (<em>Model</em>) – Model to represent</p></li>
-<li><p><strong>withflows</strong> (<em>bool</em><em>, </em><em>optional</em>) – Whether to include flows. The default is True.</p></li>
+<li><p><strong>withflows</strong> (<em>bool</em><em>, </em><em>optional</em>) – Whether to include flows, default is True</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
@@ -2644,6 +2701,20 @@ The default is True.</p></li>
 <dt class="sig sig-object py" id="fmdtools.analyze.graph.Graph">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">fmdtools.analyze.graph.</span></span><span class="sig-name descname"><span class="pre">Graph</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">obj</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">get_states</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.analyze.graph.Graph" title="Permalink to this definition"></a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Create a Graph.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>obj</strong> (<em>object</em>) – <dl class="simple">
+<dt>must either be a networkx graph (or be a verion of Graph corresponding</dt><dd><p>to the object)</p>
+</dd>
+</dl>
+</p></li>
+<li><p><strong>get_states</strong> (<em>bool</em>) – whether to get states for the graph</p></li>
+<li><p><strong>**kwargs</strong> – keyword arguments for self.nx_from_obj</p></li>
+</ul>
+</dd>
+</dl>
 <dl class="py method">
 <dt class="sig sig-object py" id="fmdtools.analyze.graph.Graph.add_node_groups">
 <span class="sig-name descname"><span class="pre">add_node_groups</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">node_groups</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.analyze.graph.Graph.add_node_groups" title="Permalink to this definition"></a></dt>
@@ -2651,8 +2722,9 @@ The default is True.</p></li>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>**node_groups</strong> (<em>iterable</em>) – </p></li>
+<li><p><strong>**node_groups</strong> (<em>iterable</em>) – nodes in groups. see example.</p></li>
 <li><p><strong>e.g.</strong> – </p></li>
+<li><p><strong>::</strong> – </p></li>
 <li><p><strong>graph.add_node_groups</strong><strong>(</strong><strong>group1=</strong><strong>(</strong><strong>'node1'</strong> – </p></li>
 <li><p><strong>'node2'</strong><strong>)</strong> – </p></li>
 <li><p><strong>group2=</strong><strong>(</strong><strong>'node3'</strong><strong>)</strong><strong>)</strong> – </p></li>
@@ -2675,8 +2747,8 @@ The default is True.</p></li>
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>history</strong> (<a class="reference internal" href="#fmdtools.analyze.history.History" title="fmdtools.analyze.history.History"><em>History</em></a>) – History with faulty and nominal states</p></li>
-<li><p><strong>times</strong> (<em>list</em><em>, </em><em>optional</em>) – List of times to animate over. The default is ‘all’.</p></li>
-<li><p><strong>figsize</strong> (<em>tuple</em><em>, </em><em>optional</em>) – Size for the figure. The default is (6,4).</p></li>
+<li><p><strong>times</strong> (<em>list</em><em>, </em><em>optional</em>) – List of times to animate over. The default is ‘all’</p></li>
+<li><p><strong>figsize</strong> (<em>tuple</em><em>, </em><em>optional</em>) – Size for the figure. The default is (6,4)</p></li>
 <li><p><strong>**kwargs</strong> (<em>kwargs</em>) – </p></li>
 </ul>
 </dd>
@@ -2750,20 +2822,13 @@ The default is True.</p></li>
 <li><p><strong>fig</strong> (<em>bool</em><em>, </em><em>optional</em>) – matplotlib figure to project on (if provided). The default is False.</p></li>
 <li><p><strong>ax</strong> (<em>bool</em><em>, </em><em>optional</em>) – matplotlib axis to plot on (if provided). The default is False.</p></li>
 <li><p><strong>withlegend</strong> (<em>bool</em><em>, </em><em>optional</em>) – Whether to include a legend. The default is True.</p></li>
-<li><p><strong>legend_bbox</strong> (<em>tuple</em><em>, </em><em>optional</em>) – <dl class="simple">
-<dt>bbox to anchor the legend to. The default is (1,0.5) (places legend on the</dt><dd><p>right)</p>
-</dd>
-</dl>
-</p></li>
-<li><p><strong>legend_loc</strong> (<em>str</em><em>, </em><em>optional</em>) – loc argument for plt.legend. the default is “center left”</p></li>
-<li><p><strong>legend_labelspacing</strong> (<em>float</em><em>, </em><em>optional</em>) – labelspacing argument for plt.legend. the default is “2</p></li>
-<li><p><strong>legend_borderpad</strong> (<em>str</em><em>, </em><em>optional</em>) – borderpad argument for plt.legend. the default is 1</p></li>
-<li><p><strong>**kwargs</strong> (<em>kwargs</em>) – <p>Arguments for various supporting functions:
-(set_pos, set_edge_styles, set_edge_labels, set_node_styles,</p>
-<blockquote>
-<div><p>set_node_labels, etc)</p>
-</div></blockquote>
-</p></li>
+<li><p><strong>legend_bbox</strong> (<em>tuple</em><em>, </em><em>optional</em>) – bbox to anchor the legend to. The default is (1,0.5) (places legend on the right).</p></li>
+<li><p><strong>legend_loc</strong> (<em>str</em><em>, </em><em>optional</em>) – loc argument for plt.legend. The default is “center left”.</p></li>
+<li><p><strong>legend_labelspacing</strong> (<em>float</em><em>, </em><em>optional</em>) – labelspacing argument for plt.legend. the default is 2.</p></li>
+<li><p><strong>legend_borderpad</strong> (<em>str</em><em>, </em><em>optional</em>) – borderpad argument for plt.legend. the default is 1.</p></li>
+<li><p><strong>**kwargs</strong> (<em>kwargs</em>) – Arguments for various supporting functions:
+(set_pos, set_edge_styles, set_edge_labels, set_node_styles,
+set_node_labels, etc)</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
@@ -2785,7 +2850,7 @@ The default is True.</p></li>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>time</strong> (<em>int</em>) – Time to draw the graph (in the history)</p></li>
 <li><p><strong>history</strong> (<a class="reference internal" href="#fmdtools.analyze.history.History" title="fmdtools.analyze.history.History"><em>History</em></a><em>, </em><em>optional</em>) – History with nominal and faulty history. The default is History().</p></li>
-<li><p><strong>**kwargs</strong> (<a href="#id31"><span class="problematic" id="id32">**</span></a>kwargs) – arguments for Graph.draw</p></li>
+<li><p><strong>**kwargs</strong> (<a href="#id33"><span class="problematic" id="id34">**</span></a>kwargs) – arguments for Graph.draw</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
@@ -2808,7 +2873,7 @@ The default is True.</p></li>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>filename</strong> (<em>str</em><em>, </em><em>optional</em>) – Name to save the figure to (if saving the figure). The default is ‘’.</p></li>
 <li><p><strong>filetype</strong> (<em>str</em><em>, </em><em>optional</em>) – Type of file to safe. The default is ‘png’.</p></li>
-<li><p><strong>**kwargs</strong> (<em>kwargs</em>) – kwargs to draw</p></li>
+<li><p><strong>**kwargs</strong> (<em>kwargs</em>) – kwargs to draw.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
@@ -2889,7 +2954,7 @@ The default is True.</p></li>
 <span class="sig-name descname"><span class="pre">move_nodes</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.analyze.graph.Graph.move_nodes" title="Permalink to this definition"></a></dt>
 <dd><p>Set the position of nodes for plots in analyze.graph using a graphical tool.</p>
 <p>Note: make sure matplotlib is set to plot in an external window
-(e.g using ‘%matplotlib qt)</p>
+(e.g., using ‘%matplotlib qt)</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>**kwargs</strong> (<em>kwargs</em>) – keyword arguments for graph.draw</p>
@@ -2911,7 +2976,7 @@ The default is True.</p></li>
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>title</strong> (<em>str</em><em>, </em><em>optional</em>) – Title for the plot. The default is ‘bridging nodes’.</p></li>
-<li><p><strong>node_kwargs</strong> (<em>TODO : need documentation update.</em>) – </p></li>
+<li><p><strong>node_kwargs</strong> (<em>dict</em><em>, </em><em>optional</em>) – Non-default fields for NodeStyle</p></li>
 <li><p><strong>**kwargs</strong> (<em>kwargs</em>) – kwargs for Graph.draw</p></li>
 </ul>
 </dd>
@@ -2981,8 +3046,8 @@ The default is True.</p></li>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>title</strong> (<em>str</em><em>, </em><em>optional</em>) – property to get for title text. The default is ‘id’.</p></li>
 <li><p><strong>title2</strong> (<em>str</em><em>, </em><em>optional</em>) – property to get for title text after the colon. The default is ‘’.</p></li>
-<li><p><strong>subtext</strong> (<em>str</em><em>, </em><em>optional</em>) – property to get for the subtext. The default is ‘’.</p></li>
-<li><p><strong>**node_label_styles</strong> (<em>dict</em>) – LabelStyle arguments to overwrite.</p></li>
+<li><p><strong>subtext</strong> (<em>str</em><em>, </em><em>optional</em>) – property to get for the subtext. The default is ‘states’.</p></li>
+<li><p><strong>**edge_label_styles</strong> (<em>dict</em>) – LabelStyle arguments to overwrite.</p></li>
 </ul>
 </dd>
 </dl>
@@ -3005,9 +3070,10 @@ arguments to nx.draw_networkx_edges. The default is {“label”:{}}.</p>
 <dt class="sig sig-object py" id="fmdtools.analyze.graph.Graph.set_heatmap">
 <span class="sig-name descname"><span class="pre">set_heatmap</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">heatmap</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cmap=&lt;matplotlib.colors.LinearSegmentedColormap</span> <span class="pre">object&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">default_color_val=0.0</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.analyze.graph.Graph.set_heatmap" title="Permalink to this definition"></a></dt>
 <dd><p>Set the association and plotting of a heatmap on a graph.</p>
-<p>e.g. graph.set_heatmap({‘node_1’:1.0, ‘node_2’: 0.0, ‘node_3’:0.5})
-graph.draw()
-Should draw node_1 the bluest, node_2 the reddest, and node_3 in between.</p>
+<p>e.g.,::
+graph.set_heatmap({‘node_1’:1.0, ‘node_2’: 0.0, ‘node_3’:0.5})
+graph.draw()</p>
+<p>Should draw node_1 the bluest, node_2 the reddest, and node_3 in between.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
@@ -3027,10 +3093,10 @@ of a heatmap (0-1)</p></li>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>title</strong> – </p></li>
-<li><p><strong>title2</strong> – </p></li>
-<li><p><strong>subtext</strong> – </p></li>
-<li><p><strong>node_label_styles</strong> – </p></li>
+<li><p><strong>title</strong> (<em>str</em><em>, </em><em>optional</em>) – Property to get for title text. The default is ‘id’.</p></li>
+<li><p><strong>title2</strong> (<em>str</em><em>, </em><em>optional</em>) – Property to get for title text after the colon. The default is ‘’.</p></li>
+<li><p><strong>subtext</strong> (<em>str</em><em>, </em><em>optional</em>) – property to get for the subtext. The default is ‘’.</p></li>
+<li><p><strong>node_label_styles</strong> (<em>dict</em>) – LabelStyle arguments to overwrite.</p></li>
 </ul>
 </dd>
 </dl>
@@ -3115,44 +3181,24 @@ etc.–used in set_pos to set node positions</p>
 <dt class="sig sig-object py" id="fmdtools.analyze.graph.GraphInteractor.get_closest_point">
 <span class="sig-name descname"><span class="pre">get_closest_point</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">event</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.analyze.graph.GraphInteractor.get_closest_point" title="Permalink to this definition"></a></dt>
 <dd><p>Find the closest node to the given click to see if it should be moved.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>event</strong> – </p>
-</dd>
-</dl>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="fmdtools.analyze.graph.GraphInteractor.on_button_press">
 <span class="sig-name descname"><span class="pre">on_button_press</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">event</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.analyze.graph.GraphInteractor.on_button_press" title="Permalink to this definition"></a></dt>
 <dd><p>Determine what to do when a button is pressed.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>event</strong> – </p>
-</dd>
-</dl>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="fmdtools.analyze.graph.GraphInteractor.on_button_release">
 <span class="sig-name descname"><span class="pre">on_button_release</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">event</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.analyze.graph.GraphInteractor.on_button_release" title="Permalink to this definition"></a></dt>
 <dd><p>Determine what to do when the mouse is released.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>event</strong> – </p>
-</dd>
-</dl>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="fmdtools.analyze.graph.GraphInteractor.on_mouse_move">
 <span class="sig-name descname"><span class="pre">on_mouse_move</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">event</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.analyze.graph.GraphInteractor.on_mouse_move" title="Permalink to this definition"></a></dt>
 <dd><p>Change the node position when the user drags it.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>event</strong> – </p>
-</dd>
-</dl>
 </dd></dl>
 
 <dl class="py method">
@@ -3248,7 +3294,7 @@ three distinct parts:</p>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>g</strong> (<em>nx.graph</em>) – Networkx graph structure to create labels for</p></li>
 <li><p><strong>iterator</strong> (<em>nx.graph.nodes/edges</em>) – Property to iterate over (e.g., nodes or edges)</p></li>
-<li><p><strong>LabStyle</strong> (<em>class</em>) – Class to use for label styles (e.g. LabelStyle or EdgeStyle)</p></li>
+<li><p><strong>LabStyle</strong> (<em>class</em>) – Class to use for label styles (e.g., LabelStyle or EdgeStyle)</p></li>
 <li><p><strong>title</strong> (<em>str</em><em>, </em><em>optional</em>) – entry for title text. (See <a class="reference internal" href="#fmdtools.analyze.graph.label_for_entry" title="fmdtools.analyze.graph.label_for_entry"><code class="xref py py-func docutils literal notranslate"><span class="pre">label_for_entry()</span></code></a> for options).
 The default is ‘id’.</p></li>
 <li><p><strong>title2</strong> (<em>str</em><em>, </em><em>optional</em>) – entry for title text after the colon. (See <a class="reference internal" href="#fmdtools.analyze.graph.label_for_entry" title="fmdtools.analyze.graph.label_for_entry"><code class="xref py py-func docutils literal notranslate"><span class="pre">label_for_entry()</span></code></a> for
@@ -3318,7 +3364,7 @@ The default is ‘’.</p></li>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>filename</strong> (<em>str</em><em>, </em><em>optional</em>) – Name to save the figure to (if saving the figure). The default is ‘’.</p></li>
 <li><p><strong>filetype</strong> (<em>str</em><em>, </em><em>optional</em>) – Type of file to safe. The default is ‘png’.</p></li>
-<li><p><strong>**kwargs</strong> (<em>kwargs</em>) – kwargs to draw</p></li>
+<li><p><strong>**kwargs</strong> (<em>kwargs</em>) – kwargs to draw.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
@@ -3452,10 +3498,8 @@ through multigraph locals to construct the containment tree.</p>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p><ul class="simple">
-<li><p><strong>lower_error</strong> (<em>float</em>)</p></li>
-<li><p><em>Lower bound of error</em></p></li>
-<li><p><strong>upper_error</strong> (<em>float</em>)</p></li>
-<li><p><em>Upper bound of error</em></p></li>
+<li><p><strong>lower_error</strong> (<em>float</em>) – Lower bound of error</p></li>
+<li><p><strong>upper_error</strong> (<em>float</em>) – Upper bound of error</p></li>
 </ul>
 </p>
 </dd>
@@ -3469,13 +3513,17 @@ through multigraph locals to construct the containment tree.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>iterator</strong> (<em>iterable</em>) – e.g. nx.graph.nodes(), nx.graph.edges()</p></li>
+<li><p><strong>iterator</strong> (<em>iterable</em>) – e.g., nx.graph.nodes(), nx.graph.edges()</p></li>
 <li><p><strong>*tags</strong> (<em>list</em>) – Tags to find in the graph object (e.g., <cite>label</cite>, <cite>status</cite>, etc.)</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p><strong>label_groups</strong> – Dict of groups of nodes/edges with given tag values. With structure:
-{(tagval1, tagval2…):[list_of_nodes]}</p>
+<dd class="field-even"><p><p><strong>label_groups</strong> –</p>
+<dl class="simple">
+<dt>Dict of groups of nodes/edges with given tag values. With structure::</dt><dd><p>{(tagval1, tagval2…):[list_of_nodes]}</p>
+</dd>
+</dl>
+</p>
 </dd>
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>dict</p>
@@ -3514,7 +3562,7 @@ through multigraph locals to construct the containment tree.</p>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>styles</strong> (<em>dict</em>) – edge_styles/node_styles</p></li>
 <li><p><strong>label</strong> (<em>tuple</em>) – tuple of tag values to create the keywords for</p></li>
-<li><p><strong>styletype</strong> (<em>&quot;node&quot;/&quot;edge&quot;</em><em>, </em><em>optional</em>) – Whether the kwargs are for a node or edge. The default is “edge”.</p></li>
+<li><p><strong>style_class</strong> (<em>&quot;node&quot;/&quot;edge&quot;</em><em>, </em><em>optional</em>) – Whether the kwargs are for a node or edge. The default is “edge”.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
@@ -3653,20 +3701,37 @@ node is the tag</p></li>
 <section id="module-fmdtools.analyze.tabulate">
 <span id="fmdtools-analyze-tabulate"></span><h2>fmdtools.analyze.tabulate<a class="headerlink" href="#module-fmdtools.analyze.tabulate" title="Permalink to this heading"></a></h2>
 <p>Description: Translates simulation outputs to pandas tables for display, export, etc.</p>
-<p>Uses methods:
-- <a class="reference internal" href="#fmdtools.analyze.tabulate.result_summary_fmea" title="fmdtools.analyze.tabulate.result_summary_fmea"><code class="xref py py-meth docutils literal notranslate"><span class="pre">result_summary_fmea()</span></code></a>: Make a table of endclass metrics, along with degraded
-functions/flows.
-- <code class="xref py py-meth docutils literal notranslate"><span class="pre">result_summary:()</span></code> Make a a table of a summary dictionary from a given model run.
-- <code class="xref py py-meth docutils literal notranslate"><span class="pre">nominal_stats()</span></code>: Makes a table of quantities of interest from endclasses from a
-nominal approach.</p>
-<p>and classes:
-- <a class="reference internal" href="#fmdtools.analyze.tabulate.FMEA" title="fmdtools.analyze.tabulate.FMEA"><code class="xref py py-class docutils literal notranslate"><span class="pre">FMEA</span></code></a>: Class defining FMEA tables (with plotting/tabular export).
-- <a class="reference internal" href="#fmdtools.analyze.tabulate.Comparison" title="fmdtools.analyze.tabulate.Comparison"><code class="xref py py-class docutils literal notranslate"><span class="pre">Comparison</span></code></a>: Class defining metric comparison (with plot/tab export).
-- <a class="reference internal" href="#fmdtools.analyze.tabulate.NominalEnvelope" title="fmdtools.analyze.tabulate.NominalEnvelope"><code class="xref py py-class docutils literal notranslate"><span class="pre">NominalEnvelope</span></code></a>: Class defining performance envelope (with plot export).</p>
+<p>Uses methods:</p>
+<ul class="simple">
+<li><p><a class="reference internal" href="#fmdtools.analyze.tabulate.result_summary_fmea" title="fmdtools.analyze.tabulate.result_summary_fmea"><code class="xref py py-func docutils literal notranslate"><span class="pre">result_summary_fmea()</span></code></a>: Make a table of endclass metrics, along with degraded functions/flows.</p></li>
+<li><p><a class="reference internal" href="#fmdtools.analyze.tabulate.result_summary" title="fmdtools.analyze.tabulate.result_summary"><code class="xref py py-func docutils literal notranslate"><span class="pre">result_summary()</span></code></a>: Make a a table of a summary dictionary from a given model run.</p></li>
+</ul>
+<p>and classes:</p>
+<ul class="simple">
+<li><p><a class="reference internal" href="#fmdtools.analyze.tabulate.FMEA" title="fmdtools.analyze.tabulate.FMEA"><code class="xref py py-class docutils literal notranslate"><span class="pre">FMEA</span></code></a>: Class defining FMEA tables (with plotting/tabular export).</p></li>
+<li><p><a class="reference internal" href="#fmdtools.analyze.tabulate.Comparison" title="fmdtools.analyze.tabulate.Comparison"><code class="xref py py-class docutils literal notranslate"><span class="pre">Comparison</span></code></a>: Class defining metric comparison (with plot/tab export).</p></li>
+<li><p><a class="reference internal" href="#fmdtools.analyze.tabulate.NominalEnvelope" title="fmdtools.analyze.tabulate.NominalEnvelope"><code class="xref py py-class docutils literal notranslate"><span class="pre">NominalEnvelope</span></code></a>: Class defining performance envelope (with plot export).</p></li>
+</ul>
 <dl class="py class">
 <dt class="sig sig-object py" id="fmdtools.analyze.tabulate.BaseComparison">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">fmdtools.analyze.tabulate.</span></span><span class="sig-name descname"><span class="pre">BaseComparison</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">res</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">scen_groups</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">metrics</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">['cost']</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">default_stat</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'expected'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">stats</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">{}</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ci_metrics</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[]</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ci_kwargs</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">{}</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.analyze.tabulate.BaseComparison" title="Permalink to this definition"></a></dt>
 <dd><p>Bases: <a class="reference internal" href="#fmdtools.analyze.tabulate.BaseTab" title="fmdtools.analyze.tabulate.BaseTab"><code class="xref py py-class docutils literal notranslate"><span class="pre">BaseTab</span></code></a></p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>res</strong> (<a class="reference internal" href="#fmdtools.analyze.result.Result" title="fmdtools.analyze.result.Result"><em>Result</em></a>) – Result with the given metrics over a number of scenarios.</p></li>
+<li><p><strong>scen_groups</strong> (<em>dict</em>) – Grouped scenarios.</p></li>
+<li><p><strong>metrics</strong> (<em>list</em>) – metrics in res to tabulate over time. Default is [‘cost’].</p></li>
+<li><p><strong>default_stat</strong> (<em>str</em>) – statistic to take for given metrics my default.
+(e.g., ‘average’, ‘percent’… see Result methods). Default is ‘expected’.</p></li>
+<li><p><strong>stats</strong> (<em>dict</em>) – Non-default statistics to take for each individual metric.
+e.g. {‘cost’: ‘average’}. Default is {}</p></li>
+<li><p><strong>ci_metrics</strong> (<em>list</em>) – Metrics to calculate a confidence interval for (using bootstrap_ci).
+Default is [].</p></li>
+<li><p><strong>ci_kwargs</strong> (<em>dict</em>) – kwargs to bootstrap_ci</p></li>
+</ul>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="py class">
@@ -3675,11 +3740,11 @@ nominal approach.</p>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">UserDict</span></code></p>
 <p>Base class for tables that extends Userdict.</p>
 <p>Userdict has structure {metric: {comp_group: value}} which enables plots/tables.</p>
-<p>Attributes
-factors : list</p>
-<blockquote>
-<div><p>List of factors in the table</p>
-</div></blockquote>
+<p>…</p>
+<dl class="simple">
+<dt>factors<span class="classifier">list</span></dt><dd><p>List of factors in the table</p>
+</dd>
+</dl>
 <dl class="py method">
 <dt class="sig sig-object py" id="fmdtools.analyze.tabulate.BaseTab.all_metrics">
 <span class="sig-name descname"><span class="pre">all_metrics</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.analyze.tabulate.BaseTab.all_metrics" title="Permalink to this definition"></a></dt>
@@ -3695,17 +3760,17 @@ factors : list</p>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>metric</strong> (<em>str</em>) – Metric to plot.</p></li>
 <li><p><strong>title</strong> (<em>str</em><em>, </em><em>optional</em>) – Title to use (if not default). The default is “”.</p></li>
-<li><p><strong>fig</strong> (<em>figure</em>) – Matplotlib figure object</p></li>
-<li><p><strong>ax</strong> (<em>axis</em>) – Corresponding matplotlib axis</p></li>
+<li><p><strong>fig</strong> (<em>figure</em>) – Matplotlib figure object.</p></li>
+<li><p><strong>ax</strong> (<em>axis</em>) – Corresponding matplotlib axis.</p></li>
 <li><p><strong>figsize</strong> (<em>tuple</em><em>, </em><em>optional</em>) – Figsize (if fig not provided). The default is (6, 4).</p></li>
 <li><p><strong>xlab</strong> (<em>str</em><em>, </em><em>optional</em>) – label for x-axis. The default is ‘’.</p></li>
 <li><p><strong>xlab_ang</strong> (<em>number</em>) – Angle to tilt the xlabel at. The default is 90.</p></li>
 <li><p><strong>ylab</strong> (<em>str</em><em>, </em><em>optional</em>) – label for y-axis. The default is ‘’.</p></li>
-<li><p><strong>color_factor</strong> – Factor to label with a color (instead of the x-axis)</p></li>
+<li><p><strong>color_factor</strong> – Factor to label with a color (instead of the x-axis).</p></li>
 <li><p><strong>pallette</strong> (<em>list</em>) – list of colors to . Defaults to matplotlib.colors.TABLEAU_COLORS.</p></li>
-<li><p><strong>suppress_legend</strong> (<em>bool</em>) – Whether to suppress the generated legend (for multiplots)</p></li>
+<li><p><strong>suppress_legend</strong> (<em>bool</em>) – Whether to suppress the generated legend (for multiplots).</p></li>
 <li><p><strong>suppress_ticklabels</strong> (<em>bool</em>) – Whether to suppress tick labels.</p></li>
-<li><p><strong>**kwargs</strong> (<em>kwargs</em>) – Keyword arguments to ax.bar</p></li>
+<li><p><strong>**kwargs</strong> (<em>kwargs</em>) – Keyword arguments to ax.bar.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
@@ -3728,9 +3793,9 @@ factors : list</p>
 <li><p><strong>*metrics</strong> (<em>str</em>) – Metrics to plot.</p></li>
 <li><p><strong>cols</strong> (<em>int</em><em>, </em><em>optional</em>) – Number of columns. The default is 2.</p></li>
 <li><p><strong>figsize</strong> (<em>str</em><em>, </em><em>optional</em>) – Figure size. The default is ‘default’.</p></li>
-<li><p><strong>titles</strong> (<em>dict</em><em>, </em><em>optional</em>) – Individual plot titles. The default is {}.</p></li>
+<li><p><strong>titles</strong> (<em>str</em>) – Individual plot titles. The default is {}.</p></li>
 <li><p><strong>legend_loc</strong> (<em>str</em>) – Plot to put the legend on. The default is -1 (the last plot).</p></li>
-<li><p><strong>title</strong> (<em>str</em>) – Overall title for the plots. the default is ‘</p></li>
+<li><p><strong>titles</strong> – Overall title for the plots. the default is {}.</p></li>
 <li><p><strong>v_padding</strong> (<em>float</em>) – Vertical padding between plots.</p></li>
 <li><p><strong>h_padding</strong> (<em>float</em>) – Horizontal padding between plots.</p></li>
 <li><p><strong>title_padding</strong> (<em>float</em>) – Padding for the overall title</p></li>
@@ -3788,11 +3853,7 @@ factors : list</p>
 <dd><p>Sort the table by its factors.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>*factor</strong> (<em>str/int</em>) – <dl class="simple">
-<dt>Name of factor(s) to sort by, in order of sorting. (non-included factors</dt><dd><p>will be sorted last)</p>
-</dd>
-</dl>
-</p>
+<dd class="field-odd"><p><strong>*factor</strong> (<em>str/int</em>) – Name of factor(s) to sort by, in order of sorting. (non-included factors will be sorted last)</p>
 </dd>
 </dl>
 </dd></dl>
@@ -3817,6 +3878,106 @@ factors : list</p>
 <dt class="sig sig-object py" id="fmdtools.analyze.tabulate.Comparison">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">fmdtools.analyze.tabulate.</span></span><span class="sig-name descname"><span class="pre">Comparison</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">res</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">samp</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">factors</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">['time']</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.analyze.tabulate.Comparison" title="Permalink to this definition"></a></dt>
 <dd><p>Bases: <a class="reference internal" href="#fmdtools.analyze.tabulate.BaseComparison" title="fmdtools.analyze.tabulate.BaseComparison"><code class="xref py py-class docutils literal notranslate"><span class="pre">BaseComparison</span></code></a></p>
+<p>Make a table of the statistic for given metrics over given factors.</p>
+<p>…</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>res</strong> (<a class="reference internal" href="#fmdtools.analyze.result.Result" title="fmdtools.analyze.result.Result"><em>Result</em></a>) – Result with the given metrics over a number of scenarios.</p></li>
+<li><p><strong>samp</strong> (<a class="reference internal" href="fmdtools.sim.html#fmdtools.sim.sample.BaseSample" title="fmdtools.sim.sample.BaseSample"><em>BaseSample</em></a>) – Sample object used to generate the scenarios</p></li>
+<li><p><strong>factors</strong> (<em>list</em>) – Factors (Scenario properties e.g., ‘name’, ‘time’, ‘var’) in samp to take
+statistic over. Default is [‘time’]</p></li>
+<li><p><strong>**kwargs</strong> (<em>kwargs</em>) – keyword arguments to BaseComparison</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>met_table</strong> – pandas dataframe with the statistic of the metric over the corresponding
+set of scenarios for the given factor level.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>dataframe</p>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">fmdtools.sim.sample</span> <span class="kn">import</span> <span class="n">exp_ps</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">fmdtools.analyze.result</span> <span class="kn">import</span> <span class="n">Result</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">res</span> <span class="o">=</span> <span class="n">Result</span><span class="p">({</span><span class="n">k</span><span class="o">.</span><span class="n">name</span><span class="p">:</span> <span class="n">Result</span><span class="p">({</span><span class="s1">&#39;a&#39;</span><span class="p">:</span> <span class="n">k</span><span class="o">.</span><span class="n">p</span><span class="p">[</span><span class="s1">&#39;x&#39;</span><span class="p">]</span><span class="o">**</span><span class="mi">2</span><span class="p">,</span> <span class="s2">&quot;b&quot;</span><span class="p">:</span> <span class="n">k</span><span class="o">.</span><span class="n">p</span><span class="p">[</span><span class="s1">&#39;y&#39;</span><span class="p">]</span><span class="o">*</span><span class="n">k</span><span class="o">.</span><span class="n">p</span><span class="p">[</span><span class="s1">&#39;x&#39;</span><span class="p">],</span> <span class="s1">&#39;rate&#39;</span><span class="p">:</span><span class="n">k</span><span class="o">.</span><span class="n">rate</span><span class="p">})</span> <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">exp_ps</span><span class="o">.</span><span class="n">scenarios</span><span class="p">())})</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">res</span> <span class="o">=</span> <span class="n">res</span><span class="o">.</span><span class="n">flatten</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>example 1: checking the x = x^2 accross variables</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">comp</span> <span class="o">=</span> <span class="n">Comparison</span><span class="p">(</span><span class="n">res</span><span class="p">,</span> <span class="n">exp_ps</span><span class="p">,</span> <span class="n">metrics</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;a&#39;</span><span class="p">],</span> <span class="n">factors</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;p.x&#39;</span><span class="p">],</span> <span class="n">default_stat</span><span class="o">=</span><span class="s1">&#39;average&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">comp</span><span class="o">.</span><span class="n">sort_by_factors</span><span class="p">(</span><span class="s2">&quot;p.x&quot;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">comp</span>
+<span class="go">{&#39;a&#39;: {(0,): 0.0, (1,): 1.0, (2,): 4.0, (3,): 9.0, (4,): 16.0, (5,): 25.0, (6,): 36.0, (7,): 49.0, (8,): 64.0, (9,): 81.0, (10,): 100.0}}</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">comp</span><span class="o">.</span><span class="n">as_table</span><span class="p">()</span>
+<span class="go">        a</span>
+<span class="go">10  100.0</span>
+<span class="go">9    81.0</span>
+<span class="go">8    64.0</span>
+<span class="go">7    49.0</span>
+<span class="go">6    36.0</span>
+<span class="go">5    25.0</span>
+<span class="go">4    16.0</span>
+<span class="go">3     9.0</span>
+<span class="go">2     4.0</span>
+<span class="go">1     1.0</span>
+<span class="go">0     0.0</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">comp</span><span class="o">.</span><span class="n">as_plot</span><span class="p">(</span><span class="s2">&quot;a&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>example 2: viewing interaction between x and y:</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">comp</span> <span class="o">=</span> <span class="n">Comparison</span><span class="p">(</span><span class="n">res</span><span class="p">,</span> <span class="n">exp_ps</span><span class="p">,</span> <span class="n">metrics</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;b&#39;</span><span class="p">],</span> <span class="n">factors</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;p.x&#39;</span><span class="p">,</span> <span class="s1">&#39;p.y&#39;</span><span class="p">],</span> <span class="n">default_stat</span><span class="o">=</span><span class="s1">&#39;average&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">comp</span><span class="o">.</span><span class="n">sort_by_factors</span><span class="p">(</span><span class="s2">&quot;p.x&quot;</span><span class="p">,</span> <span class="s2">&quot;p.y&quot;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">comp</span><span class="o">.</span><span class="n">as_table</span><span class="p">(</span><span class="n">sort</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+<span class="go">           b</span>
+<span class="go">0  1.0   0.0</span>
+<span class="go">   2.0   0.0</span>
+<span class="go">   3.0   0.0</span>
+<span class="go">   4.0   0.0</span>
+<span class="go">1  1.0   1.0</span>
+<span class="go">   2.0   2.0</span>
+<span class="go">   3.0   3.0</span>
+<span class="go">   4.0   4.0</span>
+<span class="go">2  1.0   2.0</span>
+<span class="go">   2.0   4.0</span>
+<span class="go">   3.0   6.0</span>
+<span class="go">   4.0   8.0</span>
+<span class="go">3  1.0   3.0</span>
+<span class="go">   2.0   6.0</span>
+<span class="go">   3.0   9.0</span>
+<span class="go">   4.0  12.0</span>
+<span class="go">4  1.0   4.0</span>
+<span class="go">   2.0   8.0</span>
+<span class="go">   3.0  12.0</span>
+<span class="go">   4.0  16.0</span>
+<span class="go">5  1.0   5.0</span>
+<span class="go">   2.0  10.0</span>
+<span class="go">   3.0  15.0</span>
+<span class="go">   4.0  20.0</span>
+<span class="go">6  1.0   6.0</span>
+<span class="go">   2.0  12.0</span>
+<span class="go">   3.0  18.0</span>
+<span class="go">   4.0  24.0</span>
+<span class="go">7  1.0   7.0</span>
+<span class="go">   2.0  14.0</span>
+<span class="go">   3.0  21.0</span>
+<span class="go">   4.0  28.0</span>
+<span class="go">8  1.0   8.0</span>
+<span class="go">   2.0  16.0</span>
+<span class="go">   3.0  24.0</span>
+<span class="go">   4.0  32.0</span>
+<span class="go">9  1.0   9.0</span>
+<span class="go">   2.0  18.0</span>
+<span class="go">   3.0  27.0</span>
+<span class="go">   4.0  36.0</span>
+<span class="go">10 1.0  10.0</span>
+<span class="go">   2.0  20.0</span>
+<span class="go">   3.0  30.0</span>
+<span class="go">   4.0  40.0</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">comp</span><span class="o">.</span><span class="n">as_plot</span><span class="p">(</span><span class="s2">&quot;b&quot;</span><span class="p">,</span> <span class="n">color_factor</span><span class="o">=</span><span class="s2">&quot;p.y&quot;</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">4</span><span class="p">))</span>
+</pre></div>
+</div>
 </dd></dl>
 
 <dl class="py class">
@@ -3829,6 +3990,29 @@ factors : list</p>
 <dt class="sig sig-object py" id="fmdtools.analyze.tabulate.NestedComparison">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">fmdtools.analyze.tabulate.</span></span><span class="sig-name descname"><span class="pre">NestedComparison</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">res</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">samp</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">samp_factors</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">samps</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">samps_factors</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.analyze.tabulate.NestedComparison" title="Permalink to this definition"></a></dt>
 <dd><p>Bases: <a class="reference internal" href="#fmdtools.analyze.tabulate.BaseComparison" title="fmdtools.analyze.tabulate.BaseComparison"><code class="xref py py-class docutils literal notranslate"><span class="pre">BaseComparison</span></code></a></p>
+<p>Make a nested table of the statistic for samples taken in other samples.</p>
+<p>…</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>res</strong> (<a class="reference internal" href="#fmdtools.analyze.result.Result" title="fmdtools.analyze.result.Result"><em>Result</em></a>) – Result with the given metrics over a number of scenarios.</p></li>
+<li><p><strong>samp</strong> (<a class="reference internal" href="fmdtools.sim.html#fmdtools.sim.sample.BaseSample" title="fmdtools.sim.sample.BaseSample"><em>BaseSample</em></a>) – Sample object used to generate the scenarios</p></li>
+<li><p><strong>samp_factors</strong> (<em>list</em>) – Factors (Scenario properties e.g., ‘name’, ‘time’, ‘var’) in samp to take
+statistic over. Default is [‘time’]</p></li>
+<li><p><strong>samps</strong> (<em>dict</em>) – Sample objects used to generate the scenarios. {‘name’: samp}</p></li>
+<li><p><strong>samps_factors</strong> (<em>list</em>) – Factors (Scenario properties e.g., ‘name’, ‘time’, ‘var’) in samp to take
+statistic over in the apps. Default is [‘time’]</p></li>
+<li><p><strong>**kwargs</strong> (<em>kwargs</em>) – keyword arguments to BaseComparison</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>met_table</strong> – pandas dataframe with the statistic of the metric over the corresponding
+set of scenarios for the given factor level.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>dataframe</p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="py class">
@@ -3836,6 +4020,7 @@ factors : list</p>
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">fmdtools.analyze.tabulate.</span></span><span class="sig-name descname"><span class="pre">NominalEnvelope</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ps</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">res</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">metric</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">*params</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">func=&lt;function</span> <span class="pre">NominalEnvelope.&lt;lambda&gt;&gt;</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.analyze.tabulate.NominalEnvelope" title="Permalink to this definition"></a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
 <p>Class defining nominal performance envelope.</p>
+<p>…</p>
 <dl class="py attribute">
 <dt class="sig sig-object py" id="fmdtools.analyze.tabulate.NominalEnvelope.params">
 <span class="sig-name descname"><span class="pre">params</span></span><a class="headerlink" href="#fmdtools.analyze.tabulate.NominalEnvelope.params" title="Permalink to this definition"></a></dt>
@@ -3869,6 +4054,20 @@ factors : list</p>
 </dl>
 </dd></dl>
 
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>ps</strong> (<a class="reference internal" href="fmdtools.sim.html#fmdtools.sim.sample.ParameterSample" title="fmdtools.sim.sample.ParameterSample"><em>ParameterSample</em></a>) – ParameterSample sample approach simulated in the model.</p></li>
+<li><p><strong>res</strong> (<a class="reference internal" href="#fmdtools.analyze.result.Result" title="fmdtools.analyze.result.Result"><em>Result</em></a>) – Result dict for the set of simulations produced by running the model over ps</p></li>
+<li><p><strong>metric</strong> (<em>str</em>) – Value to get from endclasses for the scenario(s). The default is ‘cost’.</p></li>
+<li><p><strong>x_param</strong> (<em>str</em>) – Parameter range desired to visualize in the operational envelope. Can be any
+property that changes over the nomapp
+(e.g., <cite>r.seed</cite>, <cite>inputparam.x_in</cite>, <cite>p.x</cite>…)</p></li>
+<li><p><strong>func</strong> (<em>method</em><em>, </em><em>optional</em>) – Function to classify metric values as “nominal”.
+Default is lambda x: x == 0.0</p></li>
+</ul>
+</dd>
+</dl>
 <dl class="py method">
 <dt class="sig sig-object py" id="fmdtools.analyze.tabulate.NominalEnvelope.as_plot">
 <span class="sig-name descname"><span class="pre">as_plot</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.analyze.tabulate.NominalEnvelope.as_plot" title="Permalink to this definition"></a></dt>
@@ -3994,12 +4193,11 @@ factors : list</p>
 <ul class="simple">
 <li><p><a class="reference internal" href="#fmdtools.analyze.phases.from_hist" title="fmdtools.analyze.phases.from_hist"><code class="xref py py-func docutils literal notranslate"><span class="pre">from_hist()</span></code></a>: Creates dict of PhaseMaps based on mode progression in history.</p></li>
 <li><p><a class="reference internal" href="#fmdtools.analyze.phases.phaseplot" title="fmdtools.analyze.phases.phaseplot"><code class="xref py py-func docutils literal notranslate"><span class="pre">phaseplot()</span></code></a>: Plots the progression of phases over time.</p></li>
-<li><p>:func:<a href="#id33"><span class="problematic" id="id34">`</span></a>samplemetric</p></li>
 <li><p><a class="reference internal" href="#fmdtools.analyze.phases.samplemetric" title="fmdtools.analyze.phases.samplemetric"><code class="xref py py-func docutils literal notranslate"><span class="pre">samplemetric()</span></code></a>: plots a metric for a single fault sampled by a SampleApproach
-over time with rates</p></li>
+over time with rates/</p></li>
 <li><p><a class="reference internal" href="#fmdtools.analyze.phases.samplemetrics" title="fmdtools.analyze.phases.samplemetrics"><code class="xref py py-func docutils literal notranslate"><span class="pre">samplemetrics()</span></code></a>: plots a metric for a set of faults sampled by a SampleApproach
 over time with rates on separate plots</p></li>
-<li><p><code class="xref py py-func docutils literal notranslate"><span class="pre">find_overlap_n()</span></code>: Find overlap between given intervals.</p></li>
+<li><p><a class="reference internal" href="#fmdtools.analyze.phases.find_interval_overlap" title="fmdtools.analyze.phases.find_interval_overlap"><code class="xref py py-func docutils literal notranslate"><span class="pre">find_interval_overlap()</span></code></a>: Find overlap between given intervals.</p></li>
 <li><p><a class="reference internal" href="#fmdtools.analyze.phases.gen_interval_times" title="fmdtools.analyze.phases.gen_interval_times"><code class="xref py py-func docutils literal notranslate"><span class="pre">gen_interval_times()</span></code></a>: Creates times in a given interval.</p></li>
 </ul>
 <dl class="py class">
@@ -4015,10 +4213,13 @@ over time with rates on separate plots</p></li>
 factor defined by the dict in fault.phases.
 Has structure {‘phase1’: [starttime, endtime]}. The default is {}.
 May also provide tuple with structure ((‘phase1’, starttime, endtime))</p></li>
-<li><p><strong>modephases</strong> (<em>dict</em><em>, </em><em>optional</em>) – Modes that the phases occur in. Used to determine opportunity vector defined
+<li><p><strong>modephases</strong> (<em>dict</em><em>, </em><em>optional</em>) – <p>Modes that the phases occur in. Used to determine opportunity vector defined
 by the dict in fault.phases (if .phases maps to modes of occurence an not
 phases).
-Has structure {‘on’: {‘on1’, ‘on2’, ‘on3’}}. The default is {}.</p></li>
+Has structure::
+{‘on’: {‘on1’, ‘on2’, ‘on3’}}</p>
+<p>The default is {}.</p>
+</p></li>
 <li><p><strong>dt</strong> (<em>float</em>) – Timestep defining phases.</p></li>
 </ul>
 </dd>
@@ -4029,12 +4230,7 @@ Has structure {‘on’: {‘on1’, ‘on2’, ‘on3’}}. The default is {}.<
 <dd><p>Calculate the amount of time in a mode, given that mode maps to multiple phases.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>modephase</strong> (<em>str</em>) – Name of the mode to check.</p></li>
-<li><p><strong>phases</strong> (<em>dict</em>) – Dict mapping phases to times.</p></li>
-<li><p><strong>modephases</strong> (<em>dict</em>) – Dict mapping modes to phases</p></li>
-<li><p><strong>dt</strong> (<em>float</em><em>, </em><em>optional</em>) – Timestep. The default is 1.0.</p></li>
-</ul>
+<dd class="field-odd"><p><strong>modephases</strong> (<em>dict</em>) – Dict mapping modes to phases</p>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p><strong>modephase_time</strong> – Amount of time in the modephase</p>
@@ -4087,10 +4283,10 @@ Has structure {‘on’: {‘on1’, ‘on2’, ‘on3’}}. The default is {}.<
 <dd class="field-odd"><p><strong>*times</strong> (<em>float</em>) – Times to check</p>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p><strong>phase_times</strong> – DESCRIPTION.</p>
+<dd class="field-even"><p><strong>phase_times</strong> – the number of time-steps in each phase</p>
 </dd>
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p>TYPE</p>
+<dd class="field-odd"><p>dict</p>
 </dd>
 </dl>
 <p class="rubric">Examples</p>
@@ -4215,7 +4411,12 @@ Has structure {‘on’: {‘on1’, ‘on2’, ‘on3’}}. The default is {}.<
 is used.</p>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p><strong>sampletimes</strong> – dict of times to sample with structure {‘phase1’: [t0, t1, t2], …}</p>
+<dd class="field-even"><p><p><strong>sampletimes</strong> –</p>
+<dl class="simple">
+<dt>dict of times to sample with structure::</dt><dd><p>{‘phase1’: [t0, t1, t2], …}</p>
+</dd>
+</dl>
+</p>
 </dd>
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>dict</p>
@@ -4325,7 +4526,7 @@ phases for future sampling.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>mdlphases</strong> (<em>dict</em><em> or </em><a class="reference internal" href="#fmdtools.analyze.phases.PhaseMap" title="fmdtools.analyze.phases.PhaseMap"><em>PhaseMap</em></a>) – Dict of phasemaps that the functions of the model progresses through
+<li><p><strong>phasemaps</strong> (<em>dict</em><em> or </em><a class="reference internal" href="#fmdtools.analyze.phases.PhaseMap" title="fmdtools.analyze.phases.PhaseMap"><em>PhaseMap</em></a>) – Dict of phasemaps that the functions of the model progresses through
 (e.g. from phases.from_hist).</p></li>
 <li><p><strong>modephases</strong> (<em>dict</em><em>, </em><em>optional</em>) – dictionary that maps the phases to operational modes, if it is desired to track
 the progression through modes</p></li>
@@ -4334,11 +4535,12 @@ function phases</p></li>
 <li><p><strong>singleplot</strong> (<em>bool</em><em>, </em><em>optional</em>) – Whether the functions’ progressions through phases are plotted on the same plot
 or on different plots.
 The default is True.</p></li>
-<li><p><strong>phase_ticks</strong> (<em>'std'/'phases'/'both'</em>) – x-ticks to use (standard, at the edge of phases, or both). Default is ‘both’</p></li>
-<li><p><strong>figsize</strong> (<em>tuple</em><em> (</em><em>float</em><em>,</em><em>float</em><em>)</em>) – x-y size for the figure. The default is ‘default’, which dymanically gives 2 for
+<li><p><strong>phase_ticks</strong> (<em>'std'/'phases'/'both'</em><em>, </em><em>optional</em>) – x-ticks to use (standard, at the edge of phases, or both). Default is ‘both’</p></li>
+<li><p><strong>figsize</strong> (<em>tuple</em><em> (</em><em>float</em><em>,</em><em>float</em><em>)</em><em>, </em><em>optional</em>) – x-y size for the figure. The default is ‘default’, which dymanically gives 2 for
 each row</p></li>
-<li><p><strong>v_padding</strong> (<em>float</em>) – vertical padding between subplots as a fraction of axis height</p></li>
+<li><p><strong>v_padding</strong> (<em>float</em><em>, </em><em>optional</em>) – vertical padding between subplots as a fraction of axis height</p></li>
 <li><p><strong>title_padding</strong> (<em>float</em>) – padding for title as a fraction of figure height</p></li>
+<li><p><strong>title</strong> (<em>str</em><em>, </em><em>optional</em>) – figure title. Default is “Progression of model through operational phases”</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
@@ -4359,16 +4561,16 @@ in the app sampleapproach</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>app</strong> (<em>FaultSamp</em>) – Fault sampledefining the underlying samples to take with phasemap</p></li>
+<li><p><strong>faultsamp</strong> (<em>FaultSamp</em>) – Fault sample defining the underlying samples to take with phasemap</p></li>
 <li><p><strong>endclasses</strong> (<a class="reference internal" href="#fmdtools.analyze.result.Result" title="fmdtools.analyze.result.Result"><em>Result</em></a>) – A Result with the end classification of each fault (metrics, etc)</p></li>
-<li><p><strong>metric</strong> (<em>str</em>) – Metric to plot. The default is ‘cost’</p></li>
-<li><p><strong>rad</strong> (<em>str</em>) – Metric to plot as a radius at each sample. Default is ‘rate’.</p></li>
-<li><p><strong>rad_scale</strong> (<em>float</em>) – Scale factor for radius. Default is 0.01, which makes the max rad size 1/100 of
+<li><p><strong>metric</strong> (<em>str</em><em>, </em><em>optional</em>) – Metric to plot. The default is ‘cost’</p></li>
+<li><p><strong>rad</strong> (<em>str</em><em>, </em><em>optional</em>) – Metric to plot as a radius at each sample. Default is ‘rate’.</p></li>
+<li><p><strong>rad_scale</strong> (<em>float</em><em>, </em><em>optional</em>) – Scale factor for radius. Default is 0.01, which makes the max rad size 1/100 of
 the max metric value.</p></li>
-<li><p><strong>label_rad</strong> (<em>str</em>) – Format string for the radius (if any). Default is “{:.2e}”.</p></li>
-<li><p><strong>line</strong> (<em>str</em><em> (</em><em>'stem'</em><em> or </em><em>'line'</em><em>)</em>) – Whether to plot metrics as a stem or line plot</p></li>
-<li><p><strong>title</strong> (<em>str</em>) – Title for the plot</p></li>
-<li><p><strong>ylims</strong> (<em>tuple</em>) – y-limits for plot</p></li>
+<li><p><strong>label_rad</strong> (<em>str</em><em>, </em><em>optional</em>) – Format string for the radius (if any). Default is “{:.2e}”.</p></li>
+<li><p><strong>line</strong> (<em>str</em><em> (</em><em>'stem'</em><em> or </em><em>'line'</em><em>)</em><em>, </em><em>optional</em>) – Whether to plot metrics as a stem or line plot</p></li>
+<li><p><strong>title</strong> (<em>str</em><em>, </em><em>optional</em>) – Title for the plot</p></li>
+<li><p><strong>ylims</strong> (<em>tuple</em><em>, </em><em>optional</em>) – y-limits for plot</p></li>
 <li><p><strong>**scen_kwargs</strong> (<em>kwargs</em>) – Arguments to FaultSample.get_scens (e.g., modes etc to sample).</p></li>
 </ul>
 </dd>
@@ -4391,7 +4593,6 @@ approach app.</p>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>app</strong> (<em>sampleapproach</em>) – The sample approach used to run the list of faults</p></li>
 <li><p><strong>endclasses</strong> (<a class="reference internal" href="#fmdtools.analyze.result.Result" title="fmdtools.analyze.result.Result"><em>Result</em></a>) – Results over the scenarios defined in app.</p></li>
-<li><p><strong>title</strong> (<em>str</em>) – Optional title.</p></li>
 <li><p><strong>**kwargs</strong> (<em>kwargs</em>) – kwargs to samplemetric</p></li>
 </ul>
 </dd>

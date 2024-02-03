@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Synthetic Mode Generation &mdash; fmdtools 2.0-rc-1 documentation</title>
+  <title>Synthetic Mode Generation &mdash; fmdtools 2.0-rc-2 documentation</title>
       <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
       <link rel="stylesheet" href="../../../_static/nbsphinx-code-cells.css" type="text/css" />
@@ -71,14 +71,14 @@
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="../../../docs/Development%20Guide.html#intro-to-fmdtools">Intro to fmdtools</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="../../../docs/Intro_to_fmdtools.html">Intro to resilience modelling, simulation, and visualization in Python with fmdtools.</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../docs/Intro_to_fmdtools.html">Intro to resilience modeling, simulation, and visualization in Python with fmdtools.</a><ul>
 <li class="toctree-l4"><a class="reference internal" href="../../../docs/Intro_to_fmdtools.html#author-daniel-hulse">Author: Daniel Hulse</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../../docs/Intro_to_fmdtools.html#version-2-0-rc-1">Version: 2.0-rc-1</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../docs/Intro_to_fmdtools.html#version-2-0-rc-2">Version: 2.0-rc-2</a></li>
 </ul>
 </li>
 <li class="toctree-l3"><a class="reference internal" href="../../../docs/Intro_to_fmdtools.html#overview">Overview</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../docs/Intro_to_fmdtools.html#prerequisites">Prerequisites</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../../../docs/Intro_to_fmdtools.html#motivation-modelling-system-resilience">Motivation: Modelling System Resilience</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../docs/Intro_to_fmdtools.html#motivation-modeling-system-resilience">Motivation: Modeling System Resilience</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../docs/Intro_to_fmdtools.html#why-is-resilience-important">Why is Resilience Important?</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../docs/Intro_to_fmdtools.html#enabling-proactive-design-process">Enabling proactive design process</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../docs/Intro_to_fmdtools.html#why-fmdtools-possible-competitors">Why fmdtools? Possible Competitors:</a></li>
@@ -291,6 +291,18 @@
 </li>
 </ul>
 </li>
+<li class="toctree-l2"><a class="reference internal" href="../../Examples.html#taxiway">Taxiway</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../taxiway/Paper_Notebook.html">Taxiway Model Overview</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../taxiway/Paper_Notebook.html#Model-Simulation">Model Simulation</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../../taxiway/Paper_Notebook.html#Fault-Simulation-and-Analysis">Fault Simulation and Analysis</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../taxiway/Paper_Notebook.html#Perception-Fault---AC-Vision-Fault">Perception Fault - AC Vision Fault</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../taxiway/Paper_Notebook.html#Communications-Fault---Poor-land-command-by-ATC">Communications Fault - Poor land command by ATC</a></li>
+</ul>
+</li>
+</ul>
+</li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../../../docs/Glossary.html">Glossary</a></li>
@@ -313,13 +325,11 @@
 </li>
 <li class="toctree-l3"><a class="reference internal" href="../../../docs/fmdtools.define.container.html">fmdtools.define.container</a><ul>
 <li class="toctree-l4"><a class="reference internal" href="../../../docs/fmdtools.define.container.html#fmdtools-define-container-base">fmdtools.define.container.base</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../../docs/fmdtools.define.container.html#module-0">fmdtools.define.container.mode</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../docs/fmdtools.define.container.html#module-fmdtools.define.container.mode">fmdtools.define.container.mode</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../docs/fmdtools.define.container.html#module-fmdtools.define.container.state">fmdtools.define.container.state</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../docs/fmdtools.define.container.html#fmdtools-define-container-parameter">fmdtools.define.container.parameter</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../docs/fmdtools.define.container.html#module-fmdtools.define.container.rand">fmdtools.define.container.rand</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../docs/fmdtools.define.container.html#module-fmdtools.define.container.time">fmdtools.define.container.time</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../../docs/fmdtools.define.container.html#fmdtools-define-container-geom">fmdtools.define.container.geom</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../../docs/fmdtools.define.container.html#fmdtools-define-container-coords">fmdtools.define.container.coords</a></li>
 </ul>
 </li>
 <li class="toctree-l3"><a class="reference internal" href="../../../docs/fmdtools.define.flow.html">fmdtools.define.flow</a><ul>
@@ -387,12 +397,11 @@
   <section id="Synthetic-Mode-Generation">
 <h1>Synthetic Mode Generation<a class="headerlink" href="#Synthetic-Mode-Generation" title="Permalink to this heading"></a></h1>
 <p>This notebook shows how modes can be elaborated from health states in an fmdtools model.</p>
-<div class="nbinput docutils container">
+<div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[1]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">fmdtools.sim.approach</span> <span class="kn">import</span> <span class="n">SampleApproach</span>
-<span class="kn">import</span> <span class="nn">fmdtools.analyze</span> <span class="k">as</span> <span class="nn">an</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">fmdtools.sim.sample</span> <span class="kn">import</span> <span class="n">SampleApproach</span><span class="p">,</span> <span class="n">FaultDomain</span><span class="p">,</span> <span class="n">FaultSample</span>
 <span class="kn">import</span> <span class="nn">fmdtools.sim.propagate</span> <span class="k">as</span> <span class="nn">prop</span>
 <span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">rcParams</span><span class="p">[</span><span class="s1">&#39;pdf.fonttype&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="mi">42</span>
@@ -402,39 +411,33 @@
 </pre></div>
 </div>
 </div>
-<div class="nboutput nblast docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area docutils container">
-<div class="highlight"><pre>
-<span class="ansi-red-intense-fg ansi-bold">---------------------------------------------------------------------------</span>
-<span class="ansi-red-intense-fg ansi-bold">ModuleNotFoundError</span>                       Traceback (most recent call last)
-Cell <span class="ansi-green-intense-fg ansi-bold">In[1], line 1</span>
-<span class="ansi-green-intense-fg ansi-bold">----&gt; 1</span> <span class="ansi-bold" style="color: rgb(0,135,0)">from</span> <span class="ansi-bold" style="color: rgb(0,0,255)">fmdtools</span><span class="ansi-bold" style="color: rgb(0,0,255)">.</span><span class="ansi-bold" style="color: rgb(0,0,255)">sim</span><span class="ansi-bold" style="color: rgb(0,0,255)">.</span><span class="ansi-bold" style="color: rgb(0,0,255)">approach</span> <span class="ansi-bold" style="color: rgb(0,135,0)">import</span> SampleApproach
-<span class="ansi-green-fg">      2</span> <span class="ansi-bold" style="color: rgb(0,135,0)">import</span> <span class="ansi-bold" style="color: rgb(0,0,255)">fmdtools</span><span class="ansi-bold" style="color: rgb(0,0,255)">.</span><span class="ansi-bold" style="color: rgb(0,0,255)">analyze</span> <span class="ansi-bold" style="color: rgb(0,135,0)">as</span> <span class="ansi-bold" style="color: rgb(0,0,255)">an</span>
-<span class="ansi-green-fg">      3</span> <span class="ansi-bold" style="color: rgb(0,135,0)">import</span> <span class="ansi-bold" style="color: rgb(0,0,255)">fmdtools</span><span class="ansi-bold" style="color: rgb(0,0,255)">.</span><span class="ansi-bold" style="color: rgb(0,0,255)">sim</span><span class="ansi-bold" style="color: rgb(0,0,255)">.</span><span class="ansi-bold" style="color: rgb(0,0,255)">propagate</span> <span class="ansi-bold" style="color: rgb(0,135,0)">as</span> <span class="ansi-bold" style="color: rgb(0,0,255)">prop</span>
-
-<span class="ansi-red-intense-fg ansi-bold">ModuleNotFoundError</span>: No module named &#39;fmdtools.sim.approach&#39;
-</pre></div></div>
-</div>
 <p>The Rover model is in defined rover_model.py, along with a few analysis methods.</p>
 <div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[2]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">rover_model</span> <span class="kn">import</span> <span class="n">Rover</span><span class="p">,</span> <span class="n">gen_params</span><span class="p">,</span> <span class="n">plot_map</span><span class="p">,</span> <span class="n">plot_trajectories</span><span class="p">,</span> <span class="n">compare_trajectories</span><span class="p">,</span> <span class="n">plot_course</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">examples.rover.rover_model</span> <span class="kn">import</span> <span class="n">Rover</span><span class="p">,</span> <span class="n">RoverParam</span>
 </pre></div>
 </div>
 </div>
 <p>Below we compare the space of hazards revealed by querying the model with: - identifed modes (modes that we identify up-front) - elaborated modes (modes generated by lists of forseeable parameter values) - randomly-generated modes (modes generated by randomly sampling ranges of parameter values)</p>
-<div class="nbinput nblast docutils container">
+<div class="nbinput docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[3]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">mdl_illust</span> <span class="o">=</span> <span class="n">Rover</span><span class="p">()</span>
-<span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">an</span><span class="o">.</span><span class="n">graph</span><span class="o">.</span><span class="n">show</span><span class="p">(</span><span class="n">mdl_illust</span><span class="p">)</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">fmdtools.analyze.graph</span> <span class="kn">import</span> <span class="n">FunctionArchitectureFxnGraph</span>
+<span class="n">mdl_illust</span> <span class="o">=</span> <span class="n">Rover</span><span class="p">()</span>
+<span class="n">mg</span> <span class="o">=</span> <span class="n">FunctionArchitectureFxnGraph</span><span class="p">(</span><span class="n">mdl_illust</span><span class="p">)</span>
+<span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">mg</span><span class="o">.</span><span class="n">draw</span><span class="p">()</span>
 <span class="n">colors</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;goldenrod&quot;</span><span class="p">,</span> <span class="s2">&quot;magenta&quot;</span><span class="p">,</span> <span class="s2">&quot;blue&quot;</span><span class="p">]</span>
-</pre></div>
+<br/><br/></pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../../../_images/examples_rover_fault_sampling_Rover_Mode_Notebook_5_0.png" src="../../../_images/examples_rover_fault_sampling_Rover_Mode_Notebook_5_0.png" />
 </div>
 </div>
 <div class="nbinput nblast docutils container">
@@ -445,13 +448,21 @@ Cell <span class="ansi-green-intense-fg ansi-bold">In[1], line 1</span>
 </pre></div>
 </div>
 </div>
-<div class="nbinput nblast docutils container">
+<div class="nbinput docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[5]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">fig</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="s2">&quot;rover_structure.eps&quot;</span><span class="p">,</span> <span class="nb">format</span><span class="o">=</span><span class="s2">&quot;eps&quot;</span><span class="p">,</span> <span class="n">bbox_inches</span> <span class="o">=</span> <span class="s1">&#39;tight&#39;</span><span class="p">,</span> <span class="n">pad_inches</span> <span class="o">=</span> <span class="mi">0</span><span class="p">)</span>
 </pre></div>
 </div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area stderr docutils container">
+<div class="highlight"><pre>
+The PostScript backend does not support transparency; partially transparent artists will be rendered opaque.
+</pre></div></div>
 </div>
 <div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[6]:
@@ -460,14 +471,14 @@ Cell <span class="ansi-green-intense-fg ansi-bold">In[1], line 1</span>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">mpl_toolkits.mplot3d</span> <span class="kn">import</span> <span class="n">proj3d</span>
 <span class="k">def</span> <span class="nf">plot_hstate_modes</span><span class="p">(</span><span class="n">mdl</span><span class="p">,</span> <span class="n">el_size</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">id_size</span><span class="o">=</span><span class="mi">30</span><span class="p">,</span> <span class="n">nom_size</span><span class="o">=</span><span class="mi">50</span><span class="p">,</span> <span class="n">el_alpha</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span> <span class="n">mdl_range</span><span class="o">=</span><span class="p">[],</span>
                       <span class="n">range_alpha</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span> <span class="n">range_size</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">title</span> <span class="o">=</span> <span class="s2">&quot;Space of Fault Modes&quot;</span><span class="p">,</span> <span class="n">colors</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;yellow&quot;</span><span class="p">,</span> <span class="s2">&quot;orange&quot;</span><span class="p">,</span> <span class="s2">&quot;red&quot;</span><span class="p">,</span> <span class="s2">&quot;blue&quot;</span><span class="p">]):</span>
-    <span class="n">x</span><span class="o">=</span> <span class="p">[</span><span class="n">hstates</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;friction&#39;</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">)</span> <span class="k">for</span> <span class="n">mode</span><span class="p">,</span> <span class="n">hstates</span> <span class="ow">in</span> <span class="n">mdl</span><span class="o">.</span><span class="n">fxns</span><span class="p">[</span><span class="s1">&#39;Drive&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">mode_state_dict</span><span class="o">.</span><span class="n">items</span><span class="p">()</span>  <span class="k">if</span> <span class="n">mode</span><span class="p">[:</span><span class="mi">5</span><span class="p">]</span><span class="o">==</span><span class="s1">&#39;hmode&#39;</span><span class="p">]</span>
-    <span class="n">y</span><span class="o">=</span> <span class="p">[</span><span class="n">hstates</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;transfer&#39;</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">)</span> <span class="k">for</span> <span class="n">mode</span><span class="p">,</span> <span class="n">hstates</span> <span class="ow">in</span> <span class="n">mdl</span><span class="o">.</span><span class="n">fxns</span><span class="p">[</span><span class="s1">&#39;Drive&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">mode_state_dict</span><span class="o">.</span><span class="n">items</span><span class="p">()</span>  <span class="k">if</span> <span class="n">mode</span><span class="p">[:</span><span class="mi">5</span><span class="p">]</span><span class="o">==</span><span class="s1">&#39;hmode&#39;</span><span class="p">]</span>
-    <span class="n">z</span><span class="o">=</span> <span class="p">[</span><span class="n">hstates</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;drift&#39;</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">)</span> <span class="k">for</span> <span class="n">mode</span><span class="p">,</span> <span class="n">hstates</span> <span class="ow">in</span> <span class="n">mdl</span><span class="o">.</span><span class="n">fxns</span><span class="p">[</span><span class="s1">&#39;Drive&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">mode_state_dict</span><span class="o">.</span><span class="n">items</span><span class="p">()</span>  <span class="k">if</span> <span class="n">mode</span><span class="p">[:</span><span class="mi">5</span><span class="p">]</span><span class="o">==</span><span class="s1">&#39;hmode&#39;</span><span class="p">]</span>
+    <span class="n">x</span><span class="o">=</span> <span class="p">[</span><span class="n">hstates</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;friction&#39;</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">)</span> <span class="k">for</span> <span class="n">mode</span><span class="p">,</span> <span class="n">hstates</span> <span class="ow">in</span> <span class="n">mdl</span><span class="o">.</span><span class="n">fxns</span><span class="p">[</span><span class="s1">&#39;drive&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">m</span><span class="o">.</span><span class="n">mode_state_dict</span><span class="o">.</span><span class="n">items</span><span class="p">()</span>  <span class="k">if</span> <span class="n">mode</span><span class="p">[:</span><span class="mi">5</span><span class="p">]</span><span class="o">==</span><span class="s1">&#39;hmode&#39;</span><span class="p">]</span>
+    <span class="n">y</span><span class="o">=</span> <span class="p">[</span><span class="n">hstates</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;transfer&#39;</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">)</span> <span class="k">for</span> <span class="n">mode</span><span class="p">,</span> <span class="n">hstates</span> <span class="ow">in</span> <span class="n">mdl</span><span class="o">.</span><span class="n">fxns</span><span class="p">[</span><span class="s1">&#39;drive&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">m</span><span class="o">.</span><span class="n">mode_state_dict</span><span class="o">.</span><span class="n">items</span><span class="p">()</span>  <span class="k">if</span> <span class="n">mode</span><span class="p">[:</span><span class="mi">5</span><span class="p">]</span><span class="o">==</span><span class="s1">&#39;hmode&#39;</span><span class="p">]</span>
+    <span class="n">z</span><span class="o">=</span> <span class="p">[</span><span class="n">hstates</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;drift&#39;</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">)</span> <span class="k">for</span> <span class="n">mode</span><span class="p">,</span> <span class="n">hstates</span> <span class="ow">in</span> <span class="n">mdl</span><span class="o">.</span><span class="n">fxns</span><span class="p">[</span><span class="s1">&#39;drive&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">m</span><span class="o">.</span><span class="n">mode_state_dict</span><span class="o">.</span><span class="n">items</span><span class="p">()</span>  <span class="k">if</span> <span class="n">mode</span><span class="p">[:</span><span class="mi">5</span><span class="p">]</span><span class="o">==</span><span class="s1">&#39;hmode&#39;</span><span class="p">]</span>
 
-    <span class="n">x_id</span><span class="o">=</span> <span class="p">[</span><span class="n">hstates</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;friction&#39;</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">)</span> <span class="k">for</span> <span class="n">mode</span><span class="p">,</span> <span class="n">hstates</span> <span class="ow">in</span> <span class="n">mdl</span><span class="o">.</span><span class="n">fxns</span><span class="p">[</span><span class="s1">&#39;Drive&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">mode_state_dict</span><span class="o">.</span><span class="n">items</span><span class="p">()</span> <span class="k">if</span> <span class="n">mode</span><span class="p">[:</span><span class="mi">5</span><span class="p">]</span><span class="o">!=</span><span class="s1">&#39;hmode&#39;</span><span class="p">]</span>
-    <span class="n">y_id</span><span class="o">=</span> <span class="p">[</span><span class="n">hstates</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;transfer&#39;</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">)</span> <span class="k">for</span> <span class="n">mode</span><span class="p">,</span> <span class="n">hstates</span> <span class="ow">in</span> <span class="n">mdl</span><span class="o">.</span><span class="n">fxns</span><span class="p">[</span><span class="s1">&#39;Drive&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">mode_state_dict</span><span class="o">.</span><span class="n">items</span><span class="p">()</span> <span class="k">if</span> <span class="n">mode</span><span class="p">[:</span><span class="mi">5</span><span class="p">]</span><span class="o">!=</span><span class="s1">&#39;hmode&#39;</span><span class="p">]</span>
-    <span class="n">z_id</span><span class="o">=</span> <span class="p">[</span><span class="n">hstates</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;drift&#39;</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">)</span> <span class="k">for</span> <span class="n">mode</span><span class="p">,</span> <span class="n">hstates</span> <span class="ow">in</span> <span class="n">mdl</span><span class="o">.</span><span class="n">fxns</span><span class="p">[</span><span class="s1">&#39;Drive&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">mode_state_dict</span><span class="o">.</span><span class="n">items</span><span class="p">()</span> <span class="k">if</span> <span class="n">mode</span><span class="p">[:</span><span class="mi">5</span><span class="p">]</span><span class="o">!=</span><span class="s1">&#39;hmode&#39;</span><span class="p">]</span>
-    <span class="n">id_labels</span><span class="o">=</span> <span class="p">[</span><span class="n">mode</span> <span class="k">for</span> <span class="n">mode</span><span class="p">,</span> <span class="n">hstates</span> <span class="ow">in</span> <span class="n">mdl</span><span class="o">.</span><span class="n">fxns</span><span class="p">[</span><span class="s1">&#39;Drive&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">mode_state_dict</span><span class="o">.</span><span class="n">items</span><span class="p">()</span> <span class="k">if</span> <span class="n">mode</span><span class="p">[:</span><span class="mi">5</span><span class="p">]</span><span class="o">!=</span><span class="s1">&#39;hmode&#39;</span><span class="p">]</span>
+    <span class="n">x_id</span><span class="o">=</span> <span class="p">[</span><span class="n">hstates</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;friction&#39;</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">)</span> <span class="k">for</span> <span class="n">mode</span><span class="p">,</span> <span class="n">hstates</span> <span class="ow">in</span> <span class="n">mdl</span><span class="o">.</span><span class="n">fxns</span><span class="p">[</span><span class="s1">&#39;drive&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">m</span><span class="o">.</span><span class="n">mode_state_dict</span><span class="o">.</span><span class="n">items</span><span class="p">()</span> <span class="k">if</span> <span class="n">mode</span><span class="p">[:</span><span class="mi">5</span><span class="p">]</span><span class="o">!=</span><span class="s1">&#39;hmode&#39;</span><span class="p">]</span>
+    <span class="n">y_id</span><span class="o">=</span> <span class="p">[</span><span class="n">hstates</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;transfer&#39;</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">)</span> <span class="k">for</span> <span class="n">mode</span><span class="p">,</span> <span class="n">hstates</span> <span class="ow">in</span> <span class="n">mdl</span><span class="o">.</span><span class="n">fxns</span><span class="p">[</span><span class="s1">&#39;drive&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">m</span><span class="o">.</span><span class="n">mode_state_dict</span><span class="o">.</span><span class="n">items</span><span class="p">()</span> <span class="k">if</span> <span class="n">mode</span><span class="p">[:</span><span class="mi">5</span><span class="p">]</span><span class="o">!=</span><span class="s1">&#39;hmode&#39;</span><span class="p">]</span>
+    <span class="n">z_id</span><span class="o">=</span> <span class="p">[</span><span class="n">hstates</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;drift&#39;</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">)</span> <span class="k">for</span> <span class="n">mode</span><span class="p">,</span> <span class="n">hstates</span> <span class="ow">in</span> <span class="n">mdl</span><span class="o">.</span><span class="n">fxns</span><span class="p">[</span><span class="s1">&#39;drive&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">m</span><span class="o">.</span><span class="n">mode_state_dict</span><span class="o">.</span><span class="n">items</span><span class="p">()</span> <span class="k">if</span> <span class="n">mode</span><span class="p">[:</span><span class="mi">5</span><span class="p">]</span><span class="o">!=</span><span class="s1">&#39;hmode&#39;</span><span class="p">]</span>
+    <span class="n">id_labels</span><span class="o">=</span> <span class="p">[</span><span class="n">mode</span> <span class="k">for</span> <span class="n">mode</span><span class="p">,</span> <span class="n">hstates</span> <span class="ow">in</span> <span class="n">mdl</span><span class="o">.</span><span class="n">fxns</span><span class="p">[</span><span class="s1">&#39;drive&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">m</span><span class="o">.</span><span class="n">mode_state_dict</span><span class="o">.</span><span class="n">items</span><span class="p">()</span> <span class="k">if</span> <span class="n">mode</span><span class="p">[:</span><span class="mi">5</span><span class="p">]</span><span class="o">!=</span><span class="s1">&#39;hmode&#39;</span><span class="p">]</span>
 
     <span class="n">fig</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">()</span>
     <span class="n">fig</span><span class="o">.</span><span class="n">patch</span><span class="o">.</span><span class="n">set_alpha</span><span class="p">(</span><span class="mf">0.7</span><span class="p">)</span>
@@ -475,9 +486,9 @@ Cell <span class="ansi-green-intense-fg ansi-bold">In[1], line 1</span>
     <span class="n">ax</span> <span class="o">=</span> <span class="n">fig</span><span class="o">.</span><span class="n">add_subplot</span><span class="p">(</span><span class="n">projection</span><span class="o">=</span><span class="s1">&#39;3d&#39;</span><span class="p">)</span>
 
     <span class="k">if</span> <span class="n">mdl_range</span><span class="p">:</span>
-        <span class="n">x_r</span><span class="o">=</span> <span class="p">[</span><span class="n">hstates</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;friction&#39;</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">)</span> <span class="k">for</span> <span class="n">mode</span><span class="p">,</span> <span class="n">hstates</span> <span class="ow">in</span> <span class="n">mdl_range</span><span class="o">.</span><span class="n">fxns</span><span class="p">[</span><span class="s1">&#39;Drive&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">mode_state_dict</span><span class="o">.</span><span class="n">items</span><span class="p">()</span>  <span class="k">if</span> <span class="n">mode</span><span class="p">[:</span><span class="mi">5</span><span class="p">]</span><span class="o">==</span><span class="s1">&#39;hmode&#39;</span><span class="p">]</span>
-        <span class="n">y_r</span><span class="o">=</span> <span class="p">[</span><span class="n">hstates</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;transfer&#39;</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">)</span> <span class="k">for</span> <span class="n">mode</span><span class="p">,</span> <span class="n">hstates</span> <span class="ow">in</span> <span class="n">mdl_range</span><span class="o">.</span><span class="n">fxns</span><span class="p">[</span><span class="s1">&#39;Drive&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">mode_state_dict</span><span class="o">.</span><span class="n">items</span><span class="p">()</span>  <span class="k">if</span> <span class="n">mode</span><span class="p">[:</span><span class="mi">5</span><span class="p">]</span><span class="o">==</span><span class="s1">&#39;hmode&#39;</span><span class="p">]</span>
-        <span class="n">z_r</span><span class="o">=</span> <span class="p">[</span><span class="n">hstates</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;drift&#39;</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">)</span> <span class="k">for</span> <span class="n">mode</span><span class="p">,</span> <span class="n">hstates</span> <span class="ow">in</span> <span class="n">mdl_range</span><span class="o">.</span><span class="n">fxns</span><span class="p">[</span><span class="s1">&#39;Drive&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">mode_state_dict</span><span class="o">.</span><span class="n">items</span><span class="p">()</span>  <span class="k">if</span> <span class="n">mode</span><span class="p">[:</span><span class="mi">5</span><span class="p">]</span><span class="o">==</span><span class="s1">&#39;hmode&#39;</span><span class="p">]</span>
+        <span class="n">x_r</span><span class="o">=</span> <span class="p">[</span><span class="n">hstates</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;friction&#39;</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">)</span> <span class="k">for</span> <span class="n">mode</span><span class="p">,</span> <span class="n">hstates</span> <span class="ow">in</span> <span class="n">mdl_range</span><span class="o">.</span><span class="n">fxns</span><span class="p">[</span><span class="s1">&#39;drive&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">m</span><span class="o">.</span><span class="n">mode_state_dict</span><span class="o">.</span><span class="n">items</span><span class="p">()</span>  <span class="k">if</span> <span class="n">mode</span><span class="p">[:</span><span class="mi">5</span><span class="p">]</span><span class="o">==</span><span class="s1">&#39;hmode&#39;</span><span class="p">]</span>
+        <span class="n">y_r</span><span class="o">=</span> <span class="p">[</span><span class="n">hstates</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;transfer&#39;</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">)</span> <span class="k">for</span> <span class="n">mode</span><span class="p">,</span> <span class="n">hstates</span> <span class="ow">in</span> <span class="n">mdl_range</span><span class="o">.</span><span class="n">fxns</span><span class="p">[</span><span class="s1">&#39;drive&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">m</span><span class="o">.</span><span class="n">mode_state_dict</span><span class="o">.</span><span class="n">items</span><span class="p">()</span>  <span class="k">if</span> <span class="n">mode</span><span class="p">[:</span><span class="mi">5</span><span class="p">]</span><span class="o">==</span><span class="s1">&#39;hmode&#39;</span><span class="p">]</span>
+        <span class="n">z_r</span><span class="o">=</span> <span class="p">[</span><span class="n">hstates</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;drift&#39;</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">)</span> <span class="k">for</span> <span class="n">mode</span><span class="p">,</span> <span class="n">hstates</span> <span class="ow">in</span> <span class="n">mdl_range</span><span class="o">.</span><span class="n">fxns</span><span class="p">[</span><span class="s1">&#39;drive&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">m</span><span class="o">.</span><span class="n">mode_state_dict</span><span class="o">.</span><span class="n">items</span><span class="p">()</span>  <span class="k">if</span> <span class="n">mode</span><span class="p">[:</span><span class="mi">5</span><span class="p">]</span><span class="o">==</span><span class="s1">&#39;hmode&#39;</span><span class="p">]</span>
         <span class="n">ax</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">x_r</span><span class="p">,</span> <span class="n">y_r</span><span class="p">,</span> <span class="n">z_r</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;range&#39;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="n">colors</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">s</span><span class="o">=</span><span class="n">range_size</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="n">range_alpha</span><span class="p">)</span>
 
     <span class="n">ax</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">z</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;set&#39;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="n">colors</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">s</span><span class="o">=</span><span class="n">el_size</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="n">el_alpha</span><span class="p">)</span>
@@ -525,23 +536,41 @@ Cell <span class="ansi-green-intense-fg ansi-bold">In[1], line 1</span>
 </div>
 </div>
 <p>Below we compare the space of fault modes generated by our identified sets:</p>
-<div class="nbinput nblast docutils container">
+<div class="nbinput docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[7]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">mdl_set</span> <span class="o">=</span> <span class="n">Rover</span><span class="p">(</span><span class="n">valparams</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;drive_modes&#39;</span><span class="p">:</span><span class="s1">&#39;set-manual&#39;</span><span class="p">})</span>
-<span class="n">mdl_range</span> <span class="o">=</span> <span class="n">Rover</span><span class="p">(</span><span class="n">valparams</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;drive_modes&#39;</span><span class="p">:</span><span class="s1">&#39;range-manual-all&#39;</span><span class="p">})</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">mdl_set</span> <span class="o">=</span> <span class="n">Rover</span><span class="p">(</span><span class="n">p</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;drive_modes&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;mode_args&quot;</span><span class="p">:</span> <span class="s1">&#39;set-manual&#39;</span><span class="p">},</span> <span class="s1">&#39;ground&#39;</span><span class="p">:{</span><span class="s1">&#39;linetype&#39;</span><span class="p">:</span> <span class="s1">&#39;turn&#39;</span><span class="p">},</span>
+                   <span class="s1">&#39;path_param&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;buffer_on&#39;</span><span class="p">:</span> <span class="mf">1.0</span><span class="p">,</span> <span class="s1">&#39;buffer_poor&#39;</span><span class="p">:</span> <span class="mf">1.5</span><span class="p">,</span> <span class="s1">&#39;buffer_near&#39;</span><span class="p">:</span> <span class="mf">2.0</span><span class="p">}})</span>
+<span class="n">mdl_range</span> <span class="o">=</span> <span class="n">Rover</span><span class="p">(</span><span class="n">p</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;drive_modes&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;mode_args&quot;</span><span class="p">:</span> <span class="s1">&#39;range-manual-all&#39;</span><span class="p">},</span><span class="s1">&#39;ground&#39;</span><span class="p">:{</span><span class="s1">&#39;linetype&#39;</span><span class="p">:</span> <span class="s1">&#39;turn&#39;</span><span class="p">},</span>
+                    <span class="s1">&#39;path_param&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;buffer_on&#39;</span><span class="p">:</span> <span class="mf">1.0</span><span class="p">,</span> <span class="s1">&#39;buffer_poor&#39;</span><span class="p">:</span> <span class="mf">1.5</span><span class="p">,</span> <span class="s1">&#39;buffer_near&#39;</span><span class="p">:</span> <span class="mf">2.0</span><span class="p">}})</span>
 <span class="n">fig</span> <span class="o">=</span><span class="n">plot_hstate_modes</span><span class="p">(</span><span class="n">mdl_set</span><span class="p">,</span> <span class="n">mdl_range</span><span class="o">=</span> <span class="n">mdl_range</span><span class="p">,</span><span class="n">range_alpha</span><span class="o">=</span><span class="mf">0.8</span><span class="p">,</span> <span class="n">range_size</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="n">colors</span><span class="o">=</span><span class="n">colors</span><span class="o">+</span><span class="p">[</span><span class="s2">&quot;black&quot;</span><span class="p">])</span>
 </pre></div>
 </div>
 </div>
-<div class="nbinput nblast docutils container">
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../../../_images/examples_rover_fault_sampling_Rover_Mode_Notebook_10_0.png" src="../../../_images/examples_rover_fault_sampling_Rover_Mode_Notebook_10_0.png" />
+</div>
+</div>
+<div class="nbinput docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[8]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="nb">len</span><span class="p">(</span><span class="n">mdl_range</span><span class="o">.</span><span class="n">fxns</span><span class="p">[</span><span class="s1">&#39;Drive&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">faultmodes</span><span class="p">)</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="nb">len</span><span class="p">(</span><span class="n">mdl_range</span><span class="o">.</span><span class="n">fxns</span><span class="p">[</span><span class="s1">&#39;drive&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">m</span><span class="o">.</span><span class="n">faultmodes</span><span class="p">)</span>
 </pre></div>
 </div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[8]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+1103
+</pre></div></div>
 </div>
 <div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[9]:
@@ -551,7 +580,7 @@ Cell <span class="ansi-green-intense-fg ansi-bold">In[1], line 1</span>
 </pre></div>
 </div>
 </div>
-<div class="nbinput nblast docutils container">
+<div class="nbinput docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[10]:
 </pre></div>
 </div>
@@ -559,35 +588,42 @@ Cell <span class="ansi-green-intense-fg ansi-bold">In[1], line 1</span>
 </pre></div>
 </div>
 </div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area stderr docutils container">
+<div class="highlight"><pre>
+The PostScript backend does not support transparency; partially transparent artists will be rendered opaque.
+</pre></div></div>
+</div>
 <p>Below we look at how this results in different potential analyses…</p>
 <p>This function plots the end distribution of a given attribue from the model endclasses.</p>
 <div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[11]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">plot_enddist</span><span class="p">(</span><span class="n">endclasses</span><span class="p">,</span> <span class="n">att</span><span class="o">=</span><span class="s1">&#39;line_dist&#39;</span><span class="p">,</span> <span class="nb">range</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">3</span><span class="p">),</span> <span class="n">endclasses_range</span><span class="o">=</span><span class="p">[],</span> <span class="n">density</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">yscale</span><span class="o">=</span><span class="s2">&quot;log&quot;</span><span class="p">,</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">plot_enddist</span><span class="p">(</span><span class="n">endclasses</span><span class="p">,</span> <span class="n">att</span><span class="o">=</span><span class="s1">&#39;end_dist&#39;</span><span class="p">,</span> <span class="nb">range</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">3</span><span class="p">),</span> <span class="n">endclasses_range</span><span class="o">=</span><span class="p">[],</span> <span class="n">density</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">yscale</span><span class="o">=</span><span class="s2">&quot;log&quot;</span><span class="p">,</span>
                  <span class="n">fail_thresh</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span> <span class="n">thresh_label</span><span class="o">=</span><span class="s2">&quot;Off Course&quot;</span><span class="p">,</span> <span class="n">x_lab</span><span class="o">=</span><span class="s2">&quot;Line Distance&quot;</span><span class="p">,</span> <span class="n">n_bins</span> <span class="o">=</span> <span class="mi">8</span><span class="p">,</span>
                  <span class="n">title</span><span class="o">=</span><span class="s2">&quot;Results Distributions Given From Approaches&quot;</span><span class="p">,</span> <span class="n">colors</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;yellow&quot;</span><span class="p">,</span> <span class="s2">&quot;orange&quot;</span><span class="p">,</span> <span class="s2">&quot;red&quot;</span><span class="p">],</span>
                 <span class="n">hatching</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;xx&#39;</span><span class="p">,</span> <span class="s1">&#39;//&#39;</span><span class="p">,</span> <span class="s1">&#39;..&#39;</span><span class="p">]):</span>
     <span class="k">if</span> <span class="n">endclasses_range</span><span class="p">:</span>
-        <span class="n">x_range_class</span> <span class="o">=</span> <span class="p">[</span><span class="n">endclass</span><span class="p">[</span><span class="n">att</span><span class="p">]</span> <span class="k">for</span> <span class="n">scen</span><span class="p">,</span> <span class="n">endclass</span> <span class="ow">in</span> <span class="n">endclasses_range</span><span class="o">.</span><span class="n">items</span><span class="p">()</span> <span class="k">if</span> <span class="n">scen</span><span class="p">[</span><span class="mi">6</span><span class="p">:</span><span class="mi">11</span><span class="p">]</span><span class="o">==</span><span class="s1">&#39;hmode&#39;</span><span class="p">]</span>
-        <span class="n">n</span><span class="p">,</span><span class="n">bins</span><span class="p">,</span><span class="n">patches</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">hist</span><span class="p">(</span><span class="n">x_range_class</span><span class="p">,</span> <span class="n">density</span><span class="o">=</span><span class="n">density</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;range&#39;</span><span class="p">,</span> <span class="nb">range</span><span class="o">=</span><span class="nb">range</span><span class="p">,</span>
-                                  <span class="n">color</span><span class="o">=</span><span class="n">colors</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">hatch</span><span class="o">=</span><span class="n">hatching</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">bins</span><span class="o">=</span><span class="n">n_bins</span><span class="p">,</span> <span class="n">edgecolor</span><span class="o">=</span><span class="s2">&quot;white&quot;</span><span class="p">)</span>
-        <span class="n">x_elaborated_class</span> <span class="o">=</span> <span class="p">[</span><span class="n">endclass</span><span class="p">[</span><span class="n">att</span><span class="p">]</span> <span class="k">for</span> <span class="n">scen</span><span class="p">,</span> <span class="n">endclass</span> <span class="ow">in</span> <span class="n">endclasses</span><span class="o">.</span><span class="n">items</span><span class="p">()</span> <span class="k">if</span> <span class="n">scen</span><span class="p">[</span><span class="mi">6</span><span class="p">:</span><span class="mi">11</span><span class="p">]</span><span class="o">==</span><span class="s1">&#39;hmode&#39;</span><span class="p">]</span>
+        <span class="n">x_range_class</span> <span class="o">=</span> <span class="p">[</span><span class="n">endclass</span> <span class="k">for</span> <span class="n">scen</span><span class="p">,</span> <span class="n">endclass</span> <span class="ow">in</span> <span class="n">endclasses_range</span><span class="o">.</span><span class="n">get_values</span><span class="p">(</span><span class="n">att</span><span class="p">)</span><span class="o">.</span><span class="n">items</span><span class="p">()</span> <span class="k">if</span> <span class="n">scen</span><span class="p">[</span><span class="mi">6</span><span class="p">:</span><span class="mi">11</span><span class="p">]</span><span class="o">==</span><span class="s1">&#39;hmode&#39;</span><span class="p">]</span>
+        <span class="n">n</span><span class="p">,</span><span class="n">bins</span><span class="p">,</span><span class="n">patches</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">hist</span><span class="p">(</span><span class="n">x_range_class</span><span class="p">,</span> <span class="n">density</span><span class="o">=</span><span class="n">density</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;range&#39;</span><span class="p">,</span> <span class="nb">range</span><span class="o">=</span><span class="nb">range</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="n">colors</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span>
+                                  <span class="n">hatch</span><span class="o">=</span><span class="n">hatching</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">bins</span><span class="o">=</span><span class="n">n_bins</span><span class="p">,</span> <span class="n">edgecolor</span><span class="o">=</span><span class="s2">&quot;white&quot;</span><span class="p">)</span>
+        <span class="n">x_elaborated_class</span> <span class="o">=</span> <span class="p">[</span><span class="n">endclass</span> <span class="k">for</span> <span class="n">scen</span><span class="p">,</span> <span class="n">endclass</span> <span class="ow">in</span> <span class="n">endclasses</span><span class="o">.</span><span class="n">get_values</span><span class="p">(</span><span class="n">att</span><span class="p">)</span><span class="o">.</span><span class="n">items</span><span class="p">()</span> <span class="k">if</span> <span class="n">scen</span><span class="p">[</span><span class="mi">6</span><span class="p">:</span><span class="mi">11</span><span class="p">]</span><span class="o">==</span><span class="s1">&#39;hmode&#39;</span><span class="p">]</span>
         <span class="n">n</span><span class="p">,</span><span class="n">bins</span><span class="p">,</span><span class="n">patches</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">hist</span><span class="p">(</span><span class="n">x_elaborated_class</span><span class="p">,</span> <span class="n">density</span><span class="o">=</span><span class="n">density</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.8</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;set&#39;</span><span class="p">,</span> <span class="nb">range</span><span class="o">=</span><span class="nb">range</span><span class="p">,</span> <span class="n">bins</span><span class="o">=</span><span class="n">bins</span><span class="p">,</span>
                                   <span class="n">color</span><span class="o">=</span><span class="n">colors</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">hatch</span><span class="o">=</span><span class="n">hatching</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">edgecolor</span><span class="o">=</span><span class="s2">&quot;white&quot;</span><span class="p">)</span>
     <span class="k">else</span><span class="p">:</span>
-        <span class="n">x_elaborated_class</span> <span class="o">=</span> <span class="p">[</span><span class="n">endclass</span><span class="p">[</span><span class="n">att</span><span class="p">]</span> <span class="k">for</span> <span class="n">scen</span><span class="p">,</span> <span class="n">endclass</span> <span class="ow">in</span> <span class="n">endclasses</span><span class="o">.</span><span class="n">items</span><span class="p">()</span> <span class="k">if</span> <span class="n">scen</span><span class="p">[</span><span class="mi">6</span><span class="p">:</span><span class="mi">11</span><span class="p">]</span><span class="o">==</span><span class="s1">&#39;hmode&#39;</span><span class="p">]</span>
+        <span class="n">x_elaborated_class</span> <span class="o">=</span> <span class="p">[</span><span class="n">endclass</span> <span class="k">for</span> <span class="n">scen</span><span class="p">,</span> <span class="n">endclass</span> <span class="ow">in</span> <span class="n">endclasses</span><span class="o">.</span><span class="n">get_values</span><span class="p">(</span><span class="n">att</span><span class="p">)</span><span class="o">.</span><span class="n">items</span><span class="p">()</span> <span class="k">if</span> <span class="n">scen</span><span class="p">[</span><span class="mi">6</span><span class="p">:</span><span class="mi">11</span><span class="p">]</span><span class="o">==</span><span class="s1">&#39;hmode&#39;</span><span class="p">]</span>
         <span class="n">n</span><span class="p">,</span><span class="n">bins</span><span class="p">,</span><span class="n">patches</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">hist</span><span class="p">(</span><span class="n">x_elaborated_class</span><span class="p">,</span> <span class="n">density</span><span class="o">=</span><span class="n">density</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;set&#39;</span><span class="p">,</span> <span class="nb">range</span><span class="o">=</span><span class="nb">range</span><span class="p">,</span>
                                   <span class="n">color</span><span class="o">=</span><span class="n">colors</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">hatch</span><span class="o">=</span><span class="n">hatching</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">bins</span><span class="o">=</span><span class="n">n_bins</span><span class="p">,</span> <span class="n">edgecolor</span><span class="o">=</span><span class="s2">&quot;white&quot;</span><span class="p">)</span>
 
     <span class="k">if</span> <span class="n">fail_thresh</span><span class="p">:</span> <span class="n">plt</span><span class="o">.</span><span class="n">axvline</span><span class="p">(</span><span class="n">fail_thresh</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="n">thresh_label</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;black&quot;</span><span class="p">)</span>
 
-    <span class="n">x_identified_class</span> <span class="o">=</span> <span class="p">[</span><span class="n">endclass</span><span class="p">[</span><span class="n">att</span><span class="p">]</span> <span class="k">for</span> <span class="n">scen</span><span class="p">,</span> <span class="n">endclass</span> <span class="ow">in</span> <span class="n">endclasses</span><span class="o">.</span><span class="n">items</span><span class="p">()</span> <span class="k">if</span> <span class="n">scen</span><span class="p">[</span><span class="mi">6</span><span class="p">:</span><span class="mi">11</span><span class="p">]</span><span class="o">!=</span><span class="s1">&#39;hmode&#39;</span> <span class="ow">and</span> <span class="n">scen</span><span class="o">!=</span><span class="s1">&#39;nominal&#39;</span><span class="p">]</span>
-    <span class="n">label_identified_class</span> <span class="o">=</span> <span class="p">[</span><span class="n">scen</span><span class="p">[</span><span class="mi">6</span><span class="p">:]</span> <span class="k">for</span> <span class="n">scen</span><span class="p">,</span> <span class="n">endclass</span> <span class="ow">in</span> <span class="n">endclasses</span><span class="o">.</span><span class="n">items</span><span class="p">()</span> <span class="k">if</span> <span class="n">scen</span><span class="p">[</span><span class="mi">6</span><span class="p">:</span><span class="mi">11</span><span class="p">]</span><span class="o">!=</span><span class="s1">&#39;hmode&#39;</span><span class="ow">and</span> <span class="n">scen</span><span class="o">!=</span><span class="s1">&#39;nominal&#39;</span><span class="p">]</span>
+    <span class="n">x_identified_class</span> <span class="o">=</span> <span class="p">[</span><span class="n">endclass</span> <span class="k">for</span> <span class="n">scen</span><span class="p">,</span> <span class="n">endclass</span> <span class="ow">in</span> <span class="n">endclasses</span><span class="o">.</span><span class="n">get_values</span><span class="p">(</span><span class="n">att</span><span class="p">)</span><span class="o">.</span><span class="n">items</span><span class="p">()</span> <span class="k">if</span> <span class="n">scen</span><span class="p">[</span><span class="mi">6</span><span class="p">:</span><span class="mi">11</span><span class="p">]</span><span class="o">!=</span><span class="s1">&#39;hmode&#39;</span> <span class="ow">and</span> <span class="n">scen</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="mi">6</span><span class="p">]</span><span class="o">!=</span><span class="s1">&#39;nominal&#39;</span><span class="p">]</span>
+    <span class="n">label_identified_class</span> <span class="o">=</span> <span class="p">[</span><span class="n">scen</span><span class="p">[</span><span class="mi">6</span><span class="p">:]</span> <span class="k">for</span> <span class="n">scen</span><span class="p">,</span> <span class="n">endclass</span> <span class="ow">in</span> <span class="n">endclasses</span><span class="o">.</span><span class="n">get_values</span><span class="p">(</span><span class="n">att</span><span class="p">)</span><span class="o">.</span><span class="n">items</span><span class="p">()</span> <span class="k">if</span> <span class="n">scen</span><span class="p">[</span><span class="mi">6</span><span class="p">:</span><span class="mi">11</span><span class="p">]</span><span class="o">!=</span><span class="s1">&#39;hmode&#39;</span><span class="ow">and</span> <span class="n">scen</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="mi">6</span><span class="p">]</span><span class="o">!=</span><span class="s1">&#39;nominal&#39;</span><span class="p">]</span>
 
-    <span class="n">_</span><span class="p">,</span><span class="n">_</span><span class="p">,</span><span class="n">_</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">hist</span><span class="p">(</span><span class="n">x_identified_class</span><span class="p">,</span> <span class="n">density</span><span class="o">=</span><span class="n">density</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.8</span><span class="p">,</span> <span class="n">bins</span><span class="o">=</span><span class="n">bins</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;identified&#39;</span><span class="p">,</span>
-                     <span class="n">color</span><span class="o">=</span><span class="n">colors</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span> <span class="n">hatch</span><span class="o">=</span><span class="n">hatching</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span> <span class="n">edgecolor</span><span class="o">=</span><span class="s2">&quot;white&quot;</span><span class="p">)</span>
+    <span class="n">_</span><span class="p">,</span><span class="n">_</span><span class="p">,</span><span class="n">_</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">hist</span><span class="p">(</span><span class="n">x_identified_class</span><span class="p">,</span> <span class="n">density</span><span class="o">=</span><span class="n">density</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.8</span><span class="p">,</span> <span class="n">bins</span><span class="o">=</span><span class="n">bins</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;identified&#39;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="n">colors</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span> <span class="n">hatch</span><span class="o">=</span><span class="n">hatching</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span> <span class="n">edgecolor</span><span class="o">=</span><span class="s2">&quot;white&quot;</span><span class="p">)</span>
     <span class="n">plt</span><span class="o">.</span><span class="n">grid</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="s1">&#39;y&#39;</span><span class="p">,</span> <span class="n">which</span><span class="o">=</span><span class="s1">&#39;both&#39;</span><span class="p">,</span> <span class="n">zorder</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
     <span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
     <span class="n">plt</span><span class="o">.</span><span class="n">yscale</span><span class="p">(</span><span class="n">yscale</span><span class="p">)</span>
@@ -601,57 +637,149 @@ Cell <span class="ansi-green-intense-fg ansi-bold">In[1], line 1</span>
 </div>
 </div>
 <p>Finding phases so the Approach can inject the fault halfway through the simulation.</p>
-<div class="nbinput nblast docutils container">
+<div class="nbinput docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[12]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">pool</span> <span class="o">=</span> <span class="n">mp</span><span class="o">.</span><span class="n">Pool</span><span class="p">(</span><span class="mi">4</span><span class="p">)</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">fmdtools.analyze.phases</span> <span class="k">as</span> <span class="nn">ph</span>
+<span class="n">pool</span> <span class="o">=</span> <span class="n">mp</span><span class="o">.</span><span class="n">Pool</span><span class="p">(</span><span class="mi">4</span><span class="p">)</span>
 <span class="n">endresults</span><span class="p">,</span> <span class="n">mdlhist</span> <span class="o">=</span> <span class="n">prop</span><span class="o">.</span><span class="n">nominal</span><span class="p">(</span><span class="n">mdl_set</span><span class="p">)</span>
-<span class="n">phases</span><span class="p">,</span> <span class="n">modephases</span> <span class="o">=</span> <span class="n">mdlhist</span><span class="o">.</span><span class="n">get_modephases</span><span class="p">()</span>
+<span class="n">phasemap</span> <span class="o">=</span> <span class="n">ph</span><span class="o">.</span><span class="n">from_hist</span><span class="p">(</span><span class="n">mdlhist</span><span class="p">)</span>
+<span class="n">endresults</span>
 </pre></div>
 </div>
 </div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[12]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+endclass:
+--rate:                              1.0
+--cost:                                0
+--prob:                              1.0
+--expected_cost:                       0
+--in_bound:                         True
+--at_finish:                        True
+--line_dist:                           1
+--num_modes:                           0
+--end_dist:                          0.0
+--tot_deviation:    0.005246344989065292
+--faults:                             {}
+--classification:        nominal mission
+--end_x:              29.813614084369863
+--end_y:               17.26588133276667
+--endpt:                        array(2)
+</pre></div></div>
+</div>
 <p>Simulating the set and range approach. Note that the identified modes are present in the range and mode approaches, so we end up taking this data from these results afterwards.</p>
 <p>We simulate it here to get some idea of the simulation time.</p>
-<div class="nbinput nblast docutils container">
+<div class="nbinput docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[13]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">t_id_0</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
-<span class="n">mdl_id</span> <span class="o">=</span> <span class="n">Rover</span><span class="p">(</span><span class="n">valparams</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;drive_modes&#39;</span><span class="p">:</span><span class="s1">&#39;manual&#39;</span><span class="p">})</span>
-<span class="n">mdl_id</span><span class="o">.</span><span class="n">modelparams</span><span class="p">[</span><span class="s1">&#39;end_condition&#39;</span><span class="p">]</span><span class="o">=</span><span class="s1">&#39;&#39;</span>
-<span class="n">app_id</span> <span class="o">=</span> <span class="n">SampleApproach</span><span class="p">(</span><span class="n">mdl_id</span><span class="p">,</span> <span class="n">faults</span><span class="o">=</span><span class="s1">&#39;Drive&#39;</span><span class="p">,</span> <span class="n">phases</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;drive&#39;</span><span class="p">:</span><span class="n">phases</span><span class="p">[</span><span class="s1">&#39;Avionics&#39;</span><span class="p">][</span><span class="s1">&#39;drive&#39;</span><span class="p">]})</span>
-<span class="n">endclasses_id</span><span class="p">,</span> <span class="n">mdlhists_id</span> <span class="o">=</span> <span class="n">prop</span><span class="o">.</span><span class="n">approach</span><span class="p">(</span><span class="n">mdl_id</span><span class="p">,</span> <span class="n">app_id</span><span class="p">,</span> <span class="n">staged</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">pool</span><span class="o">=</span><span class="n">pool</span><span class="p">)</span>
+<span class="n">mdl_id</span> <span class="o">=</span> <span class="n">Rover</span><span class="p">(</span><span class="n">p</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;drive_modes&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;mode_args&quot;</span><span class="p">:</span> <span class="s1">&#39;manual&#39;</span><span class="p">},</span>
+                  <span class="s1">&#39;ground&#39;</span><span class="p">:{</span><span class="s1">&#39;linetype&#39;</span><span class="p">:</span> <span class="s1">&#39;turn&#39;</span><span class="p">,</span> <span class="s1">&#39;buffer_on&#39;</span><span class="p">:</span> <span class="mf">0.5</span><span class="p">,</span> <span class="s1">&#39;buffer_poor&#39;</span><span class="p">:</span> <span class="mf">0.8</span><span class="p">,</span> <span class="s1">&#39;buffer_near&#39;</span><span class="p">:</span> <span class="mf">1.0</span><span class="p">}},</span>
+               <span class="n">sp</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;end_condition&#39;</span><span class="p">:</span> <span class="s1">&#39;&#39;</span><span class="p">})</span>
+<span class="n">mdl_id</span><span class="o">.</span><span class="n">sp</span>
+<span class="n">fault_domain_id</span> <span class="o">=</span> <span class="n">FaultDomain</span><span class="p">(</span><span class="n">mdl_id</span><span class="p">)</span>
+<span class="n">fault_domain_id</span><span class="o">.</span><span class="n">add_all_fxnclass_modes</span><span class="p">(</span><span class="s1">&#39;Drive&#39;</span><span class="p">)</span>
+<span class="n">fault_sample_id</span> <span class="o">=</span> <span class="n">FaultSample</span><span class="p">(</span><span class="n">fault_domain_id</span><span class="p">,</span> <span class="n">phasemap</span><span class="p">[</span><span class="s1">&#39;plan_path&#39;</span><span class="p">])</span>
+<span class="n">fault_sample_id</span><span class="o">.</span><span class="n">add_fault_phases</span><span class="p">(</span><span class="s1">&#39;drive&#39;</span><span class="p">)</span>
+<span class="n">results_id</span><span class="p">,</span> <span class="n">mdlhists_id</span> <span class="o">=</span> <span class="n">prop</span><span class="o">.</span><span class="n">fault_sample</span><span class="p">(</span><span class="n">mdl_id</span><span class="p">,</span> <span class="n">fault_sample_id</span><span class="p">)</span>
 <span class="n">t_id</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span><span class="o">-</span><span class="n">t_id_0</span>
 <span class="n">t_id</span>
 </pre></div>
 </div>
 </div>
-<div class="nbinput nblast docutils container">
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area stderr docutils container">
+<div class="highlight"><pre>
+SCENARIOS COMPLETE: 100%|██████████| 4/4 [00:00&lt;00:00,  7.98it/s]
+</pre></div></div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[13]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+0.6439580917358398
+</pre></div></div>
+</div>
+<div class="nbinput docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[14]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">t_set_0</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
-<span class="n">app_set</span> <span class="o">=</span> <span class="n">SampleApproach</span><span class="p">(</span><span class="n">mdl_set</span><span class="p">,</span> <span class="n">faults</span><span class="o">=</span><span class="s1">&#39;Drive&#39;</span><span class="p">,</span> <span class="n">phases</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;drive&#39;</span><span class="p">:</span><span class="n">phases</span><span class="p">[</span><span class="s1">&#39;Avionics&#39;</span><span class="p">][</span><span class="s1">&#39;drive&#39;</span><span class="p">]})</span>
-<span class="n">endclasses_set</span><span class="p">,</span> <span class="n">mdlhists_set</span> <span class="o">=</span> <span class="n">prop</span><span class="o">.</span><span class="n">approach</span><span class="p">(</span><span class="n">mdl_set</span><span class="p">,</span> <span class="n">app_set</span><span class="p">,</span> <span class="n">staged</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">pool</span><span class="o">=</span><span class="n">pool</span><span class="p">)</span>
+<span class="n">mdl_set</span> <span class="o">=</span> <span class="n">Rover</span><span class="p">(</span><span class="n">p</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;drive_modes&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;mode_args&quot;</span><span class="p">:</span> <span class="s1">&#39;set-manual&#39;</span><span class="p">},</span>
+                   <span class="s1">&#39;ground&#39;</span><span class="p">:{</span><span class="s1">&#39;linetype&#39;</span><span class="p">:</span> <span class="s1">&#39;turn&#39;</span><span class="p">,</span> <span class="s1">&#39;buffer_on&#39;</span><span class="p">:</span> <span class="mf">0.5</span><span class="p">,</span> <span class="s1">&#39;buffer_poor&#39;</span><span class="p">:</span> <span class="mf">0.8</span><span class="p">,</span> <span class="s1">&#39;buffer_near&#39;</span><span class="p">:</span> <span class="mf">1.0</span><span class="p">}},</span>
+                   <span class="n">sp</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;end_condition&#39;</span><span class="p">:</span> <span class="s1">&#39;&#39;</span><span class="p">})</span>
+<span class="n">fd_set</span> <span class="o">=</span> <span class="n">FaultDomain</span><span class="p">(</span><span class="n">mdl_set</span><span class="p">)</span>
+<span class="n">fd_set</span><span class="o">.</span><span class="n">add_all_fxnclass_modes</span><span class="p">(</span><span class="s1">&#39;Drive&#39;</span><span class="p">)</span>
+<span class="n">fs_set</span> <span class="o">=</span> <span class="n">FaultSample</span><span class="p">(</span><span class="n">fd_set</span><span class="p">,</span> <span class="n">phasemap</span><span class="p">[</span><span class="s1">&#39;plan_path&#39;</span><span class="p">])</span>
+<span class="n">fs_set</span><span class="o">.</span><span class="n">add_fault_phases</span><span class="p">(</span><span class="s1">&#39;drive&#39;</span><span class="p">)</span>
+<span class="n">results_set</span><span class="p">,</span> <span class="n">mdlhists_set</span> <span class="o">=</span> <span class="n">prop</span><span class="o">.</span><span class="n">fault_sample</span><span class="p">(</span><span class="n">mdl_set</span><span class="p">,</span> <span class="n">fs_set</span><span class="p">,</span> <span class="n">staged</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 <span class="n">t_set</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span> <span class="o">-</span> <span class="n">t_set_0</span>
 <span class="n">t_set</span>
 </pre></div>
 </div>
 </div>
-<div class="nbinput nblast docutils container">
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area stderr docutils container">
+<div class="highlight"><pre>
+SCENARIOS COMPLETE: 100%|██████████| 39/39 [00:03&lt;00:00, 11.24it/s]
+</pre></div></div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[14]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+3.664266586303711
+</pre></div></div>
+</div>
+<div class="nbinput docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[15]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">t_range_0</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
-<span class="n">mdl_range</span> <span class="o">=</span> <span class="n">Rover</span><span class="p">(</span><span class="n">valparams</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;drive_modes&#39;</span><span class="p">:</span><span class="s1">&#39;range-manual-all&#39;</span><span class="p">})</span>
-<span class="n">mdl_range</span><span class="o">.</span><span class="n">modelparams</span><span class="p">[</span><span class="s1">&#39;end_condition&#39;</span><span class="p">]</span><span class="o">=</span><span class="s1">&#39;&#39;</span>
-<span class="n">app_range</span> <span class="o">=</span> <span class="n">SampleApproach</span><span class="p">(</span><span class="n">mdl_range</span><span class="p">,</span> <span class="n">faults</span><span class="o">=</span><span class="s1">&#39;Drive&#39;</span><span class="p">,</span> <span class="n">phases</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;drive&#39;</span><span class="p">:</span><span class="n">phases</span><span class="p">[</span><span class="s1">&#39;Avionics&#39;</span><span class="p">][</span><span class="s1">&#39;drive&#39;</span><span class="p">]})</span>
-<span class="n">endclasses_range</span><span class="p">,</span> <span class="n">mdlhists_range</span> <span class="o">=</span> <span class="n">prop</span><span class="o">.</span><span class="n">approach</span><span class="p">(</span><span class="n">mdl_range</span><span class="p">,</span> <span class="n">app_range</span><span class="p">,</span> <span class="n">staged</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">pool</span><span class="o">=</span><span class="n">pool</span><span class="p">)</span>
+<span class="n">mdl_range</span> <span class="o">=</span> <span class="n">Rover</span><span class="p">(</span><span class="n">p</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;drive_modes&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;mode_args&quot;</span><span class="p">:</span> <span class="s1">&#39;range-manual-all&#39;</span><span class="p">},</span>
+                     <span class="s1">&#39;ground&#39;</span><span class="p">:{</span><span class="s1">&#39;linetype&#39;</span><span class="p">:</span> <span class="s1">&#39;turn&#39;</span><span class="p">,</span> <span class="s1">&#39;buffer_on&#39;</span><span class="p">:</span> <span class="mf">0.5</span><span class="p">,</span> <span class="s1">&#39;buffer_poor&#39;</span><span class="p">:</span> <span class="mf">0.8</span><span class="p">,</span> <span class="s1">&#39;buffer_near&#39;</span><span class="p">:</span> <span class="mf">1.0</span><span class="p">}},</span>
+                  <span class="n">sp</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;end_condition&#39;</span><span class="p">:</span> <span class="s1">&#39;&#39;</span><span class="p">})</span>
+<span class="n">fd_range</span> <span class="o">=</span> <span class="n">FaultDomain</span><span class="p">(</span><span class="n">mdl_range</span><span class="p">)</span>
+<span class="n">fd_range</span><span class="o">.</span><span class="n">add_all_fxnclass_modes</span><span class="p">(</span><span class="s1">&#39;Drive&#39;</span><span class="p">)</span>
+<span class="n">fs_range</span> <span class="o">=</span> <span class="n">FaultSample</span><span class="p">(</span><span class="n">fd_range</span><span class="p">,</span> <span class="n">phasemap</span><span class="p">[</span><span class="s1">&#39;plan_path&#39;</span><span class="p">])</span>
+<span class="n">fs_range</span><span class="o">.</span><span class="n">add_fault_phases</span><span class="p">(</span><span class="s1">&#39;drive&#39;</span><span class="p">)</span>
+<span class="n">results_range</span><span class="p">,</span> <span class="n">mdlhists_range</span> <span class="o">=</span> <span class="n">prop</span><span class="o">.</span><span class="n">fault_sample</span><span class="p">(</span><span class="n">mdl_range</span><span class="p">,</span> <span class="n">fs_range</span><span class="p">,</span> <span class="n">staged</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">pool</span> <span class="o">=</span> <span class="n">pool</span><span class="p">)</span>
 <span class="n">t_range</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span> <span class="o">-</span> <span class="n">t_range_0</span>
 <span class="n">t_range</span>
 </pre></div>
 </div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area stderr docutils container">
+<div class="highlight"><pre>
+SCENARIOS COMPLETE: 100%|██████████| 1103/1103 [00:00&lt;00:00, 546523.01it/s]
+</pre></div></div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[15]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+126.75349593162537
+</pre></div></div>
 </div>
 <div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[16]:
@@ -661,12 +789,19 @@ Cell <span class="ansi-green-intense-fg ansi-bold">In[1], line 1</span>
 </pre></div>
 </div>
 </div>
-<div class="nbinput nblast docutils container">
+<div class="nbinput docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[17]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">fig</span> <span class="o">=</span> <span class="n">plot_enddist</span><span class="p">(</span><span class="n">endclasses_set</span><span class="p">,</span> <span class="n">endclasses_range</span><span class="o">=</span><span class="n">endclasses_range</span><span class="p">,</span> <span class="nb">range</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">2</span><span class="p">),</span> <span class="n">title</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="n">colors</span><span class="o">=</span><span class="n">colors</span><span class="p">)</span> <span class="c1">#, colors = [&#39;red&#39;,&#39;green&#39;,&#39;blue&#39;]</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">fig</span> <span class="o">=</span> <span class="n">plot_enddist</span><span class="p">(</span><span class="n">results_set</span><span class="p">,</span> <span class="n">endclasses_range</span><span class="o">=</span><span class="n">results_range</span><span class="p">,</span> <span class="nb">range</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">2</span><span class="p">),</span> <span class="n">title</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="n">colors</span><span class="o">=</span><span class="n">colors</span><span class="p">)</span> <span class="c1">#, colors = [&#39;red&#39;,&#39;green&#39;,&#39;blue&#39;]</span>
 </pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../../../_images/examples_rover_fault_sampling_Rover_Mode_Notebook_23_0.png" src="../../../_images/examples_rover_fault_sampling_Rover_Mode_Notebook_23_0.png" />
 </div>
 </div>
 <div class="nbinput nblast docutils container">
@@ -677,7 +812,7 @@ Cell <span class="ansi-green-intense-fg ansi-bold">In[1], line 1</span>
 </pre></div>
 </div>
 </div>
-<div class="nbinput nblast docutils container">
+<div class="nbinput docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[19]:
 </pre></div>
 </div>
@@ -685,143 +820,125 @@ Cell <span class="ansi-green-intense-fg ansi-bold">In[1], line 1</span>
 </pre></div>
 </div>
 </div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area stderr docutils container">
+<div class="highlight"><pre>
+The PostScript backend does not support transparency; partially transparent artists will be rendered opaque.
+</pre></div></div>
+</div>
 <p>as well as the discovery of fault trajectories…</p>
-<div class="nbinput nblast docutils container">
+<div class="nbinput docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[20]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">plot_course</span><span class="p">(</span><span class="n">hist</span><span class="p">,</span>  <span class="n">nom_lab</span><span class="o">=</span><span class="s2">&quot;Nominal&quot;</span><span class="p">,</span> <span class="n">bound_lab</span><span class="o">=</span><span class="s2">&quot;Bounds&quot;</span><span class="p">,</span> <span class="n">center_lab</span><span class="o">=</span><span class="s2">&quot;Center-line&quot;</span><span class="p">,</span> <span class="n">nom_color</span><span class="o">=</span><span class="s2">&quot;black&quot;</span><span class="p">):</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">geoms</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;start&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;shapes&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;shape&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;color&#39;</span><span class="p">:</span> <span class="s1">&#39;black&#39;</span><span class="p">},</span> <span class="s1">&#39;near&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;color&#39;</span><span class="p">:</span> <span class="s1">&#39;grey&#39;</span><span class="p">,</span> <span class="s1">&#39;linestyle&#39;</span><span class="p">:</span> <span class="s1">&#39;dotted&#39;</span><span class="p">}}},</span>
+        <span class="s1">&#39;end&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;shapes&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;shape&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;color&#39;</span><span class="p">:</span> <span class="s1">&#39;black&#39;</span><span class="p">},</span> <span class="s1">&#39;near&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;color&#39;</span><span class="p">:</span> <span class="s1">&#39;grey&#39;</span><span class="p">,</span> <span class="s1">&#39;linestyle&#39;</span><span class="p">:</span> <span class="s1">&#39;dotted&#39;</span><span class="p">}}},</span>
+        <span class="s1">&#39;line&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;shapes&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;shape&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;color&#39;</span><span class="p">:</span> <span class="s1">&#39;black&#39;</span><span class="p">},</span> <span class="s1">&#39;near&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;color&#39;</span><span class="p">:</span> <span class="s1">&#39;grey&#39;</span><span class="p">,</span> <span class="s1">&#39;linestyle&#39;</span><span class="p">:</span> <span class="s1">&#39;dotted&#39;</span><span class="p">}}}}</span>
 
-    <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">hist</span><span class="p">[</span><span class="s1">&#39;flows&#39;</span><span class="p">][</span><span class="s1">&#39;Ground&#39;</span><span class="p">][</span><span class="s1">&#39;x&#39;</span><span class="p">],</span><span class="n">hist</span><span class="p">[</span><span class="s1">&#39;flows&#39;</span><span class="p">][</span><span class="s1">&#39;Ground&#39;</span><span class="p">][</span><span class="s1">&#39;y&#39;</span><span class="p">],</span> <span class="n">color</span><span class="o">=</span><span class="n">nom_color</span><span class="p">)</span>
-    <span class="n">plt</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">hist</span><span class="p">[</span><span class="s1">&#39;flows&#39;</span><span class="p">][</span><span class="s1">&#39;Ground&#39;</span><span class="p">][</span><span class="s1">&#39;x&#39;</span><span class="p">][</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span><span class="n">hist</span><span class="p">[</span><span class="s1">&#39;flows&#39;</span><span class="p">][</span><span class="s1">&#39;Ground&#39;</span><span class="p">][</span><span class="s1">&#39;y&#39;</span><span class="p">][</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span> <span class="n">color</span><span class="o">=</span><span class="n">nom_color</span><span class="p">,</span> <span class="n">marker</span><span class="o">=</span><span class="s1">&#39;*&#39;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="n">nom_lab</span><span class="p">)</span>
-
-    <span class="n">x_ground</span> <span class="o">=</span> <span class="n">hist</span><span class="p">[</span><span class="s1">&#39;flows&#39;</span><span class="p">][</span><span class="s1">&#39;Ground&#39;</span><span class="p">][</span><span class="s1">&#39;lbx&#39;</span><span class="p">]</span>
-    <span class="n">y_ground</span> <span class="o">=</span> <span class="n">hist</span><span class="p">[</span><span class="s1">&#39;flows&#39;</span><span class="p">][</span><span class="s1">&#39;Ground&#39;</span><span class="p">][</span><span class="s1">&#39;lby&#39;</span><span class="p">]</span>
-    <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x_ground</span><span class="p">,</span><span class="n">y_ground</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="n">bound_lab</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;grey&#39;</span><span class="p">)</span>
-    <span class="n">x_ground</span> <span class="o">=</span> <span class="n">hist</span><span class="p">[</span><span class="s1">&#39;flows&#39;</span><span class="p">][</span><span class="s1">&#39;Ground&#39;</span><span class="p">][</span><span class="s1">&#39;ubx&#39;</span><span class="p">]</span>
-    <span class="n">y_ground</span> <span class="o">=</span> <span class="n">hist</span><span class="p">[</span><span class="s1">&#39;flows&#39;</span><span class="p">][</span><span class="s1">&#39;Ground&#39;</span><span class="p">][</span><span class="s1">&#39;uby&#39;</span><span class="p">]</span>
-    <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x_ground</span><span class="p">,</span><span class="n">y_ground</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="n">bound_lab</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;grey&#39;</span><span class="p">)</span>
-    <span class="n">x_ground</span> <span class="o">=</span> <span class="n">hist</span><span class="p">[</span><span class="s1">&#39;flows&#39;</span><span class="p">][</span><span class="s1">&#39;Ground&#39;</span><span class="p">][</span><span class="s1">&#39;x&#39;</span><span class="p">]</span>
-    <span class="n">y_ground</span> <span class="o">=</span> <span class="n">hist</span><span class="p">[</span><span class="s1">&#39;flows&#39;</span><span class="p">][</span><span class="s1">&#39;Ground&#39;</span><span class="p">][</span><span class="s1">&#39;liney&#39;</span><span class="p">]</span>
-    <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x_ground</span><span class="p">,</span><span class="n">y_ground</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="n">center_lab</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;grey&#39;</span><span class="p">,</span> <span class="n">linestyle</span><span class="o">=</span><span class="s1">&#39;--&#39;</span><span class="p">)</span>
-<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
-<span class="k">def</span> <span class="nf">plot_trajectories</span><span class="p">(</span><span class="n">mdlhists</span><span class="p">,</span> <span class="n">nomhist</span><span class="o">=</span><span class="p">[],</span>  <span class="n">app</span><span class="o">=</span> <span class="p">[],</span> <span class="n">faultlabel</span><span class="o">=</span><span class="s1">&#39;Faulty&#39;</span><span class="p">,</span> <span class="n">faultalpha</span><span class="o">=</span><span class="mf">0.1</span><span class="p">,</span> <span class="n">range_hist</span><span class="o">=</span><span class="p">{},</span> <span class="n">rangealpha</span><span class="o">=</span><span class="mf">0.1</span><span class="p">,</span>
-                      <span class="n">setalpha</span><span class="o">=</span><span class="mf">0.3</span><span class="p">,</span> <span class="n">show_labels</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="s2">&quot;Fault Trajectories&quot;</span><span class="p">,</span> <span class="n">textoffset</span><span class="o">=</span><span class="mf">2.0</span><span class="p">,</span><span class="n">mode_trunc</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span><span class="n">mode_trunc_end</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span>
-                      <span class="n">xlim</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">ylim</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">colors</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;yellow&quot;</span><span class="p">,</span> <span class="s2">&quot;orange&quot;</span><span class="p">,</span> <span class="s2">&quot;red&quot;</span><span class="p">]):</span>
-    <span class="n">in_mdlhists</span><span class="o">=</span><span class="kc">False</span>
-    <span class="k">for</span> <span class="n">mode</span><span class="p">,</span> <span class="n">hist</span> <span class="ow">in</span> <span class="n">range_hist</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
-        <span class="k">if</span> <span class="n">mode</span><span class="p">[</span><span class="mi">6</span><span class="p">:</span><span class="mi">11</span><span class="p">]</span><span class="o">==</span><span class="s1">&#39;hmode&#39;</span><span class="p">:</span>
-            <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">hist</span><span class="p">[</span><span class="s1">&#39;flows&#39;</span><span class="p">][</span><span class="s1">&#39;Ground&#39;</span><span class="p">][</span><span class="s1">&#39;x&#39;</span><span class="p">],</span><span class="n">hist</span><span class="p">[</span><span class="s1">&#39;flows&#39;</span><span class="p">][</span><span class="s1">&#39;Ground&#39;</span><span class="p">][</span><span class="s1">&#39;y&#39;</span><span class="p">],</span> <span class="n">color</span><span class="o">=</span><span class="n">colors</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">alpha</span><span class="o">=</span><span class="n">rangealpha</span><span class="p">)</span>
-            <span class="n">plt</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">hist</span><span class="p">[</span><span class="s1">&#39;flows&#39;</span><span class="p">][</span><span class="s1">&#39;Ground&#39;</span><span class="p">][</span><span class="s1">&#39;x&#39;</span><span class="p">][</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span><span class="n">hist</span><span class="p">[</span><span class="s1">&#39;flows&#39;</span><span class="p">][</span><span class="s1">&#39;Ground&#39;</span><span class="p">][</span><span class="s1">&#39;y&#39;</span><span class="p">][</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span> <span class="n">color</span><span class="o">=</span><span class="n">colors</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">alpha</span><span class="o">=</span><span class="n">rangealpha</span><span class="p">,</span>
-                        <span class="n">marker</span><span class="o">=</span><span class="s1">&#39;.&#39;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;Range&#39;</span><span class="p">)</span>
-    <span class="k">for</span> <span class="n">mode</span><span class="p">,</span> <span class="n">hist</span> <span class="ow">in</span> <span class="n">mdlhists</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
-        <span class="k">if</span> <span class="n">mode</span><span class="o">==</span><span class="s1">&#39;nominal&#39;</span><span class="p">:</span>
-            <span class="n">plot_course</span><span class="p">(</span><span class="n">hist</span><span class="p">,</span> <span class="n">nom_lab</span><span class="o">=</span><span class="s2">&quot;_nolegend_&quot;</span><span class="p">)</span>
-            <span class="n">in_mdlhists</span><span class="o">=</span><span class="kc">True</span>
-        <span class="k">elif</span> <span class="n">mode</span><span class="p">[</span><span class="mi">6</span><span class="p">:</span><span class="mi">11</span><span class="p">]</span><span class="o">==</span><span class="s1">&#39;hmode&#39;</span><span class="p">:</span>
-            <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">hist</span><span class="p">[</span><span class="s1">&#39;flows&#39;</span><span class="p">][</span><span class="s1">&#39;Ground&#39;</span><span class="p">][</span><span class="s1">&#39;x&#39;</span><span class="p">],</span><span class="n">hist</span><span class="p">[</span><span class="s1">&#39;flows&#39;</span><span class="p">][</span><span class="s1">&#39;Ground&#39;</span><span class="p">][</span><span class="s1">&#39;y&#39;</span><span class="p">],</span> <span class="n">color</span><span class="o">=</span><span class="n">colors</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">alpha</span><span class="o">=</span><span class="n">setalpha</span><span class="p">)</span>
-            <span class="n">plt</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">hist</span><span class="p">[</span><span class="s1">&#39;flows&#39;</span><span class="p">][</span><span class="s1">&#39;Ground&#39;</span><span class="p">][</span><span class="s1">&#39;x&#39;</span><span class="p">][</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span><span class="n">hist</span><span class="p">[</span><span class="s1">&#39;flows&#39;</span><span class="p">][</span><span class="s1">&#39;Ground&#39;</span><span class="p">][</span><span class="s1">&#39;y&#39;</span><span class="p">][</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span> <span class="n">color</span><span class="o">=</span><span class="n">colors</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">alpha</span><span class="o">=</span><span class="n">setalpha</span><span class="p">,</span>
-                        <span class="n">marker</span><span class="o">=</span><span class="s1">&#39;o&#39;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;Set&#39;</span><span class="p">)</span>
-        <span class="k">else</span><span class="p">:</span>
-            <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">hist</span><span class="p">[</span><span class="s1">&#39;flows&#39;</span><span class="p">][</span><span class="s1">&#39;Ground&#39;</span><span class="p">][</span><span class="s1">&#39;x&#39;</span><span class="p">],</span><span class="n">hist</span><span class="p">[</span><span class="s1">&#39;flows&#39;</span><span class="p">][</span><span class="s1">&#39;Ground&#39;</span><span class="p">][</span><span class="s1">&#39;y&#39;</span><span class="p">],</span> <span class="n">color</span><span class="o">=</span><span class="n">colors</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span> <span class="n">alpha</span><span class="o">=</span><span class="n">faultalpha</span><span class="p">)</span>
-            <span class="n">plt</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">hist</span><span class="p">[</span><span class="s1">&#39;flows&#39;</span><span class="p">][</span><span class="s1">&#39;Ground&#39;</span><span class="p">][</span><span class="s1">&#39;x&#39;</span><span class="p">][</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span><span class="n">hist</span><span class="p">[</span><span class="s1">&#39;flows&#39;</span><span class="p">][</span><span class="s1">&#39;Ground&#39;</span><span class="p">][</span><span class="s1">&#39;y&#39;</span><span class="p">][</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span> <span class="n">color</span><span class="o">=</span><span class="n">colors</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span> <span class="n">alpha</span><span class="o">=</span><span class="n">faultalpha</span><span class="p">,</span>
-                        <span class="n">marker</span><span class="o">=</span><span class="s1">&#39;*&#39;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="n">faultlabel</span><span class="p">)</span>
-            <span class="k">if</span> <span class="n">show_labels</span><span class="p">:</span>
-                <span class="n">label</span> <span class="o">=</span> <span class="n">mode</span><span class="p">[</span><span class="n">mode_trunc</span><span class="p">:]</span>
-                <span class="n">label</span> <span class="o">=</span> <span class="n">label</span><span class="p">[:</span><span class="o">-</span><span class="n">mode_trunc_end</span><span class="p">]</span>
-                <span class="n">randang</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">rand</span><span class="p">()</span>
-                <span class="k">if</span> <span class="s1">&#39;stuck_left&#39;</span> <span class="ow">in</span> <span class="n">mode</span> <span class="p">:</span> <span class="n">xyt</span> <span class="o">=</span> <span class="n">textoffset</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="o">-</span><span class="mf">0.5</span><span class="p">,</span><span class="mf">1.5</span><span class="p">])</span>
-                <span class="k">elif</span> <span class="s1">&#39;stuck_right&#39;</span> <span class="ow">in</span> <span class="n">mode</span><span class="p">:</span> <span class="n">xyt</span> <span class="o">=</span> <span class="n">textoffset</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">0.5</span><span class="p">,</span><span class="o">-</span><span class="mf">1.5</span><span class="p">])</span>
-                <span class="k">elif</span> <span class="s1">&#39;elec_open&#39;</span> <span class="ow">in</span> <span class="n">mode</span><span class="p">:</span> <span class="n">xyt</span> <span class="o">=</span> <span class="n">textoffset</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="o">-</span><span class="mi">2</span><span class="p">,</span><span class="mf">0.5</span><span class="p">])</span>
-                <span class="k">elif</span> <span class="s1">&#39;stuck&#39;</span> <span class="ow">in</span> <span class="n">mode</span><span class="p">:</span> <span class="n">xyt</span> <span class="o">=</span> <span class="n">textoffset</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span>
-                <span class="k">else</span><span class="p">:</span> <span class="n">xyt</span> <span class="o">=</span> <span class="n">textoffset</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">])</span>
-                <span class="n">plt</span><span class="o">.</span><span class="n">annotate</span><span class="p">(</span><span class="n">label</span><span class="p">,</span> <span class="n">xy</span><span class="o">=</span><span class="p">(</span><span class="n">hist</span><span class="p">[</span><span class="s1">&#39;flows&#39;</span><span class="p">][</span><span class="s1">&#39;Ground&#39;</span><span class="p">][</span><span class="s1">&#39;x&#39;</span><span class="p">][</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span><span class="n">hist</span><span class="p">[</span><span class="s1">&#39;flows&#39;</span><span class="p">][</span><span class="s1">&#39;Ground&#39;</span><span class="p">][</span><span class="s1">&#39;y&#39;</span><span class="p">][</span><span class="o">-</span><span class="mi">1</span><span class="p">]),</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">8</span><span class="p">,</span>
-                             <span class="n">xytext</span><span class="o">=</span><span class="n">xyt</span><span class="p">,</span> <span class="n">textcoords</span><span class="o">=</span><span class="s1">&#39;offset points&#39;</span><span class="p">,</span> <span class="n">ha</span><span class="o">=</span><span class="s1">&#39;center&#39;</span><span class="p">,</span> <span class="n">va</span><span class="o">=</span><span class="s1">&#39;bottom&#39;</span><span class="p">,</span>
-                             <span class="n">bbox</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">boxstyle</span><span class="o">=</span><span class="s1">&#39;round,pad=0.2&#39;</span><span class="p">,</span> <span class="n">fc</span><span class="o">=</span><span class="s1">&#39;white&#39;</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">1.0</span><span class="p">),</span>
-                             <span class="n">arrowprops</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">arrowstyle</span><span class="o">=</span><span class="s1">&#39;-|&gt;&#39;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;black&#39;</span><span class="p">))</span>
-    <span class="k">if</span> <span class="n">app</span><span class="p">:</span> <span class="n">plt</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">hist</span><span class="p">[</span><span class="s1">&#39;flows&#39;</span><span class="p">][</span><span class="s1">&#39;Ground&#39;</span><span class="p">][</span><span class="s1">&#39;x&#39;</span><span class="p">][</span><span class="n">app</span><span class="o">.</span><span class="n">times</span><span class="p">[</span><span class="mi">0</span><span class="p">]],</span><span class="n">hist</span><span class="p">[</span><span class="s1">&#39;flows&#39;</span><span class="p">][</span><span class="s1">&#39;Ground&#39;</span><span class="p">][</span><span class="s1">&#39;y&#39;</span><span class="p">][</span><span class="n">app</span><span class="o">.</span><span class="n">times</span><span class="p">[</span><span class="mi">0</span><span class="p">]],</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;black&#39;</span><span class="p">,</span>
-                        <span class="n">marker</span><span class="o">=</span><span class="s1">&#39;X&#39;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;fault time&#39;</span><span class="p">)</span>
-    <span class="k">if</span> <span class="ow">not</span> <span class="n">in_mdlhists</span> <span class="ow">and</span> <span class="n">nomhist</span><span class="p">:</span> <span class="n">plot_course</span><span class="p">(</span><span class="n">nomhist</span><span class="p">)</span>
-    <span class="k">if</span> <span class="n">xlim</span><span class="p">:</span> <span class="n">plt</span><span class="o">.</span><span class="n">xlim</span><span class="p">(</span><span class="o">*</span><span class="n">xlim</span><span class="p">)</span>
-    <span class="k">if</span> <span class="n">ylim</span><span class="p">:</span> <span class="n">plt</span><span class="o">.</span><span class="n">ylim</span><span class="p">(</span><span class="o">*</span><span class="n">ylim</span><span class="p">)</span>
-    <span class="n">handles</span><span class="p">,</span> <span class="n">labels</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">gca</span><span class="p">()</span><span class="o">.</span><span class="n">get_legend_handles_labels</span><span class="p">()</span>
-    <span class="n">by_label</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="nb">zip</span><span class="p">(</span><span class="n">labels</span><span class="p">,</span> <span class="n">handles</span><span class="p">))</span>
-    <span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">(</span><span class="n">by_label</span><span class="o">.</span><span class="n">values</span><span class="p">(),</span> <span class="n">by_label</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span>
-    <span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="n">title</span><span class="p">)</span>
-    <span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s2">&quot;x-distance (m)&quot;</span><span class="p">)</span>
-    <span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s2">&quot;y-distance (m)&quot;</span><span class="p">)</span>
-    <span class="n">plt</span><span class="o">.</span><span class="n">grid</span><span class="p">()</span>
-    <span class="k">return</span> <span class="n">plt</span><span class="o">.</span><span class="n">gcf</span><span class="p">()</span>
-</pre></div>
+<span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">mdl_set</span><span class="o">.</span><span class="n">flows</span><span class="p">[</span><span class="s1">&#39;ground&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">ga</span><span class="o">.</span><span class="n">show</span><span class="p">(</span><span class="n">geoms</span><span class="p">,</span> <span class="n">figsize</span> <span class="o">=</span> <span class="p">(</span><span class="mi">8</span><span class="p">,</span><span class="mi">8</span><span class="p">))</span>
+<span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">mdlhists_range</span><span class="o">.</span><span class="n">plot_trajectories</span><span class="p">(</span><span class="s2">&quot;flows.pos.s.x&quot;</span><span class="p">,</span> <span class="s2">&quot;flows.pos.s.y&quot;</span><span class="p">,</span>
+                                        <span class="n">comp_groups</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;range&#39;</span><span class="p">:</span> <span class="nb">list</span><span class="p">(</span><span class="n">mdlhists_range</span><span class="o">.</span><span class="n">nest</span><span class="p">()</span><span class="o">.</span><span class="n">keys</span><span class="p">())},</span>
+                                        <span class="n">fig</span><span class="o">=</span><span class="n">fig</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">,</span> <span class="n">color</span> <span class="o">=</span> <span class="n">colors</span><span class="p">[</span><span class="mi">2</span><span class="p">])</span>
+<span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">mdlhists_set</span><span class="o">.</span><span class="n">plot_trajectories</span><span class="p">(</span><span class="s2">&quot;flows.pos.s.x&quot;</span><span class="p">,</span> <span class="s2">&quot;flows.pos.s.y&quot;</span><span class="p">,</span>
+                                         <span class="n">comp_groups</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;set&#39;</span><span class="p">:</span> <span class="nb">list</span><span class="p">(</span><span class="n">mdlhists_set</span><span class="o">.</span><span class="n">nest</span><span class="p">()</span><span class="o">.</span><span class="n">keys</span><span class="p">())},</span>
+                                         <span class="n">color</span> <span class="o">=</span> <span class="n">colors</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">fig</span><span class="o">=</span><span class="n">fig</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">)</span>
+<span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">mdlhists_id</span><span class="o">.</span><span class="n">plot_trajectories</span><span class="p">(</span><span class="s2">&quot;flows.pos.s.x&quot;</span><span class="p">,</span> <span class="s2">&quot;flows.pos.s.y&quot;</span><span class="p">,</span>
+                                        <span class="n">comp_groups</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;id&#39;</span><span class="p">:</span> <span class="nb">list</span><span class="p">(</span><span class="n">mdlhists_id</span><span class="o">.</span><span class="n">nest</span><span class="p">()</span><span class="o">.</span><span class="n">keys</span><span class="p">())},</span>
+                                        <span class="n">fig</span><span class="o">=</span><span class="n">fig</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">,</span> <span class="n">color</span> <span class="o">=</span> <span class="n">colors</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+<br/><br/><br/></pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../../../_images/examples_rover_fault_sampling_Rover_Mode_Notebook_27_0.png" src="../../../_images/examples_rover_fault_sampling_Rover_Mode_Notebook_27_0.png" />
 </div>
 </div>
 <div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[21]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">fig</span> <span class="o">=</span> <span class="n">plot_trajectories</span><span class="p">(</span><span class="n">mdlhists_set</span><span class="p">,</span> <span class="n">mdlhist</span><span class="p">,</span> <span class="n">app_range</span><span class="p">,</span> <span class="n">range_hist</span><span class="o">=</span><span class="n">mdlhists_range</span><span class="p">,</span> <span class="n">faultalpha</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span> <span class="n">mode_trunc_end</span><span class="o">=</span><span class="mi">6</span><span class="p">,</span>
-                        <span class="n">setalpha</span><span class="o">=</span><span class="mf">0.8</span><span class="p">,</span> <span class="n">rangealpha</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="n">textoffset</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span> <span class="n">colors</span><span class="o">=</span><span class="n">colors</span><span class="p">,</span> <span class="n">faultlabel</span><span class="o">=</span><span class="s2">&quot;_nolegend_&quot;</span><span class="p">)</span>
-</pre></div>
-</div>
-</div>
-<div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[22]:
-</pre></div>
-</div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">fig</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="s2">&quot;fault_map.pdf&quot;</span><span class="p">,</span> <span class="nb">format</span><span class="o">=</span><span class="s2">&quot;pdf&quot;</span><span class="p">,</span> <span class="n">bbox_inches</span> <span class="o">=</span> <span class="s1">&#39;tight&#39;</span><span class="p">,</span> <span class="n">pad_inches</span> <span class="o">=</span> <span class="mi">0</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
-<div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[23]:
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[22]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">fig</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="s2">&quot;fault_map.eps&quot;</span><span class="p">,</span> <span class="nb">format</span><span class="o">=</span><span class="s2">&quot;eps&quot;</span><span class="p">,</span> <span class="n">bbox_inches</span> <span class="o">=</span> <span class="s1">&#39;tight&#39;</span><span class="p">,</span> <span class="n">pad_inches</span> <span class="o">=</span> <span class="mi">0</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area stderr docutils container">
+<div class="highlight"><pre>
+The PostScript backend does not support transparency; partially transparent artists will be rendered opaque.
+</pre></div></div>
+</div>
 <section id="Cluster-Analysis">
 <h2>Cluster Analysis<a class="headerlink" href="#Cluster-Analysis" title="Permalink to this heading"></a></h2>
 <p>Below, we use clustering to identify similar sets of synthetic modes.</p>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[24]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[28]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">sklearn.cluster</span> <span class="kn">import</span> <span class="n">DBSCAN</span> <span class="k">as</span> <span class="n">cluster</span> <span class="c1">#DBSCAN</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[29]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">get_X</span> <span class="p">(</span><span class="n">mdlhists</span><span class="p">,</span> <span class="n">hmode</span> <span class="o">=</span> <span class="kc">True</span><span class="p">):</span>
+    <span class="k">if</span> <span class="n">hmode</span><span class="p">:</span>
+        <span class="n">x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="n">value</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]]</span> <span class="k">for</span> <span class="n">scen</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">mdlhists</span><span class="o">.</span><span class="n">get_values</span><span class="p">(</span><span class="s1">&#39;flows.pos.s.x&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">items</span><span class="p">()</span> <span class="k">if</span> <span class="s1">&#39;hmode&#39;</span> <span class="ow">in</span> <span class="n">scen</span><span class="p">])</span>
+        <span class="n">y</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="n">value</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]]</span> <span class="k">for</span> <span class="n">scen</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">mdlhists</span><span class="o">.</span><span class="n">get_values</span><span class="p">(</span><span class="s1">&#39;flows.pos.s.y&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">items</span><span class="p">()</span> <span class="k">if</span> <span class="s1">&#39;hmode&#39;</span> <span class="ow">in</span> <span class="n">scen</span><span class="p">])</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="n">value</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]]</span> <span class="k">for</span> <span class="n">scen</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">mdlhists</span><span class="o">.</span><span class="n">get_values</span><span class="p">(</span><span class="s1">&#39;flows.pos.s.x&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">items</span><span class="p">()</span> <span class="k">if</span> <span class="s1">&#39;hmode&#39;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">scen</span><span class="p">])</span>
+        <span class="n">y</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="n">value</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]]</span> <span class="k">for</span> <span class="n">scen</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">mdlhists</span><span class="o">.</span><span class="n">get_values</span><span class="p">(</span><span class="s1">&#39;flows.pos.s.y&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">items</span><span class="p">()</span> <span class="k">if</span> <span class="s1">&#39;hmode&#39;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">scen</span><span class="p">])</span>
+    <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">concatenate</span><span class="p">((</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">),</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
 <p>To find similar trajectories, we will cluster on the x-y coordinates of the end position of the Rover accross these scenarios:</p>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[25]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[30]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">X_range</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="n">hist</span><span class="p">[</span><span class="s1">&#39;flows&#39;</span><span class="p">][</span><span class="s1">&#39;Ground&#39;</span><span class="p">][</span><span class="s1">&#39;x&#39;</span><span class="p">][</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span><span class="n">hist</span><span class="p">[</span><span class="s1">&#39;flows&#39;</span><span class="p">][</span><span class="s1">&#39;Ground&#39;</span><span class="p">][</span><span class="s1">&#39;y&#39;</span><span class="p">][</span><span class="o">-</span><span class="mi">1</span><span class="p">]]</span> <span class="k">for</span> <span class="n">scen</span><span class="p">,</span> <span class="n">hist</span> <span class="ow">in</span> <span class="n">mdlhists_range</span><span class="o">.</span><span class="n">items</span><span class="p">()</span> <span class="k">if</span> <span class="s1">&#39;hmode&#39;</span> <span class="ow">in</span> <span class="n">scen</span><span class="p">])</span>
-<span class="n">ec_range</span> <span class="o">=</span> <span class="p">[</span><span class="n">endclass</span><span class="p">[</span><span class="s1">&#39;line_dist&#39;</span><span class="p">]</span> <span class="k">for</span> <span class="n">scen</span><span class="p">,</span> <span class="n">endclass</span> <span class="ow">in</span> <span class="n">endclasses_range</span><span class="o">.</span><span class="n">items</span><span class="p">()</span> <span class="k">if</span> <span class="n">scen</span><span class="p">[</span><span class="mi">6</span><span class="p">:</span><span class="mi">11</span><span class="p">]</span><span class="o">==</span><span class="s1">&#39;hmode&#39;</span><span class="p">]</span>
-</pre></div>
-</div>
-</div>
-<div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[26]:
-</pre></div>
-</div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">X_set</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="n">hist</span><span class="p">[</span><span class="s1">&#39;flows&#39;</span><span class="p">][</span><span class="s1">&#39;Ground&#39;</span><span class="p">][</span><span class="s1">&#39;x&#39;</span><span class="p">][</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span> <span class="n">hist</span><span class="p">[</span><span class="s1">&#39;flows&#39;</span><span class="p">][</span><span class="s1">&#39;Ground&#39;</span><span class="p">][</span><span class="s1">&#39;y&#39;</span><span class="p">][</span><span class="o">-</span><span class="mi">1</span><span class="p">]]</span> <span class="k">for</span> <span class="n">scen</span><span class="p">,</span> <span class="n">hist</span> <span class="ow">in</span> <span class="n">mdlhists_set</span><span class="o">.</span><span class="n">items</span><span class="p">()</span> <span class="k">if</span> <span class="s1">&#39;hmode&#39;</span> <span class="ow">in</span> <span class="n">scen</span><span class="p">])</span>
-<span class="n">ec_set</span> <span class="o">=</span> <span class="p">[</span><span class="n">endclass</span><span class="p">[</span><span class="s1">&#39;line_dist&#39;</span><span class="p">]</span> <span class="k">for</span> <span class="n">scen</span><span class="p">,</span> <span class="n">endclass</span> <span class="ow">in</span> <span class="n">endclasses_set</span><span class="o">.</span><span class="n">items</span><span class="p">()</span> <span class="k">if</span> <span class="n">scen</span><span class="p">[</span><span class="mi">6</span><span class="p">:</span><span class="mi">11</span><span class="p">]</span><span class="o">==</span><span class="s1">&#39;hmode&#39;</span><span class="p">]</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">X_range</span> <span class="o">=</span> <span class="n">get_X</span> <span class="p">(</span><span class="n">mdlhists_range</span><span class="p">)</span>
+<span class="n">ec_range</span> <span class="o">=</span> <span class="p">[</span><span class="n">endclass</span> <span class="k">for</span> <span class="n">scen</span><span class="p">,</span> <span class="n">endclass</span> <span class="ow">in</span> <span class="n">results_range</span><span class="o">.</span><span class="n">get_values</span><span class="p">(</span><span class="s1">&#39;end_dist&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">items</span><span class="p">()</span> <span class="k">if</span> <span class="n">scen</span><span class="p">[</span><span class="mi">6</span><span class="p">:</span><span class="mi">11</span><span class="p">]</span><span class="o">==</span><span class="s1">&#39;hmode&#39;</span><span class="p">]</span>
 </pre></div>
 </div>
 </div>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[27]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[31]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">X_id</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="n">hist</span><span class="p">[</span><span class="s1">&#39;flows&#39;</span><span class="p">][</span><span class="s1">&#39;Ground&#39;</span><span class="p">][</span><span class="s1">&#39;x&#39;</span><span class="p">][</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span><span class="n">hist</span><span class="p">[</span><span class="s1">&#39;flows&#39;</span><span class="p">][</span><span class="s1">&#39;Ground&#39;</span><span class="p">][</span><span class="s1">&#39;y&#39;</span><span class="p">][</span><span class="o">-</span><span class="mi">1</span><span class="p">]]</span> <span class="k">for</span> <span class="n">scen</span><span class="p">,</span> <span class="n">hist</span> <span class="ow">in</span> <span class="n">mdlhists_set</span><span class="o">.</span><span class="n">items</span><span class="p">()</span><span class="k">if</span> <span class="s1">&#39;hmode&#39;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">scen</span><span class="p">])</span>
-<span class="n">ec_id</span> <span class="o">=</span> <span class="p">[</span><span class="n">endclass</span><span class="p">[</span><span class="s1">&#39;line_dist&#39;</span><span class="p">]</span> <span class="k">for</span> <span class="n">scen</span><span class="p">,</span> <span class="n">endclass</span> <span class="ow">in</span> <span class="n">endclasses_set</span><span class="o">.</span><span class="n">items</span><span class="p">()</span> <span class="k">if</span> <span class="n">scen</span><span class="p">[</span><span class="mi">6</span><span class="p">:</span><span class="mi">11</span><span class="p">]</span><span class="o">!=</span><span class="s1">&#39;hmode&#39;</span> <span class="ow">and</span> <span class="n">scen</span><span class="p">[</span><span class="mi">6</span><span class="p">:</span><span class="mi">11</span><span class="p">]</span><span class="o">!=</span><span class="s1">&#39;nominal&#39;</span><span class="p">]</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">X_set</span> <span class="o">=</span> <span class="n">get_X</span> <span class="p">(</span><span class="n">mdlhists_set</span><span class="p">)</span>
+<span class="n">ec_set</span> <span class="o">=</span> <span class="p">[</span><span class="n">endclass</span> <span class="k">for</span> <span class="n">scen</span><span class="p">,</span> <span class="n">endclass</span> <span class="ow">in</span> <span class="n">results_set</span><span class="o">.</span><span class="n">get_values</span><span class="p">(</span><span class="s1">&#39;end_dist&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">items</span><span class="p">()</span> <span class="k">if</span> <span class="n">scen</span><span class="p">[</span><span class="mi">6</span><span class="p">:</span><span class="mi">11</span><span class="p">]</span><span class="o">==</span><span class="s1">&#39;hmode&#39;</span><span class="p">]</span>
 </pre></div>
+</div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[32]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">X_id</span> <span class="o">=</span> <span class="n">get_X</span> <span class="p">(</span><span class="n">mdlhists_set</span><span class="p">,</span> <span class="n">hmode</span> <span class="o">=</span> <span class="kc">False</span><span class="p">)</span>
+<span class="n">ec_id</span> <span class="o">=</span> <span class="p">[</span><span class="n">endclass</span> <span class="k">for</span> <span class="n">scen</span><span class="p">,</span> <span class="n">endclass</span> <span class="ow">in</span> <span class="n">results_set</span><span class="o">.</span><span class="n">get_values</span><span class="p">(</span><span class="s1">&#39;end_dist&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">items</span><span class="p">()</span> <span class="k">if</span> <span class="n">scen</span><span class="p">[</span><span class="mi">6</span><span class="p">:</span><span class="mi">11</span><span class="p">]</span><span class="o">!=</span><span class="s1">&#39;hmode&#39;</span> <span class="ow">and</span> <span class="n">scen</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="mi">6</span><span class="p">]</span><span class="o">!=</span><span class="s1">&#39;nominal&#39;</span><span class="p">]</span>
+<br/></pre></div>
 </div>
 </div>
 <p>To identify where all the clusters are accross all three approaches, we first have to combine the three sets of data into one (otherwise it might cluster differently).</p>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[28]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[33]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">X</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">concatenate</span><span class="p">((</span><span class="n">X_range</span><span class="p">,</span> <span class="n">X_set</span><span class="p">,</span> <span class="n">X_id</span><span class="p">))</span>
@@ -830,7 +947,7 @@ Cell <span class="ansi-green-intense-fg ansi-bold">In[1], line 1</span>
 </div>
 <p>This runs the clustering algorithm:</p>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[29]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[34]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">cl</span> <span class="o">=</span> <span class="n">cluster</span><span class="p">()</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X</span><span class="p">)</span>
@@ -839,8 +956,8 @@ Cell <span class="ansi-green-intense-fg ansi-bold">In[1], line 1</span>
 </div>
 </div>
 <p>The number of clusters is:</p>
-<div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[30]:
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[35]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">unique_labels</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="n">labels</span><span class="p">)</span>
@@ -848,13 +965,22 @@ Cell <span class="ansi-green-intense-fg ansi-bold">In[1], line 1</span>
 </pre></div>
 </div>
 </div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[35]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+2
+</pre></div></div>
+</div>
 <p>Here we plot the clusters on the course map to see what the algorithm identified.</p>
-<div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[31]:
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[36]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">fig</span><span class="o">=</span><span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">()</span>
-<span class="n">plot_course</span><span class="p">(</span><span class="n">mdlhist</span><span class="p">,</span> <span class="n">nom_lab</span><span class="o">=</span><span class="s2">&quot;_nolegend_&quot;</span><span class="p">)</span>
+<span class="n">mdl_set</span><span class="o">.</span><span class="n">flows</span><span class="p">[</span><span class="s1">&#39;ground&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">ga</span><span class="o">.</span><span class="n">show</span><span class="p">(</span><span class="n">geoms</span><span class="p">,</span> <span class="n">figsize</span> <span class="o">=</span> <span class="p">(</span><span class="mi">8</span><span class="p">,</span><span class="mi">8</span><span class="p">))</span>
 <span class="c1">#clust_colors = [plt.cm.Spectral(each) for each in np.linspace(0, 1, len(unique_labels))]</span>
 <span class="c1">#clust_colors.reverse()</span>
 <span class="n">clust_colors</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">cm</span><span class="o">.</span><span class="n">get_cmap</span><span class="p">(</span><span class="s1">&#39;viridis&#39;</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">unique_labels</span><span class="p">)</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span>
@@ -880,25 +1006,48 @@ Cell <span class="ansi-green-intense-fg ansi-bold">In[1], line 1</span>
 </pre></div>
 </div>
 </div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+&lt;Figure size 640x480 with 0 Axes&gt;
+</pre></div></div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../../../_images/examples_rover_fault_sampling_Rover_Mode_Notebook_44_1.png" src="../../../_images/examples_rover_fault_sampling_Rover_Mode_Notebook_44_1.png" />
+</div>
+</div>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[37]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">fig</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="s2">&quot;cluster_map.pdf&quot;</span><span class="p">,</span> <span class="nb">format</span><span class="o">=</span><span class="s2">&quot;pdf&quot;</span><span class="p">,</span> <span class="n">bbox_inches</span> <span class="o">=</span> <span class="s1">&#39;tight&#39;</span><span class="p">,</span> <span class="n">pad_inches</span> <span class="o">=</span> <span class="mi">0</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
-<div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[38]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">fig</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="s2">&quot;cluster_map.eps&quot;</span><span class="p">,</span> <span class="nb">format</span><span class="o">=</span><span class="s2">&quot;eps&quot;</span><span class="p">,</span> <span class="n">bbox_inches</span> <span class="o">=</span> <span class="s1">&#39;tight&#39;</span><span class="p">,</span> <span class="n">pad_inches</span> <span class="o">=</span> <span class="mi">0</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area stderr docutils container">
+<div class="highlight"><pre>
+The PostScript backend does not support transparency; partially transparent artists will be rendered opaque.
+</pre></div></div>
+</div>
 <p>Next, we would like to see how these approaches span the different clusters. If an approach has more coverage, we might say that it better explored the space.</p>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[39]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">categorizations</span> <span class="o">=</span> <span class="p">{</span><span class="nb">tuple</span><span class="p">(</span><span class="n">x</span><span class="p">):</span><span class="n">labels</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="k">for</span> <span class="n">i</span><span class="p">,</span><span class="n">x</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">X</span><span class="p">)}</span>
@@ -906,7 +1055,7 @@ Cell <span class="ansi-green-intense-fg ansi-bold">In[1], line 1</span>
 </div>
 </div>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[40]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">cat_values</span> <span class="o">=</span> <span class="p">{</span><span class="n">lab</span><span class="p">:{</span><span class="nb">tuple</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">X</span> <span class="k">if</span> <span class="n">lab</span><span class="o">==</span><span class="n">categorizations</span><span class="p">[</span><span class="nb">tuple</span><span class="p">(</span><span class="n">x</span><span class="p">)]}</span> <span class="k">for</span> <span class="n">lab</span> <span class="ow">in</span> <span class="nb">set</span><span class="p">(</span><span class="n">labels</span><span class="p">)}</span>
@@ -914,8 +1063,8 @@ Cell <span class="ansi-green-intense-fg ansi-bold">In[1], line 1</span>
 </div>
 </div>
 <p>These are the categories found by each approach:</p>
-<div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[41]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">cat_range</span> <span class="o">=</span> <span class="p">[</span><span class="n">categorizations</span><span class="p">[</span><span class="nb">tuple</span><span class="p">(</span><span class="n">x</span><span class="p">)]</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">X_range</span><span class="p">]</span>
@@ -923,8 +1072,17 @@ Cell <span class="ansi-green-intense-fg ansi-bold">In[1], line 1</span>
 </pre></div>
 </div>
 </div>
-<div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[41]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+{-1, 0, 1}
+</pre></div></div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[42]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">cat_id</span> <span class="o">=</span> <span class="p">[</span><span class="n">categorizations</span><span class="p">[</span><span class="nb">tuple</span><span class="p">(</span><span class="n">x</span><span class="p">)]</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">X_id</span><span class="p">]</span>
@@ -932,8 +1090,17 @@ Cell <span class="ansi-green-intense-fg ansi-bold">In[1], line 1</span>
 </pre></div>
 </div>
 </div>
-<div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[42]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+{0, 1}
+</pre></div></div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[43]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">cat_set</span> <span class="o">=</span> <span class="p">[</span><span class="n">categorizations</span><span class="p">[</span><span class="nb">tuple</span><span class="p">(</span><span class="n">x</span><span class="p">)]</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">X_set</span><span class="p">]</span>
@@ -941,9 +1108,18 @@ Cell <span class="ansi-green-intense-fg ansi-bold">In[1], line 1</span>
 </pre></div>
 </div>
 </div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[43]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+{0, 1}
+</pre></div></div>
+</div>
 <p>This function categorizes the results of each approach into the given clusters</p>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[44]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">get_cats</span><span class="p">(</span><span class="n">categorizations</span><span class="p">,</span> <span class="n">X</span><span class="p">,</span> <span class="n">ec</span><span class="p">,</span> <span class="n">unique_categorizations</span><span class="p">):</span>
@@ -955,7 +1131,7 @@ Cell <span class="ansi-green-intense-fg ansi-bold">In[1], line 1</span>
 </div>
 </div>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[45]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">cats</span> <span class="o">=</span> <span class="n">get_cats</span><span class="p">(</span><span class="n">categorizations</span><span class="p">,</span><span class="n">X_range</span><span class="p">,</span> <span class="n">ec_range</span><span class="p">,</span> <span class="n">unique_labels</span><span class="p">)</span>
@@ -963,7 +1139,7 @@ Cell <span class="ansi-green-intense-fg ansi-bold">In[1], line 1</span>
 </div>
 </div>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[46]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">worst_cat</span><span class="p">(</span><span class="n">categorizations</span><span class="p">,</span> <span class="n">X</span><span class="p">,</span> <span class="n">ec</span><span class="p">,</span> <span class="n">unique_categorizations</span><span class="p">):</span>
@@ -976,7 +1152,7 @@ Cell <span class="ansi-green-intense-fg ansi-bold">In[1], line 1</span>
 </div>
 </div>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[47]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">worst_cat_id</span> <span class="o">=</span> <span class="n">worst_cat</span><span class="p">(</span><span class="n">categorizations</span><span class="p">,</span><span class="n">X_id</span><span class="p">,</span> <span class="n">ec_id</span><span class="p">,</span> <span class="n">unique_labels</span><span class="p">)</span>
@@ -986,8 +1162,8 @@ Cell <span class="ansi-green-intense-fg ansi-bold">In[1], line 1</span>
 </div>
 </div>
 <p>This table shows the worst-case identified in each category</p>
-<div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[48]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">cat_tab</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">([[</span><span class="o">*</span><span class="n">worst_cat_id</span><span class="o">.</span><span class="n">values</span><span class="p">()],</span> <span class="p">[</span><span class="o">*</span><span class="n">worst_cat_set</span><span class="o">.</span><span class="n">values</span><span class="p">()],</span> <span class="p">[</span><span class="o">*</span><span class="n">worst_cat_range</span><span class="o">.</span><span class="n">values</span><span class="p">()]],</span> <span class="n">index</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;Identified&quot;</span><span class="p">,</span> <span class="s2">&quot;Set&quot;</span><span class="p">,</span> <span class="s2">&quot;Range&quot;</span><span class="p">],</span> <span class="n">columns</span> <span class="o">=</span> <span class="n">worst_cat_id</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span>
@@ -995,9 +1171,60 @@ Cell <span class="ansi-green-intense-fg ansi-bold">In[1], line 1</span>
 </pre></div>
 </div>
 </div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[48]:
+</pre></div>
+</div>
+<div class="output_area rendered_html docutils container">
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>0</th>
+      <th>1</th>
+      <th>-1</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>Identified</th>
+      <td>18.536162</td>
+      <td>0.000000</td>
+      <td>0.000000</td>
+    </tr>
+    <tr>
+      <th>Set</th>
+      <td>18.536162</td>
+      <td>0.556991</td>
+      <td>0.000000</td>
+    </tr>
+    <tr>
+      <th>Range</th>
+      <td>18.621225</td>
+      <td>0.000000</td>
+      <td>13.954836</td>
+    </tr>
+  </tbody>
+</table>
+</div></div>
+</div>
 <p>To view the coverage of each approach, here we plot the frequency of scenarios accross the clusters.</p>
-<div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[49]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">hatching</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;xx&#39;</span><span class="p">,</span> <span class="s1">&#39;//&#39;</span><span class="p">,</span> <span class="s1">&#39;..&#39;</span><span class="p">]</span>
@@ -1016,25 +1243,49 @@ Cell <span class="ansi-green-intense-fg ansi-bold">In[1], line 1</span>
 </pre></div>
 </div>
 </div>
+<div class="nboutput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[49]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+&lt;matplotlib.legend.Legend at 0x2b1187febb0&gt;
+</pre></div></div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../../../_images/examples_rover_fault_sampling_Rover_Mode_Notebook_62_1.png" src="../../../_images/examples_rover_fault_sampling_Rover_Mode_Notebook_62_1.png" />
+</div>
+</div>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[50]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">fig</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="s2">&quot;cluster_dist.pdf&quot;</span><span class="p">,</span> <span class="nb">format</span><span class="o">=</span><span class="s2">&quot;pdf&quot;</span><span class="p">,</span> <span class="n">bbox_inches</span> <span class="o">=</span> <span class="s1">&#39;tight&#39;</span><span class="p">,</span> <span class="n">pad_inches</span> <span class="o">=</span> <span class="mi">0</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
-<div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[51]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">fig</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="s2">&quot;cluster_dist.eps&quot;</span><span class="p">,</span> <span class="nb">format</span><span class="o">=</span><span class="s2">&quot;eps&quot;</span><span class="p">,</span> <span class="n">bbox_inches</span> <span class="o">=</span> <span class="s1">&#39;tight&#39;</span><span class="p">,</span> <span class="n">pad_inches</span> <span class="o">=</span> <span class="mi">0</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area stderr docutils container">
+<div class="highlight"><pre>
+The PostScript backend does not support transparency; partially transparent artists will be rendered opaque.
+</pre></div></div>
+</div>
 <p>Next, summarizing the overall stats from the approaches:</p>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[52]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">uncat_range</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">([</span><span class="n">i</span><span class="o">==-</span><span class="mi">1</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">cat_range</span><span class="p">])</span>
@@ -1044,7 +1295,7 @@ Cell <span class="ansi-green-intense-fg ansi-bold">In[1], line 1</span>
 </div>
 </div>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[53]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">uncat</span> <span class="o">=</span> <span class="p">[</span><span class="n">uncat_id</span><span class="p">,</span> <span class="n">uncat_set</span><span class="p">,</span> <span class="n">uncat_range</span><span class="p">]</span>
@@ -1053,8 +1304,8 @@ Cell <span class="ansi-green-intense-fg ansi-bold">In[1], line 1</span>
 </pre></div>
 </div>
 </div>
-<div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[54]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">res_tab</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">([</span><span class="n">lens</span><span class="p">,</span> <span class="n">sim_times</span><span class="p">,</span><span class="n">num_cat</span><span class="p">,</span> <span class="n">uncat</span><span class="p">])</span>
@@ -1064,17 +1315,101 @@ Cell <span class="ansi-green-intense-fg ansi-bold">In[1], line 1</span>
 </pre></div>
 </div>
 </div>
-<div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[54]:
+</pre></div>
+</div>
+<div class="output_area rendered_html docutils container">
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>Identified</th>
+      <th>Elaborated-Set</th>
+      <th>Elaborated-Range</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>Scenarios</th>
+      <td>5.000000</td>
+      <td>35.000000</td>
+      <td>1099.000000</td>
+    </tr>
+    <tr>
+      <th>Comp. Time (s)</th>
+      <td>0.643958</td>
+      <td>3.664267</td>
+      <td>126.753496</td>
+    </tr>
+    <tr>
+      <th>% Clusters</th>
+      <td>66.666667</td>
+      <td>66.666667</td>
+      <td>100.000000</td>
+    </tr>
+    <tr>
+      <th>Unclustered</th>
+      <td>0.000000</td>
+      <td>0.000000</td>
+      <td>20.000000</td>
+    </tr>
+  </tbody>
+</table>
+</div></div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[55]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="n">res_tab</span><span class="o">.</span><span class="n">to_latex</span><span class="p">(</span><span class="n">float_format</span><span class="o">=</span><span class="s2">&quot;</span><span class="si">%.2f</span><span class="s2">&quot;</span><span class="p">))</span>
 </pre></div>
 </div>
 </div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+\begin{tabular}{lrrr}
+\toprule
+{} &amp;  Identified &amp;  Elaborated-Set &amp;  Elaborated-Range \\
+\midrule
+Scenarios      &amp;        5.00 &amp;           35.00 &amp;           1099.00 \\
+Comp. Time (s) &amp;        0.64 &amp;            3.66 &amp;            126.75 \\
+\% Clusters     &amp;       66.67 &amp;           66.67 &amp;            100.00 \\
+Unclustered    &amp;        0.00 &amp;            0.00 &amp;             20.00 \\
+\bottomrule
+\end{tabular}
+
+</pre></div></div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area stderr docutils container">
+<div class="highlight"><pre>
+C:\Users\mmohame2\AppData\Local\Temp\1\ipykernel_8124\1791633431.py:1: FutureWarning: In future versions `DataFrame.to_latex` is expected to utilise the base implementation of `Styler.to_latex` for formatting and rendering. The arguments signature may therefore change. It is recommended instead to use `DataFrame.style.to_latex` which also contains additional functionality.
+  print(res_tab.to_latex(float_format=&#34;%.2f&#34;))
+</pre></div></div>
+</div>
 <p>Finally, we use the following to calculate more detailed statistics about the cluster coverage.</p>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[56]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">calc_2d_cov_loss</span><span class="p">(</span><span class="n">xmin</span><span class="p">,</span> <span class="n">xmax</span><span class="p">,</span> <span class="n">ymin</span><span class="p">,</span> <span class="n">ymax</span><span class="p">,</span> <span class="n">xs</span><span class="p">,</span> <span class="n">ys</span><span class="p">):</span>
@@ -1090,7 +1425,7 @@ Cell <span class="ansi-green-intense-fg ansi-bold">In[1], line 1</span>
 </div>
 </div>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[57]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">cov_loss_id</span><span class="p">,</span><span class="n">cov_loss_set</span><span class="p">,</span><span class="n">cov_loss_range</span> <span class="o">=</span> <span class="p">[],[],[]</span>
@@ -1112,8 +1447,8 @@ Cell <span class="ansi-green-intense-fg ansi-bold">In[1], line 1</span>
 </div>
 </div>
 <p>Coverage Compared to the range approach:</p>
-<div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[58]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">cov_tab</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">([</span><span class="n">cov_loss_id</span><span class="p">,</span><span class="n">cov_loss_set</span><span class="p">,</span><span class="n">cov_loss_range</span><span class="p">],</span> <span class="n">columns</span><span class="o">=</span><span class="nb">list</span><span class="p">(</span><span class="n">cat_values</span><span class="o">.</span><span class="n">keys</span><span class="p">()),</span> <span class="n">index</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;Identified&quot;</span><span class="p">,</span> <span class="s2">&quot;Set&quot;</span><span class="p">,</span> <span class="s2">&quot;Range&quot;</span><span class="p">])</span>
@@ -1122,9 +1457,60 @@ Cell <span class="ansi-green-intense-fg ansi-bold">In[1], line 1</span>
 </pre></div>
 </div>
 </div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[58]:
+</pre></div>
+</div>
+<div class="output_area rendered_html docutils container">
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>0</th>
+      <th>1</th>
+      <th>-1</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>Identified</th>
+      <td>0.322338</td>
+      <td>0.704326</td>
+      <td>1.0</td>
+    </tr>
+    <tr>
+      <th>Set</th>
+      <td>0.101203</td>
+      <td>0.077128</td>
+      <td>1.0</td>
+    </tr>
+    <tr>
+      <th>Range</th>
+      <td>0.000000</td>
+      <td>0.000000</td>
+      <td>0.0</td>
+    </tr>
+  </tbody>
+</table>
+</div></div>
+</div>
 <p>Number of scenarios per approach for each cluster:</p>
-<div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[59]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">scens_tab</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">([</span><span class="n">num_scens_id</span><span class="p">,</span><span class="n">num_scens_set</span><span class="p">,</span><span class="n">num_scens_range</span><span class="p">],</span> <span class="n">columns</span><span class="o">=</span><span class="nb">list</span><span class="p">(</span><span class="n">cat_values</span><span class="o">.</span><span class="n">keys</span><span class="p">()),</span> <span class="n">index</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;Identified&quot;</span><span class="p">,</span> <span class="s2">&quot;Set&quot;</span><span class="p">,</span> <span class="s2">&quot;Range&quot;</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">int</span><span class="p">)</span>
@@ -1133,17 +1519,77 @@ Cell <span class="ansi-green-intense-fg ansi-bold">In[1], line 1</span>
 </pre></div>
 </div>
 </div>
-<div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[59]:
+</pre></div>
+</div>
+<div class="output_area rendered_html docutils container">
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>0</th>
+      <th>1</th>
+      <th>-1</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>Identified</th>
+      <td>3</td>
+      <td>2</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <th>Set</th>
+      <td>18</td>
+      <td>6</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <th>Range</th>
+      <td>932</td>
+      <td>38</td>
+      <td>20</td>
+    </tr>
+  </tbody>
+</table>
+</div></div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[60]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="nb">len</span><span class="p">(</span><span class="n">cat_values</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
 </pre></div>
 </div>
 </div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[60]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+949
+</pre></div></div>
+</div>
 <p>Combined Table:</p>
-<div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[61]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">comb</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">concat</span><span class="p">({</span><span class="s2">&quot;# Scenarios&quot;</span><span class="p">:</span><span class="n">scens_tab</span><span class="p">,</span> <span class="s2">&quot;Coverage Loss&quot;</span><span class="p">:</span><span class="n">cov_tab</span><span class="p">,</span> <span class="s2">&quot;Worst-Case&quot;</span><span class="p">:</span><span class="n">cat_tab</span><span class="p">},</span> <span class="n">axis</span><span class="o">=</span><span class="s2">&quot;columns&quot;</span><span class="p">,</span><span class="n">join</span><span class="o">=</span><span class="s1">&#39;inner&#39;</span><span class="p">)</span>
@@ -1163,45 +1609,161 @@ Cell <span class="ansi-green-intense-fg ansi-bold">In[1], line 1</span>
 </pre></div>
 </div>
 </div>
-<div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area stderr docutils container">
+<div class="highlight"><pre>
+C:\Users\mmohame2\AppData\Local\Temp\1\ipykernel_8124\4162587351.py:10: FutureWarning: The frame.append method is deprecated and will be removed from pandas in a future version. Use pandas.concat instead.
+  if not(i%3): comb_2 = comb_2.append(comb.iloc[i].astype(int))
+C:\Users\mmohame2\AppData\Local\Temp\1\ipykernel_8124\4162587351.py:11: FutureWarning: The frame.append method is deprecated and will be removed from pandas in a future version. Use pandas.concat instead.
+  else: comb_2 = comb_2.append(comb.iloc[i].map(&#39;{:,.2f}&#39;.format))
+C:\Users\mmohame2\AppData\Local\Temp\1\ipykernel_8124\4162587351.py:11: FutureWarning: The frame.append method is deprecated and will be removed from pandas in a future version. Use pandas.concat instead.
+  else: comb_2 = comb_2.append(comb.iloc[i].map(&#39;{:,.2f}&#39;.format))
+C:\Users\mmohame2\AppData\Local\Temp\1\ipykernel_8124\4162587351.py:10: FutureWarning: The frame.append method is deprecated and will be removed from pandas in a future version. Use pandas.concat instead.
+  if not(i%3): comb_2 = comb_2.append(comb.iloc[i].astype(int))
+C:\Users\mmohame2\AppData\Local\Temp\1\ipykernel_8124\4162587351.py:11: FutureWarning: The frame.append method is deprecated and will be removed from pandas in a future version. Use pandas.concat instead.
+  else: comb_2 = comb_2.append(comb.iloc[i].map(&#39;{:,.2f}&#39;.format))
+C:\Users\mmohame2\AppData\Local\Temp\1\ipykernel_8124\4162587351.py:11: FutureWarning: The frame.append method is deprecated and will be removed from pandas in a future version. Use pandas.concat instead.
+  else: comb_2 = comb_2.append(comb.iloc[i].map(&#39;{:,.2f}&#39;.format))
+C:\Users\mmohame2\AppData\Local\Temp\1\ipykernel_8124\4162587351.py:10: FutureWarning: The frame.append method is deprecated and will be removed from pandas in a future version. Use pandas.concat instead.
+  if not(i%3): comb_2 = comb_2.append(comb.iloc[i].astype(int))
+C:\Users\mmohame2\AppData\Local\Temp\1\ipykernel_8124\4162587351.py:11: FutureWarning: The frame.append method is deprecated and will be removed from pandas in a future version. Use pandas.concat instead.
+  else: comb_2 = comb_2.append(comb.iloc[i].map(&#39;{:,.2f}&#39;.format))
+C:\Users\mmohame2\AppData\Local\Temp\1\ipykernel_8124\4162587351.py:11: FutureWarning: The frame.append method is deprecated and will be removed from pandas in a future version. Use pandas.concat instead.
+  else: comb_2 = comb_2.append(comb.iloc[i].map(&#39;{:,.2f}&#39;.format))
+</pre></div></div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[61]:
+</pre></div>
+</div>
+<div class="output_area rendered_html docutils container">
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th></th>
+      <th>Identified</th>
+      <th>Set</th>
+      <th>Range</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th rowspan="3" valign="top">-1</th>
+      <th># Scenarios</th>
+      <td>0</td>
+      <td>0</td>
+      <td>20</td>
+    </tr>
+    <tr>
+      <th>Coverage Loss</th>
+      <td>1.00</td>
+      <td>1.00</td>
+      <td>0.00</td>
+    </tr>
+    <tr>
+      <th>Worst-Case</th>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>13.95</td>
+    </tr>
+    <tr>
+      <th rowspan="3" valign="top">0</th>
+      <th># Scenarios</th>
+      <td>3</td>
+      <td>18</td>
+      <td>932</td>
+    </tr>
+    <tr>
+      <th>Coverage Loss</th>
+      <td>0.32</td>
+      <td>0.10</td>
+      <td>0.00</td>
+    </tr>
+    <tr>
+      <th>Worst-Case</th>
+      <td>18.54</td>
+      <td>18.54</td>
+      <td>18.62</td>
+    </tr>
+    <tr>
+      <th rowspan="3" valign="top">1</th>
+      <th># Scenarios</th>
+      <td>2</td>
+      <td>6</td>
+      <td>38</td>
+    </tr>
+    <tr>
+      <th>Coverage Loss</th>
+      <td>0.70</td>
+      <td>0.08</td>
+      <td>0.00</td>
+    </tr>
+    <tr>
+      <th>Worst-Case</th>
+      <td>0.00</td>
+      <td>0.56</td>
+      <td>0.00</td>
+    </tr>
+  </tbody>
+</table>
+</div></div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[62]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="n">comb</span><span class="o">.</span><span class="n">to_latex</span><span class="p">(</span> <span class="p">))</span>
 </pre></div>
 </div>
 </div>
-<div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
-</pre></div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">a</span><span class="o">=</span><span class="s2">&quot;1234&quot;</span>
-</pre></div>
+<div class="output_area stderr docutils container">
+<div class="highlight"><pre>
+C:\Users\mmohame2\AppData\Local\Temp\1\ipykernel_8124\3516487135.py:1: FutureWarning: In future versions `DataFrame.to_latex` is expected to utilise the base implementation of `Styler.to_latex` for formatting and rendering. The arguments signature may therefore change. It is recommended instead to use `DataFrame.style.to_latex` which also contains additional functionality.
+  print(comb.to_latex( ))
+</pre></div></div>
 </div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
 </div>
-<div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
-</pre></div>
-</div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="o">?</span>a
-</pre></div>
-</div>
-</div>
-<div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
-</pre></div>
-</div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">a</span><span class="o">.</span><span class="n">insert</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span><span class="s2">&quot;hi&quot;</span><span class="p">)</span>
-</pre></div>
-</div>
-</div>
-<div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
-</pre></div>
-</div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>
-</pre></div>
-</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+\begin{tabular}{lllll}
+\toprule
+   &amp;            &amp; Identified &amp;    Set &amp;  Range \\
+\midrule
+-1 &amp; \# Scenarios &amp;          0 &amp;      0 &amp;     20 \\
+   &amp; Coverage Loss &amp;       1.00 &amp;   1.00 &amp;   0.00 \\
+   &amp; Worst-Case &amp;       0.00 &amp;   0.00 &amp;  13.95 \\
+ 0 &amp; \# Scenarios &amp;          3 &amp;     18 &amp;    932 \\
+   &amp; Coverage Loss &amp;       0.32 &amp;   0.10 &amp;   0.00 \\
+   &amp; Worst-Case &amp;      18.54 &amp;  18.54 &amp;  18.62 \\
+ 1 &amp; \# Scenarios &amp;          2 &amp;      6 &amp;     38 \\
+   &amp; Coverage Loss &amp;       0.70 &amp;   0.08 &amp;   0.00 \\
+   &amp; Worst-Case &amp;       0.00 &amp;   0.56 &amp;   0.00 \\
+\bottomrule
+\end{tabular}
+
+</pre></div></div>
 </div>
 </section>
 </section>

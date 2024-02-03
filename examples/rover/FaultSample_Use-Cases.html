@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Defining Fault Sampling Approaches in fmdtools &mdash; fmdtools 2.0-rc-1 documentation</title>
+  <title>Defining Fault Sampling Approaches in fmdtools &mdash; fmdtools 2.0-rc-2 documentation</title>
       <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
       <link rel="stylesheet" href="../../_static/nbsphinx-code-cells.css" type="text/css" />
@@ -69,14 +69,14 @@
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="../../docs/Development%20Guide.html#intro-to-fmdtools">Intro to fmdtools</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="../../docs/Intro_to_fmdtools.html">Intro to resilience modelling, simulation, and visualization in Python with fmdtools.</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../docs/Intro_to_fmdtools.html">Intro to resilience modeling, simulation, and visualization in Python with fmdtools.</a><ul>
 <li class="toctree-l4"><a class="reference internal" href="../../docs/Intro_to_fmdtools.html#author-daniel-hulse">Author: Daniel Hulse</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/Intro_to_fmdtools.html#version-2-0-rc-1">Version: 2.0-rc-1</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../docs/Intro_to_fmdtools.html#version-2-0-rc-2">Version: 2.0-rc-2</a></li>
 </ul>
 </li>
 <li class="toctree-l3"><a class="reference internal" href="../../docs/Intro_to_fmdtools.html#overview">Overview</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../docs/Intro_to_fmdtools.html#prerequisites">Prerequisites</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../../docs/Intro_to_fmdtools.html#motivation-modelling-system-resilience">Motivation: Modelling System Resilience</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../docs/Intro_to_fmdtools.html#motivation-modeling-system-resilience">Motivation: Modeling System Resilience</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../docs/Intro_to_fmdtools.html#why-is-resilience-important">Why is Resilience Important?</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../docs/Intro_to_fmdtools.html#enabling-proactive-design-process">Enabling proactive design process</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../docs/Intro_to_fmdtools.html#why-fmdtools-possible-competitors">Why fmdtools? Possible Competitors:</a></li>
@@ -289,6 +289,18 @@
 </li>
 </ul>
 </li>
+<li class="toctree-l2"><a class="reference internal" href="../Examples.html#taxiway">Taxiway</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../taxiway/Paper_Notebook.html">Taxiway Model Overview</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../taxiway/Paper_Notebook.html#Model-Simulation">Model Simulation</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../taxiway/Paper_Notebook.html#Fault-Simulation-and-Analysis">Fault Simulation and Analysis</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../taxiway/Paper_Notebook.html#Perception-Fault---AC-Vision-Fault">Perception Fault - AC Vision Fault</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../taxiway/Paper_Notebook.html#Communications-Fault---Poor-land-command-by-ATC">Communications Fault - Poor land command by ATC</a></li>
+</ul>
+</li>
+</ul>
+</li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../../docs/Glossary.html">Glossary</a></li>
@@ -311,13 +323,11 @@
 </li>
 <li class="toctree-l3"><a class="reference internal" href="../../docs/fmdtools.define.container.html">fmdtools.define.container</a><ul>
 <li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.define.container.html#fmdtools-define-container-base">fmdtools.define.container.base</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.define.container.html#module-0">fmdtools.define.container.mode</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.define.container.html#module-fmdtools.define.container.mode">fmdtools.define.container.mode</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.define.container.html#module-fmdtools.define.container.state">fmdtools.define.container.state</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.define.container.html#fmdtools-define-container-parameter">fmdtools.define.container.parameter</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.define.container.html#module-fmdtools.define.container.rand">fmdtools.define.container.rand</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.define.container.html#module-fmdtools.define.container.time">fmdtools.define.container.time</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.define.container.html#fmdtools-define-container-geom">fmdtools.define.container.geom</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.define.container.html#fmdtools-define-container-coords">fmdtools.define.container.coords</a></li>
 </ul>
 </li>
 <li class="toctree-l3"><a class="reference internal" href="../../docs/fmdtools.define.flow.html">fmdtools.define.flow</a><ul>
@@ -743,10 +753,10 @@ FaultSample of scenarios:
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-{&#39;power&#39;: PhaseMap({&#39;off&#39;: [0.0, 0.0], &#39;supply&#39;: [1.0, 149.0]}, {&#39;off&#39;: {&#39;off&#39;}, &#39;supply&#39;: {&#39;supply&#39;}}),
- &#39;perception&#39;: PhaseMap({&#39;off&#39;: [0.0, 1.0], &#39;feed&#39;: [2.0, 149.0]}, {&#39;off&#39;: {&#39;off&#39;}, &#39;feed&#39;: {&#39;feed&#39;}}),
- &#39;plan_path&#39;: PhaseMap({&#39;standby&#39;: [0.0, 4.0], &#39;drive&#39;: [5.0, 148.0], &#39;standby1&#39;: [149.0, 149.0]}, {&#39;standby&#39;: {&#39;standby&#39;, &#39;standby1&#39;}, &#39;drive&#39;: {&#39;drive&#39;}}),
- &#39;override&#39;: PhaseMap({&#39;off&#39;: [0.0, 1.0], &#39;standby&#39;: [2.0, 149.0]}, {&#39;off&#39;: {&#39;off&#39;}, &#39;standby&#39;: {&#39;standby&#39;}})}
+{&#39;power&#39;: PhaseMap({&#39;off&#39;: [0.0, 0.0], &#39;supply&#39;: [1.0, 112.0]}, {&#39;off&#39;: {&#39;off&#39;}, &#39;supply&#39;: {&#39;supply&#39;}}),
+ &#39;perception&#39;: PhaseMap({&#39;off&#39;: [0.0, 1.0], &#39;feed&#39;: [2.0, 112.0]}, {&#39;off&#39;: {&#39;off&#39;}, &#39;feed&#39;: {&#39;feed&#39;}}),
+ &#39;plan_path&#39;: PhaseMap({&#39;standby&#39;: [0.0, 4.0], &#39;drive&#39;: [5.0, 112.0]}, {&#39;standby&#39;: {&#39;standby&#39;}, &#39;drive&#39;: {&#39;drive&#39;}}),
+ &#39;override&#39;: PhaseMap({&#39;off&#39;: [0.0, 1.0], &#39;standby&#39;: [2.0, 112.0]}, {&#39;off&#39;: {&#39;off&#39;}, &#39;standby&#39;: {&#39;standby&#39;}})}
 </pre></div></div>
 </div>
 <p>Which can be visualized using:</p>
@@ -780,7 +790,7 @@ FaultSample of scenarios:
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-PhaseMap({&#39;off&#39;: [0.0, 0.0], &#39;supply&#39;: [1.0, 149.0]}, {&#39;off&#39;: {&#39;off&#39;}, &#39;supply&#39;: {&#39;supply&#39;}})
+PhaseMap({&#39;off&#39;: [0.0, 0.0], &#39;supply&#39;: [1.0, 112.0]}, {&#39;off&#39;: {&#39;off&#39;}, &#39;supply&#39;: {&#39;supply&#39;}})
 </pre></div></div>
 </div>
 <p>Which we can use to create a <code class="docutils literal notranslate"><span class="pre">FaultSample</span></code> which only samples the phases corresponding to the information given in <code class="docutils literal notranslate"><span class="pre">Mode</span></code>:</p>
@@ -803,8 +813,8 @@ PhaseMap({&#39;off&#39;: [0.0, 0.0], &#39;supply&#39;: [1.0, 149.0]}, {&#39;off&
 FaultSample of scenarios:
  - power_no_charge_t0p0
  - power_short_t0p0
- - power_no_charge_t75p0
- - power_short_t75p0
+ - power_no_charge_t56p0
+ - power_short_t56p0
 </pre></div></div>
 </div>
 <p>If we look at the rate information, however:</p>
@@ -824,8 +834,8 @@ FaultSample of scenarios:
 <div class="highlight"><pre>
 [SingleFaultScenario(sequence={0.0: Injection(faults={&#39;power&#39;: [&#39;no_charge&#39;]}, disturbances={})}, times=(0.0,), function=&#39;power&#39;, fault=&#39;no_charge&#39;, rate=1e-05, name=&#39;power_no_charge_t0p0&#39;, time=0.0, phase=&#39;off&#39;),
  SingleFaultScenario(sequence={0.0: Injection(faults={&#39;power&#39;: [&#39;short&#39;]}, disturbances={})}, times=(0.0,), function=&#39;power&#39;, fault=&#39;short&#39;, rate=0.0, name=&#39;power_short_t0p0&#39;, time=0.0, phase=&#39;off&#39;),
- SingleFaultScenario(sequence={75.0: Injection(faults={&#39;power&#39;: [&#39;no_charge&#39;]}, disturbances={})}, times=(75.0,), function=&#39;power&#39;, fault=&#39;no_charge&#39;, rate=0.0, name=&#39;power_no_charge_t75p0&#39;, time=75.0, phase=&#39;supply&#39;),
- SingleFaultScenario(sequence={75.0: Injection(faults={&#39;power&#39;: [&#39;short&#39;]}, disturbances={})}, times=(75.0,), function=&#39;power&#39;, fault=&#39;short&#39;, rate=1e-05, name=&#39;power_short_t75p0&#39;, time=75.0, phase=&#39;supply&#39;)]
+ SingleFaultScenario(sequence={56.0: Injection(faults={&#39;power&#39;: [&#39;no_charge&#39;]}, disturbances={})}, times=(56.0,), function=&#39;power&#39;, fault=&#39;no_charge&#39;, rate=0.0, name=&#39;power_no_charge_t56p0&#39;, time=56.0, phase=&#39;supply&#39;),
+ SingleFaultScenario(sequence={56.0: Injection(faults={&#39;power&#39;: [&#39;short&#39;]}, disturbances={})}, times=(56.0,), function=&#39;power&#39;, fault=&#39;short&#39;, rate=1e-05, name=&#39;power_short_t56p0&#39;, time=56.0, phase=&#39;supply&#39;)]
 </pre></div></div>
 </div>
 <p>The rate for scenarios outside the phases is zero!</p>
@@ -847,7 +857,7 @@ FaultSample of scenarios:
 <div class="highlight"><pre>
 FaultSample of scenarios:
  - power_no_charge_t0p0
- - power_short_t75p0
+ - power_short_t56p0
 </pre></div></div>
 </div>
 <div class="nbinput docutils container">
@@ -865,7 +875,7 @@ FaultSample of scenarios:
 <div class="output_area docutils container">
 <div class="highlight"><pre>
 [SingleFaultScenario(sequence={0.0: Injection(faults={&#39;power&#39;: [&#39;no_charge&#39;]}, disturbances={})}, times=(0.0,), function=&#39;power&#39;, fault=&#39;no_charge&#39;, rate=1e-05, name=&#39;power_no_charge_t0p0&#39;, time=0.0, phase=&#39;off&#39;),
- SingleFaultScenario(sequence={75.0: Injection(faults={&#39;power&#39;: [&#39;short&#39;]}, disturbances={})}, times=(75.0,), function=&#39;power&#39;, fault=&#39;short&#39;, rate=1e-05, name=&#39;power_short_t75p0&#39;, time=75.0, phase=&#39;supply&#39;)]
+ SingleFaultScenario(sequence={56.0: Injection(faults={&#39;power&#39;: [&#39;short&#39;]}, disturbances={})}, times=(56.0,), function=&#39;power&#39;, fault=&#39;short&#39;, rate=1e-05, name=&#39;power_short_t56p0&#39;, time=56.0, phase=&#39;supply&#39;)]
 </pre></div></div>
 </div>
 <p>As shown, now the only scenarios in the <code class="docutils literal notranslate"><span class="pre">FaultSample</span></code> are ones which have nonzero rate.</p>
@@ -892,10 +902,10 @@ FaultSample of scenarios:
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-{&#39;power&#39;: PhaseMap({&#39;off&#39;: [0.0, 0.0], &#39;supply&#39;: [1.0, 149.0]}, {&#39;off&#39;: {&#39;off&#39;}, &#39;supply&#39;: {&#39;supply&#39;}}),
- &#39;perception&#39;: PhaseMap({&#39;off&#39;: [0.0, 1.0], &#39;feed&#39;: [2.0, 149.0]}, {&#39;off&#39;: {&#39;off&#39;}, &#39;feed&#39;: {&#39;feed&#39;}}),
- &#39;plan_path&#39;: PhaseMap({&#39;standby&#39;: [0.0, 4.0], &#39;drive&#39;: [5.0, 148.0], &#39;standby1&#39;: [149.0, 149.0]}, {&#39;standby&#39;: {&#39;standby&#39;, &#39;standby1&#39;}, &#39;drive&#39;: {&#39;drive&#39;}}),
- &#39;override&#39;: PhaseMap({&#39;off&#39;: [0.0, 1.0], &#39;standby&#39;: [2.0, 149.0]}, {&#39;off&#39;: {&#39;off&#39;}, &#39;standby&#39;: {&#39;standby&#39;}})}
+{&#39;power&#39;: PhaseMap({&#39;off&#39;: [0.0, 0.0], &#39;supply&#39;: [1.0, 112.0]}, {&#39;off&#39;: {&#39;off&#39;}, &#39;supply&#39;: {&#39;supply&#39;}}),
+ &#39;perception&#39;: PhaseMap({&#39;off&#39;: [0.0, 1.0], &#39;feed&#39;: [2.0, 112.0]}, {&#39;off&#39;: {&#39;off&#39;}, &#39;feed&#39;: {&#39;feed&#39;}}),
+ &#39;plan_path&#39;: PhaseMap({&#39;standby&#39;: [0.0, 4.0], &#39;drive&#39;: [5.0, 112.0]}, {&#39;standby&#39;: {&#39;standby&#39;}, &#39;drive&#39;: {&#39;drive&#39;}}),
+ &#39;override&#39;: PhaseMap({&#39;off&#39;: [0.0, 1.0], &#39;standby&#39;: [2.0, 112.0]}, {&#39;off&#39;: {&#39;off&#39;}, &#39;standby&#39;: {&#39;standby&#39;}})}
 </pre></div></div>
 </div>
 <div class="nbinput nblast docutils container">
@@ -947,13 +957,13 @@ SampleApproach for rover with:
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-[SingleFaultScenario(sequence={76.0: Injection(faults={&#39;drive&#39;: [&#39;hmode_1&#39;]}, disturbances={})}, times=(76.0,), function=&#39;drive&#39;, fault=&#39;hmode_1&#39;, rate=0.02857142857142857, name=&#39;drive_hmode_1_t76p0&#39;, time=76.0, phase=&#39;drive&#39;),
+[SingleFaultScenario(sequence={58.0: Injection(faults={&#39;drive&#39;: [&#39;hmode_1&#39;]}, disturbances={})}, times=(58.0,), function=&#39;drive&#39;, fault=&#39;hmode_1&#39;, rate=0.02857142857142857, name=&#39;drive_hmode_1_t58p0&#39;, time=58.0, phase=&#39;drive&#39;),
  SingleFaultScenario(sequence={2.0: Injection(faults={&#39;plan_path&#39;: [&#39;no_con&#39;]}, disturbances={})}, times=(2.0,), function=&#39;plan_path&#39;, fault=&#39;no_con&#39;, rate=0.0001, name=&#39;plan_path_no_con_t2p0&#39;, time=2.0, phase=&#39;standby&#39;),
  SingleFaultScenario(sequence={2.0: Injection(faults={&#39;plan_path&#39;: [&#39;crash&#39;]}, disturbances={})}, times=(2.0,), function=&#39;plan_path&#39;, fault=&#39;crash&#39;, rate=0.0001, name=&#39;plan_path_crash_t2p0&#39;, time=2.0, phase=&#39;standby&#39;),
- SingleFaultScenario(sequence={76.0: Injection(faults={&#39;plan_path&#39;: [&#39;no_con&#39;]}, disturbances={})}, times=(76.0,), function=&#39;plan_path&#39;, fault=&#39;no_con&#39;, rate=0.0001, name=&#39;plan_path_no_con_t76p0&#39;, time=76.0, phase=&#39;drive&#39;),
- SingleFaultScenario(sequence={76.0: Injection(faults={&#39;plan_path&#39;: [&#39;crash&#39;]}, disturbances={})}, times=(76.0,), function=&#39;plan_path&#39;, fault=&#39;crash&#39;, rate=0.0001, name=&#39;plan_path_crash_t76p0&#39;, time=76.0, phase=&#39;drive&#39;),
+ SingleFaultScenario(sequence={58.0: Injection(faults={&#39;plan_path&#39;: [&#39;no_con&#39;]}, disturbances={})}, times=(58.0,), function=&#39;plan_path&#39;, fault=&#39;no_con&#39;, rate=0.0001, name=&#39;plan_path_no_con_t58p0&#39;, time=58.0, phase=&#39;drive&#39;),
+ SingleFaultScenario(sequence={58.0: Injection(faults={&#39;plan_path&#39;: [&#39;crash&#39;]}, disturbances={})}, times=(58.0,), function=&#39;plan_path&#39;, fault=&#39;crash&#39;, rate=0.0001, name=&#39;plan_path_crash_t58p0&#39;, time=58.0, phase=&#39;drive&#39;),
  SingleFaultScenario(sequence={0.0: Injection(faults={&#39;power&#39;: [&#39;no_charge&#39;]}, disturbances={})}, times=(0.0,), function=&#39;power&#39;, fault=&#39;no_charge&#39;, rate=1e-05, name=&#39;power_no_charge_t0p0&#39;, time=0.0, phase=&#39;off&#39;),
- SingleFaultScenario(sequence={75.0: Injection(faults={&#39;power&#39;: [&#39;short&#39;]}, disturbances={})}, times=(75.0,), function=&#39;power&#39;, fault=&#39;short&#39;, rate=1e-05, name=&#39;power_short_t75p0&#39;, time=75.0, phase=&#39;supply&#39;)]
+ SingleFaultScenario(sequence={56.0: Injection(faults={&#39;power&#39;: [&#39;short&#39;]}, disturbances={})}, times=(56.0,), function=&#39;power&#39;, fault=&#39;short&#39;, rate=1e-05, name=&#39;power_short_t56p0&#39;, time=56.0, phase=&#39;supply&#39;)]
 </pre></div></div>
 </div>
 <p>This is mostly useful when we would like to sample different functions in a model differently than others (e.g., using different phases), but still want to propagate the scenarios together as a part of a single sample.</p>
@@ -974,7 +984,7 @@ SampleApproach for rover with:
 </div>
 <div class="output_area stderr docutils container">
 <div class="highlight"><pre>
-SCENARIOS COMPLETE: 100%|██████████| 2/2 [00:00&lt;00:00, 10.00it/s]
+SCENARIOS COMPLETE: 100%|██████████| 2/2 [00:00&lt;00:00, 12.66it/s]
 </pre></div></div>
 </div>
 <div class="nbinput docutils container">
@@ -1006,35 +1016,35 @@ power_no_charge_t0p0incomplete mission faulty
 power_no_charge_t0p0.endclass.end_x: 0.0
 power_no_charge_t0p0.endclass.end_y: 0.0
 power_no_charge_t0p0.endclass.endpt: array(2)
-power_short_t75p0.endclass.rate:   1e-05
-power_short_t75p0.endclass.cost:       0
-power_short_t75p0.endclass.prob:     1.0
-power_short_t75p0.en                   0
-power_short_t75p0.endclass.in_bound: True
-power_short_t75p0.endclass.at_finish: False
-power_short_t75p0.endclass.line_dist:  1
-power_short_t75p0.endclass.num_modes:  1
-power_short_t75p0.endclass.end_dist: 2.0873256513551914
-power_short_t75p0.en 0.14980808415676147
-power_short_t75p0.endclass.faults: {&#39;power&#39;: [&#39;short&#39;]}
-power_short_t75p0.enincomplete mission faulty
-power_short_t75p0.endclass.end_x: 27.46715394950123
-power_short_t75p0.endclass.end_y: 0.9015499296277614
-power_short_t75p0.endclass.endpt: array(2)
+power_short_t56p0.endclass.rate:   1e-05
+power_short_t56p0.endclass.cost:       0
+power_short_t56p0.endclass.prob:     1.0
+power_short_t56p0.en                   0
+power_short_t56p0.endclass.in_bound: True
+power_short_t56p0.endclass.at_finish: True
+power_short_t56p0.endclass.line_dist:  1
+power_short_t56p0.endclass.num_modes:  1
+power_short_t56p0.endclass.end_dist: 0.0
+power_short_t56p0.en 0.11859644458085598
+power_short_t56p0.endclass.faults: {&#39;power&#39;: [&#39;short&#39;]}
+power_short_t56p0.en              faulty
+power_short_t56p0.endclass.end_x: 29.254775331608617
+power_short_t56p0.endclass.end_y: -0.7827640334587979
+power_short_t56p0.endclass.endpt: array(2)
 nominal.endclass.rate:               1.0
 nominal.endclass.cost:                 0
 nominal.endclass.prob:               1.0
 nominal.endclass.expected_cost:        0
 nominal.endclass.in_bound:          True
-nominal.endclass.at_finish:        False
+nominal.endclass.at_finish:         True
 nominal.endclass.line_dist:            1
 nominal.endclass.num_modes:            0
-nominal.endclass.end_dist: 2.0873256513551914
-nominal.endclass.tot_deviation: 0.14980808415676147
+nominal.endclass.end_dist:           0.0
+nominal.endclass.tot_deviation: 0.11859644458085598
 nominal.endclass.faults:              {}
-nominal.endclass.classification: incomplete mission
-nominal.endclass.end_x: 27.46715394950123
-nominal.endclass.end_y: 0.9015499296277614
+nominal.endclass.classification: nominal mission
+nominal.endclass.end_x: 29.254775331608617
+nominal.endclass.end_y: -0.7827640334587979
 nominal.endclass.endpt:         array(2)
 </pre></div></div>
 </div>
@@ -1081,9 +1091,9 @@ nominal.endclass.endpt:         array(2)
     <tr>
       <th rowspan="2" valign="top">power</th>
       <th>short</th>
-      <td>2.087326</td>
+      <td>0.000000</td>
       <td>1</td>
-      <td>0.149808</td>
+      <td>0.118596</td>
     </tr>
     <tr>
       <th>no_charge</th>
@@ -1111,7 +1121,7 @@ nominal.endclass.endpt:         array(2)
 <div class="highlight"><pre>
 (&lt;Figure size 600x400 with 4 Axes&gt;,
  array([&lt;Axes: title={&#39;center&#39;: &#39;end_dist&#39;}&gt;,
-        &lt;Axes: title={&#39;center&#39;: &#39;line_dist&#39;}&gt;,
+        &lt;Axes: title={&#39;center&#39;: &#39;line_dist&#39;}, xlabel=&#34;[&#39;function&#39;, &#39;fault&#39;]&#34;&gt;,
         &lt;Axes: title={&#39;center&#39;: &#39;tot_deviation&#39;}, xlabel=&#34;[&#39;function&#39;, &#39;fault&#39;]&#34;&gt;,
         &lt;Axes: &gt;], dtype=object))
 </pre></div></div>
@@ -1163,8 +1173,8 @@ nominal.endclass.endpt:         array(2)
   </thead>
   <tbody>
     <tr>
-      <th>75.0</th>
-      <td>0.000021</td>
+      <th>56.0</th>
+      <td>0.000000</td>
       <td>0.00001</td>
       <td>0.000001</td>
     </tr>
@@ -1194,7 +1204,7 @@ nominal.endclass.endpt:         array(2)
 <div class="highlight"><pre>
 (&lt;Figure size 600x400 with 4 Axes&gt;,
  array([&lt;Axes: title={&#39;center&#39;: &#39;end_dist&#39;}&gt;,
-        &lt;Axes: title={&#39;center&#39;: &#39;line_dist&#39;}&gt;,
+        &lt;Axes: title={&#39;center&#39;: &#39;line_dist&#39;}, xlabel=&#39;time&#39;&gt;,
         &lt;Axes: title={&#39;center&#39;: &#39;tot_deviation&#39;}, xlabel=&#39;time&#39;&gt;, &lt;Axes: &gt;],
        dtype=object))
 </pre></div></div>
@@ -1204,6 +1214,30 @@ nominal.endclass.endpt:         array(2)
 </div>
 <div class="output_area docutils container">
 <img alt="../../_images/examples_rover_FaultSample_Use-Cases_56_1.png" src="../../_images/examples_rover_FaultSample_Use-Cases_56_1.png" />
+</div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>
+</pre></div>
 </div>
 </div>
 </section>

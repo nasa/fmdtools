@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>fmdtools.define.flow &mdash; fmdtools 2.0-rc-1 documentation</title>
+  <title>fmdtools.define.flow &mdash; fmdtools 2.0-rc-2 documentation</title>
       <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
     <link rel="shortcut icon" href="../_static/fmdtools_ico.ico"/>
@@ -68,14 +68,14 @@
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="Development%20Guide.html#intro-to-fmdtools">Intro to fmdtools</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="Intro_to_fmdtools.html">Intro to resilience modelling, simulation, and visualization in Python with fmdtools.</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="Intro_to_fmdtools.html">Intro to resilience modeling, simulation, and visualization in Python with fmdtools.</a><ul>
 <li class="toctree-l4"><a class="reference internal" href="Intro_to_fmdtools.html#author-daniel-hulse">Author: Daniel Hulse</a></li>
-<li class="toctree-l4"><a class="reference internal" href="Intro_to_fmdtools.html#version-2-0-rc-1">Version: 2.0-rc-1</a></li>
+<li class="toctree-l4"><a class="reference internal" href="Intro_to_fmdtools.html#version-2-0-rc-2">Version: 2.0-rc-2</a></li>
 </ul>
 </li>
 <li class="toctree-l3"><a class="reference internal" href="Intro_to_fmdtools.html#overview">Overview</a></li>
 <li class="toctree-l3"><a class="reference internal" href="Intro_to_fmdtools.html#prerequisites">Prerequisites</a></li>
-<li class="toctree-l3"><a class="reference internal" href="Intro_to_fmdtools.html#motivation-modelling-system-resilience">Motivation: Modelling System Resilience</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Intro_to_fmdtools.html#motivation-modeling-system-resilience">Motivation: Modeling System Resilience</a></li>
 <li class="toctree-l3"><a class="reference internal" href="Intro_to_fmdtools.html#why-is-resilience-important">Why is Resilience Important?</a></li>
 <li class="toctree-l3"><a class="reference internal" href="Intro_to_fmdtools.html#enabling-proactive-design-process">Enabling proactive design process</a></li>
 <li class="toctree-l3"><a class="reference internal" href="Intro_to_fmdtools.html#why-fmdtools-possible-competitors">Why fmdtools? Possible Competitors:</a></li>
@@ -288,6 +288,18 @@
 </li>
 </ul>
 </li>
+<li class="toctree-l2"><a class="reference internal" href="../examples/Examples.html#taxiway">Taxiway</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../examples/taxiway/Paper_Notebook.html">Taxiway Model Overview</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../examples/taxiway/Paper_Notebook.html#Model-Simulation">Model Simulation</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../examples/taxiway/Paper_Notebook.html#Fault-Simulation-and-Analysis">Fault Simulation and Analysis</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../examples/taxiway/Paper_Notebook.html#Perception-Fault---AC-Vision-Fault">Perception Fault - AC Vision Fault</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../examples/taxiway/Paper_Notebook.html#Communications-Fault---Poor-land-command-by-ATC">Communications Fault - Poor land command by ATC</a></li>
+</ul>
+</li>
+</ul>
+</li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="Glossary.html">Glossary</a></li>
@@ -310,13 +322,11 @@
 </li>
 <li class="toctree-l3"><a class="reference internal" href="fmdtools.define.container.html">fmdtools.define.container</a><ul>
 <li class="toctree-l4"><a class="reference internal" href="fmdtools.define.container.html#fmdtools-define-container-base">fmdtools.define.container.base</a></li>
-<li class="toctree-l4"><a class="reference internal" href="fmdtools.define.container.html#module-0">fmdtools.define.container.mode</a></li>
+<li class="toctree-l4"><a class="reference internal" href="fmdtools.define.container.html#module-fmdtools.define.container.mode">fmdtools.define.container.mode</a></li>
 <li class="toctree-l4"><a class="reference internal" href="fmdtools.define.container.html#module-fmdtools.define.container.state">fmdtools.define.container.state</a></li>
 <li class="toctree-l4"><a class="reference internal" href="fmdtools.define.container.html#fmdtools-define-container-parameter">fmdtools.define.container.parameter</a></li>
 <li class="toctree-l4"><a class="reference internal" href="fmdtools.define.container.html#module-fmdtools.define.container.rand">fmdtools.define.container.rand</a></li>
 <li class="toctree-l4"><a class="reference internal" href="fmdtools.define.container.html#module-fmdtools.define.container.time">fmdtools.define.container.time</a></li>
-<li class="toctree-l4"><a class="reference internal" href="fmdtools.define.container.html#fmdtools-define-container-geom">fmdtools.define.container.geom</a></li>
-<li class="toctree-l4"><a class="reference internal" href="fmdtools.define.container.html#fmdtools-define-container-coords">fmdtools.define.container.coords</a></li>
 </ul>
 </li>
 <li class="toctree-l3 current"><a class="current reference internal" href="#">fmdtools.define.flow</a><ul>
@@ -408,21 +418,6 @@
 <dd><p>alias of <code class="xref py py-class docutils literal notranslate"><span class="pre">ExampleState</span></code></p>
 </dd></dl>
 
-<dl class="py attribute">
-<dt class="sig sig-object py" id="fmdtools.define.flow.base.ExampleFlow.h">
-<span class="sig-name descname"><span class="pre">h</span></span><a class="headerlink" href="#fmdtools.define.flow.base.ExampleFlow.h" title="Permalink to this definition"></a></dt>
-<dd></dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="fmdtools.define.flow.base.ExampleFlow.p">
-<span class="sig-name descname"><span class="pre">p</span></span><a class="headerlink" href="#fmdtools.define.flow.base.ExampleFlow.p" title="Permalink to this definition"></a></dt>
-<dd></dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="fmdtools.define.flow.base.ExampleFlow.s">
-<span class="sig-name descname"><span class="pre">s</span></span><a class="headerlink" href="#fmdtools.define.flow.base.ExampleFlow.s" title="Permalink to this definition"></a></dt>
-<dd></dd></dl>
-
 </dd></dl>
 
 <dl class="py class">
@@ -434,6 +429,7 @@
 and respresent shared variables or states.</p>
 <p class="rubric">Examples</p>
 <div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="k">class</span> <span class="nc">ExampleFlow</span><span class="p">(</span><span class="n">Flow</span><span class="p">):</span>
+<span class="gp">... </span>    <span class="vm">__slots__</span> <span class="o">=</span> <span class="p">()</span>
 <span class="gp">... </span>    <span class="n">container_s</span> <span class="o">=</span> <span class="n">ExampleState</span>
 </pre></div>
 </div>
@@ -442,13 +438,20 @@ and respresent shared variables or states.</p>
 <span class="go">exf ExampleFlow flow: ExampleState(x=0.0, y=1.0)</span>
 </pre></div>
 </div>
-<p>Note that copying creates independent copies of states:
-&gt;&gt;&gt; exf2 = exf.copy()
-&gt;&gt;&gt; exf2
-exf ExampleFlow flow: ExampleState(x=0.0, y=1.0)
-&gt;&gt;&gt; exf2.s.x = 2.0
-&gt;&gt;&gt; exf2.s == exf.s
-False</p>
+<p>Note that copying creates independent copies of states:</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">exf2</span> <span class="o">=</span> <span class="n">exf</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">exf2</span>
+<span class="go">exf ExampleFlow flow: ExampleState(x=0.0, y=1.0)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">exf2</span><span class="o">.</span><span class="n">s</span><span class="o">.</span><span class="n">x</span> <span class="o">=</span> <span class="mf">2.0</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">exf2</span><span class="o">.</span><span class="n">s</span> <span class="o">==</span> <span class="n">exf</span><span class="o">.</span><span class="n">s</span>
+<span class="go">False</span>
+</pre></div>
+</div>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="fmdtools.define.flow.base.Flow.check_dict_creation">
+<span class="sig-name descname"><span class="pre">check_dict_creation</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">True</span></em><a class="headerlink" href="#fmdtools.define.flow.base.Flow.check_dict_creation" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
 <dl class="py method">
 <dt class="sig sig-object py" id="fmdtools.define.flow.base.Flow.check_role">
 <span class="sig-name descname"><span class="pre">check_role</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">roletype</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rolename</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.define.flow.base.Flow.check_role" title="Permalink to this definition"></a></dt>
@@ -567,6 +570,11 @@ flow (e.g., perception, etc). Notably, this class adds the methods:</p>
 </div></blockquote>
 <p>A MultiFlow can have any number of local views (listed by name in MultiFlow.locals)
 as well as a single global view (which may represent the actual value)</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="fmdtools.define.flow.multiflow.MultiFlow.check_dict_creation">
+<span class="sig-name descname"><span class="pre">check_dict_creation</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">False</span></em><a class="headerlink" href="#fmdtools.define.flow.multiflow.MultiFlow.check_dict_creation" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
 <dl class="py method">
 <dt class="sig sig-object py" id="fmdtools.define.flow.multiflow.MultiFlow.copy">
 <span class="sig-name descname"><span class="pre">copy</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">glob</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[]</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">p</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">{}</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">s</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">{}</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">track</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">['s']</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.define.flow.multiflow.MultiFlow.copy" title="Permalink to this definition"></a></dt>
@@ -592,7 +600,7 @@ as well as a single global view (which may represent the actual value)</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="fmdtools.define.flow.multiflow.MultiFlow.create_local">
-<span class="sig-name descname"><span class="pre">create_local</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">attrs</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'all'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">p</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'global'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">s</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'global'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">track</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">['s']</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.define.flow.multiflow.MultiFlow.create_local" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">create_local</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">attrs</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'all'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">p</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'global'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">s</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'global'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">track</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">['s']</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.define.flow.multiflow.MultiFlow.create_local" title="Permalink to this definition"></a></dt>
 <dd><p>Create a local view of the Flow.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -727,6 +735,11 @@ and “received” (a set of messages received).</p>
 </ul>
 </dd>
 </dl>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="fmdtools.define.flow.commsflow.CommsFlow.check_dict_creation">
+<span class="sig-name descname"><span class="pre">check_dict_creation</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">False</span></em><a class="headerlink" href="#fmdtools.define.flow.commsflow.CommsFlow.check_dict_creation" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
 <dl class="py method">
 <dt class="sig sig-object py" id="fmdtools.define.flow.commsflow.CommsFlow.clear_inbox">
 <span class="sig-name descname"><span class="pre">clear_inbox</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">fxnname</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'local'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.define.flow.commsflow.CommsFlow.clear_inbox" title="Permalink to this definition"></a></dt>

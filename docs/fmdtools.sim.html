@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>fmdtools.sim &mdash; fmdtools 2.0-rc-1 documentation</title>
+  <title>fmdtools.sim &mdash; fmdtools 2.0-rc-2 documentation</title>
       <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
     <link rel="shortcut icon" href="../_static/fmdtools_ico.ico"/>
@@ -68,14 +68,14 @@
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="Development%20Guide.html#intro-to-fmdtools">Intro to fmdtools</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="Intro_to_fmdtools.html">Intro to resilience modelling, simulation, and visualization in Python with fmdtools.</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="Intro_to_fmdtools.html">Intro to resilience modeling, simulation, and visualization in Python with fmdtools.</a><ul>
 <li class="toctree-l4"><a class="reference internal" href="Intro_to_fmdtools.html#author-daniel-hulse">Author: Daniel Hulse</a></li>
-<li class="toctree-l4"><a class="reference internal" href="Intro_to_fmdtools.html#version-2-0-rc-1">Version: 2.0-rc-1</a></li>
+<li class="toctree-l4"><a class="reference internal" href="Intro_to_fmdtools.html#version-2-0-rc-2">Version: 2.0-rc-2</a></li>
 </ul>
 </li>
 <li class="toctree-l3"><a class="reference internal" href="Intro_to_fmdtools.html#overview">Overview</a></li>
 <li class="toctree-l3"><a class="reference internal" href="Intro_to_fmdtools.html#prerequisites">Prerequisites</a></li>
-<li class="toctree-l3"><a class="reference internal" href="Intro_to_fmdtools.html#motivation-modelling-system-resilience">Motivation: Modelling System Resilience</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Intro_to_fmdtools.html#motivation-modeling-system-resilience">Motivation: Modeling System Resilience</a></li>
 <li class="toctree-l3"><a class="reference internal" href="Intro_to_fmdtools.html#why-is-resilience-important">Why is Resilience Important?</a></li>
 <li class="toctree-l3"><a class="reference internal" href="Intro_to_fmdtools.html#enabling-proactive-design-process">Enabling proactive design process</a></li>
 <li class="toctree-l3"><a class="reference internal" href="Intro_to_fmdtools.html#why-fmdtools-possible-competitors">Why fmdtools? Possible Competitors:</a></li>
@@ -288,6 +288,18 @@
 </li>
 </ul>
 </li>
+<li class="toctree-l2"><a class="reference internal" href="../examples/Examples.html#taxiway">Taxiway</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../examples/taxiway/Paper_Notebook.html">Taxiway Model Overview</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../examples/taxiway/Paper_Notebook.html#Model-Simulation">Model Simulation</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../examples/taxiway/Paper_Notebook.html#Fault-Simulation-and-Analysis">Fault Simulation and Analysis</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../examples/taxiway/Paper_Notebook.html#Perception-Fault---AC-Vision-Fault">Perception Fault - AC Vision Fault</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../examples/taxiway/Paper_Notebook.html#Communications-Fault---Poor-land-command-by-ATC">Communications Fault - Poor land command by ATC</a></li>
+</ul>
+</li>
+</ul>
+</li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="Glossary.html">Glossary</a></li>
@@ -310,13 +322,11 @@
 </li>
 <li class="toctree-l3"><a class="reference internal" href="fmdtools.define.container.html">fmdtools.define.container</a><ul>
 <li class="toctree-l4"><a class="reference internal" href="fmdtools.define.container.html#fmdtools-define-container-base">fmdtools.define.container.base</a></li>
-<li class="toctree-l4"><a class="reference internal" href="fmdtools.define.container.html#module-0">fmdtools.define.container.mode</a></li>
+<li class="toctree-l4"><a class="reference internal" href="fmdtools.define.container.html#module-fmdtools.define.container.mode">fmdtools.define.container.mode</a></li>
 <li class="toctree-l4"><a class="reference internal" href="fmdtools.define.container.html#module-fmdtools.define.container.state">fmdtools.define.container.state</a></li>
 <li class="toctree-l4"><a class="reference internal" href="fmdtools.define.container.html#fmdtools-define-container-parameter">fmdtools.define.container.parameter</a></li>
 <li class="toctree-l4"><a class="reference internal" href="fmdtools.define.container.html#module-fmdtools.define.container.rand">fmdtools.define.container.rand</a></li>
 <li class="toctree-l4"><a class="reference internal" href="fmdtools.define.container.html#module-fmdtools.define.container.time">fmdtools.define.container.time</a></li>
-<li class="toctree-l4"><a class="reference internal" href="fmdtools.define.container.html#fmdtools-define-container-geom">fmdtools.define.container.geom</a></li>
-<li class="toctree-l4"><a class="reference internal" href="fmdtools.define.container.html#fmdtools-define-container-coords">fmdtools.define.container.coords</a></li>
 </ul>
 </li>
 <li class="toctree-l3"><a class="reference internal" href="fmdtools.define.flow.html">fmdtools.define.flow</a><ul>
@@ -384,18 +394,18 @@
   <section id="fmdtools-sim">
 <h1>fmdtools.sim<a class="headerlink" href="#fmdtools-sim" title="Permalink to this heading"></a></h1>
 <dl class="simple">
-<dt>The <code class="xref py py-mod docutils literal notranslate"><span class="pre">fmdtools.sim</span></code> package is used to simulate <code class="xref py py-class docutils literal notranslate"><span class="pre">fmdtools.define.Model</span></code> models. It consists of four modules:</dt><dd><ul class="simple">
+<dt>The <code class="xref py py-mod docutils literal notranslate"><span class="pre">fmdtools.sim</span></code> package is used to simulate <code class="xref py py-mod docutils literal notranslate"><span class="pre">fmdtools.define.architecture</span></code> models. It consists of four modules:</dt><dd><ul class="simple">
 <li><p><a class="reference internal" href="#module-fmdtools.sim.propagate" title="fmdtools.sim.propagate"><code class="xref py py-mod docutils literal notranslate"><span class="pre">fmdtools.sim.propagate</span></code></a>, which simulates the user-defined behaviors of a model over set time(s).</p></li>
 <li><p><a class="reference internal" href="#module-fmdtools.sim.scenario" title="fmdtools.sim.scenario"><code class="xref py py-mod docutils literal notranslate"><span class="pre">fmdtools.sim.scenario</span></code></a>, which defines scenario information for simulations.</p></li>
 <li><p><a class="reference internal" href="#module-fmdtools.sim.sample" title="fmdtools.sim.sample"><code class="xref py py-mod docutils literal notranslate"><span class="pre">fmdtools.sim.sample</span></code></a>, which provides classes for defining sets of scenarios to simulate.</p></li>
-<li><p><a class="reference internal" href="#module-fmdtools.sim.search" title="fmdtools.sim.search"><code class="xref py py-mod docutils literal notranslate"><span class="pre">fmdtools.sim.search</span></code></a>, which provides an the <code class="xref py py-class docutils literal notranslate"><span class="pre">ProblemInterface</span></code> and <cite>DynamicInterface</cite> classes for enabling the search of parameters and/or scenarios.</p></li>
+<li><p><a class="reference internal" href="#module-fmdtools.sim.search" title="fmdtools.sim.search"><code class="xref py py-mod docutils literal notranslate"><span class="pre">fmdtools.sim.search</span></code></a>, which provides an the <code class="xref py py-class docutils literal notranslate"><span class="pre">ProblemArchitecture</span></code> and <cite>DynamicInterface</cite> classes for enabling the search of parameters and/or scenarios.</p></li>
 </ul>
 </dd>
 </dl>
 <section id="fmdtools-sim-propagate">
 <h2>fmdtools.sim.propagate<a class="headerlink" href="#fmdtools-sim-propagate" title="Permalink to this heading"></a></h2>
 <a class="reference internal image-reference" href="../_images/simulation_types.png"><img alt="../_images/simulation_types.png" src="../_images/simulation_types.png" style="width: 800px;" /></a>
-<p>The <a class="reference internal" href="#module-fmdtools.sim.propagate" title="fmdtools.sim.propagate"><code class="xref py py-mod docutils literal notranslate"><span class="pre">fmdtools.sim.propagate</span></code></a> module is used to simulate the behaviors of a <code class="xref py py-class docutils literal notranslate"><span class="pre">fmdtools.define.block.Simulable</span></code> (<cite>Model</cite> or <cite>Block</cite>) with and without faults. As shown above, each of the methods (described below) fit a given simulation use-case for resilience assessment–single/multiple scenarios, in nominal/faulty scenarios, and at a single set or multiple sets of parameters.</p>
+<p>The <a class="reference internal" href="#module-fmdtools.sim.propagate" title="fmdtools.sim.propagate"><code class="xref py py-mod docutils literal notranslate"><span class="pre">fmdtools.sim.propagate</span></code></a> module is used to simulate the behaviors of a <a class="reference internal" href="fmdtools.define.block.html#fmdtools.define.block.base.Simulable" title="fmdtools.define.block.base.Simulable"><code class="xref py py-class docutils literal notranslate"><span class="pre">fmdtools.define.block.base.Simulable</span></code></a> (<cite>Model</cite> or <cite>Block</cite>) with and without faults. As shown above, each of the methods (described below) fit a given simulation use-case for resilience assessment–single/multiple scenarios, in nominal/faulty scenarios, and at a single set or multiple sets of parameters.</p>
 <span class="target" id="module-fmdtools.sim.propagate"></span><p>Description: functions to propagate faults through a user-defined fault model.</p>
 <p>Main Methods:</p>
 <ul class="simple">
@@ -434,7 +444,6 @@ a model and nominal model history</p></li>
 the mdlhist and number of scenarios</p></li>
 <li><p><a class="reference internal" href="#fmdtools.sim.propagate.check_mdl_memory" title="fmdtools.sim.propagate.check_mdl_memory"><code class="xref py py-func docutils literal notranslate"><span class="pre">check_mdl_memory()</span></code></a>: Raises exception if model size is too large.</p></li>
 <li><p><a class="reference internal" href="#fmdtools.sim.propagate.check_overwrite" title="fmdtools.sim.propagate.check_overwrite"><code class="xref py py-func docutils literal notranslate"><span class="pre">check_overwrite()</span></code></a>: Checks if file can be overwritten</p></li>
-<li><p><code class="xref py py-func docutils literal notranslate"><span class="pre">phases_from_hist()</span></code>: Helper function for <cite>nested_approach</cite></p></li>
 <li><p><a class="reference internal" href="#fmdtools.sim.propagate.check_end_condition" title="fmdtools.sim.propagate.check_end_condition"><code class="xref py py-func docutils literal notranslate"><span class="pre">check_end_condition()</span></code></a>: Helper function for <cite>prop_one_scen</cite> to end simulation
 earlier.</p></li>
 <li><p><a class="reference internal" href="#fmdtools.sim.propagate.get_result" title="fmdtools.sim.propagate.get_result"><code class="xref py py-func docutils literal notranslate"><span class="pre">get_result()</span></code></a>: Helper function for <cite>prop_one_scen</cite> to get result at specific
@@ -504,12 +513,11 @@ nominal model history.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>mdl</strong> (<a class="reference internal" href="fmdtools.define.block.html#fmdtools.define.block.base.Simulable" title="fmdtools.define.block.base.Simulable"><em>Simulable</em></a>) – The model to inject faults in.</p></li>
+<li><p><strong>mdl</strong> (<a class="reference internal" href="fmdtools.define.block.html#fmdtools.define.block.base.Simulable" title="fmdtools.define.block.base.Simulable"><em>Simulable</em></a>) – The model to inject faults in</p></li>
 <li><p><strong>scen</strong> (<em>scenario</em>) – scenario used to define time and faults where the fault is to be injected</p></li>
-<li><p><strong>nomhist</strong> (<a class="reference internal" href="fmdtools.analyze.html#fmdtools.analyze.history.History" title="fmdtools.analyze.history.History"><em>History</em></a>) – history of results in the nominal model run</p></li>
 <li><p><strong>save_args</strong> (<em>dict</em>) – Save dictionary to use in save_helper defining when/how to save the dictionary</p></li>
 <li><p><strong>indiv_id</strong> (<em>str</em>) – ID str to insert into the file name (if saving individually)</p></li>
-<li><p><strong>**kwargs</strong> (<em>kwargs</em>) – <a class="reference internal" href="#fmdtools.sim.propagate.sim_kwargs" title="fmdtools.sim.propagate.sim_kwargs"><code class="xref py py-data docutils literal notranslate"><span class="pre">sim_kwargs</span></code></a> for <a class="reference internal" href="#fmdtools.sim.propagate.prop_one_scen" title="fmdtools.sim.propagate.prop_one_scen"><code class="xref py py-func docutils literal notranslate"><span class="pre">prop_one_scen()</span></code></a>.</p></li>
+<li><p><strong>**kwargs</strong> (<em>kwargs</em>) – <a class="reference internal" href="#fmdtools.sim.propagate.sim_kwargs" title="fmdtools.sim.propagate.sim_kwargs"><code class="xref py py-data docutils literal notranslate"><span class="pre">sim_kwargs</span></code></a> for <a class="reference internal" href="#fmdtools.sim.propagate.prop_one_scen" title="fmdtools.sim.propagate.prop_one_scen"><code class="xref py py-func docutils literal notranslate"><span class="pre">prop_one_scen()</span></code></a></p></li>
 </ul>
 </dd>
 </dl>
@@ -581,14 +589,15 @@ desired_result over the set of scenarios.</p></li>
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>mdl</strong> (<a class="reference internal" href="fmdtools.define.block.html#fmdtools.define.block.base.Simulable" title="fmdtools.define.block.base.Simulable"><em>Simulable</em></a>) – Model to simulate</p></li>
-<li><p><strong>get_phasemap</strong> (<em>bool</em><em>, </em><em>optional</em>) – Whether to use nominal simulation phasemap to set up the SampleApproach.</p></li>
 <li><p><strong>faultdomains</strong> (<em>dict</em>) – Dict of arguments to SampleApproach.add_faultdomains</p></li>
 <li><p><strong>faultsamples</strong> (<em>dict</em>) – Dict of arguments to SampleApproach.add_faultsamples
 FaultSamples to add to othe SampleApproach and their arguments.
-Has structure: {‘fs_name’: (<a href="#id1"><span class="problematic" id="id2">*</span></a>args, <a href="#id3"><span class="problematic" id="id4">**</span></a>kwargs)}, where args and kwargs are
-arguments/kwargs to SampleApproach.add_faultsamples.</p></li>
-<li><p><strong>get_phasemap</strong> – Whether to generate the FaultSample from the phasemap. The default is True.</p></li>
+Has structure::
+{‘fs_name’: (<a href="#id1"><span class="problematic" id="id2">*</span></a>args, <a href="#id3"><span class="problematic" id="id4">**</span></a>kwargs)}
+where args and kwargs are arguments/kwargs to SampleApproach.add_faultsamples.</p></li>
+<li><p><strong>get_phasemap</strong> (<em>bool</em><em>, </em><em>optional</em>) – Whether to generate the FaultSample from the phasemap. The default is True.</p></li>
 <li><p><strong>scen</strong> (<em>scenario</em><em>, </em><em>optional</em>) – Scenario to use as nominal. The default is {}.</p></li>
+<li><p><strong>include_nominal</strong> (<em>bool</em><em>, </em><em>optional</em>) – Whether to return nominal hists/results back. Default is False.</p></li>
 <li><p><strong>**kwargs</strong> (<em>kwargs</em>) – kwargs to simulate over</p></li>
 </ul>
 </dd>
@@ -691,8 +700,10 @@ See multiprocessing documentation.</p>
 <li><p><strong>faultdomains</strong> (<em>dict</em>) – Dict of arguments to SampleApproach.add_faultdomains</p></li>
 <li><p><strong>faultsamples</strong> (<em>dict</em>) – Dict of arguments to SampleApproach.add_faultsamples
 FaultSamples to add to othe SampleApproach and their arguments.
-Has structure: {‘fs_name’: (<a href="#id5"><span class="problematic" id="id6">*</span></a>args, <a href="#id7"><span class="problematic" id="id8">**</span></a>kwargs)}, where args and kwargs are
-arguments/kwargs to SampleApproach.add_faultsamples.</p></li>
+Has structure::
+{‘fs_name’: (<a href="#id5"><span class="problematic" id="id6">*</span></a>args, <a href="#id7"><span class="problematic" id="id8">**</span></a>kwargs)}
+where args and kwargs are arguments/kwargs to SampleApproach.add_faultsamples.</p></li>
+<li><p><strong>include_nominal</strong> (<em>bool</em><em>, </em><em>optional</em>) – Whether to return nominal hists/results back. Default is False.</p></li>
 <li><p><strong>**kwargs</strong> (<em>kwargs</em>) – <p>Additional keyword arguments, may include:</p>
 <ul>
 <li><dl class="simple">
@@ -741,7 +752,34 @@ scenario with structure {‘nomscen1’: app1}</p></li>
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>mdl</strong> (<a class="reference internal" href="fmdtools.define.block.html#fmdtools.define.block.base.Simulable" title="fmdtools.define.block.base.Simulable"><em>Simulable</em></a><em> (</em><em>object</em><em> or </em><em>class</em><em>)</em>) – Model of the system</p></li>
-<li><p><strong>time</strong> (<em>float/list</em>) – Times to copy the nominal model from</p></li>
+<li><p><strong>ctimes</strong> (<em>float/list</em>) – Times to copy the nominal model from</p></li>
+<li><p><strong>protect</strong> (<em>bool</em>) – <p>Whether or not to protect the model object via copying.
+Options:</p>
+<blockquote>
+<div><ul>
+<li><p>True (default): re-instances the model so that multiple simulations can</p></li>
+</ul>
+<p>be run successively without causing problems
+- False : Thus, the model object that is returned can be modified and
+analyzed if needed</p>
+</div></blockquote>
+</p></li>
+<li><p><strong>save_args</strong> (<em>dict</em><em> (</em><em>optional</em><em>)</em>) – <p>Dictionary specifying if/how to save results. Default is {}, which doesn’t
+save anything.
+Has structure</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">{</span><span class="s1">&#39;mdlhists&#39;</span><span class="p">:</span><span class="n">mdlhistargs</span><span class="p">,</span> <span class="s1">&#39;endclass&#39;</span><span class="p">:</span><span class="n">endclassargs</span><span class="p">,</span> <span class="s1">&#39;indiv&#39;</span><span class="p">:</span><span class="n">indiv</span><span class="p">}</span>
+</pre></div>
+</div>
+</p></li>
+<li><p><strong>mdl_kwargs</strong> (<em>dict</em><em>, </em><em>optional</em>) – <p>Model arameter dictionary.
+Has structure</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">{</span><span class="s2">&quot;p&quot;</span><span class="p">:</span> <span class="n">Parameter</span><span class="p">,</span> <span class="s2">&quot;sp&quot;</span><span class="p">:</span><span class="n">SimParam</span><span class="p">,</span> <span class="s2">&quot;track&quot;</span><span class="p">:</span><span class="n">track</span><span class="p">}</span>
+</pre></div>
+</div>
+</p></li>
+<li><p><strong>scen</strong> (<em>scenario</em><em>, </em><em>optional</em>) – Scenario to use. The default is {}.</p></li>
+<li><p><strong>warn_faults</strong> (<em>bool</em>) – choose whether to display a warning message if faults are identified during nominal runs.
+Default is True.</p></li>
 <li><p><strong>**kwargs</strong> (<em>kwargs</em>) – <a class="reference internal" href="#fmdtools.sim.propagate.sim_kwargs" title="fmdtools.sim.propagate.sim_kwargs"><code class="xref py py-data docutils literal notranslate"><span class="pre">sim_kwargs</span></code></a> simulation options for <a class="reference internal" href="#fmdtools.sim.propagate.prop_one_scen" title="fmdtools.sim.propagate.prop_one_scen"><code class="xref py py-func docutils literal notranslate"><span class="pre">prop_one_scen()</span></code></a></p></li>
 </ul>
 </dd>
@@ -874,7 +912,6 @@ nominally and/or fail.</p>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>mdl</strong> (<a class="reference internal" href="fmdtools.define.block.html#fmdtools.define.block.base.Simulable" title="fmdtools.define.block.base.Simulable"><em>Simulable</em></a>) – Model to simulate</p></li>
 <li><p><strong>ps</strong> (<a class="reference internal" href="#fmdtools.sim.sample.ParameterSample" title="fmdtools.sim.sample.ParameterSample"><em>ParameterSample</em></a>) – Parameter Sample defining the nominal scenarios to run the system over.</p></li>
-<li><p><strong>get_endclass</strong> (<em>bool</em>) – Whether to return endclasses from mdl.find_classification. Default is True.</p></li>
 <li><p><strong>**kwargs</strong> (<em>kwargs</em>) – <p>Additional keyword arguments, may include:</p>
 <ul>
 <li><dl class="simple">
@@ -924,10 +961,7 @@ nominally and/or fail.</p>
 <li><p><strong>ctimes</strong> (<em>list</em><em>, </em><em>optional</em>) – List of times to copy the model (for use in staged execution).
 The default is [].</p></li>
 <li><p><strong>nomhist</strong> (<em>dict</em><em>, </em><em>optional</em>) – Model history dictionary from previous runs, for use in creating the new
-mdlhist.</p></li>
-<li><p><strong>nomhist</strong> – Model history dictionary from the nominal state, for use in
-Model.find_classification and for initializing model history in staged execution
-option. The default is {}.</p></li>
+mdlhist. The default is {}.</p></li>
 <li><p><strong>nomresult</strong> (<em>dict</em><em>, </em><em>optional</em>) – Nominal result dictionary (to compare with current if desired)</p></li>
 <li><p><strong>**kwargs</strong> (<em>kwargs</em>) – simulation options, see <a class="reference internal" href="#fmdtools.sim.propagate.sim_kwargs" title="fmdtools.sim.propagate.sim_kwargs"><code class="xref py py-data docutils literal notranslate"><span class="pre">sim_kwargs</span></code></a></p></li>
 </ul>
@@ -968,8 +1002,8 @@ Has structure</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">{</span><span class="s1">&#39;mdlhists&#39;</span><span class="p">:</span><span class="n">mdlhistargs</span><span class="p">,</span> <span class="s1">&#39;endclass&#39;</span><span class="p">:</span><span class="n">endclassargs</span><span class="p">,</span> <span class="s1">&#39;indiv&#39;</span><span class="p">:</span><span class="n">indiv</span><span class="p">}</span>
 </pre></div>
 </div>
-<p>where mdlhistargs and endclassargs are dictionaries of save arguments, e.g.:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">{</span><span class="s1">&#39;filename&#39;</span><span class="p">:</span><span class="s1">&#39;filename.pkl&#39;</span><span class="p">,</span> <span class="s1">&#39;filetype&#39;</span><span class="p">:</span><span class="s1">&#39;pickle&#39;</span><span class="p">,</span> <span class="s1">&#39;overwrite&#39;</span><span class="p">:</span><span class="kc">True</span><span class="p">}</span>
+<p>where mdlhistargs and endclassargs are dictionaries of save arguments, e.g.,:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">{</span><span class="s1">&#39;filename&#39;</span><span class="p">:</span><span class="s1">&#39;filename.npz&#39;</span><span class="p">,</span> <span class="s1">&#39;filetype&#39;</span><span class="p">:</span><span class="s1">&#39;npz&#39;</span><span class="p">,</span> <span class="s1">&#39;overwrite&#39;</span><span class="p">:</span><span class="kc">True</span><span class="p">}</span>
 </pre></div>
 </div>
 <p>and indiv is an (optional) bool specifying whether to save results individually
@@ -1078,7 +1112,7 @@ structure: {‘nominal’: nomhist, ‘faulty’: faulthist}</p></li>
 Options are:</p>
 <ul>
 <li><p>’endclass’: a dict returned by find_classification (default)</p></li>
-<li><p>’endfaults’: a dict of returned fault modes and their propagation, e.g.</p>
+<li><p>’endfaults’: a dict of returned fault modes and their propagation, e.g.,</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">{</span><span class="s1">&#39;endfaults&#39;</span><span class="p">:</span><span class="n">faultdict</span><span class="p">,</span> <span class="s1">&#39;faultprops&#39;</span><span class="p">:</span><span class="n">faultpropdict</span><span class="p">}</span>
 </pre></div>
 </div>
@@ -1087,7 +1121,7 @@ Options are:</p>
 superimposed</p></li>
 <li><p>’fxnname.varname’: variable values to get</p></li>
 <li><p>a list of the above arguments (for multiple at the end)</p></li>
-<li><p>a dict of lists (for multiple over time), e.g.</p>
+<li><p>a dict of lists (for multiple over time), e.g.,</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">{</span><span class="n">time</span><span class="p">:[</span><span class="n">varnames</span><span class="p">,</span><span class="o">...</span> <span class="s1">&#39;endclass&#39;</span><span class="p">]}</span>
 </pre></div>
 </div>
@@ -1178,23 +1212,16 @@ See multiprocessing documentation.</p>
 <section id="module-fmdtools.sim.scenario">
 <span id="fmdtools-sim-scenario"></span><h2>fmdtools.sim.scenario<a class="headerlink" href="#module-fmdtools.sim.scenario" title="Permalink to this heading"></a></h2>
 <p>Description: Classes for defining scenarios to simulate.</p>
-<p>Classes:
-- <a class="reference internal" href="#fmdtools.sim.scenario.Injection" title="fmdtools.sim.scenario.Injection"><code class="xref py py-class docutils literal notranslate"><span class="pre">Injection</span></code></a>: Defines faults and disturbances to inject at a specific time
-- <a class="reference internal" href="#fmdtools.sim.scenario.Scenario" title="fmdtools.sim.scenario.Scenario"><code class="xref py py-class docutils literal notranslate"><span class="pre">Scenario</span></code></a>: Defines a generic scenario to simulation
-- <a class="reference internal" href="#fmdtools.sim.scenario.SingleFaultScenario" title="fmdtools.sim.scenario.SingleFaultScenario"><code class="xref py py-class docutils literal notranslate"><span class="pre">SingleFaultScenario</span></code></a>: Defines the scenario of a single fault injected in a
-function</p>
+<p>Classes:</p>
 <ul class="simple">
-<li><p><a class="reference internal" href="#fmdtools.sim.scenario.JointFaultScenario" title="fmdtools.sim.scenario.JointFaultScenario"><code class="xref py py-class docutils literal notranslate"><span class="pre">JointFaultScenario</span></code></a>: Defines the scenario of multiple faults injected in a</p></li>
+<li><p><a class="reference internal" href="#fmdtools.sim.scenario.Injection" title="fmdtools.sim.scenario.Injection"><code class="xref py py-class docutils literal notranslate"><span class="pre">Injection</span></code></a>: Defines faults and disturbances to inject at a specific time.</p></li>
+<li><p><a class="reference internal" href="#fmdtools.sim.scenario.Scenario" title="fmdtools.sim.scenario.Scenario"><code class="xref py py-class docutils literal notranslate"><span class="pre">Scenario</span></code></a>: Defines a generic scenario to simulation.</p></li>
+<li><p><a class="reference internal" href="#fmdtools.sim.scenario.SingleFaultScenario" title="fmdtools.sim.scenario.SingleFaultScenario"><code class="xref py py-class docutils literal notranslate"><span class="pre">SingleFaultScenario</span></code></a>: Defines the scenario of a single fault injected in a function.</p></li>
+<li><p><a class="reference internal" href="#fmdtools.sim.scenario.JointFaultScenario" title="fmdtools.sim.scenario.JointFaultScenario"><code class="xref py py-class docutils literal notranslate"><span class="pre">JointFaultScenario</span></code></a>: Defines the scenario of multiple faults injected in a function at the same time.</p></li>
+<li><p><code class="xref py py-class docutils literal notranslate"><span class="pre">NominalScenario</span></code>: Defines the scenario of a model having given parameters at the outset.</p></li>
+<li><p><code class="xref py py-class docutils literal notranslate"><span class="pre">ParamScenario</span></code>: Defines the scenario of a model having parameters from a given paramfunc.</p></li>
+<li><p><a class="reference internal" href="#fmdtools.sim.scenario.Sequence" title="fmdtools.sim.scenario.Sequence"><code class="xref py py-class docutils literal notranslate"><span class="pre">Sequence</span></code></a>: Creates an overall sequence of Injections from a given sequence of faults and disturbances.</p></li>
 </ul>
-<p>function at the same time.</p>
-<ul class="simple">
-<li><p><code class="xref py py-class docutils literal notranslate"><span class="pre">NominalScenario</span></code>: Defines the scenario of a model having given parameters at</p></li>
-</ul>
-<p>the outset.
-- <code class="xref py py-class docutils literal notranslate"><span class="pre">ParamScenario</span></code>: Defines the scenario of a model having parameters from a given
-paramfunc.
-- <a class="reference internal" href="#fmdtools.sim.scenario.Sequence" title="fmdtools.sim.scenario.Sequence"><code class="xref py py-class docutils literal notranslate"><span class="pre">Sequence</span></code></a>: Creates an overall sequence of Injections from a given sequence of
-faults and disturbances.</p>
 <dl class="py class">
 <dt class="sig sig-object py" id="fmdtools.sim.scenario.BaseScenObj">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">fmdtools.sim.scenario.</span></span><span class="sig-name descname"><span class="pre">BaseScenObj</span></span><a class="headerlink" href="#fmdtools.sim.scenario.BaseScenObj" title="Permalink to this definition"></a></dt>
@@ -1244,11 +1271,12 @@ faults and disturbances.</p>
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">fmdtools.sim.scenario.</span></span><span class="sig-name descname"><span class="pre">BaseScenario</span></span><a class="headerlink" href="#fmdtools.sim.scenario.BaseScenario" title="Permalink to this definition"></a></dt>
 <dd><p>Bases: <a class="reference internal" href="#fmdtools.sim.scenario.BaseScenObj" title="fmdtools.sim.scenario.BaseScenObj"><code class="xref py py-class docutils literal notranslate"><span class="pre">BaseScenObj</span></code></a></p>
 <p>Base class for scenarios.</p>
+<p>…</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>sequence</strong> (<a class="reference internal" href="#fmdtools.sim.scenario.Sequence" title="fmdtools.sim.scenario.Sequence"><em>Sequence</em></a>) – Sequence of faults and distrubances over time defined by Sequence</p></li>
-<li><p><strong>tuple</strong> (<em>times =</em>) – Times faunts/distrubances will occur.</p></li>
+<li><p><strong>times</strong> (<em>tuple</em>) – Times faunts/distrubances will occur.</p></li>
 <li><p><strong>Variables</strong> (<em>Class</em>) – </p></li>
 <li><p><strong>---------------</strong> – </p></li>
 <li><p><strong>prob</strong> (<em>float</em>) – Scenario probability</p></li>
@@ -1301,6 +1329,7 @@ faults and disturbances.</p>
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">fmdtools.sim.scenario.</span></span><span class="sig-name descname"><span class="pre">Injection</span></span><a class="headerlink" href="#fmdtools.sim.scenario.Injection" title="Permalink to this definition"></a></dt>
 <dd><p>Bases: <a class="reference internal" href="#fmdtools.sim.scenario.BaseScenObj" title="fmdtools.sim.scenario.BaseScenObj"><code class="xref py py-class docutils literal notranslate"><span class="pre">BaseScenObj</span></code></a></p>
 <p>Defines a single fault/disturbance injection.</p>
+<p>…</p>
 <dl class="simple">
 <dt>faults<span class="classifier">dict</span></dt><dd><p>Faults to inject with structure {‘fxnname’: [faults]}</p>
 </dd>
@@ -1657,12 +1686,14 @@ faults and disturbances.</p>
 <section id="module-fmdtools.sim.sample">
 <span id="fmdtools-sim-sample"></span><h2>fmdtools.sim.sample<a class="headerlink" href="#module-fmdtools.sim.sample" title="Permalink to this heading"></a></h2>
 <p>Module for Fault Sampling. Takes the place of approach classes.</p>
-<p>Has classes:
-- <a class="reference internal" href="#fmdtools.sim.sample.ParameterDomain" title="fmdtools.sim.sample.ParameterDomain"><code class="xref py py-class docutils literal notranslate"><span class="pre">ParameterDomain</span></code></a>: Defines domain for sampling from Parameters.
-- <a class="reference internal" href="#fmdtools.sim.sample.FaultDomain" title="fmdtools.sim.sample.FaultDomain"><code class="xref py py-class docutils literal notranslate"><span class="pre">FaultDomain</span></code></a>: Defines domain for sampling from Faults.
-- <a class="reference internal" href="#fmdtools.sim.sample.FaultSample" title="fmdtools.sim.sample.FaultSample"><code class="xref py py-class docutils literal notranslate"><span class="pre">FaultSample</span></code></a>: Defines a sample of fault scenarios.
-- <a class="reference internal" href="#fmdtools.sim.sample.SampleApproach" title="fmdtools.sim.sample.SampleApproach"><code class="xref py py-class docutils literal notranslate"><span class="pre">SampleApproach</span></code></a>: Defines a set of fault scenario samples.
-- <a class="reference internal" href="#fmdtools.sim.sample.ParameterSample" title="fmdtools.sim.sample.ParameterSample"><code class="xref py py-class docutils literal notranslate"><span class="pre">ParameterSample</span></code></a>: Defines a sample of a set of parameters.</p>
+<p>Has classes:</p>
+<ul class="simple">
+<li><p><a class="reference internal" href="#fmdtools.sim.sample.ParameterDomain" title="fmdtools.sim.sample.ParameterDomain"><code class="xref py py-class docutils literal notranslate"><span class="pre">ParameterDomain</span></code></a>: Defines domain for sampling from Parameters.</p></li>
+<li><p><a class="reference internal" href="#fmdtools.sim.sample.FaultDomain" title="fmdtools.sim.sample.FaultDomain"><code class="xref py py-class docutils literal notranslate"><span class="pre">FaultDomain</span></code></a>: Defines domain for sampling from Faults.</p></li>
+<li><p><a class="reference internal" href="#fmdtools.sim.sample.FaultSample" title="fmdtools.sim.sample.FaultSample"><code class="xref py py-class docutils literal notranslate"><span class="pre">FaultSample</span></code></a>: Defines a sample of fault scenarios.</p></li>
+<li><p><a class="reference internal" href="#fmdtools.sim.sample.SampleApproach" title="fmdtools.sim.sample.SampleApproach"><code class="xref py py-class docutils literal notranslate"><span class="pre">SampleApproach</span></code></a>: Defines a set of fault scenario samples.</p></li>
+<li><p><a class="reference internal" href="#fmdtools.sim.sample.ParameterSample" title="fmdtools.sim.sample.ParameterSample"><code class="xref py py-class docutils literal notranslate"><span class="pre">ParameterSample</span></code></a>: Defines a sample of a set of parameters.</p></li>
+</ul>
 <dl class="py class">
 <dt class="sig sig-object py" id="fmdtools.sim.sample.BaseSample">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">fmdtools.sim.sample.</span></span><span class="sig-name descname"><span class="pre">BaseSample</span></span><a class="headerlink" href="#fmdtools.sim.sample.BaseSample" title="Permalink to this definition"></a></dt>
@@ -1683,7 +1714,6 @@ faults and disturbances.</p>
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>res</strong> (<a class="reference internal" href="fmdtools.analyze.html#fmdtools.analyze.result.Result" title="fmdtools.analyze.result.Result"><em>Result</em></a>) – Result with the given metrics over a number of scenarios.</p></li>
-<li><p><strong>samp</strong> (<a class="reference internal" href="#fmdtools.sim.sample.BaseSample" title="fmdtools.sim.sample.BaseSample"><em>BaseSample</em></a>) – Sample object used to generate the scenarios</p></li>
 <li><p><strong>metrics</strong> (<em>list</em>) – metrics in res to tabulate over time. Default is [‘cost’].</p></li>
 <li><p><strong>factors</strong> (<em>list</em>) – Factors (Scenario properties e.g., ‘name’, ‘time’, ‘var’) in samp to take the
 statistic over. Default is [‘time’]</p></li>
@@ -1820,6 +1850,7 @@ set of scenarios for the given factor level.</p>
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">fmdtools.sim.sample.</span></span><span class="sig-name descname"><span class="pre">FaultDomain</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mdl</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.sim.sample.FaultDomain" title="Permalink to this definition"></a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
 <p>Defines the faults which will be sampled from in an approach.</p>
+<p>…</p>
 <dl class="py attribute">
 <dt class="sig sig-object py" id="fmdtools.sim.sample.FaultDomain.fxns">
 <span class="sig-name descname"><span class="pre">fxns</span></span><a class="headerlink" href="#fmdtools.sim.sample.FaultDomain.fxns" title="Permalink to this definition"></a></dt>
@@ -1991,6 +2022,7 @@ set of scenarios for the given factor level.</p>
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">fmdtools.sim.sample.</span></span><span class="sig-name descname"><span class="pre">FaultSample</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">faultdomain</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">phasemap</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">{}</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">def_mdl_phasemap</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.sim.sample.FaultSample" title="Permalink to this definition"></a></dt>
 <dd><p>Bases: <a class="reference internal" href="#fmdtools.sim.sample.BaseSample" title="fmdtools.sim.sample.BaseSample"><code class="xref py py-class docutils literal notranslate"><span class="pre">BaseSample</span></code></a></p>
 <p>Defines a sample of a given faultdomain.</p>
+<p>…</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
@@ -2205,6 +2237,7 @@ independent base rate assumptions to calculate. Default is 1.0.</p></li>
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">fmdtools.sim.sample.</span></span><span class="sig-name descname"><span class="pre">ParameterDomain</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">parameter_init</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.sim.sample.ParameterDomain" title="Permalink to this definition"></a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
 <p>Defines a domain to sample from a Parameter.</p>
+<p>…</p>
 <dl class="py attribute">
 <dt class="sig sig-object py" id="fmdtools.sim.sample.ParameterDomain.parameter_init">
 <span class="sig-name descname"><span class="pre">parameter_init</span></span><a class="headerlink" href="#fmdtools.sim.sample.ParameterDomain.parameter_init" title="Permalink to this definition"></a></dt>
@@ -2240,38 +2273,44 @@ may only take kwargs as input (which will map to ParameterDomain variables).</p>
 </dd></dl>
 
 <p class="rubric">Examples</p>
-<p>Given the parameter:
-&gt;&gt;&gt; class ExampleParameter(Parameter):
-…    x: float = 1.0
-…    y: float = 10.0
-…    z: float = 0.0
-…    x_lim = (0, 10)
-…    y_set = (1.0, 2.0, 3.0, 4.0)</p>
-<p>We can then define the following domain, which by default gets set constraints:
-&gt;&gt;&gt; expd = ParameterDomain(ExampleParameter)
-&gt;&gt;&gt; expd.add_variables(“y”, “x”)
-&gt;&gt;&gt; expd.add_constants(z=20)
-&gt;&gt;&gt; expd
-ParameterDomain with:</p>
-<blockquote>
-<div><ul class="simple">
-<li><p>variables: {‘y’: {1.0, 2.0, 3.0, 4.0}, ‘x’: (0, 10)}</p></li>
-<li><p>constants: {‘z’: 20}</p></li>
-<li><p>parameter_initializer: ExampleParameter</p></li>
-</ul>
-</div></blockquote>
-<p>This ParameterDomain then becomes a callable with the given variables:
-&gt;&gt;&gt; expd(1, 2)
-ExampleParameter(x=2.0, y=1.0, z=20.0)</p>
-<p>And we can separately check the set contraints for the variables:
-&gt;&gt;&gt; expd.get_set_constraints(1, 2)
-(False, False)
-&gt;&gt;&gt; expd.get_set_constraints(0, 20)
-(True, True)</p>
-<p>This can also work with nested parameters:
-&gt;&gt;&gt; class ExNestedParam(Parameter):
-…    ex_param: ExampleParameter = ExampleParameter()
-…    k: float = 20.0</p>
+<p>Given the parameter:</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="k">class</span> <span class="nc">ExampleParameter</span><span class="p">(</span><span class="n">Parameter</span><span class="p">):</span>
+<span class="gp">... </span>   <span class="n">x</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">1.0</span>
+<span class="gp">... </span>   <span class="n">y</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">10.0</span>
+<span class="gp">... </span>   <span class="n">z</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.0</span>
+<span class="gp">... </span>   <span class="n">x_lim</span> <span class="o">=</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">10</span><span class="p">)</span>
+<span class="gp">... </span>   <span class="n">y_set</span> <span class="o">=</span> <span class="p">(</span><span class="mf">1.0</span><span class="p">,</span> <span class="mf">2.0</span><span class="p">,</span> <span class="mf">3.0</span><span class="p">,</span> <span class="mf">4.0</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>We can then define the following domain, which by default gets set constraints:</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">expd</span> <span class="o">=</span> <span class="n">ParameterDomain</span><span class="p">(</span><span class="n">ExampleParameter</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">expd</span><span class="o">.</span><span class="n">add_variables</span><span class="p">(</span><span class="s2">&quot;y&quot;</span><span class="p">,</span> <span class="s2">&quot;x&quot;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">expd</span><span class="o">.</span><span class="n">add_constants</span><span class="p">(</span><span class="n">z</span><span class="o">=</span><span class="mi">20</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">expd</span>
+<span class="go">ParameterDomain with:</span>
+<span class="go"> - variables: {&#39;y&#39;: {1.0, 2.0, 3.0, 4.0}, &#39;x&#39;: (0, 10)}</span>
+<span class="go"> - constants: {&#39;z&#39;: 20}</span>
+<span class="go"> - parameter_initializer: ExampleParameter</span>
+</pre></div>
+</div>
+<p>This ParameterDomain then becomes a callable with the given variables:</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">expd</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
+<span class="go">ExampleParameter(x=2.0, y=1.0, z=20.0)</span>
+</pre></div>
+</div>
+<p>And we can separately check the set contraints for the variables:</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">expd</span><span class="o">.</span><span class="n">get_set_constraints</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
+<span class="go">(False, False)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">expd</span><span class="o">.</span><span class="n">get_set_constraints</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">20</span><span class="p">)</span>
+<span class="go">(True, True)</span>
+</pre></div>
+</div>
+<p>This can also work with nested parameters:</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="k">class</span> <span class="nc">ExNestedParam</span><span class="p">(</span><span class="n">Parameter</span><span class="p">):</span>
+<span class="gp">... </span>   <span class="n">ex_param</span><span class="p">:</span> <span class="n">ExampleParameter</span> <span class="o">=</span> <span class="n">ExampleParameter</span><span class="p">()</span>
+<span class="gp">... </span>   <span class="n">k</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">20.0</span>
+</pre></div>
+</div>
 <div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">expd1</span> <span class="o">=</span> <span class="n">ParameterDomain</span><span class="p">(</span><span class="n">ExNestedParam</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">expd1</span><span class="o">.</span><span class="n">add_variables</span><span class="p">(</span><span class="s2">&quot;ex_param.x&quot;</span><span class="p">,</span> <span class="s2">&quot;ex_param.y&quot;</span><span class="p">,</span> <span class="s2">&quot;k&quot;</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">expd1</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span>
@@ -2410,6 +2449,7 @@ The default is {}.</p></li>
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">fmdtools.sim.sample.</span></span><span class="sig-name descname"><span class="pre">ParameterSample</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">paramdomain=ParameterDomain</span> <span class="pre">with:</span>&#160; <span class="pre">-</span> <span class="pre">variables:</span> <span class="pre">{}</span>&#160; <span class="pre">-</span> <span class="pre">constants:</span> <span class="pre">{}</span>&#160; <span class="pre">-</span> <span class="pre">parameter_initializer:</span> <span class="pre">Parameter</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">seed=None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sp={}</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.sim.sample.ParameterSample" title="Permalink to this definition"></a></dt>
 <dd><p>Bases: <a class="reference internal" href="#fmdtools.sim.sample.BaseSample" title="fmdtools.sim.sample.BaseSample"><code class="xref py py-class docutils literal notranslate"><span class="pre">BaseSample</span></code></a></p>
 <p>Class for sampling parameters and other immutable model attributes.</p>
+<p>…</p>
 <dl class="py attribute">
 <dt class="sig sig-object py" id="fmdtools.sim.sample.ParameterSample.seed">
 <span class="sig-name descname"><span class="pre">seed</span></span><a class="headerlink" href="#fmdtools.sim.sample.ParameterSample.seed" title="Permalink to this definition"></a></dt>
@@ -2516,7 +2556,7 @@ default values of x are used.</p></li>
 seed for each value while ‘independent’ uses different seeds over all
 variable values. The default is ‘shared’.</p></li>
 <li><p><strong>name</strong> (<em>str</em><em>, </em><em>optional</em>) – Name prefix for the set of replicates. The default is ‘var’.</p></li>
-<li><p><strong>weight</strong> (<em>float</em><em>, </em><em>optional</em>) – Total weight for the replicates (i.e.., total probability to divide between
+<li><p><strong>weight</strong> (<em>float</em><em>, </em><em>optional</em>) – Total weight for the replicates (i.e., total probability to divide between
 samples). The default is 1.0.</p></li>
 </ul>
 </dd>
@@ -2669,6 +2709,7 @@ samples). The default is 1.0.</p></li>
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">fmdtools.sim.sample.</span></span><span class="sig-name descname"><span class="pre">SampleApproach</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mdl</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">phasemaps</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">{}</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">def_mdl_phasemap</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.sim.sample.SampleApproach" title="Permalink to this definition"></a></dt>
 <dd><p>Bases: <a class="reference internal" href="#fmdtools.sim.sample.BaseSample" title="fmdtools.sim.sample.BaseSample"><code class="xref py py-class docutils literal notranslate"><span class="pre">BaseSample</span></code></a></p>
 <p>Class for defining an agglomeration of fault samples accross an entire model.</p>
+<p>…</p>
 <dl class="py attribute">
 <dt class="sig sig-object py" id="fmdtools.sim.sample.SampleApproach.mdl">
 <span class="sig-name descname"><span class="pre">mdl</span></span><a class="headerlink" href="#fmdtools.sim.sample.SampleApproach.mdl" title="Permalink to this definition"></a></dt>
@@ -2761,8 +2802,9 @@ of the model.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>**faultdomains</strong> (<em>tuple</em>) – FaultDomains to add to the SampleApproach and their arguments.
-Has structure: {‘fd_name’: (<a href="#id15"><span class="problematic" id="id16">*</span></a>args, <a href="#id17"><span class="problematic" id="id18">**</span></a>kwargs)}, where args and kwargs are
-arguments/kwargs to SampleApproach.add_faultdomain (after name).</p>
+Has structure::
+{‘fd_name’: (<a href="#id15"><span class="problematic" id="id16">*</span></a>args, <a href="#id17"><span class="problematic" id="id18">**</span></a>kwargs)}
+where args and kwargs are arguments/kwargs to SampleApproach.add_faultdomain (after name).</p>
 </dd>
 </dl>
 </dd></dl>
@@ -2819,8 +2861,9 @@ If a list, passes to JointFaultSample</p></li>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>**faultsamples</strong> (<em>tuple</em>) – FaultSamples to add to othe SampleApproach and their arguments.
-Has structure: fs_name = (<a href="#id19"><span class="problematic" id="id20">*</span></a>args, <a href="#id21"><span class="problematic" id="id22">**</span></a>kwargs)}, where args and kwargs are
-arguments/kwargs to SampleApproach.add_faultsample (after name).</p>
+Has structure::
+fs_name = (<a href="#id19"><span class="problematic" id="id20">*</span></a>args, <a href="#id21"><span class="problematic" id="id22">**</span></a>kwargs)}
+where args and kwargs are arguments/kwargs to SampleApproach.add_faultsample (after name).</p>
 </dd>
 </dl>
 </dd></dl>
@@ -2984,8 +3027,11 @@ arguments/kwargs to SampleApproach.add_faultsample (after name).</p>
 <p>Description: Functions and Classes to enable optimization and search of fault model states and parameters.</p>
 <dl class="simple">
 <dt>Classes:</dt><dd><ul class="simple">
-<li><p><code class="xref py py-class docutils literal notranslate"><span class="pre">ProblemInterface</span></code>:  Creates an interface for model simulations for optimization methods</p></li>
+<li><p><a class="reference internal" href="#fmdtools.sim.search.ProblemArchitecture" title="fmdtools.sim.search.ProblemArchitecture"><code class="xref py py-class docutils literal notranslate"><span class="pre">ProblemArchitecture</span></code></a>:  Enables the representation of combined joint optimization problems</p></li>
 <li><p><a class="reference internal" href="#fmdtools.sim.search.DynamicInterface" title="fmdtools.sim.search.DynamicInterface"><code class="xref py py-class docutils literal notranslate"><span class="pre">DynamicInterface</span></code></a>:  Creates an interface for model simulations for dynamic optimization of a single sim</p></li>
+<li><p><a class="reference internal" href="#fmdtools.sim.search.SimpleProblem" title="fmdtools.sim.search.SimpleProblem"><code class="xref py py-class docutils literal notranslate"><span class="pre">SimpleProblem</span></code></a>: Creates an interface for simple optimazation problem without any model constructs</p></li>
+<li><p><a class="reference internal" href="#fmdtools.sim.search.DisturbanceProblem" title="fmdtools.sim.search.DisturbanceProblem"><code class="xref py py-class docutils literal notranslate"><span class="pre">DisturbanceProblem</span></code></a>: Enables optimizing disturbances that occur at a set time</p></li>
+<li><p><a class="reference internal" href="#fmdtools.sim.search.SingleFaultScenarioProblem" title="fmdtools.sim.search.SingleFaultScenarioProblem"><code class="xref py py-class docutils literal notranslate"><span class="pre">SingleFaultScenarioProblem</span></code></a>: Enables optimizing the time of a given fault scenario</p></li>
 </ul>
 </dd>
 </dl>
@@ -2996,6 +3042,7 @@ arguments/kwargs to SampleApproach.add_faultsample (after name).</p>
 <p>Base class for connectors.</p>
 <p>Connectectors are used in ProblemArchitectures to link the outputs of one problem
 as the inputs to another.</p>
+<p>…</p>
 <p>name : name to give the Connector</p>
 <dl class="py attribute">
 <dt class="sig sig-object py" id="fmdtools.sim.search.BaseConnector.name">
@@ -3009,6 +3056,7 @@ as the inputs to another.</p>
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">fmdtools.sim.search.</span></span><span class="sig-name descname"><span class="pre">BaseObjCon</span></span><a class="headerlink" href="#fmdtools.sim.search.BaseObjCon" title="Permalink to this definition"></a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">dataobject</span></code></p>
 <p>Base class for objectives and constraints.</p>
+<p>…</p>
 <dl class="simple">
 <dt>name<span class="classifier">str</span></dt><dd><p>Name of the objective/constraint</p>
 </dd>
@@ -3032,6 +3080,7 @@ as the inputs to another.</p>
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">fmdtools.sim.search.</span></span><span class="sig-name descname"><span class="pre">BaseProblem</span></span><a class="headerlink" href="#fmdtools.sim.search.BaseProblem" title="Permalink to this definition"></a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
 <p>Base optimization problem.</p>
+<p>…</p>
 <dl class="py attribute">
 <dt class="sig sig-object py" id="fmdtools.sim.search.BaseProblem.variables">
 <span class="sig-name descname"><span class="pre">variables</span></span><a class="headerlink" href="#fmdtools.sim.search.BaseProblem.variables" title="Permalink to this definition"></a></dt>
@@ -3086,7 +3135,7 @@ as the inputs to another.</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="fmdtools.sim.search.BaseProblem.add_objective_callable">
 <span class="sig-name descname"><span class="pre">add_objective_callable</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.sim.search.BaseProblem.add_objective_callable" title="Permalink to this definition"></a></dt>
-<dd><p>Add callable objective function with name name.</p>
+<dd><p>Add callable objective function with name.</p>
 </dd></dl>
 
 <dl class="py method">
@@ -3205,6 +3254,7 @@ values.</p></li>
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">fmdtools.sim.search.</span></span><span class="sig-name descname"><span class="pre">BaseSimProblem</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mdl</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">prop_method</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.sim.search.BaseSimProblem" title="Permalink to this definition"></a></dt>
 <dd><p>Bases: <a class="reference internal" href="#fmdtools.sim.search.BaseProblem" title="fmdtools.sim.search.BaseProblem"><code class="xref py py-class docutils literal notranslate"><span class="pre">BaseProblem</span></code></a></p>
 <p>Base optimization problem for optimizing over simulations.</p>
+<p>…</p>
 <dl class="py attribute">
 <dt class="sig sig-object py" id="fmdtools.sim.search.BaseSimProblem.prop_method">
 <span class="sig-name descname"><span class="pre">prop_method</span></span><a class="headerlink" href="#fmdtools.sim.search.BaseSimProblem.prop_method" title="Permalink to this definition"></a></dt>
@@ -3305,6 +3355,7 @@ than the full set of potential timesteps.</p>
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">fmdtools.sim.search.</span></span><span class="sig-name descname"><span class="pre">Constraint</span></span><a class="headerlink" href="#fmdtools.sim.search.Constraint" title="Permalink to this definition"></a></dt>
 <dd><p>Bases: <a class="reference internal" href="#fmdtools.sim.search.Objective" title="fmdtools.sim.search.Objective"><code class="xref py py-class docutils literal notranslate"><span class="pre">Objective</span></code></a></p>
 <p>Base class for constraints which derive from results.</p>
+<p>…</p>
 <dl class="simple">
 <dt>threshold<span class="classifier">float</span></dt><dd><p>Theshold for the constraint. Default is 0.0</p>
 </dd>
@@ -3423,6 +3474,7 @@ g(x) = value - theshold &gt; 0.0 for ‘less’ constraints.</p>
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">fmdtools.sim.search.</span></span><span class="sig-name descname"><span class="pre">DynamicInterface</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mdl</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mdl_kwargs</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">{}</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">t_max</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">track</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'all'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">run_stochastic</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'track_pdf'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">desired_result</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[]</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">use_end_condition</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.sim.search.DynamicInterface" title="Permalink to this definition"></a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
 <p>Interface for dynamic search of model states (e.g., AST).</p>
+<p>…</p>
 <dl class="py attribute">
 <dt class="sig sig-object py" id="fmdtools.sim.search.DynamicInterface.t">
 <span class="sig-name descname"><span class="pre">t</span></span><a class="headerlink" href="#fmdtools.sim.search.DynamicInterface.t" title="Permalink to this definition"></a></dt>
@@ -3605,6 +3657,7 @@ The default is {}.</p></li>
 <dt class="sig sig-object py" id="fmdtools.sim.search.Objective">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">fmdtools.sim.search.</span></span><span class="sig-name descname"><span class="pre">Objective</span></span><a class="headerlink" href="#fmdtools.sim.search.Objective" title="Permalink to this definition"></a></dt>
 <dd><p>Bases: <a class="reference internal" href="#fmdtools.sim.search.BaseObjCon" title="fmdtools.sim.search.BaseObjCon"><code class="xref py py-class docutils literal notranslate"><span class="pre">BaseObjCon</span></code></a></p>
+<p>…</p>
 <dl class="simple">
 <dt>negative<span class="classifier">bool</span></dt><dd><p>Whether the objective is the negative of the value.</p>
 </dd>
@@ -3681,58 +3734,56 @@ The default is {}.</p></li>
 <span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">fmdtools.define.block.function</span> <span class="kn">import</span> <span class="n">ExampleFunction</span>
 </pre></div>
 </div>
-<p># below, we show basic setup of a parameter problem where objectives get values
-# from the sim at particular times.
-&gt;&gt;&gt; exprob = ParameterSimProblem(ExampleFunction(), expd, “nominal”)
-&gt;&gt;&gt; exprob.add_result_objective(“f1”, “s.x”, time=5)
-&gt;&gt;&gt; exprob.add_result_objective(“f2”, “s.y”, time=5)
-&gt;&gt;&gt; exprob.add_result_constraint(“g1”, “s.x”, time=10, threshold=10, comparator=’greater’)
-&gt;&gt;&gt; exprob
-ParameterSimProblem with:
-VARIABLES</p>
-<blockquote>
-<div><dl class="option-list">
-<dt><kbd><span class="option">-y</span></kbd></dt>
-<dd><p>nan</p>
-</dd>
-<dt><kbd><span class="option">-x</span></kbd></dt>
-<dd><p>nan</p>
-</dd>
-</dl>
-</div></blockquote>
-<dl class="simple">
-<dt>OBJECTIVES</dt><dd><p>-f1                                                            nan
--f2                                                            nan</p>
-</dd>
-<dt>CONSTRAINTS</dt><dd><p>-g1                                                            nan</p>
-</dd>
-</dl>
-<p># once this is set up, you can use the objectives/constraints as callables, like so:
-&gt;&gt;&gt; exprob.f1(1, 0)
-0.0
-&gt;&gt;&gt; exprob.f1(1, 1)
-5.0
-&gt;&gt;&gt; exprob.f1(1, 2)
-10.0
-&gt;&gt;&gt; exprob.f2(1, 2)
-0.0
-&gt;&gt;&gt; exprob.g1(1, 2)
--10.0</p>
-<p># below, we use the endclass as an objective instead of the variable:
-&gt;&gt;&gt; exprob = ParameterSimProblem(ExampleFunction(), expd, “nominal”)
-&gt;&gt;&gt; exprob.add_result_objective(“f1”, “endclass.xy”)
-&gt;&gt;&gt; exprob.f1(1, 1)
-100.0
-&gt;&gt;&gt; exprob.f1(1, 2)
-200.0</p>
-<p># finally, note that this class can work with a variety of methods:
-&gt;&gt;&gt; exprob = ParameterSimProblem(ExampleFunction(“ex”), expd, “one_fault”, “ex”, “short”, 2)
-&gt;&gt;&gt; exprob.add_result_objective(“f1”, “s.y”, time=3)
-&gt;&gt;&gt; exprob.add_result_objective(“f2”, “s.y”, time=5)
-&gt;&gt;&gt; exprob.f1(1, 1)
-2.0
-&gt;&gt;&gt; exprob.f2(1, 1)
-4.0</p>
+<p>below, we show basic setup of a parameter problem where objectives get values
+from the sim at particular times.</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">exprob</span> <span class="o">=</span> <span class="n">ParameterSimProblem</span><span class="p">(</span><span class="n">ExampleFunction</span><span class="p">(),</span> <span class="n">expd</span><span class="p">,</span> <span class="s2">&quot;nominal&quot;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">exprob</span><span class="o">.</span><span class="n">add_result_objective</span><span class="p">(</span><span class="s2">&quot;f1&quot;</span><span class="p">,</span> <span class="s2">&quot;s.x&quot;</span><span class="p">,</span> <span class="n">time</span><span class="o">=</span><span class="mi">5</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">exprob</span><span class="o">.</span><span class="n">add_result_objective</span><span class="p">(</span><span class="s2">&quot;f2&quot;</span><span class="p">,</span> <span class="s2">&quot;s.y&quot;</span><span class="p">,</span> <span class="n">time</span><span class="o">=</span><span class="mi">5</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">exprob</span><span class="o">.</span><span class="n">add_result_constraint</span><span class="p">(</span><span class="s2">&quot;g1&quot;</span><span class="p">,</span> <span class="s2">&quot;s.x&quot;</span><span class="p">,</span> <span class="n">time</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">threshold</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">comparator</span><span class="o">=</span><span class="s1">&#39;greater&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">exprob</span>
+<span class="go">ParameterSimProblem with:</span>
+<span class="go">VARIABLES</span>
+<span class="go"> -y                                                             nan</span>
+<span class="go"> -x                                                             nan</span>
+<span class="go">OBJECTIVES</span>
+<span class="go"> -f1                                                            nan</span>
+<span class="go"> -f2                                                            nan</span>
+<span class="go">CONSTRAINTS</span>
+<span class="go"> -g1                                                            nan</span>
+</pre></div>
+</div>
+<p>once this is set up, you can use the objectives/constraints as callables, like so:</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">exprob</span><span class="o">.</span><span class="n">f1</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+<span class="go">0.0</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">exprob</span><span class="o">.</span><span class="n">f1</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+<span class="go">5.0</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">exprob</span><span class="o">.</span><span class="n">f1</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
+<span class="go">10.0</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">exprob</span><span class="o">.</span><span class="n">f2</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
+<span class="go">0.0</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">exprob</span><span class="o">.</span><span class="n">g1</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
+<span class="go">-10.0</span>
+</pre></div>
+</div>
+<p>below, we use the endclass as an objective instead of the variable:</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">exprob</span> <span class="o">=</span> <span class="n">ParameterSimProblem</span><span class="p">(</span><span class="n">ExampleFunction</span><span class="p">(),</span> <span class="n">expd</span><span class="p">,</span> <span class="s2">&quot;nominal&quot;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">exprob</span><span class="o">.</span><span class="n">add_result_objective</span><span class="p">(</span><span class="s2">&quot;f1&quot;</span><span class="p">,</span> <span class="s2">&quot;endclass.xy&quot;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">exprob</span><span class="o">.</span><span class="n">f1</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+<span class="go">100.0</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">exprob</span><span class="o">.</span><span class="n">f1</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
+<span class="go">200.0</span>
+</pre></div>
+</div>
+<p>finally, note that this class can work with a variety of methods:</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">exprob</span> <span class="o">=</span> <span class="n">ParameterSimProblem</span><span class="p">(</span><span class="n">ExampleFunction</span><span class="p">(</span><span class="s2">&quot;ex&quot;</span><span class="p">),</span> <span class="n">expd</span><span class="p">,</span> <span class="s2">&quot;one_fault&quot;</span><span class="p">,</span> <span class="s2">&quot;ex&quot;</span><span class="p">,</span> <span class="s2">&quot;short&quot;</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">exprob</span><span class="o">.</span><span class="n">add_result_objective</span><span class="p">(</span><span class="s2">&quot;f1&quot;</span><span class="p">,</span> <span class="s2">&quot;s.y&quot;</span><span class="p">,</span> <span class="n">time</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">exprob</span><span class="o">.</span><span class="n">add_result_objective</span><span class="p">(</span><span class="s2">&quot;f2&quot;</span><span class="p">,</span> <span class="s2">&quot;s.y&quot;</span><span class="p">,</span> <span class="n">time</span><span class="o">=</span><span class="mi">5</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">exprob</span><span class="o">.</span><span class="n">f1</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+<span class="go">2.0</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">exprob</span><span class="o">.</span><span class="n">f2</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+<span class="go">4.0</span>
+</pre></div>
+</div>
 <dl class="py method">
 <dt class="sig sig-object py" id="fmdtools.sim.search.ParameterSimProblem.sim_mdl">
 <span class="sig-name descname"><span class="pre">sim_mdl</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">x</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.sim.search.ParameterSimProblem.sim_mdl" title="Permalink to this definition"></a></dt>
@@ -3764,6 +3815,7 @@ interact (e.g., Integrated Resilience Optimization, Two-Stage Optimization, etc.
 problems are sequentially linked in the order of instantiation. While this works
 well for nested problems, there are some limitations when workign with parallel
 problems which we hope to resolve in future work.</p>
+<p>…</p>
 <dl class="py attribute">
 <dt class="sig sig-object py" id="fmdtools.sim.search.ProblemArchitecture.connectors">
 <span class="sig-name descname"><span class="pre">connectors</span></span><a class="headerlink" href="#fmdtools.sim.search.ProblemArchitecture.connectors" title="Permalink to this definition"></a></dt>
@@ -3811,63 +3863,49 @@ problems which we hope to resolve in future work.</p>
 <p class="rubric">Examples</p>
 <p>Below we connect three example problems in a single architecture, linking the vars
 x0 and x1 from ex_sp to be inputs to the scenario simulation (time) as well as the
-disturbance simulation variable (s.y).
-&gt;&gt;&gt; ex_pa = ProblemArchitecture()
-&gt;&gt;&gt; ex_pa.add_connector_variable(“x0”, “x0”)
-&gt;&gt;&gt; ex_pa.add_connector_variable(“x1”, “x1”)
-&gt;&gt;&gt; ex_pa.add_problem(“ex_sp”, ex_sp, outputs={“x0”: [“x0”], “x1”: [“x1”]})
-&gt;&gt;&gt; ex_pa.add_problem(“ex_scenprob”, ex_scenprob, inputs={“x0”: [“time”]})
-&gt;&gt;&gt; ex_pa.add_problem(“ex_dp”, ex_dp, inputs={“x1”: [“s.y”]})
-&gt;&gt;&gt; ex_pa
-ProblemArchitecture with:
-CONNECTORS</p>
-<blockquote>
-<div><p>-x0                                                          [nan]
--x1                                                          [nan]</p>
-</div></blockquote>
-<dl>
-<dt>PROBLEMS</dt><dd><p>-ex_sp({‘ex_sp_xloc’: [‘x0’, ‘x1’]}) -&gt; [‘x0’, ‘x1’]
--ex_scenprob({‘x0’: [‘time’]}) -&gt; []
--ex_dp({‘x1’: [‘s.y’]}) -&gt; []</p>
-</dd>
-<dt>VARIABLES</dt><dd><dl class="option-list">
-<dt><kbd><span class="option">-e<var>x_sp_xloc</var></span></kbd></dt>
-<dd><p>[nan nan]</p>
-</dd>
-</dl>
-</dd>
-<dt>OBJECTIVES</dt><dd><dl class="option-list">
-<dt><kbd><span class="option">-e<var>x_sp_f1</var></span></kbd></dt>
-<dd><p>nan</p>
-</dd>
-<dt><kbd><span class="option">-e<var>x_scenprob_f1</var></span></kbd></dt>
-<dd><p>nan</p>
-</dd>
-<dt><kbd><span class="option">-e<var>x_dp_f1</var></span></kbd></dt>
-<dd><p>nan</p>
-</dd>
-</dl>
-</dd>
-<dt>CONSTRAINTS</dt><dd><dl class="option-list">
-<dt><kbd><span class="option">-e<var>x_sp_g1</var></span></kbd></dt>
-<dd><p>nan</p>
-</dd>
-</dl>
-</dd>
-</dl>
+disturbance simulation variable (s.y).</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">ex_pa</span> <span class="o">=</span> <span class="n">ProblemArchitecture</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ex_pa</span><span class="o">.</span><span class="n">add_connector_variable</span><span class="p">(</span><span class="s2">&quot;x0&quot;</span><span class="p">,</span> <span class="s2">&quot;x0&quot;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ex_pa</span><span class="o">.</span><span class="n">add_connector_variable</span><span class="p">(</span><span class="s2">&quot;x1&quot;</span><span class="p">,</span> <span class="s2">&quot;x1&quot;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ex_pa</span><span class="o">.</span><span class="n">add_problem</span><span class="p">(</span><span class="s2">&quot;ex_sp&quot;</span><span class="p">,</span> <span class="n">ex_sp</span><span class="p">,</span> <span class="n">outputs</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;x0&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;x0&quot;</span><span class="p">],</span> <span class="s2">&quot;x1&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;x1&quot;</span><span class="p">]})</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ex_pa</span><span class="o">.</span><span class="n">add_problem</span><span class="p">(</span><span class="s2">&quot;ex_scenprob&quot;</span><span class="p">,</span> <span class="n">ex_scenprob</span><span class="p">,</span> <span class="n">inputs</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;x0&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;time&quot;</span><span class="p">]})</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ex_pa</span><span class="o">.</span><span class="n">add_problem</span><span class="p">(</span><span class="s2">&quot;ex_dp&quot;</span><span class="p">,</span> <span class="n">ex_dp</span><span class="p">,</span> <span class="n">inputs</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;x1&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;s.y&quot;</span><span class="p">]})</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ex_pa</span>
+<span class="go">ProblemArchitecture with:</span>
+<span class="go">CONNECTORS</span>
+<span class="go"> -x0                                                          [nan]</span>
+<span class="go"> -x1                                                          [nan]</span>
+<span class="go">PROBLEMS</span>
+<span class="go"> -ex_sp({&#39;ex_sp_xloc&#39;: [&#39;x0&#39;, &#39;x1&#39;]}) -&gt; [&#39;x0&#39;, &#39;x1&#39;]</span>
+<span class="go"> -ex_scenprob({&#39;x0&#39;: [&#39;time&#39;]}) -&gt; []</span>
+<span class="go"> -ex_dp({&#39;x1&#39;: [&#39;s.y&#39;]}) -&gt; []</span>
+<span class="go">VARIABLES</span>
+<span class="go"> -ex_sp_xloc                                              [nan nan]</span>
+<span class="go">OBJECTIVES</span>
+<span class="go"> -ex_sp_f1                                                      nan</span>
+<span class="go"> -ex_scenprob_f1                                                nan</span>
+<span class="go"> -ex_dp_f1                                                      nan</span>
+<span class="go">CONSTRAINTS</span>
+<span class="go"> -ex_sp_g1                                                      nan</span>
+</pre></div>
+</div>
 <p>Setting up this problem gives us callables for each problem which we can use to
-call each objective in each problem in terms of its local variables:
-&gt;&gt;&gt; ex_pa.ex_sp_f1(1, 1)
-2.0
-&gt;&gt;&gt; ex_pa.ex_scenprob_f1()
-16.0
-&gt;&gt;&gt; ex_pa.ex_dp_f1()
-1.0</p>
-<p>We can also call these in terms of the full set of variables:
-&gt;&gt;&gt; ex_pa.ex_scenprob_f1_full(2, 2)
-13.0
-&gt;&gt;&gt; ex_pa.ex_dp_f1_full(3, 3)
-3.0</p>
+call each objective in each problem in terms of its local variables:</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">ex_pa</span><span class="o">.</span><span class="n">ex_sp_f1</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+<span class="go">2.0</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ex_pa</span><span class="o">.</span><span class="n">ex_scenprob_f1</span><span class="p">()</span>
+<span class="go">16.0</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ex_pa</span><span class="o">.</span><span class="n">ex_dp_f1</span><span class="p">()</span>
+<span class="go">1.0</span>
+</pre></div>
+</div>
+<p>We can also call these in terms of the full set of variables:</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">ex_pa</span><span class="o">.</span><span class="n">ex_scenprob_f1_full</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
+<span class="go">13.0</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ex_pa</span><span class="o">.</span><span class="n">ex_dp_f1_full</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span>
+<span class="go">3.0</span>
+</pre></div>
+</div>
 <dl class="py method">
 <dt class="sig sig-object py" id="fmdtools.sim.search.ProblemArchitecture.add_connector">
 <span class="sig-name descname"><span class="pre">add_connector</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">*args</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">conclass=&lt;class</span> <span class="pre">'fmdtools.sim.search.VariableConnector'&gt;</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.sim.search.ProblemArchitecture.add_connector" title="Permalink to this definition"></a></dt>
@@ -3935,7 +3973,7 @@ connector.</p></li>
 <dl class="py method">
 <dt class="sig sig-object py" id="fmdtools.sim.search.ProblemArchitecture.add_constraint_callables">
 <span class="sig-name descname"><span class="pre">add_constraint_callables</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">probname</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.sim.search.ProblemArchitecture.add_constraint_callables" title="Permalink to this definition"></a></dt>
-<dd><p>Add callable constraint function with name name.</p>
+<dd><p>Add callable constraint function from problem probname.</p>
 </dd></dl>
 
 <dl class="py method">
@@ -4200,29 +4238,21 @@ The default is ‘’.</p></li>
 <span class="go"> -g1                                                        -4.0000</span>
 </pre></div>
 </div>
-<dl>
-<dt>This update should further update connectors:</dt><dd><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">ex_pa</span><span class="o">.</span><span class="n">get_outputs</span><span class="p">(</span><span class="s2">&quot;ex_sp&quot;</span><span class="p">)</span>
+<p>This update should further update connectors:</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">ex_pa</span><span class="o">.</span><span class="n">get_outputs</span><span class="p">(</span><span class="s2">&quot;ex_sp&quot;</span><span class="p">)</span>
 <span class="go">{&#39;x0&#39;: VariableConnector(name=&#39;x0&#39;, keys=(&#39;x0&#39;,), values=array([1.])), &#39;x1&#39;: VariableConnector(name=&#39;x1&#39;, keys=(&#39;x1&#39;,), values=array([2.]))}</span>
 </pre></div>
 </div>
-</dd>
-</dl>
-<p>Which should then propagate to downstream sims:
-&gt;&gt;&gt; ex_pa.update_problem(“ex_scenprob”)
-&gt;&gt;&gt; ex_pa.problems[“ex_scenprob”]
-SingleScenarioProblem(examplefunction, short) with:
-VARIABLES</p>
-<blockquote>
-<div><dl class="option-list">
-<dt><kbd><span class="option">-t<var>ime</var></span></kbd></dt>
-<dd><p>1.0000</p>
-</dd>
-</dl>
-</div></blockquote>
-<dl class="simple">
-<dt>OBJECTIVES</dt><dd><p>-f1                                                        16.0000</p>
-</dd>
-</dl>
+<p>Which should then propagate to downstream sims:</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">ex_pa</span><span class="o">.</span><span class="n">update_problem</span><span class="p">(</span><span class="s2">&quot;ex_scenprob&quot;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ex_pa</span><span class="o">.</span><span class="n">problems</span><span class="p">[</span><span class="s2">&quot;ex_scenprob&quot;</span><span class="p">]</span>
+<span class="go">SingleScenarioProblem(examplefunction, short) with:</span>
+<span class="go">VARIABLES</span>
+<span class="go"> -time                                                       1.0000</span>
+<span class="go">OBJECTIVES</span>
+<span class="go"> -f1                                                        16.0000</span>
+</pre></div>
+</div>
 </dd></dl>
 
 <dl class="py method">
@@ -4255,6 +4285,7 @@ VARIABLES</p>
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">fmdtools.sim.search.</span></span><span class="sig-name descname"><span class="pre">ResultConstraint</span></span><a class="headerlink" href="#fmdtools.sim.search.ResultConstraint" title="Permalink to this definition"></a></dt>
 <dd><p>Bases: <a class="reference internal" href="#fmdtools.sim.search.ResultObjective" title="fmdtools.sim.search.ResultObjective"><code class="xref py py-class docutils literal notranslate"><span class="pre">ResultObjective</span></code></a></p>
 <p>Base class for constraints which derive from results.</p>
+<p>…</p>
 <dl class="simple">
 <dt>threshold<span class="classifier">float</span></dt><dd><p>Theshold for the constraint. Default is 0.0</p>
 </dd>
@@ -4326,6 +4357,7 @@ VARIABLES</p>
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">fmdtools.sim.search.</span></span><span class="sig-name descname"><span class="pre">ResultObjective</span></span><a class="headerlink" href="#fmdtools.sim.search.ResultObjective" title="Permalink to this definition"></a></dt>
 <dd><p>Bases: <a class="reference internal" href="#fmdtools.sim.search.Objective" title="fmdtools.sim.search.Objective"><code class="xref py py-class docutils literal notranslate"><span class="pre">Objective</span></code></a></p>
 <p>Base class of objectives which derive from Results.</p>
+<p>…</p>
 <dl class="simple">
 <dt>time<span class="classifier">float</span></dt><dd><p>Time the objective is called at. If None, time will be the end of the sim.</p>
 </dd>
@@ -4401,6 +4433,7 @@ VARIABLES</p>
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">fmdtools.sim.search.</span></span><span class="sig-name descname"><span class="pre">ScenarioProblem</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mdl</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">faultdomain</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">phasemap</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.sim.search.ScenarioProblem" title="Permalink to this definition"></a></dt>
 <dd><p>Bases: <a class="reference internal" href="#fmdtools.sim.search.BaseSimProblem" title="fmdtools.sim.search.BaseSimProblem"><code class="xref py py-class docutils literal notranslate"><span class="pre">BaseSimProblem</span></code></a></p>
 <p>Base class for optimizing scenario parameters.</p>
+<p>…</p>
 <dl class="py attribute">
 <dt class="sig sig-object py" id="fmdtools.sim.search.ScenarioProblem.prepped_sims">
 <span class="sig-name descname"><span class="pre">prepped_sims</span></span><a class="headerlink" href="#fmdtools.sim.search.ScenarioProblem.prepped_sims" title="Permalink to this definition"></a></dt>
@@ -4444,6 +4477,7 @@ scenarios (where the model is copied instead of re-simulated).</p>
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">fmdtools.sim.search.</span></span><span class="sig-name descname"><span class="pre">SimpleProblem</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">variables</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.sim.search.SimpleProblem" title="Permalink to this definition"></a></dt>
 <dd><p>Bases: <a class="reference internal" href="#fmdtools.sim.search.BaseProblem" title="fmdtools.sim.search.BaseProblem"><code class="xref py py-class docutils literal notranslate"><span class="pre">BaseProblem</span></code></a></p>
 <p>Simple optimization problem (without any given model constructs).</p>
+<p>…</p>
 <dl class="py attribute">
 <dt class="sig sig-object py" id="fmdtools.sim.search.SimpleProblem.callables">
 <span class="sig-name descname"><span class="pre">callables</span></span><a class="headerlink" href="#fmdtools.sim.search.SimpleProblem.callables" title="Permalink to this definition"></a></dt>
@@ -4512,6 +4546,7 @@ scenarios (where the model is copied instead of re-simulated).</p>
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">fmdtools.sim.search.</span></span><span class="sig-name descname"><span class="pre">SingleFaultScenarioProblem</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mdl</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">faulttup</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">phasemap</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">t_start</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.0</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.sim.search.SingleFaultScenarioProblem" title="Permalink to this definition"></a></dt>
 <dd><p>Bases: <a class="reference internal" href="#fmdtools.sim.search.ScenarioProblem" title="fmdtools.sim.search.ScenarioProblem"><code class="xref py py-class docutils literal notranslate"><span class="pre">ScenarioProblem</span></code></a></p>
 <p>Class for optimizing the time of a given fault scenario.</p>
+<p>…</p>
 <dl class="py attribute">
 <dt class="sig sig-object py" id="fmdtools.sim.search.SingleFaultScenarioProblem.faultdomain">
 <span class="sig-name descname"><span class="pre">faultdomain</span></span><a class="headerlink" href="#fmdtools.sim.search.SingleFaultScenarioProblem.faultdomain" title="Permalink to this definition"></a></dt>
@@ -4552,11 +4587,13 @@ Default is 0.0.</p>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">ex_scenprob</span><span class="o">.</span><span class="n">add_result_objective</span><span class="p">(</span><span class="s2">&quot;f1&quot;</span><span class="p">,</span> <span class="s2">&quot;s.y&quot;</span><span class="p">,</span> <span class="n">time</span><span class="o">=</span><span class="mi">5</span><span class="p">)</span>
 </pre></div>
 </div>
-<p># objective value should be 1.0 (init value) + 3 * time_with_fault
-&gt;&gt;&gt; ex_scenprob.f1(5.0)
-4.0
-&gt;&gt;&gt; ex_scenprob.f1(4.0)
-7.0</p>
+<p>objective value should be 1.0 (init value) + 3 * time_with_fault</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">ex_scenprob</span><span class="o">.</span><span class="n">f1</span><span class="p">(</span><span class="mf">5.0</span><span class="p">)</span>
+<span class="go">4.0</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ex_scenprob</span><span class="o">.</span><span class="n">f1</span><span class="p">(</span><span class="mf">4.0</span><span class="p">)</span>
+<span class="go">7.0</span>
+</pre></div>
+</div>
 <dl class="py method">
 <dt class="sig sig-object py" id="fmdtools.sim.search.SingleFaultScenarioProblem.gen_scenario">
 <span class="sig-name descname"><span class="pre">gen_scenario</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.sim.search.SingleFaultScenarioProblem.gen_scenario" title="Permalink to this definition"></a></dt>

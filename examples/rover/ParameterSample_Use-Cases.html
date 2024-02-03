@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Defining Parameter Samples in fmdtools &mdash; fmdtools 2.0-rc-1 documentation</title>
+  <title>Defining Parameter Samples in fmdtools &mdash; fmdtools 2.0-rc-2 documentation</title>
       <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
       <link rel="stylesheet" href="../../_static/nbsphinx-code-cells.css" type="text/css" />
@@ -69,14 +69,14 @@
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="../../docs/Development%20Guide.html#intro-to-fmdtools">Intro to fmdtools</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="../../docs/Intro_to_fmdtools.html">Intro to resilience modelling, simulation, and visualization in Python with fmdtools.</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../docs/Intro_to_fmdtools.html">Intro to resilience modeling, simulation, and visualization in Python with fmdtools.</a><ul>
 <li class="toctree-l4"><a class="reference internal" href="../../docs/Intro_to_fmdtools.html#author-daniel-hulse">Author: Daniel Hulse</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/Intro_to_fmdtools.html#version-2-0-rc-1">Version: 2.0-rc-1</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../docs/Intro_to_fmdtools.html#version-2-0-rc-2">Version: 2.0-rc-2</a></li>
 </ul>
 </li>
 <li class="toctree-l3"><a class="reference internal" href="../../docs/Intro_to_fmdtools.html#overview">Overview</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../docs/Intro_to_fmdtools.html#prerequisites">Prerequisites</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../../docs/Intro_to_fmdtools.html#motivation-modelling-system-resilience">Motivation: Modelling System Resilience</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../docs/Intro_to_fmdtools.html#motivation-modeling-system-resilience">Motivation: Modeling System Resilience</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../docs/Intro_to_fmdtools.html#why-is-resilience-important">Why is Resilience Important?</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../docs/Intro_to_fmdtools.html#enabling-proactive-design-process">Enabling proactive design process</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../docs/Intro_to_fmdtools.html#why-fmdtools-possible-competitors">Why fmdtools? Possible Competitors:</a></li>
@@ -289,6 +289,18 @@
 </li>
 </ul>
 </li>
+<li class="toctree-l2"><a class="reference internal" href="../Examples.html#taxiway">Taxiway</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../taxiway/Paper_Notebook.html">Taxiway Model Overview</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../taxiway/Paper_Notebook.html#Model-Simulation">Model Simulation</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../taxiway/Paper_Notebook.html#Fault-Simulation-and-Analysis">Fault Simulation and Analysis</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../taxiway/Paper_Notebook.html#Perception-Fault---AC-Vision-Fault">Perception Fault - AC Vision Fault</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../taxiway/Paper_Notebook.html#Communications-Fault---Poor-land-command-by-ATC">Communications Fault - Poor land command by ATC</a></li>
+</ul>
+</li>
+</ul>
+</li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../../docs/Glossary.html">Glossary</a></li>
@@ -311,13 +323,11 @@
 </li>
 <li class="toctree-l3"><a class="reference internal" href="../../docs/fmdtools.define.container.html">fmdtools.define.container</a><ul>
 <li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.define.container.html#fmdtools-define-container-base">fmdtools.define.container.base</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.define.container.html#module-0">fmdtools.define.container.mode</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.define.container.html#module-fmdtools.define.container.mode">fmdtools.define.container.mode</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.define.container.html#module-fmdtools.define.container.state">fmdtools.define.container.state</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.define.container.html#fmdtools-define-container-parameter">fmdtools.define.container.parameter</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.define.container.html#module-fmdtools.define.container.rand">fmdtools.define.container.rand</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.define.container.html#module-fmdtools.define.container.time">fmdtools.define.container.time</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.define.container.html#fmdtools-define-container-geom">fmdtools.define.container.geom</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.define.container.html#fmdtools-define-container-coords">fmdtools.define.container.coords</a></li>
 </ul>
 </li>
 <li class="toctree-l3"><a class="reference internal" href="../../docs/fmdtools.define.flow.html">fmdtools.define.flow</a><ul>
@@ -481,6 +491,11 @@ class GroundParam(Parameter):
     x_min: float = 0.0
     x_max: float = 30.0
     x_res: float = 0.1
+    path_buffer_on: float = 0.2
+    path_buffer_poor: float = 0.3
+    path_buffer_near: float = 0.4
+    dest_buffer_on: float = 1.0
+    dest_buffer_near: float = 2.0
 
     def gen_ls_sine(self):
         &#34;&#34;&#34;Generate coordinates in sine environment.&#34;&#34;&#34;
@@ -653,91 +668,91 @@ ParameterSample of scenarios:
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-[ParameterScenario(sequence={}, times=(), p={&#39;ground&#39;: {&#39;amp&#39;: 0.0, &#39;linetype&#39;: &#39;sine&#39;, &#39;period&#39;: 10}}, r={}, sp={}, prob=0.011764705882352941, inputparams=(0.0, 10), rangeid=&#39;&#39;, name=&#39;rep0_range_0&#39;),
- ParameterScenario(sequence={}, times=(), p={&#39;ground&#39;: {&#39;amp&#39;: 0.0, &#39;linetype&#39;: &#39;sine&#39;, &#39;period&#39;: 20}}, r={}, sp={}, prob=0.011764705882352941, inputparams=(0.0, 20), rangeid=&#39;&#39;, name=&#39;rep0_range_1&#39;),
- ParameterScenario(sequence={}, times=(), p={&#39;ground&#39;: {&#39;amp&#39;: 0.0, &#39;linetype&#39;: &#39;sine&#39;, &#39;period&#39;: 30}}, r={}, sp={}, prob=0.011764705882352941, inputparams=(0.0, 30), rangeid=&#39;&#39;, name=&#39;rep0_range_2&#39;),
- ParameterScenario(sequence={}, times=(), p={&#39;ground&#39;: {&#39;amp&#39;: 0.0, &#39;linetype&#39;: &#39;sine&#39;, &#39;period&#39;: 40}}, r={}, sp={}, prob=0.011764705882352941, inputparams=(0.0, 40), rangeid=&#39;&#39;, name=&#39;rep0_range_3&#39;),
- ParameterScenario(sequence={}, times=(), p={&#39;ground&#39;: {&#39;amp&#39;: 0.0, &#39;linetype&#39;: &#39;sine&#39;, &#39;period&#39;: 50}}, r={}, sp={}, prob=0.011764705882352941, inputparams=(0.0, 50), rangeid=&#39;&#39;, name=&#39;rep0_range_4&#39;),
- ParameterScenario(sequence={}, times=(), p={&#39;ground&#39;: {&#39;amp&#39;: 0.5, &#39;linetype&#39;: &#39;sine&#39;, &#39;period&#39;: 10}}, r={}, sp={}, prob=0.011764705882352941, inputparams=(0.5, 10), rangeid=&#39;&#39;, name=&#39;rep0_range_5&#39;),
- ParameterScenario(sequence={}, times=(), p={&#39;ground&#39;: {&#39;amp&#39;: 0.5, &#39;linetype&#39;: &#39;sine&#39;, &#39;period&#39;: 20}}, r={}, sp={}, prob=0.011764705882352941, inputparams=(0.5, 20), rangeid=&#39;&#39;, name=&#39;rep0_range_6&#39;),
- ParameterScenario(sequence={}, times=(), p={&#39;ground&#39;: {&#39;amp&#39;: 0.5, &#39;linetype&#39;: &#39;sine&#39;, &#39;period&#39;: 30}}, r={}, sp={}, prob=0.011764705882352941, inputparams=(0.5, 30), rangeid=&#39;&#39;, name=&#39;rep0_range_7&#39;),
- ParameterScenario(sequence={}, times=(), p={&#39;ground&#39;: {&#39;amp&#39;: 0.5, &#39;linetype&#39;: &#39;sine&#39;, &#39;period&#39;: 40}}, r={}, sp={}, prob=0.011764705882352941, inputparams=(0.5, 40), rangeid=&#39;&#39;, name=&#39;rep0_range_8&#39;),
- ParameterScenario(sequence={}, times=(), p={&#39;ground&#39;: {&#39;amp&#39;: 0.5, &#39;linetype&#39;: &#39;sine&#39;, &#39;period&#39;: 50}}, r={}, sp={}, prob=0.011764705882352941, inputparams=(0.5, 50), rangeid=&#39;&#39;, name=&#39;rep0_range_9&#39;),
- ParameterScenario(sequence={}, times=(), p={&#39;ground&#39;: {&#39;amp&#39;: 1.0, &#39;linetype&#39;: &#39;sine&#39;, &#39;period&#39;: 10}}, r={}, sp={}, prob=0.011764705882352941, inputparams=(1.0, 10), rangeid=&#39;&#39;, name=&#39;rep0_range_10&#39;),
- ParameterScenario(sequence={}, times=(), p={&#39;ground&#39;: {&#39;amp&#39;: 1.0, &#39;linetype&#39;: &#39;sine&#39;, &#39;period&#39;: 20}}, r={}, sp={}, prob=0.011764705882352941, inputparams=(1.0, 20), rangeid=&#39;&#39;, name=&#39;rep0_range_11&#39;),
- ParameterScenario(sequence={}, times=(), p={&#39;ground&#39;: {&#39;amp&#39;: 1.0, &#39;linetype&#39;: &#39;sine&#39;, &#39;period&#39;: 30}}, r={}, sp={}, prob=0.011764705882352941, inputparams=(1.0, 30), rangeid=&#39;&#39;, name=&#39;rep0_range_12&#39;),
- ParameterScenario(sequence={}, times=(), p={&#39;ground&#39;: {&#39;amp&#39;: 1.0, &#39;linetype&#39;: &#39;sine&#39;, &#39;period&#39;: 40}}, r={}, sp={}, prob=0.011764705882352941, inputparams=(1.0, 40), rangeid=&#39;&#39;, name=&#39;rep0_range_13&#39;),
- ParameterScenario(sequence={}, times=(), p={&#39;ground&#39;: {&#39;amp&#39;: 1.0, &#39;linetype&#39;: &#39;sine&#39;, &#39;period&#39;: 50}}, r={}, sp={}, prob=0.011764705882352941, inputparams=(1.0, 50), rangeid=&#39;&#39;, name=&#39;rep0_range_14&#39;),
- ParameterScenario(sequence={}, times=(), p={&#39;ground&#39;: {&#39;amp&#39;: 1.5, &#39;linetype&#39;: &#39;sine&#39;, &#39;period&#39;: 10}}, r={}, sp={}, prob=0.011764705882352941, inputparams=(1.5, 10), rangeid=&#39;&#39;, name=&#39;rep0_range_15&#39;),
- ParameterScenario(sequence={}, times=(), p={&#39;ground&#39;: {&#39;amp&#39;: 1.5, &#39;linetype&#39;: &#39;sine&#39;, &#39;period&#39;: 20}}, r={}, sp={}, prob=0.011764705882352941, inputparams=(1.5, 20), rangeid=&#39;&#39;, name=&#39;rep0_range_16&#39;),
- ParameterScenario(sequence={}, times=(), p={&#39;ground&#39;: {&#39;amp&#39;: 1.5, &#39;linetype&#39;: &#39;sine&#39;, &#39;period&#39;: 30}}, r={}, sp={}, prob=0.011764705882352941, inputparams=(1.5, 30), rangeid=&#39;&#39;, name=&#39;rep0_range_17&#39;),
- ParameterScenario(sequence={}, times=(), p={&#39;ground&#39;: {&#39;amp&#39;: 1.5, &#39;linetype&#39;: &#39;sine&#39;, &#39;period&#39;: 40}}, r={}, sp={}, prob=0.011764705882352941, inputparams=(1.5, 40), rangeid=&#39;&#39;, name=&#39;rep0_range_18&#39;),
- ParameterScenario(sequence={}, times=(), p={&#39;ground&#39;: {&#39;amp&#39;: 1.5, &#39;linetype&#39;: &#39;sine&#39;, &#39;period&#39;: 50}}, r={}, sp={}, prob=0.011764705882352941, inputparams=(1.5, 50), rangeid=&#39;&#39;, name=&#39;rep0_range_19&#39;),
- ParameterScenario(sequence={}, times=(), p={&#39;ground&#39;: {&#39;amp&#39;: 2.0, &#39;linetype&#39;: &#39;sine&#39;, &#39;period&#39;: 10}}, r={}, sp={}, prob=0.011764705882352941, inputparams=(2.0, 10), rangeid=&#39;&#39;, name=&#39;rep0_range_20&#39;),
- ParameterScenario(sequence={}, times=(), p={&#39;ground&#39;: {&#39;amp&#39;: 2.0, &#39;linetype&#39;: &#39;sine&#39;, &#39;period&#39;: 20}}, r={}, sp={}, prob=0.011764705882352941, inputparams=(2.0, 20), rangeid=&#39;&#39;, name=&#39;rep0_range_21&#39;),
- ParameterScenario(sequence={}, times=(), p={&#39;ground&#39;: {&#39;amp&#39;: 2.0, &#39;linetype&#39;: &#39;sine&#39;, &#39;period&#39;: 30}}, r={}, sp={}, prob=0.011764705882352941, inputparams=(2.0, 30), rangeid=&#39;&#39;, name=&#39;rep0_range_22&#39;),
- ParameterScenario(sequence={}, times=(), p={&#39;ground&#39;: {&#39;amp&#39;: 2.0, &#39;linetype&#39;: &#39;sine&#39;, &#39;period&#39;: 40}}, r={}, sp={}, prob=0.011764705882352941, inputparams=(2.0, 40), rangeid=&#39;&#39;, name=&#39;rep0_range_23&#39;),
- ParameterScenario(sequence={}, times=(), p={&#39;ground&#39;: {&#39;amp&#39;: 2.0, &#39;linetype&#39;: &#39;sine&#39;, &#39;period&#39;: 50}}, r={}, sp={}, prob=0.011764705882352941, inputparams=(2.0, 50), rangeid=&#39;&#39;, name=&#39;rep0_range_24&#39;),
- ParameterScenario(sequence={}, times=(), p={&#39;ground&#39;: {&#39;amp&#39;: 2.5, &#39;linetype&#39;: &#39;sine&#39;, &#39;period&#39;: 10}}, r={}, sp={}, prob=0.011764705882352941, inputparams=(2.5, 10), rangeid=&#39;&#39;, name=&#39;rep0_range_25&#39;),
- ParameterScenario(sequence={}, times=(), p={&#39;ground&#39;: {&#39;amp&#39;: 2.5, &#39;linetype&#39;: &#39;sine&#39;, &#39;period&#39;: 20}}, r={}, sp={}, prob=0.011764705882352941, inputparams=(2.5, 20), rangeid=&#39;&#39;, name=&#39;rep0_range_26&#39;),
- ParameterScenario(sequence={}, times=(), p={&#39;ground&#39;: {&#39;amp&#39;: 2.5, &#39;linetype&#39;: &#39;sine&#39;, &#39;period&#39;: 30}}, r={}, sp={}, prob=0.011764705882352941, inputparams=(2.5, 30), rangeid=&#39;&#39;, name=&#39;rep0_range_27&#39;),
- ParameterScenario(sequence={}, times=(), p={&#39;ground&#39;: {&#39;amp&#39;: 2.5, &#39;linetype&#39;: &#39;sine&#39;, &#39;period&#39;: 40}}, r={}, sp={}, prob=0.011764705882352941, inputparams=(2.5, 40), rangeid=&#39;&#39;, name=&#39;rep0_range_28&#39;),
- ParameterScenario(sequence={}, times=(), p={&#39;ground&#39;: {&#39;amp&#39;: 2.5, &#39;linetype&#39;: &#39;sine&#39;, &#39;period&#39;: 50}}, r={}, sp={}, prob=0.011764705882352941, inputparams=(2.5, 50), rangeid=&#39;&#39;, name=&#39;rep0_range_29&#39;),
- ParameterScenario(sequence={}, times=(), p={&#39;ground&#39;: {&#39;amp&#39;: 3.0, &#39;linetype&#39;: &#39;sine&#39;, &#39;period&#39;: 10}}, r={}, sp={}, prob=0.011764705882352941, inputparams=(3.0, 10), rangeid=&#39;&#39;, name=&#39;rep0_range_30&#39;),
- ParameterScenario(sequence={}, times=(), p={&#39;ground&#39;: {&#39;amp&#39;: 3.0, &#39;linetype&#39;: &#39;sine&#39;, &#39;period&#39;: 20}}, r={}, sp={}, prob=0.011764705882352941, inputparams=(3.0, 20), rangeid=&#39;&#39;, name=&#39;rep0_range_31&#39;),
- ParameterScenario(sequence={}, times=(), p={&#39;ground&#39;: {&#39;amp&#39;: 3.0, &#39;linetype&#39;: &#39;sine&#39;, &#39;period&#39;: 30}}, r={}, sp={}, prob=0.011764705882352941, inputparams=(3.0, 30), rangeid=&#39;&#39;, name=&#39;rep0_range_32&#39;),
- ParameterScenario(sequence={}, times=(), p={&#39;ground&#39;: {&#39;amp&#39;: 3.0, &#39;linetype&#39;: &#39;sine&#39;, &#39;period&#39;: 40}}, r={}, sp={}, prob=0.011764705882352941, inputparams=(3.0, 40), rangeid=&#39;&#39;, name=&#39;rep0_range_33&#39;),
- ParameterScenario(sequence={}, times=(), p={&#39;ground&#39;: {&#39;amp&#39;: 3.0, &#39;linetype&#39;: &#39;sine&#39;, &#39;period&#39;: 50}}, r={}, sp={}, prob=0.011764705882352941, inputparams=(3.0, 50), rangeid=&#39;&#39;, name=&#39;rep0_range_34&#39;),
- ParameterScenario(sequence={}, times=(), p={&#39;ground&#39;: {&#39;amp&#39;: 3.5, &#39;linetype&#39;: &#39;sine&#39;, &#39;period&#39;: 10}}, r={}, sp={}, prob=0.011764705882352941, inputparams=(3.5, 10), rangeid=&#39;&#39;, name=&#39;rep0_range_35&#39;),
- ParameterScenario(sequence={}, times=(), p={&#39;ground&#39;: {&#39;amp&#39;: 3.5, &#39;linetype&#39;: &#39;sine&#39;, &#39;period&#39;: 20}}, r={}, sp={}, prob=0.011764705882352941, inputparams=(3.5, 20), rangeid=&#39;&#39;, name=&#39;rep0_range_36&#39;),
- ParameterScenario(sequence={}, times=(), p={&#39;ground&#39;: {&#39;amp&#39;: 3.5, &#39;linetype&#39;: &#39;sine&#39;, &#39;period&#39;: 30}}, r={}, sp={}, prob=0.011764705882352941, inputparams=(3.5, 30), rangeid=&#39;&#39;, name=&#39;rep0_range_37&#39;),
- ParameterScenario(sequence={}, times=(), p={&#39;ground&#39;: {&#39;amp&#39;: 3.5, &#39;linetype&#39;: &#39;sine&#39;, &#39;period&#39;: 40}}, r={}, sp={}, prob=0.011764705882352941, inputparams=(3.5, 40), rangeid=&#39;&#39;, name=&#39;rep0_range_38&#39;),
- ParameterScenario(sequence={}, times=(), p={&#39;ground&#39;: {&#39;amp&#39;: 3.5, &#39;linetype&#39;: &#39;sine&#39;, &#39;period&#39;: 50}}, r={}, sp={}, prob=0.011764705882352941, inputparams=(3.5, 50), rangeid=&#39;&#39;, name=&#39;rep0_range_39&#39;),
- ParameterScenario(sequence={}, times=(), p={&#39;ground&#39;: {&#39;amp&#39;: 4.0, &#39;linetype&#39;: &#39;sine&#39;, &#39;period&#39;: 10}}, r={}, sp={}, prob=0.011764705882352941, inputparams=(4.0, 10), rangeid=&#39;&#39;, name=&#39;rep0_range_40&#39;),
- ParameterScenario(sequence={}, times=(), p={&#39;ground&#39;: {&#39;amp&#39;: 4.0, &#39;linetype&#39;: &#39;sine&#39;, &#39;period&#39;: 20}}, r={}, sp={}, prob=0.011764705882352941, inputparams=(4.0, 20), rangeid=&#39;&#39;, name=&#39;rep0_range_41&#39;),
- ParameterScenario(sequence={}, times=(), p={&#39;ground&#39;: {&#39;amp&#39;: 4.0, &#39;linetype&#39;: &#39;sine&#39;, &#39;period&#39;: 30}}, r={}, sp={}, prob=0.011764705882352941, inputparams=(4.0, 30), rangeid=&#39;&#39;, name=&#39;rep0_range_42&#39;),
- ParameterScenario(sequence={}, times=(), p={&#39;ground&#39;: {&#39;amp&#39;: 4.0, &#39;linetype&#39;: &#39;sine&#39;, &#39;period&#39;: 40}}, r={}, sp={}, prob=0.011764705882352941, inputparams=(4.0, 40), rangeid=&#39;&#39;, name=&#39;rep0_range_43&#39;),
- ParameterScenario(sequence={}, times=(), p={&#39;ground&#39;: {&#39;amp&#39;: 4.0, &#39;linetype&#39;: &#39;sine&#39;, &#39;period&#39;: 50}}, r={}, sp={}, prob=0.011764705882352941, inputparams=(4.0, 50), rangeid=&#39;&#39;, name=&#39;rep0_range_44&#39;),
- ParameterScenario(sequence={}, times=(), p={&#39;ground&#39;: {&#39;amp&#39;: 4.5, &#39;linetype&#39;: &#39;sine&#39;, &#39;period&#39;: 10}}, r={}, sp={}, prob=0.011764705882352941, inputparams=(4.5, 10), rangeid=&#39;&#39;, name=&#39;rep0_range_45&#39;),
- ParameterScenario(sequence={}, times=(), p={&#39;ground&#39;: {&#39;amp&#39;: 4.5, &#39;linetype&#39;: &#39;sine&#39;, &#39;period&#39;: 20}}, r={}, sp={}, prob=0.011764705882352941, inputparams=(4.5, 20), rangeid=&#39;&#39;, name=&#39;rep0_range_46&#39;),
- ParameterScenario(sequence={}, times=(), p={&#39;ground&#39;: {&#39;amp&#39;: 4.5, &#39;linetype&#39;: &#39;sine&#39;, &#39;period&#39;: 30}}, r={}, sp={}, prob=0.011764705882352941, inputparams=(4.5, 30), rangeid=&#39;&#39;, name=&#39;rep0_range_47&#39;),
- ParameterScenario(sequence={}, times=(), p={&#39;ground&#39;: {&#39;amp&#39;: 4.5, &#39;linetype&#39;: &#39;sine&#39;, &#39;period&#39;: 40}}, r={}, sp={}, prob=0.011764705882352941, inputparams=(4.5, 40), rangeid=&#39;&#39;, name=&#39;rep0_range_48&#39;),
- ParameterScenario(sequence={}, times=(), p={&#39;ground&#39;: {&#39;amp&#39;: 4.5, &#39;linetype&#39;: &#39;sine&#39;, &#39;period&#39;: 50}}, r={}, sp={}, prob=0.011764705882352941, inputparams=(4.5, 50), rangeid=&#39;&#39;, name=&#39;rep0_range_49&#39;),
- ParameterScenario(sequence={}, times=(), p={&#39;ground&#39;: {&#39;amp&#39;: 5.0, &#39;linetype&#39;: &#39;sine&#39;, &#39;period&#39;: 10}}, r={}, sp={}, prob=0.011764705882352941, inputparams=(5.0, 10), rangeid=&#39;&#39;, name=&#39;rep0_range_50&#39;),
- ParameterScenario(sequence={}, times=(), p={&#39;ground&#39;: {&#39;amp&#39;: 5.0, &#39;linetype&#39;: &#39;sine&#39;, &#39;period&#39;: 20}}, r={}, sp={}, prob=0.011764705882352941, inputparams=(5.0, 20), rangeid=&#39;&#39;, name=&#39;rep0_range_51&#39;),
- ParameterScenario(sequence={}, times=(), p={&#39;ground&#39;: {&#39;amp&#39;: 5.0, &#39;linetype&#39;: &#39;sine&#39;, &#39;period&#39;: 30}}, r={}, sp={}, prob=0.011764705882352941, inputparams=(5.0, 30), rangeid=&#39;&#39;, name=&#39;rep0_range_52&#39;),
- ParameterScenario(sequence={}, times=(), p={&#39;ground&#39;: {&#39;amp&#39;: 5.0, &#39;linetype&#39;: &#39;sine&#39;, &#39;period&#39;: 40}}, r={}, sp={}, prob=0.011764705882352941, inputparams=(5.0, 40), rangeid=&#39;&#39;, name=&#39;rep0_range_53&#39;),
- ParameterScenario(sequence={}, times=(), p={&#39;ground&#39;: {&#39;amp&#39;: 5.0, &#39;linetype&#39;: &#39;sine&#39;, &#39;period&#39;: 50}}, r={}, sp={}, prob=0.011764705882352941, inputparams=(5.0, 50), rangeid=&#39;&#39;, name=&#39;rep0_range_54&#39;),
- ParameterScenario(sequence={}, times=(), p={&#39;ground&#39;: {&#39;amp&#39;: 5.5, &#39;linetype&#39;: &#39;sine&#39;, &#39;period&#39;: 10}}, r={}, sp={}, prob=0.011764705882352941, inputparams=(5.5, 10), rangeid=&#39;&#39;, name=&#39;rep0_range_55&#39;),
- ParameterScenario(sequence={}, times=(), p={&#39;ground&#39;: {&#39;amp&#39;: 5.5, &#39;linetype&#39;: &#39;sine&#39;, &#39;period&#39;: 20}}, r={}, sp={}, prob=0.011764705882352941, inputparams=(5.5, 20), rangeid=&#39;&#39;, name=&#39;rep0_range_56&#39;),
- ParameterScenario(sequence={}, times=(), p={&#39;ground&#39;: {&#39;amp&#39;: 5.5, &#39;linetype&#39;: &#39;sine&#39;, &#39;period&#39;: 30}}, r={}, sp={}, prob=0.011764705882352941, inputparams=(5.5, 30), rangeid=&#39;&#39;, name=&#39;rep0_range_57&#39;),
- ParameterScenario(sequence={}, times=(), p={&#39;ground&#39;: {&#39;amp&#39;: 5.5, &#39;linetype&#39;: &#39;sine&#39;, &#39;period&#39;: 40}}, r={}, sp={}, prob=0.011764705882352941, inputparams=(5.5, 40), rangeid=&#39;&#39;, name=&#39;rep0_range_58&#39;),
- ParameterScenario(sequence={}, times=(), p={&#39;ground&#39;: {&#39;amp&#39;: 5.5, &#39;linetype&#39;: &#39;sine&#39;, &#39;period&#39;: 50}}, r={}, sp={}, prob=0.011764705882352941, inputparams=(5.5, 50), rangeid=&#39;&#39;, name=&#39;rep0_range_59&#39;),
- ParameterScenario(sequence={}, times=(), p={&#39;ground&#39;: {&#39;amp&#39;: 6.0, &#39;linetype&#39;: &#39;sine&#39;, &#39;period&#39;: 10}}, r={}, sp={}, prob=0.011764705882352941, inputparams=(6.0, 10), rangeid=&#39;&#39;, name=&#39;rep0_range_60&#39;),
- ParameterScenario(sequence={}, times=(), p={&#39;ground&#39;: {&#39;amp&#39;: 6.0, &#39;linetype&#39;: &#39;sine&#39;, &#39;period&#39;: 20}}, r={}, sp={}, prob=0.011764705882352941, inputparams=(6.0, 20), rangeid=&#39;&#39;, name=&#39;rep0_range_61&#39;),
- ParameterScenario(sequence={}, times=(), p={&#39;ground&#39;: {&#39;amp&#39;: 6.0, &#39;linetype&#39;: &#39;sine&#39;, &#39;period&#39;: 30}}, r={}, sp={}, prob=0.011764705882352941, inputparams=(6.0, 30), rangeid=&#39;&#39;, name=&#39;rep0_range_62&#39;),
- ParameterScenario(sequence={}, times=(), p={&#39;ground&#39;: {&#39;amp&#39;: 6.0, &#39;linetype&#39;: &#39;sine&#39;, &#39;period&#39;: 40}}, r={}, sp={}, prob=0.011764705882352941, inputparams=(6.0, 40), rangeid=&#39;&#39;, name=&#39;rep0_range_63&#39;),
- ParameterScenario(sequence={}, times=(), p={&#39;ground&#39;: {&#39;amp&#39;: 6.0, &#39;linetype&#39;: &#39;sine&#39;, &#39;period&#39;: 50}}, r={}, sp={}, prob=0.011764705882352941, inputparams=(6.0, 50), rangeid=&#39;&#39;, name=&#39;rep0_range_64&#39;),
- ParameterScenario(sequence={}, times=(), p={&#39;ground&#39;: {&#39;amp&#39;: 6.5, &#39;linetype&#39;: &#39;sine&#39;, &#39;period&#39;: 10}}, r={}, sp={}, prob=0.011764705882352941, inputparams=(6.5, 10), rangeid=&#39;&#39;, name=&#39;rep0_range_65&#39;),
- ParameterScenario(sequence={}, times=(), p={&#39;ground&#39;: {&#39;amp&#39;: 6.5, &#39;linetype&#39;: &#39;sine&#39;, &#39;period&#39;: 20}}, r={}, sp={}, prob=0.011764705882352941, inputparams=(6.5, 20), rangeid=&#39;&#39;, name=&#39;rep0_range_66&#39;),
- ParameterScenario(sequence={}, times=(), p={&#39;ground&#39;: {&#39;amp&#39;: 6.5, &#39;linetype&#39;: &#39;sine&#39;, &#39;period&#39;: 30}}, r={}, sp={}, prob=0.011764705882352941, inputparams=(6.5, 30), rangeid=&#39;&#39;, name=&#39;rep0_range_67&#39;),
- ParameterScenario(sequence={}, times=(), p={&#39;ground&#39;: {&#39;amp&#39;: 6.5, &#39;linetype&#39;: &#39;sine&#39;, &#39;period&#39;: 40}}, r={}, sp={}, prob=0.011764705882352941, inputparams=(6.5, 40), rangeid=&#39;&#39;, name=&#39;rep0_range_68&#39;),
- ParameterScenario(sequence={}, times=(), p={&#39;ground&#39;: {&#39;amp&#39;: 6.5, &#39;linetype&#39;: &#39;sine&#39;, &#39;period&#39;: 50}}, r={}, sp={}, prob=0.011764705882352941, inputparams=(6.5, 50), rangeid=&#39;&#39;, name=&#39;rep0_range_69&#39;),
- ParameterScenario(sequence={}, times=(), p={&#39;ground&#39;: {&#39;amp&#39;: 7.0, &#39;linetype&#39;: &#39;sine&#39;, &#39;period&#39;: 10}}, r={}, sp={}, prob=0.011764705882352941, inputparams=(7.0, 10), rangeid=&#39;&#39;, name=&#39;rep0_range_70&#39;),
- ParameterScenario(sequence={}, times=(), p={&#39;ground&#39;: {&#39;amp&#39;: 7.0, &#39;linetype&#39;: &#39;sine&#39;, &#39;period&#39;: 20}}, r={}, sp={}, prob=0.011764705882352941, inputparams=(7.0, 20), rangeid=&#39;&#39;, name=&#39;rep0_range_71&#39;),
- ParameterScenario(sequence={}, times=(), p={&#39;ground&#39;: {&#39;amp&#39;: 7.0, &#39;linetype&#39;: &#39;sine&#39;, &#39;period&#39;: 30}}, r={}, sp={}, prob=0.011764705882352941, inputparams=(7.0, 30), rangeid=&#39;&#39;, name=&#39;rep0_range_72&#39;),
- ParameterScenario(sequence={}, times=(), p={&#39;ground&#39;: {&#39;amp&#39;: 7.0, &#39;linetype&#39;: &#39;sine&#39;, &#39;period&#39;: 40}}, r={}, sp={}, prob=0.011764705882352941, inputparams=(7.0, 40), rangeid=&#39;&#39;, name=&#39;rep0_range_73&#39;),
- ParameterScenario(sequence={}, times=(), p={&#39;ground&#39;: {&#39;amp&#39;: 7.0, &#39;linetype&#39;: &#39;sine&#39;, &#39;period&#39;: 50}}, r={}, sp={}, prob=0.011764705882352941, inputparams=(7.0, 50), rangeid=&#39;&#39;, name=&#39;rep0_range_74&#39;),
- ParameterScenario(sequence={}, times=(), p={&#39;ground&#39;: {&#39;amp&#39;: 7.5, &#39;linetype&#39;: &#39;sine&#39;, &#39;period&#39;: 10}}, r={}, sp={}, prob=0.011764705882352941, inputparams=(7.5, 10), rangeid=&#39;&#39;, name=&#39;rep0_range_75&#39;),
- ParameterScenario(sequence={}, times=(), p={&#39;ground&#39;: {&#39;amp&#39;: 7.5, &#39;linetype&#39;: &#39;sine&#39;, &#39;period&#39;: 20}}, r={}, sp={}, prob=0.011764705882352941, inputparams=(7.5, 20), rangeid=&#39;&#39;, name=&#39;rep0_range_76&#39;),
- ParameterScenario(sequence={}, times=(), p={&#39;ground&#39;: {&#39;amp&#39;: 7.5, &#39;linetype&#39;: &#39;sine&#39;, &#39;period&#39;: 30}}, r={}, sp={}, prob=0.011764705882352941, inputparams=(7.5, 30), rangeid=&#39;&#39;, name=&#39;rep0_range_77&#39;),
- ParameterScenario(sequence={}, times=(), p={&#39;ground&#39;: {&#39;amp&#39;: 7.5, &#39;linetype&#39;: &#39;sine&#39;, &#39;period&#39;: 40}}, r={}, sp={}, prob=0.011764705882352941, inputparams=(7.5, 40), rangeid=&#39;&#39;, name=&#39;rep0_range_78&#39;),
- ParameterScenario(sequence={}, times=(), p={&#39;ground&#39;: {&#39;amp&#39;: 7.5, &#39;linetype&#39;: &#39;sine&#39;, &#39;period&#39;: 50}}, r={}, sp={}, prob=0.011764705882352941, inputparams=(7.5, 50), rangeid=&#39;&#39;, name=&#39;rep0_range_79&#39;),
- ParameterScenario(sequence={}, times=(), p={&#39;ground&#39;: {&#39;amp&#39;: 8.0, &#39;linetype&#39;: &#39;sine&#39;, &#39;period&#39;: 10}}, r={}, sp={}, prob=0.011764705882352941, inputparams=(8.0, 10), rangeid=&#39;&#39;, name=&#39;rep0_range_80&#39;),
- ParameterScenario(sequence={}, times=(), p={&#39;ground&#39;: {&#39;amp&#39;: 8.0, &#39;linetype&#39;: &#39;sine&#39;, &#39;period&#39;: 20}}, r={}, sp={}, prob=0.011764705882352941, inputparams=(8.0, 20), rangeid=&#39;&#39;, name=&#39;rep0_range_81&#39;),
- ParameterScenario(sequence={}, times=(), p={&#39;ground&#39;: {&#39;amp&#39;: 8.0, &#39;linetype&#39;: &#39;sine&#39;, &#39;period&#39;: 30}}, r={}, sp={}, prob=0.011764705882352941, inputparams=(8.0, 30), rangeid=&#39;&#39;, name=&#39;rep0_range_82&#39;),
- ParameterScenario(sequence={}, times=(), p={&#39;ground&#39;: {&#39;amp&#39;: 8.0, &#39;linetype&#39;: &#39;sine&#39;, &#39;period&#39;: 40}}, r={}, sp={}, prob=0.011764705882352941, inputparams=(8.0, 40), rangeid=&#39;&#39;, name=&#39;rep0_range_83&#39;),
- ParameterScenario(sequence={}, times=(), p={&#39;ground&#39;: {&#39;amp&#39;: 8.0, &#39;linetype&#39;: &#39;sine&#39;, &#39;period&#39;: 50}}, r={}, sp={}, prob=0.011764705882352941, inputparams=(8.0, 50), rangeid=&#39;&#39;, name=&#39;rep0_range_84&#39;)]
+[ParameterScenario(sequence={}, times=(), p={&#39;ground&#39;: {&#39;linetype&#39;: &#39;sine&#39;, &#39;period&#39;: 10, &#39;amp&#39;: 0.0}}, r={}, sp={}, prob=0.011764705882352941, inputparams=(0.0, 10), rangeid=&#39;&#39;, name=&#39;rep0_range_0&#39;),
+ ParameterScenario(sequence={}, times=(), p={&#39;ground&#39;: {&#39;linetype&#39;: &#39;sine&#39;, &#39;period&#39;: 20, &#39;amp&#39;: 0.0}}, r={}, sp={}, prob=0.011764705882352941, inputparams=(0.0, 20), rangeid=&#39;&#39;, name=&#39;rep0_range_1&#39;),
+ ParameterScenario(sequence={}, times=(), p={&#39;ground&#39;: {&#39;linetype&#39;: &#39;sine&#39;, &#39;period&#39;: 30, &#39;amp&#39;: 0.0}}, r={}, sp={}, prob=0.011764705882352941, inputparams=(0.0, 30), rangeid=&#39;&#39;, name=&#39;rep0_range_2&#39;),
+ ParameterScenario(sequence={}, times=(), p={&#39;ground&#39;: {&#39;linetype&#39;: &#39;sine&#39;, &#39;period&#39;: 40, &#39;amp&#39;: 0.0}}, r={}, sp={}, prob=0.011764705882352941, inputparams=(0.0, 40), rangeid=&#39;&#39;, name=&#39;rep0_range_3&#39;),
+ ParameterScenario(sequence={}, times=(), p={&#39;ground&#39;: {&#39;linetype&#39;: &#39;sine&#39;, &#39;period&#39;: 50, &#39;amp&#39;: 0.0}}, r={}, sp={}, prob=0.011764705882352941, inputparams=(0.0, 50), rangeid=&#39;&#39;, name=&#39;rep0_range_4&#39;),
+ ParameterScenario(sequence={}, times=(), p={&#39;ground&#39;: {&#39;linetype&#39;: &#39;sine&#39;, &#39;period&#39;: 10, &#39;amp&#39;: 0.5}}, r={}, sp={}, prob=0.011764705882352941, inputparams=(0.5, 10), rangeid=&#39;&#39;, name=&#39;rep0_range_5&#39;),
+ ParameterScenario(sequence={}, times=(), p={&#39;ground&#39;: {&#39;linetype&#39;: &#39;sine&#39;, &#39;period&#39;: 20, &#39;amp&#39;: 0.5}}, r={}, sp={}, prob=0.011764705882352941, inputparams=(0.5, 20), rangeid=&#39;&#39;, name=&#39;rep0_range_6&#39;),
+ ParameterScenario(sequence={}, times=(), p={&#39;ground&#39;: {&#39;linetype&#39;: &#39;sine&#39;, &#39;period&#39;: 30, &#39;amp&#39;: 0.5}}, r={}, sp={}, prob=0.011764705882352941, inputparams=(0.5, 30), rangeid=&#39;&#39;, name=&#39;rep0_range_7&#39;),
+ ParameterScenario(sequence={}, times=(), p={&#39;ground&#39;: {&#39;linetype&#39;: &#39;sine&#39;, &#39;period&#39;: 40, &#39;amp&#39;: 0.5}}, r={}, sp={}, prob=0.011764705882352941, inputparams=(0.5, 40), rangeid=&#39;&#39;, name=&#39;rep0_range_8&#39;),
+ ParameterScenario(sequence={}, times=(), p={&#39;ground&#39;: {&#39;linetype&#39;: &#39;sine&#39;, &#39;period&#39;: 50, &#39;amp&#39;: 0.5}}, r={}, sp={}, prob=0.011764705882352941, inputparams=(0.5, 50), rangeid=&#39;&#39;, name=&#39;rep0_range_9&#39;),
+ ParameterScenario(sequence={}, times=(), p={&#39;ground&#39;: {&#39;linetype&#39;: &#39;sine&#39;, &#39;period&#39;: 10, &#39;amp&#39;: 1.0}}, r={}, sp={}, prob=0.011764705882352941, inputparams=(1.0, 10), rangeid=&#39;&#39;, name=&#39;rep0_range_10&#39;),
+ ParameterScenario(sequence={}, times=(), p={&#39;ground&#39;: {&#39;linetype&#39;: &#39;sine&#39;, &#39;period&#39;: 20, &#39;amp&#39;: 1.0}}, r={}, sp={}, prob=0.011764705882352941, inputparams=(1.0, 20), rangeid=&#39;&#39;, name=&#39;rep0_range_11&#39;),
+ ParameterScenario(sequence={}, times=(), p={&#39;ground&#39;: {&#39;linetype&#39;: &#39;sine&#39;, &#39;period&#39;: 30, &#39;amp&#39;: 1.0}}, r={}, sp={}, prob=0.011764705882352941, inputparams=(1.0, 30), rangeid=&#39;&#39;, name=&#39;rep0_range_12&#39;),
+ ParameterScenario(sequence={}, times=(), p={&#39;ground&#39;: {&#39;linetype&#39;: &#39;sine&#39;, &#39;period&#39;: 40, &#39;amp&#39;: 1.0}}, r={}, sp={}, prob=0.011764705882352941, inputparams=(1.0, 40), rangeid=&#39;&#39;, name=&#39;rep0_range_13&#39;),
+ ParameterScenario(sequence={}, times=(), p={&#39;ground&#39;: {&#39;linetype&#39;: &#39;sine&#39;, &#39;period&#39;: 50, &#39;amp&#39;: 1.0}}, r={}, sp={}, prob=0.011764705882352941, inputparams=(1.0, 50), rangeid=&#39;&#39;, name=&#39;rep0_range_14&#39;),
+ ParameterScenario(sequence={}, times=(), p={&#39;ground&#39;: {&#39;linetype&#39;: &#39;sine&#39;, &#39;period&#39;: 10, &#39;amp&#39;: 1.5}}, r={}, sp={}, prob=0.011764705882352941, inputparams=(1.5, 10), rangeid=&#39;&#39;, name=&#39;rep0_range_15&#39;),
+ ParameterScenario(sequence={}, times=(), p={&#39;ground&#39;: {&#39;linetype&#39;: &#39;sine&#39;, &#39;period&#39;: 20, &#39;amp&#39;: 1.5}}, r={}, sp={}, prob=0.011764705882352941, inputparams=(1.5, 20), rangeid=&#39;&#39;, name=&#39;rep0_range_16&#39;),
+ ParameterScenario(sequence={}, times=(), p={&#39;ground&#39;: {&#39;linetype&#39;: &#39;sine&#39;, &#39;period&#39;: 30, &#39;amp&#39;: 1.5}}, r={}, sp={}, prob=0.011764705882352941, inputparams=(1.5, 30), rangeid=&#39;&#39;, name=&#39;rep0_range_17&#39;),
+ ParameterScenario(sequence={}, times=(), p={&#39;ground&#39;: {&#39;linetype&#39;: &#39;sine&#39;, &#39;period&#39;: 40, &#39;amp&#39;: 1.5}}, r={}, sp={}, prob=0.011764705882352941, inputparams=(1.5, 40), rangeid=&#39;&#39;, name=&#39;rep0_range_18&#39;),
+ ParameterScenario(sequence={}, times=(), p={&#39;ground&#39;: {&#39;linetype&#39;: &#39;sine&#39;, &#39;period&#39;: 50, &#39;amp&#39;: 1.5}}, r={}, sp={}, prob=0.011764705882352941, inputparams=(1.5, 50), rangeid=&#39;&#39;, name=&#39;rep0_range_19&#39;),
+ ParameterScenario(sequence={}, times=(), p={&#39;ground&#39;: {&#39;linetype&#39;: &#39;sine&#39;, &#39;period&#39;: 10, &#39;amp&#39;: 2.0}}, r={}, sp={}, prob=0.011764705882352941, inputparams=(2.0, 10), rangeid=&#39;&#39;, name=&#39;rep0_range_20&#39;),
+ ParameterScenario(sequence={}, times=(), p={&#39;ground&#39;: {&#39;linetype&#39;: &#39;sine&#39;, &#39;period&#39;: 20, &#39;amp&#39;: 2.0}}, r={}, sp={}, prob=0.011764705882352941, inputparams=(2.0, 20), rangeid=&#39;&#39;, name=&#39;rep0_range_21&#39;),
+ ParameterScenario(sequence={}, times=(), p={&#39;ground&#39;: {&#39;linetype&#39;: &#39;sine&#39;, &#39;period&#39;: 30, &#39;amp&#39;: 2.0}}, r={}, sp={}, prob=0.011764705882352941, inputparams=(2.0, 30), rangeid=&#39;&#39;, name=&#39;rep0_range_22&#39;),
+ ParameterScenario(sequence={}, times=(), p={&#39;ground&#39;: {&#39;linetype&#39;: &#39;sine&#39;, &#39;period&#39;: 40, &#39;amp&#39;: 2.0}}, r={}, sp={}, prob=0.011764705882352941, inputparams=(2.0, 40), rangeid=&#39;&#39;, name=&#39;rep0_range_23&#39;),
+ ParameterScenario(sequence={}, times=(), p={&#39;ground&#39;: {&#39;linetype&#39;: &#39;sine&#39;, &#39;period&#39;: 50, &#39;amp&#39;: 2.0}}, r={}, sp={}, prob=0.011764705882352941, inputparams=(2.0, 50), rangeid=&#39;&#39;, name=&#39;rep0_range_24&#39;),
+ ParameterScenario(sequence={}, times=(), p={&#39;ground&#39;: {&#39;linetype&#39;: &#39;sine&#39;, &#39;period&#39;: 10, &#39;amp&#39;: 2.5}}, r={}, sp={}, prob=0.011764705882352941, inputparams=(2.5, 10), rangeid=&#39;&#39;, name=&#39;rep0_range_25&#39;),
+ ParameterScenario(sequence={}, times=(), p={&#39;ground&#39;: {&#39;linetype&#39;: &#39;sine&#39;, &#39;period&#39;: 20, &#39;amp&#39;: 2.5}}, r={}, sp={}, prob=0.011764705882352941, inputparams=(2.5, 20), rangeid=&#39;&#39;, name=&#39;rep0_range_26&#39;),
+ ParameterScenario(sequence={}, times=(), p={&#39;ground&#39;: {&#39;linetype&#39;: &#39;sine&#39;, &#39;period&#39;: 30, &#39;amp&#39;: 2.5}}, r={}, sp={}, prob=0.011764705882352941, inputparams=(2.5, 30), rangeid=&#39;&#39;, name=&#39;rep0_range_27&#39;),
+ ParameterScenario(sequence={}, times=(), p={&#39;ground&#39;: {&#39;linetype&#39;: &#39;sine&#39;, &#39;period&#39;: 40, &#39;amp&#39;: 2.5}}, r={}, sp={}, prob=0.011764705882352941, inputparams=(2.5, 40), rangeid=&#39;&#39;, name=&#39;rep0_range_28&#39;),
+ ParameterScenario(sequence={}, times=(), p={&#39;ground&#39;: {&#39;linetype&#39;: &#39;sine&#39;, &#39;period&#39;: 50, &#39;amp&#39;: 2.5}}, r={}, sp={}, prob=0.011764705882352941, inputparams=(2.5, 50), rangeid=&#39;&#39;, name=&#39;rep0_range_29&#39;),
+ ParameterScenario(sequence={}, times=(), p={&#39;ground&#39;: {&#39;linetype&#39;: &#39;sine&#39;, &#39;period&#39;: 10, &#39;amp&#39;: 3.0}}, r={}, sp={}, prob=0.011764705882352941, inputparams=(3.0, 10), rangeid=&#39;&#39;, name=&#39;rep0_range_30&#39;),
+ ParameterScenario(sequence={}, times=(), p={&#39;ground&#39;: {&#39;linetype&#39;: &#39;sine&#39;, &#39;period&#39;: 20, &#39;amp&#39;: 3.0}}, r={}, sp={}, prob=0.011764705882352941, inputparams=(3.0, 20), rangeid=&#39;&#39;, name=&#39;rep0_range_31&#39;),
+ ParameterScenario(sequence={}, times=(), p={&#39;ground&#39;: {&#39;linetype&#39;: &#39;sine&#39;, &#39;period&#39;: 30, &#39;amp&#39;: 3.0}}, r={}, sp={}, prob=0.011764705882352941, inputparams=(3.0, 30), rangeid=&#39;&#39;, name=&#39;rep0_range_32&#39;),
+ ParameterScenario(sequence={}, times=(), p={&#39;ground&#39;: {&#39;linetype&#39;: &#39;sine&#39;, &#39;period&#39;: 40, &#39;amp&#39;: 3.0}}, r={}, sp={}, prob=0.011764705882352941, inputparams=(3.0, 40), rangeid=&#39;&#39;, name=&#39;rep0_range_33&#39;),
+ ParameterScenario(sequence={}, times=(), p={&#39;ground&#39;: {&#39;linetype&#39;: &#39;sine&#39;, &#39;period&#39;: 50, &#39;amp&#39;: 3.0}}, r={}, sp={}, prob=0.011764705882352941, inputparams=(3.0, 50), rangeid=&#39;&#39;, name=&#39;rep0_range_34&#39;),
+ ParameterScenario(sequence={}, times=(), p={&#39;ground&#39;: {&#39;linetype&#39;: &#39;sine&#39;, &#39;period&#39;: 10, &#39;amp&#39;: 3.5}}, r={}, sp={}, prob=0.011764705882352941, inputparams=(3.5, 10), rangeid=&#39;&#39;, name=&#39;rep0_range_35&#39;),
+ ParameterScenario(sequence={}, times=(), p={&#39;ground&#39;: {&#39;linetype&#39;: &#39;sine&#39;, &#39;period&#39;: 20, &#39;amp&#39;: 3.5}}, r={}, sp={}, prob=0.011764705882352941, inputparams=(3.5, 20), rangeid=&#39;&#39;, name=&#39;rep0_range_36&#39;),
+ ParameterScenario(sequence={}, times=(), p={&#39;ground&#39;: {&#39;linetype&#39;: &#39;sine&#39;, &#39;period&#39;: 30, &#39;amp&#39;: 3.5}}, r={}, sp={}, prob=0.011764705882352941, inputparams=(3.5, 30), rangeid=&#39;&#39;, name=&#39;rep0_range_37&#39;),
+ ParameterScenario(sequence={}, times=(), p={&#39;ground&#39;: {&#39;linetype&#39;: &#39;sine&#39;, &#39;period&#39;: 40, &#39;amp&#39;: 3.5}}, r={}, sp={}, prob=0.011764705882352941, inputparams=(3.5, 40), rangeid=&#39;&#39;, name=&#39;rep0_range_38&#39;),
+ ParameterScenario(sequence={}, times=(), p={&#39;ground&#39;: {&#39;linetype&#39;: &#39;sine&#39;, &#39;period&#39;: 50, &#39;amp&#39;: 3.5}}, r={}, sp={}, prob=0.011764705882352941, inputparams=(3.5, 50), rangeid=&#39;&#39;, name=&#39;rep0_range_39&#39;),
+ ParameterScenario(sequence={}, times=(), p={&#39;ground&#39;: {&#39;linetype&#39;: &#39;sine&#39;, &#39;period&#39;: 10, &#39;amp&#39;: 4.0}}, r={}, sp={}, prob=0.011764705882352941, inputparams=(4.0, 10), rangeid=&#39;&#39;, name=&#39;rep0_range_40&#39;),
+ ParameterScenario(sequence={}, times=(), p={&#39;ground&#39;: {&#39;linetype&#39;: &#39;sine&#39;, &#39;period&#39;: 20, &#39;amp&#39;: 4.0}}, r={}, sp={}, prob=0.011764705882352941, inputparams=(4.0, 20), rangeid=&#39;&#39;, name=&#39;rep0_range_41&#39;),
+ ParameterScenario(sequence={}, times=(), p={&#39;ground&#39;: {&#39;linetype&#39;: &#39;sine&#39;, &#39;period&#39;: 30, &#39;amp&#39;: 4.0}}, r={}, sp={}, prob=0.011764705882352941, inputparams=(4.0, 30), rangeid=&#39;&#39;, name=&#39;rep0_range_42&#39;),
+ ParameterScenario(sequence={}, times=(), p={&#39;ground&#39;: {&#39;linetype&#39;: &#39;sine&#39;, &#39;period&#39;: 40, &#39;amp&#39;: 4.0}}, r={}, sp={}, prob=0.011764705882352941, inputparams=(4.0, 40), rangeid=&#39;&#39;, name=&#39;rep0_range_43&#39;),
+ ParameterScenario(sequence={}, times=(), p={&#39;ground&#39;: {&#39;linetype&#39;: &#39;sine&#39;, &#39;period&#39;: 50, &#39;amp&#39;: 4.0}}, r={}, sp={}, prob=0.011764705882352941, inputparams=(4.0, 50), rangeid=&#39;&#39;, name=&#39;rep0_range_44&#39;),
+ ParameterScenario(sequence={}, times=(), p={&#39;ground&#39;: {&#39;linetype&#39;: &#39;sine&#39;, &#39;period&#39;: 10, &#39;amp&#39;: 4.5}}, r={}, sp={}, prob=0.011764705882352941, inputparams=(4.5, 10), rangeid=&#39;&#39;, name=&#39;rep0_range_45&#39;),
+ ParameterScenario(sequence={}, times=(), p={&#39;ground&#39;: {&#39;linetype&#39;: &#39;sine&#39;, &#39;period&#39;: 20, &#39;amp&#39;: 4.5}}, r={}, sp={}, prob=0.011764705882352941, inputparams=(4.5, 20), rangeid=&#39;&#39;, name=&#39;rep0_range_46&#39;),
+ ParameterScenario(sequence={}, times=(), p={&#39;ground&#39;: {&#39;linetype&#39;: &#39;sine&#39;, &#39;period&#39;: 30, &#39;amp&#39;: 4.5}}, r={}, sp={}, prob=0.011764705882352941, inputparams=(4.5, 30), rangeid=&#39;&#39;, name=&#39;rep0_range_47&#39;),
+ ParameterScenario(sequence={}, times=(), p={&#39;ground&#39;: {&#39;linetype&#39;: &#39;sine&#39;, &#39;period&#39;: 40, &#39;amp&#39;: 4.5}}, r={}, sp={}, prob=0.011764705882352941, inputparams=(4.5, 40), rangeid=&#39;&#39;, name=&#39;rep0_range_48&#39;),
+ ParameterScenario(sequence={}, times=(), p={&#39;ground&#39;: {&#39;linetype&#39;: &#39;sine&#39;, &#39;period&#39;: 50, &#39;amp&#39;: 4.5}}, r={}, sp={}, prob=0.011764705882352941, inputparams=(4.5, 50), rangeid=&#39;&#39;, name=&#39;rep0_range_49&#39;),
+ ParameterScenario(sequence={}, times=(), p={&#39;ground&#39;: {&#39;linetype&#39;: &#39;sine&#39;, &#39;period&#39;: 10, &#39;amp&#39;: 5.0}}, r={}, sp={}, prob=0.011764705882352941, inputparams=(5.0, 10), rangeid=&#39;&#39;, name=&#39;rep0_range_50&#39;),
+ ParameterScenario(sequence={}, times=(), p={&#39;ground&#39;: {&#39;linetype&#39;: &#39;sine&#39;, &#39;period&#39;: 20, &#39;amp&#39;: 5.0}}, r={}, sp={}, prob=0.011764705882352941, inputparams=(5.0, 20), rangeid=&#39;&#39;, name=&#39;rep0_range_51&#39;),
+ ParameterScenario(sequence={}, times=(), p={&#39;ground&#39;: {&#39;linetype&#39;: &#39;sine&#39;, &#39;period&#39;: 30, &#39;amp&#39;: 5.0}}, r={}, sp={}, prob=0.011764705882352941, inputparams=(5.0, 30), rangeid=&#39;&#39;, name=&#39;rep0_range_52&#39;),
+ ParameterScenario(sequence={}, times=(), p={&#39;ground&#39;: {&#39;linetype&#39;: &#39;sine&#39;, &#39;period&#39;: 40, &#39;amp&#39;: 5.0}}, r={}, sp={}, prob=0.011764705882352941, inputparams=(5.0, 40), rangeid=&#39;&#39;, name=&#39;rep0_range_53&#39;),
+ ParameterScenario(sequence={}, times=(), p={&#39;ground&#39;: {&#39;linetype&#39;: &#39;sine&#39;, &#39;period&#39;: 50, &#39;amp&#39;: 5.0}}, r={}, sp={}, prob=0.011764705882352941, inputparams=(5.0, 50), rangeid=&#39;&#39;, name=&#39;rep0_range_54&#39;),
+ ParameterScenario(sequence={}, times=(), p={&#39;ground&#39;: {&#39;linetype&#39;: &#39;sine&#39;, &#39;period&#39;: 10, &#39;amp&#39;: 5.5}}, r={}, sp={}, prob=0.011764705882352941, inputparams=(5.5, 10), rangeid=&#39;&#39;, name=&#39;rep0_range_55&#39;),
+ ParameterScenario(sequence={}, times=(), p={&#39;ground&#39;: {&#39;linetype&#39;: &#39;sine&#39;, &#39;period&#39;: 20, &#39;amp&#39;: 5.5}}, r={}, sp={}, prob=0.011764705882352941, inputparams=(5.5, 20), rangeid=&#39;&#39;, name=&#39;rep0_range_56&#39;),
+ ParameterScenario(sequence={}, times=(), p={&#39;ground&#39;: {&#39;linetype&#39;: &#39;sine&#39;, &#39;period&#39;: 30, &#39;amp&#39;: 5.5}}, r={}, sp={}, prob=0.011764705882352941, inputparams=(5.5, 30), rangeid=&#39;&#39;, name=&#39;rep0_range_57&#39;),
+ ParameterScenario(sequence={}, times=(), p={&#39;ground&#39;: {&#39;linetype&#39;: &#39;sine&#39;, &#39;period&#39;: 40, &#39;amp&#39;: 5.5}}, r={}, sp={}, prob=0.011764705882352941, inputparams=(5.5, 40), rangeid=&#39;&#39;, name=&#39;rep0_range_58&#39;),
+ ParameterScenario(sequence={}, times=(), p={&#39;ground&#39;: {&#39;linetype&#39;: &#39;sine&#39;, &#39;period&#39;: 50, &#39;amp&#39;: 5.5}}, r={}, sp={}, prob=0.011764705882352941, inputparams=(5.5, 50), rangeid=&#39;&#39;, name=&#39;rep0_range_59&#39;),
+ ParameterScenario(sequence={}, times=(), p={&#39;ground&#39;: {&#39;linetype&#39;: &#39;sine&#39;, &#39;period&#39;: 10, &#39;amp&#39;: 6.0}}, r={}, sp={}, prob=0.011764705882352941, inputparams=(6.0, 10), rangeid=&#39;&#39;, name=&#39;rep0_range_60&#39;),
+ ParameterScenario(sequence={}, times=(), p={&#39;ground&#39;: {&#39;linetype&#39;: &#39;sine&#39;, &#39;period&#39;: 20, &#39;amp&#39;: 6.0}}, r={}, sp={}, prob=0.011764705882352941, inputparams=(6.0, 20), rangeid=&#39;&#39;, name=&#39;rep0_range_61&#39;),
+ ParameterScenario(sequence={}, times=(), p={&#39;ground&#39;: {&#39;linetype&#39;: &#39;sine&#39;, &#39;period&#39;: 30, &#39;amp&#39;: 6.0}}, r={}, sp={}, prob=0.011764705882352941, inputparams=(6.0, 30), rangeid=&#39;&#39;, name=&#39;rep0_range_62&#39;),
+ ParameterScenario(sequence={}, times=(), p={&#39;ground&#39;: {&#39;linetype&#39;: &#39;sine&#39;, &#39;period&#39;: 40, &#39;amp&#39;: 6.0}}, r={}, sp={}, prob=0.011764705882352941, inputparams=(6.0, 40), rangeid=&#39;&#39;, name=&#39;rep0_range_63&#39;),
+ ParameterScenario(sequence={}, times=(), p={&#39;ground&#39;: {&#39;linetype&#39;: &#39;sine&#39;, &#39;period&#39;: 50, &#39;amp&#39;: 6.0}}, r={}, sp={}, prob=0.011764705882352941, inputparams=(6.0, 50), rangeid=&#39;&#39;, name=&#39;rep0_range_64&#39;),
+ ParameterScenario(sequence={}, times=(), p={&#39;ground&#39;: {&#39;linetype&#39;: &#39;sine&#39;, &#39;period&#39;: 10, &#39;amp&#39;: 6.5}}, r={}, sp={}, prob=0.011764705882352941, inputparams=(6.5, 10), rangeid=&#39;&#39;, name=&#39;rep0_range_65&#39;),
+ ParameterScenario(sequence={}, times=(), p={&#39;ground&#39;: {&#39;linetype&#39;: &#39;sine&#39;, &#39;period&#39;: 20, &#39;amp&#39;: 6.5}}, r={}, sp={}, prob=0.011764705882352941, inputparams=(6.5, 20), rangeid=&#39;&#39;, name=&#39;rep0_range_66&#39;),
+ ParameterScenario(sequence={}, times=(), p={&#39;ground&#39;: {&#39;linetype&#39;: &#39;sine&#39;, &#39;period&#39;: 30, &#39;amp&#39;: 6.5}}, r={}, sp={}, prob=0.011764705882352941, inputparams=(6.5, 30), rangeid=&#39;&#39;, name=&#39;rep0_range_67&#39;),
+ ParameterScenario(sequence={}, times=(), p={&#39;ground&#39;: {&#39;linetype&#39;: &#39;sine&#39;, &#39;period&#39;: 40, &#39;amp&#39;: 6.5}}, r={}, sp={}, prob=0.011764705882352941, inputparams=(6.5, 40), rangeid=&#39;&#39;, name=&#39;rep0_range_68&#39;),
+ ParameterScenario(sequence={}, times=(), p={&#39;ground&#39;: {&#39;linetype&#39;: &#39;sine&#39;, &#39;period&#39;: 50, &#39;amp&#39;: 6.5}}, r={}, sp={}, prob=0.011764705882352941, inputparams=(6.5, 50), rangeid=&#39;&#39;, name=&#39;rep0_range_69&#39;),
+ ParameterScenario(sequence={}, times=(), p={&#39;ground&#39;: {&#39;linetype&#39;: &#39;sine&#39;, &#39;period&#39;: 10, &#39;amp&#39;: 7.0}}, r={}, sp={}, prob=0.011764705882352941, inputparams=(7.0, 10), rangeid=&#39;&#39;, name=&#39;rep0_range_70&#39;),
+ ParameterScenario(sequence={}, times=(), p={&#39;ground&#39;: {&#39;linetype&#39;: &#39;sine&#39;, &#39;period&#39;: 20, &#39;amp&#39;: 7.0}}, r={}, sp={}, prob=0.011764705882352941, inputparams=(7.0, 20), rangeid=&#39;&#39;, name=&#39;rep0_range_71&#39;),
+ ParameterScenario(sequence={}, times=(), p={&#39;ground&#39;: {&#39;linetype&#39;: &#39;sine&#39;, &#39;period&#39;: 30, &#39;amp&#39;: 7.0}}, r={}, sp={}, prob=0.011764705882352941, inputparams=(7.0, 30), rangeid=&#39;&#39;, name=&#39;rep0_range_72&#39;),
+ ParameterScenario(sequence={}, times=(), p={&#39;ground&#39;: {&#39;linetype&#39;: &#39;sine&#39;, &#39;period&#39;: 40, &#39;amp&#39;: 7.0}}, r={}, sp={}, prob=0.011764705882352941, inputparams=(7.0, 40), rangeid=&#39;&#39;, name=&#39;rep0_range_73&#39;),
+ ParameterScenario(sequence={}, times=(), p={&#39;ground&#39;: {&#39;linetype&#39;: &#39;sine&#39;, &#39;period&#39;: 50, &#39;amp&#39;: 7.0}}, r={}, sp={}, prob=0.011764705882352941, inputparams=(7.0, 50), rangeid=&#39;&#39;, name=&#39;rep0_range_74&#39;),
+ ParameterScenario(sequence={}, times=(), p={&#39;ground&#39;: {&#39;linetype&#39;: &#39;sine&#39;, &#39;period&#39;: 10, &#39;amp&#39;: 7.5}}, r={}, sp={}, prob=0.011764705882352941, inputparams=(7.5, 10), rangeid=&#39;&#39;, name=&#39;rep0_range_75&#39;),
+ ParameterScenario(sequence={}, times=(), p={&#39;ground&#39;: {&#39;linetype&#39;: &#39;sine&#39;, &#39;period&#39;: 20, &#39;amp&#39;: 7.5}}, r={}, sp={}, prob=0.011764705882352941, inputparams=(7.5, 20), rangeid=&#39;&#39;, name=&#39;rep0_range_76&#39;),
+ ParameterScenario(sequence={}, times=(), p={&#39;ground&#39;: {&#39;linetype&#39;: &#39;sine&#39;, &#39;period&#39;: 30, &#39;amp&#39;: 7.5}}, r={}, sp={}, prob=0.011764705882352941, inputparams=(7.5, 30), rangeid=&#39;&#39;, name=&#39;rep0_range_77&#39;),
+ ParameterScenario(sequence={}, times=(), p={&#39;ground&#39;: {&#39;linetype&#39;: &#39;sine&#39;, &#39;period&#39;: 40, &#39;amp&#39;: 7.5}}, r={}, sp={}, prob=0.011764705882352941, inputparams=(7.5, 40), rangeid=&#39;&#39;, name=&#39;rep0_range_78&#39;),
+ ParameterScenario(sequence={}, times=(), p={&#39;ground&#39;: {&#39;linetype&#39;: &#39;sine&#39;, &#39;period&#39;: 50, &#39;amp&#39;: 7.5}}, r={}, sp={}, prob=0.011764705882352941, inputparams=(7.5, 50), rangeid=&#39;&#39;, name=&#39;rep0_range_79&#39;),
+ ParameterScenario(sequence={}, times=(), p={&#39;ground&#39;: {&#39;linetype&#39;: &#39;sine&#39;, &#39;period&#39;: 10, &#39;amp&#39;: 8.0}}, r={}, sp={}, prob=0.011764705882352941, inputparams=(8.0, 10), rangeid=&#39;&#39;, name=&#39;rep0_range_80&#39;),
+ ParameterScenario(sequence={}, times=(), p={&#39;ground&#39;: {&#39;linetype&#39;: &#39;sine&#39;, &#39;period&#39;: 20, &#39;amp&#39;: 8.0}}, r={}, sp={}, prob=0.011764705882352941, inputparams=(8.0, 20), rangeid=&#39;&#39;, name=&#39;rep0_range_81&#39;),
+ ParameterScenario(sequence={}, times=(), p={&#39;ground&#39;: {&#39;linetype&#39;: &#39;sine&#39;, &#39;period&#39;: 30, &#39;amp&#39;: 8.0}}, r={}, sp={}, prob=0.011764705882352941, inputparams=(8.0, 30), rangeid=&#39;&#39;, name=&#39;rep0_range_82&#39;),
+ ParameterScenario(sequence={}, times=(), p={&#39;ground&#39;: {&#39;linetype&#39;: &#39;sine&#39;, &#39;period&#39;: 40, &#39;amp&#39;: 8.0}}, r={}, sp={}, prob=0.011764705882352941, inputparams=(8.0, 40), rangeid=&#39;&#39;, name=&#39;rep0_range_83&#39;),
+ ParameterScenario(sequence={}, times=(), p={&#39;ground&#39;: {&#39;linetype&#39;: &#39;sine&#39;, &#39;period&#39;: 50, &#39;amp&#39;: 8.0}}, r={}, sp={}, prob=0.011764705882352941, inputparams=(8.0, 50), rangeid=&#39;&#39;, name=&#39;rep0_range_84&#39;)]
 </pre></div></div>
 </div>
 <p>ParameterSamples are sampled using <code class="docutils literal notranslate"><span class="pre">prop.parameter_sample</span></code>:</p>
@@ -755,7 +770,7 @@ ParameterSample of scenarios:
 </div>
 <div class="output_area stderr docutils container">
 <div class="highlight"><pre>
-SCENARIOS COMPLETE: 100%|██████████| 85/85 [00:14&lt;00:00,  5.95it/s]
+SCENARIOS COMPLETE: 100%|██████████| 85/85 [00:14&lt;00:00,  5.69it/s]
 </pre></div></div>
 </div>
 <div class="nboutput nblast docutils container">
@@ -776,7 +791,7 @@ rep0_range_0.endclass.end_dist:      0.0
 rep0_range_0.endclass.tot_deviation: 0.0
 rep0_range_0.endclass.faults:         {}
 rep0_range_0.endclass.classification: nominal mission
-rep0_range_0.endclass.end_x:        29.0
+rep0_range_0.endclass.end_x: 28.999999999999964
 rep0_range_0.endclass.end_y:         0.0
 rep0_range_0.endclass.endpt:    array(2)
 rep0_range_1.endclass.rate:          1.0
@@ -791,7 +806,7 @@ rep0_range_1.endclass.end_dist:      0.0
 rep0_range_1.endclass.tot_deviation: 0.0
 rep0_range_1.endclass.faults:         {}
 rep0_range_1.endclass.classification: nominal mission
-rep0_range_1.endclass.end_x:        29.0
+rep0_range_1.endclass.end_x: 28.999999999999964
 rep0_range_1.endclass.end_y:         0.0
 rep0_range_1.endclass.endpt:    array(2)
 rep0_range_2.endclass.rate:          1.0
@@ -806,7 +821,7 @@ rep0_range_2.endclass.end_dist:      0.0
 rep0_range_2.endclass.tot_deviation: 0.0
 rep0_range_2.endclass.faults:         {}
 rep0_range_2.endclass.classification: nominal mission
-rep0_range_2.endclass.end_x:        29.0
+rep0_range_2.endclass.end_x: 28.999999999999964
 rep0_range_2.endclass.end_y:         0.0
 rep0_range_2.endclass.endpt:    array(2)
 rep0_range_3.endclass.rate:          1.0
@@ -821,7 +836,7 @@ rep0_range_3.endclass.end_dist:      0.0
 rep0_range_3.endclass.tot_deviation: 0.0
 rep0_range_3.endclass.faults:         {}
 rep0_range_3.endclass.classification: nominal mission
-rep0_range_3.endclass.end_x:        29.0
+rep0_range_3.endclass.end_x: 28.999999999999964
 rep0_range_3.endclass.end_y:         0.0
 rep0_range_3.endclass.endpt:    array(2)
 rep0_range_4.endclass.rate:          1.0
@@ -836,7 +851,7 @@ rep0_range_4.endclass.end_dist:      0.0
 rep0_range_4.endclass.tot_deviation: 0.0
 rep0_range_4.endclass.faults:         {}
 rep0_range_4.endclass.classification: nominal mission
-rep0_range_4.endclass.end_x:        29.0
+rep0_range_4.endclass.end_x: 28.999999999999964
 rep0_range_4.endclass.end_y:         0.0
 rep0_range_4.endclass.endpt:    array(2)
 rep0_range_5.endclass.rate:          1.0
@@ -848,11 +863,11 @@ rep0_range_5.endclass.at_finish:    True
 rep0_range_5.endclass.line_dist:       1
 rep0_range_5.endclass.num_modes:       0
 rep0_range_5.endclass.end_dist:      0.0
-rep0_range_5.endclass.tot_deviation: 0.07938511512082397
+rep0_range_5.endclass.tot_deviation: 0.04031193364617163
 rep0_range_5.endclass.faults:         {}
 rep0_range_5.endclass.classification: nominal mission
-rep0_range_5.endclass.end_x: 28.98239567571418
-rep0_range_5.endclass.end_y: -0.3278904290295951
+rep0_range_5.endclass.end_x: 28.954484372396227
+rep0_range_5.endclass.end_y: -0.33577828948066196
 rep0_range_5.endclass.endpt:    array(2)
 rep0_range_6.endclass.rate:          1.0
 rep0_range_6.endclass.cost:            0
@@ -863,11 +878,11 @@ rep0_range_6.endclass.at_finish:    True
 rep0_range_6.endclass.line_dist:       1
 rep0_range_6.endclass.num_modes:       0
 rep0_range_6.endclass.end_dist:      0.0
-rep0_range_6.endclass.tot_deviation: 0.01597643798558636
+rep0_range_6.endclass.tot_deviation: 0.013287216610996896
 rep0_range_6.endclass.faults:         {}
 rep0_range_6.endclass.classification: nominal mission
-rep0_range_6.endclass.end_x: 28.99666782931965
-rep0_range_6.endclass.end_y: 0.16964022270368895
+rep0_range_6.endclass.end_x: 29.159994285962927
+rep0_range_6.endclass.end_y: 0.12176108577474055
 rep0_range_6.endclass.endpt:    array(2)
 rep0_range_7.endclass.rate:          1.0
 rep0_range_7.endclass.cost:            0
@@ -878,11 +893,11 @@ rep0_range_7.endclass.at_finish:    True
 rep0_range_7.endclass.line_dist:       1
 rep0_range_7.endclass.num_modes:       0
 rep0_range_7.endclass.end_dist:      0.0
-rep0_range_7.endclass.tot_deviation: 0.014483015349601851
+rep0_range_7.endclass.tot_deviation: 0.020979046204939525
 rep0_range_7.endclass.faults:         {}
 rep0_range_7.endclass.classification: nominal mission
-rep0_range_7.endclass.end_x: 28.985080988954063
-rep0_range_7.endclass.end_y: -0.1148458299673761
+rep0_range_7.endclass.end_x: 28.917836557667336
+rep0_range_7.endclass.end_y: -0.12293083654799107
 rep0_range_7.endclass.endpt:    array(2)
 rep0_range_8.endclass.rate:          1.0
 rep0_range_8.endclass.cost:            0
@@ -893,11 +908,11 @@ rep0_range_8.endclass.at_finish:    True
 rep0_range_8.endclass.line_dist:       1
 rep0_range_8.endclass.num_modes:       0
 rep0_range_8.endclass.end_dist:      0.0
-rep0_range_8.endclass.tot_deviation: 0.016761044887508503
+rep0_range_8.endclass.tot_deviation: 0.012689026281263317
 rep0_range_8.endclass.faults:         {}
 rep0_range_8.endclass.classification: nominal mission
-rep0_range_8.endclass.end_x: 29.125052884759747
-rep0_range_8.endclass.end_y: -0.5074193028322059
+rep0_range_8.endclass.end_x: 28.950969682009344
+rep0_range_8.endclass.end_y: -0.501713030304046
 rep0_range_8.endclass.endpt:    array(2)
 rep0_range_9.endclass.rate:          1.0
 rep0_range_9.endclass.cost:            0
@@ -908,11 +923,11 @@ rep0_range_9.endclass.at_finish:    True
 rep0_range_9.endclass.line_dist:       1
 rep0_range_9.endclass.num_modes:       0
 rep0_range_9.endclass.end_dist:      0.0
-rep0_range_9.endclass.tot_deviation: 0.01228522632988805
+rep0_range_9.endclass.tot_deviation: 0.008709416578409242
 rep0_range_9.endclass.faults:         {}
 rep0_range_9.endclass.classification: nominal mission
-rep0_range_9.endclass.end_x: 29.20449461325114
-rep0_range_9.endclass.end_y: -0.2480009138310285
+rep0_range_9.endclass.end_x: 28.966405094769144
+rep0_range_9.endclass.end_y: -0.239309282710179
 rep0_range_9.endclass.endpt:    array(2)
 rep0_range_10.endclass.rate:         1.0
 rep0_range_10.endclass.cost:           0
@@ -923,11 +938,11 @@ rep0_range_10.endclass.at_finish:   True
 rep0_range_10.endclass.line_dist:      1
 rep0_range_10.endclass.num_modes:      0
 rep0_range_10.endclass.end_dist:     0.0
-rep0_range_10.endclass.tot_deviation: 0.1286905414839801
+rep0_range_10.endclass.tot_deviation: 0.07265907374931083
 rep0_range_10.endclass.faults:        {}
 rep0_range_10.endclass.classification: nominal mission
-rep0_range_10.endclass.end_x: 29.192925377782856
-rep0_range_10.endclass.end_y: -0.5980118763374519
+rep0_range_10.endclass.end_x: 29.24509887978839
+rep0_range_10.endclass.end_y: -0.5264756208112762
 rep0_range_10.endclass.endpt:   array(2)
 rep0_range_11.endclass.rate:         1.0
 rep0_range_11.endclass.cost:           0
@@ -938,11 +953,11 @@ rep0_range_11.endclass.at_finish:   True
 rep0_range_11.endclass.line_dist:      1
 rep0_range_11.endclass.num_modes:      0
 rep0_range_11.endclass.end_dist:     0.0
-rep0_range_11.endclass.tot_deviation: 0.016243060140341454
+rep0_range_11.endclass.tot_deviation: 0.01882428399199615
 rep0_range_11.endclass.faults:        {}
 rep0_range_11.endclass.classification: nominal mission
-rep0_range_11.endclass.end_x: 29.106368282157625
-rep0_range_11.endclass.end_y: 0.2825064842745505
+rep0_range_11.endclass.end_x: 28.978851134353565
+rep0_range_11.endclass.end_y: 0.33031616038277367
 rep0_range_11.endclass.endpt:   array(2)
 rep0_range_12.endclass.rate:         1.0
 rep0_range_12.endclass.cost:           0
@@ -953,11 +968,11 @@ rep0_range_12.endclass.at_finish:   True
 rep0_range_12.endclass.line_dist:      1
 rep0_range_12.endclass.num_modes:      0
 rep0_range_12.endclass.end_dist:     0.0
-rep0_range_12.endclass.tot_deviation: 0.022570429487067674
+rep0_range_12.endclass.tot_deviation: 0.020940135808406236
 rep0_range_12.endclass.faults:        {}
 rep0_range_12.endclass.classification: nominal mission
-rep0_range_12.endclass.end_x: 28.972265117689133
-rep0_range_12.endclass.end_y: -0.22716452386199446
+rep0_range_12.endclass.end_x: 29.02667378003487
+rep0_range_12.endclass.end_y: -0.19112420094406496
 rep0_range_12.endclass.endpt:   array(2)
 rep0_range_13.endclass.rate:         1.0
 rep0_range_13.endclass.cost:           0
@@ -968,11 +983,11 @@ rep0_range_13.endclass.at_finish:   True
 rep0_range_13.endclass.line_dist:      1
 rep0_range_13.endclass.num_modes:      0
 rep0_range_13.endclass.end_dist:     0.0
-rep0_range_13.endclass.tot_deviation: 0.012912154157010762
+rep0_range_13.endclass.tot_deviation: 0.023959689114854337
 rep0_range_13.endclass.faults:        {}
 rep0_range_13.endclass.classification: nominal mission
-rep0_range_13.endclass.end_x: 29.487273033227115
-rep0_range_13.endclass.end_y: -1.0016940122989169
+rep0_range_13.endclass.end_x: 29.140699707404103
+rep0_range_13.endclass.end_y: -1.009399162379895
 rep0_range_13.endclass.endpt:   array(2)
 rep0_range_14.endclass.rate:         1.0
 rep0_range_14.endclass.cost:           0
@@ -983,26 +998,26 @@ rep0_range_14.endclass.at_finish:   True
 rep0_range_14.endclass.line_dist:      1
 rep0_range_14.endclass.num_modes:      0
 rep0_range_14.endclass.end_dist:     0.0
-rep0_range_14.endclass.tot_deviation: 0.013435541754276204
+rep0_range_14.endclass.tot_deviation: 0.016012109187890512
 rep0_range_14.endclass.faults:        {}
 rep0_range_14.endclass.classification: nominal mission
-rep0_range_14.endclass.end_x: 29.198898982776793
-rep0_range_14.endclass.end_y: -0.5151243235449108
+rep0_range_14.endclass.end_x: 29.200384936771
+rep0_range_14.endclass.end_y: -0.5088740949686043
 rep0_range_14.endclass.endpt:   array(2)
 rep0_range_15.endclass.rate:         1.0
 rep0_range_15.endclass.cost:           0
 rep0_range_15.endclass.prob: 0.011764705882352941
 rep0_range_15.endclass.expected_cost:  0
-rep0_range_15.endclass.in_bound:   False
-rep0_range_15.endclass.at_finish:  False
+rep0_range_15.endclass.in_bound:    True
+rep0_range_15.endclass.at_finish:   True
 rep0_range_15.endclass.line_dist:      1
 rep0_range_15.endclass.num_modes:      0
-rep0_range_15.endclass.end_dist: 6.298142532660087
-rep0_range_15.endclass.tot_deviation: 0.2014145588151497
+rep0_range_15.endclass.end_dist:     0.0
+rep0_range_15.endclass.tot_deviation: 0.09641579639279106
 rep0_range_15.endclass.faults:        {}
-rep0_range_15.endclass.classification: incomplete mission
-rep0_range_15.endclass.end_x: 22.820532208787583
-rep0_range_15.endclass.end_y: 1.6739953767826836
+rep0_range_15.endclass.classification: nominal mission
+rep0_range_15.endclass.end_x: 29.22890544654618
+rep0_range_15.endclass.end_y: -0.8066111491747783
 rep0_range_15.endclass.endpt:   array(2)
 rep0_range_16.endclass.rate:         1.0
 rep0_range_16.endclass.cost:           0
@@ -1013,11 +1028,11 @@ rep0_range_16.endclass.at_finish:   True
 rep0_range_16.endclass.line_dist:      1
 rep0_range_16.endclass.num_modes:      0
 rep0_range_16.endclass.end_dist:     0.0
-rep0_range_16.endclass.tot_deviation: 0.037846412605042554
+rep0_range_16.endclass.tot_deviation: 0.034271198916084405
 rep0_range_16.endclass.faults:        {}
 rep0_range_16.endclass.classification: nominal mission
-rep0_range_16.endclass.end_x: 29.228291989607136
-rep0_range_16.endclass.end_y: 0.3667042576454643
+rep0_range_16.endclass.end_x: 29.127166031966276
+rep0_range_16.endclass.end_y: 0.4353308249083395
 rep0_range_16.endclass.endpt:   array(2)
 rep0_range_17.endclass.rate:         1.0
 rep0_range_17.endclass.cost:           0
@@ -1028,11 +1043,11 @@ rep0_range_17.endclass.at_finish:   True
 rep0_range_17.endclass.line_dist:      1
 rep0_range_17.endclass.num_modes:      0
 rep0_range_17.endclass.end_dist:     0.0
-rep0_range_17.endclass.tot_deviation: 0.009342437871385018
+rep0_range_17.endclass.tot_deviation: 0.008665927334266237
 rep0_range_17.endclass.faults:        {}
 rep0_range_17.endclass.classification: nominal mission
-rep0_range_17.endclass.end_x: 29.199294152791225
-rep0_range_17.endclass.end_y: -0.24856561999623034
+rep0_range_17.endclass.end_x: 28.988004309049906
+rep0_range_17.endclass.end_y: -0.31557029037246215
 rep0_range_17.endclass.endpt:   array(2)
 rep0_range_18.endclass.rate:         1.0
 rep0_range_18.endclass.cost:           0
@@ -1043,11 +1058,11 @@ rep0_range_18.endclass.at_finish:   True
 rep0_range_18.endclass.line_dist:      1
 rep0_range_18.endclass.num_modes:      0
 rep0_range_18.endclass.end_dist:     0.0
-rep0_range_18.endclass.tot_deviation: 0.019649125766733083
+rep0_range_18.endclass.tot_deviation: 0.017464958885312847
 rep0_range_18.endclass.faults:        {}
 rep0_range_18.endclass.classification: nominal mission
-rep0_range_18.endclass.end_x: 29.20981734468701
-rep0_range_18.endclass.end_y: -1.4952068613372713
+rep0_range_18.endclass.end_x: 28.912657782705324
+rep0_range_18.endclass.end_y: -1.4894469618395239
 rep0_range_18.endclass.endpt:   array(2)
 rep0_range_19.endclass.rate:         1.0
 rep0_range_19.endclass.cost:           0
@@ -1058,41 +1073,41 @@ rep0_range_19.endclass.at_finish:   True
 rep0_range_19.endclass.line_dist:      1
 rep0_range_19.endclass.num_modes:      0
 rep0_range_19.endclass.end_dist:     0.0
-rep0_range_19.endclass.tot_deviation: 0.013250929045056477
+rep0_range_19.endclass.tot_deviation: 0.023312475882955888
 rep0_range_19.endclass.faults:        {}
 rep0_range_19.endclass.classification: nominal mission
-rep0_range_19.endclass.end_x: 29.37562851815764
-rep0_range_19.endclass.end_y: -0.7762528735593929
+rep0_range_19.endclass.end_x: 29.03938920851671
+rep0_range_19.endclass.end_y: -0.732846538594535
 rep0_range_19.endclass.endpt:   array(2)
 rep0_range_20.endclass.rate:         1.0
 rep0_range_20.endclass.cost:           0
 rep0_range_20.endclass.prob: 0.011764705882352941
 rep0_range_20.endclass.expected_cost:  0
 rep0_range_20.endclass.in_bound:    True
-rep0_range_20.endclass.at_finish:  False
+rep0_range_20.endclass.at_finish:   True
 rep0_range_20.endclass.line_dist:      1
 rep0_range_20.endclass.num_modes:      0
-rep0_range_20.endclass.end_dist: 4.97673755786017
-rep0_range_20.endclass.tot_deviation: 0.15346516863417273
+rep0_range_20.endclass.end_dist:     0.0
+rep0_range_20.endclass.tot_deviation: 0.11284511123392486
 rep0_range_20.endclass.faults:        {}
-rep0_range_20.endclass.classification: incomplete mission
-rep0_range_20.endclass.end_x: 24.081373688264453
-rep0_range_20.endclass.end_y: 1.237075501796257
+rep0_range_20.endclass.classification: nominal mission
+rep0_range_20.endclass.end_x: 29.38997261168595
+rep0_range_20.endclass.end_y: -0.8981879973680189
 rep0_range_20.endclass.endpt:   array(2)
 rep0_range_21.endclass.rate:         1.0
 rep0_range_21.endclass.cost:           0
 rep0_range_21.endclass.prob: 0.011764705882352941
 rep0_range_21.endclass.expected_cost:  0
 rep0_range_21.endclass.in_bound:    True
-rep0_range_21.endclass.at_finish:  False
+rep0_range_21.endclass.at_finish:   True
 rep0_range_21.endclass.line_dist:      1
 rep0_range_21.endclass.num_modes:      0
-rep0_range_21.endclass.end_dist: 0.12044763809031671
-rep0_range_21.endclass.tot_deviation: 0.045082954486655426
+rep0_range_21.endclass.end_dist:     0.0
+rep0_range_21.endclass.tot_deviation: 0.04880058739211242
 rep0_range_21.endclass.faults:        {}
-rep0_range_21.endclass.classification: incomplete mission
-rep0_range_21.endclass.end_x: 28.952411491766856
-rep0_range_21.endclass.end_y: 0.6589461717162802
+rep0_range_21.endclass.classification: nominal mission
+rep0_range_21.endclass.end_x: 29.30163064374983
+rep0_range_21.endclass.end_y: 0.47762213257624786
 rep0_range_21.endclass.endpt:   array(2)
 rep0_range_22.endclass.rate:         1.0
 rep0_range_22.endclass.cost:           0
@@ -1103,11 +1118,11 @@ rep0_range_22.endclass.at_finish:   True
 rep0_range_22.endclass.line_dist:      1
 rep0_range_22.endclass.num_modes:      0
 rep0_range_22.endclass.end_dist:     0.0
-rep0_range_22.endclass.tot_deviation: 0.016824688297475885
+rep0_range_22.endclass.tot_deviation: 0.015106130029186112
 rep0_range_22.endclass.faults:        {}
 rep0_range_22.endclass.classification: nominal mission
-rep0_range_22.endclass.end_x: 29.349691160970252
-rep0_range_22.endclass.end_y: -0.2701326571320684
+rep0_range_22.endclass.end_x: 29.12413778936169
+rep0_range_22.endclass.end_y: -0.3705635585347911
 rep0_range_22.endclass.endpt:   array(2)
 rep0_range_23.endclass.rate:         1.0
 rep0_range_23.endclass.cost:           0
@@ -1118,11 +1133,11 @@ rep0_range_23.endclass.at_finish:   True
 rep0_range_23.endclass.line_dist:      1
 rep0_range_23.endclass.num_modes:      0
 rep0_range_23.endclass.end_dist:     0.0
-rep0_range_23.endclass.tot_deviation: 0.016319452106950356
+rep0_range_23.endclass.tot_deviation: 0.018560494077101537
 rep0_range_23.endclass.faults:        {}
 rep0_range_23.endclass.classification: nominal mission
-rep0_range_23.endclass.end_x: 29.248052279128693
-rep0_range_23.endclass.end_y: -1.9941509850232608
+rep0_range_23.endclass.end_x: 28.94026562393683
+rep0_range_23.endclass.end_y: -1.9687845632662222
 rep0_range_23.endclass.endpt:   array(2)
 rep0_range_24.endclass.rate:         1.0
 rep0_range_24.endclass.cost:           0
@@ -1133,41 +1148,41 @@ rep0_range_24.endclass.at_finish:   True
 rep0_range_24.endclass.line_dist:      1
 rep0_range_24.endclass.num_modes:      0
 rep0_range_24.endclass.end_dist:     0.0
-rep0_range_24.endclass.tot_deviation: 0.017095546491822072
+rep0_range_24.endclass.tot_deviation: 0.030551740099704457
 rep0_range_24.endclass.faults:        {}
 rep0_range_24.endclass.classification: nominal mission
-rep0_range_24.endclass.end_x: 29.32914136938406
-rep0_range_24.endclass.end_y: -1.0240422296162524
+rep0_range_24.endclass.end_x: 29.144526240438584
+rep0_range_24.endclass.end_y: -1.00390993910328
 rep0_range_24.endclass.endpt:   array(2)
 rep0_range_25.endclass.rate:         1.0
 rep0_range_25.endclass.cost:           0
 rep0_range_25.endclass.prob: 0.011764705882352941
 rep0_range_25.endclass.expected_cost:  0
-rep0_range_25.endclass.in_bound:   False
-rep0_range_25.endclass.at_finish:  False
+rep0_range_25.endclass.in_bound:    True
+rep0_range_25.endclass.at_finish:   True
 rep0_range_25.endclass.line_dist:      1
 rep0_range_25.endclass.num_modes:      0
-rep0_range_25.endclass.end_dist: 28.20852808099358
-rep0_range_25.endclass.tot_deviation: 0.20630699276536996
+rep0_range_25.endclass.end_dist:     0.0
+rep0_range_25.endclass.tot_deviation: 0.12704827454099682
 rep0_range_25.endclass.faults:        {}
-rep0_range_25.endclass.classification: incomplete mission
-rep0_range_25.endclass.end_x: 0.7047037982844006
-rep0_range_25.endclass.end_y: 0.7069268171133591
+rep0_range_25.endclass.classification: nominal mission
+rep0_range_25.endclass.end_x: 29.609865640536785
+rep0_range_25.endclass.end_y: -0.7967210632055489
 rep0_range_25.endclass.endpt:   array(2)
 rep0_range_26.endclass.rate:         1.0
 rep0_range_26.endclass.cost:           0
 rep0_range_26.endclass.prob: 0.011764705882352941
 rep0_range_26.endclass.expected_cost:  0
 rep0_range_26.endclass.in_bound:    True
-rep0_range_26.endclass.at_finish:  False
+rep0_range_26.endclass.at_finish:   True
 rep0_range_26.endclass.line_dist:      1
 rep0_range_26.endclass.num_modes:      0
-rep0_range_26.endclass.end_dist: 1.6363074902929695
-rep0_range_26.endclass.tot_deviation: 0.07353485508497205
+rep0_range_26.endclass.end_dist:     0.0
+rep0_range_26.endclass.tot_deviation: 0.0601103630798466
 rep0_range_26.endclass.faults:        {}
-rep0_range_26.endclass.classification: incomplete mission
-rep0_range_26.endclass.end_x: 27.772362688176745
-rep0_range_26.endclass.end_y: 1.6332855257444368
+rep0_range_26.endclass.classification: nominal mission
+rep0_range_26.endclass.end_x: 29.25170469072636
+rep0_range_26.endclass.end_y: 0.6347985115430519
 rep0_range_26.endclass.endpt:   array(2)
 rep0_range_27.endclass.rate:         1.0
 rep0_range_27.endclass.cost:           0
@@ -1178,11 +1193,11 @@ rep0_range_27.endclass.at_finish:   True
 rep0_range_27.endclass.line_dist:      1
 rep0_range_27.endclass.num_modes:      0
 rep0_range_27.endclass.end_dist:     0.0
-rep0_range_27.endclass.tot_deviation: 0.034309964693866574
+rep0_range_27.endclass.tot_deviation: 0.025249343998657622
 rep0_range_27.endclass.faults:        {}
 rep0_range_27.endclass.classification: nominal mission
-rep0_range_27.endclass.end_x: 29.240687825059428
-rep0_range_27.endclass.end_y: -0.3963211354346584
+rep0_range_27.endclass.end_x: 29.13110106039093
+rep0_range_27.endclass.end_y: -0.4635193917148366
 rep0_range_27.endclass.endpt:   array(2)
 rep0_range_28.endclass.rate:         1.0
 rep0_range_28.endclass.cost:           0
@@ -1193,11 +1208,11 @@ rep0_range_28.endclass.at_finish:   True
 rep0_range_28.endclass.line_dist:      1
 rep0_range_28.endclass.num_modes:      0
 rep0_range_28.endclass.end_dist:     0.0
-rep0_range_28.endclass.tot_deviation: 0.017954866083916343
+rep0_range_28.endclass.tot_deviation: 0.011989833834154728
 rep0_range_28.endclass.faults:        {}
 rep0_range_28.endclass.classification: nominal mission
-rep0_range_28.endclass.end_x: 29.06993925731318
-rep0_range_28.endclass.end_y: -2.4866488194541794
+rep0_range_28.endclass.end_x: 29.210174823054277
+rep0_range_28.endclass.end_y: -2.477559578188976
 rep0_range_28.endclass.endpt:   array(2)
 rep0_range_29.endclass.rate:         1.0
 rep0_range_29.endclass.cost:           0
@@ -1208,41 +1223,41 @@ rep0_range_29.endclass.at_finish:   True
 rep0_range_29.endclass.line_dist:      1
 rep0_range_29.endclass.num_modes:      0
 rep0_range_29.endclass.end_dist:     0.0
-rep0_range_29.endclass.tot_deviation: 0.01327694089110737
+rep0_range_29.endclass.tot_deviation: 0.021520934615468466
 rep0_range_29.endclass.faults:        {}
 rep0_range_29.endclass.classification: nominal mission
-rep0_range_29.endclass.end_x: 29.097703947338516
-rep0_range_29.endclass.end_y: -1.220016512909051
+rep0_range_29.endclass.end_x: 29.196821875790913
+rep0_range_29.endclass.end_y: -1.2689214678770406
 rep0_range_29.endclass.endpt:   array(2)
 rep0_range_30.endclass.rate:         1.0
 rep0_range_30.endclass.cost:           0
 rep0_range_30.endclass.prob: 0.011764705882352941
 rep0_range_30.endclass.expected_cost:  0
-rep0_range_30.endclass.in_bound:   False
+rep0_range_30.endclass.in_bound:    True
 rep0_range_30.endclass.at_finish:  False
 rep0_range_30.endclass.line_dist:      1
 rep0_range_30.endclass.num_modes:      0
-rep0_range_30.endclass.end_dist: 28.26473898400901
-rep0_range_30.endclass.tot_deviation: 0.23808567605319
+rep0_range_30.endclass.end_dist: 0.1701974261981555
+rep0_range_30.endclass.tot_deviation: 0.14492921371085954
 rep0_range_30.endclass.faults:        {}
 rep0_range_30.endclass.classification: incomplete mission
-rep0_range_30.endclass.end_x: 0.6493869027086476
-rep0_range_30.endclass.end_y: 0.705121284869211
+rep0_range_30.endclass.end_x: 29.434993679668953
+rep0_range_30.endclass.end_y: -1.2615889838921517
 rep0_range_30.endclass.endpt:   array(2)
 rep0_range_31.endclass.rate:         1.0
 rep0_range_31.endclass.cost:           0
 rep0_range_31.endclass.prob: 0.011764705882352941
 rep0_range_31.endclass.expected_cost:  0
 rep0_range_31.endclass.in_bound:    True
-rep0_range_31.endclass.at_finish:  False
+rep0_range_31.endclass.at_finish:   True
 rep0_range_31.endclass.line_dist:      1
 rep0_range_31.endclass.num_modes:      0
-rep0_range_31.endclass.end_dist: 2.6546086874718853
-rep0_range_31.endclass.tot_deviation: 0.10423366631457652
+rep0_range_31.endclass.end_dist:     0.0
+rep0_range_31.endclass.tot_deviation: 0.07019798659455637
 rep0_range_31.endclass.faults:        {}
-rep0_range_31.endclass.classification: incomplete mission
-rep0_range_31.endclass.end_x: 27.081798517415738
-rep0_range_31.endclass.end_y: 2.4210028649544793
+rep0_range_31.endclass.classification: nominal mission
+rep0_range_31.endclass.end_x: 29.309039641891463
+rep0_range_31.endclass.end_y: 0.714583411451293
 rep0_range_31.endclass.endpt:   array(2)
 rep0_range_32.endclass.rate:         1.0
 rep0_range_32.endclass.cost:           0
@@ -1253,11 +1268,11 @@ rep0_range_32.endclass.at_finish:   True
 rep0_range_32.endclass.line_dist:      1
 rep0_range_32.endclass.num_modes:      0
 rep0_range_32.endclass.end_dist:     0.0
-rep0_range_32.endclass.tot_deviation: 0.047458057912325956
+rep0_range_32.endclass.tot_deviation: 0.033095408698309625
 rep0_range_32.endclass.faults:        {}
 rep0_range_32.endclass.classification: nominal mission
-rep0_range_32.endclass.end_x: 29.26991436591824
-rep0_range_32.endclass.end_y: -0.4574532789312075
+rep0_range_32.endclass.end_x: 29.326174325808566
+rep0_range_32.endclass.end_y: -0.44188457676692694
 rep0_range_32.endclass.endpt:   array(2)
 rep0_range_33.endclass.rate:         1.0
 rep0_range_33.endclass.cost:           0
@@ -1268,11 +1283,11 @@ rep0_range_33.endclass.at_finish:   True
 rep0_range_33.endclass.line_dist:      1
 rep0_range_33.endclass.num_modes:      0
 rep0_range_33.endclass.end_dist:     0.0
-rep0_range_33.endclass.tot_deviation: 0.02625809884142386
+rep0_range_33.endclass.tot_deviation: 0.008947958132256198
 rep0_range_33.endclass.faults:        {}
 rep0_range_33.endclass.classification: nominal mission
-rep0_range_33.endclass.end_x: 28.99398964908361
-rep0_range_33.endclass.end_y: -2.976849599077134
+rep0_range_33.endclass.end_x: 29.062675330702344
+rep0_range_33.endclass.end_y: -2.971390738580973
 rep0_range_33.endclass.endpt:   array(2)
 rep0_range_34.endclass.rate:         1.0
 rep0_range_34.endclass.cost:           0
@@ -1283,41 +1298,41 @@ rep0_range_34.endclass.at_finish:   True
 rep0_range_34.endclass.line_dist:      1
 rep0_range_34.endclass.num_modes:      0
 rep0_range_34.endclass.end_dist:     0.0
-rep0_range_34.endclass.tot_deviation: 0.013669088959652857
+rep0_range_34.endclass.tot_deviation: 0.023799143752141937
 rep0_range_34.endclass.faults:        {}
 rep0_range_34.endclass.classification: nominal mission
-rep0_range_34.endclass.end_x: 29.022838522622425
-rep0_range_34.endclass.end_y: -1.4642263064187775
+rep0_range_34.endclass.end_x: 29.201210080179663
+rep0_range_34.endclass.end_y: -1.5209535998153236
 rep0_range_34.endclass.endpt:   array(2)
 rep0_range_35.endclass.rate:         1.0
 rep0_range_35.endclass.cost:           0
 rep0_range_35.endclass.prob: 0.011764705882352941
 rep0_range_35.endclass.expected_cost:  0
-rep0_range_35.endclass.in_bound:   False
+rep0_range_35.endclass.in_bound:    True
 rep0_range_35.endclass.at_finish:  False
 rep0_range_35.endclass.line_dist:      1
 rep0_range_35.endclass.num_modes:      0
-rep0_range_35.endclass.end_dist: 28.30730555921831
-rep0_range_35.endclass.tot_deviation: 0.25961125170795796
+rep0_range_35.endclass.end_dist: 3.2491374911124042
+rep0_range_35.endclass.tot_deviation: 0.1573084616393087
 rep0_range_35.endclass.faults:        {}
 rep0_range_35.endclass.classification: incomplete mission
-rep0_range_35.endclass.end_x: 0.6076890680567851
-rep0_range_35.endclass.end_y: 0.7014769893325896
+rep0_range_35.endclass.end_x: 26.207221354099755
+rep0_range_35.endclass.end_y: -2.32087985463916
 rep0_range_35.endclass.endpt:   array(2)
 rep0_range_36.endclass.rate:         1.0
 rep0_range_36.endclass.cost:           0
 rep0_range_36.endclass.prob: 0.011764705882352941
 rep0_range_36.endclass.expected_cost:  0
 rep0_range_36.endclass.in_bound:    True
-rep0_range_36.endclass.at_finish:  False
+rep0_range_36.endclass.at_finish:   True
 rep0_range_36.endclass.line_dist:      1
 rep0_range_36.endclass.num_modes:      0
-rep0_range_36.endclass.end_dist: 3.9390786128953446
-rep0_range_36.endclass.tot_deviation: 0.13447036170414453
+rep0_range_36.endclass.end_dist:     0.0
+rep0_range_36.endclass.tot_deviation: 0.07909996723249132
 rep0_range_36.endclass.faults:        {}
-rep0_range_36.endclass.classification: incomplete mission
-rep0_range_36.endclass.end_x: 26.14435306816135
-rep0_range_36.endclass.end_y: 3.317309750767116
+rep0_range_36.endclass.classification: nominal mission
+rep0_range_36.endclass.end_x: 29.465026352745042
+rep0_range_36.endclass.end_y: 0.6636458576071678
 rep0_range_36.endclass.endpt:   array(2)
 rep0_range_37.endclass.rate:         1.0
 rep0_range_37.endclass.cost:           0
@@ -1328,11 +1343,11 @@ rep0_range_37.endclass.at_finish:   True
 rep0_range_37.endclass.line_dist:      1
 rep0_range_37.endclass.num_modes:      0
 rep0_range_37.endclass.end_dist:     0.0
-rep0_range_37.endclass.tot_deviation: 0.06637366496296679
+rep0_range_37.endclass.tot_deviation: 0.040569119949447216
 rep0_range_37.endclass.faults:        {}
 rep0_range_37.endclass.classification: nominal mission
-rep0_range_37.endclass.end_x: 29.600111641284474
-rep0_range_37.endclass.end_y: -0.2894491464509304
+rep0_range_37.endclass.end_x: 29.140772222353664
+rep0_range_37.endclass.end_y: -0.6526840810332275
 rep0_range_37.endclass.endpt:   array(2)
 rep0_range_38.endclass.rate:         1.0
 rep0_range_38.endclass.cost:           0
@@ -1343,11 +1358,11 @@ rep0_range_38.endclass.at_finish:   True
 rep0_range_38.endclass.line_dist:      1
 rep0_range_38.endclass.num_modes:      0
 rep0_range_38.endclass.end_dist:     0.0
-rep0_range_38.endclass.tot_deviation: 0.03560866144943147
+rep0_range_38.endclass.tot_deviation: 0.015221764715137661
 rep0_range_38.endclass.faults:        {}
 rep0_range_38.endclass.classification: nominal mission
-rep0_range_38.endclass.end_x: 29.004417374372515
-rep0_range_38.endclass.end_y: -3.468051302306419
+rep0_range_38.endclass.end_x: 29.17533981045304
+rep0_range_38.endclass.end_y: -3.4793141221156323
 rep0_range_38.endclass.endpt:   array(2)
 rep0_range_39.endclass.rate:         1.0
 rep0_range_39.endclass.cost:           0
@@ -1358,41 +1373,41 @@ rep0_range_39.endclass.at_finish:   True
 rep0_range_39.endclass.line_dist:      1
 rep0_range_39.endclass.num_modes:      0
 rep0_range_39.endclass.end_dist:     0.0
-rep0_range_39.endclass.tot_deviation: 0.020708714207007248
+rep0_range_39.endclass.tot_deviation: 0.01812310565797931
 rep0_range_39.endclass.faults:        {}
 rep0_range_39.endclass.classification: nominal mission
-rep0_range_39.endclass.end_x: 29.437126836527973
-rep0_range_39.endclass.end_y: -1.8509907961630265
+rep0_range_39.endclass.end_x: 29.14060880327211
+rep0_range_39.endclass.end_y: -1.754213472272745
 rep0_range_39.endclass.endpt:   array(2)
 rep0_range_40.endclass.rate:         1.0
 rep0_range_40.endclass.cost:           0
 rep0_range_40.endclass.prob: 0.011764705882352941
 rep0_range_40.endclass.expected_cost:  0
-rep0_range_40.endclass.in_bound:   False
+rep0_range_40.endclass.in_bound:    True
 rep0_range_40.endclass.at_finish:  False
 rep0_range_40.endclass.line_dist:      1
 rep0_range_40.endclass.num_modes:      0
-rep0_range_40.endclass.end_dist: 28.340420554783
-rep0_range_40.endclass.tot_deviation: 0.2748060969443043
+rep0_range_40.endclass.end_dist: 4.796434605680536
+rep0_range_40.endclass.tot_deviation: 0.1718769398529267
 rep0_range_40.endclass.faults:        {}
 rep0_range_40.endclass.classification: incomplete mission
-rep0_range_40.endclass.end_x: 0.5754526977131285
-rep0_range_40.endclass.end_y: 0.697235171182967
+rep0_range_40.endclass.end_x: 24.43562416078548
+rep0_range_40.endclass.end_y: 1.6790813352594796
 rep0_range_40.endclass.endpt:   array(2)
 rep0_range_41.endclass.rate:         1.0
 rep0_range_41.endclass.cost:           0
 rep0_range_41.endclass.prob: 0.011764705882352941
 rep0_range_41.endclass.expected_cost:  0
 rep0_range_41.endclass.in_bound:    True
-rep0_range_41.endclass.at_finish:  False
+rep0_range_41.endclass.at_finish:   True
 rep0_range_41.endclass.line_dist:      1
 rep0_range_41.endclass.num_modes:      0
-rep0_range_41.endclass.end_dist: 6.573477716230237
-rep0_range_41.endclass.tot_deviation: 0.163000375818198
+rep0_range_41.endclass.end_dist:     0.0
+rep0_range_41.endclass.tot_deviation: 0.089390407355406
 rep0_range_41.endclass.faults:        {}
-rep0_range_41.endclass.classification: incomplete mission
-rep0_range_41.endclass.end_x: 22.98187330410633
-rep0_range_41.endclass.end_y: 3.2064017511813576
+rep0_range_41.endclass.classification: nominal mission
+rep0_range_41.endclass.end_x: 29.499710787735783
+rep0_range_41.endclass.end_y: 0.7031795984206857
 rep0_range_41.endclass.endpt:   array(2)
 rep0_range_42.endclass.rate:         1.0
 rep0_range_42.endclass.cost:           0
@@ -1403,11 +1418,11 @@ rep0_range_42.endclass.at_finish:   True
 rep0_range_42.endclass.line_dist:      1
 rep0_range_42.endclass.num_modes:      0
 rep0_range_42.endclass.end_dist:     0.0
-rep0_range_42.endclass.tot_deviation: 0.08634125284983565
+rep0_range_42.endclass.tot_deviation: 0.04851410792877185
 rep0_range_42.endclass.faults:        {}
 rep0_range_42.endclass.classification: nominal mission
-rep0_range_42.endclass.end_x: 29.68948807724263
-rep0_range_42.endclass.end_y: -0.2544511377232265
+rep0_range_42.endclass.end_x: 29.15183689041273
+rep0_range_42.endclass.end_y: -0.7357180582368594
 rep0_range_42.endclass.endpt:   array(2)
 rep0_range_43.endclass.rate:         1.0
 rep0_range_43.endclass.cost:           0
@@ -1418,11 +1433,11 @@ rep0_range_43.endclass.at_finish:   True
 rep0_range_43.endclass.line_dist:      1
 rep0_range_43.endclass.num_modes:      0
 rep0_range_43.endclass.end_dist:     0.0
-rep0_range_43.endclass.tot_deviation: 0.048492555683169736
+rep0_range_43.endclass.tot_deviation: 0.021399348812334133
 rep0_range_43.endclass.faults:        {}
 rep0_range_43.endclass.classification: nominal mission
-rep0_range_43.endclass.end_x: 29.09615140425916
-rep0_range_43.endclass.end_y: -3.9701381573424968
+rep0_range_43.endclass.end_x: 29.216795141317544
+rep0_range_43.endclass.end_y: -3.982867618902233
 rep0_range_43.endclass.endpt:   array(2)
 rep0_range_44.endclass.rate:         1.0
 rep0_range_44.endclass.cost:           0
@@ -1433,41 +1448,41 @@ rep0_range_44.endclass.at_finish:   True
 rep0_range_44.endclass.line_dist:      1
 rep0_range_44.endclass.num_modes:      0
 rep0_range_44.endclass.end_dist:     0.0
-rep0_range_44.endclass.tot_deviation: 0.029066958295064064
+rep0_range_44.endclass.tot_deviation: 0.015112800240589815
 rep0_range_44.endclass.faults:        {}
 rep0_range_44.endclass.classification: nominal mission
-rep0_range_44.endclass.end_x: 29.61142695117701
-rep0_range_44.endclass.end_y: -2.195583037817789
+rep0_range_44.endclass.end_x: 29.037344989024888
+rep0_range_44.endclass.end_y: -1.9584604542297777
 rep0_range_44.endclass.endpt:   array(2)
 rep0_range_45.endclass.rate:         1.0
 rep0_range_45.endclass.cost:           0
 rep0_range_45.endclass.prob: 0.011764705882352941
 rep0_range_45.endclass.expected_cost:  0
-rep0_range_45.endclass.in_bound:   False
+rep0_range_45.endclass.in_bound:    True
 rep0_range_45.endclass.at_finish:  False
 rep0_range_45.endclass.line_dist:      1
 rep0_range_45.endclass.num_modes:      0
-rep0_range_45.endclass.end_dist: 28.36683256495202
-rep0_range_45.endclass.tot_deviation: 0.28597405012749527
+rep0_range_45.endclass.end_dist: 8.159540248052002
+rep0_range_45.endclass.tot_deviation: 0.17642298651427404
 rep0_range_45.endclass.faults:        {}
 rep0_range_45.endclass.classification: incomplete mission
-rep0_range_45.endclass.end_x: 0.5499458975173706
-rep0_range_45.endclass.end_y: 0.692953889285752
+rep0_range_45.endclass.end_x: 21.904074485238326
+rep0_range_45.endclass.end_y: 4.184967598174154
 rep0_range_45.endclass.endpt:   array(2)
 rep0_range_46.endclass.rate:         1.0
 rep0_range_46.endclass.cost:           0
 rep0_range_46.endclass.prob: 0.011764705882352941
 rep0_range_46.endclass.expected_cost:  0
 rep0_range_46.endclass.in_bound:    True
-rep0_range_46.endclass.at_finish:  False
+rep0_range_46.endclass.at_finish:   True
 rep0_range_46.endclass.line_dist:      1
 rep0_range_46.endclass.num_modes:      0
-rep0_range_46.endclass.end_dist: 6.81284622667979
-rep0_range_46.endclass.tot_deviation: 0.18922575396160357
+rep0_range_46.endclass.end_dist:     0.0
+rep0_range_46.endclass.tot_deviation: 0.09362925739683162
 rep0_range_46.endclass.faults:        {}
-rep0_range_46.endclass.classification: incomplete mission
-rep0_range_46.endclass.end_x: 22.88709395273906
-rep0_range_46.endclass.end_y: 3.583586666471165
+rep0_range_46.endclass.classification: nominal mission
+rep0_range_46.endclass.end_x: 29.472057448236693
+rep0_range_46.endclass.end_y: 0.8324437751946532
 rep0_range_46.endclass.endpt:   array(2)
 rep0_range_47.endclass.rate:         1.0
 rep0_range_47.endclass.cost:           0
@@ -1478,11 +1493,11 @@ rep0_range_47.endclass.at_finish:   True
 rep0_range_47.endclass.line_dist:      1
 rep0_range_47.endclass.num_modes:      0
 rep0_range_47.endclass.end_dist:     0.0
-rep0_range_47.endclass.tot_deviation: 0.10664735348330223
+rep0_range_47.endclass.tot_deviation: 0.05523840411284116
 rep0_range_47.endclass.faults:        {}
 rep0_range_47.endclass.classification: nominal mission
-rep0_range_47.endclass.end_x: 29.73304603104002
-rep0_range_47.endclass.end_y: -0.24431980782371832
+rep0_range_47.endclass.end_x: 29.347957239646547
+rep0_range_47.endclass.end_y: -0.6459451241581151
 rep0_range_47.endclass.endpt:   array(2)
 rep0_range_48.endclass.rate:         1.0
 rep0_range_48.endclass.cost:           0
@@ -1493,11 +1508,11 @@ rep0_range_48.endclass.at_finish:   True
 rep0_range_48.endclass.line_dist:      1
 rep0_range_48.endclass.num_modes:      0
 rep0_range_48.endclass.end_dist:     0.0
-rep0_range_48.endclass.tot_deviation: 0.0625059017708973
+rep0_range_48.endclass.tot_deviation: 0.027107771695039033
 rep0_range_48.endclass.faults:        {}
 rep0_range_48.endclass.classification: nominal mission
-rep0_range_48.endclass.end_x: 28.916559762970515
-rep0_range_48.endclass.end_y: -4.445644545240353
+rep0_range_48.endclass.end_x: 29.195053779162567
+rep0_range_48.endclass.end_y: -4.480553472177286
 rep0_range_48.endclass.endpt:   array(2)
 rep0_range_49.endclass.rate:         1.0
 rep0_range_49.endclass.cost:           0
@@ -1508,56 +1523,56 @@ rep0_range_49.endclass.at_finish:   True
 rep0_range_49.endclass.line_dist:      1
 rep0_range_49.endclass.num_modes:      0
 rep0_range_49.endclass.end_dist:     0.0
-rep0_range_49.endclass.tot_deviation: 0.03855438914714991
+rep0_range_49.endclass.tot_deviation: 0.013128698021386258
 rep0_range_49.endclass.faults:        {}
 rep0_range_49.endclass.classification: nominal mission
-rep0_range_49.endclass.end_x: 29.472764195049972
-rep0_range_49.endclass.end_y: -2.403618818078738
+rep0_range_49.endclass.end_x: 29.195282489544713
+rep0_range_49.endclass.end_y: -2.2705440476057746
 rep0_range_49.endclass.endpt:   array(2)
 rep0_range_50.endclass.rate:         1.0
 rep0_range_50.endclass.cost:           0
 rep0_range_50.endclass.prob: 0.011764705882352941
 rep0_range_50.endclass.expected_cost:  0
-rep0_range_50.endclass.in_bound:   False
+rep0_range_50.endclass.in_bound:    True
 rep0_range_50.endclass.at_finish:  False
 rep0_range_50.endclass.line_dist:      1
 rep0_range_50.endclass.num_modes:      0
-rep0_range_50.endclass.end_dist: 28.38837238599716
-rep0_range_50.endclass.tot_deviation: 0.2943795757333332
+rep0_range_50.endclass.end_dist: 8.621391343800537
+rep0_range_50.endclass.tot_deviation: 0.19223663123032816
 rep0_range_50.endclass.faults:        {}
 rep0_range_50.endclass.classification: incomplete mission
-rep0_range_50.endclass.end_x: 0.5293456817722989
-rep0_range_50.endclass.end_y: 0.6888735496361815
+rep0_range_50.endclass.end_x: 20.35124747887383
+rep0_range_50.endclass.end_y: 0.8633544428667195
 rep0_range_50.endclass.endpt:   array(2)
 rep0_range_51.endclass.rate:         1.0
 rep0_range_51.endclass.cost:           0
 rep0_range_51.endclass.prob: 0.011764705882352941
 rep0_range_51.endclass.expected_cost:  0
-rep0_range_51.endclass.in_bound:   False
-rep0_range_51.endclass.at_finish:  False
+rep0_range_51.endclass.in_bound:    True
+rep0_range_51.endclass.at_finish:   True
 rep0_range_51.endclass.line_dist:      1
 rep0_range_51.endclass.num_modes:      0
-rep0_range_51.endclass.end_dist: 28.200815486796124
-rep0_range_51.endclass.tot_deviation: 0.21263470638518298
+rep0_range_51.endclass.end_dist:     0.0
+rep0_range_51.endclass.tot_deviation: 0.10276433291970202
 rep0_range_51.endclass.faults:        {}
-rep0_range_51.endclass.classification: incomplete mission
-rep0_range_51.endclass.end_x: 0.7045458584366886
-rep0_range_51.endclass.end_y: 0.7069263909255318
+rep0_range_51.endclass.classification: nominal mission
+rep0_range_51.endclass.end_x: 29.558832445428926
+rep0_range_51.endclass.end_y: 0.7821513291334509
 rep0_range_51.endclass.endpt:   array(2)
 rep0_range_52.endclass.rate:         1.0
 rep0_range_52.endclass.cost:           0
 rep0_range_52.endclass.prob: 0.011764705882352941
 rep0_range_52.endclass.expected_cost:  0
 rep0_range_52.endclass.in_bound:    True
-rep0_range_52.endclass.at_finish:  False
+rep0_range_52.endclass.at_finish:   True
 rep0_range_52.endclass.line_dist:      1
 rep0_range_52.endclass.num_modes:      0
-rep0_range_52.endclass.end_dist: 2.8776964887902823
-rep0_range_52.endclass.tot_deviation: 0.12671027160024995
+rep0_range_52.endclass.end_dist:     0.0
+rep0_range_52.endclass.tot_deviation: 0.060501672317475934
 rep0_range_52.endclass.faults:        {}
-rep0_range_52.endclass.classification: incomplete mission
-rep0_range_52.endclass.end_x: 27.140887747811487
-rep0_range_52.endclass.end_y: -2.8293447487333805
+rep0_range_52.endclass.classification: nominal mission
+rep0_range_52.endclass.end_x: 29.23771666028621
+rep0_range_52.endclass.end_y: -0.8299853862990831
 rep0_range_52.endclass.endpt:   array(2)
 rep0_range_53.endclass.rate:         1.0
 rep0_range_53.endclass.cost:           0
@@ -1568,11 +1583,11 @@ rep0_range_53.endclass.at_finish:   True
 rep0_range_53.endclass.line_dist:      1
 rep0_range_53.endclass.num_modes:      0
 rep0_range_53.endclass.end_dist:     0.0
-rep0_range_53.endclass.tot_deviation: 0.07723040541724244
+rep0_range_53.endclass.tot_deviation: 0.03223606544381252
 rep0_range_53.endclass.faults:        {}
 rep0_range_53.endclass.classification: nominal mission
-rep0_range_53.endclass.end_x: 29.112483140018977
-rep0_range_53.endclass.end_y: -4.962425094916853
+rep0_range_53.endclass.end_x: 29.114064393459476
+rep0_range_53.endclass.end_y: -4.97141529517165
 rep0_range_53.endclass.endpt:   array(2)
 rep0_range_54.endclass.rate:         1.0
 rep0_range_54.endclass.cost:           0
@@ -1583,11 +1598,11 @@ rep0_range_54.endclass.at_finish:   True
 rep0_range_54.endclass.line_dist:      1
 rep0_range_54.endclass.num_modes:      0
 rep0_range_54.endclass.end_dist:     0.0
-rep0_range_54.endclass.tot_deviation: 0.04897034103001493
+rep0_range_54.endclass.tot_deviation: 0.016576042731110394
 rep0_range_54.endclass.faults:        {}
 rep0_range_54.endclass.classification: nominal mission
-rep0_range_54.endclass.end_x: 29.09615133964248
-rep0_range_54.endclass.end_y: -2.4764766650444425
+rep0_range_54.endclass.end_x: 29.303595488012697
+rep0_range_54.endclass.end_y: -2.5842050284625966
 rep0_range_54.endclass.endpt:   array(2)
 rep0_range_55.endclass.rate:         1.0
 rep0_range_55.endclass.cost:           0
@@ -1597,42 +1612,42 @@ rep0_range_55.endclass.in_bound:   False
 rep0_range_55.endclass.at_finish:  False
 rep0_range_55.endclass.line_dist:      1
 rep0_range_55.endclass.num_modes:      0
-rep0_range_55.endclass.end_dist: 28.40628740333588
-rep0_range_55.endclass.tot_deviation: 0.30099608616874424
+rep0_range_55.endclass.end_dist: 11.54409096763301
+rep0_range_55.endclass.tot_deviation: 0.20001736233060288
 rep0_range_55.endclass.faults:        {}
 rep0_range_55.endclass.classification: incomplete mission
-rep0_range_55.endclass.end_x: 0.5124081713056564
-rep0_range_55.endclass.end_y: 0.6850861328883633
+rep0_range_55.endclass.end_x: 18.315635242908417
+rep0_range_55.endclass.end_y: -5.157488485132333
 rep0_range_55.endclass.endpt:   array(2)
 rep0_range_56.endclass.rate:         1.0
 rep0_range_56.endclass.cost:           0
 rep0_range_56.endclass.prob: 0.011764705882352941
 rep0_range_56.endclass.expected_cost:  0
-rep0_range_56.endclass.in_bound:   False
-rep0_range_56.endclass.at_finish:  False
+rep0_range_56.endclass.in_bound:    True
+rep0_range_56.endclass.at_finish:   True
 rep0_range_56.endclass.line_dist:      1
 rep0_range_56.endclass.num_modes:      0
-rep0_range_56.endclass.end_dist: 28.23018435550321
-rep0_range_56.endclass.tot_deviation: 0.22868811970746997
+rep0_range_56.endclass.end_dist:     0.0
+rep0_range_56.endclass.tot_deviation: 0.10976061305075449
 rep0_range_56.endclass.faults:        {}
-rep0_range_56.endclass.classification: incomplete mission
-rep0_range_56.endclass.end_x: 0.6748592882570589
-rep0_range_56.endclass.end_y: 0.706370033148768
+rep0_range_56.endclass.classification: nominal mission
+rep0_range_56.endclass.end_x: 29.592755394685636
+rep0_range_56.endclass.end_y: 0.8001113444364056
 rep0_range_56.endclass.endpt:   array(2)
 rep0_range_57.endclass.rate:         1.0
 rep0_range_57.endclass.cost:           0
 rep0_range_57.endclass.prob: 0.011764705882352941
 rep0_range_57.endclass.expected_cost:  0
 rep0_range_57.endclass.in_bound:    True
-rep0_range_57.endclass.at_finish:  False
+rep0_range_57.endclass.at_finish:   True
 rep0_range_57.endclass.line_dist:      1
 rep0_range_57.endclass.num_modes:      0
-rep0_range_57.endclass.end_dist: 3.5138847008610155
-rep0_range_57.endclass.tot_deviation: 0.14611712008119818
+rep0_range_57.endclass.end_dist:     0.0
+rep0_range_57.endclass.tot_deviation: 0.06539432566375045
 rep0_range_57.endclass.faults:        {}
-rep0_range_57.endclass.classification: incomplete mission
-rep0_range_57.endclass.end_x: 26.823313484328825
-rep0_range_57.endclass.end_y: -3.416991917897211
+rep0_range_57.endclass.classification: nominal mission
+rep0_range_57.endclass.end_x: 29.31319210776906
+rep0_range_57.endclass.end_y: -0.8268760905770671
 rep0_range_57.endclass.endpt:   array(2)
 rep0_range_58.endclass.rate:         1.0
 rep0_range_58.endclass.cost:           0
@@ -1643,11 +1658,11 @@ rep0_range_58.endclass.at_finish:   True
 rep0_range_58.endclass.line_dist:      1
 rep0_range_58.endclass.num_modes:      0
 rep0_range_58.endclass.end_dist:     0.0
-rep0_range_58.endclass.tot_deviation: 0.09231252412855706
+rep0_range_58.endclass.tot_deviation: 0.03632176954016553
 rep0_range_58.endclass.faults:        {}
 rep0_range_58.endclass.classification: nominal mission
-rep0_range_58.endclass.end_x: 29.059764611326536
-rep0_range_58.endclass.end_y: -5.451159941547954
+rep0_range_58.endclass.end_x: 28.98440092513973
+rep0_range_58.endclass.end_y: -5.450945905963565
 rep0_range_58.endclass.endpt:   array(2)
 rep0_range_59.endclass.rate:         1.0
 rep0_range_59.endclass.cost:           0
@@ -1658,11 +1673,11 @@ rep0_range_59.endclass.at_finish:   True
 rep0_range_59.endclass.line_dist:      1
 rep0_range_59.endclass.num_modes:      0
 rep0_range_59.endclass.end_dist:     0.0
-rep0_range_59.endclass.tot_deviation: 0.06009902047803829
+rep0_range_59.endclass.tot_deviation: 0.020278746383925902
 rep0_range_59.endclass.faults:        {}
 rep0_range_59.endclass.classification: nominal mission
-rep0_range_59.endclass.end_x: 29.22869847878602
-rep0_range_59.endclass.end_y: -2.7746897936170347
+rep0_range_59.endclass.end_x: 29.08254111086972
+rep0_range_59.endclass.end_y: -2.7068971005127866
 rep0_range_59.endclass.endpt:   array(2)
 rep0_range_60.endclass.rate:         1.0
 rep0_range_60.endclass.cost:           0
@@ -1672,42 +1687,42 @@ rep0_range_60.endclass.in_bound:   False
 rep0_range_60.endclass.at_finish:  False
 rep0_range_60.endclass.line_dist:      1
 rep0_range_60.endclass.num_modes:      0
-rep0_range_60.endclass.end_dist: 28.421448153300027
-rep0_range_60.endclass.tot_deviation: 0.30631236802771045
+rep0_range_60.endclass.end_dist: 26.345580095871306
+rep0_range_60.endclass.tot_deviation: 0.20338367346864575
 rep0_range_60.endclass.faults:        {}
 rep0_range_60.endclass.classification: incomplete mission
-rep0_range_60.endclass.end_x: 0.49826423646282736
-rep0_range_60.endclass.end_y: 0.6816144542218703
+rep0_range_60.endclass.end_x: 3.244172048054306
+rep0_range_60.endclass.end_y: 5.724426649145389
 rep0_range_60.endclass.endpt:   array(2)
 rep0_range_61.endclass.rate:         1.0
 rep0_range_61.endclass.cost:           0
 rep0_range_61.endclass.prob: 0.011764705882352941
 rep0_range_61.endclass.expected_cost:  0
-rep0_range_61.endclass.in_bound:   False
-rep0_range_61.endclass.at_finish:  False
+rep0_range_61.endclass.in_bound:    True
+rep0_range_61.endclass.at_finish:   True
 rep0_range_61.endclass.line_dist:      1
 rep0_range_61.endclass.num_modes:      0
-rep0_range_61.endclass.end_dist: 28.255478032897106
-rep0_range_61.endclass.tot_deviation: 0.24183613938422435
+rep0_range_61.endclass.end_dist:     0.0
+rep0_range_61.endclass.tot_deviation: 0.11540617233743503
 rep0_range_61.endclass.faults:        {}
-rep0_range_61.endclass.classification: incomplete mission
-rep0_range_61.endclass.end_x: 0.6492457811284543
-rep0_range_61.endclass.end_y: 0.7051123382075083
+rep0_range_61.endclass.classification: nominal mission
+rep0_range_61.endclass.end_x: 29.583329136273232
+rep0_range_61.endclass.end_y: 0.8720821348409515
 rep0_range_61.endclass.endpt:   array(2)
 rep0_range_62.endclass.rate:         1.0
 rep0_range_62.endclass.cost:           0
 rep0_range_62.endclass.prob: 0.011764705882352941
 rep0_range_62.endclass.expected_cost:  0
 rep0_range_62.endclass.in_bound:    True
-rep0_range_62.endclass.at_finish:  False
+rep0_range_62.endclass.at_finish:   True
 rep0_range_62.endclass.line_dist:      1
 rep0_range_62.endclass.num_modes:      0
-rep0_range_62.endclass.end_dist: 4.5310039311797645
-rep0_range_62.endclass.tot_deviation: 0.1646815061944902
+rep0_range_62.endclass.end_dist:     0.0
+rep0_range_62.endclass.tot_deviation: 0.07052979148498371
 rep0_range_62.endclass.faults:        {}
-rep0_range_62.endclass.classification: incomplete mission
-rep0_range_62.endclass.end_x: 26.239376896625192
-rep0_range_62.endclass.end_y: -4.270894162039491
+rep0_range_62.endclass.classification: nominal mission
+rep0_range_62.endclass.end_x: 29.34401041748718
+rep0_range_62.endclass.end_y: -0.8644398197636842
 rep0_range_62.endclass.endpt:   array(2)
 rep0_range_63.endclass.rate:         1.0
 rep0_range_63.endclass.cost:           0
@@ -1718,11 +1733,11 @@ rep0_range_63.endclass.at_finish:   True
 rep0_range_63.endclass.line_dist:      1
 rep0_range_63.endclass.num_modes:      0
 rep0_range_63.endclass.end_dist:     0.0
-rep0_range_63.endclass.tot_deviation: 0.10748404516450766
+rep0_range_63.endclass.tot_deviation: 0.041055902419956415
 rep0_range_63.endclass.faults:        {}
 rep0_range_63.endclass.classification: nominal mission
-rep0_range_63.endclass.end_x: 29.100098488021217
-rep0_range_63.endclass.end_y: -5.9514685138403784
+rep0_range_63.endclass.end_x: 29.132488571587903
+rep0_range_63.endclass.end_y: -5.969042055913237
 rep0_range_63.endclass.endpt:   array(2)
 rep0_range_64.endclass.rate:         1.0
 rep0_range_64.endclass.cost:           0
@@ -1733,11 +1748,11 @@ rep0_range_64.endclass.at_finish:   True
 rep0_range_64.endclass.line_dist:      1
 rep0_range_64.endclass.num_modes:      0
 rep0_range_64.endclass.end_dist:     0.0
-rep0_range_64.endclass.tot_deviation: 0.07173195503361116
+rep0_range_64.endclass.tot_deviation: 0.024145794288878388
 rep0_range_64.endclass.faults:        {}
 rep0_range_64.endclass.classification: nominal mission
-rep0_range_64.endclass.end_x: 29.14847778956668
-rep0_range_64.endclass.end_y: -2.975280169777914
+rep0_range_64.endclass.end_x: 29.115397290789332
+rep0_range_64.endclass.end_y: -2.9764674834001332
 rep0_range_64.endclass.endpt:   array(2)
 rep0_range_65.endclass.rate:         1.0
 rep0_range_65.endclass.cost:           0
@@ -1747,42 +1762,42 @@ rep0_range_65.endclass.in_bound:   False
 rep0_range_65.endclass.at_finish:  False
 rep0_range_65.endclass.line_dist:      1
 rep0_range_65.endclass.num_modes:      0
-rep0_range_65.endclass.end_dist: 28.43447643077065
-rep0_range_65.endclass.tot_deviation: 0.31054236879938535
+rep0_range_65.endclass.end_dist: 26.57966178555577
+rep0_range_65.endclass.tot_deviation: 0.20284704935506792
 rep0_range_65.endclass.faults:        {}
 rep0_range_65.endclass.classification: incomplete mission
-rep0_range_65.endclass.end_x: 0.48629246619998606
-rep0_range_65.endclass.end_y: 0.6784498963847527
+rep0_range_65.endclass.end_x: 3.1534563435982577
+rep0_range_65.endclass.end_y: 6.314525096143149
 rep0_range_65.endclass.endpt:   array(2)
 rep0_range_66.endclass.rate:         1.0
 rep0_range_66.endclass.cost:           0
 rep0_range_66.endclass.prob: 0.011764705882352941
 rep0_range_66.endclass.expected_cost:  0
-rep0_range_66.endclass.in_bound:   False
+rep0_range_66.endclass.in_bound:    True
 rep0_range_66.endclass.at_finish:  False
 rep0_range_66.endclass.line_dist:      1
 rep0_range_66.endclass.num_modes:      0
-rep0_range_66.endclass.end_dist: 28.277404288264588
-rep0_range_66.endclass.tot_deviation: 0.25279618440772844
+rep0_range_66.endclass.end_dist: 2.198881636367323
+rep0_range_66.endclass.tot_deviation: 0.11854376111531574
 rep0_range_66.endclass.faults:        {}
 rep0_range_66.endclass.classification: incomplete mission
-rep0_range_66.endclass.end_x: 0.6270032453420129
-rep0_range_66.endclass.end_y: 0.7034171604031787
+rep0_range_66.endclass.end_x: 28.504283016988044
+rep0_range_66.endclass.end_y: 3.0813402802537593
 rep0_range_66.endclass.endpt:   array(2)
 rep0_range_67.endclass.rate:         1.0
 rep0_range_67.endclass.cost:           0
 rep0_range_67.endclass.prob: 0.011764705882352941
 rep0_range_67.endclass.expected_cost:  0
 rep0_range_67.endclass.in_bound:    True
-rep0_range_67.endclass.at_finish:  False
+rep0_range_67.endclass.at_finish:   True
 rep0_range_67.endclass.line_dist:      1
 rep0_range_67.endclass.num_modes:      0
-rep0_range_67.endclass.end_dist: 5.6942890816851435
-rep0_range_67.endclass.tot_deviation: 0.18223502785226045
+rep0_range_67.endclass.end_dist:     0.0
+rep0_range_67.endclass.tot_deviation: 0.0771081674675882
 rep0_range_67.endclass.faults:        {}
-rep0_range_67.endclass.classification: incomplete mission
-rep0_range_67.endclass.end_x: 25.56463051953614
-rep0_range_67.endclass.end_y: -5.236687839167172
+rep0_range_67.endclass.classification: nominal mission
+rep0_range_67.endclass.end_x: 29.336048086964233
+rep0_range_67.endclass.end_y: -0.9457348531805283
 rep0_range_67.endclass.endpt:   array(2)
 rep0_range_68.endclass.rate:         1.0
 rep0_range_68.endclass.cost:           0
@@ -1793,11 +1808,11 @@ rep0_range_68.endclass.at_finish:   True
 rep0_range_68.endclass.line_dist:      1
 rep0_range_68.endclass.num_modes:      0
 rep0_range_68.endclass.end_dist:     0.0
-rep0_range_68.endclass.tot_deviation: 0.1225151434877088
+rep0_range_68.endclass.tot_deviation: 0.04474820768614523
 rep0_range_68.endclass.faults:        {}
 rep0_range_68.endclass.classification: nominal mission
-rep0_range_68.endclass.end_x: 28.9849136922847
-rep0_range_68.endclass.end_y: -6.429238234483911
+rep0_range_68.endclass.end_x: 28.908813125338703
+rep0_range_68.endclass.end_y: -6.4304668406770125
 rep0_range_68.endclass.endpt:   array(2)
 rep0_range_69.endclass.rate:         1.0
 rep0_range_69.endclass.cost:           0
@@ -1808,11 +1823,11 @@ rep0_range_69.endclass.at_finish:   True
 rep0_range_69.endclass.line_dist:      1
 rep0_range_69.endclass.num_modes:      0
 rep0_range_69.endclass.end_dist:     0.0
-rep0_range_69.endclass.tot_deviation: 0.08366717622777053
+rep0_range_69.endclass.tot_deviation: 0.028115646146894564
 rep0_range_69.endclass.faults:        {}
 rep0_range_69.endclass.classification: nominal mission
-rep0_range_69.endclass.end_x: 29.138085325670218
-rep0_range_69.endclass.end_y: -3.243907713839231
+rep0_range_69.endclass.end_x: 29.116436099060007
+rep0_range_69.endclass.end_y: -3.225055887229985
 rep0_range_69.endclass.endpt:   array(2)
 rep0_range_70.endclass.rate:         1.0
 rep0_range_70.endclass.cost:           0
@@ -1822,42 +1837,42 @@ rep0_range_70.endclass.in_bound:   False
 rep0_range_70.endclass.at_finish:  False
 rep0_range_70.endclass.line_dist:      1
 rep0_range_70.endclass.num_modes:      0
-rep0_range_70.endclass.end_dist: 28.445826042740585
-rep0_range_70.endclass.tot_deviation: 0.314036446266242
+rep0_range_70.endclass.end_dist: 26.823138110731406
+rep0_range_70.endclass.tot_deviation: 0.20645065180004699
 rep0_range_70.endclass.faults:        {}
 rep0_range_70.endclass.classification: incomplete mission
-rep0_range_70.endclass.end_x: 0.4760389492712123
-rep0_range_70.endclass.end_y: 0.6755705918363415
+rep0_range_70.endclass.end_x: 3.064238683651353
+rep0_range_70.endclass.end_y: 6.905349736476489
 rep0_range_70.endclass.endpt:   array(2)
 rep0_range_71.endclass.rate:         1.0
 rep0_range_71.endclass.cost:           0
 rep0_range_71.endclass.prob: 0.011764705882352941
 rep0_range_71.endclass.expected_cost:  0
-rep0_range_71.endclass.in_bound:   False
+rep0_range_71.endclass.in_bound:    True
 rep0_range_71.endclass.at_finish:  False
 rep0_range_71.endclass.line_dist:      1
 rep0_range_71.endclass.num_modes:      0
-rep0_range_71.endclass.end_dist: 28.29653515637125
-rep0_range_71.endclass.tot_deviation: 0.2619154224258985
+rep0_range_71.endclass.end_dist: 4.706638544330022
+rep0_range_71.endclass.tot_deviation: 0.12755065536085175
 rep0_range_71.endclass.faults:        {}
 rep0_range_71.endclass.classification: incomplete mission
-rep0_range_71.endclass.end_x: 0.6075632853584889
-rep0_range_71.endclass.end_y: 0.7014629003459592
+rep0_range_71.endclass.end_x: 27.36719115123559
+rep0_range_71.endclass.end_y: 5.332993393422351
 rep0_range_71.endclass.endpt:   array(2)
 rep0_range_72.endclass.rate:         1.0
 rep0_range_72.endclass.cost:           0
 rep0_range_72.endclass.prob: 0.011764705882352941
 rep0_range_72.endclass.expected_cost:  0
 rep0_range_72.endclass.in_bound:    True
-rep0_range_72.endclass.at_finish:  False
+rep0_range_72.endclass.at_finish:   True
 rep0_range_72.endclass.line_dist:      1
 rep0_range_72.endclass.num_modes:      0
-rep0_range_72.endclass.end_dist: 6.890147241315012
-rep0_range_72.endclass.tot_deviation: 0.19872465093713085
+rep0_range_72.endclass.end_dist:     0.0
+rep0_range_72.endclass.tot_deviation: 0.08241168312823173
 rep0_range_72.endclass.faults:        {}
-rep0_range_72.endclass.classification: incomplete mission
-rep0_range_72.endclass.end_x: 24.848064081728296
-rep0_range_72.endclass.end_y: -6.207276641169724
+rep0_range_72.endclass.classification: nominal mission
+rep0_range_72.endclass.end_x: 29.48765747739592
+rep0_range_72.endclass.end_y: -0.7904473109208641
 rep0_range_72.endclass.endpt:   array(2)
 rep0_range_73.endclass.rate:         1.0
 rep0_range_73.endclass.cost:           0
@@ -1868,11 +1883,11 @@ rep0_range_73.endclass.at_finish:   True
 rep0_range_73.endclass.line_dist:      1
 rep0_range_73.endclass.num_modes:      0
 rep0_range_73.endclass.end_dist:     0.0
-rep0_range_73.endclass.tot_deviation: 0.1372137456637202
+rep0_range_73.endclass.tot_deviation: 0.048906467417241244
 rep0_range_73.endclass.faults:        {}
 rep0_range_73.endclass.classification: nominal mission
-rep0_range_73.endclass.end_x: 29.06597575460469
-rep0_range_73.endclass.end_y: -6.937122775298684
+rep0_range_73.endclass.end_x: 28.971267111905096
+rep0_range_73.endclass.end_y: -6.936898211758005
 rep0_range_73.endclass.endpt:   array(2)
 rep0_range_74.endclass.rate:         1.0
 rep0_range_74.endclass.cost:           0
@@ -1883,11 +1898,11 @@ rep0_range_74.endclass.at_finish:   True
 rep0_range_74.endclass.line_dist:      1
 rep0_range_74.endclass.num_modes:      0
 rep0_range_74.endclass.end_dist:     0.0
-rep0_range_74.endclass.tot_deviation: 0.09575844094097263
+rep0_range_74.endclass.tot_deviation: 0.03213489486981362
 rep0_range_74.endclass.faults:        {}
 rep0_range_74.endclass.classification: nominal mission
-rep0_range_74.endclass.end_x: 29.167928392027573
-rep0_range_74.endclass.end_y: -3.5177121370112236
+rep0_range_74.endclass.end_x: 29.355563239023194
+rep0_range_74.endclass.end_y: -3.6557764559372896
 rep0_range_74.endclass.endpt:   array(2)
 rep0_range_75.endclass.rate:         1.0
 rep0_range_75.endclass.cost:           0
@@ -1897,57 +1912,57 @@ rep0_range_75.endclass.in_bound:   False
 rep0_range_75.endclass.at_finish:  False
 rep0_range_75.endclass.line_dist:      1
 rep0_range_75.endclass.num_modes:      0
-rep0_range_75.endclass.end_dist: 28.45583477972009
-rep0_range_75.endclass.tot_deviation: 0.31697408986565734
+rep0_range_75.endclass.end_dist: 27.100934207948242
+rep0_range_75.endclass.tot_deviation: 0.20616476938507275
 rep0_range_75.endclass.faults:        {}
 rep0_range_75.endclass.classification: incomplete mission
-rep0_range_75.endclass.end_x: 0.46716557167960754
-rep0_range_75.endclass.end_y: 0.6729501978604223
+rep0_range_75.endclass.end_x: 2.9544758962846203
+rep0_range_75.endclass.end_y: 7.504025499000269
 rep0_range_75.endclass.endpt:   array(2)
 rep0_range_76.endclass.rate:         1.0
 rep0_range_76.endclass.cost:           0
 rep0_range_76.endclass.prob: 0.011764705882352941
 rep0_range_76.endclass.expected_cost:  0
-rep0_range_76.endclass.in_bound:   False
+rep0_range_76.endclass.in_bound:    True
 rep0_range_76.endclass.at_finish:  False
 rep0_range_76.endclass.line_dist:      1
 rep0_range_76.endclass.num_modes:      0
-rep0_range_76.endclass.end_dist: 28.313332477150254
-rep0_range_76.endclass.tot_deviation: 0.26966160612923196
+rep0_range_76.endclass.end_dist: 7.172076922667674
+rep0_range_76.endclass.tot_deviation: 0.13077214484659536
 rep0_range_76.endclass.faults:        {}
 rep0_range_76.endclass.classification: incomplete mission
-rep0_range_76.endclass.end_x: 0.5904663460069287
-rep0_range_76.endclass.end_y: 0.699369713099375
+rep0_range_76.endclass.end_x: 25.895516761943107
+rep0_range_76.endclass.end_y: 7.358975113627673
 rep0_range_76.endclass.endpt:   array(2)
 rep0_range_77.endclass.rate:         1.0
 rep0_range_77.endclass.cost:           0
 rep0_range_77.endclass.prob: 0.011764705882352941
 rep0_range_77.endclass.expected_cost:  0
-rep0_range_77.endclass.in_bound:   False
-rep0_range_77.endclass.at_finish:  False
+rep0_range_77.endclass.in_bound:    True
+rep0_range_77.endclass.at_finish:   True
 rep0_range_77.endclass.line_dist:      1
 rep0_range_77.endclass.num_modes:      0
-rep0_range_77.endclass.end_dist: 28.208717970684507
-rep0_range_77.endclass.tot_deviation: 0.2137573628689993
+rep0_range_77.endclass.end_dist:     0.0
+rep0_range_77.endclass.tot_deviation: 0.08645760722947114
 rep0_range_77.endclass.faults:        {}
-rep0_range_77.endclass.classification: incomplete mission
-rep0_range_77.endclass.end_x: 0.7045166183349069
-rep0_range_77.endclass.end_y: 0.7069263091131811
+rep0_range_77.endclass.classification: nominal mission
+rep0_range_77.endclass.end_x: 29.425951628409738
+rep0_range_77.endclass.end_y: -0.9372430125336007
 rep0_range_77.endclass.endpt:   array(2)
 rep0_range_78.endclass.rate:         1.0
 rep0_range_78.endclass.cost:           0
 rep0_range_78.endclass.prob: 0.011764705882352941
 rep0_range_78.endclass.expected_cost:  0
 rep0_range_78.endclass.in_bound:    True
-rep0_range_78.endclass.at_finish:  False
+rep0_range_78.endclass.at_finish:   True
 rep0_range_78.endclass.line_dist:      1
 rep0_range_78.endclass.num_modes:      0
-rep0_range_78.endclass.end_dist: 1.5855378215111895
-rep0_range_78.endclass.tot_deviation: 0.1514899446098637
+rep0_range_78.endclass.end_dist:     0.0
+rep0_range_78.endclass.tot_deviation: 0.05242733460217779
 rep0_range_78.endclass.faults:        {}
-rep0_range_78.endclass.classification: incomplete mission
-rep0_range_78.endclass.end_x: 27.38841623442044
-rep0_range_78.endclass.end_y: -6.889895302939244
+rep0_range_78.endclass.classification: nominal mission
+rep0_range_78.endclass.end_x: 28.99668482843865
+rep0_range_78.endclass.end_y: -7.438957825123864
 rep0_range_78.endclass.endpt:   array(2)
 rep0_range_79.endclass.rate:         1.0
 rep0_range_79.endclass.cost:           0
@@ -1958,11 +1973,11 @@ rep0_range_79.endclass.at_finish:   True
 rep0_range_79.endclass.line_dist:      1
 rep0_range_79.endclass.num_modes:      0
 rep0_range_79.endclass.end_dist:     0.0
-rep0_range_79.endclass.tot_deviation: 0.10786989409874645
+rep0_range_79.endclass.tot_deviation: 0.03615875502895397
 rep0_range_79.endclass.faults:        {}
 rep0_range_79.endclass.classification: nominal mission
-rep0_range_79.endclass.end_x: 29.604163902300524
-rep0_range_79.endclass.end_y: -4.108534325762307
+rep0_range_79.endclass.end_x: 29.296223597696212
+rep0_range_79.endclass.end_y: -3.868440839854516
 rep0_range_79.endclass.endpt:   array(2)
 rep0_range_80.endclass.rate:         1.0
 rep0_range_80.endclass.cost:           0
@@ -1972,57 +1987,57 @@ rep0_range_80.endclass.in_bound:   False
 rep0_range_80.endclass.at_finish:  False
 rep0_range_80.endclass.line_dist:      1
 rep0_range_80.endclass.num_modes:      0
-rep0_range_80.endclass.end_dist: 28.464758603286114
-rep0_range_80.endclass.tot_deviation: 0.31947310466698464
+rep0_range_80.endclass.end_dist: 27.10663026149649
+rep0_range_80.endclass.tot_deviation: 0.2291470953234815
 rep0_range_80.endclass.faults:        {}
 rep0_range_80.endclass.classification: incomplete mission
-rep0_range_80.endclass.end_x: 0.4594159647529185
-rep0_range_80.endclass.end_y: 0.6705620604973453
+rep0_range_80.endclass.end_x: 3.0769258596114826
+rep0_range_80.endclass.end_y: 7.894286824166977
 rep0_range_80.endclass.endpt:   array(2)
 rep0_range_81.endclass.rate:         1.0
 rep0_range_81.endclass.cost:           0
 rep0_range_81.endclass.prob: 0.011764705882352941
 rep0_range_81.endclass.expected_cost:  0
-rep0_range_81.endclass.in_bound:   False
+rep0_range_81.endclass.in_bound:    True
 rep0_range_81.endclass.at_finish:  False
 rep0_range_81.endclass.line_dist:      1
 rep0_range_81.endclass.num_modes:      0
-rep0_range_81.endclass.end_dist: 28.32816990227081
-rep0_range_81.endclass.tot_deviation: 0.27630020290174767
+rep0_range_81.endclass.end_dist: 8.451600957356657
+rep0_range_81.endclass.tot_deviation: 0.13644617918369573
 rep0_range_81.endclass.faults:        {}
 rep0_range_81.endclass.classification: incomplete mission
-rep0_range_81.endclass.end_x: 0.5753401674204985
-rep0_range_81.endclass.end_y: 0.6972181084548181
+rep0_range_81.endclass.end_x: 23.92486026024334
+rep0_range_81.endclass.end_y: 7.57456263046494
 rep0_range_81.endclass.endpt:   array(2)
 rep0_range_82.endclass.rate:         1.0
 rep0_range_82.endclass.cost:           0
 rep0_range_82.endclass.prob: 0.011764705882352941
 rep0_range_82.endclass.expected_cost:  0
-rep0_range_82.endclass.in_bound:   False
-rep0_range_82.endclass.at_finish:  False
+rep0_range_82.endclass.in_bound:    True
+rep0_range_82.endclass.at_finish:   True
 rep0_range_82.endclass.line_dist:      1
 rep0_range_82.endclass.num_modes:      0
-rep0_range_82.endclass.end_dist: 28.229303884062908
-rep0_range_82.endclass.tot_deviation: 0.22464200266132195
+rep0_range_82.endclass.end_dist:     0.0
+rep0_range_82.endclass.tot_deviation: 0.08966577184875783
 rep0_range_82.endclass.faults:        {}
-rep0_range_82.endclass.classification: incomplete mission
-rep0_range_82.endclass.end_x: 0.6842350326878053
-rep0_range_82.endclass.end_y: 0.7066488862024055
+rep0_range_82.endclass.classification: nominal mission
+rep0_range_82.endclass.end_x: 29.517328157372404
+rep0_range_82.endclass.end_y: -0.8402492510690385
 rep0_range_82.endclass.endpt:   array(2)
 rep0_range_83.endclass.rate:         1.0
 rep0_range_83.endclass.cost:           0
 rep0_range_83.endclass.prob: 0.011764705882352941
 rep0_range_83.endclass.expected_cost:  0
 rep0_range_83.endclass.in_bound:    True
-rep0_range_83.endclass.at_finish:  False
+rep0_range_83.endclass.at_finish:   True
 rep0_range_83.endclass.line_dist:      1
 rep0_range_83.endclass.num_modes:      0
-rep0_range_83.endclass.end_dist: 0.22753625934866703
-rep0_range_83.endclass.tot_deviation: 0.16526381042223026
+rep0_range_83.endclass.end_dist:     0.0
+rep0_range_83.endclass.tot_deviation: 0.055920369123655764
 rep0_range_83.endclass.faults:        {}
-rep0_range_83.endclass.classification: incomplete mission
-rep0_range_83.endclass.end_x: 28.68345922393005
-rep0_range_83.endclass.end_y: -7.8425482454625834
+rep0_range_83.endclass.classification: nominal mission
+rep0_range_83.endclass.end_x: 28.989660201763556
+rep0_range_83.endclass.end_y: -7.932951735588295
 rep0_range_83.endclass.endpt:   array(2)
 rep0_range_84.endclass.rate:         1.0
 rep0_range_84.endclass.cost:           0
@@ -2033,11 +2048,11 @@ rep0_range_84.endclass.at_finish:   True
 rep0_range_84.endclass.line_dist:      1
 rep0_range_84.endclass.num_modes:      0
 rep0_range_84.endclass.end_dist:     0.0
-rep0_range_84.endclass.tot_deviation: 0.11989088615099242
+rep0_range_84.endclass.tot_deviation: 0.04015079601641714
 rep0_range_84.endclass.faults:        {}
 rep0_range_84.endclass.classification: nominal mission
-rep0_range_84.endclass.end_x: 29.246112622860345
-rep0_range_84.endclass.end_y: -4.086569755049319
+rep0_range_84.endclass.end_x: 29.22108539365357
+rep0_range_84.endclass.end_y: -4.057941864347776
 rep0_range_84.endclass.endpt:   array(2)
 </pre></div></div>
 </div>
@@ -2124,32 +2139,32 @@ rep0_range_84.endclass.endpt:   array(2)
     <tr>
       <th>8.0</th>
       <th>10</th>
-      <td>28.464759</td>
-      <td>0.319473</td>
-    </tr>
-    <tr>
-      <th>7.5</th>
-      <th>10</th>
-      <td>28.455835</td>
-      <td>0.316974</td>
+      <td>27.106630</td>
+      <td>0.229147</td>
     </tr>
     <tr>
       <th>7.0</th>
       <th>10</th>
-      <td>28.445826</td>
-      <td>0.314036</td>
+      <td>26.823138</td>
+      <td>0.206451</td>
     </tr>
     <tr>
-      <th>6.5</th>
+      <th>7.5</th>
       <th>10</th>
-      <td>28.434476</td>
-      <td>0.310542</td>
+      <td>27.100934</td>
+      <td>0.206165</td>
     </tr>
     <tr>
       <th>6.0</th>
       <th>10</th>
-      <td>28.421448</td>
-      <td>0.306312</td>
+      <td>26.345580</td>
+      <td>0.203384</td>
+    </tr>
+    <tr>
+      <th>6.5</th>
+      <th>10</th>
+      <td>26.579662</td>
+      <td>0.202847</td>
     </tr>
     <tr>
       <th>...</th>
@@ -2164,12 +2179,7 @@ rep0_range_84.endclass.endpt:   array(2)
       <td>0.000000</td>
     </tr>
     <tr>
-      <th>50</th>
-      <td>0.000000</td>
-      <td>0.000000</td>
-    </tr>
-    <tr>
-      <th>10</th>
+      <th>20</th>
       <td>0.000000</td>
       <td>0.000000</td>
     </tr>
@@ -2179,7 +2189,12 @@ rep0_range_84.endclass.endpt:   array(2)
       <td>0.000000</td>
     </tr>
     <tr>
-      <th>20</th>
+      <th>10</th>
+      <td>0.000000</td>
+      <td>0.000000</td>
+    </tr>
+    <tr>
+      <th>50</th>
       <td>0.000000</td>
       <td>0.000000</td>
     </tr>
@@ -2244,63 +2259,63 @@ rep0_range_84.endclass.endpt:   array(2)
   </thead>
   <tbody>
     <tr>
-      <th>7.5</th>
-      <td>86.563423</td>
+      <th>8.0</th>
+      <td>35.558231</td>
     </tr>
     <tr>
-      <th>8.0</th>
-      <td>85.249769</td>
+      <th>7.5</th>
+      <td>34.273011</td>
     </tr>
     <tr>
       <th>7.0</th>
-      <td>63.632508</td>
+      <td>31.529777</td>
     </tr>
     <tr>
       <th>6.5</th>
-      <td>62.406170</td>
+      <td>28.778543</td>
     </tr>
     <tr>
       <th>6.0</th>
-      <td>61.207930</td>
+      <td>26.345580</td>
     </tr>
     <tr>
       <th>5.5</th>
-      <td>60.150356</td>
+      <td>11.544091</td>
     </tr>
     <tr>
       <th>5.0</th>
-      <td>59.466884</td>
+      <td>8.621391</td>
     </tr>
     <tr>
       <th>4.5</th>
-      <td>35.179679</td>
+      <td>8.159540</td>
     </tr>
     <tr>
       <th>4.0</th>
-      <td>34.913898</td>
+      <td>4.796435</td>
     </tr>
     <tr>
       <th>3.5</th>
-      <td>32.246384</td>
+      <td>3.249137</td>
     </tr>
     <tr>
       <th>3.0</th>
-      <td>30.919348</td>
-    </tr>
-    <tr>
-      <th>2.5</th>
-      <td>29.844836</td>
-    </tr>
-    <tr>
-      <th>1.5</th>
-      <td>6.298143</td>
-    </tr>
-    <tr>
-      <th>2.0</th>
-      <td>5.097185</td>
+      <td>0.170197</td>
     </tr>
     <tr>
       <th>0.5</th>
+      <td>0.000000</td>
+    </tr>
+    <tr>
+      <th>2.5</th>
+      <td>0.000000</td>
+    </tr>
+    <tr>
+      <th>2.0</th>
+      <td>0.000000</td>
+    </tr>
+    <tr>
+      <th>1.5</th>
       <td>0.000000</td>
     </tr>
     <tr>
@@ -2356,8 +2371,8 @@ rep0_range_84.endclass.endpt:   array(2)
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-{&#39;nominal mission&#39;: 0.5764705882352943,
- &#39;incomplete mission&#39;: 0.4235294117647062}
+{&#39;nominal mission&#39;: 0.8235294117647052,
+ &#39;incomplete mission&#39;: 0.17647058823529416}
 </pre></div></div>
 </div>
 </section>
@@ -2406,7 +2421,7 @@ SampleApproach for rover with:
 </div>
 <div class="output_area stderr docutils container">
 <div class="highlight"><pre>
-NESTED SCENARIOS COMPLETE: 100%|██████████| 85/85 [00:47&lt;00:00,  1.80it/s]
+NESTED SCENARIOS COMPLETE: 100%|██████████| 85/85 [00:52&lt;00:00,  1.61it/s]
 </pre></div></div>
 </div>
 <p>The resulting endclass/mdlhist dictionary is in turn nested within operational scenarios.</p>
@@ -2746,9 +2761,16 @@ dict_keys([&#39;rep0_range_0.power_no_charge_t1.endclass.rate&#39;, &#39;rep0_ra
     <tr>
       <th>8.0</th>
       <th>40</th>
-      <td>15.089792</td>
-      <td>0.227536</td>
+      <td>14.976024</td>
+      <td>0.000000</td>
       <td>29.952048</td>
+    </tr>
+    <tr>
+      <th>7.5</th>
+      <th>40</th>
+      <td>14.913633</td>
+      <td>0.000000</td>
+      <td>29.827266</td>
     </tr>
     <tr>
       <th>7.0</th>
@@ -2772,53 +2794,44 @@ dict_keys([&#39;rep0_range_0.power_no_charge_t1.endclass.rate&#39;, &#39;rep0_ra
       <td>29.495921</td>
     </tr>
     <tr>
-      <th>5.5</th>
-      <th>40</th>
-      <td>14.700815</td>
+      <th>...</th>
+      <th>...</th>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+    </tr>
+    <tr>
+      <th rowspan="3" valign="top">0.0</th>
+      <th>10</th>
+      <td>14.450000</td>
       <td>0.000000</td>
-      <td>29.401630</td>
+      <td>28.900000</td>
     </tr>
     <tr>
-      <th>...</th>
-      <th>...</th>
-      <td>...</td>
-      <td>...</td>
-      <td>...</td>
+      <th>30</th>
+      <td>14.450000</td>
+      <td>0.000000</td>
+      <td>28.900000</td>
     </tr>
     <tr>
-      <th>6.5</th>
-      <th>10</th>
-      <td>28.668679</td>
-      <td>28.434476</td>
-      <td>28.785780</td>
-    </tr>
-    <tr>
-      <th>5.5</th>
-      <th>10</th>
-      <td>28.654175</td>
-      <td>28.406287</td>
-      <td>28.778119</td>
-    </tr>
-    <tr>
-      <th>4.5</th>
-      <th>10</th>
-      <td>28.634107</td>
-      <td>28.366833</td>
-      <td>28.767744</td>
-    </tr>
-    <tr>
-      <th>1.5</th>
-      <th>10</th>
-      <td>17.599148</td>
-      <td>6.298143</td>
-      <td>23.249651</td>
+      <th>50</th>
+      <td>14.450000</td>
+      <td>0.000000</td>
+      <td>28.900000</td>
     </tr>
     <tr>
       <th>7.5</th>
-      <th>40</th>
-      <td>15.706402</td>
-      <td>1.585538</td>
-      <td>22.766834</td>
+      <th>10</th>
+      <td>28.002385</td>
+      <td>27.100934</td>
+      <td>28.453111</td>
+    </tr>
+    <tr>
+      <th>7.0</th>
+      <th>10</th>
+      <td>27.863240</td>
+      <td>26.823138</td>
+      <td>28.383291</td>
     </tr>
   </tbody>
 </table>
@@ -2866,6 +2879,22 @@ dict_keys([&#39;rep0_range_0.power_no_charge_t1.endclass.rate&#39;, &#39;rep0_ra
 </div>
 <div class="output_area docutils container">
 <img alt="../../_images/examples_rover_ParameterSample_Use-Cases_47_0.png" src="../../_images/examples_rover_ParameterSample_Use-Cases_47_0.png" />
+</div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>
+</pre></div>
 </div>
 </div>
 </section>

@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>fmdtools.define.block &mdash; fmdtools 2.0-rc-1 documentation</title>
+  <title>fmdtools.define.block &mdash; fmdtools 2.0-rc-2 documentation</title>
       <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
     <link rel="shortcut icon" href="../_static/fmdtools_ico.ico"/>
@@ -68,14 +68,14 @@
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="Development%20Guide.html#intro-to-fmdtools">Intro to fmdtools</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="Intro_to_fmdtools.html">Intro to resilience modelling, simulation, and visualization in Python with fmdtools.</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="Intro_to_fmdtools.html">Intro to resilience modeling, simulation, and visualization in Python with fmdtools.</a><ul>
 <li class="toctree-l4"><a class="reference internal" href="Intro_to_fmdtools.html#author-daniel-hulse">Author: Daniel Hulse</a></li>
-<li class="toctree-l4"><a class="reference internal" href="Intro_to_fmdtools.html#version-2-0-rc-1">Version: 2.0-rc-1</a></li>
+<li class="toctree-l4"><a class="reference internal" href="Intro_to_fmdtools.html#version-2-0-rc-2">Version: 2.0-rc-2</a></li>
 </ul>
 </li>
 <li class="toctree-l3"><a class="reference internal" href="Intro_to_fmdtools.html#overview">Overview</a></li>
 <li class="toctree-l3"><a class="reference internal" href="Intro_to_fmdtools.html#prerequisites">Prerequisites</a></li>
-<li class="toctree-l3"><a class="reference internal" href="Intro_to_fmdtools.html#motivation-modelling-system-resilience">Motivation: Modelling System Resilience</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Intro_to_fmdtools.html#motivation-modeling-system-resilience">Motivation: Modeling System Resilience</a></li>
 <li class="toctree-l3"><a class="reference internal" href="Intro_to_fmdtools.html#why-is-resilience-important">Why is Resilience Important?</a></li>
 <li class="toctree-l3"><a class="reference internal" href="Intro_to_fmdtools.html#enabling-proactive-design-process">Enabling proactive design process</a></li>
 <li class="toctree-l3"><a class="reference internal" href="Intro_to_fmdtools.html#why-fmdtools-possible-competitors">Why fmdtools? Possible Competitors:</a></li>
@@ -288,6 +288,18 @@
 </li>
 </ul>
 </li>
+<li class="toctree-l2"><a class="reference internal" href="../examples/Examples.html#taxiway">Taxiway</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../examples/taxiway/Paper_Notebook.html">Taxiway Model Overview</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../examples/taxiway/Paper_Notebook.html#Model-Simulation">Model Simulation</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../examples/taxiway/Paper_Notebook.html#Fault-Simulation-and-Analysis">Fault Simulation and Analysis</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../examples/taxiway/Paper_Notebook.html#Perception-Fault---AC-Vision-Fault">Perception Fault - AC Vision Fault</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../examples/taxiway/Paper_Notebook.html#Communications-Fault---Poor-land-command-by-ATC">Communications Fault - Poor land command by ATC</a></li>
+</ul>
+</li>
+</ul>
+</li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="Glossary.html">Glossary</a></li>
@@ -310,13 +322,11 @@
 </li>
 <li class="toctree-l3"><a class="reference internal" href="fmdtools.define.container.html">fmdtools.define.container</a><ul>
 <li class="toctree-l4"><a class="reference internal" href="fmdtools.define.container.html#fmdtools-define-container-base">fmdtools.define.container.base</a></li>
-<li class="toctree-l4"><a class="reference internal" href="fmdtools.define.container.html#module-0">fmdtools.define.container.mode</a></li>
+<li class="toctree-l4"><a class="reference internal" href="fmdtools.define.container.html#module-fmdtools.define.container.mode">fmdtools.define.container.mode</a></li>
 <li class="toctree-l4"><a class="reference internal" href="fmdtools.define.container.html#module-fmdtools.define.container.state">fmdtools.define.container.state</a></li>
 <li class="toctree-l4"><a class="reference internal" href="fmdtools.define.container.html#fmdtools-define-container-parameter">fmdtools.define.container.parameter</a></li>
 <li class="toctree-l4"><a class="reference internal" href="fmdtools.define.container.html#module-fmdtools.define.container.rand">fmdtools.define.container.rand</a></li>
 <li class="toctree-l4"><a class="reference internal" href="fmdtools.define.container.html#module-fmdtools.define.container.time">fmdtools.define.container.time</a></li>
-<li class="toctree-l4"><a class="reference internal" href="fmdtools.define.container.html#fmdtools-define-container-geom">fmdtools.define.container.geom</a></li>
-<li class="toctree-l4"><a class="reference internal" href="fmdtools.define.container.html#fmdtools-define-container-coords">fmdtools.define.container.coords</a></li>
 </ul>
 </li>
 <li class="toctree-l3"><a class="reference internal" href="fmdtools.define.flow.html">fmdtools.define.flow</a><ul>
@@ -403,8 +413,9 @@
 <dt class="sig sig-object py" id="fmdtools.define.block.base.Block">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">fmdtools.define.block.base.</span></span><span class="sig-name descname"><span class="pre">Block</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">flows</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">{}</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">h</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">{}</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.define.block.base.Block" title="Permalink to this definition"></a></dt>
 <dd><p>Bases: <a class="reference internal" href="#fmdtools.define.block.base.Simulable" title="fmdtools.define.block.base.Simulable"><code class="xref py py-class docutils literal notranslate"><span class="pre">Simulable</span></code></a></p>
-<p>Superclass for Function and Component subclasses.</p>
-<p>Has functions for model setup, querying state, reseting the model</p>
+<p>Superclass for Function, Component, and Action subclasses.</p>
+<p>Has functions for model setup, querying state, and reseting the model.</p>
+<p>…</p>
 <dl class="py attribute">
 <dt class="sig sig-object py" id="fmdtools.define.block.base.Block.p">
 <span class="sig-name descname"><span class="pre">p</span></span><a class="headerlink" href="#fmdtools.define.block.base.Block.p" title="Permalink to this definition"></a></dt>
@@ -433,7 +444,7 @@
 <dd><p>Internal Mode for the block. Instanced from container_m</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type<span class="colon">:</span></dt>
-<dd class="field-odd"><p><a class="reference internal" href="fmdtools.define.container.html#id16" title="fmdtools.define.container.mode.Mode">Mode</a></p>
+<dd class="field-odd"><p><a class="reference internal" href="fmdtools.define.container.html#fmdtools.define.container.mode.Mode" title="fmdtools.define.container.mode.Mode">Mode</a></p>
 </dd>
 </dl>
 </dd></dl>
@@ -481,6 +492,11 @@
 </dd>
 </dl>
 </dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="fmdtools.define.block.base.Block.check_dict_creation">
+<span class="sig-name descname"><span class="pre">check_dict_creation</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">True</span></em><a class="headerlink" href="#fmdtools.define.block.base.Block.check_dict_creation" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="fmdtools.define.block.base.Block.check_flows">
@@ -628,7 +644,7 @@ The default is 1, which just chooses single fault modes.</p></li>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>time</strong> (<em>float</em>) – The current timestep.</p></li>
+<li><p><strong>time</strong> (<em>float</em>) – The current time-step.</p></li>
 <li><p><strong>faults</strong> (<em>dict</em>) – Faults to inject during this propagation step.
 With structure {fname: [‘fault1’, ‘fault2’…]}</p></li>
 <li><p><strong>disturbances</strong> (<em>dict</em>) – Variables to change during this propagation step.
@@ -686,14 +702,14 @@ Options are:
 <div><p>vector [t1 … tn]</p>
 </div></blockquote>
 </dd>
-<dt>dt<span class="classifier">float</span></dt><dd><p>timestep used in the simulation. default is 1.0</p>
+<dt>dt<span class="classifier">float</span></dt><dd><p>time-step used in the simulation. default is 1.0</p>
 </dd>
 <dt>units<span class="classifier">str</span></dt><dd><p>time-units. default is hours`</p>
 </dd>
 <dt>end_condition<span class="classifier">str</span></dt><dd><p>Name of indicator method to use to end the simulation. If not provided (‘’),
 the simulation ends at the final time. Default is ‘’</p>
 </dd>
-<dt>use_local<span class="classifier">bool</span></dt><dd><p>Whether to use locally-defined timesteps in functions (if any).
+<dt>use_local<span class="classifier">bool</span></dt><dd><p>Whether to use locally-defined time-steps in functions (if any).
 Default is True.</p>
 </dd>
 </dl>
@@ -806,6 +822,7 @@ Default is True.</p>
 <dd><p>Bases: <a class="reference internal" href="fmdtools.define.object.html#fmdtools.define.object.base.BaseObject" title="fmdtools.define.object.base.BaseObject"><code class="xref py py-class docutils literal notranslate"><span class="pre">BaseObject</span></code></a></p>
 <p>Base class for object which simulate (blocks and architectures).</p>
 <p>Note that classes solely based on Simulable may not be able to be simulated.</p>
+<p>…</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
@@ -1118,16 +1135,6 @@ them.</p>
 </dl>
 </dd></dl>
 
-<dl class="py attribute">
-<dt class="sig sig-object py" id="fmdtools.define.block.component.Component.m">
-<span class="sig-name descname"><span class="pre">m</span></span><a class="headerlink" href="#fmdtools.define.block.component.Component.m" title="Permalink to this definition"></a></dt>
-<dd></dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="fmdtools.define.block.component.Component.s">
-<span class="sig-name descname"><span class="pre">s</span></span><a class="headerlink" href="#fmdtools.define.block.component.Component.s" title="Permalink to this definition"></a></dt>
-<dd></dd></dl>
-
 </dd></dl>
 
 </section>
@@ -1149,29 +1156,9 @@ them.</p>
 <dd><p>Bases: <a class="reference internal" href="#fmdtools.define.block.function.Function" title="fmdtools.define.block.function.Function"><code class="xref py py-class docutils literal notranslate"><span class="pre">Function</span></code></a></p>
 <p>Example Function block for testing.</p>
 <dl class="py attribute">
-<dt class="sig sig-object py" id="fmdtools.define.block.function.ExampleFunction.aa">
-<span class="sig-name descname"><span class="pre">aa</span></span><a class="headerlink" href="#fmdtools.define.block.function.ExampleFunction.aa" title="Permalink to this definition"></a></dt>
-<dd></dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="fmdtools.define.block.function.ExampleFunction.archs">
-<span class="sig-name descname"><span class="pre">archs</span></span><a class="headerlink" href="#fmdtools.define.block.function.ExampleFunction.archs" title="Permalink to this definition"></a></dt>
-<dd></dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="fmdtools.define.block.function.ExampleFunction.args_f">
-<span class="sig-name descname"><span class="pre">args_f</span></span><a class="headerlink" href="#fmdtools.define.block.function.ExampleFunction.args_f" title="Permalink to this definition"></a></dt>
-<dd></dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="fmdtools.define.block.function.ExampleFunction.ca">
-<span class="sig-name descname"><span class="pre">ca</span></span><a class="headerlink" href="#fmdtools.define.block.function.ExampleFunction.ca" title="Permalink to this definition"></a></dt>
-<dd></dd></dl>
-
-<dl class="py attribute">
 <dt class="sig sig-object py" id="fmdtools.define.block.function.ExampleFunction.container_m">
 <span class="sig-name descname"><span class="pre">container_m</span></span><a class="headerlink" href="#fmdtools.define.block.function.ExampleFunction.container_m" title="Permalink to this definition"></a></dt>
-<dd><p>alias of <a class="reference internal" href="fmdtools.define.container.html#id0" title="fmdtools.define.container.mode.ExampleMode"><code class="xref py py-class docutils literal notranslate"><span class="pre">ExampleMode</span></code></a></p>
+<dd><p>alias of <a class="reference internal" href="fmdtools.define.container.html#fmdtools.define.container.mode.ExampleMode" title="fmdtools.define.container.mode.ExampleMode"><code class="xref py py-class docutils literal notranslate"><span class="pre">ExampleMode</span></code></a></p>
 </dd></dl>
 
 <dl class="py attribute">
@@ -1193,8 +1180,8 @@ them.</p>
 </dd></dl>
 
 <dl class="py attribute">
-<dt class="sig sig-object py" id="fmdtools.define.block.function.ExampleFunction.fa">
-<span class="sig-name descname"><span class="pre">fa</span></span><a class="headerlink" href="#fmdtools.define.block.function.ExampleFunction.fa" title="Permalink to this definition"></a></dt>
+<dt class="sig sig-object py" id="fmdtools.define.block.function.ExampleFunction.exf">
+<span class="sig-name descname"><span class="pre">exf</span></span><a class="headerlink" href="#fmdtools.define.block.function.ExampleFunction.exf" title="Permalink to this definition"></a></dt>
 <dd></dd></dl>
 
 <dl class="py method">
@@ -1219,6 +1206,7 @@ them.</p>
 <p>Functions are distinguished from other blocks in their ability to contain
 architectures, which may be used to hold multiple components or an action sequence
 graph within the function.</p>
+<p>…</p>
 <dl class="simple">
 <dt>arch<span class="classifier">Architecture</span></dt><dd><p>component, action, function architectures at ca, aa, fa, etc.</p>
 </dd>
@@ -1350,31 +1338,6 @@ graph within the function.</p>
 <p>Generic function block.</p>
 <p>For use when the user has not yet defined a class for the given (to be implemented)
 function block. Acts as a placeholder that enables simulation.</p>
-<dl class="py attribute">
-<dt class="sig sig-object py" id="fmdtools.define.block.function.GenericFxn.aa">
-<span class="sig-name descname"><span class="pre">aa</span></span><a class="headerlink" href="#fmdtools.define.block.function.GenericFxn.aa" title="Permalink to this definition"></a></dt>
-<dd></dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="fmdtools.define.block.function.GenericFxn.archs">
-<span class="sig-name descname"><span class="pre">archs</span></span><a class="headerlink" href="#fmdtools.define.block.function.GenericFxn.archs" title="Permalink to this definition"></a></dt>
-<dd></dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="fmdtools.define.block.function.GenericFxn.args_f">
-<span class="sig-name descname"><span class="pre">args_f</span></span><a class="headerlink" href="#fmdtools.define.block.function.GenericFxn.args_f" title="Permalink to this definition"></a></dt>
-<dd></dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="fmdtools.define.block.function.GenericFxn.ca">
-<span class="sig-name descname"><span class="pre">ca</span></span><a class="headerlink" href="#fmdtools.define.block.function.GenericFxn.ca" title="Permalink to this definition"></a></dt>
-<dd></dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="fmdtools.define.block.function.GenericFxn.fa">
-<span class="sig-name descname"><span class="pre">fa</span></span><a class="headerlink" href="#fmdtools.define.block.function.GenericFxn.fa" title="Permalink to this definition"></a></dt>
-<dd></dd></dl>
-
 </dd></dl>
 
 </section>
