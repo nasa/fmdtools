@@ -253,10 +253,10 @@ function filterTable(elem) { // eslint-disable-line no-unused-vars
 }
 </script>
     <h1>report.html</h1>
-    <p>Report generated on 02-Feb-2024 at 16:34:55 by <a href="https://pypi.python.org/pypi/pytest-html">pytest-html</a> v3.2.0</p>
+    <p>Report generated on 02-Feb-2024 at 17:06:03 by <a href="https://pypi.python.org/pypi/pytest-html">pytest-html</a> v3.2.0</p>
     <h2>Summary</h2>
-    <p>256 tests ran in 964.70 seconds. </p>
-    <p class="filter" hidden="true">(Un)check the boxes to filter the results.</p><input checked="true" class="filter" data-test-result="passed" hidden="true" name="filter_checkbox" onChange="filterTable(this)" type="checkbox"/><span class="passed">255 passed</span>, <input checked="true" class="filter" data-test-result="skipped" hidden="true" name="filter_checkbox" onChange="filterTable(this)" type="checkbox"/><span class="skipped">3 skipped</span>, <input checked="true" class="filter" data-test-result="failed" hidden="true" name="filter_checkbox" onChange="filterTable(this)" type="checkbox"/><span class="failed">1 failed</span>, <input checked="true" class="filter" data-test-result="error" hidden="true" name="filter_checkbox" onChange="filterTable(this)" type="checkbox"/><span class="error">7 errors</span>, <input checked="true" class="filter" data-test-result="xfailed" disabled="true" hidden="true" name="filter_checkbox" onChange="filterTable(this)" type="checkbox"/><span class="xfailed">0 expected failures</span>, <input checked="true" class="filter" data-test-result="xpassed" disabled="true" hidden="true" name="filter_checkbox" onChange="filterTable(this)" type="checkbox"/><span class="xpassed">0 unexpected passes</span>
+    <p>255 tests ran in 934.53 seconds. </p>
+    <p class="filter" hidden="true">(Un)check the boxes to filter the results.</p><input checked="true" class="filter" data-test-result="passed" hidden="true" name="filter_checkbox" onChange="filterTable(this)" type="checkbox"/><span class="passed">255 passed</span>, <input checked="true" class="filter" data-test-result="skipped" hidden="true" name="filter_checkbox" onChange="filterTable(this)" type="checkbox"/><span class="skipped">3 skipped</span>, <input checked="true" class="filter" data-test-result="failed" disabled="true" hidden="true" name="filter_checkbox" onChange="filterTable(this)" type="checkbox"/><span class="failed">0 failed</span>, <input checked="true" class="filter" data-test-result="error" hidden="true" name="filter_checkbox" onChange="filterTable(this)" type="checkbox"/><span class="error">2 errors</span>, <input checked="true" class="filter" data-test-result="xfailed" disabled="true" hidden="true" name="filter_checkbox" onChange="filterTable(this)" type="checkbox"/><span class="xfailed">0 expected failures</span>, <input checked="true" class="filter" data-test-result="xpassed" disabled="true" hidden="true" name="filter_checkbox" onChange="filterTable(this)" type="checkbox"/><span class="xpassed">0 unexpected passes</span>
     <h2>Results</h2>
     <table id="results-table">
       <thead id="results-table-head">
@@ -270,48 +270,12 @@ function filterTable(elem) { // eslint-disable-line no-unused-vars
       <tbody class="error results-table-row">
         <tr>
           <td class="col-result">Error</td>
-          <td class="col-name">examples/multirotor/opt_drone_rural.py::collect</td>
-          <td class="col-duration"></td>
-          <td class="col-links"></td></tr>
-        <tr>
-          <td class="extra" colspan="4">
-            <div class="log">examples\multirotor\opt_drone_rural.py:8: in &lt;module&gt;<br/>    from drone_mdl_rural import Drone, DroneParam, ResPolicy, DronePhysicalParameters<br/><span class="error">E   ModuleNotFoundError: No module named &#x27;drone_mdl_rural&#x27;</span><br/></div></td></tr></tbody>
-      <tbody class="error results-table-row">
-        <tr>
-          <td class="col-result">Error</td>
-          <td class="col-name">examples/rover/rover_degradation.py::collect</td>
-          <td class="col-duration"></td>
-          <td class="col-links"></td></tr>
-        <tr>
-          <td class="extra" colspan="4">
-            <div class="log">examples\rover\rover_degradation.py:17: in &lt;module&gt;<br/>    from rover_model import Rover, DegParam<br/><span class="error">E   ModuleNotFoundError: No module named &#x27;rover_model&#x27;</span><br/></div></td></tr></tbody>
-      <tbody class="error results-table-row">
-        <tr>
-          <td class="col-result">Error</td>
           <td class="col-name">examples/rover/rover_mode_space.py::collect</td>
           <td class="col-duration"></td>
           <td class="col-links"></td></tr>
         <tr>
           <td class="extra" colspan="4">
-            <div class="log">examples\rover\rover_mode_space.py:7: in &lt;module&gt;<br/>    from rover_model import Rover, RoverParam<br/><span class="error">E   ModuleNotFoundError: No module named &#x27;rover_model&#x27;</span><br/></div></td></tr></tbody>
-      <tbody class="error results-table-row">
-        <tr>
-          <td class="col-result">Error</td>
-          <td class="col-name">examples/rover/rover_model_human.py::collect</td>
-          <td class="col-duration"></td>
-          <td class="col-links"></td></tr>
-        <tr>
-          <td class="extra" colspan="4">
-            <div class="log">examples\rover\rover_model_human.py:28: in &lt;module&gt;<br/>    from fmdtools.sim.approach import SampleApproach, NominalApproach<br/><span class="error">E   ModuleNotFoundError: No module named &#x27;fmdtools.sim.approach&#x27;</span><br/></div></td></tr></tbody>
-      <tbody class="error results-table-row">
-        <tr>
-          <td class="col-result">Error</td>
-          <td class="col-name">examples/rover/optimization/animation.py::collect</td>
-          <td class="col-duration"></td>
-          <td class="col-links"></td></tr>
-        <tr>
-          <td class="extra" colspan="4">
-            <div class="log">examples\rover\optimization\animation.py:24: in &lt;module&gt;<br/>    dfccea = pd.read_csv(&#x27;ccea_species.csv&#x27;)<br/>..\..\..\AppData\Roaming\Python\Python310\site-packages\pandas\io\parsers\readers.py:912: in read_csv<br/>    return _read(filepath_or_buffer, kwds)<br/>..\..\..\AppData\Roaming\Python\Python310\site-packages\pandas\io\parsers\readers.py:577: in _read<br/>    parser = TextFileReader(filepath_or_buffer, **kwds)<br/>..\..\..\AppData\Roaming\Python\Python310\site-packages\pandas\io\parsers\readers.py:1407: in __init__<br/>    self._engine = self._make_engine(f, self.engine)<br/>..\..\..\AppData\Roaming\Python\Python310\site-packages\pandas\io\parsers\readers.py:1661: in _make_engine<br/>    self.handles = get_handle(<br/>..\..\..\AppData\Roaming\Python\Python310\site-packages\pandas\io\common.py:859: in get_handle<br/>    handle = open(<br/><span class="error">E   FileNotFoundError: [Errno 2] No such file or directory: &#x27;ccea_species.csv&#x27;</span><br/></div></td></tr></tbody>
+            <div class="log">examples\rover\rover_mode_space.py:15: in &lt;module&gt;<br/>    phases, modephases = mdlhist.get_modephases()<br/><span class="error">E   TypeError: &#x27;NoneType&#x27; object is not callable</span><br/></div></td></tr></tbody>
       <tbody class="error results-table-row">
         <tr>
           <td class="col-result">Error</td>
@@ -320,26 +284,7 @@ function filterTable(elem) { // eslint-disable-line no-unused-vars
           <td class="col-links"></td></tr>
         <tr>
           <td class="extra" colspan="4">
-            <div class="log">examples\rover\optimization\ea_analysis.py:11: in &lt;module&gt;<br/>    dfea = pd.read_csv(&#x27;rslt_ea.csv&#x27;)<br/>..\..\..\AppData\Roaming\Python\Python310\site-packages\pandas\io\parsers\readers.py:912: in read_csv<br/>    return _read(filepath_or_buffer, kwds)<br/>..\..\..\AppData\Roaming\Python\Python310\site-packages\pandas\io\parsers\readers.py:577: in _read<br/>    parser = TextFileReader(filepath_or_buffer, **kwds)<br/>..\..\..\AppData\Roaming\Python\Python310\site-packages\pandas\io\parsers\readers.py:1407: in __init__<br/>    self._engine = self._make_engine(f, self.engine)<br/>..\..\..\AppData\Roaming\Python\Python310\site-packages\pandas\io\parsers\readers.py:1661: in _make_engine<br/>    self.handles = get_handle(<br/>..\..\..\AppData\Roaming\Python\Python310\site-packages\pandas\io\common.py:859: in get_handle<br/>    handle = open(<br/><span class="error">E   FileNotFoundError: [Errno 2] No such file or directory: &#x27;rslt_ea.csv&#x27;</span><br/></div></td></tr></tbody>
-      <tbody class="error results-table-row">
-        <tr>
-          <td class="col-result">Error</td>
-          <td class="col-name">examples/tank/tank_script.py::collect</td>
-          <td class="col-duration"></td>
-          <td class="col-links"></td></tr>
-        <tr>
-          <td class="extra" colspan="4">
-            <div class="log">examples\tank\tank_script.py:13: in &lt;module&gt;<br/>    from tank_model import Tank<br/><span class="error">E   ModuleNotFoundError: No module named &#x27;tank_model&#x27;</span><br/></div></td></tr></tbody>
-      <tbody class="failed results-table-row">
-        <tr>
-          <td class="col-result">Failed</td>
-          <td class="col-name">examples/tank/Tank_Optimization.ipynb::</td>
-          <td class="col-duration">34.76</td>
-          <td class="col-links"></td></tr>
-        <tr>
-          <td class="extra" colspan="4">
-            <div class="log">A cell timed out while it was being executed, after 20 seconds.<br/>The message was: Cell execution timed out.<br/>Here is a preview of the cell contents:<br/>-------------------<br/>result, args, fhist, thist, xdhist = alternating_opt(pa.tot_tot_cost_full, pa.des_cd, pa.res_cr, max_alts=1)<br/>-------------------<br/> ------------------------------Captured stderr call------------------------------ <br/>[SpyderKernelApp] ERROR | Timeout waiting for execute reply (20s).
-<br/></div></td></tr></tbody>
+            <div class="log">examples\rover\optimization\ea_analysis.py:11: in &lt;module&gt;<br/>    dfea = pd.read_csv(&#x27;results/rslt_ea.csv&#x27;)<br/>..\..\..\AppData\Roaming\Python\Python310\site-packages\pandas\io\parsers\readers.py:912: in read_csv<br/>    return _read(filepath_or_buffer, kwds)<br/>..\..\..\AppData\Roaming\Python\Python310\site-packages\pandas\io\parsers\readers.py:577: in _read<br/>    parser = TextFileReader(filepath_or_buffer, **kwds)<br/>..\..\..\AppData\Roaming\Python\Python310\site-packages\pandas\io\parsers\readers.py:1407: in __init__<br/>    self._engine = self._make_engine(f, self.engine)<br/>..\..\..\AppData\Roaming\Python\Python310\site-packages\pandas\io\parsers\readers.py:1661: in _make_engine<br/>    self.handles = get_handle(<br/>..\..\..\AppData\Roaming\Python\Python310\site-packages\pandas\io\common.py:859: in get_handle<br/>    handle = open(<br/><span class="error">E   FileNotFoundError: [Errno 2] No such file or directory: &#x27;results/rslt_ea.csv&#x27;</span><br/></div></td></tr></tbody>
       <tbody class="skipped results-table-row">
         <tr>
           <td class="col-result">Skipped</td>
@@ -371,7 +316,7 @@ function filterTable(elem) { // eslint-disable-line no-unused-vars
         <tr>
           <td class="col-result">Passed</td>
           <td class="col-name">examples/asg_demo/Action_Sequence_Graph.ipynb::</td>
-          <td class="col-duration">7.91</td>
+          <td class="col-duration">7.75</td>
           <td class="col-links"></td></tr>
         <tr>
           <td class="extra" colspan="4">
@@ -380,7 +325,7 @@ function filterTable(elem) { // eslint-disable-line no-unused-vars
         <tr>
           <td class="col-result">Passed</td>
           <td class="col-name">examples/eps/EPS_Example_Notebook.ipynb::</td>
-          <td class="col-duration">5.25</td>
+          <td class="col-duration">5.23</td>
           <td class="col-links"></td></tr>
         <tr>
           <td class="extra" colspan="4">
@@ -416,7 +361,7 @@ function filterTable(elem) { // eslint-disable-line no-unused-vars
         <tr>
           <td class="col-result">Passed</td>
           <td class="col-name">examples/eps/test_eps.py::epsTests::test_fault_app</td>
-          <td class="col-duration">63.43</td>
+          <td class="col-duration">63.64</td>
           <td class="col-links"></td></tr>
         <tr>
           <td class="extra" colspan="4">
@@ -425,7 +370,7 @@ function filterTable(elem) { // eslint-disable-line no-unused-vars
         <tr>
           <td class="col-result">Passed</td>
           <td class="col-name">examples/eps/test_eps.py::epsTests::test_multfault_saving</td>
-          <td class="col-duration">0.09</td>
+          <td class="col-duration">0.08</td>
           <td class="col-links"></td></tr>
         <tr>
           <td class="extra" colspan="4">
@@ -452,7 +397,7 @@ function filterTable(elem) { // eslint-disable-line no-unused-vars
         <tr>
           <td class="col-result">Passed</td>
           <td class="col-name">examples/eps/test_eps.py::epsTests::test_save_load_onefault</td>
-          <td class="col-duration">0.08</td>
+          <td class="col-duration">0.07</td>
           <td class="col-links"></td></tr>
         <tr>
           <td class="extra" colspan="4">
@@ -461,7 +406,7 @@ function filterTable(elem) { // eslint-disable-line no-unused-vars
         <tr>
           <td class="col-result">Passed</td>
           <td class="col-name">examples/eps/test_eps.py::epsTests::test_save_load_singlefaults</td>
-          <td class="col-duration">1.12</td>
+          <td class="col-duration">1.14</td>
           <td class="col-links"></td></tr>
         <tr>
           <td class="extra" colspan="4">
@@ -470,7 +415,7 @@ function filterTable(elem) { // eslint-disable-line no-unused-vars
         <tr>
           <td class="col-result">Passed</td>
           <td class="col-name">examples/multiflow_demo/Multiflow_and_Commsflow_Demonstration.ipynb::</td>
-          <td class="col-duration">4.31</td>
+          <td class="col-duration">4.17</td>
           <td class="col-links"></td></tr>
         <tr>
           <td class="extra" colspan="4">
@@ -506,7 +451,7 @@ function filterTable(elem) { // eslint-disable-line no-unused-vars
         <tr>
           <td class="col-result">Passed</td>
           <td class="col-name">examples/multirotor/Demonstration.ipynb::</td>
-          <td class="col-duration">20.45</td>
+          <td class="col-duration">20.65</td>
           <td class="col-links"></td></tr>
         <tr>
           <td class="extra" colspan="4">
@@ -515,7 +460,7 @@ function filterTable(elem) { // eslint-disable-line no-unused-vars
         <tr>
           <td class="col-result">Passed</td>
           <td class="col-name">examples/multirotor/Multirotor_Optimization.ipynb::</td>
-          <td class="col-duration">31.20</td>
+          <td class="col-duration">32.25</td>
           <td class="col-links"></td></tr>
         <tr>
           <td class="extra" colspan="4">
@@ -524,7 +469,7 @@ function filterTable(elem) { // eslint-disable-line no-unused-vars
         <tr>
           <td class="col-result">Passed</td>
           <td class="col-name">examples/multirotor/Urban_Drone_Demo.ipynb::</td>
-          <td class="col-duration">96.79</td>
+          <td class="col-duration">97.74</td>
           <td class="col-links"></td></tr>
         <tr>
           <td class="extra" colspan="4">
@@ -533,7 +478,7 @@ function filterTable(elem) { // eslint-disable-line no-unused-vars
         <tr>
           <td class="col-result">Passed</td>
           <td class="col-name">examples/multirotor/drone_mdl_dynamic.py::examples.multirotor.drone_mdl_dynamic.AffectDOF.inc_pos</td>
-          <td class="col-duration">0.00</td>
+          <td class="col-duration">0.01</td>
           <td class="col-links"></td></tr>
         <tr>
           <td class="extra" colspan="4">
@@ -641,7 +586,7 @@ function filterTable(elem) { // eslint-disable-line no-unused-vars
         <tr>
           <td class="col-result">Passed</td>
           <td class="col-name">examples/multirotor/test_multirotor.py::DroneParameterTests::test_objectives</td>
-          <td class="col-duration">0.16</td>
+          <td class="col-duration">0.15</td>
           <td class="col-links"></td></tr>
         <tr>
           <td class="extra" colspan="4">
@@ -686,7 +631,7 @@ function filterTable(elem) { // eslint-disable-line no-unused-vars
         <tr>
           <td class="col-result">Passed</td>
           <td class="col-name">examples/multirotor/test_multirotor.py::DroneParameterTests::test_sim_mdl</td>
-          <td class="col-duration">0.08</td>
+          <td class="col-duration">0.07</td>
           <td class="col-links"></td></tr>
         <tr>
           <td class="extra" colspan="4">
@@ -695,7 +640,7 @@ function filterTable(elem) { // eslint-disable-line no-unused-vars
         <tr>
           <td class="col-result">Passed</td>
           <td class="col-name">examples/multirotor/test_multirotor.py::DroneScenarioTest::test_scenprob_results</td>
-          <td class="col-duration">0.28</td>
+          <td class="col-duration">0.27</td>
           <td class="col-links"></td></tr>
         <tr>
           <td class="extra" colspan="4">
@@ -704,7 +649,7 @@ function filterTable(elem) { // eslint-disable-line no-unused-vars
         <tr>
           <td class="col-result">Passed</td>
           <td class="col-name">examples/multirotor/test_multirotor.py::DroneScenarioTest2::test_scenprob_results</td>
-          <td class="col-duration">0.18</td>
+          <td class="col-duration">0.17</td>
           <td class="col-links"></td></tr>
         <tr>
           <td class="extra" colspan="4">
@@ -713,7 +658,7 @@ function filterTable(elem) { // eslint-disable-line no-unused-vars
         <tr>
           <td class="col-result">Passed</td>
           <td class="col-name">examples/multirotor/test_multirotor.py::DroneScenarioTest3::test_scenprob_results</td>
-          <td class="col-duration">0.18</td>
+          <td class="col-duration">0.17</td>
           <td class="col-links"></td></tr>
         <tr>
           <td class="extra" colspan="4">
@@ -731,16 +676,17 @@ function filterTable(elem) { // eslint-disable-line no-unused-vars
         <tr>
           <td class="col-result">Passed</td>
           <td class="col-name">examples/pump/Optimization.ipynb::</td>
-          <td class="col-duration">38.39</td>
+          <td class="col-duration">41.45</td>
           <td class="col-links"></td></tr>
         <tr>
           <td class="extra" colspan="4">
-            <div class="empty log">No log output captured.</div></td></tr></tbody>
+            <div class="log"> ------------------------------Captured stderr call------------------------------ <br/>Assertion failed: pfd.revents &amp; POLLIN (C:\ci\zeromq_1616055400030\work\src\signaler.cpp:265)
+<br/></div></td></tr></tbody>
       <tbody class="passed results-table-row">
         <tr>
           <td class="col-result">Passed</td>
           <td class="col-name">examples/pump/Parallelism_Tutorial.ipynb::</td>
-          <td class="col-duration">65.51</td>
+          <td class="col-duration">65.63</td>
           <td class="col-links"></td></tr>
         <tr>
           <td class="extra" colspan="4">
@@ -749,7 +695,7 @@ function filterTable(elem) { // eslint-disable-line no-unused-vars
         <tr>
           <td class="col-result">Passed</td>
           <td class="col-name">examples/pump/Pump_Example_Notebook.ipynb::</td>
-          <td class="col-duration">17.06</td>
+          <td class="col-duration">17.38</td>
           <td class="col-links"></td></tr>
         <tr>
           <td class="extra" colspan="4">
@@ -758,7 +704,7 @@ function filterTable(elem) { // eslint-disable-line no-unused-vars
         <tr>
           <td class="col-result">Passed</td>
           <td class="col-name">examples/pump/Stochastic_Modelling.ipynb::</td>
-          <td class="col-duration">70.88</td>
+          <td class="col-duration">71.72</td>
           <td class="col-links"></td></tr>
         <tr>
           <td class="extra" colspan="4">
@@ -767,7 +713,7 @@ function filterTable(elem) { // eslint-disable-line no-unused-vars
         <tr>
           <td class="col-result">Passed</td>
           <td class="col-name">examples/pump/Tutorial_complete.ipynb::</td>
-          <td class="col-duration">7.27</td>
+          <td class="col-duration">7.24</td>
           <td class="col-links"></td></tr>
         <tr>
           <td class="extra" colspan="4">
@@ -785,7 +731,7 @@ function filterTable(elem) { // eslint-disable-line no-unused-vars
         <tr>
           <td class="col-result">Passed</td>
           <td class="col-name">examples/pump/test_pump.py::PumpTests::test_approach_cost_calc</td>
-          <td class="col-duration">15.21</td>
+          <td class="col-duration">14.95</td>
           <td class="col-links"></td></tr>
         <tr>
           <td class="extra" colspan="4">
@@ -794,7 +740,7 @@ function filterTable(elem) { // eslint-disable-line no-unused-vars
         <tr>
           <td class="col-result">Passed</td>
           <td class="col-name">examples/pump/test_pump.py::PumpTests::test_approach_parallelism</td>
-          <td class="col-duration">14.42</td>
+          <td class="col-duration">14.52</td>
           <td class="col-links"></td></tr>
         <tr>
           <td class="extra" colspan="4">
@@ -803,7 +749,7 @@ function filterTable(elem) { // eslint-disable-line no-unused-vars
         <tr>
           <td class="col-result">Passed</td>
           <td class="col-name">examples/pump/test_pump.py::PumpTests::test_dynamic_prop_values</td>
-          <td class="col-duration">0.16</td>
+          <td class="col-duration">0.15</td>
           <td class="col-links"></td></tr>
         <tr>
           <td class="extra" colspan="4">
@@ -812,7 +758,7 @@ function filterTable(elem) { // eslint-disable-line no-unused-vars
         <tr>
           <td class="col-result">Passed</td>
           <td class="col-name">examples/pump/test_pump.py::PumpTests::test_dynamic_prop_values_2</td>
-          <td class="col-duration">0.31</td>
+          <td class="col-duration">0.28</td>
           <td class="col-links"></td></tr>
         <tr>
           <td class="extra" colspan="4">
@@ -821,7 +767,7 @@ function filterTable(elem) { // eslint-disable-line no-unused-vars
         <tr>
           <td class="col-result">Passed</td>
           <td class="col-name">examples/pump/test_pump.py::PumpTests::test_fault_sample_isave</td>
-          <td class="col-duration">2.29</td>
+          <td class="col-duration">2.14</td>
           <td class="col-links"></td></tr>
         <tr>
           <td class="extra" colspan="4">
@@ -830,7 +776,7 @@ function filterTable(elem) { // eslint-disable-line no-unused-vars
         <tr>
           <td class="col-result">Passed</td>
           <td class="col-name">examples/pump/test_pump.py::PumpTests::test_fault_sample_save</td>
-          <td class="col-duration">1.97</td>
+          <td class="col-duration">1.85</td>
           <td class="col-links"></td></tr>
         <tr>
           <td class="extra" colspan="4">
@@ -839,7 +785,7 @@ function filterTable(elem) { // eslint-disable-line no-unused-vars
         <tr>
           <td class="col-result">Passed</td>
           <td class="col-name">examples/pump/test_pump.py::PumpTests::test_fmea_options</td>
-          <td class="col-duration">0.26</td>
+          <td class="col-duration">0.25</td>
           <td class="col-links"></td></tr>
         <tr>
           <td class="extra" colspan="4">
@@ -848,7 +794,7 @@ function filterTable(elem) { // eslint-disable-line no-unused-vars
         <tr>
           <td class="col-result">Passed</td>
           <td class="col-name">examples/pump/test_pump.py::PumpTests::test_model_copy_different</td>
-          <td class="col-duration">0.76</td>
+          <td class="col-duration">0.72</td>
           <td class="col-links"></td></tr>
         <tr>
           <td class="extra" colspan="4">
@@ -857,7 +803,7 @@ function filterTable(elem) { // eslint-disable-line no-unused-vars
         <tr>
           <td class="col-result">Passed</td>
           <td class="col-name">examples/pump/test_pump.py::PumpTests::test_model_copy_same</td>
-          <td class="col-duration">1.34</td>
+          <td class="col-duration">1.36</td>
           <td class="col-links"></td></tr>
         <tr>
           <td class="extra" colspan="4">
@@ -866,7 +812,7 @@ function filterTable(elem) { // eslint-disable-line no-unused-vars
         <tr>
           <td class="col-result">Passed</td>
           <td class="col-name">examples/pump/test_pump.py::PumpTests::test_nested_sample_isave</td>
-          <td class="col-duration">19.73</td>
+          <td class="col-duration">19.49</td>
           <td class="col-links"></td></tr>
         <tr>
           <td class="extra" colspan="4">
@@ -875,7 +821,7 @@ function filterTable(elem) { // eslint-disable-line no-unused-vars
         <tr>
           <td class="col-result">Passed</td>
           <td class="col-name">examples/pump/test_pump.py::PumpTests::test_nested_sample_save</td>
-          <td class="col-duration">19.14</td>
+          <td class="col-duration">18.96</td>
           <td class="col-links"></td></tr>
         <tr>
           <td class="extra" colspan="4">
@@ -902,7 +848,7 @@ function filterTable(elem) { // eslint-disable-line no-unused-vars
         <tr>
           <td class="col-result">Passed</td>
           <td class="col-name">examples/pump/test_pump.py::PumpTests::test_one_run_json</td>
-          <td class="col-duration">0.06</td>
+          <td class="col-duration">0.05</td>
           <td class="col-links"></td></tr>
         <tr>
           <td class="extra" colspan="4">
@@ -911,7 +857,7 @@ function filterTable(elem) { // eslint-disable-line no-unused-vars
         <tr>
           <td class="col-result">Passed</td>
           <td class="col-name">examples/pump/test_pump.py::PumpTests::test_one_run_pickle</td>
-          <td class="col-duration">0.07</td>
+          <td class="col-duration">0.06</td>
           <td class="col-links"></td></tr>
         <tr>
           <td class="extra" colspan="4">
@@ -920,7 +866,7 @@ function filterTable(elem) { // eslint-disable-line no-unused-vars
         <tr>
           <td class="col-result">Passed</td>
           <td class="col-name">examples/pump/test_pump.py::PumpTests::test_onefault_save</td>
-          <td class="col-duration">0.17</td>
+          <td class="col-duration">0.16</td>
           <td class="col-links"></td></tr>
         <tr>
           <td class="extra" colspan="4">
@@ -929,7 +875,7 @@ function filterTable(elem) { // eslint-disable-line no-unused-vars
         <tr>
           <td class="col-result">Passed</td>
           <td class="col-name">examples/pump/test_pump.py::PumpTests::test_param_sample_isave</td>
-          <td class="col-duration">0.89</td>
+          <td class="col-duration">0.85</td>
           <td class="col-links"></td></tr>
         <tr>
           <td class="extra" colspan="4">
@@ -938,7 +884,7 @@ function filterTable(elem) { // eslint-disable-line no-unused-vars
         <tr>
           <td class="col-result">Passed</td>
           <td class="col-name">examples/pump/test_pump.py::PumpTests::test_param_sample_save</td>
-          <td class="col-duration">0.78</td>
+          <td class="col-duration">0.73</td>
           <td class="col-links"></td></tr>
         <tr>
           <td class="extra" colspan="4">
@@ -956,7 +902,7 @@ function filterTable(elem) { // eslint-disable-line no-unused-vars
         <tr>
           <td class="col-result">Passed</td>
           <td class="col-name">examples/pump/test_pump.py::PumpTests::test_save_load_multfault</td>
-          <td class="col-duration">0.17</td>
+          <td class="col-duration">0.16</td>
           <td class="col-links"></td></tr>
         <tr>
           <td class="extra" colspan="4">
@@ -965,7 +911,7 @@ function filterTable(elem) { // eslint-disable-line no-unused-vars
         <tr>
           <td class="col-result">Passed</td>
           <td class="col-name">examples/pump/test_pump.py::PumpTests::test_single_faults_isave</td>
-          <td class="col-duration">0.78</td>
+          <td class="col-duration">0.75</td>
           <td class="col-links"></td></tr>
         <tr>
           <td class="extra" colspan="4">
@@ -974,7 +920,7 @@ function filterTable(elem) { // eslint-disable-line no-unused-vars
         <tr>
           <td class="col-result">Passed</td>
           <td class="col-name">examples/pump/test_pump.py::PumpTests::test_single_faults_save</td>
-          <td class="col-duration">0.70</td>
+          <td class="col-duration">0.67</td>
           <td class="col-links"></td></tr>
         <tr>
           <td class="extra" colspan="4">
@@ -1082,7 +1028,7 @@ function filterTable(elem) { // eslint-disable-line no-unused-vars
         <tr>
           <td class="col-result">Passed</td>
           <td class="col-name">examples/pump/test_pump_example.py::Integration_Tests::test_blockage_results</td>
-          <td class="col-duration">0.09</td>
+          <td class="col-duration">0.08</td>
           <td class="col-links"></td></tr>
         <tr>
           <td class="extra" colspan="4">
@@ -1109,7 +1055,7 @@ function filterTable(elem) { // eslint-disable-line no-unused-vars
         <tr>
           <td class="col-result">Passed</td>
           <td class="col-name">examples/pump/test_pump_stochastic.py::StochasticPumpTests::test_mdl_pickle</td>
-          <td class="col-duration">0.66</td>
+          <td class="col-duration">0.64</td>
           <td class="col-links"></td></tr>
         <tr>
           <td class="extra" colspan="4">
@@ -1142,7 +1088,7 @@ The object is pickleable
         <tr>
           <td class="col-result">Passed</td>
           <td class="col-name">examples/pump/test_pump_stochastic.py::StochasticPumpTests::test_model_copy_different</td>
-          <td class="col-duration">0.77</td>
+          <td class="col-duration">0.76</td>
           <td class="col-links"></td></tr>
         <tr>
           <td class="extra" colspan="4">
@@ -1151,7 +1097,7 @@ The object is pickleable
         <tr>
           <td class="col-result">Passed</td>
           <td class="col-name">examples/pump/test_pump_stochastic.py::StochasticPumpTests::test_model_copy_same</td>
-          <td class="col-duration">1.19</td>
+          <td class="col-duration">1.16</td>
           <td class="col-links"></td></tr>
         <tr>
           <td class="extra" colspan="4">
@@ -1160,7 +1106,7 @@ The object is pickleable
         <tr>
           <td class="col-result">Passed</td>
           <td class="col-name">examples/pump/test_pump_stochastic.py::StochasticPumpTests::test_model_set_vars</td>
-          <td class="col-duration">0.01</td>
+          <td class="col-duration">0.00</td>
           <td class="col-links"></td></tr>
         <tr>
           <td class="extra" colspan="4">
@@ -1169,7 +1115,7 @@ The object is pickleable
         <tr>
           <td class="col-result">Passed</td>
           <td class="col-name">examples/pump/test_pump_stochastic.py::StochasticPumpTests::test_nested_sample_isave</td>
-          <td class="col-duration">38.96</td>
+          <td class="col-duration">38.91</td>
           <td class="col-links"></td></tr>
         <tr>
           <td class="extra" colspan="4">
@@ -1178,7 +1124,7 @@ The object is pickleable
         <tr>
           <td class="col-result">Passed</td>
           <td class="col-name">examples/pump/test_pump_stochastic.py::StochasticPumpTests::test_nested_sample_save</td>
-          <td class="col-duration">39.01</td>
+          <td class="col-duration">39.64</td>
           <td class="col-links"></td></tr>
         <tr>
           <td class="extra" colspan="4">
@@ -1187,7 +1133,7 @@ The object is pickleable
         <tr>
           <td class="col-result">Passed</td>
           <td class="col-name">examples/pump/test_pump_stochastic.py::StochasticPumpTests::test_param_sample_isave</td>
-          <td class="col-duration">5.70</td>
+          <td class="col-duration">5.99</td>
           <td class="col-links"></td></tr>
         <tr>
           <td class="extra" colspan="4">
@@ -1196,7 +1142,7 @@ The object is pickleable
         <tr>
           <td class="col-result">Passed</td>
           <td class="col-name">examples/pump/test_pump_stochastic.py::StochasticPumpTests::test_param_sample_save</td>
-          <td class="col-duration">5.88</td>
+          <td class="col-duration">6.23</td>
           <td class="col-links"></td></tr>
         <tr>
           <td class="extra" colspan="4">
@@ -1205,7 +1151,7 @@ The object is pickleable
         <tr>
           <td class="col-result">Passed</td>
           <td class="col-name">examples/pump/test_pump_stochastic.py::StochasticPumpTests::test_plot_nested_hists</td>
-          <td class="col-duration">5.12</td>
+          <td class="col-duration">5.23</td>
           <td class="col-links"></td></tr>
         <tr>
           <td class="extra" colspan="4">
@@ -1214,7 +1160,7 @@ The object is pickleable
         <tr>
           <td class="col-result">Passed</td>
           <td class="col-name">examples/pump/test_pump_stochastic.py::StochasticPumpTests::test_plot_nominal_vals</td>
-          <td class="col-duration">0.49</td>
+          <td class="col-duration">0.50</td>
           <td class="col-links"></td></tr>
         <tr>
           <td class="extra" colspan="4">
@@ -1223,7 +1169,7 @@ The object is pickleable
         <tr>
           <td class="col-result">Passed</td>
           <td class="col-name">examples/pump/test_pump_stochastic.py::StochasticPumpTests::test_plot_nominal_vals_xd</td>
-          <td class="col-duration">27.08</td>
+          <td class="col-duration">27.14</td>
           <td class="col-links"></td></tr>
         <tr>
           <td class="extra" colspan="4">
@@ -1232,7 +1178,7 @@ The object is pickleable
         <tr>
           <td class="col-result">Passed</td>
           <td class="col-name">examples/pump/test_pump_stochastic.py::StochasticPumpTests::test_rand_paramsample_plot</td>
-          <td class="col-duration">1.49</td>
+          <td class="col-duration">1.63</td>
           <td class="col-links"></td></tr>
         <tr>
           <td class="extra" colspan="4">
@@ -1241,7 +1187,7 @@ The object is pickleable
         <tr>
           <td class="col-result">Passed</td>
           <td class="col-name">examples/pump/test_pump_stochastic.py::StochasticPumpTests::test_run_approach</td>
-          <td class="col-duration">33.66</td>
+          <td class="col-duration">34.55</td>
           <td class="col-links"></td></tr>
         <tr>
           <td class="extra" colspan="4">
@@ -1250,7 +1196,7 @@ The object is pickleable
         <tr>
           <td class="col-result">Passed</td>
           <td class="col-name">examples/pump/test_pump_stochastic.py::StochasticPumpTests::test_run_safety</td>
-          <td class="col-duration">2.48</td>
+          <td class="col-duration">2.50</td>
           <td class="col-links"></td></tr>
         <tr>
           <td class="extra" colspan="4">
@@ -1277,7 +1223,7 @@ The object is pickleable
         <tr>
           <td class="col-result">Passed</td>
           <td class="col-name">examples/rover/FaultSample_Use-Cases.ipynb::</td>
-          <td class="col-duration">6.48</td>
+          <td class="col-duration">6.28</td>
           <td class="col-links"></td></tr>
         <tr>
           <td class="extra" colspan="4">
@@ -1286,7 +1232,7 @@ The object is pickleable
         <tr>
           <td class="col-result">Passed</td>
           <td class="col-name">examples/rover/Model_Structure_Visualization_Tutorial.ipynb::</td>
-          <td class="col-duration">23.26</td>
+          <td class="col-duration">23.08</td>
           <td class="col-links"></td></tr>
         <tr>
           <td class="extra" colspan="4">
@@ -1295,7 +1241,7 @@ The object is pickleable
         <tr>
           <td class="col-result">Passed</td>
           <td class="col-name">examples/rover/ParameterSample_Use-Cases.ipynb::</td>
-          <td class="col-duration">76.13</td>
+          <td class="col-duration">76.38</td>
           <td class="col-links"></td></tr>
         <tr>
           <td class="extra" colspan="4">
@@ -1304,7 +1250,7 @@ The object is pickleable
         <tr>
           <td class="col-result">Passed</td>
           <td class="col-name">examples/rover/Rover_Setup_Notebook.ipynb::</td>
-          <td class="col-duration">27.34</td>
+          <td class="col-duration">28.26</td>
           <td class="col-links"></td></tr>
         <tr>
           <td class="extra" colspan="4">
@@ -1331,7 +1277,7 @@ The object is pickleable
         <tr>
           <td class="col-result">Passed</td>
           <td class="col-name">examples/tank/Tank_Analysis.ipynb::</td>
-          <td class="col-duration">14.33</td>
+          <td class="col-duration">14.84</td>
           <td class="col-links"></td></tr>
         <tr>
           <td class="extra" colspan="4">
@@ -1340,7 +1286,7 @@ The object is pickleable
         <tr>
           <td class="col-result">Passed</td>
           <td class="col-name">examples/tank/test_tank.py::TankTests::test_approach</td>
-          <td class="col-duration">1.35</td>
+          <td class="col-duration">1.39</td>
           <td class="col-links"></td></tr>
         <tr>
           <td class="extra" colspan="4">
@@ -1349,7 +1295,7 @@ The object is pickleable
         <tr>
           <td class="col-result">Passed</td>
           <td class="col-name">examples/tank/test_tank.py::TankTests::test_approach_parallelism_0</td>
-          <td class="col-duration">5.50</td>
+          <td class="col-duration">5.25</td>
           <td class="col-links"></td></tr>
         <tr>
           <td class="extra" colspan="4">
@@ -1358,7 +1304,7 @@ The object is pickleable
         <tr>
           <td class="col-result">Passed</td>
           <td class="col-name">examples/tank/test_tank.py::TankTests::test_approach_parallelism_1</td>
-          <td class="col-duration">8.87</td>
+          <td class="col-duration">8.59</td>
           <td class="col-links"></td></tr>
         <tr>
           <td class="extra" colspan="4">
@@ -1367,7 +1313,7 @@ The object is pickleable
         <tr>
           <td class="col-result">Passed</td>
           <td class="col-name">examples/tank/test_tank.py::TankTests::test_approach_parallelism_notrack</td>
-          <td class="col-duration">5.66</td>
+          <td class="col-duration">5.55</td>
           <td class="col-links"></td></tr>
         <tr>
           <td class="extra" colspan="4">
@@ -1403,7 +1349,7 @@ The object is pickleable
         <tr>
           <td class="col-result">Passed</td>
           <td class="col-name">examples/tank/test_tank.py::TankTests::test_fault_sample_isave</td>
-          <td class="col-duration">1.87</td>
+          <td class="col-duration">1.80</td>
           <td class="col-links"></td></tr>
         <tr>
           <td class="extra" colspan="4">
@@ -1412,7 +1358,7 @@ The object is pickleable
         <tr>
           <td class="col-result">Passed</td>
           <td class="col-name">examples/tank/test_tank.py::TankTests::test_fault_sample_save</td>
-          <td class="col-duration">1.51</td>
+          <td class="col-duration">1.45</td>
           <td class="col-links"></td></tr>
         <tr>
           <td class="extra" colspan="4">
@@ -1430,7 +1376,7 @@ The object is pickleable
         <tr>
           <td class="col-result">Passed</td>
           <td class="col-name">examples/tank/test_tank.py::TankTests::test_model_copy_different</td>
-          <td class="col-duration">0.45</td>
+          <td class="col-duration">0.42</td>
           <td class="col-links"></td></tr>
         <tr>
           <td class="extra" colspan="4">
@@ -1439,7 +1385,7 @@ The object is pickleable
         <tr>
           <td class="col-result">Passed</td>
           <td class="col-name">examples/tank/test_tank.py::TankTests::test_model_copy_same</td>
-          <td class="col-duration">0.79</td>
+          <td class="col-duration">0.77</td>
           <td class="col-links"></td></tr>
         <tr>
           <td class="extra" colspan="4">
@@ -1448,7 +1394,7 @@ The object is pickleable
         <tr>
           <td class="col-result">Passed</td>
           <td class="col-name">examples/tank/test_tank.py::TankTests::test_nested_sample_isave</td>
-          <td class="col-duration">15.47</td>
+          <td class="col-duration">15.15</td>
           <td class="col-links"></td></tr>
         <tr>
           <td class="extra" colspan="4">
@@ -1457,7 +1403,7 @@ The object is pickleable
         <tr>
           <td class="col-result">Passed</td>
           <td class="col-name">examples/tank/test_tank.py::TankTests::test_nested_sample_save</td>
-          <td class="col-duration">15.61</td>
+          <td class="col-duration">14.93</td>
           <td class="col-links"></td></tr>
         <tr>
           <td class="extra" colspan="4">
@@ -1466,7 +1412,7 @@ The object is pickleable
         <tr>
           <td class="col-result">Passed</td>
           <td class="col-name">examples/tank/test_tank.py::TankTests::test_param_sample_save</td>
-          <td class="col-duration">0.61</td>
+          <td class="col-duration">0.57</td>
           <td class="col-links"></td></tr>
         <tr>
           <td class="extra" colspan="4">
@@ -1475,7 +1421,7 @@ The object is pickleable
         <tr>
           <td class="col-result">Passed</td>
           <td class="col-name">examples/tank/test_tank.py::TankTests::test_save_load_multfault</td>
-          <td class="col-duration">0.12</td>
+          <td class="col-duration">0.10</td>
           <td class="col-links"></td></tr>
         <tr>
           <td class="extra" colspan="4">
@@ -1484,7 +1430,7 @@ The object is pickleable
         <tr>
           <td class="col-result">Passed</td>
           <td class="col-name">examples/tank/test_tank.py::TankTests::test_save_load_nominal</td>
-          <td class="col-duration">0.09</td>
+          <td class="col-duration">0.08</td>
           <td class="col-links"></td></tr>
         <tr>
           <td class="extra" colspan="4">
@@ -1493,7 +1439,7 @@ The object is pickleable
         <tr>
           <td class="col-result">Passed</td>
           <td class="col-name">examples/tank/test_tank.py::TankTests::test_save_load_onefault</td>
-          <td class="col-duration">0.12</td>
+          <td class="col-duration">0.10</td>
           <td class="col-links"></td></tr>
         <tr>
           <td class="extra" colspan="4">
@@ -1502,7 +1448,7 @@ The object is pickleable
         <tr>
           <td class="col-result">Passed</td>
           <td class="col-name">examples/tank/test_tank.py::TankTests::test_save_load_singlefaults</td>
-          <td class="col-duration">0.85</td>
+          <td class="col-duration">0.76</td>
           <td class="col-links"></td></tr>
         <tr>
           <td class="extra" colspan="4">
@@ -1511,7 +1457,7 @@ The object is pickleable
         <tr>
           <td class="col-result">Passed</td>
           <td class="col-name">examples/tank/test_tank.py::TankTests::test_singlefaults_isave</td>
-          <td class="col-duration">1.01</td>
+          <td class="col-duration">0.97</td>
           <td class="col-links"></td></tr>
         <tr>
           <td class="extra" colspan="4">
@@ -1529,7 +1475,7 @@ The object is pickleable
         <tr>
           <td class="col-result">Passed</td>
           <td class="col-name">examples/taxiway/Paper_Notebook.ipynb::</td>
-          <td class="col-duration">14.68</td>
+          <td class="col-duration">14.91</td>
           <td class="col-links"></td></tr>
         <tr>
           <td class="extra" colspan="4">
@@ -1547,7 +1493,7 @@ The object is pickleable
         <tr>
           <td class="col-result">Passed</td>
           <td class="col-name">examples/taxiway/test_asset.py::AssetTests::test_avoid_plot</td>
-          <td class="col-duration">0.35</td>
+          <td class="col-duration">0.49</td>
           <td class="col-links"></td></tr>
         <tr>
           <td class="extra" colspan="4">
@@ -1574,7 +1520,7 @@ The object is pickleable
         <tr>
           <td class="col-result">Passed</td>
           <td class="col-name">examples/taxiway/test_asset.py::AssetTests::test_lost_sight</td>
-          <td class="col-duration">0.39</td>
+          <td class="col-duration">0.40</td>
           <td class="col-links"></td></tr>
         <tr>
           <td class="extra" colspan="4">
@@ -1583,7 +1529,7 @@ The object is pickleable
         <tr>
           <td class="col-result">Passed</td>
           <td class="col-name">examples/taxiway/test_asset.py::AssetTests::test_lost_sight_plot</td>
-          <td class="col-duration">0.52</td>
+          <td class="col-duration">0.47</td>
           <td class="col-links"></td></tr>
         <tr>
           <td class="extra" colspan="4">
@@ -1601,7 +1547,7 @@ The object is pickleable
         <tr>
           <td class="col-result">Passed</td>
           <td class="col-name">examples/taxiway/test_asset.py::AssetTests::test_one_cycle_plot</td>
-          <td class="col-duration">0.17</td>
+          <td class="col-duration">0.15</td>
           <td class="col-links"></td></tr>
         <tr>
           <td class="extra" colspan="4">
@@ -1610,7 +1556,7 @@ The object is pickleable
         <tr>
           <td class="col-result">Passed</td>
           <td class="col-name">examples/taxiway/test_model.py::ModelTests::test_atc_lost_ground_perception</td>
-          <td class="col-duration">1.55</td>
+          <td class="col-duration">1.50</td>
           <td class="col-links"></td></tr>
         <tr>
           <td class="extra" colspan="4">
@@ -1619,7 +1565,7 @@ The object is pickleable
         <tr>
           <td class="col-result">Passed</td>
           <td class="col-name">examples/taxiway/test_model.py::ModelTests::test_atc_lost_ground_perception_plot</td>
-          <td class="col-duration">1.72</td>
+          <td class="col-duration">1.79</td>
           <td class="col-links"></td></tr>
         <tr>
           <td class="extra" colspan="4">
@@ -1628,7 +1574,7 @@ The object is pickleable
         <tr>
           <td class="col-result">Passed</td>
           <td class="col-name">examples/taxiway/test_model.py::ModelTests::test_atc_wrong_land_command</td>
-          <td class="col-duration">1.68</td>
+          <td class="col-duration">1.61</td>
           <td class="col-links"></td></tr>
         <tr>
           <td class="extra" colspan="4">
@@ -1637,7 +1583,7 @@ The object is pickleable
         <tr>
           <td class="col-result">Passed</td>
           <td class="col-name">examples/taxiway/test_model.py::ModelTests::test_atc_wrong_land_command_lost_sight</td>
-          <td class="col-duration">1.64</td>
+          <td class="col-duration">1.63</td>
           <td class="col-links"></td></tr>
         <tr>
           <td class="extra" colspan="4">
@@ -1646,7 +1592,7 @@ The object is pickleable
         <tr>
           <td class="col-result">Passed</td>
           <td class="col-name">examples/taxiway/test_model.py::ModelTests::test_atc_wrong_land_command_sight_plot</td>
-          <td class="col-duration">3.10</td>
+          <td class="col-duration">2.97</td>
           <td class="col-links"></td></tr>
         <tr>
           <td class="extra" colspan="4">
@@ -1655,7 +1601,7 @@ The object is pickleable
         <tr>
           <td class="col-result">Passed</td>
           <td class="col-name">examples/taxiway/test_model.py::ModelTests::test_default_plots</td>
-          <td class="col-duration">2.47</td>
+          <td class="col-duration">2.42</td>
           <td class="col-links"></td></tr>
         <tr>
           <td class="extra" colspan="4">
@@ -1664,7 +1610,7 @@ The object is pickleable
         <tr>
           <td class="col-result">Passed</td>
           <td class="col-name">examples/taxiway/test_model.py::ModelTests::test_scen</td>
-          <td class="col-duration">0.37</td>
+          <td class="col-duration">0.35</td>
           <td class="col-links"></td></tr>
         <tr>
           <td class="extra" colspan="4">
@@ -1781,7 +1727,7 @@ The object is pickleable
         <tr>
           <td class="col-result">Passed</td>
           <td class="col-name">fmdtools/analyze/tabulate.py::fmdtools.analyze.tabulate.Comparison</td>
-          <td class="col-duration">0.77</td>
+          <td class="col-duration">0.71</td>
           <td class="col-links"></td></tr>
         <tr>
           <td class="extra" colspan="4">
@@ -2474,7 +2420,7 @@ The object is pickleable
         <tr>
           <td class="col-result">Passed</td>
           <td class="col-name">fmdtools/sim/sample.py::fmdtools.sim.sample.SampleApproach.add_faultsample</td>
-          <td class="col-duration">0.02</td>
+          <td class="col-duration">0.01</td>
           <td class="col-links"></td></tr>
         <tr>
           <td class="extra" colspan="4">
@@ -2645,7 +2591,7 @@ The object is pickleable
         <tr>
           <td class="col-result">Passed</td>
           <td class="col-name">tests/test_graph.py::ModelGraphTests::test_fxngraph_plot</td>
-          <td class="col-duration">0.10</td>
+          <td class="col-duration">0.11</td>
           <td class="col-links"></td></tr>
         <tr>
           <td class="extra" colspan="4">
@@ -2654,7 +2600,7 @@ The object is pickleable
         <tr>
           <td class="col-result">Passed</td>
           <td class="col-name">tests/test_graph.py::ModelGraphTests::test_modelgraph_plot</td>
-          <td class="col-duration">0.17</td>
+          <td class="col-duration">0.37</td>
           <td class="col-links"></td></tr>
         <tr>
           <td class="extra" colspan="4">

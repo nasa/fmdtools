@@ -18,7 +18,7 @@ required = ["scipy",
 
 setuptools.setup(
     name="fmdtools",
-    version="2.0-rc-1",
+    version="2.0-rc-2",
     author="Daniel Hulse",
     author_email="daniel.e.hulse@nasa.gov",
     description="System resilience modelling, simulation, and assessment in Python",
