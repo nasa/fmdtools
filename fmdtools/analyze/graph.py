@@ -273,7 +273,8 @@ def label_for_entry(g, iterator, entryname):
     elif entryname == 'faults_and_indicators':
         faults = nx.get_node_attributes(g, 'faults')
         indicators = nx.get_node_attributes(g, 'indicators')
-        entryvals = {n: v + indicators[n] for n, v in faults.items()}
+        all_entries = [*faults, *indicators]
+        entryvals = {n: faults.get(n, [])+indicators.get(n, []) for n in all_entries}
     elif 'Edge' in iterator.__class__.__name__:
         entryvals = nx.get_edge_attributes(g, entryname)
     elif 'Node' in iterator.__class__.__name__:
