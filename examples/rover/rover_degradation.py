@@ -17,9 +17,22 @@ import matplotlib.pyplot as plt
 from examples.rover.rover_model import Rover, DegParam
 
 
-
-
 class DriveDegradationStates(State):
+    """
+    State defining the degradation of drive functionality.
+
+    Fields
+    ------
+    wear : float
+        How much wear is in the system (0-1). Default is 0.0.
+    corrosion : float
+        Amount of corrosion present. Default is 0.0.
+    friction : float
+        Amount of friction present, slowing down the system. Default is 0.0.
+    drift : float
+        Drift in the system, causing unintentional turning. Default is 0.0.
+    """
+
     wear: float = 0.0
     corrosion: float = 0.0
     friction: float = 0.0
@@ -27,6 +40,22 @@ class DriveDegradationStates(State):
 
 
 class DriveRandStates(State):
+    """
+    Random degradation states for the drive function.
+
+    Fields
+    ------
+    corrode_rate : float
+        Rate of chemical corrosion of the mechanical system. Default is 0.01. Updates
+        according to a pareto law with parameter 50.
+    wear_rate : float
+        Rate of wear of the mechanical system. Default is 0.02. Updates according
+        to a pareto law with parameter 25.
+    yaw_load : float
+        Yaw imbalance one way or another. Default is 0.01 but updates according to a
+        uniform distribution between -0.1 (left yaw) and 0.1 (right yaw).
+    """
+
     corrode_rate: float = 0.01
     corrode_rate_update = ("pareto", (50,))
     wear_rate: float = 0.02
@@ -36,42 +65,80 @@ class DriveRandStates(State):
 
 
 class DriveRand(Rand):
+    """Rand defining random states for Drive degradation."""
+
     s: DriveRandStates = DriveRandStates()
 
 
 class DriveDegradation(Function):
+    """Function defining the stochastic degradation of the Drive function."""
+
+    __slots__ = ()
     container_s = DriveDegradationStates
     container_r = DriveRand
     default_sp = dict(end_time=100)
 
-    def __init__(self, name, **kwargs):
-        super().__init__(name, **kwargs)
-
     def dynamic_behavior(self, time):
         self.s.inc(corrosion=self.r.s.corrode_rate, wear=self.r.s.wear_rate)
-        self.s.inc(
-            drift=self.r.s.yaw_load / 1000
-            + (np.sign(self.s.drift) == np.sign(self.r.s.yaw_load)) * self.r.s.yaw_load
-        )
+        opp_drift = (np.sign(self.s.drift) == np.sign(self.r.s.yaw_load))
+        self.s.inc(drift=self.r.s.yaw_load / 1000 + opp_drift * self.r.s.yaw_load)
         self.s.friction = np.sqrt(self.s.corrosion**2 + self.s.wear**2)
         self.s.limit(drift=(-1, 1), corrosion=(0, 1), wear=(0, 1))
 
 
 class PSFDegradationShortStates(State):
+    """
+    State defining the short-term human performance shaping factor degradation.
+
+    Fields
+    ------
+    fatigue : float
+        Operator fatigue over the course of a day. Default is 0.0.
+    stress : float
+        Operator stress over the course of a day. Default is 0.0.
+    """
+
     fatigue: float = 0.0
     stress: float = 0.0
 
 
 class PSFDegShortRandStates(State):
+    """
+    State defining the stochastic states of human performance shaping factors.
+
+    Fields
+    ------
+    fatigue_param : float
+        Operator starting fatigue. Default is 2.0. Updates according to gamma
+        distribution with parameters 2 and 1.9.
+    """
+
     fatigue_param: float = 2.0
     fatigue_param_update = ("gamma", (2, 1.9))
 
 
 class PSFDegShortRand(Rand):
+    """Rand defining randomness of human performance shaping factor degradation."""
+
     s: PSFDegShortRandStates = PSFDegShortRandStates()
 
 
 class PSFShortParams(Parameter, readonly=True):
+    """
+    Parameter defining the input/starting parameters of human PSFs.
+
+    Fields
+    ------
+    experience : float
+        Operator experience. Default is 1.0.
+    stress_param : float
+        Operator base stress. Default is 0.0.
+    fatigue_param : float
+        Operator base fatigue. Default is 0.0
+    stoch_fatigue : bool
+        Whether or not fatigue should be evaluated stochastically. Default is False.
+    """
+
     experience: float = 1.0
     stress_param: float = 0.0
     fatigue_param: float = 0.0
@@ -79,28 +146,42 @@ class PSFShortParams(Parameter, readonly=True):
 
 
 class PSFDegradationShort(Function):
+    """Function defining short-term operator performance shaping factor degradation."""
+
     container_s = PSFDegradationShortStates
     container_r = PSFDegShortRand
     container_p = PSFShortParams
     default_sp = dict(end_time=100)
 
-    def __init__(self, name, **kwargs):
-        super().__init__(name, **kwargs)
+    def init_block(self, **kwargs):
+        """Initialize parameter-defined base states."""
         self.s.stress = self.p.stress_param
+        self.s.fatigue = int(self.p.fatigue_param)
 
     def dynamic_behavior(self, time):
         if self.p.stoch_fatigue:
             self.s.fatigue = int(self.r.s.fatigue_param)
-        else:
-            self.s.fatigue = int(self.p.fatigue_param)
+
         if self.s.stress < 100:
-            self.s.stress = int(
-                self.s.stress + (1 + (1 / self.p.experience)) ** self.t.time
-            )
+            s_inc = (1 + (1 / self.p.experience)) ** self.t.time
+            self.s.stress = int(self.s.stress + s_inc)
         self.s.limit(fatigue=(0, 10), stress=(0, 100))
 
 
 class LongParams(Parameter, readonly=True):
+    """
+    Parameter defining long-range PSF degradation.
+
+    Fields
+    ------
+    experience_param : float
+        Operator experience. Default is 9.0.
+    training_frequency : float
+        Operator training frequency. Default is 8.0.
+    experience_scale_max : float
+        Maximum operator experience. Default is 10.0.
+    """
+
     experience_param: float = 9.0
     training_frequency: float = 8.0
     experience_scale_max: float = 10.0
