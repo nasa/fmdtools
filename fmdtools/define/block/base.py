@@ -265,6 +265,8 @@ class Simulable(BaseObject):
             param_dict['sp'] = self.sp.copy_with_vals(**sp)
         if not r and hasattr(self, 'r'):
             param_dict['r'] = {'seed': self.r.seed}
+        elif r:
+            param_dict['r'] = r
         if not track:
             param_dict['track'] = copy.deepcopy(self.track)
         return param_dict
