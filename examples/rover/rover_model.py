@@ -169,7 +169,7 @@ class DestParam(PointParam):
 def sin_func(x, amp, period):
     """Sine line function generator."""
     return amp * np.sin(x * 2 * np.pi / period)
-    
+
 class PathParam(LineParam):
     """Parameter defining the path."""
 
@@ -177,8 +177,8 @@ class PathParam(LineParam):
     buffer_on: float = 0.2
     buffer_poor: float = 0.3
     buffer_near: float = 0.4
-    
-    
+
+
 class RoverParam(Parameter):
     """Parameters for rover."""
 
@@ -191,8 +191,6 @@ class RoverParam(Parameter):
         super().__init__(*args, strict_immutability=False, **kwargs)
 
 
-
-
 def turn_func(x, radius, start):
     """Turn line function generator."""
     if x >= start + radius:
@@ -203,9 +201,6 @@ def turn_func(x, radius, start):
         return 0.0
     elif x < 0.0:
         raise Exception("x="+str(x)+" <0.0")
-
-
-
 
 
 class DestState(State):
@@ -222,9 +217,6 @@ class Dest(GeomPoint):
     container_s = DestState
 
 
-
-
-
 class GroundGeomArch(GeomArchitecture):
     """Geometry of rover environment--start, end, and line."""
 
@@ -233,15 +225,16 @@ class GroundGeomArch(GeomArchitecture):
     def init_architecture(self, **kwargs):
         """Initialize geometry with line and start/end points."""
         ls = self.p.gen_ls()
-        self.add_line('line', PathLine, p={'xys': ls, 'buffer_on': self.p.path_buffer_on,
+        self.add_line('line', PathLine, p={'xys': ls,
+                                           'buffer_on': self.p.path_buffer_on,
                                            'buffer_poor': self.p.path_buffer_poor,
                                            'buffer_near': self.p.path_buffer_near})
         self.add_point('start', Dest, p={'x': ls[0][0], 'y': ls[0][1],
                                          'buffer_on': self.p.dest_buffer_on,
                                          'buffer_near': self.p.dest_buffer_near})
         self.add_point('end', Dest, p={'x': ls[-1][0], 'y': ls[-1][1],
-                                         'buffer_on': self.p.dest_buffer_on,
-                                         'buffer_near': self.p.dest_buffer_near})
+                                       'buffer_on': self.p.dest_buffer_on,
+                                       'buffer_near': self.p.dest_buffer_near})
 
 
 class GroundState(State):
@@ -1129,11 +1122,18 @@ def gen_param_space():
     return paramspace
 
 
+def plot_map(mdl, hists):
+    fig, ax = hists.plot_trajectories('flows.pos.s.x', 'flows.pos.s.y',
+                                      time_groups=['nominal'])
+    geoms = {'line': {'shapes': {'on': {}, 'shape': {}}}, 'start': {}, 'end': {}}
+    fig, ax = mdl.flows['ground'].ga.show(geoms=geoms, fig=fig, ax=ax)
+    return fig, ax
+
+
 if __name__ == "__main__":
     import multiprocessing as mp
     from fmdtools.analyze import tabulate
     from fmdtools.sim.sample import SampleApproach, FaultDomain, FaultSample
-    
     import doctest
     doctest.testmod(verbose=True)
     mdl = Rover()
