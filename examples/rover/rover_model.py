@@ -681,7 +681,6 @@ class Drive(Function):
             >>> d.pos.s
             PosState(x=0.0, y=-2.0, vel=2.0, ux=0.0, uy=-1.0)
         """
-        
         #the division by 6 slows down the rover, so it can manage the course
         self.pos.s.vel = (rpower + lpower) / (5 + (1 + self.m.s.friction))
         ang_inc = np.arctan((rpower - lpower) / (rpower + lpower + 0.001))
