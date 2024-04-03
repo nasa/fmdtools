@@ -14,6 +14,7 @@ smart_stereo/
 rad_models/
 aerialdrm/
 boeing_perception_model/
+troupe_model/
 
 #ignore output tables
 #*.ecsv
