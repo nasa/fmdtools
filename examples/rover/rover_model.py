@@ -399,24 +399,23 @@ class Switch(Flow):
     container_s = SwitchState
 
 
+class CommsState(PosState):
+    """
+    Communications signal with override.
+
+    Extends Pos and Control such that 'active' represents override activity.
+    """
+
+    rpower: float = 0.0
+    lpower: float = 0.0
+    active: float = 0.0
+
+
 class Comms(Flow):
     """External communications flow."""
 
     __slots__ = ()
-    container_s = PosState
-
-
-class OverrideState(ControlState):
-    """Override signal. 'active' represents activity."""
-
-    active: float = 0.0
-
-
-class OverrideComms(Flow):
-    """Override communications flow."""
-
-    __slots__ = ()
-    container_s = OverrideState
+    container_s = CommsState
 
 
 class FaultStates(State):
@@ -908,9 +907,9 @@ class OverrideMode(Mode):
 
 
 class Override(Function):
-    __slots__ = ("override_comms", "ee", "motor_control", "auto_control")
+    __slots__ = ("comms", "ee", "motor_control", "auto_control")
     container_m = OverrideMode
-    flow_override_comms = OverrideComms
+    flow_comms = Comms
     flow_ee = EE
     flow_motor_control = Control
     flow_auto_control = Control
@@ -923,10 +922,10 @@ class Override(Function):
                 self.m.set_mode("standby")
         elif self.m.in_mode("standby"):
             self.motor_control.s.assign(self.auto_control.s, "rpower", "lpower")
-            if self.override_comms == "active" and self.EE.s.v > 4:
+            if self.comms.s.active and self.EE.s.v > 4:
                 self.m.set_mode("override")
         elif self.m.in_mode("override"):
-            self.motor_control.s.assign(self.override_comms.s, "rpower", "lpower")
+            self.motor_control.s.assign(self.comms.s, "rpower", "lpower")
 
 
 class Communications(Function):
@@ -1005,7 +1004,6 @@ class Rover(FunctionArchitecture):
         self.add_flow("motor_control", Control)
         self.add_flow("switch", Switch)
         self.add_flow("comms", Comms)
-        self.add_flow("override_comms", OverrideComms)
         self.add_flow("fault_sig", FaultSig)
 
         self.add_fxn("power", Power, "ee_15", "ee_5", "ee_12", "switch")
@@ -1014,7 +1012,7 @@ class Rover(FunctionArchitecture):
         self.add_fxn("perception", Perception, "ground", 'pos', "ee_12", "video")
         self.add_fxn("plan_path", PlanPath, "video", "pos_signal", "ground", 'pos',
                      "auto_control", "fault_sig", p=self.p.correction)
-        self.add_fxn("override", Override, "override_comms", "ee_5", "motor_control",
+        self.add_fxn("override", Override, "comms", "ee_5", "motor_control",
                      "auto_control")
         drive_m = {"mode_args": self.p.drive_modes, 'deg_params': self.p.degradation}
         self.add_fxn("drive", Drive, "ground", 'pos', "ee_15", "motor_control",
