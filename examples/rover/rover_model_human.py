@@ -30,6 +30,11 @@ from fmdtools.define.container.mode import Mode
 from fmdtools.define.flow.base import Flow
 
 from examples.rover.rover_model import Switch, Comms, Video, Control
+from examples.rover.rover_model import Rover, RoverParam
+from examples.rover.rover_model import Ground, Pos_Signal, Pos, EE
+from examples.rover.rover_model import FaultSig, Power, Perception, Communications
+from examples.rover.rover_model import PlanPath, Override, Drive
+
 
 class OperatorSignalState(State):
     """
@@ -77,6 +82,8 @@ class Look(Action, GenericHumanAction):
     Operator looking at the state of comms signals, switches, etc.
 
     Should take in external info (comms, switches, etc, and relay perceived info).
+
+    (use this for Comms.recieve)
     """
 
     __slots__ = ('signal', 'video', 'switch')
@@ -99,6 +106,8 @@ class Percieve(Action, GenericHumanAction):
     Operator percieving the state of comms signals, switches, etc.
 
     Should take in view (from look) and pass as percieved info.
+
+    (passthrough?)
     """
 
     __slots__ = ('signal',)
@@ -113,6 +122,7 @@ class Comprehend(Action, GenericHumanAction):
     Should take in percieved info and distill as situation (moving, turning, etc)
 
     May fail due to stress >8 or stress >80.
+    (passthrough?)
     """
 
     __slots__ = ('signal',)
@@ -130,7 +140,8 @@ class Project(Action, GenericHumanAction):
 
     May fail to project turns or power?
 
-    Causes and uses workload
+    Causes and uses workload.
+    (Inherit speed/projection PlanPath behavior here)
     """
 
     __slots__ = ('signal',)
@@ -141,6 +152,7 @@ class Project(Action, GenericHumanAction):
 class Decide(Action, GenericHumanAction):
     """
     Operator deciding how to control actions based on projection of input state.
+    (Inherit motor control signal behavior here)
     """
 
     __slots__ = ('signal',)
@@ -149,7 +161,11 @@ class Decide(Action, GenericHumanAction):
 
 
 class Reach(Action, GenericHumanAction):
-    """Operator reaching for controls to operate."""
+    """
+    Operator reaching for controls to operate.
+
+    (passthrough)
+    """
 
     __slots__ = ('signal',)
     container_m = HumanActionMode
@@ -160,7 +176,11 @@ class PressMode(Mode):
     fm_args = ('failed_long', 'failed_short', 'failed_no_action')
 
 class Press(Action, GenericHumanAction):
-    """Operator presses the button/toggle for the controls."""
+    """
+    Operator presses the button/toggle for the controls.
+
+    (passthrough)
+    """
 
     __slots__ = ('signal', 'switch', 'control')
     container_m = PressMode
@@ -200,10 +220,48 @@ class HumanActions(ActionArchitecture):
         self.add_cond('reach', 'press', condition=self.acts['reach'].complete)
 
 
-from examples.rover.rover_model import Rover, RoverParam
+class Operator(Function):
+    __slots__ = ('signal', 'switch', 'control', 'comms', 'video')
+    flow_signal = OperatorSignal
+    flow_switch = Switch
+    flow_control = Control
+    flow_comms = Comms
+    flow_video = Video
+    flownames = {"operator_signal": "signal", "manual_control": "control"}
+
 
 class RoverHuman(Rover):
-    a = 1
+
+    def init_architecture(self, **kwargs):
+        """Initialize the functional architecture."""
+        self.add_flow("ground", Ground, p=self.p.ground)
+        self.add_flow("pos_signal", Pos_Signal)
+        self.add_flow('pos', Pos)
+        self.add_flow("ee_12", EE)
+        self.add_flow("ee_5", EE)
+        self.add_flow("ee_15", EE)
+        self.add_flow("video", Video)
+        self.add_flow("auto_control", Control)
+        self.add_flow("manual_control", Control)
+        self.add_flow("motor_control", Control)
+        self.add_flow("switch", Switch)
+        self.add_flow("operator_signal", OperatorSignal)
+        self.add_flow("comms", Comms)
+        self.add_flow("fault_sig", FaultSig)
+
+        self.add_fxn("power", Power, "ee_15", "ee_5", "ee_12", "switch")
+        self.add_fxn("operator", Operator,
+                     "operator_signal", "switch", "manual_control", "comms", "video")
+        self.add_fxn("communications", Communications, "comms", "ee_12", "pos_signal")
+        self.add_fxn("perception", Perception, "ground", 'pos', "ee_12", "video")
+        self.add_fxn("plan_path", PlanPath, "video", "pos_signal", "ground", 'pos',
+                     "auto_control", "fault_sig", p=self.p.correction)
+        self.add_fxn("override", Override,
+                     "comms", "ee_5", "motor_control", "auto_control",
+                     m={'mode': 'override'})
+        drive_m = {"mode_args": self.p.drive_modes, 'deg_params': self.p.degradation}
+        self.add_fxn("drive", Drive, "ground", 'pos', "ee_15", "motor_control",
+                     "fault_sig", m=drive_m)
 
 
 if __name__ == "__main__":
@@ -211,6 +269,8 @@ if __name__ == "__main__":
     hum = HumanActions()
     ag = ActionArchitectureGraph(hum)
     ag.draw()
+
+    rvr = RoverHuman()
     # mdl = RoverHuman(params=RoverParam('sine', amp=4.0))
 
 
