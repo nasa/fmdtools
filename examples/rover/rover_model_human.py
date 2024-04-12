@@ -31,37 +31,23 @@ from fmdtools.define.flow.base import Flow
 
 from examples.rover.rover_model import Switch, Comms, Video, Control
 from examples.rover.rover_model import Rover, RoverParam
-from examples.rover.rover_model import Ground, Pos_Signal, Pos, EE
+from examples.rover.rover_model import Ground, Pos, EE
 from examples.rover.rover_model import FaultSig, Power, Perception, Communications
 from examples.rover.rover_model import PlanPath, Override, Drive
-
-
-class OperatorSignalState(State):
-    """
-    State defining qualitative actions the operator performs.
-
-    Fields
-    ------
-    turn : str
-        Turning actions ('none', 'left', or 'right'). Default is 'none'.
-    power : str
-        Power actions ('none', 'on', 'off'). Default is 'none'.
-    """
-    turn: str = 'none'
-    power: str = 'none'
+from examples.rover.rover_model import PlanPathState
 
 
 class OperatorSignal(Flow):
 
     __slots__ = ()
-    container_s = OperatorSignalState
+    container_s = PlanPathState
 
 
 class HumanActionMode(Mode):
     """Generic/shared modes for human actions."""
     fm_args = ('failed_no_action', )
-    opermodes = ('no_action', 'done')
-    mode: float = 'no_action'
+    opermodes = ('nominal', )
+    mode: str = 'nominal'
     exclusive = True
 
 
@@ -69,36 +55,25 @@ class GenericHumanAction(object):
     """Shared properties of human actions."""
 
     __slots__ = ()
+    container_m = HumanActionMode
+
     def complete(self):
         return not self.m.in_mode('no_action', 'failed_no_action')
-
-
-class LookMode(HumanActionMode):
-    fm_args = ('not_visible', 'wrong_data', 'failed_no_action')
 
 
 class Look(Action, GenericHumanAction):
     """
     Operator looking at the state of comms signals, switches, etc.
 
-    Should take in external info (comms, switches, etc, and relay perceived info).
-
-    (use this for Comms.recieve)
+    Works as a simple pass-through. If the user doesn't look, they can't percieve,
+    project, etc.
     """
 
-    __slots__ = ('signal', 'video', 'switch')
-    container_m = LookMode
-    flow_signal = OperatorSignal
-    flow_video = Video
-    flow_switch = Switch
-
-    def behavior(self, t):
-        if self.video.quality == 0.0:
-            self.set_mode('not_visible')
+    __slots__ = ()
 
 
 class PerceptionMode(HumanActionMode):
-    fm_args = ("failed_speed", "failed_no_action", "failed_turn")
+    fm_args = ("failed_no_action", "not_visible", "wrong_position")
 
 
 class Percieve(Action, GenericHumanAction):
@@ -110,9 +85,19 @@ class Percieve(Action, GenericHumanAction):
     (passthrough?)
     """
 
-    __slots__ = ('signal',)
+    __slots__ = ('comms', 'pos_signal', 'video')
     container_m = PerceptionMode
-    flow_signal = OperatorSignal
+    flow_comms = Comms
+    flow_pos_signal = Pos
+    flow_video = Video
+
+    def behavior(self, t):
+        if self.comms.video.quality == 0.0:
+            self.set_mode('not_visible')
+        if not self.m.in_mode("not_visible"):
+            self.video.s.assign(self.comms.video)
+        if not self.m.in_mode("wrong_position"):
+            self.pos_signal.s.assign(self.comms.pos)
 
 
 class Comprehend(Action, GenericHumanAction):
@@ -125,14 +110,21 @@ class Comprehend(Action, GenericHumanAction):
     (passthrough?)
     """
 
-    __slots__ = ('signal',)
-    container_m = PerceptionMode
+    __slots__ = ('signal', 'pos_signal', 'video')
+    container_m = HumanActionMode
     flow_signal = OperatorSignal
+    flow_pos_signal = Pos
+    flow_video = Video
+
+    def behavior(self, t):
+        if self.m.in_mode('nominal'):
+            self.signal.s.set_positions(self.pos_signal, self.video)
 
 
 class ProjectMode(HumanActionMode):
-    fm_args = ('failed_turn_left', 'failed_turn_right', 'failed_noturn',
-               'failed_poweron', 'failed_poweroff', 'failed_no_action')
+    fm_args = ('failed_turn_left', 'failed_turn_right', 'failed_slow', 'failed_fast',
+               'failed_no_action')
+
 
 class Project(Action, GenericHumanAction):
     """
@@ -148,6 +140,24 @@ class Project(Action, GenericHumanAction):
     container_m = ProjectMode
     flow_signal = OperatorSignal
 
+    def behavior(self, t):
+        if self.m.in_mode('nominal'):
+            self.signal.s.set_turn()
+        elif self.m.in_mode('failed_turn_left'):
+            self.signal.s.rdiff = -0.5
+        elif self.m.in_mode('failed_turn_right'):
+            self.signal.s.rdiff = 0.5
+        elif self.m.in_mode('failed_slow'):
+            self.signal.s.set_turn()
+            self.signal.s.vel_adj = 0.2
+        elif self.m.in_mode('failed_fast'):
+            self.signal.s.set_turn()
+            self.signal.s.vel_adj = 4.0
+
+
+class DecideMode(Mode):
+    fm_args = ('failed_no_action', 'failed_continue')
+
 
 class Decide(Action, GenericHumanAction):
     """
@@ -155,9 +165,15 @@ class Decide(Action, GenericHumanAction):
     (Inherit motor control signal behavior here)
     """
 
-    __slots__ = ('signal',)
+    __slots__ = ('signal', 'control')
     container_m = ProjectMode
     flow_signal = OperatorSignal
+    flow_control = Control
+
+    def behavior(self, t):
+        # if no action, stops here. If continue, doesn't pass new control info.
+        if self.m.in_mode('nominal'):
+            self.signal.set_control(self.control)
 
 
 class Reach(Action, GenericHumanAction):
@@ -167,13 +183,12 @@ class Reach(Action, GenericHumanAction):
     (passthrough)
     """
 
-    __slots__ = ('signal',)
+    __slots__ = ()
     container_m = HumanActionMode
-    flow_signal = OperatorSignal
 
 
 class PressMode(Mode):
-    fm_args = ('failed_long', 'failed_short', 'failed_no_action')
+    fm_args = ('failed_left', 'failed_right', 'no_press')
 
 class Press(Action, GenericHumanAction):
     """
@@ -182,11 +197,20 @@ class Press(Action, GenericHumanAction):
     (passthrough)
     """
 
-    __slots__ = ('signal', 'switch', 'control')
+    __slots__ = ('control', 'comms')
     container_m = PressMode
-    flow_signal = OperatorSignal
-    flow_switch = Switch
     flow_control = Control
+    flow_comms = Comms
+
+    def behavior(self, t):
+        if self.m.in_mode('nominal'):
+            self.comms.s.ctl.assign(self.control.s)
+        elif self.m.in_mode('failed_left'):
+            self.comms.s.ctl.put(lpower=1.0, rpower=0.0)
+        elif self.m.in_mode('failed_right'):
+            self.comms.s.ctl.put(lpower=0.0, rpower=1.0)
+        elif self.m.in_mode('no_press'):
+            self.comms.s.ctl.put(lpower=0.0, rpower=0.0)
 
 
 class HumanActions(ActionArchitecture):
@@ -196,19 +220,20 @@ class HumanActions(ActionArchitecture):
 
     def init_architecture(self, **kwargs):
         self.add_flow('signal', OperatorSignal)
+        self.add_flow('pos_signal', Pos)
         self.add_flow('switch', Switch)
         self.add_flow('control', Control)
         self.add_flow('comms', Comms)
         self.add_flow('video', Video)
         # flow for workload "local PSF"?
 
-        self.add_act('look', Look, 'signal', 'video', 'switch')
-        self.add_act('percieve', Percieve, 'signal')
-        self.add_act('comprehend', Comprehend, 'signal')
+        self.add_act('look', Look)
+        self.add_act('percieve', Percieve, 'comms', 'pos_signal', 'video')
+        self.add_act('comprehend', Comprehend, 'pos_signal', 'video', 'signal')
         self.add_act('project', Project, 'signal')
-        self.add_act('decide', Decide, 'signal')
-        self.add_act('reach', Reach, 'signal')
-        self.add_act('press', Press, 'signal', 'switch', 'control', duration=1.0)
+        self.add_act('decide', Decide, 'signal', 'control')
+        self.add_act('reach', Reach)
+        self.add_act('press', Press, 'comms', 'control', duration=1.0)
 
         self.add_cond('look', 'percieve', condition=self.acts['look'].complete)
         self.add_cond('percieve', 'comprehend',
@@ -227,7 +252,7 @@ class Operator(Function):
     flow_control = Control
     flow_comms = Comms
     flow_video = Video
-    flownames = {"operator_signal": "signal", "manual_control": "control"}
+    flownames = {"operator_signal": "signal"}
 
 
 class RoverHuman(Rover):
@@ -235,39 +260,47 @@ class RoverHuman(Rover):
     def init_architecture(self, **kwargs):
         """Initialize the functional architecture."""
         self.add_flow("ground", Ground, p=self.p.ground)
-        self.add_flow("pos_signal", Pos_Signal)
+        self.add_flow("pos_signal", Pos)
         self.add_flow('pos', Pos)
         self.add_flow("ee_12", EE)
         self.add_flow("ee_5", EE)
         self.add_flow("ee_15", EE)
         self.add_flow("video", Video)
         self.add_flow("auto_control", Control)
-        self.add_flow("manual_control", Control)
         self.add_flow("motor_control", Control)
         self.add_flow("switch", Switch)
-        self.add_flow("operator_signal", OperatorSignal)
         self.add_flow("comms", Comms)
         self.add_flow("fault_sig", FaultSig)
 
         self.add_fxn("power", Power, "ee_15", "ee_5", "ee_12", "switch")
-        self.add_fxn("operator", Operator,
-                     "operator_signal", "switch", "manual_control", "comms", "video")
-        self.add_fxn("communications", Communications, "comms", "ee_12", "pos_signal")
-        self.add_fxn("perception", Perception, "ground", 'pos', "ee_12", "video")
-        self.add_fxn("plan_path", PlanPath, "video", "pos_signal", "ground", 'pos',
+        self.add_fxn("perception", Perception, "ground", 'pos', 'pos_signal',
+                     "ee_12", "video")
+        self.add_fxn("communications", Communications, "comms", "ee_12", "pos_signal",
+                     "video")
+
+        self.add_fxn("operator", Operator, "switch", "comms")
+
+        self.add_fxn("override", Override, "comms", "ee_5", "motor_control",
+                     "auto_control")
+        self.add_fxn("plan_path", PlanPath, "video", "pos_signal", "ground",
                      "auto_control", "fault_sig", p=self.p.correction)
-        self.add_fxn("override", Override,
-                     "comms", "ee_5", "motor_control", "auto_control",
-                     m={'mode': 'override'})
         drive_m = {"mode_args": self.p.drive_modes, 'deg_params': self.p.degradation}
         self.add_fxn("drive", Drive, "ground", 'pos', "ee_15", "motor_control",
                      "fault_sig", m=drive_m)
+
+
+asg_pos = {'look': [-0.9, 0.88], 'percieve': [-0.68, 0.62], 'comms': [-0.66, -0.68],
+           'pos_signal': [-0.45, 0.91], 'video': [0.02, 0.7],
+           'comprehend': [-0.46, 0.4], 'signal': [0.46, 0.44], 'project': [-0.24, 0.1],
+           'decide': [-0.01, -0.15], 'control': [0.81, -0.13], 'reach': [0.36, -0.44],
+           'press': [0.9, -0.69]}
 
 
 if __name__ == "__main__":
     from fmdtools.analyze.graph import ActionArchitectureGraph
     hum = HumanActions()
     ag = ActionArchitectureGraph(hum)
+    ag.set_pos(**asg_pos)
     ag.draw()
 
     rvr = RoverHuman()
