@@ -26,6 +26,7 @@ from fmdtools.define.block.action import Action
 from fmdtools.define.architecture.action import ActionArchitecture
 from fmdtools.define.block.function import Function
 from fmdtools.define.container.state import State
+from fmdtools.define.container.parameter import Parameter
 from fmdtools.define.container.mode import Mode
 from fmdtools.define.flow.base import Flow
 
@@ -37,7 +38,48 @@ from examples.rover.rover_model import PlanPath, Override, Drive
 from examples.rover.rover_model import PlanPathState
 
 
+class PSFParam(Parameter):
+    """
+    Operator performance shaping factors that stay the same in an operation.
+
+    Fields
+    ------
+    fatigue : float
+        Fatigue level over the course of a day.
+    stress : float
+        Operator stress level over the course of a day.
+    """
+    fatigue: float = 0.0
+    stress: float = 0.0
+
+
+class PSFState(State):
+    """
+    Operator performance shaping factors that degrade over time.
+
+    Fields
+    ------
+    fatigue : float
+        Fatigue level over the course of a day.
+    stress : float
+        Operator stress level over the course of a day.
+    attention : float
+        Operator attention over the course of a day.
+    """
+
+    attention: float = 10.0
+
+
+class PSFs(Flow):
+    """Flow of operator performance shaping factors."""
+
+    __slots__ = ()
+    container_s = PSFState
+    container_p = PSFParam
+
+
 class OperatorSignal(Flow):
+    """Flow of operator path planning information."""
 
     __slots__ = ()
     container_s = PlanPathState
@@ -85,16 +127,22 @@ class Percieve(Action, GenericHumanAction):
     (passthrough?)
     """
 
-    __slots__ = ('comms', 'pos_signal', 'video')
+    __slots__ = ('comms', 'pos_signal', 'video', 'psfs')
     container_m = PerceptionMode
     flow_comms = Comms
     flow_pos_signal = Pos
     flow_video = Video
+    flow_psfs = PSFs
 
     def behavior(self, t):
         if self.comms.video.quality == 0.0:
             self.set_mode('not_visible')
-        if not self.m.in_mode("not_visible"):
+        elif self.psfs.p.fatigue > 8:
+            self.set_mode("failed_no_action")
+        elif self.psfs.s.attention < 3:
+            self.set_mode("wrong_position")
+
+        if self.m.in_mode("not_visible"):
             self.video.s.assign(self.comms.video)
         if not self.m.in_mode("wrong_position"):
             self.pos_signal.s.assign(self.comms.pos)
@@ -110,13 +158,16 @@ class Comprehend(Action, GenericHumanAction):
     (passthrough?)
     """
 
-    __slots__ = ('signal', 'pos_signal', 'video')
+    __slots__ = ('signal', 'pos_signal', 'video', 'psfs')
     container_m = HumanActionMode
     flow_signal = OperatorSignal
     flow_pos_signal = Pos
     flow_video = Video
+    flow_psfs = PSFs
 
     def behavior(self, t):
+        if self.psfs.s.fatigue > 8 or self.psfs.p.stress > 80:
+            self.set_mode('failed_no_action')
         if self.m.in_mode('nominal'):
             self.signal.s.set_positions(self.pos_signal, self.video)
 
@@ -136,9 +187,10 @@ class Project(Action, GenericHumanAction):
     (Inherit speed/projection PlanPath behavior here)
     """
 
-    __slots__ = ('signal',)
+    __slots__ = ('signal', 'psfs')
     container_m = ProjectMode
     flow_signal = OperatorSignal
+    flow_psfs = PSFs
 
     def behavior(self, t):
         if self.m.in_mode('nominal'):
@@ -153,6 +205,13 @@ class Project(Action, GenericHumanAction):
         elif self.m.in_mode('failed_fast'):
             self.signal.s.set_turn()
             self.signal.s.vel_adj = 4.0
+        # increment attention - degrades over the course of an operation if the
+        # driving isn't "interesting" (aka there are no turns)
+        if self.signal.s.rdiff < 0.01:
+            if self.psfs.p.fatigue < 5:
+                self.psfs.s.inc(attention=(-1, 0.0))
+            else:
+                self.psfs.s.inc(attention=(-2, 0.0))
 
 
 class DecideMode(Mode):
@@ -217,8 +276,10 @@ class HumanActions(ActionArchitecture):
 
     __slots__ = ()
     initial_action = "look"
+    container_p = PSFParam
 
     def init_architecture(self, **kwargs):
+        self.add_flow('psfs', PSFs, p=self.p)
         self.add_flow('signal', OperatorSignal)
         self.add_flow('pos_signal', Pos)
         self.add_flow('switch', Switch)
@@ -228,9 +289,9 @@ class HumanActions(ActionArchitecture):
         # flow for workload "local PSF"?
 
         self.add_act('look', Look)
-        self.add_act('percieve', Percieve, 'comms', 'pos_signal', 'video')
-        self.add_act('comprehend', Comprehend, 'pos_signal', 'video', 'signal')
-        self.add_act('project', Project, 'signal')
+        self.add_act('percieve', Percieve, 'comms', 'pos_signal', 'video', 'psfs')
+        self.add_act('comprehend', Comprehend, 'pos_signal', 'video', 'signal', 'psfs')
+        self.add_act('project', Project, 'signal', 'psfs')
         self.add_act('decide', Decide, 'signal', 'control')
         self.add_act('reach', Reach)
         self.add_act('press', Press, 'comms', 'control', duration=1.0)
@@ -246,16 +307,23 @@ class HumanActions(ActionArchitecture):
 
 
 class Operator(Function):
-    __slots__ = ('signal', 'switch', 'control', 'comms', 'video')
+    __slots__ = ('signal', 'switch', 'control', 'comms', 'video', 'psfs')
     flow_signal = OperatorSignal
     flow_switch = Switch
     flow_control = Control
     flow_comms = Comms
     flow_video = Video
+    flow_psfs = PSFs
     flownames = {"operator_signal": "signal"}
+    container_p = PSFParam
+
+
+class RoverHumanParam(RoverParam):
+    psfs: PSFParam = PSFParam()
 
 
 class RoverHuman(Rover):
+    container_p = RoverHumanParam
 
     def init_architecture(self, **kwargs):
         """Initialize the functional architecture."""
@@ -278,7 +346,7 @@ class RoverHuman(Rover):
         self.add_fxn("communications", Communications, "comms", "ee_12", "pos_signal",
                      "video")
 
-        self.add_fxn("operator", Operator, "switch", "comms")
+        self.add_fxn("operator", Operator, "switch", "comms", p=self.p.psfs)
 
         self.add_fxn("override", Override, "comms", "ee_5", "motor_control",
                      "auto_control")
@@ -290,7 +358,7 @@ class RoverHuman(Rover):
 
 
 asg_pos = {'look': [-0.9, 0.88], 'percieve': [-0.68, 0.62], 'comms': [-0.66, -0.68],
-           'pos_signal': [-0.45, 0.91], 'video': [0.02, 0.7],
+           'pos_signal': [-0.45, 0.91], 'video': [0.02, 0.7], 'psfs': [-0.55, 0.05],
            'comprehend': [-0.46, 0.4], 'signal': [0.46, 0.44], 'project': [-0.24, 0.1],
            'decide': [-0.01, -0.15], 'control': [0.81, -0.13], 'reach': [0.36, -0.44],
            'press': [0.9, -0.69]}
