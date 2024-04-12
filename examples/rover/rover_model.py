@@ -397,13 +397,15 @@ class CommsState(State):
     """
     Communications signal with override.
 
-    Extends Pos and Control such that 'active' represents override activity.
+    Extends Pos and Control such that 'active' represents override activity and
+    'on' represents whether data is active/passed.
     """
 
     pos: PosState = PosState()
     ctl: ControlState = ControlState()
     video: VideoState = VideoState()
     active: bool = False
+    on: bool = False
 
 
 class Comms(Flow):
@@ -487,9 +489,14 @@ class PlanPathState(State):
     def set_turn(self):
         """Calculate turn rdiff from ownship position, line position, and deviation."""
         rdiff_track = rdiff_from_vects(self.u_self, self.u_lin)
-        rdiff_err = rdiff_from_vects(self.u_self,
-                                     self.u_lin_dev) * np.linalg.norm(self.u_lin_dev)
+        err_dist = np.linalg.norm(self.u_lin_dev)
+        rdiff_err = rdiff_from_vects(self.u_self, self.u_lin_dev) * err_dist
         self.rdiff = rdiff_track + 0.15 * rdiff_err
+        #if err_dist > 0.05:
+        #    self.vel_adj = 0.2
+        #else:
+        #    self.vel_adj = 1.0
+
 
     def set_control(self, control):
         """Set rpower and lpower for control given intended turn and vel_adj."""
@@ -764,22 +771,23 @@ class Perception(Function):
     def dynamic_behavior(self, time):
         """Set the video feed based on the behavior mode at each timestep."""
         # Nominal Behavior
+        if self.ee.s.v > 8:
+            self.m.set_mode("feed")
+        elif self.ee.s.v == 0:
+            self.m.set_mode("off")
+
         if self.m.in_mode("off"):
             self.ee.s.a = 0
             self.video.s.put(lin_ux=0.0, lin_uy=0.0,
                              lin_dx=0.0, lin_dy=0.0, quality=0.0)
-            if self.ee.s.v == 12:
-                self.m.set_mode("feed")
         elif self.m.in_mode("feed"):
-            if self.ee.s.v > 8:
-                if self.ground.on_course(self.pos.s):
-                    self.get_line_ang()
-                else:
-                    # Video quality drops off if rover is off course
-                    self.video.s.quality = 0.0
-                self.pos_signal.s.assign(self.pos.s, "x", "y", "ux", "uy")
-            elif self.ee.s.v == 0:
-                self.m.set_mode("off")
+            if self.ground.on_course(self.pos.s):
+                self.get_line_ang()
+            else:
+                # Video quality drops off if rover is off course
+                self.video.s.quality = 0.0
+            self.pos_signal.s.assign(self.pos.s, "x", "y", "ux", "uy")
+            
         # Faulty Behavior
         elif self.m.has_fault("bad_feed"):
             self.video.s.quality = 0.5
@@ -953,18 +961,22 @@ class Override(Function):
     flownames = {"ee_5": "ee"}
 
     def dynamic_behavior(self, time):
+        if self.ee.s.v > 4:
+            if self.comms.s.active and self.comms.s.on:
+                self.m.set_mode("override")
+            else:
+                self.m.set_mode("standby")
+        else:
+            self.m.set_mode("off")
+
         if self.m.in_mode("off"):
             self.ee.s.a = 0
-            if self.ee.s.v == 5:
-                self.m.set_mode("standby")
         elif self.m.in_mode("standby"):
+            self.ee.s.a = 1
             self.motor_control.s.assign(self.auto_control.s, "rpower", "lpower")
-            if self.ee.s.v > 4 and self.comms.s.active:
-                self.m.set_mode("override")
         elif self.m.in_mode("override"):
+            self.ee.s.a = 1
             self.motor_control.s.assign(self.comms.s.ctl, "rpower", "lpower")
-            if self.ee.s.v > 4 and not self.comms.s.active:
-                self.m.set_mode("override")
 
 
 class Communications(Function):
@@ -982,8 +994,10 @@ class Communications(Function):
             self.ee_12.s.a = 1
             self.comms.s.pos.assign(self.pos_signal.s, "x", "y", "vel", "ux", "uy")
             self.comms.s.video.assign(self.video.s)
+            self.comms.s.on = True
         else:
             self.comms.s.pos.put(x=0, y=0, vel=0, ux=0, uy=0)
+            self.comms.s.on = False
 
 
 class Operator(Function):
@@ -1056,10 +1070,10 @@ class Rover(FunctionArchitecture):
         self.add_fxn("communications", Communications, "comms", "ee_12", "pos_signal",
                      "video")
         self.add_fxn("operator", Operator, "switch")
-        self.add_fxn("override", Override, "comms", "ee_5", "motor_control",
-                     "auto_control")
         self.add_fxn("plan_path", PlanPath, "video", "pos_signal", "ground",
                      "auto_control", "fault_sig", p=self.p.correction)
+        self.add_fxn("override", Override, "comms", "ee_5", "motor_control",
+                     "auto_control")
         drive_m = {"mode_args": self.p.drive_modes, 'deg_params': self.p.degradation}
         self.add_fxn("drive", Drive, "ground", 'pos', "ee_15", "motor_control",
                      "fault_sig", m=drive_m)
@@ -1177,14 +1191,21 @@ if __name__ == "__main__":
     import multiprocessing as mp
     from fmdtools.analyze import tabulate
     from fmdtools.sim.sample import SampleApproach, FaultDomain, FaultSample
+
+    mdl = Rover()
+    ec1, hist1 = prop.nominal(mdl)
+    fig, ax = hist1.plot_trajectories('flows.pos.s.x', 'flows.pos.s.y',
+                                     time_groups=['nominal'])
+    fig, ax = plot_map(mdl, hist1)
+    ax.set_xlim(0,1.5)
+    ax.set_ylim(0,1.5)
+    fig.show()
+
     import doctest
     doctest.testmod(verbose=True)
-    mdl = Rover()
-    ec1, hist = prop.nominal(mdl)
-    fig, ax = hist.plot_trajectories('flows.pos.s.x', 'flows.pos.s.y',
-                                     time_groups=['nominal'])
+
     mdl.flows['ground'].ga.show(fig=fig, ax=ax)
-    fig, ax = hist.plot_trajectories('flows.pos.s.x', 'flows.pos.s.y')
+    fig, ax = hist1.plot_trajectories('flows.pos.s.x', 'flows.pos.s.y')
 
     mdl = Rover(p={'ground': GroundParam(linetype='turn')})
     ec, hist = prop.nominal(mdl)

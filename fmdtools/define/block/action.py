@@ -18,9 +18,9 @@ class Action(Block):
 
     __slots__ = ('duration',)
 
-    def __init__(self, name, duration=0.0, **kwargs):
+    def __init__(self, name=None, duration=0.0, **kwargs):
         self.duration = duration
-        super().__init__(name, **kwargs)
+        super().__init__(name=name, **kwargs)
 
     def __call__(self, time=0, run_stochastic=False, proptype='dynamic', dt=1.0):
         """
