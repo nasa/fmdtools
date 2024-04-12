@@ -24,7 +24,6 @@ Flows:
 """
 from fmdtools.define.block.action import Action
 from fmdtools.define.architecture.action import ActionArchitecture
-from fmdtools.define.block.function import Function
 from fmdtools.define.container.state import State
 from fmdtools.define.container.parameter import Parameter
 from fmdtools.define.container.mode import Mode
@@ -36,6 +35,7 @@ from examples.rover.rover_model import Ground, Pos, EE
 from examples.rover.rover_model import FaultSig, Power, Perception, Communications
 from examples.rover.rover_model import PlanPath, Override, Drive
 from examples.rover.rover_model import PlanPathState
+from examples.rover.rover_model import Operator as BaseOperator
 
 
 class PSFParam(Parameter):
@@ -49,6 +49,7 @@ class PSFParam(Parameter):
     stress : float
         Operator stress level over the course of a day.
     """
+
     fatigue: float = 0.0
     stress: float = 0.0
 
@@ -100,6 +101,7 @@ class GenericHumanAction(object):
     container_m = HumanActionMode
 
     def complete(self):
+        """Action is finished if not in 'no_action' mode."""
         return not self.m.in_mode('no_action', 'failed_no_action')
 
 
@@ -109,13 +111,35 @@ class Look(Action, GenericHumanAction):
 
     Works as a simple pass-through. If the user doesn't look, they can't percieve,
     project, etc.
+
+    Example
+    -------
+    >>> l = Look()
+    >>> l.complete()
+    True
+    >>> l.m.to_fault("failed_no_action")
+    >>> l.complete()
+    False
     """
 
     __slots__ = ()
 
 
 class PerceptionMode(HumanActionMode):
+    """
+    Modes for failed perception.
+
+    Modes
+    -----
+    failed_no_action : Mode
+        Action not completed.
+    not_visible : Mode
+        Video not percieved.
+    wrong_position : Mode
+        Position not percieved.
+    """
     fm_args = ("failed_no_action", "not_visible", "wrong_position")
+    opermodes = ('nominal', 'no_action')
 
 
 class Percieve(Action, GenericHumanAction):
@@ -124,7 +148,16 @@ class Percieve(Action, GenericHumanAction):
 
     Should take in view (from look) and pass as percieved info.
 
-    (passthrough?)
+    Examples
+    --------
+    >>> p = Percieve()
+    >>> p.comms.s.pos.x = 1.0
+    >>> p.comms.s.video.lin_ux = 2.0
+    >>> p.behavior(1)
+    >>> p.pos_signal.s.x
+    1.0
+    >>> p.video.s.lin_ux
+    2.0
     """
 
     __slots__ = ('comms', 'pos_signal', 'video', 'psfs')
@@ -135,17 +168,21 @@ class Percieve(Action, GenericHumanAction):
     flow_psfs = PSFs
 
     def behavior(self, t):
-        if self.comms.video.quality == 0.0:
-            self.set_mode('not_visible')
+        if not self.comms.s.on:
+            self.m.remove_any_faults(opermode='no_action')
+        elif self.comms.s.video.quality == 0.0:
+            self.m.to_fault('not_visible')
         elif self.psfs.p.fatigue > 8:
-            self.set_mode("failed_no_action")
+            self.m.to_fault("failed_no_action")
         elif self.psfs.s.attention < 3:
-            self.set_mode("wrong_position")
+            self.m.to_fault("wrong_position")
+        else:
+            self.m.remove_any_faults(opermode='nominal')
 
-        if self.m.in_mode("not_visible"):
-            self.video.s.assign(self.comms.video)
-        if not self.m.in_mode("wrong_position"):
-            self.pos_signal.s.assign(self.comms.pos)
+        if not self.m.in_mode("not_visible", 'no_action'):
+            self.video.s.assign(self.comms.s.video)
+        if not self.m.in_mode("wrong_position", 'no_action'):
+            self.pos_signal.s.assign(self.comms.s.pos)
 
 
 class Comprehend(Action, GenericHumanAction):
@@ -155,7 +192,13 @@ class Comprehend(Action, GenericHumanAction):
     Should take in percieved info and distill as situation (moving, turning, etc)
 
     May fail due to stress >8 or stress >80.
-    (passthrough?)
+    Examples
+    --------
+    >>> c = Comprehend()
+    >>> c.pos_signal.s.put(ux=1.0, uy=1.0)
+    >>> c.behavior(1)
+    >>> c.signal.s.u_self
+    array([1., 1.])
     """
 
     __slots__ = ('signal', 'pos_signal', 'video', 'psfs')
@@ -166,13 +209,30 @@ class Comprehend(Action, GenericHumanAction):
     flow_psfs = PSFs
 
     def behavior(self, t):
-        if self.psfs.s.fatigue > 8 or self.psfs.p.stress > 80:
-            self.set_mode('failed_no_action')
+        if self.psfs.p.fatigue > 8 or self.psfs.p.stress > 80:
+            self.to_fault('failed_no_action')
         if self.m.in_mode('nominal'):
             self.signal.s.set_positions(self.pos_signal, self.video)
 
 
 class ProjectMode(HumanActionMode):
+    """
+    Projection failure modes.
+
+    Modes
+    -----
+    failed_turn_left : Mode
+        Spontaneous left turn.
+    failed_turn_right : Mode
+        Spontaneous right turn.
+    failed_slow : Mode
+        Velocity adjusted slow.
+    failed_fast : Mode
+        Velocity adjusted to go fast.
+    failed_no_action : Mode
+        No projection performed.
+    """
+
     fm_args = ('failed_turn_left', 'failed_turn_right', 'failed_slow', 'failed_fast',
                'failed_no_action')
 
@@ -181,10 +241,14 @@ class Project(Action, GenericHumanAction):
     """
     Operator projecting out how control actions might affect input state.
 
-    May fail to project turns or power?
-
-    Causes and uses workload.
-    (Inherit speed/projection PlanPath behavior here)
+    Determines rdiff in signal.
+    Examples
+    --------
+    >>> p = Project()
+    >>> p.signal.s.put(u_self=(0.0, 1.0), u_lin=(1.0, 1.0))
+    >>> p.behavior(1)
+    >>> p.signal.s.rdiff
+    -0.7854052343902613
     """
 
     __slots__ = ('signal', 'psfs')
@@ -207,21 +271,41 @@ class Project(Action, GenericHumanAction):
             self.signal.s.vel_adj = 4.0
         # increment attention - degrades over the course of an operation if the
         # driving isn't "interesting" (aka there are no turns)
-        if self.signal.s.rdiff < 0.01:
+        # turns reset the attention to 10
+        if abs(self.signal.s.rdiff) < 0.01:
             if self.psfs.p.fatigue < 5:
                 self.psfs.s.inc(attention=(-1, 0.0))
             else:
                 self.psfs.s.inc(attention=(-2, 0.0))
+        else:
+            self.psfs.s.attention = 10.0
 
 
 class DecideMode(Mode):
+    """
+    Decide failure modes.
+
+    Modes
+    -----
+    failed_no_action : Mode
+        No decision performed.
+    failed_continue : Mode
+        Decision not performed, but continues with actions.
+    """
     fm_args = ('failed_no_action', 'failed_continue')
 
 
 class Decide(Action, GenericHumanAction):
     """
     Operator deciding how to control actions based on projection of input state.
-    (Inherit motor control signal behavior here)
+
+    Examples
+    --------
+    >>> d = Decide()
+    >>> d.signal.s.rdiff = 1.0
+    >>> d.behavior(1)
+    >>> d.control.s
+    ControlState(rpower=2, lpower=0.0)
     """
 
     __slots__ = ('signal', 'control')
@@ -232,7 +316,7 @@ class Decide(Action, GenericHumanAction):
     def behavior(self, t):
         # if no action, stops here. If continue, doesn't pass new control info.
         if self.m.in_mode('nominal'):
-            self.signal.set_control(self.control)
+            self.signal.s.set_control(self.control)
 
 
 class Reach(Action, GenericHumanAction):
@@ -247,13 +331,33 @@ class Reach(Action, GenericHumanAction):
 
 
 class PressMode(Mode):
+    """
+    Operator pressing modes.
+
+    Modes
+    -----
+    failed_left : Mode
+        Operator unexpectedly presses to turn left.
+    failed_right : Mode
+        Operator unexpectedly presses to turn right.
+    no_press : Mode
+        Operator unexpectedly disengages controls (making power zero).
+    """
+
     fm_args = ('failed_left', 'failed_right', 'no_press')
+
 
 class Press(Action, GenericHumanAction):
     """
     Operator presses the button/toggle for the controls.
 
-    (passthrough)
+    Examples
+    --------
+    >>> p = Press()
+    >>> p.control.s.put(lpower=1.0, rpower=0.0)
+    >>> p.behavior(1)
+    >>> p.comms.s.ctl
+    ControlState(rpower=0.0, lpower=1.0)
     """
 
     __slots__ = ('control', 'comms')
@@ -273,9 +377,21 @@ class Press(Action, GenericHumanAction):
 
 
 class HumanActions(ActionArchitecture):
+    """
+    Overall ASG for human operator driving the rover.
 
+    Examples
+    --------
+    >>> ha = HumanActions()
+    >>> ha.active_actions
+    {'look'}
+    >>> ha('dynamic', 1, False, 1)
+    >>> ha.active_actions
+    {'press'}
+    """
     __slots__ = ()
     initial_action = "look"
+    per_timestep = True
     container_p = PSFParam
 
     def init_architecture(self, **kwargs):
@@ -294,7 +410,7 @@ class HumanActions(ActionArchitecture):
         self.add_act('project', Project, 'signal', 'psfs')
         self.add_act('decide', Decide, 'signal', 'control')
         self.add_act('reach', Reach)
-        self.add_act('press', Press, 'comms', 'control', duration=1.0)
+        self.add_act('press', Press, 'comms', 'control')
 
         self.add_cond('look', 'percieve', condition=self.acts['look'].complete)
         self.add_cond('percieve', 'comprehend',
@@ -306,23 +422,30 @@ class HumanActions(ActionArchitecture):
         self.add_cond('reach', 'press', condition=self.acts['reach'].complete)
 
 
-class Operator(Function):
-    __slots__ = ('signal', 'switch', 'control', 'comms', 'video', 'psfs')
-    flow_signal = OperatorSignal
+class Operator(BaseOperator):
+    """Overall function for operator (adds ASG to flipping switch)."""
+
+    __slots__ = ('switch', 'control', 'comms', 'video', 'psfs')
     flow_switch = Switch
     flow_control = Control
     flow_comms = Comms
     flow_video = Video
     flow_psfs = PSFs
-    flownames = {"operator_signal": "signal"}
     container_p = PSFParam
+    arch_aa = HumanActions
+    container_m = Mode
 
+    def dynamic_behavior(self, t):
+        self.set_power(t)
 
 class RoverHumanParam(RoverParam):
+    """Human rover parameter (extends to add PSF parameter)."""
+
     psfs: PSFParam = PSFParam()
 
 
 class RoverHuman(Rover):
+    """Overall human model for the rover."""
     container_p = RoverHumanParam
 
     def init_architecture(self, **kwargs):
@@ -337,7 +460,7 @@ class RoverHuman(Rover):
         self.add_flow("auto_control", Control)
         self.add_flow("motor_control", Control)
         self.add_flow("switch", Switch)
-        self.add_flow("comms", Comms)
+        self.add_flow("comms", Comms, s={'active': True})
         self.add_flow("fault_sig", FaultSig)
 
         self.add_fxn("power", Power, "ee_15", "ee_5", "ee_12", "switch")
@@ -347,11 +470,11 @@ class RoverHuman(Rover):
                      "video")
 
         self.add_fxn("operator", Operator, "switch", "comms", p=self.p.psfs)
-
-        self.add_fxn("override", Override, "comms", "ee_5", "motor_control",
-                     "auto_control")
         self.add_fxn("plan_path", PlanPath, "video", "pos_signal", "ground",
                      "auto_control", "fault_sig", p=self.p.correction)
+        self.add_fxn("override", Override, "comms", "ee_5", "motor_control",
+                     "auto_control")
+
         drive_m = {"mode_args": self.p.drive_modes, 'deg_params': self.p.degradation}
         self.add_fxn("drive", Drive, "ground", 'pos', "ee_15", "motor_control",
                      "fault_sig", m=drive_m)
@@ -365,18 +488,26 @@ asg_pos = {'look': [-0.9, 0.88], 'percieve': [-0.68, 0.62], 'comms': [-0.66, -0.
 
 
 if __name__ == "__main__":
+    #import doctest
+    #doctest.testmod(verbose=True)
+
     from fmdtools.analyze.graph import ActionArchitectureGraph
     hum = HumanActions()
     ag = ActionArchitectureGraph(hum)
     ag.set_pos(**asg_pos)
     ag.draw()
 
-    rvr = RoverHuman()
-    # mdl = RoverHuman(params=RoverParam('sine', amp=4.0))
-
-
-#     endresults, mdlhist = prop.nominal(mdl)
-#     plot_map(mdl, mdlhist)
+    from examples.rover.rover_model import plot_map
+    from fmdtools.sim import propagate as prop
+    mdl = RoverHuman()
+    endresults, mdlhist = prop.nominal(mdl)
+    ec1, hist = prop.nominal(mdl)
+    fig, ax = hist.plot_trajectories('flows.pos.s.x', 'flows.pos.s.y',
+                                     time_groups=['nominal'])
+    fig, ax = plot_map(mdl, mdlhist)
+    # ax.set_xlim(0,5)
+    # ax.set_ylim(-2,2)
+    fig.show()
 #     an.plot.mdlhists({'nominal':mdlhist}, fxnflowvals=['Power'])
 #     an.plot.mdlhists({'nominal':mdlhist}, fxnflowvals={'Ground'})
 
