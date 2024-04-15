@@ -40,11 +40,11 @@ class EnvironmentParams (CoordsParam):
     all_explored: collection
         all points that are explored
     """
-    x_size: int = 100
-    y_size: int = 100
-    blocksize: float = 0.1
+    x_size: int = 10
+    y_size: int = 10
+    blocksize: float = 1.0
 
-    num_occupied: int = 1000
+    num_occupied: int = 5
     feature_explored: tuple = (bool, False)
     feature_occupied: tuple = (bool, False)
     point_start: tuple = (0, 0)
@@ -118,6 +118,8 @@ class CommsState(State):
         destination point
     new_desitnation: bool
         if a new destination is possible
+    power: bool
+        turn on rover
     map: RoverEnvironment
         areas mapped by the rover
     comms_to_ground: str
@@ -179,15 +181,13 @@ class SupplyPowerMode(Mode):
         There is a short.
     supply: Mode
         supply power
-    charge: Mode
-        charge battery
     standby: Mode
         power supply is in stand by
     off: Mode
         power supply is off
     """
     fm_args = ("no_charge", "short")
-    opermodes = ("off", "supply", "charge", "standby")
+    opermodes = ("off", "supply", "standby")
     mode: str =  "off"
 
 class SupplyPower(Function):
@@ -198,6 +198,64 @@ class SupplyPower(Function):
     container_m = SupplyPowerMode
     flow_ee = EE
     flow_comms = Comms
+
+    def static_behavior(self, time):
+        """Determine power use based on mode."""
+        if self.m.in_mode("off"):
+            self.off_power()
+        elif self.m.in_mode("supply"):
+            self.supply_power()
+        elif self.m.in_mode("short"):
+            self.short_power()
+        elif self.m.in_mode("no_charge"):
+            self.no_charge_power()
+
+        else:
+            self.power_usage()
+            if self.m.in_mode("short"):
+                self.short_power_usage()
+
+    def dynamic_behavior(self, time):
+        """power usage over time."""
+        self.s.inc(charge=-self.s.power / 100)
+        self.s.limit(charge=(0, 100))
+
+    def short_power(self):
+        """Power in case of a short has normal voltage."""
+        self.ee.s.v = 12
+
+    def no_charge_power(self):
+        """Battery is out of charge."""
+        self.ee.s.v = 0
+
+    def off_power(self):
+        """Power supply is shut off."""
+        self.ee.s.put(v=0, a=0)
+        if self.comms.s.power == True:
+            self.m.set_mode("supply")
+
+    def supply_power(self):
+        """Power supply is in supply mode."""
+        if self.s.charge > 0:
+            self.ee.s.v = 12
+        else:
+            self.m.set_mode("no_charge")
+        if self.comms.s.power == False:
+            self.m.set_mode("off")
+
+    def power_usage(self):
+        """Calculate the power usage in general."""
+        self.s.power = (1.0 + self.ee_12.s.mul("v", "a") +
+                        self.ee_5.s.mul("v", "a") + self.ee_15.s.mul("v", "a"))
+
+
+    def short_power_usage(self):
+        """Calculate power usage when there is a short (calculated as double)."""
+        self.s.power = self.s.power * 2
+        if self.s.charge == 0:
+            self.m.set_mode("no_charge")
+        if self.comms.s.power == False:
+            self.m.set_mode("off")
 
 
     
