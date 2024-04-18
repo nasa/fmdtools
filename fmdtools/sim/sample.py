@@ -17,6 +17,7 @@ from fmdtools.sim.scenario import ParameterScenario
 from fmdtools.analyze.phases import gen_interval_times, PhaseMap, join_phasemaps
 import numpy as np
 import itertools
+import inspect
 
 def pass_var(*x):
     return x
@@ -221,7 +222,7 @@ class ParameterDomain(object):
         """Generate the parameter at a given value of the variables."""
         kwargs = self.get_param_kwargs(*x)
 
-        if issubclass(self.parameter_init, Parameter):
+        if inspect.isclass(self.parameter_init) and issubclass(self.parameter_init, Parameter):
             kwargs['check_type'] = False
             kwargs['check_pickle'] = False
             kwargs['check_lim'] = False
