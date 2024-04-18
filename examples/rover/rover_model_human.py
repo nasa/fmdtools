@@ -192,6 +192,7 @@ class Comprehend(Action, GenericHumanAction):
     Should take in percieved info and distill as situation (moving, turning, etc)
 
     May fail due to stress >8 or stress >80.
+
     Examples
     --------
     >>> c = Comprehend()
@@ -242,6 +243,7 @@ class Project(Action, GenericHumanAction):
     Operator projecting out how control actions might affect input state.
 
     Determines rdiff in signal.
+
     Examples
     --------
     >>> p = Project()
