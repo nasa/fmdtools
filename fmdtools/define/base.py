@@ -12,6 +12,7 @@ Functions contained in this module:
 """
 from collections.abc import Iterable
 from recordclass import dataobject
+from ordered_set import OrderedSet
 
 
 def get_var(obj, var):
@@ -115,7 +116,7 @@ def nest_dict(dic, levels=float('inf'), separator="."):
         Nested dictionary. e.g. {'a': {'b': 1.0}}
     """
     newhist = dic.__class__()
-    key_options = set([h.split(separator)[0] for h in dic.keys()])
+    key_options = OrderedSet([h.split(separator)[0] for h in dic.keys()])
     for key in key_options:
         if key in dic:
             newhist[key] = dic[key]
