@@ -9,6 +9,8 @@ Has classes:
 - :class:`FaultSample`: Defines a sample of fault scenarios.
 - :class:`SampleApproach`: Defines a set of fault scenario samples.
 - :Class:`ParameterSample`: Defines a sample of a set of parameters.
+- :Class:`ParameterResultSample`: Defines a sample from Result values.
+- :Class:`ParameterHistSample`: Defines a sample from History values.
 """
 from fmdtools.define.base import get_var, nest_dict
 from fmdtools.define.container.parameter import Parameter, ExampleParameter
@@ -196,9 +198,9 @@ class ParameterDomain(object):
                     arg = x[i]
                 else:
                     raise Exception("x of invalid length: "+str(len(x)))
-                if type(const) == tuple:
+                if type(const) is tuple:
                     set_const = not (const[0] <= arg <= const[1])
-                elif type(const) == set:
+                elif type(const) is set:
                     set_const = not (arg in const)
             set_constraints.append(set_const)
         return tuple(set_constraints)
@@ -1126,7 +1128,7 @@ class SampleApproach(BaseSample):
          - store_ee_s1p1_short_t1
          - ... (171 total)
         """
-        if type(phasemap) == str:
+        if type(phasemap) is str:
             phasemap = self.phasemaps[phasemap]
         elif isinstance(phasemap, PhaseMap) or not phasemap:
             phasemap = phasemap
@@ -1136,7 +1138,7 @@ class SampleApproach(BaseSample):
             phasemap = [self.phasemaps[ph] for ph in phasemap]
         else:
             raise Exception("Invalid arg for phasemap: "+str(phasemap))
-        if type(faultdomains) == list:
+        if type(faultdomains) is list:
             if len(faultdomains) > 1:
                 faultsample = JointFaultSample(faultdomains, phasemap)
             else:
@@ -1157,7 +1159,8 @@ class SampleApproach(BaseSample):
             FaultDomains to add to the SampleApproach and their arguments.
             Has structure::
             {'fd_name': (*args, **kwargs)} 
-            where args and kwargs are arguments/kwargs to SampleApproach.add_faultdomain (after name).
+            where args and kwargs are arguments/kwargs to SampleApproach.add_faultdomain
+            (after name).
         """
         for fd in faultdomains:
             self.add_faultdomain(fd, *faultdomains[fd][0], **faultdomains[fd][1])
@@ -1172,7 +1175,8 @@ class SampleApproach(BaseSample):
             FaultSamples to add to othe SampleApproach and their arguments.
             Has structure::
             fs_name = (*args, **kwargs)}
-            where args and kwargs are arguments/kwargs to SampleApproach.add_faultsample (after name).
+            where args and kwargs are arguments/kwargs to SampleApproach.add_faultsample
+            (after name).
         """
         for fs in faultsamples:
             self.add_faultsample(fs, *faultsamples[fs][0], **faultsamples[fs][1])
@@ -1534,14 +1538,217 @@ def combine_random(ranges, seed=None, num_combos=1):
     for i in range(num_combos):
         x = []
         for ran in ranges:
-            if type(ran) == set:
+            if type(ran) is set:
                 x.append(rng.choice([*ran]))
-            elif type(ran) == tuple:
+            elif type(ran) is tuple:
                 x.append(rng.uniform(ran[0], ran[-1]))
             else:
                 raise Exception("invalid range: " + str(ran))
         x_combos.append(x)
     return x_combos
+
+
+class ParameterResultSample(ParameterSample):
+    """
+    Class for sampling parameters from Results.
+
+    Parameters
+    ----------
+    vars : tuple
+        Variables to sample from the Result.
+    res_to_sample : Result
+        Subset of input result associated with the variables/groups to sample.
+
+    Examples
+    --------
+    >>> from fmdtools.define.container.parameter import ExampleParameter
+    >>> expd = ParameterDomain(ExampleParameter)
+    >>> expd.add_variables("y")
+    >>> from fmdtools.analyze.result import Result
+    >>> res = Result({'scen1.a.y': 1.0, 'scen2.a.y': 2.0})
+    >>> prs = ParameterResultSample(res, 'a.y', paramdomain=expd)
+    >>> prs.get_param_ins(rep=0)
+    [1.0]
+    >>> prs.get_param_ins(rep=1)
+    [2.0]
+
+    # prs.add_res_scenario can be used to add a given scenario from the result.
+    >>> prs.add_res_scenario(rep=0)
+    >>> prs.scenarios()
+    [ParameterScenario(sequence={}, times=(), p={'y': 1.0}, r={}, sp={}, prob=1.0, inputparams=(1.0,), rangeid='', name='res_0')]
+
+    # prs.add_res_reps can be used to add replicate scenarios from the results.
+    >>> prs.add_res_reps(reps='all')
+    >>> prs
+    ParameterSample of scenarios:
+     - res_0
+     - res_1
+     - res_2
+    """
+
+    def __init__(self, res, *varnames, comp_groups={}, **kwargs):
+        """
+        Initialize the ParameterResultSample.
+
+        Parameters
+        ----------
+        res : Result
+            Result to sample from (usually, with multiple scenarios).
+        *varnames : str
+            Names of values to sample (e.g., 's.x', 's.y') in the order of the
+            parameters in the input ParameterDomain
+        comp_groups : dict, optional
+            Groups to put the scenarios in (to sample differently). The default is {}.
+        **kwargs : kwargs
+            Input arguments to ParameterSample (e.g., the ParameterDomain).
+        """
+        ParameterSample.__init__(self, **kwargs)
+        self.vars = varnames
+        self.res_to_sample = res.get_comp_groups(*varnames, **comp_groups)
+
+    def _get_repname(self, comp_group, rep):
+        """
+        Get the name of the nth replicate scenario in the comparison group.
+
+        Parameters
+        ----------
+        comp_group : str
+            Name of the comparison group.
+        rep : str or int
+            If str, the name of the replicate. If int, n, where n is the nth replicate
+            to choose.
+
+        Returns
+        -------
+        rep : str
+            Name of the replicate.
+        """
+        if type(rep) is int:
+            return [*self.res_to_sample[comp_group].nest().keys()][rep]
+        elif type(rep) is str:
+            return rep
+        else:
+            raise Exception("Invalid option for rep: "+str(rep))
+
+    def _get_param(self, comp_group, rep, var, t=None):
+        """
+        Get the value of the parameter variable in the given group, replicate and time.
+
+        Parameters
+        ----------
+        comp_group : str
+            Name of the comparison group to get the value from.
+        rep : str
+            Name of the replicate scenario to get the value from.
+        var : str
+            Name of the variable to get.
+        t : int/None, optional
+            If a History, the time to get. The default is None.
+
+        Returns
+        -------
+        param : value
+            Variable value (to be used as the parameter).
+        """
+        if t is None:
+            return self.res_to_sample[comp_group].get(rep).get(var)
+        elif type(t) is int:
+            return self.res_to_sample[comp_group].get(rep).get(var)[t]
+        else:
+            return Exception("Invalid option for t: "+str(t))
+
+    def _get_reps(self, comp_group, reps):
+        """
+        Get the replicates to sample in the comparison group.
+
+        Parameters
+        ----------
+        comp_group : str
+            Name of the comparison group.
+        reps : int/str/list
+            If int, the number of replicates to sample. If a list, the names of the
+            replicate scenarios to sample. If 'all', all replicates in the group.
+
+        Returns
+        -------
+        reps_to_sample : list
+            List of names of replicates to sample.
+        """
+        reps_possible = [*self.res_to_sample[comp_group].nest().keys()]
+        if reps == 'all':
+            reps_to_sample = reps_possible
+        elif type(reps) is int:
+            reps_to_sample = reps_possible[:reps]
+        elif type(reps) is list:
+            reps_to_sample = reps
+        else:
+            raise Exception("Invalid option for reps: "+str(reps))
+        return reps_to_sample
+
+    def get_param_ins(self, comp_group='default', rep=1, t=None):
+        """
+        Get the parameter values at the given Result scenario.
+
+        Parameters
+        ----------
+        comp_group : str
+            Name of the comparison group to get the value from.
+        rep : str
+            Name of the replicate scenario to get the value from.
+        t : int/None, optional
+            If a History, the time to get. The default is None.
+
+        Returns
+        -------
+        param_list : list
+            List of variable values (self.vars) for the given group and replicate.
+        """
+        param_list = []
+        rep = self._get_repname(comp_group, rep)
+        for var in self.vars:
+            param_list.append(self._get_param(comp_group, rep, var, t))
+        return param_list
+
+    def add_res_scenario(self, comp_group='default', rep=1, t=None,
+                         name='res', **kwargs):
+        """
+        Add a scenario to the ParameterResultSample from the Result.
+
+        Parameters
+        ----------
+        comp_group : str
+            Name of the comparison group to get the value from.
+        rep : str
+            Name of the replicate scenario to get the value from.
+        t : int/None, optional
+            If a History, the time to get. The default is None.
+        name : str, optional
+            Name prefix for the scenario. The default is 'res'.
+        **kwargs : kwargs
+            Keyword arguments to ParameterSample.add_variable_scenario.
+        """
+        param_list = self.get_param_ins(comp_group, rep, t)
+        self.add_variable_scenario(*param_list, name=name, **kwargs)
+
+    def add_res_reps(self, comp_group='default', reps='all', name='res', **kwargs):
+        """
+        Add multiple scenario replicates from the Restul to the ParameterResultSample.
+
+        Parameters
+        ----------
+        comp_group : str
+            Name of the comparison group to get the value from.
+        reps : int/str/list
+            If int, the number of replicates to sample. If a list, the names of the
+            replicate scenarios to sample. If 'all', all replicates in the group.
+        name : str, optional
+            Name prefix for the scenarios. The default is 'res'.
+        **kwargs : kwargs
+            Keyword arguments to ParameterScenario.add_res_scenario.
+        """
+        reps_to_sample = self._get_reps(comp_group, reps)
+        for rep in reps_to_sample:
+            self.add_res_scenario(comp_group, rep, name=name, **kwargs)
 
 
 def combine_orthogonal(defaults, ranges):
