@@ -509,8 +509,6 @@ class Comparison(BaseComparison):
     """
     Make a table of the statistic for given metrics over given factors.
 
-    ...
-
     Parameters
     ----------
     res : Result
@@ -610,7 +608,6 @@ class Comparison(BaseComparison):
     >>> fig, ax = comp.as_plot("b", color_factor="p.y", figsize=(10, 4))
     """
     def __init__(self, res, samp, factors=['time'], **kwargs):
-        
         self.factors = factors
         scen_groups = samp.get_scen_groups(*factors)
         super().__init__(res, scen_groups, **kwargs)
@@ -621,8 +618,6 @@ class NestedComparison(BaseComparison):
     """
     Make a nested table of the statistic for samples taken in other samples.
 
-    ...
-    
     Parameters
     ----------
     res : Result
@@ -665,8 +660,6 @@ class NominalEnvelope(object):
     """
     Class defining nominal performance envelope.
 
-    ...
-    
     Attributes
     ----------
     params : tuple
@@ -687,7 +680,7 @@ class NominalEnvelope(object):
     x_param : str
         Parameter range desired to visualize in the operational envelope. Can be any
         property that changes over the nomapp
-        (e.g., `r.seed`, `inputparam.x_in`, `p.x`...)
+        (e.g., `r.seed`, `inputparams.x_in`, `p.x`...)
     func : method, optional
         Function to classify metric values as "nominal".
         Default is lambda x: x == 0.0
@@ -708,7 +701,7 @@ class NominalEnvelope(object):
         x_param : str
             Parameter range desired to visualize in the operational envelope. Can be any
             property that changes over the nomapp
-            (e.g., `r.seed`, `inputparam.x_in`, `p.x`...)
+            (e.g., `r.seed`, `inputparams.x_in`, `p.x`...)
         func : method, optional
             Function to classify metric values as "nominal".
             Default is lambda x: x == 0.0
