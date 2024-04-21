@@ -1624,7 +1624,7 @@ class ParameterResultSample(ParameterSample):
             Name of the replicate.
         """
         if type(rep) is int:
-            return [*self.res_to_sample[comp_group].nest().keys()][rep]
+            return [*self.res_to_sample[comp_group].nest(1).keys()][rep]
         elif type(rep) is str:
             return rep
         else:
@@ -1749,6 +1749,133 @@ class ParameterResultSample(ParameterSample):
         reps_to_sample = self._get_reps(comp_group, reps)
         for rep in reps_to_sample:
             self.add_res_scenario(comp_group, rep, name=name, **kwargs)
+
+
+class ParameterHistSample(ParameterResultSample):
+    """
+    Class for sampling parameters from Histories. Extends ParameterResultSample.
+
+    Examples
+    --------
+    >>> from fmdtools.define.container.parameter import ExampleParameter
+    >>> expd = ParameterDomain(ExampleParameter)
+    >>> expd.add_variables("y")
+    >>> from fmdtools.analyze.history import History
+    >>> hist = History({'scen1.a.y': [1.0, 2.0, 3.0], 'scen1.time':[0,2,3], 'scen2.a.y': [10.0, 20.0, 30.0], 'scen2.time':[0,2,3]})
+    >>> phs = ParameterHistSample(hist, 'a.y', paramdomain=expd)
+    >>> phs.get_param_ins(rep=0, t=0)
+    [1.0]
+    >>> phs.get_param_ins(rep=1, t=1)
+    [20.0]
+
+    # Add scenarios to the sample
+    >>> phs.add_hist_times('default', 'scen1')
+    >>> [s.p for s in phs.scenarios()]
+    [{'y': 1.0}, {'y': 2.0}, {'y': 3.0}]
+    """
+
+    def add_hist_scenario(self, comp_group='default', rep=1, t=1, name='hist',
+                          **kwargs):
+        """Add a scenario from a history (extends add_res_scenario)."""
+        self.add_res_scenario(comp_group, rep, t, name, **kwargs)
+
+    def _get_times(self, comp_group, rep, ts):
+        """
+        Get the available times to sample in a given comparison group and replicate.
+
+        Parameters
+        ----------
+        comp_group : str
+            Name of the comparison group to get the value from.
+        rep : str
+            Name of the replicate scenario to get the value from.
+        ts : int/list/tuple/'all'
+            If 'all', returns all times. If int, returns a range of times with ts
+            resolution. If a list (of ints), uses as ts_to_sample. IF a tuple, returns
+            a range with the given input arguments.
+
+        Returns
+        -------
+        ts_to_sample : list
+            List of times to sample.
+        """
+        res = self.res_to_sample[comp_group].get(rep)
+        if ts == 'all':
+            ts_to_sample = [i for i, e in enumerate(res.time)]
+        elif type(ts) is int:
+            ts_to_sample = [*np.arange(0, len(res.time), ts)]
+        elif type(ts) is list:
+            ts_to_sample = ts
+        elif type(ts) is tuple:
+            ts_to_sample = [*np.arange(*ts)]
+        else:
+            raise Exception("Invalid option for ts: "+str(ts))
+        return ts_to_sample
+
+    def add_hist_times(self, comp_group, rep, ts='all', **kwargs):
+        """
+        Add scenarios in the scenario comp_group and replicate from the given times.
+
+        Parameters
+        ----------
+        comp_group : str
+            Name of the comparison group to get the value from.
+        rep : str
+            Name of the replicate scenario to get the value from.
+        ts : int/list/tuple/'all'
+            If 'all', returns all times. If int, returns a range of times with ts
+            resolution. If a list (of ints), uses as ts_to_sample. IF a tuple, returns
+            a range with the given input arguments.
+        **kwargs : kwargs
+            Keyword arguments to .add_hist_scenario
+        """
+        rep = self._get_repname(comp_group, rep)
+        ts_to_sample = self._get_times(comp_group, rep, ts)
+        for t in ts_to_sample:
+            self.add_hist_scenario(comp_group, rep, t, **kwargs)
+
+    def add_hist_reps(self, comp_group, reps='all', ts='all', **kwargs):
+        """
+        Add scenarios in the scenario comp_group over given replicates and times.
+
+        Parameters
+        ----------
+        comp_group : str
+            Name of the comparison group to get the value from.
+        reps : int/str/list
+            If int, the number of replicates to sample. If a list, the names of the
+            replicate scenarios to sample. If 'all', all replicates in the group.
+        ts : int/list/tuple/'all'
+            If 'all', returns all times. If int, returns a range of times with ts
+            resolution. If a list (of ints), uses as ts_to_sample. IF a tuple, returns
+            a range with the given input arguments.
+        **kwargs : kwargs
+            Keyword arguments to .add_hist_scenario
+        """
+        reps_to_sample = self._get_reps(comp_group, reps)
+        for rep in reps_to_sample:
+            self.add_hist_times(comp_group, rep, ts, **kwargs)
+
+    def add_hist_groups(self, comp_groups=['default'], reps='all', ts='all', **kwargs):
+        """
+        Add scenarios in the comp_groups over given replicates and times.
+
+        Parameters
+        ----------
+        comp_groups : list
+            Names of the comparison group to get the values from.
+        reps : int/str/list
+            If int, the number of replicates to sample. If a list, the names of the
+            replicate scenarios to sample. If 'all', all replicates in the group.
+        ts : int/list/tuple/'all'
+            If 'all', returns all times. If int, returns a range of times with ts
+            resolution. If a list (of ints), uses as ts_to_sample. IF a tuple, returns
+            a range with the given input arguments.
+        **kwargs : kwargs
+            Keyword arguments to .add_hist_scenario
+        """
+        for comp_group in comp_groups:
+            self.add_hist_reps(comp_group, reps=reps, ts=ts, **kwargs)
 
 
 def combine_orthogonal(defaults, ranges):
