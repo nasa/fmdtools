@@ -1006,8 +1006,6 @@ class SampleApproach(BaseSample):
     """
     Class for defining an agglomeration of fault samples accross an entire model.
 
-    ...
-    
     Attributes
     ----------
     mdl : Simulable
@@ -1245,7 +1243,8 @@ class ParameterSample(BaseSample):
         """Return list of scenarios that make up the ParameterSample."""
         return [*self._scenarios]
 
-    def add_variable_scenario(self, *x, seed=False, sp={}, weight=1.0, name='var'):
+    def add_variable_scenario(self, *x, seed=False, sp={}, weight=1.0, name='var',
+                              inputparams={}):
         """
         Add a scenario to the ParamSample.
 
@@ -1261,6 +1260,8 @@ class ParameterSample(BaseSample):
             Weight (probability) allocated to the scenario. The default is 1.0.
         name : str, optional
             Name to assign the scenario. The default is 'param'.
+        inputparams : dict, optional
+            Input parameters (if different from Parameter input).
 
         Examples
         --------
@@ -1286,12 +1287,15 @@ class ParameterSample(BaseSample):
         if not sp:
             sp = self.sp
         name = name+"_"+str(len(self.scenarios()))
+        if not inputparams:
+            inputparams = {i: x[i] for i in range(len(x))}
+
         scen = ParameterScenario(p=param_args,
                                  r=r,
                                  sp=sp,
                                  prob=weight,
                                  name=name,
-                                 inputparams=x)
+                                 inputparams=inputparams)
         self._scenarios.append(scen)
 
     def add_variable_replicates(self, x_combos, replicates=1, seed_comb='shared',
@@ -1332,7 +1336,7 @@ class ParameterSample(BaseSample):
         >>> scen0.p['y']
         1
         >>> scen0.inputparams
-        (1, 1)
+        {0: 1, 1: 1}
         >>> scen1 =ex_ps.scenarios()[1]
         >>> scen1.prob
         0.5
@@ -1341,7 +1345,7 @@ class ParameterSample(BaseSample):
         >>> scen1.p['y']
         2
         >>> scen1.inputparams
-        (2, 2)
+        {0: 2, 1: 2}
         """
         if len(x_combos) == 0:
             x_combos = [self.paramdomain.get_x_defaults()]
@@ -1575,7 +1579,7 @@ class ParameterResultSample(ParameterSample):
     # prs.add_res_scenario can be used to add a given scenario from the result.
     >>> prs.add_res_scenario(rep=0)
     >>> prs.scenarios()
-    [ParameterScenario(sequence={}, times=(), p={'y': 1.0}, r={}, sp={}, prob=1.0, inputparams=(1.0,), rangeid='', name='res_0')]
+    [ParameterScenario(sequence={}, times=(), p={'y': 1.0}, r={}, sp={}, prob=1.0, inputparams={'comp_group': 'default', 'rep': 0}, rangeid='', name='res_0')]
 
     # prs.add_res_reps can be used to add replicate scenarios from the results.
     >>> prs.add_res_reps(reps='all')
@@ -1728,7 +1732,12 @@ class ParameterResultSample(ParameterSample):
             Keyword arguments to ParameterSample.add_variable_scenario.
         """
         param_list = self.get_param_ins(comp_group, rep, t)
-        self.add_variable_scenario(*param_list, name=name, **kwargs)
+        if type(t) in [int, float]:
+            inputparams = {'comp_group': comp_group, 'rep': rep, 't': t}
+        else:
+            inputparams = {'comp_group': comp_group, 'rep': rep}
+        self.add_variable_scenario(*param_list, name=name, inputparams=inputparams,
+                                   **kwargs)
 
     def add_res_reps(self, comp_group='default', reps='all', name='res', **kwargs):
         """
