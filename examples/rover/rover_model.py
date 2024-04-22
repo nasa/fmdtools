@@ -617,32 +617,16 @@ class DriveMode(Mode):
             self.mode_args = mode_args
         ph = {'drive': 1.0}
         if self.mode_args == "degradation":
-            self.s.friction = deg_params.friction
-            self.s.drift = deg_params.drift
-            franges = {"friction": {(self.s.friction + 0.5), 2 * (self.s.friction + 0.5), 5 * (self.s.friction + 0.5)},
-                       "transfer": {0.0},
-                       "drift": {self.s.drift + 0.2, self.s.drift - 0.2}}
-            self.init_n_faultstates(franges, phases=ph)
-
-        elif type(self.mode_args) == int:
-            franges = {"friction": np.linspace(0.0, 20, 10),
-                       "transfer":  np.linspace(1.0, 0.0, 10),
-                       "drift": np.linspace(-0.5, 0.5, 10)}
-            self.init_n_faultstates(franges, n=self.mode_args, phases=ph)
-        elif type(self.mode_args) == list:
-            manual_modes = {"s_" + str(i):
-                            {"friction": mode[0], "transfer": mode[1], "drift": mode[2]}
-                            for i, mode in enumerate(self.mode_args)}
-            self.init_faultstate_modes(manual_modes, phases=ph)
-        elif type(self.mode_args) == dict:
+            self.add_degradation_modes(deg_params, ph)
+        elif type(self.mode_args) is int:
+            self.add_n_modes(ph)
+        elif type(self.mode_args) is list:
+            self.add_mode_list(ph)
+        elif type(self.mode_args) is dict:
             self.init_faultstate_modes(manual_modes=self.mode_args, phases=ph)
         else:
             if "manual" in self.mode_args:
-                manual_modes = {"elec_open": {"transfer": 0.0},
-                                "stuck": {"friction": 10.0},
-                                "stuck_right": {"friction": 3.0, "drift": 0.2},
-                                "stuck_left": {"friction": 3.0, "drift": -0.2}}
-                self.init_faultstate_modes(manual_modes, phases=ph)
+                self.add_manual_modes(ph)
             if "set" in self.mode_args:
                 franges = {"friction": {1.5, 3.0, 10.0},
                            "transfer": {0.5, 0.0},
@@ -656,6 +640,30 @@ class DriveMode(Mode):
                     self.init_n_faultstates(franges, phases=ph, n="all")
                 else:
                     self.init_n_faultstates(franges, phases=ph, n=1)
+
+    def add_manual_modes(self, ph, drift=0.0, friction=0.0):
+        manual_modes = {"elec_open": {"transfer": 0.0},
+                        "stuck": {"friction": 10.0+friction},
+                        "stuck_right": {"friction": 3.0+friction, "drift": 0.2+drift},
+                        "stuck_left": {"friction": 3.0+friction, "drift": -0.2+drift}}
+        self.init_faultstate_modes(manual_modes, phases=ph)
+
+    def add_degradation_modes(self, deg_params, ph):
+        self.s.friction = deg_params.friction
+        self.s.drift = deg_params.drift
+        self.add_manual_modes(ph, drift=self.s.drift, friction=self.s.friction)
+
+    def add_n_modes(self, ph):
+        franges = {"friction": np.linspace(0.0, 20, 10),
+                   "transfer":  np.linspace(1.0, 0.0, 10),
+                   "drift": np.linspace(-0.5, 0.5, 10)}
+        self.init_n_faultstates(franges, n=self.mode_args, phases=ph)
+
+    def add_mode_list(self, ph):
+        manual_modes = {"s_" + str(i):
+                        {"friction": mode[0], "transfer": mode[1], "drift": mode[2]}
+                        for i, mode in enumerate(self.mode_args)}
+        self.init_faultstate_modes(manual_modes, phases=ph)
 
 
 class Drive(Function):
@@ -723,12 +731,12 @@ class Drive(Function):
             >>> d.pos.s
             PosState(x=0.0, y=-2.0, vel=2.0, ux=0.0, uy=-1.0)
         """
-        #the division by 6 slows down the rover, so it can manage the course
+        # the division by 6 slows down the rover, so it can manage the course
         self.pos.s.vel = (rpower + lpower) / (5 + (1 + self.m.s.friction))
         ang_inc = np.arctan((rpower - lpower) / (rpower + lpower + 0.001))
         ux = np.cos(ang_inc) * self.pos.s.ux - np.sin(ang_inc) * self.pos.s.uy
         uy = np.sin(ang_inc) * self.pos.s.ux + np.cos(ang_inc) * self.pos.s.uy
-        mag_u = np.linalg.norm([ux, uy])        
+        mag_u = np.linalg.norm([ux, uy])
         self.pos.s.put(ux=ux/mag_u, uy=uy/mag_u)
         self.pos.s.inc(x=self.pos.s.ux*self.pos.s.vel, y=self.pos.s.uy*self.pos.s.vel)
 
@@ -787,7 +795,7 @@ class Perception(Function):
                 # Video quality drops off if rover is off course
                 self.video.s.quality = 0.0
             self.pos_signal.s.assign(self.pos.s, "x", "y", "ux", "uy")
-            
+
         # Faulty Behavior
         elif self.m.has_fault("bad_feed"):
             self.video.s.quality = 0.5
