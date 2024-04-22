@@ -151,7 +151,7 @@ class PSFDegradationShort(Function):
     container_s = PSFDegradationShortStates
     container_r = PSFDegShortRand
     container_p = PSFShortParams
-    default_sp = dict(end_time=100)
+    default_sp = dict(end_time=12)
 
     def init_block(self, **kwargs):
         """Initialize parameter-defined base states."""

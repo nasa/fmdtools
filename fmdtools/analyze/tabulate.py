@@ -198,7 +198,7 @@ class BaseTab(UserDict):
         table = pd.DataFrame(self.data)
         if sort_by not in self.all_metrics():
             sort_by = self.all_metrics()[0]
-        if sort: 
+        if sort:
             table = table.sort_values(sort_by, ascending=ascending)
         return table
 
@@ -477,7 +477,7 @@ class BaseComparison(BaseTab):
     """
     def __init__(self, res, scen_groups, metrics=['cost'],
                  default_stat="expected", stats={}, ci_metrics=[], ci_kwargs={}):
-        
+
         met_dict = {met: {} for met in metrics}
         met_dict.update({met+"_lb": {} for met in ci_metrics})
         met_dict.update({met+"_ub": {} for met in ci_metrics})
@@ -607,11 +607,11 @@ class Comparison(BaseComparison):
        4.0  40.0
     >>> fig, ax = comp.as_plot("b", color_factor="p.y", figsize=(10, 4))
     """
+
     def __init__(self, res, samp, factors=['time'], **kwargs):
         self.factors = factors
         scen_groups = samp.get_scen_groups(*factors)
         super().__init__(res, scen_groups, **kwargs)
-
 
 
 class NestedComparison(BaseComparison):
@@ -634,13 +634,8 @@ class NestedComparison(BaseComparison):
         statistic over in the apps. Default is ['time']
     **kwargs : kwargs
         keyword arguments to BaseComparison
-
-    Returns
-    -------
-    met_table : dataframe
-        pandas dataframe with the statistic of the metric over the corresponding
-        set of scenarios for the given factor level.
     """
+
     def __init__(self, res, samp, samp_factors, samps, samps_factors, **kwargs):
         overall_scen_groups = {}
         scen_groups = samp.get_scen_groups(*samp_factors)
