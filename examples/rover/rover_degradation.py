@@ -99,6 +99,7 @@ class PSFDegradationShortStates(State):
 
     fatigue: float = 0.0
     stress: float = 0.0
+    experience: float = 0.0
 
 
 class PSFDegShortRandStates(State):
@@ -108,12 +109,12 @@ class PSFDegShortRandStates(State):
     Fields
     ------
     fatigue_param : float
-        Operator starting fatigue. Default is 2.0. Updates according to gamma
-        distribution with parameters 2 and 1.9.
+        Operator starting fatigue. Default is 1.0. Updates according to gamma
+        distribution with parameters 1 and 1.9.
     """
 
-    fatigue_param: float = 2.0
-    fatigue_param_update = ("gamma", (2, 1.9))
+    fatigue_param: float = 1.0
+    fatigue_param_update = ("gamma", (1, 1.9))
 
 
 class PSFDegShortRand(Rand):
@@ -133,15 +134,12 @@ class PSFShortParams(Parameter, readonly=True):
     stress_param : float
         Operator base stress. Default is 0.0.
     fatigue_param : float
-        Operator base fatigue. Default is 0.0
-    stoch_fatigue : bool
-        Whether or not fatigue should be evaluated stochastically. Default is False.
+        Operator base fatigue increment. Default is 0.0
     """
 
     experience: float = 1.0
     stress_param: float = 0.0
-    fatigue_param: float = 0.0
-    stoch_fatigue: bool = False
+    fatigue_param: float = 1.0
 
 
 class PSFDegradationShort(Function):
@@ -156,11 +154,11 @@ class PSFDegradationShort(Function):
     def init_block(self, **kwargs):
         """Initialize parameter-defined base states."""
         self.s.stress = self.p.stress_param
-        self.s.fatigue = int(self.p.fatigue_param)
+        self.s.experience = self.p.experience
+        self.r.s.fatigue_param = self.p.fatigue_param
 
     def dynamic_behavior(self, time):
-        if self.p.stoch_fatigue:
-            self.s.fatigue = int(self.r.s.fatigue_param)
+        self.s.inc(fatigue=self.r.s.fatigue_param)
 
         if self.s.stress < 100:
             s_inc = (1 + (1 / self.p.experience)) ** self.t.time

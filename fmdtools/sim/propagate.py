@@ -309,10 +309,6 @@ def parameter_sample(mdl, ps, **kwargs):
     num_scens = ps.num_scenarios()
     kwargs['num_scens'] = num_scens
 
-    scennames = ps.scen_names()
-    n_results = Result.fromkeys(scennames)
-    n_mdlhists = History.fromkeys(scennames)
-
     if pool:
         check_mdl_memory(mdl, num_scens, max_mem=kwargs['max_mem'])
         inputs = [(mdl, sc, name, kwargs) for name, sc in ps.named_scenarios().items()]
@@ -322,15 +318,17 @@ def parameter_sample(mdl, ps, **kwargs):
                                   desc="SCENARIOS COMPLETE"))
         n_results, n_mdlhists = unpack_res_list(ps.scenarios(), res_list)
     else:
+        scennames = ps.scen_names()
+        n_results = Result.fromkeys(scennames)
+        n_mdlhists = History.fromkeys(scennames)
         for scenname, scen in tqdm.tqdm(ps.named_scenarios().items(),
                                         disable=not (showprogress),
                                         desc="SCENARIOS COMPLETE"):
             loc_kwargs = {**kwargs, 'use_end_condition': False}
-            n_results[scenname], n_mdlhists[scenname] = exec_nom_helper(mdl, scen,
-                                                                        scenname,
-                                                                        **loc_kwargs)
+            res, hist = exec_nom_helper(mdl, scen, scenname, **loc_kwargs)
+            n_results[scenname], n_mdlhists[scenname] = res, hist
     save_helper(kwargs['save_args'], n_results, n_mdlhists)
-    close_pool(kwargs)
+    close_pool({'pool': pool, 'close_pool': close_p})
     return n_results.flatten(), n_mdlhists.flatten()
 
 
@@ -350,8 +348,8 @@ def exec_nom_par(arg):
 
 def exec_nom_helper(mdl, scen, name, **kwargs):
     """Helper function for executing nominal scenarios"""
-    mdl = mdl.new(p=scen.p, sp=scen.sp, r=scen.r)
-    result, mdlhist, _, t_end = prop_one_scen(mdl, scen, **kwargs)
+    mdl_run = mdl.new(p=scen.p, sp=scen.sp, r=scen.r)
+    result, mdlhist, _, t_end = prop_one_scen(mdl_run, scen, **kwargs)
     check_hist_memory(mdlhist, kwargs['num_scens'], max_mem=kwargs['max_mem'])
     save_helper(kwargs['save_args'], result, mdlhist, name, name)
     return result, mdlhist
@@ -799,6 +797,7 @@ def close_pool(kwargs):
     """Closes pool to avoid memory problems"""
     if kwargs.get('pool', False) and kwargs.get('close_pool', True):
         kwargs['pool'].close()
+        kwargs['pool'].terminate()
         kwargs['pool'].join()
 
 
@@ -953,7 +952,7 @@ def nested_sample(mdl, ps, get_phasemap=False, faultdomains={}, faultsamples={},
         nest_hist[scenname] = hist
         apps[scenname] = app
     save_helper(save_args, nest_res, nest_hist)
-    close_pool(kwargs)
+    close_pool({'pool': pool, 'close_pool': close_p})
     return nest_res.flatten(), nest_hist.flatten(), apps
 
 

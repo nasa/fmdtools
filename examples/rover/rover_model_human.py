@@ -191,7 +191,7 @@ class Comprehend(Action, GenericHumanAction):
 
     Should take in percieved info and distill as situation (moving, turning, etc)
 
-    May fail due to stress >8 or stress >80.
+    May fail due to fatigue >8 or stress >80.
 
     Examples
     --------
@@ -211,7 +211,7 @@ class Comprehend(Action, GenericHumanAction):
 
     def behavior(self, t):
         if self.psfs.p.fatigue > 8 or self.psfs.p.stress > 80:
-            self.to_fault('failed_no_action')
+            self.m.to_fault('failed_no_action')
         if self.m.in_mode('nominal'):
             self.signal.s.set_positions(self.pos_signal, self.video)
 
@@ -273,13 +273,13 @@ class Project(Action, GenericHumanAction):
             self.signal.s.vel_adj = 4.0
         # increment attention - degrades over the course of an operation if the
         # driving isn't "interesting" (aka there are no turns)
-        # turns reset the attention to 10
+        # turns reset the attention to 10 if attention is above threshold
         if abs(self.signal.s.rdiff) < 0.01:
             if self.psfs.p.fatigue < 5:
-                self.psfs.s.inc(attention=(-1, 0.0))
+                self.psfs.s.inc(attention=(-0.2, 0.0))
             else:
-                self.psfs.s.inc(attention=(-2, 0.0))
-        else:
+                self.psfs.s.inc(attention=(-0.4, 0.0))
+        elif self.psfs.s.attention > 3:
             self.psfs.s.attention = 10.0
 
 
@@ -427,18 +427,24 @@ class HumanActions(ActionArchitecture):
 class Operator(BaseOperator):
     """Overall function for operator (adds ASG to flipping switch)."""
 
-    __slots__ = ('switch', 'control', 'comms', 'video', 'psfs')
+    __slots__ = ('switch', 'control', 'comms', 'pos_signal', 'video', 'psfs', 'ground')
     flow_switch = Switch
     flow_control = Control
+    flow_pos_signal = Pos
     flow_comms = Comms
     flow_video = Video
     flow_psfs = PSFs
+    flow_ground = Ground
     container_p = PSFParam
     arch_aa = HumanActions
     container_m = Mode
 
     def dynamic_behavior(self, t):
         self.set_power(t)
+        if self.ground.at_end(self.pos_signal.s):
+            self.switch.s.power = False
+            self.comms.s.ctl.put(rpower=0, lpower=0)
+
 
 class RoverHumanParam(RoverParam):
     """Human rover parameter (extends to add PSF parameter)."""
@@ -448,11 +454,13 @@ class RoverHumanParam(RoverParam):
 
 class RoverHuman(Rover):
     """Overall human model for the rover."""
+
     container_p = RoverHumanParam
 
     def init_architecture(self, **kwargs):
         """Initialize the functional architecture."""
         self.add_flow("ground", Ground, p=self.p.ground)
+        self.add_flow("psfs", PSFs, p=self.p.psfs)
         self.add_flow("pos_signal", Pos)
         self.add_flow('pos', Pos)
         self.add_flow("ee_12", EE)
@@ -471,7 +479,7 @@ class RoverHuman(Rover):
         self.add_fxn("communications", Communications, "comms", "ee_12", "pos_signal",
                      "video")
 
-        self.add_fxn("operator", Operator, "switch", "comms", p=self.p.psfs)
+        self.add_fxn("operator", Operator, "switch", "comms", "ground", "psfs", p=self.p.psfs)
         self.add_fxn("plan_path", PlanPath, "video", "pos_signal", "ground",
                      "auto_control", "fault_sig", p=self.p.correction)
         self.add_fxn("override", Override, "comms", "ee_5", "motor_control",
