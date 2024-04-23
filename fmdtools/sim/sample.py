@@ -1739,7 +1739,8 @@ class ParameterResultSample(ParameterSample):
         self.add_variable_scenario(*param_list, name=name, inputparams=inputparams,
                                    **kwargs)
 
-    def add_res_reps(self, comp_group='default', reps='all', name='res', **kwargs):
+    def add_res_reps(self, comp_group='default', reps='all', name='res', ind_seeds=True,
+                     **kwargs):
         """
         Add multiple scenario replicates from the Restul to the ParameterResultSample.
 
@@ -1752,12 +1753,20 @@ class ParameterResultSample(ParameterSample):
             replicate scenarios to sample. If 'all', all replicates in the group.
         name : str, optional
             Name prefix for the scenarios. The default is 'res'.
+        ind_seeds : bool
+            Whether to give replicates independent seeds. The default is True.
         **kwargs : kwargs
             Keyword arguments to ParameterScenario.add_res_scenario.
         """
         reps_to_sample = self._get_reps(comp_group, reps)
-        for rep in reps_to_sample:
-            self.add_res_scenario(comp_group, rep, name=name, **kwargs)
+        if ind_seeds:
+            seeds = self.seedsequence.generate_state(len(reps_to_sample))
+        for i, rep in enumerate(reps_to_sample):
+            if ind_seeds:
+                self.add_res_scenario(comp_group, rep, name=name, seed=seeds[i],
+                                      **kwargs)
+            else:
+                self.add_res_scenario(comp_group, rep, name=name, **kwargs)
 
 
 class ParameterHistSample(ParameterResultSample):
@@ -1843,7 +1852,7 @@ class ParameterHistSample(ParameterResultSample):
         for t in ts_to_sample:
             self.add_hist_scenario(comp_group, rep, t, **kwargs)
 
-    def add_hist_reps(self, comp_group, reps='all', ts='all', **kwargs):
+    def add_hist_reps(self, comp_group, reps='all', ts='all', ind_seeds=True, **kwargs):
         """
         Add scenarios in the scenario comp_group over given replicates and times.
 
@@ -1858,12 +1867,19 @@ class ParameterHistSample(ParameterResultSample):
             If 'all', returns all times. If int, returns a range of times with ts
             resolution. If a list (of ints), uses as ts_to_sample. IF a tuple, returns
             a range with the given input arguments.
+        ind_seeds : bool
+            Whether to give replicates independent seeds. The default is True.
         **kwargs : kwargs
             Keyword arguments to .add_hist_scenario
         """
         reps_to_sample = self._get_reps(comp_group, reps)
-        for rep in reps_to_sample:
-            self.add_hist_times(comp_group, rep, ts, **kwargs)
+        if ind_seeds:
+            seeds = self.seedsequence.generate_state(len(reps_to_sample))
+        for i, rep in enumerate(reps_to_sample):
+            if ind_seeds:
+                self.add_hist_times(comp_group, rep, ts, seed=seeds[i], **kwargs)
+            else:
+                self.add_hist_times(comp_group, rep, ts, **kwargs)
 
     def add_hist_groups(self, comp_groups=['default'], reps='all', ts='all', **kwargs):
         """
