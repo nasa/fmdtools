@@ -74,7 +74,7 @@ if __name__=="__main__":
                       "examples/rover/ParameterSample_Use-Cases.ipynb",
                       "examples/pump/Optimization.ipynb",
                       "examples/rover/degradation_modelling/Degradation_Modelling_Notebook.ipynb",
-                        "examples/rover/HFAC_Analyses/IDETC_Human_Paper_Analysis.ipynb",
+                      "examples/rover/HFAC_Analyses/IDETC_Human_Paper_Analysis.ipynb",
                       "examples/pump/Parallelism_Tutorial.ipynb"]
     # retcode = pytest.main(["--nbmake", *slow_notebooks])
 
