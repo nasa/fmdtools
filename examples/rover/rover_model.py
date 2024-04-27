@@ -474,9 +474,9 @@ class PlanPathState(State):
         Velocity adjustment (for faults).
     """
 
-    u_self: tuple = (0.0, 0.0)
-    u_lin: tuple = (0.0, 0.0)
-    u_lin_dev: tuple = (0.0, 0.0)
+    u_self: np.array = np.array([0.0, 0.0])
+    u_lin: np.array = np.array([0.0, 0.0])
+    u_lin_dev:  np.array = np.array([0.0, 0.0])
     rdiff: float = 0.0
     vel_adj: float = 1.0
 

@@ -73,13 +73,15 @@ if __name__=="__main__":
                       "examples/pump/Stochastic_Modelling.ipynb",
                       "examples/rover/ParameterSample_Use-Cases.ipynb",
                       "examples/pump/Optimization.ipynb",
+                      "examples/rover/degradation_modelling/Degradation_Modelling_Notebook.ipynb",
+                        "examples/rover/HFAC_Analyses/IDETC_Human_Paper_Analysis.ipynb",
                       "examples/pump/Parallelism_Tutorial.ipynb"]
     # retcode = pytest.main(["--nbmake", *slow_notebooks])
 
     # for testing extremely slow notebooks that can't be run to completion :
     too_slow_notebooks = ["examples/rover/optimization/Rover_Response_Optimization.ipynb",  # extremely slow notebook
                         "examples/rover/fault_sampling/Rover_Mode_Notebook.ipynb",  # extremely slow notebook
-                        "examples/rover/optimization/Search_Comparison.ipynb",  # not fully adapted
+                        "examples/rover/optimization/Search_Comparison.ipynb",  # extremely slow
                         "examples/tank/Tank_Optimization.ipynb"
                         ]
     # retcode = pytest.main(["--nbmake", "--nbmake-find-import-errors", "--nbmake-timeout=20", *too_slow_notebooks])
@@ -88,8 +90,6 @@ if __name__=="__main__":
     # while not included in the testing approach, they should be verified periodically
     ignore_notebooks = [*too_slow_notebooks,
                         "examples/rover/HFAC_Analyses/HFAC_Analyses.ipynb",  # not yet adapted
-                        "examples/rover/HFAC_Analyses/IDETC_Human_Paper_Analysis.ipynb",  # not yet adapted
-                        "examples/rover/degradation_modelling/Degradation_Modelling_Notebook.ipynb",  # not yet adapted
                         "examples/pump/AST_Sampling.ipynb",  # requires special setup with julia kernel
                         "examples/pump/Tutorial_unfilled.ipynb"  # intended to be blank
                         ]

@@ -107,12 +107,15 @@ def diff(val1, val2, difftype='bool'):
 
     The difftype option ('diff' (takes the difference), 'bool' (checks if the same), and float (checks if under the provided tolerance))
     """
-    if difftype == 'diff':
-        return val1-val2
-    elif difftype == 'bool':
-        return val1 != val2
-    elif type(difftype) == float:
-        return abs(val1-val2) > difftype
+    try:
+        if difftype == 'diff':
+            return val1-val2
+        elif difftype == 'bool':
+            return val1 != val2
+        elif type(difftype) == float:
+            return abs(val1-val2) > difftype
+    except ValueError as e:
+        raise Exception("Unable to diff "+str(val1)+" and "+str(val2)) from e
 
 
 def prep_hists(simhists, plot_values, comp_groups, indiv_kwargs):
@@ -410,13 +413,43 @@ class History(Result):
         else:
             return self.flatten()
 
-    def _prep_nom_faulty(self, nomhist={}):
+    def _prep_nom_faulty(self, nomhist={}, align=True):
         """Create a nominal history of states from the current history."""
         if not nomhist:
             nomhist = self.nominal.flatten()
         else:
             nomhist = nomhist.flatten()
-        return nomhist, self._prep_faulty()
+        faulthist = self._prep_faulty()
+        if align:
+            faulthist._align(nomhist)
+        return nomhist, faulthist
+
+    def _align(self, nomhist):
+        """Align the timeranges of the current hist and an external hist."""
+        nom_start = nomhist.time[0]
+        fault_start = self.time[0]
+        nom_start_ind, fault_start_ind = 0, 0
+        if nom_start < fault_start:
+            nom_start_ind = np.where(nomhist.time == fault_start)[0][0]
+            fault_start_ind = 0
+        elif fault_start < nom_start:
+            nom_start_ind = 0
+            fault_start_ind = np.where(self.time == nom_start)[0][0]
+
+        nom_end = nomhist.time[-1]
+        fault_end = self.time[-1]
+        nom_end_ind = len(nomhist.time)
+        fault_end_ind = len(self.time)
+        if nom_end > fault_end:
+            nom_end_ind = np.where(nomhist.time == fault_end)[0][0]
+            fault_end_ind = len(self.time)
+        elif fault_end > nom_end:
+            nom_end_ind = len(nomhist.time)
+            fault_end_ind = np.where(self.time == nom_end)[0][0]
+        self.cut(fault_end_ind, fault_start_ind)
+        nomhist.cut(nom_end_ind, nom_start_ind)
+        if len(nomhist.time) != len(self.time):
+            print(nomhist)
 
     def get_degraded_hist(self, *attrs, nomhist={}, operator=np.any, difftype='bool',
                           withtime=True, withtotal=True):
@@ -451,14 +484,21 @@ class History(Result):
         if not attrs:
             attrs = self.keys()
 
-        nomhist, faulthist = self._prep_nom_faulty(nomhist)
+        nomhist, faulthist = self._prep_nom_faulty(nomhist, align=True)
         deghist = History()
         for att in attrs:
-            att_diff = [diff(nomhist[k], v, difftype)
-                        for k, v in faulthist.items()
-                        if att in k]
-            if att_diff:
-                deghist[att] = operator(att_diff, 0)
+            try:
+                att_diff = [diff(nomhist[k], v, difftype)
+                            for k, v in faulthist.items()
+                            if att in k]
+                if att_diff:
+                    try:
+                        deghist[att] = operator(att_diff, 0)
+                    except ValueError:
+                        deghist[att] = operator([operator(arr) for arr in att_diff], 0)
+            except Exception as e:
+                raise Exception("Unable to diff att " + att) from e
+
         if withtotal:
             deghist['total'] = len(deghist.values()) - np.sum([*deghist.values()], axis=0)
         if withtime:
@@ -701,19 +741,25 @@ class History(Result):
                              xlabel='', ylabel='', title='', **kwargs):
         """Plot value in hist as individual lines."""
         fig, ax = setup_plot(fig=fig, ax=ax, figsize=figsize)
-        times = self.get_metric('time', axis=0)
+        scens = [*self.nest(1).keys()]
+        all_times = self.get_values('time')
         hist_to_plot = self.get_values(value)
         if 'color' not in kwargs:
             kwargs['color'] = next(ax._get_lines.prop_cycler)['color']
-        for h in hist_to_plot.values():
-            ax.plot(times, h, **kwargs)
+        for scen in scens:
+            hist_to_plot = self.get(scen)
+            h_value = hist_to_plot.get(value)
+            times = hist_to_plot.get('time')
+            ax.plot(times, h_value, **kwargs)
         if xlabel:
             ax.set_xlabel(xlabel)
         if ylabel:
             ax.set_ylabel(ylabel)
         if title:
             ax.set_title(title)
-        ax.set_xlim(times[0], times[-1])
+        min_ind = np.min([i[0] for i in self.get_values('time').values()])
+        max_ind = np.max([i[-1] for i in self.get_values('time').values()])
+        ax.set_xlim(min_ind, max_ind)
         return fig, ax
 
     def get_mean_std_errhist(self, value):
