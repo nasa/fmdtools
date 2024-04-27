@@ -518,6 +518,17 @@ if __name__ == "__main__":
     # ax.set_xlim(0,5)
     # ax.set_ylim(-2,2)
     fig.show()
-#     an.plot.mdlhists({'nominal':mdlhist}, fxnflowvals=['Power'])
-#     an.plot.mdlhists({'nominal':mdlhist}, fxnflowvals={'Ground'})
+    import fmdtools.analyze as an
+    from fmdtools.sim.sample import FaultDomain, FaultSample
+    pm = an.phases.from_hist(hist)
+    fd = FaultDomain(mdl)
+    fd.add_all_fxn_modes('operator')
+    fd
+    fs = FaultSample(fd, phasemap = pm['override'])
+    fs.add_fault_phases('override')
+    fs
+    ecs, hists = prop.fault_sample(mdl, fs)
+    tab = an.tabulate.result_summary_fmea(ecs, hists,
+                                          *mdl.fxns,
+                                          metrics = ["in_bound", "at_finish", "end_dist", "faults", "classification", "end_x", "end_y"])
 
