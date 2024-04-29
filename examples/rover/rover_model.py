@@ -615,7 +615,7 @@ class DriveMode(Mode):
             self.mode_args = mode_args["mode_args"]
         else:
             self.mode_args = mode_args
-        ph = {'drive': 1.0}
+        ph = {'drive': 1.0, 'start': 1.0}
         if self.mode_args == "degradation":
             self.add_degradation_modes(deg_params, ph)
         elif type(self.mode_args) is int:
