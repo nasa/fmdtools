@@ -654,9 +654,9 @@ class DriveMode(Mode):
         self.add_manual_modes(ph, drift=self.s.drift, friction=self.s.friction)
 
     def add_n_modes(self, ph):
-        franges = {"friction": np.linspace(0.0, 20, 10),
-                   "transfer":  np.linspace(1.0, 0.0, 10),
-                   "drift": np.linspace(-0.5, 0.5, 10)}
+        franges = {"friction": {*np.linspace(0.0, 20, 10)},
+                   "transfer":  {*np.linspace(1.0, 0.0, 10)},
+                   "drift": {*np.linspace(-0.5, 0.5, 10)}}
         self.init_n_faultstates(franges, n=self.mode_args, phases=ph)
 
     def add_mode_list(self, ph):
