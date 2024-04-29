@@ -6,10 +6,10 @@ Created on Thu Sep 28 15:30:00 2023
 """
 from examples.rover.rover_model import Rover, RoverParam
 import fmdtools.sim.propagate as prop
-from fmdtools.sim.sample import SampleApproach, FaultDomain, FaultSample
+from fmdtools.sim.sample import FaultDomain, FaultSample
 from fmdtools.analyze.phases import from_hist
 
-if __name__=="__main__":
+if __name__ == "__main__":
     mdl = Rover()
     p = RoverParam()
     endresults, mdlhist = prop.nominal(mdl)
