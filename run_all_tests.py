@@ -75,6 +75,7 @@ if __name__=="__main__":
                       "examples/pump/Optimization.ipynb",
                       "examples/rover/degradation_modelling/Degradation_Modelling_Notebook.ipynb",
                       "examples/rover/HFAC_Analyses/IDETC_Human_Paper_Analysis.ipynb",
+                      "examples/rover/HFAC_Analyses/HFAC_Analyses.ipynb",
                       "examples/pump/Parallelism_Tutorial.ipynb"]
     # retcode = pytest.main(["--nbmake", *slow_notebooks])
 
@@ -89,7 +90,6 @@ if __name__=="__main__":
     #  we ignore the following notebooks for various reasons:
     # while not included in the testing approach, they should be verified periodically
     ignore_notebooks = [*too_slow_notebooks,
-                        "examples/rover/HFAC_Analyses/HFAC_Analyses.ipynb",  # not yet adapted
                         "examples/pump/AST_Sampling.ipynb",  # requires special setup with julia kernel
                         "examples/pump/Tutorial_unfilled.ipynb"  # intended to be blank
                         ]

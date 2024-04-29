@@ -16,6 +16,7 @@ from fmdtools.define.base import get_var, nest_dict
 from fmdtools.define.container.parameter import Parameter, ExampleParameter
 from fmdtools.sim.scenario import SingleFaultScenario, Injection, JointFaultScenario
 from fmdtools.sim.scenario import ParameterScenario
+from fmdtools.analyze.common import is_numeric
 from fmdtools.analyze.phases import gen_interval_times, PhaseMap, join_phasemaps
 import numpy as np
 import itertools
@@ -1156,7 +1157,7 @@ class SampleApproach(BaseSample):
         **faultdomains : tuple
             FaultDomains to add to the SampleApproach and their arguments.
             Has structure::
-            {'fd_name': (*args, **kwargs)} 
+            {'fd_name': (*args, **kwargs)}
             where args and kwargs are arguments/kwargs to SampleApproach.add_faultdomain
             (after name).
         """
@@ -1656,7 +1657,7 @@ class ParameterResultSample(ParameterSample):
         """
         if t is None:
             return self.res_to_sample[comp_group].get(rep).get(var)
-        elif type(t) is int:
+        elif is_numeric(t):
             return self.res_to_sample[comp_group].get(rep).get(var)[t]
         else:
             return Exception("Invalid option for t: "+str(t))
@@ -1732,7 +1733,7 @@ class ParameterResultSample(ParameterSample):
             Keyword arguments to ParameterSample.add_variable_scenario.
         """
         param_list = self.get_param_ins(comp_group, rep, t)
-        if type(t) in [int, float]:
+        if is_numeric(t):
             inputparams = {'comp_group': comp_group, 'rep': rep, 't': t}
         else:
             inputparams = {'comp_group': comp_group, 'rep': rep}
