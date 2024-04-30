@@ -500,7 +500,8 @@ if __name__ == "__main__":
     phasemaps = phases.from_hist(mdlhist)
     phases.phaseplot(phasemaps['plan_path'])
 
-    mdlhist.plot_line("flows.dofs.s.planvel","flows.dofs.s.vertvel", "fxns.store_ee.s.soc")
+    mdlhist.plot_line("flows.dofs.s.planvel",
+                      "flows.dofs.s.vertvel", "fxns.store_ee.s.soc")
     plot_env_with_traj(mdlhist, mdl)
     plot_env_with_traj_z(mdlhist, mdl)
 
