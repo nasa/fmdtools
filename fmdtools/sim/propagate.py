@@ -312,7 +312,7 @@ def parameter_sample(mdl, ps, **kwargs):
     if pool:
         check_mdl_memory(mdl, num_scens, max_mem=kwargs['max_mem'])
         inputs = [(mdl, sc, name, kwargs) for name, sc in ps.named_scenarios().items()]
-        res_list = list(tqdm.tqdm(pool.map(exec_nom_par, inputs),
+        res_list = list(tqdm.tqdm(pool.imap(exec_nom_par, inputs),
                                   total=len(inputs),
                                   disable=not (showprogress),
                                   desc="SCENARIOS COMPLETE"))
@@ -774,7 +774,7 @@ def scenlist_helper(mdl, scenlist, c_mdl, **kwargs):
         else:
             inputs = [(c_mdl[0], scen,  kwargs, str(i))
                       for i, scen in enumerate(scenlist)]
-        res_list = list(tqdm.tqdm(pool.map(exec_scen_par, inputs),
+        res_list = list(tqdm.tqdm(pool.imap(exec_scen_par, inputs),
                                   total=len(inputs),
                                   disable=not (showprogress),
                                   desc="SCENARIOS COMPLETE"))
@@ -803,12 +803,7 @@ def close_pool(kwargs):
 
 def exec_scen_par(args):
     """Helper function for executing the scenario in parallel"""
-    mdl_in = args[0]
-    if args[2].get('staged', False):
-        mdl_out = mdl_in.copy()
-    else:
-        mdl_out = mdl_in.copy()
-    return exec_scen(mdl_out, args[1], **args[2], indiv_id=args[3])
+    return exec_scen(args[0].copy(), args[1], **args[2], indiv_id=args[3])
 
 
 def exec_scen(mdl, scen, save_args={}, indiv_id='', **kwargs):

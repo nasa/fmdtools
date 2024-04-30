@@ -105,10 +105,13 @@ genbadge
 # license: (BSD 3-Clause) https://github.com/smarie/python-genbadge/blob/main/LICENSE
 multiprocess
 # used for parallism tutorial profiling
-# license: (BSD-3 Clause) https://github.com/uqfoundation/multiprocess/blob/master/LICENSE      
+# license: (BSD-3 Clause) https://github.com/uqfoundation/multiprocess/blob/master/LICENSE
 pathos          
 # used for parallelism tutorial profiling
 # license: (BSD-3 Clause) https://github.com/uqfoundation/pathos/blob/master/LICENSE
+sklearn
+# used for rove mode notebook
+# license: (BSD-3 Clause) https://github.com/scikit-learn/scikit-learn?tab=BSD-3-Clause-1-ov-file#readme
 ```
 They can be installed using ``pip install packagename``.
 

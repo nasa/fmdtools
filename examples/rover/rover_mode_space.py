@@ -8,12 +8,29 @@ from examples.rover.rover_model import Rover, RoverParam
 import fmdtools.sim.propagate as prop
 from fmdtools.sim.sample import FaultDomain, FaultSample
 from fmdtools.analyze.phases import from_hist
+import multiprocessing as mp
 
 if __name__ == "__main__":
     mdl = Rover()
     p = RoverParam()
     endresults, mdlhist = prop.nominal(mdl)
     pm = from_hist(mdlhist)
+
+    # range modes
+    mdl_range = Rover(p={"drive_modes": {"mode_args": 'range-manual-all'},
+                     'ground':{'linetype': 'turn', 'buffer_on': 0.5, 'buffer_poor': 0.8, 'buffer_near': 1.0}},
+                  sp={'end_condition': ''})
+    fd_range = FaultDomain(mdl_range)
+    fd_range.add_all_fxnclass_modes('Drive')
+    # fd_range.add_fault('drive', 'hmode_5')
+    # fd_range.add_fault('drive', 'hmode_995')
+    # fd_range.add_fault('drive', 'elec_open')
+    # faults = [('drive', 'hmode_'+str(i)) for i in range(800)]
+    # fd_range.add_faults(*faults)
+    fs_range = FaultSample(fd_range, pm['plan_path'])
+    fs_range.add_fault_phases('drive')
+    results_range, mdlhists_range = prop.fault_sample(mdl_range, fs_range, pool=mp.Pool(4),
+                                                      staged=True)
 
     # set modes
     mdl_id = Rover(p={"drive_modes": {"mode_args": "set"}})
@@ -23,8 +40,7 @@ if __name__ == "__main__":
     ps_id = FaultSample(pd_id, phasemap=pm['plan_path'])
     ps_id.add_fault_phases('drive', args=(3,))
 
-    ec_id, hist_id = prop.fault_sample(mdl, ps_id)
-
+    ec_id, hist_id = prop.fault_sample(mdl, ps_id, pool=mp.Pool(4), staged=True)
     #  manual modes
     mdl_id = Rover(p={"drive_modes": {"mode_args": "manual"}})
     endresults, mdlhist = prop.one_fault(mdl_id, "drive", "elec_open",
