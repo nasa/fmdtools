@@ -79,10 +79,13 @@ class Constraint(Objective):
         Theshold for the constraint. Default is 0.0
     comparator : str
         Whether the constraint is 'greater' or 'less'.
+    satisfied : bool
+        Whether the constraint is satisfied.
     """
 
     threshold: float = 0.0
     comparator: str = 'greater'
+    satisfied: bool = True
 
     def con_from_value(self, value):
         """
@@ -113,6 +116,10 @@ class Constraint(Objective):
     def update(self, value):
         """Update with given value."""
         self.value = self.con_from_value(value)
+        if not self.negative:
+            self.satisfied = self.value <= 0.0
+        else:
+            self.satisfied = self.value >= 0.0
 
 
 def unpack_x(*x):
@@ -441,15 +448,22 @@ class ResultConstraint(ResultObjective):
         Theshold for the constraint. Default is 0.0
     comparator : str
         Whether the constraint is 'greater' or 'less'.
+    satisfied : bool
+        Whether the constraint is satisfied.
     """
 
     threshold: float = 0.0
     comparator: str = 'greater'
+    satisfied: bool = True
 
     def update(self, res):
         """Update the value of the constraint given the result."""
         value = self.get_result_value(res)
         self.value = self.con_from_value(value)
+        if not self.negative:
+            self.satisfied = self.value <= 0.0
+        else:
+            self.satisfied = self.value >= 0.0
 
     def con_from_value(self, value):
         """
@@ -719,8 +733,6 @@ class ScenarioProblem(BaseSimProblem):
     """
     Base class for optimizing scenario parameters.
 
-    ...
-
     Attributes
     ----------
     prepped_sims : dict
@@ -810,7 +822,7 @@ class SingleFaultScenarioProblem(ScenarioProblem):
     >>> ex_scenprob.add_result_objective("f1", "s.y", time=5)
 
     objective value should be 1.0 (init value) + 3 * time_with_fault
-    
+
     >>> ex_scenprob.f1(5.0)
     4.0
     >>> ex_scenprob.f1(4.0)
@@ -1736,7 +1748,7 @@ class DynamicInterface():
 
 
 if __name__ == "__main__":
-    
+
     from fmdtools.sim.sample import expd
     from fmdtools.define.block.function import ExampleFunction
     exprob = ParameterSimProblem(ExampleFunction("ex"), expd, "one_fault", "ex", "short", 2)

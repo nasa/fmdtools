@@ -513,8 +513,8 @@ def nom_helper(mdl, ctimes, protect=True, save_args={}, mdl_kwargs={}, scen={},
     scen : scenario, optional
         Scenario to use. The default is {}.
     warn_faults : bool
-        choose whether to display a warning message if faults are identified during nominal runs.
-        Default is True.
+        choose whether to display a warning message if faults are identified during
+        nominal runs. Default is True.
     **kwargs : kwargs
         :data:`sim_kwargs` simulation options for :func:`prop_one_scen`
 
@@ -1068,6 +1068,11 @@ def prop_one_scen(mdl, scen, ctimes=[], nomhist={}, nomresult={}, **kwargs):
     else:
         start_time = 0
     timerange = mdl.sp.get_timerange(start_time)
+    # check if sequence is out of timerange
+    for t in scen['sequence']:
+        if t not in timerange:
+            raise Exception("t="+str(t)+" from sequence not in timerange: "
+                            + str(timerange))
     shift = mdl.sp.get_shift(start_time)
     mdl.init_time_hist()
     # run model through the time range defined in the object
@@ -1091,17 +1096,18 @@ def prop_one_scen(mdl, scen, ctimes=[], nomhist={}, nomresult={}, **kwargs):
 
             mdl.log_hist(t_ind, t, shift)
 
-            if type(desired_result) == dict:
+            if type(desired_result) is dict:
                 if "all" in desired_result:
                     des_res = desired_result['all']
                     nom_res = nomresult
                 elif t in desired_result:
                     des_res = desired_result[t]
-                    nom_res = nomresult.get(t)
+                    nom_res = nomresult.get(t_key(t))
                 else:
                     des_res = False
                 if des_res:
-                    result[t] = get_result(scen, mdl, des_res, nomhist, nom_res, time=t)
+                    result[t_key(t)] = get_result(scen, mdl, des_res, nomhist,
+                                                  nom_res, time=t)
             if check_end_condition(mdl, use_end_condition, t):
                 break
         except:
@@ -1110,10 +1116,10 @@ def prop_one_scen(mdl, scen, ctimes=[], nomhist={}, nomresult={}, **kwargs):
             break
     if cut_hist:
         mdl.h.cut(t_ind + shift)
-    if type(desired_result) == dict and 'end' in desired_result:
+    if type(desired_result) is dict and 'end' in desired_result:
         result['end'] = get_result(scen, mdl, desired_result['end'], nomhist, nomresult,
                                    time=t)
-    else:
+    elif type(desired_result) is not dict or 'endclass' in desired_result:
         result.update(get_result(scen, mdl, desired_result, nomhist, nomresult, time=t))
 
     if None in c_mdl.values():
