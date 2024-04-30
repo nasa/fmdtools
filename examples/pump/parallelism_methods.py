@@ -64,7 +64,7 @@ def compare_pools(mdl, app, pools, staged=False, track=False, verbose= True, tra
     exectimes = {}
     starttime = time.time()
     endclasses, mdlhists = propagate.fault_sample(mdl, app, pool=False, staged=staged,
-                                                  track=track, showprogress=False,
+                                                  showprogress=False,
                                                   track_times=track_times,
                                                   desired_result={})
     exectime_single = time.time() - starttime
@@ -76,7 +76,6 @@ def compare_pools(mdl, app, pools, staged=False, track=False, verbose= True, tra
         starttime = time.time()
         loc_kwargs = dict(pool=pools[pool],
                           staged=staged,
-                          track=track,
                           showprogress=False,
                           track_times=track_times,
                           desired_result={},
@@ -125,14 +124,18 @@ def parallel_mc3():
     close_pool(pool)
     return resultslist
 
-def instantiate_pools(cores):
+def instantiate_pools(cores, with_pathos=False):
     """Used to instantiate multiprocessing pools for comparison"""
-    from pathos.pools import ParallelPool, ProcessPool, SerialPool, ThreadPool
-    return {'multiprocessing': mp.Pool(cores),
-            'ProcessPool': ProcessPool(nodes=cores),
-            'ParallelPool': ParallelPool(nodes=cores),
-            'ThreadPool': ThreadPool(nodes=cores),
-            'multiprocess': ms.Pool(cores)}
+    if with_pathos:
+        from pathos.pools import ParallelPool, ProcessPool, SerialPool, ThreadPool
+        return {'multiprocessing': mp.Pool(cores),
+                'ProcessPool': ProcessPool(nodes=cores),
+                'ParallelPool': ParallelPool(nodes=cores),
+                'ThreadPool': ThreadPool(nodes=cores),
+                'multiprocess': ms.Pool(cores)}
+    else:
+        return {'multiprocessing': mp.Pool(cores),
+                'multiprocess': ms.Pool(cores)}
 
 def terminate_pools(pools):
     """End pools after comparing them."""
@@ -146,27 +149,39 @@ if __name__=='__main__':
     fd = FaultDomain(mdl)
     fd.add_all()
     fs = FaultSample(fd)
-    fs.add_fault_phases('start', 'on', args=(3,))
+    fs.add_fault_phases('start', 'end', args=(3,))
 
     cores = 4
     pools = instantiate_pools(cores)
 
     print("STAGED + FULL MODEL TRACKING")
-    compare_pools(mdl, fs, pools, staged=True, track='all')
+    mdl=Pump(sp = dict(phases=(('start',0,4),('on',5, 49),('end',50,500)), end_time=500),
+             track='all')
+    compare_pools(mdl, fs, pools, staged=True)
+    print("NOT STAGED + FULL MODEL TRACKING")
+    compare_pools(mdl, fs, pools, staged=False)
 
     print("STAGED + SOME TRACKING")
-
-    compare_pools(mdl, fs, pools, staged=True,
-                  track={'flows': {'EE_1': 'all', 'Wat_2': ['pressure', 'flowrate']}})
+    mdl=Pump(sp = dict(phases=(('start',0,4),('on',5, 49),('end',50,500)), end_time=500),
+             track={'flows': {'ee_1': 'all', 'wat_2': ['pressure', 'flowrate']}})
+    compare_pools(mdl, fs, pools, staged=True)
 
 
 
     print("STAGED + FLOW TRACKING")
-    compare_pools(mdl, fs, pools, staged=True, track='flows')
+    mdl=Pump(sp = dict(phases=(('start',0,4),('on',5, 49),('end',50,500)), end_time=500),
+             track='flows')
+    compare_pools(mdl, fs, pools, staged=True)
 
     print("STAGED + FUNCTION TRACKING")
-    compare_pools(mdl, fs, pools, staged=True, track='fxns')
+    mdl=Pump(sp = dict(phases=(('start',0,4),('on',5, 49),('end',50,500)), end_time=500),
+             track='fxns')
+    compare_pools(mdl, fs, pools, staged=True)
 
     print("STAGED + NO TRACKING")
-    compare_pools(mdl, fs, pools, staged=True, track='none')
+    mdl=Pump(sp = dict(phases=(('start',0,4),('on',5, 49),('end',50,500)), end_time=500),
+             track='none')
+    compare_pools(mdl, fs, pools, staged=True)
+    print("NOT STAGED + NO TRACKING")
+    compare_pools(mdl, fs, pools, staged=False)
     terminate_pools(pools)
