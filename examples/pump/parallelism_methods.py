@@ -7,19 +7,24 @@ Created on Fri Mar 26 12:23:14 2021
 
 from ex_pump import Pump, PumpParam
 import fmdtools.sim.propagate as propagate
-
 import time
-
 import multiprocessing as mp
 import multiprocess as ms
 
+
+def close_pool(pool):
+    """Close a pool process."""
+    pool.close()
+    pool.terminate()
 
 def delay_test(delays =  [i for i in range(0,100,10)]):
     """ Delay parameter use-case described in notebook--here we are using pool.map to manually
     simulate the model several times over parameters we want to run."""
     pool = mp.Pool(4)
     resultslist = pool.map(one_delay_helper, delays)
+    close_pool(pool)
     return resultslist
+
 def one_delay_helper(delay):
     """This helper function is used by pool.map to generate output over the given 
     input delays"""
@@ -94,6 +99,7 @@ def parallel_mc(iters=10):
     pool = mp.Pool(4)
     future_res = [pool.apply_async(run_model) for _ in range(iters)]
     res = [f.get() for f in future_res]
+    close_pool(pool)
     return res
 
 def parallel_mc2(iters=10):
@@ -101,6 +107,7 @@ def parallel_mc2(iters=10):
     pool = mp.Pool(4)
     models = [Pump() for i in range(iters)]
     result_list = pool.map(propagate.nominal, models)
+    close_pool(pool)
     return result_list
 
 def one_fault_helper(args):
@@ -115,6 +122,7 @@ def parallel_mc3():
     mdl = Pump()
     inputlist = [(fxn,fm) for fxn in mdl.fxns for fm in mdl.fxns[fxn].faultmodes.keys()]
     resultslist = pool.map(one_fault_helper, inputlist)
+    close_pool(pool)
     return resultslist
 
 def instantiate_pools(cores):
@@ -126,6 +134,11 @@ def instantiate_pools(cores):
             'ThreadPool': ThreadPool(nodes=cores),
             'multiprocess': ms.Pool(cores)}
 
+def terminate_pools(pools):
+    """End pools after comparing them."""
+    for pool in pools.values():
+        pool.terminate()
+
 
 if __name__=='__main__':
     mdl=Pump(sp = dict(phases=(('start',0,4),('on',5, 49),('end',50,500)), end_time=500))
@@ -133,7 +146,7 @@ if __name__=='__main__':
     fd = FaultDomain(mdl)
     fd.add_all()
     fs = FaultSample(fd)
-    fs.add_fault_phases(phase_args=(3,))
+    fs.add_fault_phases('start', 'on', args=(3,))
 
     cores = 4
     pools = instantiate_pools(cores)
@@ -156,4 +169,4 @@ if __name__=='__main__':
 
     print("STAGED + NO TRACKING")
     compare_pools(mdl, fs, pools, staged=True, track='none')
-    for pool in pools.values(): pool.terminate()
+    terminate_pools(pools)
