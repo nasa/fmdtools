@@ -906,52 +906,6 @@ class Graph(object):
             display(SVG(dot._repr_image_svg_xml()))
         return dot
 
-    def draw_pyvis(self, filename="graph", width=1000, filt=True, physics=False,
-                   notebook=False):
-        """
-        Plot graphs with pyvis. Produces interactive HTML.
-
-        Parameters
-        ----------
-        filename : str, optional
-            File to save the html to. The default is "typegraph.html".
-        width : int, optional
-            Width of the frame in px. The default is 1000.
-        filt : Dict/Bool, optional
-            Whether to display sliders. The default is True.
-        physics : Bool, optional
-            Whether to use physics during node placement. The default is False.
-        notebook : Bool, optional
-            passes notebook arg to pyviz Network (for displaying in jupyter)
-
-        Returns
-        -------
-        n : pyvis object
-            pyvis object of the drawn graph
-        """
-        from pyvis.network import Network
-        width = str(width)+"px"
-
-        if isinstance(self, FunctionArchitectureTypeGraph):
-            n = Network(directed=True, layout='hierarchical', width=width,
-                        notebook=notebook)
-        else:
-            n = Network(width=width, notebook=notebook)
-        g = self.g.copy()
-        nx.set_node_attributes(g, {g: g for g in g.nodes}, name='label')
-
-        for nd in g.nodes():  # fixes JSON serializability needed for pyvis
-            for attr in g.nodes[nd]:
-                if type(g.nodes[nd][attr]) in (set, dict):
-                    g.nodes[nd][attr] = str(g.nodes[nd][attr])
-
-        n.from_nx(g)
-        n.toggle_physics(physics)
-        if filt:
-            n.show_buttons(filter_=filt)
-        n.show(filename+".html")
-        return n
-
     def calc_aspl(self):
         """
         Compute average shortest path length of
