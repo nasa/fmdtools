@@ -180,6 +180,35 @@ fmdtools is developed primarily by researchers at NASA Ames Research Center. Ext
 
 See: [CONTRIBUTORS.md](https://github.com/nasa/fmdtools/blob/main/CONTRIBUTORS.md)
 
+## Citing this repository
+
+To cite fmdtools in general, you may cite our explanatory publication:
+
+```
+@article{hulse2021fmdtools,
+  title={fmdtools: A fault propagation toolkit for resilience assessment in early design},
+  author={Hulse, Daniel and Walsh, Hannah and Dong, Andy and Hoyle, Christopher and Tumer, Irem and Kulkarni, Chetan and Goebel, Kai},
+  journal={International Journal of Prognostics and Health Management},
+  volume={12},
+  number={3},
+  year={2021}
+}
+```
+
+To cite a particular version of the fmdtools, you may use:
+
+```
+@software{nasa2024fmdtools,
+  author = {{NASA}},
+  title = {fmdtools},
+  url = {https://github.com/nasa/fmdtools},
+  version = {2.0-rc3}, # <- replace with your version number
+  date = {2024-05-01},
+}
+```
+
+To cite a particular fmdtools example or published research methodology, use the relevant reference provided in the in accompanying README file for the example.
+
 ## License/Notices
 
 Released under the [NASA Open Source Agreement Version 1.3](https://github.com/nasa/fmdtools/blob/main/NASA_Open_Source_Agreement_fmdtools.pdf)

@@ -31,6 +31,11 @@ Notebooks
 
 A demo is provided in `Paper Notebook <../examples/taxiway/Paper_Notebook.ipynb>`_, which shows basic analysis of this model in two scenarios.
 
+References
+/////////////////////////////////////////////
+
+- Irshad, L, & Hulse, D. "Modeling Distributed Situation Awareness in Resilience-Based Design of Complex Engineered Systems." Proceedings of the ASME 2023 International Design Engineering Technical Conferences and Computers and Information in Engineering Conference. Volume 2: 43rd Computers and Information in Engineering Conference (CIE). Boston, Massachusetts, USA. August 20–23, 2023. V002T02A050. ASME. https://doi.org/10.1115/DETC2023-116689
+
 
 .. toctree::
    :hidden:
