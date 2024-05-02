@@ -34,6 +34,13 @@ The support files include various implementations of the tank model.
  
 - The main Tank optimization model (`tank_optimization.py`) similar to `tank_model` and `tank_opt` and is a dynamical implementation of a tank system with contingency management. 
 
+References
+/////////////////////////////////////////////
+
+- Irshad, L., Hulse, D., Demirel, H. O., Tumer, I. Y., and Jensen, D. C. (May 3, 2021). "Quantifying the Combined Effects of Human Errors and Component Failures." ASME. J. Mech. Des. October 2021; 143(10): 101703. https://doi.org/10.1115/1.4050402
+
+- Hulse, D., and Hoyle, C. (August 8, 2022). "Understanding Resilience Optimization Architectures: Alignment and Coupling in Multilevel Decomposition Strategies." ASME. J. Mech. Des. November 2022; 144(11): 111704. https://doi.org/10.1115/1.4054993
+
 .. toctree::
    :hidden:
    

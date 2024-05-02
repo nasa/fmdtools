@@ -50,6 +50,14 @@ The multirotor example model has several models of drones modeled at differing l
 
   - `drone_mdl_opt.py` is a modified version of the hierarchical done that encompasses autonomous path planning, rotors, electrical system, and control of the drone. It is parameterized with the following parameters: The rotor and battery architecture can be changed, the flight height can be changed to support different heights, which in turn changes the drone's flight plan, and there is now a `ManageHealth` function which reconfigures the flight depending on detected faults.
 
+References
+/////////////////////////////////////////////
+
+- Hulse, D., Walsh, H., Dong, A., Hoyle, C., Tumer, I., Kulkarni, C., & Goebel, K. (2021). fmdtools: A fault propagation toolkit for resilience assessment in early design. International Journal of Prognostics and Health Management, 12(3). https://doi.org/10.36001/ijphm.2021.v12i3.2954
+
+- Hulse, D., Biswas, A., Hoyle, C., Tumer, I. Y., Kulkarni, C., & Goebel, K. (2021). Exploring architectures for integrated resilience optimization. Journal of Aerospace Information Systems, 18(10), 665-678. https://doi.org/10.2514/1.I010942
+
+- Hulse, D, Zhang, H, & Hoyle, C. "Understanding Resilience Optimization Architectures With an Optimization Problem Repository." Proceedings of the ASME 2021 International Design Engineering Technical Conferences and Computers and Information in Engineering Conference. Volume 3A: 47th Design Automation Conference (DAC). Virtual, Online. August 17–19, 2021. V03AT03A039. ASME. https://doi.org/10.1115/DETC2021-70985
 
 .. toctree::
    :hidden:

@@ -54,6 +54,22 @@ Notebooks
   
 - `Rover Response Optimization <../examples/rover/optimization/Rover_Response_Optimization.ipynb>`_ further demonstrates the optimization of parameters over a set of fault scenarios using :class:`fmdtools.sim.search.ProblemArchitecture`.
 
+References
+/////////////////////////////////////////////
+
+- Irshad, L., & Hulse, D. (2022). Can Resilience Assessments Inform Early Design Human Factors Decision-making?. IFAC-PapersOnLine, 55(29), 61-66.
+
+- Irshad, L, & Hulse, D. "Resilience Modeling in Complex Engineered Systems With Human-Machine Interactions." Proceedings of the ASME 2022 International Design Engineering Technical Conferences and Computers and Information in Engineering Conference. Volume 2: 42nd Computers and Information in Engineering Conference (CIE). St. Louis, Missouri, USA. August 14–17, 2022. V002T02A024. ASME. https://doi.org/10.1115/DETC2022-89531
+
+- Hulse, D., and Irshad, L. (December 12, 2022). "Synthetic Fault Mode Generation for Resilience Analysis and Failure Mechanism Discovery." ASME. J. Mech. Des. March 2023; 145(3): 031707. https://doi.org/10.1115/1.4056320
+
+- D. Hulse and L. Irshad, "Using Degradation Modeling to Identify Fragile Operational Conditions in Human- and Component-driven Resilience Assessment," 2022 IEEE/AIAA 41st Digital Avionics Systems Conference (DASC), Portsmouth, VA, USA, 2022, pp. 1-10, doi: 10.1109/DASC55683.2022.9925877.
+
+- Girshfeld, I., Hulse, D., & Irshad, L. (2023). Uncovering Hazards Using a Multi-Objective Optimization to Explore the Faulty State-Space. In AIAA SCITECH 2023 Forum (p. 2578).
+
+- Irshad, L., & Hulse, D. (2023). On the Use of Resilience Models as Digital Twins for Operational Support and In-time Decision Making. In AIAA AVIATION 2023 Forum (p. 3559).
+
+
 .. toctree::
    :hidden:
    

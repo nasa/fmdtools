@@ -66,6 +66,11 @@ Notebooks
   - Using :meth:`fmdtools.analyze.history.History.plot_line()` to visualize the results of multiple stochastic simulations over time, and analyze quantities of interest using :class:`fmdtools.analyze.tabulate.FMEA`, :class:`fmdtools.analyze.tabulate.Comparison()`
 
 
+References
+/////////////////////////////////////////////
+
+- Hulse, D, Hoyle, C, Tumer, IY, Goebel, K, & Kulkarni, C. "Temporal Fault Injection Considerations in Resilience Quantification." Proceedings of the ASME 2020 International Design Engineering Technical Conferences and Computers and Information in Engineering Conference. Volume 11A: 46th Design Automation Conference (DAC). Virtual, Online. August 17–19, 2020. V11AT11A040. ASME. https://doi.org/10.1115/DETC2020-22154
+
 .. toctree::
    :hidden:
    
