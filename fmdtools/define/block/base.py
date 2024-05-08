@@ -402,8 +402,6 @@ class Block(Simulable):
 
     Has functions for model setup, querying state, and reseting the model.
 
-    ...
-
     Attributes
     ----------
     p : Parameter
