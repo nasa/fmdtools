@@ -309,28 +309,26 @@ def parameter_sample(mdl, ps, **kwargs):
     num_scens = ps.num_scenarios()
     kwargs['num_scens'] = num_scens
 
-    scennames = ps.scen_names()
-    n_results = Result.fromkeys(scennames)
-    n_mdlhists = History.fromkeys(scennames)
-
     if pool:
         check_mdl_memory(mdl, num_scens, max_mem=kwargs['max_mem'])
         inputs = [(mdl, sc, name, kwargs) for name, sc in ps.named_scenarios().items()]
-        res_list = list(tqdm.tqdm(pool.map(exec_nom_par, inputs),
+        res_list = list(tqdm.tqdm(pool.imap(exec_nom_par, inputs),
                                   total=len(inputs),
                                   disable=not (showprogress),
                                   desc="SCENARIOS COMPLETE"))
         n_results, n_mdlhists = unpack_res_list(ps.scenarios(), res_list)
     else:
+        scennames = ps.scen_names()
+        n_results = Result.fromkeys(scennames)
+        n_mdlhists = History.fromkeys(scennames)
         for scenname, scen in tqdm.tqdm(ps.named_scenarios().items(),
                                         disable=not (showprogress),
                                         desc="SCENARIOS COMPLETE"):
             loc_kwargs = {**kwargs, 'use_end_condition': False}
-            n_results[scenname], n_mdlhists[scenname] = exec_nom_helper(mdl, scen,
-                                                                        scenname,
-                                                                        **loc_kwargs)
+            res, hist = exec_nom_helper(mdl, scen, scenname, **loc_kwargs)
+            n_results[scenname], n_mdlhists[scenname] = res, hist
     save_helper(kwargs['save_args'], n_results, n_mdlhists)
-    close_pool(kwargs)
+    close_pool({'pool': pool, 'close_pool': close_p})
     return n_results.flatten(), n_mdlhists.flatten()
 
 
@@ -350,8 +348,8 @@ def exec_nom_par(arg):
 
 def exec_nom_helper(mdl, scen, name, **kwargs):
     """Helper function for executing nominal scenarios"""
-    mdl = mdl.new(p=scen.p, sp=scen.sp, r=scen.r)
-    result, mdlhist, _, t_end = prop_one_scen(mdl, scen, **kwargs)
+    mdl_run = mdl.new(p=scen.p, sp=scen.sp, r=scen.r)
+    result, mdlhist, _, t_end = prop_one_scen(mdl_run, scen, **kwargs)
     check_hist_memory(mdlhist, kwargs['num_scens'], max_mem=kwargs['max_mem'])
     save_helper(kwargs['save_args'], result, mdlhist, name, name)
     return result, mdlhist
@@ -515,8 +513,8 @@ def nom_helper(mdl, ctimes, protect=True, save_args={}, mdl_kwargs={}, scen={},
     scen : scenario, optional
         Scenario to use. The default is {}.
     warn_faults : bool
-        choose whether to display a warning message if faults are identified during nominal runs.
-        Default is True.
+        choose whether to display a warning message if faults are identified during
+        nominal runs. Default is True.
     **kwargs : kwargs
         :data:`sim_kwargs` simulation options for :func:`prop_one_scen`
 
@@ -776,7 +774,7 @@ def scenlist_helper(mdl, scenlist, c_mdl, **kwargs):
         else:
             inputs = [(c_mdl[0], scen,  kwargs, str(i))
                       for i, scen in enumerate(scenlist)]
-        res_list = list(tqdm.tqdm(pool.map(exec_scen_par, inputs),
+        res_list = list(tqdm.tqdm(pool.imap(exec_scen_par, inputs),
                                   total=len(inputs),
                                   disable=not (showprogress),
                                   desc="SCENARIOS COMPLETE"))
@@ -799,17 +797,13 @@ def close_pool(kwargs):
     """Closes pool to avoid memory problems"""
     if kwargs.get('pool', False) and kwargs.get('close_pool', True):
         kwargs['pool'].close()
+        kwargs['pool'].terminate()
         kwargs['pool'].join()
 
 
 def exec_scen_par(args):
     """Helper function for executing the scenario in parallel"""
-    mdl_in = args[0]
-    if args[2].get('staged', False):
-        mdl_out = mdl_in.copy()
-    else:
-        mdl_out = mdl_in.copy()
-    return exec_scen(mdl_out, args[1], **args[2], indiv_id=args[3])
+    return exec_scen(args[0].copy(), args[1], **args[2], indiv_id=args[3])
 
 
 def exec_scen(mdl, scen, save_args={}, indiv_id='', **kwargs):
@@ -953,7 +947,7 @@ def nested_sample(mdl, ps, get_phasemap=False, faultdomains={}, faultsamples={},
         nest_hist[scenname] = hist
         apps[scenname] = app
     save_helper(save_args, nest_res, nest_hist)
-    close_pool(kwargs)
+    close_pool({'pool': pool, 'close_pool': close_p})
     return nest_res.flatten(), nest_hist.flatten(), apps
 
 
@@ -1074,6 +1068,11 @@ def prop_one_scen(mdl, scen, ctimes=[], nomhist={}, nomresult={}, **kwargs):
     else:
         start_time = 0
     timerange = mdl.sp.get_timerange(start_time)
+    # check if sequence is out of timerange
+    for t in scen['sequence']:
+        if t not in timerange:
+            raise Exception("t="+str(t)+" from sequence not in timerange: "
+                            + str(timerange))
     shift = mdl.sp.get_shift(start_time)
     mdl.init_time_hist()
     # run model through the time range defined in the object
@@ -1097,17 +1096,18 @@ def prop_one_scen(mdl, scen, ctimes=[], nomhist={}, nomresult={}, **kwargs):
 
             mdl.log_hist(t_ind, t, shift)
 
-            if type(desired_result) == dict:
+            if type(desired_result) is dict:
                 if "all" in desired_result:
                     des_res = desired_result['all']
                     nom_res = nomresult
                 elif t in desired_result:
                     des_res = desired_result[t]
-                    nom_res = nomresult.get(t)
+                    nom_res = nomresult.get(t_key(t))
                 else:
                     des_res = False
                 if des_res:
-                    result[t] = get_result(scen, mdl, des_res, nomhist, nom_res, time=t)
+                    result[t_key(t)] = get_result(scen, mdl, des_res, nomhist,
+                                                  nom_res, time=t)
             if check_end_condition(mdl, use_end_condition, t):
                 break
         except:
@@ -1116,10 +1116,10 @@ def prop_one_scen(mdl, scen, ctimes=[], nomhist={}, nomresult={}, **kwargs):
             break
     if cut_hist:
         mdl.h.cut(t_ind + shift)
-    if type(desired_result) == dict and 'end' in desired_result:
+    if type(desired_result) is dict and 'end' in desired_result:
         result['end'] = get_result(scen, mdl, desired_result['end'], nomhist, nomresult,
                                    time=t)
-    else:
+    elif type(desired_result) is not dict or 'endclass' in desired_result:
         result.update(get_result(scen, mdl, desired_result, nomhist, nomresult, time=t))
 
     if None in c_mdl.values():

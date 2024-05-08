@@ -356,14 +356,18 @@ class StoreEE(Function):
 
     def condfaults(self, time):
         """Calculate overall conditional faults for StoreEE architecture."""
-        if self.s.soc < 20:
-            self.m.add_fault('lowcharge')
-        if self.s.soc < 1:
+        if self.s.soc < 1 and self.m.has_fault('lowcharge'):
             self.m.replace_fault('lowcharge', 'nocharge')
+        elif self.s.soc < 1:
+            self.m.add_fault('nocharge')
+        elif self.s.soc < 20:
+            self.m.add_fault('lowcharge')
+
         if self.m.has_fault('lowcharge'):
             for batname, bat in self.ca.comps.items():
                 bat.s.limit(soc=(0, 19))
         elif self.m.has_fault('nocharge'):
+            self.s.soc = 0
             for batname, bat in self.ca.comps.items():
                 bat.s.soc = 0
 
@@ -926,7 +930,7 @@ if __name__ == "__main__":
 
     # plot trajectories over fault scenarios
     fault_kwargs = {'alpha': 0.2, 'color': 'red'}
-    mdlhists.plot_line('flows.dofs.s.x', 'dofs.s.y', 'dofs.s.z', 'store_ee.s.soc',
+    mdlhists.plot_line('flows.dofs.s.x', 'flows.dofs.s.y', 'flows.dofs.s.z', 'fxns.store_ee.s.soc',
                        indiv_kwargs={'faulty': fault_kwargs})
     fig, ax = mdlhists.plot_trajectories("dofs.s.x", "dofs.s.y", "dofs.s.z",
                                          time_groups=['nominal'],

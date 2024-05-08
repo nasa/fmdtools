@@ -45,7 +45,7 @@ class Fault(BaseContainer, readonly=True):
     def calc_rate(self, time, phasemap={}, sim_time=1.0, sim_units='hr', weight=1.0):
         """
         Calculate the rate of a given fault mode.
-        
+
         Parameters
         ----------
         time : float
@@ -380,10 +380,10 @@ class Mode(BaseContainer, readonly=False):
         """
         p_def = 1/len(manual_modes)
         for mode, atts in manual_modes.items():
-            if type(atts) == list:
+            if type(atts) is list:
                 states = atts[0]
                 loc_kwargs = {**kwargs, **atts[1]}
-            elif type(atts) == dict:
+            elif type(atts) is dict:
                 states = atts
                 loc_kwargs = {**kwargs}
             loc_kwargs['prob'] = loc_kwargs.get('prob', p_def) * self.failrate

@@ -93,7 +93,7 @@ class SimParam(Parameter, readonly=True):
             start_time = self.start_time
         if end_time is None:
             end_time = self.end_time
-        return np.arange(start_time, end_time + self.dt, self.dt)
+        return np.round(np.arange(start_time, end_time + self.dt, self.dt), 7)
 
     def get_histrange(self, start_time=0.0, end_time=None):
         """Get the history range associated with the SimParam."""
@@ -265,6 +265,8 @@ class Simulable(BaseObject):
             param_dict['sp'] = self.sp.copy_with_vals(**sp)
         if not r and hasattr(self, 'r'):
             param_dict['r'] = {'seed': self.r.seed}
+        elif r:
+            param_dict['r'] = r
         if not track:
             param_dict['track'] = copy.deepcopy(self.track)
         return param_dict
