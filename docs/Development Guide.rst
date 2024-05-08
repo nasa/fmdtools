@@ -1,7 +1,7 @@
 Development Guide
 ===========================
 
-Why fmdtools?
+Why fmdtools? - Improving the Hazard Analysis Process
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 .. figure:: figures/resilience_importance.png
@@ -10,67 +10,17 @@ Why fmdtools?
    
    Resilience is important to consider when dynamics of system behavior can lead to hazardous or unsafe outcomes.
 
-The fmdtools library was developed to study resilience, which is an important consideration in designing safe, low-risk systems. As shown above, the key defining aspect of resilience is the **dynamics of failure events**, which may lead to recovery (or, a safe outcome) or failure (or, an unsafe outcome). 
+The fmdtools library was initial developed to study resilience, which is an important consideration in designing safe, low-risk systems. Resilience is the ability of a system to mitigate hazardous scenarios as they arise. As shown above, the key defining aspect of resilience is the **dynamics of failure events**, which may lead to recovery (or, a safe outcome) or failure (or, an unsafe outcome). 
 
-The main reason for developing fmdtools was a lack of existing open-source tools to model these dynamics at a high level (i.e., functions and flows) in the design process. Thus, researchers in this area had to re-implement modeling, simulation, and analysis approaches for each new case study or methodological improvement. The fmdtools package resolves this problem by separating resilience modeling, simulation, and analysis constructs from the model under study, enabling reuse of methodologies between case studies. Towards this end, the fmdtools package provides three major functions:
+The original reason for developing fmdtools was a lack of existing open-source tools to model these dynamics at a high level (i.e., functions and flows) in the design process. Thus, researchers in this area had to re-implement modeling, simulation, and analysis approaches for each new case study or methodological improvement. The fmdtools package resolved this problem by separating resilience modeling, simulation, and analysis constructs from the model under study, enabling reuse of methodologies between case studies. The goals of the fmdtools project have since shifted to the more general goal of **improving the hazard assessment process** by better representing systems resilience. Towards this end, fmdtools provides the following capabilities:
 
-1. Model definition constructs that enable systematic early specification of high level structure and behaviors of a system with concise syntax (:mod:`fmdtools.define`).
+- **Representing system dynamics** to enable the quantification of resilience properties. Typically, hazard assessment processes neglect the consideration of resilience because they focus on the immediate effects of faults on the function of the system, rather than an assessment of how these effects play out over time. The fmdtools library enables this consideration by providing a behavioral view of hazardous scenarios. This is important both for understanding hazardous behaviors, but also how they can be mitigated as they arise.
 
-2. Simulation methods that enable the quantification of system performance and propagation of hazards over a wide range of operational scenarios and model types (:mod:`fmdtools.sim`).
+- **Representing operational behaviors and actions** to enable the assessment the contributions of human operators and autonomous/AI-enabled systems to overall risk and resilience. Traditional hazard assessment approaches do not consider the feedback between operators, the system, and the environment, instead leaving them as ``accidents'' or ``mistakes'' to be blamed on the operator. With fmdtools, these hazards can be considered directly by modelling potential operator behaviors and how they support or degrade overall systems resilience. These approaches can also be used to better understand the risks posed by AI/autonomous systems.
 
-3. Analysis methods for quantifying resilience and summarizing and visualizing behaviors and properties of interest (:mod:`fmdtools.analyze`).
+- **Enabling a Model/Simulation-based hazard analysis paradigm** by allowing the iterative, consistent analysis of resilience through the design, implementation, and V\&V processes. The traditional hazard assessment process is a manual, expert-driven approach that is inefficient to iterate on or change as a the design changes or assumptions are validated (or invalidated). In contrast, because all assumptions in fmdtools are represented as code, they can easily be modified as assumptions change while maintaining the overall integrity of the analysis. Furthermore, simulations in fmdtools can be efficiently and consistently be varied to analyze a system in more detail or in different configurations.
 
-An overview of an earlier version of fmdtools (0.6.2) is provided in the paper:
-
-`Hulse, D., Walsh, H., Dong, A., Hoyle, C., Tumer, I., Kulkarni, C., & Goebel, K. (2021). fmdtools: A Fault Propagation Toolkit for Resilience Assessment in Early Design. International Journal of Prognostics and Health Management, 12(3). <https://doi.org/10.36001/ijphm.2021.v12i3.2954>`_
-
-Key Features
---------------------------------
-
-fmdtools was developed with a number of unique features that differentiate it from existing safety/resilience simulation tools. 
-
-- fmdtools uses an object-oriented undirected graph-based model representation which enables arbitrary propagation of flow states through a model graph, as opposed to a *procedural* *directed* graph-based model representation (a typical strategy for developing fault models in code is to represent functions or components by methods where the inputs and outputs of these methods connect the functions/components in a larger model method). This enables one to:
-  
-  - propagate behaviors in multiple directions in a model graph, e.g., closing a valve will not just reduce flow in the downstream pipe but also increase pressure in upstream pipes.
-  
-  - define the data structures that make a function/component (e.g., states, faults, timed events) with the behavioral methods in a single logical structure that can be re-used and modified for similar components and methods (that is, a class, instead of a set of unstructured variables and methods)
-
-- fmdtools can represent different system elements including human and AI components, and their interactions in both systems and system of systems. Additionally, fmdtools allows the modeling of the interactions between systems/system-of-systems and external factors such as the environment (e.g., weather, organizational factors). Specifically, fmdtools enables:
-
-  - Representing the actions of autonomous systems and human operators and behaviors through functions/actions and action architectures
-
-  -	Representing performance shaping factors, the interactions between performance shaping factors, their short-term and long-term influence on overall system resilience
-
-  -	Modeling perception and communications (for both human and artificial intelligence components) to allow the study of situation awareness’s contribution to safety (both positive and negative) in system of systems (and systems) by representing systems via functions and the interconnection between systems via flows
-
-  -	Representing the influence of external factors on system behaviors through parameters and parameter sampling
-  
-
-- fmdtools can represent the system at varying levels of fidelity through the design process so that one can start with a simple model and analysis, and make it more detailed as the design is elaborated. A typical process of representing the system (from less to more detail) would involve:
-  
-  - Creating a network representation of the model functions and flows to visualize the system and identify structurally-important parts of the model's causal structure
-  
-  - Elaborating the flow attributes and function failure logic in a static propagation to simulate the timeless effects of faults in the model
-  
-  - Adding dynamic states and behaviors to the functions as well as a simulation times and operational phases in a dynamic propagation model to simulate the dynamic effects of faults instantiated at different time-steps
-  
-  - Instantiating functions with component architectures to compare the expected resilience and behaviors of each
-  
-  - Defining stochastic behavioral and input parameters to simulate and analyze system resilience throughout the operational envelope
-  
-  - Using optimization methods to search the space of potential hazardous scenarios and find the optimal response parameters to mitigate these scenarios
-
-- fmdtools provides convenient methods for quickly visualizing the results of fault simulations with commonly-used Python libraries to enable one to quickly assess:
-  
-  - effects of faults on functions and flows in the model graph at a given time-step
-  
-  - the behavior of system states over time in nominal and faulty scenarios over a range of operational parameters
-  
-  - the effect of model input parameters (e.g., ranges, stochastic inputs) on nominal/faulty operations
-  
-  - the high-level results of a set of simulations in an FMEA-style table of faults, effects, rates, costs, and overall risk
-  
-  - simulation responses over a range or distribution of model and scenario parameters
+While this libary primarily provides code structures, a major objective of this library is further to enable these techniques to be used in a graphical simulation tool for hazard assessment.
 
 
 Intro to fmdtools

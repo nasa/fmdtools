@@ -151,10 +151,11 @@ if __name__ == "__main__":
     faultdomains = {'fd': (('fault', 'export_water', 'block'), {})}
     faultsamples = {'fs': (('fault_phases', 'fd'), {})}
 
+    pool = mp.Pool(4)
     ecs, hists, apps = propagate.nested_sample(mdl, ps, run_stochastic=True,
                                                faultdomains=faultdomains,
                                                faultsamples=faultsamples,
-                                               pool=mp.Pool(4))
+                                               pool=pool)
 
     # convert to plot tests:
     comp_mdlhists = hists.get_scens('export_water_block_t27p0')
@@ -185,7 +186,7 @@ if __name__ == "__main__":
     ps2.add_variable_replicates([[0]], replicates=100, name="nodelay")
     ps2.add_variable_replicates([[10]], replicates=100, name="delay10")
     nomhist, nomres, = propagate.parameter_sample(mdl, ps)
-    ps2.group_scens("inputparams")
+    ps2.group_scens("p.delay")
 
     # test prob dense?
     for i in range(1, 10):
