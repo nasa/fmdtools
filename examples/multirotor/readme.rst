@@ -28,7 +28,7 @@ Notebooks
 
 The multirotor example model has several models of drones modeled at differing levels of detail which are then used in the following example notebooks;
 
-- `fmdtools Paper Demonstration <../examples/multirotor/Demonstration.ipynb>`_  is helpful for understanding how a model can be matured as more details are added, covering:
+- `fmdtools Paper Demonstration <Demonstration.ipynb>`_  is helpful for understanding how a model can be matured as more details are added, covering:
 
   - The :mod:`fmdtools.analyze.graph` module.
   
@@ -36,9 +36,9 @@ The multirotor example model has several models of drones modeled at differing l
   
   - Analysis using Basic analysis/results processing capabilities
  
-- The `Urban Drone Model <../examples/multirotor/drone_mdl_urban.py>`_ is helpful for understanding how to set up gridworlds using :class:`fmdtools.define.object.coords.Coords` and an Environment class. `Urban Drone Demo <../examples/multirotor/Urban_Drone_Demo.ipynb>`_ demonstrates how this gridworld can be used in simulation.
+- The `Urban Drone Model <drone_mdl_urban.py>`_ is helpful for understanding how to set up gridworlds using :class:`fmdtools.define.object.coords.Coords` and an Environment class. `Urban Drone Demo <Urban_Drone_Demo.ipynb>`_ demonstrates how this gridworld can be used in simulation.
  
-- `Multirotor Optimization <../examples/multirotor/Multirotor_Optimization.ipynb>`_ shows how the design, operations, and contingency management of a system can be co-optimized with the :class:`fmdtools.sim.search.ProblemArchitecture` class. 
+- `Multirotor Optimization <Multirotor_Optimization.ipynb>`_ shows how the design, operations, and contingency management of a system can be co-optimized with the :class:`fmdtools.sim.search.ProblemArchitecture` class. 
 
 - The support files include various implementations of the drone model.
 
@@ -62,6 +62,6 @@ References
 .. toctree::
    :hidden:
    
-   ../examples/multirotor/Demonstration.ipynb
-   ../examples/multirotor/Urban_Drone_Demo.ipynb
-   ../examples/multirotor/Multirotor_Optimization.ipynb
+   Demonstration.ipynb
+   Urban_Drone_Demo.ipynb
+   Multirotor_Optimization.ipynb

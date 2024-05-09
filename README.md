@@ -19,17 +19,21 @@ The fmdtools libary provides the computational support needed to evolve towards 
 
 Some key features include:
 
+<img align="left" width="100" height="100" src="/docs/figures/flexible.svg">
+
 ### Flexible Modelling Paradigm
-<img align="left" width="100" height="100" src="https://raw.githubusercontent.com/nasa/fmdtools/main/docs/figures/flexible.svg">
-Models in fmdtools use a consistent and composable representation of system structure and behavior. Whether you want to model a simple component, a complex system-of-systems, or both, fmdtools help.
+Models in fmdtools use a consistent and composable representation of system structure and behavior. Whether you want to model a simple component, a complex system-of-systems, or both, fmdtools can help.
+
+<img align="left" width="100" height="100" src="/docs/figures/powerful.svg">
 
 ### Powerful Simulation Techniques
-<img align="left" width="100" height="100" src="https://raw.githubusercontent.com/nasa/fmdtools/main/docs/figures/powerful.svg">
 Simulation techniques in fmdtools represent the state-of-the-art in dynamical systems modelling for resilience quantification. With fmdtools, you can simulate the dynamic effects of hazardous scenarios over a wide range of variables to quantify and optimize risk, resilience, and safety metrics. 
 
+<img align="left" width="100" height="100" src="/docs/figures/efficient.svg"> 
+
 ### Efficient Analysis Process
-<img align="left" width="100" height="100" src="https://raw.githubusercontent.com/nasa/fmdtools/main/docs/figures/efficient.svg"> 
 Readily-deployable analysis methods are built in to fmdtools to enable the rapid and iterative statistical analysis of simulation results. With fmdtools, you can write 2-3 lines of code to visualize model behavior instead of spending hours writing it yourself.
+
 
 
 ## Getting Started

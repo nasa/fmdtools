@@ -29,11 +29,11 @@ Notebooks
 
 - **Tutorial** which was designed to provide a basic interactive tutorial for learning basic fmdtools functions (along with the `Intro to fmdtools <docs/Intro_to_fmdtools.md>`_ workshop). This tutorial has two components: 
 
-  - `Tutorial_unfilled.ipynb <../examples/pump/Tutorial_unfilled.ipynb>`_, which is to be used by students, and has the basic structure without the code filled in.
+  - `Tutorial_unfilled.ipynb <Tutorial_unfilled.ipynb>`_, which is to be used by students, and has the basic structure without the code filled in.
 
-  - `Tutorial_complete.ipynb <../examples/pump/Tutorial_complete.ipynb>`_, which is to be used by the instructor, and has the basic code filled in to follow along with.
+  - `Tutorial_complete.ipynb <Tutorial_complete.ipynb>`_, which is to be used by the instructor, and has the basic code filled in to follow along with.
 
-- `Pump Example Notebook <../examples/pump/Pump_Example_Notebook.ipynb>`_ is helpful for understanding the breadth of fmdtools plotting, tabulation, and visualization capabilities. It covers:
+- `Pump Example Notebook <Pump_Example_Notebook.ipynb>`_ is helpful for understanding the breadth of fmdtools plotting, tabulation, and visualization capabilities. It covers:
   
   - A variety of graphing use-cases in :mod:`fmdtools.analyze.graph` functions which enable viewing different graph types, simulation results at individual times, and overall model statistics/results.
   
@@ -41,7 +41,7 @@ Notebooks
   
   - Saving/Loading `fmdtools.analyze.result.Result` data structures.
   
-- `Using Parallel Computing in fmdtools <../examples/pump/Parallelism_Tutorial.ipynb>`_ covers how to reduce computational costs for computationally-expensive simulation use-cases (e.g., sampling large numbers of fault scenarios or running complex models with large numbers of timesteps). It covers:
+- `Using Parallel Computing in fmdtools <Parallelism_Tutorial.ipynb>`_ covers how to reduce computational costs for computationally-expensive simulation use-cases (e.g., sampling large numbers of fault scenarios or running complex models with large numbers of timesteps). It covers:
 
   - Using process pools as arguments to :mod:`fmdtools.sim.propagate` methods to speed up simulation. A comparison of process pools from different external python packages are provided.
   
@@ -49,15 +49,15 @@ Notebooks
   
   - Profiling models with ``cProfile`` to discover what parts are most computationally-expensive.
 
-- `Optimization <../examples/pump/Optimization.ipynb>`_, shows some of the basics of working with :class:`fmdtools.sim.search.DisturbanceProblem` and :class:`fmdtools.sim.search.ParameterSimProblem` classes for optimization. 
+- `Optimization <Optimization.ipynb>`_, shows some of the basics of working with :class:`fmdtools.sim.search.DisturbanceProblem` and :class:`fmdtools.sim.search.ParameterSimProblem` classes for optimization. 
 
-- `AST Sampling <../examples/pump/AST_Sampling.ipynb>`_, shows how fmdtools models called from the `AdaSress Julia <https://www.nasa.gov/content/tech/rse/research/adastress>_` package to leverage the adaptive stress testing methodology using the :class:`fmdtools.sim.search.DynamicInterface` class.
+- `AST Sampling <AST_Sampling.ipynb>`_, shows how fmdtools models called from the `AdaSress Julia <https://www.nasa.gov/content/tech/rse/research/adastress>_` package to leverage the adaptive stress testing methodology using the :class:`fmdtools.sim.search.DynamicInterface` class.
 
 - `Optimization.ipynb`: Showing how to use optimization methods in `fmdtools.sim.search` to optimize scenarios and responses.
 
 - `Parallelism_Tutorial.ipynb`: Shows how to use parallelism in the context of simulation using the `multiprocessing` library.
 
-- `Stochastic Modeling in fmdtools <../examples/pump/Stochastic_Modelling.ipynb>`_ , which covers defining and simulating stochastic models--models with random internal behaviors. This includees:
+- `Stochastic Modeling in fmdtools <Stochastic_Modelling.ipynb>`_ , which covers defining and simulating stochastic models--models with random internal behaviors. This includees:
 
   - Setting up random states in functions using :class:`fmdtools.define.container.rand.Rand` and :meth:`fmdtools.define.container.rand.Rand.set_rand_state()`.
   
@@ -74,9 +74,9 @@ References
 .. toctree::
    :hidden:
    
-   ../examples/pump/Tutorial_complete.ipynb
-   ../examples/pump/Pump_Example_Notebook.ipynb
-   ../examples/pump/Parallelism_Tutorial.ipynb
-   ../examples/pump/Optimization.ipynb
-   ../examples/pump/Stochastic_Modelling.ipynb
-   ../examples/pump/AST_Sampling.ipynb
+   Tutorial_complete.ipynb
+   Pump_Example_Notebook.ipynb
+   Parallelism_Tutorial.ipynb
+   Optimization.ipynb
+   Stochastic_Modelling.ipynb
+   AST_Sampling.ipynb
