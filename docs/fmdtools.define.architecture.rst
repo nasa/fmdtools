@@ -22,6 +22,10 @@ fmdtools.define.architecture.base
 fmdtools.define.architecture.action
 --------------------------------
 
+Class to define successive actions taken by an agent.
+
+For an example and illustration of the structure, see: `The Action Sequence Graph Demo Model <../examples/asg_demo/readme.rst>`_.
+
 .. automodule:: fmdtools.define.architecture.action
    :members:
    :undoc-members:

@@ -21,9 +21,9 @@ Scripts and tests:
 Notebooks
 /////////////////////////////////////////////
 
-- `Hold-up Tank Model <../examples/tank/Tank_Analysis.ipynb>`_ uses the :class:`fmdtools.sim.sample.SampleApproach` class to model human interactions with the modeled system (in `tank_model.py`).
+- `Hold-up Tank Model <Tank_Analysis.ipynb>`_ uses the :class:`fmdtools.sim.sample.SampleApproach` class to model human interactions with the modeled system (in `tank_model.py`).
 
-- `Tank Optimization <../examples/tank/Tank_Optimization.ipynb>`_ shows how design and contingency management of a system (in `tank_optimization_model.py`) can be co-optimized with the :class:`fmdtools.sim.search.ProblemArchitecture` class, as well as external solvers.
+- `Tank Optimization <Tank_Optimization.ipynb>`_ shows how design and contingency management of a system (in `tank_optimization_model.py`) can be co-optimized with the :class:`fmdtools.sim.search.ProblemArchitecture` class, as well as external solvers.
 
 The support files include various implementations of the tank model.
 
@@ -44,5 +44,5 @@ References
 .. toctree::
    :hidden:
    
-   ../examples/tank/Tank_Analysis.ipynb
-   ../examples/tank/Tank_Optimization.ipynb
+   Tank_Analysis.ipynb
+   Tank_Optimization.ipynb

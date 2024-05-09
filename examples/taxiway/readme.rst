@@ -29,7 +29,7 @@ Scripts and tests:
 Notebooks
 /////////////////////////////////////////////
 
-A demo is provided in `Paper Notebook <../examples/taxiway/Paper_Notebook.ipynb>`_, which shows basic analysis of this model in two scenarios.
+A demo is provided in `Paper Notebook <Paper_Notebook.ipynb>`_, which shows basic analysis of this model in two scenarios.
 
 References
 /////////////////////////////////////////////
@@ -40,4 +40,4 @@ References
 .. toctree::
    :hidden:
 
-   ../examples/taxiway/Paper_Notebook.ipynb
+   Paper_Notebook.ipynb
