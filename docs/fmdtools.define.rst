@@ -5,7 +5,7 @@ The define package provides the building blocks to develop a simulation. Simulat
 
 .. figure:: figures/block_inheritance.svg
    :width: 800
-   :alt: Structure simulable fmdtools classes
+   :alt: Inheritance of simulable fmdtools classes
    
    Structure of simulable fmdtools subclasses used for developing simulations. 
  

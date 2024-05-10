@@ -37,13 +37,31 @@ fmdtools.define.block.component
 fmdtools.define.block.function
 --------------------------------
 
+Functions are used to represent overall system functionality and behaviors (i.e., what a system does).
+
+Functions are defined by extending the Function class, which may then be instantiated, as shown below:
+
+.. figure:: figures/Function.svg
+   :width: 800
+   :alt: Structure of a Function Class
+   
+   Example of a Function class and its corresponding instantiation.
+
+To define a function class, it can be helpful to use this code template:
+
 .. figure:: figures/fxnblock_structure.png
    :width: 800
-   :alt: Structure of a Function
+   :alt: Structure of a Function Class
    
    Code template for :class:`Function` used to define high-level system functions and their behavior.
 
-.. automodule:: fmdtools.define.block.function
+
+.. autoclass:: fmdtools.define.block.function.Function
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+.. autoclass:: fmdtools.define.block.function.GenericFunction
    :members:
    :undoc-members:
    :show-inheritance:
