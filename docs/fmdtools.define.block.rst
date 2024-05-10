@@ -1,14 +1,15 @@
 fmdtools.define.block
 ===========================
+.. automodule:: fmdtools.define.block
 
 The block subpackage provides a representation of blocks, which are simulable models which may contain containers and other properties.
 
 These variants of block are provided in the following modules:
 
-* :mod:`base`: for :class:`Simulable`, which is used for all simulations (including architectures) and :class:`Block`, which is used for blocks.
-* :mod:`action`: for :class:`Action`, which is used to represent actions.
-* :mod:`component`: for :class:`Component`, which is used to represent components.
-* :mod:`function`: for :class:`Function`, which is used to represent functions.
+* :mod:`fmdtools.define.block.base`: for :class:`Simulable`, which is used for all simulations (including architectures) and :class:`Block`, which is used for blocks.
+* :mod:`fmdtools.define.block.action`: for :class:`Action`, which is used to represent actions.
+* :mod:`fmdtools.define.block.component`: for :class:`Component`, which is used to represent components.
+* :mod:`fmdtools.define.block.function`: for :class:`Function`, which is used to represent functions.
 
 fmdtools.define.block.base
 --------------------------------
@@ -36,6 +37,7 @@ fmdtools.define.block.component
 
 fmdtools.define.block.function
 --------------------------------
+.. automodule:: fmdtools.define.block.function
 
 Functions are used to represent overall system functionality and behaviors (i.e., what a system does).
 

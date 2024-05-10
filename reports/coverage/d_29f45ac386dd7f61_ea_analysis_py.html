@@ -2,7 +2,7 @@
 <html>
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-    <title>Coverage for examples\rover\optimization\ea_analysis.py: 29%</title>
+    <title>Coverage for examples\rover\optimization\ea_analysis.py: 24%</title>
     <link rel="icon" sizes="32x32" href="favicon_32.png">
     <link rel="stylesheet" href="style.css" type="text/css">
     <script type="text/javascript" src="coverage_html.js" defer></script>
@@ -12,7 +12,7 @@
     <div class="content">
         <h1>
             <span class="text">Coverage for </span><b>examples\rover\optimization\ea_analysis.py</b>:
-            <span class="pc_cov">29%</span>
+            <span class="pc_cov">24%</span>
         </h1>
         <aside id="help_panel_wrapper">
             <input id="help_panel_state" type="checkbox">
@@ -55,8 +55,8 @@
         </aside>
         <h2>
             <span class="text">17 statements &nbsp;</span>
-            <button type="button" class="run button_toggle_run" value="run" data-shortcut="r" title="Toggle lines run">5<span class="text"> run</span></button>
-            <button type="button" class="mis show_mis button_toggle_mis" value="mis" data-shortcut="m" title="Toggle lines missing">12<span class="text"> missing</span></button>
+            <button type="button" class="run button_toggle_run" value="run" data-shortcut="r" title="Toggle lines run">4<span class="text"> run</span></button>
+            <button type="button" class="mis show_mis button_toggle_mis" value="mis" data-shortcut="m" title="Toggle lines missing">13<span class="text"> missing</span></button>
             <button type="button" class="exc show_exc button_toggle_exc" value="exc" data-shortcut="x" title="Toggle lines excluded">0<span class="text"> excluded</span></button>
         </h2>
         <p class="text">
@@ -65,7 +65,7 @@
             <a id="nextFileLink" class="nav" href="d_29f45ac386dd7f61_search_rover_py.html">&#xbb; next</a>
             &nbsp; &nbsp; &nbsp;
             <a class="nav" href="https://coverage.readthedocs.io/en/7.4.0">coverage.py v7.4.0</a>,
-            created at 2024-02-02 17:06 -0800
+            created at 2024-05-10 11:29 -0700
         </p>
         <aside class="hidden">
             <button type="button" class="button_next_chunk" data-shortcut="j"/>
@@ -88,31 +88,33 @@
     <p class="pln"><span class="n"><a id="t6" href="#t6">6</a></span><span class="t">&nbsp;</span><span class="r"></span></p>
     <p class="run"><span class="n"><a id="t7" href="#t7">7</a></span><span class="t"><span class="key">import</span> <span class="nam">pandas</span> <span class="key">as</span> <span class="nam">pd</span>&nbsp;</span><span class="r"></span></p>
     <p class="run"><span class="n"><a id="t8" href="#t8">8</a></span><span class="t"><span class="key">import</span> <span class="nam">matplotlib</span><span class="op">.</span><span class="nam">pyplot</span> <span class="key">as</span> <span class="nam">plt</span>&nbsp;</span><span class="r"></span></p>
-    <p class="run"><span class="n"><a id="t9" href="#t9">9</a></span><span class="t"><span class="key">import</span> <span class="nam">numpy</span> <span class="key">as</span> <span class="nam">np</span>&nbsp;</span><span class="r"></span></p>
-    <p class="pln"><span class="n"><a id="t10" href="#t10">10</a></span><span class="t">&nbsp;</span><span class="r"></span></p>
-    <p class="run"><span class="n"><a id="t11" href="#t11">11</a></span><span class="t"><span class="nam">dfea</span> <span class="op">=</span> <span class="nam">pd</span><span class="op">.</span><span class="nam">read_csv</span><span class="op">(</span><span class="str">'results/rslt_ea.csv'</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
-    <p class="mis show_mis"><span class="n"><a id="t12" href="#t12">12</a></span><span class="t"><span class="nam">dfrand</span> <span class="op">=</span> <span class="nam">pd</span><span class="op">.</span><span class="nam">read_csv</span><span class="op">(</span><span class="str">'results/rslt_random.csv'</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
-    <p class="pln"><span class="n"><a id="t13" href="#t13">13</a></span><span class="t"><span class="com">#dfccea = pd.read_csv("ccea_pop.csv")</span>&nbsp;</span><span class="r"></span></p>
-    <p class="mis show_mis"><span class="n"><a id="t14" href="#t14">14</a></span><span class="t"><span class="nam">dfccea</span> <span class="op">=</span> <span class="nam">pd</span><span class="op">.</span><span class="nam">read_csv</span><span class="op">(</span><span class="str">"results/rslt_ccea.csv"</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
+    <p class="pln"><span class="n"><a id="t9" href="#t9">9</a></span><span class="t">&nbsp;</span><span class="r"></span></p>
+    <p class="run"><span class="n"><a id="t10" href="#t10">10</a></span><span class="t"><span class="key">if</span> <span class="nam">__name__</span> <span class="op">==</span> <span class="str">"__main__"</span><span class="op">:</span>&nbsp;</span><span class="r"></span></p>
+    <p class="mis show_mis"><span class="n"><a id="t11" href="#t11">11</a></span><span class="t">    <span class="nam">dfea</span> <span class="op">=</span> <span class="nam">pd</span><span class="op">.</span><span class="nam">read_csv</span><span class="op">(</span><span class="str">'results/rslt_ea.csv'</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
+    <p class="mis show_mis"><span class="n"><a id="t12" href="#t12">12</a></span><span class="t">    <span class="nam">dfrand</span> <span class="op">=</span> <span class="nam">pd</span><span class="op">.</span><span class="nam">read_csv</span><span class="op">(</span><span class="str">'results/rslt_random.csv'</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
+    <p class="pln"><span class="n"><a id="t13" href="#t13">13</a></span><span class="t">    <span class="com"># dfccea = pd.read_csv("ccea_pop.csv")</span>&nbsp;</span><span class="r"></span></p>
+    <p class="mis show_mis"><span class="n"><a id="t14" href="#t14">14</a></span><span class="t">    <span class="nam">dfccea</span> <span class="op">=</span> <span class="nam">pd</span><span class="op">.</span><span class="nam">read_csv</span><span class="op">(</span><span class="str">"results/rslt_ccea.csv"</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t15" href="#t15">15</a></span><span class="t">&nbsp;</span><span class="r"></span></p>
-    <p class="mis show_mis"><span class="n"><a id="t16" href="#t16">16</a></span><span class="t"><span class="nam">print</span><span class="op">(</span><span class="nam">dfea</span><span class="op">.</span><span class="nam">head</span><span class="op">(</span><span class="op">)</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
-    <p class="mis show_mis"><span class="n"><a id="t17" href="#t17">17</a></span><span class="t"><span class="nam">print</span><span class="op">(</span><span class="nam">dfrand</span><span class="op">.</span><span class="nam">head</span><span class="op">(</span><span class="op">)</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
-    <p class="mis show_mis"><span class="n"><a id="t18" href="#t18">18</a></span><span class="t"><span class="nam">print</span><span class="op">(</span><span class="nam">dfccea</span><span class="op">.</span><span class="nam">head</span><span class="op">(</span><span class="op">)</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
+    <p class="mis show_mis"><span class="n"><a id="t16" href="#t16">16</a></span><span class="t">    <span class="nam">print</span><span class="op">(</span><span class="nam">dfea</span><span class="op">.</span><span class="nam">head</span><span class="op">(</span><span class="op">)</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
+    <p class="mis show_mis"><span class="n"><a id="t17" href="#t17">17</a></span><span class="t">    <span class="nam">print</span><span class="op">(</span><span class="nam">dfrand</span><span class="op">.</span><span class="nam">head</span><span class="op">(</span><span class="op">)</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
+    <p class="mis show_mis"><span class="n"><a id="t18" href="#t18">18</a></span><span class="t">    <span class="nam">print</span><span class="op">(</span><span class="nam">dfccea</span><span class="op">.</span><span class="nam">head</span><span class="op">(</span><span class="op">)</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t19" href="#t19">19</a></span><span class="t">&nbsp;</span><span class="r"></span></p>
-    <p class="pln"><span class="n"><a id="t20" href="#t20">20</a></span><span class="t"><span class="com"># scatter plot</span>&nbsp;</span><span class="r"></span></p>
-    <p class="mis show_mis"><span class="n"><a id="t21" href="#t21">21</a></span><span class="t"><span class="nam">ax</span> <span class="op">=</span> <span class="nam">dfea</span><span class="op">.</span><span class="nam">plot</span><span class="op">(</span><span class="nam">x</span><span class="op">=</span><span class="str">'time'</span><span class="op">,</span> <span class="nam">y</span><span class="op">=</span> <span class="str">'EA Fitness Values'</span><span class="op">,</span><span class="nam">c</span><span class="op">=</span><span class="str">'r'</span><span class="op">,</span> <span class="nam">kind</span><span class="op">=</span><span class="str">'scatter'</span><span class="op">,</span> <span class="nam">label</span><span class="op">=</span><span class="str">'EA'</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
-    <p class="mis show_mis"><span class="n"><a id="t22" href="#t22">22</a></span><span class="t"><span class="nam">dfrand</span><span class="op">.</span><span class="nam">plot</span><span class="op">(</span><span class="nam">x</span><span class="op">=</span><span class="str">'time'</span><span class="op">,</span> <span class="nam">y</span><span class="op">=</span><span class="str">'Random Fitness Values'</span><span class="op">,</span> <span class="nam">kind</span><span class="op">=</span><span class="str">'scatter'</span><span class="op">,</span> <span class="nam">ax</span><span class="op">=</span><span class="nam">ax</span><span class="op">,</span> <span class="nam">c</span><span class="op">=</span><span class="str">'g'</span><span class="op">,</span> <span class="nam">label</span><span class="op">=</span><span class="str">'Monte Carlo'</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
-    <p class="mis show_mis"><span class="n"><a id="t23" href="#t23">23</a></span><span class="t"><span class="nam">dfccea</span><span class="op">.</span><span class="nam">plot</span><span class="op">(</span><span class="nam">x</span><span class="op">=</span><span class="str">'time'</span><span class="op">,</span> <span class="nam">y</span><span class="op">=</span><span class="str">'CCEA Fitness Values'</span><span class="op">,</span> <span class="nam">kind</span><span class="op">=</span><span class="str">'scatter'</span><span class="op">,</span> <span class="nam">ax</span><span class="op">=</span><span class="nam">ax</span><span class="op">,</span> <span class="nam">c</span><span class="op">=</span><span class="str">'b'</span><span class="op">,</span> <span class="nam">label</span><span class="op">=</span><span class="str">'CCEA'</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
-    <p class="pln"><span class="n"><a id="t24" href="#t24">24</a></span><span class="t">&nbsp;</span><span class="r"></span></p>
-    <p class="pln"><span class="n"><a id="t25" href="#t25">25</a></span><span class="t"><span class="com"># set the title</span>&nbsp;</span><span class="r"></span></p>
-    <p class="pln"><span class="n"><a id="t26" href="#t26">26</a></span><span class="t">&nbsp;</span><span class="r"></span></p>
-    <p class="mis show_mis"><span class="n"><a id="t27" href="#t27">27</a></span><span class="t"><span class="nam">plt</span><span class="op">.</span><span class="nam">ylabel</span><span class="op">(</span><span class="str">"Objective Value"</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
-    <p class="mis show_mis"><span class="n"><a id="t28" href="#t28">28</a></span><span class="t"><span class="nam">plt</span><span class="op">.</span><span class="nam">xlabel</span><span class="op">(</span><span class="str">"Computational Time (s)"</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
-    <p class="mis show_mis"><span class="n"><a id="t29" href="#t29">29</a></span><span class="t"><span class="nam">plt</span><span class="op">.</span><span class="nam">title</span><span class="op">(</span><span class="str">"Search Performance Comparison"</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
-    <p class="pln"><span class="n"><a id="t30" href="#t30">30</a></span><span class="t">&nbsp;</span><span class="r"></span></p>
-    <p class="pln"><span class="n"><a id="t31" href="#t31">31</a></span><span class="t"><span class="com"># show the plot</span>&nbsp;</span><span class="r"></span></p>
-    <p class="mis show_mis"><span class="n"><a id="t32" href="#t32">32</a></span><span class="t"><span class="nam">plt</span><span class="op">.</span><span class="nam">show</span><span class="op">(</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
+    <p class="pln"><span class="n"><a id="t20" href="#t20">20</a></span><span class="t">    <span class="com"># scatter plot</span>&nbsp;</span><span class="r"></span></p>
+    <p class="mis show_mis"><span class="n"><a id="t21" href="#t21">21</a></span><span class="t">    <span class="nam">ax</span> <span class="op">=</span> <span class="nam">dfea</span><span class="op">.</span><span class="nam">plot</span><span class="op">(</span><span class="nam">x</span><span class="op">=</span><span class="str">'time'</span><span class="op">,</span> <span class="nam">y</span><span class="op">=</span><span class="str">'EA Fitness Values'</span><span class="op">,</span>&nbsp;</span><span class="r"></span></p>
+    <p class="pln"><span class="n"><a id="t22" href="#t22">22</a></span><span class="t">                   <span class="nam">c</span><span class="op">=</span><span class="str">'r'</span><span class="op">,</span> <span class="nam">kind</span><span class="op">=</span><span class="str">'scatter'</span><span class="op">,</span> <span class="nam">label</span><span class="op">=</span><span class="str">'EA'</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
+    <p class="mis show_mis"><span class="n"><a id="t23" href="#t23">23</a></span><span class="t">    <span class="nam">dfrand</span><span class="op">.</span><span class="nam">plot</span><span class="op">(</span><span class="nam">x</span><span class="op">=</span><span class="str">'time'</span><span class="op">,</span> <span class="nam">y</span><span class="op">=</span><span class="str">'Random Fitness Values'</span><span class="op">,</span> <span class="nam">kind</span><span class="op">=</span><span class="str">'scatter'</span><span class="op">,</span> <span class="nam">ax</span><span class="op">=</span><span class="nam">ax</span><span class="op">,</span>&nbsp;</span><span class="r"></span></p>
+    <p class="pln"><span class="n"><a id="t24" href="#t24">24</a></span><span class="t">                <span class="nam">c</span><span class="op">=</span><span class="str">'g'</span><span class="op">,</span> <span class="nam">label</span><span class="op">=</span><span class="str">'Monte Carlo'</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
+    <p class="mis show_mis"><span class="n"><a id="t25" href="#t25">25</a></span><span class="t">    <span class="nam">dfccea</span><span class="op">.</span><span class="nam">plot</span><span class="op">(</span><span class="nam">x</span><span class="op">=</span><span class="str">'time'</span><span class="op">,</span> <span class="nam">y</span><span class="op">=</span><span class="str">'CCEA Fitness Values'</span><span class="op">,</span> <span class="nam">kind</span><span class="op">=</span><span class="str">'scatter'</span><span class="op">,</span> <span class="nam">ax</span><span class="op">=</span><span class="nam">ax</span><span class="op">,</span>&nbsp;</span><span class="r"></span></p>
+    <p class="pln"><span class="n"><a id="t26" href="#t26">26</a></span><span class="t">                <span class="nam">c</span><span class="op">=</span><span class="str">'b'</span><span class="op">,</span> <span class="nam">label</span><span class="op">=</span><span class="str">'CCEA'</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
+    <p class="pln"><span class="n"><a id="t27" href="#t27">27</a></span><span class="t">&nbsp;</span><span class="r"></span></p>
+    <p class="pln"><span class="n"><a id="t28" href="#t28">28</a></span><span class="t">    <span class="com"># set the title</span>&nbsp;</span><span class="r"></span></p>
+    <p class="pln"><span class="n"><a id="t29" href="#t29">29</a></span><span class="t">&nbsp;</span><span class="r"></span></p>
+    <p class="mis show_mis"><span class="n"><a id="t30" href="#t30">30</a></span><span class="t">    <span class="nam">plt</span><span class="op">.</span><span class="nam">ylabel</span><span class="op">(</span><span class="str">"Objective Value"</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
+    <p class="mis show_mis"><span class="n"><a id="t31" href="#t31">31</a></span><span class="t">    <span class="nam">plt</span><span class="op">.</span><span class="nam">xlabel</span><span class="op">(</span><span class="str">"Computational Time (s)"</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
+    <p class="mis show_mis"><span class="n"><a id="t32" href="#t32">32</a></span><span class="t">    <span class="nam">plt</span><span class="op">.</span><span class="nam">title</span><span class="op">(</span><span class="str">"Search Performance Comparison"</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t33" href="#t33">33</a></span><span class="t">&nbsp;</span><span class="r"></span></p>
+    <p class="pln"><span class="n"><a id="t34" href="#t34">34</a></span><span class="t">    <span class="com"># show the plot</span>&nbsp;</span><span class="r"></span></p>
+    <p class="mis show_mis"><span class="n"><a id="t35" href="#t35">35</a></span><span class="t">    <span class="nam">plt</span><span class="op">.</span><span class="nam">show</span><span class="op">(</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
 </main>
 <footer>
     <div class="content">
@@ -122,7 +124,7 @@
             <a id="nextFileLink" class="nav" href="d_29f45ac386dd7f61_search_rover_py.html">&#xbb; next</a>
             &nbsp; &nbsp; &nbsp;
             <a class="nav" href="https://coverage.readthedocs.io/en/7.4.0">coverage.py v7.4.0</a>,
-            created at 2024-02-02 17:06 -0800
+            created at 2024-05-10 11:29 -0700
         </p>
     </div>
 </footer>

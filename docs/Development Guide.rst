@@ -1,7 +1,7 @@
 Development Guide
 ===========================
 
-Why use fmdtools?
+Why fmdtools?
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Use fmdtools to improve your understanding of the dynamics of hazardous behavior. The fmdtools library was developed to study resilience, which is an important consideration in designing safe, low-risk systems. Resilience is the ability of a system to mitigate hazardous scenarios as they arise. As shown below, the key defining aspect of resilience is the **dynamics of failure events**, which may lead to recovery (or, a safe outcome) or failure (or, an unsafe outcome).
@@ -52,7 +52,7 @@ You can use the glossary as a reference to understand basic simulation and analy
 		A flow object that is internal to a :class:`fmdtools.define.block.function.Function` which is not present in the overall model definition.
 	
 	Model
-		A simulation that defines system behavior. Models contain functions and flows, their graph connections, parameters related to the simulation configuration, as well as methods for classifying simulations. Models are specified using the :class:`fmdtools.define.architecture.function.FunctionArchitecture`: class.
+		A simulation that defines system behavior. Models contain functions and flows, their graph connections, parameters related to the simulation configuration, as well as methods for classifying simulations. 
 	
 	Behavior
 		How the states of a system unfold over time, including in the various :term:`mode` s it may encounter. Defined in :term:`Function` s, :term:`Component` s, and :term:`Action` s using :meth:`fmdtools.define.Block.behavior`, :meth:`fmdtools.define.Block.static_behavior`, :meth:`fmdtools.define.Block.dynamic_behavior`, and :meth:`fmdtools.define.Block.condfaults`
@@ -136,6 +136,17 @@ You can use the glossary as a reference to understand basic simulation and analy
 	Model History
 		A history of model states over a set of timesteps defined in :class:`fmdtools.analyze.history.History`. Returned in fmdtools as a nested dictionary from methods in :mod:`fmdtools.sim.propagate`.
 
+	FRDL
+		See: :term:`Functional Reasoning Design Language`.
+
+	Architecture
+		Composition of blocks. Defined using :class:`fmdtools.define.architecture.base.Architecture` and its sub-classes.
+
+	Functional Reasoning Design Language
+		Language used to define/represent the network structure and behavioral propagation of an :term:`Architecture`.
+
+	Functional Architecture
+		Composition of :term:`Function` and :term:`Flow` objects in an overall :term:`Architecture` that enables :term:`propagation` of behaviors between :term:`function` s.
 
 
 Model Development Best Practices
@@ -343,7 +354,7 @@ See also
 How to Contribute
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Development of fmdtools is coordinated by the `fmdtools team <https://github.com/nasa/fmdtools/blob/main/CONTRIBUTORS.md>`_ at NASA Ames Research Center. As an open-source tool developed under the NASA Open Source Agreement, outside contributions are welcomed. To be able to submit contributions (e.g., pull requests), external contributors should first submit a contributors license agreement (`Individual CLA <https://github.com/nasa/fmdtools/blob/main/fmdtools_Individual_CLA.pdf>`_ , `Corporate CLA <https://github.com/nasa/fmdtools/blob/main/fmdtools_Corporate_CLA.pdf>`_).
+Development of fmdtools is coordinated by the `fmdtools team <../CONTRIBUTORS.md>`_ at NASA Ames Research Center. As an open-source tool developed under the NASA Open Source Agreement, outside contributions are welcomed. To be able to submit contributions (e.g., pull requests), external contributors should first submit a contributors license agreement (`Individual CLA <https://github.com/nasa/fmdtools/blob/main/fmdtools_Individual_CLA.pdf>`_ , `Corporate CLA <https://github.com/nasa/fmdtools/blob/main/fmdtools_Corporate_CLA.pdf>`_).
 
 
 Repo Structure
@@ -490,12 +501,3 @@ There are two major types of tests:
 - quantitative tests, which are tests running ``run_all_tests.py``, and
 - qualitative tests, which are the example notebooks
 
-Contributors
---------------------------------
-
-See: `CONTRIBUTORS.md <../CONTRIBUTORS.md>`_
-
-.. toctree::
-   :hidden:
-   
-   ../CONTRIBUTORS.md

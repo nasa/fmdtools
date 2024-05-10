@@ -1,5 +1,6 @@
 fmdtools.define.container
 ===========================
+.. automodule:: fmdtools.define.container
 
 The containers subpackage provides the elemental building blocks (i.e., containers for holding states, modes, etc.) for developing simulations, shown below.
 

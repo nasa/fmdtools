@@ -2,7 +2,7 @@
 <html>
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-    <title>Coverage for fmdtools\define\architecture\base.py: 88%</title>
+    <title>Coverage for fmdtools\define\architecture\base.py: 80%</title>
     <link rel="icon" sizes="32x32" href="favicon_32.png">
     <link rel="stylesheet" href="style.css" type="text/css">
     <script type="text/javascript" src="coverage_html.js" defer></script>
@@ -12,7 +12,7 @@
     <div class="content">
         <h1>
             <span class="text">Coverage for </span><b>fmdtools\define\architecture\base.py</b>:
-            <span class="pc_cov">88%</span>
+            <span class="pc_cov">80%</span>
         </h1>
         <aside id="help_panel_wrapper">
             <input id="help_panel_state" type="checkbox">
@@ -55,8 +55,8 @@
         </aside>
         <h2>
             <span class="text">161 statements &nbsp;</span>
-            <button type="button" class="run button_toggle_run" value="run" data-shortcut="r" title="Toggle lines run">141<span class="text"> run</span></button>
-            <button type="button" class="mis show_mis button_toggle_mis" value="mis" data-shortcut="m" title="Toggle lines missing">20<span class="text"> missing</span></button>
+            <button type="button" class="run button_toggle_run" value="run" data-shortcut="r" title="Toggle lines run">129<span class="text"> run</span></button>
+            <button type="button" class="mis show_mis button_toggle_mis" value="mis" data-shortcut="m" title="Toggle lines missing">32<span class="text"> missing</span></button>
             <button type="button" class="exc show_exc button_toggle_exc" value="exc" data-shortcut="x" title="Toggle lines excluded">0<span class="text"> excluded</span></button>
         </h2>
         <p class="text">
@@ -65,7 +65,7 @@
             <a id="nextFileLink" class="nav" href="d_3d99ab35d814b52d_component_py.html">&#xbb; next</a>
             &nbsp; &nbsp; &nbsp;
             <a class="nav" href="https://coverage.readthedocs.io/en/7.4.0">coverage.py v7.4.0</a>,
-            created at 2024-02-02 16:34 -0800
+            created at 2024-05-10 11:29 -0700
         </p>
         <aside class="hidden">
             <button type="button" class="button_next_chunk" data-shortcut="j"/>
@@ -261,7 +261,7 @@
     <p class="run"><span class="n"><a id="t179" href="#t179">179</a></span><span class="t">        <span class="key">if</span> <span class="nam">hasattr</span><span class="op">(</span><span class="nam">self</span><span class="op">,</span> <span class="str">'r'</span><span class="op">)</span><span class="op">:</span>&nbsp;</span><span class="r"></span></p>
     <p class="run"><span class="n"><a id="t180" href="#t180">180</a></span><span class="t">            <span class="nam">fkwargs</span> <span class="op">=</span> <span class="op">{</span><span class="op">**</span><span class="op">{</span><span class="str">'r'</span><span class="op">:</span> <span class="op">{</span><span class="str">"seed"</span><span class="op">:</span> <span class="nam">self</span><span class="op">.</span><span class="nam">r</span><span class="op">.</span><span class="nam">seed</span><span class="op">}</span><span class="op">}</span><span class="op">,</span> <span class="op">**</span><span class="nam">fkwargs</span><span class="op">}</span>&nbsp;</span><span class="r"></span></p>
     <p class="run"><span class="n"><a id="t181" href="#t181">181</a></span><span class="t">        <span class="key">if</span> <span class="key">not</span> <span class="nam">self</span><span class="op">.</span><span class="nam">sp</span><span class="op">.</span><span class="nam">use_local</span><span class="op">:</span>&nbsp;</span><span class="r"></span></p>
-    <p class="run"><span class="n"><a id="t182" href="#t182">182</a></span><span class="t">            <span class="nam">fkwargs</span> <span class="op">=</span> <span class="op">{</span><span class="op">**</span><span class="op">{</span><span class="str">'t'</span><span class="op">:</span> <span class="op">{</span><span class="str">'dt'</span><span class="op">:</span> <span class="nam">self</span><span class="op">.</span><span class="nam">sp</span><span class="op">.</span><span class="nam">dt</span><span class="op">}</span><span class="op">}</span><span class="op">,</span> <span class="op">**</span><span class="nam">fkwargs</span><span class="op">}</span>&nbsp;</span><span class="r"></span></p>
+    <p class="mis show_mis"><span class="n"><a id="t182" href="#t182">182</a></span><span class="t">            <span class="nam">fkwargs</span> <span class="op">=</span> <span class="op">{</span><span class="op">**</span><span class="op">{</span><span class="str">'t'</span><span class="op">:</span> <span class="op">{</span><span class="str">'dt'</span><span class="op">:</span> <span class="nam">self</span><span class="op">.</span><span class="nam">sp</span><span class="op">.</span><span class="nam">dt</span><span class="op">}</span><span class="op">}</span><span class="op">,</span> <span class="op">**</span><span class="nam">fkwargs</span><span class="op">}</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t183" href="#t183">183</a></span><span class="t">&nbsp;</span><span class="r"></span></p>
     <p class="run"><span class="n"><a id="t184" href="#t184">184</a></span><span class="t">        <span class="nam">self</span><span class="op">.</span><span class="nam">add_flex_role_obj</span><span class="op">(</span><span class="nam">flex_role</span><span class="op">,</span> <span class="nam">name</span><span class="op">,</span> <span class="nam">objclass</span><span class="op">=</span><span class="nam">simclass</span><span class="op">,</span> <span class="nam">flows</span><span class="op">=</span><span class="nam">flows</span><span class="op">,</span> <span class="op">**</span><span class="nam">fkwargs</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t185" href="#t185">185</a></span><span class="t">&nbsp;</span><span class="r"></span></p>
@@ -435,17 +435,17 @@
     <p class="pln"><span class="n"><a id="t353" href="#t353">353</a></span><span class="t">&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t354" href="#t354">354</a></span><span class="t"><span class="str">    Provides more detail about functions/flows.</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t355" href="#t355">355</a></span><span class="t"><span class="str">    """</span>&nbsp;</span><span class="r"></span></p>
-    <p class="run"><span class="n"><a id="t356" href="#t356">356</a></span><span class="t">    <span class="nam">print</span><span class="op">(</span><span class="str">'FLOWS '</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
-    <p class="run"><span class="n"><a id="t357" href="#t357">357</a></span><span class="t">    <span class="key">for</span> <span class="nam">flowname</span><span class="op">,</span> <span class="nam">flow</span> <span class="key">in</span> <span class="nam">model</span><span class="op">.</span><span class="nam">flows</span><span class="op">.</span><span class="nam">items</span><span class="op">(</span><span class="op">)</span><span class="op">:</span>&nbsp;</span><span class="r"></span></p>
-    <p class="run"><span class="n"><a id="t358" href="#t358">358</a></span><span class="t">        <span class="nam">print</span><span class="op">(</span><span class="nam">flowname</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
-    <p class="run"><span class="n"><a id="t359" href="#t359">359</a></span><span class="t">        <span class="nam">check_pickleability</span><span class="op">(</span><span class="nam">flow</span><span class="op">,</span> <span class="nam">try_pick</span><span class="op">=</span><span class="nam">try_pick</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
-    <p class="run"><span class="n"><a id="t360" href="#t360">360</a></span><span class="t">    <span class="nam">print</span><span class="op">(</span><span class="str">'FUNCTIONS '</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
-    <p class="run"><span class="n"><a id="t361" href="#t361">361</a></span><span class="t">    <span class="key">for</span> <span class="nam">fxnname</span><span class="op">,</span> <span class="nam">fxn</span> <span class="key">in</span> <span class="nam">model</span><span class="op">.</span><span class="nam">fxns</span><span class="op">.</span><span class="nam">items</span><span class="op">(</span><span class="op">)</span><span class="op">:</span>&nbsp;</span><span class="r"></span></p>
-    <p class="run"><span class="n"><a id="t362" href="#t362">362</a></span><span class="t">        <span class="nam">print</span><span class="op">(</span><span class="nam">fxnname</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
-    <p class="run"><span class="n"><a id="t363" href="#t363">363</a></span><span class="t">        <span class="nam">check_pickleability</span><span class="op">(</span><span class="nam">fxn</span><span class="op">,</span> <span class="nam">try_pick</span><span class="op">=</span><span class="nam">try_pick</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
-    <p class="run"><span class="n"><a id="t364" href="#t364">364</a></span><span class="t">    <span class="nam">time</span><span class="op">.</span><span class="nam">sleep</span><span class="op">(</span><span class="num">0.2</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
-    <p class="run"><span class="n"><a id="t365" href="#t365">365</a></span><span class="t">    <span class="nam">print</span><span class="op">(</span><span class="str">'MODEL'</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
-    <p class="run"><span class="n"><a id="t366" href="#t366">366</a></span><span class="t">    <span class="nam">unpickleable</span> <span class="op">=</span> <span class="nam">check_pickleability</span><span class="op">(</span><span class="nam">model</span><span class="op">,</span> <span class="nam">try_pick</span><span class="op">=</span><span class="nam">try_pick</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
+    <p class="mis show_mis"><span class="n"><a id="t356" href="#t356">356</a></span><span class="t">    <span class="nam">print</span><span class="op">(</span><span class="str">'FLOWS '</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
+    <p class="mis show_mis"><span class="n"><a id="t357" href="#t357">357</a></span><span class="t">    <span class="key">for</span> <span class="nam">flowname</span><span class="op">,</span> <span class="nam">flow</span> <span class="key">in</span> <span class="nam">model</span><span class="op">.</span><span class="nam">flows</span><span class="op">.</span><span class="nam">items</span><span class="op">(</span><span class="op">)</span><span class="op">:</span>&nbsp;</span><span class="r"></span></p>
+    <p class="mis show_mis"><span class="n"><a id="t358" href="#t358">358</a></span><span class="t">        <span class="nam">print</span><span class="op">(</span><span class="nam">flowname</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
+    <p class="mis show_mis"><span class="n"><a id="t359" href="#t359">359</a></span><span class="t">        <span class="nam">check_pickleability</span><span class="op">(</span><span class="nam">flow</span><span class="op">,</span> <span class="nam">try_pick</span><span class="op">=</span><span class="nam">try_pick</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
+    <p class="mis show_mis"><span class="n"><a id="t360" href="#t360">360</a></span><span class="t">    <span class="nam">print</span><span class="op">(</span><span class="str">'FUNCTIONS '</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
+    <p class="mis show_mis"><span class="n"><a id="t361" href="#t361">361</a></span><span class="t">    <span class="key">for</span> <span class="nam">fxnname</span><span class="op">,</span> <span class="nam">fxn</span> <span class="key">in</span> <span class="nam">model</span><span class="op">.</span><span class="nam">fxns</span><span class="op">.</span><span class="nam">items</span><span class="op">(</span><span class="op">)</span><span class="op">:</span>&nbsp;</span><span class="r"></span></p>
+    <p class="mis show_mis"><span class="n"><a id="t362" href="#t362">362</a></span><span class="t">        <span class="nam">print</span><span class="op">(</span><span class="nam">fxnname</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
+    <p class="mis show_mis"><span class="n"><a id="t363" href="#t363">363</a></span><span class="t">        <span class="nam">check_pickleability</span><span class="op">(</span><span class="nam">fxn</span><span class="op">,</span> <span class="nam">try_pick</span><span class="op">=</span><span class="nam">try_pick</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
+    <p class="mis show_mis"><span class="n"><a id="t364" href="#t364">364</a></span><span class="t">    <span class="nam">time</span><span class="op">.</span><span class="nam">sleep</span><span class="op">(</span><span class="num">0.2</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
+    <p class="mis show_mis"><span class="n"><a id="t365" href="#t365">365</a></span><span class="t">    <span class="nam">print</span><span class="op">(</span><span class="str">'MODEL'</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
+    <p class="mis show_mis"><span class="n"><a id="t366" href="#t366">366</a></span><span class="t">    <span class="nam">unpickleable</span> <span class="op">=</span> <span class="nam">check_pickleability</span><span class="op">(</span><span class="nam">model</span><span class="op">,</span> <span class="nam">try_pick</span><span class="op">=</span><span class="nam">try_pick</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
 </main>
 <footer>
     <div class="content">
@@ -455,7 +455,7 @@
             <a id="nextFileLink" class="nav" href="d_3d99ab35d814b52d_component_py.html">&#xbb; next</a>
             &nbsp; &nbsp; &nbsp;
             <a class="nav" href="https://coverage.readthedocs.io/en/7.4.0">coverage.py v7.4.0</a>,
-            created at 2024-02-02 16:34 -0800
+            created at 2024-05-10 11:29 -0700
         </p>
     </div>
 </footer>
