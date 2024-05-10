@@ -48,14 +48,15 @@ if __name__=="__main__":
 
     # retcode = pytest.main(["--doctest-modules", *doctest_modules])
 
-    # for testing all unittests
-    retcode = pytest.main(["--continue-on-collection-errors"])
-
     # retcode = pytest.main(["--html=./reports/junit/report.html",
     #                        "--self-contained-html",
     #                        "--junitxml=./reports/junit/junit.xml",
     #                        "--doctest-modules",
     #                        "--continue-on-collection-errors"])
+
+    # for testing all unittests
+    # retcode = pytest.main(["--continue-on-collection-errors"])
+
 
     # for testing notebooks during development:
     fast_notebooks = ["examples/asg_demo/Action_Sequence_Graph.ipynb",
@@ -84,10 +85,10 @@ if __name__=="__main__":
 
     # for testing extremely slow notebooks that can't be run to completion :
     too_slow_notebooks = ["examples/rover/optimization/Rover_Response_Optimization.ipynb",  # extremely slow notebook
-                        "examples/rover/fault_sampling/Rover_Mode_Notebook.ipynb",  # extremely slow notebook
-                        "examples/rover/optimization/Search_Comparison.ipynb",  # extremely slow
-                        "examples/tank/Tank_Optimization.ipynb"
-                        ]
+                          "examples/rover/fault_sampling/Rover_Mode_Notebook.ipynb",  # extremely slow notebook
+                          "examples/rover/optimization/Search_Comparison.ipynb",  # extremely slow
+                          "examples/tank/Tank_Optimization.ipynb"
+                          ]
     # retcode = pytest.main(["--nbmake", "--nbmake-find-import-errors", "--nbmake-timeout=20", *too_slow_notebooks])
 
     #  we ignore the following notebooks for various reasons:

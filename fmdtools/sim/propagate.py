@@ -1133,29 +1133,37 @@ def get_result(scen, mdl, desired_result, nomhist={}, nomresult={}, time=0.0):
     """Get the desired_result specified from the model."""
     mdlhist = mdl.h
     desired_result = copy.deepcopy(desired_result)
-    if type(desired_result) == str:
+    if type(desired_result) is str:
         desired_result = {desired_result: None}
     elif type(desired_result) in [list, set]:
         des_res = desired_result
-        desired_result = {str(k): k for k in des_res if type(k) != str}
-        desired_result.update({k: None for k in des_res if type(k) == str})
+        desired_result = {str(k): k for k in des_res if type(k) is not str}
+        desired_result.update({k: None for k in des_res if type(k) is str})
     result = Result()
     if not nomhist:
         nomhist = mdlhist
     elif len(nomhist['time']) != len(mdlhist['time']):
         nomhist = nomhist.cut(start_ind=len(nomhist['time']) - len(mdlhist['time']),
                               newcopy=True)
-    if 'endclass' in desired_result:
+    ec_des_res = [x.split('.')[1] for x in desired_result
+                  if 'endclass' in x and x != 'endclass']
+    if 'endclass' in desired_result or ec_des_res:
         mdlhists = History()
         mdlhists['faulty'] = mdlhist
         mdlhists['nominal'] = nomhist
         endclass = Result(**mdl.find_classification(scen, mdlhists))
-        if type(desired_result['endclass']) == dict:
-            result['endclass'] = {k: v for k, v in endclass
-                                  if k in desired_result['endclass']}
+        if ec_des_res:
+            result['endclass'] = Result({k: v for k, v in endclass.items()
+                                         if k in ec_des_res})
+            for k in ec_des_res:
+                desired_result.pop('endclass.'+k)
+        elif type(desired_result['endclass']) is dict:
+            result['endclass'] = Result({k: v for k, v in endclass.items()
+                                         if k in desired_result['endclass']})
+            desired_result.pop('endclass')
         else:
             result['endclass'] = endclass
-        desired_result.pop('endclass')
+            desired_result.pop('endclass')
     if 'endfaults' in desired_result:
         result['endfaults'], result['faultprops'] = mdl.return_faultmodes()
         desired_result.pop('endfaults')
@@ -1214,7 +1222,7 @@ def get_endclass_vars(mdl, desired_result, result):
     result : Result
         Result to append results to.
     """
-    if type(desired_result) == str:
+    if type(desired_result) is str:
         vars_to_get = [desired_result]
     else:
         vars_to_get = [d for d in desired_result

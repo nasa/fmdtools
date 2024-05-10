@@ -600,7 +600,7 @@ class BaseSimProblem(BaseProblem):
             if n.time:
                 t = n.time
             else:
-                t = 'endclass'
+                t = 'end'
             if t in des_res:
                 des_res[t].append(n.name)
             else:
