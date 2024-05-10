@@ -94,12 +94,12 @@ if __name__ == '__main__':
     # endresults.graph.set_node_styles(degraded={}, faulty={})
     # endresults.graph.set_node_labels(title='id', subtext='faults')
     # endresults.graph.draw()
-    
+
     a = FunctionArchitectureTypeGraph(mdl)
     # a.draw_pyvis()
     # a.draw_from(10, mdlhist)
     # a.draw_from(50, mdlhist)
-    
+
     # an = a.animate_from(mdlhist)
     # from IPython.display import HTML
     # HTML(an.to_jshtml())

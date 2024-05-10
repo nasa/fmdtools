@@ -40,7 +40,7 @@ class ActionArchitecture(Architecture):
         Defines whether the action sequence graph is reset to the initial state each
         time-step (True) or stays in the current action (False). Default is False.
     """
-    __slots__ = ['acts', 'action_graph', 'flow_graph', 'faultmodes', 'active_actions']
+    __slots__ = ['acts', 'conds', 'action_graph', 'flow_graph', 'faultmodes', 'active_actions']
     initial_action = "auto"
     state_rep = "finite-state"
     max_action_prop = "until_false"

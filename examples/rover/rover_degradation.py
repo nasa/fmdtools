@@ -8,7 +8,6 @@ from fmdtools.define.container.parameter import Parameter
 from fmdtools.define.container.state import State
 from fmdtools.define.container.rand import Rand
 from fmdtools.define.block.function import Function
-from fmdtools.define.architecture.function import FunctionArchitecture
 from fmdtools.sim.sample import ParameterSample
 import numpy as np
 from fmdtools.sim import propagate as prop
@@ -17,9 +16,22 @@ import matplotlib.pyplot as plt
 from examples.rover.rover_model import Rover, DegParam
 
 
-
-
 class DriveDegradationStates(State):
+    """
+    State defining the degradation of drive functionality.
+
+    Fields
+    ------
+    wear : float
+        How much wear is in the system (0-1). Default is 0.0.
+    corrosion : float
+        Amount of corrosion present. Default is 0.0.
+    friction : float
+        Amount of friction present, slowing down the system. Default is 0.0.
+    drift : float
+        Drift in the system, causing unintentional turning. Default is 0.0.
+    """
+
     wear: float = 0.0
     corrosion: float = 0.0
     friction: float = 0.0
@@ -27,6 +39,22 @@ class DriveDegradationStates(State):
 
 
 class DriveRandStates(State):
+    """
+    Random degradation states for the drive function.
+
+    Fields
+    ------
+    corrode_rate : float
+        Rate of chemical corrosion of the mechanical system. Default is 0.01. Updates
+        according to a pareto law with parameter 50.
+    wear_rate : float
+        Rate of wear of the mechanical system. Default is 0.02. Updates according
+        to a pareto law with parameter 25.
+    yaw_load : float
+        Yaw imbalance one way or another. Default is 0.01 but updates according to a
+        uniform distribution between -0.1 (left yaw) and 0.1 (right yaw).
+    """
+
     corrode_rate: float = 0.01
     corrode_rate_update = ("pareto", (50,))
     wear_rate: float = 0.02
@@ -36,229 +64,156 @@ class DriveRandStates(State):
 
 
 class DriveRand(Rand):
+    """Rand defining random states for Drive degradation."""
+
     s: DriveRandStates = DriveRandStates()
 
 
 class DriveDegradation(Function):
+    """Function defining the stochastic degradation of the Drive function."""
+
+    __slots__ = ()
     container_s = DriveDegradationStates
     container_r = DriveRand
     default_sp = dict(end_time=100)
 
-    def __init__(self, name, **kwargs):
-        super().__init__(name, **kwargs)
-
     def dynamic_behavior(self, time):
         self.s.inc(corrosion=self.r.s.corrode_rate, wear=self.r.s.wear_rate)
-        self.s.inc(
-            drift=self.r.s.yaw_load / 1000
-            + (np.sign(self.s.drift) == np.sign(self.r.s.yaw_load)) * self.r.s.yaw_load
-        )
+        opp_drift = (np.sign(self.s.drift) == np.sign(self.r.s.yaw_load))
+        self.s.inc(drift=self.r.s.yaw_load / 1000 + opp_drift * self.r.s.yaw_load)
         self.s.friction = np.sqrt(self.s.corrosion**2 + self.s.wear**2)
         self.s.limit(drift=(-1, 1), corrosion=(0, 1), wear=(0, 1))
 
 
 class PSFDegradationShortStates(State):
+    """
+    State defining the short-term human performance shaping factor degradation.
+
+    Fields
+    ------
+    fatigue : float
+        Operator fatigue over the course of a day. Default is 0.0.
+    stress : float
+        Operator stress over the course of a day. Default is 0.0.
+    """
+
     fatigue: float = 0.0
     stress: float = 0.0
+    experience: float = 0.0
 
 
 class PSFDegShortRandStates(State):
-    fatigue_param: float = 2.0
-    fatigue_param_update = ("gamma", (2, 1.9))
+    """
+    State defining the stochastic states of human performance shaping factors.
+
+    Fields
+    ------
+    fatigue_param : float
+        Operator starting fatigue. Default is 1.0. Updates according to gamma
+        distribution with parameters 1 and 1.9.
+    """
+
+    fatigue_param: float = 1.0
+    fatigue_param_update = ("gamma", (1, 1.9))
 
 
 class PSFDegShortRand(Rand):
+    """Rand defining randomness of human performance shaping factor degradation."""
+
     s: PSFDegShortRandStates = PSFDegShortRandStates()
 
 
 class PSFShortParams(Parameter, readonly=True):
+    """
+    Parameter defining the input/starting parameters of human PSFs.
+
+    Fields
+    ------
+    experience : float
+        Operator experience. Default is 1.0.
+    stress_param : float
+        Operator base stress. Default is 0.0.
+    fatigue_param : float
+        Operator base fatigue increment. Default is 0.0
+    """
+
     experience: float = 1.0
     stress_param: float = 0.0
-    fatigue_param: float = 0.0
-    stoch_fatigue: bool = False
+    fatigue_param: float = 1.0
 
 
 class PSFDegradationShort(Function):
+    """Function defining short-term operator performance shaping factor degradation."""
+
+    __slots__ = ()
     container_s = PSFDegradationShortStates
     container_r = PSFDegShortRand
     container_p = PSFShortParams
-    default_sp = dict(end_time=100)
+    default_sp = dict(end_time=12)
 
-    def __init__(self, name, **kwargs):
-        super().__init__(name, **kwargs)
+    def init_block(self, **kwargs):
+        """Initialize parameter-defined base states."""
         self.s.stress = self.p.stress_param
+        self.s.experience = self.p.experience
+        self.r.s.fatigue_param = self.p.fatigue_param
 
     def dynamic_behavior(self, time):
-        if self.p.stoch_fatigue:
-            self.s.fatigue = int(self.r.s.fatigue_param)
-        else:
-            self.s.fatigue = int(self.p.fatigue_param)
+        self.s.inc(fatigue=self.r.s.fatigue_param)
+
         if self.s.stress < 100:
-            self.s.stress = int(
-                self.s.stress + (1 + (1 / self.p.experience)) ** self.t.time
-            )
+            s_inc = (1 + (1 / self.p.experience)) ** self.t.time
+            self.s.stress = int(self.s.stress + s_inc)
         self.s.limit(fatigue=(0, 10), stress=(0, 100))
 
 
 class LongParams(Parameter, readonly=True):
+    """
+    Parameter defining long-range PSF degradation.
+
+    Fields
+    ------
+    experience_param : float
+        Operator experience. Default is 9.0.
+    training_frequency : float
+        Operator training frequency. Default is 8.0.
+    experience_scale_max : float
+        Maximum operator experience. Default is 10.0.
+    """
+
     experience_param: float = 9.0
     training_frequency: float = 8.0
     experience_scale_max: float = 10.0
 
 
 class PSFDegradationLongStates(State):
+    """
+    State defining long-range PSF degradation.
+
+    Fields
+    ------
+    experience : float
+        Base/starting experience of the operator. Default is 0.0.
+    """
+
     experience: float = 0.0
 
 
 class PSFDegradationLong(Function):
+    """Long-term degradation of operator behavior."""
+
+    __slots__ = ()
     container_s = PSFDegradationLongStates
     container_p = LongParams
     default_sp = dict(end_time=100)
 
-    def __init__(self, name, **kwargs):
-        super().__init__(name, **kwargs)
-        # self.s.experience= self.p.experience_param
-
     def dynamic_behavior(self, time):
         # normalize time between -1 and 1 to enable sigmoid usage
-        norm_time = ((self.t.time - 0) * 2) / (self.sp.end_time - self.sp.start_time) - 1
-        norm_experience_param = (
-            self.p.experience_scale_max - self.p.experience_param
-        ) / self.p.experience_scale_max
-        self.s.experience = self.p.experience_scale_max / (
-            1
-            + (
-                norm_experience_param
-                * np.exp(-1 * self.p.training_frequency * norm_time)
-            )
-        )
-
-
-
-def get_params_from(mdlhist, t=1):
-    friction = mdlhist.s.friction[t]
-    drift = mdlhist.s.drift[t]
-    return {"friction": friction, "drift": drift}
-
-
-def get_paramdist_from(mdlhists, t):
-    friction = []
-    drift = []
-    for rep in mdlhists:
-        fdict = get_params_from(mdlhists[rep], t)
-        friction.append(fdict["friction"])
-        drift.append(fdict["drift"])
-    return {"friction": friction, "drift": drift}
-
-
-def sample_params(mdlhists, histname, t=1, scen=1):
-    mdlhists = mdlhists.nest(1)
-    mdlhist = mdlhists[histname + "_" + str(scen)]
-    return get_params_from(mdlhist, t)
-
-
-def gen_sample_params(mdlhists, histname, t=1, scen=1):
-    degparams = sample_params(mdlhists, histname, t=t, scen=scen)
-    return { 'drive_modes': {"mode_args": "degradation"}, "degradation": DegParam(**degparams)}
-
-
-def gen_long_degPSF_param(experience_param, scen=1):
-    params = {"experience_param": experience_param[scen]}
-    return params
-
-
-def gen_short_degPSF_param(mdlhists, stress_param, histname, t=1, scen=1):
-    mdlhists = mdlhists.nest(1)
-    mdlhist = mdlhists[histname + "_" + str(scen + 1)]
-    params = {"experience": get_longhuman_params_from(mdlhist, t)}
-    params.update({"stress_param": stress_param[scen]})
-    return params
-
-
-def get_longhuman_params_from(mdlhist, t):
-    experience = mdlhist.s.experience[t]
-    return experience
-
-
-def gen_human_params_combined(
-    mdlhists_stress,
-    app_stress,
-    t_exp=1,
-    t_stress=1,
-    scen=1,
-    linetype="sine",
-):
-    scen_groups = app_stress.get_param_scens("inputparams.t", "inputparams.scen")
-    scen = [scenario[0] for scenario in scen_groups if scenario[1] == [t_exp, scen]]
-    if len(scen) > 1:
-        raise Exception("multiple scenarios for the given time and scen")
-    scen = [*scen][0]
-    mdlhists_stress = mdlhists_stress.nest(1)
-    mdlhist = mdlhists_stress[scen]
-    human_params = get_human_params_from(mdlhist, t_stress)
-    return dict(linetype=linetype, **human_params)
-
-
-def get_human_params_from(mdlhist, t=1):
-    fatigue = mdlhist.s.fatigue[t]
-    stress = mdlhist.s.stress[t]
-    return {"fatigue": fatigue, "stress": stress}
-
-
-# def gen_sample_params(mdlhists, long_deg_params, t=1, scen=1, linetype='sine'):
-#     degparams={}
-#     degparams.update(sample_human_params(mdlhists, t=t, scen=scen))
-#     degparams.update({'friction': long_deg_params[scen][0], 'drift': long_deg_params[scen][1], 'experience': long_deg_params[scen][2]})
-#     return dict(linetype=linetype, **degparams)
-
-
-def sample_human_params(mdlhists, t=1, scen=1):
-    mdlhist = [*mdlhists.values()][scen]
-    return get_human_params_from(mdlhist, t)
-
-
-def gen_sample_params_human(mdlhists, t=1, scen=1, linetype="sine"):
-    degparams = sample_human_params(mdlhists, t=t, scen=scen)
-    return dict(linetype=linetype, **degparams)
-
-
-def gen_sample_params_comp(mdlhists, t=1, scen=1, linetype="sine"):
-    degparams = sample_params(mdlhists, t=t, scen=scen)
-    return dict(linetype=linetype, **degparams)
-
-
-def gen_sample_params_combined(
-    mdlhists_comp,
-    mdlhists_stress,
-    app_stress,
-    stress_id="nomapp",
-    t_comp=1,
-    t_exp=1,
-    t_stress=1,
-    scen=1,
-    linetype="sine",
-):
-    scen_groups = app_stress.get_param_scens(stress_id, "t", "scen")
-    stress_scen = scen_groups[t_exp, scen]
-    if len(stress_scen) > 1:
-        raise Exception("multiple scenarios for the given time and scen")
-    stress_scen = [*stress_scen][0]
-    mdlhist_stress = mdlhists_stress[stress_scen]
-    degparams = get_human_params_from(mdlhist_stress, t_stress)
-    degparams.update(sample_params(mdlhists_comp, t=t_comp, scen=scen))
-    return dict(linetype=linetype, **degparams)
-
-
-def gen_long_deg_param_list(mdlhists, mdlhists_hum, t_total, total_scen):
-    params = []
-    for s in range(total_scen):
-        for t in range(t_total):
-            mdlhist = [*mdlhists.values()][s]
-            temp = get_params_from(mdlhist, t + 1)
-            mdlhist_hum = [*mdlhists_hum.values()][s]
-            temp = temp + (get_longhuman_params_from(mdlhist_hum, t + 1),)
-            params.append(temp)
-    return params
+        norm_time = (((self.t.time - 0) * 2) / (self.sp.end_time - self.sp.start_time)
+                     - 1)
+        norm_exp = ((self.p.experience_scale_max - self.p.experience_param) /
+                    self.p.experience_scale_max)
+        exp_den = 1 + (norm_exp * np.exp(-1 * self.p.training_frequency * norm_time))
+        self.s.experience = self.p.experience_scale_max / exp_den
 
 
 if __name__ == "__main__":
@@ -271,18 +226,16 @@ if __name__ == "__main__":
     endresults, mdlhist = prop.nominal(deg_mdl, run_stochastic=True)
     mdlhist.plot_line("s.friction")
 
-    # stochastic over replicates
-    nomapp = ParameterSample()
-    histname = "test"
-    nomapp.add_variable_replicates(histname, 100)
-    endclasses, mdlhists = prop.parameter_sample(deg_mdl, nomapp, 
-                                                 desired_result = 'endclass', 
-                                                 run_stochastic=True)
-    mdlhists.plot_line({"s": ["wear", "corrosion", "friction", "drift"]},
-        aggregation="mean_std")
+
+    ps = ParameterSample()
+    ps.add_variable_replicates([], replicates=100, seed_comb='independent')
+    endclasses_deg, mdlhists_deg = prop.parameter_sample(deg_mdl, ps, run_stochastic=True)
+    fig, ax = mdlhists_deg.plot_line('s.wear', 's.corrosion', 's.friction', 's.drift',
+                                 'r.s.corrode_rate', 'r.s.wear_rate', 'r.s.yaw_load',
+                                 title="", xlabel='lifecycle time (months)')
 
     # individual slice
-    mdlhists.plot_metric_dist([1, 10, 20],
+    mdlhists_deg.plot_metric_dist([1, 10, 20],
                              {'s': ['wear', 'corrosion', 'friction', 'drift']})
 
     # question -- how do we sample this:
@@ -292,92 +245,92 @@ if __name__ == "__main__":
     #   - what if we get a complementary sample of times and etc?
     #   - if states in one replicate are the same as a different at the next, can we only sample one?
 
-    behave_nomapp = ParameterSample()
-    behave_nomapp.add_variable_ranges(
-        gen_sample_params,
-        "behave_nomapp",
-        mdlhists,
-        histname,
-        t=(1, 100, 10),
-        scen=(1, 100, 5),
-    )
+    # behave_nomapp = ParameterSample()
+    # behave_nomapp.add_variable_ranges(
+    #     gen_sample_params,
+    #     "behave_nomapp",
+    #     mdlhists,
+    #     histname,
+    #     t=(1, 100, 10),
+    #     scen=(1, 100, 5),
+    # )
 
-    mdl = Rover()
-    behave_endclasses, behave_mdlhists = prop.nominal_approach(mdl, behave_nomapp)
-    f = plt.figure()
-    f = plot_trajectories(behave_mdlhists)
-    an.plot.nominal_vals_2d(behave_nomapp, behave_endclasses, "inputparams.t", "inputparams.scen",
-                            nom_func=lambda x: x == 'nominal',
-                            metric='classification')
+    # mdl = Rover()
+    # behave_endclasses, behave_mdlhists = prop.nominal_approach(mdl, behave_nomapp)
+    # f = plt.figure()
+    # f = plot_trajectories(behave_mdlhists)
+    # an.plot.nominal_vals_2d(behave_nomapp, behave_endclasses, "inputparams.t", "inputparams.scen",
+    #                         nom_func=lambda x: x == 'nominal',
+    #                         metric='classification')
 
-    comp_groups = {
-        "group_1": [*behave_endclasses.nest().keys()][:100],
-        "group_2": [*behave_endclasses.nest().keys()][100:],
-    }
-
-
-    an.plot.metric_dist(behave_endclasses, 'line_dist', 'end_dist',
-                        comp_groups=comp_groups, alpha=0.5, bins=10,
-                        metric_bins={'x':20})
-
-    an.plot.metric_dist_from(behave_mdlhists, [0, 10, 20],
-                             {'flows': {'ground': {'s': ['x', 'y', 'linex', 'ang']}}},
-                             alpha=0.5, bins=10)
-
-    an.plot.metric_dist_from(behave_mdlhists, 30,
-                             {'flows': {'ground': {'s':['x', 'y', 'linex', 'ang']}}},
-                             comp_groups=comp_groups, alpha=0.5, bins=10)
+    # comp_groups = {
+    #     "group_1": [*behave_endclasses.nest().keys()][:100],
+    #     "group_2": [*behave_endclasses.nest().keys()][100:],
+    # }
 
 
-    # human PSF degradation code starts here
+    # an.plot.metric_dist(behave_endclasses, 'line_dist', 'end_dist',
+    #                     comp_groups=comp_groups, alpha=0.5, bins=10,
+    #                     metric_bins={'x':20})
 
-    fxn_deg_long = PSFDegradationLong("PSFDeg")
-    fxn_deg_short = PSFDegradationShort("PSFDeg")
-    endresults, mdlhist_hum_long = prop.nominal(fxn_deg_long)
-    fig, ax = an.plot.hist(mdlhist_hum_long, "s.experience")
+    # an.plot.metric_dist_from(behave_mdlhists, [0, 10, 20],
+    #                          {'flows': {'ground': {'s': ['x', 'y', 'linex', 'ang']}}},
+    #                          alpha=0.5, bins=10)
 
-    # endresults, mdlhist_hum_short = prop.nominal(fxn_deg_short)
-    # fig,ax = an.plot.hist(mdlhist_hum_short, {'s':['fatigue', 'stress']})
+    # an.plot.metric_dist_from(behave_mdlhists, 30,
+    #                          {'flows': {'ground': {'s':['x', 'y', 'linex', 'ang']}}},
+    #                          comp_groups=comp_groups, alpha=0.5, bins=10)
 
-    nomapp_hum_long = NominalApproach()
-    experience_param = np.random.default_rng(seed=101).gamma(1, 1.9, 101)
-    experience_param = list(experience_param)
-    nomapp_hum_long.add_param_ranges(
-        gen_long_degPSF_param, "nomapp_hum_long", experience_param, scen=(0, 25, 1)
-    )
 
-    endclasses, mdlhists_hum_long = prop.nominal_approach(
-        fxn_deg_long, nomapp_hum_long, run_stochastic=True
-    )
-    histname_long = "nomapp_hum_long"
+    # # human PSF degradation code starts here
 
-    stress_param = np.random.default_rng(seed=101).gamma(2, 1.9, 101)
-    stress_param = list(stress_param)
-    nomapp_short_long = NominalApproach()
-    histname_short = "nomapp"
-    nomapp_short_long.add_param_ranges(
-        gen_short_degPSF_param,
-        histname_short,
-        mdlhists_hum_long,
-        stress_param,
-        histname_long,
-        scen=(0, 25, 1),
-        t=(1, 15, 4),
-    )
-    nomapp_short_long.update_factor_seeds(histname_short, "scen")
+    # fxn_deg_long = PSFDegradationLong("PSFDeg")
+    # fxn_deg_short = PSFDegradationShort("PSFDeg")
+    # endresults, mdlhist_hum_long = prop.nominal(fxn_deg_long)
+    # fig, ax = an.plot.hist(mdlhist_hum_long, "s.experience")
 
-    endclasses, mdlhists_hum_short_long = prop.nominal_approach(
-        fxn_deg_short, nomapp_short_long, run_stochastic=True
-    )
+    # # endresults, mdlhist_hum_short = prop.nominal(fxn_deg_short)
+    # # fig,ax = an.plot.hist(mdlhist_hum_short, {'s':['fatigue', 'stress']})
 
-    behave_nomapp_hum = NominalApproach()
-    behave_nomapp_hum.add_param_ranges(
-        gen_human_params_combined,
-        "behave_nomapp_hum",
-        mdlhists_hum_short_long,
-        nomapp_short_long,
-        t_stress=(1, 11, 2),
-        t_exp=(1, 15, 4),
-        scen=(1, 25, 1),
-        linetype="sine",
-    )
+    # nomapp_hum_long = NominalApproach()
+    # experience_param = np.random.default_rng(seed=101).gamma(1, 1.9, 101)
+    # experience_param = list(experience_param)
+    # nomapp_hum_long.add_param_ranges(
+    #     gen_long_degPSF_param, "nomapp_hum_long", experience_param, scen=(0, 25, 1)
+    # )
+
+    # endclasses, mdlhists_hum_long = prop.nominal_approach(
+    #     fxn_deg_long, nomapp_hum_long, run_stochastic=True
+    # )
+    # histname_long = "nomapp_hum_long"
+
+    # stress_param = np.random.default_rng(seed=101).gamma(2, 1.9, 101)
+    # stress_param = list(stress_param)
+    # nomapp_short_long = NominalApproach()
+    # histname_short = "nomapp"
+    # nomapp_short_long.add_param_ranges(
+    #     gen_short_degPSF_param,
+    #     histname_short,
+    #     mdlhists_hum_long,
+    #     stress_param,
+    #     histname_long,
+    #     scen=(0, 25, 1),
+    #     t=(1, 15, 4),
+    # )
+    # nomapp_short_long.update_factor_seeds(histname_short, "scen")
+
+    # endclasses, mdlhists_hum_short_long = prop.nominal_approach(
+    #     fxn_deg_short, nomapp_short_long, run_stochastic=True
+    # )
+
+    # behave_nomapp_hum = NominalApproach()
+    # behave_nomapp_hum.add_param_ranges(
+    #     gen_human_params_combined,
+    #     "behave_nomapp_hum",
+    #     mdlhists_hum_short_long,
+    #     nomapp_short_long,
+    #     t_stress=(1, 11, 2),
+    #     t_exp=(1, 15, 4),
+    #     scen=(1, 25, 1),
+    #     linetype="sine",
+    # )

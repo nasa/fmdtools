@@ -75,7 +75,8 @@ class Coordinator(Function):
         self.coord_view.update("local", "mover_2", "x")
 
 
-class TestModel(FunctionArchitecture):
+class ExModel(FunctionArchitecture):
+    __slots__ = ()
     default_sp = dict(end_time=10)
 
     def init_architecture(self, **kwargs):
@@ -88,7 +89,7 @@ class TestModel(FunctionArchitecture):
         self.add_fxn("coordinator", Coordinator, "communications")
 
 if __name__=='__main__':
-    mdl = TestModel()
+    mdl = ExModel()
     mdl.flows["communications"].mover_1.s.x = 25
     mdl.flows["communications"].mover_1.send("mover_2")
     from fmdtools.sim import propagate

@@ -20,8 +20,7 @@ class Function(Block):
     architectures, which may be used to hold multiple components or an action sequence
     graph within the function.
 
-    ...
-    
+
     Additional role types
     ---------------------
     arch : Architecture

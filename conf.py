@@ -30,10 +30,11 @@ release = '2.0-rc-2'
 # Add any Sphinx extension module names here, as strings. They can be
 # extensions coming with Sphinx (named 'sphinx.ext.*') or your custom
 # ones.
-extensions = ['sphinx.ext.autodoc', 'sphinx.ext.napoleon', "nbsphinx", "myst_parser", "sphinx.ext.githubpages"]
+extensions = ['sphinx.ext.autodoc', 'sphinx.ext.napoleon', 'sphinx.ext.intersphinx', "nbsphinx", "myst_parser", "sphinx.ext.githubpages"]
 
 #"gaphor.extensions.sphinx"
 #gaphor_models = "/docs/figures/module-reference-diagrams.gaphor"
+myst_enable_extensions = ["html_image", "html_admonition"]
 
 
 exclude_patterns = ['_build', '**.ipynb_checkpoints', 'rad_models*']

@@ -469,8 +469,8 @@ if __name__ == "__main__":
                                    "mechfaults", phasemap='mdl', args=(5,))
 
     quad_ec, quad_hist = fs.propagate.fault_sample(mdl, app_mechfaults, staged=True)
-    quad_hist.nominal.plot_line('flows.dofs.s.x', 'dofs.s.y', 'dofs.s.z',
-                                'store_ee.s.soc')
+    quad_hist.nominal.plot_line('flows.dofs.s.x', 'flows.dofs.s.y', 'flows.dofs.s.z',
+                                'fxns.store_ee.s.soc')
 
     fig, ax = quad_hist.plot_trajectories("dofs.s.x", "dofs.s.y", "dofs.s.z",
                                           time_groups=['nominal'],
