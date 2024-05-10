@@ -2,7 +2,7 @@
 <html>
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-    <title>Coverage for examples\rover\test_rover.py: 93%</title>
+    <title>Coverage for examples\rover\test_rover.py: 47%</title>
     <link rel="icon" sizes="32x32" href="favicon_32.png">
     <link rel="stylesheet" href="style.css" type="text/css">
     <script type="text/javascript" src="coverage_html.js" defer></script>
@@ -12,7 +12,7 @@
     <div class="content">
         <h1>
             <span class="text">Coverage for </span><b>examples\rover\test_rover.py</b>:
-            <span class="pc_cov">93%</span>
+            <span class="pc_cov">47%</span>
         </h1>
         <aside id="help_panel_wrapper">
             <input id="help_panel_state" type="checkbox">
@@ -55,8 +55,8 @@
         </aside>
         <h2>
             <span class="text">15 statements &nbsp;</span>
-            <button type="button" class="run button_toggle_run" value="run" data-shortcut="r" title="Toggle lines run">14<span class="text"> run</span></button>
-            <button type="button" class="mis show_mis button_toggle_mis" value="mis" data-shortcut="m" title="Toggle lines missing">1<span class="text"> missing</span></button>
+            <button type="button" class="run button_toggle_run" value="run" data-shortcut="r" title="Toggle lines run">7<span class="text"> run</span></button>
+            <button type="button" class="mis show_mis button_toggle_mis" value="mis" data-shortcut="m" title="Toggle lines missing">8<span class="text"> missing</span></button>
             <button type="button" class="exc show_exc button_toggle_exc" value="exc" data-shortcut="x" title="Toggle lines excluded">0<span class="text"> excluded</span></button>
         </h2>
         <p class="text">
@@ -65,7 +65,7 @@
             <a id="nextFileLink" class="nav" href="d_36b6f534fa1b0a7c___init___py.html">&#xbb; next</a>
             &nbsp; &nbsp; &nbsp;
             <a class="nav" href="https://coverage.readthedocs.io/en/7.4.0">coverage.py v7.4.0</a>,
-            created at 2024-02-02 16:34 -0800
+            created at 2024-05-10 11:29 -0700
         </p>
         <aside class="hidden">
             <button type="button" class="button_next_chunk" data-shortcut="j"/>
@@ -94,15 +94,15 @@
     <p class="run"><span class="n"><a id="t12" href="#t12">12</a></span><span class="t"><span class="key">class</span> <span class="nam">RoverTests</span><span class="op">(</span><span class="nam">unittest</span><span class="op">.</span><span class="nam">TestCase</span><span class="op">,</span> <span class="nam">CommonTests</span><span class="op">)</span><span class="op">:</span>&nbsp;</span><span class="r"></span></p>
     <p class="run"><span class="n"><a id="t13" href="#t13">13</a></span><span class="t">    <span class="key">def</span> <span class="nam">test_obj_values</span><span class="op">(</span><span class="nam">self</span><span class="op">)</span><span class="op">:</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t14" href="#t14">14</a></span><span class="t">&nbsp;</span><span class="r"></span></p>
-    <p class="run"><span class="n"><a id="t15" href="#t15">15</a></span><span class="t">        <span class="nam">testvalues</span> <span class="op">=</span> <span class="op">[</span><span class="op">[</span><span class="num">1.0</span><span class="op">,</span> <span class="num">0.5</span><span class="op">,</span> <span class="num">0.0</span><span class="op">]</span><span class="op">,</span> <span class="op">[</span><span class="num">0.0</span><span class="op">,</span> <span class="num">0.0</span><span class="op">,</span> <span class="num">0.0</span><span class="op">]</span><span class="op">,</span>&nbsp;</span><span class="r"></span></p>
+    <p class="mis show_mis"><span class="n"><a id="t15" href="#t15">15</a></span><span class="t">        <span class="nam">testvalues</span> <span class="op">=</span> <span class="op">[</span><span class="op">[</span><span class="num">1.0</span><span class="op">,</span> <span class="num">0.5</span><span class="op">,</span> <span class="num">0.0</span><span class="op">]</span><span class="op">,</span> <span class="op">[</span><span class="num">0.0</span><span class="op">,</span> <span class="num">0.0</span><span class="op">,</span> <span class="num">0.0</span><span class="op">]</span><span class="op">,</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t16" href="#t16">16</a></span><span class="t">                      <span class="op">[</span><span class="num">1.0</span><span class="op">,</span> <span class="num">1.0</span><span class="op">,</span> <span class="num">1.0</span><span class="op">]</span><span class="op">,</span> <span class="op">[</span><span class="num">0.5</span><span class="op">,</span> <span class="num">0.5</span><span class="op">,</span> <span class="num">0.5</span><span class="op">]</span><span class="op">]</span>&nbsp;</span><span class="r"></span></p>
-    <p class="run"><span class="n"><a id="t17" href="#t17">17</a></span><span class="t">        <span class="key">for</span> <span class="nam">testvalue</span> <span class="key">in</span> <span class="nam">testvalues</span><span class="op">:</span>&nbsp;</span><span class="r"></span></p>
-    <p class="run"><span class="n"><a id="t18" href="#t18">18</a></span><span class="t">            <span class="nam">dist_int</span><span class="op">,</span> <span class="nam">enddist_int</span><span class="op">,</span> <span class="nam">endpt_int</span> <span class="op">=</span> <span class="nam">line_dist_faster</span><span class="op">(</span><span class="nam">testvalue</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
-    <p class="run"><span class="n"><a id="t19" href="#t19">19</a></span><span class="t">            <span class="nam">dist</span><span class="op">,</span> <span class="nam">enddist</span><span class="op">,</span> <span class="nam">endpt</span> <span class="op">=</span> <span class="nam">line_dist</span><span class="op">(</span><span class="nam">testvalue</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
+    <p class="mis show_mis"><span class="n"><a id="t17" href="#t17">17</a></span><span class="t">        <span class="key">for</span> <span class="nam">testvalue</span> <span class="key">in</span> <span class="nam">testvalues</span><span class="op">:</span>&nbsp;</span><span class="r"></span></p>
+    <p class="mis show_mis"><span class="n"><a id="t18" href="#t18">18</a></span><span class="t">            <span class="nam">dist_int</span><span class="op">,</span> <span class="nam">enddist_int</span><span class="op">,</span> <span class="nam">endpt_int</span> <span class="op">=</span> <span class="nam">line_dist_faster</span><span class="op">(</span><span class="nam">testvalue</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
+    <p class="mis show_mis"><span class="n"><a id="t19" href="#t19">19</a></span><span class="t">            <span class="nam">dist</span><span class="op">,</span> <span class="nam">enddist</span><span class="op">,</span> <span class="nam">endpt</span> <span class="op">=</span> <span class="nam">line_dist</span><span class="op">(</span><span class="nam">testvalue</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t20" href="#t20">20</a></span><span class="t">&nbsp;</span><span class="r"></span></p>
-    <p class="run"><span class="n"><a id="t21" href="#t21">21</a></span><span class="t">            <span class="nam">self</span><span class="op">.</span><span class="nam">assertEqual</span><span class="op">(</span><span class="nam">dist</span><span class="op">,</span> <span class="nam">dist_int</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
-    <p class="run"><span class="n"><a id="t22" href="#t22">22</a></span><span class="t">            <span class="nam">self</span><span class="op">.</span><span class="nam">assertEqual</span><span class="op">(</span><span class="nam">enddist</span><span class="op">,</span> <span class="nam">enddist_int</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
-    <p class="run"><span class="n"><a id="t23" href="#t23">23</a></span><span class="t">            <span class="nam">self</span><span class="op">.</span><span class="nam">assertEqual</span><span class="op">(</span><span class="nam">endpt</span><span class="op">,</span> <span class="nam">endpt_int</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
+    <p class="mis show_mis"><span class="n"><a id="t21" href="#t21">21</a></span><span class="t">            <span class="nam">self</span><span class="op">.</span><span class="nam">assertEqual</span><span class="op">(</span><span class="nam">dist</span><span class="op">,</span> <span class="nam">dist_int</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
+    <p class="mis show_mis"><span class="n"><a id="t22" href="#t22">22</a></span><span class="t">            <span class="nam">self</span><span class="op">.</span><span class="nam">assertEqual</span><span class="op">(</span><span class="nam">enddist</span><span class="op">,</span> <span class="nam">enddist_int</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
+    <p class="mis show_mis"><span class="n"><a id="t23" href="#t23">23</a></span><span class="t">            <span class="nam">self</span><span class="op">.</span><span class="nam">assertEqual</span><span class="op">(</span><span class="nam">endpt</span><span class="op">,</span> <span class="nam">endpt_int</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t24" href="#t24">24</a></span><span class="t">&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t25" href="#t25">25</a></span><span class="t">&nbsp;</span><span class="r"></span></p>
     <p class="run"><span class="n"><a id="t26" href="#t26">26</a></span><span class="t"><span class="key">if</span> <span class="nam">__name__</span> <span class="op">==</span> <span class="str">'__main__'</span><span class="op">:</span>&nbsp;</span><span class="r"></span></p>
@@ -116,7 +116,7 @@
             <a id="nextFileLink" class="nav" href="d_36b6f534fa1b0a7c___init___py.html">&#xbb; next</a>
             &nbsp; &nbsp; &nbsp;
             <a class="nav" href="https://coverage.readthedocs.io/en/7.4.0">coverage.py v7.4.0</a>,
-            created at 2024-02-02 16:34 -0800
+            created at 2024-05-10 11:29 -0700
         </p>
     </div>
 </footer>

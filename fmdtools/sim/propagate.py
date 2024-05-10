@@ -1119,7 +1119,8 @@ def prop_one_scen(mdl, scen, ctimes=[], nomhist={}, nomresult={}, **kwargs):
     if type(desired_result) is dict and 'end' in desired_result:
         result['end'] = get_result(scen, mdl, desired_result['end'], nomhist, nomresult,
                                    time=t)
-    elif type(desired_result) is not dict or 'endclass' in desired_result:
+    elif (type(desired_result) is not dict
+          or all([type(k) is str for k in desired_result])):
         result.update(get_result(scen, mdl, desired_result, nomhist, nomresult, time=t))
 
     if None in c_mdl.values():
