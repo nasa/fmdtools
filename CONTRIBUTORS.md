@@ -1,4 +1,4 @@
-# CONTRIBUTORS
+# Contributors
 
 <a href="https://github.com/nasa/fmdtools/graphs/contributors">
   <img src="https://contrib.rocks/image?repo=nasa/fmdtools" />

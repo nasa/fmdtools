@@ -12,6 +12,8 @@ Functions contained in this module:
 """
 from collections.abc import Iterable
 from recordclass import dataobject
+from ordered_set import OrderedSet
+import numpy as np
 
 
 def get_var(obj, var):
@@ -115,7 +117,7 @@ def nest_dict(dic, levels=float('inf'), separator="."):
         Nested dictionary. e.g. {'a': {'b': 1.0}}
     """
     newhist = dic.__class__()
-    key_options = set([h.split(separator)[0] for h in dic.keys()])
+    key_options = OrderedSet([h.split(separator)[0] for h in dic.keys()])
     for key in key_options:
         if key in dic:
             newhist[key] = dic[key]
@@ -192,5 +194,11 @@ def t_key(time):
     """
     Generate keys for a given (float) time in a queryable format.
 
-    e.g. endresults.t10p0, the result at time t=10.0"""
+    e.g. endresults.t10p0, the result at time t=10.0
+    """
     return 't'+'p'.join(str(time).split('.'))
+
+
+def round_float(number, res=1.0, min_r=7):
+    """Round floats to a given resolution (avoiding fp errors)."""
+    return np.round(round(number/res)*res, 7)

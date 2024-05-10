@@ -5,6 +5,9 @@ Created on Tue May 16 15:12:39 2023
 @author: dhulse
 """
 import pytest
+# let more tests be created during testing
+from matplotlib import pyplot as plt
+plt.rcParams['figure.max_open_warning'] = 50
 # import sys
 
 # NOTE: If report won't generate with error:
@@ -13,7 +16,7 @@ import pytest
 
 if __name__=="__main__":
     # requires pytest, nbmake, pytest-html, pytest-cov
-    
+
     # for testing modules with doctests
     doctest_modules = ["fmdtools/define/container/base.py",
                        "fmdtools/define/container/state.py",
@@ -45,14 +48,15 @@ if __name__=="__main__":
 
     # retcode = pytest.main(["--doctest-modules", *doctest_modules])
 
-    # for testing all unittests
-    # retcode = pytest.main(["--continue-on-collection-errors"])
-
     # retcode = pytest.main(["--html=./reports/junit/report.html",
     #                        "--self-contained-html",
     #                        "--junitxml=./reports/junit/junit.xml",
     #                        "--doctest-modules",
     #                        "--continue-on-collection-errors"])
+
+    # for testing all unittests
+    # retcode = pytest.main(["--continue-on-collection-errors"])
+
 
     # for testing notebooks during development:
     fast_notebooks = ["examples/asg_demo/Action_Sequence_Graph.ipynb",
@@ -73,23 +77,23 @@ if __name__=="__main__":
                       "examples/pump/Stochastic_Modelling.ipynb",
                       "examples/rover/ParameterSample_Use-Cases.ipynb",
                       "examples/pump/Optimization.ipynb",
+                      "examples/rover/degradation_modelling/Degradation_Modelling_Notebook.ipynb",
+                      "examples/rover/HFAC_Analyses/IDETC_Human_Paper_Analysis.ipynb",
+                      "examples/rover/HFAC_Analyses/HFAC_Analyses.ipynb",
                       "examples/pump/Parallelism_Tutorial.ipynb"]
     # retcode = pytest.main(["--nbmake", *slow_notebooks])
 
     # for testing extremely slow notebooks that can't be run to completion :
     too_slow_notebooks = ["examples/rover/optimization/Rover_Response_Optimization.ipynb",  # extremely slow notebook
-                        "examples/rover/fault_sampling/Rover_Mode_Notebook.ipynb",  # extremely slow notebook
-                        "examples/rover/optimization/Search_Comparison.ipynb",  # not fully adapted
-                        "examples/tank/Tank_Optimization.ipynb"
-                        ]
+                          "examples/rover/fault_sampling/Rover_Mode_Notebook.ipynb",  # extremely slow notebook
+                          "examples/rover/optimization/Search_Comparison.ipynb",  # extremely slow
+                          "examples/tank/Tank_Optimization.ipynb"
+                          ]
     # retcode = pytest.main(["--nbmake", "--nbmake-find-import-errors", "--nbmake-timeout=20", *too_slow_notebooks])
 
     #  we ignore the following notebooks for various reasons:
     # while not included in the testing approach, they should be verified periodically
     ignore_notebooks = [*too_slow_notebooks,
-                        "examples/rover/HFAC_Analyses/HFAC_Analyses.ipynb",  # not yet adapted
-                        "examples/rover/HFAC_Analyses/IDETC_Human_Paper_Analysis.ipynb",  # not yet adapted
-                        "examples/rover/degradation_modelling/Degradation_Modelling_Notebook.ipynb",  # not yet adapted
                         "examples/pump/AST_Sampling.ipynb",  # requires special setup with julia kernel
                         "examples/pump/Tutorial_unfilled.ipynb"  # intended to be blank
                         ]
@@ -100,18 +104,21 @@ if __name__=="__main__":
 
     # for creating comprehensive test report:
 
-    retcode = pytest.main(["--cov-report",
-                           "html:reports/coverage",
-                           "--cov-report",
-                           "xml:reports/coverage/coverage.xml",
-                           "--cov",
-                           "--html=./reports/junit/report.html",
-                           "--junitxml=./reports/junit/junit.xml",
-                           "--overwrite",
-                           "--doctest-modules",
-                           "--nbmake",
-                           *["--ignore="+notebook for notebook in ignore_notebooks],
-                           "--continue-on-collection-errors"])
+    # retcode = pytest.main(["--cov-report",
+    #                        "html:reports/coverage",
+    #                        "--cov-report",
+    #                        "xml:reports/coverage/coverage.xml",
+    #                        "--cov",
+    #                        "--html=./reports/junit/report.html",
+    #                        "--junitxml=./reports/junit/junit.xml",
+    #                        "--overwrite",
+    #                        "--doctest-modules",
+    #                        "--nbmake",
+    #                        *["--ignore="+notebook for notebook in ignore_notebooks],
+    #                        "--continue-on-collection-errors"])
+
+    # this should close any open plots
+    plt.close()
 
     # after creating test report, update the badge using this in powershell:
     # !Powershell.exe -Command "genbadge tests"

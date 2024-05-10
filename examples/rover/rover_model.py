@@ -169,7 +169,8 @@ class DestParam(PointParam):
 def sin_func(x, amp, period):
     """Sine line function generator."""
     return amp * np.sin(x * 2 * np.pi / period)
-    
+
+
 class PathParam(LineParam):
     """Parameter defining the path."""
 
@@ -177,8 +178,8 @@ class PathParam(LineParam):
     buffer_on: float = 0.2
     buffer_poor: float = 0.3
     buffer_near: float = 0.4
-    
-    
+
+
 class RoverParam(Parameter):
     """Parameters for rover."""
 
@@ -191,8 +192,6 @@ class RoverParam(Parameter):
         super().__init__(*args, strict_immutability=False, **kwargs)
 
 
-
-
 def turn_func(x, radius, start):
     """Turn line function generator."""
     if x >= start + radius:
@@ -203,9 +202,6 @@ def turn_func(x, radius, start):
         return 0.0
     elif x < 0.0:
         raise Exception("x="+str(x)+" <0.0")
-
-
-
 
 
 class DestState(State):
@@ -222,9 +218,6 @@ class Dest(GeomPoint):
     container_s = DestState
 
 
-
-
-
 class GroundGeomArch(GeomArchitecture):
     """Geometry of rover environment--start, end, and line."""
 
@@ -233,15 +226,16 @@ class GroundGeomArch(GeomArchitecture):
     def init_architecture(self, **kwargs):
         """Initialize geometry with line and start/end points."""
         ls = self.p.gen_ls()
-        self.add_line('line', PathLine, p={'xys': ls, 'buffer_on': self.p.path_buffer_on,
+        self.add_line('line', PathLine, p={'xys': ls,
+                                           'buffer_on': self.p.path_buffer_on,
                                            'buffer_poor': self.p.path_buffer_poor,
                                            'buffer_near': self.p.path_buffer_near})
         self.add_point('start', Dest, p={'x': ls[0][0], 'y': ls[0][1],
                                          'buffer_on': self.p.dest_buffer_on,
                                          'buffer_near': self.p.dest_buffer_near})
         self.add_point('end', Dest, p={'x': ls[-1][0], 'y': ls[-1][1],
-                                         'buffer_on': self.p.dest_buffer_on,
-                                         'buffer_near': self.p.dest_buffer_near})
+                                       'buffer_on': self.p.dest_buffer_on,
+                                       'buffer_near': self.p.dest_buffer_near})
 
 
 class GroundState(State):
@@ -312,13 +306,6 @@ class PosState(State):
 
 class Pos(Flow):
     """Rover position/velocity flow."""
-
-    __slots__ = ()
-    container_s = PosState
-
-
-class Pos_Signal(Flow):
-    """Rover position signal flow."""
 
     __slots__ = ()
     container_s = PosState
@@ -396,7 +383,7 @@ class Control(Flow):
 class SwitchState(State):
     """Power switch state (power on or off)."""
 
-    power: float = 0.0
+    power: bool = False
 
 
 class Switch(Flow):
@@ -406,24 +393,26 @@ class Switch(Flow):
     container_s = SwitchState
 
 
+class CommsState(State):
+    """
+    Communications signal with override.
+
+    Extends Pos and Control such that 'active' represents override activity and
+    'on' represents whether data is active/passed.
+    """
+
+    pos: PosState = PosState()
+    ctl: ControlState = ControlState()
+    video: VideoState = VideoState()
+    active: bool = False
+    on: bool = False
+
+
 class Comms(Flow):
     """External communications flow."""
 
     __slots__ = ()
-    container_s = PosState
-
-
-class OverrideState(ControlState):
-    """Override signal. 'active' represents activity."""
-
-    active: float = 0.0
-
-
-class OverrideComms(Flow):
-    """Override communications flow."""
-
-    __slots__ = ()
-    container_s = OverrideState
+    container_s = CommsState
 
 
 class FaultStates(State):
@@ -467,15 +456,64 @@ class PlanPathMode(Mode):
     mode: str = "standby"
 
 
+class PlanPathState(State):
+    """
+    States used in rover path planning.
+
+    Fields
+    ------
+    u_self: tuple
+        Position of the ownship.
+    u_lin: tuple
+        Position of the line.
+    u_lin_dev: tuple
+        Deviation of ownship from line.
+    rdiff: float
+        Projected turning around.
+    vel_adj: float
+        Velocity adjustment (for faults).
+    """
+
+    u_self: np.array = np.array([0.0, 0.0])
+    u_lin: np.array = np.array([0.0, 0.0])
+    u_lin_dev:  np.array = np.array([0.0, 0.0])
+    rdiff: float = 0.0
+    vel_adj: float = 1.0
+
+    def set_positions(self, pos_signal, video):
+        """Get and group the ownship position, line position, and deviation."""
+        self.u_self = pos_signal.s.get('ux', 'uy')
+        self.u_lin = video.s.get('lin_ux', 'lin_uy')
+        self.u_lin_dev = video.s.get('lin_dx', 'lin_dy')
+
+    def set_turn(self):
+        """Calculate turn rdiff from ownship position, line position, and deviation."""
+        rdiff_track = rdiff_from_vects(self.u_self, self.u_lin)
+        err_dist = np.linalg.norm(self.u_lin_dev)
+        rdiff_err = rdiff_from_vects(self.u_self, self.u_lin_dev) * err_dist
+        self.rdiff = rdiff_track + 0.15 * rdiff_err
+        #if err_dist > 0.05:
+        #    self.vel_adj = 0.2
+        #else:
+        #    self.vel_adj = 1.0
+
+
+    def set_control(self, control):
+        """Set rpower and lpower for control given intended turn and vel_adj."""
+        control.s.put(rpower=self.vel_adj * (1 + (self.rdiff)),
+                      lpower=self.vel_adj * (1 - (self.rdiff)))
+        control.s.limit(rpower=(-1, 2), lpower=(-1, 2))
+
+
 class PlanPath(Function):
     """Plan the next drive move based on the current state of the rover."""
 
-    __slots__ = ("video", "pos_signal", "ground", "control", "fault_sig", 'pos')
+    __slots__ = ("video", "pos_signal", "ground", "control", "fault_sig")
     container_m = PlanPathMode
     container_p = ResCorrection
+    container_s = PlanPathState
     flow_video = Video
-    flow_pos_signal = Pos_Signal
-    flow_pos = Pos
+    flow_pos_signal = Pos
     flow_ground = Ground
     flow_control = Control
     flow_fault_sig = FaultSig
@@ -501,8 +539,6 @@ class PlanPath(Function):
                 self.m.set_mode("standby")
 
         if self.m.in_mode("drive") and not self.m.in_mode("no_con"):
-            self.pos_signal.s.assign(self.pos.s, "x", "y", "ux", "uy")
-
             if self.ground.at_end(self.pos_signal.s):
                 self.m.set_mode("finished")
             elif self.video.s.quality == 0:
@@ -516,39 +552,38 @@ class PlanPath(Function):
 
     def drive_control(self):
         """Control of rpower/lpower signal based on percieved line."""
-        u_self = self.pos_signal.s.get('ux', 'uy')
-        u_lin = self.video.s.get('lin_ux', 'lin_uy')
-        rdiff_track = rdiff_from_vects(u_self, u_lin)
+        # comprehend: get u_self, u_line, u_dev
+        self.s.set_positions(self.pos_signal, self.video)
+        # project : calculate rdiffs and vel_adj from u_self, u_line, u_dev
+        self.s.set_turn()
+        # correct velocity
+        self.s.vel_adj = self.correct_fault_vel(self.s.rdiff)
+        # decide : rpower/lpower from rdiffs
+        self.s.set_control(self.control)
 
-        u_lin_dev = self.video.s.get('lin_dx', 'lin_dy')
-        rdiff_err = rdiff_from_vects(u_self, u_lin_dev) * np.linalg.norm(u_lin_dev)
-
-        rdiff = rdiff_track + 0.15 * rdiff_err
-        
-        #applying the correction factor if drift is present
+    def correct_fault_vel(self, rdiff):
+        """Slow down the rover when faults are detected."""
+        # applying the correction factor if drift is present
         turn_fault_correction = self.p.cor_d * self.fault_sig.s.drift
         rdiff = rdiff + turn_fault_correction
-        
-        #applying a correction factor if friction or transfer is present
-        #goal is to increase power if friction is present 
-        friction_vel_correction = ((1 - self.p.cor_f) * self.fault_sig.s.friction / 
+
+        # applying a correction factor if friction or transfer is present
+        # goal is to increase power if friction is present
+        friction_vel_correction = ((1 - self.p.cor_f) * self.fault_sig.s.friction /
                                    (1 + self.fault_sig.s.friction))
-        
+
         # increase power is transfer is below 1 and decrease power if it is more than 1
-        transfer_vel_correction = ((1 + self.p.cor_t) * (self.fault_sig.s.transfer - 1) 
+        transfer_vel_correction = ((1 + self.p.cor_t) * (self.fault_sig.s.transfer - 1)
                                    / (1 + self.fault_sig.s.transfer))
         vel_adj = 1 + friction_vel_correction - transfer_vel_correction
-
-        #vel_adj = max(0.2, 1 - 0.9 * abs(rdiff_err * 50)) * vel_fault_correction
-        self.control.s.put(rpower=vel_adj * (1 + (rdiff)),
-                           lpower=vel_adj * (1 - (rdiff)))
-        self.control.s.limit(rpower=(-1, 2), lpower=(-1, 2))
+        return vel_adj
 
     def faultstates_in_bounds(self):
         """Check if fault-states are in-bounds."""
         return (self.p.lb_f <= self.fault_sig.s.friction <= self.p.ub_f
                 and self.p.lb_d <= self.fault_sig.s.drift <= self.p.ub_d
                 and self.p.lb_t <= self.fault_sig.s.transfer <= self.p.ub_t)
+
 
 
 def rdiff_from_vects(u_self, u_lin):
@@ -580,34 +615,18 @@ class DriveMode(Mode):
             self.mode_args = mode_args["mode_args"]
         else:
             self.mode_args = mode_args
-        ph = {'drive': 1.0}
+        ph = {'drive': 1.0, 'start': 1.0}
         if self.mode_args == "degradation":
-            self.s.friction = deg_params.friction
-            self.s.drift = deg_params.drift
-            franges = {"friction": {(self.s.friction + 0.5), 2 * (self.s.friction + 0.5), 5 * (self.s.friction + 0.5)},
-                       "transfer": {0.0},
-                       "drift": {self.s.drift + 0.2, self.s.drift - 0.2}}
-            self.init_n_faultstates(franges, phases=ph)
-
-        elif type(self.mode_args) == int:
-            franges = {"friction": np.linspace(0.0, 20, 10),
-                       "transfer":  np.linspace(1.0, 0.0, 10),
-                       "drift": np.linspace(-0.5, 0.5, 10)}
-            self.init_n_faultstates(franges, n=self.mode_args, phases=ph)
-        elif type(self.mode_args) == list:
-            manual_modes = {"s_" + str(i):
-                            {"friction": mode[0], "transfer": mode[1], "drift": mode[2]}
-                            for i, mode in enumerate(self.mode_args)}
-            self.init_faultstate_modes(manual_modes, phases=ph)
-        elif type(self.mode_args) == dict:
+            self.add_degradation_modes(deg_params, ph)
+        elif type(self.mode_args) is int:
+            self.add_n_modes(ph)
+        elif type(self.mode_args) is list:
+            self.add_mode_list(ph)
+        elif type(self.mode_args) is dict:
             self.init_faultstate_modes(manual_modes=self.mode_args, phases=ph)
         else:
             if "manual" in self.mode_args:
-                manual_modes = {"elec_open": {"transfer": 0.0},
-                                "stuck": {"friction": 10.0},
-                                "stuck_right": {"friction": 3.0, "drift": 0.2},
-                                "stuck_left": {"friction": 3.0, "drift": -0.2}}
-                self.init_faultstate_modes(manual_modes, phases=ph)
+                self.add_manual_modes(ph)
             if "set" in self.mode_args:
                 franges = {"friction": {1.5, 3.0, 10.0},
                            "transfer": {0.5, 0.0},
@@ -621,6 +640,30 @@ class DriveMode(Mode):
                     self.init_n_faultstates(franges, phases=ph, n="all")
                 else:
                     self.init_n_faultstates(franges, phases=ph, n=1)
+
+    def add_manual_modes(self, ph, drift=0.0, friction=0.0):
+        manual_modes = {"elec_open": {"transfer": 0.0},
+                        "stuck": {"friction": 10.0+friction},
+                        "stuck_right": {"friction": 3.0+friction, "drift": 0.2+drift},
+                        "stuck_left": {"friction": 3.0+friction, "drift": -0.2+drift}}
+        self.init_faultstate_modes(manual_modes, phases=ph)
+
+    def add_degradation_modes(self, deg_params, ph):
+        self.s.friction = deg_params.friction
+        self.s.drift = deg_params.drift
+        self.add_manual_modes(ph, drift=self.s.drift, friction=self.s.friction)
+
+    def add_n_modes(self, ph):
+        franges = {"friction": {*np.linspace(0.0, 20, 10)},
+                   "transfer":  {*np.linspace(1.0, 0.0, 10)},
+                   "drift": {*np.linspace(-0.5, 0.5, 10)}}
+        self.init_n_faultstates(franges, n=self.mode_args, phases=ph)
+
+    def add_mode_list(self, ph):
+        manual_modes = {"s_" + str(i):
+                        {"friction": mode[0], "transfer": mode[1], "drift": mode[2]}
+                        for i, mode in enumerate(self.mode_args)}
+        self.init_faultstate_modes(manual_modes, phases=ph)
 
 
 class Drive(Function):
@@ -688,13 +731,12 @@ class Drive(Function):
             >>> d.pos.s
             PosState(x=0.0, y=-2.0, vel=2.0, ux=0.0, uy=-1.0)
         """
-        
-        #the division by 6 slows down the rover, so it can manage the course
+        # the division by 6 slows down the rover, so it can manage the course
         self.pos.s.vel = (rpower + lpower) / (5 + (1 + self.m.s.friction))
         ang_inc = np.arctan((rpower - lpower) / (rpower + lpower + 0.001))
         ux = np.cos(ang_inc) * self.pos.s.ux - np.sin(ang_inc) * self.pos.s.uy
         uy = np.sin(ang_inc) * self.pos.s.ux + np.cos(ang_inc) * self.pos.s.uy
-        mag_u = np.linalg.norm([ux, uy])        
+        mag_u = np.linalg.norm([ux, uy])
         self.pos.s.put(ux=ux/mag_u, uy=uy/mag_u)
         self.pos.s.inc(x=self.pos.s.ux*self.pos.s.vel, y=self.pos.s.uy*self.pos.s.vel)
 
@@ -725,10 +767,10 @@ class PerceptionMode(Mode):
 class Perception(Function):
     """Rover function that percieves the environment and creates the video feed."""
 
-    __slots__ = ("ground", "ee", "video", 'pos')
-    rad = 1         # not used. Is it needeD?
+    __slots__ = ("ground", "ee", "video", 'pos', 'pos_signal')
     container_m = PerceptionMode
     flow_pos = Pos
+    flow_pos_signal = Pos
     flow_ground = Ground
     flow_ee = EE
     flow_video = Video
@@ -737,24 +779,26 @@ class Perception(Function):
     def dynamic_behavior(self, time):
         """Set the video feed based on the behavior mode at each timestep."""
         # Nominal Behavior
+        if self.ee.s.v > 8:
+            self.m.set_mode("feed")
+        elif self.ee.s.v == 0:
+            self.m.set_mode("off")
+
         if self.m.in_mode("off"):
             self.ee.s.a = 0
             self.video.s.put(lin_ux=0.0, lin_uy=0.0,
                              lin_dx=0.0, lin_dy=0.0, quality=0.0)
-            if self.ee.s.v == 12:
-                self.m.set_mode("feed")
         elif self.m.in_mode("feed"):
-            if self.ee.s.v > 8:
-                if self.ground.on_course(self.pos.s):
-                    self.get_line_ang()
-                else:
-                    # Video quality drops off if rover is off course
-                    self.video.s.quality = 0.0
-            elif self.ee.s.v == 0:
-                self.m.set_mode("off")
+            if self.ground.on_course(self.pos.s):
+                self.get_line_ang()
+            else:
+                # Video quality drops off if rover is off course
+                self.video.s.quality = 0.0
+            self.pos_signal.s.assign(self.pos.s, "x", "y", "ux", "uy")
+
         # Faulty Behavior
         elif self.m.has_fault("bad_feed"):
-            self.video.quality = 0.5
+            self.video.s.quality = 0.5
 
     def get_line_ang(self):
         """Determine the video feed states."""
@@ -863,7 +907,7 @@ class Power(Function):
         self.ee_5.s.put(v=0, a=0)
         self.ee_12.s.put(v=0, a=0)
         self.ee_15.s.put(v=0, a=0)
-        if self.switch.s.power == 1:
+        if self.switch.s.power:
             self.m.set_mode("supply")
 
     def supply_power(self):
@@ -874,7 +918,7 @@ class Power(Function):
             self.ee_15.s.v = 15
         else:
             self.m.set_mode("no_charge")
-        if self.switch.s.power == 0:
+        if not self.switch.s.power:
             self.m.set_mode("off")
 
     def power_usage(self):
@@ -893,7 +937,7 @@ class Power(Function):
         self.s.power = self.s.power * 2
         if self.s.charge == 0:
             self.m.set_mode("no_charge")
-        if self.switch.s.power == 0:
+        if not self.switch.s.power:
             self.m.set_mode("off")
 
 
@@ -916,42 +960,52 @@ class OverrideMode(Mode):
 
 
 class Override(Function):
-    __slots__ = ("override_comms", "ee", "motor_control", "auto_control")
+    __slots__ = ("comms", "ee", "motor_control", "auto_control")
     container_m = OverrideMode
-    flow_override_comms = OverrideComms
+    flow_comms = Comms
     flow_ee = EE
     flow_motor_control = Control
     flow_auto_control = Control
     flownames = {"ee_5": "ee"}
 
     def dynamic_behavior(self, time):
+        if self.ee.s.v > 4:
+            if self.comms.s.active and self.comms.s.on:
+                self.m.set_mode("override")
+            else:
+                self.m.set_mode("standby")
+        else:
+            self.m.set_mode("off")
+
         if self.m.in_mode("off"):
             self.ee.s.a = 0
-            if self.ee.s.v == 5:
-                self.m.set_mode("standby")
         elif self.m.in_mode("standby"):
+            self.ee.s.a = 1
             self.motor_control.s.assign(self.auto_control.s, "rpower", "lpower")
-            if self.override_comms == "active" and self.EE.s.v > 4:
-                self.m.set_mode("override")
         elif self.m.in_mode("override"):
-            self.motor_control.s.assign(self.override_comms.s, "rpower", "lpower")
+            self.ee.s.a = 1
+            self.motor_control.s.assign(self.comms.s.ctl, "rpower", "lpower")
 
 
 class Communications(Function):
     """Rover communications to the user."""
 
-    __slots__ = ("ee_12", "comms", "pos_signal")
+    __slots__ = ("ee_12", "comms", "pos_signal", "video")
     flow_ee_12 = EE
     flow_comms = Comms
-    flow_pos_signal = Pos_Signal
+    flow_pos_signal = Pos
+    flow_video = Video
 
     def dynamic_behavior(self, time):
         """When active, convert position signals to communication signals."""
         if self.ee_12.s.v == 12:
             self.ee_12.s.a = 1
-            self.comms.s.assign(self.pos_signal.s, "x", "y", "vel", "ux", "uy")
+            self.comms.s.pos.assign(self.pos_signal.s, "x", "y", "vel", "ux", "uy")
+            self.comms.s.video.assign(self.video.s)
+            self.comms.s.on = True
         else:
-            self.comms.s.put(x=0, y=0, vel=0, ux=0, uy=0)
+            self.comms.s.pos.put(x=0, y=0, vel=0, ux=0, uy=0)
+            self.comms.s.on = False
 
 
 class Operator(Function):
@@ -960,11 +1014,14 @@ class Operator(Function):
     __slots__ = ("switch",)
     flow_switch = Switch
 
-    def dynamic_behavior(self, t):
+    def set_power(self, t):
         if t == 1:
-            self.switch.s.power = 1
+            self.switch.s.power = True
         elif t == 200:
-            self.switch.s.power = 0
+            self.switch.s.power = False
+
+    def dynamic_behavior(self, t):
+        self.set_power(t)
 
 
 def gen_model_params(x, scen):
@@ -1003,7 +1060,7 @@ class Rover(FunctionArchitecture):
     def init_architecture(self, **kwargs):
         """Initialize the functional architecture."""
         self.add_flow("ground", Ground, p=self.p.ground)
-        self.add_flow("pos_signal", Pos_Signal)
+        self.add_flow("pos_signal", Pos)
         self.add_flow('pos', Pos)
         self.add_flow("ee_12", EE)
         self.add_flow("ee_5", EE)
@@ -1013,16 +1070,17 @@ class Rover(FunctionArchitecture):
         self.add_flow("motor_control", Control)
         self.add_flow("switch", Switch)
         self.add_flow("comms", Comms)
-        self.add_flow("override_comms", OverrideComms)
         self.add_flow("fault_sig", FaultSig)
 
         self.add_fxn("power", Power, "ee_15", "ee_5", "ee_12", "switch")
+        self.add_fxn("perception", Perception, "ground", 'pos', 'pos_signal',
+                     "ee_12", "video")
+        self.add_fxn("communications", Communications, "comms", "ee_12", "pos_signal",
+                     "video")
         self.add_fxn("operator", Operator, "switch")
-        self.add_fxn("communications", Communications, "comms", "ee_12", "pos_signal")
-        self.add_fxn("perception", Perception, "ground", 'pos', "ee_12", "video")
-        self.add_fxn("plan_path", PlanPath, "video", "pos_signal", "ground", 'pos',
+        self.add_fxn("plan_path", PlanPath, "video", "pos_signal", "ground",
                      "auto_control", "fault_sig", p=self.p.correction)
-        self.add_fxn("override", Override, "override_comms", "ee_5", "motor_control",
+        self.add_fxn("override", Override, "comms", "ee_5", "motor_control",
                      "auto_control")
         drive_m = {"mode_args": self.p.drive_modes, 'deg_params': self.p.degradation}
         self.add_fxn("drive", Drive, "ground", 'pos', "ee_15", "motor_control",
@@ -1129,19 +1187,33 @@ def gen_param_space():
     return paramspace
 
 
+def plot_map(mdl, hists):
+    fig, ax = hists.plot_trajectories('flows.pos.s.x', 'flows.pos.s.y',
+                                      time_groups=['nominal'])
+    geoms = {'line': {'shapes': {'on': {}, 'shape': {}}}, 'start': {}, 'end': {}}
+    fig, ax = mdl.flows['ground'].ga.show(geoms=geoms, fig=fig, ax=ax)
+    return fig, ax
+
+
 if __name__ == "__main__":
     import multiprocessing as mp
     from fmdtools.analyze import tabulate
     from fmdtools.sim.sample import SampleApproach, FaultDomain, FaultSample
-    
+
+    mdl = Rover()
+    ec1, hist1 = prop.nominal(mdl)
+    fig, ax = hist1.plot_trajectories('flows.pos.s.x', 'flows.pos.s.y',
+                                     time_groups=['nominal'])
+    fig, ax = plot_map(mdl, hist1)
+    ax.set_xlim(0,1.5)
+    ax.set_ylim(0,1.5)
+    fig.show()
+
     import doctest
     doctest.testmod(verbose=True)
-    mdl = Rover()
-    ec1, hist = prop.nominal(mdl)
-    fig, ax = hist.plot_trajectories('flows.pos.s.x', 'flows.pos.s.y',
-                                     time_groups=['nominal'])
+
     mdl.flows['ground'].ga.show(fig=fig, ax=ax)
-    fig, ax = hist.plot_trajectories('flows.pos.s.x', 'flows.pos.s.y')
+    fig, ax = hist1.plot_trajectories('flows.pos.s.x', 'flows.pos.s.y')
 
     mdl = Rover(p={'ground': GroundParam(linetype='turn')})
     ec, hist = prop.nominal(mdl)

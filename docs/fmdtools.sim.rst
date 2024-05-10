@@ -1,7 +1,8 @@
 fmdtools.sim 
 =========================
+.. automodule:: fmdtools.sim
 
-The :mod:`fmdtools.sim` package is used to simulate :mod:`fmdtools.define.architecture` models. It consists of four modules: 
+The :mod:`fmdtools.sim` package is used to simulate models. It consists of four modules: 
  - :mod:`fmdtools.sim.propagate`, which simulates the user-defined behaviors of a model over set time(s).
  - :mod:`fmdtools.sim.scenario`, which defines scenario information for simulations.
  - :mod:`fmdtools.sim.sample`, which provides classes for defining sets of scenarios to simulate. 

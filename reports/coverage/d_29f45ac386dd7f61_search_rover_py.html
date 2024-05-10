@@ -2,7 +2,7 @@
 <html>
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-    <title>Coverage for examples\rover\optimization\search_rover.py: 21%</title>
+    <title>Coverage for examples\rover\optimization\search_rover.py: 19%</title>
     <link rel="icon" sizes="32x32" href="favicon_32.png">
     <link rel="stylesheet" href="style.css" type="text/css">
     <script type="text/javascript" src="coverage_html.js" defer></script>
@@ -12,7 +12,7 @@
     <div class="content">
         <h1>
             <span class="text">Coverage for </span><b>examples\rover\optimization\search_rover.py</b>:
-            <span class="pc_cov">21%</span>
+            <span class="pc_cov">19%</span>
         </h1>
         <aside id="help_panel_wrapper">
             <input id="help_panel_state" type="checkbox">
@@ -55,8 +55,8 @@
         </aside>
         <h2>
             <span class="text">444 statements &nbsp;</span>
-            <button type="button" class="run button_toggle_run" value="run" data-shortcut="r" title="Toggle lines run">92<span class="text"> run</span></button>
-            <button type="button" class="mis show_mis button_toggle_mis" value="mis" data-shortcut="m" title="Toggle lines missing">352<span class="text"> missing</span></button>
+            <button type="button" class="run button_toggle_run" value="run" data-shortcut="r" title="Toggle lines run">85<span class="text"> run</span></button>
+            <button type="button" class="mis show_mis button_toggle_mis" value="mis" data-shortcut="m" title="Toggle lines missing">359<span class="text"> missing</span></button>
             <button type="button" class="exc show_exc button_toggle_exc" value="exc" data-shortcut="x" title="Toggle lines excluded">0<span class="text"> excluded</span></button>
         </h2>
         <p class="text">
@@ -65,7 +65,7 @@
             <a id="nextFileLink" class="nav" href="d_29f45ac386dd7f61_untitled2_py.html">&#xbb; next</a>
             &nbsp; &nbsp; &nbsp;
             <a class="nav" href="https://coverage.readthedocs.io/en/7.4.0">coverage.py v7.4.0</a>,
-            created at 2024-02-02 16:34 -0800
+            created at 2024-05-10 11:29 -0700
         </p>
         <aside class="hidden">
             <button type="button" class="button_next_chunk" data-shortcut="j"/>
@@ -135,17 +135,17 @@
     <p class="pln"><span class="n"><a id="t53" href="#t53">53</a></span><span class="t">&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t54" href="#t54">54</a></span><span class="t"><span class="str">    (end dist, line dist, endpt)</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t55" href="#t55">55</a></span><span class="t"><span class="str">    """</span>&nbsp;</span><span class="r"></span></p>
-    <p class="run"><span class="n"><a id="t56" href="#t56">56</a></span><span class="t">    <span class="nam">starttime</span> <span class="op">=</span> <span class="nam">time</span><span class="op">.</span><span class="nam">time</span><span class="op">(</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
-    <p class="run"><span class="n"><a id="t57" href="#t57">57</a></span><span class="t">    <span class="nam">dist</span> <span class="op">=</span> <span class="nam">mode_search_prob</span><span class="op">.</span><span class="nam">line_dist</span><span class="op">(</span><span class="op">*</span><span class="nam">ind</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
-    <p class="run"><span class="n"><a id="t58" href="#t58">58</a></span><span class="t">    <span class="nam">end_dist</span> <span class="op">=</span> <span class="nam">mode_search_prob</span><span class="op">.</span><span class="nam">end_dist</span><span class="op">(</span><span class="op">*</span><span class="nam">ind</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
-    <p class="run"><span class="n"><a id="t59" href="#t59">59</a></span><span class="t">    <span class="nam">endpt</span> <span class="op">=</span> <span class="op">[</span><span class="nam">mode_search_prob</span><span class="op">.</span><span class="nam">end_x</span><span class="op">(</span><span class="op">*</span><span class="nam">ind</span><span class="op">)</span><span class="op">,</span> <span class="nam">mode_search_prob</span><span class="op">.</span><span class="nam">end_y</span><span class="op">(</span><span class="op">*</span><span class="nam">ind</span><span class="op">)</span><span class="op">]</span>&nbsp;</span><span class="r"></span></p>
+    <p class="mis show_mis"><span class="n"><a id="t56" href="#t56">56</a></span><span class="t">    <span class="nam">starttime</span> <span class="op">=</span> <span class="nam">time</span><span class="op">.</span><span class="nam">time</span><span class="op">(</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
+    <p class="mis show_mis"><span class="n"><a id="t57" href="#t57">57</a></span><span class="t">    <span class="nam">dist</span> <span class="op">=</span> <span class="nam">mode_search_prob</span><span class="op">.</span><span class="nam">line_dist</span><span class="op">(</span><span class="op">*</span><span class="nam">ind</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
+    <p class="mis show_mis"><span class="n"><a id="t58" href="#t58">58</a></span><span class="t">    <span class="nam">end_dist</span> <span class="op">=</span> <span class="nam">mode_search_prob</span><span class="op">.</span><span class="nam">end_dist</span><span class="op">(</span><span class="op">*</span><span class="nam">ind</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
+    <p class="mis show_mis"><span class="n"><a id="t59" href="#t59">59</a></span><span class="t">    <span class="nam">endpt</span> <span class="op">=</span> <span class="op">[</span><span class="nam">mode_search_prob</span><span class="op">.</span><span class="nam">end_x</span><span class="op">(</span><span class="op">*</span><span class="nam">ind</span><span class="op">)</span><span class="op">,</span> <span class="nam">mode_search_prob</span><span class="op">.</span><span class="nam">end_y</span><span class="op">(</span><span class="op">*</span><span class="nam">ind</span><span class="op">)</span><span class="op">]</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t60" href="#t60">60</a></span><span class="t">&nbsp;</span><span class="r"></span></p>
-    <p class="run"><span class="n"><a id="t61" href="#t61">61</a></span><span class="t">    <span class="key">if</span> <span class="nam">print_time</span><span class="op">:</span>&nbsp;</span><span class="r"></span></p>
+    <p class="mis show_mis"><span class="n"><a id="t61" href="#t61">61</a></span><span class="t">    <span class="key">if</span> <span class="nam">print_time</span><span class="op">:</span>&nbsp;</span><span class="r"></span></p>
     <p class="mis show_mis"><span class="n"><a id="t62" href="#t62">62</a></span><span class="t">        <span class="nam">print</span><span class="op">(</span><span class="nam">str</span><span class="op">(</span><span class="nam">print_time</span><span class="op">)</span><span class="op">+</span><span class="str">" Interface Exec Time: "</span><span class="op">+</span><span class="nam">str</span><span class="op">(</span><span class="nam">time</span><span class="op">.</span><span class="nam">time</span><span class="op">(</span><span class="op">)</span><span class="op">-</span><span class="nam">starttime</span><span class="op">)</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
-    <p class="run"><span class="n"><a id="t63" href="#t63">63</a></span><span class="t">    <span class="key">if</span> <span class="nam">show_plot</span><span class="op">:</span>&nbsp;</span><span class="r"></span></p>
+    <p class="mis show_mis"><span class="n"><a id="t63" href="#t63">63</a></span><span class="t">    <span class="key">if</span> <span class="nam">show_plot</span><span class="op">:</span>&nbsp;</span><span class="r"></span></p>
     <p class="mis show_mis"><span class="n"><a id="t64" href="#t64">64</a></span><span class="t">        <span class="nam">hist</span> <span class="op">=</span> <span class="nam">mode_search_prob</span><span class="op">.</span><span class="nam">hist</span>&nbsp;</span><span class="r"></span></p>
     <p class="mis show_mis"><span class="n"><a id="t65" href="#t65">65</a></span><span class="t">        <span class="nam">hist</span><span class="op">.</span><span class="nam">plot_trajectories</span><span class="op">(</span><span class="str">'flows.pos.s.x'</span><span class="op">,</span> <span class="str">'flows.pos.s.y'</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
-    <p class="run"><span class="n"><a id="t66" href="#t66">66</a></span><span class="t">    <span class="key">return</span> <span class="nam">dist</span><span class="op">,</span> <span class="nam">end_dist</span><span class="op">,</span>  <span class="nam">endpt</span>&nbsp;</span><span class="r"></span></p>
+    <p class="mis show_mis"><span class="n"><a id="t66" href="#t66">66</a></span><span class="t">    <span class="key">return</span> <span class="nam">dist</span><span class="op">,</span> <span class="nam">end_dist</span><span class="op">,</span>  <span class="nam">endpt</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t67" href="#t67">67</a></span><span class="t">&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t68" href="#t68">68</a></span><span class="t">&nbsp;</span><span class="r"></span></p>
     <p class="run"><span class="n"><a id="t69" href="#t69">69</a></span><span class="t"><span class="key">def</span> <span class="nam">f_1</span><span class="op">(</span><span class="nam">sol</span><span class="op">)</span><span class="op">:</span>&nbsp;</span><span class="r"></span></p>
@@ -930,7 +930,7 @@
             <a id="nextFileLink" class="nav" href="d_29f45ac386dd7f61_untitled2_py.html">&#xbb; next</a>
             &nbsp; &nbsp; &nbsp;
             <a class="nav" href="https://coverage.readthedocs.io/en/7.4.0">coverage.py v7.4.0</a>,
-            created at 2024-02-02 16:34 -0800
+            created at 2024-05-10 11:29 -0700
         </p>
     </div>
 </footer>

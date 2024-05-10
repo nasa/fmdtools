@@ -2,7 +2,7 @@
 <html>
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-    <title>Coverage for fmdtools\define\architecture\action.py: 79%</title>
+    <title>Coverage for fmdtools\define\architecture\action.py: 76%</title>
     <link rel="icon" sizes="32x32" href="favicon_32.png">
     <link rel="stylesheet" href="style.css" type="text/css">
     <script type="text/javascript" src="coverage_html.js" defer></script>
@@ -12,7 +12,7 @@
     <div class="content">
         <h1>
             <span class="text">Coverage for </span><b>fmdtools\define\architecture\action.py</b>:
-            <span class="pc_cov">79%</span>
+            <span class="pc_cov">76%</span>
         </h1>
         <aside id="help_panel_wrapper">
             <input id="help_panel_state" type="checkbox">
@@ -55,8 +55,8 @@
         </aside>
         <h2>
             <span class="text">103 statements &nbsp;</span>
-            <button type="button" class="run button_toggle_run" value="run" data-shortcut="r" title="Toggle lines run">81<span class="text"> run</span></button>
-            <button type="button" class="mis show_mis button_toggle_mis" value="mis" data-shortcut="m" title="Toggle lines missing">22<span class="text"> missing</span></button>
+            <button type="button" class="run button_toggle_run" value="run" data-shortcut="r" title="Toggle lines run">78<span class="text"> run</span></button>
+            <button type="button" class="mis show_mis button_toggle_mis" value="mis" data-shortcut="m" title="Toggle lines missing">25<span class="text"> missing</span></button>
             <button type="button" class="exc show_exc button_toggle_exc" value="exc" data-shortcut="x" title="Toggle lines excluded">0<span class="text"> excluded</span></button>
         </h2>
         <p class="text">
@@ -65,7 +65,7 @@
             <a id="nextFileLink" class="nav" href="d_3d99ab35d814b52d_base_py.html">&#xbb; next</a>
             &nbsp; &nbsp; &nbsp;
             <a class="nav" href="https://coverage.readthedocs.io/en/7.4.0">coverage.py v7.4.0</a>,
-            created at 2024-02-02 16:34 -0800
+            created at 2024-05-10 11:29 -0700
         </p>
         <aside class="hidden">
             <button type="button" class="button_next_chunk" data-shortcut="j"/>
@@ -122,7 +122,7 @@
     <p class="pln"><span class="n"><a id="t40" href="#t40">40</a></span><span class="t"><span class="str">        Defines whether the action sequence graph is reset to the initial state each</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t41" href="#t41">41</a></span><span class="t"><span class="str">        time-step (True) or stays in the current action (False). Default is False.</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t42" href="#t42">42</a></span><span class="t"><span class="str">    """</span>&nbsp;</span><span class="r"></span></p>
-    <p class="run"><span class="n"><a id="t43" href="#t43">43</a></span><span class="t">    <span class="nam">__slots__</span> <span class="op">=</span> <span class="op">[</span><span class="str">'acts'</span><span class="op">,</span> <span class="str">'action_graph'</span><span class="op">,</span> <span class="str">'flow_graph'</span><span class="op">,</span> <span class="str">'faultmodes'</span><span class="op">,</span> <span class="str">'active_actions'</span><span class="op">]</span>&nbsp;</span><span class="r"></span></p>
+    <p class="run"><span class="n"><a id="t43" href="#t43">43</a></span><span class="t">    <span class="nam">__slots__</span> <span class="op">=</span> <span class="op">[</span><span class="str">'acts'</span><span class="op">,</span> <span class="str">'conds'</span><span class="op">,</span> <span class="str">'action_graph'</span><span class="op">,</span> <span class="str">'flow_graph'</span><span class="op">,</span> <span class="str">'faultmodes'</span><span class="op">,</span> <span class="str">'active_actions'</span><span class="op">]</span>&nbsp;</span><span class="r"></span></p>
     <p class="run"><span class="n"><a id="t44" href="#t44">44</a></span><span class="t">    <span class="nam">initial_action</span> <span class="op">=</span> <span class="str">"auto"</span>&nbsp;</span><span class="r"></span></p>
     <p class="run"><span class="n"><a id="t45" href="#t45">45</a></span><span class="t">    <span class="nam">state_rep</span> <span class="op">=</span> <span class="str">"finite-state"</span>&nbsp;</span><span class="r"></span></p>
     <p class="run"><span class="n"><a id="t46" href="#t46">46</a></span><span class="t">    <span class="nam">max_action_prop</span> <span class="op">=</span> <span class="str">"until_false"</span>&nbsp;</span><span class="r"></span></p>
@@ -140,9 +140,9 @@
     <p class="run"><span class="n"><a id="t58" href="#t58">58</a></span><span class="t">        <span class="nam">Architecture</span><span class="op">.</span><span class="nam">__init__</span><span class="op">(</span><span class="nam">self</span><span class="op">,</span> <span class="op">**</span><span class="nam">kwargs</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t59" href="#t59">59</a></span><span class="t">&nbsp;</span><span class="r"></span></p>
     <p class="run"><span class="n"><a id="t60" href="#t60">60</a></span><span class="t">    <span class="key">def</span> <span class="nam">copy</span><span class="op">(</span><span class="nam">self</span><span class="op">,</span> <span class="op">**</span><span class="nam">kwargs</span><span class="op">)</span><span class="op">:</span>&nbsp;</span><span class="r"></span></p>
-    <p class="run"><span class="n"><a id="t61" href="#t61">61</a></span><span class="t">        <span class="nam">cop</span> <span class="op">=</span> <span class="nam">super</span><span class="op">(</span><span class="op">)</span><span class="op">.</span><span class="nam">copy</span><span class="op">(</span><span class="op">**</span><span class="nam">kwargs</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
-    <p class="run"><span class="n"><a id="t62" href="#t62">62</a></span><span class="t">        <span class="nam">cop</span><span class="op">.</span><span class="nam">active_actions</span> <span class="op">=</span> <span class="op">{</span><span class="op">*</span><span class="nam">self</span><span class="op">.</span><span class="nam">active_actions</span><span class="op">}</span>&nbsp;</span><span class="r"></span></p>
-    <p class="run"><span class="n"><a id="t63" href="#t63">63</a></span><span class="t">        <span class="key">return</span> <span class="nam">cop</span>&nbsp;</span><span class="r"></span></p>
+    <p class="mis show_mis"><span class="n"><a id="t61" href="#t61">61</a></span><span class="t">        <span class="nam">cop</span> <span class="op">=</span> <span class="nam">super</span><span class="op">(</span><span class="op">)</span><span class="op">.</span><span class="nam">copy</span><span class="op">(</span><span class="op">**</span><span class="nam">kwargs</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
+    <p class="mis show_mis"><span class="n"><a id="t62" href="#t62">62</a></span><span class="t">        <span class="nam">cop</span><span class="op">.</span><span class="nam">active_actions</span> <span class="op">=</span> <span class="op">{</span><span class="op">*</span><span class="nam">self</span><span class="op">.</span><span class="nam">active_actions</span><span class="op">}</span>&nbsp;</span><span class="r"></span></p>
+    <p class="mis show_mis"><span class="n"><a id="t63" href="#t63">63</a></span><span class="t">        <span class="key">return</span> <span class="nam">cop</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t64" href="#t64">64</a></span><span class="t">&nbsp;</span><span class="r"></span></p>
     <p class="run"><span class="n"><a id="t65" href="#t65">65</a></span><span class="t">    <span class="key">def</span> <span class="nam">reset</span><span class="op">(</span><span class="nam">self</span><span class="op">)</span><span class="op">:</span>&nbsp;</span><span class="r"></span></p>
     <p class="mis show_mis"><span class="n"><a id="t66" href="#t66">66</a></span><span class="t">        <span class="nam">super</span><span class="op">(</span><span class="op">)</span><span class="op">.</span><span class="nam">reset</span><span class="op">(</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
@@ -308,7 +308,7 @@
             <a id="nextFileLink" class="nav" href="d_3d99ab35d814b52d_base_py.html">&#xbb; next</a>
             &nbsp; &nbsp; &nbsp;
             <a class="nav" href="https://coverage.readthedocs.io/en/7.4.0">coverage.py v7.4.0</a>,
-            created at 2024-02-02 16:34 -0800
+            created at 2024-05-10 11:29 -0700
         </p>
     </div>
 </footer>

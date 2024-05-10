@@ -22,9 +22,16 @@ class FunctionArchitecture(Architecture):
     Class representing a functional architecture.
 
     Functional architectures enable the execution of multiple Function objects
-    interacting with each other over time.
-
-    ...
+    interacting with each other over time. The FunctionArchitecture uses an 
+    object-oriented, undirected graph-based model representation to enable the
+    arbitrary propagation of flow states through the functions of the system.
+    As opposed to a *procedural* *directed* graph-based model representation,
+    in which each function has an ``input'' and ``output'', the undirected
+    graph approach enables one to propagate behaviors in multiple directions.
+    For example, in a pump system, closing a valve can be modelled to not just
+    reduce flow in the downstream pipe, but also increase pressure in upstream
+    pipes.
+  
 
     Flexible Roles
     --------------

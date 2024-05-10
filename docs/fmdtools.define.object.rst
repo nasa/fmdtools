@@ -1,5 +1,6 @@
 fmdtools.define.object
 ===========================
+.. automodule:: fmdtools.define.object
 
 The object subpackage provides a representation of base-level objects (i.e., timers, geometric points/lines, coordinates) which can be used to construct a simulation.
 

@@ -233,18 +233,18 @@ class StochasticPumpTests(unittest.TestCase, CommonTests):
                                           showprogress=False)
 
         title = "should show bounds and perc of random variables over time"
-        hist.plot_line('move_water.r.s.eff', 'move_water.s.total_flow',
-                       'wat_2.s.flowrate', 'wat_2.s.pressure',
-                       'import_ee.r.s.effstate', 'import_ee.r.s.grid_noise',
-                       'ee_1.s.voltage', 'sig_1.s.power',
+        hist.plot_line('fxns.move_water.r.s.eff', 'fxns.move_water.s.total_flow',
+                        'flows.wat_2.s.flowrate', 'flows.wat_2.s.pressure',
+                        'fxns.import_ee.r.s.effstate', 'fxns.import_ee.r.s.grid_noise',
+                        'flows.ee_1.s.voltage', 'flows.sig_1.s.power',
                        color='blue', comp_groups={}, aggregation='percentile',
                        title=title)
 
         title = 'should show mean and ci of random variables over time'
-        hist.plot_line('move_water.r.s.eff', 'move_water.s.total_flow',
-                       'wat_2.s.flowrate', 'wat_2.s.pressure',
-                       'import_ee.r.s.effstate', 'import_ee.r.s.grid_noise',
-                       'ee_1.s.voltage', 'sig_1.s.power',
+        hist.plot_line('fxns.move_water.r.s.eff', 'fxns.move_water.s.total_flow',
+                       'flows.wat_2.s.flowrate', 'flows.wat_2.s.pressure',
+                       'fxns.import_ee.r.s.effstate', 'fxns.import_ee.r.s.grid_noise',
+                       'flows.ee_1.s.voltage', 'flows.sig_1.s.power',
                        color='blue', comp_groups={}, aggregation='mean_ci',
                        title=title)
         plt.close('all')

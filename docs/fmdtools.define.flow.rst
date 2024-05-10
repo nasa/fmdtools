@@ -1,21 +1,36 @@
 fmdtools.define.flow
 ===========================
+.. automodule:: fmdtools.define.flow
 
-The flow subpackage provides a representation of flows, which are used to connect Blocks in an Architecture.
+The flow subpackage provides a representation of flows, which are used to connect Blocks in an Architecture. Different types of flows are provided in the following modules, as shown below/
 
-Different types of flows are provided in the following modules:
+.. figure:: figures/Flowtypes.svg
+   :width: 400
+   :alt: Inheritance of flow types classes
+   
+   Different types of flows defined in fmdtools.
 
-* :mod:`base`: for :class:`Flow`, which is used for the base object class used for both objects and blocks/architectures.
-* :mod:`multiflow`: for :class:`MultiFlow` class which represents multiple flows in a combined graph.
-* :mod:`commsflow`: for :class:`CommsFlow` class which represents perception and communications between agents/functions.
+These are provided in the modules:
+
+* :mod:`fmdtools.define.flow.base`: for :class:`Flow`, which is used for the base object class used for both objects and blocks/architectures.
+* :mod:`fmdtools.define.flow.multiflow`: for :class:`MultiFlow` class which represents multiple flows in a combined graph.
+* :mod:`fmdtools.define.flow.commsflow`: for :class:`CommsFlow` class which represents perception and communications between agents/functions.
 
 
 fmdtools.define.flow.base
 --------------------------------
 
-.. automodule:: fmdtools.define.flow.base
+Flow classes are used to represent variables that are shared between blocks, such as connections or a shared environment. Like blocks, flows (see example below) can hold containers (e.g., States, Parameters, etc.) in order to represent different properties:
+ 
+
+.. figure:: figures/Flow.svg
+   :width: 800
+   :alt: example flow class
+   
+   Example of defining and instantiating a :class:`Flow` class to hold x/y fields.
+
+.. autoclass:: fmdtools.define.flow.base.Flow
    :members:
-   :undoc-members:
    :show-inheritance:
 
 fmdtools.define.flow.multiflow
