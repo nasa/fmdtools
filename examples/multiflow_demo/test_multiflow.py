@@ -6,13 +6,13 @@ Created on Mon Jun 12 17:45:26 2023
 """
 import unittest
 import numpy as np
-from examples.multiflow_demo.multiflow_demo import TestModel
+from examples.multiflow_demo.multiflow_demo import ExModel
 from fmdtools.sim import propagate
 
 
 class define_Tests(unittest.TestCase):
     def setUp(self):
-        self.mdl = TestModel()
+        self.mdl = ExModel()
         self.endresults, self.mdlhist = propagate.nominal(self.mdl)
 
     def test_multiflow_passing(self):

@@ -5,6 +5,9 @@ Created on Tue May 16 15:12:39 2023
 @author: dhulse
 """
 import pytest
+# let more tests be created during testing
+from matplotlib import pyplot as plt
+plt.rcParams['figure.max_open_warning'] = 50
 # import sys
 
 # NOTE: If report won't generate with error:
@@ -13,7 +16,7 @@ import pytest
 
 if __name__=="__main__":
     # requires pytest, nbmake, pytest-html, pytest-cov
-    
+
     # for testing modules with doctests
     doctest_modules = ["fmdtools/define/container/base.py",
                        "fmdtools/define/container/state.py",
@@ -46,7 +49,7 @@ if __name__=="__main__":
     # retcode = pytest.main(["--doctest-modules", *doctest_modules])
 
     # for testing all unittests
-    # retcode = pytest.main(["--continue-on-collection-errors"])
+    retcode = pytest.main(["--continue-on-collection-errors"])
 
     # retcode = pytest.main(["--html=./reports/junit/report.html",
     #                        "--self-contained-html",
@@ -65,7 +68,7 @@ if __name__=="__main__":
                       "examples/tank/Tank_Analysis.ipynb",
                       "examples/taxiway/Paper_Notebook.ipynb"
                       ]
-    retcode = pytest.main(["--nbmake", *fast_notebooks])
+    # retcode = pytest.main(["--nbmake", *fast_notebooks])
 
     # for testing longer-running notebooks (>~20s each)
     slow_notebooks = ["examples/multirotor/Urban_Drone_Demo.ipynb",
@@ -112,6 +115,9 @@ if __name__=="__main__":
     #                        "--nbmake",
     #                        *["--ignore="+notebook for notebook in ignore_notebooks],
     #                        "--continue-on-collection-errors"])
+
+    # this should close any open plots
+    plt.close()
 
     # after creating test report, update the badge using this in powershell:
     # !Powershell.exe -Command "genbadge tests"
