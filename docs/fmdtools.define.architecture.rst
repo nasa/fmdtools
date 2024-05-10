@@ -42,13 +42,23 @@ fmdtools.define.architecture.component
 fmdtools.define.architecture.function
 --------------------------------
 
-   Class used to define the high-level function-flow structure of a system model.
+The FunctionArchitecture class is used to define the high-level function-flow structure of a system model. It is a composition of instantiated Function and Flow objects, as shown below:
+
+.. figure:: figures/FunctionArchitecture.svg
+   :width: 800
+   :alt: Structure of a Model
+   
+   Example Function Architecture connecting function objects with flow objects.
+
+To define a FunctionArchitecture class, it can be helpful to use the following code template:
 
 .. figure:: figures/model_structure.png
    :width: 800
    :alt: Structure of a Model
+   
+   Code template for FunctionArchitecture classes.
 
-.. automodule:: fmdtools.define.architecture.function
+.. autoclass:: fmdtools.define.architecture.function.FunctionArchitecture
    :members:
    :undoc-members:
    :show-inheritance:

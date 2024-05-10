@@ -1,9 +1,15 @@
 fmdtools.define.container
 ===========================
 
-The containers subpackage provides the elemental building blocks (i.e., containers for holding states, modes, etc.) for developing simulations.
+The containers subpackage provides the elemental building blocks (i.e., containers for holding states, modes, etc.) for developing simulations, shown below.
 
-These sub-attributes are provided in the following modules:
+.. figure:: figures/Containers.svg
+   :width: 800
+   :alt: fmdtools container classes
+   
+   Container classes in fmdtools and their inheritance.
+
+These classes are provided in the following modules:
 
 * :mod:`base`: for :class:`BaseContainer`, which all the other containers inherit from.
 * :mod:`mode`: for :class:`Mode`, which represents discrete modes (nominal and faulty) which the system may progress through over time,
@@ -34,7 +40,15 @@ fmdtools.define.container.mode
 fmdtools.define.container.state
 --------------------------------
 
-.. automodule:: fmdtools.define.container.state
+State classes are used to represent mutables properties of the system that change over time. State classes are extended and deployed by the user, as shown below: 
+
+.. figure:: figures/State.svg
+   :width: 600
+   :alt: example state class
+   
+   Example of extending the :class:`State` class to hold x/y fields.
+
+.. autoclass:: fmdtools.define.container.state.State
    :members: State
    :show-inheritance:
 
@@ -42,9 +56,17 @@ fmdtools.define.container.state
 fmdtools.define.container.parameter
 --------------------------------
 
-.. automodule:: fmdtools.define.container.parameter
+Parameter classes are used to represent immutable properties of the system. Parameter classes are extended and deployed by the user, as shown below: 
+
+.. figure:: figures/Parameter.svg
+   :width: 600
+   :alt: example state class
+   
+   Example of extending the :class:`Parameter` class to hold x/y/z fields.
+
+.. autoclass:: fmdtools.define.container.parameter.Parameter
    :members:
-   :undoc-members:
+   :show-inheritance:
 
 fmdtools.define.container.rand
 --------------------------------
