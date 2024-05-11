@@ -4,10 +4,6 @@ Human Rover Model
 
 @authors: mmohame2 and dhulse
 
-
-NOTE: Model not yet adapted but preserved here for historical reasons.
-See: RAD-245
-
 Functions:
     - Communications
     - Avionics
@@ -138,6 +134,7 @@ class PerceptionMode(HumanActionMode):
     wrong_position : Mode
         Position not percieved.
     """
+
     fm_args = ("failed_no_action", "not_visible", "wrong_position")
     opermodes = ('nominal', 'no_action')
 
@@ -151,6 +148,7 @@ class Percieve(Action, GenericHumanAction):
     Examples
     --------
     >>> p = Percieve()
+    >>> p.comms.s.on = True
     >>> p.comms.s.pos.x = 1.0
     >>> p.comms.s.video.lin_ux = 2.0
     >>> p.behavior(1)
@@ -385,6 +383,7 @@ class HumanActions(ActionArchitecture):
     Examples
     --------
     >>> ha = HumanActions()
+    >>> ha.flows['comms'].s.on = True
     >>> ha.active_actions
     {'look'}
     >>> ha('dynamic', 1, False, 1)
@@ -498,8 +497,8 @@ asg_pos = {'look': [-0.9, 0.88], 'percieve': [-0.68, 0.62], 'comms': [-0.66, -0.
 
 
 if __name__ == "__main__":
-    #import doctest
-    #doctest.testmod(verbose=True)
+    import doctest
+    doctest.testmod(verbose=True)
 
     from fmdtools.analyze.graph import ActionArchitectureGraph
     hum = HumanActions()
