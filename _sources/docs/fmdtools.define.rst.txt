@@ -1,11 +1,12 @@
 fmdtools.define
 ===========================
+.. automodule:: fmdtools.define
 
 The define package provides the building blocks to develop a simulation. Simulations are defined in the sub-classes of the :class:`Simulable` class (in the :mod:`block` and :mod:`architecture` subpackages), as shown below:
 
 .. figure:: figures/block_inheritance.svg
    :width: 800
-   :alt: Structure simulable fmdtools classes
+   :alt: Inheritance of simulable fmdtools classes
    
    Structure of simulable fmdtools subclasses used for developing simulations. 
  
@@ -21,6 +22,7 @@ Aside from their internal methods defining behavior, events/indicators, and resu
    fmdtools.define.container
    fmdtools.define.flow
    fmdtools.define.object
+
 
 fmdtools.define.base
 --------------------------------

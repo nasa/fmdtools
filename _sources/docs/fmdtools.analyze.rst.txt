@@ -1,5 +1,6 @@
 fmdtools.analyze
 ===========================
+.. automodule:: fmdtools.analyze
 
 .. image:: figures/analyze_module_structure.png
    :width: 800

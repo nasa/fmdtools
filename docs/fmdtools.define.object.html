@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>fmdtools.define.object &mdash; fmdtools 2.0-rc-2 documentation</title>
+  <title>fmdtools.define.object &mdash; fmdtools 2.0-rc-3 documentation</title>
       <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
     <link rel="shortcut icon" href="../_static/fmdtools_ico.ico"/>
@@ -47,15 +47,26 @@
         </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
               <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="../README.html">Overview</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../README.html#about">About</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../README.html#flexible-modelling-paradigm">Flexible Modelling Paradigm</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../README.html#powerful-simulation-techniques">Powerful Simulation Techniques</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../README.html#efficient-analysis-process">Efficient Analysis Process</a></li>
+</ul>
+</li>
 <li class="toctree-l2"><a class="reference internal" href="../README.html#getting-started">Getting Started</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="../README.html#prerequisites">Prerequisites</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../README.html#examples">Examples</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../README.html#set-up-python-environment">Set up python environment</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../README.html#install-fmdtools">Install fmdtools</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../README.html#dependencies">Dependencies</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../README.html#explore-tutorials-and-resources">Explore Tutorials and Resources</a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="../README.html#contributions">Contributions</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="../README.html#contributors">Contributors</a></li>
 </ul>
 </li>
+<li class="toctree-l2"><a class="reference internal" href="../README.html#citing-this-repository">Citing this repository</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../README.html#license-notices">License/Notices</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="../README.html#disclaimers">Disclaimers</a></li>
 </ul>
@@ -63,14 +74,11 @@
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="Development%20Guide.html">Development Guide</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="Development%20Guide.html#why-fmdtools">Why fmdtools?</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="Development%20Guide.html#key-features">Key Features</a></li>
-</ul>
-</li>
-<li class="toctree-l2"><a class="reference internal" href="Development%20Guide.html#intro-to-fmdtools">Intro to fmdtools</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="Development%20Guide.html#why-fmdtools">Why fmdtools?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Development%20Guide.html#introductory-tutorial">Introductory Tutorial</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="Intro_to_fmdtools.html">Intro to resilience modeling, simulation, and visualization in Python with fmdtools.</a><ul>
 <li class="toctree-l4"><a class="reference internal" href="Intro_to_fmdtools.html#author-daniel-hulse">Author: Daniel Hulse</a></li>
-<li class="toctree-l4"><a class="reference internal" href="Intro_to_fmdtools.html#version-2-0-rc-2">Version: 2.0-rc-2</a></li>
+<li class="toctree-l4"><a class="reference internal" href="Intro_to_fmdtools.html#version-2-0-rc-3">Version: 2.0-rc-3</a></li>
 </ul>
 </li>
 <li class="toctree-l3"><a class="reference internal" href="Intro_to_fmdtools.html#overview">Overview</a></li>
@@ -104,26 +112,7 @@
 <li class="toctree-l3"><a class="reference internal" href="Intro_to_fmdtools.html#further-reading-links">Further Reading/Links</a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="Development%20Guide.html#contributions">Contributions</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="Development%20Guide.html#repo-structure">Repo Structure</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="Development%20Guide.html#remote-structure">Remote Structure</a></li>
-</ul>
-</li>
-<li class="toctree-l3"><a class="reference internal" href="Development%20Guide.html#development-process">Development Process</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="Development%20Guide.html#release-checklist">Release Checklist</a></li>
-<li class="toctree-l4"><a class="reference internal" href="Development%20Guide.html#upload-to-pypi">Upload to PyPI</a></li>
-</ul>
-</li>
-<li class="toctree-l3"><a class="reference internal" href="Development%20Guide.html#roles">Roles</a></li>
-<li class="toctree-l3"><a class="reference internal" href="Development%20Guide.html#documentation">Documentation</a></li>
-<li class="toctree-l3"><a class="reference internal" href="Development%20Guide.html#style-formatting">Style/Formatting</a></li>
-<li class="toctree-l3"><a class="reference internal" href="Development%20Guide.html#testing">Testing</a></li>
-<li class="toctree-l3"><a class="reference internal" href="Development%20Guide.html#contributors">Contributors</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="../CONTRIBUTORS.html">CONTRIBUTORS</a></li>
-</ul>
-</li>
-</ul>
-</li>
+<li class="toctree-l2"><a class="reference internal" href="Development%20Guide.html#glossary">Glossary</a></li>
 <li class="toctree-l2"><a class="reference internal" href="Development%20Guide.html#model-development-best-practices">Model Development Best Practices</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="Development%20Guide.html#pay-attention-to-and-document-the-fmdtools-version">Pay attention to and document the fmdtools version</a></li>
 <li class="toctree-l3"><a class="reference internal" href="Development%20Guide.html#plan-your-model-to-avoid-technical-debt">Plan your model to avoid technical debt</a></li>
@@ -138,171 +127,106 @@
 <li class="toctree-l3"><a class="reference internal" href="Development%20Guide.html#see-also">See also</a></li>
 </ul>
 </li>
+<li class="toctree-l2"><a class="reference internal" href="Development%20Guide.html#how-to-contribute">How to Contribute</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="Development%20Guide.html#repo-structure">Repo Structure</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="Development%20Guide.html#remote-structure">Remote Structure</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="Development%20Guide.html#development-process">Development Process</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="Development%20Guide.html#release-checklist">Release Checklist</a></li>
+<li class="toctree-l4"><a class="reference internal" href="Development%20Guide.html#upload-to-pypi">Upload to PyPI</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="Development%20Guide.html#roles">Roles</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Development%20Guide.html#documentation">Documentation</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Development%20Guide.html#style-formatting">Style/Formatting</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Development%20Guide.html#testing">Testing</a></li>
+</ul>
+</li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../examples/Examples.html">Examples</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="../examples/Examples.html#pump">Pump</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="../examples/pump/Tutorial_complete.html">fmdtools Tutorial</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="../examples/pump/Tutorial_complete.html#1.)-Loading-the-environment-and-model">1.) Loading the environment and model</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../examples/pump/Tutorial_complete.html#2.),-3.),-and-4.)-Simulate-and-visualize-the-results!">2.), 3.), and 4.) Simulate and visualize the results!</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../examples/pump/Tutorial_complete.html#5.)-Saving-Work">5.) Saving Work</a></li>
-</ul>
-</li>
-<li class="toctree-l3"><a class="reference internal" href="../examples/pump/Pump_Example_Notebook.html">Pump Example Notebook</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="../examples/pump/Pump_Example_Notebook.html#Initial-Model-Checks">Initial Model Checks</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../examples/pump/Pump_Example_Notebook.html#History">History</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../examples/pump/Pump_Example_Notebook.html#Propagating-and-Viewing-Results-for-Individual-Faults">Propagating and Viewing Results for Individual Faults</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../examples/pump/Pump_Example_Notebook.html#Visualization-of-resilience-metrics">Visualization of resilience metrics</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../examples/pump/Pump_Example_Notebook.html#Running-a-List-of-Faults">Running a List of Faults</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../examples/pump/Pump_Example_Notebook.html#Running-a-Fault-Sampling-Approach">Running a Fault Sampling Approach</a></li>
-</ul>
-</li>
-<li class="toctree-l3"><a class="reference internal" href="../examples/pump/Parallelism_Tutorial.html">Using Parallel Computing in fmdtools</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="../examples/pump/Parallelism_Tutorial.html#Model-Checks">Model Checks</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../examples/pump/Parallelism_Tutorial.html#Using-Parallelism-in-Simulation">Using Parallelism in Simulation</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../examples/pump/Parallelism_Tutorial.html#Performance-Comparison">Performance Comparison</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../examples/pump/Parallelism_Tutorial.html#Comparison:-Lower-Tracking-Time-Resolution">Comparison: Lower Tracking Time Resolution</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../examples/pump/Parallelism_Tutorial.html#Comparison-Conclusions:">Comparison Conclusions:</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../examples/pump/Parallelism_Tutorial.html#Further-Computational-Cost-Reduction-via-Profiling">Further Computational Cost Reduction via Profiling</a></li>
-</ul>
-</li>
-<li class="toctree-l3"><a class="reference internal" href="../examples/pump/Optimization.html">Optimization using the ProblemInterface class</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="../examples/pump/Optimization.html#Problem-Setup">Problem Setup</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../examples/pump/Optimization.html#Problem-interfaces">Problem interfaces</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../examples/pump/Optimization.html#Optimization:">Optimization:</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../examples/pump/Optimization.html#Multi-scenario-Optimization">Multi-scenario Optimization</a></li>
-</ul>
-</li>
-<li class="toctree-l3"><a class="reference internal" href="../examples/pump/Stochastic_Modelling.html">Stochastic Modelling in fmdtools</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="../examples/pump/Stochastic_Modelling.html#Model-Setup">Model Setup</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../examples/pump/Stochastic_Modelling.html#Simulation-and-Analysis">Simulation and Analysis</a></li>
-</ul>
-</li>
-<li class="toctree-l3"><a class="reference internal" href="../examples/pump/AST_Sampling.html">fmdtools-AdaStress integration</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="../examples/pump/AST_Sampling.html#Python-setup:">Python setup:</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../examples/pump/AST_Sampling.html#Running-AdaStress-Methods">Running AdaStress Methods</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../examples/pump/AST_Sampling.html#MCTS">MCTS</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../examples/pump/AST_Sampling.html#Pump">Pump</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../examples/pump/AST_Sampling.html#Simulator">Simulator</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../examples/pump/readme.html">Pump Model</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../examples/pump/readme.html#models">Models</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../examples/pump/readme.html#scripts-and-tests">Scripts and tests:</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../examples/pump/readme.html#notebooks">Notebooks</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../examples/pump/readme.html#references">References</a></li>
 </ul>
 </li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="../examples/Examples.html#multirotor">Multirotor</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="../examples/multirotor/Demonstration.html">fmdtools Paper Demonstration</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="../examples/multirotor/Demonstration.html#Initial-Network-Model">Initial Network Model</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../examples/multirotor/Demonstration.html#Setting-Node-Positions">Setting Node Positions</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../examples/multirotor/Demonstration.html#Static-Model">Static Model</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../examples/multirotor/Demonstration.html#Dynamic-Model">Dynamic Model</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../examples/multirotor/Demonstration.html#Hierarchical-Model">Hierarchical Model</a></li>
-</ul>
-</li>
-<li class="toctree-l3"><a class="reference internal" href="../examples/multirotor/Urban_Drone_Demo.html">Urban Drone Demo</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="../examples/multirotor/Urban_Drone_Demo.html#Model-Overview">Model Overview</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../examples/multirotor/Urban_Drone_Demo.html#Nominal-Simulation">Nominal Simulation</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../examples/multirotor/Urban_Drone_Demo.html#Resilience-model">Resilience model</a></li>
-</ul>
-</li>
-<li class="toctree-l3"><a class="reference internal" href="../examples/multirotor/Multirotor_Optimization.html">Integrated Resilience Optimization Architectures</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="../examples/multirotor/Multirotor_Optimization.html#Design-Model">Design Model</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../examples/multirotor/Multirotor_Optimization.html#Operational-Model">Operational Model</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../examples/multirotor/Multirotor_Optimization.html#Resilience-Model">Resilience Model</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../examples/multirotor/Multirotor_Optimization.html#Combined-Simulation/Optimization">Combined Simulation/Optimization</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../examples/multirotor/readme.html">Drone Model</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../examples/multirotor/readme.html#models">Models</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../examples/multirotor/readme.html#scripts-and-tests">Scripts and tests:</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../examples/multirotor/readme.html#notebooks">Notebooks</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../examples/multirotor/readme.html#references">References</a></li>
 </ul>
 </li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="../examples/Examples.html#tank">Tank</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="../examples/tank/Tank_Analysis.html">Hold-up Tank Model</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="../examples/tank/Tank_Analysis.html#Verifying-the-nominal-state:">Verifying the nominal state:</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../examples/tank/Tank_Analysis.html#History">History</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../examples/tank/Tank_Analysis.html#What-happens-under-component-faults?">What happens under component faults?</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../examples/tank/Tank_Analysis.html#What-about-human-induced-faults?">What about human-induced faults?</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../examples/tank/Tank_Analysis.html#Evaluating-Joint-Component-Human-fault-modes">Evaluating Joint Component-Human fault modes</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../examples/tank/Tank_Analysis.html#Testing-different-reaction-times">Testing different reaction times</a></li>
-</ul>
-</li>
-<li class="toctree-l3"><a class="reference internal" href="../examples/tank/Tank_Optimization.html">Cooling Tank Model Optimization</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../examples/tank/Tank_Optimization.html#Simulation">Simulation</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="../examples/tank/Tank_Optimization.html#Verifying-the-nominal-state:">Verifying the nominal state:</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../examples/tank/Tank_Optimization.html#What-happens-under-component-faults?">What happens under component faults?</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../examples/tank/Tank_Optimization.html#Full-set-of-modes">Full set of modes</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../examples/tank/Tank_Optimization.html#Defining-Optimization-Problem">Defining Optimization Problem</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../examples/tank/Tank_Optimization.html#Optimization">Optimization</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../examples/tank/readme.html">Tank Model</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../examples/tank/readme.html#models">Models</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../examples/tank/readme.html#scripts-and-tests">Scripts and tests:</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../examples/tank/readme.html#notebooks">Notebooks</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../examples/tank/readme.html#references">References</a></li>
 </ul>
 </li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="../examples/Examples.html#eps">EPS</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="../examples/eps/EPS_Example_Notebook.html">EPS Example Notebook</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../examples/eps/readme.html">EPS Model</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../examples/eps/readme.html#models">Models</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../examples/eps/readme.html#scripts-and-tests">Scripts and tests:</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../examples/eps/readme.html#notebooks">Notebooks</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../examples/eps/readme.html#references">References</a></li>
+</ul>
+</li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="../examples/Examples.html#action-sequence-graph">Action Sequence Graph</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="../examples/asg_demo/Action_Sequence_Graph.html">Action Sequence Graph Tutorial</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="../examples/asg_demo/Action_Sequence_Graph.html#Function-level-Simulation">Function-level Simulation</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../examples/asg_demo/Action_Sequence_Graph.html#Model-Simulation">Model Simulation</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../examples/asg_demo/Action_Sequence_Graph.html#Fault-Simulation">Fault Simulation</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../examples/asg_demo/readme.html">ASG Model</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../examples/asg_demo/readme.html#models">Models</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../examples/asg_demo/readme.html#scripts-and-tests">Scripts and tests:</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../examples/asg_demo/readme.html#notebooks">Notebooks</a></li>
 </ul>
 </li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="../examples/Examples.html#rover">Rover</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="../examples/rover/Rover_Setup_Notebook.html">Rover Model Explanation and Preliminaries</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="../examples/rover/Rover_Setup_Notebook.html#Model-Setup">Model Setup</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../examples/rover/Rover_Setup_Notebook.html#Model-simulation">Model simulation</a></li>
-</ul>
-</li>
-<li class="toctree-l3"><a class="reference internal" href="../examples/rover/HFAC_Analyses/HFAC_Analyses.html">More Human Failure Analyses</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../examples/rover/HFAC_Analyses/IDETC_Human_Paper_Analysis.html">Human Failure Representation</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="../examples/rover/HFAC_Analyses/IDETC_Human_Paper_Analysis.html#Testing-behavioral-simulation">Testing behavioral simulation</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../examples/rover/HFAC_Analyses/IDETC_Human_Paper_Analysis.html#Testing-Faults">Testing Faults</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../examples/rover/HFAC_Analyses/IDETC_Human_Paper_Analysis.html#Examining-Performance-Shaping-Factors">Examining Performance Shaping Factors</a></li>
-</ul>
-</li>
-<li class="toctree-l3"><a class="reference internal" href="../examples/rover/degradation_modelling/Degradation_Modelling_Notebook.html">Degradation Modelling</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="../examples/rover/degradation_modelling/Degradation_Modelling_Notebook.html#Drive-Degradation">Drive Degradation</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../examples/rover/degradation_modelling/Degradation_Modelling_Notebook.html#Human-Degradation">Human Degradation</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../examples/rover/degradation_modelling/Degradation_Modelling_Notebook.html#Combined-Degradation">Combined Degradation</a></li>
-</ul>
-</li>
-<li class="toctree-l3"><a class="reference internal" href="../examples/rover/fault_sampling/Rover_Mode_Notebook.html">Synthetic Mode Generation</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="../examples/rover/fault_sampling/Rover_Mode_Notebook.html#Cluster-Analysis">Cluster Analysis</a></li>
-</ul>
-</li>
-<li class="toctree-l3"><a class="reference internal" href="../examples/rover/optimization/Search_Comparison.html">Faulty State-Space Search Method Comparison</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="../examples/rover/optimization/Search_Comparison.html#Performance-Comparison">Performance Comparison</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../examples/rover/optimization/Search_Comparison.html#Comparing-Solutions-over-weights---Fault-Space-Formulation">Comparing Solutions over weights - Fault-Space Formulation</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../examples/rover/optimization/Search_Comparison.html#Comparing-Solutions-over-weights---Result-Space-Formulation">Comparing Solutions over weights - Result-Space Formulation</a></li>
-</ul>
-</li>
-<li class="toctree-l3"><a class="reference internal" href="../examples/rover/optimization/Rover_Response_Optimization.html">Rover Response Optimization</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="../examples/rover/optimization/Rover_Response_Optimization.html#Optimization">Optimization</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../examples/rover/readme.html">Rover Model</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../examples/rover/readme.html#models">Models</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../examples/rover/readme.html#scripts-and-tests">Scripts and tests:</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../examples/rover/readme.html#notebooks">Notebooks</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../examples/rover/readme.html#references">References</a></li>
 </ul>
 </li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="../examples/Examples.html#multiflow-demo">Multiflow Demo</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="../examples/multiflow_demo/Multiflow_and_Commsflow_Demonstration.html">Demonstration on Using MultiFlow and CommsFlow</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="../examples/multiflow_demo/Multiflow_and_Commsflow_Demonstration.html#Bulding-Flows">Bulding Flows</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../examples/multiflow_demo/readme.html">MultiFlow Demo Model</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../examples/multiflow_demo/readme.html#models">Models</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../examples/multiflow_demo/readme.html#scripts-and-tests">Scripts and tests:</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../examples/multiflow_demo/readme.html#notebooks">Notebooks</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../examples/multiflow_demo/readme.html#references">References</a></li>
 </ul>
 </li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="../examples/Examples.html#taxiway">Taxiway</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="../examples/taxiway/Paper_Notebook.html">Taxiway Model Overview</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="../examples/taxiway/Paper_Notebook.html#Model-Simulation">Model Simulation</a></li>
-</ul>
-</li>
-<li class="toctree-l3"><a class="reference internal" href="../examples/taxiway/Paper_Notebook.html#Fault-Simulation-and-Analysis">Fault Simulation and Analysis</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="../examples/taxiway/Paper_Notebook.html#Perception-Fault---AC-Vision-Fault">Perception Fault - AC Vision Fault</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../examples/taxiway/Paper_Notebook.html#Communications-Fault---Poor-land-command-by-ATC">Communications Fault - Poor land command by ATC</a></li>
-</ul>
-</li>
+<li class="toctree-l3"><a class="reference internal" href="../examples/taxiway/readme.html">Taxiway Model</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../examples/taxiway/readme.html#models">Models</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../examples/taxiway/readme.html#scripts-and-tests">Scripts and tests:</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../examples/taxiway/readme.html#notebooks">Notebooks</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../examples/taxiway/readme.html#references">References</a></li>
 </ul>
 </li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="Glossary.html">Glossary</a></li>
+</ul>
+</li>
 <li class="toctree-l1 current"><a class="reference internal" href="fmdtools.html">Module Reference</a><ul class="current">
 <li class="toctree-l2 current"><a class="reference internal" href="fmdtools.define.html">fmdtools.define</a><ul class="current">
 <li class="toctree-l3"><a class="reference internal" href="fmdtools.define.architecture.html">fmdtools.define.architecture</a><ul>
@@ -317,20 +241,20 @@
 <li class="toctree-l4"><a class="reference internal" href="fmdtools.define.block.html#module-fmdtools.define.block.base">fmdtools.define.block.base</a></li>
 <li class="toctree-l4"><a class="reference internal" href="fmdtools.define.block.html#module-fmdtools.define.block.action">fmdtools.define.block.action</a></li>
 <li class="toctree-l4"><a class="reference internal" href="fmdtools.define.block.html#module-fmdtools.define.block.component">fmdtools.define.block.component</a></li>
-<li class="toctree-l4"><a class="reference internal" href="fmdtools.define.block.html#fmdtools-define-block-function">fmdtools.define.block.function</a></li>
+<li class="toctree-l4"><a class="reference internal" href="fmdtools.define.block.html#module-fmdtools.define.block.function">fmdtools.define.block.function</a></li>
 </ul>
 </li>
 <li class="toctree-l3"><a class="reference internal" href="fmdtools.define.container.html">fmdtools.define.container</a><ul>
 <li class="toctree-l4"><a class="reference internal" href="fmdtools.define.container.html#fmdtools-define-container-base">fmdtools.define.container.base</a></li>
 <li class="toctree-l4"><a class="reference internal" href="fmdtools.define.container.html#module-fmdtools.define.container.mode">fmdtools.define.container.mode</a></li>
-<li class="toctree-l4"><a class="reference internal" href="fmdtools.define.container.html#module-fmdtools.define.container.state">fmdtools.define.container.state</a></li>
+<li class="toctree-l4"><a class="reference internal" href="fmdtools.define.container.html#fmdtools-define-container-state">fmdtools.define.container.state</a></li>
 <li class="toctree-l4"><a class="reference internal" href="fmdtools.define.container.html#fmdtools-define-container-parameter">fmdtools.define.container.parameter</a></li>
 <li class="toctree-l4"><a class="reference internal" href="fmdtools.define.container.html#module-fmdtools.define.container.rand">fmdtools.define.container.rand</a></li>
 <li class="toctree-l4"><a class="reference internal" href="fmdtools.define.container.html#module-fmdtools.define.container.time">fmdtools.define.container.time</a></li>
 </ul>
 </li>
 <li class="toctree-l3"><a class="reference internal" href="fmdtools.define.flow.html">fmdtools.define.flow</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="fmdtools.define.flow.html#module-fmdtools.define.flow.base">fmdtools.define.flow.base</a></li>
+<li class="toctree-l4"><a class="reference internal" href="fmdtools.define.flow.html#fmdtools-define-flow-base">fmdtools.define.flow.base</a></li>
 <li class="toctree-l4"><a class="reference internal" href="fmdtools.define.flow.html#module-fmdtools.define.flow.multiflow">fmdtools.define.flow.multiflow</a></li>
 <li class="toctree-l4"><a class="reference internal" href="fmdtools.define.flow.html#module-fmdtools.define.flow.commsflow">fmdtools.define.flow.commsflow</a></li>
 </ul>
@@ -364,6 +288,13 @@
 </li>
 </ul>
 </li>
+<li class="toctree-l1"><a class="reference internal" href="../CONTRIBUTORS.html">Contributors</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../CONTRIBUTORS.html#internal-contributors">Internal Contributors</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../CONTRIBUTORS.html#external-contributors">External Contributors</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../CONTRIBUTORS.html#alumni-and-interns">Alumni and Interns</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../CONTRIBUTORS.html#fmdtools-at-osu">fmdtools at OSU</a></li>
+</ul>
+</li>
 </ul>
 
         </div>
@@ -392,8 +323,8 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
              
-  <section id="fmdtools-define-object">
-<h1>fmdtools.define.object<a class="headerlink" href="#fmdtools-define-object" title="Permalink to this heading"></a></h1>
+  <section id="module-fmdtools.define.object">
+<span id="fmdtools-define-object"></span><h1>fmdtools.define.object<a class="headerlink" href="#module-fmdtools.define.object" title="Permalink to this heading"></a></h1>
 <p>The object subpackage provides a representation of base-level objects (i.e., timers, geometric points/lines, coordinates) which can be used to construct a simulation.</p>
 <p>These different object classes are provided in the following modules:</p>
 <ul class="simple">

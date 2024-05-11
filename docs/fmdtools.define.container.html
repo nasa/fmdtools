@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>fmdtools.define.container &mdash; fmdtools 2.0-rc-2 documentation</title>
+  <title>fmdtools.define.container &mdash; fmdtools 2.0-rc-3 documentation</title>
       <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
     <link rel="shortcut icon" href="../_static/fmdtools_ico.ico"/>
@@ -47,15 +47,26 @@
         </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
               <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="../README.html">Overview</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../README.html#about">About</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../README.html#flexible-modelling-paradigm">Flexible Modelling Paradigm</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../README.html#powerful-simulation-techniques">Powerful Simulation Techniques</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../README.html#efficient-analysis-process">Efficient Analysis Process</a></li>
+</ul>
+</li>
 <li class="toctree-l2"><a class="reference internal" href="../README.html#getting-started">Getting Started</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="../README.html#prerequisites">Prerequisites</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../README.html#examples">Examples</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../README.html#set-up-python-environment">Set up python environment</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../README.html#install-fmdtools">Install fmdtools</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../README.html#dependencies">Dependencies</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../README.html#explore-tutorials-and-resources">Explore Tutorials and Resources</a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="../README.html#contributions">Contributions</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="../README.html#contributors">Contributors</a></li>
 </ul>
 </li>
+<li class="toctree-l2"><a class="reference internal" href="../README.html#citing-this-repository">Citing this repository</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../README.html#license-notices">License/Notices</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="../README.html#disclaimers">Disclaimers</a></li>
 </ul>
@@ -63,14 +74,11 @@
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="Development%20Guide.html">Development Guide</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="Development%20Guide.html#why-fmdtools">Why fmdtools?</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="Development%20Guide.html#key-features">Key Features</a></li>
-</ul>
-</li>
-<li class="toctree-l2"><a class="reference internal" href="Development%20Guide.html#intro-to-fmdtools">Intro to fmdtools</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="Development%20Guide.html#why-fmdtools">Why fmdtools?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Development%20Guide.html#introductory-tutorial">Introductory Tutorial</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="Intro_to_fmdtools.html">Intro to resilience modeling, simulation, and visualization in Python with fmdtools.</a><ul>
 <li class="toctree-l4"><a class="reference internal" href="Intro_to_fmdtools.html#author-daniel-hulse">Author: Daniel Hulse</a></li>
-<li class="toctree-l4"><a class="reference internal" href="Intro_to_fmdtools.html#version-2-0-rc-2">Version: 2.0-rc-2</a></li>
+<li class="toctree-l4"><a class="reference internal" href="Intro_to_fmdtools.html#version-2-0-rc-3">Version: 2.0-rc-3</a></li>
 </ul>
 </li>
 <li class="toctree-l3"><a class="reference internal" href="Intro_to_fmdtools.html#overview">Overview</a></li>
@@ -104,26 +112,7 @@
 <li class="toctree-l3"><a class="reference internal" href="Intro_to_fmdtools.html#further-reading-links">Further Reading/Links</a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="Development%20Guide.html#contributions">Contributions</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="Development%20Guide.html#repo-structure">Repo Structure</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="Development%20Guide.html#remote-structure">Remote Structure</a></li>
-</ul>
-</li>
-<li class="toctree-l3"><a class="reference internal" href="Development%20Guide.html#development-process">Development Process</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="Development%20Guide.html#release-checklist">Release Checklist</a></li>
-<li class="toctree-l4"><a class="reference internal" href="Development%20Guide.html#upload-to-pypi">Upload to PyPI</a></li>
-</ul>
-</li>
-<li class="toctree-l3"><a class="reference internal" href="Development%20Guide.html#roles">Roles</a></li>
-<li class="toctree-l3"><a class="reference internal" href="Development%20Guide.html#documentation">Documentation</a></li>
-<li class="toctree-l3"><a class="reference internal" href="Development%20Guide.html#style-formatting">Style/Formatting</a></li>
-<li class="toctree-l3"><a class="reference internal" href="Development%20Guide.html#testing">Testing</a></li>
-<li class="toctree-l3"><a class="reference internal" href="Development%20Guide.html#contributors">Contributors</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="../CONTRIBUTORS.html">CONTRIBUTORS</a></li>
-</ul>
-</li>
-</ul>
-</li>
+<li class="toctree-l2"><a class="reference internal" href="Development%20Guide.html#glossary">Glossary</a></li>
 <li class="toctree-l2"><a class="reference internal" href="Development%20Guide.html#model-development-best-practices">Model Development Best Practices</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="Development%20Guide.html#pay-attention-to-and-document-the-fmdtools-version">Pay attention to and document the fmdtools version</a></li>
 <li class="toctree-l3"><a class="reference internal" href="Development%20Guide.html#plan-your-model-to-avoid-technical-debt">Plan your model to avoid technical debt</a></li>
@@ -138,171 +127,106 @@
 <li class="toctree-l3"><a class="reference internal" href="Development%20Guide.html#see-also">See also</a></li>
 </ul>
 </li>
+<li class="toctree-l2"><a class="reference internal" href="Development%20Guide.html#how-to-contribute">How to Contribute</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="Development%20Guide.html#repo-structure">Repo Structure</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="Development%20Guide.html#remote-structure">Remote Structure</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="Development%20Guide.html#development-process">Development Process</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="Development%20Guide.html#release-checklist">Release Checklist</a></li>
+<li class="toctree-l4"><a class="reference internal" href="Development%20Guide.html#upload-to-pypi">Upload to PyPI</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="Development%20Guide.html#roles">Roles</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Development%20Guide.html#documentation">Documentation</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Development%20Guide.html#style-formatting">Style/Formatting</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Development%20Guide.html#testing">Testing</a></li>
+</ul>
+</li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../examples/Examples.html">Examples</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="../examples/Examples.html#pump">Pump</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="../examples/pump/Tutorial_complete.html">fmdtools Tutorial</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="../examples/pump/Tutorial_complete.html#1.)-Loading-the-environment-and-model">1.) Loading the environment and model</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../examples/pump/Tutorial_complete.html#2.),-3.),-and-4.)-Simulate-and-visualize-the-results!">2.), 3.), and 4.) Simulate and visualize the results!</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../examples/pump/Tutorial_complete.html#5.)-Saving-Work">5.) Saving Work</a></li>
-</ul>
-</li>
-<li class="toctree-l3"><a class="reference internal" href="../examples/pump/Pump_Example_Notebook.html">Pump Example Notebook</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="../examples/pump/Pump_Example_Notebook.html#Initial-Model-Checks">Initial Model Checks</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../examples/pump/Pump_Example_Notebook.html#History">History</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../examples/pump/Pump_Example_Notebook.html#Propagating-and-Viewing-Results-for-Individual-Faults">Propagating and Viewing Results for Individual Faults</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../examples/pump/Pump_Example_Notebook.html#Visualization-of-resilience-metrics">Visualization of resilience metrics</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../examples/pump/Pump_Example_Notebook.html#Running-a-List-of-Faults">Running a List of Faults</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../examples/pump/Pump_Example_Notebook.html#Running-a-Fault-Sampling-Approach">Running a Fault Sampling Approach</a></li>
-</ul>
-</li>
-<li class="toctree-l3"><a class="reference internal" href="../examples/pump/Parallelism_Tutorial.html">Using Parallel Computing in fmdtools</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="../examples/pump/Parallelism_Tutorial.html#Model-Checks">Model Checks</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../examples/pump/Parallelism_Tutorial.html#Using-Parallelism-in-Simulation">Using Parallelism in Simulation</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../examples/pump/Parallelism_Tutorial.html#Performance-Comparison">Performance Comparison</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../examples/pump/Parallelism_Tutorial.html#Comparison:-Lower-Tracking-Time-Resolution">Comparison: Lower Tracking Time Resolution</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../examples/pump/Parallelism_Tutorial.html#Comparison-Conclusions:">Comparison Conclusions:</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../examples/pump/Parallelism_Tutorial.html#Further-Computational-Cost-Reduction-via-Profiling">Further Computational Cost Reduction via Profiling</a></li>
-</ul>
-</li>
-<li class="toctree-l3"><a class="reference internal" href="../examples/pump/Optimization.html">Optimization using the ProblemInterface class</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="../examples/pump/Optimization.html#Problem-Setup">Problem Setup</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../examples/pump/Optimization.html#Problem-interfaces">Problem interfaces</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../examples/pump/Optimization.html#Optimization:">Optimization:</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../examples/pump/Optimization.html#Multi-scenario-Optimization">Multi-scenario Optimization</a></li>
-</ul>
-</li>
-<li class="toctree-l3"><a class="reference internal" href="../examples/pump/Stochastic_Modelling.html">Stochastic Modelling in fmdtools</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="../examples/pump/Stochastic_Modelling.html#Model-Setup">Model Setup</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../examples/pump/Stochastic_Modelling.html#Simulation-and-Analysis">Simulation and Analysis</a></li>
-</ul>
-</li>
-<li class="toctree-l3"><a class="reference internal" href="../examples/pump/AST_Sampling.html">fmdtools-AdaStress integration</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="../examples/pump/AST_Sampling.html#Python-setup:">Python setup:</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../examples/pump/AST_Sampling.html#Running-AdaStress-Methods">Running AdaStress Methods</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../examples/pump/AST_Sampling.html#MCTS">MCTS</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../examples/pump/AST_Sampling.html#Pump">Pump</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../examples/pump/AST_Sampling.html#Simulator">Simulator</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../examples/pump/readme.html">Pump Model</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../examples/pump/readme.html#models">Models</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../examples/pump/readme.html#scripts-and-tests">Scripts and tests:</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../examples/pump/readme.html#notebooks">Notebooks</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../examples/pump/readme.html#references">References</a></li>
 </ul>
 </li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="../examples/Examples.html#multirotor">Multirotor</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="../examples/multirotor/Demonstration.html">fmdtools Paper Demonstration</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="../examples/multirotor/Demonstration.html#Initial-Network-Model">Initial Network Model</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../examples/multirotor/Demonstration.html#Setting-Node-Positions">Setting Node Positions</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../examples/multirotor/Demonstration.html#Static-Model">Static Model</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../examples/multirotor/Demonstration.html#Dynamic-Model">Dynamic Model</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../examples/multirotor/Demonstration.html#Hierarchical-Model">Hierarchical Model</a></li>
-</ul>
-</li>
-<li class="toctree-l3"><a class="reference internal" href="../examples/multirotor/Urban_Drone_Demo.html">Urban Drone Demo</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="../examples/multirotor/Urban_Drone_Demo.html#Model-Overview">Model Overview</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../examples/multirotor/Urban_Drone_Demo.html#Nominal-Simulation">Nominal Simulation</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../examples/multirotor/Urban_Drone_Demo.html#Resilience-model">Resilience model</a></li>
-</ul>
-</li>
-<li class="toctree-l3"><a class="reference internal" href="../examples/multirotor/Multirotor_Optimization.html">Integrated Resilience Optimization Architectures</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="../examples/multirotor/Multirotor_Optimization.html#Design-Model">Design Model</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../examples/multirotor/Multirotor_Optimization.html#Operational-Model">Operational Model</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../examples/multirotor/Multirotor_Optimization.html#Resilience-Model">Resilience Model</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../examples/multirotor/Multirotor_Optimization.html#Combined-Simulation/Optimization">Combined Simulation/Optimization</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../examples/multirotor/readme.html">Drone Model</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../examples/multirotor/readme.html#models">Models</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../examples/multirotor/readme.html#scripts-and-tests">Scripts and tests:</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../examples/multirotor/readme.html#notebooks">Notebooks</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../examples/multirotor/readme.html#references">References</a></li>
 </ul>
 </li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="../examples/Examples.html#tank">Tank</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="../examples/tank/Tank_Analysis.html">Hold-up Tank Model</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="../examples/tank/Tank_Analysis.html#Verifying-the-nominal-state:">Verifying the nominal state:</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../examples/tank/Tank_Analysis.html#History">History</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../examples/tank/Tank_Analysis.html#What-happens-under-component-faults?">What happens under component faults?</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../examples/tank/Tank_Analysis.html#What-about-human-induced-faults?">What about human-induced faults?</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../examples/tank/Tank_Analysis.html#Evaluating-Joint-Component-Human-fault-modes">Evaluating Joint Component-Human fault modes</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../examples/tank/Tank_Analysis.html#Testing-different-reaction-times">Testing different reaction times</a></li>
-</ul>
-</li>
-<li class="toctree-l3"><a class="reference internal" href="../examples/tank/Tank_Optimization.html">Cooling Tank Model Optimization</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../examples/tank/Tank_Optimization.html#Simulation">Simulation</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="../examples/tank/Tank_Optimization.html#Verifying-the-nominal-state:">Verifying the nominal state:</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../examples/tank/Tank_Optimization.html#What-happens-under-component-faults?">What happens under component faults?</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../examples/tank/Tank_Optimization.html#Full-set-of-modes">Full set of modes</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../examples/tank/Tank_Optimization.html#Defining-Optimization-Problem">Defining Optimization Problem</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../examples/tank/Tank_Optimization.html#Optimization">Optimization</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../examples/tank/readme.html">Tank Model</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../examples/tank/readme.html#models">Models</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../examples/tank/readme.html#scripts-and-tests">Scripts and tests:</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../examples/tank/readme.html#notebooks">Notebooks</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../examples/tank/readme.html#references">References</a></li>
 </ul>
 </li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="../examples/Examples.html#eps">EPS</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="../examples/eps/EPS_Example_Notebook.html">EPS Example Notebook</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../examples/eps/readme.html">EPS Model</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../examples/eps/readme.html#models">Models</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../examples/eps/readme.html#scripts-and-tests">Scripts and tests:</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../examples/eps/readme.html#notebooks">Notebooks</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../examples/eps/readme.html#references">References</a></li>
+</ul>
+</li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="../examples/Examples.html#action-sequence-graph">Action Sequence Graph</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="../examples/asg_demo/Action_Sequence_Graph.html">Action Sequence Graph Tutorial</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="../examples/asg_demo/Action_Sequence_Graph.html#Function-level-Simulation">Function-level Simulation</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../examples/asg_demo/Action_Sequence_Graph.html#Model-Simulation">Model Simulation</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../examples/asg_demo/Action_Sequence_Graph.html#Fault-Simulation">Fault Simulation</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../examples/asg_demo/readme.html">ASG Model</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../examples/asg_demo/readme.html#models">Models</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../examples/asg_demo/readme.html#scripts-and-tests">Scripts and tests:</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../examples/asg_demo/readme.html#notebooks">Notebooks</a></li>
 </ul>
 </li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="../examples/Examples.html#rover">Rover</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="../examples/rover/Rover_Setup_Notebook.html">Rover Model Explanation and Preliminaries</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="../examples/rover/Rover_Setup_Notebook.html#Model-Setup">Model Setup</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../examples/rover/Rover_Setup_Notebook.html#Model-simulation">Model simulation</a></li>
-</ul>
-</li>
-<li class="toctree-l3"><a class="reference internal" href="../examples/rover/HFAC_Analyses/HFAC_Analyses.html">More Human Failure Analyses</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../examples/rover/HFAC_Analyses/IDETC_Human_Paper_Analysis.html">Human Failure Representation</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="../examples/rover/HFAC_Analyses/IDETC_Human_Paper_Analysis.html#Testing-behavioral-simulation">Testing behavioral simulation</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../examples/rover/HFAC_Analyses/IDETC_Human_Paper_Analysis.html#Testing-Faults">Testing Faults</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../examples/rover/HFAC_Analyses/IDETC_Human_Paper_Analysis.html#Examining-Performance-Shaping-Factors">Examining Performance Shaping Factors</a></li>
-</ul>
-</li>
-<li class="toctree-l3"><a class="reference internal" href="../examples/rover/degradation_modelling/Degradation_Modelling_Notebook.html">Degradation Modelling</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="../examples/rover/degradation_modelling/Degradation_Modelling_Notebook.html#Drive-Degradation">Drive Degradation</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../examples/rover/degradation_modelling/Degradation_Modelling_Notebook.html#Human-Degradation">Human Degradation</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../examples/rover/degradation_modelling/Degradation_Modelling_Notebook.html#Combined-Degradation">Combined Degradation</a></li>
-</ul>
-</li>
-<li class="toctree-l3"><a class="reference internal" href="../examples/rover/fault_sampling/Rover_Mode_Notebook.html">Synthetic Mode Generation</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="../examples/rover/fault_sampling/Rover_Mode_Notebook.html#Cluster-Analysis">Cluster Analysis</a></li>
-</ul>
-</li>
-<li class="toctree-l3"><a class="reference internal" href="../examples/rover/optimization/Search_Comparison.html">Faulty State-Space Search Method Comparison</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="../examples/rover/optimization/Search_Comparison.html#Performance-Comparison">Performance Comparison</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../examples/rover/optimization/Search_Comparison.html#Comparing-Solutions-over-weights---Fault-Space-Formulation">Comparing Solutions over weights - Fault-Space Formulation</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../examples/rover/optimization/Search_Comparison.html#Comparing-Solutions-over-weights---Result-Space-Formulation">Comparing Solutions over weights - Result-Space Formulation</a></li>
-</ul>
-</li>
-<li class="toctree-l3"><a class="reference internal" href="../examples/rover/optimization/Rover_Response_Optimization.html">Rover Response Optimization</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="../examples/rover/optimization/Rover_Response_Optimization.html#Optimization">Optimization</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../examples/rover/readme.html">Rover Model</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../examples/rover/readme.html#models">Models</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../examples/rover/readme.html#scripts-and-tests">Scripts and tests:</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../examples/rover/readme.html#notebooks">Notebooks</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../examples/rover/readme.html#references">References</a></li>
 </ul>
 </li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="../examples/Examples.html#multiflow-demo">Multiflow Demo</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="../examples/multiflow_demo/Multiflow_and_Commsflow_Demonstration.html">Demonstration on Using MultiFlow and CommsFlow</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="../examples/multiflow_demo/Multiflow_and_Commsflow_Demonstration.html#Bulding-Flows">Bulding Flows</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../examples/multiflow_demo/readme.html">MultiFlow Demo Model</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../examples/multiflow_demo/readme.html#models">Models</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../examples/multiflow_demo/readme.html#scripts-and-tests">Scripts and tests:</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../examples/multiflow_demo/readme.html#notebooks">Notebooks</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../examples/multiflow_demo/readme.html#references">References</a></li>
 </ul>
 </li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="../examples/Examples.html#taxiway">Taxiway</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="../examples/taxiway/Paper_Notebook.html">Taxiway Model Overview</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="../examples/taxiway/Paper_Notebook.html#Model-Simulation">Model Simulation</a></li>
-</ul>
-</li>
-<li class="toctree-l3"><a class="reference internal" href="../examples/taxiway/Paper_Notebook.html#Fault-Simulation-and-Analysis">Fault Simulation and Analysis</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="../examples/taxiway/Paper_Notebook.html#Perception-Fault---AC-Vision-Fault">Perception Fault - AC Vision Fault</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../examples/taxiway/Paper_Notebook.html#Communications-Fault---Poor-land-command-by-ATC">Communications Fault - Poor land command by ATC</a></li>
-</ul>
-</li>
+<li class="toctree-l3"><a class="reference internal" href="../examples/taxiway/readme.html">Taxiway Model</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../examples/taxiway/readme.html#models">Models</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../examples/taxiway/readme.html#scripts-and-tests">Scripts and tests:</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../examples/taxiway/readme.html#notebooks">Notebooks</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../examples/taxiway/readme.html#references">References</a></li>
 </ul>
 </li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="Glossary.html">Glossary</a></li>
+</ul>
+</li>
 <li class="toctree-l1 current"><a class="reference internal" href="fmdtools.html">Module Reference</a><ul class="current">
 <li class="toctree-l2 current"><a class="reference internal" href="fmdtools.define.html">fmdtools.define</a><ul class="current">
 <li class="toctree-l3"><a class="reference internal" href="fmdtools.define.architecture.html">fmdtools.define.architecture</a><ul>
@@ -317,20 +241,20 @@
 <li class="toctree-l4"><a class="reference internal" href="fmdtools.define.block.html#module-fmdtools.define.block.base">fmdtools.define.block.base</a></li>
 <li class="toctree-l4"><a class="reference internal" href="fmdtools.define.block.html#module-fmdtools.define.block.action">fmdtools.define.block.action</a></li>
 <li class="toctree-l4"><a class="reference internal" href="fmdtools.define.block.html#module-fmdtools.define.block.component">fmdtools.define.block.component</a></li>
-<li class="toctree-l4"><a class="reference internal" href="fmdtools.define.block.html#fmdtools-define-block-function">fmdtools.define.block.function</a></li>
+<li class="toctree-l4"><a class="reference internal" href="fmdtools.define.block.html#module-fmdtools.define.block.function">fmdtools.define.block.function</a></li>
 </ul>
 </li>
 <li class="toctree-l3 current"><a class="current reference internal" href="#">fmdtools.define.container</a><ul>
 <li class="toctree-l4"><a class="reference internal" href="#fmdtools-define-container-base">fmdtools.define.container.base</a></li>
 <li class="toctree-l4"><a class="reference internal" href="#module-fmdtools.define.container.mode">fmdtools.define.container.mode</a></li>
-<li class="toctree-l4"><a class="reference internal" href="#module-fmdtools.define.container.state">fmdtools.define.container.state</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#fmdtools-define-container-state">fmdtools.define.container.state</a></li>
 <li class="toctree-l4"><a class="reference internal" href="#fmdtools-define-container-parameter">fmdtools.define.container.parameter</a></li>
 <li class="toctree-l4"><a class="reference internal" href="#module-fmdtools.define.container.rand">fmdtools.define.container.rand</a></li>
 <li class="toctree-l4"><a class="reference internal" href="#module-fmdtools.define.container.time">fmdtools.define.container.time</a></li>
 </ul>
 </li>
 <li class="toctree-l3"><a class="reference internal" href="fmdtools.define.flow.html">fmdtools.define.flow</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="fmdtools.define.flow.html#module-fmdtools.define.flow.base">fmdtools.define.flow.base</a></li>
+<li class="toctree-l4"><a class="reference internal" href="fmdtools.define.flow.html#fmdtools-define-flow-base">fmdtools.define.flow.base</a></li>
 <li class="toctree-l4"><a class="reference internal" href="fmdtools.define.flow.html#module-fmdtools.define.flow.multiflow">fmdtools.define.flow.multiflow</a></li>
 <li class="toctree-l4"><a class="reference internal" href="fmdtools.define.flow.html#module-fmdtools.define.flow.commsflow">fmdtools.define.flow.commsflow</a></li>
 </ul>
@@ -364,6 +288,13 @@
 </li>
 </ul>
 </li>
+<li class="toctree-l1"><a class="reference internal" href="../CONTRIBUTORS.html">Contributors</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../CONTRIBUTORS.html#internal-contributors">Internal Contributors</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../CONTRIBUTORS.html#external-contributors">External Contributors</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../CONTRIBUTORS.html#alumni-and-interns">Alumni and Interns</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../CONTRIBUTORS.html#fmdtools-at-osu">fmdtools at OSU</a></li>
+</ul>
+</li>
 </ul>
 
         </div>
@@ -392,10 +323,16 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
              
-  <section id="fmdtools-define-container">
-<h1>fmdtools.define.container<a class="headerlink" href="#fmdtools-define-container" title="Permalink to this heading"></a></h1>
-<p>The containers subpackage provides the elemental building blocks (i.e., containers for holding states, modes, etc.) for developing simulations.</p>
-<p>These sub-attributes are provided in the following modules:</p>
+  <section id="module-fmdtools.define.container">
+<span id="fmdtools-define-container"></span><h1>fmdtools.define.container<a class="headerlink" href="#module-fmdtools.define.container" title="Permalink to this heading"></a></h1>
+<p>The containers subpackage provides the elemental building blocks (i.e., containers for holding states, modes, etc.) for developing simulations, shown below.</p>
+<figure class="align-default" id="id35">
+<a class="reference internal image-reference" href="../_images/Containers.svg"><img alt="fmdtools container classes" src="../_images/Containers.svg" width="800" /></a>
+<figcaption>
+<p><span class="caption-text">Container classes in fmdtools and their inheritance.</span><a class="headerlink" href="#id35" title="Permalink to this image"></a></p>
+</figcaption>
+</figure>
+<p>These classes are provided in the following modules:</p>
 <ul class="simple">
 <li><p><code class="xref py py-mod docutils literal notranslate"><span class="pre">base</span></code>: for <code class="xref py py-class docutils literal notranslate"><span class="pre">BaseContainer</span></code>, which all the other containers inherit from.</p></li>
 <li><p><code class="xref py py-mod docutils literal notranslate"><span class="pre">mode</span></code>: for <code class="xref py py-class docutils literal notranslate"><span class="pre">Mode</span></code>, which represents discrete modes (nominal and faulty) which the system may progress through over time,</p></li>
@@ -1277,13 +1214,15 @@ their properties</p>
 </dd></dl>
 
 </section>
-<section id="module-fmdtools.define.container.state">
-<span id="fmdtools-define-container-state"></span><h2>fmdtools.define.container.state<a class="headerlink" href="#module-fmdtools.define.container.state" title="Permalink to this heading"></a></h2>
-<p>Description: A module for defining States, which are (generic) containers for system
-attributes that change over time.</p>
-<ul class="simple">
-<li><p><a class="reference internal" href="#fmdtools.define.container.state.State" title="fmdtools.define.container.state.State"><code class="xref py py-class docutils literal notranslate"><span class="pre">State</span></code></a>: Superclass for Model States.</p></li>
-</ul>
+<section id="fmdtools-define-container-state">
+<h2>fmdtools.define.container.state<a class="headerlink" href="#fmdtools-define-container-state" title="Permalink to this heading"></a></h2>
+<p>State classes are used to represent mutables properties of the system that change over time. State classes are extended and deployed by the user, as shown below:</p>
+<figure class="align-default" id="id36">
+<a class="reference internal image-reference" href="../_images/State.svg"><img alt="example state class" src="../_images/State.svg" width="600" /></a>
+<figcaption>
+<p><span class="caption-text">Example of extending the <code class="xref py py-class docutils literal notranslate"><span class="pre">State</span></code> class to hold x/y fields.</span><a class="headerlink" href="#id36" title="Permalink to this image"></a></p>
+</figcaption>
+</figure>
 <dl class="py class">
 <dt class="sig sig-object py" id="fmdtools.define.container.state.State">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">fmdtools.define.container.state.</span></span><span class="sig-name descname"><span class="pre">State</span></span><a class="headerlink" href="#fmdtools.define.container.state.State" title="Permalink to this definition"></a></dt>
@@ -1312,249 +1251,23 @@ values of 1.0.</p>
 <span class="go">10.0</span>
 </pre></div>
 </div>
-<dl class="py method">
-<dt class="sig sig-object py" id="fmdtools.define.container.state.State.add">
-<span class="sig-name descname"><span class="pre">add</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">states</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.define.container.state.State.add" title="Permalink to this definition"></a></dt>
-<dd><p>Return the addition of given attributes of the State.</p>
-<p>e.g.,:
-&gt;&gt;&gt; p = ExampleState(x=1.0, y=2.0)
-&gt;&gt;&gt; p.add(‘x’,’y’)
-3.0</p>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="fmdtools.define.container.state.State.div">
-<span class="sig-name descname"><span class="pre">div</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">states</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.define.container.state.State.div" title="Permalink to this definition"></a></dt>
-<dd><p>Return the division of given attributes of the State.</p>
-<p>e.g.,:
-&gt;&gt;&gt; p = ExampleState(x=1.0, y=2.0)
-&gt;&gt;&gt; p.div(‘x’,’y’)
-0.5</p>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="fmdtools.define.container.state.State.get">
-<span class="sig-name descname"><span class="pre">get</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">attnames</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.define.container.state.State.get" title="Permalink to this definition"></a></dt>
-<dd><p>Return the given attribute names (strings) as a numpy array.</p>
-<p>Mainly useful for reducing length of lines/adding clarity to assignment
-statements. e.g.,:</p>
-<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">p</span> <span class="o">=</span> <span class="n">ExampleState</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="mf">2.0</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">p_arr</span> <span class="o">=</span> <span class="n">p</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;x&quot;</span><span class="p">,</span> <span class="s2">&quot;y&quot;</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">p_arr</span>
-<span class="go">array([1., 2.])</span>
-</pre></div>
-</div>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="fmdtools.define.container.state.State.gett">
-<span class="sig-name descname"><span class="pre">gett</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">attnames</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.define.container.state.State.gett" title="Permalink to this definition"></a></dt>
-<dd><p>Alternative to self.get that returns a tuple, not an array.</p>
-<p>Useful when a numpy array would translate the underlying data
-types poorly (e.g., np.array([1,’b’] would make 1 a string–using a tuple
-instead preserves the data type)).</p>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="fmdtools.define.container.state.State.inc">
-<span class="sig-name descname"><span class="pre">inc</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.define.container.state.State.inc" title="Permalink to this definition"></a></dt>
-<dd><p>Increment the given arguments by a given value.</p>
-<p>Mainly useful for reducing length/adding clarity to increment statements, e.g.,:</p>
-<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">p</span> <span class="o">=</span> <span class="n">ExampleState</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="mf">1.0</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">p</span><span class="o">.</span><span class="n">inc</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">p</span><span class="o">.</span><span class="n">x</span>
-<span class="go">2.0</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">p</span><span class="o">.</span><span class="n">y</span>
-<span class="go">3.0</span>
-</pre></div>
-</div>
-<p>Can additionally be provided with a second value denoting a limit on the
-increments e.g.,:</p>
-<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">p</span> <span class="o">=</span> <span class="n">ExampleState</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="mf">1.0</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">p</span><span class="o">.</span><span class="n">inc</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mf">5.0</span><span class="p">))</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">p</span><span class="o">.</span><span class="n">x</span>
-<span class="go">4.0</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">p</span><span class="o">.</span><span class="n">inc</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mf">5.0</span><span class="p">))</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">p</span><span class="o">.</span><span class="n">x</span>
-<span class="go">5.0</span>
-</pre></div>
-</div>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="fmdtools.define.container.state.State.init_hist_att">
-<span class="sig-name descname"><span class="pre">init_hist_att</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">hist</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">att</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">timerange</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">track</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">str_size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'&lt;U20'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.define.container.state.State.init_hist_att" title="Permalink to this definition"></a></dt>
-<dd><p>Extend init_hist_attr to use _set to get history size.</p>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="fmdtools.define.container.state.State.limit">
-<span class="sig-name descname"><span class="pre">limit</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.define.container.state.State.limit" title="Permalink to this definition"></a></dt>
-<dd><p>Enforce limits on the value of a given property.</p>
-<p>Mainly useful for reducing length/adding clarity to increment statements. e.g.,:</p>
-<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">p</span> <span class="o">=</span> <span class="n">ExampleState</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="mf">200.0</span><span class="p">,</span> <span class="n">y</span><span class="o">=-</span><span class="mf">200.0</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">p</span><span class="o">.</span><span class="n">limit</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="p">(</span><span class="mf">0.0</span><span class="p">,</span><span class="mf">100.0</span><span class="p">),</span> <span class="n">y</span><span class="o">=</span><span class="p">(</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">100.0</span><span class="p">))</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">p</span><span class="o">.</span><span class="n">x</span>
-<span class="go">100.0</span>
-<span class="gp">&gt;&gt;&gt;</span>
-<span class="go">0.0</span>
-</pre></div>
-</div>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="fmdtools.define.container.state.State.mul">
-<span class="sig-name descname"><span class="pre">mul</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">states</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.define.container.state.State.mul" title="Permalink to this definition"></a></dt>
-<dd><p>Return the multiplication of given attributes of the State.</p>
-<p>e.g.,:</p>
-<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">p</span> <span class="o">=</span> <span class="n">ExampleState</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="mf">2.0</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="mf">3.0</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">p</span><span class="o">.</span><span class="n">mul</span><span class="p">(</span><span class="s2">&quot;x&quot;</span><span class="p">,</span><span class="s2">&quot;y&quot;</span><span class="p">)</span>
-<span class="go">6.0</span>
-</pre></div>
-</div>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="fmdtools.define.container.state.State.put">
-<span class="sig-name descname"><span class="pre">put</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">as_copy</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.define.container.state.State.put" title="Permalink to this definition"></a></dt>
-<dd><p>Set the given fields to a given value.</p>
-<p>Mainly useful for reducing length/adding clarity to assignment statements.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>as_copy</strong> (<em>bool</em>) – set to True for dicts/sets to be copied rather than referenced</p></li>
-<li><p><strong>**kwargs</strong> (<em>values</em>) – fields and values to set.</p></li>
-</ul>
-</dd>
-</dl>
-<p class="rubric">Examples</p>
-<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">p</span> <span class="o">=</span> <span class="n">ExampleState</span><span class="p">()</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">p</span><span class="o">.</span><span class="n">put</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="mf">2.0</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="mf">2.0</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">p</span><span class="o">.</span><span class="n">x</span>
-<span class="go">2.0</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">p</span><span class="o">.</span><span class="n">y</span>
-<span class="go">2.0</span>
-</pre></div>
-</div>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="fmdtools.define.container.state.State.roundto">
-<span class="sig-name descname"><span class="pre">roundto</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.define.container.state.State.roundto" title="Permalink to this definition"></a></dt>
-<dd><p>Round the given arguments to a given resolution.</p>
-<p>e.g.,:</p>
-<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">p</span> <span class="o">=</span> <span class="n">ExampleState</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="mf">1.75850</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">p</span><span class="o">.</span><span class="n">roundto</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="mf">0.1</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">p</span><span class="o">.</span><span class="n">x</span>
-<span class="go">1.8</span>
-</pre></div>
-</div>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="fmdtools.define.container.state.State.same">
-<span class="sig-name descname"><span class="pre">same</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">values</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">states</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.define.container.state.State.same" title="Permalink to this definition"></a></dt>
-<dd><p>Test whether a given iterable values has the same value as each in the state.</p>
-<p class="rubric">Examples</p>
-<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">p</span> <span class="o">=</span> <span class="n">ExampleState</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="mf">2.0</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">p</span><span class="o">.</span><span class="n">same</span><span class="p">([</span><span class="mf">1.0</span><span class="p">,</span> <span class="mf">2.0</span><span class="p">],</span> <span class="s2">&quot;x&quot;</span><span class="p">,</span> <span class="s2">&quot;y&quot;</span><span class="p">)</span>
-<span class="go">True</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">p</span><span class="o">.</span><span class="n">same</span><span class="p">([</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">2.0</span><span class="p">],</span> <span class="s2">&quot;x&quot;</span><span class="p">,</span> <span class="s2">&quot;y&quot;</span><span class="p">)</span>
-<span class="go">False</span>
-</pre></div>
-</div>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="fmdtools.define.container.state.State.set_atts">
-<span class="sig-name descname"><span class="pre">set_atts</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.define.container.state.State.set_atts" title="Permalink to this definition"></a></dt>
-<dd><p>Sets the given arguments to a given value. Mainly useful for
-reducing length/adding clarity to assignment statements in __init__ methods
-(self.put is reccomended otherwise so that the iteration is on function/flow
-<em>states</em>) e.g.,</p>
-<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">p</span> <span class="o">=</span> <span class="n">ExampleState</span><span class="p">()</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">p</span><span class="o">.</span><span class="n">set_atts</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="mf">2.0</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="mf">2.0</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">p</span><span class="o">.</span><span class="n">x</span>
-<span class="go">2.0</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">p</span><span class="o">.</span><span class="n">y</span>
-<span class="go">2.0</span>
-</pre></div>
-</div>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="fmdtools.define.container.state.State.sub">
-<span class="sig-name descname"><span class="pre">sub</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">states</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.define.container.state.State.sub" title="Permalink to this definition"></a></dt>
-<dd><p>Return the subtraction of given attributes of the State.</p>
-<p>e.g.,:</p>
-<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">p</span> <span class="o">=</span> <span class="n">ExampleState</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="mf">2.0</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">p</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span><span class="s1">&#39;x&#39;</span><span class="p">,</span><span class="s1">&#39;y&#39;</span><span class="p">)</span>
-<span class="go">-1.0</span>
-</pre></div>
-</div>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="fmdtools.define.container.state.State.warn">
-<span class="sig-name descname"><span class="pre">warn</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">messages</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">stacklevel</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">2</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.define.container.state.State.warn" title="Permalink to this definition"></a></dt>
-<dd><p>Print warning message(s) when called.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>*messages</strong> (<em>str</em>) – Strings to make up the message (will be joined by spaces)</p></li>
-<li><p><strong>stacklevel</strong> (<em>int</em>) – Where the warning points to.
-The default is 2 (points to the place in the model)</p></li>
-</ul>
-</dd>
-</dl>
-</dd></dl>
-
 </dd></dl>
 
 </section>
 <section id="fmdtools-define-container-parameter">
 <h2>fmdtools.define.container.parameter<a class="headerlink" href="#fmdtools-define-container-parameter" title="Permalink to this heading"></a></h2>
-<span class="target" id="module-fmdtools.define.container.parameter"></span><p>Description: A module for defining Parameters, which are (generic) containers for
-system attributes that do not change.</p>
-<ul class="simple">
-<li><p><a class="reference internal" href="#fmdtools.define.container.parameter.Parameter" title="fmdtools.define.container.parameter.Parameter"><code class="xref py py-class docutils literal notranslate"><span class="pre">Parameter</span></code></a>: Superclass for Parameters</p></li>
-<li><p><code class="xref py py-class docutils literal notranslate"><span class="pre">SimParam</span></code>: Class defining Simulation Parameters</p></li>
-</ul>
-<dl class="py class">
-<dt class="sig sig-object py" id="fmdtools.define.container.parameter.ExampleParameter">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">fmdtools.define.container.parameter.</span></span><span class="sig-name descname"><span class="pre">ExampleParameter</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">strict_immutability</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">check_type</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">check_pickle</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">set_type</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">check_lim</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.define.container.parameter.ExampleParameter" title="Permalink to this definition"></a></dt>
-<dd><p>Example parameter for testing and documentation.</p>
-<dl class="py attribute">
-<dt class="sig sig-object py" id="fmdtools.define.container.parameter.ExampleParameter.x">
-<span class="sig-name descname"><span class="pre">x</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">float</span></em><a class="headerlink" href="#fmdtools.define.container.parameter.ExampleParameter.x" title="Permalink to this definition"></a></dt>
-<dd></dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="fmdtools.define.container.parameter.ExampleParameter.x_lim">
-<span class="sig-name descname"><span class="pre">x_lim</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">(0,</span> <span class="pre">10)</span></em><a class="headerlink" href="#fmdtools.define.container.parameter.ExampleParameter.x_lim" title="Permalink to this definition"></a></dt>
-<dd></dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="fmdtools.define.container.parameter.ExampleParameter.y">
-<span class="sig-name descname"><span class="pre">y</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">float</span></em><a class="headerlink" href="#fmdtools.define.container.parameter.ExampleParameter.y" title="Permalink to this definition"></a></dt>
-<dd></dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="fmdtools.define.container.parameter.ExampleParameter.y_set">
-<span class="sig-name descname"><span class="pre">y_set</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">(1.0,</span> <span class="pre">2.0,</span> <span class="pre">3.0,</span> <span class="pre">4.0)</span></em><a class="headerlink" href="#fmdtools.define.container.parameter.ExampleParameter.y_set" title="Permalink to this definition"></a></dt>
-<dd></dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="fmdtools.define.container.parameter.ExampleParameter.z">
-<span class="sig-name descname"><span class="pre">z</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">float</span></em><a class="headerlink" href="#fmdtools.define.container.parameter.ExampleParameter.z" title="Permalink to this definition"></a></dt>
-<dd></dd></dl>
-
-</dd></dl>
-
+<p>Parameter classes are used to represent immutable properties of the system. Parameter classes are extended and deployed by the user, as shown below:</p>
+<figure class="align-default" id="id37">
+<a class="reference internal image-reference" href="../_images/Parameter.svg"><img alt="example state class" src="../_images/Parameter.svg" width="600" /></a>
+<figcaption>
+<p><span class="caption-text">Example of extending the <code class="xref py py-class docutils literal notranslate"><span class="pre">Parameter</span></code> class to hold x/y/z fields.</span><a class="headerlink" href="#id37" title="Permalink to this image"></a></p>
+</figcaption>
+</figure>
 <dl class="py class">
 <dt class="sig sig-object py" id="fmdtools.define.container.parameter.Parameter">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">fmdtools.define.container.parameter.</span></span><span class="sig-name descname"><span class="pre">Parameter</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">strict_immutability</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">check_type</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">check_pickle</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">set_type</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">check_lim</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.define.container.parameter.Parameter" title="Permalink to this definition"></a></dt>
-<dd><p>The Parameter class defines model/function/flow values which are immutable,
+<dd><p>Bases: <a class="reference internal" href="#fmdtools.define.container.base.BaseContainer" title="fmdtools.define.container.base.BaseContainer"><code class="xref py py-class docutils literal notranslate"><span class="pre">BaseContainer</span></code></a></p>
+<p>The Parameter class defines model/function/flow values which are immutable,
 that is, the same from model instantiation through a simulation. Parameters
 inherit from recordclass, giving them a low memory footprint, and use type
 hints and ranges to ensure parameter values are valid. e.g.,:</p>
@@ -1662,30 +1375,10 @@ self.k_lim or set constraints self.k_set</p>
 </dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="fmdtools.define.container.parameter.Parameter.get_set_const">
-<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">get_set_const</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">field</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.define.container.parameter.Parameter.get_set_const" title="Permalink to this definition"></a></dt>
-<dd></dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="fmdtools.define.container.parameter.Parameter.keys">
-<span class="sig-name descname"><span class="pre">keys</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.define.container.parameter.Parameter.keys" title="Permalink to this definition"></a></dt>
-<dd></dd></dl>
-
-<dl class="py method">
 <dt class="sig sig-object py" id="fmdtools.define.container.parameter.Parameter.reset">
 <span class="sig-name descname"><span class="pre">reset</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.define.container.parameter.Parameter.reset" title="Permalink to this definition"></a></dt>
 <dd><p>Do nothing since the parameter is immutable.</p>
 </dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="fmdtools.define.container.parameter.Parameter.return_mutables">
-<span class="sig-name descname"><span class="pre">return_mutables</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.define.container.parameter.Parameter.return_mutables" title="Permalink to this definition"></a></dt>
-<dd></dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="fmdtools.define.container.parameter.Parameter.rolename">
-<span class="sig-name descname"><span class="pre">rolename</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'p'</span></em><a class="headerlink" href="#fmdtools.define.container.parameter.Parameter.rolename" title="Permalink to this definition"></a></dt>
-<dd></dd></dl>
 
 </dd></dl>
 

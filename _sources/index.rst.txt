@@ -18,7 +18,7 @@ TABLE OF CONTENTS
  README
  docs/Development Guide
  examples/Examples
- docs/Glossary
  docs/fmdtools
+ CONTRIBUTORS
  
  :ref:`genindex`
