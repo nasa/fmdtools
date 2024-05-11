@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Development Guide &mdash; fmdtools 2.0-rc-2 documentation</title>
+  <title>Development Guide &mdash; fmdtools 2.0-rc-3 documentation</title>
       <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
     <link rel="shortcut icon" href="../_static/fmdtools_ico.ico"/>
@@ -47,15 +47,26 @@
         </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
               <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="../README.html">Overview</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../README.html#about">About</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../README.html#flexible-modelling-paradigm">Flexible Modelling Paradigm</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../README.html#powerful-simulation-techniques">Powerful Simulation Techniques</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../README.html#efficient-analysis-process">Efficient Analysis Process</a></li>
+</ul>
+</li>
 <li class="toctree-l2"><a class="reference internal" href="../README.html#getting-started">Getting Started</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="../README.html#prerequisites">Prerequisites</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../README.html#examples">Examples</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../README.html#set-up-python-environment">Set up python environment</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../README.html#install-fmdtools">Install fmdtools</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../README.html#dependencies">Dependencies</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../README.html#explore-tutorials-and-resources">Explore Tutorials and Resources</a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="../README.html#contributions">Contributions</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="../README.html#contributors">Contributors</a></li>
 </ul>
 </li>
+<li class="toctree-l2"><a class="reference internal" href="../README.html#citing-this-repository">Citing this repository</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../README.html#license-notices">License/Notices</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="../README.html#disclaimers">Disclaimers</a></li>
 </ul>
@@ -63,14 +74,11 @@
 </ul>
 </li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Development Guide</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="#why-fmdtools">Why fmdtools?</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="#key-features">Key Features</a></li>
-</ul>
-</li>
-<li class="toctree-l2"><a class="reference internal" href="#intro-to-fmdtools">Intro to fmdtools</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#why-fmdtools">Why fmdtools?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#introductory-tutorial">Introductory Tutorial</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="Intro_to_fmdtools.html">Intro to resilience modeling, simulation, and visualization in Python with fmdtools.</a><ul>
 <li class="toctree-l4"><a class="reference internal" href="Intro_to_fmdtools.html#author-daniel-hulse">Author: Daniel Hulse</a></li>
-<li class="toctree-l4"><a class="reference internal" href="Intro_to_fmdtools.html#version-2-0-rc-2">Version: 2.0-rc-2</a></li>
+<li class="toctree-l4"><a class="reference internal" href="Intro_to_fmdtools.html#version-2-0-rc-3">Version: 2.0-rc-3</a></li>
 </ul>
 </li>
 <li class="toctree-l3"><a class="reference internal" href="Intro_to_fmdtools.html#overview">Overview</a></li>
@@ -104,26 +112,7 @@
 <li class="toctree-l3"><a class="reference internal" href="Intro_to_fmdtools.html#further-reading-links">Further Reading/Links</a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="#contributions">Contributions</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="#repo-structure">Repo Structure</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="#remote-structure">Remote Structure</a></li>
-</ul>
-</li>
-<li class="toctree-l3"><a class="reference internal" href="#development-process">Development Process</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="#release-checklist">Release Checklist</a></li>
-<li class="toctree-l4"><a class="reference internal" href="#upload-to-pypi">Upload to PyPI</a></li>
-</ul>
-</li>
-<li class="toctree-l3"><a class="reference internal" href="#roles">Roles</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#documentation">Documentation</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#style-formatting">Style/Formatting</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#testing">Testing</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#contributors">Contributors</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="../CONTRIBUTORS.html">CONTRIBUTORS</a></li>
-</ul>
-</li>
-</ul>
-</li>
+<li class="toctree-l2"><a class="reference internal" href="#glossary">Glossary</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#model-development-best-practices">Model Development Best Practices</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="#pay-attention-to-and-document-the-fmdtools-version">Pay attention to and document the fmdtools version</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#plan-your-model-to-avoid-technical-debt">Plan your model to avoid technical debt</a></li>
@@ -138,171 +127,106 @@
 <li class="toctree-l3"><a class="reference internal" href="#see-also">See also</a></li>
 </ul>
 </li>
+<li class="toctree-l2"><a class="reference internal" href="#how-to-contribute">How to Contribute</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#repo-structure">Repo Structure</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#remote-structure">Remote Structure</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#development-process">Development Process</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#release-checklist">Release Checklist</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#upload-to-pypi">Upload to PyPI</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#roles">Roles</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#documentation">Documentation</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#style-formatting">Style/Formatting</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#testing">Testing</a></li>
+</ul>
+</li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../examples/Examples.html">Examples</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="../examples/Examples.html#pump">Pump</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="../examples/pump/Tutorial_complete.html">fmdtools Tutorial</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="../examples/pump/Tutorial_complete.html#1.)-Loading-the-environment-and-model">1.) Loading the environment and model</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../examples/pump/Tutorial_complete.html#2.),-3.),-and-4.)-Simulate-and-visualize-the-results!">2.), 3.), and 4.) Simulate and visualize the results!</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../examples/pump/Tutorial_complete.html#5.)-Saving-Work">5.) Saving Work</a></li>
-</ul>
-</li>
-<li class="toctree-l3"><a class="reference internal" href="../examples/pump/Pump_Example_Notebook.html">Pump Example Notebook</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="../examples/pump/Pump_Example_Notebook.html#Initial-Model-Checks">Initial Model Checks</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../examples/pump/Pump_Example_Notebook.html#History">History</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../examples/pump/Pump_Example_Notebook.html#Propagating-and-Viewing-Results-for-Individual-Faults">Propagating and Viewing Results for Individual Faults</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../examples/pump/Pump_Example_Notebook.html#Visualization-of-resilience-metrics">Visualization of resilience metrics</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../examples/pump/Pump_Example_Notebook.html#Running-a-List-of-Faults">Running a List of Faults</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../examples/pump/Pump_Example_Notebook.html#Running-a-Fault-Sampling-Approach">Running a Fault Sampling Approach</a></li>
-</ul>
-</li>
-<li class="toctree-l3"><a class="reference internal" href="../examples/pump/Parallelism_Tutorial.html">Using Parallel Computing in fmdtools</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="../examples/pump/Parallelism_Tutorial.html#Model-Checks">Model Checks</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../examples/pump/Parallelism_Tutorial.html#Using-Parallelism-in-Simulation">Using Parallelism in Simulation</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../examples/pump/Parallelism_Tutorial.html#Performance-Comparison">Performance Comparison</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../examples/pump/Parallelism_Tutorial.html#Comparison:-Lower-Tracking-Time-Resolution">Comparison: Lower Tracking Time Resolution</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../examples/pump/Parallelism_Tutorial.html#Comparison-Conclusions:">Comparison Conclusions:</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../examples/pump/Parallelism_Tutorial.html#Further-Computational-Cost-Reduction-via-Profiling">Further Computational Cost Reduction via Profiling</a></li>
-</ul>
-</li>
-<li class="toctree-l3"><a class="reference internal" href="../examples/pump/Optimization.html">Optimization using the ProblemInterface class</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="../examples/pump/Optimization.html#Problem-Setup">Problem Setup</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../examples/pump/Optimization.html#Problem-interfaces">Problem interfaces</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../examples/pump/Optimization.html#Optimization:">Optimization:</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../examples/pump/Optimization.html#Multi-scenario-Optimization">Multi-scenario Optimization</a></li>
-</ul>
-</li>
-<li class="toctree-l3"><a class="reference internal" href="../examples/pump/Stochastic_Modelling.html">Stochastic Modelling in fmdtools</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="../examples/pump/Stochastic_Modelling.html#Model-Setup">Model Setup</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../examples/pump/Stochastic_Modelling.html#Simulation-and-Analysis">Simulation and Analysis</a></li>
-</ul>
-</li>
-<li class="toctree-l3"><a class="reference internal" href="../examples/pump/AST_Sampling.html">fmdtools-AdaStress integration</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="../examples/pump/AST_Sampling.html#Python-setup:">Python setup:</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../examples/pump/AST_Sampling.html#Running-AdaStress-Methods">Running AdaStress Methods</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../examples/pump/AST_Sampling.html#MCTS">MCTS</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../examples/pump/AST_Sampling.html#Pump">Pump</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../examples/pump/AST_Sampling.html#Simulator">Simulator</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../examples/pump/readme.html">Pump Model</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../examples/pump/readme.html#models">Models</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../examples/pump/readme.html#scripts-and-tests">Scripts and tests:</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../examples/pump/readme.html#notebooks">Notebooks</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../examples/pump/readme.html#references">References</a></li>
 </ul>
 </li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="../examples/Examples.html#multirotor">Multirotor</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="../examples/multirotor/Demonstration.html">fmdtools Paper Demonstration</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="../examples/multirotor/Demonstration.html#Initial-Network-Model">Initial Network Model</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../examples/multirotor/Demonstration.html#Setting-Node-Positions">Setting Node Positions</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../examples/multirotor/Demonstration.html#Static-Model">Static Model</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../examples/multirotor/Demonstration.html#Dynamic-Model">Dynamic Model</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../examples/multirotor/Demonstration.html#Hierarchical-Model">Hierarchical Model</a></li>
-</ul>
-</li>
-<li class="toctree-l3"><a class="reference internal" href="../examples/multirotor/Urban_Drone_Demo.html">Urban Drone Demo</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="../examples/multirotor/Urban_Drone_Demo.html#Model-Overview">Model Overview</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../examples/multirotor/Urban_Drone_Demo.html#Nominal-Simulation">Nominal Simulation</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../examples/multirotor/Urban_Drone_Demo.html#Resilience-model">Resilience model</a></li>
-</ul>
-</li>
-<li class="toctree-l3"><a class="reference internal" href="../examples/multirotor/Multirotor_Optimization.html">Integrated Resilience Optimization Architectures</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="../examples/multirotor/Multirotor_Optimization.html#Design-Model">Design Model</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../examples/multirotor/Multirotor_Optimization.html#Operational-Model">Operational Model</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../examples/multirotor/Multirotor_Optimization.html#Resilience-Model">Resilience Model</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../examples/multirotor/Multirotor_Optimization.html#Combined-Simulation/Optimization">Combined Simulation/Optimization</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../examples/multirotor/readme.html">Drone Model</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../examples/multirotor/readme.html#models">Models</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../examples/multirotor/readme.html#scripts-and-tests">Scripts and tests:</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../examples/multirotor/readme.html#notebooks">Notebooks</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../examples/multirotor/readme.html#references">References</a></li>
 </ul>
 </li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="../examples/Examples.html#tank">Tank</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="../examples/tank/Tank_Analysis.html">Hold-up Tank Model</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="../examples/tank/Tank_Analysis.html#Verifying-the-nominal-state:">Verifying the nominal state:</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../examples/tank/Tank_Analysis.html#History">History</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../examples/tank/Tank_Analysis.html#What-happens-under-component-faults?">What happens under component faults?</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../examples/tank/Tank_Analysis.html#What-about-human-induced-faults?">What about human-induced faults?</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../examples/tank/Tank_Analysis.html#Evaluating-Joint-Component-Human-fault-modes">Evaluating Joint Component-Human fault modes</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../examples/tank/Tank_Analysis.html#Testing-different-reaction-times">Testing different reaction times</a></li>
-</ul>
-</li>
-<li class="toctree-l3"><a class="reference internal" href="../examples/tank/Tank_Optimization.html">Cooling Tank Model Optimization</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../examples/tank/Tank_Optimization.html#Simulation">Simulation</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="../examples/tank/Tank_Optimization.html#Verifying-the-nominal-state:">Verifying the nominal state:</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../examples/tank/Tank_Optimization.html#What-happens-under-component-faults?">What happens under component faults?</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../examples/tank/Tank_Optimization.html#Full-set-of-modes">Full set of modes</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../examples/tank/Tank_Optimization.html#Defining-Optimization-Problem">Defining Optimization Problem</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../examples/tank/Tank_Optimization.html#Optimization">Optimization</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../examples/tank/readme.html">Tank Model</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../examples/tank/readme.html#models">Models</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../examples/tank/readme.html#scripts-and-tests">Scripts and tests:</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../examples/tank/readme.html#notebooks">Notebooks</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../examples/tank/readme.html#references">References</a></li>
 </ul>
 </li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="../examples/Examples.html#eps">EPS</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="../examples/eps/EPS_Example_Notebook.html">EPS Example Notebook</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../examples/eps/readme.html">EPS Model</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../examples/eps/readme.html#models">Models</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../examples/eps/readme.html#scripts-and-tests">Scripts and tests:</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../examples/eps/readme.html#notebooks">Notebooks</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../examples/eps/readme.html#references">References</a></li>
+</ul>
+</li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="../examples/Examples.html#action-sequence-graph">Action Sequence Graph</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="../examples/asg_demo/Action_Sequence_Graph.html">Action Sequence Graph Tutorial</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="../examples/asg_demo/Action_Sequence_Graph.html#Function-level-Simulation">Function-level Simulation</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../examples/asg_demo/Action_Sequence_Graph.html#Model-Simulation">Model Simulation</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../examples/asg_demo/Action_Sequence_Graph.html#Fault-Simulation">Fault Simulation</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../examples/asg_demo/readme.html">ASG Model</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../examples/asg_demo/readme.html#models">Models</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../examples/asg_demo/readme.html#scripts-and-tests">Scripts and tests:</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../examples/asg_demo/readme.html#notebooks">Notebooks</a></li>
 </ul>
 </li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="../examples/Examples.html#rover">Rover</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="../examples/rover/Rover_Setup_Notebook.html">Rover Model Explanation and Preliminaries</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="../examples/rover/Rover_Setup_Notebook.html#Model-Setup">Model Setup</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../examples/rover/Rover_Setup_Notebook.html#Model-simulation">Model simulation</a></li>
-</ul>
-</li>
-<li class="toctree-l3"><a class="reference internal" href="../examples/rover/HFAC_Analyses/HFAC_Analyses.html">More Human Failure Analyses</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../examples/rover/HFAC_Analyses/IDETC_Human_Paper_Analysis.html">Human Failure Representation</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="../examples/rover/HFAC_Analyses/IDETC_Human_Paper_Analysis.html#Testing-behavioral-simulation">Testing behavioral simulation</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../examples/rover/HFAC_Analyses/IDETC_Human_Paper_Analysis.html#Testing-Faults">Testing Faults</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../examples/rover/HFAC_Analyses/IDETC_Human_Paper_Analysis.html#Examining-Performance-Shaping-Factors">Examining Performance Shaping Factors</a></li>
-</ul>
-</li>
-<li class="toctree-l3"><a class="reference internal" href="../examples/rover/degradation_modelling/Degradation_Modelling_Notebook.html">Degradation Modelling</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="../examples/rover/degradation_modelling/Degradation_Modelling_Notebook.html#Drive-Degradation">Drive Degradation</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../examples/rover/degradation_modelling/Degradation_Modelling_Notebook.html#Human-Degradation">Human Degradation</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../examples/rover/degradation_modelling/Degradation_Modelling_Notebook.html#Combined-Degradation">Combined Degradation</a></li>
-</ul>
-</li>
-<li class="toctree-l3"><a class="reference internal" href="../examples/rover/fault_sampling/Rover_Mode_Notebook.html">Synthetic Mode Generation</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="../examples/rover/fault_sampling/Rover_Mode_Notebook.html#Cluster-Analysis">Cluster Analysis</a></li>
-</ul>
-</li>
-<li class="toctree-l3"><a class="reference internal" href="../examples/rover/optimization/Search_Comparison.html">Faulty State-Space Search Method Comparison</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="../examples/rover/optimization/Search_Comparison.html#Performance-Comparison">Performance Comparison</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../examples/rover/optimization/Search_Comparison.html#Comparing-Solutions-over-weights---Fault-Space-Formulation">Comparing Solutions over weights - Fault-Space Formulation</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../examples/rover/optimization/Search_Comparison.html#Comparing-Solutions-over-weights---Result-Space-Formulation">Comparing Solutions over weights - Result-Space Formulation</a></li>
-</ul>
-</li>
-<li class="toctree-l3"><a class="reference internal" href="../examples/rover/optimization/Rover_Response_Optimization.html">Rover Response Optimization</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="../examples/rover/optimization/Rover_Response_Optimization.html#Optimization">Optimization</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../examples/rover/readme.html">Rover Model</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../examples/rover/readme.html#models">Models</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../examples/rover/readme.html#scripts-and-tests">Scripts and tests:</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../examples/rover/readme.html#notebooks">Notebooks</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../examples/rover/readme.html#references">References</a></li>
 </ul>
 </li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="../examples/Examples.html#multiflow-demo">Multiflow Demo</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="../examples/multiflow_demo/Multiflow_and_Commsflow_Demonstration.html">Demonstration on Using MultiFlow and CommsFlow</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="../examples/multiflow_demo/Multiflow_and_Commsflow_Demonstration.html#Bulding-Flows">Bulding Flows</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../examples/multiflow_demo/readme.html">MultiFlow Demo Model</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../examples/multiflow_demo/readme.html#models">Models</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../examples/multiflow_demo/readme.html#scripts-and-tests">Scripts and tests:</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../examples/multiflow_demo/readme.html#notebooks">Notebooks</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../examples/multiflow_demo/readme.html#references">References</a></li>
 </ul>
 </li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="../examples/Examples.html#taxiway">Taxiway</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="../examples/taxiway/Paper_Notebook.html">Taxiway Model Overview</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="../examples/taxiway/Paper_Notebook.html#Model-Simulation">Model Simulation</a></li>
-</ul>
-</li>
-<li class="toctree-l3"><a class="reference internal" href="../examples/taxiway/Paper_Notebook.html#Fault-Simulation-and-Analysis">Fault Simulation and Analysis</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="../examples/taxiway/Paper_Notebook.html#Perception-Fault---AC-Vision-Fault">Perception Fault - AC Vision Fault</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../examples/taxiway/Paper_Notebook.html#Communications-Fault---Poor-land-command-by-ATC">Communications Fault - Poor land command by ATC</a></li>
-</ul>
-</li>
+<li class="toctree-l3"><a class="reference internal" href="../examples/taxiway/readme.html">Taxiway Model</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../examples/taxiway/readme.html#models">Models</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../examples/taxiway/readme.html#scripts-and-tests">Scripts and tests:</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../examples/taxiway/readme.html#notebooks">Notebooks</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../examples/taxiway/readme.html#references">References</a></li>
 </ul>
 </li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="Glossary.html">Glossary</a></li>
+</ul>
+</li>
 <li class="toctree-l1"><a class="reference internal" href="fmdtools.html">Module Reference</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="fmdtools.define.html">fmdtools.define</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="fmdtools.define.architecture.html">fmdtools.define.architecture</a><ul>
@@ -317,20 +241,20 @@
 <li class="toctree-l4"><a class="reference internal" href="fmdtools.define.block.html#module-fmdtools.define.block.base">fmdtools.define.block.base</a></li>
 <li class="toctree-l4"><a class="reference internal" href="fmdtools.define.block.html#module-fmdtools.define.block.action">fmdtools.define.block.action</a></li>
 <li class="toctree-l4"><a class="reference internal" href="fmdtools.define.block.html#module-fmdtools.define.block.component">fmdtools.define.block.component</a></li>
-<li class="toctree-l4"><a class="reference internal" href="fmdtools.define.block.html#fmdtools-define-block-function">fmdtools.define.block.function</a></li>
+<li class="toctree-l4"><a class="reference internal" href="fmdtools.define.block.html#module-fmdtools.define.block.function">fmdtools.define.block.function</a></li>
 </ul>
 </li>
 <li class="toctree-l3"><a class="reference internal" href="fmdtools.define.container.html">fmdtools.define.container</a><ul>
 <li class="toctree-l4"><a class="reference internal" href="fmdtools.define.container.html#fmdtools-define-container-base">fmdtools.define.container.base</a></li>
 <li class="toctree-l4"><a class="reference internal" href="fmdtools.define.container.html#module-fmdtools.define.container.mode">fmdtools.define.container.mode</a></li>
-<li class="toctree-l4"><a class="reference internal" href="fmdtools.define.container.html#module-fmdtools.define.container.state">fmdtools.define.container.state</a></li>
+<li class="toctree-l4"><a class="reference internal" href="fmdtools.define.container.html#fmdtools-define-container-state">fmdtools.define.container.state</a></li>
 <li class="toctree-l4"><a class="reference internal" href="fmdtools.define.container.html#fmdtools-define-container-parameter">fmdtools.define.container.parameter</a></li>
 <li class="toctree-l4"><a class="reference internal" href="fmdtools.define.container.html#module-fmdtools.define.container.rand">fmdtools.define.container.rand</a></li>
 <li class="toctree-l4"><a class="reference internal" href="fmdtools.define.container.html#module-fmdtools.define.container.time">fmdtools.define.container.time</a></li>
 </ul>
 </li>
 <li class="toctree-l3"><a class="reference internal" href="fmdtools.define.flow.html">fmdtools.define.flow</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="fmdtools.define.flow.html#module-fmdtools.define.flow.base">fmdtools.define.flow.base</a></li>
+<li class="toctree-l4"><a class="reference internal" href="fmdtools.define.flow.html#fmdtools-define-flow-base">fmdtools.define.flow.base</a></li>
 <li class="toctree-l4"><a class="reference internal" href="fmdtools.define.flow.html#module-fmdtools.define.flow.multiflow">fmdtools.define.flow.multiflow</a></li>
 <li class="toctree-l4"><a class="reference internal" href="fmdtools.define.flow.html#module-fmdtools.define.flow.commsflow">fmdtools.define.flow.commsflow</a></li>
 </ul>
@@ -364,6 +288,13 @@
 </li>
 </ul>
 </li>
+<li class="toctree-l1"><a class="reference internal" href="../CONTRIBUTORS.html">Contributors</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../CONTRIBUTORS.html#internal-contributors">Internal Contributors</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../CONTRIBUTORS.html#external-contributors">External Contributors</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../CONTRIBUTORS.html#alumni-and-interns">Alumni and Interns</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../CONTRIBUTORS.html#fmdtools-at-osu">fmdtools at OSU</a></li>
+</ul>
+</li>
 </ul>
 
         </div>
@@ -394,342 +325,104 @@
 <h1>Development Guide<a class="headerlink" href="#development-guide" title="Permalink to this heading"></a></h1>
 <section id="why-fmdtools">
 <h2>Why fmdtools?<a class="headerlink" href="#why-fmdtools" title="Permalink to this heading"></a></h2>
-<figure class="align-default" id="id4">
+<p>Use fmdtools to improve your understanding of the dynamics of hazardous behavior. The fmdtools library was developed to study resilience, which is an important consideration in designing safe, low-risk systems. Resilience is the ability of a system to mitigate hazardous scenarios as they arise. As shown below, the key defining aspect of resilience is the <strong>dynamics of failure events</strong>, which may lead to recovery (or, a safe outcome) or failure (or, an unsafe outcome).</p>
+<figure class="align-default" id="id3">
 <a class="reference internal image-reference" href="../_images/resilience_importance.png"><img alt="importance of considering resilience" src="../_images/resilience_importance.png" style="width: 800px;" /></a>
 <figcaption>
-<p><span class="caption-text">Resilience is important to consider when dynamics of system behavior can lead to hazardous or unsafe outcomes.</span><a class="headerlink" href="#id4" title="Permalink to this image"></a></p>
+<p><span class="caption-text">Resilience is important to consider when dynamics of system behavior can lead to hazardous or unsafe outcomes.</span><a class="headerlink" href="#id3" title="Permalink to this image"></a></p>
 </figcaption>
 </figure>
-<p>The fmdtools library was developed to study resilience, which is an important consideration in designing safe, low-risk systems. As shown above, the key defining aspect of resilience is the <strong>dynamics of failure events</strong>, which may lead to recovery (or, a safe outcome) or failure (or, an unsafe outcome).</p>
-<p>The main reason for developing fmdtools was a lack of existing open-source tools to model these dynamics at a high level (i.e., functions and flows) in the design process. Thus, researchers in this area had to re-implement modeling, simulation, and analysis approaches for each new case study or methodological improvement. The fmdtools package resolves this problem by separating resilience modeling, simulation, and analysis constructs from the model under study, enabling reuse of methodologies between case studies. Towards this end, the fmdtools package provides three major functions:</p>
-<ol class="arabic simple">
-<li><p>Model definition constructs that enable systematic early specification of high level structure and behaviors of a system with concise syntax (<code class="xref py py-mod docutils literal notranslate"><span class="pre">fmdtools.define</span></code>).</p></li>
-<li><p>Simulation methods that enable the quantification of system performance and propagation of hazards over a wide range of operational scenarios and model types (<code class="xref py py-mod docutils literal notranslate"><span class="pre">fmdtools.sim</span></code>).</p></li>
-<li><p>Analysis methods for quantifying resilience and summarizing and visualizing behaviors and properties of interest (<code class="xref py py-mod docutils literal notranslate"><span class="pre">fmdtools.analyze</span></code>).</p></li>
-</ol>
-<p>An overview of an earlier version of fmdtools (0.6.2) is provided in the paper:</p>
-<p><a class="reference external" href="https://doi.org/10.36001/ijphm.2021.v12i3.2954">Hulse, D., Walsh, H., Dong, A., Hoyle, C., Tumer, I., Kulkarni, C., &amp; Goebel, K. (2021). fmdtools: A Fault Propagation Toolkit for Resilience Assessment in Early Design. International Journal of Prognostics and Health Management, 12(3).</a></p>
-<section id="key-features">
-<h3>Key Features<a class="headerlink" href="#key-features" title="Permalink to this heading"></a></h3>
-<p>fmdtools was developed with a number of unique features that differentiate it from existing safety/resilience simulation tools.</p>
+<p>The impetus for developing fmdtools was a lack of existing open-source tools to model these dynamics at a high level (i.e., functions and flows) in the design process. Thus, researchers in this area had to re-implement modeling, simulation, and analysis approaches for each new case study or methodological improvement. The fmdtools package resolved this problem by separating resilience modeling, simulation, and analysis constructs from the model under study, enabling reuse of methodologies between case studies. The goals of the fmdtools project have since shifted to the more general goal of <strong>improving the hazard assessment process</strong> by better representing systems resilience. Towards this end, fmdtools provides the following capabilities:</p>
 <ul class="simple">
-<li><p>fmdtools uses an object-oriented undirected graph-based model representation which enables arbitrary propagation of flow states through a model graph, as opposed to a <em>procedural</em> <em>directed</em> graph-based model representation (a typical strategy for developing fault models in code is to represent functions or components by methods where the inputs and outputs of these methods connect the functions/components in a larger model method). This enables one to:</p>
-<ul>
-<li><p>propagate behaviors in multiple directions in a model graph, e.g., closing a valve will not just reduce flow in the downstream pipe but also increase pressure in upstream pipes.</p></li>
-<li><p>define the data structures that make a function/component (e.g., states, faults, timed events) with the behavioral methods in a single logical structure that can be re-used and modified for similar components and methods (that is, a class, instead of a set of unstructured variables and methods)</p></li>
+<li><p><strong>Representing system dynamics</strong> to enable the quantification of resilience properties. Typically, hazard assessment processes neglect the consideration of resilience because they focus on the immediate effects of faults on the function of the system, rather than an assessment of how these effects play out over time. The fmdtools library enables this consideration by providing a behavioral view of hazardous scenarios. This is important both for understanding hazardous behaviors, but also how they can be mitigated as they arise.</p></li>
+<li><p><strong>Representing operational behaviors and actions</strong> to enable the assessment the contributions of human operators and autonomous/AI-enabled systems to overall risk and resilience. Traditional hazard assessment approaches do not consider the feedback between operators, the system, and the environment, instead leaving them as “accidents” or “mistakes” to be blamed on the operator. With fmdtools, these hazards can be considered directly by modelling potential operator behaviors and how they support or degrade overall systems resilience. These approaches can also be used to better understand the risks posed by AI/autonomous systems.</p></li>
+<li><p><strong>Enabling a Model/Simulation-based hazard analysis paradigm</strong> by allowing the iterative, consistent analysis of resilience through the design, implementation, and V&amp;V processes. The traditional hazard assessment process is a manual, expert-driven approach that is inefficient to iterate on or change as a the design changes or assumptions are validated (or invalidated). In contrast, because all assumptions in fmdtools are represented as code, they can easily be modified as assumptions change while maintaining the overall integrity of the analysis. Furthermore, simulations in fmdtools can be efficiently and consistently be varied to analyze a system in more detail or in different configurations.</p></li>
 </ul>
-</li>
-<li><p>fmdtools can represent different system elements including human and AI components, and their interactions in both systems and system of systems. Additionally, fmdtools allows the modeling of the interactions between systems/system-of-systems and external factors such as the environment (e.g., weather, organizational factors). Specifically, fmdtools enables:</p>
-<ul>
-<li><p>Representing the actions of autonomous systems and human operators and behaviors through functions/actions and action architectures</p></li>
-<li><p>Representing performance shaping factors, the interactions between performance shaping factors, their short-term and long-term influence on overall system resilience</p></li>
-<li><p>Modeling perception and communications (for both human and artificial intelligence components) to allow the study of situation awareness’s contribution to safety (both positive and negative) in system of systems (and systems) by representing systems via functions and the interconnection between systems via flows</p></li>
-<li><p>Representing the influence of external factors on system behaviors through parameters and parameter sampling</p></li>
-</ul>
-</li>
-<li><p>fmdtools can represent the system at varying levels of fidelity through the design process so that one can start with a simple model and analysis, and make it more detailed as the design is elaborated. A typical process of representing the system (from less to more detail) would involve:</p>
-<ul>
-<li><p>Creating a network representation of the model functions and flows to visualize the system and identify structurally-important parts of the model’s causal structure</p></li>
-<li><p>Elaborating the flow attributes and function failure logic in a static propagation to simulate the timeless effects of faults in the model</p></li>
-<li><p>Adding dynamic states and behaviors to the functions as well as a simulation times and operational phases in a dynamic propagation model to simulate the dynamic effects of faults instantiated at different time-steps</p></li>
-<li><p>Instantiating functions with component architectures to compare the expected resilience and behaviors of each</p></li>
-<li><p>Defining stochastic behavioral and input parameters to simulate and analyze system resilience throughout the operational envelope</p></li>
-<li><p>Using optimization methods to search the space of potential hazardous scenarios and find the optimal response parameters to mitigate these scenarios</p></li>
-</ul>
-</li>
-<li><p>fmdtools provides convenient methods for quickly visualizing the results of fault simulations with commonly-used Python libraries to enable one to quickly assess:</p>
-<ul>
-<li><p>effects of faults on functions and flows in the model graph at a given time-step</p></li>
-<li><p>the behavior of system states over time in nominal and faulty scenarios over a range of operational parameters</p></li>
-<li><p>the effect of model input parameters (e.g., ranges, stochastic inputs) on nominal/faulty operations</p></li>
-<li><p>the high-level results of a set of simulations in an FMEA-style table of faults, effects, rates, costs, and overall risk</p></li>
-<li><p>simulation responses over a range or distribution of model and scenario parameters</p></li>
-</ul>
-</li>
-</ul>
+<p>While this libary primarily provides code structures, a major objective of this library is further to enable these techniques to be used in a graphical simulation tool for hazard assessment.</p>
 </section>
-</section>
-<section id="intro-to-fmdtools">
-<h2>Intro to fmdtools<a class="headerlink" href="#intro-to-fmdtools" title="Permalink to this heading"></a></h2>
+<section id="introductory-tutorial">
+<h2>Introductory Tutorial<a class="headerlink" href="#introductory-tutorial" title="Permalink to this heading"></a></h2>
 <p><strong>The best place to start</strong> to getting acquanted with basic syntax and functionality is the <a class="reference internal" href="Intro_to_fmdtools.html"><span class="doc">Intro to fmdtools</span></a> workshop (<a class="reference download internal" download="" href="../_downloads/8beb090e1fc817752b2772e991b2a807/Intro_to_fmdtools.pdf"><code class="xref download docutils literal notranslate"><span class="pre">download</span> <span class="pre">slides</span> <span class="pre">as</span> <span class="pre">pdf</span></code></a>), which uses the <cite>Pump</cite> example to introduce the overall structure and use of fmdtools. Other models are further helpful to demonstrate the full variety of methods/approaches supported in fmdtools and their applcation for more advanced use-cases.</p>
 <div class="toctree-wrapper compound">
 </div>
 </section>
-<section id="contributions">
-<h2>Contributions<a class="headerlink" href="#contributions" title="Permalink to this heading"></a></h2>
-<p>Development of fmdtools is coordinated by the <a class="reference external" href="https://github.com/nasa/fmdtools/blob/main/CONTRIBUTORS.md">fmdtools team</a> at NASA Ames Research Center. As an open-source tool developed under the NASA Open Source Agreement, outside contributions are welcomed. To be able to submit contributions (e.g., pull requests), external contributors should first submit a contributors license agreement (<a class="reference external" href="https://github.com/nasa/fmdtools/blob/main/fmdtools_Individual_CLA.pdf">Individual CLA</a> , <a class="reference external" href="https://github.com/nasa/fmdtools/blob/main/fmdtools_Corporate_CLA.pdf">Corporate CLA</a>).</p>
-<section id="repo-structure">
-<h3>Repo Structure<a class="headerlink" href="#repo-structure" title="Permalink to this heading"></a></h3>
-<a class="reference internal image-reference" href="../_images/repo_structure.svg"><img alt="../_images/repo_structure.svg" src="../_images/repo_structure.svg" width="800" /></a>
-<p>Getting started with development first requires some basic familiarity with the repo structure, shown above. As shown, the repo contains:</p>
-<ul class="simple">
-<li><p><code class="docutils literal notranslate"><span class="pre">/fmdtools</span></code>, which is where the toolkit sub-packages and modules are held,</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">/tests</span></code>, which has tests of the modules,</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">/examples</span></code>, which are different case study examples, and</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">/docs</span></code>, which contains documentation.</p></li>
-</ul>
-<p>There are additionally a few scripts with specific purposes to serve the development process:</p>
-<ul class="simple">
-<li><p><code class="docutils literal notranslate"><span class="pre">run_all_tests.py</span></code> which is a script that runs tests defined in <cite>/tests</cite> and <cite>/examples</cite>,</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">setup.py</span></code>, which is used for building PyPI packages, and</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">MAKE</span></code>, which is used to build the sphinx documentation.</p></li>
-</ul>
-<section id="remote-structure">
-<h4>Remote Structure<a class="headerlink" href="#remote-structure" title="Permalink to this heading"></a></h4>
-<a class="reference internal image-reference" href="../_images/git_structure.svg"><img alt="../_images/git_structure.svg" src="../_images/git_structure.svg" width="800" /></a>
-<p>Development of fmdtools uses a two-track development model, in which contributions are provided within NASA as well as by external collaborators. To support this, there are multiple repositories which must be managed in the development process, as shown above. Essentially, there is:</p>
-<ul class="simple">
-<li><p>An internal bitbucket, where NASA coordination and development takes place,</p></li>
-<li><p>A public GitHub, where collaboration with outside developers takes place (and where documentation is hosted), and</p></li>
-<li><p>A PyPI repository which contains stable versions of fmdtools which can be readily installed via <code class="docutils literal notranslate"><span class="pre">pip</span></code>.</p></li>
-</ul>
-<p>The fmdtools team is responsible for coordinating the development between the internal and external git repositories. Managing multiple repositories can best be coordinated by:</p>
-<ul class="simple">
-<li><p>setting up multiple remotes on a single git repo on your machine using <cite>git remote</cite> and</p></li>
-<li><p>propagating changes between repositories during development using <cite>git push</cite> and <cite>git pull</cite> from each repository</p></li>
-</ul>
-</section>
-</section>
-<section id="development-process">
-<h3>Development Process<a class="headerlink" href="#development-process" title="Permalink to this heading"></a></h3>
-<a class="reference internal image-reference" href="../_images/dev_process.svg"><img alt="../_images/dev_process.svg" src="../_images/dev_process.svg" width="800" /></a>
-<p>To encourage code quality we follow the general process above to manage contributions:</p>
-<ol class="arabic simple">
-<li><p>Development begins on a <code class="docutils literal notranslate"><span class="pre">/dev</span></code> branch for a given version of fmdtools. This branch is used to test and integrate contributions from multiple sources.</p></li>
-<li><p>The first step in making a contribution is then to create an issue, which describes the work to be performed and/or problem to be solved.</p></li>
-<li><p>This issue can then be taken on in an issue branch (or repo for external contributions) and fixed.</p></li>
-<li><p>When the contributor is done with a given fix, they can submit a pull request, which enables the review of the fix as a whole.</p></li>
-<li><p>This fix is reviewed by a member of the fmdtools team, who may suggest changes.</p></li>
-<li><p>When the review is accepted, it is merged into the <code class="docutils literal notranslate"><span class="pre">dev</span></code> branch.</p></li>
-<li><p>When all the issues for a given version are complete (this may also happen concurrently with development), tests and documentation are updated for the branch. If tests do not pass (or are obsolete), contributions may be made directly on the <code class="docutils literal notranslate"><span class="pre">dev</span></code> branch to fix it, or further issues may be generated based on the impact of the change.</p></li>
-<li><p>When the software team deems the release process to be complete, the <code class="docutils literal notranslate"><span class="pre">dev</span></code> branch may be merged into the <cite>main</cite> branch. These branches are then used to create releases.</p></li>
-</ol>
-<p>The major exceptions to this process are:</p>
-<ul class="simple">
-<li><p>bug fixes, which, if minor, may occur on <code class="docutils literal notranslate"><span class="pre">main</span></code>/<code class="docutils literal notranslate"><span class="pre">dev</span></code> branches (or may be given their own branches off of <code class="docutils literal notranslate"><span class="pre">main</span></code>),</p></li>
-<li><p>external contributions, which are managed via pull request off of <code class="docutils literal notranslate"><span class="pre">main</span></code> (or some external dev branch), and</p></li>
-<li><p>minor documentation changes.</p></li>
-</ul>
-<section id="release-checklist">
-<h4>Release Checklist<a class="headerlink" href="#release-checklist" title="Permalink to this heading"></a></h4>
-<p>When releasing fmdtools, follow the steps in the <a class="reference download internal" download="" href="../_downloads/5c30b50c462e7bedd42160d15db7cf88/release_checklist.csv"><code class="xref download docutils literal notranslate"><span class="pre">Release</span> <span class="pre">Checklist</span></code></a>, see below:</p>
-<table class="docutils align-default" id="id5">
-<caption><span class="caption-text">Release Checklist</span><a class="headerlink" href="#id5" title="Permalink to this table"></a></caption>
-<colgroup>
-<col style="width: 13%" />
-<col style="width: 38%" />
-<col style="width: 13%" />
-<col style="width: 38%" />
-</colgroup>
-<thead>
-<tr class="row-odd"><th class="head"><p>Step</p></th>
-<th class="head"><p>Description</p></th>
-<th class="head"><p>Complete?</p></th>
-<th class="head"><p>Comment</p></th>
-</tr>
-</thead>
-<tbody>
-<tr class="row-even"><td><p>1</p></td>
-<td><p>Sync appropriate branches into release branch</p></td>
-<td></td>
-<td></td>
-</tr>
-<tr class="row-odd"><td><p>1a</p></td>
-<td><p>Internal branches (e.g. main dev)</p></td>
-<td></td>
-<td></td>
-</tr>
-<tr class="row-even"><td><p>1b</p></td>
-<td><p>External branches (e.g. main)</p></td>
-<td></td>
-<td></td>
-</tr>
-<tr class="row-odd"><td><p>2</p></td>
-<td><p>Run script run_all_tests.py and verify test results are appropriate</p></td>
-<td></td>
-<td></td>
-</tr>
-<tr class="row-even"><td><p>2a</p></td>
-<td><p>Run full tests</p></td>
-<td></td>
-<td></td>
-</tr>
-<tr class="row-odd"><td><p>2b</p></td>
-<td><p>Regenerate badge</p></td>
-<td></td>
-<td></td>
-</tr>
-<tr class="row-even"><td><p>3</p></td>
-<td><p>Update version numbers in appropriate files</p></td>
-<td></td>
-<td></td>
-</tr>
-<tr class="row-odd"><td><p>3a</p></td>
-<td><p>Check files conf.py LICENSE.py README.py Intro_to_fmdtools.md</p></td>
-<td></td>
-<td></td>
-</tr>
-<tr class="row-even"><td><p>3b</p></td>
-<td><p>Run a repository-wide search for the version number</p></td>
-<td></td>
-<td></td>
-</tr>
-<tr class="row-odd"><td><p>4</p></td>
-<td><p>Generate the documentation using “./make html”</p></td>
-<td></td>
-<td></td>
-</tr>
-<tr class="row-even"><td><p>5</p></td>
-<td><p>Commit and tag branch with the appropriate version.</p></td>
-<td></td>
-<td></td>
-</tr>
-<tr class="row-odd"><td><p>5a</p></td>
-<td><p>git tag -a v2.x.x -m ‘version 2.x.x’</p></td>
-<td></td>
-<td></td>
-</tr>
-<tr class="row-even"><td><p>6</p></td>
-<td><p>Sync to remotes</p></td>
-<td></td>
-<td></td>
-</tr>
-<tr class="row-odd"><td><p>6a</p></td>
-<td><p>Push release branch to github and internal remotes</p></td>
-<td></td>
-<td></td>
-</tr>
-<tr class="row-even"><td><p>6b</p></td>
-<td><p>Overwrite documentation on gh-pages and push to GitHub</p></td>
-<td></td>
-<td></td>
-</tr>
-<tr class="row-odd"><td><p>7</p></td>
-<td><p>Create a release in GitHub</p></td>
-<td></td>
-<td></td>
-</tr>
-<tr class="row-even"><td><p>7a</p></td>
-<td><p>incorporate a narrative summary of features and changes</p></td>
-<td></td>
-<td></td>
-</tr>
-<tr class="row-odd"><td><p>7b</p></td>
-<td><p>incorporate the auto-generated bitbucket release notes.</p></td>
-<td></td>
-<td></td>
-</tr>
-<tr class="row-even"><td><p>8</p></td>
-<td><p>Update project plan</p></td>
-<td></td>
-<td></td>
-</tr>
-<tr class="row-odd"><td><p>8a</p></td>
-<td><p>Include any changed dependencies</p></td>
-<td></td>
-<td></td>
-</tr>
-<tr class="row-even"><td><p>8b</p></td>
-<td><p>Include version in schedule</p></td>
-<td></td>
-<td></td>
-</tr>
-<tr class="row-odd"><td><p>8c</p></td>
-<td><p>Identify and include additional changes/activities</p></td>
-<td></td>
-<td></td>
-</tr>
-<tr class="row-even"><td><p>9</p></td>
-<td><p>Update/check external CI resources as needed</p></td>
-<td></td>
-<td></td>
-</tr>
-<tr class="row-odd"><td><p>9a</p></td>
-<td><p>CodeFactor</p></td>
-<td></td>
-<td></td>
-</tr>
-<tr class="row-even"><td><p>10</p></td>
-<td><p>If release is ‘stable’ Upload to PyPI (see below</p></td>
-<td></td>
-<td></td>
-</tr>
-<tr class="row-odd"><td></td>
-<td></td>
-<td></td>
-<td></td>
-</tr>
-</tbody>
-</table>
-</section>
-<section id="upload-to-pypi">
-<h4>Upload to PyPI<a class="headerlink" href="#upload-to-pypi" title="Permalink to this heading"></a></h4>
-<p>Note: Performing this process requires an account with the Python Package Index and Owner/Maintainer status in the fmdtools repository. Presently, this repository is owned by Daniel Hulse and setup should be coordinated with him.</p>
-<p>Note: Performing this process also requires a twine setup. For full instructions, see: <a class="reference external" href="https://www.geeksforgeeks.org/how-to-publish-python-package-at-pypi-using-twine-module/">https://www.geeksforgeeks.org/how-to-publish-python-package-at-pypi-using-twine-module/</a></p>
-<p>Once this is set up, the code can be built and uploaded using the following commands in powershell from the repository folder:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>python -m build
-python -m twine check dist/*
-python -m twine upload –repository pypi dist/*
-</pre></div>
-</div>
-<p>Note: when performing for the first time, it may be helpful to use the test python repo (substitute testpypi for pypi) first—an account is required however.</p>
-<p>Note: make sure that there are no old versions in <cite>dist/</cite></p>
-<p>After upload, test the deployment by:</p>
-<ol class="arabic simple">
-<li><p>Spot-checking the online repo (e.g., has the version updated?)</p></li>
-<li><p>Updating the package (<code class="docutils literal notranslate"><span class="pre">pip</span> <span class="pre">install</span> <span class="pre">–upgrade</span> <span class="pre">pip</span></code>)</p></li>
-</ol>
-</section>
-</section>
-<section id="roles">
-<h3>Roles<a class="headerlink" href="#roles" title="Permalink to this heading"></a></h3>
-<ul class="simple">
-<li><p>team lead:            coordinates all activities and has technical authority over project direction</p></li>
-<li><p>full developer:       can make changes off of version and main branches and has full ability to perform the release process</p></li>
-<li><p>contributor:          creates issues and develops off of issue branches</p></li>
-</ul>
-</section>
-<section id="documentation">
-<h3>Documentation<a class="headerlink" href="#documentation" title="Permalink to this heading"></a></h3>
-<p>Documentation is generated using Sphinx, which generates html from rst files. The process for generating documentation (after sphinx has been set up) is to open powershell and run:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">cd</span> <span class="n">path</span><span class="o">/</span><span class="n">to</span><span class="o">/</span><span class="n">fmdtools</span>
-<span class="o">./</span><span class="n">make</span> <span class="n">clean</span>
-<span class="o">./</span><span class="n">make</span> <span class="n">html</span>
-</pre></div>
-</div>
-<p>Note that sphinx requires the following requirements, which should be installed beforehand:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">nbsphinx</span>
-<span class="n">myst_parser</span>
-<span class="n">sphinx_rtd_theme</span>
-<span class="n">pandoc</span>
-</pre></div>
-</div>
-<p>Pandoc must be installed with anaconda (i.e., using <cite>conda install pandoc</cite>) since it is an external program.</p>
-</section>
-<section id="style-formatting">
-<h3>Style/Formatting<a class="headerlink" href="#style-formatting" title="Permalink to this heading"></a></h3>
-<p>Generally, we try to follow PEP8 style conventions. To catch these errors, it is best to <em>turn on PEP8 style linting</em> in your IDE of choice.</p>
-<p>Style conventions can additionally be followed/enforced automatically using the Black code formatter. See resources:</p>
-<ul class="simple">
-<li><p>stand-alone formatter: <a class="reference external" href="https://github.com/psf/black">https://github.com/psf/black</a></p></li>
-<li><p>VSCode Extension: <a class="reference external" href="https://marketplace.visualstudio.com/items?itemName=ms-python.black-formatter">https://marketplace.visualstudio.com/items?itemName=ms-python.black-formatter</a></p></li>
-<li><p>Spyder workflow: <a class="reference external" href="https://stackoverflow.com/questions/55698077/how-to-use-code-formatter-black-with-spyder">https://stackoverflow.com/questions/55698077/how-to-use-code-formatter-black-with-spyder</a></p></li>
-</ul>
-</section>
-<section id="testing">
-<h3>Testing<a class="headerlink" href="#testing" title="Permalink to this heading"></a></h3>
-<p>There are two major types of tests:</p>
-<ul class="simple">
-<li><p>quantitative tests, which are tests running <code class="docutils literal notranslate"><span class="pre">run_all_tests.py</span></code>, and</p></li>
-<li><p>qualitative tests, which are the example notebooks</p></li>
-</ul>
-</section>
-<section id="contributors">
-<h3>Contributors<a class="headerlink" href="#contributors" title="Permalink to this heading"></a></h3>
-<p>See: <a class="reference internal" href="../CONTRIBUTORS.html"><span class="doc">CONTRIBUTORS.md</span></a></p>
-<div class="toctree-wrapper compound">
-</div>
-</section>
+<section id="glossary">
+<h2>Glossary<a class="headerlink" href="#glossary" title="Permalink to this heading"></a></h2>
+<p>You can use the glossary as a reference to understand basic simulation and analysis concepts in fmdtools.</p>
+<dl class="simple glossary">
+<dt id="term-Function">Function<a class="headerlink" href="#term-Function" title="Permalink to this term"></a></dt><dd><p>A piece of functionality in a system which has its own defined behavior, modes, and flow connections, and may be further instantiated by a <a class="reference internal" href="#term-Component-Architecture"><span class="xref std std-term">component architecture</span></a> or <a class="reference internal" href="#term-Action-Sequence-Graph"><span class="xref std std-term">action sequence graph</span></a>. In general, functions are the main building block of a model defining how the different pieces of the system behave. Functions in fmdtools are specified by extending the <a class="reference internal" href="fmdtools.define.block.html#fmdtools.define.block.function.Function" title="fmdtools.define.block.function.Function"><code class="xref py py-class docutils literal notranslate"><span class="pre">fmdtools.define.block.function.Function</span></code></a> class.</p>
+</dd>
+<dt id="term-Flow">Flow<a class="headerlink" href="#term-Flow" title="Permalink to this term"></a></dt><dd><p>A data structure which connects functions–traditionally energy, material, or signal. Defined using the <a class="reference internal" href="fmdtools.define.flow.html#fmdtools.define.flow.base.Flow" title="fmdtools.define.flow.base.Flow"><code class="xref py py-class docutils literal notranslate"><span class="pre">fmdtools.define.flow.base.Flow</span></code></a> class.</p>
+</dd>
+<dt id="term-Role">Role<a class="headerlink" href="#term-Role" title="Permalink to this term"></a></dt><dd><p>A defined attribute of an fmdtools class which refers to a user-defined (or default) subclass of a corresponding fmdtools data structure. For example, Blocks have the container <cite>Block.s</cite> (for state) which may be filled by a subclass of <a class="reference internal" href="fmdtools.define.container.html#fmdtools.define.container.state.State" title="fmdtools.define.container.state.State"><code class="xref py py-class docutils literal notranslate"><span class="pre">fmdtools.define.container.state.State</span></code></a>.</p>
+</dd>
+<dt id="term-Internal-Flow">Internal Flow<a class="headerlink" href="#term-Internal-Flow" title="Permalink to this term"></a></dt><dd><p>A flow object that is internal to a <a class="reference internal" href="fmdtools.define.block.html#fmdtools.define.block.function.Function" title="fmdtools.define.block.function.Function"><code class="xref py py-class docutils literal notranslate"><span class="pre">fmdtools.define.block.function.Function</span></code></a> which is not present in the overall model definition.</p>
+</dd>
+<dt id="term-Model">Model<a class="headerlink" href="#term-Model" title="Permalink to this term"></a></dt><dd><p>A simulation that defines system behavior. Models contain functions and flows, their graph connections, parameters related to the simulation configuration, as well as methods for classifying simulations.</p>
+</dd>
+<dt id="term-Behavior">Behavior<a class="headerlink" href="#term-Behavior" title="Permalink to this term"></a></dt><dd><p>How the states of a system unfold over time, including in the various <a class="reference internal" href="#term-Mode"><span class="xref std std-term">mode</span></a> s it may encounter. Defined in <a class="reference internal" href="#term-Function"><span class="xref std std-term">Function</span></a> s, <a class="reference internal" href="#term-Component"><span class="xref std std-term">Component</span></a> s, and <a class="reference internal" href="#term-Action"><span class="xref std std-term">Action</span></a> s using <code class="xref py py-meth docutils literal notranslate"><span class="pre">fmdtools.define.Block.behavior()</span></code>, <code class="xref py py-meth docutils literal notranslate"><span class="pre">fmdtools.define.Block.static_behavior()</span></code>, <code class="xref py py-meth docutils literal notranslate"><span class="pre">fmdtools.define.Block.dynamic_behavior()</span></code>, and <code class="xref py py-meth docutils literal notranslate"><span class="pre">fmdtools.define.Block.condfaults()</span></code></p>
+</dd>
+<dt id="term-Graph">Graph<a class="headerlink" href="#term-Graph" title="Permalink to this term"></a></dt><dd><p>A view of simulation construct connections and/or relationships embodied by the <a class="reference internal" href="fmdtools.analyze.html#fmdtools.analyze.graph.Graph" title="fmdtools.analyze.graph.Graph"><code class="xref py py-class docutils literal notranslate"><span class="pre">fmdtools.analyze.graph.Graph</span></code></a> class and sub-classes (which uses networkx to represent the structure itself).</p>
+</dd>
+<dt id="term-Component">Component<a class="headerlink" href="#term-Component" title="Permalink to this term"></a></dt><dd><p>A physical component that embodies specific behavior for a <a class="reference internal" href="#term-Function"><span class="xref std std-term">function</span></a>. May have <a class="reference internal" href="#term-Mode"><span class="xref std std-term">mode</span></a> s and <a class="reference internal" href="#term-Behavior"><span class="xref std std-term">behavior</span></a> s of its own. Specified by extending the <a class="reference internal" href="fmdtools.define.block.html#fmdtools.define.block.component.Component" title="fmdtools.define.block.component.Component"><code class="xref py py-class docutils literal notranslate"><span class="pre">fmdtools.define.block.component.Component</span></code></a> class.</p>
+</dd>
+<dt id="term-Component-Architecture">Component Architecture<a class="headerlink" href="#term-Component-Architecture" title="Permalink to this term"></a></dt><dd><p>The physical embodiment of a <a class="reference internal" href="#term-Function"><span class="xref std std-term">function</span></a> that encompasses multiple <a class="reference internal" href="#term-Component"><span class="xref std std-term">Component</span></a> s. Represented via the <a class="reference internal" href="fmdtools.define.architecture.html#fmdtools.define.architecture.component.ComponentArchitecture" title="fmdtools.define.architecture.component.ComponentArchitecture"><code class="xref py py-class docutils literal notranslate"><span class="pre">fmdtools.define.architecture.component.ComponentArchitecture</span></code></a> class.</p>
+</dd>
+<dt id="term-Mode">Mode<a class="headerlink" href="#term-Mode" title="Permalink to this term"></a></dt><dd><p>Discrete modifications of a <a class="reference internal" href="#term-Behavior"><span class="xref std std-term">behavior</span></a> specified as entries in the <a class="reference internal" href="fmdtools.define.container.html#fmdtools.define.container.mode.Mode" title="fmdtools.define.container.mode.Mode"><code class="xref py py-meth docutils literal notranslate"><span class="pre">fmdtools.define.container.mode.Mode()</span></code></a> class. Often used to control if/else statements in a <a class="reference internal" href="#term-Behavior"><span class="xref std std-term">behavior</span></a> method within a <a class="reference internal" href="#term-Function"><span class="xref std std-term">function</span></a>.</p>
+</dd>
+<dt id="term-Fault-Mode">Fault Mode<a class="headerlink" href="#term-Fault-Mode" title="Permalink to this term"></a></dt><dd><p>Undesired <a class="reference internal" href="#term-Mode"><span class="xref std std-term">mode</span></a>, which leads to hazardous behavior. For example, a lamp may have “burn-out” due to a “flicker” mode.</p>
+</dd>
+<dt id="term-Operational-Mode">Operational Mode<a class="headerlink" href="#term-Operational-Mode" title="Permalink to this term"></a></dt><dd><p>Defined <a class="reference internal" href="#term-Mode"><span class="xref std std-term">mode</span></a> that the system progresses through as a part of its desired functioning. For example, a light switch may be in “on” and “off” modes.</p>
+</dd>
+<dt id="term-Action-Sequence-Graph">Action Sequence Graph<a class="headerlink" href="#term-Action-Sequence-Graph" title="Permalink to this term"></a></dt><dd><p>An instance of the <a class="reference internal" href="fmdtools.define.architecture.html#fmdtools.define.architecture.action.ActionArchitecture" title="fmdtools.define.architecture.action.ActionArchitecture"><code class="xref py py-class docutils literal notranslate"><span class="pre">fmdtools.define.architecture.action.ActionArchitecture</span></code></a> which embodies a (human or autonomous) <a class="reference internal" href="#term-Agent"><span class="xref std std-term">agent</span></a>’s sequence of tasks which it performs to accomplish a certain function.</p>
+</dd>
+<dt id="term-Agent">Agent<a class="headerlink" href="#term-Agent" title="Permalink to this term"></a></dt><dd><p>An actor which controls behaviors in a system. May be modeled as a <a class="reference internal" href="#term-Function"><span class="xref std std-term">function</span></a>.</p>
+</dd>
+<dt id="term-Environment">Environment<a class="headerlink" href="#term-Environment" title="Permalink to this term"></a></dt><dd><p>The uncontrolled aspect of a system which may effect system inputs and behaviors. May be modeled as a <a class="reference internal" href="#term-Function"><span class="xref std std-term">function</span></a>.</p>
+</dd>
+<dt id="term-Action">Action<a class="headerlink" href="#term-Action" title="Permalink to this term"></a></dt><dd><p>A specific task to be performed by an <a class="reference internal" href="#term-Agent"><span class="xref std std-term">agent</span></a> used to represent human/autonomous operations. May be specified by extending the <a class="reference internal" href="fmdtools.define.block.html#fmdtools.define.block.action.Action" title="fmdtools.define.block.action.Action"><code class="xref py py-class docutils literal notranslate"><span class="pre">fmdtools.define.block.action.Action</span></code></a> class and added to a <a class="reference internal" href="fmdtools.define.block.html#fmdtools.define.block.function.Function" title="fmdtools.define.block.function.Function"><code class="xref py py-class docutils literal notranslate"><span class="pre">fmdtools.define.block.function.Function</span></code></a> as a part of an Action Sequence Graph <a class="reference internal" href="fmdtools.define.architecture.html#fmdtools.define.architecture.action.ActionArchitecture" title="fmdtools.define.architecture.action.ActionArchitecture"><code class="xref py py-class docutils literal notranslate"><span class="pre">fmdtools.define.architecture.action.ActionArchitecture</span></code></a>.</p>
+</dd>
+<dt id="term-Rate">Rate<a class="headerlink" href="#term-Rate" title="Permalink to this term"></a></dt><dd><p>The expected occurence (frequency) of a given <a class="reference internal" href="#term-Mode"><span class="xref std std-term">mode</span></a>, which may be specified in a number of ways using <a class="reference internal" href="fmdtools.define.container.html#fmdtools.define.container.mode.Mode.faultmodes" title="fmdtools.define.container.mode.Mode.faultmodes"><code class="xref py py-meth docutils literal notranslate"><span class="pre">fmdtools.define.container.mode.Mode.faultmodes()</span></code></a>.</p>
+</dd>
+<dt id="term-Cost">Cost<a class="headerlink" href="#term-Cost" title="Permalink to this term"></a></dt><dd><p>A metric used to define severity of a scenario. While cost is defined in a monetary sense, it should often be defined holistically to account for indirect costs and externalities (e.g., safety, disruption, etc). One of the default outputs from <code class="xref py py-meth docutils literal notranslate"><span class="pre">fmdtools.define.block.base.Simulabl.find_classification()</span></code> for models or blocks.</p>
+</dd>
+<dt id="term-Expected-Cost">Expected Cost<a class="headerlink" href="#term-Expected-Cost" title="Permalink to this term"></a></dt><dd><p>A metric used to define risk of a scenario, calculated my multiplying the <a class="reference internal" href="#term-Rate"><span class="xref std std-term">rate</span></a> and <a class="reference internal" href="#term-Cost"><span class="xref std std-term">cost</span></a>.</p>
+</dd>
+<dt id="term-Endclass">Endclass<a class="headerlink" href="#term-Endclass" title="Permalink to this term"></a></dt><dd><p>The end-state classification given from <code class="xref py py-meth docutils literal notranslate"><span class="pre">fmdtools.define.block.base.Simulabl.find_classification()</span></code>.</p>
+</dd>
+<dt id="term-Scenario">Scenario<a class="headerlink" href="#term-Scenario" title="Permalink to this term"></a></dt><dd><p>A specific set of inputs to a simulation, including <span class="xref std std-term">parameters</span>, <a class="reference internal" href="#term-Fault-Mode"><span class="xref std std-term">Fault Mode</span></a> s, and <a class="reference internal" href="#term-Disturbances"><span class="xref std std-term">Disturbances</span></a>. Defined in <a class="reference internal" href="fmdtools.sim.html#fmdtools.sim.scenario.Scenario" title="fmdtools.sim.scenario.Scenario"><code class="xref py py-class docutils literal notranslate"><span class="pre">fmdtools.sim.scenario.Scenario</span></code></a>.</p>
+</dd>
+<dt id="term-Disturbances">Disturbances<a class="headerlink" href="#term-Disturbances" title="Permalink to this term"></a></dt><dd><p>A specific sequence of variable values over time which may modify system behavior.</p>
+</dd>
+<dt id="term-Sample">Sample<a class="headerlink" href="#term-Sample" title="Permalink to this term"></a></dt><dd><p>A set of <a class="reference internal" href="#term-Scenario"><span class="xref std std-term">scenario</span></a> s to simulate a model over to represent certain hazards or parameters of interest. May be generated using <a class="reference internal" href="fmdtools.sim.html#fmdtools.sim.sample.FaultSample" title="fmdtools.sim.sample.FaultSample"><code class="xref py py-class docutils literal notranslate"><span class="pre">fmdtools.sim.sample.FaultSample</span></code></a> for fault modes or <a class="reference internal" href="fmdtools.sim.html#fmdtools.sim.sample.ParameterSample" title="fmdtools.sim.sample.ParameterSample"><code class="xref py py-class docutils literal notranslate"><span class="pre">fmdtools.sim.sample.ParameterSample</span></code></a> for nominal parameters.</p>
+</dd>
+<dt id="term-Nested-Approach">Nested Approach<a class="headerlink" href="#term-Nested-Approach" title="Permalink to this term"></a></dt><dd><p>The result of simulating a fault sampling <span class="xref std std-term">Approach</span> (<a class="reference internal" href="fmdtools.sim.html#fmdtools.sim.sample.SampleApproach" title="fmdtools.sim.sample.SampleApproach"><code class="xref py py-class docutils literal notranslate"><span class="pre">fmdtools.sim.sample.SampleApproach</span></code></a>) within a nominal <span class="xref std std-term">Approach</span> (<a class="reference internal" href="fmdtools.sim.html#fmdtools.sim.sample.ParameterSample" title="fmdtools.sim.sample.ParameterSample"><code class="xref py py-class docutils literal notranslate"><span class="pre">fmdtools.sim.sample.ParameterSample</span></code></a>). Created in <a class="reference internal" href="fmdtools.sim.html#fmdtools.sim.propagate.nested_sample" title="fmdtools.sim.propagate.nested_sample"><code class="xref py py-func docutils literal notranslate"><span class="pre">fmdtools.sim.propagate.nested_sample()</span></code></a>.</p>
+</dd>
+<dt id="term-Static-Propagation">Static Propagation<a class="headerlink" href="#term-Static-Propagation" title="Permalink to this term"></a></dt><dd><p>The undirected propagation of model behaviors within a timestep. Defined for each function using <code class="xref py py-meth docutils literal notranslate"><span class="pre">fmdtools.define.block.Function.static_behavior()</span></code>, which may run multiple times in a timestep until behavior has converged. The static <a class="reference internal" href="#term-Behavior"><span class="xref std std-term">behavior</span></a> s are propagated through the graph using the method <a class="reference internal" href="fmdtools.define.architecture.html#fmdtools.define.architecture.function.FunctionArchitecture.prop_static" title="fmdtools.define.architecture.function.FunctionArchitecture.prop_static"><code class="xref py py-meth docutils literal notranslate"><span class="pre">fmdtools.define.architecture.function.FunctionArchitecture.prop_static()</span></code></a>.</p>
+</dd>
+<dt id="term-Dynamic-Propagation">Dynamic Propagation<a class="headerlink" href="#term-Dynamic-Propagation" title="Permalink to this term"></a></dt><dd><p>The progression of model states over time. Defined for each function using <code class="xref py py-meth docutils literal notranslate"><span class="pre">fmdtools.define.block.Function.dynamic_behavior()</span></code>, which runs once per timestep. The dynamic <a class="reference internal" href="#term-Behavior"><span class="xref std std-term">behavior</span></a> s are propagated using the method <code class="xref py py-meth docutils literal notranslate"><span class="pre">fmdtools.define.block.Function.static_behavior()</span></code>, which may run multiple times in a timestep until behavior has converged. The static <a class="reference internal" href="#term-Behavior"><span class="xref std std-term">behavior</span></a> s are propagated through the graph using the method <a class="reference internal" href="fmdtools.define.architecture.html#fmdtools.define.architecture.function.FunctionArchitecture.propagate" title="fmdtools.define.architecture.function.FunctionArchitecture.propagate"><code class="xref py py-meth docutils literal notranslate"><span class="pre">fmdtools.define.architecture.function.FunctionArchitecture.propagate()</span></code></a>.</p>
+</dd>
+<dt id="term-Propagation">Propagation<a class="headerlink" href="#term-Propagation" title="Permalink to this term"></a></dt><dd><p>The simulation of <a class="reference internal" href="fmdtools.define.architecture.html#fmdtools.define.architecture.function.FunctionArchitecture" title="fmdtools.define.architecture.function.FunctionArchitecture"><code class="xref py py-class docutils literal notranslate"><span class="pre">fmdtools.define.architecture.function.FunctionArchitecture</span></code></a> <a class="reference internal" href="#term-Behavior"><span class="xref std std-term">behavior</span></a> s, including the passing of <a class="reference internal" href="#term-Flow"><span class="xref std std-term">flow</span></a> s between <a class="reference internal" href="#term-Function"><span class="xref std std-term">function</span></a> s and the progression of model states over time.</p>
+</dd>
+<dt id="term-Resilience">Resilience<a class="headerlink" href="#term-Resilience" title="Permalink to this term"></a></dt><dd><p>The expectation of defined performance metrics over time over a set of hazardous <a class="reference internal" href="#term-Scenario"><span class="xref std std-term">scenario</span></a> s, often defined in terms of the deviation from their nominal values.</p>
+</dd>
+<dt id="term-End-state">End-state<a class="headerlink" href="#term-End-state" title="Permalink to this term"></a></dt><dd><p>The state of a <a class="reference internal" href="fmdtools.define.block.html#fmdtools.define.block.base.Simulable" title="fmdtools.define.block.base.Simulable"><code class="xref py py-class docutils literal notranslate"><span class="pre">fmdtools.define.block.base.Simulable</span></code></a> at the final time-step of a simulation.</p>
+</dd>
+<dt id="term-FMEA">FMEA<a class="headerlink" href="#term-FMEA" title="Permalink to this term"></a></dt><dd><p>A table outlining the risks of hazardous <a class="reference internal" href="#term-Scenario"><span class="xref std std-term">scenario</span></a> s in terms of their rate, severity, and expected risk. By default, the <a class="reference internal" href="fmdtools.analyze.html#module-fmdtools.analyze.tabulate" title="fmdtools.analyze.tabulate"><code class="xref py py-mod docutils literal notranslate"><span class="pre">fmdtools.analyze.tabulate</span></code></a> module produces cost-based FMEAS, with the metrics of interest being <a class="reference internal" href="#term-Rate"><span class="xref std std-term">rate</span></a>, <a class="reference internal" href="#term-Cost"><span class="xref std std-term">cost</span></a>, and <a class="reference internal" href="#term-Expected-Cost"><span class="xref std std-term">expected cost</span></a>, however these functions can be tailored to the metrics of interest.</p>
+</dd>
+<dt id="term-Behavior-Over-Time">Behavior Over Time<a class="headerlink" href="#term-Behavior-Over-Time" title="Permalink to this term"></a></dt><dd><p>How a the states of a system unfold over time. Defined using <a class="reference internal" href="#term-Behavior"><span class="xref std std-term">behavior</span></a>.</p>
+</dd>
+<dt id="term-Model-History">Model History<a class="headerlink" href="#term-Model-History" title="Permalink to this term"></a></dt><dd><p>A history of model states over a set of timesteps defined in <a class="reference internal" href="fmdtools.analyze.html#fmdtools.analyze.history.History" title="fmdtools.analyze.history.History"><code class="xref py py-class docutils literal notranslate"><span class="pre">fmdtools.analyze.history.History</span></code></a>. Returned in fmdtools as a nested dictionary from methods in <a class="reference internal" href="fmdtools.sim.html#module-fmdtools.sim.propagate" title="fmdtools.sim.propagate"><code class="xref py py-mod docutils literal notranslate"><span class="pre">fmdtools.sim.propagate</span></code></a>.</p>
+</dd>
+<dt id="term-FRDL">FRDL<a class="headerlink" href="#term-FRDL" title="Permalink to this term"></a></dt><dd><p>See: <a class="reference internal" href="#term-Functional-Reasoning-Design-Language"><span class="xref std std-term">Functional Reasoning Design Language</span></a>.</p>
+</dd>
+<dt id="term-Architecture">Architecture<a class="headerlink" href="#term-Architecture" title="Permalink to this term"></a></dt><dd><p>Composition of blocks. Defined using <a class="reference internal" href="fmdtools.define.architecture.html#fmdtools.define.architecture.base.Architecture" title="fmdtools.define.architecture.base.Architecture"><code class="xref py py-class docutils literal notranslate"><span class="pre">fmdtools.define.architecture.base.Architecture</span></code></a> and its sub-classes.</p>
+</dd>
+<dt id="term-Functional-Reasoning-Design-Language">Functional Reasoning Design Language<a class="headerlink" href="#term-Functional-Reasoning-Design-Language" title="Permalink to this term"></a></dt><dd><p>Language used to define/represent the network structure and behavioral propagation of an <a class="reference internal" href="#term-Architecture"><span class="xref std std-term">Architecture</span></a>.</p>
+</dd>
+<dt id="term-Functional-Architecture">Functional Architecture<a class="headerlink" href="#term-Functional-Architecture" title="Permalink to this term"></a></dt><dd><p>Composition of <a class="reference internal" href="#term-Function"><span class="xref std std-term">Function</span></a> and <a class="reference internal" href="#term-Flow"><span class="xref std std-term">Flow</span></a> objects in an overall <a class="reference internal" href="#term-Architecture"><span class="xref std std-term">Architecture</span></a> that enables <a class="reference internal" href="#term-Propagation"><span class="xref std std-term">propagation</span></a> of behaviors between <a class="reference internal" href="#term-Function"><span class="xref std std-term">function</span></a> s.</p>
+</dd>
+</dl>
 </section>
 <section id="model-development-best-practices">
 <h2>Model Development Best Practices<a class="headerlink" href="#model-development-best-practices" title="Permalink to this heading"></a></h2>
@@ -961,6 +654,319 @@ python -m twine upload –repository pypi dist/*
 <li><p><a class="reference external" href="https://en.wikipedia.org/wiki/Iterative_and_incremental_development">Iterative development</a></p></li>
 <li><p><a class="reference external" href="https://en.wikibooks.org/wiki/Python_Programming/Idioms">Python Programming Idioms</a></p></li>
 <li><p><a class="reference external" href="https://en.wikipedia.org/wiki/Zen_of_Python">The Zen of Python</a></p></li>
+</ul>
+</section>
+</section>
+<section id="how-to-contribute">
+<h2>How to Contribute<a class="headerlink" href="#how-to-contribute" title="Permalink to this heading"></a></h2>
+<p>Development of fmdtools is coordinated by the <a class="reference internal" href="../CONTRIBUTORS.html"><span class="doc">fmdtools team</span></a> at NASA Ames Research Center. As an open-source tool developed under the NASA Open Source Agreement, outside contributions are welcomed. To be able to submit contributions (e.g., pull requests), external contributors should first submit a contributors license agreement (<a class="reference external" href="https://github.com/nasa/fmdtools/blob/main/fmdtools_Individual_CLA.pdf">Individual CLA</a> , <a class="reference external" href="https://github.com/nasa/fmdtools/blob/main/fmdtools_Corporate_CLA.pdf">Corporate CLA</a>).</p>
+<section id="repo-structure">
+<h3>Repo Structure<a class="headerlink" href="#repo-structure" title="Permalink to this heading"></a></h3>
+<a class="reference internal image-reference" href="../_images/repo_structure.svg"><img alt="../_images/repo_structure.svg" src="../_images/repo_structure.svg" width="800" /></a>
+<p>Getting started with development first requires some basic familiarity with the repo structure, shown above. As shown, the repo contains:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">/fmdtools</span></code>, which is where the toolkit sub-packages and modules are held,</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">/tests</span></code>, which has tests of the modules,</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">/examples</span></code>, which are different case study examples, and</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">/docs</span></code>, which contains documentation.</p></li>
+</ul>
+<p>There are additionally a few scripts with specific purposes to serve the development process:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">run_all_tests.py</span></code> which is a script that runs tests defined in <cite>/tests</cite> and <cite>/examples</cite>,</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">setup.py</span></code>, which is used for building PyPI packages, and</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">MAKE</span></code>, which is used to build the sphinx documentation.</p></li>
+</ul>
+<section id="remote-structure">
+<h4>Remote Structure<a class="headerlink" href="#remote-structure" title="Permalink to this heading"></a></h4>
+<a class="reference internal image-reference" href="../_images/git_structure.svg"><img alt="../_images/git_structure.svg" src="../_images/git_structure.svg" width="800" /></a>
+<p>Development of fmdtools uses a two-track development model, in which contributions are provided within NASA as well as by external collaborators. To support this, there are multiple repositories which must be managed in the development process, as shown above. Essentially, there is:</p>
+<ul class="simple">
+<li><p>An internal bitbucket, where NASA coordination and development takes place,</p></li>
+<li><p>A public GitHub, where collaboration with outside developers takes place (and where documentation is hosted), and</p></li>
+<li><p>A PyPI repository which contains stable versions of fmdtools which can be readily installed via <code class="docutils literal notranslate"><span class="pre">pip</span></code>.</p></li>
+</ul>
+<p>The fmdtools team is responsible for coordinating the development between the internal and external git repositories. Managing multiple repositories can best be coordinated by:</p>
+<ul class="simple">
+<li><p>setting up multiple remotes on a single git repo on your machine using <cite>git remote</cite> and</p></li>
+<li><p>propagating changes between repositories during development using <cite>git push</cite> and <cite>git pull</cite> from each repository</p></li>
+</ul>
+</section>
+</section>
+<section id="development-process">
+<h3>Development Process<a class="headerlink" href="#development-process" title="Permalink to this heading"></a></h3>
+<a class="reference internal image-reference" href="../_images/dev_process.svg"><img alt="../_images/dev_process.svg" src="../_images/dev_process.svg" width="800" /></a>
+<p>To encourage code quality we follow the general process above to manage contributions:</p>
+<ol class="arabic simple">
+<li><p>Development begins on a <code class="docutils literal notranslate"><span class="pre">/dev</span></code> branch for a given version of fmdtools. This branch is used to test and integrate contributions from multiple sources.</p></li>
+<li><p>The first step in making a contribution is then to create an issue, which describes the work to be performed and/or problem to be solved.</p></li>
+<li><p>This issue can then be taken on in an issue branch (or repo for external contributions) and fixed.</p></li>
+<li><p>When the contributor is done with a given fix, they can submit a pull request, which enables the review of the fix as a whole.</p></li>
+<li><p>This fix is reviewed by a member of the fmdtools team, who may suggest changes.</p></li>
+<li><p>When the review is accepted, it is merged into the <code class="docutils literal notranslate"><span class="pre">dev</span></code> branch.</p></li>
+<li><p>When all the issues for a given version are complete (this may also happen concurrently with development), tests and documentation are updated for the branch. If tests do not pass (or are obsolete), contributions may be made directly on the <code class="docutils literal notranslate"><span class="pre">dev</span></code> branch to fix it, or further issues may be generated based on the impact of the change.</p></li>
+<li><p>When the software team deems the release process to be complete, the <code class="docutils literal notranslate"><span class="pre">dev</span></code> branch may be merged into the <cite>main</cite> branch. These branches are then used to create releases.</p></li>
+</ol>
+<p>The major exceptions to this process are:</p>
+<ul class="simple">
+<li><p>bug fixes, which, if minor, may occur on <code class="docutils literal notranslate"><span class="pre">main</span></code>/<code class="docutils literal notranslate"><span class="pre">dev</span></code> branches (or may be given their own branches off of <code class="docutils literal notranslate"><span class="pre">main</span></code>),</p></li>
+<li><p>external contributions, which are managed via pull request off of <code class="docutils literal notranslate"><span class="pre">main</span></code> (or some external dev branch), and</p></li>
+<li><p>minor documentation changes.</p></li>
+</ul>
+<section id="release-checklist">
+<h4>Release Checklist<a class="headerlink" href="#release-checklist" title="Permalink to this heading"></a></h4>
+<p>When releasing fmdtools, follow the steps in the <a class="reference download internal" download="" href="../_downloads/5c30b50c462e7bedd42160d15db7cf88/release_checklist.csv"><code class="xref download docutils literal notranslate"><span class="pre">Release</span> <span class="pre">Checklist</span></code></a>, see below:</p>
+<table class="docutils align-default" id="id4">
+<caption><span class="caption-text">Release Checklist</span><a class="headerlink" href="#id4" title="Permalink to this table"></a></caption>
+<colgroup>
+<col style="width: 13%" />
+<col style="width: 38%" />
+<col style="width: 13%" />
+<col style="width: 38%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Step</p></th>
+<th class="head"><p>Description</p></th>
+<th class="head"><p>Complete?</p></th>
+<th class="head"><p>Comment</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>1</p></td>
+<td><p>Sync appropriate branches into release branch</p></td>
+<td></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p>1a</p></td>
+<td><blockquote>
+<div><p>“Internal branches (e.g. main dev)”</p>
+</div></blockquote>
+</td>
+<td></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><p>1b</p></td>
+<td><blockquote>
+<div><p>“External branches (e.g. main)”</p>
+</div></blockquote>
+</td>
+<td></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p>2</p></td>
+<td><p>Run script run_all_tests.py and verify test results are appropriate</p></td>
+<td></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><p>2a</p></td>
+<td><blockquote>
+<div><p>“Run full tests”</p>
+</div></blockquote>
+</td>
+<td></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p>2b</p></td>
+<td><blockquote>
+<div><p>“Regenerate badge”</p>
+</div></blockquote>
+</td>
+<td></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><p>3</p></td>
+<td><p>Update version numbers in appropriate files</p></td>
+<td></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p>3a</p></td>
+<td><blockquote>
+<div><p>“Check files conf.py LICENSE.py README.py Intro_to_fmdtools.md pyproject.toml”</p>
+</div></blockquote>
+</td>
+<td></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><p>3b</p></td>
+<td><blockquote>
+<div><p>“Run a repository-wide search for the version number”</p>
+</div></blockquote>
+</td>
+<td></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p>4</p></td>
+<td><p>Generate the documentation using “./make html”</p></td>
+<td></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><p>5</p></td>
+<td><p>Commit and tag branch with the appropriate version.</p></td>
+<td></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p>5a</p></td>
+<td><blockquote>
+<div><p>“git tag -a v2.x.x -m ‘version 2.x.x’”</p>
+</div></blockquote>
+</td>
+<td></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><p>6</p></td>
+<td><p>Sync to remotes</p></td>
+<td></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p>6a</p></td>
+<td><blockquote>
+<div><p>“Push release branch to github and internal remotes”</p>
+</div></blockquote>
+</td>
+<td></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><p>6b</p></td>
+<td><blockquote>
+<div><p>“Overwrite documentation on gh-pages and push to GitHub”</p>
+</div></blockquote>
+</td>
+<td></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p>7</p></td>
+<td><p>Create a release in GitHub</p></td>
+<td></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><p>7a</p></td>
+<td><blockquote>
+<div><p>“incorporate a narrative summary of features and changes”</p>
+</div></blockquote>
+</td>
+<td></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p>7b</p></td>
+<td><blockquote>
+<div><p>“incorporate the auto-generated bitbucket release notes.”</p>
+</div></blockquote>
+</td>
+<td></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><p>8</p></td>
+<td><blockquote>
+<div><p>“Update project plan”</p>
+</div></blockquote>
+</td>
+<td></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p>8a</p></td>
+<td><blockquote>
+<div><p>“Include any changed dependencies”</p>
+</div></blockquote>
+</td>
+<td></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><p>8b</p></td>
+<td><blockquote>
+<div><p>“Include version in schedule”</p>
+</div></blockquote>
+</td>
+<td></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p>8c</p></td>
+<td><blockquote>
+<div><p>“Identify and include additional changes/activities”</p>
+</div></blockquote>
+</td>
+<td></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><p>9</p></td>
+<td><p>Update/check external CI resources as needed</p></td>
+<td></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p>9a</p></td>
+<td><blockquote>
+<div><p>“CodeFactor”</p>
+</div></blockquote>
+</td>
+<td></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><p>10</p></td>
+<td><p>If release is ‘stable’ Upload to PyPI (see below</p></td>
+<td></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="upload-to-pypi">
+<h4>Upload to PyPI<a class="headerlink" href="#upload-to-pypi" title="Permalink to this heading"></a></h4>
+<p>Note: Performing this process requires an account with the Python Package Index and Owner/Maintainer status in the fmdtools repository. Presently, this repository is owned by Daniel Hulse and setup should be coordinated with him.</p>
+<p>Note: Performing this process also requires a twine setup. For full instructions, see: <a class="reference external" href="https://www.geeksforgeeks.org/how-to-publish-python-package-at-pypi-using-twine-module/">https://www.geeksforgeeks.org/how-to-publish-python-package-at-pypi-using-twine-module/</a></p>
+<p>Once this is set up, the code can be built and uploaded using the following commands in powershell from the repository folder:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>python -m build
+python -m twine check dist/*
+python -m twine upload –repository pypi dist/*
+</pre></div>
+</div>
+<p>Note: when performing for the first time, it may be helpful to use the test python repo (substitute testpypi for pypi) first—an account is required however.</p>
+<p>Note: make sure that there are no old versions in <cite>dist/</cite></p>
+<p>After upload, test the deployment by:</p>
+<ol class="arabic simple">
+<li><p>Spot-checking the online repo (e.g., has the version updated?)</p></li>
+<li><p>Updating the package (<code class="docutils literal notranslate"><span class="pre">pip</span> <span class="pre">install</span> <span class="pre">–upgrade</span> <span class="pre">pip</span></code>)</p></li>
+</ol>
+</section>
+</section>
+<section id="roles">
+<h3>Roles<a class="headerlink" href="#roles" title="Permalink to this heading"></a></h3>
+<ul class="simple">
+<li><p>team lead:            coordinates all activities and has technical authority over project direction</p></li>
+<li><p>full developer:       can make changes off of version and main branches and has full ability to perform the release process</p></li>
+<li><p>contributor:          creates issues and develops off of issue branches</p></li>
+</ul>
+</section>
+<section id="documentation">
+<h3>Documentation<a class="headerlink" href="#documentation" title="Permalink to this heading"></a></h3>
+<p>Documentation is generated using Sphinx, which generates html from rst files. The process for generating documentation (after sphinx has been set up) is to open powershell and run:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">cd</span> <span class="n">path</span><span class="o">/</span><span class="n">to</span><span class="o">/</span><span class="n">fmdtools</span>
+<span class="o">./</span><span class="n">make</span> <span class="n">clean</span>
+<span class="o">./</span><span class="n">make</span> <span class="n">html</span>
+</pre></div>
+</div>
+<p>Note that sphinx requires the following requirements, which should be installed beforehand:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">nbsphinx</span>
+<span class="n">myst_parser</span>
+<span class="n">sphinx_rtd_theme</span>
+<span class="n">pandoc</span>
+</pre></div>
+</div>
+<p>Pandoc must be installed with anaconda (i.e., using <cite>conda install pandoc</cite>) since it is an external program.</p>
+</section>
+<section id="style-formatting">
+<h3>Style/Formatting<a class="headerlink" href="#style-formatting" title="Permalink to this heading"></a></h3>
+<p>Generally, we try to follow PEP8 style conventions. To catch these errors, it is best to <em>turn on PEP8 style linting</em> in your IDE of choice.</p>
+<p>Style conventions can additionally be followed/enforced automatically using the Black code formatter. See resources:</p>
+<ul class="simple">
+<li><p>stand-alone formatter: <a class="reference external" href="https://github.com/psf/black">https://github.com/psf/black</a></p></li>
+<li><p>VSCode Extension: <a class="reference external" href="https://marketplace.visualstudio.com/items?itemName=ms-python.black-formatter">https://marketplace.visualstudio.com/items?itemName=ms-python.black-formatter</a></p></li>
+<li><p>Spyder workflow: <a class="reference external" href="https://stackoverflow.com/questions/55698077/how-to-use-code-formatter-black-with-spyder">https://stackoverflow.com/questions/55698077/how-to-use-code-formatter-black-with-spyder</a></p></li>
+</ul>
+</section>
+<section id="testing">
+<h3>Testing<a class="headerlink" href="#testing" title="Permalink to this heading"></a></h3>
+<p>There are two major types of tests:</p>
+<ul class="simple">
+<li><p>quantitative tests, which are tests running <code class="docutils literal notranslate"><span class="pre">run_all_tests.py</span></code>, and</p></li>
+<li><p>qualitative tests, which are the example notebooks</p></li>
 </ul>
 </section>
 </section>

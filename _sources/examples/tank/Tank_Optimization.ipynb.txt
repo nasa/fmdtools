@@ -327,7 +327,7 @@
      "name": "stderr",
      "output_type": "stream",
      "text": [
-      "\r",
+      "\r\n",
       "SCENARIOS COMPLETE:   0%|          | 0/5 [00:00<?, ?it/s]"
      ]
     },
@@ -335,7 +335,7 @@
      "name": "stderr",
      "output_type": "stream",
      "text": [
-      "\r",
+      "\r\n",
       "SCENARIOS COMPLETE: 100%|██████████| 5/5 [00:00<00:00, 94.20it/s]"
      ]
     },
@@ -2052,6 +2052,16 @@
    "outputs": [],
    "source": [
     "bilevel_opt(maxiter=2)"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "pool.close()\n",
+    "pool.terminate()"
    ]
   },
   {

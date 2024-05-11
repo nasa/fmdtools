@@ -674,9 +674,9 @@ if __name__ == "__main__":
 
     # test cases for multiplot legend/axis sharing
     mdlhists.plot_line("flows.ee_1.s.current", "flows.sig_1.s.power",
-                       "move_water.s.eff")
+                       "fxns.move_water.s.eff")
     mdlhists.plot_line("flows.ee_1.s.current", "flows.sig_1.s.power",
-                       "move_water.s.eff", "wat_1.s.flowrate", cols=3)
+                       "fxns.move_water.s.eff", "flows.wat_1.s.flowrate", cols=3)
 
     endclasses.plot_metric_dist("rate", "cost", "expected_cost")
     #t = an.tabulate.factor_metrics(endclasses, faultapp, ci_metrics=['cost'], default_stat=np.mean)

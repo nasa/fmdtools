@@ -4,76 +4,26 @@ Development Guide
 Why fmdtools?
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+Use fmdtools to improve your understanding of the dynamics of hazardous behavior. The fmdtools library was developed to study resilience, which is an important consideration in designing safe, low-risk systems. Resilience is the ability of a system to mitigate hazardous scenarios as they arise. As shown below, the key defining aspect of resilience is the **dynamics of failure events**, which may lead to recovery (or, a safe outcome) or failure (or, an unsafe outcome).
+
 .. figure:: figures/resilience_importance.png
    :width: 800
    :alt: importance of considering resilience 
    
    Resilience is important to consider when dynamics of system behavior can lead to hazardous or unsafe outcomes.
 
-The fmdtools library was developed to study resilience, which is an important consideration in designing safe, low-risk systems. As shown above, the key defining aspect of resilience is the **dynamics of failure events**, which may lead to recovery (or, a safe outcome) or failure (or, an unsafe outcome). 
+The impetus for developing fmdtools was a lack of existing open-source tools to model these dynamics at a high level (i.e., functions and flows) in the design process. Thus, researchers in this area had to re-implement modeling, simulation, and analysis approaches for each new case study or methodological improvement. The fmdtools package resolved this problem by separating resilience modeling, simulation, and analysis constructs from the model under study, enabling reuse of methodologies between case studies. The goals of the fmdtools project have since shifted to the more general goal of **improving the hazard assessment process** by better representing systems resilience. Towards this end, fmdtools provides the following capabilities:
 
-The main reason for developing fmdtools was a lack of existing open-source tools to model these dynamics at a high level (i.e., functions and flows) in the design process. Thus, researchers in this area had to re-implement modeling, simulation, and analysis approaches for each new case study or methodological improvement. The fmdtools package resolves this problem by separating resilience modeling, simulation, and analysis constructs from the model under study, enabling reuse of methodologies between case studies. Towards this end, the fmdtools package provides three major functions:
+- **Representing system dynamics** to enable the quantification of resilience properties. Typically, hazard assessment processes neglect the consideration of resilience because they focus on the immediate effects of faults on the function of the system, rather than an assessment of how these effects play out over time. The fmdtools library enables this consideration by providing a behavioral view of hazardous scenarios. This is important both for understanding hazardous behaviors, but also how they can be mitigated as they arise.
 
-1. Model definition constructs that enable systematic early specification of high level structure and behaviors of a system with concise syntax (:mod:`fmdtools.define`).
+- **Representing operational behaviors and actions** to enable the assessment the contributions of human operators and autonomous/AI-enabled systems to overall risk and resilience. Traditional hazard assessment approaches do not consider the feedback between operators, the system, and the environment, instead leaving them as "accidents" or "mistakes" to be blamed on the operator. With fmdtools, these hazards can be considered directly by modelling potential operator behaviors and how they support or degrade overall systems resilience. These approaches can also be used to better understand the risks posed by AI/autonomous systems.
 
-2. Simulation methods that enable the quantification of system performance and propagation of hazards over a wide range of operational scenarios and model types (:mod:`fmdtools.sim`).
+- **Enabling a Model/Simulation-based hazard analysis paradigm** by allowing the iterative, consistent analysis of resilience through the design, implementation, and V\&V processes. The traditional hazard assessment process is a manual, expert-driven approach that is inefficient to iterate on or change as a the design changes or assumptions are validated (or invalidated). In contrast, because all assumptions in fmdtools are represented as code, they can easily be modified as assumptions change while maintaining the overall integrity of the analysis. Furthermore, simulations in fmdtools can be efficiently and consistently be varied to analyze a system in more detail or in different configurations.
 
-3. Analysis methods for quantifying resilience and summarizing and visualizing behaviors and properties of interest (:mod:`fmdtools.analyze`).
-
-An overview of an earlier version of fmdtools (0.6.2) is provided in the paper:
-
-`Hulse, D., Walsh, H., Dong, A., Hoyle, C., Tumer, I., Kulkarni, C., & Goebel, K. (2021). fmdtools: A Fault Propagation Toolkit for Resilience Assessment in Early Design. International Journal of Prognostics and Health Management, 12(3). <https://doi.org/10.36001/ijphm.2021.v12i3.2954>`_
-
-Key Features
---------------------------------
-
-fmdtools was developed with a number of unique features that differentiate it from existing safety/resilience simulation tools. 
-
-- fmdtools uses an object-oriented undirected graph-based model representation which enables arbitrary propagation of flow states through a model graph, as opposed to a *procedural* *directed* graph-based model representation (a typical strategy for developing fault models in code is to represent functions or components by methods where the inputs and outputs of these methods connect the functions/components in a larger model method). This enables one to:
-  
-  - propagate behaviors in multiple directions in a model graph, e.g., closing a valve will not just reduce flow in the downstream pipe but also increase pressure in upstream pipes.
-  
-  - define the data structures that make a function/component (e.g., states, faults, timed events) with the behavioral methods in a single logical structure that can be re-used and modified for similar components and methods (that is, a class, instead of a set of unstructured variables and methods)
-
-- fmdtools can represent different system elements including human and AI components, and their interactions in both systems and system of systems. Additionally, fmdtools allows the modeling of the interactions between systems/system-of-systems and external factors such as the environment (e.g., weather, organizational factors). Specifically, fmdtools enables:
-
-  - Representing the actions of autonomous systems and human operators and behaviors through functions/actions and action architectures
-
-  -	Representing performance shaping factors, the interactions between performance shaping factors, their short-term and long-term influence on overall system resilience
-
-  -	Modeling perception and communications (for both human and artificial intelligence components) to allow the study of situation awareness’s contribution to safety (both positive and negative) in system of systems (and systems) by representing systems via functions and the interconnection between systems via flows
-
-  -	Representing the influence of external factors on system behaviors through parameters and parameter sampling
-  
-
-- fmdtools can represent the system at varying levels of fidelity through the design process so that one can start with a simple model and analysis, and make it more detailed as the design is elaborated. A typical process of representing the system (from less to more detail) would involve:
-  
-  - Creating a network representation of the model functions and flows to visualize the system and identify structurally-important parts of the model's causal structure
-  
-  - Elaborating the flow attributes and function failure logic in a static propagation to simulate the timeless effects of faults in the model
-  
-  - Adding dynamic states and behaviors to the functions as well as a simulation times and operational phases in a dynamic propagation model to simulate the dynamic effects of faults instantiated at different time-steps
-  
-  - Instantiating functions with component architectures to compare the expected resilience and behaviors of each
-  
-  - Defining stochastic behavioral and input parameters to simulate and analyze system resilience throughout the operational envelope
-  
-  - Using optimization methods to search the space of potential hazardous scenarios and find the optimal response parameters to mitigate these scenarios
-
-- fmdtools provides convenient methods for quickly visualizing the results of fault simulations with commonly-used Python libraries to enable one to quickly assess:
-  
-  - effects of faults on functions and flows in the model graph at a given time-step
-  
-  - the behavior of system states over time in nominal and faulty scenarios over a range of operational parameters
-  
-  - the effect of model input parameters (e.g., ranges, stochastic inputs) on nominal/faulty operations
-  
-  - the high-level results of a set of simulations in an FMEA-style table of faults, effects, rates, costs, and overall risk
-  
-  - simulation responses over a range or distribution of model and scenario parameters
+While this libary primarily provides code structures, a major objective of this library is further to enable these techniques to be used in a graphical simulation tool for hazard assessment.
 
 
-Intro to fmdtools
+Introductory Tutorial
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 **The best place to start** to getting acquanted with basic syntax and functionality is the `Intro to fmdtools <Intro_to_fmdtools.md>`_ workshop (:download:`download slides as pdf <Intro_to_fmdtools.pdf>`), which uses the `Pump` example to introduce the overall structure and use of fmdtools. Other models are further helpful to demonstrate the full variety of methods/approaches supported in fmdtools and their applcation for more advanced use-cases.
 
@@ -82,165 +32,121 @@ Intro to fmdtools
    
    Intro_to_fmdtools.md
 
-Contributions
+Glossary
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Development of fmdtools is coordinated by the `fmdtools team <https://github.com/nasa/fmdtools/blob/main/CONTRIBUTORS.md>`_ at NASA Ames Research Center. As an open-source tool developed under the NASA Open Source Agreement, outside contributions are welcomed. To be able to submit contributions (e.g., pull requests), external contributors should first submit a contributors license agreement (`Individual CLA <https://github.com/nasa/fmdtools/blob/main/fmdtools_Individual_CLA.pdf>`_ , `Corporate CLA <https://github.com/nasa/fmdtools/blob/main/fmdtools_Corporate_CLA.pdf>`_).
+You can use the glossary as a reference to understand basic simulation and analysis concepts in fmdtools.
 
+.. glossary::
 
-Repo Structure
---------------------------------
-
-.. image:: /docs/figures/repo_structure.svg
-   :width: 800
-   
-Getting started with development first requires some basic familiarity with the repo structure, shown above. As shown, the repo contains:
-
-- ``/fmdtools``, which is where the toolkit sub-packages and modules are held,
-- ``/tests``, which has tests of the modules,
-- ``/examples``, which are different case study examples, and 
-- ``/docs``, which contains documentation.
-
-There are additionally a few scripts with specific purposes to serve the development process:
-
-- ``run_all_tests.py`` which is a script that runs tests defined in `/tests` and `/examples`,
-- ``setup.py``, which is used for building PyPI packages, and 
-- ``MAKE``, which is used to build the sphinx documentation.
-
-
-Remote Structure
-********************************
-
-.. image:: /docs/figures/git_structure.svg
-   :width: 800
-
-Development of fmdtools uses a two-track development model, in which contributions are provided within NASA as well as by external collaborators. To support this, there are multiple repositories which must be managed in the development process, as shown above. Essentially, there is:
-
-- An internal bitbucket, where NASA coordination and development takes place,
-- A public GitHub, where collaboration with outside developers takes place (and where documentation is hosted), and 
-- A PyPI repository which contains stable versions of fmdtools which can be readily installed via ``pip``.
-
-The fmdtools team is responsible for coordinating the development between the internal and external git repositories. Managing multiple repositories can best be coordinated by:
-
-- setting up multiple remotes on a single git repo on your machine using `git remote` and
-- propagating changes between repositories during development using `git push` and `git pull` from each repository
-
-Development Process
---------------------------------
-
-.. image:: /docs/figures/dev_process.svg
-   :width: 800
-
-To encourage code quality we follow the general process above to manage contributions:
-
-1. Development begins on a ``/dev`` branch for a given version of fmdtools. This branch is used to test and integrate contributions from multiple sources.
-2. The first step in making a contribution is then to create an issue, which describes the work to be performed and/or problem to be solved. 
-3. This issue can then be taken on in an issue branch (or repo for external contributions) and fixed. 
-4. When the contributor is done with a given fix, they can submit a pull request, which enables the review of the fix as a whole.
-5. This fix is reviewed by a member of the fmdtools team, who may suggest changes. 
-6. When the review is accepted, it is merged into the ``dev`` branch.
-7. When all the issues for a given version are complete (this may also happen concurrently with development), tests and documentation are updated for the branch. If tests do not pass (or are obsolete), contributions may be made directly on the ``dev`` branch to fix it, or further issues may be generated based on the impact of the change.
-8. When the software team deems the release process to be complete, the ``dev`` branch may be merged into the `main` branch. These branches are then used to create releases. 
-
-The major exceptions to this process are:
-
-- bug fixes, which, if minor, may occur on ``main``/``dev`` branches (or may be given their own branches off of ``main``),
-- external contributions, which are managed via pull request off of ``main`` (or some external dev branch), and
-- minor documentation changes.
-
-Release Checklist
-********************************
-
-When releasing fmdtools, follow the steps in the :download:`Release Checklist <release_checklist.csv>`, see below:
-
-.. tabularcolumns:: |p{1cm}|p{3cm}|p{1cm}|p{3cm}|
-
-.. csv-table:: Release Checklist
-   :file: release_checklist.csv
-   :header-rows: 1
-   :widths: 1 3 1 3
-
-.. tabularcolumns:: |p{1cm}|p{3cm}|p{1cm}|p{3cm}|
-
-
-Upload to PyPI
-********************************
-
-Note: Performing this process requires an account with the Python Package Index and Owner/Maintainer status in the fmdtools repository. Presently, this repository is owned by Daniel Hulse and setup should be coordinated with him.  
-
-Note: Performing this process also requires a twine setup. For full instructions, see: https://www.geeksforgeeks.org/how-to-publish-python-package-at-pypi-using-twine-module/  
-
-
-Once this is set up, the code can be built and uploaded using the following commands in powershell from the repository folder::
-
-	python -m build 
-	python -m twine check dist/* 
-	python -m twine upload –repository pypi dist/*  
-
-Note: when performing for the first time, it may be helpful to use the test python repo (substitute testpypi for pypi) first—an account is required however. 
-
-Note: make sure that there are no old versions in `dist/`
-
-After upload, test the deployment by: 
-
-1. Spot-checking the online repo (e.g., has the version updated?) 
-
-2. Updating the package (``pip install –upgrade pip``)
-
-Roles
---------------------------------
-
-- team lead: 		coordinates all activities and has technical authority over project direction
-- full developer: 	can make changes off of version and main branches and has full ability to perform the release process
-- contributor: 		creates issues and develops off of issue branches
-
-
-Documentation
---------------------------------
-
-Documentation is generated using Sphinx, which generates html from rst files. The process for generating documentation (after sphinx has been set up) is to open powershell and run::
+	Function
+		A piece of functionality in a system which has its own defined behavior, modes, and flow connections, and may be further instantiated by a :term:`component architecture` or :term:`action sequence graph`. In general, functions are the main building block of a model defining how the different pieces of the system behave. Functions in fmdtools are specified by extending the :class:`fmdtools.define.block.function.Function` class.
+		
+	Flow
+		A data structure which connects functions--traditionally energy, material, or signal. Defined using the :class:`fmdtools.define.flow.base.Flow` class.
 	
-	cd path/to/fmdtools
-	./make clean
-	./make html
+	Role
+		A defined attribute of an fmdtools class which refers to a user-defined (or default) subclass of a corresponding fmdtools data structure. For example, Blocks have the container `Block.s` (for state) which may be filled by a subclass of :class:`fmdtools.define.container.state.State`.
 
-Note that sphinx requires the following requirements, which should be installed beforehand::
+	Internal Flow
+		A flow object that is internal to a :class:`fmdtools.define.block.function.Function` which is not present in the overall model definition.
+	
+	Model
+		A simulation that defines system behavior. Models contain functions and flows, their graph connections, parameters related to the simulation configuration, as well as methods for classifying simulations. 
+	
+	Behavior
+		How the states of a system unfold over time, including in the various :term:`mode` s it may encounter. Defined in :term:`Function` s, :term:`Component` s, and :term:`Action` s using :meth:`fmdtools.define.Block.behavior`, :meth:`fmdtools.define.Block.static_behavior`, :meth:`fmdtools.define.Block.dynamic_behavior`, and :meth:`fmdtools.define.Block.condfaults`
+	
+	Graph
+		A view of simulation construct connections and/or relationships embodied by the :class:`fmdtools.analyze.graph.Graph` class and sub-classes (which uses networkx to represent the structure itself).
+	
+	Component
+		A physical component that embodies specific behavior for a :term:`function`. May have :term:`mode` s and :term:`behavior` s of its own. Specified by extending the :class:`fmdtools.define.block.component.Component` class.
+		
+	Component Architecture
+		The physical embodiment of a :term:`function` that encompasses multiple :term:`Component` s. Represented via the :class:`fmdtools.define.architecture.component.ComponentArchitecture` class. 
+	
+	Mode
+		Discrete modifications of a :term:`behavior` specified as entries in the :meth:`fmdtools.define.container.mode.Mode` class. Often used to control if/else statements in a :term:`behavior` method within a :term:`function`.
+	
+	Fault Mode
+		Undesired :term:`mode`, which leads to hazardous behavior. For example, a lamp may have "burn-out" due to a "flicker" mode.
+	
+	Operational Mode
+		Defined :term:`mode` that the system progresses through as a part of its desired functioning. For example, a light switch may be in "on" and "off" modes.
 
-	nbsphinx
-	myst_parser
-	sphinx_rtd_theme
-	pandoc
+	Action Sequence Graph
+		An instance of the :class:`fmdtools.define.architecture.action.ActionArchitecture` which embodies a (human or autonomous) :term:`agent`'s sequence of tasks which it performs to accomplish a certain function. 
+	
+	Agent
+		An actor which controls behaviors in a system. May be modeled as a :term:`function`.
+		
+	Environment
+		The uncontrolled aspect of a system which may effect system inputs and behaviors. May be modeled as a :term:`function`.
+	
+	Action
+		A specific task to be performed by an :term:`agent` used to represent human/autonomous operations. May be specified by extending the :class:`fmdtools.define.block.action.Action` class and added to a :class:`fmdtools.define.block.function.Function` as a part of an Action Sequence Graph :class:`fmdtools.define.architecture.action.ActionArchitecture`.
+	
+	Rate
+		The expected occurence (frequency) of a given :term:`mode`, which may be specified in a number of ways using :meth:`fmdtools.define.container.mode.Mode.faultmodes`.
+		
+	Cost
+		A metric used to define severity of a scenario. While cost is defined in a monetary sense, it should often be defined holistically to account for indirect costs and externalities (e.g., safety, disruption, etc). One of the default outputs from :meth:`fmdtools.define.block.base.Simulabl.find_classification()` for models or blocks.
+		
+	Expected Cost
+		A metric used to define risk of a scenario, calculated my multiplying the :term:`rate` and :term:`cost`.
+		
+	Endclass
+		The end-state classification given from :meth:`fmdtools.define.block.base.Simulabl.find_classification()`.
+	
+	Scenario
+		A specific set of inputs to a simulation, including :term:`parameters`, :term:`Fault Mode` s, and :term:`Disturbances`. Defined in :class:`fmdtools.sim.scenario.Scenario`.
+		
+	Disturbances
+		A specific sequence of variable values over time which may modify system behavior.
 
-Pandoc must be installed with anaconda (i.e., using `conda install pandoc`) since it is an external program.
+	Sample
+		A set of :term:`scenario` s to simulate a model over to represent certain hazards or parameters of interest. May be generated using :class:`fmdtools.sim.sample.FaultSample` for fault modes or :class:`fmdtools.sim.sample.ParameterSample` for nominal parameters. 
+	
+	Nested Approach
+		The result of simulating a fault sampling :term:`Approach` (:class:`fmdtools.sim.sample.SampleApproach`) within a nominal :term:`Approach` (:class:`fmdtools.sim.sample.ParameterSample`). Created in :func:`fmdtools.sim.propagate.nested_sample()`.
+	
+	Static Propagation
+		The undirected propagation of model behaviors within a timestep. Defined for each function using :meth:`fmdtools.define.block.Function.static_behavior`, which may run multiple times in a timestep until behavior has converged. The static :term:`behavior` s are propagated through the graph using the method :meth:`fmdtools.define.architecture.function.FunctionArchitecture.prop_static()`.
+	
+	
+	Dynamic Propagation
+		The progression of model states over time. Defined for each function using :meth:`fmdtools.define.block.Function.dynamic_behavior`, which runs once per timestep. The dynamic :term:`behavior` s are propagated using the method :meth:`fmdtools.define.block.Function.static_behavior`, which may run multiple times in a timestep until behavior has converged. The static :term:`behavior` s are propagated through the graph using the method :meth:`fmdtools.define.architecture.function.FunctionArchitecture.propagate()`.
+	
+	Propagation
+		The simulation of :class:`fmdtools.define.architecture.function.FunctionArchitecture` :term:`behavior` s, including the passing of :term:`flow` s between :term:`function` s and the progression of model states over time.
+	
+	Resilience
+		The expectation of defined performance metrics over time over a set of hazardous :term:`scenario` s, often defined in terms of the deviation from their nominal values.
+	
+	End-state
+		The state of a :class:`fmdtools.define.block.base.Simulable` at the final time-step of a simulation.
+	
+	FMEA
+		A table outlining the risks of hazardous :term:`scenario` s in terms of their rate, severity, and expected risk. By default, the :mod:`fmdtools.analyze.tabulate` module produces cost-based FMEAS, with the metrics of interest being :term:`rate`, :term:`cost`, and :term:`expected cost`, however these functions can be tailored to the metrics of interest.
+	
+	Behavior Over Time
+		How a the states of a system unfold over time. Defined using :term:`behavior`.
+	
+	Model History
+		A history of model states over a set of timesteps defined in :class:`fmdtools.analyze.history.History`. Returned in fmdtools as a nested dictionary from methods in :mod:`fmdtools.sim.propagate`.
 
-Style/Formatting
---------------------------------
+	FRDL
+		See: :term:`Functional Reasoning Design Language`.
 
-Generally, we try to follow PEP8 style conventions. To catch these errors, it is best to *turn on PEP8 style linting* in your IDE of choice.
+	Architecture
+		Composition of blocks. Defined using :class:`fmdtools.define.architecture.base.Architecture` and its sub-classes.
 
-Style conventions can additionally be followed/enforced automatically using the Black code formatter. See resources:
+	Functional Reasoning Design Language
+		Language used to define/represent the network structure and behavioral propagation of an :term:`Architecture`.
 
-- stand-alone formatter: https://github.com/psf/black
-- VSCode Extension: https://marketplace.visualstudio.com/items?itemName=ms-python.black-formatter
-- Spyder workflow: https://stackoverflow.com/questions/55698077/how-to-use-code-formatter-black-with-spyder
-
-Testing
---------------------------------
-
-There are two major types of tests:
-
-- quantitative tests, which are tests running ``run_all_tests.py``, and
-- qualitative tests, which are the example notebooks
-
-Contributors
---------------------------------
-
-See: `CONTRIBUTORS.md <../CONTRIBUTORS.md>`_
-
-.. toctree::
-   :hidden:
-   
-   ../CONTRIBUTORS.md
+	Functional Architecture
+		Composition of :term:`Function` and :term:`Flow` objects in an overall :term:`Architecture` that enables :term:`propagation` of behaviors between :term:`function` s.
 
 
 Model Development Best Practices
@@ -443,3 +349,155 @@ See also
 * `Iterative development <https://en.wikipedia.org/wiki/Iterative_and_incremental_development>`_
 * `Python Programming Idioms <https://en.wikibooks.org/wiki/Python_Programming/Idioms>`_
 * `The Zen of Python <https://en.wikipedia.org/wiki/Zen_of_Python>`_
+
+
+How to Contribute
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+Development of fmdtools is coordinated by the `fmdtools team <../CONTRIBUTORS.md>`_ at NASA Ames Research Center. As an open-source tool developed under the NASA Open Source Agreement, outside contributions are welcomed. To be able to submit contributions (e.g., pull requests), external contributors should first submit a contributors license agreement (`Individual CLA <https://github.com/nasa/fmdtools/blob/main/fmdtools_Individual_CLA.pdf>`_ , `Corporate CLA <https://github.com/nasa/fmdtools/blob/main/fmdtools_Corporate_CLA.pdf>`_).
+
+
+Repo Structure
+--------------------------------
+
+.. image:: /docs/figures/repo_structure.svg
+   :width: 800
+   
+Getting started with development first requires some basic familiarity with the repo structure, shown above. As shown, the repo contains:
+
+- ``/fmdtools``, which is where the toolkit sub-packages and modules are held,
+- ``/tests``, which has tests of the modules,
+- ``/examples``, which are different case study examples, and 
+- ``/docs``, which contains documentation.
+
+There are additionally a few scripts with specific purposes to serve the development process:
+
+- ``run_all_tests.py`` which is a script that runs tests defined in `/tests` and `/examples`,
+- ``setup.py``, which is used for building PyPI packages, and 
+- ``MAKE``, which is used to build the sphinx documentation.
+
+
+Remote Structure
+********************************
+
+.. image:: /docs/figures/git_structure.svg
+   :width: 800
+
+Development of fmdtools uses a two-track development model, in which contributions are provided within NASA as well as by external collaborators. To support this, there are multiple repositories which must be managed in the development process, as shown above. Essentially, there is:
+
+- An internal bitbucket, where NASA coordination and development takes place,
+- A public GitHub, where collaboration with outside developers takes place (and where documentation is hosted), and 
+- A PyPI repository which contains stable versions of fmdtools which can be readily installed via ``pip``.
+
+The fmdtools team is responsible for coordinating the development between the internal and external git repositories. Managing multiple repositories can best be coordinated by:
+
+- setting up multiple remotes on a single git repo on your machine using `git remote` and
+- propagating changes between repositories during development using `git push` and `git pull` from each repository
+
+Development Process
+--------------------------------
+
+.. image:: /docs/figures/dev_process.svg
+   :width: 800
+
+To encourage code quality we follow the general process above to manage contributions:
+
+1. Development begins on a ``/dev`` branch for a given version of fmdtools. This branch is used to test and integrate contributions from multiple sources.
+2. The first step in making a contribution is then to create an issue, which describes the work to be performed and/or problem to be solved. 
+3. This issue can then be taken on in an issue branch (or repo for external contributions) and fixed. 
+4. When the contributor is done with a given fix, they can submit a pull request, which enables the review of the fix as a whole.
+5. This fix is reviewed by a member of the fmdtools team, who may suggest changes. 
+6. When the review is accepted, it is merged into the ``dev`` branch.
+7. When all the issues for a given version are complete (this may also happen concurrently with development), tests and documentation are updated for the branch. If tests do not pass (or are obsolete), contributions may be made directly on the ``dev`` branch to fix it, or further issues may be generated based on the impact of the change.
+8. When the software team deems the release process to be complete, the ``dev`` branch may be merged into the `main` branch. These branches are then used to create releases. 
+
+The major exceptions to this process are:
+
+- bug fixes, which, if minor, may occur on ``main``/``dev`` branches (or may be given their own branches off of ``main``),
+- external contributions, which are managed via pull request off of ``main`` (or some external dev branch), and
+- minor documentation changes.
+
+Release Checklist
+********************************
+
+When releasing fmdtools, follow the steps in the :download:`Release Checklist <release_checklist.csv>`, see below:
+
+.. tabularcolumns:: |p{1cm}|p{3cm}|p{1cm}|p{3cm}|
+
+.. csv-table:: Release Checklist
+   :file: release_checklist.csv
+   :header-rows: 1
+   :widths: 1 3 1 3
+
+.. tabularcolumns:: |p{1cm}|p{3cm}|p{1cm}|p{3cm}|
+
+
+Upload to PyPI
+********************************
+
+Note: Performing this process requires an account with the Python Package Index and Owner/Maintainer status in the fmdtools repository. Presently, this repository is owned by Daniel Hulse and setup should be coordinated with him.  
+
+Note: Performing this process also requires a twine setup. For full instructions, see: https://www.geeksforgeeks.org/how-to-publish-python-package-at-pypi-using-twine-module/  
+
+
+Once this is set up, the code can be built and uploaded using the following commands in powershell from the repository folder::
+
+	python -m build 
+	python -m twine check dist/* 
+	python -m twine upload –repository pypi dist/*  
+
+Note: when performing for the first time, it may be helpful to use the test python repo (substitute testpypi for pypi) first—an account is required however. 
+
+Note: make sure that there are no old versions in `dist/`
+
+After upload, test the deployment by: 
+
+1. Spot-checking the online repo (e.g., has the version updated?) 
+
+2. Updating the package (``pip install –upgrade pip``)
+
+Roles
+--------------------------------
+
+- team lead: 		coordinates all activities and has technical authority over project direction
+- full developer: 	can make changes off of version and main branches and has full ability to perform the release process
+- contributor: 		creates issues and develops off of issue branches
+
+
+Documentation
+--------------------------------
+
+Documentation is generated using Sphinx, which generates html from rst files. The process for generating documentation (after sphinx has been set up) is to open powershell and run::
+	
+	cd path/to/fmdtools
+	./make clean
+	./make html
+
+Note that sphinx requires the following requirements, which should be installed beforehand::
+
+	nbsphinx
+	myst_parser
+	sphinx_rtd_theme
+	pandoc
+
+Pandoc must be installed with anaconda (i.e., using `conda install pandoc`) since it is an external program.
+
+Style/Formatting
+--------------------------------
+
+Generally, we try to follow PEP8 style conventions. To catch these errors, it is best to *turn on PEP8 style linting* in your IDE of choice.
+
+Style conventions can additionally be followed/enforced automatically using the Black code formatter. See resources:
+
+- stand-alone formatter: https://github.com/psf/black
+- VSCode Extension: https://marketplace.visualstudio.com/items?itemName=ms-python.black-formatter
+- Spyder workflow: https://stackoverflow.com/questions/55698077/how-to-use-code-formatter-black-with-spyder
+
+Testing
+--------------------------------
+
+There are two major types of tests:
+
+- quantitative tests, which are tests running ``run_all_tests.py``, and
+- qualitative tests, which are the example notebooks
+
