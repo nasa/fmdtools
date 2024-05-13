@@ -42,6 +42,7 @@ if __name__=="__main__":
                        "fmdtools/analyze/phases.py",
                        "fmdtools/analyze/tabulate.py",
                        "examples/rover/rover_model.py",
+                       "examples/rover/rover_model_human.py",
                        "examples/multirotor/drone_mdl_static.py",
                        "examples/multirotor/drone_mdl_dynamic.py",
                        "examples/multirotor/drone_mdl_hierarchical.py"]
@@ -104,18 +105,18 @@ if __name__=="__main__":
 
     # for creating comprehensive test report:
 
-    # retcode = pytest.main(["--cov-report",
-    #                        "html:reports/coverage",
-    #                        "--cov-report",
-    #                        "xml:reports/coverage/coverage.xml",
-    #                        "--cov",
-    #                        "--html=./reports/junit/report.html",
-    #                        "--junitxml=./reports/junit/junit.xml",
-    #                        "--overwrite",
-    #                        "--doctest-modules",
-    #                        "--nbmake",
-    #                        *["--ignore="+notebook for notebook in ignore_notebooks],
-    #                        "--continue-on-collection-errors"])
+    retcode = pytest.main(["--cov-report",
+                            "html:reports/coverage",
+                            "--cov-report",
+                            "xml:reports/coverage/coverage.xml",
+                            "--cov",
+                            "--html=./reports/junit/report.html",
+                            "--junitxml=./reports/junit/junit.xml",
+                            "--overwrite",
+                            "--doctest-modules",
+                            "--nbmake",
+                            *["--ignore="+notebook for notebook in ignore_notebooks],
+                            "--continue-on-collection-errors"])
 
     # this should close any open plots
     plt.close()
