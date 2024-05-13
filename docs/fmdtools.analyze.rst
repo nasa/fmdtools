@@ -2,7 +2,7 @@ fmdtools.analyze
 ===========================
 .. automodule:: fmdtools.analyze
 
-.. image:: figures/analyze_module_structure.png
+.. image:: figures/uml/analyze_module_structure.png
    :width: 800
 
 The analyze package is organized into the modules:

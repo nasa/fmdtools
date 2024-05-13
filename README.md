@@ -1,3 +1,5 @@
+[![fmdtools logo - titanic](/docs/figures/logo/logo-titanic.png)](https://nasa.github.io/fmdtools)
+
 # Overview
 
 [![PyPI](https://img.shields.io/pypi/v/fmdtools)](https://pypi.org/project/fmdtools/)
@@ -17,17 +19,17 @@
 
 The fmdtools libary provides the computational support needed to evolve towards a simulation-based (rather than document-based) hazard analysis process that [**enables the consideration of systems resilience**](https://nasa.github.io/fmdtools/docs/Development%20Guide.html#why-fmdtools). This means that it can be used to extend the scope of hazard analysis from component faults to the dynamic interactions between the system, operators, and the environment. Some key features include:
 
-<img align="left" width="100" height="100" src="/docs/figures/flexible.svg">
+<img align="left" width="100" height="100" src="/docs/figures/powerpoint/flexible.svg">
 
 ### Flexible Modelling Paradigm
 Models in fmdtools use a consistent and composable representation of system structure and behavior. Whether you want to model a simple component, a complex system-of-systems, or both, fmdtools can help.
 
-<img align="left" width="100" height="100" src="/docs/figures/powerful.svg">
+<img align="left" width="100" height="100" src="/docs/figures/powerpoint/powerful.svg">
 
 ### Powerful Simulation Techniques
 Simulation techniques in fmdtools represent the state-of-the-art in dynamical systems modelling for resilience quantification. With fmdtools, you can simulate the dynamic effects of hazardous scenarios over a wide range of variables to quantify and optimize risk, resilience, and safety metrics. 
 
-<img align="left" width="100" height="100" src="/docs/figures/efficient.svg"> 
+<img align="left" width="100" height="100" src="/docs/figures/powerpoint/efficient.svg"> 
 
 ### Efficient Analysis Process
 Readily-deployable analysis methods are built in to fmdtools to enable the rapid and iterative statistical analysis of simulation results. With fmdtools, you can write 2-3 lines of code to visualize model behavior instead of spending hours writing it yourself.

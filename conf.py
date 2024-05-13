@@ -33,7 +33,7 @@ release = '2.0-rc-2'
 extensions = ['sphinx.ext.autodoc', 'sphinx.ext.napoleon', 'sphinx.ext.intersphinx', "nbsphinx", "myst_parser", "sphinx.ext.githubpages"]
 
 #"gaphor.extensions.sphinx"
-#gaphor_models = "/docs/figures/module-reference-diagrams.gaphor"
+#gaphor_models = "/docs/figures/uml/module-reference-diagrams.gaphor"
 myst_enable_extensions = ["html_image", "html_admonition"]
 
 
@@ -57,9 +57,9 @@ html_theme = 'sphinx_rtd_theme'
 
 html_theme_options = {'logo_only':True, "collapse_navigation" : False}
 
-html_favicon = 'docs/figures/fmdtools_ico.ico'
+html_favicon = 'docs/figures/logo/fmdtools_ico.ico'
 
-html_logo = 'docs/figures/logo_glow.png'
+html_logo = 'docs/figures/logo/logo-main.svg'
 
 # Add any paths that contain custom static files (such as style sheets) here,
 # relative to this directory. They are copied after the builtin static files,

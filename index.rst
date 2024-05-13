@@ -1,10 +1,6 @@
 fmdtools Version |release|
 ==============================================
 
-.. image:: /docs/figures/logo_detailed.jpg
-   :width: 800
-   :alt: fmdtools logo (detailed)
-
 .. include:: README.md
    :parser: myst_parser.sphinx_
 
