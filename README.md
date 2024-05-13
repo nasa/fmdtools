@@ -1,4 +1,4 @@
-[![fmdtools logo - titanic](/docs/figures/logo/logo-titanic.png)](https://nasa.github.io/fmdtools)
+[![fmdtools logo - titanic](/docs/figures/logo/logo-titanic.png)](https://github.com/nasa/fmdtools)
 
 # Overview
 
