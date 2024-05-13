@@ -3,7 +3,7 @@ title: Intro to fmdtools
 description: Intro to resilience modeling, simulation, and visualization in Python with fmdtools.
 marp: true
 ---
-![fmdtools logo](/docs/figures/logo.png)
+![fmdtools logo - tenerife](/docs/figures/logo/logo-tenerife.png)
 
 # Intro to resilience modeling, simulation, and visualization in Python with fmdtools.
 ### Author: Daniel Hulse 
@@ -41,17 +41,17 @@ marp: true
 
 Resilience means taking a **dynamic understanding of risk and safety**
 
-![resilience idea](/docs/figures/resilience_idea.png)
+![resilience idea](/docs/figures/powerpoint/resilience_idea.png)
 
 -----------------
 # Why is Resilience Important?
 
-![resilience importance](/docs/figures/resilience_importance.png)
+![resilience importance](/docs/figures/powerpoint/resilience_importance.png)
 
 -----------------
 # Enabling proactive design process
 
-![width:900px](/docs/figures/resilience_design.png)
+![width:900px](/docs/figures/powerpoint/resilience_design.png)
 
 - Especially relevant to **new systems** when **we don’t have data** 
 
@@ -98,7 +98,7 @@ Resilience means taking a **dynamic understanding of risk and safety**
 
 # What is fmdtools? A Python package for **design**, **simulation**, and **analysis** of resilience.
 
-![module organization width:990px](/docs/figures/module_organization.svg)
+![module organization width:990px](/docs/figures/uml/module_organization.svg)
 
 -----------------
 
@@ -134,7 +134,7 @@ Resilience means taking a **dynamic understanding of risk and safety**
 
 # Analysis Workflow/Structure
 
-![Analysis Workflow](/docs/figures/workflow.png)
+![Analysis Workflow](/docs/figures/powerpoint/workflow.png)
 
 -----------------
 
@@ -157,17 +157,17 @@ Resilience means taking a **dynamic understanding of risk and safety**
 
 # Defining a Model
 
-![formalism example](/docs/figures/formalism_example.png)
+![formalism example](/docs/figures/powerpoint/formalism_example.png)
 
 -----------------
 # Function Code Template
 
-![Function Code Template](/docs/figures/fxnblock_structure.png)
+![Function Code Template](/docs/figures/powerpoint/fxnblock_structure.png)
 
 -----------------
 # Model Code Template
 
-![Model Code Template](/docs/figures/model_structure.png)
+![Model Code Template](/docs/figures/powerpoint/model_structure.png)
 
 -----------------
 # Demo Model Activity: examples/pump/ex_pump.py
@@ -209,7 +209,7 @@ Open `/examples/pump/Tutorial_unfilled.ipynb`:
 
 # Simulation Concepts: Static/Undirected Propagation
 
-![Static Propagation](/docs/figures/propagation.png)
+![Static Propagation](/docs/figures/drawio/propagation.png)
 
 In a single timestep:
 - Functions with `static_behavior()` methods simulate until behaviors converge (i.e., no new state values)
@@ -219,7 +219,7 @@ In a single timestep:
 
 # Simulation Concepts: Propagation over Time
 
-![Dynamic Propagation](/docs/figures/propagationovertime.png)
+![Dynamic Propagation](/docs/figures/drawio/propagationovertime.png)
 
 - Model increments (simulated + history updated) over each time-step until a **defined final time-step** or **specified indicator returns true**. 
 
@@ -227,7 +227,7 @@ In a single timestep:
 
 # Simulation Concepts: Types of Simulations
 
-![Dynamic Propagation](/docs/figures/simulation_types.png)
+![Dynamic Propagation](/docs/figures/powerpoint/simulation_types.png)
 
 For more info on syntax/arguments, see documentation for [`fmdtools.sim.propagate`](https://nasa.github.io/fmdtools/docs/fmdtools.sim.html#fmdtools-sim-propagate).
 
@@ -283,7 +283,7 @@ Explore:
 
 # Analysis Modules
 
-![Analyze Modules width:960px](/docs/figures/analyze_module_structure.png)
+![Analyze Modules width:960px](/docs/figures/powerpoint/analyze_module_structure.png)
 
 See docs for: [`fmdtools.analyze`](https://nasa.github.io/fmdtools/docs/fmdtools.analyze.html)
 

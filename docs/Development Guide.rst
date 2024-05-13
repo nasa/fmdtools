@@ -360,7 +360,7 @@ Development of fmdtools is coordinated by the `fmdtools team <../CONTRIBUTORS.md
 Repo Structure
 --------------------------------
 
-.. image:: /docs/figures/repo_structure.svg
+.. image:: /docs/figures/uml/repo_structure.svg
    :width: 800
    
 Getting started with development first requires some basic familiarity with the repo structure, shown above. As shown, the repo contains:
@@ -380,7 +380,7 @@ There are additionally a few scripts with specific purposes to serve the develop
 Remote Structure
 ********************************
 
-.. image:: /docs/figures/git_structure.svg
+.. image:: /docs/figures/uml/git_structure.svg
    :width: 800
 
 Development of fmdtools uses a two-track development model, in which contributions are provided within NASA as well as by external collaborators. To support this, there are multiple repositories which must be managed in the development process, as shown above. Essentially, there is:
@@ -397,7 +397,7 @@ The fmdtools team is responsible for coordinating the development between the in
 Development Process
 --------------------------------
 
-.. image:: /docs/figures/dev_process.svg
+.. image:: /docs/figures/uml/dev_process.svg
    :width: 800
 
 To encourage code quality we follow the general process above to manage contributions:
