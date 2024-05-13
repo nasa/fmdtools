@@ -1,0 +1,15 @@
+Hindenberg_Burning:
+- License: Publid Domain
+- Source: https://en.wikipedia.org/wiki/Hindenburg_disaster#/media/File:Hindenburg_burning.jpg
+
+Titanic Sinking:
+- License: Public Domain
+- Source: https://commons.wikimedia.org/wiki/File:Titanic_sinking,_painting_by_Willy_St%C3%B6wer.jpg
+
+Challenger Explosion:
+- License: Public Domain
+- Source: https://en.wikipedia.org/wiki/Space_Shuttle_Challenger_disaster#/media/File:Challenger_explosion.jpg
+
+Tenerife:
+- License: CC0 / Public Domain
+- Source: https://en.wikipedia.org/wiki/Tenerife_airport_disaster#/media/File:Het_verongelukte_KLM-toestel_De_Rijn,_Bestanddeelnr_929-1005_-_cropped.jpg
