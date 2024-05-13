@@ -217,7 +217,7 @@ To cite a particular fmdtools example or published research methodology, use the
 
 Released under the [NASA Open Source Agreement Version 1.3](https://github.com/nasa/fmdtools/blob/main/NASA_Open_Source_Agreement_fmdtools.pdf)
 
-Copyright © 2022 United States Government as represented by the Administrator of the National Aeronautics and Space Administration.  All Rights Reserved.
+Copyright © 2024 United States Government as represented by the Administrator of the National Aeronautics and Space Administration.  All Rights Reserved.
 
 
 ### Disclaimers
