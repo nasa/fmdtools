@@ -1,0 +1,1205 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Defining Fault Sampling Approaches in fmdtools &mdash; fmdtools 2.0-rc-3 documentation</title>
+      <link rel="stylesheet" href="../../../../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../../../../_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="../../../../_static/nbsphinx-code-cells.css" type="text/css" />
+    <link rel="shortcut icon" href="../../../../_static/fmdtools_ico.ico"/>
+  <!--[if lt IE 9]>
+    <script src="../../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../../../../" id="documentation_options" src="../../../../_static/documentation_options.js"></script>
+        <script src="../../../../_static/jquery.js"></script>
+        <script src="../../../../_static/underscore.js"></script>
+        <script src="../../../../_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script src="../../../../_static/doctools.js"></script>
+        <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+        <script>window.MathJax = {"tex": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true}, "options": {"ignoreHtmlClass": "tex2jax_ignore|mathjax_ignore|document", "processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+        <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script src="../../../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../../../index.html">
+            
+              <img src="../../../../_static/logo_glow.png" class="logo" alt="Logo"/>
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../README.html">Overview</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../../README.html#about">About</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../../README.html#flexible-modelling-paradigm">Flexible Modelling Paradigm</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../README.html#powerful-simulation-techniques">Powerful Simulation Techniques</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../README.html#efficient-analysis-process">Efficient Analysis Process</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../README.html#getting-started">Getting Started</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../../README.html#set-up-python-environment">Set up python environment</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../README.html#install-fmdtools">Install fmdtools</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../../../README.html#dependencies">Dependencies</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../README.html#explore-tutorials-and-resources">Explore Tutorials and Resources</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../README.html#contributions">Contributions</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../../README.html#contributors">Contributors</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../README.html#citing-this-repository">Citing this repository</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../README.html#license-notices">License/Notices</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../../README.html#disclaimers">Disclaimers</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../docs/Development%20Guide.html">Development Guide</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../../docs/Development%20Guide.html#why-fmdtools">Why fmdtools?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../docs/Development%20Guide.html#introductory-tutorial">Introductory Tutorial</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../../docs/Intro_to_fmdtools.html">Intro to resilience modeling, simulation, and visualization in Python with fmdtools.</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../../../docs/Intro_to_fmdtools.html#author-daniel-hulse">Author: Daniel Hulse</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../../docs/Intro_to_fmdtools.html#version-2-0-rc-3">Version: 2.0-rc-3</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../docs/Intro_to_fmdtools.html#overview">Overview</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../docs/Intro_to_fmdtools.html#prerequisites">Prerequisites</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../docs/Intro_to_fmdtools.html#motivation-modeling-system-resilience">Motivation: Modeling System Resilience</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../docs/Intro_to_fmdtools.html#why-is-resilience-important">Why is Resilience Important?</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../docs/Intro_to_fmdtools.html#enabling-proactive-design-process">Enabling proactive design process</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../docs/Intro_to_fmdtools.html#why-fmdtools-possible-competitors">Why fmdtools? Possible Competitors:</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../docs/Intro_to_fmdtools.html#why-fmdtools-pros">Why fmdtools? Pros:</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../docs/Intro_to_fmdtools.html#why-not-fmdtools-cons">Why <strong>not</strong> fmdtools? Cons:</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../docs/Intro_to_fmdtools.html#what-is-fmdtools-a-python-package-for-design-simulation-and-analysis-of-resilience">What is fmdtools? A Python package for <strong>design</strong>, <strong>simulation</strong>, and <strong>analysis</strong> of resilience.</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../docs/Intro_to_fmdtools.html#what-is-fmdtools-repo-structure">What is fmdtools? Repo Structure</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../docs/Intro_to_fmdtools.html#activity-download-and-install-fmdtools">Activity: Download and Install fmdtools</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../docs/Intro_to_fmdtools.html#analysis-workflow-structure">Analysis Workflow/Structure</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../docs/Intro_to_fmdtools.html#defining-a-model">Defining a Model</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../docs/Intro_to_fmdtools.html#id1">Defining a Model</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../docs/Intro_to_fmdtools.html#function-code-template">Function Code Template</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../docs/Intro_to_fmdtools.html#model-code-template">Model Code Template</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../docs/Intro_to_fmdtools.html#demo-model-activity-examples-pump-ex-pump-py">Demo Model Activity: examples/pump/ex_pump.py</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../docs/Intro_to_fmdtools.html#more-resources-for-model-definition">More Resources for Model Definition</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../docs/Intro_to_fmdtools.html#notebook-activity">Notebook Activity:</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../docs/Intro_to_fmdtools.html#simulation-concepts-static-undirected-propagation">Simulation Concepts: Static/Undirected Propagation</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../docs/Intro_to_fmdtools.html#simulation-concepts-propagation-over-time">Simulation Concepts: Propagation over Time</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../docs/Intro_to_fmdtools.html#simulation-concepts-types-of-simulations">Simulation Concepts: Types of Simulations</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../docs/Intro_to_fmdtools.html#simulation-concepts-sampling-approaches">Simulation Concepts: Sampling Approaches</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../docs/Intro_to_fmdtools.html#simulation-concepts-things-to-consider">Simulation Concepts: Things to Consider</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../docs/Intro_to_fmdtools.html#activity-simulate-the-model">Activity: Simulate the Model</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../docs/Intro_to_fmdtools.html#analysis-modules">Analysis Modules</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../docs/Intro_to_fmdtools.html#analysis-activity">Analysis Activity</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../docs/Intro_to_fmdtools.html#conclusions-summary">Conclusions/Summary</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../docs/Intro_to_fmdtools.html#further-reading-links">Further Reading/Links</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../docs/Development%20Guide.html#glossary">Glossary</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../docs/Development%20Guide.html#model-development-best-practices">Model Development Best Practices</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../../docs/Development%20Guide.html#pay-attention-to-and-document-the-fmdtools-version">Pay attention to and document the fmdtools version</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../docs/Development%20Guide.html#plan-your-model-to-avoid-technical-debt">Plan your model to avoid technical debt</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../docs/Development%20Guide.html#don-t-copy-inherit-and-functionalize">Don’t copy, inherit and functionalize</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../docs/Development%20Guide.html#document-your-code-sometimes-before-your-write-it">Document your code, sometimes <em>before</em> your write it</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../docs/Development%20Guide.html#don-t-get-ahead-of-yourself-try-to-get-a-running-simulation-first">Don’t get ahead of yourself–try to get a running simulation first</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../docs/Development%20Guide.html#preserve-your-prototype-setup-by-formalizing-it-as-a-test">Preserve your prototype setup by formalizing it as a test</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../docs/Development%20Guide.html#edit-your-code">Edit your code</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../docs/Development%20Guide.html#structuring-a-model">Structuring a model</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../docs/Development%20Guide.html#use-model-constructs-to-simplify-your-code">Use model constructs to simplify your code</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../docs/Development%20Guide.html#style-advice">Style advice</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../docs/Development%20Guide.html#see-also">See also</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../docs/Development%20Guide.html#how-to-contribute">How to Contribute</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../../docs/Development%20Guide.html#repo-structure">Repo Structure</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../../../docs/Development%20Guide.html#remote-structure">Remote Structure</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../docs/Development%20Guide.html#development-process">Development Process</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../../../docs/Development%20Guide.html#release-checklist">Release Checklist</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../../docs/Development%20Guide.html#upload-to-pypi">Upload to PyPI</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../docs/Development%20Guide.html#roles">Roles</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../docs/Development%20Guide.html#documentation">Documentation</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../docs/Development%20Guide.html#style-formatting">Style/Formatting</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../docs/Development%20Guide.html#testing">Testing</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../examples/Examples.html">Examples</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../../examples/Examples.html#pump">Pump</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../../examples/pump/readme.html">Pump Model</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../../../examples/pump/readme.html#models">Models</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../../examples/pump/readme.html#scripts-and-tests">Scripts and tests:</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../../examples/pump/readme.html#notebooks">Notebooks</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../../examples/pump/readme.html#references">References</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../examples/Examples.html#multirotor">Multirotor</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../../examples/multirotor/readme.html">Drone Model</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../../../examples/multirotor/readme.html#models">Models</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../../examples/multirotor/readme.html#scripts-and-tests">Scripts and tests:</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../../examples/multirotor/readme.html#notebooks">Notebooks</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../../examples/multirotor/readme.html#references">References</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../examples/Examples.html#tank">Tank</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../../examples/tank/readme.html">Tank Model</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../../../examples/tank/readme.html#models">Models</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../../examples/tank/readme.html#scripts-and-tests">Scripts and tests:</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../../examples/tank/readme.html#notebooks">Notebooks</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../../examples/tank/readme.html#references">References</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../examples/Examples.html#eps">EPS</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../../examples/eps/readme.html">EPS Model</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../../../examples/eps/readme.html#models">Models</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../../examples/eps/readme.html#scripts-and-tests">Scripts and tests:</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../../examples/eps/readme.html#notebooks">Notebooks</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../../examples/eps/readme.html#references">References</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../examples/Examples.html#action-sequence-graph">Action Sequence Graph</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../../examples/asg_demo/readme.html">ASG Model</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../../../examples/asg_demo/readme.html#models">Models</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../../examples/asg_demo/readme.html#scripts-and-tests">Scripts and tests:</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../../examples/asg_demo/readme.html#notebooks">Notebooks</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../examples/Examples.html#rover">Rover</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../../examples/rover/readme.html">Rover Model</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../../../examples/rover/readme.html#models">Models</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../../examples/rover/readme.html#scripts-and-tests">Scripts and tests:</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../../examples/rover/readme.html#notebooks">Notebooks</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../../examples/rover/readme.html#references">References</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../examples/Examples.html#multiflow-demo">Multiflow Demo</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../../examples/multiflow_demo/readme.html">MultiFlow Demo Model</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../../../examples/multiflow_demo/readme.html#models">Models</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../../examples/multiflow_demo/readme.html#scripts-and-tests">Scripts and tests:</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../../examples/multiflow_demo/readme.html#notebooks">Notebooks</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../../examples/multiflow_demo/readme.html#references">References</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../examples/Examples.html#taxiway">Taxiway</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../../examples/taxiway/readme.html">Taxiway Model</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../../../examples/taxiway/readme.html#models">Models</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../../examples/taxiway/readme.html#scripts-and-tests">Scripts and tests:</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../../examples/taxiway/readme.html#notebooks">Notebooks</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../../examples/taxiway/readme.html#references">References</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../docs/fmdtools.html">Module Reference</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../../docs/fmdtools.define.html">fmdtools.define</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../../docs/fmdtools.define.architecture.html">fmdtools.define.architecture</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../../../docs/fmdtools.define.architecture.html#fmdtools-define-architecture-base">fmdtools.define.architecture.base</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../../docs/fmdtools.define.architecture.html#fmdtools-define-architecture-action">fmdtools.define.architecture.action</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../../docs/fmdtools.define.architecture.html#fmdtools-define-architecture-component">fmdtools.define.architecture.component</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../../docs/fmdtools.define.architecture.html#fmdtools-define-architecture-function">fmdtools.define.architecture.function</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../../docs/fmdtools.define.architecture.html#fmdtools-define-architecture-geom">fmdtools.define.architecture.geom</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../docs/fmdtools.define.block.html">fmdtools.define.block</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../../../docs/fmdtools.define.block.html#module-fmdtools.define.block.base">fmdtools.define.block.base</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../../docs/fmdtools.define.block.html#module-fmdtools.define.block.action">fmdtools.define.block.action</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../../docs/fmdtools.define.block.html#module-fmdtools.define.block.component">fmdtools.define.block.component</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../../docs/fmdtools.define.block.html#module-fmdtools.define.block.function">fmdtools.define.block.function</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../docs/fmdtools.define.container.html">fmdtools.define.container</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../../../docs/fmdtools.define.container.html#fmdtools-define-container-base">fmdtools.define.container.base</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../../docs/fmdtools.define.container.html#module-fmdtools.define.container.mode">fmdtools.define.container.mode</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../../docs/fmdtools.define.container.html#fmdtools-define-container-state">fmdtools.define.container.state</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../../docs/fmdtools.define.container.html#fmdtools-define-container-parameter">fmdtools.define.container.parameter</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../../docs/fmdtools.define.container.html#module-fmdtools.define.container.rand">fmdtools.define.container.rand</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../../docs/fmdtools.define.container.html#module-fmdtools.define.container.time">fmdtools.define.container.time</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../docs/fmdtools.define.flow.html">fmdtools.define.flow</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../../../docs/fmdtools.define.flow.html#fmdtools-define-flow-base">fmdtools.define.flow.base</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../../docs/fmdtools.define.flow.html#module-fmdtools.define.flow.multiflow">fmdtools.define.flow.multiflow</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../../docs/fmdtools.define.flow.html#module-fmdtools.define.flow.commsflow">fmdtools.define.flow.commsflow</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../docs/fmdtools.define.object.html">fmdtools.define.object</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../../../docs/fmdtools.define.object.html#module-fmdtools.define.object.base">fmdtools.define.object.base</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../../docs/fmdtools.define.object.html#module-fmdtools.define.object.timer">fmdtools.define.object.timer</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../../docs/fmdtools.define.object.html#module-fmdtools.define.object.geom">fmdtools.define.object.geom</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../../docs/fmdtools.define.object.html#module-fmdtools.define.object.coords">fmdtools.define.object.coords</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../docs/fmdtools.define.html#fmdtools-define-base">fmdtools.define.base</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../docs/fmdtools.define.html#module-fmdtools.define.environment">fmdtools.define.environment</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../docs/fmdtools.sim.html">fmdtools.sim</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../../docs/fmdtools.sim.html#fmdtools-sim-propagate">fmdtools.sim.propagate</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../docs/fmdtools.sim.html#module-fmdtools.sim.scenario">fmdtools.sim.scenario</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../docs/fmdtools.sim.html#module-fmdtools.sim.sample">fmdtools.sim.sample</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../docs/fmdtools.sim.html#module-fmdtools.sim.search">fmdtools.sim.search</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../docs/fmdtools.analyze.html">fmdtools.analyze</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../../docs/fmdtools.analyze.html#module-fmdtools.analyze.common">fmdtools.analyze.common</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../docs/fmdtools.analyze.html#module-fmdtools.analyze.result">fmdtools.analyze.result</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../docs/fmdtools.analyze.html#module-fmdtools.analyze.history">fmdtools.analyze.history</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../docs/fmdtools.analyze.html#module-fmdtools.analyze.graph">fmdtools.analyze.graph</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../docs/fmdtools.analyze.html#module-fmdtools.analyze.tabulate">fmdtools.analyze.tabulate</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../docs/fmdtools.analyze.html#module-fmdtools.analyze.phases">fmdtools.analyze.phases</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../CONTRIBUTORS.html">Contributors</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../../CONTRIBUTORS.html#internal-contributors">Internal Contributors</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../CONTRIBUTORS.html#external-contributors">External Contributors</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../CONTRIBUTORS.html#alumni-and-interns">Alumni and Interns</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../CONTRIBUTORS.html#fmdtools-at-osu">fmdtools at OSU</a></li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../../index.html">fmdtools</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">Defining Fault Sampling Approaches in fmdtools</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../../../../_sources/._build/html/examples/rover/FaultSample_Use-Cases.ipynb.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="Defining-Fault-Sampling-Approaches-in-fmdtools">
+<h1>Defining Fault Sampling Approaches in fmdtools<a class="headerlink" href="#Defining-Fault-Sampling-Approaches-in-fmdtools" title="Permalink to this heading"></a></h1>
+<p>Fault Sampling is used to evaluate the overall resilience of a system to a set of faults and the corresponding risks associated with these faults. There is no single best way to define the set of scenarios to evaluate resilience with, because a given resilience analysis may need more or less detail, support more or less computational time, or be interested in specific scenario types of interest.</p>
+<p>Thus, there are a number of use-cases supported by fmdtools for different sampling models. This document will demonstrate and showcase a few of them.</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[1]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">fmdtools.sim.sample</span> <span class="kn">import</span> <span class="n">SampleApproach</span><span class="p">,</span> <span class="n">FaultSample</span><span class="p">,</span> <span class="n">FaultDomain</span>
+<span class="kn">from</span> <span class="nn">fmdtools.analyze.tabulate</span> <span class="kn">import</span> <span class="n">FMEA</span><span class="p">,</span> <span class="n">Comparison</span>
+<span class="kn">import</span> <span class="nn">fmdtools.sim.propagate</span> <span class="k">as</span> <span class="nn">prop</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+</pre></div>
+</div>
+</div>
+<section id="Basics">
+<h2>Basics<a class="headerlink" href="#Basics" title="Permalink to this heading"></a></h2>
+<p>Fault sampling involves: - Defining faults and fault models for each function/component/flows of the model is done using the ‘Mode’ Class - Defining a fault sampling approach, using the: - <code class="docutils literal notranslate"><span class="pre">SampleApproach</span></code> class, or - <code class="docutils literal notranslate"><span class="pre">FaultDomain</span></code> and <code class="docutils literal notranslate"><span class="pre">FaultSample</span></code> calsses directly - Propagating faults through the model (using the <code class="docutils literal notranslate"><span class="pre">propagate.faultsample</span></code> method) Before proceeding, it can be helpful to look through their respective documentation.</p>
+</section>
+<section id="Model-Setup">
+<h2>Model Setup<a class="headerlink" href="#Model-Setup" title="Permalink to this heading"></a></h2>
+<p>Consider the rover model in <code class="docutils literal notranslate"><span class="pre">rover_model</span></code></p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[2]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">inspect</span>
+<span class="kn">from</span> <span class="nn">rover_model</span> <span class="kn">import</span> <span class="n">Power</span><span class="p">,</span> <span class="n">PowerMode</span>
+</pre></div>
+</div>
+</div>
+<p>This rover has a Power function:</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[3]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="n">inspect</span><span class="o">.</span><span class="n">getsource</span><span class="p">(</span><span class="n">Power</span><span class="p">))</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+class Power(Function):
+    &#34;&#34;&#34;Rover power supply.&#34;&#34;&#34;
+
+    __slots__ = (&#34;ee_15&#34;, &#34;ee_5&#34;, &#34;ee_12&#34;, &#34;switch&#34;)
+    container_s = PowerState
+    container_m = PowerMode
+    flow_ee_15 = EE
+    flow_ee_5 = EE
+    flow_ee_12 = EE
+    flow_switch = Switch
+
+    def static_behavior(self, time):
+        &#34;&#34;&#34;Determine power use based on mode.&#34;&#34;&#34;
+        if self.m.in_mode(&#34;off&#34;):
+            self.off_power()
+        elif self.m.in_mode(&#34;supply&#34;):
+            self.supply_power()
+        elif self.m.in_mode(&#34;short&#34;):
+            self.short_power()
+        elif self.m.in_mode(&#34;no_charge&#34;):
+            self.no_charge_power()
+
+        if self.m.in_mode(&#34;charge&#34;):
+            self.charge_power_usage()
+        else:
+            self.power_usage()
+            if self.m.in_mode(&#34;short&#34;):
+                self.short_power_usage()
+
+    def dynamic_behavior(self, time):
+        &#34;&#34;&#34;Charge increment over time.&#34;&#34;&#34;
+        self.s.inc(charge=-self.s.power / 100)
+        self.s.limit(charge=(0, 100))
+
+    def short_power(self):
+        &#34;&#34;&#34;Power in case of a short has normal voltage.&#34;&#34;&#34;
+        self.ee_5.s.v = 5
+        self.ee_12.s.v = 12
+        self.ee_15.s.v = 15
+
+    def no_charge_power(self):
+        &#34;&#34;&#34;Battery is out of charge.&#34;&#34;&#34;
+        self.ee_5.s.v = 0
+        self.ee_12.s.v = 0
+        self.ee_15.s.v = 0
+
+    def off_power(self):
+        &#34;&#34;&#34;Power supply is shut off.&#34;&#34;&#34;
+        self.ee_5.s.put(v=0, a=0)
+        self.ee_12.s.put(v=0, a=0)
+        self.ee_15.s.put(v=0, a=0)
+        if self.switch.s.power:
+            self.m.set_mode(&#34;supply&#34;)
+
+    def supply_power(self):
+        &#34;&#34;&#34;Power supply is in supply mode.&#34;&#34;&#34;
+        if self.s.charge &gt; 0:
+            self.ee_5.s.v = 5
+            self.ee_12.s.v = 12
+            self.ee_15.s.v = 15
+        else:
+            self.m.set_mode(&#34;no_charge&#34;)
+        if not self.switch.s.power:
+            self.m.set_mode(&#34;off&#34;)
+
+    def power_usage(self):
+        &#34;&#34;&#34;Calculate the power usage in general.&#34;&#34;&#34;
+        self.s.power = (1.0 + self.ee_12.s.mul(&#34;v&#34;, &#34;a&#34;) +
+                        self.ee_5.s.mul(&#34;v&#34;, &#34;a&#34;) + self.ee_15.s.mul(&#34;v&#34;, &#34;a&#34;))
+
+    def charge_power_usage(self):
+        &#34;&#34;&#34;Calculate the power usage when the battery charges.&#34;&#34;&#34;
+        self.s.power = -1
+        if self.s.charge == 100:
+            self.m.set_mode(&#34;off&#34;)
+
+    def short_power_usage(self):
+        &#34;&#34;&#34;Calculate power usage when there is a short (calculated as double).&#34;&#34;&#34;
+        self.s.power = self.s.power * 2
+        if self.s.charge == 0:
+            self.m.set_mode(&#34;no_charge&#34;)
+        if not self.switch.s.power:
+            self.m.set_mode(&#34;off&#34;)
+
+</pre></div></div>
+</div>
+<p>Which contains the mode <code class="docutils literal notranslate"><span class="pre">PowerMode</span></code>:</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[4]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="n">inspect</span><span class="o">.</span><span class="n">getsource</span><span class="p">(</span><span class="n">PowerMode</span><span class="p">))</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+class PowerMode(Mode):
+    &#34;&#34;&#34;
+    Possible modes for Power function.
+
+    Modes
+    -------
+    no_charge : Fault
+        Battery is out of charge.
+    short: Fault
+        There is a short.
+    supply: Mode
+        supply power
+    charge: Mode
+        charge battery
+    standby: Mode
+        power supply is in stand by
+    off: Mode
+        power supply is off
+    &#34;&#34;&#34;
+
+    fm_args = {&#34;no_charge&#34;: (1e-5, 100, {&#34;off&#34;: 1.0}),
+               &#34;short&#34;: (1e-5, 100, {&#34;supply&#34;: 1.0})}
+    opermodes = (&#34;supply&#34;, &#34;charge&#34;, &#34;off&#34;)
+    mode: str = &#34;off&#34;
+    exclusive = True
+
+</pre></div></div>
+</div>
+<p>The class variable <code class="docutils literal notranslate"><span class="pre">fm_args</span></code> specifies that there are two possible modes to inject, “no_charge”, and “shortn”, with no more information given for each mode. More information has been added in the tuples of the dictionary, including: - rate - repair cost - phase dictionary The phase dictionary is important because it specifies that this mode is to occur in a given phase. In this case, <code class="docutils literal notranslate"><span class="pre">no_charge</span></code> is supposed to only occur during the <code class="docutils literal notranslate"><span class="pre">standby</span></code> phase while <code class="docutils literal notranslate"><span class="pre">short</span></code> is only supposed to occur
+during the <code class="docutils literal notranslate"><span class="pre">supply</span></code> phase. In this <code class="docutils literal notranslate"><span class="pre">Mode</span></code>, these phases correspond to the operational modes (<code class="docutils literal notranslate"><span class="pre">opermodes</span></code>), but they may correspond to other operational modes also.</p>
+<p>All of these fields are optional, but they do help us develop a more informed statistical sample of the fault modes.</p>
+</section>
+<section id="Setting-up-a-FaultSample">
+<h2>Setting up a FaultSample<a class="headerlink" href="#Setting-up-a-FaultSample" title="Permalink to this heading"></a></h2>
+<p>Sampling using <code class="docutils literal notranslate"><span class="pre">FaultSample</span></code> first requires creating a <code class="docutils literal notranslate"><span class="pre">FaultDomain</span></code> to sample from. These faultdomains can be created from both models and individual functions:</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[5]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">fd_power</span> <span class="o">=</span> <span class="n">FaultDomain</span><span class="p">(</span><span class="n">Power</span><span class="p">())</span>
+<span class="n">fd_power</span><span class="o">.</span><span class="n">add_all</span><span class="p">()</span>
+<span class="n">fd_power</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[5]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+FaultDomain with faults:
+ -(&#39;power&#39;, &#39;no_charge&#39;)
+ -(&#39;power&#39;, &#39;short&#39;)
+</pre></div></div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[6]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">rover_model</span> <span class="kn">import</span> <span class="n">Rover</span>
+<span class="n">fd_rvr</span> <span class="o">=</span> <span class="n">FaultDomain</span><span class="p">(</span><span class="n">Rover</span><span class="p">())</span>
+<span class="n">fd_rvr</span><span class="o">.</span><span class="n">add_all</span><span class="p">()</span>
+<span class="n">fd_rvr</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[6]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+FaultDomain with faults:
+ -(&#39;power&#39;, &#39;no_charge&#39;)
+ -(&#39;power&#39;, &#39;short&#39;)
+ -(&#39;perception&#39;, &#39;bad_feed&#39;)
+ -(&#39;plan_path&#39;, &#39;no_con&#39;)
+ -(&#39;plan_path&#39;, &#39;crash&#39;)
+ -(&#39;drive&#39;, &#39;hmode_0&#39;)
+ -(&#39;drive&#39;, &#39;hmode_1&#39;)
+ -(&#39;drive&#39;, &#39;hmode_2&#39;)
+ -(&#39;drive&#39;, &#39;hmode_3&#39;)
+ -(&#39;drive&#39;, &#39;hmode_4&#39;)
+ -...more
+</pre></div></div>
+</div>
+<p>Note that there are several methods in FaultDomain which let us specify the list of faults we want to sample from, e.g.:</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[7]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">fd_short</span> <span class="o">=</span> <span class="n">FaultDomain</span><span class="p">(</span><span class="n">Rover</span><span class="p">())</span>
+<span class="n">fd_short</span><span class="o">.</span><span class="n">add_all_modes</span><span class="p">(</span><span class="s2">&quot;short&quot;</span><span class="p">)</span>
+<span class="n">fd_short</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[7]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+FaultDomain with faults:
+ -(&#39;power&#39;, &#39;short&#39;)
+</pre></div></div>
+</div>
+<p>or:</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[8]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">fd_pwr</span> <span class="o">=</span> <span class="n">FaultDomain</span><span class="p">(</span><span class="n">Rover</span><span class="p">())</span>
+<span class="n">fd_pwr</span><span class="o">.</span><span class="n">add_all_fxn_modes</span><span class="p">(</span><span class="s2">&quot;power&quot;</span><span class="p">)</span>
+<span class="n">fd_pwr</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[8]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+FaultDomain with faults:
+ -(&#39;power&#39;, &#39;no_charge&#39;)
+ -(&#39;power&#39;, &#39;short&#39;)
+</pre></div></div>
+</div>
+<p>We can then sample this domain using a <code class="docutils literal notranslate"><span class="pre">FaultSample</span></code>:</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[9]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">fs_pwr</span> <span class="o">=</span> <span class="n">FaultSample</span><span class="p">(</span><span class="n">fd_pwr</span><span class="p">,</span> <span class="n">def_mdl_phasemap</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<p>Note that FaultSamples have two main variables: faultdomain and phasemap. A PhaseMap is essentially a dictionary of phases to sample from.</p>
+<p>In the above case, we don’t want to use phase information to form the sample, so we don’t provide any and we set <code class="docutils literal notranslate"><span class="pre">def_mdl_phasemap=False</span></code>, since this would get phase information from the model.</p>
+<p>To add scenarios to the <code class="docutils literal notranslate"><span class="pre">FaultSample</span></code>, we can then use one of the <code class="docutils literal notranslate"><span class="pre">add</span></code> methods:</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[10]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">fs_pwr</span><span class="o">.</span><span class="n">add_fault_times</span><span class="p">([</span><span class="mi">2</span><span class="p">,</span><span class="mi">5</span><span class="p">,</span><span class="mi">10</span><span class="p">])</span>
+<span class="n">fs_pwr</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[10]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+FaultSample of scenarios:
+ - power_no_charge_t2
+ - power_no_charge_t5
+ - power_no_charge_t10
+ - power_short_t2
+ - power_short_t5
+ - power_short_t10
+</pre></div></div>
+</div>
+<p>As shown, this adds the list of faults in the faultdomain over the given times.</p>
+<p>Note the underlying rate information in these scenarios is all the same:</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[11]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">fs_pwr</span><span class="o">.</span><span class="n">scenarios</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[11]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+[SingleFaultScenario(sequence={2.0: Injection(faults={&#39;power&#39;: [&#39;no_charge&#39;]}, disturbances={})}, times=(2,), function=&#39;power&#39;, fault=&#39;no_charge&#39;, rate=1e-05, name=&#39;power_no_charge_t2&#39;, time=2, phase=&#39;&#39;),
+ SingleFaultScenario(sequence={5.0: Injection(faults={&#39;power&#39;: [&#39;no_charge&#39;]}, disturbances={})}, times=(5,), function=&#39;power&#39;, fault=&#39;no_charge&#39;, rate=1e-05, name=&#39;power_no_charge_t5&#39;, time=5, phase=&#39;&#39;),
+ SingleFaultScenario(sequence={10.0: Injection(faults={&#39;power&#39;: [&#39;no_charge&#39;]}, disturbances={})}, times=(10,), function=&#39;power&#39;, fault=&#39;no_charge&#39;, rate=1e-05, name=&#39;power_no_charge_t10&#39;, time=10, phase=&#39;&#39;),
+ SingleFaultScenario(sequence={2.0: Injection(faults={&#39;power&#39;: [&#39;short&#39;]}, disturbances={})}, times=(2,), function=&#39;power&#39;, fault=&#39;short&#39;, rate=1e-05, name=&#39;power_short_t2&#39;, time=2, phase=&#39;&#39;),
+ SingleFaultScenario(sequence={5.0: Injection(faults={&#39;power&#39;: [&#39;short&#39;]}, disturbances={})}, times=(5,), function=&#39;power&#39;, fault=&#39;short&#39;, rate=1e-05, name=&#39;power_short_t5&#39;, time=5, phase=&#39;&#39;),
+ SingleFaultScenario(sequence={10.0: Injection(faults={&#39;power&#39;: [&#39;short&#39;]}, disturbances={})}, times=(10,), function=&#39;power&#39;, fault=&#39;short&#39;, rate=1e-05, name=&#39;power_short_t10&#39;, time=10, phase=&#39;&#39;)]
+</pre></div></div>
+</div>
+<p>But we know better than this–some of the faults should have zero rate if they are going to occur in phases they don’t apply to!</p>
+<p>If we want to sample the given phases for the sample, we can additionally pass a phasemap generated by first running the model in the nominal state:</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[12]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">res</span><span class="p">,</span> <span class="n">hist</span> <span class="o">=</span> <span class="n">prop</span><span class="o">.</span><span class="n">nominal</span><span class="p">(</span><span class="n">Rover</span><span class="p">())</span>
+</pre></div>
+</div>
+</div>
+<p>We can then get phase information from this history using the <code class="docutils literal notranslate"><span class="pre">fmdtools.analyze.phases.from_hist</span></code>:</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[13]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">fmdtools.analyze.phases</span> <span class="kn">import</span> <span class="n">from_hist</span><span class="p">,</span> <span class="n">phaseplot</span>
+<span class="n">phases</span> <span class="o">=</span> <span class="n">from_hist</span><span class="p">(</span><span class="n">hist</span><span class="p">)</span>
+<span class="n">phases</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[13]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+{&#39;power&#39;: PhaseMap({&#39;off&#39;: [0.0, 0.0], &#39;supply&#39;: [1.0, 112.0]}, {&#39;off&#39;: {&#39;off&#39;}, &#39;supply&#39;: {&#39;supply&#39;}}),
+ &#39;perception&#39;: PhaseMap({&#39;off&#39;: [0.0, 1.0], &#39;feed&#39;: [2.0, 112.0]}, {&#39;off&#39;: {&#39;off&#39;}, &#39;feed&#39;: {&#39;feed&#39;}}),
+ &#39;plan_path&#39;: PhaseMap({&#39;standby&#39;: [0.0, 4.0], &#39;drive&#39;: [5.0, 112.0]}, {&#39;standby&#39;: {&#39;standby&#39;}, &#39;drive&#39;: {&#39;drive&#39;}}),
+ &#39;override&#39;: PhaseMap({&#39;off&#39;: [0.0, 1.0], &#39;standby&#39;: [2.0, 112.0]}, {&#39;off&#39;: {&#39;off&#39;}, &#39;standby&#39;: {&#39;standby&#39;}})}
+</pre></div></div>
+</div>
+<p>Which can be visualized using:</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[14]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">fig</span> <span class="o">=</span> <span class="n">phaseplot</span><span class="p">(</span><span class="n">phases</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../../../../_images/._build_html_examples_rover_FaultSample_Use-Cases_30_0.png" src="../../../../_images/._build_html_examples_rover_FaultSample_Use-Cases_30_0.png" />
+</div>
+</div>
+<p>The <code class="docutils literal notranslate"><span class="pre">PhaseMap</span></code> for <code class="docutils literal notranslate"><span class="pre">Power</span></code> is here in <code class="docutils literal notranslate"><span class="pre">power</span></code>:</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[15]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">phases</span><span class="p">[</span><span class="s1">&#39;power&#39;</span><span class="p">]</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[15]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+PhaseMap({&#39;off&#39;: [0.0, 0.0], &#39;supply&#39;: [1.0, 112.0]}, {&#39;off&#39;: {&#39;off&#39;}, &#39;supply&#39;: {&#39;supply&#39;}})
+</pre></div></div>
+</div>
+<p>Which we can use to create a <code class="docutils literal notranslate"><span class="pre">FaultSample</span></code> which only samples the phases corresponding to the information given in <code class="docutils literal notranslate"><span class="pre">Mode</span></code>:</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[16]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">fs_pwr</span> <span class="o">=</span> <span class="n">FaultSample</span><span class="p">(</span><span class="n">fd_pwr</span><span class="p">,</span> <span class="n">phasemap</span><span class="o">=</span><span class="n">phases</span><span class="p">[</span><span class="s1">&#39;power&#39;</span><span class="p">])</span>
+<span class="n">fs_pwr</span><span class="o">.</span><span class="n">add_fault_phases</span><span class="p">()</span>
+<span class="n">fs_pwr</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[16]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+FaultSample of scenarios:
+ - power_no_charge_t0p0
+ - power_short_t0p0
+ - power_no_charge_t56p0
+ - power_short_t56p0
+</pre></div></div>
+</div>
+<p>If we look at the rate information, however:</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[17]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">fs_pwr</span><span class="o">.</span><span class="n">scenarios</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[17]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+[SingleFaultScenario(sequence={0.0: Injection(faults={&#39;power&#39;: [&#39;no_charge&#39;]}, disturbances={})}, times=(0.0,), function=&#39;power&#39;, fault=&#39;no_charge&#39;, rate=1e-05, name=&#39;power_no_charge_t0p0&#39;, time=0.0, phase=&#39;off&#39;),
+ SingleFaultScenario(sequence={0.0: Injection(faults={&#39;power&#39;: [&#39;short&#39;]}, disturbances={})}, times=(0.0,), function=&#39;power&#39;, fault=&#39;short&#39;, rate=0.0, name=&#39;power_short_t0p0&#39;, time=0.0, phase=&#39;off&#39;),
+ SingleFaultScenario(sequence={56.0: Injection(faults={&#39;power&#39;: [&#39;no_charge&#39;]}, disturbances={})}, times=(56.0,), function=&#39;power&#39;, fault=&#39;no_charge&#39;, rate=0.0, name=&#39;power_no_charge_t56p0&#39;, time=56.0, phase=&#39;supply&#39;),
+ SingleFaultScenario(sequence={56.0: Injection(faults={&#39;power&#39;: [&#39;short&#39;]}, disturbances={})}, times=(56.0,), function=&#39;power&#39;, fault=&#39;short&#39;, rate=1e-05, name=&#39;power_short_t56p0&#39;, time=56.0, phase=&#39;supply&#39;)]
+</pre></div></div>
+</div>
+<p>The rate for scenarios outside the phases is zero!</p>
+<p>We can remove these scenarios using <code class="docutils literal notranslate"><span class="pre">FaultSample.prune_scenarios</span></code>:</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[18]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">fs_pwr</span><span class="o">.</span><span class="n">prune_scenarios</span><span class="p">(</span><span class="s2">&quot;rate&quot;</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">greater</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">)</span>
+<span class="n">fs_pwr</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[18]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+FaultSample of scenarios:
+ - power_no_charge_t0p0
+ - power_short_t56p0
+</pre></div></div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[19]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">fs_pwr</span><span class="o">.</span><span class="n">scenarios</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[19]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+[SingleFaultScenario(sequence={0.0: Injection(faults={&#39;power&#39;: [&#39;no_charge&#39;]}, disturbances={})}, times=(0.0,), function=&#39;power&#39;, fault=&#39;no_charge&#39;, rate=1e-05, name=&#39;power_no_charge_t0p0&#39;, time=0.0, phase=&#39;off&#39;),
+ SingleFaultScenario(sequence={56.0: Injection(faults={&#39;power&#39;: [&#39;short&#39;]}, disturbances={})}, times=(56.0,), function=&#39;power&#39;, fault=&#39;short&#39;, rate=1e-05, name=&#39;power_short_t56p0&#39;, time=56.0, phase=&#39;supply&#39;)]
+</pre></div></div>
+</div>
+<p>As shown, now the only scenarios in the <code class="docutils literal notranslate"><span class="pre">FaultSample</span></code> are ones which have nonzero rate.</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[20]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">assert</span> <span class="nb">all</span><span class="p">([</span><span class="n">scen</span><span class="o">.</span><span class="n">rate</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="k">for</span> <span class="n">scen</span> <span class="ow">in</span> <span class="n">fs_pwr</span><span class="o">.</span><span class="n">scenarios</span><span class="p">()])</span>
+</pre></div>
+</div>
+</div>
+<p>To enable multiple samples to be generated for different faultdomains accross the model, we can use <code class="docutils literal notranslate"><span class="pre">SampleApproach</span></code>, e.g.:</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[21]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">phases</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[21]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+{&#39;power&#39;: PhaseMap({&#39;off&#39;: [0.0, 0.0], &#39;supply&#39;: [1.0, 112.0]}, {&#39;off&#39;: {&#39;off&#39;}, &#39;supply&#39;: {&#39;supply&#39;}}),
+ &#39;perception&#39;: PhaseMap({&#39;off&#39;: [0.0, 1.0], &#39;feed&#39;: [2.0, 112.0]}, {&#39;off&#39;: {&#39;off&#39;}, &#39;feed&#39;: {&#39;feed&#39;}}),
+ &#39;plan_path&#39;: PhaseMap({&#39;standby&#39;: [0.0, 4.0], &#39;drive&#39;: [5.0, 112.0]}, {&#39;standby&#39;: {&#39;standby&#39;}, &#39;drive&#39;: {&#39;drive&#39;}}),
+ &#39;override&#39;: PhaseMap({&#39;off&#39;: [0.0, 1.0], &#39;standby&#39;: [2.0, 112.0]}, {&#39;off&#39;: {&#39;off&#39;}, &#39;standby&#39;: {&#39;standby&#39;}})}
+</pre></div></div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[22]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">sa</span> <span class="o">=</span> <span class="n">SampleApproach</span><span class="p">(</span><span class="n">Rover</span><span class="p">(),</span> <span class="n">phasemaps</span><span class="o">=</span><span class="n">phases</span><span class="p">)</span>
+<span class="c1"># adding fault domains</span>
+<span class="n">sa</span><span class="o">.</span><span class="n">add_faultdomain</span><span class="p">(</span><span class="s2">&quot;drive&quot;</span><span class="p">,</span> <span class="s2">&quot;fault&quot;</span><span class="p">,</span> <span class="s2">&quot;drive&quot;</span><span class="p">,</span> <span class="s2">&quot;hmode_1&quot;</span><span class="p">)</span>
+<span class="n">sa</span><span class="o">.</span><span class="n">add_faultdomain</span><span class="p">(</span><span class="s2">&quot;plan_path&quot;</span><span class="p">,</span> <span class="s2">&quot;all_fxn_modes&quot;</span><span class="p">,</span> <span class="s2">&quot;plan_path&quot;</span><span class="p">)</span>
+<span class="n">sa</span><span class="o">.</span><span class="n">add_faultdomain</span><span class="p">(</span><span class="s2">&quot;power&quot;</span><span class="p">,</span> <span class="s2">&quot;all_fxn_modes&quot;</span><span class="p">,</span> <span class="s2">&quot;power&quot;</span><span class="p">)</span>
+<span class="n">sa</span><span class="o">.</span><span class="n">add_faultsample</span><span class="p">(</span><span class="s2">&quot;drive&quot;</span><span class="p">,</span> <span class="s2">&quot;fault_phases&quot;</span><span class="p">,</span> <span class="s2">&quot;drive&quot;</span><span class="p">,</span> <span class="n">phasemap</span><span class="o">=</span><span class="s2">&quot;plan_path&quot;</span><span class="p">)</span>
+<span class="n">sa</span><span class="o">.</span><span class="n">add_faultsample</span><span class="p">(</span><span class="s2">&quot;plan_path&quot;</span><span class="p">,</span> <span class="s2">&quot;fault_phases&quot;</span><span class="p">,</span> <span class="s2">&quot;plan_path&quot;</span><span class="p">,</span> <span class="n">phasemap</span><span class="o">=</span><span class="s2">&quot;plan_path&quot;</span><span class="p">)</span>
+<span class="n">sa</span><span class="o">.</span><span class="n">add_faultsample</span><span class="p">(</span><span class="s2">&quot;power&quot;</span><span class="p">,</span> <span class="s2">&quot;fault_phases&quot;</span><span class="p">,</span> <span class="s2">&quot;power&quot;</span><span class="p">,</span> <span class="n">phasemap</span><span class="o">=</span><span class="s2">&quot;power&quot;</span><span class="p">)</span>
+<span class="n">sa</span><span class="o">.</span><span class="n">prune_scenarios</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[23]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">sa</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[23]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+SampleApproach for rover with:
+ faultdomains: drive, plan_path, power
+ faultsamples: drive, plan_path, power
+</pre></div></div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[24]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">sa</span><span class="o">.</span><span class="n">scenarios</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[24]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+[SingleFaultScenario(sequence={58.0: Injection(faults={&#39;drive&#39;: [&#39;hmode_1&#39;]}, disturbances={})}, times=(58.0,), function=&#39;drive&#39;, fault=&#39;hmode_1&#39;, rate=0.02857142857142857, name=&#39;drive_hmode_1_t58p0&#39;, time=58.0, phase=&#39;drive&#39;),
+ SingleFaultScenario(sequence={2.0: Injection(faults={&#39;plan_path&#39;: [&#39;no_con&#39;]}, disturbances={})}, times=(2.0,), function=&#39;plan_path&#39;, fault=&#39;no_con&#39;, rate=0.0001, name=&#39;plan_path_no_con_t2p0&#39;, time=2.0, phase=&#39;standby&#39;),
+ SingleFaultScenario(sequence={2.0: Injection(faults={&#39;plan_path&#39;: [&#39;crash&#39;]}, disturbances={})}, times=(2.0,), function=&#39;plan_path&#39;, fault=&#39;crash&#39;, rate=0.0001, name=&#39;plan_path_crash_t2p0&#39;, time=2.0, phase=&#39;standby&#39;),
+ SingleFaultScenario(sequence={58.0: Injection(faults={&#39;plan_path&#39;: [&#39;no_con&#39;]}, disturbances={})}, times=(58.0,), function=&#39;plan_path&#39;, fault=&#39;no_con&#39;, rate=0.0001, name=&#39;plan_path_no_con_t58p0&#39;, time=58.0, phase=&#39;drive&#39;),
+ SingleFaultScenario(sequence={58.0: Injection(faults={&#39;plan_path&#39;: [&#39;crash&#39;]}, disturbances={})}, times=(58.0,), function=&#39;plan_path&#39;, fault=&#39;crash&#39;, rate=0.0001, name=&#39;plan_path_crash_t58p0&#39;, time=58.0, phase=&#39;drive&#39;),
+ SingleFaultScenario(sequence={0.0: Injection(faults={&#39;power&#39;: [&#39;no_charge&#39;]}, disturbances={})}, times=(0.0,), function=&#39;power&#39;, fault=&#39;no_charge&#39;, rate=1e-05, name=&#39;power_no_charge_t0p0&#39;, time=0.0, phase=&#39;off&#39;),
+ SingleFaultScenario(sequence={56.0: Injection(faults={&#39;power&#39;: [&#39;short&#39;]}, disturbances={})}, times=(56.0,), function=&#39;power&#39;, fault=&#39;short&#39;, rate=1e-05, name=&#39;power_short_t56p0&#39;, time=56.0, phase=&#39;supply&#39;)]
+</pre></div></div>
+</div>
+<p>This is mostly useful when we would like to sample different functions in a model differently than others (e.g., using different phases), but still want to propagate the scenarios together as a part of a single sample.</p>
+</section>
+<section id="Propagating-Faults">
+<h2>Propagating Faults<a class="headerlink" href="#Propagating-Faults" title="Permalink to this heading"></a></h2>
+<p>Given the <code class="docutils literal notranslate"><span class="pre">FaultSample</span></code> approach, faults can then be propagated through the model to get results. Note that these faults can be sampled in parallel if desired using a user-provided pool (see the parallel pool tutorial in the <code class="docutils literal notranslate"><span class="pre">\pump</span> <span class="pre">example</span></code> folder).</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[25]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">res</span><span class="p">,</span> <span class="n">hist</span> <span class="o">=</span> <span class="n">prop</span><span class="o">.</span><span class="n">fault_sample</span><span class="p">(</span><span class="n">Rover</span><span class="p">(),</span> <span class="n">fs_pwr</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area stderr docutils container">
+<div class="highlight"><pre>
+SCENARIOS COMPLETE: 100%|██████████| 2/2 [00:00&lt;00:00, 11.45it/s]
+</pre></div></div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[26]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">res</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[26]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+power_no_charge_t0p0.endclass.rate: 1e-05
+power_no_charge_t0p0.endclass.cost:    0
+power_no_charge_t0p0.endclass.prob:  1.0
+power_no_charge_t0p0                   0
+power_no_charge_t0p0.endclass.in_bound: True
+power_no_charge_t0p0               False
+power_no_charge_t0p0                   1
+power_no_charge_t0p0                   1
+power_no_charge_t0p0.endclass.end_dist: 28.91724385770989
+power_no_charge_t0p0                 0.0
+power_no_charge_t0p0.endclass.faults: {&#39;power&#39;: [&#39;no_charge&#39;]}
+power_no_charge_t0p0incomplete mission faulty
+power_no_charge_t0p0.endclass.end_x: 0.0
+power_no_charge_t0p0.endclass.end_y: 0.0
+power_no_charge_t0p0.endclass.endpt: array(2)
+power_short_t56p0.endclass.rate:   1e-05
+power_short_t56p0.endclass.cost:       0
+power_short_t56p0.endclass.prob:     1.0
+power_short_t56p0.en                   0
+power_short_t56p0.endclass.in_bound: True
+power_short_t56p0.endclass.at_finish: True
+power_short_t56p0.endclass.line_dist:  1
+power_short_t56p0.endclass.num_modes:  1
+power_short_t56p0.endclass.end_dist: 0.0
+power_short_t56p0.en 0.11859644458085598
+power_short_t56p0.endclass.faults: {&#39;power&#39;: [&#39;short&#39;]}
+power_short_t56p0.en              faulty
+power_short_t56p0.endclass.end_x: 29.254775331608617
+power_short_t56p0.endclass.end_y: -0.7827640334587979
+power_short_t56p0.endclass.endpt: array(2)
+nominal.endclass.rate:               1.0
+nominal.endclass.cost:                 0
+nominal.endclass.prob:               1.0
+nominal.endclass.expected_cost:        0
+nominal.endclass.in_bound:          True
+nominal.endclass.at_finish:         True
+nominal.endclass.line_dist:            1
+nominal.endclass.num_modes:            0
+nominal.endclass.end_dist:           0.0
+nominal.endclass.tot_deviation: 0.11859644458085598
+nominal.endclass.faults:              {}
+nominal.endclass.classification: nominal mission
+nominal.endclass.end_x: 29.254775331608617
+nominal.endclass.end_y: -0.7827640334587979
+nominal.endclass.endpt:         array(2)
+</pre></div></div>
+</div>
+<p>These responses can be visualized over the given faults:</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[27]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">fmea</span> <span class="o">=</span> <span class="n">FMEA</span><span class="p">(</span><span class="n">res</span><span class="p">,</span> <span class="n">fs_pwr</span><span class="p">,</span> <span class="n">metrics</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;end_dist&quot;</span><span class="p">,</span> <span class="s2">&quot;line_dist&quot;</span><span class="p">,</span> <span class="s2">&quot;tot_deviation&quot;</span><span class="p">])</span>
+<span class="n">fmea</span><span class="o">.</span><span class="n">as_table</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[27]:
+</pre></div>
+</div>
+<div class="output_area rendered_html docutils container">
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th></th>
+      <th>end_dist</th>
+      <th>line_dist</th>
+      <th>tot_deviation</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th rowspan="2" valign="top">power</th>
+      <th>short</th>
+      <td>0.000000</td>
+      <td>1</td>
+      <td>0.118596</td>
+    </tr>
+    <tr>
+      <th>no_charge</th>
+      <td>28.917244</td>
+      <td>1</td>
+      <td>0.000000</td>
+    </tr>
+  </tbody>
+</table>
+</div></div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[28]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">fmea</span><span class="o">.</span><span class="n">as_plots</span><span class="p">(</span><span class="n">cols</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[28]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+(&lt;Figure size 600x400 with 4 Axes&gt;,
+ array([&lt;Axes: title={&#39;center&#39;: &#39;end_dist&#39;}&gt;,
+        &lt;Axes: title={&#39;center&#39;: &#39;line_dist&#39;}, xlabel=&#34;[&#39;function&#39;, &#39;fault&#39;]&#34;&gt;,
+        &lt;Axes: title={&#39;center&#39;: &#39;tot_deviation&#39;}, xlabel=&#34;[&#39;function&#39;, &#39;fault&#39;]&#34;&gt;,
+        &lt;Axes: &gt;], dtype=object))
+</pre></div></div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../../../../_images/._build_html_examples_rover_FaultSample_Use-Cases_53_1.png" src="../../../../_images/._build_html_examples_rover_FaultSample_Use-Cases_53_1.png" />
+</div>
+</div>
+<p>Or over time/any other variable:</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[29]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">comp</span> <span class="o">=</span> <span class="n">Comparison</span><span class="p">(</span><span class="n">res</span><span class="p">,</span> <span class="n">fs_pwr</span><span class="p">,</span> <span class="n">metrics</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;end_dist&quot;</span><span class="p">,</span> <span class="s2">&quot;line_dist&quot;</span><span class="p">,</span> <span class="s2">&quot;tot_deviation&quot;</span><span class="p">],</span> <span class="n">factors</span> <span class="o">=</span><span class="p">[</span><span class="s1">&#39;time&#39;</span><span class="p">])</span>
+<span class="n">comp</span><span class="o">.</span><span class="n">as_table</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[29]:
+</pre></div>
+</div>
+<div class="output_area rendered_html docutils container">
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>end_dist</th>
+      <th>line_dist</th>
+      <th>tot_deviation</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>56.0</th>
+      <td>0.000000</td>
+      <td>0.00001</td>
+      <td>0.000001</td>
+    </tr>
+    <tr>
+      <th>0.0</th>
+      <td>0.000289</td>
+      <td>0.00001</td>
+      <td>0.000000</td>
+    </tr>
+  </tbody>
+</table>
+</div></div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[30]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">comp</span><span class="o">.</span><span class="n">as_plots</span><span class="p">(</span><span class="n">cols</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[30]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+(&lt;Figure size 600x400 with 4 Axes&gt;,
+ array([&lt;Axes: title={&#39;center&#39;: &#39;end_dist&#39;}&gt;,
+        &lt;Axes: title={&#39;center&#39;: &#39;line_dist&#39;}, xlabel=&#39;time&#39;&gt;,
+        &lt;Axes: title={&#39;center&#39;: &#39;tot_deviation&#39;}, xlabel=&#39;time&#39;&gt;, &lt;Axes: &gt;],
+       dtype=object))
+</pre></div></div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../../../../_images/._build_html_examples_rover_FaultSample_Use-Cases_56_1.png" src="../../../../_images/._build_html_examples_rover_FaultSample_Use-Cases_56_1.png" />
+</div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>
+</pre></div>
+</div>
+</div>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright .</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
