@@ -4,7 +4,7 @@ fmdtools.define.container
 
 The containers subpackage provides the elemental building blocks (i.e., containers for holding states, modes, etc.) for developing simulations, shown below.
 
-.. figure:: figures/Containers.svg
+.. figure:: figures/uml/Containers.svg
    :width: 800
    :alt: fmdtools container classes
    
@@ -43,7 +43,7 @@ fmdtools.define.container.state
 
 State classes are used to represent mutables properties of the system that change over time. State classes are extended and deployed by the user, as shown below: 
 
-.. figure:: figures/State.svg
+.. figure:: figures/uml/State.svg
    :width: 600
    :alt: example state class
    
@@ -59,7 +59,7 @@ fmdtools.define.container.parameter
 
 Parameter classes are used to represent immutable properties of the system. Parameter classes are extended and deployed by the user, as shown below: 
 
-.. figure:: figures/Parameter.svg
+.. figure:: figures/uml/Parameter.svg
    :width: 600
    :alt: example state class
    
