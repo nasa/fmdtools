@@ -1,4 +1,4 @@
-Pump Model
+Overview
 ---------------------------------------------
 
 A simple pump model to demonstrate various capabilities of fmdtools.
@@ -70,13 +70,3 @@ References
 /////////////////////////////////////////////
 
 - Hulse, D, Hoyle, C, Tumer, IY, Goebel, K, & Kulkarni, C. "Temporal Fault Injection Considerations in Resilience Quantification." Proceedings of the ASME 2020 International Design Engineering Technical Conferences and Computers and Information in Engineering Conference. Volume 11A: 46th Design Automation Conference (DAC). Virtual, Online. August 17–19, 2020. V11AT11A040. ASME. https://doi.org/10.1115/DETC2020-22154
-
-.. toctree::
-   :hidden:
-   
-   Tutorial_complete.ipynb
-   Pump_Example_Notebook.ipynb
-   Parallelism_Tutorial.ipynb
-   Optimization.ipynb
-   Stochastic_Modelling.ipynb
-   AST_Sampling.ipynb
