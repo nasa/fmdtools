@@ -1,4 +1,4 @@
-Taxiway Model
+Overview
 ---------------------------------------------
 
 This provides a model of different aircraft moving on a taxiway. Specifically, this example shows how to model, test, and simulate different agents individually and then compose them in a combined functional architecture.
@@ -36,8 +36,3 @@ References
 
 - Irshad, L, & Hulse, D. "Modeling Distributed Situation Awareness in Resilience-Based Design of Complex Engineered Systems." Proceedings of the ASME 2023 International Design Engineering Technical Conferences and Computers and Information in Engineering Conference. Volume 2: 43rd Computers and Information in Engineering Conference (CIE). Boston, Massachusetts, USA. August 20–23, 2023. V002T02A050. ASME. https://doi.org/10.1115/DETC2023-116689
 
-
-.. toctree::
-   :hidden:
-
-   Paper_Notebook.ipynb
