@@ -13,7 +13,7 @@ Step,Description,Complete?,Comment
 5a," ""git tag -a v2.x.x -m 'version 2.x.x'""",,
 6,Sync to remotes,,
 6a," ""Push release branch to github and internal remotes""",,
-6b," ""Overwrite documentation on gh-pages and push to GitHub""",,
+6b," ""Push docs using `git subtree push --prefix=_build/html public gh-pages`""",,
 7,Create a release in GitHub,,
 7a," ""incorporate a narrative summary of features and changes""",,
 7b," ""incorporate the auto-generated bitbucket release notes.""",,
