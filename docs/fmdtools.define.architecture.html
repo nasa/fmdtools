@@ -1,0 +1,1571 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>fmdtools.define.architecture &mdash; fmdtools 2.0-rc-3 documentation</title>
+      <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+    <link rel="shortcut icon" href="../_static/fmdtools_ico.ico"/>
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script src="../_static/doctools.js"></script>
+        <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="fmdtools.define.block" href="fmdtools.define.block.html" />
+    <link rel="prev" title="fmdtools.define" href="fmdtools.define.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../index.html">
+            
+              <img src="../_static/logo_glow.png" class="logo" alt="Logo"/>
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../README.html">Overview</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../README.html#about">About</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../README.html#flexible-modelling-paradigm">Flexible Modelling Paradigm</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../README.html#powerful-simulation-techniques">Powerful Simulation Techniques</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../README.html#efficient-analysis-process">Efficient Analysis Process</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../README.html#getting-started">Getting Started</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../README.html#set-up-python-environment">Set up python environment</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../README.html#install-fmdtools">Install fmdtools</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../README.html#dependencies">Dependencies</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../README.html#explore-tutorials-and-resources">Explore Tutorials and Resources</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../README.html#contributions">Contributions</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../README.html#contributors">Contributors</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../README.html#citing-this-repository">Citing this repository</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../README.html#license-notices">License/Notices</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../README.html#disclaimers">Disclaimers</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="Development%20Guide.html">Development Guide</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="Development%20Guide.html#why-fmdtools">Why fmdtools?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Development%20Guide.html#introductory-tutorial">Introductory Tutorial</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="Intro_to_fmdtools.html">Intro to resilience modeling, simulation, and visualization in Python with fmdtools.</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="Intro_to_fmdtools.html#author-daniel-hulse">Author: Daniel Hulse</a></li>
+<li class="toctree-l4"><a class="reference internal" href="Intro_to_fmdtools.html#version-2-0-rc-3">Version: 2.0-rc-3</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="Intro_to_fmdtools.html#overview">Overview</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Intro_to_fmdtools.html#prerequisites">Prerequisites</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Intro_to_fmdtools.html#motivation-modeling-system-resilience">Motivation: Modeling System Resilience</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Intro_to_fmdtools.html#why-is-resilience-important">Why is Resilience Important?</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Intro_to_fmdtools.html#enabling-proactive-design-process">Enabling proactive design process</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Intro_to_fmdtools.html#why-fmdtools-possible-competitors">Why fmdtools? Possible Competitors:</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Intro_to_fmdtools.html#why-fmdtools-pros">Why fmdtools? Pros:</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Intro_to_fmdtools.html#why-not-fmdtools-cons">Why <strong>not</strong> fmdtools? Cons:</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Intro_to_fmdtools.html#what-is-fmdtools-a-python-package-for-design-simulation-and-analysis-of-resilience">What is fmdtools? A Python package for <strong>design</strong>, <strong>simulation</strong>, and <strong>analysis</strong> of resilience.</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Intro_to_fmdtools.html#what-is-fmdtools-repo-structure">What is fmdtools? Repo Structure</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Intro_to_fmdtools.html#activity-download-and-install-fmdtools">Activity: Download and Install fmdtools</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Intro_to_fmdtools.html#analysis-workflow-structure">Analysis Workflow/Structure</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Intro_to_fmdtools.html#defining-a-model">Defining a Model</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Intro_to_fmdtools.html#id1">Defining a Model</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Intro_to_fmdtools.html#function-code-template">Function Code Template</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Intro_to_fmdtools.html#model-code-template">Model Code Template</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Intro_to_fmdtools.html#demo-model-activity-examples-pump-ex-pump-py">Demo Model Activity: examples/pump/ex_pump.py</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Intro_to_fmdtools.html#more-resources-for-model-definition">More Resources for Model Definition</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Intro_to_fmdtools.html#notebook-activity">Notebook Activity:</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Intro_to_fmdtools.html#simulation-concepts-static-undirected-propagation">Simulation Concepts: Static/Undirected Propagation</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Intro_to_fmdtools.html#simulation-concepts-propagation-over-time">Simulation Concepts: Propagation over Time</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Intro_to_fmdtools.html#simulation-concepts-types-of-simulations">Simulation Concepts: Types of Simulations</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Intro_to_fmdtools.html#simulation-concepts-sampling-approaches">Simulation Concepts: Sampling Approaches</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Intro_to_fmdtools.html#simulation-concepts-things-to-consider">Simulation Concepts: Things to Consider</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Intro_to_fmdtools.html#activity-simulate-the-model">Activity: Simulate the Model</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Intro_to_fmdtools.html#analysis-modules">Analysis Modules</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Intro_to_fmdtools.html#analysis-activity">Analysis Activity</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Intro_to_fmdtools.html#conclusions-summary">Conclusions/Summary</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Intro_to_fmdtools.html#further-reading-links">Further Reading/Links</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="Development%20Guide.html#glossary">Glossary</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Development%20Guide.html#model-development-best-practices">Model Development Best Practices</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="Development%20Guide.html#pay-attention-to-and-document-the-fmdtools-version">Pay attention to and document the fmdtools version</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Development%20Guide.html#plan-your-model-to-avoid-technical-debt">Plan your model to avoid technical debt</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Development%20Guide.html#don-t-copy-inherit-and-functionalize">Don’t copy, inherit and functionalize</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Development%20Guide.html#document-your-code-sometimes-before-your-write-it">Document your code, sometimes <em>before</em> your write it</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Development%20Guide.html#don-t-get-ahead-of-yourself-try-to-get-a-running-simulation-first">Don’t get ahead of yourself–try to get a running simulation first</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Development%20Guide.html#preserve-your-prototype-setup-by-formalizing-it-as-a-test">Preserve your prototype setup by formalizing it as a test</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Development%20Guide.html#edit-your-code">Edit your code</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Development%20Guide.html#structuring-a-model">Structuring a model</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Development%20Guide.html#use-model-constructs-to-simplify-your-code">Use model constructs to simplify your code</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Development%20Guide.html#style-advice">Style advice</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Development%20Guide.html#see-also">See also</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="Development%20Guide.html#how-to-contribute">How to Contribute</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="Development%20Guide.html#repo-structure">Repo Structure</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="Development%20Guide.html#remote-structure">Remote Structure</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="Development%20Guide.html#development-process">Development Process</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="Development%20Guide.html#release-checklist">Release Checklist</a></li>
+<li class="toctree-l4"><a class="reference internal" href="Development%20Guide.html#upload-to-pypi">Upload to PyPI</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="Development%20Guide.html#roles">Roles</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Development%20Guide.html#documentation">Documentation</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Development%20Guide.html#style-formatting">Style/Formatting</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Development%20Guide.html#testing">Testing</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../examples/Examples.html">Examples</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../examples/Examples.html#pump">Pump</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../examples/pump/readme.html">Pump Model</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../examples/pump/readme.html#models">Models</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../examples/pump/readme.html#scripts-and-tests">Scripts and tests:</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../examples/pump/readme.html#notebooks">Notebooks</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../examples/pump/readme.html#references">References</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../examples/Examples.html#multirotor">Multirotor</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../examples/multirotor/readme.html">Drone Model</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../examples/multirotor/readme.html#models">Models</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../examples/multirotor/readme.html#scripts-and-tests">Scripts and tests:</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../examples/multirotor/readme.html#notebooks">Notebooks</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../examples/multirotor/readme.html#references">References</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../examples/Examples.html#tank">Tank</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../examples/tank/readme.html">Tank Model</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../examples/tank/readme.html#models">Models</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../examples/tank/readme.html#scripts-and-tests">Scripts and tests:</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../examples/tank/readme.html#notebooks">Notebooks</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../examples/tank/readme.html#references">References</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../examples/Examples.html#eps">EPS</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../examples/eps/readme.html">EPS Model</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../examples/eps/readme.html#models">Models</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../examples/eps/readme.html#scripts-and-tests">Scripts and tests:</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../examples/eps/readme.html#notebooks">Notebooks</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../examples/eps/readme.html#references">References</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../examples/Examples.html#action-sequence-graph">Action Sequence Graph</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../examples/asg_demo/readme.html">ASG Model</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../examples/asg_demo/readme.html#models">Models</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../examples/asg_demo/readme.html#scripts-and-tests">Scripts and tests:</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../examples/asg_demo/readme.html#notebooks">Notebooks</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../examples/Examples.html#rover">Rover</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../examples/rover/readme.html">Rover Model</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../examples/rover/readme.html#models">Models</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../examples/rover/readme.html#scripts-and-tests">Scripts and tests:</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../examples/rover/readme.html#notebooks">Notebooks</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../examples/rover/readme.html#references">References</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../examples/Examples.html#multiflow-demo">Multiflow Demo</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../examples/multiflow_demo/readme.html">MultiFlow Demo Model</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../examples/multiflow_demo/readme.html#models">Models</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../examples/multiflow_demo/readme.html#scripts-and-tests">Scripts and tests:</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../examples/multiflow_demo/readme.html#notebooks">Notebooks</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../examples/multiflow_demo/readme.html#references">References</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../examples/Examples.html#taxiway">Taxiway</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../examples/taxiway/readme.html">Taxiway Model</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../examples/taxiway/readme.html#models">Models</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../examples/taxiway/readme.html#scripts-and-tests">Scripts and tests:</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../examples/taxiway/readme.html#notebooks">Notebooks</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../examples/taxiway/readme.html#references">References</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1 current"><a class="reference internal" href="fmdtools.html">Module Reference</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="fmdtools.define.html">fmdtools.define</a><ul class="current">
+<li class="toctree-l3 current"><a class="current reference internal" href="#">fmdtools.define.architecture</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#fmdtools-define-architecture-base">fmdtools.define.architecture.base</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#fmdtools-define-architecture-action">fmdtools.define.architecture.action</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#fmdtools-define-architecture-component">fmdtools.define.architecture.component</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#fmdtools-define-architecture-function">fmdtools.define.architecture.function</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#fmdtools-define-architecture-geom">fmdtools.define.architecture.geom</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="fmdtools.define.block.html">fmdtools.define.block</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="fmdtools.define.block.html#module-fmdtools.define.block.base">fmdtools.define.block.base</a></li>
+<li class="toctree-l4"><a class="reference internal" href="fmdtools.define.block.html#module-fmdtools.define.block.action">fmdtools.define.block.action</a></li>
+<li class="toctree-l4"><a class="reference internal" href="fmdtools.define.block.html#module-fmdtools.define.block.component">fmdtools.define.block.component</a></li>
+<li class="toctree-l4"><a class="reference internal" href="fmdtools.define.block.html#module-fmdtools.define.block.function">fmdtools.define.block.function</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="fmdtools.define.container.html">fmdtools.define.container</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="fmdtools.define.container.html#fmdtools-define-container-base">fmdtools.define.container.base</a></li>
+<li class="toctree-l4"><a class="reference internal" href="fmdtools.define.container.html#module-fmdtools.define.container.mode">fmdtools.define.container.mode</a></li>
+<li class="toctree-l4"><a class="reference internal" href="fmdtools.define.container.html#fmdtools-define-container-state">fmdtools.define.container.state</a></li>
+<li class="toctree-l4"><a class="reference internal" href="fmdtools.define.container.html#fmdtools-define-container-parameter">fmdtools.define.container.parameter</a></li>
+<li class="toctree-l4"><a class="reference internal" href="fmdtools.define.container.html#module-fmdtools.define.container.rand">fmdtools.define.container.rand</a></li>
+<li class="toctree-l4"><a class="reference internal" href="fmdtools.define.container.html#module-fmdtools.define.container.time">fmdtools.define.container.time</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="fmdtools.define.flow.html">fmdtools.define.flow</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="fmdtools.define.flow.html#fmdtools-define-flow-base">fmdtools.define.flow.base</a></li>
+<li class="toctree-l4"><a class="reference internal" href="fmdtools.define.flow.html#module-fmdtools.define.flow.multiflow">fmdtools.define.flow.multiflow</a></li>
+<li class="toctree-l4"><a class="reference internal" href="fmdtools.define.flow.html#module-fmdtools.define.flow.commsflow">fmdtools.define.flow.commsflow</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="fmdtools.define.object.html">fmdtools.define.object</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="fmdtools.define.object.html#module-fmdtools.define.object.base">fmdtools.define.object.base</a></li>
+<li class="toctree-l4"><a class="reference internal" href="fmdtools.define.object.html#module-fmdtools.define.object.timer">fmdtools.define.object.timer</a></li>
+<li class="toctree-l4"><a class="reference internal" href="fmdtools.define.object.html#module-fmdtools.define.object.geom">fmdtools.define.object.geom</a></li>
+<li class="toctree-l4"><a class="reference internal" href="fmdtools.define.object.html#module-fmdtools.define.object.coords">fmdtools.define.object.coords</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="fmdtools.define.html#fmdtools-define-base">fmdtools.define.base</a></li>
+<li class="toctree-l3"><a class="reference internal" href="fmdtools.define.html#module-fmdtools.define.environment">fmdtools.define.environment</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="fmdtools.sim.html">fmdtools.sim</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="fmdtools.sim.html#fmdtools-sim-propagate">fmdtools.sim.propagate</a></li>
+<li class="toctree-l3"><a class="reference internal" href="fmdtools.sim.html#module-fmdtools.sim.scenario">fmdtools.sim.scenario</a></li>
+<li class="toctree-l3"><a class="reference internal" href="fmdtools.sim.html#module-fmdtools.sim.sample">fmdtools.sim.sample</a></li>
+<li class="toctree-l3"><a class="reference internal" href="fmdtools.sim.html#module-fmdtools.sim.search">fmdtools.sim.search</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="fmdtools.analyze.html">fmdtools.analyze</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="fmdtools.analyze.html#module-fmdtools.analyze.common">fmdtools.analyze.common</a></li>
+<li class="toctree-l3"><a class="reference internal" href="fmdtools.analyze.html#module-fmdtools.analyze.result">fmdtools.analyze.result</a></li>
+<li class="toctree-l3"><a class="reference internal" href="fmdtools.analyze.html#module-fmdtools.analyze.history">fmdtools.analyze.history</a></li>
+<li class="toctree-l3"><a class="reference internal" href="fmdtools.analyze.html#module-fmdtools.analyze.graph">fmdtools.analyze.graph</a></li>
+<li class="toctree-l3"><a class="reference internal" href="fmdtools.analyze.html#module-fmdtools.analyze.tabulate">fmdtools.analyze.tabulate</a></li>
+<li class="toctree-l3"><a class="reference internal" href="fmdtools.analyze.html#module-fmdtools.analyze.phases">fmdtools.analyze.phases</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../CONTRIBUTORS.html">Contributors</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../CONTRIBUTORS.html#internal-contributors">Internal Contributors</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../CONTRIBUTORS.html#external-contributors">External Contributors</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../CONTRIBUTORS.html#alumni-and-interns">Alumni and Interns</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../CONTRIBUTORS.html#fmdtools-at-osu">fmdtools at OSU</a></li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">fmdtools</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="fmdtools.html">Module Reference</a></li>
+          <li class="breadcrumb-item"><a href="fmdtools.define.html">fmdtools.define</a></li>
+      <li class="breadcrumb-item active">fmdtools.define.architecture</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/docs/fmdtools.define.architecture.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="fmdtools-define-architecture">
+<h1>fmdtools.define.architecture<a class="headerlink" href="#fmdtools-define-architecture" title="Permalink to this heading"></a></h1>
+<span class="target" id="module-fmdtools.define.architecture"></span><p>The architecture subpackage provides a representation of Architectures, which may be used to represent agglomerations/interactions of blocks in an overall combined simulation.</p>
+<p>Different types of architectures are provided in the following modules:</p>
+<ul class="simple">
+<li><p><a class="reference internal" href="#module-fmdtools.define.architecture.base" title="fmdtools.define.architecture.base"><code class="xref py py-mod docutils literal notranslate"><span class="pre">fmdtools.define.architecture.base</span></code></a>: for <code class="xref py py-class docutils literal notranslate"><span class="pre">Architecture</span></code>, which is used as the base class for all architectures.</p></li>
+<li><p><a class="reference internal" href="#module-fmdtools.define.architecture.action" title="fmdtools.define.architecture.action"><code class="xref py py-mod docutils literal notranslate"><span class="pre">fmdtools.define.architecture.action</span></code></a>: for <code class="xref py py-class docutils literal notranslate"><span class="pre">ActionArchitecture</span></code>, which is used to represent action sequence graphs</p></li>
+<li><p><a class="reference internal" href="#module-fmdtools.define.architecture.component" title="fmdtools.define.architecture.component"><code class="xref py py-mod docutils literal notranslate"><span class="pre">fmdtools.define.architecture.component</span></code></a>: for <code class="xref py py-class docutils literal notranslate"><span class="pre">ComponentArchitecture</span></code>, which is used to represent sets of components.</p></li>
+<li><p><a class="reference internal" href="#module-fmdtools.define.architecture.function" title="fmdtools.define.architecture.function"><code class="xref py py-mod docutils literal notranslate"><span class="pre">fmdtools.define.architecture.function</span></code></a>: for <code class="xref py py-class docutils literal notranslate"><span class="pre">FunctionArchitecture</span></code>, which is used to represent functional architectures.</p></li>
+<li><p><a class="reference internal" href="#module-fmdtools.define.architecture.geom" title="fmdtools.define.architecture.geom"><code class="xref py py-mod docutils literal notranslate"><span class="pre">fmdtools.define.architecture.geom</span></code></a>: for <code class="xref py py-class docutils literal notranslate"><span class="pre">GeomArchitecture</span></code>, which is used to represent multiple geometries in an <cite>Environment</cite>.</p></li>
+</ul>
+<section id="fmdtools-define-architecture-base">
+<h2>fmdtools.define.architecture.base<a class="headerlink" href="#fmdtools-define-architecture-base" title="Permalink to this heading"></a></h2>
+<span class="target" id="module-fmdtools.define.architecture.base"></span><p>Module for action architectures.</p>
+<section id="classes">
+<h3>Classes<a class="headerlink" href="#classes" title="Permalink to this heading"></a></h3>
+<p><a class="reference internal" href="#fmdtools.define.architecture.base.Architecture" title="fmdtools.define.architecture.base.Architecture"><code class="xref py py-class docutils literal notranslate"><span class="pre">Architecture</span></code></a>: Generic Architecture Class.</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="fmdtools.define.architecture.base.Architecture">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">fmdtools.define.architecture.base.</span></span><span class="sig-name descname"><span class="pre">Architecture</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">as_copy</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">h</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">{}</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.define.architecture.base.Architecture" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="fmdtools.define.block.html#fmdtools.define.block.base.Simulable" title="fmdtools.define.block.base.Simulable"><code class="xref py py-class docutils literal notranslate"><span class="pre">Simulable</span></code></a></p>
+<p>Superclass for architectures.</p>
+<p>Architectures are distinguished from Block classes in that they have flexible role
+dictionaries that are populated using add_xxx methods in an overall user-defined
+init_architecture method.</p>
+<p>This method is called for a copy using the as_copy option, which copies passed
+flexible roles.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="fmdtools.define.architecture.base.Architecture.add_flex_role_obj">
+<span class="sig-name descname"><span class="pre">add_flex_role_obj</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">flex_role</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">objclass=&lt;class</span> <span class="pre">'fmdtools.define.object.base.BaseObject'&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">use_copy=False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">**kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.define.architecture.base.Architecture.add_flex_role_obj" title="Permalink to this definition"></a></dt>
+<dd><p>Add a flexible role object to the architecture.</p>
+<p>Used for add_fxn, add_flow, etc methods in subclasses.
+If called during copying (self.as_copy=True), the object is copied instead
+of instantiated.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>flex_role</strong> (<em>str</em>) – Name of the role dictionary to initialize the object in.</p></li>
+<li><p><strong>name</strong> (<em>str</em>) – Name of the object</p></li>
+<li><p><strong>objclass</strong> (<em>class</em><em>, </em><em>optional</em>) – Class to instantiate in the dict. The default is BaseObject.</p></li>
+<li><p><strong>as_copy</strong> (<em>bool</em>) – Whether to instantiate obj as a copy. The default is fault.</p></li>
+<li><p><strong>**kwargs</strong> (<em>kwargs</em>) – Non-default kwargs to send to the object class.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="fmdtools.define.architecture.base.Architecture.add_flow">
+<span class="sig-name descname"><span class="pre">add_flow</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fclass=&lt;class</span> <span class="pre">'fmdtools.define.flow.base.Flow'&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">**kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.define.architecture.base.Architecture.add_flow" title="Permalink to this definition"></a></dt>
+<dd><p>Add a flow with given attributes to the model.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>name</strong> (<em>str</em>) – Unique flow name to give the flow in the model</p></li>
+<li><p><strong>fclass</strong> (<em>Class</em><em>, </em><em>optional</em>) – Class to instantiate (e.g. CommsFlow, MultiFlow). Default is Flow.
+Class must take flowname, p, s as input to __init__()
+May alternatively provide already-instanced object.</p></li>
+<li><p><strong>kwargs</strong> (<em>kwargs</em>) – Dicts for non-default values to p, s, etc</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="fmdtools.define.architecture.base.Architecture.add_flows">
+<span class="sig-name descname"><span class="pre">add_flows</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">*names</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fclass=&lt;class</span> <span class="pre">'fmdtools.define.flow.base.Flow'&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">**kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.define.architecture.base.Architecture.add_flows" title="Permalink to this definition"></a></dt>
+<dd><p>Add a set of flows with the same type and initial parameters.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>flownames</strong> (<em>list</em>) – Unique flow names to give the flows in the model</p></li>
+<li><p><strong>fclass</strong> (<em>Class</em><em>, </em><em>optional</em>) – Class to instantiate (e.g. CommsFlow, MultiFlow). Default is Flow.
+Class must take flowname, p, s as input to __init__()
+May alternatively provide already-instanced object.</p></li>
+<li><p><strong>kwargs</strong> (<em>kwargs</em>) – Dicts for non-default values to p, s, etc</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="fmdtools.define.architecture.base.Architecture.add_obj_modes">
+<span class="sig-name descname"><span class="pre">add_obj_modes</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">obj</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.define.architecture.base.Architecture.add_obj_modes" title="Permalink to this definition"></a></dt>
+<dd><p>Add modes from an object to faultmodes.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="fmdtools.define.architecture.base.Architecture.add_sim">
+<span class="sig-name descname"><span class="pre">add_sim</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">flex_role</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">simclass</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">flownames</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.define.architecture.base.Architecture.add_sim" title="Permalink to this definition"></a></dt>
+<dd><p>Add a Simulable to the given flex_role.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>flex_role</strong> (<em>str</em>) – Name of the flexible role to add to.</p></li>
+<li><p><strong>name</strong> (<em>str</em>) – Name to give the Simulable.</p></li>
+<li><p><strong>simclass</strong> (<a class="reference internal" href="fmdtools.define.block.html#fmdtools.define.block.base.Simulable" title="fmdtools.define.block.base.Simulable"><em>Simulable</em></a>) – Simulable to instantiate.</p></li>
+<li><p><strong>flownames</strong> (<em>list</em>) – List of flows to associate with the function.</p></li>
+<li><p><strong>**kwargs</strong> (<em>kwargs</em>) – Flows, dicts for non-default values to p, s, etc.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="fmdtools.define.architecture.base.Architecture.as_copy">
+<span class="sig-name descname"><span class="pre">as_copy</span></span><a class="headerlink" href="#fmdtools.define.architecture.base.Architecture.as_copy" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="fmdtools.define.architecture.base.Architecture.build">
+<span class="sig-name descname"><span class="pre">build</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">update_seed</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.define.architecture.base.Architecture.build" title="Permalink to this definition"></a></dt>
+<dd><p>Construct the overall model structure.</p>
+<p>Use in subclasses to build the model after init_architecture is called.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>update_seed</strong> (<em>bool</em>) – Whether to update the seed</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="fmdtools.define.architecture.base.Architecture.check_role">
+<span class="sig-name descname"><span class="pre">check_role</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">roletype</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rolename</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.define.architecture.base.Architecture.check_role" title="Permalink to this definition"></a></dt>
+<dd><p>Check that ‘arch_xa’ role is used for the arch.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="fmdtools.define.architecture.base.Architecture.copy">
+<span class="sig-name descname"><span class="pre">copy</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">flows</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">{}</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.define.architecture.base.Architecture.copy" title="Permalink to this definition"></a></dt>
+<dd><p>Copy the architecture at the current state.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>flows</strong> (<em>dict</em>) – Dict of flows to use in the copy.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>copy</strong> – Copy of the curent architecture.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="#fmdtools.define.architecture.base.Architecture" title="fmdtools.define.architecture.base.Architecture">Architecture</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="fmdtools.define.architecture.base.Architecture.flexible_roles">
+<span class="sig-name descname"><span class="pre">flexible_roles</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">['flows']</span></em><a class="headerlink" href="#fmdtools.define.architecture.base.Architecture.flexible_roles" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="fmdtools.define.architecture.base.Architecture.flows">
+<span class="sig-name descname"><span class="pre">flows</span></span><a class="headerlink" href="#fmdtools.define.architecture.base.Architecture.flows" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="fmdtools.define.architecture.base.Architecture.flows_of_type">
+<span class="sig-name descname"><span class="pre">flows_of_type</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ftype</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.define.architecture.base.Architecture.flows_of_type" title="Permalink to this definition"></a></dt>
+<dd><p>Return the set of flows for each flow type.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="fmdtools.define.architecture.base.Architecture.flowtypes">
+<span class="sig-name descname"><span class="pre">flowtypes</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.define.architecture.base.Architecture.flowtypes" title="Permalink to this definition"></a></dt>
+<dd><p>Return the set of flow types used in the model.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="fmdtools.define.architecture.base.Architecture.get_all_possible_track">
+<span class="sig-name descname"><span class="pre">get_all_possible_track</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.define.architecture.base.Architecture.get_all_possible_track" title="Permalink to this definition"></a></dt>
+<dd><p>Get all possible tracking options.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="fmdtools.define.architecture.base.Architecture.get_faults">
+<span class="sig-name descname"><span class="pre">get_faults</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.define.architecture.base.Architecture.get_faults" title="Permalink to this definition"></a></dt>
+<dd><p>Get faults from contained roles.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="fmdtools.define.architecture.base.Architecture.get_flex_role_objs">
+<span class="sig-name descname"><span class="pre">get_flex_role_objs</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.define.architecture.base.Architecture.get_flex_role_objs" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="fmdtools.define.architecture.base.Architecture.get_flows">
+<span class="sig-name descname"><span class="pre">get_flows</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">flownames</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">all_if_empty</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.define.architecture.base.Architecture.get_flows" title="Permalink to this definition"></a></dt>
+<dd><p>Return a list of the model flow objects.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="fmdtools.define.architecture.base.Architecture.get_rand_states">
+<span class="sig-name descname"><span class="pre">get_rand_states</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">auto_update_only</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.define.architecture.base.Architecture.get_rand_states" title="Permalink to this definition"></a></dt>
+<dd><p>Get dictionary of random states throughout the model objs.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="fmdtools.define.architecture.base.Architecture.h">
+<span class="sig-name descname"><span class="pre">h</span></span><a class="headerlink" href="#fmdtools.define.architecture.base.Architecture.h" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="fmdtools.define.architecture.base.Architecture.init_architecture">
+<span class="sig-name descname"><span class="pre">init_architecture</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.define.architecture.base.Architecture.init_architecture" title="Permalink to this definition"></a></dt>
+<dd><p>Use to initialize architecture.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="fmdtools.define.architecture.base.Architecture.init_flexible_roles">
+<span class="sig-name descname"><span class="pre">init_flexible_roles</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.define.architecture.base.Architecture.init_flexible_roles" title="Permalink to this definition"></a></dt>
+<dd><p>Initialize flexible roles.</p>
+<p>If initializing as a copy, uses a passed copy instead.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>**kwargs</strong> (<em>kwargs</em>) – Existing roles (if any).</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="fmdtools.define.architecture.base.Architecture.inject_faults">
+<span class="sig-name descname"><span class="pre">inject_faults</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">flexible_role</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">faults</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.define.architecture.base.Architecture.inject_faults" title="Permalink to this definition"></a></dt>
+<dd><p>Inject faults in the ComponentArchitecture/ASG object obj.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>obj</strong> (<em>TYPE</em>) – DESCRIPTION.</p></li>
+<li><p><strong>faults</strong> (<em>TYPE</em>) – DESCRIPTION.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="fmdtools.define.architecture.base.Architecture.reset">
+<span class="sig-name descname"><span class="pre">reset</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.define.architecture.base.Architecture.reset" title="Permalink to this definition"></a></dt>
+<dd><p>Reset the architecture and its contained objects.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="fmdtools.define.architecture.base.Architecture.return_mutables">
+<span class="sig-name descname"><span class="pre">return_mutables</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.define.architecture.base.Architecture.return_mutables" title="Permalink to this definition"></a></dt>
+<dd><p>Return all mutable values in the block.</p>
+<p>Used in static propagation steps to check if the block has changed.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>states</strong> – tuple of all states in the block</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>tuple</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="fmdtools.define.architecture.base.Architecture.roletype">
+<span class="sig-name descname"><span class="pre">roletype</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'arch'</span></em><a class="headerlink" href="#fmdtools.define.architecture.base.Architecture.roletype" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="fmdtools.define.architecture.base.Architecture.update_seed">
+<span class="sig-name descname"><span class="pre">update_seed</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">seed</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[]</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.define.architecture.base.Architecture.update_seed" title="Permalink to this definition"></a></dt>
+<dd><p>Update model seed and the seed in all contained roles.</p>
+<p>Must have an associated Rand role.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>seed</strong> (<em>int</em><em>, </em><em>optional</em>) – Seed to use. The default is [].</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="fmdtools.define.architecture.base.check_model_pickleability">
+<span class="sig-prename descclassname"><span class="pre">fmdtools.define.architecture.base.</span></span><span class="sig-name descname"><span class="pre">check_model_pickleability</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">model</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">try_pick</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.define.architecture.base.check_model_pickleability" title="Permalink to this definition"></a></dt>
+<dd><p>Check to see which attributes of a model object will pickle.</p>
+<p>Provides more detail about functions/flows.</p>
+</dd></dl>
+
+</section>
+</section>
+<section id="fmdtools-define-architecture-action">
+<h2>fmdtools.define.architecture.action<a class="headerlink" href="#fmdtools-define-architecture-action" title="Permalink to this heading"></a></h2>
+<span class="target" id="module-fmdtools.define.architecture.action"></span><p>Module for action architectures.</p>
+<section id="id1">
+<h3>Classes<a class="headerlink" href="#id1" title="Permalink to this heading"></a></h3>
+<p><a class="reference internal" href="#fmdtools.define.architecture.action.ActionArchitecture" title="fmdtools.define.architecture.action.ActionArchitecture"><code class="xref py py-class docutils literal notranslate"><span class="pre">ActionArchitecture</span></code></a>: Architecture of multiple Actions.</p>
+</section>
+<p>The ActionArchitecture class is used to represent a sequenced of action taken by an agent. It is a composition of instantiated Action objects, Flow objects, and conditions as shown below:</p>
+<figure class="align-default" id="id10">
+<a class="reference internal image-reference" href="../_images/demo_model_asg.svg"><img alt="Structure of an ActionArchitecture" src="../_images/demo_model_asg.svg" width="800" /></a>
+<figcaption>
+<p><span class="caption-text">Example Action Architecture connecting action objects with flow objects and conditions.</span><a class="headerlink" href="#id10" title="Permalink to this image"></a></p>
+</figcaption>
+</figure>
+<p>In the Human action architecture, a human operator percieves and acts on a hazard and the total number of hazards acted on is recorded in the outcome flow. This can also be represented in <a class="reference internal" href="Development%20Guide.html#term-FRDL"><span class="xref std std-term">FRDL</span></a> using:</p>
+<figure class="align-default" id="id11">
+<a class="reference internal image-reference" href="../_images/demo_model_asg_FRDL.svg"><img alt="Structure of an ActionArchitecture in FRDL" src="../_images/demo_model_asg_FRDL.svg" width="600" /></a>
+<figcaption>
+<p><span class="caption-text">Propagation network of example Action Architecture.</span><a class="headerlink" href="#id11" title="Permalink to this image"></a></p>
+</figcaption>
+</figure>
+<p>For more info on this example, see: <a class="reference internal" href="../examples/asg_demo/readme.html"><span class="doc">The Action Sequence Graph Demo Model</span></a>.</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="fmdtools.define.architecture.action.ActionArchitecture">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">fmdtools.define.architecture.action.</span></span><span class="sig-name descname"><span class="pre">ActionArchitecture</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.define.architecture.action.ActionArchitecture" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#fmdtools.define.architecture.base.Architecture" title="fmdtools.define.architecture.base.Architecture"><code class="xref py py-class docutils literal notranslate"><span class="pre">Architecture</span></code></a></p>
+<p>Construct the Action Sequence Graph with the given parameters.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>initial_action</strong> (<em>str/list</em>) – <dl>
+<dt>Initial action to set as active. Default is ‘auto’</dt><dd><ul>
+<li><p>’auto’ finds the starting node of the graph and uses it</p></li>
+<li><p>’ActionName’ sets the given action as the first active action</p></li>
+<li><p>providing a list of actions will set them all to active</p></li>
+</ul>
+<p>(if multi-state rep is used)</p>
+</dd>
+</dl>
+</p></li>
+<li><p><strong>state_rep</strong> (<em>'finite-state'/'multi-state'</em>) – <dl class="simple">
+<dt>How the states of the system are represented. Default is ‘finite-state’</dt><dd><ul>
+<li><p>’finite-state’ means only one action in the system can be active at once (i.e., a finite state machine)</p></li>
+<li><p>’multi-state’ means multiple actions can be performed at once</p></li>
+</ul>
+</dd>
+</dl>
+</p></li>
+<li><p><strong>max_action_prop</strong> (<em>'until_false'/'manual'/int</em>) – <dl>
+<dt>How actions progress. Default is ‘until_false’</dt><dd><ul>
+<li><p>’until_false’ means actions are simulated until all outgoing conditions are false</p></li>
+<li><p>providing an integer places a limit on the number of actions that can be</p></li>
+</ul>
+<p>performed per timestep</p>
+</dd>
+</dl>
+</p></li>
+<li><p><strong>proptype</strong> (<em>'static'/'dynamic'/'manual'</em>) – <p>Which propagation step to execute the Action Sequence Graph in.
+Default is ‘dynamic’</p>
+<blockquote>
+<div><ul>
+<li><p>’manual’ means that the propagation is performed manually</p></li>
+</ul>
+<p>(defined in a behavior method)</p>
+</div></blockquote>
+</p></li>
+<li><p><strong>per_timestep</strong> (<em>bool</em>) – Defines whether the action sequence graph is reset to the initial state each
+time-step (True) or stays in the current action (False). Default is False.</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="fmdtools.define.architecture.action.ActionArchitecture.action_graph">
+<span class="sig-name descname"><span class="pre">action_graph</span></span><a class="headerlink" href="#fmdtools.define.architecture.action.ActionArchitecture.action_graph" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="fmdtools.define.architecture.action.ActionArchitecture.active_actions">
+<span class="sig-name descname"><span class="pre">active_actions</span></span><a class="headerlink" href="#fmdtools.define.architecture.action.ActionArchitecture.active_actions" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="fmdtools.define.architecture.action.ActionArchitecture.acts">
+<span class="sig-name descname"><span class="pre">acts</span></span><a class="headerlink" href="#fmdtools.define.architecture.action.ActionArchitecture.acts" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="fmdtools.define.architecture.action.ActionArchitecture.add_act">
+<span class="sig-name descname"><span class="pre">add_act</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">actclass</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">flownames</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">fkwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.define.architecture.action.ActionArchitecture.add_act" title="Permalink to this definition"></a></dt>
+<dd><p>Associate an Action with the architecture. Called after add_flow.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>name</strong> (<em>str</em>) – Internal Name for the Action</p></li>
+<li><p><strong>actclass</strong> (<a class="reference internal" href="fmdtools.define.block.html#fmdtools.define.block.action.Action" title="fmdtools.define.block.action.Action"><em>Action</em></a>) – Action class to instantiate</p></li>
+<li><p><strong>*flownames</strong> (<em>flow</em>) – Flows (optional) which connect the actions</p></li>
+<li><p><strong>duration</strong> – Duration of the action. Default is 0.0</p></li>
+<li><p><strong>**kwargs</strong> (<em>any</em>) – kwargs to instantiate the Action with.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="fmdtools.define.architecture.action.ActionArchitecture.add_cond">
+<span class="sig-name descname"><span class="pre">add_cond</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">start_action</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">end_action</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'auto'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">condition</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'pass'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.define.architecture.action.ActionArchitecture.add_cond" title="Permalink to this definition"></a></dt>
+<dd><p>Associate a Condition with the ActionArchitecture.</p>
+<p>Conditions specify when to precede from one action to the next.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>start_action</strong> (<em>str</em>) – Action where the condition is checked</p></li>
+<li><p><strong>end_action</strong> (<em>str</em>) – Action that the condition leads to.</p></li>
+<li><p><strong>name</strong> (<em>str</em>) – Name for the condition.
+Defaults to numbered conditions if none are provided.</p></li>
+<li><p><strong>condition</strong> (<em>method</em>) – Method in the class to use as a condition.
+Defaults to self.condition_pass if none are provided.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="fmdtools.define.architecture.action.ActionArchitecture.build">
+<span class="sig-name descname"><span class="pre">build</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.define.architecture.action.ActionArchitecture.build" title="Permalink to this definition"></a></dt>
+<dd><p>Construct the overall model structure.</p>
+<p>Use in subclasses to build the model after init_architecture is called.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>update_seed</strong> (<em>bool</em>) – Whether to update the seed</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="fmdtools.define.architecture.action.ActionArchitecture.cond_pass">
+<span class="sig-name descname"><span class="pre">cond_pass</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.define.architecture.action.ActionArchitecture.cond_pass" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="fmdtools.define.architecture.action.ActionArchitecture.conds">
+<span class="sig-name descname"><span class="pre">conds</span></span><a class="headerlink" href="#fmdtools.define.architecture.action.ActionArchitecture.conds" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="fmdtools.define.architecture.action.ActionArchitecture.copy">
+<span class="sig-name descname"><span class="pre">copy</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.define.architecture.action.ActionArchitecture.copy" title="Permalink to this definition"></a></dt>
+<dd><p>Copy the architecture at the current state.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>flows</strong> (<em>dict</em>) – Dict of flows to use in the copy.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>copy</strong> – Copy of the curent architecture.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="#fmdtools.define.architecture.base.Architecture" title="fmdtools.define.architecture.base.Architecture">Architecture</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="fmdtools.define.architecture.action.ActionArchitecture.default_track">
+<span class="sig-name descname"><span class="pre">default_track</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">('acts',</span> <span class="pre">'flows',</span> <span class="pre">'active_actions',</span> <span class="pre">'i')</span></em><a class="headerlink" href="#fmdtools.define.architecture.action.ActionArchitecture.default_track" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="fmdtools.define.architecture.action.ActionArchitecture.faultmodes">
+<span class="sig-name descname"><span class="pre">faultmodes</span></span><a class="headerlink" href="#fmdtools.define.architecture.action.ActionArchitecture.faultmodes" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="fmdtools.define.architecture.action.ActionArchitecture.flexible_roles">
+<span class="sig-name descname"><span class="pre">flexible_roles</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">['flows',</span> <span class="pre">'acts',</span> <span class="pre">'conds']</span></em><a class="headerlink" href="#fmdtools.define.architecture.action.ActionArchitecture.flexible_roles" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="fmdtools.define.architecture.action.ActionArchitecture.flow_graph">
+<span class="sig-name descname"><span class="pre">flow_graph</span></span><a class="headerlink" href="#fmdtools.define.architecture.action.ActionArchitecture.flow_graph" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="fmdtools.define.architecture.action.ActionArchitecture.initial_action">
+<span class="sig-name descname"><span class="pre">initial_action</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'auto'</span></em><a class="headerlink" href="#fmdtools.define.architecture.action.ActionArchitecture.initial_action" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="fmdtools.define.architecture.action.ActionArchitecture.inject_faults">
+<span class="sig-name descname"><span class="pre">inject_faults</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">faults</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.define.architecture.action.ActionArchitecture.inject_faults" title="Permalink to this definition"></a></dt>
+<dd><p>Inject faults in the ComponentArchitecture/ASG object obj.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>obj</strong> (<em>TYPE</em>) – DESCRIPTION.</p></li>
+<li><p><strong>faults</strong> (<em>TYPE</em>) – DESCRIPTION.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="fmdtools.define.architecture.action.ActionArchitecture.max_action_prop">
+<span class="sig-name descname"><span class="pre">max_action_prop</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'until_false'</span></em><a class="headerlink" href="#fmdtools.define.architecture.action.ActionArchitecture.max_action_prop" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="fmdtools.define.architecture.action.ActionArchitecture.per_timestep">
+<span class="sig-name descname"><span class="pre">per_timestep</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">False</span></em><a class="headerlink" href="#fmdtools.define.architecture.action.ActionArchitecture.per_timestep" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="fmdtools.define.architecture.action.ActionArchitecture.proptype">
+<span class="sig-name descname"><span class="pre">proptype</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'dynamic'</span></em><a class="headerlink" href="#fmdtools.define.architecture.action.ActionArchitecture.proptype" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="fmdtools.define.architecture.action.ActionArchitecture.reset">
+<span class="sig-name descname"><span class="pre">reset</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.define.architecture.action.ActionArchitecture.reset" title="Permalink to this definition"></a></dt>
+<dd><p>Reset the architecture and its contained objects.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="fmdtools.define.architecture.action.ActionArchitecture.rolename">
+<span class="sig-name descname"><span class="pre">rolename</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'aa'</span></em><a class="headerlink" href="#fmdtools.define.architecture.action.ActionArchitecture.rolename" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="fmdtools.define.architecture.action.ActionArchitecture.set_active_actions">
+<span class="sig-name descname"><span class="pre">set_active_actions</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">actions</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.define.architecture.action.ActionArchitecture.set_active_actions" title="Permalink to this definition"></a></dt>
+<dd><p>Set given action(s) as active.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="fmdtools.define.architecture.action.ActionArchitecture.set_initial_active_action">
+<span class="sig-name descname"><span class="pre">set_initial_active_action</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.define.architecture.action.ActionArchitecture.set_initial_active_action" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="fmdtools.define.architecture.action.ActionArchitecture.state_rep">
+<span class="sig-name descname"><span class="pre">state_rep</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'finite-state'</span></em><a class="headerlink" href="#fmdtools.define.architecture.action.ActionArchitecture.state_rep" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="fmdtools-define-architecture-component">
+<h2>fmdtools.define.architecture.component<a class="headerlink" href="#fmdtools-define-architecture-component" title="Permalink to this heading"></a></h2>
+<span class="target" id="module-fmdtools.define.architecture.component"></span><p>Module for action architectures.</p>
+<section id="id2">
+<h3>Classes<a class="headerlink" href="#id2" title="Permalink to this heading"></a></h3>
+<p><a class="reference internal" href="#fmdtools.define.architecture.component.ComponentArchitecture" title="fmdtools.define.architecture.component.ComponentArchitecture"><code class="xref py py-class docutils literal notranslate"><span class="pre">ComponentArchitecture</span></code></a>: Architecture defining agglomeration of Components.</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="fmdtools.define.architecture.component.ComponentArchitecture">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">fmdtools.define.architecture.component.</span></span><span class="sig-name descname"><span class="pre">ComponentArchitecture</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.define.architecture.component.ComponentArchitecture" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#fmdtools.define.architecture.base.Architecture" title="fmdtools.define.architecture.base.Architecture"><code class="xref py py-class docutils literal notranslate"><span class="pre">Architecture</span></code></a></p>
+<p>Class defining Component Architectures.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="fmdtools.define.architecture.component.ComponentArchitecture.add_comp">
+<span class="sig-name descname"><span class="pre">add_comp</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">compclass</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">flownames</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.define.architecture.component.ComponentArchitecture.add_comp" title="Permalink to this definition"></a></dt>
+<dd><p>Associate a Component with the architecture. Called after add_flow.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>name</strong> (<em>str</em>) – Internal Name for the Component</p></li>
+<li><p><strong>compclass</strong> (<a class="reference internal" href="fmdtools.define.block.html#fmdtools.define.block.component.Component" title="fmdtools.define.block.component.Component"><em>Component</em></a>) – Component class to instantiate</p></li>
+<li><p><strong>*flownames</strong> (<em>flow</em>) – Flows (optional) which connect the components</p></li>
+<li><p><strong>**kwargs</strong> (<em>any</em>) – kwargs to instantiate the Component with</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="fmdtools.define.architecture.component.ComponentArchitecture.comps">
+<span class="sig-name descname"><span class="pre">comps</span></span><a class="headerlink" href="#fmdtools.define.architecture.component.ComponentArchitecture.comps" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="fmdtools.define.architecture.component.ComponentArchitecture.faultmodes">
+<span class="sig-name descname"><span class="pre">faultmodes</span></span><a class="headerlink" href="#fmdtools.define.architecture.component.ComponentArchitecture.faultmodes" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="fmdtools.define.architecture.component.ComponentArchitecture.flexible_roles">
+<span class="sig-name descname"><span class="pre">flexible_roles</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">['flows',</span> <span class="pre">'comps']</span></em><a class="headerlink" href="#fmdtools.define.architecture.component.ComponentArchitecture.flexible_roles" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="fmdtools.define.architecture.component.ComponentArchitecture.inject_faults">
+<span class="sig-name descname"><span class="pre">inject_faults</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">faults</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.define.architecture.component.ComponentArchitecture.inject_faults" title="Permalink to this definition"></a></dt>
+<dd><p>Inject faults in the ComponentArchitecture/ASG object obj.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>obj</strong> (<em>TYPE</em>) – DESCRIPTION.</p></li>
+<li><p><strong>faults</strong> (<em>TYPE</em>) – DESCRIPTION.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="fmdtools.define.architecture.component.ComponentArchitecture.rolename">
+<span class="sig-name descname"><span class="pre">rolename</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'ca'</span></em><a class="headerlink" href="#fmdtools.define.architecture.component.ComponentArchitecture.rolename" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</section>
+</section>
+<section id="fmdtools-define-architecture-function">
+<h2>fmdtools.define.architecture.function<a class="headerlink" href="#fmdtools-define-architecture-function" title="Permalink to this heading"></a></h2>
+<span class="target" id="module-fmdtools.define.architecture.function"></span><p>Description: A module for defining Functional Architectures.</p>
+<p>Has Classes and Functions:</p>
+<ul class="simple">
+<li><p><a class="reference internal" href="#fmdtools.define.architecture.function.FunctionArchitecture" title="fmdtools.define.architecture.function.FunctionArchitecture"><code class="xref py py-class docutils literal notranslate"><span class="pre">FunctionArchitecture</span></code></a>:  Superclass for functional architectures.</p></li>
+</ul>
+<p>The FunctionArchitecture class is used to define the high-level function-flow structure of a system model. It is a composition of instantiated Function and Flow objects, as shown below:</p>
+<figure class="align-default" id="id12">
+<a class="reference internal image-reference" href="../_images/FunctionArchitecture.svg"><img alt="Structure of a Model" src="../_images/FunctionArchitecture.svg" width="800" /></a>
+<figcaption>
+<p><span class="caption-text">Example Function Architecture connecting function objects with flow objects.</span><a class="headerlink" href="#id12" title="Permalink to this image"></a></p>
+</figcaption>
+</figure>
+<p>In <a class="reference internal" href="Development%20Guide.html#term-FRDL"><span class="xref std std-term">FRDL</span></a>, this object may be represented as:</p>
+<figure class="align-default" id="id13">
+<a class="reference internal image-reference" href="../_images/FRDL_Function_Example.svg"><img alt="Example Function Represented in FRDL" src="../_images/FRDL_Function_Example.svg" width="800" /></a>
+<figcaption>
+<p><span class="caption-text">Example Function Architecture propagation structure represented in FRDL.</span><a class="headerlink" href="#id13" title="Permalink to this image"></a></p>
+</figcaption>
+</figure>
+<p>To define a FunctionArchitecture class, it can be helpful to use the following code template:</p>
+<figure class="align-default" id="id14">
+<a class="reference internal image-reference" href="../_images/model_structure.png"><img alt="Structure of a Model" src="../_images/model_structure.png" style="width: 800px;" /></a>
+<figcaption>
+<p><span class="caption-text">Code template for FunctionArchitecture classes.</span><a class="headerlink" href="#id14" title="Permalink to this image"></a></p>
+</figcaption>
+</figure>
+<dl class="py class">
+<dt class="sig sig-object py" id="fmdtools.define.architecture.function.FunctionArchitecture">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">fmdtools.define.architecture.function.</span></span><span class="sig-name descname"><span class="pre">FunctionArchitecture</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">h</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">{}</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.define.architecture.function.FunctionArchitecture" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#fmdtools.define.architecture.base.Architecture" title="fmdtools.define.architecture.base.Architecture"><code class="xref py py-class docutils literal notranslate"><span class="pre">Architecture</span></code></a></p>
+<p>Class representing a functional architecture.</p>
+<p>Functional architectures enable the execution of multiple Function objects
+interacting with each other over time. The FunctionArchitecture uses an
+object-oriented, undirected graph-based model representation to enable the
+arbitrary propagation of flow states through the functions of the system.
+As opposed to a <em>procedural</em> <em>directed</em> graph-based model representation,
+in which each function has an <a href="#id3"><span class="problematic" id="id4">``</span></a>input’’ and <a href="#id5"><span class="problematic" id="id6">``</span></a>output’’, the undirected
+graph approach enables one to propagate behaviors in multiple directions.
+For example, in a pump system, closing a valve can be modelled to not just
+reduce flow in the downstream pipe, but also increase pressure in upstream
+pipes.</p>
+<dl class="simple">
+<dt>flows<span class="classifier">dict</span></dt><dd><p>dictionary of flows objects in the model indexed by name</p>
+</dd>
+<dt>fxns<span class="classifier">dict</span></dt><dd><p>dictionary of functions in the model indexed by name</p>
+</dd>
+</dl>
+<dl class="simple">
+<dt>functionorder<span class="classifier">OrderedSet</span></dt><dd><p>Keeps track of function dynamic execution order</p>
+</dd>
+<dt>staticfxns<span class="classifier">OrderedSet</span></dt><dd><p>Keeps track of which functions run in static execution step</p>
+</dd>
+<dt>dynamicfxns<span class="classifier">Orderedset</span></dt><dd><p>Keeps track of which functions run in dynamic execution step</p>
+</dd>
+<dt>staticflows<span class="classifier">list</span></dt><dd><p>Flows to keep track of in static execution step</p>
+</dd>
+<dt>graph<span class="classifier">networkx graph</span></dt><dd><p>multigraph view of functions and flows</p>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">fmdtools.define.block.function</span> <span class="kn">import</span> <span class="n">ExampleFunction</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">fmdtools.define.flow.base</span> <span class="kn">import</span> <span class="n">ExampleFlow</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">fmdtools.define.container.parameter</span> <span class="kn">import</span> <span class="n">ExampleParameter</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">class</span> <span class="nc">ExFxnArch</span><span class="p">(</span><span class="n">FunctionArchitecture</span><span class="p">):</span>
+<span class="gp">... </span>    <span class="n">container_p</span> <span class="o">=</span> <span class="n">ExampleParameter</span>
+<span class="gp">... </span>    <span class="k">def</span> <span class="nf">init_architecture</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<span class="gp">... </span>        <span class="bp">self</span><span class="o">.</span><span class="n">add_flow</span><span class="p">(</span><span class="s2">&quot;exf&quot;</span><span class="p">,</span> <span class="n">ExampleFlow</span><span class="p">,</span> <span class="n">s</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;x&#39;</span><span class="p">:</span> <span class="mf">0.0</span><span class="p">,</span> <span class="s1">&#39;y&#39;</span><span class="p">:</span> <span class="mf">0.0</span><span class="p">})</span>
+<span class="gp">... </span>        <span class="bp">self</span><span class="o">.</span><span class="n">add_fxn</span><span class="p">(</span><span class="s2">&quot;ex_fxn&quot;</span><span class="p">,</span> <span class="n">ExampleFunction</span><span class="p">,</span> <span class="s2">&quot;exf&quot;</span><span class="p">,</span> <span class="n">p</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">p</span><span class="p">)</span>
+<span class="gp">... </span>        <span class="bp">self</span><span class="o">.</span><span class="n">add_fxn</span><span class="p">(</span><span class="s2">&quot;ex_fxn2&quot;</span><span class="p">,</span> <span class="n">ExampleFunction</span><span class="p">,</span> <span class="s2">&quot;exf&quot;</span><span class="p">,</span> <span class="n">p</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">p</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">exfa</span> <span class="o">=</span> <span class="n">ExFxnArch</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s2">&quot;exfa&quot;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">exfa</span>
+<span class="go">exfa ExFxnArch</span>
+<span class="go">FUNCTIONS:</span>
+<span class="go">ex_fxn ExampleFunction</span>
+<span class="go">- ExampleState(x=1.0, y=1.0)</span>
+<span class="go">- ExampleMode(mode=standby, faults=set())</span>
+<span class="go">ex_fxn2 ExampleFunction</span>
+<span class="go">- ExampleState(x=1.0, y=1.0)</span>
+<span class="go">- ExampleMode(mode=standby, faults=set())</span>
+<span class="go">FLOWS:</span>
+<span class="go">exf ExampleFlow flow: ExampleState(x=0.0, y=0.0)</span>
+</pre></div>
+</div>
+<p>This type of functional architecture only has dynamic functions:</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">exfa</span><span class="o">.</span><span class="n">dynamicfxns</span>
+<span class="go">OrderedSet([&#39;ex_fxn&#39;, &#39;ex_fxn2&#39;])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">exfa</span><span class="o">.</span><span class="n">staticfxns</span>
+<span class="go">OrderedSet()</span>
+</pre></div>
+</div>
+<p>This can in turn be simulated using FunctionArchitecture’s built-in .propagate
+method. Note how the flow exf accumulates both ex_fxn and ex_fxn2 as reflected in
+their behavior methods:</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">exfa</span><span class="o">.</span><span class="n">propagate</span><span class="p">(</span><span class="mf">1.0</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">exfa</span>
+<span class="go">exfa ExFxnArch</span>
+<span class="go">FUNCTIONS:</span>
+<span class="go">ex_fxn ExampleFunction</span>
+<span class="go">- ExampleState(x=2.0, y=1.0)</span>
+<span class="go">- ExampleMode(mode=standby, faults=set())</span>
+<span class="go">ex_fxn2 ExampleFunction</span>
+<span class="go">- ExampleState(x=2.0, y=1.0)</span>
+<span class="go">- ExampleMode(mode=standby, faults=set())</span>
+<span class="go">FLOWS:</span>
+<span class="go">exf ExampleFlow flow: ExampleState(x=4.0, y=0.0)</span>
+</pre></div>
+</div>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">exfa</span><span class="o">.</span><span class="n">propagate</span><span class="p">(</span><span class="mf">2.0</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">exfa</span>
+<span class="go">exfa ExFxnArch</span>
+<span class="go">FUNCTIONS:</span>
+<span class="go">ex_fxn ExampleFunction</span>
+<span class="go">- ExampleState(x=3.0, y=1.0)</span>
+<span class="go">- ExampleMode(mode=standby, faults=set())</span>
+<span class="go">ex_fxn2 ExampleFunction</span>
+<span class="go">- ExampleState(x=3.0, y=1.0)</span>
+<span class="go">- ExampleMode(mode=standby, faults=set())</span>
+<span class="go">FLOWS:</span>
+<span class="go">exf ExampleFlow flow: ExampleState(x=10.0, y=0.0)</span>
+</pre></div>
+</div>
+<dl class="py method">
+<dt class="sig sig-object py" id="fmdtools.define.architecture.function.FunctionArchitecture.add_fxn">
+<span class="sig-name descname"><span class="pre">add_fxn</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fclass</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">flownames</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">fkwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.define.architecture.function.FunctionArchitecture.add_fxn" title="Permalink to this definition"></a></dt>
+<dd><p>Instantiate a given function in the model.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>name</strong> (<em>str</em>) – Name to give the function.</p></li>
+<li><p><strong>fclass</strong> (<em>Class</em>) – Class to instantiate the function as. If no class has been developed,
+the user can send the block.GenericFxn class.</p></li>
+<li><p><strong>flownames</strong> (<em>list</em>) – List of flows to associate with the function.</p></li>
+<li><p><strong>args_f</strong> (<em>dict.</em>) – Other parameters to send to the __init__ method of the function class</p></li>
+<li><p><strong>fkwargs</strong> (<em>dict</em>) – Parameters to send to __init__ method of the Function superclass</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="fmdtools.define.architecture.function.FunctionArchitecture.build">
+<span class="sig-name descname"><span class="pre">build</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">require_connections</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.define.architecture.function.FunctionArchitecture.build" title="Permalink to this definition"></a></dt>
+<dd><p>Build the model graph after the functions have been added.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="fmdtools.define.architecture.function.FunctionArchitecture.calc_repaircost">
+<span class="sig-name descname"><span class="pre">calc_repaircost</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">additional_cost</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">default_cost</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_cost</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">inf</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.define.architecture.function.FunctionArchitecture.calc_repaircost" title="Permalink to this definition"></a></dt>
+<dd><p>Calculate the repair cost of the fault modes in the model.</p>
+<p>Uses given mode cost information for each function mode (in fxn.m).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>additional_cost</strong> (<em>int/float</em>) – Additional cost to add if there are faults in the model. Default is 0.</p></li>
+<li><p><strong>default_cost</strong> (<em>int/float</em>) – Cost to use for each fault mode if no fault cost information given
+in assoc_faultmodes/ Default is 0.</p></li>
+<li><p><strong>max_cost</strong> (<em>int/float</em>) – Maximum cost of repair (e.g. cost of replacement). Default is np.inf</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>repair_cost</strong> – Cost of repairing the fault modes in the given model</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>float</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="fmdtools.define.architecture.function.FunctionArchitecture.construct_graph">
+<span class="sig-name descname"><span class="pre">construct_graph</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">require_connections</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.define.architecture.function.FunctionArchitecture.construct_graph" title="Permalink to this definition"></a></dt>
+<dd><p>Create .graph nx.graph representation of the model.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="fmdtools.define.architecture.function.FunctionArchitecture.default_name">
+<span class="sig-name descname"><span class="pre">default_name</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'model'</span></em><a class="headerlink" href="#fmdtools.define.architecture.function.FunctionArchitecture.default_name" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="fmdtools.define.architecture.function.FunctionArchitecture.default_track">
+<span class="sig-name descname"><span class="pre">default_track</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">('fxns',</span> <span class="pre">'flows',</span> <span class="pre">'i')</span></em><a class="headerlink" href="#fmdtools.define.architecture.function.FunctionArchitecture.default_track" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="fmdtools.define.architecture.function.FunctionArchitecture.dynamicfxns">
+<span class="sig-name descname"><span class="pre">dynamicfxns</span></span><a class="headerlink" href="#fmdtools.define.architecture.function.FunctionArchitecture.dynamicfxns" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="fmdtools.define.architecture.function.FunctionArchitecture.flexible_roles">
+<span class="sig-name descname"><span class="pre">flexible_roles</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">['flows',</span> <span class="pre">'fxns']</span></em><a class="headerlink" href="#fmdtools.define.architecture.function.FunctionArchitecture.flexible_roles" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="fmdtools.define.architecture.function.FunctionArchitecture.flowtypes_for_fxnclasses">
+<span class="sig-name descname"><span class="pre">flowtypes_for_fxnclasses</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.define.architecture.function.FunctionArchitecture.flowtypes_for_fxnclasses" title="Permalink to this definition"></a></dt>
+<dd><p>Return the flows required by each function class in the model (as a dict).</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="fmdtools.define.architecture.function.FunctionArchitecture.functionorder">
+<span class="sig-name descname"><span class="pre">functionorder</span></span><a class="headerlink" href="#fmdtools.define.architecture.function.FunctionArchitecture.functionorder" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="fmdtools.define.architecture.function.FunctionArchitecture.fxnclasses">
+<span class="sig-name descname"><span class="pre">fxnclasses</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.define.architecture.function.FunctionArchitecture.fxnclasses" title="Permalink to this definition"></a></dt>
+<dd><p>Return the set of class names used in the model.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="fmdtools.define.architecture.function.FunctionArchitecture.fxns">
+<span class="sig-name descname"><span class="pre">fxns</span></span><a class="headerlink" href="#fmdtools.define.architecture.function.FunctionArchitecture.fxns" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="fmdtools.define.architecture.function.FunctionArchitecture.fxns_of_class">
+<span class="sig-name descname"><span class="pre">fxns_of_class</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ftype</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.define.architecture.function.FunctionArchitecture.fxns_of_class" title="Permalink to this definition"></a></dt>
+<dd><p>Return dict of funcitons corresponding to the given class name ftype.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="fmdtools.define.architecture.function.FunctionArchitecture.get_memory">
+<span class="sig-name descname"><span class="pre">get_memory</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.define.architecture.function.FunctionArchitecture.get_memory" title="Permalink to this definition"></a></dt>
+<dd><p>Return the approximate memory usage of the model.</p>
+<p>Includes profile of fxn/flow memory usage.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="fmdtools.define.architecture.function.FunctionArchitecture.get_typename">
+<span class="sig-name descname"><span class="pre">get_typename</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.define.architecture.function.FunctionArchitecture.get_typename" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="fmdtools.define.architecture.function.FunctionArchitecture.graph">
+<span class="sig-name descname"><span class="pre">graph</span></span><a class="headerlink" href="#fmdtools.define.architecture.function.FunctionArchitecture.graph" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="fmdtools.define.architecture.function.FunctionArchitecture.inject_faults">
+<span class="sig-name descname"><span class="pre">inject_faults</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">faults</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.define.architecture.function.FunctionArchitecture.inject_faults" title="Permalink to this definition"></a></dt>
+<dd><p>Inject faults in the ComponentArchitecture/ASG object obj.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>obj</strong> (<em>TYPE</em>) – DESCRIPTION.</p></li>
+<li><p><strong>faults</strong> (<em>TYPE</em>) – DESCRIPTION.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="fmdtools.define.architecture.function.FunctionArchitecture.plot_dynamic_run_order">
+<span class="sig-name descname"><span class="pre">plot_dynamic_run_order</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">rotateticks</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">title</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'Dynamic</span> <span class="pre">Run</span> <span class="pre">Order'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.define.architecture.function.FunctionArchitecture.plot_dynamic_run_order" title="Permalink to this definition"></a></dt>
+<dd><p>Plot the run order for the model during the dynamic propagation step.</p>
+<p>The x-direction is the order of each function executed and the y are the
+corresponding flows acted on by the given methods.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>rotateticks</strong> (<em>Bool</em><em>, </em><em>optional</em>) – Whether to rotate the x-ticks (for bigger plots). The default is False.</p></li>
+<li><p><strong>title</strong> (<em>str</em><em>, </em><em>optional</em>) – String to use for the title (if any). The default is “Dynamic Run Order”.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><ul class="simple">
+<li><p><strong>fig</strong> (<em>figure</em>) – Matplotlib figure object</p></li>
+<li><p><strong>ax</strong> (<em>axis</em>) – Corresponding matplotlib axis</p></li>
+</ul>
+</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="fmdtools.define.architecture.function.FunctionArchitecture.prop_static">
+<span class="sig-name descname"><span class="pre">prop_static</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">time</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">run_stochastic</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.define.architecture.function.FunctionArchitecture.prop_static" title="Permalink to this definition"></a></dt>
+<dd><p>Propagate behaviors through model graph (static propagation step).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>time</strong> (<em>float</em>) – Current time-step</p></li>
+<li><p><strong>run_stochastic</strong> (<em>bool</em>) – Whether to run stochastic behaviors or use default values. Default is False.
+Can set as ‘track_pdf’ to calculate/track the probability densities of
+random states over time.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="fmdtools.define.architecture.function.FunctionArchitecture.propagate">
+<span class="sig-name descname"><span class="pre">propagate</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">time</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fxnfaults</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">{}</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">disturbances</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">{}</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">run_stochastic</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.define.architecture.function.FunctionArchitecture.propagate" title="Permalink to this definition"></a></dt>
+<dd><p>Inject and propagates faults through the graph at one time-step.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>time</strong> (<em>float</em>) – The current time-step.</p></li>
+<li><p><strong>fxnfaults</strong> (<em>dict</em>) – Faults to inject during this propagation step.
+With structure {‘function’:[‘fault1’, ‘fault2’…]}</p></li>
+<li><p><strong>disturbances</strong> (<em>dict</em>) – Variables to change during this propagation step.
+With structure {‘function.var1’:value}</p></li>
+<li><p><strong>run_stochastic</strong> (<em>bool</em>) – Whether to run stochastic behaviors or use default values. Default is False.
+Can set as ‘track_pdf’ to calculate/track the probability densities of
+random states over time.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="fmdtools.define.architecture.function.FunctionArchitecture.reset">
+<span class="sig-name descname"><span class="pre">reset</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.define.architecture.function.FunctionArchitecture.reset" title="Permalink to this definition"></a></dt>
+<dd><p>Reset the model to the initial state (with no faults, etc).</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="fmdtools.define.architecture.function.FunctionArchitecture.return_faultmodes">
+<span class="sig-name descname"><span class="pre">return_faultmodes</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.define.architecture.function.FunctionArchitecture.return_faultmodes" title="Permalink to this definition"></a></dt>
+<dd><p>Return faultmodes present in the model.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p><ul class="simple">
+<li><p><strong>modes</strong> (<em>dict</em>) – Fault modes present in the model indexed by function name</p></li>
+<li><p><strong>modeprops</strong> (<em>dict</em>) – Fault mode properties (defined in the function definition).
+Has structure {fxn:mode:properties}.</p></li>
+</ul>
+</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="fmdtools.define.architecture.function.FunctionArchitecture.return_probdens">
+<span class="sig-name descname"><span class="pre">return_probdens</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.define.architecture.function.FunctionArchitecture.return_probdens" title="Permalink to this definition"></a></dt>
+<dd><p>Return the probability density of the model distributions.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="fmdtools.define.architecture.function.FunctionArchitecture.rolename">
+<span class="sig-name descname"><span class="pre">rolename</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'fa'</span></em><a class="headerlink" href="#fmdtools.define.architecture.function.FunctionArchitecture.rolename" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="fmdtools.define.architecture.function.FunctionArchitecture.set_functionorder">
+<span class="sig-name descname"><span class="pre">set_functionorder</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">functionorder</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.define.architecture.function.FunctionArchitecture.set_functionorder" title="Permalink to this definition"></a></dt>
+<dd><p>Manually set the order of functions to be executed.</p>
+<p>(otherwise it will be executed based on the sequence of add_fxn calls)</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="fmdtools.define.architecture.function.FunctionArchitecture.set_vars">
+<span class="sig-name descname"><span class="pre">set_vars</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.define.architecture.function.FunctionArchitecture.set_vars" title="Permalink to this definition"></a></dt>
+<dd><p>Set variables in the model to set values (useful for optimization, etc.).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>varlist</strong> (<em>list of lists/tuples</em>) – <dl class="simple">
+<dt>List of variables to set, with possible structures:</dt><dd><p>[[‘fxnname’, ‘att1’], [‘fxnname2’, ‘comp1’, ‘att2’], [‘flowname’, ‘att3’]]
+[‘fxnname.att1’, ‘fxnname.comp1.att2’, ‘flowname.att3’]</p>
+</dd>
+</dl>
+</p></li>
+<li><p><strong>varvalues</strong> (<em>list</em>) – List of values corresponding to varlist</p></li>
+<li><p><strong>kwargs</strong> (<em>kwargs</em>) – attribute-value pairs. If provided, must be passed using ** syntax:
+mdl.set_vars(<a href="#id7"><span class="problematic" id="id8">**</span></a>{‘fxnname.varname’:value})</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="fmdtools.define.architecture.function.FunctionArchitecture.staticflows">
+<span class="sig-name descname"><span class="pre">staticflows</span></span><a class="headerlink" href="#fmdtools.define.architecture.function.FunctionArchitecture.staticflows" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="fmdtools.define.architecture.function.FunctionArchitecture.staticfxns">
+<span class="sig-name descname"><span class="pre">staticfxns</span></span><a class="headerlink" href="#fmdtools.define.architecture.function.FunctionArchitecture.staticfxns" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="fmdtools-define-architecture-geom">
+<h2>fmdtools.define.architecture.geom<a class="headerlink" href="#fmdtools-define-architecture-geom" title="Permalink to this heading"></a></h2>
+<span class="target" id="module-fmdtools.define.architecture.geom"></span><p>Module for defining Geometry Architectures, agglomerations of individual geometries.</p>
+<section id="id9">
+<h3>Classes<a class="headerlink" href="#id9" title="Permalink to this heading"></a></h3>
+<p><a class="reference internal" href="#fmdtools.define.architecture.geom.GeomArchitecture" title="fmdtools.define.architecture.geom.GeomArchitecture"><code class="xref py py-class docutils literal notranslate"><span class="pre">GeomArchitecture</span></code></a>: Architecture of multiple geometries.
+<a class="reference internal" href="#fmdtools.define.architecture.geom.ExGeomArch" title="fmdtools.define.architecture.geom.ExGeomArch"><code class="xref py py-class docutils literal notranslate"><span class="pre">ExGeomArch</span></code></a>: Example GeomArchitecture.</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="fmdtools.define.architecture.geom.ExGeomArch">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">fmdtools.define.architecture.geom.</span></span><span class="sig-name descname"><span class="pre">ExGeomArch</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">as_copy</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">h</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">{}</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.define.architecture.geom.ExGeomArch" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#fmdtools.define.architecture.geom.GeomArchitecture" title="fmdtools.define.architecture.geom.GeomArchitecture"><code class="xref py py-class docutils literal notranslate"><span class="pre">GeomArchitecture</span></code></a></p>
+<p>Example Geometric Architecture for testing etc.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="fmdtools.define.architecture.geom.ExGeomArch.as_copy">
+<span class="sig-name descname"><span class="pre">as_copy</span></span><a class="headerlink" href="#fmdtools.define.architecture.geom.ExGeomArch.as_copy" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="fmdtools.define.architecture.geom.ExGeomArch.flows">
+<span class="sig-name descname"><span class="pre">flows</span></span><a class="headerlink" href="#fmdtools.define.architecture.geom.ExGeomArch.flows" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="fmdtools.define.architecture.geom.ExGeomArch.h">
+<span class="sig-name descname"><span class="pre">h</span></span><a class="headerlink" href="#fmdtools.define.architecture.geom.ExGeomArch.h" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="fmdtools.define.architecture.geom.ExGeomArch.init_architecture">
+<span class="sig-name descname"><span class="pre">init_architecture</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.define.architecture.geom.ExGeomArch.init_architecture" title="Permalink to this definition"></a></dt>
+<dd><p>Initialize example geoms.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="fmdtools.define.architecture.geom.GeomArchitecture">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">fmdtools.define.architecture.geom.</span></span><span class="sig-name descname"><span class="pre">GeomArchitecture</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">as_copy</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">h</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">{}</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.define.architecture.geom.GeomArchitecture" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#fmdtools.define.architecture.base.Architecture" title="fmdtools.define.architecture.base.Architecture"><code class="xref py py-class docutils literal notranslate"><span class="pre">Architecture</span></code></a></p>
+<p>Agglomeration of multiple geoms/shapes.</p>
+<p>Architecture is defined using add_shape method in user-defined init_shapes method.</p>
+<p class="rubric">Examples</p>
+<p>for an architecture with the geoms already defined:</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="k">class</span> <span class="nc">ExGeomArch</span><span class="p">(</span><span class="n">GeomArchitecture</span><span class="p">):</span>
+<span class="gp">... </span>   <span class="k">def</span> <span class="nf">init_architecture</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="gp">... </span>       <span class="bp">self</span><span class="o">.</span><span class="n">add_point</span><span class="p">(</span><span class="s2">&quot;ex_point&quot;</span><span class="p">,</span> <span class="n">ExPoint</span><span class="p">)</span>
+<span class="gp">... </span>       <span class="bp">self</span><span class="o">.</span><span class="n">add_line</span><span class="p">(</span><span class="s2">&quot;ex_line&quot;</span><span class="p">,</span> <span class="n">ExLine</span><span class="p">)</span>
+<span class="gp">... </span>       <span class="bp">self</span><span class="o">.</span><span class="n">add_poly</span><span class="p">(</span><span class="s2">&quot;ex_poly&quot;</span><span class="p">,</span> <span class="n">ExPoly</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>This can then be used in containing classes (e.g., environments) that need multiple
+geoms. We can then access the individual geoms in the geoms dict, e.g.,:</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">ega</span> <span class="o">=</span> <span class="n">ExGeomArch</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ega</span><span class="o">.</span><span class="n">geoms</span><span class="p">()[</span><span class="s1">&#39;ex_point&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">s</span>
+<span class="go">ExGeomState(occupied=False)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ega</span><span class="o">.</span><span class="n">h</span>
+<span class="go">points.ex_point.s.occupied:   array(101)</span>
+<span class="go">lines.ex_line.s.occupied:     array(101)</span>
+<span class="go">polys.ex_poly.s.occupied:     array(101)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ega</span><span class="o">.</span><span class="n">return_mutables</span><span class="p">()</span>
+<span class="go">((-0.1, 0, 0.0, 1), False, False, False)</span>
+</pre></div>
+</div>
+<dl class="py method">
+<dt class="sig sig-object py" id="fmdtools.define.architecture.geom.GeomArchitecture.add_line">
+<span class="sig-name descname"><span class="pre">add_line</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lclass=&lt;class</span> <span class="pre">'fmdtools.define.object.geom.GeomLine'&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">**kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.define.architecture.geom.GeomArchitecture.add_line" title="Permalink to this definition"></a></dt>
+<dd><p>Add/instantiate an individual line to the overall architecture.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>name</strong> (<em>str</em>) – Name of the geom object to instantiate.</p></li>
+<li><p><strong>gclass</strong> (<a class="reference internal" href="fmdtools.define.object.html#fmdtools.define.object.geom.Geom" title="fmdtools.define.object.geom.Geom"><em>Geom</em></a>) – Class defining the geom.</p></li>
+<li><p><strong>**kwargs</strong> (<em>kwargs</em>) – kwargs defining the object for gclass.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="fmdtools.define.architecture.geom.GeomArchitecture.add_point">
+<span class="sig-name descname"><span class="pre">add_point</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pclass=&lt;class</span> <span class="pre">'fmdtools.define.object.geom.GeomPoint'&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">**kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.define.architecture.geom.GeomArchitecture.add_point" title="Permalink to this definition"></a></dt>
+<dd><p>Add/instantiate an individual point to the overall architecture.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>name</strong> (<em>str</em>) – Name of the geom object to instantiate.</p></li>
+<li><p><strong>gclass</strong> (<a class="reference internal" href="fmdtools.define.object.html#fmdtools.define.object.geom.Geom" title="fmdtools.define.object.geom.Geom"><em>Geom</em></a>) – Class defining the geom.</p></li>
+<li><p><strong>**kwargs</strong> (<em>kwargs</em>) – kwargs defining the object for gclass.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="fmdtools.define.architecture.geom.GeomArchitecture.add_poly">
+<span class="sig-name descname"><span class="pre">add_poly</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pclass=&lt;class</span> <span class="pre">'fmdtools.define.object.geom.GeomPoly'&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">**kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.define.architecture.geom.GeomArchitecture.add_poly" title="Permalink to this definition"></a></dt>
+<dd><p>Add/instantiate an individual polygon to the overall architecture.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>name</strong> (<em>str</em>) – Name of the geom object to instantiate.</p></li>
+<li><p><strong>gclass</strong> (<a class="reference internal" href="fmdtools.define.object.html#fmdtools.define.object.geom.Geom" title="fmdtools.define.object.geom.Geom"><em>Geom</em></a>) – Class defining the geom.</p></li>
+<li><p><strong>**kwargs</strong> (<em>kwargs</em>) – kwargs defining the object for gclass.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="fmdtools.define.architecture.geom.GeomArchitecture.all_at">
+<span class="sig-name descname"><span class="pre">all_at</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">pt</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.define.architecture.geom.GeomArchitecture.all_at" title="Permalink to this definition"></a></dt>
+<dd><p>Find all geoms (and buffers) a given is at.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>*pt</strong> (<em>x</em><em>,</em><em>y</em>) – x, y, z location to check.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>all_at</strong> – Names of geoms where the point is at (and their properties)</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>dict</p>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">exga</span> <span class="o">=</span> <span class="n">ExGeomArch</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">exga</span><span class="o">.</span><span class="n">all_at</span><span class="p">(</span><span class="mf">1.0</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">)</span>
+<span class="go">{&#39;ex_point&#39;: [&#39;shape&#39;, &#39;on&#39;], &#39;ex_line&#39;: [&#39;shape&#39;, &#39;on&#39;], &#39;ex_poly&#39;: [&#39;shape&#39;]}</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">exga</span><span class="o">.</span><span class="n">all_at</span><span class="p">(</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">)</span>
+<span class="go">{&#39;ex_line&#39;: [&#39;shape&#39;, &#39;on&#39;], &#39;ex_poly&#39;: [&#39;shape&#39;]}</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">exga</span><span class="o">.</span><span class="n">all_at</span><span class="p">(</span><span class="mf">0.4</span><span class="p">,</span> <span class="mf">0.3</span><span class="p">)</span>
+<span class="go">{&#39;ex_point&#39;: [&#39;on&#39;], &#39;ex_line&#39;: [&#39;on&#39;]}</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="fmdtools.define.architecture.geom.GeomArchitecture.all_possible">
+<span class="sig-name descname"><span class="pre">all_possible</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">['points',</span> <span class="pre">'lines',</span> <span class="pre">'polys']</span></em><a class="headerlink" href="#fmdtools.define.architecture.geom.GeomArchitecture.all_possible" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="fmdtools.define.architecture.geom.GeomArchitecture.as_copy">
+<span class="sig-name descname"><span class="pre">as_copy</span></span><a class="headerlink" href="#fmdtools.define.architecture.geom.GeomArchitecture.as_copy" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="fmdtools.define.architecture.geom.GeomArchitecture.check_geom_class">
+<span class="sig-name descname"><span class="pre">check_geom_class</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">gclass</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">baseclass</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.define.architecture.geom.GeomArchitecture.check_geom_class" title="Permalink to this definition"></a></dt>
+<dd><p>Check that geom class/object inherits from given base class.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="fmdtools.define.architecture.geom.GeomArchitecture.container_p">
+<span class="sig-name descname"><span class="pre">container_p</span></span><a class="headerlink" href="#fmdtools.define.architecture.geom.GeomArchitecture.container_p" title="Permalink to this definition"></a></dt>
+<dd><p>alias of <a class="reference internal" href="fmdtools.define.container.html#fmdtools.define.container.parameter.Parameter" title="fmdtools.define.container.parameter.Parameter"><code class="xref py py-class docutils literal notranslate"><span class="pre">Parameter</span></code></a></p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="fmdtools.define.architecture.geom.GeomArchitecture.default_track">
+<span class="sig-name descname"><span class="pre">default_track</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">['points',</span> <span class="pre">'lines',</span> <span class="pre">'polys']</span></em><a class="headerlink" href="#fmdtools.define.architecture.geom.GeomArchitecture.default_track" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="fmdtools.define.architecture.geom.GeomArchitecture.flexible_roles">
+<span class="sig-name descname"><span class="pre">flexible_roles</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">['points',</span> <span class="pre">'lines',</span> <span class="pre">'polys']</span></em><a class="headerlink" href="#fmdtools.define.architecture.geom.GeomArchitecture.flexible_roles" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="fmdtools.define.architecture.geom.GeomArchitecture.flows">
+<span class="sig-name descname"><span class="pre">flows</span></span><a class="headerlink" href="#fmdtools.define.architecture.geom.GeomArchitecture.flows" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="fmdtools.define.architecture.geom.GeomArchitecture.geoms">
+<span class="sig-name descname"><span class="pre">geoms</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.define.architecture.geom.GeomArchitecture.geoms" title="Permalink to this definition"></a></dt>
+<dd><p>Return a dict of all points, lines, and polygons.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="fmdtools.define.architecture.geom.GeomArchitecture.h">
+<span class="sig-name descname"><span class="pre">h</span></span><a class="headerlink" href="#fmdtools.define.architecture.geom.GeomArchitecture.h" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="fmdtools.define.architecture.geom.GeomArchitecture.init_architecture">
+<span class="sig-name descname"><span class="pre">init_architecture</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.define.architecture.geom.GeomArchitecture.init_architecture" title="Permalink to this definition"></a></dt>
+<dd><p>Use this placeholder method to define custom architectures.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="fmdtools.define.architecture.geom.GeomArchitecture.return_states">
+<span class="sig-name descname"><span class="pre">return_states</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.define.architecture.geom.GeomArchitecture.return_states" title="Permalink to this definition"></a></dt>
+<dd><p>Return a dict of states for each geom.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="fmdtools.define.architecture.geom.GeomArchitecture.rolename">
+<span class="sig-name descname"><span class="pre">rolename</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'ga'</span></em><a class="headerlink" href="#fmdtools.define.architecture.geom.GeomArchitecture.rolename" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="fmdtools.define.architecture.geom.GeomArchitecture.show">
+<span class="sig-name descname"><span class="pre">show</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">geoms</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">{'all':</span> <span class="pre">{}}</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fig</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ax</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">figsize</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">(4,</span> <span class="pre">4)</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">z</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.define.architecture.geom.GeomArchitecture.show" title="Permalink to this definition"></a></dt>
+<dd><p>Show the shapes of a GeomArchitecture all on one plot.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>geoms</strong> (<em>dict</em><em>, </em><em>optional</em>) – Individual shapes to plot and their corresponding kwargs.
+The default is {‘all’: {}}.</p></li>
+<li><p><strong>fig</strong> (<em>matplotlib.figure</em><em>, </em><em>optional</em>) – Existing Figure. The default is None.</p></li>
+<li><p><strong>ax</strong> (<em>matplotlib.axis</em><em>, </em><em>optional</em>) – Existing axis. The default is None.</p></li>
+<li><p><strong>figsize</strong> (<em>tuple</em><em>, </em><em>optional</em>) – Size for figure (if instantiating). The default is (4, 4).</p></li>
+<li><p><strong>z</strong> (<em>bool/number</em><em>, </em><em>optional</em>) – If plotting on a 3d axis, set z to a number which will be the z-level.
+The default is False.</p></li>
+<li><p><strong>**kwargs</strong> (<em>kwargs</em>) – Overall kwargs to show.geom for all geoms.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><ul class="simple">
+<li><p><strong>fig</strong> (<em>figure</em>) – Matplotlib figure object</p></li>
+<li><p><strong>ax</strong> (<em>axis</em>) – Corresponding matplotlib axis</p></li>
+</ul>
+</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="fmdtools.define.html" class="btn btn-neutral float-left" title="fmdtools.define" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="fmdtools.define.block.html" class="btn btn-neutral float-right" title="fmdtools.define.block" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright .</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

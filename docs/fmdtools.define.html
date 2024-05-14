@@ -1,0 +1,641 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>fmdtools.define &mdash; fmdtools 2.0-rc-3 documentation</title>
+      <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+    <link rel="shortcut icon" href="../_static/fmdtools_ico.ico"/>
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script src="../_static/doctools.js"></script>
+        <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="fmdtools.define.architecture" href="fmdtools.define.architecture.html" />
+    <link rel="prev" title="Module Reference" href="fmdtools.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../index.html">
+            
+              <img src="../_static/logo_glow.png" class="logo" alt="Logo"/>
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../README.html">Overview</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../README.html#about">About</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../README.html#flexible-modelling-paradigm">Flexible Modelling Paradigm</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../README.html#powerful-simulation-techniques">Powerful Simulation Techniques</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../README.html#efficient-analysis-process">Efficient Analysis Process</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../README.html#getting-started">Getting Started</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../README.html#set-up-python-environment">Set up python environment</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../README.html#install-fmdtools">Install fmdtools</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../README.html#dependencies">Dependencies</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../README.html#explore-tutorials-and-resources">Explore Tutorials and Resources</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../README.html#contributions">Contributions</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../README.html#contributors">Contributors</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../README.html#citing-this-repository">Citing this repository</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../README.html#license-notices">License/Notices</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../README.html#disclaimers">Disclaimers</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="Development%20Guide.html">Development Guide</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="Development%20Guide.html#why-fmdtools">Why fmdtools?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Development%20Guide.html#introductory-tutorial">Introductory Tutorial</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="Intro_to_fmdtools.html">Intro to resilience modeling, simulation, and visualization in Python with fmdtools.</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="Intro_to_fmdtools.html#author-daniel-hulse">Author: Daniel Hulse</a></li>
+<li class="toctree-l4"><a class="reference internal" href="Intro_to_fmdtools.html#version-2-0-rc-3">Version: 2.0-rc-3</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="Intro_to_fmdtools.html#overview">Overview</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Intro_to_fmdtools.html#prerequisites">Prerequisites</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Intro_to_fmdtools.html#motivation-modeling-system-resilience">Motivation: Modeling System Resilience</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Intro_to_fmdtools.html#why-is-resilience-important">Why is Resilience Important?</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Intro_to_fmdtools.html#enabling-proactive-design-process">Enabling proactive design process</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Intro_to_fmdtools.html#why-fmdtools-possible-competitors">Why fmdtools? Possible Competitors:</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Intro_to_fmdtools.html#why-fmdtools-pros">Why fmdtools? Pros:</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Intro_to_fmdtools.html#why-not-fmdtools-cons">Why <strong>not</strong> fmdtools? Cons:</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Intro_to_fmdtools.html#what-is-fmdtools-a-python-package-for-design-simulation-and-analysis-of-resilience">What is fmdtools? A Python package for <strong>design</strong>, <strong>simulation</strong>, and <strong>analysis</strong> of resilience.</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Intro_to_fmdtools.html#what-is-fmdtools-repo-structure">What is fmdtools? Repo Structure</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Intro_to_fmdtools.html#activity-download-and-install-fmdtools">Activity: Download and Install fmdtools</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Intro_to_fmdtools.html#analysis-workflow-structure">Analysis Workflow/Structure</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Intro_to_fmdtools.html#defining-a-model">Defining a Model</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Intro_to_fmdtools.html#id1">Defining a Model</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Intro_to_fmdtools.html#function-code-template">Function Code Template</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Intro_to_fmdtools.html#model-code-template">Model Code Template</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Intro_to_fmdtools.html#demo-model-activity-examples-pump-ex-pump-py">Demo Model Activity: examples/pump/ex_pump.py</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Intro_to_fmdtools.html#more-resources-for-model-definition">More Resources for Model Definition</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Intro_to_fmdtools.html#notebook-activity">Notebook Activity:</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Intro_to_fmdtools.html#simulation-concepts-static-undirected-propagation">Simulation Concepts: Static/Undirected Propagation</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Intro_to_fmdtools.html#simulation-concepts-propagation-over-time">Simulation Concepts: Propagation over Time</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Intro_to_fmdtools.html#simulation-concepts-types-of-simulations">Simulation Concepts: Types of Simulations</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Intro_to_fmdtools.html#simulation-concepts-sampling-approaches">Simulation Concepts: Sampling Approaches</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Intro_to_fmdtools.html#simulation-concepts-things-to-consider">Simulation Concepts: Things to Consider</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Intro_to_fmdtools.html#activity-simulate-the-model">Activity: Simulate the Model</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Intro_to_fmdtools.html#analysis-modules">Analysis Modules</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Intro_to_fmdtools.html#analysis-activity">Analysis Activity</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Intro_to_fmdtools.html#conclusions-summary">Conclusions/Summary</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Intro_to_fmdtools.html#further-reading-links">Further Reading/Links</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="Development%20Guide.html#glossary">Glossary</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Development%20Guide.html#model-development-best-practices">Model Development Best Practices</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="Development%20Guide.html#pay-attention-to-and-document-the-fmdtools-version">Pay attention to and document the fmdtools version</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Development%20Guide.html#plan-your-model-to-avoid-technical-debt">Plan your model to avoid technical debt</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Development%20Guide.html#don-t-copy-inherit-and-functionalize">Don’t copy, inherit and functionalize</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Development%20Guide.html#document-your-code-sometimes-before-your-write-it">Document your code, sometimes <em>before</em> your write it</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Development%20Guide.html#don-t-get-ahead-of-yourself-try-to-get-a-running-simulation-first">Don’t get ahead of yourself–try to get a running simulation first</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Development%20Guide.html#preserve-your-prototype-setup-by-formalizing-it-as-a-test">Preserve your prototype setup by formalizing it as a test</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Development%20Guide.html#edit-your-code">Edit your code</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Development%20Guide.html#structuring-a-model">Structuring a model</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Development%20Guide.html#use-model-constructs-to-simplify-your-code">Use model constructs to simplify your code</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Development%20Guide.html#style-advice">Style advice</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Development%20Guide.html#see-also">See also</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="Development%20Guide.html#how-to-contribute">How to Contribute</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="Development%20Guide.html#repo-structure">Repo Structure</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="Development%20Guide.html#remote-structure">Remote Structure</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="Development%20Guide.html#development-process">Development Process</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="Development%20Guide.html#release-checklist">Release Checklist</a></li>
+<li class="toctree-l4"><a class="reference internal" href="Development%20Guide.html#upload-to-pypi">Upload to PyPI</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="Development%20Guide.html#roles">Roles</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Development%20Guide.html#documentation">Documentation</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Development%20Guide.html#style-formatting">Style/Formatting</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Development%20Guide.html#testing">Testing</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../examples/Examples.html">Examples</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../examples/Examples.html#pump">Pump</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../examples/pump/readme.html">Pump Model</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../examples/pump/readme.html#models">Models</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../examples/pump/readme.html#scripts-and-tests">Scripts and tests:</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../examples/pump/readme.html#notebooks">Notebooks</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../examples/pump/readme.html#references">References</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../examples/Examples.html#multirotor">Multirotor</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../examples/multirotor/readme.html">Drone Model</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../examples/multirotor/readme.html#models">Models</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../examples/multirotor/readme.html#scripts-and-tests">Scripts and tests:</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../examples/multirotor/readme.html#notebooks">Notebooks</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../examples/multirotor/readme.html#references">References</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../examples/Examples.html#tank">Tank</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../examples/tank/readme.html">Tank Model</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../examples/tank/readme.html#models">Models</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../examples/tank/readme.html#scripts-and-tests">Scripts and tests:</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../examples/tank/readme.html#notebooks">Notebooks</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../examples/tank/readme.html#references">References</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../examples/Examples.html#eps">EPS</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../examples/eps/readme.html">EPS Model</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../examples/eps/readme.html#models">Models</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../examples/eps/readme.html#scripts-and-tests">Scripts and tests:</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../examples/eps/readme.html#notebooks">Notebooks</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../examples/eps/readme.html#references">References</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../examples/Examples.html#action-sequence-graph">Action Sequence Graph</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../examples/asg_demo/readme.html">ASG Model</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../examples/asg_demo/readme.html#models">Models</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../examples/asg_demo/readme.html#scripts-and-tests">Scripts and tests:</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../examples/asg_demo/readme.html#notebooks">Notebooks</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../examples/Examples.html#rover">Rover</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../examples/rover/readme.html">Rover Model</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../examples/rover/readme.html#models">Models</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../examples/rover/readme.html#scripts-and-tests">Scripts and tests:</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../examples/rover/readme.html#notebooks">Notebooks</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../examples/rover/readme.html#references">References</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../examples/Examples.html#multiflow-demo">Multiflow Demo</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../examples/multiflow_demo/readme.html">MultiFlow Demo Model</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../examples/multiflow_demo/readme.html#models">Models</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../examples/multiflow_demo/readme.html#scripts-and-tests">Scripts and tests:</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../examples/multiflow_demo/readme.html#notebooks">Notebooks</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../examples/multiflow_demo/readme.html#references">References</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../examples/Examples.html#taxiway">Taxiway</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../examples/taxiway/readme.html">Taxiway Model</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../examples/taxiway/readme.html#models">Models</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../examples/taxiway/readme.html#scripts-and-tests">Scripts and tests:</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../examples/taxiway/readme.html#notebooks">Notebooks</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../examples/taxiway/readme.html#references">References</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1 current"><a class="reference internal" href="fmdtools.html">Module Reference</a><ul class="current">
+<li class="toctree-l2 current"><a class="current reference internal" href="#">fmdtools.define</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="fmdtools.define.architecture.html">fmdtools.define.architecture</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="fmdtools.define.architecture.html#fmdtools-define-architecture-base">fmdtools.define.architecture.base</a></li>
+<li class="toctree-l4"><a class="reference internal" href="fmdtools.define.architecture.html#fmdtools-define-architecture-action">fmdtools.define.architecture.action</a></li>
+<li class="toctree-l4"><a class="reference internal" href="fmdtools.define.architecture.html#fmdtools-define-architecture-component">fmdtools.define.architecture.component</a></li>
+<li class="toctree-l4"><a class="reference internal" href="fmdtools.define.architecture.html#fmdtools-define-architecture-function">fmdtools.define.architecture.function</a></li>
+<li class="toctree-l4"><a class="reference internal" href="fmdtools.define.architecture.html#fmdtools-define-architecture-geom">fmdtools.define.architecture.geom</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="fmdtools.define.block.html">fmdtools.define.block</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="fmdtools.define.block.html#module-fmdtools.define.block.base">fmdtools.define.block.base</a></li>
+<li class="toctree-l4"><a class="reference internal" href="fmdtools.define.block.html#module-fmdtools.define.block.action">fmdtools.define.block.action</a></li>
+<li class="toctree-l4"><a class="reference internal" href="fmdtools.define.block.html#module-fmdtools.define.block.component">fmdtools.define.block.component</a></li>
+<li class="toctree-l4"><a class="reference internal" href="fmdtools.define.block.html#module-fmdtools.define.block.function">fmdtools.define.block.function</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="fmdtools.define.container.html">fmdtools.define.container</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="fmdtools.define.container.html#fmdtools-define-container-base">fmdtools.define.container.base</a></li>
+<li class="toctree-l4"><a class="reference internal" href="fmdtools.define.container.html#module-fmdtools.define.container.mode">fmdtools.define.container.mode</a></li>
+<li class="toctree-l4"><a class="reference internal" href="fmdtools.define.container.html#fmdtools-define-container-state">fmdtools.define.container.state</a></li>
+<li class="toctree-l4"><a class="reference internal" href="fmdtools.define.container.html#fmdtools-define-container-parameter">fmdtools.define.container.parameter</a></li>
+<li class="toctree-l4"><a class="reference internal" href="fmdtools.define.container.html#module-fmdtools.define.container.rand">fmdtools.define.container.rand</a></li>
+<li class="toctree-l4"><a class="reference internal" href="fmdtools.define.container.html#module-fmdtools.define.container.time">fmdtools.define.container.time</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="fmdtools.define.flow.html">fmdtools.define.flow</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="fmdtools.define.flow.html#fmdtools-define-flow-base">fmdtools.define.flow.base</a></li>
+<li class="toctree-l4"><a class="reference internal" href="fmdtools.define.flow.html#module-fmdtools.define.flow.multiflow">fmdtools.define.flow.multiflow</a></li>
+<li class="toctree-l4"><a class="reference internal" href="fmdtools.define.flow.html#module-fmdtools.define.flow.commsflow">fmdtools.define.flow.commsflow</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="fmdtools.define.object.html">fmdtools.define.object</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="fmdtools.define.object.html#module-fmdtools.define.object.base">fmdtools.define.object.base</a></li>
+<li class="toctree-l4"><a class="reference internal" href="fmdtools.define.object.html#module-fmdtools.define.object.timer">fmdtools.define.object.timer</a></li>
+<li class="toctree-l4"><a class="reference internal" href="fmdtools.define.object.html#module-fmdtools.define.object.geom">fmdtools.define.object.geom</a></li>
+<li class="toctree-l4"><a class="reference internal" href="fmdtools.define.object.html#module-fmdtools.define.object.coords">fmdtools.define.object.coords</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#fmdtools-define-base">fmdtools.define.base</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#module-fmdtools.define.environment">fmdtools.define.environment</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="fmdtools.sim.html">fmdtools.sim</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="fmdtools.sim.html#fmdtools-sim-propagate">fmdtools.sim.propagate</a></li>
+<li class="toctree-l3"><a class="reference internal" href="fmdtools.sim.html#module-fmdtools.sim.scenario">fmdtools.sim.scenario</a></li>
+<li class="toctree-l3"><a class="reference internal" href="fmdtools.sim.html#module-fmdtools.sim.sample">fmdtools.sim.sample</a></li>
+<li class="toctree-l3"><a class="reference internal" href="fmdtools.sim.html#module-fmdtools.sim.search">fmdtools.sim.search</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="fmdtools.analyze.html">fmdtools.analyze</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="fmdtools.analyze.html#module-fmdtools.analyze.common">fmdtools.analyze.common</a></li>
+<li class="toctree-l3"><a class="reference internal" href="fmdtools.analyze.html#module-fmdtools.analyze.result">fmdtools.analyze.result</a></li>
+<li class="toctree-l3"><a class="reference internal" href="fmdtools.analyze.html#module-fmdtools.analyze.history">fmdtools.analyze.history</a></li>
+<li class="toctree-l3"><a class="reference internal" href="fmdtools.analyze.html#module-fmdtools.analyze.graph">fmdtools.analyze.graph</a></li>
+<li class="toctree-l3"><a class="reference internal" href="fmdtools.analyze.html#module-fmdtools.analyze.tabulate">fmdtools.analyze.tabulate</a></li>
+<li class="toctree-l3"><a class="reference internal" href="fmdtools.analyze.html#module-fmdtools.analyze.phases">fmdtools.analyze.phases</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../CONTRIBUTORS.html">Contributors</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../CONTRIBUTORS.html#internal-contributors">Internal Contributors</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../CONTRIBUTORS.html#external-contributors">External Contributors</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../CONTRIBUTORS.html#alumni-and-interns">Alumni and Interns</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../CONTRIBUTORS.html#fmdtools-at-osu">fmdtools at OSU</a></li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">fmdtools</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="fmdtools.html">Module Reference</a></li>
+      <li class="breadcrumb-item active">fmdtools.define</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/docs/fmdtools.define.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="module-fmdtools.define">
+<span id="fmdtools-define"></span><h1>fmdtools.define<a class="headerlink" href="#module-fmdtools.define" title="Permalink to this heading"></a></h1>
+<p>The define package provides the building blocks to develop a simulation. Simulations are defined in the sub-classes of the <code class="xref py py-class docutils literal notranslate"><span class="pre">Simulable</span></code> class (in the <code class="xref py py-mod docutils literal notranslate"><span class="pre">block</span></code> and <code class="xref py py-mod docutils literal notranslate"><span class="pre">architecture</span></code> subpackages), as shown below:</p>
+<figure class="align-default" id="id1">
+<a class="reference internal image-reference" href="../_images/block_inheritance.svg"><img alt="Inheritance of simulable fmdtools classes" src="../_images/block_inheritance.svg" width="800" /></a>
+<figcaption>
+<p><span class="caption-text">Structure of simulable fmdtools subclasses used for developing simulations.</span><a class="headerlink" href="#id1" title="Permalink to this image"></a></p>
+</figcaption>
+</figure>
+<p>Aside from their internal methods defining behavior, events/indicators, and results, Simulations are additionally composed of internal containers (or sub-attributes) of the class which are defined in their own class.</p>
+<p><strong>Submodule Links</strong></p>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="fmdtools.define.architecture.html">fmdtools.define.architecture</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="fmdtools.define.architecture.html#fmdtools-define-architecture-base">fmdtools.define.architecture.base</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="fmdtools.define.architecture.html#classes">Classes</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="fmdtools.define.architecture.html#fmdtools-define-architecture-action">fmdtools.define.architecture.action</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="fmdtools.define.architecture.html#id1">Classes</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="fmdtools.define.architecture.html#fmdtools-define-architecture-component">fmdtools.define.architecture.component</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="fmdtools.define.architecture.html#id2">Classes</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="fmdtools.define.architecture.html#fmdtools-define-architecture-function">fmdtools.define.architecture.function</a></li>
+<li class="toctree-l2"><a class="reference internal" href="fmdtools.define.architecture.html#fmdtools-define-architecture-geom">fmdtools.define.architecture.geom</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="fmdtools.define.architecture.html#id9">Classes</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="fmdtools.define.block.html">fmdtools.define.block</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="fmdtools.define.block.html#module-fmdtools.define.block.base">fmdtools.define.block.base</a></li>
+<li class="toctree-l2"><a class="reference internal" href="fmdtools.define.block.html#module-fmdtools.define.block.action">fmdtools.define.block.action</a></li>
+<li class="toctree-l2"><a class="reference internal" href="fmdtools.define.block.html#module-fmdtools.define.block.component">fmdtools.define.block.component</a></li>
+<li class="toctree-l2"><a class="reference internal" href="fmdtools.define.block.html#module-fmdtools.define.block.function">fmdtools.define.block.function</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="fmdtools.define.container.html">fmdtools.define.container</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="fmdtools.define.container.html#fmdtools-define-container-base">fmdtools.define.container.base</a></li>
+<li class="toctree-l2"><a class="reference internal" href="fmdtools.define.container.html#module-fmdtools.define.container.mode">fmdtools.define.container.mode</a></li>
+<li class="toctree-l2"><a class="reference internal" href="fmdtools.define.container.html#fmdtools-define-container-state">fmdtools.define.container.state</a></li>
+<li class="toctree-l2"><a class="reference internal" href="fmdtools.define.container.html#fmdtools-define-container-parameter">fmdtools.define.container.parameter</a></li>
+<li class="toctree-l2"><a class="reference internal" href="fmdtools.define.container.html#module-fmdtools.define.container.rand">fmdtools.define.container.rand</a></li>
+<li class="toctree-l2"><a class="reference internal" href="fmdtools.define.container.html#module-fmdtools.define.container.time">fmdtools.define.container.time</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="fmdtools.define.flow.html">fmdtools.define.flow</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="fmdtools.define.flow.html#fmdtools-define-flow-base">fmdtools.define.flow.base</a></li>
+<li class="toctree-l2"><a class="reference internal" href="fmdtools.define.flow.html#module-fmdtools.define.flow.multiflow">fmdtools.define.flow.multiflow</a></li>
+<li class="toctree-l2"><a class="reference internal" href="fmdtools.define.flow.html#module-fmdtools.define.flow.commsflow">fmdtools.define.flow.commsflow</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="fmdtools.define.object.html">fmdtools.define.object</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="fmdtools.define.object.html#module-fmdtools.define.object.base">fmdtools.define.object.base</a></li>
+<li class="toctree-l2"><a class="reference internal" href="fmdtools.define.object.html#module-fmdtools.define.object.timer">fmdtools.define.object.timer</a></li>
+<li class="toctree-l2"><a class="reference internal" href="fmdtools.define.object.html#module-fmdtools.define.object.geom">fmdtools.define.object.geom</a></li>
+<li class="toctree-l2"><a class="reference internal" href="fmdtools.define.object.html#module-fmdtools.define.object.coords">fmdtools.define.object.coords</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<section id="fmdtools-define-base">
+<h2>fmdtools.define.base<a class="headerlink" href="#fmdtools-define-base" title="Permalink to this heading"></a></h2>
+<p>Common methods and data structures are kept in <code class="xref py py-mod docutils literal notranslate"><span class="pre">base</span></code>.</p>
+<span class="target" id="module-fmdtools.define.base"></span><p>Description: A module for methods used commonly in model definition constructs.</p>
+<p>Functions contained in this module:</p>
+<ul class="simple">
+<li><p><a class="reference internal" href="#fmdtools.define.base.get_var" title="fmdtools.define.base.get_var"><code class="xref py py-func docutils literal notranslate"><span class="pre">get_var()</span></code></a>:Gets the variable value of the object</p></li>
+<li><p><a class="reference internal" href="#fmdtools.define.base.set_var" title="fmdtools.define.base.set_var"><code class="xref py py-func docutils literal notranslate"><span class="pre">set_var()</span></code></a>:Sets variable of the object to a given value</p></li>
+<li><p><a class="reference internal" href="#fmdtools.define.base.is_iter" title="fmdtools.define.base.is_iter"><code class="xref py py-func docutils literal notranslate"><span class="pre">is_iter()</span></code></a>: Checks whether a data type should be interpreted as an iterable or not.</p></li>
+<li><p><a class="reference internal" href="#fmdtools.define.base.t_key" title="fmdtools.define.base.t_key"><code class="xref py py-func docutils literal notranslate"><span class="pre">t_key()</span></code></a>:Used to generate keys for a given (float) time that is queryable as an attribute of an object/dict</p></li>
+</ul>
+<dl class="py function">
+<dt class="sig sig-object py" id="fmdtools.define.base.eq_units">
+<span class="sig-prename descclassname"><span class="pre">fmdtools.define.base.</span></span><span class="sig-name descname"><span class="pre">eq_units</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">rateunit</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">timeunit</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.define.base.eq_units" title="Permalink to this definition"></a></dt>
+<dd><p>Find conversion factor from rateunit (str) to timeunit (str).</p>
+<p>Options for units are: ‘sec’, ‘min’, ‘hr’, ‘day’, ‘wk’, ‘month’, and ‘year’.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="fmdtools.define.base.get_var">
+<span class="sig-prename descclassname"><span class="pre">fmdtools.define.base.</span></span><span class="sig-name descname"><span class="pre">get_var</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">obj</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">var</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.define.base.get_var" title="Permalink to this definition"></a></dt>
+<dd><p>Get the variable value of the object.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>var</strong> (<em>str/list</em>) – list specifying the attribute (or sub-attribute of the object</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>var_value</strong> – value of the variable</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>any</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="fmdtools.define.base.is_iter">
+<span class="sig-prename descclassname"><span class="pre">fmdtools.define.base.</span></span><span class="sig-name descname"><span class="pre">is_iter</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.define.base.is_iter" title="Permalink to this definition"></a></dt>
+<dd><p>Check whether a data type should be interpreted as an iterable or not.</p>
+<p>Returned as a single value or tuple/array.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="fmdtools.define.base.nest_dict">
+<span class="sig-prename descclassname"><span class="pre">fmdtools.define.base.</span></span><span class="sig-name descname"><span class="pre">nest_dict</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dic</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">levels</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">inf</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">separator</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'.'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.define.base.nest_dict" title="Permalink to this definition"></a></dt>
+<dd><p>Nest a dictionary a certain number of levels by separator.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>dict</strong> (<em>dict</em>) – Dictionary to nest. e.g. {‘a.b’: 1.0}</p></li>
+<li><p><strong>levels</strong> (<em>int</em><em>, </em><em>optional</em>) – DESCRIPTION. The default is float(‘inf’).</p></li>
+<li><p><strong>separator</strong> (<em>str</em>) – Saparator to nest by. The default is “.”</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>newhist</strong> – Nested dictionary. e.g. {‘a’: {‘b’: 1.0}}</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>dict</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="fmdtools.define.base.round_float">
+<span class="sig-prename descclassname"><span class="pre">fmdtools.define.base.</span></span><span class="sig-name descname"><span class="pre">round_float</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">number</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">res</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">min_r</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">7</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.define.base.round_float" title="Permalink to this definition"></a></dt>
+<dd><p>Round floats to a given resolution (avoiding fp errors).</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="fmdtools.define.base.set_arg_as_type">
+<span class="sig-prename descclassname"><span class="pre">fmdtools.define.base.</span></span><span class="sig-name descname"><span class="pre">set_arg_as_type</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">true_type</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">new_arg</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.define.base.set_arg_as_type" title="Permalink to this definition"></a></dt>
+<dd><p>Set a given argument as the type true_type.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>true_type</strong> (<em>class/type</em>) – Class/type to set to</p></li>
+<li><p><strong>new_arg</strong> (<em>value</em>) – Value to set as.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>new_arg</strong> – Value with correct type (if possible).</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>value</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="fmdtools.define.base.set_var">
+<span class="sig-prename descclassname"><span class="pre">fmdtools.define.base.</span></span><span class="sig-name descname"><span class="pre">set_var</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">obj</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">var</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">val</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.define.base.set_var" title="Permalink to this definition"></a></dt>
+<dd><p>Set variable of the object to a given value.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>var</strong> (<em>list/tuple of strings</em>) – list of nested attributes</p></li>
+<li><p><strong>val</strong> (<em>attr</em>) – attribute to set the value to</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>flowdict</strong> – dict of flows indexed by flownames</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>dict</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="fmdtools.define.base.t_key">
+<span class="sig-prename descclassname"><span class="pre">fmdtools.define.base.</span></span><span class="sig-name descname"><span class="pre">t_key</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">time</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.define.base.t_key" title="Permalink to this definition"></a></dt>
+<dd><p>Generate keys for a given (float) time in a queryable format.</p>
+<p>e.g. endresults.t10p0, the result at time t=10.0</p>
+</dd></dl>
+
+</section>
+<section id="module-fmdtools.define.environment">
+<span id="fmdtools-define-environment"></span><h2>fmdtools.define.environment<a class="headerlink" href="#module-fmdtools.define.environment" title="Permalink to this heading"></a></h2>
+<p>Module for creating environments.</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="fmdtools.define.environment.Environment">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">fmdtools.define.environment.</span></span><span class="sig-name descname"><span class="pre">Environment</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">glob</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[]</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">p</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">{}</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">s</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">{}</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">r</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">{}</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">c</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">{}</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ga</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">{}</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">track</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'default'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.define.environment.Environment" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="fmdtools.define.flow.html#fmdtools.define.flow.commsflow.CommsFlow" title="fmdtools.define.flow.commsflow.CommsFlow"><code class="xref py py-class docutils literal notranslate"><span class="pre">CommsFlow</span></code></a></p>
+<p>Class for representing environments (in development).</p>
+<p>Environments are CommsFlows in order to readily enable perception as well as
+sending and recieving of information. In addition to having normal flow properties,
+they also contain the roles:</p>
+<p>TODO: Properly expand create_local, update, send, recieve, etc to use ga and coords.</p>
+<dl class="simple">
+<dt>c: Coords</dt><dd><p>Representation of gridworld properties</p>
+</dd>
+<dt>r: Rand</dt><dd><p>Representaiton of random variables/rng</p>
+</dd>
+<dt>ga: GeomArch</dt><dd><p>Representaion of shapes/forms</p>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="k">class</span> <span class="nc">ExampleEnvironment</span><span class="p">(</span><span class="n">Environment</span><span class="p">):</span>
+<span class="gp">... </span>   <span class="n">coords_c</span> <span class="o">=</span> <span class="n">ExampleCoords</span>
+<span class="gp">... </span>   <span class="n">arch_ga</span> <span class="o">=</span> <span class="n">ExGeomArch</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">env</span> <span class="o">=</span> <span class="n">ExampleEnvironment</span><span class="p">(</span><span class="s1">&#39;env&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">env</span><span class="o">.</span><span class="n">create_hist</span><span class="p">([</span><span class="mf">1.0</span><span class="p">])</span>
+<span class="go">c.r.probdens:                   array(1)</span>
+<span class="go">c.st:                           array(1)</span>
+<span class="go">ga.points.ex_point:             array(1)</span>
+<span class="go">ga.lines.ex_line:               array(1)</span>
+<span class="go">ga.polys.ex_poly:               array(1)</span>
+</pre></div>
+</div>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="fmdtools.define.environment.Environment.arch_ga">
+<span class="sig-name descname"><span class="pre">arch_ga</span></span><a class="headerlink" href="#fmdtools.define.environment.Environment.arch_ga" title="Permalink to this definition"></a></dt>
+<dd><p>alias of <a class="reference internal" href="fmdtools.define.architecture.html#fmdtools.define.architecture.geom.GeomArchitecture" title="fmdtools.define.architecture.geom.GeomArchitecture"><code class="xref py py-class docutils literal notranslate"><span class="pre">GeomArchitecture</span></code></a></p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="fmdtools.define.environment.Environment.container_r">
+<span class="sig-name descname"><span class="pre">container_r</span></span><a class="headerlink" href="#fmdtools.define.environment.Environment.container_r" title="Permalink to this definition"></a></dt>
+<dd><p>alias of <a class="reference internal" href="fmdtools.define.container.html#fmdtools.define.container.rand.Rand" title="fmdtools.define.container.rand.Rand"><code class="xref py py-class docutils literal notranslate"><span class="pre">Rand</span></code></a></p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="fmdtools.define.environment.Environment.coords_c">
+<span class="sig-name descname"><span class="pre">coords_c</span></span><a class="headerlink" href="#fmdtools.define.environment.Environment.coords_c" title="Permalink to this definition"></a></dt>
+<dd><p>alias of <a class="reference internal" href="fmdtools.define.object.html#fmdtools.define.object.coords.Coords" title="fmdtools.define.object.coords.Coords"><code class="xref py py-class docutils literal notranslate"><span class="pre">Coords</span></code></a></p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="fmdtools.define.environment.Environment.copy">
+<span class="sig-name descname"><span class="pre">copy</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">glob</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[]</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">p</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">{}</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">s</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">{}</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.define.environment.Environment.copy" title="Permalink to this definition"></a></dt>
+<dd><p>Copy the Environment.</p>
+<p class="rubric">Examples</p>
+<p>Copies should be identical but independent after copying, e.g.:</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">e</span> <span class="o">=</span> <span class="n">ExampleEnvironment</span><span class="p">(</span><span class="s2">&quot;env&quot;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">e</span><span class="o">.</span><span class="n">ga</span><span class="o">.</span><span class="n">points</span><span class="p">[</span><span class="s1">&#39;ex_point&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">s</span><span class="o">.</span><span class="n">occupied</span> <span class="o">=</span> <span class="kc">True</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">e</span><span class="o">.</span><span class="n">c</span><span class="o">.</span><span class="n">st</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span>
+</pre></div>
+</div>
+<p>Given these changes, the copy should have the same states (and not default):</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">d</span> <span class="o">=</span> <span class="n">e</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">d</span><span class="o">.</span><span class="n">ga</span><span class="o">.</span><span class="n">points</span><span class="p">[</span><span class="s1">&#39;ex_point&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">s</span><span class="o">.</span><span class="n">occupied</span>
+<span class="go">True</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">d</span><span class="o">.</span><span class="n">c</span><span class="o">.</span><span class="n">st</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span>
+<span class="go">1.0</span>
+</pre></div>
+</div>
+<p>It should also be independent, meaning changes don’t effect the original:</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">d</span><span class="o">.</span><span class="n">c</span><span class="o">.</span><span class="n">st</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="mf">1.0</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">e</span><span class="o">.</span><span class="n">c</span><span class="o">.</span><span class="n">st</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">]</span>
+<span class="go">0.0</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">d</span><span class="o">.</span><span class="n">ga</span><span class="o">.</span><span class="n">lines</span><span class="p">[</span><span class="s1">&#39;ex_line&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">s</span><span class="o">.</span><span class="n">occupied</span> <span class="o">=</span> <span class="kc">True</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">e</span><span class="o">.</span><span class="n">ga</span><span class="o">.</span><span class="n">lines</span><span class="p">[</span><span class="s1">&#39;ex_line&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">s</span><span class="o">.</span><span class="n">occupied</span>
+<span class="go">False</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="fmdtools.define.environment.Environment.reset">
+<span class="sig-name descname"><span class="pre">reset</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.define.environment.Environment.reset" title="Permalink to this definition"></a></dt>
+<dd><p>Reset the flow to the initial state.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="fmdtools.define.environment.Environment.return_mutables">
+<span class="sig-name descname"><span class="pre">return_mutables</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.define.environment.Environment.return_mutables" title="Permalink to this definition"></a></dt>
+<dd><p>Return mutable properties of the flow.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="fmdtools.define.environment.Environment.status">
+<span class="sig-name descname"><span class="pre">status</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.define.environment.Environment.status" title="Permalink to this definition"></a></dt>
+<dd><p>Return a dict with the current states of the flow.</p>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="fmdtools.html" class="btn btn-neutral float-left" title="Module Reference" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="fmdtools.define.architecture.html" class="btn btn-neutral float-right" title="fmdtools.define.architecture" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright .</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
