@@ -32,7 +32,8 @@ fmdtools.egg-info/
 fmdtools_hulsed.egg-info
 
 #sphinx output
-_build/
+_build/html/*
+_build/doctrees/
 _static/
 _templates/
 LICENSE.bak
