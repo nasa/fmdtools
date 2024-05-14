@@ -1,4 +1,4 @@
-Rover Model
+Overview
 ---------------------------------------------
 
 Very basic Action Sequence Graph model
@@ -68,18 +68,3 @@ References
 - Girshfeld, I., Hulse, D., & Irshad, L. (2023). Uncovering Hazards Using a Multi-Objective Optimization to Explore the Faulty State-Space. In AIAA SCITECH 2023 Forum (p. 2578).
 
 - Irshad, L., & Hulse, D. (2023). On the Use of Resilience Models as Digital Twins for Operational Support and In-time Decision Making. In AIAA AVIATION 2023 Forum (p. 3559).
-
-
-.. toctree::
-   :hidden:
-   
-   Rover_Setup_Notebook.ipynb
-   Mode_Structure_Visualization_Tutorial.ipynb
-   FaultSample_Use-Cases.ipynb
-   ParameterSample_Use-Cases.ipynb
-   HFAC_Analyses/HFAC_Analyses.ipynb
-   HFAC_Analyses/IDETC_Human_Paper_Analysis.ipynb
-   degradation_modelling/Degradation_Modelling_Notebook.ipynb
-   fault_sampling/Rover_Mode_Notebook.ipynb
-   optimization/Search_Comparison.ipynb
-   optimization/Rover_Response_Optimization.ipynb

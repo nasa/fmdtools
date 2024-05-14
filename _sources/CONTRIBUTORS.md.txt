@@ -4,13 +4,15 @@
   <img src="https://contrib.rocks/image?repo=nasa/fmdtools" />
 </a>
 
-Internal Contributors
+The fmdtools library is developed by small team of developers at NASA Ames Research Center, along with external open-source contributors.
+
+NASA Contributors
 ------------------
 
 * [Daniel Hulse](https://github.com/hulsed), team lead and point-of-contact
 * [Lukman Irshad](https://www.researchgate.net/profile/Lukman-Irshad), contributor 
 * [Sequoia Andrade](https://github.com/sequoiarose), contributor 
-* Hannah Walsh, contributor 
+* [Hannah Walsh](https://github.com/walshh), contributor 
 * [Chris Teubert](https://github.com/teubert), contributor
 
 External Contributors
@@ -22,7 +24,7 @@ Alumni and Interns
 ------------------
 
 * Inga Girshfeld
-* Cole Jetton
+* [Cole Jetton](https://github.com/ColeJetton)
 
 fmdtools at OSU
 -------------------------

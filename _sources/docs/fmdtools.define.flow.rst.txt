@@ -4,7 +4,7 @@ fmdtools.define.flow
 
 The flow subpackage provides a representation of flows, which are used to connect Blocks in an Architecture. Different types of flows are provided in the following modules, as shown below/
 
-.. figure:: figures/Flowtypes.svg
+.. figure:: figures/uml/Flowtypes.svg
    :width: 400
    :alt: Inheritance of flow types classes
    
@@ -23,7 +23,7 @@ fmdtools.define.flow.base
 Flow classes are used to represent variables that are shared between blocks, such as connections or a shared environment. Like blocks, flows (see example below) can hold containers (e.g., States, Parameters, etc.) in order to represent different properties:
  
 
-.. figure:: figures/Flow.svg
+.. figure:: figures/uml/Flow.svg
    :width: 800
    :alt: example flow class
    

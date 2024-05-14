@@ -1,4 +1,4 @@
-Tank Model
+Overview
 ---------------------------------------------
 
 The tank example is a fairly simple model of a tank, inlet valve, and outlet valve. This example is shown in the following notebooks.
@@ -41,8 +41,3 @@ References
 
 - Hulse, D., and Hoyle, C. (August 8, 2022). "Understanding Resilience Optimization Architectures: Alignment and Coupling in Multilevel Decomposition Strategies." ASME. J. Mech. Des. November 2022; 144(11): 111704. https://doi.org/10.1115/1.4054993
 
-.. toctree::
-   :hidden:
-   
-   Tank_Analysis.ipynb
-   Tank_Optimization.ipynb

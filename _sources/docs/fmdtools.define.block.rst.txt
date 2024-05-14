@@ -43,7 +43,7 @@ Functions are used to represent overall system functionality and behaviors (i.e.
 
 Functions are defined by extending the Function class, which may then be instantiated, as shown below:
 
-.. figure:: figures/Function.svg
+.. figure:: figures/uml/Function.svg
    :width: 800
    :alt: Structure of a Function Class
    
@@ -51,7 +51,7 @@ Functions are defined by extending the Function class, which may then be instant
 
 To define a function class, it can be helpful to use this code template:
 
-.. figure:: figures/fxnblock_structure.png
+.. figure:: figures/powerpoint/fxnblock_structure.png
    :width: 800
    :alt: Structure of a Function Class
    

@@ -1,7 +1,7 @@
 Module Reference
 ================
 
-.. image:: figures/module_organization.svg
+.. image:: figures/uml/module_organization.svg
    :width: 800
 
 The fmdtools package is split into three subpackages for design, simulation, and analysis. As shown above:

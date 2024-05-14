@@ -1,4 +1,4 @@
-Drone Model
+Overview
 ---------------------------------------------
 
 Multiple drone models to demonstrate various capabilities of fmdtools.
@@ -58,10 +58,3 @@ References
 - Hulse, D., Biswas, A., Hoyle, C., Tumer, I. Y., Kulkarni, C., & Goebel, K. (2021). Exploring architectures for integrated resilience optimization. Journal of Aerospace Information Systems, 18(10), 665-678. https://doi.org/10.2514/1.I010942
 
 - Hulse, D, Zhang, H, & Hoyle, C. "Understanding Resilience Optimization Architectures With an Optimization Problem Repository." Proceedings of the ASME 2021 International Design Engineering Technical Conferences and Computers and Information in Engineering Conference. Volume 3A: 47th Design Automation Conference (DAC). Virtual, Online. August 17–19, 2021. V03AT03A039. ASME. https://doi.org/10.1115/DETC2021-70985
-
-.. toctree::
-   :hidden:
-   
-   Demonstration.ipynb
-   Urban_Drone_Demo.ipynb
-   Multirotor_Optimization.ipynb
