@@ -188,9 +188,9 @@ Notice the definitions and structure:
 
 # More Resources for Model Definition
 
-- Note the docs for model definition are in https://nasa.github.io/fmdtools/docs/fmdtools.define.html
+- Note the docs for model definition are in [https://nasa.github.io/fmdtools/docs/fmdtools.define.html](https://nasa.github.io/fmdtools/docs/fmdtools.define.html)
 
-- Other examples also can be helpful: https://nasa.github.io/fmdtools/docs/Examples.html
+- Other examples also can be helpful: [https://nasa.github.io/fmdtools/examples/Examples.html](https://nasa.github.io/fmdtools/examples/Examples.html)
 
 -----------------
 
@@ -319,7 +319,7 @@ See docs for: [`fmdtools.analyze`](https://nasa.github.io/fmdtools/docs/fmdtools
 
 # Further Reading/Links
 
-- More advanced topics ([see examples](https://nasa.github.io/fmdtools/docs/Examples.html)):
+- More advanced topics ([see examples](../examples/Examples.rst)):
     - Search and optimization
     - Human/AI Modeling
     - Systems-of-Systems modeling
