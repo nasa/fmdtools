@@ -1,6 +1,6 @@
 .. _asg_demo_readme
 
-ASG Model
+Overview
 ---------------------------------------------
 
 Very basic Action Sequence Graph model used to demonstrate the use of the :class:`fmdtools.define.architecture.action.ActionArchitecture` class.
@@ -19,9 +19,3 @@ Notebooks
 /////////////////////////////////////////////
 
 `Action Sequence Graph <Action_Sequence_Graph.ipynb>`_ shows a very basic example of using the :class:`fmdtools.define.architecture.action.ActionArchitecture` structure to define sequences of actions or modes, which is helpful for modeling human and autonomous behaviors.
-
-
-.. toctree::
-   :hidden:
-   
-   Action_Sequence_Graph.ipynb

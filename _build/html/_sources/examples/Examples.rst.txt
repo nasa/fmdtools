@@ -12,6 +12,12 @@ Pump
    :hidden:
    
    ../examples/pump/readme.rst
+   ../examples/pump/Tutorial_complete.ipynb
+   ../examples/pump/Pump_Example_Notebook.ipynb
+   ../examples/pump/Parallelism_Tutorial.ipynb
+   ../examples/pump/Optimization.ipynb
+   ../examples/pump/Stochastic_Modelling.ipynb
+   ../examples/pump/AST_Sampling.ipynb
 
 Multirotor
 +++++++++++++++++++++++++++++++++++++++++++++
@@ -22,6 +28,9 @@ Multirotor
    :hidden:
 
    ../examples/multirotor/readme.rst
+   ../examples/multirotor/Demonstration.ipynb
+   ../examples/multirotor/Urban_Drone_Demo.ipynb
+   ../examples/multirotor/Multirotor_Optimization.ipynb
  
 Tank
 +++++++++++++++++++++++++++++++++++++++++++++
@@ -32,6 +41,8 @@ Tank
    :hidden:
    
    ../examples/tank/readme.rst
+   ../examples/tank/Tank_Analysis.ipynb
+   ../examples/tank/Tank_Optimization.ipynb
 
 
 EPS
@@ -43,6 +54,7 @@ EPS
    :hidden:
    
    ../examples/eps/readme.rst
+   ../examples/eps/EPS_Example_Notebook.ipynb
 
 Action Sequence Graph
 +++++++++++++++++++++++++++++++++++++++++++++
@@ -53,6 +65,7 @@ Action Sequence Graph
    :hidden:
    
    ../examples/asg_demo/readme.rst
+   ../examples/asg_demo/Action_Sequence_Graph.ipynb
 
 Rover
 +++++++++++++++++++++++++++++++++++++++++++++
@@ -63,6 +76,16 @@ Rover
    :hidden:
    
    ../examples/rover/readme.rst
+   ../examples/rover/Rover_Setup_Notebook.ipynb
+   ../examples/rover/Model_Structure_Visualization_Tutorial.ipynb
+   ../examples/rover/FaultSample_Use-Cases.ipynb
+   ../examples/rover/ParameterSample_Use-Cases.ipynb
+   ../examples/rover/HFAC_Analyses/HFAC_Analyses.ipynb
+   ../examples/rover/HFAC_Analyses/IDETC_Human_Paper_Analysis.ipynb
+   ../examples/rover/degradation_modelling/Degradation_Modelling_Notebook.ipynb
+   ../examples/rover/fault_sampling/Rover_Mode_Notebook.ipynb
+   ../examples/rover/optimization/Search_Comparison.ipynb
+   ../examples/rover/optimization/Rover_Response_Optimization.ipynb
 
 Multiflow Demo
 +++++++++++++++++++++++++++++++++++++++++++++
@@ -84,3 +107,4 @@ Taxiway
    :hidden:
    
    ../examples/taxiway/readme.rst
+   ../examples/taxiway/Paper_Notebook.ipynb
