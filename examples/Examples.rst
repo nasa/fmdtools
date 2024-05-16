@@ -90,7 +90,7 @@ Rover
 Multiflow Demo
 +++++++++++++++++++++++++++++++++++++++++++++
 
-`/examples/multiflow_demo <../examples/multiflow_demo/readme.rst>`_ provides a is limited to the model in the file `multiflow_demo.py`, which shows basic usage of the :class:`fmdtools.define.flow.multiflow.MultiFlow` and :class:`fmdtools.define.flow.commsflow.CommsFlow` flow classes.
+`/examples/multiflow_demo <../examples/multiflow_demo/readme.rst>`_ provides a is limited to the model in the file `multiflow_demo.py`, which shows basic usage of the :class:`~fmdtools.define.flow.multiflow.MultiFlow` and :class:`~fmdtools.define.flow.commsflow.CommsFlow` flow classes.
 
 .. toctree::
    :hidden:

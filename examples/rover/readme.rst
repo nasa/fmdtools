@@ -26,21 +26,21 @@ Notebooks
 
 - `Rover Setup Notebook <Rover_Setup_Notebook.ipynb>`_ , which introduces the model and basic usages.
 
-- `Defining and Visualizing fmdtools Model Structures <Model_Structure_Visualization_Tutorial.ipynb>`_ is helpful for understanding how a given model simulates over time. It covers the class  :class:`fmdtools.analyze.graph.Graph` and containing methods.
+- `Defining and Visualizing fmdtools Model Structures <Model_Structure_Visualization_Tutorial.ipynb>`_ is helpful for understanding how a given model simulates over time. It covers the class  :class:`~fmdtools.analyze.graph.Graph` and containing methods.
 
 - `Defining Parameter Samples in fmdtools <ParameterSample_Use-Cases.ipynb>`_ , which covers simulating the model at different parameters in nominal/faulty scenarios. This includes:
 
-  - Setting up a nominal parameter sampling approach using :class:`fmdtools.sim.sample.ParameterSample` and simulating it with :func:`fmdtools.sim.propagate.parameter_sample()` and :func:`fmdtools.sim.propagate.nested_sample()` methods for nominal and faulty simulations.
+  - Setting up a nominal parameter sampling approach using :class:`~fmdtools.sim.sample.ParameterSample` and simulating it with :func:`~fmdtools.sim.propagate.parameter_sample()` and :func:`~fmdtools.sim.propagate.nested_sample()` methods for nominal and faulty simulations.
 
-  - Using analysis classes like :func:`fmdtools.analyze.tabulate.NominalEnvelope` and :func:`fmdtools.analyze.tabulate.Comparison` to visualize quantities of interest for the simulation over a range of nominal parameters.
+  - Using analysis classes like :func:`~fmdtools.analyze.tabulate.NominalEnvelope` and :func:`~fmdtools.analyze.tabulate.Comparison` to visualize quantities of interest for the simulation over a range of nominal parameters.
   
 - `Defining Fault Sampling Approaches in fmdtools <FaultSample_Use-Cases.ipynb>`_ covers how to set up a fault sampling approach and use it to simulate a large number of hazardous scenarios in a model. This includes:
 
-  - Adding fault and operational modes to Model functions using the class :class:`fmdtools.define.container.mode.Mode` and explanation of the `phases` and `exclusive` options.
+  - Adding fault and operational modes to Model functions using the class :class:`~fmdtools.define.container.mode.Mode` and explanation of the `phases` and `exclusive` options.
   
-  - Using :func:`fmdtools.analyze.phases.from_hist` to setting a :class:`fmdtools.sim.sample.SampleApproach` up which samples individual faults based on the phases of the model and/or function defined by their operational modes.
+  - Using :func:`~fmdtools.analyze.phases.from_hist` to setting a :class:`~fmdtools.sim.sample.SampleApproach` up which samples individual faults based on the phases of the model and/or function defined by their operational modes.
 
-  - Using :func:`fmdtools.analyze.phases.PhaseMap` to visualize the phases and modes of a model over time and to visualize the consequences of each fault scenario in the approach within each phase.
+  - Using :func:`~fmdtools.analyze.phases.PhaseMap` to visualize the phases and modes of a model over time and to visualize the consequences of each fault scenario in the approach within each phase.
   
   - Using the `defaultsamp` option to control how many time-steps in each phase are sampled (and when).
 
@@ -52,7 +52,7 @@ Notebooks
   
 - `Search_Comparison <optimization/Search_Comparison.ipynb>`_ shows an (in-development) method for searching the faulty state-space to find a unique set of hazardous scenarios. 
   
-- `Rover Response Optimization <optimization/Rover_Response_Optimization.ipynb>`_ further demonstrates the optimization of parameters over a set of fault scenarios using :class:`fmdtools.sim.search.ProblemArchitecture`.
+- `Rover Response Optimization <optimization/Rover_Response_Optimization.ipynb>`_ further demonstrates the optimization of parameters over a set of fault scenarios using :class:`~fmdtools.sim.search.ProblemArchitecture`.
 
 References
 /////////////////////////////////////////////
