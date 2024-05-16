@@ -2,15 +2,15 @@ fmdtools.define.architecture
 ===========================
 .. automodule:: fmdtools.define.architecture
 
-The architecture subpackage provides a representation of Architectures, which may be used to represent agglomerations/interactions of blocks in an overall combined simulation.
+The architecture subpackage provides a representation of :term:`Architecture` s, which may be used to represent aggregations/interactions of blocks in an overall combined simulation.
 
 Different types of architectures are provided in the following modules:
 
-* :mod:`fmdtools.define.architecture.base`: for :class:`Architecture`, which is used as the base class for all architectures.
-* :mod:`fmdtools.define.architecture.action`: for :class:`ActionArchitecture`, which is used to represent action sequence graphs
-* :mod:`fmdtools.define.architecture.component`: for :class:`ComponentArchitecture`, which is used to represent sets of components.
-* :mod:`fmdtools.define.architecture.function`: for :class:`FunctionArchitecture`, which is used to represent functional architectures.
-* :mod:`fmdtools.define.architecture.geom`: for :class:`GeomArchitecture`, which is used to represent multiple geometries in an `Environment`.
+* :mod:`~fmdtools.define.architecture.base`: for :class:`~fmdtools.define.architecture.base.Architecture`, which is used as the base class for all architectures.
+* :mod:`~fmdtools.define.architecture.action`: for :class:`~fmdtools.define.architecture.action.ActionArchitecture`, which is used to represent action sequence graphs
+* :mod:`~fmdtools.define.architecture.component`: for :class:`~fmdtools.define.architecture.component.ComponentArchitecture`, which is used to represent sets of components.
+* :mod:`~fmdtools.define.architecture.function`: for :class:`~fmdtools.define.architecture.function.FunctionArchitecture`, which is used to represent functional architectures.
+* :mod:`~fmdtools.define.architecture.geom`: for :class:`~fmdtools.define.architecture.geom.GeomArchitecture`, which is used to represent multiple geometries in an `Environment`.
 
 fmdtools.define.architecture.base
 --------------------------------

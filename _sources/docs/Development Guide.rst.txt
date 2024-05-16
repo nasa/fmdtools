@@ -38,18 +38,19 @@ Glossary
 You can use the glossary as a reference to understand basic simulation and analysis concepts in fmdtools.
 
 .. glossary::
+	:sorted:
 
 	Function
-		A piece of functionality in a system which has its own defined behavior, modes, and flow connections, and may be further instantiated by a :term:`component architecture` or :term:`action sequence graph`. In general, functions are the main building block of a model defining how the different pieces of the system behave. Functions in fmdtools are specified by extending the :class:`fmdtools.define.block.function.Function` class.
+		A piece of functionality in a system which has its own defined behavior, modes, and flow connections, and may be further instantiated by a :term:`component architecture` or :term:`action sequence graph`. In general, functions are the main building block of a model defining how the different pieces of the system behave. Functions in fmdtools are specified by extending the :class:`~fmdtools.define.block.function.Function` class.
 		
 	Flow
-		A data structure which connects functions--traditionally energy, material, or signal. Defined using the :class:`fmdtools.define.flow.base.Flow` class.
+		A data structure which connects functions--traditionally energy, material, or signal. Defined using the :class:`~fmdtools.define.flow.base.Flow` class.
 	
 	Role
-		A defined attribute of an fmdtools class which refers to a user-defined (or default) subclass of a corresponding fmdtools data structure. For example, Blocks have the container `Block.s` (for state) which may be filled by a subclass of :class:`fmdtools.define.container.state.State`.
+		A defined attribute of an fmdtools class which refers to a user-defined (or default) subclass of a corresponding fmdtools data structure. For example, Blocks have the container `Block.s` (for state) which may be filled by a subclass of :class:`~fmdtools.define.container.state.State`.
 
 	Internal Flow
-		A flow object that is internal to a :class:`fmdtools.define.block.function.Function` which is not present in the overall model definition.
+		A flow object that is internal to a :class:`~fmdtools.define.block.function.Function` which is not present in the overall model definition.
 	
 	Model
 		A simulation that defines system behavior. Models contain functions and flows, their graph connections, parameters related to the simulation configuration, as well as methods for classifying simulations. 
@@ -58,16 +59,16 @@ You can use the glossary as a reference to understand basic simulation and analy
 		How the states of a system unfold over time, including in the various :term:`mode` s it may encounter. Defined in :term:`Function` s, :term:`Component` s, and :term:`Action` s using :meth:`fmdtools.define.Block.behavior`, :meth:`fmdtools.define.Block.static_behavior`, :meth:`fmdtools.define.Block.dynamic_behavior`, and :meth:`fmdtools.define.Block.condfaults`
 	
 	Graph
-		A view of simulation construct connections and/or relationships embodied by the :class:`fmdtools.analyze.graph.Graph` class and sub-classes (which uses networkx to represent the structure itself).
+		A view of simulation construct connections and/or relationships embodied by the :class:`~fmdtools.analyze.graph.Graph` class and sub-classes (which uses networkx to represent the structure itself).
 	
 	Component
-		A physical component that embodies specific behavior for a :term:`function`. May have :term:`mode` s and :term:`behavior` s of its own. Specified by extending the :class:`fmdtools.define.block.component.Component` class.
+		A physical component that embodies specific behavior for a :term:`function`. May have :term:`mode` s and :term:`behavior` s of its own. Specified by extending the :class:`~fmdtools.define.block.component.Component` class.
 		
 	Component Architecture
-		The physical embodiment of a :term:`function` that encompasses multiple :term:`Component` s. Represented via the :class:`fmdtools.define.architecture.component.ComponentArchitecture` class. 
+		The physical embodiment of a :term:`function` that encompasses multiple :term:`Component` s. Represented via the :class:`~fmdtools.define.architecture.component.ComponentArchitecture` class. 
 	
 	Mode
-		Discrete modifications of a :term:`behavior` specified as entries in the :meth:`fmdtools.define.container.mode.Mode` class. Often used to control if/else statements in a :term:`behavior` method within a :term:`function`.
+		Discrete modifications of a :term:`behavior` specified as entries in the :meth:`~fmdtools.define.container.mode.Mode` class. Often used to control if/else statements in a :term:`behavior` method within a :term:`function`.
 	
 	Fault Mode
 		Undesired :term:`mode`, which leads to hazardous behavior. For example, a lamp may have "burn-out" due to a "flicker" mode.
@@ -76,7 +77,7 @@ You can use the glossary as a reference to understand basic simulation and analy
 		Defined :term:`mode` that the system progresses through as a part of its desired functioning. For example, a light switch may be in "on" and "off" modes.
 
 	Action Sequence Graph
-		An instance of the :class:`fmdtools.define.architecture.action.ActionArchitecture` which embodies a (human or autonomous) :term:`agent`'s sequence of tasks which it performs to accomplish a certain function. 
+		An instance of the :class:`~fmdtools.define.architecture.action.ActionArchitecture` which embodies a (human or autonomous) :term:`agent`'s sequence of tasks which it performs to accomplish a certain function. 
 	
 	Agent
 		An actor which controls behaviors in a system. May be modeled as a :term:`function`.
@@ -85,62 +86,62 @@ You can use the glossary as a reference to understand basic simulation and analy
 		The uncontrolled aspect of a system which may effect system inputs and behaviors. May be modeled as a :term:`function`.
 	
 	Action
-		A specific task to be performed by an :term:`agent` used to represent human/autonomous operations. May be specified by extending the :class:`fmdtools.define.block.action.Action` class and added to a :class:`fmdtools.define.block.function.Function` as a part of an Action Sequence Graph :class:`fmdtools.define.architecture.action.ActionArchitecture`.
+		A specific task to be performed by an :term:`agent` used to represent human/autonomous operations. May be specified by extending the :class:`~fmdtools.define.block.action.Action` class and added to a :class:`~fmdtools.define.block.function.Function` as a part of an Action Sequence Graph :class:`~fmdtools.define.architecture.action.ActionArchitecture`.
 	
 	Rate
-		The expected occurence (frequency) of a given :term:`mode`, which may be specified in a number of ways using :meth:`fmdtools.define.container.mode.Mode.faultmodes`.
+		The expected occurence (frequency) of a given :term:`mode`, which may be specified in a number of ways in the :class:`fmdtools.define.container.mode.Mode` class.
 		
 	Cost
-		A metric used to define severity of a scenario. While cost is defined in a monetary sense, it should often be defined holistically to account for indirect costs and externalities (e.g., safety, disruption, etc). One of the default outputs from :meth:`fmdtools.define.block.base.Simulabl.find_classification()` for models or blocks.
+		A metric used to define severity of a scenario. While cost is defined in a monetary sense, it should often be defined holistically to account for indirect costs and externalities (e.g., safety, disruption, etc). One of the default outputs from :meth:`fmdtools.define.block.base.Simulable.find_classification()` for models or blocks.
 		
 	Expected Cost
 		A metric used to define risk of a scenario, calculated my multiplying the :term:`rate` and :term:`cost`.
 		
 	Endclass
-		The end-state classification given from :meth:`fmdtools.define.block.base.Simulabl.find_classification()`.
+		The end-state classification given from :meth:`fmdtools.define.block.base.Simulable.find_classification()`.
 	
 	Scenario
-		A specific set of inputs to a simulation, including :term:`parameters`, :term:`Fault Mode` s, and :term:`Disturbances`. Defined in :class:`fmdtools.sim.scenario.Scenario`.
+		A specific set of inputs to a simulation, including :term:`parameters`, :term:`Fault Mode` s, and :term:`Disturbances`. Defined in :class:`~fmdtools.sim.scenario.Scenario`.
 		
 	Disturbances
 		A specific sequence of variable values over time which may modify system behavior.
 
 	Sample
-		A set of :term:`scenario` s to simulate a model over to represent certain hazards or parameters of interest. May be generated using :class:`fmdtools.sim.sample.FaultSample` for fault modes or :class:`fmdtools.sim.sample.ParameterSample` for nominal parameters. 
+		A set of :term:`scenario` s to simulate a model over to represent certain hazards or parameters of interest. May be generated using :class:`~fmdtools.sim.sample.FaultSample` for fault modes or :class:`~fmdtools.sim.sample.ParameterSample` for nominal parameters. 
 	
 	Nested Approach
-		The result of simulating a fault sampling :term:`Approach` (:class:`fmdtools.sim.sample.SampleApproach`) within a nominal :term:`Approach` (:class:`fmdtools.sim.sample.ParameterSample`). Created in :func:`fmdtools.sim.propagate.nested_sample()`.
+		The result of simulating a fault sampling :term:`Approach` (:class:`~fmdtools.sim.sample.SampleApproach`) within a nominal :term:`Approach` (:class:`~fmdtools.sim.sample.ParameterSample`). Created in :func:`~fmdtools.sim.propagate.nested_sample()`.
 	
 	Static Propagation
-		The undirected propagation of model behaviors within a timestep. Defined for each function using :meth:`fmdtools.define.block.Function.static_behavior`, which may run multiple times in a timestep until behavior has converged. The static :term:`behavior` s are propagated through the graph using the method :meth:`fmdtools.define.architecture.function.FunctionArchitecture.prop_static()`.
+		The undirected propagation of model behaviors within a timestep. Defined for each function using :meth:`fmdtools.define.block.Function.static_behavior`, which may run multiple times in a timestep until behavior has converged. The static :term:`behavior` s are propagated through the graph using the method :meth:`~fmdtools.define.architecture.function.FunctionArchitecture.prop_static()`.
 	
 	
 	Dynamic Propagation
-		The progression of model states over time. Defined for each function using :meth:`fmdtools.define.block.Function.dynamic_behavior`, which runs once per timestep. The dynamic :term:`behavior` s are propagated using the method :meth:`fmdtools.define.block.Function.static_behavior`, which may run multiple times in a timestep until behavior has converged. The static :term:`behavior` s are propagated through the graph using the method :meth:`fmdtools.define.architecture.function.FunctionArchitecture.propagate()`.
+		The progression of model states over time. Defined for each function using :meth:`fmdtools.define.block.Function.dynamic_behavior`, which runs once per timestep. The dynamic :term:`behavior` s are propagated using the method :meth:`fmdtools.define.block.Function.static_behavior`, which may run multiple times in a timestep until behavior has converged. The static :term:`behavior` s are propagated through the graph using the method :meth:`~fmdtools.define.architecture.function.FunctionArchitecture.propagate()`.
 	
 	Propagation
-		The simulation of :class:`fmdtools.define.architecture.function.FunctionArchitecture` :term:`behavior` s, including the passing of :term:`flow` s between :term:`function` s and the progression of model states over time.
+		The simulation of :class:`~fmdtools.block.base.Simulable` :term:`behavior` s, including the passing of :term:`flow` s between :term:`function` s and the progression of model states over time.
 	
 	Resilience
 		The expectation of defined performance metrics over time over a set of hazardous :term:`scenario` s, often defined in terms of the deviation from their nominal values.
 	
 	End-state
-		The state of a :class:`fmdtools.define.block.base.Simulable` at the final time-step of a simulation.
+		The state of a :class:`~fmdtools.define.block.base.Simulable` at the final time-step of a simulation.
 	
 	FMEA
-		A table outlining the risks of hazardous :term:`scenario` s in terms of their rate, severity, and expected risk. By default, the :mod:`fmdtools.analyze.tabulate` module produces cost-based FMEAS, with the metrics of interest being :term:`rate`, :term:`cost`, and :term:`expected cost`, however these functions can be tailored to the metrics of interest.
+		A table outlining the risks of hazardous :term:`scenario` s in terms of their rate, severity, and expected risk. By default, the :mod:`~fmdtools.analyze.tabulate` module produces cost-based FMEAS, with the metrics of interest being :term:`rate`, :term:`cost`, and :term:`expected cost`, however these functions can be tailored to the metrics of interest.
 	
 	Behavior Over Time
 		How a the states of a system unfold over time. Defined using :term:`behavior`.
 	
 	Model History
-		A history of model states over a set of timesteps defined in :class:`fmdtools.analyze.history.History`. Returned in fmdtools as a nested dictionary from methods in :mod:`fmdtools.sim.propagate`.
+		A history of model states over a set of timesteps defined in :class:`~fmdtools.analyze.history.History`. Returned in fmdtools as a nested dictionary from methods in :mod:`~fmdtools.sim.propagate`.
 
 	FRDL
 		See: :term:`Functional Reasoning Design Language`.
 
 	Architecture
-		Composition of blocks. Defined using :class:`fmdtools.define.architecture.base.Architecture` and its sub-classes.
+		Composition of blocks. Defined using :class:`~fmdtools.define.architecture.base.Architecture` and its sub-classes.
 
 	Functional Reasoning Design Language
 		Language used to define/represent the network structure and behavioral propagation of an :term:`Architecture`.
@@ -182,7 +183,7 @@ The advantages of inheritance are:
 
 In fmdtools, these patterns can be helpful:
 
-* Instead of creating two very similar :class:`fmdtools.define.block.function.Function` classes (e.g. Drone and PilotedAircraft) and copying code between each, create a single class (e.g. Aircraft) with common methods/structures (e.g., Fly, Taxi, Park, etc.) and then use sub-classes to extend and/or replace methods/structures in the common class as needed (e.g., Autonomous Navigation in the Drone vs. Piloted Navigation in the normal aircraft).
+* Instead of creating two very similar :class:`~fmdtools.define.block.function.Function` classes (e.g. Drone and PilotedAircraft) and copying code between each, create a single class (e.g. Aircraft) with common methods/structures (e.g., Fly, Taxi, Park, etc.) and then use sub-classes to extend and/or replace methods/structures in the common class as needed (e.g., Autonomous Navigation in the Drone vs. Piloted Navigation in the normal aircraft).
 * Instead copying code for the same operations to several different places in a model, write a single function instead. This method can then be documented/tested and extended to a variety of different use-cases which require the same basic operation to be done. 
 
 This is an incomplete list. In general, it can be a helpful limitation to *try to avoid using copy-and-paste as much as possible.* Instead if a piece of code needs to be run more than once in more than once place, write a function or method which will be used everywhere. The idea should be to *write the code once, and run it everywhere.*
@@ -205,7 +206,7 @@ For fmdtools models, documentation should at the very least take the following f
 * Docstrings document the classes and functions which make up your model. These are most important for development and should include:
 	* An overall module description (top of file)
 	* Docstrings for flows: What does the state represent? What are the states? What values may these take?
-	* Docstrings for :class:`fmdtools.define.block.function.Function`: What are the states, parameters, behaviors, and modes?
+	* Docstrings for :class:`~fmdtools.define.block.function.Function`: What are the states, parameters, behaviors, and modes?
 	* For any method/function, try to follow existing docstring conventions, with a summary of the purpose/behavior of the method, and a description of all input/output data types.
 
 Documentation can best be thought of as a *contract that your code should fulfill*. As such, it can be very helpful to think of the documentation first, as a way of specifying your work. Tests (formal and informal) can then be defined based on the stated behavior of the function. It is thus recommended to *document your code as you write it*, instead of waiting until the end of the development process, to avoid technical debt. 
@@ -233,7 +234,7 @@ Preserve your prototype setup by formalizing it as a test
 
 Testing code is something which is often neglected in the development process, as something to do when the project is finished (i.e., as an assurance rather than development task). Simultaneously, developers often iterate over temporary scripts and code snippets during development to ensure that it works as expected in what is essentially an informal testing process. The major problem with this process is that these tests are easily lost and are only run one at a time, making it difficult to verify that code works after it has been modified.
 
-Instead, it is best to *formalize scripts into tests*. This can be done with Python's `unittest <https://docs.python.org/3/library/unittest.html>`_ module, which integrates well with existing python IDEs and enables execution of several different tests in a sequence. Instead of losing prototype code, one can easily place this code into a `test_X` method and use it iteratively in the development process to ensure that the code still works as intended. This is true even for more "qualitative" prototype script, where the output that is being iterated over is a plot of results. Rather than abandoning a prototyping setup like this, (e.g., by commenting it out), a much better approach is to formalize the script as a test which can be run at the will of the user when desired. In this case, the plot should show the analysis and describe expected results so that it can be quickly verified. The testing of plots is enabled with the function :func:`fmdtools.analyze.common.suite_for_plots`, which enables you to filter plotting tests out of a model's test suite (or specify only running specific tests/showing specific plots). 
+Instead, it is best to *formalize scripts into tests*. This can be done with Python's `unittest <https://docs.python.org/3/library/unittest.html>`_ module, which integrates well with existing python IDEs and enables execution of several different tests in a sequence. Instead of losing prototype code, one can easily place this code into a `test_X` method and use it iteratively in the development process to ensure that the code still works as intended. This is true even for more "qualitative" prototype script, where the output that is being iterated over is a plot of results. Rather than abandoning a prototyping setup like this, (e.g., by commenting it out), a much better approach is to formalize the script as a test which can be run at the will of the user when desired. In this case, the plot should show the analysis and describe expected results so that it can be quickly verified. The testing of plots is enabled with the function :func:`~fmdtools.analyze.common.suite_for_plots`, which enables you to filter plotting tests out of a model's test suite (or specify only running specific tests/showing specific plots). 
 
 While testing is an assurance activity, it should also be considered a development activity. Testing ensures that the changes made to code do not cause it to take on undesired behaviors, or be unable to operate with its interfacing functions. To enable tests to continue to be useful through the modelling process, they should be given meaningful names as well as descriptions describing what is being tested by the test (and why).
 
@@ -317,12 +318,12 @@ Use model constructs to simplify your code
 --------------------------------
 The fmdtools codebase is quite large, and, as a result, it can be tempting to dive into modeling before learning about all of its capabilities. The problem with this is that many of these capabilities and interfaces are there to make your life easier, provided you understand and use them correctly. Below are some commonly-misunderstood constructs to integrate into your code:
 
-* :class:`fmdtools.define.container.base.BaseContainer` has a number of very basic operations which can be used in all containers to reduce the length of lines dedicated solely to assignment and passing variables between constructs. Using these methods can furthermore enable one to more simply perform vector operations with reduced syntax.
-* :class:`fmdtools.define.object.timer.Timer` can be used very simply to represent timed behavior and state-transitions. 
-* While modes can be used to describe fault modes in a very general way, faulty behavior that can also be queried from the model using the concept of a *disturbance*, which is merely a change in a given variable value. While disturbances are less general, they require much less to be implemented in the model. Disturbances can be passed as an argument (as a dict or as a part of a Sequence class) to :meth:`fmdtools.sim.propagate.sequence()`
-* :class:`fmdtools.define.container.parameter.Parameter` and parameter-generating functions are helpful for understanding the model operating envelope. In general, try to avoid having parameters that duplicate each other in some way.
-* Randomness can be used throughout, but use the specified interfaces (:class:`fmdtools.define.container.rand.Rand`, etc.) so that a single seed is used to generate all of the rngs in the model. Not using these interfaces can lead to not being able to replicate results consistently.
-* A variety of custom attributes can be added to :class:`fmdtools.define.block.function.Function` and :class:`fmdtools.define.flow.base.Flow`, but not every custom attribute is going to work with staged execution and parallelism options. In general, use containers to represent things that change and parameters to represent things that don't change. If you want to do something fancy with data structures, you may need to re-implement :class:`fmdtools.define.block.base` methods for copying and returning states to `propagate`.
+* :class:`~fmdtools.define.container.base.BaseContainer` has a number of very basic operations which can be used in all containers to reduce the length of lines dedicated solely to assignment and passing variables between constructs. Using these methods can furthermore enable one to more simply perform vector operations with reduced syntax.
+* :class:`~fmdtools.define.object.timer.Timer` can be used very simply to represent timed behavior and state-transitions. 
+* While modes can be used to describe fault modes in a very general way, faulty behavior that can also be queried from the model using the concept of a *disturbance*, which is merely a change in a given variable value. While disturbances are less general, they require much less to be implemented in the model. Disturbances can be passed as an argument (as a dict or as a part of a Sequence class) to :meth:`~fmdtools.sim.propagate.sequence()`
+* :class:`~fmdtools.define.container.parameter.Parameter` and parameter-generating functions are helpful for understanding the model operating envelope. In general, try to avoid having parameters that duplicate each other in some way.
+* Randomness can be used throughout, but use the specified interfaces (:class:`~fmdtools.define.container.rand.Rand`, etc.) so that a single seed is used to generate all of the rngs in the model. Not using these interfaces can lead to not being able to replicate results consistently.
+* A variety of custom attributes can be added to :class:`~fmdtools.define.block.function.Function` and :class:`~fmdtools.define.flow.base.Flow`, but not every custom attribute is going to work with staged execution and parallelism options. In general, use containers to represent things that change and parameters to represent things that don't change. If you want to do something fancy with data structures, you may need to re-implement :class:`~fmdtools.define.block.base` methods for copying and returning states to `propagate`.
 * If there's something that you'd like to do in an fmdtools model that is difficult with existing model structures, consider filing a bug report before implementing an ad-hoc solution. Alternatively, try devoping your solution as a *feature* rather than a hack to solve a single use-case. If the features is in our scope and well-developed, we may try to incorporate it in our next release.
 
 Style advice
@@ -330,7 +331,7 @@ Style advice
 
 Development of fmdtools models should follow the `PEP 8 Style Guide <https://peps.python.org/pep-0008/#introduction>`_ as much as possible. While this won't be entirely re-iterated here, the following applies:
 
-* Use CamelCase for classes like :class:`fmdtools.define.architecture.function.FunctionArchitecture`, :class:`fmdtools.define.block.function.Function`, :class:`fmdtools.define.flow.base.Flow`, etc. Use lowercase for object instantiations of these classes, and lower_case_with_underscores (e.g. do_this()) for methods/functions.
+* Use CamelCase for classes like :class:`~fmdtools.define.architecture.function.FunctionArchitecture`, :class:`~fmdtools.define.block.function.Function`, :class:`~fmdtools.define.flow.base.Flow`, etc. Use lowercase for object instantiations of these classes, and lower_case_with_underscores (e.g. do_this()) for methods/functions.
 	* if a model class is named Model (e.g., Drone), the instance can be named model_X, where X is an identifying string for the model being used (e.g. drone_test). 
 * Names should be descriptive, but keep the length down. Use abbreviations if needed.
 * Try to use the code formatting structure to show what your code is doing as much as possible. Single-line if statements can be good for this, as long as they don't go too long.

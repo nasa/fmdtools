@@ -2,7 +2,7 @@ fmdtools.define
 ===========================
 .. automodule:: fmdtools.define
 
-The define package provides the building blocks to develop a simulation. Simulations are defined in the sub-classes of the :class:`Simulable` class (in the :mod:`block` and :mod:`architecture` subpackages), as shown below:
+The define package provides the building blocks to develop a simulation. Simulations are defined in the sub-classes of the :class:`~fmdtools.define.block.base.Simulable` class (in the :mod:`~fmdtools.define.block` and :mod:`~fmdtools.define.architecture` subpackages), as shown below:
 
 .. figure:: figures/uml/block_inheritance.svg
    :width: 800
@@ -15,7 +15,7 @@ Aside from their internal methods defining behavior, events/indicators, and resu
 **Submodule Links**
 
 .. toctree::
-   :maxdepth: 5
+   :maxdepth: 1
 
    fmdtools.define.architecture
    fmdtools.define.block
@@ -27,7 +27,7 @@ Aside from their internal methods defining behavior, events/indicators, and resu
 fmdtools.define.base
 --------------------------------
 
-Common methods and data structures are kept in :mod:`base`.
+Common methods and data structures are kept in :mod:`~fmdtools.define.base`.
 
 .. automodule:: fmdtools.define.base
    :members:

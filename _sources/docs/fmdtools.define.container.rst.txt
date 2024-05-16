@@ -2,7 +2,7 @@ fmdtools.define.container
 ===========================
 .. automodule:: fmdtools.define.container
 
-The containers subpackage provides the elemental building blocks (i.e., containers for holding states, modes, etc.) for developing simulations, shown below.
+The containers subpackage provides the elemental building puzzle pieces needed (i.e., containers for holding states, modes, etc.) to develop simulations, shown below.
 
 .. figure:: figures/uml/Containers.svg
    :width: 800
@@ -12,12 +12,12 @@ The containers subpackage provides the elemental building blocks (i.e., containe
 
 These classes are provided in the following modules:
 
-* :mod:`base`: for :class:`BaseContainer`, which all the other containers inherit from.
-* :mod:`mode`: for :class:`Mode`, which represents discrete modes (nominal and faulty) which the system may progress through over time,
-* :mod:`state`: for :class:`State`, which represents values of the simulation which change over time,
-* :mod:`parameter`: for :class:`Parameter`, which represents variables which do not change over time,
-* :mod:`rand`: for :class:`Rand`, which represents random states and behavior, and
-* :mod:`time`: for :class:`Time`, which represents the internal time and timers of the block.
+* :mod:`~fmdtools.define.container.base`: for :class:`~fmdtools.define.container.base.BaseContainer`, which all the other containers inherit from.
+* :mod:`~fmdtools.define.container.mode`: for :class:`~fmdtools.define.container.mode.Mode`, which represents discrete modes (nominal and faulty) which the system may progress through over time,
+* :mod:`~fmdtools.define.container.state`: for :class:`~fmdtools.define.container.state.State`, which represents values of the simulation which change over time,
+* :mod:`~fmdtools.define.container.parameter`: for :class:`~fmdtools.define.container.parameter.Parameter`, which represents variables which do not change over time,
+* :mod:`~fmdtools.define.container.rand`: for :class:`~fmdtools.define.container.rand.Rand`, which represents random states and behavior, and
+* :mod:`~fmdtools.define.container.time`: for :class:`~fmdtools.define.container.time.Time`, which represents the internal time and timers of the block.
 
 fmdtools.define.container.base
 --------------------------------
