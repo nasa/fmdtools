@@ -120,7 +120,7 @@ def clean_resultdict_keys(resultdict_dirty):
 
 
 def get_dict_attr(dict_in, des_class, *attr):
-    """Gets attributes *attr from a given nested dict dict_in of class des_class"""
+    """Get attributes *attr from a given nested dict dict_in of class des_class."""
     if len(attr) == 1:
         return dict_in[attr[0]]
     else:
@@ -128,7 +128,7 @@ def get_dict_attr(dict_in, des_class, *attr):
 
 
 def fromdict(resultclass, inputdict):
-    """Creates new history/result from given dictionary"""
+    """Create new history/result from given dictionary."""
     newhist = resultclass()
     for k, val in inputdict.items():
         if isinstance(val, dict):
@@ -139,7 +139,7 @@ def fromdict(resultclass, inputdict):
 
 
 def check_include_errors(result, to_include):
-    if type(to_include) != str:
+    if type(to_include) is not str:
         for k in to_include:
             check_include_error(result, k)
     else:
@@ -154,11 +154,12 @@ def check_include_error(result, to_include):
 
 class Result(UserDict):
     """
-    Result is a special type of dictionary that makes it convenient to store, access,
-    and load results form a model/simulation.
+    Result is a special type of dictionary for simulation results.
 
-    As a dictionary, it supports dict-based item assignement (e.g. r['x']=10) but
-    also enables convenient access via __getattr__, e.g.,:
+    The goal of the Result class is to make it convenient to store, access, and load
+    results form a model/simulation. As a dictionary, it supports dict-based item
+    assignment (e.g. r['x']=10) but also enables convenient access via __getattr__,
+    e.g.,:
 
     >>> r = Result()
     >>> r['x'] = 10
@@ -386,7 +387,13 @@ class Result(UserDict):
         """Gets a dict with all values corresponding to the strings in *values"""
         h = self.__class__()
         flatself = self.flatten()
-        k_vs = [k for k in flatself.keys() for v in values if k.endswith(v)]
+        k_vs = []
+        for v in values:
+            ks = [k for k in flatself.keys() if k.endswith(v)]
+            if not ks:
+                raise Exception("Value "+v+" not in Result keys.")
+            k_vs.append(*ks)
+
         for k in k_vs:
             h[k] = flatself[k]
         return h
