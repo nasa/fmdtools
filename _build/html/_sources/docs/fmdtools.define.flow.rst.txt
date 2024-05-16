@@ -12,9 +12,9 @@ The flow subpackage provides a representation of flows, which are used to connec
 
 These are provided in the modules:
 
-* :mod:`fmdtools.define.flow.base`: for :class:`Flow`, which is used for the base object class used for both objects and blocks/architectures.
-* :mod:`fmdtools.define.flow.multiflow`: for :class:`MultiFlow` class which represents multiple flows in a combined graph.
-* :mod:`fmdtools.define.flow.commsflow`: for :class:`CommsFlow` class which represents perception and communications between agents/functions.
+* :mod:`~fmdtools.define.flow.base`: for :class:`~fmdtools.define.flow.base.Flow`, which is used for the base object class used for both objects and blocks/architectures.
+* :mod:`~fmdtools.define.flow.multiflow`: for :class:`~fmdtools.define.flow.multiflow.MultiFlow` class which represents multiple flows in a combined graph.
+* :mod:`~fmdtools.define.flow.commsflow`: for :class:`~fmdtools.define.flow.commsflow.CommsFlow` class which represents perception and communications between agents/functions.
 
 
 fmdtools.define.flow.base

@@ -481,12 +481,12 @@
 <a class="reference internal image-reference" href="../_images/analyze_module_structure1.png"><img alt="../_images/analyze_module_structure1.png" src="../_images/analyze_module_structure1.png" style="width: 800px;" /></a>
 <p>The analyze package is organized into the modules:</p>
 <ul class="simple">
-<li><p><a class="reference internal" href="#module-fmdtools.analyze.common" title="fmdtools.analyze.common"><code class="xref py py-mod docutils literal notranslate"><span class="pre">fmdtools.analyze.common</span></code></a>, which is used for common analysis functions</p></li>
-<li><p><a class="reference internal" href="#module-fmdtools.analyze.result" title="fmdtools.analyze.result"><code class="xref py py-mod docutils literal notranslate"><span class="pre">fmdtools.analyze.result</span></code></a>, which defines the <a class="reference internal" href="#fmdtools.analyze.result.Result" title="fmdtools.analyze.result.Result"><code class="xref py py-class docutils literal notranslate"><span class="pre">fmdtools.analyze.result.Result</span></code></a> class for sim results</p></li>
-<li><p><a class="reference internal" href="#module-fmdtools.analyze.history" title="fmdtools.analyze.history"><code class="xref py py-mod docutils literal notranslate"><span class="pre">fmdtools.analyze.history</span></code></a>, which defines the <a class="reference internal" href="#fmdtools.analyze.history.History" title="fmdtools.analyze.history.History"><code class="xref py py-class docutils literal notranslate"><span class="pre">fmdtools.analyze.history.History</span></code></a> classe for tracking, saving, and processing simulation logs/histories.</p></li>
-<li><p><a class="reference internal" href="#module-fmdtools.analyze.graph" title="fmdtools.analyze.graph"><code class="xref py py-mod docutils literal notranslate"><span class="pre">fmdtools.analyze.graph</span></code></a>, which provides classes for creating and visualizing Graphs of simulation structures (and is a sort of convenience iterface for <cite>networkx</cite>/<cite>graphviz</cite> and other graphing libraries).</p></li>
-<li><p><a class="reference internal" href="#module-fmdtools.analyze.tabulate" title="fmdtools.analyze.tabulate"><code class="xref py py-mod docutils literal notranslate"><span class="pre">fmdtools.analyze.tabulate</span></code></a>, which provides functions to generate tables and visualizations of metrics of interest using (e.g., FMEAs).</p></li>
-<li><p><a class="reference internal" href="#module-fmdtools.analyze.phases" title="fmdtools.analyze.phases"><code class="xref py py-mod docutils literal notranslate"><span class="pre">fmdtools.analyze.phases</span></code></a>, which enables the analysis of phase information from model histories.</p></li>
+<li><p><a class="reference internal" href="#module-fmdtools.analyze.common" title="fmdtools.analyze.common"><code class="xref py py-mod docutils literal notranslate"><span class="pre">common</span></code></a>, which is used for common analysis functions</p></li>
+<li><p><a class="reference internal" href="#module-fmdtools.analyze.result" title="fmdtools.analyze.result"><code class="xref py py-mod docutils literal notranslate"><span class="pre">result</span></code></a>, which defines the <a class="reference internal" href="#fmdtools.analyze.result.Result" title="fmdtools.analyze.result.Result"><code class="xref py py-class docutils literal notranslate"><span class="pre">Result</span></code></a> class for sim results</p></li>
+<li><p><a class="reference internal" href="#module-fmdtools.analyze.history" title="fmdtools.analyze.history"><code class="xref py py-mod docutils literal notranslate"><span class="pre">history</span></code></a>, which defines the <a class="reference internal" href="#fmdtools.analyze.history.History" title="fmdtools.analyze.history.History"><code class="xref py py-class docutils literal notranslate"><span class="pre">History</span></code></a> class for tracking, saving, and processing simulation logs/histories.</p></li>
+<li><p><a class="reference internal" href="#module-fmdtools.analyze.graph" title="fmdtools.analyze.graph"><code class="xref py py-mod docutils literal notranslate"><span class="pre">graph</span></code></a>, which provides classes for creating and visualizing Graphs of simulation structures (and is a sort of convenience iterface for <cite>networkx</cite>/<cite>graphviz</cite> and other graphing libraries).</p></li>
+<li><p><a class="reference internal" href="#module-fmdtools.analyze.tabulate" title="fmdtools.analyze.tabulate"><code class="xref py py-mod docutils literal notranslate"><span class="pre">tabulate</span></code></a>, which provides functions to generate tables and visualizations of metrics of interest using (e.g., FMEAs).</p></li>
+<li><p><a class="reference internal" href="#module-fmdtools.analyze.phases" title="fmdtools.analyze.phases"><code class="xref py py-mod docutils literal notranslate"><span class="pre">phases</span></code></a>, which enables the analysis of phase information from model histories.</p></li>
 </ul>
 <p>The model reference for each of these is provided below:</p>
 <section id="module-fmdtools.analyze.common">
@@ -732,10 +732,11 @@ provided dict/str/list/set to_include</p></li>
 <dt class="sig sig-object py" id="fmdtools.analyze.result.Result">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">fmdtools.analyze.result.</span></span><span class="sig-name descname"><span class="pre">Result</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dict</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">/</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.analyze.result.Result" title="Permalink to this definition"></a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">UserDict</span></code></p>
-<p>Result is a special type of dictionary that makes it convenient to store, access,
-and load results form a model/simulation.</p>
-<p>As a dictionary, it supports dict-based item assignement (e.g. r[‘x’]=10) but
-also enables convenient access via __getattr__, e.g.,:</p>
+<p>Result is a special type of dictionary for simulation results.</p>
+<p>The goal of the Result class is to make it convenient to store, access, and load
+results form a model/simulation. As a dictionary, it supports dict-based item
+assignment (e.g. r[‘x’]=10) but also enables convenient access via __getattr__,
+e.g.,:</p>
 <div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">r</span> <span class="o">=</span> <span class="n">Result</span><span class="p">()</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">r</span><span class="p">[</span><span class="s1">&#39;x&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="mi">10</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">r</span>
@@ -1297,13 +1298,13 @@ filename and an individual id</p>
 <dl class="py function">
 <dt class="sig sig-object py" id="fmdtools.analyze.result.fromdict">
 <span class="sig-prename descclassname"><span class="pre">fmdtools.analyze.result.</span></span><span class="sig-name descname"><span class="pre">fromdict</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">resultclass</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">inputdict</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.analyze.result.fromdict" title="Permalink to this definition"></a></dt>
-<dd><p>Creates new history/result from given dictionary</p>
+<dd><p>Create new history/result from given dictionary.</p>
 </dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="fmdtools.analyze.result.get_dict_attr">
 <span class="sig-prename descclassname"><span class="pre">fmdtools.analyze.result.</span></span><span class="sig-name descname"><span class="pre">get_dict_attr</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dict_in</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">des_class</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">attr</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.analyze.result.get_dict_attr" title="Permalink to this definition"></a></dt>
-<dd><p>Gets attributes <a href="#id15"><span class="problematic" id="id16">*</span></a>attr from a given nested dict dict_in of class des_class</p>
+<dd><p>Get attributes <a href="#id15"><span class="problematic" id="id16">*</span></a>attr from a given nested dict dict_in of class des_class.</p>
 </dd></dl>
 
 <dl class="py function">

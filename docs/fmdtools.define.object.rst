@@ -6,10 +6,10 @@ The object subpackage provides a representation of base-level objects (i.e., tim
 
 These different object classes are provided in the following modules:
 
-* :mod:`base`: for :class:`BaseObject`, which is used for the base object class used for both objects and blocks/architectures.
-* :mod:`geom`: for :class:`Geom`, class and subclasses which represent geometric attributes.
-* :mod:`coords`: for :class:`Coords`, which is used to define coordinate systems.
-* :mod:`timer`: for :class:`Timer`, which is used to define timers (used in :class:`fmdtools.define.container.time.Time` containers).
+* :mod:`~fmdtools.define.object.base`: for :class:`~fmdtools.define.object.base.BaseObject`, which is used for the base object class used for both objects and blocks/architectures.
+* :mod:`~fmdtools.define.object.geom`: for :class:`~fmdtools.define.object.geom.Geom`, class and subclasses which represent geometric attributes.
+* :mod:`~fmdtools.define.object.coords`: for :class:`~fmdtools.define.object.coords.Coords`, which is used to define coordinate systems.
+* :mod:`~fmdtools.define.object.timer`: for :class:`~fmdtools.define.object.timer.Timer`, which is used to define timers (used in :class:`~fmdtools.define.container.time.Time` containers).
 
 fmdtools.define.object.base
 --------------------------------
