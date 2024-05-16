@@ -16,7 +16,7 @@ Scripts and tests:
 Notebooks
 /////////////////////////////////////////////
 
-- `EPS Example Notebook <EPS_Example_Notebook.ipynb>`_ demonstrates this model and some basic fmdtools methods. It shows how fmdtools can be used for purely static propagation models where dynamic states are not a concern. This is a replication of a previous simple electric power system implemented in `IBFM <https://github.com/DesignEngrLab/IBFM>_`.
+- `EPS Example Notebook <EPS_Example_Notebook.ipynb>`_ demonstrates this model and some basic fmdtools methods. It shows how fmdtools can be used for purely static propagation models where dynamic states are not a concern. This is a replication of a previous simple electric power system implemented in `IBFM <https://github.com/DesignEngrLab/IBFM>`_.
 
 References
 /////////////////////////////////////////////

@@ -8,7 +8,6 @@ TABLE OF CONTENTS
 
 .. toctree::
  :glob:
- :hidden:
  
  README
  docs/Development Guide

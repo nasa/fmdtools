@@ -35,35 +35,35 @@ Notebooks
 
 - `Pump Example Notebook <Pump_Example_Notebook.ipynb>`_ is helpful for understanding the breadth of fmdtools plotting, tabulation, and visualization capabilities. It covers:
   
-  - A variety of graphing use-cases in :mod:`fmdtools.analyze.graph` functions which enable viewing different graph types, simulation results at individual times, and overall model statistics/results.
+  - A variety of graphing use-cases in :mod:`~fmdtools.analyze.graph` functions which enable viewing different graph types, simulation results at individual times, and overall model statistics/results.
   
-  - :mod:`fmdtools.analyze.tabulate` functions for viewing simulation results over time and summarizing run information.
+  - :mod:`~fmdtools.analyze.tabulate` functions for viewing simulation results over time and summarizing run information.
   
-  - Saving/Loading `fmdtools.analyze.result.Result` data structures.
+  - Saving/Loading :class:`~fmdtools.analyze.result.Result` data structures.
   
 - `Using Parallel Computing in fmdtools <Parallelism_Tutorial.ipynb>`_ covers how to reduce computational costs for computationally-expensive simulation use-cases (e.g., sampling large numbers of fault scenarios or running complex models with large numbers of timesteps). It covers:
 
-  - Using process pools as arguments to :mod:`fmdtools.sim.propagate` methods to speed up simulation. A comparison of process pools from different external python packages are provided.
+  - Using process pools as arguments to :mod:`~fmdtools.sim.propagate` methods to speed up simulation. A comparison of process pools from different external python packages are provided.
   
   - Different options for history tracking and staged execution which can reduce computational costs when desired.
   
   - Profiling models with ``cProfile`` to discover what parts are most computationally-expensive.
 
-- `Optimization <Optimization.ipynb>`_, shows some of the basics of working with :class:`fmdtools.sim.search.DisturbanceProblem` and :class:`fmdtools.sim.search.ParameterSimProblem` classes for optimization. 
+- `Optimization <Optimization.ipynb>`_, shows some of the basics of working with :class:`~fmdtools.sim.search.DisturbanceProblem` and :class:`~fmdtools.sim.search.ParameterSimProblem` classes for optimization. 
 
-- `AST Sampling <AST_Sampling.ipynb>`_, shows how fmdtools models called from the `AdaSress Julia <https://www.nasa.gov/content/tech/rse/research/adastress>_` package to leverage the adaptive stress testing methodology using the :class:`fmdtools.sim.search.DynamicInterface` class.
+- `AST Sampling <AST_Sampling.ipynb>`_, shows how fmdtools models called from the `AdaSress Julia <https://github.com/NASA-SW-VnV/AdaStress.jl>`_ package to leverage the adaptive stress testing methodology using the :class:`~fmdtools.sim.search.DynamicInterface` class.
 
-- `Optimization.ipynb`: Showing how to use optimization methods in `fmdtools.sim.search` to optimize scenarios and responses.
+- `Optimization.ipynb`: Showing how to use optimization methods in `~fmdtools.sim.search` to optimize scenarios and responses.
 
 - `Parallelism_Tutorial.ipynb`: Shows how to use parallelism in the context of simulation using the `multiprocessing` library.
 
 - `Stochastic Modeling in fmdtools <Stochastic_Modelling.ipynb>`_ , which covers defining and simulating stochastic models--models with random internal behaviors. This includees:
 
-  - Setting up random states in functions using :class:`fmdtools.define.container.rand.Rand` and :meth:`fmdtools.define.container.rand.Rand.set_rand_state()`.
+  - Setting up random states in functions using :class:`~fmdtools.define.container.rand.Rand` and :meth:`~fmdtools.define.container.rand.Rand.set_rand_state()`.
   
-  - Simulating stochastic models using the `run_stochastic` parameter in :mod:`fmdtools.sim.propagate` functions, as well as setting up a :class:`fmdtools.sim.sample.ParameterSample` with multiple seeds to run a set of random simulations.
+  - Simulating stochastic models using the `run_stochastic` parameter in :mod:`~fmdtools.sim.propagate` functions, as well as setting up a :class:`~fmdtools.sim.sample.ParameterSample` with multiple seeds to run a set of random simulations.
   
-  - Using :meth:`fmdtools.analyze.history.History.plot_line()` to visualize the results of multiple stochastic simulations over time, and analyze quantities of interest using :class:`fmdtools.analyze.tabulate.FMEA`, :class:`fmdtools.analyze.tabulate.Comparison()`
+  - Using :meth:`~fmdtools.analyze.history.History.plot_line()` to visualize the results of multiple stochastic simulations over time, and analyze quantities of interest using :class:`~fmdtools.analyze.tabulate.FMEA`, :class:`~fmdtools.analyze.tabulate.Comparison()`
 
 
 References
