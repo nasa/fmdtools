@@ -30,15 +30,15 @@ The multirotor example model has several models of drones modeled at differing l
 
 - `fmdtools Paper Demonstration <Demonstration.ipynb>`_  is helpful for understanding how a model can be matured as more details are added, covering:
 
-  - The :mod:`fmdtools.analyze.graph` module.
+  - The :mod:`~fmdtools.analyze.graph` module.
   
-  - Basic simulation of dynamic and static models using methods in :mod:`fmdtools.sim.propagate` and usage of class :class:`fmdtools.sim.sample.SampleApproach` for fault sampling
+  - Basic simulation of dynamic and static models using methods in :mod:`~fmdtools.sim.propagate` and usage of class :class:`~fmdtools.sim.sample.SampleApproach` for fault sampling
   
   - Analysis using Basic analysis/results processing capabilities
  
-- The `Urban Drone Model <drone_mdl_urban.py>`_ is helpful for understanding how to set up gridworlds using :class:`fmdtools.define.object.coords.Coords` and an Environment class. `Urban Drone Demo <Urban_Drone_Demo.ipynb>`_ demonstrates how this gridworld can be used in simulation.
+- The `Urban Drone Model <drone_mdl_urban.py>`_ is helpful for understanding how to set up gridworlds using :class:`~fmdtools.define.object.coords.Coords` and an Environment class. `Urban Drone Demo <Urban_Drone_Demo.ipynb>`_ demonstrates how this gridworld can be used in simulation.
  
-- `Multirotor Optimization <Multirotor_Optimization.ipynb>`_ shows how the design, operations, and contingency management of a system can be co-optimized with the :class:`fmdtools.sim.search.ProblemArchitecture` class. 
+- `Multirotor Optimization <Multirotor_Optimization.ipynb>`_ shows how the design, operations, and contingency management of a system can be co-optimized with the :class:`~fmdtools.sim.search.ProblemArchitecture` class. 
 
 - The support files include various implementations of the drone model.
 
