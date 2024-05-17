@@ -32,6 +32,15 @@ fmdtools.define.container.base
 
 fmdtools.define.container.mode
 --------------------------------
+.. currentmodule:: fmdtools.define.container.mode
+
+The following template shows the basic syntax to use to define modes:
+
+.. figure:: figures/powerpoint/mode_structure.svg
+   :width: 600
+   :alt: Structure of a Mode Class
+   
+   Mode class template/example.
 
 .. automodule:: fmdtools.define.container.mode
    :members:
@@ -42,13 +51,23 @@ fmdtools.define.container.state
 --------------------------------
 .. automodule:: fmdtools.define.container.state
 
-State classes are used to represent mutables properties of the system that change over time. State classes are extended and deployed by the user, as shown below: 
+State classes are used to represent mutables properties of the system that change over time.
+
+State classes are extended and deployed by the user, as shown below: 
 
 .. figure:: figures/uml/State.svg
    :width: 600
    :alt: example state class
    
    Example of extending the :class:`State` class to hold x/y fields.
+   
+The following template shows the basic syntax used to define states:
+
+.. figure:: figures/powerpoint/state_structure.svg
+   :width: 600
+   :alt: Structure of a State Class
+   
+   State class template/example.
 
 .. autoclass:: fmdtools.define.container.state.State
    :members: State
@@ -67,6 +86,14 @@ fmdtools.define.container.parameter
    :alt: example state class
    
    Example of extending the :class:`Parameter` class to hold x/y/z fields.
+
+The following template shows the basic syntax to use to define parameters:
+
+.. figure:: figures/powerpoint/parameter_structure.svg
+   :width: 600
+   :alt: Structure of a Parameter Class
+   
+   Parameter class template/example.
 
 .. autoclass:: fmdtools.define.container.parameter.Parameter
    :members:

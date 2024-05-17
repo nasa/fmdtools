@@ -160,6 +160,17 @@ Resilience means taking a **dynamic understanding of risk and safety**
 ![formalism example](/docs/figures/powerpoint/formalism_example.png)
 
 -----------------
+# Containers - The building blocks of simulations
+![container example](/docs/figures/powerpoint/container_structures.svg)
+- Containers are used to define various attribtues of Functions and Flows
+
+-----------------
+# Flow Code Template
+![flow example](/docs/figures/powerpoint/flow_structure.svg)
+- Flows represent connections or shared variables between different functions. Think of them as Function inputs/outputs.
+- Flows are build from container classes like states, along with their own methods/variables.
+
+-----------------
 # Function Code Template
 
 ![Function Code Template](/docs/figures/powerpoint/fxnblock_structure.png)
