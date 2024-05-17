@@ -1,8 +1,10 @@
 # -*- coding: utf-8 -*-
 """
-Description: A module to define Functions.
+Defines :class:`Function` class for representing system functional behaviors.
 
+Has classes:
 - :class:`Function`: Class for defining model Functions.
+- :class:`GenericFxn`: Function class to use as a placeholder.
 """
 from decimal import Decimal
 from fmdtools.define.block.base import Block

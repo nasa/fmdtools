@@ -1,3 +1,4 @@
+"""Package for modelling system structure and behavior."""
 
 from fmdtools.define import base
 import fmdtools.define.object as object

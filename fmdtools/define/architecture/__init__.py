@@ -1,3 +1,4 @@
+"""Package for defining system :term:`Architecture`."""
 
 from fmdtools.define.architecture import base
 from fmdtools.define.architecture import function

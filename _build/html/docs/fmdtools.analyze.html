@@ -401,14 +401,14 @@
 <li class="toctree-l3"><a class="reference internal" href="fmdtools.define.container.html">fmdtools.define.container</a><ul>
 <li class="toctree-l4"><a class="reference internal" href="fmdtools.define.container.html#fmdtools-define-container-base">fmdtools.define.container.base</a></li>
 <li class="toctree-l4"><a class="reference internal" href="fmdtools.define.container.html#module-fmdtools.define.container.mode">fmdtools.define.container.mode</a></li>
-<li class="toctree-l4"><a class="reference internal" href="fmdtools.define.container.html#fmdtools-define-container-state">fmdtools.define.container.state</a></li>
+<li class="toctree-l4"><a class="reference internal" href="fmdtools.define.container.html#module-fmdtools.define.container.state">fmdtools.define.container.state</a></li>
 <li class="toctree-l4"><a class="reference internal" href="fmdtools.define.container.html#fmdtools-define-container-parameter">fmdtools.define.container.parameter</a></li>
 <li class="toctree-l4"><a class="reference internal" href="fmdtools.define.container.html#module-fmdtools.define.container.rand">fmdtools.define.container.rand</a></li>
 <li class="toctree-l4"><a class="reference internal" href="fmdtools.define.container.html#module-fmdtools.define.container.time">fmdtools.define.container.time</a></li>
 </ul>
 </li>
 <li class="toctree-l3"><a class="reference internal" href="fmdtools.define.flow.html">fmdtools.define.flow</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="fmdtools.define.flow.html#fmdtools-define-flow-base">fmdtools.define.flow.base</a></li>
+<li class="toctree-l4"><a class="reference internal" href="fmdtools.define.flow.html#module-fmdtools.define.flow.base">fmdtools.define.flow.base</a></li>
 <li class="toctree-l4"><a class="reference internal" href="fmdtools.define.flow.html#module-fmdtools.define.flow.multiflow">fmdtools.define.flow.multiflow</a></li>
 <li class="toctree-l4"><a class="reference internal" href="fmdtools.define.flow.html#module-fmdtools.define.flow.commsflow">fmdtools.define.flow.commsflow</a></li>
 </ul>
@@ -420,7 +420,7 @@
 <li class="toctree-l4"><a class="reference internal" href="fmdtools.define.object.html#module-fmdtools.define.object.coords">fmdtools.define.object.coords</a></li>
 </ul>
 </li>
-<li class="toctree-l3"><a class="reference internal" href="fmdtools.define.html#fmdtools-define-base">fmdtools.define.base</a></li>
+<li class="toctree-l3"><a class="reference internal" href="fmdtools.define.html#module-fmdtools.define.base">fmdtools.define.base</a></li>
 <li class="toctree-l3"><a class="reference internal" href="fmdtools.define.html#module-fmdtools.define.environment">fmdtools.define.environment</a></li>
 </ul>
 </li>
@@ -478,16 +478,31 @@
              
   <section id="module-fmdtools.analyze">
 <span id="fmdtools-analyze"></span><h1>fmdtools.analyze<a class="headerlink" href="#module-fmdtools.analyze" title="Permalink to this heading"></a></h1>
-<a class="reference internal image-reference" href="../_images/analyze_module_structure1.png"><img alt="../_images/analyze_module_structure1.png" src="../_images/analyze_module_structure1.png" style="width: 800px;" /></a>
+<p>Package for analyzing simulation results.</p>
+<a class="reference internal image-reference" href="../_images/analyze_module_structure.png"><img alt="../_images/analyze_module_structure.png" src="../_images/analyze_module_structure.png" style="width: 800px;" /></a>
 <p>The analyze package is organized into the modules:</p>
-<ul class="simple">
-<li><p><a class="reference internal" href="#module-fmdtools.analyze.common" title="fmdtools.analyze.common"><code class="xref py py-mod docutils literal notranslate"><span class="pre">common</span></code></a>, which is used for common analysis functions</p></li>
-<li><p><a class="reference internal" href="#module-fmdtools.analyze.result" title="fmdtools.analyze.result"><code class="xref py py-mod docutils literal notranslate"><span class="pre">result</span></code></a>, which defines the <a class="reference internal" href="#fmdtools.analyze.result.Result" title="fmdtools.analyze.result.Result"><code class="xref py py-class docutils literal notranslate"><span class="pre">Result</span></code></a> class for sim results</p></li>
-<li><p><a class="reference internal" href="#module-fmdtools.analyze.history" title="fmdtools.analyze.history"><code class="xref py py-mod docutils literal notranslate"><span class="pre">history</span></code></a>, which defines the <a class="reference internal" href="#fmdtools.analyze.history.History" title="fmdtools.analyze.history.History"><code class="xref py py-class docutils literal notranslate"><span class="pre">History</span></code></a> class for tracking, saving, and processing simulation logs/histories.</p></li>
-<li><p><a class="reference internal" href="#module-fmdtools.analyze.graph" title="fmdtools.analyze.graph"><code class="xref py py-mod docutils literal notranslate"><span class="pre">graph</span></code></a>, which provides classes for creating and visualizing Graphs of simulation structures (and is a sort of convenience iterface for <cite>networkx</cite>/<cite>graphviz</cite> and other graphing libraries).</p></li>
-<li><p><a class="reference internal" href="#module-fmdtools.analyze.tabulate" title="fmdtools.analyze.tabulate"><code class="xref py py-mod docutils literal notranslate"><span class="pre">tabulate</span></code></a>, which provides functions to generate tables and visualizations of metrics of interest using (e.g., FMEAs).</p></li>
-<li><p><a class="reference internal" href="#module-fmdtools.analyze.phases" title="fmdtools.analyze.phases"><code class="xref py py-mod docutils literal notranslate"><span class="pre">phases</span></code></a>, which enables the analysis of phase information from model histories.</p></li>
-</ul>
+<table class="autosummary longtable docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#module-fmdtools.analyze.common" title="fmdtools.analyze.common"><code class="xref py py-obj docutils literal notranslate"><span class="pre">fmdtools.analyze.common</span></code></a></p></td>
+<td><p>Some common methods for analysis used by other modules.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#module-fmdtools.analyze.result" title="fmdtools.analyze.result"><code class="xref py py-obj docutils literal notranslate"><span class="pre">fmdtools.analyze.result</span></code></a></p></td>
+<td><p>Defines how simulation results (histories) structured and processed.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#module-fmdtools.analyze.history" title="fmdtools.analyze.history"><code class="xref py py-obj docutils literal notranslate"><span class="pre">fmdtools.analyze.history</span></code></a></p></td>
+<td><p>Defines <code class="xref py py-class docutils literal notranslate"><span class="pre">History</span></code>: class and for structuring/analyzing simulation histories.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#module-fmdtools.analyze.graph" title="fmdtools.analyze.graph"><code class="xref py py-obj docutils literal notranslate"><span class="pre">fmdtools.analyze.graph</span></code></a></p></td>
+<td><p>Provides representations and visualizations of a model graph structure.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#module-fmdtools.analyze.tabulate" title="fmdtools.analyze.tabulate"><code class="xref py py-obj docutils literal notranslate"><span class="pre">fmdtools.analyze.tabulate</span></code></a></p></td>
+<td><p>Translates simulation outputs to pandas tables for display, export, etc.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#module-fmdtools.analyze.phases" title="fmdtools.analyze.phases"><code class="xref py py-obj docutils literal notranslate"><span class="pre">fmdtools.analyze.phases</span></code></a></p></td>
+<td><p>Module for analyzing phases and time-based sampling schemes.</p></td>
+</tr>
+</tbody>
+</table>
 <p>The model reference for each of these is provided below:</p>
 <section id="module-fmdtools.analyze.common">
 <span id="fmdtools-analyze-common"></span><h2>fmdtools.analyze.common<a class="headerlink" href="#module-fmdtools.analyze.common" title="Permalink to this heading"></a></h2>
@@ -699,8 +714,8 @@ dictionary</p>
 </section>
 <section id="module-fmdtools.analyze.result">
 <span id="fmdtools-analyze-result"></span><h2>fmdtools.analyze.result<a class="headerlink" href="#module-fmdtools.analyze.result" title="Permalink to this heading"></a></h2>
-<p>Description: A module defining how simulation results (histories) structured and
-processed. Has classes:</p>
+<p>Defines how simulation results (histories) structured and processed.</p>
+<p>Has classes:</p>
 <ul class="simple">
 <li><p><a class="reference internal" href="#fmdtools.analyze.result.Result" title="fmdtools.analyze.result.Result"><code class="xref py py-class docutils literal notranslate"><span class="pre">Result</span></code></a>: Class for defining simulation results</p></li>
 </ul>
@@ -1358,8 +1373,7 @@ The default is False.</p></li>
 </section>
 <section id="module-fmdtools.analyze.history">
 <span id="fmdtools-analyze-history"></span><h2>fmdtools.analyze.history<a class="headerlink" href="#module-fmdtools.analyze.history" title="Permalink to this heading"></a></h2>
-<p>Description: A module defining how simulation histories are structured and
-processed. Has classes:</p>
+<p>Defines <a class="reference internal" href="#fmdtools.analyze.history.History" title="fmdtools.analyze.history.History"><code class="xref py py-class docutils literal notranslate"><span class="pre">History</span></code></a>: class and for structuring/analyzing simulation histories.</p>
 <ul class="simple">
 <li><p><a class="reference internal" href="#fmdtools.analyze.history.History" title="fmdtools.analyze.history.History"><code class="xref py py-class docutils literal notranslate"><span class="pre">History</span></code></a>: Class for defining simulation histories
 (nested dictionaries of arrays or lists)</p></li>
@@ -2037,50 +2051,39 @@ numpy array</p></li>
 </section>
 <section id="module-fmdtools.analyze.graph">
 <span id="fmdtools-analyze-graph"></span><h2>fmdtools.analyze.graph<a class="headerlink" href="#module-fmdtools.analyze.graph" title="Permalink to this heading"></a></h2>
-<p>Description: Gives graph-level visualizations of the model using installed renderers.</p>
-<dl>
-<dt>Main user-facing individual graphing classes:</dt><dd><ul class="simple">
-<li><p><a class="reference internal" href="#fmdtools.analyze.graph.FunctionArchitectureGraph" title="fmdtools.analyze.graph.FunctionArchitectureGraph"><code class="xref py py-class docutils literal notranslate"><span class="pre">FunctionArchitectureGraph</span></code></a>: Graphs Model of functions and flow for display</p></li>
-</ul>
-<p>where both functions and flows are nodes.</p>
+<p>Provides representations and visualizations of a model graph structure.</p>
+<p>Main user-facing individual graphing classes:
+- <a class="reference internal" href="#fmdtools.analyze.graph.FunctionArchitectureGraph" title="fmdtools.analyze.graph.FunctionArchitectureGraph"><code class="xref py py-class docutils literal notranslate"><span class="pre">FunctionArchitectureGraph</span></code></a>: Graphs Model of functions and flow for display</p>
+<blockquote>
+<div><p>where both functions and flows are nodes.</p>
+</div></blockquote>
 <ul class="simple">
-<li><p><a class="reference internal" href="#fmdtools.analyze.graph.FunctionArchitectureFlowGraph" title="fmdtools.analyze.graph.FunctionArchitectureFlowGraph"><code class="xref py py-class docutils literal notranslate"><span class="pre">FunctionArchitectureFlowGraph</span></code></a>: Graphs Model of flows for display, where flows are set as</p></li>
-</ul>
-<p>nodes and connections (via functions) are edges.</p>
-<ul class="simple">
-<li><p><a class="reference internal" href="#fmdtools.analyze.graph.FunctionArchitectureCompGraph" title="fmdtools.analyze.graph.FunctionArchitectureCompGraph"><code class="xref py py-class docutils literal notranslate"><span class="pre">FunctionArchitectureCompGraph</span></code></a>: Graphs Model of functions, and flows, with component</p></li>
-</ul>
-<p>containment relationships shown for functions.</p>
-<ul class="simple">
-<li><p><a class="reference internal" href="#fmdtools.analyze.graph.FunctionArchitectureFxnGraph" title="fmdtools.analyze.graph.FunctionArchitectureFxnGraph"><code class="xref py py-class docutils literal notranslate"><span class="pre">FunctionArchitectureFxnGraph</span></code></a>: Graphs representation of the functions of the model, where</p></li>
-</ul>
-<p>functions are nodes and flows are edges</p>
-<ul class="simple">
-<li><p><a class="reference internal" href="#fmdtools.analyze.graph.FunctionArchitectureTypeGraph" title="fmdtools.analyze.graph.FunctionArchitectureTypeGraph"><code class="xref py py-class docutils literal notranslate"><span class="pre">FunctionArchitectureTypeGraph</span></code></a>: Graph representation of model Classes, showing the</p></li>
-</ul>
-<p>containment relationship between function classes and flow classes in the model.</p>
-<ul class="simple">
+<li><p><a class="reference internal" href="#fmdtools.analyze.graph.FunctionArchitectureFlowGraph" title="fmdtools.analyze.graph.FunctionArchitectureFlowGraph"><code class="xref py py-class docutils literal notranslate"><span class="pre">FunctionArchitectureFlowGraph</span></code></a>: Graphs Model of flows for display, where flows
+are set as nodes and connections (via functions) are edges.</p></li>
+<li><p><a class="reference internal" href="#fmdtools.analyze.graph.FunctionArchitectureCompGraph" title="fmdtools.analyze.graph.FunctionArchitectureCompGraph"><code class="xref py py-class docutils literal notranslate"><span class="pre">FunctionArchitectureCompGraph</span></code></a>: Graphs Model of functions, and flows, with
+component containment relationships shown for functions.</p></li>
+<li><p><a class="reference internal" href="#fmdtools.analyze.graph.FunctionArchitectureFxnGraph" title="fmdtools.analyze.graph.FunctionArchitectureFxnGraph"><code class="xref py py-class docutils literal notranslate"><span class="pre">FunctionArchitectureFxnGraph</span></code></a>: Graphs representation of the functions of the
+model, where functions are nodes and flows are edges</p></li>
+<li><p><a class="reference internal" href="#fmdtools.analyze.graph.FunctionArchitectureTypeGraph" title="fmdtools.analyze.graph.FunctionArchitectureTypeGraph"><code class="xref py py-class docutils literal notranslate"><span class="pre">FunctionArchitectureTypeGraph</span></code></a>: Graph representation of model Classes, showing
+the containment relationship between function classes and flow classes in the model.</p></li>
 <li><p><a class="reference internal" href="#fmdtools.analyze.graph.MultiFlowGraph" title="fmdtools.analyze.graph.MultiFlowGraph"><code class="xref py py-class docutils literal notranslate"><span class="pre">MultiFlowGraph</span></code></a>: Creates a networkx graph corresponding to the MultiFlow.</p></li>
-<li><p><a class="reference internal" href="#fmdtools.analyze.graph.CommsFlowGraph" title="fmdtools.analyze.graph.CommsFlowGraph"><code class="xref py py-class docutils literal notranslate"><span class="pre">CommsFlowGraph</span></code></a>: Creates a graph representation of the CommsFlow (assuming no additional locals).</p></li>
-<li><p><a class="reference internal" href="#fmdtools.analyze.graph.ActionArchitectureGraph" title="fmdtools.analyze.graph.ActionArchitectureGraph"><code class="xref py py-class docutils literal notranslate"><span class="pre">ActionArchitectureGraph</span></code></a>: Shows a visualization of the internal Action Sequence Graph of</p></li>
+<li><p><a class="reference internal" href="#fmdtools.analyze.graph.CommsFlowGraph" title="fmdtools.analyze.graph.CommsFlowGraph"><code class="xref py py-class docutils literal notranslate"><span class="pre">CommsFlowGraph</span></code></a>: Creates a graph representation of the CommsFlow (assuming no
+additional locals).</p></li>
+<li><p><a class="reference internal" href="#fmdtools.analyze.graph.ActionArchitectureGraph" title="fmdtools.analyze.graph.ActionArchitectureGraph"><code class="xref py py-class docutils literal notranslate"><span class="pre">ActionArchitectureGraph</span></code></a>: Shows a visualization of the internal Action
+Sequence Graph of the Function Block, with Sequences as edges, with Flows (circular)
+and Actions (square) as nodes.</p></li>
+<li><p><a class="reference internal" href="#fmdtools.analyze.graph.ActionArchitectureActGraph" title="fmdtools.analyze.graph.ActionArchitectureActGraph"><code class="xref py py-class docutils literal notranslate"><span class="pre">ActionArchitectureActGraph</span></code></a>: Variant of ActionArchitectureGraph where only the
+sequence between actions is shown.</p></li>
+<li><p><a class="reference internal" href="#fmdtools.analyze.graph.ActionArchitectureFlowGraph" title="fmdtools.analyze.graph.ActionArchitectureFlowGraph"><code class="xref py py-class docutils literal notranslate"><span class="pre">ActionArchitectureFlowGraph</span></code></a>: Variant of ActionArchitectureGraph where only
+the flow relationships between actions is shown.</p></li>
 </ul>
-<p>the Function Block, with Sequences as edges, with Flows (circular) and Actions
-(square) as nodes.</p>
+<p>Shared Method Parameters:</p>
 <ul class="simple">
-<li><p><a class="reference internal" href="#fmdtools.analyze.graph.ActionArchitectureActGraph" title="fmdtools.analyze.graph.ActionArchitectureActGraph"><code class="xref py py-class docutils literal notranslate"><span class="pre">ActionArchitectureActGraph</span></code></a>: Variant of ActionArchitectureGraph where only the</p></li>
-</ul>
-<p>sequence between actions is shown.</p>
-<ul class="simple">
-<li><p><a class="reference internal" href="#fmdtools.analyze.graph.ActionArchitectureFlowGraph" title="fmdtools.analyze.graph.ActionArchitectureFlowGraph"><code class="xref py py-class docutils literal notranslate"><span class="pre">ActionArchitectureFlowGraph</span></code></a>: Variant of ActionArchitectureGraph where only the</p></li>
-</ul>
-<p>flow relationships between actions is shown.</p>
-</dd>
-<dt>Shared Method Parameters:</dt><dd><ul class="simple">
 <li><p><code class="xref py py-data docutils literal notranslate"><span class="pre">default_edge_kwargs</span></code>: Default appearance for edges in model network graphs.</p></li>
 <li><p><code class="xref py py-data docutils literal notranslate"><span class="pre">default_node_kwargs</span></code>: Default appearance for nodes in model network graphs.</p></li>
 </ul>
-</dd>
-<dt>Private Methods:</dt><dd><ul class="simple">
+<p>Private Methods:</p>
+<ul class="simple">
 <li><p><a class="reference internal" href="#fmdtools.analyze.graph.EdgeStyle" title="fmdtools.analyze.graph.EdgeStyle"><code class="xref py py-class docutils literal notranslate"><span class="pre">EdgeStyle</span></code></a>: Holds kwargs for nx.draw_networkx_edges to be applied to edges</p></li>
 <li><p><a class="reference internal" href="#fmdtools.analyze.graph.NodeStyle" title="fmdtools.analyze.graph.NodeStyle"><code class="xref py py-class docutils literal notranslate"><span class="pre">NodeStyle</span></code></a>: Holds kwargs for nx.draw_networkx_nodes to be applied to nodes</p></li>
 <li><p><a class="reference internal" href="#fmdtools.analyze.graph.LabelStyle" title="fmdtools.analyze.graph.LabelStyle"><code class="xref py py-class docutils literal notranslate"><span class="pre">LabelStyle</span></code></a>: Holds kwargs for nx.draw_networkx_labels to be applied to labels</p></li>
@@ -2089,18 +2092,19 @@ numpy array</p></li>
 <li><p><a class="reference internal" href="#fmdtools.analyze.graph.GraphInteractor" title="fmdtools.analyze.graph.GraphInteractor"><code class="xref py py-class docutils literal notranslate"><span class="pre">GraphInteractor</span></code></a>: Used to set nodes in set_pos when creating interactive graph</p></li>
 <li><p><a class="reference internal" href="#fmdtools.analyze.graph.label_for_entry" title="fmdtools.analyze.graph.label_for_entry"><code class="xref py py-func docutils literal notranslate"><span class="pre">label_for_entry()</span></code></a>: Gets the label from an nx.graph for a given entry.</p></li>
 <li><p><a class="reference internal" href="#fmdtools.analyze.graph.get_style_kwargs" title="fmdtools.analyze.graph.get_style_kwargs"><code class="xref py py-func docutils literal notranslate"><span class="pre">get_style_kwargs()</span></code></a>:  Gets the keywords for networkx plotting</p></li>
-<li><p><a class="reference internal" href="#fmdtools.analyze.graph.get_label_groups" title="fmdtools.analyze.graph.get_label_groups"><code class="xref py py-func docutils literal notranslate"><span class="pre">get_label_groups()</span></code></a>: Creates groups of nodes/edges in terms of discrete values for the given tags.</p></li>
-<li><p><a class="reference internal" href="#fmdtools.analyze.graph.to_legend_label" title="fmdtools.analyze.graph.to_legend_label"><code class="xref py py-func docutils literal notranslate"><span class="pre">to_legend_label()</span></code></a>: Creates a legend label string for the group corresponding to style_labels</p></li>
+<li><p><a class="reference internal" href="#fmdtools.analyze.graph.get_label_groups" title="fmdtools.analyze.graph.get_label_groups"><code class="xref py py-func docutils literal notranslate"><span class="pre">get_label_groups()</span></code></a>: Creates groups of nodes/edges in terms of discrete values
+for the given tags.</p></li>
+<li><p><a class="reference internal" href="#fmdtools.analyze.graph.to_legend_label" title="fmdtools.analyze.graph.to_legend_label"><code class="xref py py-func docutils literal notranslate"><span class="pre">to_legend_label()</span></code></a>: Creates a legend label string for the group corresponding to
+style_labels</p></li>
 <li><p><a class="reference internal" href="#fmdtools.analyze.graph.sff_one_trial" title="fmdtools.analyze.graph.sff_one_trial"><code class="xref py py-func docutils literal notranslate"><span class="pre">sff_one_trial()</span></code></a>: Calculates one trial of the sff model</p></li>
 <li><p><a class="reference internal" href="#fmdtools.analyze.graph.data_average" title="fmdtools.analyze.graph.data_average"><code class="xref py py-func docutils literal notranslate"><span class="pre">data_average()</span></code></a>: Averages each column in data</p></li>
 <li><p><a class="reference internal" href="#fmdtools.analyze.graph.data_error" title="fmdtools.analyze.graph.data_error"><code class="xref py py-func docutils literal notranslate"><span class="pre">data_error()</span></code></a>: Calculates error for each column in data</p></li>
-<li><p><a class="reference internal" href="#fmdtools.analyze.graph.gv_import_check" title="fmdtools.analyze.graph.gv_import_check"><code class="xref py py-func docutils literal notranslate"><span class="pre">gv_import_check()</span></code></a>: Checks if graphviz is installed on the system before plotting.</p></li>
+<li><p><a class="reference internal" href="#fmdtools.analyze.graph.gv_import_check" title="fmdtools.analyze.graph.gv_import_check"><code class="xref py py-func docutils literal notranslate"><span class="pre">gv_import_check()</span></code></a>: Checks if graphviz is installed on the system before plotting</p></li>
 <li><p><a class="reference internal" href="#fmdtools.analyze.graph.node_is_tagged" title="fmdtools.analyze.graph.node_is_tagged"><code class="xref py py-func docutils literal notranslate"><span class="pre">node_is_tagged()</span></code></a>: Returns if node is tagged</p></li>
-<li><p><a class="reference internal" href="#fmdtools.analyze.graph.add_g_nested" title="fmdtools.analyze.graph.add_g_nested"><code class="xref py py-func docutils literal notranslate"><span class="pre">add_g_nested()</span></code></a>: Helper function for MultiFlow.create_multigraph to construct the containment tree.</p></li>
+<li><p><a class="reference internal" href="#fmdtools.analyze.graph.add_g_nested" title="fmdtools.analyze.graph.add_g_nested"><code class="xref py py-func docutils literal notranslate"><span class="pre">add_g_nested()</span></code></a>: Helper function for MultiFlow.create_multigraph to construct the
+containment tree.</p></li>
 <li><p><a class="reference internal" href="#fmdtools.analyze.graph.graph_factory" title="fmdtools.analyze.graph.graph_factory"><code class="xref py py-func docutils literal notranslate"><span class="pre">graph_factory()</span></code></a>: Creates the default Graph for a given object.</p></li>
 </ul>
-</dd>
-</dl>
 <dl class="py class">
 <dt class="sig sig-object py" id="fmdtools.analyze.graph.ActionArchitectureActGraph">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">fmdtools.analyze.graph.</span></span><span class="sig-name descname"><span class="pre">ActionArchitectureActGraph</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">aa</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">get_states</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.analyze.graph.ActionArchitectureActGraph" title="Permalink to this definition"></a></dt>
@@ -3764,7 +3768,7 @@ node is the tag</p></li>
 </section>
 <section id="module-fmdtools.analyze.tabulate">
 <span id="fmdtools-analyze-tabulate"></span><h2>fmdtools.analyze.tabulate<a class="headerlink" href="#module-fmdtools.analyze.tabulate" title="Permalink to this heading"></a></h2>
-<p>Description: Translates simulation outputs to pandas tables for display, export, etc.</p>
+<p>Translates simulation outputs to pandas tables for display, export, etc.</p>
 <p>Uses methods:</p>
 <ul class="simple">
 <li><p><a class="reference internal" href="#fmdtools.analyze.tabulate.result_summary_fmea" title="fmdtools.analyze.tabulate.result_summary_fmea"><code class="xref py py-func docutils literal notranslate"><span class="pre">result_summary_fmea()</span></code></a>: Make a table of endclass metrics, along with degraded functions/flows.</p></li>
@@ -4240,7 +4244,7 @@ Default is lambda x: x == 0.0</p></li>
 </section>
 <section id="module-fmdtools.analyze.phases">
 <span id="fmdtools-analyze-phases"></span><h2>fmdtools.analyze.phases<a class="headerlink" href="#module-fmdtools.analyze.phases" title="Permalink to this heading"></a></h2>
-<p>Description: Module for analyzing phases and time-based sampling schemes.</p>
+<p>Module for analyzing phases and time-based sampling schemes.</p>
 <p>Has classes:
 - <a class="reference internal" href="#fmdtools.analyze.phases.PhaseMap" title="fmdtools.analyze.phases.PhaseMap"><code class="xref py py-class docutils literal notranslate"><span class="pre">PhaseMap</span></code></a>: A mapping of phases to times.</p>
 <p>And functions:</p>

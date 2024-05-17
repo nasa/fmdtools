@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 """
-Description: A module defining how simulation histories are structured and
-processed. Has classes:
+Defines :class:`History`: class and for structuring/analyzing simulation histories.
 
 - :class:`History`: Class for defining simulation histories
   (nested dictionaries of arrays or lists)

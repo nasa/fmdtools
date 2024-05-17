@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
-"""Description: A module to define Components."""
+"""Defines :class:`Component` class for representing system components."""
+
 from fmdtools.define.block.base import Block
 
 

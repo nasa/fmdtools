@@ -1,16 +1,8 @@
 # -*- coding: utf-8 -*-
-"""
-Description: A module to define multiflows.
-
-Contains:
-
-- :class:`MultiFlow`: Class for flows which enable multiple copies to be instantiated
-within itself (e.g., for perception)
-"""
+"""Defines :class:`MultiFlow` class which represents multiple flows in one graph."""
 from fmdtools.define.flow.base import Flow
 from recordclass import asdict
 
-# Specialized Flow types
 
 class MultiFlow(Flow):
     """

@@ -1,11 +1,5 @@
 # -*- coding: utf-8 -*-
-"""
-Description: A module for defining Parameters, which are (generic) containers for
-system attributes that do not change.
-
-- :class:`Parameter`: Superclass for Parameters
-- :class:`SimParam`: Class defining Simulation Parameters
-"""
+"""Defines :class:`Parameter` class to represent attributes that do not change."""
 
 import inspect
 from recordclass import asdict, astuple

@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 """
-Description: A module defining BaseObjects.
+Defines :class:`BaseObject` class used to define objects.
 
 Classes in this module:
 

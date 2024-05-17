@@ -1,5 +1,5 @@
 """
-Description: Translates simulation outputs to pandas tables for display, export, etc.
+Translates simulation outputs to pandas tables for display, export, etc.
 
 Uses methods:
 

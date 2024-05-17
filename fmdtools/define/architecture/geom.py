@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 """
-Module for defining Geometry Architectures, agglomerations of individual geometries.
+Defines :class:`GeomArchitecture` class for representing multiple geometries in a
+:class:`Environment`.
 
 Classes
 -------

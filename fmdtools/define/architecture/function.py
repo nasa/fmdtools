@@ -1,11 +1,7 @@
 # -*- coding: utf-8 -*-
-"""
-Description: A module for defining Functional Architectures.
+"""Defines :class:`FunctionArchitecture` class to represent functional architecture."""
 
-Has Classes and Functions:
 
-- :class:`FunctionArchitecture`:  Superclass for functional architectures.
-"""
 import numpy as np
 from ordered_set import OrderedSet
 import networkx as nx
@@ -13,8 +9,6 @@ import sys
 
 from fmdtools.define.base import set_var
 from fmdtools.define.architecture.base import Architecture
-from fmdtools.analyze.common import get_sub_include
-from fmdtools.analyze.history import History
 
 
 class FunctionArchitecture(Architecture):
@@ -22,7 +16,7 @@ class FunctionArchitecture(Architecture):
     Class representing a functional architecture.
 
     Functional architectures enable the execution of multiple Function objects
-    interacting with each other over time. The FunctionArchitecture uses an 
+    interacting with each other over time. The FunctionArchitecture uses an
     object-oriented, undirected graph-based model representation to enable the
     arbitrary propagation of flow states through the functions of the system.
     As opposed to a *procedural* *directed* graph-based model representation,

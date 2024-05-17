@@ -1,7 +1,8 @@
 # -*- coding: utf-8 -*-
 """
-Description: A module to define blocks.
+Defines base :class:`Simulable` and :class:`Block` classes for defining simulations.
 
+Classes:
 - :class:`Simulable`: Superclass for architectures and blocks.
 - :class:`Block`: Superclass for Functions, Components, Actions, etc.
 """
@@ -506,8 +507,8 @@ class Block(Simulable):
         """
         Associate flows with the given Simulable.
 
-        Flows must be defined with the flow_ class variable pointing to the class to
-        initialize (e.g., flow_flowname = FlowClass).
+        Flows must be defined with the flow_flowname class variable pointing to the
+        class to initialize (e.g., flow_flowname = FlowClass).
 
         Parameters
         ----------

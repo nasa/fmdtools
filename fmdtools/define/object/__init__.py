@@ -1,3 +1,4 @@
+"""Package defining various model building blocks."""
 
 import fmdtools.define.object.base as base
 import fmdtools.define.object.coords as coords

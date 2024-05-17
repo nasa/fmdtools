@@ -401,14 +401,14 @@
 <li class="toctree-l3"><a class="reference internal" href="fmdtools.define.container.html">fmdtools.define.container</a><ul>
 <li class="toctree-l4"><a class="reference internal" href="fmdtools.define.container.html#fmdtools-define-container-base">fmdtools.define.container.base</a></li>
 <li class="toctree-l4"><a class="reference internal" href="fmdtools.define.container.html#module-fmdtools.define.container.mode">fmdtools.define.container.mode</a></li>
-<li class="toctree-l4"><a class="reference internal" href="fmdtools.define.container.html#fmdtools-define-container-state">fmdtools.define.container.state</a></li>
+<li class="toctree-l4"><a class="reference internal" href="fmdtools.define.container.html#module-fmdtools.define.container.state">fmdtools.define.container.state</a></li>
 <li class="toctree-l4"><a class="reference internal" href="fmdtools.define.container.html#fmdtools-define-container-parameter">fmdtools.define.container.parameter</a></li>
 <li class="toctree-l4"><a class="reference internal" href="fmdtools.define.container.html#module-fmdtools.define.container.rand">fmdtools.define.container.rand</a></li>
 <li class="toctree-l4"><a class="reference internal" href="fmdtools.define.container.html#module-fmdtools.define.container.time">fmdtools.define.container.time</a></li>
 </ul>
 </li>
 <li class="toctree-l3"><a class="reference internal" href="fmdtools.define.flow.html">fmdtools.define.flow</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="fmdtools.define.flow.html#fmdtools-define-flow-base">fmdtools.define.flow.base</a></li>
+<li class="toctree-l4"><a class="reference internal" href="fmdtools.define.flow.html#module-fmdtools.define.flow.base">fmdtools.define.flow.base</a></li>
 <li class="toctree-l4"><a class="reference internal" href="fmdtools.define.flow.html#module-fmdtools.define.flow.multiflow">fmdtools.define.flow.multiflow</a></li>
 <li class="toctree-l4"><a class="reference internal" href="fmdtools.define.flow.html#module-fmdtools.define.flow.commsflow">fmdtools.define.flow.commsflow</a></li>
 </ul>
@@ -420,7 +420,7 @@
 <li class="toctree-l4"><a class="reference internal" href="fmdtools.define.object.html#module-fmdtools.define.object.coords">fmdtools.define.object.coords</a></li>
 </ul>
 </li>
-<li class="toctree-l3"><a class="reference internal" href="fmdtools.define.html#fmdtools-define-base">fmdtools.define.base</a></li>
+<li class="toctree-l3"><a class="reference internal" href="fmdtools.define.html#module-fmdtools.define.base">fmdtools.define.base</a></li>
 <li class="toctree-l3"><a class="reference internal" href="fmdtools.define.html#module-fmdtools.define.environment">fmdtools.define.environment</a></li>
 </ul>
 </li>
@@ -479,21 +479,31 @@
              
   <section id="module-fmdtools.define.block">
 <span id="fmdtools-define-block"></span><h1>fmdtools.define.block<a class="headerlink" href="#module-fmdtools.define.block" title="Permalink to this heading"></a></h1>
+<p>Package for defining system behaviors.</p>
 <p>The block subpackage provides a representation of behavioral blocks, which are simulable models which may contain containers and other properties.</p>
 <p>These variants of block are provided in the following modules:</p>
-<ul class="simple">
-<li><p><a class="reference internal" href="#module-fmdtools.define.block.base" title="fmdtools.define.block.base"><code class="xref py py-mod docutils literal notranslate"><span class="pre">base</span></code></a>: for <a class="reference internal" href="#fmdtools.define.block.base.Simulable" title="fmdtools.define.block.base.Simulable"><code class="xref py py-class docutils literal notranslate"><span class="pre">Simulable</span></code></a>, which is used for all simulations (including architectures) and <a class="reference internal" href="#fmdtools.define.block.base.Block" title="fmdtools.define.block.base.Block"><code class="xref py py-class docutils literal notranslate"><span class="pre">Block</span></code></a>, which is used for blocks.</p></li>
-<li><p><a class="reference internal" href="#module-fmdtools.define.block.action" title="fmdtools.define.block.action"><code class="xref py py-mod docutils literal notranslate"><span class="pre">action</span></code></a>: for <a class="reference internal" href="#fmdtools.define.block.action.Action" title="fmdtools.define.block.action.Action"><code class="xref py py-class docutils literal notranslate"><span class="pre">Action</span></code></a>, which is used to represent actions.</p></li>
-<li><p><a class="reference internal" href="#module-fmdtools.define.block.component" title="fmdtools.define.block.component"><code class="xref py py-mod docutils literal notranslate"><span class="pre">component</span></code></a>: for <a class="reference internal" href="#fmdtools.define.block.component.Component" title="fmdtools.define.block.component.Component"><code class="xref py py-class docutils literal notranslate"><span class="pre">Component</span></code></a>, which is used to represent components.</p></li>
-<li><p><a class="reference internal" href="#module-fmdtools.define.block.function" title="fmdtools.define.block.function"><code class="xref py py-mod docutils literal notranslate"><span class="pre">function</span></code></a>: for <a class="reference internal" href="#fmdtools.define.block.function.Function" title="fmdtools.define.block.function.Function"><code class="xref py py-class docutils literal notranslate"><span class="pre">Function</span></code></a>, which is used to represent functions.</p></li>
-</ul>
+<table class="autosummary longtable docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#module-fmdtools.define.block.base" title="fmdtools.define.block.base"><code class="xref py py-obj docutils literal notranslate"><span class="pre">fmdtools.define.block.base</span></code></a></p></td>
+<td><p>Defines base <code class="xref py py-class docutils literal notranslate"><span class="pre">Simulable</span></code> and <code class="xref py py-class docutils literal notranslate"><span class="pre">Block</span></code> classes for defining simulations.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#module-fmdtools.define.block.action" title="fmdtools.define.block.action"><code class="xref py py-obj docutils literal notranslate"><span class="pre">fmdtools.define.block.action</span></code></a></p></td>
+<td><p>Defines <code class="xref py py-class docutils literal notranslate"><span class="pre">Action</span></code> class for representing discrete actions.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#module-fmdtools.define.block.component" title="fmdtools.define.block.component"><code class="xref py py-obj docutils literal notranslate"><span class="pre">fmdtools.define.block.component</span></code></a></p></td>
+<td><p>Defines <code class="xref py py-class docutils literal notranslate"><span class="pre">Component</span></code> class for representing system components.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#module-fmdtools.define.block.function" title="fmdtools.define.block.function"><code class="xref py py-obj docutils literal notranslate"><span class="pre">fmdtools.define.block.function</span></code></a></p></td>
+<td><p>Defines <code class="xref py py-class docutils literal notranslate"><span class="pre">Function</span></code> class for representing system functional behaviors.</p></td>
+</tr>
+</tbody>
+</table>
 <section id="module-fmdtools.define.block.base">
 <span id="fmdtools-define-block-base"></span><h2>fmdtools.define.block.base<a class="headerlink" href="#module-fmdtools.define.block.base" title="Permalink to this heading"></a></h2>
-<p>Description: A module to define blocks.</p>
-<ul class="simple">
-<li><p><a class="reference internal" href="#fmdtools.define.block.base.Simulable" title="fmdtools.define.block.base.Simulable"><code class="xref py py-class docutils literal notranslate"><span class="pre">Simulable</span></code></a>: Superclass for architectures and blocks.</p></li>
-<li><p><a class="reference internal" href="#fmdtools.define.block.base.Block" title="fmdtools.define.block.base.Block"><code class="xref py py-class docutils literal notranslate"><span class="pre">Block</span></code></a>: Superclass for Functions, Components, Actions, etc.</p></li>
-</ul>
+<p>Defines base <a class="reference internal" href="#fmdtools.define.block.base.Simulable" title="fmdtools.define.block.base.Simulable"><code class="xref py py-class docutils literal notranslate"><span class="pre">Simulable</span></code></a> and <a class="reference internal" href="#fmdtools.define.block.base.Block" title="fmdtools.define.block.base.Block"><code class="xref py py-class docutils literal notranslate"><span class="pre">Block</span></code></a> classes for defining simulations.</p>
+<p>Classes:
+- <a class="reference internal" href="#fmdtools.define.block.base.Simulable" title="fmdtools.define.block.base.Simulable"><code class="xref py py-class docutils literal notranslate"><span class="pre">Simulable</span></code></a>: Superclass for architectures and blocks.
+- <a class="reference internal" href="#fmdtools.define.block.base.Block" title="fmdtools.define.block.base.Block"><code class="xref py py-class docutils literal notranslate"><span class="pre">Block</span></code></a>: Superclass for Functions, Components, Actions, etc.</p>
 <dl class="py class">
 <dt class="sig sig-object py" id="fmdtools.define.block.base.Block">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">fmdtools.define.block.base.</span></span><span class="sig-name descname"><span class="pre">Block</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">flows</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">{}</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">h</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">{}</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.define.block.base.Block" title="Permalink to this definition"></a></dt>
@@ -586,8 +596,8 @@
 <dt class="sig sig-object py" id="fmdtools.define.block.base.Block.check_flows">
 <span class="sig-name descname"><span class="pre">check_flows</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">flows</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">{}</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.define.block.base.Block.check_flows" title="Permalink to this definition"></a></dt>
 <dd><p>Associate flows with the given Simulable.</p>
-<p>Flows must be defined with the <a href="#id4"><span class="problematic" id="id5">flow_</span></a> class variable pointing to the class to
-initialize (e.g., flow_flowname = FlowClass).</p>
+<p>Flows must be defined with the flow_flowname class variable pointing to the
+class to initialize (e.g., flow_flowname = FlowClass).</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>flows</strong> (<em>dict</em><em>, </em><em>optional</em>) – If flows is provided AND it contains a flowname corresponding to the
@@ -1145,10 +1155,7 @@ The default is 1.</p></li>
 </section>
 <section id="module-fmdtools.define.block.action">
 <span id="fmdtools-define-block-action"></span><h2>fmdtools.define.block.action<a class="headerlink" href="#module-fmdtools.define.block.action" title="Permalink to this heading"></a></h2>
-<p>Description: A module to define Actions.</p>
-<ul class="simple">
-<li><p><a class="reference internal" href="#fmdtools.define.block.action.Action" title="fmdtools.define.block.action.Action"><code class="xref py py-class docutils literal notranslate"><span class="pre">Action</span></code></a>: Class for defining Actions.</p></li>
-</ul>
+<p>Defines <a class="reference internal" href="#fmdtools.define.block.action.Action" title="fmdtools.define.block.action.Action"><code class="xref py py-class docutils literal notranslate"><span class="pre">Action</span></code></a> class for representing discrete actions.</p>
 <dl class="py class">
 <dt class="sig sig-object py" id="fmdtools.define.block.action.Action">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">fmdtools.define.block.action.</span></span><span class="sig-name descname"><span class="pre">Action</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">duration</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.0</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.define.block.action.Action" title="Permalink to this definition"></a></dt>
@@ -1191,7 +1198,7 @@ The default is 1.</p></li>
 </section>
 <section id="module-fmdtools.define.block.component">
 <span id="fmdtools-define-block-component"></span><h2>fmdtools.define.block.component<a class="headerlink" href="#module-fmdtools.define.block.component" title="Permalink to this heading"></a></h2>
-<p>Description: A module to define Components.</p>
+<p>Defines <a class="reference internal" href="#fmdtools.define.block.component.Component" title="fmdtools.define.block.component.Component"><code class="xref py py-class docutils literal notranslate"><span class="pre">Component</span></code></a> class for representing system components.</p>
 <dl class="py class">
 <dt class="sig sig-object py" id="fmdtools.define.block.component.Component">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">fmdtools.define.block.component.</span></span><span class="sig-name descname"><span class="pre">Component</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">flows</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">{}</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">h</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">{}</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.define.block.component.Component" title="Permalink to this definition"></a></dt>
@@ -1224,10 +1231,10 @@ them.</p>
 </section>
 <section id="module-fmdtools.define.block.function">
 <span id="fmdtools-define-block-function"></span><h2>fmdtools.define.block.function<a class="headerlink" href="#module-fmdtools.define.block.function" title="Permalink to this heading"></a></h2>
-<p>Description: A module to define Functions.</p>
-<ul class="simple">
-<li><p><a class="reference internal" href="#fmdtools.define.block.function.Function" title="fmdtools.define.block.function.Function"><code class="xref py py-class docutils literal notranslate"><span class="pre">Function</span></code></a>: Class for defining model Functions.</p></li>
-</ul>
+<p>Defines <a class="reference internal" href="#fmdtools.define.block.function.Function" title="fmdtools.define.block.function.Function"><code class="xref py py-class docutils literal notranslate"><span class="pre">Function</span></code></a> class for representing system functional behaviors.</p>
+<p>Has classes:
+- <a class="reference internal" href="#fmdtools.define.block.function.Function" title="fmdtools.define.block.function.Function"><code class="xref py py-class docutils literal notranslate"><span class="pre">Function</span></code></a>: Class for defining model Functions.
+- <code class="xref py py-class docutils literal notranslate"><span class="pre">GenericFxn</span></code>: Function class to use as a placeholder.</p>
 <p>Functions are used to represent overall system functionality and behaviors (i.e., what a system does).</p>
 <p>Functions are defined by extending the Function class, which may then be instantiated, as shown below:</p>
 <figure class="align-default" id="id2">
@@ -1238,7 +1245,7 @@ them.</p>
 </figure>
 <p>To define a function class, it can be helpful to use this code template:</p>
 <figure class="align-default" id="id3">
-<a class="reference internal image-reference" href="../_images/fxnblock_structure1.png"><img alt="Structure of a Function Class" src="../_images/fxnblock_structure1.png" style="width: 800px;" /></a>
+<a class="reference internal image-reference" href="../_images/fxnblock_structure.png"><img alt="Structure of a Function Class" src="../_images/fxnblock_structure.png" style="width: 800px;" /></a>
 <figcaption>
 <p><span class="caption-text">Code template for <a class="reference internal" href="#fmdtools.define.block.function.Function" title="fmdtools.define.block.function.Function"><code class="xref py py-class docutils literal notranslate"><span class="pre">Function</span></code></a> used to define high-level system functions and their behavior.</span><a class="headerlink" href="#id3" title="Permalink to this image"></a></p>
 </figcaption>

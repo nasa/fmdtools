@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 """
-Description: A module for defining randon properties for use in blocks.
+Defines :class:`Rand` class and other methods defining random properties used in blocks.
 
 Has Classes and Functions:
 

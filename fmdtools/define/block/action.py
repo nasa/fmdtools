@@ -1,10 +1,5 @@
 # -*- coding: utf-8 -*-
-"""
-Description: A module to define Actions.
-
-- :class:`Action`: Class for defining Actions.
-
-"""
+"""Defines :class:`Action` class for representing discrete actions."""
 from fmdtools.define.block.base import Block
 # Actions/ASGs
 

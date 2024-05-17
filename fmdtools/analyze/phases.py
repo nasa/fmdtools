@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 """
-Description: Module for analyzing phases and time-based sampling schemes.
+Module for analyzing phases and time-based sampling schemes.
 
 Has classes:
 - :class:`PhaseMap`: A mapping of phases to times.

@@ -1,6 +1,6 @@
 
 """
-Module for Fault Sampling. Takes the place of approach classes.
+Module for defining samples of Faults and Parameters to simulate.
 
 Has classes:
 
@@ -14,13 +14,14 @@ Has classes:
 """
 from fmdtools.define.base import get_var, nest_dict
 from fmdtools.define.container.parameter import Parameter, ExampleParameter
-from fmdtools.sim.scenario import SingleFaultScenario, Injection, JointFaultScenario
+from fmdtools.sim.scenario import SingleFaultScenario, JointFaultScenario
 from fmdtools.sim.scenario import ParameterScenario
 from fmdtools.analyze.common import is_numeric
 from fmdtools.analyze.phases import gen_interval_times, PhaseMap, join_phasemaps
 import numpy as np
 import itertools
 import inspect
+
 
 def pass_var(*x):
     return x
@@ -29,8 +30,6 @@ def pass_var(*x):
 class ParameterDomain(object):
     """
     Defines a domain to sample from a Parameter.
-
-    ...
 
     Attributes
     ----------
@@ -1383,7 +1382,7 @@ class ParameterSample(BaseSample):
             Name of the combination method ('product', 'orthogonal', 'random') for the
             class. The default is 'product'.
         comb_kwargs : dict, optional
-            Keyword arguments to the self.combine_'methodname'. The default is {}.
+            Keyword arguments to the self.combine_methodname. The default is {}.
         n_samp : int, optional
             Number of values to randomly sample from the set of combinations.
             The default is False, which samples all.

@@ -1,19 +1,11 @@
 # -*- coding: utf-8 -*-
-"""
-Description: A module for defining timers for use in Time containers.
-
-Has Classes:
-- :class:`Timer`: Class defining timers
-"""
-from fmdtools.analyze.history import History
+"""Defines :class:`Timer` class for representing timers."""
 from fmdtools.define.object.base import BaseObject
 
 
 class Timer(BaseObject):
     """
     Class for model timers used in functions (e.g. for conditional faults).
-    
-    ...
 
     Attributes
     ----------
@@ -33,7 +25,7 @@ class Timer(BaseObject):
 
     def __init__(self, name=''):
         """
-        Initializes the Tymer
+        Initialize the Timer.
 
         Parameters
         ----------
@@ -126,8 +118,7 @@ class Timer(BaseObject):
         cop.dt = self.dt
         return cop
 
+
 if __name__ == "__main__":
     import doctest
     doctest.testmod(verbose=True)
-
-
