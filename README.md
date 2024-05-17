@@ -165,7 +165,7 @@ Once fmdtools is installed, use the following to get acquainted with how to use 
 
 - Explore more [examples](https://nasa.github.io/fmdtools/examples/Examples.html) of particular use-cases by going through the [examples folder](https://github.com/nasa/fmdtools/tree/main/examples)
 
-- Read about contributions and model development best practices by perusing the [Development Guide(https://nasa.github.io/fmdtools/docs/Development%20Guide.html#).
+- Read about contributions and model development best practices by perusing the [Development Guide](https://nasa.github.io/fmdtools/docs/Development%20Guide.html#).
 
 - Explore the searchable [module reference](https://nasa.github.io/fmdtools/docs/fmdtools.html) for syntax and usage documentation.
 
