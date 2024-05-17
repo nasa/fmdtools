@@ -10,10 +10,7 @@ Classes:
   function.
 - :class:`JointFaultScenario`: Defines the scenario of multiple faults injected in a
   function at the same time.
-- :class:`NominalScenario`: Defines the scenario of a model having given parameters at
-  the outset.
-- :class:`ParamScenario`: Defines the scenario of a model having parameters from a given
-  paramfunc.
+- :class:`ParameterScenario`: Defines the scenario of a model having parameter values.
 - :class:`Sequence`: Creates an overall sequence of Injections from a given sequence of
   faults and disturbances.
 """
