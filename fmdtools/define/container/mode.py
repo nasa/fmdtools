@@ -282,13 +282,13 @@ class Mode(BaseContainer, readonly=False):
                           'phases': self.phases,
                           'units': self.units}
         for mode in fm_args:
-            if type(fm_args) == tuple:
+            if type(fm_args) is tuple:
                 args = ()
                 kwargs = {**default_kwargs}
-            elif type(fm_args[mode]) == dict:
+            elif type(fm_args[mode]) is dict:
                 args = ()
                 kwargs = {**default_kwargs, **fm_args[mode]}
-            elif type(fm_args[mode]) == tuple:
+            elif type(fm_args[mode]) is tuple:
                 args = fm_args[mode]
                 kwargs = {**default_kwargs}
             else:

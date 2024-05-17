@@ -98,6 +98,8 @@
 <li class="toctree-l3"><a class="reference internal" href="#analysis-workflow-structure">Analysis Workflow/Structure</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#defining-a-model">Defining a Model</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#id1">Defining a Model</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#containers-the-building-blocks-of-simulations">Containers - The building blocks of simulations</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#flow-code-template">Flow Code Template</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#function-code-template">Function Code Template</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#model-code-template">Model Code Template</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#demo-model-activity-examples-pump-ex-pump-py">Demo Model Activity: examples/pump/ex_pump.py</a></li>
@@ -399,8 +401,8 @@
 </ul>
 </li>
 <li class="toctree-l3"><a class="reference internal" href="fmdtools.define.container.html">fmdtools.define.container</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="fmdtools.define.container.html#fmdtools-define-container-base">fmdtools.define.container.base</a></li>
-<li class="toctree-l4"><a class="reference internal" href="fmdtools.define.container.html#module-fmdtools.define.container.mode">fmdtools.define.container.mode</a></li>
+<li class="toctree-l4"><a class="reference internal" href="fmdtools.define.container.html#module-fmdtools.define.container.base">fmdtools.define.container.base</a></li>
+<li class="toctree-l4"><a class="reference internal" href="fmdtools.define.container.html#fmdtools-define-container-mode">fmdtools.define.container.mode</a></li>
 <li class="toctree-l4"><a class="reference internal" href="fmdtools.define.container.html#module-fmdtools.define.container.state">fmdtools.define.container.state</a></li>
 <li class="toctree-l4"><a class="reference internal" href="fmdtools.define.container.html#fmdtools-define-container-parameter">fmdtools.define.container.parameter</a></li>
 <li class="toctree-l4"><a class="reference internal" href="fmdtools.define.container.html#module-fmdtools.define.container.rand">fmdtools.define.container.rand</a></li>
@@ -705,6 +707,23 @@
 <section id="id1">
 <h1>Defining a Model<a class="headerlink" href="#id1" title="Permalink to this heading"></a></h1>
 <p><img alt="formalism example" src="../_images/formalism_example.png" /></p>
+</section>
+<hr class="docutils" />
+<section id="containers-the-building-blocks-of-simulations">
+<h1>Containers - The building blocks of simulations<a class="headerlink" href="#containers-the-building-blocks-of-simulations" title="Permalink to this heading"></a></h1>
+<p><img alt="container example" src="../_images/container_structures.svg" /></p>
+<ul class="simple">
+<li><p>Containers are used to define various attribtues of Functions and Flows</p></li>
+</ul>
+</section>
+<hr class="docutils" />
+<section id="flow-code-template">
+<h1>Flow Code Template<a class="headerlink" href="#flow-code-template" title="Permalink to this heading"></a></h1>
+<p><img alt="flow example" src="../_images/flow_structure.svg" /></p>
+<ul class="simple">
+<li><p>Flows represent connections or shared variables between different functions. Think of them as Function inputs/outputs.</p></li>
+<li><p>Flows are build from container classes like states, along with their own methods/variables.</p></li>
+</ul>
 </section>
 <hr class="docutils" />
 <section id="function-code-template">
