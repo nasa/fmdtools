@@ -33,6 +33,14 @@ Flow classes are used to represent variables that are shared between blocks, suc
    
    Example of defining and instantiating a :class:`Flow` class to hold x/y fields.
 
+The following template shows the basic syntax used to define simple flows in a system:
+
+.. figure:: figures/powerpoint/flow_structure.svg
+   :width: 600
+   :alt: Structure of a Flow Class
+   
+   Flow class template/example.
+
 .. autoclass:: fmdtools.define.flow.base.Flow
    :members:
    :show-inheritance:
