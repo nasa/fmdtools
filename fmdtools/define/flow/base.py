@@ -1,9 +1,5 @@
 # -*- coding: utf-8 -*-
-"""
-Description: A module to define flows used to conect functions in a model. Contains:
-
-- :class:`Flow`: Superclass for flows to be instantiated in a model.
-"""
+"""Module defining :class:`Flow` class used to connect multiple blocks in a model."""
 from recordclass import asdict, astuple
 
 from fmdtools.define.container.parameter import Parameter

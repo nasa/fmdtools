@@ -401,14 +401,14 @@
 <li class="toctree-l3"><a class="reference internal" href="fmdtools.define.container.html">fmdtools.define.container</a><ul>
 <li class="toctree-l4"><a class="reference internal" href="fmdtools.define.container.html#fmdtools-define-container-base">fmdtools.define.container.base</a></li>
 <li class="toctree-l4"><a class="reference internal" href="fmdtools.define.container.html#module-fmdtools.define.container.mode">fmdtools.define.container.mode</a></li>
-<li class="toctree-l4"><a class="reference internal" href="fmdtools.define.container.html#fmdtools-define-container-state">fmdtools.define.container.state</a></li>
+<li class="toctree-l4"><a class="reference internal" href="fmdtools.define.container.html#module-fmdtools.define.container.state">fmdtools.define.container.state</a></li>
 <li class="toctree-l4"><a class="reference internal" href="fmdtools.define.container.html#fmdtools-define-container-parameter">fmdtools.define.container.parameter</a></li>
 <li class="toctree-l4"><a class="reference internal" href="fmdtools.define.container.html#module-fmdtools.define.container.rand">fmdtools.define.container.rand</a></li>
 <li class="toctree-l4"><a class="reference internal" href="fmdtools.define.container.html#module-fmdtools.define.container.time">fmdtools.define.container.time</a></li>
 </ul>
 </li>
 <li class="toctree-l3"><a class="reference internal" href="fmdtools.define.flow.html">fmdtools.define.flow</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="fmdtools.define.flow.html#fmdtools-define-flow-base">fmdtools.define.flow.base</a></li>
+<li class="toctree-l4"><a class="reference internal" href="fmdtools.define.flow.html#module-fmdtools.define.flow.base">fmdtools.define.flow.base</a></li>
 <li class="toctree-l4"><a class="reference internal" href="fmdtools.define.flow.html#module-fmdtools.define.flow.multiflow">fmdtools.define.flow.multiflow</a></li>
 <li class="toctree-l4"><a class="reference internal" href="fmdtools.define.flow.html#module-fmdtools.define.flow.commsflow">fmdtools.define.flow.commsflow</a></li>
 </ul>
@@ -420,7 +420,7 @@
 <li class="toctree-l4"><a class="reference internal" href="#module-fmdtools.define.object.coords">fmdtools.define.object.coords</a></li>
 </ul>
 </li>
-<li class="toctree-l3"><a class="reference internal" href="fmdtools.define.html#fmdtools-define-base">fmdtools.define.base</a></li>
+<li class="toctree-l3"><a class="reference internal" href="fmdtools.define.html#module-fmdtools.define.base">fmdtools.define.base</a></li>
 <li class="toctree-l3"><a class="reference internal" href="fmdtools.define.html#module-fmdtools.define.environment">fmdtools.define.environment</a></li>
 </ul>
 </li>
@@ -479,17 +479,28 @@
              
   <section id="module-fmdtools.define.object">
 <span id="fmdtools-define-object"></span><h1>fmdtools.define.object<a class="headerlink" href="#module-fmdtools.define.object" title="Permalink to this heading"></a></h1>
+<p>Package defining various model building blocks.</p>
 <p>The object subpackage provides a representation of base-level objects (i.e., timers, geometric points/lines, coordinates) which can be used to construct a simulation.</p>
 <p>These different object classes are provided in the following modules:</p>
-<ul class="simple">
-<li><p><a class="reference internal" href="#module-fmdtools.define.object.base" title="fmdtools.define.object.base"><code class="xref py py-mod docutils literal notranslate"><span class="pre">base</span></code></a>: for <a class="reference internal" href="#fmdtools.define.object.base.BaseObject" title="fmdtools.define.object.base.BaseObject"><code class="xref py py-class docutils literal notranslate"><span class="pre">BaseObject</span></code></a>, which is used for the base object class used for both objects and blocks/architectures.</p></li>
-<li><p><a class="reference internal" href="#module-fmdtools.define.object.geom" title="fmdtools.define.object.geom"><code class="xref py py-mod docutils literal notranslate"><span class="pre">geom</span></code></a>: for <a class="reference internal" href="#fmdtools.define.object.geom.Geom" title="fmdtools.define.object.geom.Geom"><code class="xref py py-class docutils literal notranslate"><span class="pre">Geom</span></code></a>, class and subclasses which represent geometric attributes.</p></li>
-<li><p><a class="reference internal" href="#module-fmdtools.define.object.coords" title="fmdtools.define.object.coords"><code class="xref py py-mod docutils literal notranslate"><span class="pre">coords</span></code></a>: for <a class="reference internal" href="#fmdtools.define.object.coords.Coords" title="fmdtools.define.object.coords.Coords"><code class="xref py py-class docutils literal notranslate"><span class="pre">Coords</span></code></a>, which is used to define coordinate systems.</p></li>
-<li><p><a class="reference internal" href="#module-fmdtools.define.object.timer" title="fmdtools.define.object.timer"><code class="xref py py-mod docutils literal notranslate"><span class="pre">timer</span></code></a>: for <a class="reference internal" href="#fmdtools.define.object.timer.Timer" title="fmdtools.define.object.timer.Timer"><code class="xref py py-class docutils literal notranslate"><span class="pre">Timer</span></code></a>, which is used to define timers (used in <a class="reference internal" href="fmdtools.define.container.html#fmdtools.define.container.time.Time" title="fmdtools.define.container.time.Time"><code class="xref py py-class docutils literal notranslate"><span class="pre">Time</span></code></a> containers).</p></li>
-</ul>
+<table class="autosummary longtable docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#module-fmdtools.define.object.base" title="fmdtools.define.object.base"><code class="xref py py-obj docutils literal notranslate"><span class="pre">fmdtools.define.object.base</span></code></a></p></td>
+<td><p>Defines <code class="xref py py-class docutils literal notranslate"><span class="pre">BaseObject</span></code> class used to define objects.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#module-fmdtools.define.object.geom" title="fmdtools.define.object.geom"><code class="xref py py-obj docutils literal notranslate"><span class="pre">fmdtools.define.object.geom</span></code></a></p></td>
+<td><p>Defines geometry classes using the shapely library.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#module-fmdtools.define.object.coords" title="fmdtools.define.object.coords"><code class="xref py py-obj docutils literal notranslate"><span class="pre">fmdtools.define.object.coords</span></code></a></p></td>
+<td><p>Defines <code class="xref py py-class docutils literal notranslate"><span class="pre">Coords</span></code> class for representing coordinate systems.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#module-fmdtools.define.object.timer" title="fmdtools.define.object.timer"><code class="xref py py-obj docutils literal notranslate"><span class="pre">fmdtools.define.object.timer</span></code></a></p></td>
+<td><p>Defines <code class="xref py py-class docutils literal notranslate"><span class="pre">Timer</span></code> class for representing timers.</p></td>
+</tr>
+</tbody>
+</table>
 <section id="module-fmdtools.define.object.base">
 <span id="fmdtools-define-object-base"></span><h2>fmdtools.define.object.base<a class="headerlink" href="#module-fmdtools.define.object.base" title="Permalink to this heading"></a></h2>
-<p>Description: A module defining BaseObjects.</p>
+<p>Defines <a class="reference internal" href="#fmdtools.define.object.base.BaseObject" title="fmdtools.define.object.base.BaseObject"><code class="xref py py-class docutils literal notranslate"><span class="pre">BaseObject</span></code></a> class used to define objects.</p>
 <p>Classes in this module:</p>
 <ul class="simple">
 <li><p><a class="reference internal" href="#fmdtools.define.object.base.BaseObject" title="fmdtools.define.object.base.BaseObject"><code class="xref py py-class docutils literal notranslate"><span class="pre">BaseObject</span></code></a>: Base object class used throughout.</p></li>
@@ -896,15 +907,12 @@ Default is False.</p></li>
 </section>
 <section id="module-fmdtools.define.object.timer">
 <span id="fmdtools-define-object-timer"></span><h2>fmdtools.define.object.timer<a class="headerlink" href="#module-fmdtools.define.object.timer" title="Permalink to this heading"></a></h2>
-<p>Description: A module for defining timers for use in Time containers.</p>
-<p>Has Classes:
-- <a class="reference internal" href="#fmdtools.define.object.timer.Timer" title="fmdtools.define.object.timer.Timer"><code class="xref py py-class docutils literal notranslate"><span class="pre">Timer</span></code></a>: Class defining timers</p>
+<p>Defines <a class="reference internal" href="#fmdtools.define.object.timer.Timer" title="fmdtools.define.object.timer.Timer"><code class="xref py py-class docutils literal notranslate"><span class="pre">Timer</span></code></a> class for representing timers.</p>
 <dl class="py class">
 <dt class="sig sig-object py" id="fmdtools.define.object.timer.Timer">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">fmdtools.define.object.timer.</span></span><span class="sig-name descname"><span class="pre">Timer</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.define.object.timer.Timer" title="Permalink to this definition"></a></dt>
 <dd><p>Bases: <a class="reference internal" href="#fmdtools.define.object.base.BaseObject" title="fmdtools.define.object.base.BaseObject"><code class="xref py py-class docutils literal notranslate"><span class="pre">BaseObject</span></code></a></p>
 <p>Class for model timers used in functions (e.g. for conditional faults).</p>
-<p>…</p>
 <dl class="py attribute">
 <dt class="sig sig-object py" id="fmdtools.define.object.timer.Timer.name">
 <span class="sig-name descname"><span class="pre">name</span></span><a class="headerlink" href="#fmdtools.define.object.timer.Timer.name" title="Permalink to this definition"></a></dt>
@@ -1057,14 +1065,20 @@ Default is False.</p></li>
 </section>
 <section id="module-fmdtools.define.object.geom">
 <span id="fmdtools-define-object-geom"></span><h2>fmdtools.define.object.geom<a class="headerlink" href="#module-fmdtools.define.object.geom" title="Permalink to this heading"></a></h2>
-<p>Module for defining geometries using the shapely library.</p>
-<dl class="simple">
-<dt>Now:</dt><dd><p>Static Geoms, with properties tied to parameters and states representing
-allocations.</p>
-</dd>
-<dt>Future:</dt><dd><p>Dynamic Geoms, with properties tied to states</p>
-</dd>
-</dl>
+<p>Defines geometry classes using the shapely library.</p>
+<p>For now, this includes static Geoms, with properties tied to parameters and states
+representing allocations.</p>
+<p>In the future we hope to include Dynamic Geoms, with properties tied to states</p>
+<p>Has classes:</p>
+<ul class="simple">
+<li><p><a class="reference internal" href="#fmdtools.define.object.geom.Geom" title="fmdtools.define.object.geom.Geom"><code class="xref py py-class docutils literal notranslate"><span class="pre">Geom</span></code></a>: Base geometry class</p></li>
+<li><p><a class="reference internal" href="#fmdtools.define.object.geom.GeomPoint" title="fmdtools.define.object.geom.GeomPoint"><code class="xref py py-class docutils literal notranslate"><span class="pre">GeomPoint</span></code></a>: Class defining points.</p></li>
+<li><p><a class="reference internal" href="#fmdtools.define.object.geom.PointParam" title="fmdtools.define.object.geom.PointParam"><code class="xref py py-class docutils literal notranslate"><span class="pre">PointParam</span></code></a>: Class defining <a class="reference internal" href="#fmdtools.define.object.geom.GeomPoint" title="fmdtools.define.object.geom.GeomPoint"><code class="xref py py-class docutils literal notranslate"><span class="pre">GeomPoint</span></code></a> attributes.</p></li>
+<li><p><a class="reference internal" href="#fmdtools.define.object.geom.GeomLine" title="fmdtools.define.object.geom.GeomLine"><code class="xref py py-class docutils literal notranslate"><span class="pre">GeomLine</span></code></a>: Class defining lines.</p></li>
+<li><p><a class="reference internal" href="#fmdtools.define.object.geom.LineParam" title="fmdtools.define.object.geom.LineParam"><code class="xref py py-class docutils literal notranslate"><span class="pre">LineParam</span></code></a>: Class defining <a class="reference internal" href="#fmdtools.define.object.geom.GeomLine" title="fmdtools.define.object.geom.GeomLine"><code class="xref py py-class docutils literal notranslate"><span class="pre">GeomLine</span></code></a> attributes.</p></li>
+<li><p><a class="reference internal" href="#fmdtools.define.object.geom.GeomPoly" title="fmdtools.define.object.geom.GeomPoly"><code class="xref py py-class docutils literal notranslate"><span class="pre">GeomPoly</span></code></a>: Class defining polygons.</p></li>
+<li><p><a class="reference internal" href="#fmdtools.define.object.geom.PolyParam" title="fmdtools.define.object.geom.PolyParam"><code class="xref py py-class docutils literal notranslate"><span class="pre">PolyParam</span></code></a>: Class defining <a class="reference internal" href="#fmdtools.define.object.geom.GeomPoly" title="fmdtools.define.object.geom.GeomPoly"><code class="xref py py-class docutils literal notranslate"><span class="pre">GeomPoly</span></code></a> attributes.</p></li>
+</ul>
 <dl class="py class">
 <dt class="sig sig-object py" id="fmdtools.define.object.geom.Geom">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">fmdtools.define.object.geom.</span></span><span class="sig-name descname"><span class="pre">Geom</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">s</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">{}</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">p</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">{}</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">track</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'default'</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.define.object.geom.Geom" title="Permalink to this definition"></a></dt>
@@ -1453,7 +1467,12 @@ is on the point would be defined by the parameter:</p>
 </section>
 <section id="module-fmdtools.define.object.coords">
 <span id="fmdtools-define-object-coords"></span><h2>fmdtools.define.object.coords<a class="headerlink" href="#module-fmdtools.define.object.coords" title="Permalink to this heading"></a></h2>
-<p>Module for creating x-y arrays to represent gridworlds.</p>
+<p>Defines <a class="reference internal" href="#fmdtools.define.object.coords.Coords" title="fmdtools.define.object.coords.Coords"><code class="xref py py-class docutils literal notranslate"><span class="pre">Coords</span></code></a> class for representing coordinate systems.</p>
+<p>Has classes:</p>
+<ul class="simple">
+<li><p><a class="reference internal" href="#fmdtools.define.object.coords.CoordsParam" title="fmdtools.define.object.coords.CoordsParam"><code class="xref py py-class docutils literal notranslate"><span class="pre">CoordsParam</span></code></a>, which is used to define <a class="reference internal" href="#fmdtools.define.object.coords.Coords" title="fmdtools.define.object.coords.Coords"><code class="xref py py-class docutils literal notranslate"><span class="pre">Coords</span></code></a> attributes.</p></li>
+<li><p><a class="reference internal" href="#fmdtools.define.object.coords.Coords" title="fmdtools.define.object.coords.Coords"><code class="xref py py-class docutils literal notranslate"><span class="pre">Coords</span></code></a>, which is used to define coordinate systems.</p></li>
+</ul>
 <dl class="py class">
 <dt class="sig sig-object py" id="fmdtools.define.object.coords.Coords">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">fmdtools.define.object.coords.</span></span><span class="sig-name descname"><span class="pre">Coords</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">track</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'default'</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.define.object.coords.Coords" title="Permalink to this definition"></a></dt>

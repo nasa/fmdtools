@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-"""Module for creating environments."""
+"""Module for representing environments with the :class:`Environment` class."""
 from fmdtools.define.container.rand import Rand
 from fmdtools.define.flow.commsflow import CommsFlow
 from fmdtools.define.object.coords import Coords, ExampleCoords

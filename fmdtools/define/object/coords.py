@@ -1,6 +1,12 @@
 # -*- coding: utf-8 -*-
 """
-Module for creating x-y arrays to represent gridworlds.
+Defines :class:`Coords` class for representing coordinate systems.
+
+Has classes:
+
+- :class:`CoordsParam`, which is used to define :class:`Coords` attributes.
+- :class:`Coords`, which is used to define coordinate systems.
+
 """
 import numpy as np
 import copy
@@ -9,7 +15,6 @@ from fmdtools.define.container.parameter import Parameter
 from fmdtools.define.container.rand import Rand
 from fmdtools.define.base import is_iter
 from fmdtools.define.object.base import BaseObject
-from fmdtools.analyze.history import History
 from fmdtools.analyze.common import setup_plot, consolidate_legend
 from matplotlib import pyplot as plt
 from mpl_toolkits.axes_grid1 import make_axes_locatable

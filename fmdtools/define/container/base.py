@@ -1,10 +1,5 @@
 # -*- coding: utf-8 -*-
-"""
-Module providing the `BaseContainer` class which other containers inherit from.
-
-A container is a dataobject (from the recordclass library) that fulfills a specific role
-in a block.
-"""
+"""Defines :class:`BaseContainer` class which other containers inherit from."""
 from recordclass import dataobject, astuple
 import copy
 from fmdtools.define.base import set_arg_as_type
@@ -15,7 +10,13 @@ import sys
 
 
 class BaseContainer(dataobject, mapping=True, iterable=True, copy_default=True):
-    """Base container class."""
+    """
+    Base container class.
+
+    A container is a dataobject (from the recordclass library) that fulfills a specific
+    role in a block.  This class inherits from dataobject for low memory footprint and
+    has a number of methods for making attribute assignment/copying/tracking easier.
+    """
 
     default_track = 'all'
     rolename = 'x'

@@ -401,14 +401,14 @@
 <li class="toctree-l3"><a class="reference internal" href="fmdtools.define.container.html">fmdtools.define.container</a><ul>
 <li class="toctree-l4"><a class="reference internal" href="fmdtools.define.container.html#fmdtools-define-container-base">fmdtools.define.container.base</a></li>
 <li class="toctree-l4"><a class="reference internal" href="fmdtools.define.container.html#module-fmdtools.define.container.mode">fmdtools.define.container.mode</a></li>
-<li class="toctree-l4"><a class="reference internal" href="fmdtools.define.container.html#fmdtools-define-container-state">fmdtools.define.container.state</a></li>
+<li class="toctree-l4"><a class="reference internal" href="fmdtools.define.container.html#module-fmdtools.define.container.state">fmdtools.define.container.state</a></li>
 <li class="toctree-l4"><a class="reference internal" href="fmdtools.define.container.html#fmdtools-define-container-parameter">fmdtools.define.container.parameter</a></li>
 <li class="toctree-l4"><a class="reference internal" href="fmdtools.define.container.html#module-fmdtools.define.container.rand">fmdtools.define.container.rand</a></li>
 <li class="toctree-l4"><a class="reference internal" href="fmdtools.define.container.html#module-fmdtools.define.container.time">fmdtools.define.container.time</a></li>
 </ul>
 </li>
 <li class="toctree-l3"><a class="reference internal" href="fmdtools.define.flow.html">fmdtools.define.flow</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="fmdtools.define.flow.html#fmdtools-define-flow-base">fmdtools.define.flow.base</a></li>
+<li class="toctree-l4"><a class="reference internal" href="fmdtools.define.flow.html#module-fmdtools.define.flow.base">fmdtools.define.flow.base</a></li>
 <li class="toctree-l4"><a class="reference internal" href="fmdtools.define.flow.html#module-fmdtools.define.flow.multiflow">fmdtools.define.flow.multiflow</a></li>
 <li class="toctree-l4"><a class="reference internal" href="fmdtools.define.flow.html#module-fmdtools.define.flow.commsflow">fmdtools.define.flow.commsflow</a></li>
 </ul>
@@ -420,7 +420,7 @@
 <li class="toctree-l4"><a class="reference internal" href="fmdtools.define.object.html#module-fmdtools.define.object.coords">fmdtools.define.object.coords</a></li>
 </ul>
 </li>
-<li class="toctree-l3"><a class="reference internal" href="fmdtools.define.html#fmdtools-define-base">fmdtools.define.base</a></li>
+<li class="toctree-l3"><a class="reference internal" href="fmdtools.define.html#module-fmdtools.define.base">fmdtools.define.base</a></li>
 <li class="toctree-l3"><a class="reference internal" href="fmdtools.define.html#module-fmdtools.define.environment">fmdtools.define.environment</a></li>
 </ul>
 </li>
@@ -477,21 +477,28 @@
              
   <section id="module-reference">
 <h1>Module Reference<a class="headerlink" href="#module-reference" title="Permalink to this heading"></a></h1>
-<a class="reference internal image-reference" href="../_images/module_organization1.svg"><img alt="../_images/module_organization1.svg" src="../_images/module_organization1.svg" width="800" /></a>
-<p>The fmdtools package is split into three subpackages for design, simulation, and analysis. As shown above:</p>
-<ul class="simple">
-<li><p>The <a class="reference internal" href="fmdtools.define.html"><span class="doc">fmdtools.define</span></a> subpackage provides classes for model and simulation definition, and is used for defining system (nominal and faulty) behavior.</p></li>
-<li><p>The <a class="reference internal" href="fmdtools.sim.html"><span class="doc">fmdtools.sim</span></a> subpackage provides functions to simulate these models in a variety of configurations (e.g., nominal and faulty scenarios).</p></li>
-<li><p>The <a class="reference internal" href="fmdtools.analyze.html"><span class="doc">fmdtools.analyze</span></a> subpackage provides classes for processing, analyzing, and visualizing simulation results.</p></li>
-</ul>
-<p>Thus, working with fmdtools often means creating a model file which extends classes from <a class="reference internal" href="fmdtools.define.html#module-fmdtools.define" title="fmdtools.define"><code class="xref py py-mod docutils literal notranslate"><span class="pre">fmdtools.define</span></code></a>, and then simulating and analyzing that model in a script or notebook using the <a class="reference internal" href="fmdtools.sim.html#module-fmdtools.sim" title="fmdtools.sim"><code class="xref py py-mod docutils literal notranslate"><span class="pre">fmdtools.sim</span></code></a> and <a class="reference internal" href="fmdtools.analyze.html#module-fmdtools.analyze" title="fmdtools.analyze"><code class="xref py py-mod docutils literal notranslate"><span class="pre">fmdtools.analyze</span></code></a> subpackages. This page provides references for the functions and classes in these modules.</p>
-<p><strong>Submodule Links</strong></p>
+<a class="reference internal image-reference" href="../_images/module_organization.svg"><img alt="../_images/module_organization.svg" src="../_images/module_organization.svg" width="800" /></a>
+<p>The fmdtools package is split into three subpackages for design, simulation, and analysis. As shown above. Thus, working with fmdtools often means:</p>
+<ol class="arabic simple">
+<li><p>Creating a model file which extends classes from <a class="reference internal" href="fmdtools.define.html#module-fmdtools.define" title="fmdtools.define"><code class="xref py py-mod docutils literal notranslate"><span class="pre">define</span></code></a>,</p></li>
+<li><p>Simulating and analyzing that model in a script or notebook using the <a class="reference internal" href="fmdtools.sim.html#module-fmdtools.sim" title="fmdtools.sim"><code class="xref py py-mod docutils literal notranslate"><span class="pre">sim</span></code></a>, and</p></li>
+<li><p>Analyzing simulation results using the <a class="reference internal" href="fmdtools.analyze.html#module-fmdtools.analyze" title="fmdtools.analyze"><code class="xref py py-mod docutils literal notranslate"><span class="pre">analyze</span></code></a> subpackage.</p></li>
+</ol>
+<p>This page provides references for the functions and classes in these packages, which can further be explored below:</p>
+<table class="autosummary longtable docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="fmdtools.define.html#module-fmdtools.define" title="fmdtools.define"><code class="xref py py-obj docutils literal notranslate"><span class="pre">fmdtools.define</span></code></a></p></td>
+<td><p>Package for modelling system structure and behavior.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="fmdtools.sim.html#module-fmdtools.sim" title="fmdtools.sim"><code class="xref py py-obj docutils literal notranslate"><span class="pre">fmdtools.sim</span></code></a></p></td>
+<td><p>Package for simulating system models in various configurations and scenarios.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="fmdtools.analyze.html#module-fmdtools.analyze" title="fmdtools.analyze"><code class="xref py py-obj docutils literal notranslate"><span class="pre">fmdtools.analyze</span></code></a></p></td>
+<td><p>Package for analyzing simulation results.</p></td>
+</tr>
+</tbody>
+</table>
 <div class="toctree-wrapper compound">
-<ul>
-<li class="toctree-l1"><a class="reference internal" href="fmdtools.define.html">fmdtools.define</a></li>
-<li class="toctree-l1"><a class="reference internal" href="fmdtools.sim.html">fmdtools.sim</a></li>
-<li class="toctree-l1"><a class="reference internal" href="fmdtools.analyze.html">fmdtools.analyze</a></li>
-</ul>
 </div>
 </section>
 

@@ -1,3 +1,4 @@
+"""Resilience Modelling, Simulation, and Analysis in Python."""
 
 import fmdtools.define as define
 import fmdtools.sim as sim

@@ -1,11 +1,5 @@
 # -*- coding: utf-8 -*-
-"""
-Module for action architectures.
-
-Classes
--------
-:class:`Architecture`: Generic Architecture Class.
-"""
+"""Defines base :class:`Architecture` class used by other architecture classes."""
 from fmdtools.define.object.base import check_pickleability, BaseObject
 from fmdtools.define.flow.base import Flow
 from fmdtools.define.block.base import Simulable

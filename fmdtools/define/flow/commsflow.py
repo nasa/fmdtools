@@ -1,12 +1,5 @@
 # -*- coding: utf-8 -*-
-"""
-Description: A module to define multiflows.
-
-Contains:
-
-- :class:`CommsFlow`: Class for flows which enable communications
-(e.g., sending/recieving messages) between functions
-"""
+"""Defines :class:`CommsFlow` class representing perception and communications."""
 import copy
 from fmdtools.define.flow.base import Flow
 from fmdtools.define.flow.multiflow import MultiFlow

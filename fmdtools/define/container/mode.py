@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 """
-Description: Module for helping define Modes (faulty and otherwise).
+Defines :class:`Mode` class for defining (faulty and otherwise) :term:`mode` s.
 
 Has classes:
 

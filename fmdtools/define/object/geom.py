@@ -1,12 +1,21 @@
 # -*- coding: utf-8 -*-
 """
-Module for defining geometries using the shapely library.
+Defines geometry classes using the shapely library.
 
-Now:
-    Static Geoms, with properties tied to parameters and states representing
-    allocations.
-Future:
-    Dynamic Geoms, with properties tied to states
+For now, this includes static Geoms, with properties tied to parameters and states
+representing allocations.
+
+In the future we hope to include Dynamic Geoms, with properties tied to states
+
+Has classes:
+
+- :class:`Geom`: Base geometry class
+- :class:`GeomPoint`: Class defining points.
+- :class:`PointParam`: Class defining :class:`GeomPoint` attributes.
+- :class:`GeomLine`: Class defining lines.
+- :class:`LineParam`: Class defining :class:`GeomLine` attributes.
+- :class:`GeomPoly`: Class defining polygons.
+- :class:`PolyParam`: Class defining :class:`GeomPoly` attributes.
 """
 from fmdtools.define.object.base import BaseObject
 from fmdtools.define.container.parameter import Parameter

@@ -1,10 +1,5 @@
 # -*- coding: utf-8 -*-
-"""
-Description: A module for defining States, which are (generic) containers for system
-attributes that change over time.
-
-- :class:`State`: Superclass for Model States.
-"""
+"""Defines :class:`State` class for representing variables that change over time."""
 import numpy as np
 import warnings
 
@@ -14,9 +9,9 @@ from fmdtools.define.container.base import BaseContainer
 
 class State(BaseContainer):
     """
-    Class for working with model states, which are variables in the model which
-    change over time. This class inherits from dataobject for low memory footprint
-    and has a number of methods for making attribute assignment/copying easier.
+    Class for working with model states.
+
+    States which are variables in the model which change over time.
 
     State is meant to be extended in the model definition object to add the
     corresponding field related to a simulation, e.g.,
@@ -40,13 +35,16 @@ class State(BaseContainer):
     >>> p.x
     10.0
     """
+
     rolename = 's'
 
     def set_atts(self, **kwargs):
-        """Sets the given arguments to a given value. Mainly useful for
-        reducing length/adding clarity to assignment statements in __init__ methods
-        (self.put is reccomended otherwise so that the iteration is on function/flow
-        *states*) e.g.,
+        """
+        Set the given arguments to a given value.
+
+        Mainly useful for reducing length/adding clarity to assignment statements in
+        __init__ methods (self.put is recomended otherwise so that the iteration is on
+        function/flow *states*) e.g.,
 
         >>> p = ExampleState()
         >>> p.set_atts(x=2.0, y=2.0)

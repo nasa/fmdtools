@@ -1,60 +1,55 @@
 """
-Description: Gives graph-level visualizations of the model using installed renderers.
-
+Provides representations and visualizations of a model graph structure.
 
 Main user-facing individual graphing classes:
-    - :class:`FunctionArchitectureGraph`: Graphs Model of functions and flow for display
-    where both functions and flows are nodes.
-
-    - :class:`FunctionArchitectureFlowGraph`: Graphs Model of flows for display, where flows are set as
-    nodes and connections (via functions) are edges.
-
-    - :class:`FunctionArchitectureCompGraph`: Graphs Model of functions, and flows, with component
-    containment relationships shown for functions.
-
-    - :class:`FunctionArchitectureFxnGraph`: Graphs representation of the functions of the model, where
-    functions are nodes and flows are edges
-
-    - :class:`FunctionArchitectureTypeGraph`: Graph representation of model Classes, showing the
-    containment relationship between function classes and flow classes in the model.
-
-    - :class:`MultiFlowGraph`: Creates a networkx graph corresponding to the MultiFlow.
-
-    - :class:`CommsFlowGraph`: Creates a graph representation of the CommsFlow (assuming no additional locals).
-
-    - :class:`ActionArchitectureGraph`: Shows a visualization of the internal Action Sequence Graph of
-    the Function Block, with Sequences as edges, with Flows (circular) and Actions
-    (square) as nodes.
-
-    - :class:`ActionArchitectureActGraph`: Variant of ActionArchitectureGraph where only the 
-    sequence between actions is shown.
-
-    - :class:`ActionArchitectureFlowGraph`: Variant of ActionArchitectureGraph where only the 
-    flow relationships between actions is shown.
+- :class:`FunctionArchitectureGraph`: Graphs Model of functions and flow for display
+  where both functions and flows are nodes.
+- :class:`FunctionArchitectureFlowGraph`: Graphs Model of flows for display, where flows
+  are set as nodes and connections (via functions) are edges.
+- :class:`FunctionArchitectureCompGraph`: Graphs Model of functions, and flows, with
+  component containment relationships shown for functions.
+- :class:`FunctionArchitectureFxnGraph`: Graphs representation of the functions of the
+  model, where functions are nodes and flows are edges
+- :class:`FunctionArchitectureTypeGraph`: Graph representation of model Classes, showing
+  the containment relationship between function classes and flow classes in the model.
+- :class:`MultiFlowGraph`: Creates a networkx graph corresponding to the MultiFlow.
+- :class:`CommsFlowGraph`: Creates a graph representation of the CommsFlow (assuming no
+  additional locals).
+- :class:`ActionArchitectureGraph`: Shows a visualization of the internal Action
+  Sequence Graph of the Function Block, with Sequences as edges, with Flows (circular)
+  and Actions (square) as nodes.
+- :class:`ActionArchitectureActGraph`: Variant of ActionArchitectureGraph where only the
+  sequence between actions is shown.
+- :class:`ActionArchitectureFlowGraph`: Variant of ActionArchitectureGraph where only
+  the flow relationships between actions is shown.
 
 Shared Method Parameters:
-    - :data:`default_edge_kwargs`: Default appearance for edges in model network graphs.
-    - :data:`default_node_kwargs`: Default appearance for nodes in model network graphs.
+
+- :data:`default_edge_kwargs`: Default appearance for edges in model network graphs.
+- :data:`default_node_kwargs`: Default appearance for nodes in model network graphs.
 
 Private Methods:
-    - :class:`EdgeStyle`: Holds kwargs for nx.draw_networkx_edges to be applied to edges
-    - :class:`NodeStyle`: Holds kwargs for nx.draw_networkx_nodes to be applied to nodes
-    - :class:`LabelStyle`: Holds kwargs for nx.draw_networkx_labels to be applied to labels
-    - :class:`EdgeLabelStyle`: Controls edge labels to ensure they do not rotate
-    - :class:`Labels`: Defines a set of labels to be drawn using draw_networkx_labels.
-    - :class:`GraphInteractor`: Used to set nodes in set_pos when creating interactive graph
-    - :func:`label_for_entry`: Gets the label from an nx.graph for a given entry.
-    - :func:`get_style_kwargs`:  Gets the keywords for networkx plotting
-    - :func:`get_label_groups`: Creates groups of nodes/edges in terms of discrete values for the given tags.
-    - :func:`to_legend_label`: Creates a legend label string for the group corresponding to style_labels
-    - :func:`sff_one_trial`: Calculates one trial of the sff model
-    - :func:`data_average`: Averages each column in data
-    - :func:`data_error`: Calculates error for each column in data
-    - :func:`gv_import_check`: Checks if graphviz is installed on the system before plotting.
-    - :func:`node_is_tagged`: Returns if node is tagged
-    - :func:`add_g_nested`: Helper function for MultiFlow.create_multigraph to construct the containment tree.
-    - :func:`graph_factory`: Creates the default Graph for a given object.
 
+- :class:`EdgeStyle`: Holds kwargs for nx.draw_networkx_edges to be applied to edges
+- :class:`NodeStyle`: Holds kwargs for nx.draw_networkx_nodes to be applied to nodes
+- :class:`LabelStyle`: Holds kwargs for nx.draw_networkx_labels to be applied to labels
+- :class:`EdgeLabelStyle`: Controls edge labels to ensure they do not rotate
+- :class:`Labels`: Defines a set of labels to be drawn using draw_networkx_labels.
+- :class:`GraphInteractor`: Used to set nodes in set_pos when creating interactive graph
+- :func:`label_for_entry`: Gets the label from an nx.graph for a given entry.
+- :func:`get_style_kwargs`:  Gets the keywords for networkx plotting
+- :func:`get_label_groups`: Creates groups of nodes/edges in terms of discrete values
+  for the given tags.
+- :func:`to_legend_label`: Creates a legend label string for the group corresponding to
+  style_labels
+- :func:`sff_one_trial`: Calculates one trial of the sff model
+- :func:`data_average`: Averages each column in data
+- :func:`data_error`: Calculates error for each column in data
+- :func:`gv_import_check`: Checks if graphviz is installed on the system before plotting
+- :func:`node_is_tagged`: Returns if node is tagged
+- :func:`add_g_nested`: Helper function for MultiFlow.create_multigraph to construct the
+  containment tree.
+- :func:`graph_factory`: Creates the default Graph for a given object.
 """
 
 # File Name: analyze/graph.py

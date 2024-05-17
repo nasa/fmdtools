@@ -1,7 +1,8 @@
 # -*- coding: utf-8 -*-
 """
-Description: A module defining how simulation results (histories) structured and
-processed. Has classes:
+Defines how simulation results (histories) structured and processed.
+
+Has classes:
 
 - :class:`Result`: Class for defining simulation results
 

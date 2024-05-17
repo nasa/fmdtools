@@ -12,17 +12,17 @@ The containers subpackage provides the elemental building puzzle pieces needed (
 
 These classes are provided in the following modules:
 
-* :mod:`~fmdtools.define.container.base`: for :class:`~fmdtools.define.container.base.BaseContainer`, which all the other containers inherit from.
-* :mod:`~fmdtools.define.container.mode`: for :class:`~fmdtools.define.container.mode.Mode`, which represents discrete modes (nominal and faulty) which the system may progress through over time,
-* :mod:`~fmdtools.define.container.state`: for :class:`~fmdtools.define.container.state.State`, which represents values of the simulation which change over time,
-* :mod:`~fmdtools.define.container.parameter`: for :class:`~fmdtools.define.container.parameter.Parameter`, which represents variables which do not change over time,
-* :mod:`~fmdtools.define.container.rand`: for :class:`~fmdtools.define.container.rand.Rand`, which represents random states and behavior, and
-* :mod:`~fmdtools.define.container.time`: for :class:`~fmdtools.define.container.time.Time`, which represents the internal time and timers of the block.
+.. autosummary::
+
+	fmdtools.define.container.base
+	fmdtools.define.container.mode
+	fmdtools.define.container.state
+	fmdtools.define.container.parameter
+	fmdtools.define.container.rand
+	fmdtools.define.container.time
 
 fmdtools.define.container.base
 --------------------------------
-
-	Base class/module for containers.
 
 .. automodule:: fmdtools.define.container.base
    :members:
@@ -40,6 +40,7 @@ fmdtools.define.container.mode
 
 fmdtools.define.container.state
 --------------------------------
+.. automodule:: fmdtools.define.container.state
 
 State classes are used to represent mutables properties of the system that change over time. State classes are extended and deployed by the user, as shown below: 
 
@@ -57,7 +58,9 @@ State classes are used to represent mutables properties of the system that chang
 fmdtools.define.container.parameter
 --------------------------------
 
-Parameter classes are used to represent immutable properties of the system. Parameter classes are extended and deployed by the user, as shown below: 
+.. automodule:: fmdtools.define.container.parameter
+
+:class:`~fmdtools.define.container.parameter.Parameter` classes are used to represent immutable properties of the system. :class:`~fmdtools.define.container.parameter.Parameter` classes are extended and deployed by the user, as shown below: 
 
 .. figure:: figures/uml/Parameter.svg
    :width: 600

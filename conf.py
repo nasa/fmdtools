@@ -32,6 +32,7 @@ version = release
 # extensions coming with Sphinx (named 'sphinx.ext.*') or your custom
 # ones.
 extensions = ['sphinx.ext.autodoc', 'sphinx.ext.napoleon', 'sphinx.ext.intersphinx',
+              'sphinx.ext.autosummary',
               "nbsphinx", "myst_parser", "sphinx.ext.githubpages"]
 
 # "gaphor.extensions.sphinx"

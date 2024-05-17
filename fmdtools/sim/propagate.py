@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 """
-Description: functions to propagate faults through a user-defined fault model.
+Functions to propagate faults through a user-defined fault model.
 
 Main Methods:
 

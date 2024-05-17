@@ -1,3 +1,4 @@
+"""Package for analyzing simulation results."""
 
 from fmdtools.analyze import common
 from fmdtools.analyze import result

@@ -1,11 +1,5 @@
 # -*- coding: utf-8 -*-
-"""
-Description: A module for defining time-based properties for use in blocks.
-
-Has Classes:
-
-- :class:`Time`: Class containing all time-related Block constructs (e.g., timers).
-"""
+"""Defines :class:`Time` class for containing timers and time-related constructs."""
 from decimal import Decimal
 from fmdtools.analyze.common import get_sub_include
 from fmdtools.define.container.base import BaseContainer
@@ -15,8 +9,6 @@ from fmdtools.define.object.timer import Timer
 class Time(BaseContainer):
     """
     Class for defining all time-based aspects of a Block (e.g., time, timestep, timers).
-
-    ...
 
     Attributes
     ----------

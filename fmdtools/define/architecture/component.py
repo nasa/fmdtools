@@ -1,11 +1,5 @@
 # -*- coding: utf-8 -*-
-"""
-Module for action architectures.
-
-Classes
--------
-:class:`ComponentArchitecture`: Architecture defining agglomeration of Components.
-"""
+"""Defines :class:`ComponentArchitecture` class to represent component architectures."""
 from fmdtools.define.architecture.base import Architecture
 
 

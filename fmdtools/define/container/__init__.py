@@ -1,3 +1,4 @@
+"""Package defining system variables other base constructs."""
 
 from fmdtools.define.container import mode
 from fmdtools.define.container import parameter
