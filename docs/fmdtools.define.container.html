@@ -401,14 +401,14 @@
 <li class="toctree-l3 current"><a class="current reference internal" href="#">fmdtools.define.container</a><ul>
 <li class="toctree-l4"><a class="reference internal" href="#fmdtools-define-container-base">fmdtools.define.container.base</a></li>
 <li class="toctree-l4"><a class="reference internal" href="#module-fmdtools.define.container.mode">fmdtools.define.container.mode</a></li>
-<li class="toctree-l4"><a class="reference internal" href="#fmdtools-define-container-state">fmdtools.define.container.state</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#module-fmdtools.define.container.state">fmdtools.define.container.state</a></li>
 <li class="toctree-l4"><a class="reference internal" href="#fmdtools-define-container-parameter">fmdtools.define.container.parameter</a></li>
 <li class="toctree-l4"><a class="reference internal" href="#module-fmdtools.define.container.rand">fmdtools.define.container.rand</a></li>
 <li class="toctree-l4"><a class="reference internal" href="#module-fmdtools.define.container.time">fmdtools.define.container.time</a></li>
 </ul>
 </li>
 <li class="toctree-l3"><a class="reference internal" href="fmdtools.define.flow.html">fmdtools.define.flow</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="fmdtools.define.flow.html#fmdtools-define-flow-base">fmdtools.define.flow.base</a></li>
+<li class="toctree-l4"><a class="reference internal" href="fmdtools.define.flow.html#module-fmdtools.define.flow.base">fmdtools.define.flow.base</a></li>
 <li class="toctree-l4"><a class="reference internal" href="fmdtools.define.flow.html#module-fmdtools.define.flow.multiflow">fmdtools.define.flow.multiflow</a></li>
 <li class="toctree-l4"><a class="reference internal" href="fmdtools.define.flow.html#module-fmdtools.define.flow.commsflow">fmdtools.define.flow.commsflow</a></li>
 </ul>
@@ -420,7 +420,7 @@
 <li class="toctree-l4"><a class="reference internal" href="fmdtools.define.object.html#module-fmdtools.define.object.coords">fmdtools.define.object.coords</a></li>
 </ul>
 </li>
-<li class="toctree-l3"><a class="reference internal" href="fmdtools.define.html#fmdtools-define-base">fmdtools.define.base</a></li>
+<li class="toctree-l3"><a class="reference internal" href="fmdtools.define.html#module-fmdtools.define.base">fmdtools.define.base</a></li>
 <li class="toctree-l3"><a class="reference internal" href="fmdtools.define.html#module-fmdtools.define.environment">fmdtools.define.environment</a></li>
 </ul>
 </li>
@@ -479,6 +479,7 @@
              
   <section id="module-fmdtools.define.container">
 <span id="fmdtools-define-container"></span><h1>fmdtools.define.container<a class="headerlink" href="#module-fmdtools.define.container" title="Permalink to this heading"></a></h1>
+<p>Package defining system variables other base constructs.</p>
 <p>The containers subpackage provides the elemental building puzzle pieces needed (i.e., containers for holding states, modes, etc.) to develop simulations, shown below.</p>
 <figure class="align-default" id="id35">
 <a class="reference internal image-reference" href="../_images/Containers.svg"><img alt="fmdtools container classes" src="../_images/Containers.svg" width="800" /></a>
@@ -487,27 +488,42 @@
 </figcaption>
 </figure>
 <p>These classes are provided in the following modules:</p>
-<ul class="simple">
-<li><p><a class="reference internal" href="#module-fmdtools.define.container.base" title="fmdtools.define.container.base"><code class="xref py py-mod docutils literal notranslate"><span class="pre">base</span></code></a>: for <a class="reference internal" href="#fmdtools.define.container.base.BaseContainer" title="fmdtools.define.container.base.BaseContainer"><code class="xref py py-class docutils literal notranslate"><span class="pre">BaseContainer</span></code></a>, which all the other containers inherit from.</p></li>
-<li><p><a class="reference internal" href="#module-fmdtools.define.container.mode" title="fmdtools.define.container.mode"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mode</span></code></a>: for <a class="reference internal" href="#fmdtools.define.container.mode.Mode" title="fmdtools.define.container.mode.Mode"><code class="xref py py-class docutils literal notranslate"><span class="pre">Mode</span></code></a>, which represents discrete modes (nominal and faulty) which the system may progress through over time,</p></li>
-<li><p><code class="xref py py-mod docutils literal notranslate"><span class="pre">state</span></code>: for <a class="reference internal" href="#fmdtools.define.container.state.State" title="fmdtools.define.container.state.State"><code class="xref py py-class docutils literal notranslate"><span class="pre">State</span></code></a>, which represents values of the simulation which change over time,</p></li>
-<li><p><code class="xref py py-mod docutils literal notranslate"><span class="pre">parameter</span></code>: for <a class="reference internal" href="#fmdtools.define.container.parameter.Parameter" title="fmdtools.define.container.parameter.Parameter"><code class="xref py py-class docutils literal notranslate"><span class="pre">Parameter</span></code></a>, which represents variables which do not change over time,</p></li>
-<li><p><a class="reference internal" href="#module-fmdtools.define.container.rand" title="fmdtools.define.container.rand"><code class="xref py py-mod docutils literal notranslate"><span class="pre">rand</span></code></a>: for <a class="reference internal" href="#fmdtools.define.container.rand.Rand" title="fmdtools.define.container.rand.Rand"><code class="xref py py-class docutils literal notranslate"><span class="pre">Rand</span></code></a>, which represents random states and behavior, and</p></li>
-<li><p><a class="reference internal" href="#module-fmdtools.define.container.time" title="fmdtools.define.container.time"><code class="xref py py-mod docutils literal notranslate"><span class="pre">time</span></code></a>: for <a class="reference internal" href="#fmdtools.define.container.time.Time" title="fmdtools.define.container.time.Time"><code class="xref py py-class docutils literal notranslate"><span class="pre">Time</span></code></a>, which represents the internal time and timers of the block.</p></li>
-</ul>
+<table class="autosummary longtable docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#module-fmdtools.define.container.base" title="fmdtools.define.container.base"><code class="xref py py-obj docutils literal notranslate"><span class="pre">fmdtools.define.container.base</span></code></a></p></td>
+<td><p>Defines <code class="xref py py-class docutils literal notranslate"><span class="pre">BaseContainer</span></code> class which other containers inherit from.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#module-fmdtools.define.container.mode" title="fmdtools.define.container.mode"><code class="xref py py-obj docutils literal notranslate"><span class="pre">fmdtools.define.container.mode</span></code></a></p></td>
+<td><p>Defines <code class="xref py py-class docutils literal notranslate"><span class="pre">Mode</span></code> class for defining (faulty and otherwise) <a class="reference internal" href="Development%20Guide.html#term-Mode"><span class="xref std std-term">mode</span></a> s.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#module-fmdtools.define.container.state" title="fmdtools.define.container.state"><code class="xref py py-obj docutils literal notranslate"><span class="pre">fmdtools.define.container.state</span></code></a></p></td>
+<td><p>Defines <code class="xref py py-class docutils literal notranslate"><span class="pre">State</span></code> class for representing variables that change over time.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#module-fmdtools.define.container.parameter" title="fmdtools.define.container.parameter"><code class="xref py py-obj docutils literal notranslate"><span class="pre">fmdtools.define.container.parameter</span></code></a></p></td>
+<td><p>Defines <code class="xref py py-class docutils literal notranslate"><span class="pre">Parameter</span></code> class to represent attributes that do not change.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#module-fmdtools.define.container.rand" title="fmdtools.define.container.rand"><code class="xref py py-obj docutils literal notranslate"><span class="pre">fmdtools.define.container.rand</span></code></a></p></td>
+<td><p>Defines <code class="xref py py-class docutils literal notranslate"><span class="pre">Rand</span></code> class and other methods defining random properties used in blocks.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#module-fmdtools.define.container.time" title="fmdtools.define.container.time"><code class="xref py py-obj docutils literal notranslate"><span class="pre">fmdtools.define.container.time</span></code></a></p></td>
+<td><p>Defines <code class="xref py py-class docutils literal notranslate"><span class="pre">Time</span></code> class for containing timers and time-related constructs.</p></td>
+</tr>
+</tbody>
+</table>
 <section id="fmdtools-define-container-base">
 <h2>fmdtools.define.container.base<a class="headerlink" href="#fmdtools-define-container-base" title="Permalink to this heading"></a></h2>
 <blockquote>
 <div><p>Base class/module for containers.</p>
 </div></blockquote>
-<span class="target" id="module-fmdtools.define.container.base"></span><p>Module providing the <cite>BaseContainer</cite> class which other containers inherit from.</p>
-<p>A container is a dataobject (from the recordclass library) that fulfills a specific role
-in a block.</p>
+<span class="target" id="module-fmdtools.define.container.base"></span><p>Defines <a class="reference internal" href="#fmdtools.define.container.base.BaseContainer" title="fmdtools.define.container.base.BaseContainer"><code class="xref py py-class docutils literal notranslate"><span class="pre">BaseContainer</span></code></a> class which other containers inherit from.</p>
 <dl class="py class">
 <dt class="sig sig-object py" id="fmdtools.define.container.base.BaseContainer">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">fmdtools.define.container.base.</span></span><span class="sig-name descname"><span class="pre">BaseContainer</span></span><a class="headerlink" href="#fmdtools.define.container.base.BaseContainer" title="Permalink to this definition"></a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">dataobject</span></code></p>
 <p>Base container class.</p>
+<p>A container is a dataobject (from the recordclass library) that fulfills a specific
+role in a block.  This class inherits from dataobject for low memory footprint and
+has a number of methods for making attribute assignment/copying/tracking easier.</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="fmdtools.define.container.base.BaseContainer.assign">
 <span class="sig-name descname"><span class="pre">assign</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">obj</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">fields</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">as_copy</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">fielddict</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.define.container.base.BaseContainer.assign" title="Permalink to this definition"></a></dt>
@@ -832,7 +848,7 @@ Create class ExNestContainer instance</p>
 </section>
 <section id="module-fmdtools.define.container.mode">
 <span id="fmdtools-define-container-mode"></span><h2>fmdtools.define.container.mode<a class="headerlink" href="#module-fmdtools.define.container.mode" title="Permalink to this heading"></a></h2>
-<p>Description: Module for helping define Modes (faulty and otherwise).</p>
+<p>Defines <a class="reference internal" href="#fmdtools.define.container.mode.Mode" title="fmdtools.define.container.mode.Mode"><code class="xref py py-class docutils literal notranslate"><span class="pre">Mode</span></code></a> class for defining (faulty and otherwise) <a class="reference internal" href="Development%20Guide.html#term-Mode"><span class="xref std std-term">mode</span></a> s.</p>
 <p>Has classes:</p>
 <ul class="simple">
 <li><p><a class="reference internal" href="#fmdtools.define.container.mode.Fault" title="fmdtools.define.container.mode.Fault"><code class="xref py py-class docutils literal notranslate"><span class="pre">Fault</span></code></a>: Class for defining fault parameters</p></li>
@@ -1368,22 +1384,22 @@ their properties</p>
 </dd></dl>
 
 </section>
-<section id="fmdtools-define-container-state">
-<h2>fmdtools.define.container.state<a class="headerlink" href="#fmdtools-define-container-state" title="Permalink to this heading"></a></h2>
+<section id="module-fmdtools.define.container.state">
+<span id="fmdtools-define-container-state"></span><h2>fmdtools.define.container.state<a class="headerlink" href="#module-fmdtools.define.container.state" title="Permalink to this heading"></a></h2>
+<p>Defines <a class="reference internal" href="#fmdtools.define.container.state.State" title="fmdtools.define.container.state.State"><code class="xref py py-class docutils literal notranslate"><span class="pre">State</span></code></a> class for representing variables that change over time.</p>
 <p>State classes are used to represent mutables properties of the system that change over time. State classes are extended and deployed by the user, as shown below:</p>
 <figure class="align-default" id="id36">
 <a class="reference internal image-reference" href="../_images/State.svg"><img alt="example state class" src="../_images/State.svg" width="600" /></a>
 <figcaption>
-<p><span class="caption-text">Example of extending the <code class="xref py py-class docutils literal notranslate"><span class="pre">State</span></code> class to hold x/y fields.</span><a class="headerlink" href="#id36" title="Permalink to this image"></a></p>
+<p><span class="caption-text">Example of extending the <a class="reference internal" href="#fmdtools.define.container.state.State" title="fmdtools.define.container.state.State"><code class="xref py py-class docutils literal notranslate"><span class="pre">State</span></code></a> class to hold x/y fields.</span><a class="headerlink" href="#id36" title="Permalink to this image"></a></p>
 </figcaption>
 </figure>
 <dl class="py class">
 <dt class="sig sig-object py" id="fmdtools.define.container.state.State">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">fmdtools.define.container.state.</span></span><span class="sig-name descname"><span class="pre">State</span></span><a class="headerlink" href="#fmdtools.define.container.state.State" title="Permalink to this definition"></a></dt>
 <dd><p>Bases: <a class="reference internal" href="#fmdtools.define.container.base.BaseContainer" title="fmdtools.define.container.base.BaseContainer"><code class="xref py py-class docutils literal notranslate"><span class="pre">BaseContainer</span></code></a></p>
-<p>Class for working with model states, which are variables in the model which
-change over time. This class inherits from dataobject for low memory footprint
-and has a number of methods for making attribute assignment/copying easier.</p>
+<p>Class for working with model states.</p>
+<p>States which are variables in the model which change over time.</p>
 <p>State is meant to be extended in the model definition object to add the
 corresponding field related to a simulation, e.g.,</p>
 <div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="k">class</span> <span class="nc">ExampleState</span><span class="p">(</span><span class="n">State</span><span class="p">):</span>
@@ -1410,11 +1426,12 @@ values of 1.0.</p>
 </section>
 <section id="fmdtools-define-container-parameter">
 <h2>fmdtools.define.container.parameter<a class="headerlink" href="#fmdtools-define-container-parameter" title="Permalink to this heading"></a></h2>
-<p>Parameter classes are used to represent immutable properties of the system. Parameter classes are extended and deployed by the user, as shown below:</p>
+<span class="target" id="module-fmdtools.define.container.parameter"></span><p>Defines <a class="reference internal" href="#fmdtools.define.container.parameter.Parameter" title="fmdtools.define.container.parameter.Parameter"><code class="xref py py-class docutils literal notranslate"><span class="pre">Parameter</span></code></a> class to represent attributes that do not change.</p>
+<p><a class="reference internal" href="#fmdtools.define.container.parameter.Parameter" title="fmdtools.define.container.parameter.Parameter"><code class="xref py py-class docutils literal notranslate"><span class="pre">Parameter</span></code></a> classes are used to represent immutable properties of the system. <a class="reference internal" href="#fmdtools.define.container.parameter.Parameter" title="fmdtools.define.container.parameter.Parameter"><code class="xref py py-class docutils literal notranslate"><span class="pre">Parameter</span></code></a> classes are extended and deployed by the user, as shown below:</p>
 <figure class="align-default" id="id37">
 <a class="reference internal image-reference" href="../_images/Parameter.svg"><img alt="example state class" src="../_images/Parameter.svg" width="600" /></a>
 <figcaption>
-<p><span class="caption-text">Example of extending the <code class="xref py py-class docutils literal notranslate"><span class="pre">Parameter</span></code> class to hold x/y/z fields.</span><a class="headerlink" href="#id37" title="Permalink to this image"></a></p>
+<p><span class="caption-text">Example of extending the <a class="reference internal" href="#fmdtools.define.container.parameter.Parameter" title="fmdtools.define.container.parameter.Parameter"><code class="xref py py-class docutils literal notranslate"><span class="pre">Parameter</span></code></a> class to hold x/y/z fields.</span><a class="headerlink" href="#id37" title="Permalink to this image"></a></p>
 </figcaption>
 </figure>
 <dl class="py class">
@@ -1539,7 +1556,7 @@ self.k_lim or set constraints self.k_set</p>
 </section>
 <section id="module-fmdtools.define.container.rand">
 <span id="fmdtools-define-container-rand"></span><h2>fmdtools.define.container.rand<a class="headerlink" href="#module-fmdtools.define.container.rand" title="Permalink to this heading"></a></h2>
-<p>Description: A module for defining randon properties for use in blocks.</p>
+<p>Defines <a class="reference internal" href="#fmdtools.define.container.rand.Rand" title="fmdtools.define.container.rand.Rand"><code class="xref py py-class docutils literal notranslate"><span class="pre">Rand</span></code></a> class and other methods defining random properties used in blocks.</p>
 <p>Has Classes and Functions:</p>
 <ul class="simple">
 <li><p><a class="reference internal" href="#fmdtools.define.container.rand.Rand" title="fmdtools.define.container.rand.Rand"><code class="xref py py-class docutils literal notranslate"><span class="pre">Rand</span></code></a>: Superclass for Block random properties.</p></li>
@@ -1849,11 +1866,7 @@ The default is False.</p></li>
 </section>
 <section id="module-fmdtools.define.container.time">
 <span id="fmdtools-define-container-time"></span><h2>fmdtools.define.container.time<a class="headerlink" href="#module-fmdtools.define.container.time" title="Permalink to this heading"></a></h2>
-<p>Description: A module for defining time-based properties for use in blocks.</p>
-<p>Has Classes:</p>
-<ul class="simple">
-<li><p><a class="reference internal" href="#fmdtools.define.container.time.Time" title="fmdtools.define.container.time.Time"><code class="xref py py-class docutils literal notranslate"><span class="pre">Time</span></code></a>: Class containing all time-related Block constructs (e.g., timers).</p></li>
-</ul>
+<p>Defines <a class="reference internal" href="#fmdtools.define.container.time.Time" title="fmdtools.define.container.time.Time"><code class="xref py py-class docutils literal notranslate"><span class="pre">Time</span></code></a> class for containing timers and time-related constructs.</p>
 <dl class="py class">
 <dt class="sig sig-object py" id="fmdtools.define.container.time.ExtendedTime">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">fmdtools.define.container.time.</span></span><span class="sig-name descname"><span class="pre">ExtendedTime</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.define.container.time.ExtendedTime" title="Permalink to this definition"></a></dt>
@@ -1906,7 +1919,6 @@ The default is False.</p></li>
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">fmdtools.define.container.time.</span></span><span class="sig-name descname"><span class="pre">Time</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.define.container.time.Time" title="Permalink to this definition"></a></dt>
 <dd><p>Bases: <a class="reference internal" href="#fmdtools.define.container.base.BaseContainer" title="fmdtools.define.container.base.BaseContainer"><code class="xref py py-class docutils literal notranslate"><span class="pre">BaseContainer</span></code></a></p>
 <p>Class for defining all time-based aspects of a Block (e.g., time, timestep, timers).</p>
-<p>…</p>
 <dl class="py attribute">
 <dt class="sig sig-object py" id="fmdtools.define.container.time.Time.time">
 <span class="sig-name descname"><span class="pre">time</span></span><a class="headerlink" href="#fmdtools.define.container.time.Time.time" title="Permalink to this definition"></a></dt>

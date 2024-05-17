@@ -10,12 +10,20 @@ The define package provides the building blocks to develop a simulation. Simulat
    
    Structure of simulable fmdtools subclasses used for developing simulations. 
  
-Aside from their internal methods defining behavior, events/indicators, and results, Simulations are additionally composed of internal containers (or sub-attributes) of the class which are defined in their own class. 
+Aside from their internal methods defining behavior, events/indicators, and results, Simulations are additionally composed of internal containers (or sub-attributes) of the class which are defined in their own class.
 
-**Submodule Links**
+.. autosummary::
+
+	fmdtools.define.architecture
+	fmdtools.define.block
+	fmdtools.define.flow
+	fmdtools.define.object
+	fmdtools.define.base
+	fmdtools.define.environment
 
 .. toctree::
    :maxdepth: 1
+   :hidden:
 
    fmdtools.define.architecture
    fmdtools.define.block
@@ -26,8 +34,6 @@ Aside from their internal methods defining behavior, events/indicators, and resu
 
 fmdtools.define.base
 --------------------------------
-
-Common methods and data structures are kept in :mod:`~fmdtools.define.base`.
 
 .. automodule:: fmdtools.define.base
    :members:

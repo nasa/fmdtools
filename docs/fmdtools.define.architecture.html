@@ -401,14 +401,14 @@
 <li class="toctree-l3"><a class="reference internal" href="fmdtools.define.container.html">fmdtools.define.container</a><ul>
 <li class="toctree-l4"><a class="reference internal" href="fmdtools.define.container.html#fmdtools-define-container-base">fmdtools.define.container.base</a></li>
 <li class="toctree-l4"><a class="reference internal" href="fmdtools.define.container.html#module-fmdtools.define.container.mode">fmdtools.define.container.mode</a></li>
-<li class="toctree-l4"><a class="reference internal" href="fmdtools.define.container.html#fmdtools-define-container-state">fmdtools.define.container.state</a></li>
+<li class="toctree-l4"><a class="reference internal" href="fmdtools.define.container.html#module-fmdtools.define.container.state">fmdtools.define.container.state</a></li>
 <li class="toctree-l4"><a class="reference internal" href="fmdtools.define.container.html#fmdtools-define-container-parameter">fmdtools.define.container.parameter</a></li>
 <li class="toctree-l4"><a class="reference internal" href="fmdtools.define.container.html#module-fmdtools.define.container.rand">fmdtools.define.container.rand</a></li>
 <li class="toctree-l4"><a class="reference internal" href="fmdtools.define.container.html#module-fmdtools.define.container.time">fmdtools.define.container.time</a></li>
 </ul>
 </li>
 <li class="toctree-l3"><a class="reference internal" href="fmdtools.define.flow.html">fmdtools.define.flow</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="fmdtools.define.flow.html#fmdtools-define-flow-base">fmdtools.define.flow.base</a></li>
+<li class="toctree-l4"><a class="reference internal" href="fmdtools.define.flow.html#module-fmdtools.define.flow.base">fmdtools.define.flow.base</a></li>
 <li class="toctree-l4"><a class="reference internal" href="fmdtools.define.flow.html#module-fmdtools.define.flow.multiflow">fmdtools.define.flow.multiflow</a></li>
 <li class="toctree-l4"><a class="reference internal" href="fmdtools.define.flow.html#module-fmdtools.define.flow.commsflow">fmdtools.define.flow.commsflow</a></li>
 </ul>
@@ -420,7 +420,7 @@
 <li class="toctree-l4"><a class="reference internal" href="fmdtools.define.object.html#module-fmdtools.define.object.coords">fmdtools.define.object.coords</a></li>
 </ul>
 </li>
-<li class="toctree-l3"><a class="reference internal" href="fmdtools.define.html#fmdtools-define-base">fmdtools.define.base</a></li>
+<li class="toctree-l3"><a class="reference internal" href="fmdtools.define.html#module-fmdtools.define.base">fmdtools.define.base</a></li>
 <li class="toctree-l3"><a class="reference internal" href="fmdtools.define.html#module-fmdtools.define.environment">fmdtools.define.environment</a></li>
 </ul>
 </li>
@@ -479,21 +479,31 @@
              
   <section id="fmdtools-define-architecture">
 <h1>fmdtools.define.architecture<a class="headerlink" href="#fmdtools-define-architecture" title="Permalink to this heading"></a></h1>
-<span class="target" id="module-fmdtools.define.architecture"></span><p>The architecture subpackage provides a representation of <a class="reference internal" href="Development%20Guide.html#term-Architecture"><span class="xref std std-term">Architecture</span></a> s, which may be used to represent aggregations/interactions of blocks in an overall combined simulation.</p>
+<span class="target" id="module-fmdtools.define.architecture"></span><p>Package for defining system <a class="reference internal" href="Development%20Guide.html#term-Architecture"><span class="xref std std-term">Architecture</span></a>.</p>
+<p>The architecture subpackage provides a representation of <a class="reference internal" href="Development%20Guide.html#term-Architecture"><span class="xref std std-term">Architecture</span></a> which may be used to represent aggregations/interactions of blocks in an overall combined simulation.</p>
 <p>Different types of architectures are provided in the following modules:</p>
-<ul class="simple">
-<li><p><a class="reference internal" href="#module-fmdtools.define.architecture.base" title="fmdtools.define.architecture.base"><code class="xref py py-mod docutils literal notranslate"><span class="pre">base</span></code></a>: for <a class="reference internal" href="#fmdtools.define.architecture.base.Architecture" title="fmdtools.define.architecture.base.Architecture"><code class="xref py py-class docutils literal notranslate"><span class="pre">Architecture</span></code></a>, which is used as the base class for all architectures.</p></li>
-<li><p><a class="reference internal" href="#module-fmdtools.define.architecture.action" title="fmdtools.define.architecture.action"><code class="xref py py-mod docutils literal notranslate"><span class="pre">action</span></code></a>: for <a class="reference internal" href="#fmdtools.define.architecture.action.ActionArchitecture" title="fmdtools.define.architecture.action.ActionArchitecture"><code class="xref py py-class docutils literal notranslate"><span class="pre">ActionArchitecture</span></code></a>, which is used to represent action sequence graphs</p></li>
-<li><p><a class="reference internal" href="#module-fmdtools.define.architecture.component" title="fmdtools.define.architecture.component"><code class="xref py py-mod docutils literal notranslate"><span class="pre">component</span></code></a>: for <a class="reference internal" href="#fmdtools.define.architecture.component.ComponentArchitecture" title="fmdtools.define.architecture.component.ComponentArchitecture"><code class="xref py py-class docutils literal notranslate"><span class="pre">ComponentArchitecture</span></code></a>, which is used to represent sets of components.</p></li>
-<li><p><a class="reference internal" href="#module-fmdtools.define.architecture.function" title="fmdtools.define.architecture.function"><code class="xref py py-mod docutils literal notranslate"><span class="pre">function</span></code></a>: for <a class="reference internal" href="#fmdtools.define.architecture.function.FunctionArchitecture" title="fmdtools.define.architecture.function.FunctionArchitecture"><code class="xref py py-class docutils literal notranslate"><span class="pre">FunctionArchitecture</span></code></a>, which is used to represent functional architectures.</p></li>
-<li><p><a class="reference internal" href="#module-fmdtools.define.architecture.geom" title="fmdtools.define.architecture.geom"><code class="xref py py-mod docutils literal notranslate"><span class="pre">geom</span></code></a>: for <a class="reference internal" href="#fmdtools.define.architecture.geom.GeomArchitecture" title="fmdtools.define.architecture.geom.GeomArchitecture"><code class="xref py py-class docutils literal notranslate"><span class="pre">GeomArchitecture</span></code></a>, which is used to represent multiple geometries in an <cite>Environment</cite>.</p></li>
-</ul>
+<table class="autosummary longtable docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#module-fmdtools.define.architecture.base" title="fmdtools.define.architecture.base"><code class="xref py py-obj docutils literal notranslate"><span class="pre">fmdtools.define.architecture.base</span></code></a></p></td>
+<td><p>Defines base <code class="xref py py-class docutils literal notranslate"><span class="pre">Architecture</span></code> class used by other architecture classes.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#module-fmdtools.define.architecture.action" title="fmdtools.define.architecture.action"><code class="xref py py-obj docutils literal notranslate"><span class="pre">fmdtools.define.architecture.action</span></code></a></p></td>
+<td><p>Defines <code class="xref py py-class docutils literal notranslate"><span class="pre">ActionArchitecture</span></code> class for representing action architectures.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#module-fmdtools.define.architecture.component" title="fmdtools.define.architecture.component"><code class="xref py py-obj docutils literal notranslate"><span class="pre">fmdtools.define.architecture.component</span></code></a></p></td>
+<td><p>Defines <code class="xref py py-class docutils literal notranslate"><span class="pre">ComponentArchitecture</span></code> class to represent component architectures.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#module-fmdtools.define.architecture.function" title="fmdtools.define.architecture.function"><code class="xref py py-obj docutils literal notranslate"><span class="pre">fmdtools.define.architecture.function</span></code></a></p></td>
+<td><p>Defines <code class="xref py py-class docutils literal notranslate"><span class="pre">FunctionArchitecture</span></code> class to represent functional architecture.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#module-fmdtools.define.architecture.geom" title="fmdtools.define.architecture.geom"><code class="xref py py-obj docutils literal notranslate"><span class="pre">fmdtools.define.architecture.geom</span></code></a></p></td>
+<td><p>Defines <code class="xref py py-class docutils literal notranslate"><span class="pre">GeomArchitecture</span></code> class for representing multiple geometries in a <code class="xref py py-class docutils literal notranslate"><span class="pre">Environment</span></code>.</p></td>
+</tr>
+</tbody>
+</table>
 <section id="fmdtools-define-architecture-base">
 <h2>fmdtools.define.architecture.base<a class="headerlink" href="#fmdtools-define-architecture-base" title="Permalink to this heading"></a></h2>
-<span class="target" id="module-fmdtools.define.architecture.base"></span><p>Module for action architectures.</p>
-<section id="classes">
-<h3>Classes<a class="headerlink" href="#classes" title="Permalink to this heading"></a></h3>
-<p><a class="reference internal" href="#fmdtools.define.architecture.base.Architecture" title="fmdtools.define.architecture.base.Architecture"><code class="xref py py-class docutils literal notranslate"><span class="pre">Architecture</span></code></a>: Generic Architecture Class.</p>
+<span class="target" id="module-fmdtools.define.architecture.base"></span><p>Defines base <a class="reference internal" href="#fmdtools.define.architecture.base.Architecture" title="fmdtools.define.architecture.base.Architecture"><code class="xref py py-class docutils literal notranslate"><span class="pre">Architecture</span></code></a> class used by other architecture classes.</p>
 <dl class="py class">
 <dt class="sig sig-object py" id="fmdtools.define.architecture.base.Architecture">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">fmdtools.define.architecture.base.</span></span><span class="sig-name descname"><span class="pre">Architecture</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">as_copy</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">h</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">{}</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.define.architecture.base.Architecture" title="Permalink to this definition"></a></dt>
@@ -757,26 +767,21 @@ May alternatively provide already-instanced object.</p></li>
 </dd></dl>
 
 </section>
-</section>
 <section id="fmdtools-define-architecture-action">
 <h2>fmdtools.define.architecture.action<a class="headerlink" href="#fmdtools-define-architecture-action" title="Permalink to this heading"></a></h2>
-<span class="target" id="module-fmdtools.define.architecture.action"></span><p>Module for action architectures.</p>
-<section id="id1">
-<h3>Classes<a class="headerlink" href="#id1" title="Permalink to this heading"></a></h3>
-<p><a class="reference internal" href="#fmdtools.define.architecture.action.ActionArchitecture" title="fmdtools.define.architecture.action.ActionArchitecture"><code class="xref py py-class docutils literal notranslate"><span class="pre">ActionArchitecture</span></code></a>: Architecture of multiple Actions.</p>
-</section>
+<span class="target" id="module-fmdtools.define.architecture.action"></span><p>Defines <a class="reference internal" href="#fmdtools.define.architecture.action.ActionArchitecture" title="fmdtools.define.architecture.action.ActionArchitecture"><code class="xref py py-class docutils literal notranslate"><span class="pre">ActionArchitecture</span></code></a> class for representing action architectures.</p>
 <p>The ActionArchitecture class is used to represent a sequenced of action taken by an agent. It is a composition of instantiated Action objects, Flow objects, and conditions as shown below:</p>
-<figure class="align-default" id="id10">
+<figure class="align-default" id="id7">
 <a class="reference internal image-reference" href="../_images/demo_model_asg.svg"><img alt="Structure of an ActionArchitecture" src="../_images/demo_model_asg.svg" width="800" /></a>
 <figcaption>
-<p><span class="caption-text">Example Action Architecture connecting action objects with flow objects and conditions.</span><a class="headerlink" href="#id10" title="Permalink to this image"></a></p>
+<p><span class="caption-text">Example Action Architecture connecting action objects with flow objects and conditions.</span><a class="headerlink" href="#id7" title="Permalink to this image"></a></p>
 </figcaption>
 </figure>
 <p>In the Human action architecture, a human operator percieves and acts on a hazard and the total number of hazards acted on is recorded in the outcome flow. This can also be represented in <a class="reference internal" href="Development%20Guide.html#term-FRDL"><span class="xref std std-term">FRDL</span></a> using:</p>
-<figure class="align-default" id="id11">
+<figure class="align-default" id="id8">
 <a class="reference internal image-reference" href="../_images/demo_model_asg_FRDL.svg"><img alt="Structure of an ActionArchitecture in FRDL" src="../_images/demo_model_asg_FRDL.svg" width="600" /></a>
 <figcaption>
-<p><span class="caption-text">Propagation network of example Action Architecture.</span><a class="headerlink" href="#id11" title="Permalink to this image"></a></p>
+<p><span class="caption-text">Propagation network of example Action Architecture.</span><a class="headerlink" href="#id8" title="Permalink to this image"></a></p>
 </figcaption>
 </figure>
 <p>For more info on this example, see: <a class="reference internal" href="../examples/asg_demo/readme.html"><span class="doc">The Action Sequence Graph Demo Model</span></a>.</p>
@@ -1005,10 +1010,7 @@ Defaults to self.condition_pass if none are provided.</p></li>
 </section>
 <section id="fmdtools-define-architecture-component">
 <h2>fmdtools.define.architecture.component<a class="headerlink" href="#fmdtools-define-architecture-component" title="Permalink to this heading"></a></h2>
-<span class="target" id="module-fmdtools.define.architecture.component"></span><p>Module for action architectures.</p>
-<section id="id2">
-<h3>Classes<a class="headerlink" href="#id2" title="Permalink to this heading"></a></h3>
-<p><a class="reference internal" href="#fmdtools.define.architecture.component.ComponentArchitecture" title="fmdtools.define.architecture.component.ComponentArchitecture"><code class="xref py py-class docutils literal notranslate"><span class="pre">ComponentArchitecture</span></code></a>: Architecture defining agglomeration of Components.</p>
+<span class="target" id="module-fmdtools.define.architecture.component"></span><p>Defines <a class="reference internal" href="#fmdtools.define.architecture.component.ComponentArchitecture" title="fmdtools.define.architecture.component.ComponentArchitecture"><code class="xref py py-class docutils literal notranslate"><span class="pre">ComponentArchitecture</span></code></a> class to represent component architectures.</p>
 <dl class="py class">
 <dt class="sig sig-object py" id="fmdtools.define.architecture.component.ComponentArchitecture">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">fmdtools.define.architecture.component.</span></span><span class="sig-name descname"><span class="pre">ComponentArchitecture</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.define.architecture.component.ComponentArchitecture" title="Permalink to this definition"></a></dt>
@@ -1067,33 +1069,28 @@ Defaults to self.condition_pass if none are provided.</p></li>
 </dd></dl>
 
 </section>
-</section>
 <section id="fmdtools-define-architecture-function">
 <h2>fmdtools.define.architecture.function<a class="headerlink" href="#fmdtools-define-architecture-function" title="Permalink to this heading"></a></h2>
-<span class="target" id="module-fmdtools.define.architecture.function"></span><p>Description: A module for defining Functional Architectures.</p>
-<p>Has Classes and Functions:</p>
-<ul class="simple">
-<li><p><a class="reference internal" href="#fmdtools.define.architecture.function.FunctionArchitecture" title="fmdtools.define.architecture.function.FunctionArchitecture"><code class="xref py py-class docutils literal notranslate"><span class="pre">FunctionArchitecture</span></code></a>:  Superclass for functional architectures.</p></li>
-</ul>
+<span class="target" id="module-fmdtools.define.architecture.function"></span><p>Defines <a class="reference internal" href="#fmdtools.define.architecture.function.FunctionArchitecture" title="fmdtools.define.architecture.function.FunctionArchitecture"><code class="xref py py-class docutils literal notranslate"><span class="pre">FunctionArchitecture</span></code></a> class to represent functional architecture.</p>
 <p>The FunctionArchitecture class is used to define the high-level function-flow structure of a system model. It is a composition of instantiated Function and Flow objects, as shown below:</p>
-<figure class="align-default" id="id12">
+<figure class="align-default" id="id9">
 <a class="reference internal image-reference" href="../_images/FunctionArchitecture.svg"><img alt="Structure of a Model" src="../_images/FunctionArchitecture.svg" width="800" /></a>
 <figcaption>
-<p><span class="caption-text">Example Function Architecture connecting function objects with flow objects.</span><a class="headerlink" href="#id12" title="Permalink to this image"></a></p>
+<p><span class="caption-text">Example Function Architecture connecting function objects with flow objects.</span><a class="headerlink" href="#id9" title="Permalink to this image"></a></p>
 </figcaption>
 </figure>
 <p>In <a class="reference internal" href="Development%20Guide.html#term-FRDL"><span class="xref std std-term">FRDL</span></a>, this object may be represented as:</p>
-<figure class="align-default" id="id13">
+<figure class="align-default" id="id10">
 <a class="reference internal image-reference" href="../_images/FRDL_Function_Example.svg"><img alt="Example Function Represented in FRDL" src="../_images/FRDL_Function_Example.svg" width="800" /></a>
 <figcaption>
-<p><span class="caption-text">Example Function Architecture propagation structure represented in FRDL.</span><a class="headerlink" href="#id13" title="Permalink to this image"></a></p>
+<p><span class="caption-text">Example Function Architecture propagation structure represented in FRDL.</span><a class="headerlink" href="#id10" title="Permalink to this image"></a></p>
 </figcaption>
 </figure>
 <p>To define a FunctionArchitecture class, it can be helpful to use the following code template:</p>
-<figure class="align-default" id="id14">
-<a class="reference internal image-reference" href="../_images/model_structure1.png"><img alt="Structure of a Model" src="../_images/model_structure1.png" style="width: 800px;" /></a>
+<figure class="align-default" id="id11">
+<a class="reference internal image-reference" href="../_images/model_structure.png"><img alt="Structure of a Model" src="../_images/model_structure.png" style="width: 800px;" /></a>
 <figcaption>
-<p><span class="caption-text">Code template for FunctionArchitecture classes.</span><a class="headerlink" href="#id14" title="Permalink to this image"></a></p>
+<p><span class="caption-text">Code template for FunctionArchitecture classes.</span><a class="headerlink" href="#id11" title="Permalink to this image"></a></p>
 </figcaption>
 </figure>
 <dl class="py class">
@@ -1106,7 +1103,7 @@ interacting with each other over time. The FunctionArchitecture uses an
 object-oriented, undirected graph-based model representation to enable the
 arbitrary propagation of flow states through the functions of the system.
 As opposed to a <em>procedural</em> <em>directed</em> graph-based model representation,
-in which each function has an <a href="#id3"><span class="problematic" id="id4">``</span></a>input’’ and <a href="#id5"><span class="problematic" id="id6">``</span></a>output’’, the undirected
+in which each function has an <a href="#id1"><span class="problematic" id="id2">``</span></a>input’’ and <a href="#id3"><span class="problematic" id="id4">``</span></a>output’’, the undirected
 graph approach enables one to propagate behaviors in multiple directions.
 For example, in a pump system, closing a valve can be modelled to not just
 reduce flow in the downstream pipe, but also increase pressure in upstream
@@ -1439,7 +1436,7 @@ Has structure {fxn:mode:properties}.</p></li>
 </p></li>
 <li><p><strong>varvalues</strong> (<em>list</em>) – List of values corresponding to varlist</p></li>
 <li><p><strong>kwargs</strong> (<em>kwargs</em>) – attribute-value pairs. If provided, must be passed using ** syntax:
-mdl.set_vars(<a href="#id7"><span class="problematic" id="id8">**</span></a>{‘fxnname.varname’:value})</p></li>
+mdl.set_vars(<a href="#id5"><span class="problematic" id="id6">**</span></a>{‘fxnname.varname’:value})</p></li>
 </ul>
 </dd>
 </dl>
@@ -1460,9 +1457,10 @@ mdl.set_vars(<a href="#id7"><span class="problematic" id="id8">**</span></a>{‘
 </section>
 <section id="fmdtools-define-architecture-geom">
 <h2>fmdtools.define.architecture.geom<a class="headerlink" href="#fmdtools-define-architecture-geom" title="Permalink to this heading"></a></h2>
-<span class="target" id="module-fmdtools.define.architecture.geom"></span><p>Module for defining Geometry Architectures, agglomerations of individual geometries.</p>
-<section id="id9">
-<h3>Classes<a class="headerlink" href="#id9" title="Permalink to this heading"></a></h3>
+<span class="target" id="module-fmdtools.define.architecture.geom"></span><p>Defines <a class="reference internal" href="#fmdtools.define.architecture.geom.GeomArchitecture" title="fmdtools.define.architecture.geom.GeomArchitecture"><code class="xref py py-class docutils literal notranslate"><span class="pre">GeomArchitecture</span></code></a> class for representing multiple geometries in a
+<code class="xref py py-class docutils literal notranslate"><span class="pre">Environment</span></code>.</p>
+<section id="classes">
+<h3>Classes<a class="headerlink" href="#classes" title="Permalink to this heading"></a></h3>
 <p><a class="reference internal" href="#fmdtools.define.architecture.geom.GeomArchitecture" title="fmdtools.define.architecture.geom.GeomArchitecture"><code class="xref py py-class docutils literal notranslate"><span class="pre">GeomArchitecture</span></code></a>: Architecture of multiple geometries.
 <a class="reference internal" href="#fmdtools.define.architecture.geom.ExGeomArch" title="fmdtools.define.architecture.geom.ExGeomArch"><code class="xref py py-class docutils literal notranslate"><span class="pre">ExGeomArch</span></code></a>: Example GeomArchitecture.</p>
 <dl class="py class">
