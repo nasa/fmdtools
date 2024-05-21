@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>fmdtools Paper Demonstration &mdash; fmdtools 2.0-rc-3 documentation</title>
+  <title>fmdtools Paper Demonstration &mdash; fmdtools 2.0-rc-4 documentation</title>
       <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
       <link rel="stylesheet" href="../../_static/nbsphinx-code-cells.css" type="text/css" />
@@ -41,7 +41,7 @@
               <img src="../../_static/logo-main.svg" class="logo" alt="Logo"/>
           </a>
               <div class="version">
-                2.0-rc-3
+                2.0-rc-4
               </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
@@ -84,7 +84,7 @@
 <li class="toctree-l2"><a class="reference internal" href="../../docs/Development%20Guide.html#introductory-tutorial">Introductory Tutorial</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="../../docs/Intro_to_fmdtools.html">Intro to resilience modeling, simulation, and visualization in Python with fmdtools.</a><ul>
 <li class="toctree-l4"><a class="reference internal" href="../../docs/Intro_to_fmdtools.html#author-daniel-hulse">Author: Daniel Hulse</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/Intro_to_fmdtools.html#version-2-0-rc-3">Version: 2.0-rc-3</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../docs/Intro_to_fmdtools.html#version-2-0-rc-4">Version: 2.0-rc-4</a></li>
 </ul>
 </li>
 <li class="toctree-l3"><a class="reference internal" href="../../docs/Intro_to_fmdtools.html#overview">Overview</a></li>
@@ -101,6 +101,8 @@
 <li class="toctree-l3"><a class="reference internal" href="../../docs/Intro_to_fmdtools.html#analysis-workflow-structure">Analysis Workflow/Structure</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../docs/Intro_to_fmdtools.html#defining-a-model">Defining a Model</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../docs/Intro_to_fmdtools.html#id1">Defining a Model</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../docs/Intro_to_fmdtools.html#containers-the-building-blocks-of-simulations">Containers - The building blocks of simulations</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../docs/Intro_to_fmdtools.html#flow-code-template">Flow Code Template</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../docs/Intro_to_fmdtools.html#function-code-template">Function Code Template</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../docs/Intro_to_fmdtools.html#model-code-template">Model Code Template</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../docs/Intro_to_fmdtools.html#demo-model-activity-examples-pump-ex-pump-py">Demo Model Activity: examples/pump/ex_pump.py</a></li>
@@ -402,8 +404,8 @@
 </ul>
 </li>
 <li class="toctree-l3"><a class="reference internal" href="../../docs/fmdtools.define.container.html">fmdtools.define.container</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.define.container.html#fmdtools-define-container-base">fmdtools.define.container.base</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.define.container.html#module-fmdtools.define.container.mode">fmdtools.define.container.mode</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.define.container.html#module-fmdtools.define.container.base">fmdtools.define.container.base</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.define.container.html#fmdtools-define-container-mode">fmdtools.define.container.mode</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.define.container.html#module-fmdtools.define.container.state">fmdtools.define.container.state</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.define.container.html#fmdtools-define-container-parameter">fmdtools.define.container.parameter</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.define.container.html#module-fmdtools.define.container.rand">fmdtools.define.container.rand</a></li>
@@ -650,7 +652,7 @@ prior to understanding the full system dynamics (Static Propagation Model) - Be 
 <div class="highlight"><pre>
 ASPL: 1.14
 Modularity: 0.00
-Robustness Coefficient: 99.39
+Robustness Coefficient: 99.06
 </pre></div></div>
 </div>
 <p>Next, we visualize network vulnerabilities using find_bridging_nodes and find_high_degree_nodes.</p>
@@ -746,7 +748,7 @@ High Degree Nodes: [(&#39;ctl_dof&#39;, 6), (&#39;plan_path&#39;, 6), (&#39;hold
 <div class="highlight"><pre>
 ASPL, functions and flows: 2.30
 Modularity, functions and flows: 0.32
-Robustness Coefficient, functions and flows: 86.12
+Robustness Coefficient, functions and flows: 86.90
 </pre></div></div>
 </div>
 <div class="nbinput docutils container">
@@ -852,7 +854,7 @@ High Degree Nodes: [(&#39;ctl_dof&#39;, 5), (&#39;force_st&#39;, 5), (&#39;dofs&
 </div>
 <div class="output_area stderr docutils container">
 <div class="highlight"><pre>
-SCENARIOS COMPLETE: 100%|██████████| 21/21 [00:00&lt;00:00, 126.20it/s]
+SCENARIOS COMPLETE: 100%|██████████| 21/21 [00:00&lt;00:00, 125.73it/s]
 </pre></div></div>
 </div>
 <p>Here we produce a scenario-based FMEA to show which scenarios are most important in the model:</p>
@@ -1246,7 +1248,7 @@ nominal &amp; [&#39;store_ee&#39;, &#39;dist_ee&#39;, &#39;affect_dof&#39;, &#39
 </div>
 <div class="output_area stderr docutils container">
 <div class="highlight"><pre>
-SCENARIOS COMPLETE: 100%|██████████| 13/13 [00:00&lt;00:00, 33.22it/s]
+SCENARIOS COMPLETE: 100%|██████████| 13/13 [00:00&lt;00:00, 36.72it/s]
 </pre></div></div>
 </div>
 <div class="nbinput docutils container">
@@ -1496,7 +1498,7 @@ FaultSample of scenarios:
 </div>
 <div class="output_area stderr docutils container">
 <div class="highlight"><pre>
-SCENARIOS COMPLETE: 100%|██████████| 50/50 [00:02&lt;00:00, 21.53it/s]
+SCENARIOS COMPLETE: 100%|██████████| 50/50 [00:02&lt;00:00, 21.02it/s]
 </pre></div></div>
 </div>
 <div class="nbinput docutils container">
@@ -2107,7 +2109,7 @@ FaultSample of scenarios:
 </div>
 <div class="output_area stderr docutils container">
 <div class="highlight"><pre>
-SCENARIOS COMPLETE: 100%|██████████| 90/90 [00:06&lt;00:00, 14.19it/s]
+SCENARIOS COMPLETE: 100%|██████████| 90/90 [00:06&lt;00:00, 14.38it/s]
 </pre></div></div>
 </div>
 <div class="nbinput docutils container">

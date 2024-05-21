@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Pump Example Notebook &mdash; fmdtools 2.0-rc-3 documentation</title>
+  <title>Pump Example Notebook &mdash; fmdtools 2.0-rc-4 documentation</title>
       <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
       <link rel="stylesheet" href="../../_static/nbsphinx-code-cells.css" type="text/css" />
@@ -41,7 +41,7 @@
               <img src="../../_static/logo-main.svg" class="logo" alt="Logo"/>
           </a>
               <div class="version">
-                2.0-rc-3
+                2.0-rc-4
               </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
@@ -84,7 +84,7 @@
 <li class="toctree-l2"><a class="reference internal" href="../../docs/Development%20Guide.html#introductory-tutorial">Introductory Tutorial</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="../../docs/Intro_to_fmdtools.html">Intro to resilience modeling, simulation, and visualization in Python with fmdtools.</a><ul>
 <li class="toctree-l4"><a class="reference internal" href="../../docs/Intro_to_fmdtools.html#author-daniel-hulse">Author: Daniel Hulse</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/Intro_to_fmdtools.html#version-2-0-rc-3">Version: 2.0-rc-3</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../docs/Intro_to_fmdtools.html#version-2-0-rc-4">Version: 2.0-rc-4</a></li>
 </ul>
 </li>
 <li class="toctree-l3"><a class="reference internal" href="../../docs/Intro_to_fmdtools.html#overview">Overview</a></li>
@@ -101,6 +101,8 @@
 <li class="toctree-l3"><a class="reference internal" href="../../docs/Intro_to_fmdtools.html#analysis-workflow-structure">Analysis Workflow/Structure</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../docs/Intro_to_fmdtools.html#defining-a-model">Defining a Model</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../docs/Intro_to_fmdtools.html#id1">Defining a Model</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../docs/Intro_to_fmdtools.html#containers-the-building-blocks-of-simulations">Containers - The building blocks of simulations</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../docs/Intro_to_fmdtools.html#flow-code-template">Flow Code Template</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../docs/Intro_to_fmdtools.html#function-code-template">Function Code Template</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../docs/Intro_to_fmdtools.html#model-code-template">Model Code Template</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../docs/Intro_to_fmdtools.html#demo-model-activity-examples-pump-ex-pump-py">Demo Model Activity: examples/pump/ex_pump.py</a></li>
@@ -402,8 +404,8 @@
 </ul>
 </li>
 <li class="toctree-l3"><a class="reference internal" href="../../docs/fmdtools.define.container.html">fmdtools.define.container</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.define.container.html#fmdtools-define-container-base">fmdtools.define.container.base</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.define.container.html#module-fmdtools.define.container.mode">fmdtools.define.container.mode</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.define.container.html#module-fmdtools.define.container.base">fmdtools.define.container.base</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.define.container.html#fmdtools-define-container-mode">fmdtools.define.container.mode</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.define.container.html#module-fmdtools.define.container.state">fmdtools.define.container.state</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.define.container.html#fmdtools-define-container-parameter">fmdtools.define.container.parameter</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.define.container.html#module-fmdtools.define.container.rand">fmdtools.define.container.rand</a></li>
@@ -635,7 +637,7 @@ dict_keys([&#39;graph&#39;])
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-&lt;fmdtools.analyze.graph.FunctionArchitectureGraph at 0x2200c16e800&gt;
+&lt;fmdtools.analyze.graph.FunctionArchitectureGraph at 0x2693100e6e0&gt;
 </pre></div></div>
 </div>
 <p>With these results, we can now plot the graph of results resgraph using:</p>
@@ -2007,7 +2009,7 @@ endclass.cost:        29000.000000000007
 endclass.expected_cost: 29000.000000000007
 endfaults: {&#39;import_ee&#39;: [&#39;no_v&#39;], &#39;move_water&#39;: [&#39;short&#39;]}
 faultprops: {&#39;import_ee&#39;: {&#39;no_v&#39;: Fault(prob=8.000000000000001e-06, cost=10000, phases={&#39;start&#39;: 0, &#39;on&#39;: 1, &#39;end&#39;: 0}, units=&#39;sim&#39;)}, &#39;move_water&#39;: {&#39;short&#39;: Fault(prob=1e-05, cost=10000, phases={&#39;start&#39;: 1.5, &#39;on&#39;: 1, &#39;end&#39;: 1}, units=&#39;sim&#39;)}}
-graph: &lt;fmdtools.analyze.graph.FunctionArchitectureGraph object at 0x000002200C1D32E0&gt;
+graph: &lt;fmdtools.analyze.graph.FunctionArchitectureGraph object at 0x000002695E5E60E0&gt;
 </pre></div></div>
 </div>
 <p>However, the graph view now has information about degradations between the faulty and nominal runs, along with fault information:</p>
@@ -2288,42 +2290,42 @@ input[type=range].anim-slider {
 </style>
 
 <div class="animation">
-  <img id="_anim_imgbe52123970914546989aaf9b6d588c95">
+  <img id="_anim_imgbd190fb048404c57bb4791cca276cb2f">
   <div class="anim-controls">
-    <input id="_anim_sliderbe52123970914546989aaf9b6d588c95" type="range" class="anim-slider"
+    <input id="_anim_sliderbd190fb048404c57bb4791cca276cb2f" type="range" class="anim-slider"
            name="points" min="0" max="1" step="1" value="0"
-           oninput="animbe52123970914546989aaf9b6d588c95.set_frame(parseInt(this.value));">
+           oninput="animbd190fb048404c57bb4791cca276cb2f.set_frame(parseInt(this.value));">
     <div class="anim-buttons">
-      <button title="Decrease speed" aria-label="Decrease speed" onclick="animbe52123970914546989aaf9b6d588c95.slower()">
+      <button title="Decrease speed" aria-label="Decrease speed" onclick="animbd190fb048404c57bb4791cca276cb2f.slower()">
           <i class="fa fa-minus"></i></button>
-      <button title="First frame" aria-label="First frame" onclick="animbe52123970914546989aaf9b6d588c95.first_frame()">
+      <button title="First frame" aria-label="First frame" onclick="animbd190fb048404c57bb4791cca276cb2f.first_frame()">
         <i class="fa fa-fast-backward"></i></button>
-      <button title="Previous frame" aria-label="Previous frame" onclick="animbe52123970914546989aaf9b6d588c95.previous_frame()">
+      <button title="Previous frame" aria-label="Previous frame" onclick="animbd190fb048404c57bb4791cca276cb2f.previous_frame()">
           <i class="fa fa-step-backward"></i></button>
-      <button title="Play backwards" aria-label="Play backwards" onclick="animbe52123970914546989aaf9b6d588c95.reverse_animation()">
+      <button title="Play backwards" aria-label="Play backwards" onclick="animbd190fb048404c57bb4791cca276cb2f.reverse_animation()">
           <i class="fa fa-play fa-flip-horizontal"></i></button>
-      <button title="Pause" aria-label="Pause" onclick="animbe52123970914546989aaf9b6d588c95.pause_animation()">
+      <button title="Pause" aria-label="Pause" onclick="animbd190fb048404c57bb4791cca276cb2f.pause_animation()">
           <i class="fa fa-pause"></i></button>
-      <button title="Play" aria-label="Play" onclick="animbe52123970914546989aaf9b6d588c95.play_animation()">
+      <button title="Play" aria-label="Play" onclick="animbd190fb048404c57bb4791cca276cb2f.play_animation()">
           <i class="fa fa-play"></i></button>
-      <button title="Next frame" aria-label="Next frame" onclick="animbe52123970914546989aaf9b6d588c95.next_frame()">
+      <button title="Next frame" aria-label="Next frame" onclick="animbd190fb048404c57bb4791cca276cb2f.next_frame()">
           <i class="fa fa-step-forward"></i></button>
-      <button title="Last frame" aria-label="Last frame" onclick="animbe52123970914546989aaf9b6d588c95.last_frame()">
+      <button title="Last frame" aria-label="Last frame" onclick="animbd190fb048404c57bb4791cca276cb2f.last_frame()">
           <i class="fa fa-fast-forward"></i></button>
-      <button title="Increase speed" aria-label="Increase speed" onclick="animbe52123970914546989aaf9b6d588c95.faster()">
+      <button title="Increase speed" aria-label="Increase speed" onclick="animbd190fb048404c57bb4791cca276cb2f.faster()">
           <i class="fa fa-plus"></i></button>
     </div>
-    <form title="Repetition mode" aria-label="Repetition mode" action="#n" name="_anim_loop_selectbe52123970914546989aaf9b6d588c95"
+    <form title="Repetition mode" aria-label="Repetition mode" action="#n" name="_anim_loop_selectbd190fb048404c57bb4791cca276cb2f"
           class="anim-state">
-      <input type="radio" name="state" value="once" id="_anim_radio1_be52123970914546989aaf9b6d588c95"
+      <input type="radio" name="state" value="once" id="_anim_radio1_bd190fb048404c57bb4791cca276cb2f"
              >
-      <label for="_anim_radio1_be52123970914546989aaf9b6d588c95">Once</label>
-      <input type="radio" name="state" value="loop" id="_anim_radio2_be52123970914546989aaf9b6d588c95"
+      <label for="_anim_radio1_bd190fb048404c57bb4791cca276cb2f">Once</label>
+      <input type="radio" name="state" value="loop" id="_anim_radio2_bd190fb048404c57bb4791cca276cb2f"
              checked>
-      <label for="_anim_radio2_be52123970914546989aaf9b6d588c95">Loop</label>
-      <input type="radio" name="state" value="reflect" id="_anim_radio3_be52123970914546989aaf9b6d588c95"
+      <label for="_anim_radio2_bd190fb048404c57bb4791cca276cb2f">Loop</label>
+      <input type="radio" name="state" value="reflect" id="_anim_radio3_bd190fb048404c57bb4791cca276cb2f"
              >
-      <label for="_anim_radio3_be52123970914546989aaf9b6d588c95">Reflect</label>
+      <label for="_anim_radio3_bd190fb048404c57bb4791cca276cb2f">Reflect</label>
     </form>
   </div>
 </div>
@@ -2333,9 +2335,9 @@ input[type=range].anim-slider {
   /* Instantiate the Animation class. */
   /* The IDs given should match those used in the template above. */
   (function() {
-    var img_id = "_anim_imgbe52123970914546989aaf9b6d588c95";
-    var slider_id = "_anim_sliderbe52123970914546989aaf9b6d588c95";
-    var loop_select_id = "_anim_loop_selectbe52123970914546989aaf9b6d588c95";
+    var img_id = "_anim_imgbd190fb048404c57bb4791cca276cb2f";
+    var slider_id = "_anim_sliderbd190fb048404c57bb4791cca276cb2f";
+    var loop_select_id = "_anim_loop_selectbd190fb048404c57bb4791cca276cb2f";
     var frames = new Array(56);
 
   frames[0] = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAlgAAAGQCAYAAAByNR6YAAAAOXRFWHRTb2Z0d2FyZQBNYXRwbG90\
@@ -44656,7 +44658,7 @@ oCDKAAAAAElFTkSuQmCC\
     /* set a timeout to make sure all the above elements are created before
        the object is initialized. */
     setTimeout(function() {
-        animbe52123970914546989aaf9b6d588c95 = new Animation(frames, img_id, slider_id, 200.0,
+        animbd190fb048404c57bb4791cca276cb2f = new Animation(frames, img_id, slider_id, 200.0,
                                  loop_select_id);
     }, 0);
   })()
@@ -47084,7 +47086,7 @@ time:                               27.5
 </div>
 <div class="output_area stderr docutils container">
 <div class="highlight"><pre>
-SCENARIOS COMPLETE: 100%|██████████| 8/8 [00:00&lt;00:00, 29.09it/s]
+SCENARIOS COMPLETE: 100%|██████████| 8/8 [00:00&lt;00:00, 27.84it/s]
 </pre></div></div>
 </div>
 <p>We can visualize the metrics for each scenario using <code class="docutils literal notranslate"><span class="pre">Result.create_simple_fmea</span></code></p>
@@ -47379,7 +47381,7 @@ FaultSample of scenarios:
 </div>
 <div class="output_area stderr docutils container">
 <div class="highlight"><pre>
-SCENARIOS COMPLETE: 100%|██████████| 24/24 [00:00&lt;00:00, 47.96it/s]
+SCENARIOS COMPLETE: 100%|██████████| 24/24 [00:00&lt;00:00, 45.18it/s]
 </pre></div></div>
 </div>
 <div class="nboutput nblast docutils container">
@@ -47633,28 +47635,14 @@ SCENARIOS COMPLETE: 100%|██████████| 24/24 [00:00&lt;00:00, 
       <td>0.003000</td>
     </tr>
     <tr>
-      <th rowspan="4" valign="top">import_ee</th>
-      <th>no_v</th>
+      <th rowspan="2" valign="top">import_ee</th>
+      <th rowspan="2" valign="top">no_v</th>
       <th>end</th>
       <td>0.000000e+00</td>
       <td>5000.000</td>
       <td>0.000000</td>
     </tr>
     <tr>
-      <th rowspan="2" valign="top">inf_v</th>
-      <th>end</th>
-      <td>0.000000e+00</td>
-      <td>2500.000</td>
-      <td>0.000000</td>
-    </tr>
-    <tr>
-      <th>start</th>
-      <td>0.000000e+00</td>
-      <td>12562.500</td>
-      <td>0.000000</td>
-    </tr>
-    <tr>
-      <th>no_v</th>
       <th>start</th>
       <td>0.000000e+00</td>
       <td>10062.500</td>
@@ -47666,6 +47654,20 @@ SCENARIOS COMPLETE: 100%|██████████| 24/24 [00:00&lt;00:00, 
       <th>end</th>
       <td>1.000000e-05</td>
       <td>0.000</td>
+      <td>0.000000</td>
+    </tr>
+    <tr>
+      <th rowspan="2" valign="top">import_ee</th>
+      <th rowspan="2" valign="top">inf_v</th>
+      <th>end</th>
+      <td>0.000000e+00</td>
+      <td>2500.000</td>
+      <td>0.000000</td>
+    </tr>
+    <tr>
+      <th>start</th>
+      <td>0.000000e+00</td>
+      <td>12562.500</td>
       <td>0.000000</td>
     </tr>
   </tbody>

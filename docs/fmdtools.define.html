@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>fmdtools.define &mdash; fmdtools 2.0-rc-3 documentation</title>
+  <title>fmdtools.define &mdash; fmdtools 2.0-rc-4 documentation</title>
       <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
     <link rel="shortcut icon" href="../_static/fmdtools_ico.ico"/>
@@ -38,7 +38,7 @@
               <img src="../_static/logo-main.svg" class="logo" alt="Logo"/>
           </a>
               <div class="version">
-                2.0-rc-3
+                2.0-rc-4
               </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
@@ -81,7 +81,7 @@
 <li class="toctree-l2"><a class="reference internal" href="Development%20Guide.html#introductory-tutorial">Introductory Tutorial</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="Intro_to_fmdtools.html">Intro to resilience modeling, simulation, and visualization in Python with fmdtools.</a><ul>
 <li class="toctree-l4"><a class="reference internal" href="Intro_to_fmdtools.html#author-daniel-hulse">Author: Daniel Hulse</a></li>
-<li class="toctree-l4"><a class="reference internal" href="Intro_to_fmdtools.html#version-2-0-rc-3">Version: 2.0-rc-3</a></li>
+<li class="toctree-l4"><a class="reference internal" href="Intro_to_fmdtools.html#version-2-0-rc-4">Version: 2.0-rc-4</a></li>
 </ul>
 </li>
 <li class="toctree-l3"><a class="reference internal" href="Intro_to_fmdtools.html#overview">Overview</a></li>
@@ -481,7 +481,7 @@
   <section id="module-fmdtools.define">
 <span id="fmdtools-define"></span><h1>fmdtools.define<a class="headerlink" href="#module-fmdtools.define" title="Permalink to this heading"></a></h1>
 <p>Package for modelling system structure and behavior.</p>
-<p>The define package provides the building blocks to develop a simulation. Simulations are defined in the sub-classes of the <a class="reference internal" href="fmdtools.define.block.html#fmdtools.define.block.base.Simulable" title="fmdtools.define.block.base.Simulable"><code class="xref py py-class docutils literal notranslate"><span class="pre">Simulable</span></code></a> class (in the <a class="reference internal" href="fmdtools.define/fmdtools.define.block.html#module-fmdtools.define.block" title="fmdtools.define.block"><code class="xref py py-mod docutils literal notranslate"><span class="pre">block</span></code></a> and <a class="reference internal" href="fmdtools.define/fmdtools.define.architecture.html#module-fmdtools.define.architecture" title="fmdtools.define.architecture"><code class="xref py py-mod docutils literal notranslate"><span class="pre">architecture</span></code></a> subpackages), as shown below:</p>
+<p>The define package provides the building blocks to develop a simulation. Simulations are defined in the sub-classes of the <a class="reference internal" href="fmdtools.define.block.html#fmdtools.define.block.base.Simulable" title="fmdtools.define.block.base.Simulable"><code class="xref py py-class docutils literal notranslate"><span class="pre">Simulable</span></code></a> class (in the <a class="reference internal" href="fmdtools.define.block.html#module-fmdtools.define.block" title="fmdtools.define.block"><code class="xref py py-mod docutils literal notranslate"><span class="pre">block</span></code></a> and <a class="reference internal" href="fmdtools.define.architecture.html#module-fmdtools.define.architecture" title="fmdtools.define.architecture"><code class="xref py py-mod docutils literal notranslate"><span class="pre">architecture</span></code></a> subpackages), as shown below:</p>
 <figure class="align-default" id="id1">
 <a class="reference internal image-reference" href="../_images/block_inheritance.svg"><img alt="Inheritance of simulable fmdtools classes" src="../_images/block_inheritance.svg" width="800" /></a>
 <figcaption>
@@ -491,22 +491,22 @@
 <p>Aside from their internal methods defining behavior, events/indicators, and results, Simulations are additionally composed of internal containers (or sub-attributes) of the class which are defined in their own class.</p>
 <table class="autosummary longtable docutils align-default">
 <tbody>
-<tr class="row-odd"><td><p><a class="reference internal" href="fmdtools.define/fmdtools.define.architecture.html#module-fmdtools.define.architecture" title="fmdtools.define.architecture"><code class="xref py py-obj docutils literal notranslate"><span class="pre">fmdtools.define.architecture</span></code></a></p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="fmdtools.define.architecture.html#module-fmdtools.define.architecture" title="fmdtools.define.architecture"><code class="xref py py-obj docutils literal notranslate"><span class="pre">fmdtools.define.architecture</span></code></a></p></td>
 <td><p>Package for defining system <a class="reference internal" href="Development%20Guide.html#term-Architecture"><span class="xref std std-term">Architecture</span></a>.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="fmdtools.define/fmdtools.define.block.html#module-fmdtools.define.block" title="fmdtools.define.block"><code class="xref py py-obj docutils literal notranslate"><span class="pre">fmdtools.define.block</span></code></a></p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="fmdtools.define.block.html#module-fmdtools.define.block" title="fmdtools.define.block"><code class="xref py py-obj docutils literal notranslate"><span class="pre">fmdtools.define.block</span></code></a></p></td>
 <td><p>Package for defining system behaviors.</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="fmdtools.define/fmdtools.define.flow.html#module-fmdtools.define.flow" title="fmdtools.define.flow"><code class="xref py py-obj docutils literal notranslate"><span class="pre">fmdtools.define.flow</span></code></a></p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="fmdtools.define.flow.html#module-fmdtools.define.flow" title="fmdtools.define.flow"><code class="xref py py-obj docutils literal notranslate"><span class="pre">fmdtools.define.flow</span></code></a></p></td>
 <td><p>Package for defining <a class="reference internal" href="Development%20Guide.html#term-Flow"><span class="xref std std-term">Flow</span></a> connections between behavioral elements.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="fmdtools.define/fmdtools.define.object.html#module-fmdtools.define.object" title="fmdtools.define.object"><code class="xref py py-obj docutils literal notranslate"><span class="pre">fmdtools.define.object</span></code></a></p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="fmdtools.define.object.html#module-fmdtools.define.object" title="fmdtools.define.object"><code class="xref py py-obj docutils literal notranslate"><span class="pre">fmdtools.define.object</span></code></a></p></td>
 <td><p>Package defining various model building blocks.</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="fmdtools.define/fmdtools.define.base.html#module-fmdtools.define.base" title="fmdtools.define.base"><code class="xref py py-obj docutils literal notranslate"><span class="pre">fmdtools.define.base</span></code></a></p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#module-fmdtools.define.base" title="fmdtools.define.base"><code class="xref py py-obj docutils literal notranslate"><span class="pre">fmdtools.define.base</span></code></a></p></td>
 <td><p>Common methods used commonly in model definition constructs.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="fmdtools.define/fmdtools.define.environment.html#module-fmdtools.define.environment" title="fmdtools.define.environment"><code class="xref py py-obj docutils literal notranslate"><span class="pre">fmdtools.define.environment</span></code></a></p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="#module-fmdtools.define.environment" title="fmdtools.define.environment"><code class="xref py py-obj docutils literal notranslate"><span class="pre">fmdtools.define.environment</span></code></a></p></td>
 <td><p>Module for representing environments with the <code class="xref py py-class docutils literal notranslate"><span class="pre">Environment</span></code> class.</p></td>
 </tr>
 </tbody>
