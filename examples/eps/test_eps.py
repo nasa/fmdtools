@@ -48,8 +48,8 @@ class epsTests(unittest.TestCase, CommonTests):
         self.assertEqual(len(res.nest(1)), actual_num_faults + 1)
         hist_len_is_1 = all([len(v) == 1 for v in hist.values()])
         self.assertTrue(hist_len_is_1)  # all histories have length 1
-        all_have_costs = all(v > 0 for k, v in res.get_values('.cost').items()
-                             if 'nominal' not in k)
+        all_have_costs = all([v > 0 for k, v in res.get_values('.cost').items()
+                              if 'nominal' not in k])
         # all endresults have positive costs
         self.assertTrue(all_have_costs)
         repcosts = np.sum([np.sum([m["cost"] for m in f.m.faultmodes.values()])

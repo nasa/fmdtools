@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>EPS Example Notebook &mdash; fmdtools 2.0-rc-3 documentation</title>
+  <title>EPS Example Notebook &mdash; fmdtools 2.0-rc-4 documentation</title>
       <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
       <link rel="stylesheet" href="../../_static/nbsphinx-code-cells.css" type="text/css" />
@@ -41,7 +41,7 @@
               <img src="../../_static/logo-main.svg" class="logo" alt="Logo"/>
           </a>
               <div class="version">
-                2.0-rc-3
+                2.0-rc-4
               </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
@@ -84,7 +84,7 @@
 <li class="toctree-l2"><a class="reference internal" href="../../docs/Development%20Guide.html#introductory-tutorial">Introductory Tutorial</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="../../docs/Intro_to_fmdtools.html">Intro to resilience modeling, simulation, and visualization in Python with fmdtools.</a><ul>
 <li class="toctree-l4"><a class="reference internal" href="../../docs/Intro_to_fmdtools.html#author-daniel-hulse">Author: Daniel Hulse</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/Intro_to_fmdtools.html#version-2-0-rc-3">Version: 2.0-rc-3</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../docs/Intro_to_fmdtools.html#version-2-0-rc-4">Version: 2.0-rc-4</a></li>
 </ul>
 </li>
 <li class="toctree-l3"><a class="reference internal" href="../../docs/Intro_to_fmdtools.html#overview">Overview</a></li>
@@ -101,6 +101,8 @@
 <li class="toctree-l3"><a class="reference internal" href="../../docs/Intro_to_fmdtools.html#analysis-workflow-structure">Analysis Workflow/Structure</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../docs/Intro_to_fmdtools.html#defining-a-model">Defining a Model</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../docs/Intro_to_fmdtools.html#id1">Defining a Model</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../docs/Intro_to_fmdtools.html#containers-the-building-blocks-of-simulations">Containers - The building blocks of simulations</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../docs/Intro_to_fmdtools.html#flow-code-template">Flow Code Template</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../docs/Intro_to_fmdtools.html#function-code-template">Function Code Template</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../docs/Intro_to_fmdtools.html#model-code-template">Model Code Template</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../docs/Intro_to_fmdtools.html#demo-model-activity-examples-pump-ex-pump-py">Demo Model Activity: examples/pump/ex_pump.py</a></li>
@@ -402,8 +404,8 @@
 </ul>
 </li>
 <li class="toctree-l3"><a class="reference internal" href="../../docs/fmdtools.define.container.html">fmdtools.define.container</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.define.container.html#fmdtools-define-container-base">fmdtools.define.container.base</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.define.container.html#module-fmdtools.define.container.mode">fmdtools.define.container.mode</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.define.container.html#module-fmdtools.define.container.base">fmdtools.define.container.base</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.define.container.html#fmdtools-define-container-mode">fmdtools.define.container.mode</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.define.container.html#module-fmdtools.define.container.state">fmdtools.define.container.state</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.define.container.html#fmdtools-define-container-parameter">fmdtools.define.container.parameter</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.define.container.html#module-fmdtools.define.container.rand">fmdtools.define.container.rand</a></li>
@@ -534,7 +536,7 @@
 </div>
 <div class="output_area stderr docutils container">
 <div class="highlight"><pre>
-c:\users\dhulse\documents\github\fmdtools\fmdtools\analyze\history.py:762: UserWarning: Attempting to set identical low and high xlims makes transformation singular; automatically expanding.
+c:\users\dhulse\documents\github\fmdtools\fmdtools\analyze\history.py:761: UserWarning: Attempting to set identical low and high xlims makes transformation singular; automatically expanding.
   ax.set_xlim(min_ind, max_ind)
 </pre></div></div>
 </div>
@@ -576,7 +578,7 @@ c:\users\dhulse\documents\github\fmdtools\fmdtools\analyze\history.py:762: UserW
 </div>
 <div class="output_area stderr docutils container">
 <div class="highlight"><pre>
-SCENARIOS COMPLETE: 100%|██████████| 35/35 [00:00&lt;00:00, 74.59it/s]
+SCENARIOS COMPLETE: 100%|██████████| 35/35 [00:00&lt;00:00, 70.57it/s]
 </pre></div></div>
 </div>
 <p>Using <code class="docutils literal notranslate"><span class="pre">analyze.tabulate.result_summary_fmea</span></code>, one can see the degradation effects of this fault on the flows:</p>
@@ -638,11 +640,11 @@ SCENARIOS COMPLETE: 100%|██████████| 35/35 [00:00&lt;00:00, 
     </tr>
     <tr>
       <th>import_ee_high_v_t0p0</th>
-      <td>[]</td>
+      <td>['me', 'oe', 'he']</td>
       <td>[]</td>
       <td>0.000005</td>
-      <td>3350.0</td>
-      <td>733.65</td>
+      <td>2100.0</td>
+      <td>459.9</td>
     </tr>
     <tr>
       <th>import_ee_no_v_t0p0</th>
@@ -670,11 +672,11 @@ SCENARIOS COMPLETE: 100%|██████████| 35/35 [00:00&lt;00:00, 
     </tr>
     <tr>
       <th>supply_ee_major_overload_t0p0</th>
-      <td>[]</td>
+      <td>['me', 'oe', 'he']</td>
       <td>[]</td>
       <td>0.000003</td>
-      <td>3650.0</td>
-      <td>479.61</td>
+      <td>2400.0</td>
+      <td>315.36</td>
     </tr>
     <tr>
       <th>supply_ee_short_t0p0</th>
