@@ -64,7 +64,7 @@ State classes are extended and deployed by the user, as shown below:
 The following template shows the basic syntax used to define states:
 
 .. figure:: figures/powerpoint/state_structure.svg
-   :width: 800
+   :width: 600
    :alt: Structure of a State Class
    
    State class template/example.

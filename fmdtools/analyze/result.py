@@ -393,7 +393,7 @@ class Result(UserDict):
             ks = [k for k in flatself.keys() if k.endswith(v)]
             if not ks:
                 raise Exception("Value "+v+" not in Result keys.")
-            k_vs.append(*ks)
+            k_vs.extend(ks)
 
         for k in k_vs:
             h[k] = flatself[k]

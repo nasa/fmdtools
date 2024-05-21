@@ -65,7 +65,7 @@
             <a id="nextFileLink" class="nav" href="d_c3fb750c09d80710_parameter_py.html">&#xbb; next</a>
             &nbsp; &nbsp; &nbsp;
             <a class="nav" href="https://coverage.readthedocs.io/en/7.4.0">coverage.py v7.4.0</a>,
-            created at 2024-05-10 16:47 -0700
+            created at 2024-05-21 16:29 -0700
         </p>
         <aside class="hidden">
             <button type="button" class="button_next_chunk" data-shortcut="j"/>
@@ -82,7 +82,7 @@
 <main id="source">
     <p class="pln"><span class="n"><a id="t1" href="#t1">1</a></span><span class="t"><span class="com"># -*- coding: utf-8 -*-</span>&nbsp;</span><span class="r"></span></p>
     <p class="run"><span class="n"><a id="t2" href="#t2">2</a></span><span class="t"><span class="str">"""</span>&nbsp;</span><span class="r"></span></p>
-    <p class="pln"><span class="n"><a id="t3" href="#t3">3</a></span><span class="t"><span class="str">Description: Module for helping define Modes (faulty and otherwise).</span>&nbsp;</span><span class="r"></span></p>
+    <p class="pln"><span class="n"><a id="t3" href="#t3">3</a></span><span class="t"><span class="str">Defines :class:`Mode` class for defining (faulty and otherwise) :term:`mode` s.</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t4" href="#t4">4</a></span><span class="t">&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t5" href="#t5">5</a></span><span class="t"><span class="str">Has classes:</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t6" href="#t6">6</a></span><span class="t">&nbsp;</span><span class="r"></span></p>
@@ -364,13 +364,13 @@
     <p class="pln"><span class="n"><a id="t282" href="#t282">282</a></span><span class="t">                          <span class="str">'phases'</span><span class="op">:</span> <span class="nam">self</span><span class="op">.</span><span class="nam">phases</span><span class="op">,</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t283" href="#t283">283</a></span><span class="t">                          <span class="str">'units'</span><span class="op">:</span> <span class="nam">self</span><span class="op">.</span><span class="nam">units</span><span class="op">}</span>&nbsp;</span><span class="r"></span></p>
     <p class="run"><span class="n"><a id="t284" href="#t284">284</a></span><span class="t">        <span class="key">for</span> <span class="nam">mode</span> <span class="key">in</span> <span class="nam">fm_args</span><span class="op">:</span>&nbsp;</span><span class="r"></span></p>
-    <p class="run"><span class="n"><a id="t285" href="#t285">285</a></span><span class="t">            <span class="key">if</span> <span class="nam">type</span><span class="op">(</span><span class="nam">fm_args</span><span class="op">)</span> <span class="op">==</span> <span class="nam">tuple</span><span class="op">:</span>&nbsp;</span><span class="r"></span></p>
+    <p class="run"><span class="n"><a id="t285" href="#t285">285</a></span><span class="t">            <span class="key">if</span> <span class="nam">type</span><span class="op">(</span><span class="nam">fm_args</span><span class="op">)</span> <span class="key">is</span> <span class="nam">tuple</span><span class="op">:</span>&nbsp;</span><span class="r"></span></p>
     <p class="run"><span class="n"><a id="t286" href="#t286">286</a></span><span class="t">                <span class="nam">args</span> <span class="op">=</span> <span class="op">(</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
     <p class="run"><span class="n"><a id="t287" href="#t287">287</a></span><span class="t">                <span class="nam">kwargs</span> <span class="op">=</span> <span class="op">{</span><span class="op">**</span><span class="nam">default_kwargs</span><span class="op">}</span>&nbsp;</span><span class="r"></span></p>
-    <p class="run"><span class="n"><a id="t288" href="#t288">288</a></span><span class="t">            <span class="key">elif</span> <span class="nam">type</span><span class="op">(</span><span class="nam">fm_args</span><span class="op">[</span><span class="nam">mode</span><span class="op">]</span><span class="op">)</span> <span class="op">==</span> <span class="nam">dict</span><span class="op">:</span>&nbsp;</span><span class="r"></span></p>
+    <p class="run"><span class="n"><a id="t288" href="#t288">288</a></span><span class="t">            <span class="key">elif</span> <span class="nam">type</span><span class="op">(</span><span class="nam">fm_args</span><span class="op">[</span><span class="nam">mode</span><span class="op">]</span><span class="op">)</span> <span class="key">is</span> <span class="nam">dict</span><span class="op">:</span>&nbsp;</span><span class="r"></span></p>
     <p class="mis show_mis"><span class="n"><a id="t289" href="#t289">289</a></span><span class="t">                <span class="nam">args</span> <span class="op">=</span> <span class="op">(</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
     <p class="mis show_mis"><span class="n"><a id="t290" href="#t290">290</a></span><span class="t">                <span class="nam">kwargs</span> <span class="op">=</span> <span class="op">{</span><span class="op">**</span><span class="nam">default_kwargs</span><span class="op">,</span> <span class="op">**</span><span class="nam">fm_args</span><span class="op">[</span><span class="nam">mode</span><span class="op">]</span><span class="op">}</span>&nbsp;</span><span class="r"></span></p>
-    <p class="run"><span class="n"><a id="t291" href="#t291">291</a></span><span class="t">            <span class="key">elif</span> <span class="nam">type</span><span class="op">(</span><span class="nam">fm_args</span><span class="op">[</span><span class="nam">mode</span><span class="op">]</span><span class="op">)</span> <span class="op">==</span> <span class="nam">tuple</span><span class="op">:</span>&nbsp;</span><span class="r"></span></p>
+    <p class="run"><span class="n"><a id="t291" href="#t291">291</a></span><span class="t">            <span class="key">elif</span> <span class="nam">type</span><span class="op">(</span><span class="nam">fm_args</span><span class="op">[</span><span class="nam">mode</span><span class="op">]</span><span class="op">)</span> <span class="key">is</span> <span class="nam">tuple</span><span class="op">:</span>&nbsp;</span><span class="r"></span></p>
     <p class="run"><span class="n"><a id="t292" href="#t292">292</a></span><span class="t">                <span class="nam">args</span> <span class="op">=</span> <span class="nam">fm_args</span><span class="op">[</span><span class="nam">mode</span><span class="op">]</span>&nbsp;</span><span class="r"></span></p>
     <p class="run"><span class="n"><a id="t293" href="#t293">293</a></span><span class="t">                <span class="nam">kwargs</span> <span class="op">=</span> <span class="op">{</span><span class="op">**</span><span class="nam">default_kwargs</span><span class="op">}</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t294" href="#t294">294</a></span><span class="t">            <span class="key">else</span><span class="op">:</span>&nbsp;</span><span class="r"></span></p>
@@ -690,7 +690,7 @@
             <a id="nextFileLink" class="nav" href="d_c3fb750c09d80710_parameter_py.html">&#xbb; next</a>
             &nbsp; &nbsp; &nbsp;
             <a class="nav" href="https://coverage.readthedocs.io/en/7.4.0">coverage.py v7.4.0</a>,
-            created at 2024-05-10 16:47 -0700
+            created at 2024-05-21 16:29 -0700
         </p>
     </div>
 </footer>
