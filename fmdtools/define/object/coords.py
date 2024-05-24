@@ -364,6 +364,29 @@ class Coords(BaseObject):
         x_i, y_i = self.to_index(x, y)
         return proparray[x_i, y_i]
 
+    def assign_from(self, hist, t, *properties):
+        """
+        Assign properties of the coords to a value from the history.
+
+        Useful for plotting progression of states over time.
+
+        Parameters
+        ----------
+        hist : History
+            History for the the coords object.
+        t : int
+            Time-step to get from the history.
+        *properties : str
+            Properties to assign from the history. If none provided, all are assigned.
+        """
+        if not properties:
+            properties = [k for k in self.properties if k in hist.keys()]
+            if not properties:
+                raise Exception()
+        for prop in properties:
+            prop_array = getattr(self, prop)
+            prop_array[:] = hist.get(prop)[t]
+
     def set(self, x, y, prop, value):
         """
         Set the value of the property at the given scalar x/y values.
@@ -509,7 +532,8 @@ class Coords(BaseObject):
             for pt in pts:
                 self.set(*pt, prop, value)
 
-    def find_closest(self, x, y, prop, include_pt=True, value=True, comparator=np.equal):
+    def find_closest(self, x, y, prop, include_pt=True, value=True,
+                     comparator=np.equal):
         """
         Find the closest point in the grid satisfying a given property.
 

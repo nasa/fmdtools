@@ -192,7 +192,7 @@ class Result(UserDict):
         str_rep = ""
         for k, val in self.items():
             if isinstance(val, np.ndarray) or isinstance(val, list):
-                if type(k) == tuple:
+                if type(k) is tuple:
                     k = str(k)
                 val_rep = ind*"--"+k+": "
                 if len(val_rep) > 40:
@@ -324,7 +324,7 @@ class Result(UserDict):
 
     def get(self, *argstr,  **to_include):
         """
-        Provides dict-like access to the history/result across a number of arguments
+        Provide dict-like access to the history/result across a number of arguments.
 
         Parameters
         ----------
@@ -348,7 +348,7 @@ class Result(UserDict):
             return res
 
     def all_with(self, attr):
-        """Gets all values with the attribute attr"""
+        """Get all values with the attribute attr."""
         if attr in self:
             return self[attr]
         new = self.__class__()
@@ -363,6 +363,8 @@ class Result(UserDict):
                 return new[k]
             else:
                 return new
+        else:
+            raise Exception(attr+" not in Result keys: "+str(self.keys()))
 
     def fromdict(inputdict):
         return fromdict(Result, inputdict)
@@ -1104,5 +1106,7 @@ def load_folder(folder, filetype):
 
 
 if __name__ == "__main__":
-    import doctest
-    doctest.testmod(verbose=True)
+    r = Result()
+    r.get('hi')
+    # import doctest
+    # doctest.testmod(verbose=True)

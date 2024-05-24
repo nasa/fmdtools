@@ -63,6 +63,13 @@ class SightGrid(Coords):
     Define the Drone Grid environment.
 
     Used to calculate environmental risk and number of points viewed.
+
+    Example
+    -------
+    >>> mdl = Drone()
+    >>> ec, hist = fs.propagate.nominal(mdl)
+    >>> mdl.flows['environment'].c.assign_from(hist.flows.environment.c, 10)
+    >>> fig, ax = mdl.flows['environment'].c.show('viewed')
     """
 
     container_p = DroneEnvironmentGridParam
@@ -452,6 +459,7 @@ def vectdist(p1, p2):
     return [p1[0]-p2[0], p1[1]-p2[1], p1[2]-p2[2]]
 
 
+
 if __name__ == "__main__":
     import doctest
     doctest.testmod(verbose=True)
@@ -460,6 +468,7 @@ if __name__ == "__main__":
     from fmdtools import analyze as an
     mdl = Drone()
     ec, mdlhist = fs.propagate.nominal(mdl)
+
     fig, ax = mdlhist.plot_trajectories("dofs.s.x", "dofs.s.y", "dofs.s.z",
                                         time_groups=['nominal'], time_ticks=2.0)
 
@@ -477,7 +486,6 @@ if __name__ == "__main__":
                                           indiv_kwargs={'faulty': {'alpha': 0.15,
                                                                    'color': 'red'}})
 
-    import fmdtools.analyze as an
     an.phases.phaseplot(app_mechfaults.phasemaps)
     an.phases.samplemetric(app_mechfaults.faultsamples['mechfault_scens'], quad_ec)
     an.phases.samplemetrics(app_mechfaults, quad_ec)
@@ -485,3 +493,8 @@ if __name__ == "__main__":
     quad_ec_1, quad_hist_1 = fs.propagate.fault_sample(mdl, app_mechfaults)
 
     cost_tests = [ec for ec in quad_ec if quad_ec[ec] != quad_ec_1[ec]]
+
+    mdl = Drone()
+    ec, mdlhist = fs.propagate.nominal(mdl)
+    mdl.flows['environment'].c.assign_from(mdlhist.flows.environment.c, 10)
+    mdl.flows['environment'].c.show('viewed')
