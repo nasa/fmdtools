@@ -580,7 +580,7 @@ class Coords(BaseObject):
             pts = getattr(self, prop)
         else:
             raise Exception(prop+" not in .properties or .collections")
- 
+
         p_rounded = self.to_gridpoint(x, y)
 
         if p_rounded.tolist() in pts.tolist():
@@ -832,7 +832,8 @@ class Coords(BaseObject):
         z_res : int, optional
             Resolution to plot z at. The default is 10.
         collections:  dict, optional
-            Collections to plot and their respective kwargs for show_collection. The default is {}.
+            Collections to plot and their respective kwargs for show_collection.
+            The default is {}.
         xlab : str, optional
             Label for x-axis. The default is "x".
         ylab : str, optional
@@ -958,7 +959,7 @@ class Coords(BaseObject):
         offset = self.p.blocksize/2
         if not ax:
             fig, ax = setup_plot(z=z, figsize=figsize)
-            if type(z) == str and z:
+            if isinstance(z, str) and z:
                 ax.set_zlim(getattr(self, z).min(), getattr(self, z).max())
             ax.set_xlim(-offset, self.p.x_size*self.p.blocksize+offset)
             ax.set_ylim(-offset, self.p.y_size*self.p.blocksize+offset)
@@ -971,7 +972,7 @@ class Coords(BaseObject):
             rect = Rectangle(corner, self.p.blocksize, self.p.blocksize,
                              label=prop, **kwargs)
             ax.add_patch(rect)
-            if type(z) == str and z:
+            if isinstance(z, str) and z:
                 z_h = self.get(pt[0], pt[1], z)
                 art3d.patch_2d_to_3d(rect, z=z_h)
             elif type(z) in [float, int]:
@@ -980,7 +981,7 @@ class Coords(BaseObject):
             else:
                 z_h = None
             if label:
-                if type(label) != str:
+                if isinstance(label, str):
                     lab = rect.get_label()
                 else:
                     lab = label
