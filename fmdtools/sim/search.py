@@ -80,15 +80,18 @@ class Constraint(Objective):
     Fields
     ------
     threshold : float
-        Theshold for the constraint. Default is 0.0
+        Threshold for the constraint. Default is 0.0
     comparator : str
-        Whether the constraint is 'greater' or 'less'.
+        Whether the constraint is 'greater', 'less', 'equal', or 'notequal'.
+    or_equal : bool
+        Whether comparator includes equality (e.g., greater or equalto) or not.
     satisfied : bool
         Whether the constraint is satisfied.
     """
 
     threshold: float = 0.0
     comparator: str = 'greater'
+    or_equal: bool = True
     satisfied: bool = True
 
     def con_from_value(self, value):
@@ -97,7 +100,7 @@ class Constraint(Objective):
 
         By default, constraints follow the form:
             g(x) = threshold - value > 0.0 for 'greater' constraints or
-            g(x) = value - theshold > 0.0 for 'less' constraints.
+            g(x) = value - threshold > 0.0 for 'less' constraints.
 
         Parameters
         ----------
@@ -113,6 +116,11 @@ class Constraint(Objective):
             value = self.threshold - value
         elif self.comparator == 'less':
             value = value - self.threshold
+        elif self.comparator == 'equal':
+            value = 1*(value == self.threshold)
+        elif self.comparator == 'notequal':
+            # 1 if true, else zero
+            value = 1*(value != self.threshold)
         else:
             raise Exception("Invalid comparator: "+self.comparator)
         return self.obj_from_value(value)
@@ -121,9 +129,15 @@ class Constraint(Objective):
         """Update with given value."""
         self.value = self.con_from_value(value)
         if not self.negative:
-            self.satisfied = self.value <= 0.0
+            if self.or_equal:
+                self.satisfied = self.value <= 0.0
+            else:
+                self.satisfied = self.value < 0.0
         else:
-            self.satisfied = self.value >= 0.0
+            if self.or_equal:
+                self.satisfied = self.value >= 0.0
+            else:
+                self.satisfied = self.value > 0.0
 
 
 def unpack_x(*x):
@@ -442,15 +456,18 @@ class ResultConstraint(ResultObjective):
     Fields
     ------
     threshold : float
-        Theshold for the constraint. Default is 0.0
+        Threshold for the constraint. Default is 0.0
     comparator : str
-        Whether the constraint is 'greater' or 'less'.
+        Whether the constraint is 'greater', 'less', 'equal', or 'notequal'.
+    or_equal : bool
+        Whether comparator includes equality (e.g., greater or equalto) or not.
     satisfied : bool
         Whether the constraint is satisfied.
     """
 
     threshold: float = 0.0
     comparator: str = 'greater'
+    or_equal: bool = True
     satisfied: bool = True
 
     def update(self, res):
@@ -458,9 +475,15 @@ class ResultConstraint(ResultObjective):
         value = self.get_result_value(res)
         self.value = self.con_from_value(value)
         if not self.negative:
-            self.satisfied = self.value <= 0.0
+            if self.or_equal:
+                self.satisfied = self.value <= 0.0
+            else:
+                self.satisfied = self.value < 0.0
         else:
-            self.satisfied = self.value >= 0.0
+            if self.or_equal:
+                self.satisfied = self.value >= 0.0
+            else:
+                self.satisfied = self.value > 0.0
 
     def con_from_value(self, value):
         """
