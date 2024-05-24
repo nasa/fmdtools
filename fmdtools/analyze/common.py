@@ -231,7 +231,7 @@ def plot_err_lines(times, lows, highs, ax=None, fig=None, figsize=(6, 4), **kwar
 
 def unpack_plot_values(plot_values):
     """Helper function for enabling both dict and str plot_values."""
-    if len(plot_values) == 1 and type(plot_values[0]) == dict:
+    if len(plot_values) == 1 and type(plot_values[0]) is dict:
         plot_values = to_include_keys(plot_values[0])
     if not plot_values:
         raise Exception("Empty plot_values--make sure to pass quantities to plot!")
@@ -239,20 +239,22 @@ def unpack_plot_values(plot_values):
 
 
 def multiplot_helper(cols, *plot_values, figsize='default', titles={}, sharex=True,
-                     sharey=False):
+                     sharey=False, fig=None, axs=None):
     """Create multiple plot axes for plotting."""
     num_plots = len(plot_values)
     if num_plots == 1:
         cols = 1
     rows = int(np.ceil(num_plots/cols))
-    if figsize == 'default':
-        figsize = (cols*3, 2*rows)
-    fig, axs = plt.subplots(rows, cols, sharex=sharex, sharey=sharey, figsize=figsize)
+    if not fig:
+        if figsize == 'default':
+            figsize = (cols*3, 2*rows)
+        fig, axs = plt.subplots(rows, cols,
+                                sharex=sharex, sharey=sharey, figsize=figsize)
 
-    if type(axs) == np.ndarray:
-        axs = axs.flatten()
-    else:
-        axs = [axs]
+        if isinstance(axs, np.ndarray):
+            axs = axs.flatten()
+        else:
+            axs = [axs]
 
     subplot_titles = {plot_value: plot_value for plot_value in plot_values}
     subplot_titles.update(titles)
