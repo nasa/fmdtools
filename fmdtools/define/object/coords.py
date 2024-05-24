@@ -55,7 +55,7 @@ class CoordsParam(Parameter):
         as arrays.
     collect_collectionname : tuple
         Tuple (propertyname, value, comparator) defining a collection of points to
-        instantiate as a list, where the tuple is arguments to Coords.find_all
+        instantiate as a list, where the tuple is arguments to Coords.find_all_prop
     point_pointname: tuple
         Tuple (x, y) referring to a point in the grid with a given name.
 
@@ -214,12 +214,12 @@ class Coords(BaseObject):
                 proparray.flags.writeable = False
         for cname, collection in self.collections.items():
             if collection[0] in self.features:
-                setattr(self, cname, self.find_all(*collection))
+                setattr(self, cname, self.find_all_prop(*collection))
             else:
                 raise Exception("Invalid collection: " + cname +
                                 " collections may only map to (immutable) features")
 
-    def find_all(self, name, value=True, comparator=np.equal):
+    def find_all_prop(self, name, value=True, comparator=np.equal):
         """
         Find all points in array satisfying statement defined by value and comparator.
 
@@ -241,12 +241,77 @@ class Coords(BaseObject):
         Examples
         --------
         >>> ex = ExampleCoords()
-        >>> ex.find_all("v", 10.0, np.equal)
+        >>> ex.find_all_prop("v", 10.0, np.equal)
         array([[ 0.,  0.],
                [10.,  0.]])
         """
         prop = getattr(self, name)
         where = np.where(comparator(prop, value))
+        pts_with_condition = [(p, where[1][i]) for i, p in enumerate(where[0])]
+        return np.array([self.grid[tuple(p)] for p in pts_with_condition])
+
+    def find_all(self, *points_colls, in_points_colls=True, **prop_kwargs):
+        """
+        Find all points in array satisfying multiple statements.
+
+        Parameters
+        ----------
+        *points_colls: str
+            Name(s) of points or collections defining the set of points to check.
+            If not provided, assumes all points.
+        in_points_colls: bool
+            Whether the properties are to be searched in the given set of
+            points/collections (True) or outside the given set of points/collections
+            (False). The default is True
+        **prop_kwargs : kwargs
+            keyword arguments corresponding to properties, values and comparators, e.g.:
+            statename=(True, np.equal)
+
+        Returns
+        -------
+        all: np.array
+            List of points where the comparator methods returns true.
+
+        Examples
+        --------
+        >>> ex = ExampleCoords()
+        >>> ex.find_all(v=(10.0, np.equal))
+        array([[ 0.,  0.],
+               [10.,  0.]])
+        >>> ex.st[0, 0] = 5.0
+        >>> ex.find_all(v=(10.0, np.equal), st=(0.0, np.greater))
+        array([[0., 0.]])
+        >>> ex.find_all("high_v", v=(10.0, np.equal))
+        array([[ 0.,  0.],
+               [10.,  0.]])
+        >>> ex.find_all("high_v", v=(10.0, np.less))
+        array([], dtype=float64)
+        >>> ex.st[2,2] = 1.0
+        >>> ex.find_all("high_v", in_points_colls=False, st=(0.0, np.greater))
+        array([[20., 20.]])
+        """
+        # check if in points or collections
+        if points_colls:
+            pts = []
+            for name in points_colls:
+                prop = getattr(self, name)
+                if name in self.points:
+                    pts.append(prop)
+                elif name in self.collections:
+                    pts.extend(prop)
+                else:
+                    raise Exception(name+"not in points or collections")
+            true_array = np.full((self.p.x_size, self.p.y_size), not in_points_colls)
+            for pt in pts:
+                true_array[self.to_index(*pt)] = in_points_colls
+        else:
+            true_array = np.full((self.p.x_size, self.p.y_size), True)
+
+        # check properties
+        for name, (value, comparator) in prop_kwargs.items():
+            prop = getattr(self, name)
+            true_array *= comparator(prop, value)
+        where = np.where(true_array)
         pts_with_condition = [(p, where[1][i]) for i, p in enumerate(where[0])]
         return np.array([self.grid[tuple(p)] for p in pts_with_condition])
 
@@ -575,7 +640,7 @@ class Coords(BaseObject):
         array([0., 0.])
         """
         if prop in self.properties:
-            pts = self.find_all(prop, value, comparator)
+            pts = self.find_all_prop(prop, value, comparator)
         elif prop in self.collections or prop == 'pts':
             pts = getattr(self, prop)
         else:
@@ -672,7 +737,7 @@ class Coords(BaseObject):
         --------
         >>> ex = ExampleCoords()
         >>> ex.set_rand_pts("st", 40, 5)
-        >>> len(ex.find_all("st", 40))
+        >>> len(ex.find_all_prop("st", 40))
         5
         """
         if pts is None:
@@ -794,8 +859,6 @@ class Coords(BaseObject):
         fig, ax = plt.subplots(1)
 
         p = getattr(self, prop)
-        # im = ax.matshow(p, **kwargs)
-        offset = self.p.blocksize/2
         x = np.linspace(0., self.p.blocksize*(self.p.x_size-1), self.p.x_size)
         y = np.linspace(0., self.p.blocksize*(self.p.y_size-1), self.p.y_size)
         X, Y = np.meshgrid(x, y)
