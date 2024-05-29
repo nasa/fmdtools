@@ -405,7 +405,7 @@ def plot_env_with_traj(mdlhists, mdl, legend=True, title="trajectory"):
                  "all_allowed": {"color": "blue"},
                  "start": {"color": "blue"},
                  "end": {"color": "blue"}}
-    fig, ax = mdl.flows['environment'].c.show("height", collections=collections)
+    fig, ax = mdl.flows['environment'].c.show({"height": {}}, collections=collections)
     fig, ax = mdlhists.plot_trajectories("dofs.s.x", "dofs.s.y",
                                          fig=fig, ax=ax, legend=legend, title=title)
     return fig, ax
@@ -487,7 +487,7 @@ if __name__ == "__main__":
     # p = PlanPath("test", {})
 
     e = UrbanDroneEnvironment("env")
-    e.c.show("height")
+    e.c.show({"height": {}})
     e.c.show_z("height")
 
     e.c.show_collection('all_safe', z='height')

@@ -20,7 +20,7 @@ from matplotlib import pyplot as plt
 from mpl_toolkits.axes_grid1 import make_axes_locatable
 from matplotlib import colormaps, cm
 from mpl_toolkits.mplot3d import art3d
-from matplotlib.colors import to_rgba
+from matplotlib.colors import to_rgba, ListedColormap, TABLEAU_COLORS
 from matplotlib.patches import Rectangle
 
 
@@ -826,7 +826,9 @@ class Coords(BaseObject):
             states[state] = copy.copy(getattr(self, state))
         return states
 
-    def show_property(self, prop, xlab="x", ylab="y", proplab="prop", **kwargs):
+    def show_property(self, prop, xlab="x", ylab="y", proplab="prop",
+                      as_bool=False, color='green', legend_kwargs={},
+                      fig=None, ax=None, figsize=(5, 5), **kwargs):
         """
         Plot a given property 'prop' as a colormesh on an x-y grid.
 
@@ -843,6 +845,11 @@ class Coords(BaseObject):
         proplab : str, optional
             Label for the property. The default is "prop", which uses the name of the
             property provided.
+        as_bool : bool, optional
+            Whether to interpret the property as a boolean where >0.0 returns as True
+            and <=0.0 returns as False.
+        color : str, optional
+            Color to use if the property is boolean. Default is 'green'.
         **kwargs : kwargs
             Keyword arguments to matplotlib.pyplot.pcolormesh (e.g., cmap, edgecolors)
 
@@ -853,27 +860,48 @@ class Coords(BaseObject):
         ax : mpl.axis
             Ploted axis object.
         """
-        default_kwargs = dict(edgecolors='black', cmap="Greens")
-        kwargs = {**kwargs, **default_kwargs}
-
-        fig, ax = plt.subplots(1)
-
+        fig, ax = setup_plot(fig=fig, ax=ax, figsize=figsize)
+        # create mesh
         p = getattr(self, prop)
         x = np.linspace(0., self.p.blocksize*(self.p.x_size-1), self.p.x_size)
         y = np.linspace(0., self.p.blocksize*(self.p.y_size-1), self.p.y_size)
         X, Y = np.meshgrid(x, y)
+        # refine property for plotting
+        if as_bool:
+            p = p > 0.0
+        if p.dtype == 'bool':
+            cmap = ListedColormap([color])
+            default_kwargs = dict(edgecolors='black', cmap=cmap)
+            p = np.ma.array(p, mask=~p).swapaxes(0, 1)
+            vmin, vmax = 0, 1
+        else:
+            default_kwargs = dict(edgecolors='black', cmap="Greens")
+            p = p.swapaxes(0, 1)
+            vmin = p.min()
+            vmax = p.max()
+            if vmin == vmax:
+                vmax = vmin + 1.0
+        kwargs = {**kwargs, **default_kwargs}
 
-        im = ax.pcolormesh(X, Y, p.swapaxes(0, 1), **kwargs)
+        im = ax.pcolormesh(X, Y, p, vmin=vmin, vmax=vmax, **kwargs)
 
         plt.xlabel(xlab)
         plt.ylabel(ylab)
-
-        divider = make_axes_locatable(ax)
-        cax = divider.append_axes("right", size="5%", pad=0.05)
-        cbar = plt.colorbar(im, cax=cax)
         if proplab == "prop":
             proplab = prop
-        cbar.set_label(proplab, rotation=270)
+
+        if p.dtype == 'bool':
+            # if boolean, create a legend
+            import matplotlib.patches as mpatches
+            patch = mpatches.Patch(color=color, label=proplab)
+            consolidate_legend(ax, add_handles=[patch], **legend_kwargs,
+                               title="Properties")
+        else:
+            # if float, create a colorbar
+            divider = make_axes_locatable(ax)
+            cax = divider.append_axes("right", size="5%", pad=0.05)
+            cbar = plt.colorbar(im, cax=cax)
+            cbar.set_label(proplab, rotation=270)
         return fig, ax
 
     def show_property_z(self, prop, z="prop", z_res=10, collections={},
@@ -1060,21 +1088,20 @@ class Coords(BaseObject):
             consolidate_legend(ax, **legend_args)
         return fig, ax
 
-    def show(self, prop, collections={}, legend_args=False, **kwargs):
+    def show(self, properties={}, collections={}, fig=None, ax=None,
+             figsize=(5, 5), **kwargs):
         """
         Plot a property and set of collections on the grid.
 
         Parameters
         ----------
-        prop : str
-            Property to plot.
+        prop : dict
+            Properties to plot and their arguments, e.g. {'prop1': {'color': 'green'}}
         collections : dict, optional
             Collections to plot and their respective kwargs for show_collection.
             The default is {}.
-        legend_args : bool/dict, optional
-            Specifies arguments to legend. Default is False, which shows no legend.
         **kwargs : kwargs
-            kwargs to show_property.
+            overall kwargs to show_property.
 
         Returns
         -------
@@ -1083,9 +1110,15 @@ class Coords(BaseObject):
         ax : mpl.axis
             Ploted axis object.
         """
-        fig, ax = self.show_property(prop, **kwargs)
-        for coll in collections:
-            self.show_collection(coll, fig=fig, ax=ax, **collections[coll])
+        fig, ax = setup_plot(fig=fig, ax=ax, figsize=figsize)
+        pallette = [*TABLEAU_COLORS.keys()]
+        for i, (prop, prop_kwargs) in enumerate(properties.items()):
+            kwar = {**kwargs, 'color': pallette[i], **prop_kwargs}
+            fig, ax = self.show_property(prop, fig=fig, ax=ax, **kwar)
+        for i, (coll, coll_kwargs) in enumerate(collections.items()):
+            kwar = {'color': pallette[i+len(properties)], 'legend_args': True,
+                    **coll_kwargs}
+            self.show_collection(coll, fig=fig, ax=ax, **kwar)
         return fig, ax
 
     def show_z(self, prop, z="prop", collections={}, legend_args=False, voxels=True,
@@ -1159,7 +1192,7 @@ if __name__ == "__main__":
     ex = ExampleCoords()
     ex.show_property("v", cmap="Greys")
     ex.show_collection("high_v")
-    ex.show("st", collections={"high_v": {"alpha": 0.5, "color": "red"}})
+    ex.show({"st": {}}, collections={"high_v": {"alpha": 0.5, "color": "red"}})
     ex.show_property_z("st", z="v",
                        collections={"high_v": {"alpha": 0.5, "color": "red"}})
 
