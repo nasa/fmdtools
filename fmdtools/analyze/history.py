@@ -104,14 +104,15 @@ def diff(val1, val2, difftype='bool'):
     """
     Find inconsistent states between val1, val2.
 
-    The difftype option ('diff' (takes the difference), 'bool' (checks if the same), and float (checks if under the provided tolerance))
+    The difftype option ('diff' (takes the difference), 'bool' (checks if the same),
+                         and float (checks if under the provided tolerance))
     """
     try:
         if difftype == 'diff':
             return val1-val2
         elif difftype == 'bool':
             return val1 != val2
-        elif type(difftype) == float:
+        elif isinstance(difftype, float):
             return abs(val1-val2) > difftype
     except ValueError as e:
         raise Exception("Unable to diff "+str(val1)+" and "+str(val2)) from e
@@ -184,13 +185,13 @@ class History(Result):
                  timerange=None, track=None, dtype=None, str_size='<U20'):
         sub_track = get_sub_include(att, track)
         if sub_track:
-            if type(val) == dict or (hasattr(val, 'keys') and hasattr(val, 'values')):
+            if isinstance(val, dict) or (hasattr(val, 'keys') and hasattr(val, 'values')):
                 self[att] = init_dicthist(val, timerange, sub_track)
             elif timerange is None:
                 self[att] = [val]
-            elif type(val) == str:
+            elif isinstance(val, str):
                 self[att] = np.empty([len(timerange)], dtype=str_size)
-            elif type(val) == np.ndarray or dtype == np.ndarray:
+            elif isinstance(val, np.ndarray) or dtype == np.ndarray:
                 self[att] = np.array([val for i in timerange])
             elif dtype:
                 self[att] = np.empty([len(timerange)], dtype=dtype)
@@ -290,12 +291,12 @@ class History(Result):
                 raise Exception("Unable to log att " + str(att) + " in " +
                                 str(obj.__class__.__name__) + ', val=' + str(val))
 
-            if type(hist) == History:
+            if isinstance(hist, History):
                 hist.log(val, t_ind)
             else:
                 if is_known_mutable(val):
                     val = copy.deepcopy(val)
-                if type(hist) == list:
+                if isinstance(hist, list):
                     hist.append(val)
                 elif isinstance(hist, np.ndarray):
                     try:
@@ -323,13 +324,14 @@ class History(Result):
         Parameters
         ----------
         end_ind : int, optional
-            the index of the array that you want to cut the history upto. Default is None.
+            the index of the array that you want to cut the history upto.
+            Default is None.
         start_ind: int, optional
-            the index of the array that you want to start cutting the history from. 
+            the index of the array that you want to start cutting the history from.
             The default is None, which starts from the 0th index.
         newcopy: bool, optional
-            Tells whether to creat a new history variable with the information what was cut or
-            cut the original history variable. Default is False.
+            Tells whether to creat a new history variable with the information what was
+            cut or cut the original history variable. Default is False.
 
         Examples
         --------
@@ -368,9 +370,7 @@ class History(Result):
         return hist
 
     def get_slice(self, t_ind=0):
-        """
-        Return a dictionary of values from (flattenned) version of the history at t_ind.
-        """
+        """Return dict of values from (flattenned) version of the history at t_ind."""
         flathist = self.flatten()
         slice_dict = dict.fromkeys(flathist)
         for key, arr in flathist.items():
@@ -913,8 +913,8 @@ class History(Result):
             If more than one time is provided, it takes the place of comp_groups.
         *plot_values : strs
             names of values to pull from the history (e.g., 'fxns.move_water.s.flow')
-            Can also be specified as a dict (e.g., {'fxns':'move_water'}) to get all keys
-            from a given fxn/flow/mode/etc.
+            Can also be specified as a dict (e.g., {'fxns':'move_water'}) to get all
+            keys from a given fxn/flow/mode/etc.
         **kwargs : kwargs
             keyword arguments to Result.plot_metric_dist
         """
