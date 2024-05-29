@@ -117,7 +117,7 @@ class Constraint(Objective):
         elif self.comparator == 'less':
             value = value - self.threshold
         elif self.comparator == 'equal':
-            value = 1*(value == self.threshold)
+            value = abs(value - self.threshold)
         elif self.comparator == 'notequal':
             # 1 if true, else zero
             value = 1*(value != self.threshold)

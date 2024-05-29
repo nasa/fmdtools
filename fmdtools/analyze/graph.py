@@ -716,10 +716,10 @@ class Graph(object):
             eds = nx.draw_networkx_edges(self.g, self.pos, edges,
                                          **self.edge_styles[label].kwargs(),
                                          label=legend_label, ax=ax)
-            if eds and isinstance(eds, list):
-                lin = mlines.Line2D([], [], **self.edge_styles[label].line_kwargs(),
-                                    label=legend_label)
-                edge_handles.append(lin)
+            #if eds and isinstance(eds, list):
+            lin = mlines.Line2D([], [], **self.edge_styles[label].line_kwargs(),
+                                label=legend_label)
+            edge_handles.append(lin)
 
         for level in self.edge_labels.iter_groups():
             nx.draw_networkx_edge_labels(self.g, self.pos, self.edge_labels[level],

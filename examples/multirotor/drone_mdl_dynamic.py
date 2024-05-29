@@ -69,7 +69,7 @@ class SightGrid(Coords):
     >>> mdl = Drone()
     >>> ec, hist = fs.propagate.nominal(mdl)
     >>> mdl.flows['environment'].c.assign_from(hist.flows.environment.c, 10)
-    >>> fig, ax = mdl.flows['environment'].c.show('viewed')
+    >>> fig, ax = mdl.flows['environment'].c.show({'viewed': {}})
     """
 
     container_p = DroneEnvironmentGridParam
@@ -459,13 +459,16 @@ def vectdist(p1, p2):
     return [p1[0]-p2[0], p1[1]-p2[1], p1[2]-p2[2]]
 
 
-
 if __name__ == "__main__":
-    import doctest
-    doctest.testmod(verbose=True)
     from fmdtools.sim.sample import SampleApproach
     from fmdtools.analyze.phases import PhaseMap
     from fmdtools import analyze as an
+
+    mdl = Drone()
+    ec, mdlhist = fs.propagate.nominal(mdl)
+    mdl.flows['environment'].c.assign_from(mdlhist.flows.environment.c, 10)
+    mdl.flows['environment'].c.show({'viewed': {}})
+
     mdl = Drone()
     ec, mdlhist = fs.propagate.nominal(mdl)
 
@@ -497,4 +500,10 @@ if __name__ == "__main__":
     mdl = Drone()
     ec, mdlhist = fs.propagate.nominal(mdl)
     mdl.flows['environment'].c.assign_from(mdlhist.flows.environment.c, 10)
-    mdl.flows['environment'].c.show('viewed')
+    mdl.flows['environment'].c.show({'viewed': {}})
+    import doctest
+    doctest.testmod(verbose=True)
+    mdl.flows['environment'].c.show({'viewed': {}, 'target': {}})
+    mdl.flows['environment'].c.show({'target': {},
+                                     'viewed': {'alpha': 0.5}},
+                                    collections={'start':{}, 'safe': {}})
