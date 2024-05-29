@@ -62,8 +62,6 @@ Private Methods:
 
 import networkx as nx
 import numpy as np
-import copy
-import matplotlib.animation
 import matplotlib.pyplot as plt
 import matplotlib.lines as mlines
 from numpy.random import random
@@ -73,7 +71,7 @@ from matplotlib.colors import Colormap
 from recordclass import dataobject, asdict
 from fmdtools.analyze.result import Result
 from fmdtools.analyze.history import History
-from fmdtools.analyze.common import consolidate_legend
+from fmdtools.analyze.common import consolidate_legend, animate_from
 
 
 plt.rcParams['pdf.fonttype'] = 42
@@ -837,17 +835,8 @@ class Graph(object):
         ani : matplotlib.animation.FuncAnimation
             Animation object with the given frames
         """
-        from functools import partial
-        if times == 'all':
-            t_inds = [i for i in range(len(history.faulty.time))]
-        else:
-            t_inds = times
-
-        fig = plt.figure(figsize=figsize)
-        partial_draw = partial(self.draw_from, history=history,
-                               fig=fig, withlegend=False, **kwargs)
-        ani = matplotlib.animation.FuncAnimation(fig, partial_draw, frames=t_inds)
-        return ani
+        return animate_from(self.draw_from, history, times=times, figsize=figsize,
+                            withlegend=False, **kwargs)
 
     def draw_graphviz(self, filename='', filetype='png', **kwargs):
         """

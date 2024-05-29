@@ -19,23 +19,24 @@ Has methods:
 """
 import numpy as np
 import matplotlib.pyplot as plt
+from matplotlib import animation
+from functools import partial
 
 plt.rcParams['pdf.fonttype'] = 42
 
 
 def get_sub_include(att, to_include):
-    """Determines what attributes of att to include based on the provided
-    dict/str/list/set to_include"""
+    """Determine attributes of att to include based on provided dict/str/list/set."""
     if type(to_include) in [list, set, tuple, str]:
         if att in to_include:
             new_to_include = 'default'
-        elif type(to_include) == str and to_include == 'all':
+        elif isinstance(to_include, str) and to_include == 'all':
             new_to_include = 'all'
-        elif type(to_include) == str and to_include == 'default':
+        elif isinstance(to_include, str) and to_include == 'default':
             new_to_include = 'default'
         else:
             new_to_include = False
-    elif type(to_include) == dict and att in to_include:
+    elif isinstance(to_include, dict) and att in to_include:
         new_to_include = to_include[att]
     else:
         new_to_include = False
@@ -43,13 +44,12 @@ def get_sub_include(att, to_include):
 
 
 def to_include_keys(to_include):
-    """Determine what dict keys to include from Result given nested to_include
-    dictionary"""
-    if type(to_include) == str:
+    """Determine dict keys to include from Result given nested to_include dictionary."""
+    if isinstance(to_include, str):
         return [to_include]
     elif type(to_include) in [list, set, tuple]:
         return [to_i for to_i in to_include]
-    elif type(to_include) == dict:
+    elif isinstance(to_include, dict):
         keys = []
         for k, v in to_include.items():
             add = to_include_keys(v)
@@ -58,7 +58,7 @@ def to_include_keys(to_include):
 
 
 def is_numeric(val):
-    """Checks if a given value is numeric"""
+    """Check if a given value is a number."""
     try:
         return np.issubdtype(np.array(val).dtype, np.number)
     except:
@@ -67,7 +67,7 @@ def is_numeric(val):
 
 def bootstrap_confidence_interval(data, method=np.mean, return_anyway=False, **kwargs):
     """
-    Convenience wrapper for scipy.bootstrap.
+    Return bootstrap confidence interval (helper for scipy.bootstrap).
 
     Parameters
     ----------
@@ -94,7 +94,7 @@ def bootstrap_confidence_interval(data, method=np.mean, return_anyway=False, **k
 
 
 def nan_to_x(metric, x=0.0):
-    """returns nan as zero if present, otherwise returns the number"""
+    """Return nan as zero if present, otherwise return the number."""
     if np.isnan(metric):
         return x
     else:
@@ -113,6 +113,21 @@ def join_key(k):
         return '.'.join(k)
     else:
         return k
+
+
+def animate_from(plot_func, hist, times='all', figsize=(6, 4), z=False, **kwargs):
+    fig = setup_plot(figsize=figsize, z=z)
+
+    if times == 'all':
+        max_time = np.min([len(h) for k, h in hist.times()])
+        t_inds = [i for i in range(max_time)]
+    else:
+        t_inds = times
+
+    partial_draw = partial(plot_func, history=hist, fig=fig, **kwargs)
+
+    ani = animation.FuncAnimation(fig, partial_draw, frames=t_inds)
+    return ani
 
 
 def setup_plot(fig=None, ax=None, z=False, figsize=(6, 4)):
@@ -230,7 +245,7 @@ def plot_err_lines(times, lows, highs, ax=None, fig=None, figsize=(6, 4), **kwar
 
 
 def unpack_plot_values(plot_values):
-    """Helper function for enabling both dict and str plot_values."""
+    """Upack plot_values if provided as a dict or str."""
     if len(plot_values) == 1 and type(plot_values[0]) is dict:
         plot_values = to_include_keys(plot_values[0])
     if not plot_values:
@@ -288,7 +303,7 @@ def set_empty_multiplots(axs, num_plots, cols, xlab_ang=-90, grid=False,
 def multiplot_legend_title(groupmetrics, axs, ax,
                            legend_loc=False, title='', v_padding=None, h_padding=None,
                            title_padding=0.0, legend_title=None):
-    """Helper function for multiplot legends and titles."""
+    """Create multiplot legends and titles on shared axes."""
     if len(groupmetrics) > 1 and legend_loc != False:
         ax.legend()
         handles, labels = ax.get_legend_handles_labels()
@@ -360,9 +375,10 @@ def mark_times(ax, tick, time, *plot_values, fontsize=8):
 
 def suite_for_plots(testclass, plottests=False):
     """
-    Enables qualitative testing suite with or without plots in unittest. Plot tests
-    should have "plot" in the title of their method, this enables this function to
-    filter them out (or include them).
+    Qualitative testing suite with or without plots in unittest.
+
+    Plot tests should have "plot" in the title of their method, this enables this
+    function tofilter them out (or include them).
 
     Parameters
     ----------
@@ -384,7 +400,7 @@ def suite_for_plots(testclass, plottests=False):
     if not plottests:
         tests = [func for func in dir(testclass)
                  if (func.startswith("test") and not ('plot' in func))]
-    elif type(plottests) == list:
+    elif isinstance(plottests, list):
         tests = [func for func in dir(testclass)
                  if (func.startswith("test") and func in plottests)]
     else:
