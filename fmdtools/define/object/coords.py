@@ -15,7 +15,7 @@ from fmdtools.define.container.parameter import Parameter
 from fmdtools.define.container.rand import Rand
 from fmdtools.define.base import is_iter
 from fmdtools.define.object.base import BaseObject
-from fmdtools.analyze.common import setup_plot, consolidate_legend
+from fmdtools.analyze.common import setup_plot, consolidate_legend, animate_from
 from matplotlib import pyplot as plt
 from mpl_toolkits.axes_grid1 import make_axes_locatable
 from matplotlib import colormaps, cm
@@ -1120,6 +1120,49 @@ class Coords(BaseObject):
                     **coll_kwargs}
             self.show_collection(coll, fig=fig, ax=ax, **kwar)
         return fig, ax
+
+    def show_from(self, t, history={}, properties={}, **kwargs):
+        """
+        Run Coords.show() at a particular time in the history.
+
+        Parameters
+        ----------
+        t : int
+            Time index to show the Coords object at.
+        hist : History
+            History to show the Coords object at.
+        **kwargs : kwargs
+            kwargs for self.show
+
+        Returns
+        -------
+        fig : mpl.figure
+            Plotted figure object
+        ax : mpl.axis
+            Ploted axis object.
+        """
+        self.assign_from(history, t, *properties)
+        return self.show(properties=properties, **kwargs)
+
+    def animate_from(self, hist, times='all', **kwargs):
+        """
+        Animate the coords over a history using show_from.
+
+        Parameters
+        ----------
+        hist : History
+            History of coords.
+        times : list/'all'
+            Times to animate over.
+        **kwargs : kwargs
+            Arguments to self.show.
+
+        Returns
+        -------
+        ani : animation.Funcanimation
+            Object with animation.
+        """
+        return animate_from(self.show_from, hist, times=times, **kwargs)
 
     def show_z(self, prop, z="prop", collections={}, legend_args=False, voxels=True,
                **kwargs):

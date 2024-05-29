@@ -507,3 +507,8 @@ if __name__ == "__main__":
     mdl.flows['environment'].c.show({'target': {},
                                      'viewed': {'alpha': 0.5}},
                                     collections={'start':{}, 'safe': {}})
+
+    mdl.flows['environment'].c.show_from(10, mdlhist.flows.environment.c,
+                                         {'viewed': {}})
+    ani = mdl.flows['environment'].c.animate_from(mdlhist.flows.environment.c,
+                                                  properties={'viewed': {}})

@@ -116,15 +116,38 @@ def join_key(k):
 
 
 def animate_from(plot_func, hist, times='all', figsize=(6, 4), z=False, **kwargs):
-    fig = setup_plot(figsize=figsize, z=z)
+    """
+    Create an animation of a plotting function over a history.
+
+    Parameters
+    ----------
+    plot_func : method
+        Update function for plot.
+    hist : History
+        History input for plot function.
+    times : list or `all`, optional
+        Times to animate over. The default is 'all'.
+    figsize : tuple, optional
+        Size of the figure. The default is (6, 4).
+    z : int/Float/Bool, optional
+        Whether to instantiate a z-value. The default is False.
+    **kwargs : kwargs
+        Keyword arguments.
+
+    Returns
+    -------
+    ani : animation.Funcanimation
+        Object with animation.
+    """
+    fig, ax = setup_plot(figsize=figsize, z=z)
 
     if times == 'all':
-        max_time = np.min([len(h) for k, h in hist.times()])
+        max_time = np.min([len(h) for h in hist.values()])
         t_inds = [i for i in range(max_time)]
     else:
         t_inds = times
 
-    partial_draw = partial(plot_func, history=hist, fig=fig, **kwargs)
+    partial_draw = partial(plot_func, history=hist, fig=fig, ax=ax, **kwargs)
 
     ani = animation.FuncAnimation(fig, partial_draw, frames=t_inds)
     return ani
