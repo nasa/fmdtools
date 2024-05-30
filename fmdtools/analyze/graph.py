@@ -177,7 +177,7 @@ class NodeStyle(dataobject, copy_default=True):
         """
         style_kwargs = {}
         for i, (style, tagstyles) in enumerate(styles.items()):
-            if type(label[i]) == bool and label[i]:
+            if isinstance(label[i], bool) and label[i]:
                 style_kwargs.update(default_node_kwargs.get(style, {}))
                 style_kwargs.update(**tagstyles)
             else:
