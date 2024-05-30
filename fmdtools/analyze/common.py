@@ -19,8 +19,7 @@ Has methods:
 """
 import numpy as np
 import matplotlib.pyplot as plt
-from matplotlib import animation
-from functools import partial
+
 
 plt.rcParams['pdf.fonttype'] = 42
 
@@ -115,44 +114,6 @@ def join_key(k):
         return k
 
 
-def animate_from(plot_func, hist, times='all', figsize=(6, 4), z=False, **kwargs):
-    """
-    Create an animation of a plotting function over a history.
-
-    Parameters
-    ----------
-    plot_func : method
-        Update function for plot.
-    hist : History
-        History input for plot function.
-    times : list or `all`, optional
-        Times to animate over. The default is 'all'.
-    figsize : tuple, optional
-        Size of the figure. The default is (6, 4).
-    z : int/Float/Bool, optional
-        Whether to instantiate a z-value. The default is False.
-    **kwargs : kwargs
-        Keyword arguments.
-
-    Returns
-    -------
-    ani : animation.Funcanimation
-        Object with animation.
-    """
-    fig, ax = setup_plot(figsize=figsize, z=z)
-
-    if times == 'all':
-        max_time = np.min([len(h) for h in hist.values()])
-        t_inds = [i for i in range(max_time)]
-    else:
-        t_inds = times
-
-    partial_draw = partial(plot_func, history=hist, fig=fig, ax=ax, **kwargs)
-
-    ani = animation.FuncAnimation(fig, partial_draw, frames=t_inds)
-    return ani
-
-
 def setup_plot(fig=None, ax=None, z=False, figsize=(6, 4)):
     """
     Initialize a 2d or 3d figure at a given size.
@@ -165,6 +126,9 @@ def setup_plot(fig=None, ax=None, z=False, figsize=(6, 4)):
             ax = fig.add_subplot(111, projection='3d')
         else:
             fig, ax = plt.subplots(1, figsize=figsize)
+    if fig:
+        if not ax:
+            ax = fig.add_subplot(111)
     return fig, ax
 
 
@@ -234,14 +198,19 @@ def plot_err_hist(err_hist, ax=None, fig=None, figsize=(6, 4), boundtype='fill',
                            ax=ax, fig=fig, color=boundcolor, linestyle=boundlinestyle)
     else:
         raise Exception("Invalid bound type: "+boundtype)
+    add_title_xylabs(ax, title=title, xlabel=xlabel, ylabel=ylabel)
+    ax.set_xlim(err_hist['time'][0], err_hist['time'][-1])
+    return fig, ax
+
+
+def add_title_xylabs(ax, title='', xlabel='', ylabel=''):
+    """Add title and x/y labels to the given axis."""
     if xlabel:
         ax.set_xlabel(xlabel)
     if ylabel:
         ax.set_ylabel(ylabel)
     if title:
         ax.set_title(title)
-    ax.set_xlim(err_hist['time'][0], err_hist['time'][-1])
-    return fig, ax
 
 
 def plot_err_lines(times, lows, highs, ax=None, fig=None, figsize=(6, 4), **kwargs):
@@ -276,6 +245,21 @@ def unpack_plot_values(plot_values):
     return plot_values
 
 
+def prep_animation_title(time, title='', **kwargs):
+    """Add time to titles for plot_from methods."""
+    kwargs['title'] = title+' t='+str(time)
+    return kwargs
+
+
+def clear_prev_figure(**kwargs):
+    """Clear previous animations for plot_from methods."""
+    if 'fig' in kwargs:
+        kwargs['fig'].clf()
+    # clear figure/ax beforehand for speed
+    if 'ax' in kwargs:
+        kwargs.pop('ax')
+
+
 def multiplot_helper(cols, *plot_values, figsize='default', titles={}, sharex=True,
                      sharey=False, fig=None, axs=None):
     """Create multiple plot axes for plotting."""
@@ -283,15 +267,22 @@ def multiplot_helper(cols, *plot_values, figsize='default', titles={}, sharex=Tr
     if num_plots == 1:
         cols = 1
     rows = int(np.ceil(num_plots/cols))
-    if not fig:
+    if not fig or not axs:
         if figsize == 'default':
             figsize = (cols*3, 2*rows)
-        fig, axs = plt.subplots(rows, cols,
-                                sharex=sharex, sharey=sharey, figsize=figsize)
+        if not fig:
+            fig, axs = plt.subplots(rows, cols,
+                                    sharex=sharex, sharey=sharey, figsize=figsize)
+        if axs is None:
+            if len(fig.axes) != num_plots:
+                fig.clf()
+                axs = fig.subplots(rows, cols, sharex=sharex, sharey=sharey)
+            else:
+                axs = fig.axes
 
         if isinstance(axs, np.ndarray):
             axs = axs.flatten()
-        else:
+        elif not isinstance(axs, list):
             axs = [axs]
 
     subplot_titles = {plot_value: plot_value for plot_value in plot_values}

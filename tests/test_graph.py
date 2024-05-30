@@ -100,7 +100,7 @@ if __name__ == '__main__':
     # a.draw_from(10, mdlhist)
     # a.draw_from(50, mdlhist)
 
-    # an = a.animate_from(mdlhist)
+    # an = a.animate(mdlhist)
     # from IPython.display import HTML
     # HTML(an.to_jshtml())
 
