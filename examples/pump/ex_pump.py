@@ -647,7 +647,7 @@ if __name__ == "__main__":
 
     exp = deghist.get_metrics()
 
-    from fmdtools.analyze.graph import FunctionArchitectureGraph
+    from fmdtools.analyze.graph.architecture import FunctionArchitectureGraph
     mg = FunctionArchitectureGraph(mdl)
     mg.set_heatmap(exp)
     mg.draw()

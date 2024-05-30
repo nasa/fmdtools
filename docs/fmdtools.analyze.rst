@@ -46,7 +46,43 @@ fmdtools.analyze.history
 fmdtools.analyze.graph 
 --------------------------------
 
-.. automodule:: fmdtools.analyze.graph
+The graph sub-package is used to graphically represent models and has the following modules:
+
+.. autosummary::
+
+    fmdtools.define.graph.style
+    fmdtools.define.graph.base
+    fmdtools.define.graph.architecture
+    fmdtools.define.graph.flow
+
+fmdtools.analyze.graph.style
++++++++++++++++++++++++++++++++++++
+
+.. automodule:: fmdtools.analyze.graph.style
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+fmdtools.analyze.graph.base
++++++++++++++++++++++++++++++++++++
+
+.. automodule:: fmdtools.analyze.graph.base
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+fmdtools.analyze.graph.architecture
++++++++++++++++++++++++++++++++++++
+
+.. automodule:: fmdtools.analyze.graph.architecture
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+fmdtools.analyze.graph.flow
++++++++++++++++++++++++++++++++++++
+
+.. automodule:: fmdtools.analyze.graph.flow
    :members:
    :undoc-members:
    :show-inheritance:
