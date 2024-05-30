@@ -1252,7 +1252,7 @@ def sff_one_trial(start_node_selected, g, endtime=5, pi=.1, pr=.1):
 
 
 def data_average(data):
-    """Averages each column in data"""
+    """Average each column in data."""
     list_average = []
     for i in range(0, len(data[0])):
         list_average.append(sum(x[i] for x in data)/len(data))
@@ -1261,7 +1261,7 @@ def data_average(data):
 
 def data_error(data, average):
     """
-    Calculates error for each column in data
+    Calculate error for each column in data.
 
     Parameters
     ----------
@@ -1302,8 +1302,12 @@ def gv_import_check():
 
 
 class GraphInteractor:
-    """A simple interactive graph for consistent node placement,
-    etc.--used in set_pos to set node positions"""
+    """
+    A simple interactive graph for consistent node placement, etc.
+
+    Used in set_pos to set node positions.
+    """
+
     showverts = True
     epsilon = 0.2  # max pixel distance to count as a vertex hit
 
@@ -1333,9 +1337,7 @@ class GraphInteractor:
         self.fig.canvas.mpl_connect('motion_notify_event', self.on_mouse_move)
 
     def get_closest_point(self, event):
-        """
-        Find the closest node to the given click to see if it should be moved.
-        """
+        """Find the closest node to the given click to see if it should be move."""
         pt_x = np.array([x[0] for x in self.g_obj.pos.values()])
         pt_y = np.array([x[1] for x in self.g_obj.pos.values()])
         pt_names = [*self.g_obj.pos.keys()]
@@ -1347,10 +1349,7 @@ class GraphInteractor:
         return closest_pt
 
     def on_button_press(self, event):
-        """
-        Determine what to do when a button is pressed.
-        """
-
+        """Determine what to do when a button is pressed."""
         if event.inaxes is None:
             return
         if event.inaxes == self.bax:
@@ -1361,9 +1360,7 @@ class GraphInteractor:
         self._clicked_node = self.get_closest_point(event)
 
     def on_button_release(self, event):
-        """
-        Determine what to do when the mouse is released.
-        """
+        """Determine what to do when the mouse is released."""
         if event.button != 1:
             return
         self._clicked_node = None
@@ -1371,9 +1368,7 @@ class GraphInteractor:
         self.refresh_plot()
 
     def on_mouse_move(self, event):
-        """
-        Change the node position when the user drags it.
-        """
+        """Change the node position when the user drags it."""
         if not self.showverts:
             return
         if event.inaxes is None:
@@ -1400,10 +1395,7 @@ class GraphInteractor:
         plt.pause(0.001)
 
     def print_pos(self):
-        """
-        Prints the current node positions in the graph so they can be viewed
-        (and copied) from the console.
-        """
+        """Print the current node positions in the graph from the console."""
         print({k: list(v) for k, v in self.g_obj.pos.items()})
 
 
@@ -1411,8 +1403,7 @@ class GraphInteractor:
 # MODELS
 class FunctionArchitectureGraph(Graph):
     """
-    Creates a Graph of Model functions and flow for display, where both functions
-    and flows are nodes.
+    Graph of FunctionArchitecture, where both functions and flows are nodes.
 
     If get_states option is used on instantiation, a `states` dict is associated
     with the edges/nodes which can then be used to visualize function/flow attributes.
@@ -1475,8 +1466,7 @@ class FunctionArchitectureGraph(Graph):
 
     def set_fxn_nodestates(self, mdl):
         """
-        Attaches state attributes to Graph corresponding to the states of the model
-        that belong to functions
+        Attach attributes to Graph corresponding to function states.
 
         Parameters
         ----------
@@ -1484,8 +1474,6 @@ class FunctionArchitectureGraph(Graph):
             Model to represent
         time: float
             Time to execute indicators at. Default is 0.0
-
-
         """
         fxnfaults, fxnstates, indicators = {}, {}, {}
         for fxnname, fxn in mdl.fxns.items():
@@ -1498,14 +1486,12 @@ class FunctionArchitectureGraph(Graph):
 
     def set_flow_nodestates(self, mdl):
         """
-        Attaches node state attributes to Graph corresponding to the states of the
-        model that belong to flows.
+        Attach attributes to Graph notes corresponding to flow states.
 
         Parameters
         ----------
         mdl: Model
             Model to represent
-
         """
         flowstates, indicators = {}, {}
         for flowname, flow in mdl.flows.items():
@@ -1584,17 +1570,17 @@ class FunctionArchitectureGraph(Graph):
             The default is True.
         """
         node_style_kwargs = {}
-        if not (type(static) == bool and not static):
+        if not (isinstance(static, bool) and not static):
             static_node_dict = self.get_staticnodes(mdl)
             nx.set_node_attributes(self.g, static_node_dict, name='static')
             node_style_kwargs['static'] = static
 
-        if not (type(dynamic) == bool and not dynamic):
+        if not (isinstance(dynamic, bool) and not dynamic):
             dynamic_node_dict, orders, dynamicnodes = self.get_dynamicnodes(mdl)
             nx.set_node_attributes(self.g, dynamic_node_dict, name='dynamic')
             node_style_kwargs['dynamic'] = dynamic
 
-        if not (type(next_edges) == bool and not next_edges):
+        if not (isinstance(next_edges, bool) and not next_edges):
             next_edges_dict = [(dynamicnodes[n], dynamicnodes[n+1])
                                for n in range(len(dynamicnodes)-1)
                                if (dynamicnodes[n] in self.g.nodes
@@ -1626,8 +1612,9 @@ class FunctionArchitectureGraph(Graph):
 
 class FunctionArchitectureFlowGraph(FunctionArchitectureGraph):
     """
-    Creates a Graph of model flows for display, where flows are
-    set as nodes and connections (via functions) are edges
+    Create a Graph of FunctionArchitecture flows.
+
+    In this Graph, flows are set as nodes and ther connections (via functions) are edges
     """
 
     def nx_from_obj(self, mdl):
@@ -1651,8 +1638,9 @@ class FunctionArchitectureFlowGraph(FunctionArchitectureGraph):
 
 class FunctionArchitectureCompGraph(FunctionArchitectureGraph):
     """
-    Creates a graph of model functions, and flows, with component containment
-    relationships shown for functions.
+    Creates a graph of FunctionArchitecture functions, and flows, and components.
+
+    Shows components as contained within functions.
     """
 
     def nx_from_obj(self, mdl):
@@ -1695,8 +1683,11 @@ class FunctionArchitectureCompGraph(FunctionArchitectureGraph):
 
 
 class FunctionArchitectureFxnGraph(FunctionArchitectureGraph):
-    """ Returns a graph representation of the functions of the model, where
-    functions are nodes and flows are edges"""
+    """
+    Create a graph representation of the functions of the model.
+
+    In this graph, functions are nodes and flows are edges.
+    """
 
     def nx_from_obj(self, mdl):
         g = nx.projected_graph(mdl.graph, mdl.fxns)
@@ -1741,14 +1732,15 @@ class FunctionArchitectureFxnGraph(FunctionArchitectureGraph):
 
 class FunctionArchitectureTypeGraph(FunctionArchitectureGraph):
     """
-    Creates a graph representation of model Classes, showing the containment
-    relationship between function classes and flow classes in the model.
+    Creates a graph representation of FunctionArchitecture Classes.
+
+    Shows the containment relationship between function classes and flow classes in the
+    model.
     """
 
     def nx_from_obj(self, mdl, withflows=True, **kwargs):
         """
-        Returns a graph with the type containment relationships of the different model
-        constructs.
+        Return graph with type containment relationships of the function/flow classes.
 
         Parameters
         ----------
@@ -1836,7 +1828,7 @@ class MultiFlowGraph(Graph):
                  connections_as_tags=True, include_states=False, get_states=True,
                  get_indicators=True, time=0.0):
         """
-        Create a networkx graph corresponding to the MultiFlow.
+        Create networkx graph corresponding to the MultiFlow.
 
         Parameters
         ----------
@@ -1873,10 +1865,10 @@ class MultiFlowGraph(Graph):
                 add_g_nested(g, local_flow, loc, include_states=include_states,
                              get_states=get_states, get_indicators=get_indicators,
                              time=time)
-        if type(send_connections) == dict:
+        if isinstance(send_connections, dict):
             send_iter = send_connections.items()
             connections_as_tags = True
-        elif type(send_connections) == list:
+        elif isinstance(send_connections, list):
             send_iter = send_connections
             connections_as_tags = False
 
@@ -1891,7 +1883,7 @@ class MultiFlowGraph(Graph):
 
     def set_resgraph(self, other=False):
         """
-        Standard results processing for results graphs (show faults and degradations)
+        Process results for results graphs (show faults and degradations).
 
         Parameters
         ----------
@@ -1911,8 +1903,8 @@ class MultiFlowGraph(Graph):
 
 
 class CommsFlowGraph(MultiFlowGraph):
-    '''
-    Create a graph representation of the CommsFlow (assuming no additional locals).
+    """
+    Create graph representation of the CommsFlow (assuming no additional locals).
 
     Parameters
     ----------
@@ -1932,10 +1924,10 @@ class CommsFlowGraph(MultiFlowGraph):
     -------
     g : networkx.DiGraph
         Graph of the commsflow connections.
-    '''
+    """
+
     def __init__(self, flow, include_glob=False, ports_only=False,
                  get_states=True, get_indicators=True, time=0.0):
-     
         send_connections = []
         for f in flow.fxns:
             int_flow = getattr(flow, f)
@@ -1973,8 +1965,9 @@ class CommsFlowGraph(MultiFlowGraph):
 
 def node_is_tagged(connections_as_tags, tag, node):
     """
-    Returns if a node is tagged, and thus if a connection should be made. If
-    connections_as_tags, cheks if either the tag is in the node string, or, if the
+    Return if a node is tagged, and thus if a connection should be made.
+
+    If connections_as_tags, checks if either the tag is in the node string, or, if the
     tag is "base", connects with all base nodes (without an underscore)
 
     Parameters
@@ -1999,8 +1992,9 @@ def node_is_tagged(connections_as_tags, tag, node):
 def add_g_nested(g, multiflow, base_name, include_states=False,
                  get_states=False, get_indicators=False, time=0.0):
     """
-    Helper function for MultiFlow.create_multigraph. Iterates recursively
-    through multigraph locals to construct the containment tree.
+    Create graph for MultiFlow.create_multigraph.
+
+    Iterates recursively through multigraph locals to construct the containment tree.
 
     Parameters
     ----------
@@ -2098,14 +2092,14 @@ class ActionArchitectureGraph(Graph):
 
     def set_nx_labels(self, aa):
         """
-        Labels the underlying networkx graph structure with type attributes
-        corresponding to the ActionArchitecture.
+        Label the underlying networkx graph structure.
+
+        Adds type attributes corresponding to the ActionArchitecture.
 
         Parameters
         ----------
         aa : ActionArchitecture
             Action Sequence Graph object to represent
-
         """
         for n in self.g.nodes():
             if n in aa.action_graph.nodes():
@@ -2194,7 +2188,7 @@ class ActionArchitectureGraph(Graph):
 
 
 class ActionArchitectureActGraph(ActionArchitectureGraph):
-    """Variant of ActionArchitectureGraph where only the sequence between actions is shown."""
+    """ActionArchitectureGraph where only the sequence between actions is shown."""
 
     def __init__(self, aa, get_states=True):
         self.g = aa.action_graph.copy()
@@ -2204,7 +2198,7 @@ class ActionArchitectureActGraph(ActionArchitectureGraph):
 
 
 class ActionArchitectureFlowGraph(ActionArchitectureGraph):
-    """Variant of ActionArchitectureGraph where only showing flow relationships between actions."""
+    """ActionArchitectureGraph where only showing flow relationships between actions."""
 
     def __init__(self, aa, get_states=True):
         self.g = aa.flow_graph.copy()
