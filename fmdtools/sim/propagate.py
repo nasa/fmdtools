@@ -45,9 +45,6 @@ Private Methods:
   timestep.
 - :func:`get_endclass_vars`: Helper function for `get_result`
 """
-# File name: propagate.py
-# Author: Daniel Hulse
-# Created: December 2019
 
 import numpy as np
 import copy
