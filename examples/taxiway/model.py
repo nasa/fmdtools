@@ -114,8 +114,8 @@ def create_fault_scen_metrics(mdlhist):
 
 if __name__ == "__main__":
     import networkx as nx
-    from fmdtools.analyze.graph import MultiFlowGraph, CommsFlowGraph
-    from fmdtools.analyze.graph import FunctionArchitectureGraph
+    from fmdtools.analyze.graph.flow import MultiFlowGraph, CommsFlowGraph
+    from fmdtools.analyze.graph.architecture import FunctionArchitectureGraph
 
     mdl = taxiway_model()
 
@@ -152,12 +152,11 @@ if __name__ == "__main__":
             120: ["graph", "endclass"],
         },
     )
-    
+
     ind_hist = create_fault_scen_metrics(mdlhist)
     fig, ax = ind_hist.plot_line("incorrect_fields",
                                  "unsafe_distances",
                                  "overbooked_locations",
-                                 "no_sight",
                                  "incorrect_perception", time_slice=0)
 
     mdlhist.nominal.get_metric("i.unsafe", metric=np.sum, axis=1)
@@ -208,7 +207,7 @@ if __name__ == "__main__":
                                  "assets_without_sight",
                                  "faulty_functions", time_slice=[8, 10])
 
-    endresults.get("120p0")
+    endresults.get("t120p0")
 
     degraded = mdlhist.get_degraded_hist(*mdl.fxns, *mdl.flows)
     faulty = mdlhist.get_faulty_hist(*mdl.fxns)

@@ -82,8 +82,8 @@ if __name__ == "__main__":
     mdl = taxiway_model()
     
     from fmdtools.sim import propagate as prop
-    from fmdtools.analyze.graph import ModelGraph, ModelTypeGraph
-    from fmdtools.analyze.graph import MultiFlowGraph, CommsFlowGraph
+    from fmdtools.analyze.graph.architecture import ModelGraph, ModelTypeGraph
+    from fmdtools.analyze.graph.flow import MultiFlowGraph, CommsFlowGraph
     
     endresults, mdlhist = prop.one_fault(mdl, "ma3", "lost_sight",
                                     desired_result={93: {"graph.flows.location":(MultiFlowGraph, {'include_glob':False})},

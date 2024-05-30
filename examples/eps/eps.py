@@ -468,7 +468,7 @@ def discrep(value):
 
 if __name__ == "__main__":
     import fmdtools.sim.propagate as propagate
-    from fmdtools.analyze.graph import FunctionArchitectureGraph
+    from fmdtools.analyze.graph.architecture import FunctionArchitectureGraph
     import numpy as np
 
     mdl = EPS(track=['fxns', 'flows', 'i'])
