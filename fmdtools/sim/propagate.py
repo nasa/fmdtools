@@ -106,12 +106,12 @@ warn_faults : bool
 
 
 def unpack_sim_kwargs(**kwargs):
-    """Unpacks :data:`sim_kwargs` parameters for :func:`prop_one_scen`"""
+    """Unpack :data:`sim_kwargs` parameters for :func:`prop_one_scen`."""
     return (kwargs.get(k, v) for k, v in sim_kwargs.items())
 
 
 def pack_sim_kwargs(**kwargs):
-    """Creates :data:`sim_kwargs` for :func:`prop_one_scen`"""
+    """Create :data:`sim_kwargs` for :func:`prop_one_scen`."""
     return {k: kwargs.get(k, v) for k, v in sim_kwargs.items()}
 
 
@@ -154,7 +154,7 @@ mdl_kwargs: dict (optional)
 
 
 def pack_run_kwargs(**kwargs):
-    """Creates subset of run kwargs for :func:`nom_helper` and :data:`run_kwarg`"""
+    """Create subset of run kwargs for :func:`nom_helper` and :data:`run_kwarg`."""
     return {k: copy.deepcopy(kwargs.get(k, v)) for k, v in run_kwargs.items()}
 
 
@@ -229,7 +229,7 @@ def nominal(mdl, **kwargs):
 
 def save_helper(save_args, endclass, mdlhist, indiv_id='', result_id=''):
     """
-    Helper function for inline results saving.
+    Save results (helper function).
 
     Parameters
     ----------
@@ -333,6 +333,7 @@ def parameter_sample(mdl, ps, **kwargs):
 
 
 def unpack_res_list(scenlist, res_list):
+    """Create result/history from output list."""
     results = Result()
     mdlhists = History()
     results.data = {scen.name: res_list[i][0] for i, scen in enumerate(scenlist)}
@@ -341,13 +342,14 @@ def unpack_res_list(scenlist, res_list):
 
 
 def exec_nom_par(arg):
+    """Execute a nominal scenario (helper function/interface for parallel pools)."""
     endclass, mdlhist = exec_nom_helper(arg[0], arg[1], arg[2],
                                         **{**arg[3], 'use_end_condition': False})
     return endclass, mdlhist
 
 
 def exec_nom_helper(mdl, scen, name, **kwargs):
-    """Helper function for executing nominal scenarios"""
+    """Execute a nominal scenario (helper function)."""
     mdl_run = mdl.new(p=scen.p, sp=scen.sp, r=scen.r)
     result, mdlhist, _, t_end = prop_one_scen(mdl_run, scen, **kwargs)
     check_hist_memory(mdlhist, kwargs['num_scens'], max_mem=kwargs['max_mem'])
@@ -794,7 +796,7 @@ def scenlist_helper(mdl, scenlist, c_mdl, **kwargs):
 
 
 def close_pool(kwargs):
-    """Closes pool to avoid memory problems"""
+    """Close pool to avoid memory problems."""
     if kwargs.get('pool', False) and kwargs.get('close_pool', True):
         kwargs['pool'].close()
         kwargs['pool'].terminate()
@@ -802,7 +804,7 @@ def close_pool(kwargs):
 
 
 def exec_scen_par(args):
-    """Helper function for executing the scenario in parallel"""
+    """Execute scenario (parallel execution helper function for pool.map)."""
     return exec_scen(args[0].copy(), args[1], **args[2], indiv_id=args[3])
 
 
@@ -830,8 +832,7 @@ def exec_scen(mdl, scen, save_args={}, indiv_id='', **kwargs):
 
 
 def check_hist_memory(mdlhist, nscens, max_mem=2e9):
-    """Checks if the memory will be exhausted given the size of the mdlhist and number
-    of scenarios"""
+    """Check if the memory will be exhausted by the hist over the scenarios."""
     mem_total, mem_profile = mdlhist.get_memory()
     total_memory = int(mem_total) * int(nscens)
     if total_memory > max_mem:
@@ -845,6 +846,7 @@ def check_hist_memory(mdlhist, nscens, max_mem=2e9):
 
 
 def check_mdl_memory(mdl, nscens, max_mem=2e9):
+    """Check if memory will be exhausted by the model over the scenarios."""
     mem_total, mem_profile = mdl.get_memory()
     total_memory = int(mem_total) * int(nscens)
     if total_memory > max_mem:
@@ -1003,7 +1005,7 @@ def list_init_faults(mdl, times):
 
 def check_end_condition(mdl, use_end_condition, t):
     """
-    Checks if the end condition of the simulate has been met.
+    Check if the end condition of the simulation has been met.
 
     Parameters
     ----------
@@ -1031,7 +1033,7 @@ def check_end_condition(mdl, use_end_condition, t):
 
 def prop_one_scen(mdl, scen, ctimes=[], nomhist={}, nomresult={}, **kwargs):
     """
-    Runs a fault scenario in the model over time
+    Simulate a single scenario in the model over time.
 
     Parameters
     ----------
