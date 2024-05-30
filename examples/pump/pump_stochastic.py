@@ -182,6 +182,12 @@ if __name__ == "__main__":
                                    'flows.wat_2.s.flowrate',
                                    'flows.wat_2.s.pressure')
 
+    ani = comp_mdlhists.animate('plot_metric_dist_from',
+                                plot_values=('fxns.move_water.s.eff',
+                                             'fxns.move_water.s.total_flow',
+                                             'flows.wat_2.s.flowrate',
+                                             'flows.wat_2.s.pressure'))
+
     ps2 = ParameterSample(pd)
     ps2.add_variable_replicates([[0]], replicates=100, name="nodelay")
     ps2.add_variable_replicates([[10]], replicates=100, name="delay10")
@@ -208,10 +214,10 @@ if __name__ == "__main__":
                                                time=20, staged=False, run_stochastic=True,
                                                new_params={'modelparams': {'seed': 50}})
 
-    #mdlhist['faulty']['functions']['ImportEE']['probdens']
+    # mdlhist['faulty']['functions']['ImportEE']['probdens']
 
     mdlhist.plot_line('fxns.import_ee.s.effstate', 'fxns.import_ee.r.s.grid_noise',
                       'flows.ee_1.s.voltage', 'flows.ee_1.s.current')
-    #an.plot.mdlhists(mdlhist, fxnflowvals={'ImportEE'})
-    
+
+    # an.plot.mdlhists(mdlhist, fxnflowvals={'ImportEE'})
 

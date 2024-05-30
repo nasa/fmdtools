@@ -509,6 +509,14 @@ if __name__ == "__main__":
                                     collections={'start':{}, 'safe': {}})
 
     mdl.flows['environment'].c.show_from(10, mdlhist.flows.environment.c,
-                                         {'viewed': {}})
-    ani = mdl.flows['environment'].c.animate_from(mdlhist.flows.environment.c,
-                                                  properties={'viewed': {}})
+                                         {'viewed': {}}, title='hi')
+    ani = mdl.flows['environment'].c.animate(mdlhist.flows.environment.c,
+                                             properties={'target': {}, 'viewed': {}},
+                                             collections={'start':{}, 'safe': {}})
+
+    fig, ax = quad_hist.plot_trajectories_from(10, ("dofs.s.x", "dofs.s.y", "dofs.s.z"),
+                                          time_groups=['nominal'],
+                                          indiv_kwargs={'faulty': {'alpha': 0.15,
+                                                                   'color': 'red'}})
+    quad_hist.animate('plot_trajectories_from',
+                      plot_values=("dofs.s.x", "dofs.s.y", "dofs.s.z"))

@@ -15,7 +15,8 @@ from fmdtools.define.container.parameter import Parameter
 from fmdtools.define.container.rand import Rand
 from fmdtools.define.base import is_iter
 from fmdtools.define.object.base import BaseObject
-from fmdtools.analyze.common import setup_plot, consolidate_legend, animate_from
+from fmdtools.analyze.common import setup_plot, consolidate_legend
+from fmdtools.analyze.common import prep_animation_title, add_title_xylabs
 from matplotlib import pyplot as plt
 from mpl_toolkits.axes_grid1 import make_axes_locatable
 from matplotlib import colormaps, cm
@@ -31,8 +32,6 @@ class CoordsParam(Parameter):
     Modifiers may be added to add additional properties (e.g., features, states,
     collections, points) to the coordinates. Additionally has class fields which may be
     overwritten.
-
-    ...
 
     Class Variables
     ---------------
@@ -826,7 +825,7 @@ class Coords(BaseObject):
             states[state] = copy.copy(getattr(self, state))
         return states
 
-    def show_property(self, prop, xlab="x", ylab="y", proplab="prop",
+    def show_property(self, prop, xlabel="x", ylabel="y", title='', proplab="prop",
                       as_bool=False, color='green', legend_kwargs={},
                       fig=None, ax=None, figsize=(5, 5), **kwargs):
         """
@@ -838,10 +837,12 @@ class Coords(BaseObject):
         ----------
         prop : str
             Name of the property to plot.
-        xlab : str, optional
+        xlabel : str, optional
             Label for x-axis. The default is "x".
-        ylab : str, optional
+        ylabel : str, optional
             Label for y-axis. The default is "y".
+        title : str, optional
+            Title for the plot. The default is ''.
         proplab : str, optional
             Label for the property. The default is "prop", which uses the name of the
             property provided.
@@ -885,8 +886,7 @@ class Coords(BaseObject):
 
         im = ax.pcolormesh(X, Y, p, vmin=vmin, vmax=vmax, **kwargs)
 
-        plt.xlabel(xlab)
-        plt.ylabel(ylab)
+        add_title_xylabs(ax, title=title, xlabel=xlabel, ylabel=ylabel)
         if proplab == "prop":
             proplab = prop
 
@@ -905,7 +905,7 @@ class Coords(BaseObject):
         return fig, ax
 
     def show_property_z(self, prop, z="prop", z_res=10, collections={},
-                        xlab="x", ylab="y", zlab="prop",
+                        xlabel="x", ylabel="y", zlabel="prop",
                         proplab="prop", cmap="Greens",
                         fig=None, ax=None, figsize=(4, 5), **kwargs):
         """
@@ -925,11 +925,11 @@ class Coords(BaseObject):
         collections:  dict, optional
             Collections to plot and their respective kwargs for show_collection.
             The default is {}.
-        xlab : str, optional
+        xlabel : str, optional
             Label for x-axis. The default is "x".
-        ylab : str, optional
+        ylabel : str, optional
             Label for y-axis. The default is "y".
-        zlab : str, optional
+        zlabel : str, optional
             Label for the z-axis. The default is "prop", which uses the name of the
             property.
         proplab : str, optional
@@ -1005,12 +1005,13 @@ class Coords(BaseObject):
                 colors[index[0], index[1], z_index] = coll_color
 
         ax.voxels(X_scale, Y_scale, Z_scale, shape, facecolors=colors, **kwargs)
-        ax.set_xlabel(xlab)
-        ax.set_ylabel(ylab)
-        ax.set_zlabel(zlab)
+        ax.set_xlabel(xlabel)
+        ax.set_ylabel(ylabel)
+        ax.set_zlabel(zlabel)
         return fig, ax
 
     def show_collection(self, prop, fig=None, ax=None, label=True, z="",
+                        xlabel='x', ylabel='y', title='',
                         legend_args=False, text_z_offset=0.0, figsize=(4, 4), **kwargs):
         """
         Show a collection on the grid as square patches.
@@ -1031,6 +1032,13 @@ class Coords(BaseObject):
             Argument to plot as third dimension on 3d plot. Default is '', which
             returns a 2d plot. If a number is provided, the plot will be 3d with
             the height at that constant z-value.
+        xlabel : str, optional
+            Label for x-axis. The default is "x".
+        ylabel : str, optional
+            Label for y-axis. The default is "y".
+        zlabel : str, optional
+            Label for the z-axis. The default is "prop", which uses the name of the
+            property.
         legend_args : dict/False
             Specifies arguments to legend. Default is False, which shows no legend.
         text_z_offset : float
@@ -1086,10 +1094,11 @@ class Coords(BaseObject):
             if legend_args == True:
                 legend_args = {}
             consolidate_legend(ax, **legend_args)
+        add_title_xylabs(ax, title=title, xlabel=xlabel, ylabel=ylabel)
         return fig, ax
 
     def show(self, properties={}, collections={}, fig=None, ax=None,
-             figsize=(5, 5), **kwargs):
+             figsize=(5, 5), xlabel='x', ylabel='y', title='', **kwargs):
         """
         Plot a property and set of collections on the grid.
 
@@ -1100,6 +1109,12 @@ class Coords(BaseObject):
         collections : dict, optional
             Collections to plot and their respective kwargs for show_collection.
             The default is {}.
+        xlabel : str
+            x-axis label.
+        ylabel : str
+            y-axis label.
+        title : str
+            title for the plot.
         **kwargs : kwargs
             overall kwargs to show_property.
 
@@ -1113,12 +1128,18 @@ class Coords(BaseObject):
         fig, ax = setup_plot(fig=fig, ax=ax, figsize=figsize)
         pallette = [*TABLEAU_COLORS.keys()]
         for i, (prop, prop_kwargs) in enumerate(properties.items()):
-            kwar = {**kwargs, 'color': pallette[i], **prop_kwargs}
+            kwar = {**kwargs,
+                    'color': pallette[i],
+                    'xlabel': '', 'ylabel': '', 'title': '',
+                    **prop_kwargs}
             fig, ax = self.show_property(prop, fig=fig, ax=ax, **kwar)
         for i, (coll, coll_kwargs) in enumerate(collections.items()):
-            kwar = {'color': pallette[i+len(properties)], 'legend_args': True,
+            kwar = {'color': pallette[i+len(properties)],
+                    'xlabel': '', 'ylabel': '', 'title': '',
+                    'legend_args': True,
                     **coll_kwargs}
             self.show_collection(coll, fig=fig, ax=ax, **kwar)
+        add_title_xylabs(ax, title=title, xlabel=xlabel, ylabel=ylabel)
         return fig, ax
 
     def show_from(self, t, history={}, properties={}, **kwargs):
@@ -1141,10 +1162,12 @@ class Coords(BaseObject):
         ax : mpl.axis
             Ploted axis object.
         """
-        self.assign_from(history, t, *properties)
+        kwargs = prep_animation_title(t, **kwargs)
+        props = [p for p in properties if p in history]
+        self.assign_from(history, t, *props)
         return self.show(properties=properties, **kwargs)
 
-    def animate_from(self, hist, times='all', **kwargs):
+    def animate(self, hist, times='all', **kwargs):
         """
         Animate the coords over a history using show_from.
 
@@ -1162,7 +1185,7 @@ class Coords(BaseObject):
         ani : animation.Funcanimation
             Object with animation.
         """
-        return animate_from(self.show_from, hist, times=times, **kwargs)
+        return hist.animate(self.show_from, times=times, **kwargs)
 
     def show_z(self, prop, z="prop", collections={}, legend_args=False, voxels=True,
                **kwargs):

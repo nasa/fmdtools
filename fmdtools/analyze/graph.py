@@ -71,7 +71,8 @@ from matplotlib.colors import Colormap
 from recordclass import dataobject, asdict
 from fmdtools.analyze.result import Result
 from fmdtools.analyze.history import History
-from fmdtools.analyze.common import consolidate_legend, animate_from
+from fmdtools.analyze.common import consolidate_legend, setup_plot, prep_animation_title
+from fmdtools.analyze.common import clear_prev_figure
 
 
 plt.rcParams['pdf.fonttype'] = 42
@@ -698,10 +699,8 @@ class Graph(object):
         ax : matplotlib axis
             Ax in the figure
         """
-        if not fig:
-            fig = plt.figure(figsize=figsize)
-        if not ax:
-            ax = plt.gca()
+        fig, ax = setup_plot(figsize=figsize, fig=fig, ax=ax)
+
         for to_set in ['pos', 'edge_styles', 'edge_labels',
                        'node_styles', 'node_labels']:
             if to_set in kwargs or not hasattr(self, to_set):
@@ -743,7 +742,7 @@ class Graph(object):
         plt.axis('off')
 
         if title:
-            plt.title(title)
+            ax.set_title(title)
         return fig, ax
 
     def move_nodes(self, **kwargs):
@@ -805,18 +804,17 @@ class Graph(object):
         degraded = history.get_degraded_hist(*self.g.nodes,
                                              withtotal=False,
                                              withtime=False).get_slice(time)
-        deg_nodes = {n: not bool(degraded.get(n, 1)) for n in self.g.nodes}
+        deg_nodes = {n: bool(degraded.get(n, 0)) for n in self.g.nodes}
         nx.set_node_attributes(self.g, deg_nodes, 'degraded')
 
         # nx.set_node_attributes(self.g, state_nodes, 'states')
         self.set_node_styles(degraded={}, faulty={})
         self.set_node_labels(title='id', subtext='faults')
-        kwargs['title'] = kwargs.get('title', '')+' t='+str(time)
-        if 'fig' in kwargs:
-            kwargs['fig'].clf()
+        kwargs = prep_animation_title(time, **kwargs)
+        clear_prev_figure(**kwargs)
         return self.draw(**kwargs)
 
-    def animate_from(self, history, times='all', figsize=(6, 4), **kwargs):
+    def animate(self, history, times='all', figsize=(6, 4), **kwargs):
         """
         Successively animate a plot using Graph.draw_from.
 
@@ -835,8 +833,8 @@ class Graph(object):
         ani : matplotlib.animation.FuncAnimation
             Animation object with the given frames
         """
-        return animate_from(self.draw_from, history, times=times, figsize=figsize,
-                            withlegend=False, **kwargs)
+        return history.animate(self.draw_from, times=times, figsize=figsize,
+                               withlegend=False, **kwargs)
 
     def draw_graphviz(self, filename='', filetype='png', **kwargs):
         """
