@@ -543,12 +543,11 @@ class ActionArchitectureGraph(Graph):
             overwrite the default.
             Has structure {tag:{label:kwargs}}, where kwargs are the keyword arguments
             to nx.draw_networkx_nodes. The default is {"label":{}}.
-
         """
         super().set_node_styles(active=active, **node_styles)
 
     def draw_graphviz(self, layout="twopi", overlap='voronoi', **kwargs):
-        """Calls Graph.draw_graphviz."""
+        """Call Graph.draw_graphviz."""
         return super().draw_graphviz(layout=layout, overlap=overlap, **kwargs)
 
     def draw_from(self, time, history=History(), **kwargs):
