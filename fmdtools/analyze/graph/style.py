@@ -15,8 +15,6 @@ Has Classes:
 - :class:`Labels`: Defines a set of labels to be drawn using draw_networkx_labels.
 - :class:`GraphInteractor`: Used to set nodes in set_pos when creating interactive graph
 - :func:`label_for_entry`: Gets the label from an nx.graph for a given entry.
-- :func:`get_label_groups`: Creates groups of nodes/edges in terms of discrete values
-  for the given tags.
 - :func:`to_legend_label`: Creates a legend label string for the group corresponding to
   style_labels
 """
@@ -318,39 +316,6 @@ class Labels(dataobject, mapping=True):
 
     def group_styles(self):
         return {k: (self[k], self[k+'_style']) for k in self.iter_groups()}
-
-
-def get_label_groups(iterator, *tags):
-    """
-    Create groups of nodes/edges in terms of discrete values for the given tags.
-
-    Parameters
-    ----------
-    iterator : iterable
-        e.g., nx.graph.nodes(), nx.graph.edges()
-    *tags : list
-        Tags to find in the graph object (e.g., `label`, `status`, etc.)
-
-    Returns
-    -------
-    label_groups : dict
-        Dict of groups of nodes/edges with given tag values. With structure::
-        {(tagval1, tagval2...):[list_of_nodes]}
-    """
-    try:
-        labels = {k: tuple(vals[tag] for tag in tags) for k, vals in iterator.items()}
-    except KeyError as e:
-        unable = {k: tuple(tag for tag in tags if tag not in vals)
-                  for k, vals in iterator.items()}
-        raise Exception("The following keys lack the following tags: " +
-                        str(unable)) from e
-    label_groups = {}
-    for key, label in labels.items():
-        if label in label_groups:
-            label_groups[label].append(key)
-        else:
-            label_groups[label] = [key]
-    return label_groups
 
 
 def to_legend_label(group_label, style_labels):

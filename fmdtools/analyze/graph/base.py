@@ -12,6 +12,8 @@ Private Methods:
 - :func:`data_error`: Calculates error for each column in data
 - :func:`gv_import_check`: Checks if graphviz is installed on the system before plotting
 - :func:`graph_factory`: Creates the default Graph for a given object.
+- :func:`get_label_groups`: Creates groups of nodes/edges in terms of discrete values
+  for the given tags.
 """
 
 import networkx as nx
@@ -27,7 +29,7 @@ from fmdtools.analyze.history import History
 from fmdtools.analyze.common import consolidate_legend, setup_plot, prep_animation_title
 from fmdtools.analyze.common import clear_prev_figure
 from fmdtools.analyze.graph.style import EdgeStyle, Labels, EdgeLabelStyle, LabelStyle
-from fmdtools.analyze.graph.style import to_legend_label, get_label_groups, NodeStyle
+from fmdtools.analyze.graph.style import to_legend_label, NodeStyle
 
 
 plt.rcParams['pdf.fonttype'] = 42
@@ -35,7 +37,29 @@ plt.rcParams['pdf.fonttype'] = 42
 
 class Graph(object):
     """
-    Create a Graph.
+    Base class for graphs which can be extended to represent various objects.
+
+    Essentially provides a convenience interface for networkx to enable quick
+    visualization and analysis of model properties.
+
+    Attributes
+    ----------
+    g : nx.Graph
+        Networkx graph to run analyses on.
+    pos : dict
+        Dict of node positions set using set_pos.
+    edge_styles : dict
+        Dict of styles for each edge set using set_edge_styles.
+    node_groups : dict
+        Dict of node groups by tag with key (tag1, tag2) and value [node1, node2].
+    node_styles : dict
+        Dict of styles for each node set using set_node_styles.
+    edge_groups : dict
+        Dict of edge groups by tag with key (tag1, tag2) and value [edge1, edge2].
+    edge_labels : Labels
+        Labels for each edge.
+    node_labels : Labels
+        Labels for each node.
 
     Parameters
     ----------
@@ -240,6 +264,15 @@ class Graph(object):
             self.node_styles[label].node_color = nodes_colors
             self.node_styles[label].cmap = cmap
 
+    def set_properties(self, **kwargs):
+        """Set properties using kwargs where there is a given set_kwarg command."""
+        for to_set in ['pos', 'edge_styles', 'edge_labels',
+                       'node_styles', 'node_labels']:
+            if to_set in kwargs or not hasattr(self, to_set):
+                set_func = getattr(self, 'set_'+to_set)
+                set_func(**kwargs.pop(to_set, {}))
+        return kwargs
+
     def draw(self, figsize=(12, 10), title="", fig=False, ax=False, withlegend=True,
              legend_bbox=(1, 0.5), legend_loc="center left", legend_labelspacing=2,
              legend_borderpad=1, **kwargs):
@@ -259,7 +292,8 @@ class Graph(object):
         withlegend : bool, optional
             Whether to include a legend. The default is True.
         legend_bbox : tuple, optional
-            bbox to anchor the legend to. The default is (1,0.5) (places legend on the right).
+            bbox to anchor the legend to. The default is (1,0.5), which places legend
+            on the right.
         legend_loc : str, optional
             loc argument for plt.legend. The default is "center left".
         legend_labelspacing : float, optional
@@ -279,20 +313,14 @@ class Graph(object):
             Ax in the figure
         """
         fig, ax = setup_plot(figsize=figsize, fig=fig, ax=ax)
-
-        for to_set in ['pos', 'edge_styles', 'edge_labels',
-                       'node_styles', 'node_labels']:
-            if to_set in kwargs or not hasattr(self, to_set):
-                set_func = getattr(self, 'set_'+to_set)
-                set_func(**kwargs.get(to_set, {}))
+        self.set_properties(**kwargs)
         # edge handles: used to fix edge legend bug in matplotlib/networkx
         edge_handles = []
         for label, edges in self.edge_groups.items():
             legend_label = to_legend_label(label, self.edge_style_labels)
-            eds = nx.draw_networkx_edges(self.g, self.pos, edges,
-                                         **self.edge_styles[label].kwargs(),
-                                         label=legend_label, ax=ax)
-            #if eds and isinstance(eds, list):
+            nx.draw_networkx_edges(self.g, self.pos, edges,
+                                   **self.edge_styles[label].kwargs(),
+                                   label=legend_label, ax=ax)
             lin = mlines.Line2D([], [], **self.edge_styles[label].line_kwargs(),
                                 label=legend_label)
             edge_handles.append(lin)
@@ -428,13 +456,17 @@ class Graph(object):
         filetype : str, optional
             Type of file to safe. The default is 'png'.
         **kwargs : kwargs
-            kwargs to draw.
+            Arguments for various supporting functions:
+            (set_pos, set_edge_styles, set_edge_labels, set_node_styles,
+            set_node_labels, etc)
+            Can also provide kwargs for Digraph() initialization.
 
         Returns
         -------
         dot : PyGraphviz DiGraph
             Graph object corresponding to the figure.
         """
+        kwargs = self.set_properties(**kwargs)
         from IPython.display import display, SVG
         Digraph, Graph = gv_import_check()
         dot = Digraph(graph_attr=kwargs)
@@ -649,7 +681,7 @@ class Graph(object):
 
     def plot_degree_dist(self):
         """
-        Plots degree distribution of graph representation of model mdl.
+        Plot degree distribution of graph representation of model mdl.
 
         Returns
         -------
@@ -855,7 +887,6 @@ def data_error(data, average):
         Lower bound of error
     upper_error : float
         Upper bound of error
-
     """
     q1 = []
     q3 = []
@@ -878,6 +909,39 @@ def gv_import_check():
                         "\n https://pypi.org/project/graphviz/",
                         "\n https://www.graphviz.org/download/")
     return Digraph, Graph
+
+
+def get_label_groups(iterator, *tags):
+    """
+    Create groups of nodes/edges in terms of discrete values for the given tags.
+
+    Parameters
+    ----------
+    iterator : iterable
+        e.g., nx.graph.nodes(), nx.graph.edges()
+    *tags : list
+        Tags to find in the graph object (e.g., `label`, `status`, etc.)
+
+    Returns
+    -------
+    label_groups : dict
+        Dict of groups of nodes/edges with given tag values. With structure::
+        {(tagval1, tagval2...):[list_of_nodes]}
+    """
+    try:
+        labels = {k: tuple(vals[tag] for tag in tags) for k, vals in iterator.items()}
+    except KeyError as e:
+        unable = {k: tuple(tag for tag in tags if tag not in vals)
+                  for k, vals in iterator.items()}
+        raise Exception("The following keys lack the following tags: " +
+                        str(unable)) from e
+    label_groups = {}
+    for key, label in labels.items():
+        if label in label_groups:
+            label_groups[label].append(key)
+        else:
+            label_groups[label] = [key]
+    return label_groups
 
 
 class GraphInteractor:
@@ -965,7 +1029,7 @@ class GraphInteractor:
         self.ax.set_xlim(-1, 1)
         self.ax.set_ylim(-1, 1)
         limits = plt.axis('on')
-        # TODO : Looks like limits is not used and might be removed from the code.
+
         self.ax.tick_params(left=True, bottom=True, labelleft=True, labelbottom=True)
         self.ax.set_aspect('equal')
         self.ax.grid(True, which='both')
