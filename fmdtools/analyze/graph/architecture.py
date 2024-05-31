@@ -573,7 +573,7 @@ class ActionArchitectureActGraph(ActionArchitectureGraph):
 
 
 class ActionArchitectureFlowGraph(ActionArchitectureGraph):
-    """ActionArchitectureGraph where only showing flow relationships between actions."""
+    """ActionArchitectureGraph that only shows flow relationships between actions."""
 
     def __init__(self, aa, get_states=True):
         self.g = aa.flow_graph.copy()
