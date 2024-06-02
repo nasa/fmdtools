@@ -26,9 +26,9 @@ from fmdtools.analyze.result import Result
 from fmdtools.analyze.history import History
 from fmdtools.analyze.common import consolidate_legend, setup_plot, prep_animation_title
 from fmdtools.analyze.common import clear_prev_figure
-from fmdtools.analyze.graph.style import edge_style_factory
+from fmdtools.analyze.graph.style import edge_style_factory, node_style_factory
 from fmdtools.analyze.graph.style import Labels, EdgeLabelStyle, LabelStyle
-from fmdtools.analyze.graph.style import to_legend_label, NodeStyle, gv_import_check
+from fmdtools.analyze.graph.style import to_legend_label, gv_import_check
 
 
 plt.rcParams['pdf.fonttype'] = 42
@@ -134,8 +134,7 @@ class Graph(object):
             node_styles['label'] = {}
         self.node_groups = get_label_groups(self.g.nodes(), *node_styles)
         for node_group in self.node_groups:
-            self.node_styles[node_group] = NodeStyle.from_styles(node_styles,
-                                                                 node_group)
+            self.node_styles[node_group] = node_style_factory(node_styles, node_group)
         self.node_style_labels = [*node_styles.keys()]
 
     def set_edge_labels(self, title='label', title2='', subtext='states',
