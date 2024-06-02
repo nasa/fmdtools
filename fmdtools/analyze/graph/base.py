@@ -10,7 +10,6 @@ Private Methods:
 - :func:`sff_one_trial`: Calculates one trial of the sff model
 - :func:`data_average`: Averages each column in data
 - :func:`data_error`: Calculates error for each column in data
-- :func:`gv_import_check`: Checks if graphviz is installed on the system before plotting
 - :func:`graph_factory`: Creates the default Graph for a given object.
 - :func:`get_label_groups`: Creates groups of nodes/edges in terms of discrete values
   for the given tags.
@@ -19,7 +18,6 @@ Private Methods:
 import networkx as nx
 import numpy as np
 import matplotlib.pyplot as plt
-import matplotlib.lines as mlines
 from numpy.random import random
 from matplotlib.widgets import Button
 from matplotlib import get_backend
@@ -28,8 +26,9 @@ from fmdtools.analyze.result import Result
 from fmdtools.analyze.history import History
 from fmdtools.analyze.common import consolidate_legend, setup_plot, prep_animation_title
 from fmdtools.analyze.common import clear_prev_figure
-from fmdtools.analyze.graph.style import EdgeStyle, Labels, EdgeLabelStyle, LabelStyle
-from fmdtools.analyze.graph.style import to_legend_label, NodeStyle
+from fmdtools.analyze.graph.style import edge_style_factory
+from fmdtools.analyze.graph.style import Labels, EdgeLabelStyle, LabelStyle
+from fmdtools.analyze.graph.style import to_legend_label, NodeStyle, gv_import_check
 
 
 plt.rcParams['pdf.fonttype'] = 42
@@ -116,8 +115,7 @@ class Graph(object):
             edge_styles["label"] = {}
         self.edge_groups = get_label_groups(self.g.edges(), *edge_styles)
         for edge_group in self.edge_groups:
-            self.edge_styles[edge_group] = EdgeStyle.from_styles(edge_styles,
-                                                                 edge_group)
+            self.edge_styles[edge_group] = edge_style_factory(edge_styles, edge_group)
         self.edge_style_labels = [*edge_styles.keys()]
 
     def set_node_styles(self, **node_styles):
@@ -319,11 +317,9 @@ class Graph(object):
         for label, edges in self.edge_groups.items():
             legend_label = to_legend_label(label, self.edge_style_labels)
             nx.draw_networkx_edges(self.g, self.pos, edges,
-                                   **self.edge_styles[label].kwargs(),
+                                   **self.edge_styles[label].nx_kwargs(),
                                    label=legend_label, ax=ax)
-            lin = mlines.Line2D([], [], **self.edge_styles[label].line_kwargs(),
-                                label=legend_label)
-            edge_handles.append(lin)
+            edge_handles.append(self.edge_styles[label].nx_legend_line(legend_label))
 
         for level in self.edge_labels.iter_groups():
             nx.draw_networkx_edge_labels(self.g, self.pos, self.edge_labels[level],
@@ -897,18 +893,6 @@ def data_error(data, average):
     lower_error = [x - y for x, y in zip(average, q1)]
     upper_error = [x - y for x, y in zip(q3, average)]
     return lower_error, upper_error
-
-
-def gv_import_check():
-    """Check if graphviz is installed on the system before plotting."""
-    try:
-        from graphviz import Digraph, Graph
-    except ImportError as error:
-        print(error.__class__.__name__ + ": " + error.message)
-        raise Exception("GraphViz not installed. Please see:",
-                        "\n https://pypi.org/project/graphviz/",
-                        "\n https://www.graphviz.org/download/")
-    return Digraph, Graph
 
 
 def get_label_groups(iterator, *tags):

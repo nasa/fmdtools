@@ -75,7 +75,7 @@ class FunctionArchitectureGraph(Graph):
         labels = {fname: f.get_typename() for fname, f in mdl.fxns.items()}
         labels.update({fname: f.get_typename() for fname, f in mdl.flows.items()})
         nx.set_node_attributes(g, labels, name='label')
-        nx.set_edge_attributes(g, 'contains', name='label')
+        nx.set_edge_attributes(g, 'flow', name='label')
         return g
 
     def set_nx_states(self, mdl):
@@ -211,8 +211,8 @@ class FunctionArchitectureGraph(Graph):
                                for n in range(len(dynamicnodes)-1)
                                if (dynamicnodes[n] in self.g.nodes
                                and dynamicnodes[n+1] in self.g.nodes)]
-            self.g.add_edges_from(next_edges_dict, label='next')
-            self.set_edge_styles(label={'next': next_edges})
+            self.g.add_edges_from(next_edges_dict, label='activation')
+            self.set_edge_styles(label={'activation': next_edges})
 
         if label_order:
             orders.update({n: "" for n in self.g.nodes() if n not in orders})
@@ -386,13 +386,13 @@ class FunctionArchitectureTypeGraph(FunctionArchitectureGraph):
         g.add_node(modelname, level=1, label="Model")
         g.add_nodes_from(mdl.fxnclasses(), level=2, label="Function")
         function_connections = [(modelname, fname) for fname in mdl.fxnclasses()]
-        g.add_edges_from(function_connections, label="contains")
+        g.add_edges_from(function_connections, label="containment")
         if withflows:
             g.add_nodes_from(mdl.flowtypes(), level=3, label="Flow")
             fxnclass_flowtype = mdl.flowtypes_for_fxnclasses()
             flow_edges = [(fxn, flow) for fxn, flows in fxnclass_flowtype.items()
                           for flow in flows]
-            g.add_edges_from(flow_edges, label="contains")
+            g.add_edges_from(flow_edges, label="flow")
         return g
 
     def set_nx_states(self, mdl):
@@ -484,9 +484,9 @@ class ActionArchitectureGraph(Graph):
                 self.g.nodes[n]['label'] = 'Flow'
         for e in self.g.edges():
             if e in aa.action_graph.edges():
-                self.g.edges[e]['label'] = 'condition'
+                self.g.edges[e]['label'] = 'activation'
             elif e in aa.flow_graph.edges():
-                self.g.edges[e]['label'] = 'contains'
+                self.g.edges[e]['label'] = 'flow'
 
     def set_nx_states(self, aa):
         """

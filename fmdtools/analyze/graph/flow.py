@@ -218,13 +218,13 @@ def add_g_nested(g, multiflow, base_name, include_states=False,
             else:
                 kwargs = {"states": {}, "indicators": {}}
             g.add_node(base_name+"_"+state, label="State", **kwargs)
-            g.add_edge(base_name, base_name+"_"+state, label="contains")
+            g.add_edge(base_name, base_name+"_"+state, label="containment")
     for loc in multiflow.locals:
         local_flow = getattr(multiflow, loc)
         local_name = base_name+"_"+loc
         kwargs = get_node_info(local_flow, get_states, get_indicators, time)
         g.add_node(local_name, label=local_flow.get_typename(), **kwargs)
-        g.add_edge(base_name, local_name, label="contains")
+        g.add_edge(base_name, local_name, label="containment")
         if local_flow.locals:
             add_g_nested(g, local_flow, local_name,
                          include_states=include_states, get_states=get_states,
@@ -236,7 +236,7 @@ def add_g_nested(g, multiflow, base_name, include_states=False,
                 else:
                     kwargs = {"states": {}, "indicators": {}}
                 g.add_node(local_name+"_"+state, label="State", **kwargs)
-                g.add_edge(local_name, local_name+"_"+state, label="contains")
+                g.add_edge(local_name, local_name+"_"+state, label="containment")
 
 
 def get_node_info(flow, get_states, get_indicators, time):
