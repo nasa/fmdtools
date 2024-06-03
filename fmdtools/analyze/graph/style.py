@@ -21,6 +21,7 @@ Has Classes:
 """
 
 import networkx as nx
+from IPython.display import display, SVG
 from matplotlib.colors import Colormap
 from recordclass import dataobject, asdict
 from fmdtools.analyze.common import setup_plot, consolidate_legend
@@ -40,7 +41,33 @@ def gv_import_check():
     return Digraph, Graph
 
 
-class EdgeStyle(dataobject, copy_default=True):
+class BaseStyle(dataobject, copy_default=True):
+    """Base class to define node/edge styles."""
+
+    def __init__(self, *args, group={}, styles={}, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.set_styles(**group)
+        self.set_styles(**styles)
+
+    def set_styles(self, **styles):
+        """Modify the style based on a modifier."""
+        style_kwargs = {}
+        for tagname, tagstyles in styles.items():
+            style_kwargs.update(self.modifiers.get(tagname, {}))
+            style_kwargs.update(tagstyles.get(tagname, {}))
+            for k, v in style_kwargs.items():
+                setattr(self, k, v)
+
+    def gv_kwargs(self):
+        """Return keyword arguments for dot.edge."""
+        return {k[3:]: v for k, v in asdict(self).items() if k.startswith('gv_')}
+
+    def nx_kwargs(self):
+        """Return kwargs to nx.draw_networkx_nodes."""
+        return {k[3:]: v for k, v in asdict(self).items() if k.startswith('nx_')}
+
+
+class EdgeStyle(BaseStyle):
     """
     Define style to use to represent an edge.
 
@@ -64,6 +91,8 @@ class EdgeStyle(dataobject, copy_default=True):
         Graphviz color.
     gv_style : str
         Graphviz line style.
+    modifiers : dict
+        Modifiers to previous parameters to apply based on 
     """
 
     nx_edge_color: ClassVar[str] = 'black'
@@ -74,16 +103,14 @@ class EdgeStyle(dataobject, copy_default=True):
     gv_arrowhead: ClassVar[str] = 'open'
     gv_color: ClassVar[str] = 'black'
     gv_style: ClassVar[str] = 'solid'
+    modifiers = dict(degraded=dict(nx_edge_color='orange', gv_color='orange'),
+                     active=dict(nx_edge_color='green', gv_color='green'))
 
     def nx_kwargs(self):
         """Return the style-defined arguments for nx.draw_networkx_edges.v."""
         return {k[3:]: v for k, v in asdict(self).items()
                 if (k.startswith('nx_') and
                     not (not self.nx_arrows and k in ('nx_arrowstyle', 'nx_arrowsize')))}
-
-    def gv_kwargs(self):
-        """Return keyword arguments for dot.edge."""
-        return {k[3:]: v for k, v in asdict(self).items() if k.startswith('gv_')}
 
     def nx_legend_line(self, legend_label=''):
         """Return mlines.Line2D patch for legend."""
@@ -94,7 +121,6 @@ class EdgeStyle(dataobject, copy_default=True):
 
     def show_nx(self):
         """Show how the edge will look in networkx."""
-        import networkx as nx
         fig, ax = setup_plot()
         d = nx.DiGraph()
         d.add_nodes_from([1, 2])
@@ -107,16 +133,10 @@ class EdgeStyle(dataobject, copy_default=True):
 
     def show_gv(self):
         """Show how the edge will look in graphviz."""
-        from IPython.display import display, SVG
         Digraph, Graph = gv_import_check()
         dot = Digraph()
         dot.edge('0', '1', label=self.__class__.__name__, **self.gv_kwargs())
         display(SVG(dot._repr_image_svg_xml()))
-        dot = Digraph()
-
-
-edge_modifiers = dict(degraded=dict(nx_edge_color='orange', gv_color='orange'),
-                      active=dict(nx_edge_color='green', gv_color='green'))
 
 
 class FlowEdgeStyle(EdgeStyle):
@@ -136,9 +156,11 @@ class FlowEdgeStyle(EdgeStyle):
     nx_arrows: bool = True
     nx_arrowstyle: str = '-|>'
     nx_arrowsize: int = 15
-    gv_arrowhead: str = 'normal'
+    gv_arrowhead: str = 'none'
     gv_color: str = 'black'
     gv_style: str = 'solid'
+    gv_arrowtail: str = 'ediamond'
+    gv_dir: str = 'both'
 
 
 class ActivationEdgeStyle(EdgeStyle):
@@ -162,9 +184,11 @@ class ContainmentEdgeStyle(EdgeStyle):
     nx_arrows: bool = True
     nx_arrowstyle: str = '-|>'
     nx_arrowsize: int = 15
-    gv_arrowhead: str = 'normal'
+    gv_arrowhead: str = 'none'
+    gv_arrowtail: str = 'diamond'
     gv_color: str = 'black'
     gv_style: str = 'solid'
+    gv_dir: str = 'both'
 
 
 class ConnectionEdgeStyle(EdgeStyle):
@@ -180,7 +204,7 @@ class ConnectionEdgeStyle(EdgeStyle):
     gv_style: str = 'dashed'
 
 
-def edge_style_factory(styles, group):
+def edge_style_factory(style_tag, group={}, styles={}, **kwargs):
     """
     Get the appropriate EdgeStyle for networkx plotting.
 
@@ -188,28 +212,19 @@ def edge_style_factory(styles, group):
     ----------
     styles : dict
         edge_styles/node_styles
-    group : tuple
-        tuple of tag values to create the keywords for
     """
-    style_class = EdgeStyle()
-    style_kwargs = {}
-    for i, (tagname, tagstyles) in enumerate(styles.items()):
-        if tagname == 'label':
-            if tagstyles == 'flow':
-                style_class = FlowEdgeStyle
-            elif tagstyles == 'activation':
-                style_class = ActivationEdgeStyle
-            elif tagstyles == 'containment':
-                style_class = ContainmentEdgeStyle
-            else:
-                raise Exception("Invalid edge style: "+tagstyles)
-        else:
-            style_kwargs.update(edge_modifiers.get(group[i], {}))
-            style_kwargs.update(tagstyles.get(group[i], {}))
-    return style_class(**style_kwargs)
+    if style_tag == 'flow':
+        style_class = FlowEdgeStyle
+    elif style_tag == 'activation':
+        style_class = ActivationEdgeStyle
+    elif style_tag == 'containment':
+        style_class = ContainmentEdgeStyle
+    else:
+        raise Exception("Invalid edge style: "+str(style_class))
+    return style_class(styles=styles, group=group, **kwargs)
 
 
-class NodeStyle(dataobject, copy_default=True):
+class NodeStyle(BaseStyle):
     """
     Define style to use to represent an edge.
 
@@ -217,31 +232,50 @@ class NodeStyle(dataobject, copy_default=True):
 
     Parameters
     ----------
+    nx_node_shape : str
+        Node shape to networkx. Extended by subclasses.
+    nx_lindwidths : int
+        Width of node edge in networkx. Extended by subclasses.
+    nx_node_color : str
+        Node color to networkx.
+    nx_node_size : int
+        Node size in networkx.
+    nx_edgecolors : str
+        Edge color to networkx.
+    nx_cmap : str
+        Colormap to use in networkx.
+    gv_shape : str
+        Node shape to graphviz. Extended by subclasses.
+    gv_penwidth : str
+        Width of node edge in graphviz. Extended by subclasses.
+    gv_style : str
+        Style of node in graphviz. Default is 'filled'.
+    gv_fillcolor : str
+        Fill color in graphviz. Default is 'lightgrey'.
+    gv_color : str
+        Edge color in graphviz. Default is 'grey'.
     """
 
     nx_node_shape: ClassVar[str] = 'o'
+    nx_linewidths: ClassVar[int] = 0
     nx_node_color: str = "lightgrey"
     nx_node_size: int = 500
     nx_edgecolors: str = 'grey'
-    nx_linewidths: int = 0
     nx_cmap: Colormap = None
     gv_shape: ClassVar[str] = 'ellipse'
+    gv_penwidth: ClassVar[str] = '0'
     gv_style: str = 'filled'
     gv_fillcolor: str = 'lightgrey'
     gv_color: str = 'grey'
-    gv_penwidth: str = '0'
-
-    def nx_kwargs(self):
-        """Return kwargs to nx.draw_networkx_nodes."""
-        return {k[3:]: v for k, v in asdict(self).items() if k.startswith('nx_')}
-
-    def gv_kwargs(self):
-        """Return kwargs to dot.node."""
-        return {k[3:]: v for k, v in asdict(self).items() if k.startswith('gv_')}
+    modifiers = dict(active=dict(nx_node_color='green', gv_fillcolor='green'),
+                     degraded=dict(nx_node_color='orange', gv_fillcolor='orange'),
+                     faulty=dict(nx_edgecolors='red', gv_color='red'),
+                     high_degree_nodes=dict(nx_node_color='red', gv_fillcolor='red'),
+                     static=dict(nx_node_color='cyan', gv_fillcolor='cyan'),
+                     dynamic=dict(nx_edgecolors='teal', gv_color='teal'))
 
     def show_nx(self):
         """Show how the node will look in networkx."""
-        import networkx as nx
         fig, ax = setup_plot()
         d = nx.DiGraph()
         d.add_node(0)
@@ -252,7 +286,6 @@ class NodeStyle(dataobject, copy_default=True):
 
     def show_gv(self):
         """Show how the edge will look in graphviz."""
-        from IPython.display import display, SVG
         Digraph, Graph = gv_import_check()
         dot = Digraph()
         dot.node('0', label=self.__class__.__name__, **self.gv_kwargs())
@@ -264,7 +297,9 @@ class BlockNodeStyle(NodeStyle):
     """Style representing Functions."""
 
     nx_node_shape: str = 's'
+    nx_linewidths: int = 2
     gv_shape: str = 'rectangle'
+    gv_penwidth: str = '2'
 
 
 class ArchitectureNodeStyle(NodeStyle):
@@ -278,39 +313,39 @@ class FlowNodeStyle(NodeStyle):
     """Style representing Actions."""
 
     nx_node_shape: str = 'o'
+    nx_linewidths: int = 0
     gv_shape: str = 'ellipse'
+    gv_penwidth: str = '0'
 
 
 class MultiFlowNodeStyle(NodeStyle):
     """Style representing Actions."""
 
-    nx_node_shape: str = 'h'
+    nx_node_shape: str = 'p'
+    nx_linewidths: int = 0
     gv_shape: str = 'pentagon'
+    gv_penwidth: str = '0'
 
 
 class CommsFlowNodeStyle(NodeStyle):
     """Style representing Actions."""
 
     nx_node_shape: str = '8'
-    gv_shape: str = 'octogon'
+    nx_linewidths: int = 0
+    gv_shape: str = 'octagon'
+    gv_penwidth: str = '0'
 
 
 class ContainerNodeStyle(NodeStyle):
     """Style representing containers."""
 
     nx_node_shape: str = 'd'
+    nx_linewidths: int = 0
     gv_shape: str = 'diamond'
+    gv_penwidth: str = '0'
 
 
-node_modifiers = dict(active=dict(node_color='green'),
-                      degraded=dict(node_color='orange'),
-                      faulty=dict(edgecolors='red'),
-                      high_degree_nodes=dict(node_color='red'),
-                      static=dict(node_color='cyan'),
-                      dynamic=dict(edgecolors='teal'))
-
-
-def node_style_factory(styles, label):
+def node_style_factory(style_tag, group={}, styles={}, **kwargs):
     """
     Get the keywords for networkx plotting.
 
@@ -321,18 +356,56 @@ def node_style_factory(styles, label):
     label : tuple
         tuple of tag values to create the keywords for
     """
-    node_style = NodeStyle
-    style_kwargs = {}
-    for i, (tagname, tagstyles) in enumerate(styles.items()):
-        if tagname == 'label':
-            if tagstyles == 'flow':
-                NodeStyle
-            else:
-                raise Exception("Invalid edge style: "+tagstyles)
-        else:
-            style_kwargs.update(node_modifiers.get(label[i], {}))
-            style_kwargs.update(tagstyles.get(label[i], {}))
-    return node_style(**style_kwargs)
+    if style_tag in ['flow', 'Flow']:
+        node_style = FlowNodeStyle
+    elif style_tag == 'multiflow':
+        node_style = MultiFlowNodeStyle
+    elif style_tag == 'commsflow':
+        node_style = CommsFlowNodeStyle
+    elif style_tag == 'architecture':
+        node_style = ArchitectureNodeStyle
+    elif style_tag in ['block', 'Function', 'Action']:
+        node_style = BlockNodeStyle
+    else:
+        raise Exception("Invalid node style: "+str(style_tag))
+    return node_style(styles=styles, group=group, **kwargs)
+
+
+def to_legend_label(group_label, style_labels):
+    """
+    Create a legend label string for the group corresponding to style_labels.
+
+    Parameters
+    ----------
+    group_label : tuple
+        tuple defining the group
+    style_labels : list
+        properties the tuple is meant to describe
+
+    Returns
+    -------
+    legend_label : str
+        String labeling the group
+
+    Examples
+    --------
+    >>> to_legend_label(('Function', True, False), ['label', 'static', 'dynamic'])
+    'Function, static'
+    >>> to_legend_label(('Function', False, True), ['label', 'static', 'dynamic'])
+    'Function, dynamic'
+    """
+    if len(group_label) != len(style_labels):
+        raise Exception("Mismatch between groups " + str(group_label) +
+                        " and styles "+str(style_labels))
+    legend_label = ""
+    for i, entry in enumerate(group_label):
+        if entry is True:
+            legend_label += style_labels[i] + ', '
+        elif entry is not False:
+            legend_label += entry + ", "
+    if legend_label:
+        legend_label = legend_label[:len(legend_label)-2]
+    return legend_label
 
 
 class LabelStyle(dataobject):
@@ -348,10 +421,13 @@ class LabelStyle(dataobject):
     bbox: dict = dict(alpha=0)
 
     def kwargs(self):
+        """Return kwargs for nx.draw_networkx_labels."""
         return asdict(self)
 
 
 class EdgeLabelStyle(LabelStyle):
+    """Holds kwargs for nx.draw_networkx_edge_labels."""
+
     rotate: bool = False
 
 
@@ -496,33 +572,6 @@ class Labels(dataobject, mapping=True):
         return {k: (self[k], self[k+'_style']) for k in self.iter_groups()}
 
 
-def to_legend_label(group_label, style_labels):
-    """
-    Create a legend label string for the group corresponding to style_labels.
-
-    Parameters
-    ----------
-    group_label : tuple
-        tuple defining the group
-    style_labels : list
-        properties the tuple is meant to describe
-
-    Returns
-    -------
-    legend_label : str
-        String labeling the group
-    """
-    legend_label = ""
-    for i, entry in enumerate(group_label):
-        if entry is True:
-            legend_label += style_labels[i] + ', '
-        elif entry is not False:
-            legend_label += entry + ", "
-    if legend_label:
-        legend_label = legend_label[:len(legend_label)-2]
-    return legend_label
-
-
 if __name__ == "__main__":
     import doctest
     doctest.testmod(verbose=True)
@@ -540,3 +589,9 @@ if __name__ == "__main__":
 
     BlockNodeStyle().show_nx()
     BlockNodeStyle().show_gv()
+
+    MultiFlowNodeStyle().show_nx()
+    MultiFlowNodeStyle().show_gv()
+
+    CommsFlowNodeStyle().show_nx()
+    CommsFlowNodeStyle().show_gv()

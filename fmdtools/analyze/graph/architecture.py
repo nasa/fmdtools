@@ -274,7 +274,7 @@ class FunctionArchitectureCompGraph(FunctionArchitectureGraph):
         for fxnname, fxn in mdl.fxns.items():
             if {**fxn.comps, **fxn.acts}:
                 graph.add_nodes_from({**fxn.comps, **fxn.acts},
-                                     bipartite=1, label="Block")
+                                     bipartite=1, label="block")
                 graph.add_edges_from([(fxnname, comp)
                                       for comp in {**fxn.comps, **fxn.acts}])
         return graph
@@ -383,12 +383,12 @@ class FunctionArchitectureTypeGraph(FunctionArchitectureGraph):
         """
         g = nx.DiGraph()
         modelname = type(mdl).__name__
-        g.add_node(modelname, level=1, label="Model")
-        g.add_nodes_from(mdl.fxnclasses(), level=2, label="Function")
+        g.add_node(modelname, level=1, label="architecture")
+        g.add_nodes_from(mdl.fxnclasses(), level=2, label="block")
         function_connections = [(modelname, fname) for fname in mdl.fxnclasses()]
         g.add_edges_from(function_connections, label="containment")
         if withflows:
-            g.add_nodes_from(mdl.flowtypes(), level=3, label="Flow")
+            g.add_nodes_from(mdl.flowtypes(), level=3, label="flow")
             fxnclass_flowtype = mdl.flowtypes_for_fxnclasses()
             flow_edges = [(fxn, flow) for fxn, flows in fxnclass_flowtype.items()
                           for flow in flows]
