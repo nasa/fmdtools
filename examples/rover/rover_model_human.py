@@ -505,7 +505,7 @@ if __name__ == "__main__":
     ag = ActionArchitectureGraph(hum)
     ag.set_pos(**asg_pos)
     ag.draw()
-    ag.draw_gravphiz()
+    ag.draw_graphviz(layout='dot')
 
     from examples.rover.rover_model import plot_map
     from fmdtools.sim import propagate as prop

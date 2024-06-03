@@ -75,7 +75,7 @@ class MultiFlowGraph(Graph):
                              and not ((in_node, out_node) in g.edges
                                       or (out_node, in_node) in g.edges))
                              and in_node != out_node):
-                            g.add_edge(in_node, out_node, label="connection")
+                            g.add_edge(in_node, out_node, edgetype="connection")
         self.g = g
 
     def set_resgraph(self, other=False):
@@ -211,7 +211,7 @@ def add_g_nested(g, multiflow, base_name, include_states=False,
         Time to run the indicator methods at.
     """
     kwargs = get_node_info(multiflow, get_states, get_indicators, time)
-    g.add_node(base_name, label=multiflow.get_typename(), **kwargs)
+    g.add_node(base_name, nodetype=multiflow.get_typename(), **kwargs)
 
     if include_states:
         for state in multiflow.s.__fields__:
@@ -219,14 +219,14 @@ def add_g_nested(g, multiflow, base_name, include_states=False,
                 kwargs = {"states": getattr(multiflow.s, state), "indicators": {}}
             else:
                 kwargs = {"states": {}, "indicators": {}}
-            g.add_node(base_name+"_"+state, label="state", **kwargs)
-            g.add_edge(base_name, base_name+"_"+state, label="containment")
+            g.add_node(base_name+"_"+state, nodetype="state", **kwargs)
+            g.add_edge(base_name, base_name+"_"+state, edgetype="containment")
     for loc in multiflow.locals:
         local_flow = getattr(multiflow, loc)
         local_name = base_name+"_"+loc
         kwargs = get_node_info(local_flow, get_states, get_indicators, time)
-        g.add_node(local_name, label=local_flow.get_typename(), **kwargs)
-        g.add_edge(base_name, local_name, label="containment")
+        g.add_node(local_name, nodetype=local_flow.get_typename(), **kwargs)
+        g.add_edge(base_name, local_name, edgetype="containment")
         if local_flow.locals:
             add_g_nested(g, local_flow, local_name,
                          include_states=include_states, get_states=get_states,
@@ -237,8 +237,8 @@ def add_g_nested(g, multiflow, base_name, include_states=False,
                     kwargs = {"states": getattr(multiflow.s, state), "indicators": {}}
                 else:
                     kwargs = {"states": {}, "indicators": {}}
-                g.add_node(local_name+"_"+state, label="state", **kwargs)
-                g.add_edge(local_name, local_name+"_"+state, label="containment")
+                g.add_node(local_name+"_"+state, nodetype="state", **kwargs)
+                g.add_edge(local_name, local_name+"_"+state, edgetype="containment")
 
 
 def get_node_info(flow, get_states, get_indicators, time):

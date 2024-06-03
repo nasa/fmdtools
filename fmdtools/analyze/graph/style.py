@@ -454,7 +454,7 @@ def label_for_entry(g, iterator, entryname):
 
         - 'last' : The last part (after all "_" characters) of the name of the node/edge
 
-        - 'label' : The label property of the node/edge (usually indicates type)
+        - 'nodetype'/'edgetype' : The type property of the node or edge.
 
         - 'faults_and_indicators' : Fault and indicator properties from the node/edge
 
@@ -469,8 +469,8 @@ def label_for_entry(g, iterator, entryname):
         entryvals = {n: n for n in iterator}
     elif entryname == "last":
         entryvals = {n: n.split("_")[-1] for n in iterator}
-    elif entryname == 'label':
-        entryvals = {n: '<'+v['label']+'>' for n, v in iterator.items()}
+    elif 'type' in entryname:
+        entryvals = {n: '<'+v[entryname]+'>' for n, v in iterator.items()}
     elif entryname == 'faults_and_indicators':
         faults = nx.get_node_attributes(g, 'faults')
         indicators = nx.get_node_attributes(g, 'indicators')
