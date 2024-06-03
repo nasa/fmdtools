@@ -27,8 +27,8 @@ from fmdtools.analyze.history import History
 from fmdtools.analyze.common import consolidate_legend, setup_plot, prep_animation_title
 from fmdtools.analyze.common import clear_prev_figure
 from fmdtools.analyze.graph.style import edge_style_factory, node_style_factory
-from fmdtools.analyze.graph.style import Labels, EdgeLabelStyle, LabelStyle
 from fmdtools.analyze.graph.style import to_legend_label, gv_import_check
+from fmdtools.analyze.graph.label import Labels, EdgeLabelStyle, LabelStyle
 
 
 plt.rcParams['pdf.fonttype'] = 42

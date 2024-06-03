@@ -50,10 +50,19 @@ The graph sub-package is used to graphically represent models and has the follow
 
 .. autosummary::
 
+    fmdtools.define.graph.label
     fmdtools.define.graph.style
     fmdtools.define.graph.base
     fmdtools.define.graph.architecture
     fmdtools.define.graph.flow
+
+fmdtools.analyze.graph.label
++++++++++++++++++++++++++++++++++++
+
+.. automodule:: fmdtools.analyze.graph.label
+   :members:
+   :undoc-members:
+   :show-inheritance:
 
 fmdtools.analyze.graph.style
 +++++++++++++++++++++++++++++++++++
