@@ -542,6 +542,15 @@ if __name__ == "__main__":
     from fmdtools.sim.sample import SampleApproach, ParameterSample, ParameterDomain
 
     mdl = Pump()
+    from fmdtools.analyze.graph.architecture import FunctionArchitectureGraph
+
+    mg = FunctionArchitectureGraph(mdl)
+    mg.set_exec_order(mdl)
+    mg.draw()
+
+    mg = FunctionArchitectureGraph(mdl)
+    fig, ax = mg.plot_high_degree_nodes()
+
     endclass, mdlhist = propagate.one_fault(mdl, 'export_water', 'block', time=29,
                                             staged=True)
 
@@ -598,6 +607,7 @@ if __name__ == "__main__":
     endclass, mdlhist = propagate.one_fault(
         mdl, 'import_water', 'no_wat', time=29, staged=True)
 
+
     # mdlhist.get_faulty_hist(*mdl.fxns)
     endclass, mdlhist = propagate.one_fault(
         mdl, 'move_water', 'mech_break', time=0, staged=False)
@@ -646,17 +656,8 @@ if __name__ == "__main__":
     d = h.get_degraded_hist(*mdl.flows, nomhist=mdlhists.nominal)
 
     exp = deghist.get_metrics()
-
-    from fmdtools.analyze.graph.architecture import FunctionArchitectureGraph
     mg = FunctionArchitectureGraph(mdl)
     mg.set_heatmap(exp)
-    mg.draw()
-
-    mg = FunctionArchitectureGraph(mdl)
-    fig, ax = mg.plot_high_degree_nodes()
-
-    mg = FunctionArchitectureGraph(mdl)
-    mg.set_exec_order(mdl)
     mg.draw()
 
     c = an.tabulate.Comparison(endclasses, faultapp, default_stat=np.mean,

@@ -73,7 +73,7 @@ class MultiFlowGraph(Graph):
                     for out_node in g.nodes:
                         if ((node_is_tagged(connections_as_tags, out_tag, out_node)
                              and not ((in_node, out_node) in g.edges)) and in_node != out_node):
-                            g.add_edge(in_node, out_node, label="sends")
+                            g.add_edge(in_node, out_node, label="connection")
         self.g = g
 
     def set_resgraph(self, other=False):
@@ -217,7 +217,7 @@ def add_g_nested(g, multiflow, base_name, include_states=False,
                 kwargs = {"states": getattr(multiflow.s, state), "indicators": {}}
             else:
                 kwargs = {"states": {}, "indicators": {}}
-            g.add_node(base_name+"_"+state, label="State", **kwargs)
+            g.add_node(base_name+"_"+state, label="state", **kwargs)
             g.add_edge(base_name, base_name+"_"+state, label="containment")
     for loc in multiflow.locals:
         local_flow = getattr(multiflow, loc)
@@ -235,7 +235,7 @@ def add_g_nested(g, multiflow, base_name, include_states=False,
                     kwargs = {"states": getattr(multiflow.s, state), "indicators": {}}
                 else:
                     kwargs = {"states": {}, "indicators": {}}
-                g.add_node(local_name+"_"+state, label="State", **kwargs)
+                g.add_node(local_name+"_"+state, label="state", **kwargs)
                 g.add_edge(local_name, local_name+"_"+state, label="containment")
 
 

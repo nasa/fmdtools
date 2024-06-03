@@ -99,43 +99,57 @@ class Graph(object):
             self.pos = {n: self.pos.get(n, (0.5, 0.5)) for n in self.g.nodes}
         self.pos.update(pos)
 
-    def set_edge_styles(self, **edge_styles):
+    def set_edge_styles(self, label={}, **edge_styles):
         """
         Set self.edge_styles and self.edge_groups given the provided edge styles.
 
         Parameters
         ----------
+        label : dict, optional
+            kwargs to EdgeStyle for the given node type (e.g., contaimnet, etc).
         **edge_styles : dict, optional
             Dictionary of tags, labels, and styles for the edges that overwrite the
             default. Has structure {tag:{label:kwargs}}, where kwargs are the keyword
             arguments to nx.draw_networkx_edges. The default is {"label":{}}.
         """
+        self.edge_style_labels = ['label', *edge_styles]
+        self.edge_groups = get_label_groups(self.g.edges(), *self.edge_style_labels)
         self.edge_styles = {}
-        if "label" not in edge_styles:
-            edge_styles["label"] = {}
-        self.edge_groups = get_label_groups(self.g.edges(), *edge_styles)
         for edge_group in self.edge_groups:
-            self.edge_styles[edge_group] = edge_style_factory(edge_styles, edge_group)
-        self.edge_style_labels = [*edge_styles.keys()]
+            styles = {k: v for i, (k, v) in enumerate(edge_styles.items())
+                      if edge_group[i+1]}
+            group = styles.pop('group', {})
+            kwar = label.get(edge_group[0], {})
+            self.edge_styles[edge_group] = edge_style_factory(edge_group[0],
+                                                              styles=styles,
+                                                              group=group,
+                                                              **kwar)
 
-    def set_node_styles(self, **node_styles):
+    def set_node_styles(self, label={}, **node_styles):
         """
         Set self.node_styles and self.edge_groups given the provided node styles.
 
         Parameters
         ----------
+        label : dict, optional
+            kwargs to NodeStyle for the given node type (e.g., Block, Flow, etc).
         **node_styles : dict, optional
             Dictionary of tags, labels, and style kwargs for the nodes that overwrite
             the default. Has structure {tag:{label:kwargs}}, where kwargs are the
             keyword arguments to nx.draw_networkx_nodes. The default is {"label":{}}.
         """
+        self.node_style_labels = ['label', *node_styles]
+        self.node_groups = get_label_groups(self.g.nodes(), *self.node_style_labels)
         self.node_styles = {}
-        if "label" not in node_styles:
-            node_styles['label'] = {}
-        self.node_groups = get_label_groups(self.g.nodes(), *node_styles)
         for node_group in self.node_groups:
-            self.node_styles[node_group] = node_style_factory(node_styles, node_group)
-        self.node_style_labels = [*node_styles.keys()]
+            styles = {k: v for i, (k, v) in enumerate(node_styles.items())
+                      if node_group[i+1]}
+            group = styles.pop('group', {})
+            kwar = label.get(node_group[0], {})
+            self.node_styles[node_group] = node_style_factory(node_group[0],
+                                                              styles=styles,
+                                                              group=group,
+                                                              **kwar)
 
     def set_edge_labels(self, title='label', title2='', subtext='states',
                         **edge_label_styles):
@@ -258,8 +272,8 @@ class Graph(object):
         for label, nodes in self.node_groups.items():
             nodes_colors = [heatmap[node] if node in heatmap else default_color_val
                             for node in nodes]
-            self.node_styles[label].node_color = nodes_colors
-            self.node_styles[label].cmap = cmap
+            self.node_styles[label].nx_node_color = nodes_colors
+            self.node_styles[label].nx_cmap = cmap
 
     def set_properties(self, **kwargs):
         """Set properties using kwargs where there is a given set_kwarg command."""
@@ -328,7 +342,7 @@ class Graph(object):
         for label, nodes in self.node_groups.items():
             legend_label = to_legend_label(label, self.node_style_labels)
             nx.draw_networkx_nodes(self.g, self.pos, nodes,
-                                   **self.node_styles[label].kwargs(),
+                                   **self.node_styles[label].nx_kwargs(),
                                    label=legend_label, ax=ax)
 
         for level in self.node_labels.iter_groups():
@@ -467,24 +481,27 @@ class Graph(object):
         dot = Digraph(graph_attr=kwargs)
 
         for group, nodes in self.node_groups.items():
-            gv_kwargs = self.node_styles[group].as_gv_kwargs()
+            gv_kwargs = self.node_styles[group].gv_kwargs()
             for node in nodes:
                 label = ""
                 if node in self.node_labels.title:
                     label += self.node_labels.title[node]
                 if node in self.node_labels.subtext:
                     label += '\n'+str(self.node_labels.subtext[node])
-
-                dot.node(node, style="filled", label=label, **gv_kwargs)
+                if ('<' in label or '>' in label):
+                    label = "\\" + label
+                dot.node(node, label=label, **gv_kwargs)
 
         for group, edges in self.edge_groups.items():
-            gv_kwargs = self.edge_styles[group].as_gv_kwargs()
+            gv_kwargs = self.edge_styles[group].gv_kwargs()
             for edge in edges:
                 label = ""
                 if edge in self.edge_labels.title:
                     label += self.edge_labels.title[edge]
                 if edge in self.edge_labels.subtext:
                     label += '\n'+self.edge_labels.subtext[edge]
+                if ('<' in label or '>' in label):
+                    label = "\\" + label
 
                 dot.edge(edge[0], edge[1], label=label, **gv_kwargs)
 
