@@ -99,59 +99,59 @@ class Graph(object):
             self.pos = {n: self.pos.get(n, (0.5, 0.5)) for n in self.g.nodes}
         self.pos.update(pos)
 
-    def set_edge_styles(self, label={}, **edge_styles):
+    def set_edge_styles(self, edgetype={}, **edge_styles):
         """
         Set self.edge_styles and self.edge_groups given the provided edge styles.
 
         Parameters
         ----------
-        label : dict, optional
+        edgetype : dict, optional
             kwargs to EdgeStyle for the given node type (e.g., contaimnet, etc).
         **edge_styles : dict, optional
             Dictionary of tags, labels, and styles for the edges that overwrite the
             default. Has structure {tag:{label:kwargs}}, where kwargs are the keyword
             arguments to nx.draw_networkx_edges. The default is {"label":{}}.
         """
-        self.edge_style_labels = ['label', *edge_styles]
+        self.edge_style_labels = ['edgetype', *edge_styles]
         self.edge_groups = get_label_groups(self.g.edges(), *self.edge_style_labels)
         self.edge_styles = {}
         for edge_group in self.edge_groups:
             styles = {k: v for i, (k, v) in enumerate(edge_styles.items())
                       if edge_group[i+1]}
             group = styles.pop('group', {})
-            kwar = label.get(edge_group[0], {})
+            kwar = edgetype.get(edge_group[0], {})
             self.edge_styles[edge_group] = edge_style_factory(edge_group[0],
                                                               styles=styles,
                                                               group=group,
                                                               **kwar)
 
-    def set_node_styles(self, label={}, **node_styles):
+    def set_node_styles(self, nodetype={}, **node_styles):
         """
         Set self.node_styles and self.edge_groups given the provided node styles.
 
         Parameters
         ----------
-        label : dict, optional
+        nodetype : dict, optional
             kwargs to NodeStyle for the given node type (e.g., Block, Flow, etc).
         **node_styles : dict, optional
             Dictionary of tags, labels, and style kwargs for the nodes that overwrite
             the default. Has structure {tag:{label:kwargs}}, where kwargs are the
             keyword arguments to nx.draw_networkx_nodes. The default is {"label":{}}.
         """
-        self.node_style_labels = ['label', *node_styles]
+        self.node_style_labels = ['nodetype', *node_styles]
         self.node_groups = get_label_groups(self.g.nodes(), *self.node_style_labels)
         self.node_styles = {}
         for node_group in self.node_groups:
             styles = {k: v for i, (k, v) in enumerate(node_styles.items())
                       if node_group[i+1]}
             group = styles.pop('group', {})
-            kwar = label.get(node_group[0], {})
+            kwar = nodetype.get(node_group[0], {})
             self.node_styles[node_group] = node_style_factory(node_group[0],
                                                               styles=styles,
                                                               group=group,
                                                               **kwar)
 
-    def set_edge_labels(self, title='label', title2='', subtext='states',
+    def set_edge_labels(self, title='edgetype', title2='', subtext='states',
                         **edge_label_styles):
         """
         Create labels using Labels.from_iterator for the edges in the graph.

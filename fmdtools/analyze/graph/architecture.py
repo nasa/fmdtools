@@ -72,10 +72,10 @@ class FunctionArchitectureGraph(Graph):
             (along with their attributes)
         """
         g = mdl.graph.copy()
-        labels = {fname: f.get_typename() for fname, f in mdl.fxns.items()}
-        labels.update({fname: f.get_typename() for fname, f in mdl.flows.items()})
-        nx.set_node_attributes(g, labels, name='label')
-        nx.set_edge_attributes(g, 'flow', name='label')
+        nodetypes = {fname: f.get_typename() for fname, f in mdl.fxns.items()}
+        nodetypes.update({fname: f.get_typename() for fname, f in mdl.flows.items()})
+        nx.set_node_attributes(g, nodetypes, name='nodetype')
+        nx.set_edge_attributes(g, 'flow', name='edgetype')
         return g
 
     def set_nx_states(self, mdl):
@@ -211,8 +211,8 @@ class FunctionArchitectureGraph(Graph):
                                for n in range(len(dynamicnodes)-1)
                                if (dynamicnodes[n] in self.g.nodes
                                and dynamicnodes[n+1] in self.g.nodes)]
-            self.g.add_edges_from(next_edges_dict, label='activation')
-            self.set_edge_styles(label={'activation': next_edges})
+            self.g.add_edges_from(next_edges_dict, edgetype='activation')
+            self.set_edge_styles(edgetype={'activation': next_edges})
 
         if label_order:
             orders.update({n: "" for n in self.g.nodes() if n not in orders})
@@ -245,18 +245,18 @@ class FunctionArchitectureFlowGraph(FunctionArchitectureGraph):
 
     def nx_from_obj(self, mdl):
         g = nx.projected_graph(mdl.graph, mdl.flows)
-        labels = {fname: f.get_typename() for fname, f in mdl.flows.items()}
-        nx.set_node_attributes(g, labels, name='label')
+        nodetypes = {fname: f.get_typename() for fname, f in mdl.flows.items()}
+        nx.set_node_attributes(g, nodetypes, name='nodetype')
         fxns = self.get_multi_edges(mdl, mdl.flows)
         edgelabels = {e: str(fl) for e, fl in fxns.items()}
         nx.set_edge_attributes(g, edgelabels, name='functions')
-        nx.set_edge_attributes(g, {e: "functions" for e in g.edges()}, name='label')
+        nx.set_edge_attributes(g, {e: "functions" for e in g.edges()}, name='edgetype')
         return g
 
     def set_nx_states(self, mdl):
         self.set_flow_nodestates(mdl)
 
-    def set_edge_labels(self, title='label', title2='', subtext='functions',
+    def set_edge_labels(self, title='edgetype', title2='', subtext='functions',
                         **edge_label_styles):
         super().set_edge_labels(title=title, title2=title2, subtext=subtext,
                                 **edge_label_styles)
@@ -274,7 +274,7 @@ class FunctionArchitectureCompGraph(FunctionArchitectureGraph):
         for fxnname, fxn in mdl.fxns.items():
             if {**fxn.comps, **fxn.acts}:
                 graph.add_nodes_from({**fxn.comps, **fxn.acts},
-                                     bipartite=1, label="block")
+                                     bipartite=1, nodetype="block")
                 graph.add_edges_from([(fxnname, comp)
                                       for comp in {**fxn.comps, **fxn.acts}])
         return graph
@@ -317,12 +317,12 @@ class FunctionArchitectureFxnGraph(FunctionArchitectureGraph):
 
     def nx_from_obj(self, mdl):
         g = nx.projected_graph(mdl.graph, mdl.fxns)
-        labels = {fname: f.get_typename() for fname, f in mdl.fxns.items()}
-        nx.set_node_attributes(g, labels, name='label')
+        nodetypes = {fname: f.get_typename() for fname, f in mdl.fxns.items()}
+        nx.set_node_attributes(g, nodetypes, name='nodetype')
         flows = self.get_multi_edges(mdl, mdl.fxns)
         edgelabels = {e: str(fl) for e, fl in flows.items()}
         nx.set_edge_attributes(g, edgelabels, name='flows')
-        nx.set_edge_attributes(g, {e: "flows" for e in g.edges()}, name='label')
+        nx.set_edge_attributes(g, {e: "flows" for e in g.edges()}, name='edgetype')
         return g
 
     def set_nx_states(self, mdl):
@@ -350,7 +350,7 @@ class FunctionArchitectureFxnGraph(FunctionArchitectureGraph):
                     degraded = True
             g.edges[edge]['degraded'] = degraded
 
-    def set_edge_labels(self, title='label', title2='', subtext='flows',
+    def set_edge_labels(self, title='edgetype', title2='', subtext='flows',
                         **edge_label_styles):
         super().set_edge_labels(title=title, title2=title2, subtext=subtext,
                                 **edge_label_styles)
@@ -383,16 +383,16 @@ class FunctionArchitectureTypeGraph(FunctionArchitectureGraph):
         """
         g = nx.DiGraph()
         modelname = type(mdl).__name__
-        g.add_node(modelname, level=1, label="architecture")
-        g.add_nodes_from(mdl.fxnclasses(), level=2, label="block")
+        g.add_node(modelname, level=1, nodetype="architecture")
+        g.add_nodes_from(mdl.fxnclasses(), level=2, nodetype="block")
         function_connections = [(modelname, fname) for fname in mdl.fxnclasses()]
-        g.add_edges_from(function_connections, label="containment")
+        g.add_edges_from(function_connections, edgetype="containment")
         if withflows:
-            g.add_nodes_from(mdl.flowtypes(), level=3, label="flow")
+            g.add_nodes_from(mdl.flowtypes(), level=3, nodetype="flow")
             fxnclass_flowtype = mdl.flowtypes_for_fxnclasses()
             flow_edges = [(fxn, flow) for fxn, flows in fxnclass_flowtype.items()
                           for flow in flows]
-            g.add_edges_from(flow_edges, label="flow")
+            g.add_edges_from(flow_edges, edgetype="flow")
         return g
 
     def set_nx_states(self, mdl):
@@ -461,12 +461,12 @@ class ActionArchitectureGraph(Graph):
 
     def __init__(self, aa, time=0.0, get_states=True):
         self.g = nx.compose(aa.flow_graph, aa.action_graph)
-        self.set_nx_labels(aa)
+        self.set_nx_types(aa)
         if get_states:
             self.time = time
             self.set_nx_states(aa)
 
-    def set_nx_labels(self, aa):
+    def set_nx_types(self, aa):
         """
         Label the underlying networkx graph structure.
 
@@ -479,14 +479,14 @@ class ActionArchitectureGraph(Graph):
         """
         for n in self.g.nodes():
             if n in aa.action_graph.nodes():
-                self.g.nodes[n]['label'] = 'Action'
+                self.g.nodes[n]['nodetype'] = 'Action'
             elif n in aa.flow_graph.nodes():
-                self.g.nodes[n]['label'] = 'Flow'
+                self.g.nodes[n]['nodetype'] = 'Flow'
         for e in self.g.edges():
             if e in aa.action_graph.edges():
-                self.g.edges[e]['label'] = 'activation'
+                self.g.edges[e]['edgetype'] = 'activation'
             elif e in aa.flow_graph.edges():
-                self.g.edges[e]['label'] = 'flow'
+                self.g.edges[e]['edgetype'] = 'flow'
 
     def set_nx_states(self, aa):
         """
@@ -513,7 +513,7 @@ class ActionArchitectureGraph(Graph):
         nx.set_node_attributes(self.g, faults, 'faults')
         nx.set_node_attributes(self.g, indicators, 'indicators')
 
-    def set_edge_labels(self, title='label', title2='', subtext='name',
+    def set_edge_labels(self, title='edgetype', title2='', subtext='name',
                         **edge_label_styles):
         """
         Set / define the edge labels.
@@ -567,7 +567,7 @@ class ActionArchitectureActGraph(ActionArchitectureGraph):
 
     def __init__(self, aa, get_states=True):
         self.g = aa.action_graph.copy()
-        self.set_nx_labels(aa)
+        self.set_nx_types(aa)
         if get_states:
             self.set_nx_states(aa)
 
@@ -577,6 +577,6 @@ class ActionArchitectureFlowGraph(ActionArchitectureGraph):
 
     def __init__(self, aa, get_states=True):
         self.g = aa.flow_graph.copy()
-        self.set_nx_labels(aa)
+        self.set_nx_types(aa)
         if get_states:
             self.set_nx_states(aa)
