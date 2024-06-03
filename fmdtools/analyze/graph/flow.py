@@ -72,7 +72,9 @@ class MultiFlowGraph(Graph):
                 if node_is_tagged(connections_as_tags, in_tag, in_node):
                     for out_node in g.nodes:
                         if ((node_is_tagged(connections_as_tags, out_tag, out_node)
-                             and not ((in_node, out_node) in g.edges)) and in_node != out_node):
+                             and not ((in_node, out_node) in g.edges
+                                      or (out_node, in_node) in g.edges))
+                             and in_node != out_node):
                             g.add_edge(in_node, out_node, label="connection")
         self.g = g
 

@@ -92,7 +92,7 @@ class EdgeStyle(BaseStyle):
     gv_style : str
         Graphviz line style.
     modifiers : dict
-        Modifiers to previous parameters to apply based on 
+        Modifiers to previous parameters to apply based on particular styles.
     """
 
     nx_edge_color: ClassVar[str] = 'black'
@@ -219,8 +219,10 @@ def edge_style_factory(style_tag, group={}, styles={}, **kwargs):
         style_class = ActivationEdgeStyle
     elif style_tag == 'containment':
         style_class = ContainmentEdgeStyle
+    elif style_tag == 'connection':
+        style_class = ConnectionEdgeStyle
     else:
-        raise Exception("Invalid edge style: "+str(style_class))
+        raise Exception("Invalid edge style: "+str(style_tag))
     return style_class(styles=styles, group=group, **kwargs)
 
 
@@ -254,6 +256,8 @@ class NodeStyle(BaseStyle):
         Fill color in graphviz. Default is 'lightgrey'.
     gv_color : str
         Edge color in graphviz. Default is 'grey'.
+    modifiers : dict
+        Modifiers to previous parameters to apply based on particular styles.
     """
 
     nx_node_shape: ClassVar[str] = 'o'
@@ -358,14 +362,16 @@ def node_style_factory(style_tag, group={}, styles={}, **kwargs):
     """
     if style_tag in ['flow', 'Flow']:
         node_style = FlowNodeStyle
-    elif style_tag == 'multiflow':
+    elif style_tag in ['multiflow', 'MultiFlow']:
         node_style = MultiFlowNodeStyle
-    elif style_tag == 'commsflow':
+    elif style_tag in ['commsflow', 'CommsFlow']:
         node_style = CommsFlowNodeStyle
     elif style_tag == 'architecture':
         node_style = ArchitectureNodeStyle
     elif style_tag in ['block', 'Function', 'Action']:
         node_style = BlockNodeStyle
+    elif style_tag in ['container', 'state']:
+        node_style = ContainerNodeStyle
     else:
         raise Exception("Invalid node style: "+str(style_tag))
     return node_style(styles=styles, group=group, **kwargs)
