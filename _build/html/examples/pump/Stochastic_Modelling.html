@@ -340,6 +340,7 @@
 </ul>
 </li>
 <li class="toctree-l3"><a class="reference internal" href="../rover/fault_sampling/Rover_Mode_Notebook.html">Synthetic Mode Generation</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../rover/fault_sampling/Rover_Mode_Notebook.html#Analysis">Analysis</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../rover/fault_sampling/Rover_Mode_Notebook.html#Cluster-Analysis">Cluster Analysis</a></li>
 </ul>
 </li>
@@ -437,10 +438,17 @@
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="../../docs/fmdtools.analyze.html">fmdtools.analyze</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../docs/fmdtools.analyze.graph.html">fmdtools.analyze.graph</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.analyze.graph.html#module-fmdtools.analyze.graph.label">fmdtools.analyze.graph.label</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.analyze.graph.html#fmdtools-analyze-graph-style">fmdtools.analyze.graph.style</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.analyze.graph.html#module-fmdtools.analyze.graph.base">fmdtools.analyze.graph.base</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.analyze.graph.html#fmdtools-analyze-graph-architecture">fmdtools.analyze.graph.architecture</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.analyze.graph.html#module-fmdtools.analyze.graph.flow">fmdtools.analyze.graph.flow</a></li>
+</ul>
+</li>
 <li class="toctree-l3"><a class="reference internal" href="../../docs/fmdtools.analyze.html#module-fmdtools.analyze.common">fmdtools.analyze.common</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../docs/fmdtools.analyze.html#module-fmdtools.analyze.result">fmdtools.analyze.result</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../docs/fmdtools.analyze.html#module-fmdtools.analyze.history">fmdtools.analyze.history</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../../docs/fmdtools.analyze.html#module-fmdtools.analyze.graph">fmdtools.analyze.graph</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../docs/fmdtools.analyze.html#module-fmdtools.analyze.tabulate">fmdtools.analyze.tabulate</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../docs/fmdtools.analyze.html#module-fmdtools.analyze.phases">fmdtools.analyze.phases</a></li>
 </ul>
@@ -491,7 +499,7 @@ states</em> to function blocks and incorporating them in function behavior - How
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">fmdtools.sim.sample</span> <span class="kn">import</span> <span class="n">ParameterSample</span><span class="p">,</span> <span class="n">ParameterDomain</span>
 <span class="kn">import</span> <span class="nn">fmdtools.sim.propagate</span> <span class="k">as</span> <span class="nn">propagate</span>
-<span class="kn">from</span> <span class="nn">fmdtools.analyze.graph</span> <span class="kn">import</span> <span class="n">FunctionArchitectureGraph</span>
+<span class="kn">from</span> <span class="nn">fmdtools.analyze.graph.architecture</span> <span class="kn">import</span> <span class="n">FunctionArchitectureGraph</span>
 
 <span class="kn">import</span> <span class="nn">inspect</span> <span class="c1"># we will be using inspect to look at</span>
 </pre></div>
@@ -979,6 +987,57 @@ add_variable_replicates(self, x_combos, replicates=1, seed_comb=&#39;shared&#39;
 </div>
 <div class="output_area stderr docutils container">
 <div class="highlight"><pre>
+
+SCENARIOS COMPLETE:   0%|          | 0/100 [00:00&lt;?, ?it/s]
+SCENARIOS COMPLETE:   2%|▏         | 2/100 [00:00&lt;00:05, 19.05it/s]
+SCENARIOS COMPLETE:   4%|▍         | 4/100 [00:00&lt;00:05, 18.84it/s]
+SCENARIOS COMPLETE:   6%|▌         | 6/100 [00:00&lt;00:05, 18.61it/s]
+SCENARIOS COMPLETE:   8%|▊         | 8/100 [00:00&lt;00:04, 18.71it/s]
+SCENARIOS COMPLETE:  10%|█         | 10/100 [00:00&lt;00:04, 18.95it/s]
+SCENARIOS COMPLETE:  12%|█▏        | 12/100 [00:00&lt;00:04, 19.11it/s]
+SCENARIOS COMPLETE:  14%|█▍        | 14/100 [00:00&lt;00:04, 19.15it/s]
+SCENARIOS COMPLETE:  16%|█▌        | 16/100 [00:00&lt;00:04, 18.83it/s]
+SCENARIOS COMPLETE:  18%|█▊        | 18/100 [00:00&lt;00:04, 19.12it/s]
+SCENARIOS COMPLETE:  20%|██        | 20/100 [00:01&lt;00:04, 19.27it/s]
+SCENARIOS COMPLETE:  22%|██▏       | 22/100 [00:01&lt;00:04, 19.43it/s]
+SCENARIOS COMPLETE:  24%|██▍       | 24/100 [00:01&lt;00:03, 19.37it/s]
+SCENARIOS COMPLETE:  26%|██▌       | 26/100 [00:01&lt;00:03, 19.38it/s]
+SCENARIOS COMPLETE:  28%|██▊       | 28/100 [00:01&lt;00:03, 19.34it/s]
+SCENARIOS COMPLETE:  31%|███       | 31/100 [00:01&lt;00:03, 19.25it/s]
+SCENARIOS COMPLETE:  33%|███▎      | 33/100 [00:01&lt;00:03, 19.04it/s]
+SCENARIOS COMPLETE:  35%|███▌      | 35/100 [00:01&lt;00:03, 19.04it/s]
+SCENARIOS COMPLETE:  37%|███▋      | 37/100 [00:01&lt;00:03, 19.15it/s]
+SCENARIOS COMPLETE:  39%|███▉      | 39/100 [00:02&lt;00:03, 19.14it/s]
+SCENARIOS COMPLETE:  41%|████      | 41/100 [00:02&lt;00:03, 19.22it/s]
+SCENARIOS COMPLETE:  43%|████▎     | 43/100 [00:02&lt;00:02, 19.00it/s]
+SCENARIOS COMPLETE:  45%|████▌     | 45/100 [00:02&lt;00:02, 19.18it/s]
+SCENARIOS COMPLETE:  47%|████▋     | 47/100 [00:02&lt;00:02, 19.25it/s]
+SCENARIOS COMPLETE:  49%|████▉     | 49/100 [00:02&lt;00:02, 19.30it/s]
+SCENARIOS COMPLETE:  51%|█████     | 51/100 [00:02&lt;00:02, 19.17it/s]
+SCENARIOS COMPLETE:  53%|█████▎    | 53/100 [00:02&lt;00:02, 18.89it/s]
+SCENARIOS COMPLETE:  55%|█████▌    | 55/100 [00:02&lt;00:02, 18.72it/s]
+SCENARIOS COMPLETE:  57%|█████▋    | 57/100 [00:02&lt;00:02, 18.93it/s]
+SCENARIOS COMPLETE:  59%|█████▉    | 59/100 [00:03&lt;00:02, 19.02it/s]
+SCENARIOS COMPLETE:  61%|██████    | 61/100 [00:03&lt;00:02, 18.76it/s]
+SCENARIOS COMPLETE:  64%|██████▍   | 64/100 [00:03&lt;00:01, 19.23it/s]
+SCENARIOS COMPLETE:  66%|██████▌   | 66/100 [00:03&lt;00:01, 19.23it/s]
+SCENARIOS COMPLETE:  68%|██████▊   | 68/100 [00:03&lt;00:01, 19.02it/s]
+SCENARIOS COMPLETE:  70%|███████   | 70/100 [00:03&lt;00:01, 19.08it/s]
+SCENARIOS COMPLETE:  72%|███████▏  | 72/100 [00:03&lt;00:01, 18.78it/s]
+SCENARIOS COMPLETE:  74%|███████▍  | 74/100 [00:03&lt;00:01, 18.96it/s]
+SCENARIOS COMPLETE:  76%|███████▌  | 76/100 [00:03&lt;00:01, 19.09it/s]
+SCENARIOS COMPLETE:  78%|███████▊  | 78/100 [00:04&lt;00:01, 17.94it/s]
+SCENARIOS COMPLETE:  80%|████████  | 80/100 [00:04&lt;00:01, 18.20it/s]
+SCENARIOS COMPLETE:  82%|████████▏ | 82/100 [00:04&lt;00:00, 18.50it/s]
+SCENARIOS COMPLETE:  84%|████████▍ | 84/100 [00:04&lt;00:00, 18.87it/s]
+SCENARIOS COMPLETE:  86%|████████▌ | 86/100 [00:04&lt;00:00, 19.14it/s]
+SCENARIOS COMPLETE:  88%|████████▊ | 88/100 [00:04&lt;00:00, 18.58it/s]
+SCENARIOS COMPLETE:  90%|█████████ | 90/100 [00:04&lt;00:00, 17.91it/s]
+SCENARIOS COMPLETE:  92%|█████████▏| 92/100 [00:04&lt;00:00, 18.04it/s]
+SCENARIOS COMPLETE:  94%|█████████▍| 94/100 [00:04&lt;00:00, 18.31it/s]
+SCENARIOS COMPLETE:  96%|█████████▌| 96/100 [00:05&lt;00:00, 18.57it/s]
+SCENARIOS COMPLETE:  98%|█████████▊| 98/100 [00:05&lt;00:00, 18.66it/s]
+SCENARIOS COMPLETE: 100%|██████████| 100/100 [00:05&lt;00:00, 18.77it/s]
 SCENARIOS COMPLETE: 100%|██████████| 100/100 [00:05&lt;00:00, 18.91it/s]
 </pre></div></div>
 </div>
@@ -1123,6 +1182,10 @@ ParameterSample of scenarios:
 </div>
 <div class="output_area stderr docutils container">
 <div class="highlight"><pre>
+
+NESTED SCENARIOS COMPLETE:   0%|          | 0/200 [00:00&lt;?, ?it/s]
+NESTED SCENARIOS COMPLETE:   0%|          | 1/200 [00:00&lt;00:49,  3.99it/s]
+NESTED SCENARIOS COMPLETE:   1%|          | 2/200 [00:00&lt;00:47,  4.16it/s]
 NESTED SCENARIOS COMPLETE:   2%|▏         | 3/200 [00:00&lt;00:46,  4.20it/s]
 </pre></div></div>
 </div>
@@ -1140,6 +1203,8 @@ Faults found during the nominal run {&#39;move_water&#39;: [&#39;mech_break&#39;
 </div>
 <div class="output_area stderr docutils container">
 <div class="highlight"><pre>
+
+NESTED SCENARIOS COMPLETE:   2%|▏         | 4/200 [00:00&lt;00:47,  4.15it/s]
 NESTED SCENARIOS COMPLETE:   2%|▎         | 5/200 [00:01&lt;00:46,  4.16it/s]
 </pre></div></div>
 </div>
@@ -1157,6 +1222,9 @@ Faults found during the nominal run {&#39;move_water&#39;: [&#39;mech_break&#39;
 </div>
 <div class="output_area stderr docutils container">
 <div class="highlight"><pre>
+
+NESTED SCENARIOS COMPLETE:   3%|▎         | 6/200 [00:01&lt;00:46,  4.17it/s]
+NESTED SCENARIOS COMPLETE:   4%|▎         | 7/200 [00:01&lt;00:46,  4.16it/s]
 NESTED SCENARIOS COMPLETE:   4%|▍         | 8/200 [00:01&lt;00:46,  4.13it/s]
 </pre></div></div>
 </div>
@@ -1174,6 +1242,9 @@ Faults found during the nominal run {&#39;move_water&#39;: [&#39;mech_break&#39;
 </div>
 <div class="output_area stderr docutils container">
 <div class="highlight"><pre>
+
+NESTED SCENARIOS COMPLETE:   4%|▍         | 9/200 [00:02&lt;00:44,  4.25it/s]
+NESTED SCENARIOS COMPLETE:   5%|▌         | 10/200 [00:02&lt;00:44,  4.27it/s]
 NESTED SCENARIOS COMPLETE:   6%|▌         | 11/200 [00:02&lt;00:44,  4.28it/s]
 </pre></div></div>
 </div>
@@ -1190,6 +1261,8 @@ Faults found during the nominal run {&#39;move_water&#39;: [&#39;mech_break&#39;
 </div>
 <div class="output_area stderr docutils container">
 <div class="highlight"><pre>
+
+NESTED SCENARIOS COMPLETE:   6%|▌         | 12/200 [00:02&lt;00:43,  4.27it/s]
 NESTED SCENARIOS COMPLETE:   6%|▋         | 13/200 [00:03&lt;00:43,  4.31it/s]
 </pre></div></div>
 </div>
@@ -1206,6 +1279,7 @@ Faults found during the nominal run {&#39;move_water&#39;: [&#39;mech_break&#39;
 </div>
 <div class="output_area stderr docutils container">
 <div class="highlight"><pre>
+
 NESTED SCENARIOS COMPLETE:   7%|▋         | 14/200 [00:03&lt;00:43,  4.30it/s]
 </pre></div></div>
 </div>
@@ -1223,6 +1297,8 @@ Faults found during the nominal run {&#39;import_ee&#39;: [&#39;no_v&#39;]}
 </div>
 <div class="output_area stderr docutils container">
 <div class="highlight"><pre>
+
+NESTED SCENARIOS COMPLETE:   8%|▊         | 15/200 [00:03&lt;00:43,  4.21it/s]
 NESTED SCENARIOS COMPLETE:   8%|▊         | 16/200 [00:03&lt;00:43,  4.25it/s]
 </pre></div></div>
 </div>
@@ -1240,6 +1316,8 @@ Faults found during the nominal run {&#39;move_water&#39;: [&#39;mech_break&#39;
 </div>
 <div class="output_area stderr docutils container">
 <div class="highlight"><pre>
+
+NESTED SCENARIOS COMPLETE:   8%|▊         | 17/200 [00:04&lt;00:42,  4.34it/s]
 NESTED SCENARIOS COMPLETE:   9%|▉         | 18/200 [00:04&lt;00:41,  4.42it/s]
 </pre></div></div>
 </div>
@@ -1257,6 +1335,8 @@ Faults found during the nominal run {&#39;import_ee&#39;: [&#39;no_v&#39;]}
 </div>
 <div class="output_area stderr docutils container">
 <div class="highlight"><pre>
+
+NESTED SCENARIOS COMPLETE:  10%|▉         | 19/200 [00:04&lt;00:41,  4.39it/s]
 NESTED SCENARIOS COMPLETE:  10%|█         | 20/200 [00:04&lt;00:40,  4.44it/s]
 </pre></div></div>
 </div>
@@ -1273,6 +1353,8 @@ Faults found during the nominal run {&#39;move_water&#39;: [&#39;mech_break&#39;
 </div>
 <div class="output_area stderr docutils container">
 <div class="highlight"><pre>
+
+NESTED SCENARIOS COMPLETE:  10%|█         | 21/200 [00:04&lt;00:41,  4.36it/s]
 NESTED SCENARIOS COMPLETE:  11%|█         | 22/200 [00:05&lt;00:40,  4.43it/s]
 </pre></div></div>
 </div>
@@ -1290,6 +1372,8 @@ Faults found during the nominal run {&#39;move_water&#39;: [&#39;mech_break&#39;
 </div>
 <div class="output_area stderr docutils container">
 <div class="highlight"><pre>
+
+NESTED SCENARIOS COMPLETE:  12%|█▏        | 23/200 [00:05&lt;00:41,  4.26it/s]
 NESTED SCENARIOS COMPLETE:  12%|█▏        | 24/200 [00:05&lt;00:41,  4.26it/s]
 </pre></div></div>
 </div>
@@ -1307,6 +1391,8 @@ Faults found during the nominal run {&#39;move_water&#39;: [&#39;mech_break&#39;
 </div>
 <div class="output_area stderr docutils container">
 <div class="highlight"><pre>
+
+NESTED SCENARIOS COMPLETE:  12%|█▎        | 25/200 [00:05&lt;00:40,  4.36it/s]
 NESTED SCENARIOS COMPLETE:  13%|█▎        | 26/200 [00:06&lt;00:39,  4.37it/s]
 </pre></div></div>
 </div>
@@ -1324,6 +1410,9 @@ Faults found during the nominal run {&#39;move_water&#39;: [&#39;mech_break&#39;
 </div>
 <div class="output_area stderr docutils container">
 <div class="highlight"><pre>
+
+NESTED SCENARIOS COMPLETE:  14%|█▎        | 27/200 [00:06&lt;00:40,  4.30it/s]
+NESTED SCENARIOS COMPLETE:  14%|█▍        | 28/200 [00:06&lt;00:39,  4.31it/s]
 NESTED SCENARIOS COMPLETE:  14%|█▍        | 29/200 [00:06&lt;00:39,  4.34it/s]
 </pre></div></div>
 </div>
@@ -1341,6 +1430,8 @@ Faults found during the nominal run {&#39;move_water&#39;: [&#39;mech_break&#39;
 </div>
 <div class="output_area stderr docutils container">
 <div class="highlight"><pre>
+
+NESTED SCENARIOS COMPLETE:  15%|█▌        | 30/200 [00:06&lt;00:39,  4.34it/s]
 NESTED SCENARIOS COMPLETE:  16%|█▌        | 31/200 [00:07&lt;00:39,  4.33it/s]
 </pre></div></div>
 </div>
@@ -1357,6 +1448,7 @@ Faults found during the nominal run {&#39;move_water&#39;: [&#39;mech_break&#39;
 </div>
 <div class="output_area stderr docutils container">
 <div class="highlight"><pre>
+
 NESTED SCENARIOS COMPLETE:  16%|█▌        | 32/200 [00:07&lt;00:38,  4.32it/s]
 </pre></div></div>
 </div>
@@ -1374,6 +1466,9 @@ Faults found during the nominal run {&#39;move_water&#39;: [&#39;mech_break&#39;
 </div>
 <div class="output_area stderr docutils container">
 <div class="highlight"><pre>
+
+NESTED SCENARIOS COMPLETE:  16%|█▋        | 33/200 [00:07&lt;00:38,  4.32it/s]
+NESTED SCENARIOS COMPLETE:  17%|█▋        | 34/200 [00:07&lt;00:39,  4.25it/s]
 NESTED SCENARIOS COMPLETE:  18%|█▊        | 35/200 [00:08&lt;00:38,  4.29it/s]
 </pre></div></div>
 </div>
@@ -1390,6 +1485,8 @@ Faults found during the nominal run {&#39;move_water&#39;: [&#39;mech_break&#39;
 </div>
 <div class="output_area stderr docutils container">
 <div class="highlight"><pre>
+
+NESTED SCENARIOS COMPLETE:  18%|█▊        | 36/200 [00:08&lt;00:38,  4.30it/s]
 NESTED SCENARIOS COMPLETE:  18%|█▊        | 37/200 [00:08&lt;00:37,  4.32it/s]
 </pre></div></div>
 </div>
@@ -1407,6 +1504,9 @@ Faults found during the nominal run {&#39;move_water&#39;: [&#39;mech_break&#39;
 </div>
 <div class="output_area stderr docutils container">
 <div class="highlight"><pre>
+
+NESTED SCENARIOS COMPLETE:  19%|█▉        | 38/200 [00:08&lt;00:38,  4.26it/s]
+NESTED SCENARIOS COMPLETE:  20%|█▉        | 39/200 [00:09&lt;00:38,  4.19it/s]
 NESTED SCENARIOS COMPLETE:  20%|██        | 40/200 [00:09&lt;00:37,  4.27it/s]
 </pre></div></div>
 </div>
@@ -1424,6 +1524,8 @@ Faults found during the nominal run {&#39;move_water&#39;: [&#39;mech_break&#39;
 </div>
 <div class="output_area stderr docutils container">
 <div class="highlight"><pre>
+
+NESTED SCENARIOS COMPLETE:  20%|██        | 41/200 [00:09&lt;00:38,  4.12it/s]
 NESTED SCENARIOS COMPLETE:  21%|██        | 42/200 [00:09&lt;00:37,  4.20it/s]
 </pre></div></div>
 </div>
@@ -1440,6 +1542,7 @@ Faults found during the nominal run {&#39;move_water&#39;: [&#39;mech_break&#39;
 </div>
 <div class="output_area stderr docutils container">
 <div class="highlight"><pre>
+
 NESTED SCENARIOS COMPLETE:  22%|██▏       | 43/200 [00:10&lt;00:37,  4.13it/s]
 </pre></div></div>
 </div>
@@ -1456,6 +1559,7 @@ Faults found during the nominal run {&#39;move_water&#39;: [&#39;mech_break&#39;
 </div>
 <div class="output_area stderr docutils container">
 <div class="highlight"><pre>
+
 NESTED SCENARIOS COMPLETE:  22%|██▏       | 44/200 [00:10&lt;00:38,  4.05it/s]
 </pre></div></div>
 </div>
@@ -1473,6 +1577,10 @@ Faults found during the nominal run {&#39;move_water&#39;: [&#39;mech_break&#39;
 </div>
 <div class="output_area stderr docutils container">
 <div class="highlight"><pre>
+
+NESTED SCENARIOS COMPLETE:  22%|██▎       | 45/200 [00:10&lt;00:38,  4.06it/s]
+NESTED SCENARIOS COMPLETE:  23%|██▎       | 46/200 [00:10&lt;00:37,  4.12it/s]
+NESTED SCENARIOS COMPLETE:  24%|██▎       | 47/200 [00:11&lt;00:36,  4.14it/s]
 NESTED SCENARIOS COMPLETE:  24%|██▍       | 48/200 [00:11&lt;00:36,  4.22it/s]
 </pre></div></div>
 </div>
@@ -1489,6 +1597,8 @@ Faults found during the nominal run {&#39;move_water&#39;: [&#39;mech_break&#39;
 </div>
 <div class="output_area stderr docutils container">
 <div class="highlight"><pre>
+
+NESTED SCENARIOS COMPLETE:  24%|██▍       | 49/200 [00:11&lt;00:35,  4.26it/s]
 NESTED SCENARIOS COMPLETE:  25%|██▌       | 50/200 [00:11&lt;00:35,  4.28it/s]
 </pre></div></div>
 </div>
@@ -1505,6 +1615,7 @@ Faults found during the nominal run {&#39;move_water&#39;: [&#39;mech_break&#39;
 </div>
 <div class="output_area stderr docutils container">
 <div class="highlight"><pre>
+
 NESTED SCENARIOS COMPLETE:  26%|██▌       | 51/200 [00:11&lt;00:34,  4.29it/s]
 </pre></div></div>
 </div>
@@ -1522,6 +1633,8 @@ Faults found during the nominal run {&#39;move_water&#39;: [&#39;mech_break&#39;
 </div>
 <div class="output_area stderr docutils container">
 <div class="highlight"><pre>
+
+NESTED SCENARIOS COMPLETE:  26%|██▌       | 52/200 [00:12&lt;00:34,  4.27it/s]
 NESTED SCENARIOS COMPLETE:  26%|██▋       | 53/200 [00:12&lt;00:34,  4.25it/s]
 </pre></div></div>
 </div>
@@ -1539,6 +1652,9 @@ Faults found during the nominal run {&#39;move_water&#39;: [&#39;mech_break&#39;
 </div>
 <div class="output_area stderr docutils container">
 <div class="highlight"><pre>
+
+NESTED SCENARIOS COMPLETE:  27%|██▋       | 54/200 [00:12&lt;00:34,  4.26it/s]
+NESTED SCENARIOS COMPLETE:  28%|██▊       | 55/200 [00:12&lt;00:34,  4.21it/s]
 NESTED SCENARIOS COMPLETE:  28%|██▊       | 56/200 [00:13&lt;00:33,  4.33it/s]
 </pre></div></div>
 </div>
@@ -1555,6 +1671,7 @@ Faults found during the nominal run {&#39;move_water&#39;: [&#39;mech_break&#39;
 </div>
 <div class="output_area stderr docutils container">
 <div class="highlight"><pre>
+
 NESTED SCENARIOS COMPLETE:  28%|██▊       | 57/200 [00:13&lt;00:33,  4.30it/s]
 </pre></div></div>
 </div>
@@ -1572,6 +1689,8 @@ Faults found during the nominal run {&#39;move_water&#39;: [&#39;mech_break&#39;
 </div>
 <div class="output_area stderr docutils container">
 <div class="highlight"><pre>
+
+NESTED SCENARIOS COMPLETE:  29%|██▉       | 58/200 [00:13&lt;00:33,  4.26it/s]
 NESTED SCENARIOS COMPLETE:  30%|██▉       | 59/200 [00:13&lt;00:32,  4.28it/s]
 </pre></div></div>
 </div>
@@ -1589,6 +1708,10 @@ Faults found during the nominal run {&#39;move_water&#39;: [&#39;mech_break&#39;
 </div>
 <div class="output_area stderr docutils container">
 <div class="highlight"><pre>
+
+NESTED SCENARIOS COMPLETE:  30%|███       | 60/200 [00:14&lt;00:31,  4.39it/s]
+NESTED SCENARIOS COMPLETE:  30%|███       | 61/200 [00:14&lt;00:32,  4.34it/s]
+NESTED SCENARIOS COMPLETE:  31%|███       | 62/200 [00:14&lt;00:32,  4.21it/s]
 NESTED SCENARIOS COMPLETE:  32%|███▏      | 63/200 [00:14&lt;00:32,  4.15it/s]
 </pre></div></div>
 </div>
@@ -1605,6 +1728,7 @@ Faults found during the nominal run {&#39;move_water&#39;: [&#39;mech_break&#39;
 </div>
 <div class="output_area stderr docutils container">
 <div class="highlight"><pre>
+
 NESTED SCENARIOS COMPLETE:  32%|███▏      | 64/200 [00:15&lt;00:31,  4.30it/s]
 </pre></div></div>
 </div>
@@ -1621,6 +1745,7 @@ Faults found during the nominal run {&#39;move_water&#39;: [&#39;mech_break&#39;
 </div>
 <div class="output_area stderr docutils container">
 <div class="highlight"><pre>
+
 NESTED SCENARIOS COMPLETE:  32%|███▎      | 65/200 [00:15&lt;00:30,  4.42it/s]
 </pre></div></div>
 </div>
@@ -1638,6 +1763,8 @@ Faults found during the nominal run {&#39;move_water&#39;: [&#39;mech_break&#39;
 </div>
 <div class="output_area stderr docutils container">
 <div class="highlight"><pre>
+
+NESTED SCENARIOS COMPLETE:  33%|███▎      | 66/200 [00:15&lt;00:29,  4.50it/s]
 NESTED SCENARIOS COMPLETE:  34%|███▎      | 67/200 [00:15&lt;00:29,  4.50it/s]
 </pre></div></div>
 </div>
@@ -1655,6 +1782,9 @@ Faults found during the nominal run {&#39;move_water&#39;: [&#39;mech_break&#39;
 </div>
 <div class="output_area stderr docutils container">
 <div class="highlight"><pre>
+
+NESTED SCENARIOS COMPLETE:  34%|███▍      | 68/200 [00:15&lt;00:29,  4.48it/s]
+NESTED SCENARIOS COMPLETE:  34%|███▍      | 69/200 [00:16&lt;00:29,  4.46it/s]
 NESTED SCENARIOS COMPLETE:  35%|███▌      | 70/200 [00:16&lt;00:31,  4.10it/s]
 </pre></div></div>
 </div>
@@ -1671,6 +1801,8 @@ Faults found during the nominal run {&#39;move_water&#39;: [&#39;mech_break&#39;
 </div>
 <div class="output_area stderr docutils container">
 <div class="highlight"><pre>
+
+NESTED SCENARIOS COMPLETE:  36%|███▌      | 71/200 [00:16&lt;00:32,  4.03it/s]
 NESTED SCENARIOS COMPLETE:  36%|███▌      | 72/200 [00:16&lt;00:30,  4.13it/s]
 </pre></div></div>
 </div>
@@ -1688,6 +1820,9 @@ Faults found during the nominal run {&#39;move_water&#39;: [&#39;mech_break&#39;
 </div>
 <div class="output_area stderr docutils container">
 <div class="highlight"><pre>
+
+NESTED SCENARIOS COMPLETE:  36%|███▋      | 73/200 [00:17&lt;00:30,  4.10it/s]
+NESTED SCENARIOS COMPLETE:  37%|███▋      | 74/200 [00:17&lt;00:30,  4.13it/s]
 NESTED SCENARIOS COMPLETE:  38%|███▊      | 75/200 [00:17&lt;00:30,  4.11it/s]
 </pre></div></div>
 </div>
@@ -1704,6 +1839,8 @@ Faults found during the nominal run {&#39;move_water&#39;: [&#39;mech_break&#39;
 </div>
 <div class="output_area stderr docutils container">
 <div class="highlight"><pre>
+
+NESTED SCENARIOS COMPLETE:  38%|███▊      | 76/200 [00:17&lt;00:30,  4.05it/s]
 NESTED SCENARIOS COMPLETE:  38%|███▊      | 77/200 [00:18&lt;00:30,  4.08it/s]
 </pre></div></div>
 </div>
@@ -1721,6 +1858,8 @@ Faults found during the nominal run {&#39;move_water&#39;: [&#39;mech_break&#39;
 </div>
 <div class="output_area stderr docutils container">
 <div class="highlight"><pre>
+
+NESTED SCENARIOS COMPLETE:  39%|███▉      | 78/200 [00:18&lt;00:29,  4.12it/s]
 NESTED SCENARIOS COMPLETE:  40%|███▉      | 79/200 [00:18&lt;00:29,  4.17it/s]
 </pre></div></div>
 </div>
@@ -1738,6 +1877,8 @@ Faults found during the nominal run {&#39;move_water&#39;: [&#39;mech_break&#39;
 </div>
 <div class="output_area stderr docutils container">
 <div class="highlight"><pre>
+
+NESTED SCENARIOS COMPLETE:  40%|████      | 80/200 [00:18&lt;00:28,  4.21it/s]
 NESTED SCENARIOS COMPLETE:  40%|████      | 81/200 [00:19&lt;00:27,  4.33it/s]
 </pre></div></div>
 </div>
@@ -1755,6 +1896,9 @@ Faults found during the nominal run {&#39;move_water&#39;: [&#39;mech_break&#39;
 </div>
 <div class="output_area stderr docutils container">
 <div class="highlight"><pre>
+
+NESTED SCENARIOS COMPLETE:  41%|████      | 82/200 [00:19&lt;00:26,  4.39it/s]
+NESTED SCENARIOS COMPLETE:  42%|████▏     | 83/200 [00:19&lt;00:26,  4.39it/s]
 NESTED SCENARIOS COMPLETE:  42%|████▏     | 84/200 [00:19&lt;00:27,  4.27it/s]
 </pre></div></div>
 </div>
@@ -1772,6 +1916,9 @@ Faults found during the nominal run {&#39;move_water&#39;: [&#39;mech_break&#39;
 </div>
 <div class="output_area stderr docutils container">
 <div class="highlight"><pre>
+
+NESTED SCENARIOS COMPLETE:  42%|████▎     | 85/200 [00:19&lt;00:26,  4.29it/s]
+NESTED SCENARIOS COMPLETE:  43%|████▎     | 86/200 [00:20&lt;00:27,  4.17it/s]
 NESTED SCENARIOS COMPLETE:  44%|████▎     | 87/200 [00:20&lt;00:27,  4.13it/s]
 </pre></div></div>
 </div>
@@ -1789,6 +1936,8 @@ Faults found during the nominal run {&#39;import_ee&#39;: [&#39;no_v&#39;]}
 </div>
 <div class="output_area stderr docutils container">
 <div class="highlight"><pre>
+
+NESTED SCENARIOS COMPLETE:  44%|████▍     | 88/200 [00:20&lt;00:26,  4.23it/s]
 NESTED SCENARIOS COMPLETE:  44%|████▍     | 89/200 [00:20&lt;00:26,  4.21it/s]
 </pre></div></div>
 </div>
@@ -1805,6 +1954,7 @@ Faults found during the nominal run {&#39;move_water&#39;: [&#39;mech_break&#39;
 </div>
 <div class="output_area stderr docutils container">
 <div class="highlight"><pre>
+
 NESTED SCENARIOS COMPLETE:  45%|████▌     | 90/200 [00:21&lt;00:25,  4.31it/s]
 </pre></div></div>
 </div>
@@ -1822,6 +1972,8 @@ Faults found during the nominal run {&#39;move_water&#39;: [&#39;mech_break&#39;
 </div>
 <div class="output_area stderr docutils container">
 <div class="highlight"><pre>
+
+NESTED SCENARIOS COMPLETE:  46%|████▌     | 91/200 [00:21&lt;00:25,  4.32it/s]
 NESTED SCENARIOS COMPLETE:  46%|████▌     | 92/200 [00:21&lt;00:24,  4.35it/s]
 </pre></div></div>
 </div>
@@ -1838,6 +1990,8 @@ Faults found during the nominal run {&#39;move_water&#39;: [&#39;mech_break&#39;
 </div>
 <div class="output_area stderr docutils container">
 <div class="highlight"><pre>
+
+NESTED SCENARIOS COMPLETE:  46%|████▋     | 93/200 [00:21&lt;00:25,  4.26it/s]
 NESTED SCENARIOS COMPLETE:  47%|████▋     | 94/200 [00:22&lt;00:24,  4.30it/s]
 </pre></div></div>
 </div>
@@ -1854,6 +2008,8 @@ Faults found during the nominal run {&#39;move_water&#39;: [&#39;mech_break&#39;
 </div>
 <div class="output_area stderr docutils container">
 <div class="highlight"><pre>
+
+NESTED SCENARIOS COMPLETE:  48%|████▊     | 95/200 [00:22&lt;00:25,  4.15it/s]
 NESTED SCENARIOS COMPLETE:  48%|████▊     | 96/200 [00:22&lt;00:25,  4.11it/s]
 </pre></div></div>
 </div>
@@ -1870,6 +2026,7 @@ Faults found during the nominal run {&#39;move_water&#39;: [&#39;mech_break&#39;
 </div>
 <div class="output_area stderr docutils container">
 <div class="highlight"><pre>
+
 NESTED SCENARIOS COMPLETE:  48%|████▊     | 97/200 [00:22&lt;00:24,  4.16it/s]
 </pre></div></div>
 </div>
@@ -1887,6 +2044,9 @@ Faults found during the nominal run {&#39;move_water&#39;: [&#39;mech_break&#39;
 </div>
 <div class="output_area stderr docutils container">
 <div class="highlight"><pre>
+
+NESTED SCENARIOS COMPLETE:  49%|████▉     | 98/200 [00:23&lt;00:24,  4.20it/s]
+NESTED SCENARIOS COMPLETE:  50%|████▉     | 99/200 [00:23&lt;00:24,  4.15it/s]
 NESTED SCENARIOS COMPLETE:  50%|█████     | 100/200 [00:23&lt;00:25,  3.95it/s]
 </pre></div></div>
 </div>
@@ -1903,6 +2063,21 @@ Faults found during the nominal run {&#39;move_water&#39;: [&#39;mech_break&#39;
 </div>
 <div class="output_area stderr docutils container">
 <div class="highlight"><pre>
+
+NESTED SCENARIOS COMPLETE:  50%|█████     | 101/200 [00:23&lt;00:26,  3.78it/s]
+NESTED SCENARIOS COMPLETE:  51%|█████     | 102/200 [00:24&lt;00:25,  3.86it/s]
+NESTED SCENARIOS COMPLETE:  52%|█████▏    | 103/200 [00:24&lt;00:24,  3.88it/s]
+NESTED SCENARIOS COMPLETE:  52%|█████▏    | 104/200 [00:24&lt;00:24,  3.96it/s]
+NESTED SCENARIOS COMPLETE:  52%|█████▎    | 105/200 [00:24&lt;00:23,  4.06it/s]
+NESTED SCENARIOS COMPLETE:  53%|█████▎    | 106/200 [00:25&lt;00:22,  4.15it/s]
+NESTED SCENARIOS COMPLETE:  54%|█████▎    | 107/200 [00:25&lt;00:22,  4.23it/s]
+NESTED SCENARIOS COMPLETE:  54%|█████▍    | 108/200 [00:25&lt;00:22,  4.15it/s]
+NESTED SCENARIOS COMPLETE:  55%|█████▍    | 109/200 [00:25&lt;00:21,  4.22it/s]
+NESTED SCENARIOS COMPLETE:  55%|█████▌    | 110/200 [00:26&lt;00:21,  4.25it/s]
+NESTED SCENARIOS COMPLETE:  56%|█████▌    | 111/200 [00:26&lt;00:21,  4.15it/s]
+NESTED SCENARIOS COMPLETE:  56%|█████▌    | 112/200 [00:26&lt;00:21,  4.17it/s]
+NESTED SCENARIOS COMPLETE:  56%|█████▋    | 113/200 [00:26&lt;00:21,  3.96it/s]
+NESTED SCENARIOS COMPLETE:  57%|█████▋    | 114/200 [00:27&lt;00:22,  3.88it/s]
 NESTED SCENARIOS COMPLETE:  57%|█████▊    | 115/200 [00:27&lt;00:21,  3.93it/s]
 </pre></div></div>
 </div>
@@ -1919,6 +2094,10 @@ Faults found during the nominal run {&#39;import_ee&#39;: [&#39;no_v&#39;]}
 </div>
 <div class="output_area stderr docutils container">
 <div class="highlight"><pre>
+
+NESTED SCENARIOS COMPLETE:  58%|█████▊    | 116/200 [00:27&lt;00:20,  4.07it/s]
+NESTED SCENARIOS COMPLETE:  58%|█████▊    | 117/200 [00:27&lt;00:20,  4.00it/s]
+NESTED SCENARIOS COMPLETE:  59%|█████▉    | 118/200 [00:28&lt;00:20,  4.05it/s]
 NESTED SCENARIOS COMPLETE:  60%|█████▉    | 119/200 [00:28&lt;00:19,  4.08it/s]
 </pre></div></div>
 </div>
@@ -1935,6 +2114,37 @@ Faults found during the nominal run {&#39;import_ee&#39;: [&#39;no_v&#39;]}
 </div>
 <div class="output_area stderr docutils container">
 <div class="highlight"><pre>
+
+NESTED SCENARIOS COMPLETE:  60%|██████    | 120/200 [00:28&lt;00:19,  4.02it/s]
+NESTED SCENARIOS COMPLETE:  60%|██████    | 121/200 [00:28&lt;00:20,  3.93it/s]
+NESTED SCENARIOS COMPLETE:  61%|██████    | 122/200 [00:29&lt;00:20,  3.83it/s]
+NESTED SCENARIOS COMPLETE:  62%|██████▏   | 123/200 [00:29&lt;00:21,  3.66it/s]
+NESTED SCENARIOS COMPLETE:  62%|██████▏   | 124/200 [00:29&lt;00:20,  3.78it/s]
+NESTED SCENARIOS COMPLETE:  62%|██████▎   | 125/200 [00:29&lt;00:19,  3.85it/s]
+NESTED SCENARIOS COMPLETE:  63%|██████▎   | 126/200 [00:30&lt;00:19,  3.87it/s]
+NESTED SCENARIOS COMPLETE:  64%|██████▎   | 127/200 [00:30&lt;00:18,  3.87it/s]
+NESTED SCENARIOS COMPLETE:  64%|██████▍   | 128/200 [00:30&lt;00:18,  3.95it/s]
+NESTED SCENARIOS COMPLETE:  64%|██████▍   | 129/200 [00:30&lt;00:17,  4.01it/s]
+NESTED SCENARIOS COMPLETE:  65%|██████▌   | 130/200 [00:31&lt;00:17,  4.03it/s]
+NESTED SCENARIOS COMPLETE:  66%|██████▌   | 131/200 [00:31&lt;00:16,  4.09it/s]
+NESTED SCENARIOS COMPLETE:  66%|██████▌   | 132/200 [00:31&lt;00:16,  4.06it/s]
+NESTED SCENARIOS COMPLETE:  66%|██████▋   | 133/200 [00:31&lt;00:16,  4.03it/s]
+NESTED SCENARIOS COMPLETE:  67%|██████▋   | 134/200 [00:32&lt;00:16,  4.02it/s]
+NESTED SCENARIOS COMPLETE:  68%|██████▊   | 135/200 [00:32&lt;00:15,  4.08it/s]
+NESTED SCENARIOS COMPLETE:  68%|██████▊   | 136/200 [00:32&lt;00:15,  4.12it/s]
+NESTED SCENARIOS COMPLETE:  68%|██████▊   | 137/200 [00:32&lt;00:15,  4.13it/s]
+NESTED SCENARIOS COMPLETE:  69%|██████▉   | 138/200 [00:33&lt;00:14,  4.15it/s]
+NESTED SCENARIOS COMPLETE:  70%|██████▉   | 139/200 [00:33&lt;00:14,  4.12it/s]
+NESTED SCENARIOS COMPLETE:  70%|███████   | 140/200 [00:33&lt;00:14,  4.10it/s]
+NESTED SCENARIOS COMPLETE:  70%|███████   | 141/200 [00:33&lt;00:14,  4.10it/s]
+NESTED SCENARIOS COMPLETE:  71%|███████   | 142/200 [00:34&lt;00:14,  4.10it/s]
+NESTED SCENARIOS COMPLETE:  72%|███████▏  | 143/200 [00:34&lt;00:14,  4.07it/s]
+NESTED SCENARIOS COMPLETE:  72%|███████▏  | 144/200 [00:34&lt;00:13,  4.13it/s]
+NESTED SCENARIOS COMPLETE:  72%|███████▎  | 145/200 [00:34&lt;00:13,  4.05it/s]
+NESTED SCENARIOS COMPLETE:  73%|███████▎  | 146/200 [00:34&lt;00:13,  4.15it/s]
+NESTED SCENARIOS COMPLETE:  74%|███████▎  | 147/200 [00:35&lt;00:12,  4.13it/s]
+NESTED SCENARIOS COMPLETE:  74%|███████▍  | 148/200 [00:35&lt;00:12,  4.13it/s]
+NESTED SCENARIOS COMPLETE:  74%|███████▍  | 149/200 [00:35&lt;00:12,  4.16it/s]
 NESTED SCENARIOS COMPLETE:  75%|███████▌  | 150/200 [00:35&lt;00:11,  4.18it/s]
 </pre></div></div>
 </div>
@@ -1951,6 +2161,44 @@ Faults found during the nominal run {&#39;import_ee&#39;: [&#39;no_v&#39;]}
 </div>
 <div class="output_area stderr docutils container">
 <div class="highlight"><pre>
+
+NESTED SCENARIOS COMPLETE:  76%|███████▌  | 151/200 [00:36&lt;00:11,  4.21it/s]
+NESTED SCENARIOS COMPLETE:  76%|███████▌  | 152/200 [00:36&lt;00:11,  4.19it/s]
+NESTED SCENARIOS COMPLETE:  76%|███████▋  | 153/200 [00:36&lt;00:11,  4.22it/s]
+NESTED SCENARIOS COMPLETE:  77%|███████▋  | 154/200 [00:36&lt;00:11,  4.18it/s]
+NESTED SCENARIOS COMPLETE:  78%|███████▊  | 155/200 [00:37&lt;00:10,  4.19it/s]
+NESTED SCENARIOS COMPLETE:  78%|███████▊  | 156/200 [00:37&lt;00:10,  4.25it/s]
+NESTED SCENARIOS COMPLETE:  78%|███████▊  | 157/200 [00:37&lt;00:10,  4.20it/s]
+NESTED SCENARIOS COMPLETE:  79%|███████▉  | 158/200 [00:37&lt;00:10,  4.12it/s]
+NESTED SCENARIOS COMPLETE:  80%|███████▉  | 159/200 [00:38&lt;00:09,  4.11it/s]
+NESTED SCENARIOS COMPLETE:  80%|████████  | 160/200 [00:38&lt;00:09,  4.16it/s]
+NESTED SCENARIOS COMPLETE:  80%|████████  | 161/200 [00:38&lt;00:09,  4.17it/s]
+NESTED SCENARIOS COMPLETE:  81%|████████  | 162/200 [00:38&lt;00:09,  4.09it/s]
+NESTED SCENARIOS COMPLETE:  82%|████████▏ | 163/200 [00:39&lt;00:09,  4.02it/s]
+NESTED SCENARIOS COMPLETE:  82%|████████▏ | 164/200 [00:39&lt;00:08,  4.13it/s]
+NESTED SCENARIOS COMPLETE:  82%|████████▎ | 165/200 [00:39&lt;00:08,  4.18it/s]
+NESTED SCENARIOS COMPLETE:  83%|████████▎ | 166/200 [00:39&lt;00:08,  4.15it/s]
+NESTED SCENARIOS COMPLETE:  84%|████████▎ | 167/200 [00:40&lt;00:08,  4.10it/s]
+NESTED SCENARIOS COMPLETE:  84%|████████▍ | 168/200 [00:40&lt;00:07,  4.13it/s]
+NESTED SCENARIOS COMPLETE:  84%|████████▍ | 169/200 [00:40&lt;00:07,  4.17it/s]
+NESTED SCENARIOS COMPLETE:  85%|████████▌ | 170/200 [00:40&lt;00:07,  4.16it/s]
+NESTED SCENARIOS COMPLETE:  86%|████████▌ | 171/200 [00:41&lt;00:07,  4.04it/s]
+NESTED SCENARIOS COMPLETE:  86%|████████▌ | 172/200 [00:41&lt;00:06,  4.07it/s]
+NESTED SCENARIOS COMPLETE:  86%|████████▋ | 173/200 [00:41&lt;00:06,  4.01it/s]
+NESTED SCENARIOS COMPLETE:  87%|████████▋ | 174/200 [00:41&lt;00:06,  3.86it/s]
+NESTED SCENARIOS COMPLETE:  88%|████████▊ | 175/200 [00:42&lt;00:06,  3.81it/s]
+NESTED SCENARIOS COMPLETE:  88%|████████▊ | 176/200 [00:42&lt;00:06,  3.77it/s]
+NESTED SCENARIOS COMPLETE:  88%|████████▊ | 177/200 [00:42&lt;00:06,  3.74it/s]
+NESTED SCENARIOS COMPLETE:  89%|████████▉ | 178/200 [00:42&lt;00:05,  3.76it/s]
+NESTED SCENARIOS COMPLETE:  90%|████████▉ | 179/200 [00:43&lt;00:05,  3.80it/s]
+NESTED SCENARIOS COMPLETE:  90%|█████████ | 180/200 [00:43&lt;00:05,  3.84it/s]
+NESTED SCENARIOS COMPLETE:  90%|█████████ | 181/200 [00:43&lt;00:04,  3.86it/s]
+NESTED SCENARIOS COMPLETE:  91%|█████████ | 182/200 [00:43&lt;00:04,  3.89it/s]
+NESTED SCENARIOS COMPLETE:  92%|█████████▏| 183/200 [00:44&lt;00:04,  3.92it/s]
+NESTED SCENARIOS COMPLETE:  92%|█████████▏| 184/200 [00:44&lt;00:04,  3.84it/s]
+NESTED SCENARIOS COMPLETE:  92%|█████████▎| 185/200 [00:44&lt;00:03,  3.88it/s]
+NESTED SCENARIOS COMPLETE:  93%|█████████▎| 186/200 [00:44&lt;00:03,  3.83it/s]
+NESTED SCENARIOS COMPLETE:  94%|█████████▎| 187/200 [00:45&lt;00:03,  3.81it/s]
 NESTED SCENARIOS COMPLETE:  94%|█████████▍| 188/200 [00:45&lt;00:03,  3.94it/s]
 </pre></div></div>
 </div>
@@ -1967,6 +2215,12 @@ Faults found during the nominal run {&#39;import_ee&#39;: [&#39;no_v&#39;]}
 </div>
 <div class="output_area stderr docutils container">
 <div class="highlight"><pre>
+
+NESTED SCENARIOS COMPLETE:  94%|█████████▍| 189/200 [00:45&lt;00:02,  3.89it/s]
+NESTED SCENARIOS COMPLETE:  95%|█████████▌| 190/200 [00:45&lt;00:02,  3.92it/s]
+NESTED SCENARIOS COMPLETE:  96%|█████████▌| 191/200 [00:46&lt;00:02,  3.86it/s]
+NESTED SCENARIOS COMPLETE:  96%|█████████▌| 192/200 [00:46&lt;00:02,  3.85it/s]
+NESTED SCENARIOS COMPLETE:  96%|█████████▋| 193/200 [00:46&lt;00:01,  3.88it/s]
 NESTED SCENARIOS COMPLETE:  97%|█████████▋| 194/200 [00:47&lt;00:01,  3.90it/s]
 </pre></div></div>
 </div>
@@ -1983,6 +2237,13 @@ Faults found during the nominal run {&#39;import_ee&#39;: [&#39;no_v&#39;]}
 </div>
 <div class="output_area stderr docutils container">
 <div class="highlight"><pre>
+
+NESTED SCENARIOS COMPLETE:  98%|█████████▊| 195/200 [00:47&lt;00:01,  3.87it/s]
+NESTED SCENARIOS COMPLETE:  98%|█████████▊| 196/200 [00:47&lt;00:01,  3.90it/s]
+NESTED SCENARIOS COMPLETE:  98%|█████████▊| 197/200 [00:47&lt;00:00,  3.90it/s]
+NESTED SCENARIOS COMPLETE:  99%|█████████▉| 198/200 [00:48&lt;00:00,  3.94it/s]
+NESTED SCENARIOS COMPLETE: 100%|█████████▉| 199/200 [00:48&lt;00:00,  3.97it/s]
+NESTED SCENARIOS COMPLETE: 100%|██████████| 200/200 [00:48&lt;00:00,  3.97it/s]
 NESTED SCENARIOS COMPLETE: 100%|██████████| 200/200 [00:48&lt;00:00,  4.12it/s]
 </pre></div></div>
 </div>

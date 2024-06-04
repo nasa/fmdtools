@@ -1,0 +1,3 @@
+digraph {
+	0 [label=CommsFlowNodeStyle color=grey fillcolor=lightgrey penwidth=0 shape=octagon style=filled]
+}

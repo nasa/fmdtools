@@ -16,6 +16,12 @@ The analyze package is organized into the modules:
 	fmdtools.analyze.tabulate
 	fmdtools.analyze.phases
 
+.. toctree::
+   :maxdepth: 1
+   :hidden:
+   
+   fmdtools.analyze.graph
+
 
 The model reference for each of these is provided below:
 
@@ -39,59 +45,6 @@ fmdtools.analyze.history
 --------------------------------
 
 .. automodule:: fmdtools.analyze.history
-   :members:
-   :undoc-members:
-   :show-inheritance:
-
-fmdtools.analyze.graph 
---------------------------------
-
-The graph sub-package is used to graphically represent models and has the following modules:
-
-.. autosummary::
-
-    fmdtools.define.graph.label
-    fmdtools.define.graph.style
-    fmdtools.define.graph.base
-    fmdtools.define.graph.architecture
-    fmdtools.define.graph.flow
-
-fmdtools.analyze.graph.label
-+++++++++++++++++++++++++++++++++++
-
-.. automodule:: fmdtools.analyze.graph.label
-   :members:
-   :undoc-members:
-   :show-inheritance:
-
-fmdtools.analyze.graph.style
-+++++++++++++++++++++++++++++++++++
-
-.. automodule:: fmdtools.analyze.graph.style
-   :members:
-   :undoc-members:
-   :show-inheritance:
-
-fmdtools.analyze.graph.base
-+++++++++++++++++++++++++++++++++++
-
-.. automodule:: fmdtools.analyze.graph.base
-   :members:
-   :undoc-members:
-   :show-inheritance:
-
-fmdtools.analyze.graph.architecture
-+++++++++++++++++++++++++++++++++++
-
-.. automodule:: fmdtools.analyze.graph.architecture
-   :members:
-   :undoc-members:
-   :show-inheritance:
-
-fmdtools.analyze.graph.flow
-+++++++++++++++++++++++++++++++++++
-
-.. automodule:: fmdtools.analyze.graph.flow
    :members:
    :undoc-members:
    :show-inheritance:
