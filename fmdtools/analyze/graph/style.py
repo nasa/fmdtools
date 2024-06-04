@@ -4,12 +4,27 @@ Defines style arguments for plotting graphs.
 Has Classes:
 
 - :class:`EdgeStyle`: Holds kwargs for nx.draw_networkx_edges to be applied to edges
+- :class:`FlowEdgeStyle`: Edge style for flow aggregation.
+- :class:`ActivationEdgeStyle`: Edge style for activation/sequence.
+- :class:`ContainmentEdgeStyle`: Edge style for containment.
+- :class:`ConnectionEdgeStyle`: Edge style for (weak) connections.
 - :class:`NodeStyle`: Holds kwargs for nx.draw_networkx_nodes to be applied to nodes
-
+- :class:`BlockNodeStyle`: Node style for :term:`Block`
+- :class:`ArchitectureNodeStyle`: Node style for :term:`Architecture`
+- :class:`FlowNodeStyle`: Node style for :term:`Flow
+- :class:`MultiFlowNodeStyle`: Node style for multiflows.
+- :class:`CommsFlowNodeStyle`: Node style for communications flows.
+- :class:`ContainerNodeStyle`: Node style for containers.
 - :class:`GraphInteractor`: Used to set nodes in set_pos when creating interactive graph
 - :func:`to_legend_label`: Creates a legend label string for the group corresponding to
   style_labels
+
+And functions:
+
+- :func:`edge_style_factory`: Factory for constructing edge styles.
+- :func:`node_style_factory`: Factory for constructing node styles.
 - :func:`gv_import_check`: Checks if graphviz is installed on the system before plotting
+- :func:`save_dot`: Helper function for saving graphviz dot objects.
 """
 
 import networkx as nx
@@ -111,24 +126,39 @@ class EdgeStyle(BaseStyle):
         return mlines.Line2D([], [], color=self.nx_edge_color, linestyle=self.nx_style,
                              label=legend_label)
 
-    def show_nx(self):
+    def show_nx(self, fig=None, ax=None, figsize=(1, 1), withlegend=False, saveas=''):
         """Show how the edge will look in networkx."""
-        fig, ax = setup_plot()
+        fig, ax = setup_plot(fig=fig, ax=ax, figsize=figsize)
         d = nx.DiGraph()
         d.add_nodes_from([1, 2])
         d.add_edge(1, 2)
         pos = {1: (0, 0), 2: (1, 0)}
         nx.draw_networkx_edges(d, pos=pos, **self.nx_kwargs())
         lin = self.nx_legend_line(self.__class__.__name__)
-        consolidate_legend(ax, add_handles=[lin])
         ax.set_title(self.__class__.__name__)
+        ax.axis("off")
+        if withlegend:
+            consolidate_legend(ax, add_handles=[lin])
+        if saveas:
+            fig.savefig(saveas, bbox_inches='tight')
+        return fig, ax
 
-    def show_gv(self):
+    def show_gv(self, disp=True, saveas=''):
         """Show how the edge will look in graphviz."""
         Digraph, Graph = gv_import_check()
         dot = Digraph()
         dot.edge('0', '1', label=self.__class__.__name__, **self.gv_kwargs())
-        display(SVG(dot._repr_image_svg_xml()))
+        if disp:
+            display(SVG(dot._repr_image_svg_xml()))
+        save_dot(dot, saveas)
+        return dot
+
+
+def save_dot(dot, saveas=''):
+    """Save a graphviz diagram."""
+    if saveas:
+        filecomponents = saveas.split('.')
+        dot.render('.'.join(filecomponents[:-1]), format=filecomponents[-1])
 
 
 class FlowEdgeStyle(EdgeStyle):
@@ -202,8 +232,32 @@ def edge_style_factory(style_tag, group={}, styles={}, **kwargs):
 
     Parameters
     ----------
+    style_tag : str
+        Tag defining the type of edge (e.g. 'flow', 'activation', etc.)
+    group : dict
+        edge_styles based on edge group
     styles : dict
-        edge_styles/node_styles
+        edge_styles based on style membership
+    **kwargs : kwargs
+        Additional keyword arguments for the EdgeStyle
+
+    Examples
+    --------
+    >>> fs = edge_style_factory('flow')
+    >>> fig, ax = fs.show_nx(saveas='../../../docs/figures/frdl/nx_flowconnection.svg')
+    >>> sv = fs.show_gv(disp=False, saveas='../../../docs/figures/frdl/gv_flowconnection.svg')
+
+    >>> a_s = edge_style_factory('activation')
+    >>> fig, ax = a_s.show_nx(saveas='../../../docs/figures/frdl/nx_activation.svg')
+    >>> sv = a_s.show_gv(disp=False, saveas='../../../docs/figures/frdl/gv_activation.svg')
+
+    >>> c_s = edge_style_factory('containment')
+    >>> fig, ax = c_s.show_nx(saveas='../../../docs/figures/frdl/nx_containment.svg')
+    >>> sv = c_s.show_gv(disp=False, saveas='../../../docs/figures/frdl/gv_containment.svg')
+
+    >>> cs = edge_style_factory('connection')
+    >>> fig, ax = cs.show_nx(saveas='../../../docs/figures/frdl/nx_connection.svg')
+    >>> sv = cs.show_gv(disp=False, saveas='../../../docs/figures/frdl/gv_connection.svg')
     """
     if style_tag == 'flow':
         style_class = FlowEdgeStyle
@@ -270,23 +324,31 @@ class NodeStyle(BaseStyle):
                      static=dict(nx_node_color='cyan', gv_fillcolor='cyan'),
                      dynamic=dict(nx_edgecolors='teal', gv_color='teal'))
 
-    def show_nx(self):
+    def show_nx(self, fig=None, ax=None, figsize=(1, 1), withlegend=False, saveas=''):
         """Show how the node will look in networkx."""
-        fig, ax = setup_plot()
+        fig, ax = setup_plot(fig=fig, ax=ax, figsize=figsize)
         d = nx.DiGraph()
         d.add_node(0)
-        nx.draw_networkx_nodes(d, pos={0: (0, 0)}, label=self.__class__.__name__,
+        nx.draw_networkx_nodes(d,pos={0: (0, 0)}, label=self.__class__.__name__,
                                **self.nx_kwargs())
         ax.set_title(self.__class__.__name__)
-        consolidate_legend(ax)
+        ax.axis("off")
+        if withlegend:
+            consolidate_legend(ax)
+        if saveas:
+            fig.savefig(saveas, bbox_inches='tight')
+        return fig, ax
 
-    def show_gv(self):
+    def show_gv(self, disp=True, saveas=''):
         """Show how the edge will look in graphviz."""
         Digraph, Graph = gv_import_check()
         dot = Digraph()
         dot.node('0', label=self.__class__.__name__, **self.gv_kwargs())
         display(SVG(dot._repr_image_svg_xml()))
-        dot = Digraph()
+        if disp:
+            display(SVG(dot._repr_image_svg_xml()))
+        save_dot(dot, saveas)
+        return dot
 
 
 class BlockNodeStyle(NodeStyle):
@@ -351,6 +413,40 @@ def node_style_factory(style_tag, group={}, styles={}, **kwargs):
         edge_styles/node_styles
     label : tuple
         tuple of tag values to create the keywords for
+
+    Examples
+    --------
+    >>> fs = node_style_factory('flow')
+    >>> fig, ax = fs.show_nx(saveas='../../../docs/figures/frdl/nx_flow.svg')
+    >>> sv = fs.show_gv(disp=False, saveas='../../../docs/figures/frdl/gv_flow.svg')
+
+    >>> ms = node_style_factory('multiflow')
+    >>> fig, ax = ms.show_nx(saveas='../../../docs/figures/frdl/nx_multiflow.svg')
+    >>> sv = ms.show_gv(disp=False, saveas='../../../docs/figures/frdl/gv_multiflow.svg')
+
+    >>> cs = node_style_factory('commsflow')
+    >>> fig, ax = cs.show_nx(saveas='../../../docs/figures/frdl/nx_commsflow.svg')
+    >>> sv = cs.show_gv(disp=False, saveas='../../../docs/figures/frdl/gv_commsflow.svg')
+
+    >>> fs = node_style_factory('function')
+    >>> fig, ax = fs.show_nx(saveas='../../../docs/figures/frdl/nx_function.svg')
+    >>> sv = fs.show_gv(disp=False, saveas='../../../docs/figures/frdl/gv_function.svg')
+
+    >>> a_s = node_style_factory('action')
+    >>> fig, ax = a_s.show_nx(saveas='../../../docs/figures/frdl/nx_action.svg')
+    >>> sv = a_s.show_gv(disp=False, saveas='../../../docs/figures/frdl/gv_action.svg')
+
+    >>> cs = node_style_factory('component')
+    >>> fig, ax = cs.show_nx(saveas='../../../docs/figures/frdl/nx_component.svg')
+    >>> sv = cs.show_gv(disp=False, saveas='../../../docs/figures/frdl/gv_component.svg')
+
+    >>> cs = node_style_factory('container')
+    >>> fig, ax = cs.show_nx(saveas='../../../docs/figures/frdl/nx_container.svg')
+    >>> sv = cs.show_gv(disp=False, saveas='../../../docs/figures/frdl/gv_container.svg')
+
+    >>> a_s = node_style_factory('architecture')
+    >>> fig, ax = a_s.show_nx(saveas='../../../docs/figures/frdl/nx_architecture.svg')
+    >>> sv = a_s.show_gv(disp=False, saveas='../../../docs/figures/frdl/gv_architecture.svg')
     """
     if style_tag in ['flow', 'Flow']:
         node_style = FlowNodeStyle
@@ -360,7 +456,8 @@ def node_style_factory(style_tag, group={}, styles={}, **kwargs):
         node_style = CommsFlowNodeStyle
     elif style_tag == 'architecture':
         node_style = ArchitectureNodeStyle
-    elif style_tag in ['block', 'Function', 'Action']:
+    elif style_tag in ['block', 'Block', 'function', 'Function',
+                       'action', 'Action', 'component', 'Component']:
         node_style = BlockNodeStyle
     elif style_tag in ['container', 'state']:
         node_style = ContainerNodeStyle
@@ -409,23 +506,3 @@ def to_legend_label(group_label, style_labels):
 if __name__ == "__main__":
     import doctest
     doctest.testmod(verbose=True)
-    FlowEdgeStyle().show_nx()
-    FlowEdgeStyle().show_gv()
-
-    ActivationEdgeStyle().show_nx()
-    ActivationEdgeStyle().show_gv()
-
-    ContainmentEdgeStyle().show_nx()
-    ContainmentEdgeStyle().show_gv()
-
-    ConnectionEdgeStyle().show_nx()
-    ConnectionEdgeStyle().show_gv()
-
-    BlockNodeStyle().show_nx()
-    BlockNodeStyle().show_gv()
-
-    MultiFlowNodeStyle().show_nx()
-    MultiFlowNodeStyle().show_gv()
-
-    CommsFlowNodeStyle().show_nx()
-    CommsFlowNodeStyle().show_gv()

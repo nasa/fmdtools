@@ -170,10 +170,6 @@ class Labels(dataobject, mapping=True):
         return labs
 
     def iter_groups(self):
+        """Return groups to iterate through when calling nx.draw_labels."""
         return [n for n in ['title', 'subtext'] if getattr(self, n)]
 
-    def styles(self):
-        return {k: self[k+'_style'] for k in self.iter_groups()}
-
-    def group_styles(self):
-        return {k: (self[k], self[k+'_style']) for k in self.iter_groups()}
