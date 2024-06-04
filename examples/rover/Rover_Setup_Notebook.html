@@ -340,6 +340,7 @@
 </ul>
 </li>
 <li class="toctree-l3"><a class="reference internal" href="fault_sampling/Rover_Mode_Notebook.html">Synthetic Mode Generation</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="fault_sampling/Rover_Mode_Notebook.html#Analysis">Analysis</a></li>
 <li class="toctree-l4"><a class="reference internal" href="fault_sampling/Rover_Mode_Notebook.html#Cluster-Analysis">Cluster Analysis</a></li>
 </ul>
 </li>
@@ -437,10 +438,17 @@
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="../../docs/fmdtools.analyze.html">fmdtools.analyze</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../docs/fmdtools.analyze.graph.html">fmdtools.analyze.graph</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.analyze.graph.html#module-fmdtools.analyze.graph.label">fmdtools.analyze.graph.label</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.analyze.graph.html#fmdtools-analyze-graph-style">fmdtools.analyze.graph.style</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.analyze.graph.html#module-fmdtools.analyze.graph.base">fmdtools.analyze.graph.base</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.analyze.graph.html#fmdtools-analyze-graph-architecture">fmdtools.analyze.graph.architecture</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.analyze.graph.html#module-fmdtools.analyze.graph.flow">fmdtools.analyze.graph.flow</a></li>
+</ul>
+</li>
 <li class="toctree-l3"><a class="reference internal" href="../../docs/fmdtools.analyze.html#module-fmdtools.analyze.common">fmdtools.analyze.common</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../docs/fmdtools.analyze.html#module-fmdtools.analyze.result">fmdtools.analyze.result</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../docs/fmdtools.analyze.html#module-fmdtools.analyze.history">fmdtools.analyze.history</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../../docs/fmdtools.analyze.html#module-fmdtools.analyze.graph">fmdtools.analyze.graph</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../docs/fmdtools.analyze.html#module-fmdtools.analyze.tabulate">fmdtools.analyze.tabulate</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../docs/fmdtools.analyze.html#module-fmdtools.analyze.phases">fmdtools.analyze.phases</a></li>
 </ul>
@@ -517,7 +525,7 @@
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[4]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">fmdtools.analyze.graph</span> <span class="kn">import</span> <span class="n">FunctionArchitectureFxnGraph</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">fmdtools.analyze.graph.architecture</span> <span class="kn">import</span> <span class="n">FunctionArchitectureFxnGraph</span>
 <span class="n">mg</span> <span class="o">=</span> <span class="n">FunctionArchitectureFxnGraph</span><span class="p">(</span><span class="n">mdl</span><span class="p">)</span>
 <span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">mg</span><span class="o">.</span><span class="n">draw</span><span class="p">()</span>
 </pre></div>
@@ -1026,6 +1034,14 @@ ParameterDomain with:
 </div>
 <div class="output_area stderr docutils container">
 <div class="highlight"><pre>
+
+SCENARIOS COMPLETE:   0%|          | 0/30 [00:00&lt;?, ?it/s]
+SCENARIOS COMPLETE:   3%|▎         | 1/30 [00:01&lt;00:52,  1.80s/it]
+SCENARIOS COMPLETE:  20%|██        | 6/30 [00:01&lt;00:05,  4.00it/s]
+SCENARIOS COMPLETE:  37%|███▋      | 11/30 [00:02&lt;00:02,  7.47it/s]
+SCENARIOS COMPLETE:  53%|█████▎    | 16/30 [00:02&lt;00:01, 10.74it/s]
+SCENARIOS COMPLETE:  70%|███████   | 21/30 [00:02&lt;00:00, 13.65it/s]
+SCENARIOS COMPLETE:  87%|████████▋ | 26/30 [00:02&lt;00:00, 15.93it/s]
 SCENARIOS COMPLETE: 100%|██████████| 30/30 [00:02&lt;00:00, 10.45it/s]
 </pre></div></div>
 </div>
@@ -1042,6 +1058,50 @@ SCENARIOS COMPLETE: 100%|██████████| 30/30 [00:02&lt;00:00, 
 </div>
 <div class="output_area stderr docutils container">
 <div class="highlight"><pre>
+
+SCENARIOS COMPLETE:   0%|          | 0/205 [00:00&lt;?, ?it/s]
+SCENARIOS COMPLETE:   0%|          | 1/205 [00:01&lt;06:13,  1.83s/it]
+SCENARIOS COMPLETE:   3%|▎         | 6/205 [00:02&lt;00:52,  3.79it/s]
+SCENARIOS COMPLETE:   5%|▌         | 11/205 [00:02&lt;00:27,  7.08it/s]
+SCENARIOS COMPLETE:   8%|▊         | 16/205 [00:02&lt;00:18, 10.19it/s]
+SCENARIOS COMPLETE:  10%|█         | 21/205 [00:02&lt;00:14, 12.97it/s]
+SCENARIOS COMPLETE:  13%|█▎        | 26/205 [00:02&lt;00:11, 15.32it/s]
+SCENARIOS COMPLETE:  15%|█▌        | 31/205 [00:03&lt;00:10, 17.02it/s]
+SCENARIOS COMPLETE:  18%|█▊        | 36/205 [00:03&lt;00:09, 18.33it/s]
+SCENARIOS COMPLETE:  20%|██        | 41/205 [00:03&lt;00:08, 19.55it/s]
+SCENARIOS COMPLETE:  22%|██▏       | 46/205 [00:03&lt;00:07, 20.47it/s]
+SCENARIOS COMPLETE:  25%|██▍       | 51/205 [00:04&lt;00:07, 21.14it/s]
+SCENARIOS COMPLETE:  27%|██▋       | 56/205 [00:04&lt;00:06, 21.59it/s]
+SCENARIOS COMPLETE:  30%|██▉       | 61/205 [00:04&lt;00:06, 21.73it/s]
+SCENARIOS COMPLETE:  32%|███▏      | 66/205 [00:04&lt;00:06, 22.00it/s]
+SCENARIOS COMPLETE:  35%|███▍      | 71/205 [00:04&lt;00:06, 21.99it/s]
+SCENARIOS COMPLETE:  37%|███▋      | 76/205 [00:05&lt;00:05, 22.49it/s]
+SCENARIOS COMPLETE:  40%|███▉      | 81/205 [00:05&lt;00:05, 22.57it/s]
+SCENARIOS COMPLETE:  42%|████▏     | 86/205 [00:05&lt;00:05, 22.31it/s]
+SCENARIOS COMPLETE:  44%|████▍     | 91/205 [00:05&lt;00:05, 22.46it/s]
+SCENARIOS COMPLETE:  47%|████▋     | 96/205 [00:06&lt;00:04, 22.55it/s]
+SCENARIOS COMPLETE:  49%|████▉     | 101/205 [00:06&lt;00:04, 22.37it/s]
+SCENARIOS COMPLETE:  52%|█████▏    | 106/205 [00:06&lt;00:04, 22.71it/s]
+SCENARIOS COMPLETE:  54%|█████▍    | 111/205 [00:06&lt;00:04, 22.46it/s]
+SCENARIOS COMPLETE:  57%|█████▋    | 116/205 [00:06&lt;00:03, 22.48it/s]
+SCENARIOS COMPLETE:  59%|█████▉    | 121/205 [00:07&lt;00:03, 22.23it/s]
+SCENARIOS COMPLETE:  61%|██████▏   | 126/205 [00:07&lt;00:03, 22.38it/s]
+SCENARIOS COMPLETE:  64%|██████▍   | 131/205 [00:07&lt;00:03, 22.50it/s]
+SCENARIOS COMPLETE:  66%|██████▋   | 136/205 [00:07&lt;00:02, 23.58it/s]
+SCENARIOS COMPLETE:  69%|██████▉   | 141/205 [00:08&lt;00:02, 23.05it/s]
+SCENARIOS COMPLETE:  71%|███████   | 146/205 [00:08&lt;00:02, 23.75it/s]
+SCENARIOS COMPLETE:  74%|███████▎  | 151/205 [00:08&lt;00:02, 24.86it/s]
+SCENARIOS COMPLETE:  75%|███████▌  | 154/205 [00:08&lt;00:02, 25.12it/s]
+SCENARIOS COMPLETE:  77%|███████▋  | 157/205 [00:08&lt;00:02, 20.85it/s]
+SCENARIOS COMPLETE:  79%|███████▉  | 162/205 [00:08&lt;00:02, 21.45it/s]
+SCENARIOS COMPLETE:  81%|████████▏ | 167/205 [00:09&lt;00:01, 21.90it/s]
+SCENARIOS COMPLETE:  84%|████████▍ | 172/205 [00:09&lt;00:01, 22.51it/s]
+SCENARIOS COMPLETE:  86%|████████▋ | 177/205 [00:09&lt;00:01, 21.37it/s]
+SCENARIOS COMPLETE:  89%|████████▉ | 182/205 [00:09&lt;00:00, 23.01it/s]
+SCENARIOS COMPLETE:  91%|█████████ | 187/205 [00:10&lt;00:00, 21.69it/s]
+SCENARIOS COMPLETE:  94%|█████████▎| 192/205 [00:10&lt;00:00, 21.20it/s]
+SCENARIOS COMPLETE:  96%|█████████▌| 197/205 [00:10&lt;00:00, 20.24it/s]
+SCENARIOS COMPLETE:  99%|█████████▊| 202/205 [00:10&lt;00:00, 19.96it/s]
 SCENARIOS COMPLETE: 100%|██████████| 205/205 [00:10&lt;00:00, 18.87it/s]
 </pre></div></div>
 </div>

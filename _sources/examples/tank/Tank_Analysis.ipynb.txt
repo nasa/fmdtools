@@ -33,8 +33,8 @@
     "import fmdtools.analyze as an\n",
     "from tank_model import Tank\n",
     "from fmdtools.sim.sample import FaultDomain, FaultSample\n",
-    "from fmdtools.analyze.graph import FunctionArchitectureFxnGraph\n",
-    "from fmdtools.analyze.graph import FunctionArchitectureGraph"
+    "from fmdtools.analyze.graph.architecture import FunctionArchitectureFxnGraph\n",
+    "from fmdtools.analyze.graph.architecture import FunctionArchitectureGraph"
    ]
   },
   {
@@ -2939,7 +2939,7 @@
      "name": "stderr",
      "output_type": "stream",
      "text": [
-      "\r",
+      "\r\n",
       "SCENARIOS COMPLETE:   0%|          | 0/30 [00:00<?, ?it/s]"
      ]
     },
@@ -2947,7 +2947,7 @@
      "name": "stderr",
      "output_type": "stream",
      "text": [
-      "\r",
+      "\r\n",
       "SCENARIOS COMPLETE:  17%|█▋        | 5/30 [00:00<00:00, 43.17it/s]"
      ]
     },
@@ -2955,7 +2955,7 @@
      "name": "stderr",
      "output_type": "stream",
      "text": [
-      "\r",
+      "\r\n",
       "SCENARIOS COMPLETE:  33%|███▎      | 10/30 [00:00<00:00, 45.85it/s]"
      ]
     },
@@ -2963,7 +2963,7 @@
      "name": "stderr",
      "output_type": "stream",
      "text": [
-      "\r",
+      "\r\n",
       "SCENARIOS COMPLETE:  50%|█████     | 15/30 [00:00<00:00, 46.70it/s]"
      ]
     },
@@ -2971,7 +2971,7 @@
      "name": "stderr",
      "output_type": "stream",
      "text": [
-      "\r",
+      "\r\n",
       "SCENARIOS COMPLETE:  67%|██████▋   | 20/30 [00:00<00:00, 38.47it/s]"
      ]
     },
@@ -2979,7 +2979,7 @@
      "name": "stderr",
      "output_type": "stream",
      "text": [
-      "\r",
+      "\r\n",
       "SCENARIOS COMPLETE:  83%|████████▎ | 25/30 [00:00<00:00, 41.37it/s]"
      ]
     },
@@ -2987,7 +2987,7 @@
      "name": "stderr",
      "output_type": "stream",
      "text": [
-      "\r",
+      "\r\n",
       "SCENARIOS COMPLETE: 100%|██████████| 30/30 [00:00<00:00, 43.94it/s]"
      ]
     },
@@ -2995,7 +2995,7 @@
      "name": "stderr",
      "output_type": "stream",
      "text": [
-      "\r",
+      "\r\n",
       "SCENARIOS COMPLETE: 100%|██████████| 30/30 [00:00<00:00, 43.18it/s]"
      ]
     },
@@ -3034,7 +3034,7 @@
      "name": "stderr",
      "output_type": "stream",
      "text": [
-      "\r",
+      "\r\n",
       "SCENARIOS COMPLETE:   0%|          | 0/240 [00:00<?, ?it/s]"
      ]
     },
@@ -3042,7 +3042,7 @@
      "name": "stderr",
      "output_type": "stream",
      "text": [
-      "\r",
+      "\r\n",
       "SCENARIOS COMPLETE:   2%|▏         | 5/240 [00:00<00:05, 45.43it/s]"
      ]
     },
@@ -3050,7 +3050,7 @@
      "name": "stderr",
      "output_type": "stream",
      "text": [
-      "\r",
+      "\r\n",
       "SCENARIOS COMPLETE:   4%|▍         | 10/240 [00:00<00:05, 45.36it/s]"
      ]
     },
@@ -3058,7 +3058,7 @@
      "name": "stderr",
      "output_type": "stream",
      "text": [
-      "\r",
+      "\r\n",
       "SCENARIOS COMPLETE:   7%|▋         | 16/240 [00:00<00:04, 47.59it/s]"
      ]
     },
@@ -3066,7 +3066,7 @@
      "name": "stderr",
      "output_type": "stream",
      "text": [
-      "\r",
+      "\r\n",
       "SCENARIOS COMPLETE:   9%|▉         | 21/240 [00:00<00:04, 46.78it/s]"
      ]
     },
@@ -3074,7 +3074,7 @@
      "name": "stderr",
      "output_type": "stream",
      "text": [
-      "\r",
+      "\r\n",
       "SCENARIOS COMPLETE:  11%|█         | 26/240 [00:00<00:04, 47.11it/s]"
      ]
     },
@@ -3082,7 +3082,7 @@
      "name": "stderr",
      "output_type": "stream",
      "text": [
-      "\r",
+      "\r\n",
       "SCENARIOS COMPLETE:  13%|█▎        | 31/240 [00:00<00:04, 47.29it/s]"
      ]
     },
@@ -3090,7 +3090,7 @@
      "name": "stderr",
      "output_type": "stream",
      "text": [
-      "\r",
+      "\r\n",
       "SCENARIOS COMPLETE:  15%|█▌        | 36/240 [00:00<00:04, 47.39it/s]"
      ]
     },
@@ -3098,7 +3098,7 @@
      "name": "stderr",
      "output_type": "stream",
      "text": [
-      "\r",
+      "\r\n",
       "SCENARIOS COMPLETE:  17%|█▋        | 41/240 [00:00<00:04, 47.42it/s]"
      ]
     },
@@ -3106,7 +3106,7 @@
      "name": "stderr",
      "output_type": "stream",
      "text": [
-      "\r",
+      "\r\n",
       "SCENARIOS COMPLETE:  19%|█▉        | 46/240 [00:00<00:04, 47.54it/s]"
      ]
     },
@@ -3114,7 +3114,7 @@
      "name": "stderr",
      "output_type": "stream",
      "text": [
-      "\r",
+      "\r\n",
       "SCENARIOS COMPLETE:  21%|██▏       | 51/240 [00:01<00:03, 47.49it/s]"
      ]
     },
@@ -3122,7 +3122,7 @@
      "name": "stderr",
      "output_type": "stream",
      "text": [
-      "\r",
+      "\r\n",
       "SCENARIOS COMPLETE:  23%|██▎       | 56/240 [00:01<00:03, 47.58it/s]"
      ]
     },
@@ -3130,7 +3130,7 @@
      "name": "stderr",
      "output_type": "stream",
      "text": [
-      "\r",
+      "\r\n",
       "SCENARIOS COMPLETE:  25%|██▌       | 61/240 [00:01<00:03, 46.89it/s]"
      ]
     },
@@ -3138,7 +3138,7 @@
      "name": "stderr",
      "output_type": "stream",
      "text": [
-      "\r",
+      "\r\n",
       "SCENARIOS COMPLETE:  28%|██▊       | 66/240 [00:01<00:03, 47.11it/s]"
      ]
     },
@@ -3146,7 +3146,7 @@
      "name": "stderr",
      "output_type": "stream",
      "text": [
-      "\r",
+      "\r\n",
       "SCENARIOS COMPLETE:  30%|██▉       | 71/240 [00:01<00:03, 46.86it/s]"
      ]
     },
@@ -3154,7 +3154,7 @@
      "name": "stderr",
      "output_type": "stream",
      "text": [
-      "\r",
+      "\r\n",
       "SCENARIOS COMPLETE:  32%|███▏      | 76/240 [00:01<00:03, 46.84it/s]"
      ]
     },
@@ -3162,7 +3162,7 @@
      "name": "stderr",
      "output_type": "stream",
      "text": [
-      "\r",
+      "\r\n",
       "SCENARIOS COMPLETE:  34%|███▍      | 81/240 [00:01<00:03, 47.05it/s]"
      ]
     },
@@ -3170,7 +3170,7 @@
      "name": "stderr",
      "output_type": "stream",
      "text": [
-      "\r",
+      "\r\n",
       "SCENARIOS COMPLETE:  36%|███▌      | 86/240 [00:01<00:03, 46.56it/s]"
      ]
     },
@@ -3178,7 +3178,7 @@
      "name": "stderr",
      "output_type": "stream",
      "text": [
-      "\r",
+      "\r\n",
       "SCENARIOS COMPLETE:  38%|███▊      | 91/240 [00:01<00:03, 46.26it/s]"
      ]
     },
@@ -3186,7 +3186,7 @@
      "name": "stderr",
      "output_type": "stream",
      "text": [
-      "\r",
+      "\r\n",
       "SCENARIOS COMPLETE:  40%|████      | 96/240 [00:02<00:03, 46.61it/s]"
      ]
     },
@@ -3194,7 +3194,7 @@
      "name": "stderr",
      "output_type": "stream",
      "text": [
-      "\r",
+      "\r\n",
       "SCENARIOS COMPLETE:  42%|████▏     | 101/240 [00:02<00:02, 46.94it/s]"
      ]
     },
@@ -3202,7 +3202,7 @@
      "name": "stderr",
      "output_type": "stream",
      "text": [
-      "\r",
+      "\r\n",
       "SCENARIOS COMPLETE:  44%|████▍     | 106/240 [00:02<00:02, 46.76it/s]"
      ]
     },
@@ -3210,7 +3210,7 @@
      "name": "stderr",
      "output_type": "stream",
      "text": [
-      "\r",
+      "\r\n",
       "SCENARIOS COMPLETE:  46%|████▋     | 111/240 [00:02<00:02, 47.38it/s]"
      ]
     },
@@ -3218,7 +3218,7 @@
      "name": "stderr",
      "output_type": "stream",
      "text": [
-      "\r",
+      "\r\n",
       "SCENARIOS COMPLETE:  49%|████▉     | 117/240 [00:02<00:02, 48.21it/s]"
      ]
     },
@@ -3226,7 +3226,7 @@
      "name": "stderr",
      "output_type": "stream",
      "text": [
-      "\r",
+      "\r\n",
       "SCENARIOS COMPLETE:  51%|█████     | 122/240 [00:02<00:02, 47.42it/s]"
      ]
     },
@@ -3234,7 +3234,7 @@
      "name": "stderr",
      "output_type": "stream",
      "text": [
-      "\r",
+      "\r\n",
       "SCENARIOS COMPLETE:  53%|█████▎    | 127/240 [00:02<00:02, 47.43it/s]"
      ]
     },
@@ -3242,7 +3242,7 @@
      "name": "stderr",
      "output_type": "stream",
      "text": [
-      "\r",
+      "\r\n",
       "SCENARIOS COMPLETE:  55%|█████▌    | 132/240 [00:02<00:02, 46.87it/s]"
      ]
     },
@@ -3250,7 +3250,7 @@
      "name": "stderr",
      "output_type": "stream",
      "text": [
-      "\r",
+      "\r\n",
       "SCENARIOS COMPLETE:  57%|█████▋    | 137/240 [00:02<00:02, 46.47it/s]"
      ]
     },
@@ -3258,7 +3258,7 @@
      "name": "stderr",
      "output_type": "stream",
      "text": [
-      "\r",
+      "\r\n",
       "SCENARIOS COMPLETE:  59%|█████▉    | 142/240 [00:03<00:02, 46.64it/s]"
      ]
     },
@@ -3266,7 +3266,7 @@
      "name": "stderr",
      "output_type": "stream",
      "text": [
-      "\r",
+      "\r\n",
       "SCENARIOS COMPLETE:  61%|██████▏   | 147/240 [00:03<00:01, 47.59it/s]"
      ]
     },
@@ -3274,7 +3274,7 @@
      "name": "stderr",
      "output_type": "stream",
      "text": [
-      "\r",
+      "\r\n",
       "SCENARIOS COMPLETE:  63%|██████▎   | 152/240 [00:03<00:01, 47.09it/s]"
      ]
     },
@@ -3282,7 +3282,7 @@
      "name": "stderr",
      "output_type": "stream",
      "text": [
-      "\r",
+      "\r\n",
       "SCENARIOS COMPLETE:  65%|██████▌   | 157/240 [00:03<00:01, 47.89it/s]"
      ]
     },
@@ -3290,7 +3290,7 @@
      "name": "stderr",
      "output_type": "stream",
      "text": [
-      "\r",
+      "\r\n",
       "SCENARIOS COMPLETE:  68%|██████▊   | 162/240 [00:03<00:01, 47.66it/s]"
      ]
     },
@@ -3298,7 +3298,7 @@
      "name": "stderr",
      "output_type": "stream",
      "text": [
-      "\r",
+      "\r\n",
       "SCENARIOS COMPLETE:  70%|██████▉   | 167/240 [00:03<00:01, 47.39it/s]"
      ]
     },
@@ -3306,7 +3306,7 @@
      "name": "stderr",
      "output_type": "stream",
      "text": [
-      "\r",
+      "\r\n",
       "SCENARIOS COMPLETE:  72%|███████▏  | 172/240 [00:03<00:01, 46.40it/s]"
      ]
     },
@@ -3314,7 +3314,7 @@
      "name": "stderr",
      "output_type": "stream",
      "text": [
-      "\r",
+      "\r\n",
       "SCENARIOS COMPLETE:  74%|███████▍  | 177/240 [00:03<00:01, 45.87it/s]"
      ]
     },
@@ -3322,7 +3322,7 @@
      "name": "stderr",
      "output_type": "stream",
      "text": [
-      "\r",
+      "\r\n",
       "SCENARIOS COMPLETE:  76%|███████▌  | 182/240 [00:03<00:01, 46.22it/s]"
      ]
     },
@@ -3330,7 +3330,7 @@
      "name": "stderr",
      "output_type": "stream",
      "text": [
-      "\r",
+      "\r\n",
       "SCENARIOS COMPLETE:  78%|███████▊  | 187/240 [00:03<00:01, 46.64it/s]"
      ]
     },
@@ -3338,7 +3338,7 @@
      "name": "stderr",
      "output_type": "stream",
      "text": [
-      "\r",
+      "\r\n",
       "SCENARIOS COMPLETE:  80%|████████  | 192/240 [00:04<00:01, 46.29it/s]"
      ]
     },
@@ -3346,7 +3346,7 @@
      "name": "stderr",
      "output_type": "stream",
      "text": [
-      "\r",
+      "\r\n",
       "SCENARIOS COMPLETE:  82%|████████▏ | 197/240 [00:04<00:00, 46.67it/s]"
      ]
     },
@@ -3354,7 +3354,7 @@
      "name": "stderr",
      "output_type": "stream",
      "text": [
-      "\r",
+      "\r\n",
       "SCENARIOS COMPLETE:  84%|████████▍ | 202/240 [00:04<00:00, 46.98it/s]"
      ]
     },
@@ -3362,7 +3362,7 @@
      "name": "stderr",
      "output_type": "stream",
      "text": [
-      "\r",
+      "\r\n",
       "SCENARIOS COMPLETE:  86%|████████▋ | 207/240 [00:04<00:00, 47.18it/s]"
      ]
     },
@@ -3370,7 +3370,7 @@
      "name": "stderr",
      "output_type": "stream",
      "text": [
-      "\r",
+      "\r\n",
       "SCENARIOS COMPLETE:  88%|████████▊ | 212/240 [00:04<00:00, 46.40it/s]"
      ]
     },
@@ -3378,7 +3378,7 @@
      "name": "stderr",
      "output_type": "stream",
      "text": [
-      "\r",
+      "\r\n",
       "SCENARIOS COMPLETE:  90%|█████████ | 217/240 [00:04<00:00, 46.92it/s]"
      ]
     },
@@ -3386,7 +3386,7 @@
      "name": "stderr",
      "output_type": "stream",
      "text": [
-      "\r",
+      "\r\n",
       "SCENARIOS COMPLETE:  92%|█████████▎| 222/240 [00:04<00:00, 47.33it/s]"
      ]
     },
@@ -3394,7 +3394,7 @@
      "name": "stderr",
      "output_type": "stream",
      "text": [
-      "\r",
+      "\r\n",
       "SCENARIOS COMPLETE:  95%|█████████▍| 227/240 [00:04<00:00, 47.30it/s]"
      ]
     },
@@ -3402,7 +3402,7 @@
      "name": "stderr",
      "output_type": "stream",
      "text": [
-      "\r",
+      "\r\n",
       "SCENARIOS COMPLETE:  97%|█████████▋| 232/240 [00:04<00:00, 47.05it/s]"
      ]
     },
@@ -3410,7 +3410,7 @@
      "name": "stderr",
      "output_type": "stream",
      "text": [
-      "\r",
+      "\r\n",
       "SCENARIOS COMPLETE:  99%|█████████▉| 237/240 [00:05<00:00, 47.37it/s]"
      ]
     },
@@ -3418,7 +3418,7 @@
      "name": "stderr",
      "output_type": "stream",
      "text": [
-      "\r",
+      "\r\n",
       "SCENARIOS COMPLETE: 100%|██████████| 240/240 [00:05<00:00, 47.02it/s]"
      ]
     },

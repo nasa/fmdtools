@@ -23,8 +23,6 @@ Scripts and tests:
 
 - `test_model.py` tests combined model behaviors
 
-- `propositional_network_testing.py` shows some more advanced setups for working with graphs in the contexts of multiflows.
-
 
 Notebooks
 /////////////////////////////////////////////
