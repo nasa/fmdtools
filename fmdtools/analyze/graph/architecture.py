@@ -24,37 +24,16 @@ Main user-facing individual graphing classes:
 
 import networkx as nx
 from fmdtools.analyze.history import History
-from fmdtools.analyze.graph.base import Graph
+from fmdtools.analyze.graph.model import ModelGraph
 
 
-class FunctionArchitectureGraph(Graph):
+class FunctionArchitectureGraph(ModelGraph):
     """
     Graph of FunctionArchitecture, where both functions and flows are nodes.
 
     If get_states option is used on instantiation, a `states` dict is associated
     with the edges/nodes which can then be used to visualize function/flow attributes.
     """
-
-    def __init__(self, mdl, get_states=True, time=0.0, **kwargs):
-        """
-        Generate the FunctionArchitectureGraph corresponding to a given Model.
-
-        Parameters
-        ----------
-        mdl : define.Model
-            fmdtools model to represent graphically
-        get_states : bool, optional
-            Whether to copy states to the node/edge 'states' property.
-            The default is True.
-        time: float
-            Time model is run at (to execute indicators at). Default is 0.0
-        **kwargs : kwargs
-            (placeholder for kwargs)
-        """
-        self.g = self.nx_from_obj(mdl)
-        if get_states:
-            self.time = time
-            self.set_nx_states(mdl)
 
     def nx_from_obj(self, mdl):
         """
@@ -448,8 +427,34 @@ class FunctionArchitectureTypeGraph(FunctionArchitectureGraph):
         raise Exception("Cannot specify exec_order for FunctionArchitectureTypeGraph")
 
 
+def set_aa_nx_types(aa, g):
+    """
+    Label networkx graph structure.
+
+    Adds type attributes corresponding to the ActionArchitecture.
+
+    Parameters
+    ----------
+    aa : ActionArchitecture
+        Action Sequence Graph object to represent
+    g : nx.Graph
+        Graph to label
+    """
+    for n in g.nodes():
+        if n in aa.action_graph.nodes():
+            g.nodes[n]['nodetype'] = 'Action'
+        elif n in aa.flow_graph.nodes():
+            g.nodes[n]['nodetype'] = 'Flow'
+    for e in g.edges():
+        if e in aa.action_graph.edges():
+            g.edges[e]['edgetype'] = 'activation'
+        elif e in aa.flow_graph.edges():
+            g.edges[e]['edgetype'] = 'flow'
+    return g
+
+
 # ActionArchitecture
-class ActionArchitectureGraph(Graph):
+class ActionArchitectureGraph(ModelGraph):
     """
     Create a visual representation of an Action Architecture.
 
@@ -459,34 +464,9 @@ class ActionArchitectureGraph(Graph):
         - Actions as (square) Nodes
     """
 
-    def __init__(self, aa, time=0.0, get_states=True):
-        self.g = nx.compose(aa.flow_graph, aa.action_graph)
-        self.set_nx_types(aa)
-        if get_states:
-            self.time = time
-            self.set_nx_states(aa)
-
-    def set_nx_types(self, aa):
-        """
-        Label the underlying networkx graph structure.
-
-        Adds type attributes corresponding to the ActionArchitecture.
-
-        Parameters
-        ----------
-        aa : ActionArchitecture
-            Action Sequence Graph object to represent
-        """
-        for n in self.g.nodes():
-            if n in aa.action_graph.nodes():
-                self.g.nodes[n]['nodetype'] = 'Action'
-            elif n in aa.flow_graph.nodes():
-                self.g.nodes[n]['nodetype'] = 'Flow'
-        for e in self.g.edges():
-            if e in aa.action_graph.edges():
-                self.g.edges[e]['edgetype'] = 'activation'
-            elif e in aa.flow_graph.edges():
-                self.g.edges[e]['edgetype'] = 'flow'
+    def nx_from_obj(self, aa):
+        """Create Graph for ActionArchitecture."""
+        return set_aa_nx_types(aa, nx.compose(aa.flow_graph, aa.action_graph))
 
     def set_nx_states(self, aa):
         """
@@ -565,18 +545,14 @@ class ActionArchitectureGraph(Graph):
 class ActionArchitectureActGraph(ActionArchitectureGraph):
     """ActionArchitectureGraph where only the sequence between actions is shown."""
 
-    def __init__(self, aa, get_states=True):
-        self.g = aa.action_graph.copy()
-        self.set_nx_types(aa)
-        if get_states:
-            self.set_nx_states(aa)
+    def nx_from_obj(self, aa):
+        """Create Graph for ActionArchitecture Actions."""
+        return set_aa_nx_types(aa, aa.action_graph.copy())
 
 
 class ActionArchitectureFlowGraph(ActionArchitectureGraph):
     """ActionArchitectureGraph that only shows flow relationships between actions."""
 
-    def __init__(self, aa, get_states=True):
-        self.g = aa.flow_graph.copy()
-        self.set_nx_types(aa)
-        if get_states:
-            self.set_nx_states(aa)
+    def nx_from_obj(self, aa):
+        """Create Graph for ActionArchitecture flows."""
+        return set_aa_nx_types(aa, aa.flow_graph.copy())

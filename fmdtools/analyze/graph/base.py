@@ -10,7 +10,6 @@ Private Methods:
 - :func:`sff_one_trial`: Calculates one trial of the sff model
 - :func:`data_average`: Averages each column in data
 - :func:`data_error`: Calculates error for each column in data
-- :func:`graph_factory`: Creates the default Graph for a given object.
 - :func:`get_label_groups`: Creates groups of nodes/edges in terms of discrete values
   for the given tags.
 """
@@ -21,10 +20,7 @@ import matplotlib.pyplot as plt
 from numpy.random import random
 from matplotlib.widgets import Button
 from matplotlib import get_backend
-from fmdtools.analyze.result import Result
-from fmdtools.analyze.history import History
-from fmdtools.analyze.common import consolidate_legend, setup_plot, prep_animation_title
-from fmdtools.analyze.common import clear_prev_figure
+from fmdtools.analyze.common import consolidate_legend, setup_plot
 from fmdtools.analyze.graph.style import edge_style_factory, node_style_factory
 from fmdtools.analyze.graph.style import to_legend_label, gv_import_check
 from fmdtools.analyze.graph.label import Labels, EdgeLabelStyle, LabelStyle
@@ -61,20 +57,15 @@ class Graph(object):
 
     Parameters
     ----------
-    obj: object
-        must either be a networkx graph (or be a verion of Graph corresponding
-                                            to the object)
-    get_states: bool
-        whether to get states for the graph
-    **kwargs:
-        keyword arguments for self.nx_from_obj
+    g: networkx.Graph
+        Graph to analyze.
     """
 
-    def __init__(self, obj, get_states=True, **kwargs):
-        if isinstance(obj, nx.Graph):
-            self.g = obj
-        elif hasattr(self, 'nx_from_obj'):
-            self.g = self.nx_from_obj(obj, get_states=get_states, **kwargs)
+    def __init__(self, g):
+        if isinstance(g, nx.Graph):
+            self.g = g
+        else:
+            raise Exception(str(g) + " not a networkx Graph object.")
 
     def set_pos(self, auto=True, **pos):
         """
@@ -213,40 +204,6 @@ class Graph(object):
         group_attrs.update({n: '' for n in self.g.nodes if n not in group_attrs})
         nx.set_node_attributes(self.g, group_attrs, 'group')
 
-    def set_resgraph(self, other=False):
-        """
-        Process results for results graphs (show faults and degradations).
-
-        Parameters
-        ----------
-        other : Graph, optional
-            Graph to compare with (for degradations). The default is False.
-        """
-        if not other:
-            other = self
-        self.set_degraded(other)
-        self.set_node_styles(degraded={}, faulty={})
-        self.set_node_labels(title='id', subtext='faults_and_indicators')
-
-    def set_degraded(self, other):
-        """
-        Set 'degraded' state in networkx graph.
-
-        Uses difference between states with another Graph object.
-
-        Parameters
-        ----------
-        other : Graph
-            (assumed nominal) Graph to compare to
-        """
-        g = self.g
-        nomg = other.g
-        for node in g.nodes:
-            degstates = (g.nodes[node]['states'] != nomg.nodes[node]['states'])
-            degindicators = (set(g.nodes[node]['indicators']) != set(nomg.nodes[node]['indicators']))
-            g.nodes[node]['degraded'] = degstates or degindicators
-            g.nodes[node]['faulty'] = any(g.nodes[node].get('faults', []))
-
     def set_heatmap(self, heatmap, cmap=plt.cm.coolwarm, default_color_val=0.0):
         """
         Set the association and plotting of a heatmap on a graph.
@@ -383,73 +340,6 @@ class Graph(object):
             print("Cannot place nodes in inline version of plot. Use '%matplotlib qt'" +
                   " (or '%matplotlib osx') to open in external window")
         return p
-
-    def draw_from(self, time, history=History(), **kwargs):
-        """
-        Draws the graph with degraded/fault data at a given time.
-
-        Parameters
-        ----------
-        time : int
-            Time to draw the graph (in the history)
-        history : History, optional
-            History with nominal and faulty history. The default is History().
-        **kwargs : **kwargs
-            arguments for Graph.draw
-
-        Returns
-        -------
-        fig : matplotlib figure
-            matplotlib figure to draw
-        ax : matplotlib axis
-            Ax in the figure
-        """
-        faulty = history.get_faulty_hist(*self.g.nodes,
-                                         withtotal=False,
-                                         withtime=False).get_slice(time)
-        fault_nodes = {n: bool(faulty.get(n, 0)) for n in self.g.nodes}
-        nx.set_node_attributes(self.g, fault_nodes, 'faulty')
-
-        faults = Result(history.get_faults_hist(*self.g.nodes).get_slice(time))
-        faults_nodes = {n: [k for k, v in faults.get(n).items() if v]
-                        if fault_nodes.get(n)
-                        else [] for n in self.g.nodes}
-        nx.set_node_attributes(self.g, faults_nodes, 'faults')
-
-        degraded = history.get_degraded_hist(*self.g.nodes,
-                                             withtotal=False,
-                                             withtime=False).get_slice(time)
-        deg_nodes = {n: bool(degraded.get(n, 0)) for n in self.g.nodes}
-        nx.set_node_attributes(self.g, deg_nodes, 'degraded')
-
-        # nx.set_node_attributes(self.g, state_nodes, 'states')
-        self.set_node_styles(degraded={}, faulty={})
-        self.set_node_labels(title='id', subtext='faults')
-        kwargs = prep_animation_title(time, **kwargs)
-        clear_prev_figure(**kwargs)
-        return self.draw(**kwargs)
-
-    def animate(self, history, times='all', figsize=(6, 4), **kwargs):
-        """
-        Successively animate a plot using Graph.draw_from.
-
-        Parameters
-        ----------
-        history : History
-            History with faulty and nominal states
-        times : list, optional
-            List of times to animate over. The default is 'all'
-        figsize : tuple, optional
-            Size for the figure. The default is (6,4)
-        **kwargs : kwargs
-
-        Returns
-        -------
-        ani : matplotlib.animation.FuncAnimation
-            Animation object with the given frames
-        """
-        return history.animate(self.draw_from, times=times, figsize=figsize,
-                               withlegend=False, **kwargs)
 
     def draw_graphviz(self, filename='', filetype='png', **kwargs):
         """
@@ -1029,43 +919,33 @@ class GraphInteractor:
         print({k: list(v) for k, v in self.g_obj.pos.items()})
 
 
-def graph_factory(obj, **kwargs):
-    """
-    Create the default Graph for a given object. Used in fmdtools.sim.get_result.
-
-    Parameters
-    ----------
-    obj : object
-        object corresponding to a specific graph type
-    **kwargs : kwargs
-        Keyword arguments for the Graph class
-
-    Returns
-    -------
-    graph : Graph
-        Graph of the appropriate (default) class
-    """
-    from fmdtools.define.architecture.function import FunctionArchitecture
-    from fmdtools.define.flow.multiflow import MultiFlow
-    from fmdtools.define.flow.commsflow import CommsFlow
-    from fmdtools.define.architecture.action import ActionArchitecture
-
-    if isinstance(obj, FunctionArchitecture):
-        from fmdtools.analyze.graph.architecture import FunctionArchitectureGraph
-        return FunctionArchitectureGraph(obj, **kwargs)
-    elif isinstance(obj, CommsFlow):
-        from fmdtools.analyze.graph.flow import CommsFlowGraph
-        return CommsFlowGraph(obj, **kwargs)
-    elif isinstance(obj, MultiFlow):
-        from fmdtools.analyze.graph.flow import MultiFlowGraph
-        return MultiFlowGraph(obj, **kwargs)
-    elif isinstance(obj, ActionArchitecture):
-        from fmdtools.analyze.graph.architecture import ActionArchitectureGraph
-        return ActionArchitectureGraph(obj, **kwargs)
-    else:
-        raise Exception("No default graph for class "+obj.__class__.__name__)
-
 
 if __name__ == "__main__":
     import doctest
     doctest.testmod(verbose=True)
+    g = nx.DiGraph()
+    g.add_nodes_from(["function_a", "function_b", "function_c"], nodetype="function")
+    g.add_nodes_from(["external_signals", "control_signal", "external_energy_in",
+                      "internal_energy", "external_material_in",
+                      "external_material_out", "external_energy_out"], nodetype="flow")
+    g.add_edges_from([("function_a", "external_signals"),
+                      ("function_a", "control_signal"),
+                      ("function_b", "control_signal"),
+                      ("function_b", "external_energy_in"),
+                      ("function_b", "internal_energy"),
+                      ("function_c", "internal_energy"),
+                      ("function_c", "external_material_in"),
+                      ("function_c", "external_material_out"),
+                      ("function_c", "external_energy_out")], edgetype="flow")
+    mg = Graph(g)
+    mg.draw()
+
+    g.add_edge("function_a", "function_b", edgetype="activation",
+               name="new_control_signal")
+    g.add_edge("function_b", "function_c", edgetype="activation",
+               name="change_in_energy_usage")
+    g.add_edge("function_c", "function_b", edgetype="activation",
+               name="change_in_energy_potential")
+    mg = Graph(g)
+    mg.set_edge_labels(title="name")
+    mg.draw()
