@@ -15,7 +15,6 @@ Has Classes:
 - :class:`MultiFlowNodeStyle`: Node style for multiflows.
 - :class:`CommsFlowNodeStyle`: Node style for communications flows.
 - :class:`ContainerNodeStyle`: Node style for containers.
-- :class:`GraphInteractor`: Used to set nodes in set_pos when creating interactive graph
 - :func:`to_legend_label`: Creates a legend label string for the group corresponding to
   style_labels
 

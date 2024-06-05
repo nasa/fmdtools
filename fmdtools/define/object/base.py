@@ -468,6 +468,20 @@ class BaseObject(object):
                             hist.init_att(at, attr, timerange, at_track)
             return hist.flatten()
 
+    def get_state(self):
+        """Get dict of state attributes for the block (if attached)."""
+        if hasattr(self, 's'):
+            return self.s.asdict()
+        else:
+            return {}
+
+    def get_mode(self):
+        """Get list of modes present in the block (if any)."""
+        if hasattr(self, 'm'):
+            return [*self.m.faults]
+        else:
+            return []
+
 
 def check_pickleability(obj, verbose=True, try_pick=False, pause=0.2):
     """Check to see which attributes of an object will pickle (and parallelize)."""

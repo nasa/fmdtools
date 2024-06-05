@@ -13,7 +13,6 @@ from fmdtools.define.container.parameter import Parameter
 from fmdtools.analyze.common import setup_plot
 from fmdtools.define.object.geom import GeomPoint, GeomLine, GeomPoly
 from fmdtools.define.object.geom import ExPoint, ExLine, ExPoly
-from recordclass import asdict
 
 
 class GeomArchitecture(Architecture):
@@ -152,7 +151,7 @@ class GeomArchitecture(Architecture):
         """Return a dict of states for each geom."""
         states = {}
         for geomname, geom in self.geoms().items():
-            states[geomname] = asdict(geom.s)
+            states[geomname] = geom.s.asdict()
         return states
 
     def show(self, geoms={'all': {}}, fig=None, ax=None, figsize=(4, 4), z=False,

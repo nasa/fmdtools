@@ -21,7 +21,6 @@ import matplotlib.pyplot as plt
 from numpy.random import random
 from matplotlib.widgets import Button
 from matplotlib import get_backend
-from recordclass import asdict
 from fmdtools.analyze.result import Result
 from fmdtools.analyze.history import History
 from fmdtools.analyze.common import consolidate_legend, setup_plot, prep_animation_title
@@ -513,7 +512,7 @@ class Graph(object):
 
     def calc_aspl(self):
         """
-        Compute average shortest path length of
+        Compute average shortest path length of the graph.
 
         Returns
         -------
@@ -628,7 +627,7 @@ class Graph(object):
     def plot_high_degree_nodes(self, p=90, title='', node_kwargs={'node_color': 'red'},
                                **kwargs):
         """
-        Plot high-degree nodes using self.draw()
+        Plot high-degree nodes using self.draw().
 
         Parameters
         ----------
@@ -795,18 +794,6 @@ class Graph(object):
         plt.ylabel('Number of nodes')
         plt.show()
         return fig
-
-    def get_obj_state(self, obj):
-        if hasattr(obj, 's'):
-            return asdict(obj.s)
-        else:
-            return {}
-
-    def get_obj_mode(self, obj):
-        if hasattr(obj, 'm'):
-            return [*obj.m.faults]
-        else:
-            return []
 
 
 def sff_one_trial(start_node_selected, g, endtime=5, pi=.1, pr=.1):
@@ -1028,7 +1015,7 @@ class GraphInteractor:
         self.g_obj.draw(fig=self.fig, ax=self.ax, withlegend=False, **self.kwargs)
         self.ax.set_xlim(-1, 1)
         self.ax.set_ylim(-1, 1)
-        limits = plt.axis('on')
+        self.ax.axis('on')
 
         self.ax.tick_params(left=True, bottom=True, labelleft=True, labelbottom=True)
         self.ax.set_aspect('equal')
@@ -1077,3 +1064,8 @@ def graph_factory(obj, **kwargs):
         return ActionArchitectureGraph(obj, **kwargs)
     else:
         raise Exception("No default graph for class "+obj.__class__.__name__)
+
+
+if __name__ == "__main__":
+    import doctest
+    doctest.testmod(verbose=True)
