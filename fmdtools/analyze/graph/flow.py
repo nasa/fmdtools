@@ -14,10 +14,10 @@ Private Methods:
 - :func:`get_node_info`: Get info for a given node.
 """
 import networkx as nx
-from fmdtools.analyze.graph.base import Graph
+from fmdtools.analyze.graph.model import ModelGraph
 
 
-class MultiFlowGraph(Graph):
+class MultiFlowGraph(ModelGraph):
     """
     Create networkx graph corresponding to the MultiFlow.
 

@@ -6,11 +6,15 @@ Has Classes and Functions:
 
 - :class:`Rand`: Superclass for Block random properties.
 
-- :func:`get_pdf_for_rand`: Gets the corresponding probability mass/density for random sample x from 'randname' function in numpy.
+- :func:`get_pdf_for_rand`: Gets the corresponding probability mass/density for random
+  sample x from 'randname' function in numpy.
 
-- :func:`get_scipy_pdf_helper`: Gets probability mass/density for the outcome x from the distribution "randname". Used as a helper function in determining stochastic model state probability
+- :func:`get_scipy_pdf_helper`: Gets probability mass/density for the outcome x from the
+  distribution "randname". Used as a helper function in determining stochastic model
+  state probability
 
-- :func:`get_pdf_for_dist`: Gets the corresponding probability mass/density (from scipy) for outcome x for probability distributions with name 'randname' in numpy.
+- :func:`get_pdf_for_dist`: Gets the corresponding probability mass/density (from scipy)
+  for outcome x for probability distributions with name 'randname' in numpy.
 """
 from scipy import stats
 from recordclass import astuple

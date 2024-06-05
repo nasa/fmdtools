@@ -55,7 +55,7 @@ from fmdtools.sim.sample import SampleApproach
 from fmdtools.sim.scenario import Sequence, Scenario, SingleFaultScenario
 from fmdtools.analyze.result import Result, create_indiv_filename, file_check
 from fmdtools.analyze.history import History
-from fmdtools.analyze.graph.base import graph_factory
+from fmdtools.analyze.graph.model import graph_factory
 from fmdtools.analyze.phases import from_hist
 
 # DEFAULT ARGUMENTS

@@ -9,6 +9,7 @@ The graph sub-package is used to graphically represent models and has the follow
     fmdtools.analyze.graph.label
     fmdtools.analyze.graph.style
     fmdtools.analyze.graph.base
+    fmdtools.analyze.graph.model
     fmdtools.analyze.graph.architecture
     fmdtools.analyze.graph.flow
 
@@ -106,6 +107,14 @@ fmdtools.analyze.graph.base
 --------------------------------
 
 .. automodule:: fmdtools.analyze.graph.base
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+fmdtools.analyze.graph.model
+--------------------------------
+
+.. automodule:: fmdtools.analyze.graph.model
    :members:
    :undoc-members:
    :show-inheritance:
