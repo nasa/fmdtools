@@ -103,8 +103,8 @@ class FunctionArchitectureGraph(Graph):
         """
         fxnfaults, fxnstates, indicators = {}, {}, {}
         for fxnname, fxn in mdl.fxns.items():
-            fxnstates[fxnname] = self.get_obj_state(mdl.fxns[fxnname])
-            fxnfaults[fxnname] = self.get_obj_mode(mdl.fxns[fxnname])
+            fxnstates[fxnname] = mdl.fxns[fxnname].get_state()
+            fxnfaults[fxnname] = mdl.fxns[fxnname].get_mode()
             indicators[fxnname] = fxn.return_true_indicators(self.time)
         nx.set_node_attributes(self.g, fxnstates, 'states')
         nx.set_node_attributes(self.g, fxnfaults, 'faults')
@@ -121,7 +121,7 @@ class FunctionArchitectureGraph(Graph):
         """
         flowstates, indicators = {}, {}
         for flowname, flow in mdl.flows.items():
-            flowstates[flowname] = self.get_obj_state(flow)
+            flowstates[flowname] = flow.get_state()
             indicators[flowname] = flow.return_true_indicators(self.time)
         nx.set_node_attributes(self.g, flowstates, 'states')
         nx.set_node_attributes(self.g, indicators, 'indicators')
@@ -287,8 +287,8 @@ class FunctionArchitectureCompGraph(FunctionArchitectureGraph):
         compfaults, compstates, comptypes = {}, {}, {}
         fxnstates, fxnfaults, indicators = {}, {}, {}
         for fxnname, fxn in mdl.fxns.items():
-            fxnstates[fxnname] = self.get_obj_state(mdl.fxns[fxnname])
-            fxnfaults[fxnname] = self.get_obj_mode(mdl.fxns[fxnname])
+            fxnstates[fxnname] = mdl.fxns[fxnname].get_state()
+            fxnfaults[fxnname] = mdl.fxns[fxnname].get_mode()
             indicators[fxnname] = fxn.return_true_indicators(self.time)
             for mode in fxnfaults[fxnname].copy():
                 for compname, comp in {**fxn.acts, **fxn.comps}.items():
@@ -335,7 +335,7 @@ class FunctionArchitectureFxnGraph(FunctionArchitectureGraph):
         for edge, flows in flows.items():
             flowdict = {}
             for flow in flows:
-                flowdict[flow] = self.get_obj_state(mdl.flows[flow].s)
+                flowdict[flow] = mdl.flows[flow].get_state()
             edgevals[edge] = flowdict
         nx.set_edge_attributes(self.g, edgevals)
 
@@ -403,7 +403,7 @@ class FunctionArchitectureTypeGraph(FunctionArchitectureGraph):
             flowstates[flowtype] = {}
             indicators[flowtype] = {}
             for flow in mdl.flows_of_type(flowtype):
-                flowstates[flowtype][flow] = self.get_obj_state(mdl.flows[flow])
+                flowstates[flowtype][flow] = mdl.flows[flow].get_state()
                 indicators[flowtype][flow] = mdl.flows[flow].return_true_indicators(self.time)
         nx.set_node_attributes(graph, flowstates, 'states')
 
@@ -414,8 +414,8 @@ class FunctionArchitectureTypeGraph(FunctionArchitectureGraph):
             fxnfaults[fxnclass] = {}
             indicators[fxnclass] = {}
             for fxn in mdl.fxns_of_class(fxnclass):
-                fxnstates[fxnclass][fxn] = self.get_obj_state(mdl.fxns[fxn])
-                fxnfaults[fxnclass][fxn] = self.get_obj_mode(mdl.fxns[fxn])
+                fxnstates[fxnclass][fxn] = mdl.fxns[fxn].get_state()
+                fxnfaults[fxnclass][fxn] = mdl.fxns[fxn].get_mode()
                 indicators[fxnclass][fxn] = mdl.fxns[fxn].return_true_indicators(self.time)
 
         nx.set_node_attributes(graph, fxnstates, 'states')
@@ -503,11 +503,11 @@ class ActionArchitectureGraph(Graph):
         faults = {}
         indicators = {}
         for aname, action in aa.acts.items():
-            states[aname] = self.get_obj_state(action)
-            faults[aname] = self.get_obj_mode(action)
+            states[aname] = action.get_state()
+            faults[aname] = action.get_mode()
             indicators[aname] = action.return_true_indicators(self.time)
         for fname, flow in aa.flows.items():
-            states[fname] = self.get_obj_state(flow)
+            states[fname] = flow.get_state()
             indicators[fname] = flow.return_true_indicators(self.time)
         nx.set_node_attributes(self.g, states, 'states')
         nx.set_node_attributes(self.g, faults, 'faults')

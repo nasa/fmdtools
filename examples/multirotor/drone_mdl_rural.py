@@ -28,8 +28,6 @@ from examples.multirotor.drone_mdl_dynamic import HoldPayload as HoldPayloadDyn
 
 from examples.multirotor.drone_mdl_hierarchical import AffectDOF as AffectDOFHierarchical
 
-from recordclass import asdict
-
 # DEFINE PARAMETERS
 
 
@@ -689,7 +687,7 @@ class Drone(FunctionArchitecture):
 
         # add functions to the model
         flows = ['ee_ctl', 'force_st', 'hsig_dofs', 'hsig_bat', 'rsig_traj']
-        self.add_fxn('manage_health', ManageHealth, *flows, p=asdict(self.p.respolicy))
+        self.add_fxn('manage_health', ManageHealth, *flows, p=self.p.respolicy.asdict())
 
         store_ee_p = {'archtype': self.p.phys_param.bat,
                       'weight': self.p.phys_param.batweight+self.p.phys_param.archweight,
@@ -702,7 +700,7 @@ class Drone(FunctionArchitecture):
                      ca={'p': {'archtype': self.p.phys_param.linearch}})
         self.add_fxn('ctl_dof', CtlDOF, 'ee_ctl', 'des_traj', 'ctl', 'dofs', 'force_st')
         self.add_fxn('plan_path', PlanPath, 'ee_ctl', 'dofs', 'des_traj', 'force_st',
-                     'rsig_traj', p=asdict(self.p))
+                     'rsig_traj', p=self.p.asdict())
         self.add_fxn('hold_payload', HoldPayload, 'dofs', 'force_lin', 'force_st')
         self.add_fxn('view_environment', ViewEnvironment, 'dofs', 'environment')
 

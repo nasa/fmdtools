@@ -2,7 +2,7 @@
 """Defines :class:`Parameter` class to represent attributes that do not change."""
 
 import inspect
-from recordclass import asdict, astuple
+from recordclass import astuple
 import warnings
 import numpy as np
 
@@ -153,7 +153,7 @@ class Parameter(BaseContainer, readonly=True):
 
     def copy_with_vals(self, **kwargs):
         """Creates a copy of itself with modified values given by kwargs"""
-        return self.__class__(**{**asdict(self), **kwargs})
+        return self.__class__(**{**self.asdict(), **kwargs})
 
     def check_pickle(self):
         """Checks to make sure pickled object will get *args and **kwargs"""

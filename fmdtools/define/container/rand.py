@@ -13,7 +13,7 @@ Has Classes and Functions:
 - :func:`get_pdf_for_dist`: Gets the corresponding probability mass/density (from scipy) for outcome x for probability distributions with name 'randname' in numpy.
 """
 from scipy import stats
-from recordclass import asdict, astuple
+from recordclass import astuple
 import numpy as np
 import math
 from fmdtools.define.container.base import BaseContainer
@@ -98,7 +98,7 @@ class Rand(BaseContainer):
         rand_states : dict
             States in self.s
         """
-        rand_states = asdict(self.s)
+        rand_states = self.s.asdict()
         if auto_update_only:
             rand_states = {state: vals for state,
                            vals in rand_states.items()

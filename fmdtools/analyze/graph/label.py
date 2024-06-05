@@ -173,3 +173,7 @@ class Labels(dataobject, mapping=True):
         """Return groups to iterate through when calling nx.draw_labels."""
         return [n for n in ['title', 'subtext'] if getattr(self, n)]
 
+
+if __name__ == "__main__":
+    import doctest
+    doctest.testmod(verbose=True)

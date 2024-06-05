@@ -21,7 +21,6 @@ from fmdtools.define.environment import Environment
 from fmdtools.define.object.coords import Coords, CoordsParam
 
 import numpy as np
-from recordclass import asdict
 
 
 class EnvironmentState(State):
@@ -330,7 +329,7 @@ class Drone(DroneRural):
 
         # add functions to the model
         flows = ['ee_ctl', 'force_st', 'hsig_dofs', 'hsig_bat', 'rsig_traj']
-        self.add_fxn('manage_health', ManageHealth, *flows, p=asdict(self.p.respolicy))
+        self.add_fxn('manage_health', ManageHealth, *flows, p=self.p.respolicy.asdict())
 
         store_ee_p = {'archtype': self.p.phys_param.bat,
                       'weight': self.p.phys_param.batweight+self.p.phys_param.archweight,
