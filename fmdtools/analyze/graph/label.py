@@ -173,6 +173,18 @@ class Labels(dataobject, mapping=True):
         """Return groups to iterate through when calling nx.draw_labels."""
         return [n for n in ['title', 'subtext'] if getattr(self, n)]
 
+    def draw_nx_edges(self, g, pos, ax=None):
+        """Draw edge labels for a given graph."""
+        for level in self.iter_groups():
+            nx.draw_networkx_edge_labels(g, pos, self[level],
+                                         **self[level+'_style'].kwargs(), ax=ax)
+
+    def draw_nx_nodes(self, g, pos, ax=None):
+        """Draw node labels for a given graph."""
+        for level in self.iter_groups():
+            nx.draw_networkx_labels(g, pos, self[level],
+                                    **self[level+'_style'].kwargs(), ax=ax)
+
 
 if __name__ == "__main__":
     import doctest

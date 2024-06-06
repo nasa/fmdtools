@@ -106,6 +106,22 @@ Generally, it is the intent of fmdtools to comply with the :term:`FRDL` specific
 fmdtools.analyze.graph.base
 --------------------------------
 
+Graphing in fmdtools relies on the Graph class, which can be used to plot different characteristics of graphs using :term:`FRDL`.
+
+While this is the intent of the graph package, there are some inherent limitations with working with networkx/graphviz, and not all :term:`FRDL` constructs are representable in fmdtools at present.
+
+See the following examples for "typical" representation of an architecture. In this example, activation arrows were added to the Graph structure, which is possible when working with the base :class:`Graph` class, but often is not added in :Class:`ModelGraphs` because the information has not been defined in underlying model constructs.
+
+ .. |frdl_dec| image:: ../docs/figures/frdl/frdl_funcdecomp.svg
+ .. |nx_dec| image:: ../docs/figures/frdl/nx_funcdecomp.svg
+ .. |gv_dec| image:: ../docs/figures/frdl/gv_funcdecomp.svg
+
+ +--------------------+----------------+-----------+-----------+
+ | Use-case           +  FRDL          + graphviz  + networkx  |
+ +--------------------+----------------+-----------+-----------+
+ | Decomposition      + |frdl_dec|     + |gv_dec|  + |nx_dec|  |
+ +--------------------+----------------+-----------+-----------+ 
+
 .. automodule:: fmdtools.analyze.graph.base
    :members:
    :undoc-members:

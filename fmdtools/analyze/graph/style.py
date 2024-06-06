@@ -163,6 +163,10 @@ class EdgeStyle(BaseStyle):
         gv_plot_ending(dot, disp=disp, saveas=saveas)
         return dot
 
+    def draw_nx(self, g, pos, edges, label='', ax=''):
+        """Draw the edges of a graph with networkx."""
+        nx.draw_networkx_edges(g, pos, edges, label=label, ax=ax, **self.nx_kwargs())
+
 
 def save_dot(dot, saveas=''):
     """Save a graphviz diagram."""
@@ -355,6 +359,9 @@ class NodeStyle(BaseStyle):
         gv_plot_ending(dot, disp=disp, saveas=saveas)
         return dot
 
+    def draw_nx(self, g, pos, nodes, label='', ax=None):
+        """Draw the nodes using networkx."""
+        nx.draw_networkx_nodes(g, pos, nodes, **self.nx_kwargs(), label=label, ax=ax)
 
 class BlockNodeStyle(NodeStyle):
     """Style representing Functions."""
