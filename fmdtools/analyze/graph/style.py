@@ -47,12 +47,29 @@ def gv_import_check():
     return Digraph, Graph
 
 
+def nx_plot_ending(fig, ax, title='', withlegend=True, saveas='', **leg_kwargs):
+    """Add additional options for nx plot."""
+    if title:
+        ax.set_title(title)
+    ax.axis("off")
+    if withlegend:
+        consolidate_legend(ax, **leg_kwargs)
+    if saveas:
+        fig.savefig(saveas, bbox_inches='tight')
+
+
+def gv_plot_ending(dot, disp=True, saveas=''):
+    """Add additional options for gv plots."""
+    if disp:
+        display(SVG(dot._repr_image_svg_xml()))
+    save_dot(dot, saveas)
+
+
 class BaseStyle(dataobject, copy_default=True):
     """Base class to define node/edge styles."""
 
-    def __init__(self, *args, group={}, styles={}, **kwargs):
+    def __init__(self, *args, styles={}, **kwargs):
         super().__init__(*args, **kwargs)
-        self.set_styles(**group)
         self.set_styles(**styles)
 
     def set_styles(self, **styles):
@@ -134,12 +151,8 @@ class EdgeStyle(BaseStyle):
         pos = {1: (0, 0), 2: (1, 0)}
         nx.draw_networkx_edges(d, pos=pos, **self.nx_kwargs())
         lin = self.nx_legend_line(self.__class__.__name__)
-        ax.set_title(self.__class__.__name__)
-        ax.axis("off")
-        if withlegend:
-            consolidate_legend(ax, add_handles=[lin])
-        if saveas:
-            fig.savefig(saveas, bbox_inches='tight')
+        nx_plot_ending(fig, ax, title=self.__class__.__name__, withlegend=withlegend,
+                       add_handles=[lin], saveas=saveas)
         return fig, ax
 
     def show_gv(self, disp=True, saveas=''):
@@ -147,9 +160,7 @@ class EdgeStyle(BaseStyle):
         Digraph, Graph = gv_import_check()
         dot = Digraph()
         dot.edge('0', '1', label=self.__class__.__name__, **self.gv_kwargs())
-        if disp:
-            display(SVG(dot._repr_image_svg_xml()))
-        save_dot(dot, saveas)
+        gv_plot_ending(dot, disp=disp, saveas=saveas)
         return dot
 
 
@@ -225,7 +236,7 @@ class ConnectionEdgeStyle(EdgeStyle):
     gv_style: str = 'dashed'
 
 
-def edge_style_factory(style_tag, group={}, styles={}, **kwargs):
+def edge_style_factory(style_tag, styles={}, **kwargs):
     """
     Get the appropriate EdgeStyle for networkx plotting.
 
@@ -233,8 +244,6 @@ def edge_style_factory(style_tag, group={}, styles={}, **kwargs):
     ----------
     style_tag : str
         Tag defining the type of edge (e.g. 'flow', 'activation', etc.)
-    group : dict
-        edge_styles based on edge group
     styles : dict
         edge_styles based on style membership
     **kwargs : kwargs
@@ -268,7 +277,7 @@ def edge_style_factory(style_tag, group={}, styles={}, **kwargs):
         style_class = ConnectionEdgeStyle
     else:
         raise Exception("Invalid edge style: "+str(style_tag))
-    return style_class(styles=styles, group=group, **kwargs)
+    return style_class(styles=styles, **kwargs)
 
 
 class NodeStyle(BaseStyle):
@@ -311,6 +320,8 @@ class NodeStyle(BaseStyle):
     nx_node_size: int = 500
     nx_edgecolors: str = 'grey'
     nx_cmap: Colormap = None
+    nx_vmin: float = None
+    nx_vmax: float = None
     gv_shape: ClassVar[str] = 'ellipse'
     gv_penwidth: ClassVar[str] = '0'
     gv_style: str = 'filled'
@@ -328,14 +339,11 @@ class NodeStyle(BaseStyle):
         fig, ax = setup_plot(fig=fig, ax=ax, figsize=figsize)
         d = nx.DiGraph()
         d.add_node(0)
-        nx.draw_networkx_nodes(d,pos={0: (0, 0)}, label=self.__class__.__name__,
+        nx.draw_networkx_nodes(d, pos={0: (0, 0)}, label=self.__class__.__name__,
                                **self.nx_kwargs())
         ax.set_title(self.__class__.__name__)
-        ax.axis("off")
-        if withlegend:
-            consolidate_legend(ax)
-        if saveas:
-            fig.savefig(saveas, bbox_inches='tight')
+        nx_plot_ending(fig, ax, title=self.__class__.__name__, withlegend=withlegend,
+                       saveas=saveas)
         return fig, ax
 
     def show_gv(self, disp=True, saveas=''):
@@ -344,9 +352,7 @@ class NodeStyle(BaseStyle):
         dot = Digraph()
         dot.node('0', label=self.__class__.__name__, **self.gv_kwargs())
         display(SVG(dot._repr_image_svg_xml()))
-        if disp:
-            display(SVG(dot._repr_image_svg_xml()))
-        save_dot(dot, saveas)
+        gv_plot_ending(dot, disp=disp, saveas=saveas)
         return dot
 
 
@@ -402,7 +408,7 @@ class ContainerNodeStyle(NodeStyle):
     gv_penwidth: str = '0'
 
 
-def node_style_factory(style_tag, group={}, styles={}, **kwargs):
+def node_style_factory(style_tag, styles={}, **kwargs):
     """
     Get the keywords for networkx plotting.
 
@@ -462,7 +468,7 @@ def node_style_factory(style_tag, group={}, styles={}, **kwargs):
         node_style = ContainerNodeStyle
     else:
         raise Exception("Invalid node style: "+str(style_tag))
-    return node_style(styles=styles, group=group, **kwargs)
+    return node_style(styles=styles, **kwargs)
 
 
 def to_legend_label(group_label, style_labels):

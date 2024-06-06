@@ -12,6 +12,7 @@ Private Methods:
 - :func:`data_error`: Calculates error for each column in data
 - :func:`get_label_groups`: Creates groups of nodes/edges in terms of discrete values
   for the given tags.
+- :func:`get_group_kwarg`: Get style kwargs for a given group.
 """
 
 import networkx as nx
@@ -20,9 +21,10 @@ import matplotlib.pyplot as plt
 from numpy.random import random
 from matplotlib.widgets import Button
 from matplotlib import get_backend
-from fmdtools.analyze.common import consolidate_legend, setup_plot
+from fmdtools.analyze.common import setup_plot
 from fmdtools.analyze.graph.style import edge_style_factory, node_style_factory
 from fmdtools.analyze.graph.style import to_legend_label, gv_import_check
+from fmdtools.analyze.graph.style import nx_plot_ending, gv_plot_ending
 from fmdtools.analyze.graph.label import Labels, EdgeLabelStyle, LabelStyle
 
 
@@ -59,6 +61,14 @@ class Graph(object):
     ----------
     g: networkx.Graph
         Graph to analyze.
+
+    Examples
+    --------
+    >>> graph = Graph(ex_nxgraph)
+    >>> graph.set_pos(auto='kamada_kawai')
+    >>> fig, ax = graph.draw(saveas='../../../docs/figures/frdl/nx_funcdecomp.svg')
+    >>> graph.set_edge_labels(title="name")
+    >>> dot = graph.draw_graphviz(saveas='../../../docs/figures/frdl/gv_funcdecomp.svg')
     """
 
     def __init__(self, g):
@@ -67,27 +77,35 @@ class Graph(object):
         else:
             raise Exception(str(g) + " not a networkx Graph object.")
 
-    def set_pos(self, auto=True, **pos):
+    def set_pos(self, auto=True, overwrite=True, **pos):
         """
         Set graph positions to given positions, (automatically or manually).
 
         Parameters
         ----------
         auto : str, optional
-            Whether to auto-layout the node position. The default is True.
+            Whether to auto-layout the node position. The default is True. If a string
+            is provided, calls method_layout, where method is the string provided
+        overwrite : bool, optional
+            Whether to overwrite the existing pos. Default is True.
         **pos : nodename=(x,y)
             Positions of nodes to set. Otherwise updates to the auto-layout or (0.5,0.5)
         """
         if not getattr(self, 'pos', False):
             self.pos = {}
-        if auto:
-            try:
-                self.pos = nx.planar_layout(nx.MultiGraph(self.g))
-            except:
-                self.pos = nx.spring_layout(nx.MultiGraph(self.g))
-        else:
-            self.pos = {n: self.pos.get(n, (0.5, 0.5)) for n in self.g.nodes}
-        self.pos.update(pos)
+        if overwrite or not self.pos:
+            if auto:
+                if isinstance(auto, str):
+                    auto_method = getattr(nx, auto+'_layout')
+                    self.pos = auto_method(nx.MultiGraph(self.g))
+                else:
+                    try:
+                        self.pos = nx.planar_layout(nx.MultiGraph(self.g))
+                    except:
+                        self.pos = nx.spring_layout(nx.MultiGraph(self.g))
+            else:
+                self.pos = {n: self.pos.get(n, (0.5, 0.5)) for n in self.g.nodes}
+            self.pos.update(pos)
 
     def set_edge_styles(self, edgetype={}, **edge_styles):
         """
@@ -96,7 +114,7 @@ class Graph(object):
         Parameters
         ----------
         edgetype : dict, optional
-            kwargs to EdgeStyle for the given node type (e.g., contaimnet, etc).
+            kwargs to EdgeStyle for the given node type (e.g., containment, etc).
         **edge_styles : dict, optional
             Dictionary of tags, labels, and styles for the edges that overwrite the
             default. Has structure {tag:{label:kwargs}}, where kwargs are the keyword
@@ -108,11 +126,10 @@ class Graph(object):
         for edge_group in self.edge_groups:
             styles = {k: v for i, (k, v) in enumerate(edge_styles.items())
                       if edge_group[i+1]}
-            group = styles.pop('group', {})
-            kwar = edgetype.get(edge_group[0], {})
+            group_kwar = get_group_kwarg(styles.pop('group', {}), edge_group)
+            kwar = {**group_kwar, **edgetype.get(edge_group[0], {})}
             self.edge_styles[edge_group] = edge_style_factory(edge_group[0],
                                                               styles=styles,
-                                                              group=group,
                                                               **kwar)
 
     def set_node_styles(self, nodetype={}, **node_styles):
@@ -134,11 +151,10 @@ class Graph(object):
         for node_group in self.node_groups:
             styles = {k: v for i, (k, v) in enumerate(node_styles.items())
                       if node_group[i+1]}
-            group = styles.pop('group', {})
-            kwar = nodetype.get(node_group[0], {})
+            group_kwar = get_group_kwarg(styles.pop('group', {}), node_group)
+            kwar = {**group_kwar, **nodetype.get(node_group[0], {})}
             self.node_styles[node_group] = node_style_factory(node_group[0],
                                                               styles=styles,
-                                                              group=group,
                                                               **kwar)
 
     def set_edge_labels(self, title='edgetype', title2='', subtext='states',
@@ -189,11 +205,12 @@ class Graph(object):
         **node_groups : iterable
             nodes in groups. see example.
 
-        e.g.,::
-        graph.add_node_groups(group1=('node1', 'node2'), group2=('node3'))
-        graph.set_node_styles(group={'group1':{'color':'green'},
-                                     'group2':{'color':'red'}})
-        graph.draw()
+        Examples
+        --------
+        >>> graph = Graph(ex_nxgraph)
+        >>> graph.add_node_groups(group1=('function_a', 'function_b'), group2=('function_c',))
+        >>> graph.set_node_styles(group={'group1': {'nx_node_color':'green'}, 'group2': {'nx_node_color':'red'}})
+        >>> fig, ax = graph.draw()
 
         would show two different groups of nodes, one with green nodes, and the other
         with red nodes
@@ -204,15 +221,10 @@ class Graph(object):
         group_attrs.update({n: '' for n in self.g.nodes if n not in group_attrs})
         nx.set_node_attributes(self.g, group_attrs, 'group')
 
-    def set_heatmap(self, heatmap, cmap=plt.cm.coolwarm, default_color_val=0.0):
+    def set_heatmap(self, heatmap, cmap=plt.cm.coolwarm, default_color_val=0.0,
+                    vmin=None, vmax=None):
         """
         Set the association and plotting of a heatmap on a graph.
-
-        e.g.,::
-        graph.set_heatmap({'node_1':1.0, 'node_2': 0.0, 'node_3':0.5})
-        graph.draw()
-
-        Should draw node_1 the bluest, node_2 the reddest, and node_3 in between.
 
         Parameters
         ----------
@@ -223,13 +235,33 @@ class Graph(object):
             Colormap to use for the heatmap. The default is plt.cm.coolwarm.
         default_color_val : float, optional
             Value to use if a node is not in the heatmap dict. The default is 0.0.
+        vmin : float
+            Minimum value for the heatmap. Default is None, which sets it to the minimum
+            value of the heatmap.
+        vmax : float
+            Maximum value for the heatmap. Default is None, which sets it to the maximum
+            value of the heatmap.
+
+        Examples
+        --------
+        The below should draw function a red, function b blue, function c pink, and all
+        else grey:
+        >>> graph = Graph(ex_nxgraph)
+        >>> graph.set_heatmap({'function_a': 1.0, 'function_b': 0.0, 'function_c': 0.75}, default_color_val=0.5)
+        >>> fig, ax = graph.draw()
         """
+        if not vmin:
+            vmin = np.min([default_color_val, *heatmap.values()])
+        if not vmax:
+            vmax = np.max([default_color_val, *heatmap.values()])
         self.set_node_styles()
         for label, nodes in self.node_groups.items():
             nodes_colors = [heatmap[node] if node in heatmap else default_color_val
                             for node in nodes]
             self.node_styles[label].nx_node_color = nodes_colors
             self.node_styles[label].nx_cmap = cmap
+            self.node_styles[label].nx_vmin = vmin
+            self.node_styles[label].nx_vmax = vmax
 
     def set_properties(self, **kwargs):
         """Set properties using kwargs where there is a given set_kwarg command."""
@@ -242,7 +274,7 @@ class Graph(object):
 
     def draw(self, figsize=(12, 10), title="", fig=False, ax=False, withlegend=True,
              legend_bbox=(1, 0.5), legend_loc="center left", legend_labelspacing=2,
-             legend_borderpad=1, **kwargs):
+             legend_borderpad=1, saveas='', **kwargs):
         """
         Draw a graph with given styles corresponding to the node/edge properties.
 
@@ -267,6 +299,8 @@ class Graph(object):
             labelspacing argument for plt.legend. the default is 2.
         legend_borderpad : str, optional
             borderpad argument for plt.legend. the default is 1.
+        saveas : str, optional
+            file to save as (if provided).
         **kwargs : kwargs
             Arguments for various supporting functions:
             (set_pos, set_edge_styles, set_edge_labels, set_node_styles,
@@ -304,17 +338,10 @@ class Graph(object):
         for level in self.node_labels.iter_groups():
             nx.draw_networkx_labels(self.g, self.pos, self.node_labels[level],
                                     **self.node_labels[level+'_style'].kwargs(), ax=ax)
-
-        if withlegend:
-            consolidate_legend(ax, labelspacing=legend_labelspacing,
-                               borderpad=legend_borderpad,
-                               bbox_to_anchor=legend_bbox,
-                               loc=legend_loc,
-                               add_handles=edge_handles)
-        plt.axis('off')
-
-        if title:
-            ax.set_title(title)
+        nx_plot_ending(fig, ax, title, withlegend, saveas=saveas,
+                       labelspacing=legend_labelspacing,
+                       borderpad=legend_borderpad, bbox_to_anchor=legend_bbox,
+                       loc=legend_loc, add_handles=edge_handles)
         return fig, ax
 
     def move_nodes(self, **kwargs):
@@ -341,7 +368,7 @@ class Graph(object):
                   " (or '%matplotlib osx') to open in external window")
         return p
 
-    def draw_graphviz(self, filename='', filetype='png', **kwargs):
+    def draw_graphviz(self, disp=True, saveas='', **kwargs):
         """
         Draw the graph using pygraphviz for publication-quality figures.
 
@@ -349,10 +376,10 @@ class Graph(object):
 
         Parameters
         ----------
-        filename : str, optional
-            Name to save the figure to (if saving the figure). The default is ''.
-        filetype : str, optional
-            Type of file to safe. The default is 'png'.
+        disp : bool
+            Whether to display the plot. The default is True.
+        saveas : str
+            File to save the plot as. The default is '' (which doesn't save the plot').
         **kwargs : kwargs
             Arguments for various supporting functions:
             (set_pos, set_edge_styles, set_edge_labels, set_node_styles,
@@ -365,7 +392,6 @@ class Graph(object):
             Graph object corresponding to the figure.
         """
         kwargs = self.set_properties(**kwargs)
-        from IPython.display import display, SVG
         Digraph, Graph = gv_import_check()
         dot = Digraph(graph_attr=kwargs)
 
@@ -393,11 +419,7 @@ class Graph(object):
                     label = "\\" + label
 
                 dot.edge(edge[0], edge[1], label=label, **gv_kwargs)
-
-        if filename:
-            dot.render(filename=filename, format=filetype)
-        else:
-            display(SVG(dot._repr_image_svg_xml()))
+        gv_plot_ending(dot, disp=disp, saveas=saveas)
         return dot
 
     def calc_aspl(self):
@@ -616,7 +638,7 @@ class Graph(object):
     def sff_model(self, endtime=5, pi=.1, pr=.1,
                   num_trials=100, start_node='random', error_bar_option='off'):
         """
-        susc-fix-fail model.
+        Susceptible-fix-fail model.
 
         Parameters
         ----------
@@ -821,6 +843,17 @@ def get_label_groups(iterator, *tags):
     return label_groups
 
 
+def get_group_kwarg(group_dict, group_membership):
+    """Get the kwargs related to group membership for a node/edge style."""
+    this_group = [g for g in group_membership if g in group_dict]
+    if not this_group:
+        return {}
+    elif len(this_group) == 1:
+        return group_dict[this_group[0]]
+    else:
+        raise Exception("Cannot belong to more than one group at once.")
+
+
 class GraphInteractor:
     """
     A simple interactive graph for consistent node placement, etc.
@@ -919,33 +952,32 @@ class GraphInteractor:
         print({k: list(v) for k, v in self.g_obj.pos.items()})
 
 
+"""Example graph for testing. Matches example from FRDL spec."""
+ex_nxgraph = nx.DiGraph()
+ex_nxgraph.add_nodes_from(["function_a", "function_b", "function_c"],
+                          nodetype="function")
+ex_nxgraph.add_nodes_from(["external_signals", "control_signal", "external_energy_in",
+                           "internal_energy", "external_material_in",
+                           "external_material_out", "external_energy_out"],
+                          nodetype="flow")
+ex_nxgraph.add_edges_from([("function_a", "external_signals"),
+                           ("function_a", "control_signal"),
+                           ("function_b", "control_signal"),
+                           ("function_b", "external_energy_in"),
+                           ("function_b", "internal_energy"),
+                           ("function_c", "internal_energy"),
+                           ("function_c", "external_material_in"),
+                           ("function_c", "external_material_out"),
+                           ("function_c", "external_energy_out")], edgetype="flow")
+
+ex_nxgraph.add_edge("function_a", "function_b", edgetype="activation",
+                    name="new_control_signal")
+ex_nxgraph.add_edge("function_b", "function_c", edgetype="activation",
+                    name="change_in_energy_usage")
+ex_nxgraph.add_edge("function_c", "function_b", edgetype="activation",
+                    name="change_in_energy_potential")
+
 
 if __name__ == "__main__":
     import doctest
     doctest.testmod(verbose=True)
-    g = nx.DiGraph()
-    g.add_nodes_from(["function_a", "function_b", "function_c"], nodetype="function")
-    g.add_nodes_from(["external_signals", "control_signal", "external_energy_in",
-                      "internal_energy", "external_material_in",
-                      "external_material_out", "external_energy_out"], nodetype="flow")
-    g.add_edges_from([("function_a", "external_signals"),
-                      ("function_a", "control_signal"),
-                      ("function_b", "control_signal"),
-                      ("function_b", "external_energy_in"),
-                      ("function_b", "internal_energy"),
-                      ("function_c", "internal_energy"),
-                      ("function_c", "external_material_in"),
-                      ("function_c", "external_material_out"),
-                      ("function_c", "external_energy_out")], edgetype="flow")
-    mg = Graph(g)
-    mg.draw()
-
-    g.add_edge("function_a", "function_b", edgetype="activation",
-               name="new_control_signal")
-    g.add_edge("function_b", "function_c", edgetype="activation",
-               name="change_in_energy_usage")
-    g.add_edge("function_c", "function_b", edgetype="activation",
-               name="change_in_energy_potential")
-    mg = Graph(g)
-    mg.set_edge_labels(title="name")
-    mg.draw()
