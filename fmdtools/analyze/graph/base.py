@@ -2,6 +2,7 @@
 Provides representations and visualizations of a model graph structure.
 
 Main user-facing individual graphing classes:
+
 - :class:`Graph`: Base graph class.
 - :class:`GraphInteractor`: Class for moving graph nodes.
 
@@ -317,29 +318,23 @@ class Graph(object):
         """
         fig, ax = setup_plot(figsize=figsize, fig=fig, ax=ax)
         self.set_properties(**kwargs)
-        # edge handles: used to fix edge legend bug in matplotlib/networkx
+        # draw edges
         edge_handles = []
         for label, edges in self.edge_groups.items():
             legend_label = to_legend_label(label, self.edge_style_labels)
-            nx.draw_networkx_edges(self.g, self.pos, edges,
-                                   **self.edge_styles[label].nx_kwargs(),
-                                   label=legend_label, ax=ax)
-            edge_handles.append(self.edge_styles[label].nx_legend_line(legend_label))
-
-        for level in self.edge_labels.iter_groups():
-            nx.draw_networkx_edge_labels(self.g, self.pos, self.edge_labels[level],
-                                         **self.edge_labels[level+'_style'].kwargs(),
-                                         ax=ax)
-
+            style = self.edge_styles[label]
+            style.draw_nx(self.g, self.pos, edges, label=legend_label, ax=ax)
+            # edge handles: used to fix edge legend bug in matplotlib/networkx
+            edge_handles.append(style.nx_legend_line(legend_label))
+        # draw edge labels
+        self.edge_labels.draw_nx_edges(self.g, self.pos, ax=ax)
+        # draw nodes
         for label, nodes in self.node_groups.items():
             legend_label = to_legend_label(label, self.node_style_labels)
-            nx.draw_networkx_nodes(self.g, self.pos, nodes,
-                                   **self.node_styles[label].nx_kwargs(),
-                                   label=legend_label, ax=ax)
-
-        for level in self.node_labels.iter_groups():
-            nx.draw_networkx_labels(self.g, self.pos, self.node_labels[level],
-                                    **self.node_labels[level+'_style'].kwargs(), ax=ax)
+            self.node_styles[label].draw_nx(self.g, self.pos, nodes,
+                                            label=legend_label, ax=ax)
+        # draw node labels
+        self.node_labels.draw_nx_nodes(self.g, self.pos, ax=ax)
         nx_plot_ending(fig, ax, title, withlegend, saveas=saveas,
                        labelspacing=legend_labelspacing,
                        borderpad=legend_borderpad, bbox_to_anchor=legend_bbox,
