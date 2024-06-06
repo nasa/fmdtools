@@ -250,10 +250,12 @@ class Graph(object):
         >>> graph.set_heatmap({'function_a': 1.0, 'function_b': 0.0, 'function_c': 0.75}, default_color_val=0.5)
         >>> fig, ax = graph.draw()
         """
+        allc = [default_color_val,
+                *[v for n, v in heatmap.items() if n in self.g.nodes()]]
         if not vmin:
-            vmin = np.min([default_color_val, *heatmap.values()])
+            vmin = np.min(allc)
         if not vmax:
-            vmax = np.max([default_color_val, *heatmap.values()])
+            vmax = np.max(allc)
         self.set_node_styles()
         for label, nodes in self.node_groups.items():
             nodes_colors = [heatmap[node] if node in heatmap else default_color_val
@@ -536,7 +538,8 @@ class Graph(object):
                 highDegreeNodes.append(sortedNodes[i])
         return highDegreeNodes
 
-    def plot_high_degree_nodes(self, p=90, title='', node_kwargs={'node_color': 'red'},
+    def plot_high_degree_nodes(self, p=90, title='',
+                               node_kwargs={'nx_node_color': 'red', 'gv_fillcolor': 'red'},
                                **kwargs):
         """
         Plot high-degree nodes using self.draw().
