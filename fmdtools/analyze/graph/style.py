@@ -271,7 +271,7 @@ def edge_style_factory(style_tag, styles={}, **kwargs):
     >>> fig, ax = cs.show_nx(saveas='../../../docs/figures/frdl/nx_connection.svg')
     >>> sv = cs.show_gv(disp=False, saveas='../../../docs/figures/frdl/gv_connection.svg')
     """
-    if style_tag == 'flow':
+    if style_tag in ['flow', 'flows', 'functions']:
         style_class = FlowEdgeStyle
     elif style_tag == 'activation':
         style_class = ActivationEdgeStyle
@@ -491,7 +491,7 @@ def node_style_factory(style_tag, styles={}, **kwargs):
         node_style = FlowNodeStyle
     elif style_tag in ['multiflow', 'MultiFlow']:
         node_style = MultiFlowNodeStyle
-    elif style_tag in ['commsflow', 'CommsFlow']:
+    elif style_tag in ['commsflow', 'CommsFlow', 'environment', 'Environment']:
         node_style = CommsFlowNodeStyle
     elif style_tag == 'architecture':
         node_style = ArchitectureNodeStyle
