@@ -328,7 +328,7 @@ class NodeStyle(BaseStyle):
     nx_vmax: float = None
     gv_shape: ClassVar[str] = 'ellipse'
     gv_penwidth: ClassVar[str] = '0'
-    gv_style: str = 'filled'
+    gv_style: ClassVar[str] = 'filled'
     gv_fillcolor: str = 'lightgrey'
     gv_color: str = 'grey'
     modifiers = dict(active=dict(nx_node_color='green', gv_fillcolor='green'),
@@ -363,45 +363,71 @@ class NodeStyle(BaseStyle):
         """Draw the nodes using networkx."""
         nx.draw_networkx_nodes(g, pos, nodes, **self.nx_kwargs(), label=label, ax=ax)
 
+
 class BlockNodeStyle(NodeStyle):
     """Style representing Functions."""
 
     nx_node_shape: str = 's'
     nx_linewidths: int = 2
-    gv_shape: str = 'rectangle'
+    gv_shape: ClassVar[str] = 'rectangle'
     gv_penwidth: str = '2'
+
+
+class FunctionNodeStyle(BlockNodeStyle):
+    """Style representing Functions."""
+
+    gv_style: str = 'filled'
+    gv_shape: str = 'rectangle'
+
+
+class ActionNodeStyle(BlockNodeStyle):
+    """Style representing Actions."""
+
+    gv_style: str = 'rounded, filled'
+    gv_shape: str = 'rectangle'
+
+
+class ComponentNodeStyle(NodeStyle):
+    """Style representing Components."""
+
+    gv_style: str = 'filled'
+    gv_shape: str = 'trapezium'
 
 
 class ArchitectureNodeStyle(NodeStyle):
     """Style representing Actions."""
 
     nx_node_shape: str = '^'
+    gv_style: str = 'filled'
     gv_shape: str = 'triangle'
 
 
 class FlowNodeStyle(NodeStyle):
-    """Style representing Actions."""
+    """Style representing Flow objects."""
 
     nx_node_shape: str = 'o'
     nx_linewidths: int = 0
+    gv_style: str = 'filled'
     gv_shape: str = 'ellipse'
     gv_penwidth: str = '0'
 
 
 class MultiFlowNodeStyle(NodeStyle):
-    """Style representing Actions."""
+    """Style representing MultiFlow objects."""
 
     nx_node_shape: str = 'p'
     nx_linewidths: int = 0
+    gv_style: str = 'filled'
     gv_shape: str = 'pentagon'
     gv_penwidth: str = '0'
 
 
 class CommsFlowNodeStyle(NodeStyle):
-    """Style representing Actions."""
+    """Style representing CommsFlow objects."""
 
     nx_node_shape: str = '8'
     nx_linewidths: int = 0
+    gv_style: str = 'filled'
     gv_shape: str = 'octagon'
     gv_penwidth: str = '0'
 
@@ -411,6 +437,7 @@ class ContainerNodeStyle(NodeStyle):
 
     nx_node_shape: str = 'd'
     nx_linewidths: int = 0
+    gv_style: str = 'filled'
     gv_shape: str = 'diamond'
     gv_penwidth: str = '0'
 
@@ -468,9 +495,14 @@ def node_style_factory(style_tag, styles={}, **kwargs):
         node_style = CommsFlowNodeStyle
     elif style_tag == 'architecture':
         node_style = ArchitectureNodeStyle
-    elif style_tag in ['block', 'Block', 'function', 'Function',
-                       'action', 'Action', 'component', 'Component']:
+    elif style_tag in ['block', 'Block']:
         node_style = BlockNodeStyle
+    elif style_tag in ['function', 'Function']:
+        node_style = FunctionNodeStyle
+    elif style_tag in ['action', 'Action']:
+        node_style = ActionNodeStyle
+    elif style_tag in ['component', 'Component']:
+        node_style = ComponentNodeStyle
     elif style_tag in ['container', 'state']:
         node_style = ContainerNodeStyle
     else:

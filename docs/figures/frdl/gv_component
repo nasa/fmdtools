@@ -1,3 +1,3 @@
 digraph {
-	0 [label=BlockNodeStyle color=grey fillcolor=lightgrey penwidth=2 shape=rectangle style=filled]
+	0 [label=ComponentNodeStyle color=grey fillcolor=lightgrey shape=trapezium style=filled]
 }
