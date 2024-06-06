@@ -438,7 +438,8 @@
 <li class="toctree-l3"><a class="reference internal" href="fmdtools.analyze.graph.html">fmdtools.analyze.graph</a><ul>
 <li class="toctree-l4"><a class="reference internal" href="fmdtools.analyze.graph.html#module-fmdtools.analyze.graph.label">fmdtools.analyze.graph.label</a></li>
 <li class="toctree-l4"><a class="reference internal" href="fmdtools.analyze.graph.html#fmdtools-analyze-graph-style">fmdtools.analyze.graph.style</a></li>
-<li class="toctree-l4"><a class="reference internal" href="fmdtools.analyze.graph.html#module-fmdtools.analyze.graph.base">fmdtools.analyze.graph.base</a></li>
+<li class="toctree-l4"><a class="reference internal" href="fmdtools.analyze.graph.html#fmdtools-analyze-graph-base">fmdtools.analyze.graph.base</a></li>
+<li class="toctree-l4"><a class="reference internal" href="fmdtools.analyze.graph.html#module-fmdtools.analyze.graph.model">fmdtools.analyze.graph.model</a></li>
 <li class="toctree-l4"><a class="reference internal" href="fmdtools.analyze.graph.html#fmdtools-analyze-graph-architecture">fmdtools.analyze.graph.architecture</a></li>
 <li class="toctree-l4"><a class="reference internal" href="fmdtools.analyze.graph.html#module-fmdtools.analyze.graph.flow">fmdtools.analyze.graph.flow</a></li>
 </ul>
@@ -531,6 +532,12 @@
 <p>A container is a dataobject (from the recordclass library) that fulfills a specific
 role in a block.  This class inherits from dataobject for low memory footprint and
 has a number of methods for making attribute assignment/copying/tracking easier.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="fmdtools.define.container.base.BaseContainer.asdict">
+<span class="sig-name descname"><span class="pre">asdict</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.define.container.base.BaseContainer.asdict" title="Permalink to this definition"></a></dt>
+<dd><p>Return fields as a dictionary.</p>
+</dd></dl>
+
 <dl class="py method">
 <dt class="sig sig-object py" id="fmdtools.define.container.base.BaseContainer.assign">
 <span class="sig-name descname"><span class="pre">assign</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">obj</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">fields</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">as_copy</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">fielddict</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.define.container.base.BaseContainer.assign" title="Permalink to this definition"></a></dt>
@@ -741,7 +748,8 @@ The default is None.</p></li>
 <dl class="py method">
 <dt class="sig sig-object py" id="fmdtools.define.container.base.BaseContainer.return_mutables">
 <span class="sig-name descname"><span class="pre">return_mutables</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.define.container.base.BaseContainer.return_mutables" title="Permalink to this definition"></a></dt>
-<dd></dd></dl>
+<dd><p>Return mutable aspects of the container.</p>
+</dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="fmdtools.define.container.base.BaseContainer.rolename">
@@ -1337,7 +1345,8 @@ their properties</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="fmdtools.define.container.mode.Mode.return_mutables">
 <span class="sig-name descname"><span class="pre">return_mutables</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.define.container.mode.Mode.return_mutables" title="Permalink to this definition"></a></dt>
-<dd></dd></dl>
+<dd><p>Return mutable aspects of the container.</p>
+</dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="fmdtools.define.container.mode.Mode.rolename">
@@ -1442,6 +1451,203 @@ values of 1.0.</p>
 <span class="go">10.0</span>
 </pre></div>
 </div>
+<dl class="py method">
+<dt class="sig sig-object py" id="fmdtools.define.container.state.State.add">
+<span class="sig-name descname"><span class="pre">add</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">states</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.define.container.state.State.add" title="Permalink to this definition"></a></dt>
+<dd><p>Return the addition of given attributes of the State.</p>
+<p>e.g.,:
+&gt;&gt;&gt; p = ExampleState(x=1.0, y=2.0)
+&gt;&gt;&gt; p.add(‘x’,’y’)
+3.0</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="fmdtools.define.container.state.State.div">
+<span class="sig-name descname"><span class="pre">div</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">states</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.define.container.state.State.div" title="Permalink to this definition"></a></dt>
+<dd><p>Return the division of given attributes of the State.</p>
+<p>e.g.,:
+&gt;&gt;&gt; p = ExampleState(x=1.0, y=2.0)
+&gt;&gt;&gt; p.div(‘x’,’y’)
+0.5</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="fmdtools.define.container.state.State.get">
+<span class="sig-name descname"><span class="pre">get</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">attnames</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.define.container.state.State.get" title="Permalink to this definition"></a></dt>
+<dd><p>Return the given attribute names (strings) as a numpy array.</p>
+<p>Mainly useful for reducing length of lines/adding clarity to assignment
+statements. e.g.,:</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">p</span> <span class="o">=</span> <span class="n">ExampleState</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="mf">2.0</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">p_arr</span> <span class="o">=</span> <span class="n">p</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;x&quot;</span><span class="p">,</span> <span class="s2">&quot;y&quot;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">p_arr</span>
+<span class="go">array([1., 2.])</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="fmdtools.define.container.state.State.gett">
+<span class="sig-name descname"><span class="pre">gett</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">attnames</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.define.container.state.State.gett" title="Permalink to this definition"></a></dt>
+<dd><p>Alternative to self.get that returns a tuple, not an array.</p>
+<p>Useful when a numpy array would translate the underlying data
+types poorly (e.g., np.array([1,’b’] would make 1 a string–using a tuple
+instead preserves the data type)).</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="fmdtools.define.container.state.State.inc">
+<span class="sig-name descname"><span class="pre">inc</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.define.container.state.State.inc" title="Permalink to this definition"></a></dt>
+<dd><p>Increment the given arguments by a given value.</p>
+<p>Mainly useful for reducing length/adding clarity to increment statements, e.g.,:</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">p</span> <span class="o">=</span> <span class="n">ExampleState</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="mf">1.0</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">p</span><span class="o">.</span><span class="n">inc</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">p</span><span class="o">.</span><span class="n">x</span>
+<span class="go">2.0</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">p</span><span class="o">.</span><span class="n">y</span>
+<span class="go">3.0</span>
+</pre></div>
+</div>
+<p>Can additionally be provided with a second value denoting a limit on the
+increments e.g.,:</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">p</span> <span class="o">=</span> <span class="n">ExampleState</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="mf">1.0</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">p</span><span class="o">.</span><span class="n">inc</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mf">5.0</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">p</span><span class="o">.</span><span class="n">x</span>
+<span class="go">4.0</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">p</span><span class="o">.</span><span class="n">inc</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mf">5.0</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">p</span><span class="o">.</span><span class="n">x</span>
+<span class="go">5.0</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="fmdtools.define.container.state.State.init_hist_att">
+<span class="sig-name descname"><span class="pre">init_hist_att</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">hist</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">att</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">timerange</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">track</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">str_size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'&lt;U20'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.define.container.state.State.init_hist_att" title="Permalink to this definition"></a></dt>
+<dd><p>Extend init_hist_attr to use _set to get history size.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="fmdtools.define.container.state.State.limit">
+<span class="sig-name descname"><span class="pre">limit</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.define.container.state.State.limit" title="Permalink to this definition"></a></dt>
+<dd><p>Enforce limits on the value of a given property.</p>
+<p>Mainly useful for reducing length/adding clarity to increment statements. e.g.,:</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">p</span> <span class="o">=</span> <span class="n">ExampleState</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="mf">200.0</span><span class="p">,</span> <span class="n">y</span><span class="o">=-</span><span class="mf">200.0</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">p</span><span class="o">.</span><span class="n">limit</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="p">(</span><span class="mf">0.0</span><span class="p">,</span><span class="mf">100.0</span><span class="p">),</span> <span class="n">y</span><span class="o">=</span><span class="p">(</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">100.0</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">p</span><span class="o">.</span><span class="n">x</span>
+<span class="go">100.0</span>
+<span class="gp">&gt;&gt;&gt;</span>
+<span class="go">0.0</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="fmdtools.define.container.state.State.mul">
+<span class="sig-name descname"><span class="pre">mul</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">states</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.define.container.state.State.mul" title="Permalink to this definition"></a></dt>
+<dd><p>Return the multiplication of given attributes of the State.</p>
+<p>e.g.,:</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">p</span> <span class="o">=</span> <span class="n">ExampleState</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="mf">2.0</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="mf">3.0</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">p</span><span class="o">.</span><span class="n">mul</span><span class="p">(</span><span class="s2">&quot;x&quot;</span><span class="p">,</span><span class="s2">&quot;y&quot;</span><span class="p">)</span>
+<span class="go">6.0</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="fmdtools.define.container.state.State.put">
+<span class="sig-name descname"><span class="pre">put</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">as_copy</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.define.container.state.State.put" title="Permalink to this definition"></a></dt>
+<dd><p>Set the given fields to a given value.</p>
+<p>Mainly useful for reducing length/adding clarity to assignment statements.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>as_copy</strong> (<em>bool</em>) – set to True for dicts/sets to be copied rather than referenced</p></li>
+<li><p><strong>**kwargs</strong> (<em>values</em>) – fields and values to set.</p></li>
+</ul>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">p</span> <span class="o">=</span> <span class="n">ExampleState</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">p</span><span class="o">.</span><span class="n">put</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="mf">2.0</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="mf">2.0</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">p</span><span class="o">.</span><span class="n">x</span>
+<span class="go">2.0</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">p</span><span class="o">.</span><span class="n">y</span>
+<span class="go">2.0</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="fmdtools.define.container.state.State.roundto">
+<span class="sig-name descname"><span class="pre">roundto</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.define.container.state.State.roundto" title="Permalink to this definition"></a></dt>
+<dd><p>Round the given arguments to a given resolution.</p>
+<p>e.g.,:</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">p</span> <span class="o">=</span> <span class="n">ExampleState</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="mf">1.75850</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">p</span><span class="o">.</span><span class="n">roundto</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="mf">0.1</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">p</span><span class="o">.</span><span class="n">x</span>
+<span class="go">1.8</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="fmdtools.define.container.state.State.same">
+<span class="sig-name descname"><span class="pre">same</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">values</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">states</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.define.container.state.State.same" title="Permalink to this definition"></a></dt>
+<dd><p>Test whether a given iterable values has the same value as each in the state.</p>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">p</span> <span class="o">=</span> <span class="n">ExampleState</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="mf">2.0</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">p</span><span class="o">.</span><span class="n">same</span><span class="p">([</span><span class="mf">1.0</span><span class="p">,</span> <span class="mf">2.0</span><span class="p">],</span> <span class="s2">&quot;x&quot;</span><span class="p">,</span> <span class="s2">&quot;y&quot;</span><span class="p">)</span>
+<span class="go">True</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">p</span><span class="o">.</span><span class="n">same</span><span class="p">([</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">2.0</span><span class="p">],</span> <span class="s2">&quot;x&quot;</span><span class="p">,</span> <span class="s2">&quot;y&quot;</span><span class="p">)</span>
+<span class="go">False</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="fmdtools.define.container.state.State.set_atts">
+<span class="sig-name descname"><span class="pre">set_atts</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.define.container.state.State.set_atts" title="Permalink to this definition"></a></dt>
+<dd><p>Set the given arguments to a given value.</p>
+<p>Mainly useful for reducing length/adding clarity to assignment statements in
+__init__ methods (self.put is recomended otherwise so that the iteration is on
+function/flow <em>states</em>) e.g.,</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">p</span> <span class="o">=</span> <span class="n">ExampleState</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">p</span><span class="o">.</span><span class="n">set_atts</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="mf">2.0</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="mf">2.0</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">p</span><span class="o">.</span><span class="n">x</span>
+<span class="go">2.0</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">p</span><span class="o">.</span><span class="n">y</span>
+<span class="go">2.0</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="fmdtools.define.container.state.State.sub">
+<span class="sig-name descname"><span class="pre">sub</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">states</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.define.container.state.State.sub" title="Permalink to this definition"></a></dt>
+<dd><p>Return the subtraction of given attributes of the State.</p>
+<p>e.g.,:</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">p</span> <span class="o">=</span> <span class="n">ExampleState</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="mf">2.0</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">p</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span><span class="s1">&#39;x&#39;</span><span class="p">,</span><span class="s1">&#39;y&#39;</span><span class="p">)</span>
+<span class="go">-1.0</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="fmdtools.define.container.state.State.warn">
+<span class="sig-name descname"><span class="pre">warn</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">messages</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">stacklevel</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">2</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.define.container.state.State.warn" title="Permalink to this definition"></a></dt>
+<dd><p>Print warning message(s) when called.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>*messages</strong> (<em>str</em>) – Strings to make up the message (will be joined by spaces)</p></li>
+<li><p><strong>stacklevel</strong> (<em>int</em>) – Where the warning points to.
+The default is 2 (points to the place in the model)</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
 </dd></dl>
 
 </section>
@@ -1579,6 +1785,12 @@ self.k_lim or set constraints self.k_set</p>
 <dd><p>Do nothing since the parameter is immutable.</p>
 </dd></dl>
 
+<dl class="py method">
+<dt class="sig sig-object py" id="fmdtools.define.container.parameter.Parameter.return_mutables">
+<span class="sig-name descname"><span class="pre">return_mutables</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.define.container.parameter.Parameter.return_mutables" title="Permalink to this definition"></a></dt>
+<dd><p>Return mutable aspects of the container.</p>
+</dd></dl>
+
 </dd></dl>
 
 </section>
@@ -1588,9 +1800,13 @@ self.k_lim or set constraints self.k_set</p>
 <p>Has Classes and Functions:</p>
 <ul class="simple">
 <li><p><a class="reference internal" href="#fmdtools.define.container.rand.Rand" title="fmdtools.define.container.rand.Rand"><code class="xref py py-class docutils literal notranslate"><span class="pre">Rand</span></code></a>: Superclass for Block random properties.</p></li>
-<li><p><a class="reference internal" href="#fmdtools.define.container.rand.get_pdf_for_rand" title="fmdtools.define.container.rand.get_pdf_for_rand"><code class="xref py py-func docutils literal notranslate"><span class="pre">get_pdf_for_rand()</span></code></a>: Gets the corresponding probability mass/density for random sample x from ‘randname’ function in numpy.</p></li>
-<li><p><a class="reference internal" href="#fmdtools.define.container.rand.get_scipy_pdf_helper" title="fmdtools.define.container.rand.get_scipy_pdf_helper"><code class="xref py py-func docutils literal notranslate"><span class="pre">get_scipy_pdf_helper()</span></code></a>: Gets probability mass/density for the outcome x from the distribution “randname”. Used as a helper function in determining stochastic model state probability</p></li>
-<li><p><a class="reference internal" href="#fmdtools.define.container.rand.get_pdf_for_dist" title="fmdtools.define.container.rand.get_pdf_for_dist"><code class="xref py py-func docutils literal notranslate"><span class="pre">get_pdf_for_dist()</span></code></a>: Gets the corresponding probability mass/density (from scipy) for outcome x for probability distributions with name ‘randname’ in numpy.</p></li>
+<li><p><a class="reference internal" href="#fmdtools.define.container.rand.get_pdf_for_rand" title="fmdtools.define.container.rand.get_pdf_for_rand"><code class="xref py py-func docutils literal notranslate"><span class="pre">get_pdf_for_rand()</span></code></a>: Gets the corresponding probability mass/density for random
+sample x from ‘randname’ function in numpy.</p></li>
+<li><p><a class="reference internal" href="#fmdtools.define.container.rand.get_scipy_pdf_helper" title="fmdtools.define.container.rand.get_scipy_pdf_helper"><code class="xref py py-func docutils literal notranslate"><span class="pre">get_scipy_pdf_helper()</span></code></a>: Gets probability mass/density for the outcome x from the
+distribution “randname”. Used as a helper function in determining stochastic model
+state probability</p></li>
+<li><p><a class="reference internal" href="#fmdtools.define.container.rand.get_pdf_for_dist" title="fmdtools.define.container.rand.get_pdf_for_dist"><code class="xref py py-func docutils literal notranslate"><span class="pre">get_pdf_for_dist()</span></code></a>: Gets the corresponding probability mass/density (from scipy)
+for outcome x for probability distributions with name ‘randname’ in numpy.</p></li>
 </ul>
 <dl class="py class">
 <dt class="sig sig-object py" id="fmdtools.define.container.rand.ExampleRand">
@@ -1741,7 +1957,8 @@ these states with methods called from the rng when run_stochastic=True.</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="fmdtools.define.container.rand.Rand.return_mutables">
 <span class="sig-name descname"><span class="pre">return_mutables</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.define.container.rand.Rand.return_mutables" title="Permalink to this definition"></a></dt>
-<dd></dd></dl>
+<dd><p>Return mutable aspects of the container.</p>
+</dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="fmdtools.define.container.rand.Rand.return_probdens">
@@ -2094,7 +2311,8 @@ global</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="fmdtools.define.container.time.Time.return_mutables">
 <span class="sig-name descname"><span class="pre">return_mutables</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.define.container.time.Time.return_mutables" title="Permalink to this definition"></a></dt>
-<dd></dd></dl>
+<dd><p>Return mutable aspects of the container.</p>
+</dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="fmdtools.define.container.time.Time.rolename">

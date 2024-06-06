@@ -435,7 +435,8 @@
 <li class="toctree-l3"><a class="reference internal" href="docs/fmdtools.analyze.graph.html">fmdtools.analyze.graph</a><ul>
 <li class="toctree-l4"><a class="reference internal" href="docs/fmdtools.analyze.graph.html#module-fmdtools.analyze.graph.label">fmdtools.analyze.graph.label</a></li>
 <li class="toctree-l4"><a class="reference internal" href="docs/fmdtools.analyze.graph.html#fmdtools-analyze-graph-style">fmdtools.analyze.graph.style</a></li>
-<li class="toctree-l4"><a class="reference internal" href="docs/fmdtools.analyze.graph.html#module-fmdtools.analyze.graph.base">fmdtools.analyze.graph.base</a></li>
+<li class="toctree-l4"><a class="reference internal" href="docs/fmdtools.analyze.graph.html#fmdtools-analyze-graph-base">fmdtools.analyze.graph.base</a></li>
+<li class="toctree-l4"><a class="reference internal" href="docs/fmdtools.analyze.graph.html#module-fmdtools.analyze.graph.model">fmdtools.analyze.graph.model</a></li>
 <li class="toctree-l4"><a class="reference internal" href="docs/fmdtools.analyze.graph.html#fmdtools-analyze-graph-architecture">fmdtools.analyze.graph.architecture</a></li>
 <li class="toctree-l4"><a class="reference internal" href="docs/fmdtools.analyze.graph.html#module-fmdtools.analyze.graph.flow">fmdtools.analyze.graph.flow</a></li>
 </ul>
@@ -508,6 +509,7 @@
  | <a href="#T"><strong>T</strong></a>
  | <a href="#U"><strong>U</strong></a>
  | <a href="#V"><strong>V</strong></a>
+ | <a href="#W"><strong>W</strong></a>
  | <a href="#X"><strong>X</strong></a>
  | <a href="#Y"><strong>Y</strong></a>
  | <a href="#Z"><strong>Z</strong></a>
@@ -553,6 +555,8 @@
       <li><a href="docs/fmdtools.define.architecture.html#fmdtools.define.architecture.action.ActionArchitecture.active_actions">active_actions (fmdtools.define.architecture.action.ActionArchitecture attribute)</a>
 </li>
       <li><a href="docs/fmdtools.define.architecture.html#fmdtools.define.architecture.action.ActionArchitecture.acts">acts (fmdtools.define.architecture.action.ActionArchitecture attribute)</a>
+</li>
+      <li><a href="docs/fmdtools.define.container.html#fmdtools.define.container.state.State.add">add() (fmdtools.define.container.state.State method)</a>
 </li>
       <li><a href="docs/fmdtools.define.architecture.html#fmdtools.define.architecture.action.ActionArchitecture.add_act">add_act() (fmdtools.define.architecture.action.ActionArchitecture method)</a>
 </li>
@@ -716,7 +720,7 @@
         <li><a href="docs/fmdtools.analyze.graph.html#fmdtools.analyze.graph.label.LabelStyle.alpha">(fmdtools.analyze.graph.label.LabelStyle attribute)</a>
 </li>
       </ul></li>
-      <li><a href="docs/fmdtools.analyze.graph.html#fmdtools.analyze.graph.base.Graph.animate">animate() (fmdtools.analyze.graph.base.Graph method)</a>
+      <li><a href="docs/fmdtools.analyze.graph.html#fmdtools.analyze.graph.model.ModelGraph.animate">animate() (fmdtools.analyze.graph.model.ModelGraph method)</a>
 
       <ul>
         <li><a href="docs/fmdtools.analyze.html#fmdtools.analyze.history.History.animate">(fmdtools.analyze.history.History method)</a>
@@ -770,6 +774,8 @@
         <li><a href="docs/fmdtools.analyze.html#fmdtools.analyze.tabulate.BaseTab.as_table">(fmdtools.analyze.tabulate.BaseTab method)</a>
 </li>
       </ul></li>
+      <li><a href="docs/fmdtools.define.container.html#fmdtools.define.container.base.BaseContainer.asdict">asdict() (fmdtools.define.container.base.BaseContainer method)</a>
+</li>
       <li><a href="docs/fmdtools.define.container.html#fmdtools.define.container.base.BaseContainer.assign">assign() (fmdtools.define.container.base.BaseContainer method)</a>
 </li>
       <li><a href="docs/fmdtools.define.object.html#fmdtools.define.object.coords.Coords.assign_from">assign_from() (fmdtools.define.object.coords.Coords method)</a>
@@ -1196,12 +1202,14 @@
 </li>
       <li><a href="docs/fmdtools.sim.html#fmdtools.sim.scenario.Injection.disturbances">disturbances (fmdtools.sim.scenario.Injection attribute)</a>
 </li>
+      <li><a href="docs/fmdtools.define.container.html#fmdtools.define.container.state.State.div">div() (fmdtools.define.container.state.State method)</a>
+</li>
       <li><a href="docs/fmdtools.analyze.graph.html#fmdtools.analyze.graph.base.Graph.draw">draw() (fmdtools.analyze.graph.base.Graph method)</a>
 </li>
       <li><a href="docs/fmdtools.analyze.graph.html#fmdtools.analyze.graph.architecture.ActionArchitectureGraph.draw_from">draw_from() (fmdtools.analyze.graph.architecture.ActionArchitectureGraph method)</a>
 
       <ul>
-        <li><a href="docs/fmdtools.analyze.graph.html#fmdtools.analyze.graph.base.Graph.draw_from">(fmdtools.analyze.graph.base.Graph method)</a>
+        <li><a href="docs/fmdtools.analyze.graph.html#fmdtools.analyze.graph.model.ModelGraph.draw_from">(fmdtools.analyze.graph.model.ModelGraph method)</a>
 </li>
       </ul></li>
       <li><a href="docs/fmdtools.analyze.graph.html#fmdtools.analyze.graph.architecture.ActionArchitectureGraph.draw_graphviz">draw_graphviz() (fmdtools.analyze.graph.architecture.ActionArchitectureGraph method)</a>
@@ -1493,6 +1501,13 @@
 
       <ul>
         <li><a href="docs/fmdtools.analyze.graph.html#module-fmdtools.analyze.graph.label">module</a>
+</li>
+      </ul></li>
+      <li>
+    fmdtools.analyze.graph.model
+
+      <ul>
+        <li><a href="docs/fmdtools.analyze.graph.html#module-fmdtools.analyze.graph.model">module</a>
 </li>
       </ul></li>
       <li>
@@ -1896,6 +1911,8 @@
       <li><a href="docs/fmdtools.analyze.html#fmdtools.analyze.result.Result.get">get() (fmdtools.analyze.result.Result method)</a>
 
       <ul>
+        <li><a href="docs/fmdtools.define.container.html#fmdtools.define.container.state.State.get">(fmdtools.define.container.state.State method)</a>
+</li>
         <li><a href="docs/fmdtools.define.object.html#fmdtools.define.object.coords.Coords.get">(fmdtools.define.object.coords.Coords method)</a>
 </li>
         <li><a href="docs/fmdtools.sim.html#fmdtools.sim.scenario.BaseScenObj.get">(fmdtools.sim.scenario.BaseScenObj method)</a>
@@ -1975,6 +1992,8 @@
 </li>
       <li><a href="docs/fmdtools.define.block.html#fmdtools.define.block.base.Simulable.get_fxns">get_fxns() (fmdtools.define.block.base.Simulable method)</a>
 </li>
+      <li><a href="docs/fmdtools.analyze.graph.html#fmdtools.analyze.graph.base.get_group_kwarg">get_group_kwarg() (in module fmdtools.analyze.graph.base)</a>
+</li>
       <li><a href="docs/fmdtools.sim.html#fmdtools.sim.sample.BaseSample.get_groups_scens">get_groups_scens() (fmdtools.sim.sample.BaseSample method)</a>
 </li>
       <li><a href="docs/fmdtools.define.block.html#fmdtools.define.block.base.SimParam.get_hist_ind">get_hist_ind() (fmdtools.define.block.base.SimParam method)</a>
@@ -2017,13 +2036,11 @@
 </li>
       <li><a href="docs/fmdtools.analyze.html#fmdtools.analyze.result.Result.get_metrics">get_metrics() (fmdtools.analyze.result.Result method)</a>
 </li>
+      <li><a href="docs/fmdtools.define.object.html#fmdtools.define.object.base.BaseObject.get_mode">get_mode() (fmdtools.define.object.base.BaseObject method)</a>
+</li>
       <li><a href="docs/fmdtools.analyze.graph.html#fmdtools.analyze.graph.architecture.FunctionArchitectureGraph.get_multi_edges">get_multi_edges() (fmdtools.analyze.graph.architecture.FunctionArchitectureGraph method)</a>
 </li>
       <li><a href="docs/fmdtools.analyze.graph.html#fmdtools.analyze.graph.flow.get_node_info">get_node_info() (in module fmdtools.analyze.graph.flow)</a>
-</li>
-      <li><a href="docs/fmdtools.analyze.graph.html#fmdtools.analyze.graph.base.Graph.get_obj_mode">get_obj_mode() (fmdtools.analyze.graph.base.Graph method)</a>
-</li>
-      <li><a href="docs/fmdtools.analyze.graph.html#fmdtools.analyze.graph.base.Graph.get_obj_state">get_obj_state() (fmdtools.analyze.graph.base.Graph method)</a>
 </li>
       <li><a href="docs/fmdtools.sim.html#fmdtools.sim.search.BaseProblem.get_objectives">get_objectives() (fmdtools.sim.search.BaseProblem method)</a>
 </li>
@@ -2069,10 +2086,10 @@
 </li>
       <li><a href="docs/fmdtools.analyze.html#fmdtools.analyze.phases.PhaseMap.get_sample_times">get_sample_times() (fmdtools.analyze.phases.PhaseMap method)</a>
 </li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="docs/fmdtools.sim.html#fmdtools.sim.sample.BaseSample.get_scen_groups">get_scen_groups() (fmdtools.sim.sample.BaseSample method)</a>
 </li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="docs/fmdtools.define.block.html#fmdtools.define.block.base.Simulable.get_scen_rate">get_scen_rate() (fmdtools.define.block.base.Simulable method)</a>
 </li>
       <li><a href="docs/fmdtools.analyze.html#fmdtools.analyze.result.Result.get_scens">get_scens() (fmdtools.analyze.result.Result method)</a>
@@ -2095,6 +2112,8 @@
         <li><a href="docs/fmdtools.sim.html#fmdtools.sim.search.SingleFaultScenarioProblem.get_start_time">(fmdtools.sim.search.SingleFaultScenarioProblem method)</a>
 </li>
       </ul></li>
+      <li><a href="docs/fmdtools.define.object.html#fmdtools.define.object.base.BaseObject.get_state">get_state() (fmdtools.define.object.base.BaseObject method)</a>
+</li>
       <li><a href="docs/fmdtools.analyze.graph.html#fmdtools.analyze.graph.architecture.FunctionArchitectureGraph.get_staticnodes">get_staticnodes() (fmdtools.analyze.graph.architecture.FunctionArchitectureGraph method)</a>
 </li>
       <li><a href="docs/fmdtools.analyze.html#fmdtools.analyze.common.get_sub_include">get_sub_include() (in module fmdtools.analyze.common)</a>
@@ -2137,6 +2156,8 @@
 </li>
       <li><a href="docs/fmdtools.sim.html#fmdtools.sim.sample.ParameterDomain.get_x_defaults">get_x_defaults() (fmdtools.sim.sample.ParameterDomain method)</a>
 </li>
+      <li><a href="docs/fmdtools.define.container.html#fmdtools.define.container.state.State.gett">gett() (fmdtools.define.container.state.State method)</a>
+</li>
       <li><a href="docs/Development%20Guide.html#term-Graph"><strong>Graph</strong></a>
 
       <ul>
@@ -2145,7 +2166,7 @@
       </ul></li>
       <li><a href="docs/fmdtools.define.architecture.html#fmdtools.define.architecture.function.FunctionArchitecture.graph">graph (fmdtools.define.architecture.function.FunctionArchitecture attribute)</a>
 </li>
-      <li><a href="docs/fmdtools.analyze.graph.html#fmdtools.analyze.graph.base.graph_factory">graph_factory() (in module fmdtools.analyze.graph.base)</a>
+      <li><a href="docs/fmdtools.analyze.graph.html#fmdtools.analyze.graph.model.graph_factory">graph_factory() (in module fmdtools.analyze.graph.model)</a>
 </li>
       <li><a href="docs/fmdtools.analyze.graph.html#fmdtools.analyze.graph.base.GraphInteractor">GraphInteractor (class in fmdtools.analyze.graph.base)</a>
 </li>
@@ -2237,6 +2258,8 @@
         <li><a href="docs/fmdtools.analyze.graph.html#fmdtools.analyze.graph.style.NodeStyle.gv_penwidth">(fmdtools.analyze.graph.style.NodeStyle attribute)</a>
 </li>
       </ul></li>
+      <li><a href="docs/fmdtools.analyze.graph.html#fmdtools.analyze.graph.style.gv_plot_ending">gv_plot_ending() (in module fmdtools.analyze.graph.style)</a>
+</li>
       <li><a href="docs/fmdtools.analyze.graph.html#fmdtools.analyze.graph.style.ArchitectureNodeStyle.gv_shape">gv_shape (fmdtools.analyze.graph.style.ArchitectureNodeStyle attribute)</a>
 
       <ul>
@@ -2341,8 +2364,12 @@
 </li>
       <li><a href="docs/fmdtools.define.flow.html#fmdtools.define.flow.commsflow.CommsFlow.inbox">inbox() (fmdtools.define.flow.commsflow.CommsFlow method)</a>
 </li>
-      <li><a href="docs/fmdtools.define.object.html#fmdtools.define.object.timer.Timer.inc">inc() (fmdtools.define.object.timer.Timer method)</a>
+      <li><a href="docs/fmdtools.define.container.html#fmdtools.define.container.state.State.inc">inc() (fmdtools.define.container.state.State method)</a>
+
+      <ul>
+        <li><a href="docs/fmdtools.define.object.html#fmdtools.define.object.timer.Timer.inc">(fmdtools.define.object.timer.Timer method)</a>
 </li>
+      </ul></li>
       <li><a href="docs/fmdtools.define.object.html#fmdtools.define.object.timer.Timer.indicate_complete">indicate_complete() (fmdtools.define.object.timer.Timer method)</a>
 </li>
       <li><a href="docs/fmdtools.define.object.html#fmdtools.define.object.timer.Timer.indicate_set">indicate_set() (fmdtools.define.object.timer.Timer method)</a>
@@ -2388,13 +2415,15 @@
 </li>
         <li><a href="docs/fmdtools.define.container.html#fmdtools.define.container.rand.Rand.init_hist_att">(fmdtools.define.container.rand.Rand method)</a>
 </li>
+        <li><a href="docs/fmdtools.define.container.html#fmdtools.define.container.state.State.init_hist_att">(fmdtools.define.container.state.State method)</a>
+</li>
         <li><a href="docs/fmdtools.define.container.html#fmdtools.define.container.time.Time.init_hist_att">(fmdtools.define.container.time.Time method)</a>
 </li>
       </ul></li>
-      <li><a href="docs/fmdtools.analyze.html#fmdtools.analyze.history.init_hist_iter">init_hist_iter() (in module fmdtools.analyze.history)</a>
-</li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="docs/fmdtools.analyze.html#fmdtools.analyze.history.init_hist_iter">init_hist_iter() (in module fmdtools.analyze.history)</a>
+</li>
       <li><a href="docs/fmdtools.define.object.html#fmdtools.define.object.base.BaseObject.init_indicator_hist">init_indicator_hist() (fmdtools.define.object.base.BaseObject method)</a>
 </li>
       <li><a href="docs/fmdtools.define.object.html#fmdtools.define.object.base.BaseObject.init_indicators">init_indicators() (fmdtools.define.object.base.BaseObject method)</a>
@@ -2513,6 +2542,8 @@
 </li>
       <li><a href="docs/fmdtools.analyze.graph.html#fmdtools.analyze.graph.label.LabelStyle">LabelStyle (class in fmdtools.analyze.graph.label)</a>
 </li>
+      <li><a href="docs/fmdtools.define.container.html#fmdtools.define.container.state.State.limit">limit() (fmdtools.define.container.state.State method)</a>
+</li>
       <li><a href="docs/fmdtools.define.object.html#fmdtools.define.object.geom.LineParam">LineParam (class in fmdtools.define.object.geom)</a>
 </li>
       <li><a href="docs/fmdtools.sim.html#fmdtools.sim.propagate.list_init_faults">list_init_faults() (in module fmdtools.sim.propagate)</a>
@@ -2597,6 +2628,8 @@
 </li>
       <li><a href="docs/Development%20Guide.html#term-Model-History"><strong>Model History</strong></a>
 </li>
+      <li><a href="docs/fmdtools.analyze.graph.html#fmdtools.analyze.graph.model.ModelGraph">ModelGraph (class in fmdtools.analyze.graph.model)</a>
+</li>
       <li><a href="docs/fmdtools.sim.html#fmdtools.sim.scenario.JointFaultScenario.modes">modes (fmdtools.sim.scenario.JointFaultScenario attribute)</a>
 </li>
       <li><a href="docs/fmdtools.analyze.graph.html#fmdtools.analyze.graph.style.EdgeStyle.modifiers">modifiers (fmdtools.analyze.graph.style.EdgeStyle attribute)</a>
@@ -2622,6 +2655,8 @@
         <li><a href="docs/fmdtools.analyze.graph.html#module-fmdtools.analyze.graph.flow">fmdtools.analyze.graph.flow</a>
 </li>
         <li><a href="docs/fmdtools.analyze.graph.html#module-fmdtools.analyze.graph.label">fmdtools.analyze.graph.label</a>
+</li>
+        <li><a href="docs/fmdtools.analyze.graph.html#module-fmdtools.analyze.graph.model">fmdtools.analyze.graph.model</a>
 </li>
         <li><a href="docs/fmdtools.analyze.graph.html#module-fmdtools.analyze.graph.style">fmdtools.analyze.graph.style</a>
 </li>
@@ -2707,6 +2742,8 @@
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="docs/fmdtools.analyze.graph.html#fmdtools.analyze.graph.base.Graph.move_nodes">move_nodes() (fmdtools.analyze.graph.base.Graph method)</a>
+</li>
+      <li><a href="docs/fmdtools.define.container.html#fmdtools.define.container.state.State.mul">mul() (fmdtools.define.container.state.State method)</a>
 </li>
       <li><a href="docs/fmdtools.sim.html#fmdtools.sim.propagate.mult_kwargs">mult_kwargs (in module fmdtools.sim.propagate)</a>
 </li>
@@ -2868,8 +2905,6 @@
         <li><a href="docs/fmdtools.analyze.graph.html#fmdtools.analyze.graph.style.FlowEdgeStyle.nx_arrowstyle">(fmdtools.analyze.graph.style.FlowEdgeStyle attribute)</a>
 </li>
       </ul></li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="docs/fmdtools.analyze.graph.html#fmdtools.analyze.graph.style.ArchitectureNodeStyle.nx_cmap">nx_cmap (fmdtools.analyze.graph.style.ArchitectureNodeStyle attribute)</a>
 
       <ul>
@@ -2886,6 +2921,8 @@
         <li><a href="docs/fmdtools.analyze.graph.html#fmdtools.analyze.graph.style.NodeStyle.nx_cmap">(fmdtools.analyze.graph.style.NodeStyle attribute)</a>
 </li>
       </ul></li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="docs/fmdtools.analyze.graph.html#fmdtools.analyze.graph.style.ActivationEdgeStyle.nx_edge_color">nx_edge_color (fmdtools.analyze.graph.style.ActivationEdgeStyle attribute)</a>
 
       <ul>
@@ -2914,9 +2951,15 @@
         <li><a href="docs/fmdtools.analyze.graph.html#fmdtools.analyze.graph.style.NodeStyle.nx_edgecolors">(fmdtools.analyze.graph.style.NodeStyle attribute)</a>
 </li>
       </ul></li>
-      <li><a href="docs/fmdtools.analyze.graph.html#fmdtools.analyze.graph.architecture.FunctionArchitectureCompGraph.nx_from_obj">nx_from_obj() (fmdtools.analyze.graph.architecture.FunctionArchitectureCompGraph method)</a>
+      <li><a href="docs/fmdtools.analyze.graph.html#fmdtools.analyze.graph.architecture.ActionArchitectureActGraph.nx_from_obj">nx_from_obj() (fmdtools.analyze.graph.architecture.ActionArchitectureActGraph method)</a>
 
       <ul>
+        <li><a href="docs/fmdtools.analyze.graph.html#fmdtools.analyze.graph.architecture.ActionArchitectureFlowGraph.nx_from_obj">(fmdtools.analyze.graph.architecture.ActionArchitectureFlowGraph method)</a>
+</li>
+        <li><a href="docs/fmdtools.analyze.graph.html#fmdtools.analyze.graph.architecture.ActionArchitectureGraph.nx_from_obj">(fmdtools.analyze.graph.architecture.ActionArchitectureGraph method)</a>
+</li>
+        <li><a href="docs/fmdtools.analyze.graph.html#fmdtools.analyze.graph.architecture.FunctionArchitectureCompGraph.nx_from_obj">(fmdtools.analyze.graph.architecture.FunctionArchitectureCompGraph method)</a>
+</li>
         <li><a href="docs/fmdtools.analyze.graph.html#fmdtools.analyze.graph.architecture.FunctionArchitectureFlowGraph.nx_from_obj">(fmdtools.analyze.graph.architecture.FunctionArchitectureFlowGraph method)</a>
 </li>
         <li><a href="docs/fmdtools.analyze.graph.html#fmdtools.analyze.graph.architecture.FunctionArchitectureFxnGraph.nx_from_obj">(fmdtools.analyze.graph.architecture.FunctionArchitectureFxnGraph method)</a>
@@ -2924,6 +2967,8 @@
         <li><a href="docs/fmdtools.analyze.graph.html#fmdtools.analyze.graph.architecture.FunctionArchitectureGraph.nx_from_obj">(fmdtools.analyze.graph.architecture.FunctionArchitectureGraph method)</a>
 </li>
         <li><a href="docs/fmdtools.analyze.graph.html#fmdtools.analyze.graph.architecture.FunctionArchitectureTypeGraph.nx_from_obj">(fmdtools.analyze.graph.architecture.FunctionArchitectureTypeGraph method)</a>
+</li>
+        <li><a href="docs/fmdtools.analyze.graph.html#fmdtools.analyze.graph.model.ModelGraph.nx_from_obj">(fmdtools.analyze.graph.model.ModelGraph method)</a>
 </li>
       </ul></li>
       <li><a href="docs/fmdtools.analyze.graph.html#fmdtools.analyze.graph.style.BaseStyle.nx_kwargs">nx_kwargs() (fmdtools.analyze.graph.style.BaseStyle method)</a>
@@ -2996,6 +3041,8 @@
         <li><a href="docs/fmdtools.analyze.graph.html#fmdtools.analyze.graph.style.NodeStyle.nx_node_size">(fmdtools.analyze.graph.style.NodeStyle attribute)</a>
 </li>
       </ul></li>
+      <li><a href="docs/fmdtools.analyze.graph.html#fmdtools.analyze.graph.style.nx_plot_ending">nx_plot_ending() (in module fmdtools.analyze.graph.style)</a>
+</li>
       <li><a href="docs/fmdtools.analyze.graph.html#fmdtools.analyze.graph.style.ActivationEdgeStyle.nx_style">nx_style (fmdtools.analyze.graph.style.ActivationEdgeStyle attribute)</a>
 
       <ul>
@@ -3006,6 +3053,38 @@
         <li><a href="docs/fmdtools.analyze.graph.html#fmdtools.analyze.graph.style.EdgeStyle.nx_style">(fmdtools.analyze.graph.style.EdgeStyle attribute)</a>
 </li>
         <li><a href="docs/fmdtools.analyze.graph.html#fmdtools.analyze.graph.style.FlowEdgeStyle.nx_style">(fmdtools.analyze.graph.style.FlowEdgeStyle attribute)</a>
+</li>
+      </ul></li>
+      <li><a href="docs/fmdtools.analyze.graph.html#fmdtools.analyze.graph.style.ArchitectureNodeStyle.nx_vmax">nx_vmax (fmdtools.analyze.graph.style.ArchitectureNodeStyle attribute)</a>
+
+      <ul>
+        <li><a href="docs/fmdtools.analyze.graph.html#fmdtools.analyze.graph.style.BlockNodeStyle.nx_vmax">(fmdtools.analyze.graph.style.BlockNodeStyle attribute)</a>
+</li>
+        <li><a href="docs/fmdtools.analyze.graph.html#fmdtools.analyze.graph.style.CommsFlowNodeStyle.nx_vmax">(fmdtools.analyze.graph.style.CommsFlowNodeStyle attribute)</a>
+</li>
+        <li><a href="docs/fmdtools.analyze.graph.html#fmdtools.analyze.graph.style.ContainerNodeStyle.nx_vmax">(fmdtools.analyze.graph.style.ContainerNodeStyle attribute)</a>
+</li>
+        <li><a href="docs/fmdtools.analyze.graph.html#fmdtools.analyze.graph.style.FlowNodeStyle.nx_vmax">(fmdtools.analyze.graph.style.FlowNodeStyle attribute)</a>
+</li>
+        <li><a href="docs/fmdtools.analyze.graph.html#fmdtools.analyze.graph.style.MultiFlowNodeStyle.nx_vmax">(fmdtools.analyze.graph.style.MultiFlowNodeStyle attribute)</a>
+</li>
+        <li><a href="docs/fmdtools.analyze.graph.html#fmdtools.analyze.graph.style.NodeStyle.nx_vmax">(fmdtools.analyze.graph.style.NodeStyle attribute)</a>
+</li>
+      </ul></li>
+      <li><a href="docs/fmdtools.analyze.graph.html#fmdtools.analyze.graph.style.ArchitectureNodeStyle.nx_vmin">nx_vmin (fmdtools.analyze.graph.style.ArchitectureNodeStyle attribute)</a>
+
+      <ul>
+        <li><a href="docs/fmdtools.analyze.graph.html#fmdtools.analyze.graph.style.BlockNodeStyle.nx_vmin">(fmdtools.analyze.graph.style.BlockNodeStyle attribute)</a>
+</li>
+        <li><a href="docs/fmdtools.analyze.graph.html#fmdtools.analyze.graph.style.CommsFlowNodeStyle.nx_vmin">(fmdtools.analyze.graph.style.CommsFlowNodeStyle attribute)</a>
+</li>
+        <li><a href="docs/fmdtools.analyze.graph.html#fmdtools.analyze.graph.style.ContainerNodeStyle.nx_vmin">(fmdtools.analyze.graph.style.ContainerNodeStyle attribute)</a>
+</li>
+        <li><a href="docs/fmdtools.analyze.graph.html#fmdtools.analyze.graph.style.FlowNodeStyle.nx_vmin">(fmdtools.analyze.graph.style.FlowNodeStyle attribute)</a>
+</li>
+        <li><a href="docs/fmdtools.analyze.graph.html#fmdtools.analyze.graph.style.MultiFlowNodeStyle.nx_vmin">(fmdtools.analyze.graph.style.MultiFlowNodeStyle attribute)</a>
+</li>
+        <li><a href="docs/fmdtools.analyze.graph.html#fmdtools.analyze.graph.style.NodeStyle.nx_vmin">(fmdtools.analyze.graph.style.NodeStyle attribute)</a>
 </li>
       </ul></li>
   </ul></td>
@@ -3256,6 +3335,8 @@
         <li><a href="docs/fmdtools.sim.html#fmdtools.sim.sample.SampleApproach.prune_scenarios">(fmdtools.sim.sample.SampleApproach method)</a>
 </li>
       </ul></li>
+      <li><a href="docs/fmdtools.define.container.html#fmdtools.define.container.state.State.put">put() (fmdtools.define.container.state.State method)</a>
+</li>
   </ul></td>
 </tr></table>
 
@@ -3361,6 +3442,8 @@
 </li>
         <li><a href="docs/fmdtools.define.container.html#fmdtools.define.container.mode.Mode.return_mutables">(fmdtools.define.container.mode.Mode method)</a>
 </li>
+        <li><a href="docs/fmdtools.define.container.html#fmdtools.define.container.parameter.Parameter.return_mutables">(fmdtools.define.container.parameter.Parameter method)</a>
+</li>
         <li><a href="docs/fmdtools.define.container.html#fmdtools.define.container.rand.Rand.return_mutables">(fmdtools.define.container.rand.Rand method)</a>
 </li>
         <li><a href="docs/fmdtools.define.container.html#fmdtools.define.container.time.Time.return_mutables">(fmdtools.define.container.time.Time method)</a>
@@ -3452,6 +3535,8 @@
 </li>
       <li><a href="docs/fmdtools.define.html#fmdtools.define.base.round_float">round_float() (in module fmdtools.define.base)</a>
 </li>
+      <li><a href="docs/fmdtools.define.container.html#fmdtools.define.container.state.State.roundto">roundto() (fmdtools.define.container.state.State method)</a>
+</li>
       <li><a href="docs/fmdtools.sim.html#fmdtools.sim.propagate.run_kwargs">run_kwargs (in module fmdtools.sim.propagate)</a>
 </li>
       <li><a href="docs/fmdtools.define.container.html#fmdtools.define.container.rand.ExampleRand.run_stochastic">run_stochastic (fmdtools.define.container.rand.ExampleRand attribute)</a>
@@ -3482,6 +3567,8 @@
         <li><a href="docs/fmdtools.define.flow.html#fmdtools.define.flow.multiflow.MultiFlow.s">(fmdtools.define.flow.multiflow.MultiFlow attribute)</a>
 </li>
       </ul></li>
+      <li><a href="docs/fmdtools.define.container.html#fmdtools.define.container.state.State.same">same() (fmdtools.define.container.state.State method)</a>
+</li>
       <li><a href="docs/fmdtools.sim.html#fmdtools.sim.sample.same_mode">same_mode() (in module fmdtools.sim.sample)</a>
 </li>
       <li><a href="docs/Development%20Guide.html#term-Sample"><strong>Sample</strong></a>
@@ -3560,11 +3647,15 @@
 </li>
       <li><a href="docs/fmdtools.define.object.html#fmdtools.define.object.coords.Coords.set">set() (fmdtools.define.object.coords.Coords method)</a>
 </li>
+      <li><a href="docs/fmdtools.analyze.graph.html#fmdtools.analyze.graph.architecture.set_aa_nx_types">set_aa_nx_types() (in module fmdtools.analyze.graph.architecture)</a>
+</li>
       <li><a href="docs/fmdtools.define.architecture.html#fmdtools.define.architecture.action.ActionArchitecture.set_active_actions">set_active_actions() (fmdtools.define.architecture.action.ActionArchitecture method)</a>
 </li>
       <li><a href="docs/fmdtools.define.html#fmdtools.define.base.set_arg_as_type">set_arg_as_type() (in module fmdtools.define.base)</a>
 </li>
       <li><a href="docs/fmdtools.define.container.html#fmdtools.define.container.base.BaseContainer.set_arg_type">set_arg_type() (fmdtools.define.container.base.BaseContainer method)</a>
+</li>
+      <li><a href="docs/fmdtools.define.container.html#fmdtools.define.container.state.State.set_atts">set_atts() (fmdtools.define.container.state.State method)</a>
 </li>
       <li><a href="docs/fmdtools.analyze.graph.html#fmdtools.analyze.graph.architecture.FunctionArchitectureCompGraph.set_compgraph_blockstates">set_compgraph_blockstates() (fmdtools.analyze.graph.architecture.FunctionArchitectureCompGraph method)</a>
 </li>
@@ -3573,7 +3664,7 @@
       <ul>
         <li><a href="docs/fmdtools.analyze.graph.html#fmdtools.analyze.graph.architecture.FunctionArchitectureTypeGraph.set_degraded">(fmdtools.analyze.graph.architecture.FunctionArchitectureTypeGraph method)</a>
 </li>
-        <li><a href="docs/fmdtools.analyze.graph.html#fmdtools.analyze.graph.base.Graph.set_degraded">(fmdtools.analyze.graph.base.Graph method)</a>
+        <li><a href="docs/fmdtools.analyze.graph.html#fmdtools.analyze.graph.model.ModelGraph.set_degraded">(fmdtools.analyze.graph.model.ModelGraph method)</a>
 </li>
       </ul></li>
       <li><a href="docs/fmdtools.analyze.graph.html#fmdtools.analyze.graph.architecture.ActionArchitectureGraph.set_edge_labels">set_edge_labels() (fmdtools.analyze.graph.architecture.ActionArchitectureGraph method)</a>
@@ -3639,11 +3730,11 @@
 </li>
         <li><a href="docs/fmdtools.analyze.graph.html#fmdtools.analyze.graph.architecture.FunctionArchitectureTypeGraph.set_nx_states">(fmdtools.analyze.graph.architecture.FunctionArchitectureTypeGraph method)</a>
 </li>
+        <li><a href="docs/fmdtools.analyze.graph.html#fmdtools.analyze.graph.model.ModelGraph.set_nx_states">(fmdtools.analyze.graph.model.ModelGraph method)</a>
+</li>
       </ul></li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="docs/fmdtools.analyze.graph.html#fmdtools.analyze.graph.architecture.ActionArchitectureGraph.set_nx_types">set_nx_types() (fmdtools.analyze.graph.architecture.ActionArchitectureGraph method)</a>
-</li>
       <li><a href="docs/fmdtools.analyze.graph.html#fmdtools.analyze.graph.architecture.FunctionArchitectureTypeGraph.set_pos">set_pos() (fmdtools.analyze.graph.architecture.FunctionArchitectureTypeGraph method)</a>
 
       <ul>
@@ -3662,10 +3753,10 @@
 </li>
       <li><a href="docs/fmdtools.define.object.html#fmdtools.define.object.coords.Coords.set_range">set_range() (fmdtools.define.object.coords.Coords method)</a>
 </li>
-      <li><a href="docs/fmdtools.analyze.graph.html#fmdtools.analyze.graph.base.Graph.set_resgraph">set_resgraph() (fmdtools.analyze.graph.base.Graph method)</a>
+      <li><a href="docs/fmdtools.analyze.graph.html#fmdtools.analyze.graph.flow.MultiFlowGraph.set_resgraph">set_resgraph() (fmdtools.analyze.graph.flow.MultiFlowGraph method)</a>
 
       <ul>
-        <li><a href="docs/fmdtools.analyze.graph.html#fmdtools.analyze.graph.flow.MultiFlowGraph.set_resgraph">(fmdtools.analyze.graph.flow.MultiFlowGraph method)</a>
+        <li><a href="docs/fmdtools.analyze.graph.html#fmdtools.analyze.graph.model.ModelGraph.set_resgraph">(fmdtools.analyze.graph.model.ModelGraph method)</a>
 </li>
       </ul></li>
       <li><a href="docs/fmdtools.define.container.html#fmdtools.define.container.rand.Rand.set_rng">set_rng() (fmdtools.define.container.rand.Rand method)</a>
@@ -3800,6 +3891,8 @@
         <li><a href="docs/fmdtools.define.flow.html#fmdtools.define.flow.multiflow.MultiFlow.status">(fmdtools.define.flow.multiflow.MultiFlow method)</a>
 </li>
       </ul></li>
+      <li><a href="docs/fmdtools.define.container.html#fmdtools.define.container.state.State.sub">sub() (fmdtools.define.container.state.State method)</a>
+</li>
       <li><a href="docs/fmdtools.analyze.graph.html#fmdtools.analyze.graph.label.Labels.subtext">subtext (fmdtools.analyze.graph.label.Labels attribute)</a>
 </li>
       <li><a href="docs/fmdtools.analyze.graph.html#fmdtools.analyze.graph.label.Labels.subtext_style">subtext_style (fmdtools.analyze.graph.label.Labels attribute)</a>
@@ -4100,6 +4193,14 @@
         <li><a href="docs/fmdtools.analyze.graph.html#fmdtools.analyze.graph.label.LabelStyle.verticalalignment">(fmdtools.analyze.graph.label.LabelStyle attribute)</a>
 </li>
       </ul></li>
+  </ul></td>
+</tr></table>
+
+<h2 id="W">W</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="docs/fmdtools.define.container.html#fmdtools.define.container.state.State.warn">warn() (fmdtools.define.container.state.State method)</a>
+</li>
   </ul></td>
 </tr></table>
 
