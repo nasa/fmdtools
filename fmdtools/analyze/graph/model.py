@@ -68,26 +68,8 @@ class ModelGraph(Graph):
         raise Exception("set_nx_states method not implemented for "
                         + self.__class__.__name__)
 
-    def draw_from(self, time, history=History(), **kwargs):
-        """
-        Draws the graph with degraded/fault data at a given time.
-
-        Parameters
-        ----------
-        time : int
-            Time to draw the graph (in the history)
-        history : History, optional
-            History with nominal and faulty history. The default is History().
-        **kwargs : **kwargs
-            arguments for Graph.draw
-
-        Returns
-        -------
-        fig : matplotlib figure
-            matplotlib figure to draw
-        ax : matplotlib axis
-            Ax in the figure
-        """
+    def set_from(self, time, history=History()):
+        """Set ModelGraph faulty/degraded attributes from a given history."""
         faulty = history.get_faulty_hist(*self.g.nodes,
                                          withtotal=False,
                                          withtime=False).get_slice(time)
@@ -109,9 +91,52 @@ class ModelGraph(Graph):
         # nx.set_node_attributes(self.g, state_nodes, 'states')
         self.set_node_styles(degraded={}, faulty={})
         self.set_node_labels(title='id', subtext='faults')
+
+    def draw_from(self, time, history=History(), **kwargs):
+        """
+        Draws the graph with degraded/fault data at a given time.
+
+        Parameters
+        ----------
+        time : int
+            Time to draw the graph (in the history)
+        history : History, optional
+            History with nominal and faulty history. The default is History().
+        **kwargs : **kwargs
+            arguments for Graph.draw
+
+        Returns
+        -------
+        fig : matplotlib figure
+            matplotlib figure to draw
+        ax : matplotlib axis
+            Ax in the figure
+        """
+        self.set_from(time, history)
         kwargs = prep_animation_title(time, **kwargs)
         clear_prev_figure(**kwargs)
         return self.draw(**kwargs)
+
+    def draw_graphviz_from(self, time, history=History(), **kwargs):
+        """
+        Draws the graph with degraded/fault data at a given time.
+
+        Parameters
+        ----------
+        time : int
+            Time to draw the graph (in the history)
+        history : History, optional
+            History with nominal and faulty history. The default is History().
+        **kwargs : **kwargs
+            arguments for Graph.draw
+
+        Returns
+        -------
+        dot : graphvis graph
+            Graph drawn with attributes at the given time.
+        """
+        self.set_from(time, history)
+        self.draw_graphviz(**kwargs)
 
     def animate(self, history, times='all', figsize=(6, 4), **kwargs):
         """

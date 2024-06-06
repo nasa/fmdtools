@@ -320,8 +320,6 @@ class State(BaseContainer):
         BaseContainer.init_hist_att(self, hist, att, timerange, track, str_size)
 
 
-
-
 class ExampleState(State):
     """Example State class used for docstring tests."""
 

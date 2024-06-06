@@ -25,7 +25,7 @@ class ModelGraphTests(unittest.TestCase):
         a.draw()
 
         b = FunctionArchitectureGraph(self.rvr)
-        b.set_exec_order(self.rvr, next_edges={"edge_color": "red"})
+        b.set_exec_order(self.rvr, next_edges={"nx_edge_color": "red"})
         b.draw(title="Should show Order, timestep, and dynamic properties of"
                + " FunctionArchitectureGraph with red arrows for next")
 
@@ -74,6 +74,7 @@ class ModelGraphTests(unittest.TestCase):
                                        time=10, track='all', desired_result=des_res)
         mg = FunctionArchitectureGraph(self.mdl)
         mg.draw_from(11, hist)
+        mg.draw_graphviz_from(11, hist)
 
 # def test_move_nodes(self):
 #    p = endresults.graph.move_nodes()
