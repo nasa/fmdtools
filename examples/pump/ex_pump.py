@@ -93,7 +93,10 @@ def reseting_accumulate(vec):
     """
     Accummulate vector for all positive output.
 
-    (e.g. if input =[1,1,1, 0, 1,1], output = [1,2,3,0,1,2])
+    Examples
+    --------
+    >>> reseting_accumulate([1,1,1, 0, 1,1])
+    [1, 2, 3, 0, 1, 2]
     """
     newvec = vec
     val = 0
@@ -107,7 +110,14 @@ def reseting_accumulate(vec):
 
 
 def accumulate(vec):
-    """Accummulate vector (e.g. if input =[1,1,1, 0, 1,1], output = [1,2,3,3,4,5])."""
+    """
+    Accummulate vector.
+
+    Examples
+    --------
+    >>> accumulate([1, 1, 1, 0, 1, 1])
+    [1, 2, 3, 3, 4, 5]
+    """
     return [sum(vec[:i+1]) for i in range(len(vec))]
 
 
@@ -539,6 +549,8 @@ class Pump(FunctionArchitecture):
 
 
 if __name__ == "__main__":
+    import doctest
+    doctest.testmod(verbose=True)
     from fmdtools.sim.sample import SampleApproach, ParameterSample, ParameterDomain
 
     mdl = Pump()
