@@ -7,6 +7,7 @@ Created on Mon Dec 20 15:49:13 2021
 import os
 import unittest
 from examples.pump.ex_pump import Pump
+from examples.pump.pump_indiv import MoveWatDynamic
 from fmdtools.sim import propagate as prop
 import fmdtools.analyze as an
 from fmdtools.define.object.base import check_pickleability
@@ -258,13 +259,29 @@ def exp_cost_quant(fs, mdl):
     util = fmea.as_table()['expected_cost'].sum()
     return util
 
+class IndivPumpTests(unittest.TestCase):
+    """Unit tests for individual pump model."""
+
+    def setUp(self):
+        self.mdl = MoveWatDynamic()
+
+    def test_mutable_setup(self):
+        """Check that non-default state carries through to simulation."""
+        mdl_diff = MoveWatDynamic(s={'eff': 2.0})
+        self.assertEqual(mdl_diff.s.eff, 2.0)
+        res, hist = prop.nominal(mdl_diff, showprogress=False)
+        # should sim with eff = 2.0
+        self.assertEqual(hist.s.eff[0], 2.0)
+        # after it turns on at t=5, should break at t=6 (due to delay)
+        self.assertEqual(hist.m.faults.mech_break[6], True)
+
 if __name__ == '__main__':
     unittest.main()
 
-    # suite = unittest.TestSuite()
-    # suite.addTest(PumpTests("test_approach_parallelism"))
+    suite = unittest.TestSuite()
+    suite.addTest(IndivPumpTests("test_mutable_setup"))
     # suite.addTest(PumpTests("test_model_copy_same"))
     # suite.addTest(PumpTests("test_value_setting_dict"))
     # suite.addTest(PumpTests("test_one_run_csv"))
-    # runner = unittest.TextTestRunner()
-    # runner.run(suite)
+    runner = unittest.TextTestRunner()
+    runner.run(suite)

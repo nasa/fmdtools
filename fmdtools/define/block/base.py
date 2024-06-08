@@ -155,17 +155,17 @@ class Simulable(BaseObject):
 
     Note that classes solely based on Simulable may not be able to be simulated.
 
-    ...
-
     Parameters
     ----------
     t : Time
         Time tracker and options.
     sp : SimParam
         Parameters defining the simulation.
+    mut_kwargs : dict
+        Non-default kwargs for mutable containers/roles (to use for reset)
     """
 
-    __slots__ = ('p', 'sp', 'r', 't', 'h', 'track', 'flows')
+    __slots__ = ('p', 'sp', 'r', 't', 'h', 'track', 'flows', 'mut_kwargs')
     container_t = Time
     default_track = ["all"]
     immutable_roles = BaseObject.immutable_roles + ['sp']
@@ -185,6 +185,9 @@ class Simulable(BaseObject):
         """
         loc_kwargs = {**kwargs, 'sp': {**self.default_sp, **sp}}
         BaseObject.__init__(self, **loc_kwargs)
+        self.mut_kwargs = {role: kwargs.get(role)
+                           for role in self.get_roles('container', with_immutable=False)
+                           if role in kwargs}
 
     def init_hist(self, h={}):
         """Initialize the history of the sim using SimParam parameters and track."""
@@ -258,7 +261,7 @@ class Simulable(BaseObject):
         param_dict: dict
             Dict with immutable parameters/options. (e.g., 'p', 'sp', 'track')
         """
-        param_dict = {}
+        param_dict = {**copy.deepcopy(self.mut_kwargs)}
 
         if hasattr(self, 'p'):
             param_dict['p'] = self.p.copy_with_vals(**p)

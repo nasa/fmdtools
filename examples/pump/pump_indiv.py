@@ -16,6 +16,7 @@ class MoveWatDynamic(MoveWat):
     default_sp = {'end_time': 50}
 
     def static_loading(self, time):
+        """Simulate how the outside system interacts with the function."""
         # Signal Inputs
         if time < 5:
             self.sig_in.s.power = 0.0
@@ -32,12 +33,12 @@ class MoveWatDynamic(MoveWat):
 
 
 if __name__ == "__main__":
-    a = MoveWatDynamic(track='all')
+    a = MoveWatDynamic(track='all', s={'eff': 1.0})
 
     result, mdlhist = prop.nominal(a,
                                    disturbances={10: {"wat_in.s.level": 0.0}})
-    mdlhist.plot_line('flows.sig_in.s.power', 'flows.wat_out.s.flowrate',
-                      'flows.wat_in.s.level', 'flows.wat_in.s.flowrate')
+    # mdlhist.plot_line('flows.sig_in.s.power', 'flows.wat_out.s.flowrate',
+    #                   'flows.wat_in.s.level', 'flows.wat_in.s.flowrate')
 
     fd = FaultDomain(a)
     fd.add_all()
@@ -48,11 +49,11 @@ if __name__ == "__main__":
 
     result, mdlhist = prop.nominal(a, track='all')
 
-    mdlhist.plot_line('flows.sig_in.s.power', 'flows.wat_out.s.flowrate')
+    # mdlhist.plot_line('flows.sig_in.s.power', 'flows.wat_out.s.flowrate')
 
     result, mdlhist = prop.one_fault(a, "short", time=10, track='all')
 
-    mdlhist.plot_line('flows.sig_in.s.power', 'flows.wat_out.s.flowrate')
+    # mdlhist.plot_line('flows.sig_in.s.power', 'flows.wat_out.s.flowrate')
 
     results, mdlhists = prop.single_faults(a)
 
