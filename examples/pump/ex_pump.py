@@ -549,8 +549,8 @@ class Pump(FunctionArchitecture):
 
 
 if __name__ == "__main__":
-    import doctest
-    doctest.testmod(verbose=True)
+    # import doctest
+    # doctest.testmod(verbose=True)
     from fmdtools.sim.sample import SampleApproach, ParameterSample, ParameterDomain
 
     mdl = Pump()
@@ -562,6 +562,7 @@ if __name__ == "__main__":
 
     mg = FunctionArchitectureGraph(mdl)
     fig, ax = mg.plot_high_degree_nodes()
+    endclass, mdlhist = propagate.nominal(mdl)
 
     endclass, mdlhist = propagate.one_fault(mdl, 'export_water', 'block', time=29,
                                             staged=True)
@@ -618,7 +619,6 @@ if __name__ == "__main__":
     # an.graph.exec_order(mdl)
     endclass, mdlhist = propagate.one_fault(
         mdl, 'import_water', 'no_wat', time=29, staged=True)
-
 
     # mdlhist.get_faulty_hist(*mdl.fxns)
     endclass, mdlhist = propagate.one_fault(
@@ -692,5 +692,5 @@ if __name__ == "__main__":
                        "fxns.move_water.s.eff", "flows.wat_1.s.flowrate", cols=3)
 
     endclasses.plot_metric_dist("rate", "cost", "expected_cost")
-    #t = an.tabulate.factor_metrics(endclasses, faultapp, ci_metrics=['cost'], default_stat=np.mean)
-    #an.plot.factor_metrics(t)
+    # t = an.tabulate.factor_metrics(endclasses, faultapp, ci_metrics=['cost'], default_stat=np.mean)
+    # an.plot.factor_metrics(t)
