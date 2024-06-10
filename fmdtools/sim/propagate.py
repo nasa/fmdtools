@@ -678,7 +678,7 @@ def fault_sample_from(mdl, faultdomains={}, faultsamples={}, get_phasemap=True,
         _, nomhist, _, _, t_end = nom_helper(mdl, [], **loc_kwargs)
     else:
         mdl = mdl.new(p=scen.p, sp=scen.sp, r=scen.r)
-        _, nomhist, _, t_end,  = prop_one_scen(mdl, scen, **loc_kwargs)
+        _, nomhist, _, t_end, = prop_one_scen(mdl, scen, **loc_kwargs)
     app = gen_sampleapproach(mdl, faultdomains, faultsamples, get_phasemap, nomhist)
     res, hist = fault_sample(mdl, app, **sim_kwarg, **run_kwargs, **mult_kwarg,
                              include_nominal=include_nominal)
@@ -768,10 +768,10 @@ def scenlist_helper(mdl, scenlist, c_mdl, **kwargs):
     if pool:
         check_mdl_memory(mdl, len(scenlist), max_mem=max_mem)
         if staged:
-            inputs = [(c_mdl[scen.time], scen, kwargs,  str(i))
+            inputs = [(c_mdl[scen.time], scen, kwargs, str(i))
                       for i, scen in enumerate(scenlist)]
         else:
-            inputs = [(c_mdl[0], scen,  kwargs, str(i))
+            inputs = [(c_mdl[0], scen, kwargs, str(i))
                       for i, scen in enumerate(scenlist)]
         res_list = list(tqdm.tqdm(pool.imap(exec_scen_par, inputs),
                                   total=len(inputs),
@@ -823,7 +823,7 @@ def exec_scen(mdl, scen, save_args={}, indiv_id='', **kwargs):
     **kwargs : kwargs
         :data:`sim_kwargs` for :func:`prop_one_scen`
     """
-    result, mdlhist, _, t_end,  = prop_one_scen(mdl, scen, **kwargs)
+    result, mdlhist, _, t_end, = prop_one_scen(mdl, scen, **kwargs)
     save_helper(save_args, result, mdlhist, indiv_id=indiv_id, result_id=str(scen.name))
     return result, mdlhist, t_end
 

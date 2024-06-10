@@ -17,6 +17,24 @@ class Timer(BaseObject):
         time to increment at each time-step
     mode : str (standby/ticking/complete)
         the internal state of the timer
+
+    Examples
+    --------
+    >>> t = Timer("test_timer")
+    >>> t
+    Timer test_timer: mode= standby, time= 0.0
+    >>> t.set_timer(2)
+    >>> t
+    Timer test_timer: mode= set, time= 2
+    >>> t.inc()
+    >>> t
+    Timer test_timer: mode= ticking, time= 1.0
+    >>> t.inc()
+    >>> t
+    Timer test_timer: mode= complete, time= 0.0
+    >>> t.reset()
+    >>> t
+    Timer test_timer: mode= standby, time= 0.0
     """
 
     default_track = ('time', 'mode')
@@ -33,7 +51,6 @@ class Timer(BaseObject):
             Name for the timer
         """
         BaseObject.__init__(self, name=name)
-        self.name = str(name)
         self.time = 0.0
         self.tstep = -1.0
         self.mode = 'standby'

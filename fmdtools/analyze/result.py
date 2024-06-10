@@ -1035,8 +1035,6 @@ def load(filename, filetype="", renest_dict=True, indiv=False, Rclass=Result):
     result : Result/History
         Corresponding result/hist object with data loaded from the file.
     """
-    import json
-    import pandas
     if not os.path.exists(filename):
         raise Exception("File does not exist: "+filename)
     filetype = auto_filetype(filename, filetype)
@@ -1044,34 +1042,9 @@ def load(filename, filetype="", renest_dict=True, indiv=False, Rclass=Result):
         loaded = np.load(filename)
         resultdict = {k: v[()] for k, v in loaded.items()}
     elif filetype == 'csv':  # add support for nested dict mdlhist using flatten_hist?
-        if indiv:
-            resulttab = pandas.read_csv(filename, skiprows=1)
-        else:
-            resulttab = pandas.read_csv(filename)
-        resultdict = resulttab.to_dict("list")
-        resultdict = clean_resultdict_keys(resultdict)
-        for key in resultdict:
-            if (len(resultdict[key]) == 1 and
-                    (isinstance(resultdict[key], list) or
-                     isinstance(resultdict[key], tuple))):
-                resultdict[key] = resultdict[key][0]
-            else:
-                resultdict[key] = np.array(resultdict[key])
-        if indiv:
-            scenname = [*pandas.read_csv(filename, nrows=0).columns][0]
-            resultdict = {scenname: resultdict}
+        resultdict = load_csv(filename, indiv=indiv)
     elif filetype == 'json':
-        with open(filename, 'r', encoding='utf8') as file_handle:
-            loadeddict = json.load(file_handle)
-            if indiv:
-                key = [*loadeddict.keys()][0]
-                loadeddict = loadeddict[key]
-                loadeddict = {key+"."+innerkey: values for innerkey,
-                              values in loadeddict.items()}
-                resultdict = clean_resultdict_keys(loadeddict)
-            else:
-                resultdict = clean_resultdict_keys(loadeddict)
-        file_handle.close()
+        resultdict = load_json(filename, indiv=indiv)
     else:
         raise Exception("Invalid File Type")
     if Rclass not in [dict, 'dict']:
@@ -1082,6 +1055,45 @@ def load(filename, filetype="", renest_dict=True, indiv=False, Rclass=Result):
         result = resultdict
 
     return result
+
+
+def load_csv(filename, indiv=False):
+    """Load csv files."""
+    import pandas
+    if indiv:
+        resulttab = pandas.read_csv(filename, skiprows=1)
+    else:
+        resulttab = pandas.read_csv(filename)
+    resultdict = resulttab.to_dict("list")
+    resultdict = clean_resultdict_keys(resultdict)
+    for key in resultdict:
+        if (len(resultdict[key]) == 1 and
+                (isinstance(resultdict[key], list) or
+                 isinstance(resultdict[key], tuple))):
+            resultdict[key] = resultdict[key][0]
+        else:
+            resultdict[key] = np.array(resultdict[key])
+    if indiv:
+        scenname = [*pandas.read_csv(filename, nrows=0).columns][0]
+        resultdict = {scenname: resultdict}
+    return resultdict
+
+
+def load_json(filename, indiv=False):
+    """Load json files."""
+    import json
+    with open(filename, 'r', encoding='utf8') as file_handle:
+        loadeddict = json.load(file_handle)
+        if indiv:
+            key = [*loadeddict.keys()][0]
+            loadeddict = loadeddict[key]
+            loadeddict = {key+"."+innerkey: values for innerkey,
+                          values in loadeddict.items()}
+            resultdict = clean_resultdict_keys(loadeddict)
+        else:
+            resultdict = clean_resultdict_keys(loadeddict)
+    file_handle.close()
+    return resultdict
 
 
 def load_folder(folder, filetype):

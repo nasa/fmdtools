@@ -43,11 +43,24 @@ def get_sub_include(att, to_include):
 
 
 def to_include_keys(to_include):
-    """Determine dict keys to include from Result given nested to_include dictionary."""
+    """
+    Determine dict keys to include from Result given nested to_include dictionary.
+
+    Examples
+    --------
+    >>> to_include_keys({"a":{"b": "c"}})
+    ('a.b.c',)
+    >>> to_include_keys({"a":{"b": {"c", "d", "e"}}})
+    ('a.b.c', 'a.b.e', 'a.b.d')
+    >>> to_include_keys("hi")
+    ('hi',)
+    >>> to_include_keys(["a", "b", "c"])
+    ('a', 'b', 'c')
+    """
     if isinstance(to_include, str):
-        return [to_include]
+        return tuple([to_include])
     elif type(to_include) in [list, set, tuple]:
-        return [to_i for to_i in to_include]
+        return tuple([to_i for to_i in to_include])
     elif isinstance(to_include, dict):
         keys = []
         for k, v in to_include.items():
@@ -57,10 +70,23 @@ def to_include_keys(to_include):
 
 
 def is_numeric(val):
-    """Check if a given value is a number."""
+    """
+    Check if a given value is a number.
+
+    Examples
+    --------
+    >>> is_numeric(1.0)
+    True
+    >>> is_numeric("hi")
+    False
+    >>> is_numeric(np.array([1.0])[0])
+    True
+    >>> is_numeric(np.array(["hi"])[0])
+    False
+    """
     try:
         return np.issubdtype(np.array(val).dtype, np.number)
-    except:
+    except TypeError:
         return type(val) in [float, bool, int]
 
 
@@ -93,7 +119,16 @@ def bootstrap_confidence_interval(data, method=np.mean, return_anyway=False, **k
 
 
 def nan_to_x(metric, x=0.0):
-    """Return nan as zero if present, otherwise return the number."""
+    """
+    Return nan as zero if present, otherwise return the number.
+
+    Examples
+    --------
+    >>> nan_to_x(1.0)
+    1.0
+    >>> nan_to_x(np.nan, 10.0)
+    10.0
+    """
     if np.isnan(metric):
         return x
     else:
@@ -101,13 +136,37 @@ def nan_to_x(metric, x=0.0):
 
 
 def is_bool(val):
+    """
+    Check if the value is a boolean.
+
+    Examples
+    --------
+    >>> is_bool(True)
+    True
+    >>> is_bool(1.0)
+    False
+    >>> is_bool(np.array([True])[0])
+    True
+    >>> is_bool(np.array([1.0])[0])
+    False
+    """
     try:
         return val.dtype in ['bool']
-    except:
+    except AttributeError:
         return type(val) in [bool]
 
 
 def join_key(k):
+    """
+    Join list of keys into single key separated by a '.'.
+
+    Examples
+    --------
+    >>> join_key(["key", "subkey"])
+    'key.subkey'
+    >>> join_key("existing_key")
+    'existing_key'
+    """
     if not isinstance(k, str):
         return '.'.join(k)
     else:
@@ -423,3 +482,8 @@ def suite_for_plots(testclass, plottests=False):
     for test in tests:
         suite.addTest(testclass(test))
     return suite
+
+
+if __name__ == "__main__":
+    import doctest
+    doctest.testmod(verbose=True)
