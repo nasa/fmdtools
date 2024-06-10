@@ -1127,18 +1127,18 @@ class Coords(BaseObject):
         """
         fig, ax = setup_plot(fig=fig, ax=ax, figsize=figsize)
         pallette = [*TABLEAU_COLORS.keys()]
-        for i, (prop, prop_kwargs) in enumerate(properties.items()):
-            kwar = {**kwargs,
-                    'color': pallette[i],
-                    'xlabel': '', 'ylabel': '', 'title': '',
-                    **prop_kwargs}
-            fig, ax = self.show_property(prop, fig=fig, ax=ax, **kwar)
         for i, (coll, coll_kwargs) in enumerate(collections.items()):
             kwar = {'color': pallette[i+len(properties)],
                     'xlabel': '', 'ylabel': '', 'title': '',
                     'legend_args': True,
                     **coll_kwargs}
             self.show_collection(coll, fig=fig, ax=ax, **kwar)
+        for i, (prop, prop_kwargs) in enumerate(properties.items()):
+            kwar = {**kwargs,
+                    'color': pallette[i],
+                    'xlabel': '', 'ylabel': '', 'title': '',
+                    **prop_kwargs}
+            fig, ax = self.show_property(prop, fig=fig, ax=ax, **kwar)
         add_title_xylabs(ax, title=title, xlabel=xlabel, ylabel=ylabel)
         return fig, ax
 
