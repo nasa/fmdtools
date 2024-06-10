@@ -459,17 +459,17 @@ def vectdist(p1, p2):
     return [p1[0]-p2[0], p1[1]-p2[1], p1[2]-p2[2]]
 
 
-if __name__ == "__main__":
-    from fmdtools.sim.sample import SampleApproach
-    from fmdtools.analyze.phases import PhaseMap
-    from fmdtools import analyze as an
-
-    mdl = Drone()
+def script_nominal_viewed(**kwargs):
+    """Show viewed environment in nominal scenario."""
+    mdl = Drone(**kwargs)
     ec, mdlhist = fs.propagate.nominal(mdl)
     mdl.flows['environment'].c.assign_from(mdlhist.flows.environment.c, 10)
-    mdl.flows['environment'].c.show({'viewed': {}})
+    return mdl.flows['environment'].c.show({'viewed': {}})
 
-    mdl = Drone()
+
+def script_faulty_trajectories(**kwargs):
+    """Show the faulty trajectories over a range of mechanical break scenarios."""
+    mdl = Drone(**kwargs)
     ec, mdlhist = fs.propagate.nominal(mdl)
 
     fig, ax = mdlhist.plot_trajectories("dofs.s.x", "dofs.s.y", "dofs.s.z",
@@ -494,29 +494,42 @@ if __name__ == "__main__":
     an.phases.samplemetrics(app_mechfaults, quad_ec)
 
     quad_ec_1, quad_hist_1 = fs.propagate.fault_sample(mdl, app_mechfaults)
-
     cost_tests = [ec for ec in quad_ec if quad_ec[ec] != quad_ec_1[ec]]
 
-    mdl = Drone()
+    fig, ax = quad_hist.plot_trajectories_from(10, ("dofs.s.x", "dofs.s.y", "dofs.s.z"),
+                                               time_groups=['nominal'],
+                                               indiv_kwargs={'faulty': {'alpha': 0.15,
+                                                                        'color': 'red'}})
+    quad_hist.animate('plot_trajectories_from',
+                      plot_values=("dofs.s.x", "dofs.s.y", "dofs.s.z"))
+
+
+def script_env_viewed(**kwargs):
+    """Show the viewed properties of the environment in various configurations."""
+    mdl = Drone(**kwargs)
     ec, mdlhist = fs.propagate.nominal(mdl)
     mdl.flows['environment'].c.assign_from(mdlhist.flows.environment.c, 10)
     mdl.flows['environment'].c.show({'viewed': {}})
-    import doctest
-    doctest.testmod(verbose=True)
+
     mdl.flows['environment'].c.show({'viewed': {}, 'target': {}})
     mdl.flows['environment'].c.show({'target': {},
                                      'viewed': {'alpha': 0.5}},
-                                    collections={'start':{}, 'safe': {}})
+                                    collections={'start': {}, 'safe': {}})
 
     mdl.flows['environment'].c.show_from(10, mdlhist.flows.environment.c,
                                          {'viewed': {}}, title='hi')
     ani = mdl.flows['environment'].c.animate(mdlhist.flows.environment.c,
                                              properties={'target': {}, 'viewed': {}},
-                                             collections={'start':{}, 'safe': {}})
+                                             collections={'start': {}, 'safe': {}})
+    return ani
 
-    fig, ax = quad_hist.plot_trajectories_from(10, ("dofs.s.x", "dofs.s.y", "dofs.s.z"),
-                                          time_groups=['nominal'],
-                                          indiv_kwargs={'faulty': {'alpha': 0.15,
-                                                                   'color': 'red'}})
-    quad_hist.animate('plot_trajectories_from',
-                      plot_values=("dofs.s.x", "dofs.s.y", "dofs.s.z"))
+
+if __name__ == "__main__":
+    from fmdtools.sim.sample import SampleApproach
+    from fmdtools.analyze.phases import PhaseMap
+    from fmdtools import analyze as an
+    import doctest
+    doctest.testmod(verbose=True)
+    # script_nominal_viewed()
+    # script_faulty_trajectories()
+    ani = script_env_viewed()

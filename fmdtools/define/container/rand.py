@@ -28,8 +28,6 @@ class Rand(BaseContainer):
     """
     Class for defining and interacting with random states of the model.
 
-    ...
-
     Attributes
     ----------
     rng : np.random.default_rng
@@ -101,6 +99,13 @@ class Rand(BaseContainer):
         -------
         rand_states : dict
             States in self.s
+
+        Examples
+        --------
+        >>> ExampleRand().get_rand_states()
+        {'noise': 1.0}
+        >>> ExampleRand().get_rand_states(auto_update_only=True)
+        {}
         """
         rand_states = self.s.asdict()
         if auto_update_only:

@@ -92,6 +92,10 @@ class State(BaseContainer):
         >>> p_arr = p.get("x", "y")
         >>> p_arr
         array([1., 2.])
+        >>> p.get("x")
+        1.0
+        >>> p.get("x", "y", as_array=False)
+        [1.0, 2.0]
         """
         if len(attnames) == 1:
             states = getattr(self, attnames[0])
@@ -107,6 +111,7 @@ class State(BaseContainer):
             return states
 
     def values(self):
+        """Return the values of the defined fields for the state."""
         return self.gett(*self.__fields__)
 
     def gett(self, *attnames):
@@ -116,6 +121,13 @@ class State(BaseContainer):
         Useful when a numpy array would translate the underlying data
         types poorly (e.g., np.array([1,'b'] would make 1 a string--using a tuple
         instead preserves the data type)).
+
+        Examples
+        --------
+        >>> ExampleState().gett("x")
+        1.0
+        >>> ExampleState().gett("x", "y")
+        (1.0, 1.0)
         """
         states = self.get(*attnames, as_array=False)
         if not is_iter(states):

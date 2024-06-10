@@ -1104,7 +1104,7 @@ class Coords(BaseObject):
 
         Parameters
         ----------
-        prop : dict
+        properties : dict
             Properties to plot and their arguments, e.g. {'prop1': {'color': 'green'}}
         collections : dict, optional
             Collections to plot and their respective kwargs for show_collection.

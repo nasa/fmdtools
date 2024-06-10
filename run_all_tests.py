@@ -12,9 +12,9 @@ plt.rcParams['figure.max_open_warning'] = 50
 
 # NOTE: If report won't generate with error:
 # "UnicodeEncodeError: 'charmap' codec can't encode characters in position..."
-# make sure all tests pass show_progress=False to propagate
+# make sure all tests pass showprogress=False to propagate
 
-if __name__=="__main__":
+if __name__ == "__main__":
     # requires pytest, nbmake, pytest-html, pytest-cov
 
     # for testing modules with doctests
