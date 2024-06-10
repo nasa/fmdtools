@@ -32,11 +32,12 @@ class ImportEE(DetImportEE):
     __slots__ = ()
     container_r = ImportEERand
 
-    def condfaults(self, time):
+    def set_faults(self):
         if self.ee_out.s.current > 20.0:
             self.m.add_fault('no_v')
 
-    def behavior(self, time):
+    def static_behavior(self, time):
+        self.set_faults()
         if self.m.has_fault('no_v'):
             self.r.s.effstate = 0.0  # an open circuit means no voltage is exported
         elif self.m.has_fault('inf_v'):
@@ -66,7 +67,7 @@ class ImportSig(DetImportSig):
     __slots__ = ()
     container_r = ImportSigRand
 
-    def behavior(self, time):
+    def static_behavior(self, time):
         if self.m.has_fault('no_sig'):
             self.sig_out.s.power = 0.0  # an open circuit means no voltage is exported
         else:
@@ -102,9 +103,9 @@ class MoveWat(DetMoveWat):
     container_s = MoveWatStates
     container_r = MoveWatRand
 
-    def behavior(self, time):
+    def static_behavior(self, time):
         self.s.eff = self.r.s.eff
-        super().behavior(time)
+        super().static_behavior(time)
         if time > self.t.time:
             self.s.inc(total_flow=self.wat_out.s.flowrate)
 

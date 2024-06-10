@@ -38,30 +38,30 @@ class ImportEE_Tests(unittest.TestCase):
     def test_condfaults_hi(self):
         """Test that behavior under high current results in no_v fault."""
         self.ee_1.s.current = 20
-        self.import_ee.condfaults(1)
+        self.import_ee.set_faults()
         self.assertTrue(self.import_ee.m.has_fault('no_v'))
 
     def test_condfaults_nom(self):
         """Test that behavior under no current - should not result in any faults."""
         self.ee_1.s.current = 1
-        self.import_ee.condfaults(1)
+        self.import_ee.set_faults()
         self.assertFalse(self.import_ee.m.any_faults())
 
     def test_behave_nom(self):
         """Tests the nominal behavior - voltage should be 500"""
-        self.import_ee.behavior(1)
+        self.import_ee.static_behavior(1)
         self.assertEqual(self.ee_1.s.voltage, 500.0)
 
     def test_behave_inf_v(self):
         """Tests the inf_v behavior - voltage should be 500*100"""
         self.import_ee.m.add_fault('inf_v')
-        self.import_ee.behavior(1)
+        self.import_ee.static_behavior(1)
         self.assertEqual(self.ee_1.s.voltage, 50000.0)
 
     def test_behave_no_v(self):
         """Tests the no_v behavior - voltage should be 0.0"""
         self.import_ee.m.add_fault('no_v')
-        self.import_ee.behavior(1)
+        self.import_ee.static_behavior(1)
         self.assertEqual(self.ee_1.s.voltage, 0.0)
 
 
@@ -80,9 +80,9 @@ class MoveWat_Tests(unittest.TestCase):
         self.assertEqual(self.move_wat.s.eff, 1.0)
 
     def test_nom(self):
-        self.move_wat.behavior(1.0)
+        self.move_wat.static_behavior(1.0)
         self.assertEqual(self.move_wat.ee_in.s.current, 0.002)
-        self.move_wat.behavior(1.0)
+        self.move_wat.static_behavior(1.0)
         self.assertEqual(self.move_wat.wat_in.s.pressure, 0.02)
         self.assertEqual(self.move_wat.wat_in.s.flowrate, 0.0006)
 
@@ -90,8 +90,7 @@ class MoveWat_Tests(unittest.TestCase):
         """Test that blockage dynamic behavior results in a mech failure after 10 dt."""
         self.move_wat.wat_out.s.area = 0.0001
         for t in range(0, 20):
-            self.move_wat.condfaults(t)
-            self.move_wat.behavior(t)
+            self.move_wat.static_behavior(t)
             if t < 10:
                 # checks each time-step that fault has not been added until the delay
                 self.assertFalse(self.move_wat.m.has_fault('mech_break'))

@@ -352,7 +352,7 @@ class StoreEE(Function):
     flow_ee_1 = EE
     flow_force_st = Force
 
-    def condfaults(self, time):
+    def set_faults(self):
         """Calculate overall conditional faults for StoreEE architecture."""
         if self.s.soc < 1 and self.m.has_fault('lowcharge'):
             self.m.replace_fault('lowcharge', 'nocharge')
@@ -369,8 +369,9 @@ class StoreEE(Function):
             for batname, bat in self.ca.comps.items():
                 bat.s.soc = 0
 
-    def behavior(self, time):
+    def static_behavior(self, time):
         """Calculate overall behavior for StoreEE architecture."""
+        self.set_faults()
         ee, soc = {}, {}
         rate_res = 0
         for batname, bat in self.ca.comps.items():
@@ -447,13 +448,14 @@ class ManageHealth(Function):
     flow_hsig_bat = HSig
     flow_rsig_traj = RSig
 
-    def condfaults(self, time):
+    def set_faults(self):
         """If no support (e.g., in a crash), unit breaks."""
         if self.force_st.s.support < 0.5 or self.ee_ctl.s.effort > 2.0:
             self.m.add_fault('lostfunction')
 
-    def behavior(self, time):
+    def static_behavior(self, time):
         """Assign recovery trajectory from ResPolicy for a fault mode, if found."""
+        self.set_faults()
         if self.m.has_fault('lostfunction'):
             self.rsig_traj.s.mode = 'continue'
         elif self.hsig_dofs.s.hstate == 'faulty':
@@ -576,7 +578,7 @@ class PlanPath(PlanPathDyn):
         """Initialize path planning goals based on initial flightplan."""
         self.s.goals = {i: list(vals) for i, vals in enumerate(self.p.flightplan)}
 
-    def behavior(self, t):
+    def static_behavior(self, t):
         """
         Path planning behavior for the drone.
 
