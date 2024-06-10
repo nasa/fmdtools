@@ -91,14 +91,15 @@ class StoreEE(StaticstoreEE):
 
     __slots__ = ()
 
-    def condfaults(self, time):
+    def set_faults(self, time):
         """When soc is 0, add 'nocharge' fault."""
         if self.s.soc < 1:
             self.s.soc = 0
             self.m.add_fault('nocharge')
 
-    def behavior(self, time):
+    def static_behavior(self, time):
         """Energy storage/use behavior."""
+        self.set_faults()
         if self.m.has_fault('nocharge'):
             self.ee_out.s.effort = 0.0
         else:
@@ -205,7 +206,7 @@ class PlanPath(Function):
     flow_fs = Force
     flownames = {'force_st': 'fs'}
 
-    def condfaults(self, time):
+    def set_faults(self, time):
         """Enter "noloc" fault if loses support."""
         if self.fs.s.support < 0.5:
             self.m.add_fault('noloc')
@@ -241,13 +242,14 @@ class PlanPath(Function):
         vd = vectdist(self.s.goal, loc)
         self.des_traj.s.assign(vd, "dx", "dy", "dz")
 
-    def behavior(self, t):
+    def static_behavior(self, t):
         """
         Path planning behavior.
 
         Involves steps (1) calculating distance to goal (2) determining mode/next goal
         based on progress in flight plan and (3) asigning new trajectory.
         """
+        self.set_faults()
         self.s.goal = self.p.goals[self.s.pt]
         self.calc_dist_to_goal()
 
@@ -297,7 +299,7 @@ class AffectDOF(AffectDOFStatic):
     __slots__ = ('des_traj',)
     flow_des_traj = DesTraj
 
-    def behavior(self, time):
+    def static_behavior(self, time):
         """Behavior in-time (fault effects on states and instantaneous power/force)."""
         self.calc_faults()
         self.calc_pwr()
@@ -370,7 +372,7 @@ class ViewEnvironment(Function):
     flow_dofs = DOFs
     flow_environment = DroneEnvironment
 
-    def behavior(self, time):
+    def static_behavior(self, time):
         """Set points in grid as viewed if in range of view."""
         width = self.dofs.s.z
         height = self.dofs.s.z

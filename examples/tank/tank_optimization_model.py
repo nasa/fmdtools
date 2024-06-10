@@ -75,7 +75,7 @@ class ImportLiquid(Function):
     flow_wat_out = Liquid
     flownames = {'coolant_in': 'wat_out', 'input_sig': 'sig'}
 
-    def behavior(self, time):
+    def static_behavior(self, time):
         if self.sig.s.action >= 1:
             self.s.amt_open = 1 + self.p.turnup
         elif self.sig.s.action == 0:
@@ -103,7 +103,7 @@ class ExportLiquid(Function):
     flow_wat_in = Liquid
     flownames = {'coolant_out': 'wat_in', 'output_sig': 'sig'}
 
-    def behavior(self, time):
+    def static_behavior(self, time):
         if self.sig.s.action >= 1:
             self.s.amt_open = 1 + self.p.turnup
         elif self.sig.s.action == 0:
@@ -138,7 +138,7 @@ class StoreLiquid(Function):
     flow_sig = Signal
     flownames = {'coolant_in': 'wat_in', 'coolant_out': 'wat_out', 'tank_sig': 'sig'}
 
-    def behavior(self, time):
+    def static_behavior(self, time):
         if self.s.level >= self.p.capacity:
             self.wat_in.s.rate = 0.0 * self.wat_in.s.effort
             self.wat_out.s.effort = 2.0 * self.wat_in.s.effort

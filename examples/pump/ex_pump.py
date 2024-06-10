@@ -202,17 +202,16 @@ class ImportEE(Function):
     flow_ee_out = Electricity
     flownames = {"ee_1": "ee_out"}
 
-    def condfaults(self, time):
+    def set_faults(self):
         """
         Conditional fault behavior.
 
-        condfaults() changes the state of the system if there is a change in state in a
+        set_faults() changes the state of the system if there is a change in state in a
         flow.
 
-        Using a condfaults method is optional but helpful for delinating between the
-        determination of a fault and the behavior that results during fault propagation
-
-        condfaults() executes before behavior()
+        Using methods for specific behaviors is optional but can be helpful, in this
+        case for delinating between the determination of a faults and their resulting
+        behaviors.
 
         In this example,  if the current is too high, the line becomes an open circuit
         (e.g. due to a fuse or line burnout)
@@ -220,13 +219,14 @@ class ImportEE(Function):
         if self.ee_out.s.current > 15.0:
             self.m.add_fault('no_v')
 
-    def behavior(self, time):
+    def static_behavior(self, time):
         """
         Electricity input behavior.
 
         behavior() defines the behavior of the function in terms of
         how the system behaves normally and under faults.
         """
+        self.set_faults()
         if self.m.has_fault('no_v'):
             self.s.effstate = 0.0  # an open circuit means no voltage is exported
         elif self.m.has_fault('inf_v'):
@@ -251,7 +251,7 @@ class ImportWater(Function):
     flow_wat_out = Water
     flownames = {"wat_1": "wat_out"}
 
-    def behavior(self, time):
+    def static_behavior(self, time):
         """If the flow has a no_wat fault, the water level goes to zero."""
         if self.m.has_fault('no_wat'):
             self.wat_out.s.level = 0.0
@@ -277,7 +277,7 @@ class ExportWater(Function):
     flow_wat_in = Water
     flownames = {'wat_2': 'wat_in'}
 
-    def behavior(self, time):
+    def static_behavior(self, time):
         """Blockage changes the area the output water flows through."""
         if self.m.has_fault('block'):
             self.wat_in.s.area = 0.01
@@ -298,7 +298,7 @@ class ImportSig(Function):
     flow_sig_out = Signal
     flownames = {'sig_1': 'sig_out'}
 
-    def behavior(self, time):
+    def static_behavior(self, time):
         """
         Time-dependent behavior for the function.
 
@@ -371,7 +371,7 @@ class MoveWat(Function):
     flownames = {"ee_1": "ee_in", "sig_1": "sig_in",
                  "wat_1": "wat_in", "wat_2": "wat_out"}
 
-    def condfaults(self, time):
+    def set_faults(self, time):
         """
         Here we use the timer to define a conditional fault that only occurs after a
         state is present after X seconds.
@@ -404,8 +404,9 @@ class MoveWat(Function):
         """
         return self.wat_out.s.pressure > 15.0
 
-    def behavior(self, time):
+    def static_behavior(self, time):
         """Define how the function will behave with different faults."""
+        self.set_faults(time)
         if self.m.has_fault('short'):
             self.ee_in.s.current = 500*10/5000*self.sig_in.s.power*self.ee_in.s.voltage
             self.s.eff = 0.0

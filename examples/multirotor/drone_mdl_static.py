@@ -204,7 +204,7 @@ class StoreEE(Function):
     flow_fs = Force
     flownames = {"ee_1": "ee_out", "force_st": "fs"}
 
-    def behavior(self, time):
+    def static_behavior(self, time):
         """Source loses voltage in nocharge mode."""
         if self.m.has_fault("nocharge"):
             self.ee_out.s.effort = 0.0
@@ -265,14 +265,14 @@ class DistEE(Function):
     flow_st = Force
     flownames = {"ee_1": "ee_in", "force_st": "st"}
 
-    def condfaults(self, time):
+    def set_faults(self):
         """Add faults if current is too high or support is broken."""
         if self.st.s.support < 0.5 or max(self.ee_mot.s.rate, self.ee_ctl.s.rate) > 2:
             self.m.add_fault("break")
         if self.ee_in.s.rate > 2:
             self.m.add_fault("short")
 
-    def behavior(self, time):
+    def static_behavior(self, time):
         """
         Power distribution behavior.
 
@@ -280,19 +280,20 @@ class DistEE(Function):
         e.g., when nominal, high effort gets passed to outgoing EE flows::
         >>> d = DistEE()
         >>> d.ee_in.s.effort = 2.0
-        >>> d.behavior(1.0)
+        >>> d.static_behavior(1.0)
         >>> d.ee_mot
         ee EE flow: EEState(rate=1.0, effort=2.0)
 
         while fault modes modify this relationship::
         >>> d = DistEE()
         >>> d.m.add_fault("short")
-        >>> d.behavior(1.0)
+        >>> d.static_behavior(1.0)
         >>> d.ee_mot
         ee EE flow: EEState(rate=1.0, effort=0.0)
         >>> d.ee_in
         ee EE flow: EEState(rate=10.0, effort=1.0)
         """
+        self.set_faults()
         if self.m.has_fault("short"):
             self.s.put(ee_tr=10.0, ee_te=0.0)
         elif self.m.has_fault("break"):
@@ -356,7 +357,7 @@ class HoldPayload(Function):
         else:
             self.s.force_gr = 0.0
 
-    def behavior(self, time):
+    def static_behavior(self, time):
         """
         Ground support behavior.
 
@@ -366,13 +367,13 @@ class HoldPayload(Function):
         e.g., in the nominal case::
         >>> h = HoldPayload()
         >>> h.dofs.s.z = 1.0
-        >>> h.behavior(1.0)
+        >>> h.static_behavior(1.0)
         >>> h.force_st.s
         ForceState(support=1.0)
 
         Or, in the drone has fallen::
         >>> h.dofs.s.z = 0.0
-        >>> h.behavior(2.0)
+        >>> h.static_behavior(2.0)
         >>> h.m.faults
         {'break'}
         >>> h.force_st.s
@@ -507,7 +508,7 @@ class AffectDOF(Function, BaseLine):
                  "ctl": "ctl_in",
                  "force_lin": "force"}
 
-    def behavior(self, time):
+    def static_behavior(self, time):
         """
         Drone locomotive behaviors.
 
@@ -517,13 +518,13 @@ class AffectDOF(Function, BaseLine):
         >>> a = AffectDOF()
         >>> a.dofs.s.z
         0.0
-        >>> a.behavior(0.0)
+        >>> a.static_behavior(0.0)
         >>> a.dofs.s.z
         1.0
 
         Mechanical breakages (And other faults) cause a fall::
         >>> a.m.add_fault("mechbreak")
-        >>> a.behavior(0.0)
+        >>> a.static_behavior(0.0)
         >>> a.s.mt
         0.0
         >>> a.dofs.s.uppwr
@@ -594,27 +595,28 @@ class CtlDOF(Function):
     flow_fs = Force
     flownames = {"ee_ctl": "ee_in", "force_st": "fs"}
 
-    def condfaults(self, time):
+    def set_faults(self):
         """If no/reduced support (from force), lose control."""
         if self.fs.s.support < 0.5:
             self.m.add_fault("noctl")
 
-    def behavior(self, time):
+    def static_behavior(self, time):
         """
         Translate desired trajectory into control signals.
 
         e.g., in the nominal case::
         >>> c = CtlDOF()
-        >>> c.behavior(0.0)
+        >>> c.static_behavior(0.0)
         >>> c.ctl.s
         ControlState(forward=1.0, upward=1.0)
 
         and in the off-nominal case::
         >>> c.m.add_fault("noctl")
-        >>> c.behavior(0.0)
+        >>> c.static_behavior(0.0)
         >>> c.ctl.s
         ControlState(forward=0.0, upward=0.0)
         """
+        self.set_faults()
         self.calc_cs()
         up, forward = self.calc_throttle()
         self.update_ctl(up, forward)
@@ -664,30 +666,31 @@ class PlanPath(Function):
     flow_fs = Force
     flownames = {"ee_ctl": "ee_in", "force_st": "fs"}
 
-    def condfaults(self, time):
+    def set_faults(self):
         """Enter "noloc" fault if loses support or velocity too high."""
         if self.fs.s.support < 0.5:
             self.m.add_fault("noloc")
         if self.dofs.s.planvel > 1.5 or self.dofs.s.planvel < 0.5:
             self.m.add_fault("noloc")
 
-    def behavior(self, t):
+    def static_behavior(self, t):
         """
         Path planning behavior.
 
         Assigns trajectory based on current point. In the static case, this is just
         going forward 1.0 in the x, e.g.::
         >>> p = PlanPath()
-        >>> p.behavior(0.0)
+        >>> p.static_behavior(0.0)
         >>> p.des_traj.s
         DesTrajState(dx=1.0, dy=0.0, dz=0.0, power=1.0)
 
         If it loses location, navigation not provided:
         >>> p.m.add_fault("noloc")
-        >>> p.behavior(0.0)
+        >>> p.static_behavior(0.0)
         >>> p.des_traj.s
         DesTrajState(dx=0.0, dy=0.0, dz=0.0, power=1.0)
         """
+        self.set_faults()
         self.des_traj.s.assign([1.0, 0.0, 0.0], "dx", "dy", "dz")
         # faulty behaviors
         if self.m.has_fault("noloc"):

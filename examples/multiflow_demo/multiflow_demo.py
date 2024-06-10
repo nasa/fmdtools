@@ -42,7 +42,7 @@ class Mover(Function):
         # the inbox should be cleared each timestep to allow new messages
         self.internal_info.clear_inbox()
 
-    def behavior(self, time):
+    def static_behavior(self, time):
         # recieve messages
         self.internal_info.receive()
         # communicate
@@ -69,7 +69,7 @@ class Coordinator(Function):
     def dynamic_behavior(self, time):
         self.coord_view.clear_inbox()
 
-    def behavior(self, time):
+    def static_behavior(self, time):
         self.coord_view.receive()
         self.coord_view.update("local", "mover_1", "y")
         self.coord_view.update("local", "mover_2", "x")
