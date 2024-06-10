@@ -826,8 +826,8 @@ class Coords(BaseObject):
         return states
 
     def show_property(self, prop, xlabel="x", ylabel="y", title='', proplab="prop",
-                      as_bool=False, color='green', legend_kwargs={},
-                      fig=None, ax=None, figsize=(5, 5), **kwargs):
+                      as_bool=False, color='green', cmap='Greens', ec='black',
+                      legend_kwargs={}, fig=None, ax=None, figsize=(5, 5), **kwargs):
         """
         Plot a given property 'prop' as a colormesh on an x-y grid.
 
@@ -851,6 +851,10 @@ class Coords(BaseObject):
             and <=0.0 returns as False.
         color : str, optional
             Color to use if the property is boolean. Default is 'green'.
+        cmap : str, optional
+            Colormap to use if property is continuous. Default is 'Greens'.
+        ec : str, optional
+            Default edge color. Default is 'black'. If 'face', no edges are drawn.
         **kwargs : kwargs
             Keyword arguments to matplotlib.pyplot.pcolormesh (e.g., cmap, edgecolors)
 
@@ -872,11 +876,11 @@ class Coords(BaseObject):
             p = p > 0.0
         if p.dtype == 'bool':
             cmap = ListedColormap([color])
-            default_kwargs = dict(edgecolors='black', cmap=cmap)
+            default_kwargs = dict(ec=ec, cmap=cmap)
             p = np.ma.array(p, mask=~p).swapaxes(0, 1)
             vmin, vmax = 0, 1
         else:
-            default_kwargs = dict(edgecolors='black', cmap="Greens")
+            default_kwargs = dict(ec=ec, cmap=cmap)
             p = p.swapaxes(0, 1)
             vmin = p.min()
             vmax = p.max()
@@ -1097,24 +1101,48 @@ class Coords(BaseObject):
         add_title_xylabs(ax, title=title, xlabel=xlabel, ylabel=ylabel)
         return fig, ax
 
-    def show(self, properties={}, collections={}, fig=None, ax=None,
-             figsize=(5, 5), xlabel='x', ylabel='y', title='', **kwargs):
+    def _show_properties(self, properties, fig, ax, pallette, **kwargs):
+        """Show multiple properties on a plot. Helper function to .show()."""
+        for i, (prop, prop_kwargs) in enumerate(properties.items()):
+            kwar = {**kwargs,
+                    'color': pallette[i],
+                    'xlabel': '', 'ylabel': '', 'title': '',
+                    **prop_kwargs}
+            fig, ax = self.show_property(prop, fig=fig, ax=ax, **kwar)
+
+    def _show_collections(self, collections, fig, ax, pallette, c_offset=0):
+        """Show multiple collections on a plot. Helper function to .show()."""
+        for i, (coll, coll_kwargs) in enumerate(collections.items()):
+            kwar = {'color': pallette[i+c_offset],
+                    'xlabel': '', 'ylabel': '', 'title': '',
+                    'legend_args': True,
+                    **coll_kwargs}
+            self.show_collection(coll, fig=fig, ax=ax, **kwar)
+
+    def show(self, properties={}, collections={}, coll_overlay=True, fig=None, ax=None,
+             figsize=(5, 5), xlabel='x', ylabel='y', title='',
+             pallette=[*TABLEAU_COLORS.keys()], **kwargs):
         """
         Plot a property and set of collections on the grid.
 
         Parameters
         ----------
-        prop : dict
+        properties : dict
             Properties to plot and their arguments, e.g. {'prop1': {'color': 'green'}}
         collections : dict, optional
             Collections to plot and their respective kwargs for show_collection.
             The default is {}.
+        coll_overlay : bool, optional
+            If True, show collections in front of properties. If False, show properties
+            in front of collections. Default is True.
         xlabel : str
             x-axis label.
         ylabel : str
             y-axis label.
         title : str
             title for the plot.
+        pallete : list
+            List of colors (in order) to cycle through for each plot.
         **kwargs : kwargs
             overall kwargs to show_property.
 
@@ -1126,19 +1154,14 @@ class Coords(BaseObject):
             Ploted axis object.
         """
         fig, ax = setup_plot(fig=fig, ax=ax, figsize=figsize)
-        pallette = [*TABLEAU_COLORS.keys()]
-        for i, (coll, coll_kwargs) in enumerate(collections.items()):
-            kwar = {'color': pallette[i+len(properties)],
-                    'xlabel': '', 'ylabel': '', 'title': '',
-                    'legend_args': True,
-                    **coll_kwargs}
-            self.show_collection(coll, fig=fig, ax=ax, **kwar)
-        for i, (prop, prop_kwargs) in enumerate(properties.items()):
-            kwar = {**kwargs,
-                    'color': pallette[i],
-                    'xlabel': '', 'ylabel': '', 'title': '',
-                    **prop_kwargs}
-            fig, ax = self.show_property(prop, fig=fig, ax=ax, **kwar)
+        c_offset = len(properties)
+        if coll_overlay:
+            self._show_properties(properties, fig, ax, pallette, **kwargs)
+            self._show_collections(collections, fig, ax, pallette, c_offset=c_offset)
+        else:
+            self._show_collections(collections, fig, ax, pallette, c_offset=c_offset)
+            self._show_properties(properties, fig, ax, pallette, **kwargs)
+
         add_title_xylabs(ax, title=title, xlabel=xlabel, ylabel=ylabel)
         return fig, ax
 
