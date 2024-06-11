@@ -2,9 +2,11 @@
 Module for generating graphs from models.
 
 Provides classes:
+
 - :class:`ModelGraph`: Superclass for graphs generated from modelling constructs.
 
 and methods:
+
 - :func:`graph_factory`: Creates the default Graph for a given object.
 """
 from fmdtools.analyze.graph.base import Graph
