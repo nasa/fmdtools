@@ -597,6 +597,56 @@ class Coords(BaseObject):
             for pt in pts:
                 self.set(*pt, prop, value)
 
+    def get_neighbors(self, x, y, direction="all"):
+        """
+        Get the points neighboring x and y.
+
+        Parameters
+        ----------
+        x : float
+            x-position
+        y : float
+            y-position
+        direction: str/list
+            Direction(s) to get neighbors from. Default is "all".
+
+        Returns
+        -------
+        neighbors : list
+            List of points next to the given grid point.
+
+        Examples
+        --------
+        >>> ex.get_neighbors(0, 0)
+        [array([10.,  0.]), array([ 0., 10.])]
+        >>> ex.get_neighbors(10, 10)
+        [array([ 0., 10.]), array([20., 10.]), array([10., 20.]), array([10.,  0.])]
+        >>> ex.get_neighbors(10, 10, direction="left")
+        [array([ 0., 10.])]
+        >>> ex.get_neighbors(10, 10, direction="up-down")
+        [array([10., 20.]), array([10.,  0.])]
+        >>> ex.get_neighbors(10, 10, direction=["up","down"])
+        [array([10., 20.]), array([10.,  0.])]
+        """
+        ind = self.to_index(x, y)
+        neighbor_list = []
+        if 'left' in direction or direction == 'all':
+            neighbor_list.append((ind[0]-1, ind[1]))
+        if 'right' in direction or direction == 'all':
+            neighbor_list.append((ind[0]+1, ind[1]))
+        if 'up' in direction or direction == 'all':
+            neighbor_list.append((ind[0], ind[1]+1))
+        if 'down' in direction or direction == 'all':
+            neighbor_list.append((ind[0], ind[1]-1))
+
+        neighbors = []
+        for i, n_point in enumerate(neighbor_list):
+            if not (n_point[0] < 0 or
+                    n_point[1] < 0 or
+                    n_point[0] >= self.p.x_size or n_point[1] >= self.p.y_size):
+                neighbors.append(self.grid[n_point[0], n_point[1]])
+        return neighbors
+
     def find_closest(self, x, y, prop, include_pt=True, value=True,
                      comparator=np.equal):
         """
