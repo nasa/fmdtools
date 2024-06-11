@@ -23,6 +23,7 @@ from fmdtools.define.block.function import Function
 from fmdtools.define.container.mode import Mode
 from fmdtools.define.flow.base import Flow
 from fmdtools.define.architecture.function import FunctionArchitecture
+from fmdtools.analyze.graph.architecture import FunctionArchitectureGraph
 from fmdtools.define.architecture.base import check_model_pickleability
 from fmdtools.define.container.parameter import Parameter
 from fmdtools.define.container.state import State
@@ -93,7 +94,10 @@ def reseting_accumulate(vec):
     """
     Accummulate vector for all positive output.
 
-    (e.g. if input =[1,1,1, 0, 1,1], output = [1,2,3,0,1,2])
+    Examples
+    --------
+    >>> reseting_accumulate([1,1,1, 0, 1,1])
+    [1, 2, 3, 0, 1, 2]
     """
     newvec = vec
     val = 0
@@ -107,7 +111,14 @@ def reseting_accumulate(vec):
 
 
 def accumulate(vec):
-    """Accummulate vector (e.g. if input =[1,1,1, 0, 1,1], output = [1,2,3,3,4,5])."""
+    """
+    Accummulate vector.
+
+    Examples
+    --------
+    >>> accumulate([1, 1, 1, 0, 1, 1])
+    [1, 2, 3, 3, 4, 5]
+    """
     return [sum(vec[:i+1]) for i in range(len(vec))]
 
 
@@ -191,17 +202,16 @@ class ImportEE(Function):
     flow_ee_out = Electricity
     flownames = {"ee_1": "ee_out"}
 
-    def condfaults(self, time):
+    def set_faults(self):
         """
         Conditional fault behavior.
 
-        condfaults() changes the state of the system if there is a change in state in a
+        set_faults() changes the state of the system if there is a change in state in a
         flow.
 
-        Using a condfaults method is optional but helpful for delinating between the
-        determination of a fault and the behavior that results during fault propagation
-
-        condfaults() executes before behavior()
+        Using methods for specific behaviors is optional but can be helpful, in this
+        case for delinating between the determination of a faults and their resulting
+        behaviors.
 
         In this example,  if the current is too high, the line becomes an open circuit
         (e.g. due to a fuse or line burnout)
@@ -209,13 +219,14 @@ class ImportEE(Function):
         if self.ee_out.s.current > 15.0:
             self.m.add_fault('no_v')
 
-    def behavior(self, time):
+    def static_behavior(self, time):
         """
         Electricity input behavior.
 
         behavior() defines the behavior of the function in terms of
         how the system behaves normally and under faults.
         """
+        self.set_faults()
         if self.m.has_fault('no_v'):
             self.s.effstate = 0.0  # an open circuit means no voltage is exported
         elif self.m.has_fault('inf_v'):
@@ -240,7 +251,7 @@ class ImportWater(Function):
     flow_wat_out = Water
     flownames = {"wat_1": "wat_out"}
 
-    def behavior(self, time):
+    def static_behavior(self, time):
         """If the flow has a no_wat fault, the water level goes to zero."""
         if self.m.has_fault('no_wat'):
             self.wat_out.s.level = 0.0
@@ -266,7 +277,7 @@ class ExportWater(Function):
     flow_wat_in = Water
     flownames = {'wat_2': 'wat_in'}
 
-    def behavior(self, time):
+    def static_behavior(self, time):
         """Blockage changes the area the output water flows through."""
         if self.m.has_fault('block'):
             self.wat_in.s.area = 0.01
@@ -287,7 +298,7 @@ class ImportSig(Function):
     flow_sig_out = Signal
     flownames = {'sig_1': 'sig_out'}
 
-    def behavior(self, time):
+    def static_behavior(self, time):
         """
         Time-dependent behavior for the function.
 
@@ -360,7 +371,7 @@ class MoveWat(Function):
     flownames = {"ee_1": "ee_in", "sig_1": "sig_in",
                  "wat_1": "wat_in", "wat_2": "wat_out"}
 
-    def condfaults(self, time):
+    def set_faults(self, time):
         """
         Here we use the timer to define a conditional fault that only occurs after a
         state is present after X seconds.
@@ -393,8 +404,9 @@ class MoveWat(Function):
         """
         return self.wat_out.s.pressure > 15.0
 
-    def behavior(self, time):
+    def static_behavior(self, time):
         """Define how the function will behave with different faults."""
+        self.set_faults(time)
         if self.m.has_fault('short'):
             self.ee_in.s.current = 500*10/5000*self.sig_in.s.power*self.ee_in.s.voltage
             self.s.eff = 0.0
@@ -538,19 +550,20 @@ class Pump(FunctionArchitecture):
         return {'rate': rate, 'cost': totcost, 'expected_cost': expcost}
 
 
-if __name__ == "__main__":
-    from fmdtools.sim.sample import SampleApproach, ParameterSample, ParameterDomain
-
-    mdl = Pump()
-    from fmdtools.analyze.graph.architecture import FunctionArchitectureGraph
-
+def script_show_graphs(**kwargs):
+    """Show graphs of Pump structure."""
+    mdl = Pump(**kwargs)
     mg = FunctionArchitectureGraph(mdl)
     mg.set_exec_order(mdl)
-    mg.draw()
+    fig, ax = mg.draw()
 
     mg = FunctionArchitectureGraph(mdl)
     fig, ax = mg.plot_high_degree_nodes()
 
+
+def script_try_faults(**kwargs):
+    """Try some fault scenarios."""
+    mdl = Pump(**kwargs)
     endclass, mdlhist = propagate.one_fault(mdl, 'export_water', 'block', time=29,
                                             staged=True)
 
@@ -558,66 +571,37 @@ if __name__ == "__main__":
         mdl, 'import_water', 'no_wat', time=29, staged=True)
     endclass, mdlhist = propagate.nominal(mdl, mdl_kwargs=dict(track='all'))
     fig, ax = mdlhist.plot_line('flows.wat_2.s.flowrate', 'i.on')
+    mdl = Pump(**kwargs)
 
-    mdl = Pump()
-    newhist2 = mdl.h
-
-    newhist2.flows.wat_2.s.flowrate
-
-    mdl = Pump()
-
-    endclass, mdlhist = propagate.nominal(
-        mdl,  mdl_kwargs={'sp': {'end_condition': 'indicate_on'}})
-
-    mdl_kwargs = {'sp': {'end_condition': 'indicate_on'}}
-    endclass, mdlhist = propagate.one_fault(mdl, 'export_water', 'block', time=29,
-                                            mdl_kwargs=mdl_kwargs)
-
-    check_model_pickleability(mdl, try_pick=True)
-    # from define.common import check_pickleability
-    # unpickleable = check_pickleability(mdl, try_pick=True)
-
-    # newhist = mdl.create_hist(range(10), 'all')
-
-    # import pickle
-    # a = pickle.dumps(newhist)
-    # b = pickle.loads(a)
-
-    # a = pickle.dumps(mdl.flows)
-    # b = pickle.loads(a)
-
-    # a = pickle.dumps(mdl.fxns)
-    # b = pickle.loads(a)
-
-    # c = pickle.dumps(mdl)
-    # d = pickle.loads(c)
-
-    mdl = Pump(track={'flows': {'ee_1': 'all', "wat_1": {'s': ('flowrate',)}}})
-    newhist2 = mdl.h
-    mdl = Pump(track="all")
-    newhist3 = mdl.h
-    mdl.flows['ee_1'].s
-
-    mdl = Pump(track={'fxns': {'move_water': ['s', 't']}})
-    newhist4 = mdl.h
-    mdl.flows['ee_1'].s
-
-    mdl = Pump(track='all')
-    # an.graph.exec_order(mdl)
     endclass, mdlhist = propagate.one_fault(
         mdl, 'import_water', 'no_wat', time=29, staged=True)
 
-
-    # mdlhist.get_faulty_hist(*mdl.fxns)
     endclass, mdlhist = propagate.one_fault(
         mdl, 'move_water', 'mech_break', time=0, staged=False)
 
-    pd = ParameterDomain(PumpParam)
-    pd.add_variable("delay")
-    pd.add_constant("cost", ('repair', 'water'))
-    ps = ParameterSample(pd)
-    ps.add_variable_replicates([], replicates=10)
 
+def script_fault_degradation_tables(**kwargs):
+    """Show fault/degradation tables/plots for a given fault scenario."""
+    mdl = Pump(**kwargs)
+    endclass, mdlhist = propagate.one_fault(
+        mdl, 'import_ee', 'no_v', time=29,  staged=True)
+
+    deghist = mdlhist.get_degraded_hist(*mdl.fxns, *mdl.flows)
+    exp = deghist.get_metrics()
+    deghist
+    a = deghist.as_table()
+
+    b = mdlhist.get_fault_degradation_summary(*mdl.fxns, *mdl.flows)
+
+    exp = deghist.get_metrics()
+    mg = FunctionArchitectureGraph(mdl)
+    mg.set_heatmap(exp)
+    mg.draw()
+
+
+def script_sample_faults(track='all', **kwargs):
+    """Sample all faults from the pump."""
+    mdl = Pump(track=track, **kwargs)
     faultapp = SampleApproach(mdl)
     faultapp.add_faultdomain("testdomain", "all")
     faultapp.add_faultsample("testsample", "fault_phases", "testdomain",
@@ -630,20 +614,6 @@ if __name__ == "__main__":
 
     endclasses, mdlhists_staged = propagate.fault_sample(mdl, faultapp,
                                                          staged=True, track='all')
-    flat_staged = mdlhists_staged.flatten()
-
-    [all(flat[k] == flat_staged[k]) for k in flat]
-    all([all(flat[k] == flat_staged[k]) for k in flat])
-
-    endclass, mdlhist = propagate.one_fault(
-        mdl, 'import_ee', 'no_v', time=29,  staged=True, track='all')
-
-    deghist = mdlhist.get_degraded_hist(*mdl.fxns, *mdl.flows)
-    exp = deghist.get_metrics()
-    deghist
-    a = deghist.as_table()
-
-    b = mdlhist.get_fault_degradation_summary(*mdl.fxns, *mdl.flows)
 
     tab = an.tabulate.result_summary_fmea(
         endclasses, mdlhists, *mdl.fxns, *mdl.flows)
@@ -655,10 +625,7 @@ if __name__ == "__main__":
 
     d = h.get_degraded_hist(*mdl.flows, nomhist=mdlhists.nominal)
 
-    exp = deghist.get_metrics()
-    mg = FunctionArchitectureGraph(mdl)
-    mg.set_heatmap(exp)
-    mg.draw()
+
 
     c = an.tabulate.Comparison(endclasses, faultapp, default_stat=np.mean,
                                metrics=['cost', 'rate', 'expected_cost'],
@@ -680,5 +647,14 @@ if __name__ == "__main__":
                        "fxns.move_water.s.eff", "flows.wat_1.s.flowrate", cols=3)
 
     endclasses.plot_metric_dist("rate", "cost", "expected_cost")
-    #t = an.tabulate.factor_metrics(endclasses, faultapp, ci_metrics=['cost'], default_stat=np.mean)
-    #an.plot.factor_metrics(t)
+
+
+if __name__ == "__main__":
+    # import doctest
+    # doctest.testmod(verbose=True)
+    from fmdtools.sim.sample import SampleApproach, ParameterSample, ParameterDomain
+    script_show_graphs()
+    script_try_faults()
+    script_sample_faults()
+
+    check_model_pickleability(Pump(), try_pick=True)

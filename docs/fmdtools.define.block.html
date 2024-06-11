@@ -927,12 +927,12 @@ Default is True.</p>
 <dd><p>Bases: <a class="reference internal" href="fmdtools.define.object.html#fmdtools.define.object.base.BaseObject" title="fmdtools.define.object.base.BaseObject"><code class="xref py py-class docutils literal notranslate"><span class="pre">BaseObject</span></code></a></p>
 <p>Base class for object which simulate (blocks and architectures).</p>
 <p>Note that classes solely based on Simulable may not be able to be simulated.</p>
-<p>…</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>t</strong> (<a class="reference internal" href="fmdtools.define.container.html#fmdtools.define.container.time.Time" title="fmdtools.define.container.time.Time"><em>Time</em></a>) – Time tracker and options.</p></li>
 <li><p><strong>sp</strong> (<a class="reference internal" href="#fmdtools.define.block.base.SimParam" title="fmdtools.define.block.base.SimParam"><em>SimParam</em></a>) – Parameters defining the simulation.</p></li>
+<li><p><strong>mut_kwargs</strong> (<em>dict</em>) – Non-default kwargs for mutable containers/roles (to use for reset)</p></li>
 </ul>
 </dd>
 </dl>
@@ -1073,6 +1073,11 @@ The default is 1.</p></li>
 <span class="sig-name descname"><span class="pre">log_hist</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">t_ind</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">t</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">shift</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.define.block.base.Simulable.log_hist" title="Permalink to this definition"></a></dt>
 <dd><p>Log the history over time.</p>
 </dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="fmdtools.define.block.base.Simulable.mut_kwargs">
+<span class="sig-name descname"><span class="pre">mut_kwargs</span></span><a class="headerlink" href="#fmdtools.define.block.base.Simulable.mut_kwargs" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="fmdtools.define.block.base.Simulable.new">

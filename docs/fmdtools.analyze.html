@@ -581,18 +581,49 @@ being compared</p>
 <dl class="py function">
 <dt class="sig sig-object py" id="fmdtools.analyze.common.is_bool">
 <span class="sig-prename descclassname"><span class="pre">fmdtools.analyze.common.</span></span><span class="sig-name descname"><span class="pre">is_bool</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">val</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.analyze.common.is_bool" title="Permalink to this definition"></a></dt>
-<dd></dd></dl>
+<dd><p>Check if the value is a boolean.</p>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">is_bool</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span>
+<span class="go">True</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">is_bool</span><span class="p">(</span><span class="mf">1.0</span><span class="p">)</span>
+<span class="go">False</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">is_bool</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="kc">True</span><span class="p">])[</span><span class="mi">0</span><span class="p">])</span>
+<span class="go">True</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">is_bool</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">1.0</span><span class="p">])[</span><span class="mi">0</span><span class="p">])</span>
+<span class="go">False</span>
+</pre></div>
+</div>
+</dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="fmdtools.analyze.common.is_numeric">
 <span class="sig-prename descclassname"><span class="pre">fmdtools.analyze.common.</span></span><span class="sig-name descname"><span class="pre">is_numeric</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">val</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.analyze.common.is_numeric" title="Permalink to this definition"></a></dt>
 <dd><p>Check if a given value is a number.</p>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">is_numeric</span><span class="p">(</span><span class="mf">1.0</span><span class="p">)</span>
+<span class="go">True</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">is_numeric</span><span class="p">(</span><span class="s2">&quot;hi&quot;</span><span class="p">)</span>
+<span class="go">False</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">is_numeric</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">1.0</span><span class="p">])[</span><span class="mi">0</span><span class="p">])</span>
+<span class="go">True</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">is_numeric</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="s2">&quot;hi&quot;</span><span class="p">])[</span><span class="mi">0</span><span class="p">])</span>
+<span class="go">False</span>
+</pre></div>
+</div>
 </dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="fmdtools.analyze.common.join_key">
 <span class="sig-prename descclassname"><span class="pre">fmdtools.analyze.common.</span></span><span class="sig-name descname"><span class="pre">join_key</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">k</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.analyze.common.join_key" title="Permalink to this definition"></a></dt>
-<dd></dd></dl>
+<dd><p>Join list of keys into single key separated by a ‘.’.</p>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">join_key</span><span class="p">([</span><span class="s2">&quot;key&quot;</span><span class="p">,</span> <span class="s2">&quot;subkey&quot;</span><span class="p">])</span>
+<span class="go">&#39;key.subkey&#39;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">join_key</span><span class="p">(</span><span class="s2">&quot;existing_key&quot;</span><span class="p">)</span>
+<span class="go">&#39;existing_key&#39;</span>
+</pre></div>
+</div>
+</dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="fmdtools.analyze.common.mark_times">
@@ -627,6 +658,13 @@ being compared</p>
 <dt class="sig sig-object py" id="fmdtools.analyze.common.nan_to_x">
 <span class="sig-prename descclassname"><span class="pre">fmdtools.analyze.common.</span></span><span class="sig-name descname"><span class="pre">nan_to_x</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">metric</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">x</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.0</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.analyze.common.nan_to_x" title="Permalink to this definition"></a></dt>
 <dd><p>Return nan as zero if present, otherwise return the number.</p>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">nan_to_x</span><span class="p">(</span><span class="mf">1.0</span><span class="p">)</span>
+<span class="go">1.0</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">nan_to_x</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">nan</span><span class="p">,</span> <span class="mf">10.0</span><span class="p">)</span>
+<span class="go">10.0</span>
+</pre></div>
+</div>
 </dd></dl>
 
 <dl class="py function">
@@ -732,6 +770,17 @@ runner.run(suite_for_plots(UnitTests, plottests=False)))</p>
 <dt class="sig sig-object py" id="fmdtools.analyze.common.to_include_keys">
 <span class="sig-prename descclassname"><span class="pre">fmdtools.analyze.common.</span></span><span class="sig-name descname"><span class="pre">to_include_keys</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">to_include</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.analyze.common.to_include_keys" title="Permalink to this definition"></a></dt>
 <dd><p>Determine dict keys to include from Result given nested to_include dictionary.</p>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">to_include_keys</span><span class="p">({</span><span class="s2">&quot;a&quot;</span><span class="p">:{</span><span class="s2">&quot;b&quot;</span><span class="p">:</span> <span class="s2">&quot;c&quot;</span><span class="p">}})</span>
+<span class="go">(&#39;a.b.c&#39;,)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">to_include_keys</span><span class="p">({</span><span class="s2">&quot;a&quot;</span><span class="p">:{</span><span class="s2">&quot;b&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;c&quot;</span><span class="p">,</span> <span class="s2">&quot;d&quot;</span><span class="p">,</span> <span class="s2">&quot;e&quot;</span><span class="p">}}})</span>
+<span class="go">(&#39;a.b.c&#39;, &#39;a.b.e&#39;, &#39;a.b.d&#39;)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">to_include_keys</span><span class="p">(</span><span class="s2">&quot;hi&quot;</span><span class="p">)</span>
+<span class="go">(&#39;hi&#39;,)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">to_include_keys</span><span class="p">([</span><span class="s2">&quot;a&quot;</span><span class="p">,</span> <span class="s2">&quot;b&quot;</span><span class="p">,</span> <span class="s2">&quot;c&quot;</span><span class="p">])</span>
+<span class="go">(&#39;a&#39;, &#39;b&#39;, &#39;c&#39;)</span>
+</pre></div>
+</div>
 </dd></dl>
 
 <dl class="py function">
@@ -1376,6 +1425,12 @@ The default is False.</p></li>
 </dd></dl>
 
 <dl class="py function">
+<dt class="sig sig-object py" id="fmdtools.analyze.result.load_csv">
+<span class="sig-prename descclassname"><span class="pre">fmdtools.analyze.result.</span></span><span class="sig-name descname"><span class="pre">load_csv</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filename</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">indiv</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.analyze.result.load_csv" title="Permalink to this definition"></a></dt>
+<dd><p>Load csv files.</p>
+</dd></dl>
+
+<dl class="py function">
 <dt class="sig sig-object py" id="fmdtools.analyze.result.load_folder">
 <span class="sig-prename descclassname"><span class="pre">fmdtools.analyze.result.</span></span><span class="sig-name descname"><span class="pre">load_folder</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">folder</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">filetype</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.analyze.result.load_folder" title="Permalink to this definition"></a></dt>
 <dd><p>Loads endclass/mdlhist results from a given folder
@@ -1394,6 +1449,12 @@ The default is False.</p></li>
 <dd class="field-odd"><p>list</p>
 </dd>
 </dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="fmdtools.analyze.result.load_json">
+<span class="sig-prename descclassname"><span class="pre">fmdtools.analyze.result.</span></span><span class="sig-name descname"><span class="pre">load_json</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filename</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">indiv</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.analyze.result.load_json" title="Permalink to this definition"></a></dt>
+<dd><p>Load json files.</p>
 </dd></dl>
 
 </section>
