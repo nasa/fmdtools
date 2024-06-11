@@ -3,6 +3,7 @@
 Defines :class:`Function` class for representing system functional behaviors.
 
 Has classes:
+
 - :class:`Function`: Class for defining model Functions.
 - :class:`GenericFxn`: Function class to use as a placeholder.
 """
