@@ -64,13 +64,14 @@ if __name__ == "__main__":
                       "examples/eps/EPS_Example_Notebook.ipynb",
                       "examples/multirotor/Demonstration.ipynb",
                       "examples/pump/Pump_Example_Notebook.ipynb",
+                      "examples/pump/Tutorial_filled.ipynb",
                       "examples/rover/Model_Structure_Visualization_Tutorial.ipynb",
                       "examples/rover/FaultSample_Use-Cases.ipynb",
                       "examples/rover/Rover_Setup_Notebook.ipynb",
                       "examples/tank/Tank_Analysis.ipynb",
                       "examples/taxiway/Paper_Notebook.ipynb"
                       ]
-    retcode = pytest.main(["--nbmake", *fast_notebooks])
+    # retcode = pytest.main(["--nbmake", *fast_notebooks])
 
     # for testing longer-running notebooks (>~20s each)
     slow_notebooks = ["examples/multirotor/Urban_Drone_Demo.ipynb",
@@ -82,7 +83,7 @@ if __name__ == "__main__":
                       "examples/rover/HFAC_Analyses/IDETC_Human_Paper_Analysis.ipynb",
                       "examples/rover/HFAC_Analyses/HFAC_Analyses.ipynb",
                       "examples/pump/Parallelism_Tutorial.ipynb"]
-    # retcode = pytest.main(["--nbmake", *slow_notebooks])
+    retcode = pytest.main(["--nbmake", *slow_notebooks])
 
     # for testing extremely slow notebooks that can't be run to completion :
     too_slow_notebooks = ["examples/rover/optimization/Rover_Response_Optimization.ipynb",  # extremely slow notebook
