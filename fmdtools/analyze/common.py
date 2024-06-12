@@ -402,13 +402,13 @@ def consolidate_legend(ax, loc='upper left', bbox_to_anchor=(1.05, 1),
     if ax.get_legend() is None:
         ax.legend()
         lg = ax.get_legend()
-        hands = lg.legendHandles
+        hands = lg.legend_handles
     else:
         lg = ax.get_legend()
-        old_hands = lg.legendHandles
+        old_hands = lg.legend_handles
         ax.get_legend().remove()
         ax.legend()
-        hands = old_hands + ax.get_legend().legendHandles
+        hands = old_hands + ax.get_legend().legend_handles
     # ax.legend(handles=add_handles+hands)
     # handles, labels = ax.get_legend_handles_labels()
     handles, labels = [], []
