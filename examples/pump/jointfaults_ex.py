@@ -8,10 +8,10 @@ This code tests some approaches to sampling joing fault scenarios
 """
 import fmdtools.sim.propagate as prop
 import fmdtools.analyze as an
-from fmdtools.sim.sample import SampleApproach, FaultSample, FaultDomain
+from fmdtools.sim.sample import FaultSample, FaultDomain
 from fmdtools.analyze.phases import PhaseMap
 from fmdtools.analyze.history import History
-from ex_pump import Pump  # required to import entire module
+from examples.pump.ex_pump import Pump  # required to import entire module
 
 mdl = Pump()
 

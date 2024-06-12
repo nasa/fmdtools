@@ -37,6 +37,8 @@ if __name__ == "__main__":
                        "fmdtools/sim/scenario.py",
                        "fmdtools/sim/sample.py",
                        "fmdtools/sim/search.py",
+                       "fmdtools/analyze/graph/style.py",
+                       "fmdtools/analyze/graph/base.py",
                        "fmdtools/analyze/result.py",
                        "fmdtools/analyze/history.py",
                        "fmdtools/analyze/phases.py",
@@ -96,8 +98,8 @@ if __name__ == "__main__":
     # while not included in the testing approach, they should be verified periodically
     ignore_notebooks = [*too_slow_notebooks,
                         "examples/pump/AST_Sampling.ipynb",  # requires special setup with julia kernel
-                        "examples/pump/Tutorial_unfilled.ipynb"  # intended to be blank
-                        ]
+                        "examples/pump/Tutorial_unfilled.ipynb",  # intended to be blank
+                        "_build"]
 
     # retcode = pytest.main(["--nbmake", *["--ignore="+notebook for notebook in ignore_notebooks]])
     # retcode = pytest.main(["--nbmake", "examples/pump/AST_Sampling.ipynb"])

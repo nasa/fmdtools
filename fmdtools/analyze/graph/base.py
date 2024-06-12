@@ -65,11 +65,13 @@ class Graph(object):
 
     Examples
     --------
+    >>> from fmdtools.analyze.graph.style import mod_prefix
+    >>> loc = mod_prefix()
     >>> graph = Graph(ex_nxgraph)
     >>> graph.set_pos(auto='kamada_kawai')
-    >>> fig, ax = graph.draw(saveas='../../../docs/figures/frdl/nx_funcdecomp.svg')
+    >>> fig, ax = graph.draw(saveas=loc+'nx_funcdecomp.svg')
     >>> graph.set_edge_labels(title="name")
-    >>> dot = graph.draw_graphviz(saveas='../../../docs/figures/frdl/gv_funcdecomp.svg')
+    >>> dot = graph.draw_graphviz(saveas=loc+'gv_funcdecomp.svg')
     """
 
     def __init__(self, g):
