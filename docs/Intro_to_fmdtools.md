@@ -3,11 +3,11 @@ title: Intro to fmdtools
 description: Intro to resilience modeling, simulation, and visualization in Python with fmdtools.
 marp: true
 ---
-![fmdtools logo - tenerife](/docs/figures/logo/logo-tenerife.png)
+![fmdtools logo - hindenberg](/docs/figures/logo/logo-hindenberg.png)
 
 # Intro to resilience modeling, simulation, and visualization in Python with fmdtools.
 ### Author: Daniel Hulse 
-### Version: 2.0-rc-4
+### Version: 2.0-rc-5
 
 -----------------
 
