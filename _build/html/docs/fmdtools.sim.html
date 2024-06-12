@@ -337,6 +337,7 @@
 </ul>
 </li>
 <li class="toctree-l3"><a class="reference internal" href="../examples/rover/fault_sampling/Rover_Mode_Notebook.html">Synthetic Mode Generation</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../examples/rover/fault_sampling/Rover_Mode_Notebook.html#Analysis">Analysis</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../examples/rover/fault_sampling/Rover_Mode_Notebook.html#Cluster-Analysis">Cluster Analysis</a></li>
 </ul>
 </li>
@@ -434,10 +435,18 @@
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="fmdtools.analyze.html">fmdtools.analyze</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="fmdtools.analyze.graph.html">fmdtools.analyze.graph</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="fmdtools.analyze.graph.html#module-fmdtools.analyze.graph.label">fmdtools.analyze.graph.label</a></li>
+<li class="toctree-l4"><a class="reference internal" href="fmdtools.analyze.graph.html#fmdtools-analyze-graph-style">fmdtools.analyze.graph.style</a></li>
+<li class="toctree-l4"><a class="reference internal" href="fmdtools.analyze.graph.html#fmdtools-analyze-graph-base">fmdtools.analyze.graph.base</a></li>
+<li class="toctree-l4"><a class="reference internal" href="fmdtools.analyze.graph.html#module-fmdtools.analyze.graph.model">fmdtools.analyze.graph.model</a></li>
+<li class="toctree-l4"><a class="reference internal" href="fmdtools.analyze.graph.html#fmdtools-analyze-graph-architecture">fmdtools.analyze.graph.architecture</a></li>
+<li class="toctree-l4"><a class="reference internal" href="fmdtools.analyze.graph.html#module-fmdtools.analyze.graph.flow">fmdtools.analyze.graph.flow</a></li>
+</ul>
+</li>
 <li class="toctree-l3"><a class="reference internal" href="fmdtools.analyze.html#module-fmdtools.analyze.common">fmdtools.analyze.common</a></li>
 <li class="toctree-l3"><a class="reference internal" href="fmdtools.analyze.html#module-fmdtools.analyze.result">fmdtools.analyze.result</a></li>
 <li class="toctree-l3"><a class="reference internal" href="fmdtools.analyze.html#module-fmdtools.analyze.history">fmdtools.analyze.history</a></li>
-<li class="toctree-l3"><a class="reference internal" href="fmdtools.analyze.html#module-fmdtools.analyze.graph">fmdtools.analyze.graph</a></li>
 <li class="toctree-l3"><a class="reference internal" href="fmdtools.analyze.html#module-fmdtools.analyze.tabulate">fmdtools.analyze.tabulate</a></li>
 <li class="toctree-l3"><a class="reference internal" href="fmdtools.analyze.html#module-fmdtools.analyze.phases">fmdtools.analyze.phases</a></li>
 </ul>
@@ -549,7 +558,7 @@ timestep.</p></li>
 <dl class="py function">
 <dt class="sig sig-object py" id="fmdtools.sim.propagate.check_end_condition">
 <span class="sig-prename descclassname"><span class="pre">fmdtools.sim.propagate.</span></span><span class="sig-name descname"><span class="pre">check_end_condition</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mdl</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">use_end_condition</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">t</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.sim.propagate.check_end_condition" title="Permalink to this definition"></a></dt>
-<dd><p>Checks if the end condition of the simulate has been met.</p>
+<dd><p>Check if the end condition of the simulation has been met.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
@@ -570,14 +579,14 @@ timestep.</p></li>
 <dl class="py function">
 <dt class="sig sig-object py" id="fmdtools.sim.propagate.check_hist_memory">
 <span class="sig-prename descclassname"><span class="pre">fmdtools.sim.propagate.</span></span><span class="sig-name descname"><span class="pre">check_hist_memory</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mdlhist</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nscens</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_mem</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">2000000000.0</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.sim.propagate.check_hist_memory" title="Permalink to this definition"></a></dt>
-<dd><p>Checks if the memory will be exhausted given the size of the mdlhist and number
-of scenarios</p>
+<dd><p>Check if the memory will be exhausted by the hist over the scenarios.</p>
 </dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="fmdtools.sim.propagate.check_mdl_memory">
 <span class="sig-prename descclassname"><span class="pre">fmdtools.sim.propagate.</span></span><span class="sig-name descname"><span class="pre">check_mdl_memory</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mdl</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nscens</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_mem</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">2000000000.0</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.sim.propagate.check_mdl_memory" title="Permalink to this definition"></a></dt>
-<dd></dd></dl>
+<dd><p>Check if memory will be exhausted by the model over the scenarios.</p>
+</dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="fmdtools.sim.propagate.check_overwrite">
@@ -587,19 +596,20 @@ of scenarios</p>
 <dl class="py function">
 <dt class="sig sig-object py" id="fmdtools.sim.propagate.close_pool">
 <span class="sig-prename descclassname"><span class="pre">fmdtools.sim.propagate.</span></span><span class="sig-name descname"><span class="pre">close_pool</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.sim.propagate.close_pool" title="Permalink to this definition"></a></dt>
-<dd><p>Closes pool to avoid memory problems</p>
+<dd><p>Close pool to avoid memory problems.</p>
 </dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="fmdtools.sim.propagate.exec_nom_helper">
 <span class="sig-prename descclassname"><span class="pre">fmdtools.sim.propagate.</span></span><span class="sig-name descname"><span class="pre">exec_nom_helper</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mdl</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">scen</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">name</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.sim.propagate.exec_nom_helper" title="Permalink to this definition"></a></dt>
-<dd><p>Helper function for executing nominal scenarios</p>
+<dd><p>Execute a nominal scenario (helper function).</p>
 </dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="fmdtools.sim.propagate.exec_nom_par">
 <span class="sig-prename descclassname"><span class="pre">fmdtools.sim.propagate.</span></span><span class="sig-name descname"><span class="pre">exec_nom_par</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">arg</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.sim.propagate.exec_nom_par" title="Permalink to this definition"></a></dt>
-<dd></dd></dl>
+<dd><p>Execute a nominal scenario (helper function/interface for parallel pools).</p>
+</dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="fmdtools.sim.propagate.exec_scen">
@@ -622,7 +632,7 @@ nominal model history.</p>
 <dl class="py function">
 <dt class="sig sig-object py" id="fmdtools.sim.propagate.exec_scen_par">
 <span class="sig-prename descclassname"><span class="pre">fmdtools.sim.propagate.</span></span><span class="sig-name descname"><span class="pre">exec_scen_par</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">args</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.sim.propagate.exec_scen_par" title="Permalink to this definition"></a></dt>
-<dd><p>Helper function for executing the scenario in parallel</p>
+<dd><p>Execute scenario (parallel execution helper function for pool.map).</p>
 </dd></dl>
 
 <dl class="py function">
@@ -988,13 +998,13 @@ structure: {‘nominal’: nomhist, ‘faulty’: faulthist}</p></li>
 <dl class="py function">
 <dt class="sig sig-object py" id="fmdtools.sim.propagate.pack_run_kwargs">
 <span class="sig-prename descclassname"><span class="pre">fmdtools.sim.propagate.</span></span><span class="sig-name descname"><span class="pre">pack_run_kwargs</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.sim.propagate.pack_run_kwargs" title="Permalink to this definition"></a></dt>
-<dd><p>Creates subset of run kwargs for <a class="reference internal" href="#fmdtools.sim.propagate.nom_helper" title="fmdtools.sim.propagate.nom_helper"><code class="xref py py-func docutils literal notranslate"><span class="pre">nom_helper()</span></code></a> and <code class="xref py py-data docutils literal notranslate"><span class="pre">run_kwarg</span></code></p>
+<dd><p>Create subset of run kwargs for <a class="reference internal" href="#fmdtools.sim.propagate.nom_helper" title="fmdtools.sim.propagate.nom_helper"><code class="xref py py-func docutils literal notranslate"><span class="pre">nom_helper()</span></code></a> and <code class="xref py py-data docutils literal notranslate"><span class="pre">run_kwarg</span></code>.</p>
 </dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="fmdtools.sim.propagate.pack_sim_kwargs">
 <span class="sig-prename descclassname"><span class="pre">fmdtools.sim.propagate.</span></span><span class="sig-name descname"><span class="pre">pack_sim_kwargs</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.sim.propagate.pack_sim_kwargs" title="Permalink to this definition"></a></dt>
-<dd><p>Creates <a class="reference internal" href="#fmdtools.sim.propagate.sim_kwargs" title="fmdtools.sim.propagate.sim_kwargs"><code class="xref py py-data docutils literal notranslate"><span class="pre">sim_kwargs</span></code></a> for <a class="reference internal" href="#fmdtools.sim.propagate.prop_one_scen" title="fmdtools.sim.propagate.prop_one_scen"><code class="xref py py-func docutils literal notranslate"><span class="pre">prop_one_scen()</span></code></a></p>
+<dd><p>Create <a class="reference internal" href="#fmdtools.sim.propagate.sim_kwargs" title="fmdtools.sim.propagate.sim_kwargs"><code class="xref py py-data docutils literal notranslate"><span class="pre">sim_kwargs</span></code></a> for <a class="reference internal" href="#fmdtools.sim.propagate.prop_one_scen" title="fmdtools.sim.propagate.prop_one_scen"><code class="xref py py-func docutils literal notranslate"><span class="pre">prop_one_scen()</span></code></a>.</p>
 </dd></dl>
 
 <dl class="py function">
@@ -1048,7 +1058,7 @@ nominally and/or fail.</p>
 <dl class="py function">
 <dt class="sig sig-object py" id="fmdtools.sim.propagate.prop_one_scen">
 <span class="sig-prename descclassname"><span class="pre">fmdtools.sim.propagate.</span></span><span class="sig-name descname"><span class="pre">prop_one_scen</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mdl</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">scen</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ctimes</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[]</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nomhist</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">{}</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nomresult</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">{}</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.sim.propagate.prop_one_scen" title="Permalink to this definition"></a></dt>
-<dd><p>Runs a fault scenario in the model over time</p>
+<dd><p>Simulate a single scenario in the model over time.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
@@ -1120,7 +1130,7 @@ Has structure</p>
 <dl class="py function">
 <dt class="sig sig-object py" id="fmdtools.sim.propagate.save_helper">
 <span class="sig-prename descclassname"><span class="pre">fmdtools.sim.propagate.</span></span><span class="sig-name descname"><span class="pre">save_helper</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">save_args</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">endclass</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mdlhist</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">indiv_id</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">result_id</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.sim.propagate.save_helper" title="Permalink to this definition"></a></dt>
-<dd><p>Helper function for inline results saving.</p>
+<dd><p>Save results (helper function).</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
@@ -1296,12 +1306,13 @@ See multiprocessing documentation.</p>
 <dl class="py function">
 <dt class="sig sig-object py" id="fmdtools.sim.propagate.unpack_res_list">
 <span class="sig-prename descclassname"><span class="pre">fmdtools.sim.propagate.</span></span><span class="sig-name descname"><span class="pre">unpack_res_list</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">scenlist</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">res_list</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.sim.propagate.unpack_res_list" title="Permalink to this definition"></a></dt>
-<dd></dd></dl>
+<dd><p>Create result/history from output list.</p>
+</dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="fmdtools.sim.propagate.unpack_sim_kwargs">
 <span class="sig-prename descclassname"><span class="pre">fmdtools.sim.propagate.</span></span><span class="sig-name descname"><span class="pre">unpack_sim_kwargs</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.sim.propagate.unpack_sim_kwargs" title="Permalink to this definition"></a></dt>
-<dd><p>Unpacks <a class="reference internal" href="#fmdtools.sim.propagate.sim_kwargs" title="fmdtools.sim.propagate.sim_kwargs"><code class="xref py py-data docutils literal notranslate"><span class="pre">sim_kwargs</span></code></a> parameters for <a class="reference internal" href="#fmdtools.sim.propagate.prop_one_scen" title="fmdtools.sim.propagate.prop_one_scen"><code class="xref py py-func docutils literal notranslate"><span class="pre">prop_one_scen()</span></code></a></p>
+<dd><p>Unpack <a class="reference internal" href="#fmdtools.sim.propagate.sim_kwargs" title="fmdtools.sim.propagate.sim_kwargs"><code class="xref py py-data docutils literal notranslate"><span class="pre">sim_kwargs</span></code></a> parameters for <a class="reference internal" href="#fmdtools.sim.propagate.prop_one_scen" title="fmdtools.sim.propagate.prop_one_scen"><code class="xref py py-func docutils literal notranslate"><span class="pre">prop_one_scen()</span></code></a>.</p>
 </dd></dl>
 
 </section>
@@ -3331,7 +3342,6 @@ scenario</p></li>
 <p>Base class for connectors.</p>
 <p>Connectectors are used in ProblemArchitectures to link the outputs of one problem
 as the inputs to another.</p>
-<p>…</p>
 <p>name : name to give the Connector</p>
 <dl class="py attribute">
 <dt class="sig sig-object py" id="fmdtools.sim.search.BaseConnector.name">
@@ -3646,9 +3656,11 @@ than the full set of potential timesteps.</p>
 <p>Base class for constraints which derive from results.</p>
 <p>…</p>
 <dl class="simple">
-<dt>threshold<span class="classifier">float</span></dt><dd><p>Theshold for the constraint. Default is 0.0</p>
+<dt>threshold<span class="classifier">float</span></dt><dd><p>Threshold for the constraint. Default is 0.0</p>
 </dd>
-<dt>comparator<span class="classifier">str</span></dt><dd><p>Whether the constraint is ‘greater’ or ‘less’.</p>
+<dt>comparator<span class="classifier">str</span></dt><dd><p>Whether the constraint is ‘greater’, ‘less’, ‘equal’, or ‘notequal’.</p>
+</dd>
+<dt>or_equal<span class="classifier">bool</span></dt><dd><p>Whether comparator includes equality (e.g., greater or equalto) or not.</p>
 </dd>
 <dt>satisfied<span class="classifier">bool</span></dt><dd><p>Whether the constraint is satisfied.</p>
 </dd>
@@ -3664,7 +3676,7 @@ than the full set of potential timesteps.</p>
 <dd><p>Get the constraint given the value of its variable given threshold.</p>
 <dl class="simple">
 <dt>By default, constraints follow the form:</dt><dd><p>g(x) = threshold - value &gt; 0.0 for ‘greater’ constraints or
-g(x) = value - theshold &gt; 0.0 for ‘less’ constraints.</p>
+g(x) = value - threshold &gt; 0.0 for ‘less’ constraints.</p>
 </dd>
 </dl>
 <dl class="field-list simple">
@@ -3688,6 +3700,11 @@ g(x) = value - theshold &gt; 0.0 for ‘less’ constraints.</p>
 <dl class="py attribute">
 <dt class="sig sig-object py" id="fmdtools.sim.search.Constraint.negative">
 <span class="sig-name descname"><span class="pre">negative</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">bool</span></em><a class="headerlink" href="#fmdtools.sim.search.Constraint.negative" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="fmdtools.sim.search.Constraint.or_equal">
+<span class="sig-name descname"><span class="pre">or_equal</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">bool</span></em><a class="headerlink" href="#fmdtools.sim.search.Constraint.or_equal" title="Permalink to this definition"></a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
@@ -3891,6 +3908,11 @@ The default is {}.</p></li>
 <dl class="py attribute">
 <dt class="sig sig-object py" id="fmdtools.sim.search.HistoryConstraint.negative">
 <span class="sig-name descname"><span class="pre">negative</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">bool</span></em><a class="headerlink" href="#fmdtools.sim.search.HistoryConstraint.negative" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="fmdtools.sim.search.HistoryConstraint.or_equal">
+<span class="sig-name descname"><span class="pre">or_equal</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">bool</span></em><a class="headerlink" href="#fmdtools.sim.search.HistoryConstraint.or_equal" title="Permalink to this definition"></a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
@@ -4116,7 +4138,6 @@ interact (e.g., Integrated Resilience Optimization, Two-Stage Optimization, etc.
 problems are sequentially linked in the order of instantiation. While this works
 well for nested problems, there are some limitations when workign with parallel
 problems which we hope to resolve in future work.</p>
-<p>…</p>
 <dl class="py attribute">
 <dt class="sig sig-object py" id="fmdtools.sim.search.ProblemArchitecture.connectors">
 <span class="sig-name descname"><span class="pre">connectors</span></span><a class="headerlink" href="#fmdtools.sim.search.ProblemArchitecture.connectors" title="Permalink to this definition"></a></dt>
@@ -4165,6 +4186,21 @@ problems which we hope to resolve in future work.</p>
 <p>Below we connect three example problems in a single architecture, linking the vars
 x0 and x1 from ex_sp to be inputs to the scenario simulation (time) as well as the
 disturbance simulation variable (s.y).</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">ex_sp</span> <span class="o">=</span> <span class="n">SimpleProblem</span><span class="p">(</span><span class="s2">&quot;x0&quot;</span><span class="p">,</span> <span class="s2">&quot;x1&quot;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">f1</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">x0</span><span class="p">,</span> <span class="n">x1</span><span class="p">:</span> <span class="n">x0</span> <span class="o">+</span> <span class="n">x1</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ex_sp</span><span class="o">.</span><span class="n">add_objective</span><span class="p">(</span><span class="s2">&quot;f1&quot;</span><span class="p">,</span> <span class="n">f1</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">g1</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">x0</span><span class="p">,</span> <span class="n">x1</span><span class="p">:</span> <span class="n">x0</span> <span class="o">-</span> <span class="n">x1</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ex_sp</span><span class="o">.</span><span class="n">add_constraint</span><span class="p">(</span><span class="s2">&quot;g1&quot;</span><span class="p">,</span> <span class="n">g1</span><span class="p">,</span> <span class="n">threshold</span><span class="o">=</span><span class="mf">3.0</span><span class="p">,</span> <span class="n">comparator</span><span class="o">=</span><span class="s2">&quot;less&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">ex_scenprob</span> <span class="o">=</span> <span class="n">SingleFaultScenarioProblem</span><span class="p">(</span><span class="n">ExampleFunction</span><span class="p">(),</span> <span class="p">(</span><span class="s2">&quot;examplefunction&quot;</span><span class="p">,</span> <span class="s2">&quot;short&quot;</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ex_scenprob</span><span class="o">.</span><span class="n">add_result_objective</span><span class="p">(</span><span class="s2">&quot;f1&quot;</span><span class="p">,</span> <span class="s2">&quot;s.y&quot;</span><span class="p">,</span> <span class="n">time</span><span class="o">=</span><span class="mi">5</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">ex_dp</span> <span class="o">=</span> <span class="n">DisturbanceProblem</span><span class="p">(</span><span class="n">ExampleFunction</span><span class="p">(),</span> <span class="mi">3</span><span class="p">,</span> <span class="s2">&quot;s.y&quot;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ex_dp</span><span class="o">.</span><span class="n">add_result_objective</span><span class="p">(</span><span class="s2">&quot;f1&quot;</span><span class="p">,</span> <span class="s2">&quot;s.y&quot;</span><span class="p">,</span> <span class="n">time</span><span class="o">=</span><span class="mi">5</span><span class="p">)</span>
+</pre></div>
+</div>
 <div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">ex_pa</span> <span class="o">=</span> <span class="n">ProblemArchitecture</span><span class="p">()</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">ex_pa</span><span class="o">.</span><span class="n">add_connector_variable</span><span class="p">(</span><span class="s2">&quot;x0&quot;</span><span class="p">,</span> <span class="s2">&quot;x0&quot;</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">ex_pa</span><span class="o">.</span><span class="n">add_connector_variable</span><span class="p">(</span><span class="s2">&quot;x1&quot;</span><span class="p">,</span> <span class="s2">&quot;x1&quot;</span><span class="p">)</span>
@@ -4477,6 +4513,29 @@ The default is ‘’.</p></li>
 </dd>
 </dl>
 <p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">ex_sp</span> <span class="o">=</span> <span class="n">SimpleProblem</span><span class="p">(</span><span class="s2">&quot;x0&quot;</span><span class="p">,</span> <span class="s2">&quot;x1&quot;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">f1</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">x0</span><span class="p">,</span> <span class="n">x1</span><span class="p">:</span> <span class="n">x0</span> <span class="o">+</span> <span class="n">x1</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ex_sp</span><span class="o">.</span><span class="n">add_objective</span><span class="p">(</span><span class="s2">&quot;f1&quot;</span><span class="p">,</span> <span class="n">f1</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">g1</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">x0</span><span class="p">,</span> <span class="n">x1</span><span class="p">:</span> <span class="n">x0</span> <span class="o">-</span> <span class="n">x1</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ex_sp</span><span class="o">.</span><span class="n">add_constraint</span><span class="p">(</span><span class="s2">&quot;g1&quot;</span><span class="p">,</span> <span class="n">g1</span><span class="p">,</span> <span class="n">threshold</span><span class="o">=</span><span class="mf">3.0</span><span class="p">,</span> <span class="n">comparator</span><span class="o">=</span><span class="s2">&quot;less&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">ex_scenprob</span> <span class="o">=</span> <span class="n">SingleFaultScenarioProblem</span><span class="p">(</span><span class="n">ExampleFunction</span><span class="p">(),</span> <span class="p">(</span><span class="s2">&quot;examplefunction&quot;</span><span class="p">,</span> <span class="s2">&quot;short&quot;</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ex_scenprob</span><span class="o">.</span><span class="n">add_result_objective</span><span class="p">(</span><span class="s2">&quot;f1&quot;</span><span class="p">,</span> <span class="s2">&quot;s.y&quot;</span><span class="p">,</span> <span class="n">time</span><span class="o">=</span><span class="mi">5</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">ex_dp</span> <span class="o">=</span> <span class="n">DisturbanceProblem</span><span class="p">(</span><span class="n">ExampleFunction</span><span class="p">(),</span> <span class="mi">3</span><span class="p">,</span> <span class="s2">&quot;s.y&quot;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ex_dp</span><span class="o">.</span><span class="n">add_result_objective</span><span class="p">(</span><span class="s2">&quot;f1&quot;</span><span class="p">,</span> <span class="s2">&quot;s.y&quot;</span><span class="p">,</span> <span class="n">time</span><span class="o">=</span><span class="mi">5</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">ex_pa</span> <span class="o">=</span> <span class="n">ProblemArchitecture</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ex_pa</span><span class="o">.</span><span class="n">add_connector_variable</span><span class="p">(</span><span class="s2">&quot;x0&quot;</span><span class="p">,</span> <span class="s2">&quot;x0&quot;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ex_pa</span><span class="o">.</span><span class="n">add_connector_variable</span><span class="p">(</span><span class="s2">&quot;x1&quot;</span><span class="p">,</span> <span class="s2">&quot;x1&quot;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ex_pa</span><span class="o">.</span><span class="n">add_problem</span><span class="p">(</span><span class="s2">&quot;ex_sp&quot;</span><span class="p">,</span> <span class="n">ex_sp</span><span class="p">,</span> <span class="n">outputs</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;x0&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;x0&quot;</span><span class="p">],</span> <span class="s2">&quot;x1&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;x1&quot;</span><span class="p">]})</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ex_pa</span><span class="o">.</span><span class="n">add_problem</span><span class="p">(</span><span class="s2">&quot;ex_scenprob&quot;</span><span class="p">,</span> <span class="n">ex_scenprob</span><span class="p">,</span> <span class="n">inputs</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;x0&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;time&quot;</span><span class="p">]})</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ex_pa</span><span class="o">.</span><span class="n">add_problem</span><span class="p">(</span><span class="s2">&quot;ex_dp&quot;</span><span class="p">,</span> <span class="n">ex_dp</span><span class="p">,</span> <span class="n">inputs</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;x1&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;s.y&quot;</span><span class="p">]})</span>
+</pre></div>
+</div>
 <div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">ex_pa</span><span class="o">.</span><span class="n">update_full_problem</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">ex_pa</span>
 <span class="go">ProblemArchitecture with:</span>
@@ -4527,6 +4586,29 @@ The default is ‘’.</p></li>
 </dd>
 </dl>
 <p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">ex_sp</span> <span class="o">=</span> <span class="n">SimpleProblem</span><span class="p">(</span><span class="s2">&quot;x0&quot;</span><span class="p">,</span> <span class="s2">&quot;x1&quot;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">f1</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">x0</span><span class="p">,</span> <span class="n">x1</span><span class="p">:</span> <span class="n">x0</span> <span class="o">+</span> <span class="n">x1</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ex_sp</span><span class="o">.</span><span class="n">add_objective</span><span class="p">(</span><span class="s2">&quot;f1&quot;</span><span class="p">,</span> <span class="n">f1</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">g1</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">x0</span><span class="p">,</span> <span class="n">x1</span><span class="p">:</span> <span class="n">x0</span> <span class="o">-</span> <span class="n">x1</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ex_sp</span><span class="o">.</span><span class="n">add_constraint</span><span class="p">(</span><span class="s2">&quot;g1&quot;</span><span class="p">,</span> <span class="n">g1</span><span class="p">,</span> <span class="n">threshold</span><span class="o">=</span><span class="mf">3.0</span><span class="p">,</span> <span class="n">comparator</span><span class="o">=</span><span class="s2">&quot;less&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">ex_scenprob</span> <span class="o">=</span> <span class="n">SingleFaultScenarioProblem</span><span class="p">(</span><span class="n">ExampleFunction</span><span class="p">(),</span> <span class="p">(</span><span class="s2">&quot;examplefunction&quot;</span><span class="p">,</span> <span class="s2">&quot;short&quot;</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ex_scenprob</span><span class="o">.</span><span class="n">add_result_objective</span><span class="p">(</span><span class="s2">&quot;f1&quot;</span><span class="p">,</span> <span class="s2">&quot;s.y&quot;</span><span class="p">,</span> <span class="n">time</span><span class="o">=</span><span class="mi">5</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">ex_dp</span> <span class="o">=</span> <span class="n">DisturbanceProblem</span><span class="p">(</span><span class="n">ExampleFunction</span><span class="p">(),</span> <span class="mi">3</span><span class="p">,</span> <span class="s2">&quot;s.y&quot;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ex_dp</span><span class="o">.</span><span class="n">add_result_objective</span><span class="p">(</span><span class="s2">&quot;f1&quot;</span><span class="p">,</span> <span class="s2">&quot;s.y&quot;</span><span class="p">,</span> <span class="n">time</span><span class="o">=</span><span class="mi">5</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">ex_pa</span> <span class="o">=</span> <span class="n">ProblemArchitecture</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ex_pa</span><span class="o">.</span><span class="n">add_connector_variable</span><span class="p">(</span><span class="s2">&quot;x0&quot;</span><span class="p">,</span> <span class="s2">&quot;x0&quot;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ex_pa</span><span class="o">.</span><span class="n">add_connector_variable</span><span class="p">(</span><span class="s2">&quot;x1&quot;</span><span class="p">,</span> <span class="s2">&quot;x1&quot;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ex_pa</span><span class="o">.</span><span class="n">add_problem</span><span class="p">(</span><span class="s2">&quot;ex_sp&quot;</span><span class="p">,</span> <span class="n">ex_sp</span><span class="p">,</span> <span class="n">outputs</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;x0&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;x0&quot;</span><span class="p">],</span> <span class="s2">&quot;x1&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;x1&quot;</span><span class="p">]})</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ex_pa</span><span class="o">.</span><span class="n">add_problem</span><span class="p">(</span><span class="s2">&quot;ex_scenprob&quot;</span><span class="p">,</span> <span class="n">ex_scenprob</span><span class="p">,</span> <span class="n">inputs</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;x0&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;time&quot;</span><span class="p">]})</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ex_pa</span><span class="o">.</span><span class="n">add_problem</span><span class="p">(</span><span class="s2">&quot;ex_dp&quot;</span><span class="p">,</span> <span class="n">ex_dp</span><span class="p">,</span> <span class="n">inputs</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;x1&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;s.y&quot;</span><span class="p">]})</span>
+</pre></div>
+</div>
 <div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">ex_pa</span><span class="o">.</span><span class="n">update_problem</span><span class="p">(</span><span class="s2">&quot;ex_sp&quot;</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">ex_pa</span><span class="o">.</span><span class="n">problems</span><span class="p">[</span><span class="s2">&quot;ex_sp&quot;</span><span class="p">]</span>
 <span class="go">SimpleProblem with:</span>
@@ -4588,9 +4670,11 @@ The default is ‘’.</p></li>
 <p>Base class for constraints which derive from results.</p>
 <p>…</p>
 <dl class="simple">
-<dt>threshold<span class="classifier">float</span></dt><dd><p>Theshold for the constraint. Default is 0.0</p>
+<dt>threshold<span class="classifier">float</span></dt><dd><p>Threshold for the constraint. Default is 0.0</p>
 </dd>
-<dt>comparator<span class="classifier">str</span></dt><dd><p>Whether the constraint is ‘greater’ or ‘less’.</p>
+<dt>comparator<span class="classifier">str</span></dt><dd><p>Whether the constraint is ‘greater’, ‘less’, ‘equal’, or ‘notequal’.</p>
+</dd>
+<dt>or_equal<span class="classifier">bool</span></dt><dd><p>Whether comparator includes equality (e.g., greater or equalto) or not.</p>
 </dd>
 <dt>satisfied<span class="classifier">bool</span></dt><dd><p>Whether the constraint is satisfied.</p>
 </dd>
@@ -4630,6 +4714,11 @@ The default is ‘’.</p></li>
 <dl class="py attribute">
 <dt class="sig sig-object py" id="fmdtools.sim.search.ResultConstraint.negative">
 <span class="sig-name descname"><span class="pre">negative</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">bool</span></em><a class="headerlink" href="#fmdtools.sim.search.ResultConstraint.negative" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="fmdtools.sim.search.ResultConstraint.or_equal">
+<span class="sig-name descname"><span class="pre">or_equal</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">bool</span></em><a class="headerlink" href="#fmdtools.sim.search.ResultConstraint.or_equal" title="Permalink to this definition"></a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
@@ -4997,16 +5086,6 @@ Default is 0.0.</p>
 <dd></dd></dl>
 
 </dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="fmdtools.sim.search.f1">
-<span class="sig-prename descclassname"><span class="pre">fmdtools.sim.search.</span></span><span class="sig-name descname"><span class="pre">f1</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">x1</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.sim.search.f1" title="Permalink to this definition"></a></dt>
-<dd></dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="fmdtools.sim.search.g1">
-<span class="sig-prename descclassname"><span class="pre">fmdtools.sim.search.</span></span><span class="sig-name descname"><span class="pre">g1</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">x1</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.sim.search.g1" title="Permalink to this definition"></a></dt>
-<dd></dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="fmdtools.sim.search.obj_name">

@@ -21,7 +21,7 @@ class Environment(CommsFlow):
     c: Coords
         Representation of gridworld properties
     r: Rand
-        Representaiton of random variables/rng
+        Representation of random variables/rng
     ga: GeomArch
         Representaion of shapes/forms
 

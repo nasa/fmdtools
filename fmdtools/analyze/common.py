@@ -20,22 +20,22 @@ Has methods:
 import numpy as np
 import matplotlib.pyplot as plt
 
+
 plt.rcParams['pdf.fonttype'] = 42
 
 
 def get_sub_include(att, to_include):
-    """Determines what attributes of att to include based on the provided
-    dict/str/list/set to_include"""
+    """Determine attributes of att to include based on provided dict/str/list/set."""
     if type(to_include) in [list, set, tuple, str]:
         if att in to_include:
             new_to_include = 'default'
-        elif type(to_include) == str and to_include == 'all':
+        elif isinstance(to_include, str) and to_include == 'all':
             new_to_include = 'all'
-        elif type(to_include) == str and to_include == 'default':
+        elif isinstance(to_include, str) and to_include == 'default':
             new_to_include = 'default'
         else:
             new_to_include = False
-    elif type(to_include) == dict and att in to_include:
+    elif isinstance(to_include, dict) and att in to_include:
         new_to_include = to_include[att]
     else:
         new_to_include = False
@@ -43,13 +43,25 @@ def get_sub_include(att, to_include):
 
 
 def to_include_keys(to_include):
-    """Determine what dict keys to include from Result given nested to_include
-    dictionary"""
-    if type(to_include) == str:
-        return [to_include]
+    """
+    Determine dict keys to include from Result given nested to_include dictionary.
+
+    Examples
+    --------
+    >>> to_include_keys({"a":{"b": "c"}})
+    ('a.b.c',)
+    >>> to_include_keys({"a":{"b": {"c", "d", "e"}}})
+    ('a.b.c', 'a.b.e', 'a.b.d')
+    >>> to_include_keys("hi")
+    ('hi',)
+    >>> to_include_keys(["a", "b", "c"])
+    ('a', 'b', 'c')
+    """
+    if isinstance(to_include, str):
+        return tuple([to_include])
     elif type(to_include) in [list, set, tuple]:
-        return [to_i for to_i in to_include]
-    elif type(to_include) == dict:
+        return tuple([to_i for to_i in to_include])
+    elif isinstance(to_include, dict):
         keys = []
         for k, v in to_include.items():
             add = to_include_keys(v)
@@ -58,16 +70,29 @@ def to_include_keys(to_include):
 
 
 def is_numeric(val):
-    """Checks if a given value is numeric"""
+    """
+    Check if a given value is a number.
+
+    Examples
+    --------
+    >>> is_numeric(1.0)
+    True
+    >>> is_numeric("hi")
+    False
+    >>> is_numeric(np.array([1.0])[0])
+    True
+    >>> is_numeric(np.array(["hi"])[0])
+    False
+    """
     try:
         return np.issubdtype(np.array(val).dtype, np.number)
-    except:
+    except TypeError:
         return type(val) in [float, bool, int]
 
 
 def bootstrap_confidence_interval(data, method=np.mean, return_anyway=False, **kwargs):
     """
-    Convenience wrapper for scipy.bootstrap.
+    Return bootstrap confidence interval (helper for scipy.bootstrap).
 
     Parameters
     ----------
@@ -94,7 +119,16 @@ def bootstrap_confidence_interval(data, method=np.mean, return_anyway=False, **k
 
 
 def nan_to_x(metric, x=0.0):
-    """returns nan as zero if present, otherwise returns the number"""
+    """
+    Return nan as zero if present, otherwise return the number.
+
+    Examples
+    --------
+    >>> nan_to_x(1.0)
+    1.0
+    >>> nan_to_x(np.nan, 10.0)
+    10.0
+    """
     if np.isnan(metric):
         return x
     else:
@@ -102,13 +136,37 @@ def nan_to_x(metric, x=0.0):
 
 
 def is_bool(val):
+    """
+    Check if the value is a boolean.
+
+    Examples
+    --------
+    >>> is_bool(True)
+    True
+    >>> is_bool(1.0)
+    False
+    >>> is_bool(np.array([True])[0])
+    True
+    >>> is_bool(np.array([1.0])[0])
+    False
+    """
     try:
         return val.dtype in ['bool']
-    except:
+    except AttributeError:
         return type(val) in [bool]
 
 
 def join_key(k):
+    """
+    Join list of keys into single key separated by a '.'.
+
+    Examples
+    --------
+    >>> join_key(["key", "subkey"])
+    'key.subkey'
+    >>> join_key("existing_key")
+    'existing_key'
+    """
     if not isinstance(k, str):
         return '.'.join(k)
     else:
@@ -127,6 +185,9 @@ def setup_plot(fig=None, ax=None, z=False, figsize=(6, 4)):
             ax = fig.add_subplot(111, projection='3d')
         else:
             fig, ax = plt.subplots(1, figsize=figsize)
+    if fig:
+        if not ax:
+            ax = fig.add_subplot(111)
     return fig, ax
 
 
@@ -196,14 +257,19 @@ def plot_err_hist(err_hist, ax=None, fig=None, figsize=(6, 4), boundtype='fill',
                            ax=ax, fig=fig, color=boundcolor, linestyle=boundlinestyle)
     else:
         raise Exception("Invalid bound type: "+boundtype)
+    add_title_xylabs(ax, title=title, xlabel=xlabel, ylabel=ylabel)
+    ax.set_xlim(err_hist['time'][0], err_hist['time'][-1])
+    return fig, ax
+
+
+def add_title_xylabs(ax, title='', xlabel='', ylabel=''):
+    """Add title and x/y labels to the given axis."""
     if xlabel:
         ax.set_xlabel(xlabel)
     if ylabel:
         ax.set_ylabel(ylabel)
     if title:
         ax.set_title(title)
-    ax.set_xlim(err_hist['time'][0], err_hist['time'][-1])
-    return fig, ax
 
 
 def plot_err_lines(times, lows, highs, ax=None, fig=None, figsize=(6, 4), **kwargs):
@@ -230,29 +296,54 @@ def plot_err_lines(times, lows, highs, ax=None, fig=None, figsize=(6, 4), **kwar
 
 
 def unpack_plot_values(plot_values):
-    """Helper function for enabling both dict and str plot_values."""
-    if len(plot_values) == 1 and type(plot_values[0]) == dict:
+    """Upack plot_values if provided as a dict or str."""
+    if len(plot_values) == 1 and type(plot_values[0]) is dict:
         plot_values = to_include_keys(plot_values[0])
     if not plot_values:
         raise Exception("Empty plot_values--make sure to pass quantities to plot!")
     return plot_values
 
 
+def prep_animation_title(time, title='', **kwargs):
+    """Add time to titles for plot_from methods."""
+    kwargs['title'] = title+' t='+str(time)
+    return kwargs
+
+
+def clear_prev_figure(**kwargs):
+    """Clear previous animations for plot_from methods."""
+    if 'fig' in kwargs:
+        kwargs['fig'].clf()
+    # clear figure/ax beforehand for speed
+    if 'ax' in kwargs:
+        kwargs.pop('ax')
+    return kwargs
+
+
 def multiplot_helper(cols, *plot_values, figsize='default', titles={}, sharex=True,
-                     sharey=False):
+                     sharey=False, fig=None, axs=None):
     """Create multiple plot axes for plotting."""
     num_plots = len(plot_values)
     if num_plots == 1:
         cols = 1
     rows = int(np.ceil(num_plots/cols))
-    if figsize == 'default':
-        figsize = (cols*3, 2*rows)
-    fig, axs = plt.subplots(rows, cols, sharex=sharex, sharey=sharey, figsize=figsize)
+    if not fig or not axs:
+        if figsize == 'default':
+            figsize = (cols*3, 2*rows)
+        if not fig:
+            fig, axs = plt.subplots(rows, cols,
+                                    sharex=sharex, sharey=sharey, figsize=figsize)
+        if axs is None:
+            if len(fig.axes) != num_plots:
+                fig.clf()
+                axs = fig.subplots(rows, cols, sharex=sharex, sharey=sharey)
+            else:
+                axs = fig.axes
 
-    if type(axs) == np.ndarray:
-        axs = axs.flatten()
-    else:
-        axs = [axs]
+        if isinstance(axs, np.ndarray):
+            axs = axs.flatten()
+        elif not isinstance(axs, list):
+            axs = [axs]
 
     subplot_titles = {plot_value: plot_value for plot_value in plot_values}
     subplot_titles.update(titles)
@@ -286,7 +377,7 @@ def set_empty_multiplots(axs, num_plots, cols, xlab_ang=-90, grid=False,
 def multiplot_legend_title(groupmetrics, axs, ax,
                            legend_loc=False, title='', v_padding=None, h_padding=None,
                            title_padding=0.0, legend_title=None):
-    """Helper function for multiplot legends and titles."""
+    """Create multiplot legends and titles on shared axes."""
     if len(groupmetrics) > 1 and legend_loc != False:
         ax.legend()
         handles, labels = ax.get_legend_handles_labels()
@@ -305,13 +396,27 @@ def multiplot_legend_title(groupmetrics, axs, ax,
 
 
 def consolidate_legend(ax, loc='upper left', bbox_to_anchor=(1.05, 1),
-                       add_handles=[], color='', **kwargs):
+                       add_handles=[], remove_empty=True, color='', **kwargs):
     """Create a single legend for a given multiplot where multiple groups are
     being compared"""
-    ax.legend()
-    hands, labels = ax.get_legend_handles_labels()
-    ax.legend(handles=add_handles+hands)
-    handles, labels = ax.get_legend_handles_labels()
+    if ax.get_legend() is None:
+        ax.legend()
+        lg = ax.get_legend()
+        hands = lg.legendHandles
+    else:
+        lg = ax.get_legend()
+        old_hands = lg.legendHandles
+        ax.get_legend().remove()
+        ax.legend()
+        hands = old_hands + ax.get_legend().legendHandles
+    # ax.legend(handles=add_handles+hands)
+    # handles, labels = ax.get_legend_handles_labels()
+    handles, labels = [], []
+    for handle in hands + add_handles:
+        lab = handle.get_label()
+        if not (not lab and remove_empty):
+            handles.append(handle)
+            labels.append(lab)
     by_label = dict(zip(labels, handles))
     ax.get_legend().remove()
     ax.legend(by_label.values(), by_label.keys(),
@@ -344,9 +449,10 @@ def mark_times(ax, tick, time, *plot_values, fontsize=8):
 
 def suite_for_plots(testclass, plottests=False):
     """
-    Enables qualitative testing suite with or without plots in unittest. Plot tests
-    should have "plot" in the title of their method, this enables this function to
-    filter them out (or include them).
+    Qualitative testing suite with or without plots in unittest.
+
+    Plot tests should have "plot" in the title of their method, this enables this
+    function tofilter them out (or include them).
 
     Parameters
     ----------
@@ -368,7 +474,7 @@ def suite_for_plots(testclass, plottests=False):
     if not plottests:
         tests = [func for func in dir(testclass)
                  if (func.startswith("test") and not ('plot' in func))]
-    elif type(plottests) == list:
+    elif isinstance(plottests, list):
         tests = [func for func in dir(testclass)
                  if (func.startswith("test") and func in plottests)]
     else:
@@ -377,3 +483,8 @@ def suite_for_plots(testclass, plottests=False):
     for test in tests:
         suite.addTest(testclass(test))
     return suite
+
+
+if __name__ == "__main__":
+    import doctest
+    doctest.testmod(verbose=True)

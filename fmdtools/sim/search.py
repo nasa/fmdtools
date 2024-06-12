@@ -80,15 +80,18 @@ class Constraint(Objective):
     Fields
     ------
     threshold : float
-        Theshold for the constraint. Default is 0.0
+        Threshold for the constraint. Default is 0.0
     comparator : str
-        Whether the constraint is 'greater' or 'less'.
+        Whether the constraint is 'greater', 'less', 'equal', or 'notequal'.
+    or_equal : bool
+        Whether comparator includes equality (e.g., greater or equalto) or not.
     satisfied : bool
         Whether the constraint is satisfied.
     """
 
     threshold: float = 0.0
     comparator: str = 'greater'
+    or_equal: bool = True
     satisfied: bool = True
 
     def con_from_value(self, value):
@@ -97,7 +100,7 @@ class Constraint(Objective):
 
         By default, constraints follow the form:
             g(x) = threshold - value > 0.0 for 'greater' constraints or
-            g(x) = value - theshold > 0.0 for 'less' constraints.
+            g(x) = value - threshold > 0.0 for 'less' constraints.
 
         Parameters
         ----------
@@ -113,6 +116,11 @@ class Constraint(Objective):
             value = self.threshold - value
         elif self.comparator == 'less':
             value = value - self.threshold
+        elif self.comparator == 'equal':
+            value = abs(value - self.threshold)
+        elif self.comparator == 'notequal':
+            # 1 if true, else zero
+            value = 1*(value != self.threshold)
         else:
             raise Exception("Invalid comparator: "+self.comparator)
         return self.obj_from_value(value)
@@ -121,9 +129,15 @@ class Constraint(Objective):
         """Update with given value."""
         self.value = self.con_from_value(value)
         if not self.negative:
-            self.satisfied = self.value <= 0.0
+            if self.or_equal:
+                self.satisfied = self.value <= 0.0
+            else:
+                self.satisfied = self.value < 0.0
         else:
-            self.satisfied = self.value >= 0.0
+            if self.or_equal:
+                self.satisfied = self.value >= 0.0
+            else:
+                self.satisfied = self.value > 0.0
 
 
 def unpack_x(*x):
@@ -375,13 +389,6 @@ class SimpleProblem(BaseProblem):
         super().add_constraint(name, name, **kwargs)
 
 
-ex_sp = SimpleProblem("x0", "x1")
-f1 = lambda x0, x1: x0 + x1
-ex_sp.add_objective("f1", f1)
-g1 = lambda x0, x1: x0 - x1
-ex_sp.add_constraint("g1", g1, threshold=3.0, comparator="less")
-
-
 class ResultObjective(Objective):
     """
     Base class of objectives which derive from Results.
@@ -449,15 +456,18 @@ class ResultConstraint(ResultObjective):
     Fields
     ------
     threshold : float
-        Theshold for the constraint. Default is 0.0
+        Threshold for the constraint. Default is 0.0
     comparator : str
-        Whether the constraint is 'greater' or 'less'.
+        Whether the constraint is 'greater', 'less', 'equal', or 'notequal'.
+    or_equal : bool
+        Whether comparator includes equality (e.g., greater or equalto) or not.
     satisfied : bool
         Whether the constraint is satisfied.
     """
 
     threshold: float = 0.0
     comparator: str = 'greater'
+    or_equal: bool = True
     satisfied: bool = True
 
     def update(self, res):
@@ -465,9 +475,15 @@ class ResultConstraint(ResultObjective):
         value = self.get_result_value(res)
         self.value = self.con_from_value(value)
         if not self.negative:
-            self.satisfied = self.value <= 0.0
+            if self.or_equal:
+                self.satisfied = self.value <= 0.0
+            else:
+                self.satisfied = self.value < 0.0
         else:
-            self.satisfied = self.value >= 0.0
+            if self.or_equal:
+                self.satisfied = self.value >= 0.0
+            else:
+                self.satisfied = self.value > 0.0
 
     def con_from_value(self, value):
         """
@@ -517,7 +533,7 @@ class BaseSimProblem(BaseProblem):
 
     def __init__(self, mdl, prop_method, *args, **kwargs):
         self.mdl = mdl
-        if type(prop_method) == str:
+        if type(prop_method) is str:
             self.prop_method = getattr(propagate, prop_method)
         elif callable(prop_method):
             self.prop_method = prop_method
@@ -893,11 +909,6 @@ class SingleFaultScenarioProblem(ScenarioProblem):
         return scen
 
 
-ex_scenprob = SingleFaultScenarioProblem(ExampleFunction(), ("examplefunction", "short"))
-ex_scenprob.add_result_objective("f1", "s.y", time=5)
-ex_scenprob.f1(5.0)
-
-
 class DisturbanceProblem(ScenarioProblem):
     """Class for optimizing disturbances that occur at a set time."""
 
@@ -964,18 +975,12 @@ class DisturbanceProblem(ScenarioProblem):
         return scen
 
 
-ex_dp = DisturbanceProblem(ExampleFunction(), 3, "s.y")
-ex_dp.add_result_objective("f1", "s.y", time=5)
-
-
 class BaseConnector(dataobject):
     """
     Base class for connectors.
 
     Connectectors are used in ProblemArchitectures to link the outputs of one problem
     as the inputs to another.
-
-    ...
 
     Fields
     ------
@@ -1070,8 +1075,6 @@ class ProblemArchitecture(BaseProblem):
     well for nested problems, there are some limitations when workign with parallel
     problems which we hope to resolve in future work.
 
-    ...
-
     Attributes
     ----------
     connectors : dict
@@ -1088,6 +1091,18 @@ class ProblemArchitecture(BaseProblem):
     Below we connect three example problems in a single architecture, linking the vars
     x0 and x1 from ex_sp to be inputs to the scenario simulation (time) as well as the
     disturbance simulation variable (s.y).
+
+    >>> ex_sp = SimpleProblem("x0", "x1")
+    >>> f1 = lambda x0, x1: x0 + x1
+    >>> ex_sp.add_objective("f1", f1)
+    >>> g1 = lambda x0, x1: x0 - x1
+    >>> ex_sp.add_constraint("g1", g1, threshold=3.0, comparator="less")
+
+    >>> ex_scenprob = SingleFaultScenarioProblem(ExampleFunction(), ("examplefunction", "short"))
+    >>> ex_scenprob.add_result_objective("f1", "s.y", time=5)
+
+    >>> ex_dp = DisturbanceProblem(ExampleFunction(), 3, "s.y")
+    >>> ex_dp.add_result_objective("f1", "s.y", time=5)
 
     >>> ex_pa = ProblemArchitecture()
     >>> ex_pa.add_connector_variable("x0", "x0")
@@ -1389,6 +1404,25 @@ class ProblemArchitecture(BaseProblem):
 
         Examples
         --------
+        >>> ex_sp = SimpleProblem("x0", "x1")
+        >>> f1 = lambda x0, x1: x0 + x1
+        >>> ex_sp.add_objective("f1", f1)
+        >>> g1 = lambda x0, x1: x0 - x1
+        >>> ex_sp.add_constraint("g1", g1, threshold=3.0, comparator="less")
+
+        >>> ex_scenprob = SingleFaultScenarioProblem(ExampleFunction(), ("examplefunction", "short"))
+        >>> ex_scenprob.add_result_objective("f1", "s.y", time=5)
+
+        >>> ex_dp = DisturbanceProblem(ExampleFunction(), 3, "s.y")
+        >>> ex_dp.add_result_objective("f1", "s.y", time=5)
+
+        >>> ex_pa = ProblemArchitecture()
+        >>> ex_pa.add_connector_variable("x0", "x0")
+        >>> ex_pa.add_connector_variable("x1", "x1")
+        >>> ex_pa.add_problem("ex_sp", ex_sp, outputs={"x0": ["x0"], "x1": ["x1"]})
+        >>> ex_pa.add_problem("ex_scenprob", ex_scenprob, inputs={"x0": ["time"]})
+        >>> ex_pa.add_problem("ex_dp", ex_dp, inputs={"x1": ["s.y"]})
+
         >>> ex_pa.update_full_problem(1, 2)
         >>> ex_pa
         ProblemArchitecture with:
@@ -1449,6 +1483,25 @@ class ProblemArchitecture(BaseProblem):
 
         Examples
         --------
+        >>> ex_sp = SimpleProblem("x0", "x1")
+        >>> f1 = lambda x0, x1: x0 + x1
+        >>> ex_sp.add_objective("f1", f1)
+        >>> g1 = lambda x0, x1: x0 - x1
+        >>> ex_sp.add_constraint("g1", g1, threshold=3.0, comparator="less")
+
+        >>> ex_scenprob = SingleFaultScenarioProblem(ExampleFunction(), ("examplefunction", "short"))
+        >>> ex_scenprob.add_result_objective("f1", "s.y", time=5)
+
+        >>> ex_dp = DisturbanceProblem(ExampleFunction(), 3, "s.y")
+        >>> ex_dp.add_result_objective("f1", "s.y", time=5)
+
+        >>> ex_pa = ProblemArchitecture()
+        >>> ex_pa.add_connector_variable("x0", "x0")
+        >>> ex_pa.add_connector_variable("x1", "x1")
+        >>> ex_pa.add_problem("ex_sp", ex_sp, outputs={"x0": ["x0"], "x1": ["x1"]})
+        >>> ex_pa.add_problem("ex_scenprob", ex_scenprob, inputs={"x0": ["time"]})
+        >>> ex_pa.add_problem("ex_dp", ex_dp, inputs={"x1": ["s.y"]})
+
         >>> ex_pa.update_problem("ex_sp", 1, 2)
         >>> ex_pa.problems["ex_sp"]
         SimpleProblem with:
@@ -1614,19 +1667,6 @@ class ProblemArchitecture(BaseProblem):
         nx.draw_networkx_edge_labels(self.problem_graph, pos, edge_labels=edge_labels)
         return fig, ax
 
-    # def log_hist(self):
-    #    """Log overall problem arch history."""
-    #    self.log_time()
-
-
-ex_pa = ProblemArchitecture()
-ex_pa.add_connector_variable("x0", "x0")
-ex_pa.add_connector_variable("x1", "x1")
-ex_pa.add_problem("ex_sp", ex_sp, outputs={"x0": ["x0"], "x1": ["x1"]})
-ex_pa.add_problem("ex_scenprob", ex_scenprob, inputs={"x0": ["time"]})
-ex_pa.add_problem("ex_dp", ex_dp, inputs={"x1": ["s.y"]})
-# ex_pa.ex_dp_f1_full(3, 3)
-
 
 class DynamicInterface():
     """
@@ -1771,4 +1811,4 @@ if __name__ == "__main__":
                                     staged=True)
     import doctest
     doctest.testmod(verbose=True)
-    ex_pa.show_sequence()
+    # ex_pa.show_sequence()

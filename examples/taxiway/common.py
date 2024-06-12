@@ -806,7 +806,10 @@ def plot_tstep(mdl, mdlhist, t, fxnattr="", locattr="", markersize=10,
         text = f
         if assets_to_label == "all" or f in assets_to_label:
             if fxnattr:
-                atthist = mdlhist.fxns.get(f + "." + fxnattr)
+                try:
+                    atthist = mdlhist.fxns.get(f + "." + fxnattr)
+                except AttributeError:
+                    atthist = None
                 if (not atthist is None) and len(atthist) > 0:
                     if fxnattr == "s.visioncov" and atthist[t]:
                         plt.plot(*atthist[t].exterior.xy)

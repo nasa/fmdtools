@@ -28,8 +28,6 @@ from examples.multirotor.drone_mdl_dynamic import HoldPayload as HoldPayloadDyn
 
 from examples.multirotor.drone_mdl_hierarchical import AffectDOF as AffectDOFHierarchical
 
-from recordclass import asdict
-
 # DEFINE PARAMETERS
 
 
@@ -354,7 +352,7 @@ class StoreEE(Function):
     flow_ee_1 = EE
     flow_force_st = Force
 
-    def condfaults(self, time):
+    def set_faults(self):
         """Calculate overall conditional faults for StoreEE architecture."""
         if self.s.soc < 1 and self.m.has_fault('lowcharge'):
             self.m.replace_fault('lowcharge', 'nocharge')
@@ -371,8 +369,9 @@ class StoreEE(Function):
             for batname, bat in self.ca.comps.items():
                 bat.s.soc = 0
 
-    def behavior(self, time):
+    def static_behavior(self, time):
         """Calculate overall behavior for StoreEE architecture."""
+        self.set_faults()
         ee, soc = {}, {}
         rate_res = 0
         for batname, bat in self.ca.comps.items():
@@ -449,13 +448,14 @@ class ManageHealth(Function):
     flow_hsig_bat = HSig
     flow_rsig_traj = RSig
 
-    def condfaults(self, time):
+    def set_faults(self):
         """If no support (e.g., in a crash), unit breaks."""
         if self.force_st.s.support < 0.5 or self.ee_ctl.s.effort > 2.0:
             self.m.add_fault('lostfunction')
 
-    def behavior(self, time):
+    def static_behavior(self, time):
         """Assign recovery trajectory from ResPolicy for a fault mode, if found."""
+        self.set_faults()
         if self.m.has_fault('lostfunction'):
             self.rsig_traj.s.mode = 'continue'
         elif self.hsig_dofs.s.hstate == 'faulty':
@@ -578,7 +578,7 @@ class PlanPath(PlanPathDyn):
         """Initialize path planning goals based on initial flightplan."""
         self.s.goals = {i: list(vals) for i, vals in enumerate(self.p.flightplan)}
 
-    def behavior(self, t):
+    def static_behavior(self, t):
         """
         Path planning behavior for the drone.
 
@@ -689,7 +689,7 @@ class Drone(FunctionArchitecture):
 
         # add functions to the model
         flows = ['ee_ctl', 'force_st', 'hsig_dofs', 'hsig_bat', 'rsig_traj']
-        self.add_fxn('manage_health', ManageHealth, *flows, p=asdict(self.p.respolicy))
+        self.add_fxn('manage_health', ManageHealth, *flows, p=self.p.respolicy.asdict())
 
         store_ee_p = {'archtype': self.p.phys_param.bat,
                       'weight': self.p.phys_param.batweight+self.p.phys_param.archweight,
@@ -702,7 +702,7 @@ class Drone(FunctionArchitecture):
                      ca={'p': {'archtype': self.p.phys_param.linearch}})
         self.add_fxn('ctl_dof', CtlDOF, 'ee_ctl', 'des_traj', 'ctl', 'dofs', 'force_st')
         self.add_fxn('plan_path', PlanPath, 'ee_ctl', 'dofs', 'des_traj', 'force_st',
-                     'rsig_traj', p=asdict(self.p))
+                     'rsig_traj', p=self.p.asdict())
         self.add_fxn('hold_payload', HoldPayload, 'dofs', 'force_lin', 'force_st')
         self.add_fxn('view_environment', ViewEnvironment, 'dofs', 'environment')
 
@@ -837,7 +837,7 @@ def plot_env_with_traj_z(hist, mdl):
 
 
 def plot_env_with_traj(mdlhists, mdl):
-    fig, ax = mdl.flows['environment'].c.show( "target",
+    fig, ax = mdl.flows['environment'].c.show({"target": {}},
                         collections={"start": {"color": "yellow"},
                                      "safe": {"color": "yellow"}})
     fig, ax = mdlhists.plot_trajectories("dofs.s.x", "dofs.s.y", fig=fig, ax=ax)
@@ -930,7 +930,8 @@ if __name__ == "__main__":
 
     # plot trajectories over fault scenarios
     fault_kwargs = {'alpha': 0.2, 'color': 'red'}
-    mdlhists.plot_line('flows.dofs.s.x', 'flows.dofs.s.y', 'flows.dofs.s.z', 'fxns.store_ee.s.soc',
+    mdlhists.plot_line('flows.dofs.s.x', 'flows.dofs.s.y', 'flows.dofs.s.z',
+                       'fxns.store_ee.s.soc',
                        indiv_kwargs={'faulty': fault_kwargs})
     fig, ax = mdlhists.plot_trajectories("dofs.s.x", "dofs.s.y", "dofs.s.z",
                                          time_groups=['nominal'],
@@ -942,7 +943,7 @@ if __name__ == "__main__":
 
     # check single lowcharge fault from approach
     h = History(nominal=mdlhists.nominal,
-                faulty=mdlhists.store_ee_lowcharge_t6p0)
+                faulty=mdlhists.store_ee_lowcharge_t5p0)
     fig, ax = plot_env_with_traj_z(h, mdl)
     fig, ax = plot_env_with_traj(mdlhists, mdl)
 

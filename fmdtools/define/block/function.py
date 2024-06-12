@@ -3,6 +3,7 @@
 Defines :class:`Function` class for representing system functional behaviors.
 
 Has classes:
+
 - :class:`Function`: Class for defining model Functions.
 - :class:`GenericFxn`: Function class to use as a placeholder.
 """
@@ -68,6 +69,11 @@ class Function(Block):
         """
         super().__init__(name=name, **kwargs)
         self.args_f = args_f
+        if hasattr(self, 'behavior'):
+            raise Exception("Invalid behavioral method: behavior(). Behavior must be"
+                            " specified as dynamic_behavior() or static_behavior()")
+        if hasattr(self, 'condfaults'):
+            raise Exception("Use of condfaults() is deprecated.")
 
     def get_typename(self):
         return "Function"
@@ -143,7 +149,7 @@ class Function(Block):
         ----------
         proptype : str
             Type of propagation step to update
-            ('behavior', 'static_behavior', or 'dynamic_behavior')
+            ('static_behavior', or 'dynamic_behavior')
         faults : list, optional
             Faults to inject in the function. The default is [].
         time : float, optional
@@ -157,17 +163,12 @@ class Function(Block):
         if faults:
             self.m.add_fault(*faults)
             self.m.update_modestates()
-        # conditional faults and behavior are then run
-        if hasattr(self, 'condfaults'):
-            self.condfaults(time)
+
         if time > self.t.time:
             if hasattr(self, 'r'):
                 self.r.update_stochastic_states()
         self.prop_arch_behaviors(proptype, faults, time, run_stochastic)
 
-        if proptype == 'static' and hasattr(self, 'behavior'):
-            # generic behavioral methods are run at all steps
-            self.behavior(time)
         if proptype == 'static' and hasattr(self, 'static_behavior'):
             self.static_behavior(time)
         elif proptype == 'dynamic' and hasattr(self, 'dynamic_behavior') and time > self.t.time:

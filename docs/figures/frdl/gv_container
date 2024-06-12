@@ -1,0 +1,3 @@
+digraph {
+	0 [label=ContainerNodeStyle color=grey fillcolor=lightgrey penwidth=0 shape=diamond style=filled]
+}

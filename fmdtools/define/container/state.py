@@ -92,6 +92,10 @@ class State(BaseContainer):
         >>> p_arr = p.get("x", "y")
         >>> p_arr
         array([1., 2.])
+        >>> p.get("x")
+        1.0
+        >>> p.get("x", "y", as_array=False)
+        [1.0, 2.0]
         """
         if len(attnames) == 1:
             states = getattr(self, attnames[0])
@@ -107,6 +111,7 @@ class State(BaseContainer):
             return states
 
     def values(self):
+        """Return the values of the defined fields for the state."""
         return self.gett(*self.__fields__)
 
     def gett(self, *attnames):
@@ -116,6 +121,13 @@ class State(BaseContainer):
         Useful when a numpy array would translate the underlying data
         types poorly (e.g., np.array([1,'b'] would make 1 a string--using a tuple
         instead preserves the data type)).
+
+        Examples
+        --------
+        >>> ExampleState().gett("x")
+        1.0
+        >>> ExampleState().gett("x", "y")
+        (1.0, 1.0)
         """
         states = self.get(*attnames, as_array=False)
         if not is_iter(states):
@@ -167,8 +179,8 @@ class State(BaseContainer):
         """
         Round the given arguments to a given resolution.
 
-        e.g.,:
-
+        Examples
+        --------
         >>> p = ExampleState(x=1.75850)
         >>> p.roundto(x=0.1)
         >>> p.x
@@ -205,8 +217,8 @@ class State(BaseContainer):
         """
         Return the multiplication of given attributes of the State.
 
-        e.g.,:
-
+        Examples
+        --------
         >>> p = ExampleState(x=2.0, y=3.0)
         >>> p.mul("x","y")
         6.0
@@ -220,7 +232,8 @@ class State(BaseContainer):
         """
         Return the division of given attributes of the State.
 
-        e.g.,:
+        Examples
+        --------
         >>> p = ExampleState(x=1.0, y=2.0)
         >>> p.div('x','y')
         0.5
@@ -234,7 +247,8 @@ class State(BaseContainer):
         """
         Return the addition of given attributes of the State.
 
-        e.g.,:
+        Examples
+        --------
         >>> p = ExampleState(x=1.0, y=2.0)
         >>> p.add('x','y')
         3.0
@@ -248,8 +262,8 @@ class State(BaseContainer):
         """
         Return the subtraction of given attributes of the State.
 
-        e.g.,:
-        
+        Examples
+        --------
         >>> p = ExampleState(x=1.0, y=2.0)
         >>> p.sub('x','y')
         -1.0
@@ -259,7 +273,7 @@ class State(BaseContainer):
             a -= self.get(state)
         return a
 
-    def same(self, values, *states):
+    def same(self, *args, **kwargs):
         """
         Test whether a given iterable values has the same value as each in the state.
 
@@ -270,7 +284,23 @@ class State(BaseContainer):
         True
         >>> p.same([0.0, 2.0], "x", "y")
         False
+        >>> p.same([1.0], 'x')
+        True
+        >>> p.same(x=1.0, y=2.0)
+        True
+        >>> p.same(x=0.0, y=0.0)
+        False
         """
+        if args and kwargs:
+            raise Exception("Cannot use args and kwargs at the same time.")
+        if args:
+            values = args[0]
+            states = args[1:]
+        elif kwargs:
+            values = [*kwargs.values()]
+            states = [*kwargs.keys()]
+        if is_iter(values) and len(values) == 1:
+            values = values[0]
         test = values == self.get(*states)
         if is_iter(test):
             return all(test)
@@ -300,8 +330,6 @@ class State(BaseContainer):
                 str_size = "<U"+str(max(strlen))
 
         BaseContainer.init_hist_att(self, hist, att, timerange, track, str_size)
-
-
 
 
 class ExampleState(State):

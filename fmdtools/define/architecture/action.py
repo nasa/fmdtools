@@ -35,7 +35,8 @@ class ActionArchitecture(Architecture):
         time-step (True) or stays in the current action (False). Default is False.
     """
 
-    __slots__ = ['acts', 'conds', 'action_graph', 'flow_graph', 'faultmodes', 'active_actions']
+    __slots__ = ['acts', 'conds', 'action_graph', 'flow_graph', 'faultmodes',
+                 'active_actions']
     initial_action = "auto"
     state_rep = "finite-state"
     max_action_prop = "until_false"
@@ -67,7 +68,7 @@ class ActionArchitecture(Architecture):
                               if in_degree == 0]
             if not initial_action:
                 raise Exception("Cannot set initial action--no starting node")
-        elif type(self.initial_action) == str:
+        elif isinstance(self.initial_action, str):
             initial_action = [self.initial_action]
         self.set_active_actions(initial_action)
 
@@ -141,13 +142,13 @@ class ActionArchitecture(Architecture):
 
     def set_active_actions(self, actions):
         """Set given action(s) as active."""
-        if type(actions) == str:
+        if isinstance(actions, str):
             if actions in self.acts:
                 actions = [actions]
             else:
                 raise Exception("initial_action=" + actions +
                                 " not in self.acts: "+str(self.acts))
-        if type(actions) == list:
+        if isinstance(actions, list):
             self.active_actions = set(actions)
             if any(self.active_actions.difference(self.acts)):
                 raise Exception("Initial actions not associated with model: " +
@@ -156,6 +157,7 @@ class ActionArchitecture(Architecture):
             raise Exception("Invalid option for initial_action.")
 
     def inject_faults(self, faults):
+        """Inject faults into the actions contained in the architecture."""
         Architecture.inject_faults(self, 'acts', faults)
 
     def __call__(self, proptype, time, run_stochastic, dt):
@@ -201,7 +203,7 @@ class ActionArchitecture(Architecture):
                     raise Exception("Multiple active actions in a finite-state " +
                                     "representation: "+str(new_active_actions))
                 num_prop += 1
-                if type(self.proptype) == int and num_prop >= self.proptype:
+                if isinstance(self.proptype, int) and num_prop >= self.proptype:
                     break
                 if new_active_actions == set(active_actions):
                     break
@@ -210,5 +212,3 @@ class ActionArchitecture(Architecture):
                 if num_prop > 10000:
                     raise Exception("Undesired looping in Function ASG for: "+self.name)
             self.active_actions = active_actions
-
-

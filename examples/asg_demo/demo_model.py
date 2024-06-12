@@ -181,9 +181,15 @@ if __name__ == '__main__':
                                                  'perceive_failed', time=4,
                                                  desired_result='graph')
 
+    result_fault.graph.draw()
     ex_fxn = DetectHazard('detect_hazard')
     result_indiv, hist_indiv = prop.nominal(ex_fxn,
                                             disturbances={5:{'aa.flows.hazard.s.present':True}})
     fig, axs = hist_indiv.plot_line('aa.flows.hazard.s.present',
                                     'aa.flows.hazard.s.percieved',
                                     'aa.flows.hazard.s.mitigated', figsize=(10,5))
+
+    result_fault, mdlhist_fault = prop.one_fault(mdl, 'detect_hazard',
+                                                 'perceive_failed', time=4,
+                                                 desired_result='graph.fxns.detect_hazard.aa')
+    result_fault.graph.fxns.detect_hazard.aa.draw_graphviz(layout='dot')

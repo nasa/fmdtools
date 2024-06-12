@@ -1,0 +1,173 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="508pt" height="439pt" viewBox="0.00 0.00 508.23 438.83">
+<g id="graph0" class="graph" transform="scale(1 1) rotate(0) translate(4 434.83)">
+<polygon fill="white" stroke="transparent" points="-4,4 -4,-434.83 504.23,-434.83 504.23,4 -4,4"/>
+<!-- control_rover -->
+<g id="node1" class="node">
+<title>control_rover</title>
+<polygon fill="lightgrey" stroke="grey" stroke-width="2" points="500.23,-76.46 410.23,-76.46 410.23,-38.46 500.23,-38.46 500.23,-76.46"/>
+<text text-anchor="middle" x="455.23" y="-61.26" font-family="Times New Roman,serif" font-size="14.00">control_rover</text>
+<text text-anchor="middle" x="455.23" y="-46.26" font-family="Times New Roman,serif" font-size="14.00">[]</text>
+</g>
+<!-- control -->
+<g id="node10" class="node">
+<title>control</title>
+<ellipse fill="lightgrey" stroke="grey" stroke-width="0" cx="373.01" cy="-168.54" rx="38.78" ry="26.74"/>
+<text text-anchor="middle" x="373.01" y="-172.34" font-family="Times New Roman,serif" font-size="14.00">control</text>
+<text text-anchor="middle" x="373.01" y="-157.34" font-family="Times New Roman,serif" font-size="14.00">[]</text>
+</g>
+<!-- control_rover&#45;&gt;control -->
+<g id="edge1" class="edge">
+<title>control_rover-&gt;control</title>
+<path fill="none" stroke="black" d="M441.1,-76.55C429.02,-92.87 411.38,-116.71 397.08,-136.03"/>
+<polygon fill="black" stroke="black" points="390.98,-144.27 393.31,-133.55 393.95,-140.25 396.93,-136.23 396.93,-136.23 396.93,-136.23 393.95,-140.25 400.54,-138.91 390.98,-144.27 390.98,-144.27"/>
+<text text-anchor="start" x="373.09" y="-110.09" font-family="Times New Roman,serif" font-size="14.00">contains</text>
+</g>
+<!-- view_ground -->
+<g id="node2" class="node">
+<title>view_ground</title>
+<polygon fill="lightgrey" stroke="grey" stroke-width="2" points="321.87,-312.01 233.87,-312.01 233.87,-274.01 321.87,-274.01 321.87,-312.01"/>
+<text text-anchor="middle" x="277.87" y="-296.81" font-family="Times New Roman,serif" font-size="14.00">view_ground</text>
+<text text-anchor="middle" x="277.87" y="-281.81" font-family="Times New Roman,serif" font-size="14.00">[]</text>
+</g>
+<!-- ground -->
+<g id="node6" class="node">
+<title>ground</title>
+<ellipse fill="orange" stroke="grey" stroke-width="0" cx="450.97" cy="-333.27" rx="38.78" ry="26.74"/>
+<text text-anchor="middle" x="450.97" y="-337.07" font-family="Times New Roman,serif" font-size="14.00">ground</text>
+<text text-anchor="middle" x="450.97" y="-322.07" font-family="Times New Roman,serif" font-size="14.00">[]</text>
+</g>
+<!-- view_ground&#45;&gt;ground -->
+<g id="edge8" class="edge">
+<title>view_ground-&gt;ground</title>
+<path fill="none" stroke="black" d="M322,-303.28C347.11,-309.12 378.56,-316.43 404.11,-322.37"/>
+<polygon fill="black" stroke="black" points="413.95,-324.66 403.19,-326.78 409.08,-323.53 404.21,-322.39 404.21,-322.39 404.21,-322.39 409.08,-323.53 405.22,-318.01 413.95,-324.66 413.95,-324.66"/>
+<text text-anchor="start" x="317.05" y="-316.62" font-family="Times New Roman,serif" font-size="14.00">contains</text>
+</g>
+<!-- force -->
+<g id="node7" class="node">
+<title>force</title>
+<ellipse fill="lightgrey" stroke="grey" stroke-width="0" cx="250.93" cy="-403.96" rx="31.23" ry="26.74"/>
+<text text-anchor="middle" x="250.93" y="-407.76" font-family="Times New Roman,serif" font-size="14.00">force</text>
+<text text-anchor="middle" x="250.93" y="-392.76" font-family="Times New Roman,serif" font-size="14.00">[]</text>
+</g>
+<!-- view_ground&#45;&gt;force -->
+<g id="edge11" class="edge">
+<title>view_ground-&gt;force</title>
+<path fill="none" stroke="black" d="M273.24,-312.09C269.56,-327.25 264.3,-348.9 259.81,-367.38"/>
+<polygon fill="black" stroke="black" points="257.41,-377.26 255.4,-366.48 258.59,-372.4 259.77,-367.54 259.77,-367.54 259.77,-367.54 258.59,-372.4 264.15,-368.6 257.41,-377.26 257.41,-377.26"/>
+<text text-anchor="start" x="220.52" y="-343.53" font-family="Times New Roman,serif" font-size="14.00">contains</text>
+</g>
+<!-- ee -->
+<g id="node8" class="node">
+<title>ee</title>
+<ellipse fill="lightgrey" stroke="grey" stroke-width="0" cx="137.26" cy="-226.15" rx="27" ry="26.74"/>
+<text text-anchor="middle" x="137.26" y="-229.95" font-family="Times New Roman,serif" font-size="14.00">ee</text>
+<text text-anchor="middle" x="137.26" y="-214.95" font-family="Times New Roman,serif" font-size="14.00">[]</text>
+</g>
+<!-- view_ground&#45;&gt;ee -->
+<g id="edge9" class="edge">
+<title>view_ground-&gt;ee</title>
+<path fill="none" stroke="black" d="M237.57,-273.85C216.42,-263.79 190.8,-251.61 170.74,-242.07"/>
+<polygon fill="black" stroke="black" points="161.67,-237.76 172.64,-237.99 166.19,-239.91 170.71,-242.05 170.71,-242.05 170.71,-242.05 166.19,-239.91 168.77,-246.12 161.67,-237.76 161.67,-237.76"/>
+<text text-anchor="start" x="158.16" y="-261.76" font-family="Times New Roman,serif" font-size="14.00">contains</text>
+</g>
+<!-- video -->
+<g id="node9" class="node">
+<title>video</title>
+<ellipse fill="lightgrey" stroke="grey" stroke-width="0" cx="54.49" cy="-341.65" rx="33.47" ry="26.74"/>
+<text text-anchor="middle" x="54.49" y="-345.45" font-family="Times New Roman,serif" font-size="14.00">video</text>
+<text text-anchor="middle" x="54.49" y="-330.45" font-family="Times New Roman,serif" font-size="14.00">[]</text>
+</g>
+<!-- view_ground&#45;&gt;video -->
+<g id="edge10" class="edge">
+<title>view_ground-&gt;video</title>
+<path fill="none" stroke="black" d="M233.74,-302.62C193.94,-311.29 135.8,-323.94 96.63,-332.47"/>
+<polygon fill="black" stroke="black" points="86.61,-334.65 95.42,-328.13 91.5,-333.59 96.38,-332.53 96.38,-332.53 96.38,-332.53 91.5,-333.59 97.34,-336.92 86.61,-334.65 86.61,-334.65"/>
+<text text-anchor="start" x="119.18" y="-321.35" font-family="Times New Roman,serif" font-size="14.00">contains</text>
+</g>
+<!-- communicate -->
+<g id="node3" class="node">
+<title>communicate</title>
+<polygon fill="lightgrey" stroke="grey" stroke-width="2" points="186.22,-113.66 95.22,-113.66 95.22,-75.66 186.22,-75.66 186.22,-113.66"/>
+<text text-anchor="middle" x="140.72" y="-98.46" font-family="Times New Roman,serif" font-size="14.00">communicate</text>
+<text text-anchor="middle" x="140.72" y="-83.46" font-family="Times New Roman,serif" font-size="14.00">[]</text>
+</g>
+<!-- communicate&#45;&gt;ee -->
+<g id="edge13" class="edge">
+<title>communicate-&gt;ee</title>
+<path fill="none" stroke="black" d="M140.22,-113.78C139.7,-133.48 138.88,-164.67 138.23,-189.2"/>
+<polygon fill="black" stroke="black" points="137.97,-199.25 133.73,-189.14 138.1,-194.25 138.23,-189.26 138.23,-189.26 138.23,-189.26 138.1,-194.25 142.73,-189.37 137.97,-199.25 137.97,-199.25"/>
+<text text-anchor="start" x="93.22" y="-155.29" font-family="Times New Roman,serif" font-size="14.00">contains</text>
+</g>
+<!-- comms -->
+<g id="node11" class="node">
+<title>comms</title>
+<ellipse fill="lightgrey" stroke="grey" stroke-width="0" cx="40.31" cy="-56.9" rx="40.11" ry="26.74"/>
+<text text-anchor="middle" x="40.31" y="-60.7" font-family="Times New Roman,serif" font-size="14.00">comms</text>
+<text text-anchor="middle" x="40.31" y="-45.7" font-family="Times New Roman,serif" font-size="14.00">[]</text>
+</g>
+<!-- communicate&#45;&gt;comms -->
+<g id="edge12" class="edge">
+<title>communicate-&gt;comms</title>
+<path fill="none" stroke="black" d="M95.21,-77.55C91.79,-76.26 88.33,-74.96 84.92,-73.68"/>
+<polygon fill="black" stroke="black" points="75.43,-70.11 86.37,-69.42 80.11,-71.87 84.79,-73.63 84.79,-73.63 84.79,-73.63 80.11,-71.87 83.2,-77.84 75.43,-70.11 75.43,-70.11"/>
+<text text-anchor="start" x="90.06" y="-64.41" font-family="Times New Roman,serif" font-size="14.00">contains</text>
+</g>
+<!-- store_energy -->
+<g id="node4" class="node">
+<title>store_energy</title>
+<polygon fill="orange" stroke="red" stroke-width="2" points="295.26,-184.61 209.26,-184.61 209.26,-146.61 295.26,-146.61 295.26,-184.61"/>
+<text text-anchor="middle" x="252.26" y="-169.41" font-family="Times New Roman,serif" font-size="14.00">store_energy</text>
+<text text-anchor="middle" x="252.26" y="-154.41" font-family="Times New Roman,serif" font-size="14.00">['no_charge']</text>
+</g>
+<!-- store_energy&#45;&gt;ee -->
+<g id="edge2" class="edge">
+<title>store_energy-&gt;ee</title>
+<path fill="none" stroke="black" d="M215.87,-184.77C201.3,-192.44 184.62,-201.22 170.39,-208.71"/>
+<polygon fill="black" stroke="black" points="161.44,-213.42 168.19,-204.78 165.86,-211.09 170.29,-208.76 170.29,-208.76 170.29,-208.76 165.86,-211.09 172.38,-212.75 161.44,-213.42 161.44,-213.42"/>
+<text text-anchor="start" x="147.13" y="-185.54" font-family="Times New Roman,serif" font-size="14.00">contains</text>
+</g>
+<!-- store_energy&#45;&gt;control -->
+<g id="edge3" class="edge">
+<title>store_energy-&gt;control</title>
+<path fill="none" stroke="black" d="M295.51,-166.66C304.75,-166.88 314.58,-167.12 324.02,-167.35"/>
+<polygon fill="black" stroke="black" points="334.07,-167.6 323.96,-171.85 329.07,-167.47 324.07,-167.35 324.07,-167.35 324.07,-167.35 329.07,-167.47 324.18,-162.85 334.07,-167.6 334.07,-167.6"/>
+<text text-anchor="start" x="286.77" y="-155.81" font-family="Times New Roman,serif" font-size="14.00">contains</text>
+</g>
+<!-- move_rover -->
+<g id="node5" class="node">
+<title>move_rover</title>
+<polygon fill="lightgrey" stroke="red" stroke-width="2" points="305.05,-38 222.05,-38 222.05,0 305.05,0 305.05,-38"/>
+<text text-anchor="middle" x="263.55" y="-22.8" font-family="Times New Roman,serif" font-size="14.00">move_rover</text>
+<text text-anchor="middle" x="263.55" y="-7.8" font-family="Times New Roman,serif" font-size="14.00">['short']</text>
+</g>
+<!-- move_rover&#45;&gt;ground -->
+<g id="edge4" class="edge">
+<title>move_rover-&gt;ground</title>
+<path fill="none" stroke="black" d="M274.99,-38.19C305.96,-90.12 391.72,-233.93 430.94,-299.68"/>
+<polygon fill="black" stroke="black" points="436.15,-308.42 427.16,-302.14 433.59,-304.13 431.03,-299.83 431.03,-299.83 431.03,-299.83 433.59,-304.13 434.89,-297.53 436.15,-308.42 436.15,-308.42"/>
+<text text-anchor="start" x="306.97" y="-172.73" font-family="Times New Roman,serif" font-size="14.00">contains</text>
+</g>
+<!-- move_rover&#45;&gt;force -->
+<g id="edge7" class="edge">
+<title>move_rover-&gt;force</title>
+<path fill="none" stroke="black" d="M262.92,-38.09C260.94,-98.49 254.79,-286.18 252.15,-366.68"/>
+<polygon fill="black" stroke="black" points="251.82,-376.86 247.65,-366.71 251.98,-371.86 252.15,-366.86 252.15,-366.86 252.15,-366.86 251.98,-371.86 256.64,-367.01 251.82,-376.86 251.82,-376.86"/>
+<text text-anchor="start" x="211.54" y="-206.19" font-family="Times New Roman,serif" font-size="14.00">contains</text>
+</g>
+<!-- move_rover&#45;&gt;ee -->
+<g id="edge5" class="edge">
+<title>move_rover-&gt;ee</title>
+<path fill="none" stroke="black" d="M251.9,-38.12C230.18,-73.74 183.31,-150.62 156.71,-194.24"/>
+<polygon fill="black" stroke="black" points="151.36,-203.02 152.73,-192.13 153.97,-198.75 156.57,-194.48 156.57,-194.48 156.57,-194.48 153.97,-198.75 160.41,-196.82 151.36,-203.02 151.36,-203.02"/>
+<text text-anchor="start" x="158.3" y="-119.98" font-family="Times New Roman,serif" font-size="14.00">contains</text>
+</g>
+<!-- move_rover&#45;&gt;control -->
+<g id="edge6" class="edge">
+<title>move_rover-&gt;control</title>
+<path fill="none" stroke="black" d="M277.64,-38.24C295.71,-62.94 327.35,-106.16 349.2,-136.01"/>
+<polygon fill="black" stroke="black" points="355.36,-144.43 345.82,-139.02 352.4,-140.39 349.45,-136.36 349.45,-136.36 349.45,-136.36 352.4,-140.39 353.08,-133.7 355.36,-144.43 355.36,-144.43"/>
+<text text-anchor="start" x="267.42" y="-90.93" font-family="Times New Roman,serif" font-size="14.00">contains</text>
+</g>
+</g>
+</svg>

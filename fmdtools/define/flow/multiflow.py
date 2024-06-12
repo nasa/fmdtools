@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 """Defines :class:`MultiFlow` class which represents multiple flows in one graph."""
 from fmdtools.define.flow.base import Flow
-from recordclass import asdict
 
 
 class MultiFlow(Flow):
@@ -71,7 +70,7 @@ class MultiFlow(Flow):
             if p == 'global':
                 p = self.p
             if s == 'global':
-                s = asdict(self.s)
+                s = self.s.asdict()
             newflow = self.__class__(name=name, glob=self, p=p, s=s, track=track,
                                      **kwargs)
         setattr(self, name, newflow)
@@ -159,11 +158,11 @@ class MultiFlow(Flow):
 
     def copy(self, name='', glob=[], p={}, s={}, track=['s']):
         if not s:
-            s = asdict(self.s)
+            s = self.s.asdict()
         cop = self.__class__(self.name, glob=glob, p=p, s=s, track=track)
         for loc in self.locals:
             local = getattr(self, loc)
-            cop.create_local(local.name, s=asdict(local.s), p=local.p)
+            cop.create_local(local.name, s=local.s.asdict(), p=local.p)
         return cop
 
     def create_hist(self, timerange):

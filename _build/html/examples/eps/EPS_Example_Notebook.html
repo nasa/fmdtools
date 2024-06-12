@@ -340,6 +340,7 @@
 </ul>
 </li>
 <li class="toctree-l3"><a class="reference internal" href="../rover/fault_sampling/Rover_Mode_Notebook.html">Synthetic Mode Generation</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../rover/fault_sampling/Rover_Mode_Notebook.html#Analysis">Analysis</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../rover/fault_sampling/Rover_Mode_Notebook.html#Cluster-Analysis">Cluster Analysis</a></li>
 </ul>
 </li>
@@ -437,10 +438,18 @@
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="../../docs/fmdtools.analyze.html">fmdtools.analyze</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../docs/fmdtools.analyze.graph.html">fmdtools.analyze.graph</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.analyze.graph.html#module-fmdtools.analyze.graph.label">fmdtools.analyze.graph.label</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.analyze.graph.html#fmdtools-analyze-graph-style">fmdtools.analyze.graph.style</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.analyze.graph.html#fmdtools-analyze-graph-base">fmdtools.analyze.graph.base</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.analyze.graph.html#module-fmdtools.analyze.graph.model">fmdtools.analyze.graph.model</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.analyze.graph.html#fmdtools-analyze-graph-architecture">fmdtools.analyze.graph.architecture</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../docs/fmdtools.analyze.graph.html#module-fmdtools.analyze.graph.flow">fmdtools.analyze.graph.flow</a></li>
+</ul>
+</li>
 <li class="toctree-l3"><a class="reference internal" href="../../docs/fmdtools.analyze.html#module-fmdtools.analyze.common">fmdtools.analyze.common</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../docs/fmdtools.analyze.html#module-fmdtools.analyze.result">fmdtools.analyze.result</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../docs/fmdtools.analyze.html#module-fmdtools.analyze.history">fmdtools.analyze.history</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../../docs/fmdtools.analyze.html#module-fmdtools.analyze.graph">fmdtools.analyze.graph</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../docs/fmdtools.analyze.html#module-fmdtools.analyze.tabulate">fmdtools.analyze.tabulate</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../docs/fmdtools.analyze.html#module-fmdtools.analyze.phases">fmdtools.analyze.phases</a></li>
 </ul>
@@ -490,7 +499,7 @@
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">eps</span> <span class="kn">import</span> <span class="n">EPS</span>
 <span class="kn">import</span> <span class="nn">fmdtools.sim.propagate</span> <span class="k">as</span> <span class="nn">propagate</span>
-<span class="kn">from</span> <span class="nn">fmdtools.analyze.graph</span> <span class="kn">import</span> <span class="n">FunctionArchitectureGraph</span>
+<span class="kn">from</span> <span class="nn">fmdtools.analyze.graph.architecture</span> <span class="kn">import</span> <span class="n">FunctionArchitectureGraph</span>
 </pre></div>
 </div>
 </div>
@@ -536,7 +545,7 @@
 </div>
 <div class="output_area stderr docutils container">
 <div class="highlight"><pre>
-c:\users\dhulse\documents\github\fmdtools\fmdtools\analyze\history.py:761: UserWarning: Attempting to set identical low and high xlims makes transformation singular; automatically expanding.
+c:\users\dhulse\documents\github\fmdtools\fmdtools\analyze\history.py:759: UserWarning: Attempting to set identical low and high xlims makes transformation singular; automatically expanding.
   ax.set_xlim(min_ind, max_ind)
 </pre></div></div>
 </div>
@@ -578,7 +587,7 @@ c:\users\dhulse\documents\github\fmdtools\fmdtools\analyze\history.py:761: UserW
 </div>
 <div class="output_area stderr docutils container">
 <div class="highlight"><pre>
-SCENARIOS COMPLETE: 100%|██████████| 35/35 [00:00&lt;00:00, 70.57it/s]
+SCENARIOS COMPLETE: 100%|██████████| 35/35 [00:00&lt;00:00, 111.35it/s]
 </pre></div></div>
 </div>
 <p>Using <code class="docutils literal notranslate"><span class="pre">analyze.tabulate.result_summary_fmea</span></code>, one can see the degradation effects of this fault on the flows:</p>
@@ -640,11 +649,11 @@ SCENARIOS COMPLETE: 100%|██████████| 35/35 [00:00&lt;00:00, 
     </tr>
     <tr>
       <th>import_ee_high_v_t0p0</th>
-      <td>['me', 'oe', 'he']</td>
+      <td>[]</td>
       <td>[]</td>
       <td>0.000005</td>
-      <td>2100.0</td>
-      <td>459.9</td>
+      <td>3350.0</td>
+      <td>733.65</td>
     </tr>
     <tr>
       <th>import_ee_no_v_t0p0</th>
@@ -672,11 +681,11 @@ SCENARIOS COMPLETE: 100%|██████████| 35/35 [00:00&lt;00:00, 
     </tr>
     <tr>
       <th>supply_ee_major_overload_t0p0</th>
-      <td>['me', 'oe', 'he']</td>
+      <td>[]</td>
       <td>[]</td>
       <td>0.000003</td>
-      <td>2400.0</td>
-      <td>315.36</td>
+      <td>3650.0</td>
+      <td>479.61</td>
     </tr>
     <tr>
       <th>supply_ee_short_t0p0</th>

@@ -45,7 +45,7 @@ from fmdtools.analyze.common import set_empty_multiplots
 
 
 def file_check(filename, overwrite):
-    """Check if files exists and whether to overwrite the file"""
+    """Check if files exists and whether to overwrite the file."""
     if os.path.exists(filename):
         if not overwrite:
             raise Exception("File already exists: "+filename)
@@ -60,8 +60,7 @@ def file_check(filename, overwrite):
 
 
 def auto_filetype(filename, filetype=""):
-    """Helper function that automatically determines the filetype (pickle, csv, or json)
-    of a given filename"""
+    """Automatically determines the filetype (pickle, csv, or json) of a filename."""
     if not filetype:
         if '.' not in filename:
             raise Exception("No file extension in: " + filename)
@@ -78,8 +77,7 @@ def auto_filetype(filename, filetype=""):
 
 
 def create_indiv_filename(filename, indiv_id, splitchar='_'):
-    """Helper file that creates an individualized name for a file given the general
-    filename and an individual id"""
+    """Create filename name for a file given general filename and individual id."""
     filename_parts = filename.split(".")
     filename_parts.insert(1, '.')
     filename_parts.insert(1, splitchar+indiv_id)
@@ -88,9 +86,10 @@ def create_indiv_filename(filename, indiv_id, splitchar='_'):
 
 def clean_resultdict_keys(resultdict_dirty):
     """
+    Clean the keys of a loaded dictionary.
+
     Helper function for recreating results dictionary keys (tuples) from a dictionary
-    loaded from a file (where keys are
-    strings) (used in csv/json results)
+    loaded from a file (where keys are strings) (used in csv/json results).
 
     Parameters
     ----------
@@ -192,7 +191,7 @@ class Result(UserDict):
         str_rep = ""
         for k, val in self.items():
             if isinstance(val, np.ndarray) or isinstance(val, list):
-                if type(k) == tuple:
+                if type(k) is tuple:
                     k = str(k)
                 val_rep = ind*"--"+k+": "
                 if len(val_rep) > 40:
@@ -225,9 +224,10 @@ class Result(UserDict):
 
     def __eq__(self, other):
         """
-        Checks that the two values of the dictionary are equal. Enables the syntax
-        result1 == result2, which returns True/False depending on if the keys/values
-        are the same.
+        Check that the two values of the dictionary are equal.
+
+        Enables the syntax result1 == result2, which returns True/False depending on if
+        the keys/values are the same.
 
         Parameters
         ----------
@@ -246,7 +246,9 @@ class Result(UserDict):
 
     def __sub__(self, other):
         """
-        Magic subtraction methods for Results. Used to enable uses such as:
+        Magic subtraction methods for Results.
+
+        Used to enable uses such as:
             result1 - result2 = result3, where result3 is the difference between
             result1 and result2
 
@@ -276,7 +278,7 @@ class Result(UserDict):
 
     def get_different(self, other):
         """
-        Finds the values of two results which are different.
+        Find the values of two results which are different.
 
         Parameters
         ----------
@@ -324,7 +326,7 @@ class Result(UserDict):
 
     def get(self, *argstr,  **to_include):
         """
-        Provides dict-like access to the history/result across a number of arguments
+        Provide dict-like access to the history/result across a number of arguments.
 
         Parameters
         ----------
@@ -348,7 +350,7 @@ class Result(UserDict):
             return res
 
     def all_with(self, attr):
-        """Gets all values with the attribute attr"""
+        """Get all values with the attribute attr."""
         if attr in self:
             return self[attr]
         new = self.__class__()
@@ -363,18 +365,20 @@ class Result(UserDict):
                 return new[k]
             else:
                 return new
+        else:
+            raise Exception(attr+" not in Result keys: "+str(self.keys()))
 
     def fromdict(inputdict):
         return fromdict(Result, inputdict)
 
     def load(filename, filetype="", renest_dict=False, indiv=False):
-        """Loads as Result using :func:`load'"""
+        """Load as Result using :func:`load'."""
         inputdict = load(filename, filetype="", renest_dict=renest_dict,
                          indiv=indiv, Rclass=Result)
         return fromdict(Result, inputdict)
 
     def load_folder(folder, filetype, renest_dict=False):
-        """Loads as History using :func:`load_folder'"""
+        """Load as History using :func:`load_folder'."""
         files_toread = load_folder(folder, filetype)
         result = Result()
         for filename in files_toread:
@@ -385,7 +389,7 @@ class Result(UserDict):
         return result
 
     def get_values(self, *values):
-        """Gets a dict with all values corresponding to the strings in *values"""
+        """Get a dict with all values corresponding to the strings in *values."""
         h = self.__class__()
         flatself = self.flatten()
         k_vs = []
@@ -400,7 +404,7 @@ class Result(UserDict):
         return h
 
     def get_scens(self, *scens):
-        """Gets a dictlike with all scenarios corresponding to the strings in *scens"""
+        """Get a dictlike with all scenarios corresponding to the strings in *scens."""
         h = self.__class__()
         k_s = [k for k in self.keys()
                for s in scens if k.startswith(s+".") or '.'+s+'.' in k]
@@ -410,7 +414,7 @@ class Result(UserDict):
 
     def get_comp_groups(self, *values, **groups):
         """
-        Gets comparison groups of *values (i.e., aspects of the model) in groups
+        Get comparison groups of *values (i.e., aspects of the model) in groups
         **groups (sets of scenarios with structure )
 
         Parameters
@@ -433,7 +437,7 @@ class Result(UserDict):
         for group, scens in groups.items():
             if scens == 'default':
                 scens = {k.split('.')[0] for k in self.keys()}
-            elif type(scens) == str:
+            elif isinstance(scens, str):
                 scens = [scens]
             k_vs = [k for k in self.keys() for scen in scens for v in values
                     if k.startswith(scen) and k.endswith(v) and '.t.' not in k]
@@ -636,7 +640,7 @@ class Result(UserDict):
 
     def get_expected(self, app=[], with_nominal=False, difference_from_nominal=False):
         """
-        Takes the expectation of numeric metrics in the result over given scenarios.
+        Take the expectation of numeric metrics in the result over given scenarios.
 
         Parameters
         ----------
@@ -696,7 +700,7 @@ class Result(UserDict):
             Whether to take the metric over variables (0) or over time (1) or
             both (None). The default is None.
         """
-        if type(metric) == str:
+        if isinstance(metric, str):
             method = getattr(self, metric)
             return method("."+value, *args)
         else:
@@ -818,14 +822,12 @@ class Result(UserDict):
             return empty_as
 
     def percent(self, metric):
-        """Calculates the percentage of a given indicator variable being True in
-        endclasses"""
+        """Calculate the percentage of a given indicator variable being True."""
         return sum([int(bool(e)) for e in self.get_values(metric).values()
                     if not np.isnan(e)])/(len(self.get_values(metric))+1e-16)
 
     def rate(self, metric, prob_key='rate'):
-        """Calculates the rate of a given indicator variable being True in endclasses
-        using the rate variable in endclasses"""
+        """Calculate the rate of a metric being True using the rate variable."""
         ecs = np.array([bool(e) for e in self.get_values(metric).values()
                         if not np.isnan(e)])
         weights = np.array([e for e in self.get_values(prob_key).values()
@@ -834,8 +836,7 @@ class Result(UserDict):
 
     def end_diff(self, metric, nan_as=np.nan, as_ind=False, no_diff=False):
         """
-        Calculates the difference between the nominal and fault scenarios for a set of
-        endclasses
+        Calculate the difference between the nominal and fault scenarios.
 
         Parameters
         ----------
@@ -849,6 +850,7 @@ class Result(UserDict):
         no_diff : bool, optional
             Option for not computing the difference
             (but still performing the processing here). The default is False.
+
         Returns
         -------
         difference : dict
@@ -906,7 +908,7 @@ class Result(UserDict):
                          legend_loc=-1, xlabels={}, ylabel='count', title='', titles={},
                          figsize='default',  v_padding=0.4, h_padding=0.05,
                          title_padding=0.1, legend_title=None, indiv_kwargs={},
-                         **kwargs):
+                         fig=None, axs=None, **kwargs):
         """
         Plot histogram of given metric(s) over comparison groups of scenarios.
 
@@ -956,8 +958,8 @@ class Result(UserDict):
             comparison group comp (or scenario, if not aggregated) which overrides
             the global kwargs (or default behavior).
         figsize : tuple (float,float)
-            x-y size for the figure. The default is 'default', which dymanically gives 3 for
-            each column and 2 for each row
+            x-y size for the figure. The default is 'default', which dymanically gives
+            3 for each column and 2 for each row
         v_padding : float
             vertical padding between subplots as a fraction of axis height.
         h_padding : float
@@ -966,6 +968,10 @@ class Result(UserDict):
             padding for title as a fraction of figure height.
         legend_title : str, optional
             title for the legend. Default is None.
+        fig : matplotib figure
+            Pre-existing figure (if any).
+        axs : matplotlib axes
+            Pre-existing axes (if any).
         **kwargs : kwargs
             keyword arguments to mpl.hist e.g. bins, etc.
         """
@@ -974,13 +980,14 @@ class Result(UserDict):
         fig, axs, cols, rows, titles = multiplot_helper(cols, *plot_values,
                                                         figsize=figsize,
                                                         titles=titles,
-                                                        sharey=True, sharex=False)
+                                                        sharey=True, sharex=False,
+                                                        fig=fig, axs=axs)
         groupmetrics = self.get_comp_groups(*plot_values, **comp_groups)
         num_bins = bins
         for i, plot_value in enumerate(plot_values):
             ax = axs[i]
             xlabel = xlabels.get(plot_value, plot_value)
-            if type(xlabel) == str:
+            if isinstance(xlabel, str):
                 ax.set_xlabel(xlabel)
             else:
                 ax.set_xlabel(' '.join(xlabel))
@@ -1028,8 +1035,6 @@ def load(filename, filetype="", renest_dict=True, indiv=False, Rclass=Result):
     result : Result/History
         Corresponding result/hist object with data loaded from the file.
     """
-    import json
-    import pandas
     if not os.path.exists(filename):
         raise Exception("File does not exist: "+filename)
     filetype = auto_filetype(filename, filetype)
@@ -1037,34 +1042,9 @@ def load(filename, filetype="", renest_dict=True, indiv=False, Rclass=Result):
         loaded = np.load(filename)
         resultdict = {k: v[()] for k, v in loaded.items()}
     elif filetype == 'csv':  # add support for nested dict mdlhist using flatten_hist?
-        if indiv:
-            resulttab = pandas.read_csv(filename, skiprows=1)
-        else:
-            resulttab = pandas.read_csv(filename)
-        resultdict = resulttab.to_dict("list")
-        resultdict = clean_resultdict_keys(resultdict)
-        for key in resultdict:
-            if (len(resultdict[key]) == 1 and
-                    (isinstance(resultdict[key], list) or
-                     isinstance(resultdict[key], tuple))):
-                resultdict[key] = resultdict[key][0]
-            else:
-                resultdict[key] = np.array(resultdict[key])
-        if indiv:
-            scenname = [*pandas.read_csv(filename, nrows=0).columns][0]
-            resultdict = {scenname: resultdict}
+        resultdict = load_csv(filename, indiv=indiv)
     elif filetype == 'json':
-        with open(filename, 'r', encoding='utf8') as file_handle:
-            loadeddict = json.load(file_handle)
-            if indiv:
-                key = [*loadeddict.keys()][0]
-                loadeddict = loadeddict[key]
-                loadeddict = {key+"."+innerkey: values for innerkey,
-                              values in loadeddict.items()}
-                resultdict = clean_resultdict_keys(loadeddict)
-            else:
-                resultdict = clean_resultdict_keys(loadeddict)
-        file_handle.close()
+        resultdict = load_json(filename, indiv=indiv)
     else:
         raise Exception("Invalid File Type")
     if Rclass not in [dict, 'dict']:
@@ -1075,6 +1055,45 @@ def load(filename, filetype="", renest_dict=True, indiv=False, Rclass=Result):
         result = resultdict
 
     return result
+
+
+def load_csv(filename, indiv=False):
+    """Load csv files."""
+    import pandas
+    if indiv:
+        resulttab = pandas.read_csv(filename, skiprows=1)
+    else:
+        resulttab = pandas.read_csv(filename)
+    resultdict = resulttab.to_dict("list")
+    resultdict = clean_resultdict_keys(resultdict)
+    for key in resultdict:
+        if (len(resultdict[key]) == 1 and
+                (isinstance(resultdict[key], list) or
+                 isinstance(resultdict[key], tuple))):
+            resultdict[key] = resultdict[key][0]
+        else:
+            resultdict[key] = np.array(resultdict[key])
+    if indiv:
+        scenname = [*pandas.read_csv(filename, nrows=0).columns][0]
+        resultdict = {scenname: resultdict}
+    return resultdict
+
+
+def load_json(filename, indiv=False):
+    """Load json files."""
+    import json
+    with open(filename, 'r', encoding='utf8') as file_handle:
+        loadeddict = json.load(file_handle)
+        if indiv:
+            key = [*loadeddict.keys()][0]
+            loadeddict = loadeddict[key]
+            loadeddict = {key+"."+innerkey: values for innerkey,
+                          values in loadeddict.items()}
+            resultdict = clean_resultdict_keys(loadeddict)
+        else:
+            resultdict = clean_resultdict_keys(loadeddict)
+    file_handle.close()
+    return resultdict
 
 
 def load_folder(folder, filetype):

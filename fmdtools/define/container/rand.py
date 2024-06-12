@@ -6,14 +6,18 @@ Has Classes and Functions:
 
 - :class:`Rand`: Superclass for Block random properties.
 
-- :func:`get_pdf_for_rand`: Gets the corresponding probability mass/density for random sample x from 'randname' function in numpy.
+- :func:`get_pdf_for_rand`: Gets the corresponding probability mass/density for random
+  sample x from 'randname' function in numpy.
 
-- :func:`get_scipy_pdf_helper`: Gets probability mass/density for the outcome x from the distribution "randname". Used as a helper function in determining stochastic model state probability
+- :func:`get_scipy_pdf_helper`: Gets probability mass/density for the outcome x from the
+  distribution "randname". Used as a helper function in determining stochastic model
+  state probability
 
-- :func:`get_pdf_for_dist`: Gets the corresponding probability mass/density (from scipy) for outcome x for probability distributions with name 'randname' in numpy.
+- :func:`get_pdf_for_dist`: Gets the corresponding probability mass/density (from scipy)
+  for outcome x for probability distributions with name 'randname' in numpy.
 """
 from scipy import stats
-from recordclass import asdict, astuple
+from recordclass import astuple
 import numpy as np
 import math
 from fmdtools.define.container.base import BaseContainer
@@ -23,8 +27,6 @@ from fmdtools.define.container.state import State
 class Rand(BaseContainer):
     """
     Class for defining and interacting with random states of the model.
-
-    ...
 
     Attributes
     ----------
@@ -97,8 +99,15 @@ class Rand(BaseContainer):
         -------
         rand_states : dict
             States in self.s
+
+        Examples
+        --------
+        >>> ExampleRand().get_rand_states()
+        {'noise': 1.0}
+        >>> ExampleRand().get_rand_states(auto_update_only=True)
+        {}
         """
-        rand_states = asdict(self.s)
+        rand_states = self.s.asdict()
         if auto_update_only:
             rand_states = {state: vals for state,
                            vals in rand_states.items()

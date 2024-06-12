@@ -5,7 +5,6 @@ from fmdtools.define.flow.base import Flow
 from fmdtools.define.block.base import Simulable
 from fmdtools.define.object.base import init_obj
 from fmdtools.analyze.common import get_sub_include
-from recordclass import asdict
 import time
 
 
@@ -169,7 +168,7 @@ class Architecture(Simulable):
             Flows, dicts for non-default values to p, s, etc.
         """
         flows = self.get_flows(*flownames, all_if_empty=False)
-        fkwargs = {**{'sp': asdict(self.sp)}, **kwargs}
+        fkwargs = {**{'sp': self.sp.asdict()}, **kwargs}
         if hasattr(self, 'r'):
             fkwargs = {**{'r': {"seed": self.r.seed}}, **fkwargs}
         if not self.sp.use_local:

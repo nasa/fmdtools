@@ -6,8 +6,10 @@ Created on Mon Dec 20 15:49:13 2021
 """
 import os
 import unittest
-from examples.pump.ex_pump import Pump
+from examples.pump.ex_pump import Pump, PumpParam
+from examples.pump.pump_indiv import MoveWatDynamic
 from fmdtools.sim import propagate as prop
+from fmdtools.sim.sample import ParameterDomain, ParameterSample
 import fmdtools.analyze as an
 from fmdtools.define.object.base import check_pickleability
 from fmdtools.sim.sample import FaultDomain, FaultSample, ParameterSample
@@ -33,6 +35,35 @@ class PumpTests(unittest.TestCase, CommonTests):
         self.ps = ParameterSample()
         self.ps.add_variable_replicates([], replicates=10)
         self.filenames = ("pump_res", "pump_hist")
+
+    def test_hist_tracking_setup(self):
+        """Test that tracking args set up history keys as expected."""
+        # default track tracks wat_2.s.flowrate, ee_1.s.current, i.on, i.finished
+        mdl_def = Pump()
+        self.assertEqual(len(mdl_def.h.keys()), 4)
+        def_keys = {'flows.ee_1.s.current', 'flows.wat_2.s.flowrate',
+                    'i.finished', 'i.on'}
+        self.assertEqual(set(mdl_def.h.keys()), def_keys)
+        # sending track arguments should overwrite
+        track_arg = {'flows': {'ee_1': 'all', "wat_1": {'s': ('flowrate',)}}}
+        to_track = ['flows.ee_1.s.current', 'flows.ee_1.s.voltage',
+                    'flows.wat_1.s.flowrate']
+        mdl_cust = Pump(track=track_arg)
+        self.assertEqual(set(mdl_cust.h.keys()), set(to_track))
+        # at the very least, tracking all should mean there are a lot more keys
+        mdl_all = Pump(track='all')
+        self.assertGreater(len(mdl_all.h.keys()), 25)
+
+    def test_param_sample(self):
+        pd = ParameterDomain(PumpParam)
+        pd.add_variable("delay")
+        pd.add_constant("cost", ('repair', 'water'))
+        ps = ParameterSample(pd)
+        ps.add_variable_replicates([], replicates=10)
+        # test that 10 replicates = 10 unique seeds
+        self.assertEqual(len(set([p.r['seed'] for p in ps.scenarios()])), 10)
+        # test that all have delay of 10 (same params)
+        self.assertEqual(set([p.p['delay'] for p in ps.scenarios()]), {10})
 
     def test_value_setting(self):
         statenames = ['sig_1.s.power', 'move_water.s.eff']
@@ -258,11 +289,28 @@ def exp_cost_quant(fs, mdl):
     util = fmea.as_table()['expected_cost'].sum()
     return util
 
+
+class IndivPumpTests(unittest.TestCase):
+    """Unit tests for individual pump model."""
+
+    def setUp(self):
+        self.mdl = MoveWatDynamic()
+
+    def test_mutable_setup(self):
+        """Check that non-default state carries through to simulation."""
+        mdl_diff = MoveWatDynamic(s={'eff': 2.0})
+        self.assertEqual(mdl_diff.s.eff, 2.0)
+        res, hist = prop.nominal(mdl_diff, showprogress=False, warn_faults=False)
+        # should sim with eff = 2.0
+        self.assertEqual(hist.s.eff[0], 2.0)
+        # after it turns on at t=5, should break at t=6 (due to delay)
+        self.assertEqual(hist.m.faults.mech_break[6], True)
+
 if __name__ == '__main__':
     unittest.main()
 
     # suite = unittest.TestSuite()
-    # suite.addTest(PumpTests("test_approach_parallelism"))
+    # suite.addTest(IndivPumpTests("test_mutable_setup"))
     # suite.addTest(PumpTests("test_model_copy_same"))
     # suite.addTest(PumpTests("test_value_setting_dict"))
     # suite.addTest(PumpTests("test_one_run_csv"))

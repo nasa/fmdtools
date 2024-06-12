@@ -436,9 +436,9 @@ if __name__ == '__main__':
                       title='turn_wrong_valve', time_slice=2)
     resgraph.graph.draw(title='turn_wrong_valve, t=2')
 
-    mdl = Tank(p=TankParam(reacttime=2), sp=dict(dt=3.0))
+    mdl = Tank(p=TankParam(reacttime=2), sp=dict(dt=1.0))
     resgraph, mdlhist = propagate.one_fault(
-        mdl, 'store_water', 'leak', time=2, desired_result='graph')
+        mdl, 'store_water', 'leak', time=3, desired_result='graph')
     mdlhist.plot_line("fxns.store_water.s.level",
                       title='Leak Response', time_slice=2)
     resgraph.graph.draw(title='turn_wrong_valve, t=end')
@@ -446,18 +446,20 @@ if __name__ == '__main__':
     # run all faults - note: all faults get caught!
     endclasses, hist = propagate.single_faults(mdl)
 
+    mdl = Tank(p=TankParam(reacttime=2), sp=dict(dt=1.0))
     fd = FaultDomain(mdl)
     fd.add_all()
     fs = FaultSample(fd)
     fs.add_fault_times((0, 5, 10, 15, 20))
     endclasses, hist = propagate.fault_sample(mdl, fs)
 
-    from fmdtools.analyze.graph import FunctionArchitectureGraph
+    from fmdtools.analyze.graph.architecture import FunctionArchitectureGraph
     mdl.fxns['human'].t.dt = 2.0
     mg = FunctionArchitectureGraph(mdl)
     mg.set_exec_order(mdl)
     mg.draw()
 
-    from fmdtools.analyze.graph import ActionArchitectureGraph
+    from fmdtools.analyze.graph.architecture import ActionArchitectureGraph
     ag = ActionArchitectureGraph(mdl.fxns['human'].aa)
     ag.draw()
+    ag.draw_graphviz(layout='dot')

@@ -337,6 +337,7 @@
 </ul>
 </li>
 <li class="toctree-l3"><a class="reference internal" href="../examples/rover/fault_sampling/Rover_Mode_Notebook.html">Synthetic Mode Generation</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../examples/rover/fault_sampling/Rover_Mode_Notebook.html#Analysis">Analysis</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../examples/rover/fault_sampling/Rover_Mode_Notebook.html#Cluster-Analysis">Cluster Analysis</a></li>
 </ul>
 </li>
@@ -434,10 +435,18 @@
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="fmdtools.analyze.html">fmdtools.analyze</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="fmdtools.analyze.graph.html">fmdtools.analyze.graph</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="fmdtools.analyze.graph.html#module-fmdtools.analyze.graph.label">fmdtools.analyze.graph.label</a></li>
+<li class="toctree-l4"><a class="reference internal" href="fmdtools.analyze.graph.html#fmdtools-analyze-graph-style">fmdtools.analyze.graph.style</a></li>
+<li class="toctree-l4"><a class="reference internal" href="fmdtools.analyze.graph.html#fmdtools-analyze-graph-base">fmdtools.analyze.graph.base</a></li>
+<li class="toctree-l4"><a class="reference internal" href="fmdtools.analyze.graph.html#module-fmdtools.analyze.graph.model">fmdtools.analyze.graph.model</a></li>
+<li class="toctree-l4"><a class="reference internal" href="fmdtools.analyze.graph.html#fmdtools-analyze-graph-architecture">fmdtools.analyze.graph.architecture</a></li>
+<li class="toctree-l4"><a class="reference internal" href="fmdtools.analyze.graph.html#module-fmdtools.analyze.graph.flow">fmdtools.analyze.graph.flow</a></li>
+</ul>
+</li>
 <li class="toctree-l3"><a class="reference internal" href="fmdtools.analyze.html#module-fmdtools.analyze.common">fmdtools.analyze.common</a></li>
 <li class="toctree-l3"><a class="reference internal" href="fmdtools.analyze.html#module-fmdtools.analyze.result">fmdtools.analyze.result</a></li>
 <li class="toctree-l3"><a class="reference internal" href="fmdtools.analyze.html#module-fmdtools.analyze.history">fmdtools.analyze.history</a></li>
-<li class="toctree-l3"><a class="reference internal" href="fmdtools.analyze.html#module-fmdtools.analyze.graph">fmdtools.analyze.graph</a></li>
 <li class="toctree-l3"><a class="reference internal" href="fmdtools.analyze.html#module-fmdtools.analyze.tabulate">fmdtools.analyze.tabulate</a></li>
 <li class="toctree-l3"><a class="reference internal" href="fmdtools.analyze.html#module-fmdtools.analyze.phases">fmdtools.analyze.phases</a></li>
 </ul>
@@ -703,6 +712,12 @@ Initializing all possible using the ‘all’ option:</p>
 </dd></dl>
 
 <dl class="py method">
+<dt class="sig sig-object py" id="fmdtools.define.object.base.BaseObject.get_mode">
+<span class="sig-name descname"><span class="pre">get_mode</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.define.object.base.BaseObject.get_mode" title="Permalink to this definition"></a></dt>
+<dd><p>Get list of modes present in the block (if any).</p>
+</dd></dl>
+
+<dl class="py method">
 <dt class="sig sig-object py" id="fmdtools.define.object.base.BaseObject.get_role_memory">
 <span class="sig-name descname"><span class="pre">get_role_memory</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">rolename</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.define.object.base.BaseObject.get_role_memory" title="Permalink to this definition"></a></dt>
 <dd><p>Get memory from a particular role.</p>
@@ -718,6 +733,12 @@ Initializing all possible using the ‘all’ option:</p>
 <dt class="sig sig-object py" id="fmdtools.define.object.base.BaseObject.get_roles">
 <span class="sig-name descname"><span class="pre">get_roles</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">roletypes</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">with_immutable</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.define.object.base.BaseObject.get_roles" title="Permalink to this definition"></a></dt>
 <dd><p>Get all roles.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="fmdtools.define.object.base.BaseObject.get_state">
+<span class="sig-name descname"><span class="pre">get_state</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.define.object.base.BaseObject.get_state" title="Permalink to this definition"></a></dt>
+<dd><p>Get dict of state attributes for the block (if attached).</p>
 </dd></dl>
 
 <dl class="py attribute">
@@ -959,6 +980,24 @@ Default is False.</p></li>
 </dl>
 </dd></dl>
 
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">t</span> <span class="o">=</span> <span class="n">Timer</span><span class="p">(</span><span class="s2">&quot;test_timer&quot;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">t</span>
+<span class="go">Timer test_timer: mode= standby, time= 0.0</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">t</span><span class="o">.</span><span class="n">set_timer</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">t</span>
+<span class="go">Timer test_timer: mode= set, time= 2</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">t</span><span class="o">.</span><span class="n">inc</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">t</span>
+<span class="go">Timer test_timer: mode= ticking, time= 1.0</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">t</span><span class="o">.</span><span class="n">inc</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">t</span>
+<span class="go">Timer test_timer: mode= complete, time= 0.0</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">t</span><span class="o">.</span><span class="n">reset</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">t</span>
+<span class="go">Timer test_timer: mode= standby, time= 0.0</span>
+</pre></div>
+</div>
 <dl class="py attribute">
 <dt class="sig sig-object py" id="fmdtools.define.object.timer.Timer.containers">
 <span class="sig-name descname"><span class="pre">containers</span></span><a class="headerlink" href="#fmdtools.define.object.timer.Timer.containers" title="Permalink to this definition"></a></dt>
@@ -1554,6 +1593,43 @@ all points where v &gt; 5.0 should be a part of high_v, as shown:</p>
 </pre></div>
 </div>
 <dl class="py method">
+<dt class="sig sig-object py" id="fmdtools.define.object.coords.Coords.animate">
+<span class="sig-name descname"><span class="pre">animate</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">hist</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">times</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'all'</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.define.object.coords.Coords.animate" title="Permalink to this definition"></a></dt>
+<dd><p>Animate the coords over a history using show_from.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>hist</strong> (<a class="reference internal" href="fmdtools.analyze.html#fmdtools.analyze.history.History" title="fmdtools.analyze.history.History"><em>History</em></a>) – History of coords.</p></li>
+<li><p><strong>times</strong> (<em>list/'all'</em>) – Times to animate over.</p></li>
+<li><p><strong>**kwargs</strong> (<em>kwargs</em>) – Arguments to self.show.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>ani</strong> – Object with animation.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>animation.Funcanimation</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="fmdtools.define.object.coords.Coords.assign_from">
+<span class="sig-name descname"><span class="pre">assign_from</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">hist</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">t</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">properties</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.define.object.coords.Coords.assign_from" title="Permalink to this definition"></a></dt>
+<dd><p>Assign properties of the coords to a value from the history.</p>
+<p>Useful for plotting progression of states over time.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>hist</strong> (<a class="reference internal" href="fmdtools.analyze.html#fmdtools.analyze.history.History" title="fmdtools.analyze.history.History"><em>History</em></a>) – History for the the coords object.</p></li>
+<li><p><strong>t</strong> (<em>int</em>) – Time-step to get from the history.</p></li>
+<li><p><strong>*properties</strong> (<em>str</em>) – Properties to assign from the history. If none provided, all are assigned.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
 <dt class="sig sig-object py" id="fmdtools.define.object.coords.Coords.build">
 <span class="sig-name descname"><span class="pre">build</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.define.object.coords.Coords.build" title="Permalink to this definition"></a></dt>
 <dd><p>Set features as immutable.</p>
@@ -1597,7 +1673,50 @@ all points where v &gt; 5.0 should be a part of high_v, as shown:</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="fmdtools.define.object.coords.Coords.find_all">
-<span class="sig-name descname"><span class="pre">find_all</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">value=True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">comparator=&lt;ufunc</span> <span class="pre">'equal'&gt;</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.define.object.coords.Coords.find_all" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">find_all</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">points_colls</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">in_points_colls</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">prop_kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.define.object.coords.Coords.find_all" title="Permalink to this definition"></a></dt>
+<dd><p>Find all points in array satisfying multiple statements.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>*points_colls</strong> (<em>str</em>) – Name(s) of points or collections defining the set of points to check.
+If not provided, assumes all points.</p></li>
+<li><p><strong>in_points_colls</strong> (<em>bool</em>) – Whether the properties are to be searched in the given set of
+points/collections (True) or outside the given set of points/collections
+(False). The default is True</p></li>
+<li><p><strong>**prop_kwargs</strong> (<em>kwargs</em>) – keyword arguments corresponding to properties, values and comparators, e.g.:
+statename=(True, np.equal)</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>all</strong> – List of points where the comparator methods returns true.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>np.array</p>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">ex</span> <span class="o">=</span> <span class="n">ExampleCoords</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ex</span><span class="o">.</span><span class="n">find_all</span><span class="p">(</span><span class="n">v</span><span class="o">=</span><span class="p">(</span><span class="mf">10.0</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">equal</span><span class="p">))</span>
+<span class="go">array([[ 0.,  0.],</span>
+<span class="go">       [10.,  0.]])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ex</span><span class="o">.</span><span class="n">st</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="mf">5.0</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ex</span><span class="o">.</span><span class="n">find_all</span><span class="p">(</span><span class="n">v</span><span class="o">=</span><span class="p">(</span><span class="mf">10.0</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">equal</span><span class="p">),</span> <span class="n">st</span><span class="o">=</span><span class="p">(</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">greater</span><span class="p">))</span>
+<span class="go">array([[0., 0.]])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ex</span><span class="o">.</span><span class="n">find_all</span><span class="p">(</span><span class="s2">&quot;high_v&quot;</span><span class="p">,</span> <span class="n">v</span><span class="o">=</span><span class="p">(</span><span class="mf">10.0</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">equal</span><span class="p">))</span>
+<span class="go">array([[ 0.,  0.],</span>
+<span class="go">       [10.,  0.]])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ex</span><span class="o">.</span><span class="n">find_all</span><span class="p">(</span><span class="s2">&quot;high_v&quot;</span><span class="p">,</span> <span class="n">v</span><span class="o">=</span><span class="p">(</span><span class="mf">10.0</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">less</span><span class="p">))</span>
+<span class="go">array([], dtype=float64)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ex</span><span class="o">.</span><span class="n">st</span><span class="p">[</span><span class="mi">2</span><span class="p">,</span><span class="mi">2</span><span class="p">]</span> <span class="o">=</span> <span class="mf">1.0</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ex</span><span class="o">.</span><span class="n">find_all</span><span class="p">(</span><span class="s2">&quot;high_v&quot;</span><span class="p">,</span> <span class="n">in_points_colls</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">st</span><span class="o">=</span><span class="p">(</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">greater</span><span class="p">))</span>
+<span class="go">array([[20., 20.]])</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="fmdtools.define.object.coords.Coords.find_all_prop">
+<span class="sig-name descname"><span class="pre">find_all_prop</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">value=True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">comparator=&lt;ufunc</span> <span class="pre">'equal'&gt;</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.define.object.coords.Coords.find_all_prop" title="Permalink to this definition"></a></dt>
 <dd><p>Find all points in array satisfying statement defined by value and comparator.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -1617,7 +1736,7 @@ all points where v &gt; 5.0 should be a part of high_v, as shown:</p>
 </dl>
 <p class="rubric">Examples</p>
 <div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">ex</span> <span class="o">=</span> <span class="n">ExampleCoords</span><span class="p">()</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">ex</span><span class="o">.</span><span class="n">find_all</span><span class="p">(</span><span class="s2">&quot;v&quot;</span><span class="p">,</span> <span class="mf">10.0</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">equal</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ex</span><span class="o">.</span><span class="n">find_all_prop</span><span class="p">(</span><span class="s2">&quot;v&quot;</span><span class="p">,</span> <span class="mf">10.0</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">equal</span><span class="p">)</span>
 <span class="go">array([[ 0.,  0.],</span>
 <span class="go">       [10.,  0.]])</span>
 </pre></div>
@@ -1717,6 +1836,40 @@ e.g.,:</p>
 <dd class="field-odd"><p>np.ndarray</p>
 </dd>
 </dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="fmdtools.define.object.coords.Coords.get_neighbors">
+<span class="sig-name descname"><span class="pre">get_neighbors</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">direction</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'all'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.define.object.coords.Coords.get_neighbors" title="Permalink to this definition"></a></dt>
+<dd><p>Get the points neighboring x and y.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>x</strong> (<em>float</em>) – x-position</p></li>
+<li><p><strong>y</strong> (<em>float</em>) – y-position</p></li>
+<li><p><strong>direction</strong> (<em>str/list</em>) – Direction(s) to get neighbors from. Default is “all”.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>neighbors</strong> – List of points next to the given grid point.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>list</p>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">ex</span><span class="o">.</span><span class="n">get_neighbors</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+<span class="go">[array([10.,  0.]), array([ 0., 10.])]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ex</span><span class="o">.</span><span class="n">get_neighbors</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">10</span><span class="p">)</span>
+<span class="go">[array([ 0., 10.]), array([20., 10.]), array([10., 20.]), array([10.,  0.])]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ex</span><span class="o">.</span><span class="n">get_neighbors</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="n">direction</span><span class="o">=</span><span class="s2">&quot;left&quot;</span><span class="p">)</span>
+<span class="go">[array([ 0., 10.])]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ex</span><span class="o">.</span><span class="n">get_neighbors</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="n">direction</span><span class="o">=</span><span class="s2">&quot;up-down&quot;</span><span class="p">)</span>
+<span class="go">[array([10., 20.]), array([10.,  0.])]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ex</span><span class="o">.</span><span class="n">get_neighbors</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="n">direction</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;up&quot;</span><span class="p">,</span><span class="s2">&quot;down&quot;</span><span class="p">])</span>
+<span class="go">[array([10., 20.]), array([10.,  0.])]</span>
+</pre></div>
+</div>
 </dd></dl>
 
 <dl class="py method">
@@ -1909,7 +2062,7 @@ The default is None (which selects from all points).</p></li>
 <p class="rubric">Examples</p>
 <div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">ex</span> <span class="o">=</span> <span class="n">ExampleCoords</span><span class="p">()</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">ex</span><span class="o">.</span><span class="n">set_rand_pts</span><span class="p">(</span><span class="s2">&quot;st&quot;</span><span class="p">,</span> <span class="mi">40</span><span class="p">,</span> <span class="mi">5</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="nb">len</span><span class="p">(</span><span class="n">ex</span><span class="o">.</span><span class="n">find_all</span><span class="p">(</span><span class="s2">&quot;st&quot;</span><span class="p">,</span> <span class="mi">40</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">len</span><span class="p">(</span><span class="n">ex</span><span class="o">.</span><span class="n">find_all_prop</span><span class="p">(</span><span class="s2">&quot;st&quot;</span><span class="p">,</span> <span class="mi">40</span><span class="p">))</span>
 <span class="go">5</span>
 </pre></div>
 </div>
@@ -1946,18 +2099,19 @@ The default is None (which selects from all points).</p></li>
 <span class="go">       [  0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.],</span>
 <span class="go">       [  0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.],</span>
 <span class="go">       [  0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.]])</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">ex</span><span class="o">.</span><span class="n">set_range</span><span class="p">(</span><span class="s2">&quot;st&quot;</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ex</span><span class="o">.</span><span class="n">set_range</span><span class="p">(</span><span class="s2">&quot;st&quot;</span><span class="p">,</span> <span class="mf">10.0</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">ex</span><span class="o">.</span><span class="n">st</span>
-<span class="go">array([[0., 0., 0., 0., 0., 0., 0., 0., 0., 0.],</span>
-<span class="go">       [0., 0., 0., 0., 0., 0., 0., 0., 0., 0.],</span>
-<span class="go">       [0., 0., 0., 0., 0., 0., 0., 0., 0., 0.],</span>
-<span class="go">       [0., 0., 0., 0., 0., 0., 0., 0., 0., 0.],</span>
-<span class="go">       [0., 0., 0., 0., 0., 0., 0., 0., 0., 0.],</span>
-<span class="go">       [0., 0., 0., 0., 0., 0., 0., 0., 0., 0.],</span>
-<span class="go">       [0., 0., 0., 0., 0., 0., 0., 0., 0., 0.],</span>
-<span class="go">       [0., 0., 0., 0., 0., 0., 0., 0., 0., 0.],</span>
-<span class="go">       [0., 0., 0., 0., 0., 0., 0., 0., 0., 0.],</span>
-<span class="go">       [0., 0., 0., 0., 0., 0., 0., 0., 0., 0.]])</span>
+<span class="go">array([[10., 10., 10., 10., 10., 10., 10., 10., 10., 10.],</span>
+<span class="go">       [10., 10., 10., 10., 10., 10., 10., 10., 10., 10.],</span>
+<span class="go">       [10., 10., 10., 10., 10., 10., 10., 10., 10., 10.],</span>
+<span class="go">       [10., 10., 10., 10., 10., 10., 10., 10., 10., 10.],</span>
+<span class="go">       [10., 10., 10., 10., 10., 10., 10., 10., 10., 10.],</span>
+<span class="go">       [10., 10., 10., 10., 10., 10., 10., 10., 10., 10.],</span>
+<span class="go">       [10., 10., 10., 10., 10., 10., 10., 10., 10., 10.],</span>
+<span class="go">       [10., 10., 10., 10., 10., 10., 10., 10., 10., 10.],</span>
+<span class="go">       [10., 10., 10., 10., 10., 10., 10., 10., 10., 10.],</span>
+<span class="go">       [10., 10., 10., 10., 10., 10., 10., 10., 10., 10.]])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ex</span><span class="o">.</span><span class="n">set_range</span><span class="p">(</span><span class="s2">&quot;st&quot;</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">ex</span><span class="o">.</span><span class="n">set_range</span><span class="p">(</span><span class="s2">&quot;st&quot;</span><span class="p">,</span> <span class="mf">20.0</span><span class="p">,</span> <span class="mi">20</span><span class="p">,</span> <span class="mi">40</span><span class="p">,</span> <span class="mi">20</span><span class="p">,</span> <span class="mi">40</span><span class="p">,</span> <span class="n">inclusive</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">ex</span><span class="o">.</span><span class="n">st</span>
 <span class="go">array([[ 0.,  0.,  0.,  0.,  0.,  0.,  0.,  0.,  0.,  0.],</span>
@@ -1976,16 +2130,21 @@ The default is None (which selects from all points).</p></li>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="fmdtools.define.object.coords.Coords.show">
-<span class="sig-name descname"><span class="pre">show</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">prop</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">collections</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">{}</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">legend_args</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.define.object.coords.Coords.show" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">show</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">properties</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">{}</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">collections</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">{}</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">coll_overlay</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fig</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ax</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">figsize</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">(5,</span> <span class="pre">5)</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">xlabel</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'x'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ylabel</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'y'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">title</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pallette</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">['tab:blue',</span> <span class="pre">'tab:orange',</span> <span class="pre">'tab:green',</span> <span class="pre">'tab:red',</span> <span class="pre">'tab:purple',</span> <span class="pre">'tab:brown',</span> <span class="pre">'tab:pink',</span> <span class="pre">'tab:gray',</span> <span class="pre">'tab:olive',</span> <span class="pre">'tab:cyan']</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.define.object.coords.Coords.show" title="Permalink to this definition"></a></dt>
 <dd><p>Plot a property and set of collections on the grid.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>prop</strong> (<em>str</em>) – Property to plot.</p></li>
+<li><p><strong>properties</strong> (<em>dict</em>) – Properties to plot and their arguments, e.g. {‘prop1’: {‘color’: ‘green’}}</p></li>
 <li><p><strong>collections</strong> (<em>dict</em><em>, </em><em>optional</em>) – Collections to plot and their respective kwargs for show_collection.
 The default is {}.</p></li>
-<li><p><strong>legend_args</strong> (<em>bool/dict</em><em>, </em><em>optional</em>) – Specifies arguments to legend. Default is False, which shows no legend.</p></li>
-<li><p><strong>**kwargs</strong> (<em>kwargs</em>) – kwargs to show_property.</p></li>
+<li><p><strong>coll_overlay</strong> (<em>bool</em><em>, </em><em>optional</em>) – If True, show collections in front of properties. If False, show properties
+in front of collections. Default is True.</p></li>
+<li><p><strong>xlabel</strong> (<em>str</em>) – x-axis label.</p></li>
+<li><p><strong>ylabel</strong> (<em>str</em>) – y-axis label.</p></li>
+<li><p><strong>title</strong> (<em>str</em>) – title for the plot.</p></li>
+<li><p><strong>pallete</strong> (<em>list</em>) – List of colors (in order) to cycle through for each plot.</p></li>
+<li><p><strong>**kwargs</strong> (<em>kwargs</em>) – overall kwargs to show_property.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
@@ -2000,7 +2159,7 @@ The default is {}.</p></li>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="fmdtools.define.object.coords.Coords.show_collection">
-<span class="sig-name descname"><span class="pre">show_collection</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">prop</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fig</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ax</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">label</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">z</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">legend_args</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">text_z_offset</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">figsize</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">(4,</span> <span class="pre">4)</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.define.object.coords.Coords.show_collection" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">show_collection</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">prop</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fig</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ax</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">label</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">z</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">xlabel</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'x'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ylabel</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'y'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">title</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">legend_args</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">text_z_offset</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">figsize</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">(4,</span> <span class="pre">4)</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.define.object.coords.Coords.show_collection" title="Permalink to this definition"></a></dt>
 <dd><p>Show a collection on the grid as square patches.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -2014,6 +2173,10 @@ the label.</p></li>
 <li><p><strong>z</strong> (<em>str</em>) – Argument to plot as third dimension on 3d plot. Default is ‘’, which
 returns a 2d plot. If a number is provided, the plot will be 3d with
 the height at that constant z-value.</p></li>
+<li><p><strong>xlabel</strong> (<em>str</em><em>, </em><em>optional</em>) – Label for x-axis. The default is “x”.</p></li>
+<li><p><strong>ylabel</strong> (<em>str</em><em>, </em><em>optional</em>) – Label for y-axis. The default is “y”.</p></li>
+<li><p><strong>zlabel</strong> (<em>str</em><em>, </em><em>optional</em>) – Label for the z-axis. The default is “prop”, which uses the name of the
+property.</p></li>
 <li><p><strong>legend_args</strong> (<em>dict/False</em>) – Specifies arguments to legend. Default is False, which shows no legend.</p></li>
 <li><p><strong>text_z_offset</strong> (<em>float</em>) – Offset for text. Default is 0.0</p></li>
 <li><p><strong>figsize</strong> (<em>tuple</em>) – Size for the figure. Default is (4,4)</p></li>
@@ -2031,18 +2194,46 @@ the height at that constant z-value.</p></li>
 </dd></dl>
 
 <dl class="py method">
+<dt class="sig sig-object py" id="fmdtools.define.object.coords.Coords.show_from">
+<span class="sig-name descname"><span class="pre">show_from</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">t</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">history</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">{}</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">properties</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">{}</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.define.object.coords.Coords.show_from" title="Permalink to this definition"></a></dt>
+<dd><p>Run Coords.show() at a particular time in the history.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>t</strong> (<em>int</em>) – Time index to show the Coords object at.</p></li>
+<li><p><strong>hist</strong> (<a class="reference internal" href="fmdtools.analyze.html#fmdtools.analyze.history.History" title="fmdtools.analyze.history.History"><em>History</em></a>) – History to show the Coords object at.</p></li>
+<li><p><strong>**kwargs</strong> (<em>kwargs</em>) – kwargs for self.show</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><ul class="simple">
+<li><p><strong>fig</strong> (<em>mpl.figure</em>) – Plotted figure object</p></li>
+<li><p><strong>ax</strong> (<em>mpl.axis</em>) – Ploted axis object.</p></li>
+</ul>
+</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
 <dt class="sig sig-object py" id="fmdtools.define.object.coords.Coords.show_property">
-<span class="sig-name descname"><span class="pre">show_property</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">prop</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">xlab</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'x'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ylab</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'y'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">proplab</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'prop'</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.define.object.coords.Coords.show_property" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">show_property</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">prop</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">xlabel</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'x'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ylabel</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'y'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">title</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">proplab</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'prop'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">as_bool</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">color</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'green'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cmap</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'Greens'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ec</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'black'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">legend_kwargs</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">{}</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fig</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ax</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">figsize</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">(5,</span> <span class="pre">5)</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.define.object.coords.Coords.show_property" title="Permalink to this definition"></a></dt>
 <dd><p>Plot a given property ‘prop’ as a colormesh on an x-y grid.</p>
 <p>See matplotlib.pyplot.pcolormesh.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>prop</strong> (<em>str</em>) – Name of the property to plot.</p></li>
-<li><p><strong>xlab</strong> (<em>str</em><em>, </em><em>optional</em>) – Label for x-axis. The default is “x”.</p></li>
-<li><p><strong>ylab</strong> (<em>str</em><em>, </em><em>optional</em>) – Label for y-axis. The default is “y”.</p></li>
+<li><p><strong>xlabel</strong> (<em>str</em><em>, </em><em>optional</em>) – Label for x-axis. The default is “x”.</p></li>
+<li><p><strong>ylabel</strong> (<em>str</em><em>, </em><em>optional</em>) – Label for y-axis. The default is “y”.</p></li>
+<li><p><strong>title</strong> (<em>str</em><em>, </em><em>optional</em>) – Title for the plot. The default is ‘’.</p></li>
 <li><p><strong>proplab</strong> (<em>str</em><em>, </em><em>optional</em>) – Label for the property. The default is “prop”, which uses the name of the
 property provided.</p></li>
+<li><p><strong>as_bool</strong> (<em>bool</em><em>, </em><em>optional</em>) – Whether to interpret the property as a boolean where &gt;0.0 returns as True
+and &lt;=0.0 returns as False.</p></li>
+<li><p><strong>color</strong> (<em>str</em><em>, </em><em>optional</em>) – Color to use if the property is boolean. Default is ‘green’.</p></li>
+<li><p><strong>cmap</strong> (<em>str</em><em>, </em><em>optional</em>) – Colormap to use if property is continuous. Default is ‘Greens’.</p></li>
+<li><p><strong>ec</strong> (<em>str</em><em>, </em><em>optional</em>) – Default edge color. Default is ‘black’. If ‘face’, no edges are drawn.</p></li>
 <li><p><strong>**kwargs</strong> (<em>kwargs</em>) – Keyword arguments to matplotlib.pyplot.pcolormesh (e.g., cmap, edgecolors)</p></li>
 </ul>
 </dd>
@@ -2058,7 +2249,7 @@ property provided.</p></li>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="fmdtools.define.object.coords.Coords.show_property_z">
-<span class="sig-name descname"><span class="pre">show_property_z</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">prop</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">z</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'prop'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">z_res</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">10</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">collections</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">{}</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">xlab</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'x'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ylab</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'y'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">zlab</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'prop'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">proplab</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'prop'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cmap</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'Greens'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fig</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ax</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">figsize</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">(4,</span> <span class="pre">5)</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.define.object.coords.Coords.show_property_z" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">show_property_z</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">prop</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">z</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'prop'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">z_res</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">10</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">collections</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">{}</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">xlabel</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'x'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ylabel</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'y'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">zlabel</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'prop'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">proplab</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'prop'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cmap</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'Greens'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fig</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ax</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">figsize</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">(4,</span> <span class="pre">5)</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.define.object.coords.Coords.show_property_z" title="Permalink to this definition"></a></dt>
 <dd><p>Plot a given properties ‘prop’ and ‘z’ as a voxels on an x-y-z grid.</p>
 <p>See mpl_toolkits.mplot3d.axes3d.Axes3D.voxels.</p>
 <dl class="field-list simple">
@@ -2068,10 +2259,11 @@ property provided.</p></li>
 <li><p><strong>z</strong> (<em>str</em><em>, </em><em>optional</em>) – Name of the property to plot as z. The default is “prop”, which uses same
 property as prop.</p></li>
 <li><p><strong>z_res</strong> (<em>int</em><em>, </em><em>optional</em>) – Resolution to plot z at. The default is 10.</p></li>
-<li><p><strong>collections</strong> (<em>dict</em><em>, </em><em>optional</em>) – Collections to plot and their respective kwargs for show_collection. The default is {}.</p></li>
-<li><p><strong>xlab</strong> (<em>str</em><em>, </em><em>optional</em>) – Label for x-axis. The default is “x”.</p></li>
-<li><p><strong>ylab</strong> (<em>str</em><em>, </em><em>optional</em>) – Label for y-axis. The default is “y”.</p></li>
-<li><p><strong>zlab</strong> (<em>str</em><em>, </em><em>optional</em>) – Label for the z-axis. The default is “prop”, which uses the name of the
+<li><p><strong>collections</strong> (<em>dict</em><em>, </em><em>optional</em>) – Collections to plot and their respective kwargs for show_collection.
+The default is {}.</p></li>
+<li><p><strong>xlabel</strong> (<em>str</em><em>, </em><em>optional</em>) – Label for x-axis. The default is “x”.</p></li>
+<li><p><strong>ylabel</strong> (<em>str</em><em>, </em><em>optional</em>) – Label for y-axis. The default is “y”.</p></li>
+<li><p><strong>zlabel</strong> (<em>str</em><em>, </em><em>optional</em>) – Label for the z-axis. The default is “prop”, which uses the name of the
 property.</p></li>
 <li><p><strong>proplab</strong> (<em>str</em><em>, </em><em>optional</em>) – Label for the property. The default is “prop”, which uses the name of the
 property provided.</p></li>
@@ -2178,7 +2370,6 @@ The default is {}.</p></li>
 <p>Modifiers may be added to add additional properties (e.g., features, states,
 collections, points) to the coordinates. Additionally has class fields which may be
 overwritten.</p>
-<p>…</p>
 <dl class="simple">
 <dt>x_size<span class="classifier">int</span></dt><dd><p>Number of rows in the x-dimension</p>
 </dd>
@@ -2197,7 +2388,7 @@ as arrays.</p>
 as arrays.</p>
 </dd>
 <dt>collect_collectionname<span class="classifier">tuple</span></dt><dd><p>Tuple (propertyname, value, comparator) defining a collection of points to
-instantiate as a list, where the tuple is arguments to Coords.find_all</p>
+instantiate as a list, where the tuple is arguments to Coords.find_all_prop</p>
 </dd>
 <dt>point_pointname: tuple</dt><dd><p>Tuple (x, y) referring to a point in the grid with a given name.</p>
 </dd>

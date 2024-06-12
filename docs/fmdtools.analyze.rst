@@ -16,6 +16,12 @@ The analyze package is organized into the modules:
 	fmdtools.analyze.tabulate
 	fmdtools.analyze.phases
 
+.. toctree::
+   :maxdepth: 1
+   :hidden:
+   
+   fmdtools.analyze.graph
+
 
 The model reference for each of these is provided below:
 
@@ -39,14 +45,6 @@ fmdtools.analyze.history
 --------------------------------
 
 .. automodule:: fmdtools.analyze.history
-   :members:
-   :undoc-members:
-   :show-inheritance:
-
-fmdtools.analyze.graph 
---------------------------------
-
-.. automodule:: fmdtools.analyze.graph
    :members:
    :undoc-members:
    :show-inheritance:
