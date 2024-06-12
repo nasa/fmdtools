@@ -54,7 +54,7 @@ class Time(BaseContainer):
     {'t1': Timer t1: mode= ticking, time= 1.0, 't2': Timer t2: mode= standby, time= 0.0}
 
     Check that copied timers are independent:
-    
+
     >>> t2.timers['t1'].__hash__() == t.timers['t1'].__hash__()
     False
     """

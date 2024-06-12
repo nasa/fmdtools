@@ -500,11 +500,12 @@ if __name__ == "__main__":
     import doctest
     doctest.testmod(verbose=True)
 
-    from fmdtools.analyze.graph import ActionArchitectureGraph
+    from fmdtools.analyze.graph.architecture import ActionArchitectureGraph
     hum = HumanActions()
     ag = ActionArchitectureGraph(hum)
     ag.set_pos(**asg_pos)
     ag.draw()
+    ag.draw_graphviz(layout='dot')
 
     from examples.rover.rover_model import plot_map
     from fmdtools.sim import propagate as prop

@@ -63,6 +63,13 @@ class SightGrid(Coords):
     Define the Drone Grid environment.
 
     Used to calculate environmental risk and number of points viewed.
+
+    Example
+    -------
+    >>> mdl = Drone()
+    >>> ec, hist = fs.propagate.nominal(mdl)
+    >>> mdl.flows['environment'].c.assign_from(hist.flows.environment.c, 10)
+    >>> fig, ax = mdl.flows['environment'].c.show({'viewed': {}})
     """
 
     container_p = DroneEnvironmentGridParam
@@ -84,14 +91,15 @@ class StoreEE(StaticstoreEE):
 
     __slots__ = ()
 
-    def condfaults(self, time):
+    def set_faults(self):
         """When soc is 0, add 'nocharge' fault."""
         if self.s.soc < 1:
             self.s.soc = 0
             self.m.add_fault('nocharge')
 
-    def behavior(self, time):
+    def static_behavior(self, time):
         """Energy storage/use behavior."""
+        self.set_faults()
         if self.m.has_fault('nocharge'):
             self.ee_out.s.effort = 0.0
         else:
@@ -198,7 +206,7 @@ class PlanPath(Function):
     flow_fs = Force
     flownames = {'force_st': 'fs'}
 
-    def condfaults(self, time):
+    def set_faults(self):
         """Enter "noloc" fault if loses support."""
         if self.fs.s.support < 0.5:
             self.m.add_fault('noloc')
@@ -234,13 +242,14 @@ class PlanPath(Function):
         vd = vectdist(self.s.goal, loc)
         self.des_traj.s.assign(vd, "dx", "dy", "dz")
 
-    def behavior(self, t):
+    def static_behavior(self, t):
         """
         Path planning behavior.
 
         Involves steps (1) calculating distance to goal (2) determining mode/next goal
         based on progress in flight plan and (3) asigning new trajectory.
         """
+        self.set_faults()
         self.s.goal = self.p.goals[self.s.pt]
         self.calc_dist_to_goal()
 
@@ -290,7 +299,7 @@ class AffectDOF(AffectDOFStatic):
     __slots__ = ('des_traj',)
     flow_des_traj = DesTraj
 
-    def behavior(self, time):
+    def static_behavior(self, time):
         """Behavior in-time (fault effects on states and instantaneous power/force)."""
         self.calc_faults()
         self.calc_pwr()
@@ -363,7 +372,7 @@ class ViewEnvironment(Function):
     flow_dofs = DOFs
     flow_environment = DroneEnvironment
 
-    def behavior(self, time):
+    def static_behavior(self, time):
         """Set points in grid as viewed if in range of view."""
         width = self.dofs.s.z
         height = self.dofs.s.z
@@ -452,14 +461,19 @@ def vectdist(p1, p2):
     return [p1[0]-p2[0], p1[1]-p2[1], p1[2]-p2[2]]
 
 
-if __name__ == "__main__":
-    import doctest
-    doctest.testmod(verbose=True)
-    from fmdtools.sim.sample import SampleApproach
-    from fmdtools.analyze.phases import PhaseMap
-    from fmdtools import analyze as an
-    mdl = Drone()
+def script_nominal_viewed(**kwargs):
+    """Show viewed environment in nominal scenario."""
+    mdl = Drone(**kwargs)
     ec, mdlhist = fs.propagate.nominal(mdl)
+    mdl.flows['environment'].c.assign_from(mdlhist.flows.environment.c, 10)
+    return mdl.flows['environment'].c.show({'viewed': {}})
+
+
+def script_faulty_trajectories(**kwargs):
+    """Show the faulty trajectories over a range of mechanical break scenarios."""
+    mdl = Drone(**kwargs)
+    ec, mdlhist = fs.propagate.nominal(mdl)
+
     fig, ax = mdlhist.plot_trajectories("dofs.s.x", "dofs.s.y", "dofs.s.z",
                                         time_groups=['nominal'], time_ticks=2.0)
 
@@ -477,11 +491,48 @@ if __name__ == "__main__":
                                           indiv_kwargs={'faulty': {'alpha': 0.15,
                                                                    'color': 'red'}})
 
-    import fmdtools.analyze as an
     an.phases.phaseplot(app_mechfaults.phasemaps)
     an.phases.samplemetric(app_mechfaults.faultsamples['mechfault_scens'], quad_ec)
     an.phases.samplemetrics(app_mechfaults, quad_ec)
 
     quad_ec_1, quad_hist_1 = fs.propagate.fault_sample(mdl, app_mechfaults)
-
     cost_tests = [ec for ec in quad_ec if quad_ec[ec] != quad_ec_1[ec]]
+
+    fig, ax = quad_hist.plot_trajectories_from(10, ("dofs.s.x", "dofs.s.y", "dofs.s.z"),
+                                               time_groups=['nominal'],
+                                               indiv_kwargs={'faulty': {'alpha': 0.15,
+                                                                        'color': 'red'}})
+    quad_hist.animate('plot_trajectories_from',
+                      plot_values=("dofs.s.x", "dofs.s.y", "dofs.s.z"))
+
+
+def script_env_viewed(**kwargs):
+    """Show the viewed properties of the environment in various configurations."""
+    mdl = Drone(**kwargs)
+    ec, mdlhist = fs.propagate.nominal(mdl)
+    mdl.flows['environment'].c.assign_from(mdlhist.flows.environment.c, 10)
+    mdl.flows['environment'].c.show({'viewed': {}})
+
+    mdl.flows['environment'].c.show({'viewed': {}, 'target': {}})
+    mdl.flows['environment'].c.show({'target': {},
+                                     'viewed': {'alpha': 0.5}},
+                                    collections={'start': {}, 'safe': {}})
+
+    mdl.flows['environment'].c.show_from(10, mdlhist.flows.environment.c,
+                                         {'viewed': {}}, title='hi')
+    properties={'target': {'alpha': 0.6}, 'viewed': {'alpha': 0.5}}
+    ani = mdl.flows['environment'].c.animate(mdlhist.flows.environment.c,
+                                             properties=properties,
+                                             collections={'start': {}, 'safe': {}})
+    return ani
+
+
+if __name__ == "__main__":
+    from fmdtools.sim.sample import SampleApproach
+    from fmdtools.analyze.phases import PhaseMap
+    from fmdtools import analyze as an
+    import doctest
+    # doctest.testmod(verbose=True)
+    # script_nominal_viewed()
+    # script_faulty_trajectories()
+    ani = script_env_viewed()

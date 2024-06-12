@@ -337,6 +337,7 @@
 </ul>
 </li>
 <li class="toctree-l3"><a class="reference internal" href="../examples/rover/fault_sampling/Rover_Mode_Notebook.html">Synthetic Mode Generation</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../examples/rover/fault_sampling/Rover_Mode_Notebook.html#Analysis">Analysis</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../examples/rover/fault_sampling/Rover_Mode_Notebook.html#Cluster-Analysis">Cluster Analysis</a></li>
 </ul>
 </li>
@@ -434,10 +435,18 @@
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="fmdtools.analyze.html">fmdtools.analyze</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="fmdtools.analyze.graph.html">fmdtools.analyze.graph</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="fmdtools.analyze.graph.html#module-fmdtools.analyze.graph.label">fmdtools.analyze.graph.label</a></li>
+<li class="toctree-l4"><a class="reference internal" href="fmdtools.analyze.graph.html#fmdtools-analyze-graph-style">fmdtools.analyze.graph.style</a></li>
+<li class="toctree-l4"><a class="reference internal" href="fmdtools.analyze.graph.html#fmdtools-analyze-graph-base">fmdtools.analyze.graph.base</a></li>
+<li class="toctree-l4"><a class="reference internal" href="fmdtools.analyze.graph.html#module-fmdtools.analyze.graph.model">fmdtools.analyze.graph.model</a></li>
+<li class="toctree-l4"><a class="reference internal" href="fmdtools.analyze.graph.html#fmdtools-analyze-graph-architecture">fmdtools.analyze.graph.architecture</a></li>
+<li class="toctree-l4"><a class="reference internal" href="fmdtools.analyze.graph.html#module-fmdtools.analyze.graph.flow">fmdtools.analyze.graph.flow</a></li>
+</ul>
+</li>
 <li class="toctree-l3"><a class="reference internal" href="fmdtools.analyze.html#module-fmdtools.analyze.common">fmdtools.analyze.common</a></li>
 <li class="toctree-l3"><a class="reference internal" href="fmdtools.analyze.html#module-fmdtools.analyze.result">fmdtools.analyze.result</a></li>
 <li class="toctree-l3"><a class="reference internal" href="fmdtools.analyze.html#module-fmdtools.analyze.history">fmdtools.analyze.history</a></li>
-<li class="toctree-l3"><a class="reference internal" href="fmdtools.analyze.html#module-fmdtools.analyze.graph">fmdtools.analyze.graph</a></li>
 <li class="toctree-l3"><a class="reference internal" href="fmdtools.analyze.html#module-fmdtools.analyze.tabulate">fmdtools.analyze.tabulate</a></li>
 <li class="toctree-l3"><a class="reference internal" href="fmdtools.analyze.html#module-fmdtools.analyze.phases">fmdtools.analyze.phases</a></li>
 </ul>
@@ -514,7 +523,7 @@
 </dd>
 <dt id="term-Architecture">Architecture<a class="headerlink" href="#term-Architecture" title="Permalink to this term"></a></dt><dd><p>Composition of blocks. Defined using <a class="reference internal" href="fmdtools.define.architecture.html#fmdtools.define.architecture.base.Architecture" title="fmdtools.define.architecture.base.Architecture"><code class="xref py py-class docutils literal notranslate"><span class="pre">Architecture</span></code></a> and its sub-classes.</p>
 </dd>
-<dt id="term-Behavior">Behavior<a class="headerlink" href="#term-Behavior" title="Permalink to this term"></a></dt><dd><p>How the states of a system unfold over time, including in the various <a class="reference internal" href="#term-Mode"><span class="xref std std-term">mode</span></a> s it may encounter. Defined in <a class="reference internal" href="#term-Function"><span class="xref std std-term">Function</span></a> s, <a class="reference internal" href="#term-Component"><span class="xref std std-term">Component</span></a> s, and <a class="reference internal" href="#term-Action"><span class="xref std std-term">Action</span></a> s using <code class="xref py py-meth docutils literal notranslate"><span class="pre">fmdtools.define.Block.behavior()</span></code>, <code class="xref py py-meth docutils literal notranslate"><span class="pre">fmdtools.define.Block.static_behavior()</span></code>, <code class="xref py py-meth docutils literal notranslate"><span class="pre">fmdtools.define.Block.dynamic_behavior()</span></code>, and <code class="xref py py-meth docutils literal notranslate"><span class="pre">fmdtools.define.Block.condfaults()</span></code></p>
+<dt id="term-Behavior">Behavior<a class="headerlink" href="#term-Behavior" title="Permalink to this term"></a></dt><dd><p>How the states of a system unfold over time, including in the various <a class="reference internal" href="#term-Mode"><span class="xref std std-term">mode</span></a> s it may encounter. Defined in <a class="reference internal" href="#term-Function"><span class="xref std std-term">Function</span></a> s, <a class="reference internal" href="#term-Component"><span class="xref std std-term">Component</span></a> s, and <a class="reference internal" href="#term-Action"><span class="xref std std-term">Action</span></a> s using <code class="xref py py-meth docutils literal notranslate"><span class="pre">fmdtools.define.Block.behavior()</span></code>, <code class="xref py py-meth docutils literal notranslate"><span class="pre">fmdtools.define.Block.static_behavior()</span></code>, and <code class="xref py py-meth docutils literal notranslate"><span class="pre">fmdtools.define.Block.dynamic_behavior()</span></code>.</p>
 </dd>
 <dt id="term-Behavior-Over-Time">Behavior Over Time<a class="headerlink" href="#term-Behavior-Over-Time" title="Permalink to this term"></a></dt><dd><p>How a the states of a system unfold over time. Defined using <a class="reference internal" href="#term-Behavior"><span class="xref std std-term">behavior</span></a>.</p>
 </dd>
@@ -550,7 +559,7 @@
 </dd>
 <dt id="term-Functional-Reasoning-Design-Language">Functional Reasoning Design Language<a class="headerlink" href="#term-Functional-Reasoning-Design-Language" title="Permalink to this term"></a></dt><dd><p>Language used to define/represent the network structure and behavioral propagation of an <a class="reference internal" href="#term-Architecture"><span class="xref std std-term">Architecture</span></a>.</p>
 </dd>
-<dt id="term-Graph">Graph<a class="headerlink" href="#term-Graph" title="Permalink to this term"></a></dt><dd><p>A view of simulation construct connections and/or relationships embodied by the <a class="reference internal" href="fmdtools.analyze.html#fmdtools.analyze.graph.Graph" title="fmdtools.analyze.graph.Graph"><code class="xref py py-class docutils literal notranslate"><span class="pre">Graph</span></code></a> class and sub-classes (which uses networkx to represent the structure itself).</p>
+<dt id="term-Graph">Graph<a class="headerlink" href="#term-Graph" title="Permalink to this term"></a></dt><dd><p>A view of simulation construct connections and/or relationships embodied by the <code class="xref py py-class docutils literal notranslate"><span class="pre">Graph</span></code> class and sub-classes (which uses networkx to represent the structure itself).</p>
 </dd>
 <dt id="term-Internal-Flow">Internal Flow<a class="headerlink" href="#term-Internal-Flow" title="Permalink to this term"></a></dt><dd><p>A flow object that is internal to a <a class="reference internal" href="fmdtools.define.block.html#fmdtools.define.block.function.Function" title="fmdtools.define.block.function.Function"><code class="xref py py-class docutils literal notranslate"><span class="pre">Function</span></code></a> which is not present in the overall model definition.</p>
 </dd>

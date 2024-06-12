@@ -21,7 +21,6 @@ from fmdtools.define.environment import Environment
 from fmdtools.define.object.coords import Coords, CoordsParam
 
 import numpy as np
-from recordclass import asdict
 
 
 class EnvironmentState(State):
@@ -330,7 +329,7 @@ class Drone(DroneRural):
 
         # add functions to the model
         flows = ['ee_ctl', 'force_st', 'hsig_dofs', 'hsig_bat', 'rsig_traj']
-        self.add_fxn('manage_health', ManageHealth, *flows, p=asdict(self.p.respolicy))
+        self.add_fxn('manage_health', ManageHealth, *flows, p=self.p.respolicy.asdict())
 
         store_ee_p = {'archtype': self.p.phys_param.bat,
                       'weight': self.p.phys_param.batweight+self.p.phys_param.archweight,
@@ -405,7 +404,7 @@ def plot_env_with_traj(mdlhists, mdl, legend=True, title="trajectory"):
                  "all_allowed": {"color": "blue"},
                  "start": {"color": "blue"},
                  "end": {"color": "blue"}}
-    fig, ax = mdl.flows['environment'].c.show("height", collections=collections)
+    fig, ax = mdl.flows['environment'].c.show({"height": {}}, collections=collections)
     fig, ax = mdlhists.plot_trajectories("dofs.s.x", "dofs.s.y",
                                          fig=fig, ax=ax, legend=legend, title=title)
     return fig, ax
@@ -487,7 +486,7 @@ if __name__ == "__main__":
     # p = PlanPath("test", {})
 
     e = UrbanDroneEnvironment("env")
-    e.c.show("height")
+    e.c.show({"height": {}})
     e.c.show_z("height")
 
     e.c.show_collection('all_safe', z='height')

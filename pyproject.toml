@@ -48,3 +48,20 @@ requires = [
 [tool.setuptools.packages.find]
 where = ["fmdtools"]
 
+[tool.coverage.report]
+exclude_also = [
+    "def __repr__",
+    "raise ",
+    "if 0:",
+    "if __name__ == .__main__.:",
+	"def script_"
+    ]
+
+[tool.coverage.run]
+omit = [
+    # omit everything in /build
+    "/_build/*",
+    # omit overall test
+    "run_all_tests.py",
+    ]
+

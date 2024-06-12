@@ -70,7 +70,7 @@ The following template shows the basic syntax used to define states:
    State class template/example.
 
 .. autoclass:: fmdtools.define.container.state.State
-   :members: State
+   :members:
    :show-inheritance:
 
 

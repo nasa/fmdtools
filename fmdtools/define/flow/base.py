@@ -1,7 +1,5 @@
 # -*- coding: utf-8 -*-
 """Module defining :class:`Flow` class used to connect multiple blocks in a model."""
-from recordclass import asdict, astuple
-
 from fmdtools.define.container.parameter import Parameter
 from fmdtools.define.container.state import State
 from fmdtools.define.object.base import BaseObject
@@ -63,11 +61,11 @@ class Flow(BaseObject):
 
     def return_mutables(self):
         """Return mutable properties of the flow."""
-        return astuple(self.s)
+        return self.s.return_mutables()
 
     def status(self):
         """Return a dict with the current states of the flow."""
-        return asdict(self.s)
+        return self.s.asdict()
 
     def copy(self, **kwargs):
         """Return a copy of the flow object (used when copying the model)."""

@@ -21,8 +21,6 @@ class Fault(BaseContainer, readonly=True):
     """
     Stores Default Attributes for modes to use in Mode.faultmodes.
 
-    ...
-
     Fields
     ------
     prob : float

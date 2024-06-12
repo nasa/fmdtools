@@ -5,13 +5,13 @@ Testing some different graph plotting methods.
 import unittest
 from examples.pump.ex_pump import Pump
 from examples.rover.rover_model import Rover
-from fmdtools.analyze.graph import FunctionArchitectureGraph
-from fmdtools.analyze.graph import FunctionArchitectureFxnGraph
-from fmdtools.analyze.graph import FunctionArchitectureFlowGraph
-from fmdtools.analyze.graph import FunctionArchitectureTypeGraph
+from fmdtools.analyze.graph.architecture import FunctionArchitectureGraph
+from fmdtools.analyze.graph.architecture import FunctionArchitectureFxnGraph
+from fmdtools.analyze.graph.architecture import FunctionArchitectureFlowGraph
+from fmdtools.analyze.graph.architecture import FunctionArchitectureTypeGraph
 from fmdtools.analyze.common import suite_for_plots
 from fmdtools.sim import propagate
-from matplotlib import pyplot as plt
+
 
 class ModelGraphTests(unittest.TestCase):
     def setUp(self):
@@ -25,7 +25,7 @@ class ModelGraphTests(unittest.TestCase):
         a.draw()
 
         b = FunctionArchitectureGraph(self.rvr)
-        b.set_exec_order(self.rvr, next_edges={"edge_color": "red"})
+        b.set_exec_order(self.rvr, next_edges={"nx_edge_color": "red"})
         b.draw(title="Should show Order, timestep, and dynamic properties of"
                + " FunctionArchitectureGraph with red arrows for next")
 
@@ -74,6 +74,7 @@ class ModelGraphTests(unittest.TestCase):
                                        time=10, track='all', desired_result=des_res)
         mg = FunctionArchitectureGraph(self.mdl)
         mg.draw_from(11, hist)
+        mg.draw_graphviz_from(11, hist)
 
 # def test_move_nodes(self):
 #    p = endresults.graph.move_nodes()
@@ -100,7 +101,7 @@ if __name__ == '__main__':
     # a.draw_from(10, mdlhist)
     # a.draw_from(50, mdlhist)
 
-    # an = a.animate_from(mdlhist)
+    # an = a.animate(mdlhist)
     # from IPython.display import HTML
     # HTML(an.to_jshtml())
 

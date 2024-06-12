@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 """Defines :class:`BaseContainer` class which other containers inherit from."""
-from recordclass import dataobject, astuple
+from recordclass import dataobject, astuple, asdict
 import copy
 from fmdtools.define.base import set_arg_as_type
 from fmdtools.analyze.common import get_sub_include
@@ -64,7 +64,7 @@ class BaseContainer(dataobject, mapping=True, iterable=True, copy_default=True):
             track = self.__fields__
         elif track == 'none':
             track = ()
-        elif type(track) == str:
+        elif isinstance(track, str):
             track = (track,)
         return track
 
@@ -380,7 +380,12 @@ class BaseContainer(dataobject, mapping=True, iterable=True, copy_default=True):
         return mem, mem_profile
 
     def return_mutables(self):
+        """Return mutable aspects of the container."""
         return astuple(self)
+
+    def asdict(self):
+        """Return fields as a dictionary."""
+        return asdict(self)
 
 
 class ExContainer(BaseContainer):

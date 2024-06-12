@@ -20,7 +20,10 @@ from fmdtools.define.base import get_var
 from fmdtools.analyze.common import unpack_plot_values, phase_overlay
 from fmdtools.analyze.common import multiplot_legend_title, multiplot_helper
 from fmdtools.analyze.common import plot_err_hist, setup_plot, set_empty_multiplots
-from fmdtools.analyze.common import mark_times, consolidate_legend
+from fmdtools.analyze.common import mark_times, consolidate_legend, add_title_xylabs
+from fmdtools.analyze.common import prep_animation_title, clear_prev_figure
+from matplotlib import animation
+from functools import partial
 import numpy as np
 import copy
 
@@ -104,14 +107,15 @@ def diff(val1, val2, difftype='bool'):
     """
     Find inconsistent states between val1, val2.
 
-    The difftype option ('diff' (takes the difference), 'bool' (checks if the same), and float (checks if under the provided tolerance))
+    The difftype option ('diff' (takes the difference), 'bool' (checks if the same),
+                         and float (checks if under the provided tolerance))
     """
     try:
         if difftype == 'diff':
             return val1-val2
         elif difftype == 'bool':
             return val1 != val2
-        elif type(difftype) == float:
+        elif isinstance(difftype, float):
             return abs(val1-val2) > difftype
     except ValueError as e:
         raise Exception("Unable to diff "+str(val1)+" and "+str(val2)) from e
@@ -184,13 +188,13 @@ class History(Result):
                  timerange=None, track=None, dtype=None, str_size='<U20'):
         sub_track = get_sub_include(att, track)
         if sub_track:
-            if type(val) == dict or (hasattr(val, 'keys') and hasattr(val, 'values')):
+            if isinstance(val, dict) or (hasattr(val, 'keys') and hasattr(val, 'values')):
                 self[att] = init_dicthist(val, timerange, sub_track)
             elif timerange is None:
                 self[att] = [val]
-            elif type(val) == str:
+            elif isinstance(val, str):
                 self[att] = np.empty([len(timerange)], dtype=str_size)
-            elif type(val) == np.ndarray or dtype == np.ndarray:
+            elif isinstance(val, np.ndarray) or dtype == np.ndarray:
                 self[att] = np.array([val for i in timerange])
             elif dtype:
                 self[att] = np.empty([len(timerange)], dtype=dtype)
@@ -290,12 +294,12 @@ class History(Result):
                 raise Exception("Unable to log att " + str(att) + " in " +
                                 str(obj.__class__.__name__) + ', val=' + str(val))
 
-            if type(hist) == History:
+            if isinstance(hist, History):
                 hist.log(val, t_ind)
             else:
                 if is_known_mutable(val):
                     val = copy.deepcopy(val)
-                if type(hist) == list:
+                if isinstance(hist, list):
                     hist.append(val)
                 elif isinstance(hist, np.ndarray):
                     try:
@@ -323,13 +327,14 @@ class History(Result):
         Parameters
         ----------
         end_ind : int, optional
-            the index of the array that you want to cut the history upto. Default is None.
+            the index of the array that you want to cut the history upto.
+            Default is None.
         start_ind: int, optional
-            the index of the array that you want to start cutting the history from. 
+            the index of the array that you want to start cutting the history from.
             The default is None, which starts from the 0th index.
         newcopy: bool, optional
-            Tells whether to creat a new history variable with the information what was cut or
-            cut the original history variable. Default is False.
+            Tells whether to creat a new history variable with the information what was
+            cut or cut the original history variable. Default is False.
 
         Examples
         --------
@@ -368,9 +373,7 @@ class History(Result):
         return hist
 
     def get_slice(self, t_ind=0):
-        """
-        Return a dictionary of values from (flattenned) version of the history at t_ind.
-        """
+        """Return dict of values from (flattenned) version of the history at t_ind."""
         flathist = self.flatten()
         slice_dict = dict.fromkeys(flathist)
         for key, arr in flathist.items():
@@ -726,7 +729,7 @@ class History(Result):
                                     + " and group: " + str(group)) from e
                 if len(value) > 1 and value[1] in phases:
                     phase_overlay(ax, phases[value[1]], value[1])
-            if type(time_slice) == int:
+            if isinstance(time_slice, int):
                 ax.axvline(x=time_slice, color='k', label=time_slice_label)
             else:
                 for ts in time_slice:
@@ -750,12 +753,7 @@ class History(Result):
             h_value = hist_to_plot.get(value)
             times = hist_to_plot.get('time')
             ax.plot(times, h_value, **kwargs)
-        if xlabel:
-            ax.set_xlabel(xlabel)
-        if ylabel:
-            ax.set_ylabel(ylabel)
-        if title:
-            ax.set_title(title)
+        add_title_xylabs(ax, xlabel=xlabel, ylabel=ylabel, title=title)
         min_ind = np.min([i[0] for i in self.get_values('time').values()])
         max_ind = np.max([i[-1] for i in self.get_values('time').values()])
         ax.set_xlim(min_ind, max_ind)
@@ -913,8 +911,8 @@ class History(Result):
             If more than one time is provided, it takes the place of comp_groups.
         *plot_values : strs
             names of values to pull from the history (e.g., 'fxns.move_water.s.flow')
-            Can also be specified as a dict (e.g., {'fxns':'move_water'}) to get all keys
-            from a given fxn/flow/mode/etc.
+            Can also be specified as a dict (e.g., {'fxns':'move_water'}) to get all
+            keys from a given fxn/flow/mode/etc.
         **kwargs : kwargs
             keyword arguments to Result.plot_metric_dist
         """
@@ -936,6 +934,13 @@ class History(Result):
         res_to_plot = time_classes.flatten()
         fig, axs = res_to_plot.plot_metric_dist(*plot_values,
                                                 comp_groups=comp_groups, **kwargs)
+        return fig, axs
+
+    def plot_metric_dist_from(self, time, plot_values=(), ax=False, **kwargs):
+        """Alias for plot_metric_dist allowing animation."""
+        kwargs = prep_animation_title(time, **kwargs)
+        kwargs = clear_prev_figure(**kwargs)
+        fig, axs = self.plot_metric_dist(time, *plot_values, **kwargs)
         return fig, axs
 
     def plot_trajectories(self, *plot_values,
@@ -973,8 +978,8 @@ class History(Result):
 
             would make the nominal color green. Default is {}.
         figsize : tuple (float,float)
-            x-y size for the figure. The default is 'default', which dymanically gives 3 for
-            each column and 2 for each row.
+            x-y size for the figure. The default is 'default', which dymanically gives 3
+            for each column and 2 for each row.
         time_groups : list, optional
             List of strings corresponding to groups (e.g., 'nominal') to label the time
             at each point in the trajectory. The default is [].
@@ -1015,7 +1020,8 @@ class History(Result):
         elif len(plot_values) == 3:
             fig, ax = setup_plot(fig=fig, ax=ax, z=True, figsize=figsize)
         else:
-            raise Exception("Number of plot values must be 2 or 3, not "+len(plot_values))
+            raise Exception("Number of plot values must be 2 or 3, not "
+                            + str(len(plot_values)))
 
         for group, hists in grouphists.items():
             mark_time = group in time_groups
@@ -1054,7 +1060,8 @@ class History(Result):
         ylab : str
             Name to use for the y-values.
         mark_time : bool, optional
-            Whether to mark the time of the trajectory at given ticks. The default is False.
+            Whether to mark the time of the trajectory at given ticks.
+            The default is False.
         time_ticks : float, optional
             Time tick frequency. The default is 1.0.
         time_fontsize : int, optional
@@ -1087,6 +1094,71 @@ class History(Result):
             if mark_time:
                 mark_times(ax, time_ticks, times[i], x, ys[i], zs[i],
                            fontsize=time_fontsize)
+
+    def plot_trajectories_from(self, t, plot_values=(), **kwargs):
+        """
+        Plot trajectories using History.plot_trajectories up to a given timestep.
+
+        Parameters
+        ----------
+        t : int
+            time index to plot trajectories from.
+        plot_values : tuple, optional
+            plot_values args for History.plot_trajectories. The default is ().
+        **kwargs : kwargs
+            Keyword arguments to History.plot_trajectories.
+
+        Returns
+        -------
+        fig : figure
+            Matplotlib figure object
+        ax : axis
+            Corresponding matplotlib axis
+        """
+        kwargs = prep_animation_title(t, **kwargs)
+        new_hist = self.cut(end_ind=t, newcopy=True)
+        return new_hist.plot_trajectories(*plot_values, **kwargs)
+
+    def animate(self, plot_func, times='all', figsize=(6, 4), z=False, **kwargs):
+        """
+        Create an animation of a plotting function over the history.
+
+        Parameters
+        ----------
+        plot_func : method or str
+            External update function for plot. If str, name of internal update method.
+            (e.g., 'plot_trajectories_from').
+        times : list or `all`, optional
+            Times to animate over. The default is 'all'.
+        figsize : tuple, optional
+            Size of the figure. The default is (6, 4).
+        z : int/Float/Bool, optional
+            Whether to instantiate a z-value. The default is False.
+        **kwargs : kwargs
+            Keyword arguments.
+
+        Returns
+        -------
+        ani : animation.Funcanimation
+            Object with animation.
+        """
+        fig, ax = setup_plot(figsize=figsize, z=z)
+
+        if times == 'all':
+            max_time = np.min([len(h) for h in self.values()])
+            t_inds = [i for i in range(max_time)]
+        else:
+            t_inds = times
+
+        if isinstance(plot_func, str):
+            p_func = getattr(self, plot_func)
+            partial_draw = partial(p_func, fig=fig, ax=ax, **kwargs)
+        else:
+            partial_draw = partial(plot_func, history=self, fig=fig, ax=ax, **kwargs)
+
+        ani = animation.FuncAnimation(fig, partial_draw, frames=t_inds)
+        return ani
+
 
 if __name__ == "__main__":
     import doctest

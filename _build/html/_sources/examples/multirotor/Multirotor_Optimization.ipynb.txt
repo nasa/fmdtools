@@ -67,7 +67,7 @@
    },
    "outputs": [],
    "source": [
-    "from fmdtools.analyze.graph import FunctionArchitectureGraph"
+    "from fmdtools.analyze.graph.architecture import FunctionArchitectureGraph"
    ]
   },
   {
