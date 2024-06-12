@@ -3,7 +3,7 @@ tqdm
 multiprocessing
 networkx
 numpy
-matplotlib
+matplotlib >= 3.7.0
 pandas
 ordered-set
 dill

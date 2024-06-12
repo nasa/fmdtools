@@ -24,14 +24,14 @@ dependencies = ["scipy",
                 "tqdm",
                 "networkx",
                 "numpy",
-                "matplotlib >= 3.9.0",
+                "matplotlib >= 3.7.0",
                 "pandas",
                 "ordered-set",
                 "dill",
-                "recordclass >= 0.21",
+                "recordclass >= 0.21.1",
                 "pytest",
                 "graphviz",
-                "shapely"
+                "shapely >= 2.0"
 ]
 
 [project.urls]
