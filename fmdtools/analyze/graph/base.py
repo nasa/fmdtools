@@ -476,7 +476,8 @@ class Graph(object):
         return bridgingNodes
 
     def plot_bridging_nodes(self, title='bridging nodes',
-                            node_kwargs={'node_color': 'red'}, **kwargs):
+                            node_kwargs={'nx_node_color': 'red', 'gv_fillcolor': 'red'},
+                            **kwargs):
         """
         Plot bridging nodes using self.draw().
 
