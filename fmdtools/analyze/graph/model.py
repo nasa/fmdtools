@@ -116,7 +116,7 @@ class ModelGraph(Graph):
         """
         self.set_from(time, history)
         kwargs = prep_animation_title(time, **kwargs)
-        clear_prev_figure(**kwargs)
+        kwargs = clear_prev_figure(**kwargs)
         return self.draw(**kwargs)
 
     def draw_graphviz_from(self, time, history=History(), **kwargs):

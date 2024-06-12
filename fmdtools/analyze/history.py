@@ -939,7 +939,7 @@ class History(Result):
     def plot_metric_dist_from(self, time, plot_values=(), ax=False, **kwargs):
         """Alias for plot_metric_dist allowing animation."""
         kwargs = prep_animation_title(time, **kwargs)
-        clear_prev_figure(**kwargs)
+        kwargs = clear_prev_figure(**kwargs)
         fig, axs = self.plot_metric_dist(time, *plot_values, **kwargs)
         return fig, axs
 

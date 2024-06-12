@@ -317,6 +317,7 @@ def clear_prev_figure(**kwargs):
     # clear figure/ax beforehand for speed
     if 'ax' in kwargs:
         kwargs.pop('ax')
+    return kwargs
 
 
 def multiplot_helper(cols, *plot_values, figsize='default', titles={}, sharex=True,
