@@ -617,6 +617,7 @@ class Coords(BaseObject):
 
         Examples
         --------
+        >>> ex = ExampleCoords()
         >>> ex.get_neighbors(0, 0)
         [array([10.,  0.]), array([ 0., 10.])]
         >>> ex.get_neighbors(10, 10)

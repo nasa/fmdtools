@@ -747,7 +747,7 @@ class History(Result):
         all_times = self.get_values('time')
         hist_to_plot = self.get_values(value)
         if 'color' not in kwargs:
-            kwargs['color'] = next(ax._get_lines.prop_cycler)['color']
+            kwargs['color'] = ax._get_lines.get_next_color()
         for scen in scens:
             hist_to_plot = self.get(scen)
             h_value = hist_to_plot.get(value)

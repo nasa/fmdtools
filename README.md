@@ -2,6 +2,7 @@
 
 # Overview
 
+![Python Version](https://img.shields.io/badge/Python-3.11-blue)
 [![PyPI](https://img.shields.io/pypi/v/fmdtools)](https://pypi.org/project/fmdtools/)
 [![GitHub release (latest by date)](https://img.shields.io/github/v/release/nasa/fmdtools?label=GitHub%20Release)](https://github.com/nasa/fmdtools/releases)
 [![GitHub Tag](https://img.shields.io/github/v/tag/nasa/fmdtools)](https://github.com/nasa/fmdtools/tags)
@@ -42,7 +43,7 @@ Readily-deployable analysis methods are built in to fmdtools to enable the rapid
 
 The fmdtools library was developed to run in an anaconda python environment. If you do not have an existing python environment, first [download and install anaconda.](https://docs.anaconda.com/free/anaconda/install/index.html).
 
-After the base installation, install these external external (non-python) packages using anaconda:
+After the base installation, set up a new `Python 3.11` environment for fmdtools and install these external external (non-python) packages in it:
 
 ```
 jupyter notebook
@@ -78,7 +79,7 @@ A version of the fmdtools toolkit can also be installed directly from the [PyPI 
 
 #### Dependencies
 
-fmdtools requires Python 3 (anaconda recommended) and depends directly on these packages (see requirements.txt):
+fmdtools requires `Python 3.11` (anaconda recommended) and depends directly on these packages (see requirements.txt):
 
 ```
 scipy
@@ -117,7 +118,7 @@ deap
 pymoo
 # used for optimization of tank example
 # license: (Apache 2.0) https://github.com/anyoptimization/pymoo/blob/main/LICENSE
-sklearn
+scikit-learn
 # used for rover mode notebook
 # license: (BSD-3 Clause) https://github.com/scikit-learn/scikit-learn?tab=BSD-3-Clause-1-ov-file#readme
 nbmake
@@ -138,9 +139,12 @@ genbadge
 multiprocess
 # used for parallism tutorial profiling
 # license: (BSD-3 Clause) https://github.com/uqfoundation/multiprocess/blob/master/LICENSE
-pathos          
+pathos
 # used for parallelism tutorial profiling
 # license: (BSD-3 Clause) https://github.com/uqfoundation/pathos/blob/master/LICENSE
+adjustText
+# used for taxiway visualizations
+# license: (MIT) https://github.com/Phlya/adjustText?tab=MIT-1-ov-file#readme
 ```
 
 One `fmdtools` is installed, you should be able to run:

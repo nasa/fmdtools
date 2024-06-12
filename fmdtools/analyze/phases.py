@@ -536,8 +536,7 @@ def samplemetric(faultsamp, endclasses, metric='cost', rad='rate', rad_scale=0.0
     if line == 'line':
         axes[0].plot(times, costs, label=metric)
     elif line == 'stem':
-        axes[0].stem(times, costs, label=metric, markerfmt=",",
-                     use_line_collection=True)
+        axes[0].stem(times, costs, label=metric, markerfmt=",")
 
     # rate/metric plot
     if rad:
