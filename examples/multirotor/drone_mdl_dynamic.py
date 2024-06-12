@@ -91,7 +91,7 @@ class StoreEE(StaticstoreEE):
 
     __slots__ = ()
 
-    def set_faults(self, time):
+    def set_faults(self):
         """When soc is 0, add 'nocharge' fault."""
         if self.s.soc < 1:
             self.s.soc = 0
@@ -206,7 +206,7 @@ class PlanPath(Function):
     flow_fs = Force
     flownames = {'force_st': 'fs'}
 
-    def set_faults(self, time):
+    def set_faults(self):
         """Enter "noloc" fault if loses support."""
         if self.fs.s.support < 0.5:
             self.m.add_fault('noloc')
@@ -520,8 +520,9 @@ def script_env_viewed(**kwargs):
 
     mdl.flows['environment'].c.show_from(10, mdlhist.flows.environment.c,
                                          {'viewed': {}}, title='hi')
+    properties={'target': {'alpha': 0.6}, 'viewed': {'alpha': 0.5}}
     ani = mdl.flows['environment'].c.animate(mdlhist.flows.environment.c,
-                                             properties={'target': {}, 'viewed': {}},
+                                             properties=properties,
                                              collections={'start': {}, 'safe': {}})
     return ani
 
@@ -531,7 +532,7 @@ if __name__ == "__main__":
     from fmdtools.analyze.phases import PhaseMap
     from fmdtools import analyze as an
     import doctest
-    doctest.testmod(verbose=True)
+    # doctest.testmod(verbose=True)
     # script_nominal_viewed()
     # script_faulty_trajectories()
     ani = script_env_viewed()

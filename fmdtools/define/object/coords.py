@@ -15,7 +15,7 @@ from fmdtools.define.container.parameter import Parameter
 from fmdtools.define.container.rand import Rand
 from fmdtools.define.base import is_iter
 from fmdtools.define.object.base import BaseObject
-from fmdtools.analyze.common import setup_plot, consolidate_legend
+from fmdtools.analyze.common import setup_plot, consolidate_legend, clear_prev_figure
 from fmdtools.analyze.common import prep_animation_title, add_title_xylabs
 from matplotlib import pyplot as plt
 from mpl_toolkits.axes_grid1 import make_axes_locatable
@@ -446,7 +446,7 @@ class Coords(BaseObject):
         if not properties:
             properties = [k for k in self.properties if k in hist.keys()]
             if not properties:
-                raise Exception()
+                raise Exception("No properties: "+str(properties))
         for prop in properties:
             prop_array = getattr(self, prop)
             prop_array[:] = hist.get(prop)[t]
@@ -1216,7 +1216,7 @@ class Coords(BaseObject):
         add_title_xylabs(ax, title=title, xlabel=xlabel, ylabel=ylabel)
         return fig, ax
 
-    def show_from(self, t, history={}, properties={}, **kwargs):
+    def show_from(self, t, history={}, properties={}, clear_fig=False, **kwargs):
         """
         Run Coords.show() at a particular time in the history.
 
@@ -1226,6 +1226,8 @@ class Coords(BaseObject):
             Time index to show the Coords object at.
         hist : History
             History to show the Coords object at.
+        clear_fig : bool
+            Whether to clear the figure beforehand. Default is False.
         **kwargs : kwargs
             kwargs for self.show
 
@@ -1237,11 +1239,13 @@ class Coords(BaseObject):
             Ploted axis object.
         """
         kwargs = prep_animation_title(t, **kwargs)
+        if clear_fig:
+            kwargs = clear_prev_figure(**kwargs)
         props = [p for p in properties if p in history]
         self.assign_from(history, t, *props)
         return self.show(properties=properties, **kwargs)
 
-    def animate(self, hist, times='all', **kwargs):
+    def animate(self, hist, times='all', clear_fig=True, **kwargs):
         """
         Animate the coords over a history using show_from.
 
@@ -1259,7 +1263,7 @@ class Coords(BaseObject):
         ani : animation.Funcanimation
             Object with animation.
         """
-        return hist.animate(self.show_from, times=times, **kwargs)
+        return hist.animate(self.show_from, times=times, clear_fig=clear_fig, **kwargs)
 
     def show_z(self, prop, z="prop", collections={}, legend_args=False, voxels=True,
                **kwargs):
