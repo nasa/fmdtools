@@ -6,11 +6,11 @@
   <rdf:RDF xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:cc="http://creativecommons.org/ns#" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
    <cc:Work>
     <dc:type rdf:resource="http://purl.org/dc/dcmitype/StillImage"/>
-    <dc:date>2024-06-06T12:06:22.699202</dc:date>
+    <dc:date>2024-06-12T15:31:53.087703</dc:date>
     <dc:format>image/svg+xml</dc:format>
     <dc:creator>
      <cc:Agent>
-      <dc:title>Matplotlib v3.7.2, https://matplotlib.org/</dc:title>
+      <dc:title>Matplotlib v3.9.0, https://matplotlib.org/</dc:title>
      </cc:Agent>
     </dc:creator>
    </cc:Work>
@@ -32,7 +32,7 @@ z
    <g id="LineCollection_1">
     <path d="M 48.264336 49.498125 
 L 94.380039 49.498125 
-" clip-path="url(#p695e8e4b4c)" style="fill: none; stroke-dasharray: 3.7,1.6; stroke-dashoffset: 0; stroke: #808080"/>
+" clip-path="url(#p15a142bf02)" style="fill: none; stroke-dasharray: 3.7,1.6; stroke-dashoffset: 0; stroke: #808080"/>
    </g>
    <g id="text_1">
     <!-- ConnectionEdgeStyle -->
@@ -334,7 +334,7 @@ z
   </g>
  </g>
  <defs>
-  <clipPath id="p695e8e4b4c">
+  <clipPath id="p15a142bf02">
    <rect x="43.422187" y="22.318125" width="55.8" height="54.36"/>
   </clipPath>
  </defs>

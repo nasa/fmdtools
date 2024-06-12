@@ -1,28 +1,28 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
     <title>Coverage report</title>
-    <link rel="icon" sizes="32x32" href="favicon_32.png">
-    <link rel="stylesheet" href="style.css" type="text/css">
-    <script type="text/javascript" src="coverage_html.js" defer></script>
+    <link rel="icon" sizes="32x32" href="favicon_32_cb_58284776.png">
+    <link rel="stylesheet" href="style_cb_718ce007.css" type="text/css">
+    <script src="coverage_html_cb_497bf287.js" defer></script>
 </head>
 <body class="indexfile">
 <header>
     <div class="content">
         <h1>Coverage report:
-            <span class="pc_cov">82%</span>
+            <span class="pc_cov">88%</span>
         </h1>
         <aside id="help_panel_wrapper">
             <input id="help_panel_state" type="checkbox">
             <label for="help_panel_state">
-                <img id="keyboard_icon" src="keybd_closed.png" alt="Show/hide keyboard shortcuts" />
+                <img id="keyboard_icon" src="keybd_closed_cb_ce680311.png" alt="Show/hide keyboard shortcuts">
             </label>
             <div id="help_panel">
                 <p class="legend">Shortcuts on this page</p>
                 <div class="keyhelp">
                     <p>
-                        <kbd>n</kbd>
+                        <kbd>f</kbd>
                         <kbd>s</kbd>
                         <kbd>m</kbd>
                         <kbd>x</kbd>
@@ -41,11 +41,20 @@
             </div>
         </aside>
         <form id="filter_container">
-            <input id="filter" type="text" value="" placeholder="filter..." />
+            <input id="filter" type="text" value="" placeholder="filter...">
+            <div>
+                <input id="hide100" type="checkbox" >
+                <label for="hide100">hide covered</label>
+            </div>
         </form>
+        <h2>
+                <a class="button current">Files</a>
+                <a class="button" href="function_index.html">Functions</a>
+                <a class="button" href="class_index.html">Classes</a>
+        </h2>
         <p class="text">
-            <a class="nav" href="https://coverage.readthedocs.io/en/7.4.0">coverage.py v7.4.0</a>,
-            created at 2024-05-21 16:29 -0700
+            <a class="nav" href="https://coverage.readthedocs.io/en/7.5.3">coverage.py v7.5.3</a>,
+            created at 2024-06-12 14:40 -0700
         </p>
     </div>
 </header>
@@ -53,701 +62,722 @@
     <table class="index" data-sortable>
         <thead>
             <tr class="tablehead" title="Click to sort">
-                <th class="name left" aria-sort="none" data-shortcut="n">Module</th>
-                <th aria-sort="none" data-default-sort-order="descending" data-shortcut="s">statements</th>
-                <th aria-sort="none" data-default-sort-order="descending" data-shortcut="m">missing</th>
-                <th aria-sort="none" data-default-sort-order="descending" data-shortcut="x">excluded</th>
-                <th class="right" aria-sort="none" data-shortcut="c">coverage</th>
+                <th id="file" class="name left" aria-sort="none" data-shortcut="f">File<span class="arrows"></span></th>
+                <th id="statements" aria-sort="none" data-default-sort-order="descending" data-shortcut="s">statements<span class="arrows"></span></th>
+                <th id="missing" aria-sort="none" data-default-sort-order="descending" data-shortcut="m">missing<span class="arrows"></span></th>
+                <th id="excluded" aria-sort="none" data-default-sort-order="descending" data-shortcut="x">excluded<span class="arrows"></span></th>
+                <th id="coverage" class="right" aria-sort="none" data-shortcut="c">coverage<span class="arrows"></span></th>
             </tr>
         </thead>
         <tbody>
-            <tr class="file">
-                <td class="name left"><a href="d_2d8802fcd9c237a1_ex_pump_py.html">_build\html\_downloads\2d21039b77573642ec58edd287cbcd64\ex_pump.py</a></td>
-                <td>274</td>
-                <td>93</td>
-                <td>0</td>
-                <td class="right" data-ratio="181 274">66%</td>
-            </tr>
-            <tr class="file">
+            <tr class="region">
                 <td class="name left"><a href="conf_py.html">conf.py</a></td>
                 <td>20</td>
                 <td>0</td>
                 <td>0</td>
                 <td class="right" data-ratio="20 20">100%</td>
             </tr>
-            <tr class="file">
-                <td class="name left"><a href="d_714eac15f71a9411___init___py.html">examples\__init__.py</a></td>
+            <tr class="region">
+                <td class="name left"><a href="z_714eac15f71a9411___init___py.html">examples\__init__.py</a></td>
                 <td>1</td>
                 <td>0</td>
                 <td>0</td>
                 <td class="right" data-ratio="1 1">100%</td>
             </tr>
-            <tr class="file">
-                <td class="name left"><a href="d_508ff62dace06ed9___init___py.html">examples\asg_demo\__init__.py</a></td>
-                <td>1</td>
-                <td>0</td>
-                <td>0</td>
-                <td class="right" data-ratio="1 1">100%</td>
-            </tr>
-            <tr class="file">
-                <td class="name left"><a href="d_508ff62dace06ed9_demo_model_py.html">examples\asg_demo\demo_model.py</a></td>
-                <td>110</td>
-                <td>13</td>
-                <td>0</td>
-                <td class="right" data-ratio="97 110">88%</td>
-            </tr>
-            <tr class="file">
-                <td class="name left"><a href="d_1447ab77857ea7b4___init___py.html">examples\eps\__init__.py</a></td>
-                <td>1</td>
-                <td>0</td>
-                <td>0</td>
-                <td class="right" data-ratio="1 1">100%</td>
-            </tr>
-            <tr class="file">
-                <td class="name left"><a href="d_1447ab77857ea7b4_eps_py.html">examples\eps\eps.py</a></td>
-                <td>308</td>
-                <td>20</td>
-                <td>0</td>
-                <td class="right" data-ratio="288 308">94%</td>
-            </tr>
-            <tr class="file">
-                <td class="name left"><a href="d_1447ab77857ea7b4_test_eps_py.html">examples\eps\test_eps.py</a></td>
-                <td>68</td>
-                <td>2</td>
-                <td>0</td>
-                <td class="right" data-ratio="66 68">97%</td>
-            </tr>
-            <tr class="file">
-                <td class="name left"><a href="d_97387aa35eb79038___init___py.html">examples\multiflow_demo\__init__.py</a></td>
-                <td>1</td>
-                <td>0</td>
-                <td>0</td>
-                <td class="right" data-ratio="1 1">100%</td>
-            </tr>
-            <tr class="file">
-                <td class="name left"><a href="d_97387aa35eb79038_multiflow_demo_py.html">examples\multiflow_demo\multiflow_demo.py</a></td>
-                <td>64</td>
-                <td>7</td>
-                <td>0</td>
-                <td class="right" data-ratio="57 64">89%</td>
-            </tr>
-            <tr class="file">
-                <td class="name left"><a href="d_97387aa35eb79038_test_multiflow_py.html">examples\multiflow_demo\test_multiflow.py</a></td>
-                <td>41</td>
-                <td>1</td>
-                <td>0</td>
-                <td class="right" data-ratio="40 41">98%</td>
-            </tr>
-            <tr class="file">
-                <td class="name left"><a href="d_0fa5de129a66a7d8___init___py.html">examples\multirotor\__init__.py</a></td>
-                <td>1</td>
-                <td>0</td>
-                <td>0</td>
-                <td class="right" data-ratio="1 1">100%</td>
-            </tr>
-            <tr class="file">
-                <td class="name left"><a href="d_0fa5de129a66a7d8_drone_mdl_dynamic_py.html">examples\multirotor\drone_mdl_dynamic.py</a></td>
-                <td>225</td>
-                <td>26</td>
-                <td>0</td>
-                <td class="right" data-ratio="199 225">88%</td>
-            </tr>
-            <tr class="file">
-                <td class="name left"><a href="d_0fa5de129a66a7d8_drone_mdl_hierarchical_py.html">examples\multirotor\drone_mdl_hierarchical.py</a></td>
-                <td>163</td>
-                <td>23</td>
-                <td>0</td>
-                <td class="right" data-ratio="140 163">86%</td>
-            </tr>
-            <tr class="file">
-                <td class="name left"><a href="d_0fa5de129a66a7d8_drone_mdl_rural_py.html">examples\multirotor\drone_mdl_rural.py</a></td>
-                <td>418</td>
-                <td>50</td>
-                <td>0</td>
-                <td class="right" data-ratio="368 418">88%</td>
-            </tr>
-            <tr class="file">
-                <td class="name left"><a href="d_0fa5de129a66a7d8_drone_mdl_static_py.html">examples\multirotor\drone_mdl_static.py</a></td>
-                <td>302</td>
-                <td>10</td>
-                <td>0</td>
-                <td class="right" data-ratio="292 302">97%</td>
-            </tr>
-            <tr class="file">
-                <td class="name left"><a href="d_0fa5de129a66a7d8_drone_mdl_urban_py.html">examples\multirotor\drone_mdl_urban.py</a></td>
-                <td>249</td>
-                <td>40</td>
-                <td>0</td>
-                <td class="right" data-ratio="209 249">84%</td>
-            </tr>
-            <tr class="file">
-                <td class="name left"><a href="d_0fa5de129a66a7d8_opt_drone_rural_py.html">examples\multirotor\opt_drone_rural.py</a></td>
-                <td>90</td>
-                <td>1</td>
-                <td>0</td>
-                <td class="right" data-ratio="89 90">99%</td>
-            </tr>
-            <tr class="file">
-                <td class="name left"><a href="d_0fa5de129a66a7d8_test_multirotor_py.html">examples\multirotor\test_multirotor.py</a></td>
-                <td>81</td>
-                <td>1</td>
-                <td>0</td>
-                <td class="right" data-ratio="80 81">99%</td>
-            </tr>
-            <tr class="file">
-                <td class="name left"><a href="d_c676eda1c73bce89___init___py.html">examples\pump\__init__.py</a></td>
-                <td>1</td>
-                <td>0</td>
-                <td>0</td>
-                <td class="right" data-ratio="1 1">100%</td>
-            </tr>
-            <tr class="file">
-                <td class="name left"><a href="d_c676eda1c73bce89_ex_pump_py.html">examples\pump\ex_pump.py</a></td>
-                <td>274</td>
-                <td>87</td>
-                <td>0</td>
-                <td class="right" data-ratio="187 274">68%</td>
-            </tr>
-            <tr class="file">
-                <td class="name left"><a href="d_c676eda1c73bce89_jointfaults_ex_py.html">examples\pump\jointfaults_ex.py</a></td>
-                <td>23</td>
-                <td>0</td>
-                <td>0</td>
-                <td class="right" data-ratio="23 23">100%</td>
-            </tr>
-            <tr class="file">
-                <td class="name left"><a href="d_c676eda1c73bce89_parallelism_methods_py.html">examples\pump\parallelism_methods.py</a></td>
-                <td>99</td>
-                <td>57</td>
-                <td>0</td>
-                <td class="right" data-ratio="42 99">42%</td>
-            </tr>
-            <tr class="file">
-                <td class="name left"><a href="d_c676eda1c73bce89_pump_indiv_py.html">examples\pump\pump_indiv.py</a></td>
-                <td>36</td>
-                <td>27</td>
-                <td>0</td>
-                <td class="right" data-ratio="9 36">25%</td>
-            </tr>
-            <tr class="file">
-                <td class="name left"><a href="d_c676eda1c73bce89_pump_stochastic_py.html">examples\pump\pump_stochastic.py</a></td>
-                <td>112</td>
-                <td>29</td>
-                <td>0</td>
-                <td class="right" data-ratio="83 112">74%</td>
-            </tr>
-            <tr class="file">
-                <td class="name left"><a href="d_c676eda1c73bce89_test_pump_py.html">examples\pump\test_pump.py</a></td>
-                <td>190</td>
-                <td>6</td>
-                <td>0</td>
-                <td class="right" data-ratio="184 190">97%</td>
-            </tr>
-            <tr class="file">
-                <td class="name left"><a href="d_c676eda1c73bce89_test_pump_example_py.html">examples\pump\test_pump_example.py</a></td>
-                <td>114</td>
-                <td>1</td>
-                <td>0</td>
-                <td class="right" data-ratio="113 114">99%</td>
-            </tr>
-            <tr class="file">
-                <td class="name left"><a href="d_c676eda1c73bce89_test_pump_stochastic_py.html">examples\pump\test_pump_stochastic.py</a></td>
-                <td>161</td>
-                <td>6</td>
-                <td>0</td>
-                <td class="right" data-ratio="155 161">96%</td>
-            </tr>
-            <tr class="file">
-                <td class="name left"><a href="d_e83210bdfe1a6410___init___py.html">examples\rover\__init__.py</a></td>
-                <td>1</td>
-                <td>0</td>
-                <td>0</td>
-                <td class="right" data-ratio="1 1">100%</td>
-            </tr>
-            <tr class="file">
-                <td class="name left"><a href="d_e83210bdfe1a6410_opt_rover_py.html">examples\rover\opt_rover.py</a></td>
-                <td>35</td>
-                <td>22</td>
-                <td>0</td>
-                <td class="right" data-ratio="13 35">37%</td>
-            </tr>
-            <tr class="file">
-                <td class="name left"><a href="d_29f45ac386dd7f61_ea_analysis_py.html">examples\rover\optimization\ea_analysis.py</a></td>
-                <td>17</td>
-                <td>13</td>
-                <td>0</td>
-                <td class="right" data-ratio="4 17">24%</td>
-            </tr>
-            <tr class="file">
-                <td class="name left"><a href="d_29f45ac386dd7f61_search_rover_py.html">examples\rover\optimization\search_rover.py</a></td>
-                <td>444</td>
-                <td>352</td>
-                <td>0</td>
-                <td class="right" data-ratio="92 444">21%</td>
-            </tr>
-            <tr class="file">
-                <td class="name left"><a href="d_29f45ac386dd7f61_untitled2_py.html">examples\rover\optimization\untitled2.py</a></td>
-                <td>1</td>
-                <td>0</td>
-                <td>0</td>
-                <td class="right" data-ratio="1 1">100%</td>
-            </tr>
-            <tr class="file">
-                <td class="name left"><a href="d_e83210bdfe1a6410_rover_degradation_py.html">examples\rover\rover_degradation.py</a></td>
-                <td>93</td>
-                <td>11</td>
-                <td>0</td>
-                <td class="right" data-ratio="82 93">88%</td>
-            </tr>
-            <tr class="file">
-                <td class="name left"><a href="d_e83210bdfe1a6410_rover_mode_space_py.html">examples\rover\rover_mode_space.py</a></td>
-                <td>33</td>
-                <td>26</td>
-                <td>0</td>
-                <td class="right" data-ratio="7 33">21%</td>
-            </tr>
-            <tr class="file">
-                <td class="name left"><a href="d_e83210bdfe1a6410_rover_model_py.html">examples\rover\rover_model.py</a></td>
-                <td>568</td>
-                <td>78</td>
-                <td>0</td>
-                <td class="right" data-ratio="490 568">86%</td>
-            </tr>
-            <tr class="file">
-                <td class="name left"><a href="d_e83210bdfe1a6410_rover_model_human_py.html">examples\rover\rover_model_human.py</a></td>
-                <td>226</td>
-                <td>32</td>
-                <td>0</td>
-                <td class="right" data-ratio="194 226">86%</td>
-            </tr>
-            <tr class="file">
-                <td class="name left"><a href="d_e83210bdfe1a6410_test_rover_py.html">examples\rover\test_rover.py</a></td>
-                <td>15</td>
-                <td>1</td>
-                <td>0</td>
-                <td class="right" data-ratio="14 15">93%</td>
-            </tr>
-            <tr class="file">
-                <td class="name left"><a href="d_36b6f534fa1b0a7c___init___py.html">examples\tank\__init__.py</a></td>
-                <td>1</td>
-                <td>0</td>
-                <td>0</td>
-                <td class="right" data-ratio="1 1">100%</td>
-            </tr>
-            <tr class="file">
-                <td class="name left"><a href="d_36b6f534fa1b0a7c_tank_model_py.html">examples\tank\tank_model.py</a></td>
-                <td>302</td>
-                <td>43</td>
-                <td>0</td>
-                <td class="right" data-ratio="259 302">86%</td>
-            </tr>
-            <tr class="file">
-                <td class="name left"><a href="d_36b6f534fa1b0a7c_tank_optimization_model_py.html">examples\tank\tank_optimization_model.py</a></td>
-                <td>168</td>
-                <td>99</td>
-                <td>0</td>
-                <td class="right" data-ratio="69 168">41%</td>
-            </tr>
-            <tr class="file">
-                <td class="name left"><a href="d_36b6f534fa1b0a7c_test_tank_py.html">examples\tank\test_tank.py</a></td>
-                <td>159</td>
-                <td>28</td>
-                <td>0</td>
-                <td class="right" data-ratio="131 159">82%</td>
-            </tr>
-            <tr class="file">
-                <td class="name left"><a href="d_18c41884e19a245d_ATC_py.html">examples\taxiway\ATC.py</a></td>
-                <td>94</td>
-                <td>12</td>
-                <td>0</td>
-                <td class="right" data-ratio="82 94">87%</td>
-            </tr>
-            <tr class="file">
-                <td class="name left"><a href="d_18c41884e19a245d_asset_py.html">examples\taxiway\asset.py</a></td>
-                <td>335</td>
-                <td>5</td>
-                <td>0</td>
-                <td class="right" data-ratio="330 335">99%</td>
-            </tr>
-            <tr class="file">
-                <td class="name left"><a href="d_18c41884e19a245d_common_py.html">examples\taxiway\common.py</a></td>
-                <td>350</td>
-                <td>35</td>
-                <td>0</td>
-                <td class="right" data-ratio="315 350">90%</td>
-            </tr>
-            <tr class="file">
-                <td class="name left"><a href="d_18c41884e19a245d_model_py.html">examples\taxiway\model.py</a></td>
-                <td>73</td>
-                <td>40</td>
-                <td>0</td>
-                <td class="right" data-ratio="33 73">45%</td>
-            </tr>
-            <tr class="file">
-                <td class="name left"><a href="d_18c41884e19a245d_propositional_network_testing_py.html">examples\taxiway\propositional_network_testing.py</a></td>
-                <td>107</td>
-                <td>93</td>
-                <td>0</td>
-                <td class="right" data-ratio="14 107">13%</td>
-            </tr>
-            <tr class="file">
-                <td class="name left"><a href="d_18c41884e19a245d_test_asset_py.html">examples\taxiway\test_asset.py</a></td>
-                <td>141</td>
-                <td>6</td>
-                <td>0</td>
-                <td class="right" data-ratio="135 141">96%</td>
-            </tr>
-            <tr class="file">
-                <td class="name left"><a href="d_18c41884e19a245d_test_model_py.html">examples\taxiway\test_model.py</a></td>
-                <td>49</td>
-                <td>3</td>
-                <td>0</td>
-                <td class="right" data-ratio="46 49">94%</td>
-            </tr>
-            <tr class="file">
-                <td class="name left"><a href="d_29640eaf62c9d237___init___py.html">fmdtools\__init__.py</a></td>
-                <td>4</td>
-                <td>0</td>
-                <td>0</td>
-                <td class="right" data-ratio="4 4">100%</td>
-            </tr>
-            <tr class="file">
-                <td class="name left"><a href="d_ce7fa1180973dcbc___init___py.html">fmdtools\analyze\__init__.py</a></td>
-                <td>6</td>
-                <td>0</td>
-                <td>0</td>
-                <td class="right" data-ratio="6 6">100%</td>
-            </tr>
-            <tr class="file">
-                <td class="name left"><a href="d_ce7fa1180973dcbc_common_py.html">fmdtools\analyze\common.py</a></td>
-                <td>175</td>
-                <td>47</td>
-                <td>0</td>
-                <td class="right" data-ratio="128 175">73%</td>
-            </tr>
-            <tr class="file">
-                <td class="name left"><a href="d_ce7fa1180973dcbc_graph_py.html">fmdtools\analyze\graph.py</a></td>
-                <td>974</td>
-                <td>157</td>
-                <td>0</td>
-                <td class="right" data-ratio="817 974">84%</td>
-            </tr>
-            <tr class="file">
-                <td class="name left"><a href="d_ce7fa1180973dcbc_history_py.html">fmdtools\analyze\history.py</a></td>
-                <td>427</td>
-                <td>80</td>
-                <td>0</td>
-                <td class="right" data-ratio="347 427">81%</td>
-            </tr>
-            <tr class="file">
-                <td class="name left"><a href="d_ce7fa1180973dcbc_phases_py.html">fmdtools\analyze\phases.py</a></td>
-                <td>240</td>
-                <td>32</td>
-                <td>0</td>
-                <td class="right" data-ratio="208 240">87%</td>
-            </tr>
-            <tr class="file">
-                <td class="name left"><a href="d_ce7fa1180973dcbc_result_py.html">fmdtools\analyze\result.py</a></td>
-                <td>453</td>
-                <td>62</td>
-                <td>0</td>
-                <td class="right" data-ratio="391 453">86%</td>
-            </tr>
-            <tr class="file">
-                <td class="name left"><a href="d_ce7fa1180973dcbc_tabulate_py.html">fmdtools\analyze\tabulate.py</a></td>
-                <td>269</td>
-                <td>24</td>
-                <td>0</td>
-                <td class="right" data-ratio="245 269">91%</td>
-            </tr>
-            <tr class="file">
-                <td class="name left"><a href="d_3a471e3220ee36cf___init___py.html">fmdtools\define\__init__.py</a></td>
-                <td>7</td>
-                <td>0</td>
-                <td>0</td>
-                <td class="right" data-ratio="7 7">100%</td>
-            </tr>
-            <tr class="file">
-                <td class="name left"><a href="d_3d99ab35d814b52d___init___py.html">fmdtools\define\architecture\__init__.py</a></td>
-                <td>5</td>
-                <td>0</td>
-                <td>0</td>
-                <td class="right" data-ratio="5 5">100%</td>
-            </tr>
-            <tr class="file">
-                <td class="name left"><a href="d_3d99ab35d814b52d_action_py.html">fmdtools\define\architecture\action.py</a></td>
-                <td>103</td>
-                <td>16</td>
-                <td>0</td>
-                <td class="right" data-ratio="87 103">84%</td>
-            </tr>
-            <tr class="file">
-                <td class="name left"><a href="d_3d99ab35d814b52d_base_py.html">fmdtools\define\architecture\base.py</a></td>
-                <td>161</td>
-                <td>20</td>
-                <td>0</td>
-                <td class="right" data-ratio="141 161">88%</td>
-            </tr>
-            <tr class="file">
-                <td class="name left"><a href="d_3d99ab35d814b52d_component_py.html">fmdtools\define\architecture\component.py</a></td>
-                <td>15</td>
-                <td>0</td>
-                <td>0</td>
-                <td class="right" data-ratio="15 15">100%</td>
-            </tr>
-            <tr class="file">
-                <td class="name left"><a href="d_3d99ab35d814b52d_function_py.html">fmdtools\define\architecture\function.py</a></td>
-                <td>221</td>
-                <td>27</td>
-                <td>0</td>
-                <td class="right" data-ratio="194 221">88%</td>
-            </tr>
-            <tr class="file">
-                <td class="name left"><a href="d_3d99ab35d814b52d_geom_py.html">fmdtools\define\architecture\geom.py</a></td>
-                <td>63</td>
-                <td>12</td>
-                <td>0</td>
-                <td class="right" data-ratio="51 63">81%</td>
-            </tr>
-            <tr class="file">
-                <td class="name left"><a href="d_3a471e3220ee36cf_base_py.html">fmdtools\define\base.py</a></td>
-                <td>76</td>
-                <td>7</td>
-                <td>0</td>
-                <td class="right" data-ratio="69 76">91%</td>
-            </tr>
-            <tr class="file">
-                <td class="name left"><a href="d_1eaab89881d21414___init___py.html">fmdtools\define\block\__init__.py</a></td>
-                <td>4</td>
-                <td>0</td>
-                <td>0</td>
-                <td class="right" data-ratio="4 4">100%</td>
-            </tr>
-            <tr class="file">
-                <td class="name left"><a href="d_1eaab89881d21414_action_py.html">fmdtools\define\block\action.py</a></td>
-                <td>24</td>
-                <td>3</td>
-                <td>0</td>
-                <td class="right" data-ratio="21 24">88%</td>
-            </tr>
-            <tr class="file">
-                <td class="name left"><a href="d_1eaab89881d21414_base_py.html">fmdtools\define\block\base.py</a></td>
-                <td>294</td>
-                <td>50</td>
-                <td>0</td>
-                <td class="right" data-ratio="244 294">83%</td>
-            </tr>
-            <tr class="file">
-                <td class="name left"><a href="d_1eaab89881d21414_component_py.html">fmdtools\define\block\component.py</a></td>
-                <td>8</td>
-                <td>2</td>
-                <td>0</td>
-                <td class="right" data-ratio="6 8">75%</td>
-            </tr>
-            <tr class="file">
-                <td class="name left"><a href="d_1eaab89881d21414_function_py.html">fmdtools\define\block\function.py</a></td>
-                <td>107</td>
-                <td>12</td>
-                <td>0</td>
-                <td class="right" data-ratio="95 107">89%</td>
-            </tr>
-            <tr class="file">
-                <td class="name left"><a href="d_c3fb750c09d80710___init___py.html">fmdtools\define\container\__init__.py</a></td>
-                <td>5</td>
-                <td>0</td>
-                <td>0</td>
-                <td class="right" data-ratio="5 5">100%</td>
-            </tr>
-            <tr class="file">
-                <td class="name left"><a href="d_c3fb750c09d80710_base_py.html">fmdtools\define\container\base.py</a></td>
-                <td>144</td>
-                <td>17</td>
-                <td>0</td>
-                <td class="right" data-ratio="127 144">88%</td>
-            </tr>
-            <tr class="file">
-                <td class="name left"><a href="d_c3fb750c09d80710_mode_py.html">fmdtools\define\container\mode.py</a></td>
-                <td>233</td>
-                <td>43</td>
-                <td>0</td>
-                <td class="right" data-ratio="190 233">82%</td>
-            </tr>
-            <tr class="file">
-                <td class="name left"><a href="d_c3fb750c09d80710_parameter_py.html">fmdtools\define\container\parameter.py</a></td>
-                <td>96</td>
-                <td>15</td>
-                <td>0</td>
-                <td class="right" data-ratio="81 96">84%</td>
-            </tr>
-            <tr class="file">
-                <td class="name left"><a href="d_c3fb750c09d80710_rand_py.html">fmdtools\define\container\rand.py</a></td>
-                <td>163</td>
-                <td>40</td>
-                <td>0</td>
-                <td class="right" data-ratio="123 163">75%</td>
-            </tr>
-            <tr class="file">
-                <td class="name left"><a href="d_c3fb750c09d80710_state_py.html">fmdtools\define\container\state.py</a></td>
-                <td>97</td>
-                <td>19</td>
-                <td>0</td>
-                <td class="right" data-ratio="78 97">80%</td>
-            </tr>
-            <tr class="file">
-                <td class="name left"><a href="d_c3fb750c09d80710_time_py.html">fmdtools\define\container\time.py</a></td>
-                <td>67</td>
-                <td>12</td>
-                <td>0</td>
-                <td class="right" data-ratio="55 67">82%</td>
-            </tr>
-            <tr class="file">
-                <td class="name left"><a href="d_3a471e3220ee36cf_environment_py.html">fmdtools\define\environment.py</a></td>
-                <td>58</td>
-                <td>13</td>
-                <td>0</td>
-                <td class="right" data-ratio="45 58">78%</td>
-            </tr>
-            <tr class="file">
-                <td class="name left"><a href="d_d97a2ee3121c2b4d___init___py.html">fmdtools\define\flow\__init__.py</a></td>
-                <td>3</td>
-                <td>0</td>
-                <td>0</td>
-                <td class="right" data-ratio="3 3">100%</td>
-            </tr>
-            <tr class="file">
-                <td class="name left"><a href="d_d97a2ee3121c2b4d_base_py.html">fmdtools\define\flow\base.py</a></td>
-                <td>44</td>
-                <td>4</td>
-                <td>0</td>
-                <td class="right" data-ratio="40 44">91%</td>
-            </tr>
-            <tr class="file">
-                <td class="name left"><a href="d_d97a2ee3121c2b4d_commsflow_py.html">fmdtools\define\flow\commsflow.py</a></td>
-                <td>111</td>
-                <td>15</td>
-                <td>0</td>
-                <td class="right" data-ratio="96 111">86%</td>
-            </tr>
-            <tr class="file">
-                <td class="name left"><a href="d_d97a2ee3121c2b4d_multiflow_py.html">fmdtools\define\flow\multiflow.py</a></td>
-                <td>97</td>
-                <td>10</td>
-                <td>0</td>
-                <td class="right" data-ratio="87 97">90%</td>
-            </tr>
-            <tr class="file">
-                <td class="name left"><a href="d_59c35687e81b2951___init___py.html">fmdtools\define\object\__init__.py</a></td>
-                <td>4</td>
-                <td>0</td>
-                <td>0</td>
-                <td class="right" data-ratio="4 4">100%</td>
-            </tr>
-            <tr class="file">
-                <td class="name left"><a href="d_59c35687e81b2951_base_py.html">fmdtools\define\object\base.py</a></td>
-                <td>205</td>
-                <td>23</td>
-                <td>0</td>
-                <td class="right" data-ratio="182 205">89%</td>
-            </tr>
-            <tr class="file">
-                <td class="name left"><a href="d_59c35687e81b2951_coords_py.html">fmdtools\define\object\coords.py</a></td>
-                <td>309</td>
-                <td>39</td>
-                <td>0</td>
-                <td class="right" data-ratio="270 309">87%</td>
-            </tr>
-            <tr class="file">
-                <td class="name left"><a href="d_59c35687e81b2951_geom_py.html">fmdtools\define\object\geom.py</a></td>
-                <td>128</td>
-                <td>7</td>
-                <td>0</td>
-                <td class="right" data-ratio="121 128">95%</td>
-            </tr>
-            <tr class="file">
-                <td class="name left"><a href="d_59c35687e81b2951_timer_py.html">fmdtools\define\object\timer.py</a></td>
-                <td>58</td>
-                <td>17</td>
-                <td>0</td>
-                <td class="right" data-ratio="41 58">71%</td>
-            </tr>
-            <tr class="file">
-                <td class="name left"><a href="d_4516f526a1386668___init___py.html">fmdtools\sim\__init__.py</a></td>
-                <td>4</td>
-                <td>0</td>
-                <td>0</td>
-                <td class="right" data-ratio="4 4">100%</td>
-            </tr>
-            <tr class="file">
-                <td class="name left"><a href="d_4516f526a1386668_propagate_py.html">fmdtools\sim\propagate.py</a></td>
-                <td>395</td>
-                <td>28</td>
-                <td>0</td>
-                <td class="right" data-ratio="367 395">93%</td>
-            </tr>
-            <tr class="file">
-                <td class="name left"><a href="d_4516f526a1386668_sample_py.html">fmdtools\sim\sample.py</a></td>
-                <td>522</td>
-                <td>75</td>
-                <td>0</td>
-                <td class="right" data-ratio="447 522">86%</td>
-            </tr>
-            <tr class="file">
-                <td class="name left"><a href="d_4516f526a1386668_scenario_py.html">fmdtools\sim\scenario.py</a></td>
-                <td>133</td>
-                <td>26</td>
-                <td>0</td>
-                <td class="right" data-ratio="107 133">80%</td>
-            </tr>
-            <tr class="file">
-                <td class="name left"><a href="d_4516f526a1386668_search_py.html">fmdtools\sim\search.py</a></td>
-                <td>595</td>
-                <td>74</td>
-                <td>0</td>
-                <td class="right" data-ratio="521 595">88%</td>
-            </tr>
-            <tr class="file">
-                <td class="name left"><a href="run_all_tests_py.html">run_all_tests.py</a></td>
-                <td>12</td>
-                <td>7</td>
-                <td>0</td>
-                <td class="right" data-ratio="5 12">42%</td>
-            </tr>
-            <tr class="file">
-                <td class="name left"><a href="d_a44f0ac069e85531___init___py.html">tests\__init__.py</a></td>
+            <tr class="region">
+                <td class="name left"><a href="z_508ff62dace06ed9___init___py.html">examples\asg_demo\__init__.py</a></td>
                 <td>0</td>
                 <td>0</td>
                 <td>0</td>
                 <td class="right" data-ratio="0 0">100%</td>
             </tr>
-            <tr class="file">
-                <td class="name left"><a href="d_a44f0ac069e85531_common_py.html">tests\common.py</a></td>
-                <td>255</td>
-                <td>45</td>
-                <td>0</td>
-                <td class="right" data-ratio="210 255">82%</td>
+            <tr class="region">
+                <td class="name left"><a href="z_508ff62dace06ed9_demo_model_py.html">examples\asg_demo\demo_model.py</a></td>
+                <td>102</td>
+                <td>7</td>
+                <td>10</td>
+                <td class="right" data-ratio="95 102">93%</td>
             </tr>
-            <tr class="file">
-                <td class="name left"><a href="d_a44f0ac069e85531_test_graph_py.html">tests\test_graph.py</a></td>
-                <td>63</td>
+            <tr class="region">
+                <td class="name left"><a href="z_1447ab77857ea7b4___init___py.html">examples\eps\__init__.py</a></td>
+                <td>0</td>
+                <td>0</td>
+                <td>0</td>
+                <td class="right" data-ratio="0 0">100%</td>
+            </tr>
+            <tr class="region">
+                <td class="name left"><a href="z_1447ab77857ea7b4_eps_py.html">examples\eps\eps.py</a></td>
+                <td>296</td>
+                <td>7</td>
+                <td>14</td>
+                <td class="right" data-ratio="289 296">98%</td>
+            </tr>
+            <tr class="region">
+                <td class="name left"><a href="z_1447ab77857ea7b4_test_eps_py.html">examples\eps\test_eps.py</a></td>
+                <td>64</td>
+                <td>0</td>
+                <td>3</td>
+                <td class="right" data-ratio="64 64">100%</td>
+            </tr>
+            <tr class="region">
+                <td class="name left"><a href="z_97387aa35eb79038___init___py.html">examples\multiflow_demo\__init__.py</a></td>
+                <td>0</td>
+                <td>0</td>
+                <td>0</td>
+                <td class="right" data-ratio="0 0">100%</td>
+            </tr>
+            <tr class="region">
+                <td class="name left"><a href="z_97387aa35eb79038_multiflow_demo_py.html">examples\multiflow_demo\multiflow_demo.py</a></td>
+                <td>65</td>
+                <td>8</td>
+                <td>0</td>
+                <td class="right" data-ratio="57 65">88%</td>
+            </tr>
+            <tr class="region">
+                <td class="name left"><a href="z_97387aa35eb79038_test_multiflow_py.html">examples\multiflow_demo\test_multiflow.py</a></td>
+                <td>38</td>
+                <td>0</td>
+                <td>2</td>
+                <td class="right" data-ratio="38 38">100%</td>
+            </tr>
+            <tr class="region">
+                <td class="name left"><a href="z_0fa5de129a66a7d8___init___py.html">examples\multirotor\__init__.py</a></td>
+                <td>0</td>
+                <td>0</td>
+                <td>0</td>
+                <td class="right" data-ratio="0 0">100%</td>
+            </tr>
+            <tr class="region">
+                <td class="name left"><a href="z_0fa5de129a66a7d8_drone_mdl_dynamic_py.html">examples\multirotor\drone_mdl_dynamic.py</a></td>
+                <td>205</td>
+                <td>6</td>
+                <td>66</td>
+                <td class="right" data-ratio="199 205">97%</td>
+            </tr>
+            <tr class="region">
+                <td class="name left"><a href="z_0fa5de129a66a7d8_drone_mdl_hierarchical_py.html">examples\multirotor\drone_mdl_hierarchical.py</a></td>
+                <td>139</td>
+                <td>1</td>
+                <td>23</td>
+                <td class="right" data-ratio="138 139">99%</td>
+            </tr>
+            <tr class="region">
+                <td class="name left"><a href="z_0fa5de129a66a7d8_drone_mdl_rural_py.html">examples\multirotor\drone_mdl_rural.py</a></td>
+                <td>396</td>
+                <td>29</td>
+                <td>22</td>
+                <td class="right" data-ratio="367 396">93%</td>
+            </tr>
+            <tr class="region">
+                <td class="name left"><a href="z_0fa5de129a66a7d8_drone_mdl_static_py.html">examples\multirotor\drone_mdl_static.py</a></td>
+                <td>299</td>
+                <td>5</td>
+                <td>6</td>
+                <td class="right" data-ratio="294 299">98%</td>
+            </tr>
+            <tr class="region">
+                <td class="name left"><a href="z_0fa5de129a66a7d8_drone_mdl_urban_py.html">examples\multirotor\drone_mdl_urban.py</a></td>
+                <td>218</td>
+                <td>12</td>
+                <td>29</td>
+                <td class="right" data-ratio="206 218">94%</td>
+            </tr>
+            <tr class="region">
+                <td class="name left"><a href="z_0fa5de129a66a7d8_opt_drone_rural_py.html">examples\multirotor\opt_drone_rural.py</a></td>
+                <td>87</td>
+                <td>0</td>
+                <td>2</td>
+                <td class="right" data-ratio="87 87">100%</td>
+            </tr>
+            <tr class="region">
+                <td class="name left"><a href="z_0fa5de129a66a7d8_test_multirotor_py.html">examples\multirotor\test_multirotor.py</a></td>
+                <td>78</td>
+                <td>0</td>
+                <td>2</td>
+                <td class="right" data-ratio="78 78">100%</td>
+            </tr>
+            <tr class="region">
+                <td class="name left"><a href="z_c676eda1c73bce89___init___py.html">examples\pump\__init__.py</a></td>
+                <td>0</td>
+                <td>0</td>
+                <td>0</td>
+                <td class="right" data-ratio="0 0">100%</td>
+            </tr>
+            <tr class="region">
+                <td class="name left"><a href="z_c676eda1c73bce89_ex_pump_py.html">examples\pump\ex_pump.py</a></td>
+                <td>203</td>
+                <td>6</td>
+                <td>97</td>
+                <td class="right" data-ratio="197 203">97%</td>
+            </tr>
+            <tr class="region">
+                <td class="name left"><a href="z_c676eda1c73bce89_jointfaults_ex_py.html">examples\pump\jointfaults_ex.py</a></td>
+                <td>22</td>
+                <td>16</td>
+                <td>0</td>
+                <td class="right" data-ratio="6 22">27%</td>
+            </tr>
+            <tr class="region">
+                <td class="name left"><a href="z_c676eda1c73bce89_parallelism_methods_py.html">examples\pump\parallelism_methods.py</a></td>
+                <td>98</td>
+                <td>57</td>
+                <td>0</td>
+                <td class="right" data-ratio="41 98">42%</td>
+            </tr>
+            <tr class="region">
+                <td class="name left"><a href="z_c676eda1c73bce89_pump_indiv_py.html">examples\pump\pump_indiv.py</a></td>
+                <td>15</td>
+                <td>0</td>
+                <td>17</td>
+                <td class="right" data-ratio="15 15">100%</td>
+            </tr>
+            <tr class="region">
+                <td class="name left"><a href="z_c676eda1c73bce89_pump_stochastic_py.html">examples\pump\pump_stochastic.py</a></td>
+                <td>82</td>
+                <td>0</td>
+                <td>31</td>
+                <td class="right" data-ratio="82 82">100%</td>
+            </tr>
+            <tr class="region">
+                <td class="name left"><a href="z_c676eda1c73bce89_test_pump_py.html">examples\pump\test_pump.py</a></td>
+                <td>217</td>
+                <td>5</td>
+                <td>2</td>
+                <td class="right" data-ratio="212 217">98%</td>
+            </tr>
+            <tr class="region">
+                <td class="name left"><a href="z_c676eda1c73bce89_test_pump_example_py.html">examples\pump\test_pump_example.py</a></td>
+                <td>110</td>
+                <td>0</td>
+                <td>2</td>
+                <td class="right" data-ratio="110 110">100%</td>
+            </tr>
+            <tr class="region">
+                <td class="name left"><a href="z_c676eda1c73bce89_test_pump_stochastic_py.html">examples\pump\test_pump_stochastic.py</a></td>
+                <td>158</td>
+                <td>5</td>
+                <td>2</td>
+                <td class="right" data-ratio="153 158">97%</td>
+            </tr>
+            <tr class="region">
+                <td class="name left"><a href="z_e83210bdfe1a6410___init___py.html">examples\rover\__init__.py</a></td>
+                <td>0</td>
+                <td>0</td>
+                <td>0</td>
+                <td class="right" data-ratio="0 0">100%</td>
+            </tr>
+            <tr class="region">
+                <td class="name left"><a href="z_e83210bdfe1a6410_opt_rover_py.html">examples\rover\opt_rover.py</a></td>
+                <td>11</td>
+                <td>0</td>
+                <td>23</td>
+                <td class="right" data-ratio="11 11">100%</td>
+            </tr>
+            <tr class="region">
+                <td class="name left"><a href="z_29f45ac386dd7f61_ea_analysis_py.html">examples\rover\optimization\ea_analysis.py</a></td>
+                <td>2</td>
+                <td>0</td>
+                <td>14</td>
+                <td class="right" data-ratio="2 2">100%</td>
+            </tr>
+            <tr class="region">
+                <td class="name left"><a href="z_29f45ac386dd7f61_search_rover_py.html">examples\rover\optimization\search_rover.py</a></td>
+                <td>447</td>
+                <td>356</td>
+                <td>0</td>
+                <td class="right" data-ratio="91 447">20%</td>
+            </tr>
+            <tr class="region">
+                <td class="name left"><a href="z_29f45ac386dd7f61_untitled2_py.html">examples\rover\optimization\untitled2.py</a></td>
+                <td>0</td>
+                <td>0</td>
+                <td>0</td>
+                <td class="right" data-ratio="0 0">100%</td>
+            </tr>
+            <tr class="region">
+                <td class="name left"><a href="z_e83210bdfe1a6410_rover_degradation_py.html">examples\rover\rover_degradation.py</a></td>
+                <td>80</td>
+                <td>0</td>
+                <td>12</td>
+                <td class="right" data-ratio="80 80">100%</td>
+            </tr>
+            <tr class="region">
+                <td class="name left"><a href="z_e83210bdfe1a6410_rover_mode_space_py.html">examples\rover\rover_mode_space.py</a></td>
+                <td>5</td>
+                <td>0</td>
+                <td>27</td>
+                <td class="right" data-ratio="5 5">100%</td>
+            </tr>
+            <tr class="region">
+                <td class="name left"><a href="z_e83210bdfe1a6410_rover_model_py.html">examples\rover\rover_model.py</a></td>
+                <td>522</td>
+                <td>34</td>
+                <td>45</td>
+                <td class="right" data-ratio="488 522">93%</td>
+            </tr>
+            <tr class="region">
+                <td class="name left"><a href="z_e83210bdfe1a6410_rover_model_human_py.html">examples\rover\rover_model_human.py</a></td>
+                <td>198</td>
+                <td>6</td>
+                <td>28</td>
+                <td class="right" data-ratio="192 198">97%</td>
+            </tr>
+            <tr class="region">
+                <td class="name left"><a href="z_e83210bdfe1a6410_test_rover_py.html">examples\rover\test_rover.py</a></td>
+                <td>12</td>
+                <td>0</td>
+                <td>2</td>
+                <td class="right" data-ratio="12 12">100%</td>
+            </tr>
+            <tr class="region">
+                <td class="name left"><a href="z_36b6f534fa1b0a7c___init___py.html">examples\tank\__init__.py</a></td>
+                <td>0</td>
+                <td>0</td>
+                <td>0</td>
+                <td class="right" data-ratio="0 0">100%</td>
+            </tr>
+            <tr class="region">
+                <td class="name left"><a href="z_36b6f534fa1b0a7c_tank_model_py.html">examples\tank\tank_model.py</a></td>
+                <td>258</td>
+                <td>1</td>
+                <td>45</td>
+                <td class="right" data-ratio="257 258">99%</td>
+            </tr>
+            <tr class="region">
+                <td class="name left"><a href="z_36b6f534fa1b0a7c_tank_optimization_model_py.html">examples\tank\tank_optimization_model.py</a></td>
+                <td>149</td>
+                <td>82</td>
+                <td>20</td>
+                <td class="right" data-ratio="67 149">45%</td>
+            </tr>
+            <tr class="region">
+                <td class="name left"><a href="z_36b6f534fa1b0a7c_test_tank_py.html">examples\tank\test_tank.py</a></td>
+                <td>156</td>
+                <td>27</td>
+                <td>2</td>
+                <td class="right" data-ratio="129 156">83%</td>
+            </tr>
+            <tr class="region">
+                <td class="name left"><a href="z_18c41884e19a245d_ATC_py.html">examples\taxiway\ATC.py</a></td>
+                <td>93</td>
+                <td>11</td>
+                <td>1</td>
+                <td class="right" data-ratio="82 93">88%</td>
+            </tr>
+            <tr class="region">
+                <td class="name left"><a href="z_18c41884e19a245d_asset_py.html">examples\taxiway\asset.py</a></td>
+                <td>333</td>
+                <td>4</td>
+                <td>1</td>
+                <td class="right" data-ratio="329 333">99%</td>
+            </tr>
+            <tr class="region">
+                <td class="name left"><a href="z_18c41884e19a245d_common_py.html">examples\taxiway\common.py</a></td>
+                <td>351</td>
+                <td>34</td>
+                <td>1</td>
+                <td class="right" data-ratio="317 351">90%</td>
+            </tr>
+            <tr class="region">
+                <td class="name left"><a href="z_18c41884e19a245d_model_py.html">examples\taxiway\model.py</a></td>
+                <td>31</td>
+                <td>0</td>
+                <td>41</td>
+                <td class="right" data-ratio="31 31">100%</td>
+            </tr>
+            <tr class="region">
+                <td class="name left"><a href="z_18c41884e19a245d_test_asset_py.html">examples\taxiway\test_asset.py</a></td>
+                <td>133</td>
+                <td>0</td>
+                <td>7</td>
+                <td class="right" data-ratio="133 133">100%</td>
+            </tr>
+            <tr class="region">
+                <td class="name left"><a href="z_18c41884e19a245d_test_model_py.html">examples\taxiway\test_model.py</a></td>
+                <td>44</td>
+                <td>0</td>
+                <td>4</td>
+                <td class="right" data-ratio="44 44">100%</td>
+            </tr>
+            <tr class="region">
+                <td class="name left"><a href="z_29640eaf62c9d237___init___py.html">fmdtools\__init__.py</a></td>
+                <td>4</td>
+                <td>0</td>
+                <td>0</td>
+                <td class="right" data-ratio="4 4">100%</td>
+            </tr>
+            <tr class="region">
+                <td class="name left"><a href="z_ce7fa1180973dcbc___init___py.html">fmdtools\analyze\__init__.py</a></td>
+                <td>6</td>
+                <td>0</td>
+                <td>0</td>
+                <td class="right" data-ratio="6 6">100%</td>
+            </tr>
+            <tr class="region">
+                <td class="name left"><a href="z_ce7fa1180973dcbc_common_py.html">fmdtools\analyze\common.py</a></td>
+                <td>204</td>
+                <td>33</td>
+                <td>6</td>
+                <td class="right" data-ratio="171 204">84%</td>
+            </tr>
+            <tr class="region">
+                <td class="name left"><a href="z_1876ffdaf967dad5___init___py.html">fmdtools\analyze\graph\__init__.py</a></td>
+                <td>6</td>
+                <td>0</td>
+                <td>0</td>
+                <td class="right" data-ratio="6 6">100%</td>
+            </tr>
+            <tr class="region">
+                <td class="name left"><a href="z_1876ffdaf967dad5_architecture_py.html">fmdtools\analyze\graph\architecture.py</a></td>
+                <td>268</td>
+                <td>55</td>
+                <td>1</td>
+                <td class="right" data-ratio="213 268">79%</td>
+            </tr>
+            <tr class="region">
+                <td class="name left"><a href="z_1876ffdaf967dad5_base_py.html">fmdtools\analyze\graph\base.py</a></td>
+                <td>420</td>
+                <td>70</td>
+                <td>6</td>
+                <td class="right" data-ratio="350 420">83%</td>
+            </tr>
+            <tr class="region">
+                <td class="name left"><a href="z_1876ffdaf967dad5_flow_py.html">fmdtools\analyze\graph\flow.py</a></td>
+                <td>94</td>
+                <td>6</td>
+                <td>0</td>
+                <td class="right" data-ratio="88 94">94%</td>
+            </tr>
+            <tr class="region">
+                <td class="name left"><a href="z_1876ffdaf967dad5_label_py.html">fmdtools\analyze\graph\label.py</a></td>
+                <td>72</td>
+                <td>2</td>
+                <td>3</td>
+                <td class="right" data-ratio="70 72">97%</td>
+            </tr>
+            <tr class="region">
+                <td class="name left"><a href="z_1876ffdaf967dad5_model_py.html">fmdtools\analyze\graph\model.py</a></td>
+                <td>67</td>
+                <td>0</td>
+                <td>6</td>
+                <td class="right" data-ratio="67 67">100%</td>
+            </tr>
+            <tr class="region">
+                <td class="name left"><a href="z_1876ffdaf967dad5_style_py.html">fmdtools\analyze\graph\style.py</a></td>
+                <td>233</td>
+                <td>19</td>
+                <td>7</td>
+                <td class="right" data-ratio="214 233">92%</td>
+            </tr>
+            <tr class="region">
+                <td class="name left"><a href="z_ce7fa1180973dcbc_history_py.html">fmdtools\analyze\history.py</a></td>
+                <td>431</td>
+                <td>70</td>
+                <td>14</td>
+                <td class="right" data-ratio="361 431">84%</td>
+            </tr>
+            <tr class="region">
+                <td class="name left"><a href="z_ce7fa1180973dcbc_phases_py.html">fmdtools\analyze\phases.py</a></td>
+                <td>230</td>
+                <td>26</td>
+                <td>9</td>
+                <td class="right" data-ratio="204 230">89%</td>
+            </tr>
+            <tr class="region">
+                <td class="name left"><a href="z_ce7fa1180973dcbc_result_py.html">fmdtools\analyze\result.py</a></td>
+                <td>415</td>
+                <td>46</td>
+                <td>46</td>
+                <td class="right" data-ratio="369 415">89%</td>
+            </tr>
+            <tr class="region">
+                <td class="name left"><a href="z_ce7fa1180973dcbc_tabulate_py.html">fmdtools\analyze\tabulate.py</a></td>
+                <td>263</td>
+                <td>20</td>
+                <td>6</td>
+                <td class="right" data-ratio="243 263">92%</td>
+            </tr>
+            <tr class="region">
+                <td class="name left"><a href="z_3a471e3220ee36cf___init___py.html">fmdtools\define\__init__.py</a></td>
                 <td>7</td>
                 <td>0</td>
-                <td class="right" data-ratio="56 63">89%</td>
-            </tr>
-            <tr class="file">
-                <td class="name left"><a href="d_a44f0ac069e85531_test_packages_py.html">tests\test_packages.py</a></td>
-                <td>23</td>
-                <td>1</td>
                 <td>0</td>
-                <td class="right" data-ratio="22 23">96%</td>
+                <td class="right" data-ratio="7 7">100%</td>
+            </tr>
+            <tr class="region">
+                <td class="name left"><a href="z_3d99ab35d814b52d___init___py.html">fmdtools\define\architecture\__init__.py</a></td>
+                <td>5</td>
+                <td>0</td>
+                <td>0</td>
+                <td class="right" data-ratio="5 5">100%</td>
+            </tr>
+            <tr class="region">
+                <td class="name left"><a href="z_3d99ab35d814b52d_action_py.html">fmdtools\define\architecture\action.py</a></td>
+                <td>94</td>
+                <td>8</td>
+                <td>8</td>
+                <td class="right" data-ratio="86 94">91%</td>
+            </tr>
+            <tr class="region">
+                <td class="name left"><a href="z_3d99ab35d814b52d_base_py.html">fmdtools\define\architecture\base.py</a></td>
+                <td>155</td>
+                <td>16</td>
+                <td>4</td>
+                <td class="right" data-ratio="139 155">90%</td>
+            </tr>
+            <tr class="region">
+                <td class="name left"><a href="z_3d99ab35d814b52d_component_py.html">fmdtools\define\architecture\component.py</a></td>
+                <td>14</td>
+                <td>0</td>
+                <td>0</td>
+                <td class="right" data-ratio="14 14">100%</td>
+            </tr>
+            <tr class="region">
+                <td class="name left"><a href="z_3d99ab35d814b52d_function_py.html">fmdtools\define\architecture\function.py</a></td>
+                <td>197</td>
+                <td>16</td>
+                <td>24</td>
+                <td class="right" data-ratio="181 197">92%</td>
+            </tr>
+            <tr class="region">
+                <td class="name left"><a href="z_3d99ab35d814b52d_geom_py.html">fmdtools\define\architecture\geom.py</a></td>
+                <td>55</td>
+                <td>7</td>
+                <td>6</td>
+                <td class="right" data-ratio="48 55">87%</td>
+            </tr>
+            <tr class="region">
+                <td class="name left"><a href="z_3a471e3220ee36cf_base_py.html">fmdtools\define\base.py</a></td>
+                <td>73</td>
+                <td>5</td>
+                <td>3</td>
+                <td class="right" data-ratio="68 73">93%</td>
+            </tr>
+            <tr class="region">
+                <td class="name left"><a href="z_1eaab89881d21414___init___py.html">fmdtools\define\block\__init__.py</a></td>
+                <td>4</td>
+                <td>0</td>
+                <td>0</td>
+                <td class="right" data-ratio="4 4">100%</td>
+            </tr>
+            <tr class="region">
+                <td class="name left"><a href="z_1eaab89881d21414_action_py.html">fmdtools\define\block\action.py</a></td>
+                <td>23</td>
+                <td>3</td>
+                <td>0</td>
+                <td class="right" data-ratio="20 23">87%</td>
+            </tr>
+            <tr class="region">
+                <td class="name left"><a href="z_1eaab89881d21414_base_py.html">fmdtools\define\block\base.py</a></td>
+                <td>276</td>
+                <td>35</td>
+                <td>27</td>
+                <td class="right" data-ratio="241 276">87%</td>
+            </tr>
+            <tr class="region">
+                <td class="name left"><a href="z_1eaab89881d21414_component_py.html">fmdtools\define\block\component.py</a></td>
+                <td>7</td>
+                <td>2</td>
+                <td>0</td>
+                <td class="right" data-ratio="5 7">71%</td>
+            </tr>
+            <tr class="region">
+                <td class="name left"><a href="z_1eaab89881d21414_function_py.html">fmdtools\define\block\function.py</a></td>
+                <td>97</td>
+                <td>6</td>
+                <td>9</td>
+                <td class="right" data-ratio="91 97">94%</td>
+            </tr>
+            <tr class="region">
+                <td class="name left"><a href="z_c3fb750c09d80710___init___py.html">fmdtools\define\container\__init__.py</a></td>
+                <td>5</td>
+                <td>0</td>
+                <td>0</td>
+                <td class="right" data-ratio="5 5">100%</td>
+            </tr>
+            <tr class="region">
+                <td class="name left"><a href="z_c3fb750c09d80710_base_py.html">fmdtools\define\container\base.py</a></td>
+                <td>134</td>
+                <td>7</td>
+                <td>11</td>
+                <td class="right" data-ratio="127 134">95%</td>
+            </tr>
+            <tr class="region">
+                <td class="name left"><a href="z_c3fb750c09d80710_mode_py.html">fmdtools\define\container\mode.py</a></td>
+                <td>212</td>
+                <td>27</td>
+                <td>25</td>
+                <td class="right" data-ratio="185 212">87%</td>
+            </tr>
+            <tr class="region">
+                <td class="name left"><a href="z_c3fb750c09d80710_parameter_py.html">fmdtools\define\container\parameter.py</a></td>
+                <td>85</td>
+                <td>6</td>
+                <td>11</td>
+                <td class="right" data-ratio="79 85">93%</td>
+            </tr>
+            <tr class="region">
+                <td class="name left"><a href="z_c3fb750c09d80710_rand_py.html">fmdtools\define\container\rand.py</a></td>
+                <td>153</td>
+                <td>28</td>
+                <td>9</td>
+                <td class="right" data-ratio="125 153">82%</td>
+            </tr>
+            <tr class="region">
+                <td class="name left"><a href="z_c3fb750c09d80710_state_py.html">fmdtools\define\container\state.py</a></td>
+                <td>99</td>
+                <td>7</td>
+                <td>7</td>
+                <td class="right" data-ratio="92 99">93%</td>
+            </tr>
+            <tr class="region">
+                <td class="name left"><a href="z_c3fb750c09d80710_time_py.html">fmdtools\define\container\time.py</a></td>
+                <td>61</td>
+                <td>8</td>
+                <td>5</td>
+                <td class="right" data-ratio="53 61">87%</td>
+            </tr>
+            <tr class="region">
+                <td class="name left"><a href="z_3a471e3220ee36cf_environment_py.html">fmdtools\define\environment.py</a></td>
+                <td>52</td>
+                <td>9</td>
+                <td>5</td>
+                <td class="right" data-ratio="43 52">83%</td>
+            </tr>
+            <tr class="region">
+                <td class="name left"><a href="z_d97a2ee3121c2b4d___init___py.html">fmdtools\define\flow\__init__.py</a></td>
+                <td>3</td>
+                <td>0</td>
+                <td>0</td>
+                <td class="right" data-ratio="3 3">100%</td>
+            </tr>
+            <tr class="region">
+                <td class="name left"><a href="z_d97a2ee3121c2b4d_base_py.html">fmdtools\define\flow\base.py</a></td>
+                <td>34</td>
+                <td>0</td>
+                <td>10</td>
+                <td class="right" data-ratio="34 34">100%</td>
+            </tr>
+            <tr class="region">
+                <td class="name left"><a href="z_d97a2ee3121c2b4d_commsflow_py.html">fmdtools\define\flow\commsflow.py</a></td>
+                <td>100</td>
+                <td>15</td>
+                <td>13</td>
+                <td class="right" data-ratio="85 100">85%</td>
+            </tr>
+            <tr class="region">
+                <td class="name left"><a href="z_d97a2ee3121c2b4d_multiflow_py.html">fmdtools\define\flow\multiflow.py</a></td>
+                <td>88</td>
+                <td>8</td>
+                <td>7</td>
+                <td class="right" data-ratio="80 88">91%</td>
+            </tr>
+            <tr class="region">
+                <td class="name left"><a href="z_59c35687e81b2951___init___py.html">fmdtools\define\object\__init__.py</a></td>
+                <td>4</td>
+                <td>0</td>
+                <td>0</td>
+                <td class="right" data-ratio="4 4">100%</td>
+            </tr>
+            <tr class="region">
+                <td class="name left"><a href="z_59c35687e81b2951_base_py.html">fmdtools\define\object\base.py</a></td>
+                <td>200</td>
+                <td>12</td>
+                <td>12</td>
+                <td class="right" data-ratio="188 200">94%</td>
+            </tr>
+            <tr class="region">
+                <td class="name left"><a href="z_59c35687e81b2951_coords_py.html">fmdtools\define\object\coords.py</a></td>
+                <td>365</td>
+                <td>26</td>
+                <td>25</td>
+                <td class="right" data-ratio="339 365">93%</td>
+            </tr>
+            <tr class="region">
+                <td class="name left"><a href="z_59c35687e81b2951_geom_py.html">fmdtools\define\object\geom.py</a></td>
+                <td>123</td>
+                <td>4</td>
+                <td>4</td>
+                <td class="right" data-ratio="119 123">97%</td>
+            </tr>
+            <tr class="region">
+                <td class="name left"><a href="z_59c35687e81b2951_timer_py.html">fmdtools\define\object\timer.py</a></td>
+                <td>51</td>
+                <td>15</td>
+                <td>6</td>
+                <td class="right" data-ratio="36 51">71%</td>
+            </tr>
+            <tr class="region">
+                <td class="name left"><a href="z_4516f526a1386668___init___py.html">fmdtools\sim\__init__.py</a></td>
+                <td>4</td>
+                <td>0</td>
+                <td>0</td>
+                <td class="right" data-ratio="4 4">100%</td>
+            </tr>
+            <tr class="region">
+                <td class="name left"><a href="z_4516f526a1386668_propagate_py.html">fmdtools\sim\propagate.py</a></td>
+                <td>387</td>
+                <td>21</td>
+                <td>7</td>
+                <td class="right" data-ratio="366 387">95%</td>
+            </tr>
+            <tr class="region">
+                <td class="name left"><a href="z_4516f526a1386668_sample_py.html">fmdtools\sim\sample.py</a></td>
+                <td>466</td>
+                <td>49</td>
+                <td>60</td>
+                <td class="right" data-ratio="417 466">89%</td>
+            </tr>
+            <tr class="region">
+                <td class="name left"><a href="z_4516f526a1386668_scenario_py.html">fmdtools\sim\scenario.py</a></td>
+                <td>126</td>
+                <td>23</td>
+                <td>6</td>
+                <td class="right" data-ratio="103 126">82%</td>
+            </tr>
+            <tr class="region">
+                <td class="name left"><a href="z_4516f526a1386668_search_py.html">fmdtools\sim\search.py</a></td>
+                <td>571</td>
+                <td>65</td>
+                <td>20</td>
+                <td class="right" data-ratio="506 571">89%</td>
+            </tr>
+            <tr class="region">
+                <td class="name left"><a href="z_a44f0ac069e85531___init___py.html">tests\__init__.py</a></td>
+                <td>0</td>
+                <td>0</td>
+                <td>0</td>
+                <td class="right" data-ratio="0 0">100%</td>
+            </tr>
+            <tr class="region">
+                <td class="name left"><a href="z_a44f0ac069e85531_common_py.html">tests\common.py</a></td>
+                <td>247</td>
+                <td>38</td>
+                <td>7</td>
+                <td class="right" data-ratio="209 247">85%</td>
+            </tr>
+            <tr class="region">
+                <td class="name left"><a href="z_a44f0ac069e85531_test_graph_py.html">tests\test_graph.py</a></td>
+                <td>54</td>
+                <td>0</td>
+                <td>8</td>
+                <td class="right" data-ratio="54 54">100%</td>
+            </tr>
+            <tr class="region">
+                <td class="name left"><a href="z_a44f0ac069e85531_test_packages_py.html">tests\test_packages.py</a></td>
+                <td>20</td>
+                <td>0</td>
+                <td>2</td>
+                <td class="right" data-ratio="20 20">100%</td>
             </tr>
         </tbody>
         <tfoot>
             <tr class="total">
                 <td class="name left">Total</td>
-                <td>14100</td>
-                <td>2487</td>
-                <td>0</td>
-                <td class="right" data-ratio="11613 14100">82%</td>
+                <td>13102</td>
+                <td>1532</td>
+                <td>1048</td>
+                <td class="right" data-ratio="11570 13102">88%</td>
             </tr>
         </tfoot>
     </table>
@@ -758,16 +788,16 @@
 <footer>
     <div class="content">
         <p>
-            <a class="nav" href="https://coverage.readthedocs.io/en/7.4.0">coverage.py v7.4.0</a>,
-            created at 2024-05-21 16:29 -0700
+            <a class="nav" href="https://coverage.readthedocs.io/en/7.5.3">coverage.py v7.5.3</a>,
+            created at 2024-06-12 14:40 -0700
         </p>
     </div>
     <aside class="hidden">
-        <a id="prevFileLink" class="nav" href="d_a44f0ac069e85531_test_packages_py.html"/>
-        <a id="nextFileLink" class="nav" href="d_2d8802fcd9c237a1_ex_pump_py.html"/>
-        <button type="button" class="button_prev_file" data-shortcut="["/>
-        <button type="button" class="button_next_file" data-shortcut="]"/>
-        <button type="button" class="button_show_hide_help" data-shortcut="?"/>
+        <a id="prevFileLink" class="nav" href="z_a44f0ac069e85531_test_packages_py.html"></a>
+        <a id="nextFileLink" class="nav" href="conf_py.html"></a>
+        <button type="button" class="button_prev_file" data-shortcut="["></button>
+        <button type="button" class="button_next_file" data-shortcut="]"></button>
+        <button type="button" class="button_show_hide_help" data-shortcut="?"></button>
     </aside>
 </footer>
 </body>

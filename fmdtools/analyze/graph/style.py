@@ -65,6 +65,16 @@ def gv_plot_ending(dot, disp=True, saveas=''):
     save_dot(dot, saveas)
 
 
+def mod_prefix():
+    """Fix for doctest saving--changes save location."""
+    import os
+    wd = os.getcwd()
+    if 'graph' in wd:
+        return '../../../docs/figures/frdl/'
+    else:
+        return 'docs/figures/frdl/'
+
+
 class BaseStyle(dataobject, copy_default=True):
     """Base class to define node/edge styles."""
 
@@ -255,21 +265,22 @@ def edge_style_factory(style_tag, styles={}, **kwargs):
 
     Examples
     --------
+    >>> loc = mod_prefix()
     >>> fs = edge_style_factory('flow')
-    >>> fig, ax = fs.show_nx(saveas='../../../docs/figures/frdl/nx_flowconnection.svg')
-    >>> sv = fs.show_gv(disp=False, saveas='../../../docs/figures/frdl/gv_flowconnection.svg')
+    >>> fig, ax = fs.show_nx(saveas=loc+'nx_flowconnection.svg')
+    >>> sv = fs.show_gv(disp=False, saveas=loc+'gv_flowconnection.svg')
 
     >>> a_s = edge_style_factory('activation')
-    >>> fig, ax = a_s.show_nx(saveas='../../../docs/figures/frdl/nx_activation.svg')
-    >>> sv = a_s.show_gv(disp=False, saveas='../../../docs/figures/frdl/gv_activation.svg')
+    >>> fig, ax = a_s.show_nx(saveas=loc+'nx_activation.svg')
+    >>> sv = a_s.show_gv(disp=False, saveas=loc+'gv_activation.svg')
 
     >>> c_s = edge_style_factory('containment')
-    >>> fig, ax = c_s.show_nx(saveas='../../../docs/figures/frdl/nx_containment.svg')
-    >>> sv = c_s.show_gv(disp=False, saveas='../../../docs/figures/frdl/gv_containment.svg')
+    >>> fig, ax = c_s.show_nx(saveas=loc+'nx_containment.svg')
+    >>> sv = c_s.show_gv(disp=False, saveas=loc+'gv_containment.svg')
 
     >>> cs = edge_style_factory('connection')
-    >>> fig, ax = cs.show_nx(saveas='../../../docs/figures/frdl/nx_connection.svg')
-    >>> sv = cs.show_gv(disp=False, saveas='../../../docs/figures/frdl/gv_connection.svg')
+    >>> fig, ax = cs.show_nx(saveas=loc+'nx_connection.svg')
+    >>> sv = cs.show_gv(disp=False, saveas=loc+'gv_connection.svg')
     """
     if style_tag in ['flow', 'flows', 'functions']:
         style_class = FlowEdgeStyle
@@ -455,37 +466,38 @@ def node_style_factory(style_tag, styles={}, **kwargs):
 
     Examples
     --------
+    >>> loc = mod_prefix()
     >>> fs = node_style_factory('flow')
-    >>> fig, ax = fs.show_nx(saveas='../../../docs/figures/frdl/nx_flow.svg')
-    >>> sv = fs.show_gv(disp=False, saveas='../../../docs/figures/frdl/gv_flow.svg')
+    >>> fig, ax = fs.show_nx(saveas=loc+'nx_flow.svg')
+    >>> sv = fs.show_gv(disp=False, saveas=loc+'gv_flow.svg')
 
     >>> ms = node_style_factory('multiflow')
-    >>> fig, ax = ms.show_nx(saveas='../../../docs/figures/frdl/nx_multiflow.svg')
-    >>> sv = ms.show_gv(disp=False, saveas='../../../docs/figures/frdl/gv_multiflow.svg')
+    >>> fig, ax = ms.show_nx(saveas=loc+'nx_multiflow.svg')
+    >>> sv = ms.show_gv(disp=False, saveas=loc+'gv_multiflow.svg')
 
     >>> cs = node_style_factory('commsflow')
-    >>> fig, ax = cs.show_nx(saveas='../../../docs/figures/frdl/nx_commsflow.svg')
-    >>> sv = cs.show_gv(disp=False, saveas='../../../docs/figures/frdl/gv_commsflow.svg')
+    >>> fig, ax = cs.show_nx(saveas=loc+'nx_commsflow.svg')
+    >>> sv = cs.show_gv(disp=False, saveas=loc+'gv_commsflow.svg')
 
     >>> fs = node_style_factory('function')
-    >>> fig, ax = fs.show_nx(saveas='../../../docs/figures/frdl/nx_function.svg')
-    >>> sv = fs.show_gv(disp=False, saveas='../../../docs/figures/frdl/gv_function.svg')
+    >>> fig, ax = fs.show_nx(saveas=loc+'nx_function.svg')
+    >>> sv = fs.show_gv(disp=False, saveas=loc+'gv_function.svg')
 
     >>> a_s = node_style_factory('action')
-    >>> fig, ax = a_s.show_nx(saveas='../../../docs/figures/frdl/nx_action.svg')
-    >>> sv = a_s.show_gv(disp=False, saveas='../../../docs/figures/frdl/gv_action.svg')
+    >>> fig, ax = a_s.show_nx(saveas=loc+'nx_action.svg')
+    >>> sv = a_s.show_gv(disp=False, saveas=loc+'gv_action.svg')
 
     >>> cs = node_style_factory('component')
-    >>> fig, ax = cs.show_nx(saveas='../../../docs/figures/frdl/nx_component.svg')
-    >>> sv = cs.show_gv(disp=False, saveas='../../../docs/figures/frdl/gv_component.svg')
+    >>> fig, ax = cs.show_nx(saveas=loc+'nx_component.svg')
+    >>> sv = cs.show_gv(disp=False, saveas=loc+'gv_component.svg')
 
     >>> cs = node_style_factory('container')
-    >>> fig, ax = cs.show_nx(saveas='../../../docs/figures/frdl/nx_container.svg')
-    >>> sv = cs.show_gv(disp=False, saveas='../../../docs/figures/frdl/gv_container.svg')
+    >>> fig, ax = cs.show_nx(saveas=loc+'nx_container.svg')
+    >>> sv = cs.show_gv(disp=False, saveas=loc+'gv_container.svg')
 
     >>> a_s = node_style_factory('architecture')
-    >>> fig, ax = a_s.show_nx(saveas='../../../docs/figures/frdl/nx_architecture.svg')
-    >>> sv = a_s.show_gv(disp=False, saveas='../../../docs/figures/frdl/gv_architecture.svg')
+    >>> fig, ax = a_s.show_nx(saveas=loc+'nx_architecture.svg')
+    >>> sv = a_s.show_gv(disp=False, saveas=loc+'gv_architecture.svg')
     """
     if style_tag in ['flow', 'Flow']:
         node_style = FlowNodeStyle

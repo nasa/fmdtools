@@ -5,7 +5,7 @@ Created on Fri Mar 26 12:23:14 2021
 @author: dhulse
 """
 
-from ex_pump import Pump, PumpParam
+from examples.pump.ex_pump import Pump, PumpParam
 import fmdtools.sim.propagate as propagate
 import time
 import multiprocessing as mp

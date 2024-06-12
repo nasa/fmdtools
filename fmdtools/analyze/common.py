@@ -50,8 +50,9 @@ def to_include_keys(to_include):
     --------
     >>> to_include_keys({"a":{"b": "c"}})
     ('a.b.c',)
-    >>> to_include_keys({"a":{"b": {"c", "d", "e"}}})
-    ('a.b.c', 'a.b.e', 'a.b.d')
+    >>> ks = to_include_keys({"a":{"b": {"c", "d", "e"}}})
+    >>> all([k in ks for k in ('a.b.c', 'a.b.e', 'a.b.d')])
+    True
     >>> to_include_keys("hi")
     ('hi',)
     >>> to_include_keys(["a", "b", "c"])
