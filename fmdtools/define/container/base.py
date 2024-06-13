@@ -2,6 +2,7 @@
 """Defines :class:`BaseContainer` class which other containers inherit from."""
 from recordclass import dataobject, astuple, asdict
 import copy
+import pickle
 from fmdtools.define.base import set_arg_as_type
 from fmdtools.analyze.common import get_sub_include
 from fmdtools.analyze.history import History
@@ -386,6 +387,31 @@ class BaseContainer(dataobject, mapping=True, iterable=True, copy_default=True):
     def asdict(self):
         """Return fields as a dictionary."""
         return asdict(self)
+
+
+def check_container_pick(container, *args, **kwargs):
+    """
+    Check that a given container class or object will pickle.
+
+    Examples
+    --------
+    >>> ex = ExContainer()
+    >>> check_container_pick(ex)
+    True
+    >>> check_container_pick(ExContainer, x=2.0)
+    True
+    >>> check_container_pick(ExContainer, 5.0, 40.0)
+    True
+    """
+    if isinstance(container, BaseContainer):
+        inputobj = container
+    else:
+        inputobj = container(*args, **kwargs)
+    pickdata = pickle.dumps(inputobj)
+    outputobj = pickle.loads(pickdata)
+    same_values = [getattr(inputobj, field) == getattr(outputobj, field)
+                   for field in container.__fields__]
+    return all(same_values)
 
 
 class ExContainer(BaseContainer):

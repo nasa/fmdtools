@@ -656,5 +656,6 @@ if __name__ == "__main__":
     script_show_graphs()
     script_try_faults()
     script_sample_faults()
+    from fmdtools.define.object.base import check_pickleability
 
     check_model_pickleability(Pump(), try_pick=True)

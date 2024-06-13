@@ -11,9 +11,6 @@ from fmdtools.define.block.function import Function
 from fmdtools.sim.sample import ParameterSample
 import numpy as np
 from fmdtools.sim import propagate as prop
-import fmdtools.analyze as an
-import matplotlib.pyplot as plt
-from examples.rover.rover_model import Rover, DegParam
 
 
 class DriveDegradationStates(State):
