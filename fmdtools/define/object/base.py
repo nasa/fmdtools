@@ -486,6 +486,7 @@ class BaseObject(object):
 def check_pickleability(obj, verbose=True, try_pick=False, pause=0.2):
     """Check to see which attributes of an object will pickle (and parallelize)."""
     from pickle import PicklingError
+    from fmdtools.define.container.base import check_container_pick, BaseContainer
     unpickleable = []
     try:
         itera = vars(obj)
@@ -495,7 +496,15 @@ def check_pickleability(obj, verbose=True, try_pick=False, pause=0.2):
         print(name)
         time.sleep(pause)
         try:
-            if not dill.pickles(attribute):
+            if (isinstance(attribute, BaseContainer)
+                    or (inspect.isclass(attribute)
+                        and issubclass(attribute, BaseContainer))):
+                if not check_container_pick(attribute):
+                    unpickleable.append(name)
+            elif isinstance(attribute, BaseObject):
+                if any(check_pickleability(attribute, verbose=False)):
+                    unpickleable.append(name)
+            elif not dill.pickles(attribute):
                 unpickleable = unpickleable + [name]
         except ValueError as e:
             raise ValueError("Problem in " + name +
