@@ -602,6 +602,7 @@ def script_fault_degradation_tables(**kwargs):
 def script_sample_faults(track='all', **kwargs):
     """Sample all faults from the pump."""
     mdl = Pump(track=track, **kwargs)
+    from fmdtools.sim.sample import SampleApproach
     faultapp = SampleApproach(mdl)
     faultapp.add_faultdomain("testdomain", "all")
     faultapp.add_faultsample("testsample", "fault_phases", "testdomain",

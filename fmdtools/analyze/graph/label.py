@@ -145,8 +145,10 @@ class Labels(dataobject, mapping=True):
                 if entry == 'title':
                     labs.title = evals
                 elif entry == 'title2':
-                    labs.title = {k: v+': '+evals.get(k, '')
-                                  for k, v in labs.title.items()}
+                    all1 = {k: v for k, v in labs.title.items()}
+                    all2 = {k: v for k, v in evals.items()}
+                    alls = [*all1, *all2]
+                    labs.title = {k: all1.get(k, '')+': '+all2.get(k, '') for k in alls}
                 elif entry == 'subtext':
                     labs.subtext = evals
 

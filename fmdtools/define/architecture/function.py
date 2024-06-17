@@ -138,9 +138,6 @@ class FunctionArchitecture(Architecture):
                   '\n' + 'FUNCTIONS:' + fxnstr + '\nFLOWS:' + flowstr)
         return repstr
 
-    def get_typename(self):
-        return "Model"
-
     def inject_faults(self, faults):
         Architecture.inject_faults(self, 'fxns', faults)
 

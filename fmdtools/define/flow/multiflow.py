@@ -175,7 +175,8 @@ class MultiFlow(Flow):
     def get_typename(self):
         return "MultiFlow"
 
-    def return_mutables(self):
-        local_mutes = [getattr(self, l).return_mutables() for l in self.locals]
-        return (super().return_mutables(), *local_mutes)
+    def find_mutables(self):
+        """Find mutables (includes locals)."""
+        localflows = [getattr(self, lo) for lo in self.locals]
+        return [*super().find_mutables(), *localflows]
 

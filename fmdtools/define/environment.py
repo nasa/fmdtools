@@ -43,6 +43,7 @@ class Environment(CommsFlow):
     container_r = Rand
     coords_c = Coords
     arch_ga = GeomArchitecture
+    roletypes = ['container', 'coords', 'arch']
     default_track = ('s', 'i', 'c', 'ga')
     all_possible = ('s', 'i', 'c', 'r', 'ga')
 
@@ -55,20 +56,11 @@ class Environment(CommsFlow):
         super().__init__(name=name, glob=glob, p=p, s=s, track=track)
         # NOTE: p and s also init here because if not, they are overritten
         # may need to change in the future
-        self.init_roles('container', r=r, p=p, s=s)
-        self.init_roles('coords', c=c)
-        self.init_roles('arch', ga=ga)
-
+        self.init_roletypes('container', "coords", "arch", r=r, p=p, s=s, c=c, ga=ga)
         self.update_seed()
 
     def get_typename(self):
         return "Environment"
-
-    def return_mutables(self):
-        return (*super().return_mutables(),
-                self.r.return_mutables(),
-                self.c.return_mutables(),
-                self.ga.return_mutables())
 
     def copy(self, glob=[], p={}, s={}):
         """

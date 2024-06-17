@@ -159,11 +159,11 @@ class CommsFlow(MultiFlow):
         if fxn_from == "all":
             fxn_from = self.glob.fxns[fxn_to]["in"]
         elif fxn_from == "ports":
-            fxn_from = [f for f in fxn_to.locals]
-        elif type(fxn_from) == str:
+            fxn_from = [f for f in self.locals]
+        elif isinstance(fxn_from, str):
             fxn_from = {fxn_from: self.glob.fxns[fxn_to]["in"][fxn_from]
                         for i in range(1) if fxn_from in self.glob.fxns[fxn_to]["in"]}
-        elif type(fxn_from) == list:
+        elif isinstance(fxn_from, list):
             fxn_from = {f: self.glob.fxns[fxn_to]["in"][f]
                         for f in fxn_from if f in self.glob.fxns[fxn_to]["in"]}
         for f_from in list(fxn_from):
@@ -179,8 +179,8 @@ class CommsFlow(MultiFlow):
     def status(self):
         stat = super().status()
         for f in self.fxns:
-            stat[f+"_in"]=self.fxns[f]["in"]
-            stat[f+"_in"]=self.fxns[f]["received"]
+            stat[f+"_in"] = self.fxns[f]["in"]
+            stat[f+"_in"] = self.fxns[f]["received"]
         return stat
 
     def return_states(self):
@@ -208,9 +208,9 @@ class CommsFlow(MultiFlow):
     def get_typename(self):
         return "CommsFlow"
 
-    def return_mutables(self):
-        mutes = super().return_mutables()
-        comms_mutes = []
+    def find_mutables(self):
+        """Add in/received dicts to mutables."""
+        mutes = super().find_mutables()
         for f in self.fxns.values():
-            comms_mutes.append([f['in'], f['received']])
-        return (*mutes, *comms_mutes)
+            mutes.append([f['in'], f['received']])
+        return mutes

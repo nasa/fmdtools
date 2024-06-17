@@ -396,6 +396,11 @@ class BaseObject(object):
                 for role in getattr(self, roletype+'s', [])
                 if with_immutable or role not in self.immutable_roles]
 
+    def get_roles_as_dict(self, *roletypes, with_immutable=True):
+        """Return all roles and their objects as a dict."""
+        roles = self.get_roles(*roletypes, with_immutable=with_immutable)
+        return {role: getattr(self, role) for role in roles}
+
     def get_roledicts(self, *roledicts, with_immutable=True):
         """Get all roles in roledicts."""
         if not roledicts:
@@ -467,6 +472,24 @@ class BaseObject(object):
                         else:
                             hist.init_att(at, attr, timerange, at_track)
             return hist.flatten()
+
+    def find_mutables(self):
+        """Return list of mutable roles."""
+        return [getattr(self, mut) for mut in self.get_all_roles(with_immutable=False)]
+
+    def return_mutables(self):
+        """
+        Return all mutable values in the block.
+
+        Used in static propagation steps to check if the block has changed.
+
+        Returns
+        -------
+        mutables : tuple
+            tuple of all mutable roles for the object.
+        """
+        return tuple([mut.return_mutables() if hasattr(mut, 'return_mutables')
+                      else mut for mut in self.find_mutables()])
 
     def get_state(self):
         """Get dict of state attributes for the block (if attached)."""

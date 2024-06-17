@@ -505,7 +505,7 @@ def node_style_factory(style_tag, styles={}, **kwargs):
         node_style = MultiFlowNodeStyle
     elif style_tag in ['commsflow', 'CommsFlow', 'environment', 'Environment']:
         node_style = CommsFlowNodeStyle
-    elif style_tag == 'architecture':
+    elif style_tag in ['architecture', 'Architecture']:
         node_style = ArchitectureNodeStyle
     elif style_tag in ['block', 'Block']:
         node_style = BlockNodeStyle
@@ -515,7 +515,9 @@ def node_style_factory(style_tag, styles={}, **kwargs):
         node_style = ActionNodeStyle
     elif style_tag in ['component', 'Component']:
         node_style = ComponentNodeStyle
-    elif style_tag in ['container', 'state']:
+    elif style_tag in ['container', 'state', 'Container', 'State']:
+        node_style = ContainerNodeStyle
+    elif style_tag in ['dict', 'flexible']:
         node_style = ContainerNodeStyle
     else:
         raise Exception("Invalid node style: "+str(style_tag))
