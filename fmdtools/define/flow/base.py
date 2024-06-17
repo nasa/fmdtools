@@ -56,13 +56,6 @@ class Flow(BaseObject):
         """Reset the flow to the initial state."""
         self.s.reset()
 
-    def find_mutables(self):
-        return ['s']
-
-    def return_mutables(self):
-        """Return mutable properties of the flow."""
-        return self.s.return_mutables()
-
     def status(self):
         """Return a dict with the current states of the flow."""
         return self.s.asdict()

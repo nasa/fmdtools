@@ -22,6 +22,10 @@ class BaseContainer(dataobject, mapping=True, iterable=True, copy_default=True):
     default_track = 'all'
     rolename = 'x'
 
+    def get_typename(self):
+        """Containers are typed as containers unless specified otherwise."""
+        return "Container"
+
     def check_role(self, roletype, rolename):
         """
         Check that the container will be given the correct name for its class.

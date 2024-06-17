@@ -373,24 +373,6 @@ class Simulable(BaseObject):
                                 sim_units=self.sp.units, weight=weight)
         return rate
 
-    def find_mutables(self):
-        """Return list of mutable roles."""
-        return [getattr(self, mut) for mut in self.get_all_roles()
-                if mut not in ['p', 'sp']]
-
-    def return_mutables(self):
-        """
-        Return all mutable values in the block.
-
-        Used in static propagation steps to check if the block has changed.
-
-        Returns
-        -------
-        states : tuple
-            tuple of all states in the block
-        """
-        return tuple([mut.return_mutables() for mut in self.find_mutables()])
-
     def return_probdens(self):
         """Get the probability density associated with Block and things it contains."""
         if hasattr(self, 'r'):

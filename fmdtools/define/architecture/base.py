@@ -33,6 +33,9 @@ class Architecture(Simulable):
         self.init_architecture(**kwargs)
         self.build(**kwargs)
 
+    def get_typename(self):
+        return "Architecture"
+
     def check_role(self, roletype, rolename):
         """Check that 'arch_xa' role is used for the arch."""
         if roletype != self.roletype:
@@ -217,16 +220,12 @@ class Architecture(Simulable):
         return {flow for flow, obj in self.flows.items()
                 if obj.__class__.__name__ == ftype}
 
-    def return_mutables(self):
-        sim_mutes = Simulable.return_mutables(self)
-        muts = [*sim_mutes]
-        role_objs = self.get_flex_role_objs()
-        for obj in role_objs.values():
-            if hasattr(obj, 'return_mutables'):
-                muts.extend(obj.return_mutables())
-        return tuple(muts)
+    def find_mutables(self):
+        """Get mutables for the architecture (includes flexible roles)."""
+        return [*super().find_mutables(), *self.get_flex_role_objs().values()]
 
     def get_flex_role_objs(self):
+        """Get the objects in flexible roles (e.g., functions, flows, components)."""
         role_objs = {}
         for role in self.flexible_roles:
             roledict = getattr(self, role)
