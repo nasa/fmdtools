@@ -24,7 +24,7 @@ Main user-facing individual graphing classes:
 
 import networkx as nx
 from fmdtools.analyze.history import History
-from fmdtools.analyze.graph.model import ModelGraph
+from fmdtools.analyze.graph.model import ModelGraph, set_block_node
 
 
 class FunctionArchitectureGraph(ModelGraph):
@@ -80,14 +80,8 @@ class FunctionArchitectureGraph(ModelGraph):
         time: float
             Time to execute indicators at. Default is 0.0
         """
-        fxnfaults, fxnstates, indicators = {}, {}, {}
         for fxnname, fxn in mdl.fxns.items():
-            fxnstates[fxnname] = mdl.fxns[fxnname].get_state()
-            fxnfaults[fxnname] = mdl.fxns[fxnname].get_mode()
-            indicators[fxnname] = fxn.return_true_indicators(self.time)
-        nx.set_node_attributes(self.g, fxnstates, 'states')
-        nx.set_node_attributes(self.g, fxnfaults, 'faults')
-        nx.set_node_attributes(self.g, indicators, 'indicators')
+            set_block_node(self.g, fxn, fxnname, time=self.time)
 
     def set_flow_nodestates(self, mdl):
         """
@@ -98,12 +92,8 @@ class FunctionArchitectureGraph(ModelGraph):
         mdl: Model
             Model to represent
         """
-        flowstates, indicators = {}, {}
         for flowname, flow in mdl.flows.items():
-            flowstates[flowname] = flow.get_state()
-            indicators[flowname] = flow.return_true_indicators(self.time)
-        nx.set_node_attributes(self.g, flowstates, 'states')
-        nx.set_node_attributes(self.g, indicators, 'indicators')
+            set_block_node(self.g, flow, flowname, time=self.time)
 
     def get_multi_edges(self, mdl, subedges):
         """
@@ -241,52 +231,6 @@ class FunctionArchitectureFlowGraph(FunctionArchitectureGraph):
                                 **edge_label_styles)
 
 
-class FunctionArchitectureCompGraph(FunctionArchitectureGraph):
-    """
-    Creates a graph of FunctionArchitecture functions, and flows, and components.
-
-    Shows components as contained within functions.
-    """
-
-    def nx_from_obj(self, mdl):
-        graph = super().nx_from_obj(mdl)
-        for fxnname, fxn in mdl.fxns.items():
-            if {**fxn.comps, **fxn.acts}:
-                graph.add_nodes_from({**fxn.comps, **fxn.acts},
-                                     bipartite=1, nodetype="block")
-                graph.add_edges_from([(fxnname, comp)
-                                      for comp in {**fxn.comps, **fxn.acts}])
-        return graph
-
-    def set_nx_states(self, mdl):
-        self.set_flowgraph_states(mdl)
-        self.set_compgraph_blockstates(mdl)
-
-    def set_compgraph_blockstates(self, mdl):
-        compfaults, compstates, comptypes = {}, {}, {}
-        fxnstates, fxnfaults, indicators = {}, {}, {}
-        for fxnname, fxn in mdl.fxns.items():
-            fxnstates[fxnname] = mdl.fxns[fxnname].get_state()
-            fxnfaults[fxnname] = mdl.fxns[fxnname].get_mode()
-            indicators[fxnname] = fxn.return_true_indicators(self.time)
-            for mode in fxnfaults[fxnname].copy():
-                for compname, comp in {**fxn.acts, **fxn.comps}.items():
-                    compstates[compname] = {}
-                    comptypes[compname] = True
-                    indicators[compname] = comp.return_true_indicators(self.time)
-                    if mode in comp.faultfaults:
-                        compfaults[compname] = compfaults.get(compname, set())
-                        compfaults[compname].update([mode])
-                        fxnfaults[fxnname].remove(mode)
-                        fxnfaults[fxnname].update(['comp_fault'])
-        nx.set_node_attributes(self.g, fxnstates, 'states')
-        nx.set_node_attributes(self.g, fxnfaults, 'faults')
-        nx.set_node_attributes(self.g, compstates, 'states')
-        nx.set_node_attributes(self.g, compfaults, 'faults')
-        nx.set_node_attributes(self.g, comptypes, 'iscomponent')
-        nx.set_node_attributes(self.g, indicators, 'indicators')
-
-
 class FunctionArchitectureFxnGraph(FunctionArchitectureGraph):
     """
     Create a graph representation of the functions of the model.
@@ -314,7 +258,9 @@ class FunctionArchitectureFxnGraph(FunctionArchitectureGraph):
         for edge, flows in flows.items():
             flowdict = {}
             for flow in flows:
-                flowdict[flow] = mdl.flows[flow].get_state()
+                flowdict[flow] = flow.get_roles_as_dict('container',
+                                                        with_immutable=False)
+                flowdict[flow]['indicators'] = flow.return_true_indicators(self.time)
             edgevals[edge] = flowdict
         nx.set_edge_attributes(self.g, edgevals)
 
@@ -376,42 +322,38 @@ class FunctionArchitectureTypeGraph(FunctionArchitectureGraph):
 
     def set_nx_states(self, mdl):
         graph = self.g
-        flowstates = {}
-        indicators = {}
         for flowtype in mdl.flowtypes():
-            flowstates[flowtype] = {}
-            indicators[flowtype] = {}
+            mutes = {}
+            indicators = {}
             for flow in mdl.flows_of_type(flowtype):
-                flowstates[flowtype][flow] = mdl.flows[flow].get_state()
-                indicators[flowtype][flow] = mdl.flows[flow].return_true_indicators(self.time)
-        nx.set_node_attributes(graph, flowstates, 'states')
+                mutes[flow] = mdl.flows[flow].get_roles_as_dict('container',
+                                                                with_immutable=False)
+                indicators[flow] = mdl.flows[flow].return_true_indicators(self.time)
+            self.g.nodes[flowtype]['mutables'] = mutes
+            self.g.nodes[flowtype]['indicators'] = indicators
 
-        fxnstates = {}
-        fxnfaults = {}
         for fxnclass in mdl.fxnclasses():
-            fxnstates[fxnclass] = {}
-            fxnfaults[fxnclass] = {}
-            indicators[fxnclass] = {}
+            mutes = {}
+            indicators = {}
             for fxn in mdl.fxns_of_class(fxnclass):
-                fxnstates[fxnclass][fxn] = mdl.fxns[fxn].get_state()
-                fxnfaults[fxnclass][fxn] = mdl.fxns[fxn].get_mode()
-                indicators[fxnclass][fxn] = mdl.fxns[fxn].return_true_indicators(self.time)
-
-        nx.set_node_attributes(graph, fxnstates, 'states')
-        nx.set_node_attributes(graph, fxnfaults, 'faults')
-        nx.set_node_attributes(graph, indicators, 'indicators')
+                mutes[fxn] = mdl.fxns[fxn].get_roles_as_dict('container',
+                                                             with_immutable=False)
+                indicators[fxn] = mdl.fxns[fxn].return_true_indicators(self.time)
+            self.g.nodes[fxnclass]['mutables'] = mutes
+            self.g.nodes[fxnclass]['indicators'] = indicators
 
     def set_degraded(self, nomg):
         g = self.g
         rg = self.g.copy()
         for node in g.nodes:
             if g.nodes[node]['level'] == 2:
-                n_faults = {fxn for fxn, m in g.nodes[node]['faults'].items()
+                n_faults = {fxn for fxn, m in g.nodes[node]['mutables'].get('m', {}).items()
                             if m not in [['nom'], []]}
                 faulty = any(n_faults)
                 rg.nodes[node]['faulty'] = faulty
             if g.nodes[node]['level'] >= 2:
-                degraded = g.nodes[node]['states'] != nomg.nodes[node]['states']
+                degraded = (g.nodes[node]['mutables'] != nomg.nodes[node]['mutables'] or
+                            any([v for v in g.nodes[node]['indicators']]))
                 rg.nodes[node]['degraded'] = degraded
         self.g = rg
 
@@ -479,19 +421,10 @@ class ActionArchitectureGraph(ModelGraph):
         """
         for g in self.g.nodes():
             self.g.nodes[g]['active'] = g in aa.active_actions
-        states = {}
-        faults = {}
-        indicators = {}
         for aname, action in aa.acts.items():
-            states[aname] = action.get_state()
-            faults[aname] = action.get_mode()
-            indicators[aname] = action.return_true_indicators(self.time)
+            set_block_node(self.g, action, aname, time=self.time)
         for fname, flow in aa.flows.items():
-            states[fname] = flow.get_state()
-            indicators[fname] = flow.return_true_indicators(self.time)
-        nx.set_node_attributes(self.g, states, 'states')
-        nx.set_node_attributes(self.g, faults, 'faults')
-        nx.set_node_attributes(self.g, indicators, 'indicators')
+            set_block_node(self.g, flow, fname, time=self.time)
 
     def set_edge_labels(self, title='edgetype', title2='', subtext='name',
                         **edge_label_styles):

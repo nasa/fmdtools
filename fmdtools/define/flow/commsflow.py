@@ -176,19 +176,6 @@ class CommsFlow(MultiFlow):
             port_to.s.assign(port_from.s,  *args, as_copy=True)
             self.glob.fxns[fxn_to]["received"][f_from]=args
 
-    def status(self):
-        stat = super().status()
-        for f in self.fxns:
-            stat[f+"_in"] = self.fxns[f]["in"]
-            stat[f+"_in"] = self.fxns[f]["received"]
-        return stat
-
-    def return_states(self):
-        states= super().return_states()
-        for f in self.fxns:
-            states.update({f+"_in"+fo: args for fo, args in self.fxns[f]["in"].items()})
-        return states
-
     def reset(self):
         super().reset()
         for fxn in self.fxns:

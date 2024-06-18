@@ -124,32 +124,20 @@ class MultiFlow(Flow):
             States to update (defaults to all states)
         """
         get = self.get_view(to_get)
-        if to_update=='all':            
-            if hasattr(self, 'fxns'): 
+        if to_update == 'all':
+            if hasattr(self, 'fxns'):
                 updatelist = [*self.fxns]
             else:
                 updatelist = self.locals
-        elif type(to_update)==str:
+        elif isinstance(to_update, str):
             updatelist = [to_update]
-        elif type(to_update)==list:
+        elif isinstance(to_update, list):
             updatelist = to_update
-        else: 
+        else:
             raise Exception("Invalid to_update: "+str(to_update))
         for to_up in updatelist:
             up = self.get_view(to_update)
             up.s.assign(get.s, *states, as_copy=True)
-
-    def status(self):
-        stat = super().status()
-        for l in self.locals:
-            stat[l]=getattr(self, l).status()
-        return stat
-
-    def return_states(self):
-        states = self.status()
-        for l in self.locals:
-            states.update({l+"."+k:v for k, v in getattr(self, l).status().items()})
-        return states
 
     def reset(self):
         super().reset()
@@ -179,4 +167,3 @@ class MultiFlow(Flow):
         """Find mutables (includes locals)."""
         localflows = [getattr(self, lo) for lo in self.locals]
         return [*super().find_mutables(), *localflows]
-
