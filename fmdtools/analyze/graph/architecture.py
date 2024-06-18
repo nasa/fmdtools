@@ -321,7 +321,6 @@ class FunctionArchitectureTypeGraph(FunctionArchitectureGraph):
         return g
 
     def set_nx_states(self, mdl):
-        graph = self.g
         for flowtype in mdl.flowtypes():
             mutes = {}
             indicators = {}

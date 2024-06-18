@@ -55,10 +55,10 @@ class ModelGraph(Graph):
         **kwargs : kwargs
             (placeholder for kwargs)
         """
-        Graph.__init__(self, self.nx_from_obj(mdl))
+        Graph.__init__(self, self.nx_from_obj(mdl, **kwargs))
         if get_states:
             self.time = time
-            self.set_nx_states(mdl)
+            self.set_nx_states(mdl, **kwargs)
 
     def nx_from_obj(self, mdl):
         """Alias for nx_from_obj, the method used to instantiate the graph."""
