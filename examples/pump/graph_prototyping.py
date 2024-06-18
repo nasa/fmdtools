@@ -6,6 +6,7 @@ Created on Mon Jun 17 10:45:11 2024
 """
 
 from fmdtools.analyze.graph.model import ModelGraph
+from fmdtools.analyze.graph.model import set_block_node
 from fmdtools.define.flow.base import Flow
 import networkx as nx
 
@@ -31,8 +32,11 @@ class RoleGraph(ModelGraph):
         return g
 
     def set_nx_states(self, mdl):
-        for role in mdl.get_roles():
-            roleobj = getattr(mdl, role)
+        for role, roleobj in mdl.get_roles_as_dict().items():
+            if isinstance(roleobj, Flow):
+                set_block_node(self.g, roleobj, roleobj.name, time=self.time)
+            else:
+                self.g.nodes[role]['obj'] = roleobj
 
 
 class ArchRoleGraph(RoleGraph):
@@ -53,6 +57,6 @@ rg.set_edge_labels(title='role')
 rg.draw()
 
 rg = RoleGraph(Pump().fxns['import_ee'])
-rg.set_node_labels(title2='classname')
+rg.set_node_labels(title2='classname', subtext='obj')
 rg.set_edge_labels(title='role')
 rg.draw()
