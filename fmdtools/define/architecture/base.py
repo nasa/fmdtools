@@ -224,10 +224,12 @@ class Architecture(Simulable):
         """Get mutables for the architecture (includes flexible roles)."""
         return [*super().find_mutables(), *self.get_flex_role_objs().values()]
 
-    def get_flex_role_objs(self):
+    def get_flex_role_objs(self, *flexible_roles):
         """Get the objects in flexible roles (e.g., functions, flows, components)."""
+        if not flexible_roles:
+            flexible_roles = self.flexible_roles
         role_objs = {}
-        for role in self.flexible_roles:
+        for role in flexible_roles:
             roledict = getattr(self, role)
             role_objs.update(roledict)
         return role_objs

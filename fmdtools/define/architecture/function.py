@@ -319,7 +319,7 @@ class FunctionArchitecture(Architecture):
         if len(args) > 0:
             varlist = args[0]
             varvalues = args[1]
-            if type(varlist) == str:
+            if isinstance(varlist, str):
                 varlist = [varlist]
             if type(varvalues) in [str, float, int]:
                 varvalues = [varvalues]
@@ -336,7 +336,7 @@ class FunctionArchitecture(Architecture):
             if var == 'seed':
                 self.update_seed(seed=varvalues[i])
             else:
-                if type(var) == str:
+                if isinstance(var, str):
                     var = var.split(".")
                 if var[0] in ['functions', 'fxns']:
                     f = self.fxns[var[1]]
@@ -381,7 +381,7 @@ class FunctionArchitecture(Architecture):
         for fxnname in self.dynamicfxns.union(fxnfaults.keys()):
             fxn = self.fxns[fxnname]
             faults = fxnfaults.get(fxnname, [])
-            if type(faults) != list:
+            if not isinstance(faults, list):
                 faults = [faults]
             fxn('dynamic', faults=faults, time=time, run_stochastic=run_stochastic)
 
