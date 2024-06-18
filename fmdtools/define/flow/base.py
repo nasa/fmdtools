@@ -56,10 +56,6 @@ class Flow(BaseObject):
         """Reset the flow to the initial state."""
         self.s.reset()
 
-    def status(self):
-        """Return a dict with the current states of the flow."""
-        return self.s.asdict()
-
     def copy(self, **kwargs):
         """Return a copy of the flow object (used when copying the model)."""
         loc_kwargs = {'p': self.p.copy(), **kwargs, 's': self.s.copy(), 'name': self.name}

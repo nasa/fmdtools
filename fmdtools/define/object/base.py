@@ -491,20 +491,6 @@ class BaseObject(object):
         return tuple([mut.return_mutables() if hasattr(mut, 'return_mutables')
                       else mut for mut in self.find_mutables()])
 
-    def get_state(self):
-        """Get dict of state attributes for the block (if attached)."""
-        if hasattr(self, 's'):
-            return self.s.asdict()
-        else:
-            return {}
-
-    def get_mode(self):
-        """Get list of modes present in the block (if any)."""
-        if hasattr(self, 'm'):
-            return [*self.m.faults]
-        else:
-            return []
-
 
 def check_pickleability(obj, verbose=True, try_pick=False, pause=0.2):
     """Check to see which attributes of an object will pickle (and parallelize)."""

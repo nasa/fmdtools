@@ -122,7 +122,7 @@ if __name__ == "__main__":
     mg = FunctionArchitectureGraph(mdl)
     mg.draw()
 
-    ground_args = {'include_glob':True, "include_states":True, 
+    ground_args = {'include_glob':True, "include_containers": ['s'],
               'send_connections':{"asset_area":"asset_area", 
                                   "area_allocation":"area_allocation",
                                   "asset_assignment":"asset_assignment"}}

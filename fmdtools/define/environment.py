@@ -99,12 +99,6 @@ class Environment(CommsFlow):
             cop.h = self.h.copy()
         return cop
 
-    def status(self):
-        stat = super().status()
-        stat["c"] = self.c.return_states()
-        stat["ga"] = self.ga.return_states()
-        return stat
-
     def reset(self):
         super().reset()
         self.r.reset()

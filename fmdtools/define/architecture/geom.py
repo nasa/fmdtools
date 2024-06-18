@@ -147,13 +147,6 @@ class GeomArchitecture(Architecture):
                 all_at[geomname] = at_geom
         return all_at
 
-    def return_states(self):
-        """Return a dict of states for each geom."""
-        states = {}
-        for geomname, geom in self.geoms().items():
-            states[geomname] = geom.s.asdict()
-        return states
-
     def show(self, geoms={'all': {}}, fig=None, ax=None, figsize=(4, 4), z=False,
              **kwargs):
         """

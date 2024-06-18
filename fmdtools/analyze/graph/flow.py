@@ -11,10 +11,9 @@ Private Methods:
 - :func:`node_is_tagged`: Returns if node is tagged
 - :func:`add_g_nested`: Helper function for MultiFlow.create_multigraph to construct the
   containment tree.
-- :func:`get_node_info`: Get info for a given node.
 """
 import networkx as nx
-from fmdtools.analyze.graph.model import ModelGraph
+from fmdtools.analyze.graph.model import ModelGraph, set_block_node
 
 
 class MultiFlowGraph(ModelGraph):
@@ -31,8 +30,8 @@ class MultiFlowGraph(ModelGraph):
 
         With structure {in_tag : out_tag}. The default is {}.
         Or structure [(in_node : out_node)]
-    include_states:
-        whether to include states in the graph
+    include_containers:
+        containers to include states in the graph
     get_states:
         whether to attach state information as node attributes
     get_indicators : bool, optional
@@ -47,17 +46,17 @@ class MultiFlowGraph(ModelGraph):
     """
 
     def __init__(self, flow, include_glob=False, send_connections={"closest": "base"},
-                 connections_as_tags=True, include_states=False, get_states=True,
+                 connections_as_tags=True, include_containers=[], get_states=True,
                  get_indicators=True, time=0.0):
         g = nx.DiGraph()
         if include_glob:
-            add_g_nested(g, flow, flow.name, include_states=include_states,
+            add_g_nested(g, flow, flow.name, include_containers=include_containers,
                          get_states=get_states, get_indicators=get_indicators,
                          time=time)
         else:
             for loc in flow.locals:
                 local_flow = getattr(flow, loc)
-                add_g_nested(g, local_flow, loc, include_states=include_states,
+                add_g_nested(g, local_flow, loc, include_containers=include_containers,
                              get_states=get_states, get_indicators=get_indicators,
                              time=time)
         if isinstance(send_connections, dict):
@@ -186,7 +185,19 @@ def node_is_tagged(connections_as_tags, tag, node):
             tag == node)
 
 
-def add_g_nested(g, multiflow, base_name, include_states=False,
+def add_container_nodes(g, block, base_name, containers=[], get_states=False):
+    """Add container nodes to the flow graph."""
+    if containers == 'all':
+        containers = block.get_roles('container')
+    for state in containers:
+        nodename = base_name+"_"+state
+        g.add_node(nodename, nodetype="container")
+        g.add_edge(base_name, nodename, edgetype="containment")
+        if get_states:
+            g.nodes[nodename].update(getattr(block, state).asdict())
+
+
+def add_g_nested(g, multiflow, base_name, include_containers=[],
                  get_states=False, get_indicators=False, time=0.0):
     """
     Create graph for MultiFlow.create_multigraph.
@@ -201,8 +212,8 @@ def add_g_nested(g, multiflow, base_name, include_states=False,
         Multiflow Structure
     base_name : str
         Name at the current level of recursion
-    include_states : bool, optional
-        Whether to include state attributes in the plot. The default is False.
+    include_containers : list, optional
+        Whether to include container attributes in the plot. The default is False.
     get_states : bool, optional
         Whether to attach states as attributes to the graph. The default is False.
     get_indicators : bool, optional
@@ -210,60 +221,20 @@ def add_g_nested(g, multiflow, base_name, include_states=False,
     time : float
         Time to run the indicator methods at.
     """
-    kwargs = get_node_info(multiflow, get_states, get_indicators, time)
-    g.add_node(base_name, nodetype=multiflow.get_typename(), **kwargs)
+    g.add_node(base_name, nodetype=multiflow.get_typename())
+    set_block_node(g, multiflow, base_name, time=time)
 
-    if include_states:
-        for state in multiflow.s.__fields__:
-            if get_states:
-                kwargs = {"states": getattr(multiflow.s, state), "indicators": {}}
-            else:
-                kwargs = {"states": {}, "indicators": {}}
-            g.add_node(base_name+"_"+state, nodetype="state", **kwargs)
-            g.add_edge(base_name, base_name+"_"+state, edgetype="containment")
+    add_container_nodes(g, multiflow, base_name, containers=include_containers,
+                        get_states=get_states)
     for loc in multiflow.locals:
         local_flow = getattr(multiflow, loc)
         local_name = base_name+"_"+loc
-        kwargs = get_node_info(local_flow, get_states, get_indicators, time)
-        g.add_node(local_name, nodetype=local_flow.get_typename(), **kwargs)
+        g.add_node(local_name, nodetype=local_flow.get_typename())
+        set_block_node(g, local_flow, local_name, time=time)
         g.add_edge(base_name, local_name, edgetype="containment")
         if local_flow.locals:
             add_g_nested(g, local_flow, local_name,
-                         include_states=include_states, get_states=get_states,
+                         include_containers=include_containers, get_states=get_states,
                          get_indicators=get_indicators, time=time)
-        if include_states:
-            for state in local_flow.s.__fields__:
-                if get_states:
-                    kwargs = {"states": getattr(multiflow.s, state), "indicators": {}}
-                else:
-                    kwargs = {"states": {}, "indicators": {}}
-                g.add_node(local_name+"_"+state, nodetype="state", **kwargs)
-                g.add_edge(local_name, local_name+"_"+state, edgetype="containment")
-
-
-def get_node_info(flow, get_states, get_indicators, time):
-    """
-    Get the state/indicator information for a given flow.
-
-    Parameters
-    ----------
-    flow : Flow
-        Flow object to get node info from.
-    get_states : bool
-        Whether to get states for the flow
-    get_indicators : bool
-        Whether to get indicators for the flow
-    time : float
-        Time to execute the indicator functions at
-
-    Returns
-    -------
-    kwargs : kwargs
-        keyword arguments to add_node for the given flow.
-    """
-    kwargs = {"states": {}, "indicators": {}}
-    if get_states:
-        kwargs.update({"states": flow.return_states()})
-    if get_indicators:
-        kwargs.update({"indicators": flow.return_true_indicators(time)})
-    return kwargs
+        add_container_nodes(g, local_flow, local_name,
+                            containers=include_containers, get_states=get_states)

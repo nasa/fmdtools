@@ -870,13 +870,6 @@ class Coords(BaseObject):
         else:
             raise Exception("Not a point or collection")
 
-    def return_states(self):
-        """Return the mutable states of a Coords object."""
-        states = dict.fromkeys(self.states)
-        for state in states:
-            states[state] = copy.copy(getattr(self, state))
-        return states
-
     def show_property(self, prop, xlabel="x", ylabel="y", title='', proplab="prop",
                       as_bool=False, color='green', cmap='Greens', ec='black',
                       legend_kwargs={}, fig=None, ax=None, figsize=(5, 5), **kwargs):

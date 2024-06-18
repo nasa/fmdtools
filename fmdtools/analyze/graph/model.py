@@ -191,10 +191,20 @@ class ModelGraph(Graph):
         g = self.g
         nomg = other.g
         for node in g.nodes:
-            degstates = (g.nodes[node]['states'] != nomg.nodes[node]['states'])
-            degindicators = (set(g.nodes[node]['indicators']) != set(nomg.nodes[node]['indicators']))
+            degstates = any([g.nodes[node][s] != nomg.nodes[node][s]
+                             for s in g.nodes[node]])
+            degindicators = (set(g.nodes[node].get('indicators', {}))
+                                 != set(nomg.nodes[node].get('indicators', {})))
             g.nodes[node]['degraded'] = degstates or degindicators
-            g.nodes[node]['faulty'] = any(g.nodes[node].get('faults', []))
+            g.nodes[node]['faulty'] = any(g.nodes[node].get('m', {'faults': {}})['faults'])
+
+
+def set_block_node(g, block, nodename, time=None):
+    """Set graph attributes for a given block."""
+    roledict = block.get_roles_as_dict('container', with_immutable=False)
+    roledict['indicators'] = block.return_true_indicators(time)
+    g.nodes[nodename].update(roledict)
+
 
 
 def graph_factory(obj, **kwargs):
