@@ -44,6 +44,7 @@ class ActionArchitecture(Architecture):
     per_timestep = False
     default_track = ('acts', 'flows', 'active_actions', 'i')
     flexible_roles = ['flows', 'acts', 'conds']
+    roletypes = ['container', 'flow', 'act', 'cond']
     rolename = 'aa'
 
     def __init__(self, **kwargs):
