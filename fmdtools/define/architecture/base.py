@@ -26,7 +26,7 @@ class Architecture(Simulable):
 
     def __init__(self, *args, as_copy=False, h={}, **kwargs):
         self.as_copy = as_copy
-        Simulable.__init__(self, *args, h=h, **kwargs)
+        Simulable.__init__(self, *args, h=h, roletypes=['container'], **kwargs)
         self.init_hist(h=h)
         self._init_flexroles = []
         self.init_flexible_roles(**kwargs)
@@ -99,7 +99,7 @@ class Architecture(Simulable):
 
         track = get_sub_include(name, get_sub_include(flex_role, self.track))
         obj = init_obj(name=name, objclass=objclass, track=track,
-                       as_copy=as_copy, **kwargs)
+                       as_copy=as_copy, root=self.name, **kwargs)
 
         if hasattr(obj, 'h') and obj.h:
             hist = obj.h
@@ -224,15 +224,29 @@ class Architecture(Simulable):
         """Get mutables for the architecture (includes flexible roles)."""
         return [*super().find_mutables(), *self.get_flex_role_objs().values()]
 
-    def get_flex_role_objs(self, *flexible_roles):
+    def get_flex_role_objs(self, *flexible_roles, flex_prefixes=False):
         """Get the objects in flexible roles (e.g., functions, flows, components)."""
         if not flexible_roles:
             flexible_roles = self.flexible_roles
         role_objs = {}
         for role in flexible_roles:
             roledict = getattr(self, role)
-            role_objs.update(roledict)
+            if not flex_prefixes:
+                role_objs.update(roledict)
+            else:
+                role_objs.update({role+'.'+k: v for k, v in roledict.items()})
         return role_objs
+
+    def get_roles_as_dict(self, *roletypes, with_immutable=True, flex_prefixes=False):
+        """Adapts get_roles_as_dict for flexible roles."""
+        if not roletypes:
+            roletypes = self.roletypes
+        flex_roles = [r+'s' for r in roletypes if r+'s' in self.flexible_roles]
+        flex_roles = self.get_flex_role_objs(*flex_roles, flex_prefixes=flex_prefixes)
+        non_flex_roletypes = [r for r in roletypes if r+'s' not in self.flexible_roles]
+        non_flex_roles = Simulable.get_roles_as_dict(self, *non_flex_roletypes,
+                                                     with_immutable=with_immutable)
+        return {**flex_roles, **non_flex_roles}
 
     def update_seed(self, seed=[]):
         """

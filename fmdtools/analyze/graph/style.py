@@ -282,11 +282,11 @@ def edge_style_factory(style_tag, styles={}, **kwargs):
     >>> fig, ax = cs.show_nx(saveas=loc+'nx_connection.svg')
     >>> sv = cs.show_gv(disp=False, saveas=loc+'gv_connection.svg')
     """
-    if style_tag in ['flow', 'flows', 'functions', 'aggregation']:
+    if style_tag in ['flow', 'flows', 'Flow', 'functions', 'aggregation']:
         style_class = FlowEdgeStyle
     elif style_tag == 'activation':
         style_class = ActivationEdgeStyle
-    elif style_tag == 'containment':
+    elif style_tag in ['containment', 'Containment']:
         style_class = ContainmentEdgeStyle
     elif style_tag == 'connection':
         style_class = ConnectionEdgeStyle
@@ -517,7 +517,7 @@ def node_style_factory(style_tag, styles={}, **kwargs):
         node_style = ComponentNodeStyle
     elif style_tag in ['container', 'state', 'Container', 'State']:
         node_style = ContainerNodeStyle
-    elif style_tag in ['dict', 'flexible', 'condition', 'Condition']:
+    elif style_tag in ['dict', 'flexible', 'condition', 'Condition', 'method']:
         node_style = ContainerNodeStyle
     else:
         raise Exception("Invalid node style: "+str(style_tag))

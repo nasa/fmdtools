@@ -17,6 +17,9 @@ class Action(Block):
         self.duration = duration
         super().__init__(name=name, **kwargs)
 
+    def get_typename(self):
+        return "Action"
+
     def __call__(self, time=0, run_stochastic=False, proptype='dynamic', dt=1.0):
         """
         Update the behaviors, faults, times, etc of the action.

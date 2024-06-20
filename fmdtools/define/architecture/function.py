@@ -115,6 +115,7 @@ class FunctionArchitecture(Architecture):
     default_track = ('fxns', 'flows', 'i')
     default_name = 'model'
     flexible_roles = ['flows', 'fxns']
+    roletypes = ['container', 'flow', 'fxn']
     rolename = 'fa'
 
     def __init__(self, h={}, **kwargs):

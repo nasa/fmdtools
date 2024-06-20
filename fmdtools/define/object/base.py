@@ -95,7 +95,7 @@ class BaseObject(object):
     s.y:                            array(2)
     """
 
-    __slots__ = ('name', 'containers', 'indicators', 'track')
+    __slots__ = ('name', 'containers', 'indicators', 'track', 'root')
     roletypes = ['container']
     roledicts = []
     rolevars = []
@@ -103,7 +103,7 @@ class BaseObject(object):
     default_track = ['i']
     check_dict_creation = False
 
-    def __init__(self, name='', roletypes=[], track='default', **kwargs):
+    def __init__(self, name='', roletypes=[], track='default', root='self', **kwargs):
         """
         Initialize the baseobject.
 
@@ -125,6 +125,8 @@ class BaseObject(object):
             - or a dict of form ::
 
                 {'fxns':{'fxn1':'att1'}, 'flows':{'flow1':'att1'}}
+        root : str
+            Name of object containing the object. Default is 'self'.
         **kwargs : dict, object
             Keywork arguments for the roles.
             May be a dict of non-default arguments (e.g. s={'x': 1.0}) or
@@ -134,6 +136,7 @@ class BaseObject(object):
             self.name = self.__class__.__name__.lower()
         else:
             self.name = name
+        self.root = root
         self.init_indicators()
         self.init_roletypes(*roletypes, **kwargs)
         self.init_track(track)
@@ -153,7 +156,7 @@ class BaseObject(object):
             track = self.get_all_possible_track()
         elif track == 'none':
             track = []
-        elif type(track) == str:
+        elif isinstance(track, str):
             track = (track,)
 
         if not track:
@@ -219,10 +222,12 @@ class BaseObject(object):
         # initialize roles and add as attributes to the object
         for rolename in roles:
             container_initializer = getattr(self, roletype+'_'+rolename)
-            container_args = kwargs.get(rolename, {})
+            container_args = kwargs.get(rolename, dict())
             if isinstance(container_args, container_initializer):
                 container = container_args
             elif isinstance(container_args, dict):
+                if issubclass(container_initializer, BaseObject):
+                    container_args['root'] = self.name
                 try:
                     container = container_initializer(**container_args)
                 except AttributeError as ae:
@@ -388,7 +393,7 @@ class BaseObject(object):
             mem = sys.getsizeof(role)
         return mem
 
-    def get_roles(self, *roletypes, with_immutable=True):
+    def get_roles(self, *roletypes, with_immutable=True, **kwargs):
         """Get all roles."""
         if not roletypes:
             roletypes = self.roletypes
@@ -396,7 +401,7 @@ class BaseObject(object):
                 for role in getattr(self, roletype+'s', [])
                 if with_immutable or role not in self.immutable_roles]
 
-    def get_roles_as_dict(self, *roletypes, with_immutable=True):
+    def get_roles_as_dict(self, *roletypes, with_immutable=True, **kwargs):
         """Return all roles and their objects as a dict."""
         roles = self.get_roles(*roletypes, with_immutable=with_immutable)
         return {role: getattr(self, role) for role in roles}
