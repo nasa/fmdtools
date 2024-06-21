@@ -99,7 +99,8 @@ class Architecture(Simulable):
 
         track = get_sub_include(name, get_sub_include(flex_role, self.track))
         obj = init_obj(name=name, objclass=objclass, track=track,
-                       as_copy=as_copy, root=self.name, **kwargs)
+                       as_copy=as_copy, root=self.get_full_name()+"."+flex_role,
+                       **kwargs)
 
         if hasattr(obj, 'h') and obj.h:
             hist = obj.h
