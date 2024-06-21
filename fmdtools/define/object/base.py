@@ -401,10 +401,14 @@ class BaseObject(object):
                 for role in getattr(self, roletype+'s', [])
                 if with_immutable or role not in self.immutable_roles]
 
-    def get_roles_as_dict(self, *roletypes, with_immutable=True, **kwargs):
+    def get_roles_as_dict(self, *roletypes, with_immutable=True, with_prefix=False,
+                          **kwargs):
         """Return all roles and their objects as a dict."""
         roles = self.get_roles(*roletypes, with_immutable=with_immutable)
-        return {role: getattr(self, role) for role in roles}
+        if not with_prefix:
+            return {role: getattr(self, role) for role in roles}
+        else:
+            return {self.name+'.'+role: getattr(self, role) for role in roles}
 
     def get_roledicts(self, *roledicts, with_immutable=True):
         """Get all roles in roledicts."""

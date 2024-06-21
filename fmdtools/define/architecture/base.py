@@ -237,7 +237,8 @@ class Architecture(Simulable):
                 role_objs.update({role+'.'+k: v for k, v in roledict.items()})
         return role_objs
 
-    def get_roles_as_dict(self, *roletypes, with_immutable=True, flex_prefixes=False):
+    def get_roles_as_dict(self, *roletypes, with_immutable=True, with_prefix=False,
+                          flex_prefixes=False):
         """Adapts get_roles_as_dict for flexible roles."""
         if not roletypes:
             roletypes = self.roletypes
@@ -245,7 +246,8 @@ class Architecture(Simulable):
         flex_roles = self.get_flex_role_objs(*flex_roles, flex_prefixes=flex_prefixes)
         non_flex_roletypes = [r for r in roletypes if r+'s' not in self.flexible_roles]
         non_flex_roles = Simulable.get_roles_as_dict(self, *non_flex_roletypes,
-                                                     with_immutable=with_immutable)
+                                                     with_immutable=with_immutable,
+                                                     with_prefix=with_prefix)
         return {**flex_roles, **non_flex_roles}
 
     def update_seed(self, seed=[]):
