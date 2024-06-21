@@ -29,14 +29,14 @@ def get_var(obj, var):
     var_value: any
         value of the variable
     """
-    if type(var) == str:
+    if isinstance(var, str):
         var_s = var.split(".")
     else:
         var_s = var
         var = ".".join(var_s)
     if len(var_s) == 1:
         k = var_s[0]
-        if type(obj) == dict or (hasattr(obj, 'keys') and hasattr(obj, 'values')):
+        if isinstance(obj, dict) or (hasattr(obj, 'keys') and hasattr(obj, 'values')):
             val = obj.get(k, None)
         elif type(obj) in {tuple, list} and k.isnumeric():
             val = obj[int(k)]

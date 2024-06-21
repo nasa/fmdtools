@@ -180,7 +180,8 @@ class Graph(object):
                                                 title=title, title2=title2,
                                                 subtext=subtext, **edge_label_styles)
 
-    def set_node_labels(self, title='id', title2='', subtext='', **node_label_styles):
+    def set_node_labels(self, title='shortname', title2='', subtext='',
+                        **node_label_styles):
         """
         Create labels using Labels.from_iterator for the nodes in the graph.
 
@@ -833,6 +834,7 @@ def get_label_groups(iterator, *tags):
     except KeyError as e:
         unable = {k: tuple(tag for tag in tags if tag not in vals)
                   for k, vals in iterator.items()}
+        unable = {k: v for k, v in unable.items() if v}
         raise Exception("The following keys lack the following tags: " +
                         str(unable)) from e
     label_groups = {}

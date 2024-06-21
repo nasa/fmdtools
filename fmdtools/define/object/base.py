@@ -103,7 +103,7 @@ class BaseObject(object):
     default_track = ['i']
     check_dict_creation = False
 
-    def __init__(self, name='', roletypes=[], track='default', root='self', **kwargs):
+    def __init__(self, name='', roletypes=[], track='default', root='', **kwargs):
         """
         Initialize the baseobject.
 
@@ -197,6 +197,13 @@ class BaseObject(object):
         return tuple([at[len(roletype)+1:]
                      for at in dir(self) if at.startswith(roletype+'_')])
 
+    def get_full_name(self):
+        """Get the full name of the object (root + name)."""
+        if self.root:
+            return self.root + "." + self.name
+        else:
+            return self.name
+
     def init_roles(self, roletype, **kwargs):
         """
         Initialize the role 'roletype' for a given object.
@@ -227,7 +234,7 @@ class BaseObject(object):
                 container = container_args
             elif isinstance(container_args, dict):
                 if issubclass(container_initializer, BaseObject):
-                    container_args['root'] = self.name
+                    container_args['root'] = self.get_full_name()
                 try:
                     container = container_initializer(**container_args)
                 except AttributeError as ae:

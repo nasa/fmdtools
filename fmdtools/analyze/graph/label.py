@@ -51,7 +51,9 @@ def label_for_entry(g, iterator, entryname):
     entryname : str
         Property to get from the graph attributes. Options are:
 
-        - 'id' : The name of the node/edge
+        - 'id' : The full name of the node/edge
+
+        - 'shortname' :The short name of the node/edge (after .xx)
 
         - 'last' : The last part (after all "_" characters) of the name of the node/edge
 
@@ -68,6 +70,8 @@ def label_for_entry(g, iterator, entryname):
     """
     if entryname == "id":
         entryvals = {n: n for n in iterator}
+    elif entryname == 'shortname':
+        entryvals = {n: n.split('.')[-1] for n in iterator}
     elif entryname == "last":
         entryvals = {n: n.split("_")[-1] for n in iterator}
     elif 'type' in entryname:
@@ -108,7 +112,7 @@ class Labels(dataobject, mapping=True):
     subtext_style: LabelStyle = LabelStyle()
 
     def from_iterator(g, iterator, LabStyle,
-                      title='id', title2='', subtext='', **node_label_styles):
+                      title='shortname', title2='', subtext='', **node_label_styles):
         """
         Construct the labels from an interator (nodes or edges).
 
