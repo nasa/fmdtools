@@ -14,10 +14,6 @@ import networkx as nx
 import inspect
 
 
-def get_node_shortname(fullname):
-    return fullname.split('.')[-1]
-
-
 def get_obj_name(obj, role, basename=''):
     """
     Get the name of an object to be graphed.
@@ -34,21 +30,15 @@ def get_obj_name(obj, role, basename=''):
     name : str
         Name of the object.
     """
-    if role:
-        name = role
-    elif isinstance(obj, BaseObject):
-        name = obj.name
-    elif isinstance(obj, BaseContainer):
-        name = obj.__class__.__name__
+    if isinstance(obj, BaseObject):
+        return obj.get_full_name()
     elif inspect.ismethod(obj):
-        name = obj.__self__.name + '.' + obj.__name__
-    elif hasattr(obj, '__name__'):
-        name = obj.__name__
+        return obj.__self__.get_full_name() + '.' + obj.__name__
     else:
-        raise Exception("Unknown name for object" + str(obj))
-    if basename:
-        name = basename + '.' + name
-    return name
+        if not basename or not role:
+            raise Exception("No role (" + role + ") or basename (" + basename +
+                            ") for object: " + str(obj))
+        return basename + "." + role
 
 
 def get_edge_type(baseobj, obj):
@@ -147,11 +137,26 @@ def add_role_node(g, baseobj, basename, roleobj, rolename):
     """
     add_node(g, roleobj, rolename=rolename, basename=basename)
     add_edge(g, baseobj, basename, roleobj, rolename)
-    # if a method, check/add edge to containing object
-    # if inspect.ismethod(roleobj):
-    #     true_base = roleobj.__self__
-    #     true_basename = get_obj_name(true_base, 'na')
-    #     add_edge(g, true_base, true_basename, roleobj, rolename)
+    add_cond_edge(g, roleobj)
+
+
+def add_cond_edge(g, obj):
+    """
+    If the object is a method, attaches an edge to the containing object.
+
+    Parameters
+    ----------
+    g : nx.Graph
+        Networkx graph to add to.
+    obj : object
+        Object to check.
+    objname : str
+        Name of the object.
+    """
+    if inspect.ismethod(obj):
+        true_base = obj.__self__
+        true_basename = true_base.get_full_name()
+        add_edge(g, true_base, true_basename, obj, obj.__name__)
 
 
 def add_edge(g, baseobj, basename, roleobj, rolename):
@@ -192,18 +197,29 @@ def add_sub_nodes(g, obj, recursive=False, basename=''):
         Object to find the objects in.
     """
     for rolename, roleobj in obj.get_roles_as_dict(flex_prefixes=True).items():
-        if isinstance(roleobj, BaseObject) and roleobj.root != obj.name:
-            a=1
-            # need a way to get the correct name for the role and add edge
-            # add_edge(g, obj, basename, roleobj, rolename)
-        else:
-            name = get_obj_name(roleobj, rolename, basename)
-            add_role_node(g, obj, basename, roleobj, rolename)
-            if recursive and isinstance(roleobj, BaseObject):
-                add_sub_nodes(g, roleobj, recursive=recursive, basename=name)
+        name = get_obj_name(roleobj, rolename, basename)
+        add_role_node(g, obj, basename, roleobj, rolename)
+        if recursive and isinstance(roleobj, BaseObject):
+            add_sub_nodes(g, roleobj, recursive=recursive, basename=name)
 
 
 def set_sub_nodes(g, obj, time=None, recursive=False, basename=''):
+    """
+    Set the object's contained nodes (roles).
+
+    Parameters
+    ----------
+    g : nx.Graph
+        Networkx graph to add to.
+    obj : object
+        Object to find the objects in.
+    time : float, optional
+        Time to evaluate conditions at (if any). The default is None.
+    recursive : bool, optional
+        Whether to set nodes recursively. The default is False.
+    basename : str, optional
+        Name of the overall object. The default is ''.
+    """
     for rolename, roleobj in obj.get_roles_as_dict(flex_prefixes=True).items():
         name = get_obj_name(roleobj, rolename, basename=basename)
         set_node_states(g, roleobj, name, time=time)
@@ -247,35 +263,43 @@ class FullModelGraph(ModelGraph):
 
     def set_nx_states(self, mdl, **kwargs):
         name = get_obj_name(mdl, '')
-        # set_node_states(self.g, mdl, name, time=self.time)
-        # set_sub_nodes(self.g, mdl, time=self.time, recursive=True, basename=name)
+        set_node_states(self.g, mdl, name, time=self.time)
+        set_sub_nodes(self.g, mdl, time=self.time, recursive=True, basename=name)
 
 
 
-class RoleGraph(ModelGraph):
+class BlockGraph(ModelGraph):
 
     def nx_from_obj(self, mdl):
         g = nx.DiGraph()
         add_node(g, mdl)
-        add_sub_nodes(g, mdl)
+        add_sub_nodes(g, mdl, basename=mdl.get_full_name())
         return g
 
     def set_nx_states(self, mdl, **kwargs):
+        basename = mdl.get_full_name()
         for role, roleobj in mdl.get_roles_as_dict().items():
-            set_node_states(self.g, roleobj, role, time=self.time)
+            name = get_obj_name(roleobj, role, basename=basename)
+            set_node_states(self.g, roleobj, name, time=self.time)
+
+    def set_edge_labels(self, title='edgetype', title2='', subtext='role',
+                        **edge_label_styles):
+        super().set_edge_labels(title=title, title2=title2, subtext=subtext,
+                                **edge_label_styles)
+
+    def set_node_labels(self, title='shortname', title2='classname', **node_label_styles):
+        super().set_node_labels(title=title, title2=title2, **node_label_styles)
 
 
-class ArchRoleGraph(RoleGraph):
+class ArchitectureGraph(BlockGraph):
 
     def nx_from_obj(self, mdl, flow_edges=True, cond_edges=True):
-        g = RoleGraph.nx_from_obj(self, mdl)
+        g = BlockGraph.nx_from_obj(self, mdl)
         for flex_role in mdl.flexible_roles:
             role_objs = mdl.get_flex_role_objs(flex_role)
-            for objname, obj in role_objs.items():
-                if cond_edges and inspect.ismethod(obj):
-                    baseobj = obj.__self__
-                    basename = get_obj_name(baseobj, 'na')
-                    add_edge(g, baseobj, basename, obj, objname)
+            for rolename, obj in role_objs.items():
+                objname = get_obj_name(obj, rolename, mdl.get_full_name())
+                add_cond_edge(g, obj)
                 if flow_edges and hasattr(obj, 'flows'):
                     for locflowname, flowobj in obj.get_roles_as_dict('flow').items():
                         add_edge(g, obj, objname, flowobj, locflowname)
@@ -285,36 +309,19 @@ class ArchRoleGraph(RoleGraph):
 from examples.asg_demo.demo_model import Human, HazardModel
 mdl = HazardModel()
 fmg = FullModelGraph(mdl)
+fmg.set_edge_labels(title="role")
 fmg.draw_graphviz()
 
 from examples.pump.ex_pump import Pump, ImportEE
 
-rg = ArchRoleGraph(Pump(), flow_edges=True)
-rg.set_node_labels(title2='classname', subtext='s')
-rg.set_edge_labels(title='role')
+rg = ArchitectureGraph(Pump(), flow_edges=True)
 rg.draw()
 
-rg2 = RoleGraph(Pump().fxns['import_ee'])
-rg2.set_node_labels(title2='classname')
-rg2.set_edge_labels(title='role')
+rg2 = BlockGraph(Pump().fxns['import_ee'])
 rg2.draw()
 
-
-
-rg3 = ArchRoleGraph(Human(), flow_edges=True)
+rg3 = ArchitectureGraph(Human(), flow_edges=True)
 rg3.draw()
 mdl = Pump()
 
 # looking at hierarchy
-g = nx.DiGraph()
-add_node(g, mdl)
-add_sub_nodes(g, mdl, recursive=True)
-from fmdtools.analyze.graph.base import Graph
-Graph(g).draw()
-
-g = nx.DiGraph()
-
-
-Graph(g).draw_graphviz()
-
-

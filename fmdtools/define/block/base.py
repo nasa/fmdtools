@@ -313,11 +313,11 @@ class Simulable(BaseObject):
         variable_values: tuple
             Values of variables. Passes (non-tuple) single value if only one variable.
         """
-        if type(variables) == str:
+        if isinstance(variables, str):
             variables = [variables]
         variable_values = [None]*len(variables)
         for i, var in enumerate(variables):
-            if type(var) == str:
+            if isinstance(var, str):
                 var = var.split(".")
             if var[0] in ['functions', 'fxns']:
                 f = self.get_fxns()[var[1]]
@@ -457,11 +457,11 @@ class Block(Simulable):
         arch_kwargs = {}
         for k in archs:
             if k in kwargs and isinstance(kwargs[k], dict):
-                arch_kwargs[k] = {**kwargs[k], **{'flows': b_flows}}
+                arch_kwargs[k] = {**kwargs[k], **{'flows': b_flows}, 'name': k}
             elif k in kwargs and isinstance(kwargs[k], BaseObject):
-                arch_kwargs[k] = kwargs[k].copy(flows=b_flows)
+                arch_kwargs[k] = kwargs[k].copy(flows=b_flows, name=k)
             else:
-                arch_kwargs[k] = {'flows': b_flows}
+                arch_kwargs[k] = {'flows': b_flows, 'name': k}
 
         return {'flows': b_flows, **arch_kwargs}
 
@@ -605,7 +605,7 @@ class Block(Simulable):
             self.m.add_fault(*self.r.rng.choice(faults))
         elif default == 'first':
             self.m.add_fault(faults[0])
-        elif type(default) == str:
+        elif isinstance(default, str):
             self.m.add_fault(default)
         else:
             self.m.add_fault(*default)
