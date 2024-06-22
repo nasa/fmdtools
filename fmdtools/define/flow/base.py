@@ -35,8 +35,6 @@ class Flow(BaseObject):
     """
 
     __slots__ = ('p', 's', 'h')
-    container_p = Parameter
-    container_s = State
     default_track = ('s', 'i')
     check_dict_creation = True
 
@@ -58,7 +56,13 @@ class Flow(BaseObject):
 
     def copy(self, **kwargs):
         """Return a copy of the flow object (used when copying the model)."""
-        loc_kwargs = {'p': self.p.copy(), **kwargs, 's': self.s.copy(), 'name': self.name}
+        loc_kwargs = {}
+        if hasattr(self, 'p'):
+            loc_kwargs['p'] = self.p.copy()
+        loc_kwargs = {**loc_kwargs, **kwargs}
+        if hasattr(self, 's'):
+            loc_kwargs['s'] = self.s.copy()
+        loc_kwargs['name'] = self.name
         cop = self.__class__(**loc_kwargs)
         if hasattr(self, 'h'):
             cop.h = self.h.copy()
