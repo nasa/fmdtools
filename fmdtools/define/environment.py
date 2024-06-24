@@ -59,8 +59,9 @@ class Environment(CommsFlow):
         self.init_roletypes('container', "coords", "arch", r=r, p=p, s=s, c=c, ga=ga)
         self.update_seed()
 
-    def get_typename(self):
-        return "Environment"
+    def base_type(self):
+        """Return fmdtools type of the model class."""
+        return Environment
 
     def copy(self, glob=[], p={}, s={}):
         """

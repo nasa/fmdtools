@@ -505,7 +505,7 @@ def node_style_factory(style_tag, styles={}, **kwargs):
         node_style = MultiFlowNodeStyle
     elif style_tag in ['commsflow', 'CommsFlow', 'environment', 'Environment']:
         node_style = CommsFlowNodeStyle
-    elif style_tag in ['architecture', 'Architecture']:
+    elif 'Architecture' in style_tag or 'architecture' in style_tag:
         node_style = ArchitectureNodeStyle
     elif style_tag in ['block', 'Block']:
         node_style = BlockNodeStyle

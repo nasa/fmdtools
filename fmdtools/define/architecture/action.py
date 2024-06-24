@@ -54,6 +54,10 @@ class ActionArchitecture(Architecture):
         self.active_actions = set()
         Architecture.__init__(self, **kwargs)
 
+    def base_type(self):
+        """Return fmdtools type of the model class."""
+        return ActionArchitecture
+
     def copy(self, **kwargs):
         cop = super().copy(**kwargs)
         cop.active_actions = {*self.active_actions}

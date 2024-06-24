@@ -12,6 +12,7 @@ from fmdtools.define.object.base import BaseObject
 from fmdtools.define.container.base import BaseContainer
 import networkx as nx
 import inspect
+import re
 
 
 def get_obj_name(obj, role, basename=''):
@@ -99,7 +100,7 @@ def get_node_type(obj):
     return nodetype
 
 
-def add_node(g, obj, rolename='base', basename=''):
+def add_node(g, obj, rolename='base', basename='', get_source=False):
     """
     Add a node to a graph.
 
@@ -116,9 +117,11 @@ def add_node(g, obj, rolename='base', basename=''):
     name = get_obj_name(obj, rolename, basename=basename)
     nodetype = get_node_type(obj)
     g.add_node(name, nodetype=nodetype, classname=classname)
+    if get_source:
+        set_node_code(g, obj, name)
 
 
-def add_role_node(g, baseobj, basename, roleobj, rolename):
+def add_role_node(g, baseobj, basename, roleobj, rolename, get_source=False):
     """
     Attach the sub-object of a base object.
 
@@ -135,7 +138,7 @@ def add_role_node(g, baseobj, basename, roleobj, rolename):
     rolename : str
         Name of the object in the context of the base object.
     """
-    add_node(g, roleobj, rolename=rolename, basename=basename)
+    add_node(g, roleobj, rolename=rolename, basename=basename, get_source=get_source)
     add_edge(g, baseobj, basename, roleobj, rolename)
     add_cond_edge(g, roleobj)
 
@@ -183,7 +186,8 @@ def add_edge(g, baseobj, basename, roleobj, rolename):
     g.add_edge(basename, name, edgetype=edgetype, role=rolename)
 
 
-def add_sub_nodes(g, obj, recursive=False, basename=''):
+def add_sub_nodes(g, obj, recursive=False, basename='', with_methods=False,
+                  get_source=False):
     """
     Add the objects contained in the given object to the graph.
 
@@ -198,9 +202,20 @@ def add_sub_nodes(g, obj, recursive=False, basename=''):
     """
     for rolename, roleobj in obj.get_roles_as_dict(flex_prefixes=True).items():
         name = get_obj_name(roleobj, rolename, basename)
-        add_role_node(g, obj, basename, roleobj, rolename)
+        add_role_node(g, obj, basename, roleobj, rolename, get_source=get_source)
         if recursive and isinstance(roleobj, BaseObject):
-            add_sub_nodes(g, roleobj, recursive=recursive, basename=name)
+            add_sub_nodes(g, roleobj, recursive=recursive, basename=name,
+                          with_methods=with_methods, get_source=get_source)
+    if with_methods:
+        for methodname, methodobj in get_obj_methods(obj).items():
+            name = get_obj_name(methodobj, methodobj, basename=basename)
+            add_role_node(g, obj, basename, methodobj, name, get_source=get_source)
+
+
+def get_obj_methods(obj):
+    methods = {at[0]: at[1] for at in inspect.getmembers(obj)
+               if at[0] not in dir(obj.base_type()) and inspect.ismethod(at[1])}
+    return methods
 
 
 def set_sub_nodes(g, obj, time=None, recursive=False, basename=''):
@@ -252,13 +267,31 @@ def set_node_states(g, obj, name, time=None):
         g.nodes[name]['obj'] = obj
 
 
+def set_node_code(g, obj, name):
+    docs = ''
+    source = ''
+    code = ''
+    if isinstance(obj, BaseObject) or isinstance(obj, BaseContainer):
+        docs = inspect.getdoc(obj)
+        source = inspect.getsource(obj.__class__)
+        code = ''
+    elif inspect.ismethod(obj):
+        docs = inspect.getdoc(obj)
+        source = inspect.getsource(obj)
+        code = source.split("'''")[-1].split('"""')[-1]
+    g.nodes[name]['docs'] = docs
+    g.nodes[name]['source'] = source
+    g.nodes[name]['code'] = code
+
+
 class FullModelGraph(ModelGraph):
 
-    def nx_from_obj(self, mdl):
+    def nx_from_obj(self, mdl, with_methods=False, get_source=False):
         g = nx.DiGraph()
         name = get_obj_name(mdl, '')
-        add_node(g, mdl, rolename=name)
-        add_sub_nodes(g, mdl, recursive=True, basename=name)
+        add_node(g, mdl, rolename=name, get_source=get_source)
+        add_sub_nodes(g, mdl, recursive=True, basename=name, with_methods=with_methods,
+                      get_source=get_source)
         return g
 
     def set_nx_states(self, mdl, **kwargs):
@@ -270,10 +303,11 @@ class FullModelGraph(ModelGraph):
 
 class BlockGraph(ModelGraph):
 
-    def nx_from_obj(self, mdl):
+    def nx_from_obj(self, mdl, with_methods=True, get_source=False):
         g = nx.DiGraph()
-        add_node(g, mdl)
-        add_sub_nodes(g, mdl, basename=mdl.get_full_name())
+        add_node(g, mdl, get_source=get_source)
+        add_sub_nodes(g, mdl, basename=mdl.get_full_name(), with_methods=with_methods,
+                      get_source=get_source)
         return g
 
     def set_nx_states(self, mdl, **kwargs):
@@ -293,8 +327,8 @@ class BlockGraph(ModelGraph):
 
 class ArchitectureGraph(BlockGraph):
 
-    def nx_from_obj(self, mdl, flow_edges=True, cond_edges=True):
-        g = BlockGraph.nx_from_obj(self, mdl)
+    def nx_from_obj(self, mdl, flow_edges=True, cond_edges=True, get_source=False):
+        g = BlockGraph.nx_from_obj(self, mdl, get_source=get_source)
         for flex_role in mdl.flexible_roles:
             role_objs = mdl.get_flex_role_objs(flex_role)
             for rolename, obj in role_objs.items():
@@ -308,7 +342,7 @@ class ArchitectureGraph(BlockGraph):
 
 from examples.asg_demo.demo_model import Human, HazardModel
 mdl = HazardModel()
-fmg = FullModelGraph(mdl)
+fmg = FullModelGraph(mdl, with_methods=True)
 fmg.set_edge_labels(title="role")
 fmg.draw_graphviz()
 
@@ -317,11 +351,13 @@ from examples.pump.ex_pump import Pump, ImportEE
 rg = ArchitectureGraph(Pump(), flow_edges=True)
 rg.draw()
 
-rg2 = BlockGraph(Pump().fxns['import_ee'])
+rg2 = BlockGraph(Pump().fxns['import_ee'], get_source=True)
+rg2.set_node_labels(subtext='code')
 rg2.draw()
 
 rg3 = ArchitectureGraph(Human(), flow_edges=True)
 rg3.draw()
 mdl = Pump()
+
 
 # looking at hierarchy

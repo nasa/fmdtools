@@ -39,7 +39,7 @@ class ModelGraph(Graph):
         keyword arguments for self.nx_from_obj
     """
 
-    def __init__(self, mdl, get_states=True, time=0.0, **kwargs):
+    def __init__(self, mdl, get_states=True, get_source=False, time=0.0, **kwargs):
         """
         Generate the FunctionArchitectureGraph corresponding to a given Model.
 
@@ -50,12 +50,15 @@ class ModelGraph(Graph):
         get_states : bool, optional
             Whether to copy states to the node/edge 'states' property.
             The default is True.
+        get_source : bool, optional
+            Whether to get the source code/objects from the object. The default is
+            False.
         time: float
             Time model is run at (to execute indicators at). Default is 0.0
         **kwargs : kwargs
             (placeholder for kwargs)
         """
-        Graph.__init__(self, self.nx_from_obj(mdl, **kwargs))
+        Graph.__init__(self, self.nx_from_obj(mdl, get_source=get_source, **kwargs))
         if get_states:
             self.time = time
             self.set_nx_states(mdl, **kwargs)

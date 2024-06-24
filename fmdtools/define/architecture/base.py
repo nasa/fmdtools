@@ -33,8 +33,9 @@ class Architecture(Simulable):
         self.init_architecture(**kwargs)
         self.build(**kwargs)
 
-    def get_typename(self):
-        return "Architecture"
+    def base_type(self):
+        """Return fmdtools type of the model class."""
+        return Architecture
 
     def check_role(self, roletype, rolename):
         """Check that 'arch_xa' role is used for the arch."""

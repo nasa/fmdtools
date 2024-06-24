@@ -51,6 +51,10 @@ class GeomArchitecture(Architecture):
     flexible_roles = ['points', 'lines', 'polys']
     rolename = 'ga'
 
+    def base_type(self):
+        """Return fmdtools type of the model class."""
+        return GeomArchitecture
+
     def init_architecture(self, **kwargs):
         """Use this placeholder method to define custom architectures."""
         a = 1
