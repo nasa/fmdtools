@@ -68,8 +68,9 @@ class Flow(BaseObject):
             cop.h = self.h.copy()
         return cop
 
-    def get_typename(self):
-        return "Flow"
+    def base_type(self):
+        """Return fmdtools type of the model class."""
+        return Flow
 
     def create_hist(self, timerange):
         self.h = BaseObject.create_hist(self, timerange)

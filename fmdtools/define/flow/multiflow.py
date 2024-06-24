@@ -36,6 +36,10 @@ class MultiFlow(Flow):
             rep_str = rep_str+"\n   "+self.get_view(loc).__repr__()
         return rep_str
 
+    def base_type(self):
+        """Return fmdtools type of the model class."""
+        return MultiFlow
+
     def create_local(self, name, attrs="all", p='global', s='global', track=['s'],
                      **kwargs):
         """

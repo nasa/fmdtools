@@ -142,6 +142,14 @@ class BaseObject(object):
         self.init_track(track)
         self.check_slots()
 
+    def base_type(self):
+        """Return fmdtools type of the model class."""
+        return BaseObject
+
+    def get_typename(self):
+        """Return name of the fmdtools type of the model class."""
+        return self.base_type().__name__
+
     def check_slots(self):
         """Check if __slots__ were defined for the class to preemt __dict__ creation."""
         if self.check_dict_creation and hasattr(self, '__dict__'):

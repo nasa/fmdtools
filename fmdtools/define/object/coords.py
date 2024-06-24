@@ -177,6 +177,10 @@ class Coords(BaseObject):
         self.build()
         self.init_track(track)
 
+    def base_type(self):
+        """Return fmdtools type of the model class."""
+        return Coords
+
     def check_role(self, roletype, rolename):
         """Check that the rolename for coords is 'c'."""
         if roletype != 'coords':

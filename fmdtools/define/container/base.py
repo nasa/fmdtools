@@ -26,6 +26,10 @@ class BaseContainer(dataobject, mapping=True, iterable=True, copy_default=True):
         """Containers are typed as containers unless specified otherwise."""
         return "Container"
 
+    def base_type(self):
+        """Return fmdtools type of the model class."""
+        return BaseContainer
+
     def check_role(self, roletype, rolename):
         """
         Check that the container will be given the correct name for its class.

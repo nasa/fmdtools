@@ -142,6 +142,10 @@ class FunctionArchitecture(Architecture):
     def inject_faults(self, faults):
         Architecture.inject_faults(self, 'fxns', faults)
 
+    def base_type(self):
+        """Return fmdtools type of the model class."""
+        return FunctionArchitecture
+
     def add_fxn(self, name, fclass, *flownames, **fkwargs):
         """
         Instantiate a given function in the model.

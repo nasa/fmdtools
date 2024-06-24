@@ -28,6 +28,10 @@ class CommsFlow(MultiFlow):
         self.fxns = {}
         super().__init__(name=name, glob=glob, p=p, s=s, track=track)
 
+    def base_type(self):
+        """Return fmdtools type of the model class."""
+        return CommsFlow
+
     def __repr__(self):
         rep_str = Flow.__repr__(self)
         if self.name == self.glob.name:
@@ -191,9 +195,6 @@ class CommsFlow(MultiFlow):
                              received=copy.deepcopy(self.fxns[fxn]["received"]),
                              ports=getattr(self.fxns[fxn]['internal'], "locals", []))
         return cop
-
-    def get_typename(self):
-        return "CommsFlow"
 
     def find_mutables(self):
         """Add in/received dicts to mutables."""

@@ -518,16 +518,9 @@ class Block(Simulable):
         """Return a dictionary of the Block's flows."""
         return {f: getattr(self, f) for f in self.flows}
 
-    def get_typename(self):
-        """
-        Get the name of the type (Block for Blocks).
-
-        Returns
-        -------
-        typename: str
-            Block
-        """
-        return "Block"
+    def base_type(self):
+        """Return fmdtools type of the model class."""
+        return Block
 
     def is_static(self):
         """Check if Block has static execution step."""
