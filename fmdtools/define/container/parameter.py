@@ -80,6 +80,10 @@ class Parameter(BaseContainer, readonly=True):
         if check_pickle:
             self.check_pickle()
 
+    def base_type(self):
+        """Return fmdtools type of the model class."""
+        return Parameter
+
     def keys(self):
         return self.__fields__
 

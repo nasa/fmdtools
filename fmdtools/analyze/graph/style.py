@@ -446,11 +446,29 @@ class CommsFlowNodeStyle(NodeStyle):
 class ContainerNodeStyle(NodeStyle):
     """Style representing containers."""
 
+    nx_node_shape: str = 's'
+    nx_linewidths: int = 0
+    gv_style: str = 'filled'
+    gv_shape: str = 'tab'
+    gv_penwidth: str = '1'
+
+
+class MethodNodeStyle(NodeStyle):
+
     nx_node_shape: str = 'd'
     nx_linewidths: int = 0
     gv_style: str = 'filled'
-    gv_shape: str = 'diamond'
-    gv_penwidth: str = '0'
+    gv_shape: str = 'component'
+    gv_penwidth: str = '1'
+
+
+class OtherNodeStyle(NodeStyle):
+    """Style representing other properties."""
+    nx_node_shape: str = "P"
+    nx_linewidths: int = 0
+    gv_style: str = 'filled'
+    gv_shape: str = 'Msquare'
+    gv_penwidth: str = '1'
 
 
 def node_style_factory(style_tag, styles={}, **kwargs):
@@ -517,8 +535,10 @@ def node_style_factory(style_tag, styles={}, **kwargs):
         node_style = ComponentNodeStyle
     elif style_tag in ['container', 'state', 'Container', 'State']:
         node_style = ContainerNodeStyle
-    elif style_tag in ['dict', 'flexible', 'condition', 'Condition', 'method']:
-        node_style = ContainerNodeStyle
+    elif style_tag in ['condition', 'Condition', 'method']:
+        node_style = MethodNodeStyle
+    elif style_tag in ['dict', 'flexible']:
+        node_style = OtherNodeStyle
     else:
         raise Exception("Invalid node style: "+str(style_tag))
     return node_style(styles=styles, **kwargs)

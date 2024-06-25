@@ -267,6 +267,12 @@ def set_node_states(g, obj, name, time=None):
         g.nodes[name]['obj'] = obj
 
 
+def remove_para(source):
+    if source.startswith("\n"):
+        return remove_para(source[1:])
+    else:
+        return source
+
 def set_node_code(g, obj, name):
     docs = ''
     source = ''
@@ -274,11 +280,20 @@ def set_node_code(g, obj, name):
     if isinstance(obj, BaseObject) or isinstance(obj, BaseContainer):
         docs = inspect.getdoc(obj)
         source = inspect.getsource(obj.__class__)
-        code = ''
+        if isinstance(obj, BaseContainer):
+            if obj.__class__ == obj.base_type():
+                code = ''
+            elif '\n\n    def' in source:
+                code = source.split('\n\n    def')[0].split("'''")[-1].split('"""')[-1]
+            else:
+                code = source.split("'''")[-1].split('"""')[-1]
+            code = "\n".join(code.split("\n    "))
     elif inspect.ismethod(obj):
         docs = inspect.getdoc(obj)
         source = inspect.getsource(obj)
         code = source.split("'''")[-1].split('"""')[-1]
+        code = "\n".join(code.split("\n        "))
+    code = remove_para(code)
     g.nodes[name]['docs'] = docs
     g.nodes[name]['source'] = source
     g.nodes[name]['code'] = code
@@ -352,8 +367,9 @@ rg = ArchitectureGraph(Pump(), flow_edges=True)
 rg.draw()
 
 rg2 = BlockGraph(Pump().fxns['import_ee'], get_source=True)
-rg2.set_node_labels(subtext='code')
+rg2.set_node_labels(subtext='code', subtext_style=dict(horizontalalignment='left'))
 rg2.draw()
+rg2.draw_graphviz()
 
 rg3 = ArchitectureGraph(Human(), flow_edges=True)
 rg3.draw()

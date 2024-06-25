@@ -398,27 +398,13 @@ class Graph(object):
         for group, nodes in self.node_groups.items():
             gv_kwargs = self.node_styles[group].gv_kwargs()
             for node in nodes:
-                label = ""
-                if node in self.node_labels.title:
-                    label += self.node_labels.title[node]
-                if node in self.node_labels.subtext:
-                    label += '\n'+str(self.node_labels.subtext[node])
-                if ('<' in label or '>' in label):
-                    label = "\\" + label
-                dot.node(node, label=label, **gv_kwargs)
+                dot.node(node, label=self.node_labels.make_gv_label(node), **gv_kwargs)
 
         for group, edges in self.edge_groups.items():
             gv_kwargs = self.edge_styles[group].gv_kwargs()
             for edge in edges:
-                label = ""
-                if edge in self.edge_labels.title:
-                    label += self.edge_labels.title[edge]
-                if edge in self.edge_labels.subtext:
-                    label += '\n'+self.edge_labels.subtext[edge]
-                if ('<' in label or '>' in label):
-                    label = "\\" + label
-
-                dot.edge(edge[0], edge[1], label=label, **gv_kwargs)
+                dot.edge(edge[0], edge[1], label=self.edge_labels.make_gv_label(edge),
+                         **gv_kwargs)
         gv_plot_ending(dot, disp=disp, saveas=saveas)
         return dot
 

@@ -31,6 +31,13 @@ class LabelStyle(dataobject):
         """Return kwargs for nx.draw_networkx_labels."""
         return asdict(self)
 
+    def gv_align(self, text):
+        if self.horizontalalignment == "left":
+            text = "\l".join(text.split("\n"))
+        elif self.horizontalalignment == "right":
+            text = "\\r".join(text.split("\n"))
+        return text.replace("    ", "....")
+
 
 class EdgeLabelStyle(LabelStyle):
     """Holds kwargs for nx.draw_networkx_edge_labels."""
@@ -172,7 +179,7 @@ class Labels(dataobject, mapping=True):
                 font_weight = 'normal'
             def_style = dict(verticalalignment=verticalalignment,
                              font_weight=font_weight,
-                             **node_label_styles.get(entry, {}))
+                             **node_label_styles.get(entry+'_style', {}))
             labs[entry+'_style'] = LabStyle(**def_style)
         return labs
 
@@ -191,6 +198,17 @@ class Labels(dataobject, mapping=True):
         for level in self.iter_groups():
             nx.draw_networkx_labels(g, pos, self[level],
                                     **self[level+'_style'].kwargs(), ax=ax)
+
+    def make_gv_label(self, node):
+        """Make the label for graphviz for a given node."""
+        label = ""
+        if node in self.title:
+            label += self.title_style.gv_align(self.title[node])
+        if node in self.subtext:
+            label += self.subtext_style.gv_align('\n'+str(self.subtext[node]))
+        if ('<' in label or '>' in label):
+            label = "\\" + label
+        return label
 
 
 if __name__ == "__main__":
