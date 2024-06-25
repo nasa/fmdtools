@@ -79,6 +79,10 @@ class Time(BaseContainer):
             self.timers[timername] = Timer(timername)
         self.set_timestep()
 
+    def base_type(self):
+        """Return fmdtools type of the model class."""
+        return Time
+
     def __getattr__(self, item):
         if item in self.timers:
             return self.timers[item]

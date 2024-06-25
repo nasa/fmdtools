@@ -67,6 +67,9 @@ class SimParam(Parameter, readonly=True):
         super().__init__(*args, **kwargs)
         self.find_any_phase_overlap()
 
+    def base_type(self):
+        return SimParam
+
     def find_any_phase_overlap(self):
         """Check that simparam phases don't overlap."""
         phase_dict = {v[0]: [v[1], v[2]] for v in self.phases}
