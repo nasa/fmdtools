@@ -59,7 +59,7 @@ def get_edge_type(baseobj, obj):
         edgetype label to give the edge (e.g., containment, flow, aggregation, etc).
     """
     if isinstance(obj, BaseObject):
-        if obj.root == baseobj.name:
+        if obj.root == baseobj.get_full_name():
             edgetype = 'containment'
         elif isinstance(obj, Flow):
             edgetype = 'flow'
@@ -187,7 +187,7 @@ def add_edge(g, baseobj, basename, roleobj, rolename):
 
 
 def add_sub_nodes(g, obj, recursive=False, basename='', with_methods=False,
-                  get_source=False):
+                  get_source=False, with_subflow_edges=True):
     """
     Add the objects contained in the given object to the graph.
 
@@ -210,12 +210,26 @@ def add_sub_nodes(g, obj, recursive=False, basename='', with_methods=False,
         for methodname, methodobj in get_obj_methods(obj).items():
             name = get_obj_name(methodobj, methodobj, basename=basename)
             add_role_node(g, obj, basename, methodobj, name, get_source=get_source)
+    if with_subflow_edges:
+        for subflowname, subflowobj in get_sub_multiflows(obj).items():
+            add_edge(g, obj, basename, subflowobj, subflowname)
 
 
 def get_obj_methods(obj):
+    """Get methods from the given object."""
     methods = {at[0]: at[1] for at in inspect.getmembers(obj)
                if at[0] not in dir(obj.base_type()) and inspect.ismethod(at[1])}
     return methods
+
+
+def get_sub_multiflows(obj):
+    """Return a dict of multiflows set as object variables."""
+    if hasattr(obj, 'flows'):
+        return {k: getattr(obj, k) for k in dir(obj)
+                if isinstance(getattr(obj, k, ''), Flow)
+                and k not in obj.flows}
+    else:
+        return {}
 
 
 def set_sub_nodes(g, obj, time=None, recursive=False, basename=''):
@@ -374,6 +388,12 @@ rg2.draw_graphviz()
 rg3 = ArchitectureGraph(Human(), flow_edges=True)
 rg3.draw()
 mdl = Pump()
+
+from examples.multiflow_demo.multiflow_demo import ExModel
+
+fmg2 = FullModelGraph(ExModel())
+fmg2.draw_graphviz()
+
 
 
 # looking at hierarchy

@@ -24,9 +24,9 @@ class CommsFlow(MultiFlow):
     slots = ['__dict__']
     check_dict_creation = False
 
-    def __init__(self, name='', glob=[], p={}, s={}, track=['s']):
+    def __init__(self, name='', glob=[], track=['s'], **kwargs):
         self.fxns = {}
-        super().__init__(name=name, glob=glob, p=p, s=s, track=track)
+        super().__init__(name=name, glob=glob, track=track, **kwargs)
 
     def base_type(self):
         """Return fmdtools type of the model class."""
