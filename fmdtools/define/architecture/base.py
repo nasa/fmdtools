@@ -226,32 +226,6 @@ class Architecture(Simulable):
         """Get mutables for the architecture (includes flexible roles)."""
         return [*super().find_mutables(), *self.get_flex_role_objs().values()]
 
-    def get_flex_role_objs(self, *flexible_roles, flex_prefixes=False):
-        """Get the objects in flexible roles (e.g., functions, flows, components)."""
-        if not flexible_roles:
-            flexible_roles = self.flexible_roles
-        role_objs = {}
-        for role in flexible_roles:
-            roledict = getattr(self, role)
-            if not flex_prefixes:
-                role_objs.update(roledict)
-            else:
-                role_objs.update({role+'.'+k: v for k, v in roledict.items()})
-        return role_objs
-
-    def get_roles_as_dict(self, *roletypes, with_immutable=True, with_prefix=False,
-                          flex_prefixes=False):
-        """Adapts get_roles_as_dict for flexible roles."""
-        if not roletypes:
-            roletypes = self.roletypes
-        flex_roles = [r+'s' for r in roletypes if r+'s' in self.flexible_roles]
-        flex_roles = self.get_flex_role_objs(*flex_roles, flex_prefixes=flex_prefixes)
-        non_flex_roletypes = [r for r in roletypes if r+'s' not in self.flexible_roles]
-        non_flex_roles = Simulable.get_roles_as_dict(self, *non_flex_roletypes,
-                                                     with_immutable=with_immutable,
-                                                     with_prefix=with_prefix)
-        return {**flex_roles, **non_flex_roles}
-
     def update_seed(self, seed=[]):
         """
         Update model seed and the seed in all contained roles.

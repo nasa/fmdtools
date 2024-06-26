@@ -21,14 +21,17 @@ class MultiFlow(Flow):
 
     slots = ['__dict__']
     check_dict_creation = False
+    flexible_roles = ['locals']
 
-    def __init__(self, name='', glob=[], s={}, p={}, track=['s']):
+    def __init__(self, name='', root='', glob=[], track=['s'], **kwargs):
         self.locals = []
-        super().__init__(name=name,  s=s, p=p, track=track)
         if not glob:
             self.glob = self
         else:
             self.glob = glob
+        if not root:
+            root = glob.get_full_name()
+        super().__init__(name=name, root=root, track=track, **kwargs)
 
     def __repr__(self):
         rep_str = Flow.__repr__(self)
@@ -71,12 +74,13 @@ class MultiFlow(Flow):
             oldflow = getattr(self, name)
             newflow = oldflow.copy(glob=self)
         else:
-            if p == 'global':
-                p = self.p
-            if s == 'global':
-                s = self.s.asdict()
-            newflow = self.__class__(name=name, glob=self, p=p, s=s, track=track,
-                                     **kwargs)
+            kwar = {}
+            if p == 'global' and hasattr(self, 'p'):
+                kwar['p'] = self.p
+            if s == 'global' and hasattr(self, 's'):
+                kwar['s'] = self.s.asdict()
+            kwar = {**kwar, **kwargs}
+            newflow = self.__class__(name=name, glob=self, track=track, **kwar)
         setattr(self, name, newflow)
         self.locals.append(name)
         if hasattr(self, 'h') and self.h:
@@ -106,7 +110,7 @@ class MultiFlow(Flow):
             view = self.glob
         elif name == "out":
             view = getattr(self.glob, self.name + "_out")
-        elif name in getattr(self, 'locals',[]): 
+        elif name in getattr(self, 'locals', []):
             view = getattr(self, name)
         else:
             view = getattr(self.glob, name)
@@ -163,9 +167,6 @@ class MultiFlow(Flow):
             local_flow = getattr(self, localname)
             self.h[localname] = local_flow.create_hist(timerange)
         return self.h
-
-    def get_typename(self):
-        return "MultiFlow"
 
     def find_mutables(self):
         """Find mutables (includes locals)."""

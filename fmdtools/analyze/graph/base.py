@@ -124,7 +124,7 @@ class Graph(object):
             arguments to nx.draw_networkx_edges. The default is {"label":{}}.
         """
         self.edge_style_labels = ['edgetype', *edge_styles]
-        self.edge_groups = get_label_groups(self.g.edges(), *self.edge_style_labels)
+        self.edge_groups = get_label_groups(self.g.edges, *self.edge_style_labels)
         self.edge_styles = {}
         for edge_group in self.edge_groups:
             styles = {k: v for i, (k, v) in enumerate(edge_styles.items())
