@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 """Module defining :class:`Flow` class used to connect multiple blocks in a model."""
 from fmdtools.define.object.base import BaseObject
-
 from fmdtools.define.container.state import ExampleState
 
 

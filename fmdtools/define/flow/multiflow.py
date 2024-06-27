@@ -29,8 +29,8 @@ class MultiFlow(Flow):
             self.glob = self
         else:
             self.glob = glob
-        if not root:
-            root = glob.get_full_name()
+            if not root:
+                root = self.glob.get_full_name()
         super().__init__(name=name, root=root, track=track, **kwargs)
 
     def __repr__(self):
