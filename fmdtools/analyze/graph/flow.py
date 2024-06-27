@@ -100,7 +100,8 @@ class CommsFlowGraph(MultiFlowGraph):
                 else:
                     out_port = out_flow
                 out_name = get_obj_name(out_flow, portname, basename=int_flow.name)
-                add_edge(g, portobj, portname, out_port, out_name)
+                pname = portobj.get_full_name()
+                add_edge(g, portobj, pname, out_port, out_name)
             # add external ports going in
             for f2 in flow.fxns:
                 f2_out = getattr(flow, f2+"_out")
