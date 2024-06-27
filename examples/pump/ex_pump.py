@@ -462,8 +462,8 @@ class Pump(FunctionArchitecture):
         """
         self.add_flow('ee_1', Electricity)
         self.add_flow('sig_1', Signal)
-        self.add_flow('wat_1', Water('wat_1'))
-        self.add_flow('wat_2', Water('wat_2'))
+        self.add_flow('wat_1', Water)
+        self.add_flow('wat_2', Water)
 
         """
         Functions are added to the model using the add_fxn() method, which must be

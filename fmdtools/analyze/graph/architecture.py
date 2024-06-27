@@ -24,10 +24,33 @@ Main user-facing individual graphing classes:
 
 import networkx as nx
 from fmdtools.analyze.history import History
-from fmdtools.analyze.graph.model import ModelGraph, set_block_node
+from fmdtools.analyze.graph.model import set_block_node, remove_base
+from fmdtools.analyze.graph.model import get_obj_name, add_cond_edge, add_edge
+from fmdtools.analyze.graph.block import BlockGraph
 
 
-class FunctionArchitectureGraph(ModelGraph):
+class ArchitectureGraph(BlockGraph):
+    """Represent graph of Architecture and its containment of blocks and flows."""
+
+    def nx_from_obj(self, mdl, flow_edges=True, cond_edges=True, get_source=False,
+                    with_root=True):
+        """Add graph of architecture."""
+        g = BlockGraph.nx_from_obj(self, mdl, get_source=get_source)
+        # add flexible roles like functions, actions, etc
+        for flex_role in mdl.flexible_roles:
+            role_objs = mdl.get_flex_role_objs(flex_role)
+            for rolename, obj in role_objs.items():
+                objname = get_obj_name(obj, rolename, mdl.get_full_name())
+                add_cond_edge(g, obj)
+                if flow_edges and hasattr(obj, 'flows'):
+                    for locflowname, flowobj in obj.get_roles_as_dict('flow').items():
+                        add_edge(g, obj, objname, flowobj, locflowname)
+        if not with_root:
+            remove_base(g, mdl.name)
+        return g
+
+
+class FunctionArchitectureGraph(ArchitectureGraph):
     """
     Graph of FunctionArchitecture, where both functions and flows are nodes.
 
@@ -35,13 +58,13 @@ class FunctionArchitectureGraph(ModelGraph):
     with the edges/nodes which can then be used to visualize function/flow attributes.
     """
 
-    def nx_from_obj(self, mdl):
+    def nx_from_obj(self, mdl, with_root=False, **kwargs):
         """
         Generate the networkx.graph object corresponding to the model.
 
         Parameters
         ----------
-        mdl: Model
+        mdl: FunctionArchitecture
             Model to create the graph representation of
 
         Returns
@@ -50,24 +73,7 @@ class FunctionArchitectureGraph(ModelGraph):
             networkx.Graph representation of model functions and flows
             (along with their attributes)
         """
-        g = mdl.graph.copy()
-        nodetypes = {fname: f.get_typename() for fname, f in mdl.fxns.items()}
-        nodetypes.update({fname: f.get_typename() for fname, f in mdl.flows.items()})
-        nx.set_node_attributes(g, nodetypes, name='nodetype')
-        nx.set_edge_attributes(g, 'flow', name='edgetype')
-        return g
-
-    def set_nx_states(self, mdl):
-        """
-        Attach state attributes to Graph corresponding to the states of the model.
-
-        Parameters
-        ----------
-        mdl: Model
-            Model to represent.
-        """
-        self.set_flow_nodestates(mdl)
-        self.set_fxn_nodestates(mdl)
+        return ArchitectureGraph.nx_from_obj(self, mdl, with_root=with_root, **kwargs)
 
     def set_fxn_nodestates(self, mdl):
         """
@@ -123,16 +129,16 @@ class FunctionArchitectureGraph(ModelGraph):
 
     def get_staticnodes(self, mdl):
         """Get static node information for set_exec_order."""
-        staticfxns = list(mdl.staticfxns)
-        staticflows = list(set([n for node in mdl.staticfxns
-                                for n in mdl.graph.neighbors(node)]))
+        staticfxns = [mdl.fxns[sf].get_full_name() for sf in mdl.staticfxns]
+        staticflows = list(set([n for node in staticfxns
+                                for n in self.g.neighbors(node)]))
         staticnodes = staticfxns + staticflows
         static_node_dict = {n: n in staticnodes for n in self.g.nodes()}
         return static_node_dict
 
     def get_dynamicnodes(self, mdl):
         """Get dynamic node information for set_exec_order."""
-        dynamicnodes = list(mdl.dynamicfxns)
+        dynamicnodes = [mdl.fxns[sf].get_full_name() for sf in mdl.dynamicfxns]
         orders = {n: str(i) for i, n in enumerate(dynamicnodes)}
         dynamic_node_dict = {n: n in orders for n in self.g.nodes()}
         return dynamic_node_dict, orders, dynamicnodes
@@ -199,7 +205,7 @@ class FunctionArchitectureGraph(ModelGraph):
             subtext = ''
 
         self.set_node_styles(**node_style_kwargs)
-        self.set_node_labels(title='id', title2=title2, subtext=subtext)
+        self.set_node_labels(title='shortname', title2=title2, subtext=subtext)
 
     def draw_graphviz(self, layout="twopi", overlap='voronoi', **kwargs):
         return super().draw_graphviz(layout=layout, overlap=overlap, **kwargs)
@@ -212,7 +218,7 @@ class FunctionArchitectureFlowGraph(FunctionArchitectureGraph):
     In this Graph, flows are set as nodes and ther connections (via functions) are edges
     """
 
-    def nx_from_obj(self, mdl):
+    def nx_from_obj(self, mdl, **kwargs):
         g = nx.projected_graph(mdl.graph, mdl.flows)
         nodetypes = {fname: f.get_typename() for fname, f in mdl.flows.items()}
         nx.set_node_attributes(g, nodetypes, name='nodetype')
@@ -222,7 +228,7 @@ class FunctionArchitectureFlowGraph(FunctionArchitectureGraph):
         nx.set_edge_attributes(g, {e: "functions" for e in g.edges()}, name='edgetype')
         return g
 
-    def set_nx_states(self, mdl):
+    def set_nx_states(self, mdl, **kwargs):
         self.set_flow_nodestates(mdl)
 
     def set_edge_labels(self, title='edgetype', title2='', subtext='functions',
@@ -291,7 +297,7 @@ class FunctionArchitectureTypeGraph(FunctionArchitectureGraph):
 
     def nx_from_obj(self, mdl, withflows=True, **kwargs):
         """
-        Return graph with type containment relationships of the function/flow classes.
+        Return graph with just the type relationships of the function/flow classes.
 
         Parameters
         ----------
@@ -395,7 +401,7 @@ def set_aa_nx_types(aa, g):
 
 
 # ActionArchitecture
-class ActionArchitectureGraph(ModelGraph):
+class ActionArchitectureGraph(ArchitectureGraph):
     """
     Create a visual representation of an Action Architecture.
 
@@ -405,11 +411,11 @@ class ActionArchitectureGraph(ModelGraph):
         - Actions as (square) Nodes
     """
 
-    def nx_from_obj(self, aa):
+    def nx_from_obj(self, aa, **kwargs):
         """Create Graph for ActionArchitecture."""
         return set_aa_nx_types(aa, nx.compose(aa.flow_graph, aa.action_graph))
 
-    def set_nx_states(self, aa):
+    def set_nx_states(self, aa, **kwargs):
         """
         Attach state and fault information to the underlying graph.
 
@@ -418,12 +424,9 @@ class ActionArchitectureGraph(ModelGraph):
         aa : ActionArchitecture
             Underlying action sequence graph object to get states from
         """
+        ArchitectureGraph.set_nx_states(self, aa, **kwargs)
         for g in self.g.nodes():
             self.g.nodes[g]['active'] = g in aa.active_actions
-        for aname, action in aa.acts.items():
-            set_block_node(self.g, action, aname, time=self.time)
-        for fname, flow in aa.flows.items():
-            set_block_node(self.g, flow, fname, time=self.time)
 
     def set_edge_labels(self, title='edgetype', title2='', subtext='name',
                         **edge_label_styles):
@@ -477,7 +480,7 @@ class ActionArchitectureGraph(ModelGraph):
 class ActionArchitectureActGraph(ActionArchitectureGraph):
     """ActionArchitectureGraph where only the sequence between actions is shown."""
 
-    def nx_from_obj(self, aa):
+    def nx_from_obj(self, aa, **kwargs):
         """Create Graph for ActionArchitecture Actions."""
         return set_aa_nx_types(aa, aa.action_graph.copy())
 
@@ -485,6 +488,6 @@ class ActionArchitectureActGraph(ActionArchitectureGraph):
 class ActionArchitectureFlowGraph(ActionArchitectureGraph):
     """ActionArchitectureGraph that only shows flow relationships between actions."""
 
-    def nx_from_obj(self, aa):
+    def nx_from_obj(self, aa, **kwargs):
         """Create Graph for ActionArchitecture flows."""
         return set_aa_nx_types(aa, aa.flow_graph.copy())
