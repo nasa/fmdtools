@@ -69,7 +69,7 @@ def get_edge_type(baseobj, obj):
     if isinstance(obj, BaseObject):
         if obj.root == baseobj.get_full_name():
             edgetype = 'containment'
-        elif isinstance(obj, MultiFlow) and baseobj.glob == obj.glob:
+        elif isinstance(obj, MultiFlow) and isinstance(baseobj, MultiFlow):
             edgetype = 'connection'
         elif isinstance(obj, Flow):
             edgetype = 'flow'

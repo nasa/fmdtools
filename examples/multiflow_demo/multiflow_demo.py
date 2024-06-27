@@ -96,6 +96,6 @@ if __name__=='__main__':
 
     endres, mdlhist = propagate.nominal(mdl, desired_result='graph.flows.communications')
 
-    endres.graph.flows.communications.set_node_labels(subtext='s')
+    endres.graph.flows.communications.set_node_labels(title='id', subtext='s')
     endres.graph.flows.communications.draw()
     endres.graph.flows.communications.draw_graphviz()
