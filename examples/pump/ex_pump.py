@@ -657,3 +657,5 @@ if __name__ == "__main__":
     script_try_faults()
     script_sample_faults()
     check_model_pickleability(Pump(), try_pick=True)
+    import inspect
+    source = inspect.getsource(Pump)
