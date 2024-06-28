@@ -47,7 +47,7 @@ def get_var(obj, var):
         else:
             return val
     else:
-        if type(obj) == dict:
+        if isinstance(obj, dict):
             if var_s[0] in obj:
                 return get_var(obj[var_s[0]], var_s[1:])
             elif var in obj:
@@ -81,7 +81,7 @@ def set_var(obj, var, val):
     flowdict : dict
         dict of flows indexed by flownames
     """
-    if type(var) == str:
+    if isinstance(var, str):
         var = var.split(".")
     # if not attrgetter(".".join(var))(self):
     #    raise Exception("does not exist: "+str(var))

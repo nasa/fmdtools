@@ -24,7 +24,7 @@ Main user-facing individual graphing classes:
 
 import networkx as nx
 from fmdtools.analyze.history import History
-from fmdtools.analyze.graph.model import set_block_node, remove_base
+from fmdtools.analyze.graph.model import remove_base
 from fmdtools.analyze.graph.model import get_obj_name, add_cond_edge, add_edge
 from fmdtools.analyze.graph.block import BlockGraph
 
@@ -87,7 +87,7 @@ class FunctionArchitectureGraph(ArchitectureGraph):
             Time to execute indicators at. Default is 0.0
         """
         for fxnname, fxn in mdl.fxns.items():
-            set_block_node(self.g, fxn, fxnname, time=self.time)
+            fxn.set_node_attrs(self.g, time=self.time)
 
     def set_flow_nodestates(self, mdl):
         """
@@ -99,7 +99,7 @@ class FunctionArchitectureGraph(ArchitectureGraph):
             Model to represent
         """
         for flowname, flow in mdl.flows.items():
-            set_block_node(self.g, flow, flowname, time=self.time)
+            flow.set_node_attrs(self.g, time=self.time)
 
     def get_multi_edges(self, mdl, subedges):
         """

@@ -18,7 +18,7 @@ import networkx as nx
 import inspect
 
 
-def get_obj_name(obj, role, basename=''):
+def get_obj_name(obj, role='', basename=''):
     """
     Get the name of an object to be graphed.
 
@@ -34,8 +34,7 @@ def get_obj_name(obj, role, basename=''):
     name : str
         Name of the object.
     """
-    from fmdtools.define.object.base import BaseObject
-    if isinstance(obj, BaseObject):
+    if hasattr(obj, 'get_full_name'):
         return obj.get_full_name()
     elif inspect.ismethod(obj):
         return obj.__self__.get_full_name() + '.' + obj.__name__
@@ -46,75 +45,56 @@ def get_obj_name(obj, role, basename=''):
         return basename + "." + role
 
 
-def get_edge_type(baseobj, obj):
+# def get_edge_type(baseobj, basename, obj, objname):
+#     """
+#     Get the edge type connecting two objects.
+
+#     Parameters
+#     ----------
+#     baseobj : object
+#         Object at the base of the edge (e.g., thing contain-ing or aggregate-ing).
+#     obj : object
+#         Object at the end of the edge (e.g., thing being contained).
+
+#     Returns
+#     -------
+#     edgetype : str
+#         edgetype label to give the edge (e.g., containment, flow, aggregation, etc).
+#     """
+#     globname = ".".join(objname.split(".")[:-1])
+#     if basename in objname:
+#         edgetype = "containment"
+#     elif globname == ".".join(basename.split(".")[:-1]):
+        
+#     else:
+#         edgetype = "aggregation"
+#     if inspect.ismethod(obj):
+#         if isinstance(baseobj, dict):
+#             edgetype = "aggregation"
+#         if obj.__self__.name == baseobj.name:
+#             edgetype = 'containment'
+#         else:
+#             edgetype = 'aggregation'
+#     elif isinstance(obj, BaseObject):
+#         if obj.root == baseobj.get_full_name():
+#             edgetype = 'containment'
+#         elif isinstance(obj, MultiFlow) and isinstance(baseobj, MultiFlow):
+#             edgetype = 'connection'
+#         elif isinstance(obj, Flow):
+#             edgetype = 'flow'
+#         else:
+#             edgetype = 'aggregation'
+#     elif isinstance(obj, BaseContainer):
+#         edgetype = 'containment'
+#     else:
+#         raise Exception("Unsupported object: " + str(obj))
+#     return edgetype
+
+
+def add_node(obj, g=None, name='', classname='', nodetype='', get_attrs=False,
+             **kwargs):
     """
-    Get the edge type connecting two objects.
-
-    Parameters
-    ----------
-    baseobj : object
-        Object at the base of the edge (e.g., thing contain-ing or aggregate-ing).
-    obj : object
-        Object at the end of the edge (e.g., thing being contained).
-
-    Returns
-    -------
-    edgetype : str
-        edgetype label to give the edge (e.g., containment, flow, aggregation, etc).
-    """
-    from fmdtools.define.flow.base import Flow
-    from fmdtools.define.flow.multiflow import MultiFlow
-    from fmdtools.define.object.base import BaseObject
-    from fmdtools.define.container.base import BaseContainer
-    if isinstance(obj, BaseObject):
-        if obj.root == baseobj.get_full_name():
-            edgetype = 'containment'
-        elif isinstance(obj, MultiFlow) and isinstance(baseobj, MultiFlow):
-            edgetype = 'connection'
-        elif isinstance(obj, Flow):
-            edgetype = 'flow'
-        else:
-            edgetype = 'aggregation'
-    elif inspect.ismethod(obj):
-        if isinstance(baseobj, dict):
-            edgetype = "aggregation"
-        if obj.__self__.name == baseobj.name:
-            edgetype = 'containment'
-        else:
-            edgetype = 'aggregation'
-    elif isinstance(obj, BaseContainer):
-        edgetype = 'containment'
-    else:
-        raise Exception("Unsupported object: " + str(obj))
-    return edgetype
-
-
-def get_node_type(obj):
-    """
-    Get the type of an object to attach to a node.
-
-    Parameters
-    ----------
-    obj : object
-        Object to represent as a node.
-
-    Returns
-    -------
-    nodetype : str
-        Node type (e.g., Function, State, Component, etc).
-    """
-    from fmdtools.define.object.base import BaseObject
-    from fmdtools.define.container.base import BaseContainer
-    if isinstance(obj, BaseObject) or isinstance(obj, BaseContainer):
-        nodetype = obj.get_typename()
-    else:
-        nodetype = obj.__class__.__name__
-    return nodetype
-
-
-def add_node(g, obj, rolename='base', basename='', get_source=False):
-    """
-    Add a node to a graph.
+    Add a node to a graph for a given object.
 
     Parameters
     ----------
@@ -125,12 +105,20 @@ def add_node(g, obj, rolename='base', basename='', get_source=False):
     rolename : str, optional
         role of the graph in the larger system (if not base). The default is 'base'.
     """
-    classname = obj.__class__.__name__
-    name = get_obj_name(obj, rolename, basename=basename)
-    nodetype = get_node_type(obj)
+    if not g:
+        g = nx.DiGraph()
+    if hasattr(obj, 'get_full_name'):
+        name = obj.get_full_name()
+    if not classname:
+        classname = obj.__class__.__name__
+    if not nodetype:
+        nodetype = obj.__class__.__name__
     g.add_node(name, nodetype=nodetype, classname=classname)
-    if get_source:
-        set_node_code(g, obj, name)
+    if hasattr(obj, 'get_node_attr') and get_attrs is True:
+        g.nodes[name].update(obj.get_node_attr(**kwargs))
+    elif get_attrs is True:
+        g.nodes[name]['obj'] = obj
+    return g
 
 
 def set_node_code(g, obj, name):
@@ -230,10 +218,9 @@ def set_node_states(g, obj, name, time=None):
     time : float, optional
         Time to get the states from. The default is None.
     """
-    from fmdtools.define.object.base import BaseObject
     if name in g.nodes:
-        if isinstance(obj, BaseObject):
-            set_block_node(g, obj, name, time=time)
+        if hasattr(obj, 'set_node_attr'):
+            obj.set_node_attr(time=time)
         elif inspect.ismethod(obj):
             g.nodes[name]['condition'] = obj()
         else:
@@ -281,7 +268,7 @@ def add_cond_edge(g, obj):
         add_edge(g, true_base, true_basename, obj, obj.__name__)
 
 
-def add_edge(g, baseobj, basename, roleobj, rolename):
+def add_edge(g, basename, name, rolename, edgetype):
     """
     Add an edge from a base object to another object.
 
@@ -298,10 +285,10 @@ def add_edge(g, baseobj, basename, roleobj, rolename):
     rolename : str
         Name of the object in the context of the base object.
     """
-    name = get_obj_name(roleobj, rolename, basename=basename)
-    edgetype = get_edge_type(baseobj, roleobj)
     if name not in g.nodes():
         raise Exception("Node not in g.nodes: "+name)
+    if basename not in g.nodes():
+        raise Exception("Node not in g.nodes: "+basename)
     g.add_edge(basename, name, edgetype=edgetype, role=rolename)
 
 
@@ -357,13 +344,6 @@ def add_sub_nodes(g, obj, roles='all', recursive=False, basename='', with_method
     if with_subflow_edges:
         for subflowname, subflowobj in get_sub_multiflows(obj).items():
             add_edge(g, obj, basename, subflowobj, subflowname)
-
-
-def set_block_node(g, block, nodename, time=None):
-    """Set graph attributes for a given block."""
-    roledict = block.get_roles_as_dict('container', with_immutable=False)
-    roledict['indicators'] = block.return_true_indicators(time)
-    g.nodes[nodename].update(roledict)
 
 
 def remove_base(g, basename):

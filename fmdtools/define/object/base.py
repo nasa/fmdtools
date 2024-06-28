@@ -16,10 +16,21 @@ import dill
 import pickle
 import time
 import sys
-import inspect
 import numpy as np
+import networkx as nx
+from inspect import signature, isclass
 from fmdtools.analyze.common import get_sub_include
 from fmdtools.analyze.history import History
+
+example_object_code = """
+from fmdtools.define.container.state import ExampleState
+class ExampleObject(BaseObject):
+    container_s = ExampleState
+    def indicate_high_x(self):
+        return self.s.x > 1.0
+    def indicate_y_over_t(self, t):
+        return self.s.y > t
+"""
 
 
 class BaseObject(object):
@@ -276,9 +287,7 @@ class BaseObject(object):
 
         Examples
         --------
-        >>> from fmdtools.define.container.state import ExampleState
-        >>> class ExampleObject(BaseObject):
-        ...    container_s = ExampleState
+        >>> exec(example_object_code)
         >>> ex = ExampleObject(s={'x': 1.0, 'y': 2.0})
         >>> ex2 = ExampleObject(s={'x': 3.0, 'y': 4.0})
         >>> ex.assign_roles('container', ex2)
@@ -296,7 +305,7 @@ class BaseObject(object):
         roles = getattr(self, roletype+'s')
         for role in roles:
             other_role = getattr(other_obj, role)
-            if bool(inspect.signature(other_role.copy).parameters):
+            if bool(signature(other_role.copy).parameters):
                 other_role_copy = other_role.copy(**kwargs)
             else:
                 other_role_copy = other_role.copy()
@@ -365,8 +374,8 @@ class BaseObject(object):
             List of inticators that return true at time
         """
         return [f for f, ind in self.get_indicators().items()
-                if (bool(inspect.signature(ind).parameters) and ind(time))
-                or (not bool(inspect.signature(ind).parameters) and ind())]
+                if (bool(signature(ind).parameters) and ind(time))
+                or (not bool(signature(ind).parameters) and ind())]
 
     def init_indicator_hist(self, h, timerange, track):
         """
@@ -409,10 +418,16 @@ class BaseObject(object):
             mem = sys.getsizeof(role)
         return mem
 
+    def get_default_roletypes(self, *roletypes):
+        if not roletypes or roletypes[0] == 'all':
+            roletypes = self.roletypes
+        elif roletypes[0] == 'none':
+            roletypes = []
+        return roletypes
+
     def get_roles(self, *roletypes, with_immutable=True, **kwargs):
         """Get all roles."""
-        if not roletypes:
-            roletypes = self.roletypes
+        roletypes = self.get_default_roletypes(*roletypes)
         return [role for roletype in roletypes
                 for role in getattr(self, roletype+'s', [])
                 if with_immutable or role not in self.immutable_roles]
@@ -435,11 +450,12 @@ class BaseObject(object):
     def get_roles_as_dict(self, *roletypes, with_immutable=True, with_prefix=False,
                           flex_prefixes=False, **kwargs):
         """Return all roles and their objects as a dict."""
-        if not roletypes:
-            roletypes = self.roletypes
+        roletypes = self.get_default_roletypes(*roletypes)
         flex_roles = [r+'s' for r in roletypes if r+'s' in self.flexible_roles]
         flex_roles = self.get_flex_role_objs(*flex_roles, flex_prefixes=flex_prefixes)
         non_flex_roletypes = [r for r in roletypes if r+'s' not in self.flexible_roles]
+        if not non_flex_roletypes:
+            non_flex_roletypes = 'none'
 
         roles = self.get_roles(*non_flex_roletypes, with_immutable=with_immutable)
         if not with_prefix:
@@ -507,7 +523,7 @@ class BaseObject(object):
                     attr = getattr(self, at, False)
                     if hasattr(self, at):
                         if hasattr(attr, 'create_hist'):
-                            if 'track' in inspect.signature(attr.create_hist).parameters:
+                            if 'track' in signature(attr.create_hist).parameters:
                                 at_h = attr.create_hist(timerange, at_track)
                             else:
                                 at_h = attr.create_hist(timerange)
@@ -538,6 +554,129 @@ class BaseObject(object):
         return tuple([mut.return_mutables() if hasattr(mut, 'return_mutables')
                       else mut for mut in self.find_mutables()])
 
+    def get_node_attrs(self, roles=['container'], with_immutable=False,
+                       time=0.0, indicators=True, obj=False):
+        """
+        Get attributes from the node to attach to a graph node.
+
+        Parameters
+        ----------
+        g : nx.Graph
+            Graph where the object is a node.
+        roles : list, optional
+            Roles to set as node attributes. The default is ['container'].
+        with_immutable : bool, optional
+            Whether to include immutable roles. The default is False.
+        time : float, optional
+            Time to evaluate indicators at. The default is None.
+        indicators : bool, optional
+            Whether to evaluate indicators. The default is True.
+
+        Examples
+        --------
+        >>> exec(example_object_code)
+        >>> ExampleObject().get_node_attrs()
+        {'s': ExampleState(x=1.0, y=1.0), 'indicators': ['y_over_t']}
+        >>> ExampleObject().get_node_attrs(roles=["none"])
+        {'indicators': ['y_over_t']}
+        """
+        attdict = self.get_roles_as_dict(*roles, with_immutable=with_immutable)
+
+        if indicators:
+            attdict['indicators'] = self.return_true_indicators(time)
+        if obj:
+            attdict['obj'] = self
+        return attdict
+
+    def set_node_attrs(self, g, **kwargs):
+        """
+        Set attributes of the object to a graph.
+
+        Parameters
+        ----------
+        g : nx.Graph
+            Graph where the object is a node.
+        kwargs : kwargs
+            Arguments to get_node_attrs.
+        """
+        attdict = self.get_node_attrs(**kwargs)
+        g.nodes[self.get_full_name()].update(attdict)
+
+    def get_att_roletype(self, attname, raise_if_none=False):
+        """
+        Get the roletype for a given attribute.
+
+        Parameters
+        ----------
+        attname : str
+            Name of a variable in the object.
+
+        Returns
+        -------
+        att_roletype : str
+            Type of role that initiated the variable.
+
+        Examples
+        --------
+        >>> exec(example_object_code)
+        >>> ExampleObject().get_att_roletype("s")
+        'container'
+        """
+        att_roletype = ''
+        for roletype in self.roletypes:
+            if attname in self.get_roles(roletype):
+                att_roletype = roletype
+        if not att_roletype and raise_if_none:
+            raise Exception("Role not found for attribute: "+attname)
+        elif not att_roletype:
+            att_roletype = 'variable'
+        return att_roletype
+
+    def get_role_edgetype(self, attname, raise_if_none=False):
+        """
+        Get the edgetype for a given variable in the object.
+
+        Parameters
+        ----------
+        attname : TYPE
+            DESCRIPTION.
+        raise_if_none : TYPE, optional
+            DESCRIPTION. The default is False.
+
+        Returns
+        -------
+        edgetype : str
+            Edgetype to give the contained object.
+        """
+        roletype = self.get_att_roletype(attname, raise_if_none=raise_if_none)
+        roleobj = getattr(self, attname)
+        if roletype == 'container':
+            return "containment"
+        elif hasattr(roleobj, 'get_full_name'):
+            if getattr(self, attname).base == self.get_full_name():
+                return "containment"
+            else:
+                return "aggregation"
+        elif roletype == 'flow':
+            return "flow"
+        else:
+            raise Exception("Unknown edge type for role: " + roletype)
+
+    def as_graph(self, g=None, role_nodes=["all"], recursive=False, **kwargs):
+        g = add_node(self, g, **kwargs)
+        basename = self.get_full_name()
+        roledict = self.get_roles_as_dict(*role_nodes, flex_prefixes=True)
+        for rolename, roleobj in roledict.items():
+            subname = get_obj_name(roleobj, role=rolename, basename=basename)
+            add_node(roleobj, g, name=subname)
+            edgetype = self.get_role_edgetype(rolename)
+            add_edge(g, basename, subname, rolename, edgetype)
+            if recursive and hasattr(roleobj, 'as_graph'):
+                roleobj.as_graph(g=g, role_nodes=role_nodes, recursive=recursive,
+                                 **kwargs)
+        return g
+
+from fmdtools.analyze.graph.model import add_node, add_edge, get_obj_name
 
 def check_pickleability(obj, verbose=True, try_pick=False, pause=0.2):
     """Check to see which attributes of an object will pickle (and parallelize)."""
@@ -553,7 +692,7 @@ def check_pickleability(obj, verbose=True, try_pick=False, pause=0.2):
         time.sleep(pause)
         try:
             if (isinstance(attribute, BaseContainer)
-                    or (inspect.isclass(attribute)
+                    or (isclass(attribute)
                         and issubclass(attribute, BaseContainer))):
                 if not check_container_pick(attribute):
                     unpickleable.append(name)
@@ -616,7 +755,7 @@ def init_obj(name, objclass=BaseObject, track='default', as_copy=False, **kwargs
     **kwargs :dict
         Other specialized roles to overrride
     """
-    if not inspect.isclass(objclass):
+    if not isclass(objclass):
         if not as_copy:
             fl = objclass
             fl.init_track(track)
@@ -632,5 +771,8 @@ def init_obj(name, objclass=BaseObject, track='default', as_copy=False, **kwargs
 
 
 if __name__ == "__main__":
+    exec(example_object_code)
+    ExampleObject().get_roles_as_dict("none")
     import doctest
     doctest.testmod(verbose=True)
+
