@@ -47,13 +47,13 @@ class Environment(CommsFlow):
     default_track = ('s', 'i', 'c', 'ga')
     all_possible = ('s', 'i', 'c', 'r', 'ga')
 
-    def __init__(self, name='', glob=[], p={}, s={}, r={}, c={}, ga={},
+    def __init__(self, name='', root='', glob=[], p={}, s={}, r={}, c={}, ga={},
                  track='default'):
         if 'p' not in c and self.coords_c.container_p == self.container_p:
             c = {**c, 'p': p}
         if 'p' not in ga and self.arch_ga.container_p == self.container_p:
             ga = {**ga, 'p': p}
-        super().__init__(name=name, glob=glob, p=p, s=s, track=track)
+        super().__init__(name=name, root=root, glob=glob, p=p, s=s, track=track)
         # NOTE: p and s also init here because if not, they are overritten
         # may need to change in the future
         self.init_roletypes('container', "coords", "arch", r=r, p=p, s=s, c=c, ga=ga)

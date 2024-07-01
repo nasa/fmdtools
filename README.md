@@ -54,10 +54,6 @@ graphviz
 # used for: plotting graphs using graphviz
 # license: (CPL 1.0) https://graphviz.org/license/ 
 # install from: https://anaconda.org/anaconda/graphviz
-ffmpeg
-# used for: animations in demo notebook(s)
-# license: (LGPL version) https://www.ffmpeg.org/legal.html
-# install from: https://anaconda.org/conda-forge/ffmpeg
 ```
 
 ### Install fmdtools
