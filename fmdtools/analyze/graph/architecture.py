@@ -24,30 +24,15 @@ Main user-facing individual graphing classes:
 
 import networkx as nx
 from fmdtools.analyze.history import History
-from fmdtools.analyze.graph.model import remove_base
-from fmdtools.analyze.graph.model import get_obj_name, add_cond_edge, add_edge
 from fmdtools.analyze.graph.block import BlockGraph
 
 
 class ArchitectureGraph(BlockGraph):
     """Represent graph of Architecture and its containment of blocks and flows."""
 
-    def nx_from_obj(self, mdl, flow_edges=True, cond_edges=True, get_source=False,
-                    with_root=True):
+    def nx_from_obj(self, mdl, **kwargs):
         """Add graph of architecture."""
-        g = BlockGraph.nx_from_obj(self, mdl, get_source=get_source)
-        # add flexible roles like functions, actions, etc
-        for flex_role in mdl.flexible_roles:
-            role_objs = mdl.get_flex_role_objs(flex_role)
-            for rolename, obj in role_objs.items():
-                objname = get_obj_name(obj, rolename, mdl.get_full_name())
-                add_cond_edge(g, obj)
-                if flow_edges and hasattr(obj, 'flows'):
-                    for locflowname, flowobj in obj.get_roles_as_dict('flow').items():
-                        add_edge(g, obj, objname, flowobj, locflowname)
-        if not with_root:
-            remove_base(g, mdl.name)
-        return g
+        return mdl.create_graph(**kwargs)
 
 
 class FunctionArchitectureGraph(ArchitectureGraph):

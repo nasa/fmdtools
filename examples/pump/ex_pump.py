@@ -653,6 +653,12 @@ def script_sample_faults(track='all', **kwargs):
 if __name__ == "__main__":
     # import doctest
     # doctest.testmod(verbose=True)
+    Pump().get_vars("flows.ee_1")
+    g = Pump().create_graph()
+    from fmdtools.analyze.graph.base import Graph
+    g2 = Graph(g)
+    g2.draw_graphviz()
+    Graph(ImportEE().create_graph()).draw_graphviz()
     script_show_graphs()
     script_try_faults()
     script_sample_faults()

@@ -4,21 +4,16 @@ Created on Wed Jun 26 15:06:57 2024
 
 @author: dhulse
 """
-from fmdtools.analyze.graph.model import BaseModelGraph, add_node, add_sub_nodes
+from fmdtools.analyze.graph.model import BaseModelGraph
 from fmdtools.analyze.graph.model import set_node_states, get_obj_name
-import networkx as nx
 
 
 class BlockGraph(BaseModelGraph):
     """Blockgraph represents the definition of a Block."""
 
-    def nx_from_obj(self, mdl, with_methods=True, get_source=False):
+    def nx_from_obj(self, mdl, with_methods=True, **kwargs):
         """Generate the graph of the block with containers, flows and methods."""
-        g = nx.DiGraph()
-        add_node(g, mdl, get_source=get_source)
-        add_sub_nodes(g, mdl, basename=mdl.get_full_name(), with_methods=with_methods,
-                      get_source=get_source)
-        return g
+        return mdl.create_graph(with_methods=with_methods, **kwargs)
 
     def set_nx_states(self, mdl, **kwargs):
         """Get the states of the block and its attached objects."""

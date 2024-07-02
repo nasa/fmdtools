@@ -37,58 +37,13 @@ def get_obj_name(obj, role='', basename=''):
     if hasattr(obj, 'get_full_name'):
         return obj.get_full_name()
     elif inspect.ismethod(obj):
-        return obj.__self__.get_full_name() + '.' + obj.__name__
+        superobj = obj.__self__
+        return get_obj_name(superobj, basename=basename, role=role) + '.' + obj.__name__
     else:
         if not basename or not role:
             raise Exception("No role (" + role + ") or basename (" + basename +
                             ") for object: " + str(obj))
         return basename + "." + role
-
-
-# def get_edge_type(baseobj, basename, obj, objname):
-#     """
-#     Get the edge type connecting two objects.
-
-#     Parameters
-#     ----------
-#     baseobj : object
-#         Object at the base of the edge (e.g., thing contain-ing or aggregate-ing).
-#     obj : object
-#         Object at the end of the edge (e.g., thing being contained).
-
-#     Returns
-#     -------
-#     edgetype : str
-#         edgetype label to give the edge (e.g., containment, flow, aggregation, etc).
-#     """
-#     globname = ".".join(objname.split(".")[:-1])
-#     if basename in objname:
-#         edgetype = "containment"
-#     elif globname == ".".join(basename.split(".")[:-1]):
-        
-#     else:
-#         edgetype = "aggregation"
-#     if inspect.ismethod(obj):
-#         if isinstance(baseobj, dict):
-#             edgetype = "aggregation"
-#         if obj.__self__.name == baseobj.name:
-#             edgetype = 'containment'
-#         else:
-#             edgetype = 'aggregation'
-#     elif isinstance(obj, BaseObject):
-#         if obj.root == baseobj.get_full_name():
-#             edgetype = 'containment'
-#         elif isinstance(obj, MultiFlow) and isinstance(baseobj, MultiFlow):
-#             edgetype = 'connection'
-#         elif isinstance(obj, Flow):
-#             edgetype = 'flow'
-#         else:
-#             edgetype = 'aggregation'
-#     elif isinstance(obj, BaseContainer):
-#         edgetype = 'containment'
-#     else:
-#         raise Exception("Unsupported object: " + str(obj))
-#     return edgetype
 
 
 def add_node(obj, g=None, name='', classname='', nodetype='', get_attrs=False,
@@ -112,13 +67,40 @@ def add_node(obj, g=None, name='', classname='', nodetype='', get_attrs=False,
     if not classname:
         classname = obj.__class__.__name__
     if not nodetype:
-        nodetype = obj.__class__.__name__
+        if hasattr(obj, 'get_typename'):
+            nodetype = obj.get_typename()
+        else:
+            nodetype = obj.__class__.__name__
     g.add_node(name, nodetype=nodetype, classname=classname)
     if hasattr(obj, 'get_node_attr') and get_attrs is True:
         g.nodes[name].update(obj.get_node_attr(**kwargs))
     elif get_attrs is True:
         g.nodes[name]['obj'] = obj
     return g
+
+
+def add_edge(g, basename, name, rolename, edgetype):
+    """
+    Add an edge from a base object to another object.
+
+    Parameters
+    ----------
+    g : nx.Graph
+        Networkx graph to add to.
+    baseobj : object
+        Object that the object is within.
+    basename : str
+        Name of the base object.
+    roleobj : object
+        Object to add.
+    rolename : str
+        Name of the object in the context of the base object.
+    """
+    if name not in g.nodes():
+        raise Exception("Node not in g.nodes: "+name)
+    if basename not in g.nodes():
+        raise Exception("Node not in g.nodes: "+basename)
+    g.add_edge(basename, name, edgetype=edgetype, role=rolename)
 
 
 def set_node_code(g, obj, name):
@@ -163,6 +145,9 @@ def get_obj_methods(obj):
     methods = {at[0]: at[1] for at in inspect.getmembers(obj)
                if at[0] not in dir(obj.base_type()) and inspect.ismethod(at[1])}
     return methods
+
+
+
 
 
 def get_sub_multiflows(obj):
@@ -244,7 +229,7 @@ def add_role_node(g, baseobj, basename, roleobj, rolename, get_source=False):
     rolename : str
         Name of the object in the context of the base object.
     """
-    add_node(g, roleobj, rolename=rolename, basename=basename, get_source=get_source)
+    add_node(roleobj, g, rolename=rolename, basename=basename, get_source=get_source)
     add_edge(g, baseobj, basename, roleobj, rolename)
     add_cond_edge(g, roleobj)
 
@@ -267,29 +252,6 @@ def add_cond_edge(g, obj):
         true_basename = true_base.get_full_name()
         add_edge(g, true_base, true_basename, obj, obj.__name__)
 
-
-def add_edge(g, basename, name, rolename, edgetype):
-    """
-    Add an edge from a base object to another object.
-
-    Parameters
-    ----------
-    g : nx.Graph
-        Networkx graph to add to.
-    baseobj : object
-        Object that the object is within.
-    basename : str
-        Name of the base object.
-    roleobj : object
-        Object to add.
-    rolename : str
-        Name of the object in the context of the base object.
-    """
-    if name not in g.nodes():
-        raise Exception("Node not in g.nodes: "+name)
-    if basename not in g.nodes():
-        raise Exception("Node not in g.nodes: "+basename)
-    g.add_edge(basename, name, edgetype=edgetype, role=rolename)
 
 
 def connect_roles(g, obj, roles_to_connect=[], basename=''):
@@ -544,7 +506,7 @@ class ModelGraph(BaseModelGraph):
         """Recursively add nodes from the top level of the model graph."""
         g = nx.DiGraph()
         name = get_obj_name(mdl, '')
-        add_node(g, mdl, rolename=name, get_source=get_source)
+        add_node(mdl, g, rolename=name, get_source=get_source)
         add_sub_nodes(g, mdl, recursive=True, basename=name, with_methods=with_methods,
                       get_source=get_source)
         return g
