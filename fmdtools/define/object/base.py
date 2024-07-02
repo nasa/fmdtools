@@ -17,10 +17,11 @@ import pickle
 import time
 import sys
 import numpy as np
-import networkx as nx
 from inspect import signature, isclass
 from fmdtools.analyze.common import get_sub_include
 from fmdtools.analyze.history import History
+from fmdtools.analyze.graph.model import add_node, add_edge, get_obj_name
+from fmdtools.analyze.graph.model import remove_base, get_obj_methods
 
 example_object_code = """
 from fmdtools.define.container.state import ExampleState
@@ -649,11 +650,11 @@ class BaseObject(object):
             Edgetype to give the contained object.
         """
         roletype = self.get_att_roletype(attname, raise_if_none=raise_if_none)
-        roleobj = getattr(self, attname)
+        roleobj = self.get_vars(attname)
         if roletype == 'container':
             return "containment"
         elif hasattr(roleobj, 'get_full_name'):
-            if getattr(self, attname).base == self.get_full_name():
+            if self.get_full_name() in roleobj.root:
                 return "containment"
             else:
                 return "aggregation"
@@ -662,21 +663,87 @@ class BaseObject(object):
         else:
             raise Exception("Unknown edge type for role: " + roletype)
 
-    def as_graph(self, g=None, role_nodes=["all"], recursive=False, **kwargs):
-        g = add_node(self, g, **kwargs)
-        basename = self.get_full_name()
-        roledict = self.get_roles_as_dict(*role_nodes, flex_prefixes=True)
-        for rolename, roleobj in roledict.items():
-            subname = get_obj_name(roleobj, role=rolename, basename=basename)
-            add_node(roleobj, g, name=subname)
-            edgetype = self.get_role_edgetype(rolename)
-            add_edge(g, basename, subname, rolename, edgetype)
-            if recursive and hasattr(roleobj, 'as_graph'):
-                roleobj.as_graph(g=g, role_nodes=role_nodes, recursive=recursive,
-                                 **kwargs)
+    def _prep_graph(self, g=None, name='', **kwargs):
+        g = add_node(self, g=g, **kwargs)
+        if not name:
+            name = self.get_full_name()
+        return g, name
+
+    def create_graph(self, g=None, name='', with_methods=True, with_root=True,
+                     **kwargs):
+        """
+        Create a networkx graph view of the Block.
+
+        Parameters
+        ----------
+        g : nx.Graph
+            Existing networkx graph (if any). Default is None.
+        name : str
+            Name of the node. Default is '', which uses the get_full_name().
+        with_methods : bool
+            Whether to include methods. Default is True.
+        **kwargs : kwargs
+            Keyword arguments to create_role_subgraph.
+
+        Returns
+        -------
+        g : nx.Graph
+            Networkx graph.
+        """
+        g, name = self._prep_graph(g=g, name=name, **kwargs)
+        self.create_role_subgraph(g=g, name=name, **kwargs)
+        if with_methods:
+            self.create_method_subgraph(g=g, name=name, **kwargs)
+        if not with_root:
+            remove_base(g, name)
         return g
 
-from fmdtools.analyze.graph.model import add_node, add_edge, get_obj_name
+    def create_method_subgraph(self, g=None, name='', **kwargs):
+        """Create networkx graph of the Block and its methods."""
+        g, name = self._prep_graph(g=g, name=name, **kwargs)
+        for methodname, methodobj in get_obj_methods(self).items():
+            mname = get_obj_name(methodobj)
+            add_node(methodobj, g=g, name=mname,
+                     classname=methodname, nodetype="method")
+            add_edge(g, name, mname, methodname, "containment")
+        return g
+
+    def create_role_subgraph(self, g=None, name='', role_nodes=["all"], recursive=False,
+                             **kwargs):
+        """
+        Create a networkx graph view of the Block and its roles.
+
+        Parameters
+        ----------
+        g : nx.Graph
+            Existing networkx graph (if any). Default is None.
+        name : str
+            Name of the node. Default is '', which uses the get_full_name().
+        role_nodes : list, optional
+            Roletypes to include in the subgraph. The default is ["all"].
+        recursive : bool, optional
+            Whether to add nodes to the subgraph recursively from contained objects.
+            The default is False.
+        **kwargs : kwargs
+            kwargs to add_node
+
+        Returns
+        -------
+        g : nx.Graph
+            Networkx graph.
+        """
+        g, name = self._prep_graph(g=g, name=name, **kwargs)
+        roledict = self.get_roles_as_dict(*role_nodes, flex_prefixes=True)
+        for rolename, roleobj in roledict.items():
+            subname = get_obj_name(roleobj, role=rolename, basename=name)
+            add_node(roleobj, g, name=subname)
+            edgetype = self.get_role_edgetype(rolename)
+            add_edge(g, name, subname, rolename, edgetype)
+            if recursive and hasattr(roleobj, 'as_graph'):
+                roleobj.as_graph(g=g, role_nodes=role_nodes, recursive=recursive,
+                                 name=subname, **kwargs)
+        return g
+
 
 def check_pickleability(obj, verbose=True, try_pick=False, pause=0.2):
     """Check to see which attributes of an object will pickle (and parallelize)."""

@@ -44,7 +44,7 @@ class MultiFlowGraph(ModelGraph):
                     roles_to_connect=['locals'], **kwargs):
         g = nx.DiGraph()
         name = get_obj_name(flow, '')
-        add_node(g, flow, rolename=name)
+        add_node(flow, g, rolename=name)
         add_sub_nodes(g, flow, roles=roles, recursive=True, basename=name,
                       roles_to_connect=roles_to_connect, **kwargs)
         if not include_glob:
@@ -99,9 +99,9 @@ class CommsFlowGraph(MultiFlowGraph):
                     out_port = getattr(out_flow, portname)
                 else:
                     out_port = out_flow
-                out_name = get_obj_name(out_flow, portname, basename=int_flow.name)
+                out_name = get_obj_name(out_flow, "out", basename=int_flow.name)
                 pname = portobj.get_full_name()
-                add_edge(g, portobj, pname, out_port, out_name)
+                add_edge(g, pname, out_name, portname, "connection")
             # add external ports going in
             for f2 in flow.fxns:
                 f2_out = getattr(flow, f2+"_out")
@@ -116,7 +116,7 @@ class CommsFlowGraph(MultiFlowGraph):
                     in_port = int_flow
                 in_name = get_obj_name(in_port, in_port.name, basename=int_flow.root)
                 out_name = get_obj_name(out_port, out_port.name, basename=int_flow.root)
-                add_edge(g, in_port, in_name, out_port, out_name)
+                add_edge(g, in_name, out_name, "in", "connection")
         if not include_glob:
             remove_base(g, flow.get_full_name())
         return g

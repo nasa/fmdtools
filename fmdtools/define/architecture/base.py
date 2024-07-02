@@ -5,6 +5,7 @@ from fmdtools.define.flow.base import Flow
 from fmdtools.define.block.base import Simulable
 from fmdtools.define.object.base import init_obj
 from fmdtools.analyze.common import get_sub_include
+from fmdtools.analyze.graph.model import add_cond_edge, add_edge, get_obj_name
 import time
 
 
@@ -331,6 +332,40 @@ class Architecture(Simulable):
 
     def get_all_possible_track(self):
         return super().get_all_possible_track() + self.flexible_roles
+
+    def add_graph_edges(self, g, cond_edges=True, flow_edges=True):
+        """Add edges connecting the objects (conditions and flows) to a graph."""
+        for flex_role in self.flexible_roles:
+            role_objs = self.get_flex_role_objs(flex_role)
+            for rolename, obj in role_objs.items():
+                objname = get_obj_name(obj, rolename, self.get_full_name())
+                add_cond_edge(g, obj)
+                if flow_edges and hasattr(obj, 'flows'):
+                    for locflowname, flowobj in obj.get_roles_as_dict('flow').items():
+                        fname = flowobj.get_full_name()
+                        add_edge(g, objname, fname, locflowname, 'flow')
+
+    def create_role_subgraph(self, cond_edges=True, flow_edges=True, **kwargs):
+        """
+        Create a networkx graph view of the Block and its roles.
+
+        Parameters
+        ----------
+        cond_edges : bool, optional
+            Whether to include condition edges. The default is True.
+        flow_edges : bool, optional
+            Whether to include flow edges. The default is True.
+        **kwargs : kwargs
+            kwargs to Block.create_role_subgraph.
+
+        Returns
+        -------
+        g : nx.Graph
+            Networkx graph.
+        """
+        g = BaseObject.create_role_subgraph(self, **kwargs)
+        self.add_graph_edges(g, cond_edges=cond_edges, flow_edges=flow_edges)
+        return g
 
 
 def check_model_pickleability(model, try_pick=False):

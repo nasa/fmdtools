@@ -336,7 +336,10 @@ class Simulable(BaseObject):
                 var = var[1:]
             else:
                 f = self
-            variable_values[i] = get_var(f, var)
+            if var:
+                variable_values[i] = get_var(f, var)
+            else:
+                variable_values[i] = f
         if len(variable_values) == 1 and trunc_tuple:
             return variable_values[0]
         else:
