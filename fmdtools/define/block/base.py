@@ -11,7 +11,7 @@ import copy
 import warnings
 import numpy as np
 
-from fmdtools.define.base import set_var, get_var
+from fmdtools.define.base import set_var
 from fmdtools.define.object.base import BaseObject
 from fmdtools.define.container.parameter import Parameter
 from fmdtools.define.container.time import Time
@@ -300,50 +300,6 @@ class Simulable(BaseObject):
         else:
             fxns = {self.name: self}
         return fxns
-
-    def get_vars(self, *variables, trunc_tuple=True):
-        """
-        Get variable values in the simulable.
-
-        Parameters
-        ----------
-        *variables : list/string
-            Variables to get from the model. Can be specified as a list
-            ['fxnname2', 'comp1', 'att2'], or a str 'fxnname.comp1.att2'
-
-        Returns
-        -------
-        variable_values: tuple
-            Values of variables. Passes (non-tuple) single value if only one variable.
-        """
-        if isinstance(variables, str):
-            variables = [variables]
-        variable_values = [None]*len(variables)
-        for i, var in enumerate(variables):
-            if isinstance(var, str):
-                var = var.split(".")
-            if var[0] in ['functions', 'fxns']:
-                f = self.get_fxns()[var[1]]
-                var = var[2:]
-            elif var[0] == 'flows':
-                f = self.get_flows()[var[1]]
-                var = var[2:]
-            elif var[0] in self.get_fxns():
-                f = self.get_fxns()[var[0]]
-                var = var[1:]
-            elif var[0] in self.get_flows():
-                f = self.get_flows()[var[0]]
-                var = var[1:]
-            else:
-                f = self
-            if var:
-                variable_values[i] = get_var(f, var)
-            else:
-                variable_values[i] = f
-        if len(variable_values) == 1 and trunc_tuple:
-            return variable_values[0]
-        else:
-            return tuple(variable_values)
 
     def get_scen_rate(self, fxnname, faultmode, time, phasemap={}, weight=1.0):
         """

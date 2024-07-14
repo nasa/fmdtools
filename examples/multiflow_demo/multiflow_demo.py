@@ -94,8 +94,13 @@ if __name__=='__main__':
     mdl.flows["communications"].mover_1.send("mover_2")
     from fmdtools.sim import propagate
 
-    endres, mdlhist = propagate.nominal(mdl, desired_result='graph.flows.communications')
+    g = mdl.flows['communications'].create_graph(recursive=True)
+    from fmdtools.analyze.graph.base import Graph
+    g2 = Graph(g)
+    g2.draw()
 
-    endres.graph.flows.communications.set_node_labels(title='id', subtext='s')
-    endres.graph.flows.communications.draw()
-    endres.graph.flows.communications.draw_graphviz()
+    # endres, mdlhist = propagate.nominal(mdl, desired_result='graph.flows.communications')
+
+    # endres.graph.flows.communications.set_node_labels(title='id', subtext='s')
+    # endres.graph.flows.communications.draw()
+    # endres.graph.flows.communications.draw_graphviz()

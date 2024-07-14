@@ -18,6 +18,7 @@ import time
 import sys
 import numpy as np
 from inspect import signature, isclass
+from fmdtools.define.base import get_var
 from fmdtools.analyze.common import get_sub_include
 from fmdtools.analyze.history import History
 from fmdtools.analyze.graph.model import add_node, add_edge, get_obj_name
@@ -480,6 +481,44 @@ class BaseObject(object):
                     if with_immutable or role not in self.immutable_roles]
         return roles + roledict_roles + rolevars
 
+    def get_vars(self, *variables, trunc_tuple=True):
+        """
+        Get variable values in the object.
+
+        Parameters
+        ----------
+        *variables : list/string
+            Variables to get from the model. Can be specified as a list
+            ['fxnname2', 'comp1', 'att2'], or a str 'fxnname.comp1.att2'
+
+        Returns
+        -------
+        variable_values: tuple
+            Values of variables. Passes (non-tuple) single value if only one variable.
+        """
+        if isinstance(variables, str):
+            variables = [variables]
+        variable_values = [None]*len(variables)
+        for i, var in enumerate(variables):
+            if isinstance(var, str):
+                var = var.split(".")
+            if var[0] in self.roletypes + [rt+"s" for rt in self.roletypes]:
+                f = self.get_roles_as_dict()[var[1]]
+                var = var[2:]
+            elif var[0] in self.get_roles():
+                f = self.get_roles_as_dict()[var[0]]
+                var = var[1:]
+            else:
+                f = self
+            if var:
+                variable_values[i] = get_var(f, var)
+            else:
+                variable_values[i] = f
+        if len(variable_values) == 1 and trunc_tuple:
+            return variable_values[0]
+        else:
+            return tuple(variable_values)
+
     def get_memory(self):
         """
         Get the memory taken up by the object and its containing roles.
@@ -739,9 +778,9 @@ class BaseObject(object):
             add_node(roleobj, g, name=subname)
             edgetype = self.get_role_edgetype(rolename)
             add_edge(g, name, subname, rolename, edgetype)
-            if recursive and hasattr(roleobj, 'as_graph'):
-                roleobj.as_graph(g=g, role_nodes=role_nodes, recursive=recursive,
-                                 name=subname, **kwargs)
+            if recursive and hasattr(roleobj, 'create_graph'):
+                roleobj.create_graph(g=g, role_nodes=role_nodes, recursive=recursive,
+                                     name=subname, **kwargs)
         return g
 
 

@@ -21,7 +21,7 @@ class CommsFlow(MultiFlow):
         - clear_inbox, for clearing the inbox to enable more messages to be received
     """
 
-    slots = ['__dict__']
+    slots = ['fxns', '__dict__']
     check_dict_creation = False
 
     def __init__(self, name='', glob=[], track=['s'], **kwargs):

@@ -19,12 +19,12 @@ class MultiFlow(Flow):
     as well as a single global view (which may represent the actual value)
     """
 
-    slots = ['__dict__']
+    slots = ['locals', '__dict__']
     check_dict_creation = False
     flexible_roles = ['locals']
+    roletypes = ['container', 'local']
 
     def __init__(self, name='', root='', glob=[], track=['s'], **kwargs):
-        self.locals = []
         if not glob:
             self.glob = self
         else:
@@ -32,6 +32,7 @@ class MultiFlow(Flow):
             if not root:
                 root = self.glob.get_full_name()
         super().__init__(name=name, root=root, track=track, **kwargs)
+        self.locals = []
 
     def __repr__(self):
         rep_str = Flow.__repr__(self)
