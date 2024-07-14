@@ -3,6 +3,7 @@
 import copy
 from fmdtools.define.flow.base import Flow
 from fmdtools.define.flow.multiflow import MultiFlow
+from fmdtools.analyze.graph.model import add_edge, get_obj_name
 
 
 class CommsFlow(MultiFlow):
@@ -202,3 +203,40 @@ class CommsFlow(MultiFlow):
         for f in self.fxns.values():
             mutes.append([f['in'], f['received']])
         return mutes
+
+    def add_subgraph_edges(self, g, with_flowedges=True, **kwargs):
+        """Add subgraph edges that account for the CommsFlow's comms structure."""
+        super().add_subgraph_edges(g, **kwargs)
+        if with_flowedges:
+            self.add_subgraph_flowedges(g, **kwargs)
+
+    def add_subgraph_flowedges(self, g, **kwargs):
+        """Add in/out edges between connected commsflows in the graph."""
+        for f in self.fxns:
+            int_flow, out_flow = self.get_vars(f, f+"_out")
+            int_ports = int_flow.locals
+            out_ports = out_flow.locals
+            # add internal ports going out
+            for portname, portobj in int_flow.get_roles_as_dict('locals').items():
+                if portname in out_ports:
+                    out_port = out_flow.get_vars(portname)
+                else:
+                    out_port = out_flow
+                out_name = out_port.get_full_name()
+                pname = portobj.get_full_name()
+                add_edge(g, pname, out_name, portname, "connection")
+            # add external ports going in
+            for f2 in self.fxns:
+                f2_out = self.get_vars(f2+"_out")
+                f2_out_ports = f2_out.locals
+                if int_flow.name in f2_out_ports:
+                    out_port = f2_out.get_vars(int_flow.name)
+                else:
+                    out_port = f2_out
+                if f2 in int_ports:
+                    in_port = int_flow.get_vars(f2)
+                else:
+                    in_port = int_flow
+                in_name = get_obj_name(in_port, in_port.name, basename=int_flow.root)
+                out_name = get_obj_name(out_port, out_port.name, basename=int_flow.root)
+                add_edge(g, in_name, out_name, "in", "connection")

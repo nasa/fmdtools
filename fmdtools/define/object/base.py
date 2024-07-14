@@ -18,11 +18,11 @@ import time
 import sys
 import numpy as np
 from inspect import signature, isclass
-from fmdtools.define.base import get_var
+from fmdtools.define.base import get_var, get_methods
 from fmdtools.analyze.common import get_sub_include
 from fmdtools.analyze.history import History
 from fmdtools.analyze.graph.model import add_node, add_edge, get_obj_name
-from fmdtools.analyze.graph.model import remove_base, get_obj_methods
+from fmdtools.analyze.graph.model import remove_base
 
 example_object_code = """
 from fmdtools.define.container.state import ExampleState
@@ -699,6 +699,8 @@ class BaseObject(object):
                 return "aggregation"
         elif roletype == 'flow':
             return "flow"
+        elif roletype == 'variable':
+            return "containment"
         else:
             raise Exception("Unknown edge type for role: " + roletype)
 
@@ -740,12 +742,29 @@ class BaseObject(object):
     def create_method_subgraph(self, g=None, name='', **kwargs):
         """Create networkx graph of the Block and its methods."""
         g, name = self._prep_graph(g=g, name=name, **kwargs)
-        for methodname, methodobj in get_obj_methods(self).items():
+        for methodname, methodobj in get_methods(self).items():
             mname = get_obj_name(methodobj)
             add_node(methodobj, g=g, name=mname,
-                     classname=methodname, nodetype="method")
+                     classname=methodname, nodetype="method", **kwargs)
             add_edge(g, name, mname, methodname, "containment")
         return g
+
+    def add_subgraph_edges(self, g, roles_to_connect=[], **kwargs):
+        """Add non-role edges to the graph for the roles."""
+        if roles_to_connect:
+            self.create_role_con_edges(g, roles_to_connect=roles_to_connect, **kwargs)
+
+    def create_role_con_edges(self, g, roles_to_connect=[], role="connection",
+                              edgetype="connection"):
+        """Connect roles at the same level of hierarchy."""
+        basename = self.get_full_name()
+        roledict = self.get_roles_as_dict(*roles_to_connect)
+        for rolename, roleobj in roledict.items():
+            name = get_obj_name(roleobj, rolename, basename)
+            for rolename2, roleobj2 in roledict.items():
+                name2 = get_obj_name(roleobj2, rolename2, basename)
+                if not ((name2, name) in [*g.edges]) and name2 != name:
+                    add_edge(g, name, name2, role, edgetype)
 
     def create_role_subgraph(self, g=None, name='', role_nodes=["all"], recursive=False,
                              **kwargs):
@@ -775,12 +794,13 @@ class BaseObject(object):
         roledict = self.get_roles_as_dict(*role_nodes, flex_prefixes=True)
         for rolename, roleobj in roledict.items():
             subname = get_obj_name(roleobj, role=rolename, basename=name)
-            add_node(roleobj, g, name=subname)
+            add_node(roleobj, g, name=subname, **kwargs)
             edgetype = self.get_role_edgetype(rolename)
             add_edge(g, name, subname, rolename, edgetype)
             if recursive and hasattr(roleobj, 'create_graph'):
                 roleobj.create_graph(g=g, role_nodes=role_nodes, recursive=recursive,
                                      name=subname, **kwargs)
+        self.add_subgraph_edges(g, **kwargs)
         return g
 
 
@@ -842,7 +862,7 @@ def init_obj(name, objclass=BaseObject, track='default', as_copy=False, **kwargs
     name : str
         Name to give the flow object
     objclass: class or object
-        Class inheriting from BaseObject, or already instantiated object. 
+        Class inheriting from BaseObject, or already instantiated object.
         Default is BaseObject.
     track: str/dict
         Which model states to track over time (overwrites mdl.default_track).

@@ -12,9 +12,7 @@ Private Methods:
 - :func:`add_g_nested`: Helper function for MultiFlow.create_multigraph to construct the
   containment tree.
 """
-import networkx as nx
-from fmdtools.analyze.graph.model import ModelGraph, remove_base
-from fmdtools.analyze.graph.model import add_node, add_sub_nodes, get_obj_name
+from fmdtools.analyze.graph.model import ModelGraph
 
 
 class MultiFlowGraph(ModelGraph):
@@ -32,7 +30,7 @@ class MultiFlowGraph(ModelGraph):
     connect_ports_only : Bool
         Whether to only connect port flows. Default is False.
     **kwargs : kwargs
-        Keyword arguments to add_sub_nodes.
+        Keyword arguments to MultiFlow.create_graph.
 
     Returns
     -------
@@ -40,15 +38,10 @@ class MultiFlowGraph(ModelGraph):
         Networkx graph corresponding to the MultiFlow
     """
 
-    def nx_from_obj(self, flow, include_glob=False, roles=['locals'],
-                    roles_to_connect=['locals'], **kwargs):
-        g = nx.DiGraph()
-        name = get_obj_name(flow, '')
-        add_node(flow, g, rolename=name)
-        add_sub_nodes(g, flow, roles=roles, recursive=True, basename=name,
-                      roles_to_connect=roles_to_connect, **kwargs)
-        if not include_glob:
-            remove_base(g, name)
+    def nx_from_obj(self, flow, role_nodes=['local'], recursive=True, with_root=False,
+                    **kwargs):
+        g = flow.create_graph(role_nodes=role_nodes, recursive=recursive,
+                              with_root=with_root, **kwargs)
         return g
 
     def set_resgraph(self, other=False):
@@ -71,7 +64,6 @@ class MultiFlowGraph(ModelGraph):
     def draw_graphviz(self, layout="neato", overlap='false', **kwargs):
         return super().draw_graphviz(layout=layout, overlap=overlap, **kwargs)
 
-from fmdtools.analyze.graph.model import add_edge
 
 class CommsFlowGraph(MultiFlowGraph):
     """
@@ -83,40 +75,6 @@ class CommsFlowGraph(MultiFlowGraph):
         Graph of the commsflow connections.
     """
 
-    def nx_from_obj(self, flow, include_glob=False,
-                    roles=['locals'], roles_to_connect=[], **kwargs):
-        g = MultiFlowGraph.nx_from_obj(self, flow, roles=roles, include_glob=True,
-                                       roles_to_connect=roles_to_connect,
-                                       **kwargs)
-        for f in flow.fxns:
-            int_flow = getattr(flow, f)
-            int_ports = int_flow.locals
-            out_flow = getattr(flow, f+"_out")
-            out_ports = out_flow.locals
-            # add internal ports going out
-            for portname, portobj in int_flow.get_roles_as_dict('locals').items():
-                if portname in out_ports:
-                    out_port = getattr(out_flow, portname)
-                else:
-                    out_port = out_flow
-                out_name = get_obj_name(out_flow, "out", basename=int_flow.name)
-                pname = portobj.get_full_name()
-                add_edge(g, pname, out_name, portname, "connection")
-            # add external ports going in
-            for f2 in flow.fxns:
-                f2_out = getattr(flow, f2+"_out")
-                f2_out_ports = f2_out.locals
-                if int_flow.name in f2_out_ports:
-                    out_port = getattr(f2_out, int_flow.name)
-                else:
-                    out_port = f2_out
-                if f2 in int_ports:
-                    in_port = getattr(int_flow, f2)
-                else:
-                    in_port = int_flow
-                in_name = get_obj_name(in_port, in_port.name, basename=int_flow.root)
-                out_name = get_obj_name(out_port, out_port.name, basename=int_flow.root)
-                add_edge(g, in_name, out_name, "in", "connection")
-        if not include_glob:
-            remove_base(g, flow.get_full_name())
+    def nx_from_obj(self, flow, role_nodes=['local'], recursive=True, **kwargs):
+        g = flow.create_graph(role_nodes=role_nodes, recursive=recursive, **kwargs)
         return g
