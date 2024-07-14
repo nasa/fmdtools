@@ -14,6 +14,7 @@ from collections.abc import Iterable
 from recordclass import dataobject
 from ordered_set import OrderedSet
 import numpy as np
+import inspect
 
 
 def get_var(obj, var):
@@ -202,3 +203,48 @@ def t_key(time):
 def round_float(number, res=1.0, min_r=7):
     """Round floats to a given resolution (avoiding fp errors)."""
     return np.round(round(number/res)*res, 7)
+
+
+def get_code_attrs(obj):
+    """
+    Get a dict of code attributes for a given object or method.
+
+    Must be run from file other than where the code was originally written.
+
+    Parameters
+    ----------
+    obj : Object/method
+        Class to get code from.
+
+    Returns
+    -------
+    code_attrs : dict
+        Dict of "source", "code", and "docs" code attributes.
+    """
+    docs = inspect.getdoc(obj)
+    if inspect.ismethod(obj):
+        source = inspect.getsource(obj)
+        code = source.split("'''")[-1].split('"""')[-1]
+        code = "\n".join(code.split("\n        "))
+        code = remove_para(code)
+    else:
+        source = inspect.getsource(obj.__class__)
+        if hasattr(obj, 'get_code'):
+            code = obj.get_code(source)
+        else:
+            code = ""
+    return {'source': source, 'code': code, 'docs': docs}
+
+
+def remove_para(source):
+    """Remove paragraph newlines in a string (e.g., of code)."""
+    if source.startswith("\n"):
+        return remove_para(source[1:])
+    else:
+        return source
+
+def get_methods(obj):
+    """Get methods from the given object."""
+    methods = {at[0]: at[1] for at in inspect.getmembers(obj)
+               if at[0] not in dir(obj.base_type()) and inspect.ismethod(at[1])}
+    return methods

@@ -3,7 +3,7 @@
 from recordclass import dataobject, astuple, asdict
 import copy
 import pickle
-from fmdtools.define.base import set_arg_as_type
+from fmdtools.define.base import set_arg_as_type, remove_para
 from fmdtools.analyze.common import get_sub_include
 from fmdtools.analyze.history import History
 import numpy as np
@@ -396,6 +396,16 @@ class BaseContainer(dataobject, mapping=True, iterable=True, copy_default=True):
         """Return fields as a dictionary."""
         return asdict(self)
 
+    def get_code(self, source):
+        """Get the code defining the Container."""
+        if self.__class__ == self.base_type():
+            code = ''
+        elif '\n\n    def' in source:
+            code = source.split('\n\n    def')[0].split("'''")[-1].split('"""')[-1]
+        else:
+            code = source.split("'''")[-1].split('"""')[-1]
+        code = "\n".join(code.split("\n    "))
+        return remove_para(code)
 
 def check_container_pick(container, *args, **kwargs):
     """

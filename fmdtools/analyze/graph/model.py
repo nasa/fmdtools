@@ -14,6 +14,7 @@ from fmdtools.analyze.result import Result
 from fmdtools.analyze.history import History
 from fmdtools.analyze.common import prep_animation_title
 from fmdtools.analyze.common import clear_prev_figure
+from fmdtools.define.base import get_code_attrs
 import networkx as nx
 import inspect
 
@@ -47,7 +48,7 @@ def get_obj_name(obj, role='', basename=''):
 
 
 def add_node(obj, g=None, name='', classname='', nodetype='', get_attrs=False,
-             **kwargs):
+             get_source=False, **kwargs):
     """
     Add a node to a graph for a given object.
 
@@ -76,6 +77,8 @@ def add_node(obj, g=None, name='', classname='', nodetype='', get_attrs=False,
         g.nodes[name].update(obj.get_node_attr(**kwargs))
     elif get_attrs is True:
         g.nodes[name]['obj'] = obj
+    if get_source:
+        g.nodes[name].update(get_code_attrs(obj))
     return g
 
 
@@ -101,64 +104,6 @@ def add_edge(g, basename, name, rolename, edgetype):
     if basename not in g.nodes():
         raise Exception("Node not in g.nodes: "+basename)
     g.add_edge(basename, name, edgetype=edgetype, role=rolename)
-
-
-def set_node_code(g, obj, name):
-    """Set code attributes to graph nodes (docs, source, code) for given objects."""
-    from fmdtools.define.object.base import BaseObject
-    from fmdtools.define.container.base import BaseContainer
-    docs = ''
-    source = ''
-    code = ''
-    if isinstance(obj, BaseObject) or isinstance(obj, BaseContainer):
-        docs = inspect.getdoc(obj)
-        source = inspect.getsource(obj.__class__)
-        if isinstance(obj, BaseContainer):
-            if obj.__class__ == obj.base_type():
-                code = ''
-            elif '\n\n    def' in source:
-                code = source.split('\n\n    def')[0].split("'''")[-1].split('"""')[-1]
-            else:
-                code = source.split("'''")[-1].split('"""')[-1]
-            code = "\n".join(code.split("\n    "))
-    elif inspect.ismethod(obj):
-        docs = inspect.getdoc(obj)
-        source = inspect.getsource(obj)
-        code = source.split("'''")[-1].split('"""')[-1]
-        code = "\n".join(code.split("\n        "))
-    code = remove_para(code)
-    g.nodes[name]['docs'] = docs
-    g.nodes[name]['source'] = source
-    g.nodes[name]['code'] = code
-
-
-def remove_para(source):
-    """Remove paragraph newlines in a string (e.g., of code)."""
-    if source.startswith("\n"):
-        return remove_para(source[1:])
-    else:
-        return source
-
-
-def get_obj_methods(obj):
-    """Get methods from the given object."""
-    methods = {at[0]: at[1] for at in inspect.getmembers(obj)
-               if at[0] not in dir(obj.base_type()) and inspect.ismethod(at[1])}
-    return methods
-
-
-
-
-
-def get_sub_multiflows(obj):
-    """Return a dict of multiflows set as object variables."""
-    from fmdtools.define.flow.base import Flow
-    if hasattr(obj, 'flows'):
-        return {k: getattr(obj, k) for k in dir(obj)
-                if isinstance(getattr(obj, k, ''), Flow)
-                and k not in obj.flows}
-    else:
-        return {}
 
 
 def set_sub_nodes(g, obj, time=None, recursive=False, basename=''):
@@ -212,29 +157,7 @@ def set_node_states(g, obj, name, time=None):
             g.nodes[name]['obj'] = obj
 
 
-def add_role_node(g, baseobj, basename, roleobj, rolename, get_source=False):
-    """
-    Attach the sub-object of a base object.
-
-    Parameters
-    ----------
-    g : nx.Graph
-        Networkx graph to add to.
-    baseobj : object
-        Object that the object is within.
-    basename : str
-        Name of the base object.
-    roleobj : object
-        Object to add.
-    rolename : str
-        Name of the object in the context of the base object.
-    """
-    add_node(roleobj, g, rolename=rolename, basename=basename, get_source=get_source)
-    add_edge(g, baseobj, basename, roleobj, rolename)
-    add_cond_edge(g, roleobj)
-
-
-def add_cond_edge(g, obj):
+def add_meth_edge(g, obj, rolename="action", edgetype="activation"):
     """
     If the object is a method, attaches an edge to the containing object.
 
@@ -250,62 +173,8 @@ def add_cond_edge(g, obj):
     if inspect.ismethod(obj):
         true_base = obj.__self__
         true_basename = true_base.get_full_name()
-        add_edge(g, true_base, true_basename, obj, obj.__name__)
-
-
-
-def connect_roles(g, obj, roles_to_connect=[], basename=''):
-    """Connect roles at the same level of hierarchy."""
-    if roles_to_connect:
-        roledict = obj.get_roles_as_dict(*roles_to_connect)
-        for rolename, roleobj in roledict.items():
-            name = get_obj_name(roleobj, rolename, basename)
-            for rolename2, roleobj2 in roledict.items():
-                name2 = get_obj_name(roleobj2, rolename2, basename)
-                if not ((name2, name) in [*g.edges]) and name2 != name:
-                    add_edge(g, roleobj, name, roleobj2, name2)
-
-
-def add_sub_nodes(g, obj, roles='all', recursive=False, basename='', with_methods=False,
-                  get_source=False, with_subflow_edges=True, roles_to_connect=[],
-                  connect_ports_only=False):
-    """
-    Add the objects contained in the given object to the graph.
-
-    Sub-objects are in the objects roles (e.g. added as container_x, flow_y).
-
-    Parameters
-    ----------
-    g : nx.Graph
-        Networkx graph to add to.
-    obj : object
-        Object to find the objects in.
-    """
-    from fmdtools.define.object.base import BaseObject
-    # determine roles to iterate through
-    if roles == 'all':
-        roledict = obj.get_roles_as_dict(flex_prefixes=True)
-    else:
-        roledict = obj.get_roles_as_dict(*roles, flex_prefixes=True)
-    # add nodes for each role (recursively)
-    for rolename, roleobj in roledict.items():
-        name = get_obj_name(roleobj, rolename, basename)
-        add_role_node(g, obj, basename, roleobj, rolename, get_source=get_source)
-        if recursive and isinstance(roleobj, BaseObject):
-            add_sub_nodes(g, roleobj, recursive=recursive, basename=name, roles=roles,
-                          with_methods=with_methods, get_source=get_source,
-                          roles_to_connect=roles_to_connect)
-    # connect roles at same level of containment (if desired)
-    connect_roles(g, obj, roles_to_connect=roles_to_connect, basename=basename)
-    # attach methods if desired
-    if with_methods:
-        for methodname, methodobj in get_obj_methods(obj).items():
-            name = get_obj_name(methodobj, methodobj, basename=basename)
-            add_role_node(g, obj, basename, methodobj, name, get_source=get_source)
-    # edges from blocks to their subflows
-    if with_subflow_edges:
-        for subflowname, subflowobj in get_sub_multiflows(obj).items():
-            add_edge(g, obj, basename, subflowobj, subflowname)
+        name = get_obj_name(obj, basename=true_basename, role=obj.__name__)
+        add_edge(g, true_basename, name, rolename, edgetype)
 
 
 def remove_base(g, basename):
@@ -336,7 +205,7 @@ class BaseModelGraph(Graph):
         keyword arguments for self.nx_from_obj
     """
 
-    def __init__(self, mdl, get_states=True, get_source=False, time=0.0, **kwargs):
+    def __init__(self, mdl, get_states=True, time=0.0, **kwargs):
         """
         Generate the FunctionArchitectureGraph corresponding to a given Model.
 
@@ -347,15 +216,12 @@ class BaseModelGraph(Graph):
         get_states : bool, optional
             Whether to copy states to the node/edge 'states' property.
             The default is True.
-        get_source : bool, optional
-            Whether to get the source code/objects from the object. The default is
-            False.
         time: float
             Time model is run at (to execute indicators at). Default is 0.0
         **kwargs : kwargs
             (placeholder for kwargs)
         """
-        Graph.__init__(self, self.nx_from_obj(mdl, get_source=get_source, **kwargs))
+        Graph.__init__(self, self.nx_from_obj(mdl, **kwargs))
         if get_states:
             self.time = time
             self.set_nx_states(mdl, **kwargs)
@@ -494,7 +360,7 @@ class BaseModelGraph(Graph):
             degstates = any([g.nodes[node][s] != nomg.nodes[node][s]
                              for s in g.nodes[node]])
             degindicators = (set(g.nodes[node].get('indicators', {}))
-                                 != set(nomg.nodes[node].get('indicators', {})))
+                             != set(nomg.nodes[node].get('indicators', {})))
             g.nodes[node]['degraded'] = degstates or degindicators
             g.nodes[node]['faulty'] = any(g.nodes[node].get('m', {'faults': {}})['faults'])
 
@@ -502,21 +368,15 @@ class BaseModelGraph(Graph):
 class ModelGraph(BaseModelGraph):
     """Represent the entire containment/aggregation hierarchy of a given model."""
 
-    def nx_from_obj(self, mdl, with_methods=False, get_source=False):
+    def nx_from_obj(self, mdl, **kwargs):
         """Recursively add nodes from the top level of the model graph."""
-        g = nx.DiGraph()
-        name = get_obj_name(mdl, '')
-        add_node(mdl, g, rolename=name, get_source=get_source)
-        add_sub_nodes(g, mdl, recursive=True, basename=name, with_methods=with_methods,
-                      get_source=get_source)
-        return g
+        return mdl.create_graph(**kwargs)
 
     def set_nx_states(self, mdl, **kwargs):
         """Recursively set node states from the top level of the model graph."""
         name = get_obj_name(mdl, '')
         set_node_states(self.g, mdl, name, time=self.time)
         set_sub_nodes(self.g, mdl, time=self.time, recursive=True, basename=name)
-
 
 
 def graph_factory(obj, **kwargs):
