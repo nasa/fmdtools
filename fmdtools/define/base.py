@@ -248,3 +248,31 @@ def get_methods(obj):
     methods = {at[0]: at[1] for at in inspect.getmembers(obj)
                if at[0] not in dir(obj.base_type()) and inspect.ismethod(at[1])}
     return methods
+
+
+def get_obj_name(obj, role='', basename=''):
+    """
+    Get the name of an object.
+
+    Parameters
+    ----------
+    obj : object
+        Object to be graphed (BaseObject, BaseContainer, or other).
+    role : str
+        Role the object plays in the larger system. Determines the name of Containers.
+
+    Returns
+    -------
+    name : str
+        Name of the object.
+    """
+    if hasattr(obj, 'get_full_name'):
+        return obj.get_full_name()
+    elif inspect.ismethod(obj):
+        superobj = obj.__self__
+        return get_obj_name(superobj, basename=basename, role=role) + '.' + obj.__name__
+    else:
+        if not basename or not role:
+            raise Exception("No role (" + role + ") or basename (" + basename +
+                            ") for object: " + str(obj))
+        return basename + "." + role

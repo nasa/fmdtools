@@ -18,10 +18,10 @@ import time
 import sys
 import numpy as np
 from inspect import signature, isclass
-from fmdtools.define.base import get_var, get_methods
+from fmdtools.define.base import get_var, get_methods, get_obj_name
 from fmdtools.analyze.common import get_sub_include
 from fmdtools.analyze.history import History
-from fmdtools.analyze.graph.model import add_node, add_edge, get_obj_name
+from fmdtools.analyze.graph.model import add_node, add_edge
 from fmdtools.analyze.graph.model import remove_base
 
 example_object_code = """

@@ -3,9 +3,9 @@
 from fmdtools.define.object.base import check_pickleability, BaseObject
 from fmdtools.define.flow.base import Flow
 from fmdtools.define.block.base import Simulable
-from fmdtools.define.object.base import init_obj
+from fmdtools.define.object.base import init_obj, get_obj_name
 from fmdtools.analyze.common import get_sub_include
-from fmdtools.analyze.graph.model import add_meth_edge, add_edge, get_obj_name
+from fmdtools.analyze.graph.model import add_meth_edge, add_edge
 import time
 
 

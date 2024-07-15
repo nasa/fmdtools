@@ -38,11 +38,11 @@ class MultiFlowGraph(ModelGraph):
         Networkx graph corresponding to the MultiFlow
     """
 
-    def nx_from_obj(self, flow, role_nodes=['local'], recursive=True, with_root=False,
+    def __init__(self, flow, role_nodes=['local'], recursive=True, with_root=False,
                     **kwargs):
-        g = flow.create_graph(role_nodes=role_nodes, recursive=recursive,
-                              with_root=with_root, **kwargs)
-        return g
+        ModelGraph.__init__(self, flow, role_nodes=role_nodes, recursive=recursive,
+                            with_root=with_root, **kwargs)
+
 
     def set_resgraph(self, other=False):
         """
@@ -75,6 +75,6 @@ class CommsFlowGraph(MultiFlowGraph):
         Graph of the commsflow connections.
     """
 
-    def nx_from_obj(self, flow, role_nodes=['local'], recursive=True, **kwargs):
-        g = flow.create_graph(role_nodes=role_nodes, recursive=recursive, **kwargs)
-        return g
+    def __init__(self, flow, role_nodes=['local'], recursive=True, **kwargs):
+        ModelGraph.__init__(self, flow, role_nodes=role_nodes, recursive=recursive,
+                            **kwargs)
