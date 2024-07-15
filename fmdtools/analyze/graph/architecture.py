@@ -24,24 +24,11 @@ Main user-facing individual graphing classes:
 
 import networkx as nx
 from fmdtools.analyze.history import History
-from fmdtools.analyze.graph.block import BlockGraph
+from fmdtools.analyze.graph.model import ExtModelGraph, set_node_states
+from fmdtools.define.base import get_obj_name
 
 
-class ArchitectureGraph(BlockGraph):
-    """Represent graph of Architecture and its containment of blocks and flows."""
-
-    def nx_from_obj(self, mdl, **kwargs):
-        """Add graph of architecture."""
-        return mdl.create_graph(**kwargs)
-
-
-class FunctionArchitectureGraph(ArchitectureGraph):
-    """
-    Graph of FunctionArchitecture, where both functions and flows are nodes.
-
-    If get_states option is used on instantiation, a `states` dict is associated
-    with the edges/nodes which can then be used to visualize function/flow attributes.
-    """
+class ArchitectureGraph(ExtModelGraph):
 
     def nx_from_obj(self, mdl, with_root=False, **kwargs):
         """
@@ -58,7 +45,23 @@ class FunctionArchitectureGraph(ArchitectureGraph):
             networkx.Graph representation of model functions and flows
             (along with their attributes)
         """
-        return ArchitectureGraph.nx_from_obj(self, mdl, with_root=with_root, **kwargs)
+        return mdl.create_graph(with_root=with_root, **kwargs)
+
+    def set_nx_states(self, mdl, **kwargs):
+        basename = mdl.get_full_name()
+        for role, roleobj in mdl.get_roles_as_dict().items():
+            name = get_obj_name(roleobj, role, basename=basename)
+            if name in self.g.nodes:
+                set_node_states(self.g, roleobj, name, time=self.time)
+
+
+class FunctionArchitectureGraph(ArchitectureGraph):
+    """
+    Graph of FunctionArchitecture, where both functions and flows are nodes.
+
+    If get_states option is used on instantiation, a `states` dict is associated
+    with the edges/nodes which can then be used to visualize function/flow attributes.
+    """
 
     def set_fxn_nodestates(self, mdl):
         """
@@ -409,6 +412,7 @@ class ActionArchitectureGraph(ArchitectureGraph):
         aa : ActionArchitecture
             Underlying action sequence graph object to get states from
         """
+        # TODO: need to fix so that these
         ArchitectureGraph.set_nx_states(self, aa, **kwargs)
         for g in self.g.nodes():
             self.g.nodes[g]['active'] = g in aa.active_actions

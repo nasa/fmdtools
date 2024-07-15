@@ -3,7 +3,8 @@
 import copy
 from fmdtools.define.flow.base import Flow
 from fmdtools.define.flow.multiflow import MultiFlow
-from fmdtools.analyze.graph.model import add_edge, get_obj_name
+from fmdtools.define.base import get_obj_name
+from fmdtools.analyze.graph.model import add_edge
 
 
 class CommsFlow(MultiFlow):

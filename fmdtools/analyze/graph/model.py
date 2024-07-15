@@ -14,41 +14,13 @@ from fmdtools.analyze.result import Result
 from fmdtools.analyze.history import History
 from fmdtools.analyze.common import prep_animation_title
 from fmdtools.analyze.common import clear_prev_figure
-from fmdtools.define.base import get_code_attrs
+from fmdtools.define.base import get_code_attrs, get_obj_name
 import networkx as nx
 import inspect
 
 
-def get_obj_name(obj, role='', basename=''):
-    """
-    Get the name of an object to be graphed.
-
-    Parameters
-    ----------
-    obj : object
-        Object to be graphed (BaseObject, BaseContainer, or other).
-    role : str
-        Role the object plays in the larger system. Determines the name of Containers.
-
-    Returns
-    -------
-    name : str
-        Name of the object.
-    """
-    if hasattr(obj, 'get_full_name'):
-        return obj.get_full_name()
-    elif inspect.ismethod(obj):
-        superobj = obj.__self__
-        return get_obj_name(superobj, basename=basename, role=role) + '.' + obj.__name__
-    else:
-        if not basename or not role:
-            raise Exception("No role (" + role + ") or basename (" + basename +
-                            ") for object: " + str(obj))
-        return basename + "." + role
-
-
 def add_node(obj, g=None, name='', classname='', nodetype='', get_attrs=False,
-             get_source=False, **kwargs):
+             get_source=False, get_states=False, time=None, **kwargs):
     """
     Add a node to a graph for a given object.
 
@@ -79,6 +51,8 @@ def add_node(obj, g=None, name='', classname='', nodetype='', get_attrs=False,
         g.nodes[name]['obj'] = obj
     if get_source:
         g.nodes[name].update(get_code_attrs(obj))
+    if get_states:
+        set_node_states(g, obj, name, time=time)
     return g
 
 
@@ -106,31 +80,6 @@ def add_edge(g, basename, name, rolename, edgetype):
     g.add_edge(basename, name, edgetype=edgetype, role=rolename)
 
 
-def set_sub_nodes(g, obj, time=None, recursive=False, basename=''):
-    """
-    Set the object's contained nodes (roles).
-
-    Parameters
-    ----------
-    g : nx.Graph
-        Networkx graph to add to.
-    obj : object
-        Object to find the objects in.
-    time : float, optional
-        Time to evaluate conditions at (if any). The default is None.
-    recursive : bool, optional
-        Whether to set nodes recursively. The default is False.
-    basename : str, optional
-        Name of the overall object. The default is ''.
-    """
-    from fmdtools.define.object.base import BaseObject
-    for rolename, roleobj in obj.get_roles_as_dict(flex_prefixes=True).items():
-        name = get_obj_name(roleobj, rolename, basename=basename)
-        set_node_states(g, roleobj, name, time=time)
-        if recursive and isinstance(roleobj, BaseObject):
-            set_sub_nodes(g, roleobj, recursive=recursive, basename=name)
-
-
 def set_node_states(g, obj, name, time=None):
     """
     Attach stateful attributes to the given node.
@@ -149,8 +98,8 @@ def set_node_states(g, obj, name, time=None):
         Time to get the states from. The default is None.
     """
     if name in g.nodes:
-        if hasattr(obj, 'set_node_attr'):
-            obj.set_node_attr(time=time)
+        if hasattr(obj, 'set_node_attrs'):
+            obj.set_node_attrs(g, time=time)
         elif inspect.ismethod(obj):
             g.nodes[name]['condition'] = obj()
         else:
@@ -183,19 +132,12 @@ def remove_base(g, basename):
     g.remove_nodes_from([*nx.isolates(g)])
 
 
-class BaseModelGraph(Graph):
+class ModelGraph(Graph):
     """
     Superclass for Graphs meant to represent specific model constructs.
 
     Specifically, ModelGraphs have node/edge properties like "state" and "mode"
     corresponding to an external model simulation.
-
-    To make a ModelGraph for a particular object, one needs to create two methods
-    for the class:
-        - nx_from_obj, which returns a networkx graph with 'edgetype' and 'nodetype'
-        information, and
-        - set_nx_states, which attaches state information such as states and modes
-        to node/edge attributes.
 
     Parameters
     ----------
@@ -205,36 +147,8 @@ class BaseModelGraph(Graph):
         keyword arguments for self.nx_from_obj
     """
 
-    def __init__(self, mdl, get_states=True, time=0.0, **kwargs):
-        """
-        Generate the FunctionArchitectureGraph corresponding to a given Model.
-
-        Parameters
-        ----------
-        mdl : object
-            fmdtools object to represent graphically
-        get_states : bool, optional
-            Whether to copy states to the node/edge 'states' property.
-            The default is True.
-        time: float
-            Time model is run at (to execute indicators at). Default is 0.0
-        **kwargs : kwargs
-            (placeholder for kwargs)
-        """
-        Graph.__init__(self, self.nx_from_obj(mdl, **kwargs))
-        if get_states:
-            self.time = time
-            self.set_nx_states(mdl, **kwargs)
-
-    def nx_from_obj(self, mdl):
-        """Alias for nx_from_obj, the method used to instantiate the graph."""
-        raise Exception("nx_from_obj method not implemented for "
-                        + self.__class__.__name__)
-
-    def set_nx_states(self, mdl):
-        """Alias for set_nx_states, which is used to map model states to graph attr."""
-        raise Exception("set_nx_states method not implemented for "
-                        + self.__class__.__name__)
+    def __init__(self, mdl, **kwargs):
+        Graph.__init__(self, mdl.create_graph(**kwargs))
 
     def set_from(self, time, history=History()):
         """Set ModelGraph faulty/degraded attributes from a given history."""
@@ -365,18 +279,48 @@ class BaseModelGraph(Graph):
             g.nodes[node]['faulty'] = any(g.nodes[node].get('m', {'faults': {}})['faults'])
 
 
-class ModelGraph(BaseModelGraph):
-    """Represent the entire containment/aggregation hierarchy of a given model."""
+class ExtModelGraph(ModelGraph):
+    """
+    Extensible ModelGraph which separates graph generation from state setting.
+
+    To make a ModelGraph for a particular object, one needs to create two methods
+    for the class:
+        - nx_from_obj, which returns a networkx graph with 'edgetype' and 'nodetype'
+        information, and
+        - set_nx_states, which attaches state information such as states and modes
+        to node/edge attributes.
+    """
+
+    def __init__(self, mdl, get_states=True, time=0.0, **kwargs):
+        """
+        Generate the FunctionArchitectureGraph corresponding to a given Model.
+
+        Parameters
+        ----------
+        mdl : object
+            fmdtools object to represent graphically
+        get_states : bool, optional
+            Whether to copy states to the node/edge 'states' property.
+            The default is True.
+        time: float
+            Time model is run at (to execute indicators at). Default is 0.0
+        **kwargs : kwargs
+            (placeholder for kwargs)
+        """
+        Graph.__init__(self, self.nx_from_obj(mdl, **kwargs))
+        if get_states:
+            self.time = time
+            self.set_nx_states(mdl, **kwargs)
 
     def nx_from_obj(self, mdl, **kwargs):
-        """Recursively add nodes from the top level of the model graph."""
-        return mdl.create_graph(**kwargs)
+        """Alias for nx_from_obj, the method used to instantiate the graph."""
+        raise Exception("nx_from_obj method not implemented for "
+                        + self.__class__.__name__)
 
     def set_nx_states(self, mdl, **kwargs):
-        """Recursively set node states from the top level of the model graph."""
-        name = get_obj_name(mdl, '')
-        set_node_states(self.g, mdl, name, time=self.time)
-        set_sub_nodes(self.g, mdl, time=self.time, recursive=True, basename=name)
+        """Alias for set_nx_states, which is used to map model states to graph attr."""
+        raise Exception("set_nx_states method not implemented for "
+                        + self.__class__.__name__)
 
 
 def graph_factory(obj, **kwargs):

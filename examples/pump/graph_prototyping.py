@@ -23,7 +23,7 @@ rg2.set_node_labels(subtext='code', subtext_style=dict(horizontalalignment='left
 rg2.draw()
 rg2.draw_graphviz()
 
-rg3 = ArchitectureGraph(Human(), flow_edges=True)
+rg3 = ArchitectureGraph(Human(), flow_edges=True, with_root=True)
 rg3.draw()
 mdl = Pump()
 
