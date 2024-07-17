@@ -2,7 +2,7 @@ scipy
 tqdm
 multiprocessing
 networkx
-numpy
+numpy >1.10, <= 1.26.4
 matplotlib >= 3.7.0
 pandas
 ordered-set
