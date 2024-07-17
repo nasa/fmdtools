@@ -11,14 +11,14 @@ fmg = ModelGraph(mdl, with_methods=True)
 fmg.set_edge_labels(title="role")
 fmg.draw_graphviz()
 
-from fmdtools.analyze.graph.architecture import ArchitectureGraph
+from fmdtools.define.architecture.base import ArchitectureGraph
 from examples.pump.ex_pump import Pump, ImportEE
 
 rg = ArchitectureGraph(Pump(), flow_edges=True)
 rg.draw()
 
-from fmdtools.analyze.graph.block import BlockGraph
-rg2 = BlockGraph(Pump().fxns['import_ee'], get_source=True)
+from fmdtools.define.object.base import ObjectGraph
+rg2 = ObjectGraph(Pump().fxns['import_ee'], get_source=True)
 rg2.set_node_labels(subtext='code', subtext_style=dict(horizontalalignment='left'))
 rg2.draw()
 rg2.draw_graphviz()

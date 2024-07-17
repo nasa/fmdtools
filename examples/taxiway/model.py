@@ -114,12 +114,12 @@ def create_fault_scen_metrics(mdlhist):
 
 if __name__ == "__main__":
     import networkx as nx
-    from fmdtools.analyze.graph.flow import MultiFlowGraph, CommsFlowGraph
-    from fmdtools.analyze.graph.architecture import FunctionArchitectureGraph
+    from fmdtools.define.flow.multiflow import MultiFlowGraph
+    from fmdtools.define.flow.commsflow import CommsFlowGraph
 
     mdl = taxiway_model()
 
-    mg = FunctionArchitectureGraph(mdl)
+    mg = mdl.as_modelgraph()
     mg.draw()
 
     ground_args = {'include_glob':True, "include_containers": ['s'],

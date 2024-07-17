@@ -500,7 +500,7 @@ if __name__ == "__main__":
     import doctest
     doctest.testmod(verbose=True)
 
-    from fmdtools.analyze.graph.architecture import ActionArchitectureGraph
+    from fmdtools.define.architecture.action import ActionArchitectureGraph
     hum = HumanActions()
     ag = ActionArchitectureGraph(hum)
     ag.set_pos(**asg_pos)

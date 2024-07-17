@@ -453,13 +453,11 @@ if __name__ == '__main__':
     fs.add_fault_times((0, 5, 10, 15, 20))
     endclasses, hist = propagate.fault_sample(mdl, fs)
 
-    from fmdtools.analyze.graph.architecture import FunctionArchitectureGraph
     mdl.fxns['human'].t.dt = 2.0
-    mg = FunctionArchitectureGraph(mdl)
+    mg = mdl.as_modelgraph()
     mg.set_exec_order(mdl)
     mg.draw()
 
-    from fmdtools.analyze.graph.architecture import ActionArchitectureGraph
-    ag = ActionArchitectureGraph(mdl.fxns['human'].aa)
+    ag = mdl.fxns['human'].aa.as_modelgraph()
     ag.draw()
     ag.draw_graphviz(layout='dot')
