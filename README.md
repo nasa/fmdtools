@@ -75,13 +75,13 @@ A version of the fmdtools toolkit can also be installed directly from the [PyPI 
 
 #### Dependencies
 
-fmdtools requires `Python 3.11` (anaconda recommended) and depends directly on these packages (see requirements.txt):
+fmdtools requires `Python 3.11` (anaconda recommended) and depends directly on the packages below (see requirements.txt). Note that the use of these depencencies is governed by their respective licences, which may be obtained at the provided links.
 
 ```
 scipy
 # license: (BSD-new) https://www.scipy.org/scipylib/license.html
 tqdm
-# license: (mixed) https://github.com/tqdm/tqdm/blob/master/LICENCE
+# license: (mixed MPL/MIT) https://github.com/tqdm/tqdm/blob/master/LICENCE
 networkx
 # license: (BSD-new) https://raw.githubusercontent.com/networkx/networkx/master/LICENSE.txt
 numpy
@@ -106,11 +106,12 @@ shapely
 
 Since these are direct dependencies, they will be installed automatically along with fmdtools.
 
-Some additional indirect dependencies may be needed for development/testing of the code, or for specific notebooks. Thus, to develop/contribute to fmdtools, it can be helpful to install these up-front using `pip install packagename`:
+Some additional indirect dependencies (listed below) may be needed for development/testing of the code, or for specific notebooks. Thus, to develop/contribute to fmdtools, it can be helpful to install these up-front using `pip install packagename`. Note that the use of these depencencies is governed by their respective licences, which may be obtained at the provided links.
 ```
 deap
 # used for optimization of rover faults
 # license: (LGPL-3.0) https://github.com/DEAP/deap/blob/master/LICENSE.txt
+# the LGPL license and installation instructions are provided in ~/examples/rover/readme.rst
 pymoo
 # used for optimization of tank example
 # license: (Apache 2.0) https://github.com/anyoptimization/pymoo/blob/main/LICENSE
