@@ -106,7 +106,7 @@ shapely
 
 Since these are direct dependencies, they will be installed automatically along with fmdtools.
 
-Some additional indirect dependencies (listed below) may be needed for development/testing of the code, or for specific notebooks. Thus, to develop/contribute to fmdtools, it can be helpful to install these up-front using `pip install packagename`. Note that the use of these depencencies is governed by their respective licences, which may be obtained at the provided links.
+Some additional indirect dependencies (listed below) may be needed for development/testing of the code, or for specific notebooks. Thus, to develop/contribute to fmdtools, it can be helpful to install these up-front using `pip install packagename`. Note that the use of these dependencies is governed by their respective licenses, which may be obtained at the provided links.
 ```
 deap
 # used for optimization of rover faults
