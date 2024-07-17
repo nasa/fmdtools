@@ -110,7 +110,8 @@ if __name__ == '__main__':
     g2 = Graph(g)
     g2.draw()
 
-    from fmdtools.analyze.graph.flow import MultiFlowGraph, CommsFlowGraph
+    from fmdtools.define.flow.multiflow import MultiFlowGraph
+    from fmdtools.define.flow.commsflow import CommsFlowGraph
     MultiFlowGraph(mdl.flows['communications']).draw()
     CommsFlowGraph(mdl.flows['communications']).draw()
 

@@ -5,7 +5,7 @@ Defines :class:`BaseObject` class used to define objects.
 Classes in this module:
 
 - :class:`BaseObject`: Base object class used throughout.
-- :class:`ExampleObject`: Example base object for testing.
+- :class:`ObjectGraph`: Generic ModelGraph representation for objects.
 
 Functions contained in this module:
 
@@ -21,8 +21,23 @@ from inspect import signature, isclass
 from fmdtools.define.base import get_var, get_methods, get_obj_name
 from fmdtools.analyze.common import get_sub_include
 from fmdtools.analyze.history import History
-from fmdtools.analyze.graph.model import add_node, add_edge
-from fmdtools.analyze.graph.model import remove_base
+from fmdtools.analyze.graph.model import add_node, add_edge, remove_base, ModelGraph
+
+
+class ObjectGraph(ModelGraph):
+    """Objectgraph represents the definition of an Object."""
+
+    def __init__(self, mdl, with_methods=True, **kwargs):
+        ModelGraph.__init__(self, mdl, with_methods=with_methods, **kwargs)
+
+    def set_edge_labels(self, title='edgetype', title2='', subtext='role',
+                        **edge_label_styles):
+        super().set_edge_labels(title=title, title2=title2, subtext=subtext,
+                                **edge_label_styles)
+
+    def set_node_labels(self, title='shortname', title2='classname', **node_label_styles):
+        super().set_node_labels(title=title, title2=title2, **node_label_styles)
+
 
 example_object_code = """
 from fmdtools.define.container.state import ExampleState
@@ -802,6 +817,10 @@ class BaseObject(object):
                                      name=subname, **kwargs)
         self.add_subgraph_edges(g, **kwargs)
         return g
+
+    def as_modelgraph(self, gtype=ObjectGraph, **kwargs):
+        """Create and return the corresponding ModelGraph for the Object."""
+        return gtype(self, **kwargs)
 
 
 def check_pickleability(obj, verbose=True, try_pick=False, pause=0.2):

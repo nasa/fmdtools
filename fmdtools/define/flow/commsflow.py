@@ -1,10 +1,31 @@
 # -*- coding: utf-8 -*-
-"""Defines :class:`CommsFlow` class representing perception and communications."""
+"""
+Representation of flows with the capability for representing a communications network.
+
+Defines:
+- :class:`CommsFlow` class which represents communications networks.
+- :class:`CommsFlowGraph` class which represents `CommsFlow` in a ModelGraph structure.
+"""
 import copy
 from fmdtools.define.flow.base import Flow
-from fmdtools.define.flow.multiflow import MultiFlow
+from fmdtools.define.flow.multiflow import MultiFlow, MultiFlowGraph
 from fmdtools.define.base import get_obj_name
-from fmdtools.analyze.graph.model import add_edge
+from fmdtools.analyze.graph.model import add_edge, ModelGraph
+
+
+class CommsFlowGraph(MultiFlowGraph):
+    """
+    Create graph representation of the CommsFlow.
+
+    Returns
+    -------
+    g : networkx.DiGraph
+        Graph of the commsflow connections.
+    """
+
+    def __init__(self, flow, role_nodes=['local'], recursive=True, **kwargs):
+        ModelGraph.__init__(self, flow, role_nodes=role_nodes, recursive=recursive,
+                            **kwargs)
 
 
 class CommsFlow(MultiFlow):
@@ -241,3 +262,7 @@ class CommsFlow(MultiFlow):
                 in_name = get_obj_name(in_port, in_port.name, basename=int_flow.root)
                 out_name = get_obj_name(out_port, out_port.name, basename=int_flow.root)
                 add_edge(g, in_name, out_name, "in", "connection")
+
+    def as_modelgraph(self, gtype=CommsFlowGraph, **kwargs):
+        """Create and return the corresponding ModelGraph for the Object."""
+        return gtype(self, **kwargs)

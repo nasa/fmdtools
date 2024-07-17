@@ -1,7 +1,58 @@
 # -*- coding: utf-8 -*-
-"""Defines :class:`MultiFlow` class which represents multiple flows in one graph."""
-from fmdtools.define.flow.base import Flow
+"""
+Representation of flows with multiple contained flows for perception/communication.
 
+Defines:
+- :class:`MultiFlow` class which represents multiple flows in one graph.
+- :class:`MultiFlowGraph` class which represents `MultiFlow` in a ModelGraph structure.
+"""
+from fmdtools.define.flow.base import Flow
+from fmdtools.analyze.graph.model import ModelGraph
+
+
+class MultiFlowGraph(ModelGraph):
+    """
+    Create ModelGraph corresponding to the MultiFlow sturucture.
+
+    Parameters
+    ----------
+    flow : MultiFlow
+        Multiflow object to represent.
+    role_nodes : list
+        What roles of the multiflow to include. Default is ['locals'].
+    recursive : bool
+        Whether to construct the graph recursively (with multiple levels). The default
+        is True
+    with_root :bool
+        Whether to include the root node. Default is False.
+    **kwargs : kwargs
+    """
+
+    def __init__(self, flow, role_nodes=['local'], recursive=True, with_root=False,
+                 **kwargs):
+        ModelGraph.__init__(self, flow, role_nodes=role_nodes, recursive=recursive,
+                            with_root=with_root, **kwargs)
+
+
+    def set_resgraph(self, other=False):
+        """
+        Process results for results graphs (show faults and degradations).
+
+        Parameters
+        ----------
+        other : Graph, optional
+            Graph to compare with (for degradations). The default is False.
+        """
+        if other:
+            self.set_degraded(other)
+            self.set_node_styles(degraded={}, faulty={})
+        else:
+            self.set_degraded(self)
+            self.set_node_styles(degraded={}, faulty={})
+        self.set_node_labels(title='id', subtext='indicators')
+
+    def draw_graphviz(self, layout="neato", overlap='false', **kwargs):
+        return super().draw_graphviz(layout=layout, overlap=overlap, **kwargs)
 
 class MultiFlow(Flow):
     """
@@ -173,3 +224,7 @@ class MultiFlow(Flow):
         """Find mutables (includes locals)."""
         localflows = [getattr(self, lo) for lo in self.locals]
         return [*super().find_mutables(), *localflows]
+
+    def as_modelgraph(self, gtype=MultiFlowGraph, **kwargs):
+        """Create and return the corresponding ModelGraph for the Object."""
+        return gtype(self, **kwargs)

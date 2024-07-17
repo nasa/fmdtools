@@ -1,5 +1,21 @@
 # -*- coding: utf-8 -*-
-"""Defines :class:`FunctionArchitecture` class to represent functional architecture."""
+"""
+Defines classes for representing functional architectures.
+
+Defines classes:
+- :class:`FunctionArchitecture` class to represent functional architecture.
+- :class:`FunctionArchitectureGraph`: Graphs Model of functions and flow for display
+  where both functions and flows are nodes.
+- :class:`FunctionArchitectureFlowGraph`: Graphs Model of flows for display, where flows
+  are set as nodes and connections (via functions) are edges.
+- :class:`FunctionArchitectureCompGraph`: Graphs Model of functions, and flows, with
+  component containment relationships shown for functions.
+- :class:`FunctionArchitectureFxnGraph`: Graphs representation of the functions of the
+  model, where functions are nodes and flows are edges
+- :class:`FunctionArchitectureTypeGraph`: Graph representation of model Classes, showing
+  the containment relationship between function classes and flow classes in the model.
+
+"""
 
 
 import numpy as np
@@ -8,7 +24,314 @@ import networkx as nx
 import sys
 
 from fmdtools.define.base import set_var
-from fmdtools.define.architecture.base import Architecture
+from fmdtools.define.architecture.base import Architecture, ArchitectureGraph
+
+
+class FunctionArchitectureGraph(ArchitectureGraph):
+    """
+    Graph of FunctionArchitecture, where both functions and flows are nodes.
+
+    If get_states option is used on instantiation, a `states` dict is associated
+    with the edges/nodes which can then be used to visualize function/flow attributes.
+    """
+
+    def set_fxn_nodestates(self, mdl):
+        """
+        Attach attributes to Graph corresponding to function states.
+
+        Parameters
+        ----------
+        mdl: Model
+            Model to represent
+        time: float
+            Time to execute indicators at. Default is 0.0
+        """
+        for fxnname, fxn in mdl.fxns.items():
+            fxn.set_node_attrs(self.g, time=self.time)
+
+    def set_flow_nodestates(self, mdl):
+        """
+        Attach attributes to Graph notes corresponding to flow states.
+
+        Parameters
+        ----------
+        mdl: Model
+            Model to represent
+        """
+        for flowname, flow in mdl.flows.items():
+            flow.set_node_attrs(self.g, time=self.time)
+
+    def get_multi_edges(self, mdl, subedges):
+        """
+        Attach functions/flows (subedges arg) to edges.
+
+        Parameters
+        ----------
+        mdl: Model
+            Model to represent
+        subedges : list
+            nodes from the full graph which will become edges in the subgraph
+            (e.g., individual flows)
+
+        Returns
+        -------
+        flows : dict
+                Dictionary of edges with keys representing each sub-attribute of the
+                edge (e.g., flows)
+        """
+        flows = {}
+        multgraph = nx.projected_graph(mdl.graph, subedges, multigraph=True)
+        g = nx.projected_graph(mdl.graph, subedges)
+        for edge in g.edges:
+            midedges = list(multgraph.subgraph(edge).edges)
+            flows[edge] = [midedge[2] for midedge in midedges]
+        return flows
+
+    def get_staticnodes(self, mdl):
+        """Get static node information for set_exec_order."""
+        staticfxns = [mdl.fxns[sf].get_full_name() for sf in mdl.staticfxns]
+        staticflows = list(set([n for node in staticfxns
+                                for n in self.g.neighbors(node)]))
+        staticnodes = staticfxns + staticflows
+        static_node_dict = {n: n in staticnodes for n in self.g.nodes()}
+        return static_node_dict
+
+    def get_dynamicnodes(self, mdl):
+        """Get dynamic node information for set_exec_order."""
+        dynamicnodes = [mdl.fxns[sf].get_full_name() for sf in mdl.dynamicfxns]
+        orders = {n: str(i) for i, n in enumerate(dynamicnodes)}
+        dynamic_node_dict = {n: n in orders for n in self.g.nodes()}
+        return dynamic_node_dict, orders, dynamicnodes
+
+    def set_exec_order(self, mdl, static={}, dynamic={}, next_edges={},
+                       label_order=True, label_tstep=True):
+        """
+        Overlay FunctionArchitectureGraph execution order data on graph structure.
+
+        Parameters
+        ----------
+        mdl : Model
+            Model to plot the execution order of.
+        static : dict/False, optional
+            kwargs to overwrite the default style for functions/flows in the static
+            execution step.
+            If False, static functions are not differentiated. The default is {}.
+        dynamic : dict/False, optional
+            kwargs to overwrite the default style for functions/flows in the dynamic
+            execution step.
+            If False, dynamic functions are not differentiated. The default is {}.
+        next_edges : dict
+            kwargs to overwrite the default style for edges indicating the flow order.
+            If False, these edges are not added. the default is {}.
+        label_order : bool, optional
+            Whether to label execution order (with a number on each node).
+            The default is True.
+        label_tstep : bool, optional
+            Whether to label each timestep (with a number in the subtitle).
+            The default is True.
+        """
+        node_style_kwargs = {}
+        if not (isinstance(static, bool) and not static):
+            static_node_dict = self.get_staticnodes(mdl)
+            nx.set_node_attributes(self.g, static_node_dict, name='static')
+            node_style_kwargs['static'] = static
+
+        if not (isinstance(dynamic, bool) and not dynamic):
+            dynamic_node_dict, orders, dynamicnodes = self.get_dynamicnodes(mdl)
+            nx.set_node_attributes(self.g, dynamic_node_dict, name='dynamic')
+            node_style_kwargs['dynamic'] = dynamic
+
+        if not (isinstance(next_edges, bool) and not next_edges):
+            next_edges_dict = [(dynamicnodes[n], dynamicnodes[n+1])
+                               for n in range(len(dynamicnodes)-1)
+                               if (dynamicnodes[n] in self.g.nodes
+                               and dynamicnodes[n+1] in self.g.nodes)]
+            self.g.add_edges_from(next_edges_dict, edgetype='activation')
+            self.set_edge_styles(edgetype={'activation': next_edges})
+
+        if label_order:
+            orders.update({n: "" for n in self.g.nodes() if n not in orders})
+            nx.set_node_attributes(self.g, orders, name='order')
+            title2 = 'order'
+        else:
+            title2 = ''
+
+        if label_tstep:
+            tsteps = {n: str(mdl.fxns[n].t.dt) if n in mdl.fxns else ""
+                      for n in self.g.nodes}
+            nx.set_node_attributes(self.g, tsteps, name='tstep')
+            subtext = 'tstep'
+        else:
+            subtext = ''
+
+        self.set_node_styles(**node_style_kwargs)
+        self.set_node_labels(title='shortname', title2=title2, subtext=subtext)
+
+    def draw_graphviz(self, layout="twopi", overlap='voronoi', **kwargs):
+        return super().draw_graphviz(layout=layout, overlap=overlap, **kwargs)
+
+
+class FunctionArchitectureFlowGraph(FunctionArchitectureGraph):
+    """
+    Create a Graph of FunctionArchitecture flows.
+
+    In this Graph, flows are set as nodes and ther connections (via functions) are edges
+    """
+
+    def nx_from_obj(self, mdl, **kwargs):
+        g = nx.projected_graph(mdl.graph, mdl.flows)
+        nodetypes = {fname: f.get_typename() for fname, f in mdl.flows.items()}
+        nx.set_node_attributes(g, nodetypes, name='nodetype')
+        fxns = self.get_multi_edges(mdl, mdl.flows)
+        edgelabels = {e: str(fl) for e, fl in fxns.items()}
+        nx.set_edge_attributes(g, edgelabels, name='functions')
+        nx.set_edge_attributes(g, {e: "functions" for e in g.edges()}, name='edgetype')
+        return g
+
+    def set_nx_states(self, mdl, **kwargs):
+        self.set_flow_nodestates(mdl)
+
+    def set_edge_labels(self, title='edgetype', title2='', subtext='functions',
+                        **edge_label_styles):
+        super().set_edge_labels(title=title, title2=title2, subtext=subtext,
+                                **edge_label_styles)
+
+
+class FunctionArchitectureFxnGraph(FunctionArchitectureGraph):
+    """
+    Create a graph representation of the functions of the model.
+
+    In this graph, functions are nodes and flows are edges.
+    """
+
+    def nx_from_obj(self, mdl):
+        g = nx.projected_graph(mdl.graph, mdl.fxns)
+        nodetypes = {fname: f.get_typename() for fname, f in mdl.fxns.items()}
+        nx.set_node_attributes(g, nodetypes, name='nodetype')
+        flows = self.get_multi_edges(mdl, mdl.fxns)
+        edgelabels = {e: str(fl) for e, fl in flows.items()}
+        nx.set_edge_attributes(g, edgelabels, name='flows')
+        nx.set_edge_attributes(g, {e: "flows" for e in g.edges()}, name='edgetype')
+        return g
+
+    def set_nx_states(self, mdl):
+        self.set_flow_edgestates(mdl)
+        self.set_fxn_nodestates(mdl)
+
+    def set_flow_edgestates(self, mdl):
+        edgevals = {}
+        flows = self.get_multi_edges(mdl, mdl.fxns)
+        for edge, flows in flows.items():
+            flowdict = {}
+            for flow in flows:
+                flowdict[flow] = flow.get_roles_as_dict('container',
+                                                        with_immutable=False)
+                flowdict[flow]['indicators'] = flow.return_true_indicators(self.time)
+            edgevals[edge] = flowdict
+        nx.set_edge_attributes(self.g, edgevals)
+
+    def set_degraded(self, other):
+        super().set_degraded(other)
+        g = self.g
+        nomg = other.g
+        for edge in g.edges:
+            degraded = False
+            for flow in list(g.edges[edge].keys()):
+                if g.edges[edge][flow] != nomg.edges[edge][flow]:
+                    degraded = True
+            g.edges[edge]['degraded'] = degraded
+
+    def set_edge_labels(self, title='edgetype', title2='', subtext='flows',
+                        **edge_label_styles):
+        super().set_edge_labels(title=title, title2=title2, subtext=subtext,
+                                **edge_label_styles)
+
+
+class FunctionArchitectureTypeGraph(FunctionArchitectureGraph):
+    """
+    Creates a graph representation of FunctionArchitecture Classes.
+
+    Shows the containment relationship between function classes and flow classes in the
+    model.
+    """
+
+    def nx_from_obj(self, mdl, withflows=True, **kwargs):
+        """
+        Return graph with just the type relationships of the function/flow classes.
+
+        Parameters
+        ----------
+        mdl: Model
+            Model to represent
+
+        withflows : bool, optional
+            Whether to include flows, default is True
+
+        Returns
+        -------
+        g : nx.DiGraph
+            networkx directed graph of the type relationships
+        """
+        g = nx.DiGraph()
+        modelname = type(mdl).__name__
+        g.add_node(modelname, level=1, nodetype="architecture")
+        g.add_nodes_from(mdl.fxnclasses(), level=2, nodetype="block")
+        function_connections = [(modelname, fname) for fname in mdl.fxnclasses()]
+        g.add_edges_from(function_connections, edgetype="containment")
+        if withflows:
+            g.add_nodes_from(mdl.flowtypes(), level=3, nodetype="flow")
+            fxnclass_flowtype = mdl.flowtypes_for_fxnclasses()
+            flow_edges = [(fxn, flow) for fxn, flows in fxnclass_flowtype.items()
+                          for flow in flows]
+            g.add_edges_from(flow_edges, edgetype="flow")
+        return g
+
+    def set_nx_states(self, mdl):
+        for flowtype in mdl.flowtypes():
+            mutes = {}
+            indicators = {}
+            for flow in mdl.flows_of_type(flowtype):
+                mutes[flow] = mdl.flows[flow].get_roles_as_dict('container',
+                                                                with_immutable=False)
+                indicators[flow] = mdl.flows[flow].return_true_indicators(self.time)
+            self.g.nodes[flowtype]['mutables'] = mutes
+            self.g.nodes[flowtype]['indicators'] = indicators
+
+        for fxnclass in mdl.fxnclasses():
+            mutes = {}
+            indicators = {}
+            for fxn in mdl.fxns_of_class(fxnclass):
+                mutes[fxn] = mdl.fxns[fxn].get_roles_as_dict('container',
+                                                             with_immutable=False)
+                indicators[fxn] = mdl.fxns[fxn].return_true_indicators(self.time)
+            self.g.nodes[fxnclass]['mutables'] = mutes
+            self.g.nodes[fxnclass]['indicators'] = indicators
+
+    def set_degraded(self, nomg):
+        g = self.g
+        rg = self.g.copy()
+        for node in g.nodes:
+            if g.nodes[node]['level'] == 2:
+                n_faults = {fxn for fxn, m in g.nodes[node]['mutables'].get('m', {}).items()
+                            if m not in [['nom'], []]}
+                faulty = any(n_faults)
+                rg.nodes[node]['faulty'] = faulty
+            if g.nodes[node]['level'] >= 2:
+                degraded = (g.nodes[node]['mutables'] != nomg.nodes[node]['mutables'] or
+                            any([v for v in g.nodes[node]['indicators']]))
+                rg.nodes[node]['degraded'] = degraded
+        self.g = rg
+
+    def set_pos(self, auto=True, **pos):
+        if auto:
+            self.pos = nx.multipartite_layout(self.g, 'level')
+        super().set_pos(auto=False, **pos)
+
+    def draw_graphviz(self, layout="dot", ranksep='2.0', **kwargs):
+        return super().draw_graphviz(layout=layout, ranksep=ranksep, **kwargs)
+
+    def set_exec_order(self, *args, **kwargs):
+        raise Exception("Cannot specify exec_order for FunctionArchitectureTypeGraph")
 
 
 class FunctionArchitecture(Architecture):
@@ -523,6 +846,10 @@ class FunctionArchitecture(Architecture):
             else:
                 fig.suptitle(title, fontweight='bold')
         return fig, ax
+
+    def as_modelgraph(self, gtype=FunctionArchitectureGraph, **kwargs):
+        """Create and return the corresponding ModelGraph for the Object."""
+        return gtype(self, **kwargs)
 
 
 if __name__ == "__main__":
