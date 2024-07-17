@@ -84,7 +84,7 @@ tqdm
 # license: (mixed MPL/MIT) https://github.com/tqdm/tqdm/blob/master/LICENCE
 networkx
 # license: (BSD-new) https://raw.githubusercontent.com/networkx/networkx/master/LICENSE.txt
-numpy
+numpy < 2.0
 # license: (BSD) https://numpy.org/doc/stable/license.html
 matplotlib
 # license: (mixed) https://matplotlib.org/stable/users/license.html

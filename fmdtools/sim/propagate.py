@@ -404,7 +404,7 @@ def one_fault(mdl, *fxnfault, time=0, **kwargs):
     return result.flatten(), mdlhists.flatten()
 
 
-def sequence(mdl, seq={}, faultseq={}, disturbances={}, scen={}, rate=np.NaN,
+def sequence(mdl, seq={}, faultseq={}, disturbances={}, scen={}, rate=np.nan,
              include_nominal=True, **kwargs):
     """
     Run a sequence of faults and disturbances in the model at given times.
