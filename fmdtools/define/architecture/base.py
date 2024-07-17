@@ -1,12 +1,47 @@
 # -*- coding: utf-8 -*-
-"""Defines base :class:`Architecture` class used by other architecture classes."""
+"""
+Defines base :class:`Architecture` class used by other architecture classes.
+
+Includes:
+- :class:`Architecture` class defining architectures.
+- :class:`ArchitectureGraph` class which represents `Architecture` in a ModelGraph.
+"""
 from fmdtools.define.object.base import check_pickleability, BaseObject
 from fmdtools.define.flow.base import Flow
 from fmdtools.define.block.base import Simulable
 from fmdtools.define.object.base import init_obj, get_obj_name
 from fmdtools.analyze.common import get_sub_include
 from fmdtools.analyze.graph.model import add_meth_edge, add_edge
+from fmdtools.analyze.graph.model import ExtModelGraph, set_node_states
 import time
+
+
+class ArchitectureGraph(ExtModelGraph):
+    """Base ModelGraph for Architectures."""
+
+    def nx_from_obj(self, mdl, with_root=False, **kwargs):
+        """
+        Generate the networkx.graph object corresponding to the model.
+
+        Parameters
+        ----------
+        mdl: FunctionArchitecture
+            Model to create the graph representation of
+
+        Returns
+        -------
+        g : networkx.Graph
+            networkx.Graph representation of model functions and flows
+            (along with their attributes)
+        """
+        return mdl.create_graph(with_root=with_root, **kwargs)
+
+    def set_nx_states(self, mdl, **kwargs):
+        basename = mdl.get_full_name()
+        for role, roleobj in mdl.get_roles_as_dict().items():
+            name = get_obj_name(roleobj, role, basename=basename)
+            if name in self.g.nodes:
+                set_node_states(self.g, roleobj, name, time=self.time)
 
 
 class Architecture(Simulable):
@@ -345,6 +380,10 @@ class Architecture(Simulable):
                     for locflowname, flowobj in obj.get_roles_as_dict('flow').items():
                         fname = flowobj.get_full_name()
                         add_edge(g, objname, fname, locflowname, 'flow')
+
+    def as_modelgraph(self, gtype=ArchitectureGraph, **kwargs):
+        """Create and return the corresponding ModelGraph for the Object."""
+        return gtype(self, **kwargs)
 
 
 def check_model_pickleability(model, try_pick=False):

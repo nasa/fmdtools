@@ -1,7 +1,141 @@
 # -*- coding: utf-8 -*-
-"""Defines :class:`ActionArchitecture` class for representing action architectures."""
+"""
+Defines classes for representing action architectures.
+
+Defines classes:
+- :class:`ActionArchitecture` class for representing action architectures.
+- :class:`ActionArchitectureGraph`: Shows a visualization of the internal Action
+  Sequence Graph of the Function Block, with Sequences as edges, with Flows (circular)
+  and Actions (square) as nodes.
+- :class:`ActionArchitectureActGraph`: Variant of ActionArchitectureGraph where only the
+  sequence between actions is shown.
+- :class:`ActionArchitectureFlowGraph`: Variant of ActionArchitectureGraph where only
+  the flow relationships between actions is shown.
+"""
 import networkx as nx
-from fmdtools.define.architecture.base import Architecture
+from fmdtools.define.architecture.base import Architecture, ArchitectureGraph
+from fmdtools.analyze.history import History
+
+
+def set_aa_nx_types(aa, g):
+    """
+    Label networkx graph structure.
+
+    Adds type attributes corresponding to the ActionArchitecture.
+
+    Parameters
+    ----------
+    aa : ActionArchitecture
+        Action Sequence Graph object to represent
+    g : nx.Graph
+        Graph to label
+    """
+    for n in g.nodes():
+        if n in aa.action_graph.nodes():
+            g.nodes[n]['nodetype'] = 'Action'
+        elif n in aa.flow_graph.nodes():
+            g.nodes[n]['nodetype'] = 'Flow'
+    for e in g.edges():
+        if e in aa.action_graph.edges():
+            g.edges[e]['edgetype'] = 'activation'
+        elif e in aa.flow_graph.edges():
+            g.edges[e]['edgetype'] = 'flow'
+    return g
+
+
+class ActionArchitectureGraph(ArchitectureGraph):
+    """
+    Create a visual representation of an Action Architecture.
+
+    Represents:
+        - Sequence as edges
+        - Flows as (circular) Nodes
+        - Actions as (square) Nodes
+    """
+
+    def nx_from_obj(self, aa, **kwargs):
+        """Create Graph for ActionArchitecture."""
+        return set_aa_nx_types(aa, nx.compose(aa.flow_graph, aa.action_graph))
+
+    def set_nx_states(self, aa, **kwargs):
+        """
+        Attach state and fault information to the underlying graph.
+
+        Parameters
+        ----------
+        aa : ActionArchitecture
+            Underlying action sequence graph object to get states from
+        """
+        # TODO: need to fix so that these
+        ArchitectureGraph.set_nx_states(self, aa, **kwargs)
+        for g in self.g.nodes():
+            self.g.nodes[g]['active'] = g in aa.active_actions
+
+    def set_edge_labels(self, title='edgetype', title2='', subtext='name',
+                        **edge_label_styles):
+        """
+        Set / define the edge labels.
+
+        Parameters
+        ----------
+        title : str, optional
+            property to get for title text. The default is 'label'.
+        title2 : str, optional
+            property to get for title text after the colon. The default is ''.
+        subtext : str, optional
+            property to get for the subtext. The default is ''.
+        **edge_label_styles : dict
+            edgeStyle arguments to overwrite.
+        """
+        super().set_edge_labels(title=title, title2=title2, subtext=subtext,
+                                **edge_label_styles)
+
+    def set_node_styles(self, active={}, **node_styles):
+        """
+        Set self.node_styles and self.edge_groups given the provided node styles.
+
+        Parameters
+        ----------
+        **node_styles : dict, optional
+            Dictionary of tags, labels, and style kwargs for the nodes that
+            overwrite the default.
+            Has structure {tag:{label:kwargs}}, where kwargs are the keyword arguments
+            to nx.draw_networkx_nodes. The default is {"label":{}}.
+        """
+        super().set_node_styles(active=active, **node_styles)
+
+    def draw_graphviz(self, layout="twopi", overlap='voronoi', **kwargs):
+        """Call Graph.draw_graphviz."""
+        return super().draw_graphviz(layout=layout, overlap=overlap, **kwargs)
+
+    def draw_from(self, time, history=History(), **kwargs):
+        fault_act_hist = history._prep_faulty().get_values("a.active_actions")
+        activities = fault_act_hist.get_slice(time)
+        activity = {i for v in activities.values() for i in v}
+        for n in self.g.nodes():
+            if n in activity:
+                self.g.nodes[n]['active'] = True
+            else:
+                self.g.nodes[n]['active'] = False
+        return super().draw_from(time, history=history, **kwargs)
+
+
+class ActionArchitectureActGraph(ActionArchitectureGraph):
+    """ActionArchitectureGraph where only the sequence between actions is shown."""
+
+    def nx_from_obj(self, aa, **kwargs):
+        """Create Graph for ActionArchitecture Actions."""
+        return set_aa_nx_types(aa, aa.action_graph.copy())
+
+
+class ActionArchitectureFlowGraph(ActionArchitectureGraph):
+    """ActionArchitectureGraph that only shows flow relationships between actions."""
+
+    def nx_from_obj(self, aa, **kwargs):
+        """Create Graph for ActionArchitecture flows."""
+        return set_aa_nx_types(aa, aa.flow_graph.copy())
+
+
 
 
 class ActionArchitecture(Architecture):
@@ -217,3 +351,7 @@ class ActionArchitecture(Architecture):
                 if num_prop > 10000:
                     raise Exception("Undesired looping in Function ASG for: "+self.name)
             self.active_actions = active_actions
+
+    def as_modelgraph(self, gtype=ActionArchitectureGraph, **kwargs):
+        """Create and return the corresponding ModelGraph for the Object."""
+        return gtype(self, **kwargs)

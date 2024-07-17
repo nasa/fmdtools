@@ -323,43 +323,6 @@ class ExtModelGraph(ModelGraph):
                         + self.__class__.__name__)
 
 
-def graph_factory(obj, **kwargs):
-    """
-    Create the default Graph for a given object. Used in fmdtools.sim.get_result.
-
-    Parameters
-    ----------
-    obj : object
-        object corresponding to a specific graph type
-    **kwargs : kwargs
-        Keyword arguments for the Graph class
-
-    Returns
-    -------
-    graph : Graph
-        Graph of the appropriate (default) class
-    """
-    from fmdtools.define.architecture.function import FunctionArchitecture
-    from fmdtools.define.flow.multiflow import MultiFlow
-    from fmdtools.define.flow.commsflow import CommsFlow
-    from fmdtools.define.architecture.action import ActionArchitecture
-
-    if isinstance(obj, FunctionArchitecture):
-        from fmdtools.analyze.graph.architecture import FunctionArchitectureGraph
-        return FunctionArchitectureGraph(obj, **kwargs)
-    elif isinstance(obj, CommsFlow):
-        from fmdtools.analyze.graph.flow import CommsFlowGraph
-        return CommsFlowGraph(obj, **kwargs)
-    elif isinstance(obj, MultiFlow):
-        from fmdtools.analyze.graph.flow import MultiFlowGraph
-        return MultiFlowGraph(obj, **kwargs)
-    elif isinstance(obj, ActionArchitecture):
-        from fmdtools.analyze.graph.architecture import ActionArchitectureGraph
-        return ActionArchitectureGraph(obj, **kwargs)
-    else:
-        raise Exception("No default graph for class "+obj.__class__.__name__)
-
-
 if __name__ == "__main__":
     import doctest
     doctest.testmod(verbose=True)
