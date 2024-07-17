@@ -23,7 +23,7 @@ from fmdtools.define.block.function import Function
 from fmdtools.define.container.mode import Mode
 from fmdtools.define.flow.base import Flow
 from fmdtools.define.architecture.function import FunctionArchitecture
-from fmdtools.analyze.graph.architecture import FunctionArchitectureGraph
+from fmdtools.define.architecture.function import FunctionArchitectureGraph
 from fmdtools.define.architecture.base import check_model_pickleability
 from fmdtools.define.container.parameter import Parameter
 from fmdtools.define.container.state import State
@@ -582,21 +582,22 @@ def script_try_faults(**kwargs):
 
 def script_fault_degradation_tables(**kwargs):
     """Show fault/degradation tables/plots for a given fault scenario."""
-    mdl = Pump(**kwargs)
+    mdl = Pump(**kwargs, track="all")
     endclass, mdlhist = propagate.one_fault(
         mdl, 'import_ee', 'no_v', time=29,  staged=True)
 
-    deghist = mdlhist.get_degraded_hist(*mdl.fxns, *mdl.flows)
+    ks = mdl.get_roles_as_dict("fxn", "flow", flex_prefixes=True)
+    deghist = mdlhist.get_degraded_hist(*ks)
     exp = deghist.get_metrics()
     deghist
     a = deghist.as_table()
-
-    b = mdlhist.get_fault_degradation_summary(*mdl.fxns, *mdl.flows)
+    b = mdlhist.get_fault_degradation_summary(*ks)
 
     exp = deghist.get_metrics()
     mg = FunctionArchitectureGraph(mdl)
-    mg.set_heatmap(exp)
+    mg.set_heatmap({"pump."+k: v for k, v in exp.items()})
     mg.draw()
+    return a, b
 
 
 def script_sample_faults(track='all', **kwargs):
@@ -660,6 +661,7 @@ if __name__ == "__main__":
     g2.draw_graphviz()
     Graph(ImportEE().create_graph()).draw_graphviz()
     script_show_graphs()
+    script_fault_degradation_tables()
     script_try_faults()
     script_sample_faults()
     check_model_pickleability(Pump(), try_pick=True)

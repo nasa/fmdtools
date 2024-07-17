@@ -475,11 +475,11 @@ class BaseObject(object):
             non_flex_roletypes = 'none'
 
         roles = self.get_roles(*non_flex_roletypes, with_immutable=with_immutable)
-        if not with_prefix:
-            non_flex_roles = {role: getattr(self, role) for role in roles}
-        else:
-            non_flex_foles = {self.name+'.'+role: getattr(self, role) for role in roles}
-        return {**flex_roles, **non_flex_roles}
+        non_flex_roles = {role: getattr(self, role) for role in roles}
+        all_roles = {**flex_roles, **non_flex_roles}
+        if with_prefix:
+            all_roles = {self.name+"."+k: v for k, v in all_roles.items()}
+        return all_roles
 
     def get_roledicts(self, *roledicts, with_immutable=True):
         """Get all roles in roledicts."""
