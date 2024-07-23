@@ -37,6 +37,7 @@ class ArchitectureGraph(ExtModelGraph):
         return mdl.create_graph(with_root=with_root, **kwargs)
 
     def set_nx_states(self, mdl, **kwargs):
+        """Set the states of the graph."""
         basename = mdl.get_full_name()
         for role, roleobj in mdl.get_roles_as_dict().items():
             name = get_obj_name(roleobj, role, basename=basename)

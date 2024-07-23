@@ -234,9 +234,9 @@ class BaseObject(object):
         return tuple([at[len(roletype)+1:]
                      for at in dir(self) if at.startswith(roletype+'_')])
 
-    def get_full_name(self):
+    def get_full_name(self, with_root=True):
         """Get the full name of the object (root + name)."""
-        if self.root:
+        if self.root and with_root:
             return self.root + "." + self.name
         else:
             return self.name
@@ -643,7 +643,7 @@ class BaseObject(object):
             attdict['obj'] = self
         return attdict
 
-    def set_node_attrs(self, g, **kwargs):
+    def set_node_attrs(self, g, with_root=True, **kwargs):
         """
         Set attributes of the object to a graph.
 
@@ -655,7 +655,7 @@ class BaseObject(object):
             Arguments to get_node_attrs.
         """
         attdict = self.get_node_attrs(**kwargs)
-        g.nodes[self.get_full_name()].update(attdict)
+        g.nodes[self.get_full_name(with_root=with_root)].update(attdict)
 
     def get_att_roletype(self, attname, raise_if_none=False):
         """
