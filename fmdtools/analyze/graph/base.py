@@ -74,11 +74,22 @@ class Graph(object):
     >>> dot = graph.draw_graphviz(saveas=loc+'gv_funcdecomp.svg')
     """
 
-    def __init__(self, g):
+    def __init__(self, g, check_info=True):
         if isinstance(g, nx.Graph):
             self.g = g
         else:
             raise Exception(str(g) + " not a networkx Graph object.")
+        if check_info:
+            self.check_type_info()
+
+    def check_type_info(self):
+        """Check that nodes and edges have type data."""
+        for n, v in self.g.nodes(data=True):
+            if 'nodetype' not in v:
+                raise Exception("nodetype not defined for node: "+n)
+        for end0, end1, v in self.g.edges(data=True):
+            if 'edgetype' not in v:
+                raise Exception('edgetype not defined for edge: '+end0+', '+end1)
 
     def set_pos(self, auto=True, overwrite=True, **pos):
         """

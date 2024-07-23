@@ -49,7 +49,7 @@ if __name__ == "__main__":
                        "examples/multirotor/drone_mdl_dynamic.py",
                        "examples/multirotor/drone_mdl_hierarchical.py"]
 
-    # retcode = pytest.main(["--doctest-modules", *doctest_modules])
+    retcode = pytest.main(["--doctest-modules", *doctest_modules])
 
     # retcode = pytest.main(["--html=./reports/junit/report.html",
     #                        "--self-contained-html",
@@ -107,18 +107,18 @@ if __name__ == "__main__":
 
     # for creating comprehensive test report:
 
-    retcode = pytest.main(["--cov-report",
-                            "html:reports/coverage",
-                            "--cov-report",
-                            "xml:reports/coverage/coverage.xml",
-                            "--cov",
-                            "--html=./reports/junit/report.html",
-                            "--junitxml=./reports/junit/junit.xml",
-                            "--overwrite",
-                            "--doctest-modules",
-                            "--nbmake",
-                            *["--ignore="+notebook for notebook in ignore_notebooks],
-                            "--continue-on-collection-errors"])
+    # retcode = pytest.main(["--cov-report",
+    #                         "html:reports/coverage",
+    #                         "--cov-report",
+    #                         "xml:reports/coverage/coverage.xml",
+    #                         "--cov",
+    #                         "--html=./reports/junit/report.html",
+    #                         "--junitxml=./reports/junit/junit.xml",
+    #                         "--overwrite",
+    #                         "--doctest-modules",
+    #                         "--nbmake",
+    #                         *["--ignore="+notebook for notebook in ignore_notebooks],
+    #                         "--continue-on-collection-errors"])
 
     # this should close any open plots
     plt.close()
