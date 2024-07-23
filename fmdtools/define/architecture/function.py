@@ -26,6 +26,10 @@ import sys
 from fmdtools.define.base import set_var
 from fmdtools.define.architecture.base import Architecture, ArchitectureGraph
 
+from fmdtools.define.block.function import ExampleFlow
+from fmdtools.define.block.function import ExampleFunction
+from fmdtools.define.container.parameter import ExampleParameter
+
 
 class FunctionArchitectureGraph(ArchitectureGraph):
     """
@@ -33,9 +37,17 @@ class FunctionArchitectureGraph(ArchitectureGraph):
 
     If get_states option is used on instantiation, a `states` dict is associated
     with the edges/nodes which can then be used to visualize function/flow attributes.
+
+    Examples
+    --------
+    >>> efa = FunctionArchitectureGraph(ExFxnArch())
+    >>> efa.g.nodes()
+    NodeView(('exfxnarch.flows.exf', 'exfxnarch.fxns.ex_fxn', 'exfxnarch.fxns.ex_fxn2'))
+    >>> efa.g.edges()
+    OutEdgeView([('exfxnarch.fxns.ex_fxn', 'exfxnarch.flows.exf'), ('exfxnarch.fxns.ex_fxn2', 'exfxnarch.flows.exf')])
     """
 
-    def set_fxn_nodestates(self, mdl):
+    def set_fxn_nodestates(self, mdl, with_root=True):
         """
         Attach attributes to Graph corresponding to function states.
 
@@ -47,9 +59,9 @@ class FunctionArchitectureGraph(ArchitectureGraph):
             Time to execute indicators at. Default is 0.0
         """
         for fxnname, fxn in mdl.fxns.items():
-            fxn.set_node_attrs(self.g, time=self.time)
+            fxn.set_node_attrs(self.g, time=self.time, with_root=with_root)
 
-    def set_flow_nodestates(self, mdl):
+    def set_flow_nodestates(self, mdl, with_root=True):
         """
         Attach attributes to Graph notes corresponding to flow states.
 
@@ -59,7 +71,7 @@ class FunctionArchitectureGraph(ArchitectureGraph):
             Model to represent
         """
         for flowname, flow in mdl.flows.items():
-            flow.set_node_attrs(self.g, time=self.time)
+            flow.set_node_attrs(self.g, time=self.time, with_root=with_root)
 
     def get_multi_edges(self, mdl, subedges):
         """
@@ -175,7 +187,15 @@ class FunctionArchitectureFlowGraph(FunctionArchitectureGraph):
     """
     Create a Graph of FunctionArchitecture flows.
 
-    In this Graph, flows are set as nodes and ther connections (via functions) are edges
+    In this Graph, flows are set as nodes and connecting functions are edges.
+
+    Examples
+    --------
+    >>> efa = FunctionArchitectureFlowGraph(ExFxnArch())
+    >>> efa.g.nodes()
+    NodeView(('exf',))
+    >>> efa.g.nodes['exf']
+    {'bipartite': 1, 'nodetype': 'Flow', 's': ExampleState(x=0.0, y=0.0), 'indicators': []}
     """
 
     def nx_from_obj(self, mdl, **kwargs):
@@ -189,7 +209,7 @@ class FunctionArchitectureFlowGraph(FunctionArchitectureGraph):
         return g
 
     def set_nx_states(self, mdl, **kwargs):
-        self.set_flow_nodestates(mdl)
+        self.set_flow_nodestates(mdl, with_root=False)
 
     def set_edge_labels(self, title='edgetype', title2='', subtext='functions',
                         **edge_label_styles):
@@ -202,6 +222,16 @@ class FunctionArchitectureFxnGraph(FunctionArchitectureGraph):
     Create a graph representation of the functions of the model.
 
     In this graph, functions are nodes and flows are edges.
+
+    Examples
+    --------
+    >>> efa = FunctionArchitectureFxnGraph(ExFxnArch())
+    >>> efa.g.nodes()
+    NodeView(('ex_fxn', 'ex_fxn2'))
+    >>> efa.g.edges()
+    EdgeView([('ex_fxn', 'ex_fxn2')])
+    >>> efa.g.edges[('ex_fxn', 'ex_fxn2')]
+    {'flows': "['exf']", 'edgetype': 'flows', 'exf': {'s': ExampleState(x=0.0, y=0.0), 'indicators': []}}
     """
 
     def nx_from_obj(self, mdl):
@@ -216,17 +246,15 @@ class FunctionArchitectureFxnGraph(FunctionArchitectureGraph):
 
     def set_nx_states(self, mdl):
         self.set_flow_edgestates(mdl)
-        self.set_fxn_nodestates(mdl)
+        self.set_fxn_nodestates(mdl, with_root=False)
 
     def set_flow_edgestates(self, mdl):
         edgevals = {}
-        flows = self.get_multi_edges(mdl, mdl.fxns)
-        for edge, flows in flows.items():
+        allflows = self.get_multi_edges(mdl, mdl.fxns)
+        for edge, flows in allflows.items():
             flowdict = {}
             for flow in flows:
-                flowdict[flow] = flow.get_roles_as_dict('container',
-                                                        with_immutable=False)
-                flowdict[flow]['indicators'] = flow.return_true_indicators(self.time)
+                flowdict[flow] = mdl.flows[flow].get_node_attrs()
             edgevals[edge] = flowdict
         nx.set_edge_attributes(self.g, edgevals)
 
@@ -253,6 +281,14 @@ class FunctionArchitectureTypeGraph(FunctionArchitectureGraph):
 
     Shows the containment relationship between function classes and flow classes in the
     model.
+
+    Examples
+    --------
+    >>> efa = FunctionArchitectureTypeGraph(ExFxnArch())
+    >>> efa.g.nodes()
+    NodeView(('ExFxnArch', 'ExampleFunction', 'ExampleFlow'))
+    >>> efa.g.edges()
+    OutEdgeView([('ExFxnArch', 'ExampleFunction'), ('ExampleFunction', 'ExampleFlow')])
     """
 
     def nx_from_obj(self, mdl, withflows=True, **kwargs):
@@ -348,7 +384,6 @@ class FunctionArchitecture(Architecture):
     For example, in a pump system, closing a valve can be modelled to not just
     reduce flow in the downstream pipe, but also increase pressure in upstream
     pipes.
-  
 
     Flexible Roles
     --------------
@@ -356,7 +391,7 @@ class FunctionArchitecture(Architecture):
         dictionary of flows objects in the model indexed by name
     fxns : dict
         dictionary of functions in the model indexed by name
-    
+
     Special Attributes
     ------------------
     functionorder : OrderedSet
@@ -372,9 +407,6 @@ class FunctionArchitecture(Architecture):
 
     Examples
     --------
-    >>> from fmdtools.define.block.function import ExampleFunction
-    >>> from fmdtools.define.flow.base import ExampleFlow
-    >>> from fmdtools.define.container.parameter import ExampleParameter
     >>> class ExFxnArch(FunctionArchitecture):
     ...     container_p = ExampleParameter
     ...     def init_architecture(self, **kwargs):
@@ -852,6 +884,17 @@ class FunctionArchitecture(Architecture):
         return gtype(self, **kwargs)
 
 
+class ExFxnArch(FunctionArchitecture):
+    """Example FunctionArchitecture for testing and documentation."""
+
+    container_p = ExampleParameter
+
+    def init_architecture(self, **kwargs):
+        self.add_flow("exf", ExampleFlow, s={'x': 0.0, 'y': 0.0})
+        self.add_fxn("ex_fxn", ExampleFunction, "exf", p=self.p)
+        self.add_fxn("ex_fxn2", ExampleFunction, "exf", p=self.p)
+
 if __name__ == "__main__":
+    FunctionArchitectureTypeGraph(ExFxnArch())
     import doctest
     doctest.testmod(verbose=True)
