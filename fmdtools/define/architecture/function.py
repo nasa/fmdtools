@@ -102,7 +102,7 @@ class FunctionArchitectureGraph(ArchitectureGraph):
     def get_staticnodes(self, mdl):
         """Get static node information for set_exec_order."""
         staticfxns = [mdl.fxns[sf].get_full_name() for sf in mdl.staticfxns]
-        staticflows = list(set([n for node in staticfxns
+        staticflows = list(set([n for node in staticfxns if node in self.g
                                 for n in self.g.neighbors(node)]))
         staticnodes = staticfxns + staticflows
         static_node_dict = {n: n in staticnodes for n in self.g.nodes()}
@@ -193,13 +193,14 @@ class FunctionArchitectureFlowGraph(FunctionArchitectureGraph):
     --------
     >>> efa = FunctionArchitectureFlowGraph(ExFxnArch())
     >>> efa.g.nodes()
-    NodeView(('exf',))
-    >>> efa.g.nodes['exf']
-    {'bipartite': 1, 'nodetype': 'Flow', 's': ExampleState(x=0.0, y=0.0), 'indicators': []}
+    NodeView(('exfxnarch.flows.exf',))
+    >>> efa.g.nodes['exfxnarch.flows.exf']
+    {'nodetype': 'Flow', 'classname': 'ExampleFlow', 's': ExampleState(x=0.0, y=0.0), 'indicators': []}
     """
 
     def nx_from_obj(self, mdl, **kwargs):
-        g = nx.projected_graph(mdl.graph, mdl.flows)
+        flows = [f.get_full_name() for f in mdl.flows.values()]
+        g = nx.projected_graph(mdl.create_graph(), flows)
         nodetypes = {fname: f.get_typename() for fname, f in mdl.flows.items()}
         nx.set_node_attributes(g, nodetypes, name='nodetype')
         fxns = self.get_multi_edges(mdl, mdl.flows)
@@ -209,7 +210,7 @@ class FunctionArchitectureFlowGraph(FunctionArchitectureGraph):
         return g
 
     def set_nx_states(self, mdl, **kwargs):
-        self.set_flow_nodestates(mdl, with_root=False)
+        self.set_flow_nodestates(mdl)
 
     def set_edge_labels(self, title='edgetype', title2='', subtext='functions',
                         **edge_label_styles):

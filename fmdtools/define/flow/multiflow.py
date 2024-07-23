@@ -205,7 +205,7 @@ class MultiFlow(Flow):
             getattr(self, local).reset()
 
     def copy(self, name='', glob=[], p={}, s={}, track=['s']):
-        if not s:
+        if not s and hasattr(self, 's'):
             s = self.s.asdict()
         cop = self.__class__(self.name, glob=glob, p=p, s=s, track=track)
         for loc in self.locals:

@@ -49,9 +49,9 @@ class Environment(CommsFlow):
 
     def __init__(self, name='', root='', glob=[], p={}, s={}, r={}, c={}, ga={},
                  track='default'):
-        if 'p' not in c and self.coords_c.container_p == self.container_p:
+        if 'p' not in c and getattr(self.coords_c, 'container_p', None) == getattr(self, 'container_p', None):
             c = {**c, 'p': p}
-        if 'p' not in ga and self.arch_ga.container_p == self.container_p:
+        if 'p' not in ga and getattr(self.arch_ga, 'container_p', None) == getattr(self, 'container_p', None):
             ga = {**ga, 'p': p}
         super().__init__(name=name, root=root, glob=glob, p=p, s=s, track=track)
         # NOTE: p and s also init here because if not, they are overritten
