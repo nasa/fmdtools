@@ -73,7 +73,6 @@ class Act(Action):
     flow_outcome = Outcome
 
     def behavior(self, time):
-        print(time, self.m)
         if not self.m.in_mode('failed', 'unable'):
             self.outcome.s.num_actions += 1
             self.hazard.s.mitigated = True
