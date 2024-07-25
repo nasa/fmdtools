@@ -424,6 +424,7 @@ class Block(Simulable):
                 arch_kwargs[k] = kwargs[k].copy(flows=b_flows, name=k)
             else:
                 arch_kwargs[k] = {'flows': b_flows, 'name': k}
+            arch_kwargs[k]['sp'] = self.sp
 
         return {'flows': b_flows, **arch_kwargs}
 
