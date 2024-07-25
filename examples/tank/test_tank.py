@@ -13,6 +13,7 @@ from tests.common import CommonTests
 
 class TankTests(unittest.TestCase, CommonTests):
     def setUp(self):
+        self.maxDiff = None
         self.mdl = Tank()
         self.fd = FaultDomain(self.mdl)
         self.fd.add_all()
@@ -231,6 +232,8 @@ def check_parallel():
 
 
 if __name__ == '__main__':
+    import sys
+    sys.path.append("../..")
     # NOTE: reset expected not to work since args are no longer being saved
 
     # suite = unittest.TestSuite()
@@ -238,10 +241,10 @@ if __name__ == '__main__':
     # runner = unittest.TextTestRunner()
     # runner.run(suite)
 
-    #suite = unittest.TestSuite()
-    #suite.addTest(TankTests("test_save_load_approach"))
-    #runner = unittest.TextTestRunner()
-    #runner.run(suite)
+    # suite = unittest.TestSuite()
+    # suite.addTest(TankTests("test_model_copy_same"))
+    # runner = unittest.TextTestRunner()
+    # runner.run(suite)
 
     #suite = unittest.TestSuite()
     #suite.addTest(TankTests("test_approach_parallelism_notrack"))
