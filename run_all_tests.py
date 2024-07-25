@@ -49,7 +49,7 @@ if __name__ == "__main__":
                        "examples/multirotor/drone_mdl_dynamic.py",
                        "examples/multirotor/drone_mdl_hierarchical.py"]
 
-    retcode = pytest.main(["--doctest-modules", *doctest_modules])
+    # retcode = pytest.main(["--doctest-modules", *doctest_modules])
 
     # retcode = pytest.main(["--html=./reports/junit/report.html",
     #                        "--self-contained-html",
@@ -58,7 +58,7 @@ if __name__ == "__main__":
     #                        "--continue-on-collection-errors"])
 
     # for testing all unittests
-    # retcode = pytest.main(["--continue-on-collection-errors"])
+    retcode = pytest.main(["--continue-on-collection-errors"])
 
     # for testing notebooks during development:
     fast_notebooks = ["examples/asg_demo/Action_Sequence_Graph.ipynb",
