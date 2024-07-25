@@ -2,7 +2,8 @@
 """Defines :class:`BaseContainer` class which other containers inherit from."""
 from recordclass import dataobject, astuple, asdict
 import copy
-from fmdtools.define.base import set_arg_as_type
+import pickle
+from fmdtools.define.base import set_arg_as_type, remove_para
 from fmdtools.analyze.common import get_sub_include
 from fmdtools.analyze.history import History
 import numpy as np
@@ -20,6 +21,14 @@ class BaseContainer(dataobject, mapping=True, iterable=True, copy_default=True):
 
     default_track = 'all'
     rolename = 'x'
+
+    def get_typename(self):
+        """Containers are typed as containers unless specified otherwise."""
+        return "Container"
+
+    def base_type(self):
+        """Return fmdtools type of the model class."""
+        return BaseContainer
 
     def check_role(self, roletype, rolename):
         """
@@ -386,6 +395,41 @@ class BaseContainer(dataobject, mapping=True, iterable=True, copy_default=True):
     def asdict(self):
         """Return fields as a dictionary."""
         return asdict(self)
+
+    def get_code(self, source):
+        """Get the code defining the Container."""
+        if self.__class__ == self.base_type():
+            code = ''
+        elif '\n\n    def' in source:
+            code = source.split('\n\n    def')[0].split("'''")[-1].split('"""')[-1]
+        else:
+            code = source.split("'''")[-1].split('"""')[-1]
+        code = "\n".join(code.split("\n    "))
+        return remove_para(code)
+
+def check_container_pick(container, *args, **kwargs):
+    """
+    Check that a given container class or object will pickle.
+
+    Examples
+    --------
+    >>> ex = ExContainer()
+    >>> check_container_pick(ex)
+    True
+    >>> check_container_pick(ExContainer, x=2.0)
+    True
+    >>> check_container_pick(ExContainer, 5.0, 40.0)
+    True
+    """
+    if isinstance(container, BaseContainer):
+        inputobj = container
+    else:
+        inputobj = container(*args, **kwargs)
+    pickdata = pickle.dumps(inputobj)
+    outputobj = pickle.loads(pickdata)
+    same_values = [getattr(inputobj, field) == getattr(outputobj, field)
+                   for field in container.__fields__]
+    return all(same_values)
 
 
 class ExContainer(BaseContainer):

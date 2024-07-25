@@ -31,6 +31,13 @@ class LabelStyle(dataobject):
         """Return kwargs for nx.draw_networkx_labels."""
         return asdict(self)
 
+    def gv_align(self, text):
+        if self.horizontalalignment == "left":
+            text = "\l".join(text.split("\n"))
+        elif self.horizontalalignment == "right":
+            text = "\\r".join(text.split("\n"))
+        return text.replace("    ", "....")
+
 
 class EdgeLabelStyle(LabelStyle):
     """Holds kwargs for nx.draw_networkx_edge_labels."""
@@ -51,7 +58,9 @@ def label_for_entry(g, iterator, entryname):
     entryname : str
         Property to get from the graph attributes. Options are:
 
-        - 'id' : The name of the node/edge
+        - 'id' : The full name of the node/edge
+
+        - 'shortname' :The short name of the node/edge (after .xx)
 
         - 'last' : The last part (after all "_" characters) of the name of the node/edge
 
@@ -68,12 +77,15 @@ def label_for_entry(g, iterator, entryname):
     """
     if entryname == "id":
         entryvals = {n: n for n in iterator}
+    elif entryname == 'shortname':
+        entryvals = {n: n.split('.')[-1] for n in iterator}
     elif entryname == "last":
         entryvals = {n: n.split("_")[-1] for n in iterator}
     elif 'type' in entryname:
         entryvals = {n: '<'+v[entryname]+'>' for n, v in iterator.items()}
     elif entryname == 'faults_and_indicators':
-        faults = nx.get_node_attributes(g, 'faults')
+        modes = nx.get_node_attributes(g, 'm')
+        faults = {n: [*m['faults']] for n, m in modes.items()}
         indicators = nx.get_node_attributes(g, 'indicators')
         all_entries = [*faults, *indicators]
         entryvals = {n: faults.get(n, [])+indicators.get(n, []) for n in all_entries}
@@ -107,7 +119,7 @@ class Labels(dataobject, mapping=True):
     subtext_style: LabelStyle = LabelStyle()
 
     def from_iterator(g, iterator, LabStyle,
-                      title='id', title2='', subtext='', **node_label_styles):
+                      title='shortname', title2='', subtext='', **node_label_styles):
         """
         Construct the labels from an interator (nodes or edges).
 
@@ -145,8 +157,10 @@ class Labels(dataobject, mapping=True):
                 if entry == 'title':
                     labs.title = evals
                 elif entry == 'title2':
-                    labs.title = {k: v+': '+evals.get(k, '')
-                                  for k, v in labs.title.items()}
+                    all1 = {k: v for k, v in labs.title.items()}
+                    all2 = {k: v for k, v in evals.items()}
+                    alls = [*all1, *all2]
+                    labs.title = {k: all1.get(k, '')+': '+all2.get(k, '') for k in alls}
                 elif entry == 'subtext':
                     labs.subtext = evals
 
@@ -165,7 +179,7 @@ class Labels(dataobject, mapping=True):
                 font_weight = 'normal'
             def_style = dict(verticalalignment=verticalalignment,
                              font_weight=font_weight,
-                             **node_label_styles.get(entry, {}))
+                             **node_label_styles.get(entry+'_style', {}))
             labs[entry+'_style'] = LabStyle(**def_style)
         return labs
 
@@ -184,6 +198,17 @@ class Labels(dataobject, mapping=True):
         for level in self.iter_groups():
             nx.draw_networkx_labels(g, pos, self[level],
                                     **self[level+'_style'].kwargs(), ax=ax)
+
+    def make_gv_label(self, node):
+        """Make the label for graphviz for a given node."""
+        label = ""
+        if node in self.title:
+            label += self.title_style.gv_align(self.title[node])
+        if node in self.subtext:
+            label += self.subtext_style.gv_align('\n'+str(self.subtext[node]))
+        if ('<' in label or '>' in label):
+            label = "\\" + label
+        return label
 
 
 if __name__ == "__main__":

@@ -18,5 +18,6 @@ class Component(Block):
         """
         return 0
 
-    def get_typename(self):
-        return "Component"
+    def base_type(self):
+        """Return fmdtools type of the model class."""
+        return Component

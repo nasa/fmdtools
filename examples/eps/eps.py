@@ -471,7 +471,7 @@ def discrep(value):
 
 if __name__ == "__main__":
     import fmdtools.sim.propagate as propagate
-    from fmdtools.analyze.graph.architecture import FunctionArchitectureGraph
+    from fmdtools.define.architecture.function import FunctionArchitectureGraph
     import numpy as np
 
     mdl = EPS(track=['fxns', 'flows', 'i'])
@@ -485,15 +485,16 @@ if __name__ == "__main__":
 
     # resgraph, mdlhists = propagate.one_fault(mdl, 'ee_to_me', 'toohigh_torque', desired_result="fxnflowgraph")
     # result.graph.draw()
+    ks = [*mdl.get_roles_as_dict("fxn", "flow", flex_prefixes=True)]
 
-    summary = mdlhists.get_fault_degradation_summary(*mdl.fxns, *mdl.flows)
+    summary = mdlhists.get_fault_degradation_summary(*ks)
     # endclasses, mdlhists = propagate.single_faults(mdl)
-    degradation = mdlhists.get_degraded_hist(*mdl.fxns, *mdl.flows)
+    degradation = mdlhists.get_degraded_hist(*ks)
 
     degtimemap = degradation.get_summary(operator=np.sum)
 
     mg = FunctionArchitectureGraph(mdl)
-    mg.set_heatmap(degtimemap)
+    mg.set_heatmap({'eps.'+k: v for k, v in degtimemap.items()})
     mg.draw()
 
     #propagate.single_faults(mdl)

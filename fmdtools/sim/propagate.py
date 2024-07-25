@@ -55,7 +55,6 @@ from fmdtools.sim.sample import SampleApproach
 from fmdtools.sim.scenario import Sequence, Scenario, SingleFaultScenario
 from fmdtools.analyze.result import Result, create_indiv_filename, file_check
 from fmdtools.analyze.history import History
-from fmdtools.analyze.graph.model import graph_factory
 from fmdtools.analyze.phases import from_hist
 
 # DEFAULT ARGUMENTS
@@ -405,7 +404,7 @@ def one_fault(mdl, *fxnfault, time=0, **kwargs):
     return result.flatten(), mdlhists.flatten()
 
 
-def sequence(mdl, seq={}, faultseq={}, disturbances={}, scen={}, rate=np.NaN,
+def sequence(mdl, seq={}, faultseq={}, disturbances={}, scen={}, rate=np.nan,
              include_nominal=True, **kwargs):
     """
     Run a sequence of faults and disturbances in the model at given times.
@@ -1183,11 +1182,7 @@ def get_result(scen, mdl, desired_result, nomhist={}, nomresult={}, time=0.0):
             obj = get_var(mdl, strs[1:])
         else:
             obj = mdl
-
-        if Gclass:
-            rgraph = Gclass(obj, time=time, **kwargs)
-        else:
-            rgraph = graph_factory(obj, time=time, **kwargs)
+        rgraph = obj.as_modelgraph(time=time, **kwargs)
 
         if nomresult and g in nomresult:
             rgraph.set_resgraph(nomresult[g])

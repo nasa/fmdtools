@@ -74,11 +74,22 @@ class Graph(object):
     >>> dot = graph.draw_graphviz(saveas=loc+'gv_funcdecomp.svg')
     """
 
-    def __init__(self, g):
+    def __init__(self, g, check_info=True):
         if isinstance(g, nx.Graph):
             self.g = g
         else:
             raise Exception(str(g) + " not a networkx Graph object.")
+        if check_info:
+            self.check_type_info()
+
+    def check_type_info(self):
+        """Check that nodes and edges have type data."""
+        for n, v in self.g.nodes(data=True):
+            if 'nodetype' not in v:
+                raise Exception("nodetype not defined for node: "+n)
+        for end0, end1, v in self.g.edges(data=True):
+            if 'edgetype' not in v:
+                raise Exception('edgetype not defined for edge: '+end0+', '+end1)
 
     def set_pos(self, auto=True, overwrite=True, **pos):
         """
@@ -124,7 +135,7 @@ class Graph(object):
             arguments to nx.draw_networkx_edges. The default is {"label":{}}.
         """
         self.edge_style_labels = ['edgetype', *edge_styles]
-        self.edge_groups = get_label_groups(self.g.edges(), *self.edge_style_labels)
+        self.edge_groups = get_label_groups(self.g.edges, *self.edge_style_labels)
         self.edge_styles = {}
         for edge_group in self.edge_groups:
             styles = {k: v for i, (k, v) in enumerate(edge_styles.items())
@@ -180,7 +191,8 @@ class Graph(object):
                                                 title=title, title2=title2,
                                                 subtext=subtext, **edge_label_styles)
 
-    def set_node_labels(self, title='id', title2='', subtext='', **node_label_styles):
+    def set_node_labels(self, title='shortname', title2='', subtext='',
+                        **node_label_styles):
         """
         Create labels using Labels.from_iterator for the nodes in the graph.
 
@@ -397,27 +409,13 @@ class Graph(object):
         for group, nodes in self.node_groups.items():
             gv_kwargs = self.node_styles[group].gv_kwargs()
             for node in nodes:
-                label = ""
-                if node in self.node_labels.title:
-                    label += self.node_labels.title[node]
-                if node in self.node_labels.subtext:
-                    label += '\n'+str(self.node_labels.subtext[node])
-                if ('<' in label or '>' in label):
-                    label = "\\" + label
-                dot.node(node, label=label, **gv_kwargs)
+                dot.node(node, label=self.node_labels.make_gv_label(node), **gv_kwargs)
 
         for group, edges in self.edge_groups.items():
             gv_kwargs = self.edge_styles[group].gv_kwargs()
             for edge in edges:
-                label = ""
-                if edge in self.edge_labels.title:
-                    label += self.edge_labels.title[edge]
-                if edge in self.edge_labels.subtext:
-                    label += '\n'+self.edge_labels.subtext[edge]
-                if ('<' in label or '>' in label):
-                    label = "\\" + label
-
-                dot.edge(edge[0], edge[1], label=label, **gv_kwargs)
+                dot.edge(edge[0], edge[1], label=self.edge_labels.make_gv_label(edge),
+                         **gv_kwargs)
         gv_plot_ending(dot, disp=disp, saveas=saveas)
         return dot
 
@@ -833,6 +831,7 @@ def get_label_groups(iterator, *tags):
     except KeyError as e:
         unable = {k: tuple(tag for tag in tags if tag not in vals)
                   for k, vals in iterator.items()}
+        unable = {k: v for k, v in unable.items() if v}
         raise Exception("The following keys lack the following tags: " +
                         str(unable)) from e
     label_groups = {}

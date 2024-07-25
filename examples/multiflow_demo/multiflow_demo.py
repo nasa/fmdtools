@@ -88,13 +88,35 @@ class ExModel(FunctionArchitecture):
 
         self.add_fxn("coordinator", Coordinator, "communications")
 
-if __name__=='__main__':
+
+if __name__ == '__main__':
     mdl = ExModel()
     mdl.flows["communications"].mover_1.s.x = 25
     mdl.flows["communications"].mover_1.send("mover_2")
     from fmdtools.sim import propagate
+    from fmdtools.analyze.graph.base import Graph
 
-    endres, mdlhist = propagate.nominal(mdl, desired_result='graph.flows.communications')
+    g = mdl.flows['communications'].create_graph(role_nodes=['local'],
+                                                 roles_to_connect=["locals"],
+                                                 recursive=True,
+                                                 with_root=False)
 
-    endres.graph.flows.communications.draw()
-    endres.graph.flows.communications.draw_graphviz()
+    g2 = Graph(g)
+    g2.draw()
+
+    g = mdl.flows['communications'].create_graph(role_nodes=['local'],
+                                                 recursive=True)
+
+    g2 = Graph(g)
+    g2.draw()
+
+    from fmdtools.define.flow.multiflow import MultiFlowGraph
+    from fmdtools.define.flow.commsflow import CommsFlowGraph
+    MultiFlowGraph(mdl.flows['communications']).draw()
+    CommsFlowGraph(mdl.flows['communications']).draw()
+
+    # endres, mdlhist = propagate.nominal(mdl, desired_result='graph.flows.communications')
+
+    # endres.graph.flows.communications.set_node_labels(title='id', subtext='s')
+    # endres.graph.flows.communications.draw()
+    # endres.graph.flows.communications.draw_graphviz()

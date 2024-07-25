@@ -18,7 +18,7 @@ Flows:
     - Override Communications
     - Ground
     - Position Signal
-    - Vidoe
+    - Video
     - Electrical Energy
     - Position
     - Auto Control
