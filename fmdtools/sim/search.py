@@ -345,7 +345,7 @@ class SimpleProblem(BaseProblem):
     """
 
     def __init__(self, *variables):
-        self.variables = {v: np.NaN for v in variables}
+        self.variables = {v: np.nan for v in variables}
         super().__init__()
         self.callables = {}
 
@@ -717,7 +717,7 @@ class ParameterSimProblem(BaseSimProblem):
             Keyword arguments to prop_method.
         """
         self.parameterdomain = parameterdomain
-        self.variables = {v: np.NaN for v in self.parameterdomain.variables}
+        self.variables = {v: np.nan for v in self.parameterdomain.variables}
         super().__init__(mdl, prop_method, *args, **kwargs)
 
     def sim_mdl(self, *x):

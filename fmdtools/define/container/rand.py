@@ -86,6 +86,10 @@ class Rand(BaseContainer):
         if self.seed is None:
             raise Exception("Invalid seed: None")
 
+    def base_type(self):
+        """Return fmdtools type of the model class."""
+        return Rand
+
     def get_rand_states(self, auto_update_only=False):
         """
         Get the randomly-assigned states associated with the Rand at self.s.

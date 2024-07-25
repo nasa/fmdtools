@@ -1,8 +1,31 @@
 # -*- coding: utf-8 -*-
-"""Defines :class:`CommsFlow` class representing perception and communications."""
+"""
+Representation of flows with the capability for representing a communications network.
+
+Defines:
+- :class:`CommsFlow` class which represents communications networks.
+- :class:`CommsFlowGraph` class which represents `CommsFlow` in a ModelGraph structure.
+"""
 import copy
 from fmdtools.define.flow.base import Flow
-from fmdtools.define.flow.multiflow import MultiFlow
+from fmdtools.define.flow.multiflow import MultiFlow, MultiFlowGraph
+from fmdtools.define.base import get_obj_name
+from fmdtools.analyze.graph.model import add_edge, ModelGraph
+
+
+class CommsFlowGraph(MultiFlowGraph):
+    """
+    Create graph representation of the CommsFlow.
+
+    Returns
+    -------
+    g : networkx.DiGraph
+        Graph of the commsflow connections.
+    """
+
+    def __init__(self, flow, role_nodes=['local'], recursive=True, **kwargs):
+        ModelGraph.__init__(self, flow, role_nodes=role_nodes, recursive=recursive,
+                            **kwargs)
 
 
 class CommsFlow(MultiFlow):
@@ -21,12 +44,16 @@ class CommsFlow(MultiFlow):
         - clear_inbox, for clearing the inbox to enable more messages to be received
     """
 
-    slots = ['__dict__']
+    slots = ['fxns', '__dict__']
     check_dict_creation = False
 
-    def __init__(self, name='', glob=[], p={}, s={}, track=['s']):
+    def __init__(self, name='', glob=[], track=['s'], **kwargs):
         self.fxns = {}
-        super().__init__(name=name, glob=glob, p=p, s=s, track=track)
+        super().__init__(name=name, glob=glob, track=track, **kwargs)
+
+    def base_type(self):
+        """Return fmdtools type of the model class."""
+        return CommsFlow
 
     def __repr__(self):
         rep_str = Flow.__repr__(self)
@@ -159,11 +186,11 @@ class CommsFlow(MultiFlow):
         if fxn_from == "all":
             fxn_from = self.glob.fxns[fxn_to]["in"]
         elif fxn_from == "ports":
-            fxn_from = [f for f in fxn_to.locals]
-        elif type(fxn_from) == str:
+            fxn_from = [f for f in self.locals]
+        elif isinstance(fxn_from, str):
             fxn_from = {fxn_from: self.glob.fxns[fxn_to]["in"][fxn_from]
                         for i in range(1) if fxn_from in self.glob.fxns[fxn_to]["in"]}
-        elif type(fxn_from) == list:
+        elif isinstance(fxn_from, list):
             fxn_from = {f: self.glob.fxns[fxn_to]["in"][f]
                         for f in fxn_from if f in self.glob.fxns[fxn_to]["in"]}
         for f_from in list(fxn_from):
@@ -175,19 +202,6 @@ class CommsFlow(MultiFlow):
             port_to = self.get_port(fxn_to, f_from, "internal")
             port_to.s.assign(port_from.s,  *args, as_copy=True)
             self.glob.fxns[fxn_to]["received"][f_from]=args
-
-    def status(self):
-        stat = super().status()
-        for f in self.fxns:
-            stat[f+"_in"]=self.fxns[f]["in"]
-            stat[f+"_in"]=self.fxns[f]["received"]
-        return stat
-
-    def return_states(self):
-        states= super().return_states()
-        for f in self.fxns:
-            states.update({f+"_in"+fo: args for fo, args in self.fxns[f]["in"].items()})
-        return states
 
     def reset(self):
         super().reset()
@@ -205,12 +219,50 @@ class CommsFlow(MultiFlow):
                              ports=getattr(self.fxns[fxn]['internal'], "locals", []))
         return cop
 
-    def get_typename(self):
-        return "CommsFlow"
-
-    def return_mutables(self):
-        mutes = super().return_mutables()
-        comms_mutes = []
+    def find_mutables(self):
+        """Add in/received dicts to mutables."""
+        mutes = super().find_mutables()
         for f in self.fxns.values():
-            comms_mutes.append([f['in'], f['received']])
-        return (*mutes, *comms_mutes)
+            mutes.append([f['in'], f['received']])
+        return mutes
+
+    def add_subgraph_edges(self, g, with_flowedges=True, **kwargs):
+        """Add subgraph edges that account for the CommsFlow's comms structure."""
+        super().add_subgraph_edges(g, **kwargs)
+        if with_flowedges:
+            self.add_subgraph_flowedges(g, **kwargs)
+
+    def add_subgraph_flowedges(self, g, **kwargs):
+        """Add in/out edges between connected commsflows in the graph."""
+        for f in self.fxns:
+            int_flow, out_flow = self.get_vars(f, f+"_out")
+            int_ports = int_flow.locals
+            out_ports = out_flow.locals
+            # add internal ports going out
+            for portname, portobj in int_flow.get_roles_as_dict('locals').items():
+                if portname in out_ports:
+                    out_port = out_flow.get_vars(portname)
+                else:
+                    out_port = out_flow
+                out_name = out_port.get_full_name()
+                pname = portobj.get_full_name()
+                add_edge(g, pname, out_name, portname, "connection")
+            # add external ports going in
+            for f2 in self.fxns:
+                f2_out = self.get_vars(f2+"_out")
+                f2_out_ports = f2_out.locals
+                if int_flow.name in f2_out_ports:
+                    out_port = f2_out.get_vars(int_flow.name)
+                else:
+                    out_port = f2_out
+                if f2 in int_ports:
+                    in_port = int_flow.get_vars(f2)
+                else:
+                    in_port = int_flow
+                in_name = get_obj_name(in_port, in_port.name, basename=int_flow.root)
+                out_name = get_obj_name(out_port, out_port.name, basename=int_flow.root)
+                add_edge(g, in_name, out_name, "in", "connection")
+
+    def as_modelgraph(self, gtype=CommsFlowGraph, **kwargs):
+        """Create and return the corresponding ModelGraph for the Object."""
+        return gtype(self, **kwargs)

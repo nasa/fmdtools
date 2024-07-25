@@ -261,6 +261,10 @@ class Mode(BaseContainer, readonly=False):
             raise Exception("Invalid type for EPCs: " + str(type(EPCs)))
         return gtp*EPC_f
 
+    def base_type(self):
+        """Return fmdtools type of the model class."""
+        return Mode
+
     def return_mutables(self):
         return (self.mode, copy.copy(self.faults))
 

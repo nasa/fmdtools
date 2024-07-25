@@ -11,7 +11,7 @@ import copy
 import warnings
 import numpy as np
 
-from fmdtools.define.base import set_var, get_var
+from fmdtools.define.base import set_var
 from fmdtools.define.object.base import BaseObject
 from fmdtools.define.container.parameter import Parameter
 from fmdtools.define.container.time import Time
@@ -66,6 +66,9 @@ class SimParam(Parameter, readonly=True):
             kwargs['phases'] = p
         super().__init__(*args, **kwargs)
         self.find_any_phase_overlap()
+
+    def base_type(self):
+        return SimParam
 
     def find_any_phase_overlap(self):
         """Check that simparam phases don't overlap."""
@@ -298,47 +301,6 @@ class Simulable(BaseObject):
             fxns = {self.name: self}
         return fxns
 
-    def get_vars(self, *variables, trunc_tuple=True):
-        """
-        Get variable values in the simulable.
-
-        Parameters
-        ----------
-        *variables : list/string
-            Variables to get from the model. Can be specified as a list
-            ['fxnname2', 'comp1', 'att2'], or a str 'fxnname.comp1.att2'
-
-        Returns
-        -------
-        variable_values: tuple
-            Values of variables. Passes (non-tuple) single value if only one variable.
-        """
-        if type(variables) == str:
-            variables = [variables]
-        variable_values = [None]*len(variables)
-        for i, var in enumerate(variables):
-            if type(var) == str:
-                var = var.split(".")
-            if var[0] in ['functions', 'fxns']:
-                f = self.get_fxns()[var[1]]
-                var = var[2:]
-            elif var[0] == 'flows':
-                f = self.get_flows()[var[1]]
-                var = var[2:]
-            elif var[0] in self.get_fxns():
-                f = self.get_fxns()[var[0]]
-                var = var[1:]
-            elif var[0] in self.get_flows():
-                f = self.get_flows()[var[0]]
-                var = var[1:]
-            else:
-                f = self
-            variable_values[i] = get_var(f, var)
-        if len(variable_values) == 1 and trunc_tuple:
-            return variable_values[0]
-        else:
-            return tuple(variable_values)
-
     def get_scen_rate(self, fxnname, faultmode, time, phasemap={}, weight=1.0):
         """
         Get the scenario rate for the given single-fault scenario.
@@ -372,24 +334,6 @@ class Simulable(BaseObject):
             rate = fm.calc_rate(time, phasemap=phasemap, sim_time=sim_time,
                                 sim_units=self.sp.units, weight=weight)
         return rate
-
-    def find_mutables(self):
-        """Return list of mutable roles."""
-        return [getattr(self, mut) for mut in self.get_all_roles()
-                if mut not in ['p', 'sp']]
-
-    def return_mutables(self):
-        """
-        Return all mutable values in the block.
-
-        Used in static propagation steps to check if the block has changed.
-
-        Returns
-        -------
-        states : tuple
-            tuple of all states in the block
-        """
-        return tuple([mut.return_mutables() for mut in self.find_mutables()])
 
     def return_probdens(self):
         """Get the probability density associated with Block and things it contains."""
@@ -475,11 +419,11 @@ class Block(Simulable):
         arch_kwargs = {}
         for k in archs:
             if k in kwargs and isinstance(kwargs[k], dict):
-                arch_kwargs[k] = {**kwargs[k], **{'flows': b_flows}}
+                arch_kwargs[k] = {**kwargs[k], **{'flows': b_flows}, 'name': k}
             elif k in kwargs and isinstance(kwargs[k], BaseObject):
-                arch_kwargs[k] = kwargs[k].copy(flows=b_flows)
+                arch_kwargs[k] = kwargs[k].copy(flows=b_flows, name=k)
             else:
-                arch_kwargs[k] = {'flows': b_flows}
+                arch_kwargs[k] = {'flows': b_flows, 'name': k}
 
         return {'flows': b_flows, **arch_kwargs}
 
@@ -536,16 +480,9 @@ class Block(Simulable):
         """Return a dictionary of the Block's flows."""
         return {f: getattr(self, f) for f in self.flows}
 
-    def get_typename(self):
-        """
-        Get the name of the type (Block for Blocks).
-
-        Returns
-        -------
-        typename: str
-            Block
-        """
-        return "Block"
+    def base_type(self):
+        """Return fmdtools type of the model class."""
+        return Block
 
     def is_static(self):
         """Check if Block has static execution step."""
@@ -623,7 +560,7 @@ class Block(Simulable):
             self.m.add_fault(*self.r.rng.choice(faults))
         elif default == 'first':
             self.m.add_fault(faults[0])
-        elif type(default) == str:
+        elif isinstance(default, str):
             self.m.add_fault(default)
         else:
             self.m.add_fault(*default)

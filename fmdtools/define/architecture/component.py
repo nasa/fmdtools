@@ -8,6 +8,7 @@ class ComponentArchitecture(Architecture):
 
     __slots__ = ['comps', 'faultmodes']
     flexible_roles = ['flows', 'comps']
+    roletypes = ['container', 'flow', 'comp']
     rolename = 'ca'
 
     def __init__(self, **kwargs):

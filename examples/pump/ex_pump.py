@@ -23,7 +23,7 @@ from fmdtools.define.block.function import Function
 from fmdtools.define.container.mode import Mode
 from fmdtools.define.flow.base import Flow
 from fmdtools.define.architecture.function import FunctionArchitecture
-from fmdtools.analyze.graph.architecture import FunctionArchitectureGraph
+from fmdtools.define.architecture.function import FunctionArchitectureGraph
 from fmdtools.define.architecture.base import check_model_pickleability
 from fmdtools.define.container.parameter import Parameter
 from fmdtools.define.container.state import State
@@ -462,8 +462,8 @@ class Pump(FunctionArchitecture):
         """
         self.add_flow('ee_1', Electricity)
         self.add_flow('sig_1', Signal)
-        self.add_flow('wat_1', Water('wat_1'))
-        self.add_flow('wat_2', Water('wat_2'))
+        self.add_flow('wat_1', Water)
+        self.add_flow('wat_2', Water)
 
         """
         Functions are added to the model using the add_fxn() method, which must be
@@ -582,26 +582,28 @@ def script_try_faults(**kwargs):
 
 def script_fault_degradation_tables(**kwargs):
     """Show fault/degradation tables/plots for a given fault scenario."""
-    mdl = Pump(**kwargs)
+    mdl = Pump(**kwargs, track="all")
     endclass, mdlhist = propagate.one_fault(
         mdl, 'import_ee', 'no_v', time=29,  staged=True)
 
-    deghist = mdlhist.get_degraded_hist(*mdl.fxns, *mdl.flows)
+    ks = mdl.get_roles_as_dict("fxn", "flow", flex_prefixes=True)
+    deghist = mdlhist.get_degraded_hist(*ks)
     exp = deghist.get_metrics()
     deghist
     a = deghist.as_table()
-
-    b = mdlhist.get_fault_degradation_summary(*mdl.fxns, *mdl.flows)
+    b = mdlhist.get_fault_degradation_summary(*ks)
 
     exp = deghist.get_metrics()
     mg = FunctionArchitectureGraph(mdl)
-    mg.set_heatmap(exp)
+    mg.set_heatmap({"pump."+k: v for k, v in exp.items()})
     mg.draw()
+    return a, b
 
 
 def script_sample_faults(track='all', **kwargs):
     """Sample all faults from the pump."""
     mdl = Pump(track=track, **kwargs)
+    from fmdtools.sim.sample import SampleApproach
     faultapp = SampleApproach(mdl)
     faultapp.add_faultdomain("testdomain", "all")
     faultapp.add_faultsample("testsample", "fault_phases", "testdomain",
@@ -652,9 +654,16 @@ def script_sample_faults(track='all', **kwargs):
 if __name__ == "__main__":
     # import doctest
     # doctest.testmod(verbose=True)
-    from fmdtools.sim.sample import SampleApproach, ParameterSample, ParameterDomain
+    Pump().get_vars("flows.ee_1")
+    g = Pump().create_graph()
+    from fmdtools.analyze.graph.base import Graph
+    g2 = Graph(g)
+    g2.draw_graphviz()
+    Graph(ImportEE().create_graph()).draw_graphviz()
     script_show_graphs()
+    script_fault_degradation_tables()
     script_try_faults()
     script_sample_faults()
-
     check_model_pickleability(Pump(), try_pick=True)
+    import inspect
+    source = inspect.getsource(Pump)

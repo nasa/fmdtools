@@ -5,7 +5,7 @@ Defines :class:`BaseObject` class used to define objects.
 Classes in this module:
 
 - :class:`BaseObject`: Base object class used throughout.
-- :class:`ExampleObject`: Example base object for testing.
+- :class:`ObjectGraph`: Generic ModelGraph representation for objects.
 
 Functions contained in this module:
 
@@ -16,10 +16,38 @@ import dill
 import pickle
 import time
 import sys
-import inspect
 import numpy as np
+from inspect import signature, isclass
+from fmdtools.define.base import get_var, get_methods, get_obj_name
 from fmdtools.analyze.common import get_sub_include
 from fmdtools.analyze.history import History
+from fmdtools.analyze.graph.model import add_node, add_edge, remove_base, ModelGraph
+
+
+class ObjectGraph(ModelGraph):
+    """Objectgraph represents the definition of an Object."""
+
+    def __init__(self, mdl, with_methods=True, **kwargs):
+        ModelGraph.__init__(self, mdl, with_methods=with_methods, **kwargs)
+
+    def set_edge_labels(self, title='edgetype', title2='', subtext='role',
+                        **edge_label_styles):
+        super().set_edge_labels(title=title, title2=title2, subtext=subtext,
+                                **edge_label_styles)
+
+    def set_node_labels(self, title='shortname', title2='classname', **node_label_styles):
+        super().set_node_labels(title=title, title2=title2, **node_label_styles)
+
+
+example_object_code = """
+from fmdtools.define.container.state import ExampleState
+class ExampleObject(BaseObject):
+    container_s = ExampleState
+    def indicate_high_x(self):
+        return self.s.x > 1.0
+    def indicate_y_over_t(self, t):
+        return self.s.y > t
+"""
 
 
 class BaseObject(object):
@@ -95,15 +123,16 @@ class BaseObject(object):
     s.y:                            array(2)
     """
 
-    __slots__ = ('name', 'containers', 'indicators', 'track')
+    __slots__ = ('name', 'containers', 'indicators', 'track', 'root')
     roletypes = ['container']
     roledicts = []
     rolevars = []
     immutable_roles = ['p']
+    flexible_roles = []
     default_track = ['i']
     check_dict_creation = False
 
-    def __init__(self, name='', roletypes=[], track='default', **kwargs):
+    def __init__(self, name='', roletypes=[], track='default', root='', **kwargs):
         """
         Initialize the baseobject.
 
@@ -125,6 +154,8 @@ class BaseObject(object):
             - or a dict of form ::
 
                 {'fxns':{'fxn1':'att1'}, 'flows':{'flow1':'att1'}}
+        root : str
+            Name of object containing the object. Default is 'self'.
         **kwargs : dict, object
             Keywork arguments for the roles.
             May be a dict of non-default arguments (e.g. s={'x': 1.0}) or
@@ -134,10 +165,19 @@ class BaseObject(object):
             self.name = self.__class__.__name__.lower()
         else:
             self.name = name
+        self.root = root
         self.init_indicators()
         self.init_roletypes(*roletypes, **kwargs)
         self.init_track(track)
         self.check_slots()
+
+    def base_type(self):
+        """Return fmdtools type of the model class."""
+        return BaseObject
+
+    def get_typename(self):
+        """Return name of the fmdtools type of the model class."""
+        return self.base_type().__name__
 
     def check_slots(self):
         """Check if __slots__ were defined for the class to preemt __dict__ creation."""
@@ -153,7 +193,7 @@ class BaseObject(object):
             track = self.get_all_possible_track()
         elif track == 'none':
             track = []
-        elif type(track) == str:
+        elif isinstance(track, str):
             track = (track,)
 
         if not track:
@@ -194,6 +234,13 @@ class BaseObject(object):
         return tuple([at[len(roletype)+1:]
                      for at in dir(self) if at.startswith(roletype+'_')])
 
+    def get_full_name(self, with_root=True):
+        """Get the full name of the object (root + name)."""
+        if self.root and with_root:
+            return self.root + "." + self.name
+        else:
+            return self.name
+
     def init_roles(self, roletype, **kwargs):
         """
         Initialize the role 'roletype' for a given object.
@@ -219,10 +266,12 @@ class BaseObject(object):
         # initialize roles and add as attributes to the object
         for rolename in roles:
             container_initializer = getattr(self, roletype+'_'+rolename)
-            container_args = kwargs.get(rolename, {})
+            container_args = kwargs.get(rolename, dict())
             if isinstance(container_args, container_initializer):
                 container = container_args
             elif isinstance(container_args, dict):
+                if issubclass(container_initializer, BaseObject):
+                    container_args['root'] = self.get_full_name()
                 try:
                     container = container_initializer(**container_args)
                 except AttributeError as ae:
@@ -255,9 +304,7 @@ class BaseObject(object):
 
         Examples
         --------
-        >>> from fmdtools.define.container.state import ExampleState
-        >>> class ExampleObject(BaseObject):
-        ...    container_s = ExampleState
+        >>> exec(example_object_code)
         >>> ex = ExampleObject(s={'x': 1.0, 'y': 2.0})
         >>> ex2 = ExampleObject(s={'x': 3.0, 'y': 4.0})
         >>> ex.assign_roles('container', ex2)
@@ -275,7 +322,7 @@ class BaseObject(object):
         roles = getattr(self, roletype+'s')
         for role in roles:
             other_role = getattr(other_obj, role)
-            if bool(inspect.signature(other_role.copy).parameters):
+            if bool(signature(other_role.copy).parameters):
                 other_role_copy = other_role.copy(**kwargs)
             else:
                 other_role_copy = other_role.copy()
@@ -344,8 +391,8 @@ class BaseObject(object):
             List of inticators that return true at time
         """
         return [f for f, ind in self.get_indicators().items()
-                if (bool(inspect.signature(ind).parameters) and ind(time))
-                or (not bool(inspect.signature(ind).parameters) and ind())]
+                if (bool(signature(ind).parameters) and ind(time))
+                or (not bool(signature(ind).parameters) and ind())]
 
     def init_indicator_hist(self, h, timerange, track):
         """
@@ -388,13 +435,51 @@ class BaseObject(object):
             mem = sys.getsizeof(role)
         return mem
 
-    def get_roles(self, *roletypes, with_immutable=True):
-        """Get all roles."""
-        if not roletypes:
+    def get_default_roletypes(self, *roletypes):
+        if not roletypes or roletypes[0] == 'all':
             roletypes = self.roletypes
+        elif roletypes[0] == 'none':
+            roletypes = []
+        return roletypes
+
+    def get_roles(self, *roletypes, with_immutable=True, **kwargs):
+        """Get all roles."""
+        roletypes = self.get_default_roletypes(*roletypes)
         return [role for roletype in roletypes
                 for role in getattr(self, roletype+'s', [])
                 if with_immutable or role not in self.immutable_roles]
+
+    def get_flex_role_objs(self, *flexible_roles, flex_prefixes=False):
+        """Get the objects in flexible roles (e.g., functions, flows, components)."""
+        if not flexible_roles:
+            flexible_roles = self.flexible_roles
+        role_objs = {}
+        for role in flexible_roles:
+            roledict = getattr(self, role)
+            if isinstance(roledict, list) or isinstance(roledict, tuple):
+                roledict = {k: getattr(self, k) for k in roledict}
+            if not flex_prefixes:
+                role_objs.update(roledict)
+            else:
+                role_objs.update({role+'.'+k: v for k, v in roledict.items()})
+        return role_objs
+
+    def get_roles_as_dict(self, *roletypes, with_immutable=True, with_prefix=False,
+                          flex_prefixes=False, **kwargs):
+        """Return all roles and their objects as a dict."""
+        roletypes = self.get_default_roletypes(*roletypes)
+        flex_roles = [r+'s' for r in roletypes if r+'s' in self.flexible_roles]
+        flex_roles = self.get_flex_role_objs(*flex_roles, flex_prefixes=flex_prefixes)
+        non_flex_roletypes = [r for r in roletypes if r+'s' not in self.flexible_roles]
+        if not non_flex_roletypes:
+            non_flex_roletypes = 'none'
+
+        roles = self.get_roles(*non_flex_roletypes, with_immutable=with_immutable)
+        non_flex_roles = {role: getattr(self, role) for role in roles}
+        all_roles = {**flex_roles, **non_flex_roles}
+        if with_prefix:
+            all_roles = {self.name+"."+k: v for k, v in all_roles.items()}
+        return all_roles
 
     def get_roledicts(self, *roledicts, with_immutable=True):
         """Get all roles in roledicts."""
@@ -410,6 +495,44 @@ class BaseObject(object):
         rolevars = [role for role in self.rolevars
                     if with_immutable or role not in self.immutable_roles]
         return roles + roledict_roles + rolevars
+
+    def get_vars(self, *variables, trunc_tuple=True):
+        """
+        Get variable values in the object.
+
+        Parameters
+        ----------
+        *variables : list/string
+            Variables to get from the model. Can be specified as a list
+            ['fxnname2', 'comp1', 'att2'], or a str 'fxnname.comp1.att2'
+
+        Returns
+        -------
+        variable_values: tuple
+            Values of variables. Passes (non-tuple) single value if only one variable.
+        """
+        if isinstance(variables, str):
+            variables = [variables]
+        variable_values = [None]*len(variables)
+        for i, var in enumerate(variables):
+            if isinstance(var, str):
+                var = var.split(".")
+            if var[0] in self.roletypes + [rt+"s" for rt in self.roletypes]:
+                f = self.get_roles_as_dict()[var[1]]
+                var = var[2:]
+            elif var[0] in self.get_roles():
+                f = self.get_roles_as_dict()[var[0]]
+                var = var[1:]
+            else:
+                f = self
+            if var:
+                variable_values[i] = get_var(f, var)
+            else:
+                variable_values[i] = f
+        if len(variable_values) == 1 and trunc_tuple:
+            return variable_values[0]
+        else:
+            return tuple(variable_values)
 
     def get_memory(self):
         """
@@ -455,7 +578,7 @@ class BaseObject(object):
                     attr = getattr(self, at, False)
                     if hasattr(self, at):
                         if hasattr(attr, 'create_hist'):
-                            if 'track' in inspect.signature(attr.create_hist).parameters:
+                            if 'track' in signature(attr.create_hist).parameters:
                                 at_h = attr.create_hist(timerange, at_track)
                             else:
                                 at_h = attr.create_hist(timerange)
@@ -468,24 +591,242 @@ class BaseObject(object):
                             hist.init_att(at, attr, timerange, at_track)
             return hist.flatten()
 
-    def get_state(self):
-        """Get dict of state attributes for the block (if attached)."""
-        if hasattr(self, 's'):
-            return self.s.asdict()
-        else:
-            return {}
+    def find_mutables(self):
+        """Return list of mutable roles."""
+        return [getattr(self, mut) for mut in self.get_all_roles(with_immutable=False)]
 
-    def get_mode(self):
-        """Get list of modes present in the block (if any)."""
-        if hasattr(self, 'm'):
-            return [*self.m.faults]
+    def return_mutables(self):
+        """
+        Return all mutable values in the block.
+
+        Used in static propagation steps to check if the block has changed.
+
+        Returns
+        -------
+        mutables : tuple
+            tuple of all mutable roles for the object.
+        """
+        return tuple([mut.return_mutables() if hasattr(mut, 'return_mutables')
+                      else mut for mut in self.find_mutables()])
+
+    def get_node_attrs(self, roles=['container'], with_immutable=False,
+                       time=0.0, indicators=True, obj=False):
+        """
+        Get attributes from the node to attach to a graph node.
+
+        Parameters
+        ----------
+        g : nx.Graph
+            Graph where the object is a node.
+        roles : list, optional
+            Roles to set as node attributes. The default is ['container'].
+        with_immutable : bool, optional
+            Whether to include immutable roles. The default is False.
+        time : float, optional
+            Time to evaluate indicators at. The default is None.
+        indicators : bool, optional
+            Whether to evaluate indicators. The default is True.
+
+        Examples
+        --------
+        >>> exec(example_object_code)
+        >>> ExampleObject().get_node_attrs()
+        {'s': ExampleState(x=1.0, y=1.0), 'indicators': ['y_over_t']}
+        >>> ExampleObject().get_node_attrs(roles=["none"])
+        {'indicators': ['y_over_t']}
+        """
+        attdict = self.get_roles_as_dict(*roles, with_immutable=with_immutable)
+
+        if indicators:
+            attdict['indicators'] = self.return_true_indicators(time)
+        if obj:
+            attdict['obj'] = self
+        return attdict
+
+    def set_node_attrs(self, g, with_root=True, **kwargs):
+        """
+        Set attributes of the object to a graph.
+
+        Parameters
+        ----------
+        g : nx.Graph
+            Graph where the object is a node.
+        kwargs : kwargs
+            Arguments to get_node_attrs.
+        """
+        attdict = self.get_node_attrs(**kwargs)
+        g.nodes[self.get_full_name(with_root=with_root)].update(attdict)
+
+    def get_att_roletype(self, attname, raise_if_none=False):
+        """
+        Get the roletype for a given attribute.
+
+        Parameters
+        ----------
+        attname : str
+            Name of a variable in the object.
+
+        Returns
+        -------
+        att_roletype : str
+            Type of role that initiated the variable.
+
+        Examples
+        --------
+        >>> exec(example_object_code)
+        >>> ExampleObject().get_att_roletype("s")
+        'container'
+        """
+        att_roletype = ''
+        for roletype in self.roletypes:
+            if attname in self.get_roles(roletype):
+                att_roletype = roletype
+        if not att_roletype and raise_if_none:
+            raise Exception("Role not found for attribute: "+attname)
+        elif not att_roletype:
+            att_roletype = 'variable'
+        return att_roletype
+
+    def get_role_edgetype(self, attname, raise_if_none=False):
+        """
+        Get the edgetype for a given variable in the object.
+
+        Parameters
+        ----------
+        attname : TYPE
+            DESCRIPTION.
+        raise_if_none : TYPE, optional
+            DESCRIPTION. The default is False.
+
+        Returns
+        -------
+        edgetype : str
+            Edgetype to give the contained object.
+        """
+        roletype = self.get_att_roletype(attname, raise_if_none=raise_if_none)
+        roleobj = self.get_vars(attname)
+        if roletype == 'container':
+            return "containment"
+        elif hasattr(roleobj, 'get_full_name'):
+            if self.get_full_name() in roleobj.root:
+                return "containment"
+            else:
+                return "aggregation"
+        elif roletype == 'flow':
+            return "flow"
+        elif roletype == 'variable':
+            return "containment"
         else:
-            return []
+            raise Exception("Unknown edge type for role: " + roletype)
+
+    def _prep_graph(self, g=None, name='', **kwargs):
+        g = add_node(self, g=g, **kwargs)
+        if not name:
+            name = self.get_full_name()
+        return g, name
+
+    def create_graph(self, g=None, name='', with_methods=True, with_root=True,
+                     **kwargs):
+        """
+        Create a networkx graph view of the Block.
+
+        Parameters
+        ----------
+        g : nx.Graph
+            Existing networkx graph (if any). Default is None.
+        name : str
+            Name of the node. Default is '', which uses the get_full_name().
+        with_methods : bool
+            Whether to include methods. Default is True.
+        **kwargs : kwargs
+            Keyword arguments to create_role_subgraph.
+
+        Returns
+        -------
+        g : nx.Graph
+            Networkx graph.
+        """
+        g, name = self._prep_graph(g=g, name=name, **kwargs)
+        self.create_role_subgraph(g=g, name=name, **kwargs)
+        if with_methods:
+            self.create_method_subgraph(g=g, name=name, **kwargs)
+        if not with_root:
+            remove_base(g, name)
+        return g
+
+    def create_method_subgraph(self, g=None, name='', **kwargs):
+        """Create networkx graph of the Block and its methods."""
+        g, name = self._prep_graph(g=g, name=name, **kwargs)
+        for methodname, methodobj in get_methods(self).items():
+            mname = get_obj_name(methodobj)
+            add_node(methodobj, g=g, name=mname,
+                     classname=methodname, nodetype="method", **kwargs)
+            add_edge(g, name, mname, methodname, "containment")
+        return g
+
+    def add_subgraph_edges(self, g, roles_to_connect=[], **kwargs):
+        """Add non-role edges to the graph for the roles."""
+        if roles_to_connect:
+            self.create_role_con_edges(g, roles_to_connect=roles_to_connect, **kwargs)
+
+    def create_role_con_edges(self, g, roles_to_connect=[], role="connection",
+                              edgetype="connection"):
+        """Connect roles at the same level of hierarchy."""
+        basename = self.get_full_name()
+        roledict = self.get_roles_as_dict(*roles_to_connect)
+        for rolename, roleobj in roledict.items():
+            name = get_obj_name(roleobj, rolename, basename)
+            for rolename2, roleobj2 in roledict.items():
+                name2 = get_obj_name(roleobj2, rolename2, basename)
+                if not ((name2, name) in [*g.edges]) and name2 != name:
+                    add_edge(g, name, name2, role, edgetype)
+
+    def create_role_subgraph(self, g=None, name='', role_nodes=["all"], recursive=False,
+                             **kwargs):
+        """
+        Create a networkx graph view of the Block and its roles.
+
+        Parameters
+        ----------
+        g : nx.Graph
+            Existing networkx graph (if any). Default is None.
+        name : str
+            Name of the node. Default is '', which uses the get_full_name().
+        role_nodes : list, optional
+            Roletypes to include in the subgraph. The default is ["all"].
+        recursive : bool, optional
+            Whether to add nodes to the subgraph recursively from contained objects.
+            The default is False.
+        **kwargs : kwargs
+            kwargs to add_node
+
+        Returns
+        -------
+        g : nx.Graph
+            Networkx graph.
+        """
+        g, name = self._prep_graph(g=g, name=name, **kwargs)
+        roledict = self.get_roles_as_dict(*role_nodes, flex_prefixes=True)
+        for rolename, roleobj in roledict.items():
+            subname = get_obj_name(roleobj, role=rolename, basename=name)
+            add_node(roleobj, g, name=subname, **kwargs)
+            edgetype = self.get_role_edgetype(rolename)
+            add_edge(g, name, subname, rolename, edgetype)
+            if recursive and hasattr(roleobj, 'create_graph'):
+                roleobj.create_graph(g=g, role_nodes=role_nodes, recursive=recursive,
+                                     name=subname, **kwargs)
+        self.add_subgraph_edges(g, **kwargs)
+        return g
+
+    def as_modelgraph(self, gtype=ObjectGraph, **kwargs):
+        """Create and return the corresponding ModelGraph for the Object."""
+        return gtype(self, **kwargs)
 
 
 def check_pickleability(obj, verbose=True, try_pick=False, pause=0.2):
     """Check to see which attributes of an object will pickle (and parallelize)."""
     from pickle import PicklingError
+    from fmdtools.define.container.base import check_container_pick, BaseContainer
     unpickleable = []
     try:
         itera = vars(obj)
@@ -495,7 +836,15 @@ def check_pickleability(obj, verbose=True, try_pick=False, pause=0.2):
         print(name)
         time.sleep(pause)
         try:
-            if not dill.pickles(attribute):
+            if (isinstance(attribute, BaseContainer)
+                    or (isclass(attribute)
+                        and issubclass(attribute, BaseContainer))):
+                if not check_container_pick(attribute):
+                    unpickleable.append(name)
+            elif isinstance(attribute, BaseObject):
+                if any(check_pickleability(attribute, verbose=False)):
+                    unpickleable.append(name)
+            elif not dill.pickles(attribute):
                 unpickleable = unpickleable + [name]
         except ValueError as e:
             raise ValueError("Problem in " + name +
@@ -532,7 +881,7 @@ def init_obj(name, objclass=BaseObject, track='default', as_copy=False, **kwargs
     name : str
         Name to give the flow object
     objclass: class or object
-        Class inheriting from BaseObject, or already instantiated object. 
+        Class inheriting from BaseObject, or already instantiated object.
         Default is BaseObject.
     track: str/dict
         Which model states to track over time (overwrites mdl.default_track).
@@ -546,12 +895,12 @@ def init_obj(name, objclass=BaseObject, track='default', as_copy=False, **kwargs
 
             {'functions':{'fxn1':'att1'}, 'flows':{'flow1':'att1'}}
     as_copy: bool
-        If an object is provided for objclass, whether to copy that object (or just pass it). 
+        If an object is provided for objclass, whether to copy that object (or just pass it).
         Default is False.
     **kwargs :dict
         Other specialized roles to overrride
     """
-    if not inspect.isclass(objclass):
+    if not isclass(objclass):
         if not as_copy:
             fl = objclass
             fl.init_track(track)
@@ -567,5 +916,8 @@ def init_obj(name, objclass=BaseObject, track='default', as_copy=False, **kwargs
 
 
 if __name__ == "__main__":
+    exec(example_object_code)
+    ExampleObject().get_roles_as_dict("none")
     import doctest
     doctest.testmod(verbose=True)
+

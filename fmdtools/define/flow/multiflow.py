@@ -1,7 +1,58 @@
 # -*- coding: utf-8 -*-
-"""Defines :class:`MultiFlow` class which represents multiple flows in one graph."""
-from fmdtools.define.flow.base import Flow
+"""
+Representation of flows with multiple contained flows for perception/communication.
 
+Defines:
+- :class:`MultiFlow` class which represents multiple flows in one graph.
+- :class:`MultiFlowGraph` class which represents `MultiFlow` in a ModelGraph structure.
+"""
+from fmdtools.define.flow.base import Flow
+from fmdtools.analyze.graph.model import ModelGraph
+
+
+class MultiFlowGraph(ModelGraph):
+    """
+    Create ModelGraph corresponding to the MultiFlow sturucture.
+
+    Parameters
+    ----------
+    flow : MultiFlow
+        Multiflow object to represent.
+    role_nodes : list
+        What roles of the multiflow to include. Default is ['locals'].
+    recursive : bool
+        Whether to construct the graph recursively (with multiple levels). The default
+        is True
+    with_root :bool
+        Whether to include the root node. Default is False.
+    **kwargs : kwargs
+    """
+
+    def __init__(self, flow, role_nodes=['local'], recursive=True, with_root=False,
+                 **kwargs):
+        ModelGraph.__init__(self, flow, role_nodes=role_nodes, recursive=recursive,
+                            with_root=with_root, **kwargs)
+
+
+    def set_resgraph(self, other=False):
+        """
+        Process results for results graphs (show faults and degradations).
+
+        Parameters
+        ----------
+        other : Graph, optional
+            Graph to compare with (for degradations). The default is False.
+        """
+        if other:
+            self.set_degraded(other)
+            self.set_node_styles(degraded={}, faulty={})
+        else:
+            self.set_degraded(self)
+            self.set_node_styles(degraded={}, faulty={})
+        self.set_node_labels(title='id', subtext='indicators')
+
+    def draw_graphviz(self, layout="neato", overlap='false', **kwargs):
+        return super().draw_graphviz(layout=layout, overlap=overlap, **kwargs)
 
 class MultiFlow(Flow):
     """
@@ -19,22 +70,30 @@ class MultiFlow(Flow):
     as well as a single global view (which may represent the actual value)
     """
 
-    slots = ['__dict__']
+    slots = ['locals', '__dict__']
     check_dict_creation = False
+    flexible_roles = ['locals']
+    roletypes = ['container', 'local']
 
-    def __init__(self, name='', glob=[], s={}, p={}, track=['s']):
-        self.locals = []
-        super().__init__(name=name,  s=s, p=p, track=track)
+    def __init__(self, name='', root='', glob=[], track=['s'], **kwargs):
         if not glob:
             self.glob = self
         else:
             self.glob = glob
+            if not root:
+                root = self.glob.get_full_name()
+        super().__init__(name=name, root=root, track=track, **kwargs)
+        self.locals = []
 
     def __repr__(self):
         rep_str = Flow.__repr__(self)
         for loc in self.locals:
             rep_str = rep_str+"\n   "+self.get_view(loc).__repr__()
         return rep_str
+
+    def base_type(self):
+        """Return fmdtools type of the model class."""
+        return MultiFlow
 
     def create_local(self, name, attrs="all", p='global', s='global', track=['s'],
                      **kwargs):
@@ -67,12 +126,13 @@ class MultiFlow(Flow):
             oldflow = getattr(self, name)
             newflow = oldflow.copy(glob=self)
         else:
-            if p == 'global':
-                p = self.p
-            if s == 'global':
-                s = self.s.asdict()
-            newflow = self.__class__(name=name, glob=self, p=p, s=s, track=track,
-                                     **kwargs)
+            kwar = {}
+            if p == 'global' and hasattr(self, 'p'):
+                kwar['p'] = self.p
+            if s == 'global' and hasattr(self, 's'):
+                kwar['s'] = self.s.asdict()
+            kwar = {**kwar, **kwargs}
+            newflow = self.__class__(name=name, glob=self, track=track, **kwar)
         setattr(self, name, newflow)
         self.locals.append(name)
         if hasattr(self, 'h') and self.h:
@@ -102,7 +162,7 @@ class MultiFlow(Flow):
             view = self.glob
         elif name == "out":
             view = getattr(self.glob, self.name + "_out")
-        elif name in getattr(self, 'locals',[]): 
+        elif name in getattr(self, 'locals', []):
             view = getattr(self, name)
         else:
             view = getattr(self.glob, name)
@@ -124,32 +184,20 @@ class MultiFlow(Flow):
             States to update (defaults to all states)
         """
         get = self.get_view(to_get)
-        if to_update=='all':            
-            if hasattr(self, 'fxns'): 
+        if to_update == 'all':
+            if hasattr(self, 'fxns'):
                 updatelist = [*self.fxns]
             else:
                 updatelist = self.locals
-        elif type(to_update)==str:
+        elif isinstance(to_update, str):
             updatelist = [to_update]
-        elif type(to_update)==list:
+        elif isinstance(to_update, list):
             updatelist = to_update
-        else: 
+        else:
             raise Exception("Invalid to_update: "+str(to_update))
         for to_up in updatelist:
             up = self.get_view(to_update)
             up.s.assign(get.s, *states, as_copy=True)
-
-    def status(self):
-        stat = super().status()
-        for l in self.locals:
-            stat[l]=getattr(self, l).status()
-        return stat
-
-    def return_states(self):
-        states = self.status()
-        for l in self.locals:
-            states.update({l+"."+k:v for k, v in getattr(self, l).status().items()})
-        return states
 
     def reset(self):
         super().reset()
@@ -157,7 +205,7 @@ class MultiFlow(Flow):
             getattr(self, local).reset()
 
     def copy(self, name='', glob=[], p={}, s={}, track=['s']):
-        if not s:
+        if not s and hasattr(self, 's'):
             s = self.s.asdict()
         cop = self.__class__(self.name, glob=glob, p=p, s=s, track=track)
         for loc in self.locals:
@@ -172,10 +220,11 @@ class MultiFlow(Flow):
             self.h[localname] = local_flow.create_hist(timerange)
         return self.h
 
-    def get_typename(self):
-        return "MultiFlow"
+    def find_mutables(self):
+        """Find mutables (includes locals)."""
+        localflows = [getattr(self, lo) for lo in self.locals]
+        return [*super().find_mutables(), *localflows]
 
-    def return_mutables(self):
-        local_mutes = [getattr(self, l).return_mutables() for l in self.locals]
-        return (super().return_mutables(), *local_mutes)
-
+    def as_modelgraph(self, gtype=MultiFlowGraph, **kwargs):
+        """Create and return the corresponding ModelGraph for the Object."""
+        return gtype(self, **kwargs)

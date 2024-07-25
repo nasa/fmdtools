@@ -282,11 +282,11 @@ def edge_style_factory(style_tag, styles={}, **kwargs):
     >>> fig, ax = cs.show_nx(saveas=loc+'nx_connection.svg')
     >>> sv = cs.show_gv(disp=False, saveas=loc+'gv_connection.svg')
     """
-    if style_tag in ['flow', 'flows', 'functions']:
+    if style_tag in ['flow', 'flows', 'Flow', 'functions', 'aggregation']:
         style_class = FlowEdgeStyle
     elif style_tag == 'activation':
         style_class = ActivationEdgeStyle
-    elif style_tag == 'containment':
+    elif style_tag in ['containment', 'Containment']:
         style_class = ContainmentEdgeStyle
     elif style_tag == 'connection':
         style_class = ConnectionEdgeStyle
@@ -446,11 +446,29 @@ class CommsFlowNodeStyle(NodeStyle):
 class ContainerNodeStyle(NodeStyle):
     """Style representing containers."""
 
+    nx_node_shape: str = 's'
+    nx_linewidths: int = 0
+    gv_style: str = 'filled'
+    gv_shape: str = 'tab'
+    gv_penwidth: str = '1'
+
+
+class MethodNodeStyle(NodeStyle):
+
     nx_node_shape: str = 'd'
     nx_linewidths: int = 0
     gv_style: str = 'filled'
-    gv_shape: str = 'diamond'
-    gv_penwidth: str = '0'
+    gv_shape: str = 'component'
+    gv_penwidth: str = '1'
+
+
+class OtherNodeStyle(NodeStyle):
+    """Style representing other properties."""
+    nx_node_shape: str = "P"
+    nx_linewidths: int = 0
+    gv_style: str = 'filled'
+    gv_shape: str = 'Msquare'
+    gv_penwidth: str = '1'
 
 
 def node_style_factory(style_tag, styles={}, **kwargs):
@@ -505,7 +523,7 @@ def node_style_factory(style_tag, styles={}, **kwargs):
         node_style = MultiFlowNodeStyle
     elif style_tag in ['commsflow', 'CommsFlow', 'environment', 'Environment']:
         node_style = CommsFlowNodeStyle
-    elif style_tag == 'architecture':
+    elif 'Architecture' in style_tag or 'architecture' in style_tag:
         node_style = ArchitectureNodeStyle
     elif style_tag in ['block', 'Block']:
         node_style = BlockNodeStyle
@@ -515,8 +533,12 @@ def node_style_factory(style_tag, styles={}, **kwargs):
         node_style = ActionNodeStyle
     elif style_tag in ['component', 'Component']:
         node_style = ComponentNodeStyle
-    elif style_tag in ['container', 'state']:
+    elif style_tag in ['container', 'state', 'Container', 'State']:
         node_style = ContainerNodeStyle
+    elif style_tag in ['condition', 'Condition', 'method']:
+        node_style = MethodNodeStyle
+    elif style_tag in ['dict', 'flexible']:
+        node_style = OtherNodeStyle
     else:
         raise Exception("Invalid node style: "+str(style_tag))
     return node_style(styles=styles, **kwargs)

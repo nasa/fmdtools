@@ -75,8 +75,9 @@ class Function(Block):
         if hasattr(self, 'condfaults'):
             raise Exception("Use of condfaults() is deprecated.")
 
-    def get_typename(self):
-        return "Function"
+    def base_type(self):
+        """Return fmdtools type of the model class."""
+        return Function
 
     def return_faultmodes(self):
         """

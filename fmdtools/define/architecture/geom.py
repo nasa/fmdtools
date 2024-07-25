@@ -42,7 +42,7 @@ class GeomArchitecture(Architecture):
     lines.ex_line.s.occupied:     array(101)
     polys.ex_poly.s.occupied:     array(101)
     >>> ega.return_mutables()
-    ((-0.1, 0, 0.0, 1), False, False, False)
+    ((-0.1, 0, 0.0, 1), (False,), (False,), (False,))
     """
 
     container_p = Parameter
@@ -50,6 +50,10 @@ class GeomArchitecture(Architecture):
     all_possible = ['points', 'lines', 'polys']
     flexible_roles = ['points', 'lines', 'polys']
     rolename = 'ga'
+
+    def base_type(self):
+        """Return fmdtools type of the model class."""
+        return GeomArchitecture
 
     def init_architecture(self, **kwargs):
         """Use this placeholder method to define custom architectures."""
@@ -146,13 +150,6 @@ class GeomArchitecture(Architecture):
             if at_geom:
                 all_at[geomname] = at_geom
         return all_at
-
-    def return_states(self):
-        """Return a dict of states for each geom."""
-        states = {}
-        for geomname, geom in self.geoms().items():
-            states[geomname] = geom.s.asdict()
-        return states
 
     def show(self, geoms={'all': {}}, fig=None, ax=None, figsize=(4, 4), z=False,
              **kwargs):

@@ -38,6 +38,10 @@ class State(BaseContainer):
 
     rolename = 's'
 
+    def base_type(self):
+        """Return fmdtools type of the model class."""
+        return State
+
     def set_atts(self, **kwargs):
         """
         Set the given arguments to a given value.

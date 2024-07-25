@@ -1,11 +1,48 @@
 # -*- coding: utf-8 -*-
-"""Defines base :class:`Architecture` class used by other architecture classes."""
+"""
+Defines base :class:`Architecture` class used by other architecture classes.
+
+Includes:
+- :class:`Architecture` class defining architectures.
+- :class:`ArchitectureGraph` class which represents `Architecture` in a ModelGraph.
+"""
 from fmdtools.define.object.base import check_pickleability, BaseObject
 from fmdtools.define.flow.base import Flow
 from fmdtools.define.block.base import Simulable
-from fmdtools.define.object.base import init_obj
+from fmdtools.define.object.base import init_obj, get_obj_name
 from fmdtools.analyze.common import get_sub_include
+from fmdtools.analyze.graph.model import add_meth_edge, add_edge
+from fmdtools.analyze.graph.model import ExtModelGraph, set_node_states
 import time
+
+
+class ArchitectureGraph(ExtModelGraph):
+    """Base ModelGraph for Architectures."""
+
+    def nx_from_obj(self, mdl, with_root=False, **kwargs):
+        """
+        Generate the networkx.graph object corresponding to the model.
+
+        Parameters
+        ----------
+        mdl: FunctionArchitecture
+            Model to create the graph representation of
+
+        Returns
+        -------
+        g : networkx.Graph
+            networkx.Graph representation of model functions and flows
+            (along with their attributes)
+        """
+        return mdl.create_graph(with_root=with_root, **kwargs)
+
+    def set_nx_states(self, mdl, **kwargs):
+        """Set the states of the graph."""
+        basename = mdl.get_full_name()
+        for role, roleobj in mdl.get_roles_as_dict().items():
+            name = get_obj_name(roleobj, role, basename=basename)
+            if name in self.g.nodes:
+                set_node_states(self.g, roleobj, name, time=self.time)
 
 
 class Architecture(Simulable):
@@ -26,12 +63,16 @@ class Architecture(Simulable):
 
     def __init__(self, *args, as_copy=False, h={}, **kwargs):
         self.as_copy = as_copy
-        Simulable.__init__(self, *args, h=h, **kwargs)
+        Simulable.__init__(self, *args, h=h, roletypes=['container'], **kwargs)
         self.init_hist(h=h)
         self._init_flexroles = []
         self.init_flexible_roles(**kwargs)
         self.init_architecture(**kwargs)
         self.build(**kwargs)
+
+    def base_type(self):
+        """Return fmdtools type of the model class."""
+        return Architecture
 
     def check_role(self, roletype, rolename):
         """Check that 'arch_xa' role is used for the arch."""
@@ -96,7 +137,8 @@ class Architecture(Simulable):
 
         track = get_sub_include(name, get_sub_include(flex_role, self.track))
         obj = init_obj(name=name, objclass=objclass, track=track,
-                       as_copy=as_copy, **kwargs)
+                       as_copy=as_copy, root=self.get_full_name()+"."+flex_role,
+                       **kwargs)
 
         if hasattr(obj, 'h') and obj.h:
             hist = obj.h
@@ -217,21 +259,9 @@ class Architecture(Simulable):
         return {flow for flow, obj in self.flows.items()
                 if obj.__class__.__name__ == ftype}
 
-    def return_mutables(self):
-        sim_mutes = Simulable.return_mutables(self)
-        muts = [*sim_mutes]
-        role_objs = self.get_flex_role_objs()
-        for obj in role_objs.values():
-            if hasattr(obj, 'return_mutables'):
-                muts.extend(obj.return_mutables())
-        return tuple(muts)
-
-    def get_flex_role_objs(self):
-        role_objs = {}
-        for role in self.flexible_roles:
-            roledict = getattr(self, role)
-            role_objs.update(roledict)
-        return role_objs
+    def find_mutables(self):
+        """Get mutables for the architecture (includes flexible roles)."""
+        return [*super().find_mutables(), *self.get_flex_role_objs().values()]
 
     def update_seed(self, seed=[]):
         """
@@ -338,6 +368,23 @@ class Architecture(Simulable):
 
     def get_all_possible_track(self):
         return super().get_all_possible_track() + self.flexible_roles
+
+    def add_subgraph_edges(self, g, cond_edges=True, flow_edges=True, **kwargs):
+        """Add edges connecting the objects (conditions and flows) to a graph."""
+        BaseObject.add_subgraph_edges(self, g, **kwargs)
+        for flex_role in self.flexible_roles:
+            role_objs = self.get_flex_role_objs(flex_role)
+            for rolename, obj in role_objs.items():
+                objname = get_obj_name(obj, rolename, self.get_full_name())
+                add_meth_edge(g, obj, rolename, edgetype="activation")
+                if flow_edges and hasattr(obj, 'flows'):
+                    for locflowname, flowobj in obj.get_roles_as_dict('flow').items():
+                        fname = flowobj.get_full_name()
+                        add_edge(g, objname, fname, locflowname, 'flow')
+
+    def as_modelgraph(self, gtype=ArchitectureGraph, **kwargs):
+        """Create and return the corresponding ModelGraph for the Object."""
+        return gtype(self, **kwargs)
 
 
 def check_model_pickleability(model, try_pick=False):
