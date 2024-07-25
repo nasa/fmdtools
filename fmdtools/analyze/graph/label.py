@@ -45,6 +45,18 @@ class EdgeLabelStyle(LabelStyle):
     rotate: bool = False
 
 
+def make_shortname(name):
+    return name.split('.')[-1] 
+
+
+def make_lastname(name):
+    return name.split("_")[-1]
+
+
+def shorten_name(name, rem_ind=0):
+    return ".".join(name.split('.')[rem_ind:])
+
+
 def label_for_entry(g, iterator, entryname):
     """
     Create the label dictionary for a given entry value of interest.
@@ -78,9 +90,9 @@ def label_for_entry(g, iterator, entryname):
     if entryname == "id":
         entryvals = {n: n for n in iterator}
     elif entryname == 'shortname':
-        entryvals = {n: n.split('.')[-1] for n in iterator}
+        entryvals = {n: make_shortname(n) for n in iterator}
     elif entryname == "last":
-        entryvals = {n: n.split("_")[-1] for n in iterator}
+        entryvals = {n: make_lastname(n) for n in iterator}
     elif 'type' in entryname:
         entryvals = {n: '<'+v[entryname]+'>' for n, v in iterator.items()}
     elif entryname == 'faults_and_indicators':

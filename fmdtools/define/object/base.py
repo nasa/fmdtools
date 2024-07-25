@@ -17,8 +17,8 @@ import pickle
 import time
 import sys
 import numpy as np
-from inspect import signature, isclass
-from fmdtools.define.base import get_var, get_methods, get_obj_name
+from inspect import signature, isclass, ismethod
+from fmdtools.define.base import get_var, get_methods, get_obj_name, get_memory
 from fmdtools.analyze.common import get_sub_include
 from fmdtools.analyze.history import History
 from fmdtools.analyze.graph.model import add_node, add_edge, remove_base, ModelGraph
@@ -426,25 +426,18 @@ class BaseObject(object):
         rs = self.get_all_roles(with_immutable=False)
         return rs + ['i'] + self.rolevars
 
-    def get_role_memory(self, rolename):
-        """Get memory from a particular role."""
-        role = getattr(self, rolename)
-        if hasattr(role, 'get_memory'):
-            mem, _ = role.get_memory()
-        else:
-            mem = sys.getsizeof(role)
-        return mem
-
-    def get_default_roletypes(self, *roletypes):
+    def get_default_roletypes(self, *roletypes, no_flows=False):
         if not roletypes or roletypes[0] == 'all':
-            roletypes = self.roletypes
+            roletypes = [*self.roletypes]
         elif roletypes[0] == 'none':
             roletypes = []
+        if no_flows and 'flows' in roletypes:
+            roletypes.remove('flows')
         return roletypes
 
-    def get_roles(self, *roletypes, with_immutable=True, **kwargs):
+    def get_roles(self, *roletypes, with_immutable=True, no_flows=False, **kwargs):
         """Get all roles."""
-        roletypes = self.get_default_roletypes(*roletypes)
+        roletypes = self.get_default_roletypes(*roletypes, no_flows=no_flows)
         return [role for roletype in roletypes
                 for role in getattr(self, roletype+'s', [])
                 if with_immutable or role not in self.immutable_roles]
@@ -471,16 +464,23 @@ class BaseObject(object):
                                                    with_immutable=False).items()}
 
     def get_roles_as_dict(self, *roletypes, with_immutable=True, with_prefix=False,
-                          flex_prefixes=False, **kwargs):
+                          flex_prefixes=False, with_flex=True, no_flows=False,
+                          **kwargs):
         """Return all roles and their objects as a dict."""
         roletypes = self.get_default_roletypes(*roletypes)
         flex_roles = [r+'s' for r in roletypes if r+'s' in self.flexible_roles]
-        flex_roles = self.get_flex_role_objs(*flex_roles, flex_prefixes=flex_prefixes)
+        if with_flex:
+            flex_roles = self.get_flex_role_objs(*flex_roles,
+                                                 flex_prefixes=flex_prefixes)
+        else:
+            flex_roles = {}
         non_flex_roletypes = [r for r in roletypes if r+'s' not in self.flexible_roles]
         if not non_flex_roletypes:
             non_flex_roletypes = 'none'
 
-        roles = self.get_roles(*non_flex_roletypes, with_immutable=with_immutable)
+        roles = self.get_roles(*non_flex_roletypes,
+                               with_immutable=with_immutable,
+                               no_flows=no_flows)
         non_flex_roles = {role: getattr(self, role) for role in roles}
         all_roles = {**flex_roles, **non_flex_roles}
         if with_prefix:
@@ -551,9 +551,9 @@ class BaseObject(object):
         """
         mem = sys.getsizeof(self)
         mem_profile = {'base': mem}
-        roles_to_check = self.get_all_roles()
-        for rolename in roles_to_check:
-            mem_profile[rolename] = self.get_role_memory(rolename)
+        roles_to_check = self.get_roles_as_dict(no_flows=True)
+        for rolename, roleobj in roles_to_check.items():
+            mem_profile[rolename] = get_memory(roleobj)
             mem += mem_profile[rolename]
         return mem, mem_profile
 
@@ -599,7 +599,8 @@ class BaseObject(object):
 
     def find_mutables(self):
         """Return list of mutable roles."""
-        return [*self.get_roles_as_dict(with_immutable=False).values()]
+        return [v for v in self.get_roles_as_dict(with_immutable=False).values()
+                if not ismethod(v)]
 
     def return_mutables(self):
         """

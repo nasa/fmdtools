@@ -15,6 +15,7 @@ from recordclass import dataobject
 from ordered_set import OrderedSet
 import numpy as np
 import inspect
+import sys
 
 
 def get_var(obj, var):
@@ -276,3 +277,12 @@ def get_obj_name(obj, role='', basename=''):
             raise Exception("No role (" + role + ") or basename (" + basename +
                             ") for object: " + str(obj))
         return basename + "." + role
+
+
+def get_memory(role):
+    """Get memory of an object."""
+    if hasattr(role, 'get_memory'):
+        mem, _ = role.get_memory()
+    else:
+        mem = sys.getsizeof(role)
+    return mem

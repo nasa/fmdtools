@@ -132,6 +132,8 @@ def remove_base(g, basename):
     g.remove_nodes_from([*nx.isolates(g)])
 
 
+from fmdtools.analyze.graph.label import shorten_name
+
 class ModelGraph(Graph):
     """
     Superclass for Graphs meant to represent specific model constructs.
@@ -150,31 +152,37 @@ class ModelGraph(Graph):
     def __init__(self, mdl, **kwargs):
         Graph.__init__(self, mdl.create_graph(**kwargs))
 
-    def set_from(self, time, history=History()):
+    def get_nodes(self, rem_ind=0):
+        return [shorten_name(n, rem_ind) for n in self.g.nodes]
+
+    def set_from(self, time, history=History(), rem_ind=0):
         """Set ModelGraph faulty/degraded attributes from a given history."""
-        faulty = history.get_faulty_hist(*self.g.nodes,
+        faulty = history.get_faulty_hist(*self.get_nodes(rem_ind),
                                          withtotal=False,
                                          withtime=False).get_slice(time)
-        fault_nodes = {n: bool(faulty.get(n, 0)) for n in self.g.nodes}
+        fault_nodes = {n: bool(faulty.get(shorten_name(n, rem_ind), 0))
+                       for n in self.g.nodes}
         nx.set_node_attributes(self.g, fault_nodes, 'faulty')
 
-        faults = Result(history.get_faults_hist(*self.g.nodes).get_slice(time))
-        faults_nodes = {n: [k for k, v in faults.get(n).items() if v]
+        faults = Result(history.get_faults_hist(*self.get_nodes(rem_ind)).get_slice(time))
+        faults_nodes = {n:
+                        [k for k, v in faults.get(shorten_name(n, rem_ind)).items() if v]
                         if fault_nodes.get(n)
                         else [] for n in self.g.nodes}
         nx.set_node_attributes(self.g, faults_nodes, 'faults')
 
-        degraded = history.get_degraded_hist(*self.g.nodes,
+        degraded = history.get_degraded_hist(*self.get_nodes(rem_ind),
                                              withtotal=False,
                                              withtime=False).get_slice(time)
-        deg_nodes = {n: bool(degraded.get(n, 0)) for n in self.g.nodes}
+        deg_nodes = {n: bool(degraded.get(shorten_name(n, rem_ind), 0))
+                     for n in self.g.nodes}
         nx.set_node_attributes(self.g, deg_nodes, 'degraded')
 
         # nx.set_node_attributes(self.g, state_nodes, 'states')
         self.set_node_styles(degraded={}, faulty={})
         self.set_node_labels(title='id', subtext='faults')
 
-    def draw_from(self, time, history=History(), **kwargs):
+    def draw_from(self, time, history=History(), rem_ind=0, **kwargs):
         """
         Draws the graph with degraded/fault data at a given time.
 
@@ -194,7 +202,7 @@ class ModelGraph(Graph):
         ax : matplotlib axis
             Ax in the figure
         """
-        self.set_from(time, history)
+        self.set_from(time, history, rem_ind=rem_ind)
         kwargs = prep_animation_title(time, **kwargs)
         kwargs = clear_prev_figure(**kwargs)
         return self.draw(**kwargs)

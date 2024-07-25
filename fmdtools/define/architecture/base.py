@@ -36,6 +36,10 @@ class ArchitectureGraph(ExtModelGraph):
         """
         return mdl.create_graph(with_root=with_root, **kwargs)
 
+    def draw_from(self, *args, rem_ind=2, **kwargs):
+        """Set from a history (removes prefixes so it works at top level)."""
+        return super().draw_from(*args, rem_ind=rem_ind, **kwargs)
+
     def set_nx_states(self, mdl, **kwargs):
         """Set the states of the graph."""
         basename = mdl.get_full_name()
@@ -259,10 +263,6 @@ class Architecture(Simulable):
         return {flow for flow, obj in self.flows.items()
                 if obj.__class__.__name__ == ftype}
 
-    def find_mutables(self):
-        """Get mutables for the architecture (includes flexible roles)."""
-        return [*super().find_mutables(), *self.get_flex_role_objs().values()]
-
     def update_seed(self, seed=[]):
         """
         Update model seed and the seed in all contained roles.
@@ -351,6 +351,7 @@ class Architecture(Simulable):
                      sp=getattr(self, 'sp', {}),
                      track=getattr(self, 'track', {}),
                      h=self.h.copy(),
+                     t=kwargs.get('t', self.t.copy()),
                      as_copy=True)
         # send role dicts in to be copied via as_copy param.
         for flex_role in self.flexible_roles:

@@ -58,7 +58,7 @@ if __name__ == "__main__":
     #                        "--continue-on-collection-errors"])
 
     # for testing all unittests
-    retcode = pytest.main(["--continue-on-collection-errors"])
+    # retcode = pytest.main(["--continue-on-collection-errors"])
 
     # for testing notebooks during development:
     fast_notebooks = ["examples/asg_demo/Action_Sequence_Graph.ipynb",
@@ -72,7 +72,7 @@ if __name__ == "__main__":
                       "examples/tank/Tank_Analysis.ipynb",
                       "examples/taxiway/Paper_Notebook.ipynb"
                       ]
-    # retcode = pytest.main(["--nbmake", *fast_notebooks])
+    retcode = pytest.main(["--nbmake", *fast_notebooks])
 
     # for testing longer-running notebooks (>~20s each)
     slow_notebooks = ["examples/multirotor/Urban_Drone_Demo.ipynb",

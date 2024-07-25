@@ -419,12 +419,11 @@ class Block(Simulable):
         arch_kwargs = {}
         for k in archs:
             if k in kwargs and isinstance(kwargs[k], dict):
-                arch_kwargs[k] = {**kwargs[k], **{'flows': b_flows}, 'name': k}
+                arch_kwargs[k] = {**kwargs[k], **{'flows': b_flows}, 'name': k, 'sp': self.sp}
             elif k in kwargs and isinstance(kwargs[k], BaseObject):
-                arch_kwargs[k] = kwargs[k].copy(flows=b_flows, name=k)
+                arch_kwargs[k] = kwargs[k].copy(flows=b_flows, name=k, sp=self.sp)
             else:
-                arch_kwargs[k] = {'flows': b_flows, 'name': k}
-            arch_kwargs[k]['sp'] = self.sp
+                arch_kwargs[k] = {'flows': b_flows, 'name': k, 'sp': self.sp}
 
         return {'flows': b_flows, **arch_kwargs}
 
