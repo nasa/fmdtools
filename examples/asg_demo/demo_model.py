@@ -40,6 +40,7 @@ class Hazard(Flow):
 
 class ActionMode(Mode):
     fm_args = ('failed', 'unable')
+    mode: str = 'nominal'
     exclusive = True
 
 
@@ -72,6 +73,7 @@ class Act(Action):
     flow_outcome = Outcome
 
     def behavior(self, time):
+        print(time, self.m)
         if not self.m.in_mode('failed', 'unable'):
             self.outcome.s.num_actions += 1
             self.hazard.s.mitigated = True
@@ -177,6 +179,9 @@ class HazardModel(FunctionArchitecture):
 if __name__ == '__main__':
     import fmdtools.sim.propagate as prop
     mdl = HazardModel()
+    result_fault, mdlhist_fault = prop.one_fault(mdl, 'detect_hazard',
+                                                 'act_unable', time=4,
+                                                 desired_result='graph')
     result_fault, mdlhist_fault = prop.one_fault(mdl, 'detect_hazard',
                                                  'perceive_failed', time=4,
                                                  desired_result='graph')

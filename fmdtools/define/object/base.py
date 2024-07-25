@@ -593,7 +593,7 @@ class BaseObject(object):
 
     def find_mutables(self):
         """Return list of mutable roles."""
-        return [getattr(self, mut) for mut in self.get_all_roles(with_immutable=False)]
+        return [*self.get_roles_as_dict(with_immutable=False).values()]
 
     def return_mutables(self):
         """

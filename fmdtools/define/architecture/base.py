@@ -333,7 +333,7 @@ class Architecture(Simulable):
                 comp = compdict[self.faultmodes[fault]]
                 comp.m.add_fault(fault[len(comp.name)+1:])
 
-    def copy(self, flows={}):
+    def copy(self, flows={}, **kwargs):
         """
         Copy the architecture at the current state.
 
