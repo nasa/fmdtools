@@ -380,7 +380,8 @@ class Architecture(Simulable):
                 if flow_edges and hasattr(obj, 'flows'):
                     for locflowname, flowobj in obj.get_roles_as_dict('flow').items():
                         fname = flowobj.get_full_name()
-                        add_edge(g, objname, fname, locflowname, 'flow')
+                        if fname in g.nodes():
+                            add_edge(g, objname, fname, locflowname, 'flow')
 
     def as_modelgraph(self, gtype=ArchitectureGraph, **kwargs):
         """Create and return the corresponding ModelGraph for the Object."""
