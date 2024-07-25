@@ -129,8 +129,12 @@ class MultiFlow(Flow):
             kwar = {}
             if p == 'global' and hasattr(self, 'p'):
                 kwar['p'] = self.p
+            else:
+                kwar['p'] = p
             if s == 'global' and hasattr(self, 's'):
                 kwar['s'] = self.s.asdict()
+            else:
+                kwar['s'] = s
             kwar = {**kwar, **kwargs}
             newflow = self.__class__(name=name, glob=self, track=track, **kwar)
         setattr(self, name, newflow)
@@ -210,7 +214,7 @@ class MultiFlow(Flow):
         cop = self.__class__(self.name, glob=glob, p=p, s=s, track=track)
         for loc in self.locals:
             local = getattr(self, loc)
-            cop.create_local(local.name, s=local.s.asdict(), p=local.p)
+            cop.create_local(local.name, **local.copy_mut_containers())
         return cop
 
     def create_hist(self, timerange):

@@ -212,8 +212,7 @@ class CommsFlow(MultiFlow):
     def copy(self, name='', glob=[], p={}, s={}, track=['s']):
         cop = super().copy(name=name, glob=glob, p=p, s=s, track=track)
         for fxn in self.fxns:
-            cop.create_comms(fxn, attrs=self.fxns[fxn]['internal'].status(),
-                             out_attrs=self.fxns[fxn]['out'].status(),
+            cop.create_comms(fxn,
                              prev_in=copy.deepcopy(self.fxns[fxn]["in"]),
                              received=copy.deepcopy(self.fxns[fxn]["received"]),
                              ports=getattr(self.fxns[fxn]['internal'], "locals", []))

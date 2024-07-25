@@ -464,6 +464,12 @@ class BaseObject(object):
                 role_objs.update({role+'.'+k: v for k, v in roledict.items()})
         return role_objs
 
+    def copy_mut_containers(self):
+        """Return copies of the mutable containers."""
+        return {k: v.copy()
+                for k, v in self.get_roles_as_dict('container',
+                                                   with_immutable=False).items()}
+
     def get_roles_as_dict(self, *roletypes, with_immutable=True, with_prefix=False,
                           flex_prefixes=False, **kwargs):
         """Return all roles and their objects as a dict."""
