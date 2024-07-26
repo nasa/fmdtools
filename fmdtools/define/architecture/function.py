@@ -200,7 +200,9 @@ class FunctionArchitectureFlowGraph(FunctionArchitectureGraph):
 
     def nx_from_obj(self, mdl, **kwargs):
         flows = [f.get_full_name() for f in mdl.flows.values()]
-        g = nx.projected_graph(mdl.create_graph(), flows)
+        g0 = mdl.create_graph(with_methods=False, with_root=False,
+                              roles_to_connect=['fxn', 'flow']).to_undirected()
+        g = nx.projected_graph(g0, flows)
         nodetypes = {fname: f.get_typename() for fname, f in mdl.flows.items()}
         nx.set_node_attributes(g, nodetypes, name='nodetype')
         fxns = self.get_multi_edges(mdl, mdl.flows)
@@ -236,7 +238,7 @@ class FunctionArchitectureFxnGraph(FunctionArchitectureGraph):
     """
 
     def nx_from_obj(self, mdl):
-        g = nx.projected_graph(mdl.graph, mdl.fxns)
+        g = nx.projected_graph(mdl.graph.to_undirected(), mdl.fxns)
         nodetypes = {fname: f.get_typename() for fname, f in mdl.fxns.items()}
         nx.set_node_attributes(g, nodetypes, name='nodetype')
         flows = self.get_multi_edges(mdl, mdl.fxns)
@@ -274,6 +276,10 @@ class FunctionArchitectureFxnGraph(FunctionArchitectureGraph):
                         **edge_label_styles):
         super().set_edge_labels(title=title, title2=title2, subtext=subtext,
                                 **edge_label_styles)
+
+    def draw_from(self, *args, rem_ind=0, **kwargs):
+        return FunctionArchitectureGraph.draw_from(self, *args,
+                                                   rem_ind=rem_ind, **kwargs)
 
 
 class FunctionArchitectureTypeGraph(FunctionArchitectureGraph):

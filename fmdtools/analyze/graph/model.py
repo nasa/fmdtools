@@ -10,11 +10,13 @@ and methods:
 - :func:`graph_factory`: Creates the default Graph for a given object.
 """
 from fmdtools.analyze.graph.base import Graph
+from fmdtools.analyze.graph.label import shorten_name
 from fmdtools.analyze.result import Result
 from fmdtools.analyze.history import History
 from fmdtools.analyze.common import prep_animation_title
 from fmdtools.analyze.common import clear_prev_figure
 from fmdtools.define.base import get_code_attrs, get_obj_name
+
 import networkx as nx
 import inspect
 
@@ -132,7 +134,6 @@ def remove_base(g, basename):
     g.remove_nodes_from([*nx.isolates(g)])
 
 
-from fmdtools.analyze.graph.label import shorten_name
 
 class ModelGraph(Graph):
     """
@@ -149,8 +150,8 @@ class ModelGraph(Graph):
         keyword arguments for self.nx_from_obj
     """
 
-    def __init__(self, mdl, **kwargs):
-        Graph.__init__(self, mdl.create_graph(**kwargs))
+    def __init__(self, mdl, check_info=True, **kwargs):
+        Graph.__init__(self, mdl.create_graph(**kwargs), check_info=check_info)
 
     def get_nodes(self, rem_ind=0):
         return [shorten_name(n, rem_ind) for n in self.g.nodes]
@@ -299,7 +300,7 @@ class ExtModelGraph(ModelGraph):
         to node/edge attributes.
     """
 
-    def __init__(self, mdl, get_states=True, time=0.0, **kwargs):
+    def __init__(self, mdl, get_states=True, time=0.0, check_info=False, **kwargs):
         """
         Generate the FunctionArchitectureGraph corresponding to a given Model.
 
@@ -315,7 +316,7 @@ class ExtModelGraph(ModelGraph):
         **kwargs : kwargs
             (placeholder for kwargs)
         """
-        Graph.__init__(self, self.nx_from_obj(mdl, **kwargs))
+        Graph.__init__(self, self.nx_from_obj(mdl, **kwargs), check_info=check_info)
         if get_states:
             self.time = time
             self.set_nx_states(mdl, **kwargs)

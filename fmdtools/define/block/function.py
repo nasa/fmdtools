@@ -231,10 +231,14 @@ class GenericFxn(Function):
     For use when the user has not yet defined a class for the given (to be implemented)
     function block. Acts as a placeholder that enables simulation.
     """
-    __slots__ = ()
+    __slots__ = ['__dict__']
+    check_dict_creation = False
 
     def __init__(self, name='', flows={}, args_f={}, **kwargs):
         super().__init__(name=name, flows={}, **kwargs)
+        self.flows = tuple([*flows.keys()])
+        for fl, flobj in flows.items():
+            setattr(self, fl, flobj)
 
 
 if __name__ == "__main__":
