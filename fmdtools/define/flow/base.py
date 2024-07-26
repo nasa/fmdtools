@@ -37,8 +37,11 @@ class Flow(BaseObject):
 
     def __repr__(self):
         if hasattr(self, 'name'):
-            return (getattr(self, 'name') + ' ' + self.__class__.__name__ +
-                    ' flow: ' + self.s.__repr__())
+            startext = getattr(self, 'name') + ' ' + self.__class__.__name__
+            if hasattr(self, 's'):
+                return startext + ' flow: ' + self.s.__repr__()
+            else:
+                return startext
         else:
             return "Uninitialized Flow"
 

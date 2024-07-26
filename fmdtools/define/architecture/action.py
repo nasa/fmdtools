@@ -15,6 +15,7 @@ Defines classes:
 import networkx as nx
 from fmdtools.define.architecture.base import Architecture, ArchitectureGraph
 from fmdtools.analyze.history import History
+from fmdtools.analyze.graph.model import ModelGraph
 from fmdtools.define.block.action import ExampleAction
 from fmdtools.define.flow.base import ExampleFlow
 
@@ -127,7 +128,7 @@ class ActionArchitectureGraph(ArchitectureGraph):
                 self.g.nodes[n]['active'] = True
             else:
                 self.g.nodes[n]['active'] = False
-        return super().draw_from(time, history=history, **kwargs)
+        return ModelGraph.draw_from(self, time, history=history, **kwargs)
 
 
 class ActionArchitectureActGraph(ActionArchitectureGraph):

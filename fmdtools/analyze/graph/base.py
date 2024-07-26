@@ -428,7 +428,7 @@ class Graph(object):
         aspl: float
             Average shortest path length
         """
-        return nx.average_shortest_path_length(self.g)
+        return nx.average_shortest_path_length(self.g.to_undirected())
 
     def calc_modularity(self):
         """
@@ -579,7 +579,7 @@ class Graph(object):
         -------
         RC : robustness coefficient
         """
-        g = self.g
+        g = self.g.to_undirected()
         if seed:
             rng = np.random.default_rng(seed=seed)
         else:
