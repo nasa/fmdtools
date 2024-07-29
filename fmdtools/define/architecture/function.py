@@ -73,14 +73,14 @@ class FunctionArchitectureGraph(ArchitectureGraph):
         for flowname, flow in mdl.flows.items():
             flow.set_node_attrs(self.g, time=self.time, with_root=with_root)
 
-    def get_multi_edges(self, mdl, subedges):
+    def get_multi_edges(self, graph, subedges):
         """
         Attach functions/flows (subedges arg) to edges.
 
         Parameters
         ----------
-        mdl: Model
-            Model to represent
+        graph: networkx graph
+            Graph of model to represent
         subedges : list
             nodes from the full graph which will become edges in the subgraph
             (e.g., individual flows)
@@ -92,8 +92,8 @@ class FunctionArchitectureGraph(ArchitectureGraph):
                 edge (e.g., flows)
         """
         flows = {}
-        multgraph = nx.projected_graph(mdl.graph, subedges, multigraph=True)
-        g = nx.projected_graph(mdl.graph, subedges)
+        multgraph = nx.projected_graph(graph, subedges, multigraph=True)
+        g = nx.projected_graph(graph, subedges)
         for edge in g.edges:
             midedges = list(multgraph.subgraph(edge).edges)
             flows[edge] = [midedge[2] for midedge in midedges]
@@ -182,6 +182,14 @@ class FunctionArchitectureGraph(ArchitectureGraph):
     def draw_graphviz(self, layout="twopi", overlap='voronoi', **kwargs):
         return super().draw_graphviz(layout=layout, overlap=overlap, **kwargs)
 
+    def gen_func_arch_graph(self, mdl):
+        """Generate function architecture graph."""
+        g0 = mdl.create_graph(with_methods=False, with_root=False).to_undirected()
+        bip = {f.get_full_name(): 1 for f in mdl.flows.values()}
+        bip.update({f.get_full_name(): 0 for f in mdl.fxns.values()})
+        nx.set_node_attributes(g0, bip, name='bipartite')
+        return g0
+
 
 class FunctionArchitectureFlowGraph(FunctionArchitectureGraph):
     """
@@ -195,17 +203,16 @@ class FunctionArchitectureFlowGraph(FunctionArchitectureGraph):
     >>> efa.g.nodes()
     NodeView(('exfxnarch.flows.exf',))
     >>> efa.g.nodes['exfxnarch.flows.exf']
-    {'nodetype': 'Flow', 'classname': 'ExampleFlow', 's': ExampleState(x=0.0, y=0.0), 'indicators': []}
+    {'nodetype': 'Flow', 'classname': 'ExampleFlow', 'bipartite': 1, 's': ExampleState(x=0.0, y=0.0), 'indicators': []}
     """
 
     def nx_from_obj(self, mdl, **kwargs):
+        g0 = self.gen_func_arch_graph(mdl)
         flows = [f.get_full_name() for f in mdl.flows.values()]
-        g0 = mdl.create_graph(with_methods=False, with_root=False,
-                              roles_to_connect=['fxn', 'flow']).to_undirected()
         g = nx.projected_graph(g0, flows)
-        nodetypes = {fname: f.get_typename() for fname, f in mdl.flows.items()}
+        nodetypes = {f.get_full_name(): f.get_typename() for f in mdl.flows.values()}
         nx.set_node_attributes(g, nodetypes, name='nodetype')
-        fxns = self.get_multi_edges(mdl, mdl.flows)
+        fxns = self.get_multi_edges(g0, flows)
         edgelabels = {e: str(fl) for e, fl in fxns.items()}
         nx.set_edge_attributes(g, edgelabels, name='functions')
         nx.set_edge_attributes(g, {e: "functions" for e in g.edges()}, name='edgetype')
@@ -230,18 +237,20 @@ class FunctionArchitectureFxnGraph(FunctionArchitectureGraph):
     --------
     >>> efa = FunctionArchitectureFxnGraph(ExFxnArch())
     >>> efa.g.nodes()
-    NodeView(('ex_fxn', 'ex_fxn2'))
+    NodeView(('exfxnarch.fxns.ex_fxn', 'exfxnarch.fxns.ex_fxn2'))
     >>> efa.g.edges()
-    EdgeView([('ex_fxn', 'ex_fxn2')])
-    >>> efa.g.edges[('ex_fxn', 'ex_fxn2')]
-    {'flows': "['exf']", 'edgetype': 'flows', 'exf': {'s': ExampleState(x=0.0, y=0.0), 'indicators': []}}
+    EdgeView([('exfxnarch.fxns.ex_fxn', 'exfxnarch.fxns.ex_fxn2')])
+    >>> efa.g.edges[('exfxnarch.fxns.ex_fxn', 'exfxnarch.fxns.ex_fxn2')]
+    {'flows': "['exfxnarch.flows.exf']", 'edgetype': 'flows', 'exfxnarch.flows.exf': {'s': ExampleState(x=0.0, y=0.0), 'indicators': []}}
     """
 
     def nx_from_obj(self, mdl):
-        g = nx.projected_graph(mdl.graph.to_undirected(), mdl.fxns)
-        nodetypes = {fname: f.get_typename() for fname, f in mdl.fxns.items()}
+        g0 = self.gen_func_arch_graph(mdl)
+        fxns = [f.get_full_name() for f in mdl.fxns.values()]
+        g = nx.projected_graph(g0, fxns)
+        nodetypes = {f.get_full_name(): f.get_typename() for f in mdl.fxns.values()}
         nx.set_node_attributes(g, nodetypes, name='nodetype')
-        flows = self.get_multi_edges(mdl, mdl.fxns)
+        flows = self.get_multi_edges(g0, fxns)
         edgelabels = {e: str(fl) for e, fl in flows.items()}
         nx.set_edge_attributes(g, edgelabels, name='flows')
         nx.set_edge_attributes(g, {e: "flows" for e in g.edges()}, name='edgetype')
@@ -249,15 +258,18 @@ class FunctionArchitectureFxnGraph(FunctionArchitectureGraph):
 
     def set_nx_states(self, mdl):
         self.set_flow_edgestates(mdl)
-        self.set_fxn_nodestates(mdl, with_root=False)
+        self.set_fxn_nodestates(mdl)
 
     def set_flow_edgestates(self, mdl):
         edgevals = {}
-        allflows = self.get_multi_edges(mdl, mdl.fxns)
+        g0 = self.gen_func_arch_graph(mdl)
+        fxns = [f.get_full_name() for f in mdl.fxns.values()]
+        flowiter = {f.get_full_name(): f for f in mdl.flows.values()}
+        allflows = self.get_multi_edges(g0, fxns)
         for edge, flows in allflows.items():
             flowdict = {}
             for flow in flows:
-                flowdict[flow] = mdl.flows[flow].get_node_attrs()
+                flowdict[flow] = flowiter[flow].get_node_attrs()
             edgevals[edge] = flowdict
         nx.set_edge_attributes(self.g, edgevals)
 
@@ -902,6 +914,8 @@ class ExFxnArch(FunctionArchitecture):
         self.add_fxn("ex_fxn2", ExampleFunction, "exf", p=self.p)
 
 if __name__ == "__main__":
+    efa = FunctionArchitectureFxnGraph(ExFxnArch())
+    efla = FunctionArchitectureFlowGraph(ExFxnArch())
     FunctionArchitectureTypeGraph(ExFxnArch())
     import doctest
     doctest.testmod(verbose=True)

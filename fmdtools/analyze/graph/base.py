@@ -611,7 +611,7 @@ class Graph(object):
             plot of distribution
         """
         import math
-        g = self.g
+        g = self.g.to_undirected()
         degrees = [g.degree(n) for n in g.nodes()]
         degreesSet = set(degrees)
         degreesUnique = list(degreesSet)
@@ -658,7 +658,7 @@ class Graph(object):
         -------
         fig: plot of susc, fail, and fix nodes over time
         """
-        g = self.g
+        g = self.g.to_undirected()
         if start_node == 'random':
             nodes = list(g.nodes)
             start_node_selected = nodes[random.randint(0, len(nodes))]
