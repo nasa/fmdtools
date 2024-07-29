@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-    <title>Coverage for examples\multiflow_demo\multiflow_demo.py: 88%</title>
+    <title>Coverage for examples\multiflow_demo\multiflow_demo.py: 98%</title>
     <link rel="icon" sizes="32x32" href="favicon_32_cb_58284776.png">
     <link rel="stylesheet" href="style_cb_718ce007.css" type="text/css">
     <script src="coverage_html_cb_497bf287.js" defer></script>
@@ -12,7 +12,7 @@
     <div class="content">
         <h1>
             <span class="text">Coverage for </span><b>examples\multiflow_demo\multiflow_demo.py</b>:
-            <span class="pc_cov">88%</span>
+            <span class="pc_cov">98%</span>
         </h1>
         <aside id="help_panel_wrapper">
             <input id="help_panel_state" type="checkbox">
@@ -54,10 +54,10 @@
             </div>
         </aside>
         <h2>
-            <span class="text">65 statements &nbsp;</span>
-            <button type="button" class="run button_toggle_run" value="run" data-shortcut="r" title="Toggle lines run">57<span class="text"> run</span></button>
-            <button type="button" class="mis show_mis button_toggle_mis" value="mis" data-shortcut="m" title="Toggle lines missing">8<span class="text"> missing</span></button>
-            <button type="button" class="exc show_exc button_toggle_exc" value="exc" data-shortcut="x" title="Toggle lines excluded">0<span class="text"> excluded</span></button>
+            <span class="text">57 statements &nbsp;</span>
+            <button type="button" class="run button_toggle_run" value="run" data-shortcut="r" title="Toggle lines run">56<span class="text"> run</span></button>
+            <button type="button" class="mis show_mis button_toggle_mis" value="mis" data-shortcut="m" title="Toggle lines missing">1<span class="text"> missing</span></button>
+            <button type="button" class="exc show_exc button_toggle_exc" value="exc" data-shortcut="x" title="Toggle lines excluded">16<span class="text"> excluded</span></button>
         </h2>
         <p class="text">
             <a id="prevFileLink" class="nav" href="z_97387aa35eb79038___init___py.html">&#xab; prev</a> &nbsp; &nbsp;
@@ -65,7 +65,7 @@
             <a id="nextFileLink" class="nav" href="z_97387aa35eb79038_test_multiflow_py.html">&#xbb; next</a>
             &nbsp; &nbsp; &nbsp;
             <a class="nav" href="https://coverage.readthedocs.io/en/7.5.3">coverage.py v7.5.3</a>,
-            created at 2024-06-12 14:00 -0700
+            created at 2024-07-29 15:11 -0700
         </p>
         <aside class="hidden">
             <button type="button" class="button_next_chunk" data-shortcut="j"></button>
@@ -170,16 +170,38 @@
     <p class="pln"><span class="n"><a id="t88" href="#t88">88</a></span><span class="t">&nbsp;</span><span class="r"></span></p>
     <p class="run"><span class="n"><a id="t89" href="#t89">89</a></span><span class="t">        <span class="nam">self</span><span class="op">.</span><span class="nam">add_fxn</span><span class="op">(</span><span class="str">"coordinator"</span><span class="op">,</span> <span class="nam">Coordinator</span><span class="op">,</span> <span class="str">"communications"</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t90" href="#t90">90</a></span><span class="t">&nbsp;</span><span class="r"></span></p>
-    <p class="run"><span class="n"><a id="t91" href="#t91">91</a></span><span class="t"><span class="key">if</span> <span class="nam">__name__</span><span class="op">==</span><span class="str">'__main__'</span><span class="op">:</span>&nbsp;</span><span class="r"></span></p>
-    <p class="mis show_mis"><span class="n"><a id="t92" href="#t92">92</a></span><span class="t">    <span class="nam">mdl</span> <span class="op">=</span> <span class="nam">ExModel</span><span class="op">(</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
-    <p class="mis show_mis"><span class="n"><a id="t93" href="#t93">93</a></span><span class="t">    <span class="nam">mdl</span><span class="op">.</span><span class="nam">flows</span><span class="op">[</span><span class="str">"communications"</span><span class="op">]</span><span class="op">.</span><span class="nam">mover_1</span><span class="op">.</span><span class="nam">s</span><span class="op">.</span><span class="nam">x</span> <span class="op">=</span> <span class="num">25</span>&nbsp;</span><span class="r"></span></p>
-    <p class="mis show_mis"><span class="n"><a id="t94" href="#t94">94</a></span><span class="t">    <span class="nam">mdl</span><span class="op">.</span><span class="nam">flows</span><span class="op">[</span><span class="str">"communications"</span><span class="op">]</span><span class="op">.</span><span class="nam">mover_1</span><span class="op">.</span><span class="nam">send</span><span class="op">(</span><span class="str">"mover_2"</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
-    <p class="mis show_mis"><span class="n"><a id="t95" href="#t95">95</a></span><span class="t">    <span class="key">from</span> <span class="nam">fmdtools</span><span class="op">.</span><span class="nam">sim</span> <span class="key">import</span> <span class="nam">propagate</span>&nbsp;</span><span class="r"></span></p>
-    <p class="pln"><span class="n"><a id="t96" href="#t96">96</a></span><span class="t">&nbsp;</span><span class="r"></span></p>
-    <p class="mis show_mis"><span class="n"><a id="t97" href="#t97">97</a></span><span class="t">    <span class="nam">endres</span><span class="op">,</span> <span class="nam">mdlhist</span> <span class="op">=</span> <span class="nam">propagate</span><span class="op">.</span><span class="nam">nominal</span><span class="op">(</span><span class="nam">mdl</span><span class="op">,</span> <span class="nam">desired_result</span><span class="op">=</span><span class="str">'graph.flows.communications'</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
+    <p class="pln"><span class="n"><a id="t91" href="#t91">91</a></span><span class="t">&nbsp;</span><span class="r"></span></p>
+    <p class="exc show_exc"><span class="n"><a id="t92" href="#t92">92</a></span><span class="t"><span class="key">if</span> <span class="nam">__name__</span> <span class="op">==</span> <span class="str">'__main__'</span><span class="op">:</span>&nbsp;</span><span class="r"></span></p>
+    <p class="exc show_exc"><span class="n"><a id="t93" href="#t93">93</a></span><span class="t">    <span class="nam">mdl</span> <span class="op">=</span> <span class="nam">ExModel</span><span class="op">(</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
+    <p class="exc show_exc"><span class="n"><a id="t94" href="#t94">94</a></span><span class="t">    <span class="nam">mdl</span><span class="op">.</span><span class="nam">flows</span><span class="op">[</span><span class="str">"communications"</span><span class="op">]</span><span class="op">.</span><span class="nam">mover_1</span><span class="op">.</span><span class="nam">s</span><span class="op">.</span><span class="nam">x</span> <span class="op">=</span> <span class="num">25</span>&nbsp;</span><span class="r"></span></p>
+    <p class="exc show_exc"><span class="n"><a id="t95" href="#t95">95</a></span><span class="t">    <span class="nam">mdl</span><span class="op">.</span><span class="nam">flows</span><span class="op">[</span><span class="str">"communications"</span><span class="op">]</span><span class="op">.</span><span class="nam">mover_1</span><span class="op">.</span><span class="nam">send</span><span class="op">(</span><span class="str">"mover_2"</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
+    <p class="exc show_exc"><span class="n"><a id="t96" href="#t96">96</a></span><span class="t">    <span class="key">from</span> <span class="nam">fmdtools</span><span class="op">.</span><span class="nam">sim</span> <span class="key">import</span> <span class="nam">propagate</span>&nbsp;</span><span class="r"></span></p>
+    <p class="exc show_exc"><span class="n"><a id="t97" href="#t97">97</a></span><span class="t">    <span class="key">from</span> <span class="nam">fmdtools</span><span class="op">.</span><span class="nam">analyze</span><span class="op">.</span><span class="nam">graph</span><span class="op">.</span><span class="nam">base</span> <span class="key">import</span> <span class="nam">Graph</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t98" href="#t98">98</a></span><span class="t">&nbsp;</span><span class="r"></span></p>
-    <p class="mis show_mis"><span class="n"><a id="t99" href="#t99">99</a></span><span class="t">    <span class="nam">endres</span><span class="op">.</span><span class="nam">graph</span><span class="op">.</span><span class="nam">flows</span><span class="op">.</span><span class="nam">communications</span><span class="op">.</span><span class="nam">draw</span><span class="op">(</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
-    <p class="mis show_mis"><span class="n"><a id="t100" href="#t100">100</a></span><span class="t">    <span class="nam">endres</span><span class="op">.</span><span class="nam">graph</span><span class="op">.</span><span class="nam">flows</span><span class="op">.</span><span class="nam">communications</span><span class="op">.</span><span class="nam">draw_graphviz</span><span class="op">(</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
+    <p class="exc show_exc"><span class="n"><a id="t99" href="#t99">99</a></span><span class="t">    <span class="nam">g</span> <span class="op">=</span> <span class="nam">mdl</span><span class="op">.</span><span class="nam">flows</span><span class="op">[</span><span class="str">'communications'</span><span class="op">]</span><span class="op">.</span><span class="nam">create_graph</span><span class="op">(</span><span class="nam">role_nodes</span><span class="op">=</span><span class="op">[</span><span class="str">'local'</span><span class="op">]</span><span class="op">,</span>&nbsp;</span><span class="r"></span></p>
+    <p class="pln"><span class="n"><a id="t100" href="#t100">100</a></span><span class="t">                                                 <span class="nam">roles_to_connect</span><span class="op">=</span><span class="op">[</span><span class="str">"locals"</span><span class="op">]</span><span class="op">,</span>&nbsp;</span><span class="r"></span></p>
+    <p class="pln"><span class="n"><a id="t101" href="#t101">101</a></span><span class="t">                                                 <span class="nam">recursive</span><span class="op">=</span><span class="key">True</span><span class="op">,</span>&nbsp;</span><span class="r"></span></p>
+    <p class="pln"><span class="n"><a id="t102" href="#t102">102</a></span><span class="t">                                                 <span class="nam">with_root</span><span class="op">=</span><span class="key">False</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
+    <p class="pln"><span class="n"><a id="t103" href="#t103">103</a></span><span class="t">&nbsp;</span><span class="r"></span></p>
+    <p class="exc show_exc"><span class="n"><a id="t104" href="#t104">104</a></span><span class="t">    <span class="nam">g2</span> <span class="op">=</span> <span class="nam">Graph</span><span class="op">(</span><span class="nam">g</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
+    <p class="exc show_exc"><span class="n"><a id="t105" href="#t105">105</a></span><span class="t">    <span class="nam">g2</span><span class="op">.</span><span class="nam">draw</span><span class="op">(</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
+    <p class="pln"><span class="n"><a id="t106" href="#t106">106</a></span><span class="t">&nbsp;</span><span class="r"></span></p>
+    <p class="exc show_exc"><span class="n"><a id="t107" href="#t107">107</a></span><span class="t">    <span class="nam">g</span> <span class="op">=</span> <span class="nam">mdl</span><span class="op">.</span><span class="nam">flows</span><span class="op">[</span><span class="str">'communications'</span><span class="op">]</span><span class="op">.</span><span class="nam">create_graph</span><span class="op">(</span><span class="nam">role_nodes</span><span class="op">=</span><span class="op">[</span><span class="str">'local'</span><span class="op">]</span><span class="op">,</span>&nbsp;</span><span class="r"></span></p>
+    <p class="pln"><span class="n"><a id="t108" href="#t108">108</a></span><span class="t">                                                 <span class="nam">recursive</span><span class="op">=</span><span class="key">True</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
+    <p class="pln"><span class="n"><a id="t109" href="#t109">109</a></span><span class="t">&nbsp;</span><span class="r"></span></p>
+    <p class="exc show_exc"><span class="n"><a id="t110" href="#t110">110</a></span><span class="t">    <span class="nam">g2</span> <span class="op">=</span> <span class="nam">Graph</span><span class="op">(</span><span class="nam">g</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
+    <p class="exc show_exc"><span class="n"><a id="t111" href="#t111">111</a></span><span class="t">    <span class="nam">g2</span><span class="op">.</span><span class="nam">draw</span><span class="op">(</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
+    <p class="pln"><span class="n"><a id="t112" href="#t112">112</a></span><span class="t">&nbsp;</span><span class="r"></span></p>
+    <p class="exc show_exc"><span class="n"><a id="t113" href="#t113">113</a></span><span class="t">    <span class="key">from</span> <span class="nam">fmdtools</span><span class="op">.</span><span class="nam">define</span><span class="op">.</span><span class="nam">flow</span><span class="op">.</span><span class="nam">multiflow</span> <span class="key">import</span> <span class="nam">MultiFlowGraph</span>&nbsp;</span><span class="r"></span></p>
+    <p class="exc show_exc"><span class="n"><a id="t114" href="#t114">114</a></span><span class="t">    <span class="key">from</span> <span class="nam">fmdtools</span><span class="op">.</span><span class="nam">define</span><span class="op">.</span><span class="nam">flow</span><span class="op">.</span><span class="nam">commsflow</span> <span class="key">import</span> <span class="nam">CommsFlowGraph</span>&nbsp;</span><span class="r"></span></p>
+    <p class="exc show_exc"><span class="n"><a id="t115" href="#t115">115</a></span><span class="t">    <span class="nam">MultiFlowGraph</span><span class="op">(</span><span class="nam">mdl</span><span class="op">.</span><span class="nam">flows</span><span class="op">[</span><span class="str">'communications'</span><span class="op">]</span><span class="op">)</span><span class="op">.</span><span class="nam">draw</span><span class="op">(</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
+    <p class="exc show_exc"><span class="n"><a id="t116" href="#t116">116</a></span><span class="t">    <span class="nam">CommsFlowGraph</span><span class="op">(</span><span class="nam">mdl</span><span class="op">.</span><span class="nam">flows</span><span class="op">[</span><span class="str">'communications'</span><span class="op">]</span><span class="op">)</span><span class="op">.</span><span class="nam">draw</span><span class="op">(</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
+    <p class="pln"><span class="n"><a id="t117" href="#t117">117</a></span><span class="t">&nbsp;</span><span class="r"></span></p>
+    <p class="pln"><span class="n"><a id="t118" href="#t118">118</a></span><span class="t">    <span class="com"># endres, mdlhist = propagate.nominal(mdl, desired_result='graph.flows.communications')</span>&nbsp;</span><span class="r"></span></p>
+    <p class="pln"><span class="n"><a id="t119" href="#t119">119</a></span><span class="t">&nbsp;</span><span class="r"></span></p>
+    <p class="pln"><span class="n"><a id="t120" href="#t120">120</a></span><span class="t">    <span class="com"># endres.graph.flows.communications.set_node_labels(title='id', subtext='s')</span>&nbsp;</span><span class="r"></span></p>
+    <p class="pln"><span class="n"><a id="t121" href="#t121">121</a></span><span class="t">    <span class="com"># endres.graph.flows.communications.draw()</span>&nbsp;</span><span class="r"></span></p>
+    <p class="pln"><span class="n"><a id="t122" href="#t122">122</a></span><span class="t">    <span class="com"># endres.graph.flows.communications.draw_graphviz()</span>&nbsp;</span><span class="r"></span></p>
 </main>
 <footer>
     <div class="content">
@@ -189,7 +211,7 @@
             <a class="nav" href="z_97387aa35eb79038_test_multiflow_py.html">&#xbb; next</a>
             &nbsp; &nbsp; &nbsp;
             <a class="nav" href="https://coverage.readthedocs.io/en/7.5.3">coverage.py v7.5.3</a>,
-            created at 2024-06-12 14:00 -0700
+            created at 2024-07-29 15:11 -0700
         </p>
     </div>
 </footer>

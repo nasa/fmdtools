@@ -207,7 +207,7 @@ To cite a particular version of the fmdtools, you may use:
   author = {{NASA}},
   title = {fmdtools},
   url = {https://github.com/nasa/fmdtools},
-  version = {2.0-rc-5}, # <- replace with your version number
+  version = {2.0-rc-6}, # <- replace with your version number
   date = {2024-05-01},
 }
 ```
