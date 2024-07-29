@@ -57,7 +57,7 @@
             <span class="text">296 statements &nbsp;</span>
             <button type="button" class="run button_toggle_run" value="run" data-shortcut="r" title="Toggle lines run">289<span class="text"> run</span></button>
             <button type="button" class="mis show_mis button_toggle_mis" value="mis" data-shortcut="m" title="Toggle lines missing">7<span class="text"> missing</span></button>
-            <button type="button" class="exc show_exc button_toggle_exc" value="exc" data-shortcut="x" title="Toggle lines excluded">14<span class="text"> excluded</span></button>
+            <button type="button" class="exc show_exc button_toggle_exc" value="exc" data-shortcut="x" title="Toggle lines excluded">15<span class="text"> excluded</span></button>
         </h2>
         <p class="text">
             <a id="prevFileLink" class="nav" href="z_1447ab77857ea7b4___init___py.html">&#xab; prev</a> &nbsp; &nbsp;
@@ -65,7 +65,7 @@
             <a id="nextFileLink" class="nav" href="z_1447ab77857ea7b4_test_eps_py.html">&#xbb; next</a>
             &nbsp; &nbsp; &nbsp;
             <a class="nav" href="https://coverage.readthedocs.io/en/7.5.3">coverage.py v7.5.3</a>,
-            created at 2024-06-12 14:00 -0700
+            created at 2024-07-29 15:11 -0700
         </p>
         <aside class="hidden">
             <button type="button" class="button_next_chunk" data-shortcut="j"></button>
@@ -553,7 +553,7 @@
     <p class="pln"><span class="n"><a id="t471" href="#t471">471</a></span><span class="t">&nbsp;</span><span class="r"></span></p>
     <p class="exc show_exc"><span class="n"><a id="t472" href="#t472">472</a></span><span class="t"><span class="key">if</span> <span class="nam">__name__</span> <span class="op">==</span> <span class="str">"__main__"</span><span class="op">:</span>&nbsp;</span><span class="r"></span></p>
     <p class="exc show_exc"><span class="n"><a id="t473" href="#t473">473</a></span><span class="t">    <span class="key">import</span> <span class="nam">fmdtools</span><span class="op">.</span><span class="nam">sim</span><span class="op">.</span><span class="nam">propagate</span> <span class="key">as</span> <span class="nam">propagate</span>&nbsp;</span><span class="r"></span></p>
-    <p class="exc show_exc"><span class="n"><a id="t474" href="#t474">474</a></span><span class="t">    <span class="key">from</span> <span class="nam">fmdtools</span><span class="op">.</span><span class="nam">analyze</span><span class="op">.</span><span class="nam">graph</span><span class="op">.</span><span class="nam">architecture</span> <span class="key">import</span> <span class="nam">FunctionArchitectureGraph</span>&nbsp;</span><span class="r"></span></p>
+    <p class="exc show_exc"><span class="n"><a id="t474" href="#t474">474</a></span><span class="t">    <span class="key">from</span> <span class="nam">fmdtools</span><span class="op">.</span><span class="nam">define</span><span class="op">.</span><span class="nam">architecture</span><span class="op">.</span><span class="nam">function</span> <span class="key">import</span> <span class="nam">FunctionArchitectureGraph</span>&nbsp;</span><span class="r"></span></p>
     <p class="exc show_exc"><span class="n"><a id="t475" href="#t475">475</a></span><span class="t">    <span class="key">import</span> <span class="nam">numpy</span> <span class="key">as</span> <span class="nam">np</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t476" href="#t476">476</a></span><span class="t">&nbsp;</span><span class="r"></span></p>
     <p class="exc show_exc"><span class="n"><a id="t477" href="#t477">477</a></span><span class="t">    <span class="nam">mdl</span> <span class="op">=</span> <span class="nam">EPS</span><span class="op">(</span><span class="nam">track</span><span class="op">=</span><span class="op">[</span><span class="str">'fxns'</span><span class="op">,</span> <span class="str">'flows'</span><span class="op">,</span> <span class="str">'i'</span><span class="op">]</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
@@ -567,18 +567,19 @@
     <p class="pln"><span class="n"><a id="t485" href="#t485">485</a></span><span class="t">&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t486" href="#t486">486</a></span><span class="t">    <span class="com"># resgraph, mdlhists = propagate.one_fault(mdl, 'ee_to_me', 'toohigh_torque', desired_result="fxnflowgraph")</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t487" href="#t487">487</a></span><span class="t">    <span class="com"># result.graph.draw()</span>&nbsp;</span><span class="r"></span></p>
-    <p class="pln"><span class="n"><a id="t488" href="#t488">488</a></span><span class="t">&nbsp;</span><span class="r"></span></p>
-    <p class="exc show_exc"><span class="n"><a id="t489" href="#t489">489</a></span><span class="t">    <span class="nam">summary</span> <span class="op">=</span> <span class="nam">mdlhists</span><span class="op">.</span><span class="nam">get_fault_degradation_summary</span><span class="op">(</span><span class="op">*</span><span class="nam">mdl</span><span class="op">.</span><span class="nam">fxns</span><span class="op">,</span> <span class="op">*</span><span class="nam">mdl</span><span class="op">.</span><span class="nam">flows</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
-    <p class="pln"><span class="n"><a id="t490" href="#t490">490</a></span><span class="t">    <span class="com"># endclasses, mdlhists = propagate.single_faults(mdl)</span>&nbsp;</span><span class="r"></span></p>
-    <p class="exc show_exc"><span class="n"><a id="t491" href="#t491">491</a></span><span class="t">    <span class="nam">degradation</span> <span class="op">=</span> <span class="nam">mdlhists</span><span class="op">.</span><span class="nam">get_degraded_hist</span><span class="op">(</span><span class="op">*</span><span class="nam">mdl</span><span class="op">.</span><span class="nam">fxns</span><span class="op">,</span> <span class="op">*</span><span class="nam">mdl</span><span class="op">.</span><span class="nam">flows</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
-    <p class="pln"><span class="n"><a id="t492" href="#t492">492</a></span><span class="t">&nbsp;</span><span class="r"></span></p>
-    <p class="exc show_exc"><span class="n"><a id="t493" href="#t493">493</a></span><span class="t">    <span class="nam">degtimemap</span> <span class="op">=</span> <span class="nam">degradation</span><span class="op">.</span><span class="nam">get_summary</span><span class="op">(</span><span class="nam">operator</span><span class="op">=</span><span class="nam">np</span><span class="op">.</span><span class="nam">sum</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
-    <p class="pln"><span class="n"><a id="t494" href="#t494">494</a></span><span class="t">&nbsp;</span><span class="r"></span></p>
-    <p class="exc show_exc"><span class="n"><a id="t495" href="#t495">495</a></span><span class="t">    <span class="nam">mg</span> <span class="op">=</span> <span class="nam">FunctionArchitectureGraph</span><span class="op">(</span><span class="nam">mdl</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
-    <p class="exc show_exc"><span class="n"><a id="t496" href="#t496">496</a></span><span class="t">    <span class="nam">mg</span><span class="op">.</span><span class="nam">set_heatmap</span><span class="op">(</span><span class="nam">degtimemap</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
-    <p class="exc show_exc"><span class="n"><a id="t497" href="#t497">497</a></span><span class="t">    <span class="nam">mg</span><span class="op">.</span><span class="nam">draw</span><span class="op">(</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
-    <p class="pln"><span class="n"><a id="t498" href="#t498">498</a></span><span class="t">&nbsp;</span><span class="r"></span></p>
-    <p class="pln"><span class="n"><a id="t499" href="#t499">499</a></span><span class="t">    <span class="com">#propagate.single_faults(mdl)</span>&nbsp;</span><span class="r"></span></p>
+    <p class="exc show_exc"><span class="n"><a id="t488" href="#t488">488</a></span><span class="t">    <span class="nam">ks</span> <span class="op">=</span> <span class="op">[</span><span class="op">*</span><span class="nam">mdl</span><span class="op">.</span><span class="nam">get_roles_as_dict</span><span class="op">(</span><span class="str">"fxn"</span><span class="op">,</span> <span class="str">"flow"</span><span class="op">,</span> <span class="nam">flex_prefixes</span><span class="op">=</span><span class="key">True</span><span class="op">)</span><span class="op">]</span>&nbsp;</span><span class="r"></span></p>
+    <p class="pln"><span class="n"><a id="t489" href="#t489">489</a></span><span class="t">&nbsp;</span><span class="r"></span></p>
+    <p class="exc show_exc"><span class="n"><a id="t490" href="#t490">490</a></span><span class="t">    <span class="nam">summary</span> <span class="op">=</span> <span class="nam">mdlhists</span><span class="op">.</span><span class="nam">get_fault_degradation_summary</span><span class="op">(</span><span class="op">*</span><span class="nam">ks</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
+    <p class="pln"><span class="n"><a id="t491" href="#t491">491</a></span><span class="t">    <span class="com"># endclasses, mdlhists = propagate.single_faults(mdl)</span>&nbsp;</span><span class="r"></span></p>
+    <p class="exc show_exc"><span class="n"><a id="t492" href="#t492">492</a></span><span class="t">    <span class="nam">degradation</span> <span class="op">=</span> <span class="nam">mdlhists</span><span class="op">.</span><span class="nam">get_degraded_hist</span><span class="op">(</span><span class="op">*</span><span class="nam">ks</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
+    <p class="pln"><span class="n"><a id="t493" href="#t493">493</a></span><span class="t">&nbsp;</span><span class="r"></span></p>
+    <p class="exc show_exc"><span class="n"><a id="t494" href="#t494">494</a></span><span class="t">    <span class="nam">degtimemap</span> <span class="op">=</span> <span class="nam">degradation</span><span class="op">.</span><span class="nam">get_summary</span><span class="op">(</span><span class="nam">operator</span><span class="op">=</span><span class="nam">np</span><span class="op">.</span><span class="nam">sum</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
+    <p class="pln"><span class="n"><a id="t495" href="#t495">495</a></span><span class="t">&nbsp;</span><span class="r"></span></p>
+    <p class="exc show_exc"><span class="n"><a id="t496" href="#t496">496</a></span><span class="t">    <span class="nam">mg</span> <span class="op">=</span> <span class="nam">FunctionArchitectureGraph</span><span class="op">(</span><span class="nam">mdl</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
+    <p class="exc show_exc"><span class="n"><a id="t497" href="#t497">497</a></span><span class="t">    <span class="nam">mg</span><span class="op">.</span><span class="nam">set_heatmap</span><span class="op">(</span><span class="op">{</span><span class="str">'eps.'</span><span class="op">+</span><span class="nam">k</span><span class="op">:</span> <span class="nam">v</span> <span class="key">for</span> <span class="nam">k</span><span class="op">,</span> <span class="nam">v</span> <span class="key">in</span> <span class="nam">degtimemap</span><span class="op">.</span><span class="nam">items</span><span class="op">(</span><span class="op">)</span><span class="op">}</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
+    <p class="exc show_exc"><span class="n"><a id="t498" href="#t498">498</a></span><span class="t">    <span class="nam">mg</span><span class="op">.</span><span class="nam">draw</span><span class="op">(</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
+    <p class="pln"><span class="n"><a id="t499" href="#t499">499</a></span><span class="t">&nbsp;</span><span class="r"></span></p>
+    <p class="pln"><span class="n"><a id="t500" href="#t500">500</a></span><span class="t">    <span class="com">#propagate.single_faults(mdl)</span>&nbsp;</span><span class="r"></span></p>
 </main>
 <footer>
     <div class="content">
@@ -588,7 +589,7 @@
             <a class="nav" href="z_1447ab77857ea7b4_test_eps_py.html">&#xbb; next</a>
             &nbsp; &nbsp; &nbsp;
             <a class="nav" href="https://coverage.readthedocs.io/en/7.5.3">coverage.py v7.5.3</a>,
-            created at 2024-06-12 14:00 -0700
+            created at 2024-07-29 15:11 -0700
         </p>
     </div>
 </footer>

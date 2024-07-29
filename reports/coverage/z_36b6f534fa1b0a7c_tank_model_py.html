@@ -57,7 +57,7 @@
             <span class="text">258 statements &nbsp;</span>
             <button type="button" class="run button_toggle_run" value="run" data-shortcut="r" title="Toggle lines run">257<span class="text"> run</span></button>
             <button type="button" class="mis show_mis button_toggle_mis" value="mis" data-shortcut="m" title="Toggle lines missing">1<span class="text"> missing</span></button>
-            <button type="button" class="exc show_exc button_toggle_exc" value="exc" data-shortcut="x" title="Toggle lines excluded">45<span class="text"> excluded</span></button>
+            <button type="button" class="exc show_exc button_toggle_exc" value="exc" data-shortcut="x" title="Toggle lines excluded">43<span class="text"> excluded</span></button>
         </h2>
         <p class="text">
             <a id="prevFileLink" class="nav" href="z_36b6f534fa1b0a7c___init___py.html">&#xab; prev</a> &nbsp; &nbsp;
@@ -65,7 +65,7 @@
             <a id="nextFileLink" class="nav" href="z_36b6f534fa1b0a7c_tank_optimization_model_py.html">&#xbb; next</a>
             &nbsp; &nbsp; &nbsp;
             <a class="nav" href="https://coverage.readthedocs.io/en/7.5.3">coverage.py v7.5.3</a>,
-            created at 2024-06-12 14:40 -0700
+            created at 2024-07-29 15:11 -0700
         </p>
         <aside class="hidden">
             <button type="button" class="button_next_chunk" data-shortcut="j"></button>
@@ -535,16 +535,14 @@
     <p class="exc show_exc"><span class="n"><a id="t453" href="#t453">453</a></span><span class="t">    <span class="nam">fs</span><span class="op">.</span><span class="nam">add_fault_times</span><span class="op">(</span><span class="op">(</span><span class="num">0</span><span class="op">,</span> <span class="num">5</span><span class="op">,</span> <span class="num">10</span><span class="op">,</span> <span class="num">15</span><span class="op">,</span> <span class="num">20</span><span class="op">)</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
     <p class="exc show_exc"><span class="n"><a id="t454" href="#t454">454</a></span><span class="t">    <span class="nam">endclasses</span><span class="op">,</span> <span class="nam">hist</span> <span class="op">=</span> <span class="nam">propagate</span><span class="op">.</span><span class="nam">fault_sample</span><span class="op">(</span><span class="nam">mdl</span><span class="op">,</span> <span class="nam">fs</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t455" href="#t455">455</a></span><span class="t">&nbsp;</span><span class="r"></span></p>
-    <p class="exc show_exc"><span class="n"><a id="t456" href="#t456">456</a></span><span class="t">    <span class="key">from</span> <span class="nam">fmdtools</span><span class="op">.</span><span class="nam">analyze</span><span class="op">.</span><span class="nam">graph</span><span class="op">.</span><span class="nam">architecture</span> <span class="key">import</span> <span class="nam">FunctionArchitectureGraph</span>&nbsp;</span><span class="r"></span></p>
-    <p class="exc show_exc"><span class="n"><a id="t457" href="#t457">457</a></span><span class="t">    <span class="nam">mdl</span><span class="op">.</span><span class="nam">fxns</span><span class="op">[</span><span class="str">'human'</span><span class="op">]</span><span class="op">.</span><span class="nam">t</span><span class="op">.</span><span class="nam">dt</span> <span class="op">=</span> <span class="num">2.0</span>&nbsp;</span><span class="r"></span></p>
-    <p class="exc show_exc"><span class="n"><a id="t458" href="#t458">458</a></span><span class="t">    <span class="nam">mg</span> <span class="op">=</span> <span class="nam">FunctionArchitectureGraph</span><span class="op">(</span><span class="nam">mdl</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
-    <p class="exc show_exc"><span class="n"><a id="t459" href="#t459">459</a></span><span class="t">    <span class="nam">mg</span><span class="op">.</span><span class="nam">set_exec_order</span><span class="op">(</span><span class="nam">mdl</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
-    <p class="exc show_exc"><span class="n"><a id="t460" href="#t460">460</a></span><span class="t">    <span class="nam">mg</span><span class="op">.</span><span class="nam">draw</span><span class="op">(</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
-    <p class="pln"><span class="n"><a id="t461" href="#t461">461</a></span><span class="t">&nbsp;</span><span class="r"></span></p>
-    <p class="exc show_exc"><span class="n"><a id="t462" href="#t462">462</a></span><span class="t">    <span class="key">from</span> <span class="nam">fmdtools</span><span class="op">.</span><span class="nam">analyze</span><span class="op">.</span><span class="nam">graph</span><span class="op">.</span><span class="nam">architecture</span> <span class="key">import</span> <span class="nam">ActionArchitectureGraph</span>&nbsp;</span><span class="r"></span></p>
-    <p class="exc show_exc"><span class="n"><a id="t463" href="#t463">463</a></span><span class="t">    <span class="nam">ag</span> <span class="op">=</span> <span class="nam">ActionArchitectureGraph</span><span class="op">(</span><span class="nam">mdl</span><span class="op">.</span><span class="nam">fxns</span><span class="op">[</span><span class="str">'human'</span><span class="op">]</span><span class="op">.</span><span class="nam">aa</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
-    <p class="exc show_exc"><span class="n"><a id="t464" href="#t464">464</a></span><span class="t">    <span class="nam">ag</span><span class="op">.</span><span class="nam">draw</span><span class="op">(</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
-    <p class="exc show_exc"><span class="n"><a id="t465" href="#t465">465</a></span><span class="t">    <span class="nam">ag</span><span class="op">.</span><span class="nam">draw_graphviz</span><span class="op">(</span><span class="nam">layout</span><span class="op">=</span><span class="str">'dot'</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
+    <p class="exc show_exc"><span class="n"><a id="t456" href="#t456">456</a></span><span class="t">    <span class="nam">mdl</span><span class="op">.</span><span class="nam">fxns</span><span class="op">[</span><span class="str">'human'</span><span class="op">]</span><span class="op">.</span><span class="nam">t</span><span class="op">.</span><span class="nam">dt</span> <span class="op">=</span> <span class="num">2.0</span>&nbsp;</span><span class="r"></span></p>
+    <p class="exc show_exc"><span class="n"><a id="t457" href="#t457">457</a></span><span class="t">    <span class="nam">mg</span> <span class="op">=</span> <span class="nam">mdl</span><span class="op">.</span><span class="nam">as_modelgraph</span><span class="op">(</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
+    <p class="exc show_exc"><span class="n"><a id="t458" href="#t458">458</a></span><span class="t">    <span class="nam">mg</span><span class="op">.</span><span class="nam">set_exec_order</span><span class="op">(</span><span class="nam">mdl</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
+    <p class="exc show_exc"><span class="n"><a id="t459" href="#t459">459</a></span><span class="t">    <span class="nam">mg</span><span class="op">.</span><span class="nam">draw</span><span class="op">(</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
+    <p class="pln"><span class="n"><a id="t460" href="#t460">460</a></span><span class="t">&nbsp;</span><span class="r"></span></p>
+    <p class="exc show_exc"><span class="n"><a id="t461" href="#t461">461</a></span><span class="t">    <span class="nam">ag</span> <span class="op">=</span> <span class="nam">mdl</span><span class="op">.</span><span class="nam">fxns</span><span class="op">[</span><span class="str">'human'</span><span class="op">]</span><span class="op">.</span><span class="nam">aa</span><span class="op">.</span><span class="nam">as_modelgraph</span><span class="op">(</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
+    <p class="exc show_exc"><span class="n"><a id="t462" href="#t462">462</a></span><span class="t">    <span class="nam">ag</span><span class="op">.</span><span class="nam">draw</span><span class="op">(</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
+    <p class="exc show_exc"><span class="n"><a id="t463" href="#t463">463</a></span><span class="t">    <span class="nam">ag</span><span class="op">.</span><span class="nam">draw_graphviz</span><span class="op">(</span><span class="nam">layout</span><span class="op">=</span><span class="str">'dot'</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
 </main>
 <footer>
     <div class="content">
@@ -554,7 +552,7 @@
             <a class="nav" href="z_36b6f534fa1b0a7c_tank_optimization_model_py.html">&#xbb; next</a>
             &nbsp; &nbsp; &nbsp;
             <a class="nav" href="https://coverage.readthedocs.io/en/7.5.3">coverage.py v7.5.3</a>,
-            created at 2024-06-12 14:40 -0700
+            created at 2024-07-29 15:11 -0700
         </p>
     </div>
 </footer>

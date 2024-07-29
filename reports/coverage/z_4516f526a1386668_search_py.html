@@ -65,7 +65,7 @@
             <a id="nextFileLink" class="nav" href="z_a44f0ac069e85531___init___py.html">&#xbb; next</a>
             &nbsp; &nbsp; &nbsp;
             <a class="nav" href="https://coverage.readthedocs.io/en/7.5.3">coverage.py v7.5.3</a>,
-            created at 2024-06-12 14:40 -0700
+            created at 2024-07-29 15:11 -0700
         </p>
         <aside class="hidden">
             <button type="button" class="button_next_chunk" data-shortcut="j"></button>
@@ -427,7 +427,7 @@
     <p class="pln"><span class="n"><a id="t345" href="#t345">345</a></span><span class="t"><span class="str">    """</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t346" href="#t346">346</a></span><span class="t">&nbsp;</span><span class="r"></span></p>
     <p class="run"><span class="n"><a id="t347" href="#t347">347</a></span><span class="t">    <span class="key">def</span> <span class="nam">__init__</span><span class="op">(</span><span class="nam">self</span><span class="op">,</span> <span class="op">*</span><span class="nam">variables</span><span class="op">)</span><span class="op">:</span>&nbsp;</span><span class="r"></span></p>
-    <p class="run"><span class="n"><a id="t348" href="#t348">348</a></span><span class="t">        <span class="nam">self</span><span class="op">.</span><span class="nam">variables</span> <span class="op">=</span> <span class="op">{</span><span class="nam">v</span><span class="op">:</span> <span class="nam">np</span><span class="op">.</span><span class="nam">NaN</span> <span class="key">for</span> <span class="nam">v</span> <span class="key">in</span> <span class="nam">variables</span><span class="op">}</span>&nbsp;</span><span class="r"></span></p>
+    <p class="run"><span class="n"><a id="t348" href="#t348">348</a></span><span class="t">        <span class="nam">self</span><span class="op">.</span><span class="nam">variables</span> <span class="op">=</span> <span class="op">{</span><span class="nam">v</span><span class="op">:</span> <span class="nam">np</span><span class="op">.</span><span class="nam">nan</span> <span class="key">for</span> <span class="nam">v</span> <span class="key">in</span> <span class="nam">variables</span><span class="op">}</span>&nbsp;</span><span class="r"></span></p>
     <p class="run"><span class="n"><a id="t349" href="#t349">349</a></span><span class="t">        <span class="nam">super</span><span class="op">(</span><span class="op">)</span><span class="op">.</span><span class="nam">__init__</span><span class="op">(</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
     <p class="run"><span class="n"><a id="t350" href="#t350">350</a></span><span class="t">        <span class="nam">self</span><span class="op">.</span><span class="nam">callables</span> <span class="op">=</span> <span class="op">{</span><span class="op">}</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t351" href="#t351">351</a></span><span class="t">&nbsp;</span><span class="r"></span></p>
@@ -799,7 +799,7 @@
     <p class="pln"><span class="n"><a id="t717" href="#t717">717</a></span><span class="t"><span class="str">            Keyword arguments to prop_method.</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t718" href="#t718">718</a></span><span class="t"><span class="str">        """</span>&nbsp;</span><span class="r"></span></p>
     <p class="run"><span class="n"><a id="t719" href="#t719">719</a></span><span class="t">        <span class="nam">self</span><span class="op">.</span><span class="nam">parameterdomain</span> <span class="op">=</span> <span class="nam">parameterdomain</span>&nbsp;</span><span class="r"></span></p>
-    <p class="run"><span class="n"><a id="t720" href="#t720">720</a></span><span class="t">        <span class="nam">self</span><span class="op">.</span><span class="nam">variables</span> <span class="op">=</span> <span class="op">{</span><span class="nam">v</span><span class="op">:</span> <span class="nam">np</span><span class="op">.</span><span class="nam">NaN</span> <span class="key">for</span> <span class="nam">v</span> <span class="key">in</span> <span class="nam">self</span><span class="op">.</span><span class="nam">parameterdomain</span><span class="op">.</span><span class="nam">variables</span><span class="op">}</span>&nbsp;</span><span class="r"></span></p>
+    <p class="run"><span class="n"><a id="t720" href="#t720">720</a></span><span class="t">        <span class="nam">self</span><span class="op">.</span><span class="nam">variables</span> <span class="op">=</span> <span class="op">{</span><span class="nam">v</span><span class="op">:</span> <span class="nam">np</span><span class="op">.</span><span class="nam">nan</span> <span class="key">for</span> <span class="nam">v</span> <span class="key">in</span> <span class="nam">self</span><span class="op">.</span><span class="nam">parameterdomain</span><span class="op">.</span><span class="nam">variables</span><span class="op">}</span>&nbsp;</span><span class="r"></span></p>
     <p class="run"><span class="n"><a id="t721" href="#t721">721</a></span><span class="t">        <span class="nam">super</span><span class="op">(</span><span class="op">)</span><span class="op">.</span><span class="nam">__init__</span><span class="op">(</span><span class="nam">mdl</span><span class="op">,</span> <span class="nam">prop_method</span><span class="op">,</span> <span class="op">*</span><span class="nam">args</span><span class="op">,</span> <span class="op">**</span><span class="nam">kwargs</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t722" href="#t722">722</a></span><span class="t">&nbsp;</span><span class="r"></span></p>
     <p class="run"><span class="n"><a id="t723" href="#t723">723</a></span><span class="t">    <span class="key">def</span> <span class="nam">sim_mdl</span><span class="op">(</span><span class="nam">self</span><span class="op">,</span> <span class="op">*</span><span class="nam">x</span><span class="op">)</span><span class="op">:</span>&nbsp;</span><span class="r"></span></p>
@@ -1903,7 +1903,7 @@
             <a class="nav" href="z_a44f0ac069e85531___init___py.html">&#xbb; next</a>
             &nbsp; &nbsp; &nbsp;
             <a class="nav" href="https://coverage.readthedocs.io/en/7.5.3">coverage.py v7.5.3</a>,
-            created at 2024-06-12 14:40 -0700
+            created at 2024-07-29 15:11 -0700
         </p>
     </div>
 </footer>
