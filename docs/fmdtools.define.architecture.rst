@@ -49,6 +49,13 @@ For more info on this example, see: `The Action Sequence Graph Demo Model <../ex
    :undoc-members:
    :show-inheritance:
 
+The ActionArchitecture class can further be represented graphically using the ActionArchitectureGraph class:
+
+.. autoclass:: fmdtools.define.architecture.action.ActionArchitectureGraph
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
 fmdtools.define.architecture.component
 --------------------------------
 
@@ -86,6 +93,28 @@ To define a FunctionArchitecture class, it can be helpful to use the following c
    Code template for FunctionArchitecture classes.
 
 .. autoclass:: fmdtools.define.architecture.function.FunctionArchitecture
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+The FunctionArchitecture class can be represented with a number of dedicated graph classes, below:
+
+.. autoclass:: fmdtools.define.architecture.function.FunctionArchitectureGraph
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+.. autoclass:: fmdtools.define.architecture.function.FunctionArchitectureFxnGraph
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+.. autoclass:: fmdtools.define.architecture.function.FunctionArchitectureFlowGraph
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+.. autoclass:: fmdtools.define.architecture.function.FunctionArchitectureTypeGraph
    :members:
    :undoc-members:
    :show-inheritance:
