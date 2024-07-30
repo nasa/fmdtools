@@ -1,3 +1,0 @@
-digraph {
-	0 [label=ActionNodeStyle color=grey fillcolor=lightgrey penwidth=2 shape=rectangle style="rounded, filled"]
-}

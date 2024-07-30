@@ -1,3 +1,0 @@
-digraph {
-	0 -> 1 [label=ActivationEdgeStyle arrowhead=open color=black style=dashed]
-}

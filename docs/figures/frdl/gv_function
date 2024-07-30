@@ -1,3 +1,0 @@
-digraph {
-	0 [label=FunctionNodeStyle color=grey fillcolor=lightgrey penwidth=2 shape=rectangle style=filled]
-}

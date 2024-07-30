@@ -1,3 +1,0 @@
-digraph {
-	0 [label=ComponentNodeStyle color=grey fillcolor=lightgrey shape=trapezium style=filled]
-}

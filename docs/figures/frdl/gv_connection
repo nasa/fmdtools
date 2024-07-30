@@ -1,3 +1,0 @@
-digraph {
-	0 -> 1 [label=ConnectionEdgeStyle arrowhead=none color=black style=dashed]
-}
