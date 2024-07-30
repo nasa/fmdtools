@@ -30,7 +30,6 @@ lib/
 dist/
 fmdtools.egg-info/
 fmdtools_hulsed.egg-info
-_build/
 
 LICENSE.bak
 *.pkl
