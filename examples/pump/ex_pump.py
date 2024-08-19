@@ -657,7 +657,10 @@ if __name__ == "__main__":
     Pump().get_vars("flows.ee_1")
     g = Pump().create_graph()
     from fmdtools.analyze.graph.base import Graph
+    # horizontal alignment test:
     g2 = Graph(g)
+    g2.set_node_labels(subtext="nodetype", title_style={'horizontalalignment': 'left'},
+                       subtext_style={'horizontalalignment': 'right'})
     g2.draw_graphviz()
     Graph(ImportEE().create_graph()).draw_graphviz()
     script_show_graphs()
