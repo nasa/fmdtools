@@ -9,15 +9,6 @@ class Component(Block):
 
     __slots__ = ()
 
-    def behavior(self, time):
-        """
-        Simulate behavior provided (placeholder).
-
-        Enables one to include components without yet having a defined behavior for
-        them.
-        """
-        return 0
-
     def base_type(self):
         """Return fmdtools type of the model class."""
         return Component
