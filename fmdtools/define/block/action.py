@@ -47,23 +47,20 @@ class Action(Block):
         if time > self.t.time:
             if hasattr(self, 'r'):
                 self.r.update_stochastic_states()
-        if proptype == 'dynamic':
-            if self.t.time < time:
-                self.behavior(time)
-                self.t.t_loc += dt
-        else:
-            self.behavior(time)
-            self.t.t_loc += dt
+        if not proptype == 'dynamic' or self.t.time < time:
+            self.update_behavior(time, dt)
         self.t.time = time
+
+    def update_behavior(self, time, dt):
+        """Update the behavior of the Action."""
+        if hasattr(self, 'behavior'):
+            self.behavior(time)
+        self.t.t_loc += dt
 
     def copy(self, *args, **kwargs):
         cop = super().copy(*args, **kwargs)
         cop.duration = self.duration
         return cop
-
-    def behavior(self, time):
-        """Simulate action behavior (placeholder for user-defined method)."""
-        a = 0
 
 
 class ExampleAction(Action):
