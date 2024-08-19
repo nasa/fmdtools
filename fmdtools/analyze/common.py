@@ -398,20 +398,35 @@ def multiplot_legend_title(groupmetrics, axs, ax,
 
 def consolidate_legend(ax, loc='upper left', bbox_to_anchor=(1.05, 1),
                        add_handles=[], remove_empty=True, color='', **kwargs):
-    """Create a single legend for a given multiplot where multiple groups are
-    being compared"""
-    if ax.get_legend() is None:
-        ax.legend()
-        lg = ax.get_legend()
-        hands = lg.legend_handles
-    else:
-        lg = ax.get_legend()
-        old_hands = lg.legend_handles
+    """
+    Create a single legend for plots where multiple groups are being compared.
+
+    Parameters
+    ----------
+    ax : matplotlib axis
+        Axis object to mark on
+    loc : str
+        Legend location (see matplotlib.legend). Default is 'upper left'.
+    bbox_to_anchor : tuple
+        Anchoring bounding box point (see matplotlib.legend). Default is (1.05, 1).
+    add_handles : list
+        Labelled plot handles to add to the legend. Default is [].
+    remove_empty : bool
+        If add_handles is used, this toggles whether to add unlabeled entries to the
+        legend. Default is False.
+    """
+    # get handles/labels and any existing legend
+    hands, labs = ax.get_legend_handles_labels()
+    old_legend = ax.get_legend()
+
+    # if there is an old legend (which may not have these handles),
+    # update it with new handles/labels
+    if old_legend:
+        old_hands = old_legend.legend_handles
         ax.get_legend().remove()
-        ax.legend()
-        hands = old_hands + ax.get_legend().legend_handles
-    # ax.legend(handles=add_handles+hands)
-    # handles, labels = ax.get_legend_handles_labels()
+        hands = old_hands + hands
+
+    # if there are labels to add (add_handles argument), add them here
     handles, labels = [], []
     for handle in hands + add_handles:
         lab = handle.get_label()
@@ -419,7 +434,8 @@ def consolidate_legend(ax, loc='upper left', bbox_to_anchor=(1.05, 1),
             handles.append(handle)
             labels.append(lab)
     by_label = dict(zip(labels, handles))
-    ax.get_legend().remove()
+
+    # generate legend with consolidated labels/handles
     ax.legend(by_label.values(), by_label.keys(),
               bbox_to_anchor=bbox_to_anchor, loc=loc, **kwargs)
 
