@@ -121,7 +121,7 @@ if __name__ == "__main__":
                             "--continue-on-collection-errors"])
 
     # this should close any open plots
-    plt.close()
+    plt.close('all')
 
     # after creating test report, update the badge using this in powershell:
     # !Powershell.exe -Command "genbadge tests"
