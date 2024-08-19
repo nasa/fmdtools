@@ -33,9 +33,9 @@ class LabelStyle(dataobject):
 
     def gv_align(self, text):
         if self.horizontalalignment == "left":
-            text = "\l".join(text.split("\n"))
+            text = "\\l".join(text.split("\n")) + "\\l"
         elif self.horizontalalignment == "right":
-            text = "\\r".join(text.split("\n"))
+            text = "\\r".join(text.split("\n")) + "\\r"
         return text.replace("    ", "....")
 
 
