@@ -1,3 +1,4 @@
+#!/usr/bin/env python
 # -*- coding: utf-8 -*-
 """
 Defines how simulation results (histories) structured and processed.
@@ -29,19 +30,34 @@ Private Methods:
 - :func:`check_include_error`: Helper function to raise exceptions for errors
 - :func:`get_sub_include`: Determines what attributes of att to include based on the
   provided dict/str/list/set to_include
+
+
+Copyright © 2024, United States Government, as represented by the Administrator
+of the National Aeronautics and Space Administration. All rights reserved.
+
+The “"Fault Model Design tools - fmdtools version 2"” software is licensed
+under the Apache License, Version 2.0 (the "License"); you may not use this
+file except in compliance with the License. You may obtain a copy of the
+License at http://www.apache.org/licenses/LICENSE-2.0. 
+
+Unless required by applicable law or agreed to in writing, software distributed
+under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR
+CONDITIONS OF ANY KIND, either express or implied. See the License for the
+specific language governing permissions and limitations under the License.
 """
 
-import numpy as np
-import pandas as pd
-import sys
-import os
-from collections import UserDict
 from fmdtools.define.base import t_key, nest_dict
 from fmdtools.analyze.common import to_include_keys, is_numeric, nan_to_x, is_bool
 from fmdtools.analyze.common import bootstrap_confidence_interval, join_key
 from fmdtools.analyze.common import get_sub_include, unpack_plot_values
 from fmdtools.analyze.common import multiplot_legend_title, multiplot_helper
 from fmdtools.analyze.common import set_empty_multiplots
+
+import numpy as np
+import pandas as pd
+import sys
+import os
+from collections import UserDict
 
 
 def file_check(filename, overwrite):

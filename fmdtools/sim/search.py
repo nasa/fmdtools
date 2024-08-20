@@ -1,3 +1,4 @@
+#!/usr/bin/env python
 # -*- coding: utf-8 -*-
 """
 Functions and Classes to enable optimization and search of model states and parameters.
@@ -13,19 +14,34 @@ Classes:
 - :class:`DisturbanceProblem`: Enables optimizing disturbances that occur at a set time
 - :class:`SingleFaultScenarioProblem`: Enables optimizing the time of a given fault
   scenario
+
+Copyright © 2024, United States Government, as represented by the Administrator
+of the National Aeronautics and Space Administration. All rights reserved.
+
+The “"Fault Model Design tools - fmdtools version 2"” software is licensed
+under the Apache License, Version 2.0 (the "License"); you may not use this
+file except in compliance with the License. You may obtain a copy of the
+License at http://www.apache.org/licenses/LICENSE-2.0. 
+
+Unless required by applicable law or agreed to in writing, software distributed
+under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR
+CONDITIONS OF ANY KIND, either express or implied. See the License for the
+specific language governing permissions and limitations under the License.
 """
+
+from fmdtools.define.base import t_key
+from fmdtools.define.block.function import ExampleFunction
+from fmdtools.sim.scenario import Sequence, SingleFaultScenario, Scenario
+from fmdtools.sim.sample import FaultDomain
+import fmdtools.sim.propagate as propagate
+from fmdtools.analyze.common import setup_plot
+from fmdtools.analyze.history import History, init_dicthist
+
 import numpy as np
 import networkx as nx
 import time
 from collections.abc import Iterable
 from recordclass import dataobject
-import fmdtools.sim.propagate as propagate
-from fmdtools.define.base import t_key
-from fmdtools.define.block.function import ExampleFunction
-from fmdtools.sim.scenario import Sequence, SingleFaultScenario, Scenario
-from fmdtools.sim.sample import FaultDomain
-from fmdtools.analyze.common import setup_plot
-from fmdtools.analyze.history import History, init_dicthist
 
 
 class BaseObjCon(dataobject):

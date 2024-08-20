@@ -1,17 +1,32 @@
+#!/usr/bin/env python
 # -*- coding: utf-8 -*-
 """
-Created on Mon Feb 13 16:27:19 2023
+Tests of integrated taxiway model.
 
-@author: dhulse
+Copyright © 2024, United States Government, as represented by the Administrator
+of the National Aeronautics and Space Administration. All rights reserved.
+
+The “"Fault Model Design tools - fmdtools version 2"” software is licensed
+under the Apache License, Version 2.0 (the "License"); you may not use this
+file except in compliance with the License. You may obtain a copy of the
+License at http://www.apache.org/licenses/LICENSE-2.0. 
+
+Unless required by applicable law or agreed to in writing, software distributed
+under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR
+CONDITIONS OF ANY KIND, either express or implied. See the License for the
+specific language governing permissions and limitations under the License.
 """
+
 from model import taxiway_model
 from common import plot_course, plot_tstep
 
 from fmdtools.sim import propagate as prop
-import fmdtools.analyze as an
+from fmdtools.analyze import phases
+from fmdtools.analyze.common import suite_for_plots
+
 import unittest
 from matplotlib import pyplot as plt
-from fmdtools.analyze.common import suite_for_plots
+
 
 
 class ModelTests(unittest.TestCase):
@@ -36,8 +51,8 @@ class ModelTests(unittest.TestCase):
             if fxn != "atc":
                 fig, ax = plot_course(self.mdl, hist, fxn, title=fxn)
                 plt.close(fig)
-        phasemaps = an.phases.from_hist(hist)
-        an.phases.phaseplot(phasemaps)
+        phasemaps = phases.from_hist(hist)
+        phases.phaseplot(phasemaps)
 
     def test_atc_lost_ground_perception(self):
         """Verify that the atc losing ground perception results in aircraft being stuck
@@ -67,8 +82,8 @@ class ModelTests(unittest.TestCase):
     def test_atc_wrong_land_command_sight_plot(self):
         seq = {1: {"atc": "wrong_land_command"}, 2: {"h2": "lost_sight"}}
         res, hist = prop.sequence(self.mdl, faultseq=seq)
-        phasemaps = an.phases.from_hist(hist.faulty)
-        an.phases.phaseplot(phasemaps, title="helicopters should not cycle")
+        phasemaps = phases.from_hist(hist.faulty)
+        phases.phaseplot(phasemaps, title="helicopters should not cycle")
 
 
 if __name__ == "__main__":

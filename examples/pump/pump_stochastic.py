@@ -1,21 +1,35 @@
+#!/usr/bin/env python
 # -*- coding: utf-8 -*-
 """
-File name: pump_stochastic.py
-Author: Daniel Hulse
-Created: October 2019
-Description: A simple model for explaining stochastic behavior modelling
+Simple model for explaining stochastic behavior modelling
 
 This model is an extension of ex_pump.py that includes stochastic behaviors
+
+Copyright © 2024, United States Government, as represented by the Administrator
+of the National Aeronautics and Space Administration. All rights reserved.
+
+The “"Fault Model Design tools - fmdtools version 2"” software is licensed
+under the Apache License, Version 2.0 (the "License"); you may not use this
+file except in compliance with the License. You may obtain a copy of the
+License at http://www.apache.org/licenses/LICENSE-2.0. 
+
+Unless required by applicable law or agreed to in writing, software distributed
+under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR
+CONDITIONS OF ANY KIND, either express or implied. See the License for the
+specific language governing permissions and limitations under the License.
 """
+
 from examples.pump.ex_pump  import MoveWat as DetMoveWat
+from examples.pump.ex_pump import ImportWater, ExportWater
+from examples.pump.ex_pump import ImportEE as DetImportEE
+from examples.pump.ex_pump import ImportSig as DetImportSig
+from examples.pump.ex_pump import PumpParam, Electricity, Water, Signal
+from examples.pump.ex_pump import Pump as DetPump
+
 from fmdtools.define.container.rand import Rand
 from fmdtools.define.container.state import State
 import fmdtools.sim.propagate as propagate
 import numpy as np
-
-
-from examples.pump.ex_pump import ImportWater, ExportWater
-from examples.pump.ex_pump import ImportEE as DetImportEE
 
 
 class ImportEERandState(State):
@@ -49,9 +63,6 @@ class ImportEE(DetImportEE):
             self.r.set_rand_state('grid_noise', 'normal',
                                   1, 0.05*(2+np.sin(np.pi/2*time)))
         self.ee_out.s.voltage = self.r.s.grid_noise*self.r.s.effstate * 500
-
-
-from examples.pump.ex_pump import ImportSig as DetImportSig
 
 
 class ImportSigRandState(State):
@@ -108,10 +119,6 @@ class MoveWat(DetMoveWat):
         super().static_behavior(time)
         if time > self.t.time:
             self.s.inc(total_flow=self.wat_out.s.flowrate)
-
-
-from examples.pump.ex_pump import PumpParam, Electricity, Water, Signal
-from examples.pump.ex_pump import Pump as DetPump
 
 
 class Pump(DetPump):

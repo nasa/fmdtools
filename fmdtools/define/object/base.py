@@ -1,3 +1,4 @@
+#!/usr/bin/env python
 # -*- coding: utf-8 -*-
 """
 Defines :class:`BaseObject` class used to define objects.
@@ -11,17 +12,32 @@ Functions contained in this module:
 
 - :func:`check_pickleability`:Checks to see which attributes of an object will pickle
   (and thus parallelize)"
+
+Copyright © 2024, United States Government, as represented by the Administrator
+of the National Aeronautics and Space Administration. All rights reserved.
+
+The “"Fault Model Design tools - fmdtools version 2"” software is licensed
+under the Apache License, Version 2.0 (the "License"); you may not use this
+file except in compliance with the License. You may obtain a copy of the
+License at http://www.apache.org/licenses/LICENSE-2.0. 
+
+Unless required by applicable law or agreed to in writing, software distributed
+under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR
+CONDITIONS OF ANY KIND, either express or implied. See the License for the
+specific language governing permissions and limitations under the License.
 """
+
+from fmdtools.define.base import get_var, get_methods, get_obj_name, get_memory
+from fmdtools.analyze.common import get_sub_include
+from fmdtools.analyze.history import History
+from fmdtools.analyze.graph.model import add_node, add_edge, remove_base, ModelGraph
+
 import dill
 import pickle
 import time
 import sys
 import numpy as np
 from inspect import signature, isclass, ismethod
-from fmdtools.define.base import get_var, get_methods, get_obj_name, get_memory
-from fmdtools.analyze.common import get_sub_include
-from fmdtools.analyze.history import History
-from fmdtools.analyze.graph.model import add_node, add_edge, remove_base, ModelGraph
 
 
 class ObjectGraph(ModelGraph):

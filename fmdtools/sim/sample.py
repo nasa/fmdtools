@@ -1,4 +1,5 @@
-
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
 """
 Module for defining samples of Faults and Parameters to simulate.
 
@@ -11,6 +12,19 @@ Has classes:
 - :Class:`ParameterSample`: Defines a sample of a set of parameters.
 - :Class:`ParameterResultSample`: Defines a sample from Result values.
 - :Class:`ParameterHistSample`: Defines a sample from History values.
+
+Copyright © 2024, United States Government, as represented by the Administrator
+of the National Aeronautics and Space Administration. All rights reserved.
+
+The “"Fault Model Design tools - fmdtools version 2"” software is licensed
+under the Apache License, Version 2.0 (the "License"); you may not use this
+file except in compliance with the License. You may obtain a copy of the
+License at http://www.apache.org/licenses/LICENSE-2.0. 
+
+Unless required by applicable law or agreed to in writing, software distributed
+under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR
+CONDITIONS OF ANY KIND, either express or implied. See the License for the
+specific language governing permissions and limitations under the License.
 """
 from fmdtools.define.base import get_var, nest_dict
 from fmdtools.define.container.parameter import Parameter, ExampleParameter
@@ -18,6 +32,7 @@ from fmdtools.sim.scenario import SingleFaultScenario, JointFaultScenario
 from fmdtools.sim.scenario import ParameterScenario
 from fmdtools.analyze.common import is_numeric
 from fmdtools.analyze.phases import gen_interval_times, PhaseMap, join_phasemaps
+
 import numpy as np
 import itertools
 import inspect

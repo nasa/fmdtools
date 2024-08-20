@@ -1,25 +1,40 @@
+#!/usr/bin/env python
 # -*- coding: utf-8 -*-
 """
 Common methods and Flows for the Taxiway model
-
-@author: mmohame2
 
 Contains the following model aspects:
     - The Environment and related parameters
     - Asset Allocation, parameter generation
     - Default flow dictionaries
     - Plotting
+
+Copyright © 2024, United States Government, as represented by the Administrator
+of the National Aeronautics and Space Administration. All rights reserved.
+
+The “"Fault Model Design tools - fmdtools version 2"” software is licensed
+under the Apache License, Version 2.0 (the "License"); you may not use this
+file except in compliance with the License. You may obtain a copy of the
+License at http://www.apache.org/licenses/LICENSE-2.0. 
+
+Unless required by applicable law or agreed to in writing, software distributed
+under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR
+CONDITIONS OF ANY KIND, either express or implied. See the License for the
+specific language governing permissions and limitations under the License.
 """
-import matplotlib.pyplot as plt
-import numpy as np
-import fmdtools.analyze as an
-from adjustText import adjust_text
-from shapely.geometry import LineString
-from shapely.geometry import Point
+
 from fmdtools.define.flow.multiflow import MultiFlow
 from fmdtools.define.flow.commsflow import CommsFlow
 from fmdtools.define.container.parameter import Parameter
 from fmdtools.define.container.state import State
+from fmdtools.analyze.common import consolidate_legend
+
+import matplotlib.pyplot as plt
+import numpy as np
+from adjustText import adjust_text
+from shapely.geometry import LineString
+from shapely.geometry import Point
+
 
 """
 :param:`default_aircoords`:   Defines the segments that define the map and
@@ -441,7 +456,7 @@ class Environment(MultiFlow):
             ax.plot(*lineobj.xy, label=label, color=color)
 
         if legend:
-            an.plot.make_consolidated_legend(ax)
+            consolidate_legend(ax)
         plt.axis('off')
         return fig, ax
 
@@ -470,7 +485,7 @@ class Environment(MultiFlow):
             lineobj = self.airfield[segname]
             ax.plot(*lineobj.xy, color=color, label=routename)
         if legend:
-            an.plot.make_consolidated_legend(ax)
+            consolidate_legend(ax)
 
     def show_all_routes(self, color="red", legend=True, **kwargs):
         """

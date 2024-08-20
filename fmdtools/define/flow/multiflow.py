@@ -1,3 +1,4 @@
+#!/usr/bin/env python
 # -*- coding: utf-8 -*-
 """
 Representation of flows with multiple contained flows for perception/communication.
@@ -6,6 +7,7 @@ Defines:
 - :class:`MultiFlow` class which represents multiple flows in one graph.
 - :class:`MultiFlowGraph` class which represents `MultiFlow` in a ModelGraph structure.
 """
+
 from fmdtools.define.flow.base import Flow
 from fmdtools.analyze.graph.model import ModelGraph
 

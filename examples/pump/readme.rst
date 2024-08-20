@@ -51,8 +51,6 @@ Notebooks
 
 - `Optimization <Optimization.ipynb>`_, shows some of the basics of working with :class:`~fmdtools.sim.search.DisturbanceProblem` and :class:`~fmdtools.sim.search.ParameterSimProblem` classes for optimization. 
 
-- `AST Sampling <AST_Sampling.ipynb>`_, shows how fmdtools models called from the `AdaSress Julia <https://github.com/NASA-SW-VnV/AdaStress.jl>`_ package to leverage the adaptive stress testing methodology using the :class:`~fmdtools.sim.search.DynamicInterface` class.
-
 - `Optimization.ipynb`: Showing how to use optimization methods in `~fmdtools.sim.search` to optimize scenarios and responses.
 
 - `Parallelism_Tutorial.ipynb`: Shows how to use parallelism in the context of simulation using the `multiprocessing` library.

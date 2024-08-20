@@ -1,5 +1,5 @@
 Hindenberg_Burning:
-- License: Publid Domain
+- License: Public Domain
 - Source: https://en.wikipedia.org/wiki/Hindenburg_disaster#/media/File:Hindenburg_burning.jpg
 
 Titanic Sinking:
