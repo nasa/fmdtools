@@ -1,3 +1,5 @@
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
 """
 Provides representations and visualizations of a model graph structure.
 
@@ -14,20 +16,33 @@ Private Methods:
 - :func:`get_label_groups`: Creates groups of nodes/edges in terms of discrete values
   for the given tags.
 - :func:`get_group_kwarg`: Get style kwargs for a given group.
+
+Copyright © 2024, United States Government, as represented by the Administrator
+of the National Aeronautics and Space Administration. All rights reserved.
+
+The “"Fault Model Design tools - fmdtools version 2"” software is licensed
+under the Apache License, Version 2.0 (the "License"); you may not use this
+file except in compliance with the License. You may obtain a copy of the
+License at http://www.apache.org/licenses/LICENSE-2.0. 
+
+Unless required by applicable law or agreed to in writing, software distributed
+under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR
+CONDITIONS OF ANY KIND, either express or implied. See the License for the
+specific language governing permissions and limitations under the License.
 """
 
-import networkx as nx
-import numpy as np
-import matplotlib.pyplot as plt
-from numpy.random import random
-from matplotlib.widgets import Button
-from matplotlib import get_backend
 from fmdtools.analyze.common import setup_plot
 from fmdtools.analyze.graph.style import edge_style_factory, node_style_factory
 from fmdtools.analyze.graph.style import to_legend_label, gv_import_check
 from fmdtools.analyze.graph.style import nx_plot_ending, gv_plot_ending
 from fmdtools.analyze.graph.label import Labels, EdgeLabelStyle, LabelStyle
 
+import networkx as nx
+import numpy as np
+
+import matplotlib.pyplot as plt
+from matplotlib.widgets import Button
+from matplotlib import get_backend
 
 plt.rcParams['pdf.fonttype'] = 42
 
@@ -661,7 +676,7 @@ class Graph(object):
         g = self.g.to_undirected()
         if start_node == 'random':
             nodes = list(g.nodes)
-            start_node_selected = nodes[random.randint(0, len(nodes))]
+            start_node_selected = nodes[np.random.randint(0, len(nodes))]
         else:
             start_node_selected = start_node
         num_susc_all_trials = []

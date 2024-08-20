@@ -1,22 +1,39 @@
+#!/usr/bin/env python
 # -*- coding: utf-8 -*-
 """
-Created on Mon Dec 20 15:49:13 2021
+Tests of the pump model.
 
-@author: dhulse
+Copyright © 2024, United States Government, as represented by the Administrator
+of the National Aeronautics and Space Administration. All rights reserved.
+
+The “"Fault Model Design tools - fmdtools version 2"” software is licensed
+under the Apache License, Version 2.0 (the "License"); you may not use this
+file except in compliance with the License. You may obtain a copy of the
+License at http://www.apache.org/licenses/LICENSE-2.0. 
+
+Unless required by applicable law or agreed to in writing, software distributed
+under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR
+CONDITIONS OF ANY KIND, either express or implied. See the License for the
+specific language governing permissions and limitations under the License.
 """
-import os
-import unittest
+
+
 from examples.pump.ex_pump import Pump, PumpParam
 from examples.pump.pump_indiv import MoveWatDynamic
+
+from tests.common import CommonTests
+
+from fmdtools.define.object.base import check_pickleability
 from fmdtools.sim import propagate as prop
 from fmdtools.sim.sample import ParameterDomain, ParameterSample
-import fmdtools.analyze as an
-from fmdtools.define.object.base import check_pickleability
 from fmdtools.sim.sample import FaultDomain, FaultSample, ParameterSample
-from tests.common import CommonTests
-import numpy as np
 from fmdtools.analyze.result import load
 from fmdtools.analyze.history import History
+from fmdtools.analyze import tabulate
+
+import os
+import unittest
+import numpy as np
 
 
 class PumpTests(unittest.TestCase, CommonTests):
@@ -285,7 +302,7 @@ def exp_cost_quant(fs, mdl):
     """ Calculate expected cost of faults over a faultsample for the model."""
 
     result, mdlhists = prop.fault_sample(mdl, fs, showprogress=False)
-    fmea = an.tabulate.FMEA(result, fs)
+    fmea = tabulate.FMEA(result, fs)
     util = fmea.as_table()['expected_cost'].sum()
     return util
 

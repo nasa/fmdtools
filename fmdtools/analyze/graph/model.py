@@ -1,21 +1,42 @@
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
 """
 Module for generating graphs from models.
 
 Provides classes:
 
 - :class:`ModelGraph`: Superclass for graphs generated from modelling constructs.
+- :class:`ExtModelGraph`: ModelGraph class that can be extended w- custom inits.
 
 and methods:
 
+- :func:`add_node`: Add node to a graph for a given object.
+- :func:`add_edge`: Add an edge from a base object to another object.
+- :func:`set_node_states`: Set node states from an object.
+- :func:`add_meth_edge`: Addes edges from methods to their objects.
+- :func:`remove_base`: Remove the root note of a graph.
 - :func:`graph_factory`: Creates the default Graph for a given object.
+
+Copyright © 2024, United States Government, as represented by the Administrator
+of the National Aeronautics and Space Administration. All rights reserved.
+
+The “"Fault Model Design tools - fmdtools version 2"” software is licensed
+under the Apache License, Version 2.0 (the "License"); you may not use this
+file except in compliance with the License. You may obtain a copy of the
+License at http://www.apache.org/licenses/LICENSE-2.0. 
+
+Unless required by applicable law or agreed to in writing, software distributed
+under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR
+CONDITIONS OF ANY KIND, either express or implied. See the License for the
+specific language governing permissions and limitations under the License.
 """
+from fmdtools.define.base import get_code_attrs, get_obj_name
 from fmdtools.analyze.graph.base import Graph
 from fmdtools.analyze.graph.label import shorten_name
 from fmdtools.analyze.result import Result
 from fmdtools.analyze.history import History
 from fmdtools.analyze.common import prep_animation_title
 from fmdtools.analyze.common import clear_prev_figure
-from fmdtools.define.base import get_code_attrs, get_obj_name
 
 import networkx as nx
 import inspect

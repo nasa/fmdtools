@@ -1,3 +1,4 @@
+#!/usr/bin/env python
 # -*- coding: utf-8 -*-
 """
 Common methods used commonly in model definition constructs.
@@ -9,7 +10,21 @@ Includes functions:
 - :func:`is_iter`: Checks whether a data type should be interpreted as an iterable
 - :func:`t_key`:Used to generate keys for a given (float) time that is queryable as an
   attribute of an object/dict
+
+Copyright © 2024, United States Government, as represented by the Administrator
+of the National Aeronautics and Space Administration. All rights reserved.
+
+The “"Fault Model Design tools - fmdtools version 2"” software is licensed
+under the Apache License, Version 2.0 (the "License"); you may not use this
+file except in compliance with the License. You may obtain a copy of the
+License at http://www.apache.org/licenses/LICENSE-2.0. 
+
+Unless required by applicable law or agreed to in writing, software distributed
+under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR
+CONDITIONS OF ANY KIND, either express or implied. See the License for the
+specific language governing permissions and limitations under the License.
 """
+
 from collections.abc import Iterable
 from recordclass import dataobject
 from ordered_set import OrderedSet

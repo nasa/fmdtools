@@ -1,3 +1,4 @@
+#!/usr/bin/env python
 # -*- coding: utf-8 -*-
 """
 Defines base :class:`Architecture` class used by other architecture classes.
@@ -5,7 +6,21 @@ Defines base :class:`Architecture` class used by other architecture classes.
 Includes:
 - :class:`Architecture` class defining architectures.
 - :class:`ArchitectureGraph` class which represents `Architecture` in a ModelGraph.
+
+Copyright © 2024, United States Government, as represented by the Administrator
+of the National Aeronautics and Space Administration. All rights reserved.
+
+The “"Fault Model Design tools - fmdtools version 2"” software is licensed
+under the Apache License, Version 2.0 (the "License"); you may not use this
+file except in compliance with the License. You may obtain a copy of the
+License at http://www.apache.org/licenses/LICENSE-2.0. 
+
+Unless required by applicable law or agreed to in writing, software distributed
+under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR
+CONDITIONS OF ANY KIND, either express or implied. See the License for the
+specific language governing permissions and limitations under the License.
 """
+
 from fmdtools.define.object.base import check_pickleability, BaseObject
 from fmdtools.define.flow.base import Flow
 from fmdtools.define.block.base import Simulable
@@ -13,6 +28,7 @@ from fmdtools.define.object.base import init_obj, get_obj_name
 from fmdtools.analyze.common import get_sub_include
 from fmdtools.analyze.graph.model import add_meth_edge, add_edge
 from fmdtools.analyze.graph.model import ExtModelGraph, set_node_states
+
 import time
 
 

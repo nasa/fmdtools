@@ -1,8 +1,7 @@
+#!/usr/bin/env python
 # -*- coding: utf-8 -*-
 """
-Human Rover Model
-
-@authors: mmohame2 and dhulse
+Human Rover Model.
 
 Functions:
     - Communications
@@ -17,13 +16,20 @@ Flows:
     - Force
     - EE
     - Camera
+
+Copyright © 2024, United States Government, as represented by the Administrator
+of the National Aeronautics and Space Administration. All rights reserved.
+
+The “"Fault Model Design tools - fmdtools version 2"” software is licensed
+under the Apache License, Version 2.0 (the "License"); you may not use this
+file except in compliance with the License. You may obtain a copy of the
+License at http://www.apache.org/licenses/LICENSE-2.0. 
+
+Unless required by applicable law or agreed to in writing, software distributed
+under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR
+CONDITIONS OF ANY KIND, either express or implied. See the License for the
+specific language governing permissions and limitations under the License.
 """
-from fmdtools.define.block.action import Action
-from fmdtools.define.architecture.action import ActionArchitecture
-from fmdtools.define.container.state import State
-from fmdtools.define.container.parameter import Parameter
-from fmdtools.define.container.mode import Mode
-from fmdtools.define.flow.base import Flow
 
 from examples.rover.rover_model import Switch, Comms, Video, Control
 from examples.rover.rover_model import Rover, RoverParam
@@ -32,6 +38,13 @@ from examples.rover.rover_model import FaultSig, Power, Perception, Communicatio
 from examples.rover.rover_model import PlanPath, Override, Drive
 from examples.rover.rover_model import PlanPathState
 from examples.rover.rover_model import Operator as BaseOperator
+
+from fmdtools.define.block.action import Action
+from fmdtools.define.architecture.action import ActionArchitecture
+from fmdtools.define.container.state import State
+from fmdtools.define.container.parameter import Parameter
+from fmdtools.define.container.mode import Mode
+from fmdtools.define.flow.base import Flow
 
 
 class PSFParam(Parameter):

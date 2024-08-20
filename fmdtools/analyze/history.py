@@ -1,3 +1,4 @@
+#!/usr/bin/env python
 # -*- coding: utf-8 -*-
 """
 Defines :class:`History`: class and for structuring/analyzing simulation histories.
@@ -13,15 +14,31 @@ And functions/methods:
   val. Enables the recursive definition of a history as a nested structure.
 - :func:`init_dicthist`: Initializes histories for dictionary attributes (if any)
 - :func:`def prep_hists`: Prepare the history for plotting.
+
+Copyright © 2024, United States Government, as represented by the Administrator
+of the National Aeronautics and Space Administration. All rights reserved.
+
+The “"Fault Model Design tools - fmdtools version 2"” software is licensed
+under the Apache License, Version 2.0 (the "License"); you may not use this
+file except in compliance with the License. You may obtain a copy of the
+License at http://www.apache.org/licenses/LICENSE-2.0. 
+
+Unless required by applicable law or agreed to in writing, software distributed
+under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR
+CONDITIONS OF ANY KIND, either express or implied. See the License for the
+specific language governing permissions and limitations under the License.
 """
+
+from fmdtools.define.base import get_var
+
 from fmdtools.analyze.result import Result, load_folder, load, fromdict
 from fmdtools.analyze.common import bootstrap_confidence_interval, get_sub_include
-from fmdtools.define.base import get_var
 from fmdtools.analyze.common import unpack_plot_values, phase_overlay
 from fmdtools.analyze.common import multiplot_legend_title, multiplot_helper
 from fmdtools.analyze.common import plot_err_hist, setup_plot, set_empty_multiplots
 from fmdtools.analyze.common import mark_times, consolidate_legend, add_title_xylabs
 from fmdtools.analyze.common import prep_animation_title, clear_prev_figure
+
 from matplotlib import animation
 from functools import partial
 import numpy as np

@@ -1,19 +1,21 @@
+#!/usr/bin/env python
 # -*- coding: utf-8 -*-
 """
-File name: quad_mdl.py
-Author: Daniel Hulse
-Created: June 2019
-Description: A fault model of a multi-rotor drone.
+Multirotor drone model (with component architectures).
+
+Copyright © 2024, United States Government, as represented by the Administrator
+of the National Aeronautics and Space Administration. All rights reserved.
+
+The “"Fault Model Design tools - fmdtools version 2"” software is licensed
+under the Apache License, Version 2.0 (the "License"); you may not use this
+file except in compliance with the License. You may obtain a copy of the
+License at http://www.apache.org/licenses/LICENSE-2.0. 
+
+Unless required by applicable law or agreed to in writing, software distributed
+under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR
+CONDITIONS OF ANY KIND, either express or implied. See the License for the
+specific language governing permissions and limitations under the License.
 """
-import numpy as np
-import fmdtools.sim as fs
-
-from fmdtools.define.container.parameter import Parameter
-from fmdtools.define.container.state import State
-from fmdtools.define.block.component import Component
-from fmdtools.define.architecture.component import ComponentArchitecture
-from fmdtools.define.architecture.function import FunctionArchitecture
-
 from examples.multirotor.drone_mdl_static import m2to1, DistEE, BaseLine
 from examples.multirotor.drone_mdl_static import Force, EE, Control, DOFs, DesTraj
 from examples.multirotor.drone_mdl_static import AffectDOFMode, AffectDOFState
@@ -22,6 +24,15 @@ from examples.multirotor.drone_mdl_dynamic import ViewEnvironment, DroneEnvironm
 from examples.multirotor.drone_mdl_dynamic import Drone as DynDrone
 from examples.multirotor.drone_mdl_dynamic import AffectDOF as AffectDOFDynamic
 
+from fmdtools.define.container.parameter import Parameter
+from fmdtools.define.container.state import State
+from fmdtools.define.block.component import Component
+from fmdtools.define.architecture.component import ComponentArchitecture
+from fmdtools.define.architecture.function import FunctionArchitecture
+
+import fmdtools.sim as fs
+
+import numpy as np
 
 class OverallAffectDOFState(State):
     """
