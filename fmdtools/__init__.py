@@ -22,6 +22,6 @@ import fmdtools.sim as sim
 import fmdtools.analyze as analyze
 
 __all__ = ['analyze', 'sim', 'define']
-__version__ = 'v2.0-rc6'
+__version__ = '2.0.0'
 __copyright__ = "Copyright 2024 United States Government"
 __license__ = "Apache-2.0"
