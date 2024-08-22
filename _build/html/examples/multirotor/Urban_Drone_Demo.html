@@ -75,10 +75,7 @@
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="../../README.html#citing-this-repository">Citing this repository</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../README.html#license-notices">License/Notices</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="../../README.html#disclaimers">Disclaimers</a></li>
-</ul>
-</li>
+<li class="toctree-l2"><a class="reference internal" href="../../README.html#license-notices">License/Notices</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../../docs/Development%20Guide.html">Development Guide</a><ul>
@@ -86,7 +83,7 @@
 <li class="toctree-l2"><a class="reference internal" href="../../docs/Development%20Guide.html#introductory-tutorial">Introductory Tutorial</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="../../docs/Intro_to_fmdtools.html">Intro to resilience modeling, simulation, and visualization in Python with fmdtools.</a><ul>
 <li class="toctree-l4"><a class="reference internal" href="../../docs/Intro_to_fmdtools.html#author-daniel-hulse">Author: Daniel Hulse</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/Intro_to_fmdtools.html#version-2-0-rc-6">Version: 2.0-rc-6</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../docs/Intro_to_fmdtools.html#version-2-0-0">Version: 2.0.0</a></li>
 </ul>
 </li>
 <li class="toctree-l3"><a class="reference internal" href="../../docs/Intro_to_fmdtools.html#overview">Overview</a></li>
@@ -150,6 +147,7 @@
 <li class="toctree-l3"><a class="reference internal" href="../../docs/Development%20Guide.html#roles">Roles</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../docs/Development%20Guide.html#documentation">Documentation</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../docs/Development%20Guide.html#style-formatting">Style/Formatting</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../docs/Development%20Guide.html#headers">Headers</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../docs/Development%20Guide.html#testing">Testing</a></li>
 </ul>
 </li>
@@ -198,14 +196,6 @@
 <li class="toctree-l3"><a class="reference internal" href="../pump/Stochastic_Modelling.html">Stochastic Modelling in fmdtools</a><ul>
 <li class="toctree-l4"><a class="reference internal" href="../pump/Stochastic_Modelling.html#Model-Setup">Model Setup</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../pump/Stochastic_Modelling.html#Simulation-and-Analysis">Simulation and Analysis</a></li>
-</ul>
-</li>
-<li class="toctree-l3"><a class="reference internal" href="../pump/AST_Sampling.html">fmdtools-AdaStress integration</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="../pump/AST_Sampling.html#Python-setup:">Python setup:</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../pump/AST_Sampling.html#Running-AdaStress-Methods">Running AdaStress Methods</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../pump/AST_Sampling.html#MCTS">MCTS</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../pump/AST_Sampling.html#Pump">Pump</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../pump/AST_Sampling.html#Simulator">Simulator</a></li>
 </ul>
 </li>
 </ul>
@@ -669,12 +659,22 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
              
-  <div class="nbinput nblast docutils container">
+  <section id="Urban-Drone-Demo">
+<h1>Urban Drone Demo<a class="headerlink" href="#Urban-Drone-Demo" title="Link to this heading"></a></h1>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>Copyright © 2024, United States Government, as represented by the Administrator of the National Aeronautics and Space Administration. All rights reserved.
+
+The “&quot;Fault Model Design tools - fmdtools version 2&quot;” software is licensed under the Apache License, Version 2.0 (the &quot;License&quot;); you may not use this file except in compliance with the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0.
+
+Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an &quot;AS IS&quot; BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
+</pre></div>
+</div>
+<div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[1]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">fmdtools.sim.propagate</span> <span class="k">as</span> <span class="nn">propagate</span>
 <span class="kn">from</span> <span class="nn">fmdtools.analyze</span> <span class="kn">import</span> <span class="n">tabulate</span>
+
 <span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
 <span class="kn">from</span> <span class="nn">mpl_toolkits.mplot3d</span> <span class="kn">import</span> <span class="n">Axes3D</span>
 <span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
@@ -682,8 +682,6 @@
 </pre></div>
 </div>
 </div>
-<section id="Urban-Drone-Demo">
-<h1>Urban Drone Demo<a class="headerlink" href="#Urban-Drone-Demo" title="Link to this heading"></a></h1>
 <section id="Model-Overview">
 <h2>Model Overview<a class="headerlink" href="#Model-Overview" title="Link to this heading"></a></h2>
 <p>The drone model is defined in <code class="docutils literal notranslate"><span class="pre">drone_mdl_urban.py</span></code>, along with some visualization functions.</p>
@@ -717,7 +715,7 @@
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area docutils container">
-<img alt="../../_images/examples_multirotor_Urban_Drone_Demo_5_0.png" src="../../_images/examples_multirotor_Urban_Drone_Demo_5_0.png" />
+<img alt="../../_images/examples_multirotor_Urban_Drone_Demo_6_0.png" src="../../_images/examples_multirotor_Urban_Drone_Demo_6_0.png" />
 </div>
 </div>
 <p>We can also view the grid environment using its <code class="docutils literal notranslate"><span class="pre">show</span></code> methods:</p>
@@ -734,7 +732,7 @@
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area docutils container">
-<img alt="../../_images/examples_multirotor_Urban_Drone_Demo_7_0.png" src="../../_images/examples_multirotor_Urban_Drone_Demo_7_0.png" />
+<img alt="../../_images/examples_multirotor_Urban_Drone_Demo_8_0.png" src="../../_images/examples_multirotor_Urban_Drone_Demo_8_0.png" />
 </div>
 </div>
 <p>Which shows the Start, End, and allowed/unsafe locations in the 1000x1000-m grid. In this display, line thickness corresponds to building height, and hatching corresponds to whether or not the space is occupied. We can also display this using <code class="docutils literal notranslate"><span class="pre">show.coord3d</span></code>:</p>
@@ -750,7 +748,7 @@
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area docutils container">
-<img alt="../../_images/examples_multirotor_Urban_Drone_Demo_9_0.png" src="../../_images/examples_multirotor_Urban_Drone_Demo_9_0.png" />
+<img alt="../../_images/examples_multirotor_Urban_Drone_Demo_10_0.png" src="../../_images/examples_multirotor_Urban_Drone_Demo_10_0.png" />
 </div>
 </div>
 </section>
@@ -775,7 +773,7 @@
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area docutils container">
-<img alt="../../_images/examples_multirotor_Urban_Drone_Demo_11_0.png" src="../../_images/examples_multirotor_Urban_Drone_Demo_11_0.png" />
+<img alt="../../_images/examples_multirotor_Urban_Drone_Demo_12_0.png" src="../../_images/examples_multirotor_Urban_Drone_Demo_12_0.png" />
 </div>
 </div>
 <p>As shown, the flight ends fairly quickly (in 10 minutes), with the drone successively proceeding through points in the flight plan.</p>
@@ -792,7 +790,7 @@
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area docutils container">
-<img alt="../../_images/examples_multirotor_Urban_Drone_Demo_13_0.png" src="../../_images/examples_multirotor_Urban_Drone_Demo_13_0.png" />
+<img alt="../../_images/examples_multirotor_Urban_Drone_Demo_14_0.png" src="../../_images/examples_multirotor_Urban_Drone_Demo_14_0.png" />
 </div>
 </div>
 <p>Trajectory plots can be overlaid on top of environment plots. In this case, we defined the method <code class="docutils literal notranslate"><span class="pre">plot_env_with_traj</span></code> and <code class="docutils literal notranslate"><span class="pre">plot_env_with_traj_z</span></code> for this case.</p>
@@ -826,7 +824,7 @@
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area docutils container">
-<img alt="../../_images/examples_multirotor_Urban_Drone_Demo_16_1.png" src="../../_images/examples_multirotor_Urban_Drone_Demo_16_1.png" />
+<img alt="../../_images/examples_multirotor_Urban_Drone_Demo_17_1.png" src="../../_images/examples_multirotor_Urban_Drone_Demo_17_1.png" />
 </div>
 </div>
 <div class="nbinput docutils container">
@@ -851,7 +849,7 @@
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area docutils container">
-<img alt="../../_images/examples_multirotor_Urban_Drone_Demo_17_1.png" src="../../_images/examples_multirotor_Urban_Drone_Demo_17_1.png" />
+<img alt="../../_images/examples_multirotor_Urban_Drone_Demo_18_1.png" src="../../_images/examples_multirotor_Urban_Drone_Demo_18_1.png" />
 </div>
 </div>
 <p>As shown, this is a rather simple straight-line path. If we wanted a more complex scenario, we could make the path more complex by adding multiple destinations or planning the path based on allowed flight/landing locations.</p>
@@ -972,7 +970,7 @@ endclass:
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area docutils container">
-<img alt="../../_images/examples_multirotor_Urban_Drone_Demo_23_0.png" src="../../_images/examples_multirotor_Urban_Drone_Demo_23_0.png" />
+<img alt="../../_images/examples_multirotor_Urban_Drone_Demo_24_0.png" src="../../_images/examples_multirotor_Urban_Drone_Demo_24_0.png" />
 </div>
 </div>
 <div class="nbinput docutils container">
@@ -997,7 +995,7 @@ endclass:
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area docutils container">
-<img alt="../../_images/examples_multirotor_Urban_Drone_Demo_24_1.png" src="../../_images/examples_multirotor_Urban_Drone_Demo_24_1.png" />
+<img alt="../../_images/examples_multirotor_Urban_Drone_Demo_25_1.png" src="../../_images/examples_multirotor_Urban_Drone_Demo_25_1.png" />
 </div>
 </div>
 <div class="nbinput docutils container">
@@ -1022,7 +1020,7 @@ endclass:
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area docutils container">
-<img alt="../../_images/examples_multirotor_Urban_Drone_Demo_25_1.png" src="../../_images/examples_multirotor_Urban_Drone_Demo_25_1.png" />
+<img alt="../../_images/examples_multirotor_Urban_Drone_Demo_26_1.png" src="../../_images/examples_multirotor_Urban_Drone_Demo_26_1.png" />
 </div>
 </div>
 <div class="nbinput docutils container">
@@ -1145,7 +1143,7 @@ FaultSample of scenarios:
 </div>
 <div class="output_area stderr docutils container">
 <div class="highlight"><pre>
-SCENARIOS COMPLETE: 100%|██████████| 118/118 [03:38&lt;00:00,  1.85s/it]
+SCENARIOS COMPLETE: 100%|██████████| 118/118 [03:29&lt;00:00,  1.78s/it]
 </pre></div></div>
 </div>
 <div class="nbinput docutils container">
@@ -1170,7 +1168,7 @@ SCENARIOS COMPLETE: 100%|██████████| 118/118 [03:38&lt;00:00
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area docutils container">
-<img alt="../../_images/examples_multirotor_Urban_Drone_Demo_32_1.png" src="../../_images/examples_multirotor_Urban_Drone_Demo_32_1.png" />
+<img alt="../../_images/examples_multirotor_Urban_Drone_Demo_33_1.png" src="../../_images/examples_multirotor_Urban_Drone_Demo_33_1.png" />
 </div>
 </div>
 <div class="nbinput docutils container">
@@ -1270,28 +1268,6 @@ SCENARIOS COMPLETE: 100%|██████████| 118/118 [03:38&lt;00:00
     </tr>
     <tr>
       <th rowspan="12" valign="top">affect_dof</th>
-      <th>lf_ctlbreak</th>
-      <td>9.583333e-07</td>
-      <td>281.0</td>
-      <td>1.219775e+04</td>
-      <td>1000.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-    </tr>
-    <tr>
-      <th>rr_ctlbreak</th>
-      <td>9.583333e-07</td>
-      <td>281.0</td>
-      <td>1.219775e+04</td>
-      <td>1000.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-    </tr>
-    <tr>
       <th>lr_ctlbreak</th>
       <td>9.583333e-07</td>
       <td>281.0</td>
@@ -1314,7 +1290,29 @@ SCENARIOS COMPLETE: 100%|██████████| 118/118 [03:38&lt;00:00
       <td>0.0</td>
     </tr>
     <tr>
-      <th>rr_ctlup</th>
+      <th>lf_ctlbreak</th>
+      <td>9.583333e-07</td>
+      <td>281.0</td>
+      <td>1.219775e+04</td>
+      <td>1000.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+    </tr>
+    <tr>
+      <th>rr_ctlbreak</th>
+      <td>9.583333e-07</td>
+      <td>281.0</td>
+      <td>1.219775e+04</td>
+      <td>1000.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+    </tr>
+    <tr>
+      <th>rr_ctldn</th>
       <td>9.583333e-07</td>
       <td>281.0</td>
       <td>1.198817e+04</td>
@@ -1336,28 +1334,6 @@ SCENARIOS COMPLETE: 100%|██████████| 118/118 [03:38&lt;00:00
       <td>0.0</td>
     </tr>
     <tr>
-      <th>lr_ctlup</th>
-      <td>9.583333e-07</td>
-      <td>281.0</td>
-      <td>1.198817e+04</td>
-      <td>500.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-    </tr>
-    <tr>
-      <th>rf_ctldn</th>
-      <td>9.583333e-07</td>
-      <td>281.0</td>
-      <td>1.198817e+04</td>
-      <td>500.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-    </tr>
-    <tr>
       <th>rf_ctlup</th>
       <td>9.583333e-07</td>
       <td>281.0</td>
@@ -1369,7 +1345,18 @@ SCENARIOS COMPLETE: 100%|██████████| 118/118 [03:38&lt;00:00
       <td>0.0</td>
     </tr>
     <tr>
-      <th>lf_ctldn</th>
+      <th>rr_ctlup</th>
+      <td>9.583333e-07</td>
+      <td>281.0</td>
+      <td>1.198817e+04</td>
+      <td>500.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+    </tr>
+    <tr>
+      <th>lr_ctlup</th>
       <td>9.583333e-07</td>
       <td>281.0</td>
       <td>1.198817e+04</td>
@@ -1391,7 +1378,18 @@ SCENARIOS COMPLETE: 100%|██████████| 118/118 [03:38&lt;00:00
       <td>0.0</td>
     </tr>
     <tr>
-      <th>rr_ctldn</th>
+      <th>lf_ctldn</th>
+      <td>9.583333e-07</td>
+      <td>281.0</td>
+      <td>1.198817e+04</td>
+      <td>500.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+    </tr>
+    <tr>
+      <th>rf_ctldn</th>
       <td>9.583333e-07</td>
       <td>281.0</td>
       <td>1.198817e+04</td>
@@ -1437,17 +1435,6 @@ SCENARIOS COMPLETE: 100%|██████████| 118/118 [03:38&lt;00:00
       <td>0.0</td>
     </tr>
     <tr>
-      <th>lr_mechbreak</th>
-      <td>4.791667e-07</td>
-      <td>281.0</td>
-      <td>1.171408e+04</td>
-      <td>500.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-    </tr>
-    <tr>
       <th>lf_mechbreak</th>
       <td>4.791667e-07</td>
       <td>281.0</td>
@@ -1470,19 +1457,18 @@ SCENARIOS COMPLETE: 100%|██████████| 118/118 [03:38&lt;00:00
       <td>0.0</td>
     </tr>
     <tr>
-      <th>ctl_dof</th>
-      <th>degctl</th>
-      <td>2.875000e-08</td>
+      <th>lr_mechbreak</th>
+      <td>4.791667e-07</td>
       <td>281.0</td>
-      <td>1.165673e+04</td>
-      <td>1000.0</td>
+      <td>1.171408e+04</td>
+      <td>500.0</td>
       <td>0.0</td>
       <td>0.0</td>
       <td>0.0</td>
       <td>0.0</td>
     </tr>
     <tr>
-      <th rowspan="2" valign="top">plan_path</th>
+      <th>plan_path</th>
       <th>degloc</th>
       <td>2.875000e-08</td>
       <td>281.0</td>
@@ -1494,7 +1480,19 @@ SCENARIOS COMPLETE: 100%|██████████| 118/118 [03:38&lt;00:00
       <td>0.0</td>
     </tr>
     <tr>
-      <th>noloc</th>
+      <th rowspan="2" valign="top">ctl_dof</th>
+      <th>degctl</th>
+      <td>2.875000e-08</td>
+      <td>281.0</td>
+      <td>1.165673e+04</td>
+      <td>1000.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+    </tr>
+    <tr>
+      <th>noctl</th>
       <td>7.187500e-09</td>
       <td>281.0</td>
       <td>1.164418e+04</td>
@@ -1505,8 +1503,8 @@ SCENARIOS COMPLETE: 100%|██████████| 118/118 [03:38&lt;00:00
       <td>0.0</td>
     </tr>
     <tr>
-      <th>ctl_dof</th>
-      <th>noctl</th>
+      <th>plan_path</th>
+      <th>noloc</th>
       <td>7.187500e-09</td>
       <td>281.0</td>
       <td>1.164418e+04</td>
@@ -1530,18 +1528,7 @@ SCENARIOS COMPLETE: 100%|██████████| 118/118 [03:38&lt;00:00
     </tr>
     <tr>
       <th rowspan="16" valign="top">affect_dof</th>
-      <th>lr_short</th>
-      <td>4.791667e-07</td>
-      <td>281.0</td>
-      <td>1.159121e+04</td>
-      <td>200.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-    </tr>
-    <tr>
-      <th>rf_short</th>
+      <th>lr_openc</th>
       <td>4.791667e-07</td>
       <td>281.0</td>
       <td>1.159121e+04</td>
@@ -1563,18 +1550,7 @@ SCENARIOS COMPLETE: 100%|██████████| 118/118 [03:38&lt;00:00
       <td>0.0</td>
     </tr>
     <tr>
-      <th>lr_openc</th>
-      <td>4.791667e-07</td>
-      <td>281.0</td>
-      <td>1.159121e+04</td>
-      <td>200.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-    </tr>
-    <tr>
-      <th>lf_short</th>
+      <th>rr_short</th>
       <td>4.791667e-07</td>
       <td>281.0</td>
       <td>1.159121e+04</td>
@@ -1596,7 +1572,29 @@ SCENARIOS COMPLETE: 100%|██████████| 118/118 [03:38&lt;00:00
       <td>0.0</td>
     </tr>
     <tr>
-      <th>rr_short</th>
+      <th>rf_short</th>
+      <td>4.791667e-07</td>
+      <td>281.0</td>
+      <td>1.159121e+04</td>
+      <td>200.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+    </tr>
+    <tr>
+      <th>lf_short</th>
+      <td>4.791667e-07</td>
+      <td>281.0</td>
+      <td>1.159121e+04</td>
+      <td>200.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+    </tr>
+    <tr>
+      <th>lr_short</th>
       <td>4.791667e-07</td>
       <td>281.0</td>
       <td>1.159121e+04</td>
@@ -1612,6 +1610,17 @@ SCENARIOS COMPLETE: 100%|██████████| 118/118 [03:38&lt;00:00
       <td>281.0</td>
       <td>1.159121e+04</td>
       <td>200.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+    </tr>
+    <tr>
+      <th>rr_mechfriction</th>
+      <td>2.395833e-07</td>
+      <td>281.0</td>
+      <td>1.157704e+04</td>
+      <td>500.0</td>
       <td>0.0</td>
       <td>0.0</td>
       <td>0.0</td>
@@ -1651,18 +1660,7 @@ SCENARIOS COMPLETE: 100%|██████████| 118/118 [03:38&lt;00:00
       <td>0.0</td>
     </tr>
     <tr>
-      <th>rr_mechfriction</th>
-      <td>2.395833e-07</td>
-      <td>281.0</td>
-      <td>1.157704e+04</td>
-      <td>500.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-    </tr>
-    <tr>
-      <th>rr_propbreak</th>
+      <th>lr_propbreak</th>
       <td>1.437500e-07</td>
       <td>281.0</td>
       <td>1.140136e+04</td>
@@ -1684,7 +1682,7 @@ SCENARIOS COMPLETE: 100%|██████████| 118/118 [03:38&lt;00:00
       <td>0.0</td>
     </tr>
     <tr>
-      <th>rf_propbreak</th>
+      <th>rr_propbreak</th>
       <td>1.437500e-07</td>
       <td>281.0</td>
       <td>1.140136e+04</td>
@@ -1695,7 +1693,7 @@ SCENARIOS COMPLETE: 100%|██████████| 118/118 [03:38&lt;00:00
       <td>0.0</td>
     </tr>
     <tr>
-      <th>lr_propbreak</th>
+      <th>rf_propbreak</th>
       <td>1.437500e-07</td>
       <td>281.0</td>
       <td>1.140136e+04</td>
@@ -1719,7 +1717,7 @@ SCENARIOS COMPLETE: 100%|██████████| 118/118 [03:38&lt;00:00
     </tr>
     <tr>
       <th rowspan="4" valign="top">affect_dof</th>
-      <th>lf_propstuck</th>
+      <th>lr_propstuck</th>
       <td>9.583333e-08</td>
       <td>281.0</td>
       <td>1.137424e+04</td>
@@ -1741,7 +1739,7 @@ SCENARIOS COMPLETE: 100%|██████████| 118/118 [03:38&lt;00:00
       <td>0.0</td>
     </tr>
     <tr>
-      <th>lr_propstuck</th>
+      <th>rf_propstuck</th>
       <td>9.583333e-08</td>
       <td>281.0</td>
       <td>1.137424e+04</td>
@@ -1752,7 +1750,7 @@ SCENARIOS COMPLETE: 100%|██████████| 118/118 [03:38&lt;00:00
       <td>0.0</td>
     </tr>
     <tr>
-      <th>rf_propstuck</th>
+      <th>lf_propstuck</th>
       <td>9.583333e-08</td>
       <td>281.0</td>
       <td>1.137424e+04</td>
@@ -1787,7 +1785,7 @@ SCENARIOS COMPLETE: 100%|██████████| 118/118 [03:38&lt;00:00
       <td>0.0</td>
     </tr>
     <tr>
-      <th>rf_propwarp</th>
+      <th>lr_propwarp</th>
       <td>4.791667e-08</td>
       <td>281.0</td>
       <td>1.134712e+04</td>
@@ -1809,7 +1807,7 @@ SCENARIOS COMPLETE: 100%|██████████| 118/118 [03:38&lt;00:00
       <td>0.0</td>
     </tr>
     <tr>
-      <th>lr_propwarp</th>
+      <th>rf_propwarp</th>
       <td>4.791667e-08</td>
       <td>281.0</td>
       <td>1.134712e+04</td>
