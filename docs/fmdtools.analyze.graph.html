@@ -72,10 +72,7 @@
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="../README.html#citing-this-repository">Citing this repository</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../README.html#license-notices">License/Notices</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="../README.html#disclaimers">Disclaimers</a></li>
-</ul>
-</li>
+<li class="toctree-l2"><a class="reference internal" href="../README.html#license-notices">License/Notices</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="Development%20Guide.html">Development Guide</a><ul>
@@ -83,7 +80,7 @@
 <li class="toctree-l2"><a class="reference internal" href="Development%20Guide.html#introductory-tutorial">Introductory Tutorial</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="Intro_to_fmdtools.html">Intro to resilience modeling, simulation, and visualization in Python with fmdtools.</a><ul>
 <li class="toctree-l4"><a class="reference internal" href="Intro_to_fmdtools.html#author-daniel-hulse">Author: Daniel Hulse</a></li>
-<li class="toctree-l4"><a class="reference internal" href="Intro_to_fmdtools.html#version-2-0-rc-6">Version: 2.0-rc-6</a></li>
+<li class="toctree-l4"><a class="reference internal" href="Intro_to_fmdtools.html#version-2-0-0">Version: 2.0.0</a></li>
 </ul>
 </li>
 <li class="toctree-l3"><a class="reference internal" href="Intro_to_fmdtools.html#overview">Overview</a></li>
@@ -147,6 +144,7 @@
 <li class="toctree-l3"><a class="reference internal" href="Development%20Guide.html#roles">Roles</a></li>
 <li class="toctree-l3"><a class="reference internal" href="Development%20Guide.html#documentation">Documentation</a></li>
 <li class="toctree-l3"><a class="reference internal" href="Development%20Guide.html#style-formatting">Style/Formatting</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Development%20Guide.html#headers">Headers</a></li>
 <li class="toctree-l3"><a class="reference internal" href="Development%20Guide.html#testing">Testing</a></li>
 </ul>
 </li>
@@ -195,14 +193,6 @@
 <li class="toctree-l3"><a class="reference internal" href="../examples/pump/Stochastic_Modelling.html">Stochastic Modelling in fmdtools</a><ul>
 <li class="toctree-l4"><a class="reference internal" href="../examples/pump/Stochastic_Modelling.html#Model-Setup">Model Setup</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../examples/pump/Stochastic_Modelling.html#Simulation-and-Analysis">Simulation and Analysis</a></li>
-</ul>
-</li>
-<li class="toctree-l3"><a class="reference internal" href="../examples/pump/AST_Sampling.html">fmdtools-AdaStress integration</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="../examples/pump/AST_Sampling.html#Python-setup:">Python setup:</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../examples/pump/AST_Sampling.html#Running-AdaStress-Methods">Running AdaStress Methods</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../examples/pump/AST_Sampling.html#MCTS">MCTS</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../examples/pump/AST_Sampling.html#Pump">Pump</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../examples/pump/AST_Sampling.html#Simulator">Simulator</a></li>
 </ul>
 </li>
 </ul>
@@ -3070,13 +3060,6 @@ is provided, calls method_layout, where method is the string provided</p></li>
 </dd></dl>
 
 <dl class="py function">
-<dt class="sig sig-object py" id="fmdtools.analyze.graph.base.random">
-<span class="sig-prename descclassname"><span class="pre">fmdtools.analyze.graph.base.</span></span><span class="sig-name descname"><span class="pre">random</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.analyze.graph.base.random" title="Link to this definition"></a></dt>
-<dd><p>Return random floats in the half-open interval [0.0, 1.0). Alias for
-<cite>random_sample</cite> to ease forward-porting to the new random API.</p>
-</dd></dl>
-
-<dl class="py function">
 <dt class="sig sig-object py" id="fmdtools.analyze.graph.base.sff_one_trial">
 <span class="sig-prename descclassname"><span class="pre">fmdtools.analyze.graph.base.</span></span><span class="sig-name descname"><span class="pre">sff_one_trial</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">start_node_selected</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">g</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">endtime</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">5</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pi</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pr</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.1</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.analyze.graph.base.sff_one_trial" title="Link to this definition"></a></dt>
 <dd><p>Calculate one trial of the sff model.</p>
@@ -3100,9 +3083,15 @@ is provided, calls method_layout, where method is the string provided</p></li>
 <p>Provides classes:</p>
 <ul class="simple">
 <li><p><a class="reference internal" href="#fmdtools.analyze.graph.model.ModelGraph" title="fmdtools.analyze.graph.model.ModelGraph"><code class="xref py py-class docutils literal notranslate"><span class="pre">ModelGraph</span></code></a>: Superclass for graphs generated from modelling constructs.</p></li>
+<li><p><a class="reference internal" href="#fmdtools.analyze.graph.model.ExtModelGraph" title="fmdtools.analyze.graph.model.ExtModelGraph"><code class="xref py py-class docutils literal notranslate"><span class="pre">ExtModelGraph</span></code></a>: ModelGraph class that can be extended w- custom inits.</p></li>
 </ul>
 <p>and methods:</p>
 <ul class="simple">
+<li><p><a class="reference internal" href="#fmdtools.analyze.graph.model.add_node" title="fmdtools.analyze.graph.model.add_node"><code class="xref py py-func docutils literal notranslate"><span class="pre">add_node()</span></code></a>: Add node to a graph for a given object.</p></li>
+<li><p><a class="reference internal" href="#fmdtools.analyze.graph.model.add_edge" title="fmdtools.analyze.graph.model.add_edge"><code class="xref py py-func docutils literal notranslate"><span class="pre">add_edge()</span></code></a>: Add an edge from a base object to another object.</p></li>
+<li><p><a class="reference internal" href="#fmdtools.analyze.graph.model.set_node_states" title="fmdtools.analyze.graph.model.set_node_states"><code class="xref py py-func docutils literal notranslate"><span class="pre">set_node_states()</span></code></a>: Set node states from an object.</p></li>
+<li><p><a class="reference internal" href="#fmdtools.analyze.graph.model.add_meth_edge" title="fmdtools.analyze.graph.model.add_meth_edge"><code class="xref py py-func docutils literal notranslate"><span class="pre">add_meth_edge()</span></code></a>: Addes edges from methods to their objects.</p></li>
+<li><p><a class="reference internal" href="#fmdtools.analyze.graph.model.remove_base" title="fmdtools.analyze.graph.model.remove_base"><code class="xref py py-func docutils literal notranslate"><span class="pre">remove_base()</span></code></a>: Remove the root note of a graph.</p></li>
 <li><p><code class="xref py py-func docutils literal notranslate"><span class="pre">graph_factory()</span></code>: Creates the default Graph for a given object.</p></li>
 </ul>
 <dl class="py class">

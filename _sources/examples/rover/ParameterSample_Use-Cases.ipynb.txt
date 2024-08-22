@@ -8,7 +8,15 @@
     "\n",
     "Parameter Samples are used to evaluate the performance of a model over a set of input parameters. It can then be used to do things like:\n",
     "- define/understand the operational envelope for different system parameters (i.e., what inputs can the system safely encounter)\n",
-    "- quantify failure probabilities given stochastic inputs (i.e., if the statistical distribution of inputs are known, what is the resulting probability of hazards given the design)"
+    "- quantify failure probabilities given stochastic inputs (i.e., if the statistical distribution of inputs are known, what is the resulting probability of hazards given the design)\n",
+    "\n",
+    "```\n",
+    "Copyright © 2024, United States Government, as represented by the Administrator of the National Aeronautics and Space Administration. All rights reserved.\n",
+    "\n",
+    "The “\"Fault Model Design tools - fmdtools version 2\"” software is licensed under the Apache License, Version 2.0 (the \"License\"); you may not use this file except in compliance with the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0. \n",
+    "\n",
+    "Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an \"AS IS\" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.\n",
+    "```"
    ]
   },
   {
@@ -16,10 +24,10 @@
    "execution_count": 1,
    "metadata": {
     "execution": {
-     "iopub.execute_input": "2024-07-29T22:02:47.721014Z",
-     "iopub.status.busy": "2024-07-29T22:02:47.721014Z",
-     "iopub.status.idle": "2024-07-29T22:02:49.317683Z",
-     "shell.execute_reply": "2024-07-29T22:02:49.317683Z"
+     "iopub.execute_input": "2024-08-22T16:25:38.211672Z",
+     "iopub.status.busy": "2024-08-22T16:25:38.211672Z",
+     "iopub.status.idle": "2024-08-22T16:25:39.628777Z",
+     "shell.execute_reply": "2024-08-22T16:25:39.628777Z"
     }
    },
    "outputs": [],
@@ -40,10 +48,10 @@
    "execution_count": 2,
    "metadata": {
     "execution": {
-     "iopub.execute_input": "2024-07-29T22:02:49.321679Z",
-     "iopub.status.busy": "2024-07-29T22:02:49.320674Z",
-     "iopub.status.idle": "2024-07-29T22:02:49.329402Z",
-     "shell.execute_reply": "2024-07-29T22:02:49.329402Z"
+     "iopub.execute_input": "2024-08-22T16:25:39.628777Z",
+     "iopub.status.busy": "2024-08-22T16:25:39.628777Z",
+     "iopub.status.idle": "2024-08-22T16:25:39.639828Z",
+     "shell.execute_reply": "2024-08-22T16:25:39.639828Z"
     }
    },
    "outputs": [],
@@ -63,10 +71,10 @@
    "execution_count": 3,
    "metadata": {
     "execution": {
-     "iopub.execute_input": "2024-07-29T22:02:49.331395Z",
-     "iopub.status.busy": "2024-07-29T22:02:49.331395Z",
-     "iopub.status.idle": "2024-07-29T22:02:49.345419Z",
-     "shell.execute_reply": "2024-07-29T22:02:49.345419Z"
+     "iopub.execute_input": "2024-08-22T16:25:39.639828Z",
+     "iopub.status.busy": "2024-08-22T16:25:39.639828Z",
+     "iopub.status.idle": "2024-08-22T16:25:39.654138Z",
+     "shell.execute_reply": "2024-08-22T16:25:39.654138Z"
     }
    },
    "outputs": [
@@ -105,10 +113,10 @@
    "execution_count": 4,
    "metadata": {
     "execution": {
-     "iopub.execute_input": "2024-07-29T22:02:49.347409Z",
-     "iopub.status.busy": "2024-07-29T22:02:49.347409Z",
-     "iopub.status.idle": "2024-07-29T22:02:49.361124Z",
-     "shell.execute_reply": "2024-07-29T22:02:49.361124Z"
+     "iopub.execute_input": "2024-08-22T16:25:39.654138Z",
+     "iopub.status.busy": "2024-08-22T16:25:39.654138Z",
+     "iopub.status.idle": "2024-08-22T16:25:39.669683Z",
+     "shell.execute_reply": "2024-08-22T16:25:39.669683Z"
     }
    },
    "outputs": [
@@ -199,10 +207,10 @@
    "execution_count": 5,
    "metadata": {
     "execution": {
-     "iopub.execute_input": "2024-07-29T22:02:49.363105Z",
-     "iopub.status.busy": "2024-07-29T22:02:49.363105Z",
-     "iopub.status.idle": "2024-07-29T22:02:49.623322Z",
-     "shell.execute_reply": "2024-07-29T22:02:49.622641Z"
+     "iopub.execute_input": "2024-08-22T16:25:39.669683Z",
+     "iopub.status.busy": "2024-08-22T16:25:39.669683Z",
+     "iopub.status.idle": "2024-08-22T16:25:39.910920Z",
+     "shell.execute_reply": "2024-08-22T16:25:39.910920Z"
     }
    },
    "outputs": [],
@@ -217,10 +225,10 @@
    "execution_count": 6,
    "metadata": {
     "execution": {
-     "iopub.execute_input": "2024-07-29T22:02:49.625332Z",
-     "iopub.status.busy": "2024-07-29T22:02:49.625332Z",
-     "iopub.status.idle": "2024-07-29T22:02:49.843647Z",
-     "shell.execute_reply": "2024-07-29T22:02:49.843647Z"
+     "iopub.execute_input": "2024-08-22T16:25:39.910920Z",
+     "iopub.status.busy": "2024-08-22T16:25:39.910920Z",
+     "iopub.status.idle": "2024-08-22T16:25:40.102463Z",
+     "shell.execute_reply": "2024-08-22T16:25:40.102463Z"
     }
    },
    "outputs": [
@@ -262,10 +270,10 @@
    "execution_count": 7,
    "metadata": {
     "execution": {
-     "iopub.execute_input": "2024-07-29T22:02:49.845703Z",
-     "iopub.status.busy": "2024-07-29T22:02:49.845703Z",
-     "iopub.status.idle": "2024-07-29T22:02:50.332394Z",
-     "shell.execute_reply": "2024-07-29T22:02:50.332394Z"
+     "iopub.execute_input": "2024-08-22T16:25:40.102463Z",
+     "iopub.status.busy": "2024-08-22T16:25:40.102463Z",
+     "iopub.status.idle": "2024-08-22T16:25:40.493874Z",
+     "shell.execute_reply": "2024-08-22T16:25:40.493874Z"
     }
    },
    "outputs": [
@@ -310,10 +318,10 @@
    "execution_count": 8,
    "metadata": {
     "execution": {
-     "iopub.execute_input": "2024-07-29T22:02:50.335370Z",
-     "iopub.status.busy": "2024-07-29T22:02:50.335370Z",
-     "iopub.status.idle": "2024-07-29T22:02:50.339366Z",
-     "shell.execute_reply": "2024-07-29T22:02:50.339366Z"
+     "iopub.execute_input": "2024-08-22T16:25:40.493874Z",
+     "iopub.status.busy": "2024-08-22T16:25:40.493874Z",
+     "iopub.status.idle": "2024-08-22T16:25:40.499923Z",
+     "shell.execute_reply": "2024-08-22T16:25:40.499923Z"
     }
    },
    "outputs": [],
@@ -335,10 +343,10 @@
    "execution_count": 9,
    "metadata": {
     "execution": {
-     "iopub.execute_input": "2024-07-29T22:02:50.341354Z",
-     "iopub.status.busy": "2024-07-29T22:02:50.341354Z",
-     "iopub.status.idle": "2024-07-29T22:02:50.347368Z",
-     "shell.execute_reply": "2024-07-29T22:02:50.347368Z"
+     "iopub.execute_input": "2024-08-22T16:25:40.499923Z",
+     "iopub.status.busy": "2024-08-22T16:25:40.499923Z",
+     "iopub.status.idle": "2024-08-22T16:25:40.507289Z",
+     "shell.execute_reply": "2024-08-22T16:25:40.507289Z"
     }
    },
    "outputs": [
@@ -378,10 +386,10 @@
    "execution_count": 10,
    "metadata": {
     "execution": {
-     "iopub.execute_input": "2024-07-29T22:02:50.349358Z",
-     "iopub.status.busy": "2024-07-29T22:02:50.349358Z",
-     "iopub.status.idle": "2024-07-29T22:02:50.356764Z",
-     "shell.execute_reply": "2024-07-29T22:02:50.356764Z"
+     "iopub.execute_input": "2024-08-22T16:25:40.507289Z",
+     "iopub.status.busy": "2024-08-22T16:25:40.507289Z",
+     "iopub.status.idle": "2024-08-22T16:25:40.515636Z",
+     "shell.execute_reply": "2024-08-22T16:25:40.515636Z"
     }
    },
    "outputs": [
@@ -426,10 +434,10 @@
    "execution_count": 11,
    "metadata": {
     "execution": {
-     "iopub.execute_input": "2024-07-29T22:02:50.358736Z",
-     "iopub.status.busy": "2024-07-29T22:02:50.358736Z",
-     "iopub.status.idle": "2024-07-29T22:02:50.365760Z",
-     "shell.execute_reply": "2024-07-29T22:02:50.365760Z"
+     "iopub.execute_input": "2024-08-22T16:25:40.515636Z",
+     "iopub.status.busy": "2024-08-22T16:25:40.515636Z",
+     "iopub.status.idle": "2024-08-22T16:25:40.523650Z",
+     "shell.execute_reply": "2024-08-22T16:25:40.523650Z"
     }
    },
    "outputs": [
@@ -544,10 +552,10 @@
    "execution_count": 12,
    "metadata": {
     "execution": {
-     "iopub.execute_input": "2024-07-29T22:02:50.367736Z",
-     "iopub.status.busy": "2024-07-29T22:02:50.367736Z",
-     "iopub.status.idle": "2024-07-29T22:03:13.080388Z",
-     "shell.execute_reply": "2024-07-29T22:03:13.080388Z"
+     "iopub.execute_input": "2024-08-22T16:25:40.523650Z",
+     "iopub.status.busy": "2024-08-22T16:25:40.523650Z",
+     "iopub.status.idle": "2024-08-22T16:26:01.681396Z",
+     "shell.execute_reply": "2024-08-22T16:26:01.681396Z"
     }
    },
    "outputs": [
@@ -564,7 +572,7 @@
      "output_type": "stream",
      "text": [
       "\r",
-      "SCENARIOS COMPLETE:   1%|          | 1/85 [00:00<00:21,  3.92it/s]"
+      "SCENARIOS COMPLETE:   1%|          | 1/85 [00:00<00:19,  4.38it/s]"
      ]
     },
     {
@@ -572,7 +580,7 @@
      "output_type": "stream",
      "text": [
       "\r",
-      "SCENARIOS COMPLETE:   2%|▏         | 2/85 [00:00<00:21,  3.94it/s]"
+      "SCENARIOS COMPLETE:   2%|▏         | 2/85 [00:00<00:22,  3.65it/s]"
      ]
     },
     {
@@ -580,7 +588,7 @@
      "output_type": "stream",
      "text": [
       "\r",
-      "SCENARIOS COMPLETE:   4%|▎         | 3/85 [00:00<00:20,  3.93it/s]"
+      "SCENARIOS COMPLETE:   4%|▎         | 3/85 [00:00<00:20,  3.94it/s]"
      ]
     },
     {
@@ -588,7 +596,7 @@
      "output_type": "stream",
      "text": [
       "\r",
-      "SCENARIOS COMPLETE:   5%|▍         | 4/85 [00:01<00:20,  3.88it/s]"
+      "SCENARIOS COMPLETE:   5%|▍         | 4/85 [00:01<00:20,  4.03it/s]"
      ]
     },
     {
@@ -596,7 +604,7 @@
      "output_type": "stream",
      "text": [
       "\r",
-      "SCENARIOS COMPLETE:   6%|▌         | 5/85 [00:01<00:20,  3.91it/s]"
+      "SCENARIOS COMPLETE:   6%|▌         | 5/85 [00:01<00:19,  4.16it/s]"
      ]
     },
     {
@@ -604,7 +612,7 @@
      "output_type": "stream",
      "text": [
       "\r",
-      "SCENARIOS COMPLETE:   7%|▋         | 6/85 [00:01<00:20,  3.87it/s]"
+      "SCENARIOS COMPLETE:   7%|▋         | 6/85 [00:01<00:19,  4.09it/s]"
      ]
     },
     {
@@ -612,7 +620,7 @@
      "output_type": "stream",
      "text": [
       "\r",
-      "SCENARIOS COMPLETE:   8%|▊         | 7/85 [00:01<00:20,  3.84it/s]"
+      "SCENARIOS COMPLETE:   8%|▊         | 7/85 [00:01<00:19,  3.96it/s]"
      ]
     },
     {
@@ -620,7 +628,7 @@
      "output_type": "stream",
      "text": [
       "\r",
-      "SCENARIOS COMPLETE:   9%|▉         | 8/85 [00:02<00:20,  3.84it/s]"
+      "SCENARIOS COMPLETE:   9%|▉         | 8/85 [00:02<00:19,  3.98it/s]"
      ]
     },
     {
@@ -628,7 +636,7 @@
      "output_type": "stream",
      "text": [
       "\r",
-      "SCENARIOS COMPLETE:  11%|█         | 9/85 [00:02<00:19,  3.84it/s]"
+      "SCENARIOS COMPLETE:  11%|█         | 9/85 [00:02<00:18,  4.09it/s]"
      ]
     },
     {
@@ -636,7 +644,7 @@
      "output_type": "stream",
      "text": [
       "\r",
-      "SCENARIOS COMPLETE:  12%|█▏        | 10/85 [00:02<00:19,  3.82it/s]"
+      "SCENARIOS COMPLETE:  12%|█▏        | 10/85 [00:02<00:18,  3.99it/s]"
      ]
     },
     {
@@ -644,7 +652,7 @@
      "output_type": "stream",
      "text": [
       "\r",
-      "SCENARIOS COMPLETE:  13%|█▎        | 11/85 [00:02<00:19,  3.78it/s]"
+      "SCENARIOS COMPLETE:  13%|█▎        | 11/85 [00:02<00:18,  3.97it/s]"
      ]
     },
     {
@@ -652,7 +660,7 @@
      "output_type": "stream",
      "text": [
       "\r",
-      "SCENARIOS COMPLETE:  14%|█▍        | 12/85 [00:03<00:19,  3.78it/s]"
+      "SCENARIOS COMPLETE:  14%|█▍        | 12/85 [00:03<00:18,  3.96it/s]"
      ]
     },
     {
@@ -660,7 +668,7 @@
      "output_type": "stream",
      "text": [
       "\r",
-      "SCENARIOS COMPLETE:  15%|█▌        | 13/85 [00:03<00:19,  3.77it/s]"
+      "SCENARIOS COMPLETE:  15%|█▌        | 13/85 [00:03<00:18,  3.99it/s]"
      ]
     },
     {
@@ -668,7 +676,7 @@
      "output_type": "stream",
      "text": [
       "\r",
-      "SCENARIOS COMPLETE:  16%|█▋        | 14/85 [00:03<00:18,  3.75it/s]"
+      "SCENARIOS COMPLETE:  16%|█▋        | 14/85 [00:03<00:17,  3.98it/s]"
      ]
     },
     {
@@ -676,7 +684,7 @@
      "output_type": "stream",
      "text": [
       "\r",
-      "SCENARIOS COMPLETE:  18%|█▊        | 15/85 [00:03<00:18,  3.71it/s]"
+      "SCENARIOS COMPLETE:  18%|█▊        | 15/85 [00:03<00:17,  4.00it/s]"
      ]
     },
     {
@@ -684,7 +692,7 @@
      "output_type": "stream",
      "text": [
       "\r",
-      "SCENARIOS COMPLETE:  19%|█▉        | 16/85 [00:04<00:18,  3.71it/s]"
+      "SCENARIOS COMPLETE:  19%|█▉        | 16/85 [00:03<00:17,  4.01it/s]"
      ]
     },
     {
@@ -692,7 +700,7 @@
      "output_type": "stream",
      "text": [
       "\r",
-      "SCENARIOS COMPLETE:  20%|██        | 17/85 [00:04<00:18,  3.75it/s]"
+      "SCENARIOS COMPLETE:  20%|██        | 17/85 [00:04<00:16,  4.06it/s]"
      ]
     },
     {
@@ -700,7 +708,7 @@
      "output_type": "stream",
      "text": [
       "\r",
-      "SCENARIOS COMPLETE:  21%|██        | 18/85 [00:04<00:17,  3.75it/s]"
+      "SCENARIOS COMPLETE:  21%|██        | 18/85 [00:04<00:16,  4.06it/s]"
      ]
     },
     {
@@ -708,7 +716,7 @@
      "output_type": "stream",
      "text": [
       "\r",
-      "SCENARIOS COMPLETE:  22%|██▏       | 19/85 [00:05<00:17,  3.76it/s]"
+      "SCENARIOS COMPLETE:  22%|██▏       | 19/85 [00:04<00:16,  4.10it/s]"
      ]
     },
     {
@@ -716,7 +724,7 @@
      "output_type": "stream",
      "text": [
       "\r",
-      "SCENARIOS COMPLETE:  24%|██▎       | 20/85 [00:05<00:17,  3.76it/s]"
+      "SCENARIOS COMPLETE:  24%|██▎       | 20/85 [00:04<00:15,  4.08it/s]"
      ]
     },
     {
@@ -724,7 +732,7 @@
      "output_type": "stream",
      "text": [
       "\r",
-      "SCENARIOS COMPLETE:  25%|██▍       | 21/85 [00:05<00:17,  3.76it/s]"
+      "SCENARIOS COMPLETE:  25%|██▍       | 21/85 [00:05<00:15,  4.04it/s]"
      ]
     },
     {
@@ -732,7 +740,7 @@
      "output_type": "stream",
      "text": [
       "\r",
-      "SCENARIOS COMPLETE:  26%|██▌       | 22/85 [00:05<00:16,  3.77it/s]"
+      "SCENARIOS COMPLETE:  26%|██▌       | 22/85 [00:05<00:15,  3.97it/s]"
      ]
     },
     {
@@ -740,7 +748,7 @@
      "output_type": "stream",
      "text": [
       "\r",
-      "SCENARIOS COMPLETE:  27%|██▋       | 23/85 [00:06<00:16,  3.77it/s]"
+      "SCENARIOS COMPLETE:  27%|██▋       | 23/85 [00:05<00:15,  3.96it/s]"
      ]
     },
     {
@@ -748,7 +756,7 @@
      "output_type": "stream",
      "text": [
       "\r",
-      "SCENARIOS COMPLETE:  28%|██▊       | 24/85 [00:06<00:16,  3.77it/s]"
+      "SCENARIOS COMPLETE:  28%|██▊       | 24/85 [00:05<00:15,  3.99it/s]"
      ]
     },
     {
@@ -756,7 +764,7 @@
      "output_type": "stream",
      "text": [
       "\r",
-      "SCENARIOS COMPLETE:  29%|██▉       | 25/85 [00:06<00:15,  3.79it/s]"
+      "SCENARIOS COMPLETE:  29%|██▉       | 25/85 [00:06<00:14,  4.05it/s]"
      ]
     },
     {
@@ -764,7 +772,7 @@
      "output_type": "stream",
      "text": [
       "\r",
-      "SCENARIOS COMPLETE:  31%|███       | 26/85 [00:06<00:15,  3.73it/s]"
+      "SCENARIOS COMPLETE:  31%|███       | 26/85 [00:06<00:14,  3.97it/s]"
      ]
     },
     {
@@ -772,7 +780,7 @@
      "output_type": "stream",
      "text": [
       "\r",
-      "SCENARIOS COMPLETE:  32%|███▏      | 27/85 [00:07<00:15,  3.70it/s]"
+      "SCENARIOS COMPLETE:  32%|███▏      | 27/85 [00:06<00:14,  3.96it/s]"
      ]
     },
     {
@@ -780,7 +788,7 @@
      "output_type": "stream",
      "text": [
       "\r",
-      "SCENARIOS COMPLETE:  33%|███▎      | 28/85 [00:07<00:15,  3.70it/s]"
+      "SCENARIOS COMPLETE:  33%|███▎      | 28/85 [00:07<00:14,  3.89it/s]"
      ]
     },
     {
@@ -788,7 +796,7 @@
      "output_type": "stream",
      "text": [
       "\r",
-      "SCENARIOS COMPLETE:  34%|███▍      | 29/85 [00:07<00:15,  3.72it/s]"
+      "SCENARIOS COMPLETE:  34%|███▍      | 29/85 [00:07<00:13,  4.01it/s]"
      ]
     },
     {
@@ -796,7 +804,7 @@
      "output_type": "stream",
      "text": [
       "\r",
-      "SCENARIOS COMPLETE:  35%|███▌      | 30/85 [00:07<00:14,  3.70it/s]"
+      "SCENARIOS COMPLETE:  35%|███▌      | 30/85 [00:07<00:13,  4.02it/s]"
      ]
     },
     {
@@ -804,7 +812,7 @@
      "output_type": "stream",
      "text": [
       "\r",
-      "SCENARIOS COMPLETE:  36%|███▋      | 31/85 [00:08<00:14,  3.69it/s]"
+      "SCENARIOS COMPLETE:  36%|███▋      | 31/85 [00:07<00:13,  3.93it/s]"
      ]
     },
     {
@@ -812,7 +820,7 @@
      "output_type": "stream",
      "text": [
       "\r",
-      "SCENARIOS COMPLETE:  38%|███▊      | 32/85 [00:08<00:14,  3.69it/s]"
+      "SCENARIOS COMPLETE:  38%|███▊      | 32/85 [00:08<00:13,  3.93it/s]"
      ]
     },
     {
@@ -820,7 +828,7 @@
      "output_type": "stream",
      "text": [
       "\r",
-      "SCENARIOS COMPLETE:  39%|███▉      | 33/85 [00:08<00:14,  3.70it/s]"
+      "SCENARIOS COMPLETE:  39%|███▉      | 33/85 [00:08<00:13,  3.97it/s]"
      ]
     },
     {
@@ -828,7 +836,7 @@
      "output_type": "stream",
      "text": [
       "\r",
-      "SCENARIOS COMPLETE:  40%|████      | 34/85 [00:09<00:13,  3.72it/s]"
+      "SCENARIOS COMPLETE:  40%|████      | 34/85 [00:08<00:12,  3.96it/s]"
      ]
     },
     {
@@ -836,7 +844,7 @@
      "output_type": "stream",
      "text": [
       "\r",
-      "SCENARIOS COMPLETE:  41%|████      | 35/85 [00:09<00:13,  3.75it/s]"
+      "SCENARIOS COMPLETE:  41%|████      | 35/85 [00:08<00:12,  4.06it/s]"
      ]
     },
     {
@@ -844,7 +852,7 @@
      "output_type": "stream",
      "text": [
       "\r",
-      "SCENARIOS COMPLETE:  42%|████▏     | 36/85 [00:09<00:13,  3.75it/s]"
+      "SCENARIOS COMPLETE:  42%|████▏     | 36/85 [00:09<00:12,  3.95it/s]"
      ]
     },
     {
@@ -852,7 +860,7 @@
      "output_type": "stream",
      "text": [
       "\r",
-      "SCENARIOS COMPLETE:  44%|████▎     | 37/85 [00:09<00:12,  3.71it/s]"
+      "SCENARIOS COMPLETE:  44%|████▎     | 37/85 [00:09<00:12,  3.98it/s]"
      ]
     },
     {
@@ -860,7 +868,7 @@
      "output_type": "stream",
      "text": [
       "\r",
-      "SCENARIOS COMPLETE:  45%|████▍     | 38/85 [00:10<00:12,  3.72it/s]"
+      "SCENARIOS COMPLETE:  45%|████▍     | 38/85 [00:09<00:11,  3.97it/s]"
      ]
     },
     {
@@ -868,7 +876,7 @@
      "output_type": "stream",
      "text": [
       "\r",
-      "SCENARIOS COMPLETE:  46%|████▌     | 39/85 [00:10<00:12,  3.68it/s]"
+      "SCENARIOS COMPLETE:  46%|████▌     | 39/85 [00:09<00:11,  3.99it/s]"
      ]
     },
     {
@@ -876,7 +884,7 @@
      "output_type": "stream",
      "text": [
       "\r",
-      "SCENARIOS COMPLETE:  47%|████▋     | 40/85 [00:10<00:12,  3.70it/s]"
+      "SCENARIOS COMPLETE:  47%|████▋     | 40/85 [00:10<00:11,  3.98it/s]"
      ]
     },
     {
@@ -884,7 +892,7 @@
      "output_type": "stream",
      "text": [
       "\r",
-      "SCENARIOS COMPLETE:  48%|████▊     | 41/85 [00:10<00:11,  3.68it/s]"
+      "SCENARIOS COMPLETE:  48%|████▊     | 41/85 [00:10<00:11,  3.96it/s]"
      ]
     },
     {
@@ -892,7 +900,7 @@
      "output_type": "stream",
      "text": [
       "\r",
-      "SCENARIOS COMPLETE:  49%|████▉     | 42/85 [00:11<00:11,  3.68it/s]"
+      "SCENARIOS COMPLETE:  49%|████▉     | 42/85 [00:10<00:10,  4.00it/s]"
      ]
     },
     {
@@ -900,7 +908,7 @@
      "output_type": "stream",
      "text": [
       "\r",
-      "SCENARIOS COMPLETE:  51%|█████     | 43/85 [00:11<00:11,  3.70it/s]"
+      "SCENARIOS COMPLETE:  51%|█████     | 43/85 [00:10<00:10,  3.94it/s]"
      ]
     },
     {
@@ -908,7 +916,7 @@
      "output_type": "stream",
      "text": [
       "\r",
-      "SCENARIOS COMPLETE:  52%|█████▏    | 44/85 [00:11<00:11,  3.69it/s]"
+      "SCENARIOS COMPLETE:  52%|█████▏    | 44/85 [00:11<00:10,  3.94it/s]"
      ]
     },
     {
@@ -916,7 +924,7 @@
      "output_type": "stream",
      "text": [
       "\r",
-      "SCENARIOS COMPLETE:  53%|█████▎    | 45/85 [00:12<00:10,  3.68it/s]"
+      "SCENARIOS COMPLETE:  53%|█████▎    | 45/85 [00:11<00:09,  4.05it/s]"
      ]
     },
     {
@@ -924,7 +932,7 @@
      "output_type": "stream",
      "text": [
       "\r",
-      "SCENARIOS COMPLETE:  54%|█████▍    | 46/85 [00:12<00:10,  3.67it/s]"
+      "SCENARIOS COMPLETE:  54%|█████▍    | 46/85 [00:11<00:09,  4.02it/s]"
      ]
     },
     {
@@ -932,7 +940,7 @@
      "output_type": "stream",
      "text": [
       "\r",
-      "SCENARIOS COMPLETE:  55%|█████▌    | 47/85 [00:12<00:10,  3.68it/s]"
+      "SCENARIOS COMPLETE:  55%|█████▌    | 47/85 [00:11<00:09,  3.95it/s]"
      ]
     },
     {
@@ -940,7 +948,7 @@
      "output_type": "stream",
      "text": [
       "\r",
-      "SCENARIOS COMPLETE:  56%|█████▋    | 48/85 [00:12<00:10,  3.68it/s]"
+      "SCENARIOS COMPLETE:  56%|█████▋    | 48/85 [00:12<00:09,  3.95it/s]"
      ]
     },
     {
@@ -948,7 +956,7 @@
      "output_type": "stream",
      "text": [
       "\r",
-      "SCENARIOS COMPLETE:  58%|█████▊    | 49/85 [00:13<00:09,  3.72it/s]"
+      "SCENARIOS COMPLETE:  58%|█████▊    | 49/85 [00:12<00:09,  3.98it/s]"
      ]
     },
     {
@@ -956,7 +964,7 @@
      "output_type": "stream",
      "text": [
       "\r",
-      "SCENARIOS COMPLETE:  59%|█████▉    | 50/85 [00:13<00:09,  3.72it/s]"
+      "SCENARIOS COMPLETE:  59%|█████▉    | 50/85 [00:12<00:08,  3.97it/s]"
      ]
     },
     {
@@ -964,7 +972,7 @@
      "output_type": "stream",
      "text": [
       "\r",
-      "SCENARIOS COMPLETE:  60%|██████    | 51/85 [00:13<00:09,  3.69it/s]"
+      "SCENARIOS COMPLETE:  60%|██████    | 51/85 [00:12<00:08,  3.99it/s]"
      ]
     },
     {
@@ -972,7 +980,7 @@
      "output_type": "stream",
      "text": [
       "\r",
-      "SCENARIOS COMPLETE:  61%|██████    | 52/85 [00:13<00:09,  3.64it/s]"
+      "SCENARIOS COMPLETE:  61%|██████    | 52/85 [00:13<00:08,  3.98it/s]"
      ]
     },
     {
@@ -980,7 +988,7 @@
      "output_type": "stream",
      "text": [
       "\r",
-      "SCENARIOS COMPLETE:  62%|██████▏   | 53/85 [00:14<00:08,  3.66it/s]"
+      "SCENARIOS COMPLETE:  62%|██████▏   | 53/85 [00:13<00:08,  4.00it/s]"
      ]
     },
     {
@@ -988,7 +996,7 @@
      "output_type": "stream",
      "text": [
       "\r",
-      "SCENARIOS COMPLETE:  64%|██████▎   | 54/85 [00:14<00:08,  3.67it/s]"
+      "SCENARIOS COMPLETE:  64%|██████▎   | 54/85 [00:13<00:07,  4.06it/s]"
      ]
     },
     {
@@ -996,7 +1004,7 @@
      "output_type": "stream",
      "text": [
       "\r",
-      "SCENARIOS COMPLETE:  65%|██████▍   | 55/85 [00:14<00:08,  3.70it/s]"
+      "SCENARIOS COMPLETE:  65%|██████▍   | 55/85 [00:13<00:07,  4.06it/s]"
      ]
     },
     {
@@ -1004,7 +1012,7 @@
      "output_type": "stream",
      "text": [
       "\r",
-      "SCENARIOS COMPLETE:  66%|██████▌   | 56/85 [00:14<00:07,  3.72it/s]"
+      "SCENARIOS COMPLETE:  66%|██████▌   | 56/85 [00:14<00:07,  4.03it/s]"
      ]
     },
     {
@@ -1012,7 +1020,7 @@
      "output_type": "stream",
      "text": [
       "\r",
-      "SCENARIOS COMPLETE:  67%|██████▋   | 57/85 [00:15<00:07,  3.71it/s]"
+      "SCENARIOS COMPLETE:  67%|██████▋   | 57/85 [00:14<00:06,  4.03it/s]"
      ]
     },
     {
@@ -1020,7 +1028,7 @@
      "output_type": "stream",
      "text": [
       "\r",
-      "SCENARIOS COMPLETE:  68%|██████▊   | 58/85 [00:15<00:07,  3.73it/s]"
+      "SCENARIOS COMPLETE:  68%|██████▊   | 58/85 [00:14<00:06,  4.01it/s]"
      ]
     },
     {
@@ -1028,7 +1036,7 @@
      "output_type": "stream",
      "text": [
       "\r",
-      "SCENARIOS COMPLETE:  69%|██████▉   | 59/85 [00:15<00:06,  3.74it/s]"
+      "SCENARIOS COMPLETE:  69%|██████▉   | 59/85 [00:14<00:06,  4.02it/s]"
      ]
     },
     {
@@ -1036,7 +1044,7 @@
      "output_type": "stream",
      "text": [
       "\r",
-      "SCENARIOS COMPLETE:  71%|███████   | 60/85 [00:16<00:06,  3.75it/s]"
+      "SCENARIOS COMPLETE:  71%|███████   | 60/85 [00:15<00:06,  4.03it/s]"
      ]
     },
     {
@@ -1044,7 +1052,7 @@
      "output_type": "stream",
      "text": [
       "\r",
-      "SCENARIOS COMPLETE:  72%|███████▏  | 61/85 [00:16<00:06,  3.92it/s]"
+      "SCENARIOS COMPLETE:  72%|███████▏  | 61/85 [00:15<00:05,  4.24it/s]"
      ]
     },
     {
@@ -1052,7 +1060,7 @@
      "output_type": "stream",
      "text": [
       "\r",
-      "SCENARIOS COMPLETE:  73%|███████▎  | 62/85 [00:16<00:05,  3.86it/s]"
+      "SCENARIOS COMPLETE:  73%|███████▎  | 62/85 [00:15<00:05,  4.10it/s]"
      ]
     },
     {
@@ -1060,7 +1068,7 @@
      "output_type": "stream",
      "text": [
       "\r",
-      "SCENARIOS COMPLETE:  74%|███████▍  | 63/85 [00:16<00:05,  3.83it/s]"
+      "SCENARIOS COMPLETE:  74%|███████▍  | 63/85 [00:15<00:05,  4.05it/s]"
      ]
     },
     {
@@ -1068,7 +1076,7 @@
      "output_type": "stream",
      "text": [
       "\r",
-      "SCENARIOS COMPLETE:  75%|███████▌  | 64/85 [00:17<00:05,  3.78it/s]"
+      "SCENARIOS COMPLETE:  75%|███████▌  | 64/85 [00:15<00:05,  4.05it/s]"
      ]
     },
     {
@@ -1076,7 +1084,7 @@
      "output_type": "stream",
      "text": [
       "\r",
-      "SCENARIOS COMPLETE:  76%|███████▋  | 65/85 [00:17<00:05,  3.75it/s]"
+      "SCENARIOS COMPLETE:  76%|███████▋  | 65/85 [00:16<00:04,  4.02it/s]"
      ]
     },
     {
@@ -1084,7 +1092,7 @@
      "output_type": "stream",
      "text": [
       "\r",
-      "SCENARIOS COMPLETE:  78%|███████▊  | 66/85 [00:17<00:04,  3.88it/s]"
+      "SCENARIOS COMPLETE:  78%|███████▊  | 66/85 [00:16<00:04,  4.27it/s]"
      ]
     },
     {
@@ -1092,7 +1100,7 @@
      "output_type": "stream",
      "text": [
       "\r",
-      "SCENARIOS COMPLETE:  79%|███████▉  | 67/85 [00:17<00:04,  3.78it/s]"
+      "SCENARIOS COMPLETE:  79%|███████▉  | 67/85 [00:16<00:04,  4.12it/s]"
      ]
     },
     {
@@ -1100,7 +1108,7 @@
      "output_type": "stream",
      "text": [
       "\r",
-      "SCENARIOS COMPLETE:  80%|████████  | 68/85 [00:18<00:04,  3.68it/s]"
+      "SCENARIOS COMPLETE:  80%|████████  | 68/85 [00:16<00:04,  4.07it/s]"
      ]
     },
     {
@@ -1108,7 +1116,7 @@
      "output_type": "stream",
      "text": [
       "\r",
-      "SCENARIOS COMPLETE:  81%|████████  | 69/85 [00:18<00:04,  3.65it/s]"
+      "SCENARIOS COMPLETE:  81%|████████  | 69/85 [00:17<00:03,  4.06it/s]"
      ]
     },
     {
@@ -1116,7 +1124,7 @@
      "output_type": "stream",
      "text": [
       "\r",
-      "SCENARIOS COMPLETE:  82%|████████▏ | 70/85 [00:18<00:04,  3.62it/s]"
+      "SCENARIOS COMPLETE:  82%|████████▏ | 70/85 [00:17<00:03,  4.10it/s]"
      ]
     },
     {
@@ -1124,7 +1132,7 @@
      "output_type": "stream",
      "text": [
       "\r",
-      "SCENARIOS COMPLETE:  84%|████████▎ | 71/85 [00:18<00:03,  3.79it/s]"
+      "SCENARIOS COMPLETE:  84%|████████▎ | 71/85 [00:17<00:03,  4.25it/s]"
      ]
     },
     {
@@ -1132,7 +1140,7 @@
      "output_type": "stream",
      "text": [
       "\r",
-      "SCENARIOS COMPLETE:  85%|████████▍ | 72/85 [00:19<00:03,  3.75it/s]"
+      "SCENARIOS COMPLETE:  85%|████████▍ | 72/85 [00:17<00:03,  4.11it/s]"
      ]
     },
     {
@@ -1140,7 +1148,7 @@
      "output_type": "stream",
      "text": [
       "\r",
-      "SCENARIOS COMPLETE:  86%|████████▌ | 73/85 [00:19<00:03,  3.75it/s]"
+      "SCENARIOS COMPLETE:  86%|████████▌ | 73/85 [00:18<00:02,  4.14it/s]"
      ]
     },
     {
@@ -1148,7 +1156,7 @@
      "output_type": "stream",
      "text": [
       "\r",
-      "SCENARIOS COMPLETE:  87%|████████▋ | 74/85 [00:19<00:02,  3.69it/s]"
+      "SCENARIOS COMPLETE:  87%|████████▋ | 74/85 [00:18<00:02,  4.11it/s]"
      ]
     },
     {
@@ -1156,7 +1164,7 @@
      "output_type": "stream",
      "text": [
       "\r",
-      "SCENARIOS COMPLETE:  88%|████████▊ | 75/85 [00:20<00:02,  3.70it/s]"
+      "SCENARIOS COMPLETE:  88%|████████▊ | 75/85 [00:18<00:02,  4.06it/s]"
      ]
     },
     {
@@ -1164,7 +1172,7 @@
      "output_type": "stream",
      "text": [
       "\r",
-      "SCENARIOS COMPLETE:  89%|████████▉ | 76/85 [00:20<00:02,  3.87it/s]"
+      "SCENARIOS COMPLETE:  89%|████████▉ | 76/85 [00:18<00:02,  4.21it/s]"
      ]
     },
     {
@@ -1172,7 +1180,7 @@
      "output_type": "stream",
      "text": [
       "\r",
-      "SCENARIOS COMPLETE:  91%|█████████ | 77/85 [00:20<00:02,  3.83it/s]"
+      "SCENARIOS COMPLETE:  91%|█████████ | 77/85 [00:19<00:01,  4.16it/s]"
      ]
     },
     {
@@ -1180,7 +1188,7 @@
      "output_type": "stream",
      "text": [
       "\r",
-      "SCENARIOS COMPLETE:  92%|█████████▏| 78/85 [00:20<00:01,  3.77it/s]"
+      "SCENARIOS COMPLETE:  92%|█████████▏| 78/85 [00:19<00:01,  4.09it/s]"
      ]
     },
     {
@@ -1188,7 +1196,7 @@
      "output_type": "stream",
      "text": [
       "\r",
-      "SCENARIOS COMPLETE:  93%|█████████▎| 79/85 [00:21<00:01,  3.76it/s]"
+      "SCENARIOS COMPLETE:  93%|█████████▎| 79/85 [00:19<00:01,  4.05it/s]"
      ]
     },
     {
@@ -1196,7 +1204,7 @@
      "output_type": "stream",
      "text": [
       "\r",
-      "SCENARIOS COMPLETE:  94%|█████████▍| 80/85 [00:21<00:01,  3.77it/s]"
+      "SCENARIOS COMPLETE:  94%|█████████▍| 80/85 [00:19<00:01,  4.05it/s]"
      ]
     },
     {
@@ -1204,7 +1212,7 @@
      "output_type": "stream",
      "text": [
       "\r",
-      "SCENARIOS COMPLETE:  95%|█████████▌| 81/85 [00:21<00:01,  3.91it/s]"
+      "SCENARIOS COMPLETE:  95%|█████████▌| 81/85 [00:20<00:00,  4.20it/s]"
      ]
     },
     {
@@ -1212,7 +1220,7 @@
      "output_type": "stream",
      "text": [
       "\r",
-      "SCENARIOS COMPLETE:  96%|█████████▋| 82/85 [00:21<00:00,  3.87it/s]"
+      "SCENARIOS COMPLETE:  96%|█████████▋| 82/85 [00:20<00:00,  4.12it/s]"
      ]
     },
     {
@@ -1220,7 +1228,7 @@
      "output_type": "stream",
      "text": [
       "\r",
-      "SCENARIOS COMPLETE:  98%|█████████▊| 83/85 [00:22<00:00,  3.81it/s]"
+      "SCENARIOS COMPLETE:  98%|█████████▊| 83/85 [00:20<00:00,  4.02it/s]"
      ]
     },
     {
@@ -1228,7 +1236,7 @@
      "output_type": "stream",
      "text": [
       "\r",
-      "SCENARIOS COMPLETE:  99%|█████████▉| 84/85 [00:22<00:00,  3.80it/s]"
+      "SCENARIOS COMPLETE:  99%|█████████▉| 84/85 [00:20<00:00,  4.08it/s]"
      ]
     },
     {
@@ -1236,7 +1244,7 @@
      "output_type": "stream",
      "text": [
       "\r",
-      "SCENARIOS COMPLETE: 100%|██████████| 85/85 [00:22<00:00,  3.80it/s]"
+      "SCENARIOS COMPLETE: 100%|██████████| 85/85 [00:21<00:00,  3.99it/s]"
      ]
     },
     {
@@ -1244,7 +1252,7 @@
      "output_type": "stream",
      "text": [
       "\r",
-      "SCENARIOS COMPLETE: 100%|██████████| 85/85 [00:22<00:00,  3.75it/s]"
+      "SCENARIOS COMPLETE: 100%|██████████| 85/85 [00:21<00:00,  4.03it/s]"
      ]
     },
     {
@@ -2565,10 +2573,10 @@
    "execution_count": 13,
    "metadata": {
     "execution": {
-     "iopub.execute_input": "2024-07-29T22:03:13.083344Z",
-     "iopub.status.busy": "2024-07-29T22:03:13.082449Z",
-     "iopub.status.idle": "2024-07-29T22:03:13.086640Z",
-     "shell.execute_reply": "2024-07-29T22:03:13.086640Z"
+     "iopub.execute_input": "2024-08-22T16:26:01.681396Z",
+     "iopub.status.busy": "2024-08-22T16:26:01.681396Z",
+     "iopub.status.idle": "2024-08-22T16:26:01.688092Z",
+     "shell.execute_reply": "2024-08-22T16:26:01.688092Z"
     }
    },
    "outputs": [],
@@ -2588,10 +2596,10 @@
    "execution_count": 14,
    "metadata": {
     "execution": {
-     "iopub.execute_input": "2024-07-29T22:03:13.088646Z",
-     "iopub.status.busy": "2024-07-29T22:03:13.088646Z",
-     "iopub.status.idle": "2024-07-29T22:03:13.783860Z",
-     "shell.execute_reply": "2024-07-29T22:03:13.783236Z"
+     "iopub.execute_input": "2024-08-22T16:26:01.688092Z",
+     "iopub.status.busy": "2024-08-22T16:26:01.688092Z",
+     "iopub.status.idle": "2024-08-22T16:26:02.316516Z",
+     "shell.execute_reply": "2024-08-22T16:26:02.316516Z"
     }
    },
    "outputs": [
@@ -2634,10 +2642,10 @@
    "execution_count": 15,
    "metadata": {
     "execution": {
-     "iopub.execute_input": "2024-07-29T22:03:13.785822Z",
-     "iopub.status.busy": "2024-07-29T22:03:13.785822Z",
-     "iopub.status.idle": "2024-07-29T22:03:13.916921Z",
-     "shell.execute_reply": "2024-07-29T22:03:13.916921Z"
+     "iopub.execute_input": "2024-08-22T16:26:02.316516Z",
+     "iopub.status.busy": "2024-08-22T16:26:02.316516Z",
+     "iopub.status.idle": "2024-08-22T16:26:02.441748Z",
+     "shell.execute_reply": "2024-08-22T16:26:02.441748Z"
     }
    },
    "outputs": [
@@ -2770,10 +2778,10 @@
    "execution_count": 16,
    "metadata": {
     "execution": {
-     "iopub.execute_input": "2024-07-29T22:03:13.919944Z",
-     "iopub.status.busy": "2024-07-29T22:03:13.919944Z",
-     "iopub.status.idle": "2024-07-29T22:03:14.416467Z",
-     "shell.execute_reply": "2024-07-29T22:03:14.416467Z"
+     "iopub.execute_input": "2024-08-22T16:26:02.441748Z",
+     "iopub.status.busy": "2024-08-22T16:26:02.441748Z",
+     "iopub.status.idle": "2024-08-22T16:26:02.891576Z",
+     "shell.execute_reply": "2024-08-22T16:26:02.891576Z"
     }
    },
    "outputs": [
@@ -2806,10 +2814,10 @@
    "execution_count": 17,
    "metadata": {
     "execution": {
-     "iopub.execute_input": "2024-07-29T22:03:14.419443Z",
-     "iopub.status.busy": "2024-07-29T22:03:14.418446Z",
-     "iopub.status.idle": "2024-07-29T22:03:14.499098Z",
-     "shell.execute_reply": "2024-07-29T22:03:14.498732Z"
+     "iopub.execute_input": "2024-08-22T16:26:02.891576Z",
+     "iopub.status.busy": "2024-08-22T16:26:02.891576Z",
+     "iopub.status.idle": "2024-08-22T16:26:02.967459Z",
+     "shell.execute_reply": "2024-08-22T16:26:02.967459Z"
     }
    },
    "outputs": [
@@ -2947,10 +2955,10 @@
    "execution_count": 18,
    "metadata": {
     "execution": {
-     "iopub.execute_input": "2024-07-29T22:03:14.501094Z",
-     "iopub.status.busy": "2024-07-29T22:03:14.501094Z",
-     "iopub.status.idle": "2024-07-29T22:03:14.639557Z",
-     "shell.execute_reply": "2024-07-29T22:03:14.639557Z"
+     "iopub.execute_input": "2024-08-22T16:26:02.967459Z",
+     "iopub.status.busy": "2024-08-22T16:26:02.967459Z",
+     "iopub.status.idle": "2024-08-22T16:26:03.105090Z",
+     "shell.execute_reply": "2024-08-22T16:26:03.105090Z"
     }
    },
    "outputs": [
@@ -2993,10 +3001,10 @@
    "execution_count": 19,
    "metadata": {
     "execution": {
-     "iopub.execute_input": "2024-07-29T22:03:14.641549Z",
-     "iopub.status.busy": "2024-07-29T22:03:14.641549Z",
-     "iopub.status.idle": "2024-07-29T22:03:14.655267Z",
-     "shell.execute_reply": "2024-07-29T22:03:14.655267Z"
+     "iopub.execute_input": "2024-08-22T16:26:03.105090Z",
+     "iopub.status.busy": "2024-08-22T16:26:03.105090Z",
+     "iopub.status.idle": "2024-08-22T16:26:03.121853Z",
+     "shell.execute_reply": "2024-08-22T16:26:03.121853Z"
     }
    },
    "outputs": [
@@ -3043,10 +3051,10 @@
    "execution_count": 20,
    "metadata": {
     "execution": {
-     "iopub.execute_input": "2024-07-29T22:03:14.657260Z",
-     "iopub.status.busy": "2024-07-29T22:03:14.657260Z",
-     "iopub.status.idle": "2024-07-29T22:03:14.663382Z",
-     "shell.execute_reply": "2024-07-29T22:03:14.662441Z"
+     "iopub.execute_input": "2024-08-22T16:26:03.121853Z",
+     "iopub.status.busy": "2024-08-22T16:26:03.121853Z",
+     "iopub.status.idle": "2024-08-22T16:26:03.130150Z",
+     "shell.execute_reply": "2024-08-22T16:26:03.130150Z"
     }
    },
    "outputs": [
@@ -3077,10 +3085,10 @@
    "execution_count": 21,
    "metadata": {
     "execution": {
-     "iopub.execute_input": "2024-07-29T22:03:14.665375Z",
-     "iopub.status.busy": "2024-07-29T22:03:14.665375Z",
-     "iopub.status.idle": "2024-07-29T22:04:34.163688Z",
-     "shell.execute_reply": "2024-07-29T22:04:34.162655Z"
+     "iopub.execute_input": "2024-08-22T16:26:03.130150Z",
+     "iopub.status.busy": "2024-08-22T16:26:03.130150Z",
+     "iopub.status.idle": "2024-08-22T16:27:15.859897Z",
+     "shell.execute_reply": "2024-08-22T16:27:15.859897Z"
     }
    },
    "outputs": [
@@ -3097,7 +3105,7 @@
      "output_type": "stream",
      "text": [
       "\r",
-      "NESTED SCENARIOS COMPLETE:   1%|          | 1/85 [00:00<01:09,  1.21it/s]"
+      "NESTED SCENARIOS COMPLETE:   1%|          | 1/85 [00:00<01:02,  1.34it/s]"
      ]
     },
     {
@@ -3105,7 +3113,7 @@
      "output_type": "stream",
      "text": [
       "\r",
-      "NESTED SCENARIOS COMPLETE:   2%|▏         | 2/85 [00:01<01:09,  1.20it/s]"
+      "NESTED SCENARIOS COMPLETE:   2%|▏         | 2/85 [00:01<01:02,  1.32it/s]"
      ]
     },
     {
@@ -3113,7 +3121,7 @@
      "output_type": "stream",
      "text": [
       "\r",
-      "NESTED SCENARIOS COMPLETE:   4%|▎         | 3/85 [00:02<01:08,  1.19it/s]"
+      "NESTED SCENARIOS COMPLETE:   4%|▎         | 3/85 [00:02<01:02,  1.31it/s]"
      ]
     },
     {
@@ -3121,7 +3129,7 @@
      "output_type": "stream",
      "text": [
       "\r",
-      "NESTED SCENARIOS COMPLETE:   5%|▍         | 4/85 [00:03<01:07,  1.20it/s]"
+      "NESTED SCENARIOS COMPLETE:   5%|▍         | 4/85 [00:03<01:01,  1.32it/s]"
      ]
     },
     {
@@ -3129,7 +3137,7 @@
      "output_type": "stream",
      "text": [
       "\r",
-      "NESTED SCENARIOS COMPLETE:   6%|▌         | 5/85 [00:04<01:07,  1.19it/s]"
+      "NESTED SCENARIOS COMPLETE:   6%|▌         | 5/85 [00:03<01:00,  1.32it/s]"
      ]
     },
     {
@@ -3137,7 +3145,7 @@
      "output_type": "stream",
      "text": [
       "\r",
-      "NESTED SCENARIOS COMPLETE:   7%|▋         | 6/85 [00:05<01:07,  1.18it/s]"
+      "NESTED SCENARIOS COMPLETE:   7%|▋         | 6/85 [00:04<01:01,  1.29it/s]"
      ]
     },
     {
@@ -3145,7 +3153,7 @@
      "output_type": "stream",
      "text": [
       "\r",
-      "NESTED SCENARIOS COMPLETE:   8%|▊         | 7/85 [00:05<01:06,  1.17it/s]"
+      "NESTED SCENARIOS COMPLETE:   8%|▊         | 7/85 [00:05<01:00,  1.29it/s]"
      ]
     },
     {
@@ -3153,7 +3161,7 @@
      "output_type": "stream",
      "text": [
       "\r",
-      "NESTED SCENARIOS COMPLETE:   9%|▉         | 8/85 [00:06<01:05,  1.17it/s]"
+      "NESTED SCENARIOS COMPLETE:   9%|▉         | 8/85 [00:06<00:59,  1.29it/s]"
      ]
     },
     {
@@ -3161,7 +3169,7 @@
      "output_type": "stream",
      "text": [
       "\r",
-      "NESTED SCENARIOS COMPLETE:  11%|█         | 9/85 [00:07<01:04,  1.18it/s]"
+      "NESTED SCENARIOS COMPLETE:  11%|█         | 9/85 [00:06<00:59,  1.28it/s]"
      ]
     },
     {
@@ -3169,7 +3177,7 @@
      "output_type": "stream",
      "text": [
       "\r",
-      "NESTED SCENARIOS COMPLETE:  12%|█▏        | 10/85 [00:08<01:03,  1.18it/s]"
+      "NESTED SCENARIOS COMPLETE:  12%|█▏        | 10/85 [00:07<00:58,  1.29it/s]"
      ]
     },
     {
@@ -3177,7 +3185,7 @@
      "output_type": "stream",
      "text": [
       "\r",
-      "NESTED SCENARIOS COMPLETE:  13%|█▎        | 11/85 [00:09<01:03,  1.16it/s]"
+      "NESTED SCENARIOS COMPLETE:  13%|█▎        | 11/85 [00:08<00:58,  1.26it/s]"
      ]
     },
     {
@@ -3185,7 +3193,7 @@
      "output_type": "stream",
      "text": [
       "\r",
-      "NESTED SCENARIOS COMPLETE:  14%|█▍        | 12/85 [00:10<01:02,  1.16it/s]"
+      "NESTED SCENARIOS COMPLETE:  14%|█▍        | 12/85 [00:09<00:58,  1.25it/s]"
      ]
     },
     {
@@ -3193,7 +3201,7 @@
      "output_type": "stream",
      "text": [
       "\r",
-      "NESTED SCENARIOS COMPLETE:  15%|█▌        | 13/85 [00:11<01:01,  1.17it/s]"
+      "NESTED SCENARIOS COMPLETE:  15%|█▌        | 13/85 [00:10<00:57,  1.26it/s]"
      ]
     },
     {
@@ -3201,7 +3209,7 @@
      "output_type": "stream",
      "text": [
       "\r",
-      "NESTED SCENARIOS COMPLETE:  16%|█▋        | 14/85 [00:11<01:00,  1.17it/s]"
+      "NESTED SCENARIOS COMPLETE:  16%|█▋        | 14/85 [00:10<00:56,  1.25it/s]"
      ]
     },
     {
@@ -3209,7 +3217,7 @@
      "output_type": "stream",
      "text": [
       "\r",
-      "NESTED SCENARIOS COMPLETE:  18%|█▊        | 15/85 [00:12<00:59,  1.18it/s]"
+      "NESTED SCENARIOS COMPLETE:  18%|█▊        | 15/85 [00:11<00:55,  1.26it/s]"
      ]
     },
     {
@@ -3217,7 +3225,7 @@
      "output_type": "stream",
      "text": [
       "\r",
-      "NESTED SCENARIOS COMPLETE:  19%|█▉        | 16/85 [00:13<01:01,  1.12it/s]"
+      "NESTED SCENARIOS COMPLETE:  19%|█▉        | 16/85 [00:12<00:56,  1.22it/s]"
      ]
     },
     {
@@ -3225,7 +3233,7 @@
      "output_type": "stream",
      "text": [
       "\r",
-      "NESTED SCENARIOS COMPLETE:  20%|██        | 17/85 [00:14<01:00,  1.13it/s]"
+      "NESTED SCENARIOS COMPLETE:  20%|██        | 17/85 [00:13<00:55,  1.22it/s]"
      ]
     },
     {
@@ -3233,7 +3241,7 @@
      "output_type": "stream",
      "text": [
       "\r",
-      "NESTED SCENARIOS COMPLETE:  21%|██        | 18/85 [00:15<00:59,  1.14it/s]"
+      "NESTED SCENARIOS COMPLETE:  21%|██        | 18/85 [00:14<00:54,  1.24it/s]"
      ]
     },
     {
@@ -3241,7 +3249,7 @@
      "output_type": "stream",
      "text": [
       "\r",
-      "NESTED SCENARIOS COMPLETE:  22%|██▏       | 19/85 [00:16<00:57,  1.15it/s]"
+      "NESTED SCENARIOS COMPLETE:  22%|██▏       | 19/85 [00:14<00:53,  1.24it/s]"
      ]
     },
     {
@@ -3249,7 +3257,7 @@
      "output_type": "stream",
      "text": [
       "\r",
-      "NESTED SCENARIOS COMPLETE:  24%|██▎       | 20/85 [00:17<00:56,  1.16it/s]"
+      "NESTED SCENARIOS COMPLETE:  24%|██▎       | 20/85 [00:15<00:51,  1.25it/s]"
      ]
     },
     {
@@ -3257,7 +3265,7 @@
      "output_type": "stream",
      "text": [
       "\r",
-      "NESTED SCENARIOS COMPLETE:  25%|██▍       | 21/85 [00:18<00:58,  1.10it/s]"
+      "NESTED SCENARIOS COMPLETE:  25%|██▍       | 21/85 [00:16<00:53,  1.20it/s]"
      ]
     },
     {
@@ -3265,7 +3273,7 @@
      "output_type": "stream",
      "text": [
       "\r",
-      "NESTED SCENARIOS COMPLETE:  26%|██▌       | 22/85 [00:19<00:56,  1.11it/s]"
+      "NESTED SCENARIOS COMPLETE:  26%|██▌       | 22/85 [00:17<00:52,  1.20it/s]"
      ]
     },
     {
@@ -3273,7 +3281,7 @@
      "output_type": "stream",
      "text": [
       "\r",
-      "NESTED SCENARIOS COMPLETE:  27%|██▋       | 23/85 [00:19<00:55,  1.11it/s]"
+      "NESTED SCENARIOS COMPLETE:  27%|██▋       | 23/85 [00:18<00:52,  1.19it/s]"
      ]
     },
     {
@@ -3281,7 +3289,7 @@
      "output_type": "stream",
      "text": [
       "\r",
-      "NESTED SCENARIOS COMPLETE:  28%|██▊       | 24/85 [00:20<00:54,  1.13it/s]"
+      "NESTED SCENARIOS COMPLETE:  28%|██▊       | 24/85 [00:19<00:50,  1.21it/s]"
      ]
     },
     {
@@ -3289,7 +3297,7 @@
      "output_type": "stream",
      "text": [
       "\r",
-      "NESTED SCENARIOS COMPLETE:  29%|██▉       | 25/85 [00:21<00:53,  1.12it/s]"
+      "NESTED SCENARIOS COMPLETE:  29%|██▉       | 25/85 [00:19<00:49,  1.22it/s]"
      ]
     },
     {
@@ -3297,7 +3305,7 @@
      "output_type": "stream",
      "text": [
       "\r",
-      "NESTED SCENARIOS COMPLETE:  31%|███       | 26/85 [00:22<00:56,  1.05it/s]"
+      "NESTED SCENARIOS COMPLETE:  31%|███       | 26/85 [00:20<00:51,  1.14it/s]"
      ]
     },
     {
@@ -3305,7 +3313,7 @@
      "output_type": "stream",
      "text": [
       "\r",
-      "NESTED SCENARIOS COMPLETE:  32%|███▏      | 27/85 [00:23<00:54,  1.07it/s]"
+      "NESTED SCENARIOS COMPLETE:  32%|███▏      | 27/85 [00:21<00:50,  1.16it/s]"
      ]
     },
     {
@@ -3313,7 +3321,7 @@
      "output_type": "stream",
      "text": [
       "\r",
-      "NESTED SCENARIOS COMPLETE:  33%|███▎      | 28/85 [00:24<00:52,  1.09it/s]"
+      "NESTED SCENARIOS COMPLETE:  33%|███▎      | 28/85 [00:22<00:48,  1.18it/s]"
      ]
     },
     {
@@ -3321,7 +3329,7 @@
      "output_type": "stream",
      "text": [
       "\r",
-      "NESTED SCENARIOS COMPLETE:  34%|███▍      | 29/85 [00:25<00:50,  1.11it/s]"
+      "NESTED SCENARIOS COMPLETE:  34%|███▍      | 29/85 [00:23<00:46,  1.20it/s]"
      ]
     },
     {
@@ -3329,7 +3337,7 @@
      "output_type": "stream",
      "text": [
       "\r",
-      "NESTED SCENARIOS COMPLETE:  35%|███▌      | 30/85 [00:26<00:48,  1.13it/s]"
+      "NESTED SCENARIOS COMPLETE:  35%|███▌      | 30/85 [00:24<00:45,  1.22it/s]"
      ]
     },
     {
@@ -3337,7 +3345,7 @@
      "output_type": "stream",
      "text": [
       "\r",
-      "NESTED SCENARIOS COMPLETE:  36%|███▋      | 31/85 [00:27<00:52,  1.03it/s]"
+      "NESTED SCENARIOS COMPLETE:  36%|███▋      | 31/85 [00:25<00:48,  1.11it/s]"
      ]
     },
     {
@@ -3345,7 +3353,7 @@
      "output_type": "stream",
      "text": [
       "\r",
-      "NESTED SCENARIOS COMPLETE:  38%|███▊      | 32/85 [00:28<00:50,  1.04it/s]"
+      "NESTED SCENARIOS COMPLETE:  38%|███▊      | 32/85 [00:26<00:46,  1.13it/s]"
      ]
     },
     {
@@ -3353,7 +3361,7 @@
      "output_type": "stream",
      "text": [
       "\r",
-      "NESTED SCENARIOS COMPLETE:  39%|███▉      | 33/85 [00:29<00:48,  1.07it/s]"
+      "NESTED SCENARIOS COMPLETE:  39%|███▉      | 33/85 [00:26<00:44,  1.16it/s]"
      ]
     },
     {
@@ -3361,7 +3369,7 @@
      "output_type": "stream",
      "text": [
       "\r",
-      "NESTED SCENARIOS COMPLETE:  40%|████      | 34/85 [00:30<00:46,  1.09it/s]"
+      "NESTED SCENARIOS COMPLETE:  40%|████      | 34/85 [00:27<00:43,  1.18it/s]"
      ]
     },
     {
@@ -3369,7 +3377,7 @@
      "output_type": "stream",
      "text": [
       "\r",
-      "NESTED SCENARIOS COMPLETE:  41%|████      | 35/85 [00:31<00:44,  1.11it/s]"
+      "NESTED SCENARIOS COMPLETE:  41%|████      | 35/85 [00:28<00:41,  1.20it/s]"
      ]
     },
     {
@@ -3377,7 +3385,7 @@
      "output_type": "stream",
      "text": [
       "\r",
-      "NESTED SCENARIOS COMPLETE:  42%|████▏     | 36/85 [00:32<00:47,  1.03it/s]"
+      "NESTED SCENARIOS COMPLETE:  42%|████▏     | 36/85 [00:29<00:44,  1.11it/s]"
      ]
     },
     {
@@ -3385,7 +3393,7 @@
      "output_type": "stream",
      "text": [
       "\r",
-      "NESTED SCENARIOS COMPLETE:  44%|████▎     | 37/85 [00:33<00:46,  1.03it/s]"
+      "NESTED SCENARIOS COMPLETE:  44%|████▎     | 37/85 [00:30<00:43,  1.11it/s]"
      ]
     },
     {
@@ -3393,7 +3401,7 @@
      "output_type": "stream",
      "text": [
       "\r",
-      "NESTED SCENARIOS COMPLETE:  45%|████▍     | 38/85 [00:34<00:44,  1.05it/s]"
+      "NESTED SCENARIOS COMPLETE:  45%|████▍     | 38/85 [00:31<00:41,  1.14it/s]"
      ]
     },
     {
@@ -3401,7 +3409,7 @@
      "output_type": "stream",
      "text": [
       "\r",
-      "NESTED SCENARIOS COMPLETE:  46%|████▌     | 39/85 [00:34<00:42,  1.08it/s]"
+      "NESTED SCENARIOS COMPLETE:  46%|████▌     | 39/85 [00:32<00:39,  1.16it/s]"
      ]
     },
     {
@@ -3409,7 +3417,7 @@
      "output_type": "stream",
      "text": [
       "\r",
-      "NESTED SCENARIOS COMPLETE:  47%|████▋     | 40/85 [00:35<00:41,  1.09it/s]"
+      "NESTED SCENARIOS COMPLETE:  47%|████▋     | 40/85 [00:32<00:37,  1.19it/s]"
      ]
     },
     {
@@ -3417,7 +3425,7 @@
      "output_type": "stream",
      "text": [
       "\r",
-      "NESTED SCENARIOS COMPLETE:  48%|████▊     | 41/85 [00:36<00:43,  1.01it/s]"
+      "NESTED SCENARIOS COMPLETE:  48%|████▊     | 41/85 [00:34<00:39,  1.10it/s]"
      ]
     },
     {
@@ -3425,7 +3433,7 @@
      "output_type": "stream",
      "text": [
       "\r",
-      "NESTED SCENARIOS COMPLETE:  49%|████▉     | 42/85 [00:38<00:43,  1.01s/it]"
+      "NESTED SCENARIOS COMPLETE:  49%|████▉     | 42/85 [00:35<00:39,  1.09it/s]"
      ]
     },
     {
@@ -3433,7 +3441,7 @@
      "output_type": "stream",
      "text": [
       "\r",
-      "NESTED SCENARIOS COMPLETE:  51%|█████     | 43/85 [00:38<00:41,  1.02it/s]"
+      "NESTED SCENARIOS COMPLETE:  51%|█████     | 43/85 [00:35<00:37,  1.11it/s]"
      ]
     },
     {
@@ -3441,7 +3449,7 @@
      "output_type": "stream",
      "text": [
       "\r",
-      "NESTED SCENARIOS COMPLETE:  52%|█████▏    | 44/85 [00:39<00:40,  1.02it/s]"
+      "NESTED SCENARIOS COMPLETE:  52%|█████▏    | 44/85 [00:36<00:36,  1.14it/s]"
      ]
     },
     {
@@ -3449,7 +3457,7 @@
      "output_type": "stream",
      "text": [
       "\r",
-      "NESTED SCENARIOS COMPLETE:  53%|█████▎    | 45/85 [00:40<00:37,  1.05it/s]"
+      "NESTED SCENARIOS COMPLETE:  53%|█████▎    | 45/85 [00:37<00:34,  1.17it/s]"
      ]
     },
     {
@@ -3457,7 +3465,7 @@
      "output_type": "stream",
      "text": [
       "\r",
-      "NESTED SCENARIOS COMPLETE:  54%|█████▍    | 46/85 [00:41<00:39,  1.01s/it]"
+      "NESTED SCENARIOS COMPLETE:  54%|█████▍    | 46/85 [00:38<00:35,  1.09it/s]"
      ]
     },
     {
@@ -3465,7 +3473,7 @@
      "output_type": "stream",
      "text": [
       "\r",
-      "NESTED SCENARIOS COMPLETE:  55%|█████▌    | 47/85 [00:42<00:38,  1.02s/it]"
+      "NESTED SCENARIOS COMPLETE:  55%|█████▌    | 47/85 [00:39<00:35,  1.08it/s]"
      ]
     },
     {
@@ -3473,7 +3481,7 @@
      "output_type": "stream",
      "text": [
       "\r",
-      "NESTED SCENARIOS COMPLETE:  56%|█████▋    | 48/85 [00:43<00:36,  1.00it/s]"
+      "NESTED SCENARIOS COMPLETE:  56%|█████▋    | 48/85 [00:40<00:33,  1.10it/s]"
      ]
     },
     {
@@ -3481,7 +3489,7 @@
      "output_type": "stream",
      "text": [
       "\r",
-      "NESTED SCENARIOS COMPLETE:  58%|█████▊    | 49/85 [00:44<00:34,  1.03it/s]"
+      "NESTED SCENARIOS COMPLETE:  58%|█████▊    | 49/85 [00:41<00:32,  1.12it/s]"
      ]
     },
     {
@@ -3489,7 +3497,7 @@
      "output_type": "stream",
      "text": [
       "\r",
-      "NESTED SCENARIOS COMPLETE:  59%|█████▉    | 50/85 [00:45<00:33,  1.05it/s]"
+      "NESTED SCENARIOS COMPLETE:  59%|█████▉    | 50/85 [00:42<00:30,  1.15it/s]"
      ]
     },
     {
@@ -3497,7 +3505,7 @@
      "output_type": "stream",
      "text": [
       "\r",
-      "NESTED SCENARIOS COMPLETE:  60%|██████    | 51/85 [00:46<00:34,  1.01s/it]"
+      "NESTED SCENARIOS COMPLETE:  60%|██████    | 51/85 [00:43<00:31,  1.08it/s]"
      ]
     },
     {
@@ -3505,7 +3513,7 @@
      "output_type": "stream",
      "text": [
       "\r",
-      "NESTED SCENARIOS COMPLETE:  61%|██████    | 52/85 [00:48<00:34,  1.04s/it]"
+      "NESTED SCENARIOS COMPLETE:  61%|██████    | 52/85 [00:44<00:31,  1.04it/s]"
      ]
     },
     {
@@ -3513,7 +3521,7 @@
      "output_type": "stream",
      "text": [
       "\r",
-      "NESTED SCENARIOS COMPLETE:  62%|██████▏   | 53/85 [00:48<00:32,  1.01s/it]"
+      "NESTED SCENARIOS COMPLETE:  62%|██████▏   | 53/85 [00:45<00:30,  1.06it/s]"
      ]
     },
     {
@@ -3521,7 +3529,7 @@
      "output_type": "stream",
      "text": [
       "\r",
-      "NESTED SCENARIOS COMPLETE:  64%|██████▎   | 54/85 [00:49<00:30,  1.02it/s]"
+      "NESTED SCENARIOS COMPLETE:  64%|██████▎   | 54/85 [00:45<00:28,  1.09it/s]"
      ]
     },
     {
@@ -3529,7 +3537,7 @@
      "output_type": "stream",
      "text": [
       "\r",
-      "NESTED SCENARIOS COMPLETE:  65%|██████▍   | 55/85 [00:50<00:28,  1.05it/s]"
+      "NESTED SCENARIOS COMPLETE:  65%|██████▍   | 55/85 [00:46<00:26,  1.12it/s]"
      ]
     },
     {
@@ -3537,7 +3545,7 @@
      "output_type": "stream",
      "text": [
       "\r",
-      "NESTED SCENARIOS COMPLETE:  66%|██████▌   | 56/85 [00:51<00:29,  1.00s/it]"
+      "NESTED SCENARIOS COMPLETE:  66%|██████▌   | 56/85 [00:47<00:26,  1.08it/s]"
      ]
     },
     {
@@ -3545,7 +3553,7 @@
      "output_type": "stream",
      "text": [
       "\r",
-      "NESTED SCENARIOS COMPLETE:  67%|██████▋   | 57/85 [00:53<00:29,  1.04s/it]"
+      "NESTED SCENARIOS COMPLETE:  67%|██████▋   | 57/85 [00:48<00:26,  1.04it/s]"
      ]
     },
     {
@@ -3553,7 +3561,7 @@
      "output_type": "stream",
      "text": [
       "\r",
-      "NESTED SCENARIOS COMPLETE:  68%|██████▊   | 58/85 [00:54<00:28,  1.04s/it]"
+      "NESTED SCENARIOS COMPLETE:  68%|██████▊   | 58/85 [00:49<00:25,  1.06it/s]"
      ]
     },
     {
@@ -3561,7 +3569,7 @@
      "output_type": "stream",
      "text": [
       "\r",
-      "NESTED SCENARIOS COMPLETE:  69%|██████▉   | 59/85 [00:55<00:26,  1.02s/it]"
+      "NESTED SCENARIOS COMPLETE:  69%|██████▉   | 59/85 [00:50<00:23,  1.09it/s]"
      ]
     },
     {
@@ -3569,7 +3577,7 @@
      "output_type": "stream",
      "text": [
       "\r",
-      "NESTED SCENARIOS COMPLETE:  71%|███████   | 60/85 [00:55<00:24,  1.01it/s]"
+      "NESTED SCENARIOS COMPLETE:  71%|███████   | 60/85 [00:51<00:22,  1.13it/s]"
      ]
     },
     {
@@ -3577,7 +3585,7 @@
      "output_type": "stream",
      "text": [
       "\r",
-      "NESTED SCENARIOS COMPLETE:  72%|███████▏  | 61/85 [00:56<00:20,  1.19it/s]"
+      "NESTED SCENARIOS COMPLETE:  72%|███████▏  | 61/85 [00:51<00:18,  1.33it/s]"
      ]
     },
     {
@@ -3585,7 +3593,7 @@
      "output_type": "stream",
      "text": [
       "\r",
-      "NESTED SCENARIOS COMPLETE:  73%|███████▎  | 62/85 [00:57<00:21,  1.06it/s]"
+      "NESTED SCENARIOS COMPLETE:  73%|███████▎  | 62/85 [00:52<00:19,  1.18it/s]"
      ]
     },
     {
@@ -3593,7 +3601,7 @@
      "output_type": "stream",
      "text": [
       "\r",
-      "NESTED SCENARIOS COMPLETE:  74%|███████▍  | 63/85 [00:58<00:21,  1.03it/s]"
+      "NESTED SCENARIOS COMPLETE:  74%|███████▍  | 63/85 [00:53<00:19,  1.15it/s]"
      ]
     },
     {
@@ -3601,7 +3609,7 @@
      "output_type": "stream",
      "text": [
       "\r",
-      "NESTED SCENARIOS COMPLETE:  75%|███████▌  | 64/85 [00:59<00:20,  1.02it/s]"
+      "NESTED SCENARIOS COMPLETE:  75%|███████▌  | 64/85 [00:54<00:18,  1.15it/s]"
      ]
     },
     {
@@ -3609,7 +3617,7 @@
      "output_type": "stream",
      "text": [
       "\r",
-      "NESTED SCENARIOS COMPLETE:  76%|███████▋  | 65/85 [01:00<00:19,  1.03it/s]"
+      "NESTED SCENARIOS COMPLETE:  76%|███████▋  | 65/85 [00:55<00:17,  1.17it/s]"
      ]
     },
     {
@@ -3617,7 +3625,7 @@
      "output_type": "stream",
      "text": [
       "\r",
-      "NESTED SCENARIOS COMPLETE:  78%|███████▊  | 66/85 [01:01<00:15,  1.20it/s]"
+      "NESTED SCENARIOS COMPLETE:  78%|███████▊  | 66/85 [00:55<00:14,  1.35it/s]"
      ]
     },
     {
@@ -3625,7 +3633,7 @@
      "output_type": "stream",
      "text": [
       "\r",
-      "NESTED SCENARIOS COMPLETE:  79%|███████▉  | 67/85 [01:02<00:16,  1.07it/s]"
+      "NESTED SCENARIOS COMPLETE:  79%|███████▉  | 67/85 [00:57<00:15,  1.19it/s]"
      ]
     },
     {
@@ -3633,7 +3641,7 @@
      "output_type": "stream",
      "text": [
       "\r",
-      "NESTED SCENARIOS COMPLETE:  80%|████████  | 68/85 [01:03<00:16,  1.04it/s]"
+      "NESTED SCENARIOS COMPLETE:  80%|████████  | 68/85 [00:57<00:14,  1.15it/s]"
      ]
     },
     {
@@ -3641,7 +3649,7 @@
      "output_type": "stream",
      "text": [
       "\r",
-      "NESTED SCENARIOS COMPLETE:  81%|████████  | 69/85 [01:04<00:15,  1.04it/s]"
+      "NESTED SCENARIOS COMPLETE:  81%|████████  | 69/85 [00:58<00:13,  1.15it/s]"
      ]
     },
     {
@@ -3649,7 +3657,7 @@
      "output_type": "stream",
      "text": [
       "\r",
-      "NESTED SCENARIOS COMPLETE:  82%|████████▏ | 70/85 [01:05<00:14,  1.05it/s]"
+      "NESTED SCENARIOS COMPLETE:  82%|████████▏ | 70/85 [00:59<00:12,  1.16it/s]"
      ]
     },
     {
@@ -3657,7 +3665,7 @@
      "output_type": "stream",
      "text": [
       "\r",
-      "NESTED SCENARIOS COMPLETE:  84%|████████▎ | 71/85 [01:05<00:11,  1.22it/s]"
+      "NESTED SCENARIOS COMPLETE:  84%|████████▎ | 71/85 [01:00<00:10,  1.35it/s]"
      ]
     },
     {
@@ -3665,7 +3673,7 @@
      "output_type": "stream",
      "text": [
       "\r",
-      "NESTED SCENARIOS COMPLETE:  85%|████████▍ | 72/85 [01:06<00:11,  1.09it/s]"
+      "NESTED SCENARIOS COMPLETE:  85%|████████▍ | 72/85 [01:01<00:10,  1.19it/s]"
      ]
     },
     {
@@ -3673,7 +3681,7 @@
      "output_type": "stream",
      "text": [
       "\r",
-      "NESTED SCENARIOS COMPLETE:  86%|████████▌ | 73/85 [01:07<00:11,  1.04it/s]"
+      "NESTED SCENARIOS COMPLETE:  86%|████████▌ | 73/85 [01:02<00:10,  1.14it/s]"
      ]
     },
     {
@@ -3681,7 +3689,7 @@
      "output_type": "stream",
      "text": [
       "\r",
-      "NESTED SCENARIOS COMPLETE:  87%|████████▋ | 74/85 [01:08<00:10,  1.03it/s]"
+      "NESTED SCENARIOS COMPLETE:  87%|████████▋ | 74/85 [01:03<00:09,  1.13it/s]"
      ]
     },
     {
@@ -3689,7 +3697,7 @@
      "output_type": "stream",
      "text": [
       "\r",
-      "NESTED SCENARIOS COMPLETE:  88%|████████▊ | 75/85 [01:09<00:09,  1.03it/s]"
+      "NESTED SCENARIOS COMPLETE:  88%|████████▊ | 75/85 [01:03<00:08,  1.14it/s]"
      ]
     },
     {
@@ -3697,7 +3705,7 @@
      "output_type": "stream",
      "text": [
       "\r",
-      "NESTED SCENARIOS COMPLETE:  89%|████████▉ | 76/85 [01:10<00:07,  1.21it/s]"
+      "NESTED SCENARIOS COMPLETE:  89%|████████▉ | 76/85 [01:04<00:06,  1.32it/s]"
      ]
     },
     {
@@ -3705,7 +3713,7 @@
      "output_type": "stream",
      "text": [
       "\r",
-      "NESTED SCENARIOS COMPLETE:  91%|█████████ | 77/85 [01:11<00:07,  1.06it/s]"
+      "NESTED SCENARIOS COMPLETE:  91%|█████████ | 77/85 [01:05<00:06,  1.19it/s]"
      ]
     },
     {
@@ -3713,7 +3721,7 @@
      "output_type": "stream",
      "text": [
       "\r",
-      "NESTED SCENARIOS COMPLETE:  92%|█████████▏| 78/85 [01:12<00:06,  1.01it/s]"
+      "NESTED SCENARIOS COMPLETE:  92%|█████████▏| 78/85 [01:06<00:06,  1.13it/s]"
      ]
     },
     {
@@ -3721,7 +3729,7 @@
      "output_type": "stream",
      "text": [
       "\r",
-      "NESTED SCENARIOS COMPLETE:  93%|█████████▎| 79/85 [01:13<00:05,  1.01it/s]"
+      "NESTED SCENARIOS COMPLETE:  93%|█████████▎| 79/85 [01:07<00:05,  1.12it/s]"
      ]
     },
     {
@@ -3729,7 +3737,7 @@
      "output_type": "stream",
      "text": [
       "\r",
-      "NESTED SCENARIOS COMPLETE:  94%|█████████▍| 80/85 [01:14<00:04,  1.02it/s]"
+      "NESTED SCENARIOS COMPLETE:  94%|█████████▍| 80/85 [01:08<00:04,  1.13it/s]"
      ]
     },
     {
@@ -3737,7 +3745,7 @@
      "output_type": "stream",
      "text": [
       "\r",
-      "NESTED SCENARIOS COMPLETE:  95%|█████████▌| 81/85 [01:15<00:03,  1.19it/s]"
+      "NESTED SCENARIOS COMPLETE:  95%|█████████▌| 81/85 [01:08<00:03,  1.30it/s]"
      ]
     },
     {
@@ -3745,7 +3753,7 @@
      "output_type": "stream",
      "text": [
       "\r",
-      "NESTED SCENARIOS COMPLETE:  96%|█████████▋| 82/85 [01:16<00:02,  1.07it/s]"
+      "NESTED SCENARIOS COMPLETE:  96%|█████████▋| 82/85 [01:09<00:02,  1.18it/s]"
      ]
     },
     {
@@ -3753,7 +3761,7 @@
      "output_type": "stream",
      "text": [
       "\r",
-      "NESTED SCENARIOS COMPLETE:  98%|█████████▊| 83/85 [01:17<00:01,  1.02it/s]"
+      "NESTED SCENARIOS COMPLETE:  98%|█████████▊| 83/85 [01:10<00:01,  1.11it/s]"
      ]
     },
     {
@@ -3761,7 +3769,7 @@
      "output_type": "stream",
      "text": [
       "\r",
-      "NESTED SCENARIOS COMPLETE:  99%|█████████▉| 84/85 [01:18<00:00,  1.01it/s]"
+      "NESTED SCENARIOS COMPLETE:  99%|█████████▉| 84/85 [01:11<00:00,  1.11it/s]"
      ]
     },
     {
@@ -3769,7 +3777,7 @@
      "output_type": "stream",
      "text": [
       "\r",
-      "NESTED SCENARIOS COMPLETE: 100%|██████████| 85/85 [01:19<00:00,  1.02it/s]"
+      "NESTED SCENARIOS COMPLETE: 100%|██████████| 85/85 [01:12<00:00,  1.11it/s]"
      ]
     },
     {
@@ -3777,7 +3785,7 @@
      "output_type": "stream",
      "text": [
       "\r",
-      "NESTED SCENARIOS COMPLETE: 100%|██████████| 85/85 [01:19<00:00,  1.07it/s]"
+      "NESTED SCENARIOS COMPLETE: 100%|██████████| 85/85 [01:12<00:00,  1.17it/s]"
      ]
     },
     {
@@ -3807,10 +3815,10 @@
    "execution_count": 22,
    "metadata": {
     "execution": {
-     "iopub.execute_input": "2024-07-29T22:04:34.165682Z",
-     "iopub.status.busy": "2024-07-29T22:04:34.165682Z",
-     "iopub.status.idle": "2024-07-29T22:04:34.175728Z",
-     "shell.execute_reply": "2024-07-29T22:04:34.175728Z"
+     "iopub.execute_input": "2024-08-22T16:27:15.859897Z",
+     "iopub.status.busy": "2024-08-22T16:27:15.859897Z",
+     "iopub.status.idle": "2024-08-22T16:27:15.872430Z",
+     "shell.execute_reply": "2024-08-22T16:27:15.872430Z"
     }
    },
    "outputs": [
@@ -3834,10 +3842,10 @@
    "execution_count": 23,
    "metadata": {
     "execution": {
-     "iopub.execute_input": "2024-07-29T22:04:34.178717Z",
-     "iopub.status.busy": "2024-07-29T22:04:34.177727Z",
-     "iopub.status.idle": "2024-07-29T22:04:34.185590Z",
-     "shell.execute_reply": "2024-07-29T22:04:34.185590Z"
+     "iopub.execute_input": "2024-08-22T16:27:15.872430Z",
+     "iopub.status.busy": "2024-08-22T16:27:15.872430Z",
+     "iopub.status.idle": "2024-08-22T16:27:15.883936Z",
+     "shell.execute_reply": "2024-08-22T16:27:15.883936Z"
     }
    },
    "outputs": [
@@ -4122,10 +4130,10 @@
    "execution_count": 24,
    "metadata": {
     "execution": {
-     "iopub.execute_input": "2024-07-29T22:04:34.187577Z",
-     "iopub.status.busy": "2024-07-29T22:04:34.187577Z",
-     "iopub.status.idle": "2024-07-29T22:04:35.600673Z",
-     "shell.execute_reply": "2024-07-29T22:04:35.600673Z"
+     "iopub.execute_input": "2024-08-22T16:27:15.883936Z",
+     "iopub.status.busy": "2024-08-22T16:27:15.883936Z",
+     "iopub.status.idle": "2024-08-22T16:27:17.184030Z",
+     "shell.execute_reply": "2024-08-22T16:27:17.184030Z"
     }
    },
    "outputs": [
@@ -4274,10 +4282,10 @@
    "execution_count": 25,
    "metadata": {
     "execution": {
-     "iopub.execute_input": "2024-07-29T22:04:35.603697Z",
-     "iopub.status.busy": "2024-07-29T22:04:35.603697Z",
-     "iopub.status.idle": "2024-07-29T22:04:36.110187Z",
-     "shell.execute_reply": "2024-07-29T22:04:36.110187Z"
+     "iopub.execute_input": "2024-08-22T16:27:17.184030Z",
+     "iopub.status.busy": "2024-08-22T16:27:17.184030Z",
+     "iopub.status.idle": "2024-08-22T16:27:17.694586Z",
+     "shell.execute_reply": "2024-08-22T16:27:17.694586Z"
     }
    },
    "outputs": [
@@ -4322,10 +4330,10 @@
    "execution_count": 26,
    "metadata": {
     "execution": {
-     "iopub.execute_input": "2024-07-29T22:04:36.113236Z",
-     "iopub.status.busy": "2024-07-29T22:04:36.113236Z",
-     "iopub.status.idle": "2024-07-29T22:04:36.589019Z",
-     "shell.execute_reply": "2024-07-29T22:04:36.588888Z"
+     "iopub.execute_input": "2024-08-22T16:27:17.694586Z",
+     "iopub.status.busy": "2024-08-22T16:27:17.694586Z",
+     "iopub.status.idle": "2024-08-22T16:27:18.117294Z",
+     "shell.execute_reply": "2024-08-22T16:27:18.117294Z"
     }
    },
    "outputs": [

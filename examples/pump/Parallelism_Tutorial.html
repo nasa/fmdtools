@@ -75,10 +75,7 @@
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="../../README.html#citing-this-repository">Citing this repository</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../README.html#license-notices">License/Notices</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="../../README.html#disclaimers">Disclaimers</a></li>
-</ul>
-</li>
+<li class="toctree-l2"><a class="reference internal" href="../../README.html#license-notices">License/Notices</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../../docs/Development%20Guide.html">Development Guide</a><ul>
@@ -86,7 +83,7 @@
 <li class="toctree-l2"><a class="reference internal" href="../../docs/Development%20Guide.html#introductory-tutorial">Introductory Tutorial</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="../../docs/Intro_to_fmdtools.html">Intro to resilience modeling, simulation, and visualization in Python with fmdtools.</a><ul>
 <li class="toctree-l4"><a class="reference internal" href="../../docs/Intro_to_fmdtools.html#author-daniel-hulse">Author: Daniel Hulse</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/Intro_to_fmdtools.html#version-2-0-rc-6">Version: 2.0-rc-6</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../docs/Intro_to_fmdtools.html#version-2-0-0">Version: 2.0.0</a></li>
 </ul>
 </li>
 <li class="toctree-l3"><a class="reference internal" href="../../docs/Intro_to_fmdtools.html#overview">Overview</a></li>
@@ -150,6 +147,7 @@
 <li class="toctree-l3"><a class="reference internal" href="../../docs/Development%20Guide.html#roles">Roles</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../docs/Development%20Guide.html#documentation">Documentation</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../docs/Development%20Guide.html#style-formatting">Style/Formatting</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../docs/Development%20Guide.html#headers">Headers</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../docs/Development%20Guide.html#testing">Testing</a></li>
 </ul>
 </li>
@@ -198,14 +196,6 @@
 <li class="toctree-l3"><a class="reference internal" href="Stochastic_Modelling.html">Stochastic Modelling in fmdtools</a><ul>
 <li class="toctree-l4"><a class="reference internal" href="Stochastic_Modelling.html#Model-Setup">Model Setup</a></li>
 <li class="toctree-l4"><a class="reference internal" href="Stochastic_Modelling.html#Simulation-and-Analysis">Simulation and Analysis</a></li>
-</ul>
-</li>
-<li class="toctree-l3"><a class="reference internal" href="AST_Sampling.html">fmdtools-AdaStress integration</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="AST_Sampling.html#Python-setup:">Python setup:</a></li>
-<li class="toctree-l4"><a class="reference internal" href="AST_Sampling.html#Running-AdaStress-Methods">Running AdaStress Methods</a></li>
-<li class="toctree-l4"><a class="reference internal" href="AST_Sampling.html#MCTS">MCTS</a></li>
-<li class="toctree-l4"><a class="reference internal" href="AST_Sampling.html#Pump">Pump</a></li>
-<li class="toctree-l4"><a class="reference internal" href="AST_Sampling.html#Simulator">Simulator</a></li>
 </ul>
 </li>
 </ul>
@@ -672,6 +662,13 @@
   <section id="Using-Parallel-Computing-in-fmdtools">
 <h1>Using Parallel Computing in fmdtools<a class="headerlink" href="#Using-Parallel-Computing-in-fmdtools" title="Link to this heading"></a></h1>
 <p>This notebook will discuss how to use parallel programming in fmdtools, including: - how to set up a model for parallelism - syntax for using parallelism in simulation functions - considerations for optimizing computational performance in a model</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>Copyright © 2024, United States Government, as represented by the Administrator of the National Aeronautics and Space Administration. All rights reserved.
+
+The “&quot;Fault Model Design tools - fmdtools version 2&quot;” software is licensed under the Apache License, Version 2.0 (the &quot;License&quot;); you may not use this file except in compliance with the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0.
+
+Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an &quot;AS IS&quot; BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
+</pre></div>
+</div>
 <div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[1]:
 </pre></div>
@@ -842,7 +839,7 @@ set of faults over a set of model parameters)</p>
 </div>
 <div class="output_area stderr docutils container">
 <div class="highlight"><pre>
-SCENARIOS COMPLETE: 100%|██████████| 24/24 [00:02&lt;00:00,  9.11it/s]
+SCENARIOS COMPLETE: 100%|██████████| 24/24 [00:02&lt;00:00,  9.49it/s]
 </pre></div></div>
 </div>
 <div class="nbinput docutils container">
@@ -878,7 +875,7 @@ SCENARIOS COMPLETE: 100%|██████████| 24/24 [00:02&lt;00:00, 
 </div>
 <div class="output_area stderr docutils container">
 <div class="highlight"><pre>
-SCENARIOS COMPLETE: 100%|██████████| 8/8 [00:02&lt;00:00,  3.49it/s]
+SCENARIOS COMPLETE: 100%|██████████| 8/8 [00:02&lt;00:00,  3.50it/s]
 </pre></div></div>
 </div>
 <p>It can also be helpful to verify that the results of parallel simulation and normal serial execution are the same:</p>
@@ -900,8 +897,8 @@ SCENARIOS COMPLETE: 100%|██████████| 8/8 [00:02&lt;00:00,  3
 </div>
 <div class="output_area stderr docutils container">
 <div class="highlight"><pre>
-SCENARIOS COMPLETE: 100%|██████████| 8/8 [00:02&lt;00:00,  3.45it/s]
-SCENARIOS COMPLETE: 100%|██████████| 8/8 [00:00&lt;00:00, 16.90it/s]
+SCENARIOS COMPLETE: 100%|██████████| 8/8 [00:02&lt;00:00,  3.47it/s]
+SCENARIOS COMPLETE: 100%|██████████| 8/8 [00:00&lt;00:00, 17.86it/s]
 </pre></div></div>
 </div>
 <div class="nbinput docutils container">
@@ -923,8 +920,8 @@ SCENARIOS COMPLETE: 100%|██████████| 8/8 [00:00&lt;00:00, 16
 </div>
 <div class="output_area stderr docutils container">
 <div class="highlight"><pre>
-SCENARIOS COMPLETE: 100%|██████████| 24/24 [00:00&lt;00:00, 57.90it/s]
-SCENARIOS COMPLETE: 100%|██████████| 24/24 [00:01&lt;00:00, 16.51it/s]
+SCENARIOS COMPLETE: 100%|██████████| 24/24 [00:00&lt;00:00, 57.05it/s]
+SCENARIOS COMPLETE: 100%|██████████| 24/24 [00:01&lt;00:00, 17.13it/s]
 </pre></div></div>
 </div>
 <div class="nboutput nblast docutils container">
@@ -1097,7 +1094,7 @@ fault scenarios) to reduce the cost of each simulation.</p>
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-&lt;matplotlib.legend.Legend at 0x249ed174090&gt;
+&lt;matplotlib.legend.Legend at 0x22ca9e48b10&gt;
 </pre></div></div>
 </div>
 <div class="nboutput nblast docutils container">
@@ -1147,7 +1144,7 @@ fault scenarios) to reduce the cost of each simulation.</p>
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-&lt;matplotlib.legend.Legend at 0x249ed1b4b90&gt;
+&lt;matplotlib.legend.Legend at 0x22caa21cf10&gt;
 </pre></div></div>
 </div>
 <div class="nboutput nblast docutils container">
@@ -1194,7 +1191,7 @@ fault scenarios) to reduce the cost of each simulation.</p>
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-&lt;matplotlib.legend.Legend at 0x249ed078450&gt;
+&lt;matplotlib.legend.Legend at 0x22caa252310&gt;
 </pre></div></div>
 </div>
 <div class="nboutput nblast docutils container">
@@ -1241,7 +1238,7 @@ fault scenarios) to reduce the cost of each simulation.</p>
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-&lt;matplotlib.legend.Legend at 0x249ed2e0450&gt;
+&lt;matplotlib.legend.Legend at 0x22ca7df0450&gt;
 </pre></div></div>
 </div>
 <div class="nboutput nblast docutils container">
@@ -1287,7 +1284,7 @@ fault scenarios) to reduce the cost of each simulation.</p>
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-&lt;matplotlib.legend.Legend at 0x249ed2dbe10&gt;
+&lt;matplotlib.legend.Legend at 0x22caa7f7050&gt;
 </pre></div></div>
 </div>
 <div class="nboutput nblast docutils container">
@@ -1335,7 +1332,7 @@ fault scenarios) to reduce the cost of each simulation.</p>
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-&lt;matplotlib.legend.Legend at 0x249ed3ef890&gt;
+&lt;matplotlib.legend.Legend at 0x22caa3ef910&gt;
 </pre></div></div>
 </div>
 <div class="nboutput nblast docutils container">
@@ -1390,308 +1387,308 @@ significant effect, it does not because the overhead is less to do with filling 
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-         144930 function calls (140910 primitive calls) in 0.091 seconds
+         144930 function calls (140910 primitive calls) in 0.086 seconds
 
    Ordered by: internal time
 
    ncalls  tottime  percall  cumtime  percall filename:lineno(function)
-     3834    0.014    0.000    0.037    0.000 base.py:466(get_roles_as_dict)
-     4990    0.007    0.000    0.009    0.000 base.py:441(&lt;listcomp&gt;)
-     4990    0.005    0.000    0.016    0.000 base.py:438(get_roles)
-3834/2032    0.005    0.000    0.032    0.000 base.py:616(&lt;listcomp&gt;)
-     3834    0.005    0.000    0.048    0.000 base.py:600(find_mutables)
-3834/2032    0.004    0.000    0.063    0.000 base.py:605(return_mutables)
-     3834    0.004    0.000    0.006    0.000 base.py:602(&lt;listcomp&gt;)
-     8824    0.003    0.000    0.003    0.000 base.py:429(get_default_roletypes)
-       56    0.003    0.000    0.075    0.001 function.py:773(prop_static)
-     3834    0.002    0.000    0.003    0.000 base.py:484(&lt;dictcomp&gt;)
+     3834    0.014    0.000    0.035    0.000 base.py:482(get_roles_as_dict)
+     4990    0.007    0.000    0.008    0.000 base.py:457(&lt;listcomp&gt;)
+3834/2032    0.005    0.000    0.030    0.000 base.py:632(&lt;listcomp&gt;)
+     4990    0.005    0.000    0.015    0.000 base.py:454(get_roles)
+     3834    0.004    0.000    0.046    0.000 base.py:616(find_mutables)
+3834/2032    0.004    0.000    0.060    0.000 base.py:621(return_mutables)
+     3834    0.003    0.000    0.006    0.000 base.py:618(&lt;listcomp&gt;)
+     8824    0.003    0.000    0.003    0.000 base.py:445(get_default_roletypes)
+       56    0.003    0.000    0.072    0.001 function.py:784(prop_static)
+     3834    0.002    0.000    0.003    0.000 base.py:500(&lt;dictcomp&gt;)
     16084    0.002    0.000    0.002    0.000 {built-in method builtins.getattr}
-     3834    0.002    0.000    0.002    0.000 base.py:471(&lt;listcomp&gt;)
-     3834    0.002    0.000    0.002    0.000 base.py:477(&lt;listcomp&gt;)
-     1124    0.002    0.000    0.002    0.000 time.py:92(return_mutables)
+     3834    0.002    0.000    0.002    0.000 base.py:493(&lt;listcomp&gt;)
+     3834    0.002    0.000    0.002    0.000 base.py:487(&lt;listcomp&gt;)
      7212    0.002    0.000    0.002    0.000 inspect.py:300(ismethod)
-      562    0.002    0.000    0.009    0.000 function.py:145(__call__)
-     3834    0.002    0.000    0.002    0.000 base.py:445(get_flex_role_objs)
-       50    0.002    0.000    0.002    0.000 base.py:234(&lt;listcomp&gt;)
+     1124    0.002    0.000    0.002    0.000 time.py:110(return_mutables)
+      562    0.002    0.000    0.009    0.000 function.py:160(__call__)
+       50    0.002    0.000    0.002    0.000 base.py:250(&lt;listcomp&gt;)
+     3834    0.002    0.000    0.002    0.000 base.py:461(get_flex_role_objs)
        72    0.001    0.000    0.001    0.000 {built-in method builtins.dir}
     10070    0.001    0.000    0.001    0.000 {built-in method builtins.hasattr}
-  560/224    0.001    0.000    0.001    0.000 base.py:21(get_var)
-       56    0.001    0.000    0.003    0.000 history.py:257(log)
+  560/224    0.001    0.000    0.001    0.000 base.py:36(get_var)
     10640    0.001    0.000    0.001    0.000 {built-in method builtins.isinstance}
-     3162    0.001    0.000    0.001    0.000 base.py:391(return_mutables)
+       56    0.001    0.000    0.003    0.000 history.py:274(log)
+     3162    0.001    0.000    0.001    0.000 base.py:409(return_mutables)
      1218    0.001    0.000    0.001    0.000 copy.py:66(copy)
      8748    0.001    0.000    0.001    0.000 {method &#39;startswith&#39; of &#39;str&#39; objects}
-      900    0.001    0.000    0.001    0.000 mode.py:442(has_fault)
-     1124    0.001    0.000    0.002    0.000 mode.py:268(return_mutables)
-       22    0.001    0.000    0.001    0.000 base.py:365(&lt;listcomp&gt;)
-      113    0.001    0.000    0.003    0.000 ex_pump.py:407(static_behavior)
-       40    0.000    0.000    0.006    0.000 base.py:244(init_roles)
-       28    0.000    0.000    0.000    0.000 {method &#39;sort&#39; of &#39;numpy.ndarray&#39; objects}
-  259/231    0.000    0.000    0.001    0.000 copy.py:128(deepcopy)
-      562    0.000    0.000    0.002    0.000 function.py:123(prop_arch_behaviors)
-      226    0.000    0.000    0.001    0.000 base.py:249(set_field)
-     3162    0.000    0.000    0.000    0.000 {built-in method recordclass._dataobject.astuple}
+      900    0.001    0.000    0.001    0.000 mode.py:458(has_fault)
+     1124    0.001    0.000    0.002    0.000 mode.py:284(return_mutables)
+       22    0.001    0.000    0.001    0.000 base.py:381(&lt;listcomp&gt;)
+      113    0.001    0.000    0.002    0.000 ex_pump.py:422(static_behavior)
+      562    0.000    0.000    0.002    0.000 function.py:138(prop_arch_behaviors)
+       40    0.000    0.000    0.005    0.000 base.py:260(init_roles)
      4986    0.000    0.000    0.000    0.000 {method &#39;values&#39; of &#39;dict&#39; objects}
-      562    0.000    0.000    0.002    0.000 function.py:138(prop_arch_faults_up)
-      113    0.000    0.000    0.002    0.000 base.py:212(assign)
-     1350    0.000    0.000    0.000    0.000 time.py:93(&lt;genexpr&gt;)
+      562    0.000    0.000    0.002    0.000 function.py:153(prop_arch_faults_up)
+  259/231    0.000    0.000    0.001    0.000 copy.py:128(deepcopy)
+      226    0.000    0.000    0.001    0.000 base.py:267(set_field)
+      113    0.000    0.000    0.002    0.000 base.py:230(assign)
+     3162    0.000    0.000    0.000    0.000 {built-in method recordclass._dataobject.astuple}
+     1350    0.000    0.000    0.000    0.000 time.py:111(&lt;genexpr&gt;)
        22    0.000    0.000    0.001    0.000 inspect.py:2331(_signature_from_function)
-        1    0.000    0.000    0.080    0.080 propagate.py:1030(prop_one_scen)
-      113    0.000    0.000    0.000    0.000 base.py:151(get_field_dict)
+      113    0.000    0.000    0.000    0.000 base.py:169(get_field_dict)
+        1    0.000    0.000    0.076    0.076 propagate.py:1044(prop_one_scen)
       300    0.000    0.000    0.000    0.000 __init__.py:180(add)
-       28    0.000    0.000    0.000    0.000 {method &#39;copy&#39; of &#39;numpy.ndarray&#39; objects}
-       18    0.000    0.000    0.002    0.000 parameter.py:44(__init__)
-    44/22    0.000    0.000    0.001    0.000 inspect.py:2435(_signature_from_callable)
-      113    0.000    0.000    0.000    0.000 ex_pump.py:222(static_behavior)
-       56    0.000    0.000    0.076    0.001 function.py:736(propagate)
+      113    0.000    0.000    0.000    0.000 ex_pump.py:237(static_behavior)
       116    0.000    0.000    0.001    0.000 &lt;frozen _collections_abc&gt;:717(__ior__)
+       56    0.000    0.000    0.073    0.001 function.py:747(propagate)
      2219    0.000    0.000    0.000    0.000 {method &#39;get&#39; of &#39;dict&#39; objects}
+       18    0.000    0.000    0.002    0.000 parameter.py:61(__init__)
+    44/22    0.000    0.000    0.001    0.000 inspect.py:2435(_signature_from_callable)
        90    0.000    0.000    0.000    0.000 inspect.py:2669(__init__)
        44    0.000    0.000    0.000    0.000 inspect.py:2955(__init__)
+       18    0.000    0.000    0.000    0.000 base.py:125(set_arg_type)
+      112    0.000    0.000    0.000    0.000 ex_pump.py:269(static_behavior)
      1257    0.000    0.000    0.000    0.000 {method &#39;copy&#39; of &#39;set&#39; objects}
-       18    0.000    0.000    0.000    0.000 parameter.py:118(check_immutable)
-       18    0.000    0.000    0.000    0.000 base.py:107(set_arg_type)
-    42/32    0.000    0.000    0.000    0.000 result.py:476(flatten)
-       33    0.000    0.000    0.000    0.000 {method &#39;round&#39; of &#39;numpy.ndarray&#39; objects}
-       18    0.000    0.000    0.009    0.000 base.py:111(add_flex_role_obj)
-       14    0.000    0.000    0.001    0.000 base.py:73(find_any_phase_overlap)
-      112    0.000    0.000    0.000    0.000 ex_pump.py:254(static_behavior)
-      112    0.000    0.000    0.000    0.000 ex_pump.py:301(static_behavior)
+       18    0.000    0.000    0.000    0.000 parameter.py:135(check_immutable)
        56    0.000    0.000    0.000    0.000 __init__.py:353(union)
-       10    0.000    0.000    0.000    0.000 mode.py:271(init_faultmodes)
-       10    0.000    0.000    0.007    0.001 base.py:376(__init__)
+      112    0.000    0.000    0.000    0.000 ex_pump.py:316(static_behavior)
+    42/32    0.000    0.000    0.000    0.000 result.py:492(flatten)
+       18    0.000    0.000    0.008    0.000 base.py:127(add_flex_role_obj)
       900    0.000    0.000    0.000    0.000 {method &#39;intersection&#39; of &#39;set&#39; objects}
 1828/1818    0.000    0.000    0.000    0.000 {built-in method builtins.len}
-       18    0.000    0.000    0.000    0.000 inspect.py:3215(__str__)
+       33    0.000    0.000    0.000    0.000 {method &#39;round&#39; of &#39;numpy.ndarray&#39; objects}
       909    0.000    0.000    0.000    0.000 {built-in method builtins.any}
-      280    0.000    0.000    0.000    0.000 history.py:36(is_known_mutable)
-       56    0.000    0.000    0.003    0.000 base.py:209(log_hist)
-       30    0.000    0.000    0.001    0.000 base.py:560(create_hist)
-      113    0.000    0.000    0.000    0.000 base.py:199(&lt;dictcomp&gt;)
-      113    0.000    0.000    0.000    0.000 ex_pump.py:374(set_faults)
-       12    0.000    0.000    0.000    0.000 time.py:99(set_timestep)
+       10    0.000    0.000    0.006    0.001 base.py:391(__init__)
+       18    0.000    0.000    0.000    0.000 inspect.py:3215(__str__)
+       10    0.000    0.000    0.000    0.000 mode.py:287(init_faultmodes)
+       14    0.000    0.000    0.000    0.000 base.py:88(find_any_phase_overlap)
+       56    0.000    0.000    0.003    0.000 base.py:224(log_hist)
+      280    0.000    0.000    0.000    0.000 history.py:53(is_known_mutable)
       313    0.000    0.000    0.000    0.000 &lt;frozen abc&gt;:117(__instancecheck__)
-       18    0.000    0.000    0.008    0.000 base.py:879(init_obj)
-      118    0.000    0.000    0.000    0.000 parameter.py:90(check_lim)
-       26    0.000    0.000    0.000    0.000 base.py:80(get_true_fields)
+       30    0.000    0.000    0.001    0.000 base.py:576(create_hist)
+      113    0.000    0.000    0.000    0.000 base.py:217(&lt;dictcomp&gt;)
       118    0.000    0.000    0.001    0.000 __init__.py:65(__init__)
-    22/20    0.000    0.000    0.007    0.000 base.py:135(__init__)
-       18    0.000    0.000    0.000    0.000 parameter.py:139(check_type)
-       33    0.000    0.000    0.000    0.000 {built-in method numpy.arange}
-    32/30    0.000    0.000    0.006    0.000 base.py:213(init_roletypes)
+       12    0.000    0.000    0.000    0.000 time.py:117(set_timestep)
+      118    0.000    0.000    0.000    0.000 parameter.py:107(check_lim)
+       26    0.000    0.000    0.000    0.000 base.py:98(get_true_fields)
+      113    0.000    0.000    0.000    0.000 ex_pump.py:389(set_faults)
+       18    0.000    0.000    0.000    0.000 parameter.py:156(check_type)
+      112    0.000    0.000    0.000    0.000 ex_pump.py:295(static_behavior)
+    22/20    0.000    0.000    0.006    0.000 base.py:151(__init__)
        22    0.000    0.000    0.000    0.000 inspect.py:2037(_signature_bound_method)
-      112    0.000    0.000    0.000    0.000 ex_pump.py:280(static_behavior)
-       50    0.000    0.000    0.003    0.000 base.py:233(find_roletype_initiators)
-       33    0.000    0.000    0.000    0.000 base.py:87(get_timerange)
       313    0.000    0.000    0.000    0.000 {built-in method _abc._abc_instancecheck}
-      344    0.000    0.000    0.000    0.000 {method &#39;split&#39; of &#39;str&#39; objects}
-       56    0.000    0.000    0.000    0.000 function.py:682(set_vars)
+    32/30    0.000    0.000    0.005    0.000 base.py:229(init_roletypes)
       224    0.000    0.000    0.000    0.000 __init__.py:304(__iter__)
-       64    0.000    0.000    0.000    0.000 common.py:27(get_sub_include)
-       12    0.000    0.000    0.006    0.001 base.py:178(__init__)
-       56    0.000    0.000    0.000    0.000 inspect.py:2756(__str__)
-      336    0.000    0.000    0.000    0.000 {built-in method builtins.setattr}
-      293    0.000    0.000    0.000    0.000 {method &#39;update&#39; of &#39;set&#39; objects}
+      344    0.000    0.000    0.000    0.000 {method &#39;split&#39; of &#39;str&#39; objects}
+       56    0.000    0.000    0.000    0.000 function.py:693(set_vars)
+       33    0.000    0.000    0.000    0.000 base.py:102(get_timerange)
+       78    0.000    0.000    0.000    0.000 result.py:337(__setattr__)
+       12    0.000    0.000    0.005    0.000 base.py:193(__init__)
       466    0.000    0.000    0.000    0.000 {method &#39;join&#39; of &#39;str&#39; objects}
-       14    0.000    0.000    0.003    0.000 base.py:62(__init__)
-      226    0.000    0.000    0.000    0.000 {built-in method builtins.min}
-       78    0.000    0.000    0.000    0.000 result.py:321(__setattr__)
+       56    0.000    0.000    0.000    0.000 inspect.py:2756(__str__)
+       50    0.000    0.000    0.003    0.000 base.py:249(find_roletype_initiators)
+      293    0.000    0.000    0.000    0.000 {method &#39;update&#39; of &#39;set&#39; objects}
+       64    0.000    0.000    0.000    0.000 common.py:41(get_sub_include)
+      336    0.000    0.000    0.000    0.000 {built-in method builtins.setattr}
+      113    0.000    0.000    0.000    0.000 ex_pump.py:220(set_faults)
+       10    0.000    0.000    0.000    0.000 mode.py:218(__init__)
+       14    0.000    0.000    0.002    0.000 base.py:77(__init__)
        90    0.000    0.000    0.000    0.000 enum.py:688(__call__)
-       10    0.000    0.000    0.000    0.000 mode.py:202(__init__)
-       22    0.000    0.000    0.001    0.000 base.py:363(init_indicators)
-      105    0.000    0.000    0.000    0.000 result.py:302(items)
+      226    0.000    0.000    0.000    0.000 {built-in method builtins.min}
+      105    0.000    0.000    0.000    0.000 result.py:318(items)
        78    0.000    0.000    0.000    0.000 __init__.py:1111(__init__)
-      113    0.000    0.000    0.000    0.000 ex_pump.py:205(set_faults)
-       10    0.000    0.000    0.007    0.001 base.py:199(add_sim)
-       18    0.000    0.000    0.001    0.000 parameter.py:162(check_pickle)
-      112    0.000    0.000    0.000    0.000 inspect.py:3002(&lt;genexpr&gt;)
-       26    0.000    0.000    0.000    0.000 base.py:87(&lt;listcomp&gt;)
-        6    0.000    0.000    0.000    0.000 result.py:352(all_with)
-      168    0.000    0.000    0.000    0.000 __init__.py:74(__len__)
+       26    0.000    0.000    0.000    0.000 base.py:105(&lt;listcomp&gt;)
       496    0.000    0.000    0.000    0.000 {method &#39;append&#39; of &#39;list&#39; objects}
-       28    0.000    0.000    0.001    0.000 fromnumeric.py:865(sort)
-      113    0.000    0.000    0.000    0.000 ex_pump.py:398(indicate_over_pressure)
-       26    0.000    0.000    0.000    0.000 numerictypes.py:357(issubdtype)
-       10    0.000    0.000    0.007    0.001 function.py:523(add_fxn)
-     10/4    0.000    0.000    0.000    0.000 copy.py:227(_deepcopy_dict)
-       22    0.000    0.000    0.000    0.000 base.py:188(init_track)
-       22    0.000    0.000    0.000    0.000 inspect.py:167(get_annotations)
-       22    0.000    0.000    0.000    0.000 inspect.py:735(unwrap)
+      168    0.000    0.000    0.000    0.000 __init__.py:74(__len__)
+      112    0.000    0.000    0.000    0.000 inspect.py:3002(&lt;genexpr&gt;)
+       18    0.000    0.000    0.007    0.000 base.py:895(init_obj)
+      113    0.000    0.000    0.000    0.000 ex_pump.py:413(indicate_over_pressure)
+        6    0.000    0.000    0.000    0.000 result.py:368(all_with)
+       10    0.000    0.000    0.007    0.001 base.py:215(add_sim)
+       18    0.000    0.000    0.001    0.000 parameter.py:179(check_pickle)
        56    0.000    0.000    0.000    0.000 __init__.py:130(copy)
-       22    0.000    0.000    0.001    0.000 inspect.py:3007(from_callable)
-       12    0.000    0.000    0.000    0.000 time.py:74(__init__)
-       28    0.000    0.000    0.000    0.000 {built-in method numpy.asanyarray}
-        1    0.000    0.000    0.091    0.091 {built-in method builtins.exec}
-       26    0.000    0.000    0.000    0.000 common.py:73(is_numeric)
-      118    0.000    0.000    0.000    0.000 base.py:139(set_arg_as_type)
+        1    0.000    0.000    0.086    0.086 {built-in method builtins.exec}
+       10    0.000    0.000    0.007    0.001 function.py:534(add_fxn)
+       22    0.000    0.000    0.000    0.000 inspect.py:167(get_annotations)
+       26    0.000    0.000    0.000    0.000 numerictypes.py:357(issubdtype)
+      118    0.000    0.000    0.000    0.000 base.py:154(set_arg_as_type)
+       33    0.000    0.000    0.000    0.000 {built-in method numpy.arange}
+       28    0.000    0.000    0.000    0.000 fromnumeric.py:865(sort)
+       22    0.000    0.000    0.000    0.000 base.py:204(init_track)
       265    0.000    0.000    0.000    0.000 {method &#39;items&#39; of &#39;dict&#39; objects}
-       10    0.000    0.000    0.007    0.001 function.py:61(__init__)
-       50    0.000    0.000    0.000    0.000 base.py:33(check_role)
-        8    0.000    0.000    0.000    0.000 history.py:187(init_att)
-       31    0.000    0.000    0.000    0.000 base.py:102(get_histrange)
-       56    0.000    0.000    0.000    0.000 propagate.py:1002(check_end_condition)
-      313    0.000    0.000    0.000    0.000 {built-in method builtins.id}
-       42    0.000    0.000    0.000    0.000 result.py:141(check_include_errors)
-       56    0.000    0.000    0.000    0.000 ex_pump.py:502(indicate_on)
-       33    0.000    0.000    0.000    0.000 fromnumeric.py:3269(round)
-       52    0.000    0.000    0.000    0.000 numerictypes.py:283(issubclass_)
-       33    0.000    0.000    0.000    0.000 fromnumeric.py:53(_wrapfunc)
+       22    0.000    0.000    0.001    0.000 base.py:379(init_indicators)
+       56    0.000    0.000    0.000    0.000 ex_pump.py:517(indicate_on)
+       22    0.000    0.000    0.000    0.000 inspect.py:735(unwrap)
+       42    0.000    0.000    0.000    0.000 result.py:157(check_include_errors)
+       56    0.000    0.000    0.000    0.000 ex_pump.py:498(indicate_finished)
+       12    0.000    0.000    0.000    0.000 time.py:92(__init__)
       245    0.000    0.000    0.000    0.000 copy.py:182(_deepcopy_atomic)
-        4    0.000    0.000    0.001    0.000 parameter.py:158(copy_with_vals)
-       26    0.000    0.000    0.000    0.000 {built-in method numpy.array}
-       56    0.000    0.000    0.000    0.000 ex_pump.py:483(indicate_finished)
-       22    0.000    0.000    0.000    0.000 inspect.py:3023(replace)
-       56    0.000    0.000    0.000    0.000 base.py:133(get_hist_ind)
-       12    0.000    0.000    0.000    0.000 base.py:195(init_hist)
-        1    0.000    0.000    0.000    0.000 ex_pump.py:506(find_classification)
-        2    0.000    0.000    0.011    0.005 base.py:68(__init__)
+       31    0.000    0.000    0.000    0.000 base.py:117(get_histrange)
+       26    0.000    0.000    0.000    0.000 common.py:87(is_numeric)
+       33    0.000    0.000    0.000    0.000 fromnumeric.py:3269(round)
+      313    0.000    0.000    0.000    0.000 {built-in method builtins.id}
+       10    0.000    0.000    0.006    0.001 function.py:76(__init__)
+       33    0.000    0.000    0.000    0.000 fromnumeric.py:53(_wrapfunc)
         2    0.000    0.000    0.000    0.000 graph.py:968(add_edges_from)
-      224    0.000    0.000    0.000    0.000 inspect.py:2734(kind)
-        6    0.000    0.000    0.000    0.000 base.py:397(init_indicator_hist)
-        1    0.000    0.000    0.000    0.000 {method &#39;reduce&#39; of &#39;numpy.ufunc&#39; objects}
-       63    0.000    0.000    0.000    0.000 __init__.py:1138(__contains__)
+       56    0.000    0.000    0.000    0.000 base.py:148(get_hist_ind)
+        8    0.000    0.000    0.001    0.000 base.py:175(add_flow)
+       56    0.000    0.000    0.000    0.000 propagate.py:1016(check_end_condition)
+        1    0.000    0.000    0.000    0.000 ex_pump.py:521(find_classification)
+       22    0.000    0.000    0.001    0.000 inspect.py:3007(from_callable)
+       22    0.000    0.000    0.000    0.000 inspect.py:3023(replace)
+        8    0.000    0.000    0.000    0.000 history.py:204(init_att)
       246    0.000    0.000    0.000    0.000 {built-in method builtins.iter}
-       10    0.000    0.000    0.000    0.000 base.py:453(check_flows)
-       22    0.000    0.000    0.001    0.000 inspect.py:3261(signature)
-       52    0.000    0.000    0.000    0.000 __init__.py:1118(__len__)
-        2    0.000    0.000    0.009    0.004 ex_pump.py:455(init_architecture)
-        8    0.000    0.000    0.000    0.000 result.py:311(__getattr__)
-       10    0.000    0.000    0.001    0.000 base.py:411(create_arch_kwargs)
-       14    0.000    0.000    0.000    0.000 base.py:78(&lt;listcomp&gt;)
+        4    0.000    0.000    0.001    0.000 parameter.py:175(copy_with_vals)
+       52    0.000    0.000    0.000    0.000 numerictypes.py:283(issubclass_)
+      224    0.000    0.000    0.000    0.000 inspect.py:2734(kind)
+       28    0.000    0.000    0.000    0.000 {built-in method numpy.asanyarray}
+       63    0.000    0.000    0.000    0.000 __init__.py:1138(__contains__)
+       10    0.000    0.000    0.001    0.000 base.py:426(create_arch_kwargs)
        90    0.000    0.000    0.000    0.000 enum.py:1095(__new__)
-      158    0.000    0.000    0.000    0.000 inspect.py:2722(name)
-        1    0.000    0.000    0.091    0.091 propagate.py:482(nom_helper)
-        4    0.000    0.000    0.000    0.000 base.py:244(&lt;dictcomp&gt;)
-        2    0.000    0.000    0.001    0.001 base.py:247(new_params)
-      128    0.000    0.000    0.000    0.000 {built-in method builtins.issubclass}
-       55    0.000    0.000    0.000    0.000 __init__.py:1128(__setitem__)
+        8    0.000    0.000    0.000    0.000 result.py:327(__getattr__)
+       12    0.000    0.000    0.000    0.000 base.py:210(init_hist)
+       10    0.000    0.000    0.000    0.000 base.py:468(check_flows)
+       50    0.000    0.000    0.000    0.000 base.py:51(check_role)
         4    0.000    0.000    0.000    0.000 graph.py:566(add_nodes_from)
-       10    0.000    0.000    0.000    0.000 function.py:106(update_seed)
-        2    0.000    0.000    0.000    0.000 function.py:589(construct_graph)
-       12    0.000    0.000    0.000    0.000 function.py:818(&lt;listcomp&gt;)
+       22    0.000    0.000    0.001    0.000 inspect.py:3261(signature)
+        2    0.000    0.000    0.009    0.005 base.py:84(__init__)
+       52    0.000    0.000    0.000    0.000 __init__.py:1118(__len__)
+        1    0.000    0.000    0.086    0.086 propagate.py:496(nom_helper)
+     10/4    0.000    0.000    0.000    0.000 copy.py:227(_deepcopy_dict)
+      158    0.000    0.000    0.000    0.000 inspect.py:2722(name)
+       14    0.000    0.000    0.000    0.000 base.py:93(&lt;listcomp&gt;)
+       26    0.000    0.000    0.000    0.000 {built-in method numpy.array}
+        2    0.000    0.000    0.008    0.004 ex_pump.py:470(init_architecture)
+        6    0.000    0.000    0.000    0.000 base.py:413(init_indicator_hist)
+        1    0.000    0.000    0.000    0.000 {method &#39;reduce&#39; of &#39;numpy.ufunc&#39; objects}
+        2    0.000    0.000    0.000    0.000 function.py:588(build)
+       12    0.000    0.000    0.000    0.000 function.py:829(&lt;listcomp&gt;)
+       55    0.000    0.000    0.000    0.000 __init__.py:1128(__setitem__)
+      128    0.000    0.000    0.000    0.000 {built-in method builtins.issubclass}
+       28    0.000    0.000    0.000    0.000 {method &#39;copy&#39; of &#39;numpy.ndarray&#39; objects}
       113    0.000    0.000    0.000    0.000 {method &#39;clear&#39; of &#39;set&#39; objects}
-        2    0.000    0.000    0.000    0.000 {method &#39;__reduce_ex__&#39; of &#39;object&#39; objects}
-       14    0.000    0.000    0.000    0.000 {built-in method recordclass._dataobject.asdict}
-       10    0.000    0.000    0.000    0.000 base.py:473(&lt;listcomp&gt;)
-       14    0.000    0.000    0.000    0.000 base.py:75(&lt;dictcomp&gt;)
-        8    0.000    0.000    0.002    0.000 base.py:159(add_flow)
-        1    0.000    0.000    0.091    0.091 propagate.py:192(nominal)
-       38    0.000    0.000    0.000    0.000 {method &#39;format&#39; of &#39;str&#39; objects}
-       10    0.000    0.000    0.000    0.000 function.py:82(return_faultmodes)
-        2    0.000    0.000    0.000    0.000 function.py:577(build)
-       14    0.000    0.000    0.000    0.000 copy.py:243(_keep_alive)
+       10    0.000    0.000    0.000    0.000 function.py:121(update_seed)
+        2    0.000    0.000    0.001    0.000 base.py:262(new_params)
+       10    0.000    0.000    0.000    0.000 base.py:488(&lt;listcomp&gt;)
+       14    0.000    0.000    0.000    0.000 base.py:90(&lt;dictcomp&gt;)
+       10    0.000    0.000    0.000    0.000 function.py:97(return_faultmodes)
+        2    0.000    0.000    0.000    0.000 function.py:600(construct_graph)
+       28    0.000    0.000    0.000    0.000 {method &#39;sort&#39; of &#39;numpy.ndarray&#39; objects}
+        1    0.000    0.000    0.000    0.000 propagate.py:1144(get_result)
       113    0.000    0.000    0.000    0.000 {method &#39;copy&#39; of &#39;list&#39; objects}
-       32    0.000    0.000    0.000    0.000 base.py:182(check_slots)
-        4    0.000    0.000    0.000    0.000 base.py:343(create_hist)
-       44    0.000    0.000    0.000    0.000 inspect.py:378(isfunction)
-       90    0.000    0.000    0.000    0.000 {method &#39;__contains__&#39; of &#39;frozenset&#39; objects}
-        1    0.000    0.000    0.000    0.000 propagate.py:1130(get_result)
+        2    0.000    0.000    0.000    0.000 base.py:245(build)
+       38    0.000    0.000    0.000    0.000 {method &#39;format&#39; of &#39;str&#39; objects}
+       14    0.000    0.000    0.000    0.000 {built-in method recordclass._dataobject.asdict}
+       32    0.000    0.000    0.000    0.000 base.py:198(check_slots)
       112    0.000    0.000    0.000    0.000 {method &#39;index&#39; of &#39;list&#39; objects}
-        2    0.000    0.000    0.012    0.006 base.py:281(new)
-        2    0.000    0.000    0.000    0.000 function.py:585(&lt;listcomp&gt;)
-        1    0.000    0.000    0.091    0.091 &lt;string&gt;:1(&lt;module&gt;)
-        2    0.000    0.000    0.011    0.005 function.py:495(__init__)
-        2    0.000    0.000    0.000    0.000 function.py:580(&lt;listcomp&gt;)
-       90    0.000    0.000    0.000    0.000 {method &#39;isidentifier&#39; of &#39;str&#39; objects}
-       10    0.000    0.000    0.000    0.000 base.py:391(&lt;dictcomp&gt;)
-        4    0.000    0.000    0.000    0.000 base.py:330(init_hist_att)
-        2    0.000    0.000    0.000    0.000 base.py:229(build)
-       42    0.000    0.000    0.000    0.000 result.py:149(check_include_error)
+        1    0.000    0.000    0.086    0.086 propagate.py:206(nominal)
+        2    0.000    0.000    0.000    0.000 function.py:596(&lt;listcomp&gt;)
        20    0.000    0.000    0.000    0.000 graph.py:1318(neighbors)
-        1    0.000    0.000    0.000    0.000 history.py:323(cut)
-        2    0.000    0.000    0.000    0.000 function.py:628(return_faultmodes)
-        8    0.000    0.000    0.001    0.000 base.py:75(create_hist)
+       44    0.000    0.000    0.000    0.000 inspect.py:378(isfunction)
+        4    0.000    0.000    0.000    0.000 base.py:361(create_hist)
+       90    0.000    0.000    0.000    0.000 {method &#39;__contains__&#39; of &#39;frozenset&#39; objects}
+       10    0.000    0.000    0.000    0.000 base.py:406(&lt;dictcomp&gt;)
+       14    0.000    0.000    0.000    0.000 copy.py:243(_keep_alive)
+        2    0.000    0.000    0.000    0.000 {method &#39;__reduce_ex__&#39; of &#39;object&#39; objects}
+       90    0.000    0.000    0.000    0.000 {method &#39;isidentifier&#39; of &#39;str&#39; objects}
+        1    0.000    0.000    0.000    0.000 history.py:340(cut)
+        2    0.000    0.000    0.000    0.000 function.py:639(return_faultmodes)
         2    0.000    0.000    0.000    0.000 functools.py:981(__get__)
+        2    0.000    0.000    0.009    0.005 function.py:506(__init__)
+        2    0.000    0.000    0.010    0.005 base.py:296(new)
+        1    0.000    0.000    0.086    0.086 &lt;string&gt;:1(&lt;module&gt;)
        10    0.000    0.000    0.000    0.000 __init__.py:201(update)
-       14    0.000    0.000    0.000    0.000 base.py:77(&lt;listcomp&gt;)
-        2    0.000    0.000    0.000    0.000 graph.py:332(__init__)
-        2    0.000    0.000    0.000    0.000 copy.py:259(_reconstruct)
-        1    0.000    0.000    0.000    0.000 function.py:601(calc_repaircost)
-       10    0.000    0.000    0.000    0.000 base.py:430(update_contained_modes)
-       10    0.000    0.000    0.000    0.000 base.py:251(get_flows)
-        2    0.000    0.000    0.000    0.000 copyreg.py:113(_slotnames)
        20    0.000    0.000    0.000    0.000 reportviews.py:529(__iter__)
-       10    0.000    0.000    0.000    0.000 base.py:418(&lt;dictcomp&gt;)
-        8    0.000    0.000    0.000    0.000 function.py:586(&lt;listcomp&gt;)
-       12    0.000    0.000    0.000    0.000 base.py:191(&lt;dictcomp&gt;)
-        4    0.000    0.000    0.000    0.000 state.py:328(init_hist_att)
-       40    0.000    0.000    0.000    0.000 {method &#39;values&#39; of &#39;mappingproxy&#39; objects}
-        8    0.000    0.000    0.000    0.000 result.py:122(get_dict_attr)
-        8    0.000    0.000    0.000    0.000 {built-in method numpy.empty}
-       18    0.000    0.000    0.000    0.000 base.py:237(get_full_name)
-       10    0.000    0.000    0.000    0.000 base.py:468(&lt;listcomp&gt;)
-       56    0.000    0.000    0.000    0.000 {built-in method from_iterable}
-       60    0.000    0.000    0.000    0.000 {method &#39;keys&#39; of &#39;dict&#39; objects}
-       18    0.000    0.000    0.000    0.000 inspect.py:292(isclass)
-        1    0.000    0.000    0.000    0.000 fromnumeric.py:71(_wrapreduction)
-       14    0.000    0.000    0.000    0.000 base.py:395(asdict)
-       10    0.000    0.000    0.000    0.000 base.py:255(&lt;dictcomp&gt;)
-        2    0.000    0.000    0.000    0.000 isolate.py:42(isolates)
+       42    0.000    0.000    0.000    0.000 result.py:165(check_include_error)
+        8    0.000    0.000    0.000    0.000 base.py:92(create_hist)
+        8    0.000    0.000    0.000    0.000 function.py:597(&lt;listcomp&gt;)
+       14    0.000    0.000    0.000    0.000 base.py:92(&lt;listcomp&gt;)
+        2    0.000    0.000    0.000    0.000 graph.py:332(__init__)
+       10    0.000    0.000    0.000    0.000 base.py:445(update_contained_modes)
+       12    0.000    0.000    0.000    0.000 base.py:206(&lt;dictcomp&gt;)
+        1    0.000    0.000    0.000    0.000 function.py:612(calc_repaircost)
+       10    0.000    0.000    0.000    0.000 base.py:433(&lt;dictcomp&gt;)
+       10    0.000    0.000    0.000    0.000 base.py:267(get_flows)
+        4    0.000    0.000    0.000    0.000 base.py:348(init_hist_att)
        40    0.000    0.000    0.000    0.000 __init__.py:165(__contains__)
-        2    0.000    0.000    0.000    0.000 function.py:582(&lt;listcomp&gt;)
-       33    0.000    0.000    0.000    0.000 fromnumeric.py:3265(_round_dispatcher)
+       60    0.000    0.000    0.000    0.000 {method &#39;keys&#39; of &#39;dict&#39; objects}
+        4    0.000    0.000    0.000    0.000 base.py:260(&lt;dictcomp&gt;)
+        2    0.000    0.000    0.000    0.000 copyreg.py:113(_slotnames)
+       10    0.000    0.000    0.000    0.000 base.py:271(&lt;dictcomp&gt;)
+        2    0.000    0.000    0.000    0.000 function.py:591(&lt;listcomp&gt;)
+       10    0.000    0.000    0.000    0.000 base.py:483(&lt;listcomp&gt;)
+       18    0.000    0.000    0.000    0.000 base.py:253(get_full_name)
+       40    0.000    0.000    0.000    0.000 {method &#39;values&#39; of &#39;mappingproxy&#39; objects}
+        2    0.000    0.000    0.000    0.000 copy.py:259(_reconstruct)
+       56    0.000    0.000    0.000    0.000 {built-in method from_iterable}
+       14    0.000    0.000    0.000    0.000 base.py:413(asdict)
+        1    0.000    0.000    0.000    0.000 fromnumeric.py:71(_wrapreduction)
+        2    0.000    0.000    0.000    0.000 isolate.py:42(isolates)
        66    0.000    0.000    0.000    0.000 {built-in method builtins.callable}
-        2    0.000    0.000    0.000    0.000 &lt;class &#39;networkx.utils.decorators.argmap&#39;&gt; compilation 4:1(argmap_isolates_1)
-        2    0.000    0.000    0.000    0.000 isolate.py:85(&lt;genexpr&gt;)
-       10    0.000    0.000    0.000    0.000 base.py:493(is_dynamic)
-       10    0.000    0.000    0.000    0.000 base.py:487(is_static)
-       48    0.000    0.000    0.000    0.000 copy.py:107(_copy_immutable)
-       44    0.000    0.000    0.000    0.000 inspect.py:3015(parameters)
-        2    0.000    0.000    0.000    0.000 base.py:90(init_flexible_roles)
+        8    0.000    0.000    0.000    0.000 result.py:138(get_dict_attr)
+       10    0.000    0.000    0.000    0.000 base.py:508(is_dynamic)
+       33    0.000    0.000    0.000    0.000 fromnumeric.py:3265(_round_dispatcher)
         2    0.000    0.000    0.000    0.000 {built-in method builtins.sum}
-       52    0.000    0.000    0.000    0.000 {method &#39;update&#39; of &#39;dict&#39; objects}
-        4    0.000    0.000    0.000    0.000 base.py:51(get_track)
+        2    0.000    0.000    0.000    0.000 function.py:593(&lt;listcomp&gt;)
+        2    0.000    0.000    0.000    0.000 isolate.py:85(&lt;genexpr&gt;)
         2    0.000    0.000    0.000    0.000 &lt;frozen _collections_abc&gt;:941(update)
-        7    0.000    0.000    0.000    0.000 __init__.py:1121(__getitem__)
-        6    0.000    0.000    0.000    0.000 base.py:581(&lt;listcomp&gt;)
-        2    0.000    0.000    0.000    0.000 copy.py:201(_deepcopy_list)
+       10    0.000    0.000    0.000    0.000 base.py:502(is_static)
+        4    0.000    0.000    0.000    0.000 state.py:345(init_hist_att)
+       18    0.000    0.000    0.000    0.000 inspect.py:292(isclass)
+       52    0.000    0.000    0.000    0.000 {method &#39;update&#39; of &#39;dict&#39; objects}
+       44    0.000    0.000    0.000    0.000 inspect.py:3015(parameters)
+       48    0.000    0.000    0.000    0.000 copy.py:107(_copy_immutable)
+        2    0.000    0.000    0.000    0.000 &lt;class &#39;networkx.utils.decorators.argmap&#39;&gt; compilation 4:1(argmap_isolates_1)
         2    0.000    0.000    0.000    0.000 reportviews.py:419(__init__)
+        2    0.000    0.000    0.000    0.000 base.py:106(init_flexible_roles)
+        2    0.000    0.000    0.000    0.000 timer.py:61(__init__)
        28    0.000    0.000    0.000    0.000 fromnumeric.py:861(_sort_dispatcher)
-        2    0.000    0.000    0.000    0.000 graph.py:1484(degree)
-        2    0.000    0.000    0.000    0.000 backends.py:627(__call__)
-        2    0.000    0.000    0.000    0.000 base.py:377(&lt;dictcomp&gt;)
        10    0.000    0.000    0.000    0.000 {built-in method builtins.max}
-        2    0.000    0.000    0.000    0.000 timer.py:44(__init__)
-       16    0.000    0.000    0.000    0.000 base.py:48(check_role)
-        6    0.000    0.000    0.000    0.000 misc.py:595(_clear_cache)
-        1    0.000    0.000    0.000    0.000 fromnumeric.py:2836(min)
-       22    0.000    0.000    0.000    0.000 {built-in method sys.getrecursionlimit}
-        2    0.000    0.000    0.000    0.000 base.py:368(get_indicators)
-       12    0.000    0.000    0.000    0.000 {built-in method fromkeys}
+        8    0.000    0.000    0.000    0.000 {built-in method numpy.empty}
+        6    0.000    0.000    0.000    0.000 base.py:597(&lt;listcomp&gt;)
+        2    0.000    0.000    0.000    0.000 backends.py:627(__call__)
+        4    0.000    0.000    0.000    0.000 base.py:69(get_track)
+        2    0.000    0.000    0.000    0.000 copy.py:201(_deepcopy_list)
        36    0.000    0.000    0.000    0.000 {method &#39;copy&#39; of &#39;dict&#39; objects}
+        2    0.000    0.000    0.000    0.000 graph.py:1484(degree)
+       16    0.000    0.000    0.000    0.000 base.py:65(check_role)
+        1    0.000    0.000    0.000    0.000 fromnumeric.py:2836(min)
+        7    0.000    0.000    0.000    0.000 propagate.py:120(&lt;genexpr&gt;)
+        1    0.000    0.000    0.000    0.000 scenario.py:137(__init__)
+        2    0.000    0.000    0.000    0.000 base.py:393(&lt;dictcomp&gt;)
+        7    0.000    0.000    0.000    0.000 __init__.py:1121(__getitem__)
+        6    0.000    0.000    0.000    0.000 misc.py:595(_clear_cache)
+       12    0.000    0.000    0.000    0.000 {built-in method fromkeys}
        18    0.000    0.000    0.000    0.000 inspect.py:3019(return_annotation)
-        7    0.000    0.000    0.000    0.000 propagate.py:106(&lt;genexpr&gt;)
-        1    0.000    0.000    0.000    0.000 base.py:203(init_time_hist)
-        1    0.000    0.000    0.000    0.000 scenario.py:121(__init__)
-        1    0.000    0.000    0.000    0.000 propagate.py:858(check_overwrite)
-       20    0.000    0.000    0.000    0.000 {built-in method builtins.repr}
-        4    0.000    0.000    0.000    0.000 copy.py:264(&lt;genexpr&gt;)
-        4    0.000    0.000    0.000    0.000 result.py:299(keys)
+        2    0.000    0.000    0.000    0.000 base.py:384(get_indicators)
         2    0.000    0.000    0.000    0.000 graph.py:59(__set__)
-       10    0.000    0.000    0.000    0.000 base.py:215(update_seed)
-       10    0.000    0.000    0.000    0.000 function.py:94(&lt;listcomp&gt;)
-       12    0.000    0.000    0.000    0.000 inspect.py:2726(default)
-        1    0.000    0.000    0.000    0.000 base.py:113(get_shift)
-        1    0.000    0.000    0.000    0.000 propagate.py:226(save_helper)
-        2    0.000    0.000    0.000    0.000 function.py:597(&lt;listcomp&gt;)
-        2    0.000    0.000    0.000    0.000 base.py:266(update_seed)
-        2    0.000    0.000    0.000    0.000 graph.py:37(__set__)
-        1    0.000    0.000    0.000    0.000 propagate.py:104(unpack_sim_kwargs)
-       10    0.000    0.000    0.000    0.000 base.py:407(init_block)
-        1    0.000    0.000    0.000    0.000 fromnumeric.py:72(&lt;dictcomp&gt;)
-        2    0.000    0.000    0.000    0.000 parameter.py:87(keys)
-        2    0.000    0.000    0.000    0.000 {method &#39;get&#39; of &#39;mappingproxy&#39; objects}
+       20    0.000    0.000    0.000    0.000 {built-in method builtins.repr}
+       22    0.000    0.000    0.000    0.000 {built-in method sys.getrecursionlimit}
+        1    0.000    0.000    0.000    0.000 base.py:128(get_shift)
+        1    0.000    0.000    0.000    0.000 base.py:218(init_time_hist)
+        4    0.000    0.000    0.000    0.000 result.py:315(keys)
+       10    0.000    0.000    0.000    0.000 base.py:230(update_seed)
+       10    0.000    0.000    0.000    0.000 function.py:109(&lt;listcomp&gt;)
+        1    0.000    0.000    0.000    0.000 propagate.py:240(save_helper)
+       10    0.000    0.000    0.000    0.000 base.py:422(init_block)
+        2    0.000    0.000    0.000    0.000 function.py:608(&lt;listcomp&gt;)
         2    0.000    0.000    0.000    0.000 __init__.py:1134(__iter__)
-        2    0.000    0.000    0.000    0.000 reportviews.py:426(__call__)
+        1    0.000    0.000    0.000    0.000 propagate.py:118(unpack_sim_kwargs)
+        1    0.000    0.000    0.000    0.000 propagate.py:872(check_overwrite)
+        4    0.000    0.000    0.000    0.000 copy.py:264(&lt;genexpr&gt;)
+       12    0.000    0.000    0.000    0.000 inspect.py:2726(default)
+        1    0.000    0.000    0.000    0.000 fromnumeric.py:72(&lt;dictcomp&gt;)
+        2    0.000    0.000    0.000    0.000 base.py:282(update_seed)
         4    0.000    0.000    0.000    0.000 {method &#39;endswith&#39; of &#39;str&#39; objects}
-        1    0.000    0.000    0.000    0.000 propagate.py:1146(&lt;listcomp&gt;)
-        1    0.000    0.000    0.000    0.000 {method &#39;pop&#39; of &#39;dict&#39; objects}
-        1    0.000    0.000    0.000    0.000 {method &#39;disable&#39; of &#39;_lsprof.Profiler&#39; objects}
+        1    0.000    0.000    0.000    0.000 propagate.py:1160(&lt;listcomp&gt;)
+        2    0.000    0.000    0.000    0.000 reportviews.py:426(__call__)
+        2    0.000    0.000    0.000    0.000 graph.py:37(__set__)
+        2    0.000    0.000    0.000    0.000 parameter.py:104(keys)
+        2    0.000    0.000    0.000    0.000 {method &#39;get&#39; of &#39;mappingproxy&#39; objects}
+        1    0.000    0.000    0.000    0.000 propagate.py:1183(&lt;listcomp&gt;)
         2    0.000    0.000    0.000    0.000 {method &#39;__exit__&#39; of &#39;_thread.RLock&#39; objects}
-        1    0.000    0.000    0.000    0.000 propagate.py:1169(&lt;listcomp&gt;)
-        1    0.000    0.000    0.000    0.000 scenario.py:123(&lt;dictcomp&gt;)
+        1    0.000    0.000    0.000    0.000 scenario.py:139(&lt;dictcomp&gt;)
+        1    0.000    0.000    0.000    0.000 {method &#39;disable&#39; of &#39;_lsprof.Profiler&#39; objects}
+        1    0.000    0.000    0.000    0.000 function.py:634(&lt;listcomp&gt;)
         1    0.000    0.000    0.000    0.000 fromnumeric.py:2831(_min_dispatcher)
-        1    0.000    0.000    0.000    0.000 function.py:623(&lt;listcomp&gt;)
+        1    0.000    0.000    0.000    0.000 {method &#39;pop&#39; of &#39;dict&#39; objects}
 
 
 </pre></div></div>
@@ -1712,450 +1709,442 @@ significant effect, it does not because the overhead is less to do with filling 
 SCENARIOS COMPLETE: 100%|██████████| 72/72 [00:05&lt;00:00, 12.23it/s]
 </pre></div></div>
 </div>
-<div class="nboutput docutils container">
+<div class="nboutput nblast docutils container">
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-         9995971 function calls (9704535 primitive calls) in 5.979 seconds
+         9994001 function calls (9702625 primitive calls) in 5.988 seconds
 
    Ordered by: internal time
 
    ncalls  tottime  percall  cumtime  percall filename:lineno(function)
-   280182    1.015    0.000    2.582    0.000 base.py:466(get_roles_as_dict)
-   363628    0.497    0.000    0.580    0.000 base.py:441(&lt;listcomp&gt;)
-280182/148498    0.370    0.000    2.217    0.000 base.py:616(&lt;listcomp&gt;)
-   363628    0.369    0.000    1.089    0.000 base.py:438(get_roles)
-   280182    0.320    0.000    3.347    0.000 base.py:600(find_mutables)
-   280182    0.263    0.000    0.425    0.000 base.py:602(&lt;listcomp&gt;)
-280182/148498    0.258    0.000    4.379    0.000 base.py:605(return_mutables)
-   643810    0.239    0.000    0.239    0.000 base.py:429(get_default_roletypes)
-     4088    0.202    0.000    5.267    0.001 function.py:773(prop_static)
-   280182    0.168    0.000    0.208    0.000 base.py:484(&lt;dictcomp&gt;)
-  1147948    0.135    0.000    0.135    0.000 {built-in method builtins.getattr}
-   280182    0.129    0.000    0.129    0.000 base.py:477(&lt;listcomp&gt;)
-   280182    0.122    0.000    0.122    0.000 base.py:471(&lt;listcomp&gt;)
-    82118    0.122    0.000    0.146    0.000 time.py:92(return_mutables)
-   527022    0.119    0.000    0.162    0.000 inspect.py:300(ismethod)
-    41131    0.115    0.000    0.642    0.000 function.py:145(__call__)
-   280182    0.108    0.000    0.108    0.000 base.py:445(get_flex_role_objs)
-   728277    0.095    0.000    0.095    0.000 {built-in method builtins.hasattr}
-40880/16352    0.075    0.000    0.103    0.000 base.py:21(get_var)
-     4088    0.071    0.000    0.213    0.000 history.py:257(log)
-   744194    0.067    0.000    0.077    0.000 {built-in method builtins.isinstance}
-   231102    0.062    0.000    0.089    0.000 base.py:391(return_mutables)
-     1850    0.053    0.000    0.069    0.000 base.py:234(&lt;listcomp&gt;)
-    85596    0.050    0.000    0.067    0.000 copy.py:66(copy)
-     2664    0.048    0.000    0.048    0.000 {built-in method builtins.dir}
-    82118    0.047    0.000    0.112    0.000 mode.py:268(return_mutables)
-    63234    0.045    0.000    0.061    0.000 mode.py:442(has_fault)
-     8261    0.036    0.000    0.175    0.000 ex_pump.py:407(static_behavior)
-      319    0.028    0.000    0.028    0.000 {method &#39;acquire&#39; of &#39;_thread.lock&#39; objects}
-    41131    0.027    0.000    0.119    0.000 function.py:123(prop_arch_behaviors)
-   231102    0.027    0.000    0.027    0.000 {built-in method recordclass._dataobject.astuple}
-   363492    0.026    0.000    0.026    0.000 {method &#39;values&#39; of &#39;dict&#39; objects}
-    41131    0.026    0.000    0.116    0.000 function.py:138(prop_arch_faults_up)
-    16522    0.026    0.000    0.060    0.000 base.py:249(set_field)
+   280116    1.015    0.000    2.587    0.000 base.py:482(get_roles_as_dict)
+   363550    0.498    0.000    0.580    0.000 base.py:457(&lt;listcomp&gt;)
+   363550    0.373    0.000    1.090    0.000 base.py:454(get_roles)
+280116/148462    0.361    0.000    2.202    0.000 base.py:632(&lt;listcomp&gt;)
+   280116    0.323    0.000    3.358    0.000 base.py:616(find_mutables)
+   280116    0.260    0.000    0.428    0.000 base.py:618(&lt;listcomp&gt;)
+280116/148462    0.256    0.000    4.370    0.000 base.py:621(return_mutables)
+   643666    0.237    0.000    0.237    0.000 base.py:445(get_default_roletypes)
+     4088    0.204    0.000    5.264    0.001 function.py:784(prop_static)
+   280116    0.168    0.000    0.209    0.000 base.py:500(&lt;dictcomp&gt;)
+  1147714    0.136    0.000    0.136    0.000 {built-in method builtins.getattr}
+   280116    0.126    0.000    0.126    0.000 base.py:493(&lt;listcomp&gt;)
+   280116    0.124    0.000    0.124    0.000 base.py:487(&lt;listcomp&gt;)
+   526902    0.123    0.000    0.168    0.000 inspect.py:300(ismethod)
+    82106    0.122    0.000    0.147    0.000 time.py:110(return_mutables)
+    41125    0.116    0.000    0.646    0.000 function.py:160(__call__)
+   280116    0.111    0.000    0.111    0.000 base.py:461(get_flex_role_objs)
+   728139    0.094    0.000    0.094    0.000 {built-in method builtins.hasattr}
+40880/16352    0.077    0.000    0.106    0.000 base.py:36(get_var)
+     4088    0.071    0.000    0.216    0.000 history.py:274(log)
+   744062    0.070    0.000    0.081    0.000 {built-in method builtins.isinstance}
+   231036    0.056    0.000    0.080    0.000 base.py:409(return_mutables)
+     1850    0.053    0.000    0.070    0.000 base.py:250(&lt;listcomp&gt;)
+    85584    0.051    0.000    0.067    0.000 copy.py:66(copy)
+     2664    0.049    0.000    0.049    0.000 {built-in method builtins.dir}
+    82106    0.047    0.000    0.112    0.000 mode.py:284(return_mutables)
+    63225    0.045    0.000    0.061    0.000 mode.py:458(has_fault)
+     8258    0.037    0.000    0.177    0.000 ex_pump.py:422(static_behavior)
+      315    0.028    0.000    0.028    0.000 {method &#39;acquire&#39; of &#39;_thread.lock&#39; objects}
+    41125    0.027    0.000    0.120    0.000 function.py:138(prop_arch_behaviors)
+   363414    0.026    0.000    0.026    0.000 {method &#39;values&#39; of &#39;dict&#39; objects}
+    41125    0.026    0.000    0.116    0.000 function.py:153(prop_arch_faults_up)
    332316    0.026    0.000    0.026    0.000 {method &#39;startswith&#39; of &#39;str&#39; objects}
-17782/16746    0.025    0.000    0.033    0.000 copy.py:128(deepcopy)
-     8261    0.023    0.000    0.111    0.000 base.py:212(assign)
-      814    0.020    0.000    0.027    0.000 base.py:365(&lt;listcomp&gt;)
-    98640    0.018    0.000    0.018    0.000 time.py:93(&lt;genexpr&gt;)
-     8261    0.017    0.000    0.028    0.000 base.py:151(get_field_dict)
-       73    0.017    0.000    5.574    0.076 propagate.py:1030(prop_one_scen)
+    16516    0.026    0.000    0.061    0.000 base.py:267(set_field)
+17776/16740    0.025    0.000    0.034    0.000 copy.py:128(deepcopy)
+   231036    0.023    0.000    0.023    0.000 {built-in method recordclass._dataobject.astuple}
+     8258    0.023    0.000    0.112    0.000 base.py:230(assign)
+      814    0.021    0.000    0.027    0.000 base.py:381(&lt;listcomp&gt;)
+    98622    0.018    0.000    0.018    0.000 time.py:111(&lt;genexpr&gt;)
+     8258    0.017    0.000    0.028    0.000 base.py:169(get_field_dict)
+       73    0.017    0.000    5.573    0.076 propagate.py:1044(prop_one_scen)
     21252    0.015    0.000    0.018    0.000 __init__.py:180(add)
-     4088    0.014    0.000    5.311    0.001 function.py:736(propagate)
-     8324    0.014    0.000    0.036    0.000 &lt;frozen _collections_abc&gt;:717(__ior__)
-     8258    0.014    0.000    0.032    0.000 ex_pump.py:222(static_behavior)
-     1480    0.013    0.000    0.181    0.000 base.py:244(init_roles)
-   139380    0.012    0.000    0.012    0.000 {method &#39;get&#39; of &#39;dict&#39; objects}
-    91119    0.010    0.000    0.010    0.000 {method &#39;copy&#39; of &#39;set&#39; objects}
-     8185    0.010    0.000    0.024    0.000 ex_pump.py:254(static_behavior)
-     4088    0.009    0.000    0.022    0.000 __init__.py:353(union)
-     8170    0.009    0.000    0.017    0.000 ex_pump.py:301(static_behavior)
-    63234    0.009    0.000    0.009    0.000 {method &#39;intersection&#39; of &#39;set&#39; objects}
-      814    0.009    0.000    0.025    0.000 inspect.py:2331(_signature_from_function)
-    63531    0.008    0.000    0.008    0.000 {built-in method builtins.any}
-    20440    0.008    0.000    0.008    0.000 history.py:36(is_known_mutable)
-     4088    0.007    0.000    0.222    0.000 base.py:209(log_hist)
-112312/111581    0.007    0.000    0.007    0.000 {built-in method builtins.len}
-     8261    0.007    0.000    0.008    0.000 base.py:199(&lt;dictcomp&gt;)
-     8261    0.007    0.000    0.010    0.000 ex_pump.py:374(set_faults)
-      666    0.007    0.000    0.071    0.000 parameter.py:44(__init__)
-     1628    0.006    0.000    0.009    0.000 inspect.py:2955(__init__)
-1776/1187    0.006    0.000    0.018    0.000 result.py:476(flatten)
-    22580    0.006    0.000    0.010    0.000 &lt;frozen abc&gt;:117(__instancecheck__)
- 1628/814    0.006    0.000    0.041    0.000 inspect.py:2435(_signature_from_callable)
-     8398    0.006    0.000    0.042    0.000 __init__.py:65(__init__)
+     8255    0.015    0.000    0.033    0.000 ex_pump.py:237(static_behavior)
+     8324    0.014    0.000    0.037    0.000 &lt;frozen _collections_abc&gt;:717(__ior__)
+     4088    0.014    0.000    5.309    0.001 function.py:747(propagate)
+     1480    0.014    0.000    0.185    0.000 base.py:260(init_roles)
+   139356    0.012    0.000    0.012    0.000 {method &#39;get&#39; of &#39;dict&#39; objects}
+    91104    0.010    0.000    0.010    0.000 {method &#39;copy&#39; of &#39;set&#39; objects}
+     8185    0.010    0.000    0.025    0.000 ex_pump.py:269(static_behavior)
+     4088    0.010    0.000    0.023    0.000 __init__.py:353(union)
+     8170    0.009    0.000    0.017    0.000 ex_pump.py:316(static_behavior)
+      814    0.009    0.000    0.026    0.000 inspect.py:2331(_signature_from_function)
+    63225    0.009    0.000    0.009    0.000 {method &#39;intersection&#39; of &#39;set&#39; objects}
+    63522    0.008    0.000    0.008    0.000 {built-in method builtins.any}
+112309/111578    0.007    0.000    0.008    0.000 {built-in method builtins.len}
+1776/1187    0.007    0.000    0.019    0.000 result.py:492(flatten)
+      666    0.007    0.000    0.074    0.000 parameter.py:61(__init__)
+ 1628/814    0.007    0.000    0.042    0.000 inspect.py:2435(_signature_from_callable)
+    20440    0.007    0.000    0.007    0.000 history.py:53(is_known_mutable)
+     4088    0.007    0.000    0.224    0.000 base.py:224(log_hist)
+    22580    0.006    0.000    0.011    0.000 &lt;frozen abc&gt;:117(__instancecheck__)
+     8258    0.006    0.000    0.008    0.000 base.py:217(&lt;dictcomp&gt;)
+     8258    0.006    0.000    0.009    0.000 ex_pump.py:389(set_faults)
+     1628    0.006    0.000    0.008    0.000 inspect.py:2955(__init__)
+     8398    0.006    0.000    0.043    0.000 __init__.py:65(__init__)
      3330    0.006    0.000    0.009    0.000 inspect.py:2669(__init__)
-      666    0.005    0.000    0.007    0.000 base.py:107(set_arg_type)
-     8185    0.005    0.000    0.014    0.000 ex_pump.py:280(static_behavior)
-      666    0.005    0.000    0.007    0.000 parameter.py:118(check_immutable)
+      666    0.005    0.000    0.007    0.000 base.py:125(set_arg_type)
+     8185    0.005    0.000    0.014    0.000 ex_pump.py:295(static_behavior)
+      666    0.005    0.000    0.007    0.000 parameter.py:135(check_immutable)
      1329    0.005    0.000    0.005    0.000 {method &#39;round&#39; of &#39;numpy.ndarray&#39; objects}
-     4088    0.004    0.000    0.005    0.000 function.py:682(set_vars)
-      666    0.004    0.000    0.279    0.000 base.py:111(add_flex_role_obj)
-    16352    0.004    0.000    0.006    0.000 __init__.py:304(__iter__)
+      666    0.005    0.000    0.284    0.000 base.py:127(add_flex_role_obj)
     25112    0.004    0.000    0.004    0.000 {method &#39;split&#39; of &#39;str&#39; objects}
+     4088    0.004    0.000    0.005    0.000 function.py:693(set_vars)
     22580    0.004    0.000    0.004    0.000 {built-in method _abc._abc_instancecheck}
-      370    0.004    0.000    0.220    0.001 base.py:376(__init__)
-    21485    0.004    0.000    0.004    0.000 {method &#39;update&#39; of &#39;set&#39; objects}
-      518    0.004    0.000    0.011    0.000 base.py:73(find_any_phase_overlap)
-    33370    0.004    0.000    0.004    0.000 {method &#39;join&#39; of &#39;str&#39; objects}
+    16352    0.004    0.000    0.006    0.000 __init__.py:304(__iter__)
+      370    0.004    0.000    0.223    0.001 base.py:391(__init__)
+    21482    0.004    0.000    0.004    0.000 {method &#39;update&#39; of &#39;set&#39; objects}
+      518    0.004    0.000    0.010    0.000 base.py:88(find_any_phase_overlap)
       666    0.004    0.000    0.007    0.000 inspect.py:3215(__str__)
-      370    0.004    0.000    0.008    0.000 mode.py:271(init_faultmodes)
-     8258    0.003    0.000    0.003    0.000 ex_pump.py:205(set_faults)
-     1110    0.003    0.000    0.027    0.000 base.py:560(create_hist)
-    15117    0.003    0.000    0.003    0.000 {built-in method builtins.min}
+    33370    0.004    0.000    0.004    0.000 {method &#39;join&#39; of &#39;str&#39; objects}
+      370    0.004    0.000    0.008    0.000 mode.py:287(init_faultmodes)
+     8255    0.004    0.000    0.004    0.000 ex_pump.py:220(set_faults)
+     1110    0.003    0.000    0.028    0.000 base.py:576(create_hist)
+    15111    0.003    0.000    0.003    0.000 {built-in method builtins.min}
+      444    0.003    0.000    0.003    0.000 time.py:117(set_timestep)
     12264    0.003    0.000    0.004    0.000 __init__.py:74(__len__)
-      444    0.003    0.000    0.003    0.000 time.py:99(set_timestep)
-     4366    0.003    0.000    0.005    0.000 parameter.py:90(check_lim)
-     8261    0.003    0.000    0.003    0.000 ex_pump.py:398(indicate_over_pressure)
-      438    0.003    0.000    0.005    0.000 result.py:352(all_with)
-     6377    0.003    0.000    0.003    0.000 result.py:302(items)
-      962    0.003    0.000    0.007    0.000 base.py:80(get_true_fields)
-      666    0.003    0.000    0.003    0.000 parameter.py:139(check_type)
+     4366    0.003    0.000    0.005    0.000 parameter.py:107(check_lim)
+      438    0.003    0.000    0.005    0.000 result.py:368(all_with)
+      962    0.003    0.000    0.007    0.000 base.py:98(get_true_fields)
+     6377    0.003    0.000    0.004    0.000 result.py:318(items)
+     8258    0.003    0.000    0.003    0.000 ex_pump.py:413(indicate_over_pressure)
+      814    0.003    0.000    0.008    0.000 inspect.py:2037(_signature_bound_method)
+      666    0.003    0.000    0.003    0.000 parameter.py:156(check_type)
+    20586    0.003    0.000    0.003    0.000 {built-in method builtins.setattr}
      4088    0.003    0.000    0.032    0.000 __init__.py:130(copy)
-  814/740    0.002    0.000    0.206    0.000 base.py:135(__init__)
-    20592    0.002    0.000    0.002    0.000 {built-in method builtins.setattr}
-      814    0.002    0.000    0.007    0.000 inspect.py:2037(_signature_bound_method)
-1184/1110    0.002    0.000    0.184    0.000 base.py:213(init_roletypes)
+  814/740    0.003    0.000    0.210    0.000 base.py:151(__init__)
+1184/1110    0.002    0.000    0.188    0.000 base.py:229(init_roletypes)
+     1329    0.002    0.000    0.011    0.000 base.py:102(get_timerange)
     28504    0.002    0.000    0.002    0.000 {method &#39;append&#39; of &#39;list&#39; objects}
-     1329    0.002    0.000    0.012    0.000 base.py:87(get_timerange)
-     1329    0.002    0.000    0.002    0.000 {built-in method numpy.arange}
-     1850    0.002    0.000    0.104    0.000 base.py:233(find_roletype_initiators)
-     4088    0.002    0.000    0.002    0.000 ex_pump.py:502(indicate_on)
-     2587    0.002    0.000    0.002    0.000 common.py:27(get_sub_include)
-     4088    0.002    0.000    0.002    0.000 propagate.py:1002(check_end_condition)
-     3251    0.002    0.000    0.002    0.000 result.py:321(__setattr__)
-      444    0.002    0.000    0.184    0.000 base.py:178(__init__)
-     2072    0.002    0.000    0.002    0.000 inspect.py:2756(__str__)
-     1036    0.002    0.000    0.002    0.000 {method &#39;sort&#39; of &#39;numpy.ndarray&#39; objects}
-     4088    0.002    0.000    0.002    0.000 ex_pump.py:483(indicate_finished)
+     1850    0.002    0.000    0.106    0.000 base.py:249(find_roletype_initiators)
+     4088    0.002    0.000    0.002    0.000 ex_pump.py:517(indicate_on)
+     2587    0.002    0.000    0.002    0.000 common.py:41(get_sub_include)
+     3251    0.002    0.000    0.002    0.000 result.py:337(__setattr__)
+     2072    0.002    0.000    0.003    0.000 inspect.py:2756(__str__)
+     4088    0.002    0.000    0.002    0.000 ex_pump.py:498(indicate_finished)
+      444    0.002    0.000    0.187    0.000 base.py:193(__init__)
      3251    0.002    0.000    0.004    0.000 __init__.py:1111(__init__)
-    17262    0.002    0.000    0.002    0.000 copy.py:182(_deepcopy_atomic)
      1779    0.002    0.000    0.004    0.000 numerictypes.py:357(issubdtype)
-      518    0.002    0.000    0.064    0.000 base.py:62(__init__)
-     4088    0.002    0.000    0.002    0.000 base.py:133(get_hist_ind)
-    19788    0.002    0.000    0.002    0.000 {built-in method builtins.id}
-      370    0.002    0.000    0.012    0.000 mode.py:202(__init__)
-    16489    0.002    0.000    0.002    0.000 {method &#39;items&#39; of &#39;dict&#39; objects}
-     3330    0.002    0.000    0.002    0.000 enum.py:688(__call__)
-     4144    0.002    0.000    0.002    0.000 inspect.py:3002(&lt;genexpr&gt;)
-       73    0.002    0.000    0.013    0.000 ex_pump.py:506(find_classification)
+    17256    0.002    0.000    0.002    0.000 copy.py:182(_deepcopy_atomic)
+    16486    0.002    0.000    0.002    0.000 {method &#39;items&#39; of &#39;dict&#39; objects}
+     4088    0.002    0.000    0.002    0.000 base.py:148(get_hist_ind)
+      518    0.002    0.000    0.066    0.000 base.py:77(__init__)
+     3330    0.002    0.000    0.003    0.000 enum.py:688(__call__)
+    19782    0.002    0.000    0.002    0.000 {built-in method builtins.id}
+     1329    0.002    0.000    0.002    0.000 {built-in method numpy.arange}
+     4088    0.002    0.000    0.002    0.000 propagate.py:1016(check_end_condition)
+    17658    0.002    0.000    0.002    0.000 {built-in method builtins.iter}
+      370    0.002    0.000    0.013    0.000 mode.py:218(__init__)
      4599    0.002    0.000    0.002    0.000 __init__.py:1138(__contains__)
-    17661    0.002    0.000    0.002    0.000 {built-in method builtins.iter}
-      666    0.002    0.000    0.043    0.000 parameter.py:162(check_pickle)
-      666    0.001    0.000    0.249    0.000 base.py:879(init_obj)
-     1770    0.001    0.000    0.006    0.000 common.py:73(is_numeric)
-      584    0.001    0.000    0.007    0.000 result.py:311(__getattr__)
-      370    0.001    0.000    0.233    0.001 base.py:199(add_sim)
-        1    0.001    0.001    5.890    5.890 propagate.py:758(scenlist_helper)
-      962    0.001    0.000    0.004    0.000 base.py:87(&lt;listcomp&gt;)
+       73    0.002    0.000    0.013    0.000 ex_pump.py:521(find_classification)
+     1770    0.002    0.000    0.006    0.000 common.py:87(is_numeric)
+      119    0.002    0.000    0.002    0.000 socket.py:621(send)
+     1036    0.002    0.000    0.002    0.000 {method &#39;sort&#39; of &#39;numpy.ndarray&#39; objects}
+     4144    0.002    0.000    0.002    0.000 inspect.py:3002(&lt;genexpr&gt;)
+      666    0.002    0.000    0.253    0.000 base.py:895(init_obj)
+      666    0.001    0.000    0.045    0.000 parameter.py:179(check_pickle)
+      370    0.001    0.000    0.237    0.001 base.py:215(add_sim)
+        1    0.001    0.001    5.893    5.893 propagate.py:772(scenlist_helper)
+      584    0.001    0.000    0.007    0.000 result.py:327(__getattr__)
+      962    0.001    0.000    0.004    0.000 base.py:105(&lt;listcomp&gt;)
      3558    0.001    0.000    0.002    0.000 numerictypes.py:283(issubclass_)
-      119    0.001    0.000    0.001    0.000 socket.py:621(send)
+      370    0.001    0.000    0.239    0.001 function.py:534(add_fxn)
        73    0.001    0.000    0.001    0.000 {method &#39;reduce&#39; of &#39;numpy.ufunc&#39; objects}
-      867    0.001    0.000    0.002    0.000 function.py:818(&lt;listcomp&gt;)
-      370    0.001    0.000    0.235    0.001 function.py:523(add_fxn)
       814    0.001    0.000    0.002    0.000 inspect.py:167(get_annotations)
+      864    0.001    0.000    0.002    0.000 function.py:829(&lt;listcomp&gt;)
+      814    0.001    0.000    0.044    0.000 base.py:379(init_indicators)
      1036    0.001    0.000    0.005    0.000 fromnumeric.py:865(sort)
-     4366    0.001    0.000    0.001    0.000 base.py:139(set_arg_as_type)
-       38    0.001    0.000    0.002    0.000 std.py:464(format_meter)
-     8261    0.001    0.000    0.001    0.000 {method &#39;clear&#39; of &#39;set&#39; objects}
-      814    0.001    0.000    0.001    0.000 inspect.py:735(unwrap)
-      814    0.001    0.000    0.043    0.000 base.py:363(init_indicators)
-     1776    0.001    0.000    0.001    0.000 result.py:141(check_include_errors)
-      148    0.001    0.000    0.023    0.000 parameter.py:158(copy_with_vals)
-     1183    0.001    0.000    0.011    0.000 base.py:102(get_histrange)
-     1329    0.001    0.000    0.007    0.000 fromnumeric.py:3269(round)
-       73    0.001    0.000    0.016    0.000 propagate.py:1130(get_result)
-      444    0.001    0.000    0.008    0.000 time.py:74(__init__)
+     8258    0.001    0.000    0.001    0.000 {method &#39;clear&#39; of &#39;set&#39; objects}
+     4366    0.001    0.000    0.001    0.000 base.py:154(set_arg_as_type)
+     1776    0.001    0.000    0.001    0.000 result.py:157(check_include_errors)
+      814    0.001    0.000    0.001    0.000 base.py:204(init_track)
+      148    0.001    0.000    0.024    0.000 parameter.py:175(copy_with_vals)
      1036    0.001    0.000    0.001    0.000 {method &#39;copy&#39; of &#39;numpy.ndarray&#39; objects}
-      814    0.001    0.000    0.001    0.000 base.py:188(init_track)
-     1329    0.001    0.000    0.006    0.000 fromnumeric.py:53(_wrapfunc)
-     8261    0.001    0.000    0.001    0.000 {method &#39;copy&#39; of &#39;list&#39; objects}
-      370    0.001    0.000    0.221    0.001 function.py:61(__init__)
+      814    0.001    0.000    0.001    0.000 inspect.py:735(unwrap)
+       38    0.001    0.000    0.002    0.000 std.py:464(format_meter)
+     1329    0.001    0.000    0.007    0.000 fromnumeric.py:3269(round)
+       73    0.001    0.000    0.016    0.000 propagate.py:1144(get_result)
      3531    0.001    0.000    0.001    0.000 __init__.py:1128(__setitem__)
-     8176    0.001    0.000    0.001    0.000 {method &#39;index&#39; of &#39;list&#39; objects}
+      444    0.001    0.000    0.008    0.000 time.py:92(__init__)
+     1329    0.001    0.000    0.006    0.000 fromnumeric.py:53(_wrapfunc)
+     8258    0.001    0.000    0.001    0.000 {method &#39;copy&#39; of &#39;list&#39; objects}
+     1183    0.001    0.000    0.011    0.000 base.py:117(get_histrange)
      1770    0.001    0.000    0.001    0.000 {built-in method numpy.array}
-      296    0.001    0.000    0.002    0.000 history.py:187(init_att)
-       74    0.001    0.000    0.001    0.000 graph.py:968(add_edges_from)
+      370    0.001    0.000    0.224    0.001 function.py:76(__init__)
+      814    0.001    0.000    0.043    0.000 inspect.py:3007(from_callable)
      1036    0.001    0.000    0.001    0.000 {built-in method numpy.asanyarray}
+       74    0.001    0.000    0.001    0.000 graph.py:968(add_edges_from)
+     8176    0.001    0.000    0.001    0.000 {method &#39;index&#39; of &#39;list&#39; objects}
+      296    0.001    0.000    0.002    0.000 history.py:204(init_att)
       814    0.001    0.000    0.005    0.000 inspect.py:3023(replace)
-      814    0.001    0.000    0.041    0.000 inspect.py:3007(from_callable)
      8288    0.001    0.000    0.001    0.000 inspect.py:2734(kind)
-      444    0.001    0.000    0.015    0.000 base.py:195(init_hist)
      2357    0.001    0.000    0.001    0.000 __init__.py:1118(__len__)
-      370    0.001    0.000    0.002    0.000 base.py:453(check_flows)
-     1850    0.001    0.000    0.001    0.000 base.py:33(check_role)
+     7187    0.001    0.000    0.001    0.000 {built-in method builtins.issubclass}
+      444    0.001    0.000    0.015    0.000 base.py:210(init_hist)
+      370    0.001    0.000    0.002    0.000 base.py:468(check_flows)
+     3330    0.001    0.000    0.001    0.000 enum.py:1095(__new__)
+      814    0.001    0.000    0.044    0.000 inspect.py:3261(signature)
+     1850    0.001    0.000    0.001    0.000 base.py:51(check_role)
   372/150    0.001    0.000    0.004    0.000 copy.py:227(_deepcopy_dict)
       184    0.001    0.000    0.002    0.000 {built-in method builtins.sum}
-       74    0.001    0.000    0.331    0.004 base.py:68(__init__)
-     7187    0.001    0.000    0.001    0.000 {built-in method builtins.issubclass}
-      370    0.001    0.000    0.001    0.000 function.py:82(return_faultmodes)
-      222    0.001    0.000    0.002    0.000 base.py:397(init_indicator_hist)
      1482    0.001    0.000    0.001    0.000 {method &#39;format&#39; of &#39;str&#39; objects}
-     3330    0.001    0.000    0.001    0.000 enum.py:1095(__new__)
-      814    0.001    0.000    0.042    0.000 inspect.py:3261(signature)
-      370    0.001    0.000    0.023    0.000 base.py:411(create_arch_kwargs)
-       74    0.001    0.000    0.001    0.000 history.py:323(cut)
+       74    0.001    0.000    0.337    0.005 base.py:84(__init__)
+      370    0.001    0.000    0.001    0.000 function.py:97(return_faultmodes)
+      222    0.001    0.000    0.002    0.000 base.py:413(init_indicator_hist)
+       74    0.001    0.000    0.001    0.000 history.py:340(cut)
       148    0.001    0.000    0.001    0.000 graph.py:566(add_nodes_from)
+      370    0.001    0.000    0.023    0.000 base.py:426(create_arch_kwargs)
      5846    0.001    0.000    0.001    0.000 inspect.py:2722(name)
-       74    0.001    0.000    0.285    0.004 ex_pump.py:455(init_architecture)
-      518    0.001    0.000    0.001    0.000 base.py:78(&lt;listcomp&gt;)
-       74    0.001    0.000    0.013    0.000 function.py:577(build)
+       74    0.001    0.000    0.290    0.004 ex_pump.py:470(init_architecture)
+      518    0.001    0.000    0.001    0.000 base.py:93(&lt;listcomp&gt;)
+       74    0.001    0.000    0.030    0.000 base.py:262(new_params)
      2571    0.001    0.000    0.001    0.000 utils.py:375(&lt;genexpr&gt;)
-       74    0.001    0.000    0.005    0.000 function.py:589(construct_graph)
-      370    0.001    0.000    0.002    0.000 function.py:106(update_seed)
-      518    0.001    0.000    0.001    0.000 base.py:75(&lt;dictcomp&gt;)
-     4381    0.001    0.000    0.001    0.000 {method &#39;keys&#39; of &#39;dict&#39; objects}
-     1163    0.001    0.000    0.001    0.000 graph.py:1318(neighbors)
-       74    0.001    0.000    0.028    0.000 base.py:247(new_params)
-      370    0.001    0.000    0.001    0.000 base.py:473(&lt;listcomp&gt;)
+       74    0.001    0.000    0.013    0.000 function.py:588(build)
+     1160    0.001    0.000    0.001    0.000 graph.py:1318(neighbors)
+       74    0.001    0.000    0.005    0.000 function.py:600(construct_graph)
       518    0.001    0.000    0.001    0.000 {built-in method recordclass._dataobject.asdict}
-     1184    0.001    0.000    0.001    0.000 base.py:182(check_slots)
-     4088    0.000    0.000    0.000    0.000 {built-in method from_iterable}
-       73    0.000    0.000    0.004    0.000 function.py:601(calc_repaircost)
-      296    0.000    0.000    0.049    0.000 base.py:159(add_flow)
-      584    0.000    0.000    0.001    0.000 result.py:122(get_dict_attr)
+      518    0.001    0.000    0.001    0.000 base.py:90(&lt;dictcomp&gt;)
+      370    0.001    0.000    0.002    0.000 function.py:121(update_seed)
+     4381    0.001    0.000    0.001    0.000 {method &#39;keys&#39; of &#39;dict&#39; objects}
+      370    0.001    0.000    0.001    0.000 base.py:488(&lt;listcomp&gt;)
+     4088    0.001    0.000    0.001    0.000 {built-in method from_iterable}
+       73    0.001    0.000    0.004    0.000 function.py:612(calc_repaircost)
+      296    0.000    0.000    0.051    0.000 base.py:175(add_flow)
+     1184    0.000    0.000    0.001    0.000 base.py:198(check_slots)
      1628    0.000    0.000    0.001    0.000 inspect.py:378(isfunction)
+      584    0.000    0.000    0.000    0.000 result.py:138(get_dict_attr)
+      520    0.000    0.000    0.001    0.000 copy.py:243(_keep_alive)
+      148    0.000    0.000    0.002    0.000 base.py:361(create_hist)
        36    0.000    0.000    0.036    0.001 std.py:1198(update)
-      520    0.000    0.000    0.000    0.000 copy.py:243(_keep_alive)
-     2326    0.000    0.000    0.000    0.000 __init__.py:165(__contains__)
-       74    0.000    0.000    0.001    0.000 function.py:585(&lt;listcomp&gt;)
-       74    0.000    0.000    0.001    0.000 function.py:628(return_faultmodes)
-      148    0.000    0.000    0.002    0.000 base.py:343(create_hist)
+     2320    0.000    0.000    0.000    0.000 __init__.py:165(__contains__)
+       74    0.000    0.000    0.001    0.000 function.py:596(&lt;listcomp&gt;)
       146    0.000    0.000    0.001    0.000 &lt;frozen _collections_abc&gt;:941(update)
-       73    0.000    0.000    0.002    0.000 fromnumeric.py:71(_wrapreduction)
-      119    0.000    0.000    0.002    0.000 iostream.py:258(schedule)
-       72    0.000    0.000    5.499    0.076 propagate.py:807(exec_scen)
+       74    0.000    0.000    0.001    0.000 function.py:639(return_faultmodes)
+       72    0.000    0.000    5.495    0.076 propagate.py:821(exec_scen)
      3330    0.000    0.000    0.000    0.000 {method &#39;__contains__&#39; of &#39;frozenset&#39; objects}
-      370    0.000    0.000    0.000    0.000 base.py:391(&lt;dictcomp&gt;)
-       74    0.000    0.000    0.005    0.000 base.py:229(build)
-     1776    0.000    0.000    0.000    0.000 result.py:149(check_include_error)
-       74    0.000    0.000    0.331    0.004 function.py:495(__init__)
-       74    0.000    0.000    0.360    0.005 base.py:281(new)
+       74    0.000    0.000    0.005    0.000 base.py:245(build)
+       73    0.000    0.000    0.002    0.000 fromnumeric.py:71(_wrapreduction)
+      370    0.000    0.000    0.000    0.000 base.py:406(&lt;dictcomp&gt;)
+      119    0.000    0.000    0.002    0.000 iostream.py:258(schedule)
+     1776    0.000    0.000    0.000    0.000 result.py:165(check_include_error)
      3330    0.000    0.000    0.000    0.000 {method &#39;isidentifier&#39; of &#39;str&#39; objects}
+       74    0.000    0.000    0.368    0.005 base.py:296(new)
+       74    0.000    0.000    0.338    0.005 function.py:506(__init__)
        40    0.000    0.000    0.030    0.001 iostream.py:561(flush)
-      296    0.000    0.000    0.016    0.000 base.py:75(create_hist)
-      296    0.000    0.000    0.000    0.000 function.py:586(&lt;listcomp&gt;)
-      217    0.000    0.000    0.000    0.000 std.py:231(__call__)
-      370    0.000    0.000    0.001    0.000 base.py:430(update_contained_modes)
-       74    0.000    0.000    0.001    0.000 {method &#39;__reduce_ex__&#39; of &#39;object&#39; objects}
-      148    0.000    0.000    0.001    0.000 base.py:330(init_hist_att)
-      518    0.000    0.000    0.000    0.000 base.py:77(&lt;listcomp&gt;)
+      296    0.000    0.000    0.017    0.000 base.py:92(create_hist)
+      296    0.000    0.000    0.000    0.000 function.py:597(&lt;listcomp&gt;)
+      518    0.000    0.000    0.000    0.000 base.py:92(&lt;listcomp&gt;)
+      370    0.000    0.000    0.001    0.000 base.py:445(update_contained_modes)
       740    0.000    0.000    0.000    0.000 reportviews.py:529(__iter__)
+      370    0.000    0.000    0.001    0.000 base.py:267(get_flows)
+      217    0.000    0.000    0.000    0.000 std.py:231(__call__)
+      148    0.000    0.000    0.001    0.000 base.py:348(init_hist_att)
       370    0.000    0.000    0.001    0.000 __init__.py:201(update)
-      444    0.000    0.000    0.000    0.000 base.py:191(&lt;dictcomp&gt;)
-      370    0.000    0.000    0.001    0.000 base.py:251(get_flows)
-     1480    0.000    0.000    0.000    0.000 {method &#39;values&#39; of &#39;mappingproxy&#39; objects}
-      370    0.000    0.000    0.000    0.000 base.py:418(&lt;dictcomp&gt;)
-       74    0.000    0.000    0.001    0.000 functools.py:981(__get__)
-       40    0.000    0.000    0.002    0.000 iostream.py:624(write)
        40    0.000    0.000    0.029    0.001 threading.py:611(wait)
-       74    0.000    0.000    0.000    0.000 graph.py:332(__init__)
-       74    0.000    0.000    0.001    0.000 function.py:580(&lt;listcomp&gt;)
-      293    0.000    0.000    0.000    0.000 result.py:299(keys)
-      148    0.000    0.000    0.001    0.000 state.py:328(init_hist_att)
-      148    0.000    0.000    0.000    0.000 base.py:244(&lt;dictcomp&gt;)
-      370    0.000    0.000    0.000    0.000 base.py:468(&lt;listcomp&gt;)
-       75    0.000    0.000    0.000    0.000 std.py:400(format_interval)
+      370    0.000    0.000    0.000    0.000 base.py:433(&lt;dictcomp&gt;)
+       74    0.000    0.000    0.001    0.000 functools.py:981(__get__)
+       74    0.000    0.000    0.001    0.000 {method &#39;__reduce_ex__&#39; of &#39;object&#39; objects}
+      444    0.000    0.000    0.000    0.000 base.py:206(&lt;dictcomp&gt;)
+     1480    0.000    0.000    0.000    0.000 {method &#39;values&#39; of &#39;mappingproxy&#39; objects}
+       40    0.000    0.000    0.002    0.000 iostream.py:624(write)
       656    0.000    0.000    0.000    0.000 __init__.py:1121(__getitem__)
-       40    0.000    0.000    0.029    0.001 threading.py:295(wait)
-       74    0.000    0.000    0.001    0.000 isolate.py:42(isolates)
+       75    0.000    0.000    0.000    0.000 std.py:400(format_interval)
+       74    0.000    0.000    0.000    0.000 graph.py:332(__init__)
        73    0.000    0.000    0.037    0.001 std.py:1160(__iter__)
-      370    0.000    0.000    0.000    0.000 base.py:255(&lt;dictcomp&gt;)
-       40    0.000    0.000    0.000    0.000 threading.py:243(__init__)
-       38    0.000    0.000    0.000    0.000 std.py:1446(format_dict)
-     1329    0.000    0.000    0.000    0.000 fromnumeric.py:3265(_round_dispatcher)
-       74    0.000    0.000    0.001    0.000 function.py:582(&lt;listcomp&gt;)
-      518    0.000    0.000    0.001    0.000 base.py:395(asdict)
-       74    0.000    0.000    0.001    0.000 backends.py:627(__call__)
-      159    0.000    0.000    0.000    0.000 threading.py:1192(is_alive)
-       73    0.000    0.000    0.002    0.000 fromnumeric.py:2836(min)
-      666    0.000    0.000    0.000    0.000 inspect.py:292(isclass)
-     2533    0.000    0.000    0.000    0.000 {built-in method unicodedata.east_asian_width}
+       74    0.000    0.000    0.001    0.000 isolate.py:42(isolates)
+      370    0.000    0.000    0.000    0.000 base.py:271(&lt;dictcomp&gt;)
+       74    0.000    0.000    0.001    0.000 function.py:591(&lt;listcomp&gt;)
        74    0.000    0.000    0.001    0.000 copy.py:259(_reconstruct)
-       74    0.000    0.000    0.000    0.000 copyreg.py:113(_slotnames)
-       74    0.000    0.000    0.001    0.000 &lt;class &#39;networkx.utils.decorators.argmap&#39;&gt; compilation 4:1(argmap_isolates_1)
-      666    0.000    0.000    0.000    0.000 base.py:237(get_full_name)
+      148    0.000    0.000    0.000    0.000 base.py:260(&lt;dictcomp&gt;)
+      370    0.000    0.000    0.000    0.000 base.py:483(&lt;listcomp&gt;)
+     1329    0.000    0.000    0.000    0.000 fromnumeric.py:3265(_round_dispatcher)
+      666    0.000    0.000    0.000    0.000 base.py:253(get_full_name)
+       79    0.000    0.000    0.000    0.000 {built-in method _thread.allocate_lock}
+       39    0.000    0.000    0.028    0.001 threading.py:295(wait)
+      148    0.000    0.000    0.001    0.000 state.py:345(init_hist_att)
+       74    0.000    0.000    0.001    0.000 function.py:593(&lt;listcomp&gt;)
+      518    0.000    0.000    0.001    0.000 base.py:413(asdict)
        78    0.000    0.000    0.032    0.000 utils.py:194(inner)
-      511    0.000    0.000    0.000    0.000 propagate.py:106(&lt;genexpr&gt;)
-       80    0.000    0.000    0.000    0.000 {built-in method _thread.allocate_lock}
-       74    0.000    0.000    0.001    0.000 isolate.py:85(&lt;genexpr&gt;)
-     2442    0.000    0.000    0.000    0.000 {built-in method builtins.callable}
+      666    0.000    0.000    0.000    0.000 inspect.py:292(isclass)
+       40    0.000    0.000    0.000    0.000 threading.py:243(__init__)
+       73    0.000    0.000    0.002    0.000 fromnumeric.py:2836(min)
        76    0.000    0.000    0.000    0.000 utils.py:273(_is_ascii)
-      370    0.000    0.000    0.000    0.000 base.py:487(is_static)
       296    0.000    0.000    0.000    0.000 {built-in method numpy.empty}
+      159    0.000    0.000    0.000    0.000 threading.py:1192(is_alive)
+     2533    0.000    0.000    0.000    0.000 {built-in method unicodedata.east_asian_width}
+     2442    0.000    0.000    0.000    0.000 {built-in method builtins.callable}
+       74    0.000    0.000    0.001    0.000 isolate.py:85(&lt;genexpr&gt;)
+       74    0.000    0.000    0.000    0.000 copyreg.py:113(_slotnames)
+       38    0.000    0.000    0.000    0.000 std.py:1446(format_dict)
      1963    0.000    0.000    0.000    0.000 {method &#39;update&#39; of &#39;dict&#39; objects}
-      370    0.000    0.000    0.000    0.000 base.py:493(is_dynamic)
      1628    0.000    0.000    0.000    0.000 inspect.py:3015(parameters)
-       37    0.000    0.000    0.036    0.001 std.py:1325(refresh)
+      370    0.000    0.000    0.000    0.000 base.py:502(is_static)
+      511    0.000    0.000    0.000    0.000 propagate.py:120(&lt;genexpr&gt;)
+      370    0.000    0.000    0.000    0.000 base.py:508(is_dynamic)
+       74    0.000    0.000    0.001    0.000 &lt;class &#39;networkx.utils.decorators.argmap&#39;&gt; compilation 4:1(argmap_isolates_1)
        38    0.000    0.000    0.003    0.000 std.py:1150(__str__)
      1776    0.000    0.000    0.000    0.000 copy.py:107(_copy_immutable)
-       38    0.000    0.000    0.036    0.001 std.py:1464(display)
-       41    0.000    0.000    0.000    0.000 std.py:102(acquire)
-       38    0.000    0.000    0.034    0.001 std.py:457(print_status)
-       74    0.000    0.000    0.000    0.000 reportviews.py:419(__init__)
-       41    0.000    0.000    0.000    0.000 {method &#39;acquire&#39; of &#39;_multiprocessing.SemLock&#39; objects}
-       73    0.000    0.000    0.000    0.000 function.py:623(&lt;listcomp&gt;)
+       37    0.000    0.000    0.036    0.001 std.py:1325(refresh)
+      293    0.000    0.000    0.000    0.000 result.py:315(keys)
      1036    0.000    0.000    0.000    0.000 fromnumeric.py:861(_sort_dispatcher)
-       74    0.000    0.000    0.000    0.000 graph.py:1484(degree)
-       74    0.000    0.000    0.000    0.000 base.py:90(init_flexible_roles)
+       38    0.000    0.000    0.036    0.001 std.py:1464(display)
+       41    0.000    0.000    0.000    0.000 {method &#39;acquire&#39; of &#39;_multiprocessing.SemLock&#39; objects}
+       74    0.000    0.000    0.000    0.000 reportviews.py:419(__init__)
+       74    0.000    0.000    0.000    0.000 base.py:106(init_flexible_roles)
+       73    0.000    0.000    0.001    0.000 base.py:128(get_shift)
+      222    0.000    0.000    0.000    0.000 base.py:597(&lt;listcomp&gt;)
+       73    0.000    0.000    0.000    0.000 function.py:634(&lt;listcomp&gt;)
       517    0.000    0.000    0.000    0.000 {built-in method fromkeys}
-      148    0.000    0.000    0.000    0.000 base.py:51(get_track)
-       73    0.000    0.000    0.001    0.000 base.py:113(get_shift)
-       38    0.000    0.000    0.000    0.000 std.py:186(__format__)
-       38    0.000    0.000    0.032    0.001 std.py:451(fp_write)
-       74    0.000    0.000    0.000    0.000 propagate.py:226(save_helper)
-      222    0.000    0.000    0.000    0.000 base.py:581(&lt;listcomp&gt;)
+      148    0.000    0.000    0.000    0.000 base.py:69(get_track)
       408    0.000    0.000    0.000    0.000 {built-in method builtins.max}
-       74    0.000    0.000    0.004    0.000 timer.py:44(__init__)
-       73    0.000    0.000    0.001    0.000 base.py:203(init_time_hist)
-      592    0.000    0.000    0.000    0.000 base.py:48(check_role)
-       74    0.000    0.000    0.000    0.000 copy.py:201(_deepcopy_list)
-      370    0.000    0.000    0.000    0.000 function.py:94(&lt;listcomp&gt;)
-      159    0.000    0.000    0.000    0.000 threading.py:1125(_wait_for_tstate_lock)
-     1332    0.000    0.000    0.000    0.000 {method &#39;copy&#39; of &#39;dict&#39; objects}
-       74    0.000    0.000    0.000    0.000 base.py:377(&lt;dictcomp&gt;)
-       40    0.000    0.000    0.000    0.000 threading.py:562(__init__)
-      814    0.000    0.000    0.000    0.000 {built-in method sys.getrecursionlimit}
-      222    0.000    0.000    0.000    0.000 misc.py:595(_clear_cache)
+       38    0.000    0.000    0.033    0.001 std.py:457(print_status)
+       74    0.000    0.000    0.001    0.000 backends.py:627(__call__)
+       74    0.000    0.000    0.000    0.000 propagate.py:240(save_helper)
+       74    0.000    0.000    0.000    0.000 graph.py:1484(degree)
+       41    0.000    0.000    0.000    0.000 std.py:102(acquire)
+       38    0.000    0.000    0.000    0.000 std.py:186(__format__)
+       74    0.000    0.000    0.004    0.000 timer.py:61(__init__)
+       73    0.000    0.000    0.001    0.000 base.py:218(init_time_hist)
+      592    0.000    0.000    0.000    0.000 base.py:65(check_role)
+      195    0.000    0.000    0.000    0.000 time.py:104(__getattr__)
        41    0.000    0.000    0.000    0.000 std.py:106(release)
-       73    0.000    0.000    0.000    0.000 propagate.py:104(unpack_sim_kwargs)
-      740    0.000    0.000    0.000    0.000 {built-in method builtins.repr}
-       74    0.000    0.000    0.000    0.000 base.py:368(get_indicators)
-      119    0.000    0.000    0.000    0.000 iostream.py:137(_event_pipe)
+       38    0.000    0.000    0.032    0.001 std.py:451(fp_write)
+      159    0.000    0.000    0.000    0.000 threading.py:1125(_wait_for_tstate_lock)
        40    0.000    0.000    0.002    0.000 iostream.py:546(_schedule_flush)
-       38    0.000    0.000    0.000    0.000 std.py:153(__init__)
-      146    0.000    0.000    0.000    0.000 __init__.py:1134(__iter__)
-       90    0.000    0.000    0.000    0.000 mode.py:482(add_fault)
-      666    0.000    0.000    0.000    0.000 inspect.py:3019(return_annotation)
-        1    0.000    0.000    5.979    5.979 &lt;string&gt;:1(&lt;module&gt;)
-       38    0.000    0.000    0.001    0.000 utils.py:378(disp_len)
-      144    0.000    0.000    0.000    0.000 scenario.py:32(get)
-      198    0.000    0.000    0.000    0.000 time.py:86(__getattr__)
-      292    0.000    0.000    0.000    0.000 {method &#39;endswith&#39; of &#39;str&#39; objects}
-       72    0.000    0.000    0.000    0.000 mode.py:395(update_modestates)
-       37    0.000    0.000    0.000    0.000 {built-in method now}
-       73    0.000    0.000    0.000    0.000 fromnumeric.py:72(&lt;dictcomp&gt;)
-      370    0.000    0.000    0.000    0.000 base.py:215(update_seed)
-       40    0.000    0.000    0.000    0.000 iostream.py:519(_is_master_process)
-       60    0.000    0.000    0.000    0.000 timer.py:66(inc)
+       74    0.000    0.000    0.000    0.000 copy.py:201(_deepcopy_list)
+      814    0.000    0.000    0.000    0.000 {built-in method sys.getrecursionlimit}
+      370    0.000    0.000    0.000    0.000 function.py:109(&lt;listcomp&gt;)
+     1332    0.000    0.000    0.000    0.000 {method &#39;copy&#39; of &#39;dict&#39; objects}
+      222    0.000    0.000    0.000    0.000 misc.py:595(_clear_cache)
+       74    0.000    0.000    0.000    0.000 base.py:393(&lt;dictcomp&gt;)
        74    0.000    0.000    0.000    0.000 graph.py:59(__set__)
+      146    0.000    0.000    0.000    0.000 __init__.py:1134(__iter__)
+      666    0.000    0.000    0.000    0.000 inspect.py:3019(return_annotation)
+      119    0.000    0.000    0.000    0.000 iostream.py:137(_event_pipe)
+       40    0.000    0.000    0.000    0.000 threading.py:562(__init__)
+        1    0.000    0.000    5.988    5.988 &lt;string&gt;:1(&lt;module&gt;)
+       90    0.000    0.000    0.000    0.000 mode.py:498(add_fault)
+      740    0.000    0.000    0.000    0.000 {built-in method builtins.repr}
+       74    0.000    0.000    0.000    0.000 base.py:384(get_indicators)
+       73    0.000    0.000    0.000    0.000 propagate.py:118(unpack_sim_kwargs)
+       73    0.000    0.000    0.000    0.000 fromnumeric.py:72(&lt;dictcomp&gt;)
+       38    0.000    0.000    0.000    0.000 std.py:153(__init__)
+       37    0.000    0.000    0.000    0.000 {built-in method now}
+      292    0.000    0.000    0.000    0.000 {method &#39;endswith&#39; of &#39;str&#39; objects}
+       72    0.000    0.000    0.000    0.000 mode.py:411(update_modestates)
+       38    0.000    0.000    0.001    0.000 utils.py:378(disp_len)
+      370    0.000    0.000    0.000    0.000 base.py:230(update_seed)
+      144    0.000    0.000    0.000    0.000 scenario.py:48(get)
        38    0.000    0.000    0.000    0.000 {method &#39;sub&#39; of &#39;re.Pattern&#39; objects}
-        1    0.000    0.000    5.979    5.979 propagate.py:569(fault_sample)
-      370    0.000    0.000    0.000    0.000 base.py:407(init_block)
-       38    0.000    0.000    0.001    0.000 utils.py:374(_text_width)
-      148    0.000    0.000    0.000    0.000 copy.py:264(&lt;genexpr&gt;)
-       40    0.000    0.000    0.000    0.000 threading.py:283(_acquire_restore)
+       60    0.000    0.000    0.000    0.000 timer.py:83(inc)
        41    0.000    0.000    0.000    0.000 {method &#39;release&#39; of &#39;_multiprocessing.SemLock&#39; objects}
-       73    0.000    0.000    0.000    0.000 propagate.py:1146(&lt;listcomp&gt;)
+       40    0.000    0.000    0.000    0.000 iostream.py:519(_is_master_process)
+      370    0.000    0.000    0.000    0.000 base.py:422(init_block)
+        1    0.000    0.000    5.988    5.988 propagate.py:583(fault_sample)
+      148    0.000    0.000    0.001    0.000 copy.py:264(&lt;genexpr&gt;)
+       74    0.000    0.000    0.001    0.000 function.py:608(&lt;listcomp&gt;)
+       73    0.000    0.000    0.000    0.000 propagate.py:1160(&lt;listcomp&gt;)
        40    0.000    0.000    0.000    0.000 threading.py:1453(current_thread)
-       74    0.000    0.000    0.001    0.000 function.py:597(&lt;listcomp&gt;)
-       74    0.000    0.000    0.000    0.000 base.py:266(update_seed)
       444    0.000    0.000    0.000    0.000 inspect.py:2726(default)
-       74    0.000    0.000    0.000    0.000 graph.py:37(__set__)
+       39    0.000    0.000    0.000    0.000 threading.py:283(_acquire_restore)
+       38    0.000    0.000    0.001    0.000 utils.py:374(_text_width)
+       74    0.000    0.000    0.000    0.000 base.py:282(update_seed)
+        1    0.000    0.000    5.988    5.988 {built-in method builtins.exec}
       798    0.000    0.000    0.000    0.000 {built-in method builtins.ord}
       188    0.000    0.000    0.000    0.000 {built-in method builtins.divmod}
-      160    0.000    0.000    0.000    0.000 threading.py:575(is_set)
        40    0.000    0.000    0.000    0.000 threading.py:274(__exit__)
+      160    0.000    0.000    0.000    0.000 threading.py:575(is_set)
+       74    0.000    0.000    0.000    0.000 graph.py:37(__set__)
        77    0.000    0.000    0.000    0.000 {method &#39;pop&#39; of &#39;dict&#39; objects}
-       80    0.000    0.000    0.000    0.000 threading.py:1168(ident)
-       74    0.000    0.000    0.000    0.000 reportviews.py:426(__call__)
-      147    0.000    0.000    0.000    0.000 {built-in method time.time}
        74    0.000    0.000    0.000    0.000 {method &#39;get&#39; of &#39;mappingproxy&#39; objects}
-        1    0.000    0.000    5.979    5.979 {built-in method builtins.exec}
-       41    0.000    0.000    0.000    0.000 {method &#39;acquire&#39; of &#39;_thread.RLock&#39; objects}
-       73    0.000    0.000    0.000    0.000 propagate.py:1169(&lt;listcomp&gt;)
-       38    0.000    0.000    0.000    0.000 utils.py:108(__init__)
-       40    0.000    0.000    0.000    0.000 {built-in method nt.getpid}
+       80    0.000    0.000    0.000    0.000 threading.py:1168(ident)
+        1    0.000    0.000    0.002    0.002 std.py:952(__init__)
+      147    0.000    0.000    0.000    0.000 {built-in method time.time}
+       74    0.000    0.000    0.000    0.000 reportviews.py:426(__call__)
+       73    0.000    0.000    0.000    0.000 propagate.py:1183(&lt;listcomp&gt;)
         1    0.000    0.000    0.000    0.000 __init__.py:48(create_string_buffer)
-       38    0.000    0.000    0.000    0.000 utils.py:112(__format__)
-        1    0.000    0.000    0.001    0.001 std.py:952(__init__)
+        1    0.000    0.000    0.000    0.000 utils.py:297(_screen_shape_windows)
+       40    0.000    0.000    0.000    0.000 {built-in method nt.getpid}
+       38    0.000    0.000    0.000    0.000 utils.py:108(__init__)
+       41    0.000    0.000    0.000    0.000 {method &#39;acquire&#39; of &#39;_thread.RLock&#39; objects}
+      158    0.000    0.000    0.000    0.000 {method &#39;append&#39; of &#39;collections.deque&#39; objects}
       114    0.000    0.000    0.000    0.000 {method &#39;__exit__&#39; of &#39;_thread.RLock&#39; objects}
        40    0.000    0.000    0.000    0.000 {method &#39;write&#39; of &#39;_io.StringIO&#39; objects}
-       40    0.000    0.000    0.000    0.000 threading.py:286(_is_owned)
-        1    0.000    0.000    0.000    0.000 utils.py:297(_screen_shape_windows)
-       74    0.000    0.000    0.000    0.000 parameter.py:87(keys)
+       39    0.000    0.000    0.000    0.000 threading.py:286(_is_owned)
        40    0.000    0.000    0.000    0.000 threading.py:271(__enter__)
-      159    0.000    0.000    0.000    0.000 {method &#39;append&#39; of &#39;collections.deque&#39; objects}
+       74    0.000    0.000    0.000    0.000 parameter.py:104(keys)
+       39    0.000    0.000    0.000    0.000 threading.py:280(_release_save)
+       38    0.000    0.000    0.000    0.000 utils.py:112(__format__)
        38    0.000    0.000    0.000    0.000 std.py:167(colour)
-       40    0.000    0.000    0.000    0.000 threading.py:280(_release_save)
-        1    0.000    0.000    0.084    0.084 propagate.py:482(nom_helper)
+        1    0.000    0.000    0.089    0.089 propagate.py:496(nom_helper)
        40    0.000    0.000    0.000    0.000 {built-in method builtins.abs}
-       40    0.000    0.000    0.000    0.000 {built-in method _thread.get_ident}
        73    0.000    0.000    0.000    0.000 fromnumeric.py:2831(_min_dispatcher)
-        1    0.000    0.000    0.000    0.000 result.py:534(get_memory)
-       41    0.000    0.000    0.000    0.000 {method &#39;release&#39; of &#39;_thread.RLock&#39; objects}
-       38    0.000    0.000    0.000    0.000 std.py:163(colour)
-        2    0.000    0.000    0.001    0.000 std.py:1265(close)
-        1    0.000    0.000    0.000    0.000 std.py:663(__new__)
-        1    0.000    0.000    0.000    0.000 std.py:686(_decr_instances)
+       40    0.000    0.000    0.000    0.000 {built-in method _thread.get_ident}
+        2    0.000    0.000    0.001    0.001 std.py:1265(close)
+        1    0.000    0.000    0.000    0.000 result.py:550(get_memory)
         1    0.000    0.000    0.001    0.001 std.py:438(status_printer)
-        1    0.000    0.000    0.000    0.000 propagate.py:687(process_nominal)
+        1    0.000    0.000    0.000    0.000 std.py:686(_decr_instances)
+       38    0.000    0.000    0.000    0.000 std.py:163(colour)
+        1    0.000    0.000    0.000    0.000 std.py:663(__new__)
+       41    0.000    0.000    0.000    0.000 {method &#39;release&#39; of &#39;_thread.RLock&#39; objects}
         3    0.000    0.000    0.000    0.000 _weakrefset.py:63(__iter__)
+        1    0.000    0.000    0.000    0.000 propagate.py:701(process_nominal)
        40    0.000    0.000    0.000    0.000 {method &#39;__enter__&#39; of &#39;_thread.lock&#39; objects}
        40    0.000    0.000    0.000    0.000 {method &#39;__exit__&#39; of &#39;_thread.lock&#39; objects}
-        1    0.000    0.000    0.000    0.000 std.py:679(_get_free_pos)
-       40    0.000    0.000    0.000    0.000 {method &#39;release&#39; of &#39;_thread.lock&#39; objects}
+        1    0.000    0.000    0.000    0.000 propagate.py:168(&lt;dictcomp&gt;)
         2    0.000    0.000    0.000    0.000 _weakrefset.py:53(_commit_removals)
+       39    0.000    0.000    0.000    0.000 {method &#39;release&#39; of &#39;_thread.lock&#39; objects}
+        1    0.000    0.000    0.000    0.000 std.py:679(_get_free_pos)
         2    0.000    0.000    0.000    0.000 std.py:1286(fp_write)
-        2    0.000    0.000    0.000    0.000 _weakrefset.py:27(__exit__)
-        1    0.000    0.000    0.000    0.000 propagate.py:154(&lt;dictcomp&gt;)
         1    0.000    0.000    0.000    0.000 utils.py:213(__init__)
-        1    0.000    0.000    0.000    0.000 functools.py:393(__get__)
-        4    0.000    0.000    0.000    0.000 std.py:113(__exit__)
+        2    0.000    0.000    0.000    0.000 _weakrefset.py:27(__exit__)
+        1    0.000    0.000    0.000    0.000 propagate.py:166(pack_run_kwargs)
         4    0.000    0.000    0.000    0.000 std.py:110(__enter__)
-        1    0.000    0.000    0.000    0.000 propagate.py:152(pack_run_kwargs)
         3    0.000    0.000    0.000    0.000 {method &#39;remove&#39; of &#39;set&#39; objects}
+        1    0.000    0.000    0.000    0.000 functools.py:393(__get__)
         1    0.000    0.000    0.000    0.000 {built-in method fromtimestamp}
+        4    0.000    0.000    0.000    0.000 std.py:113(__exit__)
         1    0.000    0.000    0.000    0.000 _weakrefset.py:85(add)
-        5    0.000    0.000    0.000    0.000 propagate.py:187(&lt;genexpr&gt;)
-        2    0.000    0.000    0.000    0.000 utils.py:187(disable_on_exception)
-        1    0.000    0.000    0.000    0.000 sample.py:793(scenarios)
-        1    0.000    0.000    0.000    0.000 scenario.py:121(__init__)
-        1    0.000    0.000    0.000    0.000 utils.py:266(_supports_unicode)
-        2    0.000    0.000    0.000    0.000 _weakrefset.py:21(__enter__)
+        1    0.000    0.000    0.000    0.000 sample.py:804(times)
         1    0.000    0.000    0.000    0.000 _weakrefset.py:110(remove)
-        1    0.000    0.000    0.000    0.000 &lt;frozen importlib._bootstrap&gt;:1207(_handle_fromlist)
-        1    0.000    0.000    0.000    0.000 sample.py:789(times)
-        4    0.000    0.000    0.000    0.000 utils.py:222(__eq__)
-        1    0.000    0.000    0.000    0.000 _monitor.py:94(report)
-        2    0.000    0.000    0.000    0.000 _weakrefset.py:17(__init__)
-        2    0.000    0.000    0.000    0.000 std.py:1157(__hash__)
+        2    0.000    0.000    0.000    0.000 _weakrefset.py:21(__enter__)
+        5    0.000    0.000    0.000    0.000 propagate.py:201(&lt;genexpr&gt;)
+        2    0.000    0.000    0.000    0.000 utils.py:187(disable_on_exception)
+        1    0.000    0.000    0.000    0.000 utils.py:266(_supports_unicode)
+        1    0.000    0.000    0.000    0.000 scenario.py:137(__init__)
         1    0.000    0.000    0.000    0.000 utils.py:125(__eq__)
-        3    0.000    0.000    0.000    0.000 std.py:226(__init__)
+        1    0.000    0.000    0.000    0.000 &lt;frozen importlib._bootstrap&gt;:1207(_handle_fromlist)
+        1    0.000    0.000    0.000    0.000 sample.py:808(scenarios)
+        4    0.000    0.000    0.000    0.000 utils.py:222(__eq__)
         3    0.000    0.000    0.000    0.000 utils.py:152(wrapper_setattr)
-        3    0.000    0.000    0.000    0.000 {method &#39;add&#39; of &#39;set&#39; objects}
-        1    0.000    0.000    0.000    0.000 {method &#39;encode&#39; of &#39;str&#39; objects}
-        1    0.000    0.000    0.000    0.000 propagate.py:185(unpack_mult_kwargs)
-        1    0.000    0.000    0.000    0.000 utils.py:252(_is_utf)
-        1    0.000    0.000    0.000    0.000 utils.py:156(__init__)
-        1    0.000    0.000    0.000    0.000 std.py:682(&lt;setcomp&gt;)
-        1    0.000    0.000    0.000    0.000 std.py:1147(__del__)
+        3    0.000    0.000    0.000    0.000 std.py:226(__init__)
         2    0.000    0.000    0.000    0.000 std.py:1153(_comparable)
-        1    0.000    0.000    0.000    0.000 propagate.py:794(close_pool)
-        1    0.000    0.000    0.000    0.000 propagate.py:858(check_overwrite)
+        2    0.000    0.000    0.000    0.000 _weakrefset.py:17(__init__)
+        1    0.000    0.000    0.000    0.000 {method &#39;encode&#39; of &#39;str&#39; objects}
+        1    0.000    0.000    0.000    0.000 _monitor.py:94(report)
+        3    0.000    0.000    0.000    0.000 {method &#39;add&#39; of &#39;set&#39; objects}
+        1    0.000    0.000    0.000    0.000 utils.py:252(_is_utf)
+        1    0.000    0.000    0.000    0.000 std.py:682(&lt;setcomp&gt;)
+        1    0.000    0.000    0.000    0.000 propagate.py:872(check_overwrite)
         2    0.000    0.000    0.000    0.000 {method &#39;pop&#39; of &#39;list&#39; objects}
-        1    0.000    0.000    0.000    0.000 {method &#39;difference&#39; of &#39;set&#39; objects}
+        1    0.000    0.000    0.000    0.000 propagate.py:199(unpack_mult_kwargs)
+        1    0.000    0.000    0.000    0.000 utils.py:156(__init__)
+        2    0.000    0.000    0.000    0.000 std.py:1157(__hash__)
+        1    0.000    0.000    0.000    0.000 std.py:1147(__del__)
+        1    0.000    0.000    0.000    0.000 propagate.py:808(close_pool)
         1    0.000    0.000    0.000    0.000 utils.py:282(_screen_shape_wrapper)
+        2    0.000    0.000    0.000    0.000 {built-in method _weakref.proxy}
         1    0.000    0.000    0.000    0.000 utils.py:139(__getattr__)
         1    0.000    0.000    0.000    0.000 std.py:760(get_lock)
-        2    0.000    0.000    0.000    0.000 {built-in method _weakref.proxy}
-        1    0.000    0.000    0.000    0.000 {built-in method __new__ of type object at 0x00007FF8FD8AC4C0}
-        1    0.000    0.000    0.000    0.000 scenario.py:123(&lt;dictcomp&gt;)
-        1    0.000    0.000    0.000    0.000 std.py:1301(&lt;lambda&gt;)
+        1    0.000    0.000    0.000    0.000 {method &#39;difference&#39; of &#39;set&#39; objects}
+        1    0.000    0.000    0.000    0.000 {built-in method __new__ of type object at 0x00007FFAEE30C4C0}
         1    0.000    0.000    0.000    0.000 {method &#39;disable&#39; of &#39;_lsprof.Profiler&#39; objects}
         1    0.000    0.000    0.000    0.000 {built-in method sys.audit}
+        1    0.000    0.000    0.000    0.000 std.py:1301(&lt;lambda&gt;)
+        1    0.000    0.000    0.000    0.000 scenario.py:139(&lt;dictcomp&gt;)
 
-
-</pre></div></div>
-</div>
-<div class="nboutput nblast docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area stderr docutils container">
-<div class="highlight"><pre>
 
 </pre></div></div>
 </div>
@@ -2172,7 +2161,7 @@ SCENARIOS COMPLETE: 100%|██████████| 72/72 [00:05&lt;00:00, 
 </div>
 <div class="output_area stderr docutils container">
 <div class="highlight"><pre>
-SCENARIOS COMPLETE: 100%|██████████| 72/72 [00:05&lt;00:00, 12.32it/s]
+SCENARIOS COMPLETE: 100%|██████████| 72/72 [00:05&lt;00:00, 12.27it/s]
 </pre></div></div>
 </div>
 <div class="nboutput docutils container">
@@ -2180,436 +2169,436 @@ SCENARIOS COMPLETE: 100%|██████████| 72/72 [00:05&lt;00:00, 
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-         9995971 function calls (9704535 primitive calls) in 5.937 seconds
+         9994012 function calls (9702636 primitive calls) in 5.956 seconds
 
    Ordered by: cumulative time
 
    ncalls  tottime  percall  cumtime  percall filename:lineno(function)
-        1    0.000    0.000    5.937    5.937 {built-in method builtins.exec}
-        1    0.000    0.000    5.937    5.937 &lt;string&gt;:1(&lt;module&gt;)
-        1    0.000    0.000    5.936    5.936 propagate.py:569(fault_sample)
-        1    0.002    0.002    5.846    5.846 propagate.py:758(scenlist_helper)
-       73    0.017    0.000    5.528    0.076 propagate.py:1030(prop_one_scen)
-       72    0.000    0.000    5.452    0.076 propagate.py:807(exec_scen)
-     4088    0.015    0.000    5.265    0.001 function.py:736(propagate)
-     4088    0.201    0.000    5.220    0.001 function.py:773(prop_static)
-280182/148498    0.252    0.000    4.335    0.000 base.py:605(return_mutables)
-   280182    0.315    0.000    3.320    0.000 base.py:600(find_mutables)
-   280182    1.008    0.000    2.572    0.000 base.py:466(get_roles_as_dict)
-280182/148498    0.361    0.000    2.190    0.000 base.py:616(&lt;listcomp&gt;)
-   363628    0.365    0.000    1.082    0.000 base.py:438(get_roles)
-    41131    0.116    0.000    0.640    0.000 function.py:145(__call__)
-   363628    0.498    0.000    0.581    0.000 base.py:441(&lt;listcomp&gt;)
-   280182    0.253    0.000    0.414    0.000 base.py:602(&lt;listcomp&gt;)
-       74    0.000    0.000    0.365    0.005 base.py:281(new)
-       74    0.000    0.000    0.336    0.005 function.py:495(__init__)
-       74    0.001    0.000    0.336    0.005 base.py:68(__init__)
-       74    0.001    0.000    0.289    0.004 ex_pump.py:455(init_architecture)
-      666    0.004    0.000    0.283    0.000 base.py:111(add_flex_role_obj)
-      666    0.002    0.000    0.253    0.000 base.py:879(init_obj)
-      370    0.001    0.000    0.239    0.001 function.py:523(add_fxn)
-      370    0.001    0.000    0.237    0.001 base.py:199(add_sim)
-   643810    0.236    0.000    0.236    0.000 base.py:429(get_default_roletypes)
-      370    0.001    0.000    0.224    0.001 function.py:61(__init__)
-      370    0.004    0.000    0.223    0.001 base.py:376(__init__)
-     4088    0.007    0.000    0.222    0.000 base.py:209(log_hist)
-     4088    0.071    0.000    0.213    0.000 history.py:257(log)
-   280182    0.170    0.000    0.209    0.000 base.py:484(&lt;dictcomp&gt;)
-  814/740    0.003    0.000    0.209    0.000 base.py:135(__init__)
-1184/1110    0.002    0.000    0.187    0.000 base.py:213(init_roletypes)
-      444    0.002    0.000    0.187    0.000 base.py:178(__init__)
-     1480    0.014    0.000    0.184    0.000 base.py:244(init_roles)
-     8261    0.036    0.000    0.175    0.000 ex_pump.py:407(static_behavior)
-   527022    0.119    0.000    0.162    0.000 inspect.py:300(ismethod)
-    82118    0.122    0.000    0.146    0.000 time.py:92(return_mutables)
-  1147948    0.136    0.000    0.136    0.000 {built-in method builtins.getattr}
-   280182    0.125    0.000    0.125    0.000 base.py:477(&lt;listcomp&gt;)
-   280182    0.124    0.000    0.124    0.000 base.py:471(&lt;listcomp&gt;)
-    41131    0.027    0.000    0.117    0.000 function.py:123(prop_arch_behaviors)
-    41131    0.026    0.000    0.116    0.000 function.py:138(prop_arch_faults_up)
-     8261    0.023    0.000    0.111    0.000 base.py:212(assign)
-    82118    0.046    0.000    0.111    0.000 mode.py:268(return_mutables)
-   280182    0.107    0.000    0.107    0.000 base.py:445(get_flex_role_objs)
-     1850    0.002    0.000    0.105    0.000 base.py:233(find_roletype_initiators)
-40880/16352    0.075    0.000    0.103    0.000 base.py:21(get_var)
-   728277    0.095    0.000    0.095    0.000 {built-in method builtins.hasattr}
-   231102    0.062    0.000    0.088    0.000 base.py:391(return_mutables)
-        1    0.000    0.000    0.086    0.086 propagate.py:482(nom_helper)
-   744194    0.067    0.000    0.077    0.000 {built-in method builtins.isinstance}
-      666    0.007    0.000    0.071    0.000 parameter.py:44(__init__)
-     1850    0.053    0.000    0.069    0.000 base.py:234(&lt;listcomp&gt;)
-    85596    0.051    0.000    0.067    0.000 copy.py:66(copy)
-      518    0.002    0.000    0.065    0.000 base.py:62(__init__)
-    63234    0.044    0.000    0.060    0.000 mode.py:442(has_fault)
-    16522    0.026    0.000    0.059    0.000 base.py:249(set_field)
-      296    0.000    0.000    0.050    0.000 base.py:159(add_flow)
-     2664    0.049    0.000    0.049    0.000 {built-in method builtins.dir}
-      814    0.001    0.000    0.044    0.000 base.py:363(init_indicators)
-      666    0.002    0.000    0.044    0.000 parameter.py:162(check_pickle)
-      814    0.001    0.000    0.043    0.000 inspect.py:3261(signature)
+        1    0.000    0.000    5.956    5.956 {built-in method builtins.exec}
+        1    0.000    0.000    5.956    5.956 &lt;string&gt;:1(&lt;module&gt;)
+        1    0.000    0.000    5.956    5.956 propagate.py:583(fault_sample)
+        1    0.001    0.001    5.864    5.864 propagate.py:772(scenlist_helper)
+       73    0.017    0.000    5.553    0.076 propagate.py:1044(prop_one_scen)
+       72    0.000    0.000    5.476    0.076 propagate.py:821(exec_scen)
+     4088    0.014    0.000    5.294    0.001 function.py:747(propagate)
+     4088    0.201    0.000    5.250    0.001 function.py:784(prop_static)
+280116/148462    0.257    0.000    4.367    0.000 base.py:621(return_mutables)
+   280116    0.323    0.000    3.359    0.000 base.py:616(find_mutables)
+   280116    1.022    0.000    2.591    0.000 base.py:482(get_roles_as_dict)
+280116/148462    0.360    0.000    2.198    0.000 base.py:632(&lt;listcomp&gt;)
+   363550    0.369    0.000    1.087    0.000 base.py:454(get_roles)
+    41125    0.114    0.000    0.639    0.000 function.py:160(__call__)
+   363550    0.498    0.000    0.579    0.000 base.py:457(&lt;listcomp&gt;)
+   280116    0.258    0.000    0.425    0.000 base.py:618(&lt;listcomp&gt;)
+       74    0.000    0.000    0.360    0.005 base.py:296(new)
+       74    0.000    0.000    0.332    0.004 function.py:506(__init__)
+       74    0.001    0.000    0.332    0.004 base.py:84(__init__)
+       74    0.001    0.000    0.285    0.004 ex_pump.py:470(init_architecture)
+      666    0.005    0.000    0.280    0.000 base.py:127(add_flex_role_obj)
+      666    0.001    0.000    0.249    0.000 base.py:895(init_obj)
+   643666    0.237    0.000    0.237    0.000 base.py:445(get_default_roletypes)
+      370    0.001    0.000    0.235    0.001 function.py:534(add_fxn)
+      370    0.001    0.000    0.233    0.001 base.py:215(add_sim)
+      370    0.001    0.000    0.220    0.001 function.py:76(__init__)
+     4088    0.006    0.000    0.220    0.000 base.py:224(log_hist)
+      370    0.004    0.000    0.219    0.001 base.py:391(__init__)
+     4088    0.069    0.000    0.211    0.000 history.py:274(log)
+   280116    0.168    0.000    0.210    0.000 base.py:500(&lt;dictcomp&gt;)
+  814/740    0.003    0.000    0.207    0.000 base.py:151(__init__)
+1184/1110    0.002    0.000    0.184    0.000 base.py:229(init_roletypes)
+      444    0.002    0.000    0.184    0.000 base.py:193(__init__)
+     1480    0.013    0.000    0.182    0.000 base.py:260(init_roles)
+     8258    0.037    0.000    0.174    0.000 ex_pump.py:422(static_behavior)
+   526902    0.123    0.000    0.167    0.000 inspect.py:300(ismethod)
+    82106    0.121    0.000    0.146    0.000 time.py:110(return_mutables)
+  1147714    0.135    0.000    0.135    0.000 {built-in method builtins.getattr}
+   280116    0.125    0.000    0.125    0.000 base.py:493(&lt;listcomp&gt;)
+   280116    0.124    0.000    0.124    0.000 base.py:487(&lt;listcomp&gt;)
+    41125    0.027    0.000    0.119    0.000 function.py:138(prop_arch_behaviors)
+    41125    0.025    0.000    0.116    0.000 function.py:153(prop_arch_faults_up)
+    82106    0.046    0.000    0.111    0.000 mode.py:284(return_mutables)
+   280116    0.111    0.000    0.111    0.000 base.py:461(get_flex_role_objs)
+     8258    0.023    0.000    0.111    0.000 base.py:230(assign)
+     1850    0.002    0.000    0.104    0.000 base.py:249(find_roletype_initiators)
+40880/16352    0.075    0.000    0.103    0.000 base.py:36(get_var)
+   728139    0.093    0.000    0.093    0.000 {built-in method builtins.hasattr}
+        1    0.000    0.000    0.087    0.087 propagate.py:496(nom_helper)
+   744062    0.069    0.000    0.080    0.000 {built-in method builtins.isinstance}
+   231036    0.055    0.000    0.079    0.000 base.py:409(return_mutables)
+      666    0.007    0.000    0.072    0.000 parameter.py:61(__init__)
+     1850    0.053    0.000    0.069    0.000 base.py:250(&lt;listcomp&gt;)
+    85584    0.050    0.000    0.067    0.000 copy.py:66(copy)
+      518    0.002    0.000    0.065    0.000 base.py:77(__init__)
+    63225    0.045    0.000    0.060    0.000 mode.py:458(has_fault)
+    16516    0.025    0.000    0.060    0.000 base.py:267(set_field)
+      296    0.000    0.000    0.050    0.000 base.py:175(add_flow)
+     2664    0.048    0.000    0.048    0.000 {built-in method builtins.dir}
+      814    0.001    0.000    0.044    0.000 base.py:379(init_indicators)
+      666    0.001    0.000    0.044    0.000 parameter.py:179(check_pickle)
+      814    0.001    0.000    0.042    0.000 inspect.py:3261(signature)
      8398    0.006    0.000    0.042    0.000 __init__.py:65(__init__)
       814    0.001    0.000    0.042    0.000 inspect.py:3007(from_callable)
  1628/814    0.006    0.000    0.041    0.000 inspect.py:2435(_signature_from_callable)
      8324    0.014    0.000    0.036    0.000 &lt;frozen _collections_abc&gt;:717(__ior__)
-       73    0.000    0.000    0.035    0.000 std.py:1160(__iter__)
-       38    0.000    0.000    0.034    0.001 std.py:1464(display)
-       37    0.000    0.000    0.034    0.001 std.py:1325(refresh)
-       36    0.000    0.000    0.034    0.001 std.py:1198(update)
-17782/16746    0.025    0.000    0.033    0.000 copy.py:128(deepcopy)
-     8258    0.014    0.000    0.032    0.000 ex_pump.py:222(static_behavior)
+       73    0.000    0.000    0.034    0.000 std.py:1160(__iter__)
+17776/16740    0.024    0.000    0.033    0.000 copy.py:128(deepcopy)
+     8255    0.015    0.000    0.033    0.000 ex_pump.py:237(static_behavior)
+       38    0.000    0.000    0.032    0.001 std.py:1464(display)
+       37    0.000    0.000    0.032    0.001 std.py:1325(refresh)
+       36    0.000    0.000    0.032    0.001 std.py:1198(update)
      4088    0.003    0.000    0.032    0.000 __init__.py:130(copy)
-       38    0.000    0.000    0.031    0.001 std.py:457(print_status)
-       38    0.000    0.000    0.029    0.001 std.py:451(fp_write)
+       38    0.000    0.000    0.029    0.001 std.py:457(print_status)
        78    0.000    0.000    0.029    0.000 utils.py:194(inner)
-       74    0.001    0.000    0.028    0.000 base.py:247(new_params)
-       40    0.000    0.000    0.028    0.001 iostream.py:561(flush)
-     8261    0.017    0.000    0.028    0.000 base.py:151(get_field_dict)
-     1110    0.003    0.000    0.027    0.000 base.py:560(create_hist)
-      814    0.020    0.000    0.027    0.000 base.py:365(&lt;listcomp&gt;)
-       40    0.000    0.000    0.027    0.001 threading.py:611(wait)
-   231102    0.027    0.000    0.027    0.000 {built-in method recordclass._dataobject.astuple}
-       40    0.000    0.000    0.026    0.001 threading.py:295(wait)
-   363492    0.026    0.000    0.026    0.000 {method &#39;values&#39; of &#39;dict&#39; objects}
-      319    0.026    0.000    0.026    0.000 {method &#39;acquire&#39; of &#39;_thread.lock&#39; objects}
-   332316    0.026    0.000    0.026    0.000 {method &#39;startswith&#39; of &#39;str&#39; objects}
+       38    0.000    0.000    0.028    0.001 std.py:451(fp_write)
+       74    0.001    0.000    0.028    0.000 base.py:262(new_params)
+     1110    0.003    0.000    0.027    0.000 base.py:576(create_hist)
+     8258    0.017    0.000    0.027    0.000 base.py:169(get_field_dict)
+      814    0.020    0.000    0.027    0.000 base.py:381(&lt;listcomp&gt;)
+       40    0.000    0.000    0.027    0.001 iostream.py:561(flush)
+   363414    0.027    0.000    0.027    0.000 {method &#39;values&#39; of &#39;dict&#39; objects}
+       40    0.000    0.000    0.025    0.001 threading.py:611(wait)
+   332316    0.025    0.000    0.025    0.000 {method &#39;startswith&#39; of &#39;str&#39; objects}
       814    0.009    0.000    0.025    0.000 inspect.py:2331(_signature_from_function)
-     8185    0.010    0.000    0.024    0.000 ex_pump.py:254(static_behavior)
-      148    0.001    0.000    0.023    0.000 parameter.py:158(copy_with_vals)
-      370    0.001    0.000    0.023    0.000 base.py:411(create_arch_kwargs)
-     4088    0.009    0.000    0.022    0.000 __init__.py:353(union)
-    98640    0.019    0.000    0.019    0.000 time.py:93(&lt;genexpr&gt;)
+       40    0.000    0.000    0.025    0.001 threading.py:295(wait)
+      319    0.025    0.000    0.025    0.000 {method &#39;acquire&#39; of &#39;_thread.lock&#39; objects}
+     8185    0.009    0.000    0.024    0.000 ex_pump.py:269(static_behavior)
+   231036    0.023    0.000    0.023    0.000 {built-in method recordclass._dataobject.astuple}
+      148    0.001    0.000    0.023    0.000 parameter.py:175(copy_with_vals)
+     4088    0.009    0.000    0.023    0.000 __init__.py:353(union)
+      370    0.001    0.000    0.022    0.000 base.py:426(create_arch_kwargs)
+    98622    0.018    0.000    0.018    0.000 time.py:111(&lt;genexpr&gt;)
+1776/1187    0.006    0.000    0.018    0.000 result.py:492(flatten)
     21252    0.015    0.000    0.018    0.000 __init__.py:180(add)
-1776/1187    0.006    0.000    0.018    0.000 result.py:476(flatten)
-     8170    0.009    0.000    0.017    0.000 ex_pump.py:301(static_behavior)
-      296    0.000    0.000    0.016    0.000 base.py:75(create_hist)
-       73    0.001    0.000    0.016    0.000 propagate.py:1130(get_result)
-      444    0.001    0.000    0.015    0.000 base.py:195(init_hist)
-       73    0.002    0.000    0.014    0.000 ex_pump.py:506(find_classification)
-     8185    0.005    0.000    0.013    0.000 ex_pump.py:280(static_behavior)
-       74    0.001    0.000    0.013    0.000 function.py:577(build)
-      370    0.002    0.000    0.012    0.000 mode.py:202(__init__)
-   139380    0.012    0.000    0.012    0.000 {method &#39;get&#39; of &#39;dict&#39; objects}
-      518    0.004    0.000    0.012    0.000 base.py:73(find_any_phase_overlap)
-     1329    0.002    0.000    0.011    0.000 base.py:87(get_timerange)
-     1183    0.001    0.000    0.011    0.000 base.py:102(get_histrange)
-    22580    0.006    0.000    0.010    0.000 &lt;frozen abc&gt;:117(__instancecheck__)
-     8261    0.007    0.000    0.010    0.000 ex_pump.py:374(set_faults)
-    91119    0.010    0.000    0.010    0.000 {method &#39;copy&#39; of &#39;set&#39; objects}
+     8170    0.009    0.000    0.017    0.000 ex_pump.py:316(static_behavior)
+      296    0.000    0.000    0.016    0.000 base.py:92(create_hist)
+       73    0.001    0.000    0.015    0.000 propagate.py:1144(get_result)
+      444    0.001    0.000    0.015    0.000 base.py:210(init_hist)
+     8185    0.005    0.000    0.013    0.000 ex_pump.py:295(static_behavior)
+       73    0.002    0.000    0.013    0.000 ex_pump.py:521(find_classification)
+       74    0.001    0.000    0.012    0.000 function.py:588(build)
+      370    0.002    0.000    0.012    0.000 mode.py:218(__init__)
+   139356    0.012    0.000    0.012    0.000 {method &#39;get&#39; of &#39;dict&#39; objects}
+     1329    0.002    0.000    0.011    0.000 base.py:102(get_timerange)
+     1183    0.001    0.000    0.011    0.000 base.py:117(get_histrange)
+    22580    0.006    0.000    0.011    0.000 &lt;frozen abc&gt;:117(__instancecheck__)
+    91104    0.010    0.000    0.010    0.000 {method &#39;copy&#39; of &#39;set&#39; objects}
+      518    0.004    0.000    0.010    0.000 base.py:88(find_any_phase_overlap)
      3330    0.006    0.000    0.009    0.000 inspect.py:2669(__init__)
+     8258    0.006    0.000    0.009    0.000 ex_pump.py:389(set_faults)
+    63225    0.009    0.000    0.009    0.000 {method &#39;intersection&#39; of &#39;set&#39; objects}
      1628    0.006    0.000    0.008    0.000 inspect.py:2955(__init__)
-      444    0.001    0.000    0.008    0.000 time.py:74(__init__)
-      370    0.004    0.000    0.008    0.000 mode.py:271(init_faultmodes)
-    63234    0.008    0.000    0.008    0.000 {method &#39;intersection&#39; of &#39;set&#39; objects}
-     8261    0.007    0.000    0.008    0.000 base.py:199(&lt;dictcomp&gt;)
-    20440    0.008    0.000    0.008    0.000 history.py:36(is_known_mutable)
-    63531    0.008    0.000    0.008    0.000 {built-in method builtins.any}
+      370    0.004    0.000    0.008    0.000 mode.py:287(init_faultmodes)
+      444    0.001    0.000    0.008    0.000 time.py:92(__init__)
       814    0.002    0.000    0.008    0.000 inspect.py:2037(_signature_bound_method)
+     8258    0.006    0.000    0.008    0.000 base.py:217(&lt;dictcomp&gt;)
+112309/111578    0.007    0.000    0.007    0.000 {built-in method builtins.len}
       666    0.004    0.000    0.007    0.000 inspect.py:3215(__str__)
-112312/111581    0.007    0.000    0.007    0.000 {built-in method builtins.len}
-      584    0.001    0.000    0.007    0.000 result.py:311(__getattr__)
+    63522    0.007    0.000    0.007    0.000 {built-in method builtins.any}
+      962    0.003    0.000    0.007    0.000 base.py:98(get_true_fields)
+      584    0.001    0.000    0.007    0.000 result.py:327(__getattr__)
+      666    0.005    0.000    0.007    0.000 base.py:125(set_arg_type)
      1329    0.001    0.000    0.007    0.000 fromnumeric.py:3269(round)
-      962    0.003    0.000    0.007    0.000 base.py:80(get_true_fields)
-      666    0.005    0.000    0.007    0.000 base.py:107(set_arg_type)
-      666    0.005    0.000    0.006    0.000 parameter.py:118(check_immutable)
-     1770    0.001    0.000    0.006    0.000 common.py:73(is_numeric)
-     1036    0.001    0.000    0.006    0.000 fromnumeric.py:865(sort)
+    20440    0.007    0.000    0.007    0.000 history.py:53(is_known_mutable)
+      666    0.005    0.000    0.007    0.000 parameter.py:135(check_immutable)
+     1770    0.002    0.000    0.006    0.000 common.py:87(is_numeric)
      1329    0.001    0.000    0.006    0.000 fromnumeric.py:53(_wrapfunc)
     16352    0.004    0.000    0.006    0.000 __init__.py:304(__iter__)
-     4088    0.005    0.000    0.005    0.000 function.py:682(set_vars)
-      438    0.003    0.000    0.005    0.000 result.py:352(all_with)
-       74    0.000    0.000    0.005    0.000 base.py:229(build)
-       74    0.001    0.000    0.005    0.000 function.py:589(construct_graph)
-     1329    0.005    0.000    0.005    0.000 {method &#39;round&#39; of &#39;numpy.ndarray&#39; objects}
+      438    0.003    0.000    0.005    0.000 result.py:368(all_with)
       814    0.001    0.000    0.005    0.000 inspect.py:3023(replace)
-     4366    0.003    0.000    0.005    0.000 parameter.py:90(check_lim)
+     1036    0.001    0.000    0.005    0.000 fromnumeric.py:865(sort)
+     4088    0.004    0.000    0.005    0.000 function.py:693(set_vars)
+       74    0.001    0.000    0.005    0.000 function.py:600(construct_graph)
+     4366    0.003    0.000    0.005    0.000 parameter.py:107(check_lim)
+     1329    0.005    0.000    0.005    0.000 {method &#39;round&#39; of &#39;numpy.ndarray&#39; objects}
+       74    0.000    0.000    0.005    0.000 base.py:245(build)
     25112    0.004    0.000    0.004    0.000 {method &#39;split&#39; of &#39;str&#39; objects}
-       73    0.001    0.000    0.004    0.000 function.py:601(calc_repaircost)
      3251    0.002    0.000    0.004    0.000 __init__.py:1111(__init__)
     22580    0.004    0.000    0.004    0.000 {built-in method _abc._abc_instancecheck}
+      962    0.001    0.000    0.004    0.000 base.py:105(&lt;listcomp&gt;)
+       74    0.000    0.000    0.004    0.000 timer.py:61(__init__)
+    21482    0.004    0.000    0.004    0.000 {method &#39;update&#39; of &#39;set&#39; objects}
   372/150    0.001    0.000    0.004    0.000 copy.py:227(_deepcopy_dict)
-      962    0.001    0.000    0.004    0.000 base.py:87(&lt;listcomp&gt;)
-       74    0.000    0.000    0.004    0.000 timer.py:44(__init__)
-    21485    0.004    0.000    0.004    0.000 {method &#39;update&#39; of &#39;set&#39; objects}
+       73    0.000    0.000    0.004    0.000 function.py:612(calc_repaircost)
      1779    0.002    0.000    0.004    0.000 numerictypes.py:357(issubdtype)
     33370    0.004    0.000    0.004    0.000 {method &#39;join&#39; of &#39;str&#39; objects}
     12264    0.003    0.000    0.004    0.000 __init__.py:74(__len__)
-     8258    0.003    0.000    0.003    0.000 ex_pump.py:205(set_faults)
-    15117    0.003    0.000    0.003    0.000 {built-in method builtins.min}
-     6377    0.003    0.000    0.003    0.000 result.py:302(items)
-      444    0.003    0.000    0.003    0.000 time.py:99(set_timestep)
-      666    0.003    0.000    0.003    0.000 parameter.py:139(check_type)
-     8261    0.003    0.000    0.003    0.000 ex_pump.py:398(indicate_over_pressure)
-     1036    0.003    0.000    0.003    0.000 {method &#39;sort&#39; of &#39;numpy.ndarray&#39; objects}
+     8255    0.003    0.000    0.003    0.000 ex_pump.py:220(set_faults)
+     6377    0.003    0.000    0.003    0.000 result.py:318(items)
+    15111    0.003    0.000    0.003    0.000 {built-in method builtins.min}
+      666    0.003    0.000    0.003    0.000 parameter.py:156(check_type)
+      444    0.003    0.000    0.003    0.000 time.py:117(set_timestep)
+     8258    0.003    0.000    0.003    0.000 ex_pump.py:413(indicate_over_pressure)
+    20586    0.003    0.000    0.003    0.000 {built-in method builtins.setattr}
        38    0.000    0.000    0.003    0.000 std.py:1150(__str__)
      3330    0.002    0.000    0.003    0.000 enum.py:688(__call__)
-    20592    0.003    0.000    0.003    0.000 {built-in method builtins.setattr}
-     2072    0.002    0.000    0.002    0.000 inspect.py:2756(__str__)
-    28504    0.002    0.000    0.002    0.000 {method &#39;append&#39; of &#39;list&#39; objects}
-      222    0.001    0.000    0.002    0.000 base.py:397(init_indicator_hist)
-       38    0.001    0.000    0.002    0.000 std.py:464(format_meter)
-     2587    0.002    0.000    0.002    0.000 common.py:27(get_sub_include)
        40    0.000    0.000    0.002    0.000 iostream.py:624(write)
-       73    0.000    0.000    0.002    0.000 fromnumeric.py:2836(min)
-        1    0.000    0.000    0.002    0.002 std.py:952(__init__)
+     2072    0.002    0.000    0.002    0.000 inspect.py:2756(__str__)
       119    0.000    0.000    0.002    0.000 iostream.py:258(schedule)
-      148    0.000    0.000    0.002    0.000 base.py:343(create_hist)
+    28504    0.002    0.000    0.002    0.000 {method &#39;append&#39; of &#39;list&#39; objects}
+      222    0.001    0.000    0.002    0.000 base.py:413(init_indicator_hist)
+     2587    0.002    0.000    0.002    0.000 common.py:41(get_sub_include)
      4144    0.002    0.000    0.002    0.000 inspect.py:3002(&lt;genexpr&gt;)
-     4088    0.002    0.000    0.002    0.000 ex_pump.py:502(indicate_on)
-     3251    0.002    0.000    0.002    0.000 result.py:321(__setattr__)
-     4088    0.002    0.000    0.002    0.000 propagate.py:1002(check_end_condition)
      1329    0.002    0.000    0.002    0.000 {built-in method numpy.arange}
-       73    0.000    0.000    0.002    0.000 fromnumeric.py:71(_wrapreduction)
-     4088    0.002    0.000    0.002    0.000 ex_pump.py:483(indicate_finished)
-    17262    0.002    0.000    0.002    0.000 copy.py:182(_deepcopy_atomic)
-     3558    0.001    0.000    0.002    0.000 numerictypes.py:283(issubclass_)
-     4088    0.002    0.000    0.002    0.000 base.py:133(get_hist_ind)
-    19788    0.002    0.000    0.002    0.000 {built-in method builtins.id}
        40    0.000    0.000    0.002    0.000 iostream.py:546(_schedule_flush)
-    16489    0.002    0.000    0.002    0.000 {method &#39;items&#39; of &#39;dict&#39; objects}
-      370    0.001    0.000    0.002    0.000 base.py:453(check_flows)
-      296    0.001    0.000    0.002    0.000 history.py:187(init_att)
-     4599    0.002    0.000    0.002    0.000 __init__.py:1138(__contains__)
+       38    0.001    0.000    0.002    0.000 std.py:464(format_meter)
+        1    0.000    0.000    0.002    0.002 std.py:952(__init__)
+     4088    0.002    0.000    0.002    0.000 ex_pump.py:517(indicate_on)
+    17256    0.002    0.000    0.002    0.000 copy.py:182(_deepcopy_atomic)
+     3251    0.002    0.000    0.002    0.000 result.py:337(__setattr__)
+      148    0.000    0.000    0.002    0.000 base.py:361(create_hist)
+     4088    0.002    0.000    0.002    0.000 ex_pump.py:498(indicate_finished)
+       73    0.000    0.000    0.002    0.000 fromnumeric.py:2836(min)
+     3558    0.001    0.000    0.002    0.000 numerictypes.py:283(issubclass_)
+     4088    0.002    0.000    0.002    0.000 base.py:148(get_hist_ind)
+    19782    0.002    0.000    0.002    0.000 {built-in method builtins.id}
+      119    0.002    0.000    0.002    0.000 socket.py:621(send)
+     4088    0.002    0.000    0.002    0.000 propagate.py:1016(check_end_condition)
+    16486    0.002    0.000    0.002    0.000 {method &#39;items&#39; of &#39;dict&#39; objects}
+     1036    0.002    0.000    0.002    0.000 {method &#39;sort&#39; of &#39;numpy.ndarray&#39; objects}
       814    0.001    0.000    0.002    0.000 inspect.py:167(get_annotations)
-    17661    0.002    0.000    0.002    0.000 {built-in method builtins.iter}
-      867    0.001    0.000    0.002    0.000 function.py:818(&lt;listcomp&gt;)
-      184    0.001    0.000    0.002    0.000 {built-in method builtins.sum}
-      370    0.001    0.000    0.002    0.000 function.py:106(update_seed)
-     1776    0.001    0.000    0.001    0.000 result.py:141(check_include_errors)
+      370    0.001    0.000    0.002    0.000 base.py:468(check_flows)
+      296    0.001    0.000    0.002    0.000 history.py:204(init_att)
+       73    0.000    0.000    0.002    0.000 fromnumeric.py:71(_wrapreduction)
+     4599    0.002    0.000    0.002    0.000 __init__.py:1138(__contains__)
+    17658    0.002    0.000    0.002    0.000 {built-in method builtins.iter}
+      864    0.001    0.000    0.002    0.000 function.py:829(&lt;listcomp&gt;)
+      370    0.001    0.000    0.001    0.000 function.py:121(update_seed)
+      184    0.001    0.000    0.001    0.000 {built-in method builtins.sum}
+     1776    0.001    0.000    0.001    0.000 result.py:157(check_include_errors)
       814    0.001    0.000    0.001    0.000 inspect.py:735(unwrap)
-       74    0.000    0.000    0.001    0.000 function.py:628(return_faultmodes)
-      370    0.000    0.000    0.001    0.000 base.py:430(update_contained_modes)
+       74    0.000    0.000    0.001    0.000 function.py:639(return_faultmodes)
+      370    0.000    0.000    0.001    0.000 base.py:445(update_contained_modes)
+      148    0.000    0.000    0.001    0.000 state.py:345(init_hist_att)
        38    0.000    0.000    0.001    0.000 utils.py:378(disp_len)
-       73    0.001    0.000    0.001    0.000 {method &#39;reduce&#39; of &#39;numpy.ufunc&#39; objects}
-      148    0.000    0.000    0.001    0.000 state.py:328(init_hist_att)
+        2    0.000    0.000    0.001    0.001 std.py:1265(close)
        74    0.000    0.000    0.001    0.000 &lt;class &#39;networkx.utils.decorators.argmap&#39;&gt; compilation 4:1(argmap_isolates_1)
-      119    0.001    0.000    0.001    0.000 socket.py:621(send)
+      814    0.001    0.000    0.001    0.000 base.py:204(init_track)
+       73    0.001    0.000    0.001    0.000 {method &#39;reduce&#39; of &#39;numpy.ufunc&#39; objects}
        38    0.000    0.000    0.001    0.000 utils.py:374(_text_width)
-        1    0.000    0.000    0.001    0.001 std.py:438(status_printer)
-      814    0.001    0.000    0.001    0.000 base.py:188(init_track)
-     1036    0.001    0.000    0.001    0.000 {method &#39;copy&#39; of &#39;numpy.ndarray&#39; objects}
-     8261    0.001    0.000    0.001    0.000 {method &#39;clear&#39; of &#39;set&#39; objects}
-     4366    0.001    0.000    0.001    0.000 base.py:139(set_arg_as_type)
-       74    0.001    0.000    0.001    0.000 history.py:323(cut)
+     4366    0.001    0.000    0.001    0.000 base.py:154(set_arg_as_type)
+     8258    0.001    0.000    0.001    0.000 {method &#39;clear&#39; of &#39;set&#39; objects}
        74    0.001    0.000    0.001    0.000 graph.py:968(add_edges_from)
+     1036    0.001    0.000    0.001    0.000 {method &#39;copy&#39; of &#39;numpy.ndarray&#39; objects}
+        1    0.000    0.000    0.001    0.001 std.py:438(status_printer)
        74    0.000    0.000    0.001    0.000 backends.py:627(__call__)
-      148    0.000    0.000    0.001    0.000 base.py:330(init_hist_att)
-       74    0.000    0.000    0.001    0.000 function.py:585(&lt;listcomp&gt;)
-     8261    0.001    0.000    0.001    0.000 {method &#39;copy&#39; of &#39;list&#39; objects}
+      148    0.000    0.000    0.001    0.000 base.py:348(init_hist_att)
+       74    0.001    0.000    0.001    0.000 history.py:340(cut)
      3531    0.001    0.000    0.001    0.000 __init__.py:1128(__setitem__)
-      370    0.001    0.000    0.001    0.000 function.py:82(return_faultmodes)
+       74    0.000    0.000    0.001    0.000 function.py:596(&lt;listcomp&gt;)
+     2357    0.001    0.000    0.001    0.000 __init__.py:1118(__len__)
+     8258    0.001    0.000    0.001    0.000 {method &#39;copy&#39; of &#39;list&#39; objects}
+      370    0.001    0.000    0.001    0.000 function.py:97(return_faultmodes)
      1770    0.001    0.000    0.001    0.000 {built-in method numpy.array}
      8176    0.001    0.000    0.001    0.000 {method &#39;index&#39; of &#39;list&#39; objects}
-       74    0.000    0.000    0.001    0.000 isolate.py:42(isolates)
-     2357    0.001    0.000    0.001    0.000 __init__.py:1118(__len__)
      1036    0.001    0.000    0.001    0.000 {built-in method numpy.asanyarray}
      1482    0.001    0.000    0.001    0.000 {method &#39;format&#39; of &#39;str&#39; objects}
+       74    0.000    0.000    0.001    0.000 isolate.py:42(isolates)
      8288    0.001    0.000    0.001    0.000 inspect.py:2734(kind)
+       73    0.000    0.000    0.001    0.000 base.py:128(get_shift)
       148    0.001    0.000    0.001    0.000 graph.py:566(add_nodes_from)
-      146    0.000    0.000    0.001    0.000 &lt;frozen _collections_abc&gt;:941(update)
      2571    0.001    0.000    0.001    0.000 utils.py:375(&lt;genexpr&gt;)
-       73    0.000    0.000    0.001    0.000 base.py:113(get_shift)
-      518    0.000    0.000    0.001    0.000 base.py:395(asdict)
-        2    0.000    0.000    0.001    0.000 std.py:1265(close)
-      370    0.000    0.000    0.001    0.000 __init__.py:201(update)
-     1850    0.001    0.000    0.001    0.000 base.py:33(check_role)
+      146    0.000    0.000    0.001    0.000 &lt;frozen _collections_abc&gt;:941(update)
+      518    0.000    0.000    0.001    0.000 base.py:413(asdict)
      7187    0.001    0.000    0.001    0.000 {built-in method builtins.issubclass}
-      518    0.001    0.000    0.001    0.000 base.py:78(&lt;listcomp&gt;)
-       74    0.000    0.000    0.001    0.000 copy.py:259(_reconstruct)
-     1163    0.001    0.000    0.001    0.000 graph.py:1318(neighbors)
+      370    0.000    0.000    0.001    0.000 __init__.py:201(update)
+     1850    0.001    0.000    0.001    0.000 base.py:51(check_role)
+      518    0.001    0.000    0.001    0.000 base.py:93(&lt;listcomp&gt;)
      3330    0.001    0.000    0.001    0.000 enum.py:1095(__new__)
+       74    0.000    0.000    0.001    0.000 copy.py:259(_reconstruct)
+     1160    0.001    0.000    0.001    0.000 graph.py:1318(neighbors)
      5846    0.001    0.000    0.001    0.000 inspect.py:2722(name)
-       73    0.000    0.000    0.001    0.000 base.py:203(init_time_hist)
+       73    0.000    0.000    0.001    0.000 base.py:218(init_time_hist)
+       74    0.000    0.000    0.001    0.000 function.py:608(&lt;listcomp&gt;)
+      370    0.001    0.000    0.001    0.000 base.py:488(&lt;listcomp&gt;)
        74    0.000    0.000    0.001    0.000 functools.py:981(__get__)
+       74    0.000    0.000    0.001    0.000 function.py:593(&lt;listcomp&gt;)
+     1184    0.000    0.000    0.001    0.000 base.py:198(check_slots)
        74    0.000    0.000    0.001    0.000 {method &#39;__reduce_ex__&#39; of &#39;object&#39; objects}
-     1184    0.001    0.000    0.001    0.000 base.py:182(check_slots)
-       74    0.000    0.000    0.001    0.000 function.py:582(&lt;listcomp&gt;)
-       74    0.000    0.000    0.001    0.000 function.py:597(&lt;listcomp&gt;)
-      370    0.001    0.000    0.001    0.000 base.py:473(&lt;listcomp&gt;)
       518    0.001    0.000    0.001    0.000 {built-in method recordclass._dataobject.asdict}
-      518    0.001    0.000    0.001    0.000 base.py:75(&lt;dictcomp&gt;)
+      370    0.000    0.000    0.001    0.000 base.py:267(get_flows)
+      518    0.001    0.000    0.001    0.000 base.py:90(&lt;dictcomp&gt;)
+        2    0.000    0.000    0.001    0.000 std.py:1286(fp_write)
        74    0.000    0.000    0.001    0.000 isolate.py:85(&lt;genexpr&gt;)
-     4381    0.001    0.000    0.001    0.000 {method &#39;keys&#39; of &#39;dict&#39; objects}
-       74    0.000    0.000    0.001    0.000 function.py:580(&lt;listcomp&gt;)
      1628    0.000    0.000    0.001    0.000 inspect.py:378(isfunction)
-      370    0.000    0.000    0.001    0.000 base.py:251(get_flows)
-      584    0.000    0.000    0.001    0.000 result.py:122(get_dict_attr)
-     4088    0.001    0.000    0.001    0.000 {built-in method from_iterable}
-      520    0.000    0.000    0.001    0.000 copy.py:243(_keep_alive)
+     4381    0.001    0.000    0.001    0.000 {method &#39;keys&#39; of &#39;dict&#39; objects}
+       40    0.000    0.000    0.001    0.000 threading.py:562(__init__)
+     4088    0.000    0.000    0.000    0.000 {built-in method from_iterable}
       148    0.000    0.000    0.000    0.000 copy.py:264(&lt;genexpr&gt;)
-      370    0.000    0.000    0.000    0.000 base.py:391(&lt;dictcomp&gt;)
-       40    0.000    0.000    0.000    0.000 threading.py:562(__init__)
-     2326    0.000    0.000    0.000    0.000 __init__.py:165(__contains__)
-      296    0.000    0.000    0.000    0.000 function.py:586(&lt;listcomp&gt;)
+       74    0.000    0.000    0.000    0.000 function.py:591(&lt;listcomp&gt;)
+      520    0.000    0.000    0.000    0.000 copy.py:243(_keep_alive)
+      584    0.000    0.000    0.000    0.000 result.py:138(get_dict_attr)
+      370    0.000    0.000    0.000    0.000 base.py:406(&lt;dictcomp&gt;)
        74    0.000    0.000    0.000    0.000 graph.py:332(__init__)
+     2320    0.000    0.000    0.000    0.000 __init__.py:165(__contains__)
+      370    0.000    0.000    0.000    0.000 base.py:433(&lt;dictcomp&gt;)
+      296    0.000    0.000    0.000    0.000 function.py:597(&lt;listcomp&gt;)
       159    0.000    0.000    0.000    0.000 threading.py:1192(is_alive)
      3330    0.000    0.000    0.000    0.000 {method &#39;__contains__&#39; of &#39;frozenset&#39; objects}
-      370    0.000    0.000    0.000    0.000 base.py:418(&lt;dictcomp&gt;)
-      370    0.000    0.000    0.000    0.000 base.py:493(is_dynamic)
-     1776    0.000    0.000    0.000    0.000 result.py:149(check_include_error)
+     1776    0.000    0.000    0.000    0.000 result.py:165(check_include_error)
      3330    0.000    0.000    0.000    0.000 {method &#39;isidentifier&#39; of &#39;str&#39; objects}
+      370    0.000    0.000    0.000    0.000 base.py:508(is_dynamic)
       740    0.000    0.000    0.000    0.000 reportviews.py:529(__iter__)
-       41    0.000    0.000    0.000    0.000 std.py:102(acquire)
       217    0.000    0.000    0.000    0.000 std.py:231(__call__)
-      518    0.000    0.000    0.000    0.000 base.py:77(&lt;listcomp&gt;)
+      518    0.000    0.000    0.000    0.000 base.py:92(&lt;listcomp&gt;)
+       41    0.000    0.000    0.000    0.000 std.py:102(acquire)
+      370    0.000    0.000    0.000    0.000 base.py:483(&lt;listcomp&gt;)
+      444    0.000    0.000    0.000    0.000 base.py:206(&lt;dictcomp&gt;)
        74    0.000    0.000    0.000    0.000 graph.py:1484(degree)
-      370    0.000    0.000    0.000    0.000 base.py:468(&lt;listcomp&gt;)
-       38    0.000    0.000    0.000    0.000 std.py:1446(format_dict)
      1480    0.000    0.000    0.000    0.000 {method &#39;values&#39; of &#39;mappingproxy&#39; objects}
-       75    0.000    0.000    0.000    0.000 std.py:400(format_interval)
        74    0.000    0.000    0.000    0.000 copyreg.py:113(_slotnames)
-      444    0.000    0.000    0.000    0.000 base.py:191(&lt;dictcomp&gt;)
-      370    0.000    0.000    0.000    0.000 base.py:487(is_static)
-      666    0.000    0.000    0.000    0.000 inspect.py:292(isclass)
-      370    0.000    0.000    0.000    0.000 base.py:255(&lt;dictcomp&gt;)
+       75    0.000    0.000    0.000    0.000 std.py:400(format_interval)
       656    0.000    0.000    0.000    0.000 __init__.py:1121(__getitem__)
-       76    0.000    0.000    0.000    0.000 utils.py:273(_is_ascii)
-      148    0.000    0.000    0.000    0.000 base.py:244(&lt;dictcomp&gt;)
-       40    0.000    0.000    0.000    0.000 threading.py:243(__init__)
-       74    0.000    0.000    0.000    0.000 base.py:368(get_indicators)
-      511    0.000    0.000    0.000    0.000 propagate.py:106(&lt;genexpr&gt;)
-     1329    0.000    0.000    0.000    0.000 fromnumeric.py:3265(_round_dispatcher)
-       74    0.000    0.000    0.000    0.000 copy.py:201(_deepcopy_list)
-      666    0.000    0.000    0.000    0.000 base.py:237(get_full_name)
-     2533    0.000    0.000    0.000    0.000 {built-in method unicodedata.east_asian_width}
-      296    0.000    0.000    0.000    0.000 {built-in method numpy.empty}
+       38    0.000    0.000    0.000    0.000 std.py:1446(format_dict)
        80    0.000    0.000    0.000    0.000 {built-in method _thread.allocate_lock}
+      370    0.000    0.000    0.000    0.000 base.py:502(is_static)
+       76    0.000    0.000    0.000    0.000 utils.py:273(_is_ascii)
+      370    0.000    0.000    0.000    0.000 base.py:271(&lt;dictcomp&gt;)
+      666    0.000    0.000    0.000    0.000 inspect.py:292(isclass)
+      148    0.000    0.000    0.000    0.000 base.py:260(&lt;dictcomp&gt;)
+      666    0.000    0.000    0.000    0.000 base.py:253(get_full_name)
+     1329    0.000    0.000    0.000    0.000 fromnumeric.py:3265(_round_dispatcher)
+       74    0.000    0.000    0.000    0.000 base.py:384(get_indicators)
+       74    0.000    0.000    0.000    0.000 copy.py:201(_deepcopy_list)
+       40    0.000    0.000    0.000    0.000 threading.py:243(__init__)
+      511    0.000    0.000    0.000    0.000 propagate.py:120(&lt;genexpr&gt;)
+     2533    0.000    0.000    0.000    0.000 {built-in method unicodedata.east_asian_width}
      2442    0.000    0.000    0.000    0.000 {built-in method builtins.callable}
-      293    0.000    0.000    0.000    0.000 result.py:299(keys)
-     1963    0.000    0.000    0.000    0.000 {method &#39;update&#39; of &#39;dict&#39; objects}
      1628    0.000    0.000    0.000    0.000 inspect.py:3015(parameters)
-       74    0.000    0.000    0.000    0.000 reportviews.py:419(__init__)
-     1776    0.000    0.000    0.000    0.000 copy.py:107(_copy_immutable)
+      296    0.000    0.000    0.000    0.000 {built-in method numpy.empty}
+      293    0.000    0.000    0.000    0.000 result.py:315(keys)
+     1963    0.000    0.000    0.000    0.000 {method &#39;update&#39; of &#39;dict&#39; objects}
        41    0.000    0.000    0.000    0.000 std.py:106(release)
-       74    0.000    0.000    0.000    0.000 base.py:90(init_flexible_roles)
-      517    0.000    0.000    0.000    0.000 {built-in method fromkeys}
-       38    0.000    0.000    0.000    0.000 std.py:186(__format__)
-      159    0.000    0.000    0.000    0.000 threading.py:1125(_wait_for_tstate_lock)
-      148    0.000    0.000    0.000    0.000 base.py:51(get_track)
-       73    0.000    0.000    0.000    0.000 function.py:623(&lt;listcomp&gt;)
-       41    0.000    0.000    0.000    0.000 {method &#39;acquire&#39; of &#39;_multiprocessing.SemLock&#39; objects}
+     1776    0.000    0.000    0.000    0.000 copy.py:107(_copy_immutable)
+       74    0.000    0.000    0.000    0.000 base.py:106(init_flexible_roles)
+       74    0.000    0.000    0.000    0.000 reportviews.py:419(__init__)
      1036    0.000    0.000    0.000    0.000 fromnumeric.py:861(_sort_dispatcher)
-       74    0.000    0.000    0.000    0.000 propagate.py:226(save_helper)
-       74    0.000    0.000    0.000    0.000 base.py:377(&lt;dictcomp&gt;)
+      159    0.000    0.000    0.000    0.000 threading.py:1125(_wait_for_tstate_lock)
+       41    0.000    0.000    0.000    0.000 {method &#39;acquire&#39; of &#39;_multiprocessing.SemLock&#39; objects}
+      148    0.000    0.000    0.000    0.000 base.py:69(get_track)
+       74    0.000    0.000    0.000    0.000 propagate.py:240(save_helper)
+       73    0.000    0.000    0.000    0.000 function.py:634(&lt;listcomp&gt;)
+       74    0.000    0.000    0.000    0.000 base.py:393(&lt;dictcomp&gt;)
+       38    0.000    0.000    0.000    0.000 std.py:186(__format__)
+      517    0.000    0.000    0.000    0.000 {built-in method fromkeys}
       408    0.000    0.000    0.000    0.000 {built-in method builtins.max}
-      222    0.000    0.000    0.000    0.000 base.py:581(&lt;listcomp&gt;)
-      592    0.000    0.000    0.000    0.000 base.py:48(check_role)
+      222    0.000    0.000    0.000    0.000 base.py:597(&lt;listcomp&gt;)
+      144    0.000    0.000    0.000    0.000 scenario.py:48(get)
       222    0.000    0.000    0.000    0.000 misc.py:595(_clear_cache)
-      144    0.000    0.000    0.000    0.000 scenario.py:32(get)
-      119    0.000    0.000    0.000    0.000 iostream.py:137(_event_pipe)
+      592    0.000    0.000    0.000    0.000 base.py:65(check_role)
       146    0.000    0.000    0.000    0.000 __init__.py:1134(__iter__)
-       38    0.000    0.000    0.000    0.000 std.py:153(__init__)
-      370    0.000    0.000    0.000    0.000 function.py:94(&lt;listcomp&gt;)
-       73    0.000    0.000    0.000    0.000 propagate.py:104(unpack_sim_kwargs)
-       90    0.000    0.000    0.000    0.000 mode.py:482(add_fault)
      1332    0.000    0.000    0.000    0.000 {method &#39;copy&#39; of &#39;dict&#39; objects}
-      814    0.000    0.000    0.000    0.000 {built-in method sys.getrecursionlimit}
-       40    0.000    0.000    0.000    0.000 iostream.py:519(_is_master_process)
-      666    0.000    0.000    0.000    0.000 inspect.py:3019(return_annotation)
-      740    0.000    0.000    0.000    0.000 {built-in method builtins.repr}
-      198    0.000    0.000    0.000    0.000 time.py:86(__getattr__)
-       74    0.000    0.000    0.000    0.000 base.py:266(update_seed)
-       73    0.000    0.000    0.000    0.000 fromnumeric.py:72(&lt;dictcomp&gt;)
-      292    0.000    0.000    0.000    0.000 {method &#39;endswith&#39; of &#39;str&#39; objects}
-       72    0.000    0.000    0.000    0.000 mode.py:395(update_modestates)
-       37    0.000    0.000    0.000    0.000 {built-in method now}
-       40    0.000    0.000    0.000    0.000 threading.py:283(_acquire_restore)
-      370    0.000    0.000    0.000    0.000 base.py:215(update_seed)
-       40    0.000    0.000    0.000    0.000 threading.py:1453(current_thread)
        74    0.000    0.000    0.000    0.000 graph.py:59(__set__)
-       60    0.000    0.000    0.000    0.000 timer.py:66(inc)
-        1    0.000    0.000    0.000    0.000 result.py:534(get_memory)
-        2    0.000    0.000    0.000    0.000 std.py:1286(fp_write)
-       38    0.000    0.000    0.000    0.000 {method &#39;sub&#39; of &#39;re.Pattern&#39; objects}
-      370    0.000    0.000    0.000    0.000 base.py:407(init_block)
-       41    0.000    0.000    0.000    0.000 {method &#39;release&#39; of &#39;_multiprocessing.SemLock&#39; objects}
+      370    0.000    0.000    0.000    0.000 function.py:109(&lt;listcomp&gt;)
+      814    0.000    0.000    0.000    0.000 {built-in method sys.getrecursionlimit}
+       90    0.000    0.000    0.000    0.000 mode.py:498(add_fault)
+       38    0.000    0.000    0.000    0.000 std.py:153(__init__)
+      119    0.000    0.000    0.000    0.000 iostream.py:137(_event_pipe)
+      666    0.000    0.000    0.000    0.000 inspect.py:3019(return_annotation)
+       73    0.000    0.000    0.000    0.000 propagate.py:118(unpack_sim_kwargs)
+      740    0.000    0.000    0.000    0.000 {built-in method builtins.repr}
+       73    0.000    0.000    0.000    0.000 fromnumeric.py:72(&lt;dictcomp&gt;)
         1    0.000    0.000    0.000    0.000 utils.py:297(_screen_shape_windows)
-       73    0.000    0.000    0.000    0.000 propagate.py:1146(&lt;listcomp&gt;)
-      444    0.000    0.000    0.000    0.000 inspect.py:2726(default)
-      114    0.000    0.000    0.000    0.000 {method &#39;__exit__&#39; of &#39;_thread.RLock&#39; objects}
-       74    0.000    0.000    0.000    0.000 graph.py:37(__set__)
-      798    0.000    0.000    0.000    0.000 {built-in method builtins.ord}
+       37    0.000    0.000    0.000    0.000 {built-in method now}
+      292    0.000    0.000    0.000    0.000 {method &#39;endswith&#39; of &#39;str&#39; objects}
+       74    0.000    0.000    0.000    0.000 base.py:282(update_seed)
+       40    0.000    0.000    0.000    0.000 iostream.py:519(_is_master_process)
+       72    0.000    0.000    0.000    0.000 mode.py:411(update_modestates)
+      370    0.000    0.000    0.000    0.000 base.py:230(update_seed)
+       40    0.000    0.000    0.000    0.000 threading.py:283(_acquire_restore)
+      195    0.000    0.000    0.000    0.000 time.py:104(__getattr__)
+        1    0.000    0.000    0.000    0.000 result.py:550(get_memory)
+       40    0.000    0.000    0.000    0.000 threading.py:1453(current_thread)
+       38    0.000    0.000    0.000    0.000 {method &#39;sub&#39; of &#39;re.Pattern&#39; objects}
+       41    0.000    0.000    0.000    0.000 {method &#39;release&#39; of &#39;_multiprocessing.SemLock&#39; objects}
+      370    0.000    0.000    0.000    0.000 base.py:422(init_block)
+       60    0.000    0.000    0.000    0.000 timer.py:83(inc)
        40    0.000    0.000    0.000    0.000 threading.py:274(__exit__)
-       40    0.000    0.000    0.000    0.000 threading.py:271(__enter__)
-      160    0.000    0.000    0.000    0.000 threading.py:575(is_set)
-      188    0.000    0.000    0.000    0.000 {built-in method builtins.divmod}
+       73    0.000    0.000    0.000    0.000 propagate.py:1160(&lt;listcomp&gt;)
         1    0.000    0.000    0.000    0.000 std.py:663(__new__)
+        1    0.000    0.000    0.000    0.000 std.py:686(_decr_instances)
+      444    0.000    0.000    0.000    0.000 inspect.py:2726(default)
+        1    0.000    0.000    0.000    0.000 propagate.py:701(process_nominal)
+      798    0.000    0.000    0.000    0.000 {built-in method builtins.ord}
+       40    0.000    0.000    0.000    0.000 threading.py:271(__enter__)
+      188    0.000    0.000    0.000    0.000 {built-in method builtins.divmod}
+      159    0.000    0.000    0.000    0.000 {method &#39;append&#39; of &#39;collections.deque&#39; objects}
+      160    0.000    0.000    0.000    0.000 threading.py:575(is_set)
+       74    0.000    0.000    0.000    0.000 graph.py:37(__set__)
+       80    0.000    0.000    0.000    0.000 threading.py:1168(ident)
+        1    0.000    0.000    0.000    0.000 propagate.py:166(pack_run_kwargs)
+       40    0.000    0.000    0.000    0.000 threading.py:286(_is_owned)
+        1    0.000    0.000    0.000    0.000 __init__.py:48(create_string_buffer)
        77    0.000    0.000    0.000    0.000 {method &#39;pop&#39; of &#39;dict&#39; objects}
-       41    0.000    0.000    0.000    0.000 {method &#39;acquire&#39; of &#39;_thread.RLock&#39; objects}
-       74    0.000    0.000    0.000    0.000 reportviews.py:426(__call__)
-       73    0.000    0.000    0.000    0.000 propagate.py:1169(&lt;listcomp&gt;)
        74    0.000    0.000    0.000    0.000 {method &#39;get&#39; of &#39;mappingproxy&#39; objects}
       147    0.000    0.000    0.000    0.000 {built-in method time.time}
-       40    0.000    0.000    0.000    0.000 threading.py:286(_is_owned)
-        1    0.000    0.000    0.000    0.000 std.py:686(_decr_instances)
-       80    0.000    0.000    0.000    0.000 threading.py:1168(ident)
-        1    0.000    0.000    0.000    0.000 __init__.py:48(create_string_buffer)
-       40    0.000    0.000    0.000    0.000 {built-in method nt.getpid}
-       40    0.000    0.000    0.000    0.000 threading.py:280(_release_save)
-       40    0.000    0.000    0.000    0.000 {method &#39;write&#39; of &#39;_io.StringIO&#39; objects}
        38    0.000    0.000    0.000    0.000 utils.py:108(__init__)
-        1    0.000    0.000    0.000    0.000 propagate.py:687(process_nominal)
-       74    0.000    0.000    0.000    0.000 parameter.py:87(keys)
-      159    0.000    0.000    0.000    0.000 {method &#39;append&#39; of &#39;collections.deque&#39; objects}
-       38    0.000    0.000    0.000    0.000 std.py:167(colour)
-        3    0.000    0.000    0.000    0.000 _weakrefset.py:63(__iter__)
-        1    0.000    0.000    0.000    0.000 propagate.py:152(pack_run_kwargs)
-       38    0.000    0.000    0.000    0.000 utils.py:112(__format__)
+       73    0.000    0.000    0.000    0.000 propagate.py:1183(&lt;listcomp&gt;)
+        1    0.000    0.000    0.000    0.000 propagate.py:168(&lt;dictcomp&gt;)
         4    0.000    0.000    0.000    0.000 std.py:110(__enter__)
+       74    0.000    0.000    0.000    0.000 reportviews.py:426(__call__)
+       41    0.000    0.000    0.000    0.000 {method &#39;acquire&#39; of &#39;_thread.RLock&#39; objects}
+      114    0.000    0.000    0.000    0.000 {method &#39;__exit__&#39; of &#39;_thread.RLock&#39; objects}
+       40    0.000    0.000    0.000    0.000 threading.py:280(_release_save)
+        3    0.000    0.000    0.000    0.000 _weakrefset.py:63(__iter__)
+       40    0.000    0.000    0.000    0.000 {method &#39;write&#39; of &#39;_io.StringIO&#39; objects}
+       40    0.000    0.000    0.000    0.000 {built-in method nt.getpid}
+       38    0.000    0.000    0.000    0.000 utils.py:112(__format__)
+       74    0.000    0.000    0.000    0.000 parameter.py:104(keys)
         1    0.000    0.000    0.000    0.000 std.py:679(_get_free_pos)
-        1    0.000    0.000    0.000    0.000 propagate.py:154(&lt;dictcomp&gt;)
-       40    0.000    0.000    0.000    0.000 {built-in method builtins.abs}
+       38    0.000    0.000    0.000    0.000 std.py:167(colour)
         4    0.000    0.000    0.000    0.000 std.py:113(__exit__)
-       40    0.000    0.000    0.000    0.000 {built-in method _thread.get_ident}
+       40    0.000    0.000    0.000    0.000 {built-in method builtins.abs}
        73    0.000    0.000    0.000    0.000 fromnumeric.py:2831(_min_dispatcher)
+       40    0.000    0.000    0.000    0.000 {built-in method _thread.get_ident}
+        1    0.000    0.000    0.000    0.000 utils.py:266(_supports_unicode)
         1    0.000    0.000    0.000    0.000 utils.py:213(__init__)
         1    0.000    0.000    0.000    0.000 std.py:682(&lt;setcomp&gt;)
+        1    0.000    0.000    0.000    0.000 _weakrefset.py:110(remove)
        41    0.000    0.000    0.000    0.000 {method &#39;release&#39; of &#39;_thread.RLock&#39; objects}
        38    0.000    0.000    0.000    0.000 std.py:163(colour)
         2    0.000    0.000    0.000    0.000 _weakrefset.py:27(__exit__)
        40    0.000    0.000    0.000    0.000 {method &#39;__exit__&#39; of &#39;_thread.lock&#39; objects}
-       40    0.000    0.000    0.000    0.000 {method &#39;__enter__&#39; of &#39;_thread.lock&#39; objects}
-        1    0.000    0.000    0.000    0.000 _weakrefset.py:110(remove)
-        1    0.000    0.000    0.000    0.000 utils.py:266(_supports_unicode)
-       40    0.000    0.000    0.000    0.000 {method &#39;release&#39; of &#39;_thread.lock&#39; objects}
         3    0.000    0.000    0.000    0.000 {method &#39;remove&#39; of &#39;set&#39; objects}
-        1    0.000    0.000    0.000    0.000 _weakrefset.py:85(add)
+       40    0.000    0.000    0.000    0.000 {method &#39;__enter__&#39; of &#39;_thread.lock&#39; objects}
+       40    0.000    0.000    0.000    0.000 {method &#39;release&#39; of &#39;_thread.lock&#39; objects}
+        1    0.000    0.000    0.000    0.000 utils.py:139(__getattr__)
         2    0.000    0.000    0.000    0.000 _weakrefset.py:53(_commit_removals)
-        1    0.000    0.000    0.000    0.000 functools.py:393(__get__)
-        4    0.000    0.000    0.000    0.000 utils.py:222(__eq__)
-        5    0.000    0.000    0.000    0.000 propagate.py:187(&lt;genexpr&gt;)
-        1    0.000    0.000    0.000    0.000 &lt;frozen importlib._bootstrap&gt;:1207(_handle_fromlist)
-        1    0.000    0.000    0.000    0.000 utils.py:252(_is_utf)
-        3    0.000    0.000    0.000    0.000 {method &#39;add&#39; of &#39;set&#39; objects}
+        1    0.000    0.000    0.000    0.000 _weakrefset.py:85(add)
         1    0.000    0.000    0.000    0.000 utils.py:125(__eq__)
-        2    0.000    0.000    0.000    0.000 utils.py:187(disable_on_exception)
-        1    0.000    0.000    0.000    0.000 scenario.py:121(__init__)
+        1    0.000    0.000    0.000    0.000 functools.py:393(__get__)
+        1    0.000    0.000    0.000    0.000 utils.py:252(_is_utf)
+        4    0.000    0.000    0.000    0.000 utils.py:222(__eq__)
         1    0.000    0.000    0.000    0.000 {built-in method fromtimestamp}
         2    0.000    0.000    0.000    0.000 _weakrefset.py:21(__enter__)
-        1    0.000    0.000    0.000    0.000 sample.py:793(scenarios)
+        5    0.000    0.000    0.000    0.000 propagate.py:201(&lt;genexpr&gt;)
+        2    0.000    0.000    0.000    0.000 utils.py:187(disable_on_exception)
+        1    0.000    0.000    0.000    0.000 sample.py:804(times)
+        3    0.000    0.000    0.000    0.000 {method &#39;add&#39; of &#39;set&#39; objects}
+        2    0.000    0.000    0.000    0.000 std.py:1153(_comparable)
+        1    0.000    0.000    0.000    0.000 scenario.py:137(__init__)
+        1    0.000    0.000    0.000    0.000 &lt;frozen importlib._bootstrap&gt;:1207(_handle_fromlist)
         1    0.000    0.000    0.000    0.000 utils.py:156(__init__)
+        2    0.000    0.000    0.000    0.000 std.py:1157(__hash__)
+        1    0.000    0.000    0.000    0.000 sample.py:808(scenarios)
+        1    0.000    0.000    0.000    0.000 {method &#39;encode&#39; of &#39;str&#39; objects}
         1    0.000    0.000    0.000    0.000 _monitor.py:94(report)
-        1    0.000    0.000    0.000    0.000 sample.py:789(times)
         3    0.000    0.000    0.000    0.000 utils.py:152(wrapper_setattr)
         2    0.000    0.000    0.000    0.000 _weakrefset.py:17(__init__)
-        2    0.000    0.000    0.000    0.000 std.py:1157(__hash__)
-        2    0.000    0.000    0.000    0.000 std.py:1153(_comparable)
-        1    0.000    0.000    0.000    0.000 {method &#39;encode&#39; of &#39;str&#39; objects}
-        1    0.000    0.000    0.000    0.000 propagate.py:185(unpack_mult_kwargs)
         3    0.000    0.000    0.000    0.000 std.py:226(__init__)
         1    0.000    0.000    0.000    0.000 std.py:1147(__del__)
-        1    0.000    0.000    0.000    0.000 utils.py:139(__getattr__)
+        1    0.000    0.000    0.000    0.000 propagate.py:872(check_overwrite)
+        1    0.000    0.000    0.000    0.000 propagate.py:199(unpack_mult_kwargs)
         1    0.000    0.000    0.000    0.000 std.py:760(get_lock)
+        1    0.000    0.000    0.000    0.000 propagate.py:808(close_pool)
         2    0.000    0.000    0.000    0.000 {method &#39;pop&#39; of &#39;list&#39; objects}
-        1    0.000    0.000    0.000    0.000 propagate.py:858(check_overwrite)
-        1    0.000    0.000    0.000    0.000 utils.py:282(_screen_shape_wrapper)
-        1    0.000    0.000    0.000    0.000 propagate.py:794(close_pool)
         1    0.000    0.000    0.000    0.000 {method &#39;difference&#39; of &#39;set&#39; objects}
-        2    0.000    0.000    0.000    0.000 {built-in method _weakref.proxy}
-        1    0.000    0.000    0.000    0.000 {built-in method __new__ of type object at 0x00007FF8FD8AC4C0}
-        1    0.000    0.000    0.000    0.000 scenario.py:123(&lt;dictcomp&gt;)
+        1    0.000    0.000    0.000    0.000 utils.py:282(_screen_shape_wrapper)
         1    0.000    0.000    0.000    0.000 {method &#39;disable&#39; of &#39;_lsprof.Profiler&#39; objects}
+        2    0.000    0.000    0.000    0.000 {built-in method _weakref.proxy}
         1    0.000    0.000    0.000    0.000 {built-in method sys.audit}
+        1    0.000    0.000    0.000    0.000 {built-in method __new__ of type object at 0x00007FFAEE30C4C0}
         1    0.000    0.000    0.000    0.000 std.py:1301(&lt;lambda&gt;)
+        1    0.000    0.000    0.000    0.000 scenario.py:139(&lt;dictcomp&gt;)
 
 
 </pre></div></div>
@@ -2640,197 +2629,197 @@ SCENARIOS COMPLETE: 100%|██████████| 72/72 [00:05&lt;00:00, 
    Ordered by: internal time
 
    ncalls  tottime  percall  cumtime  percall filename:lineno(function)
-       25    0.001    0.000    0.001    0.000 base.py:234(&lt;listcomp&gt;)
+       25    0.001    0.000    0.001    0.000 base.py:250(&lt;listcomp&gt;)
        36    0.001    0.000    0.001    0.000 {built-in method builtins.dir}
      4254    0.000    0.000    0.000    0.000 {method &#39;startswith&#39; of &#39;str&#39; objects}
-       11    0.000    0.000    0.000    0.000 base.py:365(&lt;listcomp&gt;)
-       20    0.000    0.000    0.003    0.000 base.py:244(init_roles)
+       11    0.000    0.000    0.000    0.000 base.py:381(&lt;listcomp&gt;)
+       20    0.000    0.000    0.003    0.000 base.py:260(init_roles)
        10    0.000    0.000    0.000    0.000 inspect.py:2331(_signature_from_function)
-        8    0.000    0.000    0.001    0.000 parameter.py:44(__init__)
-       20    0.000    0.000    0.000    0.000 inspect.py:2955(__init__)
-    20/10    0.000    0.000    0.000    0.000 inspect.py:2435(_signature_from_callable)
+    20/10    0.000    0.000    0.001    0.000 inspect.py:2435(_signature_from_callable)
+        8    0.000    0.000    0.000    0.000 parameter.py:135(check_immutable)
        42    0.000    0.000    0.000    0.000 inspect.py:2669(__init__)
-    21/16    0.000    0.000    0.000    0.000 result.py:476(flatten)
-        9    0.000    0.000    0.004    0.000 base.py:111(add_flex_role_obj)
-        8    0.000    0.000    0.000    0.000 parameter.py:118(check_immutable)
-        8    0.000    0.000    0.000    0.000 base.py:107(set_arg_type)
-        5    0.000    0.000    0.003    0.001 base.py:376(__init__)
+        8    0.000    0.000    0.001    0.000 parameter.py:61(__init__)
        15    0.000    0.000    0.000    0.000 {method &#39;round&#39; of &#39;numpy.ndarray&#39; objects}
-        5    0.000    0.000    0.000    0.000 mode.py:271(init_faultmodes)
+       20    0.000    0.000    0.000    0.000 inspect.py:2955(__init__)
+    21/16    0.000    0.000    0.000    0.000 result.py:492(flatten)
+        9    0.000    0.000    0.004    0.000 base.py:127(add_flex_role_obj)
+        8    0.000    0.000    0.000    0.000 base.py:125(set_arg_type)
+        5    0.000    0.000    0.003    0.001 base.py:391(__init__)
+       15    0.000    0.000    0.000    0.000 base.py:576(create_hist)
       332    0.000    0.000    0.000    0.000 {built-in method builtins.getattr}
-        6    0.000    0.000    0.000    0.000 base.py:73(find_any_phase_overlap)
-       15    0.000    0.000    0.000    0.000 base.py:560(create_hist)
+        5    0.000    0.000    0.000    0.000 mode.py:287(init_faultmodes)
+        6    0.000    0.000    0.000    0.000 base.py:88(find_any_phase_overlap)
         8    0.000    0.000    0.000    0.000 inspect.py:3215(__str__)
       440    0.000    0.000    0.000    0.000 {built-in method builtins.isinstance}
-        6    0.000    0.000    0.000    0.000 time.py:99(set_timestep)
-       13    0.000    0.000    0.000    0.000 base.py:80(get_true_fields)
-    11/10    0.000    0.000    0.003    0.000 base.py:135(__init__)
-    16/15    0.000    0.000    0.003    0.000 base.py:213(init_roletypes)
-        8    0.000    0.000    0.000    0.000 parameter.py:139(check_type)
-       45    0.000    0.000    0.000    0.000 parameter.py:90(check_lim)
-       15    0.000    0.000    0.000    0.000 base.py:87(get_timerange)
-       10    0.000    0.000    0.000    0.000 inspect.py:2037(_signature_bound_method)
-       25    0.000    0.000    0.001    0.000 base.py:233(find_roletype_initiators)
-       47    0.000    0.000    0.000    0.000 copy.py:66(copy)
-       32    0.000    0.000    0.000    0.000 common.py:27(get_sub_include)
-        9    0.000    0.000    0.003    0.000 base.py:879(init_obj)
-       26    0.000    0.000    0.000    0.000 inspect.py:2756(__str__)
-        6    0.000    0.000    0.003    0.000 base.py:178(__init__)
-        5    0.000    0.000    0.000    0.000 mode.py:202(__init__)
+    11/10    0.000    0.000    0.003    0.000 base.py:151(__init__)
+        6    0.000    0.000    0.000    0.000 time.py:117(set_timestep)
+       13    0.000    0.000    0.000    0.000 base.py:98(get_true_fields)
+    16/15    0.000    0.000    0.003    0.000 base.py:229(init_roletypes)
+        8    0.000    0.000    0.000    0.000 parameter.py:156(check_type)
         1    0.000    0.000    0.005    0.005 {built-in method builtins.exec}
-       16    0.000    0.000    0.000    0.000 base.py:438(get_roles)
-       16    0.000    0.000    0.000    0.000 base.py:441(&lt;listcomp&gt;)
+       10    0.000    0.000    0.000    0.000 inspect.py:2037(_signature_bound_method)
+       32    0.000    0.000    0.000    0.000 common.py:41(get_sub_include)
+       47    0.000    0.000    0.000    0.000 copy.py:66(copy)
+       45    0.000    0.000    0.000    0.000 parameter.py:107(check_lim)
+       15    0.000    0.000    0.000    0.000 base.py:102(get_timerange)
+       25    0.000    0.000    0.001    0.000 base.py:249(find_roletype_initiators)
+        6    0.000    0.000    0.003    0.000 base.py:193(__init__)
       100    0.000    0.000    0.000    0.000 {built-in method builtins.hasattr}
-      262    0.000    0.000    0.000    0.000 {method &#39;get&#39; of &#39;dict&#39; objects}
-        6    0.000    0.000    0.001    0.000 base.py:62(__init__)
-       13    0.000    0.000    0.000    0.000 base.py:87(&lt;listcomp&gt;)
+       26    0.000    0.000    0.000    0.000 inspect.py:2756(__str__)
        42    0.000    0.000    0.000    0.000 enum.py:688(__call__)
-        5    0.000    0.000    0.003    0.001 base.py:199(add_sim)
-       52    0.000    0.000    0.000    0.000 inspect.py:3002(&lt;genexpr&gt;)
-       34    0.000    0.000    0.000    0.000 result.py:321(__setattr__)
-       13    0.000    0.000    0.000    0.000 numerictypes.py:357(issubdtype)
+        5    0.000    0.000    0.000    0.000 mode.py:218(__init__)
+        9    0.000    0.000    0.003    0.000 base.py:895(init_obj)
+       16    0.000    0.000    0.000    0.000 base.py:454(get_roles)
+       34    0.000    0.000    0.000    0.000 result.py:337(__setattr__)
+       16    0.000    0.000    0.000    0.000 base.py:457(&lt;listcomp&gt;)
+      262    0.000    0.000    0.000    0.000 {method &#39;get&#39; of &#39;dict&#39; objects}
+       13    0.000    0.000    0.000    0.000 base.py:105(&lt;listcomp&gt;)
        34    0.000    0.000    0.000    0.000 __init__.py:1111(__init__)
-        8    0.000    0.000    0.000    0.000 parameter.py:162(check_pickle)
-        5    0.000    0.000    0.003    0.001 function.py:523(add_fxn)
-      285    0.000    0.000    0.000    0.000 {built-in method builtins.len}
-       11    0.000    0.000    0.001    0.000 base.py:363(init_indicators)
+        5    0.000    0.000    0.003    0.001 base.py:215(add_sim)
+       52    0.000    0.000    0.000    0.000 inspect.py:3002(&lt;genexpr&gt;)
+        6    0.000    0.000    0.001    0.000 base.py:77(__init__)
        55    0.000    0.000    0.000    0.000 {built-in method builtins.setattr}
-       15    0.000    0.000    0.000    0.000 {built-in method numpy.arange}
-       12    0.000    0.000    0.000    0.000 fromnumeric.py:865(sort)
-        4    0.000    0.000    0.000    0.000 history.py:187(init_att)
-       10    0.000    0.000    0.000    0.000 inspect.py:167(get_annotations)
-       15    0.000    0.000    0.000    0.000 base.py:102(get_histrange)
+        8    0.000    0.000    0.001    0.000 parameter.py:179(check_pickle)
+       13    0.000    0.000    0.000    0.000 numerictypes.py:357(issubdtype)
+      285    0.000    0.000    0.000    0.000 {built-in method builtins.len}
+       11    0.000    0.000    0.001    0.000 base.py:379(init_indicators)
        10    0.000    0.000    0.000    0.000 inspect.py:735(unwrap)
-       13    0.000    0.000    0.000    0.000 common.py:73(is_numeric)
-        6    0.000    0.000    0.000    0.000 time.py:74(__init__)
-       11    0.000    0.000    0.000    0.000 base.py:188(init_track)
-       21    0.000    0.000    0.000    0.000 result.py:141(check_include_errors)
-       15    0.000    0.000    0.000    0.000 fromnumeric.py:53(_wrapfunc)
+        5    0.000    0.000    0.003    0.001 function.py:534(add_fxn)
+       10    0.000    0.000    0.000    0.000 inspect.py:167(get_annotations)
+       15    0.000    0.000    0.000    0.000 {built-in method numpy.arange}
        12    0.000    0.000    0.000    0.000 {built-in method numpy.asanyarray}
-        5    0.000    0.000    0.003    0.001 function.py:61(__init__)
+       13    0.000    0.000    0.000    0.000 common.py:87(is_numeric)
+        4    0.000    0.000    0.000    0.000 history.py:204(init_att)
+       12    0.000    0.000    0.000    0.000 fromnumeric.py:865(sort)
+        6    0.000    0.000    0.000    0.000 time.py:92(__init__)
+        3    0.000    0.000    0.000    0.000 base.py:413(init_indicator_hist)
+       21    0.000    0.000    0.000    0.000 result.py:157(check_include_errors)
+       15    0.000    0.000    0.000    0.000 base.py:117(get_histrange)
+       11    0.000    0.000    0.000    0.000 base.py:204(init_track)
+        5    0.000    0.000    0.003    0.001 function.py:76(__init__)
+       15    0.000    0.000    0.000    0.000 fromnumeric.py:53(_wrapfunc)
        15    0.000    0.000    0.000    0.000 fromnumeric.py:3269(round)
-        1    0.000    0.000    0.000    0.000 graph.py:968(add_edges_from)
        26    0.000    0.000    0.000    0.000 numerictypes.py:283(issubclass_)
-        3    0.000    0.000    0.000    0.000 base.py:397(init_indicator_hist)
-        5    0.000    0.000    0.000    0.000 base.py:453(check_flows)
-       45    0.000    0.000    0.000    0.000 base.py:139(set_arg_as_type)
-       10    0.000    0.000    0.000    0.000 inspect.py:3023(replace)
-      104    0.000    0.000    0.000    0.000 inspect.py:2734(kind)
-        6    0.000    0.000    0.000    0.000 base.py:195(init_hist)
-       13    0.000    0.000    0.000    0.000 {built-in method numpy.array}
-       25    0.000    0.000    0.000    0.000 base.py:33(check_role)
-        1    0.000    0.000    0.004    0.004 ex_pump.py:455(init_architecture)
-       10    0.000    0.000    0.000    0.000 inspect.py:3007(from_callable)
-        5    0.000    0.000    0.000    0.000 base.py:411(create_arch_kwargs)
-        1    0.000    0.000    0.005    0.005 base.py:68(__init__)
-       10    0.000    0.000    0.000    0.000 __init__.py:180(add)
-        2    0.000    0.000    0.000    0.000 graph.py:566(add_nodes_from)
-        1    0.000    0.000    0.005    0.005 &lt;string&gt;:1(&lt;module&gt;)
-       21    0.000    0.000    0.000    0.000 result.py:302(items)
-        1    0.000    0.000    0.000    0.000 function.py:589(construct_graph)
-       16    0.000    0.000    0.000    0.000 base.py:429(get_default_roletypes)
-       12    0.000    0.000    0.000    0.000 {method &#39;copy&#39; of &#39;numpy.ndarray&#39; objects}
-       74    0.000    0.000    0.000    0.000 inspect.py:2722(name)
-       12    0.000    0.000    0.000    0.000 {method &#39;sort&#39; of &#39;numpy.ndarray&#39; objects}
-       42    0.000    0.000    0.000    0.000 enum.py:1095(__new__)
-        5    0.000    0.000    0.000    0.000 function.py:106(update_seed)
-       64    0.000    0.000    0.000    0.000 {built-in method builtins.issubclass}
-        5    0.000    0.000    0.000    0.000 base.py:473(&lt;listcomp&gt;)
-        1    0.000    0.000    0.000    0.000 function.py:577(build)
-        6    0.000    0.000    0.000    0.000 base.py:78(&lt;listcomp&gt;)
+        1    0.000    0.000    0.000    0.000 graph.py:968(add_edges_from)
        97    0.000    0.000    0.000    0.000 {method &#39;append&#39; of &#39;list&#39; objects}
-       10    0.000    0.000    0.000    0.000 inspect.py:3261(signature)
-        4    0.000    0.000    0.001    0.000 base.py:159(add_flow)
-       16    0.000    0.000    0.000    0.000 base.py:182(check_slots)
+        1    0.000    0.000    0.005    0.005 base.py:84(__init__)
+       10    0.000    0.000    0.001    0.000 inspect.py:3007(from_callable)
+       10    0.000    0.000    0.000    0.000 inspect.py:3023(replace)
+        1    0.000    0.000    0.005    0.005 &lt;string&gt;:1(&lt;module&gt;)
+       45    0.000    0.000    0.000    0.000 base.py:154(set_arg_as_type)
+        6    0.000    0.000    0.000    0.000 base.py:210(init_hist)
+       25    0.000    0.000    0.000    0.000 base.py:51(check_role)
+       10    0.000    0.000    0.001    0.000 inspect.py:3261(signature)
+        5    0.000    0.000    0.000    0.000 base.py:468(check_flows)
+       13    0.000    0.000    0.000    0.000 {built-in method numpy.array}
+       42    0.000    0.000    0.000    0.000 enum.py:1095(__new__)
+       12    0.000    0.000    0.000    0.000 {method &#39;copy&#39; of &#39;numpy.ndarray&#39; objects}
+        1    0.000    0.000    0.004    0.004 ex_pump.py:470(init_architecture)
+      104    0.000    0.000    0.000    0.000 inspect.py:2734(kind)
+        2    0.000    0.000    0.000    0.000 graph.py:566(add_nodes_from)
+        5    0.000    0.000    0.000    0.000 base.py:426(create_arch_kwargs)
+       10    0.000    0.000    0.000    0.000 __init__.py:180(add)
+       21    0.000    0.000    0.000    0.000 result.py:318(items)
+       64    0.000    0.000    0.000    0.000 {built-in method builtins.issubclass}
+        1    0.000    0.000    0.000    0.000 function.py:600(construct_graph)
+        1    0.000    0.000    0.005    0.005 function.py:506(__init__)
+       16    0.000    0.000    0.000    0.000 base.py:445(get_default_roletypes)
+       12    0.000    0.000    0.000    0.000 {method &#39;sort&#39; of &#39;numpy.ndarray&#39; objects}
+       74    0.000    0.000    0.000    0.000 inspect.py:2722(name)
+        5    0.000    0.000    0.000    0.000 function.py:121(update_seed)
+        1    0.000    0.000    0.000    0.000 function.py:588(build)
        18    0.000    0.000    0.000    0.000 {method &#39;format&#39; of &#39;str&#39; objects}
-        1    0.000    0.000    0.000    0.000 function.py:585(&lt;listcomp&gt;)
-        2    0.000    0.000    0.000    0.000 base.py:343(create_hist)
+        5    0.000    0.000    0.000    0.000 base.py:488(&lt;listcomp&gt;)
+        4    0.000    0.000    0.001    0.000 base.py:175(add_flow)
        21    0.000    0.000    0.000    0.000 __init__.py:1118(__len__)
-        6    0.000    0.000    0.000    0.000 base.py:75(&lt;dictcomp&gt;)
+        6    0.000    0.000    0.000    0.000 base.py:93(&lt;listcomp&gt;)
+       16    0.000    0.000    0.000    0.000 base.py:198(check_slots)
+        1    0.000    0.000    0.000    0.000 function.py:596(&lt;listcomp&gt;)
+        2    0.000    0.000    0.000    0.000 base.py:361(create_hist)
+        6    0.000    0.000    0.000    0.000 base.py:90(&lt;dictcomp&gt;)
        20    0.000    0.000    0.000    0.000 inspect.py:378(isfunction)
-        5    0.000    0.000    0.000    0.000 base.py:391(&lt;dictcomp&gt;)
-        1    0.000    0.000    0.000    0.000 base.py:229(build)
-       13    0.000    0.000    0.000    0.000 {built-in method _abc._abc_instancecheck}
        17    0.000    0.000    0.000    0.000 __init__.py:1128(__setitem__)
-        5    0.000    0.000    0.000    0.000 {built-in method recordclass._dataobject.asdict}
-       13    0.000    0.000    0.000    0.000 &lt;frozen abc&gt;:117(__instancecheck__)
-        1    0.000    0.000    0.000    0.000 functools.py:981(__get__)
-        5    0.000    0.000    0.000    0.000 __init__.py:201(update)
-       21    0.000    0.000    0.000    0.000 result.py:149(check_include_error)
-        1    0.000    0.000    0.000    0.000 graph.py:332(__init__)
-        5    0.000    0.000    0.000    0.000 base.py:430(update_contained_modes)
-        1    0.000    0.000    0.005    0.005 function.py:495(__init__)
-        4    0.000    0.000    0.000    0.000 base.py:75(create_hist)
-        2    0.000    0.000    0.000    0.000 state.py:328(init_hist_att)
-       42    0.000    0.000    0.000    0.000 {method &#39;isidentifier&#39; of &#39;str&#39; objects}
-        2    0.000    0.000    0.000    0.000 base.py:330(init_hist_att)
-        5    0.000    0.000    0.000    0.000 base.py:251(get_flows)
+        4    0.000    0.000    0.000    0.000 base.py:92(create_hist)
+       13    0.000    0.000    0.000    0.000 {built-in method _abc._abc_instancecheck}
        42    0.000    0.000    0.000    0.000 {method &#39;__contains__&#39; of &#39;frozenset&#39; objects}
+        1    0.000    0.000    0.000    0.000 graph.py:332(__init__)
+        5    0.000    0.000    0.000    0.000 {built-in method recordclass._dataobject.asdict}
+        1    0.000    0.000    0.000    0.000 base.py:245(build)
+        4    0.000    0.000    0.000    0.000 function.py:597(&lt;listcomp&gt;)
+        5    0.000    0.000    0.000    0.000 base.py:406(&lt;dictcomp&gt;)
+       42    0.000    0.000    0.000    0.000 {method &#39;isidentifier&#39; of &#39;str&#39; objects}
        36    0.000    0.000    0.000    0.000 {method &#39;items&#39; of &#39;dict&#39; objects}
-        6    0.000    0.000    0.000    0.000 base.py:191(&lt;dictcomp&gt;)
-        5    0.000    0.000    0.000    0.000 base.py:418(&lt;dictcomp&gt;)
-        4    0.000    0.000    0.000    0.000 function.py:586(&lt;listcomp&gt;)
-       10    0.000    0.000    0.000    0.000 reportviews.py:529(__iter__)
-        1    0.000    0.000    0.000    0.000 function.py:580(&lt;listcomp&gt;)
+        5    0.000    0.000    0.000    0.000 __init__.py:201(update)
+       21    0.000    0.000    0.000    0.000 result.py:165(check_include_error)
+       13    0.000    0.000    0.000    0.000 &lt;frozen abc&gt;:117(__instancecheck__)
+        2    0.000    0.000    0.000    0.000 base.py:348(init_hist_att)
+        1    0.000    0.000    0.000    0.000 function.py:591(&lt;listcomp&gt;)
+        5    0.000    0.000    0.000    0.000 base.py:267(get_flows)
+        1    0.000    0.000    0.000    0.000 functools.py:981(__get__)
+        5    0.000    0.000    0.000    0.000 base.py:433(&lt;dictcomp&gt;)
+        5    0.000    0.000    0.000    0.000 base.py:445(update_contained_modes)
+        6    0.000    0.000    0.000    0.000 base.py:206(&lt;dictcomp&gt;)
         3    0.000    0.000    0.000    0.000 __init__.py:65(__init__)
+       10    0.000    0.000    0.000    0.000 reportviews.py:529(__iter__)
         1    0.000    0.000    0.000    0.000 isolate.py:42(isolates)
-        6    0.000    0.000    0.000    0.000 base.py:77(&lt;listcomp&gt;)
-        5    0.000    0.000    0.000    0.000 base.py:468(&lt;listcomp&gt;)
-        1    0.000    0.000    0.000    0.000 isolate.py:85(&lt;genexpr&gt;)
-        1    0.000    0.000    0.000    0.000 function.py:582(&lt;listcomp&gt;)
-        9    0.000    0.000    0.000    0.000 base.py:237(get_full_name)
-        9    0.000    0.000    0.000    0.000 inspect.py:292(isclass)
-        2    0.000    0.000    0.000    0.000 base.py:244(&lt;dictcomp&gt;)
-        5    0.000    0.000    0.000    0.000 base.py:255(&lt;dictcomp&gt;)
+        5    0.000    0.000    0.000    0.000 base.py:483(&lt;listcomp&gt;)
+        1    0.000    0.000    0.000    0.000 function.py:593(&lt;listcomp&gt;)
+        5    0.000    0.000    0.000    0.000 base.py:271(&lt;dictcomp&gt;)
+        9    0.000    0.000    0.000    0.000 base.py:253(get_full_name)
+        6    0.000    0.000    0.000    0.000 base.py:92(&lt;listcomp&gt;)
+        2    0.000    0.000    0.000    0.000 base.py:260(&lt;dictcomp&gt;)
+        5    0.000    0.000    0.000    0.000 base.py:502(is_static)
        18    0.000    0.000    0.000    0.000 {method &#39;values&#39; of &#39;mappingproxy&#39; objects}
-       15    0.000    0.000    0.000    0.000 fromnumeric.py:3265(_round_dispatcher)
-        5    0.000    0.000    0.000    0.000 base.py:395(asdict)
-        1    0.000    0.000    0.000    0.000 &lt;class &#39;networkx.utils.decorators.argmap&#39;&gt; compilation 4:1(argmap_isolates_1)
-        1    0.000    0.000    0.000    0.000 reportviews.py:419(__init__)
-        5    0.000    0.000    0.000    0.000 base.py:487(is_static)
-        1    0.000    0.000    0.000    0.000 base.py:90(init_flexible_roles)
-        5    0.000    0.000    0.000    0.000 base.py:493(is_dynamic)
-       24    0.000    0.000    0.000    0.000 copy.py:107(_copy_immutable)
-        4    0.000    0.000    0.000    0.000 {built-in method numpy.empty}
-       26    0.000    0.000    0.000    0.000 {method &#39;update&#39; of &#39;dict&#39; objects}
-        2    0.000    0.000    0.000    0.000 &lt;frozen _collections_abc&gt;:717(__ior__)
-       20    0.000    0.000    0.000    0.000 inspect.py:3015(parameters)
+        2    0.000    0.000    0.000    0.000 state.py:345(init_hist_att)
+        5    0.000    0.000    0.000    0.000 base.py:413(asdict)
+        1    0.000    0.000    0.000    0.000 base.py:106(init_flexible_roles)
+        9    0.000    0.000    0.000    0.000 inspect.py:292(isclass)
+        1    0.000    0.000    0.000    0.000 isolate.py:85(&lt;genexpr&gt;)
        30    0.000    0.000    0.000    0.000 {built-in method builtins.callable}
-        3    0.000    0.000    0.000    0.000 base.py:581(&lt;listcomp&gt;)
-        1    0.000    0.000    0.000    0.000 base.py:368(get_indicators)
+        3    0.000    0.000    0.000    0.000 base.py:597(&lt;listcomp&gt;)
+        4    0.000    0.000    0.000    0.000 {built-in method numpy.empty}
+        1    0.000    0.000    0.000    0.000 &lt;class &#39;networkx.utils.decorators.argmap&#39;&gt; compilation 4:1(argmap_isolates_1)
+       20    0.000    0.000    0.000    0.000 inspect.py:3015(parameters)
+       24    0.000    0.000    0.000    0.000 copy.py:107(_copy_immutable)
+        5    0.000    0.000    0.000    0.000 base.py:508(is_dynamic)
+       15    0.000    0.000    0.000    0.000 fromnumeric.py:3265(_round_dispatcher)
         4    0.000    0.000    0.000    0.000 graph.py:1318(neighbors)
-        2    0.000    0.000    0.000    0.000 base.py:51(get_track)
-        1    0.000    0.000    0.000    0.000 timer.py:44(__init__)
-        1    0.000    0.000    0.000    0.000 backends.py:627(__call__)
+        2    0.000    0.000    0.000    0.000 &lt;frozen _collections_abc&gt;:717(__ior__)
+        1    0.000    0.000    0.000    0.000 timer.py:61(__init__)
+        1    0.000    0.000    0.000    0.000 reportviews.py:419(__init__)
+       26    0.000    0.000    0.000    0.000 {method &#39;update&#39; of &#39;dict&#39; objects}
         1    0.000    0.000    0.000    0.000 graph.py:1484(degree)
+        2    0.000    0.000    0.000    0.000 base.py:69(get_track)
+        1    0.000    0.000    0.000    0.000 base.py:384(get_indicators)
+        1    0.000    0.000    0.000    0.000 backends.py:627(__call__)
         8    0.000    0.000    0.000    0.000 {method &#39;join&#39; of &#39;str&#39; objects}
-        1    0.000    0.000    0.000    0.000 base.py:377(&lt;dictcomp&gt;)
-       18    0.000    0.000    0.000    0.000 {method &#39;copy&#39; of &#39;dict&#39; objects}
-        8    0.000    0.000    0.000    0.000 base.py:48(check_role)
-       12    0.000    0.000    0.000    0.000 {method &#39;values&#39; of &#39;dict&#39; objects}
-        5    0.000    0.000    0.000    0.000 {built-in method builtins.max}
-        8    0.000    0.000    0.000    0.000 __init__.py:165(__contains__)
-        3    0.000    0.000    0.000    0.000 misc.py:595(_clear_cache)
-       12    0.000    0.000    0.000    0.000 fromnumeric.py:861(_sort_dispatcher)
-        8    0.000    0.000    0.000    0.000 inspect.py:3019(return_annotation)
-        5    0.000    0.000    0.000    0.000 base.py:215(update_seed)
+        8    0.000    0.000    0.000    0.000 base.py:65(check_role)
+        1    0.000    0.000    0.000    0.000 base.py:393(&lt;dictcomp&gt;)
        10    0.000    0.000    0.000    0.000 {built-in method builtins.id}
-        1    0.000    0.000    0.000    0.000 graph.py:59(__set__)
-       10    0.000    0.000    0.000    0.000 {built-in method builtins.repr}
-        2    0.000    0.000    0.000    0.000 __init__.py:1121(__getitem__)
-        1    0.000    0.000    0.000    0.000 graph.py:37(__set__)
-        1    0.000    0.000    0.000    0.000 base.py:266(update_seed)
-        5    0.000    0.000    0.000    0.000 {method &#39;copy&#39; of &#39;set&#39; objects}
-        5    0.000    0.000    0.000    0.000 base.py:407(init_block)
-        1    0.000    0.000    0.000    0.000 function.py:597(&lt;listcomp&gt;)
-        6    0.000    0.000    0.000    0.000 inspect.py:2726(default)
-        4    0.000    0.000    0.000    0.000 {built-in method builtins.any}
+        5    0.000    0.000    0.000    0.000 {built-in method builtins.max}
        10    0.000    0.000    0.000    0.000 {built-in method sys.getrecursionlimit}
+       12    0.000    0.000    0.000    0.000 fromnumeric.py:861(_sort_dispatcher)
+        3    0.000    0.000    0.000    0.000 misc.py:595(_clear_cache)
+        5    0.000    0.000    0.000    0.000 base.py:230(update_seed)
+        1    0.000    0.000    0.000    0.000 graph.py:59(__set__)
+       12    0.000    0.000    0.000    0.000 {method &#39;values&#39; of &#39;dict&#39; objects}
+       18    0.000    0.000    0.000    0.000 {method &#39;copy&#39; of &#39;dict&#39; objects}
+        8    0.000    0.000    0.000    0.000 inspect.py:3019(return_annotation)
+       10    0.000    0.000    0.000    0.000 {built-in method builtins.repr}
+        8    0.000    0.000    0.000    0.000 __init__.py:165(__contains__)
+        5    0.000    0.000    0.000    0.000 base.py:422(init_block)
+        1    0.000    0.000    0.000    0.000 function.py:608(&lt;listcomp&gt;)
+        2    0.000    0.000    0.000    0.000 __init__.py:1121(__getitem__)
+        6    0.000    0.000    0.000    0.000 inspect.py:2726(default)
+        1    0.000    0.000    0.000    0.000 graph.py:37(__set__)
+        1    0.000    0.000    0.000    0.000 base.py:282(update_seed)
+        5    0.000    0.000    0.000    0.000 {method &#39;copy&#39; of &#39;set&#39; objects}
+        4    0.000    0.000    0.000    0.000 {built-in method builtins.any}
         1    0.000    0.000    0.000    0.000 reportviews.py:426(__call__)
+        1    0.000    0.000    0.000    0.000 {method &#39;disable&#39; of &#39;_lsprof.Profiler&#39; objects}
+        1    0.000    0.000    0.000    0.000 {method &#39;lower&#39; of &#39;str&#39; objects}
         4    0.000    0.000    0.000    0.000 {built-in method builtins.iter}
         1    0.000    0.000    0.000    0.000 {method &#39;__exit__&#39; of &#39;_thread.RLock&#39; objects}
-        1    0.000    0.000    0.000    0.000 {method &#39;lower&#39; of &#39;str&#39; objects}
-        1    0.000    0.000    0.000    0.000 {method &#39;disable&#39; of &#39;_lsprof.Profiler&#39; objects}
 
 
 </pre></div></div>

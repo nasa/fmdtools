@@ -75,10 +75,7 @@
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="../../README.html#citing-this-repository">Citing this repository</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../README.html#license-notices">License/Notices</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="../../README.html#disclaimers">Disclaimers</a></li>
-</ul>
-</li>
+<li class="toctree-l2"><a class="reference internal" href="../../README.html#license-notices">License/Notices</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../../docs/Development%20Guide.html">Development Guide</a><ul>
@@ -86,7 +83,7 @@
 <li class="toctree-l2"><a class="reference internal" href="../../docs/Development%20Guide.html#introductory-tutorial">Introductory Tutorial</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="../../docs/Intro_to_fmdtools.html">Intro to resilience modeling, simulation, and visualization in Python with fmdtools.</a><ul>
 <li class="toctree-l4"><a class="reference internal" href="../../docs/Intro_to_fmdtools.html#author-daniel-hulse">Author: Daniel Hulse</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/Intro_to_fmdtools.html#version-2-0-rc-6">Version: 2.0-rc-6</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../docs/Intro_to_fmdtools.html#version-2-0-0">Version: 2.0.0</a></li>
 </ul>
 </li>
 <li class="toctree-l3"><a class="reference internal" href="../../docs/Intro_to_fmdtools.html#overview">Overview</a></li>
@@ -150,6 +147,7 @@
 <li class="toctree-l3"><a class="reference internal" href="../../docs/Development%20Guide.html#roles">Roles</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../docs/Development%20Guide.html#documentation">Documentation</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../docs/Development%20Guide.html#style-formatting">Style/Formatting</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../docs/Development%20Guide.html#headers">Headers</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../docs/Development%20Guide.html#testing">Testing</a></li>
 </ul>
 </li>
@@ -198,14 +196,6 @@
 <li class="toctree-l3"><a class="reference internal" href="../pump/Stochastic_Modelling.html">Stochastic Modelling in fmdtools</a><ul>
 <li class="toctree-l4"><a class="reference internal" href="../pump/Stochastic_Modelling.html#Model-Setup">Model Setup</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../pump/Stochastic_Modelling.html#Simulation-and-Analysis">Simulation and Analysis</a></li>
-</ul>
-</li>
-<li class="toctree-l3"><a class="reference internal" href="../pump/AST_Sampling.html">fmdtools-AdaStress integration</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="../pump/AST_Sampling.html#Python-setup:">Python setup:</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../pump/AST_Sampling.html#Running-AdaStress-Methods">Running AdaStress Methods</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../pump/AST_Sampling.html#MCTS">MCTS</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../pump/AST_Sampling.html#Pump">Pump</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../pump/AST_Sampling.html#Simulator">Simulator</a></li>
 </ul>
 </li>
 </ul>
@@ -677,6 +667,13 @@
 <p>When using <code class="docutils literal notranslate"><span class="pre">fmdtools</span></code> to do this, indivudal entities known as agents are programmed as functions, while the interactions between them are built using flows. Agents can represent a variety of things such as a representation of a more complicated system (such as a drone) or a software agent that helps control the others. The flows can be interactions such as communication channels or the environment that the agents exist in. For further explanation, see <a class="reference external" href="https://nasa.github.io/fmdtools/docs/Development%20Guide.html#structuring-a-model">this part of the
 documentation</a></p>
 <p>The concept for this example is as follows: two <code class="docutils literal notranslate"><span class="pre">mover</span></code> agents move in both the x and y direction. A <code class="docutils literal notranslate"><span class="pre">coordinator</span></code> agent is tasked with sending the messages to tell them how to move within the environment.</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>Copyright © 2024, United States Government, as represented by the Administrator of the National Aeronautics and Space Administration. All rights reserved.
+
+The “&quot;Fault Model Design tools - fmdtools version 2&quot;” software is licensed under the Apache License, Version 2.0 (the &quot;License&quot;); you may not use this file except in compliance with the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0.
+
+Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an &quot;AS IS&quot; BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
+</pre></div>
+</div>
 <div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[1]:
 </pre></div>

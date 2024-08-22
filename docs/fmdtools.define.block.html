@@ -72,10 +72,7 @@
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="../README.html#citing-this-repository">Citing this repository</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../README.html#license-notices">License/Notices</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="../README.html#disclaimers">Disclaimers</a></li>
-</ul>
-</li>
+<li class="toctree-l2"><a class="reference internal" href="../README.html#license-notices">License/Notices</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="Development%20Guide.html">Development Guide</a><ul>
@@ -83,7 +80,7 @@
 <li class="toctree-l2"><a class="reference internal" href="Development%20Guide.html#introductory-tutorial">Introductory Tutorial</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="Intro_to_fmdtools.html">Intro to resilience modeling, simulation, and visualization in Python with fmdtools.</a><ul>
 <li class="toctree-l4"><a class="reference internal" href="Intro_to_fmdtools.html#author-daniel-hulse">Author: Daniel Hulse</a></li>
-<li class="toctree-l4"><a class="reference internal" href="Intro_to_fmdtools.html#version-2-0-rc-6">Version: 2.0-rc-6</a></li>
+<li class="toctree-l4"><a class="reference internal" href="Intro_to_fmdtools.html#version-2-0-0">Version: 2.0.0</a></li>
 </ul>
 </li>
 <li class="toctree-l3"><a class="reference internal" href="Intro_to_fmdtools.html#overview">Overview</a></li>
@@ -147,6 +144,7 @@
 <li class="toctree-l3"><a class="reference internal" href="Development%20Guide.html#roles">Roles</a></li>
 <li class="toctree-l3"><a class="reference internal" href="Development%20Guide.html#documentation">Documentation</a></li>
 <li class="toctree-l3"><a class="reference internal" href="Development%20Guide.html#style-formatting">Style/Formatting</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Development%20Guide.html#headers">Headers</a></li>
 <li class="toctree-l3"><a class="reference internal" href="Development%20Guide.html#testing">Testing</a></li>
 </ul>
 </li>
@@ -195,14 +193,6 @@
 <li class="toctree-l3"><a class="reference internal" href="../examples/pump/Stochastic_Modelling.html">Stochastic Modelling in fmdtools</a><ul>
 <li class="toctree-l4"><a class="reference internal" href="../examples/pump/Stochastic_Modelling.html#Model-Setup">Model Setup</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../examples/pump/Stochastic_Modelling.html#Simulation-and-Analysis">Simulation and Analysis</a></li>
-</ul>
-</li>
-<li class="toctree-l3"><a class="reference internal" href="../examples/pump/AST_Sampling.html">fmdtools-AdaStress integration</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="../examples/pump/AST_Sampling.html#Python-setup:">Python setup:</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../examples/pump/AST_Sampling.html#Running-AdaStress-Methods">Running AdaStress Methods</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../examples/pump/AST_Sampling.html#MCTS">MCTS</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../examples/pump/AST_Sampling.html#Pump">Pump</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../examples/pump/AST_Sampling.html#Simulator">Simulator</a></li>
 </ul>
 </li>
 </ul>
@@ -1334,12 +1324,6 @@ The default is 1.</p></li>
 </dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="fmdtools.define.block.action.Action.behavior">
-<span class="sig-name descname"><span class="pre">behavior</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">time</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.define.block.action.Action.behavior" title="Link to this definition"></a></dt>
-<dd><p>Simulate action behavior (placeholder for user-defined method).</p>
-</dd></dl>
-
-<dl class="py method">
 <dt class="sig sig-object py" id="fmdtools.define.block.action.Action.copy">
 <span class="sig-name descname"><span class="pre">copy</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.define.block.action.Action.copy" title="Link to this definition"></a></dt>
 <dd><p>Copy the block with its current attributes.</p>
@@ -1363,6 +1347,12 @@ The default is 1.</p></li>
 <dt class="sig sig-object py" id="fmdtools.define.block.action.Action.duration">
 <span class="sig-name descname"><span class="pre">duration</span></span><a class="headerlink" href="#fmdtools.define.block.action.Action.duration" title="Link to this definition"></a></dt>
 <dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="fmdtools.define.block.action.Action.update_behavior">
+<span class="sig-name descname"><span class="pre">update_behavior</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">time</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dt</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.define.block.action.Action.update_behavior" title="Link to this definition"></a></dt>
+<dd><p>Update the behavior of the Action.</p>
+</dd></dl>
 
 </dd></dl>
 
@@ -1415,14 +1405,6 @@ The default is 1.</p></li>
 <dt class="sig sig-object py" id="fmdtools.define.block.component.Component.base_type">
 <span class="sig-name descname"><span class="pre">base_type</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.define.block.component.Component.base_type" title="Link to this definition"></a></dt>
 <dd><p>Return fmdtools type of the model class.</p>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="fmdtools.define.block.component.Component.behavior">
-<span class="sig-name descname"><span class="pre">behavior</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">time</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.define.block.component.Component.behavior" title="Link to this definition"></a></dt>
-<dd><p>Simulate behavior provided (placeholder).</p>
-<p>Enables one to include components without yet having a defined behavior for
-them.</p>
 </dd></dl>
 
 </dd></dl>
