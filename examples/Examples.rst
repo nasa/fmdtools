@@ -17,7 +17,6 @@ Pump
    ../examples/pump/Parallelism_Tutorial.ipynb
    ../examples/pump/Optimization.ipynb
    ../examples/pump/Stochastic_Modelling.ipynb
-   ../examples/pump/AST_Sampling.ipynb
 
 Multirotor
 +++++++++++++++++++++++++++++++++++++++++++++
