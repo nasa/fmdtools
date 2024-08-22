@@ -75,10 +75,7 @@
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="../../README.html#citing-this-repository">Citing this repository</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../README.html#license-notices">License/Notices</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="../../README.html#disclaimers">Disclaimers</a></li>
-</ul>
-</li>
+<li class="toctree-l2"><a class="reference internal" href="../../README.html#license-notices">License/Notices</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../../docs/Development%20Guide.html">Development Guide</a><ul>
@@ -86,7 +83,7 @@
 <li class="toctree-l2"><a class="reference internal" href="../../docs/Development%20Guide.html#introductory-tutorial">Introductory Tutorial</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="../../docs/Intro_to_fmdtools.html">Intro to resilience modeling, simulation, and visualization in Python with fmdtools.</a><ul>
 <li class="toctree-l4"><a class="reference internal" href="../../docs/Intro_to_fmdtools.html#author-daniel-hulse">Author: Daniel Hulse</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/Intro_to_fmdtools.html#version-2-0-rc-6">Version: 2.0-rc-6</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../docs/Intro_to_fmdtools.html#version-2-0-0">Version: 2.0.0</a></li>
 </ul>
 </li>
 <li class="toctree-l3"><a class="reference internal" href="../../docs/Intro_to_fmdtools.html#overview">Overview</a></li>
@@ -150,6 +147,7 @@
 <li class="toctree-l3"><a class="reference internal" href="../../docs/Development%20Guide.html#roles">Roles</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../docs/Development%20Guide.html#documentation">Documentation</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../docs/Development%20Guide.html#style-formatting">Style/Formatting</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../docs/Development%20Guide.html#headers">Headers</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../docs/Development%20Guide.html#testing">Testing</a></li>
 </ul>
 </li>
@@ -198,14 +196,6 @@
 <li class="toctree-l3"><a class="reference internal" href="../pump/Stochastic_Modelling.html">Stochastic Modelling in fmdtools</a><ul>
 <li class="toctree-l4"><a class="reference internal" href="../pump/Stochastic_Modelling.html#Model-Setup">Model Setup</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../pump/Stochastic_Modelling.html#Simulation-and-Analysis">Simulation and Analysis</a></li>
-</ul>
-</li>
-<li class="toctree-l3"><a class="reference internal" href="../pump/AST_Sampling.html">fmdtools-AdaStress integration</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="../pump/AST_Sampling.html#Python-setup:">Python setup:</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../pump/AST_Sampling.html#Running-AdaStress-Methods">Running AdaStress Methods</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../pump/AST_Sampling.html#MCTS">MCTS</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../pump/AST_Sampling.html#Pump">Pump</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../pump/AST_Sampling.html#Simulator">Simulator</a></li>
 </ul>
 </li>
 </ul>
@@ -677,6 +667,13 @@ prior to understanding the full system dynamics (Static Propagation Model) - Be 
 <p><a class="reference external" href="https://doi.org/10.36001/ijphm.2021.v12i3.2954">Hulse, D., Walsh, H., Dong, A., Hoyle, C., Tumer, I., Kulkarni, C., &amp; Goebel, K. (2021). fmdtools: A Fault Propagation Toolkit for Resilience Assessment in Early Design. International Journal of Prognostics and Health Management, 12(3)</a></p>
 <p>At that time, fmdtools was not developed with inheritence in mind, and thus the iterative update of models meant either over-writing an existing model structure (losing high-level design information) or copy-pasting model definition (duplicating system definition).</p>
 <p>Since then, we have been evolving fmdtools classes to be more modular in support inheritance. The following demo was thus adapted with this in mind, to show not only the progression of analysis types, but also to show how more detailed models can inherit from early model structures to maintain a consistent system representation.</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>Copyright © 2024, United States Government, as represented by the Administrator of the National Aeronautics and Space Administration. All rights reserved.
+
+The “&quot;Fault Model Design tools - fmdtools version 2&quot;” software is licensed under the Apache License, Version 2.0 (the &quot;License&quot;); you may not use this file except in compliance with the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0.
+
+Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an &quot;AS IS&quot; BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
+</pre></div>
+</div>
 <section id="Initial-Network-Model">
 <h2>Initial Network Model<a class="headerlink" href="#Initial-Network-Model" title="Link to this heading"></a></h2>
 <p>In our initial model, all we have is the flows, functions, and connections between them. These are set up in a model class as shown:</p>
@@ -879,7 +876,7 @@ NodeView((&#39;drone.flows.force_st&#39;, &#39;drone.flows.force_lin&#39;, &#39;
 <div class="highlight"><pre>
 ASPL: 1.14
 Modularity: 0.00
-Robustness Coefficient: 98.82
+Robustness Coefficient: 99.27
 </pre></div></div>
 </div>
 <p>Next, we visualize network vulnerabilities using find_bridging_nodes and find_high_degree_nodes.</p>
@@ -975,7 +972,7 @@ High Degree Nodes: [(&#39;drone.fxns.ctl_dof&#39;, 6), (&#39;drone.fxns.plan_pat
 <div class="highlight"><pre>
 ASPL, functions and flows: 2.30
 Modularity, functions and flows: 0.32
-Robustness Coefficient, functions and flows: 86.92
+Robustness Coefficient, functions and flows: 84.90
 </pre></div></div>
 </div>
 <div class="nbinput docutils container">
@@ -1081,7 +1078,7 @@ High Degree Nodes: [(&#39;drone.flows.force_st&#39;, 5), (&#39;drone.flows.dofs&
 </div>
 <div class="output_area stderr docutils container">
 <div class="highlight"><pre>
-SCENARIOS COMPLETE: 100%|██████████| 21/21 [00:00&lt;00:00, 90.08it/s]
+SCENARIOS COMPLETE: 100%|██████████| 21/21 [00:00&lt;00:00, 87.64it/s]
 </pre></div></div>
 </div>
 <p>Here we produce a scenario-based FMEA to show which scenarios are most important in the model:</p>
@@ -1475,7 +1472,7 @@ nominal &amp; [&#39;store_ee&#39;, &#39;dist_ee&#39;, &#39;affect_dof&#39;, &#39
 </div>
 <div class="output_area stderr docutils container">
 <div class="highlight"><pre>
-SCENARIOS COMPLETE: 100%|██████████| 13/13 [00:00&lt;00:00, 20.79it/s]
+SCENARIOS COMPLETE: 100%|██████████| 13/13 [00:00&lt;00:00, 20.45it/s]
 </pre></div></div>
 </div>
 <div class="nbinput docutils container">
@@ -1725,7 +1722,7 @@ FaultSample of scenarios:
 </div>
 <div class="output_area stderr docutils container">
 <div class="highlight"><pre>
-SCENARIOS COMPLETE: 100%|██████████| 50/50 [00:04&lt;00:00, 12.18it/s]
+SCENARIOS COMPLETE: 100%|██████████| 50/50 [00:04&lt;00:00, 12.33it/s]
 </pre></div></div>
 </div>
 <div class="nbinput docutils container">
@@ -2336,7 +2333,7 @@ FaultSample of scenarios:
 </div>
 <div class="output_area stderr docutils container">
 <div class="highlight"><pre>
-SCENARIOS COMPLETE: 100%|██████████| 90/90 [00:10&lt;00:00,  8.34it/s]
+SCENARIOS COMPLETE: 100%|██████████| 90/90 [00:10&lt;00:00,  8.87it/s]
 </pre></div></div>
 </div>
 <div class="nbinput docutils container">

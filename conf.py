@@ -87,3 +87,8 @@ html_static_path = ['_static']
 # -- Latex Option ---------------
 
 latex_engine = 'xelatex'
+
+# Setup for module-level license removal (must use 12-line apache template)
+def setup(app):
+    from sphinx.ext.autodoc import cut_lines
+    app.connect('autodoc-process-docstring', cut_lines(0, post=12, what=['module']))

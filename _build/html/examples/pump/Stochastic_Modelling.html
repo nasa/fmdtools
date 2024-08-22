@@ -26,7 +26,7 @@
     <script src="../../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
-    <link rel="next" title="fmdtools-AdaStress integration" href="AST_Sampling.html" />
+    <link rel="next" title="Overview" href="../multirotor/readme.html" />
     <link rel="prev" title="Optimization using the ProblemInterface class" href="Optimization.html" /> 
 </head>
 
@@ -75,10 +75,7 @@
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="../../README.html#citing-this-repository">Citing this repository</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../README.html#license-notices">License/Notices</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="../../README.html#disclaimers">Disclaimers</a></li>
-</ul>
-</li>
+<li class="toctree-l2"><a class="reference internal" href="../../README.html#license-notices">License/Notices</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../../docs/Development%20Guide.html">Development Guide</a><ul>
@@ -86,7 +83,7 @@
 <li class="toctree-l2"><a class="reference internal" href="../../docs/Development%20Guide.html#introductory-tutorial">Introductory Tutorial</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="../../docs/Intro_to_fmdtools.html">Intro to resilience modeling, simulation, and visualization in Python with fmdtools.</a><ul>
 <li class="toctree-l4"><a class="reference internal" href="../../docs/Intro_to_fmdtools.html#author-daniel-hulse">Author: Daniel Hulse</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../docs/Intro_to_fmdtools.html#version-2-0-rc-6">Version: 2.0-rc-6</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../docs/Intro_to_fmdtools.html#version-2-0-0">Version: 2.0.0</a></li>
 </ul>
 </li>
 <li class="toctree-l3"><a class="reference internal" href="../../docs/Intro_to_fmdtools.html#overview">Overview</a></li>
@@ -150,6 +147,7 @@
 <li class="toctree-l3"><a class="reference internal" href="../../docs/Development%20Guide.html#roles">Roles</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../docs/Development%20Guide.html#documentation">Documentation</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../docs/Development%20Guide.html#style-formatting">Style/Formatting</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../docs/Development%20Guide.html#headers">Headers</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../docs/Development%20Guide.html#testing">Testing</a></li>
 </ul>
 </li>
@@ -198,14 +196,6 @@
 <li class="toctree-l3 current"><a class="current reference internal" href="#">Stochastic Modelling in fmdtools</a><ul>
 <li class="toctree-l4"><a class="reference internal" href="#Model-Setup">Model Setup</a></li>
 <li class="toctree-l4"><a class="reference internal" href="#Simulation-and-Analysis">Simulation and Analysis</a></li>
-</ul>
-</li>
-<li class="toctree-l3"><a class="reference internal" href="AST_Sampling.html">fmdtools-AdaStress integration</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="AST_Sampling.html#Python-setup:">Python setup:</a></li>
-<li class="toctree-l4"><a class="reference internal" href="AST_Sampling.html#Running-AdaStress-Methods">Running AdaStress Methods</a></li>
-<li class="toctree-l4"><a class="reference internal" href="AST_Sampling.html#MCTS">MCTS</a></li>
-<li class="toctree-l4"><a class="reference internal" href="AST_Sampling.html#Pump">Pump</a></li>
-<li class="toctree-l4"><a class="reference internal" href="AST_Sampling.html#Simulator">Simulator</a></li>
 </ul>
 </li>
 </ul>
@@ -673,6 +663,13 @@
 <h1>Stochastic Modelling in fmdtools<a class="headerlink" href="#Stochastic-Modelling-in-fmdtools" title="Link to this heading"></a></h1>
 <p>This notebook covers the basics of stochastic modelling in fmdtools. Stochastic models are models which run <em>non-determinsitically</em>, meaning that simulating the model at the same inputs results in different outputs because of randomness or uncertainty in the model behavior. Thus, to determine the <em>distribution of outcomes</em> which may result from a simulation, a stochastic model must be run a number of times. This notebook will cover: - How to construct a stochastic model by adding <em>stochastic
 states</em> to function blocks and incorporating them in function behavior - How to simulate single scenarios and distributions of scenarios in <code class="docutils literal notranslate"><span class="pre">propagate</span></code> methods - How to visualize and analyze the results of stochastic model simulations</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>Copyright © 2024, United States Government, as represented by the Administrator of the National Aeronautics and Space Administration. All rights reserved.
+
+The “&quot;Fault Model Design tools - fmdtools version 2&quot;” software is licensed under the Apache License, Version 2.0 (the &quot;License&quot;); you may not use this file except in compliance with the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0.
+
+Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an &quot;AS IS&quot; BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
+</pre></div>
+</div>
 <div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[1]:
 </pre></div>
@@ -733,7 +730,7 @@ states</em> to function blocks and incorporating them in function behavior - How
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-Rand(rng=Generator(PCG64) at 0x168FF5DB4C0, probs=[], probdens=1.0, seed=42, run_stochastic=False)
+Rand(rng=Generator(PCG64) at 0x16D3399E500, probs=[], probdens=1.0, seed=42, run_stochastic=False)
 </pre></div></div>
 </div>
 <p>Below, <code class="docutils literal notranslate"><span class="pre">ImportEERand</span></code> container is used in the ImportEE function to add two random states (via <code class="docutils literal notranslate"><span class="pre">ImportEERandState</span></code>): - <code class="docutils literal notranslate"><span class="pre">effstate</span></code>, the quality of the input voltage (i.e. large fluctuations from a step change in power) - <code class="docutils literal notranslate"><span class="pre">grid_noise</span></code>, which is meant to be fluctuations in voltage from the power source (i.e., more ordinary noise)</p>
@@ -917,7 +914,7 @@ class MoveWatRandState(State):
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-MoveWatRand(rng=Generator(PCG64) at 0x168FF621FC0, probs=[], probdens=1.0, seed=23, run_stochastic=False, s=MoveWatRandState(eff=1.0))
+MoveWatRand(rng=Generator(PCG64) at 0x16D33A02180, probs=[], probdens=1.0, seed=23, run_stochastic=False, s=MoveWatRandState(eff=1.0))
 </pre></div></div>
 </div>
 <div class="nbinput docutils container">
@@ -935,7 +932,7 @@ MoveWatRand(rng=Generator(PCG64) at 0x168FF621FC0, probs=[], probdens=1.0, seed=
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-MoveWatRand(rng=Generator(PCG64) at 0x168FF622880, probs=[], probdens=1.0, seed=10, run_stochastic=False, s=MoveWatRandState(eff=1.0))
+MoveWatRand(rng=Generator(PCG64) at 0x16D33A02C00, probs=[], probdens=1.0, seed=10, run_stochastic=False, s=MoveWatRandState(eff=1.0))
 </pre></div></div>
 </div>
 </section>
@@ -1167,7 +1164,7 @@ add_variable_replicates(self, x_combos, replicates=1, seed_comb=&#39;shared&#39;
 </div>
 <div class="output_area stderr docutils container">
 <div class="highlight"><pre>
-SCENARIOS COMPLETE: 100%|██████████| 100/100 [00:09&lt;00:00, 10.18it/s]
+SCENARIOS COMPLETE: 100%|██████████| 100/100 [00:09&lt;00:00, 10.31it/s]
 </pre></div></div>
 </div>
 <p>To evaluate this behavior over time, we can then use <code class="docutils literal notranslate"><span class="pre">History.plot_line</span></code>, to plot the <em>distribution</em> of behaviors over time. <code class="docutils literal notranslate"><span class="pre">History.plot_line</span></code> has a number of different options for visualization of distributions. For example, below we plot model states as individual lines:</p>
@@ -1311,7 +1308,7 @@ ParameterSample of scenarios:
 </div>
 <div class="output_area stderr docutils container">
 <div class="highlight"><pre>
-NESTED SCENARIOS COMPLETE:   0%|          | 1/200 [00:00&lt;01:22,  2.41it/s]
+NESTED SCENARIOS COMPLETE:   0%|          | 0/200 [00:00&lt;?, ?it/s]
 </pre></div></div>
 </div>
 <div class="nboutput docutils container">
@@ -1327,7 +1324,7 @@ Faults found during the nominal run {&#39;move_water&#39;: [&#39;mech_break&#39;
 </div>
 <div class="output_area stderr docutils container">
 <div class="highlight"><pre>
-NESTED SCENARIOS COMPLETE:   1%|          | 2/200 [00:00&lt;01:27,  2.27it/s]
+NESTED SCENARIOS COMPLETE:   0%|          | 1/200 [00:00&lt;01:26,  2.30it/s]
 </pre></div></div>
 </div>
 <div class="nboutput docutils container">
@@ -1343,24 +1340,7 @@ Faults found during the nominal run {&#39;move_water&#39;: [&#39;mech_break&#39;
 </div>
 <div class="output_area stderr docutils container">
 <div class="highlight"><pre>
-NESTED SCENARIOS COMPLETE:   2%|▏         | 3/200 [00:01&lt;01:24,  2.32it/s]
-</pre></div></div>
-</div>
-<div class="nboutput docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area docutils container">
-<div class="highlight"><pre>
-Faults found during the nominal run {&#39;move_water&#39;: [&#39;mech_break&#39;]}
-Faults found during the nominal run {&#39;move_water&#39;: [&#39;mech_break&#39;]}
-</pre></div></div>
-</div>
-<div class="nboutput docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area stderr docutils container">
-<div class="highlight"><pre>
-NESTED SCENARIOS COMPLETE:   2%|▏         | 4/200 [00:01&lt;01:23,  2.36it/s]
+NESTED SCENARIOS COMPLETE:   2%|▏         | 3/200 [00:01&lt;01:28,  2.22it/s]
 </pre></div></div>
 </div>
 <div class="nboutput docutils container">
@@ -1376,7 +1356,7 @@ Faults found during the nominal run {&#39;move_water&#39;: [&#39;mech_break&#39;
 </div>
 <div class="output_area stderr docutils container">
 <div class="highlight"><pre>
-NESTED SCENARIOS COMPLETE:   3%|▎         | 6/200 [00:02&lt;01:26,  2.25it/s]
+NESTED SCENARIOS COMPLETE:   2%|▏         | 4/200 [00:01&lt;01:32,  2.11it/s]
 </pre></div></div>
 </div>
 <div class="nboutput docutils container">
@@ -1392,7 +1372,7 @@ Faults found during the nominal run {&#39;move_water&#39;: [&#39;mech_break&#39;
 </div>
 <div class="output_area stderr docutils container">
 <div class="highlight"><pre>
-NESTED SCENARIOS COMPLETE:   4%|▍         | 8/200 [00:03&lt;01:31,  2.11it/s]
+NESTED SCENARIOS COMPLETE:   2%|▎         | 5/200 [00:02&lt;01:31,  2.13it/s]
 </pre></div></div>
 </div>
 <div class="nboutput docutils container">
@@ -1408,199 +1388,7 @@ Faults found during the nominal run {&#39;move_water&#39;: [&#39;mech_break&#39;
 </div>
 <div class="output_area stderr docutils container">
 <div class="highlight"><pre>
-NESTED SCENARIOS COMPLETE:   6%|▌         | 12/200 [00:05&lt;01:25,  2.19it/s]
-</pre></div></div>
-</div>
-<div class="nboutput docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area docutils container">
-<div class="highlight"><pre>
-Faults found during the nominal run {&#39;move_water&#39;: [&#39;mech_break&#39;]}
-</pre></div></div>
-</div>
-<div class="nboutput docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area stderr docutils container">
-<div class="highlight"><pre>
-NESTED SCENARIOS COMPLETE:   6%|▋         | 13/200 [00:05&lt;01:25,  2.19it/s]
-</pre></div></div>
-</div>
-<div class="nboutput docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area docutils container">
-<div class="highlight"><pre>
-Faults found during the nominal run {&#39;move_water&#39;: [&#39;mech_break&#39;]}
-</pre></div></div>
-</div>
-<div class="nboutput docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area stderr docutils container">
-<div class="highlight"><pre>
-NESTED SCENARIOS COMPLETE:   7%|▋         | 14/200 [00:06&lt;01:24,  2.19it/s]
-</pre></div></div>
-</div>
-<div class="nboutput docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area docutils container">
-<div class="highlight"><pre>
-Faults found during the nominal run {&#39;move_water&#39;: [&#39;mech_break&#39;]}
-</pre></div></div>
-</div>
-<div class="nboutput docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area stderr docutils container">
-<div class="highlight"><pre>
-NESTED SCENARIOS COMPLETE:  10%|▉         | 19/200 [00:08&lt;01:24,  2.13it/s]
-</pre></div></div>
-</div>
-<div class="nboutput docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area docutils container">
-<div class="highlight"><pre>
-Faults found during the nominal run {&#39;move_water&#39;: [&#39;mech_break&#39;]}
-</pre></div></div>
-</div>
-<div class="nboutput docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area stderr docutils container">
-<div class="highlight"><pre>
-NESTED SCENARIOS COMPLETE:  10%|█         | 21/200 [00:09&lt;01:23,  2.15it/s]
-</pre></div></div>
-</div>
-<div class="nboutput docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area docutils container">
-<div class="highlight"><pre>
-Faults found during the nominal run {&#39;move_water&#39;: [&#39;mech_break&#39;]}
-</pre></div></div>
-</div>
-<div class="nboutput docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area stderr docutils container">
-<div class="highlight"><pre>
-NESTED SCENARIOS COMPLETE:  11%|█         | 22/200 [00:10&lt;01:25,  2.07it/s]
-</pre></div></div>
-</div>
-<div class="nboutput docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area docutils container">
-<div class="highlight"><pre>
-Faults found during the nominal run {&#39;move_water&#39;: [&#39;mech_break&#39;]}
-</pre></div></div>
-</div>
-<div class="nboutput docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area stderr docutils container">
-<div class="highlight"><pre>
-NESTED SCENARIOS COMPLETE:  12%|█▏        | 24/200 [00:11&lt;01:22,  2.13it/s]
-</pre></div></div>
-</div>
-<div class="nboutput docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area docutils container">
-<div class="highlight"><pre>
-Faults found during the nominal run {&#39;move_water&#39;: [&#39;mech_break&#39;]}
-</pre></div></div>
-</div>
-<div class="nboutput docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area stderr docutils container">
-<div class="highlight"><pre>
-NESTED SCENARIOS COMPLETE:  12%|█▎        | 25/200 [00:11&lt;01:21,  2.14it/s]
-</pre></div></div>
-</div>
-<div class="nboutput docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area docutils container">
-<div class="highlight"><pre>
-Faults found during the nominal run {&#39;move_water&#39;: [&#39;mech_break&#39;]}
-</pre></div></div>
-</div>
-<div class="nboutput docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area stderr docutils container">
-<div class="highlight"><pre>
-NESTED SCENARIOS COMPLETE:  13%|█▎        | 26/200 [00:12&lt;01:21,  2.13it/s]
-</pre></div></div>
-</div>
-<div class="nboutput docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area docutils container">
-<div class="highlight"><pre>
-Faults found during the nominal run {&#39;move_water&#39;: [&#39;mech_break&#39;]}
-</pre></div></div>
-</div>
-<div class="nboutput docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area stderr docutils container">
-<div class="highlight"><pre>
-NESTED SCENARIOS COMPLETE:  14%|█▎        | 27/200 [00:12&lt;01:20,  2.14it/s]
-</pre></div></div>
-</div>
-<div class="nboutput docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area docutils container">
-<div class="highlight"><pre>
-Faults found during the nominal run {&#39;move_water&#39;: [&#39;mech_break&#39;]}
-</pre></div></div>
-</div>
-<div class="nboutput docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area stderr docutils container">
-<div class="highlight"><pre>
-NESTED SCENARIOS COMPLETE:  14%|█▍        | 28/200 [00:12&lt;01:18,  2.19it/s]
-</pre></div></div>
-</div>
-<div class="nboutput docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area docutils container">
-<div class="highlight"><pre>
-Faults found during the nominal run {&#39;move_water&#39;: [&#39;mech_break&#39;]}
-</pre></div></div>
-</div>
-<div class="nboutput docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area stderr docutils container">
-<div class="highlight"><pre>
-NESTED SCENARIOS COMPLETE:  14%|█▍        | 29/200 [00:13&lt;01:17,  2.20it/s]
-</pre></div></div>
-</div>
-<div class="nboutput docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area docutils container">
-<div class="highlight"><pre>
-Faults found during the nominal run {&#39;move_water&#39;: [&#39;mech_break&#39;]}
-</pre></div></div>
-</div>
-<div class="nboutput docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area stderr docutils container">
-<div class="highlight"><pre>
-NESTED SCENARIOS COMPLETE:  16%|█▌        | 32/200 [00:14&lt;01:16,  2.20it/s]
+NESTED SCENARIOS COMPLETE:   4%|▎         | 7/200 [00:03&lt;01:25,  2.26it/s]
 </pre></div></div>
 </div>
 <div class="nboutput docutils container">
@@ -1617,7 +1405,7 @@ Faults found during the nominal run {&#39;move_water&#39;: [&#39;mech_break&#39;
 </div>
 <div class="output_area stderr docutils container">
 <div class="highlight"><pre>
-NESTED SCENARIOS COMPLETE:  16%|█▋        | 33/200 [00:15&lt;01:15,  2.20it/s]
+NESTED SCENARIOS COMPLETE:   4%|▍         | 8/200 [00:03&lt;01:25,  2.24it/s]
 </pre></div></div>
 </div>
 <div class="nboutput docutils container">
@@ -1633,24 +1421,7 @@ Faults found during the nominal run {&#39;move_water&#39;: [&#39;mech_break&#39;
 </div>
 <div class="output_area stderr docutils container">
 <div class="highlight"><pre>
-NESTED SCENARIOS COMPLETE:  18%|█▊        | 35/200 [00:16&lt;01:15,  2.19it/s]
-</pre></div></div>
-</div>
-<div class="nboutput docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area docutils container">
-<div class="highlight"><pre>
-Faults found during the nominal run {&#39;move_water&#39;: [&#39;mech_break&#39;]}
-Faults found during the nominal run {&#39;move_water&#39;: [&#39;mech_break&#39;]}
-</pre></div></div>
-</div>
-<div class="nboutput docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area stderr docutils container">
-<div class="highlight"><pre>
-NESTED SCENARIOS COMPLETE:  18%|█▊        | 37/200 [00:17&lt;01:13,  2.22it/s]
+NESTED SCENARIOS COMPLETE:   5%|▌         | 10/200 [00:04&lt;01:25,  2.21it/s]
 </pre></div></div>
 </div>
 <div class="nboutput docutils container">
@@ -1666,7 +1437,7 @@ Faults found during the nominal run {&#39;move_water&#39;: [&#39;mech_break&#39;
 </div>
 <div class="output_area stderr docutils container">
 <div class="highlight"><pre>
-NESTED SCENARIOS COMPLETE:  19%|█▉        | 38/200 [00:17&lt;01:13,  2.20it/s]
+NESTED SCENARIOS COMPLETE:   6%|▌         | 11/200 [00:04&lt;01:25,  2.22it/s]
 </pre></div></div>
 </div>
 <div class="nboutput docutils container">
@@ -1682,7 +1453,7 @@ Faults found during the nominal run {&#39;move_water&#39;: [&#39;mech_break&#39;
 </div>
 <div class="output_area stderr docutils container">
 <div class="highlight"><pre>
-NESTED SCENARIOS COMPLETE:  20%|██        | 40/200 [00:18&lt;01:11,  2.23it/s]
+NESTED SCENARIOS COMPLETE:   6%|▋         | 13/200 [00:05&lt;01:24,  2.22it/s]
 </pre></div></div>
 </div>
 <div class="nboutput docutils container">
@@ -1698,7 +1469,7 @@ Faults found during the nominal run {&#39;move_water&#39;: [&#39;mech_break&#39;
 </div>
 <div class="output_area stderr docutils container">
 <div class="highlight"><pre>
-NESTED SCENARIOS COMPLETE:  20%|██        | 41/200 [00:18&lt;01:10,  2.26it/s]
+NESTED SCENARIOS COMPLETE:   7%|▋         | 14/200 [00:06&lt;01:21,  2.29it/s]
 </pre></div></div>
 </div>
 <div class="nboutput docutils container">
@@ -1707,7 +1478,6 @@ NESTED SCENARIOS COMPLETE:  20%|██        | 41/200 [00:18&lt;01:10,  2.26it/
 <div class="output_area docutils container">
 <div class="highlight"><pre>
 Faults found during the nominal run {&#39;move_water&#39;: [&#39;mech_break&#39;]}
-Faults found during the nominal run {&#39;move_water&#39;: [&#39;mech_break&#39;]}
 </pre></div></div>
 </div>
 <div class="nboutput docutils container">
@@ -1715,7 +1485,7 @@ Faults found during the nominal run {&#39;move_water&#39;: [&#39;mech_break&#39;
 </div>
 <div class="output_area stderr docutils container">
 <div class="highlight"><pre>
-NESTED SCENARIOS COMPLETE:  22%|██▏       | 43/200 [00:19&lt;01:09,  2.26it/s]
+NESTED SCENARIOS COMPLETE:   8%|▊         | 17/200 [00:07&lt;01:22,  2.21it/s]
 </pre></div></div>
 </div>
 <div class="nboutput docutils container">
@@ -1724,7 +1494,6 @@ NESTED SCENARIOS COMPLETE:  22%|██▏       | 43/200 [00:19&lt;01:09,  2.26i
 <div class="output_area docutils container">
 <div class="highlight"><pre>
 Faults found during the nominal run {&#39;move_water&#39;: [&#39;mech_break&#39;]}
-Faults found during the nominal run {&#39;move_water&#39;: [&#39;mech_break&#39;]}
 </pre></div></div>
 </div>
 <div class="nboutput docutils container">
@@ -1732,7 +1501,7 @@ Faults found during the nominal run {&#39;move_water&#39;: [&#39;mech_break&#39;
 </div>
 <div class="output_area stderr docutils container">
 <div class="highlight"><pre>
-NESTED SCENARIOS COMPLETE:  22%|██▎       | 45/200 [00:20&lt;01:08,  2.28it/s]
+NESTED SCENARIOS COMPLETE:  10%|▉         | 19/200 [00:08&lt;01:20,  2.26it/s]
 </pre></div></div>
 </div>
 <div class="nboutput docutils container">
@@ -1749,7 +1518,7 @@ Faults found during the nominal run {&#39;move_water&#39;: [&#39;mech_break&#39;
 </div>
 <div class="output_area stderr docutils container">
 <div class="highlight"><pre>
-NESTED SCENARIOS COMPLETE:  24%|██▎       | 47/200 [00:21&lt;01:07,  2.27it/s]
+NESTED SCENARIOS COMPLETE:  10%|█         | 20/200 [00:08&lt;01:19,  2.28it/s]
 </pre></div></div>
 </div>
 <div class="nboutput docutils container">
@@ -1765,7 +1534,7 @@ Faults found during the nominal run {&#39;move_water&#39;: [&#39;mech_break&#39;
 </div>
 <div class="output_area stderr docutils container">
 <div class="highlight"><pre>
-NESTED SCENARIOS COMPLETE:  24%|██▍       | 48/200 [00:21&lt;01:06,  2.28it/s]
+NESTED SCENARIOS COMPLETE:  10%|█         | 21/200 [00:09&lt;01:16,  2.34it/s]
 </pre></div></div>
 </div>
 <div class="nboutput docutils container">
@@ -1781,7 +1550,7 @@ Faults found during the nominal run {&#39;move_water&#39;: [&#39;mech_break&#39;
 </div>
 <div class="output_area stderr docutils container">
 <div class="highlight"><pre>
-NESTED SCENARIOS COMPLETE:  25%|██▌       | 50/200 [00:22&lt;01:08,  2.20it/s]
+NESTED SCENARIOS COMPLETE:  11%|█         | 22/200 [00:09&lt;01:17,  2.30it/s]
 </pre></div></div>
 </div>
 <div class="nboutput docutils container">
@@ -1797,7 +1566,7 @@ Faults found during the nominal run {&#39;move_water&#39;: [&#39;mech_break&#39;
 </div>
 <div class="output_area stderr docutils container">
 <div class="highlight"><pre>
-NESTED SCENARIOS COMPLETE:  26%|██▌       | 51/200 [00:23&lt;01:07,  2.22it/s]
+NESTED SCENARIOS COMPLETE:  12%|█▏        | 23/200 [00:10&lt;01:16,  2.33it/s]
 </pre></div></div>
 </div>
 <div class="nboutput docutils container">
@@ -1813,7 +1582,7 @@ Faults found during the nominal run {&#39;move_water&#39;: [&#39;mech_break&#39;
 </div>
 <div class="output_area stderr docutils container">
 <div class="highlight"><pre>
-NESTED SCENARIOS COMPLETE:  27%|██▋       | 54/200 [00:24&lt;01:06,  2.19it/s]
+NESTED SCENARIOS COMPLETE:  12%|█▏        | 24/200 [00:10&lt;01:15,  2.32it/s]
 </pre></div></div>
 </div>
 <div class="nboutput docutils container">
@@ -1829,7 +1598,423 @@ Faults found during the nominal run {&#39;move_water&#39;: [&#39;mech_break&#39;
 </div>
 <div class="output_area stderr docutils container">
 <div class="highlight"><pre>
-NESTED SCENARIOS COMPLETE:  28%|██▊       | 55/200 [00:25&lt;01:05,  2.21it/s]
+NESTED SCENARIOS COMPLETE:  12%|█▎        | 25/200 [00:11&lt;01:15,  2.32it/s]
+</pre></div></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+Faults found during the nominal run {&#39;move_water&#39;: [&#39;mech_break&#39;]}
+</pre></div></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area stderr docutils container">
+<div class="highlight"><pre>
+NESTED SCENARIOS COMPLETE:  14%|█▎        | 27/200 [00:11&lt;01:14,  2.33it/s]
+</pre></div></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+Faults found during the nominal run {&#39;move_water&#39;: [&#39;mech_break&#39;]}
+</pre></div></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area stderr docutils container">
+<div class="highlight"><pre>
+NESTED SCENARIOS COMPLETE:  14%|█▍        | 29/200 [00:12&lt;01:14,  2.30it/s]
+</pre></div></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+Faults found during the nominal run {&#39;move_water&#39;: [&#39;mech_break&#39;]}
+</pre></div></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area stderr docutils container">
+<div class="highlight"><pre>
+NESTED SCENARIOS COMPLETE:  15%|█▌        | 30/200 [00:13&lt;01:13,  2.30it/s]
+</pre></div></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+Faults found during the nominal run {&#39;move_water&#39;: [&#39;mech_break&#39;]}
+</pre></div></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area stderr docutils container">
+<div class="highlight"><pre>
+NESTED SCENARIOS COMPLETE:  16%|█▌        | 31/200 [00:13&lt;01:14,  2.27it/s]
+</pre></div></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+Faults found during the nominal run {&#39;move_water&#39;: [&#39;mech_break&#39;]}
+</pre></div></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area stderr docutils container">
+<div class="highlight"><pre>
+NESTED SCENARIOS COMPLETE:  16%|█▋        | 33/200 [00:14&lt;01:15,  2.20it/s]
+</pre></div></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+Faults found during the nominal run {&#39;move_water&#39;: [&#39;mech_break&#39;]}
+</pre></div></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area stderr docutils container">
+<div class="highlight"><pre>
+NESTED SCENARIOS COMPLETE:  17%|█▋        | 34/200 [00:15&lt;01:15,  2.20it/s]
+</pre></div></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+Faults found during the nominal run {&#39;move_water&#39;: [&#39;mech_break&#39;]}
+</pre></div></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area stderr docutils container">
+<div class="highlight"><pre>
+NESTED SCENARIOS COMPLETE:  18%|█▊        | 35/200 [00:15&lt;01:15,  2.19it/s]
+</pre></div></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+Faults found during the nominal run {&#39;move_water&#39;: [&#39;mech_break&#39;]}
+</pre></div></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area stderr docutils container">
+<div class="highlight"><pre>
+NESTED SCENARIOS COMPLETE:  18%|█▊        | 36/200 [00:16&lt;01:14,  2.21it/s]
+</pre></div></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+Faults found during the nominal run {&#39;move_water&#39;: [&#39;mech_break&#39;]}
+</pre></div></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area stderr docutils container">
+<div class="highlight"><pre>
+NESTED SCENARIOS COMPLETE:  19%|█▉        | 38/200 [00:16&lt;01:13,  2.20it/s]
+</pre></div></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+Faults found during the nominal run {&#39;move_water&#39;: [&#39;mech_break&#39;]}
+</pre></div></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area stderr docutils container">
+<div class="highlight"><pre>
+NESTED SCENARIOS COMPLETE:  20%|█▉        | 39/200 [00:17&lt;01:13,  2.19it/s]
+</pre></div></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+Faults found during the nominal run {&#39;move_water&#39;: [&#39;mech_break&#39;]}
+</pre></div></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area stderr docutils container">
+<div class="highlight"><pre>
+NESTED SCENARIOS COMPLETE:  20%|██        | 40/200 [00:17&lt;01:13,  2.17it/s]
+</pre></div></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+Faults found during the nominal run {&#39;move_water&#39;: [&#39;mech_break&#39;]}
+</pre></div></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area stderr docutils container">
+<div class="highlight"><pre>
+NESTED SCENARIOS COMPLETE:  20%|██        | 41/200 [00:18&lt;01:12,  2.19it/s]
+</pre></div></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+Faults found during the nominal run {&#39;move_water&#39;: [&#39;mech_break&#39;]}
+</pre></div></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area stderr docutils container">
+<div class="highlight"><pre>
+NESTED SCENARIOS COMPLETE:  22%|██▏       | 43/200 [00:19&lt;01:11,  2.20it/s]
+</pre></div></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+Faults found during the nominal run {&#39;move_water&#39;: [&#39;mech_break&#39;]}
+</pre></div></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area stderr docutils container">
+<div class="highlight"><pre>
+NESTED SCENARIOS COMPLETE:  22%|██▏       | 44/200 [00:19&lt;01:10,  2.20it/s]
+</pre></div></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+Faults found during the nominal run {&#39;move_water&#39;: [&#39;mech_break&#39;]}
+</pre></div></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area stderr docutils container">
+<div class="highlight"><pre>
+NESTED SCENARIOS COMPLETE:  23%|██▎       | 46/200 [00:20&lt;01:09,  2.20it/s]
+</pre></div></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+Faults found during the nominal run {&#39;move_water&#39;: [&#39;mech_break&#39;]}
+</pre></div></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area stderr docutils container">
+<div class="highlight"><pre>
+NESTED SCENARIOS COMPLETE:  24%|██▎       | 47/200 [00:20&lt;01:07,  2.28it/s]
+</pre></div></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+Faults found during the nominal run {&#39;move_water&#39;: [&#39;mech_break&#39;]}
+</pre></div></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area stderr docutils container">
+<div class="highlight"><pre>
+NESTED SCENARIOS COMPLETE:  24%|██▍       | 48/200 [00:21&lt;01:06,  2.30it/s]
+</pre></div></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+Faults found during the nominal run {&#39;move_water&#39;: [&#39;mech_break&#39;]}
+</pre></div></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area stderr docutils container">
+<div class="highlight"><pre>
+NESTED SCENARIOS COMPLETE:  24%|██▍       | 49/200 [00:21&lt;01:07,  2.24it/s]
+</pre></div></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+Faults found during the nominal run {&#39;move_water&#39;: [&#39;mech_break&#39;]}
+</pre></div></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area stderr docutils container">
+<div class="highlight"><pre>
+NESTED SCENARIOS COMPLETE:  27%|██▋       | 54/200 [00:24&lt;01:07,  2.17it/s]
+</pre></div></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+Faults found during the nominal run {&#39;move_water&#39;: [&#39;mech_break&#39;]}
+</pre></div></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area stderr docutils container">
+<div class="highlight"><pre>
+NESTED SCENARIOS COMPLETE:  28%|██▊       | 55/200 [00:24&lt;01:04,  2.24it/s]
+</pre></div></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+Faults found during the nominal run {&#39;move_water&#39;: [&#39;mech_break&#39;]}
+</pre></div></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area stderr docutils container">
+<div class="highlight"><pre>
+NESTED SCENARIOS COMPLETE:  28%|██▊       | 56/200 [00:24&lt;01:03,  2.26it/s]
+</pre></div></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+Faults found during the nominal run {&#39;move_water&#39;: [&#39;mech_break&#39;]}
+</pre></div></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area stderr docutils container">
+<div class="highlight"><pre>
+NESTED SCENARIOS COMPLETE:  28%|██▊       | 57/200 [00:25&lt;01:02,  2.30it/s]
+</pre></div></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+Faults found during the nominal run {&#39;move_water&#39;: [&#39;mech_break&#39;]}
+</pre></div></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area stderr docutils container">
+<div class="highlight"><pre>
+NESTED SCENARIOS COMPLETE:  29%|██▉       | 58/200 [00:25&lt;01:00,  2.36it/s]
+</pre></div></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+Faults found during the nominal run {&#39;move_water&#39;: [&#39;mech_break&#39;]}
+</pre></div></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area stderr docutils container">
+<div class="highlight"><pre>
+NESTED SCENARIOS COMPLETE:  30%|███       | 60/200 [00:26&lt;01:01,  2.29it/s]
+</pre></div></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+Faults found during the nominal run {&#39;move_water&#39;: [&#39;mech_break&#39;]}
+</pre></div></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area stderr docutils container">
+<div class="highlight"><pre>
+NESTED SCENARIOS COMPLETE:  30%|███       | 61/200 [00:27&lt;01:00,  2.30it/s]
+</pre></div></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+Faults found during the nominal run {&#39;move_water&#39;: [&#39;mech_break&#39;]}
+</pre></div></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area stderr docutils container">
+<div class="highlight"><pre>
+NESTED SCENARIOS COMPLETE:  32%|███▏      | 63/200 [00:27&lt;00:59,  2.29it/s]
 </pre></div></div>
 </div>
 <div class="nboutput docutils container">
@@ -1846,7 +2031,7 @@ Faults found during the nominal run {&#39;move_water&#39;: [&#39;mech_break&#39;
 </div>
 <div class="output_area stderr docutils container">
 <div class="highlight"><pre>
-NESTED SCENARIOS COMPLETE:  28%|██▊       | 57/200 [00:26&lt;01:05,  2.19it/s]
+NESTED SCENARIOS COMPLETE:  33%|███▎      | 66/200 [00:29&lt;00:59,  2.24it/s]
 </pre></div></div>
 </div>
 <div class="nboutput docutils container">
@@ -1862,7 +2047,7 @@ Faults found during the nominal run {&#39;move_water&#39;: [&#39;mech_break&#39;
 </div>
 <div class="output_area stderr docutils container">
 <div class="highlight"><pre>
-NESTED SCENARIOS COMPLETE:  29%|██▉       | 58/200 [00:26&lt;01:03,  2.23it/s]
+NESTED SCENARIOS COMPLETE:  34%|███▎      | 67/200 [00:29&lt;00:58,  2.26it/s]
 </pre></div></div>
 </div>
 <div class="nboutput docutils container">
@@ -1878,24 +2063,7 @@ Faults found during the nominal run {&#39;move_water&#39;: [&#39;mech_break&#39;
 </div>
 <div class="output_area stderr docutils container">
 <div class="highlight"><pre>
-NESTED SCENARIOS COMPLETE:  30%|██▉       | 59/200 [00:26&lt;01:02,  2.27it/s]
-</pre></div></div>
-</div>
-<div class="nboutput docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area docutils container">
-<div class="highlight"><pre>
-Faults found during the nominal run {&#39;move_water&#39;: [&#39;mech_break&#39;]}
-Faults found during the nominal run {&#39;move_water&#39;: [&#39;mech_break&#39;]}
-</pre></div></div>
-</div>
-<div class="nboutput docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area stderr docutils container">
-<div class="highlight"><pre>
-NESTED SCENARIOS COMPLETE:  30%|███       | 61/200 [00:27&lt;01:00,  2.31it/s]
+NESTED SCENARIOS COMPLETE:  34%|███▍      | 68/200 [00:30&lt;00:57,  2.31it/s]
 </pre></div></div>
 </div>
 <div class="nboutput docutils container">
@@ -1911,7 +2079,7 @@ Faults found during the nominal run {&#39;move_water&#39;: [&#39;mech_break&#39;
 </div>
 <div class="output_area stderr docutils container">
 <div class="highlight"><pre>
-NESTED SCENARIOS COMPLETE:  31%|███       | 62/200 [00:28&lt;00:59,  2.31it/s]
+NESTED SCENARIOS COMPLETE:  34%|███▍      | 69/200 [00:30&lt;00:57,  2.27it/s]
 </pre></div></div>
 </div>
 <div class="nboutput docutils container">
@@ -1927,7 +2095,7 @@ Faults found during the nominal run {&#39;move_water&#39;: [&#39;mech_break&#39;
 </div>
 <div class="output_area stderr docutils container">
 <div class="highlight"><pre>
-NESTED SCENARIOS COMPLETE:  32%|███▏      | 63/200 [00:28&lt;01:00,  2.27it/s]
+NESTED SCENARIOS COMPLETE:  35%|███▌      | 70/200 [00:31&lt;00:56,  2.29it/s]
 </pre></div></div>
 </div>
 <div class="nboutput docutils container">
@@ -1943,24 +2111,7 @@ Faults found during the nominal run {&#39;move_water&#39;: [&#39;mech_break&#39;
 </div>
 <div class="output_area stderr docutils container">
 <div class="highlight"><pre>
-NESTED SCENARIOS COMPLETE:  32%|███▎      | 65/200 [00:29&lt;01:01,  2.21it/s]
-</pre></div></div>
-</div>
-<div class="nboutput docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area docutils container">
-<div class="highlight"><pre>
-Faults found during the nominal run {&#39;move_water&#39;: [&#39;mech_break&#39;]}
-Faults found during the nominal run {&#39;move_water&#39;: [&#39;mech_break&#39;]}
-</pre></div></div>
-</div>
-<div class="nboutput docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area stderr docutils container">
-<div class="highlight"><pre>
-NESTED SCENARIOS COMPLETE:  33%|███▎      | 66/200 [00:30&lt;00:59,  2.25it/s]
+NESTED SCENARIOS COMPLETE:  36%|███▌      | 72/200 [00:32&lt;00:58,  2.20it/s]
 </pre></div></div>
 </div>
 <div class="nboutput docutils container">
@@ -1976,55 +2127,7 @@ Faults found during the nominal run {&#39;move_water&#39;: [&#39;mech_break&#39;
 </div>
 <div class="output_area stderr docutils container">
 <div class="highlight"><pre>
-NESTED SCENARIOS COMPLETE:  34%|███▍      | 68/200 [00:30&lt;00:58,  2.25it/s]
-</pre></div></div>
-</div>
-<div class="nboutput docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area docutils container">
-<div class="highlight"><pre>
-Faults found during the nominal run {&#39;move_water&#39;: [&#39;mech_break&#39;]}
-</pre></div></div>
-</div>
-<div class="nboutput docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area stderr docutils container">
-<div class="highlight"><pre>
-NESTED SCENARIOS COMPLETE:  35%|███▌      | 70/200 [00:31&lt;00:58,  2.23it/s]
-</pre></div></div>
-</div>
-<div class="nboutput docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area docutils container">
-<div class="highlight"><pre>
-Faults found during the nominal run {&#39;move_water&#39;: [&#39;mech_break&#39;]}
-</pre></div></div>
-</div>
-<div class="nboutput docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area stderr docutils container">
-<div class="highlight"><pre>
-NESTED SCENARIOS COMPLETE:  36%|███▋      | 73/200 [00:33&lt;00:58,  2.18it/s]
-</pre></div></div>
-</div>
-<div class="nboutput docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area docutils container">
-<div class="highlight"><pre>
-Faults found during the nominal run {&#39;move_water&#39;: [&#39;mech_break&#39;]}
-</pre></div></div>
-</div>
-<div class="nboutput docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area stderr docutils container">
-<div class="highlight"><pre>
-NESTED SCENARIOS COMPLETE:  37%|███▋      | 74/200 [00:33&lt;00:57,  2.21it/s]
+NESTED SCENARIOS COMPLETE:  37%|███▋      | 74/200 [00:32&lt;00:54,  2.31it/s]
 </pre></div></div>
 </div>
 <div class="nboutput docutils container">
@@ -2041,7 +2144,7 @@ Faults found during the nominal run {&#39;move_water&#39;: [&#39;mech_break&#39;
 </div>
 <div class="output_area stderr docutils container">
 <div class="highlight"><pre>
-NESTED SCENARIOS COMPLETE:  38%|███▊      | 76/200 [00:34&lt;00:58,  2.13it/s]
+NESTED SCENARIOS COMPLETE:  38%|███▊      | 76/200 [00:33&lt;00:54,  2.28it/s]
 </pre></div></div>
 </div>
 <div class="nboutput docutils container">
@@ -2057,87 +2160,7 @@ Faults found during the nominal run {&#39;move_water&#39;: [&#39;mech_break&#39;
 </div>
 <div class="output_area stderr docutils container">
 <div class="highlight"><pre>
-NESTED SCENARIOS COMPLETE:  38%|███▊      | 77/200 [00:35&lt;00:57,  2.13it/s]
-</pre></div></div>
-</div>
-<div class="nboutput docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area docutils container">
-<div class="highlight"><pre>
-Faults found during the nominal run {&#39;move_water&#39;: [&#39;mech_break&#39;]}
-</pre></div></div>
-</div>
-<div class="nboutput docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area stderr docutils container">
-<div class="highlight"><pre>
-NESTED SCENARIOS COMPLETE:  40%|████      | 81/200 [00:36&lt;00:54,  2.20it/s]
-</pre></div></div>
-</div>
-<div class="nboutput docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area docutils container">
-<div class="highlight"><pre>
-Faults found during the nominal run {&#39;move_water&#39;: [&#39;mech_break&#39;]}
-</pre></div></div>
-</div>
-<div class="nboutput docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area stderr docutils container">
-<div class="highlight"><pre>
-NESTED SCENARIOS COMPLETE:  41%|████      | 82/200 [00:37&lt;00:53,  2.21it/s]
-</pre></div></div>
-</div>
-<div class="nboutput docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area docutils container">
-<div class="highlight"><pre>
-Faults found during the nominal run {&#39;move_water&#39;: [&#39;mech_break&#39;]}
-</pre></div></div>
-</div>
-<div class="nboutput docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area stderr docutils container">
-<div class="highlight"><pre>
-NESTED SCENARIOS COMPLETE:  42%|████▏     | 83/200 [00:37&lt;00:53,  2.19it/s]
-</pre></div></div>
-</div>
-<div class="nboutput docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area docutils container">
-<div class="highlight"><pre>
-Faults found during the nominal run {&#39;move_water&#39;: [&#39;mech_break&#39;]}
-</pre></div></div>
-</div>
-<div class="nboutput docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area stderr docutils container">
-<div class="highlight"><pre>
-NESTED SCENARIOS COMPLETE:  42%|████▏     | 84/200 [00:38&lt;00:53,  2.18it/s]
-</pre></div></div>
-</div>
-<div class="nboutput docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area docutils container">
-<div class="highlight"><pre>
-Faults found during the nominal run {&#39;move_water&#39;: [&#39;mech_break&#39;]}
-</pre></div></div>
-</div>
-<div class="nboutput docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area stderr docutils container">
-<div class="highlight"><pre>
-NESTED SCENARIOS COMPLETE:  42%|████▎     | 85/200 [00:38&lt;00:51,  2.22it/s]
+NESTED SCENARIOS COMPLETE:  39%|███▉      | 78/200 [00:34&lt;00:53,  2.30it/s]
 </pre></div></div>
 </div>
 <div class="nboutput docutils container">
@@ -2154,7 +2177,7 @@ Faults found during the nominal run {&#39;move_water&#39;: [&#39;mech_break&#39;
 </div>
 <div class="output_area stderr docutils container">
 <div class="highlight"><pre>
-NESTED SCENARIOS COMPLETE:  43%|████▎     | 86/200 [00:39&lt;00:49,  2.29it/s]
+NESTED SCENARIOS COMPLETE:  40%|███▉      | 79/200 [00:35&lt;00:52,  2.30it/s]
 </pre></div></div>
 </div>
 <div class="nboutput docutils container">
@@ -2170,7 +2193,87 @@ Faults found during the nominal run {&#39;move_water&#39;: [&#39;mech_break&#39;
 </div>
 <div class="output_area stderr docutils container">
 <div class="highlight"><pre>
-NESTED SCENARIOS COMPLETE:  44%|████▍     | 88/200 [00:40&lt;00:50,  2.20it/s]
+NESTED SCENARIOS COMPLETE:  40%|████      | 80/200 [00:35&lt;00:52,  2.29it/s]
+</pre></div></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+Faults found during the nominal run {&#39;move_water&#39;: [&#39;mech_break&#39;]}
+</pre></div></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area stderr docutils container">
+<div class="highlight"><pre>
+NESTED SCENARIOS COMPLETE:  40%|████      | 81/200 [00:35&lt;00:52,  2.29it/s]
+</pre></div></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+Faults found during the nominal run {&#39;move_water&#39;: [&#39;mech_break&#39;]}
+</pre></div></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area stderr docutils container">
+<div class="highlight"><pre>
+NESTED SCENARIOS COMPLETE:  41%|████      | 82/200 [00:36&lt;00:52,  2.25it/s]
+</pre></div></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+Faults found during the nominal run {&#39;move_water&#39;: [&#39;mech_break&#39;]}
+</pre></div></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area stderr docutils container">
+<div class="highlight"><pre>
+NESTED SCENARIOS COMPLETE:  42%|████▏     | 83/200 [00:36&lt;00:52,  2.21it/s]
+</pre></div></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+Faults found during the nominal run {&#39;move_water&#39;: [&#39;mech_break&#39;]}
+</pre></div></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area stderr docutils container">
+<div class="highlight"><pre>
+NESTED SCENARIOS COMPLETE:  42%|████▏     | 84/200 [00:37&lt;00:53,  2.17it/s]
+</pre></div></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+Faults found during the nominal run {&#39;move_water&#39;: [&#39;mech_break&#39;]}
+</pre></div></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area stderr docutils container">
+<div class="highlight"><pre>
+NESTED SCENARIOS COMPLETE:  43%|████▎     | 86/200 [00:38&lt;00:52,  2.19it/s]
 </pre></div></div>
 </div>
 <div class="nboutput docutils container">
@@ -2187,7 +2290,120 @@ Faults found during the nominal run {&#39;move_water&#39;: [&#39;mech_break&#39;
 </div>
 <div class="output_area stderr docutils container">
 <div class="highlight"><pre>
-NESTED SCENARIOS COMPLETE:  45%|████▌     | 90/200 [00:40&lt;00:48,  2.27it/s]
+NESTED SCENARIOS COMPLETE:  44%|████▎     | 87/200 [00:38&lt;00:50,  2.24it/s]
+</pre></div></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+Faults found during the nominal run {&#39;move_water&#39;: [&#39;mech_break&#39;]}
+</pre></div></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area stderr docutils container">
+<div class="highlight"><pre>
+NESTED SCENARIOS COMPLETE:  44%|████▍     | 88/200 [00:39&lt;00:50,  2.22it/s]
+</pre></div></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+Faults found during the nominal run {&#39;move_water&#39;: [&#39;mech_break&#39;]}
+</pre></div></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area stderr docutils container">
+<div class="highlight"><pre>
+NESTED SCENARIOS COMPLETE:  46%|████▌     | 91/200 [00:40&lt;00:48,  2.23it/s]
+</pre></div></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+Faults found during the nominal run {&#39;move_water&#39;: [&#39;mech_break&#39;]}
+</pre></div></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area stderr docutils container">
+<div class="highlight"><pre>
+NESTED SCENARIOS COMPLETE:  46%|████▋     | 93/200 [00:41&lt;00:48,  2.21it/s]
+</pre></div></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+Faults found during the nominal run {&#39;move_water&#39;: [&#39;mech_break&#39;]}
+</pre></div></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area stderr docutils container">
+<div class="highlight"><pre>
+NESTED SCENARIOS COMPLETE:  47%|████▋     | 94/200 [00:41&lt;00:46,  2.26it/s]
+</pre></div></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+Faults found during the nominal run {&#39;move_water&#39;: [&#39;mech_break&#39;]}
+</pre></div></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area stderr docutils container">
+<div class="highlight"><pre>
+NESTED SCENARIOS COMPLETE:  48%|████▊     | 97/200 [00:43&lt;00:45,  2.25it/s]
+</pre></div></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+Faults found during the nominal run {&#39;move_water&#39;: [&#39;mech_break&#39;]}
+</pre></div></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area stderr docutils container">
+<div class="highlight"><pre>
+NESTED SCENARIOS COMPLETE:  50%|████▉     | 99/200 [00:43&lt;00:43,  2.32it/s]
+</pre></div></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+Faults found during the nominal run {&#39;move_water&#39;: [&#39;mech_break&#39;]}
+Faults found during the nominal run {&#39;move_water&#39;: [&#39;mech_break&#39;]}
+</pre></div></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area stderr docutils container">
+<div class="highlight"><pre>
+NESTED SCENARIOS COMPLETE:  78%|███████▊  | 156/200 [01:10&lt;00:20,  2.18it/s]
 </pre></div></div>
 </div>
 <div class="nboutput docutils container">
@@ -2203,121 +2419,7 @@ Faults found during the nominal run {&#39;import_ee&#39;: [&#39;no_v&#39;]}
 </div>
 <div class="output_area stderr docutils container">
 <div class="highlight"><pre>
-NESTED SCENARIOS COMPLETE:  46%|████▌     | 92/200 [00:41&lt;00:47,  2.27it/s]
-</pre></div></div>
-</div>
-<div class="nboutput docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area docutils container">
-<div class="highlight"><pre>
-Faults found during the nominal run {&#39;move_water&#39;: [&#39;mech_break&#39;]}
-</pre></div></div>
-</div>
-<div class="nboutput docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area stderr docutils container">
-<div class="highlight"><pre>
-NESTED SCENARIOS COMPLETE:  47%|████▋     | 94/200 [00:42&lt;00:47,  2.23it/s]
-</pre></div></div>
-</div>
-<div class="nboutput docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area docutils container">
-<div class="highlight"><pre>
-Faults found during the nominal run {&#39;move_water&#39;: [&#39;mech_break&#39;]}
-Faults found during the nominal run {&#39;move_water&#39;: [&#39;mech_break&#39;]}
-</pre></div></div>
-</div>
-<div class="nboutput docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area stderr docutils container">
-<div class="highlight"><pre>
-NESTED SCENARIOS COMPLETE:  48%|████▊     | 96/200 [00:43&lt;00:47,  2.19it/s]
-</pre></div></div>
-</div>
-<div class="nboutput docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area docutils container">
-<div class="highlight"><pre>
-Faults found during the nominal run {&#39;move_water&#39;: [&#39;mech_break&#39;]}
-</pre></div></div>
-</div>
-<div class="nboutput docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area stderr docutils container">
-<div class="highlight"><pre>
-NESTED SCENARIOS COMPLETE:  49%|████▉     | 98/200 [00:44&lt;00:46,  2.18it/s]
-</pre></div></div>
-</div>
-<div class="nboutput docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area docutils container">
-<div class="highlight"><pre>
-Faults found during the nominal run {&#39;move_water&#39;: [&#39;mech_break&#39;]}
-</pre></div></div>
-</div>
-<div class="nboutput docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area stderr docutils container">
-<div class="highlight"><pre>
-NESTED SCENARIOS COMPLETE:  50%|████▉     | 99/200 [00:44&lt;00:45,  2.24it/s]
-</pre></div></div>
-</div>
-<div class="nboutput docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area docutils container">
-<div class="highlight"><pre>
-Faults found during the nominal run {&#39;move_water&#39;: [&#39;mech_break&#39;]}
-Faults found during the nominal run {&#39;move_water&#39;: [&#39;mech_break&#39;]}
-</pre></div></div>
-</div>
-<div class="nboutput docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area stderr docutils container">
-<div class="highlight"><pre>
-NESTED SCENARIOS COMPLETE:  68%|██████▊   | 135/200 [01:02&lt;00:31,  2.06it/s]
-</pre></div></div>
-</div>
-<div class="nboutput docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area docutils container">
-<div class="highlight"><pre>
-Faults found during the nominal run {&#39;import_ee&#39;: [&#39;no_v&#39;]}
-</pre></div></div>
-</div>
-<div class="nboutput docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area stderr docutils container">
-<div class="highlight"><pre>
-NESTED SCENARIOS COMPLETE:  82%|████████▎ | 165/200 [01:16&lt;00:16,  2.08it/s]
-</pre></div></div>
-</div>
-<div class="nboutput docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area docutils container">
-<div class="highlight"><pre>
-Faults found during the nominal run {&#39;import_ee&#39;: [&#39;no_v&#39;]}
-</pre></div></div>
-</div>
-<div class="nboutput docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area stderr docutils container">
-<div class="highlight"><pre>
-NESTED SCENARIOS COMPLETE:  94%|█████████▍| 189/200 [01:27&lt;00:05,  2.09it/s]
+NESTED SCENARIOS COMPLETE:  86%|████████▋ | 173/200 [01:17&lt;00:12,  2.11it/s]
 </pre></div></div>
 </div>
 <div class="nboutput docutils container">
@@ -2333,7 +2435,7 @@ Faults found during the nominal run {&#39;import_ee&#39;: [&#39;no_v&#39;]}
 </div>
 <div class="output_area stderr docutils container">
 <div class="highlight"><pre>
-NESTED SCENARIOS COMPLETE: 100%|██████████| 200/200 [01:32&lt;00:00,  2.16it/s]
+NESTED SCENARIOS COMPLETE: 100%|██████████| 200/200 [01:30&lt;00:00,  2.21it/s]
 </pre></div></div>
 </div>
 <p>Next, we get just the scenarios of interest:</p>
@@ -2428,16 +2530,16 @@ until the fault time, when pressure increases dramatically. This is also observe
     <tr>
       <th>10</th>
       <th>block</th>
-      <td>15166.191341</td>
-      <td>14474.840749</td>
-      <td>15879.433942</td>
+      <td>15151.128868</td>
+      <td>14469.853131</td>
+      <td>15852.714455</td>
     </tr>
     <tr>
       <th>1</th>
       <th>block</th>
-      <td>13377.324660</td>
-      <td>12920.670278</td>
-      <td>13864.504038</td>
+      <td>13380.052288</td>
+      <td>12920.289512</td>
+      <td>13880.426406</td>
     </tr>
   </tbody>
 </table>
@@ -2475,7 +2577,7 @@ until the fault time, when pressure increases dramatically. This is also observe
           </div>
           <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
         <a href="Optimization.html" class="btn btn-neutral float-left" title="Optimization using the ProblemInterface class" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
-        <a href="AST_Sampling.html" class="btn btn-neutral float-right" title="fmdtools-AdaStress integration" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="../multirotor/readme.html" class="btn btn-neutral float-right" title="Overview" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 
   <hr/>

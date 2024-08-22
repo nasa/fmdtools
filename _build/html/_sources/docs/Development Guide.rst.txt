@@ -355,7 +355,7 @@ See also
 How to Contribute
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Development of fmdtools is coordinated by the `fmdtools team <../CONTRIBUTORS.md>`_ at NASA Ames Research Center. As an open-source tool developed under the NASA Open Source Agreement, outside contributions are welcomed. To be able to submit contributions (e.g., pull requests), external contributors should first submit a contributors license agreement (`Individual CLA <https://github.com/nasa/fmdtools/blob/main/fmdtools_Individual_CLA.pdf>`_ , `Corporate CLA <https://github.com/nasa/fmdtools/blob/main/fmdtools_Corporate_CLA.pdf>`_).
+Development of fmdtools is coordinated by the `fmdtools team <../CONTRIBUTORS.md>`_ at NASA Ames Research Center. As an NASA-developed and maintained open-source tool, outside contributions are welcomed. To be able to submit contributions (e.g., pull requests), external contributors should first submit a contributors license agreement (`Individual CLA <https://github.com/nasa/fmdtools/blob/main/fmdtools_Individual_CLA.pdf>`_ , `Corporate CLA <https://github.com/nasa/fmdtools/blob/main/fmdtools_Corporate_CLA.pdf>`_).
 
 
 Repo Structure
@@ -493,6 +493,53 @@ Style conventions can additionally be followed/enforced automatically using the 
 - stand-alone formatter: https://github.com/psf/black
 - VSCode Extension: https://marketplace.visualstudio.com/items?itemName=ms-python.black-formatter
 - Spyder workflow: https://stackoverflow.com/questions/55698077/how-to-use-code-formatter-black-with-spyder
+
+
+Headers
+--------------------------------
+
+All source code files to be released under fmdtools should have the Apache-2.0 license applied to them. 
+
+In modules and scripts, it is best practice to use the following format for the header::
+
+	#!/usr/bin/env python
+	# -*- coding: utf-8 -*-
+	"""
+	<One-line software description here>
+
+	<Futher module-level docstring information, if needed>
+
+	Copyright © 2024, United States Government, as represented by the Administrator
+	of the National Aeronautics and Space Administration. All rights reserved.
+
+	The “"Fault Model Design tools - fmdtools version 2"” software is licensed
+	under the Apache License, Version 2.0 (the "License"); you may not use this
+	file except in compliance with the License. You may obtain a copy of the
+	License at http://www.apache.org/licenses/LICENSE-2.0. 
+
+	Unless required by applicable law or agreed to in writing, software distributed
+	under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR
+	CONDITIONS OF ANY KIND, either express or implied. See the License for the
+	specific language governing permissions and limitations under the License.
+	"""
+
+	<local/project imports>
+
+	<fmdtools imports (examples, then tests, then modules)>
+
+	<external imports>
+
+
+For jupyter notebooks, the following block should be inserted at the end of the first markdown cell, after the title/description::
+
+	```
+	Copyright © 2024, United States Government, as represented by the Administrator of the National Aeronautics and Space Administration. All rights reserved.
+
+	The “"Fault Model Design tools - fmdtools version 2"” software is licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0. 
+
+	Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
+	```
+
 
 Testing
 --------------------------------

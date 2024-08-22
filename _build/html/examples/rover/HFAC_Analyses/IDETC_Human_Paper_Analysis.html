@@ -75,10 +75,7 @@
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="../../../README.html#citing-this-repository">Citing this repository</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../../README.html#license-notices">License/Notices</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="../../../README.html#disclaimers">Disclaimers</a></li>
-</ul>
-</li>
+<li class="toctree-l2"><a class="reference internal" href="../../../README.html#license-notices">License/Notices</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../../../docs/Development%20Guide.html">Development Guide</a><ul>
@@ -86,7 +83,7 @@
 <li class="toctree-l2"><a class="reference internal" href="../../../docs/Development%20Guide.html#introductory-tutorial">Introductory Tutorial</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="../../../docs/Intro_to_fmdtools.html">Intro to resilience modeling, simulation, and visualization in Python with fmdtools.</a><ul>
 <li class="toctree-l4"><a class="reference internal" href="../../../docs/Intro_to_fmdtools.html#author-daniel-hulse">Author: Daniel Hulse</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../../docs/Intro_to_fmdtools.html#version-2-0-rc-6">Version: 2.0-rc-6</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../docs/Intro_to_fmdtools.html#version-2-0-0">Version: 2.0.0</a></li>
 </ul>
 </li>
 <li class="toctree-l3"><a class="reference internal" href="../../../docs/Intro_to_fmdtools.html#overview">Overview</a></li>
@@ -150,6 +147,7 @@
 <li class="toctree-l3"><a class="reference internal" href="../../../docs/Development%20Guide.html#roles">Roles</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../docs/Development%20Guide.html#documentation">Documentation</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../docs/Development%20Guide.html#style-formatting">Style/Formatting</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../docs/Development%20Guide.html#headers">Headers</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../docs/Development%20Guide.html#testing">Testing</a></li>
 </ul>
 </li>
@@ -198,14 +196,6 @@
 <li class="toctree-l3"><a class="reference internal" href="../../pump/Stochastic_Modelling.html">Stochastic Modelling in fmdtools</a><ul>
 <li class="toctree-l4"><a class="reference internal" href="../../pump/Stochastic_Modelling.html#Model-Setup">Model Setup</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../pump/Stochastic_Modelling.html#Simulation-and-Analysis">Simulation and Analysis</a></li>
-</ul>
-</li>
-<li class="toctree-l3"><a class="reference internal" href="../../pump/AST_Sampling.html">fmdtools-AdaStress integration</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="../../pump/AST_Sampling.html#Python-setup:">Python setup:</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../pump/AST_Sampling.html#Running-AdaStress-Methods">Running AdaStress Methods</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../pump/AST_Sampling.html#MCTS">MCTS</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../pump/AST_Sampling.html#Pump">Pump</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../pump/AST_Sampling.html#Simulator">Simulator</a></li>
 </ul>
 </li>
 </ul>
@@ -1025,7 +1015,7 @@ FaultSample of scenarios:
 </div>
 <div class="output_area stderr docutils container">
 <div class="highlight"><pre>
-SCENARIOS COMPLETE: 100%|██████████| 19/19 [00:04&lt;00:00,  3.91it/s]
+SCENARIOS COMPLETE: 100%|██████████| 19/19 [00:04&lt;00:00,  4.32it/s]
 </pre></div></div>
 </div>
 <div class="nbinput docutils container">
@@ -1191,7 +1181,7 @@ SCENARIOS COMPLETE: 100%|██████████| 19/19 [00:04&lt;00:00, 
       <td>False</td>
       <td>False</td>
       <td>14.057688</td>
-      <td>{'operator': ['project_failed_turn_left', 'per...</td>
+      <td>{'operator': ['percieve_not_visible', 'project...</td>
       <td>incomplete mission faulty</td>
       <td>14.862043</td>
       <td>-0.251773</td>
@@ -1203,7 +1193,7 @@ SCENARIOS COMPLETE: 100%|██████████| 19/19 [00:04&lt;00:00, 
       <td>False</td>
       <td>False</td>
       <td>13.693675</td>
-      <td>{'operator': ['project_failed_turn_right', 'pe...</td>
+      <td>{'operator': ['percieve_not_visible', 'project...</td>
       <td>incomplete mission faulty</td>
       <td>15.363988</td>
       <td>1.140047</td>
@@ -1263,7 +1253,7 @@ SCENARIOS COMPLETE: 100%|██████████| 19/19 [00:04&lt;00:00, 
       <td>False</td>
       <td>False</td>
       <td>13.663813</td>
-      <td>{'operator': ['decide_failed_turn_right', 'per...</td>
+      <td>{'operator': ['percieve_not_visible', 'decide_...</td>
       <td>incomplete mission faulty</td>
       <td>15.24424</td>
       <td>-0.529458</td>
@@ -1275,7 +1265,7 @@ SCENARIOS COMPLETE: 100%|██████████| 19/19 [00:04&lt;00:00, 
       <td>False</td>
       <td>False</td>
       <td>13.663813</td>
-      <td>{'operator': ['decide_failed_slow', 'percieve_...</td>
+      <td>{'operator': ['percieve_not_visible', 'decide_...</td>
       <td>incomplete mission faulty</td>
       <td>15.24424</td>
       <td>-0.529458</td>
@@ -1287,7 +1277,7 @@ SCENARIOS COMPLETE: 100%|██████████| 19/19 [00:04&lt;00:00, 
       <td>False</td>
       <td>False</td>
       <td>13.663813</td>
-      <td>{'operator': ['decide_failed_fast', 'percieve_...</td>
+      <td>{'operator': ['percieve_not_visible', 'decide_...</td>
       <td>incomplete mission faulty</td>
       <td>15.24424</td>
       <td>-0.529458</td>
@@ -1418,7 +1408,7 @@ SCENARIOS COMPLETE: 100%|██████████| 19/19 [00:04&lt;00:00, 
       <td>False</td>
       <td>False</td>
       <td>14.057688</td>
-      <td>{'operator': ['project_failed_turn_left', 'per...</td>
+      <td>{'operator': ['percieve_not_visible', 'project...</td>
       <td>incomplete mission faulty</td>
       <td>14.862043</td>
       <td>-0.251773</td>
@@ -1430,7 +1420,7 @@ SCENARIOS COMPLETE: 100%|██████████| 19/19 [00:04&lt;00:00, 
       <td>False</td>
       <td>False</td>
       <td>13.693675</td>
-      <td>{'operator': ['project_failed_turn_right', 'pe...</td>
+      <td>{'operator': ['percieve_not_visible', 'project...</td>
       <td>incomplete mission faulty</td>
       <td>15.363988</td>
       <td>1.140047</td>
@@ -1490,7 +1480,7 @@ SCENARIOS COMPLETE: 100%|██████████| 19/19 [00:04&lt;00:00, 
       <td>False</td>
       <td>False</td>
       <td>13.663813</td>
-      <td>{'operator': ['decide_failed_fast', 'percieve_...</td>
+      <td>{'operator': ['percieve_not_visible', 'decide_...</td>
       <td>incomplete mission faulty</td>
       <td>15.24424</td>
       <td>-0.529458</td>
@@ -1502,7 +1492,7 @@ SCENARIOS COMPLETE: 100%|██████████| 19/19 [00:04&lt;00:00, 
       <td>False</td>
       <td>False</td>
       <td>13.663813</td>
-      <td>{'operator': ['decide_failed_slow', 'percieve_...</td>
+      <td>{'operator': ['percieve_not_visible', 'decide_...</td>
       <td>incomplete mission faulty</td>
       <td>15.24424</td>
       <td>-0.529458</td>
@@ -1514,7 +1504,7 @@ SCENARIOS COMPLETE: 100%|██████████| 19/19 [00:04&lt;00:00, 
       <td>False</td>
       <td>False</td>
       <td>13.663813</td>
-      <td>{'operator': ['decide_failed_turn_right', 'per...</td>
+      <td>{'operator': ['percieve_not_visible', 'decide_...</td>
       <td>incomplete mission faulty</td>
       <td>15.24424</td>
       <td>-0.529458</td>
@@ -1677,15 +1667,15 @@ operator_percieve_failed_no_action_t56p0 &amp; [&#39;psfs&#39;, &#39;pos_signal&
 operator_percieve_not_visible_t56p0 &amp; [&#39;psfs&#39;, &#39;pos_signal&#39;, &#39;pos&#39;, &#39;ee_12&#39;, &#39;ee_5&#39;, &#39;ee_15&#39;, &#39;video&#39;, &#39;auto_control&#39;, &#39;motor_control&#39;, &#39;switch&#39;, &#39;comms&#39;, &#39;fault_sig&#39;, &#39;power&#39;, &#39;perception&#39;, &#39;operator&#39;, &#39;plan_path&#39;, &#39;override&#39;, &#39;drive&#39;] &amp; [] &amp; True &amp; True &amp; 0.000000 &amp; {} &amp; nominal mission &amp; 29.254775 &amp; -0.782764 \\
 operator_percieve_wrong_position_t56p0 &amp; [&#39;psfs&#39;, &#39;pos_signal&#39;, &#39;pos&#39;, &#39;ee_12&#39;, &#39;ee_5&#39;, &#39;ee_15&#39;, &#39;video&#39;, &#39;auto_control&#39;, &#39;motor_control&#39;, &#39;switch&#39;, &#39;comms&#39;, &#39;fault_sig&#39;, &#39;power&#39;, &#39;perception&#39;, &#39;operator&#39;, &#39;plan_path&#39;, &#39;override&#39;, &#39;drive&#39;] &amp; [] &amp; True &amp; True &amp; 0.000000 &amp; {} &amp; nominal mission &amp; 29.254775 &amp; -0.782764 \\
 operator_comprehend_failed_no_action_t56p0 &amp; [&#39;psfs&#39;, &#39;pos_signal&#39;, &#39;pos&#39;, &#39;ee_12&#39;, &#39;ee_5&#39;, &#39;ee_15&#39;, &#39;video&#39;, &#39;auto_control&#39;, &#39;motor_control&#39;, &#39;switch&#39;, &#39;comms&#39;, &#39;fault_sig&#39;, &#39;power&#39;, &#39;perception&#39;, &#39;override&#39;, &#39;drive&#39;] &amp; [&#39;operator&#39;] &amp; False &amp; False &amp; 13.663813 &amp; {&#39;operator&#39;: [&#39;percieve_not_visible&#39;, &#39;comprehend_failed_no_action&#39;]} &amp; incomplete mission faulty &amp; 15.244240 &amp; -0.529458 \\
-operator_project_failed_turn_left_t56p0 &amp; [&#39;psfs&#39;, &#39;pos_signal&#39;, &#39;pos&#39;, &#39;ee_12&#39;, &#39;ee_5&#39;, &#39;ee_15&#39;, &#39;video&#39;, &#39;auto_control&#39;, &#39;motor_control&#39;, &#39;switch&#39;, &#39;comms&#39;, &#39;fault_sig&#39;, &#39;power&#39;, &#39;perception&#39;, &#39;override&#39;, &#39;drive&#39;] &amp; [&#39;operator&#39;] &amp; False &amp; False &amp; 14.057688 &amp; {&#39;operator&#39;: [&#39;project_failed_turn_left&#39;, &#39;percieve_not_visible&#39;]} &amp; incomplete mission faulty &amp; 14.862043 &amp; -0.251773 \\
-operator_project_failed_turn_right_t56p0 &amp; [&#39;psfs&#39;, &#39;pos_signal&#39;, &#39;pos&#39;, &#39;ee_12&#39;, &#39;ee_5&#39;, &#39;ee_15&#39;, &#39;video&#39;, &#39;auto_control&#39;, &#39;motor_control&#39;, &#39;switch&#39;, &#39;comms&#39;, &#39;fault_sig&#39;, &#39;power&#39;, &#39;perception&#39;, &#39;override&#39;, &#39;drive&#39;] &amp; [&#39;operator&#39;] &amp; False &amp; False &amp; 13.693675 &amp; {&#39;operator&#39;: [&#39;project_failed_turn_right&#39;, &#39;percieve_not_visible&#39;]} &amp; incomplete mission faulty &amp; 15.363988 &amp; 1.140047 \\
+operator_project_failed_turn_left_t56p0 &amp; [&#39;psfs&#39;, &#39;pos_signal&#39;, &#39;pos&#39;, &#39;ee_12&#39;, &#39;ee_5&#39;, &#39;ee_15&#39;, &#39;video&#39;, &#39;auto_control&#39;, &#39;motor_control&#39;, &#39;switch&#39;, &#39;comms&#39;, &#39;fault_sig&#39;, &#39;power&#39;, &#39;perception&#39;, &#39;override&#39;, &#39;drive&#39;] &amp; [&#39;operator&#39;] &amp; False &amp; False &amp; 14.057688 &amp; {&#39;operator&#39;: [&#39;percieve_not_visible&#39;, &#39;project_failed_turn_left&#39;]} &amp; incomplete mission faulty &amp; 14.862043 &amp; -0.251773 \\
+operator_project_failed_turn_right_t56p0 &amp; [&#39;psfs&#39;, &#39;pos_signal&#39;, &#39;pos&#39;, &#39;ee_12&#39;, &#39;ee_5&#39;, &#39;ee_15&#39;, &#39;video&#39;, &#39;auto_control&#39;, &#39;motor_control&#39;, &#39;switch&#39;, &#39;comms&#39;, &#39;fault_sig&#39;, &#39;power&#39;, &#39;perception&#39;, &#39;override&#39;, &#39;drive&#39;] &amp; [&#39;operator&#39;] &amp; False &amp; False &amp; 13.693675 &amp; {&#39;operator&#39;: [&#39;percieve_not_visible&#39;, &#39;project_failed_turn_right&#39;]} &amp; incomplete mission faulty &amp; 15.363988 &amp; 1.140047 \\
 operator_project_failed_slow_t56p0 &amp; [&#39;psfs&#39;, &#39;pos_signal&#39;, &#39;pos&#39;, &#39;ee_12&#39;, &#39;ee_5&#39;, &#39;ee_15&#39;, &#39;video&#39;, &#39;auto_control&#39;, &#39;motor_control&#39;, &#39;switch&#39;, &#39;comms&#39;, &#39;fault_sig&#39;, &#39;power&#39;, &#39;perception&#39;, &#39;override&#39;, &#39;drive&#39;] &amp; [&#39;operator&#39;] &amp; True &amp; False &amp; 9.319490 &amp; {&#39;operator&#39;: [&#39;project_failed_slow&#39;]} &amp; incomplete mission faulty &amp; 19.740872 &amp; 0.812430 \\
 operator_project_failed_fast_t56p0 &amp; [&#39;psfs&#39;, &#39;pos_signal&#39;, &#39;pos&#39;, &#39;ee_12&#39;, &#39;ee_5&#39;, &#39;ee_15&#39;, &#39;video&#39;, &#39;auto_control&#39;, &#39;motor_control&#39;, &#39;switch&#39;, &#39;comms&#39;, &#39;fault_sig&#39;, &#39;power&#39;, &#39;perception&#39;, &#39;override&#39;, &#39;drive&#39;] &amp; [&#39;operator&#39;] &amp; False &amp; False &amp; 12.955107 &amp; {&#39;operator&#39;: [&#39;percieve_not_visible&#39;, &#39;project_failed_fast&#39;]} &amp; incomplete mission faulty &amp; 16.023518 &amp; 0.480458 \\
 operator_project_failed_no_action_t56p0 &amp; [&#39;psfs&#39;, &#39;pos_signal&#39;, &#39;pos&#39;, &#39;ee_12&#39;, &#39;ee_5&#39;, &#39;ee_15&#39;, &#39;video&#39;, &#39;auto_control&#39;, &#39;motor_control&#39;, &#39;switch&#39;, &#39;comms&#39;, &#39;fault_sig&#39;, &#39;power&#39;, &#39;perception&#39;, &#39;override&#39;, &#39;drive&#39;] &amp; [&#39;operator&#39;] &amp; False &amp; False &amp; 13.663813 &amp; {&#39;operator&#39;: [&#39;percieve_not_visible&#39;, &#39;project_failed_no_action&#39;]} &amp; incomplete mission faulty &amp; 15.244240 &amp; -0.529458 \\
 operator_decide_failed_turn_left_t56p0 &amp; [&#39;psfs&#39;, &#39;pos_signal&#39;, &#39;pos&#39;, &#39;ee_12&#39;, &#39;ee_5&#39;, &#39;ee_15&#39;, &#39;video&#39;, &#39;auto_control&#39;, &#39;motor_control&#39;, &#39;switch&#39;, &#39;comms&#39;, &#39;fault_sig&#39;, &#39;power&#39;, &#39;perception&#39;, &#39;override&#39;, &#39;drive&#39;] &amp; [&#39;operator&#39;] &amp; False &amp; False &amp; 13.663813 &amp; {&#39;operator&#39;: [&#39;percieve_not_visible&#39;, &#39;decide_failed_turn_left&#39;]} &amp; incomplete mission faulty &amp; 15.244240 &amp; -0.529458 \\
-operator_decide_failed_turn_right_t56p0 &amp; [&#39;psfs&#39;, &#39;pos_signal&#39;, &#39;pos&#39;, &#39;ee_12&#39;, &#39;ee_5&#39;, &#39;ee_15&#39;, &#39;video&#39;, &#39;auto_control&#39;, &#39;motor_control&#39;, &#39;switch&#39;, &#39;comms&#39;, &#39;fault_sig&#39;, &#39;power&#39;, &#39;perception&#39;, &#39;override&#39;, &#39;drive&#39;] &amp; [&#39;operator&#39;] &amp; False &amp; False &amp; 13.663813 &amp; {&#39;operator&#39;: [&#39;decide_failed_turn_right&#39;, &#39;percieve_not_visible&#39;]} &amp; incomplete mission faulty &amp; 15.244240 &amp; -0.529458 \\
-operator_decide_failed_slow_t56p0 &amp; [&#39;psfs&#39;, &#39;pos_signal&#39;, &#39;pos&#39;, &#39;ee_12&#39;, &#39;ee_5&#39;, &#39;ee_15&#39;, &#39;video&#39;, &#39;auto_control&#39;, &#39;motor_control&#39;, &#39;switch&#39;, &#39;comms&#39;, &#39;fault_sig&#39;, &#39;power&#39;, &#39;perception&#39;, &#39;override&#39;, &#39;drive&#39;] &amp; [&#39;operator&#39;] &amp; False &amp; False &amp; 13.663813 &amp; {&#39;operator&#39;: [&#39;decide_failed_slow&#39;, &#39;percieve_not_visible&#39;]} &amp; incomplete mission faulty &amp; 15.244240 &amp; -0.529458 \\
-operator_decide_failed_fast_t56p0 &amp; [&#39;psfs&#39;, &#39;pos_signal&#39;, &#39;pos&#39;, &#39;ee_12&#39;, &#39;ee_5&#39;, &#39;ee_15&#39;, &#39;video&#39;, &#39;auto_control&#39;, &#39;motor_control&#39;, &#39;switch&#39;, &#39;comms&#39;, &#39;fault_sig&#39;, &#39;power&#39;, &#39;perception&#39;, &#39;override&#39;, &#39;drive&#39;] &amp; [&#39;operator&#39;] &amp; False &amp; False &amp; 13.663813 &amp; {&#39;operator&#39;: [&#39;decide_failed_fast&#39;, &#39;percieve_not_visible&#39;]} &amp; incomplete mission faulty &amp; 15.244240 &amp; -0.529458 \\
+operator_decide_failed_turn_right_t56p0 &amp; [&#39;psfs&#39;, &#39;pos_signal&#39;, &#39;pos&#39;, &#39;ee_12&#39;, &#39;ee_5&#39;, &#39;ee_15&#39;, &#39;video&#39;, &#39;auto_control&#39;, &#39;motor_control&#39;, &#39;switch&#39;, &#39;comms&#39;, &#39;fault_sig&#39;, &#39;power&#39;, &#39;perception&#39;, &#39;override&#39;, &#39;drive&#39;] &amp; [&#39;operator&#39;] &amp; False &amp; False &amp; 13.663813 &amp; {&#39;operator&#39;: [&#39;percieve_not_visible&#39;, &#39;decide_failed_turn_right&#39;]} &amp; incomplete mission faulty &amp; 15.244240 &amp; -0.529458 \\
+operator_decide_failed_slow_t56p0 &amp; [&#39;psfs&#39;, &#39;pos_signal&#39;, &#39;pos&#39;, &#39;ee_12&#39;, &#39;ee_5&#39;, &#39;ee_15&#39;, &#39;video&#39;, &#39;auto_control&#39;, &#39;motor_control&#39;, &#39;switch&#39;, &#39;comms&#39;, &#39;fault_sig&#39;, &#39;power&#39;, &#39;perception&#39;, &#39;override&#39;, &#39;drive&#39;] &amp; [&#39;operator&#39;] &amp; False &amp; False &amp; 13.663813 &amp; {&#39;operator&#39;: [&#39;percieve_not_visible&#39;, &#39;decide_failed_slow&#39;]} &amp; incomplete mission faulty &amp; 15.244240 &amp; -0.529458 \\
+operator_decide_failed_fast_t56p0 &amp; [&#39;psfs&#39;, &#39;pos_signal&#39;, &#39;pos&#39;, &#39;ee_12&#39;, &#39;ee_5&#39;, &#39;ee_15&#39;, &#39;video&#39;, &#39;auto_control&#39;, &#39;motor_control&#39;, &#39;switch&#39;, &#39;comms&#39;, &#39;fault_sig&#39;, &#39;power&#39;, &#39;perception&#39;, &#39;override&#39;, &#39;drive&#39;] &amp; [&#39;operator&#39;] &amp; False &amp; False &amp; 13.663813 &amp; {&#39;operator&#39;: [&#39;percieve_not_visible&#39;, &#39;decide_failed_fast&#39;]} &amp; incomplete mission faulty &amp; 15.244240 &amp; -0.529458 \\
 operator_decide_failed_no_action_t56p0 &amp; [&#39;psfs&#39;, &#39;pos_signal&#39;, &#39;pos&#39;, &#39;ee_12&#39;, &#39;ee_5&#39;, &#39;ee_15&#39;, &#39;video&#39;, &#39;auto_control&#39;, &#39;motor_control&#39;, &#39;switch&#39;, &#39;comms&#39;, &#39;fault_sig&#39;, &#39;power&#39;, &#39;perception&#39;, &#39;override&#39;, &#39;drive&#39;] &amp; [&#39;operator&#39;] &amp; False &amp; False &amp; 13.663813 &amp; {&#39;operator&#39;: [&#39;percieve_not_visible&#39;, &#39;decide_failed_no_action&#39;]} &amp; incomplete mission faulty &amp; 15.244240 &amp; -0.529458 \\
 operator_reach_failed_no_action_t56p0 &amp; [&#39;psfs&#39;, &#39;pos_signal&#39;, &#39;pos&#39;, &#39;ee_12&#39;, &#39;ee_5&#39;, &#39;ee_15&#39;, &#39;video&#39;, &#39;auto_control&#39;, &#39;motor_control&#39;, &#39;switch&#39;, &#39;comms&#39;, &#39;fault_sig&#39;, &#39;power&#39;, &#39;perception&#39;, &#39;override&#39;, &#39;drive&#39;] &amp; [&#39;operator&#39;] &amp; False &amp; False &amp; 13.663813 &amp; {&#39;operator&#39;: [&#39;percieve_not_visible&#39;, &#39;reach_failed_no_action&#39;]} &amp; incomplete mission faulty &amp; 15.244240 &amp; -0.529458 \\
 operator_press_failed_left_t56p0 &amp; [&#39;psfs&#39;, &#39;pos_signal&#39;, &#39;pos&#39;, &#39;ee_12&#39;, &#39;ee_5&#39;, &#39;ee_15&#39;, &#39;video&#39;, &#39;auto_control&#39;, &#39;motor_control&#39;, &#39;switch&#39;, &#39;comms&#39;, &#39;fault_sig&#39;, &#39;power&#39;, &#39;perception&#39;, &#39;plan_path&#39;, &#39;override&#39;, &#39;drive&#39;] &amp; [&#39;operator&#39;] &amp; True &amp; True &amp; 0.000000 &amp; {&#39;operator&#39;: [&#39;press_failed_left&#39;]} &amp;  faulty &amp; 29.254775 &amp; -0.782764 \\
@@ -1930,7 +1920,7 @@ ParameterSample of scenarios:
 </div>
 <div class="output_area stderr docutils container">
 <div class="highlight"><pre>
-SCENARIOS COMPLETE: 100%|██████████| 144/144 [01:02&lt;00:00,  2.32it/s]
+SCENARIOS COMPLETE: 100%|██████████| 144/144 [00:56&lt;00:00,  2.54it/s]
 </pre></div></div>
 </div>
 <div class="nbinput docutils container">
@@ -2292,7 +2282,7 @@ FaultSample of scenarios:
 </div>
 <div class="output_area stderr docutils container">
 <div class="highlight"><pre>
-SCENARIOS COMPLETE: 100%|██████████| 114/114 [00:26&lt;00:00,  4.28it/s]
+SCENARIOS COMPLETE: 100%|██████████| 114/114 [00:24&lt;00:00,  4.59it/s]
 </pre></div></div>
 </div>
 <div class="nbinput docutils container">
@@ -2362,7 +2352,7 @@ SCENARIOS COMPLETE: 100%|██████████| 114/114 [00:26&lt;00:00
 </div>
 <div class="output_area stderr docutils container">
 <div class="highlight"><pre>
-SCENARIOS COMPLETE: 100%|██████████| 114/114 [00:23&lt;00:00,  4.93it/s]
+SCENARIOS COMPLETE: 100%|██████████| 114/114 [00:21&lt;00:00,  5.32it/s]
 </pre></div></div>
 </div>
 <div class="nbinput docutils container">

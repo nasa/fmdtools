@@ -72,10 +72,7 @@
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="../README.html#citing-this-repository">Citing this repository</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../README.html#license-notices">License/Notices</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="../README.html#disclaimers">Disclaimers</a></li>
-</ul>
-</li>
+<li class="toctree-l2"><a class="reference internal" href="../README.html#license-notices">License/Notices</a></li>
 </ul>
 </li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Development Guide</a><ul>
@@ -83,7 +80,7 @@
 <li class="toctree-l2"><a class="reference internal" href="#introductory-tutorial">Introductory Tutorial</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="Intro_to_fmdtools.html">Intro to resilience modeling, simulation, and visualization in Python with fmdtools.</a><ul>
 <li class="toctree-l4"><a class="reference internal" href="Intro_to_fmdtools.html#author-daniel-hulse">Author: Daniel Hulse</a></li>
-<li class="toctree-l4"><a class="reference internal" href="Intro_to_fmdtools.html#version-2-0-rc-6">Version: 2.0-rc-6</a></li>
+<li class="toctree-l4"><a class="reference internal" href="Intro_to_fmdtools.html#version-2-0-0">Version: 2.0.0</a></li>
 </ul>
 </li>
 <li class="toctree-l3"><a class="reference internal" href="Intro_to_fmdtools.html#overview">Overview</a></li>
@@ -147,6 +144,7 @@
 <li class="toctree-l3"><a class="reference internal" href="#roles">Roles</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#documentation">Documentation</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#style-formatting">Style/Formatting</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#headers">Headers</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#testing">Testing</a></li>
 </ul>
 </li>
@@ -195,14 +193,6 @@
 <li class="toctree-l3"><a class="reference internal" href="../examples/pump/Stochastic_Modelling.html">Stochastic Modelling in fmdtools</a><ul>
 <li class="toctree-l4"><a class="reference internal" href="../examples/pump/Stochastic_Modelling.html#Model-Setup">Model Setup</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../examples/pump/Stochastic_Modelling.html#Simulation-and-Analysis">Simulation and Analysis</a></li>
-</ul>
-</li>
-<li class="toctree-l3"><a class="reference internal" href="../examples/pump/AST_Sampling.html">fmdtools-AdaStress integration</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="../examples/pump/AST_Sampling.html#Python-setup:">Python setup:</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../examples/pump/AST_Sampling.html#Running-AdaStress-Methods">Running AdaStress Methods</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../examples/pump/AST_Sampling.html#MCTS">MCTS</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../examples/pump/AST_Sampling.html#Pump">Pump</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../examples/pump/AST_Sampling.html#Simulator">Simulator</a></li>
 </ul>
 </li>
 </ul>
@@ -1003,7 +993,7 @@
 </section>
 <section id="how-to-contribute">
 <h2>How to Contribute<a class="headerlink" href="#how-to-contribute" title="Link to this heading"></a></h2>
-<p>Development of fmdtools is coordinated by the <a class="reference internal" href="../CONTRIBUTORS.html"><span class="doc">fmdtools team</span></a> at NASA Ames Research Center. As an open-source tool developed under the NASA Open Source Agreement, outside contributions are welcomed. To be able to submit contributions (e.g., pull requests), external contributors should first submit a contributors license agreement (<a class="reference external" href="https://github.com/nasa/fmdtools/blob/main/fmdtools_Individual_CLA.pdf">Individual CLA</a> , <a class="reference external" href="https://github.com/nasa/fmdtools/blob/main/fmdtools_Corporate_CLA.pdf">Corporate CLA</a>).</p>
+<p>Development of fmdtools is coordinated by the <a class="reference internal" href="../CONTRIBUTORS.html"><span class="doc">fmdtools team</span></a> at NASA Ames Research Center. As an NASA-developed and maintained open-source tool, outside contributions are welcomed. To be able to submit contributions (e.g., pull requests), external contributors should first submit a contributors license agreement (<a class="reference external" href="https://github.com/nasa/fmdtools/blob/main/fmdtools_Individual_CLA.pdf">Individual CLA</a> , <a class="reference external" href="https://github.com/nasa/fmdtools/blob/main/fmdtools_Corporate_CLA.pdf">Corporate CLA</a>).</p>
 <section id="repo-structure">
 <h3>Repo Structure<a class="headerlink" href="#repo-structure" title="Link to this heading"></a></h3>
 <a class="reference internal image-reference" href="../_images/repo_structure.svg"><img alt="../_images/repo_structure.svg" src="../_images/repo_structure.svg" width="800" /></a>
@@ -1171,7 +1161,7 @@
 </tr>
 <tr class="row-even"><td><p>6b</p></td>
 <td><blockquote>
-<div><p>“Push docs using <cite>git subtree push –prefix=_build/html public gh-pages</cite>”</p>
+<div><p>“Push docs using <cite>git subtree split –prefix=_build/html public gh-pages -b</cite>, <cite>git push -f public gh-pages</cite> <cite>git -D gh-pages</cite>”</p>
 </div></blockquote>
 </td>
 <td></td>
@@ -1304,6 +1294,49 @@ python -m twine upload –repository pypi dist/*
 <li><p>VSCode Extension: <a class="reference external" href="https://marketplace.visualstudio.com/items?itemName=ms-python.black-formatter">https://marketplace.visualstudio.com/items?itemName=ms-python.black-formatter</a></p></li>
 <li><p>Spyder workflow: <a class="reference external" href="https://stackoverflow.com/questions/55698077/how-to-use-code-formatter-black-with-spyder">https://stackoverflow.com/questions/55698077/how-to-use-code-formatter-black-with-spyder</a></p></li>
 </ul>
+</section>
+<section id="headers">
+<h3>Headers<a class="headerlink" href="#headers" title="Link to this heading"></a></h3>
+<p>All source code files to be released under fmdtools should have the Apache-2.0 license applied to them.</p>
+<p>In modules and scripts, it is best practice to use the following format for the header:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="ch">#!/usr/bin/env python</span>
+<span class="c1"># -*- coding: utf-8 -*-</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">&lt;One-line software description here&gt;</span>
+
+<span class="sd">&lt;Futher module-level docstring information, if needed&gt;</span>
+
+<span class="sd">Copyright © 2024, United States Government, as represented by the Administrator</span>
+<span class="sd">of the National Aeronautics and Space Administration. All rights reserved.</span>
+
+<span class="sd">The “&quot;Fault Model Design tools - fmdtools version 2&quot;” software is licensed</span>
+<span class="sd">under the Apache License, Version 2.0 (the &quot;License&quot;); you may not use this</span>
+<span class="sd">file except in compliance with the License. You may obtain a copy of the</span>
+<span class="sd">License at http://www.apache.org/licenses/LICENSE-2.0.</span>
+
+<span class="sd">Unless required by applicable law or agreed to in writing, software distributed</span>
+<span class="sd">under the License is distributed on an &quot;AS IS&quot; BASIS, WITHOUT WARRANTIES OR</span>
+<span class="sd">CONDITIONS OF ANY KIND, either express or implied. See the License for the</span>
+<span class="sd">specific language governing permissions and limitations under the License.</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="o">&lt;</span><span class="n">local</span><span class="o">/</span><span class="n">project</span> <span class="n">imports</span><span class="o">&gt;</span>
+
+<span class="o">&lt;</span><span class="n">fmdtools</span> <span class="n">imports</span> <span class="p">(</span><span class="n">examples</span><span class="p">,</span> <span class="n">then</span> <span class="n">tests</span><span class="p">,</span> <span class="n">then</span> <span class="n">modules</span><span class="p">)</span><span class="o">&gt;</span>
+
+<span class="o">&lt;</span><span class="n">external</span> <span class="n">imports</span><span class="o">&gt;</span>
+</pre></div>
+</div>
+<p>For jupyter notebooks, the following block should be inserted at the end of the first markdown cell, after the title/description:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>```
+Copyright © 2024, United States Government, as represented by the Administrator of the National Aeronautics and Space Administration. All rights reserved.
+
+The “&quot;Fault Model Design tools - fmdtools version 2&quot;” software is licensed under the Apache License, Version 2.0 (the &quot;License&quot;); you may not use this file except in compliance with the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0.
+
+Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an &quot;AS IS&quot; BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
+```
+</pre></div>
+</div>
 </section>
 <section id="testing">
 <h3>Testing<a class="headerlink" href="#testing" title="Link to this heading"></a></h3>
