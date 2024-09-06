@@ -22,5 +22,5 @@ Step,Description,Complete?,Comment
 8b," ""Include version in schedule""",,
 8c," ""Identify and include additional changes/activities""",,
 9,Update/check external CI resources as needed,,
-9a," ""CodeFactor""",,
-10,If release is 'stable' Upload to PyPI (see below,,
+9a," ""Toggle CodeFactor so it updates""",,
+9b ," ""Check upload to PyPi""",,
