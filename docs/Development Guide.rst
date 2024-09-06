@@ -371,10 +371,11 @@ Getting started with development first requires some basic familiarity with the 
 - ``/examples``, which are different case study examples, and 
 - ``/docs``, which contains documentation.
 
-There are additionally a few scripts with specific purposes to serve the development process:
+There are additionally a few scripts/config files with specific purposes to serve the development process:
 
 - ``run_all_tests.py`` which is a script that runs tests defined in `/tests` and `/examples`,
-- ``setup.py``, which is used for building PyPI packages, and 
+- ``pyproject.toml`` which defines all python project and build configuration information,
+- ``conf.py`` which defines sphinx documentation settings, and
 - ``MAKE``, which is used to build the sphinx documentation.
 
 
