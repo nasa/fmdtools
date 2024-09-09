@@ -56,21 +56,34 @@ graphviz
 # install from: https://anaconda.org/anaconda/graphviz
 ```
 
+Note: some versions `fmdtools` dependencies may additionally require `Microsoft Studio Build tools <https://visualstudio.microsoft.com/license-terms/vs2022-ga-diagnosticbuildtools/>`_ to build properly, so it may be helpful to install it also.
+
+
 ### Install fmdtools
 
-The latest public version of fmdtools can be downloaded from the [fmdtools github repository](https://github.com/nasa/fmdtools/) e.g., using:
+For use of fmdtools as an external library, the toolkit can be installed directly from the [PyPI package repository](https://pypi.org/project/fmdtools/) using ``pip install fmdtools``.
+
+#### Editable Development Install
+
+For development as well as interactive use of tutorials and models, we reccomend creating an editable development install.
+
+For this installation, fmdtools can be downloaded from the [fmdtools github repository](https://github.com/nasa/fmdtools/) using:
 
 ```
    git clone https://github.com/nasa/fmdtools.git
 ```
-   
-For development and use of this version (e.g., for tutorials and models), we recommended installing this package using `pip`:
+
+This may then be installed using:
 
 ```
    pip install -e "/path/to/fmdtools" 
 ```
 
-A version of the fmdtools toolkit can also be installed directly from the [PyPI package repository](https://pypi.org/project/fmdtools/) using ``pip install fmdtools``.
+Note that this version reflects the latest version on the ``main`` git branch along with any local changes. To use a particular version of ``fmdtools`` you can checkout the tag corresponding to the version you want, e.g.:
+
+```
+   git checkout v2.0.3
+```
 
 
 #### Dependencies
@@ -207,7 +220,7 @@ To cite a particular version of the fmdtools, you may use:
   author = {{NASA}},
   title = {fmdtools},
   url = {https://github.com/nasa/fmdtools},
-  version = {2.0.0}, # <- replace with your version number
+  version = {2.0.3}, # <- replace with your version number
   date = {2024-08-22},
 }
 ```
