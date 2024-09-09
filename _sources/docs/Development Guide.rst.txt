@@ -371,10 +371,11 @@ Getting started with development first requires some basic familiarity with the 
 - ``/examples``, which are different case study examples, and 
 - ``/docs``, which contains documentation.
 
-There are additionally a few scripts with specific purposes to serve the development process:
+There are additionally a few scripts/config files with specific purposes to serve the development process:
 
 - ``run_all_tests.py`` which is a script that runs tests defined in `/tests` and `/examples`,
-- ``setup.py``, which is used for building PyPI packages, and 
+- ``pyproject.toml`` which defines all python project and build configuration information,
+- ``conf.py`` which defines sphinx documentation settings, and
 - ``MAKE``, which is used to build the sphinx documentation.
 
 
@@ -398,6 +399,10 @@ The fmdtools team is responsible for coordinating the development between the in
 Development Process
 --------------------------------
 
+
+Git Development Workflow
+********************************
+
 .. image:: /docs/figures/uml/dev_process.svg
    :width: 800
 
@@ -418,10 +423,18 @@ The major exceptions to this process are:
 - external contributions, which are managed via pull request off of ``main`` (or some external dev branch), and
 - minor documentation changes.
 
-Release Checklist
+Release Process
 ********************************
 
-When releasing fmdtools, follow the steps in the :download:`Release Checklist <release_checklist.csv>`, see below:
+Releases are made to fmdtools to push new features and bugfixes to the open-source community as they are developed. Some important things to remember about the release process are:
+
+* It's important to test prior to release to ensure (1) bugs aren't being released that could have been caught easily with a test and (2) test results are accurate to the current version of the code. Currently, this is managed by the person conducting the release. Currently, this is managed by the person conducting the release via the ``run_all_tests.py`` script.
+
+* It's also important to ensure the documentation (both source files and html) stay up to date with the release. Currently, this is managed by the person conducting the release by committing the new html to the ``gh-pages`` branch.
+
+* Releases are made to the fmdtools GitHub repository using the ``Draft a new release`` button on the `Releases <https://github.com/nasa/fmdtools/releases>`_ page. Once this release is generated, GitHub Actions uploads it to the ` fmdtools PyPi repo <https://pypi.org/project/fmdtools/>`_ automatically.
+
+To ensure all of the steps of the release process are performed, follow the :download:`Release Checklist <release_checklist.csv>`, see below:
 
 .. tabularcolumns:: |p{1cm}|p{3cm}|p{1cm}|p{3cm}|
 
@@ -432,30 +445,6 @@ When releasing fmdtools, follow the steps in the :download:`Release Checklist <r
 
 .. tabularcolumns:: |p{1cm}|p{3cm}|p{1cm}|p{3cm}|
 
-
-Upload to PyPI
-********************************
-
-Note: Performing this process requires an account with the Python Package Index and Owner/Maintainer status in the fmdtools repository. Presently, this repository is owned by Daniel Hulse and setup should be coordinated with him.  
-
-Note: Performing this process also requires a twine setup. For full instructions, see: https://www.geeksforgeeks.org/how-to-publish-python-package-at-pypi-using-twine-module/  
-
-
-Once this is set up, the code can be built and uploaded using the following commands in powershell from the repository folder::
-
-	python -m build 
-	python -m twine check dist/* 
-	python -m twine upload –repository pypi dist/*  
-
-Note: when performing for the first time, it may be helpful to use the test python repo (substitute testpypi for pypi) first—an account is required however. 
-
-Note: make sure that there are no old versions in `dist/`
-
-After upload, test the deployment by: 
-
-1. Spot-checking the online repo (e.g., has the version updated?) 
-
-2. Updating the package (``pip install –upgrade pip``)
 
 Roles
 --------------------------------
