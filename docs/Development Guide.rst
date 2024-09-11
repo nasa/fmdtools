@@ -358,7 +358,7 @@ How to Contribute
 Development of fmdtools is coordinated by the `fmdtools team <../CONTRIBUTORS.md>`_ at NASA Ames Research Center. As an NASA-developed and maintained open-source tool, outside contributions are welcomed. To be able to submit contributions (e.g., pull requests), external contributors should first submit a contributors license agreement (`Individual CLA <https://github.com/nasa/fmdtools/blob/main/fmdtools_Individual_CLA.pdf>`_ , `Corporate CLA <https://github.com/nasa/fmdtools/blob/main/fmdtools_Corporate_CLA.pdf>`_).
 
 
-Repo Structure
+Repository Structure
 --------------------------------
 
 .. image:: /docs/figures/uml/repo_structure.svg
@@ -379,29 +379,48 @@ There are additionally a few scripts/config files with specific purposes to serv
 - ``MAKE``, which is used to build the sphinx documentation.
 
 
-Remote Structure
-********************************
+Git Structure and Setup
+--------------------------------
 
 .. image:: /docs/figures/uml/git_structure.svg
    :width: 800
 
 Development of fmdtools uses a two-track development model, in which contributions are provided within NASA as well as by external collaborators. To support this, there are multiple repositories which must be managed in the development process, as shown above. Essentially, there is:
 
-- An internal bitbucket, where NASA coordination and development takes place,
-- A public GitHub, where collaboration with outside developers takes place (and where documentation is hosted), and 
-- A PyPI repository which contains stable versions of fmdtools which can be readily installed via ``pip``.
+- An internal bitbucket, ``origin``, where NASA coordination and development takes place,
+- A public GitHub, ``public``, where collaboration with outside developers takes place (and where documentation is hosted), and 
+- A PyPI repository, which contains stable versions of fmdtools which can be readily installed via ``pip``. This repository is automatically updated when a new version is released on GithHub.
+- The fmdtools GitHub Pages site, which updates from the ``gh-pages`` branch.
 
 The fmdtools team is responsible for coordinating the development between the internal and external git repositories. Managing multiple repositories can best be coordinated by:
 
-- setting up multiple remotes on a single git repo on your machine using `git remote` and
-- propagating changes between repositories during development using `git push` and `git pull` from each repository
+- setting up the ``public`` and ``origin`` remotes on a single git repo on your machine
+- using the ``dev`` branch and feature branches on ``origin`` for development and integration
+- releasing to the ``main`` branch on ``origin`` and ``public``
 
-Development Process
---------------------------------
+To assist with this, the custom git alias below can be helpful::
+
+	[alias]
+		up = "!git merge dev main"
+		tl = "!f() { git tag -s -a \"$1\" -m \"$2\"; }; f"
+		pp = "!f() { git push public tag \"$1\"; }; f"
+		po = "!f() { git push origin tag \"$1\"; }; f"
+		release = "!f() { git checkout main && git up && git tl \"$1\" \"$2\" && git pp \"$1\" && git po \"$1\"; }; f"
+		fb = "!f() { git fetch origin && git fetch public; }; f"
+		mm = "!git merge main dev"
+		sync-into-dev = "!f() { git checkout dev && git fb && git pull origin dev && git pull public dev && mm; }; f"
+
+Adding this block to your repository's git config file (e.g., ``.git/config``) adds custom git commands which can be used to simplify the release process. Specifically:
+
+- ``git sync-into-dev`` will merge all main and dev branches (local and remote) into your local dev branch
+- ``git release "vX.X.X" "Version X.X.X"`` will merge ``dev`` into ``main``, tag it with the given version, and upload it to ``public`` and ``origin``.
+
+Note that the ``-s`` option above `signs` the tag, attributing it to your credentials. For this to work, you should `set up commit signing <https://docs.github.com/en/authentication/managing-commit-signature-verification/signing-commits>`_ and configure git to sign commits by default.
+
 
 
 Git Development Workflow
-********************************
+--------------------------------
 
 .. image:: /docs/figures/uml/dev_process.svg
    :width: 800
@@ -424,7 +443,7 @@ The major exceptions to this process are:
 - minor documentation changes.
 
 Release Process
-********************************
+--------------------------------
 
 Releases are made to fmdtools to push new features and bugfixes to the open-source community as they are developed. Some important things to remember about the release process are:
 
