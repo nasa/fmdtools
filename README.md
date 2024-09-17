@@ -58,7 +58,7 @@ graphviz
 # install from: https://anaconda.org/anaconda/graphviz
 ```
 
-Note: some versions `fmdtools` dependencies may additionally require `Microsoft Studio Build tools <https://visualstudio.microsoft.com/license-terms/vs2022-ga-diagnosticbuildtools/>`_ to build properly, so it may be helpful to install it also.
+Note: On windows, some versions `fmdtools` dependencies may require a compiler such as that provided with [Microsoft Studio Build tools](https://visualstudio.microsoft.com/license-terms/vs2022-ga-diagnosticbuildtools) to build, so it may be helpful to install it also.
 
 
 ### Install fmdtools
