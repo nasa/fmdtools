@@ -1,3 +1,4 @@
+#!/usr/bin/env python
 # -*- coding: utf-8 -*-
 """
 Created on Tue May 16 15:12:39 2023
@@ -94,7 +95,7 @@ if __name__ == "__main__":
                           ]
     # retcode = pytest.main(["--nbmake", "--nbmake-find-import-errors", "--nbmake-timeout=20", *too_slow_notebooks])
 
-    #  we ignore the following notebooks for various reasons:
+    # we ignore the following notebooks for various reasons:
     # while not included in the testing approach, they should be verified periodically
     ignore_notebooks = [*too_slow_notebooks,
                         "examples/pump/Tutorial_unfilled.ipynb",  # intended to be blank
