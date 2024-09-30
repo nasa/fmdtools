@@ -395,7 +395,7 @@
 <li class="toctree-l4"><a class="reference internal" href="#module-fmdtools.define.container.base">fmdtools.define.container.base</a></li>
 <li class="toctree-l4"><a class="reference internal" href="#fmdtools-define-container-mode">fmdtools.define.container.mode</a></li>
 <li class="toctree-l4"><a class="reference internal" href="#module-fmdtools.define.container.state">fmdtools.define.container.state</a></li>
-<li class="toctree-l4"><a class="reference internal" href="#fmdtools-define-container-parameter">fmdtools.define.container.parameter</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#module-fmdtools.define.container.parameter">fmdtools.define.container.parameter</a></li>
 <li class="toctree-l4"><a class="reference internal" href="#module-fmdtools.define.container.rand">fmdtools.define.container.rand</a></li>
 <li class="toctree-l4"><a class="reference internal" href="#module-fmdtools.define.container.time">fmdtools.define.container.time</a></li>
 </ul>
@@ -1898,9 +1898,9 @@ The default is 2 (points to the place in the model)</p></li>
 </dd></dl>
 
 </section>
-<section id="fmdtools-define-container-parameter">
-<h2>fmdtools.define.container.parameter<a class="headerlink" href="#fmdtools-define-container-parameter" title="Link to this heading"></a></h2>
-<p id="module-fmdtools.define.container.parameter">Defines <a class="reference internal" href="#fmdtools.define.container.parameter.Parameter" title="fmdtools.define.container.parameter.Parameter"><code class="xref py py-class docutils literal notranslate"><span class="pre">Parameter</span></code></a> class to represent attributes that do not change.</p>
+<section id="module-fmdtools.define.container.parameter">
+<span id="fmdtools-define-container-parameter"></span><h2>fmdtools.define.container.parameter<a class="headerlink" href="#module-fmdtools.define.container.parameter" title="Link to this heading"></a></h2>
+<p>Defines <a class="reference internal" href="#fmdtools.define.container.parameter.Parameter" title="fmdtools.define.container.parameter.Parameter"><code class="xref py py-class docutils literal notranslate"><span class="pre">Parameter</span></code></a> class to represent attributes that do not change.</p>
 <p><a class="reference internal" href="#fmdtools.define.container.parameter.Parameter" title="fmdtools.define.container.parameter.Parameter"><code class="xref py py-class docutils literal notranslate"><span class="pre">Parameter</span></code></a> classes are used to represent immutable properties of the system. <a class="reference internal" href="#fmdtools.define.container.parameter.Parameter" title="fmdtools.define.container.parameter.Parameter"><code class="xref py py-class docutils literal notranslate"><span class="pre">Parameter</span></code></a> classes are extended and deployed by the user, as shown below:</p>
 <figure class="align-default" id="id40">
 <a class="reference internal image-reference" href="../_images/Parameter.svg"><img alt="example state class" src="../_images/Parameter.svg" width="600" /></a>
@@ -1919,8 +1919,8 @@ The default is 2 (points to the place in the model)</p></li>
 <dt class="sig sig-object py" id="fmdtools.define.container.parameter.Parameter">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">fmdtools.define.container.parameter.</span></span><span class="sig-name descname"><span class="pre">Parameter</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">strict_immutability</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">check_type</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">check_pickle</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">set_type</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">check_lim</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.define.container.parameter.Parameter" title="Link to this definition"></a></dt>
 <dd><p>Bases: <a class="reference internal" href="#fmdtools.define.container.base.BaseContainer" title="fmdtools.define.container.base.BaseContainer"><code class="xref py py-class docutils literal notranslate"><span class="pre">BaseContainer</span></code></a></p>
-<p>The Parameter class defines model/function/flow values which are immutable,
-that is, the same from model instantiation through a simulation. Parameters
+<p>The Parameter class defines model/function/flow values which are immutable.</p>
+<p>That is, the same from model instantiation through a simulation. Parameters
 inherit from recordclass, giving them a low memory footprint, and use type
 hints and ranges to ensure parameter values are valid. e.g.,:</p>
 <p class="rubric">Examples</p>

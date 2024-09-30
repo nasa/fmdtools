@@ -27,8 +27,9 @@ import numpy as np
 
 class Parameter(BaseContainer, readonly=True):
     """
-    The Parameter class defines model/function/flow values which are immutable,
-    that is, the same from model instantiation through a simulation. Parameters
+    The Parameter class defines model/function/flow values which are immutable.
+
+    That is, the same from model instantiation through a simulation. Parameters
     inherit from recordclass, giving them a low memory footprint, and use type
     hints and ranges to ensure parameter values are valid. e.g.,:
 

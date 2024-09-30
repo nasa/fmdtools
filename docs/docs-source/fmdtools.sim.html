@@ -395,7 +395,7 @@
 <li class="toctree-l4"><a class="reference internal" href="fmdtools.define.container.html#module-fmdtools.define.container.base">fmdtools.define.container.base</a></li>
 <li class="toctree-l4"><a class="reference internal" href="fmdtools.define.container.html#fmdtools-define-container-mode">fmdtools.define.container.mode</a></li>
 <li class="toctree-l4"><a class="reference internal" href="fmdtools.define.container.html#module-fmdtools.define.container.state">fmdtools.define.container.state</a></li>
-<li class="toctree-l4"><a class="reference internal" href="fmdtools.define.container.html#fmdtools-define-container-parameter">fmdtools.define.container.parameter</a></li>
+<li class="toctree-l4"><a class="reference internal" href="fmdtools.define.container.html#module-fmdtools.define.container.parameter">fmdtools.define.container.parameter</a></li>
 <li class="toctree-l4"><a class="reference internal" href="fmdtools.define.container.html#module-fmdtools.define.container.rand">fmdtools.define.container.rand</a></li>
 <li class="toctree-l4"><a class="reference internal" href="fmdtools.define.container.html#module-fmdtools.define.container.time">fmdtools.define.container.time</a></li>
 </ul>
@@ -1025,17 +1025,12 @@ scenario with structure {‘nomscen1’: app1}</p></li>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>mdl</strong> (<a class="reference internal" href="fmdtools.define.block.html#fmdtools.define.block.base.Simulable" title="fmdtools.define.block.base.Simulable"><em>Simulable</em></a><em> (</em><em>object</em><em> or </em><em>class</em><em>)</em>) – Model of the system</p></li>
 <li><p><strong>ctimes</strong> (<em>float/list</em>) – Times to copy the nominal model from</p></li>
-<li><p><strong>protect</strong> (<em>bool</em>) – <p>Whether or not to protect the model object via copying.
-Options:</p>
-<blockquote>
-<div><ul>
-<li><p>True (default): re-instances the model so that multiple simulations can</p></li>
-</ul>
-<p>be run successively without causing problems
+<li><p><strong>protect</strong> (<em>bool</em>) – Whether or not to protect the model object via copying.
+Options:
+- True (default): re-instances the model so that multiple simulations can
+be run successively without causing problems
 - False : Thus, the model object that is returned can be modified and
-analyzed if needed</p>
-</div></blockquote>
-</p></li>
+analyzed if needed</p></li>
 <li><p><strong>save_args</strong> (<em>dict</em><em> (</em><em>optional</em><em>)</em>) – <p>Dictionary specifying if/how to save results. Default is {}, which doesn’t
 save anything.
 Has structure</p>
@@ -1258,15 +1253,15 @@ mdlhist. The default is {}.</p></li>
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>protect</strong> (<em>bool</em>) – <p>Whether or not to protect the model object via copying.
-Options:</p>
+Options:
+- True (default): re-instances the model so that multiple simulations can</p>
 <blockquote>
-<div><ul>
-<li><p>True (default): re-instances the model so that multiple simulations can
-be run successively without causing problems</p></li>
+<div><p>be run successively without causing problems</p>
+</div></blockquote>
+<ul>
 <li><p>False : Thus, the model object that is returned can be modified and
 analyzed if needed</p></li>
 </ul>
-</div></blockquote>
 </p></li>
 <li><p><strong>save_args</strong> (<em>dict</em><em> (</em><em>optional</em><em>)</em>) – <p>Dictionary specifying if/how to save results. Default is {}, which doesn’t
 save anything.
