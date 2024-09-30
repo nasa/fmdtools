@@ -1,4 +1,4 @@
-[![fmdtools logo - titanic](/docs/figures/logo/logo-titanic.png)](https://github.com/nasa/fmdtools)
+[![fmdtools logo - titanic](/docs-source/figures/logo/logo-titanic.png)](https://github.com/nasa/fmdtools)
 
 # Overview
 
@@ -20,19 +20,19 @@
 
 ## About
 
-The fmdtools library provides the computational support needed to perform a simulation-based (rather than document-based) hazard analysis process that [**enables the consideration of systems resilience**](https://nasa.github.io/fmdtools/docs/Development%20Guide.html#why-fmdtools). This means that it can be used to extend the scope of hazard analysis from component faults to the dynamic interactions between the system, operators, and the environment. Some key features include:
+The fmdtools library provides the computational support needed to perform a simulation-based (rather than document-based) hazard analysis process that [**enables the consideration of systems resilience**](https://nasa.github.io/fmdtools/docs-source/Development%20Guide.html#why-fmdtools). This means that it can be used to extend the scope of hazard analysis from component faults to the dynamic interactions between the system, operators, and the environment. Some key features include:
 
-<img align="left" width="100" height="100" src="/docs/figures/powerpoint/flexible.svg">
+<img align="left" width="100" height="100" src="/docs-source/figures/powerpoint/flexible.svg">
 
 ### Flexible Modelling Paradigm
 Models in fmdtools use a consistent and composable representation of system structure and behavior. Whether you want to model a simple component, a complex system-of-systems, or both, fmdtools can help.
 
-<img align="left" width="100" height="100" src="/docs/figures/powerpoint/powerful.svg">
+<img align="left" width="100" height="100" src="/docs-source/figures/powerpoint/powerful.svg">
 
 ### Powerful Simulation Techniques
 Simulation techniques in fmdtools represent the state-of-the-art in dynamical systems modelling for resilience quantification. With fmdtools, you can simulate the dynamic effects of hazardous scenarios over a wide range of variables to quantify and optimize risk, resilience, and safety metrics. 
 
-<img align="left" width="100" height="100" src="/docs/figures/powerpoint/efficient.svg"> 
+<img align="left" width="100" height="100" src="/docs-source/figures/powerpoint/efficient.svg"> 
 
 ### Efficient Analysis Process
 Readily-deployable analysis methods are built in to fmdtools to enable the rapid and iterative statistical analysis of simulation results. With fmdtools, you can write 2-3 lines of code to visualize model behavior instead of spending hours writing it yourself.
@@ -58,7 +58,7 @@ graphviz
 # install from: https://anaconda.org/anaconda/graphviz
 ```
 
-Note: On windows, some versions `fmdtools` dependencies may require a compiler such as that provided with [Microsoft Studio Build tools](https://visualstudio.microsoft.com/license-terms/vs2022-ga-diagnosticbuildtools) to build, so it may be helpful to install it also.
+Note: On Windows, some versions `fmdtools` dependencies may require a compiler such as that provided with [Microsoft Studio Build tools](https://visualstudio.microsoft.com/downloads/?q=build+tools) to build, so it (while not required) may be helpful to install it also.
 
 
 ### Install fmdtools
@@ -177,13 +177,13 @@ If a development install has been performed, you can further check aspects of yo
 
 Once fmdtools is installed, use the following to get acquainted with how to use the library:
 
-- Go through the [Intro to fmdtools workshop](https://nasa.github.io/fmdtools/docs/Intro_to_fmdtools.html) to learn about some of the basics of the fmdtools library and work with an existing model. 
+- Go through the [Intro to fmdtools workshop](https://nasa.github.io/fmdtools/docs-source/Intro_to_fmdtools.html) to learn about some of the basics of the fmdtools library and work with an existing model. 
 
 - Explore more [examples](https://nasa.github.io/fmdtools/examples/Examples.html) of particular use-cases by going through the [examples folder](https://github.com/nasa/fmdtools/tree/main/examples)
 
-- Read about contributions and model development best practices by perusing the [Development Guide](https://nasa.github.io/fmdtools/docs/Development%20Guide.html#).
+- Read about contributions and model development best practices by perusing the [Development Guide](https://nasa.github.io/fmdtools/docs-source/Development%20Guide.html#).
 
-- Explore the searchable [module reference](https://nasa.github.io/fmdtools/docs/fmdtools.html) for syntax and usage documentation.
+- Explore the searchable [module reference](https://nasa.github.io/fmdtools/docs-source/fmdtools.html) for syntax and usage documentation.
 
 ## Contributions
 fmdtools is developed primarily by researchers at NASA Ames Research Center. External contributions are welcome under a Contributor License Agreement:
