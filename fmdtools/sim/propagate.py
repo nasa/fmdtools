@@ -136,10 +136,10 @@ Parameters
 protect : bool
     Whether or not to protect the model object via copying.
     Options:
-        - True (default): re-instances the model so that multiple simulations can
-          be run successively without causing problems
-        - False : Thus, the model object that is returned can be modified and
-          analyzed if needed
+    - True (default): re-instances the model so that multiple simulations can
+      be run successively without causing problems
+    - False : Thus, the model object that is returned can be modified and
+      analyzed if needed
 
 save_args : dict (optional)
     Dictionary specifying if/how to save results. Default is {}, which doesn't
@@ -507,10 +507,10 @@ def nom_helper(mdl, ctimes, protect=True, save_args={}, mdl_kwargs={}, scen={},
     protect : bool
         Whether or not to protect the model object via copying.
         Options:
-            - True (default): re-instances the model so that multiple simulations can
-            be run successively without causing problems
-            - False : Thus, the model object that is returned can be modified and
-            analyzed if needed
+        - True (default): re-instances the model so that multiple simulations can
+        be run successively without causing problems
+        - False : Thus, the model object that is returned can be modified and
+        analyzed if needed
     save_args : dict (optional)
         Dictionary specifying if/how to save results. Default is {}, which doesn't
         save anything.
