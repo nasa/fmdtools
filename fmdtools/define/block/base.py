@@ -37,30 +37,31 @@ class SimParam(Parameter, readonly=True):
     """
     Class defining Simulation parameters.
 
-    Has fields:
-        phases : tuple
-            phases (('name', start, end)...) that the simulation progresses through
-        start_time : float
-            Start time of the simulation.
-        end_time : float
-            End time of the simulation.
-        track_times : tuple
-            Defines what times to include in the history.
-            Options are:
-            - ('all',)--all simulated times
-            - ('interval', n)--includes every nth time in the history
-            - ('times', [t1, ... tn])--only includes times defined in the
-              vector [t1 ... tn]
-        dt : float
-            time-step used in the simulation. default is 1.0
-        units : str
-            time-units. default is hours`
-        end_condition : str
-            Name of indicator method to use to end the simulation. If not provided (''),
-            the simulation ends at the final time. Default is ''
-        use_local : bool
-            Whether to use locally-defined time-steps in functions (if any).
-            Default is True.
+    Parameters
+    ----------
+    phases : tuple
+        phases (('name', start, end)...) that the simulation progresses through
+    start_time : float
+        Start time of the simulation.
+    end_time : float
+        End time of the simulation.
+    track_times : tuple
+        Defines what times to include in the history.
+        Options are:
+        - ('all',)--all simulated times
+        - ('interval', n)--includes every nth time in the history
+        - ('times', [t1, ... tn])--only includes times defined in the
+          vector [t1 ... tn]
+    dt : float
+        time-step used in the simulation. default is 1.0
+    units : str
+        time-units. default is hours`
+    end_condition : str
+        Name of indicator method to use to end the simulation. If not provided (''),
+        the simulation ends at the final time. Default is ''
+    use_local : bool
+        Whether to use locally-defined time-steps in functions (if any).
+        Default is True.
     """
 
     rolename = "sp"
