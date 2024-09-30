@@ -4,6 +4,8 @@
 
 ![Python Version](https://img.shields.io/badge/Python-3.11-blue)
 [![PyPI](https://img.shields.io/pypi/v/fmdtools)](https://pypi.org/project/fmdtools/)
+[![Total Downloads](https://static.pepy.tech/badge/fmdtools)](https://pepy.tech/project/fmdtools)
+[![Downloads/Month](https://static.pepy.tech/badge/fmdtools/month)](https://pepy.tech/project/fmdtools)
 [![GitHub release (latest by date)](https://img.shields.io/github/v/release/nasa/fmdtools?label=GitHub%20Release)](https://github.com/nasa/fmdtools/releases)
 [![GitHub Tag](https://img.shields.io/github/v/tag/nasa/fmdtools)](https://github.com/nasa/fmdtools/tags)
 [![CodeFactor](https://www.codefactor.io/repository/github/nasa/fmdtools/badge)](https://www.codefactor.io/repository/github/nasa/fmdtools)
@@ -56,7 +58,7 @@ graphviz
 # install from: https://anaconda.org/anaconda/graphviz
 ```
 
-Note: some versions `fmdtools` dependencies on Windows may additionally require [Microsoft Studio Build tools](https://visualstudio.microsoft.com/downloads/?q=build+tools) to build properly, so (while not required) it may be helpful to install it also.
+Note: On Windows, some versions `fmdtools` dependencies may require a compiler such as that provided with [Microsoft Studio Build tools](https://visualstudio.microsoft.com/downloads/?q=build+tools) to build, so it (while not required) may be helpful to install it also.
 
 
 ### Install fmdtools
