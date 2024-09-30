@@ -39,11 +39,9 @@ extensions = ['sphinx.ext.autodoc', 'sphinx.ext.napoleon', 'sphinx.ext.intersphi
               "nbsphinx", "myst_parser", "sphinx.ext.githubpages"]
 
 # "gaphor.extensions.sphinx"
-# gaphor_models = "/docs/figures/uml/module-reference-diagrams.gaphor"
+# gaphor_models = "/docs-source/figures/uml/module-reference-diagrams.gaphor"
 myst_enable_extensions = ["html_image", "html_admonition"]
 
-
-exclude_patterns = ['_build', '**.ipynb_checkpoints', 'rad_models*']
 
 # Add any paths that contain templates here, relative to this directory.
 templates_path = ['_templates']
@@ -51,7 +49,7 @@ templates_path = ['_templates']
 # List of patterns, relative to source directory, that match files and
 # directories to ignore when looking for source files.
 # This pattern also affects html_static_path and html_extra_path.
-exclude_patterns = ['_build', 'Thumbs.db', '.DS_Store']
+exclude_patterns = ['_build', 'Thumbs.db', '.DS_Store', 'docs', '**.ipynb_checkpoints']
 
 
 # -- Options for HTML output -------------------------------------------------
@@ -66,9 +64,9 @@ html_theme_options = {"logo_only": True,
                       'display_version': True,
                       'github_url': 'https://github.com/nasa/fmdtools'}
 
-html_favicon = 'docs/figures/logo/fmdtools_ico.ico'
+html_favicon = 'docs-source/figures/logo/fmdtools_ico.ico'
 
-html_logo = 'docs/figures/logo/logo-main.svg'
+html_logo = 'docs-source/figures/logo/logo-main.svg'
 
 html_context = {"display_github": True,  # Integrate GitHub
                 "github_user": "nasa",  # Username

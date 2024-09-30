@@ -87,7 +87,7 @@ def mod_prefix():
     import os
     wd = os.getcwd()
     if 'graph' in wd:
-        return '../../../docs/figures/frdl/'
+        return '../../../docs-source/figures/frdl/'
     else:
         return 'docs/figures/frdl/'
 
