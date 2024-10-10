@@ -19,11 +19,11 @@ from fmdtools.define.container.rand import Rand
 from fmdtools.define.flow.base import Flow
 from fmdtools.define.flow.multiflow import MultiFlow
 from fmdtools.define.flow.commsflow import CommsFlow
-from fmdtools.analyze.graph import (
+from fmdtools.analyze.graph.architecture import (
     FunctionArchitectureGraph,
     FunctionArchitectureFlowGraph,
 )
-from fmdtools.analyze.graph import (
+from fmdtools.analyze.graph.architecture import (
     FunctionArchitectureFxnGraph,
     FunctionArchitectureTypeGraph,
 )
@@ -34,6 +34,8 @@ from shapely import Point, LineString, MultiLineString, Polygon
 from shapely.ops import split
 import matplotlib.pyplot as plt
 from shapely.plotting import plot_line, plot_points
+
+plt.rcParams['animation.ffmpeg_path'] ='C:\\Users\mmohame2\\ffmpeg\\ffmpeg\\bin\\ffmpeg.exe'
 
 # DEFINE PARAMETERS
 
@@ -55,7 +57,7 @@ class GroundControlParams(Parameter):
     """
 
     destination: tuple = (25, 25)
-    dest_buffer: float = 0.6
+    dest_buffer: float = 0.3
     speed: float = 0.1
 
 
@@ -83,7 +85,7 @@ class EnvironmentParams(CoordsParam):
     perecieved_objects: state
         objects that are percieved and mapped
     perecieved_end_zone: feature
-        accaptable end zone corresponding to the desitination point
+        acceptable end zone corresponding to the desitination point
     start: base
         base location
     all_occupied: collection
@@ -100,6 +102,7 @@ class EnvironmentParams(CoordsParam):
     num_occupied: int = 50
     state_explored: tuple = (bool, False)
     state_perceived_objects: tuple = (bool, False)
+    state_rover_path: tuple = (bool, False)
     feature_occupied: tuple = (bool, False)
     feature_end_zone: tuple = (bool, False)
     point_base: tuple = (5.1, 5.1)
@@ -132,11 +135,10 @@ class MissionParams(Parameter):
 
     loc_pos_error: float = 0.1
     num_waypoints: int = 5
-    max_sense_delay: int = 10
+    max_sense_delay: int = 4
     sense_malfunc_rate: float = 0.3
     vision_range: float = 5.0
     max_ghost_points: int = 1
-    time_step_duration: float = 1.0  # check if this is already built in?
 
 
 class RoverParams(Parameter):
@@ -203,7 +205,10 @@ class RoverEnvironment(Environment):
     def at_finish(self, curr_x, curr_y):
         """determine if the rover is at the end zone"""
         return self.c.in_area(curr_x, curr_y, "all_endzone")
-
+    
+    def check_collision(self, curr_x, curr_y):
+        """determine if the rover has hit an obstacle"""
+        return self.c.get(curr_x, curr_y, 'occupied')
 
 class EEState(State):
     """States relating to the power supply.
@@ -544,7 +549,6 @@ class Map(Function):
                         vision_cone, investigate_obstacles
                     )
                 
-                
                 # determine the visible points based on the vision cone with 
                 # blind spots. The buffers are set to cushion error and for 
                 # better visualization in the grid points
@@ -557,10 +561,9 @@ class Map(Function):
                     -self.environment.c.p.blocksize / 3
                 )
                 
+
                 # add the visible obstacles to the tracked obstacle list
-                self.s.obstacles_inrange = (
-                    self.s.obstacles_inrange + visible_obstacle_pts
-                )
+                self.s.obstacles_inrange = self.s.obstacles_inrange + visible_obstacle_pts
                 
                 # update the environment to with the percieved information
                 self.environment.c.set_pts(
@@ -599,6 +602,7 @@ class Map(Function):
         and returns the new cone.'''
         for i in perceived_obstacles:
             if vision_cone.contains(Point(i[0], i[1])):
+                inside_pt = Point(self.location_pose.s.curr_x, self.location_pose.s.curr_y)
                 delta = self.environment.c.p.blocksize / 2
                 if (
                     self.location_pose.s.curr_x <= i[0]
@@ -606,8 +610,7 @@ class Map(Function):
                 ):
                     point1 = np.array([i[0] - delta, i[1] + delta])
                     point2 = np.array([i[0] + delta, i[1] - delta])
-                    splitter = splitter = self.calc_splitter(point1, point2)
-                    inside_pt = Point(i[0] + delta, i[1] + delta)
+                    splitter = self.calc_splitter(point1, point2)
                     vision_cone = self.split_cone(
                         vision_cone, splitter, inside_pt)
                 elif (
@@ -616,8 +619,7 @@ class Map(Function):
                 ):
                     point1 = np.array([i[0] - delta, i[1] - delta])
                     point2 = np.array([i[0] + delta, i[1] + delta])
-                    splitter = splitter = self.calc_splitter(point1, point2)
-                    inside_pt = Point(i[0] - delta, i[1] + delta)
+                    splitter = self.calc_splitter(point1, point2)
                     vision_cone = self.split_cone(
                         vision_cone, splitter, inside_pt)
                 elif (
@@ -626,15 +628,13 @@ class Map(Function):
                 ):
                     point1 = np.array([i[0] - delta, i[1] + delta])
                     point2 = np.array([i[0] + delta, i[1] - delta])
-                    splitter = splitter = self.calc_splitter(point1, point2)
-                    inside_pt = Point(i[0] - delta, i[1] - delta)
+                    splitter = self.calc_splitter(point1, point2)
                     vision_cone = self.split_cone(
                         vision_cone, splitter, inside_pt)
                 else:
                     point1 = np.array([i[0] - delta, i[1] - delta])
                     point2 = np.array([i[0] + delta, i[1] + delta])
-                    splitter = splitter = self.calc_splitter(point1, point2)
-                    inside_pt = Point(i[0] + delta, i[1] - delta)
+                    splitter = self.calc_splitter(point1, point2)
                     vision_cone = self.split_cone(
                         vision_cone, splitter, inside_pt)
         return vision_cone
@@ -651,7 +651,7 @@ class Map(Function):
         split_cone = split(vision_cone, splitter)
         geoms = [*split_cone.geoms]
         for geom in geoms:
-            if not geom.contains(inside_pt):
+            if geom.contains(inside_pt):
                 vision_cone = geom
         return vision_cone
 
@@ -665,7 +665,7 @@ class Map(Function):
             ]
         )
         new_norm_coords = norm_coords * (
-            self.p.vision_range / np.linalg.norm(norm_coords)
+            self.p.vision_range * 2 / np.linalg.norm(norm_coords)
         )
         new_point = np.array(
             [
@@ -699,7 +699,7 @@ class SenseMode(Mode):
 
 
 class Sense(Function):
-    __slots__ = ("ee", "sense_data", "environment")
+    __slots__ = ("ee", "sense_data", "environment", "location_pose")
     container_p = MissionParams
     container_m = SenseMode
     container_t = SenseTime
@@ -707,15 +707,19 @@ class Sense(Function):
     flow_ee = EE
     flow_sense_data = SenseData
     flow_environment = RoverEnvironment
+    flow_location_pose = LocationPose
 
     def dynamic_behavior(self, time):
         if self.ee.s.v == 12:
-            self.ee.s.a += 1
+            power_draw_indicator = True
             if self.m.has_fault('too_late'):
                 if self.t.too_late.indicate_standby():
                     self.sense_data.s.delay = self.r.rng.integers(self.p.max_sense_delay, self.p.max_sense_delay * 3, endpoint=True)
                     self.update_sensed('both', False)
-                    self.t.too_late.set_timer(self.sense_data.s.delay)
+                    if self.environment.c.get(self.location_pose.s.curr_x, self.location_pose.s.curr_y, 'explored'):
+                        self.t.too_late.set_timer(self.sense_data.s.delay)
+                    else:
+                        power_draw_indicator = False
                 elif self.t.too_late.indicate_complete():
                     self.assign_sense_data()
                     self.t.too_late.reset()
@@ -725,13 +729,25 @@ class Sense(Function):
                 if self.t.nominal.indicate_standby():
                     self.sense_data.s.delay = self.r.rng.integers(0, self.p.max_sense_delay, endpoint=True)
                     self.update_sensed('both', False)
-                    self.t.nominal.set_timer(self.sense_data.s.delay)
+                    if self.environment.c.get(self.location_pose.s.curr_x, self.location_pose.s.curr_y, 'explored'):
+                        self.t.nominal.set_timer(self.sense_data.s.delay)
+                    else:
+                        power_draw_indicator = False
                 elif self.t.nominal.indicate_complete():
                     self.assign_sense_data()
                     self.t.nominal.reset()
                 else:
-                    self.t.nominal.inc()         
-        return
+                    self.t.nominal.inc()   
+                    
+            if self.m.has_fault ('pose_est_loss', 'position_est_loss') or power_draw_indicator == False:
+                if self.ee.s.power_draw == False:
+                    self.ee.s.a = 0  
+                else:
+                    self.ee.s.a += 0
+            else:
+                self.ee.s.power_draw = True
+                self.ee.s.a += 1
+
     
     def update_sensed (self, variable, value):
         if variable == 'both':
@@ -756,44 +772,64 @@ class Sense(Function):
             self.sense_data.s.malfunc_pose = True
 
             
-      
-
-
-
-
 class NavigateMode(Mode):
     fm_args = (
-        "no_obstacle_detection",
-        "wrong_obstacle_detection",
-        "ghose_obstacle_detection",
-        "no_own_map"
+        "steering_stuck",
+        "poor_wheel_alignment_right",
+        "poor_wheel_alignment_left",
+        "no_throttle",
+        "waypoint_calc_malfunction"
+        "path_planning_malfunction"
+        "no_path_planning"
+        "no_waypoint"
     )
+    opermodes = ('idle', 'drive')
+    mode: str = 'idle'
 
 
 class Navigate(Function):
-    __slots__ = ("ee", "environment", "location_pose", "sense_data")
+    __slots__ = ("ee", "environment", "location_pose", "location_pose_est", "sense_data")
     container_m = NavigateMode
     container_p = RoverParams
     flow_ee = EE
     flow_environment = RoverEnvironment
     flow_location_pose = LocationPose
     flow_sense_data = SenseData
+    
+    def init_block(self, **kwargs):
+        self.location_pose_est = self.location_pose.create_local(self.name)
 
     def dynamic_behavior(self, time):
-        delta_i = self.p.ground_control.destination[0] - \
-            self.location_pose.s.curr_x
-        delta_j = self.p.ground_control.destination[1] - \
-            self.location_pose.s.curr_y
-        magnitude = np.sqrt(delta_i**2 + delta_j**2)
-        unit_i = delta_i / magnitude
-        unit_j = delta_j / magnitude
-        dist_x = unit_i * self.p.ground_control.speed * \
-        self.p.mission.time_step_duration
-        dist_y = unit_j * self.p.ground_control.speed * \
-        self.p.mission.time_step_duration
-        self.location_pose.s.curr_x = self.location_pose.s.curr_x + dist_x
-        self.location_pose.s.curr_y = self.location_pose.s.curr_y + dist_y
+        if self.ee.s.v == 12:
+            if not self.environment.c.in_range (self.p.ground_control.destination[0], self.p.ground_control.destination[1]):
+                raise Exception ("Desitination is out of bounds or the defined map. Maximun x value is " + str(self.p.environment.x_size * self.p.environment.blocksize)
+                                 + "Maximum y value is " + str(self.p.environment.y_size * self.p.environment.blocksize) + ".")
+            if self.environment.c.get(self.p.ground_control.destination[0], self.p.ground_control.destination[1], 'explored'):
+                if self.environment.c.get(self.p.ground_control.destination[0], self.p.ground_control.destination[1], 'occupied'):
+                    self.m.set_mode('idle')
+                else:
+                    self.m.set_mode('drive')
+            else:
+                self.m.set_mode('drive')
+            
+            if self.m.in_mode('idle'):
+                self.ee.s.a += 0.1
+            else:
+                delta_i = self.p.ground_control.destination[0] - \
+                    self.location_pose.s.curr_x
+                delta_j = self.p.ground_control.destination[1] - \
+                    self.location_pose.s.curr_y
+                magnitude = np.sqrt(delta_i**2 + delta_j**2)
+                unit_i = delta_i / magnitude
+                unit_j = delta_j / magnitude
+                dist_x = unit_i * self.p.ground_control.speed * \
+                self.t.dt
+                dist_y = unit_j * self.p.ground_control.speed * \
+                self.t.dt
+                self.location_pose.s.curr_x = self.location_pose.s.curr_x + dist_x
+                self.location_pose.s.curr_y = self.location_pose.s.curr_y + dist_y
 
+        self.environment.c.set(self.location_pose.s.curr_x, self.location_pose.s.curr_y, 'rover_path', True)
         return
 
 
@@ -804,6 +840,7 @@ class Rover(FunctionArchitecture):
         end_time=300,
         phases=(("start", 0, 30), ("end", 31, 150)),
         end_condition="indicate_finished",
+        dt = 1.0
     )
 
     def init_architecture(self, **kwargs):
@@ -831,6 +868,10 @@ class Rover(FunctionArchitecture):
                 self.flows["location_pose"].s.curr_x,
                 self.flows["location_pose"].s.curr_y,
             )
+            or self.flows["environment"].check_collision(
+                self.flows["location_pose"].s.curr_x,
+                self.flows["location_pose"].s.curr_y,
+                        )
             or (time > 5 and self.fxns["supply_power"].m.in_mode("standby"))
             or self.fxns["supply_power"].m.in_mode("no_charge")
         ):
@@ -844,14 +885,21 @@ class Rover(FunctionArchitecture):
 
         Returns
         ----------
-            "at_finish": bool
+            at_finish: bool
                 is true if the rover has reached the end point
-            "classification": str
+            classification: str
                 mission status (nominal, faulty, or incomplete)
-            "num_explored_obstacles": int
+            num_explored_obstacles: int
                 number of obstacles in the explored area,
-            "num_perceived_obstacles: int
+            num_perceived_obstacles: int
                 number of perceived obstacles in the explored area
+            num_false_positive_objects: int
+                number of ghost obstacles detected
+            num_false_negetive_objects: int
+                number of actual obstacles not detected
+--------------------------------------------------------------
+            safety breaches - safety margin is 20 cm.
+            Safety Dangerzone - margin 
         """
 
         modes, modeproperties = self.return_faultmodes()
@@ -880,11 +928,19 @@ class Rover(FunctionArchitecture):
         perceived_objects = self.flows["environment"].c.find_all(
             perceived_objects=(True, np.equal)
         )
+        
+        false_negetive_objects = self.flows["environment"].c.find_all(
+            perceived_objects=(False, np.equal), occupied=(True, np.equal))
+        
+        false_positive_objects = self.flows["environment"].c.find_all(
+            perceived_objects=(True, np.equal), occupied=(False, np.equal))
 
         return {
             "classification": classification,
             "at_finish": at_finish,
-            "num_explored_obstacles": len(objects_explored),
+            "num_obstacles_in_explored_area": len(objects_explored),
+            "num_false_positive_obstacles": len(false_positive_objects),
+            "num_false_negetive_obstacles": len(false_negetive_objects),
             "num_perceived_obstacles": len(perceived_objects),
         }
 
@@ -905,7 +961,7 @@ if __name__ == "__main__":
     # mdl.flows['environment'].c.assign_from(hist.flows.environment.c, len(hist.time)-1, 'perceived_objects')
 
     ex2, hist2 = prop.one_fault(
-        mdl, "map", "ghost_obstacle_detection", time=5, run_stochastic=True, seed=50
+        mdl, "map", "no_self_map", time=10, run_stochastic=True, seed=50
     )
     mdl.flows["environment"].c.assign_from(
         hist2.faulty.flows.environment.c, len(
@@ -919,8 +975,8 @@ if __name__ == "__main__":
     mdl.flows["environment"].c.show(
         {"explored": {}},
         collections={"all_occupied": {"label": False},
-                     "all_endzone": {"label": False}},
-        alpha=0.5,
+                      "all_endzone": {"label": False}},
+        alpha=0.5, coll_overlay=False,
     )
     # mdl.flows['environment'].c.show_property('occupied')
 
@@ -928,10 +984,33 @@ if __name__ == "__main__":
         {
             "explored": {"color": "blue", "alpha": 0.3},
             "perceived_objects": {"color": "yellow", "alpha": 0.6},
+            "rover_path": {"color": "black", "alpha": 0.6},
         },
         collections={
             "all_occupied": {"label": False, "color": "red"},
             "all_endzone": {"label": False, "color": "green"},
-        },
+        }, coll_overlay=False,
         linewidth=0.0,
     )
+    
+    animation = mdl.flows["environment"].c.animate(
+        hist2.faulty.flows.environment.c, properties ={"explored": {"color": "blue", "alpha": 0.3},
+    "perceived_objects": {"color": "yellow", "alpha": 0.6}, "rover_path": {"color": "black", "alpha": 0.6}
+    },
+    collections={
+    "all_occupied": {"label": False, "color": "red"},
+    "all_endzone": {"label": False, "color": "green"}}, coll_overlay=False, linewidth =0.0)
+    
+    progress_callback = lambda i, n: print(f'Saving frame {i}/{n}')
+    #animation.save('Troupe_faulty_ghost_obstacle_detection.mp4', progress_callback=progress_callback)
+    animation.save('Troupe_faulty_no_self_map.mp4', progress_callback=progress_callback)
+    
+    # animation = mdl.flows["environment"].c.animate(
+    #     hist2.nominal.flows.environment.c, properties ={"explored": {"color": "blue", "alpha": 0.3},
+    # "perceived_objects": {"color": "yellow", "alpha": 0.6}, "rover_path": {"color": "black", "alpha": 0.6}
+    # },
+    # collections={
+    # "all_occupied": {"label": False, "color": "red"},
+    # "all_endzone": {"label": False, "color": "green"}}, coll_overlay=False, linewidth =0.0)
+    # animation.save('Troupe_nominal.mp4', progress_callback=progress_callback)
+    
