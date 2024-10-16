@@ -267,6 +267,19 @@ class ConnectionEdgeStyle(EdgeStyle):
     gv_style: str = 'dashed'
 
 
+class InheritanceEdgeStyle(EdgeStyle):
+    """EdgeStyle representing inheritance."""
+
+    nx_edge_color: str = 'grey'
+    nx_style: str = 'solid'
+    nx_arrows: bool = True
+    nx_arrowstyle: str = '-|>'
+    nx_arrowsize: int = 15
+    gv_arrowhead: str = 'empty'
+    gv_color: str = 'black'
+    gv_style: str = 'solid'
+
+
 def edge_style_factory(style_tag, styles={}, **kwargs):
     """
     Get the appropriate EdgeStyle for networkx plotting.
@@ -307,6 +320,8 @@ def edge_style_factory(style_tag, styles={}, **kwargs):
         style_class = ContainmentEdgeStyle
     elif style_tag == 'connection':
         style_class = ConnectionEdgeStyle
+    elif style_tag == 'inheritance':
+        style_class = InheritanceEdgeStyle
     else:
         raise Exception("Invalid edge style: "+str(style_tag))
     return style_class(styles=styles, **kwargs)
@@ -555,6 +570,8 @@ def node_style_factory(style_tag, styles={}, **kwargs):
     elif style_tag in ['condition', 'Condition', 'method']:
         node_style = MethodNodeStyle
     elif style_tag in ['dict', 'flexible']:
+        node_style = OtherNodeStyle
+    elif style_tag in ['class', 'Class']:
         node_style = OtherNodeStyle
     else:
         raise Exception("Invalid node style: "+str(style_tag))
