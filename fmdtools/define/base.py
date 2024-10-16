@@ -282,6 +282,8 @@ def get_obj_name(obj, role='', basename=''):
     name : str
         Name of the object.
     """
+    if inspect.isclass(obj):
+        return obj.__module__ + '.' + obj.__name__
     if hasattr(obj, 'get_full_name'):
         return obj.get_full_name()
     elif inspect.ismethod(obj):
@@ -301,3 +303,23 @@ def get_memory(role):
     else:
         mem = sys.getsizeof(role)
     return mem
+
+
+def get_inheritance(obj):
+    """
+    Get the base class(es) that the object inherits from.
+
+    Parameters
+    ----------
+    obj : object
+        Object to get base of.
+
+    Returns
+    -------
+    classes : tuple
+        Tuple of classes that are the base of the object.
+    """
+    if inspect.isclass(obj):
+        return tuple([b for b in obj.__bases__ if b is not object])
+    else:
+        return (obj.__class__, )
