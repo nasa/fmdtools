@@ -244,11 +244,17 @@ def get_code_attrs(obj):
         code = "\n".join(code.split("\n        "))
         code = remove_para(code)
     else:
-        source = inspect.getsource(obj.__class__)
+        if inspect.isclass(obj):
+            objcl = obj
+        else:
+            objcl = obj.__class__
+        source = inspect.getsource(objcl)
         if hasattr(obj, 'get_code'):
             code = obj.get_code(source)
         else:
             code = ""
+        if str(obj.__doc__) not in source or 'fmdtools.' in objcl.__module__:
+            docs = ""
     return {'source': source, 'code': code, 'docs': docs}
 
 
@@ -258,6 +264,7 @@ def remove_para(source):
         return remove_para(source[1:])
     else:
         return source
+
 
 def get_methods(obj):
     """Get methods from the given object."""
@@ -320,6 +327,7 @@ def get_inheritance(obj):
         Tuple of classes that are the base of the object.
     """
     if inspect.isclass(obj):
-        return tuple([b for b in obj.__bases__ if b is not object])
+        return tuple([b for b in obj.__bases__
+                      if b is not object and b is not dataobject])
     else:
         return (obj.__class__, )

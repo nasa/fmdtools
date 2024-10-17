@@ -672,7 +672,7 @@ if __name__ == "__main__":
     Pump().get_vars("flows.ee_1")
     g = Pump().create_graph()
     from fmdtools.analyze.graph.base import Graph
-    from fmdtools.analyze.graph.model import ModelGraph
+    from fmdtools.define.object.base import ObjectGraph
     # horizontal alignment test:
     g2 = Graph(g)
     g2.set_node_labels(subtext="nodetype", title_style={'horizontalalignment': 'left'},
@@ -686,6 +686,6 @@ if __name__ == "__main__":
     check_model_pickleability(Pump(), try_pick=True)
     import inspect
     source = inspect.getsource(Pump)
-    ModelGraph(Pump(), with_inheritance=True, with_containment=False).draw()
-    ModelGraph(Pump(), with_inheritance=True, with_containment=False,
-               with_methods=False, recursive=True).draw_graphviz()
+    og = ObjectGraph(Pump(), get_source=True)
+    og.set_node_labels(title='shortname', title2='classname', subtext='docs')
+    og.draw_graphviz()

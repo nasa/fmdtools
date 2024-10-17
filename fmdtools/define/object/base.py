@@ -44,8 +44,11 @@ from inspect import signature, isclass, ismethod
 class ObjectGraph(ModelGraph):
     """Objectgraph represents the definition of an Object."""
 
-    def __init__(self, mdl, with_methods=True, **kwargs):
-        ModelGraph.__init__(self, mdl, with_methods=with_methods, **kwargs)
+    def __init__(self, mdl, with_methods=True, with_inheritance=True,
+                 with_subgraph_edges=False, **kwargs):
+        ModelGraph.__init__(self, mdl, with_methods=with_methods,
+                            with_inheritance=with_inheritance,
+                            with_subgraph_edges=with_subgraph_edges, **kwargs)
 
     def set_edge_labels(self, title='edgetype', title2='', subtext='role',
                         **edge_label_styles):
@@ -750,7 +753,7 @@ class BaseObject(object):
         return g, name
 
     def create_graph(self, g=None, name='', with_methods=True, with_root=True,
-                     with_inheritance=False, **kwargs):
+                     with_inheritance=False, end_at_fmdtools=True, **kwargs):
         """
         Create a networkx graph view of the Block.
 
@@ -762,6 +765,8 @@ class BaseObject(object):
             Name of the node. Default is '', which uses the get_full_name().
         with_methods : bool
             Whether to include methods. Default is True.
+        end_at_fmdtools : bool
+            Whether to end inheritance graph at first fmdtools class. Default is True.
         **kwargs : kwargs
             Keyword arguments to create_role_subgraph.
 
@@ -772,13 +777,14 @@ class BaseObject(object):
         """
         g, name = self._prep_graph(g=g, name=name, **kwargs)
         self.create_role_subgraph(g=g, name=name, with_inheritance=with_inheritance,
-                                  with_methods=with_methods, **kwargs)
+                                  with_methods=with_methods,
+                                  end_at_fmdtools=end_at_fmdtools, **kwargs)
         if with_methods:
             self.create_method_subgraph(g=g, name=name, **kwargs)
         if not with_root:
             remove_base(g, name)
         elif with_inheritance:
-            g = create_inheritance_subgraph(self, g)
+            g = create_inheritance_subgraph(self, g, end_at_fmdtools=end_at_fmdtools)
         return g
 
     def create_method_subgraph(self, g=None, name='', **kwargs):
@@ -787,7 +793,7 @@ class BaseObject(object):
         for methodname, methodobj in get_methods(self).items():
             mname = get_obj_name(methodobj)
             add_node(methodobj, g=g, name=mname,
-                     classname=methodname, nodetype="method", **kwargs)
+                     classname="method", nodetype="method", **kwargs)
             add_edge(g, name, mname, methodname, "containment")
         return g
 
@@ -809,7 +815,8 @@ class BaseObject(object):
                     add_edge(g, name, name2, role, edgetype)
 
     def create_role_subgraph(self, g=None, name='', role_nodes=["all"], recursive=False,
-                             with_containment=True, with_inheritance=False, **kwargs):
+                             with_containment=True, with_inheritance=False,
+                             with_subgraph_edges=True, end_at_fmdtools=True, **kwargs):
         """
         Create a networkx graph view of the Block and its roles.
 
@@ -828,6 +835,11 @@ class BaseObject(object):
         with_inheritance : bool
             Whether to include class inheritance subgraphs. Default is False.
             The default is False.
+        with_subgraph_edges : bool
+            Whether to include subgraph edges, e.g. function/flow containment in an
+            architecture graph.
+        end_at_fmdtools : bool
+            Whether to end inheritance graph at first fmdtools class. Default is True.
         **kwargs : kwargs
             kwargs to add_node
 
@@ -845,12 +857,14 @@ class BaseObject(object):
                 edgetype = self.get_role_edgetype(rolename)
                 add_edge(g, name, subname, rolename, edgetype)
             if with_inheritance:
-                g = create_inheritance_subgraph(roleobj, g=g, name=subname)
+                g = create_inheritance_subgraph(roleobj, g=g, name=subname,
+                                                end_at_fmdtools=end_at_fmdtools)
             if recursive and hasattr(roleobj, 'create_graph'):
                 roleobj.create_graph(g=g, role_nodes=role_nodes, recursive=recursive,
                                      name=subname, with_containment=with_containment,
-                                     with_inheritance=with_inheritance, **kwargs)
-        if with_containment:
+                                     with_inheritance=with_inheritance,
+                                     end_at_fmdtools=end_at_fmdtools, **kwargs)
+        if with_containment and with_subgraph_edges:
             self.add_subgraph_edges(g, **kwargs)
         return g
 

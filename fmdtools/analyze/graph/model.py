@@ -31,7 +31,6 @@ CONDITIONS OF ANY KIND, either express or implied. See the License for the
 specific language governing permissions and limitations under the License.
 """
 from fmdtools.define.base import get_code_attrs, get_obj_name, get_inheritance
-from fmdtools.define.base import get_obj_name
 from fmdtools.analyze.graph.base import Graph
 from fmdtools.analyze.graph.label import shorten_name
 from fmdtools.analyze.result import Result
@@ -104,7 +103,7 @@ def add_edge(g, basename, name, rolename, edgetype):
     g.add_edge(basename, name, edgetype=edgetype, role=rolename)
 
 
-def create_inheritance_subgraph(obj, g=None, name=''):
+def create_inheritance_subgraph(obj, g=None, name='', end_at_fmdtools=True):
     """
     Create a graph of the inheritance of a given object from fmdtools classes.
 
@@ -114,6 +113,10 @@ def create_inheritance_subgraph(obj, g=None, name=''):
         Object.
     g : graph, optional
         Networkx graph to add to. The default is None.
+    end_at_fmdtools : bool
+        Option to end at first fmdtools node while building the subgraph
+        Default is False, which stops the subgraph at the first fmdtools class, rather
+        than includeing the fmdtools class inheritance.
 
     Returns
     -------
@@ -127,10 +130,11 @@ def create_inheritance_subgraph(obj, g=None, name=''):
         g = add_node(obj, g, name=name, nodetype=nodetype)
     else:
         g = add_node(obj, g, name=name)
-    base_classes = get_inheritance(obj)
-    for bc in base_classes:
-        g = create_inheritance_subgraph(bc, g)
-        add_edge(g, name, get_obj_name(bc), "base", "inheritance")
+    if not (end_at_fmdtools and 'fmdtools.' in name):
+        base_classes = get_inheritance(obj)
+        for bc in base_classes:
+            g = create_inheritance_subgraph(bc, g, end_at_fmdtools=end_at_fmdtools)
+            add_edge(g, name, get_obj_name(bc), "base", "inheritance")
     return g
 
 
