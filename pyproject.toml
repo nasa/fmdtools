@@ -28,7 +28,7 @@ dependencies = ["scipy",
                 "pandas",
                 "ordered-set",
                 "dill",
-                "recordclass == 0.21.1",
+                "recordclass == 0.22.1",
                 "pytest",
                 "graphviz",
                 "shapely >= 2.0"

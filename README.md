@@ -107,7 +107,7 @@ ordered-set
 # license: (MIT) https://github.com/rspeer/ordered-set/blob/master/MIT-LICENSE
 dill 
 # license: (MIT) https://github.com/uqfoundation/dill/blob/master/LICENSE
-recordclass == 0.21.1
+recordclass == 0.22.1
 # license: (MIT) https://github.com/intellimath/recordclass/blob/main/LICENSE.txt
 pytest
 # license: (MIT) https://docs.pytest.org/en/7.3.x/license.html
