@@ -9,12 +9,13 @@ Requires pytest, nbmake, pytest-html, pytest-cov.
 Options
 --------
 --doctests: Bool
-    Whether or not to run doctests
---no_unittest: Bool
-    Whether or not to exclude unittests
---notebooks: str
-    Set of notebooks to include. Could be "full", "fast", "too_slow", or "none". Use
-    "fast" or "none" to remove significant testing time.
+    Whether or not to run/collect doctests
+--notebooks: Bool
+    Whether or not to run/collect notebooks
+--testtype : str
+    Set test configuration to run. Could be "full" (collect all tests),
+    "full-notebooks" (just notebooks), "fast-notebooks" (just fast notebooks),
+    "slow-notebooks" (just slow notebooks), or "doctests" (just doctests).
 --cov : bool
     Whether or not to produce coverage report. Default is True.
 --report : bool
@@ -25,9 +26,9 @@ Examples
 # by default, run all tests (except slow notebooks):
 # python -m run_all_tests
 # run a faster configuration with no notebooks
-# python -m run_all_tests --notebooks "none"
+# python -m run_all_tests --notebooks False
 # run just module-level doctests with no report
-# python -m run_all_tests --no_unittests True --notebooks "none" --cov False --report False
+# python -m run_all_tests --testtype "doctests"
 """
 import pytest
 import argparse
@@ -111,32 +112,9 @@ ignore_notebooks = [*too_slow_notebooks,
                     "tmp"]
 
 
-def main(doctests=True, no_unittest=False, doctest_modules=doctest_modules,
-         notebooks="full", ignore=ignore_notebooks, cov=True, report=True):
-    pytestargs = []
-    # if doctests, add doctest_modules to set of tests
-    if doctests:
-        pytestargs.extend(["--doctest-modules"])
-        if no_unittest:
-            pytestargs.extend([*doctest_modules])
-
-    # options for notebooks to test
-    if notebooks == "full":
-        notebooks = fast_notebooks + slow_notebooks
-    elif notebooks == "fast":
-        notebooks = fast_notebooks
-    elif notebooks == "too_slow":
-        notebooks = too_slow_notebooks
-    elif isinstance(notebooks, list):
-        notebooks = notebooks
-    elif not notebooks or notebooks == "none":
-        notebooks = []
-    else:
-        raise Exception("Invalid notebooks option: "+notebooks)
-
-    # adds notebooks
-    if notebooks:
-        pytestargs.extend(["--nbmake", *notebooks])
+def main(doctests=True,  notebooks=True, testlist=[], testtype="full",
+         ignore=ignore_notebooks, cov=True, report=True):
+    pytestargs = ["--cache-clear"]
 
     # adds coverage report
     if cov:
@@ -151,6 +129,29 @@ def main(doctests=True, no_unittest=False, doctest_modules=doctest_modules,
         pytestargs.extend(["--html=./reports/junit/report.html",
                            "--junitxml=./reports/junit/junit.xml",
                            "--overwrite"])
+
+    # if doctests, add doctest_modules to set of tests
+    # options for notebooks to test (provided testlist or set testlists)
+    if doctests:
+        pytestargs.extend(["--doctest-modules"])
+    if testlist:
+        pytestargs.extend(testlist)
+    elif testtype == "full-notebooks":
+        pytestargs.extend(fast_notebooks + slow_notebooks)
+    elif testtype == "doctests":
+        pytestargs.extend(doctest_modules)
+    elif testtype == "fast-notebooks":
+        pytestargs.extend(fast_notebooks)
+    elif testtype == "slow-notebooks":
+        pytestargs.extend(slow_notebooks)
+    elif testtype == "too-slow-notebooks":
+        pytestargs.extend(too_slow_notebooks)
+    elif testtype != "full":
+        raise Exception("Invalid testtype: "+testtype)
+
+    # adds notebooks
+    if notebooks:
+        pytestargs.extend(["--nbmake"])
 
     pytestargs.extend(["--ignore="+f for f in ignore])
     pytestargs.extend(["--continue-on-collection-errors"])
@@ -167,10 +168,24 @@ def main(doctests=True, no_unittest=False, doctest_modules=doctest_modules,
 
 
 if __name__ == "__main__":
+
+    # retcode = pytest.main(["--cov-report",
+    #                     "html:./reports/coverage",
+    #                     "--cov-report",
+    #                     "xml:./reports/coverage/coverage.xml",
+    #                     "--cov",
+    #                     "--html=./reports/junit/report.html",
+    #                     "--junitxml=./reports/junit/junit.xml",
+    #                     "--overwrite",
+    #                     "--doctest-modules",
+    #                     "--nbmake",
+    #                     *["--ignore="+notebook for notebook in ignore_notebooks],
+    #                     "--continue-on-collection-errors"])
+
     parser = argparse.ArgumentParser()
     parser.add_argument("--doctests", default=True, required=False)
-    parser.add_argument("--no_unittest", default=False, required=False)
-    parser.add_argument("--notebooks", default="full", required=False)
+    parser.add_argument("--notebooks", default=True, required=False)
+    parser.add_argument("--testtype", default="full", required=False)
     parser.add_argument("--cov", default=True, required=False)
     parser.add_argument("--report", default=True, required=False)
     parsed_args = parser.parse_args()

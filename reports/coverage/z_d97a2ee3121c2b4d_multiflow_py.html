@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-    <title>Coverage for fmdtools\define\flow\multiflow.py: 35%</title>
+    <title>Coverage for fmdtools\define\flow\multiflow.py: 34%</title>
     <link rel="icon" sizes="32x32" href="favicon_32_cb_58284776.png">
     <link rel="stylesheet" href="style_cb_718ce007.css" type="text/css">
     <script src="coverage_html_cb_497bf287.js" defer></script>
@@ -12,7 +12,7 @@
     <div class="content">
         <h1>
             <span class="text">Coverage for </span><b>fmdtools\define\flow\multiflow.py</b>:
-            <span class="pc_cov">35%</span>
+            <span class="pc_cov">34%</span>
         </h1>
         <aside id="help_panel_wrapper">
             <input id="help_panel_state" type="checkbox">
@@ -55,8 +55,8 @@
         </aside>
         <h2>
             <span class="text">101 statements &nbsp;</span>
-            <button type="button" class="run button_toggle_run" value="run" data-shortcut="r" title="Toggle lines run">35<span class="text"> run</span></button>
-            <button type="button" class="mis show_mis button_toggle_mis" value="mis" data-shortcut="m" title="Toggle lines missing">66<span class="text"> missing</span></button>
+            <button type="button" class="run button_toggle_run" value="run" data-shortcut="r" title="Toggle lines run">34<span class="text"> run</span></button>
+            <button type="button" class="mis show_mis button_toggle_mis" value="mis" data-shortcut="m" title="Toggle lines missing">67<span class="text"> missing</span></button>
             <button type="button" class="exc show_exc button_toggle_exc" value="exc" data-shortcut="x" title="Toggle lines excluded">7<span class="text"> excluded</span></button>
         </h2>
         <p class="text">
@@ -65,7 +65,7 @@
             <a id="nextFileLink" class="nav" href="z_59c35687e81b2951___init___py.html">&#xbb; next</a>
             &nbsp; &nbsp; &nbsp;
             <a class="nav" href="https://coverage.readthedocs.io/en/7.5.3">coverage.py v7.5.3</a>,
-            created at 2024-10-22 12:30 -0700
+            created at 2024-10-22 15:10 -0700
         </p>
         <aside class="hidden">
             <button type="button" class="button_next_chunk" data-shortcut="j"></button>
@@ -294,7 +294,7 @@
     <p class="pln"><span class="n"><a id="t212" href="#t212">212</a></span><span class="t">&nbsp;</span><span class="r"></span></p>
     <p class="run"><span class="n"><a id="t213" href="#t213">213</a></span><span class="t">    <span class="key">def</span> <span class="nam">copy</span><span class="op">(</span><span class="nam">self</span><span class="op">,</span> <span class="nam">name</span><span class="op">=</span><span class="str">''</span><span class="op">,</span> <span class="nam">glob</span><span class="op">=</span><span class="op">[</span><span class="op">]</span><span class="op">,</span> <span class="nam">p</span><span class="op">=</span><span class="op">{</span><span class="op">}</span><span class="op">,</span> <span class="nam">s</span><span class="op">=</span><span class="op">{</span><span class="op">}</span><span class="op">,</span> <span class="nam">track</span><span class="op">=</span><span class="op">[</span><span class="str">'s'</span><span class="op">]</span><span class="op">)</span><span class="op">:</span>&nbsp;</span><span class="r"></span></p>
     <p class="run"><span class="n"><a id="t214" href="#t214">214</a></span><span class="t">        <span class="key">if</span> <span class="key">not</span> <span class="nam">s</span> <span class="key">and</span> <span class="nam">hasattr</span><span class="op">(</span><span class="nam">self</span><span class="op">,</span> <span class="str">'s'</span><span class="op">)</span><span class="op">:</span>&nbsp;</span><span class="r"></span></p>
-    <p class="mis show_mis"><span class="n"><a id="t215" href="#t215">215</a></span><span class="t">            <span class="nam">s</span> <span class="op">=</span> <span class="nam">self</span><span class="op">.</span><span class="nam">s</span><span class="op">.</span><span class="nam">asdict</span><span class="op">(</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
+    <p class="run"><span class="n"><a id="t215" href="#t215">215</a></span><span class="t">            <span class="nam">s</span> <span class="op">=</span> <span class="nam">self</span><span class="op">.</span><span class="nam">s</span><span class="op">.</span><span class="nam">asdict</span><span class="op">(</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
     <p class="run"><span class="n"><a id="t216" href="#t216">216</a></span><span class="t">        <span class="nam">cop</span> <span class="op">=</span> <span class="nam">self</span><span class="op">.</span><span class="nam">__class__</span><span class="op">(</span><span class="nam">self</span><span class="op">.</span><span class="nam">name</span><span class="op">,</span> <span class="nam">glob</span><span class="op">=</span><span class="nam">glob</span><span class="op">,</span> <span class="nam">p</span><span class="op">=</span><span class="nam">p</span><span class="op">,</span> <span class="nam">s</span><span class="op">=</span><span class="nam">s</span><span class="op">,</span> <span class="nam">track</span><span class="op">=</span><span class="nam">track</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
     <p class="run"><span class="n"><a id="t217" href="#t217">217</a></span><span class="t">        <span class="key">for</span> <span class="nam">loc</span> <span class="key">in</span> <span class="nam">self</span><span class="op">.</span><span class="nam">locals</span><span class="op">:</span>&nbsp;</span><span class="r"></span></p>
     <p class="mis show_mis"><span class="n"><a id="t218" href="#t218">218</a></span><span class="t">            <span class="nam">local</span> <span class="op">=</span> <span class="nam">getattr</span><span class="op">(</span><span class="nam">self</span><span class="op">,</span> <span class="nam">loc</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
@@ -310,8 +310,8 @@
     <p class="pln"><span class="n"><a id="t228" href="#t228">228</a></span><span class="t">&nbsp;</span><span class="r"></span></p>
     <p class="run"><span class="n"><a id="t229" href="#t229">229</a></span><span class="t">    <span class="key">def</span> <span class="nam">find_mutables</span><span class="op">(</span><span class="nam">self</span><span class="op">)</span><span class="op">:</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t230" href="#t230">230</a></span><span class="t">        <span class="str">"""Find mutables (includes locals)."""</span>&nbsp;</span><span class="r"></span></p>
-    <p class="run"><span class="n"><a id="t231" href="#t231">231</a></span><span class="t">        <span class="nam">localflows</span> <span class="op">=</span> <span class="op">[</span><span class="nam">getattr</span><span class="op">(</span><span class="nam">self</span><span class="op">,</span> <span class="nam">lo</span><span class="op">)</span> <span class="key">for</span> <span class="nam">lo</span> <span class="key">in</span> <span class="nam">self</span><span class="op">.</span><span class="nam">locals</span><span class="op">]</span>&nbsp;</span><span class="r"></span></p>
-    <p class="run"><span class="n"><a id="t232" href="#t232">232</a></span><span class="t">        <span class="key">return</span> <span class="op">[</span><span class="op">*</span><span class="nam">super</span><span class="op">(</span><span class="op">)</span><span class="op">.</span><span class="nam">find_mutables</span><span class="op">(</span><span class="op">)</span><span class="op">,</span> <span class="op">*</span><span class="nam">localflows</span><span class="op">]</span>&nbsp;</span><span class="r"></span></p>
+    <p class="mis show_mis"><span class="n"><a id="t231" href="#t231">231</a></span><span class="t">        <span class="nam">localflows</span> <span class="op">=</span> <span class="op">[</span><span class="nam">getattr</span><span class="op">(</span><span class="nam">self</span><span class="op">,</span> <span class="nam">lo</span><span class="op">)</span> <span class="key">for</span> <span class="nam">lo</span> <span class="key">in</span> <span class="nam">self</span><span class="op">.</span><span class="nam">locals</span><span class="op">]</span>&nbsp;</span><span class="r"></span></p>
+    <p class="mis show_mis"><span class="n"><a id="t232" href="#t232">232</a></span><span class="t">        <span class="key">return</span> <span class="op">[</span><span class="op">*</span><span class="nam">super</span><span class="op">(</span><span class="op">)</span><span class="op">.</span><span class="nam">find_mutables</span><span class="op">(</span><span class="op">)</span><span class="op">,</span> <span class="op">*</span><span class="nam">localflows</span><span class="op">]</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t233" href="#t233">233</a></span><span class="t">&nbsp;</span><span class="r"></span></p>
     <p class="run"><span class="n"><a id="t234" href="#t234">234</a></span><span class="t">    <span class="key">def</span> <span class="nam">as_modelgraph</span><span class="op">(</span><span class="nam">self</span><span class="op">,</span> <span class="nam">gtype</span><span class="op">=</span><span class="nam">MultiFlowGraph</span><span class="op">,</span> <span class="op">**</span><span class="nam">kwargs</span><span class="op">)</span><span class="op">:</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t235" href="#t235">235</a></span><span class="t">        <span class="str">"""Create and return the corresponding ModelGraph for the Object."""</span>&nbsp;</span><span class="r"></span></p>
@@ -325,7 +325,7 @@
             <a class="nav" href="z_59c35687e81b2951___init___py.html">&#xbb; next</a>
             &nbsp; &nbsp; &nbsp;
             <a class="nav" href="https://coverage.readthedocs.io/en/7.5.3">coverage.py v7.5.3</a>,
-            created at 2024-10-22 12:30 -0700
+            created at 2024-10-22 15:10 -0700
         </p>
     </div>
 </footer>
