@@ -89,7 +89,7 @@ def mod_prefix():
     if 'graph' in wd:
         return '../../../docs-source/figures/frdl/'
     else:
-        return 'docs/figures/frdl/'
+        return 'docs-source/figures/frdl/'
 
 
 class BaseStyle(dataobject, copy_default=True):
@@ -199,7 +199,7 @@ def save_dot(dot, saveas=''):
     """Save a graphviz diagram."""
     if saveas:
         filecomponents = saveas.split('.')
-        dot.render('.'.join(filecomponents[:-1]), format=filecomponents[-1])
+        dot.render('.'.join(filecomponents[:-1]), format=filecomponents[-1], view=False)
 
 
 class FlowEdgeStyle(EdgeStyle):
@@ -398,7 +398,8 @@ class NodeStyle(BaseStyle):
         Digraph, Graph = gv_import_check()
         dot = Digraph()
         dot.node('0', label=self.__class__.__name__, **self.gv_kwargs())
-        display(SVG(dot._repr_image_svg_xml()))
+        if disp:
+            display(SVG(dot._repr_image_svg_xml()))
         gv_plot_ending(dot, disp=disp, saveas=saveas)
         return dot
 
