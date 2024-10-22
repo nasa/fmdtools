@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-    <title>Coverage for fmdtools\define\architecture\geom.py: 79%</title>
+    <title>Coverage for fmdtools\define\architecture\geom.py: 56%</title>
     <link rel="icon" sizes="32x32" href="favicon_32_cb_58284776.png">
     <link rel="stylesheet" href="style_cb_718ce007.css" type="text/css">
     <script src="coverage_html_cb_497bf287.js" defer></script>
@@ -12,7 +12,7 @@
     <div class="content">
         <h1>
             <span class="text">Coverage for </span><b>fmdtools\define\architecture\geom.py</b>:
-            <span class="pc_cov">79%</span>
+            <span class="pc_cov">56%</span>
         </h1>
         <aside id="help_panel_wrapper">
             <input id="help_panel_state" type="checkbox">
@@ -55,8 +55,8 @@
         </aside>
         <h2>
             <span class="text">52 statements &nbsp;</span>
-            <button type="button" class="run button_toggle_run" value="run" data-shortcut="r" title="Toggle lines run">41<span class="text"> run</span></button>
-            <button type="button" class="mis show_mis button_toggle_mis" value="mis" data-shortcut="m" title="Toggle lines missing">11<span class="text"> missing</span></button>
+            <button type="button" class="run button_toggle_run" value="run" data-shortcut="r" title="Toggle lines run">29<span class="text"> run</span></button>
+            <button type="button" class="mis show_mis button_toggle_mis" value="mis" data-shortcut="m" title="Toggle lines missing">23<span class="text"> missing</span></button>
             <button type="button" class="exc show_exc button_toggle_exc" value="exc" data-shortcut="x" title="Toggle lines excluded">6<span class="text"> excluded</span></button>
         </h2>
         <p class="text">
@@ -65,7 +65,7 @@
             <a id="nextFileLink" class="nav" href="z_3a471e3220ee36cf_base_py.html">&#xbb; next</a>
             &nbsp; &nbsp; &nbsp;
             <a class="nav" href="https://coverage.readthedocs.io/en/7.5.3">coverage.py v7.5.3</a>,
-            created at 2024-10-22 12:30 -0700
+            created at 2024-10-22 15:10 -0700
         </p>
         <aside class="hidden">
             <button type="button" class="button_next_chunk" data-shortcut="j"></button>
@@ -158,7 +158,7 @@
     <p class="pln"><span class="n"><a id="t76" href="#t76">76</a></span><span class="t">&nbsp;</span><span class="r"></span></p>
     <p class="run"><span class="n"><a id="t77" href="#t77">77</a></span><span class="t">    <span class="key">def</span> <span class="nam">geoms</span><span class="op">(</span><span class="nam">self</span><span class="op">)</span><span class="op">:</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t78" href="#t78">78</a></span><span class="t">        <span class="str">"""Return a dict of all points, lines, and polygons."""</span>&nbsp;</span><span class="r"></span></p>
-    <p class="run"><span class="n"><a id="t79" href="#t79">79</a></span><span class="t">        <span class="key">return</span> <span class="op">{</span><span class="op">**</span><span class="nam">self</span><span class="op">.</span><span class="nam">points</span><span class="op">,</span> <span class="op">**</span><span class="nam">self</span><span class="op">.</span><span class="nam">lines</span><span class="op">,</span> <span class="op">**</span><span class="nam">self</span><span class="op">.</span><span class="nam">polys</span><span class="op">}</span>&nbsp;</span><span class="r"></span></p>
+    <p class="mis show_mis"><span class="n"><a id="t79" href="#t79">79</a></span><span class="t">        <span class="key">return</span> <span class="op">{</span><span class="op">**</span><span class="nam">self</span><span class="op">.</span><span class="nam">points</span><span class="op">,</span> <span class="op">**</span><span class="nam">self</span><span class="op">.</span><span class="nam">lines</span><span class="op">,</span> <span class="op">**</span><span class="nam">self</span><span class="op">.</span><span class="nam">polys</span><span class="op">}</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t80" href="#t80">80</a></span><span class="t">&nbsp;</span><span class="r"></span></p>
     <p class="run"><span class="n"><a id="t81" href="#t81">81</a></span><span class="t">    <span class="key">def</span> <span class="nam">check_geom_class</span><span class="op">(</span><span class="nam">self</span><span class="op">,</span> <span class="nam">gclass</span><span class="op">,</span> <span class="nam">baseclass</span><span class="op">)</span><span class="op">:</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t82" href="#t82">82</a></span><span class="t">        <span class="str">"""Check that geom class/object inherits from given base class."""</span>&nbsp;</span><span class="r"></span></p>
@@ -214,8 +214,8 @@
     <p class="pln"><span class="n"><a id="t132" href="#t132">132</a></span><span class="t"><span class="str">        **kwargs : kwargs</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t133" href="#t133">133</a></span><span class="t"><span class="str">            kwargs defining the object for gclass.</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t134" href="#t134">134</a></span><span class="t"><span class="str">        """</span>&nbsp;</span><span class="r"></span></p>
-    <p class="run"><span class="n"><a id="t135" href="#t135">135</a></span><span class="t">        <span class="nam">self</span><span class="op">.</span><span class="nam">check_geom_class</span><span class="op">(</span><span class="nam">pclass</span><span class="op">,</span> <span class="nam">GeomPoly</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
-    <p class="run"><span class="n"><a id="t136" href="#t136">136</a></span><span class="t">        <span class="nam">self</span><span class="op">.</span><span class="nam">add_flex_role_obj</span><span class="op">(</span><span class="str">'polys'</span><span class="op">,</span> <span class="nam">name</span><span class="op">,</span> <span class="nam">objclass</span><span class="op">=</span><span class="nam">pclass</span><span class="op">,</span> <span class="op">**</span><span class="nam">kwargs</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
+    <p class="mis show_mis"><span class="n"><a id="t135" href="#t135">135</a></span><span class="t">        <span class="nam">self</span><span class="op">.</span><span class="nam">check_geom_class</span><span class="op">(</span><span class="nam">pclass</span><span class="op">,</span> <span class="nam">GeomPoly</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
+    <p class="mis show_mis"><span class="n"><a id="t136" href="#t136">136</a></span><span class="t">        <span class="nam">self</span><span class="op">.</span><span class="nam">add_flex_role_obj</span><span class="op">(</span><span class="str">'polys'</span><span class="op">,</span> <span class="nam">name</span><span class="op">,</span> <span class="nam">objclass</span><span class="op">=</span><span class="nam">pclass</span><span class="op">,</span> <span class="op">**</span><span class="nam">kwargs</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t137" href="#t137">137</a></span><span class="t">&nbsp;</span><span class="r"></span></p>
     <p class="run"><span class="n"><a id="t138" href="#t138">138</a></span><span class="t">    <span class="key">def</span> <span class="nam">all_at</span><span class="op">(</span><span class="nam">self</span><span class="op">,</span> <span class="op">*</span><span class="nam">pt</span><span class="op">)</span><span class="op">:</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t139" href="#t139">139</a></span><span class="t">        <span class="str">"""</span>&nbsp;</span><span class="r"></span></p>
@@ -241,12 +241,12 @@
     <p class="pln"><span class="n"><a id="t159" href="#t159">159</a></span><span class="t"><span class="str">        >>> exga.all_at(0.4, 0.3)</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t160" href="#t160">160</a></span><span class="t"><span class="str">        {'ex_point': ['on'], 'ex_line': ['on']}</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t161" href="#t161">161</a></span><span class="t"><span class="str">        """</span>&nbsp;</span><span class="r"></span></p>
-    <p class="run"><span class="n"><a id="t162" href="#t162">162</a></span><span class="t">        <span class="nam">all_at</span> <span class="op">=</span> <span class="op">{</span><span class="op">}</span>&nbsp;</span><span class="r"></span></p>
-    <p class="run"><span class="n"><a id="t163" href="#t163">163</a></span><span class="t">        <span class="key">for</span> <span class="nam">geomname</span><span class="op">,</span> <span class="nam">geom</span> <span class="key">in</span> <span class="nam">self</span><span class="op">.</span><span class="nam">geoms</span><span class="op">(</span><span class="op">)</span><span class="op">.</span><span class="nam">items</span><span class="op">(</span><span class="op">)</span><span class="op">:</span>&nbsp;</span><span class="r"></span></p>
-    <p class="run"><span class="n"><a id="t164" href="#t164">164</a></span><span class="t">            <span class="nam">at_geom</span> <span class="op">=</span> <span class="nam">geom</span><span class="op">.</span><span class="nam">all_at</span><span class="op">(</span><span class="op">*</span><span class="nam">pt</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
-    <p class="run"><span class="n"><a id="t165" href="#t165">165</a></span><span class="t">            <span class="key">if</span> <span class="nam">at_geom</span><span class="op">:</span>&nbsp;</span><span class="r"></span></p>
-    <p class="run"><span class="n"><a id="t166" href="#t166">166</a></span><span class="t">                <span class="nam">all_at</span><span class="op">[</span><span class="nam">geomname</span><span class="op">]</span> <span class="op">=</span> <span class="nam">at_geom</span>&nbsp;</span><span class="r"></span></p>
-    <p class="run"><span class="n"><a id="t167" href="#t167">167</a></span><span class="t">        <span class="key">return</span> <span class="nam">all_at</span>&nbsp;</span><span class="r"></span></p>
+    <p class="mis show_mis"><span class="n"><a id="t162" href="#t162">162</a></span><span class="t">        <span class="nam">all_at</span> <span class="op">=</span> <span class="op">{</span><span class="op">}</span>&nbsp;</span><span class="r"></span></p>
+    <p class="mis show_mis"><span class="n"><a id="t163" href="#t163">163</a></span><span class="t">        <span class="key">for</span> <span class="nam">geomname</span><span class="op">,</span> <span class="nam">geom</span> <span class="key">in</span> <span class="nam">self</span><span class="op">.</span><span class="nam">geoms</span><span class="op">(</span><span class="op">)</span><span class="op">.</span><span class="nam">items</span><span class="op">(</span><span class="op">)</span><span class="op">:</span>&nbsp;</span><span class="r"></span></p>
+    <p class="mis show_mis"><span class="n"><a id="t164" href="#t164">164</a></span><span class="t">            <span class="nam">at_geom</span> <span class="op">=</span> <span class="nam">geom</span><span class="op">.</span><span class="nam">all_at</span><span class="op">(</span><span class="op">*</span><span class="nam">pt</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
+    <p class="mis show_mis"><span class="n"><a id="t165" href="#t165">165</a></span><span class="t">            <span class="key">if</span> <span class="nam">at_geom</span><span class="op">:</span>&nbsp;</span><span class="r"></span></p>
+    <p class="mis show_mis"><span class="n"><a id="t166" href="#t166">166</a></span><span class="t">                <span class="nam">all_at</span><span class="op">[</span><span class="nam">geomname</span><span class="op">]</span> <span class="op">=</span> <span class="nam">at_geom</span>&nbsp;</span><span class="r"></span></p>
+    <p class="mis show_mis"><span class="n"><a id="t167" href="#t167">167</a></span><span class="t">        <span class="key">return</span> <span class="nam">all_at</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t168" href="#t168">168</a></span><span class="t">&nbsp;</span><span class="r"></span></p>
     <p class="run"><span class="n"><a id="t169" href="#t169">169</a></span><span class="t">    <span class="key">def</span> <span class="nam">show</span><span class="op">(</span><span class="nam">self</span><span class="op">,</span> <span class="nam">geoms</span><span class="op">=</span><span class="op">{</span><span class="str">'all'</span><span class="op">:</span> <span class="op">{</span><span class="op">}</span><span class="op">}</span><span class="op">,</span> <span class="nam">fig</span><span class="op">=</span><span class="key">None</span><span class="op">,</span> <span class="nam">ax</span><span class="op">=</span><span class="key">None</span><span class="op">,</span> <span class="nam">figsize</span><span class="op">=</span><span class="op">(</span><span class="num">4</span><span class="op">,</span> <span class="num">4</span><span class="op">)</span><span class="op">,</span> <span class="nam">z</span><span class="op">=</span><span class="key">False</span><span class="op">,</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t170" href="#t170">170</a></span><span class="t">             <span class="op">**</span><span class="nam">kwargs</span><span class="op">)</span><span class="op">:</span>&nbsp;</span><span class="r"></span></p>
@@ -293,9 +293,9 @@
     <p class="pln"><span class="n"><a id="t211" href="#t211">211</a></span><span class="t">&nbsp;</span><span class="r"></span></p>
     <p class="run"><span class="n"><a id="t212" href="#t212">212</a></span><span class="t">    <span class="key">def</span> <span class="nam">init_architecture</span><span class="op">(</span><span class="nam">self</span><span class="op">,</span> <span class="op">**</span><span class="nam">kwargs</span><span class="op">)</span><span class="op">:</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t213" href="#t213">213</a></span><span class="t">        <span class="str">"""Initialize example geoms."""</span>&nbsp;</span><span class="r"></span></p>
-    <p class="run"><span class="n"><a id="t214" href="#t214">214</a></span><span class="t">        <span class="nam">self</span><span class="op">.</span><span class="nam">add_point</span><span class="op">(</span><span class="str">"ex_point"</span><span class="op">,</span> <span class="nam">ExPoint</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
-    <p class="run"><span class="n"><a id="t215" href="#t215">215</a></span><span class="t">        <span class="nam">self</span><span class="op">.</span><span class="nam">add_line</span><span class="op">(</span><span class="str">"ex_line"</span><span class="op">,</span> <span class="nam">ExLine</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
-    <p class="run"><span class="n"><a id="t216" href="#t216">216</a></span><span class="t">        <span class="nam">self</span><span class="op">.</span><span class="nam">add_poly</span><span class="op">(</span><span class="str">"ex_poly"</span><span class="op">,</span> <span class="nam">ExPoly</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
+    <p class="mis show_mis"><span class="n"><a id="t214" href="#t214">214</a></span><span class="t">        <span class="nam">self</span><span class="op">.</span><span class="nam">add_point</span><span class="op">(</span><span class="str">"ex_point"</span><span class="op">,</span> <span class="nam">ExPoint</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
+    <p class="mis show_mis"><span class="n"><a id="t215" href="#t215">215</a></span><span class="t">        <span class="nam">self</span><span class="op">.</span><span class="nam">add_line</span><span class="op">(</span><span class="str">"ex_line"</span><span class="op">,</span> <span class="nam">ExLine</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
+    <p class="mis show_mis"><span class="n"><a id="t216" href="#t216">216</a></span><span class="t">        <span class="nam">self</span><span class="op">.</span><span class="nam">add_poly</span><span class="op">(</span><span class="str">"ex_poly"</span><span class="op">,</span> <span class="nam">ExPoly</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t217" href="#t217">217</a></span><span class="t">&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t218" href="#t218">218</a></span><span class="t">&nbsp;</span><span class="r"></span></p>
     <p class="exc show_exc"><span class="n"><a id="t219" href="#t219">219</a></span><span class="t"><span class="key">if</span> <span class="nam">__name__</span> <span class="op">==</span> <span class="str">"__main__"</span><span class="op">:</span>&nbsp;</span><span class="r"></span></p>
@@ -311,7 +311,7 @@
             <a class="nav" href="z_3a471e3220ee36cf_base_py.html">&#xbb; next</a>
             &nbsp; &nbsp; &nbsp;
             <a class="nav" href="https://coverage.readthedocs.io/en/7.5.3">coverage.py v7.5.3</a>,
-            created at 2024-10-22 12:30 -0700
+            created at 2024-10-22 15:10 -0700
         </p>
     </div>
 </footer>

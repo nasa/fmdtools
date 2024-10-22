@@ -61,6 +61,8 @@ exclude_also = [
 omit = [
     # omit everything in /build
     "/_build/*",
+    "/docs/*",
+    "/tmp/*",
     # omit overall test
     "run_all_tests.py",
     ]
