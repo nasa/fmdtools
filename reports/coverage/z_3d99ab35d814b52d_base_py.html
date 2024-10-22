@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-    <title>Coverage for fmdtools\define\architecture\base.py: 72%</title>
+    <title>Coverage for fmdtools\define\architecture\base.py: 71%</title>
     <link rel="icon" sizes="32x32" href="favicon_32_cb_58284776.png">
     <link rel="stylesheet" href="style_cb_718ce007.css" type="text/css">
     <script src="coverage_html_cb_497bf287.js" defer></script>
@@ -12,7 +12,7 @@
     <div class="content">
         <h1>
             <span class="text">Coverage for </span><b>fmdtools\define\architecture\base.py</b>:
-            <span class="pc_cov">72%</span>
+            <span class="pc_cov">71%</span>
         </h1>
         <aside id="help_panel_wrapper">
             <input id="help_panel_state" type="checkbox">
@@ -55,8 +55,8 @@
         </aside>
         <h2>
             <span class="text">170 statements &nbsp;</span>
-            <button type="button" class="run button_toggle_run" value="run" data-shortcut="r" title="Toggle lines run">122<span class="text"> run</span></button>
-            <button type="button" class="mis show_mis button_toggle_mis" value="mis" data-shortcut="m" title="Toggle lines missing">48<span class="text"> missing</span></button>
+            <button type="button" class="run button_toggle_run" value="run" data-shortcut="r" title="Toggle lines run">121<span class="text"> run</span></button>
+            <button type="button" class="mis show_mis button_toggle_mis" value="mis" data-shortcut="m" title="Toggle lines missing">49<span class="text"> missing</span></button>
             <button type="button" class="exc show_exc button_toggle_exc" value="exc" data-shortcut="x" title="Toggle lines excluded">4<span class="text"> excluded</span></button>
         </h2>
         <p class="text">
@@ -65,7 +65,7 @@
             <a id="nextFileLink" class="nav" href="z_3d99ab35d814b52d_component_py.html">&#xbb; next</a>
             &nbsp; &nbsp; &nbsp;
             <a class="nav" href="https://coverage.readthedocs.io/en/7.5.3">coverage.py v7.5.3</a>,
-            created at 2024-10-21 17:16 -0700
+            created at 2024-10-22 12:30 -0700
         </p>
         <aside class="hidden">
             <button type="button" class="button_next_chunk" data-shortcut="j"></button>
@@ -233,7 +233,7 @@
     <p class="run"><span class="n"><a id="t151" href="#t151">151</a></span><span class="t">            <span class="nam">objclass</span> <span class="op">=</span> <span class="nam">roledict</span><span class="op">[</span><span class="nam">name</span><span class="op">]</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t152" href="#t152">152</a></span><span class="t">&nbsp;</span><span class="r"></span></p>
     <p class="run"><span class="n"><a id="t153" href="#t153">153</a></span><span class="t">        <span class="key">if</span> <span class="nam">use_copy</span><span class="op">:</span>&nbsp;</span><span class="r"></span></p>
-    <p class="run"><span class="n"><a id="t154" href="#t154">154</a></span><span class="t">            <span class="nam">as_copy</span> <span class="op">=</span> <span class="key">False</span>&nbsp;</span><span class="r"></span></p>
+    <p class="mis show_mis"><span class="n"><a id="t154" href="#t154">154</a></span><span class="t">            <span class="nam">as_copy</span> <span class="op">=</span> <span class="key">False</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t155" href="#t155">155</a></span><span class="t">        <span class="key">else</span><span class="op">:</span>&nbsp;</span><span class="r"></span></p>
     <p class="run"><span class="n"><a id="t156" href="#t156">156</a></span><span class="t">            <span class="nam">as_copy</span> <span class="op">=</span> <span class="nam">self</span><span class="op">.</span><span class="nam">as_copy</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t157" href="#t157">157</a></span><span class="t">&nbsp;</span><span class="r"></span></p>
@@ -270,7 +270,7 @@
     <p class="pln"><span class="n"><a id="t188" href="#t188">188</a></span><span class="t"><span class="str">            Dicts for non-default values to p, s, etc</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t189" href="#t189">189</a></span><span class="t"><span class="str">        """</span>&nbsp;</span><span class="r"></span></p>
     <p class="run"><span class="n"><a id="t190" href="#t190">190</a></span><span class="t">        <span class="key">if</span> <span class="nam">name</span> <span class="key">in</span> <span class="nam">self</span><span class="op">.</span><span class="nam">flows</span><span class="op">:</span>&nbsp;</span><span class="r"></span></p>
-    <p class="run"><span class="n"><a id="t191" href="#t191">191</a></span><span class="t">            <span class="nam">use_copy</span> <span class="op">=</span> <span class="key">True</span>&nbsp;</span><span class="r"></span></p>
+    <p class="mis show_mis"><span class="n"><a id="t191" href="#t191">191</a></span><span class="t">            <span class="nam">use_copy</span> <span class="op">=</span> <span class="key">True</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t192" href="#t192">192</a></span><span class="t">        <span class="key">else</span><span class="op">:</span>&nbsp;</span><span class="r"></span></p>
     <p class="run"><span class="n"><a id="t193" href="#t193">193</a></span><span class="t">            <span class="nam">use_copy</span> <span class="op">=</span> <span class="key">False</span>&nbsp;</span><span class="r"></span></p>
     <p class="run"><span class="n"><a id="t194" href="#t194">194</a></span><span class="t">        <span class="nam">self</span><span class="op">.</span><span class="nam">add_flex_role_obj</span><span class="op">(</span><span class="str">'flows'</span><span class="op">,</span> <span class="nam">name</span><span class="op">,</span> <span class="nam">objclass</span><span class="op">=</span><span class="nam">fclass</span><span class="op">,</span> <span class="nam">use_copy</span><span class="op">=</span><span class="nam">use_copy</span><span class="op">,</span>&nbsp;</span><span class="r"></span></p>
@@ -354,11 +354,11 @@
     <p class="pln"><span class="n"><a id="t272" href="#t272">272</a></span><span class="t">&nbsp;</span><span class="r"></span></p>
     <p class="run"><span class="n"><a id="t273" href="#t273">273</a></span><span class="t">    <span class="key">def</span> <span class="nam">flowtypes</span><span class="op">(</span><span class="nam">self</span><span class="op">)</span><span class="op">:</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t274" href="#t274">274</a></span><span class="t">        <span class="str">"""Return the set of flow types used in the model."""</span>&nbsp;</span><span class="r"></span></p>
-    <p class="mis show_mis"><span class="n"><a id="t275" href="#t275">275</a></span><span class="t">        <span class="key">return</span> <span class="op">{</span><span class="nam">obj</span><span class="op">.</span><span class="nam">__class__</span><span class="op">.</span><span class="nam">__name__</span> <span class="key">for</span> <span class="nam">f</span><span class="op">,</span> <span class="nam">obj</span> <span class="key">in</span> <span class="nam">self</span><span class="op">.</span><span class="nam">flows</span><span class="op">.</span><span class="nam">items</span><span class="op">(</span><span class="op">)</span><span class="op">}</span>&nbsp;</span><span class="r"></span></p>
+    <p class="run"><span class="n"><a id="t275" href="#t275">275</a></span><span class="t">        <span class="key">return</span> <span class="op">{</span><span class="nam">obj</span><span class="op">.</span><span class="nam">__class__</span><span class="op">.</span><span class="nam">__name__</span> <span class="key">for</span> <span class="nam">f</span><span class="op">,</span> <span class="nam">obj</span> <span class="key">in</span> <span class="nam">self</span><span class="op">.</span><span class="nam">flows</span><span class="op">.</span><span class="nam">items</span><span class="op">(</span><span class="op">)</span><span class="op">}</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t276" href="#t276">276</a></span><span class="t">&nbsp;</span><span class="r"></span></p>
     <p class="run"><span class="n"><a id="t277" href="#t277">277</a></span><span class="t">    <span class="key">def</span> <span class="nam">flows_of_type</span><span class="op">(</span><span class="nam">self</span><span class="op">,</span> <span class="nam">ftype</span><span class="op">)</span><span class="op">:</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t278" href="#t278">278</a></span><span class="t">        <span class="str">"""Return the set of flows for each flow type."""</span>&nbsp;</span><span class="r"></span></p>
-    <p class="mis show_mis"><span class="n"><a id="t279" href="#t279">279</a></span><span class="t">        <span class="key">return</span> <span class="op">{</span><span class="nam">flow</span> <span class="key">for</span> <span class="nam">flow</span><span class="op">,</span> <span class="nam">obj</span> <span class="key">in</span> <span class="nam">self</span><span class="op">.</span><span class="nam">flows</span><span class="op">.</span><span class="nam">items</span><span class="op">(</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
+    <p class="run"><span class="n"><a id="t279" href="#t279">279</a></span><span class="t">        <span class="key">return</span> <span class="op">{</span><span class="nam">flow</span> <span class="key">for</span> <span class="nam">flow</span><span class="op">,</span> <span class="nam">obj</span> <span class="key">in</span> <span class="nam">self</span><span class="op">.</span><span class="nam">flows</span><span class="op">.</span><span class="nam">items</span><span class="op">(</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t280" href="#t280">280</a></span><span class="t">                <span class="key">if</span> <span class="nam">obj</span><span class="op">.</span><span class="nam">__class__</span><span class="op">.</span><span class="nam">__name__</span> <span class="op">==</span> <span class="nam">ftype</span><span class="op">}</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t281" href="#t281">281</a></span><span class="t">&nbsp;</span><span class="r"></span></p>
     <p class="run"><span class="n"><a id="t282" href="#t282">282</a></span><span class="t">    <span class="key">def</span> <span class="nam">update_seed</span><span class="op">(</span><span class="nam">self</span><span class="op">,</span> <span class="nam">seed</span><span class="op">=</span><span class="op">[</span><span class="op">]</span><span class="op">)</span><span class="op">:</span>&nbsp;</span><span class="r"></span></p>
@@ -456,7 +456,7 @@
     <p class="run"><span class="n"><a id="t374" href="#t374">374</a></span><span class="t">            <span class="nam">cargs</span><span class="op">[</span><span class="nam">flex_role</span><span class="op">]</span> <span class="op">=</span> <span class="nam">getattr</span><span class="op">(</span><span class="nam">self</span><span class="op">,</span> <span class="nam">flex_role</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t375" href="#t375">375</a></span><span class="t">        <span class="com"># if flows provided from above, use those flows. Otherwise copy own.</span>&nbsp;</span><span class="r"></span></p>
     <p class="run"><span class="n"><a id="t376" href="#t376">376</a></span><span class="t">        <span class="key">if</span> <span class="nam">hasattr</span><span class="op">(</span><span class="nam">self</span><span class="op">,</span> <span class="str">'flows'</span><span class="op">)</span><span class="op">:</span>&nbsp;</span><span class="r"></span></p>
-    <p class="run"><span class="n"><a id="t377" href="#t377">377</a></span><span class="t">            <span class="nam">cargs</span><span class="op">[</span><span class="str">'flows'</span><span class="op">]</span> <span class="op">=</span> <span class="op">{</span><span class="nam">f</span><span class="op">:</span> <span class="nam">flows</span><span class="op">[</span><span class="nam">f</span><span class="op">]</span> <span class="key">if</span> <span class="nam">f</span> <span class="key">in</span> <span class="nam">flows</span> <span class="key">else</span> <span class="nam">obj</span><span class="op">.</span><span class="nam">copy</span><span class="op">(</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
+    <p class="mis show_mis"><span class="n"><a id="t377" href="#t377">377</a></span><span class="t">            <span class="nam">cargs</span><span class="op">[</span><span class="str">'flows'</span><span class="op">]</span> <span class="op">=</span> <span class="op">{</span><span class="nam">f</span><span class="op">:</span> <span class="nam">flows</span><span class="op">[</span><span class="nam">f</span><span class="op">]</span> <span class="key">if</span> <span class="nam">f</span> <span class="key">in</span> <span class="nam">flows</span> <span class="key">else</span> <span class="nam">obj</span><span class="op">.</span><span class="nam">copy</span><span class="op">(</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t378" href="#t378">378</a></span><span class="t">                              <span class="key">for</span> <span class="nam">f</span><span class="op">,</span> <span class="nam">obj</span> <span class="key">in</span> <span class="nam">self</span><span class="op">.</span><span class="nam">flows</span><span class="op">.</span><span class="nam">items</span><span class="op">(</span><span class="op">)</span><span class="op">}</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t379" href="#t379">379</a></span><span class="t">&nbsp;</span><span class="r"></span></p>
     <p class="run"><span class="n"><a id="t380" href="#t380">380</a></span><span class="t">        <span class="key">if</span> <span class="nam">hasattr</span><span class="op">(</span><span class="nam">self</span><span class="op">,</span> <span class="str">'r'</span><span class="op">)</span><span class="op">:</span>&nbsp;</span><span class="r"></span></p>
@@ -513,7 +513,7 @@
             <a class="nav" href="z_3d99ab35d814b52d_component_py.html">&#xbb; next</a>
             &nbsp; &nbsp; &nbsp;
             <a class="nav" href="https://coverage.readthedocs.io/en/7.5.3">coverage.py v7.5.3</a>,
-            created at 2024-10-21 17:16 -0700
+            created at 2024-10-22 12:30 -0700
         </p>
     </div>
 </footer>

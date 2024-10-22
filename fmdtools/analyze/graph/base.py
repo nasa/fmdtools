@@ -86,7 +86,7 @@ class Graph(object):
     >>> graph.set_pos(auto='kamada_kawai')
     >>> fig, ax = graph.draw(saveas=loc+'nx_funcdecomp.svg')
     >>> graph.set_edge_labels(title="name")
-    >>> dot = graph.draw_graphviz(saveas=loc+'gv_funcdecomp.svg')
+    >>> dot = graph.draw_graphviz(disp=False, saveas=loc+'gv_funcdecomp.svg')
     """
 
     def __init__(self, g, check_info=True):
