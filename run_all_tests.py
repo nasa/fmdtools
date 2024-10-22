@@ -110,7 +110,7 @@ if __name__ == "__main__":
     retcode = pytest.main(["--cov-report",
                             "html:reports/coverage",
                             "--cov-report",
-                            "xml:reports/coverage/coverage.xml",
+                            "xml:./reports/coverage/coverage.xml",
                             "--cov",
                             "--html=./reports/junit/report.html",
                             "--junitxml=./reports/junit/junit.xml",
