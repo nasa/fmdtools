@@ -99,7 +99,8 @@ if __name__ == "__main__":
     # while not included in the testing approach, they should be verified periodically
     ignore_notebooks = [*too_slow_notebooks,
                         "examples/pump/Tutorial_unfilled.ipynb",  # intended to be blank
-                        "_build"]
+                        "_build",
+                        "docs"]
 
     # retcode = pytest.main(["--nbmake", *["--ignore="+notebook for notebook in ignore_notebooks]])
     # retcode = pytest.main(["--nbmake", "examples/pump/AST_Sampling.ipynb"])
