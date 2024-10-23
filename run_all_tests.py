@@ -119,7 +119,7 @@ def main(doctests=True,  notebooks=True, testlist=[], testtype="full",
     # adds coverage report
     if cov:
         pytestargs.extend(["--cov-report",
-                           "html:./reports/coverage",
+                           "html:./reports/coverage_html",
                            "--cov-report",
                            "xml:./reports/coverage/coverage.xml",
                            "--cov",])
