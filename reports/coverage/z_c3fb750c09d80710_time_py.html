@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-    <title>Coverage for fmdtools\define\container\time.py: 27%</title>
+    <title>Coverage for fmdtools\define\container\time.py: 41%</title>
     <link rel="icon" sizes="32x32" href="favicon_32_cb_58284776.png">
     <link rel="stylesheet" href="style_cb_718ce007.css" type="text/css">
     <script src="coverage_html_cb_497bf287.js" defer></script>
@@ -12,7 +12,7 @@
     <div class="content">
         <h1>
             <span class="text">Coverage for </span><b>fmdtools\define\container\time.py</b>:
-            <span class="pc_cov">27%</span>
+            <span class="pc_cov">41%</span>
         </h1>
         <aside id="help_panel_wrapper">
             <input id="help_panel_state" type="checkbox">
@@ -55,17 +55,17 @@
         </aside>
         <h2>
             <span class="text">63 statements &nbsp;</span>
-            <button type="button" class="run button_toggle_run" value="run" data-shortcut="r" title="Toggle lines run">17<span class="text"> run</span></button>
-            <button type="button" class="mis show_mis button_toggle_mis" value="mis" data-shortcut="m" title="Toggle lines missing">46<span class="text"> missing</span></button>
+            <button type="button" class="run button_toggle_run" value="run" data-shortcut="r" title="Toggle lines run">26<span class="text"> run</span></button>
+            <button type="button" class="mis show_mis button_toggle_mis" value="mis" data-shortcut="m" title="Toggle lines missing">37<span class="text"> missing</span></button>
             <button type="button" class="exc show_exc button_toggle_exc" value="exc" data-shortcut="x" title="Toggle lines excluded">5<span class="text"> excluded</span></button>
         </h2>
         <p class="text">
             <a id="prevFileLink" class="nav" href="z_c3fb750c09d80710_state_py.html">&#xab; prev</a> &nbsp; &nbsp;
             <a id="indexLink" class="nav" href="index.html">&Hat; index</a> &nbsp; &nbsp;
-            <a id="nextFileLink" class="nav" href="z_d97a2ee3121c2b4d_base_py.html">&#xbb; next</a>
+            <a id="nextFileLink" class="nav" href="z_3a471e3220ee36cf_environment_py.html">&#xbb; next</a>
             &nbsp; &nbsp; &nbsp;
             <a class="nav" href="https://coverage.readthedocs.io/en/7.5.3">coverage.py v7.5.3</a>,
-            created at 2024-10-22 15:27 -0700
+            created at 2024-10-23 10:53 -0700
         </p>
         <aside class="hidden">
             <button type="button" class="button_next_chunk" data-shortcut="j"></button>
@@ -176,7 +176,7 @@
     <p class="run"><span class="n"><a id="t94" href="#t94">94</a></span><span class="t">        <span class="key">if</span> <span class="key">not</span> <span class="nam">self</span><span class="op">.</span><span class="nam">timers</span><span class="op">:</span>&nbsp;</span><span class="r"></span></p>
     <p class="run"><span class="n"><a id="t95" href="#t95">95</a></span><span class="t">            <span class="nam">self</span><span class="op">.</span><span class="nam">timers</span> <span class="op">=</span> <span class="op">{</span><span class="op">}</span>&nbsp;</span><span class="r"></span></p>
     <p class="run"><span class="n"><a id="t96" href="#t96">96</a></span><span class="t">        <span class="key">for</span> <span class="nam">timername</span> <span class="key">in</span> <span class="nam">self</span><span class="op">.</span><span class="nam">timernames</span><span class="op">:</span>&nbsp;</span><span class="r"></span></p>
-    <p class="mis show_mis"><span class="n"><a id="t97" href="#t97">97</a></span><span class="t">            <span class="nam">self</span><span class="op">.</span><span class="nam">timers</span><span class="op">[</span><span class="nam">timername</span><span class="op">]</span> <span class="op">=</span> <span class="nam">Timer</span><span class="op">(</span><span class="nam">timername</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
+    <p class="run"><span class="n"><a id="t97" href="#t97">97</a></span><span class="t">            <span class="nam">self</span><span class="op">.</span><span class="nam">timers</span><span class="op">[</span><span class="nam">timername</span><span class="op">]</span> <span class="op">=</span> <span class="nam">Timer</span><span class="op">(</span><span class="nam">timername</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
     <p class="run"><span class="n"><a id="t98" href="#t98">98</a></span><span class="t">        <span class="nam">self</span><span class="op">.</span><span class="nam">set_timestep</span><span class="op">(</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t99" href="#t99">99</a></span><span class="t">&nbsp;</span><span class="r"></span></p>
     <p class="mis show_mis"><span class="n"><a id="t100" href="#t100">100</a></span><span class="t">    <span class="key">def</span> <span class="nam">base_type</span><span class="op">(</span><span class="nam">self</span><span class="op">)</span><span class="op">:</span>&nbsp;</span><span class="r"></span></p>
@@ -185,7 +185,7 @@
     <p class="pln"><span class="n"><a id="t103" href="#t103">103</a></span><span class="t">&nbsp;</span><span class="r"></span></p>
     <p class="mis show_mis"><span class="n"><a id="t104" href="#t104">104</a></span><span class="t">    <span class="key">def</span> <span class="nam">__getattr__</span><span class="op">(</span><span class="nam">self</span><span class="op">,</span> <span class="nam">item</span><span class="op">)</span><span class="op">:</span>&nbsp;</span><span class="r"></span></p>
     <p class="run"><span class="n"><a id="t105" href="#t105">105</a></span><span class="t">        <span class="key">if</span> <span class="nam">item</span> <span class="key">in</span> <span class="nam">self</span><span class="op">.</span><span class="nam">timers</span><span class="op">:</span>&nbsp;</span><span class="r"></span></p>
-    <p class="mis show_mis"><span class="n"><a id="t106" href="#t106">106</a></span><span class="t">            <span class="key">return</span> <span class="nam">self</span><span class="op">.</span><span class="nam">timers</span><span class="op">[</span><span class="nam">item</span><span class="op">]</span>&nbsp;</span><span class="r"></span></p>
+    <p class="run"><span class="n"><a id="t106" href="#t106">106</a></span><span class="t">            <span class="key">return</span> <span class="nam">self</span><span class="op">.</span><span class="nam">timers</span><span class="op">[</span><span class="nam">item</span><span class="op">]</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t107" href="#t107">107</a></span><span class="t">        <span class="key">else</span><span class="op">:</span>&nbsp;</span><span class="r"></span></p>
     <p class="run"><span class="n"><a id="t108" href="#t108">108</a></span><span class="t">            <span class="key">return</span> <span class="nam">super</span><span class="op">(</span><span class="op">)</span><span class="op">.</span><span class="nam">__getattribute__</span><span class="op">(</span><span class="nam">item</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t109" href="#t109">109</a></span><span class="t">&nbsp;</span><span class="r"></span></p>
@@ -223,7 +223,7 @@
     <p class="mis show_mis"><span class="n"><a id="t141" href="#t141">141</a></span><span class="t">            <span class="nam">self</span><span class="op">.</span><span class="nam">run_times</span> <span class="op">=</span> <span class="num">1</span>&nbsp;</span><span class="r"></span></p>
     <p class="run"><span class="n"><a id="t142" href="#t142">142</a></span><span class="t">        <span class="nam">self</span><span class="op">.</span><span class="nam">dt</span> <span class="op">=</span> <span class="nam">float</span><span class="op">(</span><span class="nam">dt</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
     <p class="run"><span class="n"><a id="t143" href="#t143">143</a></span><span class="t">        <span class="key">for</span> <span class="nam">timer</span> <span class="key">in</span> <span class="nam">self</span><span class="op">.</span><span class="nam">timers</span><span class="op">.</span><span class="nam">values</span><span class="op">(</span><span class="op">)</span><span class="op">:</span>&nbsp;</span><span class="r"></span></p>
-    <p class="mis show_mis"><span class="n"><a id="t144" href="#t144">144</a></span><span class="t">            <span class="nam">timer</span><span class="op">.</span><span class="nam">dt</span> <span class="op">=</span> <span class="op">-</span><span class="nam">self</span><span class="op">.</span><span class="nam">dt</span>&nbsp;</span><span class="r"></span></p>
+    <p class="run"><span class="n"><a id="t144" href="#t144">144</a></span><span class="t">            <span class="nam">timer</span><span class="op">.</span><span class="nam">dt</span> <span class="op">=</span> <span class="op">-</span><span class="nam">self</span><span class="op">.</span><span class="nam">dt</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t145" href="#t145">145</a></span><span class="t">&nbsp;</span><span class="r"></span></p>
     <p class="mis show_mis"><span class="n"><a id="t146" href="#t146">146</a></span><span class="t">    <span class="key">def</span> <span class="nam">reset</span><span class="op">(</span><span class="nam">self</span><span class="op">)</span><span class="op">:</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t147" href="#t147">147</a></span><span class="t">        <span class="str">"""Reset time to the initial state."""</span>&nbsp;</span><span class="r"></span></p>
@@ -235,12 +235,12 @@
     <p class="pln"><span class="n"><a id="t153" href="#t153">153</a></span><span class="t">&nbsp;</span><span class="r"></span></p>
     <p class="mis show_mis"><span class="n"><a id="t154" href="#t154">154</a></span><span class="t">    <span class="key">def</span> <span class="nam">init_hist_att</span><span class="op">(</span><span class="nam">self</span><span class="op">,</span> <span class="nam">hist</span><span class="op">,</span> <span class="nam">att</span><span class="op">,</span> <span class="nam">timerange</span><span class="op">,</span> <span class="nam">track</span><span class="op">,</span> <span class="nam">str_size</span><span class="op">=</span><span class="str">'&lt;U20'</span><span class="op">)</span><span class="op">:</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t155" href="#t155">155</a></span><span class="t">        <span class="str">"""Add field 'att' to history. Accommodates time and timer tracking."""</span>&nbsp;</span><span class="r"></span></p>
-    <p class="mis show_mis"><span class="n"><a id="t156" href="#t156">156</a></span><span class="t">        <span class="key">if</span> <span class="nam">att</span> <span class="op">==</span> <span class="str">'timers'</span><span class="op">:</span>&nbsp;</span><span class="r"></span></p>
-    <p class="mis show_mis"><span class="n"><a id="t157" href="#t157">157</a></span><span class="t">            <span class="nam">track_timers</span> <span class="op">=</span> <span class="nam">get_sub_include</span><span class="op">(</span><span class="str">'timers'</span><span class="op">,</span> <span class="nam">track</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
-    <p class="mis show_mis"><span class="n"><a id="t158" href="#t158">158</a></span><span class="t">            <span class="key">for</span> <span class="nam">tname</span><span class="op">,</span> <span class="nam">timer</span> <span class="key">in</span> <span class="nam">self</span><span class="op">.</span><span class="nam">timers</span><span class="op">.</span><span class="nam">items</span><span class="op">(</span><span class="op">)</span><span class="op">:</span>&nbsp;</span><span class="r"></span></p>
-    <p class="mis show_mis"><span class="n"><a id="t159" href="#t159">159</a></span><span class="t">                <span class="nam">sub_track</span> <span class="op">=</span> <span class="nam">get_sub_include</span><span class="op">(</span><span class="nam">tname</span><span class="op">,</span> <span class="nam">track_timers</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
-    <p class="mis show_mis"><span class="n"><a id="t160" href="#t160">160</a></span><span class="t">                <span class="key">if</span> <span class="nam">tname</span> <span class="key">in</span> <span class="nam">sub_track</span> <span class="key">or</span> <span class="nam">sub_track</span> <span class="op">==</span> <span class="str">'default'</span><span class="op">:</span>&nbsp;</span><span class="r"></span></p>
-    <p class="mis show_mis"><span class="n"><a id="t161" href="#t161">161</a></span><span class="t">                    <span class="nam">hist</span><span class="op">[</span><span class="nam">tname</span><span class="op">]</span> <span class="op">=</span> <span class="nam">timer</span><span class="op">.</span><span class="nam">create_hist</span><span class="op">(</span><span class="nam">timerange</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
+    <p class="run"><span class="n"><a id="t156" href="#t156">156</a></span><span class="t">        <span class="key">if</span> <span class="nam">att</span> <span class="op">==</span> <span class="str">'timers'</span><span class="op">:</span>&nbsp;</span><span class="r"></span></p>
+    <p class="run"><span class="n"><a id="t157" href="#t157">157</a></span><span class="t">            <span class="nam">track_timers</span> <span class="op">=</span> <span class="nam">get_sub_include</span><span class="op">(</span><span class="str">'timers'</span><span class="op">,</span> <span class="nam">track</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
+    <p class="run"><span class="n"><a id="t158" href="#t158">158</a></span><span class="t">            <span class="key">for</span> <span class="nam">tname</span><span class="op">,</span> <span class="nam">timer</span> <span class="key">in</span> <span class="nam">self</span><span class="op">.</span><span class="nam">timers</span><span class="op">.</span><span class="nam">items</span><span class="op">(</span><span class="op">)</span><span class="op">:</span>&nbsp;</span><span class="r"></span></p>
+    <p class="run"><span class="n"><a id="t159" href="#t159">159</a></span><span class="t">                <span class="nam">sub_track</span> <span class="op">=</span> <span class="nam">get_sub_include</span><span class="op">(</span><span class="nam">tname</span><span class="op">,</span> <span class="nam">track_timers</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
+    <p class="run"><span class="n"><a id="t160" href="#t160">160</a></span><span class="t">                <span class="key">if</span> <span class="nam">tname</span> <span class="key">in</span> <span class="nam">sub_track</span> <span class="key">or</span> <span class="nam">sub_track</span> <span class="op">==</span> <span class="str">'default'</span><span class="op">:</span>&nbsp;</span><span class="r"></span></p>
+    <p class="run"><span class="n"><a id="t161" href="#t161">161</a></span><span class="t">                    <span class="nam">hist</span><span class="op">[</span><span class="nam">tname</span><span class="op">]</span> <span class="op">=</span> <span class="nam">timer</span><span class="op">.</span><span class="nam">create_hist</span><span class="op">(</span><span class="nam">timerange</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t162" href="#t162">162</a></span><span class="t">        <span class="key">else</span><span class="op">:</span>&nbsp;</span><span class="r"></span></p>
     <p class="mis show_mis"><span class="n"><a id="t163" href="#t163">163</a></span><span class="t">            <span class="nam">BaseContainer</span><span class="op">.</span><span class="nam">init_hist_att</span><span class="op">(</span><span class="nam">self</span><span class="op">,</span> <span class="nam">hist</span><span class="op">,</span> <span class="nam">att</span><span class="op">,</span> <span class="nam">timerange</span><span class="op">,</span> <span class="nam">track</span><span class="op">,</span> <span class="nam">str_size</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t164" href="#t164">164</a></span><span class="t">&nbsp;</span><span class="r"></span></p>
@@ -263,10 +263,10 @@
         <p>
             <a class="nav" href="z_c3fb750c09d80710_state_py.html">&#xab; prev</a> &nbsp; &nbsp;
             <a class="nav" href="index.html">&Hat; index</a> &nbsp; &nbsp;
-            <a class="nav" href="z_d97a2ee3121c2b4d_base_py.html">&#xbb; next</a>
+            <a class="nav" href="z_3a471e3220ee36cf_environment_py.html">&#xbb; next</a>
             &nbsp; &nbsp; &nbsp;
             <a class="nav" href="https://coverage.readthedocs.io/en/7.5.3">coverage.py v7.5.3</a>,
-            created at 2024-10-22 15:27 -0700
+            created at 2024-10-23 10:53 -0700
         </p>
     </div>
 </footer>
