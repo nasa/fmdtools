@@ -16,6 +16,7 @@ Options
     Set test configuration to run. Could be "full" (collect all tests),
     "full-notebooks" (just notebooks), "fast-notebooks" (just fast notebooks),
     "slow-notebooks" (just slow notebooks), or "doctests" (just doctests).
+    Default is "doctests" to enable fast testing.
 --cov : bool
     Whether or not to produce coverage report. Default is True.
 --report : bool
@@ -113,28 +114,15 @@ ignore_notebooks = [*too_slow_notebooks,
 
 
 def main(doctests=True,  notebooks=True, testlist=[], testtype="full",
-         ignore=ignore_notebooks, cov=True, report=True):
+         ignore=ignore_notebooks, cov=True, report=True, pyver="py311"):
     pytestargs = ["--cache-clear"]
-
-    # adds coverage report
-    if cov:
-        pytestargs.extend(["--cov-report",
-                           "html:./reports/coverage_html",
-                           "--cov-report",
-                           "xml:./reports/coverage/coverage.xml",
-                           "--cov",])
-
-    # adds html report
-    if report:
-        pytestargs.extend(["--html=./reports/junit/report.html",
-                           "--junitxml=./reports/junit/junit.xml",
-                           "--overwrite"])
 
     # if doctests, add doctest_modules to set of tests
     # options for notebooks to test (provided testlist or set testlists)
     if doctests:
         pytestargs.extend(["--doctest-modules"])
     if testlist:
+        testtype = "custom"
         pytestargs.extend(testlist)
     elif testtype == "full-notebooks":
         pytestargs.extend(fast_notebooks + slow_notebooks)
@@ -149,6 +137,20 @@ def main(doctests=True,  notebooks=True, testlist=[], testtype="full",
     elif testtype != "full":
         raise Exception("Invalid testtype: "+testtype)
 
+    reportdir = "./reports/"+testtype+"-"+pyver
+    # adds coverage report
+    if cov:
+        pytestargs.extend(["--cov-report",
+                           "html:"+reportdir+"/coverage_html",
+                           "--cov-report",
+                           "xml:"+reportdir+"/coverage/coverage.xml",
+                           "--cov",])
+
+    # adds html report
+    if report:
+        pytestargs.extend(["--html="+reportdir+"/junit/report.html",
+                           "--junitxml="+reportdir+"/junit/junit.xml",
+                           "--overwrite"])
     # adds notebooks
     if notebooks:
         pytestargs.extend(["--nbmake"])
@@ -185,9 +187,10 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     parser.add_argument("--doctests", default=True, required=False)
     parser.add_argument("--notebooks", default=True, required=False)
-    parser.add_argument("--testtype", default="full", required=False)
+    parser.add_argument("--testtype", default="doctests", required=False)
     parser.add_argument("--cov", default=True, required=False)
     parser.add_argument("--report", default=True, required=False)
+    parser.add_argument("--pyver", default="py311", required=False)
     parsed_args = parser.parse_args()
     kwargs = {k: v for k, v in vars(parsed_args).items() if v is not None}
     main(**kwargs)
