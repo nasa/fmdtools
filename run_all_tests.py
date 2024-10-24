@@ -108,9 +108,9 @@ too_slow_notebooks = ["examples/rover/optimization/Rover_Response_Optimization.i
 # while not included in the testing approach, they should be verified periodically
 ignore_notebooks = [*too_slow_notebooks,
                     "examples/pump/Tutorial_unfilled.ipynb",  # intended to be blank
-                    "_build",
-                    "docs",
-                    "tmp"]
+                    "_build/*",
+                    "docs/*",
+                    "tmp/*"]
 
 
 def main(doctests=True,  notebooks=True, testlist=[], testtype="full",
@@ -194,6 +194,7 @@ if __name__ == "__main__":
     parsed_args = parser.parse_args()
     kwargs = {k: v for k, v in vars(parsed_args).items() if v is not None}
     main(**kwargs)
+    # main(testtype="custom", testlist=["examples/tank/Tank_Analysis.ipynb"])
 
     # after creating test report, update the badge using this in powershell:
     # !Powershell.exe -Command "genbadge tests"

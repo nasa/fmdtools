@@ -56,14 +56,32 @@ exclude_also = [
     "if __name__ == .__main__.:",
 	"def script_"
     ]
+omit = [
+    # omit everything in /build
+    "/_build/*",
+    "/docs/*",
+    "*.pyc",
+    "*/__pycache__/*",
+    "*/tmp/*",
+    # omit overall test
+    "run_all_tests.py",
+    "*/__init__.py",
+    "*/ipykernel*",
+    "*/Temp/*"
+    ]
 
 [tool.coverage.run]
 omit = [
     # omit everything in /build
     "/_build/*",
     "/docs/*",
-    "/tmp/*",
+    "*.pyc",
+    "*/__pycache__/*",
+    "*/tmp/*",
     # omit overall test
     "run_all_tests.py",
+    "*/__init__.py",
+    "*/ipykernel*",
+    "*/Temp/*"
     ]
 
