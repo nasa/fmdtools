@@ -108,9 +108,9 @@ too_slow_notebooks = ["examples/rover/optimization/Rover_Response_Optimization.i
 # while not included in the testing approach, they should be verified periodically
 ignore_notebooks = [*too_slow_notebooks,
                     "examples/pump/Tutorial_unfilled.ipynb",  # intended to be blank
-                    "_build/*",
-                    "docs/*",
-                    "tmp/*"]
+                    "_build",
+                    "docs",
+                    "tmp"]
 
 
 def main(doctests=True,  notebooks=True, testlist=[], testtype="full",
