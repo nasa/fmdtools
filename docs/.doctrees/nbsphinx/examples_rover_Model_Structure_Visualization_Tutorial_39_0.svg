@@ -1,628 +1,555 @@
-<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="3204pt" height="319pt" viewBox="0.00 0.00 3204.38 318.75">
-<g id="graph0" class="graph" transform="scale(1 1) rotate(0) translate(4 314.75)">
-<polygon fill="white" stroke="none" points="-4,4 -4,-314.75 3200.38,-314.75 3200.38,4 -4,4"/>
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="1978pt" height="605pt" viewBox="0.00 0.00 1978.27 604.50">
+<g id="graph0" class="graph" transform="scale(1 1) rotate(0) translate(4 600.5)">
+<polygon fill="white" stroke="none" points="-4,4 -4,-600.5 1974.27,-600.5 1974.27,4 -4,4"/>
 <!-- rover -->
 <g id="node1" class="node">
 <title>rover</title>
-<polygon fill="lightgrey" stroke="grey" points="1588.38,-310.75 1528.16,-275.12 1648.59,-275.12 1588.38,-310.75"/>
-<text text-anchor="middle" x="1588.38" y="-281.57" font-family="Times New Roman,serif" font-size="14.00">rover</text>
+<polygon fill="lightgrey" stroke="grey" points="839.52,-596.5 724.42,-560.88 954.63,-560.88 839.52,-596.5"/>
+<text text-anchor="middle" x="839.52" y="-567.33" font-family="Times New Roman,serif" font-size="14.00">rover: Rover</text>
 </g>
 <!-- rover.flows.ground -->
 <g id="node2" class="node">
 <title>rover.flows.ground</title>
-<ellipse fill="lightgrey" stroke="grey" stroke-width="0" cx="1794.38" cy="-105.75" rx="37.09" ry="18"/>
-<text text-anchor="middle" x="1794.38" y="-100.33" font-family="Times New Roman,serif" font-size="14.00">ground</text>
+<ellipse fill="lightgrey" stroke="grey" stroke-width="0" cx="70.52" cy="-440.88" rx="70.52" ry="18"/>
+<text text-anchor="middle" x="70.52" y="-435.45" font-family="Times New Roman,serif" font-size="14.00">ground: Ground</text>
 </g>
 <!-- rover&#45;&gt;rover.flows.ground -->
 <g id="edge1" class="edge">
 <title>rover-&gt;rover.flows.ground</title>
-<path fill="none" stroke="black" d="M1652.28,-279.37C1698.33,-273.23 1755.11,-262.42 1771.38,-245.25 1803.05,-211.8 1800.49,-152.25 1796.98,-123.37"/>
-<polygon fill="black" stroke="black" points="1652.42,-279.35 1646.97,-284.07 1640.52,-280.86 1645.96,-276.14 1652.42,-279.35"/>
-<text text-anchor="middle" x="1839.38" y="-188.07" font-family="Times New Roman,serif" font-size="14.00">&lt;containment&gt;</text>
+<path fill="none" stroke="black" d="M741.65,-570.44C562.04,-567.38 193.4,-557.89 141.52,-531 110.96,-515.16 89.15,-479.68 78.31,-458.57"/>
+<polygon fill="black" stroke="black" points="741.61,-570.43 747.68,-566.54 753.61,-570.63 747.54,-574.53 741.61,-570.43"/>
+<text text-anchor="middle" x="183.52" y="-517.7" font-family="Times New Roman,serif" font-size="14.00">&lt;containment&gt;</text>
+<text text-anchor="middle" x="183.52" y="-501.95" font-family="Times New Roman,serif" font-size="14.00">flows.ground</text>
 </g>
 <!-- rover.flows.force -->
 <g id="node3" class="node">
 <title>rover.flows.force</title>
-<ellipse fill="lightgrey" stroke="grey" stroke-width="0" cx="1396.38" cy="-105.75" rx="30.11" ry="18"/>
-<text text-anchor="middle" x="1396.38" y="-100.33" font-family="Times New Roman,serif" font-size="14.00">force</text>
+<ellipse fill="lightgrey" stroke="grey" stroke-width="0" cx="215.52" cy="-440.88" rx="56.55" ry="18"/>
+<text text-anchor="middle" x="215.52" y="-435.45" font-family="Times New Roman,serif" font-size="14.00">force: Force</text>
 </g>
 <!-- rover&#45;&gt;rover.flows.force -->
 <g id="edge2" class="edge">
 <title>rover-&gt;rover.flows.force</title>
-<path fill="none" stroke="black" d="M1528.54,-281.62C1481.55,-274.68 1418.95,-256.87 1387.38,-211.5 1368.92,-184.98 1380.29,-145.06 1389.06,-122.94"/>
-<polygon fill="black" stroke="black" points="1528.56,-281.63 1535.03,-278.44 1540.45,-283.19 1533.98,-286.38 1528.56,-281.63"/>
-<text text-anchor="middle" x="1429.38" y="-188.07" font-family="Times New Roman,serif" font-size="14.00">&lt;containment&gt;</text>
+<path fill="none" stroke="black" d="M741.79,-570.52C585.09,-567.72 291.2,-558.8 252.52,-531 228.99,-514.08 220.37,-479.33 217.25,-458.57"/>
+<polygon fill="black" stroke="black" points="741.77,-570.52 747.84,-566.62 753.77,-570.72 747.7,-574.62 741.77,-570.52"/>
+<text text-anchor="middle" x="294.52" y="-517.7" font-family="Times New Roman,serif" font-size="14.00">&lt;containment&gt;</text>
+<text text-anchor="middle" x="294.52" y="-501.95" font-family="Times New Roman,serif" font-size="14.00">flows.force</text>
 </g>
 <!-- rover.flows.ee -->
 <g id="node4" class="node">
 <title>rover.flows.ee</title>
-<ellipse fill="lightgrey" stroke="grey" stroke-width="0" cx="2011.38" cy="-105.75" rx="27" ry="18"/>
-<text text-anchor="middle" x="2011.38" y="-100.33" font-family="Times New Roman,serif" font-size="14.00">ee</text>
+<ellipse fill="lightgrey" stroke="grey" stroke-width="0" cx="324.52" cy="-440.88" rx="34.1" ry="18"/>
+<text text-anchor="middle" x="324.52" y="-435.45" font-family="Times New Roman,serif" font-size="14.00">ee: EE</text>
 </g>
 <!-- rover&#45;&gt;rover.flows.ee -->
 <g id="edge3" class="edge">
 <title>rover-&gt;rover.flows.ee</title>
-<path fill="none" stroke="black" d="M1660.02,-274.11C1698.91,-267.02 1747.63,-257.09 1790.38,-245.25 1833.56,-233.29 1844.02,-228.76 1885.38,-211.5 1936.37,-190.22 1961.97,-199.93 1997.38,-157.5 2005.34,-147.96 2008.79,-134.23 2010.28,-123.46"/>
-<polygon fill="black" stroke="black" points="1659.93,-274.13 1654.74,-279.13 1648.12,-276.25 1653.32,-271.25 1659.93,-274.13"/>
-<text text-anchor="middle" x="2020.38" y="-188.07" font-family="Times New Roman,serif" font-size="14.00">&lt;containment&gt;</text>
+<path fill="none" stroke="black" d="M736.22,-568.47C605.32,-563.46 393.07,-552.17 363.52,-531 339.78,-513.98 330.31,-479.26 326.68,-458.54"/>
+<polygon fill="black" stroke="black" points="736.13,-568.46 742.27,-564.69 748.12,-568.91 741.97,-572.68 736.13,-568.46"/>
+<text text-anchor="middle" x="405.52" y="-517.7" font-family="Times New Roman,serif" font-size="14.00">&lt;containment&gt;</text>
+<text text-anchor="middle" x="405.52" y="-501.95" font-family="Times New Roman,serif" font-size="14.00">flows.ee</text>
 </g>
 <!-- rover.flows.video -->
 <g id="node5" class="node">
 <title>rover.flows.video</title>
-<ellipse fill="lightgrey" stroke="grey" stroke-width="0" cx="1286.38" cy="-105.75" rx="31.1" ry="18"/>
-<text text-anchor="middle" x="1286.38" y="-100.33" font-family="Times New Roman,serif" font-size="14.00">video</text>
+<ellipse fill="lightgrey" stroke="grey" stroke-width="0" cx="434.52" cy="-440.88" rx="58.05" ry="18"/>
+<text text-anchor="middle" x="434.52" y="-435.45" font-family="Times New Roman,serif" font-size="14.00">video: Video</text>
 </g>
 <!-- rover&#45;&gt;rover.flows.video -->
 <g id="edge4" class="edge">
 <title>rover-&gt;rover.flows.video</title>
-<path fill="none" stroke="black" d="M1524.06,-279.17C1445.21,-269.32 1318.55,-248.14 1290.38,-211.5 1270.74,-185.97 1276.34,-145.67 1281.67,-123.22"/>
-<polygon fill="black" stroke="black" points="1523.95,-279.16 1530.39,-275.91 1535.86,-280.61 1529.42,-283.86 1523.95,-279.16"/>
-<text text-anchor="middle" x="1332.38" y="-188.07" font-family="Times New Roman,serif" font-size="14.00">&lt;containment&gt;</text>
+<path fill="none" stroke="black" d="M745.03,-571.5C651.76,-569.46 517.25,-561.14 475.52,-531 451.78,-513.85 441.43,-479.51 437.2,-458.82"/>
+<polygon fill="black" stroke="black" points="745,-571.5 751.08,-567.61 757,-571.73 750.92,-575.61 745,-571.5"/>
+<text text-anchor="middle" x="517.52" y="-517.7" font-family="Times New Roman,serif" font-size="14.00">&lt;containment&gt;</text>
+<text text-anchor="middle" x="517.52" y="-501.95" font-family="Times New Roman,serif" font-size="14.00">flows.video</text>
 </g>
 <!-- rover.flows.control -->
 <g id="node6" class="node">
 <title>rover.flows.control</title>
-<ellipse fill="lightgrey" stroke="grey" stroke-width="0" cx="539.38" cy="-105.75" rx="37.09" ry="18"/>
-<text text-anchor="middle" x="539.38" y="-100.33" font-family="Times New Roman,serif" font-size="14.00">control</text>
+<ellipse fill="lightgrey" stroke="grey" stroke-width="0" cx="580.52" cy="-440.88" rx="70.03" ry="18"/>
+<text text-anchor="middle" x="580.52" y="-435.45" font-family="Times New Roman,serif" font-size="14.00">control: Control</text>
 </g>
 <!-- rover&#45;&gt;rover.flows.control -->
 <g id="edge5" class="edge">
 <title>rover-&gt;rover.flows.control</title>
-<path fill="none" stroke="black" d="M1529.45,-283.33C1400.69,-276.82 1084.9,-257.2 824.38,-211.5 715.4,-192.39 675.75,-215.24 581.38,-157.5 567.52,-149.02 556.11,-134.34 548.7,-122.94"/>
-<polygon fill="black" stroke="black" points="1529.52,-283.33 1535.71,-279.63 1541.5,-283.93 1535.31,-287.62 1529.52,-283.33"/>
-<text text-anchor="middle" x="866.38" y="-188.07" font-family="Times New Roman,serif" font-size="14.00">&lt;containment&gt;</text>
+<path fill="none" stroke="black" d="M740.88,-569.74C674.1,-566.04 594.23,-556.27 572.52,-531 555.32,-510.97 564.49,-478.24 572.6,-458.51"/>
+<polygon fill="black" stroke="black" points="740.72,-569.73 746.91,-566.03 752.7,-570.33 746.51,-574.02 740.72,-569.73"/>
+<text text-anchor="middle" x="614.52" y="-517.7" font-family="Times New Roman,serif" font-size="14.00">&lt;containment&gt;</text>
+<text text-anchor="middle" x="614.52" y="-501.95" font-family="Times New Roman,serif" font-size="14.00">flows.control</text>
 </g>
 <!-- rover.flows.comms -->
 <g id="node7" class="node">
 <title>rover.flows.comms</title>
-<ellipse fill="lightgrey" stroke="grey" stroke-width="0" cx="3120.38" cy="-105.75" rx="38.09" ry="18"/>
-<text text-anchor="middle" x="3120.38" y="-100.33" font-family="Times New Roman,serif" font-size="14.00">comms</text>
+<ellipse fill="lightgrey" stroke="grey" stroke-width="0" cx="677.52" cy="-364.25" rx="61.54" ry="18"/>
+<text text-anchor="middle" x="677.52" y="-358.82" font-family="Times New Roman,serif" font-size="14.00">comms: Flow</text>
 </g>
 <!-- rover&#45;&gt;rover.flows.comms -->
 <g id="edge6" class="edge">
 <title>rover-&gt;rover.flows.comms</title>
-<path fill="none" stroke="black" d="M1645.96,-284.57C1869.4,-278.74 2679.16,-255.01 2932.38,-211.5 3021.85,-196.13 3074.32,-229.68 3129.38,-157.5 3136.86,-147.68 3133.66,-133.7 3129.12,-122.9"/>
-<polygon fill="black" stroke="black" points="1645.91,-284.57 1640.01,-288.72 1633.91,-284.88 1639.81,-280.73 1645.91,-284.57"/>
-<text text-anchor="middle" x="3154.38" y="-188.07" font-family="Times New Roman,serif" font-size="14.00">&lt;containment&gt;</text>
+<path fill="none" stroke="black" d="M749.58,-557.75C720.15,-551.23 692.64,-542.37 683.52,-531 648.58,-487.41 663.15,-414.7 672.26,-382.04"/>
+<polygon fill="black" stroke="black" points="749.63,-557.76 756.32,-555.07 761.38,-560.21 754.69,-562.9 749.63,-557.76"/>
+<text text-anchor="middle" x="725.52" y="-517.7" font-family="Times New Roman,serif" font-size="14.00">&lt;containment&gt;</text>
+<text text-anchor="middle" x="725.52" y="-501.95" font-family="Times New Roman,serif" font-size="14.00">flows.comms</text>
 </g>
-<!-- rover.sp -->
-<g id="node28" class="node">
-<title>rover.sp</title>
-<polygon fill="lightgrey" stroke="grey" points="1640.38,-211.5 1598.38,-211.5 1598.38,-215.5 1586.38,-215.5 1586.38,-175.5 1640.38,-175.5 1640.38,-211.5"/>
-<polyline fill="none" stroke="grey" points="1586.38,-211.5 1598.38,-211.5"/>
-<text text-anchor="middle" x="1613.38" y="-188.07" font-family="Times New Roman,serif" font-size="14.00">sp</text>
+<!-- __main__.Rover -->
+<g id="node22" class="node">
+<title>__main__.Rover</title>
+<polygon fill="lightgrey" stroke="grey" points="788.15,-481.5 706.9,-481.5 706.9,-400.25 788.15,-400.25 788.15,-481.5"/>
+<polyline fill="none" stroke="grey" points="718.9,-481.5 706.9,-469.5"/>
+<polyline fill="none" stroke="grey" points="706.9,-412.25 718.9,-400.25"/>
+<polyline fill="none" stroke="grey" points="776.15,-400.25 788.15,-412.25"/>
+<polyline fill="none" stroke="grey" points="788.15,-469.5 776.15,-481.5"/>
+<text text-anchor="middle" x="747.52" y="-435.45" font-family="Times New Roman,serif" font-size="14.00">Rover: type</text>
 </g>
-<!-- rover&#45;&gt;rover.sp -->
-<g id="edge12" class="edge">
-<title>rover-&gt;rover.sp</title>
-<path fill="none" stroke="black" d="M1585.77,-261.89C1585.44,-251.68 1586.09,-239.79 1589.38,-229.5 1591.35,-223.32 1594.8,-217.26 1598.48,-211.96"/>
-<polygon fill="black" stroke="black" points="1585.78,-262 1590.21,-267.69 1586.66,-273.97 1582.23,-268.27 1585.78,-262"/>
-<text text-anchor="middle" x="1631.38" y="-231.95" font-family="Times New Roman,serif" font-size="14.00">&lt;containment&gt;</text>
-</g>
-<!-- rover.t -->
-<g id="node29" class="node">
-<title>rover.t</title>
-<polygon fill="lightgrey" stroke="grey" points="1722.38,-211.5 1680.38,-211.5 1680.38,-215.5 1668.38,-215.5 1668.38,-175.5 1722.38,-175.5 1722.38,-211.5"/>
-<polyline fill="none" stroke="grey" points="1668.38,-211.5 1680.38,-211.5"/>
-<text text-anchor="middle" x="1695.38" y="-188.07" font-family="Times New Roman,serif" font-size="14.00">t</text>
-</g>
-<!-- rover&#45;&gt;rover.t -->
-<g id="edge13" class="edge">
-<title>rover-&gt;rover.t</title>
-<path fill="none" stroke="black" d="M1637.56,-269.64C1650.44,-263.55 1663.47,-255.54 1673.38,-245.25 1682.3,-235.98 1687.91,-222.51 1691.23,-211.78"/>
-<polygon fill="black" stroke="black" points="1637.72,-269.57 1633.8,-275.63 1626.7,-274.34 1630.62,-268.29 1637.72,-269.57"/>
-<text text-anchor="middle" x="1725.38" y="-231.95" font-family="Times New Roman,serif" font-size="14.00">&lt;containment&gt;</text>
+<!-- rover&#45;&gt;__main__.Rover -->
+<g id="edge14" class="edge">
+<title>rover-&gt;__main__.Rover</title>
+<path fill="none" stroke="black" d="M822.2,-560.5C811.8,-553.08 798.85,-542.61 789.77,-531 780.52,-519.17 772.65,-504.98 766.3,-491.44"/>
+<polygon fill="none" stroke="black" points="769.23,-490.43 761.95,-482.74 762.85,-493.3 769.23,-490.43"/>
+<text text-anchor="middle" x="828.4" y="-517.7" font-family="Times New Roman,serif" font-size="14.00">&lt;inheritance&gt;</text>
+<text text-anchor="middle" x="828.4" y="-501.95" font-family="Times New Roman,serif" font-size="14.00">base</text>
 </g>
 <!-- rover.fxns.control_rover -->
-<g id="node30" class="node">
+<g id="node24" class="node">
 <title>rover.fxns.control_rover</title>
-<polygon fill="lightgrey" stroke="grey" stroke-width="2" points="373.62,-211.5 281.12,-211.5 281.12,-175.5 373.62,-175.5 373.62,-211.5"/>
-<text text-anchor="middle" x="327.38" y="-188.07" font-family="Times New Roman,serif" font-size="14.00">control_rover</text>
+<polygon fill="lightgrey" stroke="grey" stroke-width="2" points="982.77,-458.88 806.27,-458.88 806.27,-422.88 982.77,-422.88 982.77,-458.88"/>
+<text text-anchor="middle" x="894.52" y="-435.45" font-family="Times New Roman,serif" font-size="14.00">control_rover: ControlRover</text>
 </g>
 <!-- rover&#45;&gt;rover.fxns.control_rover -->
 <g id="edge7" class="edge">
 <title>rover-&gt;rover.fxns.control_rover</title>
-<path fill="none" stroke="black" d="M1531.86,-285.21C1316.19,-282.02 551.7,-269.13 445.38,-245.25 415.24,-238.48 383.17,-224.18 360.09,-212.48"/>
-<polygon fill="black" stroke="black" points="1531.78,-285.21 1537.83,-281.3 1543.77,-285.38 1537.72,-289.29 1531.78,-285.21"/>
-<text text-anchor="middle" x="487.38" y="-231.95" font-family="Times New Roman,serif" font-size="14.00">&lt;containment&gt;</text>
+<path fill="none" stroke="black" d="M857.22,-550.74C861.71,-544.66 866.2,-537.81 869.52,-531 880.94,-507.6 887.92,-478.13 891.51,-459.64"/>
+<polygon fill="black" stroke="black" points="857.36,-550.56 856.79,-557.75 849.94,-559.99 850.51,-552.81 857.36,-550.56"/>
+<text text-anchor="middle" x="933.65" y="-517.7" font-family="Times New Roman,serif" font-size="14.00">&lt;containment&gt;</text>
+<text text-anchor="middle" x="933.65" y="-501.95" font-family="Times New Roman,serif" font-size="14.00">fxns.control_rover</text>
 </g>
 <!-- rover.fxns.store_energy -->
-<g id="node31" class="node">
+<g id="node25" class="node">
 <title>rover.fxns.store_energy</title>
-<polygon fill="lightgrey" stroke="grey" stroke-width="2" points="1005.38,-211.5 917.38,-211.5 917.38,-175.5 1005.38,-175.5 1005.38,-211.5"/>
-<text text-anchor="middle" x="961.38" y="-188.07" font-family="Times New Roman,serif" font-size="14.00">store_energy</text>
+<polygon fill="lightgrey" stroke="grey" stroke-width="2" points="1164.4,-458.88 1000.65,-458.88 1000.65,-422.88 1164.4,-422.88 1164.4,-458.88"/>
+<text text-anchor="middle" x="1082.52" y="-435.45" font-family="Times New Roman,serif" font-size="14.00">store_energy: StoreEnergy</text>
 </g>
 <!-- rover&#45;&gt;rover.fxns.store_energy -->
 <g id="edge8" class="edge">
 <title>rover-&gt;rover.fxns.store_energy</title>
-<path fill="none" stroke="black" d="M1529.22,-283.27C1446.29,-278.78 1290.94,-267.97 1160.38,-245.25 1106.63,-235.9 1046.05,-219.6 1006,-207.99"/>
-<polygon fill="black" stroke="black" points="1529.26,-283.27 1535.46,-279.59 1541.24,-283.9 1535.04,-287.58 1529.26,-283.27"/>
-<text text-anchor="middle" x="1202.38" y="-231.95" font-family="Times New Roman,serif" font-size="14.00">&lt;containment&gt;</text>
+<path fill="none" stroke="black" d="M921.7,-557.27C944.58,-551.19 968.81,-542.71 989.52,-531 1022.23,-512.51 1052.06,-479.9 1068.7,-459.67"/>
+<polygon fill="black" stroke="black" points="921.67,-557.28 916.82,-562.62 910.03,-560.19 914.88,-554.86 921.67,-557.28"/>
+<text text-anchor="middle" x="1079.4" y="-517.7" font-family="Times New Roman,serif" font-size="14.00">&lt;containment&gt;</text>
+<text text-anchor="middle" x="1079.4" y="-501.95" font-family="Times New Roman,serif" font-size="14.00">fxns.store_energy</text>
 </g>
 <!-- rover.fxns.move_rover -->
-<g id="node32" class="node">
+<g id="node26" class="node">
 <title>rover.fxns.move_rover</title>
-<polygon fill="lightgrey" stroke="grey" stroke-width="2" points="2214.12,-211.5 2130.62,-211.5 2130.62,-175.5 2214.12,-175.5 2214.12,-211.5"/>
-<text text-anchor="middle" x="2172.38" y="-188.07" font-family="Times New Roman,serif" font-size="14.00">move_rover</text>
+<polygon fill="lightgrey" stroke="grey" stroke-width="2" points="1339.02,-458.88 1182.02,-458.88 1182.02,-422.88 1339.02,-422.88 1339.02,-458.88"/>
+<text text-anchor="middle" x="1260.52" y="-435.45" font-family="Times New Roman,serif" font-size="14.00">move_rover: MoveRover</text>
 </g>
 <!-- rover&#45;&gt;rover.fxns.move_rover -->
 <g id="edge9" class="edge">
 <title>rover-&gt;rover.fxns.move_rover</title>
-<path fill="none" stroke="black" d="M1645.04,-285.03C1729,-282.62 1891.01,-274.27 2025.38,-245.25 2061.4,-237.47 2100.8,-223.56 2129.73,-212.27"/>
-<polygon fill="black" stroke="black" points="1644.9,-285.03 1639.01,-289.19 1632.91,-285.35 1638.8,-281.19 1644.9,-285.03"/>
-<text text-anchor="middle" x="2120.38" y="-231.95" font-family="Times New Roman,serif" font-size="14.00">&lt;containment&gt;</text>
+<path fill="none" stroke="black" d="M938.19,-569.65C996.7,-565.6 1071.33,-555.47 1133.52,-531 1176.14,-514.24 1218.16,-480.43 1241.58,-459.62"/>
+<polygon fill="black" stroke="black" points="938.08,-569.65 932.35,-574.02 926.11,-570.41 931.84,-566.04 938.08,-569.65"/>
+<text text-anchor="middle" x="1237.15" y="-517.7" font-family="Times New Roman,serif" font-size="14.00">&lt;containment&gt;</text>
+<text text-anchor="middle" x="1237.15" y="-501.95" font-family="Times New Roman,serif" font-size="14.00">fxns.move_rover</text>
 </g>
 <!-- rover.fxns.view_ground -->
-<g id="node33" class="node">
+<g id="node27" class="node">
 <title>rover.fxns.view_ground</title>
-<polygon fill="lightgrey" stroke="grey" stroke-width="2" points="1568.75,-211.5 1480,-211.5 1480,-175.5 1568.75,-175.5 1568.75,-211.5"/>
-<text text-anchor="middle" x="1524.38" y="-188.07" font-family="Times New Roman,serif" font-size="14.00">view_ground</text>
+<polygon fill="lightgrey" stroke="grey" stroke-width="2" points="1524.27,-458.88 1356.77,-458.88 1356.77,-422.88 1524.27,-422.88 1524.27,-458.88"/>
+<text text-anchor="middle" x="1440.52" y="-435.45" font-family="Times New Roman,serif" font-size="14.00">view_ground: ViewGround</text>
 </g>
 <!-- rover&#45;&gt;rover.fxns.view_ground -->
 <g id="edge10" class="edge">
 <title>rover-&gt;rover.fxns.view_ground</title>
-<path fill="none" stroke="black" d="M1526.44,-269.37C1515.32,-263.55 1505.14,-255.73 1498.38,-245.25 1491.61,-234.77 1497.81,-222.31 1505.84,-212.36"/>
-<polygon fill="black" stroke="black" points="1526.51,-269.4 1533.63,-268.24 1537.43,-274.36 1530.32,-275.52 1526.51,-269.4"/>
-<text text-anchor="middle" x="1540.38" y="-231.95" font-family="Times New Roman,serif" font-size="14.00">&lt;containment&gt;</text>
+<path fill="none" stroke="black" d="M945.32,-567.48C1057.52,-562 1226.9,-550.77 1288.52,-531 1338.19,-515.07 1389.12,-480.82 1417.6,-459.73"/>
+<polygon fill="black" stroke="black" points="945.5,-567.47 939.7,-571.75 933.51,-568.04 939.31,-563.76 945.5,-567.47"/>
+<text text-anchor="middle" x="1404.77" y="-517.7" font-family="Times New Roman,serif" font-size="14.00">&lt;containment&gt;</text>
+<text text-anchor="middle" x="1404.77" y="-501.95" font-family="Times New Roman,serif" font-size="14.00">fxns.view_ground</text>
 </g>
 <!-- rover.fxns.communicate -->
-<g id="node34" class="node">
+<g id="node28" class="node">
 <title>rover.fxns.communicate</title>
-<polygon fill="lightgrey" stroke="grey" stroke-width="2" points="2923.5,-211.5 2833.25,-211.5 2833.25,-175.5 2923.5,-175.5 2923.5,-211.5"/>
-<text text-anchor="middle" x="2878.38" y="-188.07" font-family="Times New Roman,serif" font-size="14.00">communicate</text>
+<polygon fill="lightgrey" stroke="grey" stroke-width="2" points="1716.65,-458.88 1542.4,-458.88 1542.4,-422.88 1716.65,-422.88 1716.65,-458.88"/>
+<text text-anchor="middle" x="1629.52" y="-435.45" font-family="Times New Roman,serif" font-size="14.00">communicate: Communicate</text>
 </g>
 <!-- rover&#45;&gt;rover.fxns.communicate -->
 <g id="edge11" class="edge">
 <title>rover-&gt;rover.fxns.communicate</title>
-<path fill="none" stroke="black" d="M1649.59,-281.7C1755.1,-274.28 1978.01,-258.6 2166.38,-245.25 2417.93,-227.42 2719.47,-205.87 2832.56,-197.78"/>
-<polygon fill="black" stroke="black" points="1649.58,-281.7 1643.88,-286.11 1637.61,-282.54 1643.32,-278.13 1649.58,-281.7"/>
-<text text-anchor="middle" x="2423.38" y="-231.95" font-family="Times New Roman,serif" font-size="14.00">&lt;containment&gt;</text>
+<path fill="none" stroke="black" d="M937.98,-570.2C1087.24,-567.01 1363.49,-557.62 1458.52,-531 1513.65,-515.56 1571.43,-480.98 1603.72,-459.72"/>
+<polygon fill="black" stroke="black" points="938.16,-570.19 932.24,-574.32 926.16,-570.44 932.08,-566.32 938.16,-570.19"/>
+<text text-anchor="middle" x="1583.52" y="-517.7" font-family="Times New Roman,serif" font-size="14.00">&lt;containment&gt;</text>
+<text text-anchor="middle" x="1583.52" y="-501.95" font-family="Times New Roman,serif" font-size="14.00">fxns.communicate</text>
 </g>
-<!-- rover.flows.ground.s -->
+<!-- rover.sp -->
+<g id="node29" class="node">
+<title>rover.sp</title>
+<polygon fill="lightgrey" stroke="grey" points="1828.15,-458.88 1746.9,-458.88 1746.9,-462.88 1734.9,-462.88 1734.9,-422.88 1828.15,-422.88 1828.15,-458.88"/>
+<polyline fill="none" stroke="grey" points="1734.9,-458.88 1746.9,-458.88"/>
+<text text-anchor="middle" x="1781.52" y="-435.45" font-family="Times New Roman,serif" font-size="14.00">sp: SimParam</text>
+</g>
+<!-- rover&#45;&gt;rover.sp -->
+<g id="edge12" class="edge">
+<title>rover-&gt;rover.sp</title>
+<path fill="none" stroke="black" d="M931.94,-572.38C1113.1,-572.73 1508.55,-568.96 1638.52,-531 1687.39,-516.73 1735.89,-480.69 1761.95,-459.06"/>
+<polygon fill="black" stroke="black" points="931.91,-572.38 925.9,-576.36 919.91,-572.35 925.92,-568.36 931.91,-572.38"/>
+<text text-anchor="middle" x="1747.52" y="-517.7" font-family="Times New Roman,serif" font-size="14.00">&lt;containment&gt;</text>
+<text text-anchor="middle" x="1747.52" y="-501.95" font-family="Times New Roman,serif" font-size="14.00">sp</text>
+</g>
+<!-- rover.t -->
+<g id="node30" class="node">
+<title>rover.t</title>
+<polygon fill="lightgrey" stroke="grey" points="1916.02,-458.88 1873.02,-458.88 1873.02,-462.88 1861.02,-462.88 1861.02,-422.88 1916.02,-422.88 1916.02,-458.88"/>
+<polyline fill="none" stroke="grey" points="1861.02,-458.88 1873.02,-458.88"/>
+<text text-anchor="middle" x="1888.52" y="-435.45" font-family="Times New Roman,serif" font-size="14.00">t: Time</text>
+</g>
+<!-- rover&#45;&gt;rover.t -->
+<g id="edge13" class="edge">
+<title>rover-&gt;rover.t</title>
+<path fill="none" stroke="black" d="M934.69,-571.43C1160.55,-570.14 1715.9,-563.64 1793.52,-531 1829.59,-515.83 1860.29,-480.46 1876.41,-459.12"/>
+<polygon fill="black" stroke="black" points="934.81,-571.43 928.84,-575.46 922.81,-571.5 928.79,-567.46 934.81,-571.43"/>
+<text text-anchor="middle" x="1880.52" y="-517.7" font-family="Times New Roman,serif" font-size="14.00">&lt;containment&gt;</text>
+<text text-anchor="middle" x="1880.52" y="-501.95" font-family="Times New Roman,serif" font-size="14.00">t</text>
+</g>
+<!-- __main__.Ground -->
 <g id="node8" class="node">
-<title>rover.flows.ground.s</title>
-<polygon fill="lightgrey" stroke="grey" points="1821.38,-36 1779.38,-36 1779.38,-40 1767.38,-40 1767.38,0 1821.38,0 1821.38,-36"/>
-<polyline fill="none" stroke="grey" points="1767.38,-36 1779.38,-36"/>
-<text text-anchor="middle" x="1794.38" y="-12.57" font-family="Times New Roman,serif" font-size="14.00">s</text>
+<title>__main__.Ground</title>
+<polygon fill="lightgrey" stroke="grey" points="154.65,-291.12 64.4,-291.12 64.4,-200.88 154.65,-200.88 154.65,-291.12"/>
+<polyline fill="none" stroke="grey" points="76.4,-291.12 64.4,-279.12"/>
+<polyline fill="none" stroke="grey" points="64.4,-212.88 76.4,-200.88"/>
+<polyline fill="none" stroke="grey" points="142.65,-200.88 154.65,-212.88"/>
+<polyline fill="none" stroke="grey" points="154.65,-279.12 142.65,-291.12"/>
+<text text-anchor="middle" x="109.52" y="-240.57" font-family="Times New Roman,serif" font-size="14.00">Ground: type</text>
 </g>
-<!-- rover.flows.ground&#45;&gt;rover.flows.ground.s -->
-<g id="edge14" class="edge">
-<title>rover.flows.ground-&gt;rover.flows.ground.s</title>
-<path fill="none" stroke="black" d="M1794.38,-74.83C1794.38,-62.02 1794.38,-47.51 1794.38,-36.49"/>
-<polygon fill="black" stroke="black" points="1794.38,-74.91 1798.38,-80.91 1794.38,-86.91 1790.38,-80.91 1794.38,-74.91"/>
-<text text-anchor="middle" x="1836.38" y="-56.45" font-family="Times New Roman,serif" font-size="14.00">&lt;containment&gt;</text>
-</g>
-<!-- rover.flows.force.s -->
-<g id="node9" class="node">
-<title>rover.flows.force.s</title>
-<polygon fill="lightgrey" stroke="grey" points="1423.38,-36 1381.38,-36 1381.38,-40 1369.38,-40 1369.38,0 1423.38,0 1423.38,-36"/>
-<polyline fill="none" stroke="grey" points="1369.38,-36 1381.38,-36"/>
-<text text-anchor="middle" x="1396.38" y="-12.57" font-family="Times New Roman,serif" font-size="14.00">s</text>
-</g>
-<!-- rover.flows.force&#45;&gt;rover.flows.force.s -->
+<!-- rover.flows.ground&#45;&gt;__main__.Ground -->
 <g id="edge15" class="edge">
-<title>rover.flows.force-&gt;rover.flows.force.s</title>
-<path fill="none" stroke="black" d="M1396.38,-74.83C1396.38,-62.02 1396.38,-47.51 1396.38,-36.49"/>
-<polygon fill="black" stroke="black" points="1396.38,-74.91 1400.38,-80.91 1396.38,-86.91 1392.38,-80.91 1396.38,-74.91"/>
-<text text-anchor="middle" x="1438.38" y="-56.45" font-family="Times New Roman,serif" font-size="14.00">&lt;containment&gt;</text>
+<title>rover.flows.ground-&gt;__main__.Ground</title>
+<path fill="none" stroke="black" d="M73.92,-423.1C79.31,-396.43 90.08,-343.19 98.36,-302.2"/>
+<polygon fill="none" stroke="black" points="101.97,-303.03 100.52,-292.53 95.11,-301.64 101.97,-303.03"/>
+<text text-anchor="middle" x="127.4" y="-366.7" font-family="Times New Roman,serif" font-size="14.00">&lt;inheritance&gt;</text>
+<text text-anchor="middle" x="127.4" y="-350.95" font-family="Times New Roman,serif" font-size="14.00">base</text>
 </g>
-<!-- rover.flows.ee.s -->
+<!-- __main__.Force -->
 <g id="node10" class="node">
-<title>rover.flows.ee.s</title>
-<polygon fill="lightgrey" stroke="grey" points="2038.38,-36 1996.38,-36 1996.38,-40 1984.38,-40 1984.38,0 2038.38,0 2038.38,-36"/>
-<polyline fill="none" stroke="grey" points="1984.38,-36 1996.38,-36"/>
-<text text-anchor="middle" x="2011.38" y="-12.57" font-family="Times New Roman,serif" font-size="14.00">s</text>
+<title>__main__.Force</title>
+<polygon fill="lightgrey" stroke="grey" points="258.4,-285.88 178.65,-285.88 178.65,-206.12 258.4,-206.12 258.4,-285.88"/>
+<polyline fill="none" stroke="grey" points="190.65,-285.88 178.65,-273.88"/>
+<polyline fill="none" stroke="grey" points="178.65,-218.12 190.65,-206.12"/>
+<polyline fill="none" stroke="grey" points="246.4,-206.12 258.4,-218.12"/>
+<polyline fill="none" stroke="grey" points="258.4,-273.88 246.4,-285.88"/>
+<text text-anchor="middle" x="218.52" y="-240.57" font-family="Times New Roman,serif" font-size="14.00">Force: type</text>
 </g>
-<!-- rover.flows.ee&#45;&gt;rover.flows.ee.s -->
-<g id="edge16" class="edge">
-<title>rover.flows.ee-&gt;rover.flows.ee.s</title>
-<path fill="none" stroke="black" d="M2011.38,-74.83C2011.38,-62.02 2011.38,-47.51 2011.38,-36.49"/>
-<polygon fill="black" stroke="black" points="2011.38,-74.91 2015.38,-80.91 2011.38,-86.91 2007.38,-80.91 2011.38,-74.91"/>
-<text text-anchor="middle" x="2053.38" y="-56.45" font-family="Times New Roman,serif" font-size="14.00">&lt;containment&gt;</text>
-</g>
-<!-- rover.flows.video.s -->
-<g id="node11" class="node">
-<title>rover.flows.video.s</title>
-<polygon fill="lightgrey" stroke="grey" points="1313.38,-36 1271.38,-36 1271.38,-40 1259.38,-40 1259.38,0 1313.38,0 1313.38,-36"/>
-<polyline fill="none" stroke="grey" points="1259.38,-36 1271.38,-36"/>
-<text text-anchor="middle" x="1286.38" y="-12.57" font-family="Times New Roman,serif" font-size="14.00">s</text>
-</g>
-<!-- rover.flows.video&#45;&gt;rover.flows.video.s -->
+<!-- rover.flows.force&#45;&gt;__main__.Force -->
 <g id="edge17" class="edge">
-<title>rover.flows.video-&gt;rover.flows.video.s</title>
-<path fill="none" stroke="black" d="M1286.38,-74.83C1286.38,-62.02 1286.38,-47.51 1286.38,-36.49"/>
-<polygon fill="black" stroke="black" points="1286.38,-74.91 1290.38,-80.91 1286.38,-86.91 1282.38,-80.91 1286.38,-74.91"/>
-<text text-anchor="middle" x="1328.38" y="-56.45" font-family="Times New Roman,serif" font-size="14.00">&lt;containment&gt;</text>
+<title>rover.flows.force-&gt;__main__.Force</title>
+<path fill="none" stroke="black" d="M215.79,-423.1C216.22,-395.25 217.1,-338.43 217.75,-296.84"/>
+<polygon fill="none" stroke="black" points="221.26,-297.14 217.92,-287.09 214.26,-297.03 221.26,-297.14"/>
+<text text-anchor="middle" x="255.4" y="-366.7" font-family="Times New Roman,serif" font-size="14.00">&lt;inheritance&gt;</text>
+<text text-anchor="middle" x="255.4" y="-350.95" font-family="Times New Roman,serif" font-size="14.00">base</text>
 </g>
-<!-- rover.flows.control.s -->
-<g id="node12" class="node">
-<title>rover.flows.control.s</title>
-<polygon fill="lightgrey" stroke="grey" points="566.38,-36 524.38,-36 524.38,-40 512.38,-40 512.38,0 566.38,0 566.38,-36"/>
-<polyline fill="none" stroke="grey" points="512.38,-36 524.38,-36"/>
-<text text-anchor="middle" x="539.38" y="-12.57" font-family="Times New Roman,serif" font-size="14.00">s</text>
+<!-- __main__.EE -->
+<g id="node11" class="node">
+<title>__main__.EE</title>
+<polygon fill="lightgrey" stroke="grey" points="356.15,-277.62 292.9,-277.62 292.9,-214.38 356.15,-214.38 356.15,-277.62"/>
+<polyline fill="none" stroke="grey" points="304.9,-277.62 292.9,-265.62"/>
+<polyline fill="none" stroke="grey" points="292.9,-226.38 304.9,-214.38"/>
+<polyline fill="none" stroke="grey" points="344.15,-214.38 356.15,-226.38"/>
+<polyline fill="none" stroke="grey" points="356.15,-265.62 344.15,-277.62"/>
+<text text-anchor="middle" x="324.52" y="-240.57" font-family="Times New Roman,serif" font-size="14.00">EE: type</text>
 </g>
-<!-- rover.flows.control&#45;&gt;rover.flows.control.s -->
-<g id="edge18" class="edge">
-<title>rover.flows.control-&gt;rover.flows.control.s</title>
-<path fill="none" stroke="black" d="M539.38,-74.83C539.38,-62.02 539.38,-47.51 539.38,-36.49"/>
-<polygon fill="black" stroke="black" points="539.38,-74.91 543.38,-80.91 539.38,-86.91 535.38,-80.91 539.38,-74.91"/>
-<text text-anchor="middle" x="581.38" y="-56.45" font-family="Times New Roman,serif" font-size="14.00">&lt;containment&gt;</text>
-</g>
-<!-- rover.fxns.control_rover.m -->
-<g id="node13" class="node">
-<title>rover.fxns.control_rover.m</title>
-<polygon fill="lightgrey" stroke="grey" points="193.38,-123.75 151.38,-123.75 151.38,-127.75 139.38,-127.75 139.38,-87.75 193.38,-87.75 193.38,-123.75"/>
-<polyline fill="none" stroke="grey" points="139.38,-123.75 151.38,-123.75"/>
-<text text-anchor="middle" x="166.38" y="-100.33" font-family="Times New Roman,serif" font-size="14.00">m</text>
-</g>
-<!-- rover.fxns.control_rover.sp -->
-<g id="node14" class="node">
-<title>rover.fxns.control_rover.sp</title>
-<polygon fill="lightgrey" stroke="grey" points="300.38,-123.75 258.38,-123.75 258.38,-127.75 246.38,-127.75 246.38,-87.75 300.38,-87.75 300.38,-123.75"/>
-<polyline fill="none" stroke="grey" points="246.38,-123.75 258.38,-123.75"/>
-<text text-anchor="middle" x="273.38" y="-100.33" font-family="Times New Roman,serif" font-size="14.00">sp</text>
-</g>
-<!-- rover.fxns.control_rover.t -->
-<g id="node15" class="node">
-<title>rover.fxns.control_rover.t</title>
-<polygon fill="lightgrey" stroke="grey" points="407.38,-123.75 365.38,-123.75 365.38,-127.75 353.38,-127.75 353.38,-87.75 407.38,-87.75 407.38,-123.75"/>
-<polyline fill="none" stroke="grey" points="353.38,-123.75 365.38,-123.75"/>
-<text text-anchor="middle" x="380.38" y="-100.33" font-family="Times New Roman,serif" font-size="14.00">t</text>
-</g>
-<!-- rover.fxns.store_energy.m -->
-<g id="node16" class="node">
-<title>rover.fxns.store_energy.m</title>
-<polygon fill="lightgrey" stroke="grey" points="774.38,-123.75 732.38,-123.75 732.38,-127.75 720.38,-127.75 720.38,-87.75 774.38,-87.75 774.38,-123.75"/>
-<polyline fill="none" stroke="grey" points="720.38,-123.75 732.38,-123.75"/>
-<text text-anchor="middle" x="747.38" y="-100.33" font-family="Times New Roman,serif" font-size="14.00">m</text>
-</g>
-<!-- rover.fxns.store_energy.s -->
-<g id="node17" class="node">
-<title>rover.fxns.store_energy.s</title>
-<polygon fill="lightgrey" stroke="grey" points="881.38,-123.75 839.38,-123.75 839.38,-127.75 827.38,-127.75 827.38,-87.75 881.38,-87.75 881.38,-123.75"/>
-<polyline fill="none" stroke="grey" points="827.38,-123.75 839.38,-123.75"/>
-<text text-anchor="middle" x="854.38" y="-100.33" font-family="Times New Roman,serif" font-size="14.00">s</text>
-</g>
-<!-- rover.fxns.store_energy.sp -->
-<g id="node18" class="node">
-<title>rover.fxns.store_energy.sp</title>
-<polygon fill="lightgrey" stroke="grey" points="988.38,-123.75 946.38,-123.75 946.38,-127.75 934.38,-127.75 934.38,-87.75 988.38,-87.75 988.38,-123.75"/>
-<polyline fill="none" stroke="grey" points="934.38,-123.75 946.38,-123.75"/>
-<text text-anchor="middle" x="961.38" y="-100.33" font-family="Times New Roman,serif" font-size="14.00">sp</text>
-</g>
-<!-- rover.fxns.store_energy.t -->
-<g id="node19" class="node">
-<title>rover.fxns.store_energy.t</title>
-<polygon fill="lightgrey" stroke="grey" points="1095.38,-123.75 1053.38,-123.75 1053.38,-127.75 1041.38,-127.75 1041.38,-87.75 1095.38,-87.75 1095.38,-123.75"/>
-<polyline fill="none" stroke="grey" points="1041.38,-123.75 1053.38,-123.75"/>
-<text text-anchor="middle" x="1068.38" y="-100.33" font-family="Times New Roman,serif" font-size="14.00">t</text>
-</g>
-<!-- rover.fxns.move_rover.m -->
-<g id="node20" class="node">
-<title>rover.fxns.move_rover.m</title>
-<polygon fill="lightgrey" stroke="grey" points="2523.38,-123.75 2481.38,-123.75 2481.38,-127.75 2469.38,-127.75 2469.38,-87.75 2523.38,-87.75 2523.38,-123.75"/>
-<polyline fill="none" stroke="grey" points="2469.38,-123.75 2481.38,-123.75"/>
-<text text-anchor="middle" x="2496.38" y="-100.33" font-family="Times New Roman,serif" font-size="14.00">m</text>
-</g>
-<!-- rover.fxns.move_rover.s -->
-<g id="node21" class="node">
-<title>rover.fxns.move_rover.s</title>
-<polygon fill="lightgrey" stroke="grey" points="2627.38,-123.75 2585.38,-123.75 2585.38,-127.75 2573.38,-127.75 2573.38,-87.75 2627.38,-87.75 2627.38,-123.75"/>
-<polyline fill="none" stroke="grey" points="2573.38,-123.75 2585.38,-123.75"/>
-<text text-anchor="middle" x="2600.38" y="-100.33" font-family="Times New Roman,serif" font-size="14.00">s</text>
-</g>
-<!-- rover.fxns.move_rover.sp -->
-<g id="node22" class="node">
-<title>rover.fxns.move_rover.sp</title>
-<polygon fill="lightgrey" stroke="grey" points="2734.38,-123.75 2692.38,-123.75 2692.38,-127.75 2680.38,-127.75 2680.38,-87.75 2734.38,-87.75 2734.38,-123.75"/>
-<polyline fill="none" stroke="grey" points="2680.38,-123.75 2692.38,-123.75"/>
-<text text-anchor="middle" x="2707.38" y="-100.33" font-family="Times New Roman,serif" font-size="14.00">sp</text>
-</g>
-<!-- rover.fxns.move_rover.t -->
-<g id="node23" class="node">
-<title>rover.fxns.move_rover.t</title>
-<polygon fill="lightgrey" stroke="grey" points="2196.38,-123.75 2154.38,-123.75 2154.38,-127.75 2142.38,-127.75 2142.38,-87.75 2196.38,-87.75 2196.38,-123.75"/>
-<polyline fill="none" stroke="grey" points="2142.38,-123.75 2154.38,-123.75"/>
-<text text-anchor="middle" x="2169.38" y="-100.33" font-family="Times New Roman,serif" font-size="14.00">t</text>
-</g>
-<!-- rover.fxns.view_ground.sp -->
-<g id="node24" class="node">
-<title>rover.fxns.view_ground.sp</title>
-<polygon fill="lightgrey" stroke="grey" points="1551.38,-123.75 1509.38,-123.75 1509.38,-127.75 1497.38,-127.75 1497.38,-87.75 1551.38,-87.75 1551.38,-123.75"/>
-<polyline fill="none" stroke="grey" points="1497.38,-123.75 1509.38,-123.75"/>
-<text text-anchor="middle" x="1524.38" y="-100.33" font-family="Times New Roman,serif" font-size="14.00">sp</text>
-</g>
-<!-- rover.fxns.view_ground.t -->
-<g id="node25" class="node">
-<title>rover.fxns.view_ground.t</title>
-<polygon fill="lightgrey" stroke="grey" points="1658.38,-123.75 1616.38,-123.75 1616.38,-127.75 1604.38,-127.75 1604.38,-87.75 1658.38,-87.75 1658.38,-123.75"/>
-<polyline fill="none" stroke="grey" points="1604.38,-123.75 1616.38,-123.75"/>
-<text text-anchor="middle" x="1631.38" y="-100.33" font-family="Times New Roman,serif" font-size="14.00">t</text>
-</g>
-<!-- rover.fxns.communicate.sp -->
-<g id="node26" class="node">
-<title>rover.fxns.communicate.sp</title>
-<polygon fill="lightgrey" stroke="grey" points="2905.38,-123.75 2863.38,-123.75 2863.38,-127.75 2851.38,-127.75 2851.38,-87.75 2905.38,-87.75 2905.38,-123.75"/>
-<polyline fill="none" stroke="grey" points="2851.38,-123.75 2863.38,-123.75"/>
-<text text-anchor="middle" x="2878.38" y="-100.33" font-family="Times New Roman,serif" font-size="14.00">sp</text>
-</g>
-<!-- rover.fxns.communicate.t -->
-<g id="node27" class="node">
-<title>rover.fxns.communicate.t</title>
-<polygon fill="lightgrey" stroke="grey" points="3012.38,-123.75 2970.38,-123.75 2970.38,-127.75 2958.38,-127.75 2958.38,-87.75 3012.38,-87.75 3012.38,-123.75"/>
-<polyline fill="none" stroke="grey" points="2958.38,-123.75 2970.38,-123.75"/>
-<text text-anchor="middle" x="2985.38" y="-100.33" font-family="Times New Roman,serif" font-size="14.00">t</text>
-</g>
-<!-- rover.fxns.control_rover&#45;&gt;rover.flows.control -->
-<g id="edge39" class="edge">
-<title>rover.fxns.control_rover-&gt;rover.flows.control</title>
-<path fill="none" stroke="black" d="M386.9,-179.86C408.88,-174.26 433.69,-166.8 455.38,-157.5 478.55,-147.56 503,-132.15 519.51,-120.92"/>
-<polygon fill="none" stroke="black" points="386.87,-179.87 381.99,-185.19 375.21,-182.73 380.09,-177.42 386.87,-179.87"/>
-<text text-anchor="middle" x="505" y="-144.2" font-family="Times New Roman,serif" font-size="14.00">&lt;flow&gt;</text>
-</g>
-<!-- rover.fxns.control_rover&#45;&gt;rover.fxns.control_rover.m -->
+<!-- rover.flows.ee&#45;&gt;__main__.EE -->
 <g id="edge19" class="edge">
-<title>rover.fxns.control_rover-&gt;rover.fxns.control_rover.m</title>
-<path fill="none" stroke="black" d="M267.43,-184.92C231.77,-179.2 191.06,-170.17 178.38,-157.5 169.66,-148.8 166.82,-135.02 166.07,-124.01"/>
-<polygon fill="black" stroke="black" points="267.53,-184.93 274.06,-181.88 279.39,-186.74 272.86,-189.79 267.53,-184.93"/>
-<text text-anchor="middle" x="220.38" y="-144.2" font-family="Times New Roman,serif" font-size="14.00">&lt;containment&gt;</text>
+<title>rover.flows.ee-&gt;__main__.EE</title>
+<path fill="none" stroke="black" d="M324.52,-423.1C324.52,-393.46 324.52,-331.02 324.52,-289.03"/>
+<polygon fill="none" stroke="black" points="328.02,-289.04 324.52,-279.04 321.02,-289.04 328.02,-289.04"/>
+<text text-anchor="middle" x="362.4" y="-366.7" font-family="Times New Roman,serif" font-size="14.00">&lt;inheritance&gt;</text>
+<text text-anchor="middle" x="362.4" y="-350.95" font-family="Times New Roman,serif" font-size="14.00">base</text>
 </g>
-<!-- rover.fxns.control_rover&#45;&gt;rover.fxns.control_rover.sp -->
-<g id="edge20" class="edge">
-<title>rover.fxns.control_rover-&gt;rover.fxns.control_rover.sp</title>
-<path fill="none" stroke="black" d="M276.6,-166.03C274.21,-163.42 272.1,-160.58 270.38,-157.5 264.69,-147.33 265.66,-134.16 267.94,-123.78"/>
-<polygon fill="black" stroke="black" points="276.58,-166.01 283.72,-166.98 285.58,-173.94 278.43,-172.98 276.58,-166.01"/>
-<text text-anchor="middle" x="312.38" y="-144.2" font-family="Times New Roman,serif" font-size="14.00">&lt;containment&gt;</text>
+<!-- __main__.Video -->
+<g id="node12" class="node">
+<title>__main__.Video</title>
+<polygon fill="lightgrey" stroke="grey" points="464.77,-286.25 384.27,-286.25 384.27,-205.75 464.77,-205.75 464.77,-286.25"/>
+<polyline fill="none" stroke="grey" points="396.27,-286.25 384.27,-274.25"/>
+<polyline fill="none" stroke="grey" points="384.27,-217.75 396.27,-205.75"/>
+<polyline fill="none" stroke="grey" points="452.77,-205.75 464.77,-217.75"/>
+<polyline fill="none" stroke="grey" points="464.77,-274.25 452.77,-286.25"/>
+<text text-anchor="middle" x="424.52" y="-240.57" font-family="Times New Roman,serif" font-size="14.00">Video: type</text>
 </g>
-<!-- rover.fxns.control_rover&#45;&gt;rover.fxns.control_rover.t -->
+<!-- rover.flows.video&#45;&gt;__main__.Video -->
 <g id="edge21" class="edge">
-<title>rover.fxns.control_rover-&gt;rover.fxns.control_rover.t</title>
-<path fill="none" stroke="black" d="M353.27,-164.79C355.09,-162.39 356.82,-159.95 358.38,-157.5 365.08,-146.97 370.65,-134.05 374.51,-123.88"/>
-<polygon fill="black" stroke="black" points="353.17,-164.91 352.43,-172.08 345.52,-174.15 346.27,-166.98 353.17,-164.91"/>
-<text text-anchor="middle" x="409.38" y="-144.2" font-family="Times New Roman,serif" font-size="14.00">&lt;containment&gt;</text>
+<title>rover.flows.video-&gt;__main__.Video</title>
+<path fill="none" stroke="black" d="M433.65,-423.1C432.22,-395.33 429.28,-338.78 427.13,-297.22"/>
+<polygon fill="none" stroke="black" points="430.58,-297.27 426.57,-287.47 423.59,-297.64 430.58,-297.27"/>
+<text text-anchor="middle" x="469.4" y="-366.7" font-family="Times New Roman,serif" font-size="14.00">&lt;inheritance&gt;</text>
+<text text-anchor="middle" x="469.4" y="-350.95" font-family="Times New Roman,serif" font-size="14.00">base</text>
 </g>
-<!-- rover.fxns.control_rover.dynamic_behavior -->
-<g id="node35" class="node">
-<title>rover.fxns.control_rover.dynamic_behavior</title>
-<polygon fill="lightgrey" stroke="grey" points="118.75,-123.75 0,-123.75 0,-119.75 -4,-119.75 -4,-115.75 0,-115.75 0,-95.75 -4,-95.75 -4,-91.75 0,-91.75 0,-87.75 118.75,-87.75 118.75,-123.75"/>
-<polyline fill="none" stroke="grey" points="0,-119.75 4,-119.75 4,-115.75 0,-115.75"/>
-<polyline fill="none" stroke="grey" points="0,-95.75 4,-95.75 4,-91.75 0,-91.75"/>
-<text text-anchor="middle" x="59.38" y="-100.33" font-family="Times New Roman,serif" font-size="14.00">dynamic_behavior</text>
+<!-- __main__.Control -->
+<g id="node13" class="node">
+<title>__main__.Control</title>
+<polygon fill="lightgrey" stroke="grey" points="574.27,-290.75 484.77,-290.75 484.77,-201.25 574.27,-201.25 574.27,-290.75"/>
+<polyline fill="none" stroke="grey" points="496.77,-290.75 484.77,-278.75"/>
+<polyline fill="none" stroke="grey" points="484.77,-213.25 496.77,-201.25"/>
+<polyline fill="none" stroke="grey" points="562.27,-201.25 574.27,-213.25"/>
+<polyline fill="none" stroke="grey" points="574.27,-278.75 562.27,-290.75"/>
+<text text-anchor="middle" x="529.52" y="-240.57" font-family="Times New Roman,serif" font-size="14.00">Control: type</text>
 </g>
-<!-- rover.fxns.control_rover&#45;&gt;rover.fxns.control_rover.dynamic_behavior -->
-<g id="edge22" class="edge">
-<title>rover.fxns.control_rover-&gt;rover.fxns.control_rover.dynamic_behavior</title>
-<path fill="none" stroke="black" d="M267.23,-190.57C203.97,-187.41 109.72,-179.11 81.38,-157.5 70.84,-149.46 65.27,-135.34 62.37,-124.04"/>
-<polygon fill="black" stroke="black" points="267.34,-190.58 273.52,-186.86 279.33,-191.13 273.15,-194.85 267.34,-190.58"/>
-<text text-anchor="middle" x="123.38" y="-144.2" font-family="Times New Roman,serif" font-size="14.00">&lt;containment&gt;</text>
-</g>
-<!-- rover.fxns.store_energy&#45;&gt;rover.flows.ee -->
-<g id="edge41" class="edge">
-<title>rover.fxns.store_energy-&gt;rover.flows.ee</title>
-<path fill="none" stroke="black" d="M1018.88,-188.39C1074.5,-184.54 1161.17,-178.89 1236.38,-175.5 1306.67,-172.33 1803.61,-182.52 1869.38,-157.5 1879.55,-153.63 1878.51,-146.85 1888.12,-141.75 1919.57,-125.07 1959.85,-115.57 1985.64,-110.79"/>
-<polygon fill="none" stroke="black" points="1018.99,-188.38 1013.29,-192.79 1007.02,-189.21 1012.73,-184.8 1018.99,-188.38"/>
-<text text-anchor="middle" x="1908" y="-144.2" font-family="Times New Roman,serif" font-size="14.00">&lt;flow&gt;</text>
-</g>
-<!-- rover.fxns.store_energy&#45;&gt;rover.flows.control -->
-<g id="edge40" class="edge">
-<title>rover.fxns.store_energy-&gt;rover.flows.control</title>
-<path fill="none" stroke="black" d="M903.48,-189.99C819.31,-185.76 667.56,-175.85 616.12,-157.5 593.56,-149.45 571.09,-133.41 556.35,-121.51"/>
-<polygon fill="none" stroke="black" points="903.5,-189.99 909.69,-186.28 915.49,-190.57 909.3,-194.27 903.5,-189.99"/>
-<text text-anchor="middle" x="637" y="-144.2" font-family="Times New Roman,serif" font-size="14.00">&lt;flow&gt;</text>
-</g>
-<!-- rover.fxns.store_energy&#45;&gt;rover.fxns.store_energy.m -->
+<!-- rover.flows.control&#45;&gt;__main__.Control -->
 <g id="edge23" class="edge">
-<title>rover.fxns.store_energy-&gt;rover.fxns.store_energy.m</title>
-<path fill="none" stroke="black" d="M903.94,-186.93C857.45,-181.46 796.51,-171.85 776.38,-157.5 764.97,-149.37 757.44,-135.26 752.91,-123.98"/>
-<polygon fill="black" stroke="black" points="903.8,-186.91 910.21,-183.61 915.72,-188.26 909.31,-191.56 903.8,-186.91"/>
-<text text-anchor="middle" x="818.38" y="-144.2" font-family="Times New Roman,serif" font-size="14.00">&lt;containment&gt;</text>
+<title>rover.flows.control-&gt;__main__.Control</title>
+<path fill="none" stroke="black" d="M560.89,-423.66C549.77,-413.16 536.89,-398.45 530.77,-382.25 521.25,-356.99 520.02,-327.13 521.57,-301.91"/>
+<polygon fill="none" stroke="black" points="525.13,-302.29 522.42,-292.04 518.15,-301.74 525.13,-302.29"/>
+<text text-anchor="middle" x="569.4" y="-366.7" font-family="Times New Roman,serif" font-size="14.00">&lt;inheritance&gt;</text>
+<text text-anchor="middle" x="569.4" y="-350.95" font-family="Times New Roman,serif" font-size="14.00">base</text>
 </g>
-<!-- rover.fxns.store_energy&#45;&gt;rover.fxns.store_energy.s -->
-<g id="edge24" class="edge">
-<title>rover.fxns.store_energy-&gt;rover.fxns.store_energy.s</title>
-<path fill="none" stroke="black" d="M904.53,-177.95C893.12,-172.95 882,-166.3 873.38,-157.5 864.55,-148.5 859.76,-135.01 857.2,-124.21"/>
-<polygon fill="black" stroke="black" points="904.42,-177.91 911.46,-176.36 915.6,-182.26 908.56,-183.81 904.42,-177.91"/>
-<text text-anchor="middle" x="915.38" y="-144.2" font-family="Times New Roman,serif" font-size="14.00">&lt;containment&gt;</text>
+<!-- fmdtools.define.flow.base.Flow -->
+<g id="node9" class="node">
+<title>fmdtools.define.flow.base.Flow</title>
+<polygon fill="lightgrey" stroke="grey" points="412.15,-85.75 336.9,-85.75 336.9,-10.5 412.15,-10.5 412.15,-85.75"/>
+<polyline fill="none" stroke="grey" points="348.9,-85.75 336.9,-73.75"/>
+<polyline fill="none" stroke="grey" points="336.9,-22.5 348.9,-10.5"/>
+<polyline fill="none" stroke="grey" points="400.15,-10.5 412.15,-22.5"/>
+<polyline fill="none" stroke="grey" points="412.15,-73.75 400.15,-85.75"/>
+<text text-anchor="middle" x="374.52" y="-42.7" font-family="Times New Roman,serif" font-size="14.00">Flow: type</text>
 </g>
-<!-- rover.fxns.store_energy&#45;&gt;rover.fxns.store_energy.sp -->
+<!-- rover.flows.comms&#45;&gt;fmdtools.define.flow.base.Flow -->
 <g id="edge25" class="edge">
-<title>rover.fxns.store_energy-&gt;rover.fxns.store_energy.sp</title>
-<path fill="none" stroke="black" d="M961.38,-161.85C961.38,-149.21 961.38,-135.02 961.38,-124.2"/>
-<polygon fill="black" stroke="black" points="961.38,-161.83 965.38,-167.83 961.38,-173.83 957.38,-167.83 961.38,-161.83"/>
-<text text-anchor="middle" x="1003.38" y="-144.2" font-family="Times New Roman,serif" font-size="14.00">&lt;containment&gt;</text>
+<title>rover.flows.comms-&gt;fmdtools.define.flow.base.Flow</title>
+<path fill="none" stroke="black" d="M645.65,-349.06C636.97,-343.72 628.42,-336.82 622.77,-328.25 569.74,-247.76 650.99,-186.8 587.52,-114.25 546.43,-67.27 472.47,-53.64 423.43,-49.99"/>
+<polygon fill="none" stroke="black" points="423.65,-46.43 413.45,-49.3 423.21,-53.42 423.65,-46.43"/>
+<text text-anchor="middle" x="661.4" y="-248.45" font-family="Times New Roman,serif" font-size="14.00">&lt;inheritance&gt;</text>
+<text text-anchor="middle" x="661.4" y="-232.7" font-family="Times New Roman,serif" font-size="14.00">base</text>
 </g>
-<!-- rover.fxns.store_energy&#45;&gt;rover.fxns.store_energy.t -->
-<g id="edge26" class="edge">
-<title>rover.fxns.store_energy-&gt;rover.fxns.store_energy.t</title>
-<path fill="none" stroke="black" d="M1017.95,-176.41C1028.3,-171.57 1038.35,-165.38 1046.38,-157.5 1055.56,-148.49 1061.15,-135 1064.4,-124.2"/>
-<polygon fill="black" stroke="black" points="1018.13,-176.34 1014.14,-182.34 1007.06,-180.97 1011.05,-174.96 1018.13,-176.34"/>
-<text text-anchor="middle" x="1099.38" y="-144.2" font-family="Times New Roman,serif" font-size="14.00">&lt;containment&gt;</text>
+<!-- __main__.Ground&#45;&gt;fmdtools.define.flow.base.Flow -->
+<g id="edge16" class="edge">
+<title>__main__.Ground-&gt;fmdtools.define.flow.base.Flow</title>
+<path fill="none" stroke="black" d="M111.11,-200.42C114.45,-172.2 123.28,-136.9 145.77,-114.25 193.48,-66.21 273.92,-52.99 325.59,-49.7"/>
+<polygon fill="none" stroke="black" points="325.67,-53.15 335.47,-49.12 325.3,-46.16 325.67,-53.15"/>
+<text text-anchor="middle" x="184.4" y="-132.45" font-family="Times New Roman,serif" font-size="14.00">&lt;inheritance&gt;</text>
+<text text-anchor="middle" x="184.4" y="-116.7" font-family="Times New Roman,serif" font-size="14.00">base</text>
 </g>
-<!-- rover.fxns.store_energy.dynamic_behavior -->
-<g id="node36" class="node">
-<title>rover.fxns.store_energy.dynamic_behavior</title>
-<polygon fill="lightgrey" stroke="grey" points="1234.75,-123.75 1116,-123.75 1116,-119.75 1112,-119.75 1112,-115.75 1116,-115.75 1116,-95.75 1112,-95.75 1112,-91.75 1116,-91.75 1116,-87.75 1234.75,-87.75 1234.75,-123.75"/>
-<polyline fill="none" stroke="grey" points="1116,-119.75 1120,-119.75 1120,-115.75 1116,-115.75"/>
-<polyline fill="none" stroke="grey" points="1116,-95.75 1120,-95.75 1120,-91.75 1116,-91.75"/>
-<text text-anchor="middle" x="1175.38" y="-100.33" font-family="Times New Roman,serif" font-size="14.00">dynamic_behavior</text>
+<!-- __main__.Force&#45;&gt;fmdtools.define.flow.base.Flow -->
+<g id="edge18" class="edge">
+<title>__main__.Force-&gt;fmdtools.define.flow.base.Flow</title>
+<path fill="none" stroke="black" d="M215.8,-205.88C215.85,-177.79 220.25,-140.43 239.77,-114.25 260.69,-86.21 296.87,-69.65 326.48,-60.25"/>
+<polygon fill="none" stroke="black" points="327.06,-63.43 335.64,-57.22 325.06,-56.73 327.06,-63.43"/>
+<text text-anchor="middle" x="278.4" y="-132.45" font-family="Times New Roman,serif" font-size="14.00">&lt;inheritance&gt;</text>
+<text text-anchor="middle" x="278.4" y="-116.7" font-family="Times New Roman,serif" font-size="14.00">base</text>
 </g>
-<!-- rover.fxns.store_energy&#45;&gt;rover.fxns.store_energy.dynamic_behavior -->
+<!-- __main__.EE&#45;&gt;fmdtools.define.flow.base.Flow -->
+<g id="edge20" class="edge">
+<title>__main__.EE-&gt;fmdtools.define.flow.base.Flow</title>
+<path fill="none" stroke="black" d="M319.5,-213.98C316.35,-186.9 314.72,-146.94 325.77,-114.25 328.02,-107.6 331.24,-101.07 334.96,-94.88"/>
+<polygon fill="none" stroke="black" points="338.18,-97.35 340.72,-87.06 332.32,-93.52 338.18,-97.35"/>
+<text text-anchor="middle" x="364.4" y="-132.45" font-family="Times New Roman,serif" font-size="14.00">&lt;inheritance&gt;</text>
+<text text-anchor="middle" x="364.4" y="-116.7" font-family="Times New Roman,serif" font-size="14.00">base</text>
+</g>
+<!-- __main__.Video&#45;&gt;fmdtools.define.flow.base.Flow -->
+<g id="edge22" class="edge">
+<title>__main__.Video-&gt;fmdtools.define.flow.base.Flow</title>
+<path fill="none" stroke="black" d="M419.84,-205.29C416.19,-179.11 410.26,-144.23 401.52,-114.25 399.79,-108.3 397.69,-102.16 395.43,-96.14"/>
+<polygon fill="none" stroke="black" points="398.43,-95.19 391.52,-87.16 391.91,-97.75 398.43,-95.19"/>
+<text text-anchor="middle" x="447.4" y="-132.45" font-family="Times New Roman,serif" font-size="14.00">&lt;inheritance&gt;</text>
+<text text-anchor="middle" x="447.4" y="-116.7" font-family="Times New Roman,serif" font-size="14.00">base</text>
+</g>
+<!-- __main__.Control&#45;&gt;fmdtools.define.flow.base.Flow -->
+<g id="edge24" class="edge">
+<title>__main__.Control-&gt;fmdtools.define.flow.base.Flow</title>
+<path fill="none" stroke="black" d="M524.44,-200.81C519.38,-173.46 509.36,-138.97 489.52,-114.25 472.2,-92.66 445.66,-76.95 422.45,-66.38"/>
+<polygon fill="none" stroke="black" points="423.96,-62.79 413.4,-62.03 421.18,-69.22 423.96,-62.79"/>
+<text text-anchor="middle" x="545.4" y="-132.45" font-family="Times New Roman,serif" font-size="14.00">&lt;inheritance&gt;</text>
+<text text-anchor="middle" x="545.4" y="-116.7" font-family="Times New Roman,serif" font-size="14.00">base</text>
+</g>
+<!-- __main__.ControlRover -->
+<g id="node14" class="node">
+<title>__main__.ControlRover</title>
+<polygon fill="lightgrey" stroke="grey" points="1023.52,-308 899.52,-308 899.52,-184 1023.52,-184 1023.52,-308"/>
+<polyline fill="none" stroke="grey" points="911.52,-308 899.52,-296"/>
+<polyline fill="none" stroke="grey" points="899.52,-196 911.52,-184"/>
+<polyline fill="none" stroke="grey" points="1011.52,-184 1023.52,-196"/>
+<polyline fill="none" stroke="grey" points="1023.52,-296 1011.52,-308"/>
+<text text-anchor="middle" x="961.52" y="-240.57" font-family="Times New Roman,serif" font-size="14.00">ControlRover: type</text>
+</g>
+<!-- fmdtools.define.block.function.Function -->
+<g id="node15" class="node">
+<title>fmdtools.define.block.function.Function</title>
+<polygon fill="lightgrey" stroke="grey" points="1308.65,-96.25 1212.4,-96.25 1212.4,0 1308.65,0 1308.65,-96.25"/>
+<polyline fill="none" stroke="grey" points="1224.4,-96.25 1212.4,-84.25"/>
+<polyline fill="none" stroke="grey" points="1212.4,-12 1224.4,0"/>
+<polyline fill="none" stroke="grey" points="1296.65,0 1308.65,-12"/>
+<polyline fill="none" stroke="grey" points="1308.65,-84.25 1296.65,-96.25"/>
+<text text-anchor="middle" x="1260.52" y="-42.7" font-family="Times New Roman,serif" font-size="14.00">Function: type</text>
+</g>
+<!-- __main__.ControlRover&#45;&gt;fmdtools.define.block.function.Function -->
 <g id="edge27" class="edge">
-<title>rover.fxns.store_energy-&gt;rover.fxns.store_energy.dynamic_behavior</title>
-<path fill="none" stroke="black" d="M1019.17,-186.73C1065.28,-181.19 1125.35,-171.57 1145.38,-157.5 1156.93,-149.38 1164.75,-135.27 1169.5,-123.98"/>
-<polygon fill="black" stroke="black" points="1019.09,-186.74 1013.59,-191.4 1007.17,-188.12 1012.67,-183.46 1019.09,-186.74"/>
-<text text-anchor="middle" x="1202.38" y="-144.2" font-family="Times New Roman,serif" font-size="14.00">&lt;containment&gt;</text>
+<title>__main__.ControlRover-&gt;fmdtools.define.block.function.Function</title>
+<path fill="none" stroke="black" d="M1007.28,-183.63C1027.86,-159.38 1053.81,-132.9 1081.77,-114.25 1118.29,-89.89 1165.05,-73.28 1201.6,-62.93"/>
+<polygon fill="none" stroke="black" points="1202.38,-66.06 1211.1,-60.04 1200.53,-59.31 1202.38,-66.06"/>
+<text text-anchor="middle" x="1120.4" y="-132.45" font-family="Times New Roman,serif" font-size="14.00">&lt;inheritance&gt;</text>
+<text text-anchor="middle" x="1120.4" y="-116.7" font-family="Times New Roman,serif" font-size="14.00">base</text>
 </g>
-<!-- rover.fxns.store_energy.static_behavior -->
-<g id="node37" class="node">
-<title>rover.fxns.store_energy.static_behavior</title>
-<polygon fill="lightgrey" stroke="grey" points="694.75,-123.75 594,-123.75 594,-119.75 590,-119.75 590,-115.75 594,-115.75 594,-95.75 590,-95.75 590,-91.75 594,-91.75 594,-87.75 694.75,-87.75 694.75,-123.75"/>
-<polyline fill="none" stroke="grey" points="594,-119.75 598,-119.75 598,-115.75 594,-115.75"/>
-<polyline fill="none" stroke="grey" points="594,-95.75 598,-95.75 598,-91.75 594,-91.75"/>
-<text text-anchor="middle" x="644.38" y="-100.33" font-family="Times New Roman,serif" font-size="14.00">static_behavior</text>
+<!-- __main__.StoreEnergy -->
+<g id="node16" class="node">
+<title>__main__.StoreEnergy</title>
+<polygon fill="lightgrey" stroke="grey" points="1176.4,-303.88 1060.65,-303.88 1060.65,-188.12 1176.4,-188.12 1176.4,-303.88"/>
+<polyline fill="none" stroke="grey" points="1072.65,-303.88 1060.65,-291.88"/>
+<polyline fill="none" stroke="grey" points="1060.65,-200.12 1072.65,-188.12"/>
+<polyline fill="none" stroke="grey" points="1164.4,-188.12 1176.4,-200.12"/>
+<polyline fill="none" stroke="grey" points="1176.4,-291.88 1164.4,-303.88"/>
+<text text-anchor="middle" x="1118.52" y="-240.57" font-family="Times New Roman,serif" font-size="14.00">StoreEnergy: type</text>
 </g>
-<!-- rover.fxns.store_energy&#45;&gt;rover.fxns.store_energy.static_behavior -->
-<g id="edge28" class="edge">
-<title>rover.fxns.store_energy-&gt;rover.fxns.store_energy.static_behavior</title>
-<path fill="none" stroke="black" d="M903.6,-191.29C831.16,-188.78 712,-181.08 675.38,-157.5 663.4,-149.79 655.32,-135.64 650.43,-124.24"/>
-<polygon fill="black" stroke="black" points="903.66,-191.29 909.79,-187.48 915.66,-191.67 909.53,-195.48 903.66,-191.29"/>
-<text text-anchor="middle" x="717.38" y="-144.2" font-family="Times New Roman,serif" font-size="14.00">&lt;containment&gt;</text>
-</g>
-<!-- rover.fxns.move_rover&#45;&gt;rover.flows.ground -->
-<g id="edge45" class="edge">
-<title>rover.fxns.move_rover-&gt;rover.flows.ground</title>
-<path fill="none" stroke="black" d="M2117.14,-179.19C2093.55,-173.14 2065.82,-165.54 2041.12,-157.5 2022.66,-151.49 2019.1,-146.9 2000.38,-141.75 1941.62,-125.58 1871.26,-115.56 1829.84,-110.58"/>
-<polygon fill="none" stroke="black" points="2117.26,-179.22 2124.06,-176.81 2128.9,-182.16 2122.1,-184.57 2117.26,-179.22"/>
-<text text-anchor="middle" x="2061" y="-144.2" font-family="Times New Roman,serif" font-size="14.00">&lt;flow&gt;</text>
-</g>
-<!-- rover.fxns.move_rover&#45;&gt;rover.flows.force -->
-<g id="edge44" class="edge">
-<title>rover.fxns.move_rover-&gt;rover.flows.force</title>
-<path fill="none" stroke="black" d="M2117.44,-178.7C2111.37,-177.48 2105.26,-176.37 2099.38,-175.5 1979.87,-157.74 1946.56,-181.37 1828.12,-157.5 1807.04,-153.25 1803.47,-145.95 1782.38,-141.75 1653.98,-116.21 1618.31,-139.67 1488.38,-123.75 1466.61,-121.08 1442.22,-116.5 1424.02,-112.77"/>
-<polygon fill="none" stroke="black" points="2117.14,-178.64 2123.84,-175.99 2128.87,-181.16 2122.16,-183.81 2117.14,-178.64"/>
-<text text-anchor="middle" x="1848" y="-144.2" font-family="Times New Roman,serif" font-size="14.00">&lt;flow&gt;</text>
-</g>
-<!-- rover.fxns.move_rover&#45;&gt;rover.flows.ee -->
-<g id="edge43" class="edge">
-<title>rover.fxns.move_rover-&gt;rover.flows.ee</title>
-<path fill="none" stroke="black" d="M2132.67,-167.99C2118.26,-159.38 2101.75,-149.85 2086.38,-141.75 2068.7,-132.44 2048.11,-122.92 2032.98,-116.17"/>
-<polygon fill="none" stroke="black" points="2132.66,-167.98 2139.87,-167.66 2142.94,-174.18 2135.73,-174.51 2132.66,-167.98"/>
-<text text-anchor="middle" x="2133" y="-144.2" font-family="Times New Roman,serif" font-size="14.00">&lt;flow&gt;</text>
-</g>
-<!-- rover.fxns.move_rover&#45;&gt;rover.flows.control -->
-<g id="edge42" class="edge">
-<title>rover.fxns.move_rover-&gt;rover.flows.control</title>
-<path fill="none" stroke="black" d="M2117.47,-178.48C2111.4,-177.3 2105.27,-176.26 2099.38,-175.5 1962.63,-157.77 1614.3,-184.75 1479.12,-157.5 1460.09,-153.66 1457.42,-145.51 1438.38,-141.75 1252.37,-105.02 771.65,-159.1 585.38,-123.75 578.85,-122.51 572.03,-120.45 565.7,-118.18"/>
-<polygon fill="none" stroke="black" points="2117.17,-178.42 2123.86,-175.74 2128.91,-180.89 2122.21,-183.57 2117.17,-178.42"/>
-<text text-anchor="middle" x="1500" y="-144.2" font-family="Times New Roman,serif" font-size="14.00">&lt;flow&gt;</text>
-</g>
-<!-- rover.fxns.move_rover&#45;&gt;rover.fxns.move_rover.m -->
+<!-- __main__.StoreEnergy&#45;&gt;fmdtools.define.block.function.Function -->
 <g id="edge29" class="edge">
-<title>rover.fxns.move_rover-&gt;rover.fxns.move_rover.m</title>
-<path fill="none" stroke="black" d="M2227.96,-191.03C2300.39,-188.23 2422.29,-180.19 2460.38,-157.5 2473.37,-149.76 2482.92,-135.31 2488.9,-123.8"/>
-<polygon fill="black" stroke="black" points="2227.94,-191.03 2222.09,-195.25 2215.95,-191.46 2221.8,-187.25 2227.94,-191.03"/>
-<text text-anchor="middle" x="2518.38" y="-144.2" font-family="Times New Roman,serif" font-size="14.00">&lt;containment&gt;</text>
+<title>__main__.StoreEnergy-&gt;fmdtools.define.block.function.Function</title>
+<path fill="none" stroke="black" d="M1139.24,-187.81C1149.56,-163.7 1163.55,-136.21 1180.77,-114.25 1187.55,-105.62 1195.66,-97.38 1204.07,-89.84"/>
+<polygon fill="none" stroke="black" points="1205.91,-92.02 1211.2,-82.85 1201.34,-86.72 1205.91,-92.02"/>
+<text text-anchor="middle" x="1219.4" y="-132.45" font-family="Times New Roman,serif" font-size="14.00">&lt;inheritance&gt;</text>
+<text text-anchor="middle" x="1219.4" y="-116.7" font-family="Times New Roman,serif" font-size="14.00">base</text>
 </g>
-<!-- rover.fxns.move_rover&#45;&gt;rover.fxns.move_rover.s -->
-<g id="edge30" class="edge">
-<title>rover.fxns.move_rover-&gt;rover.fxns.move_rover.s</title>
-<path fill="none" stroke="black" d="M2227.86,-193.17C2322.05,-193.4 2508.48,-189.61 2564.38,-157.5 2577.49,-149.97 2587.03,-135.5 2592.98,-123.93"/>
-<polygon fill="black" stroke="black" points="2227.83,-193.17 2221.81,-197.15 2215.83,-193.12 2221.85,-189.15 2227.83,-193.17"/>
-<text text-anchor="middle" x="2623.38" y="-144.2" font-family="Times New Roman,serif" font-size="14.00">&lt;containment&gt;</text>
+<!-- __main__.MoveRover -->
+<g id="node17" class="node">
+<title>__main__.MoveRover</title>
+<polygon fill="lightgrey" stroke="grey" points="1317.27,-302.75 1203.77,-302.75 1203.77,-189.25 1317.27,-189.25 1317.27,-302.75"/>
+<polyline fill="none" stroke="grey" points="1215.77,-302.75 1203.77,-290.75"/>
+<polyline fill="none" stroke="grey" points="1203.77,-201.25 1215.77,-189.25"/>
+<polyline fill="none" stroke="grey" points="1305.27,-189.25 1317.27,-201.25"/>
+<polyline fill="none" stroke="grey" points="1317.27,-290.75 1305.27,-302.75"/>
+<text text-anchor="middle" x="1260.52" y="-240.57" font-family="Times New Roman,serif" font-size="14.00">MoveRover: type</text>
 </g>
-<!-- rover.fxns.move_rover&#45;&gt;rover.fxns.move_rover.sp -->
+<!-- __main__.MoveRover&#45;&gt;fmdtools.define.block.function.Function -->
 <g id="edge31" class="edge">
-<title>rover.fxns.move_rover-&gt;rover.fxns.move_rover.sp</title>
-<path fill="none" stroke="black" d="M2227.86,-191.18C2349.41,-187.92 2631.4,-178.2 2669.38,-157.5 2682.9,-150.12 2693,-135.64 2699.37,-124.02"/>
-<polygon fill="black" stroke="black" points="2227.79,-191.18 2221.89,-195.34 2215.79,-191.5 2221.68,-187.34 2227.79,-191.18"/>
-<text text-anchor="middle" x="2729.38" y="-144.2" font-family="Times New Roman,serif" font-size="14.00">&lt;containment&gt;</text>
+<title>__main__.MoveRover-&gt;fmdtools.define.block.function.Function</title>
+<path fill="none" stroke="black" d="M1260.52,-188.87C1260.52,-163.35 1260.52,-133.17 1260.52,-107.39"/>
+<polygon fill="none" stroke="black" points="1264.02,-107.64 1260.52,-97.64 1257.02,-107.64 1264.02,-107.64"/>
+<text text-anchor="middle" x="1298.4" y="-132.45" font-family="Times New Roman,serif" font-size="14.00">&lt;inheritance&gt;</text>
+<text text-anchor="middle" x="1298.4" y="-116.7" font-family="Times New Roman,serif" font-size="14.00">base</text>
 </g>
-<!-- rover.fxns.move_rover&#45;&gt;rover.fxns.move_rover.t -->
-<g id="edge32" class="edge">
-<title>rover.fxns.move_rover-&gt;rover.fxns.move_rover.t</title>
-<path fill="none" stroke="black" d="M2171.3,-161.85C2170.86,-149.21 2170.36,-135.02 2169.99,-124.2"/>
-<polygon fill="black" stroke="black" points="2171.3,-161.84 2175.51,-167.7 2171.72,-173.83 2167.51,-167.98 2171.3,-161.84"/>
-<text text-anchor="middle" x="2212.38" y="-144.2" font-family="Times New Roman,serif" font-size="14.00">&lt;containment&gt;</text>
+<!-- __main__.ViewGround -->
+<g id="node18" class="node">
+<title>__main__.ViewGround</title>
+<polygon fill="lightgrey" stroke="grey" points="1465.9,-305.38 1347.15,-305.38 1347.15,-186.62 1465.9,-186.62 1465.9,-305.38"/>
+<polyline fill="none" stroke="grey" points="1359.15,-305.38 1347.15,-293.38"/>
+<polyline fill="none" stroke="grey" points="1347.15,-198.62 1359.15,-186.62"/>
+<polyline fill="none" stroke="grey" points="1453.9,-186.62 1465.9,-198.62"/>
+<polyline fill="none" stroke="grey" points="1465.9,-293.38 1453.9,-305.38"/>
+<text text-anchor="middle" x="1406.52" y="-240.57" font-family="Times New Roman,serif" font-size="14.00">ViewGround: type</text>
 </g>
-<!-- rover.fxns.move_rover.dynamic_behavior -->
-<g id="node38" class="node">
-<title>rover.fxns.move_rover.dynamic_behavior</title>
-<polygon fill="lightgrey" stroke="grey" points="2332.75,-123.75 2214,-123.75 2214,-119.75 2210,-119.75 2210,-115.75 2214,-115.75 2214,-95.75 2210,-95.75 2210,-91.75 2214,-91.75 2214,-87.75 2332.75,-87.75 2332.75,-123.75"/>
-<polyline fill="none" stroke="grey" points="2214,-119.75 2218,-119.75 2218,-115.75 2214,-115.75"/>
-<polyline fill="none" stroke="grey" points="2214,-95.75 2218,-95.75 2218,-91.75 2214,-91.75"/>
-<text text-anchor="middle" x="2273.38" y="-100.33" font-family="Times New Roman,serif" font-size="14.00">dynamic_behavior</text>
-</g>
-<!-- rover.fxns.move_rover&#45;&gt;rover.fxns.move_rover.dynamic_behavior -->
+<!-- __main__.ViewGround&#45;&gt;fmdtools.define.block.function.Function -->
 <g id="edge33" class="edge">
-<title>rover.fxns.move_rover-&gt;rover.fxns.move_rover.dynamic_behavior</title>
-<path fill="none" stroke="black" d="M2226.66,-178.41C2238.01,-173.36 2249.04,-166.57 2257.38,-157.5 2265.75,-148.38 2269.74,-134.9 2271.64,-124.13"/>
-<polygon fill="black" stroke="black" points="2226.82,-178.34 2222.7,-184.26 2215.65,-182.74 2219.77,-176.82 2226.82,-178.34"/>
-<text text-anchor="middle" x="2307.38" y="-144.2" font-family="Times New Roman,serif" font-size="14.00">&lt;containment&gt;</text>
+<title>__main__.ViewGround-&gt;fmdtools.define.block.function.Function</title>
+<path fill="none" stroke="black" d="M1383.27,-186.21C1372.31,-162.51 1357.82,-135.75 1340.52,-114.25 1333.63,-105.68 1325.45,-97.48 1316.98,-89.96"/>
+<polygon fill="none" stroke="black" points="1319.69,-86.82 1309.82,-82.97 1315.14,-92.13 1319.69,-86.82"/>
+<text text-anchor="middle" x="1399.4" y="-132.45" font-family="Times New Roman,serif" font-size="14.00">&lt;inheritance&gt;</text>
+<text text-anchor="middle" x="1399.4" y="-116.7" font-family="Times New Roman,serif" font-size="14.00">base</text>
 </g>
-<!-- rover.fxns.move_rover.static_behavior -->
-<g id="node39" class="node">
-<title>rover.fxns.move_rover.static_behavior</title>
-<polygon fill="lightgrey" stroke="grey" points="2451.75,-123.75 2351,-123.75 2351,-119.75 2347,-119.75 2347,-115.75 2351,-115.75 2351,-95.75 2347,-95.75 2347,-91.75 2351,-91.75 2351,-87.75 2451.75,-87.75 2451.75,-123.75"/>
-<polyline fill="none" stroke="grey" points="2351,-119.75 2355,-119.75 2355,-115.75 2351,-115.75"/>
-<polyline fill="none" stroke="grey" points="2351,-95.75 2355,-95.75 2355,-91.75 2351,-91.75"/>
-<text text-anchor="middle" x="2401.38" y="-100.33" font-family="Times New Roman,serif" font-size="14.00">static_behavior</text>
+<!-- __main__.Communicate -->
+<g id="node19" class="node">
+<title>__main__.Communicate</title>
+<polygon fill="lightgrey" stroke="grey" points="1658.52,-308 1534.52,-308 1534.52,-184 1658.52,-184 1658.52,-308"/>
+<polyline fill="none" stroke="grey" points="1546.52,-308 1534.52,-296"/>
+<polyline fill="none" stroke="grey" points="1534.52,-196 1546.52,-184"/>
+<polyline fill="none" stroke="grey" points="1646.52,-184 1658.52,-196"/>
+<polyline fill="none" stroke="grey" points="1658.52,-296 1646.52,-308"/>
+<text text-anchor="middle" x="1596.52" y="-240.57" font-family="Times New Roman,serif" font-size="14.00">Communicate: type</text>
 </g>
-<!-- rover.fxns.move_rover&#45;&gt;rover.fxns.move_rover.static_behavior -->
-<g id="edge34" class="edge">
-<title>rover.fxns.move_rover-&gt;rover.fxns.move_rover.static_behavior</title>
-<path fill="none" stroke="black" d="M2227.81,-190.58C2265.26,-187.24 2314.73,-178.72 2353.38,-157.5 2368.04,-149.45 2380.85,-135.33 2389.53,-124.02"/>
-<polygon fill="black" stroke="black" points="2227.97,-190.57 2222.29,-195.02 2216,-191.49 2221.68,-187.04 2227.97,-190.57"/>
-<text text-anchor="middle" x="2414.38" y="-144.2" font-family="Times New Roman,serif" font-size="14.00">&lt;containment&gt;</text>
-</g>
-<!-- rover.fxns.view_ground&#45;&gt;rover.flows.ground -->
-<g id="edge48" class="edge">
-<title>rover.fxns.view_ground-&gt;rover.flows.ground</title>
-<path fill="none" stroke="black" d="M1582.25,-174.75C1636.88,-164.31 1656.02,-175.25 1707.38,-157.5 1720.76,-152.87 1752.04,-133.78 1773.21,-120.38"/>
-<polygon fill="none" stroke="black" points="1582.25,-174.75 1577.2,-179.91 1570.51,-177.23 1575.55,-172.08 1582.25,-174.75"/>
-<text text-anchor="middle" x="1758" y="-144.2" font-family="Times New Roman,serif" font-size="14.00">&lt;flow&gt;</text>
-</g>
-<!-- rover.fxns.view_ground&#45;&gt;rover.flows.force -->
-<g id="edge47" class="edge">
-<title>rover.fxns.view_ground-&gt;rover.flows.force</title>
-<path fill="none" stroke="black" d="M1466.76,-175.61C1466.63,-175.57 1466.5,-175.54 1466.38,-175.5 1435.72,-167.03 1416.76,-182.51 1397.12,-157.5 1389.72,-148.07 1389.98,-134.34 1391.84,-123.54"/>
-<polygon fill="none" stroke="black" points="1466.72,-175.59 1473.58,-173.37 1478.27,-178.85 1471.41,-181.07 1466.72,-175.59"/>
-<text text-anchor="middle" x="1418" y="-144.2" font-family="Times New Roman,serif" font-size="14.00">&lt;flow&gt;</text>
-</g>
-<!-- rover.fxns.view_ground&#45;&gt;rover.flows.ee -->
-<g id="edge46" class="edge">
-<title>rover.fxns.view_ground-&gt;rover.flows.ee</title>
-<path fill="none" stroke="black" d="M1582.37,-175.16C1674.06,-163.22 1861.9,-181.82 1933.38,-157.5 1945.02,-153.54 1945.87,-148.54 1956.12,-141.75 1968.15,-133.79 1981.84,-125.11 1992.58,-118.39"/>
-<polygon fill="none" stroke="black" points="1582.32,-175.17 1577,-180.04 1570.46,-177.01 1575.77,-172.14 1582.32,-175.17"/>
-<text text-anchor="middle" x="1976" y="-144.2" font-family="Times New Roman,serif" font-size="14.00">&lt;flow&gt;</text>
-</g>
-<!-- rover.fxns.view_ground&#45;&gt;rover.flows.video -->
-<g id="edge49" class="edge">
-<title>rover.fxns.view_ground-&gt;rover.flows.video</title>
-<path fill="none" stroke="black" d="M1466.77,-175.59C1466.64,-175.56 1466.51,-175.53 1466.38,-175.5 1413.6,-163.87 1395.33,-179.85 1346.12,-157.5 1327.79,-149.17 1310.68,-133.51 1299.51,-121.78"/>
-<polygon fill="none" stroke="black" points="1466.72,-175.57 1473.49,-173.11 1478.38,-178.41 1471.6,-180.88 1466.72,-175.57"/>
-<text text-anchor="middle" x="1367" y="-144.2" font-family="Times New Roman,serif" font-size="14.00">&lt;flow&gt;</text>
-</g>
-<!-- rover.fxns.view_ground&#45;&gt;rover.fxns.view_ground.sp -->
+<!-- __main__.Communicate&#45;&gt;fmdtools.define.block.function.Function -->
 <g id="edge35" class="edge">
-<title>rover.fxns.view_ground-&gt;rover.fxns.view_ground.sp</title>
-<path fill="none" stroke="black" d="M1524.38,-161.85C1524.38,-149.21 1524.38,-135.02 1524.38,-124.2"/>
-<polygon fill="black" stroke="black" points="1524.38,-161.83 1528.38,-167.83 1524.38,-173.83 1520.38,-167.83 1524.38,-161.83"/>
-<text text-anchor="middle" x="1566.38" y="-144.2" font-family="Times New Roman,serif" font-size="14.00">&lt;containment&gt;</text>
+<title>__main__.Communicate-&gt;fmdtools.define.block.function.Function</title>
+<path fill="none" stroke="black" d="M1534.41,-183.8C1507.5,-159.72 1474.62,-133.33 1441.52,-114.25 1403.21,-92.16 1356.1,-75.5 1319.55,-64.56"/>
+<polygon fill="none" stroke="black" points="1320.63,-60.93 1310.05,-61.48 1318.67,-67.65 1320.63,-60.93"/>
+<text text-anchor="middle" x="1526.4" y="-132.45" font-family="Times New Roman,serif" font-size="14.00">&lt;inheritance&gt;</text>
+<text text-anchor="middle" x="1526.4" y="-116.7" font-family="Times New Roman,serif" font-size="14.00">base</text>
 </g>
-<!-- rover.fxns.view_ground&#45;&gt;rover.fxns.view_ground.t -->
-<g id="edge36" class="edge">
-<title>rover.fxns.view_ground-&gt;rover.fxns.view_ground.t</title>
-<path fill="none" stroke="black" d="M1581.73,-172.57C1593.96,-167.5 1604.63,-162.16 1609.38,-157.5 1618.56,-148.49 1624.15,-135 1627.4,-124.2"/>
-<polygon fill="black" stroke="black" points="1581.67,-172.6 1577.56,-178.52 1570.51,-177 1574.62,-171.08 1581.67,-172.6"/>
-<text text-anchor="middle" x="1661.38" y="-144.2" font-family="Times New Roman,serif" font-size="14.00">&lt;containment&gt;</text>
+<!-- fmdtools.define.block.base.SimParam -->
+<g id="node20" class="node">
+<title>fmdtools.define.block.base.SimParam</title>
+<polygon fill="lightgrey" stroke="grey" points="1832.02,-309.5 1705.02,-309.5 1705.02,-182.5 1832.02,-182.5 1832.02,-309.5"/>
+<polyline fill="none" stroke="grey" points="1717.02,-309.5 1705.02,-297.5"/>
+<polyline fill="none" stroke="grey" points="1705.02,-194.5 1717.02,-182.5"/>
+<polyline fill="none" stroke="grey" points="1820.02,-182.5 1832.02,-194.5"/>
+<polyline fill="none" stroke="grey" points="1832.02,-297.5 1820.02,-309.5"/>
+<text text-anchor="middle" x="1768.52" y="-240.57" font-family="Times New Roman,serif" font-size="14.00">SimParam: datatype</text>
 </g>
-<!-- rover.fxns.communicate&#45;&gt;rover.flows.ee -->
-<g id="edge51" class="edge">
-<title>rover.fxns.communicate-&gt;rover.flows.ee</title>
-<path fill="none" stroke="black" d="M2839.1,-168.18C2820.5,-157.98 2797.54,-147.24 2775.38,-141.75 2636.84,-107.42 2275.6,-135.62 2133.38,-123.75 2099.92,-120.96 2061.61,-115.2 2036.99,-111.16"/>
-<polygon fill="none" stroke="black" points="2839.13,-168.2 2846.32,-167.68 2849.57,-174.12 2842.37,-174.64 2839.13,-168.2"/>
-<text text-anchor="middle" x="2837" y="-144.2" font-family="Times New Roman,serif" font-size="14.00">&lt;flow&gt;</text>
+<!-- fmdtools.define.container.time.Time -->
+<g id="node21" class="node">
+<title>fmdtools.define.container.time.Time</title>
+<polygon fill="lightgrey" stroke="grey" points="1948.77,-295.25 1850.27,-295.25 1850.27,-196.75 1948.77,-196.75 1948.77,-295.25"/>
+<polyline fill="none" stroke="grey" points="1862.27,-295.25 1850.27,-283.25"/>
+<polyline fill="none" stroke="grey" points="1850.27,-208.75 1862.27,-196.75"/>
+<polyline fill="none" stroke="grey" points="1936.77,-196.75 1948.77,-208.75"/>
+<polyline fill="none" stroke="grey" points="1948.77,-283.25 1936.77,-295.25"/>
+<text text-anchor="middle" x="1899.52" y="-240.57" font-family="Times New Roman,serif" font-size="14.00">Time: datatype</text>
 </g>
-<!-- rover.fxns.communicate&#45;&gt;rover.flows.comms -->
-<g id="edge50" class="edge">
-<title>rover.fxns.communicate-&gt;rover.flows.comms</title>
-<path fill="none" stroke="black" d="M2937.07,-189.04C2974.22,-185.01 3022.42,-176.3 3061.38,-157.5 3079.14,-148.93 3095.83,-133.62 3106.9,-122.06"/>
-<polygon fill="none" stroke="black" points="2937.27,-189.02 2931.68,-193.59 2925.32,-190.19 2930.9,-185.63 2937.27,-189.02"/>
-<text text-anchor="middle" x="3105" y="-144.2" font-family="Times New Roman,serif" font-size="14.00">&lt;flow&gt;</text>
+<!-- fmdtools.define.architecture.function.FunctionArchitecture -->
+<g id="node23" class="node">
+<title>fmdtools.define.architecture.function.FunctionArchitecture</title>
+<polygon fill="lightgrey" stroke="grey" points="871.77,-328.25 707.27,-328.25 707.27,-163.75 871.77,-163.75 871.77,-328.25"/>
+<polyline fill="none" stroke="grey" points="719.27,-328.25 707.27,-316.25"/>
+<polyline fill="none" stroke="grey" points="707.27,-175.75 719.27,-163.75"/>
+<polyline fill="none" stroke="grey" points="859.77,-163.75 871.77,-175.75"/>
+<polyline fill="none" stroke="grey" points="871.77,-316.25 859.77,-328.25"/>
+<text text-anchor="middle" x="789.52" y="-240.57" font-family="Times New Roman,serif" font-size="14.00">FunctionArchitecture: type</text>
 </g>
-<!-- rover.fxns.communicate&#45;&gt;rover.fxns.communicate.sp -->
-<g id="edge37" class="edge">
-<title>rover.fxns.communicate-&gt;rover.fxns.communicate.sp</title>
-<path fill="none" stroke="black" d="M2878.38,-161.85C2878.38,-149.21 2878.38,-135.02 2878.38,-124.2"/>
-<polygon fill="black" stroke="black" points="2878.38,-161.83 2882.38,-167.83 2878.38,-173.83 2874.38,-167.83 2878.38,-161.83"/>
-<text text-anchor="middle" x="2920.38" y="-144.2" font-family="Times New Roman,serif" font-size="14.00">&lt;containment&gt;</text>
-</g>
-<!-- rover.fxns.communicate&#45;&gt;rover.fxns.communicate.t -->
+<!-- __main__.Rover&#45;&gt;fmdtools.define.architecture.function.FunctionArchitecture -->
 <g id="edge38" class="edge">
-<title>rover.fxns.communicate-&gt;rover.fxns.communicate.t</title>
-<path fill="none" stroke="black" d="M2935.92,-175.96C2945.92,-171.19 2955.6,-165.13 2963.38,-157.5 2972.56,-148.49 2978.15,-135 2981.4,-124.2"/>
-<polygon fill="black" stroke="black" points="2935.98,-175.93 2932.03,-181.96 2924.94,-180.63 2928.89,-174.6 2935.98,-175.93"/>
-<text text-anchor="middle" x="3015.38" y="-144.2" font-family="Times New Roman,serif" font-size="14.00">&lt;containment&gt;</text>
+<title>__main__.Rover-&gt;fmdtools.define.architecture.function.FunctionArchitecture</title>
+<path fill="none" stroke="black" d="M756.23,-399.91C760.07,-382.26 764.76,-360.71 769.4,-339.42"/>
+<polygon fill="none" stroke="black" points="773.03,-340.19 771.74,-329.68 766.19,-338.7 773.03,-340.19"/>
+<text text-anchor="middle" x="805.4" y="-366.7" font-family="Times New Roman,serif" font-size="14.00">&lt;inheritance&gt;</text>
+<text text-anchor="middle" x="805.4" y="-350.95" font-family="Times New Roman,serif" font-size="14.00">base</text>
+</g>
+<!-- rover.fxns.control_rover&#45;&gt;__main__.ControlRover -->
+<g id="edge26" class="edge">
+<title>rover.fxns.control_rover-&gt;__main__.ControlRover</title>
+<path fill="none" stroke="black" d="M900.71,-422.08C908.85,-398.63 923.66,-356.01 936.62,-318.69"/>
+<polygon fill="none" stroke="black" points="940.25,-319.92 940.22,-309.33 933.63,-317.62 940.25,-319.92"/>
+<text text-anchor="middle" x="964.4" y="-366.7" font-family="Times New Roman,serif" font-size="14.00">&lt;inheritance&gt;</text>
+<text text-anchor="middle" x="964.4" y="-350.95" font-family="Times New Roman,serif" font-size="14.00">base</text>
+</g>
+<!-- rover.fxns.store_energy&#45;&gt;__main__.StoreEnergy -->
+<g id="edge28" class="edge">
+<title>rover.fxns.store_energy-&gt;__main__.StoreEnergy</title>
+<path fill="none" stroke="black" d="M1085.85,-422.08C1090.38,-397.78 1098.76,-352.89 1105.9,-314.64"/>
+<polygon fill="none" stroke="black" points="1109.48,-315.53 1107.88,-305.05 1102.6,-314.24 1109.48,-315.53"/>
+<text text-anchor="middle" x="1137.4" y="-366.7" font-family="Times New Roman,serif" font-size="14.00">&lt;inheritance&gt;</text>
+<text text-anchor="middle" x="1137.4" y="-350.95" font-family="Times New Roman,serif" font-size="14.00">base</text>
+</g>
+<!-- rover.fxns.move_rover&#45;&gt;__main__.MoveRover -->
+<g id="edge30" class="edge">
+<title>rover.fxns.move_rover-&gt;__main__.MoveRover</title>
+<path fill="none" stroke="black" d="M1260.52,-422.08C1260.52,-397.61 1260.52,-352.25 1260.52,-313.84"/>
+<polygon fill="none" stroke="black" points="1264.02,-314.21 1260.52,-304.21 1257.02,-314.21 1264.02,-314.21"/>
+<text text-anchor="middle" x="1298.4" y="-366.7" font-family="Times New Roman,serif" font-size="14.00">&lt;inheritance&gt;</text>
+<text text-anchor="middle" x="1298.4" y="-350.95" font-family="Times New Roman,serif" font-size="14.00">base</text>
+</g>
+<!-- rover.fxns.view_ground&#45;&gt;__main__.ViewGround -->
+<g id="edge32" class="edge">
+<title>rover.fxns.view_ground-&gt;__main__.ViewGround</title>
+<path fill="none" stroke="black" d="M1437.39,-422.08C1433.16,-398.12 1425.41,-354.14 1418.73,-316.26"/>
+<polygon fill="none" stroke="black" points="1422.06,-315.99 1416.88,-306.75 1415.17,-317.21 1422.06,-315.99"/>
+<text text-anchor="middle" x="1468.4" y="-366.7" font-family="Times New Roman,serif" font-size="14.00">&lt;inheritance&gt;</text>
+<text text-anchor="middle" x="1468.4" y="-350.95" font-family="Times New Roman,serif" font-size="14.00">base</text>
+</g>
+<!-- rover.fxns.communicate&#45;&gt;__main__.Communicate -->
+<g id="edge34" class="edge">
+<title>rover.fxns.communicate-&gt;__main__.Communicate</title>
+<path fill="none" stroke="black" d="M1626.48,-422.08C1622.47,-398.63 1615.18,-356.01 1608.79,-318.69"/>
+<polygon fill="none" stroke="black" points="1612.15,-318.59 1607.02,-309.33 1605.25,-319.77 1612.15,-318.59"/>
+<text text-anchor="middle" x="1657.4" y="-366.7" font-family="Times New Roman,serif" font-size="14.00">&lt;inheritance&gt;</text>
+<text text-anchor="middle" x="1657.4" y="-350.95" font-family="Times New Roman,serif" font-size="14.00">base</text>
+</g>
+<!-- rover.sp&#45;&gt;fmdtools.define.block.base.SimParam -->
+<g id="edge36" class="edge">
+<title>rover.sp-&gt;fmdtools.define.block.base.SimParam</title>
+<path fill="none" stroke="black" d="M1780.35,-422.42C1778.8,-399.46 1775.99,-357.69 1773.49,-320.67"/>
+<polygon fill="none" stroke="black" points="1776.93,-320.61 1772.76,-310.87 1769.94,-321.08 1776.93,-320.61"/>
+<text text-anchor="middle" x="1815.4" y="-366.7" font-family="Times New Roman,serif" font-size="14.00">&lt;inheritance&gt;</text>
+<text text-anchor="middle" x="1815.4" y="-350.95" font-family="Times New Roman,serif" font-size="14.00">base</text>
+</g>
+<!-- rover.t&#45;&gt;fmdtools.define.container.time.Time -->
+<g id="edge37" class="edge">
+<title>rover.t-&gt;fmdtools.define.container.time.Time</title>
+<path fill="none" stroke="black" d="M1889.52,-422.42C1891,-396.43 1893.86,-346.32 1896.14,-306.29"/>
+<polygon fill="none" stroke="black" points="1899.68,-306.74 1896.76,-296.56 1892.69,-306.34 1899.68,-306.74"/>
+<text text-anchor="middle" x="1932.4" y="-366.7" font-family="Times New Roman,serif" font-size="14.00">&lt;inheritance&gt;</text>
+<text text-anchor="middle" x="1932.4" y="-350.95" font-family="Times New Roman,serif" font-size="14.00">base</text>
 </g>
 </g>
 </svg>
