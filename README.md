@@ -46,9 +46,9 @@ The fmdtools library is developed in Python 3.11 but tested to maintain compatib
 
 | Python Version    | Tests |
 | -------- | ------- |
-| 3.10  | [![Python 3.10 Tests](.reports/doctests-310/tests-badge.svg)](https://htmlpreview.github.io/?https://github.com/nasa/fmdtools/blob/main/reports/doctests-310/junit/report.html)   |
-| 3.11 | [![Python 3.11 Tests](./reports/doctests-311/tests-badge.svg)](https://htmlpreview.github.io/?https://github.com/nasa/fmdtools/blob/main/reports/doctests-311/junit/report.html)    |
-| 3.12    | [![Python 3.12 Tests](./reports/doctests-312/tests-badge.svg)](https://htmlpreview.github.io/?https://github.com/nasa/fmdtools/blob/main/reports/doctests-312/junit/report.html)   |
+| 3.10  | [![Python 3.10 Tests](.reports/doctests-py310/tests-badge.svg)](https://htmlpreview.github.io/?https://github.com/nasa/fmdtools/blob/main/reports/doctests-310/junit/report.html)   |
+| 3.11 | [![Python 3.11 Tests](./reports/doctests-py311/tests-badge.svg)](https://htmlpreview.github.io/?https://github.com/nasa/fmdtools/blob/main/reports/doctests-311/junit/report.html)    |
+| 3.12    | [![Python 3.12 Tests](./reports/doctests-py312/tests-badge.svg)](https://htmlpreview.github.io/?https://github.com/nasa/fmdtools/blob/main/reports/doctests-312/junit/report.html)   |
 
 It is generally reccommended to use Python 3.11 to keep pace with development, especially when running examples, which are only tested in this environment.
 
