@@ -7,14 +7,15 @@
 [![GitHub release (latest by date)](https://img.shields.io/github/v/release/nasa/fmdtools?label=GitHub%20Release)](https://github.com/nasa/fmdtools/releases)
 [![GitHub Tag](https://img.shields.io/github/v/tag/nasa/fmdtools)](https://github.com/nasa/fmdtools/tags)
 [![CodeFactor](https://www.codefactor.io/repository/github/nasa/fmdtools/badge)](https://www.codefactor.io/repository/github/nasa/fmdtools)
-[![Tests Status](./tests-badge.svg)](https://htmlpreview.github.io/?https://github.com/nasa/fmdtools/blob/main/reports/junit/report.html)
-[![Tests Coverage](./coverage-badge.svg)](https://htmlpreview.github.io/?https://github.com/nasa/fmdtools/blob/main/reports/coverage/index.html)
+[![Tests Status](./reports/full-py311/tests-badge.svg)](https://htmlpreview.github.io/?https://github.com/nasa/fmdtools/blob/main/reports/full-py311/junit/report.html)
+[![Tests Coverage](./reports/full-py311/coverage-badge.svg)](https://htmlpreview.github.io/?https://github.com/nasa/fmdtools/blob/main/reports/full-py311/coverage/index.html)
 [![GitHub License](https://img.shields.io/badge/License-Apache%202.0-green)](https://github.com/nasa/fmdtools/blob/main/LICENSE)
 [![NASA Software Classification](https://img.shields.io/badge/Software_Class-E-blue)](https://nodis3.gsfc.nasa.gov/displayDir.cfm?Internal_ID=N_PR_7150_002D_&page_name=AppendixD)
 
 **fmdtools** (Fault Model Design tools) is a Python library for modelling, simulating, and analyzing the resilience of complex systems. With fmdtools, you can (1) represent system structure and behavior in a model, (2) simulate the dynamic effects of hazardous scenarios on the system, and (3) analyze the results of simulations to understand and improve system resilience.
 
 [Click here to view the the full documentation website.](https://nasa.github.io/fmdtools)
+
 
 ## About
 
@@ -38,6 +39,18 @@ Readily-deployable analysis methods are built in to fmdtools to enable the rapid
 
 
 ## Getting Started
+
+### Python version compatibility
+
+The fmdtools library is developed in Python 3.11 but tested to maintain compatibility over three versions of Python at a time, see current test reports below:
+
+| Python Version    | Tests |
+| -------- | ------- |
+| 3.10  | [![Python 3.10 Tests](.reports/doctests-310/tests-badge.svg)](https://htmlpreview.github.io/?https://github.com/nasa/fmdtools/blob/main/reports/doctests-310/junit/report.html)   |
+| 3.11 | [![Python 3.11 Tests](./reports/doctests-311/tests-badge.svg)](https://htmlpreview.github.io/?https://github.com/nasa/fmdtools/blob/main/reports/doctests-311/junit/report.html)    |
+| 3.12    | [![Python 3.12 Tests](./reports/doctests-312/tests-badge.svg)](https://htmlpreview.github.io/?https://github.com/nasa/fmdtools/blob/main/reports/doctests-312/junit/report.html)   |
+
+It is generally reccommended to use Python 3.11 to keep pace with development, especially when running examples, which are only tested in this environment.
 
 ### Set up python environment
 
@@ -82,7 +95,7 @@ This may then be installed using:
 Note that this version reflects the latest version on the ``main`` git branch along with any local changes. To use a particular version of ``fmdtools`` you can checkout the tag corresponding to the version you want, e.g.:
 
 ```
-   git checkout v2.0.3
+   git checkout v2.0.4
 ```
 
 
@@ -107,7 +120,7 @@ ordered-set
 # license: (MIT) https://github.com/rspeer/ordered-set/blob/master/MIT-LICENSE
 dill 
 # license: (MIT) https://github.com/uqfoundation/dill/blob/master/LICENSE
-recordclass == 0.21.1
+recordclass == 0.22.1
 # license: (MIT) https://github.com/intellimath/recordclass/blob/main/LICENSE.txt
 pytest
 # license: (MIT) https://docs.pytest.org/en/7.3.x/license.html
@@ -220,8 +233,8 @@ To cite a particular version of the fmdtools, you may use:
   author = {{NASA}},
   title = {fmdtools},
   url = {https://github.com/nasa/fmdtools},
-  version = {2.0.3}, # <- replace with your version number
-  date = {2024-08-22},
+  version = {2.0.4}, # <- replace with your version number
+  date = {2024-10-25},
 }
 ```
 

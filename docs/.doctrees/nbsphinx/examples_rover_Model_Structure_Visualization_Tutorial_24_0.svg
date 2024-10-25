@@ -7,83 +7,70 @@
 <polygon fill="lightgrey" stroke="grey" points="532.1,-439 464.9,-403.38 599.3,-403.38 532.1,-439"/>
 <text text-anchor="middle" x="532.1" y="-409.82" font-family="Times New Roman,serif" font-size="14.00">Rover</text>
 </g>
-<!-- ControlRover -->
-<g id="node2" class="node">
-<title>ControlRover</title>
-<ellipse fill="none" stroke="grey" stroke-width="2" cx="811.1" cy="-213.75" rx="62.04" ry="18"/>
-<text text-anchor="middle" x="811.1" y="-208.32" font-family="Times New Roman,serif" font-size="14.00">ControlRover</text>
-</g>
-<!-- Rover&#45;&gt;ControlRover -->
-<g id="edge1" class="edge">
-<title>Rover-&gt;ControlRover</title>
-<path fill="none" stroke="black" d="M573.9,-398.07C613.14,-381.72 672.35,-353.98 717.1,-319.5 750.78,-293.55 782.1,-254.49 798.71,-232.12"/>
-<polygon fill="black" stroke="black" points="573.85,-398.09 569.8,-404.07 562.74,-402.63 566.78,-396.66 573.85,-398.09"/>
-<text text-anchor="middle" x="776.1" y="-306.2" font-family="Times New Roman,serif" font-size="14.00">&lt;containment&gt;</text>
-</g>
 <!-- ViewGround -->
-<g id="node3" class="node">
+<g id="node2" class="node">
 <title>ViewGround</title>
 <ellipse fill="none" stroke="grey" stroke-width="2" cx="161.1" cy="-213.75" rx="58.55" ry="18"/>
 <text text-anchor="middle" x="161.1" y="-208.32" font-family="Times New Roman,serif" font-size="14.00">ViewGround</text>
 </g>
 <!-- Rover&#45;&gt;ViewGround -->
-<g id="edge2" class="edge">
+<g id="edge1" class="edge">
 <title>Rover-&gt;ViewGround</title>
 <path fill="none" stroke="black" d="M498.19,-397.08C461.33,-378.33 400.77,-347.27 349.1,-319.5 291.67,-288.64 225.18,-251.18 188.67,-230.46"/>
 <polygon fill="black" stroke="black" points="498.23,-397.1 505.39,-396.25 508.93,-402.54 501.77,-403.39 498.23,-397.1"/>
 <text text-anchor="middle" x="391.1" y="-306.2" font-family="Times New Roman,serif" font-size="14.00">&lt;containment&gt;</text>
 </g>
-<!-- StoreEnergy -->
-<g id="node4" class="node">
-<title>StoreEnergy</title>
-<ellipse fill="none" stroke="grey" stroke-width="2" cx="532.1" cy="-213.75" rx="56.55" ry="18"/>
-<text text-anchor="middle" x="532.1" y="-208.32" font-family="Times New Roman,serif" font-size="14.00">StoreEnergy</text>
-</g>
-<!-- Rover&#45;&gt;StoreEnergy -->
-<g id="edge3" class="edge">
-<title>Rover-&gt;StoreEnergy</title>
-<path fill="none" stroke="black" d="M532.1,-389.94C532.1,-349.25 532.1,-268.3 532.1,-232.49"/>
-<polygon fill="black" stroke="black" points="532.1,-390.05 536.1,-396.05 532.1,-402.05 528.1,-396.05 532.1,-390.05"/>
-<text text-anchor="middle" x="574.1" y="-306.2" font-family="Times New Roman,serif" font-size="14.00">&lt;containment&gt;</text>
-</g>
 <!-- MoveRover -->
-<g id="node5" class="node">
+<g id="node3" class="node">
 <title>MoveRover</title>
 <ellipse fill="none" stroke="grey" stroke-width="2" cx="402.1" cy="-213.75" rx="55.06" ry="18"/>
 <text text-anchor="middle" x="402.1" y="-208.32" font-family="Times New Roman,serif" font-size="14.00">MoveRover</text>
 </g>
 <!-- Rover&#45;&gt;MoveRover -->
-<g id="edge4" class="edge">
+<g id="edge2" class="edge">
 <title>Rover-&gt;MoveRover</title>
 <path fill="none" stroke="black" d="M509.27,-394.22C489.87,-376.22 462.34,-348.27 444.1,-319.5 426.16,-291.2 413.45,-253.97 406.98,-232.37"/>
 <polygon fill="black" stroke="black" points="509.29,-394.23 516.42,-395.3 518.18,-402.3 511.05,-401.23 509.29,-394.23"/>
 <text text-anchor="middle" x="486.1" y="-306.2" font-family="Times New Roman,serif" font-size="14.00">&lt;containment&gt;</text>
 </g>
+<!-- ControlRover -->
+<g id="node4" class="node">
+<title>ControlRover</title>
+<ellipse fill="none" stroke="grey" stroke-width="2" cx="811.1" cy="-213.75" rx="62.04" ry="18"/>
+<text text-anchor="middle" x="811.1" y="-208.32" font-family="Times New Roman,serif" font-size="14.00">ControlRover</text>
+</g>
+<!-- Rover&#45;&gt;ControlRover -->
+<g id="edge3" class="edge">
+<title>Rover-&gt;ControlRover</title>
+<path fill="none" stroke="black" d="M573.9,-398.07C613.14,-381.72 672.35,-353.98 717.1,-319.5 750.78,-293.55 782.1,-254.49 798.71,-232.12"/>
+<polygon fill="black" stroke="black" points="573.85,-398.09 569.8,-404.07 562.74,-402.63 566.78,-396.66 573.85,-398.09"/>
+<text text-anchor="middle" x="777.1" y="-306.2" font-family="Times New Roman,serif" font-size="14.00">&lt;containment&gt;</text>
+</g>
 <!-- Communicate -->
-<g id="node6" class="node">
+<g id="node5" class="node">
 <title>Communicate</title>
 <ellipse fill="none" stroke="grey" stroke-width="2" cx="669.1" cy="-213.75" rx="62.04" ry="18"/>
 <text text-anchor="middle" x="669.1" y="-208.32" font-family="Times New Roman,serif" font-size="14.00">Communicate</text>
 </g>
 <!-- Rover&#45;&gt;Communicate -->
-<g id="edge5" class="edge">
+<g id="edge4" class="edge">
 <title>Rover-&gt;Communicate</title>
 <path fill="none" stroke="black" d="M554.21,-394.26C573.37,-376.11 600.96,-347.91 620.1,-319.5 639.29,-291.03 654.7,-253.86 662.83,-232.31"/>
 <polygon fill="black" stroke="black" points="554.24,-394.23 552.57,-401.25 545.45,-402.4 547.12,-395.39 554.24,-394.23"/>
 <text text-anchor="middle" x="671.1" y="-306.2" font-family="Times New Roman,serif" font-size="14.00">&lt;containment&gt;</text>
 </g>
-<!-- Control -->
-<g id="node9" class="node">
-<title>Control</title>
-<ellipse fill="lightgrey" stroke="grey" stroke-width="0" cx="609.1" cy="-18" rx="39.09" ry="18"/>
-<text text-anchor="middle" x="609.1" y="-12.57" font-family="Times New Roman,serif" font-size="14.00">Control</text>
+<!-- StoreEnergy -->
+<g id="node6" class="node">
+<title>StoreEnergy</title>
+<ellipse fill="none" stroke="grey" stroke-width="2" cx="532.1" cy="-213.75" rx="56.55" ry="18"/>
+<text text-anchor="middle" x="532.1" y="-208.32" font-family="Times New Roman,serif" font-size="14.00">StoreEnergy</text>
 </g>
-<!-- ControlRover&#45;&gt;Control -->
-<g id="edge6" class="edge">
-<title>ControlRover-&gt;Control</title>
-<path fill="none" stroke="black" d="M803.14,-182.65C795.93,-160.02 783.44,-129.37 764.1,-108 729.01,-69.24 672.96,-42.94 638.75,-29.5"/>
-<polygon fill="none" stroke="black" points="803.11,-182.55 808.65,-187.16 806.52,-194.05 800.98,-189.44 803.11,-182.55"/>
-<text text-anchor="middle" x="795.73" y="-110.45" font-family="Times New Roman,serif" font-size="14.00">&lt;flow&gt;</text>
+<!-- Rover&#45;&gt;StoreEnergy -->
+<g id="edge5" class="edge">
+<title>Rover-&gt;StoreEnergy</title>
+<path fill="none" stroke="black" d="M532.1,-389.94C532.1,-349.25 532.1,-268.3 532.1,-232.49"/>
+<polygon fill="black" stroke="black" points="532.1,-390.05 536.1,-396.05 532.1,-402.05 528.1,-396.05 532.1,-390.05"/>
+<text text-anchor="middle" x="574.1" y="-306.2" font-family="Times New Roman,serif" font-size="14.00">&lt;containment&gt;</text>
 </g>
 <!-- Video -->
 <g id="node7" class="node">
@@ -92,112 +79,125 @@
 <text text-anchor="middle" x="33.1" y="-12.57" font-family="Times New Roman,serif" font-size="14.00">Video</text>
 </g>
 <!-- ViewGround&#45;&gt;Video -->
-<g id="edge7" class="edge">
+<g id="edge9" class="edge">
 <title>ViewGround-&gt;Video</title>
-<path fill="none" stroke="black" d="M121.09,-190.69C96.85,-175.18 67.48,-152.15 50.85,-123.75 34.63,-96.05 32.26,-57.62 32.4,-35.83"/>
-<polygon fill="none" stroke="black" points="121.16,-190.73 128.37,-190.46 131.39,-197.01 124.18,-197.28 121.16,-190.73"/>
-<text text-anchor="middle" x="71.73" y="-110.45" font-family="Times New Roman,serif" font-size="14.00">&lt;flow&gt;</text>
+<path fill="none" stroke="black" d="M120.17,-190.52C95.76,-175.07 66.4,-152.17 49.85,-123.75 33.72,-96.06 31.78,-57.62 32.19,-35.83"/>
+<polygon fill="none" stroke="black" points="120.29,-190.6 127.5,-190.3 130.55,-196.83 123.34,-197.13 120.29,-190.6"/>
+<text text-anchor="middle" x="70.73" y="-110.45" font-family="Times New Roman,serif" font-size="14.00">&lt;flow&gt;</text>
 </g>
 <!-- EE -->
 <g id="node8" class="node">
 <title>EE</title>
-<ellipse fill="lightgrey" stroke="grey" stroke-width="0" cx="445.1" cy="-18" rx="27" ry="18"/>
-<text text-anchor="middle" x="445.1" y="-12.57" font-family="Times New Roman,serif" font-size="14.00">EE</text>
+<ellipse fill="lightgrey" stroke="grey" stroke-width="0" cx="442.1" cy="-18" rx="27" ry="18"/>
+<text text-anchor="middle" x="442.1" y="-12.57" font-family="Times New Roman,serif" font-size="14.00">EE</text>
 </g>
 <!-- ViewGround&#45;&gt;EE -->
-<g id="edge8" class="edge">
+<g id="edge6" class="edge">
 <title>ViewGround-&gt;EE</title>
-<path fill="none" stroke="black" d="M195.41,-189.34C256.25,-147.84 380.99,-62.74 427.29,-31.15"/>
-<polygon fill="none" stroke="black" points="195.48,-189.29 192.78,-195.98 185.57,-196.06 188.27,-189.37 195.48,-189.29"/>
-<text text-anchor="middle" x="332.73" y="-110.45" font-family="Times New Roman,serif" font-size="14.00">&lt;flow&gt;</text>
-</g>
-<!-- Ground -->
-<g id="node10" class="node">
-<title>Ground</title>
-<ellipse fill="lightgrey" stroke="grey" stroke-width="0" cx="325.1" cy="-18" rx="39.59" ry="18"/>
-<text text-anchor="middle" x="325.1" y="-12.57" font-family="Times New Roman,serif" font-size="14.00">Ground</text>
-</g>
-<!-- ViewGround&#45;&gt;Ground -->
-<g id="edge9" class="edge">
-<title>ViewGround-&gt;Ground</title>
-<path fill="none" stroke="black" d="M153.56,-182.32C149.81,-160.15 148.54,-130.23 161.85,-108 189.79,-61.33 251.67,-37.54 290.71,-26.73"/>
-<polygon fill="none" stroke="black" points="153.56,-182.34 158.66,-187.43 155.92,-194.1 150.82,-189.01 153.56,-182.34"/>
-<text text-anchor="middle" x="182.73" y="-110.45" font-family="Times New Roman,serif" font-size="14.00">&lt;flow&gt;</text>
+<path fill="none" stroke="black" d="M195.02,-189.36C255.05,-147.97 378.03,-63.18 424.12,-31.4"/>
+<polygon fill="none" stroke="black" points="195.2,-189.24 192.53,-195.94 185.32,-196.05 187.99,-189.35 195.2,-189.24"/>
+<text text-anchor="middle" x="330.73" y="-110.45" font-family="Times New Roman,serif" font-size="14.00">&lt;flow&gt;</text>
 </g>
 <!-- Force -->
-<g id="node12" class="node">
+<g id="node11" class="node">
 <title>Force</title>
-<ellipse fill="lightgrey" stroke="grey" stroke-width="0" cx="171.1" cy="-18" rx="32.6" ry="18"/>
-<text text-anchor="middle" x="171.1" y="-12.57" font-family="Times New Roman,serif" font-size="14.00">Force</text>
+<ellipse fill="lightgrey" stroke="grey" stroke-width="0" cx="327.1" cy="-18" rx="32.6" ry="18"/>
+<text text-anchor="middle" x="327.1" y="-12.57" font-family="Times New Roman,serif" font-size="14.00">Force</text>
 </g>
 <!-- ViewGround&#45;&gt;Force -->
-<g id="edge10" class="edge">
+<g id="edge7" class="edge">
 <title>ViewGround-&gt;Force</title>
-<path fill="none" stroke="black" d="M130.54,-187.75C109.59,-167.39 87.34,-137.31 97.85,-108 108.93,-77.11 135.87,-49.27 153.81,-33.25"/>
-<polygon fill="none" stroke="black" points="130.45,-187.67 137.57,-188.77 139.29,-195.78 132.16,-194.67 130.45,-187.67"/>
+<path fill="none" stroke="black" d="M153.52,-182.3C149.76,-160.12 148.49,-130.19 161.85,-108 191.43,-58.87 258.45,-35.23 297.44,-25.25"/>
+<polygon fill="none" stroke="black" points="153.53,-182.33 158.64,-187.42 155.9,-194.09 150.79,-189 153.53,-182.33"/>
+<text text-anchor="middle" x="182.73" y="-110.45" font-family="Times New Roman,serif" font-size="14.00">&lt;flow&gt;</text>
+</g>
+<!-- Ground -->
+<g id="node12" class="node">
+<title>Ground</title>
+<ellipse fill="lightgrey" stroke="grey" stroke-width="0" cx="175.1" cy="-18" rx="39.59" ry="18"/>
+<text text-anchor="middle" x="175.1" y="-12.57" font-family="Times New Roman,serif" font-size="14.00">Ground</text>
+</g>
+<!-- ViewGround&#45;&gt;Ground -->
+<g id="edge8" class="edge">
+<title>ViewGround-&gt;Ground</title>
+<path fill="none" stroke="black" d="M130.33,-187.68C109.27,-167.27 86.96,-137.17 97.85,-108 109.45,-76.95 137.3,-49.56 156.19,-33.63"/>
+<polygon fill="none" stroke="black" points="130.28,-187.63 137.4,-188.72 139.13,-195.72 132.01,-194.63 130.28,-187.63"/>
 <text text-anchor="middle" x="118.73" y="-110.45" font-family="Times New Roman,serif" font-size="14.00">&lt;flow&gt;</text>
 </g>
-<!-- StoreEnergy&#45;&gt;EE -->
-<g id="edge12" class="edge">
-<title>StoreEnergy-&gt;EE</title>
-<path fill="none" stroke="black" d="M514.29,-184.24C504.03,-167.1 491.32,-144.63 481.85,-123.75 468.16,-93.56 456.28,-56.65 449.95,-35.68"/>
-<polygon fill="none" stroke="black" points="514.24,-184.15 520.77,-187.19 520.47,-194.4 513.94,-191.35 514.24,-184.15"/>
-<text text-anchor="middle" x="502.73" y="-110.45" font-family="Times New Roman,serif" font-size="14.00">&lt;flow&gt;</text>
-</g>
-<!-- StoreEnergy&#45;&gt;Control -->
-<g id="edge11" class="edge">
-<title>StoreEnergy-&gt;Control</title>
-<path fill="none" stroke="black" d="M552.69,-185.07C564.37,-168.15 578.36,-145.61 587.1,-123.75 598.96,-94.07 604.82,-56.99 607.38,-35.85"/>
-<polygon fill="none" stroke="black" points="552.89,-184.8 552.68,-192.01 545.95,-194.59 546.15,-187.38 552.89,-184.8"/>
-<text text-anchor="middle" x="612.73" y="-110.45" font-family="Times New Roman,serif" font-size="14.00">&lt;flow&gt;</text>
-</g>
 <!-- MoveRover&#45;&gt;EE -->
-<g id="edge14" class="edge">
+<g id="edge11" class="edge">
 <title>MoveRover-&gt;EE</title>
-<path fill="none" stroke="black" d="M405.52,-181.89C408.15,-160.91 412.27,-132.6 417.85,-108 423.68,-82.31 433.13,-53.26 439.23,-35.53"/>
-<polygon fill="none" stroke="black" points="405.51,-182 408.77,-188.43 404.09,-193.91 400.83,-187.48 405.51,-182"/>
+<path fill="none" stroke="black" d="M405.77,-181.94C408.5,-160.98 412.65,-132.68 417.85,-108 423.23,-82.46 431.59,-53.36 436.95,-35.59"/>
+<polygon fill="none" stroke="black" points="405.76,-182.04 408.98,-188.5 404.26,-193.95 401.04,-187.5 405.76,-182.04"/>
 <text text-anchor="middle" x="438.73" y="-110.45" font-family="Times New Roman,serif" font-size="14.00">&lt;flow&gt;</text>
 </g>
+<!-- Control -->
+<g id="node10" class="node">
+<title>Control</title>
+<ellipse fill="lightgrey" stroke="grey" stroke-width="0" cx="609.1" cy="-18" rx="39.09" ry="18"/>
+<text text-anchor="middle" x="609.1" y="-12.57" font-family="Times New Roman,serif" font-size="14.00">Control</text>
+</g>
 <!-- MoveRover&#45;&gt;Control -->
-<g id="edge13" class="edge">
+<g id="edge10" class="edge">
 <title>MoveRover-&gt;Control</title>
 <path fill="none" stroke="black" d="M438,-189.82C463.09,-173 496.68,-148.8 523.1,-123.75 553.15,-95.26 582.53,-56.43 597.96,-34.95"/>
 <polygon fill="none" stroke="black" points="437.9,-189.9 435.1,-196.54 427.89,-196.51 430.68,-189.87 437.9,-189.9"/>
 <text text-anchor="middle" x="559.73" y="-110.45" font-family="Times New Roman,serif" font-size="14.00">&lt;flow&gt;</text>
 </g>
-<!-- MoveRover&#45;&gt;Ground -->
-<g id="edge15" class="edge">
-<title>MoveRover-&gt;Ground</title>
-<path fill="none" stroke="black" d="M390.39,-183.28C373.98,-142 344.7,-68.32 331.67,-35.53"/>
-<polygon fill="none" stroke="black" points="390.37,-183.22 396.3,-187.32 394.8,-194.38 388.86,-190.28 390.37,-183.22"/>
-<text text-anchor="middle" x="386.73" y="-110.45" font-family="Times New Roman,serif" font-size="14.00">&lt;flow&gt;</text>
-</g>
 <!-- MoveRover&#45;&gt;Force -->
-<g id="edge16" class="edge">
+<g id="edge12" class="edge">
 <title>MoveRover-&gt;Force</title>
-<path fill="none" stroke="black" d="M350.17,-196.3C311.99,-182.06 260.87,-158.28 225.85,-123.75 199.99,-98.25 183.72,-57.94 176.14,-35.48"/>
-<polygon fill="none" stroke="black" points="349.94,-196.21 356.94,-194.48 361.23,-200.28 354.23,-202.01 349.94,-196.21"/>
+<path fill="none" stroke="black" d="M390.69,-183.28C374.71,-142 346.19,-68.32 333.5,-35.53"/>
+<polygon fill="none" stroke="black" points="390.65,-183.18 396.55,-187.33 394.99,-194.37 389.09,-190.22 390.65,-183.18"/>
+<text text-anchor="middle" x="387.73" y="-110.45" font-family="Times New Roman,serif" font-size="14.00">&lt;flow&gt;</text>
+</g>
+<!-- MoveRover&#45;&gt;Ground -->
+<g id="edge13" class="edge">
+<title>MoveRover-&gt;Ground</title>
+<path fill="none" stroke="black" d="M349.51,-196.47C311.21,-182.38 260.23,-158.7 225.85,-123.75 200.91,-98.4 186.27,-58.39 179.56,-35.87"/>
+<polygon fill="none" stroke="black" points="349.3,-196.4 356.29,-194.63 360.61,-200.41 353.62,-202.17 349.3,-196.4"/>
 <text text-anchor="middle" x="246.73" y="-110.45" font-family="Times New Roman,serif" font-size="14.00">&lt;flow&gt;</text>
 </g>
+<!-- ControlRover&#45;&gt;Control -->
+<g id="edge14" class="edge">
+<title>ControlRover-&gt;Control</title>
+<path fill="none" stroke="black" d="M803.47,-182.64C796.51,-160 784.32,-129.35 765.1,-108 729.94,-68.96 673.48,-42.75 638.99,-29.4"/>
+<polygon fill="none" stroke="black" points="803.43,-182.51 808.93,-187.17 806.73,-194.04 801.24,-189.37 803.43,-182.51"/>
+<text text-anchor="middle" x="796.73" y="-110.45" font-family="Times New Roman,serif" font-size="14.00">&lt;flow&gt;</text>
+</g>
 <!-- Communicate&#45;&gt;EE -->
-<g id="edge18" class="edge">
+<g id="edge15" class="edge">
 <title>Communicate-&gt;EE</title>
-<path fill="none" stroke="black" d="M666.47,-182.37C663.05,-159.54 655.18,-128.76 637.1,-108 592.33,-56.61 511.63,-32.97 470.58,-23.84"/>
-<polygon fill="none" stroke="black" points="666.46,-182.27 671.16,-187.73 667.93,-194.18 663.22,-188.72 666.46,-182.27"/>
-<text text-anchor="middle" x="667.73" y="-110.45" font-family="Times New Roman,serif" font-size="14.00">&lt;flow&gt;</text>
+<path fill="none" stroke="black" d="M666.5,-182.34C663.1,-159.49 655.24,-128.7 637.1,-108 591.48,-55.94 509.21,-32.55 467.63,-23.65"/>
+<polygon fill="none" stroke="black" points="666.49,-182.25 671.19,-187.71 667.96,-194.16 663.25,-188.69 666.49,-182.25"/>
+<text text-anchor="middle" x="668.73" y="-110.45" font-family="Times New Roman,serif" font-size="14.00">&lt;flow&gt;</text>
 </g>
 <!-- Flow -->
-<g id="node11" class="node">
+<g id="node9" class="node">
 <title>Flow</title>
 <ellipse fill="lightgrey" stroke="grey" stroke-width="0" cx="737.1" cy="-18" rx="29.61" ry="18"/>
 <text text-anchor="middle" x="737.1" y="-12.57" font-family="Times New Roman,serif" font-size="14.00">Flow</text>
 </g>
 <!-- Communicate&#45;&gt;Flow -->
-<g id="edge17" class="edge">
+<g id="edge16" class="edge">
 <title>Communicate-&gt;Flow</title>
 <path fill="none" stroke="black" d="M686.23,-184.45C695.92,-167.39 707.56,-144.92 715.1,-123.75 725.82,-93.64 732.07,-56.7 735.01,-35.71"/>
 <polygon fill="none" stroke="black" points="686.4,-184.17 686.84,-191.37 680.37,-194.54 679.92,-187.34 686.4,-184.17"/>
-<text text-anchor="middle" x="739.73" y="-110.45" font-family="Times New Roman,serif" font-size="14.00">&lt;flow&gt;</text>
+<text text-anchor="middle" x="740.73" y="-110.45" font-family="Times New Roman,serif" font-size="14.00">&lt;flow&gt;</text>
+</g>
+<!-- StoreEnergy&#45;&gt;EE -->
+<g id="edge18" class="edge">
+<title>StoreEnergy-&gt;EE</title>
+<path fill="none" stroke="black" d="M514.49,-184.15C504.29,-166.98 491.58,-144.51 481.85,-123.75 467.57,-93.28 454.44,-56.16 447.42,-35.28"/>
+<polygon fill="none" stroke="black" points="514.43,-184.05 520.95,-187.13 520.62,-194.33 514.1,-191.25 514.43,-184.05"/>
+<text text-anchor="middle" x="502.73" y="-110.45" font-family="Times New Roman,serif" font-size="14.00">&lt;flow&gt;</text>
+</g>
+<!-- StoreEnergy&#45;&gt;Control -->
+<g id="edge17" class="edge">
+<title>StoreEnergy-&gt;Control</title>
+<path fill="none" stroke="black" d="M552.69,-185.07C564.37,-168.15 578.36,-145.61 587.1,-123.75 598.96,-94.07 604.82,-56.99 607.38,-35.85"/>
+<polygon fill="none" stroke="black" points="552.89,-184.8 552.68,-192.01 545.95,-194.59 546.15,-187.38 552.89,-184.8"/>
+<text text-anchor="middle" x="612.73" y="-110.45" font-family="Times New Roman,serif" font-size="14.00">&lt;flow&gt;</text>
 </g>
 </g>
 </svg>
