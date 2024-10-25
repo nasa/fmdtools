@@ -1,8 +1,8 @@
 Development Guide
-===========================
+=================
 
 Why fmdtools?
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+^^^^^^^^^^^^^
 
 Use fmdtools to improve your understanding of the dynamics of hazardous behavior. The fmdtools library was developed to study resilience, which is an important consideration in designing safe, low-risk systems. Resilience is the ability of a system to mitigate hazardous scenarios as they arise. As shown below, the key defining aspect of resilience is the **dynamics of failure events**, which may lead to recovery (or, a safe outcome) or failure (or, an unsafe outcome).
 
@@ -24,7 +24,8 @@ While this libary primarily provides code structures, a major objective of this 
 
 
 Introductory Tutorial
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+^^^^^^^^^^^^^^^^^^^^^
+
 **The best place to start** to getting acquanted with basic syntax and functionality is the `Intro to fmdtools <Intro_to_fmdtools.md>`_ workshop (:download:`download slides as pdf <Intro_to_fmdtools.pdf>`), which uses the `Pump` example to introduce the overall structure and use of fmdtools. Other models are further helpful to demonstrate the full variety of methods/approaches supported in fmdtools and their applcation for more advanced use-cases.
 
 .. toctree::
@@ -33,7 +34,7 @@ Introductory Tutorial
    Intro_to_fmdtools.md
 
 Glossary
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+^^^^^^^^
 
 You can use the glossary as a reference to understand basic simulation and analysis concepts in fmdtools.
 
@@ -154,7 +155,7 @@ Model Development Best Practices
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Pay attention to and document the fmdtools version
---------------------------------
+--------------------------------------------------
 
 As a research-oriented tool, much of the fmdtools interfaces can be considered to be "in development." While we want to keep the repository stable, there have been many changes to syntax over the years to provide enhanced functionality and usages.
 
@@ -164,14 +165,14 @@ This also helps us (as developers) address bugs which affect specific versions o
 
 
 Plan your model to avoid technical debt
---------------------------------
+---------------------------------------
 
 Simple, small models are relatively easy to define in fmdtools with a few functions, flows, and behaviors. As such, it can be easy to get in the habit of not planning or organizing development systematically, which leads to issues when developing larger models. Specifically, code that is *written into existence* instead of designed, planned, edited, tested, and documented. This leads to `Technical debt <https://en.wikipedia.org/wiki/Technical_debt>`_, which is the inherent difficulty of modifying code that was written ad-hoc rather than designed. Unless this technical debt is resolved, the ability to modify a model (e.g., to add new behaviors, conduct analyses, etc) will be limited by the complicated and unwieldy existing code. 
 
 The next subsections give some advice to help avoid technical debt, based on lessons learned developing fmdtools models over the past few years.
 
 Don't copy, inherit and functionalize
---------------------------------
+-------------------------------------
 Copy-and-paste can be a useful concept, but often gets over-relied upon by novice model developers who want to create several variants of the same programming structure. However, in the world of systems engineering (and software development), there are many cases where developers should be using `class inheritance <https://www.w3schools.com/python/python_inheritance.asp>`_ and `writing functions <https://ucsbcarpentry.github.io/2019-10-10-Python-UCSB/14-writing-functions/>`_ instead. 
 
 The advantages of inheritance are: 
@@ -189,7 +190,7 @@ In fmdtools, these patterns can be helpful:
 This is an incomplete list. In general, it can be a helpful limitation to *try to avoid using copy-and-paste as much as possible.* Instead if a piece of code needs to be run more than once in more than once place, write a function or method which will be used everywhere. The idea should be to *write the code once, and run it everywhere.*
 
 Document your code, sometimes *before* your write it
---------------------------------
+----------------------------------------------------
 
 In general, Python coding style aspires to be `as self-documenting <https://en.wikipedia.org/wiki/Self-documenting_code>`_ as possible. However, this is not a replacement for documentation. In general, novice developers think of documentation as something which happens at the end of the software development process, as something to primarily assist users. 
 
@@ -212,7 +213,7 @@ For fmdtools models, documentation should at the very least take the following f
 Documentation can best be thought of as a *contract that your code should fulfill*. As such, it can be very helpful to think of the documentation first, as a way of specifying your work. Tests (formal and informal) can then be defined based on the stated behavior of the function. It is thus recommended to *document your code as you write it*, instead of waiting until the end of the development process, to avoid technical debt. 
 
 Don't get ahead of yourself--try to get a running simulation first
---------------------------------
+------------------------------------------------------------------
 
 In the model development process, it can often be tempting to try to model every single mode or behavior in immense detail from the get-go. This is motivated by a desire to acheive realism, but can lead to issues from a project management and integration perspective. A model does not have much meaning outside a simulation or analysis, and, as such, development needs to be motivated *first* by getting a working simulation and *then* by adding detail. These simulations are the key feedback loop for determining whether model code is embodying desired behavior. 
 
@@ -230,7 +231,7 @@ In general, it is bad to spend a lot of time developing a model without running 
 Finally, *smaller, incremental iterations are better than large iterations.* Instead of spending time implementing large sections of code at once (with documentation and testing TBD), instead implement small sections of code that you can then document, test, and edit immediately after. Using these small iterative cycles can increase code quality by ensuring that large blocks of undocumented/untested (and ultimately unreliable) code don't make it into your project, only for you to have to deal with it later.
 
 Preserve your prototype setup by formalizing it as a test
---------------------------------
+---------------------------------------------------------
 
 Testing code is something which is often neglected in the development process, as something to do when the project is finished (i.e., as an assurance rather than development task). Simultaneously, developers often iterate over temporary scripts and code snippets during development to ensure that it works as expected in what is essentially an informal testing process. The major problem with this process is that these tests are easily lost and are only run one at a time, making it difficult to verify that code works after it has been modified.
 
@@ -241,7 +242,7 @@ While testing is an assurance activity, it should also be considered a developme
 Finally, do not create tests solely to create tests. Tests should have a specific purpose in mind, ideally single tests should cover as many considerations as possible, rather than creating new tests for each individual consideration. As in model development, try to avoid bloat as much as possible. If the desire is to cover every edge-case, try to parameterize tests over these cases instead of creating individual test methods.
 
 Edit your code
---------------------------------
+--------------
 
 The nature of writing code is a messy process--often we spend a considerable amount of time getting code to a place where it "works" (i.e., runs) and leave it as-is. The problem with doing this over and over is that it neglects the syntax, documetation, and structural aspects of coding and thus contributes to technical debt. One of the best ways to avoid this from impacting development too much is to edit code after writing it.
 
@@ -260,7 +261,7 @@ Editing is the process of reviewing the code, recognizing potential (functional 
 This is an incomplete list. The point is to regularly review and improve code *after it is implemented to minimize future technical debt*. Waiting to edit will cause more hardship down the line.
 
 Structuring a model
---------------------------------
+-------------------
 
 fmdtools was originally developed around a very simple use-case of modeling physical behaviors using a Function/Flow ontology, where Functions (referred to as "technical functions") are supposed to be the high-level roles to be performed in the system, while flows are the data passed between these roles (energy, material, or signal).  Many of the models in the repository were developed to follow this form, or some variation of it, however, more complex modeling use-cases have led us to expand our conception of what can/should be modeled with a function or flow. More generally, 
 
@@ -315,7 +316,7 @@ Systems of Systems models involve the interaction of multiple systems in a singl
 Note that, unlike other model types, System of Systems models very often will have multiple copies of functions and flows instantiated in the model. As a result, it is important to use dedicated model structures to the overall structure from being intractible. Specifically, multiple copies of flows can be handled using the `MultiFlow` class while Communications between agents can be handled using the `CommsFlow` class. The `ModelTypeGraph` graph representation can be used to represent the model as just the types involved (rather than all instantiations). In general, it can be helpful to create tests/analyses for individual agents in addition to the overall system.
 
 Use model constructs to simplify your code
---------------------------------
+------------------------------------------
 The fmdtools codebase is quite large, and, as a result, it can be tempting to dive into modeling before learning about all of its capabilities. The problem with this is that many of these capabilities and interfaces are there to make your life easier, provided you understand and use them correctly. Below are some commonly-misunderstood constructs to integrate into your code:
 
 * :class:`~fmdtools.define.container.base.BaseContainer` has a number of very basic operations which can be used in all containers to reduce the length of lines dedicated solely to assignment and passing variables between constructs. Using these methods can furthermore enable one to more simply perform vector operations with reduced syntax.
@@ -327,7 +328,7 @@ The fmdtools codebase is quite large, and, as a result, it can be tempting to di
 * If there's something that you'd like to do in an fmdtools model that is difficult with existing model structures, consider filing a bug report before implementing an ad-hoc solution. Alternatively, try devoping your solution as a *feature* rather than a hack to solve a single use-case. If the features is in our scope and well-developed, we may try to incorporate it in our next release.
 
 Style advice
---------------------------------
+------------
 
 Development of fmdtools models should follow the `PEP 8 Style Guide <https://peps.python.org/pep-0008/#introduction>`_ as much as possible. While this won't be entirely re-iterated here, the following applies:
 
@@ -341,7 +342,7 @@ Development of fmdtools models should follow the `PEP 8 Style Guide <https://pep
 * It's `fmdtools`. Not `Fmdtools` or `fmd tool`. Even when it starts the sentence.
 
 See also
---------------------------------
+--------
 
 * `PEP 8 Style Guide <https://peps.python.org/pep-0008/#introduction>`_
 * `Technical debt <https://en.wikipedia.org/wiki/Technical_debt>`_
@@ -353,13 +354,13 @@ See also
 
 
 How to Contribute
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+^^^^^^^^^^^^^^^^^
 
 Development of fmdtools is coordinated by the `fmdtools team <../CONTRIBUTORS.md>`_ at NASA Ames Research Center. As an NASA-developed and maintained open-source tool, outside contributions are welcomed. To be able to submit contributions (e.g., pull requests), external contributors should first submit a contributors license agreement (`Individual CLA <https://github.com/nasa/fmdtools/blob/main/fmdtools_Individual_CLA.pdf>`_ , `Corporate CLA <https://github.com/nasa/fmdtools/blob/main/fmdtools_Corporate_CLA.pdf>`_).
 
 
 Repository Structure
---------------------------------
+--------------------
 
 .. image:: /docs-source/figures/uml/repo_organization.svg
    :width: 800
@@ -381,14 +382,14 @@ There are additionally a few scripts/config files with specific purposes to serv
 
 
 Git Structure and Setup
---------------------------------
+-----------------------
 
 .. image:: /docs-source/figures/uml/git_structure.svg
    :width: 800
 
 Development of fmdtools uses a two-track development model, in which contributions are provided within NASA as well as by external collaborators. To support this, there are multiple repositories which must be managed in the development process, as shown above. Essentially, there is:
 
-- An internal bitbucket, ``origin``, where NASA coordination and development takes place,
+- An internal bitbucket, ``origin``, where NASA coordination, development, and continuous integration takes place,
 - A public GitHub, ``public``, where collaboration with outside developers takes place (and where documentation is hosted), and 
 - A PyPI repository, which contains stable versions of fmdtools which can be readily installed via ``pip``. This repository is automatically updated when a new version is released on GithHub.
 - The fmdtools GitHub Pages site, which updates from the ``gh-pages`` branch.
@@ -421,7 +422,7 @@ Note that the ``-s`` option above `signs` the tag, attributing it to your creden
 
 
 Git Development Workflow
---------------------------------
+------------------------
 
 .. image:: /docs-source/figures/uml/dev_process.svg
    :width: 800
@@ -444,13 +445,11 @@ The major exceptions to this process are:
 - minor documentation changes.
 
 Release Process
---------------------------------
+---------------
 
 Releases are made to fmdtools to push new features and bugfixes to the open-source community as they are developed. Some important things to remember about the release process are:
 
-* It's important to test prior to release to ensure (1) bugs aren't being released that could have been caught easily with a test and (2) test results are accurate to the current version of the code. Currently, this is managed by the person conducting the release. Currently, this is managed by the person conducting the release via the ``run_all_tests.py`` script.
-
-* It's also important to ensure the documentation (both source files and html) stay up to date with the release. Currently, this is managed by the person conducting the release by rebuilding docs on their computer prior to release.
+* It's important to test prior to release to ensure (1) bugs aren't being released that could have been caught easily with a test (2) test results are accurate to the current version of the code and (3) the documentation stays up to date with the release. Currently, this is managed via Bamboo CI, which automatically builds releases on the /dev branch.
 
 * Releases are made to the fmdtools GitHub repository using the ``Draft a new release`` button on the `Releases <https://github.com/nasa/fmdtools/releases>`_ page. Once this release is generated, GitHub Actions uploads it to the ` fmdtools PyPi repo <https://pypi.org/project/fmdtools/>`_ automatically.
 
@@ -467,7 +466,7 @@ To ensure all of the steps of the release process are performed, follow the :dow
 
 
 Roles
---------------------------------
+-----
 
 - team lead: 		coordinates all activities and has technical authority over project direction
 - full developer: 	can make changes off of version and main branches and has full ability to perform the release process
@@ -475,9 +474,9 @@ Roles
 
 
 Documentation
---------------------------------
+-------------
 
-Documentation is generated using Sphinx, which generates html from rst files. The process for generating documentation (after sphinx has been set up) is to open powershell and run::
+Documentation is generated using Sphinx, which generates html from rst files. This is performed automatically on the Bamboo server. The process for generating documentation locally is to open powershell and run::
 	
 	cd path/to/fmdtools
 	./make clean
@@ -493,7 +492,7 @@ Note that sphinx requires the following requirements, which should be installed 
 Pandoc must be installed with anaconda (i.e., using `conda install pandoc`) since it is an external program.
 
 Style/Formatting
---------------------------------
+----------------
 
 Generally, we try to follow PEP8 style conventions. To catch these errors, it is best to *turn on PEP8 style linting* in your IDE of choice.
 
@@ -505,7 +504,7 @@ Style conventions can additionally be followed/enforced automatically using the 
 
 
 Headers
---------------------------------
+-------
 
 All source code files to be released under fmdtools should have the Apache-2.0 license applied to them. 
 
@@ -551,7 +550,7 @@ For jupyter notebooks, the following block should be inserted at the end of the 
 
 
 Testing
---------------------------------
+-------
 
 There are two major types of tests:
 
