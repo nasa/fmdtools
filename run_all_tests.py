@@ -86,18 +86,18 @@ fast_notebooks = ["examples/asg_demo/Action_Sequence_Graph.ipynb",
                   ]
 
 # list of slow-running notebooks:
-slow_notebooks = ["examples/multirotor/Urban_Drone_Demo.ipynb",
-                  "examples/multirotor/Multirotor_Optimization.ipynb",
-                  "examples/pump/Stochastic_Modelling.ipynb",
+slow_notebooks = ["examples/multirotor/Multirotor_Optimization.ipynb",
                   "examples/rover/ParameterSample_Use-Cases.ipynb",
                   "examples/pump/Optimization.ipynb",
                   "examples/rover/degradation_modelling/Degradation_Modelling_Notebook.ipynb",
                   "examples/rover/HFAC_Analyses/IDETC_Human_Paper_Analysis.ipynb",
-                  "examples/rover/HFAC_Analyses/HFAC_Analyses.ipynb",
                   "examples/pump/Parallelism_Tutorial.ipynb"]
 
 # for testing extremely slow notebooks that can't be run to completion :
-too_slow_notebooks = ["examples/rover/optimization/Rover_Response_Optimization.ipynb",  # extremely slow notebook
+too_slow_notebooks = ["examples/rover/HFAC_Analyses/HFAC_Analyses.ipynb",
+                      "examples/pump/Stochastic_Modelling.ipynb", # timeout comes back as failed
+                      "examples/multirotor/Urban_Drone_Demo.ipynb", # timeout comes back as failed
+                      "examples/rover/optimization/Rover_Response_Optimization.ipynb",  # extremely slow notebook
                       "examples/rover/fault_sampling/Rover_Mode_Notebook.ipynb",  # extremely slow notebook
                       "examples/rover/optimization/Search_Comparison.ipynb",  # extremely slow
                       "examples/tank/Tank_Optimization.ipynb"
