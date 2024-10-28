@@ -10,7 +10,7 @@
 [![GitHub Tag](https://img.shields.io/github/v/tag/nasa/fmdtools)](https://github.com/nasa/fmdtools/tags)
 [![CodeFactor](https://www.codefactor.io/repository/github/nasa/fmdtools/badge)](https://www.codefactor.io/repository/github/nasa/fmdtools)
 [![Tests Status](./reports/full-py311/tests-badge.svg)](https://htmlpreview.github.io/?https://github.com/nasa/fmdtools/blob/main/reports/full-py311/junit/report.html)
-[![Tests Coverage](./reports/full-py311/coverage-badge.svg)](https://htmlpreview.github.io/?https://github.com/nasa/fmdtools/blob/main/reports/full-py311/coverage/index.html)
+[![Tests Coverage](./reports/full-py311/coverage-badge.svg)](https://htmlpreview.github.io/?https://github.com/nasa/fmdtools/blob/main/reports/full-py311/coverage_html/index.html)
 [![GitHub License](https://img.shields.io/badge/License-Apache%202.0-green)](https://github.com/nasa/fmdtools/blob/main/LICENSE)
 [![NASA Software Classification](https://img.shields.io/badge/Software_Class-E-blue)](https://nodis3.gsfc.nasa.gov/displayDir.cfm?Internal_ID=N_PR_7150_002D_&page_name=AppendixD)
 
