@@ -88,7 +88,7 @@ class ModelGraphTests(unittest.TestCase):
                                        time=10, track='all', desired_result=des_res)
         mg = FunctionArchitectureGraph(self.mdl)
         mg.draw_from(11, hist)
-        mg.draw_graphviz_from(11, hist)
+        mg.draw_graphviz_from(11, hist, disp=False)
 
 # def test_move_nodes(self):
 #    p = endresults.graph.move_nodes()

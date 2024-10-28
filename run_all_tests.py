@@ -1,127 +1,200 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 """
-Created on Tue May 16 15:12:39 2023
+Testing script for fmdtools.
 
-@author: dhulse
+Requires pytest, nbmake, pytest-html, pytest-cov.
+
+
+Options
+--------
+--doctests: Bool
+    Whether or not to run/collect doctests
+--notebooks: Bool
+    Whether or not to run/collect notebooks
+--testtype : str
+    Set test configuration to run. Could be "full" (collect all tests),
+    "full-notebooks" (just notebooks), "fast-notebooks" (just fast notebooks),
+    "slow-notebooks" (just slow notebooks), or "doctests" (just doctests).
+    Default is "doctests" to enable fast testing.
+--cov : bool
+    Whether or not to produce coverage report. Default is True.
+--report : bool
+    Whether or not to produce test report. Default is True.
+
+Examples
+--------
+# by default, run all tests (except slow notebooks):
+# python -m run_all_tests
+# run a faster configuration with no notebooks
+# python -m run_all_tests --notebooks False
+# run just module-level doctests with no report
+# python -m run_all_tests --testtype "doctests"
 """
 import pytest
-# let more tests be created during testing
+import argparse
+
+# enables large numbers of tests with plots to be run:
 from matplotlib import pyplot as plt
 plt.rcParams['figure.max_open_warning'] = 50
-# import sys
 
-# NOTE: If report won't generate with error:
-# "UnicodeEncodeError: 'charmap' codec can't encode characters in position..."
-# make sure all tests pass showprogress=False to propagate
 
-if __name__ == "__main__":
-    # requires pytest, nbmake, pytest-html, pytest-cov
+# listing of modules with doctests
+doctest_modules = ["fmdtools/define/container/base.py",
+                   "fmdtools/define/container/state.py",
+                   "fmdtools/define/container/parameter.py",
+                   "fmdtools/define/container/mode.py",
+                   "fmdtools/define/container/rand.py",
+                   "fmdtools/define/container/time.py",
+                   "fmdtools/define/object/base.py",
+                   "fmdtools/define/object/timer.py",
+                   "fmdtools/define/object/geom.py",
+                   "fmdtools/define/object/coords.py",
+                   "fmdtools/define/flow/base.py",
+                   "fmdtools/define/architecture/function.py",
+                   "fmdtools/define/architecture/geom.py",
+                   "fmdtools/define/block/base.py",
+                   "fmdtools/define/block/function.py",
+                   "fmdtools/define/environment.py",
+                   "fmdtools/sim/scenario.py",
+                   "fmdtools/sim/sample.py",
+                   "fmdtools/sim/search.py",
+                   "fmdtools/analyze/graph/style.py",
+                   "fmdtools/analyze/graph/base.py",
+                   "fmdtools/analyze/result.py",
+                   "fmdtools/analyze/history.py",
+                   "fmdtools/analyze/phases.py",
+                   "fmdtools/analyze/tabulate.py",
+                   "examples/rover/rover_model.py",
+                   "examples/rover/rover_model_human.py",
+                   "examples/multirotor/drone_mdl_static.py",
+                   "examples/multirotor/drone_mdl_dynamic.py",
+                   "examples/multirotor/drone_mdl_hierarchical.py"]
 
-    # for testing modules with doctests
-    doctest_modules = ["fmdtools/define/container/base.py",
-                       "fmdtools/define/container/state.py",
-                       "fmdtools/define/container/parameter.py",
-                       "fmdtools/define/container/mode.py",
-                       "fmdtools/define/container/rand.py",
-                       "fmdtools/define/container/time.py",
-                       "fmdtools/define/object/base.py",
-                       "fmdtools/define/object/timer.py",
-                       "fmdtools/define/object/geom.py",
-                       "fmdtools/define/object/coords.py",
-                       "fmdtools/define/flow/base.py",
-                       "fmdtools/define/architecture/function.py",
-                       "fmdtools/define/architecture/geom.py",
-                       "fmdtools/define/block/base.py",
-                       "fmdtools/define/block/function.py",
-                       "fmdtools/define/environment.py",
-                       "fmdtools/sim/scenario.py",
-                       "fmdtools/sim/sample.py",
-                       "fmdtools/sim/search.py",
-                       "fmdtools/analyze/graph/style.py",
-                       "fmdtools/analyze/graph/base.py",
-                       "fmdtools/analyze/result.py",
-                       "fmdtools/analyze/history.py",
-                       "fmdtools/analyze/phases.py",
-                       "fmdtools/analyze/tabulate.py",
-                       "examples/rover/rover_model.py",
-                       "examples/rover/rover_model_human.py",
-                       "examples/multirotor/drone_mdl_static.py",
-                       "examples/multirotor/drone_mdl_dynamic.py",
-                       "examples/multirotor/drone_mdl_hierarchical.py"]
 
-    # retcode = pytest.main(["--doctest-modules", *doctest_modules])
+# list of fast-running notebooks:
+fast_notebooks = ["examples/asg_demo/Action_Sequence_Graph.ipynb",
+                  "examples/eps/EPS_Example_Notebook.ipynb",
+                  "examples/multirotor/Demonstration.ipynb",
+                  "examples/pump/Pump_Example_Notebook.ipynb",
+                  "examples/pump/Tutorial_complete.ipynb",
+                  "examples/rover/Model_Structure_Visualization_Tutorial.ipynb",
+                  "examples/rover/FaultSample_Use-Cases.ipynb",
+                  "examples/rover/Rover_Setup_Notebook.ipynb",
+                  "examples/tank/Tank_Analysis.ipynb",
+                  "examples/taxiway/Paper_Notebook.ipynb"
+                  ]
 
-    # retcode = pytest.main(["--html=./reports/junit/report.html",
-    #                        "--self-contained-html",
-    #                        "--junitxml=./reports/junit/junit.xml",
-    #                        "--doctest-modules",
-    #                        "--continue-on-collection-errors"])
+# list of slow-running notebooks:
+slow_notebooks = ["examples/multirotor/Multirotor_Optimization.ipynb",
+                  "examples/rover/ParameterSample_Use-Cases.ipynb",
+                  "examples/pump/Optimization.ipynb",
+                  "examples/rover/degradation_modelling/Degradation_Modelling_Notebook.ipynb",
+                  "examples/rover/HFAC_Analyses/IDETC_Human_Paper_Analysis.ipynb",
+                  "examples/pump/Parallelism_Tutorial.ipynb"]
 
-    # for testing all unittests
-    # retcode = pytest.main(["--continue-on-collection-errors"])
-
-    # for testing notebooks during development:
-    fast_notebooks = ["examples/asg_demo/Action_Sequence_Graph.ipynb",
-                      "examples/eps/EPS_Example_Notebook.ipynb",
-                      "examples/multirotor/Demonstration.ipynb",
-                      "examples/pump/Pump_Example_Notebook.ipynb",
-                      "examples/pump/Tutorial_complete.ipynb",
-                      "examples/rover/Model_Structure_Visualization_Tutorial.ipynb",
-                      "examples/rover/FaultSample_Use-Cases.ipynb",
-                      "examples/rover/Rover_Setup_Notebook.ipynb",
-                      "examples/tank/Tank_Analysis.ipynb",
-                      "examples/taxiway/Paper_Notebook.ipynb"
+# for testing extremely slow notebooks that can't be run to completion :
+too_slow_notebooks = ["examples/rover/HFAC_Analyses/HFAC_Analyses.ipynb",
+                      "examples/pump/Stochastic_Modelling.ipynb", # timeout comes back as failed
+                      "examples/multirotor/Urban_Drone_Demo.ipynb", # timeout comes back as failed
+                      "examples/rover/optimization/Rover_Response_Optimization.ipynb",  # extremely slow notebook
+                      "examples/rover/fault_sampling/Rover_Mode_Notebook.ipynb",  # extremely slow notebook
+                      "examples/rover/optimization/Search_Comparison.ipynb",  # extremely slow
+                      "examples/tank/Tank_Optimization.ipynb"
                       ]
-    # retcode = pytest.main(["--nbmake", *fast_notebooks])
 
-    # for testing longer-running notebooks (>~20s each)
-    slow_notebooks = ["examples/multirotor/Urban_Drone_Demo.ipynb",
-                      "examples/multirotor/Multirotor_Optimization.ipynb",
-                      "examples/pump/Stochastic_Modelling.ipynb",
-                      "examples/rover/ParameterSample_Use-Cases.ipynb",
-                      "examples/pump/Optimization.ipynb",
-                      "examples/rover/degradation_modelling/Degradation_Modelling_Notebook.ipynb",
-                      "examples/rover/HFAC_Analyses/IDETC_Human_Paper_Analysis.ipynb",
-                      "examples/rover/HFAC_Analyses/HFAC_Analyses.ipynb",
-                      "examples/pump/Parallelism_Tutorial.ipynb"]
-    # retcode = pytest.main(["--nbmake", *slow_notebooks])
 
-    # for testing extremely slow notebooks that can't be run to completion :
-    too_slow_notebooks = ["examples/rover/optimization/Rover_Response_Optimization.ipynb",  # extremely slow notebook
-                          "examples/rover/fault_sampling/Rover_Mode_Notebook.ipynb",  # extremely slow notebook
-                          "examples/rover/optimization/Search_Comparison.ipynb",  # extremely slow
-                          "examples/tank/Tank_Optimization.ipynb"
-                          ]
-    # retcode = pytest.main(["--nbmake", "--nbmake-find-import-errors", "--nbmake-timeout=20", *too_slow_notebooks])
+# we ignore the following notebooks for various reasons:
+# while not included in the testing approach, they should be verified periodically
+ignore_notebooks = [*too_slow_notebooks,
+                    "examples/pump/Tutorial_unfilled.ipynb",  # intended to be blank
+                    "_build",
+                    "docs",
+                    "tmp"]
 
-    # we ignore the following notebooks for various reasons:
-    # while not included in the testing approach, they should be verified periodically
-    ignore_notebooks = [*too_slow_notebooks,
-                        "examples/pump/Tutorial_unfilled.ipynb",  # intended to be blank
-                        "_build"]
 
-    # retcode = pytest.main(["--nbmake", *["--ignore="+notebook for notebook in ignore_notebooks]])
-    # retcode = pytest.main(["--nbmake", "examples/pump/AST_Sampling.ipynb"])
-    # retcode = pytest.main(["--nbmake", "--nbmake-timeout=20", "examples/rover/optimization/Rover_Response_Optimization.ipynb"])
+def main(doctests=True,  notebooks=True, testlist=[], testtype="full",
+         ignore=ignore_notebooks, cov=True, report=True, pyver="py311"):
+    pytestargs = ["--cache-clear"]
 
-    # for creating comprehensive test report:
+    # if doctests, add doctest_modules to set of tests
+    # options for notebooks to test (provided testlist or set testlists)
+    if doctests:
+        pytestargs.extend(["--doctest-modules"])
+    if testlist:
+        testtype = "custom"
+        pytestargs.extend(testlist)
+    elif testtype == "full-notebooks":
+        pytestargs.extend(fast_notebooks + slow_notebooks)
+    elif testtype == "doctests":
+        pytestargs.extend(doctest_modules)
+    elif testtype == "fast-notebooks":
+        pytestargs.extend(fast_notebooks)
+    elif testtype == "slow-notebooks":
+        pytestargs.extend(slow_notebooks)
+    elif testtype == "too-slow-notebooks":
+        pytestargs.extend(too_slow_notebooks)
+    elif testtype != "full":
+        raise Exception("Invalid testtype: "+testtype)
 
-    retcode = pytest.main(["--cov-report",
-                            "html:reports/coverage",
-                            "--cov-report",
-                            "xml:reports/coverage/coverage.xml",
-                            "--cov",
-                            "--html=./reports/junit/report.html",
-                            "--junitxml=./reports/junit/junit.xml",
-                            "--overwrite",
-                            "--doctest-modules",
-                            "--nbmake",
-                            *["--ignore="+notebook for notebook in ignore_notebooks],
-                            "--continue-on-collection-errors"])
+    reportdir = "./reports/"+testtype+"-"+pyver
+    # adds coverage report
+    if cov:
+        pytestargs.extend(["--cov-report",
+                           "html:"+reportdir+"/coverage_html",
+                           "--cov-report",
+                           "xml:"+reportdir+"/coverage/coverage.xml",
+                           "--cov",])
+
+    # adds html report
+    if report:
+        pytestargs.extend(["--html="+reportdir+"/junit/report.html",
+                           "--junitxml="+reportdir+"/junit/junit.xml",
+                           "--overwrite"])
+    # adds notebooks
+    if notebooks:
+        pytestargs.extend(["--nbmake"])
+
+    pytestargs.extend(["--ignore="+f for f in ignore])
+    pytestargs.extend(["--continue-on-collection-errors"])
+    try:
+        pytest.main(pytestargs)
+    except UnicodeEncodeError as e:
+        # error handling for common (difficult-to-debug) report generation error
+        raise Exception("UnicodeEncodeError resulting from non-standard characters" +
+                        "in the console. Make sure all propagate methods use the" +
+                        "showprogress=False option") from e
 
     # this should close any open plots
     plt.close('all')
+
+
+if __name__ == "__main__":
+
+    # retcode = pytest.main(["--cov-report",
+    #                     "html:./reports/coverage",
+    #                     "--cov-report",
+    #                     "xml:./reports/coverage/coverage.xml",
+    #                     "--cov",
+    #                     "--html=./reports/junit/report.html",
+    #                     "--junitxml=./reports/junit/junit.xml",
+    #                     "--overwrite",
+    #                     "--doctest-modules",
+    #                     "--nbmake",
+    #                     *["--ignore="+notebook for notebook in ignore_notebooks],
+    #                     "--continue-on-collection-errors"])
+
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--doctests", default=True, required=False)
+    parser.add_argument("--notebooks", default=True, required=False)
+    parser.add_argument("--testtype", default="doctests", required=False)
+    parser.add_argument("--cov", default=True, required=False)
+    parser.add_argument("--report", default=True, required=False)
+    parser.add_argument("--pyver", default="py311", required=False)
+    parsed_args = parser.parse_args()
+    kwargs = {k: v for k, v in vars(parsed_args).items() if v is not None}
+    main(**kwargs)
+    # main(testtype="custom", testlist=["examples/tank/Tank_Analysis.ipynb"])
 
     # after creating test report, update the badge using this in powershell:
     # !Powershell.exe -Command "genbadge tests"

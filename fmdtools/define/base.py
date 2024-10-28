@@ -244,11 +244,17 @@ def get_code_attrs(obj):
         code = "\n".join(code.split("\n        "))
         code = remove_para(code)
     else:
-        source = inspect.getsource(obj.__class__)
+        if inspect.isclass(obj):
+            objcl = obj
+        else:
+            objcl = obj.__class__
+        source = inspect.getsource(objcl)
         if hasattr(obj, 'get_code'):
             code = obj.get_code(source)
         else:
             code = ""
+        if str(obj.__doc__) not in source or 'fmdtools.' in objcl.__module__:
+            docs = ""
     return {'source': source, 'code': code, 'docs': docs}
 
 
@@ -258,6 +264,7 @@ def remove_para(source):
         return remove_para(source[1:])
     else:
         return source
+
 
 def get_methods(obj):
     """Get methods from the given object."""
@@ -282,6 +289,8 @@ def get_obj_name(obj, role='', basename=''):
     name : str
         Name of the object.
     """
+    if inspect.isclass(obj):
+        return obj.__module__ + '.' + obj.__name__
     if hasattr(obj, 'get_full_name'):
         return obj.get_full_name()
     elif inspect.ismethod(obj):
@@ -301,3 +310,24 @@ def get_memory(role):
     else:
         mem = sys.getsizeof(role)
     return mem
+
+
+def get_inheritance(obj):
+    """
+    Get the base class(es) that the object inherits from.
+
+    Parameters
+    ----------
+    obj : object
+        Object to get base of.
+
+    Returns
+    -------
+    classes : tuple
+        Tuple of classes that are the base of the object.
+    """
+    if inspect.isclass(obj):
+        return tuple([b for b in obj.__bases__
+                      if b is not object and b is not dataobject])
+    else:
+        return (obj.__class__, )

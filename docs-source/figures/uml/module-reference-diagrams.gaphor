@@ -965,7 +965,6 @@
 <ref refid="77463c79-3199-11ee-be14-300505445c7c"/>
 <ref refid="4523974c-f73b-11ed-a1b8-38baf8f02de5"/>
 <ref refid="8e0e4e80-f73b-11ed-9287-38baf8f02de5"/>
-<ref refid="bdd40017-f73b-11ed-9986-38baf8f02de5"/>
 <ref refid="d437e0d7-f73b-11ed-a917-38baf8f02de5"/>
 <ref refid="f5fd2168-f73b-11ed-b85f-38baf8f02de5"/>
 <ref refid="f9e1e47b-f73b-11ed-8cf8-38baf8f02de5"/>
@@ -977,7 +976,6 @@
 <ref refid="11dafdb3-f73d-11ed-b10e-38baf8f02de5"/>
 <ref refid="3646c21b-f73d-11ed-a4e2-38baf8f02de5"/>
 <ref refid="484bc3d9-f73d-11ed-8237-38baf8f02de5"/>
-<ref refid="f97137c5-6c65-11ef-812c-300505445c7c"/>
 <ref refid="70404aab-f73b-11ed-b093-38baf8f02de5"/>
 <ref refid="767432ab-f73b-11ed-b78e-38baf8f02de5"/>
 <ref refid="63a5c677-f73c-11ed-8b2a-38baf8f02de5"/>
@@ -992,8 +990,6 @@
 <ref refid="1387b585-f73d-11ed-ab53-38baf8f02de5"/>
 <ref refid="5b44af3f-f73d-11ed-adee-38baf8f02de5"/>
 <ref refid="a3f51d05-3199-11ee-a6ef-300505445c7c"/>
-<ref refid="aaec7a22-3199-11ee-84a5-300505445c7c"/>
-<ref refid="14057387-6c66-11ef-bc40-300505445c7c"/>
 <ref refid="44b31f0b-6c66-11ef-a7a2-300505445c7c"/>
 </reflist>
 </ownedPresentation>
@@ -1200,12 +1196,6 @@
 <name>
 <val>run_all_tests.py</val>
 </name>
-<outgoing>
-<reflist>
-<ref refid="abb9fd6e-3199-11ee-996a-300505445c7c"/>
-<ref refid="14ccdce8-6c66-11ef-9d73-300505445c7c"/>
-</reflist>
-</outgoing>
 <presentation>
 <reflist>
 <ref refid="4523974c-f73b-11ed-a1b8-38baf8f02de5"/>
@@ -1251,8 +1241,6 @@
 <ref refid="306ec1c6-f741-11ed-bdf2-38baf8f02de5"/>
 <ref refid="56acf669-f741-11ed-b7b9-38baf8f02de5"/>
 <ref refid="13c95fe1-f8f1-11ed-9440-a4fc7775efbc"/>
-<ref refid="abb9fd6e-3199-11ee-996a-300505445c7c"/>
-<ref refid="14ccdce8-6c66-11ef-9d73-300505445c7c"/>
 </reflist>
 </edge>
 <group>
@@ -1270,7 +1258,6 @@
 <reflist>
 <ref refid="4523492b-f73b-11ed-8343-38baf8f02de5"/>
 <ref refid="8e0ddadd-f73b-11ed-95e3-38baf8f02de5"/>
-<ref refid="bdd3d911-f73b-11ed-9ae0-38baf8f02de5"/>
 <ref refid="f5fc8502-f73b-11ed-a178-38baf8f02de5"/>
 <ref refid="f9e16f49-f73b-11ed-9edf-38baf8f02de5"/>
 <ref refid="1d4561ea-f73c-11ed-bfcd-38baf8f02de5"/>
@@ -1293,7 +1280,6 @@
 <ref refid="b1597adb-f740-11ed-94e9-38baf8f02de5"/>
 <ref refid="24adae73-f741-11ed-a5b1-38baf8f02de5"/>
 <ref refid="3eaba01a-f741-11ed-8db6-38baf8f02de5"/>
-<ref refid="f970c5cb-6c65-11ef-9b3b-300505445c7c"/>
 </reflist>
 </node>
 <package>
@@ -1421,44 +1407,6 @@
 </diagram>
 <subject>
 <ref refid="8e0ddadd-f73b-11ed-95e3-38baf8f02de5"/>
-</subject>
-</ObjectNodeItem>
-<ObjectNode id="bdd3d911-f73b-11ed-9ae0-38baf8f02de5">
-<activity>
-<ref refid="4524598b-f73b-11ed-96fc-38baf8f02de5"/>
-</activity>
-<incoming>
-<reflist>
-<ref refid="abb9fd6e-3199-11ee-996a-300505445c7c"/>
-</reflist>
-</incoming>
-<name>
-<val>tests-badge.svg</val>
-</name>
-<presentation>
-<reflist>
-<ref refid="bdd40017-f73b-11ed-9986-38baf8f02de5"/>
-</reflist>
-</presentation>
-</ObjectNode>
-<ObjectNodeItem id="bdd40017-f73b-11ed-9986-38baf8f02de5">
-<matrix>
-<val>(1.0, 0.0, 0.0, 1.0, 385.0, 534.9299414284324)</val>
-</matrix>
-<top-left>
-<val>(0.0, 0.0)</val>
-</top-left>
-<width>
-<val>153.0</val>
-</width>
-<height>
-<val>30.0</val>
-</height>
-<diagram>
-<ref refid="3d3f5387-f733-11ed-b46f-38baf8f02de5"/>
-</diagram>
-<subject>
-<ref refid="bdd3d911-f73b-11ed-9ae0-38baf8f02de5"/>
 </subject>
 </ObjectNodeItem>
 <Box id="d437e0d7-f73b-11ed-a917-38baf8f02de5">
@@ -5400,48 +5348,6 @@
 <ref refid="4523974c-f73b-11ed-a1b8-38baf8f02de5"/>
 </head-connection>
 </ObjectFlowItem>
-<ObjectFlowItem id="aaec7a22-3199-11ee-84a5-300505445c7c">
-<diagram>
-<ref refid="3d3f5387-f733-11ed-b46f-38baf8f02de5"/>
-</diagram>
-<horizontal>
-<val>0</val>
-</horizontal>
-<orthogonal>
-<val>0</val>
-</orthogonal>
-<subject>
-<ref refid="abb9fd6e-3199-11ee-996a-300505445c7c"/>
-</subject>
-<matrix>
-<val>(1.0, 0.0, 0.0, 1.0, 340.0, 475.0)</val>
-</matrix>
-<points>
-<val>[(2.3762065951397062, 0.0), (53.0, 59.92994142843236)]</val>
-</points>
-<head-connection>
-<ref refid="4523974c-f73b-11ed-a1b8-38baf8f02de5"/>
-</head-connection>
-<tail-connection>
-<ref refid="bdd40017-f73b-11ed-9986-38baf8f02de5"/>
-</tail-connection>
-</ObjectFlowItem>
-<ObjectFlow id="abb9fd6e-3199-11ee-996a-300505445c7c">
-<activity>
-<ref refid="4524598b-f73b-11ed-96fc-38baf8f02de5"/>
-</activity>
-<presentation>
-<reflist>
-<ref refid="aaec7a22-3199-11ee-84a5-300505445c7c"/>
-</reflist>
-</presentation>
-<source>
-<ref refid="4523492b-f73b-11ed-8343-38baf8f02de5"/>
-</source>
-<target>
-<ref refid="bdd3d911-f73b-11ed-9ae0-38baf8f02de5"/>
-</target>
-</ObjectFlow>
 <Package id="e35cb3ba-79b8-11ee-83de-4cd717048282">
 <name>
 <val>history</val>
@@ -16536,86 +16442,6 @@
 <val>dynamic_behavior</val>
 </name>
 </Operation>
-<ObjectNode id="f970c5cb-6c65-11ef-9b3b-300505445c7c">
-<activity>
-<ref refid="4524598b-f73b-11ed-96fc-38baf8f02de5"/>
-</activity>
-<incoming>
-<reflist>
-<ref refid="14ccdce8-6c66-11ef-9d73-300505445c7c"/>
-</reflist>
-</incoming>
-<name>
-<val>coverage-badge.svg</val>
-</name>
-<presentation>
-<reflist>
-<ref refid="f97137c5-6c65-11ef-812c-300505445c7c"/>
-</reflist>
-</presentation>
-</ObjectNode>
-<ObjectNodeItem id="f97137c5-6c65-11ef-812c-300505445c7c">
-<matrix>
-<val>(1.0, 0.0, 0.0, 1.0, 388.4795945198929, 586.6546800738071)</val>
-</matrix>
-<top-left>
-<val>(0.0, 0.0)</val>
-</top-left>
-<width>
-<val>144.0</val>
-</width>
-<height>
-<val>44.0</val>
-</height>
-<diagram>
-<ref refid="3d3f5387-f733-11ed-b46f-38baf8f02de5"/>
-</diagram>
-<subject>
-<ref refid="f970c5cb-6c65-11ef-9b3b-300505445c7c"/>
-</subject>
-</ObjectNodeItem>
-<ObjectFlowItem id="14057387-6c66-11ef-bc40-300505445c7c">
-<diagram>
-<ref refid="3d3f5387-f733-11ed-b46f-38baf8f02de5"/>
-</diagram>
-<horizontal>
-<val>0</val>
-</horizontal>
-<orthogonal>
-<val>0</val>
-</orthogonal>
-<subject>
-<ref refid="14ccdce8-6c66-11ef-9d73-300505445c7c"/>
-</subject>
-<matrix>
-<val>(1.0, 0.0, 0.0, 1.0, 326.41879484902796, 479.8574308213609)</val>
-</matrix>
-<points>
-<val>[(0.0, 8.02910269826225), (62.060799670864924, 114.74626050133185)]</val>
-</points>
-<head-connection>
-<ref refid="4523974c-f73b-11ed-a1b8-38baf8f02de5"/>
-</head-connection>
-<tail-connection>
-<ref refid="f97137c5-6c65-11ef-812c-300505445c7c"/>
-</tail-connection>
-</ObjectFlowItem>
-<ObjectFlow id="14ccdce8-6c66-11ef-9d73-300505445c7c">
-<activity>
-<ref refid="4524598b-f73b-11ed-96fc-38baf8f02de5"/>
-</activity>
-<presentation>
-<reflist>
-<ref refid="14057387-6c66-11ef-bc40-300505445c7c"/>
-</reflist>
-</presentation>
-<source>
-<ref refid="4523492b-f73b-11ed-8343-38baf8f02de5"/>
-</source>
-<target>
-<ref refid="f970c5cb-6c65-11ef-9b3b-300505445c7c"/>
-</target>
-</ObjectFlow>
 <DependencyItem id="44b31f0b-6c66-11ef-a7a2-300505445c7c">
 <diagram>
 <ref refid="3d3f5387-f733-11ed-b46f-38baf8f02de5"/>
