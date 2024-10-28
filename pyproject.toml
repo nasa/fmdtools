@@ -16,7 +16,7 @@ classifiers = [
 description = "System resilience modelling, simulation, and assessment in Python"
 license = {file="LICENSE"}
 name = "fmdtools"
-version="2.0.3"
+version="2.0.4"
 readme = "README.md"
 requires-python = ">=3.10"
 
@@ -28,7 +28,7 @@ dependencies = ["scipy",
                 "pandas",
                 "ordered-set",
                 "dill",
-                "recordclass == 0.21.1",
+                "recordclass == 0.22.1",
                 "pytest",
                 "graphviz",
                 "shapely >= 2.0"
@@ -56,12 +56,32 @@ exclude_also = [
     "if __name__ == .__main__.:",
 	"def script_"
     ]
+omit = [
+    # omit everything in /build
+    "/_build/*",
+    "/docs/*",
+    "*.pyc",
+    "*/__pycache__/*",
+    "*/tmp/*",
+    # omit overall test
+    "run_all_tests.py",
+    "*/__init__.py",
+    "*/ipykernel*",
+    "*/Temp/*"
+    ]
 
 [tool.coverage.run]
 omit = [
     # omit everything in /build
     "/_build/*",
+    "/docs/*",
+    "*.pyc",
+    "*/__pycache__/*",
+    "*/tmp/*",
     # omit overall test
     "run_all_tests.py",
+    "*/__init__.py",
+    "*/ipykernel*",
+    "*/Temp/*"
     ]
 

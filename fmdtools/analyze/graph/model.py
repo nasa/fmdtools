@@ -30,7 +30,7 @@ under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR
 CONDITIONS OF ANY KIND, either express or implied. See the License for the
 specific language governing permissions and limitations under the License.
 """
-from fmdtools.define.base import get_code_attrs, get_obj_name
+from fmdtools.define.base import get_code_attrs, get_obj_name, get_inheritance
 from fmdtools.analyze.graph.base import Graph
 from fmdtools.analyze.graph.label import shorten_name
 from fmdtools.analyze.result import Result
@@ -58,12 +58,12 @@ def add_node(obj, g=None, name='', classname='', nodetype='', get_attrs=False,
     """
     if not g:
         g = nx.DiGraph()
-    if hasattr(obj, 'get_full_name'):
-        name = obj.get_full_name()
+    if not name:
+        name = get_obj_name(obj)
     if not classname:
         classname = obj.__class__.__name__
     if not nodetype:
-        if hasattr(obj, 'get_typename'):
+        if hasattr(obj, 'get_typename') and not inspect.isclass(obj):
             nodetype = obj.get_typename()
         else:
             nodetype = obj.__class__.__name__
@@ -101,6 +101,41 @@ def add_edge(g, basename, name, rolename, edgetype):
     if basename not in g.nodes():
         raise Exception("Node not in g.nodes: "+basename)
     g.add_edge(basename, name, edgetype=edgetype, role=rolename)
+
+
+def create_inheritance_subgraph(obj, g=None, name='', end_at_fmdtools=True):
+    """
+    Create a graph of the inheritance of a given object from fmdtools classes.
+
+    Parameters
+    ----------
+    obj : Object
+        Object.
+    g : graph, optional
+        Networkx graph to add to. The default is None.
+    end_at_fmdtools : bool
+        Option to end at first fmdtools node while building the subgraph
+        Default is False, which stops the subgraph at the first fmdtools class, rather
+        than includeing the fmdtools class inheritance.
+
+    Returns
+    -------
+    g : graph
+        Networkx graph of inheritance from classes.
+    """
+    if not name:
+        name = get_obj_name(obj)
+    if inspect.isclass(obj):
+        nodetype = "class"
+        g = add_node(obj, g, name=name, nodetype=nodetype)
+    else:
+        g = add_node(obj, g, name=name)
+    if not (end_at_fmdtools and 'fmdtools.' in name):
+        base_classes = get_inheritance(obj)
+        for bc in base_classes:
+            g = create_inheritance_subgraph(bc, g, end_at_fmdtools=end_at_fmdtools)
+            add_edge(g, name, get_obj_name(bc), "base", "inheritance")
+    return g
 
 
 def set_node_states(g, obj, name, time=None):
@@ -153,7 +188,6 @@ def remove_base(g, basename):
     """Remove base node to enable flat view of model graph."""
     g.remove_node(basename)
     g.remove_nodes_from([*nx.isolates(g)])
-
 
 
 class ModelGraph(Graph):

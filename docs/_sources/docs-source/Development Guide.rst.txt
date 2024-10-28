@@ -1,8 +1,8 @@
 Development Guide
-================================
+=================
 
 Why fmdtools?
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+^^^^^^^^^^^^^
 
 Use fmdtools to improve your understanding of the dynamics of hazardous behavior. The fmdtools library was developed to study resilience, which is an important consideration in designing safe, low-risk systems. Resilience is the ability of a system to mitigate hazardous scenarios as they arise. As shown below, the key defining aspect of resilience is the **dynamics of failure events**, which may lead to recovery (or, a safe outcome) or failure (or, an unsafe outcome).
 
@@ -24,7 +24,8 @@ While this libary primarily provides code structures, a major objective of this 
 
 
 Introductory Tutorial
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+^^^^^^^^^^^^^^^^^^^^^
+
 **The best place to start** to getting acquanted with basic syntax and functionality is the `Intro to fmdtools <Intro_to_fmdtools.md>`_ workshop (:download:`download slides as pdf <Intro_to_fmdtools.pdf>`), which uses the `Pump` example to introduce the overall structure and use of fmdtools. Other models are further helpful to demonstrate the full variety of methods/approaches supported in fmdtools and their applcation for more advanced use-cases.
 
 .. toctree::
@@ -33,7 +34,7 @@ Introductory Tutorial
    Intro_to_fmdtools.md
 
 Glossary
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+^^^^^^^^
 
 You can use the glossary as a reference to understand basic simulation and analysis concepts in fmdtools.
 
@@ -110,7 +111,7 @@ You can use the glossary as a reference to understand basic simulation and analy
 		A set of :term:`scenario` s to simulate a model over to represent certain hazards or parameters of interest. May be generated using :class:`~fmdtools.sim.sample.FaultSample` for fault modes or :class:`~fmdtools.sim.sample.ParameterSample` for nominal parameters. 
 	
 	Nested Approach
-		The result of simulating a fault sampling Approach (:class:`~fmdtools.sim.sample.SampleApproach`) within a nominal Approach (:class:`~fmdtools.sim.sample.ParameterSample`). Created in :func:`~fmdtools.sim.propagate.nested_sample()`.
+		The result of simulating a fault sampling :term:`Approach` (:class:`~fmdtools.sim.sample.SampleApproach`) within a nominal :term:`Approach` (:class:`~fmdtools.sim.sample.ParameterSample`). Created in :func:`~fmdtools.sim.propagate.nested_sample()`.
 	
 	Static Propagation
 		The undirected propagation of model behaviors within a timestep. Defined for each function using :meth:`fmdtools.define.block.Function.static_behavior`, which may run multiple times in a timestep until behavior has converged. The static :term:`behavior` s are propagated through the graph using the method :meth:`~fmdtools.define.architecture.function.FunctionArchitecture.prop_static()`.
@@ -241,7 +242,7 @@ While testing is an assurance activity, it should also be considered a developme
 Finally, do not create tests solely to create tests. Tests should have a specific purpose in mind, ideally single tests should cover as many considerations as possible, rather than creating new tests for each individual consideration. As in model development, try to avoid bloat as much as possible. If the desire is to cover every edge-case, try to parameterize tests over these cases instead of creating individual test methods.
 
 Edit your code
---------------------------------
+--------------
 
 The nature of writing code is a messy process--often we spend a considerable amount of time getting code to a place where it "works" (i.e., runs) and leave it as-is. The problem with doing this over and over is that it neglects the syntax, documetation, and structural aspects of coding and thus contributes to technical debt. One of the best ways to avoid this from impacting development too much is to edit code after writing it.
 
@@ -260,7 +261,7 @@ Editing is the process of reviewing the code, recognizing potential (functional 
 This is an incomplete list. The point is to regularly review and improve code *after it is implemented to minimize future technical debt*. Waiting to edit will cause more hardship down the line.
 
 Structuring a model
---------------------------------
+-------------------
 
 fmdtools was originally developed around a very simple use-case of modeling physical behaviors using a Function/Flow ontology, where Functions (referred to as "technical functions") are supposed to be the high-level roles to be performed in the system, while flows are the data passed between these roles (energy, material, or signal).  Many of the models in the repository were developed to follow this form, or some variation of it, however, more complex modeling use-cases have led us to expand our conception of what can/should be modeled with a function or flow. More generally, 
 
@@ -327,7 +328,7 @@ The fmdtools codebase is quite large, and, as a result, it can be tempting to di
 * If there's something that you'd like to do in an fmdtools model that is difficult with existing model structures, consider filing a bug report before implementing an ad-hoc solution. Alternatively, try devoping your solution as a *feature* rather than a hack to solve a single use-case. If the features is in our scope and well-developed, we may try to incorporate it in our next release.
 
 Style advice
---------------------------------
+------------
 
 Development of fmdtools models should follow the `PEP 8 Style Guide <https://peps.python.org/pep-0008/#introduction>`_ as much as possible. While this won't be entirely re-iterated here, the following applies:
 
@@ -341,7 +342,7 @@ Development of fmdtools models should follow the `PEP 8 Style Guide <https://pep
 * It's `fmdtools`. Not `Fmdtools` or `fmd tool`. Even when it starts the sentence.
 
 See also
---------------------------------
+--------
 
 * `PEP 8 Style Guide <https://peps.python.org/pep-0008/#introduction>`_
 * `Technical debt <https://en.wikipedia.org/wiki/Technical_debt>`_
@@ -353,13 +354,13 @@ See also
 
 
 How to Contribute
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+^^^^^^^^^^^^^^^^^
 
 Development of fmdtools is coordinated by the `fmdtools team <../CONTRIBUTORS.md>`_ at NASA Ames Research Center. As an NASA-developed and maintained open-source tool, outside contributions are welcomed. To be able to submit contributions (e.g., pull requests), external contributors should first submit a contributors license agreement (`Individual CLA <https://github.com/nasa/fmdtools/blob/main/fmdtools_Individual_CLA.pdf>`_ , `Corporate CLA <https://github.com/nasa/fmdtools/blob/main/fmdtools_Corporate_CLA.pdf>`_).
 
 
 Repository Structure
---------------------------------
+--------------------
 
 .. image:: /docs-source/figures/uml/repo_organization.svg
    :width: 800
@@ -381,14 +382,14 @@ There are additionally a few scripts/config files with specific purposes to serv
 
 
 Git Structure and Setup
---------------------------------
+-----------------------
 
 .. image:: /docs-source/figures/uml/git_structure.svg
    :width: 800
 
 Development of fmdtools uses a two-track development model, in which contributions are provided within NASA as well as by external collaborators. To support this, there are multiple repositories which must be managed in the development process, as shown above. Essentially, there is:
 
-- An internal bitbucket, ``origin``, where NASA coordination and development takes place,
+- An internal bitbucket, ``origin``, where NASA coordination, development, and continuous integration takes place,
 - A public GitHub, ``public``, where collaboration with outside developers takes place (and where documentation is hosted), and 
 - A PyPI repository, which contains stable versions of fmdtools which can be readily installed via ``pip``. This repository is automatically updated when a new version is released on GithHub.
 - The fmdtools GitHub Pages site, which updates from the ``gh-pages`` branch.
@@ -421,7 +422,7 @@ Note that the ``-s`` option above `signs` the tag, attributing it to your creden
 
 
 Git Development Workflow
---------------------------------
+------------------------
 
 .. image:: /docs-source/figures/uml/dev_process.svg
    :width: 800
@@ -444,13 +445,11 @@ The major exceptions to this process are:
 - minor documentation changes.
 
 Release Process
---------------------------------
+---------------
 
 Releases are made to fmdtools to push new features and bugfixes to the open-source community as they are developed. Some important things to remember about the release process are:
 
-* It's important to test prior to release to ensure (1) bugs aren't being released that could have been caught easily with a test and (2) test results are accurate to the current version of the code. Currently, this is managed by the person conducting the release. Currently, this is managed by the person conducting the release via the ``run_all_tests.py`` script.
-
-* It's also important to ensure the documentation (both source files and html) stay up to date with the release. Currently, this is managed by the person conducting the release by rebuilding docs on their computer prior to release.
+* It's important to test prior to release to ensure (1) bugs aren't being released that could have been caught easily with a test (2) test results are accurate to the current version of the code and (3) the documentation stays up to date with the release. Currently, this is managed via Bamboo CI, which automatically builds releases on the /dev branch.
 
 * Releases are made to the fmdtools GitHub repository using the ``Draft a new release`` button on the `Releases <https://github.com/nasa/fmdtools/releases>`_ page. Once this release is generated, GitHub Actions uploads it to the ` fmdtools PyPi repo <https://pypi.org/project/fmdtools/>`_ automatically.
 
@@ -467,7 +466,7 @@ To ensure all of the steps of the release process are performed, follow the :dow
 
 
 Roles
---------------------------------
+-----
 
 - team lead: 		coordinates all activities and has technical authority over project direction
 - full developer: 	can make changes off of version and main branches and has full ability to perform the release process
@@ -475,9 +474,9 @@ Roles
 
 
 Documentation
---------------------------------
+-------------
 
-Documentation is generated using Sphinx, which generates html from rst files. The process for generating documentation (after sphinx has been set up) is to open powershell and run::
+Documentation is generated using Sphinx, which generates html from rst files. This is performed automatically on the Bamboo server. The process for generating documentation locally is to open powershell and run::
 	
 	cd path/to/fmdtools
 	./make clean
@@ -493,7 +492,7 @@ Note that sphinx requires the following requirements, which should be installed 
 Pandoc must be installed with anaconda (i.e., using `conda install pandoc`) since it is an external program.
 
 Style/Formatting
---------------------------------
+----------------
 
 Generally, we try to follow PEP8 style conventions. To catch these errors, it is best to *turn on PEP8 style linting* in your IDE of choice.
 
@@ -505,7 +504,7 @@ Style conventions can additionally be followed/enforced automatically using the 
 
 
 Headers
---------------------------------
+-------
 
 All source code files to be released under fmdtools should have the Apache-2.0 license applied to them. 
 
@@ -551,7 +550,7 @@ For jupyter notebooks, the following block should be inserted at the end of the 
 
 
 Testing
---------------------------------
+-------
 
 There are two major types of tests:
 
