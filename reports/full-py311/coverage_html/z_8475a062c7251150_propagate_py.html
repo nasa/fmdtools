@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-    <title>Coverage for fmdtools/sim/propagate.py: 96%</title>
+    <title>Coverage for fmdtools/sim/propagate.py: 95%</title>
     <link rel="icon" sizes="32x32" href="favicon_32_cb_58284776.png">
     <link rel="stylesheet" href="style_cb_8e611ae1.css" type="text/css">
     <script src="coverage_html_cb_6fb7b396.js" defer></script>
@@ -12,7 +12,7 @@
     <div class="content">
         <h1>
             <span class="text">Coverage for </span><b>fmdtools/sim/propagate.py</b>:
-            <span class="pc_cov">96%</span>
+            <span class="pc_cov">95%</span>
         </h1>
         <aside id="help_panel_wrapper">
             <input id="help_panel_state" type="checkbox">
@@ -55,8 +55,8 @@
         </aside>
         <h2>
             <span class="text">384 statements &nbsp;</span>
-            <button type="button" class="run button_toggle_run" value="run" data-shortcut="r" title="Toggle lines run">367<span class="text"> run</span></button>
-            <button type="button" class="mis show_mis button_toggle_mis" value="mis" data-shortcut="m" title="Toggle lines missing">17<span class="text"> missing</span></button>
+            <button type="button" class="run button_toggle_run" value="run" data-shortcut="r" title="Toggle lines run">363<span class="text"> run</span></button>
+            <button type="button" class="mis show_mis button_toggle_mis" value="mis" data-shortcut="m" title="Toggle lines missing">21<span class="text"> missing</span></button>
             <button type="button" class="exc show_exc button_toggle_exc" value="exc" data-shortcut="x" title="Toggle lines excluded">7<span class="text"> excluded</span></button>
         </h2>
         <p class="text">
@@ -65,7 +65,7 @@
             <a id="nextFileLink" class="nav" href="z_8475a062c7251150_sample_py.html">&#xbb; next</a>
             &nbsp; &nbsp; &nbsp;
             <a class="nav" href="https://coverage.readthedocs.io/en/7.6.4">coverage.py v7.6.4</a>,
-            created at 2024-10-25 23:54 +0000
+            created at 2024-10-28 02:17 +0000
         </p>
         <aside class="hidden">
             <button type="button" class="button_next_chunk" data-shortcut="j"></button>
@@ -1185,7 +1185,7 @@
     <p class="run"><span class="n"><a id="t1103" href="#t1103">1103</a></span><span class="t">                <span class="nam">disturbances</span> <span class="op">=</span> <span class="op">{</span><span class="op">}</span>&nbsp;</span><span class="r"></span></p>
     <p class="run"><span class="n"><a id="t1104" href="#t1104">1104</a></span><span class="t">            <span class="key">try</span><span class="op">:</span>&nbsp;</span><span class="r"></span></p>
     <p class="run"><span class="n"><a id="t1105" href="#t1105">1105</a></span><span class="t">                <span class="nam">mdl</span><span class="op">.</span><span class="nam">propagate</span><span class="op">(</span><span class="nam">t</span><span class="op">,</span> <span class="nam">fxnfaults</span><span class="op">,</span> <span class="nam">disturbances</span><span class="op">,</span> <span class="nam">run_stochastic</span><span class="op">=</span><span class="nam">run_stochastic</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
-    <p class="run"><span class="n"><a id="t1106" href="#t1106">1106</a></span><span class="t">            <span class="key">except</span> <span class="nam">Exception</span> <span class="key">as</span> <span class="nam">e</span><span class="op">:</span>&nbsp;</span><span class="r"></span></p>
+    <p class="mis show_mis"><span class="n"><a id="t1106" href="#t1106">1106</a></span><span class="t">            <span class="key">except</span> <span class="nam">Exception</span> <span class="key">as</span> <span class="nam">e</span><span class="op">:</span>&nbsp;</span><span class="r"></span></p>
     <p class="exc show_exc"><span class="n"><a id="t1107" href="#t1107">1107</a></span><span class="t">                <span class="key">raise</span> <span class="nam">Exception</span><span class="op">(</span><span class="str">"Error in scenario "</span> <span class="op">+</span> <span class="nam">str</span><span class="op">(</span><span class="nam">scen</span><span class="op">)</span><span class="op">)</span> <span class="key">from</span> <span class="nam">e</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t1108" href="#t1108">1108</a></span><span class="t">&nbsp;</span><span class="r"></span></p>
     <p class="run"><span class="n"><a id="t1109" href="#t1109">1109</a></span><span class="t">            <span class="nam">mdl</span><span class="op">.</span><span class="nam">log_hist</span><span class="op">(</span><span class="nam">t_ind</span><span class="op">,</span> <span class="nam">t</span><span class="op">,</span> <span class="nam">shift</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
@@ -1204,9 +1204,9 @@
     <p class="pln"><span class="n"><a id="t1122" href="#t1122">1122</a></span><span class="t">                                                  <span class="nam">nom_res</span><span class="op">,</span> <span class="nam">time</span><span class="op">=</span><span class="nam">t</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
     <p class="run"><span class="n"><a id="t1123" href="#t1123">1123</a></span><span class="t">            <span class="key">if</span> <span class="nam">check_end_condition</span><span class="op">(</span><span class="nam">mdl</span><span class="op">,</span> <span class="nam">use_end_condition</span><span class="op">,</span> <span class="nam">t</span><span class="op">)</span><span class="op">:</span>&nbsp;</span><span class="r"></span></p>
     <p class="run"><span class="n"><a id="t1124" href="#t1124">1124</a></span><span class="t">                <span class="key">break</span>&nbsp;</span><span class="r"></span></p>
-    <p class="run"><span class="n"><a id="t1125" href="#t1125">1125</a></span><span class="t">        <span class="key">except</span><span class="op">:</span>&nbsp;</span><span class="r"></span></p>
-    <p class="run"><span class="n"><a id="t1126" href="#t1126">1126</a></span><span class="t">            <span class="nam">print</span><span class="op">(</span><span class="str">"Error at t="</span> <span class="op">+</span> <span class="nam">str</span><span class="op">(</span><span class="nam">t</span><span class="op">)</span> <span class="op">+</span> <span class="str">' in scenario '</span> <span class="op">+</span> <span class="nam">str</span><span class="op">(</span><span class="nam">scen</span><span class="op">)</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
-    <p class="run"><span class="n"><a id="t1127" href="#t1127">1127</a></span><span class="t">            <span class="key">raise</span>&nbsp;</span><span class="r"></span></p>
+    <p class="mis show_mis"><span class="n"><a id="t1125" href="#t1125">1125</a></span><span class="t">        <span class="key">except</span><span class="op">:</span>&nbsp;</span><span class="r"></span></p>
+    <p class="mis show_mis"><span class="n"><a id="t1126" href="#t1126">1126</a></span><span class="t">            <span class="nam">print</span><span class="op">(</span><span class="str">"Error at t="</span> <span class="op">+</span> <span class="nam">str</span><span class="op">(</span><span class="nam">t</span><span class="op">)</span> <span class="op">+</span> <span class="str">' in scenario '</span> <span class="op">+</span> <span class="nam">str</span><span class="op">(</span><span class="nam">scen</span><span class="op">)</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
+    <p class="mis show_mis"><span class="n"><a id="t1127" href="#t1127">1127</a></span><span class="t">            <span class="key">raise</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t1128" href="#t1128">1128</a></span><span class="t">            <span class="key">break</span>&nbsp;</span><span class="r"></span></p>
     <p class="run"><span class="n"><a id="t1129" href="#t1129">1129</a></span><span class="t">    <span class="key">if</span> <span class="nam">cut_hist</span><span class="op">:</span>&nbsp;</span><span class="r"></span></p>
     <p class="run"><span class="n"><a id="t1130" href="#t1130">1130</a></span><span class="t">        <span class="nam">mdl</span><span class="op">.</span><span class="nam">h</span><span class="op">.</span><span class="nam">cut</span><span class="op">(</span><span class="nam">t_ind</span> <span class="op">+</span> <span class="nam">shift</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
@@ -1329,7 +1329,7 @@
             <a class="nav" href="z_8475a062c7251150_sample_py.html">&#xbb; next</a>
             &nbsp; &nbsp; &nbsp;
             <a class="nav" href="https://coverage.readthedocs.io/en/7.6.4">coverage.py v7.6.4</a>,
-            created at 2024-10-25 23:54 +0000
+            created at 2024-10-28 02:17 +0000
         </p>
     </div>
 </footer>

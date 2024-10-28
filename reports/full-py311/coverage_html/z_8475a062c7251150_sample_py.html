@@ -55,8 +55,8 @@
         </aside>
         <h2>
             <span class="text">466 statements &nbsp;</span>
-            <button type="button" class="run button_toggle_run" value="run" data-shortcut="r" title="Toggle lines run">417<span class="text"> run</span></button>
-            <button type="button" class="mis show_mis button_toggle_mis" value="mis" data-shortcut="m" title="Toggle lines missing">49<span class="text"> missing</span></button>
+            <button type="button" class="run button_toggle_run" value="run" data-shortcut="r" title="Toggle lines run">415<span class="text"> run</span></button>
+            <button type="button" class="mis show_mis button_toggle_mis" value="mis" data-shortcut="m" title="Toggle lines missing">51<span class="text"> missing</span></button>
             <button type="button" class="exc show_exc button_toggle_exc" value="exc" data-shortcut="x" title="Toggle lines excluded">60<span class="text"> excluded</span></button>
         </h2>
         <p class="text">
@@ -65,7 +65,7 @@
             <a id="nextFileLink" class="nav" href="z_8475a062c7251150_scenario_py.html">&#xbb; next</a>
             &nbsp; &nbsp; &nbsp;
             <a class="nav" href="https://coverage.readthedocs.io/en/7.6.4">coverage.py v7.6.4</a>,
-            created at 2024-10-25 23:54 +0000
+            created at 2024-10-28 02:17 +0000
         </p>
         <aside class="hidden">
             <button type="button" class="button_next_chunk" data-shortcut="j"></button>
@@ -1921,8 +1921,8 @@
     <p class="mis show_mis"><span class="n"><a id="t1839" href="#t1839">1839</a></span><span class="t">            <span class="nam">ts_to_sample</span> <span class="op">=</span> <span class="op">[</span><span class="op">*</span><span class="nam">np</span><span class="op">.</span><span class="nam">arange</span><span class="op">(</span><span class="num">0</span><span class="op">,</span> <span class="nam">len</span><span class="op">(</span><span class="nam">res</span><span class="op">.</span><span class="nam">time</span><span class="op">)</span><span class="op">,</span> <span class="nam">ts</span><span class="op">)</span><span class="op">]</span>&nbsp;</span><span class="r"></span></p>
     <p class="run"><span class="n"><a id="t1840" href="#t1840">1840</a></span><span class="t">        <span class="key">elif</span> <span class="nam">type</span><span class="op">(</span><span class="nam">ts</span><span class="op">)</span> <span class="key">is</span> <span class="nam">list</span><span class="op">:</span>&nbsp;</span><span class="r"></span></p>
     <p class="run"><span class="n"><a id="t1841" href="#t1841">1841</a></span><span class="t">            <span class="nam">ts_to_sample</span> <span class="op">=</span> <span class="nam">ts</span>&nbsp;</span><span class="r"></span></p>
-    <p class="run"><span class="n"><a id="t1842" href="#t1842">1842</a></span><span class="t">        <span class="key">elif</span> <span class="nam">type</span><span class="op">(</span><span class="nam">ts</span><span class="op">)</span> <span class="key">is</span> <span class="nam">tuple</span><span class="op">:</span>&nbsp;</span><span class="r"></span></p>
-    <p class="run"><span class="n"><a id="t1843" href="#t1843">1843</a></span><span class="t">            <span class="nam">ts_to_sample</span> <span class="op">=</span> <span class="op">[</span><span class="op">*</span><span class="nam">np</span><span class="op">.</span><span class="nam">arange</span><span class="op">(</span><span class="op">*</span><span class="nam">ts</span><span class="op">)</span><span class="op">]</span>&nbsp;</span><span class="r"></span></p>
+    <p class="mis show_mis"><span class="n"><a id="t1842" href="#t1842">1842</a></span><span class="t">        <span class="key">elif</span> <span class="nam">type</span><span class="op">(</span><span class="nam">ts</span><span class="op">)</span> <span class="key">is</span> <span class="nam">tuple</span><span class="op">:</span>&nbsp;</span><span class="r"></span></p>
+    <p class="mis show_mis"><span class="n"><a id="t1843" href="#t1843">1843</a></span><span class="t">            <span class="nam">ts_to_sample</span> <span class="op">=</span> <span class="op">[</span><span class="op">*</span><span class="nam">np</span><span class="op">.</span><span class="nam">arange</span><span class="op">(</span><span class="op">*</span><span class="nam">ts</span><span class="op">)</span><span class="op">]</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t1844" href="#t1844">1844</a></span><span class="t">        <span class="key">else</span><span class="op">:</span>&nbsp;</span><span class="r"></span></p>
     <p class="exc show_exc"><span class="n"><a id="t1845" href="#t1845">1845</a></span><span class="t">            <span class="key">raise</span> <span class="nam">Exception</span><span class="op">(</span><span class="str">"Invalid option for ts: "</span><span class="op">+</span><span class="nam">str</span><span class="op">(</span><span class="nam">ts</span><span class="op">)</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
     <p class="run"><span class="n"><a id="t1846" href="#t1846">1846</a></span><span class="t">        <span class="key">return</span> <span class="nam">ts_to_sample</span>&nbsp;</span><span class="r"></span></p>
@@ -2065,7 +2065,7 @@
             <a class="nav" href="z_8475a062c7251150_scenario_py.html">&#xbb; next</a>
             &nbsp; &nbsp; &nbsp;
             <a class="nav" href="https://coverage.readthedocs.io/en/7.6.4">coverage.py v7.6.4</a>,
-            created at 2024-10-25 23:54 +0000
+            created at 2024-10-28 02:17 +0000
         </p>
     </div>
 </footer>
