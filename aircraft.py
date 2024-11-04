@@ -26,7 +26,7 @@ class AircraftStates(State):
 
 class AircraftParam(Parameter, readonly=True):
     number: int = 1
-    max_range: float = 1287.0 # in km
+    max_range: float = 1287.0  # in km
     max_speed: float = 6.6  # in km/min
     base: int = 1
 
@@ -47,11 +47,14 @@ class Aircraft(Function):
     def dynamic_behavior(self, time):
         self.s.fuel_status = 100-time
         if self.indicate_at_goal():
+            # at goal
             a = 1
         elif self.indicate_in_range():
+            # if in range, clip to location
             self.s.location_x = self.s.goal_x
             self.s.location_y = self.s.goal_y
         else:
+            # moving to goal
             direction = self.s.find_direction()
             self.s.inc(location_x=self.p.max_speed*direction[0],
                        location_y=self.p.max_speed*direction[1])
@@ -64,8 +67,10 @@ if __name__ == "__main__":
     # res, hist = prop.nominal(a)
     # hist.plot_line('s.fuel_status', 's.location_x', 's.location_y')
     # hist.plot_trajectory('s.location_x', 's.location_y')
-    
-    a1 = Aircraft(s={'goal_x': 390, 'goal_y': 510})
+
+    a1 = Aircraft(s={'goal_x': 390, 'goal_y': 510}, track="all")
     res, hist = prop.nominal(a1, protect=False)
     hist.plot_line('s.fuel_status', 's.location_x', 's.location_y')
     hist.plot_trajectory('s.location_x', 's.location_y')
+    a1.fireenvironment.c.show_from(10, hist.fireenvironment.c,
+                                   properties={'burned': {}})
