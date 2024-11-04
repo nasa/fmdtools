@@ -45,12 +45,7 @@ class FireMap(Coords):
                 neighbors.append(self.grid[n_point[0], n_point[1]])
         return neighbors
 
-
-class FireEnvironment(Environment):
-    __slots__ = ()
-    coords_c = FireMap
-
-    def prop_time(self):
+    def prop_fire(self):
         for pt in self.c.pts:
             if self.c.get(*pt, 'to_burn'):
                 self.c.set(*pt, 'burned', True)
@@ -64,6 +59,14 @@ class FireEnvironment(Environment):
                 possible = self.c.get_neighbors(*pt)
                 for pt in possible:
                     self.c.set(*pt, 'to_burn', True)
+
+
+class FireEnvironment(Environment):
+    __slots__ = ()
+    coords_c = FireMap
+
+    def prop_time(self):
+        self.c.prop_fire()
 
 
 class FirePropagation(Function):
