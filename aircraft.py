@@ -28,13 +28,17 @@ class AircraftParam(Parameter, readonly=True):
     number: int = 1
     max_range: float = 1287.0  # in km
     max_speed: float = 6.6  # in km/min
-    base: int = 1
+    base: int = 0
 
 class Aircraft(Function):
     __slots__=('fireenvironment')
     container_s = AircraftStates
     container_p = AircraftParam
     flow_fireenvironment = FireEnvironment
+    
+    def init_block(self, **kwargs):
+        self.s.location_x = self.fireenvironment.c.p.base_locations[self.p.base][0]
+        self.s.location_y = self.fireenvironment.c.p.base_locations[self.p.base][1]
 
     def indicate_at_goal(self):
         return self.s.same([self.s.goal_x, self.s.goal_y],
@@ -63,12 +67,14 @@ class Aircraft(Function):
 if __name__ == "__main__":
     import fmdtools.sim.propagate as prop
     a = Aircraft()
+    fe = FireEnvironment(c={"p":{"base_locations": ((0000.0, 6000.0),)}})
 
     # res, hist = prop.nominal(a)
     # hist.plot_line('s.fuel_status', 's.location_x', 's.location_y')
     # hist.plot_trajectory('s.location_x', 's.location_y')
 
-    a1 = Aircraft(s={'goal_x': 390, 'goal_y': 510}, track="all")
+    a1 = Aircraft(s={'goal_x': 390, 'goal_y': 510}, fireenvironment=fe)
+
     res, hist = prop.nominal(a1, protect=False)
     hist.plot_line('s.fuel_status', 's.location_x', 's.location_y')
     hist.plot_trajectory('s.location_x', 's.location_y')
