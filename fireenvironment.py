@@ -46,19 +46,19 @@ class FireMap(Coords):
         return neighbors
 
     def prop_fire(self):
-        for pt in self.c.pts:
-            if self.c.get(*pt, 'to_burn'):
-                self.c.set(*pt, 'burned', True)
+        for pt in self.pts:
+            if self.get(*pt, 'to_burn'):
+                self.set(*pt, 'burned', True)
 
-        for pt in self.c.pts:
+        for pt in self.pts:
             # light the fire where lightning has struck
-            if self.c.get(*pt, 'strike'):
-                self.c.set(*pt, 'burned', True)
+            if self.get(*pt, 'strike'):
+                self.set(*pt, 'burned', True)
             # light the fire next to burning points
-            if self.c.get(*pt, 'burned'):
-                possible = self.c.get_neighbors(*pt)
+            if self.get(*pt, 'burned'):
+                possible = self.get_neighbors(*pt)
                 for pt in possible:
-                    self.c.set(*pt, 'to_burn', True)
+                    self.set(*pt, 'to_burn', True)
 
 
 class FireEnvironment(Environment):
