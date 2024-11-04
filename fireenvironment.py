@@ -19,13 +19,15 @@ class FireMapParam(CoordsParam):
     feature_tree: tuple = (bool, True)
     feature_water: tuple = (bool, False)
     feature_grass: tuple = (bool, False)
-    point_base: tuple = (0.0, 0.0)
+    feature_base: tuple = (bool, False)
+    base_locations: tuple = ((0.0, 0.0),)
 
 
 class FireMap(Coords):
     container_p = FireMapParam
 
     def init_properties(self, *args, **kwargs):
+        self.set_pts(self.p.base_locations, "base", True)
         self.set_prop_dist('strike', 'binomial', 1, self.p.strike_prob)
         self.set_range('tree', False, ymin=5000, ymax=10000, xmin=0, xmax=10000)
         self.set_range('water', True, xmin=0, xmax=4000, ymin=5000, ymax=10000)
@@ -76,11 +78,12 @@ if __name__ == "__main__":
 
     fm = FireMap()
     fm.show_property('tree')
-    fm = FireMap(p=dict(x_size=10, y_size=10, strike_prob=0.1))
+    fm = FireMap(p=dict(x_size=10, y_size=10, strike_prob=0.1, base_locations=((0.0, 8000.0), (6000.0, 6000.0))))
     fm.show_property('tree')
     fm.show_property('strike', color="yellow")
     fm.show_property('water', color="blue")
     fm.show_property('grass', color="green")
+    fm.show_property('base', color="grey")
 
     fe = FireEnvironment()
     fe.c.show_property('burned', color="red")
