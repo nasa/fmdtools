@@ -1,7 +1,7 @@
 
 #ignore python cache files
-__pycache__/
-*.pyc
+__pycache__/*
+.pyc
 
 
 #ignore Jupyter checkpoints
