@@ -110,7 +110,7 @@ class Aircraft(Function):
 if __name__ == "__main__":
     import fmdtools.sim.propagate as prop
     a = Aircraft()
-    fe = FireEnvironment(c={"p":{"base_locations": ((40.0, 20.0),)}})
+    fe = FireEnvironment(c={"p":{"base_locations": ((40.0, 20.0),), "num_strikes": 3}})
     fe.prop_time()
     # res, hist = prop.nominal(a)
     # hist.plot_line('s.fuel_status', 's.location_x', 's.location_y')
