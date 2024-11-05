@@ -7,14 +7,15 @@ import numpy as np
 from fmdtools.define.container.parameter import Parameter
 from fmdtools.define.container.state import State
 from fmdtools.define.block.function import Function
+from fmdtools.define.container.mode import Mode
 
 from fireenvironment import FireEnvironment
 
 class AircraftStates(State):
     retardant_status: float = 100 # starting retardant at 100%
     fuel_status: float = 100 # starting fuel at 100%
-    goal_x: float = 100.0
-    goal_y: float = 100.0
+    goal_x: float = 10.0
+    goal_y: float = 10.0
     location_x: float = 0.0
     location_y: float = 0.0
     direction: np.array = np.array([0, 0])
@@ -30,12 +31,15 @@ class AircraftStates(State):
         return np.sqrt(vector_dist[0]**2+vector_dist[1]**2)
 
     def at_goal(self):
-        self.same(self.gett("goal_x", "goal_y"), "location_x", "location_y")
+        return self.same(self.gett("goal_x", "goal_y"), "location_x", "location_y")
 
     def in_range(self):
         return (abs(self.goal_x - self.location_x) <= 10.0 and
                 abs(self.goal_y - self.location_y) <= 10.0)
 
+class  AircraftModes(Mode):
+    opermodes = ("resupply", "fly_to_fire", "mitigate_fire", "fly_to_base")
+    mode: str = "resupply"
 
 class AircraftParam(Parameter, readonly=True):
     number: int = 1
@@ -48,6 +52,7 @@ class Aircraft(Function):
     __slots__=('fireenvironment')
     container_s = AircraftStates
     container_p = AircraftParam
+    container_m = AircraftModes
     flow_fireenvironment = FireEnvironment
 
     def init_block(self, **kwargs):
@@ -76,22 +81,41 @@ class Aircraft(Function):
                            fuel_status=-self.p.max_speed/self.p.max_range)
 
     def dynamic_behavior(self, time):
-        self.fly_to_goal()
+        if self.m.in_mode("resupply"):
+            self.s.retardant_status = 100
+            self.s.fuel_status = 100
+            if [*self.fireenvironment.c.find_all_prop("strike")]:
+                self.m.set_mode("fly_to_fire")
+                closest = self.fireenvironment.c.find_closest(*self.s.get("location_x","location_y"), "strike")
+                self.s.assign(closest, "goal_x", "goal_y")
+        elif self.m.in_mode("fly_to_fire"):
+            self.fly_to_goal()
+            if self.indicate_at_goal():
+                self.m.set_mode("mitigate_fire")
+        elif self.m.in_mode("mitigate_fire"):
+            self.s.retardant_status=0
+            self.m.set_mode("fly_to_base")
+            self.s.goal_x = self.fireenvironment.c.p.base_locations[self.p.base][0]
+            self.s.goal_y = self.fireenvironment.c.p.base_locations[self.p.base][1]
+        elif self.m.in_mode("fly_to_base"):
+            self.fly_to_goal()
+            if self.indicate_at_goal():
+                self.m.set_mode("resupply")
 
 
 if __name__ == "__main__":
     import fmdtools.sim.propagate as prop
     a = Aircraft()
-    fe = FireEnvironment(c={"p":{"base_locations": ((0000.0, 6000.0),)}})
+    fe = FireEnvironment(c={"p":{"base_locations": ((40.0, 20.0),)}})
 
     # res, hist = prop.nominal(a)
     # hist.plot_line('s.fuel_status', 's.location_x', 's.location_y')
     # hist.plot_trajectory('s.location_x', 's.location_y')
 
-    a1 = Aircraft(s={'goal_x': 390, 'goal_y': 510}, fireenvironment=fe, track="all")
+    a1 = Aircraft(s={'goal_x': 30, 'goal_y': 40}, fireenvironment=fe, track="all")
 
     res, hist = prop.nominal(a1, protect=False)
-    hist.plot_line('s.fuel_status', 's.location_x', 's.location_y')
+    hist.plot_line('s.fuel_status', 's.location_x', 's.location_y', 'm.mode')
 
     fig, ax = a1.fireenvironment.c.show_from(10, hist.fireenvironment.c,
                                              properties={'strike': {"color": "yellow", "as_bool": True}, "base": {"color": "grey"}})
