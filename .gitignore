@@ -5,4 +5,7 @@ __pycache__/
 
 
 #ignore Jupyter checkpoints
-.ipynb_checkpoints
+*.ipynb_checkpoints
+
+#ignore DS_Store for macs
+*.DS_Store
