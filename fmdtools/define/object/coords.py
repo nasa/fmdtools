@@ -787,7 +787,7 @@ class Coords(BaseObject):
 
     def set_rand_pts(self, prop, value, number, pts=None, replace=False):
         """
-        Ses a given number of points for a property to random value.
+        Set a given number of points for a property to random value.
 
         Parameters
         ----------
@@ -840,7 +840,7 @@ class Coords(BaseObject):
 
     def return_mutables(self):
         """Check if grid properties have changed (used in propagation)."""
-        return tuple([*(tuple(map(tuple, getattr(self, state)))
+        return tuple([*(tuple(map(tuple, replace_array_nan(getattr(self, state))))
                         for state in self.states)])
 
     def copy(self):
@@ -1319,6 +1319,14 @@ class Coords(BaseObject):
             self.show_collection(coll, fig=fig, ax=ax, legend_args=legend_args,
                                  **collections[coll], z=z)
         return fig, ax
+
+
+def replace_array_nan(array):
+    """Turn arrays with nans into arrays with infs."""
+    if np.isnan(array).any():
+        return np.nan_to_num(array, nan=np.inf)
+    else:
+        return array
 
 
 class ExampleCoordsParam(CoordsParam):
