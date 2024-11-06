@@ -156,6 +156,9 @@ class Architecture(Simulable):
             as_copy = self.as_copy
 
         track = get_sub_include(name, get_sub_include(flex_role, self.track))
+        # sync rands, if present
+        if hasattr(self, 'r') and hasattr(objclass, "container_r"):
+            kwargs = {**{'r': {"seed": self.r.seed}}, **kwargs}
         obj = init_obj(name=name, objclass=objclass, track=track,
                        as_copy=as_copy, root=self.get_full_name()+"."+flex_role,
                        **kwargs)
@@ -231,8 +234,6 @@ class Architecture(Simulable):
         """
         flows = self.get_flows(*flownames, all_if_empty=False)
         fkwargs = {**{'sp': self.sp.asdict()}, **kwargs}
-        if hasattr(self, 'r'):
-            fkwargs = {**{'r': {"seed": self.r.seed}}, **fkwargs}
         if not self.sp.use_local:
             fkwargs = {**{'t': {'dt': self.sp.dt}}, **fkwargs}
 

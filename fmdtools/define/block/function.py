@@ -120,7 +120,7 @@ class Function(Block):
 
     def update_seed(self, seed=[]):
         """
-        Update seed and propogates update to contained actions/components.
+        Update seed and propagates update to contained actions/components.
 
         (keeps seeds in sync)
 

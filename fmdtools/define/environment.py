@@ -66,15 +66,18 @@ class Environment(CommsFlow):
 
     def __init__(self, name='', root='', glob=[], p={}, s={}, r={}, c={}, ga={},
                  track='default'):
+        super().__init__(name=name, root=root, glob=glob, p=p, s=s, track=track)
+        # NOTE: p and s also init here because if not, they are overritten
+        # may need to change in the future
+        self.init_roletypes('container', "coords", "arch", r=r, p=p, s=s)
         if 'p' not in c and getattr(self.coords_c, 'container_p', None) == getattr(self, 'container_p', None):
             c = {**c, 'p': p}
         if 'p' not in ga and getattr(self.arch_ga, 'container_p', None) == getattr(self, 'container_p', None):
             ga = {**ga, 'p': p}
-        super().__init__(name=name, root=root, glob=glob, p=p, s=s, track=track)
-        # NOTE: p and s also init here because if not, they are overritten
-        # may need to change in the future
-        self.init_roletypes('container', "coords", "arch", r=r, p=p, s=s, c=c, ga=ga)
-        self.update_seed()
+        r_kwargs = {'run_stochastic': self.r.run_stochastic, 'seed': self.r.seed}
+        c = {**{'r': r_kwargs}, **c}
+        ga = {**{'r': r_kwargs}, **ga}
+        self.init_roletypes('coords', 'arch', c=c, ga=ga)
 
     def base_type(self):
         """Return fmdtools type of the model class."""
@@ -122,11 +125,6 @@ class Environment(CommsFlow):
         self.r.reset()
         self.c = self.coords_c(**self._args_c)
         self.ga.reset()
-
-    def update_seed(self, seed=[]):
-        if not seed:
-            seed = self.r.seed
-        self.c.r.update_seed(seed)
 
     def return_probdens(self):
         return self.r.return_probdens() * self.c.r.return_probdens()
