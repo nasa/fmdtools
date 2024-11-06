@@ -8,6 +8,7 @@ Created on Wed Jun  5 09:33:54 2024
 
 from fmdtools.define.architecture.function import FunctionArchitecture
 from fmdtools.define.container.parameter import Parameter
+from fmdtools.define.container.rand import Rand
 from fireenvironment import FireEnvironment, FirePropagation, FireMapParam
 from aircraft import Aircraft
 
@@ -19,6 +20,7 @@ class WildFireSimParameter(Parameter):
 class WildfireSim(FunctionArchitecture):
     __slots__ = ()
     container_p = WildFireSimParameter
+    container_r = Rand
     default_sp = {'end_time': 200}
     """
     flows: environment, supplies
@@ -45,7 +47,8 @@ if __name__ == "__main__":
     from fmdtools.define.architecture.function import FunctionArchitectureGraph
     import fmdtools.sim.propagate as prop
     mdl = WildfireSim(p = {'firemapparam': {'num_strikes': 4,
-                                            'base_locations': ((10,10), (40,40))}})
+                                            'base_locations': ((10,10), (40,40))}},
+                      r={'seed': 100})
 
     mdl_graph = FunctionArchitectureGraph(mdl)
     mdl_graph.draw()
