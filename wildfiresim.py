@@ -7,14 +7,19 @@ Created on Wed Jun  5 09:33:54 2024
 """
 
 from fmdtools.define.architecture.function import FunctionArchitecture
-from fireenvironment import FireEnvironment
-from fireenvironment import FirePropagation
+from fmdtools.define.container.parameter import Parameter
+from fireenvironment import FireEnvironment, FirePropagation, FireMapParam
 from aircraft import Aircraft
 
 
+class WildFireSimParameter(Parameter):
+    firemapparam: FireMapParam = FireMapParam()
+
+
 class WildfireSim(FunctionArchitecture):
-    __slots__=()
-    default_sp={}
+    __slots__ = ()
+    container_p = WildFireSimParameter
+    default_sp = {'end_time': 200}
     """
     flows: environment, supplies
     functions: fire_propagation, aircraft, bases
@@ -22,23 +27,44 @@ class WildfireSim(FunctionArchitecture):
     def init_architecture(self, **kwargs):
 
         # self.add_flow("supplies")
-        self.add_flow("fireenvironment", FireEnvironment)
+        self.add_flow("fireenvironment", FireEnvironment,
+                      c={"p": self.p.firemapparam})
 
         # self.add_fxn("fire_propagation", GenericFxn, "environment", "supplies")
         # self.add_fxn("aircraft", GenericFxn, "environment", "supplies")
         # self.add_fxn("bases", GenericFxn, "supplies", "environment")
-        self.add_fxn("firepropagation", FirePropagation, "fireenvironment")
         self.add_fxn("aircraft", Aircraft, "fireenvironment")
+        self.add_fxn("firepropagation", FirePropagation, "fireenvironment")
 
 
 
 if __name__ == "__main__":
     from fmdtools.define.architecture.function import FunctionArchitectureGraph
     import fmdtools.sim.propagate as prop
-    mdl = WildfireSim()
+    mdl = WildfireSim(p = {'firemapparam': {'num_strikes': 4}})
 
     mdl_graph = FunctionArchitectureGraph(mdl)
     mdl_graph.draw()
 
     res, hist = prop.nominal(mdl, protect=False)
-    hist.flows.fireenvironment.c.burned
+    hist.flows.fireenvironment.c.burning
+    fig, ax = hist.plot_line('fxns.aircraft.s.fuel_status',
+                             'fxns.aircraft.s.location_x',
+                             'fxns.aircraft.s.location_y',
+                             'fxns.aircraft.m.mode')
+
+    properties={'burning': {"color": "red", "as_bool": True},
+                "base": {"color": "grey"},
+                "to_burn": {"color": "yellow", "as_bool": True, "alpha": 0.5},
+                "extinguished": {"color": "blue", "alpha": 0.5}}
+
+    fig, ax = mdl.flows['fireenvironment'].c.show_from(8, hist.flows.fireenvironment.c,
+                                                    properties=properties)
+    hist.plot_trajectory('s.location_x', 's.location_y', fig=fig, ax=ax, )
+
+    fig, ax = mdl.flows['fireenvironment'].c.show_from(45, hist.flows.fireenvironment.c,
+                                                    properties=properties)
+    hist.plot_trajectory('s.location_x', 's.location_y', fig=fig, ax=ax)
+
+    ani = mdl.flows['fireenvironment'].c.animate(hist.flows.fireenvironment.c,
+                                                 properties=properties)

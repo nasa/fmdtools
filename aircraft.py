@@ -46,6 +46,13 @@ class AircraftParam(Parameter, readonly=True):
     max_range: float = 1287.0  # in km
     max_speed: float = 6.6  # in km/min
     base: int = 0
+    resupply_time: float = 10.0  # 10 minute resupply time
+
+
+from fmdtools.define.container.time import Time
+
+class AircraftTime(Time):
+    timernames = ('resupply', )
 
 
 class Aircraft(Function):
@@ -53,6 +60,7 @@ class Aircraft(Function):
     container_s = AircraftStates
     container_p = AircraftParam
     container_m = AircraftModes
+    container_t = AircraftTime
     flow_fireenvironment = FireEnvironment
 
     def init_block(self, **kwargs):
@@ -64,6 +72,12 @@ class Aircraft(Function):
 
     def indicate_in_range(self):
         return self.s.in_range()
+
+    def set_fire_goal(self):
+        if [*self.fireenvironment.c.find_all_prop("burning")]:
+            self.m.set_mode("fly_to_fire")
+            closest = self.fireenvironment.c.find_closest(*self.s.get("location_x", "location_y"), "burning")
+            self.s.assign(closest, "goal_x", "goal_y")
 
     def fly_to_goal(self):
         if not self.indicate_at_goal():
@@ -81,23 +95,27 @@ class Aircraft(Function):
                            fuel_status=-self.p.max_speed/self.p.max_range)
 
     def dynamic_behavior(self, time):
+        print(self)
         if self.m.in_mode("resupply"):
-            self.s.retardant_status = 100
-            self.s.fuel_status = 100
-            if [*self.fireenvironment.c.find_all_prop("burned")]:
-                self.m.set_mode("fly_to_fire")
-                closest = self.fireenvironment.c.find_closest(*self.s.get("location_x","location_y"), "burned")
-                self.s.assign(closest, "goal_x", "goal_y")
+            if self.t.timers['resupply'].indicate_complete() or self.t.timers['resupply'].indicate_standby():
+                self.s.retardant_status = 100
+                self.s.fuel_status = 100
+                self.t.timers['resupply'].set_timer(self.p.resupply_time)
+                self.m.set_mode('fly_to_fire')
+                self.set_fire_goal()
+            else:
+                self.t.timers['resupply'].inc()
         elif self.m.in_mode("fly_to_fire"):
+            self.set_fire_goal()
             self.fly_to_goal()
             if self.indicate_at_goal():
                 self.m.set_mode("mitigate_fire")
         elif self.m.in_mode("mitigate_fire"):
             self.s.retardant_status = 0
             self.fireenvironment.c.set(*self.s.gett("location_x", "location_y"),
-                                       "mitigated", True)
+                                       "extinguished", True)
             self.fireenvironment.c.set(*self.s.gett("location_x", "location_y"),
-                                       "burned", False)
+                                       "burning", False)
             self.m.set_mode("fly_to_base")
             self.s.goal_x = self.fireenvironment.c.p.base_locations[self.p.base][0]
             self.s.goal_y = self.fireenvironment.c.p.base_locations[self.p.base][1]
@@ -110,7 +128,7 @@ class Aircraft(Function):
 if __name__ == "__main__":
     import fmdtools.sim.propagate as prop
     a = Aircraft()
-    fe = FireEnvironment(c={"p":{"base_locations": ((40.0, 20.0),), "num_strikes": 3}})
+    fe = FireEnvironment(c={"p": {"base_locations": ((40.0, 20.0),), "num_strikes": 3}})
     fe.prop_time()
     # res, hist = prop.nominal(a)
     # hist.plot_line('s.fuel_status', 's.location_x', 's.location_y')
@@ -122,5 +140,5 @@ if __name__ == "__main__":
     hist.plot_line('s.fuel_status', 's.location_x', 's.location_y', 'm.mode')
 
     fig, ax = a1.fireenvironment.c.show_from(30, hist.fireenvironment.c,
-                                             properties={'burned': {"color": "red", "as_bool": True}, "base": {"color": "grey"}, "mitigated": {"color": "blue", "alpha": 0.5}})
+                                             properties={'burning': {"color": "red", "as_bool": True}, "base": {"color": "grey"}, "extinguished": {"color": "blue", "alpha": 0.5}})
     hist.plot_trajectory('s.location_x', 's.location_y', fig=fig, ax=ax)

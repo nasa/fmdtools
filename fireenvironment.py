@@ -7,15 +7,17 @@ Location for Environmental Flows (e.g., Ground, AirSpace, etc)
 from fmdtools.define.object.coords import Coords, CoordsParam
 from fmdtools.define.environment import Environment
 from fmdtools.define.block.function import Function
+import numpy as np
 
 
 class FireMapParam(CoordsParam):
     x_size: int = 10
     y_size: int = 10
-    blocksize: float = 5.0 # 5 kilometers
-    state_to_burn: tuple = (bool, False)
-    state_burned: tuple = (bool, False)
-    state_mitigated: tuple = (bool, False)
+    blocksize: float = 5.0  # 5 kilometers
+    state_to_burn: tuple = (float, np.NaN)
+    state_burning: tuple = (bool, False)
+    state_to_extinguish: tuple = (float, np.NaN)
+    state_extinguished: tuple = (bool, False)
     feature_strike: tuple = (bool, False)
     feature_tree: tuple = (bool, True)
     feature_water: tuple = (bool, False)
@@ -38,42 +40,71 @@ class FireMap(Coords):
         # self.set_range('water', True, xmin=0, xmax=4000, ymin=5000, ymax=10000)
         # self.set_range('grass', True, xmin= 5000, xmax=10000, ymin=5000, ymax=10000)
 
-    def set_burned(self):
-        for pt in self.find_all_prop("to_burn"):
-            self.set(*pt, 'burned', True)
-            self.set(*pt, 'to_burn', False)
+    def set_to_burn(self, tstep=1.0):
+        for pt in self.find_all_prop("burning"):
+            # light the fire next to burning points
+            possible = self.get_neighbors(*pt)
+            for pt in possible:
+                if not self.get(*pt, "extinguished") and not self.get(*pt, 'burning'):
+                    to_burn = self.get(*pt, "to_burn")
+                    if np.isnan(to_burn):
+                        self.set(*pt, "to_burn", 50.0)
+                    else:
+                        self.set(*pt, "to_burn", to_burn-tstep)
+
+    def set_burning(self):
+        for pt in self.find_all_prop("to_burn", value=0.0, comparator=np.less_equal):
+            self.set(*pt, 'burning', True)
+            self.set(*pt, 'to_burn', np.NaN)
+            self.set(*pt, 'to_extinguish', 100.0)
+
+    def set_extinguished(self, tstep=1.0):
+        for pt in self.find_all_prop("to_extinguish", value=-np.inf, comparator=np.greater_equal):
+            to_extinguish = self.get(*pt, 'to_extinguish')
+            if to_extinguish <= 0.0:
+                self.set(*pt, 'extinguished', True)
+                self.set(*pt, 'burning', True)
+                self.set(*pt, 'to_extinguish', np.NaN)
+            else:
+                self.set(*pt, 'to_extinguish', to_extinguish-tstep)
 
     def set_strike_burn(self):
         for pt in self.find_all_prop("strike"):
             # light the fire where lightning has struck
-            self.set(*pt, 'burned', True)
+            if not self.get(*pt, 'burning'):
+                self.set(*pt, 'burning', True)
+                self.set(*pt, 'to_extinguish', 100.0)
 
-    def set_to_burn(self):
-        for pt in self.find_all_prop("burned"):
-            # light the fire next to burning points
-            possible = self.get_neighbors(*pt)
-            for pt in possible:
-                self.set(*pt, 'to_burn', True)
-
-    def prop_fire(self):
-        self.set_burned()
-        self.set_to_burn()
+    def prop_fire(self, tstep=1.0):
+        self.set_to_burn(tstep=tstep)
+        self.set_burning()
+        self.set_extinguished(tstep=tstep)
 
 
 class FireEnvironment(Environment):
     __slots__ = ()
     coords_c = FireMap
 
-    def prop_time(self):
-        self.c.prop_fire()
+    def prop_time(self, tstep=1.0):
+        self.c.prop_fire(tstep=tstep)
 
+from fmdtools.define.container.time import Time
+
+# class FirePropagationTime(Time):
+#     """
+#     Propagation time depends on assumptions, see:
+#         * ~15 mph or 0.5 km/min == prop 5 km every 10 timesteps for directional fires
+#         * ~3mph or 0.1 km/min == prop 5 km every 50 timesteps for no-wind fires
+#     """
+#     local_dt = 50.0  # ~15 mph or 0.5 km/min == prop 5 km every 10 timesteps
 
 class FirePropagation(Function):
     __slots__ = ('fireenvironment')
     flow_fireenvironment = FireEnvironment
 
     def dynamic_behavior(self, time):
-        self.fireenvironment.prop_time()
+        if time > 0:
+            self.fireenvironment.prop_time(self.t.dt)
 
 
 if __name__ == "__main__":
@@ -88,12 +119,17 @@ if __name__ == "__main__":
     fm.show_property('base', color="grey")
 
     fe = FireEnvironment()
-    fe.c.show_property('burned', color="red")
-    fe.prop_time()
-    fe.c.show_property('burned', color="red")
-    fe.prop_time()
-    fe.c.show_property('burned', color="red")
-    fe.prop_time()
-    fe.c.show_property('burned', color="red")
+    fe.c.show_property('burning', color="red")
+    fe.prop_time(tstep=50.0)
+    fe.c.show_property('burning', color="red")
+    fe.prop_time(tstep=50.0)
+    fe.c.show_property('burning', color="red")
+    fe.prop_time(tstep=50.0)
+    fe.c.show_property('burning', color="red")
+    fe.prop_time(tstep=50.0)
+    fe.c.show_property('burning', color="red")
+    fe.prop_time(tstep=50.0)
+    fe.c.show_property('burning', color="red")
+    fe.c.show_property('extinguished', color="blue")
 
     fp_mdl = FirePropagation()
