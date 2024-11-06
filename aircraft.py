@@ -8,6 +8,7 @@ from fmdtools.define.container.parameter import Parameter
 from fmdtools.define.container.state import State
 from fmdtools.define.block.function import Function
 from fmdtools.define.container.mode import Mode
+from fmdtools.define.container.time import Time
 
 from fireenvironment import FireEnvironment
 
@@ -48,8 +49,6 @@ class AircraftParam(Parameter, readonly=True):
     base: int = 0
     resupply_time: float = 10.0  # 10 minute resupply time
 
-
-from fmdtools.define.container.time import Time
 
 class AircraftTime(Time):
     timernames = ('resupply', )
@@ -95,7 +94,6 @@ class Aircraft(Function):
                            fuel_status=-self.p.max_speed/self.p.max_range)
 
     def dynamic_behavior(self, time):
-        print(self)
         if self.m.in_mode("resupply"):
             if self.t.timers['resupply'].indicate_complete() or self.t.timers['resupply'].indicate_standby():
                 self.s.retardant_status = 100
@@ -112,10 +110,10 @@ class Aircraft(Function):
                 self.m.set_mode("mitigate_fire")
         elif self.m.in_mode("mitigate_fire"):
             self.s.retardant_status = 0
-            self.fireenvironment.c.set(*self.s.gett("location_x", "location_y"),
-                                       "extinguished", True)
-            self.fireenvironment.c.set(*self.s.gett("location_x", "location_y"),
-                                       "burning", False)
+            loc = self.s.gett("location_x", "location_y")
+            if not self.fireenvironment.c.get(*loc, "base"):
+                self.fireenvironment.c.set(*loc, "extinguished", True)
+            self.fireenvironment.c.set(*loc, "burning", False)
             self.m.set_mode("fly_to_base")
             self.s.goal_x = self.fireenvironment.c.p.base_locations[self.p.base][0]
             self.s.goal_y = self.fireenvironment.c.p.base_locations[self.p.base][1]

@@ -33,7 +33,10 @@ class WildfireSim(FunctionArchitecture):
         # self.add_fxn("fire_propagation", GenericFxn, "environment", "supplies")
         # self.add_fxn("aircraft", GenericFxn, "environment", "supplies")
         # self.add_fxn("bases", GenericFxn, "supplies", "environment")
-        self.add_fxn("aircraft", Aircraft, "fireenvironment")
+        bases = [i for i in range(len(self.p.firemapparam.base_locations))]
+        for base in bases:
+            self.add_fxn("aircraft_"+str(base), Aircraft, "fireenvironment",
+                         p={'base': base})
         self.add_fxn("firepropagation", FirePropagation, "fireenvironment")
 
 
@@ -41,17 +44,18 @@ class WildfireSim(FunctionArchitecture):
 if __name__ == "__main__":
     from fmdtools.define.architecture.function import FunctionArchitectureGraph
     import fmdtools.sim.propagate as prop
-    mdl = WildfireSim(p = {'firemapparam': {'num_strikes': 4}})
+    mdl = WildfireSim(p = {'firemapparam': {'num_strikes': 4,
+                                            'base_locations': ((10,10), (40,40))}})
 
     mdl_graph = FunctionArchitectureGraph(mdl)
     mdl_graph.draw()
 
     res, hist = prop.nominal(mdl, protect=False)
     hist.flows.fireenvironment.c.burning
-    fig, ax = hist.plot_line('fxns.aircraft.s.fuel_status',
-                             'fxns.aircraft.s.location_x',
-                             'fxns.aircraft.s.location_y',
-                             'fxns.aircraft.m.mode')
+    fig, ax = hist.plot_line('fxns.aircraft_0.s.fuel_status',
+                             'fxns.aircraft_0.s.location_x',
+                             'fxns.aircraft_0.s.location_y',
+                             'fxns.aircraft_0.m.mode')
 
     properties={'burning': {"color": "red", "as_bool": True},
                 "base": {"color": "grey"},

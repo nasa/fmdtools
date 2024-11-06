@@ -59,7 +59,7 @@ class FireMap(Coords):
             self.set(*pt, 'to_extinguish', 100.0)
 
     def set_extinguished(self, tstep=1.0):
-        for pt in self.find_all_prop("to_extinguish", value=-np.inf, comparator=np.greater_equal):
+        for pt in self.find_all_prop("burning"):
             to_extinguish = self.get(*pt, 'to_extinguish')
             if to_extinguish <= 0.0:
                 self.set(*pt, 'extinguished', True)
