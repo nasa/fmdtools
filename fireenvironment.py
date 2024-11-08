@@ -7,6 +7,7 @@ Location for Environmental Flows (e.g., Ground, AirSpace, etc)
 from fmdtools.define.object.coords import Coords, CoordsParam
 from fmdtools.define.environment import Environment
 from fmdtools.define.block.function import Function
+from fmdtools.define.container.state import State
 import numpy as np
 
 
@@ -27,7 +28,7 @@ class FireMapParam(CoordsParam):
     base_locations: tuple = ((0.0, 0.0),)
     num_strikes: int = 1
     map_type: str = "uniform-grass"
-    grass_ig_time: float = 50.0
+    grass_ig_time: float = 50.0  # 5 km every 50 timesteps (~3mph)
     grass_ex_time: float = 90.0
     scrub_ig_time: float = 75.0
     scrub_ex_time: float = 200.0
@@ -120,6 +121,12 @@ class FireMap(Coords):
         self.set_burning()
         self.set_extinguished(tstep=tstep)
 
+    def calc_area_burned(self):
+        return self.p.blocksize**2 * (len(self.find_all_prop("burning"))+len(self.find_all_prop("extinguished")))
+
+    def calc_perc_burned(self):
+        return self.calc_area_burned()/(self.p.blocksize**2 * self.p.x_size*self.p.y_size)
+
 
 class FireEnvironment(Environment):
     __slots__ = ()
@@ -128,21 +135,18 @@ class FireEnvironment(Environment):
     def prop_time(self, tstep=1.0):
         self.c.prop_fire(tstep=tstep)
 
-from fmdtools.define.container.time import Time
 
-# class FirePropagationTime(Time):
-#     """
-#     Propagation time depends on assumptions, see:
-#         * ~15 mph or 0.5 km/min == prop 5 km every 10 timesteps for directional fires
-#         * ~3mph or 0.1 km/min == prop 5 km every 50 timesteps for no-wind fires
-#     """
-#     local_dt = 50.0  # ~15 mph or 0.5 km/min == prop 5 km every 10 timesteps
+class FirePropagationState(State):
+
+    perc_burned: float = 0.0
 
 class FirePropagation(Function):
     __slots__ = ('fireenvironment')
+    container_s = FirePropagationState
     flow_fireenvironment = FireEnvironment
 
     def dynamic_behavior(self, time):
+        self.s.perc_burned = self.fireenvironment.c.calc_perc_burned()
         if time > 0:
             self.fireenvironment.prop_time(self.t.dt)
 
