@@ -359,9 +359,12 @@ def exec_nom_par(arg):
     return endclass, mdlhist
 
 
-def exec_nom_helper(mdl, scen, name, **kwargs):
+def exec_nom_helper(mdl, scen, name, mdl_kwargs={}, **kwargs):
     """Execute a nominal scenario (helper function)."""
-    mdl_run = mdl.new(p=scen.p, sp=scen.sp, r=scen.r)
+    mdl_kwargs = {'p': {**mdl_kwargs.get('p', {}), **scen.p},
+                  'sp': {**mdl_kwargs.get('sp', {}), **scen.sp},
+                  'r': {**mdl_kwargs.get('r', {}), **scen.r}}
+    mdl_run = mdl.new(**mdl_kwargs)
     result, mdlhist, _, t_end = prop_one_scen(mdl_run, scen, **kwargs)
     check_hist_memory(mdlhist, kwargs['num_scens'], max_mem=kwargs['max_mem'])
     save_helper(kwargs['save_args'], result, mdlhist, name, name)
