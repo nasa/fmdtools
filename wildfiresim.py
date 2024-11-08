@@ -32,9 +32,6 @@ class WildfireSim(FunctionArchitecture):
         self.add_flow("fireenvironment", FireEnvironment,
                       c={"p": self.p.firemapparam})
 
-        # self.add_fxn("fire_propagation", GenericFxn, "environment", "supplies")
-        # self.add_fxn("aircraft", GenericFxn, "environment", "supplies")
-        # self.add_fxn("bases", GenericFxn, "supplies", "environment")
         bases = [i for i in range(len(self.p.firemapparam.base_locations))]
         for base in bases:
             self.add_fxn("aircraft_"+str(base), Aircraft, "fireenvironment",
@@ -46,8 +43,9 @@ class WildfireSim(FunctionArchitecture):
 if __name__ == "__main__":
     from fmdtools.define.architecture.function import FunctionArchitectureGraph
     import fmdtools.sim.propagate as prop
-    mdl = WildfireSim(p = {'firemapparam': {'num_strikes': 4,
-                                            'base_locations': ((10,10), (40,40))}},
+    mdl = WildfireSim(p={'firemapparam': {'num_strikes': 4,
+                                          'base_locations': ((30, 30),),
+                                          'map_type': 'grass-forest-scrub'}},
                       r={'seed': 100})
 
     mdl_graph = FunctionArchitectureGraph(mdl)
@@ -60,10 +58,13 @@ if __name__ == "__main__":
                              'fxns.aircraft_0.s.location_y',
                              'fxns.aircraft_0.m.mode')
 
-    properties={'burning': {"color": "red", "as_bool": True},
+    properties={'grass': {'color': 'lightgreen'},
+                'forest': {'color': 'darkgreen'},
+                'scrub': {'color': 'gold'},
+                'burning': {'color': "red", "as_bool": True, 'alpha': 0.5},
                 "base": {"color": "grey"},
                 "to_burn": {"color": "yellow", "as_bool": True, "alpha": 0.5},
-                "extinguished": {"color": "blue", "alpha": 0.5}}
+                "extinguished": {"color": "grey"}}
 
     fig, ax = mdl.flows['fireenvironment'].c.show_from(8, hist.flows.fireenvironment.c,
                                                     properties=properties)

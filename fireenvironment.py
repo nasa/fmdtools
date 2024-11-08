@@ -19,12 +19,20 @@ class FireMapParam(CoordsParam):
     state_to_extinguish: tuple = (float, np.NaN)
     state_extinguished: tuple = (bool, False)
     feature_strike: tuple = (bool, False)
-    feature_tree: tuple = (bool, True)
-    feature_water: tuple = (bool, False)
     feature_grass: tuple = (bool, False)
+    feature_scrub: tuple = (bool, False)
+    feature_forest: tuple = (bool, False)
+    feature_water: tuple = (bool, False)
     feature_base: tuple = (bool, False)
     base_locations: tuple = ((0.0, 0.0),)
     num_strikes: int = 1
+    map_type: str = "uniform-grass"
+    grass_ig_time: float = 50.0
+    grass_ex_time: float = 90.0
+    scrub_ig_time: float = 75.0
+    scrub_ex_time: float = 200.0
+    forest_ig_time: float = 100.0
+    forest_ex_time: float = 400.0
 
 
 class FireMap(Coords):
@@ -35,35 +43,67 @@ class FireMap(Coords):
         # self.set_prop_dist('strike', 'binomial', 1, self.p.strike_prob)
         strike_pts = self.r.rng.choice(self.pts, self.p.num_strikes, replace=False)
         self.set_pts(strike_pts, "strike", True)
+
+        mapchars = self.p.map_type.split("-")
+        half_x0 = (self.p.x_size/2-1)*self.p.blocksize
+        half_x1 = (self.p.x_size/2)*self.p.blocksize
+        half_y0 = (self.p.y_size/2-1)*self.p.blocksize
+        half_y1 = (self.p.y_size/2)*self.p.blocksize
+        if mapchars[0] == "uniform":
+            self.set_range(mapchars[1], True)
+        elif mapchars[0] == "split":
+            self.set_range(mapchars[1], True, xmax=half_x0)
+            self.set_range(mapchars[2], True, xmin=half_x1)
+        elif len(mapchars) == 3:
+            self.set_range(mapchars[0], True, xmax=half_x0, ymax=half_y0)
+            self.set_range(mapchars[1], True, xmax=half_x0, ymin=half_y1)
+            self.set_range(mapchars[2], True, xmin=half_x1)
         self.set_strike_burn()
-        # self.set_range('tree', False, ymin=5000, ymax=10000, xmin=0, xmax=10000)
-        # self.set_range('water', True, xmin=0, xmax=4000, ymin=5000, ymax=10000)
-        # self.set_range('grass', True, xmin= 5000, xmax=10000, ymin=5000, ymax=10000)
+
+    def get_ignition_time(self, *pt):
+        if self.get(*pt, "grass"):
+            return self.p.grass_ig_time
+        elif self.get(*pt, "forest"):
+            return self.p.forest_ig_time
+        elif self.get(*pt, "scrub"):
+            return self.p.scrub_ig_time
+        else:
+            return np.inf
+
+    def get_extinguish_time(self, *pt):
+        if self.get(*pt, "grass"):
+            return self.p.grass_ex_time
+        elif self.get(*pt, "forest"):
+            return self.p.forest_ex_time
+        elif self.get(*pt, "scrub"):
+            return self.p.scrub_ex_time
+        else:
+            return np.inf
 
     def set_to_burn(self, tstep=1.0):
         for pt in self.find_all_prop("burning"):
             # light the fire next to burning points
             possible = self.get_neighbors(*pt)
-            for pt in possible:
-                if not self.get(*pt, "extinguished") and not self.get(*pt, 'burning'):
-                    to_burn = self.get(*pt, "to_burn")
+            for ppt in possible:
+                if not self.get(*ppt, "extinguished") and not self.get(*ppt, 'burning'):
+                    to_burn = self.get(*ppt, "to_burn")
                     if np.isnan(to_burn):
-                        self.set(*pt, "to_burn", 50.0)
+                        self.set(*ppt, "to_burn", self.get_ignition_time(*ppt))
                     else:
-                        self.set(*pt, "to_burn", to_burn-tstep)
+                        self.set(*ppt, "to_burn", to_burn-tstep)
 
     def set_burning(self):
         for pt in self.find_all_prop("to_burn", value=0.0, comparator=np.less_equal):
             self.set(*pt, 'burning', True)
             self.set(*pt, 'to_burn', np.NaN)
-            self.set(*pt, 'to_extinguish', 100.0)
+            self.set(*pt, 'to_extinguish', self.get_extinguish_time(*pt))
 
     def set_extinguished(self, tstep=1.0):
         for pt in self.find_all_prop("burning"):
             to_extinguish = self.get(*pt, 'to_extinguish')
             if to_extinguish <= 0.0:
                 self.set(*pt, 'extinguished', True)
-                self.set(*pt, 'burning', True)
+                self.set(*pt, 'burning', False)
                 self.set(*pt, 'to_extinguish', np.NaN)
             else:
                 self.set(*pt, 'to_extinguish', to_extinguish-tstep)
@@ -73,7 +113,7 @@ class FireMap(Coords):
             # light the fire where lightning has struck
             if not self.get(*pt, 'burning'):
                 self.set(*pt, 'burning', True)
-                self.set(*pt, 'to_extinguish', 100.0)
+                self.set(*pt, 'to_extinguish', self.get_extinguish_time(*pt))
 
     def prop_fire(self, tstep=1.0):
         self.set_to_burn(tstep=tstep)
@@ -109,27 +149,66 @@ class FirePropagation(Function):
 
 if __name__ == "__main__":
 
-    fm = FireMap()
+    fm = FireMap(p={'map_type': "forest-grass-scrub"})
+    fm.show({'forest': {'color': 'darkgreen'},
+             'grass': {'color': 'lightgreen'},
+             'scrub': {'color': 'gold'}})
     # fm.show_property('tree')
-    fm = FireMap(p=dict(x_size=10, y_size=10, num_strikes=3, base_locations=((0.0, 40.0), (30.0, 30.0))))
+    fm = FireMap(p=dict(x_size=10, y_size=10, num_strikes=3,
+                        base_locations=((0.0, 40.0), (30.0, 30.0)),
+                        map_type="forest-grass-scrub"))
     # fm.show_property('tree')
     fm.show_property('strike', color="yellow")
     # fm.show_property('water', color="blue")
     # fm.show_property('grass', color="green")
     fm.show_property('base', color="grey")
 
-    fe = FireEnvironment()
+    fe = FireEnvironment(c={'p': {'map_type': "forest-grass-scrub"}})
     fe.c.show_property('burning', color="red")
-    fe.prop_time(tstep=50.0)
+    fe.prop_time(tstep=20.0)
     fe.c.show_property('burning', color="red")
-    fe.prop_time(tstep=50.0)
+    fe.prop_time(tstep=20.0)
     fe.c.show_property('burning', color="red")
-    fe.prop_time(tstep=50.0)
+    fe.prop_time(tstep=20.0)
     fe.c.show_property('burning', color="red")
-    fe.prop_time(tstep=50.0)
+    fe.prop_time(tstep=20.0)
     fe.c.show_property('burning', color="red")
-    fe.prop_time(tstep=50.0)
+    fe.prop_time(tstep=20.0)
     fe.c.show_property('burning', color="red")
     fe.c.show_property('extinguished', color="blue")
+    fe.prop_time(tstep=20.0)
+    fe.c.show_property('burning', color="red")
+    fe.prop_time(tstep=20.0)
+    fe.c.show_property('burning', color="red")
+    fe.prop_time(tstep=20.0)
+    fe.c.show_property('burning', color="red")
+    fe.prop_time(tstep=20.0)
+    fe.c.show_property('burning', color="red")
+    fe.prop_time(tstep=20.0)
+    fe.c.show_property('burning', color="red")
+    fe.prop_time(tstep=20.0)
+    fe.c.show_property('burning', color="red")
+    fe.prop_time(tstep=20.0)
+    fe.c.show_property('burning', color="red")
+    fe.prop_time(tstep=20.0)
+    fe.c.show_property('burning', color="red")
+    fe.prop_time(tstep=20.0)
+    fe.c.show_property('burning', color="red")
+    fe.prop_time(tstep=20.0)
+    fe.c.show_property('burning', color="red")
+    fe.prop_time(tstep=20.0)
+    fe.c.show_property('burning', color="red")
+    fe.prop_time(tstep=20.0)
+    fe.c.show_property('burning', color="red")
+    fe.prop_time(tstep=20.0)
+    fe.c.show_property('burning', color="red")
+    fe.prop_time(tstep=20.0)
+    fe.c.show_property('burning', color="red")
+    fe.prop_time(tstep=20.0)
+    fe.c.show_property('burning', color="red")
+    fe.prop_time(tstep=20.0)
+    fe.c.show_property('burning', color="red")
+    fe.prop_time(tstep=20.0)
+    fe.c.show_property('burning', color="red")
 
     fp_mdl = FirePropagation()
