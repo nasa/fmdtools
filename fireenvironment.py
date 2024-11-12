@@ -15,9 +15,9 @@ class FireMapParam(CoordsParam):
     x_size: int = 10
     y_size: int = 10
     blocksize: float = 5.0  # 5 kilometers
-    state_to_burn: tuple = (float, np.NaN)
+    state_to_burn: tuple = (float, np.nan)
     state_burning: tuple = (bool, False)
-    state_to_extinguish: tuple = (float, np.NaN)
+    state_to_extinguish: tuple = (float, np.nan)
     state_extinguished: tuple = (bool, False)
     feature_strike: tuple = (bool, False)
     feature_grass: tuple = (bool, False)
@@ -96,7 +96,7 @@ class FireMap(Coords):
     def set_burning(self):
         for pt in self.find_all_prop("to_burn", value=0.0, comparator=np.less_equal):
             self.set(*pt, 'burning', True)
-            self.set(*pt, 'to_burn', np.NaN)
+            self.set(*pt, 'to_burn', np.nan)
             self.set(*pt, 'to_extinguish', self.get_extinguish_time(*pt))
 
     def set_extinguished(self, tstep=1.0):
@@ -105,7 +105,7 @@ class FireMap(Coords):
             if to_extinguish <= 0.0:
                 self.set(*pt, 'extinguished', True)
                 self.set(*pt, 'burning', False)
-                self.set(*pt, 'to_extinguish', np.NaN)
+                self.set(*pt, 'to_extinguish', np.nan)
             else:
                 self.set(*pt, 'to_extinguish', to_extinguish-tstep)
 
