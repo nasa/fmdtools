@@ -202,13 +202,14 @@ double_size_p = dict(x_size=20, y_size=20, blocksize=2.5,
                      base_locations=((0.0, 40.0), (30.0, 30.0)))
 
 
+show_properties = {'forest': {'color': 'darkgreen'},
+                   'grass': {'color': 'lightgreen'},
+                   'scrub': {'color': 'gold'}}
 
 if __name__ == "__main__":
 
     fm = FireMap(p={'map_type': "forest-grass-scrub"})
-    fm.show({'forest': {'color': 'darkgreen'},
-             'grass': {'color': 'lightgreen'},
-             'scrub': {'color': 'gold'}})
+    fm.show(properties=show_properties)
     # fm.show_property('tree')
     fm = FireMap(p=double_size_p)
     # fm.show_property('tree')

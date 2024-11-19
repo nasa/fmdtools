@@ -6,6 +6,7 @@ Created on Fri Nov  8 09:18:57 2024
 """
 
 from wildfiresim import WildfireSim, WildFireSimParameter, def_p, ps
+from fireenvironment import show_properties
 from fmdtools.sim.search import ParameterSimProblem
 from fmdtools.sim.sample import ParameterDomain
 
@@ -90,7 +91,7 @@ pd.add_constant('num_strikes', 4)
 psp = ParameterSimProblem(light_mdl, pd, 'parameter_sample', ps)
 psp.add_result_objective('perc_burned', 'fxns.firepropagation.s.perc_burned', metric=np.mean)
 
-psp.perc_burned(10, 10)
+# psp.perc_burned(10, 10)
 
 
 # adaptation function for autograd/bfgs:
@@ -104,6 +105,15 @@ def perc_burned(x):
 # approx_grad = grad(perc_burned)
 # x_best, path = bfgs([10.0, 10.0], perc_burned, approx_grad)
 
+initial_simplex = [[10.0, 10.0],[0.0, 40.0],[40.0, 40.0]]
+res = minimize(perc_burned, [10.0, 10.0], method="Nelder-Mead",
+               bounds=((-1.0, 47.), (-1.0, 47.)),
+               options=dict(initial_simplex=initial_simplex,
+                            disp=True))
 
-res = minimize(psp.perc_burned, [10.0, 10.0], method="Nelder-Mead")
+fig, ax = psp.mdl.flows['fireenvironment'].c.show(properties=show_properties)
+fig, ax = psp.iter_hist.plot_trajectories("variables.x", "variables.y",
+                                          fig=fig, ax=ax,
+                                          time_ticks=0.1, time_groups=['nominal'])
+psp.iter_hist.plot_line("objectives.perc_burned")
 
