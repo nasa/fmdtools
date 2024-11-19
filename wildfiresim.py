@@ -75,8 +75,8 @@ if __name__ == "__main__":
                              'fxns.aircraft_0.s.location_x',
                              'fxns.aircraft_0.s.location_y',
                              'fxns.aircraft_0.m.mode',
-                             'flows.fireenvironment.s.leading_edge_length',
-                             'flows.fireenvironment.s.perc_burned')
+                             'fxns.firepropagation.s.leading_edge_length',
+                             'fxns.firepropagation.s.perc_burned')
 
     properties={'grass': {'color': 'lightgreen'},
                 'forest': {'color': 'darkgreen'},
