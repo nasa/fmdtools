@@ -10,7 +10,7 @@ from fmdtools.define.architecture.function import FunctionArchitecture
 from fmdtools.define.container.parameter import Parameter
 from fmdtools.define.container.rand import Rand
 from fmdtools.sim.sample import ParameterSample
-from fireenvironment import FireEnvironment, FirePropagation, FireMapParam
+from fireenvironment import FireEnvironment, FirePropagation, FireMapParam, double_size_p
 from aircraft import Aircraft
 
 
@@ -26,7 +26,7 @@ class WildfireSim(FunctionArchitecture):
     __slots__ = ()
     container_p = WildFireSimParameter
     container_r = Rand
-    default_sp = {'end_time': 200}
+    default_sp = {'end_time': 400, "end_condition": "indicate_complete"}
     """
     flows: environment, supplies
     functions: fire_propagation, aircraft, bases
@@ -46,10 +46,13 @@ class WildfireSim(FunctionArchitecture):
     def find_classification(self, scen, hist):
         return {'perc_burned': self.flows['fireenvironment'].c.calc_perc_burned()}
 
+    def indicate_complete(self, *t):
+        return self.flows['fireenvironment'].c.indicate_contained()
 
-def_p = {'firemapparam': {'num_strikes': 4,
-                          'base_locations': ((30, 30),),
-                          'map_type': 'grass-forest-scrub'}}
+
+def_p = {'firemapparam': {**double_size_p,
+                          "base_locations": ((42.0, 20.0), (20.0, 20.0)),
+                          "num_strikes": 6}}
 
 ps = ParameterSample()
 ps.add_variable_replicates([], replicates=10, seed_comb='independent')
@@ -71,7 +74,9 @@ if __name__ == "__main__":
     fig, ax = hist.plot_line('fxns.aircraft_0.s.fuel_status',
                              'fxns.aircraft_0.s.location_x',
                              'fxns.aircraft_0.s.location_y',
-                             'fxns.aircraft_0.m.mode')
+                             'fxns.aircraft_0.m.mode',
+                             'flows.fireenvironment.s.leading_edge_length',
+                             'flows.fireenvironment.s.perc_burned')
 
     properties={'grass': {'color': 'lightgreen'},
                 'forest': {'color': 'darkgreen'},

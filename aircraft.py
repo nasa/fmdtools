@@ -10,11 +10,11 @@ from fmdtools.define.block.function import Function
 from fmdtools.define.container.mode import Mode
 from fmdtools.define.container.time import Time
 
-from fireenvironment import FireEnvironment
+from fireenvironment import FireEnvironment, double_size_p
 
 class AircraftStates(State):
-    retardant_status: float = 100 # starting retardant at 100%
-    fuel_status: float = 100 # starting fuel at 100%
+    retardant_status: float = 100  # starting retardant at 100%
+    fuel_status: float = 100  # starting fuel at 100%
     goal_x: float = 10.0
     goal_y: float = 10.0
     location_x: float = 0.0
@@ -75,8 +75,10 @@ class Aircraft(Function):
     def set_fire_goal(self):
         if [*self.fireenvironment.c.find_all_prop("burning")]:
             self.m.set_mode("fly_to_fire")
-            closest = self.fireenvironment.c.find_closest(*self.s.get("location_x", "location_y"), "burning")
-            self.s.assign(closest, "goal_x", "goal_y")
+            pt = self.s.get("location_x", "location_y")
+            closest = self.fireenvironment.c.find_closest_edge(*pt)
+            if len(closest) > 0:
+                self.s.assign(closest, "goal_x", "goal_y")
 
     def fly_to_goal(self):
         if not self.indicate_at_goal():
@@ -126,7 +128,7 @@ class Aircraft(Function):
 if __name__ == "__main__":
     import fmdtools.sim.propagate as prop
     a = Aircraft()
-    fe = FireEnvironment(c={"p": {"base_locations": ((40.0, 20.0),), "num_strikes": 3}})
+    fe = FireEnvironment(c={"p": {**double_size_p, "base_locations": ((42.0, 20.0),)}})
     fe.prop_time()
     # res, hist = prop.nominal(a)
     # hist.plot_line('s.fuel_status', 's.location_x', 's.location_y')
@@ -137,6 +139,7 @@ if __name__ == "__main__":
     res, hist = prop.nominal(a1, protect=False)
     hist.plot_line('s.fuel_status', 's.location_x', 's.location_y', 'm.mode')
 
-    fig, ax = a1.fireenvironment.c.show_from(30, hist.fireenvironment.c,
+    fig, ax = a1.fireenvironment.c.show_from(55, hist.fireenvironment.c,
                                              properties={'burning': {"color": "red", "as_bool": True}, "base": {"color": "grey"}, "extinguished": {"color": "blue", "alpha": 0.5}})
+    fig, ax = a1.fireenvironment.c.show_base_placement(fig, ax)
     hist.plot_trajectory('s.location_x', 's.location_y', fig=fig, ax=ax)

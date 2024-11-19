@@ -8,6 +8,7 @@ from fmdtools.define.object.coords import Coords, CoordsParam
 from fmdtools.define.environment import Environment
 from fmdtools.define.block.function import Function
 from fmdtools.define.container.state import State
+from fmdtools.analyze.common import setup_plot, consolidate_legend
 import numpy as np
 
 
@@ -81,6 +82,27 @@ class FireMap(Coords):
         else:
             return np.inf
 
+    def get_leading_edge(self):
+        # get all points
+        burn_pts = [*self.find_all_prop("burning", True, np.equal)]
+        for i, pt2 in enumerate(burn_pts):
+            neighbors = self.get_neighbors(*pt2)
+            any_to_burn = any([not (self.get(*p3, "burning")
+                                    or self.get(*p3, "extinguished"))
+                               for p3 in neighbors])
+            if not any_to_burn:
+                burn_pts.pop(i)
+        return burn_pts
+
+    def find_closest_edge(self, *pt):
+        burn_pts = self.get_leading_edge()
+        if burn_pts:
+            dists = np.sqrt(np.sum((np.array([*pt])-burn_pts)**2, 1))
+            closest_ind = np.argmin(dists)
+            return burn_pts[closest_ind]
+        else:
+            return []
+
     def set_to_burn(self, tstep=1.0):
         for pt in self.find_all_prop("burning"):
             # light the fire next to burning points
@@ -121,11 +143,31 @@ class FireMap(Coords):
         self.set_burning()
         self.set_extinguished(tstep=tstep)
 
+    def calc_area_burning(self):
+        return self.p.blocksize**2 * len(self.find_all_prop("burning"))
+
+    def calc_perc_burning(self):
+        return self.calc_area_burning()/(self.p.blocksize**2 * self.p.x_size*self.p.y_size)
+
     def calc_area_burned(self):
         return self.p.blocksize**2 * (len(self.find_all_prop("burning"))+len(self.find_all_prop("extinguished")))
 
     def calc_perc_burned(self):
         return self.calc_area_burned()/(self.p.blocksize**2 * self.p.x_size*self.p.y_size)
+
+    def indicate_contained(self):
+        """Contained when nowhere left to spread"""
+        return len(self.get_leading_edge()) <= 0
+
+    def show_base_placement(self, fig=None, ax=None, figsize=(6.0, 4.0), color="blue",
+                            linewidths=3.0, **leg_kwargs):
+        fig, ax = setup_plot(fig=fig, ax=ax, figsize=figsize)
+        xs = [p[0] for p in self.p.base_locations]
+        ys = [p[1] for p in self.p.base_locations]
+        ax.scatter(xs, ys, marker="*", label="bases", color=color,
+                   linewidths=linewidths)
+        consolidate_legend(ax, **leg_kwargs)
+        return fig, ax
 
 
 class FireEnvironment(Environment):
@@ -139,6 +181,7 @@ class FireEnvironment(Environment):
 class FirePropagationState(State):
 
     perc_burned: float = 0.0
+    leading_edge_length: int = 0
 
 class FirePropagation(Function):
     __slots__ = ('fireenvironment')
@@ -147,8 +190,17 @@ class FirePropagation(Function):
 
     def dynamic_behavior(self, time):
         self.s.perc_burned = self.fireenvironment.c.calc_perc_burned()
+        self.s.leading_edge_length = len(self.fireenvironment.c.get_leading_edge())
         if time > 0:
             self.fireenvironment.prop_time(self.t.dt)
+
+
+
+double_size_p = dict(x_size=20, y_size=20, blocksize=2.5,
+                     map_type="forest-grass-scrub", num_strikes=3,
+                     grass_ig_time=25.0, scrub_it_time=37.0, forest_ig_time=50.0,
+                     base_locations=((0.0, 40.0), (30.0, 30.0)))
+
 
 
 if __name__ == "__main__":
@@ -158,16 +210,15 @@ if __name__ == "__main__":
              'grass': {'color': 'lightgreen'},
              'scrub': {'color': 'gold'}})
     # fm.show_property('tree')
-    fm = FireMap(p=dict(x_size=10, y_size=10, num_strikes=3,
-                        base_locations=((0.0, 40.0), (30.0, 30.0)),
-                        map_type="forest-grass-scrub"))
+    fm = FireMap(p=double_size_p)
     # fm.show_property('tree')
     fm.show_property('strike', color="yellow")
     # fm.show_property('water', color="blue")
     # fm.show_property('grass', color="green")
-    fm.show_property('base', color="grey")
+    fig, ax = fm.show_property('base', color="grey")
+    fig, ax = fm.show_base_placement(fig=fig, ax=ax)
 
-    fe = FireEnvironment(c={'p': {'map_type': "forest-grass-scrub"}})
+    fe = FireEnvironment(c={'p': double_size_p})
     fe.c.show_property('burning', color="red")
     fe.prop_time(tstep=20.0)
     fe.c.show_property('burning', color="red")
