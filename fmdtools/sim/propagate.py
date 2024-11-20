@@ -1186,7 +1186,7 @@ def get_result(scen, mdl, desired_result, nomhist={}, nomresult={}, time=0.0):
         desired_result.pop('endfaults')
 
     graphs_to_get = [g for g in desired_result
-                     if type(g) == str and (g.startswith('graph')
+                     if type(g) is str and (g.startswith('graph')
                                             or g.startswith('Graph'))]
     for g in graphs_to_get:
         arg = desired_result.pop(g)
