@@ -85,14 +85,15 @@ class FireMap(Coords):
     def get_leading_edge(self):
         # get all points
         burn_pts = [*self.find_all_prop("burning", True, np.equal)]
+        leading_edge = []
         for i, pt2 in enumerate(burn_pts):
             neighbors = self.get_neighbors(*pt2)
             any_to_burn = any([not (self.get(*p3, "burning")
                                     or self.get(*p3, "extinguished"))
                                for p3 in neighbors])
-            if not any_to_burn:
-                burn_pts.pop(i)
-        return burn_pts
+            if any_to_burn:
+                leading_edge.append(pt2)
+        return leading_edge
 
     def find_closest_edge(self, *pt):
         burn_pts = self.get_leading_edge()
@@ -267,4 +268,5 @@ if __name__ == "__main__":
     fe.prop_time(tstep=20.0)
     fe.c.show_property('burning', color="red")
 
+    fe.c.get_leading_edge()
     fp_mdl = FirePropagation()

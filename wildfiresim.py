@@ -18,7 +18,8 @@ class WildFireSimParameter(Parameter):
     firemapparam: FireMapParam = FireMapParam()
 
     def from_base_loc(x, y, num_strikes):
-        return WildFireSimParameter(firemapparam={'base_locations': ((x, y), ),
+        return WildFireSimParameter(firemapparam={**double_size_p,
+                                                  'base_locations': ((x, y), ),
                                                   'num_strikes': num_strikes})
 
 
