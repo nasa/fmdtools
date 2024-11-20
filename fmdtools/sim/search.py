@@ -409,8 +409,6 @@ class ResultObjective(Objective):
     """
     Base class of objectives which derive from Results.
 
-    ...
-
     Fields
     ------
     time : float
@@ -466,8 +464,6 @@ class ResultObjective(Objective):
 class ResultConstraint(ResultObjective):
     """
     Base class for constraints which derive from results.
-
-    ...
 
     Fields
     ------
@@ -547,7 +543,7 @@ class BaseSimProblem(BaseProblem):
         Method in propagate to call.
     """
 
-    def __init__(self, mdl, prop_method, *args, **kwargs):
+    def __init__(self, mdl, prop_method, *args, keep_ec=False, **kwargs):
         self.mdl = mdl
         if type(prop_method) is str:
             self.prop_method = getattr(propagate, prop_method)
@@ -556,6 +552,7 @@ class BaseSimProblem(BaseProblem):
         else:
             raise Exception("Invalid prop_method "+str(prop_method))
 
+        self.keep_ec = keep_ec
         self.args = args
         self.kwargs = kwargs
         super().__init__()
@@ -631,7 +628,10 @@ class BaseSimProblem(BaseProblem):
         des_res : dict
             desired_result argument to prop_method.
         """
-        des_res = {}
+        if self.keep_ec:
+            des_res = {'end': ['endclass']}
+        else:
+            des_res = {}
         for n in {**self.objectives, **self.constraints}.values():
             if n.time:
                 t = n.time
@@ -848,7 +848,7 @@ class SingleFaultScenarioProblem(ScenarioProblem):
     phasemap : PhaseMap
         PhaseMap for fault sampling
     t_start : float
-        Minimum start time for the simulation and lower bound on scenario time..
+        Minimum start time for the simulation and lower bound on scenario time.
         Default is 0.0.
 
     Examples
