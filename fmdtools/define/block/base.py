@@ -4,8 +4,9 @@
 Defines base :class:`Simulable` and :class:`Block` classes for defining simulations.
 
 Classes:
-- :class:`Simulable`: Superclass for architectures and blocks.
-- :class:`Block`: Superclass for Functions, Components, Actions, etc.
+
+ - :class:`Simulable`: Superclass for architectures and blocks.
+ - :class:`Block`: Superclass for Functions, Components, Actions, etc.
 
 Copyright © 2024, United States Government, as represented by the Administrator
 of the National Aeronautics and Space Administration. All rights reserved.

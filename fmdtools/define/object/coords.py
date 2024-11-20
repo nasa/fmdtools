@@ -494,7 +494,10 @@ class Coords(BaseObject):
         """
         proparray = getattr(self, prop)
         x_i, y_i = self.to_index(x, y)
-        proparray[x_i, y_i] = value
+        try:
+            proparray[x_i, y_i] = value
+        except IndexError as e:
+            raise Exception(str(x) + ", " + str(y) + " out of bounds.") from e
 
     def set_range(self, prop, value, xmin=0, xmax='max', ymin=0, ymax='max',
                   inclusive=True):
@@ -744,8 +747,9 @@ class Coords(BaseObject):
         in: bool
             Whether the point is in the range of the grid
         """
-        return (0.0 <= x <= self.p.blocksize * self.p.x_size and
-                0.0 <= y <= self.p.blocksize * self.p.y_size)
+        half_b = self.p.blocksize/2
+        return (-half_b <= x <= self.p.blocksize * self.p.x_size - half_b and
+                -half_b <= y <= self.p.blocksize * self.p.y_size - half_b)
 
     def in_area(self, x, y, coll):
         """
