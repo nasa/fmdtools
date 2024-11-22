@@ -138,7 +138,7 @@ def diff(val1, val2, difftype='bool'):
         raise Exception("Unable to diff "+str(val1)+" and "+str(val2)) from e
 
 
-def prep_hists(simhists, plot_values, comp_groups, indiv_kwargs):
+def prep_hists(simhists, plot_values, comp_groups, indiv_kwargs, time='time'):
     """Prepare hists for plotting."""
     # Process data - clip and flatten
     if "time" in simhists:
@@ -148,7 +148,7 @@ def prep_hists(simhists, plot_values, comp_groups, indiv_kwargs):
 
     plot_values = unpack_plot_values(plot_values)
 
-    grouphists = simhists.get_comp_groups(*plot_values, **comp_groups)
+    grouphists = simhists.get_comp_groups(*plot_values, time=time, **comp_groups)
 
     # Set up plots and iteration
     if 'nominal' in grouphists.keys() and len(grouphists) > 1:
@@ -961,10 +961,10 @@ class History(Result):
         return fig, axs
 
     def plot_trajectories(self, *plot_values,
-                          comp_groups={}, indiv_kwargs={}, figsize=(4, 4),
+                          comp_groups={}, indiv_kwargs={}, figsize=(4, 4), time='time',
                           time_groups=[], time_ticks=5.0, time_fontsize=8,
-                          xlim=(), ylim=(), zlim=(), legend=True, title='',
-                          fig=None, ax=None, **kwargs):
+                          t_pretext="t=", xlim=(), ylim=(), zlim=(), legend=True,
+                          title='', fig=None, ax=None, **kwargs):
         """
         Plot trajectories from the environment in 2d or 3d space.
 
@@ -1031,7 +1031,8 @@ class History(Result):
         simhists, plot_values, grouphists, indiv_kwargs = prep_hists(self,
                                                                      plot_values,
                                                                      comp_groups,
-                                                                     indiv_kwargs)
+                                                                     indiv_kwargs,
+                                                                     time=time)
         if len(plot_values) == 2:
             fig, ax = setup_plot(fig=fig, ax=ax, z=False, figsize=figsize)
         elif len(plot_values) == 3:
@@ -1042,8 +1043,9 @@ class History(Result):
 
         for group, hists in grouphists.items():
             mark_time = group in time_groups
-            pass_kwargs = dict(label=group, fig=fig, ax=ax, mark_time=mark_time,
-                               time_ticks=time_ticks, time_fontsize=time_fontsize)
+            pass_kwargs = dict(label=group, fig=fig, ax=ax, time=time,
+                               mark_time=mark_time, time_ticks=time_ticks,
+                               time_fontsize=time_fontsize, t_pretext=t_pretext)
             local_kwargs = {**kwargs, **pass_kwargs, **indiv_kwargs.get(group, {})}
             if len(plot_values) == 2:
                 hists.plot_trajectory(*plot_values, **local_kwargs)
@@ -1062,7 +1064,8 @@ class History(Result):
         return fig, ax
 
     def plot_trajectory(self, xlab, ylab, fig=None, ax=None, figsize=(6, 4),
-                        mark_time=False, time_ticks=1.0, time_fontsize=8, **kwargs):
+                        time="time", mark_time=False, time_ticks=1.0, time_fontsize=8,
+                        t_pretext="t=", **kwargs):
         """
         Plot a single set of trajectories on an existing matplotlib axis.
 
@@ -1089,14 +1092,16 @@ class History(Result):
         fig, ax = setup_plot(fig=fig, ax=ax, figsize=figsize)
         xs = [*self.get_values(xlab).values()]
         ys = [*self.get_values(ylab).values()]
-        times = [*self.get_values("time").values()]
+        times = [i for k, i in self.get_values("time").items() if "t." not in k]
         for i, x in enumerate(xs):
             ax.plot(x, ys[i], **kwargs)
             if mark_time:
-                mark_times(ax, time_ticks, times[i], x, ys[i], fontsize=time_fontsize)
+                mark_times(ax, time_ticks, times[i], x, ys[i],
+                           fontsize=time_fontsize, pretext=t_pretext)
 
     def plot_trajectory3(self, xlab, ylab, zlab, fig=None, ax=None, figsize=(6, 4),
-                         mark_time=False, time_ticks=1.0, time_fontsize=8, **kwargs):
+                         time="time", mark_time=False, time_ticks=1.0, time_fontsize=8,
+                         t_pretext="t=", **kwargs):
         """
         Plot a single set of trajectories on an existing matplotlib axis (3d).
 
@@ -1105,12 +1110,12 @@ class History(Result):
         xs = [*self.get_values(xlab).values()]
         ys = [*self.get_values(ylab).values()]
         zs = [*self.get_values(zlab).values()]
-        times = [*self.get_values("time").values()]
+        times = [i for k, i in self.get_values("time").items() if "t." not in k][0]
         for i, x in enumerate(xs):
             ax.plot(x, ys[i], zs[i], **kwargs)
             if mark_time:
                 mark_times(ax, time_ticks, times[i], x, ys[i], zs[i],
-                           fontsize=time_fontsize)
+                           fontsize=time_fontsize, t_pretext=t_pretext)
 
     def plot_trajectories_from(self, t, plot_values=(), **kwargs):
         """

@@ -186,6 +186,7 @@ class BaseProblem(object):
         self.objectives = {}
         self.constraints = {}
         self.iter_hist = History({"time": [],
+                                  "iter": [],
                                   "variables": History({k: [] for k in self.variables}),
                                   "objectives": History(),
                                   "constraints": History()})
@@ -295,7 +296,11 @@ class BaseProblem(object):
     def log_time(self):
         if not hasattr(self, 't_start'):
             self.t_start = time.time()
+            self.iter = 0
+        else:
+            self.iter += 1
         self.iter_hist.time.append(time.time()-self.t_start)
+        self.iter_hist.iter.append(self.iter)
 
     def log_hist(self):
         """Log the history for objectives, constraints, time, etc."""
@@ -535,12 +540,12 @@ class BaseSimProblem(BaseProblem):
     """
     Base optimization problem for optimizing over simulations.
 
-    ...
-
     Attributes
     ----------
     prop_method : callable
         Method in propagate to call.
+    keep_ec : bool, optional
+        Whether to get/keep the endresult. Default is False.
     """
 
     def __init__(self, mdl, prop_method, *args, keep_ec=False, **kwargs):

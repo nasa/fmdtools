@@ -428,7 +428,7 @@ class Result(UserDict):
             h[k] = self[k]
         return h
 
-    def get_comp_groups(self, *values, **groups):
+    def get_comp_groups(self, *values, time='time', **groups):
         """
         Get comparison groups of *values (i.e., aspects of the model) in groups
         **groups (sets of scenarios with structure )
@@ -447,8 +447,8 @@ class Result(UserDict):
         """
         if not groups:
             groups = self.get_default_comp_groups()
-        if 'time' not in values:
-            values = values + ('time', )
+        if time not in values:
+            values = values + (time, )
         group_hist = self.__class__()
         for group, scens in groups.items():
             if scens == 'default':
