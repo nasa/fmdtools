@@ -55,7 +55,9 @@ class AircraftTime(Time):
 
 
 class Aircraft(Function):
-    __slots__=('fireenvironment')
+    """Aircraft that mitigates fire propagation and resupplies from bases."""
+
+    __slots__ = ('fireenvironment')
     container_s = AircraftStates
     container_p = AircraftParam
     container_m = AircraftModes
@@ -142,4 +144,4 @@ if __name__ == "__main__":
     fig, ax = a1.fireenvironment.c.show_from(55, hist.fireenvironment.c,
                                              properties={'burning': {"color": "red", "as_bool": True}, "base": {"color": "grey"}, "extinguished": {"color": "blue", "alpha": 0.5}})
     fig, ax = a1.fireenvironment.c.show_base_placement(fig, ax)
-    hist.plot_trajectory('s.location_x', 's.location_y', fig=fig, ax=ax)
+    hist.plot_trajectory('s.location_x', 's.location_y', fig=fig, ax=ax, mark_time=True, time_ticks=2.0)

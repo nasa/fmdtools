@@ -10,11 +10,14 @@ from fmdtools.define.architecture.function import FunctionArchitecture
 from fmdtools.define.container.parameter import Parameter
 from fmdtools.define.container.rand import Rand
 from fmdtools.sim.sample import ParameterSample
-from fireenvironment import FireEnvironment, FirePropagation, FireMapParam, double_size_p
+from fireenvironment import FireEnvironment, FirePropagation, FireMapParam
+from fireenvironment import sim_properties, double_size_p
 from aircraft import Aircraft
 
 
 class WildFireSimParameter(Parameter):
+    """Parameters defining the wildfire map and response."""
+
     firemapparam: FireMapParam = FireMapParam()
 
     def from_base_loc(x, y, num_strikes):
@@ -24,14 +27,13 @@ class WildFireSimParameter(Parameter):
 
 
 class WildfireSim(FunctionArchitecture):
+    """Simulation of wildfire propagation and response."""
+
     __slots__ = ()
     container_p = WildFireSimParameter
     container_r = Rand
     default_sp = {'end_time': 400, "end_condition": "indicate_complete"}
-    """
-    flows: environment, supplies
-    functions: fire_propagation, aircraft, bases
-    """
+
     def init_architecture(self, **kwargs):
 
         # self.add_flow("supplies")
@@ -45,9 +47,11 @@ class WildfireSim(FunctionArchitecture):
         self.add_fxn("firepropagation", FirePropagation, "fireenvironment")
 
     def find_classification(self, scen, hist):
-        return {'perc_burned': self.flows['fireenvironment'].c.calc_perc_burned()}
+        return {'perc_burned': self.flows['fireenvironment'].c.calc_perc_burned(),
+                'burn_pts': self.flows['fireenvironment'].c.get_all_burned()}
 
     def indicate_complete(self, *t):
+        """Returns true when fire is contained."""
         return self.flows['fireenvironment'].c.indicate_contained()
 
 
@@ -55,8 +59,11 @@ def_p = {'firemapparam': {**double_size_p,
                           "base_locations": ((42.0, 20.0), (20.0, 20.0)),
                           "num_strikes": 6}}
 
-ps = ParameterSample()
-ps.add_variable_replicates([], replicates=10, seed_comb='independent')
+
+def create_scen_sample(seed=10, replicates=10):
+    ps = ParameterSample(seed=seed)
+    ps.add_variable_replicates([], replicates=replicates, seed_comb='independent')
+    return ps
 
 
 
@@ -79,25 +86,18 @@ if __name__ == "__main__":
                              'fxns.firepropagation.s.leading_edge_length',
                              'fxns.firepropagation.s.perc_burned')
 
-    properties={'grass': {'color': 'lightgreen'},
-                'forest': {'color': 'darkgreen'},
-                'scrub': {'color': 'gold'},
-                'burning': {'color': "red", "as_bool": True, 'alpha': 0.5},
-                "base": {"color": "grey"},
-                "to_burn": {"color": "yellow", "as_bool": True, "alpha": 0.5},
-                "extinguished": {"color": "grey"}}
 
     fig, ax = mdl.flows['fireenvironment'].c.show_from(8, hist.flows.fireenvironment.c,
-                                                       properties=properties)
-    hist.plot_trajectory('s.location_x', 's.location_y', fig=fig, ax=ax, )
+                                                       properties=sim_properties)
+    hist.plot_trajectory('s.location_x', 's.location_y', fig=fig, ax=ax)
 
     fig, ax = mdl.flows['fireenvironment'].c.show_from(45, hist.flows.fireenvironment.c,
-                                                       properties=properties)
+                                                       properties=sim_properties)
     hist.plot_trajectory('s.location_x', 's.location_y', fig=fig, ax=ax)
 
     ani = mdl.flows['fireenvironment'].c.animate(hist.flows.fireenvironment.c,
-                                                 properties=properties)
+                                                 properties=sim_properties)
 
     light_mdl = WildfireSim(p=def_p, track=None)
 
-    res, hist = prop.parameter_sample(light_mdl, ps)
+    res, hist = prop.parameter_sample(light_mdl, create_scen_sample())

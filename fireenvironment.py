@@ -150,8 +150,11 @@ class FireMap(Coords):
     def calc_perc_burning(self):
         return self.calc_area_burning()/(self.p.blocksize**2 * self.p.x_size*self.p.y_size)
 
+    def get_all_burned(self):
+        return np.logical_or(self.burning, self.extinguished)
+
     def calc_area_burned(self):
-        return self.p.blocksize**2 * (len(self.find_all_prop("burning"))+len(self.find_all_prop("extinguished")))
+        return self.p.blocksize**2 * np.sum(self.get_all_burned())
 
     def calc_perc_burned(self):
         return self.calc_area_burned()/(self.p.blocksize**2 * self.p.x_size*self.p.y_size)
@@ -172,6 +175,8 @@ class FireMap(Coords):
 
 
 class FireEnvironment(Environment):
+    """Map of fire propagation properties and air bases."""
+
     __slots__ = ()
     coords_c = FireMap
 
@@ -185,6 +190,8 @@ class FirePropagationState(State):
     leading_edge_length: int = 0
 
 class FirePropagation(Function):
+    """Propagates fire behavior over map."""
+
     __slots__ = ('fireenvironment')
     container_s = FirePropagationState
     flow_fireenvironment = FireEnvironment
@@ -197,6 +204,7 @@ class FirePropagation(Function):
 
 
 
+
 double_size_p = dict(x_size=20, y_size=20, blocksize=2.5,
                      map_type="forest-grass-scrub", num_strikes=3,
                      grass_ig_time=25.0, scrub_it_time=37.0, forest_ig_time=50.0,
@@ -206,6 +214,14 @@ double_size_p = dict(x_size=20, y_size=20, blocksize=2.5,
 show_properties = {'forest': {'color': 'darkgreen'},
                    'grass': {'color': 'lightgreen'},
                    'scrub': {'color': 'gold'}}
+
+sim_properties={'grass': {'color': 'lightgreen'},
+                'forest': {'color': 'darkgreen'},
+                'scrub': {'color': 'gold'},
+                'burning': {'color': "red", "as_bool": True, 'alpha': 0.5},
+                "base": {"color": "grey"},
+                "to_burn": {"color": "yellow", "as_bool": True, "alpha": 0.5},
+                "extinguished": {"color": "grey"}}
 
 if __name__ == "__main__":
 
