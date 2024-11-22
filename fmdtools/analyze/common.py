@@ -454,7 +454,7 @@ def consolidate_legend(ax, loc='upper left', bbox_to_anchor=(1.05, 1),
               bbox_to_anchor=bbox_to_anchor, loc=loc, **kwargs)
 
 
-def mark_times(ax, tick, time, *plot_values, fontsize=8, rounddec=1):
+def mark_times(ax, tick, time, *plot_values, fontsize=8, rounddec=1, pretext="t="):
     """
     Mark times on an axis at a particular tick interval.
 
@@ -476,7 +476,8 @@ def mark_times(ax, tick, time, *plot_values, fontsize=8, rounddec=1):
         tt = st[-1]
         xyz = st[:-1]
         if tt >= t_tick+tick:
-            ax.text(*xyz, 't='+str(np.round(tt, rounddec)), fontsize=fontsize)
+            if tt < t_tick+tick+tick:
+                ax.text(*xyz, pretext+str(np.round(tt, rounddec)), fontsize=fontsize)
             t_tick += tick
 
 
