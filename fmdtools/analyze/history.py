@@ -757,11 +757,11 @@ class History(Result):
         return fig, axs
 
     def plot_individual_line(self, value, fig=None, ax=None, figsize=(6, 4),
-                             xlabel='', ylabel='', title='', **kwargs):
+                             time='time', xlabel='', ylabel='', title='', **kwargs):
         """Plot value in hist as individual lines."""
         fig, ax = setup_plot(fig=fig, ax=ax, figsize=figsize)
         scens = [*self.nest(1).keys()]
-        all_times = self.get_values('time')
+        all_times = self.get_values(time)
         hist_to_plot = self.get_values(value)
         if 'color' not in kwargs:
             kwargs['color'] = ax._get_lines.get_next_color()
@@ -771,8 +771,8 @@ class History(Result):
             times = hist_to_plot.get('time')
             ax.plot(times, h_value, **kwargs)
         add_title_xylabs(ax, xlabel=xlabel, ylabel=ylabel, title=title)
-        min_ind = np.min([i[0] for i in self.get_values('time').values()])
-        max_ind = np.max([i[-1] for i in self.get_values('time').values()])
+        min_ind = np.min([i[0] for i in self.get_values(time).values()])
+        max_ind = np.max([i[-1] for i in self.get_values(time).values()])
         ax.set_xlim(min_ind, max_ind)
         return fig, ax
 
@@ -1092,7 +1092,7 @@ class History(Result):
         fig, ax = setup_plot(fig=fig, ax=ax, figsize=figsize)
         xs = [*self.get_values(xlab).values()]
         ys = [*self.get_values(ylab).values()]
-        times = [i for k, i in self.get_values("time").items() if "t." not in k]
+        times = [i for k, i in self.get_values(time).items() if "t." not in k]
         for i, x in enumerate(xs):
             ax.plot(x, ys[i], **kwargs)
             if mark_time:
@@ -1110,7 +1110,7 @@ class History(Result):
         xs = [*self.get_values(xlab).values()]
         ys = [*self.get_values(ylab).values()]
         zs = [*self.get_values(zlab).values()]
-        times = [i for k, i in self.get_values("time").items() if "t." not in k][0]
+        times = [i for k, i in self.get_values(time).items() if "t." not in k][0]
         for i, x in enumerate(xs):
             ax.plot(x, ys[i], zs[i], **kwargs)
             if mark_time:
