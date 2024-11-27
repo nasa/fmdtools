@@ -98,6 +98,6 @@ if __name__ == "__main__":
     ani = mdl.flows['fireenvironment'].c.animate(hist.flows.fireenvironment.c,
                                                  properties=sim_properties)
 
-    light_mdl = WildfireSim(p=def_p, track=None)
+    light_mdl = WildfireSim(p=def_p) #  track=None)
 
     res, hist = prop.parameter_sample(light_mdl, create_scen_sample())

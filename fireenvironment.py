@@ -207,7 +207,8 @@ class FirePropagation(Function):
 
 double_size_p = dict(x_size=20, y_size=20, blocksize=2.5,
                      map_type="forest-grass-scrub", num_strikes=3,
-                     grass_ig_time=25.0, scrub_it_time=37.0, forest_ig_time=50.0,
+                     grass_ig_time=25.0, scrub_ig_time=37.0, forest_ig_time=50.0,
+                     grass_ex_time=45.0, scrub_ex_time=100.0, firest_ex_time=200.0,
                      base_locations=((0.0, 40.0), (30.0, 30.0)))
 
 
