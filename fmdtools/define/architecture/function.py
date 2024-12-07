@@ -341,11 +341,12 @@ class FunctionArchitectureTypeGraph(FunctionArchitectureGraph):
         g = nx.DiGraph()
         modelname = type(mdl).__name__
         g.add_node(modelname, level=1, nodetype="architecture")
-        g.add_nodes_from(mdl.fxnclasses(), level=2, nodetype="block")
+        g.add_nodes_from(mdl.fxnclasses(), level=2, nodetype="function")
         function_connections = [(modelname, fname) for fname in mdl.fxnclasses()]
         g.add_edges_from(function_connections, edgetype="containment")
         if withflows:
-            g.add_nodes_from(mdl.flowtypes(), level=3, nodetype="flow")
+            fts = [(ft, {'nodetype': nt}) for ft, nt in mdl.flowtypes().items()]
+            g.add_nodes_from(fts, level=3)
             fxnclass_flowtype = mdl.flowtypes_for_fxnclasses()
             flow_edges = [(fxn, flow) for fxn, flows in fxnclass_flowtype.items()
                           for flow in flows]

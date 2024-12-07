@@ -273,7 +273,8 @@ class Architecture(Simulable):
 
     def flowtypes(self):
         """Return the set of flow types used in the model."""
-        return {obj.__class__.__name__ for f, obj in self.flows.items()}
+        return {obj.__class__.__name__: obj.get_typename()
+                for f, obj in self.flows.items()}
 
     def flows_of_type(self, ftype):
         """Return the set of flows for each flow type."""
