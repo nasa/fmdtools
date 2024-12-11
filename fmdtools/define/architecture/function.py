@@ -4,6 +4,7 @@
 Defines classes for representing functional architectures.
 
 Defines classes:
+
 - :class:`FunctionArchitecture` class to represent functional architecture.
 - :class:`FunctionArchitectureGraph`: Graphs Model of functions and flow for display
   where both functions and flows are nodes.
