@@ -772,8 +772,8 @@ class NominalEnvelope(object):
         ax :mpl, axis
             Axis with scatter plot
         """
-        n_kwargs = {**dict(label='nominal', alpha=0.5, color='blue'),  **n_kwargs}
-        f_kwargs = {**dict(label='faulty', alpha=0.5, color='red'),  **f_kwargs}
+        n_kwargs = {**dict(label='nominal', alpha=0.5, color='blue'), **n_kwargs}
+        f_kwargs = {**dict(label='faulty', alpha=0.5, color='red'), **f_kwargs}
 
         fig, ax = setup_plot(figsize=figsize)
 
@@ -832,8 +832,8 @@ class NominalEnvelope(object):
         """
         default_n_kwargs = dict(label='nominal', alpha=0.5, color='blue', marker='o')
         default_f_kwargs = dict(label='faulty', alpha=0.5, color='red', marker='x')
-        n_kwargs = {**default_n_kwargs,  **n_kwargs}
-        f_kwargs = {**default_f_kwargs,  **f_kwargs}
+        n_kwargs = {**default_n_kwargs, **n_kwargs}
+        f_kwargs = {**default_f_kwargs, **f_kwargs}
 
         if len(self.params) == 3:
             z = 0

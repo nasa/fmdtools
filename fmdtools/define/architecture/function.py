@@ -900,7 +900,7 @@ class FunctionArchitecture(Architecture):
         ax.set_xlim(0, len(times))
         ax.xaxis.set_minor_locator(AutoMinorLocator(2))
         ax.yaxis.set_minor_locator(AutoMinorLocator(2))
-        ax.grid(which='minor',  linewidth=2)
+        ax.grid(which='minor', linewidth=2)
         ax.tick_params(axis='x', bottom=False, top=False,
                        labelbottom=False, labeltop=True)
         if title:

@@ -108,7 +108,7 @@ class ParameterDomain(object):
         self.var_maps = {}
         self.constants = {}
 
-    def add_variable(self, variable, var_set=(),  var_lim=(), var_map=pass_var):
+    def add_variable(self, variable, var_set=(), var_lim=(), var_map=pass_var):
         """
         Add a variable to the ParameterDomain.
 
