@@ -86,7 +86,7 @@ In :term:`FRDL`, this object may be represented as:
 
 To define a FunctionArchitecture class, it can be helpful to use the following code template:
 
-.. figure:: figures/powerpoint/model_structure.png
+.. figure:: figures/powerpoint/fxnarch_structure.svg
    :width: 800
    :alt: Structure of a Model
    
