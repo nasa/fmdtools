@@ -75,14 +75,14 @@ class CommsFlow(MultiFlow):
         rep_str = Flow.__repr__(self)
         if self.name == self.glob.name:
             for fname, func in self.fxns.items():
-                rep_str=rep_str+"\n   "+fname+": "+func["internal"].__repr__()
+                rep_str = rep_str+"\n   "+fname+": "+func["internal"].__repr__()
         elif self.name in self.glob.fxns:
             rep_str = (rep_str +
                        "\n       out: " + self.out().__repr__() +
                        "\n       in: " + str(self.inbox()) +
                        "\n       received: " + str(self.received()))
-            for l in self.locals:
-                rep_str = rep_str+"\n       "+l+": "+getattr(self, l).__repr__()
+            for lo in self.locals:
+                rep_str = rep_str+"\n       "+lo+": "+getattr(self, lo).__repr__()
         return rep_str
 
     def create_comms(self, name, ports=[], **kwargs):
@@ -216,7 +216,7 @@ class CommsFlow(MultiFlow):
                 args = self.glob.fxns[fxn_to]["in"][f_from]
             port_from = self.get_port(f_from, fxn_to, "out")
             port_to = self.get_port(fxn_to, f_from, "internal")
-            port_to.s.assign(port_from.s,  *args, as_copy=True)
+            port_to.s.assign(port_from.s, *args, as_copy=True)
             self.glob.fxns[fxn_to]["received"][f_from]=args
 
     def reset(self):

@@ -351,7 +351,7 @@ class HoldPayloadState(State):
         Force from the ground
     """
 
-    force_gr:   float = 1.0
+    force_gr: float = 1.0
 
 
 class HoldPayload(Function):

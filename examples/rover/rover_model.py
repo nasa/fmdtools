@@ -489,7 +489,7 @@ class PlanPathState(State):
 
     u_self: np.array = np.array([0.0, 0.0])
     u_lin: np.array = np.array([0.0, 0.0])
-    u_lin_dev:  np.array = np.array([0.0, 0.0])
+    u_lin_dev: np.array = np.array([0.0, 0.0])
     rdiff: float = 0.0
     vel_adj: float = 1.0
 
@@ -647,7 +647,7 @@ class DriveMode(Mode):
                 self.init_n_faultstates(franges, phases=ph)
             if "range" in self.mode_args:
                 franges = {"friction": {*np.linspace(0.0, 20, 10)},
-                           "transfer":  {*np.linspace(1.0, 0.0, 10)},
+                           "transfer": {*np.linspace(1.0, 0.0, 10)},
                            "drift": {*np.linspace(-0.5, 0.5, 10)}}
                 if "all" in self.mode_args:
                     self.init_n_faultstates(franges, phases=ph, n="all")
@@ -668,7 +668,7 @@ class DriveMode(Mode):
 
     def add_n_modes(self, ph):
         franges = {"friction": {*np.linspace(0.0, 20, 10)},
-                   "transfer":  {*np.linspace(1.0, 0.0, 10)},
+                   "transfer": {*np.linspace(1.0, 0.0, 10)},
                    "drift": {*np.linspace(-0.5, 0.5, 10)}}
         self.init_n_faultstates(franges, n=self.mode_args, phases=ph)
 

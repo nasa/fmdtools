@@ -328,10 +328,10 @@ class Result(UserDict):
         try:
             args = argstr.split(".")
             return get_dict_attr(self.data, self.__class__, *args)
-        except:
+        except KeyError:
             try:
                 return self.all_with(argstr)
-            except:
+            except Exception:
                 raise AttributeError("Not in dict: "+str(argstr))
 
     def __setattr__(self, key, val):
@@ -340,7 +340,7 @@ class Result(UserDict):
         else:
             self.data[key] = val
 
-    def get(self, *argstr,  **to_include):
+    def get(self, *argstr, **to_include):
         """
         Provide dict-like access to the history/result across a number of arguments.
 
@@ -922,7 +922,7 @@ class Result(UserDict):
 
     def plot_metric_dist(self, *values, cols=2, comp_groups={}, bins=10, metric_bins={},
                          legend_loc=-1, xlabels={}, ylabel='count', title='', titles={},
-                         figsize='default',  v_padding=0.4, h_padding=0.05,
+                         figsize='default', v_padding=0.4, h_padding=0.05,
                          title_padding=0.1, legend_title=None, indiv_kwargs={},
                          fig=None, axs=None, **kwargs):
         """
@@ -1139,5 +1139,7 @@ def load_folder(folder, filetype):
 
 
 if __name__ == "__main__":
+    r = Result({'a': 1, 'b': 3})
+    r.c
     import doctest
     doctest.testmod(verbose=True)
