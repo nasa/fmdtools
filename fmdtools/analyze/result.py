@@ -10,15 +10,9 @@ Has classes:
 And functions:
 
 - :func:`load`: Loads a given file to a Result/History
-- :func:`load_folder`: Loads a given folder to a Result/History
 
 Private Methods:
 
-- :func:`file_check`: Check if files exists and whether to overwrite the file
-- :func:`auto_filetype`: Helper function that automatically determines the filetype
-  (npz, csv, or json) of a given filename
-- :func:`create_indiv_filename`: Helper function that creates an individualized name for
-  a file given the general filename and an individual id
 - :func:`clean_resultdict_keys`: Helper function for recreating results dictionary keys
   (tuples) from a dictionary loaded from a file (where keys are strings)
   (used in csv/json results)
@@ -52,52 +46,13 @@ from fmdtools.analyze.common import bootstrap_confidence_interval, join_key
 from fmdtools.analyze.common import get_sub_include, unpack_plot_values
 from fmdtools.analyze.common import multiplot_legend_title, multiplot_helper
 from fmdtools.analyze.common import set_empty_multiplots
+from fmdtools.analyze.common import auto_filetype, file_check, load_folder
 
 import numpy as np
 import pandas as pd
 import sys
 import os
 from collections import UserDict
-
-
-def file_check(filename, overwrite):
-    """Check if files exists and whether to overwrite the file."""
-    if os.path.exists(filename):
-        if not overwrite:
-            raise Exception("File already exists: "+filename)
-        else:
-            print("File already exists: "+filename+", writing anyway...")
-            os.remove(filename)
-    if "/" in filename:
-        last_split_index = filename.rfind("/")
-        foldername = filename[:last_split_index]
-        if not os.path.exists(foldername):
-            os.makedirs(foldername)
-
-
-def auto_filetype(filename, filetype=""):
-    """Automatically determines the filetype (pickle, csv, or json) of a filename."""
-    if not filetype:
-        if '.' not in filename:
-            raise Exception("No file extension in: " + filename)
-        if filename[-4:] == '.npz':
-            filetype = "npz"
-        elif filename[-4:] == '.csv':
-            filetype = "csv"
-        elif filename[-5:] == '.json':
-            filetype = "json"
-        else:
-            raise Exception("Invalid File Type in: " + filename +
-                            ", ensure extension is npz, csv, or json ")
-    return filetype
-
-
-def create_indiv_filename(filename, indiv_id, splitchar='_'):
-    """Create filename name for a file given general filename and individual id."""
-    filename_parts = filename.split(".")
-    filename_parts.insert(1, '.')
-    filename_parts.insert(1, splitchar+indiv_id)
-    return "".join(filename_parts)
 
 
 def clean_resultdict_keys(resultdict_dirty):
@@ -155,6 +110,7 @@ def fromdict(resultclass, inputdict):
 
 
 def check_include_errors(result, to_include):
+    """Throw error if any keys aren't in the result."""
     if type(to_include) is not str:
         for k in to_include:
             check_include_error(result, k)
@@ -163,6 +119,7 @@ def check_include_errors(result, to_include):
 
 
 def check_include_error(result, to_include):
+    """Throw error if key not in keys."""
     if to_include not in ('all', 'default') and to_include not in result:
         raise Exception("to_include key " + to_include +
                         " not in result keys: " + str(result.keys()))
@@ -254,11 +211,34 @@ class Result(UserDict):
         -------
         equality : Bool
             Whether the results are equal
+
+        Examples
+        >>> a = Result({'a': 1})
+        >>> a1 = Result({'a': 1})
+        >>> a == a1
+        True
+        >>> az = Result({'a': 3})
+        >>> a == az
+        False
+        >>> b = Result({'b': 3})
+        >>> a == b
+        False
+        >>> az == b
+        False
+        >>> Result({'b': [1,2], 'c': [3,4]}) == Result({'b': [1,2], 'c': [3,4]})
+        True
+        >>> Result({'b': [1,2], 'c': [3,4]}) == Result({'b': [1,2], 'c': [1,2]})
+        False
+        >>> Result({'b': [1,2]}) == Result({'b': [1,2], 'c': [1,2]})
+        False
         """
-        return all([all(v == other[k])
-                    if isinstance(v, np.ndarray)
-                    else v == other[k]
-                    for k, v in self.data.items()])
+        if self.keys() != other.keys():
+            return False
+        else:
+            return all([all(v == other.data.get(k, None))
+                        if isinstance(v, np.ndarray)
+                        else v == other.data.get(k, None)
+                        for k, v in self.data.items()])
 
     def __sub__(self, other):
         """
@@ -1112,34 +1092,8 @@ def load_json(filename, indiv=False):
     return resultdict
 
 
-def load_folder(folder, filetype):
-    """
-    Loads endclass/mdlhist results from a given folder
-    (e.g., that have been saved from multi-scenario propagate methods with 'indiv':True)
-
-    Parameters
-    ----------
-    folder : str
-        Name of the folder. Must be in the current directory
-    filetype : str
-        Type of files in the folder ('pickle', 'csv', or 'json')
-
-    Returns
-    -------
-    files_to_read : list
-        files to load for endclasses/mdlhists.
-    """
-    files = os.listdir(folder)
-    files_toread = []
-    for file in files:
-        read_filetype = auto_filetype(file)
-        if read_filetype == filetype:
-            files_toread.append(file)
-    return files_toread
-
-
 if __name__ == "__main__":
-    r = Result({'a': 1, 'b': 3})
-    r.c
+    # r = Result({'a': 1, 'b': 3})
+    # r.c
     import doctest
     doctest.testmod(verbose=True)
