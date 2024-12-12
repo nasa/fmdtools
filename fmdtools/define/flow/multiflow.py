@@ -8,7 +8,7 @@ Defines:
 - :class:`MultiFlowGraph` class which represents `MultiFlow` in a ModelGraph structure.
 """
 
-from fmdtools.define.flow.base import Flow
+from fmdtools.define.flow.base import Flow, ExampleFlow
 from fmdtools.analyze.graph.model import ModelGraph
 
 
@@ -56,6 +56,7 @@ class MultiFlowGraph(ModelGraph):
     def draw_graphviz(self, layout="neato", overlap='false', **kwargs):
         return super().draw_graphviz(layout=layout, overlap=overlap, **kwargs)
 
+
 class MultiFlow(Flow):
     """
     MultiFlow class enables represenation of multiple connected copies of the same flow.
@@ -70,6 +71,27 @@ class MultiFlow(Flow):
 
     A MultiFlow can have any number of local views (listed by name in MultiFlow.locals)
     as well as a single global view (which may represent the actual value)
+
+
+    Examples
+    --------
+    >>> exf = ExampleMultiFlow()
+    >>> sub_flow = exf.create_local("sub_flow")
+    >>> sub_flow
+    sub_flow ExampleMultiFlow flow: ExampleState(x=1.0, y=1.0)
+    >>> sub_flow.s.put(x=0.0, y=0.0)
+    >>> exf
+    examplemultiflow ExampleMultiFlow flow: ExampleState(x=1.0, y=1.0)
+       sub_flow ExampleMultiFlow flow: ExampleState(x=0.0, y=0.0)
+    >>> exf.update(to_get="sub_flow")
+    >>> exf
+    examplemultiflow ExampleMultiFlow flow: ExampleState(x=0.0, y=0.0)
+       sub_flow ExampleMultiFlow flow: ExampleState(x=0.0, y=0.0)
+    >>> exf.s.put(x=10.0, y=10.0)
+    >>> sub_flow.update("x", to_get="global")
+    >>> exf
+    examplemultiflow ExampleMultiFlow flow: ExampleState(x=10.0, y=10.0)
+       sub_flow ExampleMultiFlow flow: ExampleState(x=10.0, y=0.0)
     """
 
     slots = ['locals', '__dict__']
@@ -78,6 +100,7 @@ class MultiFlow(Flow):
     roletypes = ['container', 'local']
 
     def __init__(self, name='', root='', glob=[], track=['s'], **kwargs):
+        """Initialize MultiFlow (glob is global MultiFlow)."""
         if not glob:
             self.glob = self
         else:
@@ -88,6 +111,7 @@ class MultiFlow(Flow):
         self.locals = []
 
     def __repr__(self):
+        """Print console string."""
         rep_str = Flow.__repr__(self)
         for loc in self.locals:
             rep_str = rep_str+"\n   "+self.get_view(loc).__repr__()
@@ -123,7 +147,6 @@ class MultiFlow(Flow):
         newflow : MultiFlow
             Local view of the MultiFlow with its own individual values
         """
-
         if hasattr(self, name):
             oldflow = getattr(self, name)
             newflow = oldflow.copy(glob=self)
@@ -159,7 +182,27 @@ class MultiFlow(Flow):
             return name
 
     def get_view(self, name):
-        """Get the view of the MultiFlow corresponding to the given name."""
+        """
+        Get the view of the MultiFlow corresponding to the given name.
+
+        Parameters
+        ----------
+        name : str
+            Name of the MultiFlow object, or other identifier, such as "global",
+            "local" (which returns self), and "out" (outgoing flow for CommsFlows).
+
+        Examples
+        --------
+        >>> exf = ExampleMultiFlow()
+        >>> sub_f = exf.create_local("sub_f")
+        >>> sub_f2 = exf.create_local("sub_f2")
+        >>> sub_f.get_view("global")
+        examplemultiflow ExampleMultiFlow flow: ExampleState(x=1.0, y=1.0)
+           sub_f ExampleMultiFlow flow: ExampleState(x=1.0, y=1.0)
+           sub_f2 ExampleMultiFlow flow: ExampleState(x=1.0, y=1.0)
+        >>> sub_f.get_view("sub_f2")
+        sub_f2 ExampleMultiFlow flow: ExampleState(x=1.0, y=1.0)
+        """
         if name == "":
             raise Exception("Must provide view")
         elif name == "local":
@@ -170,24 +213,26 @@ class MultiFlow(Flow):
             view = getattr(self.glob, self.name + "_out")
         elif name in getattr(self, 'locals', []):
             view = getattr(self, name)
-        else:
+        elif name in self.glob.locals:
             view = getattr(self.glob, name)
+        else:
+            raise Exception("Inaccessible view name: "+name+". Is it a real flow name?")
         return view
 
-    def update(self, to_update="local", to_get="global", *states):
+    def update(self, *states, to_update="local", to_get="global"):
         """
         Update a view of the MultiFlow to the values of another view.
 
         Parameters
         ----------
+        *states : str
+            States to update (defaults to all states)
         to_update : str/list, optional
             Name of the view to update. The default is "local". If "all", updates all
             locals (or ports for commsflows).
             If a list is provided, updates the list (in locals)
         to_get : str, optional
             Name of the view to update from. The default is "global".
-        *states : str
-            States to update (defaults to all states)
         """
         get = self.get_view(to_get)
         if to_update == 'all':
@@ -206,11 +251,13 @@ class MultiFlow(Flow):
             up.s.assign(get.s, *states, as_copy=True)
 
     def reset(self):
+        """Reset the flow and sub-flows to their initial states."""
         super().reset()
         for local in self.locals:
             getattr(self, local).reset()
 
     def copy(self, name='', glob=[], p={}, s={}, track=['s']):
+        """Copy the flow and create new sub-flow copies for it."""
         if not s and hasattr(self, 's'):
             s = self.s.asdict()
         cop = self.__class__(self.name, glob=glob, p=p, s=s, track=track)
@@ -220,6 +267,33 @@ class MultiFlow(Flow):
         return cop
 
     def create_hist(self, timerange):
+        """
+        Create history for entire flow structure (with sub-flows).
+
+        Examples
+        --------
+        >>> exf = ExampleMultiFlow()
+        >>> exf1 = exf.create_local("exf1")
+        >>> exf2 = exf1.create_local("exf2")
+        >>> exf.create_hist([1,2,3])
+        s.x:                            array(3)
+        s.y:                            array(3)
+        exf1: 
+        --s.x:                          array(3)
+        --s.y:                          array(3)
+        --exf2: 
+        ----s.x:                        array(3)
+        ----s.y:                        array(3)
+        >>> exf1.h
+        s.x:                            array(3)
+        s.y:                            array(3)
+        exf2: 
+        --s.x:                          array(3)
+        --s.y:                          array(3)
+        >>> exf2.h
+        s.x:                            array(3)
+        s.y:                            array(3)
+        """
         super().create_hist(timerange)
         for localname in self.locals:
             local_flow = getattr(self, localname)
@@ -234,3 +308,15 @@ class MultiFlow(Flow):
     def as_modelgraph(self, gtype=MultiFlowGraph, **kwargs):
         """Create and return the corresponding ModelGraph for the Object."""
         return gtype(self, **kwargs)
+
+
+class ExampleMultiFlow(ExampleFlow, MultiFlow):
+    """Extension of ExampleFlow to MultiFlow case."""
+
+    __slots__ = ()
+
+
+if __name__ == "__main__":
+    ex = ExampleMultiFlow()
+    import doctest
+    doctest.testmod(verbose=True)
