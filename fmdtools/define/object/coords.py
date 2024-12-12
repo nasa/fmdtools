@@ -179,7 +179,8 @@ class Coords(BaseObject):
     container_p = CoordsParam
     container_r = Rand
     roledicts = ['points', 'collections', 'features', 'states']
-    immutable_roles = BaseObject.immutable_roles + ['points', 'collections', 'features']
+    immutable_roles = BaseObject.immutable_roles + \
+        ['points', 'collections', 'features']
     default_track = ["r", "states"]
 
     def __init__(self, *args, track='default', **kwargs):
@@ -319,7 +320,8 @@ class Coords(BaseObject):
                     pts.extend(prop)
                 else:
                     raise Exception(name+"not in points or collections")
-            true_array = np.full((self.p.x_size, self.p.y_size), not in_points_colls)
+            true_array = np.full(
+                (self.p.x_size, self.p.y_size), not in_points_colls)
             for pt in pts:
                 true_array[self.to_index(*pt)] = in_points_colls
         else:
@@ -628,6 +630,16 @@ class Coords(BaseObject):
             y-position
         direction: str/list
             Direction(s) to get neighbors from. Default is "all".
+            'direct' returns the top, bottom, left, and right neighbors.
+            'diagonal' returns the four diagonal neighbors.
+            'left' returns the left neighbor.
+            'right' returns the right neighbor.
+            'up' returns the top neighbor.
+            'down' returns the bottow neighbor.
+            'top-left' returns the top left neighbor.
+            'top-right' returns the top right neighbor.
+            'bottom-left' returns the bottom left neighbor.
+            'bottom-right' returns the bottom right neighbor.
 
         Returns
         -------
@@ -638,26 +650,45 @@ class Coords(BaseObject):
         --------
         >>> ex = ExampleCoords()
         >>> ex.get_neighbors(0, 0)
-        [array([10.,  0.]), array([ 0., 10.])]
+        [array([ 0., 10.]), array([10., 10.]), array([10.,  0.])]
         >>> ex.get_neighbors(10, 10)
-        [array([ 0., 10.]), array([20., 10.]), array([10., 20.]), array([10.,  0.])]
+        [array([ 0., 20.]), array([10., 20.]), array([20., 20.]), array([ 0., 10.]), array([20., 10.]), array([0., 0.]), array([10.,  0.]), array([20.,  0.])]
         >>> ex.get_neighbors(10, 10, direction="left")
         [array([ 0., 10.])]
-        >>> ex.get_neighbors(10, 10, direction="up-down")
-        [array([10., 20.]), array([10.,  0.])]
+        >>> ex.get_neighbors(10, 10, direction="top-left")
+        [array([ 0., 20.])]
         >>> ex.get_neighbors(10, 10, direction=["up","down"])
         [array([10., 20.]), array([10.,  0.])]
+        >>> ex.get_neighbors(10, 10, direction="direct")
+        [array([10., 20.]), array([ 0., 10.]), array([20., 10.]), array([10.,  0.])]
+        >>> ex.get_neighbors(10, 10, direction="diagonal")
+        [array([ 0., 20.]), array([20., 20.]), array([0., 0.]), array([20.,  0.])]
         """
         ind = self.to_index(x, y)
         neighbor_list = []
-        if 'left' in direction or direction == 'all':
-            neighbor_list.append((ind[0]-1, ind[1]))
-        if 'right' in direction or direction == 'all':
-            neighbor_list.append((ind[0]+1, ind[1]))
-        if 'up' in direction or direction == 'all':
-            neighbor_list.append((ind[0], ind[1]+1))
-        if 'down' in direction or direction == 'all':
-            neighbor_list.append((ind[0], ind[1]-1))
+
+        if isinstance(direction, list) is not True:
+            temp_dir = direction
+            direction = []
+            direction.append(temp_dir)
+
+        for i in direction:
+            if i == 'top-left' or i == 'all' or i == 'diagonal':
+                neighbor_list.append((ind[0]-1, ind[1]+1))
+            if i == 'up' or i == 'all' or i == 'direct':
+                neighbor_list.append((ind[0], ind[1]+1))
+            if i == 'top-right' or i == 'all' or i == 'diagonal':
+                neighbor_list.append((ind[0]+1, ind[1]+1))
+            if i == 'left' or i == 'all' or i == 'direct':
+                neighbor_list.append((ind[0]-1, ind[1]))
+            if i == 'right' or i == 'all' or i == 'direct':
+                neighbor_list.append((ind[0]+1, ind[1]))
+            if i == 'bottom-left' or i == 'all' or i == 'diagonal':
+                neighbor_list.append((ind[0]-1, ind[1]-1))
+            if i == 'down' or i == 'all' or i == 'direct':
+                neighbor_list.append((ind[0], ind[1]-1))
+            if i == 'bottom-right' or i == 'all' or i == 'diagonal':
+                neighbor_list.append((ind[0]+1, ind[1]-1))
 
         neighbors = []
         for i, n_point in enumerate(neighbor_list):
@@ -1072,7 +1103,8 @@ class Coords(BaseObject):
                     z_index = 0
                 colors[index[0], index[1], z_index] = coll_color
 
-        ax.voxels(X_scale, Y_scale, Z_scale, shape, facecolors=colors, **kwargs)
+        ax.voxels(X_scale, Y_scale, Z_scale, shape,
+                  facecolors=colors, **kwargs)
         ax.set_xlabel(xlabel)
         ax.set_ylabel(ylabel)
         ax.set_zlabel(zlabel)
@@ -1221,9 +1253,11 @@ class Coords(BaseObject):
         c_offset = len(properties)
         if coll_overlay:
             self._show_properties(properties, fig, ax, pallette, **kwargs)
-            self._show_collections(collections, fig, ax, pallette, c_offset=c_offset)
+            self._show_collections(collections, fig, ax,
+                                   pallette, c_offset=c_offset)
         else:
-            self._show_collections(collections, fig, ax, pallette, c_offset=c_offset)
+            self._show_collections(collections, fig, ax,
+                                   pallette, c_offset=c_offset)
             self._show_properties(properties, fig, ax, pallette, **kwargs)
 
         add_title_xylabs(ax, title=title, xlabel=xlabel, ylabel=ylabel)
@@ -1311,7 +1345,8 @@ class Coords(BaseObject):
         elif z == '':
             z = 0.0
         if voxels:
-            fig, ax = self.show_property_z(prop, z=z, collections=collections, **kwargs)
+            fig, ax = self.show_property_z(
+                prop, z=z, collections=collections, **kwargs)
         else:
             fig, ax = self.show_collection("pts", z=z, legend_args=legend_args,
                                            label=False, **kwargs)
@@ -1367,6 +1402,6 @@ if __name__ == "__main__":
     ex.show_collection("high_v")
     ex.show_collection("high_v", z="v")
     ex.show_z("st", z="v",
-            collections={"pts": {"color": "blue"},
-                         "high_v": {"alpha": 0.5, "color": "red"}},
-            legend_args=True)
+              collections={"pts": {"color": "blue"},
+                           "high_v": {"alpha": 0.5, "color": "red"}},
+              legend_args=True)
