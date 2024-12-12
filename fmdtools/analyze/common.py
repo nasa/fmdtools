@@ -17,6 +17,12 @@ Has methods:
 - :func:`multiplot_legend_title`: Helper function for multiplot legends and titles
 - :func:`consolidate_legend`: Creates a single legend for a given multiplot where
   multiple groups are being compared
+- :func:`load_folder`: Lists files to load in folder.
+- :func:`file_check`: Check if files exists and whether to overwrite the file
+- :func:`auto_filetype`: Helper function that automatically determines the filetype
+  (npz, csv, or json) of a given filename
+- :func:`create_indiv_filename`: Helper function that creates an individualized name for
+  a file given the general filename and an individual id
 
 Copyright © 2024, United States Government, as represented by the Administrator
 of the National Aeronautics and Space Administration. All rights reserved.
@@ -32,6 +38,7 @@ CONDITIONS OF ANY KIND, either express or implied. See the License for the
 specific language governing permissions and limitations under the License.
 """
 import numpy as np
+import os
 import matplotlib.pyplot as plt
 
 
@@ -103,6 +110,96 @@ def is_numeric(val):
         return np.issubdtype(np.array(val).dtype, np.number)
     except TypeError:
         return type(val) in [float, bool, int]
+
+
+def file_check(filename, overwrite):
+    """Check if files exists and whether to overwrite the file."""
+    if os.path.exists(filename):
+        if not overwrite:
+            raise Exception("File already exists: "+filename)
+        else:
+            print("File already exists: "+filename+", writing anyway...")
+            os.remove(filename)
+    if "/" in filename:
+        last_split_index = filename.rfind("/")
+        foldername = filename[:last_split_index]
+        if not os.path.exists(foldername):
+            os.makedirs(foldername)
+
+
+def auto_filetype(filename, filetype="", filetypes=['npz', 'csv', 'json']):
+    """
+    Automatically determine the filetype (npz, csv, or json) of a filename.
+
+    Examples
+    --------
+    >>> auto_filetype("hi.npz")
+    'npz'
+    >>> auto_filetype("example.csv")
+    'csv'
+    >>> auto_filetype("example.json")
+    'json'
+    >>> auto_filetype("x.pdf")
+    Traceback (most recent call last):
+      ...
+    Exception: Invalid filename in x.pdf, ensure extension is in ['npz', 'csv', 'json'].
+    >>> auto_filetype("no_ext", "csv")
+    'csv'
+    """
+    if not filetype:
+        if '.' not in filename:
+            raise Exception("No file extension in: " + filename)
+        for ft in filetypes:
+            len_ft = len(ft)
+            if filename[-(len_ft+1):] == '.'+ft:
+                filetype = ft
+                break
+        if not filetype:
+            raise Exception("Invalid filename in " + filename +
+                            ", ensure extension is in "+str(filetypes)+".")
+    return filetype
+
+
+def create_indiv_filename(filename, indiv_id, splitchar='_'):
+    """
+    Create filename name for a file given general filename and individual id.
+
+    Examples
+    --------
+    >>> create_indiv_filename("hi.csv", "4")
+    'hi_4.csv'
+    """
+    filename_parts = filename.split(".")
+    filename_parts.insert(1, '.')
+    filename_parts.insert(1, splitchar+indiv_id)
+    return "".join(filename_parts)
+
+
+def load_folder(folder, filetype):
+    """
+    Create list of files to be read from a folder.
+
+    (e.g., that have been saved from multi-scenario propagate methods with 'indiv':True)
+
+    Parameters
+    ----------
+    folder : str
+        Name of the folder. Must be in the current directory
+    filetype : str
+        Type of files in the folder ('pickle', 'csv', or 'json')
+
+    Returns
+    -------
+    files_to_read : list
+        files to load for endclasses/mdlhists.
+    """
+    files = os.listdir(folder)
+    files_toread = []
+    for file in files:
+        read_filetype = auto_filetype(file)
+        if read_filetype == filetype:
+            files_toread.append(file)
+    return files_toread
 
 
 def bootstrap_confidence_interval(data, method=np.mean, return_anyway=False, **kwargs):

@@ -62,7 +62,8 @@ specific language governing permissions and limitations under the License.
 from fmdtools.define.base import get_var, t_key
 from fmdtools.sim.sample import SampleApproach
 from fmdtools.sim.scenario import Sequence, Scenario, SingleFaultScenario
-from fmdtools.analyze.result import Result, create_indiv_filename, file_check
+from fmdtools.analyze.common import create_indiv_filename, file_check
+from fmdtools.analyze.result import Result
 from fmdtools.analyze.history import History
 from fmdtools.analyze.phases import from_hist
 
