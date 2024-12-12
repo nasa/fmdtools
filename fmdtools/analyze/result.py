@@ -95,7 +95,7 @@ def get_dict_attr(dict_in, des_class, *attr):
     if len(attr) == 1:
         return dict_in[attr[0]]
     else:
-        return get_dict_attr(des_class(dict_in[attr[0]]), *attr[1:])
+        return get_dict_attr(des_class(dict_in[attr[0]]), des_class, *attr[1:])
 
 
 def fromdict(resultclass, inputdict):
@@ -155,12 +155,28 @@ class Result(UserDict):
     1
     >>> rf.keys()
     dict_keys(['y.z'])
+    >>> Result({'a': 'b', 'c': {'d': 'e'}})
+    a:                                     b
+    c: 
+    --d:                                   e
 
     It also enables saving and loading to files via r.save(), r.load(), and
     r.load_folder()
     """
 
+    def __init__(self, mapping=None, **kwargs):
+        if isinstance(mapping, dict):
+            mapping = self.fromdict({**mapping, **kwargs})
+        elif mapping is None:
+            mapping = dict(**kwargs)
+        elif isinstance(mapping, Result):
+            mapping.update(**kwargs)
+        else:
+            raise Exception("Invalid mapping: "+str(mapping))
+        super().__init__(mapping)
+
     def __repr__(self, ind=0):
+        """Provide string representation for console."""
         str_rep = ""
         for k, val in self.items():
             if isinstance(val, np.ndarray) or isinstance(val, list):
@@ -302,18 +318,23 @@ class Result(UserDict):
         return different
 
     def keys(self):
+        """Get keys iterator (not nested)."""
         return self.data.keys()
 
     def items(self):
+        """Get items iterator (not nested)."""
         return self.data.items()
 
     def values(self):
+        """Get values iterato (not nested)r."""
         return self.data.values()
 
     def __reduce__(self):
+        """Serialize Result userdict by its items."""
         return type(self), (), None, None, iter(self.items())
 
     def __getattr__(self, argstr):
+        """Get attribute (custom method)."""
         try:
             args = argstr.split(".")
             return get_dict_attr(self.data, self.__class__, *args)
@@ -324,6 +345,7 @@ class Result(UserDict):
                 raise AttributeError("Not in dict: "+str(argstr))
 
     def __setattr__(self, key, val):
+        """Set attribute (custom method)."""
         if key == "data":
             UserDict.__setattr__(self, key, val)
         else:
@@ -344,6 +366,16 @@ class Result(UserDict):
         -------
         Result/History
             Result/History with the attributes (or single att)
+
+        Examples
+        --------
+        >>> r=Result({'a': 'b', 'c': {'d': 'e'}})
+        >>> r.get('a')
+        'b'
+        >>> r.get('c')
+        d:                                     e
+        >>> r.get('c.d')
+        'e'
         """
         atts_to_get = argstr + to_include_keys(to_include)
         res = self.__class__()
@@ -373,7 +405,21 @@ class Result(UserDict):
         else:
             raise Exception(attr+" not in Result keys: "+str(self.keys()))
 
-    def fromdict(inputdict):
+    @classmethod
+    def fromdict(cls, inputdict):
+        """
+        Set up new Result from dictionary.
+
+        Examples
+        --------
+        >>> d = Result.fromdict({'a': 2, 'b': {'c': 4}})
+        >>> d
+        a:                                     2
+        b: 
+        --c:                                   4
+        >>> d.b
+        c:                                     4
+        """
         return fromdict(Result, inputdict)
 
     def load(filename, filetype="", renest_dict=False, indiv=False):
@@ -523,22 +569,28 @@ class Result(UserDict):
         return newhist
 
     def is_flat(self):
-        """Checks if the history is flat."""
+        """
+        Check if the history is flat.
+
+        Examples
+        --------
+        >>> Result({'a': 'b', 'c': {'d': 'e'}}).is_flat()
+        False
+        >>> Result({'a': 'b', 'c.d': 'e'}).is_flat()
+        True
+        """
         for v in self.values():
             if isinstance(v, Result):
                 return False
         return True
 
     def nest(self, levels=np.inf):
-        """
-        Re-nests a flattened result
-        """
+        """Re-nest a flattened result."""
         return nest_dict(self, levels=levels)
-
 
     def get_memory(self):
         """
-        Determines the memory usage of a given history and profiles.
+        Determine the memory usage of a given history and profiles.
 
         Returns
         -------
@@ -819,7 +871,7 @@ class Result(UserDict):
         return sum(ecs*weights)
 
     def average(self, metric, empty_as='nan'):
-        """Calculates the average value of a given metric in endclasses"""
+        """Calculate the average value of a given metric in endclasses"""
         ecs = [e for e in self.get_values(metric).values() if not np.isnan(e)]
         if len(ecs) > 0 or empty_as == 'nan':
             return np.mean(ecs)
@@ -1102,6 +1154,7 @@ def load_json(filename, indiv=False):
 
 
 if __name__ == "__main__":
+
     # r = Result({'a': 1, 'b': 3})
     # r.c
     import doctest
