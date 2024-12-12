@@ -10,6 +10,8 @@ Has methods:
   otherwise returns the number
 - :func:`is_numeric`: Helper function for Result Class, checks if a given value is
   numeric
+- :func:`diff`: Helper function for finding inconsistent states between val1, val2, with
+  the difftype option
 - :func:`join_key`: Helper function for Result Class
 - :func:`setup_plot`: initializes mpl figure
 - :func:`plot_err_hist`: Plots a line with a given range of uncertainty around it
@@ -110,6 +112,45 @@ def is_numeric(val):
         return np.issubdtype(np.array(val).dtype, np.number)
     except TypeError:
         return type(val) in [float, bool, int]
+
+
+def is_known_immutable(val):
+    """Check if value is known immutable."""
+    return type(val) in [int, float, str, tuple, bool] or isinstance(val, np.number)
+
+
+def is_known_mutable(val):
+    """Check if value is a known mutable."""
+    return type(val) in [dict, set]
+
+
+def diff(val1, val2, difftype='bool'):
+    """
+    Find inconsistent states between val1, val2.
+
+    The difftype option ('diff' (takes the difference), 'bool' (checks if the same),
+                         and float (checks if under the provided tolerance))
+
+    Examples
+    --------
+    >>> diff([1, 2, 3], [2, 2, 3])
+    array([ True, False, False])
+    >>> diff([1, 2, 3], [2, 2, 3], difftype="diff")
+    array([-1,  0,  0])
+    """
+    try:
+        if isinstance(val1, list):
+            val1 = np.array(val1)
+        if isinstance(val2, list):
+            val2 = np.array(val2)
+        if difftype == 'diff':
+            return val1-val2
+        elif difftype == 'bool':
+            return val1 != val2
+        elif isinstance(difftype, float):
+            return abs(val1-val2) > difftype
+    except ValueError as e:
+        raise Exception("Unable to diff "+str(val1)+" and "+str(val2)) from e
 
 
 def file_check(filename, overwrite):

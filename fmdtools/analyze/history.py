@@ -8,10 +8,6 @@ Defines :class:`History`: class and for structuring/analyzing simulation histori
 
 And functions/methods:
 
-- :func:`diff`: Helper function for finding inconsistent states between val1, val2, with
-  the difftype option
-- :func:`init_hist_iter`: Initializes the history for a given attribute att with value
-  val. Enables the recursive definition of a history as a nested structure.
 - :func:`init_dicthist`: Initializes histories for dictionary attributes (if any)
 - :func:`def prep_hists`: Prepare the history for plotting.
 
@@ -38,62 +34,12 @@ from fmdtools.analyze.common import multiplot_legend_title, multiplot_helper
 from fmdtools.analyze.common import plot_err_hist, setup_plot, set_empty_multiplots
 from fmdtools.analyze.common import mark_times, consolidate_legend, add_title_xylabs
 from fmdtools.analyze.common import prep_animation_title, clear_prev_figure
+from fmdtools.analyze.common import is_known_mutable, diff
 
 from matplotlib import animation
 from functools import partial
 import numpy as np
 import copy
-
-
-def is_known_immutable(val):
-    """Check if value is known immutable."""
-    return type(val) in [int, float, str, tuple, bool] or isinstance(val, np.number)
-
-
-def is_known_mutable(val):
-    """Check if value is a known mutable."""
-    return type(val) in [dict, set]
-
-
-def init_hist_iter(att, val, timerange=None, track=None, dtype=None, str_size='<U20'):
-    """
-    Initialize the history for a given attribute att with value val.
-
-    Enables the recursive definition of a history as a nested structure.
-
-    If a timerange is given, the base fields are initializes as fixed-length numpy
-    arrays corresponding to the data type of the field. Otherwise, an empty list
-    is initialized.
-
-    Parameters
-    ----------
-    att : str
-        Name of the attribute.
-    val : dict/field
-        dict to be initialized as a History or field to be initialized as a list or
-        numpy array
-    timerange : iterable, optional
-        Time-range to initialize the history over. The default is None.
-    track : list/str/dict, optional
-        argument specifying attributes for :func:`get_sub_include'. The default is None.
-    dtype : str, optional
-        Datatype to initialze the array as (if given). The default is None.
-    str_size : str, optional
-        Data type for strings. The default is '<U20'.
-
-    Returns
-    -------
-    Hist : History, List, or np.array
-        Initialized history structure corresponding to the attribute
-    """
-    sub_track = get_sub_include(att, track)
-    if sub_track and hasattr(val, 'create_hist'):
-        return val.create_hist(timerange, sub_track)
-    elif sub_track and isinstance(val, dict):
-        return init_dicthist(val, timerange, sub_track)
-    elif sub_track:
-        hist = History()
-        hist.init_att(att, val, timerange, track, dtype, str_size)
 
 
 def init_dicthist(start_dict, timerange, track="all"):
@@ -118,24 +64,6 @@ def init_dicthist(start_dict, timerange, track="all"):
     for att, val in start_dict.items():
         hist.init_att(att, val, timerange, track)
     return hist
-
-
-def diff(val1, val2, difftype='bool'):
-    """
-    Find inconsistent states between val1, val2.
-
-    The difftype option ('diff' (takes the difference), 'bool' (checks if the same),
-                         and float (checks if under the provided tolerance))
-    """
-    try:
-        if difftype == 'diff':
-            return val1-val2
-        elif difftype == 'bool':
-            return val1 != val2
-        elif isinstance(difftype, float):
-            return abs(val1-val2) > difftype
-    except ValueError as e:
-        raise Exception("Unable to diff "+str(val1)+" and "+str(val2)) from e
 
 
 def prep_hists(simhists, plot_values, comp_groups, indiv_kwargs, time='time'):
@@ -203,6 +131,7 @@ class History(Result):
 
     def init_att(self, att, val,
                  timerange=None, track=None, dtype=None, str_size='<U20'):
+        """Add key/hist array for an attribute over a given timerange."""
         sub_track = get_sub_include(att, track)
         if sub_track:
             if isinstance(val, dict) or (hasattr(val, 'keys') and hasattr(val, 'values')):
@@ -218,10 +147,12 @@ class History(Result):
             else:
                 try:
                     self[att] = np.full(len(timerange), val)
-                except:
+                except ValueError:
                     self[att] = np.empty((len(timerange),), dtype=object)
 
-    def fromdict(inputdict):
+    @classmethod
+    def fromdict(cls, inputdict):
+        """Create history from dictionary. Used in initialization."""
         return fromdict(History, inputdict)
 
     def load(filename, filetype="", renest_dict=False, indiv=False):
@@ -390,12 +321,24 @@ class History(Result):
         return hist
 
     def get_slice(self, t_ind=0):
-        """Return dict of values from (flattenned) version of the history at t_ind."""
+        """
+        Return Result of values from (flattenned) version of the history at t_ind.
+
+        Examples
+        --------
+        >>> h = History(a=[3,4,5], time=[1,2,3])
+        >>> h.get_slice(0)
+        a:                                     3
+        time:                                  1
+        >>> h.get_slice(2)
+        a:                                     5
+        time:                                  3
+        """
         flathist = self.flatten()
         slice_dict = dict.fromkeys(flathist)
         for key, arr in flathist.items():
             slice_dict[key] = flathist[key][t_ind]
-        return slice_dict
+        return Result(slice_dict)
 
     def is_in(self, at):
         """Check if at is in the dictionary."""
@@ -407,7 +350,7 @@ class History(Result):
 
         Parameters
         ----------
-        metric : 'earliest','latest','total', optional
+        metric : 'earliest','latest','total', 'times', optional
             Earliest, latest, or total time fault(s) are present.
             The default is "earliest".
 
@@ -415,15 +358,28 @@ class History(Result):
         -------
         int
             index in the history when the fault is present
+
+        Examples
+        --------
+        >>> History({'m.faults.fault1': [False, False, False]}).get_fault_time()
+        nan
+        >>> History({'m.faults.fault1': [False, False, True]}).get_fault_time()
+        2
         """
         flatdict = self.flatten()
         all_faults_hist = np.sum([v for k, v in flatdict.items() if 'faults' in k], 0)
-        if metric == 'earliest':
-            return np.where(all_faults_hist >= 1)
-        elif metric == 'latest':
-            return np.where(np.flip(all_faults_hist) >= 1)
-        elif metric == 'total':
+        if metric == 'total':
             return np.sum(all_faults_hist >= 1)
+        else:
+            times = np.where(all_faults_hist >= 1)[0]
+            if times.size == 0:
+                return np.NaN
+            elif metric == 'times':
+                return times
+            elif metric == 'earliest':
+                return times[0]
+            elif metric == 'latest':
+                return times[-1]
 
     def _prep_faulty(self):
         """Create a faulty history of states from the current history."""
@@ -499,6 +455,15 @@ class History(Result):
         -------
         deghist : History
             History of degraded attributes
+
+        Examples
+        --------
+        >>> h = History({'nominal.a': np.array([1,2,3]), 'nominal.time': [0,1,2], 'faulty.a': np.array([1,1,1]), 'faulty.time': [0,1,2]})
+        >>> dh = h.get_degraded_hist("a")
+        >>> dh['total']
+        array([0, 1, 1])
+        >>> dh['a']
+        array([False,  True,  True])
         """
         if not attrs:
             attrs = self.keys()
@@ -519,7 +484,7 @@ class History(Result):
                 raise Exception("Unable to diff att " + att) from e
 
         if withtotal:
-            deghist['total'] = len(deghist.values()) - np.sum([*deghist.values()], axis=0)
+            deghist['total'] = np.sum([*deghist.values()], axis=0)
         if withtime:
             deghist['time'] = nomhist['time']
         return deghist
@@ -567,6 +532,22 @@ class History(Result):
         -------
         has_faults_hist : History
             History of attrs being faulty/not faulty
+
+        Examples
+        --------
+        >>> h = History({'f1.m.faults': [False, False, True], 'f2.m.faults': [True, False, False], 'time': [0,1,2]})
+        >>> fh = h.get_faulty_hist("f1", "f2")
+        >>> fh
+        f1:                             array(3)
+        f2:                             array(3)
+        total:                          array(3)
+        time:                           array(3)
+        >>> fh['total']
+        array([1, 0, 1])
+        >>> fh.f1
+        array([False, False,  True])
+        >>> fh.f2
+        array([ True, False, False])
         """
         faulthist = self._prep_faulty()
         faults_hist = self.get_faults_hist(*attrs)
