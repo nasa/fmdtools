@@ -281,3 +281,8 @@ class CommsFlow(MultiFlow):
     def as_modelgraph(self, gtype=CommsFlowGraph, **kwargs):
         """Create and return the corresponding ModelGraph for the Object."""
         return gtype(self, **kwargs)
+
+
+if __name__ == "__main__":
+    import doctest
+    doctest.testmod(verbose=True)
