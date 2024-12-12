@@ -262,6 +262,15 @@ class Result(UserDict):
         -------
         ret : Result/History
             Result with values correspnding to the difference between the two.
+
+        Examples
+        --------
+        >>> Result({'a': 4, 'b': 5}) - Result({'a': 2, 'b': 4})
+        a:                                     2
+        b:                                     1
+        >>> c = Result({'b': np.array([5, 4])}) - Result({'b': np.array([3,4])})
+        >>> c['b']
+        array([2, 0])
         """
         ret = self.__class__()
         # creates a dict where the values are the mathematical difference if the
