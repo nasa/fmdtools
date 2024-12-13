@@ -225,6 +225,7 @@ class ModelGraph(Graph):
         Graph.__init__(self, mdl.create_graph(**kwargs), check_info=check_info)
 
     def get_nodes(self, rem_ind=0):
+        """Get nodes (with shortened names if needed)."""
         return [shorten_name(n, rem_ind) for n in self.g.nodes]
 
     def set_from(self, time, history=History(), rem_ind=0):
