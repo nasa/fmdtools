@@ -16,7 +16,6 @@ And functions:
 - :func:`samplemetrics`: plots a metric for a set of faults sampled by a SampleApproach
   over time with rates on separate plots
 - :func:`find_interval_overlap`: Find overlap between given intervals.
-- :func:`gen_interval_times`: Creates times in a given interval.
 
 Copyright © 2024, United States Government, as represented by the Administrator
 of the National Aeronautics and Space Administration. All rights reserved.
@@ -33,6 +32,7 @@ specific language governing permissions and limitations under the License.
 """
 
 from fmdtools.analyze.common import setup_plot
+from fmdtools.define.base import gen_timerange
 
 import numpy as np
 from ordered_set import OrderedSet
@@ -280,7 +280,7 @@ class PhaseMap(object):
             intervals = [self.phases[ph] for ph in phases]
         elif phase in self.phases:
             intervals = [self.phases[phase]]
-        int_times = [gen_interval_times(i, self.dt) for i in intervals]
+        int_times = [gen_timerange(i[0], i[-1], self.dt) for i in intervals]
         all_times = list(set(np.concatenate(int_times)))
         all_times.sort()
         return all_times
@@ -363,7 +363,7 @@ class PhaseMap(object):
         plt.grid(which='major', axis='x')
 
 
-def from_hist(hist, fxn_modephases = 'all'):
+def from_hist(hist, fxn_modephases='all'):
     """
     Identify the phases of operation for the system based on its modes.
 
@@ -386,12 +386,22 @@ def from_hist(hist, fxn_modephases = 'all'):
         Phases are numbered mode, mode1, mode2 for multiple modes and given a
         corresponding phasemap {mode: {mode, mode1, mode2}} mapping modes to
         phases for future sampling.
+
+    Examples
+    --------
+    >>> from fmdtools.analyze.history import History
+    >>> g1 = History({'a.m.mode': ['off', 'off', 'on'], 'time':[0,1,2]})
+    >>> from_hist(g1)
+    {'a': PhaseMap({'off': [0, 1], 'on': [2, 2]}, {'off': {'off'}, 'on': {'on'}})}
+    >>> g2 = History({'b.m.mode': ['off', 'off', 'on'], 'c.m.mode':['up', 'down', 'left'], 'time':[0,1,2]})
+    >>> from_hist(g2)
+    {'b': PhaseMap({'off': [0, 1], 'on': [2, 2]}, {'off': {'off'}, 'on': {'on'}}), 'c': PhaseMap({'up': [0, 0], 'down': [1, 1], 'left': [2, 2]}, {'up': {'up'}, 'down': {'down'}, 'left': {'left'}})}
     """
     modephasemaps = {}
     times = hist['time']
     modehists = hist.get_values('m.mode')
     for k, modehist in modehists.items():
-        if type(k) == str:
+        if isinstance(k, str):
             k = k.split(".")
         fxn = k[k.index('m')-1]
         if len(modehist) != 0:
@@ -502,8 +512,7 @@ def phaseplot(phasemaps, modephases=[], mdl=[], dt=1.0, singleplot=True,
 def samplemetric(faultsamp, endclasses, metric='cost', rad='rate', rad_scale=0.01,
                  label_rad="{:.2e}", line='stem', title="", ylims=None, **scen_kwargs):
     """
-    Plots the sample metric and rate of a given fault over the injection times defined
-    in the app sampleapproach
+    Plot the sample metric and rate of a given fault over sample times.
 
     (note: not currently compatible with joint fault modes)
 
@@ -582,8 +591,7 @@ def samplemetric(faultsamp, endclasses, metric='cost', rad='rate', rad_scale=0.0
 
 def samplemetrics(app, endclasses, **kwargs):
     """
-    Plot the costs and rates of a set of faults injected over time according to the
-    approach app.
+    Plot costs and rates of a set of faults injected over time according to the sample.
 
     Parameters
     ----------
@@ -606,13 +614,6 @@ def samplemetrics(app, endclasses, **kwargs):
     return figs
 
 
-def get_joint_phase(**phases):
-    phasetup = tuple([*phases])
-    intervals = [i for i in phases.values()]
-    joined_interval = find_interval_overlap(*intervals)
-    return phasetup, joined_interval
-
-
 def find_interval_overlap(*intervals, dt=1.0):
     """
     Find the overlap between given intervals.
@@ -630,7 +631,7 @@ def find_interval_overlap(*intervals, dt=1.0):
         joined_times = {}
         for i, interval in enumerate(intervals):
             possible_times = set()
-            possible_times.update(*[{*gen_interval_times(interval, dt)}
+            possible_times.update(*[{*gen_timerange(interval[0], interval[-1], dt)}
                                     for i in interval])
             if i == 0:
                 joined_times = possible_times
@@ -646,11 +647,6 @@ def find_interval_overlap(*intervals, dt=1.0):
             return intervals[0]
         else:
             raise Exception("Invalid intervals: " + str(intervals)) from e
-
-
-def gen_interval_times(interval, dt):
-    """Generate the times in a given interval given the timestep dt."""
-    return np.arange(interval[0], interval[-1] + dt, dt)
 
 
 def join_phasemaps(*phasemaps):
