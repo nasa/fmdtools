@@ -22,7 +22,7 @@ CONDITIONS OF ANY KIND, either express or implied. See the License for the
 specific language governing permissions and limitations under the License.
 """
 
-from fmdtools.define.base import set_var
+from fmdtools.define.base import set_var, gen_timerange
 from fmdtools.define.object.base import BaseObject
 from fmdtools.define.container.parameter import Parameter
 from fmdtools.define.container.time import Time
@@ -101,7 +101,7 @@ class SimParam(Parameter, readonly=True):
                                 ": " + str(self.phases) +
                                 " Ensure max of each phase < min of each other phase")
 
-    def get_timerange(self, start_time=None, end_time=None):
+    def get_timerange(self, start_time=None, end_time=None, min_r=7):
         """
         Generate the timerange to simulate over.
 
@@ -114,7 +114,7 @@ class SimParam(Parameter, readonly=True):
             start_time = self.start_time
         if end_time is None:
             end_time = self.end_time
-        return np.round(np.arange(start_time, end_time + self.dt, self.dt), 7)
+        return gen_timerange(start_time, end_time, self.dt, min_r)
 
     def get_histrange(self, start_time=0.0, end_time=None):
         """Get the history range associated with the SimParam."""

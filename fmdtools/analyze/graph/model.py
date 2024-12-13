@@ -115,13 +115,22 @@ def create_inheritance_subgraph(obj, g=None, name='', end_at_fmdtools=True):
         Networkx graph to add to. The default is None.
     end_at_fmdtools : bool
         Option to end at first fmdtools node while building the subgraph
-        Default is False, which stops the subgraph at the first fmdtools class, rather
+        Default is True, which stops the subgraph at the first fmdtools class, rather
         than includeing the fmdtools class inheritance.
 
     Returns
     -------
     g : graph
         Networkx graph of inheritance from classes.
+
+    Example
+    -------
+    >>> from fmdtools.define.block.function import ExampleFunction
+    >>> g = create_inheritance_subgraph(ExampleFunction(), end_at_fmdtools=False)
+    >>> [*g.nodes]
+    ['examplefunction', 'fmdtools.define.block.function.ExampleFunction', 'fmdtools.define.block.function.Function', 'fmdtools.define.block.base.Block', 'fmdtools.define.block.base.Simulable', 'fmdtools.define.object.base.BaseObject']
+    >>> [*g.edges]
+    [('examplefunction', 'fmdtools.define.block.function.ExampleFunction'), ('fmdtools.define.block.function.ExampleFunction', 'fmdtools.define.block.function.Function'), ('fmdtools.define.block.function.Function', 'fmdtools.define.block.base.Block'), ('fmdtools.define.block.base.Block', 'fmdtools.define.block.base.Simulable'), ('fmdtools.define.block.base.Simulable', 'fmdtools.define.object.base.BaseObject')]
     """
     if not name:
         name = get_obj_name(obj)
@@ -203,6 +212,13 @@ class ModelGraph(Graph):
         whether to get states for the graph
     **kwargs:
         keyword arguments for self.nx_from_obj
+
+    Examples
+    --------
+    >>> from fmdtools.define.block.function import ExampleFunction
+    >>> mg = ModelGraph(ExampleFunction())
+    >>> mg.get_nodes()
+    ['examplefunction', 'examplefunction.m', 'examplefunction.p', 'examplefunction.s', 'examplefunction.sp', 'examplefunction.t', 'examplefunction.exampleflow', 'examplefunction.dynamic_behavior']
     """
 
     def __init__(self, mdl, check_info=True, **kwargs):

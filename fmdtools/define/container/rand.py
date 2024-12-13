@@ -250,7 +250,7 @@ def get_pdf_for_rand(x, randname, args):
     elif randname == 'bytes':
         raise Exception("Not able to calculate pdf for bytes")
     elif randname == 'choice':
-        if type(args[0]) == int:
+        if isinstance(args[0], int):
             options = [*np.arange(args[0])]
         else:
             options = args[0]
@@ -262,15 +262,15 @@ def get_pdf_for_rand(x, randname, args):
     elif randname in ['shuffle', 'permutation']:
         pd = [1/math.factorial(len(args[0]))]
     elif randname == 'permuted':
-        if len(args) > 1 and type(args[0]) == np.ndarray:
+        if len(args) > 1 and isinstance(args[0], np.ndarray):
             pd = [1/math.factorial(args[0].shape(args[1]))]
         else:
             pd = [1/math.factorial(len(args[0]))]
     else:
         pd = get_pdf_for_dist(x, randname, args)
-    if type(pd) == list:
+    if isinstance(pd, list):
         pd = np.array(pd)
-    elif type(pd) != np.ndarray:
+    elif not isinstance(pd, np.ndarray):
         pd = np.array([pd])
     return pd
 
@@ -311,8 +311,7 @@ def get_scipy_pdf_helper(x, randname, args, pmf=False):
 # note: when python 3.10 releases, this should become match/case
 def get_pdf_for_dist(x, randname, args):
     """
-    Gets the corresponding probability mass/density (from scipy) for outcome x
-    for probability distributions with name 'randname' in numpy.
+    Get the scipy probability mass/density for outcome x from numpy random draw.
 
     Parameters
     ----------
