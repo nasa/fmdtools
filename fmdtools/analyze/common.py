@@ -361,7 +361,7 @@ def phase_overlay(ax, phasemap, label_phases=True):
 
 
 def plot_err_hist(err_hist, ax=None, fig=None, figsize=(6, 4), boundtype='fill',
-                  boundcolor='gray', boundlinestyle='--', fillalpha=0.3,
+                  boundcolor='gray', boundlinestyle='--', fillalpha=0.3, time='time',
                   xlabel='time', ylabel='', title='', **kwargs):
     """
     Plot a line with a given range of uncertainty around it.
@@ -385,6 +385,8 @@ def plot_err_hist(err_hist, ax=None, fig=None, figsize=(6, 4), boundtype='fill',
         linestyle for bound lines (if any). The default is '--'.
     fillalpha : float, optional
         Alpha for fill. The default is 0.3.
+    time : str, optional
+        history to use as time. The default is 'time'.
     **kwargs : kwargs
         kwargs for the line
 
@@ -397,21 +399,21 @@ def plot_err_hist(err_hist, ax=None, fig=None, figsize=(6, 4), boundtype='fill',
     ax.plot(err_hist['stat'], **kwargs)
     if boundtype == 'fill':
         col = ax.lines[-1].get_color()
-        ax.fill_between(err_hist['time'], err_hist['low'], err_hist['high'],
+        ax.fill_between(err_hist[time], err_hist['low'], err_hist['high'],
                         alpha=fillalpha, color=col)
         if 'med_high' in err_hist and 'med_low' in err_hist:
-            ax.fill_between(err_hist['time'], err_hist['med_low'], err_hist['med_high'],
+            ax.fill_between(err_hist[time], err_hist['med_low'], err_hist['med_high'],
                             alpha=fillalpha, color=col)
     elif boundtype == 'line':
-        plot_err_lines(err_hist['time'], err_hist['low'], err_hist['high'], ax=ax,
+        plot_err_lines(err_hist[time], err_hist['low'], err_hist['high'], ax=ax,
                        fig=fig, color=boundcolor, linestyle=boundlinestyle)
         if 'med_high' in err_hist and 'med_low' in err_hist:
-            plot_err_lines(err_hist['time'], err_hist['med_low'], err_hist['med_high'],
+            plot_err_lines(err_hist[time], err_hist['med_low'], err_hist['med_high'],
                            ax=ax, fig=fig, color=boundcolor, linestyle=boundlinestyle)
     else:
         raise Exception("Invalid bound type: "+boundtype)
     add_title_xylabs(ax, title=title, xlabel=xlabel, ylabel=ylabel)
-    ax.set_xlim(err_hist['time'][0], err_hist['time'][-1])
+    ax.set_xlim(err_hist[time][0], err_hist[time][-1])
     return fig, ax
 
 

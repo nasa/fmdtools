@@ -351,7 +351,7 @@ class Result(UserDict):
         else:
             self.data[key] = val
 
-    def get(self, *argstr, **to_include):
+    def get(self, *argstr, default={}, **to_include):
         """
         Provide dict-like access to the history/result across a number of arguments.
 
@@ -359,6 +359,9 @@ class Result(UserDict):
         ----------
         *argstr : str
             keys to get directly (e.g. 'fxns.fxnname')
+        default : dict or value
+            default(s) to use if not in Result. May be a dict of keys {'k': val} or a
+            default for all values to get. Default is {}.
         **to_include : dict/str/
             to_include dict for arguments to get (e.g., {'fxns':{'fxnname'}})
 
@@ -379,8 +382,16 @@ class Result(UserDict):
         """
         atts_to_get = argstr + to_include_keys(to_include)
         res = self.__class__()
+        if not isinstance(default, dict):
+            default = {at: default for at in atts_to_get}
         for at in atts_to_get:
-            res[at] = self.__getattr__(at)
+            try:
+                res[at] = self.__getattr__(at)
+            except AttributeError:
+                try:
+                    res[at] = default[at]
+                except KeyError:
+                    raise Exception(at+" not in Result or defaults")
         if len(res) == 1 and at in res:
             return res[at]
         else:

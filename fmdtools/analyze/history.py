@@ -742,14 +742,13 @@ class History(Result):
         """Plot value in hist as individual lines."""
         fig, ax = setup_plot(fig=fig, ax=ax, figsize=figsize)
         scens = [*self.nest(1).keys()]
-        all_times = self.get_values(time)
         hist_to_plot = self.get_values(value)
         if 'color' not in kwargs:
             kwargs['color'] = ax._get_lines.get_next_color()
         for scen in scens:
             hist_to_plot = self.get(scen)
             h_value = hist_to_plot.get(value)
-            times = hist_to_plot.get('time')
+            times = hist_to_plot.get(time)
             ax.plot(times, h_value, **kwargs)
         add_title_xylabs(ax, xlabel=xlabel, ylabel=ylabel, title=title)
         min_ind = np.min([i[0] for i in self.get_values(time).values()])
@@ -757,7 +756,7 @@ class History(Result):
         ax.set_xlim(min_ind, max_ind)
         return fig, ax
 
-    def get_mean_std_errhist(self, value):
+    def get_mean_std_errhist(self, value, time='time'):
         """
         Get aggregated err_hist of means surrounded by std deviation.
 
@@ -773,19 +772,20 @@ class History(Result):
             {'time': times, 'stat': stat_values, 'low': low_values, 'high': high_values}
         """
         hist = History()
-        hist['time'] = self.get_metric('time', axis=0)
+        hist[time] = self.get_metric(time, axis=0)
         hist['stat'] = self.get_metric(value, np.mean, axis=0)
         std_dev = self.get_metric(value, np.std)
         hist['high'] = hist['stat']+std_dev/2
         hist['low'] = hist['stat']-std_dev/2
         return hist
 
-    def plot_mean_std_line(self, value, fig=None, ax=None, figsize=(6, 4), **kwargs):
+    def plot_mean_std_line(self, value, fig=None, ax=None, figsize=(6, 4), time='time',
+                           **kwargs):
         """Plot value in hist aggregated by mean and standard devation."""
-        hist = self.get_mean_std_errhist(value)
-        return plot_err_hist(hist, ax, fig, figsize, **kwargs)
+        hist = self.get_mean_std_errhist(value, time=time)
+        return plot_err_hist(hist, ax, fig, figsize, time=time, **kwargs)
 
-    def get_mean_ci_errhist(self, value, ci=0.95, max_ind='max'):
+    def get_mean_ci_errhist(self, value, ci=0.95, max_ind='max', time='time'):
         """
         Get aggregated err_hist of means surrounded by confidence intervals.
 
@@ -805,7 +805,7 @@ class History(Result):
             {'time': times, 'stat': stat_values, 'low': low_values, 'high': high_values}
         """
         hist = History()
-        hist['time'] = self.get_metric('time', axis=0)
+        hist[time] = self.get_metric(time, axis=0)
         hist['stat'] = self.get_metric(value, np.mean, axis=0)
         if max_ind == 'max':
             max_ind = min([len(h) for h in self.values()])
@@ -819,12 +819,12 @@ class History(Result):
         return hist
 
     def plot_mean_ci_line(self, value, fig=None, ax=None, figsize=(6, 4),
-                          ci=0.95, max_ind='max', **kwargs):
+                          ci=0.95, max_ind='max', time='time', **kwargs):
         """Plot value in hist aggregated by bootstrap confidence interval for mean."""
-        hist = self.get_mean_ci_errhist(value, ci, max_ind)
-        return plot_err_hist(hist, ax, fig, figsize, **kwargs)
+        hist = self.get_mean_ci_errhist(value, ci, max_ind, time=time)
+        return plot_err_hist(hist, ax, fig, figsize, time=time, **kwargs)
 
-    def get_mean_bound_errhist(self, value):
+    def get_mean_bound_errhist(self, value, time='time'):
         """
         Get aggregated err_hist of means surrounded by bounds.
 
@@ -851,18 +851,19 @@ class History(Result):
         array([1])
         """
         hist = History()
-        hist['time'] = self.get_metric('time', axis=0)
+        hist[time] = self.get_metric(time, axis=0)
         hist['stat'] = self.get_metric(value, np.mean, axis=0)
         hist['high'] = self.get_metric(value, np.max, axis=0)
         hist['low'] = self.get_metric(value, np.min, axis=0)
         return hist
 
-    def plot_mean_bound_line(self, value, fig=None, ax=None, figsize=(6, 4), **kwargs):
+    def plot_mean_bound_line(self, value, fig=None, ax=None, figsize=(6, 4),
+                             time='time', **kwargs):
         """Plot the value in hist aggregated by the mean and variable bounds."""
-        hist = self.get_mean_bound_errhist(value)
-        return plot_err_hist(hist, ax, fig, figsize, **kwargs)
+        hist = self.get_mean_bound_errhist(value, time=time)
+        return plot_err_hist(hist, ax, fig, figsize, time=time, **kwargs)
 
-    def get_percentile_errhist(self, val, prange=50):
+    def get_percentile_errhist(self, val, prange=50, time='time'):
         """
         Get aggregated err_hist of medians surrounded by percentile range prange.
 
@@ -880,23 +881,23 @@ class History(Result):
             {'time': times, 'stat': stat_values, 'low': low_values, 'high': high_values}
         """
         hist = History()
-        hist['time'] = self.get_metric('time', axis=0)
+        hist[time] = self.get_metric(time, axis=0)
         hist['stat'] = self.get_metric(val, np.median, axis=0)
         hist['low'] = self.get_metric(val, np.percentile, args=(50-prange/2,), axis=0)
         hist['high'] = self.get_metric(val, np.percentile, args=(50+prange/2,), axis=0)
         return hist
 
     def plot_percentile_line(self, value, fig=None, ax=None, figsize=(6, 4), prange=50,
-                             with_bounds=True, **kwargs):
+                             with_bounds=True, time='time', **kwargs):
         """Plot the value in hist aggregated by percentiles."""
-        hist = self.get_mean_bound_errhist(value)
-        perc_hist = self.get_percentile_errhist(value, prange)
+        hist = self.get_mean_bound_errhist(value, time=time)
+        perc_hist = self.get_percentile_errhist(value, prange, time=time)
         if with_bounds:
             hist['med_low'] = perc_hist['low']
             hist['med_high'] = perc_hist['high']
         else:
             hist = perc_hist
-        return plot_err_hist(hist, ax, fig, figsize, **kwargs)
+        return plot_err_hist(hist, ax, fig, figsize, time=time, **kwargs)
 
     def plot_metric_dist(self, times, *plot_values, **kwargs):
         """

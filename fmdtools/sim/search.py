@@ -294,6 +294,7 @@ class BaseProblem(object):
         return self.constraints[constraint].value
 
     def log_time(self):
+        """Log the time/iteration of the optimization."""
         if not hasattr(self, 't_start'):
             self.t_start = time.time()
             self.iter = 0
@@ -309,7 +310,73 @@ class BaseProblem(object):
         self.iter_hist.constraints.log(self.constraints, 1)
         self.iter_hist.variables.log(self.variables, 1)
 
+    def get_opt_hist(self, *objectives, time='time'):
+        """
+        Get the history of minimum/maximum objective values over time to plot.
+
+        Parameters
+        ----------
+        *objectives : str
+            Objectives to get (if none provided, returns all).
+        time : str, optional
+            Value to use for time indices (time or iter). The default is 'time'.
+
+        Returns
+        -------
+        opt_hist : History
+            History of minimum/maximum objective values over time.
+
+        Examples
+        --------
+        >>> exp = SimpleProblem()
+        >>> exp.add_objective("a", "a", negative=True)
+        >>> exp.add_objective("b", "b")
+        >>> exp.iter_hist = History({'time': [0,1,2], 'objectives.a': [10, 11, 12], 'objectives.b': [8, 10, 7]})
+        >>> h = exp.get_opt_hist()
+        >>> h.a
+        [10, 11, 12]
+        >>> h.b
+        [8, 8, 7]
+        """
+        if objectives:
+            hist = self.iter_hist.objectives.get_values(*objectives)
+        else:
+            hist = self.iter_hist.objectives.copy()
+        for val, arr in hist.items():
+            if getattr(self.objectives[val], 'negative', False):
+                hist[val] = [np.nanmax(arr[:i]) for i in range(1, len(arr)+1)]
+            else:
+                hist[val] = [np.nanmin(arr[:i]) for i in range(1, len(arr)+1)]
+        hist[time] = self.iter_hist.get(time)
+        return hist
+
+    def plot_opt_hist(self, *objectives, time='time', **kwargs):
+        """
+        Plot the optimal value(s) of the search over time.
+
+        Parameters
+        ----------
+        *objectives : str
+            Objectives to get (if none provided, returns all).
+        time : str, optional
+            Value to use for time indices (time or iter). The default is 'time'.
+        **kwargs : kwargs
+            Keyword arguments to History.plot_line
+
+        Returns
+        -------
+        fig, ax: matplotlib figure/axes
+            Figures/axes returned from Hist.plot_line.
+        """
+        hist = self.get_opt_hist(*objectives, time=time)
+        if not objectives:
+            objectives = [k for k in hist.keys() if k not in ('time', 'iter')]
+        if 'xlabel' not in kwargs:
+            kwargs['xlabel'] = time
+        return hist.plot_line(*objectives, **kwargs)
+
     def get_default_x(self, *x):
+        """Get x for the current iteration (previous x if x not provided)."""
         if not x:
             return tuple([*self.variables.values()])
         else:
@@ -875,7 +942,7 @@ class SingleFaultScenarioProblem(ScenarioProblem):
         faulttup = [*self.faultdomain.faults.keys()][0]
         return "SingleScenarioProblem("+faulttup[0]+", "+faulttup[1]+")"
 
-    def __init__(self, mdl, faulttup, phasemap=None, t_start=0.0, **kwargs):
+    def __init__(self, mdl, faulttup, phasemap=None, sim_start=0.0, **kwargs):
         """
         Initialize the SingleFaultScenarioProblem with a given fault to optimize.
 
@@ -887,7 +954,7 @@ class SingleFaultScenarioProblem(ScenarioProblem):
             (fxn, fault) defining the fault.
         phasemap : PhaseMap, optional
             PhaseMap for fault sampling. The default is None.
-        t_start : float, optional
+        sim_start : float, optional
             Minimum start time for the simulation and lower bound on scenario time..
             Default is 0.0.
         **kwargs : kwargs
@@ -897,13 +964,13 @@ class SingleFaultScenarioProblem(ScenarioProblem):
         faultdomain.add_fault(*faulttup)
         self.faultdomain = faultdomain
         self.phasemap = phasemap
-        self.t_start = t_start
+        self.sim_start = sim_start
         self.variables = {"time": np.nan}
         super().__init__(mdl, **kwargs)
 
     def get_start_time(self):
         """Get the scenario start time to copy the model at."""
-        return self.t_start
+        return self.sim_start
 
     def gen_scenario(self, x):
         """
