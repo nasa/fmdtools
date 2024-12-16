@@ -14,6 +14,7 @@ Classes:
 - :class:`DisturbanceProblem`: Enables optimizing disturbances that occur at a set time
 - :class:`SingleFaultScenarioProblem`: Enables optimizing the time of a given fault
   scenario
+- :class:`ResponseMap`: Enables visualiation of 2-d search space.
 
 Copyright © 2024, United States Government, as represented by the Administrator
 of the National Aeronautics and Space Administration. All rights reserved.
@@ -30,6 +31,7 @@ specific language governing permissions and limitations under the License.
 """
 
 from fmdtools.define.base import t_key
+from fmdtools.define.object.coords import Coords, CoordsParam
 from fmdtools.define.block.function import ExampleFunction
 from fmdtools.sim.scenario import Sequence, SingleFaultScenario, Scenario
 from fmdtools.sim.sample import FaultDomain
@@ -1877,6 +1879,43 @@ class DynamicInterface():
             self.hist.cut(self.t_ind)
             self.mdl.h.cut(self.t_ind)
         return end
+
+
+class ResponseMapParam(CoordsParam):
+    """Default CoordsParam for ResponseMap."""
+
+    x_size: int = 10
+    y_size: int = 10
+    blocksize: float = 1.0
+    state_fval: tuple = (float, np.NaN)
+
+
+class ResponseMap(Coords):
+    """
+    Class for sampling functions and displaying them on maps.
+
+    Examples
+    --------
+    >>> rm = ResponseMap(lambda a, b: a*b, p={'x_size': 3, 'y_size': 3, 'blocksize': 2})
+    >>> rm.fval
+    array([[ 0.,  0.,  0.],
+           [ 0.,  4.,  8.],
+           [ 0.,  8., 16.]])
+    """
+
+    container_p = ResponseMapParam
+
+    def init_properties(self, function, **kwargs):
+        """
+        Initializes ResponseMap to given function.
+
+        Parameters
+        ----------
+        function : callable
+            Function to sample from over map/grid.
+        """
+        for pt in self.pts:
+            self.set(*pt, "fval", function(*pt))
 
 
 if __name__ == "__main__":
