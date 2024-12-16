@@ -924,9 +924,40 @@ class Coords(BaseObject):
         else:
             raise Exception("Not a point or collection")
 
+    def show_property_text(self, prop, fontsize=8, digits=3,
+                           fig=None, ax=None, figsize=(5, 5)):
+        """
+        Overlay text for a given property on map.
+
+        Parameters
+        ----------
+        prop : str
+            Property text.
+        fontsize : int, optional
+            ax.text fontize argument. The default is 8.
+        digits : int, optional
+            Digits of precision for property. The default is 3.
+
+        Returns
+        -------
+        fig : mpl.figure
+            Plotted figure object
+        ax : mpl.axis
+            Ploted axis object.
+        """
+        fig, ax = setup_plot(fig=fig, ax=ax, figsize=figsize)
+        # c_off = np.array([om.p.blocksize/2, om.p.blocksize/2])
+        for pt in self.pts:
+            # c_pt = np.array(pt)-c_off
+            ax.text(*pt, str(round(self.get(*pt, prop), digits)),
+                    verticalalignment='center', horizontalalignment='center',
+                    fontsize=fontsize)
+        return fig, ax
+
     def show_property(self, prop, xlabel="x", ylabel="y", title='', proplab="prop",
                       as_bool=False, color='green', cmap='Greens', ec='black',
-                      legend_kwargs={}, fig=None, ax=None, figsize=(5, 5), **kwargs):
+                      text=False, text_kwargs={}, legend_kwargs={}, fig=None, ax=None,
+                      figsize=(5, 5), **kwargs):
         """
         Plot a given property 'prop' as a colormesh on an x-y grid.
 
@@ -954,6 +985,11 @@ class Coords(BaseObject):
             Colormap to use if property is continuous. Default is 'Greens'.
         ec : str, optional
             Default edge color. Default is 'black'. If 'face', no edges are drawn.
+        text : str, optional
+            Whether to overlay text on the property. Default is False.
+        text_kwargs : dict
+            kwargs to Coords.show_property_text (if text=True). Default is {}.
+        text: dict, optional
         **kwargs : kwargs
             Keyword arguments to matplotlib.pyplot.pcolormesh (e.g., cmap, edgecolors)
 
@@ -988,6 +1024,8 @@ class Coords(BaseObject):
         kwargs = {**kwargs, **default_kwargs}
 
         im = ax.pcolormesh(X, Y, p, vmin=vmin, vmax=vmax, **kwargs)
+        if text:
+            self.show_property_text(prop, fig=fig, ax=ax, **text_kwargs)
 
         add_title_xylabs(ax, title=title, xlabel=xlabel, ylabel=ylabel)
         if proplab == "prop":
