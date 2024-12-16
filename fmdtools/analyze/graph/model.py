@@ -233,7 +233,7 @@ class ModelGraph(Graph):
         faulty = history.get_faulty_hist(*self.get_nodes(rem_ind),
                                          withtotal=False,
                                          withtime=False).get_slice(time)
-        fault_nodes = {n: bool(faulty.get(shorten_name(n, rem_ind), 0))
+        fault_nodes = {n: bool(faulty.get(shorten_name(n, rem_ind), default=False))
                        for n in self.g.nodes}
         nx.set_node_attributes(self.g, fault_nodes, 'faulty')
 
@@ -247,7 +247,7 @@ class ModelGraph(Graph):
         degraded = history.get_degraded_hist(*self.get_nodes(rem_ind),
                                              withtotal=False,
                                              withtime=False).get_slice(time)
-        deg_nodes = {n: bool(degraded.get(shorten_name(n, rem_ind), 0))
+        deg_nodes = {n: bool(degraded.get(shorten_name(n, rem_ind), default=False))
                      for n in self.g.nodes}
         nx.set_node_attributes(self.g, deg_nodes, 'degraded')
 
