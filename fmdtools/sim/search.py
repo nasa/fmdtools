@@ -159,6 +159,7 @@ class Constraint(Objective):
 
 
 def unpack_x(*x):
+    """Unpack arrays/lists sent from solvers into tuples."""
     if len(x) == 1 and isinstance(x[0], Iterable):
         x = tuple(x[0])
     elif len(x) == 2 and isinstance(x[0], Iterable) and isinstance(x[1], Iterable):
@@ -169,8 +170,6 @@ def unpack_x(*x):
 class BaseProblem(object):
     """
     Base optimization problem.
-
-    ...
 
     Attributes
     ----------
@@ -720,7 +719,7 @@ class BaseSimProblem(BaseProblem):
     def update_objectives(self, *x):
         """Update objectives/constraints by simulating the model at x."""
         self.update_variables(*x)
-        self.res, self.hist = self.sim_mdl(*x)
+        self.res, self.hist = self.sim_mdl(*self.current_x())
         for obj in {**self.objectives, **self.constraints}.values():
             if isinstance(obj, HistoryObjective) or isinstance(obj, HistoryConstraint):
                 obj.update(self.hist)
@@ -988,7 +987,7 @@ class SingleFaultScenarioProblem(ScenarioProblem):
         scen : SingleFaultScenario
             SingleFaultScenario to simulate.
         """
-        starttime=self.get_start_time()
+        starttime = self.get_start_time()
         end_time = self.get_end_time()
         if not starttime <= x <= end_time:
             raise Exception("time out of range: "+str((starttime, end_time)))
@@ -1807,7 +1806,7 @@ class DynamicInterface():
             self.t_max = mdl.sp.end_time
         else:
             self.t_max = t_max
-        if type(desired_result) == str:
+        if isinstance(desired_result, str):
             self.desired_result = [desired_result]
         else:
             self.desired_result = desired_result
