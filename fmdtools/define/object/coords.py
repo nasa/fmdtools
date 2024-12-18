@@ -162,13 +162,13 @@ class BaseCoords(BaseObject):
         pts_with_condition = [(p, where[1][i]) for i, p in enumerate(where[0])]
         return np.array([self.grid[tuple(p)] for p in pts_with_condition])
 
-    def to_index(self, *args):
+    def to_index(self, x, y):
         """
         Find the index of the array corresponding to the given x/y values.
 
         Parameters
         ----------
-        *args : number, number,...
+        x, y : float
             x-y values corresponding to the scalar location of the point in the grid.
 
         Returns
@@ -184,7 +184,9 @@ class BaseCoords(BaseObject):
         >>> ex.to_index(54.234, 23.41)
         (5, 2)
         """
-        return tuple(round(arg/self.p.blocksize) for arg in args)
+        if not self.in_range(x, y):
+            raise Exception("Outside bounds of grid: "+str(x)+','+str(y))
+        return round(x/self.p.blocksize), round(y/self.p.blocksize)
 
     def to_gridpoint(self, *args):
         """
@@ -205,6 +207,10 @@ class BaseCoords(BaseObject):
         >>> ex = ExampleCoords()
         >>> ex.to_gridpoint(3.5, 4)
         array([0., 0.])
+        >>> ex.to_gridpoint(5.0, 0) # block range covers (-blocksize/2, blocksize/2]
+        array([0., 0.])
+        >>> ex.to_gridpoint(5.01, 0) # the next block starts at blocksize/2
+        array([10.,  0.])
         >>> ex.to_gridpoint(14.0, 12.0)
         array([10., 10.])
         """
@@ -267,14 +273,15 @@ class BaseCoords(BaseObject):
         >>> ex.get(50.0, 50.0, "v")
         1.0
         """
-        if not self.in_range(x, y):
-            if outside == "error":
-                raise Exception("Outside bounds of grid: "+str(x)+','+str(y))
+        proparray = getattr(self, prop)
+        try:
+            x_i, y_i = self.to_index(x, y)
+            return proparray[x_i, y_i]
+        except Exception as e:
+            if outside == 'error':
+                raise e
             else:
                 return outside
-        proparray = getattr(self, prop)
-        x_i, y_i = self.to_index(x, y)
-        return proparray[x_i, y_i]
 
     def assign_from(self, hist, t, *properties):
         """
@@ -545,8 +552,8 @@ class BaseCoords(BaseObject):
             Whether the point is in the range of the grid
         """
         half_b = self.p.blocksize/2
-        return (-half_b <= x <= self.p.blocksize * self.p.x_size - half_b and
-                -half_b <= y <= self.p.blocksize * self.p.y_size - half_b)
+        return (-half_b < x <= self.p.blocksize * self.p.x_size - half_b and
+                -half_b < y <= self.p.blocksize * self.p.y_size - half_b)
 
     def show_property_text(self, prop, fontsize=8, digits=3,
                            fig=None, ax=None, figsize=(5, 5)):
