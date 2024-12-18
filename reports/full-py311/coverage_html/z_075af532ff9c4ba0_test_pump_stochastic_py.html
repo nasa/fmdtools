@@ -64,8 +64,8 @@
             <a id="indexLink" class="nav" href="index.html">&Hat; index</a> &nbsp; &nbsp;
             <a id="nextFileLink" class="nav" href="z_25d7572d601709fe_opt_rover_py.html">&#xbb; next</a>
             &nbsp; &nbsp; &nbsp;
-            <a class="nav" href="https://coverage.readthedocs.io/en/7.6.4">coverage.py v7.6.4</a>,
-            created at 2024-11-13 17:54 +0000
+            <a class="nav" href="https://coverage.readthedocs.io/en/7.6.9">coverage.py v7.6.9</a>,
+            created at 2024-12-18 18:02 +0000
         </p>
         <aside class="hidden">
             <button type="button" class="button_next_chunk" data-shortcut="j"></button>
@@ -149,10 +149,10 @@
     <p class="run"><span class="n"><a id="t67" href="#t67">67</a></span><span class="t">            <span class="nam">res_1</span><span class="op">,</span> <span class="nam">hist_1</span> <span class="op">=</span> <span class="nam">prop</span><span class="op">.</span><span class="nam">nominal</span><span class="op">(</span><span class="nam">mdl</span><span class="op">,</span> <span class="nam">run_stochastic</span><span class="op">=</span><span class="key">True</span><span class="op">,</span> <span class="nam">showprogress</span><span class="op">=</span><span class="key">False</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
     <p class="run"><span class="n"><a id="t68" href="#t68">68</a></span><span class="t">            <span class="nam">res_f1</span><span class="op">,</span> <span class="nam">hist_f1</span> <span class="op">=</span> <span class="nam">prop</span><span class="op">.</span><span class="nam">single_faults</span><span class="op">(</span><span class="nam">mdl</span><span class="op">,</span> <span class="nam">run_stochastic</span><span class="op">=</span><span class="key">True</span><span class="op">,</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t69" href="#t69">69</a></span><span class="t">                                                 <span class="nam">showprogress</span><span class="op">=</span><span class="key">False</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
-    <p class="run"><span class="n"><a id="t70" href="#t70">70</a></span><span class="t">            <span class="key">if</span> <span class="nam">seed</span> <span class="op">==</span> <span class="key">None</span><span class="op">:</span>&nbsp;</span><span class="r"></span></p>
+    <p class="run"><span class="n"><a id="t70" href="#t70">70</a></span><span class="t">            <span class="key">if</span> <span class="nam">seed</span> <span class="key">is</span> <span class="key">None</span><span class="op">:</span>&nbsp;</span><span class="r"></span></p>
     <p class="mis show_mis"><span class="n"><a id="t71" href="#t71">71</a></span><span class="t">                <span class="nam">seed</span> <span class="op">=</span> <span class="nam">mdl</span><span class="op">.</span><span class="nam">r</span><span class="op">.</span><span class="nam">seed</span>&nbsp;</span><span class="r"></span></p>
     <p class="run"><span class="n"><a id="t72" href="#t72">72</a></span><span class="t">            <span class="nam">mdl2</span> <span class="op">=</span> <span class="nam">Pump</span><span class="op">(</span><span class="nam">r</span><span class="op">=</span><span class="op">{</span><span class="str">'seed'</span><span class="op">:</span> <span class="nam">seed</span><span class="op">}</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
-    <p class="run"><span class="n"><a id="t73" href="#t73">73</a></span><span class="t">            <span class="nam">res_2</span><span class="op">,</span>  <span class="nam">hist_2</span> <span class="op">=</span> <span class="nam">prop</span><span class="op">.</span><span class="nam">nominal</span><span class="op">(</span><span class="nam">mdl2</span><span class="op">,</span> <span class="nam">run_stochastic</span><span class="op">=</span><span class="key">True</span><span class="op">,</span> <span class="nam">showprogress</span><span class="op">=</span><span class="key">False</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
+    <p class="run"><span class="n"><a id="t73" href="#t73">73</a></span><span class="t">            <span class="nam">res_2</span><span class="op">,</span> <span class="nam">hist_2</span> <span class="op">=</span> <span class="nam">prop</span><span class="op">.</span><span class="nam">nominal</span><span class="op">(</span><span class="nam">mdl2</span><span class="op">,</span> <span class="nam">run_stochastic</span><span class="op">=</span><span class="key">True</span><span class="op">,</span> <span class="nam">showprogress</span><span class="op">=</span><span class="key">False</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
     <p class="run"><span class="n"><a id="t74" href="#t74">74</a></span><span class="t">            <span class="nam">res_f2</span><span class="op">,</span> <span class="nam">hist_f2</span> <span class="op">=</span> <span class="nam">prop</span><span class="op">.</span><span class="nam">single_faults</span><span class="op">(</span><span class="nam">mdl2</span><span class="op">,</span> <span class="nam">run_stochastic</span><span class="op">=</span><span class="key">True</span><span class="op">,</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t75" href="#t75">75</a></span><span class="t">                                                 <span class="nam">showprogress</span><span class="op">=</span><span class="key">False</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
     <p class="run"><span class="n"><a id="t76" href="#t76">76</a></span><span class="t">            <span class="nam">self</span><span class="op">.</span><span class="nam">assertTrue</span><span class="op">(</span><span class="nam">all</span><span class="op">(</span><span class="nam">hist_1</span><span class="op">.</span><span class="nam">fxns</span><span class="op">.</span><span class="nam">move_water</span><span class="op">.</span><span class="nam">s</span><span class="op">.</span><span class="nam">eff</span> <span class="op">==</span>&nbsp;</span><span class="r"></span></p>
@@ -385,8 +385,8 @@
             <a class="nav" href="index.html">&Hat; index</a> &nbsp; &nbsp;
             <a class="nav" href="z_25d7572d601709fe_opt_rover_py.html">&#xbb; next</a>
             &nbsp; &nbsp; &nbsp;
-            <a class="nav" href="https://coverage.readthedocs.io/en/7.6.4">coverage.py v7.6.4</a>,
-            created at 2024-11-13 17:54 +0000
+            <a class="nav" href="https://coverage.readthedocs.io/en/7.6.9">coverage.py v7.6.9</a>,
+            created at 2024-12-18 18:02 +0000
         </p>
     </div>
 </footer>

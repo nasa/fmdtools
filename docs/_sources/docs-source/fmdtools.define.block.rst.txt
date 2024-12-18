@@ -53,7 +53,7 @@ Functions are defined by extending the Function class, which may then be instant
 
 To define a function class, it can be helpful to use this code template:
 
-.. figure:: figures/powerpoint/fxnblock_structure.png
+.. figure:: figures/powerpoint/fxnblock_structure.svg
    :width: 800
    :alt: Structure of a Function Class
    

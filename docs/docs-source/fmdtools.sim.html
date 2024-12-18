@@ -77,7 +77,7 @@
 <li class="toctree-l2"><a class="reference internal" href="Development%20Guide.html#introductory-tutorial">Introductory Tutorial</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="Intro_to_fmdtools.html">Intro to resilience modeling, simulation, and visualization in Python with fmdtools.</a><ul>
 <li class="toctree-l4"><a class="reference internal" href="Intro_to_fmdtools.html#author-daniel-hulse">Author: Daniel Hulse</a></li>
-<li class="toctree-l4"><a class="reference internal" href="Intro_to_fmdtools.html#version-2-0-5">Version: 2.0.5</a></li>
+<li class="toctree-l4"><a class="reference internal" href="Intro_to_fmdtools.html#version-2-0-6">Version: 2.0.6</a></li>
 </ul>
 </li>
 <li class="toctree-l3"><a class="reference internal" href="Intro_to_fmdtools.html#overview">Overview</a></li>
@@ -399,8 +399,8 @@
 </li>
 <li class="toctree-l3"><a class="reference internal" href="fmdtools.define.flow.html">fmdtools.define.flow</a><ul>
 <li class="toctree-l4"><a class="reference internal" href="fmdtools.define.flow.html#module-fmdtools.define.flow.base">fmdtools.define.flow.base</a></li>
-<li class="toctree-l4"><a class="reference internal" href="fmdtools.define.flow.html#module-fmdtools.define.flow.multiflow">fmdtools.define.flow.multiflow</a></li>
-<li class="toctree-l4"><a class="reference internal" href="fmdtools.define.flow.html#module-fmdtools.define.flow.commsflow">fmdtools.define.flow.commsflow</a></li>
+<li class="toctree-l4"><a class="reference internal" href="fmdtools.define.flow.html#fmdtools-define-flow-multiflow">fmdtools.define.flow.multiflow</a></li>
+<li class="toctree-l4"><a class="reference internal" href="fmdtools.define.flow.html#fmdtools-define-flow-commsflow">fmdtools.define.flow.commsflow</a></li>
 </ul>
 </li>
 <li class="toctree-l3"><a class="reference internal" href="fmdtools.define.object.html">fmdtools.define.object</a><ul>
@@ -412,6 +412,7 @@
 </li>
 <li class="toctree-l3"><a class="reference internal" href="fmdtools.define.html#module-fmdtools.define.base">fmdtools.define.base</a><ul>
 <li class="toctree-l4"><a class="reference internal" href="fmdtools.define.html#fmdtools.define.base.eq_units"><code class="docutils literal notranslate"><span class="pre">eq_units()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fmdtools.define.html#fmdtools.define.base.gen_timerange"><code class="docutils literal notranslate"><span class="pre">gen_timerange()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="fmdtools.define.html#fmdtools.define.base.get_code_attrs"><code class="docutils literal notranslate"><span class="pre">get_code_attrs()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="fmdtools.define.html#fmdtools.define.base.get_inheritance"><code class="docutils literal notranslate"><span class="pre">get_inheritance()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="fmdtools.define.html#fmdtools.define.base.get_memory"><code class="docutils literal notranslate"><span class="pre">get_memory()</span></code></a></li>
@@ -519,6 +520,7 @@
 <li class="toctree-l4"><a class="reference internal" href="#fmdtools.sim.search.ObjectiveConnector"><code class="docutils literal notranslate"><span class="pre">ObjectiveConnector</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#fmdtools.sim.search.ParameterSimProblem"><code class="docutils literal notranslate"><span class="pre">ParameterSimProblem</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#fmdtools.sim.search.ProblemArchitecture"><code class="docutils literal notranslate"><span class="pre">ProblemArchitecture</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#fmdtools.sim.search.ResponseCoords"><code class="docutils literal notranslate"><span class="pre">ResponseCoords</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#fmdtools.sim.search.ResultConstraint"><code class="docutils literal notranslate"><span class="pre">ResultConstraint</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#fmdtools.sim.search.ResultObjective"><code class="docutils literal notranslate"><span class="pre">ResultObjective</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#fmdtools.sim.search.ScenarioProblem"><code class="docutils literal notranslate"><span class="pre">ScenarioProblem</span></code></a></li>
@@ -541,13 +543,20 @@
 </li>
 <li class="toctree-l3"><a class="reference internal" href="fmdtools.analyze.html#module-fmdtools.analyze.common">fmdtools.analyze.common</a><ul>
 <li class="toctree-l4"><a class="reference internal" href="fmdtools.analyze.html#fmdtools.analyze.common.add_title_xylabs"><code class="docutils literal notranslate"><span class="pre">add_title_xylabs()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fmdtools.analyze.html#fmdtools.analyze.common.auto_filetype"><code class="docutils literal notranslate"><span class="pre">auto_filetype()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="fmdtools.analyze.html#fmdtools.analyze.common.bootstrap_confidence_interval"><code class="docutils literal notranslate"><span class="pre">bootstrap_confidence_interval()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="fmdtools.analyze.html#fmdtools.analyze.common.clear_prev_figure"><code class="docutils literal notranslate"><span class="pre">clear_prev_figure()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="fmdtools.analyze.html#fmdtools.analyze.common.consolidate_legend"><code class="docutils literal notranslate"><span class="pre">consolidate_legend()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fmdtools.analyze.html#fmdtools.analyze.common.create_indiv_filename"><code class="docutils literal notranslate"><span class="pre">create_indiv_filename()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fmdtools.analyze.html#fmdtools.analyze.common.diff"><code class="docutils literal notranslate"><span class="pre">diff()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fmdtools.analyze.html#fmdtools.analyze.common.file_check"><code class="docutils literal notranslate"><span class="pre">file_check()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="fmdtools.analyze.html#fmdtools.analyze.common.get_sub_include"><code class="docutils literal notranslate"><span class="pre">get_sub_include()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="fmdtools.analyze.html#fmdtools.analyze.common.is_bool"><code class="docutils literal notranslate"><span class="pre">is_bool()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fmdtools.analyze.html#fmdtools.analyze.common.is_known_immutable"><code class="docutils literal notranslate"><span class="pre">is_known_immutable()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fmdtools.analyze.html#fmdtools.analyze.common.is_known_mutable"><code class="docutils literal notranslate"><span class="pre">is_known_mutable()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="fmdtools.analyze.html#fmdtools.analyze.common.is_numeric"><code class="docutils literal notranslate"><span class="pre">is_numeric()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="fmdtools.analyze.html#fmdtools.analyze.common.join_key"><code class="docutils literal notranslate"><span class="pre">join_key()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="fmdtools.analyze.html#fmdtools.analyze.common.load_folder"><code class="docutils literal notranslate"><span class="pre">load_folder()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="fmdtools.analyze.html#fmdtools.analyze.common.mark_times"><code class="docutils literal notranslate"><span class="pre">mark_times()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="fmdtools.analyze.html#fmdtools.analyze.common.multiplot_helper"><code class="docutils literal notranslate"><span class="pre">multiplot_helper()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="fmdtools.analyze.html#fmdtools.analyze.common.multiplot_legend_title"><code class="docutils literal notranslate"><span class="pre">multiplot_legend_title()</span></code></a></li>
@@ -565,27 +574,19 @@
 </li>
 <li class="toctree-l3"><a class="reference internal" href="fmdtools.analyze.html#module-fmdtools.analyze.result">fmdtools.analyze.result</a><ul>
 <li class="toctree-l4"><a class="reference internal" href="fmdtools.analyze.html#fmdtools.analyze.result.Result"><code class="docutils literal notranslate"><span class="pre">Result</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="fmdtools.analyze.html#fmdtools.analyze.result.auto_filetype"><code class="docutils literal notranslate"><span class="pre">auto_filetype()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="fmdtools.analyze.html#fmdtools.analyze.result.check_include_error"><code class="docutils literal notranslate"><span class="pre">check_include_error()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="fmdtools.analyze.html#fmdtools.analyze.result.check_include_errors"><code class="docutils literal notranslate"><span class="pre">check_include_errors()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="fmdtools.analyze.html#fmdtools.analyze.result.clean_resultdict_keys"><code class="docutils literal notranslate"><span class="pre">clean_resultdict_keys()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="fmdtools.analyze.html#fmdtools.analyze.result.create_indiv_filename"><code class="docutils literal notranslate"><span class="pre">create_indiv_filename()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="fmdtools.analyze.html#fmdtools.analyze.result.file_check"><code class="docutils literal notranslate"><span class="pre">file_check()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="fmdtools.analyze.html#fmdtools.analyze.result.fromdict"><code class="docutils literal notranslate"><span class="pre">fromdict()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="fmdtools.analyze.html#fmdtools.analyze.result.get_dict_attr"><code class="docutils literal notranslate"><span class="pre">get_dict_attr()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="fmdtools.analyze.html#fmdtools.analyze.result.load"><code class="docutils literal notranslate"><span class="pre">load()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="fmdtools.analyze.html#fmdtools.analyze.result.load_csv"><code class="docutils literal notranslate"><span class="pre">load_csv()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="fmdtools.analyze.html#fmdtools.analyze.result.load_folder"><code class="docutils literal notranslate"><span class="pre">load_folder()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="fmdtools.analyze.html#fmdtools.analyze.result.load_json"><code class="docutils literal notranslate"><span class="pre">load_json()</span></code></a></li>
 </ul>
 </li>
 <li class="toctree-l3"><a class="reference internal" href="fmdtools.analyze.html#module-fmdtools.analyze.history">fmdtools.analyze.history</a><ul>
 <li class="toctree-l4"><a class="reference internal" href="fmdtools.analyze.html#fmdtools.analyze.history.History"><code class="docutils literal notranslate"><span class="pre">History</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="fmdtools.analyze.html#fmdtools.analyze.history.diff"><code class="docutils literal notranslate"><span class="pre">diff()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="fmdtools.analyze.html#fmdtools.analyze.history.init_dicthist"><code class="docutils literal notranslate"><span class="pre">init_dicthist()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="fmdtools.analyze.html#fmdtools.analyze.history.init_hist_iter"><code class="docutils literal notranslate"><span class="pre">init_hist_iter()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="fmdtools.analyze.html#fmdtools.analyze.history.is_known_immutable"><code class="docutils literal notranslate"><span class="pre">is_known_immutable()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="fmdtools.analyze.html#fmdtools.analyze.history.is_known_mutable"><code class="docutils literal notranslate"><span class="pre">is_known_mutable()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="fmdtools.analyze.html#fmdtools.analyze.history.prep_hists"><code class="docutils literal notranslate"><span class="pre">prep_hists()</span></code></a></li>
 </ul>
 </li>
@@ -604,8 +605,6 @@
 <li class="toctree-l4"><a class="reference internal" href="fmdtools.analyze.html#fmdtools.analyze.phases.PhaseMap"><code class="docutils literal notranslate"><span class="pre">PhaseMap</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="fmdtools.analyze.html#fmdtools.analyze.phases.find_interval_overlap"><code class="docutils literal notranslate"><span class="pre">find_interval_overlap()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="fmdtools.analyze.html#fmdtools.analyze.phases.from_hist"><code class="docutils literal notranslate"><span class="pre">from_hist()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="fmdtools.analyze.html#fmdtools.analyze.phases.gen_interval_times"><code class="docutils literal notranslate"><span class="pre">gen_interval_times()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="fmdtools.analyze.html#fmdtools.analyze.phases.get_joint_phase"><code class="docutils literal notranslate"><span class="pre">get_joint_phase()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="fmdtools.analyze.html#fmdtools.analyze.phases.join_phasemaps"><code class="docutils literal notranslate"><span class="pre">join_phasemaps()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="fmdtools.analyze.html#fmdtools.analyze.phases.phaseplot"><code class="docutils literal notranslate"><span class="pre">phaseplot()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="fmdtools.analyze.html#fmdtools.analyze.phases.samplemetric"><code class="docutils literal notranslate"><span class="pre">samplemetric()</span></code></a></li>
@@ -672,8 +671,7 @@
 </table>
 <section id="fmdtools-sim-propagate">
 <h2>fmdtools.sim.propagate<a class="headerlink" href="#fmdtools-sim-propagate" title="Link to this heading"></a></h2>
-<a class="reference internal image-reference" href="docs-source/figures/powerpoint/simulation_types.png"><img alt="docs-source/figures/powerpoint/simulation_types.png" src="docs-source/figures/powerpoint/simulation_types.png" style="width: 800px;" />
-</a>
+<a class="reference internal image-reference" href="../_images/simulation_types.svg"><img alt="../_images/simulation_types.svg" src="../_images/simulation_types.svg" width="800" /></a>
 <p>The <a class="reference internal" href="#module-fmdtools.sim.propagate" title="fmdtools.sim.propagate"><code class="xref py py-mod docutils literal notranslate"><span class="pre">propagate</span></code></a> module is used to simulate the behaviors of a <a class="reference internal" href="fmdtools.define.block.html#fmdtools.define.block.base.Simulable" title="fmdtools.define.block.base.Simulable"><code class="xref py py-class docutils literal notranslate"><span class="pre">Simulable</span></code></a> (<cite>Model</cite> or <cite>Block</cite>) with and without faults. As shown above, each of the methods (described below) fit a given simulation use-case for resilience assessment–single/multiple scenarios, in nominal/faulty scenarios, and at a single set or multiple sets of parameters.</p>
 <p id="module-fmdtools.sim.propagate">Functions to propagate faults through a user-defined fault model.</p>
 <p>Main Methods:</p>
@@ -3497,6 +3495,7 @@ any model constructs</p></li>
 <li><p><a class="reference internal" href="#fmdtools.sim.search.DisturbanceProblem" title="fmdtools.sim.search.DisturbanceProblem"><code class="xref py py-class docutils literal notranslate"><span class="pre">DisturbanceProblem</span></code></a>: Enables optimizing disturbances that occur at a set time</p></li>
 <li><p><a class="reference internal" href="#fmdtools.sim.search.SingleFaultScenarioProblem" title="fmdtools.sim.search.SingleFaultScenarioProblem"><code class="xref py py-class docutils literal notranslate"><span class="pre">SingleFaultScenarioProblem</span></code></a>: Enables optimizing the time of a given fault
 scenario</p></li>
+<li><p><a class="reference internal" href="#fmdtools.sim.search.ResponseCoords" title="fmdtools.sim.search.ResponseCoords"><code class="xref py py-class docutils literal notranslate"><span class="pre">ResponseCoords</span></code></a>: Enables visualiation of 2-d search space.</p></li>
 </ul>
 <dl class="py class">
 <dt class="sig sig-object py" id="fmdtools.sim.search.BaseConnector">
@@ -3548,7 +3547,6 @@ as the inputs to another.</p>
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">fmdtools.sim.search.</span></span><span class="sig-name descname"><span class="pre">BaseProblem</span></span><a class="headerlink" href="#fmdtools.sim.search.BaseProblem" title="Link to this definition"></a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
 <p>Base optimization problem.</p>
-<p>…</p>
 <dl class="py attribute">
 <dt class="sig sig-object py" id="fmdtools.sim.search.BaseProblem.variables">
 <span class="sig-name descname"><span class="pre">variables</span></span><a class="headerlink" href="#fmdtools.sim.search.BaseProblem.variables" title="Link to this definition"></a></dt>
@@ -3651,12 +3649,45 @@ as the inputs to another.</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="fmdtools.sim.search.BaseProblem.get_default_x">
 <span class="sig-name descname"><span class="pre">get_default_x</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">x</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.sim.search.BaseProblem.get_default_x" title="Link to this definition"></a></dt>
-<dd></dd></dl>
+<dd><p>Get x for the current iteration (previous x if x not provided).</p>
+</dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="fmdtools.sim.search.BaseProblem.get_objectives">
 <span class="sig-name descname"><span class="pre">get_objectives</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.sim.search.BaseProblem.get_objectives" title="Link to this definition"></a></dt>
 <dd><p>Get all current objective values.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="fmdtools.sim.search.BaseProblem.get_opt_hist">
+<span class="sig-name descname"><span class="pre">get_opt_hist</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">objectives</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">time</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'time'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.sim.search.BaseProblem.get_opt_hist" title="Link to this definition"></a></dt>
+<dd><p>Get the history of minimum/maximum objective values over time to plot.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>*objectives</strong> (<em>str</em>) – Objectives to get (if none provided, returns all).</p></li>
+<li><p><strong>time</strong> (<em>str</em><em>, </em><em>optional</em>) – Value to use for time indices (time or iter). The default is ‘time’.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>opt_hist</strong> – History of minimum/maximum objective values over time.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="fmdtools.analyze.html#fmdtools.analyze.history.History" title="fmdtools.analyze.history.History">History</a></p>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">exp</span> <span class="o">=</span> <span class="n">SimpleProblem</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">exp</span><span class="o">.</span><span class="n">add_objective</span><span class="p">(</span><span class="s2">&quot;a&quot;</span><span class="p">,</span> <span class="s2">&quot;a&quot;</span><span class="p">,</span> <span class="n">negative</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">exp</span><span class="o">.</span><span class="n">add_objective</span><span class="p">(</span><span class="s2">&quot;b&quot;</span><span class="p">,</span> <span class="s2">&quot;b&quot;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">exp</span><span class="o">.</span><span class="n">iter_hist</span> <span class="o">=</span> <span class="n">History</span><span class="p">({</span><span class="s1">&#39;time&#39;</span><span class="p">:</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">],</span> <span class="s1">&#39;objectives.a&#39;</span><span class="p">:</span> <span class="p">[</span><span class="mi">10</span><span class="p">,</span> <span class="mi">11</span><span class="p">,</span> <span class="mi">12</span><span class="p">],</span> <span class="s1">&#39;objectives.b&#39;</span><span class="p">:</span> <span class="p">[</span><span class="mi">8</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="mi">7</span><span class="p">]})</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">h</span> <span class="o">=</span> <span class="n">exp</span><span class="o">.</span><span class="n">get_opt_hist</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">h</span><span class="o">.</span><span class="n">a</span>
+<span class="go">[10, 11, 12]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">h</span><span class="o">.</span><span class="n">b</span>
+<span class="go">[8, 8, 7]</span>
+</pre></div>
+</div>
 </dd></dl>
 
 <dl class="py method">
@@ -3668,7 +3699,8 @@ as the inputs to another.</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="fmdtools.sim.search.BaseProblem.log_time">
 <span class="sig-name descname"><span class="pre">log_time</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.sim.search.BaseProblem.log_time" title="Link to this definition"></a></dt>
-<dd></dd></dl>
+<dd><p>Log the time/iteration of the optimization.</p>
+</dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="fmdtools.sim.search.BaseProblem.name_repr">
@@ -3680,6 +3712,27 @@ as the inputs to another.</p>
 <dt class="sig sig-object py" id="fmdtools.sim.search.BaseProblem.new_x">
 <span class="sig-name descname"><span class="pre">new_x</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">x</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.sim.search.BaseProblem.new_x" title="Link to this definition"></a></dt>
 <dd><p>Check if a given x is the same as the current value of x.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="fmdtools.sim.search.BaseProblem.plot_opt_hist">
+<span class="sig-name descname"><span class="pre">plot_opt_hist</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">objectives</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">time</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'time'</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.sim.search.BaseProblem.plot_opt_hist" title="Link to this definition"></a></dt>
+<dd><p>Plot the optimal value(s) of the search over time.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>*objectives</strong> (<em>str</em>) – Objectives to get (if none provided, returns all).</p></li>
+<li><p><strong>time</strong> (<em>str</em><em>, </em><em>optional</em>) – Value to use for time indices (time or iter). The default is ‘time’.</p></li>
+<li><p><strong>**kwargs</strong> (<em>kwargs</em>) – Keyword arguments to History.plot_line</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>fig, ax</strong> – Figures/axes returned from Hist.plot_line.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>matplotlib figure/axes</p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="py method">
@@ -3719,10 +3772,9 @@ values.</p></li>
 
 <dl class="py class">
 <dt class="sig sig-object py" id="fmdtools.sim.search.BaseSimProblem">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">fmdtools.sim.search.</span></span><span class="sig-name descname"><span class="pre">BaseSimProblem</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mdl</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">prop_method</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.sim.search.BaseSimProblem" title="Link to this definition"></a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">fmdtools.sim.search.</span></span><span class="sig-name descname"><span class="pre">BaseSimProblem</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mdl</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">prop_method</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">keep_ec</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.sim.search.BaseSimProblem" title="Link to this definition"></a></dt>
 <dd><p>Bases: <a class="reference internal" href="#fmdtools.sim.search.BaseProblem" title="fmdtools.sim.search.BaseProblem"><code class="xref py py-class docutils literal notranslate"><span class="pre">BaseProblem</span></code></a></p>
 <p>Base optimization problem for optimizing over simulations.</p>
-<p>…</p>
 <dl class="py attribute">
 <dt class="sig sig-object py" id="fmdtools.sim.search.BaseSimProblem.prop_method">
 <span class="sig-name descname"><span class="pre">prop_method</span></span><a class="headerlink" href="#fmdtools.sim.search.BaseSimProblem.prop_method" title="Link to this definition"></a></dt>
@@ -3730,6 +3782,17 @@ values.</p></li>
 <dl class="field-list simple">
 <dt class="field-odd">Type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>callable</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="fmdtools.sim.search.BaseSimProblem.keep_ec">
+<span class="sig-name descname"><span class="pre">keep_ec</span></span><a class="headerlink" href="#fmdtools.sim.search.BaseSimProblem.keep_ec" title="Link to this definition"></a></dt>
+<dd><p>Whether to get/keep the endresult. Default is False.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>bool, optional</p>
 </dd>
 </dl>
 </dd></dl>
@@ -4603,7 +4666,8 @@ variables/objectives/constraints. The default is [].</p></li>
 <dl class="py method">
 <dt class="sig sig-object py" id="fmdtools.sim.search.ProblemArchitecture.get_default_x">
 <span class="sig-name descname"><span class="pre">get_default_x</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">x</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.sim.search.ProblemArchitecture.get_default_x" title="Link to this definition"></a></dt>
-<dd></dd></dl>
+<dd><p>Get x for the current iteration (previous x if x not provided).</p>
+</dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="fmdtools.sim.search.ProblemArchitecture.get_downstream_probs">
@@ -4839,11 +4903,59 @@ The default is ‘’.</p></li>
 </dd></dl>
 
 <dl class="py class">
+<dt class="sig sig-object py" id="fmdtools.sim.search.ResponseCoords">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">fmdtools.sim.search.</span></span><span class="sig-name descname"><span class="pre">ResponseCoords</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">function</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">*args</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">returns={'fval':</span> <span class="pre">(&lt;class</span> <span class="pre">'float'&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">0.0)}</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">**kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.sim.search.ResponseCoords" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">BaseCoords</span></code></p>
+<p>Class for sampling functions and displaying them on maps.</p>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">rm</span> <span class="o">=</span> <span class="n">ResponseCoords</span><span class="p">(</span><span class="k">lambda</span> <span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">:</span> <span class="n">a</span><span class="o">*</span><span class="n">b</span><span class="p">,</span> <span class="n">p</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;x_size&#39;</span><span class="p">:</span> <span class="mi">3</span><span class="p">,</span> <span class="s1">&#39;y_size&#39;</span><span class="p">:</span> <span class="mi">3</span><span class="p">,</span> <span class="s1">&#39;blocksize&#39;</span><span class="p">:</span> <span class="mi">2</span><span class="p">})</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">rm</span><span class="o">.</span><span class="n">fval</span>
+<span class="go">array([[ 0.,  0.,  0.],</span>
+<span class="go">       [ 0.,  4.,  8.],</span>
+<span class="go">       [ 0.,  8., 16.]])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">rm2</span> <span class="o">=</span> <span class="n">ResponseCoords</span><span class="p">(</span><span class="k">lambda</span> <span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">:</span> <span class="p">(</span><span class="n">a</span><span class="o">*</span><span class="n">b</span><span class="p">,</span> <span class="n">a</span><span class="o">+</span><span class="n">b</span><span class="p">),</span> <span class="n">returns</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;fval&#39;</span><span class="p">:</span> <span class="p">(</span><span class="nb">float</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">),</span> <span class="s1">&#39;fval2&#39;</span><span class="p">:</span> <span class="p">(</span><span class="nb">float</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">)},</span> <span class="n">p</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;x_size&#39;</span><span class="p">:</span> <span class="mi">3</span><span class="p">,</span> <span class="s1">&#39;y_size&#39;</span><span class="p">:</span> <span class="mi">3</span><span class="p">,</span> <span class="s1">&#39;blocksize&#39;</span><span class="p">:</span> <span class="mi">2</span><span class="p">})</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">rm2</span><span class="o">.</span><span class="n">fval2</span>
+<span class="go">array([[0., 2., 4.],</span>
+<span class="go">       [2., 4., 6.],</span>
+<span class="go">       [4., 6., 8.]])</span>
+</pre></div>
+</div>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="fmdtools.sim.search.ResponseCoords.grid">
+<span class="sig-name descname"><span class="pre">grid</span></span><a class="headerlink" href="#fmdtools.sim.search.ResponseCoords.grid" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="fmdtools.sim.search.ResponseCoords.init_properties">
+<span class="sig-name descname"><span class="pre">init_properties</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">function</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">returns</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">['fval']</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.sim.search.ResponseCoords.init_properties" title="Link to this definition"></a></dt>
+<dd><p>Initialize ResponseCoords to given function.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>function</strong> (<em>callable</em>) – Function to sample from over map/grid.</p></li>
+<li><p><strong>returns</strong> (<em>list</em>) – Name(s) of returns from function in order.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="fmdtools.sim.search.ResponseCoords.p">
+<span class="sig-name descname"><span class="pre">p</span></span><a class="headerlink" href="#fmdtools.sim.search.ResponseCoords.p" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="fmdtools.sim.search.ResponseCoords.pts">
+<span class="sig-name descname"><span class="pre">pts</span></span><a class="headerlink" href="#fmdtools.sim.search.ResponseCoords.pts" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
 <dt class="sig sig-object py" id="fmdtools.sim.search.ResultConstraint">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">fmdtools.sim.search.</span></span><span class="sig-name descname"><span class="pre">ResultConstraint</span></span><a class="headerlink" href="#fmdtools.sim.search.ResultConstraint" title="Link to this definition"></a></dt>
 <dd><p>Bases: <a class="reference internal" href="#fmdtools.sim.search.ResultObjective" title="fmdtools.sim.search.ResultObjective"><code class="xref py py-class docutils literal notranslate"><span class="pre">ResultObjective</span></code></a></p>
 <p>Base class for constraints which derive from results.</p>
-<p>…</p>
 <section id="id35">
 <h3>Fields<a class="headerlink" href="#id35" title="Link to this heading"></a></h3>
 <dl class="simple">
@@ -4932,7 +5044,6 @@ The default is ‘’.</p></li>
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">fmdtools.sim.search.</span></span><span class="sig-name descname"><span class="pre">ResultObjective</span></span><a class="headerlink" href="#fmdtools.sim.search.ResultObjective" title="Link to this definition"></a></dt>
 <dd><p>Bases: <a class="reference internal" href="#fmdtools.sim.search.Objective" title="fmdtools.sim.search.Objective"><code class="xref py py-class docutils literal notranslate"><span class="pre">Objective</span></code></a></p>
 <p>Base class of objectives which derive from Results.</p>
-<p>…</p>
 <section id="id36">
 <h3>Fields<a class="headerlink" href="#id36" title="Link to this heading"></a></h3>
 <dl class="simple">
@@ -5120,7 +5231,7 @@ scenarios (where the model is copied instead of re-simulated).</p>
 
 <dl class="py class">
 <dt class="sig sig-object py" id="fmdtools.sim.search.SingleFaultScenarioProblem">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">fmdtools.sim.search.</span></span><span class="sig-name descname"><span class="pre">SingleFaultScenarioProblem</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mdl</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">faulttup</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">phasemap</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">t_start</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.0</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.sim.search.SingleFaultScenarioProblem" title="Link to this definition"></a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">fmdtools.sim.search.</span></span><span class="sig-name descname"><span class="pre">SingleFaultScenarioProblem</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mdl</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">faulttup</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">phasemap</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sim_start</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.0</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.sim.search.SingleFaultScenarioProblem" title="Link to this definition"></a></dt>
 <dd><p>Bases: <a class="reference internal" href="#fmdtools.sim.search.ScenarioProblem" title="fmdtools.sim.search.ScenarioProblem"><code class="xref py py-class docutils literal notranslate"><span class="pre">ScenarioProblem</span></code></a></p>
 <p>Class for optimizing the time of a given fault scenario.</p>
 <p>…</p>
@@ -5149,7 +5260,7 @@ scenarios (where the model is copied instead of re-simulated).</p>
 <dl class="py attribute">
 <dt class="sig sig-object py" id="fmdtools.sim.search.SingleFaultScenarioProblem.t_start">
 <span class="sig-name descname"><span class="pre">t_start</span></span><a class="headerlink" href="#fmdtools.sim.search.SingleFaultScenarioProblem.t_start" title="Link to this definition"></a></dt>
-<dd><p>Minimum start time for the simulation and lower bound on scenario time..
+<dd><p>Minimum start time for the simulation and lower bound on scenario time.
 Default is 0.0.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type<span class="colon">:</span></dt>
@@ -5280,7 +5391,8 @@ Default is 0.0.</p>
 <dl class="py function">
 <dt class="sig sig-object py" id="fmdtools.sim.search.unpack_x">
 <span class="sig-prename descclassname"><span class="pre">fmdtools.sim.search.</span></span><span class="sig-name descname"><span class="pre">unpack_x</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">x</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmdtools.sim.search.unpack_x" title="Link to this definition"></a></dt>
-<dd></dd></dl>
+<dd><p>Unpack arrays/lists sent from solvers into tuples.</p>
+</dd></dl>
 
 </section>
 </section>

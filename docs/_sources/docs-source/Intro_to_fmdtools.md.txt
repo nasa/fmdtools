@@ -3,11 +3,11 @@ title: Intro to fmdtools
 description: Intro to resilience modeling, simulation, and visualization in Python with fmdtools.
 marp: true
 ---
-![fmdtools logo - hindenberg](/docs-source/figures/logo/logo-hindenberg.png)
+![fmdtools logo - hindenberg](./figures/logo/logo-hindenberg.png)
 
 # Intro to resilience modeling, simulation, and visualization in Python with fmdtools.
 ### Author: Daniel Hulse 
-### Version: 2.0.5
+### Version: 2.0.6
 
 -----------------
 
@@ -41,17 +41,17 @@ marp: true
 
 Resilience means taking a **dynamic understanding of risk and safety**
 
-![resilience idea](/docs-source/figures/powerpoint/resilience_idea.png)
+![resilience idea, width:1000px](./figures/powerpoint/resilience_idea.svg)
 
 -----------------
 # Why is Resilience Important?
 
-![resilience importance](/docs-source/figures/powerpoint/resilience_importance.png)
+![resilience importance width:1000px](./figures/powerpoint/resilience_importance.svg)
 
 -----------------
 # Enabling proactive design process
 
-![width:900px](/docs-source/figures/powerpoint/resilience_design.png)
+![width:900px](./figures/powerpoint/resilience_design.svg)
 
 - Especially relevant to **new systems** when **we don’t have data** 
 
@@ -98,7 +98,7 @@ Resilience means taking a **dynamic understanding of risk and safety**
 
 # What is fmdtools? A Python package for **design**, **simulation**, and **analysis** of resilience.
 
-![module organization width:990px](/docs-source/figures/uml/module_organization.svg)
+![module organization width:990px](./figures/uml/module_organization.svg)
 
 -----------------
 
@@ -134,7 +134,7 @@ Resilience means taking a **dynamic understanding of risk and safety**
 
 # Analysis Workflow/Structure
 
-![Analysis Workflow](/docs-source/figures/powerpoint/workflow.png)
+![Analysis Workflow](./figures/powerpoint/workflow.svg)
 
 -----------------
 
@@ -157,28 +157,28 @@ Resilience means taking a **dynamic understanding of risk and safety**
 
 # Defining a Model
 
-![formalism example](/docs-source/figures/powerpoint/formalism_example.png)
+![formalism example](./figures/powerpoint/formalism_example.svg)
 
 -----------------
 # Containers - The building blocks of simulations
-![container example](/docs-source/figures/powerpoint/container_structures.svg)
+![container example](./figures/powerpoint/container_structures.svg)
 - Containers are used to define various attribtues of Functions and Flows
 
 -----------------
 # Flow Code Template
-![flow example](/docs-source/figures/powerpoint/flow_structure.svg)
+![flow example](./figures/powerpoint/flow_structure.svg)
 - Flows represent connections or shared variables between different functions. Think of them as Function inputs/outputs.
 - Flows are build from container classes like states, along with their own methods/variables.
 
 -----------------
 # Function Code Template
 
-![Function Code Template](/docs-source/figures/powerpoint/fxnblock_structure.png)
+![Function Code Template](./figures/powerpoint/fxnblock_structure.svg)
 
 -----------------
 # Model Code Template
 
-![Model Code Template](/docs-source/figures/powerpoint/model_structure.png)
+![Model Code Template](./figures/powerpoint/fxnarch_structure.svg)
 
 -----------------
 # Demo Model Activity: examples/pump/ex_pump.py
@@ -220,7 +220,7 @@ Open `/examples/pump/Tutorial_unfilled.ipynb`:
 
 # Simulation Concepts: Static/Undirected Propagation
 
-![Static Propagation](/docs-source/figures/drawio/propagation.png)
+![Static Propagation](./figures/drawio/propagation.svg)
 
 In a single timestep:
 - Functions with `static_behavior()` methods simulate until behaviors converge (i.e., no new state values)
@@ -230,7 +230,7 @@ In a single timestep:
 
 # Simulation Concepts: Propagation over Time
 
-![Dynamic Propagation](/docs-source/figures/drawio/propagationovertime.png)
+![Dynamic Propagation](./figures/drawio/propagationovertime.svg)
 
 - Model increments (simulated + history updated) over each time-step until a **defined final time-step** or **specified indicator returns true**. 
 
@@ -238,7 +238,7 @@ In a single timestep:
 
 # Simulation Concepts: Types of Simulations
 
-![Dynamic Propagation](/docs-source/figures/powerpoint/simulation_types.png)
+![Dynamic Propagation, width:1000px](./figures/powerpoint/simulation_types.svg)
 
 For more info on syntax/arguments, see documentation for [`fmdtools.sim.propagate`](https://nasa.github.io/fmdtools/docs-source/fmdtools.sim.html#fmdtools-sim-propagate).
 
@@ -294,7 +294,7 @@ Explore:
 
 # Analysis Modules
 
-![Analyze Modules width:960px](/docs-source/figures/powerpoint/analyze_module_structure.png)
+![Analyze Modules width:960px](./figures/powerpoint/analyze_module_structure.svg)
 
 See docs for: [`fmdtools.analyze`](https://nasa.github.io/fmdtools/docs-source/fmdtools.analyze.html)
 
