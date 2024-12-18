@@ -920,7 +920,7 @@ end.dofs.s.z:                        0.0
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-{&#39;co&#39;: ResultObjective(name=&#39;endclass.expected_cost&#39;, value=-50000.0, negative=False, time=None, metric=&lt;function sum at 0x000001C17EE076B0&gt;)}
+{&#39;co&#39;: ResultObjective(name=&#39;endclass.expected_cost&#39;, value=-50000.0, negative=False, time=None, metric=&lt;function sum at 0x0000019440F03270&gt;)}
 </pre></div></div>
 </div>
 <p>Again, this should be the same as if we simulated manually (e.g., using <code class="docutils literal notranslate"><span class="pre">x_to_ocost</span></code>):</p>
@@ -1066,7 +1066,7 @@ FaultDomain with faults:
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-110.42166666666667
+131.32166666666666
 </pre></div></div>
 </div>
 <p>This takes this long to simulate:</p>
@@ -1084,7 +1084,7 @@ FaultDomain with faults:
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-0.676896333694458
+0.6670050621032715
 </pre></div></div>
 </div>
 <p>One issue with this formulation is that it assumes a static faultsample.</p>
@@ -1195,7 +1195,7 @@ PhaseMap({&#39;taxi&#39;: [0.0, 1.0], &#39;move&#39;: [2.0, 8.0], &#39;land&#39;
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-1269.125
+1289.0349999999999
 </pre></div></div>
 </div>
 <div class="nbinput docutils container">
@@ -1212,7 +1212,7 @@ PhaseMap({&#39;taxi&#39;: [0.0, 1.0], &#39;move&#39;: [2.0, 8.0], &#39;land&#39;
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-0.4720492124557495
+0.43148016929626465
 </pre></div></div>
 </div>
 <p>Note that this should produce identical values to the manually-constructed <code class="docutils literal notranslate"><span class="pre">x_to_rcost</span></code>:</p>
@@ -1231,8 +1231,8 @@ PhaseMap({&#39;taxi&#39;: [0.0, 1.0], &#39;move&#39;: [2.0, 8.0], &#39;land&#39;
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-Faults found during the nominal run {&#39;store_ee&#39;: [&#39;lowcharge&#39;, &#39;s1p1_lowcharge&#39;, &#39;s1p2_lowcharge&#39;]}
-Faults found during the nominal run {&#39;store_ee&#39;: [&#39;lowcharge&#39;, &#39;s1p1_lowcharge&#39;, &#39;s1p2_lowcharge&#39;]}
+Faults found during the nominal run {&#39;store_ee&#39;: [&#39;s1p2_lowcharge&#39;, &#39;s1p1_lowcharge&#39;, &#39;lowcharge&#39;]}
+Faults found during the nominal run {&#39;store_ee&#39;: [&#39;s1p2_lowcharge&#39;, &#39;s1p1_lowcharge&#39;, &#39;lowcharge&#39;]}
 </pre></div></div>
 </div>
 <div class="nbinput nblast docutils container">
@@ -1366,7 +1366,7 @@ CONSTRAINTS
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
--9950000.0
+-3650000.0
 </pre></div></div>
 </div>
 <div class="nbinput docutils container">
@@ -1383,7 +1383,7 @@ CONSTRAINTS
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-94.39833333333334
+127.83833333333332
 </pre></div></div>
 </div>
 <p>These can also be called in terms of the full set of variables:</p>
@@ -1401,7 +1401,7 @@ CONSTRAINTS
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-94.39833333333334
+127.83833333333332
 </pre></div></div>
 </div>
 <p>We can calculate the total computational time of this below:</p>
@@ -1419,7 +1419,7 @@ CONSTRAINTS
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-0.5655884742736816
+0.5366060256958007
 </pre></div></div>
 </div>
 <div class="nbinput docutils container">
@@ -1522,6 +1522,7 @@ CONSTRAINTS
 <div class="output_area docutils container">
 <div class="highlight"><pre>
 time:                          array(99)
+iter:                          array(99)
 variables:
 --des_xloc:
 ----bat:                      array(100)
@@ -1584,9 +1585,9 @@ constraints:
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-[[193253874.255, (0, 0, 10, 0, 0)],
- [193251983.455, (0, 0, 10, 1, 0)],
- [-4548694.605, (0, 0, 20, 0, 0)]]
+[[194153890.785, (0, 0, 10, 0, 0)],
+ [194151999.985, (0, 0, 10, 1, 0)],
+ [-2748675.225, (0, 0, 20, 0, 0)]]
 </pre></div></div>
 </div>
 <div class="nbinput nblast docutils container">
