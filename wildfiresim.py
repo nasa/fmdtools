@@ -88,16 +88,17 @@ if __name__ == "__main__":
 
 
     fig, ax = mdl.flows['fireenvironment'].c.show_from(8, hist.flows.fireenvironment.c,
-                                                       properties=sim_properties)
-    hist.plot_trajectory('s.location_x', 's.location_y', fig=fig, ax=ax)
+                                                       properties=sim_properties,
+                                                       xlabel="x (km)", ylabel="y (km)")
+    hist.plot_trajectories('s.location_x', 's.location_y', fig=fig, ax=ax)
 
     fig, ax = mdl.flows['fireenvironment'].c.show_from(45, hist.flows.fireenvironment.c,
                                                        properties=sim_properties)
-    hist.plot_trajectory('s.location_x', 's.location_y', fig=fig, ax=ax)
+    hist.plot_trajectories('s.location_x', 's.location_y', fig=fig, ax=ax)
 
     ani = mdl.flows['fireenvironment'].c.animate(hist.flows.fireenvironment.c,
                                                  properties=sim_properties)
 
-    light_mdl = WildfireSim(p=def_p) #  track=None)
+    # light_mdl = WildfireSim(p=def_p) #  track=None)
 
-    res, hist = prop.parameter_sample(light_mdl, create_scen_sample())
+    # res, hist = prop.parameter_sample(light_mdl, create_scen_sample())
