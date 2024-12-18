@@ -66,7 +66,7 @@ class LoadingForAircraft(Function):
 
         self.perc_requests.clear_inbox()
 
-        self.perc_requests.send("ma1", "local", "atc_com", "route")
+        self.perc_requests.send("ma1", "atc_com", "route")
 
 
 class test_aircraft_model(FunctionArchitecture):
@@ -115,7 +115,7 @@ class LoadingForHeli(Function):
             self.ground.s.asset_assignment["h1"] = "air_loc"
             # update area allocation for route??
         self.perc_requests.clear_inbox()
-        self.perc_requests.send("h1", "local", "atc_com")
+        self.perc_requests.send("h1", "atc_com")
 
 
 class test_heli_model(FunctionArchitecture):
@@ -241,7 +241,7 @@ class AssetTests(unittest.TestCase):
             self.two_ac_model,
             fhist,
             76,
-            fxnattr="visioncov",
+            fxnattr="s.visioncov",
             assets_to_label=["ma1"],
             title="ma1 approaches ma2 with no vision cone",
         )
@@ -249,7 +249,7 @@ class AssetTests(unittest.TestCase):
             self.two_ac_model,
             fhist,
             77,
-            fxnattr="faults",
+            fxnattr="m.faults",
             assets_to_label=["ma1"],
             title="ma1 crashes into ma2 (should show faults)",
         )

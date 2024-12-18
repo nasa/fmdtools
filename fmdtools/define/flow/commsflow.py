@@ -174,7 +174,7 @@ class CommsFlow(MultiFlow):
             fxns_to = [f for f in self.glob.fxns if f != self.name]
         elif fxn_to == "ports":
             fxns_to = [f for f in f_from.locals]
-        elif type(fxn_to) == str:
+        elif isinstance(fxn_to, str):
             fxns_to = [self.get_local_name(fxn_to)]
         else:
             fxns_to = fxn_to

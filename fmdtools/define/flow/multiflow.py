@@ -21,7 +21,7 @@ class MultiFlowGraph(ModelGraph):
     flow : MultiFlow
         Multiflow object to represent.
     role_nodes : list
-        What roles of the multiflow to include. Default is ['locals'].
+        What roles of the multiflow to include. Default is ['local'].
     recursive : bool
         Whether to construct the graph recursively (with multiple levels). The default
         is True
@@ -31,9 +31,9 @@ class MultiFlowGraph(ModelGraph):
     """
 
     def __init__(self, flow, role_nodes=['local'], recursive=True, with_root=False,
-                 **kwargs):
+                 with_methods=False, **kwargs):
         ModelGraph.__init__(self, flow, role_nodes=role_nodes, recursive=recursive,
-                            with_root=with_root, **kwargs)
+                            with_root=with_root, with_methods=with_methods, **kwargs)
 
 
     def set_resgraph(self, other=False):

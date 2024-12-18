@@ -86,8 +86,8 @@ class SightGrid(Coords):
     container_p = DroneEnvironmentGridParam
 
     def init_properties(self, *args, **kwargs):
-        """Set target true between 0 and 150 in the x and 10 and 160 in the y."""
-        self.set_range("target", True, 0, 150, 10, 160)
+        """Set target true between 0 and 155 in the x and 10 and 155 in the y."""
+        self.set_range("target", True, 0, 155, 10, 155)
 
 
 class DroneEnvironment(Environment):
@@ -391,7 +391,8 @@ class ViewEnvironment(Function):
                                      self.dofs.s.x - width/2,
                                      self.dofs.s.x + width/2,
                                      self.dofs.s.y - height/2,
-                                     self.dofs.s.y + height/2)
+                                     self.dofs.s.y + height/2,
+                                     outside_error=False)
 
 
 class Drone(FunctionArchitecture):
@@ -542,6 +543,7 @@ if __name__ == "__main__":
     from fmdtools.sim.sample import SampleApproach
     from fmdtools.analyze.phases import PhaseMap
     from fmdtools import analyze as an
+    s = SightGrid()
     import doctest
     # doctest.testmod(verbose=True)
     # script_nominal_viewed()
